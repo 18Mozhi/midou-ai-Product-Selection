@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
-import Fastify, { type FastifyInstance } from 'fastify';
+import Fastify, { type FastifyError, type FastifyInstance } from 'fastify';
 import type { ErrorEnvelope, SuccessEnvelope } from '@scoutops/contracts';
+import { ApiError, normalizeCorrelationId, type ReadinessCheck } from './api-foundation.js';
 
 export interface BuildAppOptions {
   version?: string;
@@ -8,6 +9,7 @@ export interface BuildAppOptions {
   now?: () => Date;
   logger?: boolean;
   configFingerprint?: string;
+  readinessChecks?: ReadinessCheck[];
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -18,8 +20,8 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   const configFingerprint = options.configFingerprint ?? 'not-loaded';
 
   app.addHook('onRequest', async (request, reply) => {
-    const requestId = request.headers['x-request-id']?.toString() || randomUUID();
-    const traceId = request.headers['x-trace-id']?.toString() || requestId;
+    const requestId = normalizeCorrelationId(request.headers['x-request-id'], randomUUID);
+    const traceId = normalizeCorrelationId(request.headers['x-trace-id'], () => requestId);
     request.headers['x-request-id'] = requestId;
     request.headers['x-trace-id'] = traceId;
     reply.header('x-request-id', requestId).header('x-trace-id', traceId);
@@ -53,6 +55,25 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
     request_id: request.headers['x-request-id']!.toString(),
     trace_id: request.headers['x-trace-id']!.toString(),
   }));
+
+  app.get('/api/v1/health/ready', async (request, reply): Promise<SuccessEnvelope<{
+    status:'ready';dependencies:{mysql:'available';redis:'available'}
+  }> | ErrorEnvelope> => {
+    const requestId=request.headers['x-request-id']!.toString();const traceId=request.headers['x-trace-id']!.toString();
+    const checks=options.readinessChecks??[];const results=await Promise.all(checks.map(async item=>[item.name,await item.check(requestId,traceId)] as const));
+    const dependencies=Object.fromEntries(results) as Partial<Record<'mysql'|'redis','available'|'unavailable'>>;
+    if(dependencies.mysql!=='available'||dependencies.redis!=='available'){
+      reply.code(503);return{error:{code:'dependency_unavailable',message:'API 依赖暂不可用。',action_hint:'稍后重试；运维人员在宝塔检查 MySQL 与 Redis。'},request_id:requestId,trace_id:traceId};
+    }
+    return{data:{status:'ready',dependencies:{mysql:'available',redis:'available'}},meta:{observed_at:now().toISOString()},request_id:requestId,trace_id:traceId};
+  });
+
+  app.setErrorHandler(async (error: FastifyError | ApiError, request, reply): Promise<ErrorEnvelope> => {
+    const requestId=request.headers['x-request-id']!.toString();const traceId=request.headers['x-trace-id']!.toString();
+    const apiError=error instanceof ApiError?error:null;const validation='validation' in error&&Boolean(error.validation);
+    const statusCode=apiError?.statusCode??(validation?400:500);reply.code(statusCode);
+    return{error:{code:apiError?.code??(validation?'schema_validation_failed':'internal_error'),message:apiError?.message??(validation?'请求字段不符合接口合同。':'服务暂时无法处理请求。'),action_hint:apiError?.actionHint??(validation?'按 OpenAPI 修正字段后重试。':'携带 request_id 联系管理员。')},request_id:requestId,trace_id:traceId};
+  });
 
   app.setNotFoundHandler(async (request, reply): Promise<ErrorEnvelope> => {
     const requestId = request.headers['x-request-id']!.toString();

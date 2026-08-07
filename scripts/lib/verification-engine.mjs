@@ -123,7 +123,7 @@ export function runVerificationCommand(command, { root = process.cwd(), timeoutM
   const timedOut = result.error?.code === 'ETIMEDOUT';
   return {
     command: redactVerificationOutput(command),
-    status: result.status === 0 && !timedOut ? 'passed' : 'failed',
+    status: result.status === 0 && !timedOut ? 'passed' : result.status === 2 && !timedOut ? 'blocked' : 'failed',
     exit_code: result.status,
     timed_out: timedOut,
     duration_ms: Date.now() - started,
@@ -154,9 +154,9 @@ export async function runModule(moduleId, options = {}) {
     const result = runVerificationCommand(command, { root, timeoutMs: config.timeoutMs });
     commands.push(result);
     if (result.status !== 'passed') {
-      status = 'failed';
+      status = result.status;
       failure = {
-        code: result.timed_out ? 'command_timeout' : 'command_failed',
+        code: result.timed_out ? 'command_timeout' : result.status === 'blocked' ? 'command_blocked' : 'command_failed',
         command: result.command,
         exit_code: result.exit_code,
       };
@@ -181,7 +181,7 @@ export async function runModule(moduleId, options = {}) {
   console.log(JSON.stringify({ ...report, report_file: relative(root, reportFile) }, null, 2));
   if (status !== 'passed') {
     throw new VerificationError(`[${moduleId}] module verification failed`, {
-      code: failure?.code, details: { report_file: reportFile, failure },
+      code: failure?.code, status, details: { report_file: reportFile, failure },
     });
   }
   return report;
@@ -216,18 +216,67 @@ export async function assertPhaseDependencies(phaseId, root = process.cwd()) {
 
 export async function runPhase(phaseId, options = {}) {
   const root = options.root ?? process.cwd();
-  await assertPhaseDependencies(phaseId, root);
-  const moduleIds = await modulesForPhase(phaseId, root);
+  const config = options.config ?? verificationConfig(root, options.env ?? process.env);
+  const runId = randomUUID();
+  const startedAt = new Date().toISOString();
   const reports = [];
-  for (const moduleId of moduleIds) reports.push(await runModule(moduleId, options));
-  return { scope: 'PHASE', id: phaseId, status: 'passed', modules: reports.map((report) => report.id) };
+  let caught = null;
+  try {
+    await assertPhaseDependencies(phaseId, root);
+    const moduleIds = await modulesForPhase(phaseId, root);
+    for (const moduleId of moduleIds) reports.push(await runModule(moduleId, { ...options, config }));
+  } catch (error) {
+    caught = error;
+  }
+  const status = caught instanceof VerificationError ? caught.status : caught ? 'failed' : 'passed';
+  const report = {
+    scope: 'PHASE', id: phaseId, status, run_id: runId, trace_id: runId,
+    modules: reports.map((item) => item.id),
+    failure: caught ? {
+      code: caught instanceof VerificationError ? caught.code : 'verification_failed',
+      message: redactVerificationOutput(caught.message),
+    } : null,
+    started_at: startedAt, finished_at: new Date().toISOString(),
+  };
+  const reportFile = await writeReport(report, config);
+  if (caught) {
+    throw new VerificationError(`[${phaseId}] phase verification ${status}`, {
+      code: report.failure.code, status, details: { report_file: reportFile, failure: report.failure },
+    });
+  }
+  return report;
 }
 
 export async function runAll(options = {}) {
+  const root = options.root ?? process.cwd();
+  const config = options.config ?? verificationConfig(root, options.env ?? process.env);
+  const runId = randomUUID();
+  const startedAt = new Date().toISOString();
   const phases = [];
-  for (let index = 0; index <= 8; index += 1) {
-    const phaseId = `P${String(index).padStart(2, '0')}`;
-    phases.push(await runPhase(phaseId, options));
+  let caught = null;
+  try {
+    for (let index = 0; index <= 8; index += 1) {
+      const phaseId = `P${String(index).padStart(2, '0')}`;
+      phases.push(await runPhase(phaseId, { ...options, config }));
+    }
+  } catch (error) {
+    caught = error;
   }
-  return { scope: 'ALL', id: 'P00-P08', status: 'passed', phases: phases.map((phase) => phase.id) };
+  const status = caught instanceof VerificationError ? caught.status : caught ? 'failed' : 'passed';
+  const report = {
+    scope: 'ALL', id: 'P00-P08', status, run_id: runId, trace_id: runId,
+    phases: phases.map((item) => item.id),
+    failure: caught ? {
+      code: caught instanceof VerificationError ? caught.code : 'verification_failed',
+      message: redactVerificationOutput(caught.message),
+    } : null,
+    started_at: startedAt, finished_at: new Date().toISOString(),
+  };
+  const reportFile = await writeReport(report, config);
+  if (caught) {
+    throw new VerificationError(`[P00-P08] full verification ${status}`, {
+      code: report.failure.code, status, details: { report_file: reportFile, failure: report.failure },
+    });
+  }
+  return report;
 }

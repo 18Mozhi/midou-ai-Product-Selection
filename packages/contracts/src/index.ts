@@ -31,6 +31,23 @@ export interface ErrorEnvelope {
   trace_id: string;
 }
 
+export interface RedisDependencyStatus {
+  status: 'available' | 'unavailable';
+  latency_ms: number;
+  checked_at: string;
+  request_id: string;
+  trace_id: string;
+}
+
+export interface DatabaseDependencyStatus {
+  status: 'available' | 'unavailable';
+  latency_ms: number;
+  migration_version: string;
+  checked_at: string;
+  request_id: string;
+  trace_id: string;
+}
+
 export type FoundationWorkStatus =
   | 'queued'
   | 'leased'

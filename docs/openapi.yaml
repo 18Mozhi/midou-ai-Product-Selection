@@ -12,6 +12,31 @@ x-scoutops-verification:
     module: npm run verify:module -- M00-01
     phase: npm run verify:phase -- P00
     all: npm run verify:all
+x-scoutops-redis:
+  runtimeApiExposed: false
+  reason: M00-04 provides a backend-only scoped connection contract; M00-05 owns readiness routing and authorization middleware.
+  keyScope: 'scoutops:v1:<purpose>:org:<organization_id>:ws:<workspace_id>:...'
+  purposes: [cache, queue, rate, sse]
+  secretFields: [REDIS_PASSWORD]
+x-scoutops-mysql:
+  runtimeApiExposed: false
+  reason: M00-03 provides a backend-only MySQL 5.7 contract; M00-05 owns readiness routing and authorization middleware.
+  requiredVersion: '5.7'
+  requiredCharset: utf8mb4
+  requiredDatabaseAndAccount: product_scout
+x-scoutops-file-audit:
+  runtimeApiExposed: false
+  reason: M00-06 provides backend-only path, grant and audit contracts; authorized download routing is added with identity modules.
+  pathScope: 'organizations/<organization_id>/workspaces/<workspace_id>/...'
+  downloadGrantMaximumSeconds: 300
+  sensitiveMetadataKeys: [password, secret, token, cookie, authorization, api_key, private_key]
+x-scoutops-baota-s0:
+  productionDeployed: false
+  manifest: infra/baota/service-manifest.json
+  livenessPath: /api/v1/health/live
+  readinessPath: /api/v1/health/ready
+  asyncRuntimeStatus: structured Worker and Crawler heartbeat logs in Baota
+  capacityClaim: S0 single host only; no multi-node or 10000-user claim
 paths:
   /health/live:
     get:
@@ -26,9 +51,18 @@ paths:
   /health/ready:
     get:
       summary: API readiness
+      security: []
       responses:
-        '200': { description: API can serve synchronous traffic }
-        '503': { description: Dependency unavailable }
+        '200':
+          description: Required configuration, MySQL and Redis can serve synchronous traffic
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HealthReadyEnvelope' }
+        '503':
+          description: Sanitized dependency unavailable envelope
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorEnvelope' }
   /health/version:
     get:
       summary: Sanitized build and configuration identity
@@ -112,6 +146,11 @@ paths:
       responses:
         '200': { $ref: '#/components/responses/PaginatedSuccess' }
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque-session-token
   parameters:
     Page:
       name: page
@@ -143,6 +182,19 @@ components:
       required: [data, request_id, trace_id]
       properties:
         data: {}
+        request_id: { type: string }
+        trace_id: { type: string }
+    ErrorEnvelope:
+      type: object
+      required: [error, request_id, trace_id]
+      properties:
+        error:
+          type: object
+          required: [code, message, action_hint]
+          properties:
+            code: { type: string }
+            message: { type: string }
+            action_hint: { type: string }
         request_id: { type: string }
         trace_id: { type: string }
     PaginatedEnvelope:
@@ -207,6 +259,27 @@ components:
             observed_at: { type: string, format: date-time }
         request_id: { type: string }
         trace_id: { type: string }
+    HealthReadyEnvelope:
+      type: object
+      required: [data, meta, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          required: [status, dependencies]
+          properties:
+            status: { type: string, enum: [ready] }
+            dependencies:
+              type: object
+              required: [mysql, redis]
+              properties:
+                mysql: { type: string, enum: [available] }
+                redis: { type: string, enum: [available] }
+        meta:
+          type: object
+          properties:
+            observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
     VerificationRun:
       type: object
       required: [run_id, trace_id, scope, scope_id, status, started_at]
@@ -220,6 +293,51 @@ components:
         report_path: { type: string, description: Baota-controlled local path; never a public URL }
         started_at: { type: string, format: date-time }
         finished_at: { type: string, format: date-time, nullable: true }
+    RedisDependencyStatus:
+      type: object
+      required: [status, latency_ms, checked_at, request_id, trace_id]
+      properties:
+        status: { type: string, enum: [available, unavailable] }
+        latency_ms: { type: integer, minimum: 0 }
+        checked_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
+    DatabaseDependencyStatus:
+      type: object
+      required: [status, latency_ms, migration_version, checked_at, request_id, trace_id]
+      properties:
+        status: { type: string, enum: [available, unavailable] }
+        latency_ms: { type: integer, minimum: 0 }
+        migration_version: { type: string }
+        checked_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
+    FileAsset:
+      type: object
+      required: [id, organization_id, workspace_id, category, content_sha256, size_bytes, status]
+      properties:
+        id: { type: string }
+        organization_id: { type: string }
+        workspace_id: { type: string }
+        category: { type: string, enum: [evidence, export, attachment] }
+        content_sha256: { type: string, pattern: '^[a-f0-9]{64}$' }
+        size_bytes: { type: integer, minimum: 0 }
+        status: { type: string, enum: [active, quarantined, deleted] }
+    AuditEvent:
+      type: object
+      required: [audit_id, organization_id, actor_id, action, resource_type, resource_id, request_id, trace_id, occurred_at, schema_version]
+      properties:
+        audit_id: { type: string }
+        organization_id: { type: string }
+        workspace_id: { type: string }
+        actor_id: { type: string }
+        action: { type: string }
+        resource_type: { type: string }
+        resource_id: { type: string }
+        request_id: { type: string }
+        trace_id: { type: string }
+        occurred_at: { type: string, format: date-time }
+        schema_version: { type: integer, enum: [1] }
     HealthVersionEnvelope:
       type: object
       required: [data, request_id, trace_id]

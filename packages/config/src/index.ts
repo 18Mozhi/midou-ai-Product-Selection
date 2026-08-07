@@ -11,11 +11,12 @@ export interface RuntimeConfig {
   nodeEnv: 'development' | 'test' | 'production';
   app: { host: string; port: number; version: string; buildSha: string; webOrigin: string };
   database: { host: string; port: number; name: string; user: string; password: string; writeHost?: string; readHost?: string };
-  redis: { host: string; port: number; password: string };
+  redis: { host: string; port: number; password: string; connectTimeoutMs: number };
   ai: { baseUrl: string; model: string; apiKey: string; timeoutMs: number };
   storage: { evidenceRoot: string; exportRoot: string };
   security: { sessionSecret: string; credentialsMasterKey: string };
   identity: { workerId: string; crawlerId: string };
+  runtime: { workerHeartbeatMs: number; crawlerHeartbeatSeconds: number };
   configFingerprint: string;
 }
 const text = (env: NodeJS.ProcessEnv, key: string, fallback = '') => env[key]?.trim() || fallback;
@@ -43,11 +44,12 @@ export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env, target: 
     target, nodeEnv,
     app: { host: text(env, 'APP_HOST', '127.0.0.1'), port: integer(env, 'APP_PORT', 4101, 1, 65535), version: text(env, 'APP_VERSION', '0.1.0'), buildSha: text(env, 'BUILD_SHA', 'development'), webOrigin: httpUrl(env, 'WEB_ORIGIN', 'http://127.0.0.1:5173') },
     database: { host: text(env, 'DB_HOST', '127.0.0.1'), port: integer(env, 'DB_PORT', 3306, 1, 65535), name: text(env, 'DB_NAME', 'product_scout'), user: text(env, 'DB_USER', 'product_scout'), password: secret(env, 'DB_PASSWORD', production, 12), ...(text(env, 'DB_WRITE_HOST') ? { writeHost: text(env, 'DB_WRITE_HOST') } : {}), ...(text(env, 'DB_READ_HOST') ? { readHost: text(env, 'DB_READ_HOST') } : {}) },
-    redis: { host: text(env, 'REDIS_HOST', '127.0.0.1'), port: integer(env, 'REDIS_PORT', 6379, 1, 65535), password: text(env, 'REDIS_PASSWORD') },
+    redis: { host: text(env, 'REDIS_HOST', '127.0.0.1'), port: integer(env, 'REDIS_PORT', 6379, 1, 65535), password: text(env, 'REDIS_PASSWORD'), connectTimeoutMs: integer(env, 'REDIS_CONNECT_TIMEOUT_MS', 3000, 100, 30000) },
     ai: { baseUrl: httpUrl(env, 'AI_BASE_URL', 'http://192.168.1.203:8588/v1'), model: text(env, 'AI_MODEL', 'Qwen3.5-9B-AWQ-4bit'), apiKey: text(env, 'AI_API_KEY'), timeoutMs: integer(env, 'AI_TIMEOUT_MS', 30000, 1000, 300000) },
     storage: { evidenceRoot, exportRoot },
     security: { sessionSecret: secret(env, 'SESSION_SECRET', production, 32), credentialsMasterKey: secret(env, 'CREDENTIALS_MASTER_KEY', production, 32) },
     identity: { workerId: text(env, 'WORKER_ID', 'worker-local'), crawlerId: text(env, 'CRAWLER_ID', 'crawler-local') },
+    runtime: { workerHeartbeatMs: integer(env, 'WORKER_HEARTBEAT_MS', 30000, 5000, 60000), crawlerHeartbeatSeconds: integer(env, 'CRAWLER_HEARTBEAT_SECONDS', 30, 5, 60) },
   };
   const safe = { ...base, database: { ...base.database, password: Boolean(base.database.password) }, redis: { ...base.redis, password: Boolean(base.redis.password) }, ai: { ...base.ai, apiKey: Boolean(base.ai.apiKey) }, security: { sessionSecret: Boolean(base.security.sessionSecret), credentialsMasterKey: Boolean(base.security.credentialsMasterKey) } };
   return { ...base, configFingerprint: createHash('sha256').update(JSON.stringify(safe)).digest('hex') };

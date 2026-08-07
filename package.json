@@ -11,10 +11,13 @@
     "locate:flow": "node scripts/locate_flow_v4.mjs",
     "build:contracts": "tsc -p packages/contracts/tsconfig.json",
     "build:config": "tsc -p packages/config/tsconfig.json",
+    "build:database": "tsc -p packages/database/tsconfig.json",
+    "build:redis": "tsc -p packages/redis/tsconfig.json",
+    "build:storage": "tsc -p packages/storage/tsconfig.json",
     "build:api": "tsc -p apps/api/tsconfig.json",
     "build:worker": "tsc -p apps/worker/tsconfig.json",
     "build:web": "vite build --config apps/web/vite.config.ts",
-    "build": "npm run build:contracts && npm run build:config && npm run build:api && npm run build:worker && npm run build:web",
+    "build": "npm run build:contracts && npm run build:config && npm run build:database && npm run build:redis && npm run build:storage && npm run build:api && npm run build:worker && npm run build:web",
     "dev:api": "npm run build:contracts && node --watch apps/api/dist/server.js",
     "dev:worker": "npm run build:contracts && node --watch apps/worker/dist/index.js",
     "dev:web": "vite --config apps/web/vite.config.ts",
@@ -31,6 +34,8 @@
   },
   "dependencies": {
     "fastify": "^5.6.2",
+    "mysql2": "^3.15.3",
+    "redis": "^5.12.1",
     "vue": "^3.5.22"
   },
   "devDependencies": {

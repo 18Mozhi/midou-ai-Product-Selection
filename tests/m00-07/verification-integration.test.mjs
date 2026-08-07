@@ -7,7 +7,9 @@ import {
   expectedAtomicTaskIds,
   loadModuleRegistry,
   modulesForPhase,
+  runAll,
   runModule,
+  runPhase,
   VerificationError,
 } from '../../scripts/lib/verification-engine.mjs';
 
@@ -80,5 +82,40 @@ test('M00-07.A16 missing registry is a controlled blocked result', async () => {
       () => loadModuleRegistry('M00-97', root),
       (error) => error.code === 'registry_missing' && error.status === 'blocked',
     );
+  });
+});
+
+test('M00-07.A16 command exit 2 propagates as blocked, not failed', async () => {
+  await withWorkspace(async (root) => {
+    const moduleId = 'M00-96';
+    await writeFile(join(root, 'verification', 'modules', `${moduleId}.json`), JSON.stringify(registry(moduleId, ['node -e "process.exit(2)"'])));
+    await assert.rejects(
+      () => runModule(moduleId, { root, env: { VERIFY_REPORT_DIR: '.artifacts/verification' } }),
+      (error) => error.code === 'command_blocked' && error.status === 'blocked',
+    );
+  });
+});
+
+test('M00-07.A16 phase and all runners persist aggregate reports', async () => {
+  await withWorkspace(async (root) => {
+    const completedPhases = Array.from({ length: 8 }, (_, index) => `P${String(index).padStart(2, '0')}`);
+    await writeFile(join(root, 'verification', 'state.json'), JSON.stringify({ completedModules: [], completedPhases }));
+    for (let index = 0; index <= 8; index += 1) {
+      const phaseId = `P${String(index).padStart(2, '0')}`;
+      const moduleId = `M${String(index).padStart(2, '0')}-01`;
+      await writeFile(join(root, 'plans', `phase-${String(index).padStart(2, '0')}-test.md`), `# ${phaseId}\n### ${moduleId} 原子任务索引\n`);
+      await writeFile(join(root, 'verification', 'modules', `${moduleId}.json`), JSON.stringify({
+        ...registry(moduleId, ['node -e "process.exit(0)"']),
+        phaseId,
+      }));
+    }
+
+    await runPhase('P00', { root, env: { VERIFY_REPORT_DIR: '.artifacts/verification' } });
+    assert.match(await readFile(join(root, '.artifacts', 'verification', 'phase-P00.json'), 'utf8'), /"status": "passed"/);
+
+    await runAll({ root, env: { VERIFY_REPORT_DIR: '.artifacts/verification' } });
+    const allReport = await readFile(join(root, '.artifacts', 'verification', 'all-P00-P08.json'), 'utf8');
+    assert.match(allReport, /"phases": \[/);
+    assert.match(allReport, /"P08"/);
   });
 });

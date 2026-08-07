@@ -1,14 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "project": "ScoutOps / 实时选品运营平台",
-  "status": "P00_in_progress",
+  "status": "P00_completed_P01_in_progress",
   "sourceOfTruth": "../new-product-enterprise-blueprint.md",
   "locateCommand": "node scripts/locate_flow_v4.mjs \"<keyword>\"",
   "deliveryPlan": "../plans/README.md",
   "implementation": {
-    "currentPhase": "P00",
-    "completedModules": ["M00-01", "M00-07", "M00-02"],
-    "activeModule": "M00-03",
+    "currentPhase": "P01",
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08"],
+    "activeModules": ["M01-01"],
+    "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
       "web": "../apps/web/src/main.ts",
@@ -31,6 +32,48 @@
       "pythonLoader": "../apps/crawler/scoutops_crawler/config.py",
       "browserAllowlist": ["VITE_API_BASE_URL"],
       "versionEndpoint": "/api/v1/health/version"
+    },
+    "database": {
+      "package": "../packages/database/src/index.ts",
+      "liveGate": "../scripts/verify-mysql-live.mjs",
+      "requiredVersion": "5.7",
+      "requiredCharset": "utf8mb4",
+      "runtimeEndpoint": "deferred_to_M00-05",
+      "status": "module_verified"
+    },
+    "redis": {
+      "package": "../packages/redis/src/index.ts",
+      "liveGate": "../scripts/verify-redis-live.mjs",
+      "purposes": ["cache", "queue", "rate", "sse"],
+      "keyScope": "scoutops:v1:<purpose>:org:<organization_id>:ws:<workspace_id>:...",
+      "ttlPolicy": {"cache": 300, "queue": 86400, "rate": 60, "sse": 86400},
+      "runtimeEndpoint": "deferred_to_M00-05",
+      "status": "module_verified"
+    },
+    "apiFoundation": {
+      "entrypoint": "../apps/api/src/app.ts",
+      "guard": "../apps/api/src/api-foundation.ts",
+      "readinessEndpoint": "/api/v1/health/ready",
+      "dependencies": ["configuration", "mysql", "redis"],
+      "publicReadinessFields": ["status", "dependency category", "request_id", "trace_id", "observed_at"],
+      "status": "module_verified"
+    },
+    "fileAuditFoundation": {
+      "package": "../packages/storage/src/index.ts",
+      "pathScope": "organizations/<organization_id>/workspaces/<workspace_id>/...",
+      "categories": ["evidence", "export", "attachment"],
+      "downloadGrantMaximumSeconds": 300,
+      "auditFields": ["organization_id", "workspace_id", "actor_id", "action", "resource_type", "resource_id", "request_id", "trace_id", "occurred_at", "schema_version"],
+      "runtimeApi": "deferred_to_identity_authorization_modules",
+      "status": "module_verified"
+    },
+    "baotaS0": {
+      "manifest": "../infra/baota/service-manifest.json",
+      "nginxTemplate": "../infra/baota/nginx/scoutops.conf.template",
+      "preflight": "../scripts/verify-baota-s0.mjs",
+      "productionDeployed": false,
+      "capacity": "S0 single host, 100 users and 5-20 concurrent business users",
+      "status": "phase_verified"
     }
   },
   "uiReference": {
@@ -74,6 +117,7 @@
     {"path": "/platform-admin", "view": "PlatformAdmin", "domain": "platform", "status": "planned"}
   ],
   "apiGroups": [
+    {"prefix": "/api/v1/health", "domain": "platform-runtime", "status": "foundation_implemented"},
     {"prefix": "/api/v1/auth", "domain": "identity", "status": "planned"},
     {"prefix": "/api/v1/org", "domain": "organization", "status": "planned"},
     {"prefix": "/api/v1/trends", "domain": "trends", "status": "planned"},
@@ -94,8 +138,8 @@
     {"name": "product-scout-api", "kind": "baota-node-project", "responsibility": "HTTP API, RBAC and SSE", "status": "scaffolded_not_deployed"},
     {"name": "product-scout-worker", "kind": "baota-node-project", "responsibility": "queues, outbox, notifications and reports", "status": "scaffolded_not_deployed"},
     {"name": "product-scout-crawler", "kind": "baota-python-project", "responsibility": "provider collection and parsing", "status": "scaffolded_not_deployed"},
-    {"name": "mysql57-product-scout", "kind": "baota-mysql-service", "responsibility": "product_scout data", "status": "planned"},
-    {"name": "redis-product-scout", "kind": "baota-redis-service", "responsibility": "cache, queue and rate limiting", "status": "planned"}
+    {"name": "mysql57-product-scout", "kind": "baota-mysql-service", "responsibility": "product_scout data", "status": "template_ready_not_deployed"},
+    {"name": "redis-product-scout", "kind": "baota-redis-service", "responsibility": "cache, queue, rate limiting and SSE coordination", "status": "template_ready_local_verified_not_deployed"}
   ],
   "externalDependencies": [
     {"name": "AI model endpoint", "address": "192.168.1.203:8588/v1", "contract": "OpenAI-compatible; /models, text/multimodal chat completions and 4 low-load concurrent text requests verified", "status": "verified"},

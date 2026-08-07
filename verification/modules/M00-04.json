@@ -1,0 +1,31 @@
+{
+  "moduleId": "M00-04",
+  "phaseId": "P00",
+  "name": "Redis 基座",
+  "dependencies": ["M00-02"],
+  "atomicTasks": [
+    {"id":"M00-04.A01","evidence":"docs/architecture/m00-04-redis-foundation.md scope/non-goals/failures"},
+    {"id":"M00-04.A02","evidence":"RedisPurpose, ScopedRedisKeyInput and RedisDependencyStatus"},
+    {"id":"M00-04.A03","evidence":"0004 namespace catalog up/down, MySQL 5.7 compatible"},
+    {"id":"M00-04.A04","evidence":"ScopedRedisStore bounded JSON, counter and health service"},
+    {"id":"M00-04.A05","evidence":"queue/lease namespace and bounded TTL contract; business workers deferred"},
+    {"id":"M00-04.A06","evidence":"OpenAPI x-scoutops-redis and RedisDependencyStatus; runtime API deferred to M00-05"},
+    {"id":"M00-04.A07","evidence":"RedisFoundation desktop and 390px layout based on image 64"},
+    {"id":"M00-04.A08","evidence":"available/unavailable/recovering UI states"},
+    {"id":"M00-04.A09","evidence":"organization-required key guard and no raw-key public method"},
+    {"id":"M00-04.A10","evidence":"REDIS_* schema/env/config loader and Baota instructions"},
+    {"id":"M00-04.A11","evidence":"sanitized latency/request_id/trace_id dependency status"},
+    {"id":"M00-04.A12","evidence":"tests/m00-04 key, TTL, store, rate and failure unit branches"},
+    {"id":"M00-04.A13","evidence":"contracts/OpenAPI/key-version compatibility assertions"},
+    {"id":"M00-04.A14","evidence":"verify-redis-live real scoped set/get/TTL/delete integration"},
+    {"id":"M00-04.A15","evidence":"Playwright desktop/390 visual and accessible interaction"},
+    {"id":"M00-04.A16","evidence":"dependency failure/recovery UI and fake-client fault injection"},
+    {"id":"M00-04.A17","evidence":"blueprint, Feature Map, env, architecture, Runbook and rollback synchronized"}
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m00-04/redis-foundation.test.mjs",
+    "node scripts/verify-redis-live.mjs",
+    "npx playwright test tests/e2e/m00-04-redis.spec.ts"
+  ]
+}

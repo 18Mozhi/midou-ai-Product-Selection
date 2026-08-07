@@ -2,6 +2,11 @@
 import { computed, onMounted, ref } from 'vue';
 import VerificationFramework from './components/VerificationFramework.vue';
 import ConfigBoundary from './components/ConfigBoundary.vue';
+import RedisFoundation from './components/RedisFoundation.vue';
+import MySqlFoundation from './components/MySqlFoundation.vue';
+import ApiFoundation from './components/ApiFoundation.vue';
+import FileAuditFoundation from './components/FileAuditFoundation.vue';
+import DeploymentFoundation from './components/DeploymentFoundation.vue';
 import { publicConfig } from './config';
 
 type ViewState = 'loading' | 'ready' | 'error';
@@ -25,6 +30,11 @@ const apiBase = publicConfig.apiBaseUrl;
 const selectedView = new URLSearchParams(window.location.search).get('view');
 const isVerificationView = selectedView === 'verification';
 const isConfigView = selectedView === 'config';
+const isRedisView = selectedView === 'redis';
+const isMySqlView = selectedView === 'mysql';
+const isApiView = selectedView === 'api';
+const isFileAuditView = selectedView === 'file-audit';
+const isDeploymentView = selectedView === 'deployment';
 
 const statusCopy = computed(() => {
   if (state.value === 'loading') return '正在确认 API 进程状态';
@@ -51,7 +61,7 @@ async function loadHealth() {
 }
 
 onMounted(() => {
-  if (!isVerificationView && !isConfigView) void loadHealth();
+  if (!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView) void loadHealth();
 });
 </script>
 
@@ -63,14 +73,19 @@ onMounted(() => {
         <span>ScoutOps</span>
       </a>
       <nav>
-        <a class="nav-link" :class="{ 'nav-link--active': !isVerificationView && !isConfigView }" href="/">运行状态</a>
+        <a class="nav-link" :class="{ 'nav-link--active': !isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView }" href="/">运行状态</a>
         <a class="nav-link" :class="{ 'nav-link--active': isVerificationView }" href="/?view=verification">自动验收</a>
         <a class="nav-link" :class="{ 'nav-link--active': isConfigView }" href="/?view=config">配置边界</a>
+        <a class="nav-link" :class="{ 'nav-link--active': isRedisView }" href="/?view=redis">Redis 基座</a>
+        <a class="nav-link" :class="{ 'nav-link--active': isMySqlView }" href="/?view=mysql">MySQL 基座</a>
+        <a class="nav-link" :class="{ 'nav-link--active': isApiView }" href="/?view=api">API 基座</a>
+        <a class="nav-link" :class="{ 'nav-link--active': isFileAuditView }" href="/?view=file-audit">文件审计</a>
+        <a class="nav-link" :class="{ 'nav-link--active': isDeploymentView }" href="/?view=deployment">宝塔 S0</a>
       </nav>
       <p class="phase-label">P00 · 基础框架</p>
     </aside>
 
-    <main v-if="!isVerificationView && !isConfigView" id="runtime" class="content">
+    <main v-if="!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView" id="runtime" class="content">
       <header class="topbar">
         <div>
           <p class="eyebrow">FOUNDATION / M00-01</p>
@@ -124,7 +139,12 @@ onMounted(() => {
     </main>
     <main v-else id="verification" class="content">
       <VerificationFramework v-if="isVerificationView" />
-      <ConfigBoundary v-else :api-base-url="apiBase" />
+      <ConfigBoundary v-else-if="isConfigView" :api-base-url="apiBase" />
+      <RedisFoundation v-else-if="isRedisView" />
+      <MySqlFoundation v-else-if="isMySqlView" />
+      <ApiFoundation v-else-if="isApiView" :api-base-url="apiBase" />
+      <FileAuditFoundation v-else-if="isFileAuditView" />
+      <DeploymentFoundation v-else />
     </main>
   </div>
 </template>

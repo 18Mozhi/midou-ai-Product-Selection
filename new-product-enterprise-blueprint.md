@@ -493,6 +493,7 @@ flowchart LR
 - 统一响应：`data`、`meta`、`request_id`；错误响应含 `code`、`message`、`action_hint`、`request_id`。
 - 列表接口必须分页，默认 50、上限 200；导出使用异步任务，禁止一次性查询全部数据。
 - 写操作使用 `Idempotency-Key`；更新使用 `version` 乐观锁；关键操作要求二次确认令牌。
+- API 接受 1–128 字符的安全 `X-Request-ID` / `X-Trace-ID`，非法上游值重新生成；认证中间件只有在受信 Token verifier 返回组织 claims 后才放行，缺少组织或 capability 默认拒绝。`/health/ready` 只返回同步依赖类别与可用性，不暴露主机、账号、库表或 Redis 键。
 
 ### 8.2 API 路由组
 
@@ -542,9 +543,13 @@ Web (Vue 静态站点) ── API (Node.js) ── MySQL 5.7
 
 开发环境可采用 Docker Compose；生产部署在中国境内自有服务器，且所有生产服务必须由宝塔面板创建、展示、启动、停止、重启、查看日志和配置。前端作为宝塔网站部署；Node API 与 Node Worker 作为宝塔 Node 项目部署；Python Crawler 作为宝塔 Python 项目部署；MySQL 5.7、Redis 和定时任务使用宝塔已安装的对应服务或插件。不得以系统级 systemd、独立 PM2、宿主机 crontab、屏外 Docker Compose、外部托管队列、外部数据库或外部对象存储承载生产能力。Crawler 使用隔离网络策略、独立资源上限和按来源的并发限制。
 
+P00 Redis 连接只从后端环境读取 `REDIS_HOST`、`REDIS_PORT`、`REDIS_PASSWORD` 与 `REDIS_CONNECT_TIMEOUT_MS`；浏览器不得读取。S0 键使用 `scoutops:v1:<purpose>:org:<organization_id>:ws:<workspace_id>:…` 命名，缓存、队列、限流、SSE 协调均设置有限 TTL，Redis 不作为业务或事件事实源。
+
 #### 9.1.1 部署阶段与多节点扩展合同
 
 当前可上线基线是**单机企业应用阶段（S0）**，不是已承诺的 10,000 用户高可用 SaaS：惠州 `192.168.1.220` 上由宝塔管理一个网站、一个 API、一个 Worker、一个 Crawler、MySQL 5.7、Redis 和本地受控文件目录。S0 的容量目标为 100 用户、5–20 并发业务用户；单机故障需通过宝塔和深圳备份恢复，不宣称自动高可用。
+
+P00 交付 `infra/baota/service-manifest.json` 与 Nginx 模板作为 S0 创建清单；其中 `productionDeployed=false` 在实际宝塔对象创建、配置、发布签发和健康验收前不得改为已部署。Worker/Crawler 使用 5–60 秒受控心跳并响应 SIGTERM/SIGINT；修改心跳配置后在宝塔重启对应项目。
 
 只有在下列架构经演练后，才能进入多节点阶段；每一台节点均必须由宝塔面板创建、展示、启动、停止、重启、查看日志和配置，不能以面板外服务替代：
 
@@ -566,6 +571,8 @@ S1/S2 的 SSE 统一流程为：业务事务写入 Outbox → Worker 发布带 `
 | 邮件 | 生产邮件服务商尚未确认；通过独立 Provider Adapter 接入，最终 Provider 必须支持投递、退信、投诉、延迟、失败与抑制状态回调 | 未确认 Provider 前仅允许测试收件箱；生产启用状态为 `pending_provider_selection`，Webhook 必须验签、幂等入库并写入通知审计 |
 | 可观测性 | 使用宝塔面板服务监控、访问日志、错误日志和项目日志；应用统一输出 `request_id`、`trace_id` 与结构化业务事件 | 禁止向日志写入凭证、Cookie、Token 明文或完整敏感 payload；所有日志必须可从宝塔面板查看和轮转 |
 | 搜索与分析 | 业务交易与首期检索以 MySQL 5.7 索引、分页和受控聚合为准；如容量验证证明必须引入搜索引擎，只能通过宝塔面板的 Docker/服务管理能力部署并管理 | 搜索索引是可重建派生数据，必须带组织过滤字段，不能成为权限真相来源；未经宝塔可见、可操作的部署方式不得使用 |
+
+P00 文件路径固定包含 `organizations/<organization_id>/workspaces/<workspace_id>`，拒绝路径穿越与不安全段；短时下载授权绑定组织、工作区、相对路径、随机值与过期时间，最长 300 秒。文件写入使用同目录临时文件后原子重命名。审计元数据递归脱敏 password、secret、token、cookie、authorization、API key 和 private key 类字段。
 
 #### 9.1.3 邮件 Provider 选择与跨境处理准入
 

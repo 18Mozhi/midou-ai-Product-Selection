@@ -1,0 +1,16 @@
+{
+  "name": "@scoutops/redis",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
+  },
+  "dependencies": {
+    "@scoutops/config": "0.1.0",
+    "@scoutops/contracts": "0.1.0",
+    "redis": "^5.12.1"
+  }
+}

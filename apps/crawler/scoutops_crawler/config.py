@@ -17,6 +17,7 @@ class CrawlerConfig:
     evidence_root: str
     credentials_master_key: str
     fingerprint: str
+    heartbeat_seconds: int
 
 
 def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
@@ -27,6 +28,17 @@ def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
         raise ConfigError("CREDENTIALS_MASTER_KEY", "must contain at least 32 characters in production")
     crawler_id = values.get("CRAWLER_ID", "crawler-local").strip() or "crawler-local"
     evidence_root = values.get("EVIDENCE_ROOT", "./runtime/evidence").strip()
-    safe = {"crawler_id": crawler_id, "evidence_root": evidence_root, "master_key_present": bool(master_key)}
+    try:
+        heartbeat_seconds = int(values.get("CRAWLER_HEARTBEAT_SECONDS", "30"))
+    except ValueError as error:
+        raise ConfigError("CRAWLER_HEARTBEAT_SECONDS", "must be an integer from 5 to 60") from error
+    if heartbeat_seconds < 5 or heartbeat_seconds > 60:
+        raise ConfigError("CRAWLER_HEARTBEAT_SECONDS", "must be an integer from 5 to 60")
+    safe = {
+        "crawler_id": crawler_id,
+        "evidence_root": evidence_root,
+        "heartbeat_seconds": heartbeat_seconds,
+        "master_key_present": bool(master_key),
+    }
     fingerprint = hashlib.sha256(json.dumps(safe, sort_keys=True).encode()).hexdigest()
-    return CrawlerConfig(crawler_id, evidence_root, master_key, fingerprint)
+    return CrawlerConfig(crawler_id, evidence_root, master_key, fingerprint, heartbeat_seconds)

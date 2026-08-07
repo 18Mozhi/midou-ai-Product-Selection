@@ -1,0 +1,14 @@
+{
+  "stage":"S0","productionDeployed":false,"region":{"primary":"惠州","recovery":"深圳"},
+  "objects":[
+    {"name":"product-scout-web","kind":"baota-site","workingDirectory":"<RELEASE_ROOT>/apps/web","buildCommand":"npm run build:web","publishDirectory":"apps/web/dist","healthPath":"/"},
+    {"name":"product-scout-api","kind":"baota-node-project","workingDirectory":"<RELEASE_ROOT>","startCommand":"node apps/api/dist/server.js","port":4101,"healthPath":"/api/v1/health/ready","logSource":"stdout/stderr"},
+    {"name":"product-scout-worker","kind":"baota-node-project","workingDirectory":"<RELEASE_ROOT>","startCommand":"node apps/worker/dist/index.js","logSource":"stdout/stderr"},
+    {"name":"product-scout-crawler","kind":"baota-python-project","workingDirectory":"<RELEASE_ROOT>/apps/crawler","startCommand":"python -m scoutops_crawler","logSource":"stdout/stderr"},
+    {"name":"mysql57-product-scout","kind":"baota-mysql-service","version":"5.7","database":"product_scout","account":"product_scout","charset":"utf8mb4"},
+    {"name":"redis-product-scout","kind":"baota-redis-service","bind":"127.0.0.1","purposes":["cache","queue","rate","sse"]},
+    {"name":"product-scout-release-gate","kind":"baota-scheduled-task","schedule":"manual-before-release","command":"npm run verify:phase -- P00"},
+    {"name":"product-scout-backup","kind":"baota-backup-task","targets":["product_scout database","EVIDENCE_ROOT","EXPORT_ROOT"],"recoveryRegion":"深圳"}
+  ],
+  "forbiddenProductionManagers":["systemd","standalone-pm2","host-crontab","screen-docker-compose"]
+}
