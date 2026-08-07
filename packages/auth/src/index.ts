@@ -94,6 +94,13 @@ export interface PasswordHasher {
   verify(hash: string, password: string): Promise<boolean>;
 }
 
+export interface AuthSecondFactorGate {
+  begin(user: UserRecord, context: AuthContext): Promise<
+    | { required: false }
+    | { required: true; challengeToken: string; expiresAt: Date }
+  >;
+}
+
 export interface AuthDeliveryMessage {
   userId: string;
   kind: ActionTokenPurpose;
@@ -141,6 +148,10 @@ export function authErrorMessage(code: string): string {
     account_disabled: '账号已停用。', email_verification_required: '邮箱尚未验证。', session_invalid: '登录已失效。',
     session_not_found: '会话不存在或已结束。', current_password_invalid: '当前密码不正确。', mail_provider_pending: '邮件服务尚未启用。',
     auth_delivery_key_missing: '认证投递配置不可用。', auth_delivery_payload_invalid: '认证投递数据无效。', idempotency_in_progress: '相同请求正在处理中。',
+    mfa_key_missing: 'MFA 密钥配置不可用。', mfa_secret_invalid: 'MFA 因子数据无效。', mfa_enrollment_not_found: '没有待确认的 MFA 绑定。',
+    mfa_code_invalid: '验证码或恢复码无效。', mfa_challenge_invalid: 'MFA 登录挑战无效或已过期。', mfa_challenge_locked: 'MFA 登录挑战已锁定。',
+    mfa_factor_not_found: '未找到已启用的 MFA 因子。', identity_provider_not_configured: '企业身份 Provider 尚未配置。',
+    sensitive_response_replay_unavailable: '一次性敏感响应不能重放。',
   } as Record<string,string>)[code] ?? '认证请求无法完成。';
 }
 
@@ -276,6 +287,7 @@ export class LocalAuthService {
   private readonly policy: AuthPolicy;
   private readonly now: () => Date;
   private readonly tokenFactory: () => string;
+  private readonly secondFactorGate: AuthSecondFactorGate | undefined;
   private dummyPasswordHash?: Promise<string>;
 
   constructor(input: {
@@ -285,6 +297,7 @@ export class LocalAuthService {
     policy: AuthPolicy;
     now?: () => Date;
     tokenFactory?: () => string;
+    secondFactorGate?: AuthSecondFactorGate;
   }) {
     validatePolicy(input.policy);
     this.repository = input.repository;
@@ -293,6 +306,7 @@ export class LocalAuthService {
     this.policy = input.policy;
     this.now = input.now ?? (() => new Date());
     this.tokenFactory = input.tokenFactory ?? (() => randomBytes(32).toString('base64url'));
+    this.secondFactorGate = input.secondFactorGate;
   }
 
   private async event(userId: string | null, type: string, outcome: AuthSecurityEvent['outcome'], context: AuthContext) {
@@ -349,7 +363,22 @@ export class LocalAuthService {
     }
     if (!user.email_verified_at) throw new AuthError('email_verification_required', 403, '完成邮箱验证后登录。');
     user.failed_login_count = 0; user.locked_until = null; user.status = 'active'; user.updated_at = now; await this.repository.saveUser(user);
-    const token = this.tokenFactory();
+    const secondFactor = await this.secondFactorGate?.begin(user, context);
+    if (secondFactor?.required) {
+      await this.event(user.id, 'login.mfa_required', 'succeeded', context);
+      return { mfa_required: true as const, challenge_token: secondFactor.challengeToken, expires_at: secondFactor.expiresAt.toISOString() };
+    }
+    return this.issueSession(user, context);
+  }
+
+  async completeSecondFactorLogin(userId: string, context: AuthContext) {
+    const user = await this.repository.findUserById(userId);
+    if (!user || user.status !== 'active') throw new AuthError('account_disabled', 403, '联系平台安全管理员。');
+    return this.issueSession(user, context);
+  }
+
+  private async issueSession(user: UserRecord, context: AuthContext) {
+    const now = this.now(); const token = this.tokenFactory();
     const session: SessionRecord = { id: randomUUID(), user_id: user.id, token_hash: digestOpaqueToken(token), status: 'active', device_label: context.userAgent?.slice(0, 120) || '未知设备', user_agent_hash: hashMetadata(context.userAgent), ip_hash: hashMetadata(context.ipAddress), expires_at: addMinutes(now, this.policy.sessionTtlMinutes), last_seen_at: now, revoked_at: null, created_at: now };
     await this.repository.createSession(session); await this.event(user.id, 'login.succeeded', 'succeeded', context);
     return { token, user: { id: user.id, email: user.email, status: user.status }, session: this.sessionSummary(session) };
@@ -406,3 +435,5 @@ export class LocalAuthService {
     return { id: session.id, status: session.status, device_label: session.device_label, expires_at: session.expires_at.toISOString(), last_seen_at: session.last_seen_at.toISOString(), created_at: session.created_at.toISOString() };
   }
 }
+
+export * from './mfa.js';

@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P01",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01"],
-    "activeModules": ["M01-02"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02"],
+    "activeModules": ["M01-03"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -82,7 +82,16 @@
       "routes": ["/api/v1/auth/register", "/api/v1/auth/email-verification/confirm", "/api/v1/auth/login", "/api/v1/auth/logout", "/api/v1/auth/password-reset/request", "/api/v1/auth/password-reset/confirm", "/api/v1/me/password", "/api/v1/me/sessions"],
       "sessionTransport": "opaque Secure HttpOnly SameSite=Strict cookie in production; token hash only in MySQL",
       "delivery": "AES-256-GCM MySQL outbox; provider selection pending and explicitly blocked",
-      "scope": "local email account and own sessions only; MFA/OIDC/SAML/SCIM and organization tenancy remain later modules",
+      "scope": "local email account and own sessions only; MFA and enterprise identity capabilities are tracked separately by M01-02",
+      "status": "module_verified"
+    },
+    "mfaIdentityAdapters": {
+      "module": "M01-02",
+      "entrypoints": ["../packages/auth/src/mfa.ts", "../apps/api/src/mysql-mfa-repository.ts", "../apps/web/src/components/LocalIdentity.vue"],
+      "routes": ["/api/v1/auth/mfa/totp/verify", "/api/v1/me/mfa", "/api/v1/me/mfa/totp/enrollment", "/api/v1/me/mfa/totp/confirm", "/api/v1/me/mfa/totp"],
+      "totp": "RFC6238, encrypted seed, replay-resistant time step, single-use recovery codes",
+      "challengeTransport": "short-lived opaque Secure HttpOnly SameSite=Strict cookie in production; hash only in MySQL",
+      "identityAdapters": {"oidc":"adapter_ready_not_enabled", "saml2":"reserved_disabled", "scim2":"reserved_disabled"},
       "status": "module_verified"
     }
   },
@@ -128,8 +137,8 @@
   ],
   "apiGroups": [
     {"prefix": "/api/v1/health", "domain": "platform-runtime", "status": "foundation_implemented"},
-    {"prefix": "/api/v1/auth", "domain": "identity", "status": "M01-01_local_account_implemented_MFA_OIDC_planned"},
-    {"prefix": "/api/v1/me", "domain": "identity", "status": "M01-01_password_and_own_sessions_implemented_profile_preferences_tokens_planned"},
+    {"prefix": "/api/v1/auth", "domain": "identity", "status": "M01-01_local_account_and_M01-02_TOTP_challenge_implemented_enterprise_provider_activation_planned"},
+    {"prefix": "/api/v1/me", "domain": "identity", "status": "password_sessions_and_TOTP_MFA_implemented_profile_preferences_tokens_planned"},
     {"prefix": "/api/v1/org", "domain": "organization", "status": "planned"},
     {"prefix": "/api/v1/trends", "domain": "trends", "status": "planned"},
     {"prefix": "/api/v1/opportunities", "domain": "opportunities", "status": "planned"},

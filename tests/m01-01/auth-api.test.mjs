@@ -6,7 +6,7 @@ import { CaptureAuthDelivery, InMemoryAuthRepository, LocalAuthService, createAr
 function appFixture(secureCookie = false) {
   const repository = new InMemoryAuthRepository(); const delivery = new CaptureAuthDelivery(); let sequence = 0;
   const service = new LocalAuthService({ repository, delivery, passwordHasher:createArgon2PasswordHasher({memoryCost:19456,timeCost:2,parallelism:1}), policy:{passwordMinLength:12,passwordMaxLength:128,sessionTtlMinutes:720,actionTokenTtlMinutes:15,maxFailedAttempts:5,lockMinutes:15}, now:()=>new Date('2026-08-07T00:00:00Z'), tokenFactory:()=>Buffer.alloc(32,++sequence).toString('base64url') });
-  const seen = new Map(); const idempotency = { execute:async(input,work)=>{const key=`${input.scope}:${input.route}:${input.method}:${input.key}`;if(seen.has(key))return{...seen.get(key),replayed:true};const result=await work();seen.set(key,result);return result;} };
+  const seen = new Map(); const execute=async(input,work)=>{const key=`${input.scope}:${input.route}:${input.method}:${input.key}`;if(seen.has(key))return{...seen.get(key),replayed:true};const result=await work();seen.set(key,result);return result;};const idempotency = { execute,executeSensitive:execute };
   return { app:buildApp({localAuth:{service,idempotency,webOrigin:'http://127.0.0.1:5173',secureCookie}}), delivery, repository };
 }
 

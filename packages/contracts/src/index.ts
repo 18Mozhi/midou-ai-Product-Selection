@@ -62,6 +62,22 @@ export interface PasswordResetConfirm { token: string; new_password: string; }
 export interface EmailVerificationConfirm { token: string; }
 export interface PasswordChangeRequest { current_password: string; new_password: string; }
 
+export interface MfaChallengeResponse { mfa_required: true; expires_at: string; }
+export interface MfaEnrollmentStart { factor_id: string; secret: string; otpauth_uri: string; }
+export interface IdentityAdapterCapability {
+  protocol: 'oidc' | 'saml2' | 'scim2';
+  status: 'adapter_ready' | 'reserved_disabled';
+  activation: 'requires_approved_provider_and_tenant_mapping';
+}
+export interface MfaStatus {
+  totp_enabled: boolean;
+  factor_id: string | null;
+  confirmed_at: string | null;
+  identity_adapters: IdentityAdapterCapability[];
+}
+export interface MfaCodeRequest { code: string; }
+export interface MfaDisableRequest extends MfaCodeRequest { current_password: string; }
+
 export interface RedisDependencyStatus {
   status: 'available' | 'unavailable';
   latency_ms: number;

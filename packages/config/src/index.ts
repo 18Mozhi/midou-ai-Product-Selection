@@ -16,6 +16,7 @@ export interface RuntimeConfig {
   storage: { evidenceRoot: string; exportRoot: string };
   security: { sessionSecret: string; credentialsMasterKey: string };
   auth: { argon2MemoryKib: number; argon2TimeCost: number; argon2Parallelism: number; passwordMinLength: number; passwordMaxLength: number; sessionTtlMinutes: number; actionTokenTtlMinutes: number; maxFailedAttempts: number; lockMinutes: number; outboxPollMs: number };
+  mfa: { issuer: string; totpPeriodSeconds: number; totpDigits: number; totpWindow: number; challengeTtlMinutes: number; maxAttempts: number; recoveryCodeCount: number };
   identity: { workerId: string; crawlerId: string };
   runtime: { workerHeartbeatMs: number; crawlerHeartbeatSeconds: number };
   configFingerprint: string;
@@ -50,6 +51,7 @@ export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env, target: 
     storage: { evidenceRoot, exportRoot },
     security: { sessionSecret: secret(env, 'SESSION_SECRET', production, 32), credentialsMasterKey: secret(env, 'CREDENTIALS_MASTER_KEY', production, 32) },
     auth: { argon2MemoryKib: integer(env, 'AUTH_ARGON2_MEMORY_KIB', 19456, 19456, 1048576), argon2TimeCost: integer(env, 'AUTH_ARGON2_TIME_COST', 2, 2, 20), argon2Parallelism: integer(env, 'AUTH_ARGON2_PARALLELISM', 1, 1, 16), passwordMinLength: integer(env, 'AUTH_PASSWORD_MIN_LENGTH', 12, 8, 128), passwordMaxLength: integer(env, 'AUTH_PASSWORD_MAX_LENGTH', 128, 12, 1024), sessionTtlMinutes: integer(env, 'AUTH_SESSION_TTL_MINUTES', 720, 5, 43200), actionTokenTtlMinutes: integer(env, 'AUTH_ACTION_TOKEN_TTL_MINUTES', 15, 5, 1440), maxFailedAttempts: integer(env, 'AUTH_MAX_FAILED_ATTEMPTS', 5, 2, 20), lockMinutes: integer(env, 'AUTH_LOCK_MINUTES', 15, 1, 1440), outboxPollMs: integer(env, 'AUTH_OUTBOX_POLL_MS', 5000, 1000, 60000) },
+    mfa: { issuer: text(env,'MFA_ISSUER','ScoutOps'), totpPeriodSeconds: integer(env,'MFA_TOTP_PERIOD_SECONDS',30,15,120), totpDigits: integer(env,'MFA_TOTP_DIGITS',6,6,8), totpWindow: integer(env,'MFA_TOTP_WINDOW',1,0,2), challengeTtlMinutes: integer(env,'MFA_CHALLENGE_TTL_MINUTES',5,1,10), maxAttempts: integer(env,'MFA_MAX_ATTEMPTS',5,2,10), recoveryCodeCount: integer(env,'MFA_RECOVERY_CODE_COUNT',8,4,20) },
     identity: { workerId: text(env, 'WORKER_ID', 'worker-local'), crawlerId: text(env, 'CRAWLER_ID', 'crawler-local') },
     runtime: { workerHeartbeatMs: integer(env, 'WORKER_HEARTBEAT_MS', 30000, 5000, 60000), crawlerHeartbeatSeconds: integer(env, 'CRAWLER_HEARTBEAT_SECONDS', 30, 5, 60) },
   };

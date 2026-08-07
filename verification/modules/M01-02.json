@@ -1,0 +1,33 @@
+{
+  "moduleId": "M01-02",
+  "phaseId": "P01",
+  "name": "MFA 与 OIDC 适配层",
+  "dependencies": ["M01-01"],
+  "atomicTasks": [
+    {"id":"M01-02.A01","evidence":"architecture scope freezes TOTP MFA and disabled identity adapters"},
+    {"id":"M01-02.A02","evidence":"factor, challenge, recovery code and adapter domains"},
+    {"id":"M01-02.A03","evidence":"0009 MySQL57 up/down migration"},
+    {"id":"M01-02.A04","evidence":"MfaService enrollment, challenge and disable flows"},
+    {"id":"M01-02.A05","evidence":"synchronous TOTP boundary and explicit no-async rationale"},
+    {"id":"M01-02.A06","evidence":"OpenAPI MFA and identity-adapter DTOs"},
+    {"id":"M01-02.A07","evidence":"MFA security center desktop and 390 layout"},
+    {"id":"M01-02.A08","evidence":"enroll, confirm, login challenge, recovery and disable states"},
+    {"id":"M01-02.A09","evidence":"session ownership and short-lived HttpOnly challenge guard"},
+    {"id":"M01-02.A10","evidence":"validated TOTP and challenge configuration"},
+    {"id":"M01-02.A11","evidence":"sanitized MFA security events with request_id and trace_id"},
+    {"id":"M01-02.A12","evidence":"RFC6238 vectors, replay, attempt and recovery unit tests"},
+    {"id":"M01-02.A13","evidence":"OpenAPI, DTO, cookie and adapter contract tests"},
+    {"id":"M01-02.A14","evidence":"real MySQL57 encrypted factor and challenge integration"},
+    {"id":"M01-02.A15","evidence":"Playwright desktop and 390 visual keyboard flows"},
+    {"id":"M01-02.A16","evidence":"clock drift, replay, exhaustion, disabled adapter and rollback drills"},
+    {"id":"M01-02.A17","evidence":"blueprint, OpenAPI, Feature Map, env and rollback synchronized"}
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m01-02/totp-mfa.test.mjs",
+    "node --test tests/m01-02/mfa-api.test.mjs",
+    "node --test tests/m01-02/identity-adapter-contract.test.mjs",
+    "node scripts/verify-mfa-live.mjs",
+    "npx playwright test tests/e2e/m01-02-mfa.spec.ts"
+  ]
+}

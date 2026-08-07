@@ -19,7 +19,7 @@ test('M01-01.A06/A09/A13 OpenAPI freezes local email account and own-session con
   for (const route of ['/auth/register:', '/auth/email-verification/confirm:', '/auth/login:', '/auth/logout:', '/auth/password-reset/request:', '/auth/password-reset/confirm:', '/me/password:', '/me/sessions:']) assert.match(api, new RegExp(route.replaceAll('/', '\\/')));
   for (const schema of ['LocalAccountRegistration', 'LocalLoginRequest', 'SessionSummary', 'PasswordResetConfirm']) assert.match(api, new RegExp(schema));
   assert.match(api, /HttpOnlySession/);
-  assert.doesNotMatch(api, /google|microsoft|saml|scim/i);
+  assert.doesNotMatch(api, /\/auth\/(google|microsoft|saml|scim)/i);
   for (const dto of ['LocalAccountSummary', 'LocalAccountRegistration', 'LocalLoginRequest', 'LocalSessionSummary', 'PasswordResetConfirm']) assert.match(contracts, new RegExp(`interface ${dto}`));
 });
 

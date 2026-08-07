@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: ScoutOps Internal API
   version: 0.1.0
-  description: P00 foundation plus P01 local identity contract. Organization-visible endpoints require organization-aware authorization.
+  description: P00 foundation plus P01 local identity and TOTP MFA contracts. Organization-visible endpoints require organization-aware authorization.
 servers:
   - url: /api/v1
 x-scoutops-verification:
@@ -105,8 +105,25 @@ paths:
           description: Authenticated; raw session token exists only in Set-Cookie
           headers: { Set-Cookie: { schema: { type: string }, description: '__Host-scoutops_session with Secure, HttpOnly, SameSite=Strict and Path=/' } }
           content: { application/json: { schema: { $ref: '#/components/schemas/LoginEnvelope' } } }
+        '202':
+          description: Password accepted; TOTP or one-time recovery code is still required
+          headers: { Set-Cookie: { schema: { type: string }, description: '__Host-scoutops_mfa_challenge; Secure; HttpOnly; SameSite=Strict; short lived' } }
+          content: { application/json: { schema: { $ref: '#/components/schemas/MfaChallengeEnvelope' } } }
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
+        '423': { $ref: '#/components/responses/Error' }
+  /auth/mfa/totp/verify:
+    post:
+      summary: Complete a short-lived MFA login challenge and create a session
+      security: [{ HttpOnlyMfaChallenge: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/MfaCodeRequest' } } } }
+      responses:
+        '200':
+          description: Challenge consumed once; challenge cookie cleared and session cookie set
+          headers: { Set-Cookie: { schema: { type: array, items: { type: string } }, description: 'Session cookie plus expired MFA challenge cookie' } }
+          content: { application/json: { schema: { $ref: '#/components/schemas/LoginEnvelope' } } }
+        '401': { $ref: '#/components/responses/Error' }
         '423': { $ref: '#/components/responses/Error' }
   /auth/logout:
     post:
@@ -151,6 +168,43 @@ paths:
       responses:
         '200': { description: Own sessions without token hashes, content: { application/json: { schema: { $ref: '#/components/schemas/SessionListEnvelope' } } } }
         '401': { $ref: '#/components/responses/Error' }
+  /me/mfa:
+    get:
+      summary: Read the authenticated user's MFA status and non-enabled enterprise identity capabilities
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Own MFA status without encrypted secret or recovery hashes, content: { application/json: { schema: { $ref: '#/components/schemas/MfaStatusEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+  /me/mfa/totp/enrollment:
+    post:
+      summary: Reauthenticate and create a pending encrypted TOTP factor
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/MfaEnrollmentRequest' } } } }
+      responses:
+        '201': { description: Secret is displayed only for this enrollment response and must never be logged, content: { application/json: { schema: { $ref: '#/components/schemas/MfaEnrollmentEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /me/mfa/totp/confirm:
+    post:
+      summary: Verify the pending factor and return one-time recovery codes once
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/MfaCodeRequest' } } } }
+      responses:
+        '200': { description: TOTP enabled and recovery codes shown once, content: { application/json: { schema: { $ref: '#/components/schemas/MfaEnrollmentConfirmEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /me/mfa/totp:
+    delete:
+      summary: Reauthenticate with password and current second factor, disable TOTP and revoke every session
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/MfaDisableRequest' } } } }
+      responses:
+        '204': { description: TOTP disabled; all sessions and browser cookie revoked }
+        '401': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
   /me/sessions/{sessionId}:
     delete:
       summary: Revoke one session owned by the authenticated user
@@ -244,6 +298,10 @@ components:
       type: apiKey
       in: cookie
       name: __Host-scoutops_session
+    HttpOnlyMfaChallenge:
+      type: apiKey
+      in: cookie
+      name: __Host-scoutops_mfa_challenge
   parameters:
     Page:
       name: page
@@ -330,6 +388,51 @@ components:
         expires_at: { type: string, format: date-time }
         last_seen_at: { type: string, format: date-time }
         created_at: { type: string, format: date-time }
+    MfaCodeRequest:
+      type: object
+      additionalProperties: false
+      required: [code]
+      properties: { code: { type: string, minLength: 6, maxLength: 32, writeOnly: true } }
+    MfaEnrollmentRequest:
+      type: object
+      additionalProperties: false
+      required: [current_password]
+      properties: { current_password: { type: string, maxLength: 1024, writeOnly: true } }
+    MfaDisableRequest:
+      type: object
+      additionalProperties: false
+      required: [current_password, code]
+      properties:
+        current_password: { type: string, maxLength: 1024, writeOnly: true }
+        code: { type: string, minLength: 6, maxLength: 32, writeOnly: true }
+    MfaChallengeResponse:
+      type: object
+      required: [mfa_required, expires_at]
+      properties:
+        mfa_required: { type: boolean, enum: [true] }
+        expires_at: { type: string, format: date-time }
+    MfaEnrollmentStart:
+      type: object
+      required: [factor_id, secret, otpauth_uri]
+      properties:
+        factor_id: { type: string, format: uuid }
+        secret: { type: string, description: Displayed once; never logged or persisted by the browser }
+        otpauth_uri: { type: string, description: RFC 6238 authenticator enrollment URI displayed once }
+    IdentityAdapterCapability:
+      type: object
+      required: [protocol, status, activation]
+      properties:
+        protocol: { type: string, enum: [oidc, saml2, scim2] }
+        status: { type: string, enum: [adapter_ready, reserved_disabled] }
+        activation: { type: string, enum: [requires_approved_provider_and_tenant_mapping] }
+    MfaStatus:
+      type: object
+      required: [totp_enabled, factor_id, confirmed_at, identity_adapters]
+      properties:
+        totp_enabled: { type: boolean }
+        factor_id: { type: string, format: uuid, nullable: true }
+        confirmed_at: { type: string, format: date-time, nullable: true }
+        identity_adapters: { type: array, items: { $ref: '#/components/schemas/IdentityAdapterCapability' } }
     LocalAccountEnvelope:
       allOf:
         - { $ref: '#/components/schemas/SuccessEnvelope' }
@@ -345,6 +448,29 @@ components:
               properties:
                 user: { $ref: '#/components/schemas/LocalAccountSummary' }
                 session: { $ref: '#/components/schemas/SessionSummary' }
+    MfaChallengeEnvelope:
+      allOf:
+        - { $ref: '#/components/schemas/SuccessEnvelope' }
+        - { type: object, properties: { data: { $ref: '#/components/schemas/MfaChallengeResponse' } } }
+    MfaEnrollmentEnvelope:
+      allOf:
+        - { $ref: '#/components/schemas/SuccessEnvelope' }
+        - { type: object, properties: { data: { $ref: '#/components/schemas/MfaEnrollmentStart' } } }
+    MfaEnrollmentConfirmEnvelope:
+      allOf:
+        - { $ref: '#/components/schemas/SuccessEnvelope' }
+        - type: object
+          properties:
+            data:
+              type: object
+              required: [status, recovery_codes]
+              properties:
+                status: { type: string, enum: [enabled] }
+                recovery_codes: { type: array, minItems: 4, items: { type: string } }
+    MfaStatusEnvelope:
+      allOf:
+        - { $ref: '#/components/schemas/SuccessEnvelope' }
+        - { type: object, properties: { data: { $ref: '#/components/schemas/MfaStatus' } } }
     AcceptedEnvelope:
       allOf:
         - { $ref: '#/components/schemas/SuccessEnvelope' }

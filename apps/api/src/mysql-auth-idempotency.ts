@@ -30,4 +30,10 @@ export class MySqlAuthIdempotency implements AuthIdempotency {
       await this.pool.query("UPDATE auth_idempotency_records SET status='failed',updated_at=? WHERE id=?", [new Date(),id]); throw error;
     }
   }
+  async executeSensitive<T>(input: { scope: string; route: string; method: 'POST'|'DELETE'; key: string; requestId: string; traceId: string }, work: () => Promise<IdempotentResponse<T>>): Promise<IdempotentResponse<T>> {
+    const now=new Date(),scopeHash=digest(input.scope),keyHash=digest(input.key),expiresAt=new Date(now.getTime()+24*60*60_000),id=randomUUID();
+    try{await this.pool.query("INSERT INTO auth_idempotency_records (id,scope_hash,route,http_method,idempotency_key_hash,status,response_status,response_json,request_id,trace_id,expires_at,created_at,updated_at) VALUES (?,?,?,?,?,'processing',NULL,NULL,?,?,?,?,?)",[id,scopeHash,input.route,input.method,keyHash,input.requestId,input.traceId,expiresAt,now,now]);}
+    catch(error){if(!(typeof error==='object'&&error&&'code'in error&&error.code==='ER_DUP_ENTRY'))throw error;const[rows]=await this.pool.query<RowDataPacket[]>('SELECT status FROM auth_idempotency_records WHERE scope_hash=? AND route=? AND http_method=? AND idempotency_key_hash=? AND expires_at>? LIMIT 1',[scopeHash,input.route,input.method,keyHash,now]);if(rows[0]?.status==='failed'){await this.pool.query("DELETE FROM auth_idempotency_records WHERE scope_hash=? AND route=? AND http_method=? AND idempotency_key_hash=? AND status='failed'",[scopeHash,input.route,input.method,keyHash]);return this.executeSensitive(input,work);}throw new AuthError(rows[0]?.status==='processing'?'idempotency_in_progress':'sensitive_response_replay_unavailable',409,rows[0]?.status==='processing'?'等待原请求完成后重试。':'重新进入绑定流程生成新的单次响应。');}
+    try{const result=await work();await this.pool.query("UPDATE auth_idempotency_records SET status='succeeded',response_status=?,response_json=NULL,updated_at=? WHERE id=?",[result.status,new Date(),id]);return result;}catch(error){await this.pool.query("UPDATE auth_idempotency_records SET status='failed',updated_at=? WHERE id=?",[new Date(),id]);throw error;}
+  }
 }

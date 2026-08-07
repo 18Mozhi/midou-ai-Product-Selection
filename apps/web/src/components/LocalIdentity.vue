@@ -2,15 +2,15 @@
 import { computed, ref } from 'vue';
 import { publicConfig } from '../config';
 
-type IdentityMode = 'login' | 'register' | 'forgot' | 'verify' | 'reset' | 'sessions';
+type IdentityMode = 'login' | 'register' | 'forgot' | 'verify' | 'reset' | 'sessions' | 'mfa' | 'mfa-challenge';
 type RequestState = 'idle' | 'loading' | 'success' | 'error' | 'expired';
 const params = new URLSearchParams(window.location.search);
 const mode = ref<IdentityMode>((params.get('mode') as IdentityMode) || 'login');
 const requestState = ref<RequestState>(params.get('state') === 'expired' ? 'expired' : 'idle');
-const email = ref(''); const password = ref(''); const confirmPassword = ref(''); const message = ref(''); const sessions = ref<Array<{id:string;device_label:string;status:string;last_seen_at:string}>>([]);
-const title = computed(() => ({login:'欢迎回到 ScoutOps',register:'创建本地账号',forgot:'找回密码',verify:'验证邮箱',reset:'设置新密码',sessions:'我的设备会话'})[mode.value]);
+const email = ref(''); const password = ref(''); const confirmPassword = ref(''); const currentPassword=ref('');const mfaCode=ref('');const mfaSecret=ref('');const recoveryCodes=ref<string[]>([]);const mfaEnabled=ref(false);const message = ref(''); const sessions = ref<Array<{id:string;device_label:string;status:string;last_seen_at:string}>>([]);
+const title = computed(() => ({login:'欢迎回到 ScoutOps',register:'创建本地账号',forgot:'找回密码',verify:'验证邮箱',reset:'设置新密码',sessions:'我的设备会话',mfa:'多因素认证','mfa-challenge':'完成安全验证'})[mode.value]);
 
-function switchMode(next: IdentityMode) { mode.value=next; requestState.value='idle'; message.value=''; if(next==='sessions')void loadSessions(); }
+function switchMode(next: IdentityMode) { mode.value=next; requestState.value='idle'; message.value=''; if(next==='sessions')void loadSessions();if(next==='mfa')void loadMfa(); }
 const idempotency = () => crypto.randomUUID();
 async function request(path:string,body?:Record<string,string>,method='POST') {
   requestState.value='loading';message.value='';
@@ -19,20 +19,25 @@ async function request(path:string,body?:Record<string,string>,method='POST') {
 }
 async function submit() {
   if(mode.value==='register'&&password.value!==confirmPassword.value){requestState.value='error';message.value='两次输入的密码不一致。';return;}
-  if(mode.value==='login'){const result=await request('/auth/login',{email:email.value,password:password.value});if(result)message.value='登录成功，会话已安全写入浏览器。';}
+  if(mode.value==='login'){const result=await request('/auth/login',{email:email.value,password:password.value});if(result?.data?.mfa_required){mode.value='mfa-challenge';requestState.value='idle';message.value='密码已验证，请输入认证器验证码。';}else if(result)message.value='登录成功，会话已安全写入浏览器。';}
   if(mode.value==='register'){const result=await request('/auth/register',{email:email.value,password:password.value});if(result){mode.value='verify';message.value='验证邮件已进入受控投递队列。';}}
   if(mode.value==='forgot'){const result=await request('/auth/password-reset/request',{email:email.value});if(result)message.value='如账号存在，重置邮件会进入受控投递队列。';}
   if(mode.value==='reset'){const token=params.get('token')||'';const result=await request('/auth/password-reset/confirm',{token,new_password:password.value});if(result===null&&requestState.value==='success')message.value='密码已更新，请重新登录。';}
+  if(mode.value==='mfa-challenge'){const result=await request('/auth/mfa/totp/verify',{code:mfaCode.value});if(result){message.value='双重验证通过，会话已安全建立。';mode.value='sessions';await loadSessions();}}
 }
 async function loadSessions(){const result=await request('/me/sessions',undefined,'GET');sessions.value=result?.data||[];}
 async function revoke(id:string){const result=await request(`/me/sessions/${id}`,undefined,'DELETE');if(result===null&&requestState.value==='success')await loadSessions();}
+async function loadMfa(){const result=await request('/me/mfa',undefined,'GET');if(result)mfaEnabled.value=Boolean(result.data?.totp_enabled);}
+async function startMfa(){const result=await request('/me/mfa/totp/enrollment',{current_password:currentPassword.value});if(result){mfaSecret.value=result.data.secret;message.value='密钥仅显示于本次绑定，请添加到认证器后输入验证码。';}}
+async function confirmMfa(){const result=await request('/me/mfa/totp/confirm',{code:mfaCode.value});if(result){mfaEnabled.value=true;recoveryCodes.value=result.data.recovery_codes;message.value='MFA 已启用。请离线保存一次性恢复码。';}}
+async function disableMfa(){const result=await request('/me/mfa/totp',{current_password:currentPassword.value,code:mfaCode.value},'DELETE');if(result===null&&requestState.value==='success'){mfaEnabled.value=false;message.value='MFA 已停用，所有会话已撤销，请重新登录。';}}
 </script>
 
 <template>
   <main class="identity-page" :data-mode="mode" :data-state="requestState">
     <header class="identity-header">
       <a class="identity-brand" href="/"><span>S</span>ScoutOps</a>
-      <p>本地账号 · P01 / M01-01</p>
+      <p>身份安全 · P01 / M01-02</p>
     </header>
     <section class="identity-shell">
       <aside class="identity-story" aria-label="ScoutOps 产品说明">
@@ -43,7 +48,7 @@ async function revoke(id:string){const result=await request(`/me/sessions/${id}`
         <ul>
           <li><strong>Argon2id</strong><small>密码单向哈希</small></li>
           <li><strong>单次令牌</strong><small>验证与重置可追踪</small></li>
-          <li><strong>会话可撤销</strong><small>设备级安全控制</small></li>
+          <li><strong>TOTP MFA</strong><small>30 秒短时验证码</small></li>
         </ul>
       </aside>
 
@@ -54,6 +59,8 @@ async function revoke(id:string){const result=await request(`/me/sessions/${id}`
           <span v-if="mode==='login'">使用已验证的邮箱和本地密码登录</span>
           <span v-else-if="mode==='register'">先创建账号，再完成邮箱验证</span>
           <span v-else-if="mode==='forgot'">无论账号是否存在，页面提示保持一致</span>
+          <span v-else-if="mode==='mfa'">认证器密钥加密保存，恢复码仅显示一次</span>
+          <span v-else-if="mode==='mfa-challenge'">短时挑战保存在 HttpOnly Cookie 中</span>
         </div>
 
         <div v-if="requestState==='expired'" class="identity-notice identity-notice--warning" data-testid="expired">
@@ -62,17 +69,31 @@ async function revoke(id:string){const result=await request(`/me/sessions/${id}`
         <div v-if="requestState==='error'" class="identity-notice identity-notice--error" data-testid="error"><strong>操作未完成</strong><p>{{ message }}</p></div>
         <div v-if="requestState==='success' && message" class="identity-notice identity-notice--success"><strong>操作已受理</strong><p>{{ message }}</p></div>
 
-        <form v-if="['login','register','forgot','reset'].includes(mode)" @submit.prevent="submit">
-          <label v-if="mode!=='reset'">邮箱<input v-model="email" type="email" autocomplete="email" required maxlength="254" placeholder="name@company.com"></label>
-          <label v-if="mode!=='forgot'">{{ mode==='reset' ? '新密码' : '密码' }}<input v-model="password" type="password" :autocomplete="mode==='login'?'current-password':'new-password'" required minlength="12" maxlength="128" placeholder="输入安全密码"></label>
+        <form v-if="['login','register','forgot','reset','mfa-challenge'].includes(mode)" @submit.prevent="submit">
+          <label v-if="mode==='mfa-challenge'">认证器验证码或恢复码<input v-model="mfaCode" inputmode="numeric" autocomplete="one-time-code" required minlength="6" maxlength="32" placeholder="6 位验证码"></label>
+          <label v-if="!['reset','mfa-challenge'].includes(mode)">邮箱<input v-model="email" type="email" autocomplete="email" required maxlength="254" placeholder="name@company.com"></label>
+          <label v-if="!['forgot','mfa-challenge'].includes(mode)">{{ mode==='reset' ? '新密码' : '密码' }}<input v-model="password" type="password" :autocomplete="mode==='login'?'current-password':'new-password'" required minlength="12" maxlength="128" placeholder="输入安全密码"></label>
           <label v-if="mode==='register'">确认密码<input v-model="confirmPassword" type="password" autocomplete="new-password" required minlength="12" maxlength="128" placeholder="再次输入密码"></label>
           <div v-if="mode==='login'" class="identity-form-row"><span>会话关闭浏览器后失效</span><button type="button" class="text-button" @click="switchMode('forgot')">忘记密码？</button></div>
-          <button class="identity-primary" type="submit" :disabled="requestState==='loading'">{{ requestState==='loading' ? '正在安全处理…' : mode==='login'?'登录':mode==='register'?'创建账号':mode==='forgot'?'发送重置说明':'更新密码' }}</button>
+          <button class="identity-primary" type="submit" :disabled="requestState==='loading'">{{ requestState==='loading' ? '正在安全处理…' : mode==='login'?'登录':mode==='register'?'创建账号':mode==='forgot'?'发送重置说明':mode==='mfa-challenge'?'验证并登录':'更新密码' }}</button>
         </form>
 
         <div v-else-if="mode==='verify'" class="identity-centered" data-testid="verify">
           <span class="mail-icon" aria-hidden="true">✉</span><h3>检查验证邮件</h3><p>邮件 Provider 未确认时，生产投递会明确显示受阻，不会假报已发送。</p><button type="button" @click="switchMode('login')">返回登录</button>
         </div>
+
+        <section v-else-if="mode==='mfa'" class="mfa-panel" data-testid="mfa">
+          <div class="mfa-status"><span :class="mfaEnabled?'is-enabled':'is-pending'">{{ mfaEnabled ? '已启用' : '未启用' }}</span><div><strong>认证器 TOTP</strong><p>遵循 RFC 6238；验证码 30 秒更新，允许受控时钟偏差并拒绝重放。</p></div></div>
+          <template v-if="!mfaEnabled">
+            <label>当前密码<input v-model="currentPassword" type="password" autocomplete="current-password" minlength="12" maxlength="128" placeholder="验证当前密码"></label>
+            <button v-if="!mfaSecret" class="identity-primary" type="button" @click="startMfa">开始绑定认证器</button>
+            <div v-else class="mfa-setup"><p>手动输入密钥</p><code>{{ mfaSecret }}</code><label>认证器验证码<input v-model="mfaCode" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="6 位验证码"></label><button class="identity-primary" type="button" @click="confirmMfa">确认并启用</button></div>
+          </template>
+          <template v-else>
+            <div v-if="recoveryCodes.length" class="recovery-codes"><strong>一次性恢复码</strong><p>仅本次显示，请离线保存；每个代码只能使用一次。</p><code v-for="code in recoveryCodes" :key="code">{{ code }}</code></div>
+            <div class="mfa-disable"><label>当前密码<input v-model="currentPassword" type="password" autocomplete="current-password" maxlength="128"></label><label>当前验证码或恢复码<input v-model="mfaCode" autocomplete="one-time-code" maxlength="32"></label><button type="button" @click="disableMfa">停用并撤销全部会话</button></div>
+          </template>
+        </section>
 
         <div v-else class="session-list" data-testid="sessions">
           <div v-if="requestState==='loading'" class="identity-loading">正在读取本人会话…</div>
@@ -84,9 +105,10 @@ async function revoke(id:string){const result=await request(`/me/sessions/${id}`
           <button v-if="mode!=='register'" type="button" class="text-button" @click="switchMode('register')">创建本地账号</button>
           <button v-if="mode!=='login'" type="button" class="text-button" @click="switchMode('login')">返回登录</button>
           <button type="button" class="text-button" @click="switchMode('sessions')">查看安全会话</button>
+          <button type="button" class="text-button" @click="switchMode('mfa')">管理 MFA</button>
         </footer>
       </section>
     </section>
-    <footer class="identity-footer"><span>安全状态均有文字说明</span><span>邮件 Provider：待确认</span><span>生产运行：仅宝塔管理</span></footer>
+    <footer class="identity-footer"><span>安全状态均有文字说明</span><span>企业 SSO：适配层待审批启用</span><span>生产运行：仅宝塔管理</span></footer>
   </main>
 </template>
