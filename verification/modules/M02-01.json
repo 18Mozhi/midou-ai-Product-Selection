@@ -1,0 +1,34 @@
+{
+  "moduleId": "M02-01",
+  "phaseId": "P02",
+  "name": "设计令牌与主题",
+  "dependencies": ["M00-08"],
+  "atomicTasks": [
+    { "id": "M02-01.A01", "evidence": "scope and non-goals freeze theme-only visual behavior" },
+    { "id": "M02-01.A02", "evidence": "scoped user UI preference and semantic theme domain" },
+    { "id": "M02-01.A03", "evidence": "MySQL57 preference and audit migrations with rollback" },
+    { "id": "M02-01.A04", "evidence": "versioned idempotent preference service and audit transaction" },
+    { "id": "M02-01.A05", "evidence": "synchronous preference write with explicit no-async rationale" },
+    { "id": "M02-01.A06", "evidence": "OpenAPI preference DTO errors idempotency and version contract" },
+    { "id": "M02-01.A07", "evidence": "reference-grounded desktop and 390 theme studio" },
+    { "id": "M02-01.A08", "evidence": "keyboard theme preview save and recovery states" },
+    { "id": "M02-01.A09", "evidence": "authenticated user and server-enforced organization workspace scope" },
+    { "id": "M02-01.A10", "evidence": "no new secret or environment value with config contract check" },
+    { "id": "M02-01.A11", "evidence": "sanitized preference audit request and trace correlation" },
+    { "id": "M02-01.A12", "evidence": "theme semantics validation version conflict and scope unit tests" },
+    { "id": "M02-01.A13", "evidence": "OpenAPI DTO token and frontend contract tests" },
+    { "id": "M02-01.A14", "evidence": "real MySQL57 scoped preference transaction integration" },
+    { "id": "M02-01.A15", "evidence": "Playwright desktop 390 keyboard accessibility and visual snapshots" },
+    { "id": "M02-01.A16", "evidence": "invalid theme stale version forbidden scope and dependency drills" },
+    { "id": "M02-01.A17", "evidence": "blueprint Feature Map Runbook operations and rollback synchronized" }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m02-01/theme-preferences-domain.test.mjs",
+    "node --test tests/m02-01/theme-preferences-api.test.mjs",
+    "node --test tests/m02-01/theme-preferences-contract.test.mjs",
+    "node scripts/verify-theme-preferences-live.mjs",
+    "npx playwright test tests/e2e/m02-01-theme-studio.spec.ts",
+    "npm run verify:docs"
+  ]
+}

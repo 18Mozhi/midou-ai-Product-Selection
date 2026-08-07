@@ -9,6 +9,7 @@
     "@scoutops/audit": "0.1.0",
     "@scoutops/authorization": "0.1.0",
     "@scoutops/resource-grants": "0.1.0",
+    "@scoutops/preferences": "0.1.0",
     "@scoutops/tenancy": "0.1.0",
     "@scoutops/config": "0.1.0",
     "@scoutops/contracts": "0.1.0",

@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: ScoutOps Internal API
   version: 0.1.0
-  description: P00 foundation plus P01 identity, tenancy context and deny-by-default RBAC/data-scope contracts. Organization-visible endpoints require server-side authorization.
+  description: P00 foundation, P01 identity/tenancy/RBAC, and P02 scoped UI preference contracts. Organization-visible endpoints require server-side authorization.
 servers:
   - url: /api/v1
 x-scoutops-verification:
@@ -43,6 +43,11 @@ x-scoutops-platform-seed:
   environment: [PLATFORM_ADMIN_SEED_EMAIL, PLATFORM_ADMIN_SEED_PASSWORD]
   lifecycle: inject in one Baota-controlled release task, run once, then delete both variables
   restrictedSessionError: security_setup_required
+x-scoutops-design-themes:
+  module: M02-01
+  identifiers: [deep-ocean, aurora-purple, cloud-white]
+  default: deep-ocean
+  rule: Themes only change color, shadow, background and chart semantic colors; they never change authorization, data scope, feature visibility or business conclusions.
 paths:
   /health/live:
     get:
@@ -469,6 +474,27 @@ paths:
       summary: List providers for platform operators
       responses:
         '200': { $ref: '#/components/responses/PaginatedSuccess' }
+  /me/ui-preferences:
+    get:
+      summary: Read the signed-in user's preference for the selected organization and workspace
+      responses:
+        '200': { description: Saved preference or deep-ocean default with version 0, content: { application/json: { schema: { $ref: '#/components/schemas/UiPreferenceEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+    put:
+      summary: Save the signed-in user's theme for the selected organization and workspace
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/UiPreferenceUpdate' } } }
+      responses:
+        '200': { description: Versioned saved preference, content: { application/json: { schema: { $ref: '#/components/schemas/UiPreferenceEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
 components:
   securitySchemes:
     BearerAuth:
@@ -877,6 +903,30 @@ components:
       allOf:
         - { $ref: '#/components/schemas/SuccessEnvelope' }
         - { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/SessionSummary' } } } }
+    ThemeId:
+      type: string
+      enum: [deep-ocean, aurora-purple, cloud-white]
+    UiPreference:
+      type: object
+      required: [theme, source, organization_id, workspace_id, version, updated_at]
+      properties:
+        theme: { $ref: '#/components/schemas/ThemeId' }
+        source: { type: string, enum: [default, saved] }
+        organization_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+        version: { type: integer, minimum: 0 }
+        updated_at: { type: string, format: date-time, nullable: true }
+    UiPreferenceUpdate:
+      type: object
+      required: [theme, expected_version]
+      additionalProperties: false
+      properties:
+        theme: { $ref: '#/components/schemas/ThemeId' }
+        expected_version: { type: integer, minimum: 0 }
+    UiPreferenceEnvelope:
+      allOf:
+        - { $ref: '#/components/schemas/SuccessEnvelope' }
+        - { type: object, properties: { data: { $ref: '#/components/schemas/UiPreference' } } }
     SuccessEnvelope:
       type: object
       required: [data, request_id, trace_id]

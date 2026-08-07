@@ -1,0 +1,22 @@
+CREATE TABLE `user_ui_preference_audit_events` (
+  `id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `preference_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `user_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `organization_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `workspace_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `action` ENUM('ui_preference.created','ui_preference.updated') NOT NULL,
+  `previous_theme` ENUM('deep-ocean','aurora-purple','cloud-white') NULL,
+  `theme` ENUM('deep-ocean','aurora-purple','cloud-white') NOT NULL,
+  `request_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `trace_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `occurred_at` DATETIME(3) NOT NULL,
+  `schema_version` SMALLINT UNSIGNED NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  KEY `idx_ui_preference_audit_scope` (`organization_id`,`workspace_id`,`occurred_at`,`id`),
+  KEY `idx_ui_preference_audit_request` (`request_id`),
+  KEY `idx_ui_preference_audit_trace` (`trace_id`),
+  CONSTRAINT `fk_ui_preference_audit_preference` FOREIGN KEY (`preference_id`) REFERENCES `user_ui_preferences` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `fk_ui_preference_audit_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `fk_ui_preference_audit_org` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `fk_ui_preference_audit_workspace` FOREIGN KEY (`workspace_id`) REFERENCES `workspaces` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
