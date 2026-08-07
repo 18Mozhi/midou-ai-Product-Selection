@@ -1,0 +1,17 @@
+# M03-03 Provider 适配器
+
+## 范围与合同
+
+M03-03 在 `@scoutops/provider-adapters` 固定 `collect`、`normalize`、`healthCheck` 三个方法和六种 access mode，但不猜测任何具体平台的请求方法、参数、鉴权或返回字段。适配器以 M03-01 的 Provider `code` 为 key 注册；code 未注册或 access mode 不匹配时失败关闭。M03-07 才登记首批真实来源实现，M03-04 才接入登录页浏览器执行，M03-05 才交付队列、租约、重试和死信状态机。
+
+`collect` 必须携带 organization_id、workspace_id、request_id、trace_id、Provider 技术合同和受控 limit。统一运行时限制批次条数、响应字节数和超时，拒绝缺少 scope、超限或格式错误的结果。`normalize` 产出 external_id、observed_at、canonical_url、业务 fields、evidence_ref 和 Provider/Adapter/Parser provenance；原始证据持久化归 M03-06。健康检查不接受组织上下文，因为 Provider 与适配器是平台全局技术资产。
+
+## 健康、审计与权限
+
+`provider_adapter_health` 保存每个 Provider 的当前健康结果，`provider_adapter_health_versions` 保存不可变快照，`provider_adapter_operations` 保存操作人、幂等键和 request_id/trace_id。探针仅允许 `provider:configure`，写入要求同源 Origin 与 Idempotency-Key；响应只返回注册状态、版本、稳定错误码、连续失败次数和延迟，不返回凭证、Cookie、原始 payload 或其他组织数据。
+
+生产启动创建空的适配器注册表，因此在 M03-07 之前健康检查会真实记录 `blocked / adapter_not_registered`，不会用模拟成功掩盖缺失实现。错误分类只保留 timeout、rate_limited、login_expired、adapter_not_registered、invalid_payload 等稳定代码；异常正文和敏感 payload 不进入数据库或 API。
+
+## 回滚
+
+先在宝塔停止触发适配器健康检查的入口并停止 API/Worker，备份 `product_scout` 后执行 `0016c_provider_adapters_m03_03.down.sql`。down 按 operations、health versions、health 顺序删除，保留 M03-01 Provider 定义；随后回滚应用和环境上限，由宝塔重启。删除健康历史会永久失去探针审计，未验证备份前禁止生产执行。

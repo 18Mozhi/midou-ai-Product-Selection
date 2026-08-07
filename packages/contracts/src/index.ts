@@ -94,6 +94,8 @@ export interface HomeDashboardSummary{actions:HomeDashboardItem[];changes:HomeDa
 export type ProviderAccessMode='public_page'|'public_rss'|'official_api'|'authenticated_browser'|'import'|'manual';
 export interface ProviderDefinition{id:string;code:string;name:string;target_url:string;access_mode:ProviderAccessMode;markets:string[];languages:string[];fields:string[];schedule_minutes:number;concurrency_limit:number;timeout_ms:number;retry_limit:number;circuit_failure_threshold:number;dedupe_key:string;retention_days:number;failure_rules:string[];parser_version:string;healthcheck_url:string|null;owner_label:string;status:'draft'|'disabled'|'enabled';version:number;updated_at:string;}
 export type ProviderDefinitionInput=Omit<ProviderDefinition,'id'|'version'|'updated_at'>;
+export interface ProviderAdapterSummary{id:string;code:string;name:string;access_mode:ProviderAccessMode;provider_status:'draft'|'disabled'|'enabled';adapter_registered:boolean;adapter_version:string|null;health_status:'unknown'|'ready'|'degraded'|'blocked';last_checked_at:string|null;last_latency_ms:number|null;last_error_code:string|null;consecutive_failures:number;version:number;updated_at:string;}
+export interface ProviderAdapterHealthResult extends ProviderAdapterSummary{request_id:string;trace_id:string;}
 export type CredentialAssetKind='api_key'|'account_secret'|'cookie_bundle'|'private_key'|'browser_profile';
 export interface CredentialAssetSummary{id:string;provider_id:string;name:string;kind:CredentialAssetKind;status:'active'|'revoked';key_version:string;fingerprint:string;expires_at:string|null;rotated_at:string|null;version:number;updated_at:string;}
 export interface CredentialSecretInput{encoding:'utf8'|'base64';value:string;}

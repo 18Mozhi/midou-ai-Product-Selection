@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P03",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02"],
-    "activeModules": ["M03-03"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03"],
+    "activeModules": ["M03-04"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -245,6 +245,20 @@
       "configuration": ["CREDENTIALS_MASTER_KEY", "CREDENTIALS_MASTER_KEY_VERSION", "CREDENTIAL_TEMP_ROOT", "one-time rotation variables"],
       "imageEvidence": ["concept 68 key rotation and platform security navigation shell"],
       "verificationRunId": "6b01b631-ae6a-4add-a06a-016f989d7411",
+      "status": "module_verified"
+    },
+    "providerAdapters": {
+      "module": "M03-03",
+      "entrypoints": ["../packages/provider-adapters/src/index.ts", "../apps/api/src/provider-adapter-service.ts", "../apps/api/src/mysql-provider-adapter-repository.ts", "../apps/api/src/provider-adapter-routes.ts", "../apps/web/src/components/ProviderAdapterCenter.vue"],
+      "routes": ["/platform-admin/providers/adapters", "/api/v1/platform/provider-adapters", "/api/v1/platform/provider-adapters/{providerId}/health-check"],
+      "scope": "platform-global adapter registration and health; collect invocation contract requires organization and workspace scope",
+      "contract": ["collect", "normalize", "healthCheck"],
+      "failureBoundary": "provider code must have an explicitly registered matching access-mode adapter; otherwise blocked adapter_not_registered",
+      "permission": "authenticated platform provider:configure; same-origin and Idempotency-Key for health writes",
+      "configuration": ["PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS", "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES", "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH"],
+      "downstream": {"M03-04":"authenticated browser execution", "M03-05":"queue lease retry dead letter", "M03-06":"raw evidence and normalized persistence", "M03-07":"first real adapter registration"},
+      "imageEvidence": ["concept 62 collection source management table and status layout"],
+      "verificationRunId": "c6b206e3-bf39-4d3b-8b00-f7f195eaa999",
       "status": "module_verified"
     }
   },

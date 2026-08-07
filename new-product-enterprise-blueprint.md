@@ -561,6 +561,10 @@ Resource Grant 只补充 RBAC/Data Scope 无法覆盖的指定资源例外：目
 
 `credential_assets` 与 `crawler_profiles` 是平台全局安全资产，不带组织/工作区归属。秘密写入使用 AES-256-GCM、随机 96 位 nonce、128 位认证标签和绑定资产/类型/key_version 的 AAD；数据库保存当前密文与不可变密文版本，API 和页面只返回指纹、版本、状态及引用，绝不提供明文读取、导出或下载。创建、轮换、撤销和档案登记要求 `key_rotation:manage`、同源 Origin、Idempotency-Key 与乐观锁，并同步保存操作人和 request_id/trace_id；撤销不可恢复。Worker/Crawler 仅可在授权任务中通过受限 `CREDENTIAL_TEMP_ROOT` 临时物化，回调结束或异常时必须清空 Buffer 并删除准确目录。主密钥与版本只在宝塔受限环境；主密钥轮换由宝塔一次性、可续跑任务逐个重加密 active 资产，全部校验完成后才能切换常驻配置和撤销旧密钥。M03-02 不提前创建组织连接或真实采集任务，M03-04 才接入 Playwright 执行链。
 
+#### 8.3.9 M03-03 Provider 适配器实现基线
+
+`ProviderAdapter` 统一 `collect`、`normalize`、`healthCheck`，以 Provider code 注册并校验 access mode。collect 强制携带组织/工作区 scope、关联 ID 和批次上限；运行时限制超时、响应字节与条数，normalize 保留 evidence_ref 及 Provider/Adapter/Parser provenance。Provider 和健康状态是平台全局技术资产，MySQL 5.7 保存当前健康、不可变版本、幂等操作与 request_id/trace_id；API 只允许 `provider:configure`，不返回凭证、Cookie 或原始 payload。M03-03 不猜具体平台接口：生产注册表在 M03-07 前为空，未注册实现必须记录 `blocked / adapter_not_registered`。M03-04、M03-05、M03-06 分别负责浏览器执行、任务状态机与证据持久化，不能由本模块提前替代。
+
 ---
 
 ## 9. 技术架构、性能与容量

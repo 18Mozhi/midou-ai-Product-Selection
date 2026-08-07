@@ -1,0 +1,26 @@
+# M03-03 Provider 适配器运维说明
+
+## 宝塔部署
+
+1. 在宝塔备份 `product_scout`，用业务账号执行 `0016c_provider_adapters_m03_03.up.sql`。
+2. 在 Node API 与后续调用适配器的 Node Worker 宝塔受限环境配置 `PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS`、`PROVIDER_ADAPTER_MAX_RESPONSE_BYTES`、`PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH`；初始值以 `config/env.example` 为准。
+3. 运行 `npm run build`，由宝塔重启 Node API；M03-03 不新增 systemd、独立 PM2、宿主机 crontab、面板外 Docker 或常驻采集进程。当前 Crawler 不调用该包，无需因本模块重启。
+4. 访问 `/platform-admin/providers/adapters`。未在代码中注册的 Provider 显示 `not registered`，健康检查记录 `blocked` 是预期的真实状态，不得手工改为 ready。
+
+三个上限都在进程启动时读取，修改后必须由宝塔重启 Node API；Worker 在后续模块接入该包后也必须重启。每个 Provider 自身的 `timeout_ms` 继续生效，健康探针采用 Provider timeout 与全局健康 timeout 中较小者。
+
+## 验证与恢复
+
+```powershell
+npm run verify:module -- M03-03
+```
+
+门禁覆盖运行时 scope/limit/字节/超时、normalize provenance、缺失实现失败关闭、provider:configure/Origin/幂等、MySQL 5.7 当前健康/不可变版本/审计、桌面与 390px 视觉和文档。MySQL 实测只在验证进程注册合成适配器，结束后清理 Provider、用户和健康记录，不会写入生产注册表。
+
+- `adapter_not_registered`：确认该 Provider 是否属于 M03-07 已准入的真实来源；不要猜请求合同或伪造成功。
+- `adapter_mode_mismatch`：Provider access_mode 与代码注册声明冲突，停止调用并修正版本化定义或适配器实现。
+- `timeout` / `rate_limited` / `dependency_unavailable`：保留 request_id/trace_id，按 Provider 失败规则退避；M03-05 接入后由任务状态机负责重试和死信。
+- `login_expired`：停止自动探针并由获授权人员处理凭证；不得绕过验证码、登录或平台限制。
+- `invalid_payload` / `response_too_large`：隔离该结果，检查 Parser 与全局边界，不扩大上限掩盖合同错误。
+
+回滚前按架构文档冻结入口并备份；down 迁移只删除适配器健康与操作历史，不删除 Provider 定义。恢复时同时恢复三张表和对应应用版本。

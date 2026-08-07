@@ -5,6 +5,7 @@ import HomeDashboard from './HomeDashboard.vue';
 import OpportunityMobileShell from './OpportunityMobileShell.vue';
 import ProviderRegistry from './ProviderRegistry.vue';
 import CredentialAssetCenter from './CredentialAssetCenter.vue';
+import ProviderAdapterCenter from './ProviderAdapterCenter.vue';
 
 type Shell = 'member' | 'organization_admin' | 'platform_admin';
 type State = 'loading' | 'ready' | 'expired' | 'forbidden' | 'context_required' | 'rate_limited' | 'blocked';
@@ -63,7 +64,11 @@ onMounted(()=>{void load();window.addEventListener('keydown',shortcut);});onUnmo
       <template v-else>
         <header class="role-page-head"><div><p>{{shellTitle}} / P02</p><h1>{{pageTitle}}</h1><span>导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。</span></div><b>{{guard?.guard_reason}}</b></header>
         <HomeDashboard v-if="isHome" :api-base-url="apiBaseUrl" />
-        <ProviderRegistry v-else-if="shell==='platform_admin'&&routePath==='/platform-admin/providers'" :api-base-url="apiBaseUrl" />
+        <section v-else-if="shell==='platform_admin'&&routePath.startsWith('/platform-admin/providers')" class="provider-runtime-surface">
+          <nav class="provider-runtime-tabs" aria-label="来源管理视图"><a href="/platform-admin/providers" :aria-current="routePath==='/platform-admin/providers'?'page':undefined">来源定义</a><a href="/platform-admin/providers/adapters" :aria-current="routePath==='/platform-admin/providers/adapters'?'page':undefined">适配器运行时</a></nav>
+          <ProviderAdapterCenter v-if="routePath==='/platform-admin/providers/adapters'" :api-base-url="apiBaseUrl" />
+          <ProviderRegistry v-else :api-base-url="apiBaseUrl" />
+        </section>
         <CredentialAssetCenter v-else-if="shell==='platform_admin'&&routePath==='/platform-admin/credentials'" :api-base-url="apiBaseUrl" />
         <OpportunityMobileShell v-else-if="opportunityId" :opportunity-id="opportunityId" />
         <section v-else class="role-ready-panel">

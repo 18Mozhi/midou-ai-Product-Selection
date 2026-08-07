@@ -557,6 +557,32 @@ paths:
         '404': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/provider-adapters:
+    get:
+      summary: List platform Provider adapter registration and last health state
+      description: Requires provider:configure. No credentials, cookies, raw payloads or organization data are returned.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Adapter runtime catalog, content: { application/json: { schema: { $ref: '#/components/schemas/ProviderAdapterListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/provider-adapters/{providerId}/health-check:
+    post:
+      summary: Run a bounded healthCheck through the registered Provider adapter
+      description: Unregistered adapters fail closed as blocked/adapter_not_registered. The endpoint never guesses a Provider request contract.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      responses:
+        '200': { description: Persisted correlated health result, content: { application/json: { schema: { $ref: '#/components/schemas/ProviderAdapterEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
   /platform/credential-provider-options:
     get:
       summary: List non-secret Provider options for platform security credential assignment
@@ -1216,6 +1242,29 @@ components:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/ProviderDefinition' } } }]
     ProviderDefinitionListEnvelope:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/ProviderDefinition' } } } }]
+    ProviderAdapterSummary:
+      type: object
+      additionalProperties: false
+      required: [id, code, name, access_mode, provider_status, adapter_registered, adapter_version, health_status, last_checked_at, last_latency_ms, last_error_code, consecutive_failures, version, updated_at]
+      properties:
+        id: { type: string, format: uuid }
+        code: { type: string, pattern: '^[a-z0-9_]{2,80}$' }
+        name: { type: string }
+        access_mode: { type: string, enum: [public_page, public_rss, official_api, authenticated_browser, import, manual] }
+        provider_status: { type: string, enum: [draft, disabled, enabled] }
+        adapter_registered: { type: boolean }
+        adapter_version: { type: string, nullable: true }
+        health_status: { type: string, enum: [unknown, ready, degraded, blocked] }
+        last_checked_at: { type: string, format: date-time, nullable: true }
+        last_latency_ms: { type: integer, minimum: 0, nullable: true }
+        last_error_code: { type: string, nullable: true, description: Sanitized stable error code only }
+        consecutive_failures: { type: integer, minimum: 0 }
+        version: { type: integer, minimum: 0 }
+        updated_at: { type: string, format: date-time }
+    ProviderAdapterEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/ProviderAdapterSummary' } } }]
+    ProviderAdapterListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/ProviderAdapterSummary' } } } }]
     CredentialProviderOption:
       type: object
       additionalProperties: false
