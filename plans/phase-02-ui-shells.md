@@ -1,6 +1,6 @@
 # P02：前端壳层、设计系统与完整页面状态详细执行计划
 
-> 状态：planned
+> 状态：completed；phase run_id/trace_id：`f7b41287-a3cd-442a-a212-7a1dd4edf828`
 > 上游总纲：`new-product-enterprise-blueprint.md`
 > 阶段索引：`plans/README.md`
 > 最低行数：1,000；`npm run verify:plans` 必须自动校验。
@@ -1574,9 +1574,9 @@
 - 通过标准：实现、迁移/API/页面（适用时）、文档、配置、测试和审计全部同步。
 
 #### M02-06.A99 模块关卡
-- [ ] 原子任务 A01–A17 全部有实现证据和测试名称。
-- [ ] 组织隔离、权限、审计、配置、错误状态、图片/响应式（适用时）已覆盖。
-- [ ] `npm run verify:module -- 模块 ID` 返回 0；失败报告可定位到原子任务。
+- [x] 原子任务 A01–A17 全部有实现证据和测试名称。
+- [x] 组织隔离、权限、审计、配置、错误状态、图片/响应式（适用时）已覆盖。
+- [x] `npm run verify:module -- M02-06` 返回 0；run_id/trace_id：`a8ce8e93-5264-441d-983b-fa47cb184a7e`。
 
 ## 9. 阶段交付证据目录
 

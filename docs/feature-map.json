@@ -1,14 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "project": "ScoutOps / 实时选品运营平台",
-  "status": "P00_P01_completed_P02_in_progress",
+  "status": "P00_P01_P02_completed_P03_in_progress",
   "sourceOfTruth": "../new-product-enterprise-blueprint.md",
   "locateCommand": "node scripts/locate_flow_v4.mjs \"<keyword>\"",
   "deliveryPlan": "../plans/README.md",
   "implementation": {
-    "currentPhase": "P02",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05"],
-    "activeModules": ["M02-06"],
+    "currentPhase": "P03",
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06"],
+    "activeModules": ["M03-01"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -202,10 +202,26 @@
       "imageEvidence": ["concepts 15 global search, 16 quick create, 17 notification center, 18 message detail"],
       "verificationRunId": "79adb1f9-74ba-42b9-87fb-52b7d32e10a2",
       "status": "module_verified"
+    },
+    "homeAndMobileShell": {
+      "module": "M02-06",
+      "entrypoints": ["../apps/api/src/home-dashboard-service.ts", "../apps/api/src/mysql-home-dashboard-repository.ts", "../apps/api/src/home-dashboard-routes.ts", "../apps/web/src/components/HomeDashboard.vue", "../apps/web/src/components/OpportunityMobileShell.vue"],
+      "routes": ["/home", "/api/v1/me/home-dashboard", "/opportunities/{opportunityId}"],
+      "sections": ["today actions", "change radar", "my follows", "current-user data health", "actionable empty state"],
+      "actionOrder": ["overdue", "blocking", "high_risk", "high_value", "normal"],
+      "scope": "exact organization and workspace; required capability; health exact authenticated audience user",
+      "truth": "synchronous MySQL 5.7 projection read; empty until P03-P05 owning modules write real data",
+      "opportunityDetail": "responsive route and section skeleton only; P04 metrics, profit, risk and evidence are not fabricated",
+      "async": "not applicable in M02-06; no Worker, Crawler, queue, outbox, event, file, export or SSE",
+      "configuration": "no new environment values; existing VITE_API_BASE_URL only",
+      "imageEvidence": ["high-resolution 01 today action center", "concepts 11-14 home", "concepts 53-54 mobile"],
+      "verificationRunId": "a8ce8e93-5264-441d-983b-fa47cb184a7e",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
-    "P01": {"runId": "5e4da53f-25ab-4e60-9850-516590896fe0", "status": "phase_verified", "modules": ["M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06"]}
+    "P01": {"runId": "5e4da53f-25ab-4e60-9850-516590896fe0", "status": "phase_verified", "modules": ["M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06"]},
+    "P02": {"runId": "f7b41287-a3cd-442a-a212-7a1dd4edf828", "status": "phase_verified", "modules": ["M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06"]}
   },
   "uiReference": {
     "directory": "../images-html",

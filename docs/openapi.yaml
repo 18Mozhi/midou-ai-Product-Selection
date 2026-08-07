@@ -319,6 +319,16 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /me/home-dashboard:
+    get:
+      summary: Read the current user's scoped home dashboard projection
+      description: Requires an active selected context and task:read. Action, change and follow items are workspace or user scoped; health items must target the authenticated user. Empty arrays are returned until owning modules write real projections.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Capability and audience filtered home dashboard, content: { application/json: { schema: { $ref: '#/components/schemas/HomeDashboardEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /org/{organizationId}/roles:
     get:
       summary: List the fixed organization role and capability matrix
@@ -722,6 +732,36 @@ components:
         required_capability: { type: string, pattern: '^[a-z_]+:[a-z_]+' }
     QuickActionListEnvelope:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/QuickActionSummary' } } } }]
+    HomeDashboardItem:
+      type: object
+      additionalProperties: false
+      required: [id, kind, title, reason, route, priority, owner_label, due_at, source_count, observed_at, severity, source_version]
+      properties:
+        id: { type: string, format: uuid }
+        kind: { type: string, enum: [action, change, follow, health] }
+        title: { type: string, maxLength: 255 }
+        reason: { type: string, maxLength: 500 }
+        route: { type: string, pattern: '^/(?!/)' }
+        priority: { type: string, enum: [overdue, blocking, high_risk, high_value, normal], nullable: true }
+        owner_label: { type: string, maxLength: 120, nullable: true }
+        due_at: { type: string, format: date-time, nullable: true }
+        source_count: { type: integer, minimum: 0, nullable: true }
+        observed_at: { type: string, format: date-time }
+        severity: { type: string, enum: [info, warning, critical] }
+        source_version: { type: integer, minimum: 1 }
+    HomeDashboardSummary:
+      type: object
+      additionalProperties: false
+      required: [actions, changes, follows, health, scope, generated_at]
+      properties:
+        actions: { type: array, maxItems: 5, items: { $ref: '#/components/schemas/HomeDashboardItem' } }
+        changes: { type: array, maxItems: 6, items: { $ref: '#/components/schemas/HomeDashboardItem' } }
+        follows: { type: array, maxItems: 6, items: { $ref: '#/components/schemas/HomeDashboardItem' } }
+        health: { type: array, maxItems: 3, items: { $ref: '#/components/schemas/HomeDashboardItem' } }
+        scope: { type: object, additionalProperties: false, required: [organization_id, workspace_id], properties: { organization_id: { type: string, format: uuid }, workspace_id: { type: string, format: uuid } } }
+        generated_at: { type: string, format: date-time }
+    HomeDashboardEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/HomeDashboardSummary' } } }]
     SecuritySetupStatus:
       type: object
       additionalProperties: false

@@ -87,6 +87,10 @@ export interface NavigationGuardSummary{shell:NavigationShell;organization_id:st
 export interface GlobalSearchResult{id:string;resource_type:string;resource_id:string;title:string;subtitle:string|null;route:string;updated_at:string;}
 export interface GlobalSearchPage{items:GlobalSearchResult[];next_cursor:string|null;scope:{organization_id:string;workspace_id:string};}
 export interface QuickActionSummary{id:string;label:string;description:string;route:string;required_capability:string;}
+export type HomeDashboardKind='action'|'change'|'follow'|'health';
+export type HomeActionPriority='overdue'|'blocking'|'high_risk'|'high_value'|'normal';
+export interface HomeDashboardItem{id:string;kind:HomeDashboardKind;title:string;reason:string;route:string;priority:HomeActionPriority|null;owner_label:string|null;due_at:string|null;source_count:number|null;observed_at:string;severity:'info'|'warning'|'critical';source_version:number;}
+export interface HomeDashboardSummary{actions:HomeDashboardItem[];changes:HomeDashboardItem[];follows:HomeDashboardItem[];health:HomeDashboardItem[];scope:{organization_id:string;workspace_id:string};generated_at:string;}
 export interface RoleCapabilitySummary{code:string;name:string;category:'organization'|'platform';description:string;capabilities:string[];}
 export type ResourceGrantType='task'|'opportunity'|'competitor'|'sourcing';
 export type ResourceGrantStatus='active'|'revoked'|'expired';

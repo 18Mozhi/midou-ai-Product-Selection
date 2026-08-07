@@ -16,6 +16,7 @@ import { PreferenceError } from '@scoutops/preferences';
 import { registerUiPreferenceRoutes, type UiPreferenceRouteOptions } from './ui-preference-routes.js';
 import { DiscoveryError } from './discovery-service.js';
 import { registerDiscoveryRoutes, type DiscoveryRouteOptions } from './discovery-routes.js';
+import { registerHomeDashboardRoutes, type HomeDashboardRouteOptions } from './home-dashboard-routes.js';
 
 export interface BuildAppOptions {
   version?: string;
@@ -31,6 +32,7 @@ export interface BuildAppOptions {
   audit?: AuditRouteOptions;
   uiPreferences?: UiPreferenceRouteOptions;
   discovery?: DiscoveryRouteOptions;
+  homeDashboard?: HomeDashboardRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -96,6 +98,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if (options.audit) registerAuditRoutes(app, options.audit);
   if (options.uiPreferences) registerUiPreferenceRoutes(app, options.uiPreferences);
   if (options.discovery) registerDiscoveryRoutes(app, options.discovery);
+  if (options.homeDashboard) registerHomeDashboardRoutes(app, options.homeDashboard);
 
   app.setErrorHandler(async (error: FastifyError | ApiError, request, reply): Promise<ErrorEnvelope> => {
     const requestId=request.headers['x-request-id']!.toString();const traceId=request.headers['x-trace-id']!.toString();

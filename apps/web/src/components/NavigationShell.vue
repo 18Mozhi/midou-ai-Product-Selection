@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import DiscoveryOverlay from './DiscoveryOverlay.vue';
+import HomeDashboard from './HomeDashboard.vue';
+import OpportunityMobileShell from './OpportunityMobileShell.vue';
 
 type Shell = 'member' | 'organization_admin' | 'platform_admin';
 type State = 'loading' | 'ready' | 'expired' | 'forbidden' | 'context_required' | 'rate_limited' | 'blocked';
@@ -22,6 +24,7 @@ const items=computed(()=>{const source=props.shell==='member'?memberMenu:props.s
 const activeItem=computed(()=>items.value.find(item=>item.path===window.location.pathname)||items.value.find(item=>item.path!=='/'&&window.location.pathname.startsWith(`${item.path}/`))||items.value[0]);
 const shellTitle=computed(()=>props.shell==='member'?'成员工作台':props.shell==='organization_admin'?'组织管理后台':'平台管理后台');
 const pageTitle=computed(()=>activeItem.value?.label??shellTitle.value);
+const routePath=window.location.pathname.replace(/\/$/,'')||'/',isHome=computed(()=>props.shell==='member'&&routePath==='/home'),opportunityId=computed(()=>{const match=routePath.match(/^\/opportunities\/([0-9a-f-]{36})$/i);return match?.[1]??'';});
 const short=(value:string|null)=>value?`${value.slice(0,8)}…`:'不适用';
 const stateCopy=computed(()=>({expired:['登录已失效','重新登录后返回当前页面。'],forbidden:['无权进入此工作台','服务端已拒绝该壳层；返回有权访问的工作台。'],context_required:['尚未选择组织与工作区','完成租户选择后才能进入成员或组织后台。'],rate_limited:['请求过于频繁','稍后重试；不要连续刷新。'],blocked:['导航服务暂不可用','检查网络后重试；运维可在宝塔查看 Node API。'],loading:['正在核验工作台权限','菜单只会在服务端确认后显示。'],ready:['','']} as Record<State,[string,string]>)[state.value]);
 async function load(){state.value='loading';guard.value=null;requestId.value='';actionHint.value='';try{const response=await fetch(`${props.apiBaseUrl}/me/navigation?shell=${props.shell}`,{credentials:'include',headers:{accept:'application/json'}});const body=await response.json().catch(()=>null);requestId.value=body?.request_id??'';actionHint.value=body?.error?.action_hint??'';if(!response.ok){state.value=response.status===401?'expired':response.status===403?'forbidden':response.status===409?'context_required':response.status===429?'rate_limited':'blocked';return;}guard.value=body.data;state.value='ready';}catch{state.value='blocked';}}
@@ -57,7 +60,9 @@ onMounted(()=>{void load();window.addEventListener('keydown',shortcut);});onUnmo
       </section>
       <template v-else>
         <header class="role-page-head"><div><p>{{shellTitle}} / P02</p><h1>{{pageTitle}}</h1><span>导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。</span></div><b>{{guard?.guard_reason}}</b></header>
-        <section class="role-ready-panel">
+        <HomeDashboard v-if="isHome" :api-base-url="apiBaseUrl" />
+        <OpportunityMobileShell v-else-if="opportunityId" :opportunity-id="opportunityId" />
+        <section v-else class="role-ready-panel">
           <div class="role-ready-hero"><span>S</span><div><p>VERIFIED NAVIGATION</p><h2>服务端已确认此工作台</h2><p>当前只交付导航、响应式布局与路由状态，不展示示例指标或其他组织数据。</p></div></div>
           <dl><div><dt>壳层</dt><dd>{{shellTitle}}</dd></div><div><dt>组织范围</dt><dd>{{short(guard?.organization_id??null)}}</dd></div><div><dt>工作区范围</dt><dd>{{short(guard?.workspace_id??null)}}</dd></div><div><dt>可见入口</dt><dd>{{items.length}} 项</dd></div></dl>
           <div class="role-scope-note"><strong>权限说明</strong><p>{{shell==='platform_admin'?'平台角色与组织角色严格分离；平台壳层不依赖组织上下文。':shell==='organization_admin'?'仅 organization_admin 可进入；所有后续组织 API 仍需服务端能力与范围 Guard。':'活动成员可进入；菜单按服务端 capabilities 过滤，资源 API 仍执行数据范围 Guard。'}}</p></div>

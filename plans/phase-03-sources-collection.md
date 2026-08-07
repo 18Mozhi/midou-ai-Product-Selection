@@ -1,6 +1,6 @@
 # P03：来源、凭证、采集任务与证据详细执行计划
 
-> 状态：planned
+> 状态：in_progress；当前模块：M03-01
 > 上游总纲：`new-product-enterprise-blueprint.md`
 > 阶段索引：`plans/README.md`
 > 最低行数：1,000；`npm run verify:plans` 必须自动校验。
@@ -1835,5 +1835,4 @@
 - 模块只能通过公开 API、DTO、迁移、事件与配置 schema 交付给下游；禁止复制服务内部逻辑或绕过权限。
 - 上游字段、状态、路由、事件、配置变化时，依赖模块必须重新执行定向验收和阶段验收。
 - 依赖外部来源、AI、邮件或服务器状态时，自动验收必须返回通过、失败或 blocked；blocked 不得伪装为通过。
-
 
