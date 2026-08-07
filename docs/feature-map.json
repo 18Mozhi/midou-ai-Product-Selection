@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P02",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04"],
-    "activeModules": ["M02-05"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05"],
+    "activeModules": ["M02-06"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -188,6 +188,19 @@
       "imageEvidence": ["concept 72 not-found", "P02 contact sheets and M02-01 design tokens"],
       "nonGoals": "no API request, business mutation, permission inference, persistence, async service or environment value",
       "verificationRunId": "fa7a1180-6dad-4c70-a621-10708aca95a9",
+      "status": "module_verified"
+    },
+    "globalDiscovery": {
+      "module": "M02-05",
+      "entrypoints": ["../apps/api/src/discovery-service.ts", "../apps/api/src/mysql-discovery-repository.ts", "../apps/api/src/discovery-routes.ts", "../apps/web/src/components/DiscoveryOverlay.vue"],
+      "routes": ["/api/v1/me/global-search", "/api/v1/me/quick-actions", "/notifications"],
+      "scope": "server-resolved active organization and workspace plus per-document required capability",
+      "searchProjection": "MySQL 5.7 synchronous read model with stable cursor, literal wildcard escaping and internal routes only",
+      "quickCreate": "authorized navigation entries only; no business mutation or optimistic success",
+      "async": "not applicable in M02-05; future resource modules synchronously maintain their own search projections",
+      "configuration": "no new environment values; existing VITE_API_BASE_URL only",
+      "imageEvidence": ["concepts 15 global search, 16 quick create, 17 notification center, 18 message detail"],
+      "verificationRunId": "79adb1f9-74ba-42b9-87fb-52b7d32e10a2",
       "status": "module_verified"
     }
   },

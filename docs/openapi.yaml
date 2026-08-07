@@ -295,6 +295,30 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /me/global-search:
+    get:
+      summary: Search indexed resources in the selected organization and workspace
+      description: Requires an active selected context and task:read. Results are additionally filtered by each document's required capability.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: q, in: query, required: true, schema: { type: string, minLength: 2, maxLength: 100 } }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 20, default: 10 } }
+        - { name: cursor, in: query, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: Capability-filtered workspace search results, content: { application/json: { schema: { $ref: '#/components/schemas/GlobalSearchEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /me/quick-actions:
+    get:
+      summary: List capability-filtered quick-create entry points
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Navigation entries only; this endpoint performs no business mutation, content: { application/json: { schema: { $ref: '#/components/schemas/QuickActionListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /org/{organizationId}/roles:
     get:
       summary: List the fixed organization role and capability matrix
@@ -664,6 +688,40 @@ components:
         guard_reason: { type: string, enum: [navigation_member_allowed, navigation_organization_admin_allowed, navigation_platform_admin_allowed] }
     NavigationGuardEnvelope:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/NavigationGuardSummary' } } }]
+    GlobalSearchResult:
+      type: object
+      additionalProperties: false
+      required: [id, resource_type, resource_id, title, subtitle, route, updated_at]
+      properties:
+        id: { type: string, format: uuid }
+        resource_type: { type: string, maxLength: 64 }
+        resource_id: { type: string, format: uuid }
+        title: { type: string, maxLength: 255 }
+        subtitle: { type: string, maxLength: 500, nullable: true }
+        route: { type: string, pattern: '^/' }
+        updated_at: { type: string, format: date-time }
+    GlobalSearchPage:
+      type: object
+      additionalProperties: false
+      required: [items, next_cursor, scope]
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/GlobalSearchResult' } }
+        next_cursor: { type: string, format: uuid, nullable: true }
+        scope: { type: object, additionalProperties: false, required: [organization_id, workspace_id], properties: { organization_id: { type: string, format: uuid }, workspace_id: { type: string, format: uuid } } }
+    GlobalSearchEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/GlobalSearchPage' } } }]
+    QuickActionSummary:
+      type: object
+      additionalProperties: false
+      required: [id, label, description, route, required_capability]
+      properties:
+        id: { type: string }
+        label: { type: string }
+        description: { type: string }
+        route: { type: string, pattern: '^/' }
+        required_capability: { type: string, pattern: '^[a-z_]+:[a-z_]+' }
+    QuickActionListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/QuickActionSummary' } } } }]
     SecuritySetupStatus:
       type: object
       additionalProperties: false

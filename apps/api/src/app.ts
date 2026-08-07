@@ -14,6 +14,8 @@ import { AuditError } from '@scoutops/audit';
 import { registerAuditRoutes, type AuditRouteOptions } from './audit-routes.js';
 import { PreferenceError } from '@scoutops/preferences';
 import { registerUiPreferenceRoutes, type UiPreferenceRouteOptions } from './ui-preference-routes.js';
+import { DiscoveryError } from './discovery-service.js';
+import { registerDiscoveryRoutes, type DiscoveryRouteOptions } from './discovery-routes.js';
 
 export interface BuildAppOptions {
   version?: string;
@@ -28,6 +30,7 @@ export interface BuildAppOptions {
   resourceGrants?: ResourceGrantRouteOptions;
   audit?: AuditRouteOptions;
   uiPreferences?: UiPreferenceRouteOptions;
+  discovery?: DiscoveryRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -92,13 +95,14 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if (options.resourceGrants) registerResourceGrantRoutes(app, options.resourceGrants);
   if (options.audit) registerAuditRoutes(app, options.audit);
   if (options.uiPreferences) registerUiPreferenceRoutes(app, options.uiPreferences);
+  if (options.discovery) registerDiscoveryRoutes(app, options.discovery);
 
   app.setErrorHandler(async (error: FastifyError | ApiError, request, reply): Promise<ErrorEnvelope> => {
     const requestId=request.headers['x-request-id']!.toString();const traceId=request.headers['x-trace-id']!.toString();
-    const apiError=error instanceof ApiError?error as ApiError:null;const authError=error instanceof AuthError?error as AuthError:null;const tenancyError=error instanceof TenancyError?error as TenancyError:null;const authorizationError=error instanceof AuthorizationError?error as AuthorizationError:null;const resourceGrantError=error instanceof ResourceGrantError?error as ResourceGrantError:null;const auditError=error instanceof AuditError?error as AuditError:null;const preferenceError=error instanceof PreferenceError?error as PreferenceError:null;const validation='validation' in error&&Boolean(error.validation);
-    const statusCode=apiError?.statusCode??authError?.statusCode??tenancyError?.statusCode??authorizationError?.statusCode??resourceGrantError?.statusCode??auditError?.statusCode??preferenceError?.statusCode??(validation?400:500);reply.code(statusCode);
+    const apiError=error instanceof ApiError?error as ApiError:null;const authError=error instanceof AuthError?error as AuthError:null;const tenancyError=error instanceof TenancyError?error as TenancyError:null;const authorizationError=error instanceof AuthorizationError?error as AuthorizationError:null;const resourceGrantError=error instanceof ResourceGrantError?error as ResourceGrantError:null;const auditError=error instanceof AuditError?error as AuditError:null;const preferenceError=error instanceof PreferenceError?error as PreferenceError:null;const discoveryError=error instanceof DiscoveryError?error as DiscoveryError:null;const validation='validation' in error&&Boolean(error.validation);
+    const statusCode=apiError?.statusCode??authError?.statusCode??tenancyError?.statusCode??authorizationError?.statusCode??resourceGrantError?.statusCode??auditError?.statusCode??preferenceError?.statusCode??discoveryError?.statusCode??(validation?400:500);reply.code(statusCode);
     const tenancyMessages:Record<string,string>={organization_forbidden:'无权访问该组织。',workspace_not_found:'工作区不存在。',workspace_archived:'工作区已归档。',organization_slug_conflict:'组织标识已存在。'};
-    return{error:{code:apiError?.code??authError?.code??tenancyError?.code??authorizationError?.code??resourceGrantError?.code??auditError?.code??preferenceError?.code??(validation?'schema_validation_failed':'internal_error'),message:apiError?.message??(authError?authErrorMessage(authError.code):tenancyError?tenancyMessages[tenancyError.code]??'租户请求无法处理。':authorizationError?'权限检查未通过。':resourceGrantError?'资源授权请求无法处理。':auditError?'审计请求无法处理。':preferenceError?'主题偏好请求无法处理。':validation?'请求字段不符合接口合同。':'服务暂时无法处理请求。'),action_hint:apiError?.actionHint??authError?.actionHint??tenancyError?.actionHint??authorizationError?.actionHint??resourceGrantError?.actionHint??auditError?.actionHint??preferenceError?.actionHint??(validation?'按 OpenAPI 修正字段后重试。':'携带 request_id 联系管理员。')},request_id:requestId,trace_id:traceId};
+    return{error:{code:apiError?.code??authError?.code??tenancyError?.code??authorizationError?.code??resourceGrantError?.code??auditError?.code??preferenceError?.code??discoveryError?.code??(validation?'schema_validation_failed':'internal_error'),message:apiError?.message??(authError?authErrorMessage(authError.code):tenancyError?tenancyMessages[tenancyError.code]??'租户请求无法处理。':authorizationError?'权限检查未通过。':resourceGrantError?'资源授权请求无法处理。':auditError?'审计请求无法处理。':preferenceError?'主题偏好请求无法处理。':discoveryError?'搜索请求无法处理。':validation?'请求字段不符合接口合同。':'服务暂时无法处理请求。'),action_hint:apiError?.actionHint??authError?.actionHint??tenancyError?.actionHint??authorizationError?.actionHint??resourceGrantError?.actionHint??auditError?.actionHint??preferenceError?.actionHint??discoveryError?.actionHint??(validation?'按 OpenAPI 修正字段后重试。':'携带 request_id 联系管理员。')},request_id:requestId,trace_id:traceId};
   });
 
   app.setNotFoundHandler(async (request, reply): Promise<ErrorEnvelope> => {

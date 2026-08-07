@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import DiscoveryOverlay from './DiscoveryOverlay.vue';
 
 type Shell = 'member' | 'organization_admin' | 'platform_admin';
 type State = 'loading' | 'ready' | 'expired' | 'forbidden' | 'context_required' | 'rate_limited' | 'blocked';
 interface GuardSummary { shell:Shell;organization_id:string|null;workspace_id:string|null;roles:string[];capabilities:string[];platform_roles:string[];platform_capabilities:string[];guard_reason:string; }
 interface MenuItem { label:string;path:string;icon:string;capabilities?:string[]; }
 const props=defineProps<{shell:Shell;apiBaseUrl:string}>();
-const state=ref<State>('loading'),guard=ref<GuardSummary|null>(null),requestId=ref(''),actionHint=ref(''),menuOpen=ref(false),notice=ref('');
+const state=ref<State>('loading'),guard=ref<GuardSummary|null>(null),requestId=ref(''),actionHint=ref(''),menuOpen=ref(false),discoveryMode=ref<'search'|'create'|null>(null);
 const memberMenu:MenuItem[]=[
   {label:'今日行动',path:'/home',icon:'⌂',capabilities:['task:read']},{label:'今日工作',path:'/work',icon:'✓',capabilities:['task:read']},{label:'热点趋势',path:'/trends',icon:'↗',capabilities:['trend:read']},{label:'选品机会',path:'/opportunities',icon:'◇',capabilities:['opportunity:read']},{label:'竞品监控',path:'/competitors',icon:'◎',capabilities:['competitor:read']},{label:'供应链与利润',path:'/sourcing',icon:'▣',capabilities:['sourcing:read']},{label:'任务中心',path:'/tasks',icon:'☷',capabilities:['task:read']},{label:'通知中心',path:'/notifications',icon:'○',capabilities:['notification:read']},{label:'个人中心',path:'/me',icon:'◉'}
 ];
@@ -24,8 +25,8 @@ const pageTitle=computed(()=>activeItem.value?.label??shellTitle.value);
 const short=(value:string|null)=>value?`${value.slice(0,8)}…`:'不适用';
 const stateCopy=computed(()=>({expired:['登录已失效','重新登录后返回当前页面。'],forbidden:['无权进入此工作台','服务端已拒绝该壳层；返回有权访问的工作台。'],context_required:['尚未选择组织与工作区','完成租户选择后才能进入成员或组织后台。'],rate_limited:['请求过于频繁','稍后重试；不要连续刷新。'],blocked:['导航服务暂不可用','检查网络后重试；运维可在宝塔查看 Node API。'],loading:['正在核验工作台权限','菜单只会在服务端确认后显示。'],ready:['','']} as Record<State,[string,string]>)[state.value]);
 async function load(){state.value='loading';guard.value=null;requestId.value='';actionHint.value='';try{const response=await fetch(`${props.apiBaseUrl}/me/navigation?shell=${props.shell}`,{credentials:'include',headers:{accept:'application/json'}});const body=await response.json().catch(()=>null);requestId.value=body?.request_id??'';actionHint.value=body?.error?.action_hint??'';if(!response.ok){state.value=response.status===401?'expired':response.status===403?'forbidden':response.status===409?'context_required':response.status===429?'rate_limited':'blocked';return;}guard.value=body.data;state.value='ready';}catch{state.value='blocked';}}
-function deferred(feature:string){notice.value=`${feature}由 M02-05 接入；当前壳层不伪造搜索、创建或通知结果。`;}
-onMounted(load);
+function shortcut(event:KeyboardEvent){if((event.metaKey||event.ctrlKey)&&event.key.toLowerCase()==='k'){event.preventDefault();discoveryMode.value='search';}}
+onMounted(()=>{void load();window.addEventListener('keydown',shortcut);});onUnmounted(()=>window.removeEventListener('keydown',shortcut));
 </script>
 
 <template>
@@ -37,8 +38,8 @@ onMounted(load);
         <span v-if="shell!=='platform_admin'"><small>组织</small>{{short(guard?.organization_id??null)}}</span><span v-if="shell!=='platform_admin'"><small>工作区</small>{{short(guard?.workspace_id??null)}}</span><span v-else><small>范围</small>平台全局</span>
       </div>
       <div class="role-top-actions">
-        <button type="button" @click="deferred('全局搜索')">⌕ <span>搜索</span><kbd>⌘K</kbd></button>
-        <button type="button" class="role-create" @click="deferred('快捷创建')">＋ <span>创建</span></button>
+        <button type="button" @click="discoveryMode='search'">⌕ <span>搜索</span><kbd>⌘K</kbd></button>
+        <button type="button" class="role-create" @click="discoveryMode='create'">＋ <span>创建</span></button>
         <a href="/notifications" aria-label="通知中心">○</a><a href="/me" aria-label="个人中心">◉</a>
       </div>
     </header>
@@ -55,7 +56,6 @@ onMounted(load);
         <a v-if="state==='expired'" href="/?view=local-identity">重新登录</a><a v-else-if="state==='context_required'" href="/?view=tenancy">选择组织与工作区</a><a v-else-if="state==='forbidden'" href="/home">返回成员工作台</a><button v-else-if="state!=='loading'" type="button" @click="load">重新检查</button>
       </section>
       <template v-else>
-        <div v-if="notice" class="role-notice" role="status"><span>信息</span>{{notice}}<button type="button" aria-label="关闭提示" @click="notice=''">×</button></div>
         <header class="role-page-head"><div><p>{{shellTitle}} / P02</p><h1>{{pageTitle}}</h1><span>导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。</span></div><b>{{guard?.guard_reason}}</b></header>
         <section class="role-ready-panel">
           <div class="role-ready-hero"><span>S</span><div><p>VERIFIED NAVIGATION</p><h2>服务端已确认此工作台</h2><p>当前只交付导航、响应式布局与路由状态，不展示示例指标或其他组织数据。</p></div></div>
@@ -64,6 +64,7 @@ onMounted(load);
         </section>
       </template>
     </section>
-    <nav v-if="state==='ready'" class="role-mobile-nav" aria-label="移动快捷导航"><a v-for="item in items.slice(0,4)" :key="item.path" :href="item.path" :aria-current="activeItem?.path===item.path?'page':undefined"><i>{{item.icon}}</i><span>{{item.label}}</span></a><button type="button" @click="menuOpen=true"><i>☰</i><span>全部</span></button></nav>
+    <nav v-if="state==='ready'" class="role-mobile-nav" aria-label="移动快捷导航"><a v-for="item in items.slice(0,3)" :key="item.path" :href="item.path" :aria-current="activeItem?.path===item.path?'page':undefined"><i>{{item.icon}}</i><span>{{item.label}}</span></a><button type="button" @click="discoveryMode='search'"><i>⌕</i><span>搜索</span></button><button type="button" @click="discoveryMode='create'"><i>＋</i><span>创建</span></button></nav>
+    <DiscoveryOverlay :open="Boolean(discoveryMode)" :mode="discoveryMode||'search'" :api-base-url="apiBaseUrl" @close="discoveryMode=null" />
   </main>
 </template>
