@@ -738,6 +738,92 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '404': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /platform/data-quality:
+    get:
+      summary: List scoped evidence metadata, quality issues and recent reconciliation runs
+      description: Requires platform:operate. Raw evidence content, file paths, credentials and cookies are never returned.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: organization_id, in: query, schema: { type: string, format: uuid } }
+        - { name: workspace_id, in: query, schema: { type: string, format: uuid } }
+        - { name: status, in: query, schema: { type: string, enum: [open, resolved, all], default: all } }
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: page_size, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+      responses:
+        '200': { description: Evidence and data-quality dashboard, content: { application/json: { schema: { $ref: '#/components/schemas/DataQualityDashboardEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/data/evidence/{evidenceId}:
+    get:
+      summary: Read evidence metadata, normalized versions, field provenance and linked quality issues
+      description: Requires platform:operate. The raw body and storage path are excluded.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: evidenceId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: Evidence lineage detail, content: { application/json: { schema: { $ref: '#/components/schemas/EvidenceDetailEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /platform/data-quality/issues/{issueId}/resolve:
+    post:
+      summary: Resolve a versioned quality issue while retaining evidence and history
+      description: Requires platform:operate, same-origin Origin, Idempotency-Key, reason and expected_version.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: issueId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [reason, expected_version]
+              properties:
+                reason: { type: string, minLength: 2, maxLength: 500 }
+                expected_version: { type: integer, minimum: 1 }
+      responses:
+        '200': { description: Resolved quality issue, content: { application/json: { schema: { $ref: '#/components/schemas/QualityIssueEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /platform/data/evidence/{evidenceId}/download-grant:
+    post:
+      summary: Issue a short-lived evidence download grant
+      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Grant issuance is audited and no file path is returned.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: evidenceId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: false, content: { application/json: { schema: { type: object, additionalProperties: false } } } }
+      responses:
+        '200': { description: Scoped short-lived grant, content: { application/json: { schema: { $ref: '#/components/schemas/EvidenceDownloadGrantEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/data/evidence/{evidenceId}/download:
+    get:
+      summary: Download integrity-checked evidence using a scoped short-lived grant
+      description: Requires platform:operate. The grant is bound to organization, workspace, evidence and path; successful access is audited.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: evidenceId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: grant, in: query, required: true, schema: { type: string } }
+      responses:
+        '200': { description: Raw evidence bytes with X-Content-Sha256, headers: { X-Content-Sha256: { schema: { type: string, pattern: '^[a-f0-9]{64}$' } } }, content: { application/octet-stream: { schema: { type: string, format: binary } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /me/ui-preferences:
     get:
       summary: Read the signed-in user's preference for the selected organization and workspace
@@ -1568,6 +1654,87 @@ components:
                 attempts: { type: array, items: { type: object } }
                 events: { type: array, items: { type: object } }
                 dead_letter: { type: object, nullable: true }
+    EvidenceMetadata:
+      type: object
+      required: [id, organization_id, workspace_id, collection_task_id, provider_id, provider_name, source_url, canonical_url, content_sha256, content_type, size_bytes, captured_at, parser_version, adapter_version, retention_until, status, request_id, trace_id]
+      properties:
+        id: { type: string, format: uuid }
+        organization_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+        collection_task_id: { type: string, format: uuid }
+        provider_id: { type: string, format: uuid }
+        provider_name: { type: string }
+        source_url: { type: string, format: uri }
+        canonical_url: { type: string, format: uri }
+        content_sha256: { type: string, pattern: '^[a-f0-9]{64}$' }
+        content_type: { type: string }
+        size_bytes: { type: integer, minimum: 1 }
+        captured_at: { type: string, format: date-time }
+        parser_version: { type: string }
+        adapter_version: { type: string }
+        retention_until: { type: string, format: date-time }
+        status: { type: string, enum: [active, quarantined, expired] }
+        request_id: { type: string }
+        trace_id: { type: string }
+    QualityIssue:
+      type: object
+      required: [id, organization_id, workspace_id, provider_id, provider_name, metric_code, severity, status, version, created_at, updated_at]
+      properties:
+        id: { type: string, format: uuid }
+        organization_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+        provider_id: { type: string, format: uuid }
+        provider_name: { type: string }
+        metric_code: { type: string }
+        field_path: { type: string, nullable: true }
+        severity: { type: string, enum: [warning, critical] }
+        status: { type: string, enum: [open, resolved] }
+        actual_value: { type: number, nullable: true }
+        threshold_value: { type: number, nullable: true }
+        resolution_reason: { type: string, nullable: true }
+        version: { type: integer, minimum: 1 }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    DataQualityDashboardEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/SuccessEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required: [evidence, issues, reconciliationRuns, totalEvidence, totalIssues]
+              properties:
+                evidence: { type: array, items: { $ref: '#/components/schemas/EvidenceMetadata' } }
+                issues: { type: array, items: { $ref: '#/components/schemas/QualityIssue' } }
+                reconciliationRuns: { type: array, items: { type: object } }
+                totalEvidence: { type: integer, minimum: 0 }
+                totalIssues: { type: integer, minimum: 0 }
+    EvidenceDetailEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/SuccessEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required: [evidence, normalized_records, field_provenance, quality_issues]
+              properties:
+                evidence: { $ref: '#/components/schemas/EvidenceMetadata' }
+                normalized_records: { type: array, items: { type: object } }
+                field_provenance: { type: array, items: { type: object } }
+                quality_issues: { type: array, items: { $ref: '#/components/schemas/QualityIssue' } }
+    QualityIssueEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/QualityIssue' } } }]
+    EvidenceDownloadGrantEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/SuccessEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required: [grant, expires_at]
+              properties:
+                grant: { type: string, description: Opaque short-lived scoped token }
+                expires_at: { type: string, format: date-time }
     HealthLiveData:
       type: object
       required: [status, service, version, build_sha]

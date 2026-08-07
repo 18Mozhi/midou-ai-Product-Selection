@@ -8,6 +8,7 @@ import CredentialAssetCenter from './CredentialAssetCenter.vue';
 import ProviderAdapterCenter from './ProviderAdapterCenter.vue';
 import CollectionRuntimeCenter from './CollectionRuntimeCenter.vue';
 import CollectionTaskCenter from './CollectionTaskCenter.vue';
+import DataQualityCenter from './DataQualityCenter.vue';
 
 type Shell = 'member' | 'organization_admin' | 'platform_admin';
 type State = 'loading' | 'ready' | 'expired' | 'forbidden' | 'context_required' | 'rate_limited' | 'blocked';
@@ -22,7 +23,7 @@ const orgMenu:MenuItem[]=[
   {label:'组织资料',path:'/org-admin',icon:'▰'},{label:'成员与邀请',path:'/org-admin/members',icon:'♙'},{label:'角色与权限',path:'/org-admin/roles',icon:'◇'},{label:'工作区与团队',path:'/org-admin/workspaces',icon:'▦'},{label:'任务与审批',path:'/org-admin/approvals',icon:'✓'},{label:'组织数据',path:'/org-admin/data',icon:'⌁'},{label:'组织 Token',path:'/org-admin/tokens',icon:'⌘'},{label:'组织审计',path:'/org-admin/audit',icon:'⊙'}
 ];
 const platformMenu:MenuItem[]=[
-  {label:'平台驾驶舱',path:'/platform-admin',icon:'⌂'},{label:'组织与账号',path:'/platform-admin/organizations',icon:'♙',capabilities:['platform:operate','platform:superadmin']},{label:'平台管理员',path:'/platform-admin/admins',icon:'♜',capabilities:['platform:superadmin']},{label:'来源注册中心',path:'/platform-admin/providers',icon:'◎',capabilities:['platform:operate','platform:superadmin']},{label:'凭证与档案',path:'/platform-admin/credentials',icon:'⌘',capabilities:['platform:secure','platform:superadmin']},{label:'采集控制台',path:'/platform-admin/collection',icon:'↻',capabilities:['platform:operate','platform:superadmin']},{label:'全量数据',path:'/platform-admin/data',icon:'▦'},{label:'规则与自动化',path:'/platform-admin/governance',icon:'◇',capabilities:['platform:operate','platform:superadmin']},{label:'通知运营',path:'/platform-admin/notifications',icon:'○',capabilities:['platform:operate','platform:superadmin']},{label:'Token 与开放 API',path:'/platform-admin/open-platform',icon:'⌁',capabilities:['platform:operate','platform:secure','platform:superadmin']},{label:'安全与审计',path:'/platform-admin/security',icon:'⊙',capabilities:['platform:secure','platform:superadmin']},{label:'监控与运维',path:'/platform-admin/operations',icon:'⌬',capabilities:['platform:operate','platform:superadmin']},{label:'商业运营',path:'/platform-admin/commercial',icon:'▰',capabilities:['platform:operate','platform:superadmin']}
+  {label:'平台驾驶舱',path:'/platform-admin',icon:'⌂'},{label:'组织与账号',path:'/platform-admin/organizations',icon:'♙',capabilities:['platform:operate','platform:superadmin']},{label:'平台管理员',path:'/platform-admin/admins',icon:'♜',capabilities:['platform:superadmin']},{label:'来源注册中心',path:'/platform-admin/providers',icon:'◎',capabilities:['platform:operate','platform:superadmin']},{label:'凭证与档案',path:'/platform-admin/credentials',icon:'⌘',capabilities:['platform:secure','platform:superadmin']},{label:'采集控制台',path:'/platform-admin/collection',icon:'↻',capabilities:['platform:operate','platform:superadmin']},{label:'全量数据',path:'/platform-admin/data',icon:'▦',capabilities:['platform:operate','platform:superadmin']},{label:'规则与自动化',path:'/platform-admin/governance',icon:'◇',capabilities:['platform:operate','platform:superadmin']},{label:'通知运营',path:'/platform-admin/notifications',icon:'○',capabilities:['platform:operate','platform:superadmin']},{label:'Token 与开放 API',path:'/platform-admin/open-platform',icon:'⌁',capabilities:['platform:operate','platform:secure','platform:superadmin']},{label:'安全与审计',path:'/platform-admin/security',icon:'⊙',capabilities:['platform:secure','platform:superadmin']},{label:'监控与运维',path:'/platform-admin/operations',icon:'⌬',capabilities:['platform:operate','platform:superadmin']},{label:'商业运营',path:'/platform-admin/commercial',icon:'▰',capabilities:['platform:operate','platform:superadmin']}
 ];
 const allCapabilities=computed(()=>props.shell==='platform_admin'?(guard.value?.platform_capabilities??[]):(guard.value?.capabilities??[]));
 const items=computed(()=>{const source=props.shell==='member'?memberMenu:props.shell==='organization_admin'?orgMenu:platformMenu;return source.filter(item=>!item.capabilities||item.capabilities.some(cap=>allCapabilities.value.includes(cap)));});
@@ -30,6 +31,8 @@ const activeItem=computed(()=>items.value.find(item=>item.path===window.location
 const shellTitle=computed(()=>props.shell==='member'?'成员工作台':props.shell==='organization_admin'?'组织管理后台':'平台管理后台');
 const pageTitle=computed(()=>activeItem.value?.label??shellTitle.value);
 const routePath=window.location.pathname.replace(/\/$/,'')||'/',isHome=computed(()=>props.shell==='member'&&routePath==='/home'),opportunityId=computed(()=>{const match=routePath.match(/^\/opportunities\/([0-9a-f-]{36})$/i);return match?.[1]??'';});
+const phaseLabel=computed(()=>props.shell==='platform_admin'&&['/platform-admin/providers','/platform-admin/credentials','/platform-admin/collection','/platform-admin/data'].some(path=>routePath.startsWith(path))?'P03':'P02');
+const pageSummary=computed(()=>phaseLabel.value==='P03'?'来源、采集运行与证据数据均由对应模块的真实 API 和权限边界驱动。':'导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。');
 const short=(value:string|null)=>value?`${value.slice(0,8)}…`:'不适用';
 const stateCopy=computed(()=>({expired:['登录已失效','重新登录后返回当前页面。'],forbidden:['无权进入此工作台','服务端已拒绝该壳层；返回有权访问的工作台。'],context_required:['尚未选择组织与工作区','完成租户选择后才能进入成员或组织后台。'],rate_limited:['请求过于频繁','稍后重试；不要连续刷新。'],blocked:['导航服务暂不可用','检查网络后重试；运维可在宝塔查看 Node API。'],loading:['正在核验工作台权限','菜单只会在服务端确认后显示。'],ready:['','']} as Record<State,[string,string]>)[state.value]);
 async function load(){state.value='loading';guard.value=null;requestId.value='';actionHint.value='';try{const response=await fetch(`${props.apiBaseUrl}/me/navigation?shell=${props.shell}`,{credentials:'include',headers:{accept:'application/json'}});const body=await response.json().catch(()=>null);requestId.value=body?.request_id??'';actionHint.value=body?.error?.action_hint??'';if(!response.ok){state.value=response.status===401?'expired':response.status===403?'forbidden':response.status===409?'context_required':response.status===429?'rate_limited':'blocked';return;}guard.value=body.data;state.value='ready';}catch{state.value='blocked';}}
@@ -64,7 +67,7 @@ onMounted(()=>{void load();window.addEventListener('keydown',shortcut);});onUnmo
         <a v-if="state==='expired'" href="/?view=local-identity">重新登录</a><a v-else-if="state==='context_required'" href="/?view=tenancy">选择组织与工作区</a><a v-else-if="state==='forbidden'" href="/home">返回成员工作台</a><button v-else-if="state!=='loading'" type="button" @click="load">重新检查</button>
       </section>
       <template v-else>
-        <header class="role-page-head"><div><p>{{shellTitle}} / P02</p><h1>{{pageTitle}}</h1><span>导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。</span></div><b>{{guard?.guard_reason}}</b></header>
+        <header class="role-page-head"><div><p>{{shellTitle}} / {{phaseLabel}}</p><h1>{{pageTitle}}</h1><span>{{pageSummary}}</span></div><b>{{guard?.guard_reason}}</b></header>
         <HomeDashboard v-if="isHome" :api-base-url="apiBaseUrl" />
         <section v-else-if="shell==='platform_admin'&&routePath.startsWith('/platform-admin/providers')" class="provider-runtime-surface">
           <nav class="provider-runtime-tabs" aria-label="来源管理视图"><a href="/platform-admin/providers" :aria-current="routePath==='/platform-admin/providers'?'page':undefined">来源定义</a><a href="/platform-admin/providers/adapters" :aria-current="routePath==='/platform-admin/providers/adapters'?'page':undefined">适配器运行时</a></nav>
@@ -77,6 +80,7 @@ onMounted(()=>{void load();window.addEventListener('keydown',shortcut);});onUnmo
           <CollectionRuntimeCenter v-if="routePath==='/platform-admin/collection/browser-runtime'" :api-base-url="apiBaseUrl" />
           <CollectionTaskCenter v-else :api-base-url="apiBaseUrl" />
         </section>
+        <DataQualityCenter v-else-if="shell==='platform_admin'&&routePath==='/platform-admin/data'" :api-base-url="apiBaseUrl" />
         <OpportunityMobileShell v-else-if="opportunityId" :opportunity-id="opportunityId" />
         <section v-else class="role-ready-panel">
           <div class="role-ready-hero"><span>S</span><div><p>VERIFIED NAVIGATION</p><h2>服务端已确认此工作台</h2><p>当前只交付导航、响应式布局与路由状态，不展示示例指标或其他组织数据。</p></div></div>

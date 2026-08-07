@@ -9,8 +9,10 @@
     "@scoutops/config": "0.1.0",
     "@scoutops/contracts": "0.1.0",
     "@scoutops/collection-tasks": "0.1.0",
+    "@scoutops/data-quality": "0.1.0",
     "@scoutops/database": "0.1.0",
     "@scoutops/redis": "0.1.0",
+    "@scoutops/storage": "0.1.0",
     "mysql2": "^3.15.3"
   }
 }
