@@ -2,13 +2,14 @@
 import { computed, ref } from 'vue';
 import { publicConfig } from '../config';
 
-type IdentityMode = 'login' | 'register' | 'forgot' | 'verify' | 'reset' | 'sessions' | 'mfa' | 'mfa-challenge';
+type IdentityMode = 'login' | 'register' | 'forgot' | 'verify' | 'reset' | 'sessions' | 'mfa' | 'mfa-challenge' | 'security-setup';
 type RequestState = 'idle' | 'loading' | 'success' | 'error' | 'expired';
 const params = new URLSearchParams(window.location.search);
 const mode = ref<IdentityMode>((params.get('mode') as IdentityMode) || 'login');
 const requestState = ref<RequestState>(params.get('state') === 'expired' ? 'expired' : 'idle');
 const email = ref(''); const password = ref(''); const confirmPassword = ref(''); const currentPassword=ref('');const mfaCode=ref('');const mfaSecret=ref('');const recoveryCodes=ref<string[]>([]);const mfaEnabled=ref(false);const message = ref(''); const sessions = ref<Array<{id:string;device_label:string;status:string;last_seen_at:string}>>([]);
-const title = computed(() => ({login:'欢迎回到 ScoutOps',register:'创建本地账号',forgot:'找回密码',verify:'验证邮箱',reset:'设置新密码',sessions:'我的设备会话',mfa:'多因素认证','mfa-challenge':'完成安全验证'})[mode.value]);
+const securitySetup=ref({must_change_password:false,must_enroll_mfa:false});const newPassword=ref('');
+const title = computed(() => ({login:'欢迎回到 ScoutOps',register:'创建本地账号',forgot:'找回密码',verify:'验证邮箱',reset:'设置新密码',sessions:'我的设备会话',mfa:'多因素认证','mfa-challenge':'完成安全验证','security-setup':'完成首次安全设置'})[mode.value]);
 
 function switchMode(next: IdentityMode) { mode.value=next; requestState.value='idle'; message.value=''; if(next==='sessions')void loadSessions();if(next==='mfa')void loadMfa(); }
 const idempotency = () => crypto.randomUUID();
@@ -19,7 +20,7 @@ async function request(path:string,body?:Record<string,string>,method='POST') {
 }
 async function submit() {
   if(mode.value==='register'&&password.value!==confirmPassword.value){requestState.value='error';message.value='两次输入的密码不一致。';return;}
-  if(mode.value==='login'){const result=await request('/auth/login',{email:email.value,password:password.value});if(result?.data?.mfa_required){mode.value='mfa-challenge';requestState.value='idle';message.value='密码已验证，请输入认证器验证码。';}else if(result)message.value='登录成功，会话已安全写入浏览器。';}
+  if(mode.value==='login'){const result=await request('/auth/login',{email:email.value,password:password.value});if(result?.data?.mfa_required){mode.value='mfa-challenge';requestState.value='idle';message.value='密码已验证，请输入认证器验证码。';}else if(result?.data?.security_setup?.required){securitySetup.value=result.data.security_setup;currentPassword.value=password.value;mode.value='security-setup';requestState.value='idle';message.value='种子账号必须完成改密和 MFA 后才能进入业务功能。';}else if(result)message.value='登录成功，会话已安全写入浏览器。';}
   if(mode.value==='register'){const result=await request('/auth/register',{email:email.value,password:password.value});if(result){mode.value='verify';message.value='验证邮件已进入受控投递队列。';}}
   if(mode.value==='forgot'){const result=await request('/auth/password-reset/request',{email:email.value});if(result)message.value='如账号存在，重置邮件会进入受控投递队列。';}
   if(mode.value==='reset'){const token=params.get('token')||'';const result=await request('/auth/password-reset/confirm',{token,new_password:password.value});if(result===null&&requestState.value==='success')message.value='密码已更新，请重新登录。';}
@@ -29,8 +30,9 @@ async function loadSessions(){const result=await request('/me/sessions',undefine
 async function revoke(id:string){const result=await request(`/me/sessions/${id}`,undefined,'DELETE');if(result===null&&requestState.value==='success')await loadSessions();}
 async function loadMfa(){const result=await request('/me/mfa',undefined,'GET');if(result)mfaEnabled.value=Boolean(result.data?.totp_enabled);}
 async function startMfa(){const result=await request('/me/mfa/totp/enrollment',{current_password:currentPassword.value});if(result){mfaSecret.value=result.data.secret;message.value='密钥仅显示于本次绑定，请添加到认证器后输入验证码。';}}
-async function confirmMfa(){const result=await request('/me/mfa/totp/confirm',{code:mfaCode.value});if(result){mfaEnabled.value=true;recoveryCodes.value=result.data.recovery_codes;message.value='MFA 已启用。请离线保存一次性恢复码。';}}
+async function confirmMfa(){const result=await request('/me/mfa/totp/confirm',{code:mfaCode.value});if(result){mfaEnabled.value=true;securitySetup.value.must_enroll_mfa=false;recoveryCodes.value=result.data.recovery_codes;message.value=mode.value==='security-setup'?'首次安全设置已完成。请离线保存恢复码，然后重新登录进入业务功能。':'MFA 已启用。请离线保存一次性恢复码。';}}
 async function disableMfa(){const result=await request('/me/mfa/totp',{current_password:currentPassword.value,code:mfaCode.value},'DELETE');if(result===null&&requestState.value==='success'){mfaEnabled.value=false;message.value='MFA 已停用，所有会话已撤销，请重新登录。';}}
+async function changeSeedPassword(){const result=await request('/me/password',{current_password:currentPassword.value,new_password:newPassword.value});if(result===null&&requestState.value==='success'){securitySetup.value.must_change_password=false;password.value=newPassword.value;currentPassword.value='';newPassword.value='';mode.value='login';message.value='密码已修改且旧会话已撤销。请用新密码重新登录并继续绑定 MFA。';}}
 </script>
 
 <template>
@@ -61,6 +63,7 @@ async function disableMfa(){const result=await request('/me/mfa/totp',{current_p
           <span v-else-if="mode==='forgot'">无论账号是否存在，页面提示保持一致</span>
           <span v-else-if="mode==='mfa'">认证器密钥加密保存，恢复码仅显示一次</span>
           <span v-else-if="mode==='mfa-challenge'">短时挑战保存在 HttpOnly Cookie 中</span>
+          <span v-else-if="mode==='security-setup'">完成全部步骤前，业务 API 保持拒绝</span>
         </div>
 
         <div v-if="requestState==='expired'" class="identity-notice identity-notice--warning" data-testid="expired">
@@ -82,6 +85,12 @@ async function disableMfa(){const result=await request('/me/mfa/totp',{current_p
           <span class="mail-icon" aria-hidden="true">✉</span><h3>检查验证邮件</h3><p>邮件 Provider 未确认时，生产投递会明确显示受阻，不会假报已发送。</p><button type="button" @click="switchMode('login')">返回登录</button>
         </div>
 
+        <section v-else-if="mode==='security-setup'" class="mfa-panel" data-testid="security-setup">
+          <div class="mfa-status"><span class="is-pending">强制</span><div><strong>种子管理员安全激活</strong><p>单次种子密码不能作为长期凭证；改密后必须启用认证器。</p></div></div>
+          <template v-if="securitySetup.must_change_password"><label>当前种子密码<input v-model="currentPassword" type="password" autocomplete="current-password" minlength="12" maxlength="128"></label><label>新的长期密码<input v-model="newPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128"></label><button class="identity-primary" type="button" @click="changeSeedPassword">修改密码并撤销当前会话</button></template>
+          <template v-else-if="securitySetup.must_enroll_mfa"><label>当前密码<input v-model="currentPassword" type="password" autocomplete="current-password" minlength="12" maxlength="128"></label><button v-if="!mfaSecret" class="identity-primary" type="button" @click="startMfa">开始绑定认证器</button><div v-else class="mfa-setup"><p>手动输入密钥</p><code>{{mfaSecret}}</code><label>认证器验证码<input v-model="mfaCode" inputmode="numeric" autocomplete="one-time-code" maxlength="8"></label><button class="identity-primary" type="button" @click="confirmMfa">确认并完成安全设置</button></div></template>
+          <div v-else class="recovery-codes"><strong>安全设置已完成</strong><p>恢复码仅显示本次，请离线保存后重新登录。</p><code v-for="code in recoveryCodes" :key="code">{{code}}</code><button class="identity-primary" type="button" @click="switchMode('login')">返回登录</button></div>
+        </section>
         <section v-else-if="mode==='mfa'" class="mfa-panel" data-testid="mfa">
           <div class="mfa-status"><span :class="mfaEnabled?'is-enabled':'is-pending'">{{ mfaEnabled ? '已启用' : '未启用' }}</span><div><strong>认证器 TOTP</strong><p>遵循 RFC 6238；验证码 30 秒更新，允许受控时钟偏差并拒绝重放。</p></div></div>
           <template v-if="!mfaEnabled">

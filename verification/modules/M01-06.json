@@ -1,0 +1,23 @@
+{
+  "moduleId":"M01-06","phaseId":"P01","name":"审计与种子管理员","dependencies":["M01-04"],
+  "atomicTasks":[
+    {"id":"M01-06.A01","evidence":"scope freezes one-time Baota seed and read-only audit surfaces"},
+    {"id":"M01-06.A02","evidence":"seed run admin security posture and normalized audit domain"},
+    {"id":"M01-06.A03","evidence":"MySQL57 seed security and audit index migrations with rollback"},
+    {"id":"M01-06.A04","evidence":"transactional one-time seed and paginated audit query service"},
+    {"id":"M01-06.A05","evidence":"synchronous security truth with explicit no-async rationale"},
+    {"id":"M01-06.A06","evidence":"OpenAPI DTO pagination filters errors and version contracts"},
+    {"id":"M01-06.A07","evidence":"platform security and organization audit desktop and 390 layouts"},
+    {"id":"M01-06.A08","evidence":"loading empty error forbidden expired blocked and recovery states"},
+    {"id":"M01-06.A09","evidence":"platform and organization audit guards across protected surfaces"},
+    {"id":"M01-06.A10","evidence":"Baota-only seed config schema env example startup and secret scan"},
+    {"id":"M01-06.A11","evidence":"seed and audit events preserve request trace without secrets"},
+    {"id":"M01-06.A12","evidence":"one-time seed password change MFA and auditor read-only unit tests"},
+    {"id":"M01-06.A13","evidence":"OpenAPI DTO audit event and CLI contracts"},
+    {"id":"M01-06.A14","evidence":"real MySQL57 seed isolation query and cleanup integration"},
+    {"id":"M01-06.A15","evidence":"Playwright desktop 390 keyboard and state visual flows"},
+    {"id":"M01-06.A16","evidence":"repeat seed missing secret unauthorized query and dependency drills"},
+    {"id":"M01-06.A17","evidence":"blueprint Feature Map Runbook operations and rollback synchronized"}
+  ],
+  "commands":["npm run build","node --test tests/m01-06/audit-seed-domain.test.mjs","node --test tests/m01-06/audit-seed-api.test.mjs","node --test tests/m01-06/audit-seed-contract.test.mjs","node scripts/verify-audit-seed-live.mjs","npx playwright test tests/e2e/m01-06-audit-seed.spec.ts","npm run verify:docs"]
+}

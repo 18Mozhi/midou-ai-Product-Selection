@@ -21,6 +21,7 @@ export interface RuntimeConfig {
   runtime: { workerHeartbeatMs: number; crawlerHeartbeatSeconds: number };
   configFingerprint: string;
 }
+export interface PlatformSeedConfig { email: string; password: string; }
 const text = (env: NodeJS.ProcessEnv, key: string, fallback = '') => env[key]?.trim() || fallback;
 function integer(env: NodeJS.ProcessEnv, key: string, fallback: number, min: number, max: number) {
   const value = Number(text(env, key, String(fallback)));
@@ -58,4 +59,11 @@ export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env, target: 
   if (base.auth.passwordMaxLength < base.auth.passwordMinLength) throw new ConfigError('AUTH_PASSWORD_MAX_LENGTH', 'must be greater than or equal to AUTH_PASSWORD_MIN_LENGTH');
   const safe = { ...base, database: { ...base.database, password: Boolean(base.database.password) }, redis: { ...base.redis, password: Boolean(base.redis.password) }, ai: { ...base.ai, apiKey: Boolean(base.ai.apiKey) }, security: { sessionSecret: Boolean(base.security.sessionSecret), credentialsMasterKey: Boolean(base.security.credentialsMasterKey) } };
   return { ...base, configFingerprint: createHash('sha256').update(JSON.stringify(safe)).digest('hex') };
+}
+
+export function loadPlatformSeedConfig(env: NodeJS.ProcessEnv = process.env): PlatformSeedConfig {
+  const email=text(env,'PLATFORM_ADMIN_SEED_EMAIL').toLowerCase(),password=env.PLATFORM_ADMIN_SEED_PASSWORD??'';
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new ConfigError('PLATFORM_ADMIN_SEED_EMAIL','must be a valid email');
+  if(password.length<12||password.length>1024)throw new ConfigError('PLATFORM_ADMIN_SEED_PASSWORD','must contain 12 to 1024 characters');
+  return{email,password};
 }

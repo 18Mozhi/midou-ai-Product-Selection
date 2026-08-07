@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD COLUMN `must_change_password` TINYINT(1) NOT NULL DEFAULT 0 AFTER `password_changed_at`, ADD COLUMN `must_enroll_mfa` TINYINT(1) NOT NULL DEFAULT 0 AFTER `must_change_password`, ADD COLUMN `security_setup_completed_at` DATETIME(3) NULL AFTER `must_enroll_mfa`, ADD KEY `idx_users_security_setup` (`must_change_password`,`must_enroll_mfa`);

@@ -1,14 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "project": "ScoutOps / 实时选品运营平台",
-  "status": "P00_completed_P01_in_progress",
+  "status": "P00_P01_completed_P02_in_progress",
   "sourceOfTruth": "../new-product-enterprise-blueprint.md",
   "locateCommand": "node scripts/locate_flow_v4.mjs \"<keyword>\"",
   "deliveryPlan": "../plans/README.md",
   "implementation": {
-    "currentPhase": "P01",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05"],
-    "activeModules": ["M01-06"],
+    "currentPhase": "P02",
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06"],
+    "activeModules": ["M02-01"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -20,7 +20,8 @@
       "auth": "../packages/auth/src/index.ts",
       "tenancy": "../packages/tenancy/src/index.ts",
       "authorization": "../packages/authorization/src/index.ts",
-      "resourceGrants": "../packages/resource-grants/src/index.ts"
+      "resourceGrants": "../packages/resource-grants/src/index.ts",
+      "audit": "../packages/audit/src/index.ts"
     },
     "verification": {
       "moduleCommand": "npm run verify:module -- <module-id>",
@@ -130,7 +131,22 @@
       "async": "not applicable; expiry and access authorization are synchronous MySQL truth",
       "verificationRunId": "3f6d3cb1-a805-4d17-b3f2-84780ebba303",
       "status": "module_verified"
+    },
+    "auditSecurity": {
+      "module": "M01-06",
+      "entrypoints": ["../packages/audit/src/index.ts", "../apps/api/src/mysql-audit-repository.ts", "../apps/api/src/audit-routes.ts", "../scripts/seed-platform-admin.mjs", "../apps/web/src/components/AuditSecurityCenter.vue"],
+      "routes": ["/api/v1/me/security-setup", "/api/v1/platform/audit-events", "/api/v1/organizations/{organizationId}/audit-events"],
+      "seed": "one-time Baota-controlled CLI; environment removed after success; no browser or resident service reads seed secrets",
+      "securitySetup": "restricted session until forced password change and TOTP enrollment both complete",
+      "permissions": "platform or organization audit:read; auditor has no replay, credential, key rotation or role write capability",
+      "audit": "synchronous MySQL platform-global or exact-organization events with sanitized metadata and request_id/trace_id",
+      "async": "not applicable; seed, security posture and audit authorization are synchronous security truth",
+      "verificationRunId": "d33fc9ba-8b96-4042-8252-68d0d3b7f9ee",
+      "status": "module_verified"
     }
+  },
+  "phaseVerification": {
+    "P01": {"runId": "5e4da53f-25ab-4e60-9850-516590896fe0", "status": "phase_verified", "modules": ["M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06"]}
   },
   "uiReference": {
     "directory": "../images-html",
@@ -170,7 +186,7 @@
     {"path": "/notifications", "view": "Notifications", "domain": "notifications", "status": "planned"},
     {"path": "/me", "view": "Profile", "domain": "identity", "status": "local_security_sessions_implemented_profile_planned"},
     {"path": "/org-admin", "view": "OrganizationAdmin", "domain": "organization", "status": "roles_and_resource_grants_implemented_remaining_management_planned"},
-    {"path": "/platform-admin", "view": "PlatformAdmin", "domain": "platform", "status": "planned"}
+    {"path": "/platform-admin", "view": "PlatformAdmin", "domain": "platform", "status": "security_audit_surface_implemented_remaining_admin_modules_planned"}
   ],
   "apiGroups": [
     {"prefix": "/api/v1/health", "domain": "platform-runtime", "status": "foundation_implemented"},
@@ -187,7 +203,7 @@
     {"prefix": "/api/v1/analysis", "domain": "decision-analysis", "status": "planned"},
     {"prefix": "/api/v1/reports", "domain": "reporting", "status": "planned"},
     {"prefix": "/api/v1/realtime", "domain": "realtime", "status": "planned"},
-    {"prefix": "/api/v1/platform", "domain": "platform", "status": "planned"},
+    {"prefix": "/api/v1/platform", "domain": "platform", "status": "M01-06_read_only_audit_implemented_remaining_platform_management_planned"},
     {"prefix": "/open/v1", "domain": "open-platform", "status": "planned"}
   ],
   "runtime": [

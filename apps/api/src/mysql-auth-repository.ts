@@ -3,9 +3,9 @@ import type { ActionTokenPurpose, ActionTokenRecord, AuthRepository, AuthSecurit
 import { AuthError } from '@scoutops/auth';
 import { withTransaction } from '@scoutops/database';
 
-const userColumns = 'id,email,email_normalized,password_hash,status,email_verified_at,failed_login_count,locked_until,password_changed_at,version,created_at,updated_at';
+const userColumns = 'id,email,email_normalized,password_hash,status,email_verified_at,failed_login_count,locked_until,password_changed_at,must_change_password,must_enroll_mfa,security_setup_completed_at,version,created_at,updated_at';
 const sessionColumns = 'id,user_id,token_hash,status,device_label,user_agent_hash,ip_hash,expires_at,last_seen_at,revoked_at,created_at';
-const asUser = (row: RowDataPacket) => row as UserRecord;
+const asUser = (row: RowDataPacket) => ({...row,must_change_password:Boolean(row.must_change_password),must_enroll_mfa:Boolean(row.must_enroll_mfa)}) as UserRecord;
 const asSession = (row: RowDataPacket) => row as SessionRecord;
 const asToken = (row: RowDataPacket) => row as ActionTokenRecord;
 
@@ -22,7 +22,7 @@ export class MySqlAuthRepository implements AuthRepository {
   }
   async createUser(user: UserRecord) {
     try {
-      await this.pool.query('INSERT INTO users (id,email,email_normalized,password_hash,status,email_verified_at,failed_login_count,locked_until,password_changed_at,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)', [user.id,user.email,user.email_normalized,user.password_hash,user.status,user.email_verified_at,user.failed_login_count,user.locked_until,user.password_changed_at,user.version,user.created_at,user.updated_at]);
+      await this.pool.query('INSERT INTO users (id,email,email_normalized,password_hash,status,email_verified_at,failed_login_count,locked_until,password_changed_at,must_change_password,must_enroll_mfa,security_setup_completed_at,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [user.id,user.email,user.email_normalized,user.password_hash,user.status,user.email_verified_at,user.failed_login_count,user.locked_until,user.password_changed_at,user.must_change_password,user.must_enroll_mfa,user.security_setup_completed_at,user.version,user.created_at,user.updated_at]);
     } catch (error) {
       if (typeof error === 'object' && error && 'code' in error && error.code === 'ER_DUP_ENTRY') throw new AuthError('email_already_registered', 409, '登录或使用密码重置找回账号。');
       throw error;
@@ -38,7 +38,7 @@ export class MySqlAuthRepository implements AuthRepository {
     });
   }
   async saveUser(user: UserRecord) {
-    const [result] = await this.pool.query<ResultSetHeader>('UPDATE users SET email=?,email_normalized=?,password_hash=?,status=?,email_verified_at=?,failed_login_count=?,locked_until=?,password_changed_at=?,version=?,updated_at=? WHERE id=?', [user.email,user.email_normalized,user.password_hash,user.status,user.email_verified_at,user.failed_login_count,user.locked_until,user.password_changed_at,user.version,user.updated_at,user.id]);
+    const [result] = await this.pool.query<ResultSetHeader>('UPDATE users SET email=?,email_normalized=?,password_hash=?,status=?,email_verified_at=?,failed_login_count=?,locked_until=?,password_changed_at=?,must_change_password=?,must_enroll_mfa=?,security_setup_completed_at=?,version=?,updated_at=? WHERE id=?', [user.email,user.email_normalized,user.password_hash,user.status,user.email_verified_at,user.failed_login_count,user.locked_until,user.password_changed_at,user.must_change_password,user.must_enroll_mfa,user.security_setup_completed_at,user.version,user.updated_at,user.id]);
     if (result.affectedRows !== 1) throw new Error('user_not_found');
   }
   async createActionToken(token: ActionTokenRecord) {

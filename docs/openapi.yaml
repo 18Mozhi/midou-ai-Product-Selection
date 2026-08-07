@@ -37,6 +37,12 @@ x-scoutops-baota-s0:
   readinessPath: /api/v1/health/ready
   asyncRuntimeStatus: structured Worker and Crawler heartbeat logs in Baota
   capacityClaim: S0 single host only; no multi-node or 10000-user claim
+x-scoutops-platform-seed:
+  runtimeApiExposed: false
+  command: node scripts/seed-platform-admin.mjs
+  environment: [PLATFORM_ADMIN_SEED_EMAIL, PLATFORM_ADMIN_SEED_PASSWORD]
+  lifecycle: inject in one Baota-controlled release task, run once, then delete both variables
+  restrictedSessionError: security_setup_required
 paths:
   /health/live:
     get:
@@ -160,6 +166,14 @@ paths:
       requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PasswordChangeRequest' } } } }
       responses:
         '204': { description: Password changed and session cookie cleared }
+        '401': { $ref: '#/components/responses/Error' }
+  /me/security-setup:
+    get:
+      summary: Read the authenticated seed administrator's forced security setup state
+      description: A restricted seed session may call only password, MFA, security-setup and logout endpoints until both steps complete.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Security setup posture without secrets, content: { application/json: { schema: { $ref: '#/components/schemas/SecuritySetupEnvelope' } } } }
         '401': { $ref: '#/components/responses/Error' }
   /me/sessions:
     get:
@@ -348,6 +362,41 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '404': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /platform/audit-events:
+    get:
+      summary: Query platform-global security audit events
+      description: Requires audit:read through a platform role. This surface is read-only and never returns seed passwords or credential material.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/AuditAction' }
+        - { $ref: '#/components/parameters/AuditOutcome' }
+        - { $ref: '#/components/parameters/AuditResourceType' }
+        - { $ref: '#/components/parameters/AuditCursor' }
+        - { $ref: '#/components/parameters/AuditLimit' }
+        - { $ref: '#/components/parameters/AuditOccurredFrom' }
+        - { $ref: '#/components/parameters/AuditOccurredTo' }
+      responses:
+        '200': { description: Cursor-paginated platform audit page, content: { application/json: { schema: { $ref: '#/components/schemas/SecurityAuditPageEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+  /organizations/{organizationId}/audit-events:
+    get:
+      summary: Query audit events restricted to one organization
+      description: Requires audit:read plus a matching active organization scope; auditor remains read-only.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/OrganizationId' }
+        - { $ref: '#/components/parameters/AuditAction' }
+        - { $ref: '#/components/parameters/AuditOutcome' }
+        - { $ref: '#/components/parameters/AuditResourceType' }
+        - { $ref: '#/components/parameters/AuditCursor' }
+        - { $ref: '#/components/parameters/AuditLimit' }
+        - { $ref: '#/components/parameters/AuditOccurredFrom' }
+        - { $ref: '#/components/parameters/AuditOccurredTo' }
+      responses:
+        '200': { description: Cursor-paginated organization audit page, content: { application/json: { schema: { $ref: '#/components/schemas/SecurityAuditPageEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
   /trends:
     get:
       summary: List trend topics
@@ -458,6 +507,13 @@ components:
       in: path
       required: true
       schema: { type: string, format: uuid }
+    AuditAction: { name: action, in: query, schema: { type: string, maxLength: 128 } }
+    AuditOutcome: { name: outcome, in: query, schema: { type: string, enum: [succeeded, failed, blocked] } }
+    AuditResourceType: { name: resource_type, in: query, schema: { type: string, maxLength: 64 } }
+    AuditCursor: { name: cursor, in: query, schema: { type: string, format: uuid } }
+    AuditLimit: { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 50 } }
+    AuditOccurredFrom: { name: occurred_from, in: query, schema: { type: string, format: date-time } }
+    AuditOccurredTo: { name: occurred_to, in: query, schema: { type: string, format: date-time } }
   responses:
     Success:
       description: Successful response
@@ -552,6 +608,46 @@ components:
         roles: { type: array, items: { type: string } }
         capabilities: { type: array, items: { type: string, pattern: '^[a-z_]+:[a-z_]+' } }
         data_scopes: { type: array, items: { $ref: '#/components/schemas/AuthorizationScopeSummary' } }
+        platform_roles: { type: array, items: { type: string } }
+        platform_capabilities: { type: array, items: { type: string, pattern: '^[a-z_]+:[a-z_]+' } }
+    SecuritySetupStatus:
+      type: object
+      additionalProperties: false
+      required: [required, must_change_password, must_enroll_mfa, completed_at]
+      properties:
+        required: { type: boolean }
+        must_change_password: { type: boolean }
+        must_enroll_mfa: { type: boolean }
+        completed_at: { type: string, format: date-time, nullable: true }
+    SecuritySetupEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/SecuritySetupStatus' } } }]
+    SecurityAuditEvent:
+      type: object
+      additionalProperties: false
+      required: [id, organization_id, workspace_id, actor_id, action, resource_type, resource_id, outcome, request_id, trace_id, metadata, occurred_at, schema_version]
+      properties:
+        id: { type: string, format: uuid }
+        organization_id: { type: string, format: uuid, nullable: true }
+        workspace_id: { type: string, format: uuid, nullable: true }
+        actor_id: { type: string, format: uuid, nullable: true }
+        action: { type: string, maxLength: 128 }
+        resource_type: { type: string, maxLength: 64 }
+        resource_id: { type: string, maxLength: 191, nullable: true }
+        outcome: { type: string, enum: [succeeded, failed, blocked] }
+        request_id: { type: string, maxLength: 128 }
+        trace_id: { type: string, maxLength: 128 }
+        metadata: { type: object, additionalProperties: true, description: Sanitized metadata only; secrets are forbidden }
+        occurred_at: { type: string, format: date-time }
+        schema_version: { type: integer, enum: [1] }
+    SecurityAuditPage:
+      type: object
+      additionalProperties: false
+      required: [items, nextCursor]
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/SecurityAuditEvent' } }
+        nextCursor: { type: string, format: uuid, nullable: true }
+    SecurityAuditPageEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/SecurityAuditPage' } } }]
     RoleCapabilitySummary:
       type: object
       additionalProperties: false
@@ -749,6 +845,7 @@ components:
               properties:
                 user: { $ref: '#/components/schemas/LocalAccountSummary' }
                 session: { $ref: '#/components/schemas/SessionSummary' }
+                security_setup: { $ref: '#/components/schemas/SecuritySetupStatus' }
     MfaChallengeEnvelope:
       allOf:
         - { $ref: '#/components/schemas/SuccessEnvelope' }

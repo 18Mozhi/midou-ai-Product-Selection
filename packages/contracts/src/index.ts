@@ -81,7 +81,7 @@ export interface TeamSummary { id:string;organization_id:string;name:string;stat
 export interface SelectedTenancyContext { organization:{id:string;name:string};workspace:WorkspaceSummary; }
 export type AuthorizationDataScope='own'|'team'|'workspace'|'organization'|'platform';
 export interface AuthorizationScopeSummary{scope:AuthorizationDataScope;workspace_id?:string|null;team_id?:string|null;}
-export interface CurrentAuthorizationSummary{organization_id:string;workspace_id:string;roles:string[];capabilities:string[];data_scopes:AuthorizationScopeSummary[];}
+export interface CurrentAuthorizationSummary{organization_id:string;workspace_id:string;roles:string[];capabilities:string[];data_scopes:AuthorizationScopeSummary[];platform_roles?:string[];platform_capabilities?:string[];}
 export interface RoleCapabilitySummary{code:string;name:string;category:'organization'|'platform';description:string;capabilities:string[];}
 export type ResourceGrantType='task'|'opportunity'|'competitor'|'sourcing';
 export type ResourceGrantStatus='active'|'revoked'|'expired';
@@ -90,6 +90,10 @@ export interface CreateResourceGrantRequest{workspace_id:string;resource_type:Re
 export interface ExtendResourceGrantRequest{expected_version:number;reason:string;expires_at:string;}
 export interface RevokeResourceGrantRequest{expected_version:number;reason:string;}
 export interface EligibleResourceGrantMember{id:string;user_id:string;email:string;status:'active';}
+export interface SecuritySetupStatus{required:boolean;must_change_password:boolean;must_enroll_mfa:boolean;completed_at?:string|null;}
+export type AuditOutcome='succeeded'|'failed'|'blocked';
+export interface SecurityAuditEvent{id:string;organization_id:string|null;workspace_id:string|null;actor_id:string|null;action:string;resource_type:string;resource_id:string|null;outcome:AuditOutcome;request_id:string;trace_id:string;metadata:Record<string,unknown>;occurred_at:string;schema_version:1;}
+export interface SecurityAuditPage{items:SecurityAuditEvent[];nextCursor:string|null;}
 export interface MfaCodeRequest { code: string; }
 export interface MfaDisableRequest extends MfaCodeRequest { current_password: string; }
 

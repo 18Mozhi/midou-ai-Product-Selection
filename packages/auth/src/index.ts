@@ -31,6 +31,9 @@ export interface UserRecord {
   failed_login_count: number;
   locked_until: Date | null;
   password_changed_at: Date;
+  must_change_password: boolean;
+  must_enroll_mfa: boolean;
+  security_setup_completed_at: Date | null;
   version: number;
   created_at: Date;
   updated_at: Date;
@@ -151,7 +154,7 @@ export function authErrorMessage(code: string): string {
     mfa_key_missing: 'MFA 密钥配置不可用。', mfa_secret_invalid: 'MFA 因子数据无效。', mfa_enrollment_not_found: '没有待确认的 MFA 绑定。',
     mfa_code_invalid: '验证码或恢复码无效。', mfa_challenge_invalid: 'MFA 登录挑战无效或已过期。', mfa_challenge_locked: 'MFA 登录挑战已锁定。',
     mfa_factor_not_found: '未找到已启用的 MFA 因子。', identity_provider_not_configured: '企业身份 Provider 尚未配置。',
-    sensitive_response_replay_unavailable: '一次性敏感响应不能重放。',
+    sensitive_response_replay_unavailable: '一次性敏感响应不能重放。', security_setup_required: '首次安全设置尚未完成。',
   } as Record<string,string>)[code] ?? '认证请求无法完成。';
 }
 
@@ -324,7 +327,7 @@ export class LocalAuthService {
     this.delivery.assertAvailable?.();
     if (await this.repository.findUserByEmail(email)) throw new AuthError('email_already_registered', 409, '登录或使用密码重置找回账号。');
     const now = this.now();
-    const user: UserRecord = { id: randomUUID(), email, email_normalized: email, password_hash: await this.passwordHasher.hash(input.password), status: 'pending_verification', email_verified_at: null, failed_login_count: 0, locked_until: null, password_changed_at: now, version: 1, created_at: now, updated_at: now };
+    const user: UserRecord = { id: randomUUID(), email, email_normalized: email, password_hash: await this.passwordHasher.hash(input.password), status: 'pending_verification', email_verified_at: null, failed_login_count: 0, locked_until: null, password_changed_at: now, must_change_password: false, must_enroll_mfa: false, security_setup_completed_at: null, version: 1, created_at: now, updated_at: now };
     await this.repository.createUser(user);
     try { await this.issueActionToken(user, 'email_verification', context); }
     catch (error) {
@@ -363,6 +366,7 @@ export class LocalAuthService {
     }
     if (!user.email_verified_at) throw new AuthError('email_verification_required', 403, '完成邮箱验证后登录。');
     user.failed_login_count = 0; user.locked_until = null; user.status = 'active'; user.updated_at = now; await this.repository.saveUser(user);
+    if (user.must_change_password || user.must_enroll_mfa) return this.issueSession(user, context);
     const secondFactor = await this.secondFactorGate?.begin(user, context);
     if (secondFactor?.required) {
       await this.event(user.id, 'login.mfa_required', 'succeeded', context);
@@ -381,19 +385,20 @@ export class LocalAuthService {
     const now = this.now(); const token = this.tokenFactory();
     const session: SessionRecord = { id: randomUUID(), user_id: user.id, token_hash: digestOpaqueToken(token), status: 'active', device_label: context.userAgent?.slice(0, 120) || '未知设备', user_agent_hash: hashMetadata(context.userAgent), ip_hash: hashMetadata(context.ipAddress), expires_at: addMinutes(now, this.policy.sessionTtlMinutes), last_seen_at: now, revoked_at: null, created_at: now };
     await this.repository.createSession(session); await this.event(user.id, 'login.succeeded', 'succeeded', context);
-    return { token, user: { id: user.id, email: user.email, status: user.status }, session: this.sessionSummary(session) };
+    return { token, user: { id: user.id, email: user.email, status: user.status }, session: this.sessionSummary(session), security_setup: { required: user.must_change_password || user.must_enroll_mfa, must_change_password: user.must_change_password, must_enroll_mfa: user.must_enroll_mfa } };
   }
 
-  async authenticate(token: string) {
+  async authenticate(token: string, options: { allowSecuritySetup?: boolean } = {}) {
     const session = await this.repository.findSessionByTokenHash(digestOpaqueToken(token), this.now());
     if (!session) throw new AuthError('session_invalid', 401, '重新登录后重试。');
     const user = await this.repository.findUserById(session.user_id);
     if (!user || user.status !== 'active') throw new AuthError('session_invalid', 401, '重新登录后重试。');
+    if (!options.allowSecuritySetup && (user.must_change_password || user.must_enroll_mfa)) throw new AuthError('security_setup_required', 403, '先完成密码修改和 MFA 绑定。');
     return { user, session };
   }
 
   async logout(token: string, context: AuthContext) {
-    const authenticated = await this.authenticate(token);
+    const authenticated = await this.authenticate(token, { allowSecuritySetup: true });
     await this.repository.revokeSession(authenticated.user.id, authenticated.session.id, this.now());
     await this.event(authenticated.user.id, 'logout.succeeded', 'succeeded', context);
   }
@@ -410,10 +415,20 @@ export class LocalAuthService {
   }
 
   async changePassword(token: string, currentPassword: string, newPassword: string, context: AuthContext) {
-    validatePassword(newPassword, this.policy); const authenticated = await this.authenticate(token);
+    validatePassword(newPassword, this.policy); const authenticated = await this.authenticate(token, { allowSecuritySetup: true });
     if (!(await this.passwordHasher.verify(authenticated.user.password_hash, currentPassword))) throw new AuthError('current_password_invalid', 401, '检查当前密码后重试。');
-    const now = this.now(); authenticated.user.password_hash = await this.passwordHasher.hash(newPassword); authenticated.user.password_changed_at = now; authenticated.user.updated_at = now; authenticated.user.version += 1;
+    const now = this.now(); authenticated.user.password_hash = await this.passwordHasher.hash(newPassword); authenticated.user.password_changed_at = now; authenticated.user.must_change_password = false; authenticated.user.updated_at = now; authenticated.user.version += 1;
     await this.repository.saveUser(authenticated.user); await this.repository.revokeAllSessions(authenticated.user.id, now); await this.event(authenticated.user.id, 'password.changed', 'succeeded', context);
+  }
+
+  async completeMfaEnrollment(userId: string) {
+    const user = await this.repository.findUserById(userId); if (!user) throw new AuthError('session_invalid', 401, '重新登录后重试。');
+    const now = this.now(); user.must_enroll_mfa = false; if (!user.must_change_password) user.security_setup_completed_at = now; user.updated_at = now; user.version += 1; await this.repository.saveUser(user);
+  }
+
+  async securitySetupStatus(token: string) {
+    const { user } = await this.authenticate(token, { allowSecuritySetup: true });
+    return { required: user.must_change_password || user.must_enroll_mfa, must_change_password: user.must_change_password, must_enroll_mfa: user.must_enroll_mfa, completed_at: user.security_setup_completed_at?.toISOString() ?? null };
   }
 
   async requestPasswordReset(emailInput: string, context: AuthContext): Promise<{ accepted: true }> {
