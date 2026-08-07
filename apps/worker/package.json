@@ -1,0 +1,10 @@
+{
+  "name": "@scoutops/worker",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "dependencies": {
+    "@scoutops/contracts": "0.1.0"
+  }
+}

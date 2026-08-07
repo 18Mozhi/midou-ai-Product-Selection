@@ -1,0 +1,33 @@
+{
+  "moduleId": "M00-01",
+  "phaseId": "P00",
+  "name": "仓库骨架",
+  "dependencies": [],
+  "atomicTasks": [
+    {"id": "M00-01.A01", "evidence": "docs/architecture/m00-01-scope.md + scope contract test"},
+    {"id": "M00-01.A02", "evidence": "packages/contracts/src/index.ts + unit tests"},
+    {"id": "M00-01.A03", "evidence": "database/migrations/0001_m00_01_foundation.*.sql + contract test"},
+    {"id": "M00-01.A04", "evidence": "apps/api/src/foundation-service.ts + unit/integration tests"},
+    {"id": "M00-01.A05", "evidence": "apps/worker/src/foundation-worker.ts + retry/dead-letter tests"},
+    {"id": "M00-01.A06", "evidence": "docs/openapi.yaml + API contract test"},
+    {"id": "M00-01.A07", "evidence": "apps/web/src/App.vue and styles.css + E2E screenshot"},
+    {"id": "M00-01.A08", "evidence": "loading/ready/error/retry E2E states"},
+    {"id": "M00-01.A09", "evidence": "assertOrganizationScope + cross-scope tests"},
+    {"id": "M00-01.A10", "evidence": "config/env.example + browser secret boundary contract test"},
+    {"id": "M00-01.A11", "evidence": "request_id/trace_id health response contract"},
+    {"id": "M00-01.A12", "evidence": "tests/unit/foundation.test.mjs"},
+    {"id": "M00-01.A13", "evidence": "tests/contracts/m00-01-contract.test.mjs"},
+    {"id": "M00-01.A14", "evidence": "tests/integration/m00-01-runtime.test.mjs + Python unittest"},
+    {"id": "M00-01.A15", "evidence": "tests/e2e/m00-01-runtime.spec.ts desktop/390px screenshots"},
+    {"id": "M00-01.A16", "evidence": "worker dependency failure/retry/dead-letter tests and Runbook"},
+    {"id": "M00-01.A17", "evidence": "scope, Feature Map, env, Runbook and rollback contract test"}
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/unit/*.test.mjs",
+    "node --test tests/contracts/*.test.mjs",
+    "node --test tests/integration/*.test.mjs",
+    "npm run test:python",
+    "npx playwright test tests/e2e/m00-01-runtime.spec.ts"
+  ]
+}

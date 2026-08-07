@@ -1,0 +1,44 @@
+{
+  "name": "midou-ai-product-selection",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "locate:flow": "node scripts/locate_flow_v4.mjs",
+    "build:contracts": "tsc -p packages/contracts/tsconfig.json",
+    "build:api": "tsc -p apps/api/tsconfig.json",
+    "build:worker": "tsc -p apps/worker/tsconfig.json",
+    "build:web": "vite build --config apps/web/vite.config.ts",
+    "build": "npm run build:contracts && npm run build:api && npm run build:worker && npm run build:web",
+    "dev:api": "npm run build:contracts && node --watch apps/api/dist/server.js",
+    "dev:worker": "npm run build:contracts && node --watch apps/worker/dist/index.js",
+    "dev:web": "vite --config apps/web/vite.config.ts",
+    "test:unit": "npm run build:contracts && npm run build:api && npm run build:worker && node --test tests/unit/*.test.mjs",
+    "test:contract": "npm run build:contracts && npm run build:api && node --test tests/contracts/*.test.mjs",
+    "test:integration": "npm run build:contracts && npm run build:api && npm run build:worker && node --test tests/integration/*.test.mjs",
+    "test:python": "python -m unittest discover -s apps/crawler/tests -p \"test_*.py\"",
+    "verify:module": "node scripts/verify-module.mjs",
+    "verify:phase": "node scripts/verify-phase.mjs",
+    "verify:all": "node scripts/verify-all.mjs",
+    "verify:docs": "node scripts/verify-docs.mjs",
+    "verify:plans": "node scripts/verify-plans.mjs",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "fastify": "^5.6.2",
+    "vue": "^3.5.22"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^26.1.2",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/tsconfig": "^0.8.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.7",
+    "vue-tsc": "^3.1.0"
+  }
+}

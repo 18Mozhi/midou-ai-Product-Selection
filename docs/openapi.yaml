@@ -1,0 +1,212 @@
+openapi: 3.0.3
+info:
+  title: ScoutOps Internal API
+  version: 0.1.0
+  description: P00 implementation contract. Non-public endpoints require organization-aware authorization.
+servers:
+  - url: /api/v1
+x-scoutops-verification:
+  runtimeApiExposed: false
+  reason: Verification commands execute only in local, CI, or Baota-controlled release tasks.
+  commands:
+    module: npm run verify:module -- M00-01
+    phase: npm run verify:phase -- P00
+    all: npm run verify:all
+paths:
+  /health/live:
+    get:
+      summary: Process liveness
+      security: []
+      responses:
+        '200':
+          description: Process is alive; this check does not read MySQL, Redis or providers
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HealthLiveEnvelope' }
+  /health/ready:
+    get:
+      summary: API readiness
+      responses:
+        '200': { description: API can serve synchronous traffic }
+        '503': { description: Dependency unavailable }
+  /trends:
+    get:
+      summary: List trend topics
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200': { $ref: '#/components/responses/PaginatedSuccess' }
+  /opportunities:
+    get:
+      summary: List opportunities
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200': { $ref: '#/components/responses/PaginatedSuccess' }
+    post:
+      summary: Create an opportunity candidate
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '201': { $ref: '#/components/responses/Success' }
+  /tasks:
+    get:
+      summary: List authorized tasks
+      responses:
+        '200':
+          description: Authorized task list with collection coverage when applicable
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TaskListEnvelope' }
+  /subscriptions:
+    get:
+      summary: List organization monitoring subscriptions
+      responses:
+        '200': { $ref: '#/components/responses/PaginatedSuccess' }
+  /reviews/analysis:
+    post:
+      summary: Create an auditable review pain-point analysis run
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '202': { $ref: '#/components/responses/Success' }
+  /analysis/validate:
+    post:
+      summary: Validate uploaded business data with approved statistical methods
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '202': { $ref: '#/components/responses/Success' }
+  /reports:
+    get:
+      summary: List authorized generated reports and exports
+      responses:
+        '200': { $ref: '#/components/responses/PaginatedSuccess' }
+  /realtime/events:
+    get:
+      summary: Organization-filtered SSE stream
+      parameters:
+        - name: Last-Event-ID
+          in: header
+          schema: { type: string }
+      responses:
+        '200':
+          description: Server-sent event stream
+          content:
+            text/event-stream: {}
+  /platform/providers:
+    get:
+      summary: List providers for platform operators
+      responses:
+        '200': { $ref: '#/components/responses/PaginatedSuccess' }
+components:
+  parameters:
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+    PageSize:
+      name: page_size
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema: { type: string, maxLength: 255 }
+  responses:
+    Success:
+      description: Successful response
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/SuccessEnvelope' }
+    PaginatedSuccess:
+      description: Paginated successful response
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/PaginatedEnvelope' }
+  schemas:
+    SuccessEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        data: {}
+        request_id: { type: string }
+        trace_id: { type: string }
+    PaginatedEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/SuccessEnvelope'
+        - type: object
+          properties:
+            meta:
+              type: object
+              properties:
+                page: { type: integer }
+                page_size: { type: integer }
+                total: { type: integer }
+    TaskStatus:
+      type: string
+      enum: [draft, scheduled, queued, leased, running, parsing, validating, persisted, retry_scheduled, blocked_login, blocked_captcha, blocked_robots, rate_limited, succeeded, succeeded_empty, completed_with_warnings, failed_terminal, dead_letter, manually_replayed]
+    CoverageStatus:
+      type: string
+      enum: [complete, partial, insufficient]
+    TaskSummary:
+      type: object
+      required: [id, status]
+      properties:
+        id: { type: string }
+        status: { $ref: '#/components/schemas/TaskStatus' }
+        coverage_status: { $ref: '#/components/schemas/CoverageStatus' }
+        successful_subquery_count: { type: integer, minimum: 0 }
+        failed_subquery_count: { type: integer, minimum: 0 }
+        blocked_subquery_count: { type: integer, minimum: 0 }
+    TaskListEnvelope:
+      type: object
+      required: [data, request_id]
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/TaskSummary' }
+        request_id: { type: string }
+        trace_id: { type: string }
+        meta:
+          type: object
+          properties:
+            page: { type: integer }
+            page_size: { type: integer }
+            total: { type: integer }
+    HealthLiveData:
+      type: object
+      required: [status, service, version, build_sha]
+      properties:
+        status: { type: string, enum: [ok] }
+        service: { type: string, enum: [product-scout-api] }
+        version: { type: string }
+        build_sha: { type: string }
+    HealthLiveEnvelope:
+      type: object
+      required: [data, meta, request_id, trace_id]
+      properties:
+        data: { $ref: '#/components/schemas/HealthLiveData' }
+        meta:
+          type: object
+          required: [observed_at]
+          properties:
+            observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
+    VerificationRun:
+      type: object
+      required: [run_id, trace_id, scope, scope_id, status, started_at]
+      properties:
+        run_id: { type: string, format: uuid }
+        trace_id: { type: string, format: uuid }
+        scope: { type: string, enum: [module, phase, all] }
+        scope_id: { type: string }
+        status: { type: string, enum: [running, passed, failed, blocked] }
+        failure_code: { type: string, nullable: true }
+        report_path: { type: string, description: Baota-controlled local path; never a public URL }
+        started_at: { type: string, format: date-time }
+        finished_at: { type: string, format: date-time, nullable: true }

@@ -1,0 +1,8 @@
+[project]
+name = "scoutops-crawler"
+version = "0.1.0"
+requires-python = ">=3.11"
+description = "ScoutOps provider collection runtime"
+
+[tool.unittest]
+start-directory = "tests"

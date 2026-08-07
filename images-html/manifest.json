@@ -1,0 +1,362 @@
+[
+  {
+    "index": 1,
+    "name": "登录页",
+    "file": "01_72_page_concepts/01_登录页.jpg"
+  },
+  {
+    "index": 2,
+    "name": "注册页",
+    "file": "01_72_page_concepts/02_注册页.jpg"
+  },
+  {
+    "index": 3,
+    "name": "忘记密码",
+    "file": "01_72_page_concepts/03_忘记密码.jpg"
+  },
+  {
+    "index": 4,
+    "name": "邮箱验证",
+    "file": "01_72_page_concepts/04_邮箱验证.jpg"
+  },
+  {
+    "index": 5,
+    "name": "密码重置",
+    "file": "01_72_page_concepts/05_密码重置.jpg"
+  },
+  {
+    "index": 6,
+    "name": "选择组织",
+    "file": "01_72_page_concepts/06_选择组织.jpg"
+  },
+  {
+    "index": 7,
+    "name": "选择工作区",
+    "file": "01_72_page_concepts/07_选择工作区.jpg"
+  },
+  {
+    "index": 8,
+    "name": "引导页-1",
+    "file": "01_72_page_concepts/08_引导页-1.jpg"
+  },
+  {
+    "index": 9,
+    "name": "引导页-2",
+    "file": "01_72_page_concepts/09_引导页-2.jpg"
+  },
+  {
+    "index": 10,
+    "name": "引导页-3",
+    "file": "01_72_page_concepts/10_引导页-3.jpg"
+  },
+  {
+    "index": 11,
+    "name": "首页-概览",
+    "file": "01_72_page_concepts/11_首页-概览.jpg"
+  },
+  {
+    "index": 12,
+    "name": "首页-今日行动",
+    "file": "01_72_page_concepts/12_首页-今日行动.jpg"
+  },
+  {
+    "index": 13,
+    "name": "首页-变化雷达",
+    "file": "01_72_page_concepts/13_首页-变化雷达.jpg"
+  },
+  {
+    "index": 14,
+    "name": "首页-数据健康",
+    "file": "01_72_page_concepts/14_首页-数据健康.jpg"
+  },
+  {
+    "index": 15,
+    "name": "顶部全局搜索",
+    "file": "01_72_page_concepts/15_顶部全局搜索.jpg"
+  },
+  {
+    "index": 16,
+    "name": "创建-快捷入口",
+    "file": "01_72_page_concepts/16_创建-快捷入口.jpg"
+  },
+  {
+    "index": 17,
+    "name": "通知中心",
+    "file": "01_72_page_concepts/17_通知中心.jpg"
+  },
+  {
+    "index": 18,
+    "name": "消息详情",
+    "file": "01_72_page_concepts/18_消息详情.jpg"
+  },
+  {
+    "index": 19,
+    "name": "个人中心",
+    "file": "01_72_page_concepts/19_个人中心.jpg"
+  },
+  {
+    "index": 20,
+    "name": "偏好设置",
+    "file": "01_72_page_concepts/20_偏好设置.jpg"
+  },
+  {
+    "index": 21,
+    "name": "安全设置",
+    "file": "01_72_page_concepts/21_安全设置.jpg"
+  },
+  {
+    "index": 22,
+    "name": "主题设置",
+    "file": "01_72_page_concepts/22_主题设置.jpg"
+  },
+  {
+    "index": 23,
+    "name": "今日工作",
+    "file": "01_72_page_concepts/23_今日工作.jpg"
+  },
+  {
+    "index": 24,
+    "name": "任务列表",
+    "file": "01_72_page_concepts/24_任务列表.jpg"
+  },
+  {
+    "index": 25,
+    "name": "任务详情",
+    "file": "01_72_page_concepts/25_任务详情.jpg"
+  },
+  {
+    "index": 26,
+    "name": "任务评论",
+    "file": "01_72_page_concepts/26_任务评论.jpg"
+  },
+  {
+    "index": 27,
+    "name": "任务审批",
+    "file": "01_72_page_concepts/27_任务审批.jpg"
+  },
+  {
+    "index": 28,
+    "name": "趋势列表",
+    "file": "01_72_page_concepts/28_趋势列表.jpg"
+  },
+  {
+    "index": 29,
+    "name": "趋势详情",
+    "file": "01_72_page_concepts/29_趋势详情.jpg"
+  },
+  {
+    "index": 30,
+    "name": "趋势时间线",
+    "file": "01_72_page_concepts/30_趋势时间线.jpg"
+  },
+  {
+    "index": 31,
+    "name": "趋势监控规则",
+    "file": "01_72_page_concepts/31_趋势监控规则.jpg"
+  },
+  {
+    "index": 32,
+    "name": "创建监控规则",
+    "file": "01_72_page_concepts/32_创建监控规则.jpg"
+  },
+  {
+    "index": 33,
+    "name": "机会列表",
+    "file": "01_72_page_concepts/33_机会列表.jpg"
+  },
+  {
+    "index": 34,
+    "name": "机会详情-概览",
+    "file": "01_72_page_concepts/34_机会详情-概览.jpg"
+  },
+  {
+    "index": 35,
+    "name": "机会-市场分析",
+    "file": "01_72_page_concepts/35_机会-市场分析.jpg"
+  },
+  {
+    "index": 36,
+    "name": "机会-竞争分析",
+    "file": "01_72_page_concepts/36_机会-竞争分析.jpg"
+  },
+  {
+    "index": 37,
+    "name": "机会-利润测算",
+    "file": "01_72_page_concepts/37_机会-利润测算.jpg"
+  },
+  {
+    "index": 38,
+    "name": "机会-风险评估",
+    "file": "01_72_page_concepts/38_机会-风险评估.jpg"
+  },
+  {
+    "index": 39,
+    "name": "机会-证据管理",
+    "file": "01_72_page_concepts/39_机会-证据管理.jpg"
+  },
+  {
+    "index": 40,
+    "name": "创建机会",
+    "file": "01_72_page_concepts/40_创建机会.jpg"
+  },
+  {
+    "index": 41,
+    "name": "竞品列表",
+    "file": "01_72_page_concepts/41_竞品列表.jpg"
+  },
+  {
+    "index": 42,
+    "name": "竞品详情",
+    "file": "01_72_page_concepts/42_竞品详情.jpg"
+  },
+  {
+    "index": 43,
+    "name": "竞品价格追踪",
+    "file": "01_72_page_concepts/43_竞品价格追踪.jpg"
+  },
+  {
+    "index": 44,
+    "name": "竞品监控规则",
+    "file": "01_72_page_concepts/44_竞品监控规则.jpg"
+  },
+  {
+    "index": 45,
+    "name": "供应商搜索",
+    "file": "01_72_page_concepts/45_供应商搜索.jpg"
+  },
+  {
+    "index": 46,
+    "name": "供应商详情",
+    "file": "01_72_page_concepts/46_供应商详情.jpg"
+  },
+  {
+    "index": 47,
+    "name": "报价对比",
+    "file": "01_72_page_concepts/47_报价对比.jpg"
+  },
+  {
+    "index": 48,
+    "name": "成本计算器",
+    "file": "01_72_page_concepts/48_成本计算器.jpg"
+  },
+  {
+    "index": 49,
+    "name": "采购任务",
+    "file": "01_72_page_concepts/49_采购任务.jpg"
+  },
+  {
+    "index": 50,
+    "name": "报表-机会分析",
+    "file": "01_72_page_concepts/50_报表-机会分析.jpg"
+  },
+  {
+    "index": 51,
+    "name": "报表-趋势分析",
+    "file": "01_72_page_concepts/51_报表-趋势分析.jpg"
+  },
+  {
+    "index": 52,
+    "name": "报表-团队绩效",
+    "file": "01_72_page_concepts/52_报表-团队绩效.jpg"
+  },
+  {
+    "index": 53,
+    "name": "移动端-首页",
+    "file": "01_72_page_concepts/53_移动端-首页.jpg"
+  },
+  {
+    "index": 54,
+    "name": "移动端-机会详情",
+    "file": "01_72_page_concepts/54_移动端-机会详情.jpg"
+  },
+  {
+    "index": 55,
+    "name": "组织管理",
+    "file": "01_72_page_concepts/55_组织管理.jpg"
+  },
+  {
+    "index": 56,
+    "name": "成员管理",
+    "file": "01_72_page_concepts/56_成员管理.jpg"
+  },
+  {
+    "index": 57,
+    "name": "角色与权限",
+    "file": "01_72_page_concepts/57_角色与权限.jpg"
+  },
+  {
+    "index": 58,
+    "name": "工作区管理",
+    "file": "01_72_page_concepts/58_工作区管理.jpg"
+  },
+  {
+    "index": 59,
+    "name": "团队管理",
+    "file": "01_72_page_concepts/59_团队管理.jpg"
+  },
+  {
+    "index": 60,
+    "name": "审批流程",
+    "file": "01_72_page_concepts/60_审批流程.jpg"
+  },
+  {
+    "index": 61,
+    "name": "平台运营-概览",
+    "file": "01_72_page_concepts/61_平台运营-概览.jpg"
+  },
+  {
+    "index": 62,
+    "name": "采集源管理",
+    "file": "01_72_page_concepts/62_采集源管理.jpg"
+  },
+  {
+    "index": 63,
+    "name": "采集任务监控",
+    "file": "01_72_page_concepts/63_采集任务监控.jpg"
+  },
+  {
+    "index": 64,
+    "name": "系统监控",
+    "file": "01_72_page_concepts/64_系统监控.jpg"
+  },
+  {
+    "index": 65,
+    "name": "日志中心",
+    "file": "01_72_page_concepts/65_日志中心.jpg"
+  },
+  {
+    "index": 66,
+    "name": "安全审计",
+    "file": "01_72_page_concepts/66_安全审计.jpg"
+  },
+  {
+    "index": 67,
+    "name": "Token管理",
+    "file": "01_72_page_concepts/67_Token管理.jpg"
+  },
+  {
+    "index": 68,
+    "name": "密钥轮换",
+    "file": "01_72_page_concepts/68_密钥轮换.jpg"
+  },
+  {
+    "index": 69,
+    "name": "异常告警",
+    "file": "01_72_page_concepts/69_异常告警.jpg"
+  },
+  {
+    "index": 70,
+    "name": "计费套餐",
+    "file": "01_72_page_concepts/70_计费套餐.jpg"
+  },
+  {
+    "index": 71,
+    "name": "套餐对比",
+    "file": "01_72_page_concepts/71_套餐对比.jpg"
+  },
+  {
+    "index": 72,
+    "name": "404页面",
+    "file": "01_72_page_concepts/72_404页面.jpg"
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "moduleId": "M00-07",
+  "phaseId": "P00",
+  "name": "验收框架",
+  "dependencies": ["M00-01"],
+  "atomicTasks": [
+    {"id": "M00-07.A01", "evidence": "docs/architecture/m00-07-verification-scope.md"},
+    {"id": "M00-07.A02", "evidence": "verification registry/state/report contracts + unit tests"},
+    {"id": "M00-07.A03", "evidence": "database/migrations/0002_m00_07_verification_runs.*.sql"},
+    {"id": "M00-07.A04", "evidence": "scripts/lib/verification-engine.mjs and three CLI entrypoints"},
+    {"id": "M00-07.A05", "evidence": "sequential phase/all orchestration, timeout and failure propagation tests"},
+    {"id": "M00-07.A06", "evidence": "OpenAPI x-scoutops-verification and VerificationRun schema; runtime route intentionally closed"},
+    {"id": "M00-07.A07", "evidence": "VerificationFramework.vue desktop and 390px layout"},
+    {"id": "M00-07.A08", "evidence": "passed/failed/blocked state language and command guidance"},
+    {"id": "M00-07.A09", "evidence": "local-only execution boundary, dependency gate and report path guard"},
+    {"id": "M00-07.A10", "evidence": "VERIFY_COMMAND_TIMEOUT_MS and VERIFY_REPORT_DIR config validation"},
+    {"id": "M00-07.A11", "evidence": "run_id/trace_id structured report and redaction tests"},
+    {"id": "M00-07.A12", "evidence": "tests/m00-07/verification-engine.unit.test.mjs"},
+    {"id": "M00-07.A13", "evidence": "tests/m00-07/verification-contract.test.mjs"},
+    {"id": "M00-07.A14", "evidence": "tests/m00-07/verification-integration.test.mjs"},
+    {"id": "M00-07.A15", "evidence": "tests/e2e/m00-07-verification.spec.ts visual/390px checks"},
+    {"id": "M00-07.A16", "evidence": "nonzero/timeout/missing registry/dependency fault tests and Runbook"},
+    {"id": "M00-07.A17", "evidence": "Feature Map, env, OpenAPI, Runbook and rollback synchronization"}
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m00-07/verification-engine.unit.test.mjs",
+    "node --test tests/m00-07/verification-contract.test.mjs",
+    "node --test tests/m00-07/verification-integration.test.mjs",
+    "npx playwright test tests/e2e/m00-07-verification.spec.ts"
+  ]
+}

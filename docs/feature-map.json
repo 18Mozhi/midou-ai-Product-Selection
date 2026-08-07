@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "project": "ScoutOps / 实时选品运营平台",
+  "status": "P00_in_progress",
+  "sourceOfTruth": "../new-product-enterprise-blueprint.md",
+  "locateCommand": "node scripts/locate_flow_v4.mjs \"<keyword>\"",
+  "deliveryPlan": "../plans/README.md",
+  "implementation": {
+    "currentPhase": "P00",
+    "completedModules": ["M00-01", "M00-07"],
+    "activeModule": "M00-02",
+    "moduleRegistry": "../verification/modules",
+    "entrypoints": {
+      "web": "../apps/web/src/main.ts",
+      "api": "../apps/api/src/server.ts",
+      "worker": "../apps/worker/src/index.ts",
+      "crawler": "../apps/crawler/scoutops_crawler/__main__.py",
+      "contracts": "../packages/contracts/src/index.ts"
+    },
+    "verification": {
+      "moduleCommand": "npm run verify:module -- <module-id>",
+      "phaseCommand": "npm run verify:phase -- <phase-id>",
+      "allCommand": "npm run verify:all",
+      "state": "../verification/state.json",
+      "reportDirectory": "../.artifacts/verification",
+      "runtimeApiExposed": false
+    }
+  },
+  "uiReference": {
+    "directory": "../images-html",
+    "readOrder": ["README.txt", "manifest.json", "01_72_page_concepts", "02_high_resolution_core_pages", "03_source_contact_sheets"],
+    "rule": "Images define planned visual and page-state references only; contracts, permissions and real data follow the blueprint and implementation."
+  },
+  "plannedContracts": {
+    "collectionTask": {
+      "terminalStatuses": ["succeeded", "succeeded_empty", "completed_with_warnings", "failed_terminal", "dead_letter"],
+      "coverageStatuses": ["complete", "partial", "insufficient"],
+      "rule": "Multi-source tasks retain every subquery result; insufficient coverage cannot produce an automatic recommendation."
+    },
+    "credentials": {
+      "ownership": "platform_asset",
+      "storage": "AES-256-GCM ciphertext in MySQL or Baota-controlled directory; master key only in Baota restricted runtime environment"
+    },
+    "deployment": {
+      "currentStage": "S0 single-host Baota deployment",
+      "scaleStages": ["S1 multi-node after shared storage, Redis/Sentinel, MySQL replica, load balancing and rehearsal", "S2 only after capacity and failover rehearsals"]
+    }
+  },
+  "technology": {
+    "frontend": ["Vue 3", "TypeScript"],
+    "backend": ["Node.js", "Python"],
+    "database": "MySQL 5.7",
+    "cacheQueue": "Redis",
+    "deployment": "Baota panel managed services on self-hosted servers"
+  },
+  "routes": [
+    {"path": "/home", "view": "TodayActionCenter", "domain": "work", "status": "planned"},
+    {"path": "/work", "view": "TodayWork", "domain": "tasks", "status": "planned"},
+    {"path": "/trends", "view": "Trends", "domain": "trends", "status": "planned"},
+    {"path": "/opportunities", "view": "Opportunities", "domain": "opportunities", "status": "planned"},
+    {"path": "/competitors", "view": "Competitors", "domain": "competitors", "status": "planned"},
+    {"path": "/sourcing", "view": "Sourcing", "domain": "sourcing", "status": "planned"},
+    {"path": "/tasks", "view": "TaskCenter", "domain": "tasks", "status": "planned"},
+    {"path": "/notifications", "view": "Notifications", "domain": "notifications", "status": "planned"},
+    {"path": "/me", "view": "Profile", "domain": "identity", "status": "planned"},
+    {"path": "/org-admin", "view": "OrganizationAdmin", "domain": "organization", "status": "planned"},
+    {"path": "/platform-admin", "view": "PlatformAdmin", "domain": "platform", "status": "planned"}
+  ],
+  "apiGroups": [
+    {"prefix": "/api/v1/auth", "domain": "identity", "status": "planned"},
+    {"prefix": "/api/v1/org", "domain": "organization", "status": "planned"},
+    {"prefix": "/api/v1/trends", "domain": "trends", "status": "planned"},
+    {"prefix": "/api/v1/opportunities", "domain": "opportunities", "status": "planned"},
+    {"prefix": "/api/v1/competitors", "domain": "competitors", "status": "planned"},
+    {"prefix": "/api/v1/sourcing", "domain": "sourcing", "status": "planned"},
+    {"prefix": "/api/v1/tasks", "domain": "tasks", "status": "planned"},
+    {"prefix": "/api/v1/subscriptions", "domain": "monitoring", "status": "planned"},
+    {"prefix": "/api/v1/reviews", "domain": "review-analysis", "status": "planned"},
+    {"prefix": "/api/v1/analysis", "domain": "decision-analysis", "status": "planned"},
+    {"prefix": "/api/v1/reports", "domain": "reporting", "status": "planned"},
+    {"prefix": "/api/v1/realtime", "domain": "realtime", "status": "planned"},
+    {"prefix": "/api/v1/platform", "domain": "platform", "status": "planned"},
+    {"prefix": "/open/v1", "domain": "open-platform", "status": "planned"}
+  ],
+  "runtime": [
+    {"name": "product-scout-web", "kind": "baota-site", "responsibility": "Vue static assets and reverse proxy", "status": "scaffolded_not_deployed"},
+    {"name": "product-scout-api", "kind": "baota-node-project", "responsibility": "HTTP API, RBAC and SSE", "status": "scaffolded_not_deployed"},
+    {"name": "product-scout-worker", "kind": "baota-node-project", "responsibility": "queues, outbox, notifications and reports", "status": "scaffolded_not_deployed"},
+    {"name": "product-scout-crawler", "kind": "baota-python-project", "responsibility": "provider collection and parsing", "status": "scaffolded_not_deployed"},
+    {"name": "mysql57-product-scout", "kind": "baota-mysql-service", "responsibility": "product_scout data", "status": "planned"},
+    {"name": "redis-product-scout", "kind": "baota-redis-service", "responsibility": "cache, queue and rate limiting", "status": "planned"}
+  ],
+  "externalDependencies": [
+    {"name": "AI model endpoint", "address": "192.168.1.203:8588/v1", "contract": "OpenAI-compatible; /models, text/multimodal chat completions and 4 low-load concurrent text requests verified", "status": "verified"},
+    {"name": "Mail provider", "contract": "must support delivery, bounce, complaint, delay, failure and suppression callbacks", "status": "pending_provider_selection"},
+    {"name": "GitHub public repository", "contract": "source control only; no production runtime", "status": "provided"}
+  ],
+  "securityBoundaries": [
+    "All organization-visible data is filtered by organization_id and applicable workspace_id.",
+    "Secrets are held only in Baota restricted configuration or runtime environment; never in this map or Git.",
+    "No production service may run outside Baota panel management."
+  ]
+}
