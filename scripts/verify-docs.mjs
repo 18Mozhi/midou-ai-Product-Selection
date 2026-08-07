@@ -20,6 +20,8 @@ const required = [
   'verification/modules/M00-08.json', 'infra/baota/README.md', 'infra/baota/service-manifest.json',
   'infra/baota/nginx/scoutops.conf.template', 'docs/architecture/m00-08-baota-s0-foundation.md',
   'docs/runbooks/m00-08-baota-s0-foundation.md',
+  'verification/modules/M01-01.json', 'docs/architecture/m01-01-local-identity.md',
+  'docs/runbooks/m01-01-local-identity.md',
   'docs/architecture/m00-02-config-boundary.md', 'docs/runbooks/m00-02-config-boundary.md',
   'docs/architecture/m00-01-scope.md', 'docs/architecture/m00-07-verification-scope.md',
   'docs/runbooks/m00-01-repository-foundation.md', 'docs/runbooks/m00-07-verification-framework.md',

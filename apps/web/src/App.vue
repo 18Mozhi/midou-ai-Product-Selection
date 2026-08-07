@@ -7,6 +7,7 @@ import MySqlFoundation from './components/MySqlFoundation.vue';
 import ApiFoundation from './components/ApiFoundation.vue';
 import FileAuditFoundation from './components/FileAuditFoundation.vue';
 import DeploymentFoundation from './components/DeploymentFoundation.vue';
+import LocalIdentity from './components/LocalIdentity.vue';
 import { publicConfig } from './config';
 
 type ViewState = 'loading' | 'ready' | 'error';
@@ -35,6 +36,7 @@ const isMySqlView = selectedView === 'mysql';
 const isApiView = selectedView === 'api';
 const isFileAuditView = selectedView === 'file-audit';
 const isDeploymentView = selectedView === 'deployment';
+const isLocalIdentityView = selectedView === 'local-identity';
 
 const statusCopy = computed(() => {
   if (state.value === 'loading') return '正在确认 API 进程状态';
@@ -61,12 +63,13 @@ async function loadHealth() {
 }
 
 onMounted(() => {
-  if (!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView) void loadHealth();
+  if (!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView && !isLocalIdentityView) void loadHealth();
 });
 </script>
 
 <template>
-  <div class="app-shell">
+  <LocalIdentity v-if="isLocalIdentityView" />
+  <div v-else class="app-shell">
     <aside class="sidebar" aria-label="基础导航">
       <a class="brand" href="/" aria-label="ScoutOps 首页">
         <span class="brand-mark">S</span>
@@ -81,8 +84,9 @@ onMounted(() => {
         <a class="nav-link" :class="{ 'nav-link--active': isApiView }" href="/?view=api">API 基座</a>
         <a class="nav-link" :class="{ 'nav-link--active': isFileAuditView }" href="/?view=file-audit">文件审计</a>
         <a class="nav-link" :class="{ 'nav-link--active': isDeploymentView }" href="/?view=deployment">宝塔 S0</a>
+        <a class="nav-link" href="/?view=local-identity">本地账号</a>
       </nav>
-      <p class="phase-label">P00 · 基础框架</p>
+      <p class="phase-label">P01 · 身份与租户</p>
     </aside>
 
     <main v-if="!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView" id="runtime" class="content">

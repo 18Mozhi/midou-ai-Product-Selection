@@ -5,7 +5,10 @@
   "type": "module",
   "main": "dist/index.js",
   "dependencies": {
+    "@scoutops/auth": "0.1.0",
     "@scoutops/config": "0.1.0",
-    "@scoutops/contracts": "0.1.0"
+    "@scoutops/contracts": "0.1.0",
+    "@scoutops/database": "0.1.0",
+    "mysql2": "^3.15.3"
   }
 }

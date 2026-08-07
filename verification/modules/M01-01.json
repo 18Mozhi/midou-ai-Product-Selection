@@ -1,0 +1,33 @@
+{
+  "moduleId": "M01-01",
+  "phaseId": "P01",
+  "name": "本地账号与会话",
+  "dependencies": ["M00-01", "M00-02", "M00-03", "M00-04", "M00-05", "M00-06", "M00-07", "M00-08"],
+  "atomicTasks": [
+    {"id":"M01-01.A01","evidence":"architecture scope freezes local email account and non-goals"},
+    {"id":"M01-01.A02","evidence":"user, session, action token and security event domains"},
+    {"id":"M01-01.A03","evidence":"0008 MySQL57 up/down migration"},
+    {"id":"M01-01.A04","evidence":"LocalAuthService transactional account/session flows"},
+    {"id":"M01-01.A05","evidence":"verification/reset delivery adapter and recoverable pending provider state"},
+    {"id":"M01-01.A06","evidence":"OpenAPI local auth and own-session DTOs"},
+    {"id":"M01-01.A07","evidence":"LocalIdentity desktop/390 layout from identity references"},
+    {"id":"M01-01.A08","evidence":"login/register/forgot/verify/reset/session full states"},
+    {"id":"M01-01.A09","evidence":"opaque HttpOnly session and own-session authorization"},
+    {"id":"M01-01.A10","evidence":"validated Argon2/session/lock configuration"},
+    {"id":"M01-01.A11","evidence":"sanitized security events with request_id and trace_id"},
+    {"id":"M01-01.A12","evidence":"password, lock, token and session unit tests"},
+    {"id":"M01-01.A13","evidence":"OpenAPI/DTO/cookie contract tests"},
+    {"id":"M01-01.A14","evidence":"real MySQL57 account/session integration and cleanup"},
+    {"id":"M01-01.A15","evidence":"Playwright desktop/390 visual and keyboard flows"},
+    {"id":"M01-01.A16","evidence":"invalid token, lock, expiry, replay and provider failure drills"},
+    {"id":"M01-01.A17","evidence":"blueprint, OpenAPI, Feature Map, env and rollback synchronized"}
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m01-01/local-auth.test.mjs",
+    "node --test tests/m01-01/auth-api.test.mjs",
+    "node --test tests/m01-01/identity-contract.test.mjs",
+    "node scripts/verify-local-auth-live.mjs",
+    "npx playwright test tests/e2e/m01-01-local-identity.spec.ts"
+  ]
+}

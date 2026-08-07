@@ -2,6 +2,8 @@ import { randomUUID } from 'node:crypto';
 import Fastify, { type FastifyError, type FastifyInstance } from 'fastify';
 import type { ErrorEnvelope, SuccessEnvelope } from '@scoutops/contracts';
 import { ApiError, normalizeCorrelationId, type ReadinessCheck } from './api-foundation.js';
+import { AuthError, authErrorMessage } from '@scoutops/auth';
+import { registerLocalAuthRoutes, type LocalAuthRouteOptions } from './auth-routes.js';
 
 export interface BuildAppOptions {
   version?: string;
@@ -10,6 +12,7 @@ export interface BuildAppOptions {
   logger?: boolean;
   configFingerprint?: string;
   readinessChecks?: ReadinessCheck[];
+  localAuth?: LocalAuthRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -68,11 +71,13 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
     return{data:{status:'ready',dependencies:{mysql:'available',redis:'available'}},meta:{observed_at:now().toISOString()},request_id:requestId,trace_id:traceId};
   });
 
+  if (options.localAuth) registerLocalAuthRoutes(app, options.localAuth);
+
   app.setErrorHandler(async (error: FastifyError | ApiError, request, reply): Promise<ErrorEnvelope> => {
     const requestId=request.headers['x-request-id']!.toString();const traceId=request.headers['x-trace-id']!.toString();
-    const apiError=error instanceof ApiError?error:null;const validation='validation' in error&&Boolean(error.validation);
-    const statusCode=apiError?.statusCode??(validation?400:500);reply.code(statusCode);
-    return{error:{code:apiError?.code??(validation?'schema_validation_failed':'internal_error'),message:apiError?.message??(validation?'请求字段不符合接口合同。':'服务暂时无法处理请求。'),action_hint:apiError?.actionHint??(validation?'按 OpenAPI 修正字段后重试。':'携带 request_id 联系管理员。')},request_id:requestId,trace_id:traceId};
+    const apiError=error instanceof ApiError?error as ApiError:null;const authError=error instanceof AuthError?error as AuthError:null;const validation='validation' in error&&Boolean(error.validation);
+    const statusCode=apiError?.statusCode??authError?.statusCode??(validation?400:500);reply.code(statusCode);
+    return{error:{code:apiError?.code??authError?.code??(validation?'schema_validation_failed':'internal_error'),message:apiError?.message??(authError?authErrorMessage(authError.code):validation?'请求字段不符合接口合同。':'服务暂时无法处理请求。'),action_hint:apiError?.actionHint??authError?.actionHint??(validation?'按 OpenAPI 修正字段后重试。':'携带 request_id 联系管理员。')},request_id:requestId,trace_id:traceId};
   });
 
   app.setNotFoundHandler(async (request, reply): Promise<ErrorEnvelope> => {

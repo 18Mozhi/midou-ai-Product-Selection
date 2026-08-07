@@ -31,6 +31,37 @@ export interface ErrorEnvelope {
   trace_id: string;
 }
 
+export type LocalAccountStatus = 'pending_verification' | 'active' | 'disabled';
+export type LocalSessionStatus = 'active' | 'revoked' | 'expired';
+
+export interface LocalAccountSummary {
+  id: string;
+  email: string;
+  status: LocalAccountStatus;
+}
+
+export interface LocalAccountRegistration {
+  email: string;
+  password: string;
+}
+
+export interface LocalLoginRequest extends LocalAccountRegistration {}
+
+export interface LocalSessionSummary {
+  id: string;
+  status: LocalSessionStatus;
+  device_label: string;
+  created_at: string;
+  last_seen_at: string;
+  expires_at: string;
+  current: boolean;
+}
+
+export interface PasswordResetRequest { email: string; }
+export interface PasswordResetConfirm { token: string; new_password: string; }
+export interface EmailVerificationConfirm { token: string; }
+export interface PasswordChangeRequest { current_password: string; new_password: string; }
+
 export interface RedisDependencyStatus {
   status: 'available' | 'unavailable';
   latency_ms: number;

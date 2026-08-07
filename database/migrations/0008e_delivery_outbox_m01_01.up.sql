@@ -1,0 +1,23 @@
+CREATE TABLE `auth_delivery_outbox` (
+  `id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `user_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `kind` ENUM('email_verification','password_reset') NOT NULL,
+  `payload_ciphertext` MEDIUMBLOB NOT NULL,
+  `payload_nonce` BINARY(12) NOT NULL,
+  `payload_auth_tag` BINARY(16) NOT NULL,
+  `status` ENUM('queued','leased','retry_scheduled','succeeded','dead_letter','blocked_provider') NOT NULL,
+  `attempt_count` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+  `available_at` DATETIME(3) NOT NULL,
+  `lease_owner` VARCHAR(120) CHARACTER SET ascii NULL,
+  `lease_expires_at` DATETIME(3) NULL,
+  `last_error_code` VARCHAR(80) CHARACTER SET ascii NULL,
+  `request_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `trace_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `created_at` DATETIME(3) NOT NULL,
+  `updated_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_auth_outbox_status_available` (`status`,`available_at`),
+  KEY `idx_auth_outbox_user_kind` (`user_id`,`kind`,`created_at`),
+  KEY `idx_auth_outbox_trace` (`trace_id`),
+  CONSTRAINT `fk_auth_outbox_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

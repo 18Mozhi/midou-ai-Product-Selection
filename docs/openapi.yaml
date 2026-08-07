@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: ScoutOps Internal API
   version: 0.1.0
-  description: P00 implementation contract. Non-public endpoints require organization-aware authorization.
+  description: P00 foundation plus P01 local identity contract. Organization-visible endpoints require organization-aware authorization.
 servers:
   - url: /api/v1
 x-scoutops-verification:
@@ -73,6 +73,95 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/HealthVersionEnvelope' }
+  /auth/register:
+    post:
+      summary: Register a local email account and queue verification delivery
+      security: []
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/LocalAccountRegistration' } } }
+      responses:
+        '201': { description: Pending-verification account without action or session token, content: { application/json: { schema: { $ref: '#/components/schemas/LocalAccountEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /auth/email-verification/confirm:
+    post:
+      summary: Consume a single-use email verification token
+      security: []
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ActionTokenConfirm' } } } }
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+  /auth/login:
+    post:
+      summary: Authenticate a verified local account and set an opaque HttpOnly session cookie
+      security: []
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/LocalLoginRequest' } } } }
+      responses:
+        '200':
+          description: Authenticated; raw session token exists only in Set-Cookie
+          headers: { Set-Cookie: { schema: { type: string }, description: '__Host-scoutops_session with Secure, HttpOnly, SameSite=Strict and Path=/' } }
+          content: { application/json: { schema: { $ref: '#/components/schemas/LoginEnvelope' } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '423': { $ref: '#/components/responses/Error' }
+  /auth/logout:
+    post:
+      summary: Revoke the current local session and clear browser state
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      responses:
+        '204': { description: Session revoked and cookie cleared }
+        '401': { $ref: '#/components/responses/Error' }
+  /auth/password-reset/request:
+    post:
+      summary: Queue a password reset if the account exists; response is enumeration-safe
+      security: []
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PasswordResetRequest' } } } }
+      responses:
+        '202': { description: Always accepted for a syntactically valid email, content: { application/json: { schema: { $ref: '#/components/schemas/AcceptedEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /auth/password-reset/confirm:
+    post:
+      summary: Consume a single-use reset token, change password and revoke sessions
+      security: []
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PasswordResetConfirm' } } } }
+      responses:
+        '204': { description: Password changed; all sessions revoked }
+        '400': { $ref: '#/components/responses/Error' }
+  /me/password:
+    post:
+      summary: Change own password after current-password verification and revoke all sessions
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PasswordChangeRequest' } } } }
+      responses:
+        '204': { description: Password changed and session cookie cleared }
+        '401': { $ref: '#/components/responses/Error' }
+  /me/sessions:
+    get:
+      summary: List only the authenticated user's device sessions
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Own sessions without token hashes, content: { application/json: { schema: { $ref: '#/components/schemas/SessionListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+  /me/sessions/{sessionId}:
+    delete:
+      summary: Revoke one session owned by the authenticated user
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: sessionId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      responses:
+        '204': { description: Owned session revoked }
+        '401': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
   /trends:
     get:
       summary: List trend topics
@@ -151,6 +240,10 @@ components:
       type: http
       scheme: bearer
       bearerFormat: opaque-session-token
+    HttpOnlySession:
+      type: apiKey
+      in: cookie
+      name: __Host-scoutops_session
   parameters:
     Page:
       name: page
@@ -176,7 +269,90 @@ components:
       content:
         application/json:
           schema: { $ref: '#/components/schemas/PaginatedEnvelope' }
+    Error:
+      description: Stable sanitized error envelope
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorEnvelope' }
   schemas:
+    LocalAccountRegistration:
+      type: object
+      additionalProperties: false
+      required: [email, password]
+      properties:
+        email: { type: string, format: email, maxLength: 254 }
+        password: { type: string, minLength: 8, maxLength: 1024, writeOnly: true }
+    LocalLoginRequest:
+      type: object
+      additionalProperties: false
+      required: [email, password]
+      properties:
+        email: { type: string, format: email, maxLength: 254 }
+        password: { type: string, maxLength: 1024, writeOnly: true }
+    ActionTokenConfirm:
+      type: object
+      additionalProperties: false
+      required: [token]
+      properties: { token: { type: string, minLength: 20, maxLength: 512, writeOnly: true } }
+    PasswordResetRequest:
+      type: object
+      additionalProperties: false
+      required: [email]
+      properties: { email: { type: string, format: email, maxLength: 254 } }
+    PasswordResetConfirm:
+      type: object
+      additionalProperties: false
+      required: [token, new_password]
+      properties:
+        token: { type: string, minLength: 20, maxLength: 512, writeOnly: true }
+        new_password: { type: string, minLength: 8, maxLength: 1024, writeOnly: true }
+    PasswordChangeRequest:
+      type: object
+      additionalProperties: false
+      required: [current_password, new_password]
+      properties:
+        current_password: { type: string, maxLength: 1024, writeOnly: true }
+        new_password: { type: string, minLength: 8, maxLength: 1024, writeOnly: true }
+    LocalAccountSummary:
+      type: object
+      required: [id, email, status]
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string, format: email }
+        status: { type: string, enum: [pending_verification, active, locked, disabled] }
+    SessionSummary:
+      type: object
+      required: [id, status, device_label, expires_at, last_seen_at, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        status: { type: string, enum: [active, revoked, expired] }
+        device_label: { type: string }
+        expires_at: { type: string, format: date-time }
+        last_seen_at: { type: string, format: date-time }
+        created_at: { type: string, format: date-time }
+    LocalAccountEnvelope:
+      allOf:
+        - { $ref: '#/components/schemas/SuccessEnvelope' }
+        - { type: object, properties: { data: { $ref: '#/components/schemas/LocalAccountSummary' } } }
+    LoginEnvelope:
+      allOf:
+        - { $ref: '#/components/schemas/SuccessEnvelope' }
+        - type: object
+          properties:
+            data:
+              type: object
+              required: [user, session]
+              properties:
+                user: { $ref: '#/components/schemas/LocalAccountSummary' }
+                session: { $ref: '#/components/schemas/SessionSummary' }
+    AcceptedEnvelope:
+      allOf:
+        - { $ref: '#/components/schemas/SuccessEnvelope' }
+        - { type: object, properties: { data: { type: object, required: [accepted], properties: { accepted: { type: boolean, enum: [true] } } } } }
+    SessionListEnvelope:
+      allOf:
+        - { $ref: '#/components/schemas/SuccessEnvelope' }
+        - { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/SessionSummary' } } } }
     SuccessEnvelope:
       type: object
       required: [data, request_id, trace_id]

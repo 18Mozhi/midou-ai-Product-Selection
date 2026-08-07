@@ -1,0 +1,12 @@
+{
+  "name": "@scoutops/auth",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "dependencies": {
+    "argon2": "^0.45.1"
+  }
+}
