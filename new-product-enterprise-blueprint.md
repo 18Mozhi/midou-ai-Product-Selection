@@ -589,6 +589,8 @@ MySQL 5.7 保存组织/工作区范围化的原始证据元数据、规范记录
 
 目录项默认 `disabled`。Google RSS 的端点可访问不等于生产授权，所有者必须复核当前条款、频率、展示字段和保存期限后显式启用。目录/登记要求 `provider:configure`，回放要求 `collection:replay`、同源 Origin、Idempotency-Key、启用 Provider 以及活动组织/工作区。API 在事务中写 M03-07 replay run 与 M03-05 task/subquery/event/outbox；宝塔 Node Worker 使用 Redis 租约执行真实适配器，将原始内容先交给 M03-06 证据持久化，再保存规范化字段与逐字段 provenance。生产服务仍全部由宝塔管理；本模块不创建面板外服务。
 
+P03 已于阶段自动验收 `01b8e9ff-d2c4-4a5a-80b3-673ee96dbea7` 通过；M03-01 至 M03-07 的构建、MySQL 5.7、Redis、浏览器、真实来源探针、证据链、权限、视觉与文档门均重新执行成功。此结论只证明 P03，不代表 P04–P08 或多节点/10,000 用户能力完成。
+
 ---
 
 ## 9. 技术架构、性能与容量

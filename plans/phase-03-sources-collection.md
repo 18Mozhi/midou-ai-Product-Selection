@@ -1,6 +1,6 @@
 # P03：来源、凭证、采集任务与证据详细执行计划
 
-> 状态：phase_gate_pending；M03-01 至 M03-07 已通过模块验收；M03-07 run_id/trace_id `9477e2a6-533a-430a-a372-48a69f1878e2`；当前动作：P03 阶段验收
+> 状态：completed；M03-01 至 M03-07 已通过模块验收；P03 phase run_id/trace_id `01b8e9ff-d2c4-4a5a-80b3-673ee96dbea7`；下一阶段：P04 / M04-01
 > 上游总纲：`new-product-enterprise-blueprint.md`
 > 阶段索引：`plans/README.md`
 > 最低行数：1,000；`npm run verify:plans` 必须自动校验。
