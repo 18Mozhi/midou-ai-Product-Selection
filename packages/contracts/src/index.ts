@@ -82,6 +82,8 @@ export interface SelectedTenancyContext { organization:{id:string;name:string};w
 export type AuthorizationDataScope='own'|'team'|'workspace'|'organization'|'platform';
 export interface AuthorizationScopeSummary{scope:AuthorizationDataScope;workspace_id?:string|null;team_id?:string|null;}
 export interface CurrentAuthorizationSummary{organization_id:string;workspace_id:string;roles:string[];capabilities:string[];data_scopes:AuthorizationScopeSummary[];platform_roles?:string[];platform_capabilities?:string[];}
+export type NavigationShell='member'|'organization_admin'|'platform_admin';
+export interface NavigationGuardSummary{shell:NavigationShell;organization_id:string|null;workspace_id:string|null;roles:string[];capabilities:string[];platform_roles:string[];platform_capabilities:string[];guard_reason:string;}
 export interface RoleCapabilitySummary{code:string;name:string;category:'organization'|'platform';description:string;capabilities:string[];}
 export type ResourceGrantType='task'|'opportunity'|'competitor'|'sourcing';
 export type ResourceGrantStatus='active'|'revoked'|'expired';

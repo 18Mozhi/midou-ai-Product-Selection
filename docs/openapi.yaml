@@ -282,6 +282,19 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /me/navigation:
+    get:
+      summary: Guard and describe one authenticated navigation shell
+      description: The server derives shell access from active organization membership or platform role and writes an authorization decision. Platform administrators do not require an organization context.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: shell, in: query, required: true, schema: { type: string, enum: [member, organization_admin, platform_admin] } }
+      responses:
+        '200': { description: Audited shell access and server-derived role context, content: { application/json: { schema: { $ref: '#/components/schemas/NavigationGuardEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /org/{organizationId}/roles:
     get:
       summary: List the fixed organization role and capability matrix
@@ -636,6 +649,21 @@ components:
         data_scopes: { type: array, items: { $ref: '#/components/schemas/AuthorizationScopeSummary' } }
         platform_roles: { type: array, items: { type: string } }
         platform_capabilities: { type: array, items: { type: string, pattern: '^[a-z_]+:[a-z_]+' } }
+    NavigationGuardSummary:
+      type: object
+      additionalProperties: false
+      required: [shell, organization_id, workspace_id, roles, capabilities, platform_roles, platform_capabilities, guard_reason]
+      properties:
+        shell: { type: string, enum: [member, organization_admin, platform_admin] }
+        organization_id: { type: string, format: uuid, nullable: true }
+        workspace_id: { type: string, format: uuid, nullable: true }
+        roles: { type: array, items: { type: string } }
+        capabilities: { type: array, items: { type: string, pattern: '^[a-z_]+:[a-z_]+' } }
+        platform_roles: { type: array, items: { type: string } }
+        platform_capabilities: { type: array, items: { type: string, pattern: '^[a-z_]+:[a-z_]+' } }
+        guard_reason: { type: string, enum: [navigation_member_allowed, navigation_organization_admin_allowed, navigation_platform_admin_allowed] }
+    NavigationGuardEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/NavigationGuardSummary' } } }]
     SecuritySetupStatus:
       type: object
       additionalProperties: false

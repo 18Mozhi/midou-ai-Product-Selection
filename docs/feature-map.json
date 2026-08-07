@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P02",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02"],
-    "activeModules": ["M02-03"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03"],
+    "activeModules": ["M02-04"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -166,6 +166,17 @@
       "imageEvidence": ["concepts 01-10", "high-resolution 02 login", "high-resolution 03 registration guide"],
       "nonGoals": "no phone login, Google, Microsoft or SSO activation; no onboarding persistence; no new API, migration, environment value or production service",
       "verificationRunId": "facffd5e-7749-4831-ac73-9db677b608a8",
+      "status": "module_verified"
+    },
+    "navigationShells": {
+      "module": "M02-03",
+      "entrypoints": ["../packages/authorization/src/index.ts", "../apps/api/src/authorization-routes.ts", "../apps/web/src/components/NavigationShell.vue"],
+      "routes": ["/home", "/org-admin", "/platform-admin", "/api/v1/me/navigation"],
+      "shells": ["member", "organization_admin", "platform_admin"],
+      "guard": "authenticated server-side role and tenancy evaluation with synchronous authorization decision audit",
+      "imageEvidence": ["concepts 11, 15-17, 55-71", "high-resolution 01 member", "high-resolution 09 organization admin", "high-resolution 10 platform admin"],
+      "nonGoals": "no business metrics, search results, quick-create mutation, notification count, new persistence, async service or environment value",
+      "verificationRunId": "e0784965-a07b-4eec-84c1-f5e393d7dd27",
       "status": "module_verified"
     }
   },
