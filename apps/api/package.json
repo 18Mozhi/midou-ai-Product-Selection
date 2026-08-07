@@ -15,6 +15,7 @@
     "@scoutops/contracts": "0.1.0",
     "@scoutops/credentials": "0.1.0",
     "@scoutops/provider-adapters": "0.1.0",
+    "@scoutops/provider-sources": "0.1.0",
     "@scoutops/playwright-crawler": "0.1.0",
     "@scoutops/collection-tasks": "0.1.0",
     "@scoutops/data-quality": "0.1.0",

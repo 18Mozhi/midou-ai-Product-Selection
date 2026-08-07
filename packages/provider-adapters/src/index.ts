@@ -29,6 +29,7 @@ export interface AdapterHealthContext {
 export interface ProviderCollectRequest extends AdapterInvocationContext {
   cursor?: string;
   limit: number;
+  target?: Record<string, unknown>;
 }
 
 export interface ProviderRawRecord {

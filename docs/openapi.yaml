@@ -583,6 +583,50 @@ paths:
         '404': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/provider-sources:
+    get:
+      summary: List the fixed first-provider source catalog and provisioning state
+      description: Requires provider:configure. Catalog entries are code-owned and disabled by default; no arbitrary outbound URL or raw replay input is returned.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Built-in source catalog, content: { application/json: { schema: { $ref: '#/components/schemas/ProviderSourceCatalogEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/provider-sources/{code}/provision:
+    post:
+      summary: Provision one fixed built-in source as disabled
+      description: Requires provider:configure, same-origin Origin and Idempotency-Key. Provisioning never enables collection.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: code, in: path, required: true, schema: { type: string, enum: [google_news_search, manual_product_supply_csv] } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      responses:
+        '201': { description: Disabled provisioned Provider, content: { application/json: { schema: { $ref: '#/components/schemas/ProvisionedSourceEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/provider-sources/{providerId}/replays:
+    post:
+      summary: Schedule a bounded replay for an explicitly enabled built-in source
+      description: Requires collection:replay, same-origin Origin and Idempotency-Key. Query and CSV are mutually exclusive; each task reads at most 20 records.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/ProviderSourceReplayInput' } } }
+      responses:
+        '202': { description: Scheduled replay run, content: { application/json: { schema: { $ref: '#/components/schemas/ProviderSourceReplayEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
   /platform/credential-provider-options:
     get:
       summary: List non-secret Provider options for platform security credential assignment
@@ -1735,6 +1779,64 @@ components:
               properties:
                 grant: { type: string, description: Opaque short-lived scoped token }
                 expires_at: { type: string, format: date-time }
+    ProvisionedSource:
+      type: object
+      required: [id, code, status, version, updated_at]
+      properties:
+        id: { type: string, format: uuid }
+        code: { type: string, enum: [google_news_search, manual_product_supply_csv] }
+        status: { type: string, enum: [draft, disabled, enabled] }
+        version: { type: integer, minimum: 1 }
+        updated_at: { type: string, format: date-time }
+    ProviderSourceCatalogItem:
+      type: object
+      required: [code, name, access_mode, target_url, fields, status, category, production_policy, policy_note]
+      properties:
+        code: { type: string, enum: [google_news_search, manual_product_supply_csv] }
+        name: { type: string }
+        access_mode: { type: string, enum: [public_rss, import] }
+        target_url: { type: string, description: Fixed code-owned technical contract; not caller supplied }
+        fields: { type: array, items: { type: string } }
+        status: { type: string, enum: [disabled] }
+        category: { type: string, enum: [trend, product_supply] }
+        production_policy: { type: string, enum: [owner_review_required, ready_for_owner_enablement] }
+        policy_note: { type: string }
+        provisioned: { allOf: [{ $ref: '#/components/schemas/ProvisionedSource' }], nullable: true }
+    ProviderSourceCatalogEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/SuccessEnvelope'
+        - type: object
+          properties: { data: { type: array, items: { $ref: '#/components/schemas/ProviderSourceCatalogItem' } } }
+    ProvisionedSourceEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/ProvisionedSource' } } }]
+    ProviderSourceReplayInput:
+      type: object
+      required: [organization_id, workspace_id]
+      properties:
+        organization_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+        query: { type: string, minLength: 1, maxLength: 200 }
+        csv_text: { type: string, maxLength: 1048576 }
+      oneOf:
+        - required: [query]
+        - required: [csv_text]
+    ProviderSourceReplay:
+      type: object
+      required: [id, task_id, provider_id, source_code, status, item_count, request_id, trace_id, created_at, updated_at]
+      properties:
+        id: { type: string, format: uuid }
+        task_id: { type: string, format: uuid }
+        provider_id: { type: string, format: uuid }
+        source_code: { type: string, enum: [google_news_search, manual_product_supply_csv] }
+        status: { type: string, enum: [scheduled, running, succeeded, succeeded_empty, completed_with_warnings, failed, blocked] }
+        item_count: { type: integer, minimum: 0, maximum: 20 }
+        error_code: { type: string, nullable: true }
+        request_id: { type: string }
+        trace_id: { type: string }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    ProviderSourceReplayEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/ProviderSourceReplay' } } }]
     HealthLiveData:
       type: object
       required: [status, service, version, build_sha]

@@ -9,6 +9,7 @@ import ProviderAdapterCenter from './ProviderAdapterCenter.vue';
 import CollectionRuntimeCenter from './CollectionRuntimeCenter.vue';
 import CollectionTaskCenter from './CollectionTaskCenter.vue';
 import DataQualityCenter from './DataQualityCenter.vue';
+import ProviderSourceCenter from './ProviderSourceCenter.vue';
 
 type Shell = 'member' | 'organization_admin' | 'platform_admin';
 type State = 'loading' | 'ready' | 'expired' | 'forbidden' | 'context_required' | 'rate_limited' | 'blocked';
@@ -70,8 +71,9 @@ onMounted(()=>{void load();window.addEventListener('keydown',shortcut);});onUnmo
         <header class="role-page-head"><div><p>{{shellTitle}} / {{phaseLabel}}</p><h1>{{pageTitle}}</h1><span>{{pageSummary}}</span></div><b>{{guard?.guard_reason}}</b></header>
         <HomeDashboard v-if="isHome" :api-base-url="apiBaseUrl" />
         <section v-else-if="shell==='platform_admin'&&routePath.startsWith('/platform-admin/providers')" class="provider-runtime-surface">
-          <nav class="provider-runtime-tabs" aria-label="来源管理视图"><a href="/platform-admin/providers" :aria-current="routePath==='/platform-admin/providers'?'page':undefined">来源定义</a><a href="/platform-admin/providers/adapters" :aria-current="routePath==='/platform-admin/providers/adapters'?'page':undefined">适配器运行时</a></nav>
-          <ProviderAdapterCenter v-if="routePath==='/platform-admin/providers/adapters'" :api-base-url="apiBaseUrl" />
+          <nav class="provider-runtime-tabs" aria-label="来源管理视图"><a href="/platform-admin/providers" :aria-current="routePath==='/platform-admin/providers'?'page':undefined">来源定义</a><a href="/platform-admin/providers/adapters" :aria-current="routePath==='/platform-admin/providers/adapters'?'page':undefined">适配器运行时</a><a href="/platform-admin/providers/sources" :aria-current="routePath==='/platform-admin/providers/sources'?'page':undefined">首批来源</a></nav>
+          <ProviderSourceCenter v-if="routePath==='/platform-admin/providers/sources'" :api-base-url="apiBaseUrl" />
+          <ProviderAdapterCenter v-else-if="routePath==='/platform-admin/providers/adapters'" :api-base-url="apiBaseUrl" />
           <ProviderRegistry v-else :api-base-url="apiBaseUrl" />
         </section>
         <CredentialAssetCenter v-else-if="shell==='platform_admin'&&routePath==='/platform-admin/credentials'" :api-base-url="apiBaseUrl" />

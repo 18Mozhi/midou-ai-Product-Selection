@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P03",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06"],
-    "activeModules": ["M03-07"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07"],
+    "activeModules": [],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -311,6 +311,23 @@
       "imageEvidence": ["concept 39 evidence management table and detail", "concept 64 system monitoring metrics and status hierarchy"],
       "verificationRunId": "3251d741-ce7e-4737-a4d1-8a3a62ddaaca",
       "status": "module_verified"
+    },
+    "providerSources": {
+      "module": "M03-07",
+      "entrypoints": ["../packages/provider-sources/src/index.ts", "../apps/api/src/provider-source-service.ts", "../apps/api/src/mysql-provider-source-repository.ts", "../apps/api/src/provider-source-routes.ts", "../apps/worker/src/provider-source-executor.ts", "../apps/web/src/components/ProviderSourceCenter.vue"],
+      "routes": ["/platform-admin/providers/sources", "/api/v1/platform/provider-sources", "/api/v1/platform/provider-sources/{code}/provision", "/api/v1/platform/provider-sources/{providerId}/replays"],
+      "scope": "fixed platform source catalog plus organization and workspace scoped replay tasks and evidence",
+      "sources": ["google_news_search public RSS", "manual_product_supply_csv explicit import"],
+      "admissionBoundary": "catalog and provisioning are disabled by default; Google endpoint availability is not production authorization; owners explicitly review and enable provider definitions",
+      "outboundBoundary": "Google News uses one exact code-owned URL template and rejects redirects; CSV uses inline content; callers cannot supply an outbound URL",
+      "limits": "Google RSS 2MB and 20 persisted records per task; CSV 1MB, exact 8-column header, 100 parsed rows and 20 persisted records per task",
+      "permission": "provider:configure for catalog/provision; collection:replay for scoped task creation; writes require same-origin Origin and Idempotency-Key",
+      "persistence": "MySQL 5.7 replay correlation plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
+      "configuration": ["PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS", "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES", "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH", "COLLECTION_TASK_POLL_MS", "COLLECTION_TASK_LEASE_SECONDS", "EVIDENCE_ROOT", "EVIDENCE_MAX_RAW_BYTES"],
+      "runtimeBoundary": "production Worker runs only as a Baota Node project; fixed source adapters are registered in API and Worker; no panel-external service is created",
+      "imageEvidence": ["concept 62 collection source management catalog, status and actions"],
+      "verificationRunId": "9477e2a6-533a-430a-a372-48a69f1878e2",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -357,6 +374,7 @@
     {"path": "/org-admin", "view": "OrganizationAdmin", "domain": "organization", "status": "roles_and_resource_grants_implemented_remaining_management_planned"},
     {"path": "/platform-admin", "view": "PlatformAdmin", "domain": "platform", "status": "security_audit_and_provider_registry_implemented_remaining_admin_modules_planned"},
     {"path": "/platform-admin/providers", "view": "ProviderRegistry", "domain": "platform", "status": "M03-01_implemented"},
+    {"path": "/platform-admin/providers/sources", "view": "ProviderSourceCenter", "domain": "platform", "status": "M03-07_module_verified"},
     {"path": "/platform-admin/data", "view": "DataQualityCenter", "domain": "platform", "status": "M03-06_implemented"}
   ],
   "apiGroups": [
@@ -374,7 +392,7 @@
     {"prefix": "/api/v1/analysis", "domain": "decision-analysis", "status": "planned"},
     {"prefix": "/api/v1/reports", "domain": "reporting", "status": "planned"},
     {"prefix": "/api/v1/realtime", "domain": "realtime", "status": "planned"},
-    {"prefix": "/api/v1/platform", "domain": "platform", "status": "M01-06_audit_M03-01_to_M03-06_sources_collection_and_evidence_implemented_remaining_platform_management_planned"},
+    {"prefix": "/api/v1/platform", "domain": "platform", "status": "M01-06_audit_and_P03_sources_collection_evidence_provider_sources_implemented_remaining_platform_management_planned"},
     {"prefix": "/open/v1", "domain": "open-platform", "status": "planned"}
   ],
   "runtime": [

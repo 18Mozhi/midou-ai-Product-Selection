@@ -583,6 +583,12 @@ MySQL 5.7 保存组织/工作区范围化的原始证据元数据、规范记录
 
 质量核对按 Provider、Parser、市场和时间窗记录分子、分母、冻结阈值及样本不足状态，覆盖标题、价格、币种、外部 ID、规范 URL、重复、供应商误匹配、AI 抽检、新鲜度和来源成功率。问题解决使用 `expected_version`、同源 Origin 与 Idempotency-Key，只追加解决原因、操作人、事件和 Outbox，不改写原始证据或历史核对。平台数据页面和 API 要求 `platform:operate`；原文下载使用最长 300 秒的组织/工作区/证据/路径绑定授权，签发和实际访问分别审计，下载前核对大小与 SHA-256。M03-07 前仅接入合成实库验收，不编造真实来源 URL、字段、选择器或接口合同。
 
+#### 8.3.13 M03-07 首批来源实现基线
+
+首批来源固定为 `google_news_search` 与 `manual_product_supply_csv`。Google News 使用代码内固定的关键词 RSS URL 模板，只接受关键词，不接受调用方 URL、重定向、凭证或任意 Header；解析 title、summary、published_at、source_url 和 publisher，限制 2 MB 且每任务最多持久化 20 条。商品与供应链来源采用权利明确的显式 CSV 导入，固定八列表头，限制 1 MB、100 条数据行且每任务最多持久化 20 条；没有真实凭证和已确认接口合同的平台不得伪造接入。
+
+目录项默认 `disabled`。Google RSS 的端点可访问不等于生产授权，所有者必须复核当前条款、频率、展示字段和保存期限后显式启用。目录/登记要求 `provider:configure`，回放要求 `collection:replay`、同源 Origin、Idempotency-Key、启用 Provider 以及活动组织/工作区。API 在事务中写 M03-07 replay run 与 M03-05 task/subquery/event/outbox；宝塔 Node Worker 使用 Redis 租约执行真实适配器，将原始内容先交给 M03-06 证据持久化，再保存规范化字段与逐字段 provenance。生产服务仍全部由宝塔管理；本模块不创建面板外服务。
+
 ---
 
 ## 9. 技术架构、性能与容量

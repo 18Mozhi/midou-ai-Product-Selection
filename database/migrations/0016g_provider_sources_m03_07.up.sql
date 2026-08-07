@@ -1,0 +1,42 @@
+CREATE TABLE `provider_source_replay_runs` (
+  `id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `organization_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `workspace_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `provider_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `source_code` VARCHAR(80) CHARACTER SET ascii NOT NULL,
+  `task_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `input_sha256` CHAR(64) CHARACTER SET ascii NOT NULL,
+  `status` ENUM('scheduled','running','succeeded','succeeded_empty','completed_with_warnings','failed','blocked') NOT NULL,
+  `item_count` INT UNSIGNED NOT NULL DEFAULT 0,
+  `error_code` VARCHAR(80) CHARACTER SET ascii NULL,
+  `request_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `trace_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `created_by` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `created_at` DATETIME(3) NOT NULL,
+  `updated_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_provider_source_replay_task` (`task_id`),
+  KEY `idx_provider_source_replay_scope` (`organization_id`,`workspace_id`,`created_at`),
+  KEY `idx_provider_source_replay_provider` (`provider_id`,`status`,`created_at`),
+  KEY `idx_provider_source_replay_trace` (`trace_id`),
+  CONSTRAINT `fk_provider_source_replay_org` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
+  CONSTRAINT `fk_provider_source_replay_workspace` FOREIGN KEY (`workspace_id`) REFERENCES `workspaces` (`id`),
+  CONSTRAINT `fk_provider_source_replay_provider` FOREIGN KEY (`provider_id`) REFERENCES `providers` (`id`),
+  CONSTRAINT `fk_provider_source_replay_task` FOREIGN KEY (`task_id`) REFERENCES `collection_tasks` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_provider_source_replay_actor` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `provider_source_operations` (
+  `id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `actor_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `route` VARCHAR(200) CHARACTER SET ascii NOT NULL,
+  `idempotency_key` VARCHAR(255) CHARACTER SET ascii NOT NULL,
+  `provider_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `replay_run_id` CHAR(36) CHARACTER SET ascii NULL,
+  `created_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_provider_source_operation` (`actor_id`,`route`,`idempotency_key`),
+  CONSTRAINT `fk_provider_source_operation_actor` FOREIGN KEY (`actor_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `fk_provider_source_operation_provider` FOREIGN KEY (`provider_id`) REFERENCES `providers` (`id`),
+  CONSTRAINT `fk_provider_source_operation_replay` FOREIGN KEY (`replay_run_id`) REFERENCES `provider_source_replay_runs` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
