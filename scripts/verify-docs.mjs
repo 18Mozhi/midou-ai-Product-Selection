@@ -42,6 +42,8 @@ const required = [
   'docs/runbooks/m02-05-discovery.md',
   'verification/modules/M02-06.json', 'docs/architecture/m02-06-home-mobile.md',
   'docs/runbooks/m02-06-home-mobile.md',
+  'verification/modules/M03-01.json', 'docs/architecture/m03-01-provider-registry.md',
+  'docs/runbooks/m03-01-provider-registry.md',
   'docs/architecture/m00-02-config-boundary.md', 'docs/runbooks/m00-02-config-boundary.md',
   'docs/architecture/m00-01-scope.md', 'docs/architecture/m00-07-verification-scope.md',
   'docs/runbooks/m00-01-repository-foundation.md', 'docs/runbooks/m00-07-verification-framework.md',

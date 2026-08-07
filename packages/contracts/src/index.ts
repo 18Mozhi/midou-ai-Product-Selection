@@ -91,6 +91,9 @@ export type HomeDashboardKind='action'|'change'|'follow'|'health';
 export type HomeActionPriority='overdue'|'blocking'|'high_risk'|'high_value'|'normal';
 export interface HomeDashboardItem{id:string;kind:HomeDashboardKind;title:string;reason:string;route:string;priority:HomeActionPriority|null;owner_label:string|null;due_at:string|null;source_count:number|null;observed_at:string;severity:'info'|'warning'|'critical';source_version:number;}
 export interface HomeDashboardSummary{actions:HomeDashboardItem[];changes:HomeDashboardItem[];follows:HomeDashboardItem[];health:HomeDashboardItem[];scope:{organization_id:string;workspace_id:string};generated_at:string;}
+export type ProviderAccessMode='public_page'|'public_rss'|'official_api'|'authenticated_browser'|'import'|'manual';
+export interface ProviderDefinition{id:string;code:string;name:string;target_url:string;access_mode:ProviderAccessMode;markets:string[];languages:string[];fields:string[];schedule_minutes:number;concurrency_limit:number;timeout_ms:number;retry_limit:number;circuit_failure_threshold:number;dedupe_key:string;retention_days:number;failure_rules:string[];parser_version:string;healthcheck_url:string|null;owner_label:string;status:'draft'|'disabled'|'enabled';version:number;updated_at:string;}
+export type ProviderDefinitionInput=Omit<ProviderDefinition,'id'|'version'|'updated_at'>;
 export interface RoleCapabilitySummary{code:string;name:string;category:'organization'|'platform';description:string;capabilities:string[];}
 export type ResourceGrantType='task'|'opportunity'|'competitor'|'sourcing';
 export type ResourceGrantStatus='active'|'revoked'|'expired';

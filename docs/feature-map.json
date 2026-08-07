@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P03",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06"],
-    "activeModules": ["M03-01"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01"],
+    "activeModules": ["M03-02"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -217,6 +217,20 @@
       "imageEvidence": ["high-resolution 01 today action center", "concepts 11-14 home", "concepts 53-54 mobile"],
       "verificationRunId": "a8ce8e93-5264-441d-983b-fa47cb184a7e",
       "status": "module_verified"
+    },
+    "providerRegistry": {
+      "module": "M03-01",
+      "entrypoints": ["../apps/api/src/provider-registry-service.ts", "../apps/api/src/mysql-provider-registry-repository.ts", "../apps/api/src/provider-registry-routes.ts", "../apps/web/src/components/ProviderRegistry.vue"],
+      "routes": ["/platform-admin/providers", "/api/v1/platform/providers", "/api/v1/platform/providers/{providerId}"],
+      "scope": "platform-global technical definitions; organization and workspace columns are intentionally absent",
+      "contract": ["target URL or stable identifier", "access mode", "markets", "languages", "fields", "schedule", "concurrency", "timeout", "retry", "circuit threshold", "dedupe", "retention", "failure rules", "parser version", "healthcheck", "owner", "status"],
+      "truth": "MySQL 5.7 current definition plus immutable correlated versions and idempotent operations",
+      "permission": "authenticated platform provider:configure; same-origin and Idempotency-Key for writes",
+      "async": "not applicable in M03-01; collection scheduling, queues, leases and health execution belong to later modules",
+      "configuration": "no new environment values or secrets; existing APP_WEB_ORIGIN and MySQL configuration only",
+      "imageEvidence": ["concept 62 provider management"],
+      "verificationRunId": "fb4fe378-9280-48a6-a0de-d90b0513d33f",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -261,7 +275,8 @@
     {"path": "/notifications", "view": "Notifications", "domain": "notifications", "status": "planned"},
     {"path": "/me", "view": "Profile", "domain": "identity", "status": "local_security_sessions_implemented_profile_planned"},
     {"path": "/org-admin", "view": "OrganizationAdmin", "domain": "organization", "status": "roles_and_resource_grants_implemented_remaining_management_planned"},
-    {"path": "/platform-admin", "view": "PlatformAdmin", "domain": "platform", "status": "security_audit_surface_implemented_remaining_admin_modules_planned"}
+    {"path": "/platform-admin", "view": "PlatformAdmin", "domain": "platform", "status": "security_audit_and_provider_registry_implemented_remaining_admin_modules_planned"},
+    {"path": "/platform-admin/providers", "view": "ProviderRegistry", "domain": "platform", "status": "M03-01_implemented"}
   ],
   "apiGroups": [
     {"prefix": "/api/v1/health", "domain": "platform-runtime", "status": "foundation_implemented"},
@@ -278,7 +293,7 @@
     {"prefix": "/api/v1/analysis", "domain": "decision-analysis", "status": "planned"},
     {"prefix": "/api/v1/reports", "domain": "reporting", "status": "planned"},
     {"prefix": "/api/v1/realtime", "domain": "realtime", "status": "planned"},
-    {"prefix": "/api/v1/platform", "domain": "platform", "status": "M01-06_read_only_audit_implemented_remaining_platform_management_planned"},
+    {"prefix": "/api/v1/platform", "domain": "platform", "status": "M01-06_read_only_audit_and_M03-01_provider_registry_implemented_remaining_platform_management_planned"},
     {"prefix": "/open/v1", "domain": "open-platform", "status": "planned"}
   ],
   "runtime": [

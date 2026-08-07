@@ -518,9 +518,45 @@ paths:
             text/event-stream: {}
   /platform/providers:
     get:
-      summary: List providers for platform operators
+      summary: List platform-global versioned provider definitions
+      security: [{ HttpOnlySession: [] }]
       responses:
-        '200': { $ref: '#/components/responses/PaginatedSuccess' }
+        '200': { description: Provider definitions visible to platform operators with provider:configure, content: { application/json: { schema: { $ref: '#/components/schemas/ProviderDefinitionListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Register a disabled-by-default platform provider technical contract
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/ProviderDefinitionInput' } } }
+      responses:
+        '201': { description: Version 1 provider definition, content: { application/json: { schema: { $ref: '#/components/schemas/ProviderDefinitionEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/providers/{providerId}:
+    put:
+      summary: Append a new version and update a platform provider definition
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/ProviderDefinitionUpdate' } } }
+      responses:
+        '200': { description: Updated versioned provider definition, content: { application/json: { schema: { $ref: '#/components/schemas/ProviderDefinitionEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
   /me/ui-preferences:
     get:
       summary: Read the signed-in user's preference for the selected organization and workspace
@@ -1053,6 +1089,52 @@ components:
       allOf:
         - { $ref: '#/components/schemas/SuccessEnvelope' }
         - { type: object, properties: { data: { $ref: '#/components/schemas/UiPreference' } } }
+    ProviderAccessMode:
+      type: string
+      enum: [public_page, public_rss, official_api, authenticated_browser, import, manual]
+    ProviderDefinitionInput:
+      type: object
+      additionalProperties: false
+      required: [code, name, target_url, access_mode, markets, languages, fields, schedule_minutes, concurrency_limit, timeout_ms, retry_limit, circuit_failure_threshold, dedupe_key, retention_days, failure_rules, parser_version, healthcheck_url, owner_label, status]
+      properties:
+        code: { type: string, pattern: '^[a-z0-9_]{2,80}$' }
+        name: { type: string, minLength: 2, maxLength: 160 }
+        target_url: { type: string, minLength: 1, maxLength: 1000, description: HTTP(S) template for network providers; stable target identifier for import or manual }
+        access_mode: { $ref: '#/components/schemas/ProviderAccessMode' }
+        markets: { type: array, minItems: 1, maxItems: 100, uniqueItems: true, items: { type: string, minLength: 1 } }
+        languages: { type: array, minItems: 1, maxItems: 100, uniqueItems: true, items: { type: string, minLength: 1 } }
+        fields: { type: array, minItems: 1, maxItems: 100, uniqueItems: true, items: { type: string, minLength: 1 } }
+        schedule_minutes: { type: integer, minimum: 1, maximum: 10080 }
+        concurrency_limit: { type: integer, minimum: 1, maximum: 20 }
+        timeout_ms: { type: integer, minimum: 1000, maximum: 120000 }
+        retry_limit: { type: integer, minimum: 0, maximum: 10 }
+        circuit_failure_threshold: { type: integer, minimum: 1, maximum: 20 }
+        dedupe_key: { type: string, minLength: 1, maxLength: 255 }
+        retention_days: { type: integer, minimum: 1, maximum: 3650 }
+        failure_rules: { type: array, minItems: 1, maxItems: 100, uniqueItems: true, items: { type: string, minLength: 1 } }
+        parser_version: { type: string, pattern: '^[A-Za-z0-9._-]{1,80}$' }
+        healthcheck_url: { type: string, format: uri, maxLength: 1000, nullable: true }
+        owner_label: { type: string, minLength: 2, maxLength: 120 }
+        status: { type: string, enum: [draft, disabled, enabled], default: disabled }
+    ProviderDefinitionUpdate:
+      allOf:
+        - { $ref: '#/components/schemas/ProviderDefinitionInput' }
+        - type: object
+          required: [expected_version]
+          properties: { expected_version: { type: integer, minimum: 1 } }
+    ProviderDefinition:
+      allOf:
+        - { $ref: '#/components/schemas/ProviderDefinitionInput' }
+        - type: object
+          required: [id, version, updated_at]
+          properties:
+            id: { type: string, format: uuid }
+            version: { type: integer, minimum: 1 }
+            updated_at: { type: string, format: date-time }
+    ProviderDefinitionEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/ProviderDefinition' } } }]
+    ProviderDefinitionListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/ProviderDefinition' } } } }]
     SuccessEnvelope:
       type: object
       required: [data, request_id, trace_id]

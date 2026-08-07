@@ -1,0 +1,38 @@
+# M03-01 来源注册中心运维说明
+
+## 部署和启用
+
+1. 在宝塔数据库管理中备份 `product_scout`，使用业务账号执行 `0016a_provider_registry_m03_01.up.sql`。
+2. 在宝塔 Node 项目中发布已验证代码并重启 `product-scout-api`；静态站点发布新的 Web 构建产物。
+3. 本模块不新增环境变量。保留既有 `APP_WEB_ORIGIN`、MySQL 连接和会话配置，不创建 systemd、独立 PM2、宿主机 crontab 或面板外容器。
+4. 以具备 `provider:configure` 的平台管理员访问 `/platform-admin/providers`。登记真实合同后先保持 `disabled`，由项目负责人确认目标地址、访问条款、字段和容量，再改为 `enabled`。
+
+配置调整通过版本化页面完成：频率 1–10080 分钟、并发 1–20、超时 1000–120000ms、重试 0–10、熔断阈值 1–20、保留期 1–3650 天。修改必须基于页面最新版本；409 表示需要刷新后重做，不能覆盖他人的版本。
+
+## 验证与排障
+
+在代码发布目录执行：
+
+```powershell
+npm run verify:module -- M03-01
+```
+
+该门禁包含构建、单元/契约测试、MySQL 5.7 事务实测、Playwright 桌面/390px 视觉回归和文档检查。实测会创建唯一用户与来源，验证两版快照、两条幂等操作、过期版本阻断，然后清理全部数据。
+
+- 401：会话过期，重新登录。
+- 403：确认平台角色包含 `provider:configure`；写请求还应来自 `APP_WEB_ORIGIN`。
+- 409：刷新最新版本，或为新的业务操作生成新的 Idempotency-Key。
+- 503/blocked：在宝塔检查 Node API 和 MySQL 状态、连接数与错误日志，携带 request_id/trace_id 定位。
+- 页面空态：表示尚未登记来源，不得以示例数据填充。
+
+M03-01 本身没有 Crawler、Worker、Redis 队列、文件或计划任务，排障时不要创建临时生产服务。登记为 enabled 也不会在 M03-03 前自动采集。
+
+## 回滚与恢复
+
+1. 在宝塔停止 Node API，并记录变更窗口和备份编号。
+2. 若需要保留配置，先在受控位置导出 `providers`、`provider_versions`、`provider_operations`。
+3. 执行 `0016a_provider_registry_m03_01.down.sql`，回滚应用和静态站点版本。
+4. 由宝塔重启 Node API，检查 `/api/v1/health/live` 与 `/api/v1/health/ready`。
+5. 若需恢复，先重建迁移，再从同一备份恢复三张表并核对 provider_id、version 与外键。
+
+回滚 SQL 会永久删除来源定义和版本审计，未完成备份与恢复演练前不得在生产执行。
