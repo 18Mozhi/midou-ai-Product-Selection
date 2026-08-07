@@ -19,6 +19,8 @@ import { registerDiscoveryRoutes, type DiscoveryRouteOptions } from './discovery
 import { registerHomeDashboardRoutes, type HomeDashboardRouteOptions } from './home-dashboard-routes.js';
 import { ProviderRegistryError } from './provider-registry-service.js';
 import { registerProviderRegistryRoutes, type ProviderRegistryRouteOptions } from './provider-registry-routes.js';
+import { CredentialAssetError } from './credential-asset-service.js';
+import { registerCredentialAssetRoutes, type CredentialAssetRouteOptions } from './credential-asset-routes.js';
 
 export interface BuildAppOptions {
   version?: string;
@@ -36,6 +38,7 @@ export interface BuildAppOptions {
   discovery?: DiscoveryRouteOptions;
   homeDashboard?: HomeDashboardRouteOptions;
   providerRegistry?: ProviderRegistryRouteOptions;
+  credentialAssets?: CredentialAssetRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -103,13 +106,14 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if (options.discovery) registerDiscoveryRoutes(app, options.discovery);
   if (options.homeDashboard) registerHomeDashboardRoutes(app, options.homeDashboard);
   if (options.providerRegistry) registerProviderRegistryRoutes(app, options.providerRegistry);
+  if (options.credentialAssets) registerCredentialAssetRoutes(app, options.credentialAssets);
 
   app.setErrorHandler(async (error: FastifyError | ApiError, request, reply): Promise<ErrorEnvelope> => {
     const requestId=request.headers['x-request-id']!.toString();const traceId=request.headers['x-trace-id']!.toString();
-    const apiError=error instanceof ApiError?error as ApiError:null;const authError=error instanceof AuthError?error as AuthError:null;const tenancyError=error instanceof TenancyError?error as TenancyError:null;const authorizationError=error instanceof AuthorizationError?error as AuthorizationError:null;const resourceGrantError=error instanceof ResourceGrantError?error as ResourceGrantError:null;const auditError=error instanceof AuditError?error as AuditError:null;const preferenceError=error instanceof PreferenceError?error as PreferenceError:null;const discoveryError=error instanceof DiscoveryError?error as DiscoveryError:null;const providerError=error instanceof ProviderRegistryError?error as ProviderRegistryError:null;const validation='validation' in error&&Boolean(error.validation);
-    const statusCode=apiError?.statusCode??authError?.statusCode??tenancyError?.statusCode??authorizationError?.statusCode??resourceGrantError?.statusCode??auditError?.statusCode??preferenceError?.statusCode??discoveryError?.statusCode??providerError?.statusCode??(validation?400:500);reply.code(statusCode);
+    const apiError=error instanceof ApiError?error as ApiError:null;const authError=error instanceof AuthError?error as AuthError:null;const tenancyError=error instanceof TenancyError?error as TenancyError:null;const authorizationError=error instanceof AuthorizationError?error as AuthorizationError:null;const resourceGrantError=error instanceof ResourceGrantError?error as ResourceGrantError:null;const auditError=error instanceof AuditError?error as AuditError:null;const preferenceError=error instanceof PreferenceError?error as PreferenceError:null;const discoveryError=error instanceof DiscoveryError?error as DiscoveryError:null;const providerError=error instanceof ProviderRegistryError?error as ProviderRegistryError:null;const credentialError=error instanceof CredentialAssetError?error as CredentialAssetError:null;const validation='validation' in error&&Boolean(error.validation);
+    const statusCode=apiError?.statusCode??authError?.statusCode??tenancyError?.statusCode??authorizationError?.statusCode??resourceGrantError?.statusCode??auditError?.statusCode??preferenceError?.statusCode??discoveryError?.statusCode??providerError?.statusCode??credentialError?.statusCode??(validation?400:500);reply.code(statusCode);
     const tenancyMessages:Record<string,string>={organization_forbidden:'无权访问该组织。',workspace_not_found:'工作区不存在。',workspace_archived:'工作区已归档。',organization_slug_conflict:'组织标识已存在。'};
-    return{error:{code:apiError?.code??authError?.code??tenancyError?.code??authorizationError?.code??resourceGrantError?.code??auditError?.code??preferenceError?.code??discoveryError?.code??providerError?.code??(validation?'schema_validation_failed':'internal_error'),message:apiError?.message??(authError?authErrorMessage(authError.code):tenancyError?tenancyMessages[tenancyError.code]??'租户请求无法处理。':authorizationError?'权限检查未通过。':resourceGrantError?'资源授权请求无法处理。':auditError?'审计请求无法处理。':preferenceError?'主题偏好请求无法处理。':discoveryError?'搜索请求无法处理。':providerError?'来源配置请求无法处理。':validation?'请求字段不符合接口合同。':'服务暂时无法处理请求。'),action_hint:apiError?.actionHint??authError?.actionHint??tenancyError?.actionHint??authorizationError?.actionHint??resourceGrantError?.actionHint??auditError?.actionHint??preferenceError?.actionHint??discoveryError?.actionHint??providerError?.actionHint??(validation?'按 OpenAPI 修正字段后重试。':'携带 request_id 联系管理员。')},request_id:requestId,trace_id:traceId};
+    return{error:{code:apiError?.code??authError?.code??tenancyError?.code??authorizationError?.code??resourceGrantError?.code??auditError?.code??preferenceError?.code??discoveryError?.code??providerError?.code??credentialError?.code??(validation?'schema_validation_failed':'internal_error'),message:apiError?.message??(authError?authErrorMessage(authError.code):tenancyError?tenancyMessages[tenancyError.code]??'租户请求无法处理。':authorizationError?'权限检查未通过。':resourceGrantError?'资源授权请求无法处理。':auditError?'审计请求无法处理。':preferenceError?'主题偏好请求无法处理。':discoveryError?'搜索请求无法处理。':providerError?'来源配置请求无法处理。':credentialError?'凭证资产请求无法处理。':validation?'请求字段不符合接口合同。':'服务暂时无法处理请求。'),action_hint:apiError?.actionHint??authError?.actionHint??tenancyError?.actionHint??authorizationError?.actionHint??resourceGrantError?.actionHint??auditError?.actionHint??preferenceError?.actionHint??discoveryError?.actionHint??providerError?.actionHint??credentialError?.actionHint??(validation?'按 OpenAPI 修正字段后重试。':'携带 request_id 联系管理员。')},request_id:requestId,trace_id:traceId};
   });
 
   app.setNotFoundHandler(async (request, reply): Promise<ErrorEnvelope> => {

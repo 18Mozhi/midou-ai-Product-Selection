@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P03",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01"],
-    "activeModules": ["M03-02"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02"],
+    "activeModules": ["M03-03"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -230,6 +230,21 @@
       "configuration": "no new environment values or secrets; existing APP_WEB_ORIGIN and MySQL configuration only",
       "imageEvidence": ["concept 62 provider management"],
       "verificationRunId": "fb4fe378-9280-48a6-a0de-d90b0513d33f",
+      "status": "module_verified"
+    },
+    "credentialAssets": {
+      "module": "M03-02",
+      "entrypoints": ["../packages/credentials/src/index.ts", "../apps/api/src/credential-asset-service.ts", "../apps/api/src/mysql-credential-asset-repository.ts", "../apps/api/src/credential-asset-routes.ts", "../apps/web/src/components/CredentialAssetCenter.vue"],
+      "routes": ["/platform-admin/credentials", "/api/v1/platform/credential-provider-options", "/api/v1/platform/credential-assets", "/api/v1/platform/credential-assets/{assetId}/rotate", "/api/v1/platform/credential-assets/{assetId}/revoke", "/api/v1/platform/crawler-profiles"],
+      "scope": "platform-global credential and crawler profile assets; organizations receive later use grants only",
+      "encryption": "AES-256-GCM with random nonce, authentication tag, asset/type/key-version AAD and Baota-only master key",
+      "responseBoundary": "masked fingerprint and metadata only; no decrypt, export, ciphertext, nonce or auth-tag API",
+      "permission": "authenticated platform key_rotation:manage; same-origin and Idempotency-Key for writes",
+      "temporaryMaterialization": "authorized Worker/Crawler callback under CREDENTIAL_TEMP_ROOT with finally buffer clearing and exact directory deletion",
+      "masterKeyRotation": "resumable Baota one-time re-encryption of current active versions; immutable history becomes unreadable after old-key revocation; switch resident configuration only after zero remaining active old-version assets",
+      "configuration": ["CREDENTIALS_MASTER_KEY", "CREDENTIALS_MASTER_KEY_VERSION", "CREDENTIAL_TEMP_ROOT", "one-time rotation variables"],
+      "imageEvidence": ["concept 68 key rotation and platform security navigation shell"],
+      "verificationRunId": "6b01b631-ae6a-4add-a06a-016f989d7411",
       "status": "module_verified"
     }
   },

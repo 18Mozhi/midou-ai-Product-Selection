@@ -557,6 +557,87 @@ paths:
         '404': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/credential-provider-options:
+    get:
+      summary: List non-secret Provider options for platform security credential assignment
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Provider id code and name only, content: { application/json: { schema: { $ref: '#/components/schemas/CredentialProviderOptionListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+  /platform/credential-assets:
+    get:
+      summary: List masked platform credential asset metadata
+      description: Requires key_rotation:manage. Ciphertext, nonce, authentication tag and secret payload are never returned.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Masked credential asset list, content: { application/json: { schema: { $ref: '#/components/schemas/CredentialAssetListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Encrypt and create a platform credential asset
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/CredentialAssetCreateInput' } } } }
+      responses:
+        '201': { description: Masked created asset, content: { application/json: { schema: { $ref: '#/components/schemas/CredentialAssetEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/credential-assets/{assetId}/rotate:
+    post:
+      summary: Replace the encrypted payload and append a credential version
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: assetId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/CredentialAssetRotateInput' } } } }
+      responses:
+        '200': { description: Masked rotated asset, content: { application/json: { schema: { $ref: '#/components/schemas/CredentialAssetEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/credential-assets/{assetId}/revoke:
+    post:
+      summary: Irreversibly revoke a platform credential asset while retaining audit history
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: assetId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/CredentialAssetRevokeInput' } } } }
+      responses:
+        '200': { description: Masked revoked asset, content: { application/json: { schema: { $ref: '#/components/schemas/CredentialAssetEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /platform/crawler-profiles:
+    get:
+      summary: List platform crawler profile metadata and encrypted asset references
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Crawler profile metadata, content: { application/json: { schema: { $ref: '#/components/schemas/CrawlerProfileListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Create a crawler profile referencing an active encrypted browser profile asset
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/CrawlerProfileInput' } } } }
+      responses:
+        '201': { description: Created profile metadata, content: { application/json: { schema: { $ref: '#/components/schemas/CrawlerProfileEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /me/ui-preferences:
     get:
       summary: Read the signed-in user's preference for the selected organization and workspace
@@ -1135,6 +1216,83 @@ components:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/ProviderDefinition' } } }]
     ProviderDefinitionListEnvelope:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/ProviderDefinition' } } } }]
+    CredentialProviderOption:
+      type: object
+      additionalProperties: false
+      required: [id, code, name]
+      properties: { id: { type: string, format: uuid }, code: { type: string }, name: { type: string } }
+    CredentialProviderOptionListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/CredentialProviderOption' } } } }]
+    CredentialSecretInput:
+      type: object
+      additionalProperties: false
+      required: [encoding, value]
+      properties:
+        encoding: { type: string, enum: [utf8, base64] }
+        value: { type: string, format: password, minLength: 1, maxLength: 1000000, writeOnly: true, description: Accepted only for encryption; never returned or logged }
+    CredentialAssetCreateInput:
+      type: object
+      additionalProperties: false
+      required: [provider_id, name, kind, secret_payload, expires_at]
+      properties:
+        provider_id: { type: string, format: uuid }
+        name: { type: string, minLength: 2, maxLength: 160 }
+        kind: { type: string, enum: [api_key, account_secret, cookie_bundle, private_key, browser_profile] }
+        secret_payload: { $ref: '#/components/schemas/CredentialSecretInput' }
+        expires_at: { type: string, format: date-time, nullable: true }
+    CredentialAssetSummary:
+      type: object
+      additionalProperties: false
+      required: [id, provider_id, name, kind, status, key_version, fingerprint, expires_at, rotated_at, version, updated_at]
+      properties:
+        id: { type: string, format: uuid }
+        provider_id: { type: string, format: uuid }
+        name: { type: string }
+        kind: { type: string, enum: [api_key, account_secret, cookie_bundle, private_key, browser_profile] }
+        status: { type: string, enum: [active, revoked] }
+        key_version: { type: string, description: Non-secret master key version label }
+        fingerprint: { type: string, pattern: '^[0-9a-f]{16}$' }
+        expires_at: { type: string, format: date-time, nullable: true }
+        rotated_at: { type: string, format: date-time, nullable: true }
+        version: { type: integer, minimum: 1 }
+        updated_at: { type: string, format: date-time }
+    CredentialAssetRotateInput:
+      type: object
+      additionalProperties: false
+      required: [secret_payload, expected_version]
+      properties: { secret_payload: { $ref: '#/components/schemas/CredentialSecretInput' }, expected_version: { type: integer, minimum: 1 } }
+    CredentialAssetRevokeInput:
+      type: object
+      additionalProperties: false
+      required: [expected_version, reason]
+      properties: { expected_version: { type: integer, minimum: 1 }, reason: { type: string, minLength: 2, maxLength: 500 } }
+    CredentialAssetEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/CredentialAssetSummary' } } }]
+    CredentialAssetListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/CredentialAssetSummary' } } } }]
+    CrawlerProfileInput:
+      type: object
+      additionalProperties: false
+      required: [provider_id, credential_asset_id, code, name, browser_family, locale, timezone, status]
+      properties:
+        provider_id: { type: string, format: uuid }
+        credential_asset_id: { type: string, format: uuid }
+        code: { type: string, pattern: '^[a-z0-9_]{2,80}$' }
+        name: { type: string, minLength: 2, maxLength: 160 }
+        browser_family: { type: string, enum: [chromium] }
+        locale: { type: string, pattern: '^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})?$' }
+        timezone: { type: string, minLength: 1, maxLength: 80 }
+        status: { type: string, enum: [active, disabled] }
+    CrawlerProfileSummary:
+      allOf:
+        - { $ref: '#/components/schemas/CrawlerProfileInput' }
+        - type: object
+          required: [id, version, updated_at]
+          properties: { id: { type: string, format: uuid }, version: { type: integer, minimum: 1 }, updated_at: { type: string, format: date-time } }
+    CrawlerProfileEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/CrawlerProfileSummary' } } }]
+    CrawlerProfileListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/CrawlerProfileSummary' } } } }]
     SuccessEnvelope:
       type: object
       required: [data, request_id, trace_id]

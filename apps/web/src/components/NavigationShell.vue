@@ -4,6 +4,7 @@ import DiscoveryOverlay from './DiscoveryOverlay.vue';
 import HomeDashboard from './HomeDashboard.vue';
 import OpportunityMobileShell from './OpportunityMobileShell.vue';
 import ProviderRegistry from './ProviderRegistry.vue';
+import CredentialAssetCenter from './CredentialAssetCenter.vue';
 
 type Shell = 'member' | 'organization_admin' | 'platform_admin';
 type State = 'loading' | 'ready' | 'expired' | 'forbidden' | 'context_required' | 'rate_limited' | 'blocked';
@@ -63,6 +64,7 @@ onMounted(()=>{void load();window.addEventListener('keydown',shortcut);});onUnmo
         <header class="role-page-head"><div><p>{{shellTitle}} / P02</p><h1>{{pageTitle}}</h1><span>导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。</span></div><b>{{guard?.guard_reason}}</b></header>
         <HomeDashboard v-if="isHome" :api-base-url="apiBaseUrl" />
         <ProviderRegistry v-else-if="shell==='platform_admin'&&routePath==='/platform-admin/providers'" :api-base-url="apiBaseUrl" />
+        <CredentialAssetCenter v-else-if="shell==='platform_admin'&&routePath==='/platform-admin/credentials'" :api-base-url="apiBaseUrl" />
         <OpportunityMobileShell v-else-if="opportunityId" :opportunity-id="opportunityId" />
         <section v-else class="role-ready-panel">
           <div class="role-ready-hero"><span>S</span><div><p>VERIFIED NAVIGATION</p><h2>服务端已确认此工作台</h2><p>当前只交付导航、响应式布局与路由状态，不展示示例指标或其他组织数据。</p></div></div>

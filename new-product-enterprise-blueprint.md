@@ -557,6 +557,10 @@ Resource Grant 只补充 RBAC/Data Scope 无法覆盖的指定资源例外：目
 
 `providers` 只保存平台全局、版本化的来源技术合同，不包含 `organization_id`、`workspace_id`、凭证明文或组织启用状态。合同固定包含目标 URL/标识、接入模式、市场、语言、字段、频率、并发、超时、重试、熔断、去重、保留期、失败规则、Parser 版本、健康检查地址、负责人和状态；新建默认 disabled。创建和更新在 MySQL 5.7 事务中同步写当前值、不可变版本快照、操作人、request_id/trace_id 与幂等记录，并用乐观版本锁拒绝静默覆盖。列表和写入只允许具备平台能力 `provider:configure` 的已登录用户，写入还校验同源 Origin 和 Idempotency-Key。M03-01 不创建采集任务、队列、租约、死信、凭证资产或组织连接；这些由后续归属模块实现，来源登记或 enabled 状态在 M03-03 前都不代表生产采集能力。
 
+#### 8.3.8 M03-02 平台凭证资产实现基线
+
+`credential_assets` 与 `crawler_profiles` 是平台全局安全资产，不带组织/工作区归属。秘密写入使用 AES-256-GCM、随机 96 位 nonce、128 位认证标签和绑定资产/类型/key_version 的 AAD；数据库保存当前密文与不可变密文版本，API 和页面只返回指纹、版本、状态及引用，绝不提供明文读取、导出或下载。创建、轮换、撤销和档案登记要求 `key_rotation:manage`、同源 Origin、Idempotency-Key 与乐观锁，并同步保存操作人和 request_id/trace_id；撤销不可恢复。Worker/Crawler 仅可在授权任务中通过受限 `CREDENTIAL_TEMP_ROOT` 临时物化，回调结束或异常时必须清空 Buffer 并删除准确目录。主密钥与版本只在宝塔受限环境；主密钥轮换由宝塔一次性、可续跑任务逐个重加密 active 资产，全部校验完成后才能切换常驻配置和撤销旧密钥。M03-02 不提前创建组织连接或真实采集任务，M03-04 才接入 Playwright 执行链。
+
 ---
 
 ## 9. 技术架构、性能与容量

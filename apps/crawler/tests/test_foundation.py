@@ -23,6 +23,11 @@ class FoundationTaskTest(unittest.TestCase):
             load_config({"NODE_ENV": "production", "CREDENTIALS_MASTER_KEY": "too-short"})
         self.assertNotIn("too-short", str(raised.exception))
 
+    def test_credential_key_version_matches_node_runtime_contract(self) -> None:
+        with self.assertRaises(ConfigError) as raised:
+            load_config({"CREDENTIALS_MASTER_KEY_VERSION": "version with spaces"})
+        self.assertEqual(raised.exception.key, "CREDENTIALS_MASTER_KEY_VERSION")
+
 
 if __name__ == "__main__":
     unittest.main()

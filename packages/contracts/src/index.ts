@@ -94,6 +94,12 @@ export interface HomeDashboardSummary{actions:HomeDashboardItem[];changes:HomeDa
 export type ProviderAccessMode='public_page'|'public_rss'|'official_api'|'authenticated_browser'|'import'|'manual';
 export interface ProviderDefinition{id:string;code:string;name:string;target_url:string;access_mode:ProviderAccessMode;markets:string[];languages:string[];fields:string[];schedule_minutes:number;concurrency_limit:number;timeout_ms:number;retry_limit:number;circuit_failure_threshold:number;dedupe_key:string;retention_days:number;failure_rules:string[];parser_version:string;healthcheck_url:string|null;owner_label:string;status:'draft'|'disabled'|'enabled';version:number;updated_at:string;}
 export type ProviderDefinitionInput=Omit<ProviderDefinition,'id'|'version'|'updated_at'>;
+export type CredentialAssetKind='api_key'|'account_secret'|'cookie_bundle'|'private_key'|'browser_profile';
+export interface CredentialAssetSummary{id:string;provider_id:string;name:string;kind:CredentialAssetKind;status:'active'|'revoked';key_version:string;fingerprint:string;expires_at:string|null;rotated_at:string|null;version:number;updated_at:string;}
+export interface CredentialSecretInput{encoding:'utf8'|'base64';value:string;}
+export interface CredentialAssetCreateInput{provider_id:string;name:string;kind:CredentialAssetKind;secret_payload:CredentialSecretInput;expires_at:string|null;}
+export interface CrawlerProfileSummary{id:string;provider_id:string;credential_asset_id:string;code:string;name:string;browser_family:'chromium';locale:string;timezone:string;status:'active'|'disabled'|'revoked';version:number;updated_at:string;}
+export interface CrawlerProfileInput{provider_id:string;credential_asset_id:string;code:string;name:string;browser_family:'chromium';locale:string;timezone:string;status:'active'|'disabled';}
 export interface RoleCapabilitySummary{code:string;name:string;category:'organization'|'platform';description:string;capabilities:string[];}
 export type ResourceGrantType='task'|'opportunity'|'competitor'|'sourcing';
 export type ResourceGrantStatus='active'|'revoked'|'expired';

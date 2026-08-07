@@ -1,6 +1,6 @@
 # P03：来源、凭证、采集任务与证据详细执行计划
 
-> 状态：in_progress；M03-01 已通过模块验收（run_id/trace_id `fb4fe378-9280-48a6-a0de-d90b0513d33f`）；当前模块：M03-02
+> 状态：in_progress；M03-01、M03-02 已通过模块验收（M03-02 run_id/trace_id `6b01b631-ae6a-4add-a06a-016f989d7411`）；当前模块：M03-03
 > 上游总纲：`new-product-enterprise-blueprint.md`
 > 阶段索引：`plans/README.md`
 > 最低行数：1,000；`npm run verify:plans` 必须自动校验。
@@ -642,9 +642,9 @@
 - 通过标准：实现、迁移/API/页面（适用时）、文档、配置、测试和审计全部同步。
 
 #### M03-02.A99 模块关卡
-- [ ] 原子任务 A01–A17 全部有实现证据和测试名称。
-- [ ] 组织隔离、权限、审计、配置、错误状态、图片/响应式（适用时）已覆盖。
-- [ ] `npm run verify:module -- 模块 ID` 返回 0；失败报告可定位到原子任务。
+- [x] 原子任务 A01–A17 全部有实现证据和测试名称。
+- [x] 平台全局边界、权限、审计、配置、错误状态、图片/响应式已覆盖。
+- [x] `npm run verify:module -- M03-02` 返回 0；run_id/trace_id：`6b01b631-ae6a-4add-a06a-016f989d7411`。
 
 ### M03-03 原子任务索引
 - 模块目标：Provider 适配器。

@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `crawler_profile_operations`;DROP TABLE IF EXISTS `crawler_profile_versions`;DROP TABLE IF EXISTS `crawler_profiles`;DROP TABLE IF EXISTS `credential_asset_operations`;DROP TABLE IF EXISTS `credential_asset_versions`;DROP TABLE IF EXISTS `credential_assets`;

@@ -13,6 +13,7 @@
     "@scoutops/tenancy": "0.1.0",
     "@scoutops/config": "0.1.0",
     "@scoutops/contracts": "0.1.0",
+    "@scoutops/credentials": "0.1.0",
     "@scoutops/database": "0.1.0",
     "@scoutops/redis": "0.1.0",
     "fastify": "^5.6.2"
