@@ -687,6 +687,57 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/collection/tasks:
+    get:
+      summary: List scoped collection tasks for platform monitoring
+      description: Requires collection:replay. Internal target_json, lease tokens and credentials are never returned.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: organization_id, in: query, schema: { type: string, format: uuid } }
+        - { name: workspace_id, in: query, schema: { type: string, format: uuid } }
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/TaskStatus' } }
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: page_size, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+      responses:
+        '200': { description: Paged task summaries, content: { application/json: { schema: { $ref: '#/components/schemas/TaskListEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+  /platform/collection/tasks/{taskId}:
+    get:
+      summary: Read task, subquery coverage, attempts, events and dead-letter detail
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: taskId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: Collection task detail, content: { application/json: { schema: { $ref: '#/components/schemas/CollectionTaskDetailEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /platform/collection/tasks/{taskId}/replay:
+    post:
+      summary: Manually replay one dead-letter task while retaining all history
+      description: Requires collection:replay, same-origin Origin, Idempotency-Key and a 2-500 character reason.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: taskId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [reason]
+              properties: { reason: { type: string, minLength: 2, maxLength: 500 } }
+      responses:
+        '200': { description: Newly scheduled replay task detail, content: { application/json: { schema: { $ref: '#/components/schemas/CollectionTaskDetailEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /me/ui-preferences:
     get:
       summary: Read the signed-in user's preference for the selected organization and workspace
@@ -1464,14 +1515,30 @@ components:
       enum: [complete, partial, insufficient]
     TaskSummary:
       type: object
-      required: [id, status]
+      required: [id, organization_id, workspace_id, status, priority, scheduled_at, available_at, attempt_count, successful_subquery_count, failed_subquery_count, blocked_subquery_count, available_result_count, missing_fields, request_id, trace_id, version, created_at, updated_at]
       properties:
-        id: { type: string }
+        id: { type: string, format: uuid }
+        organization_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
         status: { $ref: '#/components/schemas/TaskStatus' }
-        coverage_status: { $ref: '#/components/schemas/CoverageStatus' }
+        coverage_status: { allOf: [{ $ref: '#/components/schemas/CoverageStatus' }], nullable: true }
+        priority: { type: string, enum: [low, normal, high, critical] }
+        scheduled_at: { type: string, format: date-time }
+        available_at: { type: string, format: date-time }
+        attempt_count: { type: integer, minimum: 0, maximum: 4 }
         successful_subquery_count: { type: integer, minimum: 0 }
         failed_subquery_count: { type: integer, minimum: 0 }
         blocked_subquery_count: { type: integer, minimum: 0 }
+        available_result_count: { type: integer, minimum: 0 }
+        missing_fields: { type: array, items: { type: string } }
+        last_error_code: { type: string, nullable: true }
+        replay_of_task_id: { type: string, format: uuid, nullable: true }
+        replay_reason: { type: string, nullable: true }
+        request_id: { type: string }
+        trace_id: { type: string }
+        version: { type: integer, minimum: 1 }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
     TaskListEnvelope:
       type: object
       required: [data, request_id]
@@ -1487,6 +1554,20 @@ components:
             page: { type: integer }
             page_size: { type: integer }
             total: { type: integer }
+    CollectionTaskDetailEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/SuccessEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required: [task, subqueries, attempts, events, dead_letter]
+              properties:
+                task: { $ref: '#/components/schemas/TaskSummary' }
+                subqueries: { type: array, items: { type: object } }
+                attempts: { type: array, items: { type: object } }
+                events: { type: array, items: { type: object } }
+                dead_letter: { type: object, nullable: true }
     HealthLiveData:
       type: object
       required: [status, service, version, build_sha]

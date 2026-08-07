@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P03",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04"],
-    "activeModules": ["M03-05"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05"],
+    "activeModules": ["M03-06"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -265,7 +265,7 @@
     "playwrightCrawler": {
       "module": "M03-04",
       "entrypoints": ["../packages/playwright-crawler/src/index.ts", "../apps/crawler/scoutops_crawler/playwright_bridge.py", "../scripts/run-playwright-crawler.mjs", "../apps/api/src/crawler-runtime-service.ts", "../apps/api/src/mysql-crawler-runtime-repository.ts", "../apps/api/src/crawler-runtime-routes.ts", "../apps/web/src/components/CollectionRuntimeCenter.vue"],
-      "routes": ["/platform-admin/collection", "/api/v1/platform/crawler-runtime", "/api/v1/platform/crawler-runtime/recover-expired"],
+      "routes": ["/platform-admin/collection/browser-runtime", "/api/v1/platform/crawler-runtime", "/api/v1/platform/crawler-runtime/recover-expired"],
       "scope": "platform-global encrypted browser profiles and exclusive leases; every browser run is bound to one organization and workspace",
       "actions": ["bounded search", "pagination", "scroll", "same-allowlist detail pages"],
       "blockedStates": ["blocked_login", "blocked_captcha", "blocked_robots", "rate_limited", "timeout", "parser_changed", "dependency_failed"],
@@ -276,6 +276,23 @@
       "downstream": {"M03-05":"collection task queue retry dead letter", "M03-06":"evidence and normalized persistence", "M03-07":"real provider URLs selectors and adapters"},
       "imageEvidence": ["concept 63 collection task monitoring table and status layout"],
       "verificationRunId": "c574a8a1-d7ca-4639-9c36-69067c7c4149",
+      "status": "module_verified"
+    },
+    "collectionTaskStateMachine": {
+      "module": "M03-05",
+      "entrypoints": ["../packages/collection-tasks/src/index.ts", "../apps/worker/src/collection-task-worker.ts", "../apps/api/src/collection-task-service.ts", "../apps/api/src/mysql-collection-task-repository.ts", "../apps/api/src/collection-task-routes.ts", "../apps/web/src/components/CollectionTaskCenter.vue"],
+      "routes": ["/platform-admin/collection", "/api/v1/platform/collection/tasks", "/api/v1/platform/collection/tasks/{taskId}", "/api/v1/platform/collection/tasks/{taskId}/replay"],
+      "scope": "organization and workspace scoped task, subquery, attempt, event, outbox and dead-letter truth in MySQL 5.7",
+      "states": ["draft", "scheduled", "queued", "leased", "running", "parsing", "validating", "persisted", "retry_scheduled", "blocked_login", "blocked_captcha", "blocked_robots", "rate_limited", "succeeded", "succeeded_empty", "completed_with_warnings", "failed_terminal", "dead_letter", "manually_replayed"],
+      "coverage": ["complete", "partial", "insufficient"],
+      "retryPolicy": "maximum 4 total attempts; 1, 5 and 15 minute backoff plus at most 20 percent jitter; rate limit uses reset time",
+      "permission": "authenticated platform collection:replay; same-origin Origin, Idempotency-Key and reason for dead-letter replay",
+      "responseBoundary": "task status, coverage, scoped counts, subqueries, attempts, events, dead-letter and correlation; no target_json, lease token or credential",
+      "configuration": ["COLLECTION_TASK_POLL_MS", "COLLECTION_TASK_LEASE_SECONDS"],
+      "runtimeBoundary": "engine and synthetic live verification only; real Provider executor starts at M03-07 and evidence persistence starts at M03-06",
+      "downstream": {"M03-06":"raw evidence normalized records and field provenance", "M03-07":"approved real provider executors"},
+      "imageEvidence": ["concept 63 collection task monitoring table, filters, coverage and status layout"],
+      "verificationRunId": "54e50b9c-b851-461d-ab0a-fc2e12d5fc3c",
       "status": "module_verified"
     }
   },

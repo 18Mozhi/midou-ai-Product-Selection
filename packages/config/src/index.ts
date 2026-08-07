@@ -21,6 +21,7 @@ export interface RuntimeConfig {
   mfa: { issuer: string; totpPeriodSeconds: number; totpDigits: number; totpWindow: number; challengeTtlMinutes: number; maxAttempts: number; recoveryCodeCount: number };
   identity: { workerId: string; crawlerId: string };
   runtime: { workerHeartbeatMs: number; crawlerHeartbeatSeconds: number };
+  collectionTasks: { pollMs: number; leaseSeconds: number };
   configFingerprint: string;
 }
 export interface PlatformSeedConfig { email: string; password: string; }
@@ -60,6 +61,7 @@ export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env, target: 
     mfa: { issuer: text(env,'MFA_ISSUER','ScoutOps'), totpPeriodSeconds: integer(env,'MFA_TOTP_PERIOD_SECONDS',30,15,120), totpDigits: integer(env,'MFA_TOTP_DIGITS',6,6,8), totpWindow: integer(env,'MFA_TOTP_WINDOW',1,0,2), challengeTtlMinutes: integer(env,'MFA_CHALLENGE_TTL_MINUTES',5,1,10), maxAttempts: integer(env,'MFA_MAX_ATTEMPTS',5,2,10), recoveryCodeCount: integer(env,'MFA_RECOVERY_CODE_COUNT',8,4,20) },
     identity: { workerId: text(env, 'WORKER_ID', 'worker-local'), crawlerId: text(env, 'CRAWLER_ID', 'crawler-local') },
     runtime: { workerHeartbeatMs: integer(env, 'WORKER_HEARTBEAT_MS', 30000, 5000, 60000), crawlerHeartbeatSeconds: integer(env, 'CRAWLER_HEARTBEAT_SECONDS', 30, 5, 60) },
+    collectionTasks: { pollMs: integer(env, 'COLLECTION_TASK_POLL_MS', 2000, 250, 60000), leaseSeconds: integer(env, 'COLLECTION_TASK_LEASE_SECONDS', 120, 30, 3600) },
   };
   if (base.auth.passwordMaxLength < base.auth.passwordMinLength) throw new ConfigError('AUTH_PASSWORD_MAX_LENGTH', 'must be greater than or equal to AUTH_PASSWORD_MIN_LENGTH');
   if (!/^[A-Za-z0-9._-]{1,80}$/.test(base.security.credentialsMasterKeyVersion)) throw new ConfigError('CREDENTIALS_MASTER_KEY_VERSION', 'must contain only letters, numbers, dot, underscore or hyphen');

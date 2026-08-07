@@ -571,6 +571,12 @@ Resource Grant 只补充 RBAC/Data Scope 无法覆盖的指定资源例外：目
 
 浏览器档案是平台全局安全资产，但每次低层运行必须带 `organization_id`/`workspace_id`。MySQL 5.7 以档案主键独占租约、令牌摘要、心跳、到期时间和 `SELECT ... FOR UPDATE` 防止并发复用；首次 acquire 才向内部 Crawler 返回令牌，幂等重放和监控 API 均不返回令牌。运行、租约事件和过期回收都保留 request_id/trace_id。平台监控和显式过期回收只允许 `collection:replay`，写入还校验 Origin 与 Idempotency-Key。M03-04 不创建 M03-05 的采集任务状态机/队列/重试/死信，不保存 M03-06 证据，也不提前编造 M03-07 来源选择器。
 
+#### 8.3.11 M03-05 采集任务状态机实现基线
+
+MySQL 5.7 是采集任务、子查询、执行尝试、租约、死信、事件和 Outbox 的事实源；Redis 只保存按组织/工作区隔离的就绪信号与短租约，不能决定任务完成。调度与领取使用行锁，Worker 仅持有原始租约令牌，数据库保存带域分离的 SHA-256 摘要。租约到期或 Redis 协调冲突必须显式回收，不能让任务永久停留在 leased。
+
+任务严格执行 5.4 的状态、总尝试 4 次、1/5/15 分钟退避与受阻规则；子查询逐项保存结果与缺失字段，再计算 `complete/partial/insufficient`。人工重放仅针对 `dead_letter`，要求 `collection:replay`、同源 Origin、Idempotency-Key 与原因，创建新的 scheduled 任务并保留原任务全部历史。监控 API 不返回内部 target、租约令牌或凭证。M03-05 不保存 M03-06 原始证据，也不在 M03-07 前注册或启动真实来源执行器。
+
 ---
 
 ## 9. 技术架构、性能与容量

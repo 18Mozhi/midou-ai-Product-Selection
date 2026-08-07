@@ -7,6 +7,7 @@ import ProviderRegistry from './ProviderRegistry.vue';
 import CredentialAssetCenter from './CredentialAssetCenter.vue';
 import ProviderAdapterCenter from './ProviderAdapterCenter.vue';
 import CollectionRuntimeCenter from './CollectionRuntimeCenter.vue';
+import CollectionTaskCenter from './CollectionTaskCenter.vue';
 
 type Shell = 'member' | 'organization_admin' | 'platform_admin';
 type State = 'loading' | 'ready' | 'expired' | 'forbidden' | 'context_required' | 'rate_limited' | 'blocked';
@@ -71,7 +72,11 @@ onMounted(()=>{void load();window.addEventListener('keydown',shortcut);});onUnmo
           <ProviderRegistry v-else :api-base-url="apiBaseUrl" />
         </section>
         <CredentialAssetCenter v-else-if="shell==='platform_admin'&&routePath==='/platform-admin/credentials'" :api-base-url="apiBaseUrl" />
-        <CollectionRuntimeCenter v-else-if="shell==='platform_admin'&&routePath==='/platform-admin/collection'" :api-base-url="apiBaseUrl" />
+        <section v-else-if="shell==='platform_admin'&&routePath.startsWith('/platform-admin/collection')" class="provider-runtime-surface">
+          <nav class="provider-runtime-tabs" aria-label="采集控制台视图"><a href="/platform-admin/collection" :aria-current="routePath==='/platform-admin/collection'?'page':undefined">任务状态机</a><a href="/platform-admin/collection/browser-runtime" :aria-current="routePath==='/platform-admin/collection/browser-runtime'?'page':undefined">浏览器运行时</a></nav>
+          <CollectionRuntimeCenter v-if="routePath==='/platform-admin/collection/browser-runtime'" :api-base-url="apiBaseUrl" />
+          <CollectionTaskCenter v-else :api-base-url="apiBaseUrl" />
+        </section>
         <OpportunityMobileShell v-else-if="opportunityId" :opportunity-id="opportunityId" />
         <section v-else class="role-ready-panel">
           <div class="role-ready-hero"><span>S</span><div><p>VERIFIED NAVIGATION</p><h2>服务端已确认此工作台</h2><p>当前只交付导航、响应式布局与路由状态，不展示示例指标或其他组织数据。</p></div></div>
