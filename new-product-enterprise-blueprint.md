@@ -565,6 +565,12 @@ Resource Grant 只补充 RBAC/Data Scope 无法覆盖的指定资源例外：目
 
 `ProviderAdapter` 统一 `collect`、`normalize`、`healthCheck`，以 Provider code 注册并校验 access mode。collect 强制携带组织/工作区 scope、关联 ID 和批次上限；运行时限制超时、响应字节与条数，normalize 保留 evidence_ref 及 Provider/Adapter/Parser provenance。Provider 和健康状态是平台全局技术资产，MySQL 5.7 保存当前健康、不可变版本、幂等操作与 request_id/trace_id；API 只允许 `provider:configure`，不返回凭证、Cookie 或原始 payload。M03-03 不猜具体平台接口：生产注册表在 M03-07 前为空，未注册实现必须记录 `blocked / adapter_not_registered`。M03-04、M03-05、M03-06 分别负责浏览器执行、任务状态机与证据持久化，不能由本模块提前替代。
 
+#### 8.3.10 M03-04 Playwright Crawler 执行基线
+
+`authenticated_browser` 使用项目依法持有的账号和 M03-02 加密浏览器档案，由 Python Crawler 通过无 shell 插值的 stdin/stdout 桥接调用 Node Playwright Chromium。执行计划仅接受 HTTP(S)、明确 origin 白名单和有上限的搜索、分页、滚动及详情动作；登录、验证码、robots、429、超时、Parser 变化和依赖失败必须如实受阻或失败，禁止绕过登录、验证码、付费墙和站点限制。档案以受限 `tar.gz` 临时解包，拒绝路径穿越、链接和资源超限，并在全部结果路径关闭 context、清空 Buffer 和删除准确临时目录。
+
+浏览器档案是平台全局安全资产，但每次低层运行必须带 `organization_id`/`workspace_id`。MySQL 5.7 以档案主键独占租约、令牌摘要、心跳、到期时间和 `SELECT ... FOR UPDATE` 防止并发复用；首次 acquire 才向内部 Crawler 返回令牌，幂等重放和监控 API 均不返回令牌。运行、租约事件和过期回收都保留 request_id/trace_id。平台监控和显式过期回收只允许 `collection:replay`，写入还校验 Origin 与 Idempotency-Key。M03-04 不创建 M03-05 的采集任务状态机/队列/重试/死信，不保存 M03-06 证据，也不提前编造 M03-07 来源选择器。
+
 ---
 
 ## 9. 技术架构、性能与容量

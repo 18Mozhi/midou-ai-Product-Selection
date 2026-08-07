@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 import re
+from pathlib import Path
 from dataclasses import dataclass
 
 
@@ -21,6 +22,9 @@ class CrawlerConfig:
     heartbeat_seconds: int
     credential_temp_root: str
     credentials_master_key_version: str
+    playwright_node_binary: str
+    playwright_runner_path: str
+    playwright_run_timeout_seconds: int
 
 
 def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
@@ -38,6 +42,15 @@ def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
             "CREDENTIALS_MASTER_KEY_VERSION",
             "must contain only letters, numbers, dot, underscore or hyphen",
         )
+    playwright_node_binary = values.get("PLAYWRIGHT_NODE_BINARY", "node").strip()
+    default_runner = Path(__file__).resolve().parents[3] / "scripts" / "run-playwright-crawler.mjs"
+    playwright_runner_path = str(Path(values.get("PLAYWRIGHT_RUNNER_PATH", str(default_runner))).resolve())
+    try:
+        playwright_run_timeout_seconds = int(values.get("PLAYWRIGHT_RUN_TIMEOUT_SECONDS", "180"))
+    except ValueError as error:
+        raise ConfigError("PLAYWRIGHT_RUN_TIMEOUT_SECONDS", "must be an integer from 10 to 600") from error
+    if not playwright_node_binary or playwright_run_timeout_seconds < 10 or playwright_run_timeout_seconds > 600:
+        raise ConfigError("PLAYWRIGHT_RUN_TIMEOUT_SECONDS", "must be an integer from 10 to 600")
     try:
         heartbeat_seconds = int(values.get("CRAWLER_HEARTBEAT_SECONDS", "30"))
     except ValueError as error:
@@ -51,6 +64,8 @@ def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
         "master_key_present": bool(master_key),
         "master_key_version": master_key_version,
         "credential_temp_root": credential_temp_root,
+        "playwright_runner_path": playwright_runner_path,
+        "playwright_run_timeout_seconds": playwright_run_timeout_seconds,
     }
     fingerprint = hashlib.sha256(json.dumps(safe, sort_keys=True).encode()).hexdigest()
-    return CrawlerConfig(crawler_id, evidence_root, master_key, fingerprint, heartbeat_seconds, credential_temp_root, master_key_version)
+    return CrawlerConfig(crawler_id, evidence_root, master_key, fingerprint, heartbeat_seconds, credential_temp_root, master_key_version, playwright_node_binary, playwright_runner_path, playwright_run_timeout_seconds)

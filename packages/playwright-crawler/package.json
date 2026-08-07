@@ -1,0 +1,1 @@
+{"name":"@scoutops/playwright-crawler","private":true,"version":"0.1.0","type":"module","main":"dist/index.js","types":"dist/index.d.ts","exports":{".":{"types":"./dist/index.d.ts","import":"./dist/index.js"}},"dependencies":{"@scoutops/credentials":"0.1.0","playwright":"^1.58.2"}}

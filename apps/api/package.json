@@ -15,6 +15,7 @@
     "@scoutops/contracts": "0.1.0",
     "@scoutops/credentials": "0.1.0",
     "@scoutops/provider-adapters": "0.1.0",
+    "@scoutops/playwright-crawler": "0.1.0",
     "@scoutops/database": "0.1.0",
     "@scoutops/redis": "0.1.0",
     "fastify": "^5.6.2"

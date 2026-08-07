@@ -1,11 +1,13 @@
 import sys
 import unittest
+from unittest.mock import Mock, patch
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scoutops_crawler.foundation import FoundationTask, validate_task
 from scoutops_crawler.config import ConfigError, load_config
+from scoutops_crawler.playwright_bridge import PlaywrightBridge, PlaywrightBridgeError
 
 
 class FoundationTaskTest(unittest.TestCase):
@@ -27,6 +29,22 @@ class FoundationTaskTest(unittest.TestCase):
         with self.assertRaises(ConfigError) as raised:
             load_config({"CREDENTIALS_MASTER_KEY_VERSION": "version with spaces"})
         self.assertEqual(raised.exception.key, "CREDENTIALS_MASTER_KEY_VERSION")
+
+    @patch("scoutops_crawler.playwright_bridge.subprocess.run")
+    def test_playwright_bridge_uses_stdin_without_shell_and_checks_correlation(self, run: Mock) -> None:
+        config = load_config({"PLAYWRIGHT_NODE_BINARY": "node-test", "PLAYWRIGHT_RUNNER_PATH": "runner.mjs"})
+        run.return_value = Mock(returncode=0, stdout='{"status":"succeeded_empty","request_id":"r1","trace_id":"t1"}')
+        result = PlaywrightBridge(config).run({"request_id": "r1", "trace_id": "t1", "plan": {}})
+        self.assertEqual(result["status"], "succeeded_empty")
+        _, kwargs = run.call_args
+        self.assertFalse(kwargs["shell"])
+        self.assertIn('"request_id": "r1"', kwargs["input"])
+
+    @patch("scoutops_crawler.playwright_bridge.subprocess.run")
+    def test_playwright_bridge_fails_closed_on_invalid_output(self, run: Mock) -> None:
+        run.return_value = Mock(returncode=2, stdout='{"code":"blocked_captcha"}')
+        with self.assertRaises(PlaywrightBridgeError):
+            PlaywrightBridge(load_config()).run({"request_id": "r1", "trace_id": "t1"})
 
 
 if __name__ == "__main__":

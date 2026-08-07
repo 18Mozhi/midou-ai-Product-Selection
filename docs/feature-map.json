@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P03",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03"],
-    "activeModules": ["M03-04"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04"],
+    "activeModules": ["M03-05"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -22,7 +22,8 @@
       "authorization": "../packages/authorization/src/index.ts",
       "resourceGrants": "../packages/resource-grants/src/index.ts",
       "audit": "../packages/audit/src/index.ts",
-      "preferences": "../packages/preferences/src/index.ts"
+      "preferences": "../packages/preferences/src/index.ts",
+      "playwrightCrawler": "../packages/playwright-crawler/src/index.ts"
     },
     "verification": {
       "moduleCommand": "npm run verify:module -- <module-id>",
@@ -259,6 +260,22 @@
       "downstream": {"M03-04":"authenticated browser execution", "M03-05":"queue lease retry dead letter", "M03-06":"raw evidence and normalized persistence", "M03-07":"first real adapter registration"},
       "imageEvidence": ["concept 62 collection source management table and status layout"],
       "verificationRunId": "c6b206e3-bf39-4d3b-8b00-f7f195eaa999",
+      "status": "module_verified"
+    },
+    "playwrightCrawler": {
+      "module": "M03-04",
+      "entrypoints": ["../packages/playwright-crawler/src/index.ts", "../apps/crawler/scoutops_crawler/playwright_bridge.py", "../scripts/run-playwright-crawler.mjs", "../apps/api/src/crawler-runtime-service.ts", "../apps/api/src/mysql-crawler-runtime-repository.ts", "../apps/api/src/crawler-runtime-routes.ts", "../apps/web/src/components/CollectionRuntimeCenter.vue"],
+      "routes": ["/platform-admin/collection", "/api/v1/platform/crawler-runtime", "/api/v1/platform/crawler-runtime/recover-expired"],
+      "scope": "platform-global encrypted browser profiles and exclusive leases; every browser run is bound to one organization and workspace",
+      "actions": ["bounded search", "pagination", "scroll", "same-allowlist detail pages"],
+      "blockedStates": ["blocked_login", "blocked_captcha", "blocked_robots", "rate_limited", "timeout", "parser_changed", "dependency_failed"],
+      "permission": "authenticated platform collection:replay; same-origin and Idempotency-Key for expired lease recovery",
+      "responseBoundary": "profile metadata, lease owner and timing, scoped run counts and correlation only; no credential, ciphertext, lease token, raw plan or temporary path",
+      "profileArchive": "M03-02 encrypted base64 tar.gz, traversal-safe bounded temporary extraction and unconditional cleanup",
+      "configuration": ["PLAYWRIGHT_HEADLESS", "PLAYWRIGHT_NAVIGATION_TIMEOUT_MS", "PLAYWRIGHT_ACTION_TIMEOUT_MS", "PLAYWRIGHT_MAX_PAGES", "PLAYWRIGHT_MAX_SCROLLS", "PLAYWRIGHT_MAX_DETAILS", "PLAYWRIGHT_PROFILE_ARCHIVE_MAX_BYTES", "PLAYWRIGHT_PROFILE_EXTRACTED_MAX_BYTES", "PLAYWRIGHT_PROFILE_MAX_FILES", "PLAYWRIGHT_NODE_BINARY", "PLAYWRIGHT_RUNNER_PATH", "PLAYWRIGHT_RUN_TIMEOUT_SECONDS"],
+      "downstream": {"M03-05":"collection task queue retry dead letter", "M03-06":"evidence and normalized persistence", "M03-07":"real provider URLs selectors and adapters"},
+      "imageEvidence": ["concept 63 collection task monitoring table and status layout"],
+      "verificationRunId": "c574a8a1-d7ca-4639-9c36-69067c7c4149",
       "status": "module_verified"
     }
   },

@@ -664,6 +664,29 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /platform/crawler-runtime:
+    get:
+      summary: List sanitized Playwright profile leases and scoped browser runs
+      description: Requires collection:replay. Credential references, encrypted payloads, plans, temporary paths and lease tokens are never returned.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Platform crawler runtime snapshot, content: { application/json: { schema: { $ref: '#/components/schemas/CrawlerRuntimeEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/crawler-runtime/recover-expired:
+    post:
+      summary: Recover only expired browser profile leases and mark their runs timed out
+      description: Requires collection:replay, same-origin Origin and Idempotency-Key. Active leases and run history are retained.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: false, content: { application/json: { schema: { type: object, additionalProperties: false } } } }
+      responses:
+        '200': { description: Expired lease recovery count, content: { application/json: { schema: { $ref: '#/components/schemas/CrawlerLeaseRecoveryEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
   /me/ui-preferences:
     get:
       summary: Read the signed-in user's preference for the selected organization and workspace
@@ -1342,6 +1365,66 @@ components:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/CrawlerProfileSummary' } } }]
     CrawlerProfileListEnvelope:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/CrawlerProfileSummary' } } } }]
+    CrawlerProfileLease:
+      type: object
+      required: [run_id, lease_owner, leased_at, heartbeat_at, expires_at]
+      properties:
+        run_id: { type: string, format: uuid }
+        lease_owner: { type: string }
+        leased_at: { type: string, format: date-time }
+        heartbeat_at: { type: string, format: date-time }
+        expires_at: { type: string, format: date-time }
+    CrawlerProfileRuntime:
+      type: object
+      required: [id, code, name, provider_id, provider_name, status, lease]
+      properties:
+        id: { type: string, format: uuid }
+        code: { type: string }
+        name: { type: string }
+        provider_id: { type: string, format: uuid }
+        provider_name: { type: string }
+        status: { type: string, enum: [active, disabled, revoked] }
+        lease: { allOf: [{ $ref: '#/components/schemas/CrawlerProfileLease' }], nullable: true }
+    CrawlerBrowserRun:
+      type: object
+      required: [id, organization_id, workspace_id, provider_id, crawler_profile_id, status, page_count, item_count, detail_count, request_id, trace_id, started_at]
+      properties:
+        id: { type: string, format: uuid }
+        organization_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+        provider_id: { type: string, format: uuid }
+        crawler_profile_id: { type: string, format: uuid }
+        status: { type: string, enum: [running, succeeded, blocked, failed, timed_out, cancelled] }
+        page_count: { type: integer, minimum: 0 }
+        item_count: { type: integer, minimum: 0 }
+        detail_count: { type: integer, minimum: 0 }
+        duration_ms: { type: integer, minimum: 0, nullable: true }
+        error_code: { type: string, nullable: true }
+        request_id: { type: string }
+        trace_id: { type: string }
+        started_at: { type: string, format: date-time }
+        finished_at: { type: string, format: date-time, nullable: true }
+    CrawlerRuntimeEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/SuccessEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required: [profiles, runs, observed_at]
+              properties:
+                profiles: { type: array, items: { $ref: '#/components/schemas/CrawlerProfileRuntime' } }
+                runs: { type: array, items: { $ref: '#/components/schemas/CrawlerBrowserRun' } }
+                observed_at: { type: string, format: date-time }
+    CrawlerLeaseRecoveryEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/SuccessEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required: [recovered]
+              properties: { recovered: { type: integer, minimum: 0 } }
     SuccessEnvelope:
       type: object
       required: [data, request_id, trace_id]
