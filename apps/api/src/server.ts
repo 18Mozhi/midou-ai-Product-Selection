@@ -9,6 +9,8 @@ import { MySqlAuthIdempotency } from './mysql-auth-idempotency.js';
 import { MySqlMfaRepository } from './mysql-mfa-repository.js';
 import { TenancyService } from '@scoutops/tenancy';
 import { MySqlTenancyRepository } from './mysql-tenancy-repository.js';
+import { AuthorizationService } from '@scoutops/authorization';
+import { MySqlAuthorizationRepository } from './mysql-authorization-repository.js';
 
 const config = loadRuntimeConfig(process.env, 'api');
 const pool=createDatabasePool(config);const redisClient=createRedisConnection(config);redisClient.on('error',()=>{});const redisStore=new ScopedRedisStore(redisClient);
@@ -19,7 +21,7 @@ localAuth=new LocalAuthService({repository:authRepository,delivery:authDelivery,
 const idempotency=new MySqlAuthIdempotency(pool);const app = buildApp({ logger: true, version: config.app.version, buildSha: config.app.buildSha, configFingerprint: config.configFingerprint, readinessChecks:[
   {name:'mysql',check:async()=>{try{await pool.query('SELECT 1');return 'available';}catch{return 'unavailable';}}},
   {name:'redis',check:async(requestId,traceId)=>{try{await redisStore.connect();return (await redisStore.health(requestId,traceId)).status;}catch{return 'unavailable';}}},
-],localAuth:{service:localAuth,mfa,idempotency,webOrigin:config.app.webOrigin,secureCookie:config.nodeEnv==='production'},tenancy:{service:new TenancyService(new MySqlTenancyRepository(pool)),auth:localAuth,idempotency,webOrigin:config.app.webOrigin,secureCookie:config.nodeEnv==='production'} });
+],localAuth:{service:localAuth,mfa,idempotency,webOrigin:config.app.webOrigin,secureCookie:config.nodeEnv==='production'},tenancy:{service:new TenancyService(new MySqlTenancyRepository(pool)),auth:localAuth,idempotency,webOrigin:config.app.webOrigin,secureCookie:config.nodeEnv==='production'},authorization:{service:new AuthorizationService(new MySqlAuthorizationRepository(pool)),auth:localAuth,secureCookie:config.nodeEnv==='production'} });
 app.addHook('onClose',async()=>{await redisStore.close();await pool.end();});
 const { host, port } = config.app;
 

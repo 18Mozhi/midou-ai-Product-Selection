@@ -79,6 +79,10 @@ export interface OrganizationMembershipSummary { id:string;name:string;slug:stri
 export interface WorkspaceSummary { id:string;organization_id:string;name:string;slug:string;status:'active'|'archived';version:number; }
 export interface TeamSummary { id:string;organization_id:string;name:string;status:'active'|'archived';version:number; }
 export interface SelectedTenancyContext { organization:{id:string;name:string};workspace:WorkspaceSummary; }
+export type AuthorizationDataScope='own'|'team'|'workspace'|'organization'|'platform';
+export interface AuthorizationScopeSummary{scope:AuthorizationDataScope;workspace_id?:string|null;team_id?:string|null;}
+export interface CurrentAuthorizationSummary{organization_id:string;workspace_id:string;roles:string[];capabilities:string[];data_scopes:AuthorizationScopeSummary[];}
+export interface RoleCapabilitySummary{code:string;name:string;category:'organization'|'platform';description:string;capabilities:string[];}
 export interface MfaCodeRequest { code: string; }
 export interface MfaDisableRequest extends MfaCodeRequest { current_password: string; }
 

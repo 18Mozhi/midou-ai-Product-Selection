@@ -1,0 +1,1 @@
+CREATE TABLE `capabilities` (`code` VARCHAR(80) CHARACTER SET ascii NOT NULL,`description` VARCHAR(255) NOT NULL,`version` INT UNSIGNED NOT NULL DEFAULT 1,`created_at` DATETIME(3) NOT NULL,PRIMARY KEY(`code`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: ScoutOps Internal API
   version: 0.1.0
-  description: P00 foundation plus P01 local identity, TOTP MFA and membership-backed tenancy context contracts. Organization-visible endpoints require organization-aware authorization.
+  description: P00 foundation plus P01 identity, tenancy context and deny-by-default RBAC/data-scope contracts. Organization-visible endpoints require server-side authorization.
 servers:
   - url: /api/v1
 x-scoutops-verification:
@@ -254,6 +254,26 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '404': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /me/authorization:
+    get:
+      summary: Read the authenticated user's effective roles, capabilities and data scopes for the selected session context
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Server-computed effective authorization without internal assignment identifiers, content: { application/json: { schema: { $ref: '#/components/schemas/CurrentAuthorizationEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /org/{organizationId}/roles:
+    get:
+      summary: List the fixed organization role and capability matrix
+      description: Requires role:read, active membership, organization data scope and the same selected organization context.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses:
+        '200': { description: Read-only organization role catalog, content: { application/json: { schema: { $ref: '#/components/schemas/RoleCapabilityListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /trends:
     get:
       summary: List trend topics
@@ -435,6 +455,38 @@ components:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/TeamSummary' } } } }]
     SelectedTenancyContextEnvelope:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/SelectedTenancyContext' } } }]
+    AuthorizationScopeSummary:
+      type: object
+      additionalProperties: false
+      required: [scope]
+      properties:
+        scope: { type: string, enum: [own, team, workspace, organization, platform] }
+        workspace_id: { type: string, format: uuid, nullable: true }
+        team_id: { type: string, format: uuid, nullable: true }
+    CurrentAuthorizationSummary:
+      type: object
+      additionalProperties: false
+      required: [organization_id, workspace_id, roles, capabilities, data_scopes]
+      properties:
+        organization_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+        roles: { type: array, items: { type: string } }
+        capabilities: { type: array, items: { type: string, pattern: '^[a-z_]+:[a-z_]+' } }
+        data_scopes: { type: array, items: { $ref: '#/components/schemas/AuthorizationScopeSummary' } }
+    RoleCapabilitySummary:
+      type: object
+      additionalProperties: false
+      required: [code, name, category, description, capabilities]
+      properties:
+        code: { type: string }
+        name: { type: string }
+        category: { type: string, enum: [organization, platform] }
+        description: { type: string }
+        capabilities: { type: array, items: { type: string, pattern: '^[a-z_]+:[a-z_]+' } }
+    CurrentAuthorizationEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/CurrentAuthorizationSummary' } } }]
+    RoleCapabilityListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/RoleCapabilitySummary' } } } }]
     LocalAccountRegistration:
       type: object
       additionalProperties: false

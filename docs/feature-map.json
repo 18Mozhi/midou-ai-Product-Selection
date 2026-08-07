@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P01",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03"],
-    "activeModules": ["M01-04"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04"],
+    "activeModules": ["M01-05"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -18,7 +18,8 @@
       "crawler": "../apps/crawler/scoutops_crawler/__main__.py",
       "contracts": "../packages/contracts/src/index.ts",
       "auth": "../packages/auth/src/index.ts",
-      "tenancy": "../packages/tenancy/src/index.ts"
+      "tenancy": "../packages/tenancy/src/index.ts",
+      "authorization": "../packages/authorization/src/index.ts"
     },
     "verification": {
       "moduleCommand": "npm run verify:module -- <module-id>",
@@ -103,6 +104,18 @@
       "nonGoals": "ordinary-user organization creation, RBAC roles/data scopes, team membership and asynchronous tenancy propagation are deferred to their owning modules",
       "verificationRunId": "e529cce4-28c3-4e6c-947e-38dae71a1d6f",
       "status": "module_verified"
+    },
+    "authorization": {
+      "module": "M01-04",
+      "entrypoints": ["../packages/authorization/src/index.ts", "../apps/api/src/mysql-authorization-repository.ts", "../apps/api/src/authorization-routes.ts", "../apps/web/src/components/AuthorizationCenter.vue"],
+      "routes": ["/api/v1/me/authorization", "/api/v1/org/{organizationId}/roles"],
+      "roles": ["member", "selection_manager", "procurement_member", "organization_admin", "platform_operations_admin", "platform_security_admin", "platform_super_admin", "auditor"],
+      "dataScopes": ["own", "team", "workspace", "organization", "platform"],
+      "surfaces": ["api", "worker", "export", "file", "event", "sse"],
+      "decisionTruth": "synchronous MySQL allow and deny audit; default deny; frontend display is not authorization",
+      "nonGoals": "resource grants are M01-05; custom roles and assignment UI are not exposed in M01-04",
+      "verificationRunId": "6547bcfd-4415-4679-8a4f-27b83c07bcb9",
+      "status": "module_verified"
     }
   },
   "uiReference": {
@@ -148,8 +161,8 @@
   "apiGroups": [
     {"prefix": "/api/v1/health", "domain": "platform-runtime", "status": "foundation_implemented"},
     {"prefix": "/api/v1/auth", "domain": "identity", "status": "M01-01_local_account_M01-02_TOTP_and_M01-03_context_selection_implemented_enterprise_provider_activation_planned"},
-    {"prefix": "/api/v1/me", "domain": "identity", "status": "password_sessions_and_TOTP_MFA_implemented_profile_preferences_tokens_planned"},
-    {"prefix": "/api/v1/org", "domain": "organization", "status": "M01-03_membership_workspaces_and_teams_read_implemented_management_and_RBAC_planned"},
+    {"prefix": "/api/v1/me", "domain": "identity", "status": "password_sessions_TOTP_MFA_and_effective_authorization_implemented_profile_preferences_tokens_planned"},
+    {"prefix": "/api/v1/org", "domain": "organization", "status": "M01-03_tenancy_reads_and_M01-04_role_catalog_guard_implemented_management_writes_planned"},
     {"prefix": "/api/v1/trends", "domain": "trends", "status": "planned"},
     {"prefix": "/api/v1/opportunities", "domain": "opportunities", "status": "planned"},
     {"prefix": "/api/v1/competitors", "domain": "competitors", "status": "planned"},

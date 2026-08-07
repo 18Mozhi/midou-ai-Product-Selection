@@ -1,0 +1,23 @@
+{
+  "moduleId":"M01-04","phaseId":"P01","name":"RBAC 与数据范围","dependencies":["M01-03"],
+  "atomicTasks":[
+    {"id":"M01-04.A01","evidence":"scope freezes built-in role and data-scope authorization without resource grants"},
+    {"id":"M01-04.A02","evidence":"capability role assignment and data-scope domain"},
+    {"id":"M01-04.A03","evidence":"0011 MySQL57 role capability assignment and scope migrations"},
+    {"id":"M01-04.A04","evidence":"deny-by-default authorization service and guard"},
+    {"id":"M01-04.A05","evidence":"shared synchronous API Worker export file event SSE guard rationale"},
+    {"id":"M01-04.A06","evidence":"OpenAPI and DTO authorization contracts"},
+    {"id":"M01-04.A07","evidence":"role capability matrix desktop and 390 layout"},
+    {"id":"M01-04.A08","evidence":"loading empty error forbidden expired and read-only detail states"},
+    {"id":"M01-04.A09","evidence":"organization workspace team own and platform scope guards"},
+    {"id":"M01-04.A10","evidence":"no-new-config proof and Baota runtime instructions"},
+    {"id":"M01-04.A11","evidence":"authorization decision audit with request and trace"},
+    {"id":"M01-04.A12","evidence":"policy precedence boundary and denial unit tests"},
+    {"id":"M01-04.A13","evidence":"capability DTO OpenAPI and consumer contract tests"},
+    {"id":"M01-04.A14","evidence":"real MySQL57 cross-organization and scope integration cleanup"},
+    {"id":"M01-04.A15","evidence":"Playwright desktop and 390 role matrix visual keyboard flows"},
+    {"id":"M01-04.A16","evidence":"missing role revoked membership foreign scope and dependency drills"},
+    {"id":"M01-04.A17","evidence":"blueprint Feature Map Runbook and rollback synchronized"}
+  ],
+  "commands":["npm run build","node --test tests/m01-04/rbac-domain.test.mjs","node --test tests/m01-04/rbac-api.test.mjs","node --test tests/m01-04/rbac-contract.test.mjs","node scripts/verify-rbac-live.mjs","npx playwright test tests/e2e/m01-04-rbac.spec.ts"]
+}
