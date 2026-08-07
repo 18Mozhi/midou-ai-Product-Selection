@@ -36,6 +36,8 @@ const required = [
   'docs/runbooks/m02-02-auth-onboarding-pages.md',
   'verification/modules/M02-03.json', 'docs/architecture/m02-03-navigation-shells.md',
   'docs/runbooks/m02-03-navigation-shells.md',
+  'verification/modules/M02-04.json', 'docs/architecture/m02-04-common-ui-states.md',
+  'docs/runbooks/m02-04-common-ui-states.md',
   'docs/architecture/m00-02-config-boundary.md', 'docs/runbooks/m00-02-config-boundary.md',
   'docs/architecture/m00-01-scope.md', 'docs/architecture/m00-07-verification-scope.md',
   'docs/runbooks/m00-01-repository-foundation.md', 'docs/runbooks/m00-07-verification-framework.md',

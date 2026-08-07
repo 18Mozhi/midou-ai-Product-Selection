@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P02",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03"],
-    "activeModules": ["M02-04"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04"],
+    "activeModules": ["M02-05"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -177,6 +177,17 @@
       "imageEvidence": ["concepts 11, 15-17, 55-71", "high-resolution 01 member", "high-resolution 09 organization admin", "high-resolution 10 platform admin"],
       "nonGoals": "no business metrics, search results, quick-create mutation, notification count, new persistence, async service or environment value",
       "verificationRunId": "e0784965-a07b-4eec-84c1-f5e393d7dd27",
+      "status": "module_verified"
+    },
+    "commonUiStates": {
+      "module": "M02-04",
+      "entrypoints": ["../apps/web/src/ui/state-contract.ts", "../apps/web/src/components/UiStatePanel.vue", "../apps/web/src/components/ConfirmDialog.vue", "../apps/web/src/components/UiStateShowcase.vue"],
+      "route": "/ui-states",
+      "states": ["loading", "empty", "error", "forbidden", "expired", "blocked", "recovery", "not_found", "confirmation"],
+      "contracts": "semantic text and symbol, safe request/trace identifiers, explicit recovery, fail-closed high-impact confirmation",
+      "imageEvidence": ["concept 72 not-found", "P02 contact sheets and M02-01 design tokens"],
+      "nonGoals": "no API request, business mutation, permission inference, persistence, async service or environment value",
+      "verificationRunId": "fa7a1180-6dad-4c70-a621-10708aca95a9",
       "status": "module_verified"
     }
   },

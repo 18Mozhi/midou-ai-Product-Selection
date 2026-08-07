@@ -15,6 +15,7 @@ import AuditSecurityCenter from './components/AuditSecurityCenter.vue';
 import ThemeStudio from './components/ThemeStudio.vue';
 import OnboardingGuide from './components/OnboardingGuide.vue';
 import NavigationShell from './components/NavigationShell.vue';
+import UiStateShowcase from './components/UiStateShowcase.vue';
 import { publicConfig } from './config';
 
 type ViewState = 'loading' | 'ready' | 'error';
@@ -52,6 +53,8 @@ const isThemeView = selectedView === 'theme';
 const isOnboardingView = selectedView === 'onboarding';
 const routePath = window.location.pathname.replace(/\/$/,'') || '/';
 const navigationShell = routePath==='/home'||['/work','/trends','/opportunities','/competitors','/sourcing','/tasks','/notifications','/me'].some(path=>routePath===path||routePath.startsWith(`${path}/`))?'member':routePath==='/org-admin'||routePath.startsWith('/org-admin/')?'organization_admin':routePath==='/platform-admin'||routePath.startsWith('/platform-admin/')?'platform_admin':null;
+const isUiStatesView = selectedView === 'ui-states' || routePath === '/ui-states';
+const isNotFoundRoute = routePath !== '/' && !navigationShell && !isUiStatesView;
 
 const statusCopy = computed(() => {
   if (state.value === 'loading') return '正在确认 API 进程状态';
@@ -78,7 +81,7 @@ async function loadHealth() {
 }
 
 onMounted(() => {
-  if (!navigationShell && !isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView && !isLocalIdentityView && !isTenancyView && !isAuthorizationView && !isResourceGrantView && !isAuditSecurityView && !isThemeView && !isOnboardingView) void loadHealth();
+  if (!navigationShell && !isUiStatesView && !isNotFoundRoute && !isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView && !isLocalIdentityView && !isTenancyView && !isAuthorizationView && !isResourceGrantView && !isAuditSecurityView && !isThemeView && !isOnboardingView) void loadHealth();
 });
 </script>
 
@@ -91,6 +94,7 @@ onMounted(() => {
   <ThemeStudio v-else-if="isThemeView" :api-base-url="apiBase" />
   <OnboardingGuide v-else-if="isOnboardingView" />
   <NavigationShell v-else-if="navigationShell" :shell="navigationShell" :api-base-url="apiBase" />
+  <UiStateShowcase v-else-if="isUiStatesView || isNotFoundRoute" :initial-state="isNotFoundRoute?'not_found':undefined" />
   <div v-else class="app-shell">
     <aside class="sidebar" aria-label="基础导航">
       <a class="brand" href="/" aria-label="ScoutOps 首页">

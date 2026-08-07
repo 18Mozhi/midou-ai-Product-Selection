@@ -1,0 +1,23 @@
+{
+  "moduleId":"M02-04","phaseId":"P02","name":"通用状态组件","dependencies":["M02-01"],
+  "atomicTasks":[
+    {"id":"M02-04.A01","evidence":"scope freezes reusable UI states and confirmation semantics without business mutations"},
+    {"id":"M02-04.A02","evidence":"typed state kind action correlation and confirmation contracts"},
+    {"id":"M02-04.A03","evidence":"presentational states require no database persistence with explicit no-migration rationale"},
+    {"id":"M02-04.A04","evidence":"deterministic HTTP failure mapping and confirmation validation service"},
+    {"id":"M02-04.A05","evidence":"no Worker Crawler queue outbox retry lease or dead-letter work"},
+    {"id":"M02-04.A06","evidence":"existing success and error envelopes consumed without new API fields"},
+    {"id":"M02-04.A07","evidence":"reference-grounded state panel gallery 404 and confirmation dialog"},
+    {"id":"M02-04.A08","evidence":"keyboard retry recovery close escape acknowledgement and confirm interactions"},
+    {"id":"M02-04.A09","evidence":"components never infer permission and expose only server-provided state copy"},
+    {"id":"M02-04.A10","evidence":"theme tokens and existing browser config reused without new environment values"},
+    {"id":"M02-04.A11","evidence":"safe request_id trace_id surfaces and no credential output"},
+    {"id":"M02-04.A12","evidence":"state mapping confirmation and boundary unit tests"},
+    {"id":"M02-04.A13","evidence":"component props emits and existing envelope contract tests"},
+    {"id":"M02-04.A14","evidence":"integration in real navigation shell and static showcase without persistence"},
+    {"id":"M02-04.A15","evidence":"Playwright desktop 390 keyboard and visual snapshots"},
+    {"id":"M02-04.A16","evidence":"timeout rate limit expired forbidden dependency blocked recovery and not-found drills"},
+    {"id":"M02-04.A17","evidence":"blueprint Feature Map architecture Runbook image evidence and rollback synchronized"}
+  ],
+  "commands":["npm run build:web","node --experimental-strip-types --test tests/m02-04/ui-state-contract.test.mjs","npx playwright test tests/e2e/m02-04-ui-states.spec.ts","npm run verify:docs"]
+}
