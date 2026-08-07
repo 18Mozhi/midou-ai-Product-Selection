@@ -10,6 +10,7 @@ import DeploymentFoundation from './components/DeploymentFoundation.vue';
 import LocalIdentity from './components/LocalIdentity.vue';
 import TenancyChooser from './components/TenancyChooser.vue';
 import AuthorizationCenter from './components/AuthorizationCenter.vue';
+import ResourceGrantCenter from './components/ResourceGrantCenter.vue';
 import { publicConfig } from './config';
 
 type ViewState = 'loading' | 'ready' | 'error';
@@ -41,6 +42,7 @@ const isDeploymentView = selectedView === 'deployment';
 const isLocalIdentityView = selectedView === 'local-identity';
 const isTenancyView = selectedView === 'tenancy';
 const isAuthorizationView = selectedView === 'authorization';
+const isResourceGrantView = selectedView === 'resource-grants';
 
 const statusCopy = computed(() => {
   if (state.value === 'loading') return '正在确认 API 进程状态';
@@ -67,7 +69,7 @@ async function loadHealth() {
 }
 
 onMounted(() => {
-  if (!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView && !isLocalIdentityView && !isTenancyView && !isAuthorizationView) void loadHealth();
+  if (!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView && !isLocalIdentityView && !isTenancyView && !isAuthorizationView && !isResourceGrantView) void loadHealth();
 });
 </script>
 
@@ -75,6 +77,7 @@ onMounted(() => {
   <LocalIdentity v-if="isLocalIdentityView" />
   <TenancyChooser v-else-if="isTenancyView" :api-base-url="apiBase" />
   <AuthorizationCenter v-else-if="isAuthorizationView" :api-base-url="apiBase" />
+  <ResourceGrantCenter v-else-if="isResourceGrantView" :api-base-url="apiBase" />
   <div v-else class="app-shell">
     <aside class="sidebar" aria-label="基础导航">
       <a class="brand" href="/" aria-label="ScoutOps 首页">
@@ -93,6 +96,7 @@ onMounted(() => {
         <a class="nav-link" href="/?view=local-identity">本地账号</a>
         <a class="nav-link" href="/?view=tenancy">组织与工作区</a>
         <a class="nav-link" href="/?view=authorization">角色与权限</a>
+        <a class="nav-link" href="/?view=resource-grants">资源授权</a>
       </nav>
       <p class="phase-label">P01 · 身份与租户</p>
     </aside>

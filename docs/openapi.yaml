@@ -274,6 +274,80 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /me/resource-grants:
+    get:
+      summary: List exact-resource grants for the authenticated membership in the selected organization
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Current membership grants with derived active, expired or revoked status, content: { application/json: { schema: { $ref: '#/components/schemas/ResourceGrantListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /org/{organizationId}/resource-grants:
+    get:
+      summary: List organization resource grants
+      description: Requires role:read, organization scope and the selected organization context.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/OrganizationId' }
+        - { $ref: '#/components/parameters/Page' }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+        - { name: status, in: query, schema: { type: string, enum: [active, revoked, expired] } }
+      responses:
+        '200': { description: Paginated organization grants, content: { application/json: { schema: { $ref: '#/components/schemas/ResourceGrantListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Grant minimal actions on one resource to an active membership in the same organization
+      description: Requires role:manage. Evidence download, export, credential reference and replay actions are excluded. Expiry cannot exceed 30 days.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/CreateResourceGrantRequest' } } } }
+      responses:
+        '201': { description: Audited resource grant, content: { application/json: { schema: { $ref: '#/components/schemas/ResourceGrantEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /org/{organizationId}/resource-grant-targets:
+    get:
+      summary: List active same-organization memberships eligible for resource grants
+      description: Requires membership:read and never returns members from another organization.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses:
+        '200': { description: Eligible active members, content: { application/json: { schema: { $ref: '#/components/schemas/EligibleResourceGrantMemberListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /org/{organizationId}/resource-grants/{grantId}/expiry:
+    patch:
+      summary: Extend an active resource grant with optimistic version locking
+      description: Requires role:manage. Expired or revoked grants cannot be reactivated; create a new grant instead.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }, { $ref: '#/components/parameters/GrantId' }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ExtendResourceGrantRequest' } } } }
+      responses:
+        '200': { description: Extended and audited resource grant, content: { application/json: { schema: { $ref: '#/components/schemas/ResourceGrantEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /org/{organizationId}/resource-grants/{grantId}/revoke:
+    post:
+      summary: Revoke an active resource grant with optimistic version locking
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }, { $ref: '#/components/parameters/GrantId' }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/RevokeResourceGrantRequest' } } } }
+      responses:
+        '200': { description: Revoked and audited resource grant, content: { application/json: { schema: { $ref: '#/components/schemas/ResourceGrantEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /trends:
     get:
       summary: List trend topics
@@ -376,6 +450,11 @@ components:
       schema: { type: string, maxLength: 255 }
     OrganizationId:
       name: organizationId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    GrantId:
+      name: grantId
       in: path
       required: true
       schema: { type: string, format: uuid }
@@ -487,6 +566,74 @@ components:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/CurrentAuthorizationSummary' } } }]
     RoleCapabilityListEnvelope:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/RoleCapabilitySummary' } } } }]
+    ResourceGrantAction:
+      type: string
+      enum: [task:read, task:update, opportunity:read, opportunity:decide, competitor:read, sourcing:read, supplier_quote:manage, cost:confirm]
+    ResourceGrantSummary:
+      type: object
+      additionalProperties: false
+      required: [id, organization_id, workspace_id, resource_type, resource_id, grantee_membership_id, grantor_id, reason, status, effective_status, expires_at, revoked_at, revoked_by, revocation_reason, version, created_at, updated_at, actions]
+      properties:
+        id: { type: string, format: uuid }
+        organization_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+        resource_type: { type: string, enum: [task, opportunity, competitor, sourcing] }
+        resource_id: { type: string, format: uuid }
+        grantee_membership_id: { type: string, format: uuid }
+        grantor_id: { type: string, format: uuid }
+        reason: { type: string, minLength: 1, maxLength: 500 }
+        status: { type: string, enum: [active, revoked] }
+        effective_status: { type: string, enum: [active, revoked, expired] }
+        expires_at: { type: string, format: date-time }
+        revoked_at: { type: string, format: date-time, nullable: true }
+        revoked_by: { type: string, format: uuid, nullable: true }
+        revocation_reason: { type: string, maxLength: 500, nullable: true }
+        version: { type: integer, minimum: 1 }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+        actions: { type: array, minItems: 1, maxItems: 8, uniqueItems: true, items: { $ref: '#/components/schemas/ResourceGrantAction' } }
+    CreateResourceGrantRequest:
+      type: object
+      additionalProperties: false
+      required: [workspace_id, resource_type, resource_id, grantee_membership_id, actions, reason, expires_at]
+      properties:
+        workspace_id: { type: string, format: uuid }
+        resource_type: { type: string, enum: [task, opportunity, competitor, sourcing] }
+        resource_id: { type: string, format: uuid }
+        grantee_membership_id: { type: string, format: uuid }
+        actions: { type: array, minItems: 1, maxItems: 8, uniqueItems: true, items: { $ref: '#/components/schemas/ResourceGrantAction' } }
+        reason: { type: string, minLength: 1, maxLength: 500 }
+        expires_at: { type: string, format: date-time, description: Must be in the future and no more than 30 days from processing time }
+    ExtendResourceGrantRequest:
+      type: object
+      additionalProperties: false
+      required: [expected_version, reason, expires_at]
+      properties:
+        expected_version: { type: integer, minimum: 1 }
+        reason: { type: string, minLength: 1, maxLength: 500 }
+        expires_at: { type: string, format: date-time, description: Must extend the current expiry and remain within 30 days }
+    RevokeResourceGrantRequest:
+      type: object
+      additionalProperties: false
+      required: [expected_version, reason]
+      properties:
+        expected_version: { type: integer, minimum: 1 }
+        reason: { type: string, minLength: 1, maxLength: 500 }
+    ResourceGrantEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/ResourceGrantSummary' } } }]
+    ResourceGrantListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/ResourceGrantSummary' } }, meta: { type: object, properties: { page: { type: integer }, limit: { type: integer }, total: { type: integer } } } } }]
+    EligibleResourceGrantMember:
+      type: object
+      additionalProperties: false
+      required: [id, user_id, email, status]
+      properties:
+        id: { type: string, format: uuid, description: Membership identifier used only by the grant management form }
+        user_id: { type: string, format: uuid }
+        email: { type: string, format: email }
+        status: { type: string, enum: [active] }
+    EligibleResourceGrantMemberListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/EligibleResourceGrantMember' } } } }]
     LocalAccountRegistration:
       type: object
       additionalProperties: false

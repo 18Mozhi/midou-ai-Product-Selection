@@ -1,0 +1,23 @@
+{
+  "moduleId":"M01-05","phaseId":"P01","name":"资源临时授权","dependencies":["M01-04"],
+  "atomicTasks":[
+    {"id":"M01-05.A01","evidence":"scope freezes same-organization exact-resource temporary grants"},
+    {"id":"M01-05.A02","evidence":"grant action expiry revocation access audit domain"},
+    {"id":"M01-05.A03","evidence":"MySQL57 grant action and audit migrations with rollback"},
+    {"id":"M01-05.A04","evidence":"transactional idempotent create extend revoke and access service"},
+    {"id":"M01-05.A05","evidence":"synchronous expiry invalidation without external scheduler"},
+    {"id":"M01-05.A06","evidence":"OpenAPI DTO pagination error idempotency and version contracts"},
+    {"id":"M01-05.A07","evidence":"personal and organization grant desktop and 390 layouts"},
+    {"id":"M01-05.A08","evidence":"loading empty error forbidden expired blocked and recovery states"},
+    {"id":"M01-05.A09","evidence":"exact resource guards across API Worker export file event and SSE"},
+    {"id":"M01-05.A10","evidence":"no-new-config proof and Baota runtime instructions"},
+    {"id":"M01-05.A11","evidence":"create extend revoke expiry and actual access audit with request trace"},
+    {"id":"M01-05.A12","evidence":"same organization max 30 day and excluded action unit tests"},
+    {"id":"M01-05.A13","evidence":"OpenAPI DTO and authorization consumer contract tests"},
+    {"id":"M01-05.A14","evidence":"real MySQL57 isolation lifecycle and cleanup integration"},
+    {"id":"M01-05.A15","evidence":"Playwright desktop 390 keyboard and state visual flows"},
+    {"id":"M01-05.A16","evidence":"expired revoked foreign member conflict and dependency drills"},
+    {"id":"M01-05.A17","evidence":"blueprint Feature Map Runbook operations and rollback synchronized"}
+  ],
+  "commands":["npm run build","node --test tests/m01-05/resource-grant-domain.test.mjs","node --test tests/m01-05/resource-grant-api.test.mjs","node --test tests/m01-05/resource-grant-contract.test.mjs","node scripts/verify-resource-grants-live.mjs","npx playwright test tests/e2e/m01-05-resource-grants.spec.ts","npm run verify:docs"]
+}

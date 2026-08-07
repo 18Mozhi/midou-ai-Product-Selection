@@ -83,6 +83,13 @@ export type AuthorizationDataScope='own'|'team'|'workspace'|'organization'|'plat
 export interface AuthorizationScopeSummary{scope:AuthorizationDataScope;workspace_id?:string|null;team_id?:string|null;}
 export interface CurrentAuthorizationSummary{organization_id:string;workspace_id:string;roles:string[];capabilities:string[];data_scopes:AuthorizationScopeSummary[];}
 export interface RoleCapabilitySummary{code:string;name:string;category:'organization'|'platform';description:string;capabilities:string[];}
+export type ResourceGrantType='task'|'opportunity'|'competitor'|'sourcing';
+export type ResourceGrantStatus='active'|'revoked'|'expired';
+export interface ResourceGrantSummary{id:string;organization_id:string;workspace_id:string;resource_type:ResourceGrantType;resource_id:string;grantee_membership_id:string;grantor_id:string;reason:string;status:'active'|'revoked';effective_status:ResourceGrantStatus;expires_at:string;revoked_at:string|null;revoked_by:string|null;revocation_reason:string|null;version:number;created_at:string;updated_at:string;actions:string[];}
+export interface CreateResourceGrantRequest{workspace_id:string;resource_type:ResourceGrantType;resource_id:string;grantee_membership_id:string;actions:string[];reason:string;expires_at:string;}
+export interface ExtendResourceGrantRequest{expected_version:number;reason:string;expires_at:string;}
+export interface RevokeResourceGrantRequest{expected_version:number;reason:string;}
+export interface EligibleResourceGrantMember{id:string;user_id:string;email:string;status:'active';}
 export interface MfaCodeRequest { code: string; }
 export interface MfaDisableRequest extends MfaCodeRequest { current_password: string; }
 
