@@ -13,6 +13,7 @@ import AuthorizationCenter from './components/AuthorizationCenter.vue';
 import ResourceGrantCenter from './components/ResourceGrantCenter.vue';
 import AuditSecurityCenter from './components/AuditSecurityCenter.vue';
 import ThemeStudio from './components/ThemeStudio.vue';
+import OnboardingGuide from './components/OnboardingGuide.vue';
 import { publicConfig } from './config';
 
 type ViewState = 'loading' | 'ready' | 'error';
@@ -47,6 +48,7 @@ const isAuthorizationView = selectedView === 'authorization';
 const isResourceGrantView = selectedView === 'resource-grants';
 const isAuditSecurityView = selectedView === 'audit-security';
 const isThemeView = selectedView === 'theme';
+const isOnboardingView = selectedView === 'onboarding';
 
 const statusCopy = computed(() => {
   if (state.value === 'loading') return '正在确认 API 进程状态';
@@ -73,7 +75,7 @@ async function loadHealth() {
 }
 
 onMounted(() => {
-  if (!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView && !isLocalIdentityView && !isTenancyView && !isAuthorizationView && !isResourceGrantView && !isAuditSecurityView && !isThemeView) void loadHealth();
+  if (!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView && !isLocalIdentityView && !isTenancyView && !isAuthorizationView && !isResourceGrantView && !isAuditSecurityView && !isThemeView && !isOnboardingView) void loadHealth();
 });
 </script>
 
@@ -84,6 +86,7 @@ onMounted(() => {
   <ResourceGrantCenter v-else-if="isResourceGrantView" :api-base-url="apiBase" />
   <AuditSecurityCenter v-else-if="isAuditSecurityView" :api-base-url="apiBase" />
   <ThemeStudio v-else-if="isThemeView" :api-base-url="apiBase" />
+  <OnboardingGuide v-else-if="isOnboardingView" />
   <div v-else class="app-shell">
     <aside class="sidebar" aria-label="基础导航">
       <a class="brand" href="/" aria-label="ScoutOps 首页">

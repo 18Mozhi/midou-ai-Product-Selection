@@ -1,0 +1,23 @@
+{
+  "moduleId":"M02-02","phaseId":"P02","name":"认证与入驻页面","dependencies":["M01-06","M02-01"],
+  "atomicTasks":[
+    {"id":"M02-02.A01","evidence":"scope freezes visual flow to existing P01 identity and tenancy contracts"},
+    {"id":"M02-02.A02","evidence":"view mode onboarding step and recovery state model"},
+    {"id":"M02-02.A03","evidence":"P01 identity tenancy migrations reused with explicit no-new-schema rationale"},
+    {"id":"M02-02.A04","evidence":"existing authenticated identity and tenancy services reused unchanged"},
+    {"id":"M02-02.A05","evidence":"existing auth delivery outbox retained with no new UI-owned async work"},
+    {"id":"M02-02.A06","evidence":"existing OpenAPI auth and context contracts consumed without invented fields"},
+    {"id":"M02-02.A07","evidence":"reference-grounded login registration recovery verification tenancy onboarding layouts"},
+    {"id":"M02-02.A08","evidence":"keyboard forms loading success error expired blocked and recovery interactions"},
+    {"id":"M02-02.A09","evidence":"HttpOnly session and server-side organization workspace guards preserved"},
+    {"id":"M02-02.A10","evidence":"existing browser allowlist and Baota configuration reused without new values"},
+    {"id":"M02-02.A11","evidence":"request and trace identifiers shown on failure without secrets"},
+    {"id":"M02-02.A12","evidence":"existing P01 domain tests plus onboarding state unit tests"},
+    {"id":"M02-02.A13","evidence":"OpenAPI and frontend payload contract tests"},
+    {"id":"M02-02.A14","evidence":"real MySQL57 local auth and tenancy gates rerun"},
+    {"id":"M02-02.A15","evidence":"Playwright desktop 390 keyboard and visual snapshots for all entry flows"},
+    {"id":"M02-02.A16","evidence":"rate limit invalid login expired scope empty tenancy and dependency drills"},
+    {"id":"M02-02.A17","evidence":"blueprint Feature Map Runbook image evidence and rollback synchronized"}
+  ],
+  "commands":["npm run build","node --test tests/m02-02/auth-onboarding-contract.test.mjs","node --test tests/m01-01/local-auth.test.mjs","node --test tests/m01-03/tenancy-domain.test.mjs","node scripts/verify-local-auth-live.mjs","node scripts/verify-tenancy-live.mjs","npx playwright test tests/e2e/m02-02-auth-onboarding.spec.ts","npm run verify:docs"]
+}

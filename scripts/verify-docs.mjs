@@ -32,6 +32,8 @@ const required = [
   'docs/runbooks/m01-05-resource-grants.md',
   'verification/modules/M02-01.json', 'docs/architecture/m02-01-design-tokens-themes.md',
   'docs/runbooks/m02-01-design-tokens-themes.md',
+  'verification/modules/M02-02.json', 'docs/architecture/m02-02-auth-onboarding-pages.md',
+  'docs/runbooks/m02-02-auth-onboarding-pages.md',
   'docs/architecture/m00-02-config-boundary.md', 'docs/runbooks/m00-02-config-boundary.md',
   'docs/architecture/m00-01-scope.md', 'docs/architecture/m00-07-verification-scope.md',
   'docs/runbooks/m00-01-repository-foundation.md', 'docs/runbooks/m00-07-verification-framework.md',

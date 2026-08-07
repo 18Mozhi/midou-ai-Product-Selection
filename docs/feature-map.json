@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P02",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01"],
-    "activeModules": ["M02-02"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02"],
+    "activeModules": ["M02-03"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -156,6 +156,16 @@
       "accessibility": "status icon plus text; charts include value, period, source and freshness; keyboard radiogroup and visible focus",
       "async": "not applicable; preference reads and writes are synchronous and create no Worker, Crawler, queue, file, export, SSE or provider work",
       "verificationRunId": "3c8eef1b-fedd-48fe-9478-b6f38272dccf",
+      "status": "module_verified"
+    },
+    "authOnboardingPages": {
+      "module": "M02-02",
+      "entrypoints": ["../apps/web/src/components/LocalIdentity.vue", "../apps/web/src/components/TenancyChooser.vue", "../apps/web/src/components/OnboardingGuide.vue"],
+      "views": ["/?view=local-identity", "/?view=local-identity&mode=register", "/?view=local-identity&mode=forgot", "/?view=local-identity&mode=verify", "/?view=local-identity&mode=reset", "/?view=tenancy", "/?view=onboarding"],
+      "contracts": "reuses M01-01 local identity, M01-02 MFA and M01-03 tenancy APIs without new fields",
+      "imageEvidence": ["concepts 01-10", "high-resolution 02 login", "high-resolution 03 registration guide"],
+      "nonGoals": "no phone login, Google, Microsoft or SSO activation; no onboarding persistence; no new API, migration, environment value or production service",
+      "verificationRunId": "facffd5e-7749-4831-ac73-9db677b608a8",
       "status": "module_verified"
     }
   },
