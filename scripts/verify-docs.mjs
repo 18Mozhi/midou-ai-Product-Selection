@@ -24,6 +24,8 @@ const required = [
   'docs/runbooks/m01-01-local-identity.md',
   'verification/modules/M01-02.json', 'docs/architecture/m01-02-mfa-identity-adapters.md',
   'docs/runbooks/m01-02-mfa-identity-adapters.md',
+  'verification/modules/M01-03.json', 'docs/architecture/m01-03-tenancy-context.md',
+  'docs/runbooks/m01-03-tenancy-context.md',
   'docs/architecture/m00-02-config-boundary.md', 'docs/runbooks/m00-02-config-boundary.md',
   'docs/architecture/m00-01-scope.md', 'docs/architecture/m00-07-verification-scope.md',
   'docs/runbooks/m00-01-repository-foundation.md', 'docs/runbooks/m00-07-verification-framework.md',

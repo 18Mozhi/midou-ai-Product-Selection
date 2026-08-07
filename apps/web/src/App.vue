@@ -8,6 +8,7 @@ import ApiFoundation from './components/ApiFoundation.vue';
 import FileAuditFoundation from './components/FileAuditFoundation.vue';
 import DeploymentFoundation from './components/DeploymentFoundation.vue';
 import LocalIdentity from './components/LocalIdentity.vue';
+import TenancyChooser from './components/TenancyChooser.vue';
 import { publicConfig } from './config';
 
 type ViewState = 'loading' | 'ready' | 'error';
@@ -37,6 +38,7 @@ const isApiView = selectedView === 'api';
 const isFileAuditView = selectedView === 'file-audit';
 const isDeploymentView = selectedView === 'deployment';
 const isLocalIdentityView = selectedView === 'local-identity';
+const isTenancyView = selectedView === 'tenancy';
 
 const statusCopy = computed(() => {
   if (state.value === 'loading') return '正在确认 API 进程状态';
@@ -63,12 +65,13 @@ async function loadHealth() {
 }
 
 onMounted(() => {
-  if (!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView && !isLocalIdentityView) void loadHealth();
+  if (!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView && !isLocalIdentityView && !isTenancyView) void loadHealth();
 });
 </script>
 
 <template>
   <LocalIdentity v-if="isLocalIdentityView" />
+  <TenancyChooser v-else-if="isTenancyView" :api-base-url="apiBase" />
   <div v-else class="app-shell">
     <aside class="sidebar" aria-label="基础导航">
       <a class="brand" href="/" aria-label="ScoutOps 首页">
@@ -85,6 +88,7 @@ onMounted(() => {
         <a class="nav-link" :class="{ 'nav-link--active': isFileAuditView }" href="/?view=file-audit">文件审计</a>
         <a class="nav-link" :class="{ 'nav-link--active': isDeploymentView }" href="/?view=deployment">宝塔 S0</a>
         <a class="nav-link" href="/?view=local-identity">本地账号</a>
+        <a class="nav-link" href="/?view=tenancy">组织与工作区</a>
       </nav>
       <p class="phase-label">P01 · 身份与租户</p>
     </aside>

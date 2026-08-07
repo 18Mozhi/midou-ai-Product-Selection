@@ -75,6 +75,10 @@ export interface MfaStatus {
   confirmed_at: string | null;
   identity_adapters: IdentityAdapterCapability[];
 }
+export interface OrganizationMembershipSummary { id:string;name:string;slug:string;status:'active'|'archived';timezone:string;default_workspace_id:string|null;membership_status:'active'|'disabled'; }
+export interface WorkspaceSummary { id:string;organization_id:string;name:string;slug:string;status:'active'|'archived';version:number; }
+export interface TeamSummary { id:string;organization_id:string;name:string;status:'active'|'archived';version:number; }
+export interface SelectedTenancyContext { organization:{id:string;name:string};workspace:WorkspaceSummary; }
 export interface MfaCodeRequest { code: string; }
 export interface MfaDisableRequest extends MfaCodeRequest { current_password: string; }
 

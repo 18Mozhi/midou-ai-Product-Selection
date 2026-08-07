@@ -6,6 +6,7 @@
   "main": "dist/server.js",
   "dependencies": {
     "@scoutops/auth": "0.1.0",
+    "@scoutops/tenancy": "0.1.0",
     "@scoutops/config": "0.1.0",
     "@scoutops/contracts": "0.1.0",
     "@scoutops/database": "0.1.0",

@@ -4,6 +4,8 @@ import type { ErrorEnvelope, SuccessEnvelope } from '@scoutops/contracts';
 import { ApiError, normalizeCorrelationId, type ReadinessCheck } from './api-foundation.js';
 import { AuthError, authErrorMessage } from '@scoutops/auth';
 import { registerLocalAuthRoutes, type LocalAuthRouteOptions } from './auth-routes.js';
+import { TenancyError } from '@scoutops/tenancy';
+import { registerTenancyRoutes, type TenancyRouteOptions } from './tenancy-routes.js';
 
 export interface BuildAppOptions {
   version?: string;
@@ -13,6 +15,7 @@ export interface BuildAppOptions {
   configFingerprint?: string;
   readinessChecks?: ReadinessCheck[];
   localAuth?: LocalAuthRouteOptions;
+  tenancy?: TenancyRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -72,12 +75,14 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   });
 
   if (options.localAuth) registerLocalAuthRoutes(app, options.localAuth);
+  if (options.tenancy) registerTenancyRoutes(app, options.tenancy);
 
   app.setErrorHandler(async (error: FastifyError | ApiError, request, reply): Promise<ErrorEnvelope> => {
     const requestId=request.headers['x-request-id']!.toString();const traceId=request.headers['x-trace-id']!.toString();
-    const apiError=error instanceof ApiError?error as ApiError:null;const authError=error instanceof AuthError?error as AuthError:null;const validation='validation' in error&&Boolean(error.validation);
-    const statusCode=apiError?.statusCode??authError?.statusCode??(validation?400:500);reply.code(statusCode);
-    return{error:{code:apiError?.code??authError?.code??(validation?'schema_validation_failed':'internal_error'),message:apiError?.message??(authError?authErrorMessage(authError.code):validation?'请求字段不符合接口合同。':'服务暂时无法处理请求。'),action_hint:apiError?.actionHint??authError?.actionHint??(validation?'按 OpenAPI 修正字段后重试。':'携带 request_id 联系管理员。')},request_id:requestId,trace_id:traceId};
+    const apiError=error instanceof ApiError?error as ApiError:null;const authError=error instanceof AuthError?error as AuthError:null;const tenancyError=error instanceof TenancyError?error as TenancyError:null;const validation='validation' in error&&Boolean(error.validation);
+    const statusCode=apiError?.statusCode??authError?.statusCode??tenancyError?.statusCode??(validation?400:500);reply.code(statusCode);
+    const tenancyMessages:Record<string,string>={organization_forbidden:'无权访问该组织。',workspace_not_found:'工作区不存在。',workspace_archived:'工作区已归档。',organization_slug_conflict:'组织标识已存在。'};
+    return{error:{code:apiError?.code??authError?.code??tenancyError?.code??(validation?'schema_validation_failed':'internal_error'),message:apiError?.message??(authError?authErrorMessage(authError.code):tenancyError?tenancyMessages[tenancyError.code]??'租户请求无法处理。':validation?'请求字段不符合接口合同。':'服务暂时无法处理请求。'),action_hint:apiError?.actionHint??authError?.actionHint??tenancyError?.actionHint??(validation?'按 OpenAPI 修正字段后重试。':'携带 request_id 联系管理员。')},request_id:requestId,trace_id:traceId};
   });
 
   app.setNotFoundHandler(async (request, reply): Promise<ErrorEnvelope> => {

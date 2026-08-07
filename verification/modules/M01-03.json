@@ -1,0 +1,23 @@
+{
+  "moduleId":"M01-03","phaseId":"P01","name":"组织工作区团队","dependencies":["M00-03","M01-01"],
+  "atomicTasks":[
+    {"id":"M01-03.A01","evidence":"scope freezes organization membership and context selection without RBAC"},
+    {"id":"M01-03.A02","evidence":"organization, workspace, team and membership domains"},
+    {"id":"M01-03.A03","evidence":"0010 MySQL57 up/down migrations"},
+    {"id":"M01-03.A04","evidence":"transactional provision and context selection service"},
+    {"id":"M01-03.A05","evidence":"synchronous tenancy truth and explicit no-async rationale"},
+    {"id":"M01-03.A06","evidence":"OpenAPI and DTO list/context contracts"},
+    {"id":"M01-03.A07","evidence":"organization and workspace chooser desktop/390 layout"},
+    {"id":"M01-03.A08","evidence":"loading, empty, error, forbidden and selection states"},
+    {"id":"M01-03.A09","evidence":"membership-first organization/workspace/team guards"},
+    {"id":"M01-03.A10","evidence":"no-new-config proof and Baota runtime instructions"},
+    {"id":"M01-03.A11","evidence":"scoped audit events with request_id and trace_id"},
+    {"id":"M01-03.A12","evidence":"domain, collision and isolation unit tests"},
+    {"id":"M01-03.A13","evidence":"OpenAPI DTO and context contract tests"},
+    {"id":"M01-03.A14","evidence":"real MySQL57 cross-organization integration cleanup"},
+    {"id":"M01-03.A15","evidence":"Playwright desktop/390 visual keyboard flows"},
+    {"id":"M01-03.A16","evidence":"foreign organization, archived workspace and conflict drills"},
+    {"id":"M01-03.A17","evidence":"blueprint Feature Map Runbook and rollback synchronized"}
+  ],
+  "commands":["npm run build","node --test tests/m01-03/tenancy-domain.test.mjs","node --test tests/m01-03/tenancy-api.test.mjs","node --test tests/m01-03/tenancy-contract.test.mjs","node scripts/verify-tenancy-live.mjs","npx playwright test tests/e2e/m01-03-tenancy.spec.ts"]
+}

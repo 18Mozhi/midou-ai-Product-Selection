@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: ScoutOps Internal API
   version: 0.1.0
-  description: P00 foundation plus P01 local identity and TOTP MFA contracts. Organization-visible endpoints require organization-aware authorization.
+  description: P00 foundation plus P01 local identity, TOTP MFA and membership-backed tenancy context contracts. Organization-visible endpoints require organization-aware authorization.
 servers:
   - url: /api/v1
 x-scoutops-verification:
@@ -216,6 +216,44 @@ paths:
         '204': { description: Owned session revoked }
         '401': { $ref: '#/components/responses/Error' }
         '404': { $ref: '#/components/responses/Error' }
+  /org/memberships:
+    get:
+      summary: List organizations where the authenticated user has an active membership
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Membership-backed organization choices only, content: { application/json: { schema: { $ref: '#/components/schemas/OrganizationMembershipListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+  /org/{organizationId}/workspaces:
+    get:
+      summary: List workspaces in an organization after active-membership guard
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses:
+        '200': { description: Organization-scoped workspace choices, content: { application/json: { schema: { $ref: '#/components/schemas/WorkspaceListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+  /org/{organizationId}/teams:
+    get:
+      summary: List organization-level teams after active-membership guard
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses:
+        '200': { description: Organization-scoped team summaries without role or member details, content: { application/json: { schema: { $ref: '#/components/schemas/TeamListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+  /auth/context:
+    post:
+      summary: Select an active organization and workspace for the current session
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/TenancyContextSelection' } } } }
+      responses:
+        '200': { description: Audited session context selected idempotently, content: { application/json: { schema: { $ref: '#/components/schemas/SelectedTenancyContextEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /trends:
     get:
       summary: List trend topics
@@ -316,6 +354,11 @@ components:
       in: header
       required: true
       schema: { type: string, maxLength: 255 }
+    OrganizationId:
+      name: organizationId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
   responses:
     Success:
       description: Successful response
@@ -333,6 +376,65 @@ components:
         application/json:
           schema: { $ref: '#/components/schemas/ErrorEnvelope' }
   schemas:
+    OrganizationMembershipSummary:
+      type: object
+      additionalProperties: false
+      required: [id, name, slug, status, timezone, default_workspace_id, membership_status]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string, minLength: 2, maxLength: 120 }
+        slug: { type: string, pattern: '^[a-z0-9][a-z0-9-]{1,62}$' }
+        status: { type: string, enum: [active, archived] }
+        timezone: { type: string, maxLength: 64 }
+        default_workspace_id: { type: string, format: uuid, nullable: true }
+        membership_status: { type: string, enum: [active, disabled] }
+    WorkspaceSummary:
+      type: object
+      additionalProperties: false
+      required: [id, organization_id, name, slug, status, version]
+      properties:
+        id: { type: string, format: uuid }
+        organization_id: { type: string, format: uuid }
+        name: { type: string, minLength: 2, maxLength: 120 }
+        slug: { type: string, pattern: '^[a-z0-9][a-z0-9-]{1,62}$' }
+        status: { type: string, enum: [active, archived] }
+        version: { type: integer, minimum: 1 }
+    TeamSummary:
+      type: object
+      additionalProperties: false
+      required: [id, organization_id, name, status, version]
+      properties:
+        id: { type: string, format: uuid }
+        organization_id: { type: string, format: uuid }
+        name: { type: string, minLength: 2, maxLength: 120 }
+        status: { type: string, enum: [active, archived] }
+        version: { type: integer, minimum: 1 }
+    TenancyContextSelection:
+      type: object
+      additionalProperties: false
+      required: [organization_id, workspace_id]
+      properties:
+        organization_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+    SelectedTenancyContext:
+      type: object
+      additionalProperties: false
+      required: [organization, workspace]
+      properties:
+        organization:
+          type: object
+          additionalProperties: false
+          required: [id, name]
+          properties: { id: { type: string, format: uuid }, name: { type: string } }
+        workspace: { $ref: '#/components/schemas/WorkspaceSummary' }
+    OrganizationMembershipListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/OrganizationMembershipSummary' } } } }]
+    WorkspaceListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/WorkspaceSummary' } } } }]
+    TeamListEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/TeamSummary' } } } }]
+    SelectedTenancyContextEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/SelectedTenancyContext' } } }]
     LocalAccountRegistration:
       type: object
       additionalProperties: false
