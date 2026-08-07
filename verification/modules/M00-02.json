@@ -1,0 +1,7 @@
+{
+  "moduleId": "M00-02", "phaseId": "P00", "name": "配置边界", "dependencies": ["M00-01"],
+  "atomicTasks": [
+    {"id":"M00-02.A01","evidence":"docs/architecture/m00-02-config-boundary.md"},{"id":"M00-02.A02","evidence":"config/schema.json and RuntimeConfig"},{"id":"M00-02.A03","evidence":"0003 config release migration/rollback"},{"id":"M00-02.A04","evidence":"Node/Python config loaders"},{"id":"M00-02.A05","evidence":"API/Worker/Crawler startup validation"},{"id":"M00-02.A06","evidence":"OpenAPI health/version contract"},{"id":"M00-02.A07","evidence":"ConfigBoundary desktop/390 layout"},{"id":"M00-02.A08","evidence":"validated/rejected/restart states"},{"id":"M00-02.A09","evidence":"browser allowlist and secret non-disclosure tests"},{"id":"M00-02.A10","evidence":"env.example/schema/startup validation"},{"id":"M00-02.A11","evidence":"sanitized fingerprint and ConfigError"},{"id":"M00-02.A12","evidence":"config unit branches"},{"id":"M00-02.A13","evidence":"schema/OpenAPI/browser contract tests"},{"id":"M00-02.A14","evidence":"API and Python integration tests"},{"id":"M00-02.A15","evidence":"M00-02 Playwright visual tests"},{"id":"M00-02.A16","evidence":"invalid port/url/path/secret fault tests"},{"id":"M00-02.A17","evidence":"Feature Map/env/Runbook/rollback"}
+  ],
+  "commands": ["npm run build","node --test tests/m00-02/config-boundary.test.mjs","npm run test:python","npx playwright test tests/e2e/m00-02-config.spec.ts"]
+}

@@ -9,6 +9,8 @@ const required = [
   'scripts/verify-module.mjs', 'scripts/verify-phase.mjs', 'scripts/verify-all.mjs',
   'scripts/lib/verification-engine.mjs', 'verification/state.json',
   'verification/modules/M00-01.json', 'verification/modules/M00-07.json',
+  'verification/modules/M00-02.json', 'config/schema.json',
+  'docs/architecture/m00-02-config-boundary.md', 'docs/runbooks/m00-02-config-boundary.md',
   'docs/architecture/m00-01-scope.md', 'docs/architecture/m00-07-verification-scope.md',
   'docs/runbooks/m00-01-repository-foundation.md', 'docs/runbooks/m00-07-verification-framework.md',
   'plans/README.md', 'plans/phase-00-foundation.md', 'plans/phase-01-identity-tenancy.md',

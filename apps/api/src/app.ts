@@ -7,6 +7,7 @@ export interface BuildAppOptions {
   buildSha?: string;
   now?: () => Date;
   logger?: boolean;
+  configFingerprint?: string;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -14,6 +15,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   const now = options.now ?? (() => new Date());
   const version = options.version ?? process.env.APP_VERSION ?? '0.1.0';
   const buildSha = options.buildSha ?? process.env.BUILD_SHA ?? 'development';
+  const configFingerprint = options.configFingerprint ?? 'not-loaded';
 
   app.addHook('onRequest', async (request, reply) => {
     const requestId = request.headers['x-request-id']?.toString() || randomUUID();
@@ -43,6 +45,14 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
       trace_id: traceId,
     };
   });
+
+  app.get('/api/v1/health/version', async (request): Promise<SuccessEnvelope<{
+    version: string; build_sha: string; config_fingerprint: string;
+  }>> => ({
+    data: { version, build_sha: buildSha, config_fingerprint: configFingerprint },
+    request_id: request.headers['x-request-id']!.toString(),
+    trace_id: request.headers['x-trace-id']!.toString(),
+  }));
 
   app.setNotFoundHandler(async (request, reply): Promise<ErrorEnvelope> => {
     const requestId = request.headers['x-request-id']!.toString();

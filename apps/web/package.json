@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "dependencies": {
+    "@scoutops/config": "0.1.0",
     "vue": "^3.5.22"
   }
 }

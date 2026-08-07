@@ -5,6 +5,7 @@
   "type": "module",
   "main": "dist/server.js",
   "dependencies": {
+    "@scoutops/config": "0.1.0",
     "@scoutops/contracts": "0.1.0",
     "fastify": "^5.6.2"
   }

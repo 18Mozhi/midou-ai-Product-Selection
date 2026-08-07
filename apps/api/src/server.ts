@@ -1,8 +1,9 @@
 import { buildApp } from './app.js';
+import { loadRuntimeConfig } from '@scoutops/config';
 
-const app = buildApp({ logger: true });
-const host = process.env.APP_HOST ?? '127.0.0.1';
-const port = Number.parseInt(process.env.APP_PORT ?? '4101', 10);
+const config = loadRuntimeConfig(process.env, 'api');
+const app = buildApp({ logger: true, version: config.app.version, buildSha: config.app.buildSha, configFingerprint: config.configFingerprint });
+const { host, port } = config.app;
 
 try {
   await app.listen({ host, port });

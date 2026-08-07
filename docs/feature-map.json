@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P00",
-    "completedModules": ["M00-01", "M00-07"],
-    "activeModule": "M00-02",
+    "completedModules": ["M00-01", "M00-07", "M00-02"],
+    "activeModule": "M00-03",
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
       "web": "../apps/web/src/main.ts",
@@ -24,6 +24,13 @@
       "state": "../verification/state.json",
       "reportDirectory": "../.artifacts/verification",
       "runtimeApiExposed": false
+    },
+    "configuration": {
+      "schema": "../config/schema.json",
+      "nodeLoader": "../packages/config/src/index.ts",
+      "pythonLoader": "../apps/crawler/scoutops_crawler/config.py",
+      "browserAllowlist": ["VITE_API_BASE_URL"],
+      "versionEndpoint": "/api/v1/health/version"
     }
   },
   "uiReference": {

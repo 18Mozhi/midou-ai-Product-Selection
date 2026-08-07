@@ -5,6 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scoutops_crawler.foundation import FoundationTask, validate_task
+from scoutops_crawler.config import ConfigError, load_config
 
 
 class FoundationTaskTest(unittest.TestCase):
@@ -16,6 +17,11 @@ class FoundationTaskTest(unittest.TestCase):
         task = FoundationTask("task-1", "", "workspace-1", "req-1", "trace-1")
         with self.assertRaisesRegex(ValueError, "organization_id"):
             validate_task(task)
+
+    def test_production_requires_master_key_without_echoing_value(self) -> None:
+        with self.assertRaises(ConfigError) as raised:
+            load_config({"NODE_ENV": "production", "CREDENTIALS_MASTER_KEY": "too-short"})
+        self.assertNotIn("too-short", str(raised.exception))
 
 
 if __name__ == "__main__":

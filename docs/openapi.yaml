@@ -29,6 +29,16 @@ paths:
       responses:
         '200': { description: API can serve synchronous traffic }
         '503': { description: Dependency unavailable }
+  /health/version:
+    get:
+      summary: Sanitized build and configuration identity
+      security: []
+      responses:
+        '200':
+          description: Version data without configuration values or secrets
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HealthVersionEnvelope' }
   /trends:
     get:
       summary: List trend topics
@@ -210,3 +220,16 @@ components:
         report_path: { type: string, description: Baota-controlled local path; never a public URL }
         started_at: { type: string, format: date-time }
         finished_at: { type: string, format: date-time, nullable: true }
+    HealthVersionEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          required: [version, build_sha, config_fingerprint]
+          properties:
+            version: { type: string }
+            build_sha: { type: string }
+            config_fingerprint: { type: string, pattern: '^[a-f0-9]{64}$' }
+        request_id: { type: string }
+        trace_id: { type: string }

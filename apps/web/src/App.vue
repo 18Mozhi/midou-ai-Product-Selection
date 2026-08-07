@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import VerificationFramework from './components/VerificationFramework.vue';
+import ConfigBoundary from './components/ConfigBoundary.vue';
+import { publicConfig } from './config';
 
 type ViewState = 'loading' | 'ready' | 'error';
 
@@ -19,8 +21,10 @@ interface LiveResponse {
 const state = ref<ViewState>('loading');
 const health = ref<LiveResponse | null>(null);
 const errorRequestId = ref('');
-const apiBase = import.meta.env.VITE_API_BASE_URL || '/api/v1';
-const isVerificationView = new URLSearchParams(window.location.search).get('view') === 'verification';
+const apiBase = publicConfig.apiBaseUrl;
+const selectedView = new URLSearchParams(window.location.search).get('view');
+const isVerificationView = selectedView === 'verification';
+const isConfigView = selectedView === 'config';
 
 const statusCopy = computed(() => {
   if (state.value === 'loading') return '正在确认 API 进程状态';
@@ -47,7 +51,7 @@ async function loadHealth() {
 }
 
 onMounted(() => {
-  if (!isVerificationView) void loadHealth();
+  if (!isVerificationView && !isConfigView) void loadHealth();
 });
 </script>
 
@@ -59,13 +63,14 @@ onMounted(() => {
         <span>ScoutOps</span>
       </a>
       <nav>
-        <a class="nav-link" :class="{ 'nav-link--active': !isVerificationView }" href="/">运行状态</a>
+        <a class="nav-link" :class="{ 'nav-link--active': !isVerificationView && !isConfigView }" href="/">运行状态</a>
         <a class="nav-link" :class="{ 'nav-link--active': isVerificationView }" href="/?view=verification">自动验收</a>
+        <a class="nav-link" :class="{ 'nav-link--active': isConfigView }" href="/?view=config">配置边界</a>
       </nav>
       <p class="phase-label">P00 · 基础框架</p>
     </aside>
 
-    <main v-if="!isVerificationView" id="runtime" class="content">
+    <main v-if="!isVerificationView && !isConfigView" id="runtime" class="content">
       <header class="topbar">
         <div>
           <p class="eyebrow">FOUNDATION / M00-01</p>
@@ -118,7 +123,8 @@ onMounted(() => {
       </section>
     </main>
     <main v-else id="verification" class="content">
-      <VerificationFramework />
+      <VerificationFramework v-if="isVerificationView" />
+      <ConfigBoundary v-else :api-base-url="apiBase" />
     </main>
   </div>
 </template>
