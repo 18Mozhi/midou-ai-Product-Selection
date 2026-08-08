@@ -598,6 +598,64 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '404': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /opportunity-score-rules:
+    get:
+      summary: List versioned scoring rules in the active workspace
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Score rule list, content: { application/json: { schema: { $ref: '#/components/schemas/ScoreRuleListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Create a scoring rule draft with explicit weights and thresholds
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ScoreRuleCreateInput' } } } }
+      responses:
+        '201': { description: Draft score rule, content: { application/json: { schema: { $ref: '#/components/schemas/ScoreRuleEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /opportunity-score-rules/{scoreRuleId}/actions:
+    post:
+      summary: Submit approve reject activate or roll back a scoring rule
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: scoreRuleId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ScoreRuleActionInput' } } } }
+      responses:
+        '200': { description: Resulting score rule state, content: { application/json: { schema: { $ref: '#/components/schemas/ScoreRuleEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /opportunities/{opportunityId}/score-inputs:
+    post:
+      summary: Record a versioned score input with provenance or explicit missing fields
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: opportunityId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/OpportunityScoreInput' } } } }
+      responses:
+        '201': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /opportunities/{opportunityId}/score-runs:
+    post:
+      summary: Queue a score run against the active rule without rewriting history
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: opportunityId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/OpportunityScoreRunInput' } } } }
+      responses:
+        '202': { $ref: '#/components/responses/Success' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /tasks:
     get:
       summary: List authorized tasks
@@ -1290,7 +1348,7 @@ components:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/RoleCapabilitySummary' } } } }]
     ResourceGrantAction:
       type: string
-      enum: [task:read, task:update, opportunity:read, opportunity:decide, competitor:read, sourcing:read, supplier_quote:manage, cost:confirm]
+      enum: [task:read, task:update, opportunity:read, opportunity:decide, opportunity:approve, competitor:read, sourcing:read, supplier_quote:manage, cost:confirm]
     ResourceGrantSummary:
       type: object
       additionalProperties: false
@@ -2177,6 +2235,74 @@ components:
         action: { type: string, enum: [adopt, observe, reject] }
         reason: { type: string, minLength: 1, maxLength: 1000 }
         expected_version: { type: integer, minimum: 1 }
+    ScoreDimensionRule:
+      type: object
+      additionalProperties: false
+      required: [code, label, weight, required, evidence_group]
+      properties:
+        code: { type: string, enum: [market_demand, competition, profit, fulfillment_efficiency, customer_experience, content_fit, risk, data_quality] }
+        label: { type: string, minLength: 1, maxLength: 80 }
+        weight: { type: number, minimum: 0, maximum: 100 }
+        required: { type: boolean }
+        evidence_group: { type: string, enum: [market, competition, cost, other] }
+    ScoreRuleCreateInput:
+      type: object
+      additionalProperties: false
+      required: [version_code, name, dimensions, thresholds]
+      properties:
+        version_code: { type: string, minLength: 1, maxLength: 64, pattern: '^[A-Za-z0-9._-]+$' }
+        name: { type: string, minLength: 1, maxLength: 160 }
+        dimensions: { type: array, minItems: 2, maxItems: 8, items: { $ref: '#/components/schemas/ScoreDimensionRule' }, description: Weights must sum to 100 and at least one dimension must be required. }
+        thresholds: { type: object, additionalProperties: false, required: [recommend_min, observe_min], properties: { recommend_min: { type: number, minimum: 0, maximum: 100 }, observe_min: { type: number, minimum: 0, maximum: 100 } } }
+    ScoreRuleActionInput:
+      type: object
+      additionalProperties: false
+      required: [action, reason, expected_revision]
+      properties:
+        action: { type: string, enum: [submit, approve, reject, activate, rollback] }
+        reason: { type: string, minLength: 1, maxLength: 1000 }
+        expected_revision: { type: integer, minimum: 1 }
+        target_rule_id: { type: string, format: uuid, description: Required only for rollback. }
+    OpportunityScoreInput:
+      type: object
+      additionalProperties: false
+      required: [dimension_code, evidence_group, score_value, source_type, source_ref_id, evidence_ids, missing_fields, observed_at, expected_version]
+      properties:
+        dimension_code: { type: string, enum: [market_demand, competition, profit, fulfillment_efficiency, customer_experience, content_fit, risk, data_quality] }
+        evidence_group: { type: string, enum: [market, competition, cost, other] }
+        score_value: { type: number, minimum: 0, maximum: 100, nullable: true }
+        source_type: { type: string, minLength: 1, maxLength: 80 }
+        source_ref_id: { type: string, minLength: 1, maxLength: 160 }
+        evidence_ids: { type: array, maxItems: 100, items: { type: string, format: uuid } }
+        missing_fields: { type: array, maxItems: 100, items: { type: string, maxLength: 120 } }
+        observed_at: { type: string, format: date-time }
+        expected_version: { type: integer, minimum: 1 }
+    OpportunityScoreRunInput:
+      type: object
+      additionalProperties: false
+      required: [expected_version]
+      properties: { expected_version: { type: integer, minimum: 1 } }
+    ScoreRule:
+      allOf:
+        - { $ref: '#/components/schemas/ScoreRuleCreateInput' }
+        - type: object
+          required: [id, status, revision, submitted_at, approved_at, activated_at, updated_at]
+          properties:
+            id: { type: string, format: uuid }
+            status: { type: string, enum: [draft, pending_approval, approved, active, retired, rolled_back, rejected] }
+            revision: { type: integer, minimum: 1 }
+            submitted_at: { type: string, format: date-time, nullable: true }
+            approved_at: { type: string, format: date-time, nullable: true }
+            activated_at: { type: string, format: date-time, nullable: true }
+            updated_at: { type: string, format: date-time }
+    ScoreRuleEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties: { data: { $ref: '#/components/schemas/ScoreRule' }, request_id: { type: string }, trace_id: { type: string } }
+    ScoreRuleListEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties: { data: { type: array, items: { $ref: '#/components/schemas/ScoreRule' } }, request_id: { type: string }, trace_id: { type: string } }
     OpportunitySummary:
       type: object
       required: [id, name, market, source_type, lifecycle_status, recommendation_status, overall_score, trend_score, competition_score, profit_status, risk_level, confidence, evidence_count, source_count, coverage_status, decision_status, version, updated_at]
@@ -2222,10 +2348,12 @@ components:
           allOf:
             - { $ref: '#/components/schemas/OpportunitySummary' }
             - type: object
-              required: [score_rule_version, scored_at, evidence, decisions, section_status]
+              required: [score_rule_version, scored_at, latest_score_run, score_components, evidence, decisions, section_status]
               properties:
                 score_rule_version: { type: string, nullable: true }
                 scored_at: { type: string, format: date-time, nullable: true }
+                latest_score_run: { type: object, nullable: true, required: [id, status, coverage_percent, confidence_score, recommendation_status, missing_fields, scored_at], properties: { id: { type: string, format: uuid }, status: { type: string, enum: [calculated, insufficient_data] }, coverage_percent: { type: number, minimum: 0, maximum: 100 }, confidence_score: { type: number, minimum: 0, maximum: 100, nullable: true }, recommendation_status: { type: string, enum: [insufficient_data, recommend, observe, not_recommend] }, missing_fields: { type: array, items: { type: string } }, scored_at: { type: string, format: date-time } } }
+                score_components: { type: array, items: { type: object, required: [dimension_code, weight_percent, input_score, weighted_score, evidence_ids, missing_fields], properties: { dimension_code: { type: string }, weight_percent: { type: number }, input_score: { type: number, nullable: true }, weighted_score: { type: number, nullable: true }, evidence_ids: { type: array, items: { type: string, format: uuid } }, missing_fields: { type: array, items: { type: string } } } } }
                 evidence: { type: array, items: { type: object, required: [id, title, publisher, canonical_url, provider_id, raw_evidence_id, observed_at], properties: { id: { type: string, format: uuid }, title: { type: string }, publisher: { type: string }, canonical_url: { type: string, format: uri }, provider_id: { type: string, format: uuid }, raw_evidence_id: { type: string, format: uuid }, observed_at: { type: string, format: date-time } } } }
                 decisions: { type: array, items: { type: object, required: [id, action, reason, actor_id, created_at, opportunity_version], properties: { id: { type: string, format: uuid }, action: { type: string, enum: [adopt, observe, reject] }, reason: { type: string }, actor_id: { type: string, format: uuid }, created_at: { type: string, format: date-time }, opportunity_version: { type: integer, minimum: 2 } } } }
-                section_status: { type: object, required: [market, competition, profit, risk, execution], properties: { market: { type: string, enum: [covered, insufficient_data] }, competition: { type: string, enum: [insufficient_data] }, profit: { type: string, enum: [insufficient_data, calculated] }, risk: { type: string, enum: [insufficient_data] }, execution: { type: string, enum: [not_available] } } }
+                section_status: { type: object, required: [market, competition, profit, risk, execution], properties: { market: { type: string, enum: [covered, insufficient_data] }, competition: { type: string, enum: [covered, insufficient_data] }, profit: { type: string, enum: [insufficient_data, calculated] }, risk: { type: string, enum: [covered, insufficient_data] }, execution: { type: string, enum: [not_available] } } }

@@ -8,7 +8,7 @@
   "implementation": {
     "currentPhase": "P04",
     "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02"],
-    "activeModules": ["M04-03"],
+    "activeModules": ["M04-04"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -358,6 +358,20 @@
       "imageEvidence": ["concept 33 opportunity list", "concept 34 opportunity overview", "concept 35 market", "concept 36 competition", "concept 37 profit", "concept 38 risk", "concept 39 evidence", "concept 40 create", "concept 54 mobile opportunity", "high-resolution core page 06 opportunity dashboard"],
       "verificationRunId": "2b9658d2-eede-49e0-9920-1cd4e26a3fe9",
       "status": "module_verified"
+    },
+    "scoringEngine": {
+      "module": "M04-03",
+      "entrypoints": ["../apps/api/src/scoring-service.ts", "../apps/api/src/mysql-scoring-repository.ts", "../apps/api/src/scoring-routes.ts", "../apps/worker/src/opportunity-scoring-worker.ts", "../apps/web/src/components/ScoreRuleConsole.vue", "../apps/web/src/components/OpportunityWorkspace.vue"],
+      "routes": ["/opportunities/scoring-rules", "/api/v1/opportunity-score-rules", "/api/v1/opportunity-score-rules/{scoreRuleId}/actions", "/api/v1/opportunities/{opportunityId}/score-inputs", "/api/v1/opportunities/{opportunityId}/score-runs"],
+      "scope": "organization and workspace scoped versioned rules inputs jobs immutable runs components approvals and rollback",
+      "truthBoundary": "no default weights thresholds or missing scores; below 50 percent is insufficient and recommendation requires at least 80 percent plus market competition and cost evidence",
+      "permission": "opportunity:read for rule and explanation reads; opportunity:decide for draft submit input and rerun; opportunity:approve for approve reject activate and rollback",
+      "audit": "rule transitions input writes and scoring runs persist correlated opportunity_events and opportunity_outbox while historical runs remain immutable",
+      "configuration": ["OPPORTUNITY_SCORING_POLL_MS", "OPPORTUNITY_SCORING_LEASE_SECONDS"],
+      "runtimeBoundary": "scoring runs inside the Baota-managed Node Worker; MySQL is the rule and score truth and Redis is coordination only",
+      "imageEvidence": ["concept 34 opportunity overview", "concept 54 mobile opportunity detail", "high-resolution core page 06 opportunity dashboard"],
+      "verificationRunId": "cc645200-751b-48bf-9da3-ebc8bfa75dec",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -397,7 +411,8 @@
     {"path": "/work", "view": "TodayWork", "domain": "tasks", "status": "planned"},
     {"path": "/trends", "view": "TrendDashboard", "domain": "trends", "status": "M04-01_module_verified"},
     {"path": "/opportunities", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-02_module_verified"},
-    {"path": "/opportunities/{opportunityId}", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-02_module_verified"},
+    {"path": "/opportunities/{opportunityId}", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-03_scoring_explanation_verified"},
+    {"path": "/opportunities/scoring-rules", "view": "ScoreRuleConsole", "domain": "opportunities", "status": "M04-03_module_verified"},
     {"path": "/competitors", "view": "Competitors", "domain": "competitors", "status": "planned"},
     {"path": "/sourcing", "view": "Sourcing", "domain": "sourcing", "status": "planned"},
     {"path": "/tasks", "view": "TaskCenter", "domain": "tasks", "status": "planned"},
