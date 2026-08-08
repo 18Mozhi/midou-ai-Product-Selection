@@ -109,18 +109,21 @@ try {
   const identity = await fetchIdentity(runtime.RELEASE_CANDIDATE_BASE_URL ?? `http://127.0.0.1:${candidatePort}`);
   if (identity.build_sha !== runtime.BUILD_SHA) throw fail("candidate_build_mismatch", "candidate build_sha differs from the release task BUILD_SHA");
   const migrationName = "0026_release_rollout_m07_05.up.sql", migrationSql = await readFile(resolve(releaseRoot, "database/migrations", migrationName), "utf8"), checksum = sha256(migrationSql.replace(/\r\n/g, "\n"));
-  const [[existingMigration]] = await pool.query("SELECT checksum FROM schema_migrations WHERE name=?", [migrationName]);
-  if (!existingMigration.length) { for (const statement of migrationSql.split(";").map((value) => value.trim()).filter(Boolean)) await pool.query(statement); await pool.query("INSERT INTO schema_migrations(name,checksum,applied_at) VALUES(?,?,UTC_TIMESTAMP(3))", [migrationName, checksum]); }
-  else if (existingMigration[0].checksum !== checksum) throw fail("release_migration_drift", "M07-05 migration checksum drifted");
+  const [existingMigrationRows] = await pool.query("SELECT checksum FROM schema_migrations WHERE name=?", [migrationName]);
+  const existingMigration = existingMigrationRows[0];
+  if (!existingMigration) { for (const statement of migrationSql.split(";").map((value) => value.trim()).filter(Boolean)) await pool.query(statement); await pool.query("INSERT INTO schema_migrations(name,checksum,applied_at) VALUES(?,?,UTC_TIMESTAMP(3))", [migrationName, checksum]); }
+  else if (existingMigration.checksum !== checksum) throw fail("release_migration_drift", "M07-05 migration checksum drifted");
   const releaseId = randomUUID(), now = new Date();
-  const [[sameBuild]] = await pool.query("SELECT id FROM deployment_releases WHERE stage='S0' AND build_sha=?", [runtime.BUILD_SHA]);
-  const effectiveReleaseId = sameBuild[0]?.id ?? releaseId;
-  if (sameBuild.length) { await pool.query("DELETE FROM deployment_release_gates WHERE release_id=?", [effectiveReleaseId]); await pool.query("UPDATE deployment_releases SET app_version=?,config_fingerprint=?,migration_version=?,status='deploying',request_id=?,trace_id=?,started_at=?,finished_at=NULL,updated_at=? WHERE id=?", [runtime.APP_VERSION, identity.config_fingerprint, migrationName, requestId, traceId, now, now, effectiveReleaseId]); }
+  const [sameBuildRows] = await pool.query("SELECT id FROM deployment_releases WHERE stage='S0' AND build_sha=?", [runtime.BUILD_SHA]);
+  const sameBuild = sameBuildRows[0];
+  const effectiveReleaseId = sameBuild?.id ?? releaseId;
+  if (sameBuild) { await pool.query("DELETE FROM deployment_release_gates WHERE release_id=?", [effectiveReleaseId]); await pool.query("UPDATE deployment_releases SET app_version=?,config_fingerprint=?,migration_version=?,status='deploying',request_id=?,trace_id=?,started_at=?,finished_at=NULL,updated_at=? WHERE id=?", [runtime.APP_VERSION, identity.config_fingerprint, migrationName, requestId, traceId, now, now, effectiveReleaseId]); }
   else await pool.query("INSERT INTO deployment_releases(id,stage,app_version,build_sha,config_fingerprint,migration_version,status,approved_by,request_id,trace_id,started_at,finished_at,created_at,updated_at) VALUES(?,'S0',?,?,?,?,'deploying',NULL,?,?,?,?,?,?)", [effectiveReleaseId, runtime.APP_VERSION, runtime.BUILD_SHA, identity.config_fingerprint, migrationName, requestId, traceId, now, null, now, now]);
   const preflightGate = await writeGate(pool, effectiveReleaseId, "preflight", "passed", { metadata: { candidate_port: candidatePort, identity_verified: true, manager: "baota" } }); await event(pool, effectiveReleaseId, preflightGate, "passed");
-  const [[backup]] = await pool.query("SELECT id,finished_at FROM backup_recovery_runs WHERE run_type='restore_drill' AND status='verified' AND isolated=1 AND encrypted=1 AND integrity_verified=1 ORDER BY finished_at DESC LIMIT 1");
-  if (!backup.length) throw fail("release_backup_gate_missing", "no verified M07-04 restore drill exists");
-  const backupGate = await writeGate(pool, effectiveReleaseId, "backup", "passed", { metadata: { backup_run_id: backup[0].id, same_host_scope: true } }); await event(pool, effectiveReleaseId, backupGate, "passed");
+  const [backupRows] = await pool.query("SELECT id,finished_at FROM backup_recovery_runs WHERE run_type='restore_drill' AND status='verified' AND isolated=1 AND encrypted=1 AND integrity_verified=1 ORDER BY finished_at DESC LIMIT 1");
+  const backup = backupRows[0];
+  if (!backup) throw fail("release_backup_gate_missing", "no verified M07-04 restore drill exists");
+  const backupGate = await writeGate(pool, effectiveReleaseId, "backup", "passed", { metadata: { backup_run_id: backup.id, same_host_scope: true } }); await event(pool, effectiveReleaseId, backupGate, "passed");
   const migrationGate = await writeGate(pool, effectiveReleaseId, "migration", "passed", { metadata: { migration: migrationName, checksum } }); await event(pool, effectiveReleaseId, migrationGate, "passed");
   originalSite = await readFile(sitePath, "utf8"); const rolloutSite = siteConfig(originalSite, timingLog); await writeFile(sitePath, rolloutSite, { mode: 0o600 });
   nginxBin = runtime.RELEASE_NGINX_BIN ?? "/www/server/nginx/sbin/nginx"; nginxConfigured = true;

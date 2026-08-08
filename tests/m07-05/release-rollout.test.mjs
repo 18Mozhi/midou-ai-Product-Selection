@@ -69,3 +69,11 @@ test("M07-05 candidate slot binds through the real APP_PORT runtime contract", a
   assert.doesNotMatch(runbook, /(^|[^A-Z_])API_PORT=4103/m);
   assert.deepEqual(candidate.runtimeEnvironment, { APP_PORT: 4103 });
 });
+
+test("M07-05 MySQL single-row gates use object presence instead of array length", async () => {
+  const runner = await read("scripts/run-baota-release-rollout.mjs");
+  assert.doesNotMatch(runner, /\b(?:existingMigration|backup|sameBuild)\.length\b/);
+  assert.match(runner, /if \(!existingMigration\)/);
+  assert.match(runner, /if \(!backup\)/);
+  assert.match(runner, /if \(sameBuild\)/);
+});
