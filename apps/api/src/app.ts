@@ -145,6 +145,7 @@ import { OpenPlatformError } from "./open-platform-service.js";
 import { registerOpenPlatformRoutes, type OpenPlatformRouteOptions } from "./open-platform-routes.js";
 import { CommercialError } from "./commercial-service.js";
 import { registerCommercialRoutes, type CommercialRouteOptions } from "./commercial-routes.js";
+import { registerBackupRecoveryRoutes, type BackupRecoveryRouteOptions } from "./backup-recovery-routes.js";
 
 export interface BuildAppOptions {
   version?: string;
@@ -187,6 +188,7 @@ export interface BuildAppOptions {
   securityOperations?: SecurityOperationsRouteOptions;
   openPlatform?: OpenPlatformRouteOptions;
   commercial?: CommercialRouteOptions;
+  backupRecovery?: BackupRecoveryRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -357,6 +359,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if(options.securityOperations)registerSecurityOperationsRoutes(app,options.securityOperations);
   if(options.openPlatform)registerOpenPlatformRoutes(app,options.openPlatform);
   if(options.commercial)registerCommercialRoutes(app,options.commercial);
+  if(options.backupRecovery)registerBackupRecoveryRoutes(app,options.backupRecovery);
 
   app.setErrorHandler(
     async (

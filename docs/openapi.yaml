@@ -45,6 +45,17 @@ x-scoutops-baota-s0:
   readinessPath: /api/v1/health/ready
   asyncRuntimeStatus: structured Worker and Crawler heartbeat logs in Baota
   capacityClaim: S0 single host only; no multi-node or 10000-user claim
+x-scoutops-backup-recovery:
+  module: M07-04
+  productionManager: baota
+  primaryRegion: 惠州
+  recoveryRegion: 惠州
+  topology: same-host-local-isolation
+  mysqlRpoMinutes: 15
+  mysqlRtoMinutes: 240
+  encryption: aes-256-gcm
+  recoveryVerifiedByDefault: false
+  productionEvidence: .artifacts/verification/backup-recovery-production-evidence.json
 x-scoutops-platform-seed:
   runtimeApiExposed: false
   command: node scripts/seed-platform-admin.mjs
@@ -1769,6 +1780,46 @@ paths:
                   request_id: { type: string }
                   trace_id: { type: string }
         '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/operations/backup-recovery:
+    get:
+      summary: Read the audited backup and isolated recovery status
+      description: Requires platform:operate. Returns sanitized Huizhou same-host recovery, RPO/RTO, encrypted asset aggregates and drill checks. It explicitly does not claim host or offsite disaster protection. This endpoint never starts backup or restore and never exposes paths, hosts, credentials or organization-level contents.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200':
+          description: Truthful empty, blocked, stale or verified backup recovery state
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, request_id, trace_id]
+                properties:
+                  data:
+                    type: object
+                    required: [state, policy, latest_backup, latest_drill, recovery_copy_verified, targets, blockers, observed_at]
+                    properties:
+                      state: { type: string, enum: [empty, blocked, stale, verified] }
+                      policy:
+                        type: object
+                        required: [primary_region, recovery_region, rpo_minutes, rto_minutes, maximum_drill_age_days]
+                        properties:
+                          primary_region: { type: string, enum: [惠州] }
+                          recovery_region: { type: string, enum: [惠州] }
+                          rpo_minutes: { type: integer, minimum: 1, maximum: 15 }
+                          rto_minutes: { type: integer, minimum: 1, maximum: 240 }
+                          maximum_drill_age_days: { type: integer, minimum: 1, maximum: 90 }
+                      latest_backup: { type: object, nullable: true }
+                      latest_drill: { type: object, nullable: true }
+                      recovery_copy_verified: { type: boolean }
+                      targets: { type: array, items: { type: object } }
+                      blockers: { type: array, items: { type: object, required: [code, action_hint] } }
+                      observed_at: { type: string, format: date-time }
+                  request_id: { type: string }
+                  trace_id: { type: string }
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '429': { $ref: '#/components/responses/Error' }

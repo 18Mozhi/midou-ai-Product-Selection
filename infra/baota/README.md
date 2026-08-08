@@ -6,6 +6,6 @@
 
 本地或 CI 运行 `node scripts/verify-baota-deployment.mjs --preflight` 只证明发布包可用。每次发布后都要重新生成不含秘密的 `.artifacts/verification/baota-production-evidence.json`，并运行 `node scripts/verify-baota-deployment.mjs --production`；证据 commit 必须等于当前 Git HEAD。缺少、过期或矛盾的证据必须返回 blocked，不能人工跳过。
 
-回滚顺序：冻结新写入 → 在宝塔恢复上一构建/环境 → 逆序执行本次迁移 down（确认数据影响后）→ 重启后台项目 → 验证健康与审计 → 恢复网站。数据库、证据、导出备份目标保持深圳，生产不得用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。
+回滚顺序：冻结新写入 → 在宝塔恢复上一构建/环境 → 逆序执行本次迁移 down（确认数据影响后）→ 重启后台项目 → 验证健康与审计 → 恢复网站。数据库、证据、导出由宝塔写入当前主机内独立加密恢复目录；它不保护整机故障。生产不得用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。
 
 宝塔官方依据：命令行工具 <https://docs.bt.cn/getting-started/bt-command-line-tool>；资源管理工具 <https://docs.bt.cn/getting-started/btcli-interactive-tool>；API 总览 <https://docs.bt.cn/api/>。官方说明 API 可能随面板版本变化，因此本仓库不猜未公开的 Node/Python 项目接口；真实创建使用面板，自动验收使用应用健康、心跳、依赖与脱敏面板对象证据。

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScoutOps M07-04 production recovery evidence",
+  "type": "object",
+  "required": ["schemaVersion", "releaseCommit", "manager", "primaryRegion", "recoveryRegion", "backup", "recoveryCopy", "restoreDrill", "hostFailureProtected", "capturedAt"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "releaseCommit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "manager": {"const": "baota"},
+    "primaryRegion": {"const": "惠州"},
+    "recoveryRegion": {"const": "惠州"},
+    "backup": {"type": "object", "required": ["encrypted", "integrityVerified", "pitrVerified", "coordinatesEmbedded", "binlogRetentionDays", "rpoMinutes"], "properties": {"encrypted": {"const": true}, "integrityVerified": {"const": true}, "pitrVerified": {"const": true}, "coordinatesEmbedded": {"const": true}, "binlogRetentionDays": {"type": "integer", "minimum": 1}, "rpoMinutes": {"type": "number", "maximum": 15}}},
+    "recoveryCopy": {"type": "object", "required": ["region", "sameHost", "separateEncryptedRoot", "integrityVerified"], "properties": {"region": {"const": "惠州"}, "sameHost": {"const": true}, "separateEncryptedRoot": {"const": true}, "integrityVerified": {"const": true}}},
+    "restoreDrill": {"type": "object", "required": ["isolated", "rtoMinutes", "businessDataVerified", "auditChainVerified", "evidenceHashVerified", "permissionBoundaryVerified"], "properties": {"isolated": {"const": true}, "rtoMinutes": {"type": "number", "maximum": 240}, "businessDataVerified": {"const": true}, "auditChainVerified": {"const": true}, "evidenceHashVerified": {"const": true}, "permissionBoundaryVerified": {"const": true}}},
+    "hostFailureProtected": {"const": false},
+    "capturedAt": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

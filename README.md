@@ -10,7 +10,7 @@ P00 基础框架已通过 M00-01 至 M00-08 模块门禁和 P00 阶段门禁，�
 
 - Vue 3 + TypeScript；Node.js API/Worker；Python Crawler。
 - MySQL 5.7、Redis、Playwright；生产服务均由宝塔面板管理。
-- 生产主机房：广东惠州；备份恢复目标：广东深圳。
+- 生产与当前备份恢复均使用广东惠州现有单机；同机加密副本与逻辑隔离恢复不保护整机、磁盘或机房故障。
 - AI：OpenAI 兼容服务，已验证模型查询端点为 `/v1/models`，模型 `Qwen3.5-9B-AWQ-4bit`。
 
 ## 常用命令

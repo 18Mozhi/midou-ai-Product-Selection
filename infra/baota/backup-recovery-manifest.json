@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "module": "M07-04",
+  "productionManager": "baota",
+  "primaryRegion": "惠州",
+  "recoveryRegion": "惠州",
+  "topology": "S0-single-host-local-isolation",
+  "targets": {
+    "mysql": { "strategy": "daily-full-plus-binlog", "rpoMinutes": 15, "rtoMinutes": 240 },
+    "evidence": { "strategy": "daily-encrypted-copy", "organizationScoped": true },
+    "exports": { "strategy": "daily-encrypted-copy", "organizationScoped": true },
+    "config": { "strategy": "versioned-pre-migration-copy", "containsSecrets": false }
+  },
+  "encryption": { "algorithm": "aes-256-gcm", "keySource": "baota-restricted-environment" },
+  "recoveryDrill": {
+    "isolated": true,
+    "maximumAgeDays": 90,
+    "requiredChecks": ["business-data", "audit-chain", "evidence-hash", "permission-boundary"]
+  },
+  "recoveryCopy": {
+    "requiredRegion": "惠州",
+    "isolation": "same-host-separate-encrypted-root-and-restore-database",
+    "statusSource": "backup_recovery_assets",
+    "verifiedByDefault": false
+  },
+  "productionServices": [],
+  "notes": [
+    "备份由宝塔计划任务执行，不创建面板外常驻服务。",
+    "只有同机独立加密目录中的恢复副本和隔离恢复校验均通过时才显示 verified。",
+    "同机备份不保护整机、磁盘或机房故障，不声明异地灾备能力。"
+  ]
+}

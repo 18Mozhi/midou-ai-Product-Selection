@@ -54,9 +54,11 @@
       "M06-04",
       "M06-05",
       "M06-06",
-      "M07-01"
+      "M07-01",
+      "M07-02",
+      "M07-03"
     ],
-    "activeModules": ["M07-02"],
+    "activeModules": ["M07-04"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1367,6 +1369,28 @@
       "configuration": ["VERIFY_COMMAND_TIMEOUT_MS", "VERIFY_REPORT_DIR"],
       "verificationRunId": "3bd453d5-0016-418e-8c33-e42132341def",
       "status": "module_verified"
+    },
+    "baotaProductionDeployment": {
+      "module": "M07-03",
+      "entrypoints": ["../infra/baota/service-manifest.json", "../scripts/verify-baota-deployment.mjs", "../apps/web/src/components/DeploymentFoundation.vue"],
+      "routes": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
+      "scope": "惠州 S0 单主机、宝塔管理的 Web API Worker Crawler MySQL Redis release backup and log objects",
+      "truthBoundary": "same-commit production evidence, local-only private services and sanitized health; no P08 capacity claim",
+      "configuration": ["APP_VERSION", "BUILD_SHA", "WEB_ORIGIN"],
+      "verificationRunId": "950732f7-9b5a-4d4a-b271-d5ec0cf975d9",
+      "status": "module_verified"
+    },
+    "backupRecovery": {
+      "module": "M07-04",
+      "entrypoints": ["../scripts/backup-recovery.mjs", "../apps/api/src/backup-recovery-service.ts", "../apps/api/src/mysql-backup-recovery-repository.ts", "../apps/api/src/backup-recovery-routes.ts", "../apps/web/src/components/BackupRecoveryCenter.vue"],
+      "routes": ["/platform-admin/operations", "/api/v1/platform/operations/backup-recovery"],
+      "scope": "MySQL evidence export and non-secret config encrypted backups on the current Huizhou host with a separate encrypted recovery root",
+      "truthBoundary": "verified only after same-host encrypted-copy integrity and a logically isolated restore check business data audit chain evidence hashes and permission boundaries within 90 days; host disk and site failure are not protected",
+      "permission": "platform:operate read only; backup and restore execute only in Baota scheduled tasks",
+      "configuration": ["BACKUP_PRIMARY_REGION", "BACKUP_RECOVERY_REGION", "BACKUP_RPO_MINUTES", "BACKUP_RTO_MINUTES", "BACKUP_MAX_DRILL_AGE_DAYS", "BACKUP_RETENTION_DAYS", "BACKUP_PRIMARY_ROOT", "BACKUP_LOCAL_COPY_ROOT", "BACKUP_DRILL_ROOT", "BACKUP_ENCRYPTION_KEY", "BACKUP_MYSQL_CLIENT", "BACKUP_MYSQLDUMP_CLIENT", "BACKUP_MYSQLBINLOG_CLIENT", "BACKUP_MYSQL_ADMIN_PASSWORD_FILE", "BACKUP_RELEASE_ROOT"],
+      "runtimeBoundary": "S0 finite Baota tasks with AES-256-GCM on one host; no new daemon, offsite recovery, host-failure protection or multi-node claim",
+      "imageEvidence": ["concept 61 platform operations overview", "core 10 platform cockpit", "desktop and 390 recovery states"],
+      "status": "implementation_ready_production_recovery_pending"
     }
   },
   "phaseVerification": {

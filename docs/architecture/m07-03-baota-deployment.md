@@ -12,7 +12,7 @@ M07-03 将 M00-08 骨架部署到惠州 `192.168.1.220` 与 `midouai.mozhiz.cn`�
 - Nginx 同时反代 `/api/`、`/open/` 和无缓冲 SSE；静态站点回退到 `index.html`，HTTP 强制跳转 HTTPS，并启用 HSTS 与安全响应头。
 - API、Worker、Crawler 从 `config/schema.json` 对应环境组读取宝塔受限配置；浏览器只可读取 `VITE_API_BASE_URL`。
 - Worker/Crawler 输出结构化心跳并优雅处理 SIGTERM/SIGINT。宝塔统一展示和轮转站点、项目与任务日志；日志禁止密码、Cookie、Token、API Key、私钥和主密钥。
-- S0 只声明 100 用户和 5–20 并发业务用户，不声明多节点或 10,000 用户能力；深圳恢复目标必须到 M07-04 演练通过后才能签发。
+- S0 只声明 100 用户和 5–20 并发业务用户，不声明多节点或 10,000 用户能力；M07-04 仅签发同机逻辑隔离恢复，不签发整机或异地灾备。
 
 ## 自动证据
 

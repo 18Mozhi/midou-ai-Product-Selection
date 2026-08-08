@@ -127,6 +127,7 @@ export interface RuntimeConfig {
   securityOperations: { defaultWindow: "24h"|"7d"|"30d"; recentLimit: number };
   openPlatform: { clientTtlDays:number; defaultQuotaPerMinute:number; maxQuotaPerMinute:number; timestampToleranceSeconds:number; nonceTtlSeconds:number; webhookPollMs:number; webhookLeaseSeconds:number; webhookTimeoutMs:number };
   commercial: { recentLimit:number };
+  backupRecovery: { primaryRegion:string; recoveryRegion:string; rpoMinutes:number; rtoMinutes:number; maximumDrillAgeDays:number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -575,6 +576,13 @@ export function loadRuntimeConfig(
       webhookTimeoutMs: integer(env,"WEBHOOK_DELIVERY_TIMEOUT_MS",10000,1000,30000),
     },
     commercial: { recentLimit: integer(env,"COMMERCIAL_RECENT_LIMIT",100,10,500) },
+    backupRecovery: {
+      primaryRegion: text(env,"BACKUP_PRIMARY_REGION","惠州"),
+      recoveryRegion: text(env,"BACKUP_RECOVERY_REGION","惠州"),
+      rpoMinutes: integer(env,"BACKUP_RPO_MINUTES",15,1,1440),
+      rtoMinutes: integer(env,"BACKUP_RTO_MINUTES",240,1,10080),
+      maximumDrillAgeDays: integer(env,"BACKUP_MAX_DRILL_AGE_DAYS",90,1,365),
+    },
     evidence: {
       maxRawBytes: integer(
         env,

@@ -130,7 +130,7 @@ onMounted(() => {
     </article>
     <article>
       <span class="state-label state-label--blocked">RESTORE DRILL · M07-04</span>
-      <h3>备份与恢复</h3><p>备份任务已由宝塔管理；恢复演练及深圳恢复证据在 M07-04 验收后签发。</p>
+      <h3>备份与恢复</h3><p>备份任务由宝塔管理；M07-04 仅验收当前主机内的加密副本与隔离恢复，不声明异地灾备。</p>
     </article>
   </section>
 

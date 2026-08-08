@@ -7,7 +7,7 @@
     "host": "192.168.1.220",
     "domain": "midouai.mozhiz.cn",
     "primaryRegion": "惠州",
-    "recoveryRegion": "深圳",
+    "recoveryRegion": "惠州",
     "publicPorts": [80, 443],
     "privatePorts": [4101, 3306, 6379]
   },
@@ -91,7 +91,7 @@
       "kind": "baota-backup-task",
       "status": "owned-by-M07-04",
       "targets": ["product_scout database", "EVIDENCE_ROOT", "EXPORT_ROOT"],
-      "recoveryRegion": "深圳",
+      "recoveryRegion": "惠州",
       "public": false
     }
   ],

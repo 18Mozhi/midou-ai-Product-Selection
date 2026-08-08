@@ -26,6 +26,7 @@ import CollectionOperationsConsole from "./CollectionOperationsConsole.vue";
 import SecurityOperationsCenter from "./SecurityOperationsCenter.vue";
 import OpenPlatformCenter from "./OpenPlatformCenter.vue";
 import CommercialOperationsCenter from "./CommercialOperationsCenter.vue";
+import BackupRecoveryCenter from "./BackupRecoveryCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -260,6 +261,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   ),
   isOrganizationAdmin = computed(() => props.shell === "organization_admin" && routePath.startsWith("/org-admin")),
   isPlatformDashboard = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin"),
+  isBackupRecovery = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/operations"),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
   ),
@@ -290,6 +292,8 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
 const phaseLabel = computed(() =>
   isOrganizationAdmin.value
     ? "P06"
+    : isBackupRecovery.value
+      ? "P07"
     : isPlatformDashboard.value
       ? "P06"
     : isTasks.value || isApprovals.value || isNotifications.value
@@ -317,6 +321,8 @@ const pageSummary = computed(() =>
     ? "组织资料、成员、角色、工作区、团队、审批、Token 与审计均受当前组织权限和审计边界保护。"
     : isPlatformDashboard.value
       ? "来源健康、任务、队列、质量、文件增长和告警均来自平台当前运行事实。"
+    : isBackupRecovery.value
+      ? "备份副本、RPO/RTO 与隔离恢复结论均来自可审计记录；未验证条件明确阻断。"
     : isTasks.value || isApprovals.value || isNotifications.value
     ? "任务状态、负责人、期限、评论、转交和 SLA 均由当前工作区真实 API 驱动。"
     : isSourcing.value
@@ -539,6 +545,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           :organization-id="guard?.organization_id || ''"
         />
         <PlatformDashboard v-else-if="isPlatformDashboard" :api-base-url="apiBaseUrl" />
+        <BackupRecoveryCenter v-else-if="isBackupRecovery" :api-base-url="apiBaseUrl" />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"
