@@ -1,0 +1,32 @@
+{
+  "moduleId": "M06-06",
+  "phaseId": "P06",
+  "name": "Commercial Operations Reservation",
+  "dependencies": ["M01-06", "M06-02", "M06-05"],
+  "atomicTasks": [
+    { "id": "M06-06.A01", "evidence": "quota-only scope freeze without price payment invoice or tax contracts" },
+    { "id": "M06-06.A02", "evidence": "versioned plan assignment adjustment usage and event objects" },
+    { "id": "M06-06.A03", "evidence": "MySQL57 commercial migration indexes constraints and destructive rollback" },
+    { "id": "M06-06.A04", "evidence": "validated service version locks and concurrent idempotent repository writes" },
+    { "id": "M06-06.A05", "evidence": "synchronous persisted usage and existing transactional outbox boundary with no new daemon" },
+    { "id": "M06-06.A06", "evidence": "OpenAPI quota plan assignment adjustment and error contracts" },
+    { "id": "M06-06.A07", "evidence": "concept 70 and 71 desktop and 390 commercial operations UI" },
+    { "id": "M06-06.A08", "evidence": "loading empty error rate-limited blocked confirmation and recovery states" },
+    { "id": "M06-06.A09", "evidence": "platform operate same-origin idempotency version and organization validation guards" },
+    { "id": "M06-06.A10", "evidence": "validated commercial recent limit and Baota restart boundary" },
+    { "id": "M06-06.A11", "evidence": "commercial views platform audit commercial events organization outbox request trace" },
+    { "id": "M06-06.A12", "evidence": "quota validation version organization and forbidden payment unit coverage" },
+    { "id": "M06-06.A13", "evidence": "OpenAPI frontend config and feature map contract coverage" },
+    { "id": "M06-06.A14", "evidence": "real MySQL57 plan assignment usage adjustment idempotency audit event cleanup" },
+    { "id": "M06-06.A15", "evidence": "Playwright desktop and 390 visual snapshots" },
+    { "id": "M06-06.A16", "evidence": "rollback up migration and payment-boundary drills" },
+    { "id": "M06-06.A17", "evidence": "blueprint feature map env architecture runbook tuning restart rollback" }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m06-06/commercial.test.mjs",
+    "node scripts/verify-commercial-live.mjs",
+    "npx playwright test tests/e2e/m06-06-commercial.spec.ts",
+    "npm run verify:docs"
+  ]
+}

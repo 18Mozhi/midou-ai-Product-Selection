@@ -126,6 +126,7 @@ export interface RuntimeConfig {
   collectionConsole: { recentLimit: number };
   securityOperations: { defaultWindow: "24h"|"7d"|"30d"; recentLimit: number };
   openPlatform: { clientTtlDays:number; defaultQuotaPerMinute:number; maxQuotaPerMinute:number; timestampToleranceSeconds:number; nonceTtlSeconds:number; webhookPollMs:number; webhookLeaseSeconds:number; webhookTimeoutMs:number };
+  commercial: { recentLimit:number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -573,6 +574,7 @@ export function loadRuntimeConfig(
       webhookLeaseSeconds: integer(env,"WEBHOOK_DELIVERY_LEASE_SECONDS",60,30,3600),
       webhookTimeoutMs: integer(env,"WEBHOOK_DELIVERY_TIMEOUT_MS",10000,1000,30000),
     },
+    commercial: { recentLimit: integer(env,"COMMERCIAL_RECENT_LIMIT",100,10,500) },
     evidence: {
       maxRawBytes: integer(
         env,

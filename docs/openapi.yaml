@@ -1842,6 +1842,50 @@ paths:
       security: [{ HttpOnlySession: [] }]
       parameters: [{ name: deliveryId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
       responses: { '202': { description: New queued delivery with source evidence }, '409': { $ref: '#/components/responses/Error' } }
+  /platform/commercial:
+    get:
+      summary: Read quota-only commercial plans and optional organization usage
+      description: Requires platform:operate. With organization_id, aggregates the current assignment period from persisted collection task, open API usage and report export facts. Does not return price, payment, invoice or tax data.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: organization_id, in: query, required: false, schema: { type: string, format: uuid } }]
+      responses: { '200': { description: Plans and optional organization assignment usage and effective quotas }, '400': { $ref: '#/components/responses/Error' }, '401': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' } }
+  /platform/commercial/plans:
+    post:
+      summary: Create a versioned quota plan draft
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [code, name, quotas, reason], properties: { code: { type: string, pattern: '^[a-z0-9][a-z0-9_-]{0,79}$' }, name: { type: string, maxLength: 120 }, description: { type: string, nullable: true, maxLength: 500 }, quotas: { type: object, additionalProperties: false, properties: { collection_tasks: { type: integer, minimum: 0, maximum: 1000000000 }, open_api_requests: { type: integer, minimum: 0, maximum: 1000000000 }, report_exports: { type: integer, minimum: 0, maximum: 1000000000 } } }, reason: { type: string, maxLength: 500 } } } } } }
+      responses: { '201': { description: Draft plan result }, '400': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /platform/commercial/plans/{planId}:
+    patch:
+      summary: Update, activate or retire a versioned quota plan
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: planId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '200': { description: Updated plan version }, '400': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /platform/commercial/assignments:
+    post:
+      summary: Assign an active quota plan and explicit period to an organization
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '201': { description: Current organization assignment }, '400': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /platform/commercial/assignments/{assignmentId}/actions:
+    post:
+      summary: Suspend, resume or end a versioned organization plan assignment
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: assignmentId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '200': { description: Updated assignment version }, '400': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /platform/commercial/adjustments:
+    post:
+      summary: Create an audited nonzero quota adjustment
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '201': { description: Active quota adjustment }, '400': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /platform/commercial/adjustments/{adjustmentId}/revoke:
+    post:
+      summary: Revoke a versioned quota adjustment with a reason
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: adjustmentId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '200': { description: Revoked adjustment version }, '400': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
   /open/v1/status:
     servers: [{ url: / }]
     get:

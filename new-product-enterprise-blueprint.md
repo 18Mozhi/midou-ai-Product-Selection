@@ -315,6 +315,13 @@ M04-07 实现合同：AI 辅助分析只读取当前组织、当前工作区内�
 - Webhook 仅允许无凭证的 HTTPS 443 目标；Worker 每次尝试重新解析 DNS，拒绝私网、环回、链路本地和多播地址，并将 TLS 请求固定到已验证地址。签名覆盖 timestamp、delivery_id 与原始 body，失败按 60/300/900 秒重试，第四次进入死信，人工重放生成新 delivery 并保留来源证据。
 - 管理写入同步记录平台审计和事务 outbox；投递状态写不可变事件。API 与 Worker 均由宝塔管理并读取同一主密钥，本模块维持 S0 单机边界，不声明 P08 容量。
 
+#### M06-06 商业运营预留实现基线
+
+- `/platform-admin/commercial` 与 `/api/v1/platform/commercial/*` 只允许 `platform:operate`；写操作要求同源、`Idempotency-Key`、原因与版本锁。套餐、组织当前分配和人工配额调整均保留版本与审计。
+- 当前计量只读取已有 MySQL 事实：`collection_tasks`、`open_api_usage` 和 `report_exports`，按组织与明确账期聚合。有效配额为基础配额加当前有效人工调整且不低于零；Redis 与浏览器状态不是用量真相。
+- 本模块不实现支付扣款，不定义价格、币种、税率、发票、支付 Provider 或自动强制限额规则。没有权威业务值时不得生成默认套餐或价格。
+- 读取、变更分别写 `commercial_views`、平台审计和不可变 `commercial_events`；组织级变更还同步写事务 outbox。本模块不新增 Worker/Crawler 或面板外服务，仍维持 S0 宝塔 Node API 边界。
+
 ### 4.3 平台管理员初始化
 
 - 首次部署必须通过一次性安全种子创建平台超级管理员；禁止固定默认账号和默认密码。

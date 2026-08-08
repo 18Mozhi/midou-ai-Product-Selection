@@ -143,6 +143,8 @@ import { SecurityOperationsError } from "./security-operations-service.js";
 import { registerSecurityOperationsRoutes, type SecurityOperationsRouteOptions } from "./security-operations-routes.js";
 import { OpenPlatformError } from "./open-platform-service.js";
 import { registerOpenPlatformRoutes, type OpenPlatformRouteOptions } from "./open-platform-routes.js";
+import { CommercialError } from "./commercial-service.js";
+import { registerCommercialRoutes, type CommercialRouteOptions } from "./commercial-routes.js";
 
 export interface BuildAppOptions {
   version?: string;
@@ -184,6 +186,7 @@ export interface BuildAppOptions {
   collectionConsole?: CollectionConsoleRouteOptions;
   securityOperations?: SecurityOperationsRouteOptions;
   openPlatform?: OpenPlatformRouteOptions;
+  commercial?: CommercialRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -353,6 +356,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if (options.collectionConsole) registerCollectionConsoleRoutes(app, options.collectionConsole);
   if(options.securityOperations)registerSecurityOperationsRoutes(app,options.securityOperations);
   if(options.openPlatform)registerOpenPlatformRoutes(app,options.openPlatform);
+  if(options.commercial)registerCommercialRoutes(app,options.commercial);
 
   app.setErrorHandler(
     async (
@@ -432,6 +436,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
       const collectionConsoleError = error instanceof CollectionConsoleError ? error : null;
       const securityOperationsError = error instanceof SecurityOperationsError ? error : null;
       const openPlatformError = error instanceof OpenPlatformError ? error : null;
+      const commercialError = error instanceof CommercialError ? error : null;
       const trendError =
         error instanceof TrendServiceError
           ? (error as TrendServiceError)
@@ -487,6 +492,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         collectionConsoleError?.statusCode ??
         securityOperationsError?.statusCode ??
         openPlatformError?.statusCode ??
+        commercialError?.statusCode ??
         trendError?.statusCode ??
         opportunityError?.statusCode ??
         scoringError?.statusCode ??
@@ -531,6 +537,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         collectionConsoleError?.code ??
         securityOperationsError?.code ??
         openPlatformError?.code ??
+        commercialError?.code ??
             trendError?.code ??
             opportunityError?.code ??
             scoringError?.code ??
@@ -553,6 +560,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             collectionConsoleError?.message ??
             securityOperationsError?.message ??
             openPlatformError?.message ??
+            commercialError?.message ??
             trendError?.message ??
             opportunityError?.message ??
             scoringError?.message ??
@@ -602,6 +610,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         collectionConsoleError?.actionHint ??
         securityOperationsError?.actionHint ??
         openPlatformError?.actionHint ??
+        commercialError?.actionHint ??
             trendError?.actionHint ??
             opportunityError?.actionHint ??
             scoringError?.actionHint ??

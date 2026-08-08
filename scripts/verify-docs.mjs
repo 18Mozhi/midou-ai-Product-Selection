@@ -64,6 +64,7 @@ const required = [
   'docs/runbooks/m06-03-collection-console.md'
   ,'verification/modules/M06-04.json', 'docs/architecture/m06-04-security-operations.md',
   'verification/modules/M06-05.json', 'docs/architecture/m06-05-open-platform.md', 'docs/runbooks/m06-05-open-platform.md',
+  'verification/modules/M06-06.json', 'docs/architecture/m06-06-commercial.md', 'docs/runbooks/m06-06-commercial.md',
   'docs/runbooks/m06-04-security-operations.md'
 ];
 
