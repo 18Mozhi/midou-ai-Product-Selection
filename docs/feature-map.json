@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P04",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01"],
-    "activeModules": ["M04-02"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02"],
+    "activeModules": ["M04-03"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -343,6 +343,21 @@
       "imageEvidence": ["concept 28 trend list", "concept 29 trend detail", "concept 30 trend timeline", "concept 31 trend monitoring rules", "concept 32 create monitoring rule", "high-resolution core page 05 trend dashboard"],
       "verificationRunId": "e08c99d0-884c-4598-9281-44ac7af5a939",
       "status": "module_verified"
+    },
+    "opportunityDomain": {
+      "module": "M04-02",
+      "entrypoints": ["../apps/api/src/opportunity-service.ts", "../apps/api/src/mysql-opportunity-repository.ts", "../apps/api/src/opportunity-routes.ts", "../apps/worker/src/opportunity-refresh-worker.ts", "../apps/web/src/components/OpportunityWorkspace.vue"],
+      "routes": ["/opportunities", "/opportunities/{opportunityId}", "/api/v1/opportunities", "/api/v1/opportunities/{opportunityId}", "/api/v1/opportunities/{opportunityId}/decisions"],
+      "scope": "organization and workspace scoped opportunity candidates, trend evidence links, human decisions and refresh jobs",
+      "truthBoundary": "M04-02 never invents scores, ROI or risk; unavailable M04-03 to M04-06 inputs remain null, unknown or insufficient_data",
+      "refresh": "Baota Node Worker leases opportunity refresh jobs and links only persisted trend signals; trend-only evidence remains partial because competition and cost inputs are absent",
+      "permission": "opportunity:read for scoped reads; existing opportunity:decide for candidate creation and required-reason decisions; same-origin Origin and Idempotency-Key required",
+      "audit": "creation, evidence refresh and decision changes persist correlated opportunity_events and opportunity_outbox; decisions do not rewrite scores or evidence",
+      "configuration": ["OPPORTUNITY_REFRESH_POLL_MS", "OPPORTUNITY_REFRESH_LEASE_SECONDS"],
+      "runtimeBoundary": "refresh runs inside the Baota-managed Node Worker; no panel-external production service",
+      "imageEvidence": ["concept 33 opportunity list", "concept 34 opportunity overview", "concept 35 market", "concept 36 competition", "concept 37 profit", "concept 38 risk", "concept 39 evidence", "concept 40 create", "concept 54 mobile opportunity", "high-resolution core page 06 opportunity dashboard"],
+      "verificationRunId": "2b9658d2-eede-49e0-9920-1cd4e26a3fe9",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -381,7 +396,8 @@
     {"path": "/home", "view": "TodayActionCenter", "domain": "work", "status": "planned"},
     {"path": "/work", "view": "TodayWork", "domain": "tasks", "status": "planned"},
     {"path": "/trends", "view": "TrendDashboard", "domain": "trends", "status": "M04-01_module_verified"},
-    {"path": "/opportunities", "view": "Opportunities", "domain": "opportunities", "status": "planned"},
+    {"path": "/opportunities", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-02_module_verified"},
+    {"path": "/opportunities/{opportunityId}", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-02_module_verified"},
     {"path": "/competitors", "view": "Competitors", "domain": "competitors", "status": "planned"},
     {"path": "/sourcing", "view": "Sourcing", "domain": "sourcing", "status": "planned"},
     {"path": "/tasks", "view": "TaskCenter", "domain": "tasks", "status": "planned"},
@@ -399,7 +415,7 @@
     {"prefix": "/api/v1/me", "domain": "identity", "status": "password_sessions_TOTP_MFA_authorization_resource_grants_and_scoped_ui_preferences_implemented_profile_notification_preferences_tokens_planned"},
     {"prefix": "/api/v1/org", "domain": "organization", "status": "M01-03_tenancy_M01-04_role_catalog_and_M01-05_exact_resource_grants_implemented_remaining_management_planned"},
     {"prefix": "/api/v1/trends", "domain": "trends", "status": "M04-01_topics_signals_evidence_follows_relevance_and_monitoring_rules_verified"},
-    {"prefix": "/api/v1/opportunities", "domain": "opportunities", "status": "planned"},
+    {"prefix": "/api/v1/opportunities", "domain": "opportunities", "status": "M04-02_list_create_detail_decisions_and_evidence_refresh_verified"},
     {"prefix": "/api/v1/competitors", "domain": "competitors", "status": "planned"},
     {"prefix": "/api/v1/sourcing", "domain": "sourcing", "status": "planned"},
     {"prefix": "/api/v1/tasks", "domain": "tasks", "status": "planned"},

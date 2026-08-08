@@ -547,18 +547,57 @@ paths:
         '409': { $ref: '#/components/responses/Error' }
   /opportunities:
     get:
-      summary: List opportunities
+      summary: List workspace-scoped opportunities without fabricated scores
+      security: [{ HttpOnlySession: [] }]
       parameters:
         - $ref: '#/components/parameters/Page'
-        - $ref: '#/components/parameters/PageSize'
+        - { name: page_size, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+        - { name: q, in: query, schema: { type: string, maxLength: 200 } }
+        - { name: market, in: query, schema: { type: string, maxLength: 40 } }
+        - { name: decision_status, in: query, schema: { type: string, enum: [pending, adopted, observing, rejected] } }
       responses:
-        '200': { $ref: '#/components/responses/PaginatedSuccess' }
+        '200': { description: Opportunity page, content: { application/json: { schema: { $ref: '#/components/schemas/OpportunityPageEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
     post:
-      summary: Create an opportunity candidate
+      summary: Create a manual or trend-backed opportunity candidate
+      security: [{ HttpOnlySession: [] }]
       parameters:
         - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/OpportunityCreateInput' } } } }
       responses:
-        '201': { $ref: '#/components/responses/Success' }
+        '201': { description: Created opportunity, content: { application/json: { schema: { $ref: '#/components/schemas/OpportunityEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /opportunities/{opportunityId}:
+    get:
+      summary: Get opportunity detail, evidence coverage and decision history
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: opportunityId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: Opportunity detail, content: { application/json: { schema: { $ref: '#/components/schemas/OpportunityDetailEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /opportunities/{opportunityId}/decisions:
+    post:
+      summary: Record an audited human opportunity decision without rewriting scores
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: opportunityId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/OpportunityDecisionInput' } } } }
+      responses:
+        '200': { description: Recorded decision, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /tasks:
     get:
       summary: List authorized tasks
@@ -2121,3 +2160,72 @@ components:
       type: object
       required: [data, request_id, trace_id]
       properties: { data: { type: array, items: { $ref: '#/components/schemas/TrendMonitoringRule' } }, request_id: { type: string }, trace_id: { type: string } }
+    OpportunityCreateInput:
+      type: object
+      additionalProperties: false
+      required: [name, market]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 200 }
+        market: { type: string, minLength: 1, maxLength: 40, pattern: '^[A-Za-z0-9._-]+$' }
+        category: { type: string, nullable: true, maxLength: 80 }
+        source_topic_id: { type: string, format: uuid, nullable: true }
+    OpportunityDecisionInput:
+      type: object
+      additionalProperties: false
+      required: [action, reason, expected_version]
+      properties:
+        action: { type: string, enum: [adopt, observe, reject] }
+        reason: { type: string, minLength: 1, maxLength: 1000 }
+        expected_version: { type: integer, minimum: 1 }
+    OpportunitySummary:
+      type: object
+      required: [id, name, market, source_type, lifecycle_status, recommendation_status, overall_score, trend_score, competition_score, profit_status, risk_level, confidence, evidence_count, source_count, coverage_status, decision_status, version, updated_at]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string, maxLength: 200 }
+        market: { type: string }
+        category: { type: string, nullable: true }
+        source_type: { type: string, enum: [manual, trend_topic] }
+        source_ref_id: { type: string, format: uuid, nullable: true }
+        owner_id: { type: string, format: uuid, nullable: true }
+        lifecycle_status: { type: string, enum: [candidate, validating, ready, adopted, observing, rejected] }
+        recommendation_status: { type: string, enum: [insufficient_data, recommend, observe, not_recommend] }
+        overall_score: { type: number, minimum: 0, maximum: 100, nullable: true }
+        trend_score: { type: number, minimum: 0, maximum: 100, nullable: true }
+        competition_score: { type: number, minimum: 0, maximum: 100, nullable: true }
+        profit_status: { type: string, enum: [insufficient_data, calculated] }
+        risk_level: { type: string, enum: [unknown, low, medium, high] }
+        confidence: { type: object, required: [status, score], properties: { status: { type: string, enum: [insufficient_data, measured] }, score: { type: number, minimum: 0, maximum: 100, nullable: true } } }
+        evidence_count: { type: integer, minimum: 0 }
+        source_count: { type: integer, minimum: 0 }
+        coverage_status: { type: string, enum: [insufficient, partial, complete] }
+        decision_status: { type: string, enum: [pending, adopted, observing, rejected] }
+        version: { type: integer, minimum: 1 }
+        updated_at: { type: string, format: date-time }
+    OpportunityEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties: { data: { $ref: '#/components/schemas/OpportunitySummary' }, request_id: { type: string }, trace_id: { type: string } }
+    OpportunityPageEnvelope:
+      type: object
+      required: [data, meta, request_id, trace_id]
+      properties:
+        data: { type: array, items: { $ref: '#/components/schemas/OpportunitySummary' } }
+        meta: { type: object, required: [page, page_size, total], properties: { page: { type: integer, minimum: 1 }, page_size: { type: integer, minimum: 1, maximum: 100 }, total: { type: integer, minimum: 0 } } }
+        request_id: { type: string }
+        trace_id: { type: string }
+    OpportunityDetailEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          allOf:
+            - { $ref: '#/components/schemas/OpportunitySummary' }
+            - type: object
+              required: [score_rule_version, scored_at, evidence, decisions, section_status]
+              properties:
+                score_rule_version: { type: string, nullable: true }
+                scored_at: { type: string, format: date-time, nullable: true }
+                evidence: { type: array, items: { type: object, required: [id, title, publisher, canonical_url, provider_id, raw_evidence_id, observed_at], properties: { id: { type: string, format: uuid }, title: { type: string }, publisher: { type: string }, canonical_url: { type: string, format: uri }, provider_id: { type: string, format: uuid }, raw_evidence_id: { type: string, format: uuid }, observed_at: { type: string, format: date-time } } } }
+                decisions: { type: array, items: { type: object, required: [id, action, reason, actor_id, created_at, opportunity_version], properties: { id: { type: string, format: uuid }, action: { type: string, enum: [adopt, observe, reject] }, reason: { type: string }, actor_id: { type: string, format: uuid }, created_at: { type: string, format: date-time }, opportunity_version: { type: integer, minimum: 2 } } } }
+                section_status: { type: object, required: [market, competition, profit, risk, execution], properties: { market: { type: string, enum: [covered, insufficient_data] }, competition: { type: string, enum: [insufficient_data] }, profit: { type: string, enum: [insufficient_data, calculated] }, risk: { type: string, enum: [insufficient_data] }, execution: { type: string, enum: [not_available] } } }
