@@ -1,6 +1,6 @@
 # P06：组织后台、平台运营、安全与开放能力详细执行计划
 
-> 状态：in_progress（M06-01 至 M06-06 已通过模块门禁；M06-06 run_id/trace_id：`934c8c7b-0e66-4856-9c47-8b40a331bb3a`；当前执行 P06 阶段门禁；P06 尚未通过阶段门禁）
+> 状态：completed（M06-01 至 M06-06 及 P06 阶段门禁全部通过；P06 run_id/trace_id：`e1ab135d-20f6-450a-90c0-de9746ef6575`）
 > 上游总纲：`new-product-enterprise-blueprint.md`
 > 阶段索引：`plans/README.md`
 > 最低行数：1,000；`npm run verify:plans` 必须自动校验。
