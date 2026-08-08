@@ -23,6 +23,7 @@ import ReportCenter from "./ReportCenter.vue";
 import OrganizationAdminCenter from "./OrganizationAdminCenter.vue";
 import PlatformDashboard from "./PlatformDashboard.vue";
 import CollectionOperationsConsole from "./CollectionOperationsConsole.vue";
+import SecurityOperationsCenter from "./SecurityOperationsCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -645,6 +646,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           "
           :api-base-url="apiBaseUrl"
         />
+        <SecurityOperationsCenter v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/security'" :api-base-url="apiBaseUrl" />
         <section v-else class="role-ready-panel">
           <div class="role-ready-hero">
             <span>S</span>

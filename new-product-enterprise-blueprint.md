@@ -302,6 +302,12 @@ M04-07 实现合同：AI 辅助分析只读取当前组织、当前工作区内�
 - 控制台不返回凭证、Cookie、采集 payload 或文件路径。读取要求 `platform:operate` 并记录全局审计；重放仍要求 `collection:replay`、同源、原因与 `Idempotency-Key`。
 - `COLLECTION_CONSOLE_RECENT_LIMIT` 仅控制最近尝试和死信行数，修改后由宝塔重启 Node API；现有 Worker/Crawler 负责租约、重试、限流和死信，控制台不创建新进程。
 
+#### M06-04 安全与密钥运营实现基线
+
+- `/platform-admin/security` 与 `GET /api/v1/platform/security/operations` 只允许 `platform:secure`，汇总登录结果、风险事件、会话元数据、组织 Token 元数据、凭证生命周期和平台审计。
+- 查询明确排除会话 token/hash、组织 Token hash、凭证密文/nonce/auth tag、Cookie 以及原始 IP/User-Agent；Token 仅展示前缀，凭证仅展示指纹与 key_version。
+- 凭证轮换、会话撤销和 Token 管理继续使用既有版本锁、幂等、原因、最小 capability 与审计接口；本视图只读且记录 `platform.security.operations.read`。
+
 ### 4.3 平台管理员初始化
 
 - 首次部署必须通过一次性安全种子创建平台超级管理员；禁止固定默认账号和默认密码。

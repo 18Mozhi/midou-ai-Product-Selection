@@ -62,6 +62,8 @@ const required = [
   'docs/runbooks/m06-02-platform-dashboard.md'
   ,'verification/modules/M06-03.json', 'docs/architecture/m06-03-collection-console.md',
   'docs/runbooks/m06-03-collection-console.md'
+  ,'verification/modules/M06-04.json', 'docs/architecture/m06-04-security-operations.md',
+  'docs/runbooks/m06-04-security-operations.md'
 ];
 
 for (const file of required) await access(resolve(process.cwd(), file));

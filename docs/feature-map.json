@@ -50,9 +50,10 @@
       "M05-06",
       "M06-01",
       "M06-02",
-      "M06-03"
+      "M06-03",
+      "M06-04"
     ],
-    "activeModules": ["M06-04"],
+    "activeModules": ["M06-05"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1299,6 +1300,19 @@
       "runtimeBoundary": "observes existing Node Worker and Python Crawler leases retries rate limits and dead letters under Baota; creates no new daemon",
       "imageEvidence": ["concept 62 source management", "concept 63 collection task monitoring", "concept 64 system monitoring"],
       "verificationRunId": "808ea175-55fc-483f-a1c2-eec161fcf9bd",
+      "status": "module_verified"
+    },
+    "securityOperations": {
+      "module": "M06-04",
+      "entrypoints": ["../apps/api/src/security-operations-service.ts", "../apps/api/src/mysql-security-operations-repository.ts", "../apps/web/src/components/SecurityOperationsCenter.vue"],
+      "routes": ["/platform-admin/security", "/api/v1/platform/security/operations"],
+      "scope": "platform login outcomes risk events session metadata organization token metadata credential lifecycle and platform audit",
+      "truthBoundary": "never selects or returns session token hashes credential ciphertext nonce auth tag token hashes cookies or raw IP and user agent values",
+      "permission": "platform:secure read guard; credential rotation and token/session mutations remain on existing key rotation session and token capabilities",
+      "configuration": ["SECURITY_OPERATIONS_DEFAULT_WINDOW", "SECURITY_OPERATIONS_RECENT_LIMIT"],
+      "runtimeBoundary": "synchronous audited MySQL read under Baota Node API; no external SIEM or key service is invented",
+      "imageEvidence": ["concept 65 logs", "concept 66 security audit", "concept 67 token management", "concept 68 key rotation"],
+      "verificationRunId": "b13e605b-9566-4d84-bd8f-71af496bce32",
       "status": "module_verified"
     }
   },

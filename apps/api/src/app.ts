@@ -139,6 +139,8 @@ import { PlatformDashboardError } from "./platform-dashboard-service.js";
 import { registerPlatformDashboardRoutes, type PlatformDashboardRouteOptions } from "./platform-dashboard-routes.js";
 import { CollectionConsoleError } from "./collection-console-service.js";
 import { registerCollectionConsoleRoutes, type CollectionConsoleRouteOptions } from "./collection-console-routes.js";
+import { SecurityOperationsError } from "./security-operations-service.js";
+import { registerSecurityOperationsRoutes, type SecurityOperationsRouteOptions } from "./security-operations-routes.js";
 
 export interface BuildAppOptions {
   version?: string;
@@ -178,6 +180,7 @@ export interface BuildAppOptions {
   organizationAdmin?: OrganizationAdminRouteOptions;
   platformDashboard?: PlatformDashboardRouteOptions;
   collectionConsole?: CollectionConsoleRouteOptions;
+  securityOperations?: SecurityOperationsRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -345,6 +348,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if (options.organizationAdmin) registerOrganizationAdminRoutes(app, options.organizationAdmin);
   if (options.platformDashboard) registerPlatformDashboardRoutes(app, options.platformDashboard);
   if (options.collectionConsole) registerCollectionConsoleRoutes(app, options.collectionConsole);
+  if(options.securityOperations)registerSecurityOperationsRoutes(app,options.securityOperations);
 
   app.setErrorHandler(
     async (
@@ -422,6 +426,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
       const organizationAdminError = error instanceof OrganizationAdminError ? error : null;
       const platformDashboardError = error instanceof PlatformDashboardError ? error : null;
       const collectionConsoleError = error instanceof CollectionConsoleError ? error : null;
+      const securityOperationsError = error instanceof SecurityOperationsError ? error : null;
       const trendError =
         error instanceof TrendServiceError
           ? (error as TrendServiceError)
@@ -475,6 +480,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         organizationAdminError?.statusCode ??
         platformDashboardError?.statusCode ??
         collectionConsoleError?.statusCode ??
+        securityOperationsError?.statusCode ??
         trendError?.statusCode ??
         opportunityError?.statusCode ??
         scoringError?.statusCode ??
@@ -517,6 +523,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         organizationAdminError?.code ??
         platformDashboardError?.code ??
         collectionConsoleError?.code ??
+        securityOperationsError?.code ??
             trendError?.code ??
             opportunityError?.code ??
             scoringError?.code ??
@@ -537,6 +544,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             organizationAdminError?.message ??
             platformDashboardError?.message ??
             collectionConsoleError?.message ??
+            securityOperationsError?.message ??
             trendError?.message ??
             opportunityError?.message ??
             scoringError?.message ??
@@ -584,6 +592,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         organizationAdminError?.actionHint ??
         platformDashboardError?.actionHint ??
         collectionConsoleError?.actionHint ??
+        securityOperationsError?.actionHint ??
             trendError?.actionHint ??
             opportunityError?.actionHint ??
             scoringError?.actionHint ??

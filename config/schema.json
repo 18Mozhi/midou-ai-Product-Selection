@@ -150,6 +150,7 @@
       "PLATFORM_DASHBOARD_ERROR_LIMIT"
     ],
     "collectionConsole": ["COLLECTION_CONSOLE_RECENT_LIMIT"]
+    ,"securityOperations": ["SECURITY_OPERATIONS_DEFAULT_WINDOW", "SECURITY_OPERATIONS_RECENT_LIMIT"]
   },
   "secretKeys": [
     "DB_PASSWORD",

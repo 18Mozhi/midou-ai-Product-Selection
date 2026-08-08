@@ -1780,6 +1780,19 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '429': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/security/operations:
+    get:
+      summary: Read the audited platform security operations view
+      description: Requires platform:secure. Returns login outcomes, session metadata, credential lifecycle metadata, organization token metadata and platform audit rows; never returns token hashes, session tokens, credential ciphertext, nonces, auth tags, cookies or raw IP/user-agent values.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: window, in: query, schema: { type: string, enum: [24h, 7d, 30d], default: 24h } }]
+      responses:
+        '200': { description: Sanitized security operations facts, content: { application/json: { schema: { type: object } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
 components:
   securitySchemes:
     BearerAuth:

@@ -124,6 +124,7 @@ export interface RuntimeConfig {
   organizationAdmin: { invitationTtlHours: number; tokenDefaultTtlDays: number; tokenMaxActive: number };
   platformDashboard: { defaultWindow: "15m"|"24h"|"7d"|"30d"; queueWarning: number; errorLimit: number };
   collectionConsole: { recentLimit: number };
+  securityOperations: { defaultWindow: "24h"|"7d"|"30d"; recentLimit: number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -560,6 +561,7 @@ export function loadRuntimeConfig(
       errorLimit: integer(env, "PLATFORM_DASHBOARD_ERROR_LIMIT", 20, 1, 100),
     },
     collectionConsole: { recentLimit: integer(env, "COLLECTION_CONSOLE_RECENT_LIMIT", 50, 10, 200) },
+    securityOperations: { defaultWindow: text(env,"SECURITY_OPERATIONS_DEFAULT_WINDOW","24h") as "24h"|"7d"|"30d", recentLimit: integer(env,"SECURITY_OPERATIONS_RECENT_LIMIT",50,10,200) },
     evidence: {
       maxRawBytes: integer(
         env,
@@ -584,6 +586,7 @@ export function loadRuntimeConfig(
     );
   if (!["15m","24h","7d","30d"].includes(base.platformDashboard.defaultWindow))
     throw new ConfigError("PLATFORM_DASHBOARD_DEFAULT_WINDOW", "must be 15m, 24h, 7d or 30d");
+  if(!["24h","7d","30d"].includes(base.securityOperations.defaultWindow))throw new ConfigError("SECURITY_OPERATIONS_DEFAULT_WINDOW","must be 24h, 7d or 30d");
   if (!/^[A-Za-z0-9._-]{1,80}$/.test(base.security.credentialsMasterKeyVersion))
     throw new ConfigError(
       "CREDENTIALS_MASTER_KEY_VERSION",

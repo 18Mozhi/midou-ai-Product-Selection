@@ -85,6 +85,9 @@ import { registerPlatformDashboardRoutes } from "./platform-dashboard-routes.js"
 import { CollectionConsoleService } from "./collection-console-service.js";
 import { MySqlCollectionConsoleRepository } from "./mysql-collection-console-repository.js";
 import { registerCollectionConsoleRoutes } from "./collection-console-routes.js";
+import { SecurityOperationsService } from "./security-operations-service.js";
+import { MySqlSecurityOperationsRepository } from "./mysql-security-operations-repository.js";
+import { registerSecurityOperationsRoutes } from "./security-operations-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -410,6 +413,7 @@ registerCollectionConsoleRoutes(app, {
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",
 });
+registerSecurityOperationsRoutes(app,{service:new SecurityOperationsService(new MySqlSecurityOperationsRepository(pool),config.securityOperations.defaultWindow,config.securityOperations.recentLimit),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {
     evidenceRoot: config.storage.evidenceRoot,
