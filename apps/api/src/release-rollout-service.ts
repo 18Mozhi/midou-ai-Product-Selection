@@ -24,7 +24,7 @@ export class ReleaseProbeError extends Error {
   }
 }
 
-export const releaseProbeCanonical = (input: ReleaseProbeSignatureInput) => [input.timestamp, input.nonce, input.requestId, input.traceId, input.releaseId, input.sampleId].join("\n");
+export const releaseProbeCanonical = (input: ReleaseProbeSignatureInput) => [input.timestamp, input.nonce, input.releaseId, input.sampleId].join("\n");
 export const signReleaseProbe = (input: ReleaseProbeSignatureInput, signingKey: string) => createHmac("sha256", signingKey).update(releaseProbeCanonical(input)).digest("hex");
 
 export class ReleaseWriteProbeService {
@@ -39,9 +39,10 @@ export class ReleaseWriteProbeService {
   async record(input: Omit<ReleaseProbeSignatureInput, "timestamp"> & { timestamp: unknown; signature: unknown }) {
     const timestamp = Number(input.timestamp), signature = String(input.signature ?? "");
     const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    const auditId = (value: string) => uuid.test(value) || /^[a-f0-9]{32}$/i.test(value);
     if (!Number.isSafeInteger(timestamp) || Math.abs(Math.floor(this.now().getTime() / 1000) - timestamp) > this.timestampToleranceSeconds)
       throw new ReleaseProbeError("release_probe_timestamp_invalid", 401, "同步宝塔任务时间后重新执行发布。");
-    if (![input.nonce, input.requestId, input.traceId, input.releaseId, input.sampleId].every((value) => uuid.test(value)) || !/^[a-f0-9]{64}$/i.test(signature))
+    if (![input.nonce, input.releaseId, input.sampleId].every((value) => uuid.test(value)) || ![input.requestId, input.traceId].every(auditId) || !/^[a-f0-9]{64}$/i.test(signature))
       throw new ReleaseProbeError("release_probe_signature_invalid", 401, "检查宝塔受限发布探针配置后重试。");
     const expected = signReleaseProbe({ timestamp, nonce: input.nonce, requestId: input.requestId, traceId: input.traceId, releaseId: input.releaseId, sampleId: input.sampleId }, this.signingKey);
     if (!timingSafeEqual(Buffer.from(expected, "hex"), Buffer.from(signature, "hex")))

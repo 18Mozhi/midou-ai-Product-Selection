@@ -32,16 +32,17 @@ function siteConfig(source, timingLog) {
 function parseTimingLines(source, candidatePort) {
   const records = [];
   for (const line of source.split(/\r?\n/)) {
-    const method = line.match(/\"(GET|HEAD|POST|PUT|PATCH|DELETE)\s/)?.[1];
+    const request = line.match(/\"(GET|HEAD|POST|PUT|PATCH|DELETE)\s+([^?\s]+)(?:\?[^\s]*)?\s/) ?? [];
+    const method = request[1], path = request[2];
     const status = Number(line.match(/\bstatus=(\d{3})\b/)?.[1]);
     const seconds = Number(line.match(/\brequest_time=([0-9.]+)/)?.[1]);
     const upstream = line.match(/\bupstream_addr=\"([^\"]*)\"/)?.[1] ?? "";
-    if (method && Number.isFinite(status) && Number.isFinite(seconds) && upstream.split(/\s*,\s*/).some((item) => item.endsWith(`:${candidatePort}`))) records.push({ method, status, milliseconds: seconds * 1000 });
+    if (method && path && Number.isFinite(status) && Number.isFinite(seconds) && upstream.split(/\s*,\s*/).some((item) => item.endsWith(`:${candidatePort}`))) records.push({ method, path, status, milliseconds: seconds * 1000 });
   }
   return records;
 }
 
-const probeCanonical = ({ timestamp, nonce, requestId, traceId, releaseId, sampleId }) => [timestamp, nonce, requestId, traceId, releaseId, sampleId].join("\n");
+const probeCanonical = ({ timestamp, nonce, releaseId, sampleId }) => [timestamp, nonce, releaseId, sampleId].join("\n");
 const probeSignature = (input, signingKey) => createHmac("sha256", signingKey).update(probeCanonical(input)).digest("hex");
 
 async function sendWriteProbe(baseUrl, runtime, releaseId, correlation) {
@@ -58,6 +59,17 @@ async function applyMigration(pool, releaseRoot, migrationName) {
   return { name: migrationName, checksum };
 }
 
+async function writeProbeCount(pool, releaseId, buildSha) {
+  const [[row]] = await pool.query("SELECT COUNT(*) sample_count FROM deployment_release_write_probes WHERE release_id=? AND build_sha=?", [releaseId, buildSha]);
+  return Number(row?.sample_count ?? 0);
+}
+
+function writeProbeBreach(writes, durableWriteSamples) {
+  if (writes.some((item) => item.status !== 202)) return "release_write_probe_rejected";
+  if (durableWriteSamples !== writes.length) return "release_write_probe_persistence_mismatch";
+  return null;
+}
+
 function breachFor(metrics, readCount, writeCount, minimumSamples, thresholds) {
   if (readCount < minimumSamples || writeCount < minimumSamples) return "insufficient_candidate_samples";
   if (![metrics.errorRate, metrics.readP95, metrics.writeP95, metrics.asyncLag].every(Number.isFinite)) return "release_metric_missing";
@@ -72,7 +84,7 @@ if (argv.includes("--self-test")) {
   const records = parseTimingLines('127.0.0.1 - - [time] "GET /api/v1/health/live HTTP/1.1" status=200 bytes=1 request_time=0.100 upstream_addr="127.0.0.1:4103"\n127.0.0.1 - - [time] "POST /api/v1/platform/operations/releases/write-probe HTTP/1.1" status=202 bytes=1 request_time=0.200 upstream_addr="127.0.0.1:4103"\n127.0.0.1 - - [time] "GET /api/v1/health/live HTTP/1.1" status=500 bytes=1 request_time=9.000 upstream_addr="127.0.0.1:4101"', 4103);
   const metrics = { errorRate: 0, readP95: percentile(records.filter((item) => item.method === "GET").map((item) => item.milliseconds), .95), writeP95: percentile(records.filter((item) => item.method === "POST").map((item) => item.milliseconds), .95), asyncLag: 2 };
   const thresholds = { errorRate: 1, readP95: 300, writeP95: 600, asyncLag: 60 };
-  if (records.length !== 2 || metrics.readP95 !== 100 || metrics.writeP95 !== 200 || breachFor(metrics, 1, 1, 1, thresholds) !== null || breachFor(metrics, 0, 1, 1, thresholds) !== "insufficient_candidate_samples" || breachFor({ ...metrics, errorRate: 1 }, 1, 1, 1, thresholds) !== "error_rate_threshold_exceeded" || splitConfig(0, 4101, 4103).includes(":4103") || !siteConfig("server { location /api/ { proxy_pass http://127.0.0.1:4101; }\n}", "/www/wwwlogs/test.log").includes("$scoutops_release_upstream")) throw fail("release_self_test_failed", "release parser, thresholds, stable fallback or Nginx rendering drifted");
+  if (records.length !== 2 || records[1].path !== "/api/v1/platform/operations/releases/write-probe" || metrics.readP95 !== 100 || metrics.writeP95 !== 200 || writeProbeBreach([records[1]], 1) !== null || writeProbeBreach([{ ...records[1], status: 401 }], 0) !== "release_write_probe_rejected" || writeProbeBreach([records[1]], 0) !== "release_write_probe_persistence_mismatch" || breachFor(metrics, 1, 1, 1, thresholds) !== null || breachFor(metrics, 0, 1, 1, thresholds) !== "insufficient_candidate_samples" || breachFor({ ...metrics, errorRate: 1 }, 1, 1, 1, thresholds) !== "error_rate_threshold_exceeded" || splitConfig(0, 4101, 4103).includes(":4103") || !siteConfig("server { location /api/ { proxy_pass http://127.0.0.1:4101; }\n}", "/www/wwwlogs/test.log").includes("$scoutops_release_upstream")) throw fail("release_self_test_failed", "release parser, write persistence, thresholds, stable fallback or Nginx rendering drifted");
   process.stdout.write(`${JSON.stringify({ module: "M07-05", status: "passed", upstream_parser: "passed", fail_closed_thresholds: "passed", stable_fallback: "passed", request_id: requestId, trace_id: traceId })}\n`); process.exit(0);
 }
 
@@ -151,7 +163,7 @@ try {
   const gates = [];
   for (const percent of [5, 25, 100]) {
     await writeFile(splitPath, splitConfig(percent, stablePort, candidatePort), { mode: 0o600 }); await run(nginxBin, ["-t"]); await run(nginxBin, ["-s", "reload"]);
-    const gateStarted = new Date(), startSize = await stat(timingLog).then((value) => value.size).catch(() => 0), lagSamples = [];
+    const gateStarted = new Date(), startSize = await stat(timingLog).then((value) => value.size).catch(() => 0), writeProbeBaseline = await writeProbeCount(pool, effectiveReleaseId, identity.build_sha), lagSamples = [];
     const runningGate = await writeGate(pool, effectiveReleaseId, `canary_${percent}`, "running", { percent, startedAt: gateStarted, metadata: { routing_key: "$request_id", measurement: "baota_nginx_upstream_timing_log" } }); await event(pool, effectiveReleaseId, runningGate, "started", null, { percent });
     while ((Date.now() - gateStarted.getTime()) / 1000 < observeSeconds) {
       const correlation = randomUUID();
@@ -163,21 +175,22 @@ try {
       lagSamples.push(await asyncLagSeconds(pool)); await sleep(intervalSeconds * 1000);
     }
     const log = await readFrom(timingLog, startSize).catch(() => ""), records = parseTimingLines(log, candidatePort);
-    const reads = records.filter((item) => ["GET","HEAD"].includes(item.method)), writes = records.filter((item) => !["GET","HEAD"].includes(item.method));
+    const reads = records.filter((item) => ["GET","HEAD"].includes(item.method) && item.path === "/api/v1/health/live"), writes = records.filter((item) => !["GET","HEAD"].includes(item.method) && item.path === "/api/v1/platform/operations/releases/write-probe");
+    const durableWriteSamples = await writeProbeCount(pool, effectiveReleaseId, identity.build_sha) - writeProbeBaseline;
     const metrics = { percent, observeSeconds: Math.floor((Date.now() - gateStarted.getTime()) / 1000), sampleCount: records.length, errorRate: records.length ? records.filter((item) => item.status >= 500).length * 100 / records.length : null, readP95: percentile(reads.map((item) => item.milliseconds), .95), writeP95: percentile(writes.map((item) => item.milliseconds), .95), asyncLag: Math.max(0, ...lagSamples) };
-    const breach = breachFor(metrics, reads.length, writes.length, minimumSamples, thresholds);
+    const breach = writeProbeBreach(writes, durableWriteSamples) ?? breachFor(metrics, reads.length, durableWriteSamples, minimumSamples, thresholds);
     if (breach) {
-      await writeGate(pool, effectiveReleaseId, `canary_${percent}`, "failed", { ...metrics, failureCode: breach, startedAt: gateStarted, metadata: { read_samples: reads.length, write_samples: writes.length } });
+      await writeGate(pool, effectiveReleaseId, `canary_${percent}`, "failed", { ...metrics, failureCode: breach, startedAt: gateStarted, metadata: { read_samples: reads.length, write_samples: writes.length, durable_write_samples: durableWriteSamples } });
       await writeFile(splitPath, splitConfig(0, stablePort, candidatePort), { mode: 0o600 }); await run(nginxBin, ["-t"]); await run(nginxBin, ["-s", "reload"]);
       const stopped = await writeGate(pool, effectiveReleaseId, "automatic_stop", "stopped", { percent, failureCode: breach, metadata: metrics }); await event(pool, effectiveReleaseId, stopped, "automatic_stop", breach, metrics);
       const rollback = await writeGate(pool, effectiveReleaseId, "rollback", "rolled_back", { metadata: { stable_port: stablePort, candidate_port: candidatePort } }); await event(pool, effectiveReleaseId, rollback, "rolled_back", breach);
       await pool.query("UPDATE deployment_releases SET status='rolled_back',finished_at=UTC_TIMESTAMP(3),updated_at=UTC_TIMESTAMP(3) WHERE id=?", [effectiveReleaseId]);
       throw fail(breach, `canary ${percent}% failed and traffic was rolled back to the stable Baota project`);
     }
-    await writeGate(pool, effectiveReleaseId, `canary_${percent}`, "passed", { ...metrics, startedAt: gateStarted, metadata: { read_samples: reads.length, write_samples: writes.length } }); await event(pool, effectiveReleaseId, runningGate, "passed", null, metrics); gates.push({ ...metrics, readSamples: reads.length, writeSamples: writes.length });
+    await writeGate(pool, effectiveReleaseId, `canary_${percent}`, "passed", { ...metrics, startedAt: gateStarted, metadata: { read_samples: reads.length, write_samples: writes.length, durable_write_samples: durableWriteSamples } }); await event(pool, effectiveReleaseId, runningGate, "passed", null, { ...metrics, durableWriteSamples }); gates.push({ ...metrics, readSamples: reads.length, writeSamples: writes.length, durableWriteSamples });
   }
   await pool.query("UPDATE deployment_releases SET status='healthy',finished_at=UTC_TIMESTAMP(3),updated_at=UTC_TIMESTAMP(3) WHERE id=?", [effectiveReleaseId]);
-  const evidence = { schemaVersion: 1, module: "M07-05", manager: "baota", topology: "single_host_stable_and_candidate", backupServerUsed: false, releaseId: effectiveReleaseId, buildSha: runtime.BUILD_SHA, appVersion: runtime.APP_VERSION, configFingerprint: identity.config_fingerprint, migrationVersion: migrationName, writeProbe: { path: "/api/v1/platform/operations/releases/write-probe", signed: true, durableStatementsPerSample: 1 }, percentages: [5,25,100], minimumObservationSeconds: observeSeconds, gates, automaticStopArmed: true, rollbackTarget: { sameHost: true, stablePort }, requestId, traceId, capturedAt: new Date().toISOString() };
+  const evidence = { schemaVersion: 1, module: "M07-05", manager: "baota", topology: "single_host_stable_and_candidate", backupServerUsed: false, releaseId: effectiveReleaseId, buildSha: runtime.BUILD_SHA, appVersion: runtime.APP_VERSION, configFingerprint: identity.config_fingerprint, migrationVersion: migrationName, writeProbe: { path: "/api/v1/platform/operations/releases/write-probe", signed: true, canonicalFields: ["timestamp","nonce","release_id","sample_id"], proxyRequestIdsExcluded: true, candidatePersistenceMatched: true, durableStatementsPerSample: 1 }, percentages: [5,25,100], minimumObservationSeconds: observeSeconds, gates, automaticStopArmed: true, rollbackTarget: { sameHost: true, stablePort }, requestId, traceId, capturedAt: new Date().toISOString() };
   await mkdir(dirname(evidencePath), { recursive: true, mode: 0o700 }); await writeFile(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`, { mode: 0o600 }); process.stdout.write(`${JSON.stringify(evidence)}\n`);
 } catch (error) {
   if (nginxConfigured && splitPath && stablePort && candidatePort) {

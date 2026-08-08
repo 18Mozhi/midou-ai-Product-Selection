@@ -14,14 +14,14 @@
     "appVersion": {"type": "string", "minLength": 1},
     "configFingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "migrationVersion": {"const": "0027_release_write_probe_m07_05.up.sql"},
-    "writeProbe": {"type": "object", "required": ["path", "signed", "durableStatementsPerSample"], "properties": {"path": {"const": "/api/v1/platform/operations/releases/write-probe"}, "signed": {"const": true}, "durableStatementsPerSample": {"const": 1}}, "additionalProperties": false},
+    "writeProbe": {"type": "object", "required": ["path", "signed", "canonicalFields", "proxyRequestIdsExcluded", "candidatePersistenceMatched", "durableStatementsPerSample"], "properties": {"path": {"const": "/api/v1/platform/operations/releases/write-probe"}, "signed": {"const": true}, "canonicalFields": {"const": ["timestamp", "nonce", "release_id", "sample_id"]}, "proxyRequestIdsExcluded": {"const": true}, "candidatePersistenceMatched": {"const": true}, "durableStatementsPerSample": {"const": 1}}, "additionalProperties": false},
     "percentages": {"const": [5, 25, 100]},
     "minimumObservationSeconds": {"type": "integer", "minimum": 1800},
     "gates": {
       "type": "array", "minItems": 3, "maxItems": 3,
       "items": {
         "type": "object",
-        "required": ["percent", "observeSeconds", "sampleCount", "errorRate", "readP95", "writeP95", "asyncLag", "readSamples", "writeSamples"],
+        "required": ["percent", "observeSeconds", "sampleCount", "errorRate", "readP95", "writeP95", "asyncLag", "readSamples", "writeSamples", "durableWriteSamples"],
         "properties": {
           "percent": {"type": "integer", "enum": [5, 25, 100]},
           "observeSeconds": {"type": "integer", "minimum": 1800},
@@ -31,7 +31,8 @@
           "writeP95": {"type": "integer", "minimum": 0, "maximum": 600},
           "asyncLag": {"type": "integer", "minimum": 0, "maximum": 60},
           "readSamples": {"type": "integer", "minimum": 5},
-          "writeSamples": {"type": "integer", "minimum": 5}
+          "writeSamples": {"type": "integer", "minimum": 5},
+          "durableWriteSamples": {"type": "integer", "minimum": 5}
         }
       }
     },

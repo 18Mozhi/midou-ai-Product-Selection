@@ -34,7 +34,10 @@
     "measurementSource": "baota-nginx-upstream-timing-log",
     "syntheticReadPath": "/api/v1/health/live",
     "syntheticWritePath": "/api/v1/platform/operations/releases/write-probe",
-    "syntheticWriteContract": "HMAC-signed unique sample, one durable MySQL autocommit statement, immutable request and trace audit",
+    "syntheticWriteCanonicalFields": ["timestamp", "nonce", "release_id", "sample_id"],
+    "proxyRequestIdsExcludedFromSignature": true,
+    "candidatePersistenceParityRequired": true,
+    "syntheticWriteContract": "proxy-safe HMAC over timestamp/nonce/release/sample, one durable MySQL autocommit statement, candidate 202 and persistence parity, immutable proxy request and trace audit",
     "minimumCandidateSamplesPerMethod": 5
   },
   "automaticStop": {
