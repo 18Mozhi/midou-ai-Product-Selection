@@ -56,6 +56,7 @@ export interface RuntimeConfig {
     credentialsMasterKey: string;
     credentialsMasterKeyVersion: string;
     evidenceDownloadSigningKey: string;
+    releaseProbeSigningKey: string;
   };
   providerAdapters: {
     healthTimeoutMs: number;
@@ -128,7 +129,7 @@ export interface RuntimeConfig {
   openPlatform: { clientTtlDays:number; defaultQuotaPerMinute:number; maxQuotaPerMinute:number; timestampToleranceSeconds:number; nonceTtlSeconds:number; webhookPollMs:number; webhookLeaseSeconds:number; webhookTimeoutMs:number };
   commercial: { recentLimit:number };
   backupRecovery: { primaryRegion:string; recoveryRegion:string; rpoMinutes:number; rtoMinutes:number; maximumDrillAgeDays:number };
-  releaseRollout: { minimumObservationSeconds:number; maximumEvidenceAgeMinutes:number; errorRateStopPercent:number; readP95StopMs:number; writeP95StopMs:number; asyncLagStopSeconds:number };
+  releaseRollout: { minimumObservationSeconds:number; maximumEvidenceAgeMinutes:number; errorRateStopPercent:number; readP95StopMs:number; writeP95StopMs:number; asyncLagStopSeconds:number; probeTimestampToleranceSeconds:number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -262,6 +263,12 @@ export function loadRuntimeConfig(
         env,
         "EVIDENCE_DOWNLOAD_SIGNING_KEY",
         production,
+        32,
+      ),
+      releaseProbeSigningKey: secret(
+        env,
+        "RELEASE_PROBE_SIGNING_KEY",
+        production && target === "api",
         32,
       ),
     },
@@ -591,6 +598,7 @@ export function loadRuntimeConfig(
       readP95StopMs: integer(env,"RELEASE_READ_P95_STOP_MS",300,1,60000),
       writeP95StopMs: integer(env,"RELEASE_WRITE_P95_STOP_MS",600,1,60000),
       asyncLagStopSeconds: integer(env,"RELEASE_ASYNC_LAG_STOP_SECONDS",60,1,3600),
+      probeTimestampToleranceSeconds: integer(env,"RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS",60,10,300),
     },
     evidence: {
       maxRawBytes: integer(
@@ -645,6 +653,7 @@ export function loadRuntimeConfig(
       evidenceDownloadSigningKey: Boolean(
         base.security.evidenceDownloadSigningKey,
       ),
+      releaseProbeSigningKey: Boolean(base.security.releaseProbeSigningKey),
     },
   };
   return {

@@ -1122,6 +1122,7 @@
 ### M07-05 原子任务索引
 - 模块目标：发布与回滚。
 - 业务说明：版本、迁移、灰度、监控、自动停止与回滚 Runbook。
+- 生产写门：使用宝塔受限 HMAC 签名的 `/api/v1/platform/operations/releases/write-probe`，每个唯一样本只执行一次 MySQL 持久化提交并记录 build/request/trace 审计；不得用幂等回放、密码重置多提交链、放宽 600ms 阈值或降低 1,800 秒观察替代。
 - 图片依据：按本阶段第 3 节映射读取；页面、布局和交互均须保留可验证截图。
 - 数据边界：任何组织可见记录、文件、队列、事件和导出均执行 organization_id/workspace_id 约束。
 - 模块命令：`npm run verify:module -- M07-05`。

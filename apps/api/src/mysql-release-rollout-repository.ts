@@ -1,5 +1,5 @@
 // @ts-nocheck -- MySQL rows are normalized before leaving the repository.
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { ReleaseRolloutRepository } from "./release-rollout-service.js";
 const iso = (value: unknown) => value ? new Date(value as string | Date).toISOString() : null;
@@ -15,5 +15,8 @@ export class MySqlReleaseRolloutRepository implements ReleaseRolloutRepository {
     const gates = gateRows.map((row) => ({ ...row, traffic_percent: Number(row.traffic_percent), observe_seconds: Number(row.observe_seconds), sample_count: Number(row.sample_count), error_rate_percent: row.error_rate_percent === null ? null : Number(row.error_rate_percent), read_p95_ms: row.read_p95_ms === null ? null : Number(row.read_p95_ms), write_p95_ms: row.write_p95_ms === null ? null : Number(row.write_p95_ms), async_lag_seconds: row.async_lag_seconds === null ? null : Number(row.async_lag_seconds), started_at: iso(row.started_at), finished_at: iso(row.finished_at) }));
     await this.pool.query("INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,?,'platform.release_rollout.read','deployment_release',?,'succeeded',?,?,?,?,1)", [randomUUID(), input.actorId, releases[0]?.id ?? null, input.requestId, input.traceId, JSON.stringify({ release_count: releases.length, gate_count: gates.length }), input.now]);
     return { releases, gates };
+  }
+  async writeProbe(input: { releaseId: string; sampleId: string; buildSha: string; nonce: string; requestId: string; traceId: string; observedAt: Date }) {
+    await this.pool.query("INSERT INTO deployment_release_write_probes(id,release_id,sample_id,build_sha,nonce_hash,request_id,trace_id,observed_at,schema_version) VALUES(?,?,?,?,?,?,?,?,1) ON DUPLICATE KEY UPDATE id=id", [randomUUID(), input.releaseId, input.sampleId, input.buildSha, createHash("sha256").update(input.nonce).digest("hex"), input.requestId, input.traceId, input.observedAt]);
   }
 }

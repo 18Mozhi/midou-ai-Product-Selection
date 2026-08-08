@@ -33,7 +33,8 @@
     "routingKey": "$request_id",
     "measurementSource": "baota-nginx-upstream-timing-log",
     "syntheticReadPath": "/api/v1/health/live",
-    "syntheticWritePath": "/api/v1/auth/password-reset/request",
+    "syntheticWritePath": "/api/v1/platform/operations/releases/write-probe",
+    "syntheticWriteContract": "HMAC-signed unique sample, one durable MySQL autocommit statement, immutable request and trace audit",
     "minimumCandidateSamplesPerMethod": 5
   },
   "automaticStop": {
@@ -51,6 +52,7 @@
   },
   "restrictedConfig": {
     "source": "config/env.example and config/schema.json",
+    "releaseProbeSigningKey": "Baota restricted API and rollout-task environment only",
     "secretValuesInManifest": false,
     "browserExposedReleaseConfiguration": false
   },

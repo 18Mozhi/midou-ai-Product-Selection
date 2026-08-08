@@ -1397,11 +1397,11 @@
     "releaseRollout": {
       "module": "M07-05",
       "entrypoints": ["../infra/baota/release-rollout-manifest.json", "../scripts/run-baota-release-rollout.mjs", "../apps/api/src/release-rollout-service.ts", "../apps/api/src/mysql-release-rollout-repository.ts", "../apps/api/src/release-rollout-routes.ts", "../apps/web/src/components/ReleaseRolloutCenter.vue"],
-      "routes": ["/platform-admin/releases", "/api/v1/platform/operations/releases"],
+      "routes": ["/platform-admin/releases", "/api/v1/platform/operations/releases", "/api/v1/platform/operations/releases/write-probe"],
       "scope": "惠州当前单机内宝塔 stable API 与 candidate API 的 5 25 100 渐进发布",
-      "truthBoundary": "verified only from current release gates with at least 30 minutes per stage, real Baota Nginx candidate samples, MySQL queue lag and current build identity; no backup server or P08 capacity claim",
-      "permission": "platform:operate read only; release, automatic stop and rollback execute only in the Baota scheduled task",
-      "configuration": ["RELEASE_CANARY_OBSERVE_SECONDS", "RELEASE_SAMPLE_INTERVAL_SECONDS", "RELEASE_MINIMUM_CANDIDATE_SAMPLES", "RELEASE_EVIDENCE_MAX_AGE_MINUTES", "RELEASE_5XX_STOP_BASIS_POINTS", "RELEASE_READ_P95_STOP_MS", "RELEASE_WRITE_P95_STOP_MS", "RELEASE_ASYNC_LAG_STOP_SECONDS", "RELEASE_ROOT", "RELEASE_PRODUCTION_EVIDENCE_FILE", "RELEASE_STABLE_API_PORT", "RELEASE_CANDIDATE_API_PORT", "RELEASE_CANDIDATE_BASE_URL", "RELEASE_PUBLIC_BASE_URL", "RELEASE_NGINX_BIN", "RELEASE_NGINX_SITE_CONFIG", "RELEASE_NGINX_SPLIT_CONFIG", "RELEASE_NGINX_TIMING_LOG"],
+      "truthBoundary": "verified only from current release gates with at least 30 minutes per stage, real Baota Nginx candidate samples, a signed one-transaction durable MySQL write probe, MySQL queue lag and current build identity; no backup server or P08 capacity claim",
+      "permission": "platform:operate protects the browser read API; the write probe requires a short-lived HMAC request from the Baota rollout task and is not a user-session API; release, automatic stop and rollback execute only in the Baota scheduled task",
+      "configuration": ["RELEASE_CANARY_OBSERVE_SECONDS", "RELEASE_SAMPLE_INTERVAL_SECONDS", "RELEASE_MINIMUM_CANDIDATE_SAMPLES", "RELEASE_EVIDENCE_MAX_AGE_MINUTES", "RELEASE_5XX_STOP_BASIS_POINTS", "RELEASE_READ_P95_STOP_MS", "RELEASE_WRITE_P95_STOP_MS", "RELEASE_ASYNC_LAG_STOP_SECONDS", "RELEASE_PROBE_SIGNING_KEY", "RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS", "RELEASE_ROOT", "RELEASE_PRODUCTION_EVIDENCE_FILE", "RELEASE_STABLE_API_PORT", "RELEASE_CANDIDATE_API_PORT", "RELEASE_CANDIDATE_BASE_URL", "RELEASE_PUBLIC_BASE_URL", "RELEASE_NGINX_BIN", "RELEASE_NGINX_SITE_CONFIG", "RELEASE_NGINX_SPLIT_CONFIG", "RELEASE_NGINX_TIMING_LOG"],
       "runtimeBoundary": "finite Baota task and two same-host local-only Node API projects; no new external daemon, backup server, multi-node or 10000-user claim",
       "imageEvidence": ["core 10 platform cockpit", "concept 61 platform operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 release states"],
       "status": "in_progress"

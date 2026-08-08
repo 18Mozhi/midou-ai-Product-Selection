@@ -1875,6 +1875,33 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '429': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/operations/releases/write-probe:
+    post:
+      summary: Record one signed durable release write sample
+      description: Internal M07-05 Baota-task endpoint. The task signs timestamp, nonce, request and trace IDs, release ID and sample ID with the restricted RELEASE_PROBE_SIGNING_KEY. A valid request performs exactly one idempotent MySQL autocommit insert that preserves build, request and trace audit fields. It is not a browser or user-session API.
+      security: [{ ReleaseProbeHmac: [] }]
+      parameters:
+        - { name: X-Release-Probe-Timestamp, in: header, required: true, schema: { type: integer, format: int64 } }
+        - { name: X-Release-Probe-Nonce, in: header, required: true, schema: { type: string, format: uuid } }
+        - { name: X-Request-Id, in: header, required: true, schema: { type: string, format: uuid } }
+        - { name: X-Trace-Id, in: header, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [release_id, sample_id]
+              additionalProperties: false
+              properties:
+                release_id: { type: string, format: uuid }
+                sample_id: { type: string, format: uuid }
+      responses:
+        '202': { description: Signed sample durably recorded or idempotently replayed }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
   /platform/collection/console:
     get:
       summary: Read the audited source and collection operations console
@@ -2023,6 +2050,10 @@ components:
       type: http
       scheme: bearer
       bearerFormat: scoutops-api-client
+    ReleaseProbeHmac:
+      type: apiKey
+      in: header
+      name: X-Release-Probe-Signature
   parameters:
     Page:
       name: page

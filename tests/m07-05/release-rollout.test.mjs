@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 
 const read = (path) => readFile(path, "utf8");
 
@@ -72,16 +73,42 @@ test("M07-05 candidate slot binds through the real APP_PORT runtime contract", a
 
 test("M07-05 MySQL single-row gates use object presence instead of array length", async () => {
   const runner = await read("scripts/run-baota-release-rollout.mjs");
-  assert.doesNotMatch(runner, /\b(?:existingMigration|backup|sameBuild)\.length\b/);
-  assert.match(runner, /if \(!existingMigration\)/);
+  assert.doesNotMatch(runner, /\b(?:existing|backup|sameBuild)\.length\b/);
+  assert.match(runner, /if \(!existing\)/);
   assert.match(runner, /if \(!backup\)/);
   assert.match(runner, /if \(sameBuild\)/);
 });
 
-test("M07-05 warms the real candidate write path and measures non-replayed writes", async () => {
-  const runner = await read("scripts/run-baota-release-rollout.mjs");
+test("M07-05 signed release write probe rejects stale or forged requests before the durable write", async () => {
+  const { ReleaseWriteProbeService, signReleaseProbe } = await import("../../apps/api/dist/release-rollout-service.js");
+  const now = new Date("2026-08-08T18:00:00.000Z"), signingKey = "m07-05-test-signing-key-with-32-characters", writes = [];
+  const service = new ReleaseWriteProbeService({ writeProbe: async (input) => writes.push(input) }, signingKey, "a".repeat(40), 60, () => now);
+  const input = { timestamp: Math.floor(now.getTime() / 1000), nonce: randomUUID(), requestId: randomUUID(), traceId: randomUUID(), releaseId: randomUUID(), sampleId: randomUUID() };
+  const accepted = await service.record({ ...input, signature: signReleaseProbe(input, signingKey) });
+  assert.equal(accepted.accepted, true);
+  assert.equal(writes.length, 1);
+  await assert.rejects(() => service.record({ ...input, sampleId: randomUUID(), signature: "0".repeat(64) }), { code: "release_probe_signature_invalid" });
+  await assert.rejects(() => service.record({ ...input, timestamp: input.timestamp - 61, signature: signReleaseProbe({ ...input, timestamp: input.timestamp - 61 }, signingKey) }), { code: "release_probe_timestamp_invalid" });
+  assert.equal(writes.length, 1);
+});
+
+test("M07-05 warms a signed single-transaction release write probe and measures unique writes", async () => {
+  const [runner, up, down, routes, repository, envExample] = await Promise.all([
+    read("scripts/run-baota-release-rollout.mjs"),
+    read("database/migrations/0027_release_write_probe_m07_05.up.sql"),
+    read("database/migrations/0027_release_write_probe_m07_05.down.sql"),
+    read("apps/api/src/release-rollout-routes.ts"),
+    read("apps/api/src/mysql-release-rollout-repository.ts"),
+    read("config/env.example"),
+  ]);
   assert.match(runner, /candidate_write_warmup_failed/);
-  assert.match(runner, /idempotency-key": `release-warmup-\$\{warmupCorrelation\}`/);
-  assert.match(runner, /idempotency-key": `release-\$\{effectiveReleaseId\}-\$\{percent\}-\$\{correlation\}`/);
-  assert.doesNotMatch(runner, /idempotency-key": `release-\$\{effectiveReleaseId\}-\$\{percent\}`/);
+  assert.match(runner, /\/api\/v1\/platform\/operations\/releases\/write-probe/);
+  assert.match(runner, /RELEASE_PROBE_SIGNING_KEY/);
+  assert.match(runner, /createHmac\("sha256"/);
+  assert.match(up, /CREATE TABLE `deployment_release_write_probes`/);
+  assert.match(down, /DROP TABLE IF EXISTS `deployment_release_write_probes`/);
+  assert.match(routes, /x-release-probe-signature/);
+  assert.match(repository, /INSERT INTO deployment_release_write_probes/);
+  assert.match(envExample, /RELEASE_PROBE_SIGNING_KEY=/);
+  assert.doesNotMatch(runner, /auth\/password-reset\/request/);
 });

@@ -1,5 +1,54 @@
+import { createHmac, timingSafeEqual } from "node:crypto";
+
 export interface ReleaseRolloutRepository {
   read(input: { actorId: string; requestId: string; traceId: string; now: Date }): Promise<{ releases: Array<Record<string, unknown>>; gates: Array<Record<string, unknown>> }>;
+}
+
+export interface ReleaseWriteProbeRepository {
+  writeProbe(input: { releaseId: string; sampleId: string; buildSha: string; nonce: string; requestId: string; traceId: string; observedAt: Date }): Promise<void>;
+}
+
+export interface ReleaseProbeSignatureInput {
+  timestamp: number;
+  nonce: string;
+  requestId: string;
+  traceId: string;
+  releaseId: string;
+  sampleId: string;
+}
+
+export class ReleaseProbeError extends Error {
+  constructor(readonly code: string, readonly statusCode: number, readonly actionHint: string) {
+    super(code);
+    this.name = "ReleaseProbeError";
+  }
+}
+
+export const releaseProbeCanonical = (input: ReleaseProbeSignatureInput) => [input.timestamp, input.nonce, input.requestId, input.traceId, input.releaseId, input.sampleId].join("\n");
+export const signReleaseProbe = (input: ReleaseProbeSignatureInput, signingKey: string) => createHmac("sha256", signingKey).update(releaseProbeCanonical(input)).digest("hex");
+
+export class ReleaseWriteProbeService {
+  constructor(
+    private readonly repository: ReleaseWriteProbeRepository,
+    private readonly signingKey: string,
+    private readonly buildSha: string,
+    private readonly timestampToleranceSeconds: number,
+    private readonly now = () => new Date(),
+  ) {}
+
+  async record(input: Omit<ReleaseProbeSignatureInput, "timestamp"> & { timestamp: unknown; signature: unknown }) {
+    const timestamp = Number(input.timestamp), signature = String(input.signature ?? "");
+    const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!Number.isSafeInteger(timestamp) || Math.abs(Math.floor(this.now().getTime() / 1000) - timestamp) > this.timestampToleranceSeconds)
+      throw new ReleaseProbeError("release_probe_timestamp_invalid", 401, "同步宝塔任务时间后重新执行发布。");
+    if (![input.nonce, input.requestId, input.traceId, input.releaseId, input.sampleId].every((value) => uuid.test(value)) || !/^[a-f0-9]{64}$/i.test(signature))
+      throw new ReleaseProbeError("release_probe_signature_invalid", 401, "检查宝塔受限发布探针配置后重试。");
+    const expected = signReleaseProbe({ timestamp, nonce: input.nonce, requestId: input.requestId, traceId: input.traceId, releaseId: input.releaseId, sampleId: input.sampleId }, this.signingKey);
+    if (!timingSafeEqual(Buffer.from(expected, "hex"), Buffer.from(signature, "hex")))
+      throw new ReleaseProbeError("release_probe_signature_invalid", 401, "检查宝塔受限发布探针配置后重试。");
+    await this.repository.writeProbe({ releaseId: input.releaseId, sampleId: input.sampleId, buildSha: this.buildSha, nonce: input.nonce, requestId: input.requestId, traceId: input.traceId, observedAt: this.now() });
+    return { accepted: true as const, sample_id: input.sampleId, build_sha: this.buildSha };
+  }
 }
 
 export interface ReleaseRolloutPolicy {

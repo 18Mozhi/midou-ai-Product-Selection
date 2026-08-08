@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "ScoutOps M07-05 production rollout evidence",
   "type": "object",
-  "required": ["schemaVersion", "module", "manager", "topology", "backupServerUsed", "releaseId", "buildSha", "appVersion", "configFingerprint", "migrationVersion", "percentages", "minimumObservationSeconds", "gates", "automaticStopArmed", "rollbackTarget", "requestId", "traceId", "capturedAt"],
+  "required": ["schemaVersion", "module", "manager", "topology", "backupServerUsed", "releaseId", "buildSha", "appVersion", "configFingerprint", "migrationVersion", "writeProbe", "percentages", "minimumObservationSeconds", "gates", "automaticStopArmed", "rollbackTarget", "requestId", "traceId", "capturedAt"],
   "properties": {
     "schemaVersion": {"const": 1},
     "module": {"const": "M07-05"},
@@ -13,7 +13,8 @@
     "buildSha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
     "appVersion": {"type": "string", "minLength": 1},
     "configFingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-    "migrationVersion": {"const": "0026_release_rollout_m07_05.up.sql"},
+    "migrationVersion": {"const": "0027_release_write_probe_m07_05.up.sql"},
+    "writeProbe": {"type": "object", "required": ["path", "signed", "durableStatementsPerSample"], "properties": {"path": {"const": "/api/v1/platform/operations/releases/write-probe"}, "signed": {"const": true}, "durableStatementsPerSample": {"const": 1}}, "additionalProperties": false},
     "percentages": {"const": [5, 25, 100]},
     "minimumObservationSeconds": {"type": "integer", "minimum": 1800},
     "gates": {

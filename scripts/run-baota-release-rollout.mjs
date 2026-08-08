@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { createHash, randomUUID } from "node:crypto";
+import { createHash, createHmac, randomUUID } from "node:crypto";
 import { spawn } from "node:child_process";
 import { mkdir, open, readFile, stat, writeFile } from "node:fs/promises";
 import { basename, dirname, isAbsolute, resolve } from "node:path";
@@ -41,6 +41,23 @@ function parseTimingLines(source, candidatePort) {
   return records;
 }
 
+const probeCanonical = ({ timestamp, nonce, requestId, traceId, releaseId, sampleId }) => [timestamp, nonce, requestId, traceId, releaseId, sampleId].join("\n");
+const probeSignature = (input, signingKey) => createHmac("sha256", signingKey).update(probeCanonical(input)).digest("hex");
+
+async function sendWriteProbe(baseUrl, runtime, releaseId, correlation) {
+  const timestamp = Math.floor(Date.now() / 1000), nonce = randomUUID(), input = { timestamp, nonce, requestId: correlation, traceId: correlation, releaseId, sampleId: correlation };
+  return fetch(`${baseUrl}/api/v1/platform/operations/releases/write-probe`, { method: "POST", headers: { accept: "application/json", "content-type": "application/json", origin: runtime.WEB_ORIGIN, "x-request-id": correlation, "x-trace-id": correlation, "x-release-probe-timestamp": String(timestamp), "x-release-probe-nonce": nonce, "x-release-probe-signature": probeSignature(input, runtime.RELEASE_PROBE_SIGNING_KEY) }, body: JSON.stringify({ release_id: releaseId, sample_id: correlation }), signal: AbortSignal.timeout(10_000) });
+}
+
+async function applyMigration(pool, releaseRoot, migrationName) {
+  const migrationSql = await readFile(resolve(releaseRoot, "database/migrations", migrationName), "utf8"), checksum = sha256(migrationSql.replace(/\r\n/g, "\n"));
+  const [rows] = await pool.query("SELECT checksum FROM schema_migrations WHERE name=?", [migrationName]);
+  const existing = rows[0];
+  if (!existing) { for (const statement of migrationSql.split(";").map((value) => value.trim()).filter(Boolean)) await pool.query(statement); await pool.query("INSERT INTO schema_migrations(name,checksum,applied_at) VALUES(?,?,UTC_TIMESTAMP(3))", [migrationName, checksum]); }
+  else if (existing.checksum !== checksum) throw fail("release_migration_drift", `M07-05 migration ${migrationName} checksum drifted`);
+  return { name: migrationName, checksum };
+}
+
 function breachFor(metrics, readCount, writeCount, minimumSamples, thresholds) {
   if (readCount < minimumSamples || writeCount < minimumSamples) return "insufficient_candidate_samples";
   if (![metrics.errorRate, metrics.readP95, metrics.writeP95, metrics.asyncLag].every(Number.isFinite)) return "release_metric_missing";
@@ -52,7 +69,7 @@ function breachFor(metrics, readCount, writeCount, minimumSamples, thresholds) {
 }
 
 if (argv.includes("--self-test")) {
-  const records = parseTimingLines('127.0.0.1 - - [time] "GET /api/v1/health/live HTTP/1.1" status=200 bytes=1 request_time=0.100 upstream_addr="127.0.0.1:4103"\n127.0.0.1 - - [time] "POST /api/v1/auth/password-reset/request HTTP/1.1" status=202 bytes=1 request_time=0.200 upstream_addr="127.0.0.1:4103"\n127.0.0.1 - - [time] "GET /api/v1/health/live HTTP/1.1" status=500 bytes=1 request_time=9.000 upstream_addr="127.0.0.1:4101"', 4103);
+  const records = parseTimingLines('127.0.0.1 - - [time] "GET /api/v1/health/live HTTP/1.1" status=200 bytes=1 request_time=0.100 upstream_addr="127.0.0.1:4103"\n127.0.0.1 - - [time] "POST /api/v1/platform/operations/releases/write-probe HTTP/1.1" status=202 bytes=1 request_time=0.200 upstream_addr="127.0.0.1:4103"\n127.0.0.1 - - [time] "GET /api/v1/health/live HTTP/1.1" status=500 bytes=1 request_time=9.000 upstream_addr="127.0.0.1:4101"', 4103);
   const metrics = { errorRate: 0, readP95: percentile(records.filter((item) => item.method === "GET").map((item) => item.milliseconds), .95), writeP95: percentile(records.filter((item) => item.method === "POST").map((item) => item.milliseconds), .95), asyncLag: 2 };
   const thresholds = { errorRate: 1, readP95: 300, writeP95: 600, asyncLag: 60 };
   if (records.length !== 2 || metrics.readP95 !== 100 || metrics.writeP95 !== 200 || breachFor(metrics, 1, 1, 1, thresholds) !== null || breachFor(metrics, 0, 1, 1, thresholds) !== "insufficient_candidate_samples" || breachFor({ ...metrics, errorRate: 1 }, 1, 1, 1, thresholds) !== "error_rate_threshold_exceeded" || splitConfig(0, 4101, 4103).includes(":4103") || !siteConfig("server { location /api/ { proxy_pass http://127.0.0.1:4101; }\n}", "/www/wwwlogs/test.log").includes("$scoutops_release_upstream")) throw fail("release_self_test_failed", "release parser, thresholds, stable fallback or Nginx rendering drifted");
@@ -99,6 +116,7 @@ try {
   if (!Number.isInteger(observeSeconds) || observeSeconds < (production ? 1800 : 1)) throw fail("release_observation_invalid", production ? "production observation must be at least 1800 seconds" : "observation must be positive");
   if (!Number.isInteger(intervalSeconds) || intervalSeconds < 1 || intervalSeconds > 60 || !Number.isInteger(minimumSamples) || minimumSamples < 1) throw fail("release_sampling_invalid", "sampling interval or minimum sample count is invalid");
   const webOrigin = runtime.WEB_ORIGIN; if (!/^https:\/\/[^/]+$/.test(webOrigin ?? "")) throw fail("release_web_origin_invalid", "WEB_ORIGIN must be the production HTTPS origin");
+  if (String(runtime.RELEASE_PROBE_SIGNING_KEY ?? "").length < 32) throw fail("release_probe_signing_key_invalid", "RELEASE_PROBE_SIGNING_KEY must contain at least 32 characters");
   stablePort = Number(runtime.RELEASE_STABLE_API_PORT ?? 4101); candidatePort = Number(runtime.RELEASE_CANDIDATE_API_PORT ?? 4103);
   if (stablePort === candidatePort || ![stablePort, candidatePort].every((port) => Number.isInteger(port) && port >= 1024 && port <= 65535)) throw fail("release_port_invalid", "stable and candidate private ports must be different");
   sitePath = absolute(runtime.RELEASE_NGINX_SITE_CONFIG, "RELEASE_NGINX_SITE_CONFIG"); splitPath = absolute(runtime.RELEASE_NGINX_SPLIT_CONFIG, "RELEASE_NGINX_SPLIT_CONFIG");
@@ -109,26 +127,23 @@ try {
   const candidateBase = (runtime.RELEASE_CANDIDATE_BASE_URL ?? `http://127.0.0.1:${candidatePort}`).replace(/\/$/, "");
   const identity = await fetchIdentity(candidateBase);
   if (identity.build_sha !== runtime.BUILD_SHA) throw fail("candidate_build_mismatch", "candidate build_sha differs from the release task BUILD_SHA");
-  const warmupCorrelation = randomUUID();
-  const warmupResponse = await fetch(`${candidateBase}/api/v1/auth/password-reset/request`, { method: "POST", headers: { accept: "application/json", "content-type": "application/json", origin: webOrigin, "idempotency-key": `release-warmup-${warmupCorrelation}`, "x-request-id": warmupCorrelation, "x-trace-id": warmupCorrelation }, body: JSON.stringify({ email: `release-warmup-${warmupCorrelation}@invalid.local` }), signal: AbortSignal.timeout(10_000) });
-  if (warmupResponse.status !== 202) throw fail("candidate_write_warmup_failed", "candidate write path warmup did not return the enumeration-safe accepted response");
-  const migrationName = "0026_release_rollout_m07_05.up.sql", migrationSql = await readFile(resolve(releaseRoot, "database/migrations", migrationName), "utf8"), checksum = sha256(migrationSql.replace(/\r\n/g, "\n"));
-  const [existingMigrationRows] = await pool.query("SELECT checksum FROM schema_migrations WHERE name=?", [migrationName]);
-  const existingMigration = existingMigrationRows[0];
-  if (!existingMigration) { for (const statement of migrationSql.split(";").map((value) => value.trim()).filter(Boolean)) await pool.query(statement); await pool.query("INSERT INTO schema_migrations(name,checksum,applied_at) VALUES(?,?,UTC_TIMESTAMP(3))", [migrationName, checksum]); }
-  else if (existingMigration.checksum !== checksum) throw fail("release_migration_drift", "M07-05 migration checksum drifted");
+  const migrations = [];
+  for (const name of ["0026_release_rollout_m07_05.up.sql", "0027_release_write_probe_m07_05.up.sql"]) migrations.push(await applyMigration(pool, releaseRoot, name));
+  const migrationName = migrations.at(-1).name;
   const releaseId = randomUUID(), now = new Date();
   const [sameBuildRows] = await pool.query("SELECT id FROM deployment_releases WHERE stage='S0' AND build_sha=?", [runtime.BUILD_SHA]);
   const sameBuild = sameBuildRows[0];
   const effectiveReleaseId = sameBuild?.id ?? releaseId;
   if (sameBuild) { await pool.query("DELETE FROM deployment_release_gates WHERE release_id=?", [effectiveReleaseId]); await pool.query("UPDATE deployment_releases SET app_version=?,config_fingerprint=?,migration_version=?,status='deploying',request_id=?,trace_id=?,started_at=?,finished_at=NULL,updated_at=? WHERE id=?", [runtime.APP_VERSION, identity.config_fingerprint, migrationName, requestId, traceId, now, now, effectiveReleaseId]); }
   else await pool.query("INSERT INTO deployment_releases(id,stage,app_version,build_sha,config_fingerprint,migration_version,status,approved_by,request_id,trace_id,started_at,finished_at,created_at,updated_at) VALUES(?,'S0',?,?,?,?,'deploying',NULL,?,?,?,?,?,?)", [effectiveReleaseId, runtime.APP_VERSION, runtime.BUILD_SHA, identity.config_fingerprint, migrationName, requestId, traceId, now, null, now, now]);
+  const warmupCorrelation = randomUUID(), warmupResponse = await sendWriteProbe(candidateBase, runtime, effectiveReleaseId, warmupCorrelation);
+  if (warmupResponse.status !== 202) throw fail("candidate_write_warmup_failed", "candidate signed release write probe did not return accepted");
   const preflightGate = await writeGate(pool, effectiveReleaseId, "preflight", "passed", { metadata: { candidate_port: candidatePort, identity_verified: true, manager: "baota" } }); await event(pool, effectiveReleaseId, preflightGate, "passed");
   const [backupRows] = await pool.query("SELECT id,finished_at FROM backup_recovery_runs WHERE run_type='restore_drill' AND status='verified' AND isolated=1 AND encrypted=1 AND integrity_verified=1 ORDER BY finished_at DESC LIMIT 1");
   const backup = backupRows[0];
   if (!backup) throw fail("release_backup_gate_missing", "no verified M07-04 restore drill exists");
   const backupGate = await writeGate(pool, effectiveReleaseId, "backup", "passed", { metadata: { backup_run_id: backup.id, same_host_scope: true } }); await event(pool, effectiveReleaseId, backupGate, "passed");
-  const migrationGate = await writeGate(pool, effectiveReleaseId, "migration", "passed", { metadata: { migration: migrationName, checksum } }); await event(pool, effectiveReleaseId, migrationGate, "passed");
+  const migrationGate = await writeGate(pool, effectiveReleaseId, "migration", "passed", { metadata: { migration: migrationName, migrations } }); await event(pool, effectiveReleaseId, migrationGate, "passed");
   originalSite = await readFile(sitePath, "utf8"); const rolloutSite = siteConfig(originalSite, timingLog); await writeFile(sitePath, rolloutSite, { mode: 0o600 });
   nginxBin = runtime.RELEASE_NGINX_BIN ?? "/www/server/nginx/sbin/nginx"; nginxConfigured = true;
   const publicBase = (runtime.RELEASE_PUBLIC_BASE_URL ?? "https://midouai.mozhiz.cn").replace(/\/$/, "");
@@ -143,7 +158,7 @@ try {
       const common = { "x-request-id": correlation, "x-trace-id": correlation };
       await Promise.allSettled([
         fetch(`${publicBase}/api/v1/health/live`, { headers: { ...common, accept: "application/json" }, signal: AbortSignal.timeout(10_000) }),
-        fetch(`${publicBase}/api/v1/auth/password-reset/request`, { method: "POST", headers: { ...common, accept: "application/json", "content-type": "application/json", origin: webOrigin, "idempotency-key": `release-${effectiveReleaseId}-${percent}-${correlation}` }, body: JSON.stringify({ email: `release-probe-${effectiveReleaseId}@invalid.local` }), signal: AbortSignal.timeout(10_000) }),
+        sendWriteProbe(publicBase, runtime, effectiveReleaseId, correlation),
       ]);
       lagSamples.push(await asyncLagSeconds(pool)); await sleep(intervalSeconds * 1000);
     }
@@ -162,7 +177,7 @@ try {
     await writeGate(pool, effectiveReleaseId, `canary_${percent}`, "passed", { ...metrics, startedAt: gateStarted, metadata: { read_samples: reads.length, write_samples: writes.length } }); await event(pool, effectiveReleaseId, runningGate, "passed", null, metrics); gates.push({ ...metrics, readSamples: reads.length, writeSamples: writes.length });
   }
   await pool.query("UPDATE deployment_releases SET status='healthy',finished_at=UTC_TIMESTAMP(3),updated_at=UTC_TIMESTAMP(3) WHERE id=?", [effectiveReleaseId]);
-  const evidence = { schemaVersion: 1, module: "M07-05", manager: "baota", topology: "single_host_stable_and_candidate", backupServerUsed: false, releaseId: effectiveReleaseId, buildSha: runtime.BUILD_SHA, appVersion: runtime.APP_VERSION, configFingerprint: identity.config_fingerprint, migrationVersion: migrationName, percentages: [5,25,100], minimumObservationSeconds: observeSeconds, gates, automaticStopArmed: true, rollbackTarget: { sameHost: true, stablePort }, requestId, traceId, capturedAt: new Date().toISOString() };
+  const evidence = { schemaVersion: 1, module: "M07-05", manager: "baota", topology: "single_host_stable_and_candidate", backupServerUsed: false, releaseId: effectiveReleaseId, buildSha: runtime.BUILD_SHA, appVersion: runtime.APP_VERSION, configFingerprint: identity.config_fingerprint, migrationVersion: migrationName, writeProbe: { path: "/api/v1/platform/operations/releases/write-probe", signed: true, durableStatementsPerSample: 1 }, percentages: [5,25,100], minimumObservationSeconds: observeSeconds, gates, automaticStopArmed: true, rollbackTarget: { sameHost: true, stablePort }, requestId, traceId, capturedAt: new Date().toISOString() };
   await mkdir(dirname(evidencePath), { recursive: true, mode: 0o700 }); await writeFile(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`, { mode: 0o600 }); process.stdout.write(`${JSON.stringify(evidence)}\n`);
 } catch (error) {
   if (nginxConfigured && splitPath && stablePort && candidatePort) {
