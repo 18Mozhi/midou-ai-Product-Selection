@@ -420,6 +420,10 @@ flowchart LR
 
 任务中心以组织/工作区范围的 `tasks`、不可变评论与任务事件为事实源。任务状态固定为待处理、进行中、完成、取消；SLA 只由真实 `due_at` 派生，缺少期限显示 `not_set`。创建、状态、延期、转交和评论使用幂等键与版本锁，并在同一事务写审计和 Outbox。M04-06 采购任务由宝塔 Node Worker 通过租约投影，来源唯一键保证重放不重复；审批、通知消费和 SSE 由 M05-02 至 M05-04 后续模块交付。
 
+#### M05-02 审批流程实现基线
+
+审批模板采用草稿与不可变已发布版本分离；每个节点显式保存审批人、顺序、SLA 和超时接收人。审批请求只绑定当前组织、当前工作区内存在的任务或机会决策，并锁定创建时的模板版本。批准与驳回均要求原因并追加不可变动作历史；请求 version 防止并发覆盖。宝塔 Node Worker 以租约处理超时节点，只升级 active approver 并写审计和 `approval.overdue` Outbox，绝不自动批准或驳回；通知投递和 SSE 仍由 M05-03、M05-04 交付。
+
 所有事件包含：`event_id`、`organization_id`、`actor_id`、`resource_type`、`resource_id`、`occurred_at`、`schema_version`、`request_id`、`trace_id`、最小业务 payload。
 
 首批事件：

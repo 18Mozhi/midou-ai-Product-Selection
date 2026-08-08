@@ -16,6 +16,7 @@ import CostRuleConsole from "./CostRuleConsole.vue";
 import CompetitorMonitor from "./CompetitorMonitor.vue";
 import SourcingWorkspace from "./SourcingWorkspace.vue";
 import TaskWorkspace from "./TaskWorkspace.vue";
+import ApprovalWorkspace from "./ApprovalWorkspace.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -80,6 +81,12 @@ const memberMenu: MenuItem[] = [
     label: "任务中心",
     path: "/tasks",
     icon: "☷",
+    capabilities: ["task:read"],
+  },
+  {
+    label: "审批中心",
+    path: "/tasks/approvals",
+    icon: "✓",
     capabilities: ["task:read"],
   },
   {
@@ -228,6 +235,9 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   isTasks = computed(
     () => props.shell === "member" && ["/work", "/tasks"].includes(routePath),
   ),
+  isApprovals = computed(
+    () => props.shell === "member" && routePath === "/tasks/approvals",
+  ),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
   ),
@@ -256,40 +266,40 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
     return match?.[1] ?? "";
   });
 const phaseLabel = computed(() =>
-  isTasks.value
+  isTasks.value || isApprovals.value
     ? "P05"
     : isTrends.value ||
-  isOpportunities.value ||
-  isCompetitors.value ||
-  isSourcing.value ||
-  isCostRules.value
-    ? "P04"
-    : props.shell === "platform_admin" &&
-        [
-          "/platform-admin/providers",
-          "/platform-admin/credentials",
-          "/platform-admin/collection",
-          "/platform-admin/data",
-        ].some((path) => routePath.startsWith(path))
-      ? "P03"
-      : "P02",
+        isOpportunities.value ||
+        isCompetitors.value ||
+        isSourcing.value ||
+        isCostRules.value
+      ? "P04"
+      : props.shell === "platform_admin" &&
+          [
+            "/platform-admin/providers",
+            "/platform-admin/credentials",
+            "/platform-admin/collection",
+            "/platform-admin/data",
+          ].some((path) => routePath.startsWith(path))
+        ? "P03"
+        : "P02",
 );
 const pageSummary = computed(() =>
-  isTasks.value
+  isTasks.value || isApprovals.value
     ? "任务状态、负责人、期限、评论、转交和 SLA 均由当前工作区真实 API 驱动。"
     : isSourcing.value
-    ? "供应链候选、版本化报价、最多五家对比和采购任务均保留来源与缺失项。"
-    : isCompetitors.value
-      ? "竞品身份、来源快照、变化记录和阈值告警由真实 API 与 Worker 驱动。"
-      : isCostRules.value
-        ? "版本化费用、双审批、汇率来源与利润计算由真实 API 和 Worker 驱动。"
-        : isOpportunities.value
-          ? "机会、证据覆盖和人工决策由当前组织与工作区的真实 API 驱动。"
-          : isTrends.value
-            ? "趋势主题、证据、关注和监控规则均由当前组织与工作区的真实 API 驱动。"
-            : phaseLabel.value === "P03"
-              ? "来源、采集运行与证据数据均由对应模块的真实 API 和权限边界驱动。"
-              : "导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。",
+      ? "供应链候选、版本化报价、最多五家对比和采购任务均保留来源与缺失项。"
+      : isCompetitors.value
+        ? "竞品身份、来源快照、变化记录和阈值告警由真实 API 与 Worker 驱动。"
+        : isCostRules.value
+          ? "版本化费用、双审批、汇率来源与利润计算由真实 API 和 Worker 驱动。"
+          : isOpportunities.value
+            ? "机会、证据覆盖和人工决策由当前组织与工作区的真实 API 驱动。"
+            : isTrends.value
+              ? "趋势主题、证据、关注和监控规则均由当前组织与工作区的真实 API 驱动。"
+              : phaseLabel.value === "P03"
+                ? "来源、采集运行与证据数据均由对应模块的真实 API 和权限边界驱动。"
+                : "导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。",
 );
 const short = (value: string | null) =>
   value ? `${value.slice(0, 8)}…` : "不适用";
@@ -478,6 +488,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           :api-base-url="apiBaseUrl"
           :mode="routePath === '/work' ? 'today' : 'all'"
         />
+        <ApprovalWorkspace v-else-if="isApprovals" :api-base-url="apiBaseUrl" />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"

@@ -1,71 +1,545 @@
-import { loadRuntimeConfig } from '@scoutops/config';
-import { createDatabasePool } from '@scoutops/database';
-import { createRedisConnection, ScopedRedisStore } from '@scoutops/redis';
-import { ProviderAdapterRegistry } from '@scoutops/provider-adapters';
-import { createBuiltinSourceAdapters } from '@scoutops/provider-sources';
-import { PendingMailProvider, processAuthDeliveryOnce } from './auth-delivery-worker.js';
-import { MySqlCollectionTaskWorkerRepository, ScopedRedisCollectionCoordinator, processCollectionTaskOnce } from './collection-task-worker.js';
-import { MySqlEvidencePersistence } from './evidence-persistence.js';
-import { ProviderSourceExecutor } from './provider-source-executor.js';
-import { MySqlTrendProjectionWorker } from './trend-projection-worker.js';
-import { MySqlOpportunityRefreshWorker } from './opportunity-refresh-worker.js';
-import { MySqlOpportunityScoringWorker } from './opportunity-scoring-worker.js';
-import { MySqlOpportunityProfitWorker } from './opportunity-profit-worker.js';
-import { MySqlCompetitorMonitorWorker } from './competitor-monitor-worker.js';
-import { MySqlSourcingProjectionWorker } from './sourcing-projection-worker.js';
-import { MySqlAiAnalysisWorker, OpenAiCompatibleAnalysisAdapter } from './ai-analysis-worker.js';
-import { projectBusinessTaskOnce } from './business-task-projection-worker.js';
+import { loadRuntimeConfig } from "@scoutops/config";
+import { createDatabasePool } from "@scoutops/database";
+import { createRedisConnection, ScopedRedisStore } from "@scoutops/redis";
+import { ProviderAdapterRegistry } from "@scoutops/provider-adapters";
+import { createBuiltinSourceAdapters } from "@scoutops/provider-sources";
+import {
+  PendingMailProvider,
+  processAuthDeliveryOnce,
+} from "./auth-delivery-worker.js";
+import {
+  MySqlCollectionTaskWorkerRepository,
+  ScopedRedisCollectionCoordinator,
+  processCollectionTaskOnce,
+} from "./collection-task-worker.js";
+import { MySqlEvidencePersistence } from "./evidence-persistence.js";
+import { ProviderSourceExecutor } from "./provider-source-executor.js";
+import { MySqlTrendProjectionWorker } from "./trend-projection-worker.js";
+import { MySqlOpportunityRefreshWorker } from "./opportunity-refresh-worker.js";
+import { MySqlOpportunityScoringWorker } from "./opportunity-scoring-worker.js";
+import { MySqlOpportunityProfitWorker } from "./opportunity-profit-worker.js";
+import { MySqlCompetitorMonitorWorker } from "./competitor-monitor-worker.js";
+import { MySqlSourcingProjectionWorker } from "./sourcing-projection-worker.js";
+import {
+  MySqlAiAnalysisWorker,
+  OpenAiCompatibleAnalysisAdapter,
+} from "./ai-analysis-worker.js";
+import { projectBusinessTaskOnce } from "./business-task-projection-worker.js";
+import { ApprovalEscalationWorker } from "./approval-escalation-worker.js";
 
-const config = loadRuntimeConfig(process.env, 'worker');
+const config = loadRuntimeConfig(process.env, "worker");
 const pool = createDatabasePool(config);
 const redisClient = createRedisConnection(config);
 const redisStore = new ScopedRedisStore(redisClient);
-const registry = new ProviderAdapterRegistry({ healthTimeoutMs: config.providerAdapters.healthTimeoutMs, maxResponseBytes: config.providerAdapters.maxResponseBytes, maxItemsPerBatch: config.providerAdapters.maxItemsPerBatch });
+const registry = new ProviderAdapterRegistry({
+  healthTimeoutMs: config.providerAdapters.healthTimeoutMs,
+  maxResponseBytes: config.providerAdapters.maxResponseBytes,
+  maxItemsPerBatch: config.providerAdapters.maxItemsPerBatch,
+});
 for (const adapter of createBuiltinSourceAdapters()) registry.register(adapter);
 const collectionRepository = new MySqlCollectionTaskWorkerRepository(pool);
 const coordinator = new ScopedRedisCollectionCoordinator(redisStore);
-const executor = new ProviderSourceExecutor(pool, registry, new MySqlEvidencePersistence(pool, config.storage.evidenceRoot, config.evidence.maxRawBytes), config.identity.workerId);
-const trendProjection = new MySqlTrendProjectionWorker(pool, config.identity.workerId, config.trends.projectionLeaseSeconds);
-const opportunityRefresh = new MySqlOpportunityRefreshWorker(pool, config.identity.workerId, config.opportunities.refreshLeaseSeconds);
-const opportunityScoring = new MySqlOpportunityScoringWorker(pool, config.identity.workerId, config.scoring.leaseSeconds);
-const opportunityProfit = new MySqlOpportunityProfitWorker(pool, config.identity.workerId, config.profit.leaseSeconds);
-const competitorMonitor = new MySqlCompetitorMonitorWorker(pool, config.identity.workerId, config.competitorMonitor.leaseSeconds);
-const sourcingProjection = new MySqlSourcingProjectionWorker(pool, config.identity.workerId, config.sourcing.leaseSeconds);
-const aiAnalysis = new MySqlAiAnalysisWorker(pool,config.identity.workerId,config.ai.leaseSeconds,config.ai.retryLimit,new OpenAiCompatibleAnalysisAdapter(config.ai.model,config.ai.baseUrl,config.ai.apiKey,config.ai.timeoutMs));
-let stopping = false, authPolling = false, collectionPolling = false, trendPolling = false, opportunityPolling = false, scoringPolling = false, profitPolling = false, competitorPolling = false, sourcingPolling = false, aiPolling=false,businessTaskPolling=false;
+const executor = new ProviderSourceExecutor(
+  pool,
+  registry,
+  new MySqlEvidencePersistence(
+    pool,
+    config.storage.evidenceRoot,
+    config.evidence.maxRawBytes,
+  ),
+  config.identity.workerId,
+);
+const trendProjection = new MySqlTrendProjectionWorker(
+  pool,
+  config.identity.workerId,
+  config.trends.projectionLeaseSeconds,
+);
+const opportunityRefresh = new MySqlOpportunityRefreshWorker(
+  pool,
+  config.identity.workerId,
+  config.opportunities.refreshLeaseSeconds,
+);
+const opportunityScoring = new MySqlOpportunityScoringWorker(
+  pool,
+  config.identity.workerId,
+  config.scoring.leaseSeconds,
+);
+const opportunityProfit = new MySqlOpportunityProfitWorker(
+  pool,
+  config.identity.workerId,
+  config.profit.leaseSeconds,
+);
+const competitorMonitor = new MySqlCompetitorMonitorWorker(
+  pool,
+  config.identity.workerId,
+  config.competitorMonitor.leaseSeconds,
+);
+const sourcingProjection = new MySqlSourcingProjectionWorker(
+  pool,
+  config.identity.workerId,
+  config.sourcing.leaseSeconds,
+);
+const aiAnalysis = new MySqlAiAnalysisWorker(
+  pool,
+  config.identity.workerId,
+  config.ai.leaseSeconds,
+  config.ai.retryLimit,
+  new OpenAiCompatibleAnalysisAdapter(
+    config.ai.model,
+    config.ai.baseUrl,
+    config.ai.apiKey,
+    config.ai.timeoutMs,
+  ),
+);
+const approvalEscalation = new ApprovalEscalationWorker(
+  pool,
+  config.identity.workerId,
+  config.approvals.escalationLeaseSeconds,
+);
+let stopping = false,
+  authPolling = false,
+  collectionPolling = false,
+  trendPolling = false,
+  opportunityPolling = false,
+  scoringPolling = false,
+  profitPolling = false,
+  competitorPolling = false,
+  sourcingPolling = false,
+  aiPolling = false,
+  businessTaskPolling = false,
+  approvalPolling = false;
 
-const heartbeat = () => console.log(JSON.stringify({ service: 'product-scout-worker', status: stopping ? 'stopping' : 'idle', worker_id: config.identity.workerId, registered_sources: registry.describe().map(item => item.key), trend_projection: 'registered', opportunity_refresh: 'registered', opportunity_scoring: 'registered', opportunity_profit: 'registered', competitor_monitor: 'registered', sourcing_projection: 'registered', ai_analysis:'registered', config_fingerprint: config.configFingerprint, observed_at: new Date().toISOString() }));
-const pollAuth = async () => { if (stopping || authPolling || !config.security.credentialsMasterKey) return; authPolling = true; try { const result = await processAuthDeliveryOnce({ pool, workerId: config.identity.workerId, masterKey: config.security.credentialsMasterKey, provider: new PendingMailProvider() }); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'auth_delivery', ...result, observed_at: new Date().toISOString() })); } catch { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'auth_delivery', status: 'dependency_failed', observed_at: new Date().toISOString() })); } finally { authPolling = false; } };
-const pollCollection = async () => { if (stopping || collectionPolling) return; collectionPolling = true; try { await redisStore.connect(); const result = await processCollectionTaskOnce({ repository: collectionRepository, coordinator, executor, workerId: config.identity.workerId, leaseSeconds: config.collectionTasks.leaseSeconds }); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'collection_tasks', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'collection_tasks', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { collectionPolling = false; } };
-const pollTrends = async () => { if (stopping || trendPolling) return; trendPolling = true; try { const result = await trendProjection.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'trend_projection', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'trend_projection', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { trendPolling = false; } };
-const pollOpportunities = async () => { if (stopping || opportunityPolling) return; opportunityPolling = true; try { const result = await opportunityRefresh.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_refresh', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_refresh', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { opportunityPolling = false; } };
-const pollScoring = async () => { if (stopping || scoringPolling) return; scoringPolling = true; try { const result = await opportunityScoring.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_scoring', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_scoring', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { scoringPolling = false; } };
-const pollProfit = async () => { if (stopping || profitPolling) return; profitPolling = true; try { const result = await opportunityProfit.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_profit', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_profit', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { profitPolling = false; } };
-const pollCompetitors = async () => { if (stopping || competitorPolling) return; competitorPolling = true; try { const result = await competitorMonitor.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'competitor_monitor', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'competitor_monitor', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { competitorPolling = false; } };
-const pollSourcing = async () => { if (stopping || sourcingPolling) return; sourcingPolling = true; try { const result = await sourcingProjection.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'sourcing_projection', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'sourcing_projection', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { sourcingPolling = false; } };
-const pollAi = async()=>{if(stopping||aiPolling)return;aiPolling=true;try{const result=await aiAnalysis.processOnce();if(result.status!=='idle')console.log(JSON.stringify({service:'product-scout-worker',queue:'ai_analysis',...result,observed_at:new Date().toISOString()}));}catch{console.error(JSON.stringify({service:'product-scout-worker',queue:'ai_analysis',status:'dependency_failed',observed_at:new Date().toISOString()}));}finally{aiPolling=false;}};
-const pollBusinessTasks=async()=>{if(stopping||businessTaskPolling)return;businessTaskPolling=true;try{const result=await projectBusinessTaskOnce(pool,config.identity.workerId,config.businessTasks.leaseSeconds);if(result.status!=='idle')console.log(JSON.stringify({service:'product-scout-worker',queue:'business_task_projection',...result,observed_at:new Date().toISOString()}));}catch(error){console.error(JSON.stringify({service:'product-scout-worker',queue:'business_task_projection',status:'dependency_failed',error:error instanceof Error?error.message:'unknown',observed_at:new Date().toISOString()}));}finally{businessTaskPolling=false;}};
+const heartbeat = () =>
+  console.log(
+    JSON.stringify({
+      service: "product-scout-worker",
+      status: stopping ? "stopping" : "idle",
+      worker_id: config.identity.workerId,
+      registered_sources: registry.describe().map((item) => item.key),
+      trend_projection: "registered",
+      opportunity_refresh: "registered",
+      opportunity_scoring: "registered",
+      opportunity_profit: "registered",
+      competitor_monitor: "registered",
+      sourcing_projection: "registered",
+      ai_analysis: "registered",
+      approval_escalation: "registered",
+      config_fingerprint: config.configFingerprint,
+      observed_at: new Date().toISOString(),
+    }),
+  );
+const pollAuth = async () => {
+  if (stopping || authPolling || !config.security.credentialsMasterKey) return;
+  authPolling = true;
+  try {
+    const result = await processAuthDeliveryOnce({
+      pool,
+      workerId: config.identity.workerId,
+      masterKey: config.security.credentialsMasterKey,
+      provider: new PendingMailProvider(),
+    });
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "auth_delivery",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "auth_delivery",
+        status: "dependency_failed",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    authPolling = false;
+  }
+};
+const pollCollection = async () => {
+  if (stopping || collectionPolling) return;
+  collectionPolling = true;
+  try {
+    await redisStore.connect();
+    const result = await processCollectionTaskOnce({
+      repository: collectionRepository,
+      coordinator,
+      executor,
+      workerId: config.identity.workerId,
+      leaseSeconds: config.collectionTasks.leaseSeconds,
+    });
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "collection_tasks",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "collection_tasks",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    collectionPolling = false;
+  }
+};
+const pollTrends = async () => {
+  if (stopping || trendPolling) return;
+  trendPolling = true;
+  try {
+    const result = await trendProjection.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "trend_projection",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "trend_projection",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    trendPolling = false;
+  }
+};
+const pollOpportunities = async () => {
+  if (stopping || opportunityPolling) return;
+  opportunityPolling = true;
+  try {
+    const result = await opportunityRefresh.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "opportunity_refresh",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "opportunity_refresh",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    opportunityPolling = false;
+  }
+};
+const pollScoring = async () => {
+  if (stopping || scoringPolling) return;
+  scoringPolling = true;
+  try {
+    const result = await opportunityScoring.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "opportunity_scoring",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "opportunity_scoring",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    scoringPolling = false;
+  }
+};
+const pollProfit = async () => {
+  if (stopping || profitPolling) return;
+  profitPolling = true;
+  try {
+    const result = await opportunityProfit.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "opportunity_profit",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "opportunity_profit",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    profitPolling = false;
+  }
+};
+const pollCompetitors = async () => {
+  if (stopping || competitorPolling) return;
+  competitorPolling = true;
+  try {
+    const result = await competitorMonitor.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "competitor_monitor",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "competitor_monitor",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    competitorPolling = false;
+  }
+};
+const pollSourcing = async () => {
+  if (stopping || sourcingPolling) return;
+  sourcingPolling = true;
+  try {
+    const result = await sourcingProjection.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "sourcing_projection",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "sourcing_projection",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    sourcingPolling = false;
+  }
+};
+const pollAi = async () => {
+  if (stopping || aiPolling) return;
+  aiPolling = true;
+  try {
+    const result = await aiAnalysis.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "ai_analysis",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "ai_analysis",
+        status: "dependency_failed",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    aiPolling = false;
+  }
+};
+const pollBusinessTasks = async () => {
+  if (stopping || businessTaskPolling) return;
+  businessTaskPolling = true;
+  try {
+    const result = await projectBusinessTaskOnce(
+      pool,
+      config.identity.workerId,
+      config.businessTasks.leaseSeconds,
+    );
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "business_task_projection",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "business_task_projection",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    businessTaskPolling = false;
+  }
+};
+const pollApprovals = async () => {
+  if (stopping || approvalPolling) return;
+  approvalPolling = true;
+  try {
+    const result = await approvalEscalation.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "approval_escalation",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "approval_escalation",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    approvalPolling = false;
+  }
+};
 
 heartbeat();
 const heartbeatTimer = setInterval(heartbeat, config.runtime.workerHeartbeatMs);
 const authTimer = setInterval(() => void pollAuth(), config.auth.outboxPollMs);
-const collectionTimer = setInterval(() => void pollCollection(), config.collectionTasks.pollMs);
-const trendTimer = setInterval(() => void pollTrends(), config.trends.projectionPollMs);
-const opportunityTimer = setInterval(() => void pollOpportunities(), config.opportunities.refreshPollMs);
-const scoringTimer = setInterval(() => void pollScoring(), config.scoring.pollMs);
+const collectionTimer = setInterval(
+  () => void pollCollection(),
+  config.collectionTasks.pollMs,
+);
+const trendTimer = setInterval(
+  () => void pollTrends(),
+  config.trends.projectionPollMs,
+);
+const opportunityTimer = setInterval(
+  () => void pollOpportunities(),
+  config.opportunities.refreshPollMs,
+);
+const scoringTimer = setInterval(
+  () => void pollScoring(),
+  config.scoring.pollMs,
+);
 const profitTimer = setInterval(() => void pollProfit(), config.profit.pollMs);
-const competitorTimer = setInterval(() => void pollCompetitors(), config.competitorMonitor.pollMs);
-const sourcingTimer = setInterval(() => void pollSourcing(), config.sourcing.pollMs);
-const aiTimer=setInterval(()=>void pollAi(),config.ai.pollMs);
-const businessTaskTimer=setInterval(()=>void pollBusinessTasks(),config.businessTasks.pollMs);
-void pollAuth(); void pollCollection(); void pollTrends(); void pollOpportunities(); void pollScoring(); void pollProfit(); void pollCompetitors(); void pollSourcing(); void pollAi();void pollBusinessTasks();
+const competitorTimer = setInterval(
+  () => void pollCompetitors(),
+  config.competitorMonitor.pollMs,
+);
+const sourcingTimer = setInterval(
+  () => void pollSourcing(),
+  config.sourcing.pollMs,
+);
+const aiTimer = setInterval(() => void pollAi(), config.ai.pollMs);
+const businessTaskTimer = setInterval(
+  () => void pollBusinessTasks(),
+  config.businessTasks.pollMs,
+);
+const approvalTimer = setInterval(
+  () => void pollApprovals(),
+  config.approvals.escalationPollMs,
+);
+void pollAuth();
+void pollCollection();
+void pollTrends();
+void pollOpportunities();
+void pollScoring();
+void pollProfit();
+void pollCompetitors();
+void pollSourcing();
+void pollAi();
+void pollBusinessTasks();
+void pollApprovals();
 
 const stop = async (signal: string) => {
-  if (stopping) return; stopping = true;
-  clearInterval(heartbeatTimer); clearInterval(authTimer); clearInterval(collectionTimer); clearInterval(trendTimer); clearInterval(opportunityTimer); clearInterval(scoringTimer); clearInterval(profitTimer); clearInterval(competitorTimer); clearInterval(sourcingTimer);clearInterval(aiTimer);clearInterval(businessTaskTimer);
-  while (authPolling || collectionPolling || trendPolling || opportunityPolling || scoringPolling || profitPolling || competitorPolling || sourcingPolling||aiPolling||businessTaskPolling) await new Promise(resolve => setTimeout(resolve, 25));
-  await redisStore.close(); await pool.end();
-  console.log(JSON.stringify({ service: 'product-scout-worker', status: 'stopped', signal, worker_id: config.identity.workerId, observed_at: new Date().toISOString() }));
+  if (stopping) return;
+  stopping = true;
+  clearInterval(heartbeatTimer);
+  clearInterval(authTimer);
+  clearInterval(collectionTimer);
+  clearInterval(trendTimer);
+  clearInterval(opportunityTimer);
+  clearInterval(scoringTimer);
+  clearInterval(profitTimer);
+  clearInterval(competitorTimer);
+  clearInterval(sourcingTimer);
+  clearInterval(aiTimer);
+  clearInterval(businessTaskTimer);
+  clearInterval(approvalTimer);
+  while (
+    authPolling ||
+    collectionPolling ||
+    trendPolling ||
+    opportunityPolling ||
+    scoringPolling ||
+    profitPolling ||
+    competitorPolling ||
+    sourcingPolling ||
+    aiPolling ||
+    businessTaskPolling ||
+    approvalPolling
+  )
+    await new Promise((resolve) => setTimeout(resolve, 25));
+  await redisStore.close();
+  await pool.end();
+  console.log(
+    JSON.stringify({
+      service: "product-scout-worker",
+      status: "stopped",
+      signal,
+      worker_id: config.identity.workerId,
+      observed_at: new Date().toISOString(),
+    }),
+  );
 };
-process.once('SIGTERM', () => void stop('SIGTERM'));
-process.once('SIGINT', () => void stop('SIGINT'));
+process.once("SIGTERM", () => void stop("SIGTERM"));
+process.once("SIGINT", () => void stop("SIGINT"));

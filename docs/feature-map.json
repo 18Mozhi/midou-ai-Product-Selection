@@ -7,8 +7,45 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P05",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06", "M04-07", "M05-01"],
-    "activeModules": ["M05-02"],
+    "completedModules": [
+      "M00-01",
+      "M00-07",
+      "M00-02",
+      "M00-04",
+      "M00-03",
+      "M00-05",
+      "M00-06",
+      "M00-08",
+      "M01-01",
+      "M01-02",
+      "M01-03",
+      "M01-04",
+      "M01-05",
+      "M01-06",
+      "M02-01",
+      "M02-02",
+      "M02-03",
+      "M02-04",
+      "M02-05",
+      "M02-06",
+      "M03-01",
+      "M03-02",
+      "M03-03",
+      "M03-04",
+      "M03-05",
+      "M03-06",
+      "M03-07",
+      "M04-01",
+      "M04-02",
+      "M04-03",
+      "M04-04",
+      "M04-05",
+      "M04-06",
+      "M04-07",
+      "M05-01",
+      "M05-02"
+    ],
+    "activeModules": ["M05-03"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -54,7 +91,7 @@
       "liveGate": "../scripts/verify-redis-live.mjs",
       "purposes": ["cache", "queue", "rate", "sse"],
       "keyScope": "scoutops:v1:<purpose>:org:<organization_id>:ws:<workspace_id>:...",
-      "ttlPolicy": {"cache": 300, "queue": 86400, "rate": 60, "sse": 86400},
+      "ttlPolicy": { "cache": 300, "queue": 86400, "rate": 60, "sse": 86400 },
       "runtimeEndpoint": "deferred_to_M00-05",
       "status": "module_verified"
     },
@@ -63,7 +100,13 @@
       "guard": "../apps/api/src/api-foundation.ts",
       "readinessEndpoint": "/api/v1/health/ready",
       "dependencies": ["configuration", "mysql", "redis"],
-      "publicReadinessFields": ["status", "dependency category", "request_id", "trace_id", "observed_at"],
+      "publicReadinessFields": [
+        "status",
+        "dependency category",
+        "request_id",
+        "trace_id",
+        "observed_at"
+      ],
       "status": "module_verified"
     },
     "fileAuditFoundation": {
@@ -71,7 +114,18 @@
       "pathScope": "organizations/<organization_id>/workspaces/<workspace_id>/...",
       "categories": ["evidence", "export", "attachment"],
       "downloadGrantMaximumSeconds": 300,
-      "auditFields": ["organization_id", "workspace_id", "actor_id", "action", "resource_type", "resource_id", "request_id", "trace_id", "occurred_at", "schema_version"],
+      "auditFields": [
+        "organization_id",
+        "workspace_id",
+        "actor_id",
+        "action",
+        "resource_type",
+        "resource_id",
+        "request_id",
+        "trace_id",
+        "occurred_at",
+        "schema_version"
+      ],
       "runtimeApi": "deferred_to_identity_authorization_modules",
       "status": "module_verified"
     },
@@ -85,8 +139,21 @@
     },
     "localIdentity": {
       "module": "M01-01",
-      "entrypoints": ["../apps/api/src/auth-routes.ts", "../apps/web/src/components/LocalIdentity.vue", "../apps/worker/src/auth-delivery-worker.ts"],
-      "routes": ["/api/v1/auth/register", "/api/v1/auth/email-verification/confirm", "/api/v1/auth/login", "/api/v1/auth/logout", "/api/v1/auth/password-reset/request", "/api/v1/auth/password-reset/confirm", "/api/v1/me/password", "/api/v1/me/sessions"],
+      "entrypoints": [
+        "../apps/api/src/auth-routes.ts",
+        "../apps/web/src/components/LocalIdentity.vue",
+        "../apps/worker/src/auth-delivery-worker.ts"
+      ],
+      "routes": [
+        "/api/v1/auth/register",
+        "/api/v1/auth/email-verification/confirm",
+        "/api/v1/auth/login",
+        "/api/v1/auth/logout",
+        "/api/v1/auth/password-reset/request",
+        "/api/v1/auth/password-reset/confirm",
+        "/api/v1/me/password",
+        "/api/v1/me/sessions"
+      ],
       "sessionTransport": "opaque Secure HttpOnly SameSite=Strict cookie in production; token hash only in MySQL",
       "delivery": "AES-256-GCM MySQL outbox; provider selection pending and explicitly blocked",
       "scope": "local email account and own sessions only; MFA and enterprise identity capabilities are tracked separately by M01-02",
@@ -94,17 +161,41 @@
     },
     "mfaIdentityAdapters": {
       "module": "M01-02",
-      "entrypoints": ["../packages/auth/src/mfa.ts", "../apps/api/src/mysql-mfa-repository.ts", "../apps/web/src/components/LocalIdentity.vue"],
-      "routes": ["/api/v1/auth/mfa/totp/verify", "/api/v1/me/mfa", "/api/v1/me/mfa/totp/enrollment", "/api/v1/me/mfa/totp/confirm", "/api/v1/me/mfa/totp"],
+      "entrypoints": [
+        "../packages/auth/src/mfa.ts",
+        "../apps/api/src/mysql-mfa-repository.ts",
+        "../apps/web/src/components/LocalIdentity.vue"
+      ],
+      "routes": [
+        "/api/v1/auth/mfa/totp/verify",
+        "/api/v1/me/mfa",
+        "/api/v1/me/mfa/totp/enrollment",
+        "/api/v1/me/mfa/totp/confirm",
+        "/api/v1/me/mfa/totp"
+      ],
       "totp": "RFC6238, encrypted seed, replay-resistant time step, single-use recovery codes",
       "challengeTransport": "short-lived opaque Secure HttpOnly SameSite=Strict cookie in production; hash only in MySQL",
-      "identityAdapters": {"oidc":"adapter_ready_not_enabled", "saml2":"reserved_disabled", "scim2":"reserved_disabled"},
+      "identityAdapters": {
+        "oidc": "adapter_ready_not_enabled",
+        "saml2": "reserved_disabled",
+        "scim2": "reserved_disabled"
+      },
       "status": "module_verified"
     },
     "tenancyContext": {
       "module": "M01-03",
-      "entrypoints": ["../packages/tenancy/src/index.ts", "../apps/api/src/tenancy-routes.ts", "../apps/api/src/mysql-tenancy-repository.ts", "../apps/web/src/components/TenancyChooser.vue"],
-      "routes": ["/api/v1/org/memberships", "/api/v1/org/{organizationId}/workspaces", "/api/v1/org/{organizationId}/teams", "/api/v1/auth/context"],
+      "entrypoints": [
+        "../packages/tenancy/src/index.ts",
+        "../apps/api/src/tenancy-routes.ts",
+        "../apps/api/src/mysql-tenancy-repository.ts",
+        "../apps/web/src/components/TenancyChooser.vue"
+      ],
+      "routes": [
+        "/api/v1/org/memberships",
+        "/api/v1/org/{organizationId}/workspaces",
+        "/api/v1/org/{organizationId}/teams",
+        "/api/v1/auth/context"
+      ],
       "dataScope": "active organization membership first; workspace must belong to selected organization; session context and audit are synchronous and transactional",
       "nonGoals": "ordinary-user organization creation, RBAC roles/data scopes, team membership and asynchronous tenancy propagation are deferred to their owning modules",
       "verificationRunId": "e529cce4-28c3-4e6c-947e-38dae71a1d6f",
@@ -112,9 +203,26 @@
     },
     "authorization": {
       "module": "M01-04",
-      "entrypoints": ["../packages/authorization/src/index.ts", "../apps/api/src/mysql-authorization-repository.ts", "../apps/api/src/authorization-routes.ts", "../apps/web/src/components/AuthorizationCenter.vue"],
-      "routes": ["/api/v1/me/authorization", "/api/v1/org/{organizationId}/roles"],
-      "roles": ["member", "selection_manager", "procurement_member", "organization_admin", "platform_operations_admin", "platform_security_admin", "platform_super_admin", "auditor"],
+      "entrypoints": [
+        "../packages/authorization/src/index.ts",
+        "../apps/api/src/mysql-authorization-repository.ts",
+        "../apps/api/src/authorization-routes.ts",
+        "../apps/web/src/components/AuthorizationCenter.vue"
+      ],
+      "routes": [
+        "/api/v1/me/authorization",
+        "/api/v1/org/{organizationId}/roles"
+      ],
+      "roles": [
+        "member",
+        "selection_manager",
+        "procurement_member",
+        "organization_admin",
+        "platform_operations_admin",
+        "platform_security_admin",
+        "platform_super_admin",
+        "auditor"
+      ],
       "dataScopes": ["own", "team", "workspace", "organization", "platform"],
       "surfaces": ["api", "worker", "export", "file", "event", "sse"],
       "decisionTruth": "synchronous MySQL allow and deny audit; default deny; frontend display is not authorization",
@@ -124,21 +232,54 @@
     },
     "resourceGrants": {
       "module": "M01-05",
-      "entrypoints": ["../packages/resource-grants/src/index.ts", "../apps/api/src/mysql-resource-grant-repository.ts", "../apps/api/src/resource-grant-routes.ts", "../apps/web/src/components/ResourceGrantCenter.vue"],
-      "routes": ["/api/v1/me/resource-grants", "/api/v1/org/{organizationId}/resource-grants", "/api/v1/org/{organizationId}/resource-grant-targets", "/api/v1/org/{organizationId}/resource-grants/{grantId}/expiry", "/api/v1/org/{organizationId}/resource-grants/{grantId}/revoke"],
+      "entrypoints": [
+        "../packages/resource-grants/src/index.ts",
+        "../apps/api/src/mysql-resource-grant-repository.ts",
+        "../apps/api/src/resource-grant-routes.ts",
+        "../apps/web/src/components/ResourceGrantCenter.vue"
+      ],
+      "routes": [
+        "/api/v1/me/resource-grants",
+        "/api/v1/org/{organizationId}/resource-grants",
+        "/api/v1/org/{organizationId}/resource-grant-targets",
+        "/api/v1/org/{organizationId}/resource-grants/{grantId}/expiry",
+        "/api/v1/org/{organizationId}/resource-grants/{grantId}/revoke"
+      ],
       "resourceTypes": ["task", "opportunity", "competitor", "sourcing"],
       "surfaces": ["api", "worker", "export", "file", "event", "sse"],
       "rules": "same active organization membership; exact workspace/type/id/action; reason required; maximum 30 days; expired or revoked grants cannot reactivate",
-      "excludedActions": ["raw evidence download", "export", "credential reference", "collection replay"],
-      "audit": ["created", "extended", "revoked", "expired", "accessed", "access_denied"],
+      "excludedActions": [
+        "raw evidence download",
+        "export",
+        "credential reference",
+        "collection replay"
+      ],
+      "audit": [
+        "created",
+        "extended",
+        "revoked",
+        "expired",
+        "accessed",
+        "access_denied"
+      ],
       "async": "not applicable; expiry and access authorization are synchronous MySQL truth",
       "verificationRunId": "3f6d3cb1-a805-4d17-b3f2-84780ebba303",
       "status": "module_verified"
     },
     "auditSecurity": {
       "module": "M01-06",
-      "entrypoints": ["../packages/audit/src/index.ts", "../apps/api/src/mysql-audit-repository.ts", "../apps/api/src/audit-routes.ts", "../scripts/seed-platform-admin.mjs", "../apps/web/src/components/AuditSecurityCenter.vue"],
-      "routes": ["/api/v1/me/security-setup", "/api/v1/platform/audit-events", "/api/v1/organizations/{organizationId}/audit-events"],
+      "entrypoints": [
+        "../packages/audit/src/index.ts",
+        "../apps/api/src/mysql-audit-repository.ts",
+        "../apps/api/src/audit-routes.ts",
+        "../scripts/seed-platform-admin.mjs",
+        "../apps/web/src/components/AuditSecurityCenter.vue"
+      ],
+      "routes": [
+        "/api/v1/me/security-setup",
+        "/api/v1/platform/audit-events",
+        "/api/v1/organizations/{organizationId}/audit-events"
+      ],
       "seed": "one-time Baota-controlled CLI; environment removed after success; no browser or resident service reads seed secrets",
       "securitySetup": "restricted session until forced password change and TOTP enrollment both complete",
       "permissions": "platform or organization audit:read; auditor has no replay, credential, key rotation or role write capability",
@@ -149,7 +290,13 @@
     },
     "designTokensThemes": {
       "module": "M02-01",
-      "entrypoints": ["../packages/preferences/src/index.ts", "../apps/api/src/mysql-ui-preference-repository.ts", "../apps/api/src/ui-preference-routes.ts", "../apps/web/src/design/tokens.css", "../apps/web/src/components/ThemeStudio.vue"],
+      "entrypoints": [
+        "../packages/preferences/src/index.ts",
+        "../apps/api/src/mysql-ui-preference-repository.ts",
+        "../apps/api/src/ui-preference-routes.ts",
+        "../apps/web/src/design/tokens.css",
+        "../apps/web/src/components/ThemeStudio.vue"
+      ],
       "route": "/?view=theme",
       "api": ["GET /api/v1/me/ui-preferences", "PUT /api/v1/me/ui-preferences"],
       "themes": ["deep-ocean", "aurora-purple", "cloud-white"],
@@ -162,70 +309,182 @@
     },
     "authOnboardingPages": {
       "module": "M02-02",
-      "entrypoints": ["../apps/web/src/components/LocalIdentity.vue", "../apps/web/src/components/TenancyChooser.vue", "../apps/web/src/components/OnboardingGuide.vue"],
-      "views": ["/?view=local-identity", "/?view=local-identity&mode=register", "/?view=local-identity&mode=forgot", "/?view=local-identity&mode=verify", "/?view=local-identity&mode=reset", "/?view=tenancy", "/?view=onboarding"],
+      "entrypoints": [
+        "../apps/web/src/components/LocalIdentity.vue",
+        "../apps/web/src/components/TenancyChooser.vue",
+        "../apps/web/src/components/OnboardingGuide.vue"
+      ],
+      "views": [
+        "/?view=local-identity",
+        "/?view=local-identity&mode=register",
+        "/?view=local-identity&mode=forgot",
+        "/?view=local-identity&mode=verify",
+        "/?view=local-identity&mode=reset",
+        "/?view=tenancy",
+        "/?view=onboarding"
+      ],
       "contracts": "reuses M01-01 local identity, M01-02 MFA and M01-03 tenancy APIs without new fields",
-      "imageEvidence": ["concepts 01-10", "high-resolution 02 login", "high-resolution 03 registration guide"],
+      "imageEvidence": [
+        "concepts 01-10",
+        "high-resolution 02 login",
+        "high-resolution 03 registration guide"
+      ],
       "nonGoals": "no phone login, Google, Microsoft or SSO activation; no onboarding persistence; no new API, migration, environment value or production service",
       "verificationRunId": "facffd5e-7749-4831-ac73-9db677b608a8",
       "status": "module_verified"
     },
     "navigationShells": {
       "module": "M02-03",
-      "entrypoints": ["../packages/authorization/src/index.ts", "../apps/api/src/authorization-routes.ts", "../apps/web/src/components/NavigationShell.vue"],
-      "routes": ["/home", "/org-admin", "/platform-admin", "/api/v1/me/navigation"],
+      "entrypoints": [
+        "../packages/authorization/src/index.ts",
+        "../apps/api/src/authorization-routes.ts",
+        "../apps/web/src/components/NavigationShell.vue"
+      ],
+      "routes": [
+        "/home",
+        "/org-admin",
+        "/platform-admin",
+        "/api/v1/me/navigation"
+      ],
       "shells": ["member", "organization_admin", "platform_admin"],
       "guard": "authenticated server-side role and tenancy evaluation with synchronous authorization decision audit",
-      "imageEvidence": ["concepts 11, 15-17, 55-71", "high-resolution 01 member", "high-resolution 09 organization admin", "high-resolution 10 platform admin"],
+      "imageEvidence": [
+        "concepts 11, 15-17, 55-71",
+        "high-resolution 01 member",
+        "high-resolution 09 organization admin",
+        "high-resolution 10 platform admin"
+      ],
       "nonGoals": "no business metrics, search results, quick-create mutation, notification count, new persistence, async service or environment value",
       "verificationRunId": "e0784965-a07b-4eec-84c1-f5e393d7dd27",
       "status": "module_verified"
     },
     "commonUiStates": {
       "module": "M02-04",
-      "entrypoints": ["../apps/web/src/ui/state-contract.ts", "../apps/web/src/components/UiStatePanel.vue", "../apps/web/src/components/ConfirmDialog.vue", "../apps/web/src/components/UiStateShowcase.vue"],
+      "entrypoints": [
+        "../apps/web/src/ui/state-contract.ts",
+        "../apps/web/src/components/UiStatePanel.vue",
+        "../apps/web/src/components/ConfirmDialog.vue",
+        "../apps/web/src/components/UiStateShowcase.vue"
+      ],
       "route": "/ui-states",
-      "states": ["loading", "empty", "error", "forbidden", "expired", "blocked", "recovery", "not_found", "confirmation"],
+      "states": [
+        "loading",
+        "empty",
+        "error",
+        "forbidden",
+        "expired",
+        "blocked",
+        "recovery",
+        "not_found",
+        "confirmation"
+      ],
       "contracts": "semantic text and symbol, safe request/trace identifiers, explicit recovery, fail-closed high-impact confirmation",
-      "imageEvidence": ["concept 72 not-found", "P02 contact sheets and M02-01 design tokens"],
+      "imageEvidence": [
+        "concept 72 not-found",
+        "P02 contact sheets and M02-01 design tokens"
+      ],
       "nonGoals": "no API request, business mutation, permission inference, persistence, async service or environment value",
       "verificationRunId": "fa7a1180-6dad-4c70-a621-10708aca95a9",
       "status": "module_verified"
     },
     "globalDiscovery": {
       "module": "M02-05",
-      "entrypoints": ["../apps/api/src/discovery-service.ts", "../apps/api/src/mysql-discovery-repository.ts", "../apps/api/src/discovery-routes.ts", "../apps/web/src/components/DiscoveryOverlay.vue"],
-      "routes": ["/api/v1/me/global-search", "/api/v1/me/quick-actions", "/notifications"],
+      "entrypoints": [
+        "../apps/api/src/discovery-service.ts",
+        "../apps/api/src/mysql-discovery-repository.ts",
+        "../apps/api/src/discovery-routes.ts",
+        "../apps/web/src/components/DiscoveryOverlay.vue"
+      ],
+      "routes": [
+        "/api/v1/me/global-search",
+        "/api/v1/me/quick-actions",
+        "/notifications"
+      ],
       "scope": "server-resolved active organization and workspace plus per-document required capability",
       "searchProjection": "MySQL 5.7 synchronous read model with stable cursor, literal wildcard escaping and internal routes only",
       "quickCreate": "authorized navigation entries only; no business mutation or optimistic success",
       "async": "not applicable in M02-05; future resource modules synchronously maintain their own search projections",
       "configuration": "no new environment values; existing VITE_API_BASE_URL only",
-      "imageEvidence": ["concepts 15 global search, 16 quick create, 17 notification center, 18 message detail"],
+      "imageEvidence": [
+        "concepts 15 global search, 16 quick create, 17 notification center, 18 message detail"
+      ],
       "verificationRunId": "79adb1f9-74ba-42b9-87fb-52b7d32e10a2",
       "status": "module_verified"
     },
     "homeAndMobileShell": {
       "module": "M02-06",
-      "entrypoints": ["../apps/api/src/home-dashboard-service.ts", "../apps/api/src/mysql-home-dashboard-repository.ts", "../apps/api/src/home-dashboard-routes.ts", "../apps/web/src/components/HomeDashboard.vue", "../apps/web/src/components/OpportunityMobileShell.vue"],
-      "routes": ["/home", "/api/v1/me/home-dashboard", "/opportunities/{opportunityId}"],
-      "sections": ["today actions", "change radar", "my follows", "current-user data health", "actionable empty state"],
-      "actionOrder": ["overdue", "blocking", "high_risk", "high_value", "normal"],
+      "entrypoints": [
+        "../apps/api/src/home-dashboard-service.ts",
+        "../apps/api/src/mysql-home-dashboard-repository.ts",
+        "../apps/api/src/home-dashboard-routes.ts",
+        "../apps/web/src/components/HomeDashboard.vue",
+        "../apps/web/src/components/OpportunityMobileShell.vue"
+      ],
+      "routes": [
+        "/home",
+        "/api/v1/me/home-dashboard",
+        "/opportunities/{opportunityId}"
+      ],
+      "sections": [
+        "today actions",
+        "change radar",
+        "my follows",
+        "current-user data health",
+        "actionable empty state"
+      ],
+      "actionOrder": [
+        "overdue",
+        "blocking",
+        "high_risk",
+        "high_value",
+        "normal"
+      ],
       "scope": "exact organization and workspace; required capability; health exact authenticated audience user",
       "truth": "synchronous MySQL 5.7 projection read; empty until P03-P05 owning modules write real data",
       "opportunityDetail": "responsive route and section skeleton only; P04 metrics, profit, risk and evidence are not fabricated",
       "async": "not applicable in M02-06; no Worker, Crawler, queue, outbox, event, file, export or SSE",
       "configuration": "no new environment values; existing VITE_API_BASE_URL only",
-      "imageEvidence": ["high-resolution 01 today action center", "concepts 11-14 home", "concepts 53-54 mobile"],
+      "imageEvidence": [
+        "high-resolution 01 today action center",
+        "concepts 11-14 home",
+        "concepts 53-54 mobile"
+      ],
       "verificationRunId": "a8ce8e93-5264-441d-983b-fa47cb184a7e",
       "status": "module_verified"
     },
     "providerRegistry": {
       "module": "M03-01",
-      "entrypoints": ["../apps/api/src/provider-registry-service.ts", "../apps/api/src/mysql-provider-registry-repository.ts", "../apps/api/src/provider-registry-routes.ts", "../apps/web/src/components/ProviderRegistry.vue"],
-      "routes": ["/platform-admin/providers", "/api/v1/platform/providers", "/api/v1/platform/providers/{providerId}"],
+      "entrypoints": [
+        "../apps/api/src/provider-registry-service.ts",
+        "../apps/api/src/mysql-provider-registry-repository.ts",
+        "../apps/api/src/provider-registry-routes.ts",
+        "../apps/web/src/components/ProviderRegistry.vue"
+      ],
+      "routes": [
+        "/platform-admin/providers",
+        "/api/v1/platform/providers",
+        "/api/v1/platform/providers/{providerId}"
+      ],
       "scope": "platform-global technical definitions; organization and workspace columns are intentionally absent",
-      "contract": ["target URL or stable identifier", "access mode", "markets", "languages", "fields", "schedule", "concurrency", "timeout", "retry", "circuit threshold", "dedupe", "retention", "failure rules", "parser version", "healthcheck", "owner", "status"],
+      "contract": [
+        "target URL or stable identifier",
+        "access mode",
+        "markets",
+        "languages",
+        "fields",
+        "schedule",
+        "concurrency",
+        "timeout",
+        "retry",
+        "circuit threshold",
+        "dedupe",
+        "retention",
+        "failure rules",
+        "parser version",
+        "healthcheck",
+        "owner",
+        "status"
+      ],
       "truth": "MySQL 5.7 current definition plus immutable correlated versions and idempotent operations",
       "permission": "authenticated platform provider:configure; same-origin and Idempotency-Key for writes",
       "async": "not applicable in M03-01; collection scheduling, queues, leases and health execution belong to later modules",
@@ -236,227 +495,671 @@
     },
     "credentialAssets": {
       "module": "M03-02",
-      "entrypoints": ["../packages/credentials/src/index.ts", "../apps/api/src/credential-asset-service.ts", "../apps/api/src/mysql-credential-asset-repository.ts", "../apps/api/src/credential-asset-routes.ts", "../apps/web/src/components/CredentialAssetCenter.vue"],
-      "routes": ["/platform-admin/credentials", "/api/v1/platform/credential-provider-options", "/api/v1/platform/credential-assets", "/api/v1/platform/credential-assets/{assetId}/rotate", "/api/v1/platform/credential-assets/{assetId}/revoke", "/api/v1/platform/crawler-profiles"],
+      "entrypoints": [
+        "../packages/credentials/src/index.ts",
+        "../apps/api/src/credential-asset-service.ts",
+        "../apps/api/src/mysql-credential-asset-repository.ts",
+        "../apps/api/src/credential-asset-routes.ts",
+        "../apps/web/src/components/CredentialAssetCenter.vue"
+      ],
+      "routes": [
+        "/platform-admin/credentials",
+        "/api/v1/platform/credential-provider-options",
+        "/api/v1/platform/credential-assets",
+        "/api/v1/platform/credential-assets/{assetId}/rotate",
+        "/api/v1/platform/credential-assets/{assetId}/revoke",
+        "/api/v1/platform/crawler-profiles"
+      ],
       "scope": "platform-global credential and crawler profile assets; organizations receive later use grants only",
       "encryption": "AES-256-GCM with random nonce, authentication tag, asset/type/key-version AAD and Baota-only master key",
       "responseBoundary": "masked fingerprint and metadata only; no decrypt, export, ciphertext, nonce or auth-tag API",
       "permission": "authenticated platform key_rotation:manage; same-origin and Idempotency-Key for writes",
       "temporaryMaterialization": "authorized Worker/Crawler callback under CREDENTIAL_TEMP_ROOT with finally buffer clearing and exact directory deletion",
       "masterKeyRotation": "resumable Baota one-time re-encryption of current active versions; immutable history becomes unreadable after old-key revocation; switch resident configuration only after zero remaining active old-version assets",
-      "configuration": ["CREDENTIALS_MASTER_KEY", "CREDENTIALS_MASTER_KEY_VERSION", "CREDENTIAL_TEMP_ROOT", "one-time rotation variables"],
-      "imageEvidence": ["concept 68 key rotation and platform security navigation shell"],
+      "configuration": [
+        "CREDENTIALS_MASTER_KEY",
+        "CREDENTIALS_MASTER_KEY_VERSION",
+        "CREDENTIAL_TEMP_ROOT",
+        "one-time rotation variables"
+      ],
+      "imageEvidence": [
+        "concept 68 key rotation and platform security navigation shell"
+      ],
       "verificationRunId": "6b01b631-ae6a-4add-a06a-016f989d7411",
       "status": "module_verified"
     },
     "providerAdapters": {
       "module": "M03-03",
-      "entrypoints": ["../packages/provider-adapters/src/index.ts", "../apps/api/src/provider-adapter-service.ts", "../apps/api/src/mysql-provider-adapter-repository.ts", "../apps/api/src/provider-adapter-routes.ts", "../apps/web/src/components/ProviderAdapterCenter.vue"],
-      "routes": ["/platform-admin/providers/adapters", "/api/v1/platform/provider-adapters", "/api/v1/platform/provider-adapters/{providerId}/health-check"],
+      "entrypoints": [
+        "../packages/provider-adapters/src/index.ts",
+        "../apps/api/src/provider-adapter-service.ts",
+        "../apps/api/src/mysql-provider-adapter-repository.ts",
+        "../apps/api/src/provider-adapter-routes.ts",
+        "../apps/web/src/components/ProviderAdapterCenter.vue"
+      ],
+      "routes": [
+        "/platform-admin/providers/adapters",
+        "/api/v1/platform/provider-adapters",
+        "/api/v1/platform/provider-adapters/{providerId}/health-check"
+      ],
       "scope": "platform-global adapter registration and health; collect invocation contract requires organization and workspace scope",
       "contract": ["collect", "normalize", "healthCheck"],
       "failureBoundary": "provider code must have an explicitly registered matching access-mode adapter; otherwise blocked adapter_not_registered",
       "permission": "authenticated platform provider:configure; same-origin and Idempotency-Key for health writes",
-      "configuration": ["PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS", "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES", "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH"],
-      "downstream": {"M03-04":"authenticated browser execution", "M03-05":"queue lease retry dead letter", "M03-06":"raw evidence and normalized persistence", "M03-07":"first real adapter registration"},
-      "imageEvidence": ["concept 62 collection source management table and status layout"],
+      "configuration": [
+        "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS",
+        "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES",
+        "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH"
+      ],
+      "downstream": {
+        "M03-04": "authenticated browser execution",
+        "M03-05": "queue lease retry dead letter",
+        "M03-06": "raw evidence and normalized persistence",
+        "M03-07": "first real adapter registration"
+      },
+      "imageEvidence": [
+        "concept 62 collection source management table and status layout"
+      ],
       "verificationRunId": "c6b206e3-bf39-4d3b-8b00-f7f195eaa999",
       "status": "module_verified"
     },
     "playwrightCrawler": {
       "module": "M03-04",
-      "entrypoints": ["../packages/playwright-crawler/src/index.ts", "../apps/crawler/scoutops_crawler/playwright_bridge.py", "../scripts/run-playwright-crawler.mjs", "../apps/api/src/crawler-runtime-service.ts", "../apps/api/src/mysql-crawler-runtime-repository.ts", "../apps/api/src/crawler-runtime-routes.ts", "../apps/web/src/components/CollectionRuntimeCenter.vue"],
-      "routes": ["/platform-admin/collection/browser-runtime", "/api/v1/platform/crawler-runtime", "/api/v1/platform/crawler-runtime/recover-expired"],
+      "entrypoints": [
+        "../packages/playwright-crawler/src/index.ts",
+        "../apps/crawler/scoutops_crawler/playwright_bridge.py",
+        "../scripts/run-playwright-crawler.mjs",
+        "../apps/api/src/crawler-runtime-service.ts",
+        "../apps/api/src/mysql-crawler-runtime-repository.ts",
+        "../apps/api/src/crawler-runtime-routes.ts",
+        "../apps/web/src/components/CollectionRuntimeCenter.vue"
+      ],
+      "routes": [
+        "/platform-admin/collection/browser-runtime",
+        "/api/v1/platform/crawler-runtime",
+        "/api/v1/platform/crawler-runtime/recover-expired"
+      ],
       "scope": "platform-global encrypted browser profiles and exclusive leases; every browser run is bound to one organization and workspace",
-      "actions": ["bounded search", "pagination", "scroll", "same-allowlist detail pages"],
-      "blockedStates": ["blocked_login", "blocked_captcha", "blocked_robots", "rate_limited", "timeout", "parser_changed", "dependency_failed"],
+      "actions": [
+        "bounded search",
+        "pagination",
+        "scroll",
+        "same-allowlist detail pages"
+      ],
+      "blockedStates": [
+        "blocked_login",
+        "blocked_captcha",
+        "blocked_robots",
+        "rate_limited",
+        "timeout",
+        "parser_changed",
+        "dependency_failed"
+      ],
       "permission": "authenticated platform collection:replay; same-origin and Idempotency-Key for expired lease recovery",
       "responseBoundary": "profile metadata, lease owner and timing, scoped run counts and correlation only; no credential, ciphertext, lease token, raw plan or temporary path",
       "profileArchive": "M03-02 encrypted base64 tar.gz, traversal-safe bounded temporary extraction and unconditional cleanup",
-      "configuration": ["PLAYWRIGHT_HEADLESS", "PLAYWRIGHT_NAVIGATION_TIMEOUT_MS", "PLAYWRIGHT_ACTION_TIMEOUT_MS", "PLAYWRIGHT_MAX_PAGES", "PLAYWRIGHT_MAX_SCROLLS", "PLAYWRIGHT_MAX_DETAILS", "PLAYWRIGHT_PROFILE_ARCHIVE_MAX_BYTES", "PLAYWRIGHT_PROFILE_EXTRACTED_MAX_BYTES", "PLAYWRIGHT_PROFILE_MAX_FILES", "PLAYWRIGHT_NODE_BINARY", "PLAYWRIGHT_RUNNER_PATH", "PLAYWRIGHT_RUN_TIMEOUT_SECONDS"],
-      "downstream": {"M03-05":"collection task queue retry dead letter", "M03-06":"evidence and normalized persistence", "M03-07":"real provider URLs selectors and adapters"},
-      "imageEvidence": ["concept 63 collection task monitoring table and status layout"],
+      "configuration": [
+        "PLAYWRIGHT_HEADLESS",
+        "PLAYWRIGHT_NAVIGATION_TIMEOUT_MS",
+        "PLAYWRIGHT_ACTION_TIMEOUT_MS",
+        "PLAYWRIGHT_MAX_PAGES",
+        "PLAYWRIGHT_MAX_SCROLLS",
+        "PLAYWRIGHT_MAX_DETAILS",
+        "PLAYWRIGHT_PROFILE_ARCHIVE_MAX_BYTES",
+        "PLAYWRIGHT_PROFILE_EXTRACTED_MAX_BYTES",
+        "PLAYWRIGHT_PROFILE_MAX_FILES",
+        "PLAYWRIGHT_NODE_BINARY",
+        "PLAYWRIGHT_RUNNER_PATH",
+        "PLAYWRIGHT_RUN_TIMEOUT_SECONDS"
+      ],
+      "downstream": {
+        "M03-05": "collection task queue retry dead letter",
+        "M03-06": "evidence and normalized persistence",
+        "M03-07": "real provider URLs selectors and adapters"
+      },
+      "imageEvidence": [
+        "concept 63 collection task monitoring table and status layout"
+      ],
       "verificationRunId": "c574a8a1-d7ca-4639-9c36-69067c7c4149",
       "status": "module_verified"
     },
     "collectionTaskStateMachine": {
       "module": "M03-05",
-      "entrypoints": ["../packages/collection-tasks/src/index.ts", "../apps/worker/src/collection-task-worker.ts", "../apps/api/src/collection-task-service.ts", "../apps/api/src/mysql-collection-task-repository.ts", "../apps/api/src/collection-task-routes.ts", "../apps/web/src/components/CollectionTaskCenter.vue"],
-      "routes": ["/platform-admin/collection", "/api/v1/platform/collection/tasks", "/api/v1/platform/collection/tasks/{taskId}", "/api/v1/platform/collection/tasks/{taskId}/replay"],
+      "entrypoints": [
+        "../packages/collection-tasks/src/index.ts",
+        "../apps/worker/src/collection-task-worker.ts",
+        "../apps/api/src/collection-task-service.ts",
+        "../apps/api/src/mysql-collection-task-repository.ts",
+        "../apps/api/src/collection-task-routes.ts",
+        "../apps/web/src/components/CollectionTaskCenter.vue"
+      ],
+      "routes": [
+        "/platform-admin/collection",
+        "/api/v1/platform/collection/tasks",
+        "/api/v1/platform/collection/tasks/{taskId}",
+        "/api/v1/platform/collection/tasks/{taskId}/replay"
+      ],
       "scope": "organization and workspace scoped task, subquery, attempt, event, outbox and dead-letter truth in MySQL 5.7",
-      "states": ["draft", "scheduled", "queued", "leased", "running", "parsing", "validating", "persisted", "retry_scheduled", "blocked_login", "blocked_captcha", "blocked_robots", "rate_limited", "succeeded", "succeeded_empty", "completed_with_warnings", "failed_terminal", "dead_letter", "manually_replayed"],
+      "states": [
+        "draft",
+        "scheduled",
+        "queued",
+        "leased",
+        "running",
+        "parsing",
+        "validating",
+        "persisted",
+        "retry_scheduled",
+        "blocked_login",
+        "blocked_captcha",
+        "blocked_robots",
+        "rate_limited",
+        "succeeded",
+        "succeeded_empty",
+        "completed_with_warnings",
+        "failed_terminal",
+        "dead_letter",
+        "manually_replayed"
+      ],
       "coverage": ["complete", "partial", "insufficient"],
       "retryPolicy": "maximum 4 total attempts; 1, 5 and 15 minute backoff plus at most 20 percent jitter; rate limit uses reset time",
       "permission": "authenticated platform collection:replay; same-origin Origin, Idempotency-Key and reason for dead-letter replay",
       "responseBoundary": "task status, coverage, scoped counts, subqueries, attempts, events, dead-letter and correlation; no target_json, lease token or credential",
-      "configuration": ["COLLECTION_TASK_POLL_MS", "COLLECTION_TASK_LEASE_SECONDS"],
+      "configuration": [
+        "COLLECTION_TASK_POLL_MS",
+        "COLLECTION_TASK_LEASE_SECONDS"
+      ],
       "runtimeBoundary": "engine and synthetic live verification only; real Provider executor starts at M03-07 and evidence persistence starts at M03-06",
-      "downstream": {"M03-06":"raw evidence normalized records and field provenance", "M03-07":"approved real provider executors"},
-      "imageEvidence": ["concept 63 collection task monitoring table, filters, coverage and status layout"],
+      "downstream": {
+        "M03-06": "raw evidence normalized records and field provenance",
+        "M03-07": "approved real provider executors"
+      },
+      "imageEvidence": [
+        "concept 63 collection task monitoring table, filters, coverage and status layout"
+      ],
       "verificationRunId": "54e50b9c-b851-461d-ab0a-fc2e12d5fc3c",
       "status": "module_verified"
     },
     "evidenceDataQuality": {
       "module": "M03-06",
-      "entrypoints": ["../packages/data-quality/src/index.ts", "../apps/worker/src/evidence-persistence.ts", "../apps/api/src/data-quality-service.ts", "../apps/api/src/mysql-data-quality-repository.ts", "../apps/api/src/data-quality-routes.ts", "../apps/web/src/components/DataQualityCenter.vue"],
-      "routes": ["/platform-admin/data", "/api/v1/platform/data-quality", "/api/v1/platform/data/evidence/{evidenceId}", "/api/v1/platform/data-quality/issues/{issueId}/resolve", "/api/v1/platform/data/evidence/{evidenceId}/download-grant", "/api/v1/platform/data/evidence/{evidenceId}/download"],
+      "entrypoints": [
+        "../packages/data-quality/src/index.ts",
+        "../apps/worker/src/evidence-persistence.ts",
+        "../apps/api/src/data-quality-service.ts",
+        "../apps/api/src/mysql-data-quality-repository.ts",
+        "../apps/api/src/data-quality-routes.ts",
+        "../apps/web/src/components/DataQualityCenter.vue"
+      ],
+      "routes": [
+        "/platform-admin/data",
+        "/api/v1/platform/data-quality",
+        "/api/v1/platform/data/evidence/{evidenceId}",
+        "/api/v1/platform/data-quality/issues/{issueId}/resolve",
+        "/api/v1/platform/data/evidence/{evidenceId}/download-grant",
+        "/api/v1/platform/data/evidence/{evidenceId}/download"
+      ],
       "scope": "organization and workspace scoped immutable raw evidence, versioned normalized records, field provenance, reconciliation, quality issues, events and outbox in MySQL 5.7 plus Baota-controlled evidence files",
       "dedupeBoundary": "provider-supplied key scoped by organization workspace and provider; identical content replays, different content conflicts",
-      "qualityMetrics": ["title_accuracy", "price_accuracy", "currency_accuracy", "external_id_accuracy", "canonical_url_accuracy", "duplicate_ratio", "supplier_mismatch_ratio", "ai_classification_approval", "source_freshness", "source_success_rate"],
+      "qualityMetrics": [
+        "title_accuracy",
+        "price_accuracy",
+        "currency_accuracy",
+        "external_id_accuracy",
+        "canonical_url_accuracy",
+        "duplicate_ratio",
+        "supplier_mismatch_ratio",
+        "ai_classification_approval",
+        "source_freshness",
+        "source_success_rate"
+      ],
       "permission": "authenticated platform platform:operate; same-origin Origin, Idempotency-Key and optimistic version for issue resolution; controlled download grants and accesses are audited",
       "responseBoundary": "metadata, normalized versions, provenance and issues only; no raw content, storage path, credential or cookie outside the integrity-checked download endpoint",
-      "configuration": ["EVIDENCE_ROOT", "EVIDENCE_MAX_RAW_BYTES", "EVIDENCE_DOWNLOAD_GRANT_SECONDS", "EVIDENCE_DOWNLOAD_SIGNING_KEY"],
+      "configuration": [
+        "EVIDENCE_ROOT",
+        "EVIDENCE_MAX_RAW_BYTES",
+        "EVIDENCE_DOWNLOAD_GRANT_SECONDS",
+        "EVIDENCE_DOWNLOAD_SIGNING_KEY"
+      ],
       "runtimeBoundary": "persistence and synthetic live verification only; real approved provider URLs, selectors and executors start at M03-07",
-      "downstream": {"M03-07":"real provider evidence persistence", "P04":"fact-grounded trend normalization", "P05":"opportunity evidence chain"},
-      "imageEvidence": ["concept 39 evidence management table and detail", "concept 64 system monitoring metrics and status hierarchy"],
+      "downstream": {
+        "M03-07": "real provider evidence persistence",
+        "P04": "fact-grounded trend normalization",
+        "P05": "opportunity evidence chain"
+      },
+      "imageEvidence": [
+        "concept 39 evidence management table and detail",
+        "concept 64 system monitoring metrics and status hierarchy"
+      ],
       "verificationRunId": "3251d741-ce7e-4737-a4d1-8a3a62ddaaca",
       "status": "module_verified"
     },
     "providerSources": {
       "module": "M03-07",
-      "entrypoints": ["../packages/provider-sources/src/index.ts", "../apps/api/src/provider-source-service.ts", "../apps/api/src/mysql-provider-source-repository.ts", "../apps/api/src/provider-source-routes.ts", "../apps/worker/src/provider-source-executor.ts", "../apps/web/src/components/ProviderSourceCenter.vue"],
-      "routes": ["/platform-admin/providers/sources", "/api/v1/platform/provider-sources", "/api/v1/platform/provider-sources/{code}/provision", "/api/v1/platform/provider-sources/{providerId}/replays"],
+      "entrypoints": [
+        "../packages/provider-sources/src/index.ts",
+        "../apps/api/src/provider-source-service.ts",
+        "../apps/api/src/mysql-provider-source-repository.ts",
+        "../apps/api/src/provider-source-routes.ts",
+        "../apps/worker/src/provider-source-executor.ts",
+        "../apps/web/src/components/ProviderSourceCenter.vue"
+      ],
+      "routes": [
+        "/platform-admin/providers/sources",
+        "/api/v1/platform/provider-sources",
+        "/api/v1/platform/provider-sources/{code}/provision",
+        "/api/v1/platform/provider-sources/{providerId}/replays"
+      ],
       "scope": "fixed platform source catalog plus organization and workspace scoped replay tasks and evidence",
-      "sources": ["google_news_search public RSS", "manual_product_supply_csv explicit import"],
+      "sources": [
+        "google_news_search public RSS",
+        "manual_product_supply_csv explicit import"
+      ],
       "admissionBoundary": "catalog and provisioning are disabled by default; Google endpoint availability is not production authorization; owners explicitly review and enable provider definitions",
       "outboundBoundary": "Google News uses one exact code-owned URL template and rejects redirects; CSV uses inline content; callers cannot supply an outbound URL",
       "limits": "Google RSS 2MB and 20 persisted records per task; CSV 1MB, exact 8-column header, 100 parsed rows and 20 persisted records per task",
       "permission": "provider:configure for catalog/provision; collection:replay for scoped task creation; writes require same-origin Origin and Idempotency-Key",
       "persistence": "MySQL 5.7 replay correlation plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
-      "configuration": ["PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS", "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES", "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH", "COLLECTION_TASK_POLL_MS", "COLLECTION_TASK_LEASE_SECONDS", "EVIDENCE_ROOT", "EVIDENCE_MAX_RAW_BYTES"],
+      "configuration": [
+        "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS",
+        "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES",
+        "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH",
+        "COLLECTION_TASK_POLL_MS",
+        "COLLECTION_TASK_LEASE_SECONDS",
+        "EVIDENCE_ROOT",
+        "EVIDENCE_MAX_RAW_BYTES"
+      ],
       "runtimeBoundary": "production Worker runs only as a Baota Node project; fixed source adapters are registered in API and Worker; no panel-external service is created",
-      "imageEvidence": ["concept 62 collection source management catalog, status and actions"],
+      "imageEvidence": [
+        "concept 62 collection source management catalog, status and actions"
+      ],
       "verificationRunId": "9477e2a6-533a-430a-a372-48a69f1878e2",
       "status": "module_verified"
     },
     "trendDomain": {
       "module": "M04-01",
-      "entrypoints": ["../apps/api/src/trend-service.ts", "../apps/api/src/mysql-trend-repository.ts", "../apps/api/src/trend-routes.ts", "../apps/worker/src/trend-projection-worker.ts", "../apps/web/src/components/TrendDashboard.vue"],
-      "routes": ["/trends", "/api/v1/trends", "/api/v1/trends/{topicId}", "/api/v1/trends/{topicId}/follow", "/api/v1/trends/{topicId}/relevance", "/api/v1/trends/monitoring-rules", "/api/v1/trends/monitoring-rules/{ruleId}"],
+      "entrypoints": [
+        "../apps/api/src/trend-service.ts",
+        "../apps/api/src/mysql-trend-repository.ts",
+        "../apps/api/src/trend-routes.ts",
+        "../apps/worker/src/trend-projection-worker.ts",
+        "../apps/web/src/components/TrendDashboard.vue"
+      ],
+      "routes": [
+        "/trends",
+        "/api/v1/trends",
+        "/api/v1/trends/{topicId}",
+        "/api/v1/trends/{topicId}/follow",
+        "/api/v1/trends/{topicId}/relevance",
+        "/api/v1/trends/monitoring-rules",
+        "/api/v1/trends/monitoring-rules/{ruleId}"
+      ],
       "scope": "organization and workspace scoped trend topics signals timelines keywords follows and monitoring rules",
       "projection": "Baota Node Worker scans normalized records, leases idempotent projection jobs and only projects google_news_search evidence; non-trend records terminate as succeeded_empty",
       "heatBoundary": "heat is the observed signal count with unit signals; momentum and confidence remain insufficient_data until a measured contract exists",
       "permission": "trend:read for scoped reads; trend:manage for follow relevance and monitoring writes; same-origin Origin and Idempotency-Key required",
       "audit": "user and Worker writes persist trend_events and trend_outbox with request_id and trace_id; original evidence is never deleted by relevance actions",
-      "configuration": ["TREND_PROJECTION_POLL_MS", "TREND_PROJECTION_LEASE_SECONDS"],
+      "configuration": [
+        "TREND_PROJECTION_POLL_MS",
+        "TREND_PROJECTION_LEASE_SECONDS"
+      ],
       "runtimeBoundary": "projection runs inside the Baota-managed Node Worker; no panel-external production service",
-      "imageEvidence": ["concept 28 trend list", "concept 29 trend detail", "concept 30 trend timeline", "concept 31 trend monitoring rules", "concept 32 create monitoring rule", "high-resolution core page 05 trend dashboard"],
+      "imageEvidence": [
+        "concept 28 trend list",
+        "concept 29 trend detail",
+        "concept 30 trend timeline",
+        "concept 31 trend monitoring rules",
+        "concept 32 create monitoring rule",
+        "high-resolution core page 05 trend dashboard"
+      ],
       "verificationRunId": "e08c99d0-884c-4598-9281-44ac7af5a939",
       "status": "module_verified"
     },
     "opportunityDomain": {
       "module": "M04-02",
-      "entrypoints": ["../apps/api/src/opportunity-service.ts", "../apps/api/src/mysql-opportunity-repository.ts", "../apps/api/src/opportunity-routes.ts", "../apps/worker/src/opportunity-refresh-worker.ts", "../apps/web/src/components/OpportunityWorkspace.vue"],
-      "routes": ["/opportunities", "/opportunities/{opportunityId}", "/api/v1/opportunities", "/api/v1/opportunities/{opportunityId}", "/api/v1/opportunities/{opportunityId}/decisions"],
+      "entrypoints": [
+        "../apps/api/src/opportunity-service.ts",
+        "../apps/api/src/mysql-opportunity-repository.ts",
+        "../apps/api/src/opportunity-routes.ts",
+        "../apps/worker/src/opportunity-refresh-worker.ts",
+        "../apps/web/src/components/OpportunityWorkspace.vue"
+      ],
+      "routes": [
+        "/opportunities",
+        "/opportunities/{opportunityId}",
+        "/api/v1/opportunities",
+        "/api/v1/opportunities/{opportunityId}",
+        "/api/v1/opportunities/{opportunityId}/decisions"
+      ],
       "scope": "organization and workspace scoped opportunity candidates, trend evidence links, human decisions and refresh jobs",
       "truthBoundary": "M04-02 never invents scores, ROI or risk; unavailable M04-03 to M04-06 inputs remain null, unknown or insufficient_data",
       "refresh": "Baota Node Worker leases opportunity refresh jobs and links only persisted trend signals; trend-only evidence remains partial because competition and cost inputs are absent",
       "permission": "opportunity:read for scoped reads; existing opportunity:decide for candidate creation and required-reason decisions; same-origin Origin and Idempotency-Key required",
       "audit": "creation, evidence refresh and decision changes persist correlated opportunity_events and opportunity_outbox; decisions do not rewrite scores or evidence",
-      "configuration": ["OPPORTUNITY_REFRESH_POLL_MS", "OPPORTUNITY_REFRESH_LEASE_SECONDS"],
+      "configuration": [
+        "OPPORTUNITY_REFRESH_POLL_MS",
+        "OPPORTUNITY_REFRESH_LEASE_SECONDS"
+      ],
       "runtimeBoundary": "refresh runs inside the Baota-managed Node Worker; no panel-external production service",
-      "imageEvidence": ["concept 33 opportunity list", "concept 34 opportunity overview", "concept 35 market", "concept 36 competition", "concept 37 profit", "concept 38 risk", "concept 39 evidence", "concept 40 create", "concept 54 mobile opportunity", "high-resolution core page 06 opportunity dashboard"],
+      "imageEvidence": [
+        "concept 33 opportunity list",
+        "concept 34 opportunity overview",
+        "concept 35 market",
+        "concept 36 competition",
+        "concept 37 profit",
+        "concept 38 risk",
+        "concept 39 evidence",
+        "concept 40 create",
+        "concept 54 mobile opportunity",
+        "high-resolution core page 06 opportunity dashboard"
+      ],
       "verificationRunId": "2b9658d2-eede-49e0-9920-1cd4e26a3fe9",
       "status": "module_verified"
     },
     "scoringEngine": {
       "module": "M04-03",
-      "entrypoints": ["../apps/api/src/scoring-service.ts", "../apps/api/src/mysql-scoring-repository.ts", "../apps/api/src/scoring-routes.ts", "../apps/worker/src/opportunity-scoring-worker.ts", "../apps/web/src/components/ScoreRuleConsole.vue", "../apps/web/src/components/OpportunityWorkspace.vue"],
-      "routes": ["/opportunities/scoring-rules", "/api/v1/opportunity-score-rules", "/api/v1/opportunity-score-rules/{scoreRuleId}/actions", "/api/v1/opportunities/{opportunityId}/score-inputs", "/api/v1/opportunities/{opportunityId}/score-runs"],
+      "entrypoints": [
+        "../apps/api/src/scoring-service.ts",
+        "../apps/api/src/mysql-scoring-repository.ts",
+        "../apps/api/src/scoring-routes.ts",
+        "../apps/worker/src/opportunity-scoring-worker.ts",
+        "../apps/web/src/components/ScoreRuleConsole.vue",
+        "../apps/web/src/components/OpportunityWorkspace.vue"
+      ],
+      "routes": [
+        "/opportunities/scoring-rules",
+        "/api/v1/opportunity-score-rules",
+        "/api/v1/opportunity-score-rules/{scoreRuleId}/actions",
+        "/api/v1/opportunities/{opportunityId}/score-inputs",
+        "/api/v1/opportunities/{opportunityId}/score-runs"
+      ],
       "scope": "organization and workspace scoped versioned rules inputs jobs immutable runs components approvals and rollback",
       "truthBoundary": "no default weights thresholds or missing scores; below 50 percent is insufficient and recommendation requires at least 80 percent plus market competition and cost evidence",
       "permission": "opportunity:read for rule and explanation reads; opportunity:decide for draft submit input and rerun; opportunity:approve for approve reject activate and rollback",
       "audit": "rule transitions input writes and scoring runs persist correlated opportunity_events and opportunity_outbox while historical runs remain immutable",
-      "configuration": ["OPPORTUNITY_SCORING_POLL_MS", "OPPORTUNITY_SCORING_LEASE_SECONDS"],
+      "configuration": [
+        "OPPORTUNITY_SCORING_POLL_MS",
+        "OPPORTUNITY_SCORING_LEASE_SECONDS"
+      ],
       "runtimeBoundary": "scoring runs inside the Baota-managed Node Worker; MySQL is the rule and score truth and Redis is coordination only",
-      "imageEvidence": ["concept 34 opportunity overview", "concept 54 mobile opportunity detail", "high-resolution core page 06 opportunity dashboard"],
+      "imageEvidence": [
+        "concept 34 opportunity overview",
+        "concept 54 mobile opportunity detail",
+        "high-resolution core page 06 opportunity dashboard"
+      ],
       "verificationRunId": "cc645200-751b-48bf-9da3-ebc8bfa75dec",
       "status": "module_verified"
     },
     "profitCost": {
       "module": "M04-04",
-      "entrypoints": ["../apps/api/src/profit-service.ts", "../apps/api/src/mysql-profit-repository.ts", "../apps/api/src/profit-routes.ts", "../apps/worker/src/opportunity-profit-worker.ts", "../apps/web/src/components/CostRuleConsole.vue", "../apps/web/src/components/OpportunityWorkspace.vue"],
-      "routes": ["/sourcing/cost-rules", "/api/v1/cost-rules", "/api/v1/cost-rules/{costRuleId}/actions", "/api/v1/exchange-rates", "/api/v1/opportunities/{opportunityId}/cost-inputs", "/api/v1/opportunities/{opportunityId}/profit-runs", "/api/v1/opportunities/{opportunityId}/profit-analysis"],
+      "entrypoints": [
+        "../apps/api/src/profit-service.ts",
+        "../apps/api/src/mysql-profit-repository.ts",
+        "../apps/api/src/profit-routes.ts",
+        "../apps/worker/src/opportunity-profit-worker.ts",
+        "../apps/web/src/components/CostRuleConsole.vue",
+        "../apps/web/src/components/OpportunityWorkspace.vue"
+      ],
+      "routes": [
+        "/sourcing/cost-rules",
+        "/api/v1/cost-rules",
+        "/api/v1/cost-rules/{costRuleId}/actions",
+        "/api/v1/exchange-rates",
+        "/api/v1/opportunities/{opportunityId}/cost-inputs",
+        "/api/v1/opportunities/{opportunityId}/profit-runs",
+        "/api/v1/opportunities/{opportunityId}/profit-analysis"
+      ],
       "scope": "organization and workspace scoped versioned fee rules dual approvals exchange quotes cost inputs jobs immutable profit runs components and rollback",
       "truthBoundary": "all four fees are explicit; missing required inputs or an approved historical exchange rate stays insufficient_data and never emits numeric ROI",
       "permission": "opportunity:read for rules and profit analysis; cost:confirm for rates inputs and reruns; opportunity:approve for rule creation approval publish reject and rollback",
       "audit": "rule transitions rates inputs and profit runs persist correlated opportunity_events and opportunity_outbox while historical inputs and runs remain immutable",
-      "configuration": ["PROFIT_CALCULATION_POLL_MS", "PROFIT_CALCULATION_LEASE_SECONDS"],
+      "configuration": [
+        "PROFIT_CALCULATION_POLL_MS",
+        "PROFIT_CALCULATION_LEASE_SECONDS"
+      ],
       "runtimeBoundary": "profit calculation runs inside the Baota-managed Node Worker; MySQL 5.7 is the truth source and the browser never recalculates ROI",
-      "imageEvidence": ["concept 37 opportunity profit", "concept 48 cost calculator", "high-resolution core page 08 supply and profit decision center"],
+      "imageEvidence": [
+        "concept 37 opportunity profit",
+        "concept 48 cost calculator",
+        "high-resolution core page 08 supply and profit decision center"
+      ],
       "verificationRunId": "7dcd936b-fb04-438c-96ff-b35241b3d0c2",
       "status": "module_verified"
     },
     "competitorMonitoring": {
       "module": "M04-05",
-      "entrypoints": ["../apps/api/src/competitor-service.ts", "../apps/api/src/mysql-competitor-repository.ts", "../apps/api/src/competitor-routes.ts", "../apps/worker/src/competitor-monitor-worker.ts", "../apps/web/src/components/CompetitorMonitor.vue"],
-      "routes": ["/competitors", "/api/v1/competitors", "/api/v1/competitors/{competitorId}", "/api/v1/competitors/{competitorId}/snapshots", "/api/v1/competitors/{competitorId}/actions", "/api/v1/competitor-monitor-rules"],
+      "entrypoints": [
+        "../apps/api/src/competitor-service.ts",
+        "../apps/api/src/mysql-competitor-repository.ts",
+        "../apps/api/src/competitor-routes.ts",
+        "../apps/worker/src/competitor-monitor-worker.ts",
+        "../apps/web/src/components/CompetitorMonitor.vue"
+      ],
+      "routes": [
+        "/competitors",
+        "/api/v1/competitors",
+        "/api/v1/competitors/{competitorId}",
+        "/api/v1/competitors/{competitorId}/snapshots",
+        "/api/v1/competitors/{competitorId}/actions",
+        "/api/v1/competitor-monitor-rules"
+      ],
       "scope": "organization and workspace scoped competitor identities immutable source snapshots comparison jobs changes threshold rules alerts events and outbox",
       "truthBoundary": "complete snapshots from enabled Providers only; the baseline creates no change and missing source values are never replaced by examples",
       "permission": "competitor:read for scoped reads; competitor:manage for identities snapshots thresholds pause and resume; auditors remain read only",
       "audit": "user and Worker writes preserve request_id trace_id evidence source references immutable changes and queued downstream delivery state",
-      "configuration": ["COMPETITOR_MONITOR_POLL_MS", "COMPETITOR_MONITOR_LEASE_SECONDS"],
+      "configuration": [
+        "COMPETITOR_MONITOR_POLL_MS",
+        "COMPETITOR_MONITOR_LEASE_SECONDS"
+      ],
       "runtimeBoundary": "comparison runs inside the Baota-managed Node Worker; P05 consumes queued notification and task outbox contracts",
-      "imageEvidence": ["concept 41 competitor list", "concept 42 competitor detail", "concept 43 price history", "concept 44 monitoring rules", "high-resolution core page 07 competitor dashboard"],
+      "imageEvidence": [
+        "concept 41 competitor list",
+        "concept 42 competitor detail",
+        "concept 43 price history",
+        "concept 44 monitoring rules",
+        "high-resolution core page 07 competitor dashboard"
+      ],
       "verificationRunId": "2e64e54e-620b-4396-848b-223329b916f3",
       "status": "module_verified"
     },
     "sourcingDiscovery": {
       "module": "M04-06",
-      "entrypoints": ["../apps/api/src/sourcing-service.ts", "../apps/api/src/mysql-sourcing-repository.ts", "../apps/api/src/sourcing-routes.ts", "../apps/worker/src/sourcing-projection-worker.ts", "../apps/web/src/components/SourcingWorkspace.vue"],
-      "routes": ["/sourcing", "/api/v1/sourcing/searches", "/api/v1/sourcing/searches/{searchId}", "/api/v1/sourcing/quotes", "/api/v1/sourcing/comparisons", "/api/v1/sourcing/purchase-tasks"],
+      "entrypoints": [
+        "../apps/api/src/sourcing-service.ts",
+        "../apps/api/src/mysql-sourcing-repository.ts",
+        "../apps/api/src/sourcing-routes.ts",
+        "../apps/worker/src/sourcing-projection-worker.ts",
+        "../apps/web/src/components/SourcingWorkspace.vue"
+      ],
+      "routes": [
+        "/sourcing",
+        "/api/v1/sourcing/searches",
+        "/api/v1/sourcing/searches/{searchId}",
+        "/api/v1/sourcing/quotes",
+        "/api/v1/sourcing/comparisons",
+        "/api/v1/sourcing/purchase-tasks"
+      ],
       "scope": "organization and workspace scoped searches projection jobs candidates immutable quote versions comparisons purchase tasks events and outbox",
       "truthBoundary": "only completed same-workspace product-supply-csv-v1 collection facts are projected; missing specification lead location confidence stability or risk stays explicit until evidence-backed confirmation",
       "permission": "sourcing:read for scoped reads; supplier_quote:manage for searches quote confirmation comparisons and purchase task creation",
       "audit": "writes preserve idempotency request_id trace_id actor immutable evidence references sourcing_events and sourcing_outbox",
-      "configuration": ["SOURCING_PROJECTION_POLL_MS", "SOURCING_PROJECTION_LEASE_SECONDS"],
+      "configuration": [
+        "SOURCING_PROJECTION_POLL_MS",
+        "SOURCING_PROJECTION_LEASE_SECONDS"
+      ],
       "runtimeBoundary": "projection runs inside the Baota-managed Node Worker; P05 consumes queued purchase task outbox records and M04-04 remains the cost and exchange-rate truth",
-      "imageEvidence": ["concept 45 supplier search", "concept 46 supplier detail", "concept 47 quote comparison", "concept 48 cost calculator", "concept 49 purchase task", "high-resolution core page 08 supply and profit decision center"],
+      "imageEvidence": [
+        "concept 45 supplier search",
+        "concept 46 supplier detail",
+        "concept 47 quote comparison",
+        "concept 48 cost calculator",
+        "concept 49 purchase task",
+        "high-resolution core page 08 supply and profit decision center"
+      ],
       "verificationRunId": "eeef7338-db72-4aef-b74c-99bf2d3513b4",
       "status": "module_verified"
     },
     "aiAssistedAnalysis": {
       "module": "M04-07",
-      "entrypoints": ["../apps/api/src/ai-analysis-service.ts", "../apps/api/src/mysql-ai-analysis-repository.ts", "../apps/api/src/ai-analysis-routes.ts", "../apps/worker/src/ai-analysis-worker.ts", "../apps/web/src/components/OpportunityWorkspace.vue"],
-      "routes": ["/opportunities/{opportunityId}", "/api/v1/opportunities/{opportunityId}/ai-analyses", "/api/v1/ai-analyses/{resultId}/reviews"],
+      "entrypoints": [
+        "../apps/api/src/ai-analysis-service.ts",
+        "../apps/api/src/mysql-ai-analysis-repository.ts",
+        "../apps/api/src/ai-analysis-routes.ts",
+        "../apps/worker/src/ai-analysis-worker.ts",
+        "../apps/web/src/components/OpportunityWorkspace.vue"
+      ],
+      "routes": [
+        "/opportunities/{opportunityId}",
+        "/api/v1/opportunities/{opportunityId}/ai-analyses",
+        "/api/v1/ai-analyses/{resultId}/reviews"
+      ],
       "scope": "organization and workspace scoped immutable input snapshots requests results reviews events outbox and idempotency operations",
       "truthBoundary": "AI only summarizes classifies and points out missing fields from persisted facts; ai_generated output cannot create or overwrite prices scores profits qualifications risk conclusions or decisions",
       "permission": "opportunity:read for scoped results; opportunity:decide for queueing and human sampling review",
       "audit": "input SHA prompt contract model provider request id request_id trace_id events outbox and separate human review remain correlated without logging secrets",
-      "configuration": ["AI_BASE_URL", "AI_MODEL", "AI_API_KEY", "AI_TIMEOUT_MS", "AI_RETRY_LIMIT", "AI_ANALYSIS_POLL_MS", "AI_ANALYSIS_LEASE_SECONDS"],
+      "configuration": [
+        "AI_BASE_URL",
+        "AI_MODEL",
+        "AI_API_KEY",
+        "AI_TIMEOUT_MS",
+        "AI_RETRY_LIMIT",
+        "AI_ANALYSIS_POLL_MS",
+        "AI_ANALYSIS_LEASE_SECONDS"
+      ],
       "runtimeBoundary": "OpenAI-compatible JSON mode calls execute only in the Baota-managed Node Worker and every response is locally schema-validated against allowed source references",
-      "imageEvidence": ["concept 35 opportunity market analysis", "concept 36 opportunity competition analysis", "concept 38 opportunity risk", "concept 39 opportunity evidence", "concept 50 opportunity report", "concept 54 mobile opportunity detail", "high-resolution core page 06 opportunity dashboard"],
+      "imageEvidence": [
+        "concept 35 opportunity market analysis",
+        "concept 36 opportunity competition analysis",
+        "concept 38 opportunity risk",
+        "concept 39 opportunity evidence",
+        "concept 50 opportunity report",
+        "concept 54 mobile opportunity detail",
+        "high-resolution core page 06 opportunity dashboard"
+      ],
       "verificationRunId": "1b290819-ac45-4e21-99f0-7d84d844d25e",
       "status": "module_verified"
     },
     "businessTaskCenter": {
       "module": "M05-01",
-      "entrypoints": ["../apps/api/src/business-task-service.ts", "../apps/api/src/mysql-business-task-repository.ts", "../apps/api/src/business-task-routes.ts", "../apps/worker/src/business-task-projection-worker.ts", "../apps/web/src/components/TaskWorkspace.vue"],
-      "routes": ["/work", "/tasks", "/api/v1/tasks", "/api/v1/tasks/{taskId}", "/api/v1/tasks/{taskId}/comments", "/api/v1/tasks/{taskId}/actions"],
+      "entrypoints": [
+        "../apps/api/src/business-task-service.ts",
+        "../apps/api/src/mysql-business-task-repository.ts",
+        "../apps/api/src/business-task-routes.ts",
+        "../apps/worker/src/business-task-projection-worker.ts",
+        "../apps/web/src/components/TaskWorkspace.vue"
+      ],
+      "routes": [
+        "/work",
+        "/tasks",
+        "/api/v1/tasks",
+        "/api/v1/tasks/{taskId}",
+        "/api/v1/tasks/{taskId}/comments",
+        "/api/v1/tasks/{taskId}/actions"
+      ],
       "scope": "organization and workspace scoped business tasks immutable comments events idempotent operations audit and outbox",
       "truthBoundary": "SLA is derived only from persisted due_at; missing upstream deadlines remain not_set and M05-02 approvals M05-03 notifications M05-04 SSE are not fabricated",
       "permission": "task:read for reads, task:create for creation, task:update for status due and comments, task:assign for transfer",
-      "configuration": ["BUSINESS_TASK_PROJECTION_POLL_MS", "BUSINESS_TASK_PROJECTION_LEASE_SECONDS"],
+      "configuration": [
+        "BUSINESS_TASK_PROJECTION_POLL_MS",
+        "BUSINESS_TASK_PROJECTION_LEASE_SECONDS"
+      ],
       "runtimeBoundary": "M04-06 sourcing purchase outbox projection runs only in the Baota-managed Node Worker with lease recovery and source idempotency",
-      "imageEvidence": ["concept 12 today action", "concept 23 today work", "concept 24 task list", "concept 25 task detail", "concept 26 task comments", "high-resolution core pages 01 and 04"],
+      "imageEvidence": [
+        "concept 12 today action",
+        "concept 23 today work",
+        "concept 24 task list",
+        "concept 25 task detail",
+        "concept 26 task comments",
+        "high-resolution core pages 01 and 04"
+      ],
       "verificationRunId": "7fad07fb-3b22-4136-8e4a-2d274f0a7cdb",
+      "status": "module_verified"
+    },
+    "approvalWorkflow": {
+      "module": "M05-02",
+      "entrypoints": [
+        "../apps/api/src/approval-service.ts",
+        "../apps/api/src/mysql-approval-repository.ts",
+        "../apps/api/src/approval-routes.ts",
+        "../apps/worker/src/approval-escalation-worker.ts",
+        "../apps/web/src/components/ApprovalWorkspace.vue"
+      ],
+      "routes": [
+        "/tasks/approvals",
+        "/api/v1/tasks/approval-templates",
+        "/api/v1/tasks/approvals",
+        "/api/v1/tasks/approvals/{approvalRequestId}/actions"
+      ],
+      "scope": "organization and workspace scoped immutable published templates approval requests node runs actions idempotent operations audit and outbox",
+      "truthBoundary": "requests lock the published template version; approve and reject require reasons; overdue Worker only escalates the active approver and never decides",
+      "permission": "task:read for reads and task:assign for template request and decision writes",
+      "configuration": [
+        "APPROVAL_ESCALATION_POLL_MS",
+        "APPROVAL_ESCALATION_LEASE_SECONDS"
+      ],
+      "runtimeBoundary": "overdue node escalation runs only in the Baota-managed Node Worker; M05-03 notifications and M05-04 SSE are not implemented here",
+      "imageEvidence": ["concept 27 task approval", "concept 60 approval flow"],
+      "verificationRunId": "02651953-6607-45cc-ac45-887c9be17b60",
       "status": "module_verified"
     }
   },
   "phaseVerification": {
-    "P01": {"runId": "5e4da53f-25ab-4e60-9850-516590896fe0", "status": "phase_verified", "modules": ["M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06"]},
-    "P02": {"runId": "f7b41287-a3cd-442a-a212-7a1dd4edf828", "status": "phase_verified", "modules": ["M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06"]},
-    "P03": {"runId": "01b8e9ff-d2c4-4a5a-80b3-673ee96dbea7", "status": "phase_verified", "modules": ["M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07"]},
-    "P04": {"runId": "9bd7c0f3-2430-4262-aac0-1f06bc014fc9", "status": "phase_verified", "modules": ["M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06", "M04-07"]}
+    "P01": {
+      "runId": "5e4da53f-25ab-4e60-9850-516590896fe0",
+      "status": "phase_verified",
+      "modules": ["M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06"]
+    },
+    "P02": {
+      "runId": "f7b41287-a3cd-442a-a212-7a1dd4edf828",
+      "status": "phase_verified",
+      "modules": ["M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06"]
+    },
+    "P03": {
+      "runId": "01b8e9ff-d2c4-4a5a-80b3-673ee96dbea7",
+      "status": "phase_verified",
+      "modules": [
+        "M03-01",
+        "M03-02",
+        "M03-03",
+        "M03-04",
+        "M03-05",
+        "M03-06",
+        "M03-07"
+      ]
+    },
+    "P04": {
+      "runId": "9bd7c0f3-2430-4262-aac0-1f06bc014fc9",
+      "status": "phase_verified",
+      "modules": [
+        "M04-01",
+        "M04-02",
+        "M04-03",
+        "M04-04",
+        "M04-05",
+        "M04-06",
+        "M04-07"
+      ]
+    }
   },
   "uiReference": {
     "directory": "../images-html",
-    "readOrder": ["README.txt", "manifest.json", "01_72_page_concepts", "02_high_resolution_core_pages", "03_source_contact_sheets"],
+    "readOrder": [
+      "README.txt",
+      "manifest.json",
+      "01_72_page_concepts",
+      "02_high_resolution_core_pages",
+      "03_source_contact_sheets"
+    ],
     "rule": "Images define planned visual and page-state references only; contracts, permissions and real data follow the blueprint and implementation."
   },
   "plannedContracts": {
     "collectionTask": {
-      "terminalStatuses": ["succeeded", "succeeded_empty", "completed_with_warnings", "failed_terminal", "dead_letter"],
+      "terminalStatuses": [
+        "succeeded",
+        "succeeded_empty",
+        "completed_with_warnings",
+        "failed_terminal",
+        "dead_letter"
+      ],
       "coverageStatuses": ["complete", "partial", "insufficient"],
       "rule": "Multi-source tasks retain every subquery result; insufficient coverage cannot produce an automatic recommendation."
     },
@@ -466,7 +1169,10 @@
     },
     "deployment": {
       "currentStage": "S0 single-host Baota deployment",
-      "scaleStages": ["S1 multi-node after shared storage, Redis/Sentinel, MySQL replica, load balancing and rehearsal", "S2 only after capacity and failover rehearsals"]
+      "scaleStages": [
+        "S1 multi-node after shared storage, Redis/Sentinel, MySQL replica, load balancing and rehearsal",
+        "S2 only after capacity and failover rehearsals"
+      ]
     }
   },
   "technology": {
@@ -477,55 +1183,245 @@
     "deployment": "Baota panel managed services on self-hosted servers"
   },
   "routes": [
-    {"path": "/home", "view": "TodayActionCenter", "domain": "work", "status": "planned"},
-    {"path": "/work", "view": "TaskWorkspace", "domain": "tasks", "status": "M05-01_module_verified"},
-    {"path": "/trends", "view": "TrendDashboard", "domain": "trends", "status": "M04-01_module_verified"},
-    {"path": "/opportunities", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-02_module_verified"},
-    {"path": "/opportunities/{opportunityId}", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-04_profit_analysis_verified"},
-    {"path": "/opportunities/scoring-rules", "view": "ScoreRuleConsole", "domain": "opportunities", "status": "M04-03_module_verified"},
-    {"path": "/competitors", "view": "CompetitorMonitor", "domain": "competitors", "status": "M04-05_module_verified"},
-    {"path": "/sourcing", "view": "SourcingWorkspace", "domain": "sourcing", "status": "M04-06_module_verified"},
-    {"path": "/sourcing/cost-rules", "view": "CostRuleConsole", "domain": "sourcing", "status": "M04-04_module_verified"},
-    {"path": "/tasks", "view": "TaskWorkspace", "domain": "tasks", "status": "M05-01_module_verified"},
-    {"path": "/notifications", "view": "Notifications", "domain": "notifications", "status": "planned"},
-    {"path": "/me", "view": "Profile", "domain": "identity", "status": "local_security_sessions_implemented_profile_planned"},
-    {"path": "/org-admin", "view": "OrganizationAdmin", "domain": "organization", "status": "roles_and_resource_grants_implemented_remaining_management_planned"},
-    {"path": "/platform-admin", "view": "PlatformAdmin", "domain": "platform", "status": "security_audit_and_provider_registry_implemented_remaining_admin_modules_planned"},
-    {"path": "/platform-admin/providers", "view": "ProviderRegistry", "domain": "platform", "status": "M03-01_implemented"},
-    {"path": "/platform-admin/providers/sources", "view": "ProviderSourceCenter", "domain": "platform", "status": "M03-07_module_verified"},
-    {"path": "/platform-admin/data", "view": "DataQualityCenter", "domain": "platform", "status": "M03-06_implemented"}
+    {
+      "path": "/home",
+      "view": "TodayActionCenter",
+      "domain": "work",
+      "status": "planned"
+    },
+    {
+      "path": "/work",
+      "view": "TaskWorkspace",
+      "domain": "tasks",
+      "status": "M05-01_module_verified"
+    },
+    {
+      "path": "/trends",
+      "view": "TrendDashboard",
+      "domain": "trends",
+      "status": "M04-01_module_verified"
+    },
+    {
+      "path": "/opportunities",
+      "view": "OpportunityWorkspace",
+      "domain": "opportunities",
+      "status": "M04-02_module_verified"
+    },
+    {
+      "path": "/opportunities/{opportunityId}",
+      "view": "OpportunityWorkspace",
+      "domain": "opportunities",
+      "status": "M04-04_profit_analysis_verified"
+    },
+    {
+      "path": "/opportunities/scoring-rules",
+      "view": "ScoreRuleConsole",
+      "domain": "opportunities",
+      "status": "M04-03_module_verified"
+    },
+    {
+      "path": "/competitors",
+      "view": "CompetitorMonitor",
+      "domain": "competitors",
+      "status": "M04-05_module_verified"
+    },
+    {
+      "path": "/sourcing",
+      "view": "SourcingWorkspace",
+      "domain": "sourcing",
+      "status": "M04-06_module_verified"
+    },
+    {
+      "path": "/sourcing/cost-rules",
+      "view": "CostRuleConsole",
+      "domain": "sourcing",
+      "status": "M04-04_module_verified"
+    },
+    {
+      "path": "/tasks",
+      "view": "TaskWorkspace",
+      "domain": "tasks",
+      "status": "M05-01_module_verified"
+    },
+    {
+      "path": "/tasks/approvals",
+      "view": "ApprovalWorkspace",
+      "domain": "approvals",
+      "status": "M05-02_module_verified"
+    },
+    {
+      "path": "/notifications",
+      "view": "Notifications",
+      "domain": "notifications",
+      "status": "planned"
+    },
+    {
+      "path": "/me",
+      "view": "Profile",
+      "domain": "identity",
+      "status": "local_security_sessions_implemented_profile_planned"
+    },
+    {
+      "path": "/org-admin",
+      "view": "OrganizationAdmin",
+      "domain": "organization",
+      "status": "roles_and_resource_grants_implemented_remaining_management_planned"
+    },
+    {
+      "path": "/platform-admin",
+      "view": "PlatformAdmin",
+      "domain": "platform",
+      "status": "security_audit_and_provider_registry_implemented_remaining_admin_modules_planned"
+    },
+    {
+      "path": "/platform-admin/providers",
+      "view": "ProviderRegistry",
+      "domain": "platform",
+      "status": "M03-01_implemented"
+    },
+    {
+      "path": "/platform-admin/providers/sources",
+      "view": "ProviderSourceCenter",
+      "domain": "platform",
+      "status": "M03-07_module_verified"
+    },
+    {
+      "path": "/platform-admin/data",
+      "view": "DataQualityCenter",
+      "domain": "platform",
+      "status": "M03-06_implemented"
+    }
   ],
   "apiGroups": [
-    {"prefix": "/api/v1/health", "domain": "platform-runtime", "status": "foundation_implemented"},
-    {"prefix": "/api/v1/auth", "domain": "identity", "status": "M01-01_local_account_M01-02_TOTP_and_M01-03_context_selection_implemented_enterprise_provider_activation_planned"},
-    {"prefix": "/api/v1/me", "domain": "identity", "status": "password_sessions_TOTP_MFA_authorization_resource_grants_and_scoped_ui_preferences_implemented_profile_notification_preferences_tokens_planned"},
-    {"prefix": "/api/v1/org", "domain": "organization", "status": "M01-03_tenancy_M01-04_role_catalog_and_M01-05_exact_resource_grants_implemented_remaining_management_planned"},
-    {"prefix": "/api/v1/trends", "domain": "trends", "status": "M04-01_topics_signals_evidence_follows_relevance_and_monitoring_rules_verified"},
-    {"prefix": "/api/v1/opportunities", "domain": "opportunities", "status": "M04-02_list_create_detail_decisions_and_evidence_refresh_verified"},
-    {"prefix": "/api/v1/ai-analyses", "domain": "opportunities", "status": "M04-07_facts_only_ai_results_and_human_reviews_verified"},
-    {"prefix": "/api/v1/competitors", "domain": "competitors", "status": "M04-05_identity_snapshots_changes_thresholds_and_alert_queue_implemented"},
-    {"prefix": "/api/v1/sourcing", "domain": "sourcing", "status": "M04-06_search_projection_quote_comparison_and_purchase_task_verified"},
-    {"prefix": "/api/v1/tasks", "domain": "tasks", "status": "M05-01_scoped_tasks_comments_actions_and_sourcing_projection_verified"},
-    {"prefix": "/api/v1/subscriptions", "domain": "monitoring", "status": "planned"},
-    {"prefix": "/api/v1/reviews", "domain": "review-analysis", "status": "planned"},
-    {"prefix": "/api/v1/analysis", "domain": "decision-analysis", "status": "planned"},
-    {"prefix": "/api/v1/reports", "domain": "reporting", "status": "planned"},
-    {"prefix": "/api/v1/realtime", "domain": "realtime", "status": "planned"},
-    {"prefix": "/api/v1/platform", "domain": "platform", "status": "M01-06_audit_and_P03_sources_collection_evidence_provider_sources_implemented_remaining_platform_management_planned"},
-    {"prefix": "/open/v1", "domain": "open-platform", "status": "planned"}
+    {
+      "prefix": "/api/v1/health",
+      "domain": "platform-runtime",
+      "status": "foundation_implemented"
+    },
+    {
+      "prefix": "/api/v1/auth",
+      "domain": "identity",
+      "status": "M01-01_local_account_M01-02_TOTP_and_M01-03_context_selection_implemented_enterprise_provider_activation_planned"
+    },
+    {
+      "prefix": "/api/v1/me",
+      "domain": "identity",
+      "status": "password_sessions_TOTP_MFA_authorization_resource_grants_and_scoped_ui_preferences_implemented_profile_notification_preferences_tokens_planned"
+    },
+    {
+      "prefix": "/api/v1/org",
+      "domain": "organization",
+      "status": "M01-03_tenancy_M01-04_role_catalog_and_M01-05_exact_resource_grants_implemented_remaining_management_planned"
+    },
+    {
+      "prefix": "/api/v1/trends",
+      "domain": "trends",
+      "status": "M04-01_topics_signals_evidence_follows_relevance_and_monitoring_rules_verified"
+    },
+    {
+      "prefix": "/api/v1/opportunities",
+      "domain": "opportunities",
+      "status": "M04-02_list_create_detail_decisions_and_evidence_refresh_verified"
+    },
+    {
+      "prefix": "/api/v1/ai-analyses",
+      "domain": "opportunities",
+      "status": "M04-07_facts_only_ai_results_and_human_reviews_verified"
+    },
+    {
+      "prefix": "/api/v1/competitors",
+      "domain": "competitors",
+      "status": "M04-05_identity_snapshots_changes_thresholds_and_alert_queue_implemented"
+    },
+    {
+      "prefix": "/api/v1/sourcing",
+      "domain": "sourcing",
+      "status": "M04-06_search_projection_quote_comparison_and_purchase_task_verified"
+    },
+    {
+      "prefix": "/api/v1/tasks",
+      "domain": "tasks-and-approvals",
+      "status": "M05-01_tasks_and_M05-02_approval_workflow_verified"
+    },
+    {
+      "prefix": "/api/v1/subscriptions",
+      "domain": "monitoring",
+      "status": "planned"
+    },
+    {
+      "prefix": "/api/v1/reviews",
+      "domain": "review-analysis",
+      "status": "planned"
+    },
+    {
+      "prefix": "/api/v1/analysis",
+      "domain": "decision-analysis",
+      "status": "planned"
+    },
+    { "prefix": "/api/v1/reports", "domain": "reporting", "status": "planned" },
+    { "prefix": "/api/v1/realtime", "domain": "realtime", "status": "planned" },
+    {
+      "prefix": "/api/v1/platform",
+      "domain": "platform",
+      "status": "M01-06_audit_and_P03_sources_collection_evidence_provider_sources_implemented_remaining_platform_management_planned"
+    },
+    { "prefix": "/open/v1", "domain": "open-platform", "status": "planned" }
   ],
   "runtime": [
-    {"name": "product-scout-web", "kind": "baota-site", "responsibility": "Vue static assets and reverse proxy", "status": "scaffolded_not_deployed"},
-    {"name": "product-scout-api", "kind": "baota-node-project", "responsibility": "HTTP API, RBAC and SSE", "status": "scaffolded_not_deployed"},
-    {"name": "product-scout-worker", "kind": "baota-node-project", "responsibility": "queues, outbox, notifications and reports", "status": "scaffolded_not_deployed"},
-    {"name": "product-scout-crawler", "kind": "baota-python-project", "responsibility": "provider collection and parsing", "status": "scaffolded_not_deployed"},
-    {"name": "mysql57-product-scout", "kind": "baota-mysql-service", "responsibility": "product_scout data", "status": "template_ready_not_deployed"},
-    {"name": "redis-product-scout", "kind": "baota-redis-service", "responsibility": "cache, queue, rate limiting and SSE coordination", "status": "template_ready_local_verified_not_deployed"}
+    {
+      "name": "product-scout-web",
+      "kind": "baota-site",
+      "responsibility": "Vue static assets and reverse proxy",
+      "status": "scaffolded_not_deployed"
+    },
+    {
+      "name": "product-scout-api",
+      "kind": "baota-node-project",
+      "responsibility": "HTTP API, RBAC and SSE",
+      "status": "scaffolded_not_deployed"
+    },
+    {
+      "name": "product-scout-worker",
+      "kind": "baota-node-project",
+      "responsibility": "queues, outbox, notifications and reports",
+      "status": "scaffolded_not_deployed"
+    },
+    {
+      "name": "product-scout-crawler",
+      "kind": "baota-python-project",
+      "responsibility": "provider collection and parsing",
+      "status": "scaffolded_not_deployed"
+    },
+    {
+      "name": "mysql57-product-scout",
+      "kind": "baota-mysql-service",
+      "responsibility": "product_scout data",
+      "status": "template_ready_not_deployed"
+    },
+    {
+      "name": "redis-product-scout",
+      "kind": "baota-redis-service",
+      "responsibility": "cache, queue, rate limiting and SSE coordination",
+      "status": "template_ready_local_verified_not_deployed"
+    }
   ],
   "externalDependencies": [
-    {"name": "AI model endpoint", "address": "192.168.1.203:8588/v1", "contract": "OpenAI-compatible; /models, text/multimodal chat completions and 4 low-load concurrent text requests verified", "status": "verified"},
-    {"name": "Mail provider", "contract": "must support delivery, bounce, complaint, delay, failure and suppression callbacks", "status": "pending_provider_selection"},
-    {"name": "GitHub public repository", "contract": "source control only; no production runtime", "status": "provided"}
+    {
+      "name": "AI model endpoint",
+      "address": "192.168.1.203:8588/v1",
+      "contract": "OpenAI-compatible; /models, text/multimodal chat completions and 4 low-load concurrent text requests verified",
+      "status": "verified"
+    },
+    {
+      "name": "Mail provider",
+      "contract": "must support delivery, bounce, complaint, delay, failure and suppression callbacks",
+      "status": "pending_provider_selection"
+    },
+    {
+      "name": "GitHub public repository",
+      "contract": "source control only; no production runtime",
+      "status": "provided"
+    }
   ],
   "securityBoundaries": [
     "All organization-visible data is filtered by organization_id and applicable workspace_id.",

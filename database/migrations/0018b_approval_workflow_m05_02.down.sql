@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `approval_operations`;DROP TABLE IF EXISTS `approval_escalation_jobs`;DROP TABLE IF EXISTS `approval_actions`;DROP TABLE IF EXISTS `approval_node_runs`;DROP TABLE IF EXISTS `approval_requests`;DROP TABLE IF EXISTS `approval_template_nodes`;DROP TABLE IF EXISTS `approval_template_versions`;DROP TABLE IF EXISTS `approval_templates`;
