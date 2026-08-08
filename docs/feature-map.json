@@ -1390,7 +1390,8 @@
       "configuration": ["BACKUP_PRIMARY_REGION", "BACKUP_RECOVERY_REGION", "BACKUP_RPO_MINUTES", "BACKUP_RTO_MINUTES", "BACKUP_MAX_DRILL_AGE_DAYS", "BACKUP_RETENTION_DAYS", "BACKUP_PRIMARY_ROOT", "BACKUP_LOCAL_COPY_ROOT", "BACKUP_DRILL_ROOT", "BACKUP_ENCRYPTION_KEY", "BACKUP_MYSQL_CLIENT", "BACKUP_MYSQLDUMP_CLIENT", "BACKUP_MYSQLBINLOG_CLIENT", "BACKUP_MYSQL_ADMIN_PASSWORD_FILE", "BACKUP_RELEASE_ROOT"],
       "runtimeBoundary": "S0 finite Baota tasks with AES-256-GCM on one host; no new daemon, offsite recovery, host-failure protection or multi-node claim",
       "imageEvidence": ["concept 61 platform operations overview", "core 10 platform cockpit", "desktop and 390 recovery states"],
-      "status": "implementation_ready_production_recovery_pending"
+      "verificationRunId": "d1ede17d-0f7b-4f42-b80c-2d5dac118651",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {

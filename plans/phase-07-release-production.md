@@ -1,6 +1,6 @@
 # P07：S0 发布、生产验收与恢复详细执行计划
 
-> 状态：in_progress（P00 至 P06 已通过阶段门禁；P06 run_id/trace_id：`e1ab135d-20f6-450a-90c0-de9746ef6575`；M07-01、M07-02、M07-03 已通过，M07-03 run_id/trace_id：`8cb425c1-1606-4e4c-a736-8d29e27caf32`，当前执行 M07-04）
+> 状态：in_progress（P00 至 P06 已通过阶段门禁；P06 run_id/trace_id：`e1ab135d-20f6-450a-90c0-de9746ef6575`；M07-01 至 M07-04 已通过，M07-04 run_id/trace_id：`d1ede17d-0f7b-4f42-b80c-2d5dac118651`，当前执行 M07-05）
 > 上游总纲：`new-product-enterprise-blueprint.md`
 > 阶段索引：`plans/README.md`
 > 最低行数：1,000；`npm run verify:plans` 必须自动校验。
@@ -1115,9 +1115,9 @@
 - 通过标准：实现、迁移/API/页面（适用时）、文档、配置、测试和审计全部同步。
 
 #### M07-04.A99 模块关卡
-- [ ] 原子任务 A01–A17 全部有实现证据和测试名称。
-- [ ] 组织隔离、权限、审计、配置、错误状态、图片/响应式（适用时）已覆盖。
-- [ ] `npm run verify:module -- 模块 ID` 返回 0；失败报告可定位到原子任务。
+- [x] 原子任务 A01–A17 全部有实现证据和测试名称。
+- [x] 组织隔离、权限、审计、配置、错误状态、图片/响应式（适用时）已覆盖。
+- [x] `npm run verify:module -- M07-04` 返回 0；run_id/trace_id：`d1ede17d-0f7b-4f42-b80c-2d5dac118651`。
 
 ### M07-05 原子任务索引
 - 模块目标：发布与回滚。
