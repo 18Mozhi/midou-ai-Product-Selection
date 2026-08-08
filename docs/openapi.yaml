@@ -414,6 +414,117 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '404': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /org/admin/summary:
+    get:
+      summary: Read the current organization administration dashboard
+      description: Requires organization:manage and the active selected organization; all counters are database facts.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Organization-scoped factual summary, content: { application/json: { schema: { $ref: '#/components/schemas/OrganizationAdminEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+  /org/admin/profile:
+    get:
+      summary: Read the current organization profile
+      security: [{ HttpOnlySession: [] }]
+      responses: { '200': { description: Current organization profile }, '401': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' } }
+    patch:
+      summary: Update the current organization profile with optimistic locking
+      description: Requires organization:manage, same-origin request, Idempotency-Key, reason and expected_version.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [name, timezone, data_retention_days, default_workspace_id, expected_version, reason], properties: { name: { type: string, maxLength: 120 }, logo_url: { type: string, format: uri, nullable: true }, timezone: { type: string, maxLength: 64 }, data_retention_days: { type: integer, minimum: 30, maximum: 3650 }, default_workspace_id: { type: string, format: uuid }, expected_version: { type: integer, minimum: 1 }, reason: { type: string, minLength: 1, maxLength: 500 } } } } } }
+      responses: { '200': { description: Audited profile update }, '400': { $ref: '#/components/responses/Error' }, '401': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /org/admin/members:
+    get:
+      summary: List current organization members and pending invitations
+      description: Requires membership:read and never returns another organization.
+      security: [{ HttpOnlySession: [] }]
+      responses: { '200': { description: Scoped members and invitations }, '401': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' } }
+  /org/admin/invitations:
+    post:
+      summary: Create an auditable pending organization invitation
+      description: Requires membership:manage. Email delivery remains provider_pending until a provider contract is configured.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [email, role_code, reason], properties: { email: { type: string, format: email }, role_code: { type: string, enum: [member, selection_manager, procurement_member, organization_admin, auditor] }, reason: { type: string, minLength: 1, maxLength: 500 } } } } } }
+      responses: { '202': { description: Invitation persisted in pending delivery state }, '400': { $ref: '#/components/responses/Error' }, '401': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /org/admin/members/{membershipId}/actions:
+    post:
+      summary: Disable or restore a same-organization membership
+      description: Requires membership:manage; self-disable and removal of the last active organization administrator fail closed.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: membershipId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '200': { description: Versioned membership state }, '400': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' }, '404': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /org/admin/members/{membershipId}/roles:
+    post:
+      summary: Replace a membership organization role from the fixed catalog
+      description: Requires role:manage and protects the last active organization administrator.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: membershipId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '200': { description: Audited role assignment }, '400': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' }, '404': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /org/admin/roles:
+    get:
+      summary: Read fixed organization role capability templates
+      security: [{ HttpOnlySession: [] }]
+      responses: { '200': { description: Organization role catalog }, '403': { $ref: '#/components/responses/Error' } }
+  /org/admin/workspaces:
+    get:
+      summary: List current organization workspaces
+      security: [{ HttpOnlySession: [] }]
+      responses: { '200': { description: Scoped workspace list }, '403': { $ref: '#/components/responses/Error' } }
+    post:
+      summary: Create a workspace in the current organization
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '201': { description: Audited workspace }, '400': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /org/admin/workspaces/{workspaceId}/actions:
+    post:
+      summary: Archive or restore a same-organization workspace
+      description: The current default workspace cannot be archived.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: workspaceId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '200': { description: Versioned workspace state }, '403': { $ref: '#/components/responses/Error' }, '404': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /org/admin/teams:
+    get:
+      summary: List teams in the current organization
+      security: [{ HttpOnlySession: [] }]
+      responses: { '200': { description: Scoped team list }, '403': { $ref: '#/components/responses/Error' } }
+    post:
+      summary: Create a team with an optional same-organization lead and workflow key
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '201': { description: Audited team }, '400': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' } }
+  /org/admin/teams/{teamId}/members:
+    post:
+      summary: Assign or remove an active same-organization membership from a team
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: teamId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '200': { description: Audited team membership action }, '403': { $ref: '#/components/responses/Error' }, '404': { $ref: '#/components/responses/Error' } }
+  /org/admin/approvals:
+    get:
+      summary: Read organization-wide approval facts
+      description: Requires opportunity:approve; this endpoint does not bypass approval action permissions.
+      security: [{ HttpOnlySession: [] }]
+      responses: { '200': { description: Approval status summary and latest requests }, '403': { $ref: '#/components/responses/Error' } }
+  /org/admin/tokens:
+    get:
+      summary: List organization Token metadata without secret or hash
+      security: [{ HttpOnlySession: [] }]
+      responses: { '200': { description: Token prefix, read scopes, lifecycle and timestamps only }, '403': { $ref: '#/components/responses/Error' } }
+    post:
+      summary: Create an organization Token whose secret is returned once
+      description: Requires organization_token:manage; only fixed read scopes are accepted and only SHA-256 hashes persist.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '201': { description: Token metadata plus one-time secret }, '400': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /org/admin/tokens/{tokenId}/actions:
+    post:
+      summary: Rotate or revoke an active organization Token
+      description: Requires organization_token:manage, expected_version and reason; rotated secret is returned once.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: tokenId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '200': { description: Versioned Token lifecycle result }, '400': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' }, '404': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
   /platform/audit-events:
     get:
       summary: Query platform-global security audit events
@@ -3126,3 +3237,21 @@ components:
                 evidence: { type: array, items: { type: object, required: [id, title, publisher, canonical_url, provider_id, raw_evidence_id, observed_at], properties: { id: { type: string, format: uuid }, title: { type: string }, publisher: { type: string }, canonical_url: { type: string, format: uri }, provider_id: { type: string, format: uuid }, raw_evidence_id: { type: string, format: uuid }, observed_at: { type: string, format: date-time } } } }
                 decisions: { type: array, items: { type: object, required: [id, action, reason, actor_id, created_at, opportunity_version], properties: { id: { type: string, format: uuid }, action: { type: string, enum: [adopt, observe, reject] }, reason: { type: string }, actor_id: { type: string, format: uuid }, created_at: { type: string, format: date-time }, opportunity_version: { type: integer, minimum: 2 } } } }
                 section_status: { type: object, required: [market, competition, profit, risk, execution], properties: { market: { type: string, enum: [covered, insufficient_data] }, competition: { type: string, enum: [covered, insufficient_data] }, profit: { type: string, enum: [insufficient_data, calculated] }, risk: { type: string, enum: [covered, insufficient_data] }, execution: { type: string, enum: [not_available] } } }
+    OrganizationAdminEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          required: [organization, members, workspaces, teams, pending_approvals, active_tokens, recent_audit_events, observed_at]
+          properties:
+            organization: { type: object, additionalProperties: true }
+            members: { type: object, required: [total, active], properties: { total: { type: integer, minimum: 0 }, active: { type: integer, minimum: 0 } } }
+            workspaces: { type: object, required: [total, active], properties: { total: { type: integer, minimum: 0 }, active: { type: integer, minimum: 0 } } }
+            teams: { type: object, required: [total, active], properties: { total: { type: integer, minimum: 0 }, active: { type: integer, minimum: 0 } } }
+            pending_approvals: { type: integer, minimum: 0 }
+            active_tokens: { type: integer, minimum: 0 }
+            recent_audit_events: { type: integer, minimum: 0 }
+            observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }

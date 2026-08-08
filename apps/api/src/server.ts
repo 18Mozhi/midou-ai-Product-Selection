@@ -76,6 +76,9 @@ import { registerAutomationRoutes } from "./automation-routes.js";
 import { ReportService } from "./report-service.js";
 import { MySqlReportRepository } from "./mysql-report-repository.js";
 import { registerReportRoutes } from "./report-routes.js";
+import { OrganizationAdminService } from "./organization-admin-service.js";
+import { MySqlOrganizationAdminRepository } from "./mysql-organization-admin-repository.js";
+import { registerOrganizationAdminRoutes } from "./organization-admin-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -369,6 +372,18 @@ registerAutomationRoutes(app, {
 });
 registerReportRoutes(app, {
   service: new ReportService(new MySqlReportRepository(pool), config.reports.exportRoot, config.reports.exportTtlHours),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
+});
+registerOrganizationAdminRoutes(app, {
+  service: new OrganizationAdminService(
+    new MySqlOrganizationAdminRepository(pool),
+    config.organizationAdmin.invitationTtlHours,
+    config.organizationAdmin.tokenDefaultTtlDays,
+    config.organizationAdmin.tokenMaxActive,
+  ),
   authorization,
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",

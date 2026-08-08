@@ -47,9 +47,10 @@
       "M05-03",
       "M05-04",
       "M05-05",
-      "M05-06"
+      "M05-06",
+      "M06-01"
     ],
-    "activeModules": ["M06-01"],
+    "activeModules": ["M06-02"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1231,6 +1232,46 @@
       ],
       "verificationRunId": "90080589-18ad-4777-b46f-fb1941dfd2ad",
       "status": "module_verified"
+    },
+    "organizationAdmin": {
+      "module": "M06-01",
+      "entrypoints": [
+        "../apps/api/src/organization-admin-service.ts",
+        "../apps/api/src/mysql-organization-admin-repository.ts",
+        "../apps/api/src/organization-admin-routes.ts",
+        "../apps/web/src/components/OrganizationAdminCenter.vue"
+      ],
+      "routes": [
+        "/org-admin",
+        "/org-admin/members",
+        "/org-admin/roles",
+        "/org-admin/workspaces",
+        "/org-admin/approvals",
+        "/org-admin/data",
+        "/org-admin/tokens",
+        "/org-admin/audit",
+        "/api/v1/org/admin/*"
+      ],
+      "scope": "current organization profile members invitations fixed roles workspaces teams approvals exports tokens and audit",
+      "truthBoundary": "all counters and lists are MySQL facts; invitation delivery stays pending until a provider exists; token secrets are returned once and never stored",
+      "permission": "organization admin shell plus per-route organization manage membership role workspace team approval token audit and report capabilities",
+      "configuration": [
+        "ORG_INVITATION_TTL_HOURS",
+        "ORG_TOKEN_DEFAULT_TTL_DAYS",
+        "ORG_TOKEN_MAX_ACTIVE"
+      ],
+      "runtimeBoundary": "synchronous Node API writes business audit and transactional outbox records under Baota S0; no external email provider or P08 capacity claim",
+      "imageEvidence": [
+        "concept 55 organization management",
+        "concept 56 member management",
+        "concept 57 roles and permissions",
+        "concept 58 workspace management",
+        "concept 59 team management",
+        "concept 60 approval workflow",
+        "high resolution 09 organization administration dashboard"
+      ],
+      "verificationRunId": "1216cb8f-3a77-43d8-ac72-70c36ef4a9d5",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -1523,6 +1564,7 @@
     },
     { "prefix": "/api/v1/reports", "domain": "reports-exports", "status": "M05-06_module_verified" },
     { "prefix": "/api/v1/report-exports", "domain": "reports-exports", "status": "M05-06_module_verified" },
+    { "prefix": "/api/v1/org/admin", "domain": "organization-admin", "status": "M06-01_module_verified" },
     {
       "prefix": "/api/v1/platform",
       "domain": "platform",

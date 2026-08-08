@@ -20,6 +20,7 @@ import ApprovalWorkspace from "./ApprovalWorkspace.vue";
 import NotificationCenter from "./NotificationCenter.vue";
 import AutomationRuleCenter from "./AutomationRuleCenter.vue";
 import ReportCenter from "./ReportCenter.vue";
+import OrganizationAdminCenter from "./OrganizationAdminCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -252,6 +253,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   isReports = computed(
     () => props.shell === "member" && routePath === "/reports",
   ),
+  isOrganizationAdmin = computed(() => props.shell === "organization_admin" && routePath.startsWith("/org-admin")),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
   ),
@@ -280,7 +282,9 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
     return match?.[1] ?? "";
   });
 const phaseLabel = computed(() =>
-  isTasks.value || isApprovals.value || isNotifications.value
+  isOrganizationAdmin.value
+    ? "P06"
+    : isTasks.value || isApprovals.value || isNotifications.value
     ? "P05"
     : isTrends.value ||
         isOpportunities.value ||
@@ -299,7 +303,9 @@ const phaseLabel = computed(() =>
         : "P02",
 );
 const pageSummary = computed(() =>
-  isTasks.value || isApprovals.value || isNotifications.value
+  isOrganizationAdmin.value
+    ? "组织资料、成员、角色、工作区、团队、审批、Token 与审计均受当前组织权限和审计边界保护。"
+    : isTasks.value || isApprovals.value || isNotifications.value
     ? "任务状态、负责人、期限、评论、转交和 SLA 均由当前工作区真实 API 驱动。"
     : isSourcing.value
       ? "供应链候选、版本化报价、最多五家对比和采购任务均保留来源与缺失项。"
@@ -512,6 +518,12 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           :api-base-url="apiBaseUrl"
         />
         <ReportCenter v-else-if="isReports" :api-base-url="apiBaseUrl" />
+        <OrganizationAdminCenter
+          v-else-if="isOrganizationAdmin"
+          :api-base-url="apiBaseUrl"
+          :route-path="routePath"
+          :organization-id="guard?.organization_id || ''"
+        />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"

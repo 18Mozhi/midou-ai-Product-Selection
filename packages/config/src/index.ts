@@ -121,6 +121,7 @@ export interface RuntimeConfig {
   };
   automations: { pollMs: number; leaseSeconds: number; retryLimit: number; defaultRateLimit: number };
   reports: { pollMs: number; leaseSeconds: number; retryLimit: number; exportTtlHours: number; maxRows: number; exportRoot: string };
+  organizationAdmin: { invitationTtlHours: number; tokenDefaultTtlDays: number; tokenMaxActive: number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -545,6 +546,11 @@ export function loadRuntimeConfig(
       exportTtlHours: integer(env, "REPORT_EXPORT_TTL_HOURS", 24, 1, 720),
       maxRows: integer(env, "REPORT_EXPORT_MAX_ROWS", 10000, 1, 100000),
       exportRoot: resolve(process.cwd(), text(env, "REPORT_EXPORT_ROOT", "./data/report-exports")),
+    },
+    organizationAdmin: {
+      invitationTtlHours: integer(env, "ORG_INVITATION_TTL_HOURS", 72, 1, 720),
+      tokenDefaultTtlDays: integer(env, "ORG_TOKEN_DEFAULT_TTL_DAYS", 90, 1, 365),
+      tokenMaxActive: integer(env, "ORG_TOKEN_MAX_ACTIVE", 20, 1, 200),
     },
     evidence: {
       maxRawBytes: integer(
