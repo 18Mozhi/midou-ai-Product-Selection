@@ -1,6 +1,6 @@
 # P05：任务、审批、通知、实时与报表详细执行计划
 
-> 状态：in_progress（M05-01 至 M05-06 已通过模块门禁，当前执行 P05 阶段验收与收尾；M05-06 run_id/trace_id：`90080589-18ad-4777-b46f-fb1941dfd2ad`；P05 尚未通过阶段门禁）
+> 状态：completed（M05-01 至 M05-06 与 P05 阶段门禁已通过；P05 run_id/trace_id：`71c1ae8e-c2b0-4e3e-aecb-398bac55fefa`）
 > 上游总纲：`new-product-enterprise-blueprint.md`
 > 阶段索引：`plans/README.md`
 > 最低行数：1,000；`npm run verify:plans` 必须自动校验。
