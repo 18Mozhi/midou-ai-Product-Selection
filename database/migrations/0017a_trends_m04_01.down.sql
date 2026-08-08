@@ -1,0 +1,11 @@
+DELETE FROM `role_capabilities` WHERE `capability_code`='trend:manage';
+DELETE FROM `capabilities` WHERE `code`='trend:manage';
+DROP TABLE IF EXISTS `trend_operations`;
+DROP TABLE IF EXISTS `trend_outbox`;
+DROP TABLE IF EXISTS `trend_events`;
+DROP TABLE IF EXISTS `trend_projection_jobs`;
+DROP TABLE IF EXISTS `trend_monitoring_rules`;
+DROP TABLE IF EXISTS `trend_topic_follows`;
+DROP TABLE IF EXISTS `trend_topic_keywords`;
+DROP TABLE IF EXISTS `trend_signals`;
+DROP TABLE IF EXISTS `trend_topics`;

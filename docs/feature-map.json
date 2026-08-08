@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P04",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07"],
-    "activeModules": ["M04-01"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01"],
+    "activeModules": ["M04-02"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -328,6 +328,21 @@
       "imageEvidence": ["concept 62 collection source management catalog, status and actions"],
       "verificationRunId": "9477e2a6-533a-430a-a372-48a69f1878e2",
       "status": "module_verified"
+    },
+    "trendDomain": {
+      "module": "M04-01",
+      "entrypoints": ["../apps/api/src/trend-service.ts", "../apps/api/src/mysql-trend-repository.ts", "../apps/api/src/trend-routes.ts", "../apps/worker/src/trend-projection-worker.ts", "../apps/web/src/components/TrendDashboard.vue"],
+      "routes": ["/trends", "/api/v1/trends", "/api/v1/trends/{topicId}", "/api/v1/trends/{topicId}/follow", "/api/v1/trends/{topicId}/relevance", "/api/v1/trends/monitoring-rules", "/api/v1/trends/monitoring-rules/{ruleId}"],
+      "scope": "organization and workspace scoped trend topics signals timelines keywords follows and monitoring rules",
+      "projection": "Baota Node Worker scans normalized records, leases idempotent projection jobs and only projects google_news_search evidence; non-trend records terminate as succeeded_empty",
+      "heatBoundary": "heat is the observed signal count with unit signals; momentum and confidence remain insufficient_data until a measured contract exists",
+      "permission": "trend:read for scoped reads; trend:manage for follow relevance and monitoring writes; same-origin Origin and Idempotency-Key required",
+      "audit": "user and Worker writes persist trend_events and trend_outbox with request_id and trace_id; original evidence is never deleted by relevance actions",
+      "configuration": ["TREND_PROJECTION_POLL_MS", "TREND_PROJECTION_LEASE_SECONDS"],
+      "runtimeBoundary": "projection runs inside the Baota-managed Node Worker; no panel-external production service",
+      "imageEvidence": ["concept 28 trend list", "concept 29 trend detail", "concept 30 trend timeline", "concept 31 trend monitoring rules", "concept 32 create monitoring rule", "high-resolution core page 05 trend dashboard"],
+      "verificationRunId": "e08c99d0-884c-4598-9281-44ac7af5a939",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -365,7 +380,7 @@
   "routes": [
     {"path": "/home", "view": "TodayActionCenter", "domain": "work", "status": "planned"},
     {"path": "/work", "view": "TodayWork", "domain": "tasks", "status": "planned"},
-    {"path": "/trends", "view": "Trends", "domain": "trends", "status": "planned"},
+    {"path": "/trends", "view": "TrendDashboard", "domain": "trends", "status": "M04-01_module_verified"},
     {"path": "/opportunities", "view": "Opportunities", "domain": "opportunities", "status": "planned"},
     {"path": "/competitors", "view": "Competitors", "domain": "competitors", "status": "planned"},
     {"path": "/sourcing", "view": "Sourcing", "domain": "sourcing", "status": "planned"},
@@ -383,7 +398,7 @@
     {"prefix": "/api/v1/auth", "domain": "identity", "status": "M01-01_local_account_M01-02_TOTP_and_M01-03_context_selection_implemented_enterprise_provider_activation_planned"},
     {"prefix": "/api/v1/me", "domain": "identity", "status": "password_sessions_TOTP_MFA_authorization_resource_grants_and_scoped_ui_preferences_implemented_profile_notification_preferences_tokens_planned"},
     {"prefix": "/api/v1/org", "domain": "organization", "status": "M01-03_tenancy_M01-04_role_catalog_and_M01-05_exact_resource_grants_implemented_remaining_management_planned"},
-    {"prefix": "/api/v1/trends", "domain": "trends", "status": "planned"},
+    {"prefix": "/api/v1/trends", "domain": "trends", "status": "M04-01_topics_signals_evidence_follows_relevance_and_monitoring_rules_verified"},
     {"prefix": "/api/v1/opportunities", "domain": "opportunities", "status": "planned"},
     {"prefix": "/api/v1/competitors", "domain": "competitors", "status": "planned"},
     {"prefix": "/api/v1/sourcing", "domain": "sourcing", "status": "planned"},

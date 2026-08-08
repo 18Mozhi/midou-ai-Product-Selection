@@ -1,10 +1,10 @@
 import { randomUUID } from 'node:crypto';
 export type AuthorizationSurface='api'|'worker'|'export'|'file'|'event'|'sse';export type DataScopeType='own'|'team'|'workspace'|'organization'|'platform';export type RoleCategory='organization'|'platform';
-export const CAPABILITIES=['task:read','task:create','task:update','task:assign','trend:read','opportunity:read','opportunity:decide','opportunity:approve','competitor:read','sourcing:read','supplier_quote:manage','cost:confirm','notification:read','organization:manage','membership:read','membership:manage','workspace:manage','team:manage','role:read','role:manage','organization_token:manage','audit:read','report:read','provider:configure','collection:replay','session:manage','platform_token:manage','key_rotation:manage','platform:operate','platform:secure','platform:superadmin'] as const;
+export const CAPABILITIES=['task:read','task:create','task:update','task:assign','trend:read','trend:manage','opportunity:read','opportunity:decide','opportunity:approve','competitor:read','sourcing:read','supplier_quote:manage','cost:confirm','notification:read','organization:manage','membership:read','membership:manage','workspace:manage','team:manage','role:read','role:manage','organization_token:manage','audit:read','report:read','provider:configure','collection:replay','session:manage','platform_token:manage','key_rotation:manage','platform:operate','platform:secure','platform:superadmin'] as const;
 export type Capability=typeof CAPABILITIES[number];
 export type NavigationShell='member'|'organization_admin'|'platform_admin';
 export interface RoleDefinition{code:string;name:string;category:RoleCategory;description:string;capabilities:Capability[];}
-const member:Capability[]=['task:read','task:create','task:update','trend:read','opportunity:read','opportunity:decide','competitor:read','sourcing:read','notification:read'];
+const member:Capability[]=['task:read','task:create','task:update','trend:read','trend:manage','opportunity:read','opportunity:decide','competitor:read','sourcing:read','notification:read'];
 export const BUILTIN_ROLES:RoleDefinition[]=[
  {code:'member',name:'普通成员',category:'organization',description:'处理被授权资源、创建任务并作出决策。',capabilities:member},
  {code:'selection_manager',name:'选品经理',category:'organization',description:'分配任务、审核机会并管理团队视图。',capabilities:[...member,'task:assign','opportunity:approve','team:manage','report:read']},

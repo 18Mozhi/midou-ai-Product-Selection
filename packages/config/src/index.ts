@@ -22,6 +22,7 @@ export interface RuntimeConfig {
   identity: { workerId: string; crawlerId: string };
   runtime: { workerHeartbeatMs: number; crawlerHeartbeatSeconds: number };
   collectionTasks: { pollMs: number; leaseSeconds: number };
+  trends: { projectionPollMs: number; projectionLeaseSeconds: number };
   evidence: { maxRawBytes:number; downloadGrantSeconds:number };
   configFingerprint: string;
 }
@@ -63,6 +64,7 @@ export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env, target: 
     identity: { workerId: text(env, 'WORKER_ID', 'worker-local'), crawlerId: text(env, 'CRAWLER_ID', 'crawler-local') },
     runtime: { workerHeartbeatMs: integer(env, 'WORKER_HEARTBEAT_MS', 30000, 5000, 60000), crawlerHeartbeatSeconds: integer(env, 'CRAWLER_HEARTBEAT_SECONDS', 30, 5, 60) },
     collectionTasks: { pollMs: integer(env, 'COLLECTION_TASK_POLL_MS', 2000, 250, 60000), leaseSeconds: integer(env, 'COLLECTION_TASK_LEASE_SECONDS', 120, 30, 3600) },
+    trends: { projectionPollMs: integer(env, 'TREND_PROJECTION_POLL_MS', 2000, 250, 60000), projectionLeaseSeconds: integer(env, 'TREND_PROJECTION_LEASE_SECONDS', 120, 30, 3600) },
     evidence: { maxRawBytes:integer(env,'EVIDENCE_MAX_RAW_BYTES',10485760,1024,104857600),downloadGrantSeconds:integer(env,'EVIDENCE_DOWNLOAD_GRANT_SECONDS',120,1,300) },
   };
   if (base.auth.passwordMaxLength < base.auth.passwordMinLength) throw new ConfigError('AUTH_PASSWORD_MAX_LENGTH', 'must be greater than or equal to AUTH_PASSWORD_MIN_LENGTH');

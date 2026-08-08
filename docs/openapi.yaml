@@ -451,12 +451,100 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
   /trends:
     get:
-      summary: List trend topics
+      summary: List current-workspace trend topics
+      security: [{ HttpOnlySession: [] }]
       parameters:
         - $ref: '#/components/parameters/Page'
         - $ref: '#/components/parameters/PageSize'
+        - { name: q, in: query, schema: { type: string, maxLength: 200 } }
+        - { name: market, in: query, schema: { type: string, maxLength: 40 } }
+        - { name: category, in: query, schema: { type: string, maxLength: 80 } }
+        - { name: status, in: query, schema: { type: string, enum: [active, irrelevant, stale] } }
+        - { name: followed, in: query, schema: { type: boolean } }
       responses:
-        '200': { $ref: '#/components/responses/PaginatedSuccess' }
+        '200': { description: Organization/workspace-scoped trend page, content: { application/json: { schema: { $ref: '#/components/schemas/TrendTopicPageEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+  /trends/monitoring-rules:
+    get:
+      summary: List current-workspace trend monitoring rules
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Scoped monitoring rules, content: { application/json: { schema: { $ref: '#/components/schemas/TrendMonitoringRuleListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Create and enable a current-workspace monitoring rule
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/TrendMonitoringRuleInput' } } } }
+      responses:
+        '201': { description: Created rule, content: { application/json: { schema: { $ref: '#/components/schemas/TrendMonitoringRuleEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /trends/monitoring-rules/{ruleId}:
+    patch:
+      summary: Pause or enable a monitoring rule with version lock
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: ruleId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [status, expected_version], properties: { status: { type: string, enum: [enabled, paused] }, expected_version: { type: integer, minimum: 1 } } } } } }
+      responses:
+        '200': { description: Updated rule, content: { application/json: { schema: { $ref: '#/components/schemas/TrendMonitoringRuleEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /trends/{topicId}:
+    get:
+      summary: Get trend conclusion timeline keywords evidence and data quality
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: topicId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: Scoped trend detail, content: { application/json: { schema: { $ref: '#/components/schemas/TrendTopicDetailEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /trends/{topicId}/follow:
+    put:
+      summary: Follow a trend topic
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: topicId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      responses:
+        '200': { description: Follow state, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+    delete:
+      summary: Unfollow a trend topic without deleting evidence
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: topicId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      responses:
+        '200': { description: Follow state, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /trends/{topicId}/relevance:
+    post:
+      summary: Mark a trend active or irrelevant while preserving evidence
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: topicId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [status, reason, expected_version], properties: { status: { type: string, enum: [active, irrelevant] }, reason: { type: string, minLength: 1, maxLength: 500 }, expected_version: { type: integer, minimum: 1 } } } } } }
+      responses:
+        '200': { description: Relevance state, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /opportunities:
     get:
       summary: List opportunities
@@ -1949,3 +2037,87 @@ components:
             config_fingerprint: { type: string, pattern: '^[a-f0-9]{64}$' }
         request_id: { type: string }
         trace_id: { type: string }
+    TrendTopicSummary:
+      type: object
+      required: [id, title, market, language, status, signal_count, source_count, heat, confidence, first_seen_at, last_seen_at, source_fresh_at, followed, version]
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string, maxLength: 500 }
+        category: { type: string, nullable: true, maxLength: 80 }
+        market: { type: string }
+        language: { type: string }
+        status: { type: string, enum: [active, irrelevant, stale] }
+        signal_count: { type: integer, minimum: 0 }
+        source_count: { type: integer, minimum: 0 }
+        heat:
+          type: object
+          required: [value, unit]
+          properties: { value: { type: integer, minimum: 0 }, unit: { type: string, enum: [signals] } }
+        momentum_percent: { type: number, nullable: true }
+        confidence:
+          type: object
+          required: [score, status]
+          properties: { score: { type: number, minimum: 0, maximum: 100, nullable: true }, status: { type: string, enum: [measured, insufficient_data] } }
+        first_seen_at: { type: string, format: date-time }
+        last_seen_at: { type: string, format: date-time }
+        source_fresh_at: { type: string, format: date-time }
+        followed: { type: boolean }
+        version: { type: integer, minimum: 1 }
+    TrendTopicPageEnvelope:
+      type: object
+      required: [data, meta, request_id, trace_id]
+      properties:
+        data: { type: array, items: { $ref: '#/components/schemas/TrendTopicSummary' } }
+        meta:
+          type: object
+          required: [page, page_size, total]
+          properties: { page: { type: integer, minimum: 1 }, page_size: { type: integer, minimum: 1, maximum: 100 }, total: { type: integer, minimum: 0 } }
+        request_id: { type: string }
+        trace_id: { type: string }
+    TrendTopicDetailEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          allOf:
+            - { $ref: '#/components/schemas/TrendTopicSummary' }
+            - type: object
+              required: [keywords, timeline, evidence, data_quality]
+              properties:
+                keywords: { type: array, items: { type: object, required: [keyword, type, language, market], properties: { keyword: { type: string }, type: { type: string, enum: [primary, related, negative] }, language: { type: string }, market: { type: string } } } }
+                timeline: { type: array, items: { type: object, required: [at, signal_count, source_count], properties: { at: { type: string, format: date-time }, signal_count: { type: integer, minimum: 0 }, source_count: { type: integer, minimum: 0 } } } }
+                evidence: { type: array, items: { type: object, required: [id, title, publisher, canonical_url, published_at, observed_at, provider_id, raw_evidence_id], properties: { id: { type: string, format: uuid }, title: { type: string }, publisher: { type: string }, canonical_url: { type: string, format: uri }, published_at: { type: string, format: date-time }, observed_at: { type: string, format: date-time }, provider_id: { type: string, format: uuid }, raw_evidence_id: { type: string, format: uuid } } } }
+                data_quality: { type: object, required: [coverage_status, evidence_count, source_count, stale], properties: { coverage_status: { type: string, enum: [covered, insufficient_data] }, evidence_count: { type: integer, minimum: 0 }, source_count: { type: integer, minimum: 0 }, stale: { type: boolean } } }
+        request_id: { type: string }
+        trace_id: { type: string }
+    TrendMonitoringRuleInput:
+      type: object
+      required: [name, include_keywords, market, language, notification_channel]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 120 }
+        include_keywords: { type: array, minItems: 1, maxItems: 20, uniqueItems: true, items: { type: string, minLength: 1, maxLength: 100 } }
+        negative_keywords: { type: array, maxItems: 20, uniqueItems: true, items: { type: string, minLength: 1, maxLength: 100 } }
+        market: { type: string, minLength: 1, maxLength: 40 }
+        language: { type: string, minLength: 1, maxLength: 40 }
+        category: { type: string, nullable: true, maxLength: 80 }
+        notification_channel: { type: string, enum: [in_app], description: Email provider is not selected in M04-01 }
+    TrendMonitoringRule:
+      allOf:
+        - { $ref: '#/components/schemas/TrendMonitoringRuleInput' }
+        - type: object
+          required: [id, status, last_evaluated_at, version, created_at, updated_at]
+          properties:
+            id: { type: string, format: uuid }
+            status: { type: string, enum: [enabled, paused] }
+            last_evaluated_at: { type: string, format: date-time, nullable: true }
+            version: { type: integer, minimum: 1 }
+            created_at: { type: string, format: date-time }
+            updated_at: { type: string, format: date-time }
+    TrendMonitoringRuleEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties: { data: { $ref: '#/components/schemas/TrendMonitoringRule' }, request_id: { type: string }, trace_id: { type: string } }
+    TrendMonitoringRuleListEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties: { data: { type: array, items: { $ref: '#/components/schemas/TrendMonitoringRule' } }, request_id: { type: string }, trace_id: { type: string } }
