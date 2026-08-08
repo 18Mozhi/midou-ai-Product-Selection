@@ -146,6 +146,7 @@ import { registerOpenPlatformRoutes, type OpenPlatformRouteOptions } from "./ope
 import { CommercialError } from "./commercial-service.js";
 import { registerCommercialRoutes, type CommercialRouteOptions } from "./commercial-routes.js";
 import { registerBackupRecoveryRoutes, type BackupRecoveryRouteOptions } from "./backup-recovery-routes.js";
+import { registerReleaseRolloutRoutes, type ReleaseRolloutRouteOptions } from "./release-rollout-routes.js";
 
 export interface BuildAppOptions {
   version?: string;
@@ -189,6 +190,7 @@ export interface BuildAppOptions {
   openPlatform?: OpenPlatformRouteOptions;
   commercial?: CommercialRouteOptions;
   backupRecovery?: BackupRecoveryRouteOptions;
+  releaseRollout?: ReleaseRolloutRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -360,6 +362,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if(options.openPlatform)registerOpenPlatformRoutes(app,options.openPlatform);
   if(options.commercial)registerCommercialRoutes(app,options.commercial);
   if(options.backupRecovery)registerBackupRecoveryRoutes(app,options.backupRecovery);
+  if(options.releaseRollout)registerReleaseRolloutRoutes(app,options.releaseRollout);
 
   app.setErrorHandler(
     async (

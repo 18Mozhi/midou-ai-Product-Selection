@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "module": "M07-05",
+  "stage": "S0",
+  "productionManager": "baota",
+  "topology": "single-host-stable-and-candidate",
+  "capacityClaim": "S0 single host only; no backup server, multi-node or 10000-user claim",
+  "objects": [
+    {
+      "name": "product-scout-api",
+      "kind": "baota-node-project",
+      "role": "release-slot-a",
+      "bind": "127.0.0.1",
+      "port": 4101
+    },
+    {
+      "name": "product-scout-api-canary",
+      "kind": "baota-node-project",
+      "role": "release-slot-b",
+      "bind": "127.0.0.1",
+      "port": 4103
+    },
+    {
+      "name": "product-scout-release-rollout",
+      "kind": "baota-scheduled-task",
+      "schedule": "manual-release-gate",
+      "command": "node scripts/run-baota-release-rollout.mjs --run --env-file <BAOTA_RESTRICTED_ENV_FILE>"
+    }
+  ],
+  "canary": {
+    "percentages": [5, 25, 100],
+    "minimumObservationSeconds": 1800,
+    "routingKey": "$request_id",
+    "measurementSource": "baota-nginx-upstream-timing-log",
+    "syntheticReadPath": "/api/v1/health/live",
+    "syntheticWritePath": "/api/v1/auth/password-reset/request",
+    "minimumCandidateSamplesPerMethod": 5
+  },
+  "automaticStop": {
+    "errorRatePercentExclusive": 1,
+    "readP95MsInclusive": 300,
+    "writeP95MsInclusive": 600,
+    "asyncLagSecondsInclusive": 60,
+    "action": "route-100-percent-to-the-runtime-stable-slot-and-record-audited-rollback"
+  },
+  "nginx": {
+    "managedConfigRoot": "/www/server/panel/vhost/nginx",
+    "timingLog": "/www/wwwlogs/product-scout-release-upstream.log",
+    "testCommand": "/www/server/nginx/sbin/nginx -t",
+    "reloadCommand": "/www/server/nginx/sbin/nginx -s reload"
+  },
+  "restrictedConfig": {
+    "source": "config/env.example and config/schema.json",
+    "secretValuesInManifest": false,
+    "browserExposedReleaseConfiguration": false
+  },
+  "forbiddenProductionManagers": ["systemd", "standalone-pm2", "host-crontab", "screen-docker-compose"]
+}

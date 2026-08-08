@@ -778,7 +778,7 @@ P00 文件路径固定包含 `organizations/<organization_id>/workspaces/<worksp
 
 ### 10.3 备份恢复
 
-- MySQL：每日全量备份 + binlog/PITR；备份加密、校验，并复制到中国境内独立备用机房或经批准的同境内存储。
+- MySQL：每日全量备份 + binlog/PITR；备份加密、校验。当前 S0 只使用惠州现有主机内分离的宝塔受控密文目录与隔离恢复库，不配置备用服务器，不声明整机、磁盘或机房故障保护；后续如重新引入异地主机必须另行确认并重新验收。
 - 文件证据与导出：按组织、目录和生命周期策略备份；S1 以上按 9.1.1 的共享文件服务与挂载策略执行。
 - 配置：来源、规则、工作流、权限和 Feature Flag 独立版本化备份。
 - 每次迁移前自动备份；迁移记录保存 checksum、操作者、开始/结束和回滚说明。
@@ -924,7 +924,9 @@ M07-02 安全门禁由 `verification/security-gate.json` 冻结依赖漏洞、�
 
 M07-02 已由模块自动验收 `3bd453d5-0016-418e-8c33-e42132341def` 通过：全仓构建、策略单测、0 高危/严重生产依赖漏洞、静态安全门、MySQL 5.7 RBAC 隔离与脱敏安全运营真实链路、文档门均重新执行成功。该结果只证明发布安全门禁完成，不代表 P07 生产部署、备份恢复、发布签发、真实选品验收或 P08 容量完成。
 
-M07-03 部署合同以 `infra/baota/service-manifest.json` schema v2 锁定惠州 `192.168.1.220`、`midouai.mozhiz.cn`、八个宝塔对象、环境分组、日志秘密排除和 S0 容量边界。`scripts/verify-baota-deployment.mjs --preflight` 只验证发布包；`--production` 必须同时看到 manifest healthy 签发与忽略目录中的结构化生产证据，覆盖面板对象、当前 Git commit 的同一发布身份、live/ready/version、Worker/Crawler 心跳、MySQL 5.7/utf8mb4、本机 Redis 和日志。生产对象已全部由宝塔创建和管理，TLS、日志轮转、备份任务、健康检查和脱敏证据已现场核验；M07-04 仍须独立完成恢复演练，当前只声明 S0 单机容量。
+M07-03 部署合同以 `infra/baota/service-manifest.json` schema v2 锁定惠州 `192.168.1.220`、`midouai.mozhiz.cn`、十个宝塔对象（含 M07-05 同机候选 API 与发布任务）、环境分组、日志秘密排除和 S0 容量边界。`scripts/verify-baota-deployment.mjs --preflight` 只验证发布包；`--production` 必须同时看到 manifest healthy 签发与忽略目录中的结构化生产证据，覆盖面板对象、当前 Git commit 的同一发布身份、live/ready/version、Worker/Crawler 心跳、MySQL 5.7/utf8mb4、本机 Redis 和日志。生产对象全部由宝塔创建和管理；M07-04 只验证同机逻辑恢复，M07-05 增加同机候选 API 与渐进发布，但仍只声明 S0 单机容量且没有备用服务器。
+
+M07-05 发布合同以 `infra/baota/release-rollout-manifest.json` 锁定 4101 稳定 API、4103 同机候选 API、宝塔手工发布任务和 Nginx 5% → 25% → 100% 分流。生产每阶段至少观察 30 分钟，候选读写 P95、5xx、MySQL 异步延迟和最小样本全部来自运行证据；缺样本或超过阈值必须自动把流量退回 4101 并追加停止/回滚审计。候选项目不是备用服务器，也不提供主机故障保护、多节点或 10,000 用户能力。
 
 M07-03 已由模块自动验收 `8cb425c1-1606-4e4c-a736-8d29e27caf32` 通过：全仓构建、MySQL 5.7/Redis/API 真实探针、Python 心跳、桌面/390px 生产状态视觉、文档门和同 commit 生产证据均成功。该结果只证明 S0 宝塔部署完成，不代表 M07-04 同机隔离恢复、P07 或 P08 容量完成。
 

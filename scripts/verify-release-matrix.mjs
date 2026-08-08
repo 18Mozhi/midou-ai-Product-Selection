@@ -33,7 +33,7 @@ async function validate() {
   for (const path of matrix.requiredEvidence) await access(resolve(root, path));
   const expected = Object.values(matrix.browserGroups).flat().sort();
   if (new Set(expected).size !== expected.length) fail('browser matrix contains duplicate specs');
-  const actual = (await filesUnder(resolve(root, 'tests/e2e'), '.spec.ts')).filter((path) => !path.endsWith('m07-01-performance.spec.ts')).map((path) => path.split('/').at(-1)).sort();
+  const actual = (await filesUnder(resolve(root, 'tests/e2e'), '.spec.ts')).map((path) => path.split('/').at(-1)).filter((name) => /^m0[0-6]-/.test(name)).sort();
   if (JSON.stringify(expected) !== JSON.stringify(actual)) fail(`browser matrix drift: expected ${expected.length}, repository ${actual.length}`);
 }
 

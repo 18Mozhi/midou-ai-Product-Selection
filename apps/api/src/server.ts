@@ -97,6 +97,9 @@ import { registerCommercialRoutes } from "./commercial-routes.js";
 import { BackupRecoveryService } from "./backup-recovery-service.js";
 import { MySqlBackupRecoveryRepository } from "./mysql-backup-recovery-repository.js";
 import { registerBackupRecoveryRoutes } from "./backup-recovery-routes.js";
+import { ReleaseRolloutService } from "./release-rollout-service.js";
+import { MySqlReleaseRolloutRepository } from "./mysql-release-rollout-repository.js";
+import { registerReleaseRolloutRoutes } from "./release-rollout-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -426,6 +429,7 @@ registerSecurityOperationsRoutes(app,{service:new SecurityOperationsService(new 
 registerOpenPlatformRoutes(app,{service:new OpenPlatformService(new MySqlOpenPlatformRepository(pool),config.security.credentialsMasterKey,config.security.credentialsMasterKeyVersion,{clientTtlDays:config.openPlatform.clientTtlDays,defaultQuota:config.openPlatform.defaultQuotaPerMinute,maxQuota:config.openPlatform.maxQuotaPerMinute,timestampToleranceSeconds:config.openPlatform.timestampToleranceSeconds,nonceTtlSeconds:config.openPlatform.nonceTtlSeconds}),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production",webOrigin:config.app.webOrigin,version:config.app.version});
 registerCommercialRoutes(app,{service:new CommercialService(new MySqlCommercialRepository(pool),config.commercial.recentLimit),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production",webOrigin:config.app.webOrigin});
 registerBackupRecoveryRoutes(app,{service:new BackupRecoveryService(new MySqlBackupRecoveryRepository(pool),config.backupRecovery),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
+registerReleaseRolloutRoutes(app,{service:new ReleaseRolloutService(new MySqlReleaseRolloutRepository(pool),{percentages:[5,25,100],...config.releaseRollout}),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {
     evidenceRoot: config.storage.evidenceRoot,

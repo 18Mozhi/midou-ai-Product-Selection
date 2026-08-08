@@ -27,6 +27,7 @@ import SecurityOperationsCenter from "./SecurityOperationsCenter.vue";
 import OpenPlatformCenter from "./OpenPlatformCenter.vue";
 import CommercialOperationsCenter from "./CommercialOperationsCenter.vue";
 import BackupRecoveryCenter from "./BackupRecoveryCenter.vue";
+import ReleaseRolloutCenter from "./ReleaseRolloutCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -262,6 +263,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   isOrganizationAdmin = computed(() => props.shell === "organization_admin" && routePath.startsWith("/org-admin")),
   isPlatformDashboard = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin"),
   isBackupRecovery = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/operations"),
+  isReleaseRollout = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/releases"),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
   ),
@@ -292,7 +294,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
 const phaseLabel = computed(() =>
   isOrganizationAdmin.value
     ? "P06"
-    : isBackupRecovery.value
+    : isBackupRecovery.value || isReleaseRollout.value
       ? "P07"
     : isPlatformDashboard.value
       ? "P06"
@@ -323,6 +325,8 @@ const pageSummary = computed(() =>
       ? "来源健康、任务、队列、质量、文件增长和告警均来自平台当前运行事实。"
     : isBackupRecovery.value
       ? "备份副本、RPO/RTO 与隔离恢复结论均来自可审计记录；未验证条件明确阻断。"
+    : isReleaseRollout.value
+      ? "版本、迁移、渐进观察门、自动停止与回滚均来自宝塔发布任务的审计事实。"
     : isTasks.value || isApprovals.value || isNotifications.value
     ? "任务状态、负责人、期限、评论、转交和 SLA 均由当前工作区真实 API 驱动。"
     : isSourcing.value
@@ -546,6 +550,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         />
         <PlatformDashboard v-else-if="isPlatformDashboard" :api-base-url="apiBaseUrl" />
         <BackupRecoveryCenter v-else-if="isBackupRecovery" :api-base-url="apiBaseUrl" />
+        <ReleaseRolloutCenter v-else-if="isReleaseRollout" :api-base-url="apiBaseUrl" />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"

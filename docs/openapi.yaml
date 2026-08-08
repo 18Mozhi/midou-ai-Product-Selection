@@ -56,6 +56,15 @@ x-scoutops-backup-recovery:
   encryption: aes-256-gcm
   recoveryVerifiedByDefault: false
   productionEvidence: .artifacts/verification/backup-recovery-production-evidence.json
+x-scoutops-release-rollout:
+  module: M07-05
+  productionManager: baota
+  topology: single-host-stable-and-candidate
+  backupServerUsed: false
+  percentages: [5, 25, 100]
+  minimumObservationSeconds: 1800
+  automaticStop: true
+  productionEvidence: .artifacts/verification/release-rollout-production-evidence.json
 x-scoutops-platform-seed:
   runtimeApiExposed: false
   command: node scripts/seed-platform-admin.mjs
@@ -1816,6 +1825,48 @@ paths:
                       latest_drill: { type: object, nullable: true }
                       recovery_copy_verified: { type: boolean }
                       targets: { type: array, items: { type: object } }
+                      blockers: { type: array, items: { type: object, required: [code, action_hint] } }
+                      observed_at: { type: string, format: date-time }
+                  request_id: { type: string }
+                  trace_id: { type: string }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/operations/releases:
+    get:
+      summary: Read the audited production release and rollback gates
+      description: Requires platform:operate. Returns only the current S0 release identity, MySQL migration, 5/25/100 same-host candidate observations, automatic-stop and rollback facts recorded by the Baota release task. It never starts a deployment, exposes panel credentials, or claims a backup server, multi-node or 10000-user capacity.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200':
+          description: Truthful empty, blocked, stale, verified, stopped or rolled-back release state
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, request_id, trace_id]
+                properties:
+                  data:
+                    type: object
+                    required: [state, policy, latest_release, gates, automatic_stop_verified, rollback_verified, blockers, observed_at]
+                    properties:
+                      state: { type: string, enum: [empty, blocked, stale, verified, stopped, rolled_back] }
+                      policy:
+                        type: object
+                        required: [percentages, minimum_observation_seconds, maximum_evidence_age_minutes, error_rate_stop_percent, read_p95_stop_ms, write_p95_stop_ms, async_lag_stop_seconds]
+                        properties:
+                          percentages: { type: array, minItems: 3, maxItems: 3, items: { type: integer, enum: [5, 25, 100] } }
+                          minimum_observation_seconds: { type: integer, minimum: 1800 }
+                          maximum_evidence_age_minutes: { type: integer, minimum: 1 }
+                          error_rate_stop_percent: { type: number, exclusiveMinimum: 0, maximum: 1 }
+                          read_p95_stop_ms: { type: integer, maximum: 300 }
+                          write_p95_stop_ms: { type: integer, maximum: 600 }
+                          async_lag_stop_seconds: { type: integer, maximum: 60 }
+                      latest_release: { type: object, nullable: true, additionalProperties: true }
+                      gates: { type: array, items: { type: object, additionalProperties: true } }
+                      automatic_stop_verified: { type: boolean }
+                      rollback_verified: { type: boolean }
                       blockers: { type: array, items: { type: object, required: [code, action_hint] } }
                       observed_at: { type: string, format: date-time }
                   request_id: { type: string }

@@ -18,7 +18,7 @@ catch { fail('manifest_invalid', 'infra/baota/service-manifest.json is missing o
 if (manifest.schemaVersion !== 2 || manifest.stage !== 'S0') fail('manifest_contract_invalid', 'S0 schemaVersion 2 is required');
 if (manifest.target?.host !== '192.168.1.220' || manifest.target?.domain !== 'midouai.mozhiz.cn') fail('target_contract_invalid', 'locked production host or domain is missing');
 if (manifest.capacityClaim !== 'S0 single host; 100 users and 5-20 concurrent business users; no multi-node or 10000-user claim') fail('capacity_claim_invalid', 'S0 capacity boundary drifted');
-const expected = ['product-scout-web','product-scout-api','product-scout-worker','product-scout-crawler','mysql57-product-scout','redis-product-scout','product-scout-release-gate','product-scout-backup'];
+const expected = ['product-scout-web','product-scout-api','product-scout-api-canary','product-scout-worker','product-scout-crawler','mysql57-product-scout','redis-product-scout','product-scout-release-gate','product-scout-release-rollout','product-scout-backup'];
 for (const name of expected) if (!manifest.objects.some((item) => item.name === name)) fail('panel_object_missing', name);
 const commands = manifest.objects.flatMap((item) => [item.startCommand, item.buildCommand, item.command]).filter(Boolean).join('\n');
 if (/systemctl|\bpm2\b|crontab|docker[ -]compose/i.test(commands)) fail('external_manager_forbidden', 'panel-external production manager found');

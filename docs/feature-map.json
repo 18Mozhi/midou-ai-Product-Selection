@@ -56,9 +56,10 @@
       "M06-06",
       "M07-01",
       "M07-02",
-      "M07-03"
+      "M07-03",
+      "M07-04"
     ],
-    "activeModules": ["M07-04"],
+    "activeModules": ["M07-05"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1392,6 +1393,18 @@
       "imageEvidence": ["concept 61 platform operations overview", "core 10 platform cockpit", "desktop and 390 recovery states"],
       "verificationRunId": "d1ede17d-0f7b-4f42-b80c-2d5dac118651",
       "status": "module_verified"
+    },
+    "releaseRollout": {
+      "module": "M07-05",
+      "entrypoints": ["../infra/baota/release-rollout-manifest.json", "../scripts/run-baota-release-rollout.mjs", "../apps/api/src/release-rollout-service.ts", "../apps/api/src/mysql-release-rollout-repository.ts", "../apps/api/src/release-rollout-routes.ts", "../apps/web/src/components/ReleaseRolloutCenter.vue"],
+      "routes": ["/platform-admin/releases", "/api/v1/platform/operations/releases"],
+      "scope": "惠州当前单机内宝塔 stable API 与 candidate API 的 5 25 100 渐进发布",
+      "truthBoundary": "verified only from current release gates with at least 30 minutes per stage, real Baota Nginx candidate samples, MySQL queue lag and current build identity; no backup server or P08 capacity claim",
+      "permission": "platform:operate read only; release, automatic stop and rollback execute only in the Baota scheduled task",
+      "configuration": ["RELEASE_CANARY_OBSERVE_SECONDS", "RELEASE_SAMPLE_INTERVAL_SECONDS", "RELEASE_MINIMUM_CANDIDATE_SAMPLES", "RELEASE_EVIDENCE_MAX_AGE_MINUTES", "RELEASE_5XX_STOP_BASIS_POINTS", "RELEASE_READ_P95_STOP_MS", "RELEASE_WRITE_P95_STOP_MS", "RELEASE_ASYNC_LAG_STOP_SECONDS", "RELEASE_ROOT", "RELEASE_PRODUCTION_EVIDENCE_FILE", "RELEASE_STABLE_API_PORT", "RELEASE_CANDIDATE_API_PORT", "RELEASE_CANDIDATE_BASE_URL", "RELEASE_PUBLIC_BASE_URL", "RELEASE_NGINX_BIN", "RELEASE_NGINX_SITE_CONFIG", "RELEASE_NGINX_SPLIT_CONFIG", "RELEASE_NGINX_TIMING_LOG"],
+      "runtimeBoundary": "finite Baota task and two same-host local-only Node API projects; no new external daemon, backup server, multi-node or 10000-user claim",
+      "imageEvidence": ["core 10 platform cockpit", "concept 61 platform operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 release states"],
+      "status": "in_progress"
     }
   },
   "phaseVerification": {
@@ -1616,6 +1629,12 @@
       "view": "CommercialOperationsCenter",
       "domain": "commercial-operations",
       "status": "M06-06_module_verified"
+    },
+    {
+      "path": "/platform-admin/releases",
+      "view": "ReleaseRolloutCenter",
+      "domain": "release-operations",
+      "status": "M07-05_in_progress"
     }
   ],
   "apiGroups": [
@@ -1722,6 +1741,12 @@
       "kind": "baota-node-project",
       "responsibility": "HTTP API, RBAC and SSE",
       "status": "scaffolded_not_deployed"
+    },
+    {
+      "name": "product-scout-api-canary",
+      "kind": "baota-node-project",
+      "responsibility": "same-host M07-05 candidate API and audited rollback pairing",
+      "status": "M07-05_in_progress"
     },
     {
       "name": "product-scout-worker",

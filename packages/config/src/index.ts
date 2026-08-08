@@ -128,6 +128,7 @@ export interface RuntimeConfig {
   openPlatform: { clientTtlDays:number; defaultQuotaPerMinute:number; maxQuotaPerMinute:number; timestampToleranceSeconds:number; nonceTtlSeconds:number; webhookPollMs:number; webhookLeaseSeconds:number; webhookTimeoutMs:number };
   commercial: { recentLimit:number };
   backupRecovery: { primaryRegion:string; recoveryRegion:string; rpoMinutes:number; rtoMinutes:number; maximumDrillAgeDays:number };
+  releaseRollout: { minimumObservationSeconds:number; maximumEvidenceAgeMinutes:number; errorRateStopPercent:number; readP95StopMs:number; writeP95StopMs:number; asyncLagStopSeconds:number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -582,6 +583,14 @@ export function loadRuntimeConfig(
       rpoMinutes: integer(env,"BACKUP_RPO_MINUTES",15,1,1440),
       rtoMinutes: integer(env,"BACKUP_RTO_MINUTES",240,1,10080),
       maximumDrillAgeDays: integer(env,"BACKUP_MAX_DRILL_AGE_DAYS",90,1,365),
+    },
+    releaseRollout: {
+      minimumObservationSeconds: integer(env,"RELEASE_CANARY_OBSERVE_SECONDS",1800,1,86400),
+      maximumEvidenceAgeMinutes: integer(env,"RELEASE_EVIDENCE_MAX_AGE_MINUTES",30,1,1440),
+      errorRateStopPercent: integer(env,"RELEASE_5XX_STOP_BASIS_POINTS",100,1,10000) / 100,
+      readP95StopMs: integer(env,"RELEASE_READ_P95_STOP_MS",300,1,60000),
+      writeP95StopMs: integer(env,"RELEASE_WRITE_P95_STOP_MS",600,1,60000),
+      asyncLagStopSeconds: integer(env,"RELEASE_ASYNC_LAG_STOP_SECONDS",60,1,3600),
     },
     evidence: {
       maxRawBytes: integer(

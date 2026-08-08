@@ -9,7 +9,7 @@
     "primaryRegion": "惠州",
     "recoveryRegion": "惠州",
     "publicPorts": [80, 443],
-    "privatePorts": [4101, 3306, 6379]
+    "privatePorts": [4101, 4103, 3306, 6379]
   },
   "capacityClaim": "S0 single host; 100 users and 5-20 concurrent business users; no multi-node or 10000-user claim",
   "objects": [
@@ -33,7 +33,7 @@
       "port": 4101,
       "public": false,
       "healthPaths": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
-      "environmentGroups": ["app", "database", "redis", "storage", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial"],
+      "environmentGroups": ["app", "database", "redis", "storage", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial", "backupRecovery", "releaseRollout"],
       "logSource": "stdout/stderr",
       "gracefulSignals": ["SIGTERM", "SIGINT"]
     },
@@ -45,6 +45,20 @@
       "public": false,
       "environmentGroups": ["app", "database", "redis", "ai", "storage", "runtime", "collectionTasks", "trends", "opportunities", "competitorMonitor", "sourcing", "businessTasks", "approvals", "notifications", "providerAdapters", "playwrightCrawler", "security", "auth", "openPlatform"],
       "heartbeat": {"maximumAgeSeconds": 60, "service": "product-scout-worker"},
+      "logSource": "stdout/stderr",
+      "gracefulSignals": ["SIGTERM", "SIGINT"]
+    },
+    {
+      "name": "product-scout-api-canary",
+      "kind": "baota-node-project",
+      "workingDirectory": "<CANDIDATE_RELEASE_ROOT>",
+      "startCommand": "node apps/api/dist/server.js",
+      "bind": "127.0.0.1",
+      "port": 4103,
+      "public": false,
+      "purpose": "M07-05 same-host release slot B; stable and candidate roles alternate by audited release",
+      "healthPaths": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
+      "environmentGroups": ["app", "database", "redis", "storage", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial", "backupRecovery", "releaseRollout"],
       "logSource": "stdout/stderr",
       "gracefulSignals": ["SIGTERM", "SIGINT"]
     },
@@ -83,6 +97,15 @@
       "schedule": "manual-before-release",
       "workingDirectory": "<RELEASE_ROOT>",
       "command": "npm run verify:module -- M07-02",
+      "public": false,
+      "reportDirectory": ".artifacts/verification"
+    },
+    {
+      "name": "product-scout-release-rollout",
+      "kind": "baota-scheduled-task",
+      "schedule": "manual-release-gate",
+      "workingDirectory": "<CANDIDATE_RELEASE_ROOT>",
+      "command": "node scripts/run-baota-release-rollout.mjs --run --env-file <BAOTA_RESTRICTED_ENV_FILE>",
       "public": false,
       "reportDirectory": ".artifacts/verification"
     },

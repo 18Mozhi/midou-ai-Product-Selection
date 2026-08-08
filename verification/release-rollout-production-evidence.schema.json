@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScoutOps M07-05 production rollout evidence",
+  "type": "object",
+  "required": ["schemaVersion", "module", "manager", "topology", "backupServerUsed", "releaseId", "buildSha", "appVersion", "configFingerprint", "migrationVersion", "percentages", "minimumObservationSeconds", "gates", "automaticStopArmed", "rollbackTarget", "requestId", "traceId", "capturedAt"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "module": {"const": "M07-05"},
+    "manager": {"const": "baota"},
+    "topology": {"const": "single_host_stable_and_candidate"},
+    "backupServerUsed": {"const": false},
+    "releaseId": {"type": "string", "format": "uuid"},
+    "buildSha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "appVersion": {"type": "string", "minLength": 1},
+    "configFingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "migrationVersion": {"const": "0026_release_rollout_m07_05.up.sql"},
+    "percentages": {"const": [5, 25, 100]},
+    "minimumObservationSeconds": {"type": "integer", "minimum": 1800},
+    "gates": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["percent", "observeSeconds", "sampleCount", "errorRate", "readP95", "writeP95", "asyncLag", "readSamples", "writeSamples"],
+        "properties": {
+          "percent": {"type": "integer", "enum": [5, 25, 100]},
+          "observeSeconds": {"type": "integer", "minimum": 1800},
+          "sampleCount": {"type": "integer", "minimum": 10},
+          "errorRate": {"type": "number", "minimum": 0, "exclusiveMaximum": 1},
+          "readP95": {"type": "integer", "minimum": 0, "maximum": 300},
+          "writeP95": {"type": "integer", "minimum": 0, "maximum": 600},
+          "asyncLag": {"type": "integer", "minimum": 0, "maximum": 60},
+          "readSamples": {"type": "integer", "minimum": 5},
+          "writeSamples": {"type": "integer", "minimum": 5}
+        }
+      }
+    },
+    "automaticStopArmed": {"const": true},
+    "rollbackTarget": {"type": "object", "required": ["sameHost", "stablePort"], "properties": {"sameHost": {"const": true}, "stablePort": {"type": "integer", "enum": [4101, 4103]}}},
+    "requestId": {"type": "string", "format": "uuid"},
+    "traceId": {"type": "string", "format": "uuid"},
+    "capturedAt": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

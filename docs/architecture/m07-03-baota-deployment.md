@@ -16,4 +16,4 @@ M07-03 将 M00-08 骨架部署到惠州 `192.168.1.220` 与 `midouai.mozhiz.cn`�
 
 ## 自动证据
 
-`scripts/verify-baota-deployment.mjs --preflight` 校验固定目标、八个面板对象、构建产物、配置分组、Nginx、Python 心跳、外部管理器禁令和秘密边界。`--production` 额外要求 manifest healthy，并读取符合 `verification/baota-production-evidence.schema.json` 的忽略文件；证据 commit 必须等于当前 Git HEAD，并覆盖版本、配置指纹、迁移版本、八个面板对象、live/ready/version、Worker/Crawler 心跳、MySQL 5.7/utf8mb4、本机 Redis 和宝塔日志。缺失、过期或矛盾时返回 blocked/failed。
+`scripts/verify-baota-deployment.mjs --preflight` 校验固定目标、十个面板对象、构建产物、配置分组、Nginx、Python 心跳、外部管理器禁令和秘密边界。`--production` 额外要求 manifest healthy，并读取符合 `verification/baota-production-evidence.schema.json` 的忽略文件；证据 commit 必须等于当前 Git HEAD，并覆盖版本、配置指纹、迁移版本、十个面板对象、live/ready/version、Worker/Crawler 心跳、MySQL 5.7/utf8mb4、本机 Redis 和宝塔日志。新增对象是同一主机的候选 API 与宝塔发布任务，不是备用服务器。缺失、过期或矛盾时返回 blocked/failed。
