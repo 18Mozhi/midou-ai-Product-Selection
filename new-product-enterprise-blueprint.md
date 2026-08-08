@@ -416,6 +416,10 @@ flowchart LR
 
 ### 6.3 事件合同
 
+#### M05-01 业务任务中心实现基线
+
+任务中心以组织/工作区范围的 `tasks`、不可变评论与任务事件为事实源。任务状态固定为待处理、进行中、完成、取消；SLA 只由真实 `due_at` 派生，缺少期限显示 `not_set`。创建、状态、延期、转交和评论使用幂等键与版本锁，并在同一事务写审计和 Outbox。M04-06 采购任务由宝塔 Node Worker 通过租约投影，来源唯一键保证重放不重复；审批、通知消费和 SSE 由 M05-02 至 M05-04 后续模块交付。
+
 所有事件包含：`event_id`、`organization_id`、`actor_id`、`resource_type`、`resource_id`、`occurred_at`、`schema_version`、`request_id`、`trace_id`、最小业务 payload。
 
 首批事件：

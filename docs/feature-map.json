@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P05",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06", "M04-07"],
-    "activeModules": ["M05-01"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06", "M04-07", "M05-01"],
+    "activeModules": ["M05-02"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -428,6 +428,19 @@
       "imageEvidence": ["concept 35 opportunity market analysis", "concept 36 opportunity competition analysis", "concept 38 opportunity risk", "concept 39 opportunity evidence", "concept 50 opportunity report", "concept 54 mobile opportunity detail", "high-resolution core page 06 opportunity dashboard"],
       "verificationRunId": "1b290819-ac45-4e21-99f0-7d84d844d25e",
       "status": "module_verified"
+    },
+    "businessTaskCenter": {
+      "module": "M05-01",
+      "entrypoints": ["../apps/api/src/business-task-service.ts", "../apps/api/src/mysql-business-task-repository.ts", "../apps/api/src/business-task-routes.ts", "../apps/worker/src/business-task-projection-worker.ts", "../apps/web/src/components/TaskWorkspace.vue"],
+      "routes": ["/work", "/tasks", "/api/v1/tasks", "/api/v1/tasks/{taskId}", "/api/v1/tasks/{taskId}/comments", "/api/v1/tasks/{taskId}/actions"],
+      "scope": "organization and workspace scoped business tasks immutable comments events idempotent operations audit and outbox",
+      "truthBoundary": "SLA is derived only from persisted due_at; missing upstream deadlines remain not_set and M05-02 approvals M05-03 notifications M05-04 SSE are not fabricated",
+      "permission": "task:read for reads, task:create for creation, task:update for status due and comments, task:assign for transfer",
+      "configuration": ["BUSINESS_TASK_PROJECTION_POLL_MS", "BUSINESS_TASK_PROJECTION_LEASE_SECONDS"],
+      "runtimeBoundary": "M04-06 sourcing purchase outbox projection runs only in the Baota-managed Node Worker with lease recovery and source idempotency",
+      "imageEvidence": ["concept 12 today action", "concept 23 today work", "concept 24 task list", "concept 25 task detail", "concept 26 task comments", "high-resolution core pages 01 and 04"],
+      "verificationRunId": "7fad07fb-3b22-4136-8e4a-2d274f0a7cdb",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -465,7 +478,7 @@
   },
   "routes": [
     {"path": "/home", "view": "TodayActionCenter", "domain": "work", "status": "planned"},
-    {"path": "/work", "view": "TodayWork", "domain": "tasks", "status": "planned"},
+    {"path": "/work", "view": "TaskWorkspace", "domain": "tasks", "status": "M05-01_module_verified"},
     {"path": "/trends", "view": "TrendDashboard", "domain": "trends", "status": "M04-01_module_verified"},
     {"path": "/opportunities", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-02_module_verified"},
     {"path": "/opportunities/{opportunityId}", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-04_profit_analysis_verified"},
@@ -473,7 +486,7 @@
     {"path": "/competitors", "view": "CompetitorMonitor", "domain": "competitors", "status": "M04-05_module_verified"},
     {"path": "/sourcing", "view": "SourcingWorkspace", "domain": "sourcing", "status": "M04-06_module_verified"},
     {"path": "/sourcing/cost-rules", "view": "CostRuleConsole", "domain": "sourcing", "status": "M04-04_module_verified"},
-    {"path": "/tasks", "view": "TaskCenter", "domain": "tasks", "status": "planned"},
+    {"path": "/tasks", "view": "TaskWorkspace", "domain": "tasks", "status": "M05-01_module_verified"},
     {"path": "/notifications", "view": "Notifications", "domain": "notifications", "status": "planned"},
     {"path": "/me", "view": "Profile", "domain": "identity", "status": "local_security_sessions_implemented_profile_planned"},
     {"path": "/org-admin", "view": "OrganizationAdmin", "domain": "organization", "status": "roles_and_resource_grants_implemented_remaining_management_planned"},
@@ -492,7 +505,7 @@
     {"prefix": "/api/v1/ai-analyses", "domain": "opportunities", "status": "M04-07_facts_only_ai_results_and_human_reviews_verified"},
     {"prefix": "/api/v1/competitors", "domain": "competitors", "status": "M04-05_identity_snapshots_changes_thresholds_and_alert_queue_implemented"},
     {"prefix": "/api/v1/sourcing", "domain": "sourcing", "status": "M04-06_search_projection_quote_comparison_and_purchase_task_verified"},
-    {"prefix": "/api/v1/tasks", "domain": "tasks", "status": "planned"},
+    {"prefix": "/api/v1/tasks", "domain": "tasks", "status": "M05-01_scoped_tasks_comments_actions_and_sourcing_projection_verified"},
     {"prefix": "/api/v1/subscriptions", "domain": "monitoring", "status": "planned"},
     {"prefix": "/api/v1/reviews", "domain": "review-analysis", "status": "planned"},
     {"prefix": "/api/v1/analysis", "domain": "decision-analysis", "status": "planned"},

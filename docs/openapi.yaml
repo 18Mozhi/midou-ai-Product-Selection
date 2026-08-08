@@ -932,13 +932,55 @@ paths:
         '409': { $ref: '#/components/responses/Error' }
   /tasks:
     get:
-      summary: List authorized tasks
+      summary: List organization and workspace scoped business tasks
+      parameters:
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: page_size, in: query, schema: { type: integer, minimum: 1, maximum: 200, default: 50 } }
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/BusinessTaskStatus' } }
+        - { name: mine, in: query, schema: { type: boolean, default: false } }
       responses:
-        '200':
-          description: Authorized task list with collection coverage when applicable
-          content:
-            application/json:
-              schema: { $ref: '#/components/schemas/TaskListEnvelope' }
+        '200': { description: Scoped paginated task list, content: { application/json: { schema: { $ref: '#/components/schemas/BusinessTaskListEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Create an assigned business task
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/BusinessTaskCreateInput' } } } }
+      responses:
+        '201': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /tasks/summary:
+    get:
+      summary: Get current assignee task and truthful SLA counts
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+  /tasks/{taskId}:
+    get:
+      summary: Get scoped task detail comments and immutable events
+      parameters: [{name: taskId, in: path, required: true, schema: {type: string, format: uuid}}]
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '404': { $ref: '#/components/responses/Error' }
+  /tasks/{taskId}/comments:
+    post:
+      summary: Add immutable task comment
+      parameters: [{name: taskId, in: path, required: true, schema: {type: string, format: uuid}}, {$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [body], properties: {body: {type: string, minLength: 1, maxLength: 2000}}}}}}
+      responses:
+        '201': { $ref: '#/components/responses/Success' }
+        '409': { $ref: '#/components/responses/Error' }
+  /tasks/{taskId}/actions:
+    post:
+      summary: Start complete cancel delay or transfer a versioned task
+      parameters: [{name: taskId, in: path, required: true, schema: {type: string, format: uuid}}, {$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/BusinessTaskActionInput'}}}}
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /subscriptions:
     get:
       summary: List organization monitoring subscriptions
@@ -2195,6 +2237,54 @@ components:
                 page: { type: integer }
                 page_size: { type: integer }
                 total: { type: integer }
+    BusinessTaskStatus:
+      type: string
+      enum: [todo, in_progress, completed, cancelled]
+    BusinessTask:
+      type: object
+      required: [id, title, description, status, priority, assignee_id, source_type, due_at, sla_status, version, created_by, created_at, updated_at]
+      properties:
+        id: {type: string, format: uuid}
+        title: {type: string, maxLength: 200}
+        description: {type: string, maxLength: 5000}
+        status: {$ref: '#/components/schemas/BusinessTaskStatus'}
+        priority: {type: string, enum: [low, normal, high, critical]}
+        assignee_id: {type: string, format: uuid}
+        source_type: {type: string, enum: [manual, sourcing_purchase]}
+        source_ref_id: {type: string, format: uuid, nullable: true}
+        due_at: {type: string, format: date-time, nullable: true}
+        completed_at: {type: string, format: date-time, nullable: true}
+        sla_status: {type: string, enum: [not_set, on_track, due_soon, overdue, completed, cancelled]}
+        version: {type: integer, minimum: 1}
+        created_by: {type: string, format: uuid}
+        created_at: {type: string, format: date-time}
+        updated_at: {type: string, format: date-time}
+    BusinessTaskCreateInput:
+      type: object
+      required: [title, description, priority]
+      properties:
+        title: {type: string, minLength: 1, maxLength: 200}
+        description: {type: string, maxLength: 5000}
+        priority: {type: string, enum: [low, normal, high, critical]}
+        assignee_id: {type: string, format: uuid, description: Defaults to the authenticated actor when omitted}
+        due_at: {type: string, format: date-time, nullable: true}
+    BusinessTaskActionInput:
+      type: object
+      required: [action, expected_version]
+      properties:
+        action: {type: string, enum: [start, complete, cancel, delay, transfer]}
+        expected_version: {type: integer, minimum: 1}
+        reason: {type: string, maxLength: 500, description: Required for cancel, delay and transfer}
+        due_at: {type: string, format: date-time, description: Required for delay}
+        assignee_id: {type: string, format: uuid, description: Required for transfer}
+    BusinessTaskListEnvelope:
+      type: object
+      required: [data, meta, request_id, trace_id]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/BusinessTask'}}
+        meta: {type: object, required: [page, page_size, total], properties: {page: {type: integer}, page_size: {type: integer}, total: {type: integer}}}
+        request_id: {type: string}
+        trace_id: {type: string}
     TaskStatus:
       type: string
       enum: [draft, scheduled, queued, leased, running, parsing, validating, persisted, retry_scheduled, blocked_login, blocked_captcha, blocked_robots, rate_limited, succeeded, succeeded_empty, completed_with_warnings, failed_terminal, dead_letter, manually_replayed]

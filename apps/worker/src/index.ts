@@ -14,6 +14,7 @@ import { MySqlOpportunityProfitWorker } from './opportunity-profit-worker.js';
 import { MySqlCompetitorMonitorWorker } from './competitor-monitor-worker.js';
 import { MySqlSourcingProjectionWorker } from './sourcing-projection-worker.js';
 import { MySqlAiAnalysisWorker, OpenAiCompatibleAnalysisAdapter } from './ai-analysis-worker.js';
+import { projectBusinessTaskOnce } from './business-task-projection-worker.js';
 
 const config = loadRuntimeConfig(process.env, 'worker');
 const pool = createDatabasePool(config);
@@ -31,7 +32,7 @@ const opportunityProfit = new MySqlOpportunityProfitWorker(pool, config.identity
 const competitorMonitor = new MySqlCompetitorMonitorWorker(pool, config.identity.workerId, config.competitorMonitor.leaseSeconds);
 const sourcingProjection = new MySqlSourcingProjectionWorker(pool, config.identity.workerId, config.sourcing.leaseSeconds);
 const aiAnalysis = new MySqlAiAnalysisWorker(pool,config.identity.workerId,config.ai.leaseSeconds,config.ai.retryLimit,new OpenAiCompatibleAnalysisAdapter(config.ai.model,config.ai.baseUrl,config.ai.apiKey,config.ai.timeoutMs));
-let stopping = false, authPolling = false, collectionPolling = false, trendPolling = false, opportunityPolling = false, scoringPolling = false, profitPolling = false, competitorPolling = false, sourcingPolling = false, aiPolling=false;
+let stopping = false, authPolling = false, collectionPolling = false, trendPolling = false, opportunityPolling = false, scoringPolling = false, profitPolling = false, competitorPolling = false, sourcingPolling = false, aiPolling=false,businessTaskPolling=false;
 
 const heartbeat = () => console.log(JSON.stringify({ service: 'product-scout-worker', status: stopping ? 'stopping' : 'idle', worker_id: config.identity.workerId, registered_sources: registry.describe().map(item => item.key), trend_projection: 'registered', opportunity_refresh: 'registered', opportunity_scoring: 'registered', opportunity_profit: 'registered', competitor_monitor: 'registered', sourcing_projection: 'registered', ai_analysis:'registered', config_fingerprint: config.configFingerprint, observed_at: new Date().toISOString() }));
 const pollAuth = async () => { if (stopping || authPolling || !config.security.credentialsMasterKey) return; authPolling = true; try { const result = await processAuthDeliveryOnce({ pool, workerId: config.identity.workerId, masterKey: config.security.credentialsMasterKey, provider: new PendingMailProvider() }); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'auth_delivery', ...result, observed_at: new Date().toISOString() })); } catch { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'auth_delivery', status: 'dependency_failed', observed_at: new Date().toISOString() })); } finally { authPolling = false; } };
@@ -43,6 +44,7 @@ const pollProfit = async () => { if (stopping || profitPolling) return; profitPo
 const pollCompetitors = async () => { if (stopping || competitorPolling) return; competitorPolling = true; try { const result = await competitorMonitor.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'competitor_monitor', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'competitor_monitor', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { competitorPolling = false; } };
 const pollSourcing = async () => { if (stopping || sourcingPolling) return; sourcingPolling = true; try { const result = await sourcingProjection.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'sourcing_projection', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'sourcing_projection', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { sourcingPolling = false; } };
 const pollAi = async()=>{if(stopping||aiPolling)return;aiPolling=true;try{const result=await aiAnalysis.processOnce();if(result.status!=='idle')console.log(JSON.stringify({service:'product-scout-worker',queue:'ai_analysis',...result,observed_at:new Date().toISOString()}));}catch{console.error(JSON.stringify({service:'product-scout-worker',queue:'ai_analysis',status:'dependency_failed',observed_at:new Date().toISOString()}));}finally{aiPolling=false;}};
+const pollBusinessTasks=async()=>{if(stopping||businessTaskPolling)return;businessTaskPolling=true;try{const result=await projectBusinessTaskOnce(pool,config.identity.workerId,config.businessTasks.leaseSeconds);if(result.status!=='idle')console.log(JSON.stringify({service:'product-scout-worker',queue:'business_task_projection',...result,observed_at:new Date().toISOString()}));}catch(error){console.error(JSON.stringify({service:'product-scout-worker',queue:'business_task_projection',status:'dependency_failed',error:error instanceof Error?error.message:'unknown',observed_at:new Date().toISOString()}));}finally{businessTaskPolling=false;}};
 
 heartbeat();
 const heartbeatTimer = setInterval(heartbeat, config.runtime.workerHeartbeatMs);
@@ -55,12 +57,13 @@ const profitTimer = setInterval(() => void pollProfit(), config.profit.pollMs);
 const competitorTimer = setInterval(() => void pollCompetitors(), config.competitorMonitor.pollMs);
 const sourcingTimer = setInterval(() => void pollSourcing(), config.sourcing.pollMs);
 const aiTimer=setInterval(()=>void pollAi(),config.ai.pollMs);
-void pollAuth(); void pollCollection(); void pollTrends(); void pollOpportunities(); void pollScoring(); void pollProfit(); void pollCompetitors(); void pollSourcing(); void pollAi();
+const businessTaskTimer=setInterval(()=>void pollBusinessTasks(),config.businessTasks.pollMs);
+void pollAuth(); void pollCollection(); void pollTrends(); void pollOpportunities(); void pollScoring(); void pollProfit(); void pollCompetitors(); void pollSourcing(); void pollAi();void pollBusinessTasks();
 
 const stop = async (signal: string) => {
   if (stopping) return; stopping = true;
-  clearInterval(heartbeatTimer); clearInterval(authTimer); clearInterval(collectionTimer); clearInterval(trendTimer); clearInterval(opportunityTimer); clearInterval(scoringTimer); clearInterval(profitTimer); clearInterval(competitorTimer); clearInterval(sourcingTimer);clearInterval(aiTimer);
-  while (authPolling || collectionPolling || trendPolling || opportunityPolling || scoringPolling || profitPolling || competitorPolling || sourcingPolling||aiPolling) await new Promise(resolve => setTimeout(resolve, 25));
+  clearInterval(heartbeatTimer); clearInterval(authTimer); clearInterval(collectionTimer); clearInterval(trendTimer); clearInterval(opportunityTimer); clearInterval(scoringTimer); clearInterval(profitTimer); clearInterval(competitorTimer); clearInterval(sourcingTimer);clearInterval(aiTimer);clearInterval(businessTaskTimer);
+  while (authPolling || collectionPolling || trendPolling || opportunityPolling || scoringPolling || profitPolling || competitorPolling || sourcingPolling||aiPolling||businessTaskPolling) await new Promise(resolve => setTimeout(resolve, 25));
   await redisStore.close(); await pool.end();
   console.log(JSON.stringify({ service: 'product-scout-worker', status: 'stopped', signal, worker_id: config.identity.workerId, observed_at: new Date().toISOString() }));
 };
