@@ -1,0 +1,2 @@
+-- Export searches, candidates, quotes, comparisons, purchase tasks and events before destructive rollback.
+DROP TABLE IF EXISTS `sourcing_operations`;DROP TABLE IF EXISTS `sourcing_outbox`;DROP TABLE IF EXISTS `sourcing_events`;DROP TABLE IF EXISTS `sourcing_purchase_tasks`;DROP TABLE IF EXISTS `sourcing_comparisons`;DROP TABLE IF EXISTS `supplier_quotes`;DROP TABLE IF EXISTS `sourcing_candidates`;DROP TABLE IF EXISTS `sourcing_projection_jobs`;DROP TABLE IF EXISTS `sourcing_searches`;

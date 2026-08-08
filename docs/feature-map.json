@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P04",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02", "M04-03", "M04-04", "M04-05"],
-    "activeModules": ["M04-06"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06"],
+    "activeModules": ["M04-07"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -376,7 +376,7 @@
     "profitCost": {
       "module": "M04-04",
       "entrypoints": ["../apps/api/src/profit-service.ts", "../apps/api/src/mysql-profit-repository.ts", "../apps/api/src/profit-routes.ts", "../apps/worker/src/opportunity-profit-worker.ts", "../apps/web/src/components/CostRuleConsole.vue", "../apps/web/src/components/OpportunityWorkspace.vue"],
-      "routes": ["/sourcing", "/api/v1/cost-rules", "/api/v1/cost-rules/{costRuleId}/actions", "/api/v1/exchange-rates", "/api/v1/opportunities/{opportunityId}/cost-inputs", "/api/v1/opportunities/{opportunityId}/profit-runs", "/api/v1/opportunities/{opportunityId}/profit-analysis"],
+      "routes": ["/sourcing/cost-rules", "/api/v1/cost-rules", "/api/v1/cost-rules/{costRuleId}/actions", "/api/v1/exchange-rates", "/api/v1/opportunities/{opportunityId}/cost-inputs", "/api/v1/opportunities/{opportunityId}/profit-runs", "/api/v1/opportunities/{opportunityId}/profit-analysis"],
       "scope": "organization and workspace scoped versioned fee rules dual approvals exchange quotes cost inputs jobs immutable profit runs components and rollback",
       "truthBoundary": "all four fees are explicit; missing required inputs or an approved historical exchange rate stays insufficient_data and never emits numeric ROI",
       "permission": "opportunity:read for rules and profit analysis; cost:confirm for rates inputs and reruns; opportunity:approve for rule creation approval publish reject and rollback",
@@ -399,6 +399,20 @@
       "runtimeBoundary": "comparison runs inside the Baota-managed Node Worker; P05 consumes queued notification and task outbox contracts",
       "imageEvidence": ["concept 41 competitor list", "concept 42 competitor detail", "concept 43 price history", "concept 44 monitoring rules", "high-resolution core page 07 competitor dashboard"],
       "verificationRunId": "2e64e54e-620b-4396-848b-223329b916f3",
+      "status": "module_verified"
+    },
+    "sourcingDiscovery": {
+      "module": "M04-06",
+      "entrypoints": ["../apps/api/src/sourcing-service.ts", "../apps/api/src/mysql-sourcing-repository.ts", "../apps/api/src/sourcing-routes.ts", "../apps/worker/src/sourcing-projection-worker.ts", "../apps/web/src/components/SourcingWorkspace.vue"],
+      "routes": ["/sourcing", "/api/v1/sourcing/searches", "/api/v1/sourcing/searches/{searchId}", "/api/v1/sourcing/quotes", "/api/v1/sourcing/comparisons", "/api/v1/sourcing/purchase-tasks"],
+      "scope": "organization and workspace scoped searches projection jobs candidates immutable quote versions comparisons purchase tasks events and outbox",
+      "truthBoundary": "only completed same-workspace product-supply-csv-v1 collection facts are projected; missing specification lead location confidence stability or risk stays explicit until evidence-backed confirmation",
+      "permission": "sourcing:read for scoped reads; supplier_quote:manage for searches quote confirmation comparisons and purchase task creation",
+      "audit": "writes preserve idempotency request_id trace_id actor immutable evidence references sourcing_events and sourcing_outbox",
+      "configuration": ["SOURCING_PROJECTION_POLL_MS", "SOURCING_PROJECTION_LEASE_SECONDS"],
+      "runtimeBoundary": "projection runs inside the Baota-managed Node Worker; P05 consumes queued purchase task outbox records and M04-04 remains the cost and exchange-rate truth",
+      "imageEvidence": ["concept 45 supplier search", "concept 46 supplier detail", "concept 47 quote comparison", "concept 48 cost calculator", "concept 49 purchase task", "high-resolution core page 08 supply and profit decision center"],
+      "verificationRunId": "eeef7338-db72-4aef-b74c-99bf2d3513b4",
       "status": "module_verified"
     }
   },
@@ -442,7 +456,8 @@
     {"path": "/opportunities/{opportunityId}", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-04_profit_analysis_verified"},
     {"path": "/opportunities/scoring-rules", "view": "ScoreRuleConsole", "domain": "opportunities", "status": "M04-03_module_verified"},
     {"path": "/competitors", "view": "CompetitorMonitor", "domain": "competitors", "status": "M04-05_module_verified"},
-    {"path": "/sourcing", "view": "CostRuleConsole", "domain": "sourcing", "status": "M04-04_module_verified"},
+    {"path": "/sourcing", "view": "SourcingWorkspace", "domain": "sourcing", "status": "M04-06_module_verified"},
+    {"path": "/sourcing/cost-rules", "view": "CostRuleConsole", "domain": "sourcing", "status": "M04-04_module_verified"},
     {"path": "/tasks", "view": "TaskCenter", "domain": "tasks", "status": "planned"},
     {"path": "/notifications", "view": "Notifications", "domain": "notifications", "status": "planned"},
     {"path": "/me", "view": "Profile", "domain": "identity", "status": "local_security_sessions_implemented_profile_planned"},
@@ -460,7 +475,7 @@
     {"prefix": "/api/v1/trends", "domain": "trends", "status": "M04-01_topics_signals_evidence_follows_relevance_and_monitoring_rules_verified"},
     {"prefix": "/api/v1/opportunities", "domain": "opportunities", "status": "M04-02_list_create_detail_decisions_and_evidence_refresh_verified"},
     {"prefix": "/api/v1/competitors", "domain": "competitors", "status": "M04-05_identity_snapshots_changes_thresholds_and_alert_queue_implemented"},
-    {"prefix": "/api/v1/sourcing", "domain": "sourcing", "status": "planned"},
+    {"prefix": "/api/v1/sourcing", "domain": "sourcing", "status": "M04-06_search_projection_quote_comparison_and_purchase_task_verified"},
     {"prefix": "/api/v1/tasks", "domain": "tasks", "status": "planned"},
     {"prefix": "/api/v1/subscriptions", "domain": "monitoring", "status": "planned"},
     {"prefix": "/api/v1/reviews", "domain": "review-analysis", "status": "planned"},

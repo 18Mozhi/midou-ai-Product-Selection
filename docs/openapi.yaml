@@ -816,6 +816,81 @@ paths:
         '400': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /sourcing/searches:
+    get:
+      summary: List workspace-scoped sourcing searches and projection status
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: sourcing:read
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Project supplier candidates from a completed same-workspace collection task
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: supplier_quote:manage
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SourcingSearchInput' } } } }
+      responses:
+        '202': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /sourcing/searches/{searchId}:
+    get:
+      summary: Read supplier candidates, evidence references and explicit missing fields
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: sourcing:read
+      parameters: [{ name: searchId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /sourcing/quotes:
+    post:
+      summary: Confirm a complete immutable supplier quote version with evidence
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: supplier_quote:manage
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SupplierQuoteInput' } } } }
+      responses:
+        '201': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /sourcing/comparisons:
+    get:
+      summary: List immutable comparisons with two to five confirmed quotes
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: sourcing:read
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '403': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Compare two to five current confirmed supplier quotes
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: supplier_quote:manage
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SourcingComparisonInput' } } } }
+      responses:
+        '201': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /sourcing/purchase-tasks:
+    post:
+      summary: Queue a purchase task from a current quote without bypassing MOQ
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: supplier_quote:manage
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SourcingPurchaseTaskInput' } } } }
+      responses:
+        '202': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /tasks:
     get:
       summary: List authorized tasks
@@ -1296,6 +1371,43 @@ components:
         application/json:
           schema: { $ref: '#/components/schemas/ErrorEnvelope' }
   schemas:
+    SourcingSearchInput:
+      type: object
+      additionalProperties: false
+      required: [collection_task_id, input_type, input_ref]
+      properties:
+        collection_task_id: { type: string, format: uuid, description: Completed collection task in the active organization and workspace. }
+        input_type: { type: string, enum: [keyword, image, opportunity, product_url] }
+        input_ref: { type: string, minLength: 1, maxLength: 2048 }
+    SupplierQuoteInput:
+      type: object
+      additionalProperties: false
+      required: [candidate_id, specification, lead_time_days, location, confidence_value, stability_status, risk_level, observed_at, evidence_id]
+      properties:
+        candidate_id: { type: string, format: uuid }
+        specification: { type: string, minLength: 1, maxLength: 1000 }
+        lead_time_days: { type: integer, minimum: 0, maximum: 3650 }
+        location: { type: string, minLength: 1, maxLength: 255 }
+        confidence_value: { type: number, minimum: 0, maximum: 100 }
+        stability_status: { type: string, enum: [stable, variable, unknown] }
+        risk_level: { type: string, enum: [low, medium, high, unknown] }
+        observed_at: { type: string, format: date-time }
+        evidence_id: { type: string, format: uuid }
+    SourcingComparisonInput:
+      type: object
+      additionalProperties: false
+      required: [name, quote_ids]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 200 }
+        quote_ids: { type: array, minItems: 2, maxItems: 5, uniqueItems: true, items: { type: string, format: uuid } }
+    SourcingPurchaseTaskInput:
+      type: object
+      additionalProperties: false
+      required: [quote_id, quantity, reason]
+      properties:
+        quote_id: { type: string, format: uuid }
+        quantity: { type: integer, minimum: 1, maximum: 4294967295, description: Must also be at least the confirmed quote MOQ. }
+        reason: { type: string, minLength: 1, maxLength: 1000 }
     CompetitorSnapshotInput:
       type: object
       required: [current_price, currency, rank_value, review_count, rating_value, availability, captured_at, freshness, source_status, source_ref_id, evidence_id]

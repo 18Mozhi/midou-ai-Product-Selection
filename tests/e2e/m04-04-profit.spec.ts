@@ -14,7 +14,7 @@ test('M04-04.A07/A08/A09/A15 cost rule console exposes explicit fees and dual ap
   const rule=()=>({id:ruleId,market:'US',platform:'amazon',version_code:'US-AMZ-2026-01',name:'美国站标准费用',status,fee_lines:[{type:'platform_fee',mode:'percentage_of_sale',value:10,currency:null},{type:'payment_fee',mode:'percentage_of_sale',value:3,currency:null},{type:'tax',mode:'percentage_of_sale',value:5,currency:null},{type:'fulfillment',mode:'fixed_amount',value:2,currency:'USD'}],effective_from:'2026-08-08',revision,approvals:[],published_at:null,updated_at:'2026-08-08T10:00:00.000Z'});
   await page.route('**/api/v1/cost-rules',route=>route.fulfill({json:envelope([rule()])}));
   await page.route(`**/api/v1/cost-rules/${ruleId}/actions`,route=>{status='pending_approval';revision=2;return route.fulfill({json:envelope(rule())});});
-  await page.goto('/sourcing');
+  await page.goto('/sourcing/cost-rules');
   await expect(page.getByRole('heading',{name:'费用与利润规则',level:2})).toBeVisible();
   await expect(page.getByRole('heading',{name:'美国站标准费用',level:3})).toBeVisible();
   await expect(page.getByText('platform_fee')).toBeVisible();
