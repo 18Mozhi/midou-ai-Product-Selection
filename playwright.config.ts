@@ -1,9 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
+  expect: { timeout: 10_000, toHaveScreenshot: { maxDiffPixelRatio: 0.01 } },
   testDir: './tests/e2e',
   outputDir: './.artifacts/playwright',
   fullyParallel: false,
+  workers: 4,
   retries: 0,
   reporter: [['line']],
   use: {

@@ -116,7 +116,7 @@ onMounted(() => {
         <a class="nav-link" href="/?view=resource-grants">资源授权</a>
         <a class="nav-link" href="/?view=audit-security">审计与安全</a>
       </nav>
-      <p class="phase-label">P01 · 身份与租户</p>
+      <p class="phase-label">P07 · 发布与生产</p>
     </aside>
 
     <main v-if="!isVerificationView && !isConfigView && !isRedisView && !isMySqlView && !isApiView && !isFileAuditView && !isDeploymentView" id="runtime" class="content">

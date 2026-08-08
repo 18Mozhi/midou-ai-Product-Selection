@@ -40,6 +40,7 @@
     "verify:module": "node scripts/verify-module.mjs",
     "verify:phase": "node scripts/verify-phase.mjs",
     "verify:all": "node scripts/verify-all.mjs",
+    "verify:release-matrix": "node scripts/verify-release-matrix.mjs --validate",
     "verify:docs": "node scripts/verify-docs.mjs",
     "verify:plans": "node scripts/verify-plans.mjs",
     "test:e2e": "playwright test"

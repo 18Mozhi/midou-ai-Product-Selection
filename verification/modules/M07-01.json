@@ -1,0 +1,34 @@
+{
+  "moduleId": "M07-01",
+  "phaseId": "P07",
+  "name": "End-to-End Release Test Matrix",
+  "dependencies": ["M06-01", "M06-02", "M06-03", "M06-04", "M06-05", "M06-06"],
+  "atomicTasks": [
+    { "id": "M07-01.A01", "evidence": "frozen P00-P06 release regression scope and explicit non-goals" },
+    { "id": "M07-01.A02", "evidence": "versioned machine-readable dimensions scenarios groups and budgets" },
+    { "id": "M07-01.A03", "evidence": "existing MySQL57 migration pair inventory and isolated live data cleanup" },
+    { "id": "M07-01.A04", "evidence": "fixed-command fail-fast release matrix orchestration service" },
+    { "id": "M07-01.A05", "evidence": "existing Worker Crawler Redis queue outbox retry and recovery scenarios" },
+    { "id": "M07-01.A06", "evidence": "OpenAPI non-runtime verification contract without invented route" },
+    { "id": "M07-01.A07", "evidence": "all existing production page layouts across P00-P06" },
+    { "id": "M07-01.A08", "evidence": "existing loading empty error forbidden expired blocked recovery interactions" },
+    { "id": "M07-01.A09", "evidence": "role organization workspace API event file and export guard scenarios" },
+    { "id": "M07-01.A10", "evidence": "existing verification timeout report directory schema and Baota release task boundary" },
+    { "id": "M07-01.A11", "evidence": "structured module run and trace identifiers with fail-fast group output" },
+    { "id": "M07-01.A12", "evidence": "matrix schema drift migration rollback and boundary unit coverage" },
+    { "id": "M07-01.A13", "evidence": "OpenAPI Feature Map env browser inventory and existing DTO contract regression" },
+    { "id": "M07-01.A14", "evidence": "nine isolated real MySQL57 Redis and business chain scenarios" },
+    { "id": "M07-01.A15", "evidence": "46 prior visual flows in desktop and 390 plus browser performance probe" },
+    { "id": "M07-01.A16", "evidence": "existing timeout rate limit session dependency rollback and recovery drills" },
+    { "id": "M07-01.A17", "evidence": "blueprint feature map OpenAPI architecture runbook tuning and rollback" }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m07-01/release-matrix.test.mjs",
+    "node scripts/verify-release-matrix.mjs --node",
+    "node scripts/verify-release-matrix.mjs --live",
+    "node scripts/verify-release-matrix.mjs --browser all",
+    "npx playwright test tests/e2e/m07-01-performance.spec.ts",
+    "npm run verify:docs"
+  ]
+}

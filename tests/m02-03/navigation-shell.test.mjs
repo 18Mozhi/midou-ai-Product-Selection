@@ -1,7 +1,68 @@
-import test from'node:test';import assert from'node:assert/strict';import{readFile,readdir}from'node:fs/promises';import{AuthorizationService,InMemoryAuthorizationRepository}from'../../packages/authorization/dist/index.js';import{buildApp}from'../../apps/api/dist/app.js';
-const actor='00000000-0000-4000-8000-000000000101',session='00000000-0000-4000-8000-000000000102',org='00000000-0000-4000-8000-000000000103',workspace='00000000-0000-4000-8000-000000000104',read=path=>readFile(path,'utf8');
-const orgSubject=(role='member')=>({actor_id:actor,membership_id:'00000000-0000-4000-8000-000000000105',membership_active:true,role_codes:[role],capabilities:role==='organization_admin'?['task:read','organization:manage']:['task:read','trend:read'],scopes:[{scope:'organization'}],platform_role_codes:[],platform_capabilities:[]});
-test('M02-03.A02/A04/A09/A11/A12 server guards three shells and audits allow or deny',async()=>{const repo=new InMemoryAuthorizationRepository();repo.contexts.set(session,{user_id:actor,organization_id:org,workspace_id:workspace});repo.subjects.set(repo.key(actor,org),orgSubject('organization_admin'));const service=new AuthorizationService(repo,()=>new Date('2026-08-07T00:00:00.000Z'));const ids={requestId:'m02-03-request',traceId:'m02-03-trace'};assert.equal((await service.guardNavigationShell(actor,session,'member',ids)).shell,'member');assert.equal((await service.guardNavigationShell(actor,session,'organization_admin',ids)).guard_reason,'navigation_organization_admin_allowed');await assert.rejects(()=>service.guardNavigationShell(actor,session,'platform_admin',ids),error=>error.code==='navigation_shell_forbidden'&&error.statusCode===403);assert.deepEqual(repo.decisions.map(item=>item.outcome),['allowed','allowed','denied']);assert.ok(repo.decisions.every(item=>item.request_id===ids.requestId&&item.trace_id===ids.traceId));});
-test('M02-03.A03/A05/A09 platform shell works without organization context and creates no persistence schema',async()=>{const repo=new InMemoryAuthorizationRepository();repo.subjects.set(repo.key(actor),{...orgSubject(),membership_id:null,membership_active:false,role_codes:[],capabilities:[],scopes:[{scope:'platform'}],platform_role_codes:['platform_security_admin'],platform_capabilities:['platform:secure']});const result=await new AuthorizationService(repo).guardNavigationShell(actor,session,'platform_admin',{requestId:'request',traceId:'trace'});assert.equal(result.organization_id,null);assert.equal(result.workspace_id,null);assert.deepEqual(result.platform_roles,['platform_security_admin']);const migrations=await readdir('database/migrations');assert.equal(migrations.filter(name=>name.includes('m02_03')).length,0);});
-test('M02-03.A06/A13 authenticated API validates shell and preserves error contract',async()=>{const repo=new InMemoryAuthorizationRepository();repo.contexts.set(session,{user_id:actor,organization_id:org,workspace_id:workspace});repo.subjects.set(repo.key(actor,org),orgSubject());const service=new AuthorizationService(repo);const auth={authenticate:async()=>({user:{id:actor},session:{id:session}})};const app=buildApp({authorization:{service,auth,secureCookie:false}});const ok=await app.inject({method:'GET',url:'/api/v1/me/navigation?shell=member',headers:{cookie:'scoutops_session=test','x-request-id':'route-request','x-trace-id':'route-trace'}});assert.equal(ok.statusCode,200);assert.equal(ok.json().data.organization_id,org);const invalid=await app.inject({method:'GET',url:'/api/v1/me/navigation?shell=unknown',headers:{cookie:'scoutops_session=test'}});assert.equal(invalid.statusCode,400);await app.close();});
-test('M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay explicit',async()=>{const[component,app,styles,openapi,env,architecture,runbook,feature,e2e]=await Promise.all(['apps/web/src/components/NavigationShell.vue','apps/web/src/App.vue','apps/web/src/styles.css','docs/openapi.yaml','config/env.example','docs/architecture/m02-03-navigation-shells.md','docs/runbooks/m02-03-navigation-shells.md','docs/feature-map.json','tests/e2e/m02-03-navigation-shell.spec.ts'].map(read));for(const shell of['member','organization_admin','platform_admin'])assert.match(component+openapi,new RegExp(shell));for(const path of['/home','/org-admin','/platform-admin'])assert.match(app+component,new RegExp(path.replaceAll('/','\\/')));for(const state of['loading','expired','forbidden','context_required','rate_limited','blocked'])assert.match(component,new RegExp(state));assert.match(styles,/\.role-mobile-nav/);assert.match(styles,/@media\(max-width:840px\)/);assert.match(component,/aria-current/);assert.match(component,/credentials:'include'/);assert.match(e2e,/keyboard\.press/);assert.match(e2e,/toHaveScreenshot/);assert.doesNotMatch(env,/NAVIGATION_SHELL_|SHELL_GUARD_/);assert.match(architecture,/不新增数据库迁移|无需新增数据库迁移/);assert.match(runbook,/宝塔网站/);assert.match(feature,/navigationShells/);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile, readdir } from 'node:fs/promises';
+import { AuthorizationService, InMemoryAuthorizationRepository } from '../../packages/authorization/dist/index.js';
+import { buildApp } from '../../apps/api/dist/app.js';
+
+const actor = '00000000-0000-4000-8000-000000000101';
+const session = '00000000-0000-4000-8000-000000000102';
+const org = '00000000-0000-4000-8000-000000000103';
+const workspace = '00000000-0000-4000-8000-000000000104';
+const read = (path) => readFile(path, 'utf8');
+const orgSubject = (role = 'member') => ({ actor_id: actor, membership_id: '00000000-0000-4000-8000-000000000105', membership_active: true, role_codes: [role], capabilities: role === 'organization_admin' ? ['task:read', 'organization:manage'] : ['task:read', 'trend:read'], scopes: [{ scope: 'organization' }], platform_role_codes: [], platform_capabilities: [] });
+
+test('M02-03.A02/A04/A09/A11/A12 server guards three shells and audits allow or deny', async () => {
+  const repo = new InMemoryAuthorizationRepository();
+  repo.contexts.set(session, { user_id: actor, organization_id: org, workspace_id: workspace });
+  repo.subjects.set(repo.key(actor, org), orgSubject('organization_admin'));
+  const service = new AuthorizationService(repo, () => new Date('2026-08-07T00:00:00.000Z'));
+  const ids = { requestId: 'm02-03-request', traceId: 'm02-03-trace' };
+  assert.equal((await service.guardNavigationShell(actor, session, 'member', ids)).shell, 'member');
+  assert.equal((await service.guardNavigationShell(actor, session, 'organization_admin', ids)).guard_reason, 'navigation_organization_admin_allowed');
+  await assert.rejects(() => service.guardNavigationShell(actor, session, 'platform_admin', ids), (error) => error.code === 'navigation_shell_forbidden' && error.statusCode === 403);
+  assert.deepEqual(repo.decisions.map((item) => item.outcome), ['allowed', 'allowed', 'denied']);
+  assert.ok(repo.decisions.every((item) => item.request_id === ids.requestId && item.trace_id === ids.traceId));
+});
+
+test('M02-03.A03/A05/A09 platform shell works without organization context and creates no persistence schema', async () => {
+  const repo = new InMemoryAuthorizationRepository();
+  repo.subjects.set(repo.key(actor), { ...orgSubject(), membership_id: null, membership_active: false, role_codes: [], capabilities: [], scopes: [{ scope: 'platform' }], platform_role_codes: ['platform_security_admin'], platform_capabilities: ['platform:secure'] });
+  const result = await new AuthorizationService(repo).guardNavigationShell(actor, session, 'platform_admin', { requestId: 'request', traceId: 'trace' });
+  assert.equal(result.organization_id, null);
+  assert.equal(result.workspace_id, null);
+  assert.deepEqual(result.platform_roles, ['platform_security_admin']);
+  const migrations = await readdir('database/migrations');
+  assert.equal(migrations.filter((name) => name.includes('m02_03')).length, 0);
+});
+
+test('M02-03.A06/A13 authenticated API validates shell and preserves error contract', async () => {
+  const repo = new InMemoryAuthorizationRepository();
+  repo.contexts.set(session, { user_id: actor, organization_id: org, workspace_id: workspace });
+  repo.subjects.set(repo.key(actor, org), orgSubject());
+  const service = new AuthorizationService(repo);
+  const auth = { authenticate: async () => ({ user: { id: actor }, session: { id: session } }) };
+  const app = buildApp({ authorization: { service, auth, secureCookie: false } });
+  const ok = await app.inject({ method: 'GET', url: '/api/v1/me/navigation?shell=member', headers: { cookie: 'scoutops_session=test', 'x-request-id': 'route-request', 'x-trace-id': 'route-trace' } });
+  assert.equal(ok.statusCode, 200);
+  assert.equal(ok.json().data.organization_id, org);
+  const invalid = await app.inject({ method: 'GET', url: '/api/v1/me/navigation?shell=unknown', headers: { cookie: 'scoutops_session=test' } });
+  assert.equal(invalid.statusCode, 400);
+  await app.close();
+});
+
+test('M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay explicit', async () => {
+  const [component, app, styles, openapi, env, architecture, runbook, feature, e2e] = await Promise.all(['apps/web/src/components/NavigationShell.vue', 'apps/web/src/App.vue', 'apps/web/src/styles.css', 'docs/openapi.yaml', 'config/env.example', 'docs/architecture/m02-03-navigation-shells.md', 'docs/runbooks/m02-03-navigation-shells.md', 'docs/feature-map.json', 'tests/e2e/m02-03-navigation-shell.spec.ts'].map(read));
+  for (const shell of ['member', 'organization_admin', 'platform_admin']) assert.match(component + openapi, new RegExp(shell));
+  for (const path of ['/home', '/org-admin', '/platform-admin']) assert.match(app + component, new RegExp(path.replaceAll('/', '\\/')));
+  for (const state of ['loading', 'expired', 'forbidden', 'context_required', 'rate_limited', 'blocked']) assert.match(component, new RegExp(state));
+  assert.match(styles, /\.role-mobile-nav/);
+  assert.match(styles, /@media\(max-width:840px\)/);
+  assert.match(component, /aria-current/);
+  assert.match(component, /credentials\s*:\s*["']include["']/);
+  assert.match(e2e, /keyboard\.press/);
+  assert.match(e2e, /toHaveScreenshot/);
+  assert.doesNotMatch(env, /NAVIGATION_SHELL_|SHELL_GUARD_/);
+  assert.match(architecture, /不新增数据库迁移|无需新增数据库迁移/);
+  assert.match(runbook, /宝塔网站/);
+  assert.match(feature, /navigationShells/);
+});

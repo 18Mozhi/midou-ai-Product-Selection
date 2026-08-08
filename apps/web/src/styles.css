@@ -90,9 +90,9 @@ button { border: 0; border-radius: 11px; padding: 10px 15px; color: #07111f; bac
 @keyframes spin { to { transform: rotate(360deg); } }
 
 @media (max-width: 720px) {
-  .app-shell { grid-template-columns: 1fr; }
-  .sidebar { min-height: auto; padding: 16px 18px; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px 20px; border-right: 0; border-bottom: 1px solid var(--line); }
-  nav { width: 100%; margin: 0; display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+  .app-shell { width: 100%; grid-template-columns: minmax(0, 1fr); overflow-x: hidden; }
+  .sidebar { width: 100%; min-width: 0; min-height: auto; padding: 16px 18px; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px 20px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .sidebar nav { width: 100%; min-width: 0; max-width: 100%; margin: 0; display: flex; gap: 6px; overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 4px; }
   .nav-link { padding: 8px; font-size: 12px; white-space: nowrap; }
   .phase-label { display: none; }
   .content { padding: 24px 16px 40px; }

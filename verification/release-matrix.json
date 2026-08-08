@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "moduleId": "M07-01",
+  "scope": "P00-P06 release regression matrix; no production runtime API, table, page, permission or daemon",
+  "browserWorkers": 4,
+  "performanceTargets": {
+    "newMemberJourneyMs": 180000,
+    "taskCreateP95Ms": 3000,
+    "queuedVisibilityMs": 15000,
+    "firstOutcomeP95Ms": 180000,
+    "lcpMs": 2500,
+    "inpMs": 200,
+    "cls": 0.1,
+    "coreReadP95Ms": 300,
+    "coreWriteP95Ms": 600
+  },
+  "dimensions": {
+    "roleScope": ["verify-rbac-live", "m01-04-rbac.spec.ts", "m06-01-organization-admin.spec.ts"],
+    "sourceCollection": ["verify-provider-sources-live", "verify-collection-task-live", "m03-07-provider-sources.spec.ts"],
+    "taskQueue": ["verify-business-tasks-live", "verify-approval-workflow-live", "m05-01-business-tasks.spec.ts"],
+    "dataQuality": ["verify-evidence-data-quality-live", "verify-opportunities-live", "verify-sourcing-live"],
+    "mobileVisual": ["all browser groups run desktop-chromium and mobile-390", "m07-01-performance.spec.ts"],
+    "performance": ["blueprint budgets", "m07-01-performance.spec.ts", "M07-05 production observation"],
+    "securityFailClosed": ["verify-security-operations-live", "m06-04-security-operations.spec.ts", "M07-02 dedicated security gate"]
+  },
+  "liveScenarios": [
+    { "id": "verify-rbac-live", "program": "node", "args": ["scripts/verify-rbac-live.mjs"] },
+    { "id": "verify-provider-sources-live", "program": "node", "args": ["scripts/verify-provider-sources-live.mjs"] },
+    { "id": "verify-collection-task-live", "program": "node", "args": ["scripts/verify-collection-task-live.mjs"] },
+    { "id": "verify-evidence-data-quality-live", "program": "node", "args": ["scripts/verify-evidence-data-quality-live.mjs"] },
+    { "id": "verify-opportunities-live", "program": "node", "args": ["scripts/verify-opportunities-live.mjs"] },
+    { "id": "verify-sourcing-live", "program": "node", "args": ["scripts/verify-sourcing-live.mjs"] },
+    { "id": "verify-business-tasks-live", "program": "node", "args": ["scripts/verify-business-tasks-live.mjs"] },
+    { "id": "verify-approval-workflow-live", "program": "node", "args": ["scripts/verify-approval-workflow-live.mjs"] },
+    { "id": "verify-security-operations-live", "program": "node", "args": ["scripts/verify-security-operations-live.mjs"] }
+  ],
+  "browserGroups": {
+    "p00": ["m00-01-runtime.spec.ts", "m00-02-config.spec.ts", "m00-03-mysql.spec.ts", "m00-04-redis.spec.ts", "m00-05-api.spec.ts", "m00-06-file-audit.spec.ts", "m00-07-verification.spec.ts", "m00-08-deployment.spec.ts"],
+    "p01": ["m01-01-local-identity.spec.ts", "m01-02-mfa.spec.ts", "m01-03-tenancy.spec.ts", "m01-04-rbac.spec.ts", "m01-05-resource-grants.spec.ts", "m01-06-audit-seed.spec.ts"],
+    "p02": ["m02-01-theme-studio.spec.ts", "m02-02-auth-onboarding.spec.ts", "m02-03-navigation-shell.spec.ts", "m02-04-ui-states.spec.ts", "m02-05-discovery.spec.ts", "m02-06-home-mobile.spec.ts"],
+    "p03": ["m03-01-provider-registry.spec.ts", "m03-02-credential-assets.spec.ts", "m03-03-provider-adapter.spec.ts", "m03-04-playwright-crawler.spec.ts", "m03-05-collection-tasks.spec.ts", "m03-06-evidence-data-quality.spec.ts", "m03-07-provider-sources.spec.ts"],
+    "p04": ["m04-01-trends.spec.ts", "m04-02-opportunities.spec.ts", "m04-03-scoring.spec.ts", "m04-04-profit.spec.ts", "m04-05-competitors.spec.ts", "m04-06-sourcing.spec.ts", "m04-07-ai-analysis.spec.ts"],
+    "p05": ["m05-01-business-tasks.spec.ts", "m05-02-approval-workflow.spec.ts", "m05-03-notifications.spec.ts", "m05-04-realtime.spec.ts", "m05-05-automation-rules.spec.ts", "m05-06-reports.spec.ts"],
+    "p06": ["m06-01-organization-admin.spec.ts", "m06-02-platform-dashboard.spec.ts", "m06-03-collection-console.spec.ts", "m06-04-security-operations.spec.ts", "m06-05-open-platform.spec.ts", "m06-06-commercial.spec.ts"]
+  },
+  "requiredEvidence": [
+    "docs/openapi.yaml",
+    "docs/feature-map.json",
+    "config/env.example",
+    "docs/architecture/m07-01-release-matrix.md",
+    "docs/runbooks/m07-01-release-matrix.md",
+    "verification/modules/M07-01.json"
+  ]
+}
