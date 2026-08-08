@@ -48,9 +48,10 @@
       "M05-04",
       "M05-05",
       "M05-06",
-      "M06-01"
+      "M06-01",
+      "M06-02"
     ],
-    "activeModules": ["M06-02"],
+    "activeModules": ["M06-03"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1271,6 +1272,19 @@
         "high resolution 09 organization administration dashboard"
       ],
       "verificationRunId": "1216cb8f-3a77-43d8-ac72-70c36ef4a9d5",
+      "status": "module_verified"
+    },
+    "platformDashboard": {
+      "module": "M06-02",
+      "entrypoints": ["../apps/api/src/platform-dashboard-service.ts", "../apps/api/src/mysql-platform-dashboard-repository.ts", "../apps/api/src/platform-dashboard-routes.ts", "../apps/web/src/components/PlatformDashboard.vue"],
+      "routes": ["/platform-admin", "/api/v1/platform/dashboard"],
+      "scope": "platform-global factual summary of active organizations and users, enabled source health, terminal task success, queue backlog, quality issues, file growth and alerts",
+      "truthBoundary": "no sample remains unknown or null; no credentials, payloads, internal file paths or invented uptime and capacity claims",
+      "permission": "platform:operate on the API; platform role navigation guard on the page; every dashboard read writes a correlated platform audit event",
+      "configuration": ["PLATFORM_DASHBOARD_DEFAULT_WINDOW", "PLATFORM_DASHBOARD_QUEUE_WARNING", "PLATFORM_DASHBOARD_ERROR_LIMIT"],
+      "runtimeBoundary": "synchronous MySQL 5.7 read model under Baota Node API; existing Worker and Crawler queues are observed but no dashboard daemon is created",
+      "imageEvidence": ["concept 61 platform operations overview", "high resolution 10 platform operations cockpit"],
+      "verificationRunId": "d424c7a8-eb72-4ddd-b9aa-3ce93ffbbe96",
       "status": "module_verified"
     }
   },

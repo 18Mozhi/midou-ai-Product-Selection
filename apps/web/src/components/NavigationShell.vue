@@ -21,6 +21,7 @@ import NotificationCenter from "./NotificationCenter.vue";
 import AutomationRuleCenter from "./AutomationRuleCenter.vue";
 import ReportCenter from "./ReportCenter.vue";
 import OrganizationAdminCenter from "./OrganizationAdminCenter.vue";
+import PlatformDashboard from "./PlatformDashboard.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -254,6 +255,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
     () => props.shell === "member" && routePath === "/reports",
   ),
   isOrganizationAdmin = computed(() => props.shell === "organization_admin" && routePath.startsWith("/org-admin")),
+  isPlatformDashboard = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin"),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
   ),
@@ -284,6 +286,8 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
 const phaseLabel = computed(() =>
   isOrganizationAdmin.value
     ? "P06"
+    : isPlatformDashboard.value
+      ? "P06"
     : isTasks.value || isApprovals.value || isNotifications.value
     ? "P05"
     : isTrends.value ||
@@ -305,6 +309,8 @@ const phaseLabel = computed(() =>
 const pageSummary = computed(() =>
   isOrganizationAdmin.value
     ? "组织资料、成员、角色、工作区、团队、审批、Token 与审计均受当前组织权限和审计边界保护。"
+    : isPlatformDashboard.value
+      ? "来源健康、任务、队列、质量、文件增长和告警均来自平台当前运行事实。"
     : isTasks.value || isApprovals.value || isNotifications.value
     ? "任务状态、负责人、期限、评论、转交和 SLA 均由当前工作区真实 API 驱动。"
     : isSourcing.value
@@ -524,6 +530,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           :route-path="routePath"
           :organization-id="guard?.organization_id || ''"
         />
+        <PlatformDashboard v-else-if="isPlatformDashboard" :api-base-url="apiBaseUrl" />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"

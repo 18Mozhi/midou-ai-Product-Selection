@@ -1717,6 +1717,54 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/dashboard:
+    get:
+      summary: Read the audited platform operations dashboard
+      description: Requires platform:operate. Aggregates current MySQL facts across organizations without exposing credentials, payloads or file paths; a missing terminal sample returns a null success rate.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - name: window
+          in: query
+          schema: { type: string, enum: [15m, 24h, 7d, 30d], default: 24h }
+      responses:
+        '200':
+          description: Current source, task, queue, quality, file growth and alert facts
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, request_id, trace_id]
+                properties:
+                  data:
+                    type: object
+                    required: [window, summary, queues, provider_health, task_trend, health_signals, alerts, activity, observed_at]
+                    properties:
+                      window: { type: string, enum: [15m, 24h, 7d, 30d] }
+                      summary:
+                        type: object
+                        properties:
+                          active_organizations: { type: integer, minimum: 0 }
+                          active_users: { type: integer, minimum: 0 }
+                          enabled_providers: { type: integer, minimum: 0 }
+                          task_success_rate: { type: number, nullable: true, minimum: 0, maximum: 100 }
+                          queue_backlog: { type: integer, minimum: 0 }
+                          open_alerts: { type: integer, minimum: 0 }
+                          storage_bytes: { type: integer, minimum: 0 }
+                          file_growth_bytes: { type: integer, minimum: 0 }
+                      queues: { type: array, items: { type: object } }
+                      provider_health: { type: array, items: { type: object } }
+                      task_trend: { type: array, items: { type: object } }
+                      health_signals: { type: array, items: { type: object } }
+                      alerts: { type: array, items: { type: object } }
+                      activity: { type: array, items: { type: object } }
+                      observed_at: { type: string, format: date-time }
+                  request_id: { type: string }
+                  trace_id: { type: string }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
 components:
   securitySchemes:
     BearerAuth:

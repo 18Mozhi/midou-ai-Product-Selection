@@ -79,6 +79,9 @@ import { registerReportRoutes } from "./report-routes.js";
 import { OrganizationAdminService } from "./organization-admin-service.js";
 import { MySqlOrganizationAdminRepository } from "./mysql-organization-admin-repository.js";
 import { registerOrganizationAdminRoutes } from "./organization-admin-routes.js";
+import { PlatformDashboardService } from "./platform-dashboard-service.js";
+import { MySqlPlatformDashboardRepository } from "./mysql-platform-dashboard-repository.js";
+import { registerPlatformDashboardRoutes } from "./platform-dashboard-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -388,6 +391,15 @@ registerOrganizationAdminRoutes(app, {
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",
   webOrigin: config.app.webOrigin,
+});
+registerPlatformDashboardRoutes(app, {
+  service: new PlatformDashboardService(
+    new MySqlPlatformDashboardRepository(pool, config.platformDashboard.queueWarning, config.platformDashboard.errorLimit),
+    config.platformDashboard.defaultWindow,
+  ),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
 });
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {

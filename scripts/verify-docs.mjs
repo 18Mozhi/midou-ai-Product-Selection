@@ -58,6 +58,8 @@ const required = [
   'plans/phase-04-selection-decision.md', 'plans/phase-05-collaboration-realtime.md',
   'plans/phase-06-admin-open-platform.md', 'plans/phase-07-release-production.md',
   'plans/phase-08-scale-ha.md'
+  ,'verification/modules/M06-02.json', 'docs/architecture/m06-02-platform-dashboard.md',
+  'docs/runbooks/m06-02-platform-dashboard.md'
 ];
 
 for (const file of required) await access(resolve(process.cwd(), file));

@@ -122,6 +122,7 @@ export interface RuntimeConfig {
   automations: { pollMs: number; leaseSeconds: number; retryLimit: number; defaultRateLimit: number };
   reports: { pollMs: number; leaseSeconds: number; retryLimit: number; exportTtlHours: number; maxRows: number; exportRoot: string };
   organizationAdmin: { invitationTtlHours: number; tokenDefaultTtlDays: number; tokenMaxActive: number };
+  platformDashboard: { defaultWindow: "15m"|"24h"|"7d"|"30d"; queueWarning: number; errorLimit: number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -552,6 +553,11 @@ export function loadRuntimeConfig(
       tokenDefaultTtlDays: integer(env, "ORG_TOKEN_DEFAULT_TTL_DAYS", 90, 1, 365),
       tokenMaxActive: integer(env, "ORG_TOKEN_MAX_ACTIVE", 20, 1, 200),
     },
+    platformDashboard: {
+      defaultWindow: text(env, "PLATFORM_DASHBOARD_DEFAULT_WINDOW", "24h") as "15m"|"24h"|"7d"|"30d",
+      queueWarning: integer(env, "PLATFORM_DASHBOARD_QUEUE_WARNING", 1000, 1, 1000000),
+      errorLimit: integer(env, "PLATFORM_DASHBOARD_ERROR_LIMIT", 20, 1, 100),
+    },
     evidence: {
       maxRawBytes: integer(
         env,
@@ -574,6 +580,8 @@ export function loadRuntimeConfig(
       "AUTH_PASSWORD_MAX_LENGTH",
       "must be greater than or equal to AUTH_PASSWORD_MIN_LENGTH",
     );
+  if (!["15m","24h","7d","30d"].includes(base.platformDashboard.defaultWindow))
+    throw new ConfigError("PLATFORM_DASHBOARD_DEFAULT_WINDOW", "must be 15m, 24h, 7d or 30d");
   if (!/^[A-Za-z0-9._-]{1,80}$/.test(base.security.credentialsMasterKeyVersion))
     throw new ConfigError(
       "CREDENTIALS_MASTER_KEY_VERSION",

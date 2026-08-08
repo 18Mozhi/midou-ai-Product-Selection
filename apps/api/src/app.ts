@@ -135,6 +135,8 @@ import { ReportServiceError } from "./report-service.js";
 import { registerReportRoutes, type ReportRouteOptions } from "./report-routes.js";
 import { OrganizationAdminError } from "./organization-admin-service.js";
 import { registerOrganizationAdminRoutes, type OrganizationAdminRouteOptions } from "./organization-admin-routes.js";
+import { PlatformDashboardError } from "./platform-dashboard-service.js";
+import { registerPlatformDashboardRoutes, type PlatformDashboardRouteOptions } from "./platform-dashboard-routes.js";
 
 export interface BuildAppOptions {
   version?: string;
@@ -172,6 +174,7 @@ export interface BuildAppOptions {
   automations?: AutomationRouteOptions;
   reports?: ReportRouteOptions;
   organizationAdmin?: OrganizationAdminRouteOptions;
+  platformDashboard?: PlatformDashboardRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -337,6 +340,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if (options.automations) registerAutomationRoutes(app, options.automations);
   if (options.reports) registerReportRoutes(app, options.reports);
   if (options.organizationAdmin) registerOrganizationAdminRoutes(app, options.organizationAdmin);
+  if (options.platformDashboard) registerPlatformDashboardRoutes(app, options.platformDashboard);
 
   app.setErrorHandler(
     async (
@@ -412,6 +416,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         error instanceof AutomationServiceError ? error : null;
       const reportError = error instanceof ReportServiceError ? error : null;
       const organizationAdminError = error instanceof OrganizationAdminError ? error : null;
+      const platformDashboardError = error instanceof PlatformDashboardError ? error : null;
       const trendError =
         error instanceof TrendServiceError
           ? (error as TrendServiceError)
@@ -463,6 +468,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         automationError?.statusCode ??
         reportError?.statusCode ??
         organizationAdminError?.statusCode ??
+        platformDashboardError?.statusCode ??
         trendError?.statusCode ??
         opportunityError?.statusCode ??
         scoringError?.statusCode ??
@@ -503,6 +509,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         automationError?.code ??
         reportError?.code ??
         organizationAdminError?.code ??
+        platformDashboardError?.code ??
             trendError?.code ??
             opportunityError?.code ??
             scoringError?.code ??
@@ -521,6 +528,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             notificationError?.message ??
             realtimeError?.message ??
             organizationAdminError?.message ??
+            platformDashboardError?.message ??
             trendError?.message ??
             opportunityError?.message ??
             scoringError?.message ??
@@ -566,6 +574,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         automationError?.actionHint ??
         reportError?.actionHint ??
         organizationAdminError?.actionHint ??
+        platformDashboardError?.actionHint ??
             trendError?.actionHint ??
             opportunityError?.actionHint ??
             scoringError?.actionHint ??

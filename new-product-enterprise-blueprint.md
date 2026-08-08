@@ -275,7 +275,7 @@ M04-07 实现合同：AI 辅助分析只读取当前组织、当前工作区内�
 
 | 模块 | 页面 | 必须展示/操作 |
 |---|---|---|
-| 平台驾驶舱 | `/platform-admin/overview` | 活跃组织、用户、来源健康、任务成功率、队列积压、错误、数据增长、告警 |
+| 平台驾驶舱 | `/platform-admin`（`/overview` 不作为第二入口） | 活跃组织、用户、来源健康、任务成功率、队列积压、错误、数据增长、告警 |
 | 组织与账号 | `/platform-admin/organizations` | 创建组织、创建组织管理员、冻结/恢复、组织状态、隔离检查 |
 | 平台管理员 | `/platform-admin/admins` | 创建运营/安全/超级管理员、角色、会话、强制改密、禁用 |
 | 来源注册中心 | `/platform-admin/providers` | 所有来源、连接、健康、限流、解析版本、负责人、启停、审核 |
@@ -288,6 +288,13 @@ M04-07 实现合同：AI 辅助分析只读取当前组织、当前工作区内�
 | 安全与审计 | `/platform-admin/security` | 登录日志、会话、风险事件、审计、权限变更、导出、请求链路 |
 | 监控与运维 | `/platform-admin/operations` | API、DB、Redis、Worker、Crawler、队列、慢查询、P95/P99、版本、事件 |
 | 商业运营 | `/platform-admin/commercial` | 套餐、配额、订阅状态、用量、账期、人工调整和审计 |
+
+#### M06-02 平台驾驶舱实现基线
+
+- 驾驶舱只聚合 MySQL 5.7 已持久化事实；任务成功率仅使用成功/失败终态，没有终态样本时返回 `null`，来源没有时间窗样本时显示“未知”。
+- 页面和 `GET /api/v1/platform/dashboard` 要求 `platform:operate`，不返回凭证、Cookie、原始 payload 或内部文件路径；跨组织只显示聚合数及告警关联 ID，不展示组织业务内容。
+- 每次读取写入 `platform_dashboard_views` 和全局 `platform_audit_events`，携带 request_id、trace_id、操作者、时间窗与观测时间。
+- `PLATFORM_DASHBOARD_DEFAULT_WINDOW`、`PLATFORM_DASHBOARD_QUEUE_WARNING`、`PLATFORM_DASHBOARD_ERROR_LIMIT` 由宝塔环境配置并在重启 Node API 后生效；驾驶舱仅观察既有队列，不创建面板外服务，也不声明 P08 容量。
 
 ### 4.3 平台管理员初始化
 
