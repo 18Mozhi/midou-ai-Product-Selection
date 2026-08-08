@@ -428,6 +428,10 @@ flowchart LR
 
 宝塔 Node Worker 以租约消费任务、审批和竞品事务 Outbox，按 `source_event_id + recipient_id` 去重生成当前组织、工作区、当前用户的站内通知。通知读取必须叠加 recipient_id，已读动作和偏好使用幂等键与版本锁并写审计。偏好可按任务、审批、竞品和渠道控制；邮件在没有真实 Provider 合同前固定为 placeholder，只记录 pending_placeholder 或 suppressed，绝不向外发送。SSE 由 M05-04 从通知事实读取，不与通知 Worker 抢占 Outbox。
 
+#### M05-04 SSE 与重放实现基线
+
+通知投影同步写入带 BIGINT 单调游标的 `realtime_events`。SSE 经会话、`notification:read` 和组织/工作区/接收人四重范围校验，支持 Last-Event-ID、有限重放、心跳、连接到期和浏览器去重；只传通知失效提示，真实详情继续读取 API。重放窗口与连接上限产生明确 409/503。当前仅为宝塔 S0 单机 MySQL 轮询与进程内连接计数，P08 前不得宣称多节点或 10,000 用户能力。
+
 所有事件包含：`event_id`、`organization_id`、`actor_id`、`resource_type`、`resource_id`、`occurred_at`、`schema_version`、`request_id`、`trace_id`、最小业务 payload。
 
 首批事件：

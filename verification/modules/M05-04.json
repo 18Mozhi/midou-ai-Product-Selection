@@ -1,0 +1,83 @@
+{
+  "moduleId": "M05-04",
+  "phaseId": "P05",
+  "name": "SSE and Replay",
+  "dependencies": ["M05-03"],
+  "atomicTasks": [
+    {
+      "id": "M05-04.A01",
+      "evidence": "scope current-recipient SSE replay reconnection cross-page updates only"
+    },
+    {
+      "id": "M05-04.A02",
+      "evidence": "monotonic realtime event cursor notification payload contracts"
+    },
+    {
+      "id": "M05-04.A03",
+      "evidence": "MySQL57 realtime events monotonic index unique notification migration rollback"
+    },
+    {
+      "id": "M05-04.A04",
+      "evidence": "cursor validation replay window scope and audit services"
+    },
+    {
+      "id": "M05-04.A05",
+      "evidence": "notification projection persists replay before S0 SSE polling"
+    },
+    {
+      "id": "M05-04.A06",
+      "evidence": "OpenAPI text event stream Last-Event-ID errors permission contracts"
+    },
+    {
+      "id": "M05-04.A07",
+      "evidence": "notification realtime state desktop and 390 layout"
+    },
+    {
+      "id": "M05-04.A08",
+      "evidence": "connect reconnect replay dedupe refresh and degraded recovery"
+    },
+    {
+      "id": "M05-04.A09",
+      "evidence": "notification read API organization workspace recipient stream guards"
+    },
+    {
+      "id": "M05-04.A10",
+      "evidence": "poll heartbeat replay capacity duration env schema Baota restart"
+    },
+    {
+      "id": "M05-04.A11",
+      "evidence": "connection audit heartbeat stream errors request trace logs"
+    },
+    {
+      "id": "M05-04.A12",
+      "evidence": "cursor replay limit missing invalid and boundary unit tests"
+    },
+    {
+      "id": "M05-04.A13",
+      "evidence": "OpenAPI SSE event DTO cursor and client compatibility contracts"
+    },
+    {
+      "id": "M05-04.A14",
+      "evidence": "MySQL57 monotonic replay isolation dedupe and audit integration"
+    },
+    {
+      "id": "M05-04.A15",
+      "evidence": "Playwright desktop 390 reconnect cursor visual regression"
+    },
+    {
+      "id": "M05-04.A16",
+      "evidence": "replay overflow capacity expiry dependency and reconnect drills"
+    },
+    {
+      "id": "M05-04.A17",
+      "evidence": "blueprint Feature Map env architecture runbook migration rollback S0 handoff"
+    }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m05-04/realtime-sse.test.mjs",
+    "node scripts/verify-realtime-live.mjs",
+    "npx playwright test tests/e2e/m05-04-realtime.spec.ts",
+    "npm run verify:docs"
+  ]
+}

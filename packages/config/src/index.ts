@@ -112,6 +112,13 @@ export interface RuntimeConfig {
     retryLimit: number;
     emailDeliveryMode: "placeholder";
   };
+  realtime: {
+    pollMs: number;
+    heartbeatMs: number;
+    replayLimit: number;
+    maxConnectionSeconds: number;
+    maxConnections: number;
+  };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -509,6 +516,19 @@ export function loadRuntimeConfig(
       ),
       retryLimit: integer(env, "NOTIFICATION_OUTBOX_RETRY_LIMIT", 3, 1, 10),
       emailDeliveryMode: "placeholder" as const,
+    },
+    realtime: {
+      pollMs: integer(env, "REALTIME_POLL_MS", 1000, 250, 10000),
+      heartbeatMs: integer(env, "REALTIME_HEARTBEAT_MS", 15000, 5000, 60000),
+      replayLimit: integer(env, "REALTIME_REPLAY_LIMIT", 100, 1, 1000),
+      maxConnectionSeconds: integer(
+        env,
+        "REALTIME_MAX_CONNECTION_SECONDS",
+        55,
+        10,
+        300,
+      ),
+      maxConnections: integer(env, "REALTIME_MAX_CONNECTIONS", 200, 1, 2000),
     },
     evidence: {
       maxRawBytes: integer(

@@ -67,6 +67,9 @@ import { registerApprovalRoutes } from "./approval-routes.js";
 import { NotificationService } from "./notification-service.js";
 import { MySqlNotificationRepository } from "./mysql-notification-repository.js";
 import { registerNotificationRoutes } from "./notification-routes.js";
+import { RealtimeService } from "./realtime-service.js";
+import { MySqlRealtimeRepository } from "./mysql-realtime-repository.js";
+import { registerRealtimeRoutes } from "./realtime-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -336,6 +339,20 @@ registerNotificationRoutes(app, {
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",
   webOrigin: config.app.webOrigin,
+});
+registerRealtimeRoutes(app, {
+  service: new RealtimeService(
+    new MySqlRealtimeRepository(pool),
+    config.realtime.replayLimit,
+  ),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
+  pollMs: config.realtime.pollMs,
+  heartbeatMs: config.realtime.heartbeatMs,
+  maxConnectionSeconds: config.realtime.maxConnectionSeconds,
+  maxConnections: config.realtime.maxConnections,
 });
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {

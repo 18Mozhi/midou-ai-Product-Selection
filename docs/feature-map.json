@@ -44,9 +44,10 @@
       "M04-07",
       "M05-01",
       "M05-02",
-      "M05-03"
+      "M05-03",
+      "M05-04"
     ],
-    "activeModules": ["M05-04"],
+    "activeModules": ["M05-05"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1133,6 +1134,34 @@
       ],
       "verificationRunId": "72378171-fd60-4a38-99ed-ae5fba560eb6",
       "status": "module_verified"
+    },
+    "realtimeSse": {
+      "module": "M05-04",
+      "entrypoints": [
+        "../apps/api/src/realtime-service.ts",
+        "../apps/api/src/mysql-realtime-repository.ts",
+        "../apps/api/src/realtime-routes.ts",
+        "../apps/worker/src/notification-outbox-worker.ts",
+        "../apps/web/src/components/NotificationCenter.vue"
+      ],
+      "routes": ["/api/v1/realtime/events", "/notifications"],
+      "scope": "authenticated notification read organization workspace and current recipient scoped monotonic SSE replay",
+      "truthBoundary": "SSE only invalidates notification facts; Last-Event-ID is monotonic and replay is bounded",
+      "permission": "notification:read with current session and recipient scope",
+      "configuration": [
+        "REALTIME_POLL_MS",
+        "REALTIME_HEARTBEAT_MS",
+        "REALTIME_REPLAY_LIMIT",
+        "REALTIME_MAX_CONNECTION_SECONDS",
+        "REALTIME_MAX_CONNECTIONS"
+      ],
+      "runtimeBoundary": "Baota S0 single-host MySQL polling and process-local connection accounting; no P08 multi-node or 10000-user claim",
+      "imageEvidence": [
+        "concept 17 notification center",
+        "concept 18 message detail"
+      ],
+      "verificationRunId": "3bfab847-b04c-41f1-9817-e1b5fe7c64cb",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -1382,6 +1411,11 @@
       "status": "M05-03_module_verified"
     },
     {
+      "prefix": "/api/v1/realtime",
+      "domain": "realtime",
+      "status": "M05-04_module_verified"
+    },
+    {
       "prefix": "/api/v1/subscriptions",
       "domain": "monitoring",
       "status": "planned"
@@ -1397,7 +1431,6 @@
       "status": "planned"
     },
     { "prefix": "/api/v1/reports", "domain": "reporting", "status": "planned" },
-    { "prefix": "/api/v1/realtime", "domain": "realtime", "status": "planned" },
     {
       "prefix": "/api/v1/platform",
       "domain": "platform",

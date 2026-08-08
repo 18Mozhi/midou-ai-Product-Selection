@@ -38,7 +38,16 @@
 .notification-center header > div:last-child,
 .notification-center dialog div {
   display: flex;
+  align-items: center;
   gap: 9px;
+}
+.realtime-badge {
+  font-size: 11px;
+  color: #7bd9bd;
+  white-space: nowrap;
+}
+.realtime-badge[data-state="reconnecting"] {
+  color: #f4b36d;
 }
 .notification-notice {
   background: #1b2340;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import "../notification-center.css";
 type State =
   | "loading"
@@ -48,7 +48,11 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     version: 1,
   }),
   busy = ref(false),
+  realtimeState = ref<"connecting" | "connected" | "reconnecting">(
+    "connecting",
+  ),
   visible = computed(() => items.value);
+let stream: EventSource | null = null;
 const label = (v: string) =>
     (
       ({
@@ -155,7 +159,30 @@ async function savePreferences() {
     busy.value = false;
   }
 }
-onMounted(load);
+function connectRealtime() {
+  const cursor = sessionStorage.getItem("scoutops:last-event-id") ?? "0";
+  stream = new EventSource(
+    `${props.apiBaseUrl}/realtime/events?last_event_id=${cursor}`,
+    { withCredentials: true },
+  );
+  stream.onopen = () => {
+    realtimeState.value = "connected";
+  };
+  stream.onerror = () => {
+    realtimeState.value = "reconnecting";
+  };
+  stream.addEventListener("notification.changed", (event) => {
+    const message = event as MessageEvent;
+    if (message.lastEventId)
+      sessionStorage.setItem("scoutops:last-event-id", message.lastEventId);
+    void load();
+  });
+}
+onMounted(() => {
+  void load();
+  connectRealtime();
+});
+onUnmounted(() => stream?.close());
 </script>
 <template>
   <section class="notification-center">
@@ -166,6 +193,13 @@ onMounted(load);
         <span>只显示当前组织、工作区和当前用户的事务事件投影。</span>
       </div>
       <div>
+        <span class="realtime-badge" :data-state="realtimeState">{{
+          realtimeState === "connected"
+            ? "实时已连接"
+            : realtimeState === "connecting"
+              ? "实时连接中"
+              : "实时重连中"
+        }}</span>
         <button class="secondary" @click="showPreferences = true">
           通知偏好</button
         ><button @click="markAll">全部已读</button>

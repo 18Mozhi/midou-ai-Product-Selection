@@ -144,6 +144,26 @@ export class NotificationOutboxWorker {
         [event.id, recipient],
       ),
       id = String(found[0]!.id);
+    try {
+      await this.pool.query(
+        "INSERT IGNORE INTO realtime_events (organization_id,workspace_id,recipient_id,notification_id,event_type,payload_json,created_at) VALUES (?,?,?,?, 'notification.changed',?,?)",
+        [
+          event.organization_id,
+          event.workspace_id,
+          recipient,
+          id,
+          JSON.stringify({
+            notification_id: id,
+            category,
+            severity:
+              event.event_type === "approval.overdue" ? "warning" : "info",
+          }),
+          now,
+        ],
+      );
+    } catch (error) {
+      if ((error as { code?: string }).code !== "ER_NO_SUCH_TABLE") throw error;
+    }
     await this.pool.query(
       "INSERT IGNORE INTO notification_deliveries (id,organization_id,workspace_id,notification_id,recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES (?,?,?,?,?,'in_app',?,0,?,?)",
       [
