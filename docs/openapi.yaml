@@ -35,8 +35,12 @@ x-scoutops-file-audit:
   downloadGrantMaximumSeconds: 300
   sensitiveMetadataKeys: [password, secret, token, cookie, authorization, api_key, private_key]
 x-scoutops-baota-s0:
-  productionDeployed: false
+  productionDeployed: true
+  deploymentStatus: healthy
   manifest: infra/baota/service-manifest.json
+  targetHost: 192.168.1.220
+  targetDomain: midouai.mozhiz.cn
+  productionEvidence: .artifacts/verification/baota-production-evidence.json
   livenessPath: /api/v1/health/live
   readinessPath: /api/v1/health/ready
   asyncRuntimeStatus: structured Worker and Crawler heartbeat logs in Baota

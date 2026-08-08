@@ -71,6 +71,9 @@ const required = [
   'verification/security-gate.json', 'scripts/verify-security-gate.mjs',
   'verification/modules/M07-02.json', 'docs/architecture/m07-02-security-gate.md',
   'docs/runbooks/m07-02-security-gate.md',
+  'scripts/verify-baota-deployment.mjs', 'verification/baota-production-evidence.schema.json',
+  'verification/modules/M07-03.json', 'docs/architecture/m07-03-baota-deployment.md',
+  'docs/runbooks/m07-03-baota-deployment.md',
   'docs/runbooks/m06-04-security-operations.md'
 ];
 

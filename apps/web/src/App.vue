@@ -178,7 +178,7 @@ onMounted(() => {
       <MySqlFoundation v-else-if="isMySqlView" />
       <ApiFoundation v-else-if="isApiView" :api-base-url="apiBase" />
       <FileAuditFoundation v-else-if="isFileAuditView" />
-      <DeploymentFoundation v-else />
+      <DeploymentFoundation v-else :api-base-url="apiBase" />
     </main>
   </div>
 </template>

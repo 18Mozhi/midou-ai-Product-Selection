@@ -144,9 +144,12 @@
       "manifest": "../infra/baota/service-manifest.json",
       "nginxTemplate": "../infra/baota/nginx/scoutops.conf.template",
       "preflight": "../scripts/verify-baota-s0.mjs",
-      "productionDeployed": false,
+      "productionDeployed": true,
+      "deploymentStatus": "healthy",
+      "target": "192.168.1.220 / midouai.mozhiz.cn",
+      "productionVerifier": "../scripts/verify-baota-deployment.mjs --production",
       "capacity": "S0 single host, 100 users and 5-20 concurrent business users",
-      "status": "phase_verified"
+      "status": "module_verified"
     },
     "localIdentity": {
       "module": "M01-01",
