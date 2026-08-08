@@ -88,6 +88,9 @@ import { registerCollectionConsoleRoutes } from "./collection-console-routes.js"
 import { SecurityOperationsService } from "./security-operations-service.js";
 import { MySqlSecurityOperationsRepository } from "./mysql-security-operations-repository.js";
 import { registerSecurityOperationsRoutes } from "./security-operations-routes.js";
+import { OpenPlatformService } from "./open-platform-service.js";
+import { MySqlOpenPlatformRepository } from "./mysql-open-platform-repository.js";
+import { registerOpenPlatformRoutes } from "./open-platform-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -414,6 +417,7 @@ registerCollectionConsoleRoutes(app, {
   secureCookie: config.nodeEnv === "production",
 });
 registerSecurityOperationsRoutes(app,{service:new SecurityOperationsService(new MySqlSecurityOperationsRepository(pool),config.securityOperations.defaultWindow,config.securityOperations.recentLimit),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
+registerOpenPlatformRoutes(app,{service:new OpenPlatformService(new MySqlOpenPlatformRepository(pool),config.security.credentialsMasterKey,config.security.credentialsMasterKeyVersion,{clientTtlDays:config.openPlatform.clientTtlDays,defaultQuota:config.openPlatform.defaultQuotaPerMinute,maxQuota:config.openPlatform.maxQuotaPerMinute,timestampToleranceSeconds:config.openPlatform.timestampToleranceSeconds,nonceTtlSeconds:config.openPlatform.nonceTtlSeconds}),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production",webOrigin:config.app.webOrigin,version:config.app.version});
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {
     evidenceRoot: config.storage.evidenceRoot,

@@ -125,6 +125,7 @@ export interface RuntimeConfig {
   platformDashboard: { defaultWindow: "15m"|"24h"|"7d"|"30d"; queueWarning: number; errorLimit: number };
   collectionConsole: { recentLimit: number };
   securityOperations: { defaultWindow: "24h"|"7d"|"30d"; recentLimit: number };
+  openPlatform: { clientTtlDays:number; defaultQuotaPerMinute:number; maxQuotaPerMinute:number; timestampToleranceSeconds:number; nonceTtlSeconds:number; webhookPollMs:number; webhookLeaseSeconds:number; webhookTimeoutMs:number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -562,6 +563,16 @@ export function loadRuntimeConfig(
     },
     collectionConsole: { recentLimit: integer(env, "COLLECTION_CONSOLE_RECENT_LIMIT", 50, 10, 200) },
     securityOperations: { defaultWindow: text(env,"SECURITY_OPERATIONS_DEFAULT_WINDOW","24h") as "24h"|"7d"|"30d", recentLimit: integer(env,"SECURITY_OPERATIONS_RECENT_LIMIT",50,10,200) },
+    openPlatform: {
+      clientTtlDays: integer(env,"OPEN_API_CLIENT_TTL_DAYS",90,1,365),
+      defaultQuotaPerMinute: integer(env,"OPEN_API_DEFAULT_QUOTA_PER_MINUTE",60,1,10000),
+      maxQuotaPerMinute: integer(env,"OPEN_API_MAX_QUOTA_PER_MINUTE",1000,1,10000),
+      timestampToleranceSeconds: integer(env,"OPEN_API_TIMESTAMP_TOLERANCE_SECONDS",300,30,900),
+      nonceTtlSeconds: integer(env,"OPEN_API_NONCE_TTL_SECONDS",600,60,3600),
+      webhookPollMs: integer(env,"WEBHOOK_DELIVERY_POLL_MS",2000,250,60000),
+      webhookLeaseSeconds: integer(env,"WEBHOOK_DELIVERY_LEASE_SECONDS",60,30,3600),
+      webhookTimeoutMs: integer(env,"WEBHOOK_DELIVERY_TIMEOUT_MS",10000,1000,30000),
+    },
     evidence: {
       maxRawBytes: integer(
         env,
@@ -587,6 +598,7 @@ export function loadRuntimeConfig(
   if (!["15m","24h","7d","30d"].includes(base.platformDashboard.defaultWindow))
     throw new ConfigError("PLATFORM_DASHBOARD_DEFAULT_WINDOW", "must be 15m, 24h, 7d or 30d");
   if(!["24h","7d","30d"].includes(base.securityOperations.defaultWindow))throw new ConfigError("SECURITY_OPERATIONS_DEFAULT_WINDOW","must be 24h, 7d or 30d");
+  if(base.openPlatform.defaultQuotaPerMinute>base.openPlatform.maxQuotaPerMinute)throw new ConfigError("OPEN_API_DEFAULT_QUOTA_PER_MINUTE","must not exceed OPEN_API_MAX_QUOTA_PER_MINUTE");
   if (!/^[A-Za-z0-9._-]{1,80}$/.test(base.security.credentialsMasterKeyVersion))
     throw new ConfigError(
       "CREDENTIALS_MASTER_KEY_VERSION",

@@ -29,6 +29,7 @@ import { ApprovalEscalationWorker } from "./approval-escalation-worker.js";
 import { NotificationOutboxWorker } from "./notification-outbox-worker.js";
 import { AutomationWorker } from "./automation-worker.js";
 import { ReportExportWorker } from "./report-export-worker.js";
+import { WebhookDeliveryWorker } from "./webhook-delivery-worker.js";
 
 const config = loadRuntimeConfig(process.env, "worker");
 const pool = createDatabasePool(config);
@@ -118,6 +119,7 @@ const reportExports = new ReportExportWorker(
   config.reports.retryLimit,
   config.reports.maxRows,
 );
+const webhookDeliveries = new WebhookDeliveryWorker(pool,{workerId:config.identity.workerId,masterKey:config.security.credentialsMasterKey,leaseSeconds:config.openPlatform.webhookLeaseSeconds,timeoutMs:config.openPlatform.webhookTimeoutMs,retrySeconds:[60,300,900]});
 let stopping = false,
   authPolling = false,
   collectionPolling = false,
@@ -132,7 +134,8 @@ let stopping = false,
   approvalPolling = false,
   notificationPolling = false,
   automationPolling = false,
-  reportPolling = false;
+  reportPolling = false,
+  webhookPolling = false;
 
 const heartbeat = () =>
   console.log(
@@ -152,6 +155,7 @@ const heartbeat = () =>
       notification_outbox: "registered",
       automation_rules: "registered",
       report_exports: "registered",
+      webhook_deliveries: "registered",
       config_fingerprint: config.configFingerprint,
       observed_at: new Date().toISOString(),
     }),
@@ -562,6 +566,7 @@ const pollReports = async () => {
     reportPolling = false;
   }
 };
+const pollWebhooks=async()=>{if(stopping||webhookPolling||!config.security.credentialsMasterKey)return;webhookPolling=true;try{await webhookDeliveries.runOnce();}catch(error){console.error(JSON.stringify({service:"product-scout-worker",queue:"webhook_deliveries",status:"dependency_failed",error:error instanceof Error?error.message:"unknown",observed_at:new Date().toISOString()}));}finally{webhookPolling=false;}};
 
 heartbeat();
 const heartbeatTimer = setInterval(heartbeat, config.runtime.workerHeartbeatMs);
@@ -612,6 +617,7 @@ const reportTimer = setInterval(
   () => void pollReports(),
   config.reports.pollMs,
 );
+const webhookTimer=setInterval(()=>void pollWebhooks(),config.openPlatform.webhookPollMs);
 void pollAuth();
 void pollCollection();
 void pollTrends();
@@ -626,6 +632,7 @@ void pollApprovals();
 void pollNotifications();
 void pollAutomations();
 void pollReports();
+void pollWebhooks();
 
 const stop = async (signal: string) => {
   if (stopping) return;
@@ -645,6 +652,7 @@ const stop = async (signal: string) => {
   clearInterval(notificationTimer);
   clearInterval(automationTimer);
   clearInterval(reportTimer);
+  clearInterval(webhookTimer);
   while (
     authPolling ||
     collectionPolling ||
@@ -659,7 +667,8 @@ const stop = async (signal: string) => {
     approvalPolling ||
     notificationPolling ||
     automationPolling ||
-    reportPolling
+    reportPolling ||
+    webhookPolling
   )
     await new Promise((resolve) => setTimeout(resolve, 25));
   await redisStore.close();

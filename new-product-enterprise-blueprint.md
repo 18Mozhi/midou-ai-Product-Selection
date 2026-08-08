@@ -308,6 +308,13 @@ M04-07 实现合同：AI 辅助分析只读取当前组织、当前工作区内�
 - 查询明确排除会话 token/hash、组织 Token hash、凭证密文/nonce/auth tag、Cookie 以及原始 IP/User-Agent；Token 仅展示前缀，凭证仅展示指纹与 key_version。
 - 凭证轮换、会话撤销和 Token 管理继续使用既有版本锁、幂等、原因、最小 capability 与审计接口；本视图只读且记录 `platform.security.operations.read`。
 
+#### M06-05 开放 API 与 Webhook 实现基线
+
+- `/api/v1/platform/open/*` 是要求 `platform_token:manage`、同源、幂等键、版本和原因的管理面；`/open/v1/*` 使用独立 API Client Bearer、scope、分钟配额、时间戳、持久化 nonce 重放保护和独立用量审计，绝不复用浏览器会话。
+- API Client 密钥和 Webhook 签名密钥仅在创建或轮换成功响应中显示一次；前者只保存 SHA-256 哈希，后者使用凭证主密钥 AES-256-GCM 加密。当前实际开放 scope 仅为 `status:read`，不得为未实现接口发放虚假 scope。
+- Webhook 仅允许无凭证的 HTTPS 443 目标；Worker 每次尝试重新解析 DNS，拒绝私网、环回、链路本地和多播地址，并将 TLS 请求固定到已验证地址。签名覆盖 timestamp、delivery_id 与原始 body，失败按 60/300/900 秒重试，第四次进入死信，人工重放生成新 delivery 并保留来源证据。
+- 管理写入同步记录平台审计和事务 outbox；投递状态写不可变事件。API 与 Worker 均由宝塔管理并读取同一主密钥，本模块维持 S0 单机边界，不声明 P08 容量。
+
 ### 4.3 平台管理员初始化
 
 - 首次部署必须通过一次性安全种子创建平台超级管理员；禁止固定默认账号和默认密码。

@@ -24,6 +24,7 @@ import OrganizationAdminCenter from "./OrganizationAdminCenter.vue";
 import PlatformDashboard from "./PlatformDashboard.vue";
 import CollectionOperationsConsole from "./CollectionOperationsConsole.vue";
 import SecurityOperationsCenter from "./SecurityOperationsCenter.vue";
+import OpenPlatformCenter from "./OpenPlatformCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -304,8 +305,10 @@ const phaseLabel = computed(() =>
             "/platform-admin/credentials",
             "/platform-admin/collection",
             "/platform-admin/data",
-          ].some((path) => routePath.startsWith(path))
+        ].some((path) => routePath.startsWith(path))
         ? "P03"
+        : props.shell === "platform_admin"
+          ? "P06"
         : "P02",
 );
 const pageSummary = computed(() =>
@@ -327,6 +330,8 @@ const pageSummary = computed(() =>
               ? "趋势主题、证据、关注和监控规则均由当前组织与工作区的真实 API 驱动。"
               : phaseLabel.value === "P03"
                 ? "来源、采集运行与证据数据均由对应模块的真实 API 和权限边界驱动。"
+                : phaseLabel.value === "P06"
+                  ? "平台管理数据由真实 API、最小权限、审计与宝塔托管运行边界驱动。"
                 : "导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。",
 );
 const short = (value: string | null) =>
@@ -647,6 +652,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           :api-base-url="apiBaseUrl"
         />
         <SecurityOperationsCenter v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/security'" :api-base-url="apiBaseUrl" />
+        <OpenPlatformCenter v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/open-platform'" :api-base-url="apiBaseUrl" />
         <section v-else class="role-ready-panel">
           <div class="role-ready-hero">
             <span>S</span>

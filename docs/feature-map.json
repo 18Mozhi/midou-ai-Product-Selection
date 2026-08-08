@@ -51,9 +51,10 @@
       "M06-01",
       "M06-02",
       "M06-03",
-      "M06-04"
+      "M06-04",
+      "M06-05"
     ],
-    "activeModules": ["M06-05"],
+    "activeModules": ["M06-06"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1314,6 +1315,19 @@
       "imageEvidence": ["concept 65 logs", "concept 66 security audit", "concept 67 token management", "concept 68 key rotation"],
       "verificationRunId": "b13e605b-9566-4d84-bd8f-71af496bce32",
       "status": "module_verified"
+    },
+    "openPlatform": {
+      "module": "M06-05",
+      "entrypoints": ["../apps/api/src/open-platform-service.ts", "../apps/api/src/mysql-open-platform-repository.ts", "../apps/api/src/open-platform-routes.ts", "../apps/worker/src/webhook-delivery-worker.ts", "../apps/web/src/components/OpenPlatformCenter.vue"],
+      "routes": ["/platform-admin/open-platform", "/api/v1/platform/open", "/api/v1/platform/open/clients", "/api/v1/platform/open/webhooks", "/api/v1/platform/open/deliveries/{deliveryId}/replay", "/open/v1/status"],
+      "scope": "organization-owned API Clients, scopes, per-minute quotas, Webhook endpoints, signed delivery attempts and immutable delivery events",
+      "truthBoundary": "API and Webhook secrets are returned once; only Client hash or AES-256-GCM Webhook ciphertext is persisted; overview never selects secret material",
+      "permission": "platform_token:manage plus same-origin and idempotency for management; independent Bearer timestamp nonce scope quota middleware for /open/v1",
+      "configuration": ["OPEN_API_CLIENT_TTL_DAYS", "OPEN_API_DEFAULT_QUOTA_PER_MINUTE", "OPEN_API_MAX_QUOTA_PER_MINUTE", "OPEN_API_TIMESTAMP_TOLERANCE_SECONDS", "OPEN_API_NONCE_TTL_SECONDS", "WEBHOOK_DELIVERY_POLL_MS", "WEBHOOK_DELIVERY_LEASE_SECONDS", "WEBHOOK_DELIVERY_TIMEOUT_MS"],
+      "runtimeBoundary": "Baota S0 Node API and Node Worker; HTTPS-only per-attempt DNS and private-range rejection; 60/300/900 retry and fourth-attempt dead letter; no multi-node claim",
+      "imageEvidence": ["concept 67 token management", "concept 68 key rotation"],
+      "verificationRunId": "5fdcf027-016b-47d2-938a-4f268a339fb4",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -1521,6 +1535,12 @@
       "view": "DataQualityCenter",
       "domain": "platform",
       "status": "M03-06_implemented"
+    },
+    {
+      "path": "/platform-admin/open-platform",
+      "view": "OpenPlatformCenter",
+      "domain": "open-platform",
+      "status": "M06-05_module_verified"
     }
   ],
   "apiGroups": [
@@ -1612,7 +1632,7 @@
       "domain": "platform",
       "status": "M01-06_audit_and_P03_sources_collection_evidence_provider_sources_implemented_remaining_platform_management_planned"
     },
-    { "prefix": "/open/v1", "domain": "open-platform", "status": "planned" }
+    { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
   ],
   "runtime": [
     {

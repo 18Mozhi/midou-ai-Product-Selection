@@ -1793,6 +1793,64 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '429': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/open:
+    get:
+      summary: List sanitized API Clients, Webhooks and deliveries
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: organization_id, in: query, required: false, schema: { type: string, format: uuid } }]
+      responses: { '200': { description: Sanitized open platform overview, content: { application/json: { schema: { $ref: '#/components/schemas/OpenPlatformEnvelope' } } } }, '401': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' } }
+  /platform/open/clients:
+    post:
+      summary: Create an API Client and return its secret once
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [organization_id, name, scopes, reason], properties: { organization_id: { type: string, format: uuid }, name: { type: string, maxLength: 120 }, scopes: { type: array, items: { type: string, enum: ['status:read'] } }, quota_per_minute: { type: integer, minimum: 1, maximum: 1000 }, reason: { type: string, maxLength: 500 } } } } } }
+      responses: { '201': { description: Secret is present only in this non-replayed response, content: { application/json: { schema: { $ref: '#/components/schemas/OneTimeSecretEnvelope' } } } }, '400': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
+  /platform/open/clients/{clientId}/actions:
+    post:
+      summary: Rotate or revoke an API Client
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: clientId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '200': { description: Versioned result; a rotation secret is returned once }, '409': { $ref: '#/components/responses/Error' } }
+  /platform/open/webhooks:
+    post:
+      summary: Create an HTTPS Webhook and return its signing secret once
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '201': { description: AES-256-GCM encrypted signing secret returned once }, '400': { $ref: '#/components/responses/Error' } }
+  /platform/open/webhooks/{endpointId}:
+    patch:
+      summary: Update a versioned Webhook endpoint
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: endpointId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '200': { description: Updated endpoint }, '409': { $ref: '#/components/responses/Error' } }
+  /platform/open/webhooks/{endpointId}/rotate:
+    post:
+      summary: Rotate a Webhook signing secret
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: endpointId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '200': { description: Signing secret returned once }, '409': { $ref: '#/components/responses/Error' } }
+  /platform/open/webhooks/{endpointId}/test:
+    post:
+      summary: Queue a signed test delivery
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: endpointId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '202': { description: Queued delivery }, '409': { $ref: '#/components/responses/Error' } }
+  /platform/open/deliveries/{deliveryId}/replay:
+    post:
+      summary: Replay a succeeded or dead-letter delivery as a new delivery
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: deliveryId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '202': { description: New queued delivery with source evidence }, '409': { $ref: '#/components/responses/Error' } }
+  /open/v1/status:
+    servers: [{ url: / }]
+    get:
+      summary: Open API status for the authenticated Client organization
+      security: [{ OpenApiClient: [] }]
+      parameters:
+        - { name: X-ScoutOps-Timestamp, in: header, required: true, schema: { type: integer, format: int64 } }
+        - { name: X-ScoutOps-Nonce, in: header, required: true, schema: { type: string, minLength: 16, maxLength: 128 } }
+      responses: { '200': { description: Authenticated status with status:read scope }, '401': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' }, '429': { $ref: '#/components/responses/Error' } }
 components:
   securitySchemes:
     BearerAuth:
@@ -1807,6 +1865,10 @@ components:
       type: apiKey
       in: cookie
       name: __Host-scoutops_mfa_challenge
+    OpenApiClient:
+      type: http
+      scheme: bearer
+      bearerFormat: scoutops-api-client
   parameters:
     Page:
       name: page
@@ -1855,6 +1917,20 @@ components:
         application/json:
           schema: { $ref: '#/components/schemas/ErrorEnvelope' }
   schemas:
+    OneTimeSecretEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        data: { type: object, required: [id, secret, secret_visible_once, version], properties: { id: { type: string, format: uuid }, secret: { type: string, writeOnly: true }, secret_visible_once: { type: boolean, enum: [true] }, version: { type: integer, minimum: 1 } } }
+        request_id: { type: string }
+        trace_id: { type: string }
+    OpenPlatformEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        data: { type: object, required: [clients, webhooks, deliveries, observed_at], properties: { clients: { type: array, items: { type: object, additionalProperties: true } }, webhooks: { type: array, items: { type: object, additionalProperties: true } }, deliveries: { type: array, items: { type: object, additionalProperties: true } }, observed_at: { type: string, format: date-time } } }
+        request_id: { type: string }
+        trace_id: { type: string }
     AutomationRuleCreate:
       type: object
       additionalProperties: false
