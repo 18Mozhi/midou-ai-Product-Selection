@@ -1,14 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "project": "ScoutOps / 实时选品运营平台",
-  "status": "P00_P01_P02_P03_completed_P04_in_progress",
+  "status": "P00_P01_P02_P03_P04_completed_P05_in_progress",
   "sourceOfTruth": "../new-product-enterprise-blueprint.md",
   "locateCommand": "node scripts/locate_flow_v4.mjs \"<keyword>\"",
   "deliveryPlan": "../plans/README.md",
   "implementation": {
-    "currentPhase": "P04",
+    "currentPhase": "P05",
     "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06", "M04-07"],
-    "activeModules": [],
+    "activeModules": ["M05-01"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -433,7 +433,8 @@
   "phaseVerification": {
     "P01": {"runId": "5e4da53f-25ab-4e60-9850-516590896fe0", "status": "phase_verified", "modules": ["M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06"]},
     "P02": {"runId": "f7b41287-a3cd-442a-a212-7a1dd4edf828", "status": "phase_verified", "modules": ["M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06"]},
-    "P03": {"runId": "01b8e9ff-d2c4-4a5a-80b3-673ee96dbea7", "status": "phase_verified", "modules": ["M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07"]}
+    "P03": {"runId": "01b8e9ff-d2c4-4a5a-80b3-673ee96dbea7", "status": "phase_verified", "modules": ["M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07"]},
+    "P04": {"runId": "9bd7c0f3-2430-4262-aac0-1f06bc014fc9", "status": "phase_verified", "modules": ["M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06", "M04-07"]}
   },
   "uiReference": {
     "directory": "../images-html",

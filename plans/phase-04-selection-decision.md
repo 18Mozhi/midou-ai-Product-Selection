@@ -1,6 +1,6 @@
 # P04：趋势、选品机会、竞品、供应链与决策详细执行计划
 
-> 状态：module_verified（M04-01 至 M04-07 已通过模块门禁，等待 P04 阶段门禁）
+> 状态：phase_verified（M04-01 至 M04-07 与 P04 阶段门禁均已通过；run_id/trace_id：`9bd7c0f3-2430-4262-aac0-1f06bc014fc9`）
 > 上游总纲：`new-product-enterprise-blueprint.md`
 > 阶段索引：`plans/README.md`
 > 最低行数：1,000；`npm run verify:plans` 必须自动校验。
