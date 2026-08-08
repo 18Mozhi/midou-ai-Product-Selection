@@ -28,6 +28,7 @@ import { projectBusinessTaskOnce } from "./business-task-projection-worker.js";
 import { ApprovalEscalationWorker } from "./approval-escalation-worker.js";
 import { NotificationOutboxWorker } from "./notification-outbox-worker.js";
 import { AutomationWorker } from "./automation-worker.js";
+import { ReportExportWorker } from "./report-export-worker.js";
 
 const config = loadRuntimeConfig(process.env, "worker");
 const pool = createDatabasePool(config);
@@ -109,6 +110,14 @@ const automation = new AutomationWorker(
   config.automations.leaseSeconds,
   config.automations.retryLimit,
 );
+const reportExports = new ReportExportWorker(
+  pool,
+  config.identity.workerId,
+  config.reports.exportRoot,
+  config.reports.leaseSeconds,
+  config.reports.retryLimit,
+  config.reports.maxRows,
+);
 let stopping = false,
   authPolling = false,
   collectionPolling = false,
@@ -122,7 +131,8 @@ let stopping = false,
   businessTaskPolling = false,
   approvalPolling = false,
   notificationPolling = false,
-  automationPolling = false;
+  automationPolling = false,
+  reportPolling = false;
 
 const heartbeat = () =>
   console.log(
@@ -141,6 +151,7 @@ const heartbeat = () =>
       approval_escalation: "registered",
       notification_outbox: "registered",
       automation_rules: "registered",
+      report_exports: "registered",
       config_fingerprint: config.configFingerprint,
       observed_at: new Date().toISOString(),
     }),
@@ -500,11 +511,55 @@ const pollAutomations = async () => {
   automationPolling = true;
   try {
     const result = await automation.processOnce();
-    if (result.status !== "idle") console.log(JSON.stringify({ service: "product-scout-worker", queue: "automation_rules", ...result, observed_at: new Date().toISOString() }));
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "automation_rules",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
   } catch (error) {
-    console.error(JSON.stringify({ service: "product-scout-worker", queue: "automation_rules", status: "dependency_failed", error: error instanceof Error ? error.message : "unknown", observed_at: new Date().toISOString() }));
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "automation_rules",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
   } finally {
     automationPolling = false;
+  }
+};
+const pollReports = async () => {
+  if (stopping || reportPolling) return;
+  reportPolling = true;
+  try {
+    const result = await reportExports.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "report_exports",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "report_exports",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    reportPolling = false;
   }
 };
 
@@ -553,6 +608,10 @@ const automationTimer = setInterval(
   () => void pollAutomations(),
   config.automations.pollMs,
 );
+const reportTimer = setInterval(
+  () => void pollReports(),
+  config.reports.pollMs,
+);
 void pollAuth();
 void pollCollection();
 void pollTrends();
@@ -566,6 +625,7 @@ void pollBusinessTasks();
 void pollApprovals();
 void pollNotifications();
 void pollAutomations();
+void pollReports();
 
 const stop = async (signal: string) => {
   if (stopping) return;
@@ -584,6 +644,7 @@ const stop = async (signal: string) => {
   clearInterval(approvalTimer);
   clearInterval(notificationTimer);
   clearInterval(automationTimer);
+  clearInterval(reportTimer);
   while (
     authPolling ||
     collectionPolling ||
@@ -597,7 +658,8 @@ const stop = async (signal: string) => {
     businessTaskPolling ||
     approvalPolling ||
     notificationPolling ||
-    automationPolling
+    automationPolling ||
+    reportPolling
   )
     await new Promise((resolve) => setTimeout(resolve, 25));
   await redisStore.close();

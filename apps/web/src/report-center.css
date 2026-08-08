@@ -1,0 +1,207 @@
+.report-center {
+  display: grid;
+  gap: 20px;
+}
+.report-center > header,
+.report-chart > header,
+.report-exports > header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+}
+.report-center h2 {
+  font-size: 30px;
+  margin: 4px 0;
+}
+.report-center header p {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+.report-center header span,
+.report-chart small,
+.report-exports small {
+  color: var(--text-muted);
+}
+.report-center button {
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 15px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+.report-center > nav {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.report-center > nav button {
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-muted);
+  border-bottom: 3px solid transparent;
+}
+.report-center > nav button[aria-pressed="true"] {
+  color: var(--text-primary);
+  border-color: var(--accent);
+}
+.report-notice,
+.report-state {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 16px;
+}
+.report-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.report-metrics article {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 16px;
+}
+.report-metrics span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.report-metrics b {
+  display: block;
+  font-size: 25px;
+  margin-top: 8px;
+}
+.report-chart,
+.report-exports {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 22px;
+}
+.report-chart h3,
+.report-exports h3 {
+  margin: 4px 0;
+}
+.report-bars {
+  display: flex;
+  align-items: end;
+  gap: 22px;
+  height: 290px;
+  padding: 30px 16px 0;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(
+    to bottom,
+    transparent 24%,
+    var(--border) 25%,
+    transparent 26%,
+    transparent 49%,
+    var(--border) 50%,
+    transparent 51%,
+    transparent 74%,
+    var(--border) 75%,
+    transparent 76%
+  );
+}
+.report-bars article {
+  flex: 1;
+  min-width: 42px;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  gap: 6px;
+  text-align: center;
+}
+.report-bars article > div {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+.report-bars span {
+  display: block;
+  width: min(62px, 72%);
+  border-radius: 8px 8px 2px 2px;
+  background: linear-gradient(180deg, #64d8de, var(--accent));
+}
+.report-bars small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.report-empty {
+  padding: 42px;
+  text-align: center;
+  color: var(--text-muted);
+}
+.report-export-list {
+  display: grid;
+  margin-top: 16px;
+}
+.report-export-list article {
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+}
+.report-export-list i {
+  font-style: normal;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.report-export-list i[data-status="succeeded"] {
+  color: #247a53;
+}
+.report-export-list i[data-status="dead_letter"],
+.report-export-list i[data-status="expired"] {
+  color: #b23b3b;
+}
+.report-export-list div {
+  display: grid;
+  gap: 5px;
+}
+.report-export-list span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  .report-center > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .report-center > nav {
+    overflow-x: auto;
+  }
+  .report-center > nav button {
+    white-space: nowrap;
+  }
+  .report-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .report-chart,
+  .report-exports {
+    padding: 16px;
+  }
+  .report-chart > header,
+  .report-exports > header {
+    align-items: start;
+    flex-direction: column;
+  }
+  .report-bars {
+    height: 240px;
+    gap: 8px;
+    padding-inline: 4px;
+  }
+  .report-export-list article {
+    grid-template-columns: 1fr auto;
+  }
+  .report-export-list i {
+    grid-column: 1/-1;
+  }
+  .report-export-list small {
+    overflow-wrap: anywhere;
+  }
+}

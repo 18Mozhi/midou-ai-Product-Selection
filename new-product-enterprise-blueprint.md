@@ -113,6 +113,7 @@ ScoutOps 是面向跨境电商团队的实时选品运营平台：持续汇集�
 | `/tasks` | 任务中心 | 系统和同事交给我的事项 | 处理、审批、查看自动化状态 |
 | `/notifications` | 通知中心 | 哪些变动需要我知道 | 已读、订阅、跳转关联业务对象 |
 | `/automations` | 自动化规则 | 哪些已确认事件需要稳定跟进 | 创建、暂停、恢复、查看限流与执行记录 |
+| `/reports` | 报表与导出 | 当前机会、趋势和团队事实如何分布 | 切换报表、查看缺失、异步导出、下载未过期文件 |
 | `/me` | 个人中心 | 我的资料、权限、安全和偏好 | 编辑资料、管理会话、改密、通知偏好 |
 
 #### 3.1.1 前端 UI 图片包：必读依据与实施规则
@@ -500,7 +501,7 @@ flowchart LR
 | 来源采集 | `providers`、`credential_assets`、`provider_connections`、`provider_health_checks`、`collection_plans`、`collection_tasks`、`collection_subqueries`、`task_attempts`、`dead_letters`、`crawler_profiles` |
 | 证据质量 | `raw_evidence`、`normalized_records`、`field_provenance`、`data_quality_issues`、`reconciliation_runs` |
 | 业务决策 | `trend_signals`、`trend_topics`、`competitors`、`competitor_snapshots`、`suppliers`、`supplier_quotes`、`opportunities`、`opportunity_scores`、`decisions` |
-| 协同实时 | `tasks`、`task_comments`、`approvals`、`automation_rules`、`automation_executions`、`outbox_events`、`notifications`、`notification_preferences` |
+| 协同实时 | `tasks`、`task_comments`、`approvals`、`automation_rules`、`automation_executions`、`outbox_events`、`notifications`、`notification_preferences`、`report_exports` |
 | 安全运营 | `audit_logs`、`export_jobs`、`api_clients`、`api_tokens`、`webhook_endpoints`、`webhook_deliveries`、`config_releases` |
 | 商业化预留 | `plans`、`subscriptions`、`usage_meters`、`quota_overrides`、`billing_periods` |
 
@@ -545,6 +546,7 @@ flowchart LR
 | `/api/v1/sourcing/*` | 找货、供应商、报价、利润 |
 | `/api/v1/tasks/*` | 任务与审批 |
 | `/api/v1/automations/*` | 版本化规则、人工暂停、限流和安全动作执行记录 |
+| `/api/v1/reports/*`、`/api/v1/report-exports/*` | 事实聚合、异步 CSV、生命周期和受保护下载 |
 | `/api/v1/realtime/*` | SSE 事件、事件重放和连接状态 |
 | `/api/v1/platform/*` | 平台管理、Provider、采集、监控、审计 |
 | `/open/v1/*` | API Client、用量、Webhook、面向客户的开放能力 |

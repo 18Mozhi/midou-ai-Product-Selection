@@ -19,6 +19,7 @@ import TaskWorkspace from "./TaskWorkspace.vue";
 import ApprovalWorkspace from "./ApprovalWorkspace.vue";
 import NotificationCenter from "./NotificationCenter.vue";
 import AutomationRuleCenter from "./AutomationRuleCenter.vue";
+import ReportCenter from "./ReportCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -98,6 +99,7 @@ const memberMenu: MenuItem[] = [
     capabilities: ["notification:read"],
   },
   { label: "自动化规则", path: "/automations", icon: "⚙", capabilities: ["team:manage"] },
+  { label: "报表与导出", path: "/reports", icon: "▥", capabilities: ["report:read"] },
   { label: "个人中心", path: "/me", icon: "◉" },
 ];
 const orgMenu: MenuItem[] = [
@@ -246,6 +248,9 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   ),
   isAutomations = computed(
     () => props.shell === "member" && routePath === "/automations",
+  ),
+  isReports = computed(
+    () => props.shell === "member" && routePath === "/reports",
   ),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
@@ -506,6 +511,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           v-else-if="isAutomations"
           :api-base-url="apiBaseUrl"
         />
+        <ReportCenter v-else-if="isReports" :api-base-url="apiBaseUrl" />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"

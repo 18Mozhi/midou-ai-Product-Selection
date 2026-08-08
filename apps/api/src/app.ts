@@ -131,6 +131,8 @@ import {
 } from "./realtime-routes.js";
 import { AutomationServiceError } from "./automation-service.js";
 import { registerAutomationRoutes, type AutomationRouteOptions } from "./automation-routes.js";
+import { ReportServiceError } from "./report-service.js";
+import { registerReportRoutes, type ReportRouteOptions } from "./report-routes.js";
 
 export interface BuildAppOptions {
   version?: string;
@@ -166,6 +168,7 @@ export interface BuildAppOptions {
   notifications?: NotificationRouteOptions;
   realtime?: RealtimeRouteOptions;
   automations?: AutomationRouteOptions;
+  reports?: ReportRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -329,6 +332,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
     registerNotificationRoutes(app, options.notifications);
   if (options.realtime) registerRealtimeRoutes(app, options.realtime);
   if (options.automations) registerAutomationRoutes(app, options.automations);
+  if (options.reports) registerReportRoutes(app, options.reports);
 
   app.setErrorHandler(
     async (
@@ -402,6 +406,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         error instanceof RealtimeServiceError ? error : null;
       const automationError =
         error instanceof AutomationServiceError ? error : null;
+      const reportError = error instanceof ReportServiceError ? error : null;
       const trendError =
         error instanceof TrendServiceError
           ? (error as TrendServiceError)
@@ -451,6 +456,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         notificationError?.statusCode ??
         realtimeError?.statusCode ??
         automationError?.statusCode ??
+        reportError?.statusCode ??
         trendError?.statusCode ??
         opportunityError?.statusCode ??
         scoringError?.statusCode ??
@@ -489,6 +495,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             notificationError?.code ??
         realtimeError?.code ??
         automationError?.code ??
+        reportError?.code ??
             trendError?.code ??
             opportunityError?.code ??
             scoringError?.code ??
@@ -549,6 +556,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             notificationError?.actionHint ??
         realtimeError?.actionHint ??
         automationError?.actionHint ??
+        reportError?.actionHint ??
             trendError?.actionHint ??
             opportunityError?.actionHint ??
             scoringError?.actionHint ??

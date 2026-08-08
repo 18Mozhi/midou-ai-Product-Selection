@@ -73,6 +73,9 @@ import { registerRealtimeRoutes } from "./realtime-routes.js";
 import { AutomationService } from "./automation-service.js";
 import { MySqlAutomationRepository } from "./mysql-automation-repository.js";
 import { registerAutomationRoutes } from "./automation-routes.js";
+import { ReportService } from "./report-service.js";
+import { MySqlReportRepository } from "./mysql-report-repository.js";
+import { registerReportRoutes } from "./report-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -359,6 +362,13 @@ registerRealtimeRoutes(app, {
 });
 registerAutomationRoutes(app, {
   service: new AutomationService(new MySqlAutomationRepository(pool), config.automations.defaultRateLimit),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
+});
+registerReportRoutes(app, {
+  service: new ReportService(new MySqlReportRepository(pool), config.reports.exportRoot, config.reports.exportTtlHours),
   authorization,
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",

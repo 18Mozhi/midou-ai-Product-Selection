@@ -47,7 +47,7 @@
       "M05-03",
       "M05-04"
     ],
-    "activeModules": ["M05-06"],
+    "activeModules": [],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1194,6 +1194,41 @@
       ],
       "verificationRunId": "d64fe7a4-2994-4ca5-9ad0-76de628bf058",
       "status": "module_verified"
+    },
+    "reportsExports": {
+      "module": "M05-06",
+      "entrypoints": [
+        "../apps/api/src/report-service.ts",
+        "../apps/api/src/mysql-report-repository.ts",
+        "../apps/api/src/report-routes.ts",
+        "../apps/worker/src/report-export-worker.ts",
+        "../apps/web/src/components/ReportCenter.vue"
+      ],
+      "routes": [
+        "/reports",
+        "/api/v1/reports/{reportType}",
+        "/api/v1/report-exports",
+        "/api/v1/report-exports/{reportExportId}/download"
+      ],
+      "scope": "current organization and workspace factual opportunity trend and team aggregates plus asynchronous CSV exports",
+      "truthBoundary": "aggregates only persisted facts and preserves missing values; CSV row overflow fails instead of truncating and no forecast is generated",
+      "permission": "report:read on API list create detail and file download with current context",
+      "configuration": [
+        "REPORT_EXPORT_POLL_MS",
+        "REPORT_EXPORT_LEASE_SECONDS",
+        "REPORT_EXPORT_RETRY_LIMIT",
+        "REPORT_EXPORT_TTL_HOURS",
+        "REPORT_EXPORT_MAX_ROWS",
+        "REPORT_EXPORT_ROOT"
+      ],
+      "runtimeBoundary": "Baota S0 API and Node Worker share a restricted local export root; no shared storage multi-node or P08 capacity claim",
+      "imageEvidence": [
+        "concept 50 opportunity report",
+        "concept 51 trend report",
+        "concept 52 team report"
+      ],
+      "verificationRunId": "90080589-18ad-4777-b46f-fb1941dfd2ad",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -1356,6 +1391,12 @@
       "status": "M05-05_module_verified"
     },
     {
+      "path": "/reports",
+      "view": "ReportCenter",
+      "domain": "reports-exports",
+      "status": "M05-06_module_verified"
+    },
+    {
       "path": "/me",
       "view": "Profile",
       "domain": "identity",
@@ -1473,7 +1514,8 @@
       "domain": "decision-analysis",
       "status": "planned"
     },
-    { "prefix": "/api/v1/reports", "domain": "reporting", "status": "planned" },
+    { "prefix": "/api/v1/reports", "domain": "reports-exports", "status": "M05-06_module_verified" },
+    { "prefix": "/api/v1/report-exports", "domain": "reports-exports", "status": "M05-06_module_verified" },
     {
       "prefix": "/api/v1/platform",
       "domain": "platform",

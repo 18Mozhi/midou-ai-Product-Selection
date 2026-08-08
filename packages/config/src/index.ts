@@ -120,6 +120,7 @@ export interface RuntimeConfig {
     maxConnections: number;
   };
   automations: { pollMs: number; leaseSeconds: number; retryLimit: number; defaultRateLimit: number };
+  reports: { pollMs: number; leaseSeconds: number; retryLimit: number; exportTtlHours: number; maxRows: number; exportRoot: string };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -536,6 +537,14 @@ export function loadRuntimeConfig(
       leaseSeconds: integer(env, "AUTOMATION_LEASE_SECONDS", 120, 30, 3600),
       retryLimit: integer(env, "AUTOMATION_RETRY_LIMIT", 3, 1, 10),
       defaultRateLimit: integer(env, "AUTOMATION_DEFAULT_RATE_LIMIT", 20, 1, 1000),
+    },
+    reports: {
+      pollMs: integer(env, "REPORT_EXPORT_POLL_MS", 2000, 250, 60000),
+      leaseSeconds: integer(env, "REPORT_EXPORT_LEASE_SECONDS", 120, 30, 3600),
+      retryLimit: integer(env, "REPORT_EXPORT_RETRY_LIMIT", 3, 1, 10),
+      exportTtlHours: integer(env, "REPORT_EXPORT_TTL_HOURS", 24, 1, 720),
+      maxRows: integer(env, "REPORT_EXPORT_MAX_ROWS", 10000, 1, 100000),
+      exportRoot: resolve(process.cwd(), text(env, "REPORT_EXPORT_ROOT", "./data/report-exports")),
     },
     evidence: {
       maxRawBytes: integer(
