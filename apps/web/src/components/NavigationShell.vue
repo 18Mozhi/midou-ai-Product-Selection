@@ -12,6 +12,7 @@ import ProviderSourceCenter from './ProviderSourceCenter.vue';
 import TrendDashboard from './TrendDashboard.vue';
 import OpportunityWorkspace from './OpportunityWorkspace.vue';
 import ScoreRuleConsole from './ScoreRuleConsole.vue';
+import CostRuleConsole from './CostRuleConsole.vue';
 
 type Shell = 'member' | 'organization_admin' | 'platform_admin';
 type State = 'loading' | 'ready' | 'expired' | 'forbidden' | 'context_required' | 'rate_limited' | 'blocked';
@@ -32,10 +33,10 @@ const allCapabilities=computed(()=>props.shell==='platform_admin'?(guard.value?.
 const items=computed(()=>{const source=props.shell==='member'?memberMenu:props.shell==='organization_admin'?orgMenu:platformMenu;return source.filter(item=>!item.capabilities||item.capabilities.some(cap=>allCapabilities.value.includes(cap)));});
 const activeItem=computed(()=>items.value.find(item=>item.path===window.location.pathname)||items.value.find(item=>item.path!=='/'&&window.location.pathname.startsWith(`${item.path}/`))||items.value[0]);
 const shellTitle=computed(()=>props.shell==='member'?'成员工作台':props.shell==='organization_admin'?'组织管理后台':'平台管理后台');
-const pageTitle=computed(()=>routePath==='/opportunities/scoring-rules'?'评分规则':activeItem.value?.label??shellTitle.value);
-const routePath=window.location.pathname.replace(/\/$/,'')||'/',isHome=computed(()=>props.shell==='member'&&routePath==='/home'),isTrends=computed(()=>props.shell==='member'&&routePath==='/trends'),isScoringRules=computed(()=>props.shell==='member'&&routePath==='/opportunities/scoring-rules'),isOpportunities=computed(()=>props.shell==='member'&&(routePath==='/opportunities'||routePath.startsWith('/opportunities/'))),opportunityId=computed(()=>{const match=routePath.match(/^\/opportunities\/([0-9a-f-]{36})$/i);return match?.[1]??'';});
-const phaseLabel=computed(()=>isTrends.value||isOpportunities.value?'P04':props.shell==='platform_admin'&&['/platform-admin/providers','/platform-admin/credentials','/platform-admin/collection','/platform-admin/data'].some(path=>routePath.startsWith(path))?'P03':'P02');
-const pageSummary=computed(()=>isOpportunities.value?'机会、证据覆盖和人工决策由当前组织与工作区的真实 API 驱动。':isTrends.value?'趋势主题、证据、关注和监控规则均由当前组织与工作区的真实 API 驱动。':phaseLabel.value==='P03'?'来源、采集运行与证据数据均由对应模块的真实 API 和权限边界驱动。':'导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。');
+const pageTitle=computed(()=>routePath==='/opportunities/scoring-rules'?'评分规则':routePath.startsWith('/sourcing')?'费用与利润规则':activeItem.value?.label??shellTitle.value);
+const routePath=window.location.pathname.replace(/\/$/,'')||'/',isHome=computed(()=>props.shell==='member'&&routePath==='/home'),isTrends=computed(()=>props.shell==='member'&&routePath==='/trends'),isScoringRules=computed(()=>props.shell==='member'&&routePath==='/opportunities/scoring-rules'),isOpportunities=computed(()=>props.shell==='member'&&(routePath==='/opportunities'||routePath.startsWith('/opportunities/'))),isCostRules=computed(()=>props.shell==='member'&&routePath.startsWith('/sourcing')),opportunityId=computed(()=>{const match=routePath.match(/^\/opportunities\/([0-9a-f-]{36})$/i);return match?.[1]??'';});
+const phaseLabel=computed(()=>isTrends.value||isOpportunities.value||isCostRules.value?'P04':props.shell==='platform_admin'&&['/platform-admin/providers','/platform-admin/credentials','/platform-admin/collection','/platform-admin/data'].some(path=>routePath.startsWith(path))?'P03':'P02');
+const pageSummary=computed(()=>isCostRules.value?'版本化费用、双审批、汇率来源与利润计算由真实 API 和 Worker 驱动。':isOpportunities.value?'机会、证据覆盖和人工决策由当前组织与工作区的真实 API 驱动。':isTrends.value?'趋势主题、证据、关注和监控规则均由当前组织与工作区的真实 API 驱动。':phaseLabel.value==='P03'?'来源、采集运行与证据数据均由对应模块的真实 API 和权限边界驱动。':'导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。');
 const short=(value:string|null)=>value?`${value.slice(0,8)}…`:'不适用';
 const stateCopy=computed(()=>({expired:['登录已失效','重新登录后返回当前页面。'],forbidden:['无权进入此工作台','服务端已拒绝该壳层；返回有权访问的工作台。'],context_required:['尚未选择组织与工作区','完成租户选择后才能进入成员或组织后台。'],rate_limited:['请求过于频繁','稍后重试；不要连续刷新。'],blocked:['导航服务暂不可用','检查网络后重试；运维可在宝塔查看 Node API。'],loading:['正在核验工作台权限','菜单只会在服务端确认后显示。'],ready:['','']} as Record<State,[string,string]>)[state.value]);
 async function load(){state.value='loading';guard.value=null;requestId.value='';actionHint.value='';try{const response=await fetch(`${props.apiBaseUrl}/me/navigation?shell=${props.shell}`,{credentials:'include',headers:{accept:'application/json'}});const body=await response.json().catch(()=>null);requestId.value=body?.request_id??'';actionHint.value=body?.error?.action_hint??'';if(!response.ok){state.value=response.status===401?'expired':response.status===403?'forbidden':response.status===409?'context_required':response.status===429?'rate_limited':'blocked';return;}guard.value=body.data;state.value='ready';}catch{state.value='blocked';}}
@@ -75,6 +76,7 @@ onMounted(()=>{void load();window.addEventListener('keydown',shortcut);});onUnmo
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole v-else-if="isScoringRules" :api-base-url="apiBaseUrl" />
         <OpportunityWorkspace v-else-if="isOpportunities" :api-base-url="apiBaseUrl" :opportunity-id="opportunityId||undefined" />
+        <CostRuleConsole v-else-if="isCostRules" :api-base-url="apiBaseUrl" :roles="guard?.roles??[]" />
         <section v-else-if="shell==='platform_admin'&&routePath.startsWith('/platform-admin/providers')" class="provider-runtime-surface">
           <nav class="provider-runtime-tabs" aria-label="来源管理视图"><a href="/platform-admin/providers" :aria-current="routePath==='/platform-admin/providers'?'page':undefined">来源定义</a><a href="/platform-admin/providers/adapters" :aria-current="routePath==='/platform-admin/providers/adapters'?'page':undefined">适配器运行时</a><a href="/platform-admin/providers/sources" :aria-current="routePath==='/platform-admin/providers/sources'?'page':undefined">首批来源</a></nav>
           <ProviderSourceCenter v-if="routePath==='/platform-admin/providers/sources'" :api-base-url="apiBaseUrl" />

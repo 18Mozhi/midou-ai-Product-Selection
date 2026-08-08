@@ -656,6 +656,87 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '404': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /cost-rules:
+    get:
+      summary: List workspace-scoped versioned cost rules
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Cost rule list, content: { application/json: { schema: { type: object, required: [data, request_id, trace_id], properties: { data: { type: array, items: { $ref: '#/components/schemas/CostRule' } }, request_id: { type: string }, trace_id: { type: string } } } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Create a cost rule draft with four explicit fee lines
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/CostRuleCreateInput' } } } }
+      responses:
+        '201': { description: Cost rule draft, content: { application/json: { schema: { type: object, required: [data, request_id, trace_id], properties: { data: { $ref: '#/components/schemas/CostRule' }, request_id: { type: string }, trace_id: { type: string } } } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /cost-rules/{costRuleId}/actions:
+    post:
+      summary: Submit approve reject publish or roll back a cost rule
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: costRuleId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/CostRuleActionInput' } } } }
+      responses:
+        '200': { description: Resulting cost rule, content: { application/json: { schema: { type: object, required: [data, request_id, trace_id], properties: { data: { $ref: '#/components/schemas/CostRule' }, request_id: { type: string }, trace_id: { type: string } } } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /exchange-rates:
+    post:
+      summary: Record an approved Provider historical exchange-rate quote
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ExchangeRateInput' } } } }
+      responses:
+        '201': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /opportunities/{opportunityId}/cost-inputs:
+    post:
+      summary: Confirm a versioned sale purchase or logistics input with provenance
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: opportunityId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/OpportunityCostInput' } } } }
+      responses:
+        '201': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /opportunities/{opportunityId}/profit-runs:
+    post:
+      summary: Queue a profit calculation against the active cost rule
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: opportunityId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [platform, expected_version], properties: { platform: { type: string, minLength: 1, maxLength: 80 }, expected_version: { type: integer, minimum: 1 } } } } } }
+      responses:
+        '202': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /opportunities/{opportunityId}/profit-analysis:
+    get:
+      summary: Read the latest immutable profit run and current cost inputs
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: opportunityId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: Profit analysis, content: { application/json: { schema: { $ref: '#/components/schemas/ProfitAnalysisEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
   /tasks:
     get:
       summary: List authorized tasks
@@ -2303,6 +2384,82 @@ components:
       type: object
       required: [data, request_id, trace_id]
       properties: { data: { type: array, items: { $ref: '#/components/schemas/ScoreRule' } }, request_id: { type: string }, trace_id: { type: string } }
+    FeeLine:
+      type: object
+      required: [type, mode, value, currency]
+      properties:
+        type: { type: string, enum: [platform_fee, payment_fee, tax, fulfillment] }
+        mode: { type: string, enum: [percentage_of_sale, fixed_amount] }
+        value: { type: number, minimum: 0 }
+        currency: { type: string, minLength: 3, maxLength: 3, nullable: true }
+    CostRuleCreateInput:
+      type: object
+      required: [market, platform, version_code, name, effective_from, fee_lines]
+      properties:
+        market: { type: string, minLength: 1, maxLength: 40 }
+        platform: { type: string, minLength: 1, maxLength: 80 }
+        version_code: { type: string, minLength: 1, maxLength: 64 }
+        name: { type: string, minLength: 1, maxLength: 160 }
+        effective_from: { type: string, format: date }
+        fee_lines: { type: array, minItems: 4, maxItems: 4, items: { $ref: '#/components/schemas/FeeLine' } }
+    CostRuleActionInput:
+      type: object
+      required: [action, reason, expected_revision]
+      properties:
+        action: { type: string, enum: [submit, approve, reject, publish, rollback] }
+        reason: { type: string, minLength: 1, maxLength: 1000 }
+        expected_revision: { type: integer, minimum: 1 }
+        approval_role: { type: string, enum: [selection_manager, organization_admin] }
+        target_rule_id: { type: string, format: uuid }
+    CostRule:
+      allOf:
+        - { $ref: '#/components/schemas/CostRuleCreateInput' }
+        - type: object
+          required: [id, status, revision, approvals, published_at, updated_at]
+          properties:
+            id: { type: string, format: uuid }
+            status: { type: string, enum: [draft, pending_approval, approved, active, retired, rejected, rolled_back] }
+            revision: { type: integer, minimum: 1 }
+            approvals: { type: array, items: { type: string, enum: [selection_manager, organization_admin] } }
+            published_at: { type: string, format: date-time, nullable: true }
+            updated_at: { type: string, format: date-time }
+    ExchangeRateInput:
+      type: object
+      required: [provider_id, base_currency, quote_currency, rate_value, quote_date, observed_at, source_ref_id, evidence_id]
+      properties:
+        provider_id: { type: string, format: uuid }
+        base_currency: { type: string, minLength: 3, maxLength: 3 }
+        quote_currency: { type: string, minLength: 3, maxLength: 3 }
+        rate_value: { type: number, exclusiveMinimum: 0 }
+        quote_date: { type: string, format: date }
+        observed_at: { type: string, format: date-time }
+        source_ref_id: { type: string, minLength: 1, maxLength: 255 }
+        evidence_id: { type: string, format: uuid }
+    OpportunityCostInput:
+      type: object
+      required: [platform, input_type, amount_value, currency, source_type, source_ref_id, evidence_id, observed_at, expected_version]
+      properties:
+        platform: { type: string, minLength: 1, maxLength: 80 }
+        input_type: { type: string, enum: [sale_price, purchase_price, logistics] }
+        amount_value: { type: number, minimum: 0 }
+        currency: { type: string, minLength: 3, maxLength: 3 }
+        source_type: { type: string, minLength: 1, maxLength: 80 }
+        source_ref_id: { type: string, minLength: 1, maxLength: 255 }
+        evidence_id: { type: string, format: uuid }
+        observed_at: { type: string, format: date-time }
+        expected_version: { type: integer, minimum: 1 }
+    ProfitAnalysisEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          required: [latest_run, current_inputs]
+          properties:
+            latest_run: { type: object, nullable: true, additionalProperties: true }
+            current_inputs: { type: array, items: { type: object, additionalProperties: true } }
+        request_id: { type: string }
+        trace_id: { type: string }
     OpportunitySummary:
       type: object
       required: [id, name, market, source_type, lifecycle_status, recommendation_status, overall_score, trend_score, competition_score, profit_status, risk_level, confidence, evidence_count, source_count, coverage_status, decision_status, version, updated_at]

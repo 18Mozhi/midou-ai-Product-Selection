@@ -8,7 +8,7 @@
   "implementation": {
     "currentPhase": "P04",
     "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02"],
-    "activeModules": ["M04-04"],
+    "activeModules": ["M04-05"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -372,6 +372,20 @@
       "imageEvidence": ["concept 34 opportunity overview", "concept 54 mobile opportunity detail", "high-resolution core page 06 opportunity dashboard"],
       "verificationRunId": "cc645200-751b-48bf-9da3-ebc8bfa75dec",
       "status": "module_verified"
+    },
+    "profitCost": {
+      "module": "M04-04",
+      "entrypoints": ["../apps/api/src/profit-service.ts", "../apps/api/src/mysql-profit-repository.ts", "../apps/api/src/profit-routes.ts", "../apps/worker/src/opportunity-profit-worker.ts", "../apps/web/src/components/CostRuleConsole.vue", "../apps/web/src/components/OpportunityWorkspace.vue"],
+      "routes": ["/sourcing", "/api/v1/cost-rules", "/api/v1/cost-rules/{costRuleId}/actions", "/api/v1/exchange-rates", "/api/v1/opportunities/{opportunityId}/cost-inputs", "/api/v1/opportunities/{opportunityId}/profit-runs", "/api/v1/opportunities/{opportunityId}/profit-analysis"],
+      "scope": "organization and workspace scoped versioned fee rules dual approvals exchange quotes cost inputs jobs immutable profit runs components and rollback",
+      "truthBoundary": "all four fees are explicit; missing required inputs or an approved historical exchange rate stays insufficient_data and never emits numeric ROI",
+      "permission": "opportunity:read for rules and profit analysis; cost:confirm for rates inputs and reruns; opportunity:approve for rule creation approval publish reject and rollback",
+      "audit": "rule transitions rates inputs and profit runs persist correlated opportunity_events and opportunity_outbox while historical inputs and runs remain immutable",
+      "configuration": ["PROFIT_CALCULATION_POLL_MS", "PROFIT_CALCULATION_LEASE_SECONDS"],
+      "runtimeBoundary": "profit calculation runs inside the Baota-managed Node Worker; MySQL 5.7 is the truth source and the browser never recalculates ROI",
+      "imageEvidence": ["concept 37 opportunity profit", "concept 48 cost calculator", "high-resolution core page 08 supply and profit decision center"],
+      "verificationRunId": "7dcd936b-fb04-438c-96ff-b35241b3d0c2",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -411,10 +425,10 @@
     {"path": "/work", "view": "TodayWork", "domain": "tasks", "status": "planned"},
     {"path": "/trends", "view": "TrendDashboard", "domain": "trends", "status": "M04-01_module_verified"},
     {"path": "/opportunities", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-02_module_verified"},
-    {"path": "/opportunities/{opportunityId}", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-03_scoring_explanation_verified"},
+    {"path": "/opportunities/{opportunityId}", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-04_profit_analysis_verified"},
     {"path": "/opportunities/scoring-rules", "view": "ScoreRuleConsole", "domain": "opportunities", "status": "M04-03_module_verified"},
     {"path": "/competitors", "view": "Competitors", "domain": "competitors", "status": "planned"},
-    {"path": "/sourcing", "view": "Sourcing", "domain": "sourcing", "status": "planned"},
+    {"path": "/sourcing", "view": "CostRuleConsole", "domain": "sourcing", "status": "M04-04_module_verified"},
     {"path": "/tasks", "view": "TaskCenter", "domain": "tasks", "status": "planned"},
     {"path": "/notifications", "view": "Notifications", "domain": "notifications", "status": "planned"},
     {"path": "/me", "view": "Profile", "domain": "identity", "status": "local_security_sessions_implemented_profile_planned"},
