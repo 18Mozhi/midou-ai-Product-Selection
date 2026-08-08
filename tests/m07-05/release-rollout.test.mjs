@@ -77,3 +77,11 @@ test("M07-05 MySQL single-row gates use object presence instead of array length"
   assert.match(runner, /if \(!backup\)/);
   assert.match(runner, /if \(sameBuild\)/);
 });
+
+test("M07-05 warms the real candidate write path and measures non-replayed writes", async () => {
+  const runner = await read("scripts/run-baota-release-rollout.mjs");
+  assert.match(runner, /candidate_write_warmup_failed/);
+  assert.match(runner, /idempotency-key": `release-warmup-\$\{warmupCorrelation\}`/);
+  assert.match(runner, /idempotency-key": `release-\$\{effectiveReleaseId\}-\$\{percent\}-\$\{correlation\}`/);
+  assert.doesNotMatch(runner, /idempotency-key": `release-\$\{effectiveReleaseId\}-\$\{percent\}`/);
+});

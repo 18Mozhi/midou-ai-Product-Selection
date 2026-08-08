@@ -106,8 +106,12 @@ try {
   if (!releaseRoot.startsWith("/www/wwwroot/") || !sitePath.startsWith("/www/server/panel/vhost/nginx/") || !splitPath.startsWith("/www/server/panel/vhost/nginx/") || !timingLog.startsWith("/www/wwwlogs/") || !evidencePath.startsWith(`${releaseRoot}/.artifacts/verification/`)) throw fail("release_baota_path_invalid", "release, Nginx, log and evidence paths must remain under Baota-managed roots");
   pool = mysql.createPool({ host: runtime.DB_HOST, port: Number(runtime.DB_PORT), user: runtime.DB_USER, password: runtime.DB_PASSWORD, database: runtime.DB_NAME, waitForConnections: true, connectionLimit: 2, timezone: "Z" });
   await pool.query("SELECT 1");
-  const identity = await fetchIdentity(runtime.RELEASE_CANDIDATE_BASE_URL ?? `http://127.0.0.1:${candidatePort}`);
+  const candidateBase = (runtime.RELEASE_CANDIDATE_BASE_URL ?? `http://127.0.0.1:${candidatePort}`).replace(/\/$/, "");
+  const identity = await fetchIdentity(candidateBase);
   if (identity.build_sha !== runtime.BUILD_SHA) throw fail("candidate_build_mismatch", "candidate build_sha differs from the release task BUILD_SHA");
+  const warmupCorrelation = randomUUID();
+  const warmupResponse = await fetch(`${candidateBase}/api/v1/auth/password-reset/request`, { method: "POST", headers: { accept: "application/json", "content-type": "application/json", origin: webOrigin, "idempotency-key": `release-warmup-${warmupCorrelation}`, "x-request-id": warmupCorrelation, "x-trace-id": warmupCorrelation }, body: JSON.stringify({ email: `release-warmup-${warmupCorrelation}@invalid.local` }), signal: AbortSignal.timeout(10_000) });
+  if (warmupResponse.status !== 202) throw fail("candidate_write_warmup_failed", "candidate write path warmup did not return the enumeration-safe accepted response");
   const migrationName = "0026_release_rollout_m07_05.up.sql", migrationSql = await readFile(resolve(releaseRoot, "database/migrations", migrationName), "utf8"), checksum = sha256(migrationSql.replace(/\r\n/g, "\n"));
   const [existingMigrationRows] = await pool.query("SELECT checksum FROM schema_migrations WHERE name=?", [migrationName]);
   const existingMigration = existingMigrationRows[0];
@@ -139,7 +143,7 @@ try {
       const common = { "x-request-id": correlation, "x-trace-id": correlation };
       await Promise.allSettled([
         fetch(`${publicBase}/api/v1/health/live`, { headers: { ...common, accept: "application/json" }, signal: AbortSignal.timeout(10_000) }),
-        fetch(`${publicBase}/api/v1/auth/password-reset/request`, { method: "POST", headers: { ...common, accept: "application/json", "content-type": "application/json", origin: webOrigin, "idempotency-key": `release-${effectiveReleaseId}-${percent}` }, body: JSON.stringify({ email: `release-probe-${effectiveReleaseId}@invalid.local` }), signal: AbortSignal.timeout(10_000) }),
+        fetch(`${publicBase}/api/v1/auth/password-reset/request`, { method: "POST", headers: { ...common, accept: "application/json", "content-type": "application/json", origin: webOrigin, "idempotency-key": `release-${effectiveReleaseId}-${percent}-${correlation}` }, body: JSON.stringify({ email: `release-probe-${effectiveReleaseId}@invalid.local` }), signal: AbortSignal.timeout(10_000) }),
       ]);
       lagSamples.push(await asyncLagSeconds(pool)); await sleep(intervalSeconds * 1000);
     }
