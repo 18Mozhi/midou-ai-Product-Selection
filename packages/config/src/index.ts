@@ -26,6 +26,7 @@ export interface RuntimeConfig {
   opportunities: { refreshPollMs: number; refreshLeaseSeconds: number };
   scoring: { pollMs: number; leaseSeconds: number };
   profit: { pollMs: number; leaseSeconds: number };
+  competitorMonitor: { pollMs: number; leaseSeconds: number };
   evidence: { maxRawBytes:number; downloadGrantSeconds:number };
   configFingerprint: string;
 }
@@ -71,6 +72,7 @@ export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env, target: 
     opportunities: { refreshPollMs: integer(env, 'OPPORTUNITY_REFRESH_POLL_MS', 2000, 250, 60000), refreshLeaseSeconds: integer(env, 'OPPORTUNITY_REFRESH_LEASE_SECONDS', 120, 30, 3600) },
     scoring: { pollMs: integer(env, 'OPPORTUNITY_SCORING_POLL_MS', 2000, 250, 60000), leaseSeconds: integer(env, 'OPPORTUNITY_SCORING_LEASE_SECONDS', 120, 30, 3600) },
     profit: { pollMs: integer(env, 'PROFIT_CALCULATION_POLL_MS', 2000, 250, 60000), leaseSeconds: integer(env, 'PROFIT_CALCULATION_LEASE_SECONDS', 120, 30, 3600) },
+    competitorMonitor: { pollMs: integer(env, 'COMPETITOR_MONITOR_POLL_MS', 2000, 250, 60000), leaseSeconds: integer(env, 'COMPETITOR_MONITOR_LEASE_SECONDS', 120, 30, 3600) },
     evidence: { maxRawBytes:integer(env,'EVIDENCE_MAX_RAW_BYTES',10485760,1024,104857600),downloadGrantSeconds:integer(env,'EVIDENCE_DOWNLOAD_GRANT_SECONDS',120,1,300) },
   };
   if (base.auth.passwordMaxLength < base.auth.passwordMinLength) throw new ConfigError('AUTH_PASSWORD_MAX_LENGTH', 'must be greater than or equal to AUTH_PASSWORD_MIN_LENGTH');

@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P04",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02"],
-    "activeModules": ["M04-05"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02", "M04-03", "M04-04", "M04-05"],
+    "activeModules": ["M04-06"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -386,6 +386,20 @@
       "imageEvidence": ["concept 37 opportunity profit", "concept 48 cost calculator", "high-resolution core page 08 supply and profit decision center"],
       "verificationRunId": "7dcd936b-fb04-438c-96ff-b35241b3d0c2",
       "status": "module_verified"
+    },
+    "competitorMonitoring": {
+      "module": "M04-05",
+      "entrypoints": ["../apps/api/src/competitor-service.ts", "../apps/api/src/mysql-competitor-repository.ts", "../apps/api/src/competitor-routes.ts", "../apps/worker/src/competitor-monitor-worker.ts", "../apps/web/src/components/CompetitorMonitor.vue"],
+      "routes": ["/competitors", "/api/v1/competitors", "/api/v1/competitors/{competitorId}", "/api/v1/competitors/{competitorId}/snapshots", "/api/v1/competitors/{competitorId}/actions", "/api/v1/competitor-monitor-rules"],
+      "scope": "organization and workspace scoped competitor identities immutable source snapshots comparison jobs changes threshold rules alerts events and outbox",
+      "truthBoundary": "complete snapshots from enabled Providers only; the baseline creates no change and missing source values are never replaced by examples",
+      "permission": "competitor:read for scoped reads; competitor:manage for identities snapshots thresholds pause and resume; auditors remain read only",
+      "audit": "user and Worker writes preserve request_id trace_id evidence source references immutable changes and queued downstream delivery state",
+      "configuration": ["COMPETITOR_MONITOR_POLL_MS", "COMPETITOR_MONITOR_LEASE_SECONDS"],
+      "runtimeBoundary": "comparison runs inside the Baota-managed Node Worker; P05 consumes queued notification and task outbox contracts",
+      "imageEvidence": ["concept 41 competitor list", "concept 42 competitor detail", "concept 43 price history", "concept 44 monitoring rules", "high-resolution core page 07 competitor dashboard"],
+      "verificationRunId": "2e64e54e-620b-4396-848b-223329b916f3",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -427,7 +441,7 @@
     {"path": "/opportunities", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-02_module_verified"},
     {"path": "/opportunities/{opportunityId}", "view": "OpportunityWorkspace", "domain": "opportunities", "status": "M04-04_profit_analysis_verified"},
     {"path": "/opportunities/scoring-rules", "view": "ScoreRuleConsole", "domain": "opportunities", "status": "M04-03_module_verified"},
-    {"path": "/competitors", "view": "Competitors", "domain": "competitors", "status": "planned"},
+    {"path": "/competitors", "view": "CompetitorMonitor", "domain": "competitors", "status": "M04-05_module_verified"},
     {"path": "/sourcing", "view": "CostRuleConsole", "domain": "sourcing", "status": "M04-04_module_verified"},
     {"path": "/tasks", "view": "TaskCenter", "domain": "tasks", "status": "planned"},
     {"path": "/notifications", "view": "Notifications", "domain": "notifications", "status": "planned"},
@@ -445,7 +459,7 @@
     {"prefix": "/api/v1/org", "domain": "organization", "status": "M01-03_tenancy_M01-04_role_catalog_and_M01-05_exact_resource_grants_implemented_remaining_management_planned"},
     {"prefix": "/api/v1/trends", "domain": "trends", "status": "M04-01_topics_signals_evidence_follows_relevance_and_monitoring_rules_verified"},
     {"prefix": "/api/v1/opportunities", "domain": "opportunities", "status": "M04-02_list_create_detail_decisions_and_evidence_refresh_verified"},
-    {"prefix": "/api/v1/competitors", "domain": "competitors", "status": "planned"},
+    {"prefix": "/api/v1/competitors", "domain": "competitors", "status": "M04-05_identity_snapshots_changes_thresholds_and_alert_queue_implemented"},
     {"prefix": "/api/v1/sourcing", "domain": "sourcing", "status": "planned"},
     {"prefix": "/api/v1/tasks", "domain": "tasks", "status": "planned"},
     {"prefix": "/api/v1/subscriptions", "domain": "monitoring", "status": "planned"},

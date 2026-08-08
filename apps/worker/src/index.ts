@@ -11,6 +11,7 @@ import { MySqlTrendProjectionWorker } from './trend-projection-worker.js';
 import { MySqlOpportunityRefreshWorker } from './opportunity-refresh-worker.js';
 import { MySqlOpportunityScoringWorker } from './opportunity-scoring-worker.js';
 import { MySqlOpportunityProfitWorker } from './opportunity-profit-worker.js';
+import { MySqlCompetitorMonitorWorker } from './competitor-monitor-worker.js';
 
 const config = loadRuntimeConfig(process.env, 'worker');
 const pool = createDatabasePool(config);
@@ -25,15 +26,17 @@ const trendProjection = new MySqlTrendProjectionWorker(pool, config.identity.wor
 const opportunityRefresh = new MySqlOpportunityRefreshWorker(pool, config.identity.workerId, config.opportunities.refreshLeaseSeconds);
 const opportunityScoring = new MySqlOpportunityScoringWorker(pool, config.identity.workerId, config.scoring.leaseSeconds);
 const opportunityProfit = new MySqlOpportunityProfitWorker(pool, config.identity.workerId, config.profit.leaseSeconds);
-let stopping = false, authPolling = false, collectionPolling = false, trendPolling = false, opportunityPolling = false, scoringPolling = false, profitPolling = false;
+const competitorMonitor = new MySqlCompetitorMonitorWorker(pool, config.identity.workerId, config.competitorMonitor.leaseSeconds);
+let stopping = false, authPolling = false, collectionPolling = false, trendPolling = false, opportunityPolling = false, scoringPolling = false, profitPolling = false, competitorPolling = false;
 
-const heartbeat = () => console.log(JSON.stringify({ service: 'product-scout-worker', status: stopping ? 'stopping' : 'idle', worker_id: config.identity.workerId, registered_sources: registry.describe().map(item => item.key), trend_projection: 'registered', opportunity_refresh: 'registered', opportunity_scoring: 'registered', opportunity_profit: 'registered', config_fingerprint: config.configFingerprint, observed_at: new Date().toISOString() }));
+const heartbeat = () => console.log(JSON.stringify({ service: 'product-scout-worker', status: stopping ? 'stopping' : 'idle', worker_id: config.identity.workerId, registered_sources: registry.describe().map(item => item.key), trend_projection: 'registered', opportunity_refresh: 'registered', opportunity_scoring: 'registered', opportunity_profit: 'registered', competitor_monitor: 'registered', config_fingerprint: config.configFingerprint, observed_at: new Date().toISOString() }));
 const pollAuth = async () => { if (stopping || authPolling || !config.security.credentialsMasterKey) return; authPolling = true; try { const result = await processAuthDeliveryOnce({ pool, workerId: config.identity.workerId, masterKey: config.security.credentialsMasterKey, provider: new PendingMailProvider() }); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'auth_delivery', ...result, observed_at: new Date().toISOString() })); } catch { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'auth_delivery', status: 'dependency_failed', observed_at: new Date().toISOString() })); } finally { authPolling = false; } };
 const pollCollection = async () => { if (stopping || collectionPolling) return; collectionPolling = true; try { await redisStore.connect(); const result = await processCollectionTaskOnce({ repository: collectionRepository, coordinator, executor, workerId: config.identity.workerId, leaseSeconds: config.collectionTasks.leaseSeconds }); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'collection_tasks', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'collection_tasks', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { collectionPolling = false; } };
 const pollTrends = async () => { if (stopping || trendPolling) return; trendPolling = true; try { const result = await trendProjection.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'trend_projection', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'trend_projection', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { trendPolling = false; } };
 const pollOpportunities = async () => { if (stopping || opportunityPolling) return; opportunityPolling = true; try { const result = await opportunityRefresh.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_refresh', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_refresh', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { opportunityPolling = false; } };
 const pollScoring = async () => { if (stopping || scoringPolling) return; scoringPolling = true; try { const result = await opportunityScoring.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_scoring', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_scoring', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { scoringPolling = false; } };
 const pollProfit = async () => { if (stopping || profitPolling) return; profitPolling = true; try { const result = await opportunityProfit.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_profit', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'opportunity_profit', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { profitPolling = false; } };
+const pollCompetitors = async () => { if (stopping || competitorPolling) return; competitorPolling = true; try { const result = await competitorMonitor.processOnce(); if (result.status !== 'idle') console.log(JSON.stringify({ service: 'product-scout-worker', queue: 'competitor_monitor', ...result, observed_at: new Date().toISOString() })); } catch (error) { console.error(JSON.stringify({ service: 'product-scout-worker', queue: 'competitor_monitor', status: 'dependency_failed', error: error instanceof Error ? error.message : 'unknown', observed_at: new Date().toISOString() })); } finally { competitorPolling = false; } };
 
 heartbeat();
 const heartbeatTimer = setInterval(heartbeat, config.runtime.workerHeartbeatMs);
@@ -43,12 +46,13 @@ const trendTimer = setInterval(() => void pollTrends(), config.trends.projection
 const opportunityTimer = setInterval(() => void pollOpportunities(), config.opportunities.refreshPollMs);
 const scoringTimer = setInterval(() => void pollScoring(), config.scoring.pollMs);
 const profitTimer = setInterval(() => void pollProfit(), config.profit.pollMs);
-void pollAuth(); void pollCollection(); void pollTrends(); void pollOpportunities(); void pollScoring(); void pollProfit();
+const competitorTimer = setInterval(() => void pollCompetitors(), config.competitorMonitor.pollMs);
+void pollAuth(); void pollCollection(); void pollTrends(); void pollOpportunities(); void pollScoring(); void pollProfit(); void pollCompetitors();
 
 const stop = async (signal: string) => {
   if (stopping) return; stopping = true;
-  clearInterval(heartbeatTimer); clearInterval(authTimer); clearInterval(collectionTimer); clearInterval(trendTimer); clearInterval(opportunityTimer); clearInterval(scoringTimer); clearInterval(profitTimer);
-  while (authPolling || collectionPolling || trendPolling || opportunityPolling || scoringPolling || profitPolling) await new Promise(resolve => setTimeout(resolve, 25));
+  clearInterval(heartbeatTimer); clearInterval(authTimer); clearInterval(collectionTimer); clearInterval(trendTimer); clearInterval(opportunityTimer); clearInterval(scoringTimer); clearInterval(profitTimer); clearInterval(competitorTimer);
+  while (authPolling || collectionPolling || trendPolling || opportunityPolling || scoringPolling || profitPolling || competitorPolling) await new Promise(resolve => setTimeout(resolve, 25));
   await redisStore.close(); await pool.end();
   console.log(JSON.stringify({ service: 'product-scout-worker', status: 'stopped', signal, worker_id: config.identity.workerId, observed_at: new Date().toISOString() }));
 };

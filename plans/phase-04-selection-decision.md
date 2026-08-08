@@ -1,6 +1,6 @@
 # P04：趋势、选品机会、竞品、供应链与决策详细执行计划
 
-> 状态：in_progress（M04-01、M04-02、M04-03、M04-04 已通过模块门禁，当前执行 M04-05；P04 尚未通过阶段门禁）
+> 状态：in_progress（M04-01 至 M04-05 已通过模块门禁，当前执行 M04-06；P04 尚未通过阶段门禁）
 > 上游总纲：`new-product-enterprise-blueprint.md`
 > 阶段索引：`plans/README.md`
 > 最低行数：1,000；`npm run verify:plans` 必须自动校验。

@@ -737,6 +737,85 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '404': { $ref: '#/components/responses/Error' }
+  /competitors:
+    get:
+      summary: List workspace-scoped competitors with latest source snapshot
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: competitor:read
+      responses:
+        '200': { description: Competitor list, content: { application/json: { schema: { type: object, required: [data, request_id, trace_id], properties: { data: { type: array, items: { $ref: '#/components/schemas/Competitor' } }, request_id: { type: string }, trace_id: { type: string } } } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Create a competitor and immutable baseline snapshot
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: competitor:manage
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/CompetitorCreateInput' } } } }
+      responses:
+        '201': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /competitors/{competitorId}:
+    get:
+      summary: Read competitor snapshots changes evidence and alert delivery state
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: competitor:read
+      parameters: [{ name: competitorId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /competitors/{competitorId}/snapshots:
+    post:
+      summary: Accept a complete Provider-backed snapshot for asynchronous comparison
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: competitor:manage
+      parameters:
+        - { name: competitorId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/CompetitorSnapshotInput' } } } }
+      responses:
+        '202': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /competitors/{competitorId}/actions:
+    post:
+      summary: Pause or resume monitoring with revision lock
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: competitor:manage
+      parameters:
+        - { name: competitorId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [status, expected_revision], properties: { status: { type: string, enum: [active, paused] }, expected_revision: { type: integer, minimum: 1 } } } } } }
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /competitor-monitor-rules:
+    get:
+      summary: List workspace-scoped competitor thresholds
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: competitor:read
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '403': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Create an explicit price rank review or availability threshold
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: competitor:manage
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/CompetitorRuleInput' } } } }
+      responses:
+        '201': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /tasks:
     get:
       summary: List authorized tasks
@@ -1217,6 +1296,56 @@ components:
         application/json:
           schema: { $ref: '#/components/schemas/ErrorEnvelope' }
   schemas:
+    CompetitorSnapshotInput:
+      type: object
+      required: [current_price, currency, rank_value, review_count, rating_value, availability, captured_at, freshness, source_status, source_ref_id, evidence_id]
+      properties:
+        current_price: { type: number, minimum: 0 }
+        currency: { type: string, pattern: '^[A-Za-z]{3}$' }
+        rank_value: { type: integer, minimum: 0 }
+        review_count: { type: integer, minimum: 0 }
+        rating_value: { type: number, minimum: 0, maximum: 5 }
+        availability: { type: string, enum: [in_stock, out_of_stock, unknown] }
+        captured_at: { type: string, format: date-time }
+        freshness: { type: string, enum: [fresh, stale] }
+        source_status: { type: string, enum: [healthy, degraded, unavailable] }
+        source_ref_id: { type: string, minLength: 1, maxLength: 255 }
+        evidence_id: { type: string, format: uuid }
+    CompetitorCreateInput:
+      type: object
+      required: [provider_id, market, source_site, external_id, product_url, title, snapshot]
+      properties:
+        provider_id: { type: string, format: uuid }
+        opportunity_id: { type: string, format: uuid, nullable: true }
+        market: { type: string, minLength: 1, maxLength: 40 }
+        source_site: { type: string, minLength: 1, maxLength: 120 }
+        external_id: { type: string, minLength: 1, maxLength: 255 }
+        product_url: { type: string, format: uri }
+        title: { type: string, minLength: 1, maxLength: 500 }
+        snapshot: { $ref: '#/components/schemas/CompetitorSnapshotInput' }
+    CompetitorRuleInput:
+      type: object
+      required: [metric, direction]
+      properties:
+        competitor_id: { type: string, format: uuid, nullable: true }
+        metric: { type: string, enum: [price, rank, review_count, availability] }
+        direction: { type: string, enum: [increase, decrease, change, became_unavailable] }
+        threshold_value: { type: number, minimum: 0, nullable: true }
+    Competitor:
+      type: object
+      required: [id, provider_id, market, source_site, external_id, product_url, title, status, revision, latest_snapshot, updated_at]
+      properties:
+        id: { type: string, format: uuid }
+        provider_id: { type: string, format: uuid }
+        market: { type: string }
+        source_site: { type: string }
+        external_id: { type: string }
+        product_url: { type: string, format: uri }
+        title: { type: string }
+        status: { type: string, enum: [active, paused] }
+        revision: { type: integer, minimum: 1 }
+        latest_snapshot: { allOf: [{ $ref: '#/components/schemas/CompetitorSnapshotInput' }], nullable: true }
+        updated_at: { type: string, format: date-time }
     OrganizationMembershipSummary:
       type: object
       additionalProperties: false
