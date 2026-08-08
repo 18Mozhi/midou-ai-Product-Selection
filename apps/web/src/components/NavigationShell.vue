@@ -18,6 +18,7 @@ import SourcingWorkspace from "./SourcingWorkspace.vue";
 import TaskWorkspace from "./TaskWorkspace.vue";
 import ApprovalWorkspace from "./ApprovalWorkspace.vue";
 import NotificationCenter from "./NotificationCenter.vue";
+import AutomationRuleCenter from "./AutomationRuleCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -96,6 +97,7 @@ const memberMenu: MenuItem[] = [
     icon: "○",
     capabilities: ["notification:read"],
   },
+  { label: "自动化规则", path: "/automations", icon: "⚙", capabilities: ["team:manage"] },
   { label: "个人中心", path: "/me", icon: "◉" },
 ];
 const orgMenu: MenuItem[] = [
@@ -241,6 +243,9 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   ),
   isNotifications = computed(
     () => props.shell === "member" && routePath === "/notifications",
+  ),
+  isAutomations = computed(
+    () => props.shell === "member" && routePath === "/automations",
   ),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
@@ -495,6 +500,10 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <ApprovalWorkspace v-else-if="isApprovals" :api-base-url="apiBaseUrl" />
         <NotificationCenter
           v-else-if="isNotifications"
+          :api-base-url="apiBaseUrl"
+        />
+        <AutomationRuleCenter
+          v-else-if="isAutomations"
           :api-base-url="apiBaseUrl"
         />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />

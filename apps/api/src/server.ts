@@ -70,6 +70,9 @@ import { registerNotificationRoutes } from "./notification-routes.js";
 import { RealtimeService } from "./realtime-service.js";
 import { MySqlRealtimeRepository } from "./mysql-realtime-repository.js";
 import { registerRealtimeRoutes } from "./realtime-routes.js";
+import { AutomationService } from "./automation-service.js";
+import { MySqlAutomationRepository } from "./mysql-automation-repository.js";
+import { registerAutomationRoutes } from "./automation-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -353,6 +356,13 @@ registerRealtimeRoutes(app, {
   heartbeatMs: config.realtime.heartbeatMs,
   maxConnectionSeconds: config.realtime.maxConnectionSeconds,
   maxConnections: config.realtime.maxConnections,
+});
+registerAutomationRoutes(app, {
+  service: new AutomationService(new MySqlAutomationRepository(pool), config.automations.defaultRateLimit),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
 });
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {

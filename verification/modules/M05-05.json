@@ -1,0 +1,32 @@
+{
+  "moduleId": "M05-05",
+  "phaseId": "P05",
+  "name": "Automation Rules",
+  "dependencies": ["M03-05", "M05-03"],
+  "atomicTasks": [
+    {"id":"M05-05.A01","evidence":"real notification triggers conditions safe actions versions rate limits manual pause only"},
+    {"id":"M05-05.A02","evidence":"scoped rules executions operations and automation task source contracts"},
+    {"id":"M05-05.A03","evidence":"MySQL57 rules executions operations indexes foreign keys migration rollback"},
+    {"id":"M05-05.A04","evidence":"validation member scope version idempotency list detail pause resume services"},
+    {"id":"M05-05.A05","evidence":"Baota Worker discovery lease dedupe rate limit retry dead letter actions"},
+    {"id":"M05-05.A06","evidence":"OpenAPI list create detail action errors permission contracts"},
+    {"id":"M05-05.A07","evidence":"rule cards create dialog execution drawer desktop and 390 layout"},
+    {"id":"M05-05.A08","evidence":"loading empty errors create pause resume version conflict recovery"},
+    {"id":"M05-05.A09","evidence":"team manage and organization workspace member action guards"},
+    {"id":"M05-05.A10","evidence":"poll lease retry default rate env schema Baota restart"},
+    {"id":"M05-05.A11","evidence":"audit outbox request trace worker queue execution states"},
+    {"id":"M05-05.A12","evidence":"trigger action cycle rate validation unit tests"},
+    {"id":"M05-05.A13","evidence":"OpenAPI DTO idempotency version permission contracts"},
+    {"id":"M05-05.A14","evidence":"MySQL57 notification discovery actions isolation dedupe rate integration"},
+    {"id":"M05-05.A15","evidence":"Playwright desktop 390 rule visual regression"},
+    {"id":"M05-05.A16","evidence":"pause lease expiry retry dead letter conflict dependency rollback drills"},
+    {"id":"M05-05.A17","evidence":"blueprint Feature Map env architecture runbook migration rollback S0 handoff"}
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m05-05/automation-rules.test.mjs",
+    "node scripts/verify-automation-live.mjs",
+    "npx playwright test tests/e2e/m05-05-automation-rules.spec.ts",
+    "npm run verify:docs"
+  ]
+}

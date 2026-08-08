@@ -52,7 +52,7 @@ const isAuditSecurityView = selectedView === 'audit-security';
 const isThemeView = selectedView === 'theme';
 const isOnboardingView = selectedView === 'onboarding';
 const routePath = window.location.pathname.replace(/\/$/,'') || '/';
-const navigationShell = routePath==='/home'||['/work','/trends','/opportunities','/competitors','/sourcing','/tasks','/notifications','/me'].some(path=>routePath===path||routePath.startsWith(`${path}/`))?'member':routePath==='/org-admin'||routePath.startsWith('/org-admin/')?'organization_admin':routePath==='/platform-admin'||routePath.startsWith('/platform-admin/')?'platform_admin':null;
+const navigationShell = routePath==='/home'||['/work','/trends','/opportunities','/competitors','/sourcing','/tasks','/notifications','/automations','/me'].some(path=>routePath===path||routePath.startsWith(`${path}/`))?'member':routePath==='/org-admin'||routePath.startsWith('/org-admin/')?'organization_admin':routePath==='/platform-admin'||routePath.startsWith('/platform-admin/')?'platform_admin':null;
 const isUiStatesView = selectedView === 'ui-states' || routePath === '/ui-states';
 const isNotFoundRoute = routePath !== '/' && !navigationShell && !isUiStatesView;
 

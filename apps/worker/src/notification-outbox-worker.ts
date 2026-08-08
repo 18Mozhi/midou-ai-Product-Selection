@@ -16,7 +16,7 @@ export class NotificationOutboxWorker {
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT * FROM outbox_events WHERE ((status='pending' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) AND (event_type LIKE 'task.%' OR event_type LIKE 'approval.%' OR event_type LIKE 'competitor.%') ORDER BY available_at,id LIMIT 1 FOR UPDATE",
+        "SELECT * FROM outbox_events WHERE ((status='pending' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) AND (event_type LIKE 'task.%' OR event_type LIKE 'approval.%' OR event_type LIKE 'competitor.%' OR event_type='automation.notification.queued') ORDER BY available_at,id LIMIT 1 FOR UPDATE",
         [now, now],
       );
       event = rows[0];
@@ -41,7 +41,9 @@ export class NotificationOutboxWorker {
           ? "approval"
           : String(event.event_type).startsWith("competitor.")
             ? "competitor"
-            : "task",
+            : String(event.event_type).startsWith("automation.")
+              ? "system"
+              : "task",
         recipients = await this.recipients(event, payload);
       for (const recipient of recipients)
         await this.create(event, payload, category, recipient, now);
@@ -68,7 +70,7 @@ export class NotificationOutboxWorker {
     }
   }
   private async recipients(event: any, p: any) {
-    const direct = p.active_approver_id ?? p.assignee_id;
+    const direct = p.recipient_id ?? p.active_approver_id ?? p.assignee_id;
     if (direct) return [String(direct)];
     if (String(event.event_type).startsWith("approval.")) {
       const requestId = p.approval_request_id ?? p.resource_id;
@@ -112,7 +114,9 @@ export class NotificationOutboxWorker {
       email = Boolean(pref?.email_enabled);
     if (!categoryEnabled) return;
     const title =
-        category === "approval"
+        category === "system" && p.title
+          ? String(p.title)
+          : category === "approval"
           ? "审批状态更新"
           : category === "competitor"
             ? "竞品监控更新"

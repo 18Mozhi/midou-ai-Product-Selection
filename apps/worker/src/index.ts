@@ -27,6 +27,7 @@ import {
 import { projectBusinessTaskOnce } from "./business-task-projection-worker.js";
 import { ApprovalEscalationWorker } from "./approval-escalation-worker.js";
 import { NotificationOutboxWorker } from "./notification-outbox-worker.js";
+import { AutomationWorker } from "./automation-worker.js";
 
 const config = loadRuntimeConfig(process.env, "worker");
 const pool = createDatabasePool(config);
@@ -102,6 +103,12 @@ const notificationOutbox = new NotificationOutboxWorker(
   config.notifications.outboxLeaseSeconds,
   config.notifications.retryLimit,
 );
+const automation = new AutomationWorker(
+  pool,
+  config.identity.workerId,
+  config.automations.leaseSeconds,
+  config.automations.retryLimit,
+);
 let stopping = false,
   authPolling = false,
   collectionPolling = false,
@@ -114,7 +121,8 @@ let stopping = false,
   aiPolling = false,
   businessTaskPolling = false,
   approvalPolling = false,
-  notificationPolling = false;
+  notificationPolling = false,
+  automationPolling = false;
 
 const heartbeat = () =>
   console.log(
@@ -132,6 +140,7 @@ const heartbeat = () =>
       ai_analysis: "registered",
       approval_escalation: "registered",
       notification_outbox: "registered",
+      automation_rules: "registered",
       config_fingerprint: config.configFingerprint,
       observed_at: new Date().toISOString(),
     }),
@@ -486,6 +495,18 @@ const pollNotifications = async () => {
     notificationPolling = false;
   }
 };
+const pollAutomations = async () => {
+  if (stopping || automationPolling) return;
+  automationPolling = true;
+  try {
+    const result = await automation.processOnce();
+    if (result.status !== "idle") console.log(JSON.stringify({ service: "product-scout-worker", queue: "automation_rules", ...result, observed_at: new Date().toISOString() }));
+  } catch (error) {
+    console.error(JSON.stringify({ service: "product-scout-worker", queue: "automation_rules", status: "dependency_failed", error: error instanceof Error ? error.message : "unknown", observed_at: new Date().toISOString() }));
+  } finally {
+    automationPolling = false;
+  }
+};
 
 heartbeat();
 const heartbeatTimer = setInterval(heartbeat, config.runtime.workerHeartbeatMs);
@@ -528,6 +549,10 @@ const notificationTimer = setInterval(
   () => void pollNotifications(),
   config.notifications.outboxPollMs,
 );
+const automationTimer = setInterval(
+  () => void pollAutomations(),
+  config.automations.pollMs,
+);
 void pollAuth();
 void pollCollection();
 void pollTrends();
@@ -540,6 +565,7 @@ void pollAi();
 void pollBusinessTasks();
 void pollApprovals();
 void pollNotifications();
+void pollAutomations();
 
 const stop = async (signal: string) => {
   if (stopping) return;
@@ -557,6 +583,7 @@ const stop = async (signal: string) => {
   clearInterval(businessTaskTimer);
   clearInterval(approvalTimer);
   clearInterval(notificationTimer);
+  clearInterval(automationTimer);
   while (
     authPolling ||
     collectionPolling ||
@@ -569,7 +596,8 @@ const stop = async (signal: string) => {
     aiPolling ||
     businessTaskPolling ||
     approvalPolling ||
-    notificationPolling
+    notificationPolling ||
+    automationPolling
   )
     await new Promise((resolve) => setTimeout(resolve, 25));
   await redisStore.close();

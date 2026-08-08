@@ -119,6 +119,7 @@ export interface RuntimeConfig {
     maxConnectionSeconds: number;
     maxConnections: number;
   };
+  automations: { pollMs: number; leaseSeconds: number; retryLimit: number; defaultRateLimit: number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -529,6 +530,12 @@ export function loadRuntimeConfig(
         300,
       ),
       maxConnections: integer(env, "REALTIME_MAX_CONNECTIONS", 200, 1, 2000),
+    },
+    automations: {
+      pollMs: integer(env, "AUTOMATION_POLL_MS", 2000, 250, 60000),
+      leaseSeconds: integer(env, "AUTOMATION_LEASE_SECONDS", 120, 30, 3600),
+      retryLimit: integer(env, "AUTOMATION_RETRY_LIMIT", 3, 1, 10),
+      defaultRateLimit: integer(env, "AUTOMATION_DEFAULT_RATE_LIMIT", 20, 1, 1000),
     },
     evidence: {
       maxRawBytes: integer(

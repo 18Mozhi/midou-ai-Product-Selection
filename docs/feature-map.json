@@ -47,7 +47,7 @@
       "M05-03",
       "M05-04"
     ],
-    "activeModules": ["M05-05"],
+    "activeModules": ["M05-06"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1162,6 +1162,38 @@
       ],
       "verificationRunId": "3bfab847-b04c-41f1-9817-e1b5fe7c64cb",
       "status": "module_verified"
+    },
+    "automationRules": {
+      "module": "M05-05",
+      "entrypoints": [
+        "../apps/api/src/automation-service.ts",
+        "../apps/api/src/mysql-automation-repository.ts",
+        "../apps/api/src/automation-routes.ts",
+        "../apps/worker/src/automation-worker.ts",
+        "../apps/web/src/components/AutomationRuleCenter.vue"
+      ],
+      "routes": [
+        "/automations",
+        "/api/v1/automations",
+        "/api/v1/automations/{automationRuleId}/actions"
+      ],
+      "scope": "organization and workspace scoped versioned rules notification-derived executions safe actions and idempotent operations",
+      "truthBoundary": "rules only consume persisted notification facts; actions notify an owner or create a human task and never approve or change opportunity facts",
+      "permission": "team:manage for reads and writes with active current context",
+      "configuration": [
+        "AUTOMATION_POLL_MS",
+        "AUTOMATION_LEASE_SECONDS",
+        "AUTOMATION_RETRY_LIMIT",
+        "AUTOMATION_DEFAULT_RATE_LIMIT"
+      ],
+      "runtimeBoundary": "Baota S0 single-host Node Worker with MySQL leases dedupe rate limiting and dead letter; no P08 capacity claim",
+      "imageEvidence": [
+        "concept 31 monitoring rules",
+        "concept 32 create monitoring rule",
+        "concept 44 competitor monitoring rules"
+      ],
+      "verificationRunId": "d64fe7a4-2994-4ca5-9ad0-76de628bf058",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -1318,6 +1350,12 @@
       "status": "M05-03_module_verified"
     },
     {
+      "path": "/automations",
+      "view": "AutomationRuleCenter",
+      "domain": "automation-rules",
+      "status": "M05-05_module_verified"
+    },
+    {
       "path": "/me",
       "view": "Profile",
       "domain": "identity",
@@ -1414,6 +1452,11 @@
       "prefix": "/api/v1/realtime",
       "domain": "realtime",
       "status": "M05-04_module_verified"
+    },
+    {
+      "prefix": "/api/v1/automations",
+      "domain": "automation-rules",
+      "status": "M05-05_module_verified"
     },
     {
       "prefix": "/api/v1/subscriptions",

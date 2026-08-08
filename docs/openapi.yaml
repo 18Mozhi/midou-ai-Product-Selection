@@ -1130,6 +1130,44 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /automations:
+    get:
+      summary: List automation rules in the active organization and workspace
+      x-required-capability: team:manage
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '403': { $ref: '#/components/responses/Error' }
+    post:
+      summary: Create and activate a versioned safe automation rule
+      description: Actions only notify the rule owner or create a human task; they never approve or change business facts.
+      x-required-capability: team:manage
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/AutomationRuleCreate'}}}}
+      responses:
+        '201': { $ref: '#/components/responses/Success' }
+        '400': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /automations/{automationRuleId}:
+    get:
+      summary: Get a scoped rule and its latest execution history
+      x-required-capability: team:manage
+      parameters: [{name: automationRuleId, in: path, required: true, schema: {type: string, format: uuid}}]
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /automations/{automationRuleId}/actions:
+    post:
+      summary: Manually pause or resume a versioned automation rule
+      x-required-capability: team:manage
+      parameters: [{name: automationRuleId, in: path, required: true, schema: {type: string, format: uuid}}, {$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, additionalProperties: false, required: [action, expected_version, reason], properties: {action: {type: string, enum: [pause, resume]}, expected_version: {type: integer, minimum: 1}, reason: {type: string, minLength: 1, maxLength: 1000}}}}}}
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /subscriptions:
     get:
       summary: List organization monitoring subscriptions
@@ -1589,6 +1627,20 @@ components:
         application/json:
           schema: { $ref: '#/components/schemas/ErrorEnvelope' }
   schemas:
+    AutomationRuleCreate:
+      type: object
+      additionalProperties: false
+      required: [name, trigger_event_type, condition_severity, action_type, owner_id, action_title]
+      properties:
+        name: {type: string, minLength: 1, maxLength: 200}
+        trigger_event_type: {type: string, enum: [approval.overdue, approval.node.rejected, competitor.alert.queued, task.created]}
+        condition_severity: {type: string, enum: [any, info, warning, critical]}
+        action_type: {type: string, enum: [notify_owner, create_task]}
+        owner_id: {type: string, format: uuid}
+        action_assignee_id: {type: string, format: uuid, nullable: true}
+        action_title: {type: string, minLength: 1, maxLength: 200}
+        rate_limit_count: {type: integer, minimum: 1, maximum: 1000, default: 20}
+        rate_limit_window_minutes: {type: integer, minimum: 1, maximum: 1440, default: 60}
     AiAnalysisQueueInput:
       type: object
       additionalProperties: false
