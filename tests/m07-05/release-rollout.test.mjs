@@ -56,3 +56,16 @@ test("M07-05.A06-A17 API, UI, config and documentation contracts stay synchroniz
   for (const token of ["M07-05", "platform:operate", "/api/v1/platform/operations/releases", "RELEASE_CANARY_OBSERVE_SECONDS", "5", "25", "100", "回滚"]) assert.match(all, new RegExp(token));
   assert.doesNotMatch(await read("apps/api/src/release-rollout-service.ts"), /password|cookie|token|private_key/i);
 });
+
+test("M07-05 candidate slot binds through the real APP_PORT runtime contract", async () => {
+  const [runtimeConfig, runbook, serviceManifest] = await Promise.all([
+    read("packages/config/src/index.ts"),
+    read("docs/runbooks/m07-05-release-rollout.md"),
+    read("infra/baota/service-manifest.json").then(JSON.parse),
+  ]);
+  const candidate = serviceManifest.objects.find((entry) => entry.name === "product-scout-api-canary");
+  assert.match(runtimeConfig, /port:\s*integer\(env,\s*"APP_PORT",\s*4101/);
+  assert.match(runbook, /APP_PORT=4103/);
+  assert.doesNotMatch(runbook, /(^|[^A-Z_])API_PORT=4103/m);
+  assert.deepEqual(candidate.runtimeEnvironment, { APP_PORT: 4103 });
+});

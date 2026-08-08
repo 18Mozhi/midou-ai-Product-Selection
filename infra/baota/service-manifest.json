@@ -55,6 +55,7 @@
       "startCommand": "node apps/api/dist/server.js",
       "bind": "127.0.0.1",
       "port": 4103,
+      "runtimeEnvironment": {"APP_PORT": 4103},
       "public": false,
       "purpose": "M07-05 same-host release slot B; stable and candidate roles alternate by audited release",
       "healthPaths": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
