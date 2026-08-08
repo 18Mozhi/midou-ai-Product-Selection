@@ -7,8 +7,8 @@
   "deliveryPlan": "../plans/README.md",
   "implementation": {
     "currentPhase": "P04",
-    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06"],
-    "activeModules": ["M04-07"],
+    "completedModules": ["M00-01", "M00-07", "M00-02", "M00-04", "M00-03", "M00-05", "M00-06", "M00-08", "M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06", "M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06", "M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07", "M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06", "M04-07"],
+    "activeModules": [],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -414,6 +414,20 @@
       "imageEvidence": ["concept 45 supplier search", "concept 46 supplier detail", "concept 47 quote comparison", "concept 48 cost calculator", "concept 49 purchase task", "high-resolution core page 08 supply and profit decision center"],
       "verificationRunId": "eeef7338-db72-4aef-b74c-99bf2d3513b4",
       "status": "module_verified"
+    },
+    "aiAssistedAnalysis": {
+      "module": "M04-07",
+      "entrypoints": ["../apps/api/src/ai-analysis-service.ts", "../apps/api/src/mysql-ai-analysis-repository.ts", "../apps/api/src/ai-analysis-routes.ts", "../apps/worker/src/ai-analysis-worker.ts", "../apps/web/src/components/OpportunityWorkspace.vue"],
+      "routes": ["/opportunities/{opportunityId}", "/api/v1/opportunities/{opportunityId}/ai-analyses", "/api/v1/ai-analyses/{resultId}/reviews"],
+      "scope": "organization and workspace scoped immutable input snapshots requests results reviews events outbox and idempotency operations",
+      "truthBoundary": "AI only summarizes classifies and points out missing fields from persisted facts; ai_generated output cannot create or overwrite prices scores profits qualifications risk conclusions or decisions",
+      "permission": "opportunity:read for scoped results; opportunity:decide for queueing and human sampling review",
+      "audit": "input SHA prompt contract model provider request id request_id trace_id events outbox and separate human review remain correlated without logging secrets",
+      "configuration": ["AI_BASE_URL", "AI_MODEL", "AI_API_KEY", "AI_TIMEOUT_MS", "AI_RETRY_LIMIT", "AI_ANALYSIS_POLL_MS", "AI_ANALYSIS_LEASE_SECONDS"],
+      "runtimeBoundary": "OpenAI-compatible JSON mode calls execute only in the Baota-managed Node Worker and every response is locally schema-validated against allowed source references",
+      "imageEvidence": ["concept 35 opportunity market analysis", "concept 36 opportunity competition analysis", "concept 38 opportunity risk", "concept 39 opportunity evidence", "concept 50 opportunity report", "concept 54 mobile opportunity detail", "high-resolution core page 06 opportunity dashboard"],
+      "verificationRunId": "1b290819-ac45-4e21-99f0-7d84d844d25e",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -474,6 +488,7 @@
     {"prefix": "/api/v1/org", "domain": "organization", "status": "M01-03_tenancy_M01-04_role_catalog_and_M01-05_exact_resource_grants_implemented_remaining_management_planned"},
     {"prefix": "/api/v1/trends", "domain": "trends", "status": "M04-01_topics_signals_evidence_follows_relevance_and_monitoring_rules_verified"},
     {"prefix": "/api/v1/opportunities", "domain": "opportunities", "status": "M04-02_list_create_detail_decisions_and_evidence_refresh_verified"},
+    {"prefix": "/api/v1/ai-analyses", "domain": "opportunities", "status": "M04-07_facts_only_ai_results_and_human_reviews_verified"},
     {"prefix": "/api/v1/competitors", "domain": "competitors", "status": "M04-05_identity_snapshots_changes_thresholds_and_alert_queue_implemented"},
     {"prefix": "/api/v1/sourcing", "domain": "sourcing", "status": "M04-06_search_projection_quote_comparison_and_purchase_task_verified"},
     {"prefix": "/api/v1/tasks", "domain": "tasks", "status": "planned"},

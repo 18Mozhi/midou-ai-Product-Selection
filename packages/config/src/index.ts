@@ -12,7 +12,7 @@ export interface RuntimeConfig {
   app: { host: string; port: number; version: string; buildSha: string; webOrigin: string };
   database: { host: string; port: number; name: string; user: string; password: string; writeHost?: string; readHost?: string };
   redis: { host: string; port: number; password: string; connectTimeoutMs: number };
-  ai: { baseUrl: string; model: string; apiKey: string; timeoutMs: number };
+  ai: { baseUrl: string; model: string; apiKey: string; timeoutMs: number; retryLimit:number; pollMs:number; leaseSeconds:number };
   storage: { evidenceRoot: string; exportRoot: string; credentialTempRoot: string };
   security: { sessionSecret: string; credentialsMasterKey: string; credentialsMasterKeyVersion: string; evidenceDownloadSigningKey:string };
   providerAdapters: { healthTimeoutMs: number; maxResponseBytes: number; maxItemsPerBatch: number };
@@ -59,7 +59,7 @@ export function loadRuntimeConfig(env: NodeJS.ProcessEnv = process.env, target: 
     app: { host: text(env, 'APP_HOST', '127.0.0.1'), port: integer(env, 'APP_PORT', 4101, 1, 65535), version: text(env, 'APP_VERSION', '0.1.0'), buildSha: text(env, 'BUILD_SHA', 'development'), webOrigin: httpUrl(env, 'WEB_ORIGIN', 'http://127.0.0.1:5173') },
     database: { host: text(env, 'DB_HOST', '127.0.0.1'), port: integer(env, 'DB_PORT', 3306, 1, 65535), name: text(env, 'DB_NAME', 'product_scout'), user: text(env, 'DB_USER', 'product_scout'), password: secret(env, 'DB_PASSWORD', production, 12), ...(text(env, 'DB_WRITE_HOST') ? { writeHost: text(env, 'DB_WRITE_HOST') } : {}), ...(text(env, 'DB_READ_HOST') ? { readHost: text(env, 'DB_READ_HOST') } : {}) },
     redis: { host: text(env, 'REDIS_HOST', '127.0.0.1'), port: integer(env, 'REDIS_PORT', 6379, 1, 65535), password: text(env, 'REDIS_PASSWORD'), connectTimeoutMs: integer(env, 'REDIS_CONNECT_TIMEOUT_MS', 3000, 100, 30000) },
-    ai: { baseUrl: httpUrl(env, 'AI_BASE_URL', 'http://192.168.1.203:8588/v1'), model: text(env, 'AI_MODEL', 'Qwen3.5-9B-AWQ-4bit'), apiKey: text(env, 'AI_API_KEY'), timeoutMs: integer(env, 'AI_TIMEOUT_MS', 30000, 1000, 300000) },
+    ai: { baseUrl: httpUrl(env, 'AI_BASE_URL', 'http://192.168.1.203:8588/v1'), model: text(env, 'AI_MODEL', 'Qwen3.5-9B-AWQ-4bit'), apiKey: text(env, 'AI_API_KEY'), timeoutMs: integer(env, 'AI_TIMEOUT_MS', 30000, 1000, 300000),retryLimit:integer(env,'AI_RETRY_LIMIT',3,0,10),pollMs:integer(env,'AI_ANALYSIS_POLL_MS',2000,250,60000),leaseSeconds:integer(env,'AI_ANALYSIS_LEASE_SECONDS',120,30,3600) },
     storage: { evidenceRoot, exportRoot, credentialTempRoot },
     security: { sessionSecret: secret(env, 'SESSION_SECRET', production, 32), credentialsMasterKey: secret(env, 'CREDENTIALS_MASTER_KEY', production, 32), credentialsMasterKeyVersion: text(env, 'CREDENTIALS_MASTER_KEY_VERSION', 'v1'), evidenceDownloadSigningKey:secret(env,'EVIDENCE_DOWNLOAD_SIGNING_KEY',production,32) },
     providerAdapters: { healthTimeoutMs: integer(env, 'PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS', 10000, 100, 120000), maxResponseBytes: integer(env, 'PROVIDER_ADAPTER_MAX_RESPONSE_BYTES', 5242880, 1024, 100000000), maxItemsPerBatch: integer(env, 'PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH', 500, 1, 5000) },
