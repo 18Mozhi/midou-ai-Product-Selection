@@ -49,9 +49,10 @@
       "M05-05",
       "M05-06",
       "M06-01",
-      "M06-02"
+      "M06-02",
+      "M06-03"
     ],
-    "activeModules": ["M06-03"],
+    "activeModules": ["M06-04"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1285,6 +1286,19 @@
       "runtimeBoundary": "synchronous MySQL 5.7 read model under Baota Node API; existing Worker and Crawler queues are observed but no dashboard daemon is created",
       "imageEvidence": ["concept 61 platform operations overview", "high resolution 10 platform operations cockpit"],
       "verificationRunId": "d424c7a8-eb72-4ddd-b9aa-3ce93ffbbe96",
+      "status": "module_verified"
+    },
+    "collectionOperationsConsole": {
+      "module": "M06-03",
+      "entrypoints": ["../apps/api/src/collection-console-service.ts", "../apps/api/src/mysql-collection-console-repository.ts", "../apps/web/src/components/CollectionOperationsConsole.vue"],
+      "routes": ["/platform-admin/collection/overview", "/api/v1/platform/collection/console"],
+      "scope": "platform source definitions and health plus optionally organization and workspace scoped tasks attempts dead letters and quality summaries",
+      "truthBoundary": "no credentials cookies payloads or file paths; controlled replay and source writes remain on existing idempotent versioned M03 endpoints",
+      "permission": "platform:operate read guard and collection:replay or provider:configure on existing write routes; correlated global read audit",
+      "configuration": ["COLLECTION_CONSOLE_RECENT_LIMIT"],
+      "runtimeBoundary": "observes existing Node Worker and Python Crawler leases retries rate limits and dead letters under Baota; creates no new daemon",
+      "imageEvidence": ["concept 62 source management", "concept 63 collection task monitoring", "concept 64 system monitoring"],
+      "verificationRunId": "808ea175-55fc-483f-a1c2-eec161fcf9bd",
       "status": "module_verified"
     }
   },

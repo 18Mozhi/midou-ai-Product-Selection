@@ -123,6 +123,7 @@ export interface RuntimeConfig {
   reports: { pollMs: number; leaseSeconds: number; retryLimit: number; exportTtlHours: number; maxRows: number; exportRoot: string };
   organizationAdmin: { invitationTtlHours: number; tokenDefaultTtlDays: number; tokenMaxActive: number };
   platformDashboard: { defaultWindow: "15m"|"24h"|"7d"|"30d"; queueWarning: number; errorLimit: number };
+  collectionConsole: { recentLimit: number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -558,6 +559,7 @@ export function loadRuntimeConfig(
       queueWarning: integer(env, "PLATFORM_DASHBOARD_QUEUE_WARNING", 1000, 1, 1000000),
       errorLimit: integer(env, "PLATFORM_DASHBOARD_ERROR_LIMIT", 20, 1, 100),
     },
+    collectionConsole: { recentLimit: integer(env, "COLLECTION_CONSOLE_RECENT_LIMIT", 50, 10, 200) },
     evidence: {
       maxRawBytes: integer(
         env,

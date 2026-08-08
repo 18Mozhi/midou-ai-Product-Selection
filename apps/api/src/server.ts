@@ -82,6 +82,9 @@ import { registerOrganizationAdminRoutes } from "./organization-admin-routes.js"
 import { PlatformDashboardService } from "./platform-dashboard-service.js";
 import { MySqlPlatformDashboardRepository } from "./mysql-platform-dashboard-repository.js";
 import { registerPlatformDashboardRoutes } from "./platform-dashboard-routes.js";
+import { CollectionConsoleService } from "./collection-console-service.js";
+import { MySqlCollectionConsoleRepository } from "./mysql-collection-console-repository.js";
+import { registerCollectionConsoleRoutes } from "./collection-console-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -397,6 +400,12 @@ registerPlatformDashboardRoutes(app, {
     new MySqlPlatformDashboardRepository(pool, config.platformDashboard.queueWarning, config.platformDashboard.errorLimit),
     config.platformDashboard.defaultWindow,
   ),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+});
+registerCollectionConsoleRoutes(app, {
+  service: new CollectionConsoleService(new MySqlCollectionConsoleRepository(pool), config.collectionConsole.recentLimit),
   authorization,
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",

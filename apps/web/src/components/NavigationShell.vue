@@ -22,6 +22,7 @@ import AutomationRuleCenter from "./AutomationRuleCenter.vue";
 import ReportCenter from "./ReportCenter.vue";
 import OrganizationAdminCenter from "./OrganizationAdminCenter.vue";
 import PlatformDashboard from "./PlatformDashboard.vue";
+import CollectionOperationsConsole from "./CollectionOperationsConsole.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -609,6 +610,10 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         >
           <nav class="provider-runtime-tabs" aria-label="采集控制台视图">
             <a
+              href="/platform-admin/collection/overview"
+              :aria-current="routePath === '/platform-admin/collection/overview' ? 'page' : undefined"
+              >运营总览</a
+            ><a
               href="/platform-admin/collection"
               :aria-current="
                 routePath === '/platform-admin/collection' ? 'page' : undefined
@@ -624,8 +629,12 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
               >浏览器运行时</a
             >
           </nav>
+          <CollectionOperationsConsole
+            v-if="routePath === '/platform-admin/collection/overview'"
+            :api-base-url="apiBaseUrl"
+          />
           <CollectionRuntimeCenter
-            v-if="routePath === '/platform-admin/collection/browser-runtime'"
+            v-else-if="routePath === '/platform-admin/collection/browser-runtime'"
             :api-base-url="apiBaseUrl"
           />
           <CollectionTaskCenter v-else :api-base-url="apiBaseUrl" />

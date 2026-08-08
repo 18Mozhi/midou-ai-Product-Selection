@@ -1765,6 +1765,21 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '429': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/collection/console:
+    get:
+      summary: Read the audited source and collection operations console
+      description: Requires platform:operate. Optional organization_id and workspace_id scope all task, attempt, dead-letter and quality rows; source definitions remain platform-global. Write and replay actions use their existing versioned idempotent endpoints.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: organization_id, in: query, schema: { type: string, format: uuid } }
+        - { name: workspace_id, in: query, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: Source health, task states, recent attempts, dead letters, quality summary and controlled action links, content: { application/json: { schema: { type: object } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
 components:
   securitySchemes:
     BearerAuth:

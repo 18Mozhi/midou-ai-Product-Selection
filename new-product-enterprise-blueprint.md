@@ -296,6 +296,12 @@ M04-07 实现合同：AI 辅助分析只读取当前组织、当前工作区内�
 - 每次读取写入 `platform_dashboard_views` 和全局 `platform_audit_events`，携带 request_id、trace_id、操作者、时间窗与观测时间。
 - `PLATFORM_DASHBOARD_DEFAULT_WINDOW`、`PLATFORM_DASHBOARD_QUEUE_WARNING`、`PLATFORM_DASHBOARD_ERROR_LIMIT` 由宝塔环境配置并在重启 Node API 后生效；驾驶舱仅观察既有队列，不创建面板外服务，也不声明 P08 容量。
 
+#### M06-03 来源与采集控制台实现基线
+
+- `/platform-admin/collection/overview` 汇总平台来源定义与健康；任务、尝试、死信和质量问题可按 organization_id/workspace_id 精确筛选，来源写入、健康检查和死信重放继续使用 M03 已有版本锁、幂等、权限和审计接口。
+- 控制台不返回凭证、Cookie、采集 payload 或文件路径。读取要求 `platform:operate` 并记录全局审计；重放仍要求 `collection:replay`、同源、原因与 `Idempotency-Key`。
+- `COLLECTION_CONSOLE_RECENT_LIMIT` 仅控制最近尝试和死信行数，修改后由宝塔重启 Node API；现有 Worker/Crawler 负责租约、重试、限流和死信，控制台不创建新进程。
+
 ### 4.3 平台管理员初始化
 
 - 首次部署必须通过一次性安全种子创建平台超级管理员；禁止固定默认账号和默认密码。

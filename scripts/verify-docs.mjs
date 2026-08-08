@@ -60,6 +60,8 @@ const required = [
   'plans/phase-08-scale-ha.md'
   ,'verification/modules/M06-02.json', 'docs/architecture/m06-02-platform-dashboard.md',
   'docs/runbooks/m06-02-platform-dashboard.md'
+  ,'verification/modules/M06-03.json', 'docs/architecture/m06-03-collection-console.md',
+  'docs/runbooks/m06-03-collection-console.md'
 ];
 
 for (const file of required) await access(resolve(process.cwd(), file));
