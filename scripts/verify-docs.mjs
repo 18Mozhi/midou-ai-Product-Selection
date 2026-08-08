@@ -68,6 +68,9 @@ const required = [
   'verification/release-matrix.json', 'scripts/verify-release-matrix.mjs',
   'verification/modules/M07-01.json', 'docs/architecture/m07-01-release-matrix.md',
   'docs/runbooks/m07-01-release-matrix.md',
+  'verification/security-gate.json', 'scripts/verify-security-gate.mjs',
+  'verification/modules/M07-02.json', 'docs/architecture/m07-02-security-gate.md',
+  'docs/runbooks/m07-02-security-gate.md',
   'docs/runbooks/m06-04-security-operations.md'
 ];
 

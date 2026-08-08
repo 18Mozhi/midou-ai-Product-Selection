@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "moduleId": "M07-02",
+  "scope": "repository and Baota release-task security gate; no production runtime API, table, page, permission or daemon",
+  "dependencyAudit": { "command": "npm audit --omit=dev --json", "maximumHigh": 0, "maximumCritical": 0 },
+  "trackedSecretFilePatterns": [".env", ".pem", ".key", ".p12", "id_rsa"],
+  "sourceRoots": ["apps", "packages", "config", "infra"],
+  "excludedSegments": ["/dist/", "/node_modules/"],
+  "checks": [
+    "dependency-vulnerabilities", "tracked-secret-files", "hardcoded-secret-signatures",
+    "browser-dangerous-sinks", "browser-sensitive-storage", "external-link-opener",
+    "parameterized-sql-contract", "csrf-origin-contract", "ssrf-webhook-contract",
+    "upload-surface-contract", "authorization-live", "sanitized-log-live", "baota-edge-headers"
+  ],
+  "notApplicable": {
+    "databaseMigration": "The gate reads repository and runtime evidence and persists only ignored verification reports.",
+    "runtimeApi": "Release verification is never exposed through a production HTTP route.",
+    "frontendPage": "The gate validates all existing pages and does not add a user-facing security result page.",
+    "asyncRuntime": "It runs as a finite local, CI, or Baota-controlled release task, never as a Worker, Crawler, Outbox consumer, or daemon."
+  }
+}

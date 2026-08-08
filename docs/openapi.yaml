@@ -13,7 +13,9 @@ x-scoutops-verification:
     phase: npm run verify:phase -- P00
     all: npm run verify:all
     releaseMatrix: node scripts/verify-release-matrix.mjs --validate
+    securityGate: npm run verify:security-gate
   releaseMatrixRuntimeApiExposed: false
+  securityGateRuntimeApiExposed: false
 x-scoutops-redis:
   runtimeApiExposed: false
   reason: M00-04 provides a backend-only scoped connection contract; M00-05 owns readiness routing and authorization middleware.

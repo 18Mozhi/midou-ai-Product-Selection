@@ -1,0 +1,33 @@
+{
+  "moduleId": "M07-02",
+  "phaseId": "P07",
+  "name": "Security Gate",
+  "dependencies": ["M07-01"],
+  "atomicTasks": [
+    {"id":"M07-02.A01","evidence":"frozen repository and Baota release security scope fail closed non-goals"},
+    {"id":"M07-02.A02","evidence":"versioned policy checks thresholds findings reports and not-applicable surfaces"},
+    {"id":"M07-02.A03","evidence":"no persistence rationale plus existing MySQL57 authorization live isolation cleanup"},
+    {"id":"M07-02.A04","evidence":"fixed repository security scanner with nonzero findings and redacted reports"},
+    {"id":"M07-02.A05","evidence":"finite Baota release task only; existing Worker SSRF retry and recovery contract"},
+    {"id":"M07-02.A06","evidence":"OpenAPI non-runtime security gate command without invented route"},
+    {"id":"M07-02.A07","evidence":"all existing Vue production sources scanned; no new security results page"},
+    {"id":"M07-02.A08","evidence":"dangerous DOM storage opener and external-link interaction rules"},
+    {"id":"M07-02.A09","evidence":"real RBAC organization workspace platform security and denied access chain"},
+    {"id":"M07-02.A10","evidence":"dependency secrets env and Baota edge configuration checks"},
+    {"id":"M07-02.A11","evidence":"redacted structured run_id trace_id check and finding report"},
+    {"id":"M07-02.A12","evidence":"policy boundary N-A edge header and scanner unit coverage"},
+    {"id":"M07-02.A13","evidence":"OpenAPI Feature Map env policy and fixed command contracts"},
+    {"id":"M07-02.A14","evidence":"real MySQL57 Redis authorization and sanitized security operations scenarios"},
+    {"id":"M07-02.A15","evidence":"existing pages statically checked; visual layout not changed and no new page"},
+    {"id":"M07-02.A16","evidence":"audit failure secret detection SSRF private address denial RBAC and dependency fail closed"},
+    {"id":"M07-02.A17","evidence":"blueprint Feature Map OpenAPI env architecture Runbook Baota and rollback synchronized"}
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m07-02/security-gate.test.mjs",
+    "npm run verify:security-gate",
+    "node scripts/verify-rbac-live.mjs",
+    "node scripts/verify-security-operations-live.mjs",
+    "npm run verify:docs"
+  ]
+}

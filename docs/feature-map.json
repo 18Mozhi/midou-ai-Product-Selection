@@ -1354,6 +1354,16 @@
       "imageEvidence": ["P07 core images 01 04 05 06 07 08 09 10", "concept 53 mobile home", "concept 54 mobile opportunity", "concept 72 not found"],
       "verificationRunId": "f12a7160-90ba-437c-9e6f-fc23149b9077",
       "status": "module_verified"
+    },
+    "securityGate": {
+      "module": "M07-02",
+      "entrypoints": ["../verification/security-gate.json", "../scripts/verify-security-gate.mjs"],
+      "scope": "dependency secrets SQL XSS CSRF SSRF upload authorization logging and Baota edge release gate",
+      "runtimeBoundary": "local CI or Baota-controlled finite release task only; no production API table page permission daemon or multi-node claim",
+      "securityHeaders": ["Content-Security-Policy", "X-Content-Type-Options", "Referrer-Policy", "Permissions-Policy", "X-Frame-Options"],
+      "configuration": ["VERIFY_COMMAND_TIMEOUT_MS", "VERIFY_REPORT_DIR"],
+      "verificationRunId": "3bd453d5-0016-418e-8c33-e42132341def",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
