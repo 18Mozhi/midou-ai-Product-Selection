@@ -1061,6 +1061,60 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '404': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /notifications:
+    get:
+      summary: List current recipient notifications in the active organization and workspace
+      x-required-capability: notification:read
+      parameters: [{name: page, in: query, schema: {type: integer, minimum: 1, default: 1}}, {name: page_size, in: query, schema: {type: integer, minimum: 1, maximum: 200, default: 50}}, {name: unread, in: query, schema: {type: boolean}}, {name: category, in: query, schema: {type: string, enum: [task, approval, competitor, system]}}]
+      responses:
+        '200': { $ref: '#/components/responses/PaginatedSuccess' }
+        '403': { $ref: '#/components/responses/Error' }
+  /notifications/summary:
+    get:
+      summary: Get current recipient unread and category counts
+      x-required-capability: notification:read
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+  /notifications/{notificationId}:
+    get:
+      summary: Get one current-recipient notification
+      x-required-capability: notification:read
+      parameters: [{name: notificationId, in: path, required: true, schema: {type: string, format: uuid}}]
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '404': { $ref: '#/components/responses/Error' }
+  /notifications/{notificationId}/actions:
+    post:
+      summary: Mark a versioned current-recipient notification read or unread
+      x-required-capability: notification:read
+      parameters: [{name: notificationId, in: path, required: true, schema: {type: string, format: uuid}}, {$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [action, expected_version], properties: {action: {type: string, enum: [read, unread]}, expected_version: {type: integer, minimum: 1}}}}}}
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /notifications/actions:
+    post:
+      summary: Mark all current-recipient notifications read
+      x-required-capability: notification:read
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+  /me/notification-preferences:
+    get:
+      summary: Get current-user notification preferences
+      x-required-capability: notification:read
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+    put:
+      summary: Update current-user versioned notification preferences
+      x-required-capability: notification:read
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [expected_version, in_app_enabled, email_enabled, task_enabled, approval_enabled, competitor_enabled], properties: {expected_version: {type: integer, minimum: 1}, in_app_enabled: {type: boolean}, email_enabled: {type: boolean, description: Creates placeholder delivery only}, task_enabled: {type: boolean}, approval_enabled: {type: boolean}, competitor_enabled: {type: boolean}}}}}}
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '409': { $ref: '#/components/responses/Error' }
   /subscriptions:
     get:
       summary: List organization monitoring subscriptions

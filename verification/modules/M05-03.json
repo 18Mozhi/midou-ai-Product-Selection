@@ -1,0 +1,83 @@
+{
+  "moduleId": "M05-03",
+  "phaseId": "P05",
+  "name": "Outbox and Notifications",
+  "dependencies": ["M05-02"],
+  "atomicTasks": [
+    {
+      "id": "M05-03.A01",
+      "evidence": "scope Outbox in-app notifications email placeholder preferences only"
+    },
+    {
+      "id": "M05-03.A02",
+      "evidence": "recipient notification preference delivery operation contracts"
+    },
+    {
+      "id": "M05-03.A03",
+      "evidence": "MySQL57 preferences notifications deliveries operations migration rollback"
+    },
+    {
+      "id": "M05-03.A04",
+      "evidence": "self inbox pagination version actions preferences idempotency services"
+    },
+    {
+      "id": "M05-03.A05",
+      "evidence": "Baota Worker global Outbox lease retry dead letter and dedupe"
+    },
+    {
+      "id": "M05-03.A06",
+      "evidence": "OpenAPI notification inbox summary detail actions preference contracts"
+    },
+    {
+      "id": "M05-03.A07",
+      "evidence": "notification inbox detail preferences desktop and 390 layout"
+    },
+    {
+      "id": "M05-03.A08",
+      "evidence": "loading empty error forbidden expired rate limited conflict recovery"
+    },
+    {
+      "id": "M05-03.A09",
+      "evidence": "notification read API Worker organization workspace recipient guards"
+    },
+    {
+      "id": "M05-03.A10",
+      "evidence": "Outbox poll lease retry email placeholder env schema Baota restart"
+    },
+    {
+      "id": "M05-03.A11",
+      "evidence": "source event audit request trace deliveries and health logs"
+    },
+    {
+      "id": "M05-03.A12",
+      "evidence": "actions preferences states version and validation unit tests"
+    },
+    {
+      "id": "M05-03.A13",
+      "evidence": "OpenAPI DTO event dedupe idempotency permission contracts"
+    },
+    {
+      "id": "M05-03.A14",
+      "evidence": "MySQL57 projection preferences read isolation delivery integration"
+    },
+    {
+      "id": "M05-03.A15",
+      "evidence": "Playwright desktop 390 inbox detail visual regression"
+    },
+    {
+      "id": "M05-03.A16",
+      "evidence": "lease recovery retry dead letter conflict dependency and rollback drills"
+    },
+    {
+      "id": "M05-03.A17",
+      "evidence": "blueprint Feature Map env architecture runbook migration rollback Baota handoff"
+    }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m05-03/notifications.test.mjs",
+    "node scripts/verify-notifications-live.mjs",
+    "npx playwright test tests/e2e/m05-03-notifications.spec.ts",
+    "npm run verify:docs"
+  ]
+}

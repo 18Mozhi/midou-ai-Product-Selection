@@ -424,6 +424,10 @@ flowchart LR
 
 审批模板采用草稿与不可变已发布版本分离；每个节点显式保存审批人、顺序、SLA 和超时接收人。审批请求只绑定当前组织、当前工作区内存在的任务或机会决策，并锁定创建时的模板版本。批准与驳回均要求原因并追加不可变动作历史；请求 version 防止并发覆盖。宝塔 Node Worker 以租约处理超时节点，只升级 active approver 并写审计和 `approval.overdue` Outbox，绝不自动批准或驳回；通知投递和 SSE 仍由 M05-03、M05-04 交付。
 
+#### M05-03 Outbox 与通知实现基线
+
+宝塔 Node Worker 以租约消费任务、审批和竞品事务 Outbox，按 `source_event_id + recipient_id` 去重生成当前组织、工作区、当前用户的站内通知。通知读取必须叠加 recipient_id，已读动作和偏好使用幂等键与版本锁并写审计。偏好可按任务、审批、竞品和渠道控制；邮件在没有真实 Provider 合同前固定为 placeholder，只记录 pending_placeholder 或 suppressed，绝不向外发送。SSE 由 M05-04 从通知事实读取，不与通知 Worker 抢占 Outbox。
+
 所有事件包含：`event_id`、`organization_id`、`actor_id`、`resource_type`、`resource_id`、`occurred_at`、`schema_version`、`request_id`、`trace_id`、最小业务 payload。
 
 首批事件：

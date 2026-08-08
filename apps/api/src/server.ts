@@ -64,6 +64,9 @@ import { registerBusinessTaskRoutes } from "./business-task-routes.js";
 import { ApprovalService } from "./approval-service.js";
 import { MySqlApprovalRepository } from "./mysql-approval-repository.js";
 import { registerApprovalRoutes } from "./approval-routes.js";
+import { NotificationService } from "./notification-service.js";
+import { MySqlNotificationRepository } from "./mysql-notification-repository.js";
+import { registerNotificationRoutes } from "./notification-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -322,6 +325,13 @@ registerBusinessTaskRoutes(app, {
 });
 registerApprovalRoutes(app, {
   service: new ApprovalService(new MySqlApprovalRepository(pool)),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
+});
+registerNotificationRoutes(app, {
+  service: new NotificationService(new MySqlNotificationRepository(pool)),
   authorization,
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",

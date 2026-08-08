@@ -106,6 +106,12 @@ export interface RuntimeConfig {
   sourcing: { pollMs: number; leaseSeconds: number };
   businessTasks: { pollMs: number; leaseSeconds: number };
   approvals: { escalationPollMs: number; escalationLeaseSeconds: number };
+  notifications: {
+    outboxPollMs: number;
+    outboxLeaseSeconds: number;
+    retryLimit: number;
+    emailDeliveryMode: "placeholder";
+  };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -486,6 +492,24 @@ export function loadRuntimeConfig(
         3600,
       ),
     },
+    notifications: {
+      outboxPollMs: integer(
+        env,
+        "NOTIFICATION_OUTBOX_POLL_MS",
+        2000,
+        250,
+        60000,
+      ),
+      outboxLeaseSeconds: integer(
+        env,
+        "NOTIFICATION_OUTBOX_LEASE_SECONDS",
+        120,
+        30,
+        3600,
+      ),
+      retryLimit: integer(env, "NOTIFICATION_OUTBOX_RETRY_LIMIT", 3, 1, 10),
+      emailDeliveryMode: "placeholder" as const,
+    },
     evidence: {
       maxRawBytes: integer(
         env,
@@ -515,6 +539,14 @@ export function loadRuntimeConfig(
     );
   if (!["true", "false"].includes(text(env, "PLAYWRIGHT_HEADLESS", "true")))
     throw new ConfigError("PLAYWRIGHT_HEADLESS", "must be true or false");
+  if (
+    text(env, "NOTIFICATION_EMAIL_DELIVERY_MODE", "placeholder") !==
+    "placeholder"
+  )
+    throw new ConfigError(
+      "NOTIFICATION_EMAIL_DELIVERY_MODE",
+      "must be placeholder until a real provider contract is configured",
+    );
   const safe = {
     ...base,
     database: { ...base.database, password: Boolean(base.database.password) },

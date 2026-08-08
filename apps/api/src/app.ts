@@ -119,6 +119,11 @@ import {
   registerApprovalRoutes,
   type ApprovalRouteOptions,
 } from "./approval-routes.js";
+import { NotificationServiceError } from "./notification-service.js";
+import {
+  registerNotificationRoutes,
+  type NotificationRouteOptions,
+} from "./notification-routes.js";
 
 export interface BuildAppOptions {
   version?: string;
@@ -151,6 +156,7 @@ export interface BuildAppOptions {
   aiAnalysis?: AiAnalysisRouteOptions;
   businessTasks?: BusinessTaskRouteOptions;
   approvals?: ApprovalRouteOptions;
+  notifications?: NotificationRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -310,6 +316,8 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if (options.businessTasks)
     registerBusinessTaskRoutes(app, options.businessTasks);
   if (options.approvals) registerApprovalRoutes(app, options.approvals);
+  if (options.notifications)
+    registerNotificationRoutes(app, options.notifications);
 
   app.setErrorHandler(
     async (
@@ -375,6 +383,10 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         error instanceof ApprovalServiceError
           ? (error as ApprovalServiceError)
           : null;
+      const notificationError =
+        error instanceof NotificationServiceError
+          ? (error as NotificationServiceError)
+          : null;
       const trendError =
         error instanceof TrendServiceError
           ? (error as TrendServiceError)
@@ -421,6 +433,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         sourceError?.statusCode ??
         businessTaskError?.statusCode ??
         approvalError?.statusCode ??
+        notificationError?.statusCode ??
         trendError?.statusCode ??
         opportunityError?.statusCode ??
         scoringError?.statusCode ??
@@ -456,6 +469,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             sourceError?.code ??
             businessTaskError?.code ??
             approvalError?.code ??
+            notificationError?.code ??
             trendError?.code ??
             opportunityError?.code ??
             scoringError?.code ??
@@ -471,6 +485,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             dataQualityError?.message ??
             businessTaskError?.message ??
             approvalError?.message ??
+            notificationError?.message ??
             trendError?.message ??
             opportunityError?.message ??
             scoringError?.message ??
@@ -511,6 +526,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             sourceError?.actionHint ??
             businessTaskError?.actionHint ??
             approvalError?.actionHint ??
+            notificationError?.actionHint ??
             trendError?.actionHint ??
             opportunityError?.actionHint ??
             scoringError?.actionHint ??

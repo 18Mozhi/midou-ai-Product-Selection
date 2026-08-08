@@ -17,6 +17,7 @@ import CompetitorMonitor from "./CompetitorMonitor.vue";
 import SourcingWorkspace from "./SourcingWorkspace.vue";
 import TaskWorkspace from "./TaskWorkspace.vue";
 import ApprovalWorkspace from "./ApprovalWorkspace.vue";
+import NotificationCenter from "./NotificationCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -238,6 +239,9 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   isApprovals = computed(
     () => props.shell === "member" && routePath === "/tasks/approvals",
   ),
+  isNotifications = computed(
+    () => props.shell === "member" && routePath === "/notifications",
+  ),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
   ),
@@ -266,7 +270,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
     return match?.[1] ?? "";
   });
 const phaseLabel = computed(() =>
-  isTasks.value || isApprovals.value
+  isTasks.value || isApprovals.value || isNotifications.value
     ? "P05"
     : isTrends.value ||
         isOpportunities.value ||
@@ -285,7 +289,7 @@ const phaseLabel = computed(() =>
         : "P02",
 );
 const pageSummary = computed(() =>
-  isTasks.value || isApprovals.value
+  isTasks.value || isApprovals.value || isNotifications.value
     ? "任务状态、负责人、期限、评论、转交和 SLA 均由当前工作区真实 API 驱动。"
     : isSourcing.value
       ? "供应链候选、版本化报价、最多五家对比和采购任务均保留来源与缺失项。"
@@ -489,6 +493,10 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           :mode="routePath === '/work' ? 'today' : 'all'"
         />
         <ApprovalWorkspace v-else-if="isApprovals" :api-base-url="apiBaseUrl" />
+        <NotificationCenter
+          v-else-if="isNotifications"
+          :api-base-url="apiBaseUrl"
+        />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"

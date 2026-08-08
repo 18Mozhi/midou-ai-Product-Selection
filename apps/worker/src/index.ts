@@ -26,6 +26,7 @@ import {
 } from "./ai-analysis-worker.js";
 import { projectBusinessTaskOnce } from "./business-task-projection-worker.js";
 import { ApprovalEscalationWorker } from "./approval-escalation-worker.js";
+import { NotificationOutboxWorker } from "./notification-outbox-worker.js";
 
 const config = loadRuntimeConfig(process.env, "worker");
 const pool = createDatabasePool(config);
@@ -96,6 +97,11 @@ const approvalEscalation = new ApprovalEscalationWorker(
   config.identity.workerId,
   config.approvals.escalationLeaseSeconds,
 );
+const notificationOutbox = new NotificationOutboxWorker(
+  pool,
+  config.notifications.outboxLeaseSeconds,
+  config.notifications.retryLimit,
+);
 let stopping = false,
   authPolling = false,
   collectionPolling = false,
@@ -107,7 +113,8 @@ let stopping = false,
   sourcingPolling = false,
   aiPolling = false,
   businessTaskPolling = false,
-  approvalPolling = false;
+  approvalPolling = false,
+  notificationPolling = false;
 
 const heartbeat = () =>
   console.log(
@@ -124,6 +131,7 @@ const heartbeat = () =>
       sourcing_projection: "registered",
       ai_analysis: "registered",
       approval_escalation: "registered",
+      notification_outbox: "registered",
       config_fingerprint: config.configFingerprint,
       observed_at: new Date().toISOString(),
     }),
@@ -450,6 +458,34 @@ const pollApprovals = async () => {
     approvalPolling = false;
   }
 };
+const pollNotifications = async () => {
+  if (stopping || notificationPolling) return;
+  notificationPolling = true;
+  try {
+    const result = await notificationOutbox.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "notification_outbox",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "notification_outbox",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  } finally {
+    notificationPolling = false;
+  }
+};
 
 heartbeat();
 const heartbeatTimer = setInterval(heartbeat, config.runtime.workerHeartbeatMs);
@@ -488,6 +524,10 @@ const approvalTimer = setInterval(
   () => void pollApprovals(),
   config.approvals.escalationPollMs,
 );
+const notificationTimer = setInterval(
+  () => void pollNotifications(),
+  config.notifications.outboxPollMs,
+);
 void pollAuth();
 void pollCollection();
 void pollTrends();
@@ -499,6 +539,7 @@ void pollSourcing();
 void pollAi();
 void pollBusinessTasks();
 void pollApprovals();
+void pollNotifications();
 
 const stop = async (signal: string) => {
   if (stopping) return;
@@ -515,6 +556,7 @@ const stop = async (signal: string) => {
   clearInterval(aiTimer);
   clearInterval(businessTaskTimer);
   clearInterval(approvalTimer);
+  clearInterval(notificationTimer);
   while (
     authPolling ||
     collectionPolling ||
@@ -526,7 +568,8 @@ const stop = async (signal: string) => {
     sourcingPolling ||
     aiPolling ||
     businessTaskPolling ||
-    approvalPolling
+    approvalPolling ||
+    notificationPolling
   )
     await new Promise((resolve) => setTimeout(resolve, 25));
   await redisStore.close();

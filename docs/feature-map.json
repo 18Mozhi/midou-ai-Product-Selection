@@ -43,9 +43,10 @@
       "M04-06",
       "M04-07",
       "M05-01",
-      "M05-02"
+      "M05-02",
+      "M05-03"
     ],
-    "activeModules": ["M05-03"],
+    "activeModules": ["M05-04"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1100,6 +1101,38 @@
       "imageEvidence": ["concept 27 task approval", "concept 60 approval flow"],
       "verificationRunId": "02651953-6607-45cc-ac45-887c9be17b60",
       "status": "module_verified"
+    },
+    "notifications": {
+      "module": "M05-03",
+      "entrypoints": [
+        "../apps/api/src/notification-service.ts",
+        "../apps/api/src/mysql-notification-repository.ts",
+        "../apps/api/src/notification-routes.ts",
+        "../apps/worker/src/notification-outbox-worker.ts",
+        "../apps/web/src/components/NotificationCenter.vue"
+      ],
+      "routes": [
+        "/notifications",
+        "/api/v1/notifications",
+        "/api/v1/notifications/{notificationId}/actions",
+        "/api/v1/me/notification-preferences"
+      ],
+      "scope": "organization workspace and current recipient scoped notification facts preferences deliveries idempotent operations and audit",
+      "truthBoundary": "source Outbox and recipient are preserved; email mode is placeholder only and M05-04 SSE is not implemented here",
+      "permission": "notification:read for current-recipient reads actions and self preferences",
+      "configuration": [
+        "NOTIFICATION_OUTBOX_POLL_MS",
+        "NOTIFICATION_OUTBOX_LEASE_SECONDS",
+        "NOTIFICATION_OUTBOX_RETRY_LIMIT",
+        "NOTIFICATION_EMAIL_DELIVERY_MODE"
+      ],
+      "runtimeBoundary": "global Outbox projection runs only in the Baota-managed Node Worker; email creates pending_placeholder and no external request",
+      "imageEvidence": [
+        "concept 17 notification center",
+        "concept 18 message detail"
+      ],
+      "verificationRunId": "72378171-fd60-4a38-99ed-ae5fba560eb6",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -1251,9 +1284,9 @@
     },
     {
       "path": "/notifications",
-      "view": "Notifications",
+      "view": "NotificationCenter",
       "domain": "notifications",
-      "status": "planned"
+      "status": "M05-03_module_verified"
     },
     {
       "path": "/me",
@@ -1342,6 +1375,11 @@
       "prefix": "/api/v1/tasks",
       "domain": "tasks-and-approvals",
       "status": "M05-01_tasks_and_M05-02_approval_workflow_verified"
+    },
+    {
+      "prefix": "/api/v1/notifications",
+      "domain": "notifications",
+      "status": "M05-03_module_verified"
     },
     {
       "prefix": "/api/v1/subscriptions",
