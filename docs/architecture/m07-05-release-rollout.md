@@ -8,7 +8,7 @@ M07-05 在惠州当前 S0 主机内使用两个宝塔 Node 项目：`product-sco
 
 真实 MySQL 验收使用 MySQL `UTC_TIMESTAMP(3)` 的执行时刻创建唯一 release 探针，使它不受宝塔任务进程本地时区影响，并在验收事务内成为当前发布，再验证 verified → blocked 的失败关闭转换；固定历史时间或把 JavaScript 本地时间直接写入排序字段会被已有生产发布遮蔽，禁止使用。验收结束无论成功或失败都按唯一 actor/release 清理用户、写探针、gate、release 和审计探针，不改真实发布记录。
 
-Playwright 默认继续使用本地开发端口 4101/5173；宝塔模块验收必须通过 `PLAYWRIGHT_API_PORT`、`PLAYWRIGHT_WEB_PORT` 和同值 `APP_PORT` 选择未占用的隔离端口。临时 API/Web 只服务本次浏览器门，不能复用生产 API、不能注册为生产服务，并由 Playwright 在命令结束时关闭。
+Playwright 默认继续使用本地开发端口 4101/5173；宝塔模块验收必须通过 `PLAYWRIGHT_API_PORT`、`PLAYWRIGHT_WEB_PORT` 和同值 `APP_PORT` 选择未占用的隔离端口。若生产主机系统不在 Playwright 自带浏览器下载映射内，可将 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` 设置为宝塔主机上已验证的 Chromium 绝对路径；空值继续使用 Playwright 自带浏览器，禁止相对路径。临时 API/Web 只服务本次浏览器门，不能复用生产 API、不能注册为生产服务，并由 Playwright 在命令结束时关闭。
 
 ## 流量、指标与失败关闭
 

@@ -97,7 +97,8 @@
     ],
     "playwrightVerification": [
       "PLAYWRIGHT_API_PORT",
-      "PLAYWRIGHT_WEB_PORT"
+      "PLAYWRIGHT_WEB_PORT",
+      "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"
     ],
     "playwrightCrawler": [
       "PLAYWRIGHT_HEADLESS",

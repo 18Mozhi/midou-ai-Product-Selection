@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { isAbsolute } from 'node:path';
 
 const playwrightPort = (name: string, fallback: number) => {
   const value = Number(process.env[name] ?? fallback);
@@ -7,6 +8,10 @@ const playwrightPort = (name: string, fallback: number) => {
 };
 const apiPort = playwrightPort('PLAYWRIGHT_API_PORT', Number(process.env.APP_PORT ?? 4101));
 const webPort = playwrightPort('PLAYWRIGHT_WEB_PORT', 5173);
+const chromiumExecutablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?.trim();
+if (chromiumExecutablePath && !isAbsolute(chromiumExecutablePath)) {
+  throw new Error('PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH must be an absolute path');
+}
 
 export default defineConfig({
   expect: { timeout: 10_000, toHaveScreenshot: { maxDiffPixelRatio: 0.01 } },
@@ -20,6 +25,7 @@ export default defineConfig({
     baseURL: `http://127.0.0.1:${webPort}`,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
+    ...(chromiumExecutablePath ? { launchOptions: { executablePath: chromiumExecutablePath } } : {}),
   },
   projects: [
     { name: 'desktop-chromium', use: { ...devices['Desktop Chrome'] } },

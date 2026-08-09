@@ -102,6 +102,25 @@ test("M07-05 Playwright verification uses isolated configurable API and Web port
   assert.match(envExample, /^PLAYWRIGHT_WEB_PORT=5173$/m);
 });
 
+test("M07-05 Playwright verification can use the BaoTa host system Chromium", async () => {
+  const [playwrightConfig, envExample, schema, featureMap, runbook, blueprint, phasePlan] = await Promise.all([
+    read("playwright.config.ts"),
+    read("config/env.example"),
+    read("config/schema.json"),
+    read("docs/feature-map.json"),
+    read("docs/runbooks/m07-05-release-rollout.md"),
+    read("new-product-enterprise-blueprint.md"),
+    read("plans/phase-07-release-production.md"),
+  ]);
+  for (const source of [playwrightConfig, envExample, schema, featureMap, runbook, blueprint, phasePlan]) {
+    assert.match(source, /PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH/);
+  }
+  assert.match(playwrightConfig, /launchOptions/);
+  assert.match(playwrightConfig, /executablePath/);
+  assert.match(envExample, /^PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$/m);
+  assert.match(runbook, /\/usr\/bin\/chromium/);
+});
+
 test("M07-05 MySQL single-row gates use object presence instead of array length", async () => {
   const runner = await read("scripts/run-baota-release-rollout.mjs");
   assert.doesNotMatch(runner, /\b(?:existing|backup|sameBuild)\.length\b/);
