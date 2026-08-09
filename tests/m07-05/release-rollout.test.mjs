@@ -98,6 +98,9 @@ test("M07-05 live verification timestamps its probe after any existing productio
   const verifier = await read("scripts/verify-release-rollout-live.mjs");
   assert.match(verifier, /now\s*=\s*new Date\(\)/);
   assert.doesNotMatch(verifier, /now\s*=\s*new Date\(["']\d{4}-\d{2}-\d{2}T/);
+  assert.match(verifier, /UTC_TIMESTAMP\(3\)/);
+  assert.match(verifier, /DATE_SUB\(UTC_TIMESTAMP\(3\), INTERVAL 1800 SECOND\)/);
+  assert.doesNotMatch(verifier, /new Date\(now\.getTime\(\)-5_400_000\)/);
 });
 
 test("M07-05 signed release write probe rejects stale or forged requests before the durable write", async () => {

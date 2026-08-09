@@ -6,7 +6,7 @@ M07-05 在惠州当前 S0 主机内使用两个宝塔 Node 项目：`product-sco
 
 `deployment_releases` 保留构建 SHA、配置指纹、迁移版本与发布状态；`deployment_release_gates` 按当前 release 记录 preflight、备份、迁移、5%、25%、100%、自动停止与回滚事实；`deployment_release_gate_events` 是追加式审计。`deployment_release_write_probes` 保存每个候选写样本的 release、build、sample、nonce 哈希、request_id、trace_id 与时间。GET `/api/v1/platform/operations/releases` 只允许 `platform:operate`，只返回脱敏发布事实，不暴露主机配置、面板凭证、日志路径或元数据。
 
-真实 MySQL 验收使用执行时刻创建唯一 release 探针，使它在验收事务内成为当前发布，再验证 verified → blocked 的失败关闭转换；固定历史时间会被已有生产发布遮蔽，禁止使用。验收结束无论成功或失败都按唯一 actor/release 清理用户、写探针、gate、release 和审计探针，不改真实发布记录。
+真实 MySQL 验收使用 MySQL `UTC_TIMESTAMP(3)` 的执行时刻创建唯一 release 探针，使它不受宝塔任务进程本地时区影响，并在验收事务内成为当前发布，再验证 verified → blocked 的失败关闭转换；固定历史时间或把 JavaScript 本地时间直接写入排序字段会被已有生产发布遮蔽，禁止使用。验收结束无论成功或失败都按唯一 actor/release 清理用户、写探针、gate、release 和审计探针，不改真实发布记录。
 
 ## 流量、指标与失败关闭
 
