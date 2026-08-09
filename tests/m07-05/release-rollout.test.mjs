@@ -94,6 +94,12 @@ test("M07-05 MySQL single-row gates use object presence instead of array length"
   assert.match(runner, /if \(sameBuild\)/);
 });
 
+test("M07-05 live verification timestamps its probe after any existing production release", async () => {
+  const verifier = await read("scripts/verify-release-rollout-live.mjs");
+  assert.match(verifier, /now\s*=\s*new Date\(\)/);
+  assert.doesNotMatch(verifier, /now\s*=\s*new Date\(["']\d{4}-\d{2}-\d{2}T/);
+});
+
 test("M07-05 signed release write probe rejects stale or forged requests before the durable write", async () => {
   const { ReleaseWriteProbeService, signReleaseProbe } = await import("../../apps/api/dist/release-rollout-service.js");
   const now = new Date("2026-08-08T18:00:00.000Z"), signingKey = "m07-05-test-signing-key-with-32-characters", writes = [];

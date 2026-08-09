@@ -6,7 +6,7 @@ import { ReleaseRolloutService, ReleaseWriteProbeService, signReleaseProbe } fro
 import { MySqlReleaseRolloutRepository } from "../apps/api/dist/mysql-release-rollout-repository.js";
 
 const pool = createDatabasePool(loadRuntimeConfig(process.env, "api")), requestId = randomUUID(), traceId = randomUUID();
-const ids = { actor: randomUUID(), release: randomUUID() }, now = new Date("2026-08-08T15:00:00.000Z"), email = `m07-05-${requestId.slice(0,8)}@test.local`;
+const ids = { actor: randomUUID(), release: randomUUID() }, now = new Date(), email = `m07-05-${requestId.slice(0,8)}@test.local`;
 async function migrate() {
   for (const name of ["0007_m00_08_deployment_releases.up.sql", "0026_release_rollout_m07_05.up.sql", "0027_release_write_probe_m07_05.up.sql"]) {
     const sql = await readFile(`database/migrations/${name}`, "utf8"), checksum = createHash("sha256").update(sql.replace(/\r\n/g, "\n")).digest("hex");

@@ -15,6 +15,7 @@ MySQL 5.7 的宝塔受限 `my.cnf` 必须显式设置 `innodb_flush_log_at_trx_c
 3. 从宝塔手工执行发布任务。任务先验证 `0027` 写探针迁移和候选签名写入，再依次配置 5%、25%、100%，每阶段至少观察 30 分钟；宝塔日志应持续显示 request_id/trace_id，但不显示秘密。Nginx 会用 32 位十六进制 `$request_id` 覆盖 `X-Request-ID`，因此签名 canonical 只含 timestamp、nonce、release_id、sample_id；API 仍保存代理传入的追踪值。候选写探针必须返回 202，且候选构建的新增持久化行数必须与候选 Nginx 写样本数相等，否则自动回到稳定槽。
 4. 在 `/platform-admin/releases` 查看当前 release、三阶段样本、5xx、读写 P95、异步延迟和阻断项。API 只读，不能从浏览器触发发布。
 5. 生产证据写入 Git 忽略的 `.artifacts/verification/release-rollout-production-evidence.json`，再执行 `node scripts/verify-release-rollout-production.mjs --production`。
+6. 从宝塔 `product-scout-release-gate` 有限任务执行 `npm run verify:module -- M07-05`。任务运行前确认 `schema_migrations` 同时登记 `0007_m00_08_deployment_releases.up.sql`、`0026_release_rollout_m07_05.up.sql` 和 `0027_release_write_probe_m07_05.up.sql`。若表已存在但 0007 账本缺失，必须先逐字段、引擎、字符集和索引比对实际表与 0007 文件，并核对 SHA-256 后只补账本行、保留 0600 前后证据；不得重跑 `CREATE TABLE`、删除表或伪造 checksum。live 验收按实际执行时间创建唯一测试发布，避免被较新的真实发布遮蔽，并在成功或失败后清理全部探针数据。
 
 ## 自动停止与人工回滚
 
