@@ -29,6 +29,7 @@
     "node scripts/run-baota-release-rollout.mjs --self-test",
     "node scripts/verify-release-rollout-production.mjs",
     "node scripts/verify-release-rollout-live.mjs",
+    "node scripts/verify-playwright-host.mjs",
     "npx playwright test tests/e2e/m07-05-release-rollout.spec.ts",
     "npm run verify:docs",
     "node scripts/verify-release-rollout-production.mjs --production"

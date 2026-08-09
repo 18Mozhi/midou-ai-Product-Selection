@@ -103,7 +103,7 @@ test("M07-05 Playwright verification uses isolated configurable API and Web port
 });
 
 test("M07-05 Playwright verification can use the BaoTa host system Chromium", async () => {
-  const [playwrightConfig, envExample, schema, featureMap, runbook, blueprint, phasePlan] = await Promise.all([
+  const [playwrightConfig, envExample, schema, featureMap, runbook, blueprint, phasePlan, moduleManifest, hostVerifier] = await Promise.all([
     read("playwright.config.ts"),
     read("config/env.example"),
     read("config/schema.json"),
@@ -111,6 +111,8 @@ test("M07-05 Playwright verification can use the BaoTa host system Chromium", as
     read("docs/runbooks/m07-05-release-rollout.md"),
     read("new-product-enterprise-blueprint.md"),
     read("plans/phase-07-release-production.md"),
+    read("verification/modules/M07-05.json").then(JSON.parse),
+    read("scripts/verify-playwright-host.mjs"),
   ]);
   for (const source of [playwrightConfig, envExample, schema, featureMap, runbook, blueprint, phasePlan]) {
     assert.match(source, /PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH/);
@@ -119,6 +121,17 @@ test("M07-05 Playwright verification can use the BaoTa host system Chromium", as
   assert.match(playwrightConfig, /executablePath/);
   assert.match(envExample, /^PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$/m);
   assert.match(runbook, /\/usr\/bin\/chromium/);
+  assert.ok(moduleManifest.commands.includes("node scripts/verify-playwright-host.mjs"));
+  assert.match(hostVerifier, /fc-list/);
+  assert.match(hostVerifier, /:lang=zh/);
+  assert.match(hostVerifier, /playwright_chinese_font_missing/);
+  const { verifyPlaywrightHost } = await import("../../scripts/verify-playwright-host.mjs");
+  const executable = async () => {};
+  await assert.rejects(
+    () => verifyPlaywrightHost({ platform: "linux", env: { PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: "/usr/bin/chromium" }, assertExecutable: executable, run: () => ({ status: 0, stdout: "" }) }),
+    { code: "playwright_chinese_font_missing" },
+  );
+  assert.equal((await verifyPlaywrightHost({ platform: "linux", env: { PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: "/usr/bin/chromium" }, assertExecutable: executable, run: () => ({ status: 0, stdout: "/font/NotoSansCJK.ttc: Noto Sans CJK SC" }) })).status, "passed");
 });
 
 test("M07-05 MySQL single-row gates use object presence instead of array length", async () => {
