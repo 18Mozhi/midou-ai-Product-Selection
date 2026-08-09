@@ -64,6 +64,12 @@ x-scoutops-release-rollout:
   percentages: [5, 25, 100]
   minimumObservationSeconds: 1800
   syntheticProbeIntervalSeconds: 1
+  mysqlDurability:
+    innodbFlushLogAtTrxCommit: 2
+    syncBinlog: 1
+    productScoutBinlogExcluded: true
+    osCrashDataLossWindowSeconds: 1
+    verificationAccount: product_scout@127.0.0.1 with global REPLICATION CLIENT
   samplingPolicy: 1 秒采样用于提高低流量 S0 的候选 P95 样本分辨率，不缩短观察时间或放宽停止阈值
   automaticStop: true
   productionEvidence: .artifacts/verification/release-rollout-production-evidence.json

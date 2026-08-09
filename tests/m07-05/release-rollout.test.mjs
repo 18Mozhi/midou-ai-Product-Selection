@@ -19,6 +19,18 @@ test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundar
   assert.deepEqual(manifest.canary.syntheticWriteCanonicalFields, ["timestamp", "nonce", "release_id", "sample_id"]);
   assert.equal(manifest.canary.proxyRequestIdsExcludedFromSignature, true);
   assert.equal(manifest.canary.candidatePersistenceParityRequired, true);
+  assert.equal(manifest.schemaVersion, 2);
+  assert.deepEqual(manifest.mysqlDurability, {
+    innodbFlushLogAtTrxCommit: 2,
+    syncBinlog: 1,
+    productScoutBinlogExcluded: true,
+    osCrashDataLossWindowSeconds: 1,
+    verificationAccount: "existing product_scout@127.0.0.1 account with global REPLICATION CLIENT",
+    authorization: "explicit user approval on 2026-08-10",
+    rollback: "restore the BaoTa-restricted my.cnf backup and restart MySQL through BaoTa",
+  });
+  assert.match(runner, /release_mysql_durability_contract_invalid/);
+  assert.match(runner, /SHOW MASTER STATUS/);
   assert.match(up, /CREATE TABLE `deployment_release_gates`/);
   assert.match(down, /DROP TABLE IF EXISTS `deployment_release_gates`/);
   assert.doesNotMatch(up, /CHECK\s*\(|utf8mb4_0900|CREATE\s+INDEX\s+.*WHERE/i);
@@ -57,7 +69,7 @@ test("M07-05.A06-A17 API, UI, config and documentation contracts stay synchroniz
     "docs/runbooks/m07-05-release-rollout.md",
     "verification/modules/M07-05.json",
   ].map(read))).join("\n");
-  for (const token of ["M07-05", "platform:operate", "/api/v1/platform/operations/releases", "RELEASE_CANARY_OBSERVE_SECONDS", "5", "25", "100", "回滚"]) assert.match(all, new RegExp(token));
+  for (const token of ["M07-05", "platform:operate", "/api/v1/platform/operations/releases", "RELEASE_CANARY_OBSERVE_SECONDS", "innodb_flush_log_at_trx_commit=2", "binlog-ignore-db=product_scout", "REPLICATION CLIENT", "5", "25", "100", "回滚"]) assert.match(all, new RegExp(token));
   assert.doesNotMatch(await read("apps/api/src/release-rollout-service.ts"), /password|cookie|token|private_key/i);
 });
 
@@ -140,6 +152,10 @@ test("M07-05 uses one-second production sampling without relaxing rollout gates"
   for (const source of [openapi, featureMap, architecture, runbook]) assert.match(source, /1 秒采样/);
   assert.match(verifier, /sampleIntervalSeconds !== 1/);
   assert.ok(evidenceSchema.required.includes("sampleIntervalSeconds"));
+  assert.ok(evidenceSchema.required.includes("mysqlDurability"));
+  assert.equal(evidenceSchema.properties.schemaVersion.const, 2);
+  assert.equal(evidenceSchema.properties.mysqlDurability.properties.innodbFlushLogAtTrxCommit.const, 2);
+  assert.equal(evidenceSchema.properties.mysqlDurability.properties.productScoutBinlogExcluded.const, true);
   assert.equal(evidenceSchema.properties.sampleIntervalSeconds.const, 1);
   assert.equal(manifest.canary.minimumObservationSeconds, 1800);
   assert.equal(manifest.automaticStop.writeP95MsInclusive, 600);

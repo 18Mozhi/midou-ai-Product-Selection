@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "module": "M07-05",
   "stage": "S0",
   "productionManager": "baota",
@@ -40,6 +40,15 @@
     "candidatePersistenceParityRequired": true,
     "syntheticWriteContract": "proxy-safe HMAC over timestamp/nonce/release/sample, one durable MySQL autocommit statement, candidate 202 and persistence parity, immutable proxy request and trace audit",
     "minimumCandidateSamplesPerMethod": 5
+  },
+  "mysqlDurability": {
+    "innodbFlushLogAtTrxCommit": 2,
+    "syncBinlog": 1,
+    "productScoutBinlogExcluded": true,
+    "osCrashDataLossWindowSeconds": 1,
+    "verificationAccount": "existing product_scout@127.0.0.1 account with global REPLICATION CLIENT",
+    "authorization": "explicit user approval on 2026-08-10",
+    "rollback": "restore the BaoTa-restricted my.cnf backup and restart MySQL through BaoTa"
   },
   "automaticStop": {
     "errorRatePercentExclusive": 1,
