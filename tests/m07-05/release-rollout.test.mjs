@@ -86,6 +86,22 @@ test("M07-05 candidate slot binds through the real APP_PORT runtime contract", a
   assert.deepEqual(candidate.runtimeEnvironment, { APP_PORT: 4103 });
 });
 
+test("M07-05 Playwright verification uses isolated configurable API and Web ports", async () => {
+  const [playwrightConfig, viteConfig, envExample, schema, featureMap, runbook] = await Promise.all([
+    read("playwright.config.ts"),
+    read("apps/web/vite.config.ts"),
+    read("config/env.example"),
+    read("config/schema.json"),
+    read("docs/feature-map.json"),
+    read("docs/runbooks/m07-05-release-rollout.md"),
+  ]);
+  for (const name of ["PLAYWRIGHT_API_PORT", "PLAYWRIGHT_WEB_PORT"]) {
+    for (const source of [playwrightConfig, viteConfig, envExample, schema, featureMap, runbook]) assert.match(source, new RegExp(name));
+  }
+  assert.match(envExample, /^PLAYWRIGHT_API_PORT=4101$/m);
+  assert.match(envExample, /^PLAYWRIGHT_WEB_PORT=5173$/m);
+});
+
 test("M07-05 MySQL single-row gates use object presence instead of array length", async () => {
   const runner = await read("scripts/run-baota-release-rollout.mjs");
   assert.doesNotMatch(runner, /\b(?:existing|backup|sameBuild)\.length\b/);

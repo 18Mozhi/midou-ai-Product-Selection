@@ -95,6 +95,10 @@
       "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES",
       "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH"
     ],
+    "playwrightVerification": [
+      "PLAYWRIGHT_API_PORT",
+      "PLAYWRIGHT_WEB_PORT"
+    ],
     "playwrightCrawler": [
       "PLAYWRIGHT_HEADLESS",
       "PLAYWRIGHT_NAVIGATION_TIMEOUT_MS",

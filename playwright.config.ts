@@ -1,5 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const playwrightPort = (name: string, fallback: number) => {
+  const value = Number(process.env[name] ?? fallback);
+  if (!Number.isInteger(value) || value < 1024 || value > 65535) throw new Error(`${name} must be an integer port between 1024 and 65535`);
+  return value;
+};
+const apiPort = playwrightPort('PLAYWRIGHT_API_PORT', Number(process.env.APP_PORT ?? 4101));
+const webPort = playwrightPort('PLAYWRIGHT_WEB_PORT', 5173);
+
 export default defineConfig({
   expect: { timeout: 10_000, toHaveScreenshot: { maxDiffPixelRatio: 0.01 } },
   testDir: './tests/e2e',
@@ -9,7 +17,7 @@ export default defineConfig({
   retries: 0,
   reporter: [['line']],
   use: {
-    baseURL: 'http://127.0.0.1:5173',
+    baseURL: `http://127.0.0.1:${webPort}`,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
@@ -20,13 +28,13 @@ export default defineConfig({
   webServer: [
     {
       command: 'npm run build:contracts && npm run build:api && node apps/api/dist/server.js',
-      url: 'http://127.0.0.1:4101/api/v1/health/live',
+      url: `http://127.0.0.1:${apiPort}/api/v1/health/live`,
       reuseExistingServer: false,
       timeout: 60_000,
     },
     {
       command: 'npm run dev:web',
-      url: 'http://127.0.0.1:5173',
+      url: `http://127.0.0.1:${webPort}`,
       reuseExistingServer: false,
       timeout: 60_000,
     },

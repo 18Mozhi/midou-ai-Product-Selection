@@ -1247,6 +1247,7 @@
 #### M07-05.A10 配置注入
 - 交付目标：为“发布与回滚”完成 配置注入。
 - 实现动作：更新 schema、env.example、宝塔说明、启动检查和密钥泄露扫描。
+- E2E 端口合同：`PLAYWRIGHT_API_PORT`、`PLAYWRIGHT_WEB_PORT` 默认保持 4101/5173；宝塔验收时与 `APP_PORT` 配合改用未占用的隔离临时端口，不得复用生产 API。
 - MySQL 持久性合同：惠州当前共享 MySQL 经明确授权使用 `innodb_flush_log_at_trx_commit=2`、`sync_binlog=1`、`binlog-ignore-db=product_scout`；主机或操作系统故障最多可能丢失约 1 秒事务，且 ScoutOps 不具备 binlog/PITR。现有 `product_scout@127.0.0.1` 账号经明确授权增加全局只读 `REPLICATION CLIENT`，只用于发布任务读取 `SHOW MASTER STATUS`，不得授予 `SUPER`。生产证据必须携带该合同，漂移时失败关闭。配置和权限仅由宝塔受限路径留存快照并回滚，不新增面板外服务。
 - 前置输入：模块已声明的依赖、总计划、OpenAPI、Feature Map、环境 schema 和图片包。
 - 数据规则：字段保留来源、时间、版本、审计和组织范围；禁止跨组织查询和静默覆盖。
@@ -1313,6 +1314,7 @@
 #### M07-05.A15 E2E 视觉
 - 交付目标：为“发布与回滚”完成 E2E 视觉。
 - 实现动作：覆盖用户路径、键盘、无障碍、390px 和图片视觉回归。
+- 运行边界：Playwright 临时 API/Web 使用可配置隔离端口，结束自动关闭，不创建宝塔面板外生产服务。
 - 前置输入：模块已声明的依赖、总计划、OpenAPI、Feature Map、环境 schema 和图片包。
 - 数据规则：字段保留来源、时间、版本、审计和组织范围；禁止跨组织查询和静默覆盖。
 - 页面规则：提供桌面与 390px 状态；不得显示内部凭证、Cookie、队列细节或其他组织数据。
