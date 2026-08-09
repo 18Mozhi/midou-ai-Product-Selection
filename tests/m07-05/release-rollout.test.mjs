@@ -121,3 +121,28 @@ test("M07-05 warms a signed single-transaction release write probe and measures 
   assert.match(envExample, /RELEASE_PROBE_SIGNING_KEY=/);
   assert.doesNotMatch(runner, /auth\/password-reset\/request/);
 });
+
+test("M07-05 uses one-second production sampling without relaxing rollout gates", async () => {
+  const [manifest, runner, envExample, openapi, featureMap, architecture, runbook, verifier, evidenceSchema] = await Promise.all([
+    read("infra/baota/release-rollout-manifest.json").then(JSON.parse),
+    read("scripts/run-baota-release-rollout.mjs"),
+    read("config/env.example"),
+    read("docs/openapi.yaml"),
+    read("docs/feature-map.json"),
+    read("docs/architecture/m07-05-release-rollout.md"),
+    read("docs/runbooks/m07-05-release-rollout.md"),
+    read("scripts/verify-release-rollout-production.mjs"),
+    read("verification/release-rollout-production-evidence.schema.json").then(JSON.parse),
+  ]);
+  assert.equal(manifest.canary.syntheticProbeIntervalSeconds, 1);
+  assert.match(runner, /RELEASE_SAMPLE_INTERVAL_SECONDS \?\? 1/);
+  assert.match(envExample, /^RELEASE_SAMPLE_INTERVAL_SECONDS=1$/m);
+  for (const source of [openapi, featureMap, architecture, runbook]) assert.match(source, /1 秒采样/);
+  assert.match(verifier, /sampleIntervalSeconds !== 1/);
+  assert.ok(evidenceSchema.required.includes("sampleIntervalSeconds"));
+  assert.equal(evidenceSchema.properties.sampleIntervalSeconds.const, 1);
+  assert.equal(manifest.canary.minimumObservationSeconds, 1800);
+  assert.equal(manifest.automaticStop.writeP95MsInclusive, 600);
+  assert.equal(manifest.automaticStop.readP95MsInclusive, 300);
+  assert.equal(manifest.automaticStop.errorRatePercentExclusive, 1);
+});

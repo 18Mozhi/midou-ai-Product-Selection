@@ -8,7 +8,7 @@ M07-05 在惠州当前 S0 主机内使用两个宝塔 Node 项目：`product-sco
 
 ## 流量、指标与失败关闭
 
-宝塔手工发布任务执行 `scripts/run-baota-release-rollout.mjs`。任务将候选构建身份与 `/health/version` 对齐，验证最近 M07-04 隔离恢复及 `0026`、`0027` 迁移，然后由宝塔 Nginx 以 `$request_id` 分流 5% → 25% → 100%。生产每阶段至少 1,800 秒。真实采样来自 Nginx `mdzx_upstream_timing` 日志并按候选上游地址筛选；读 P95 只使用 `/api/v1/health/live` 的 GET/HEAD，写 P95 与持久化一致性只使用 `/api/v1/platform/operations/releases/write-probe` 的写请求，5xx 比例仍覆盖阶段内全部候选请求。任务同时发送这两个安全探针，弥补 S0 无客户请求时的最低样本，但不把探针数量冒充用户流量。
+宝塔手工发布任务执行 `scripts/run-baota-release-rollout.mjs`。任务将候选构建身份与 `/health/version` 对齐，验证最近 M07-04 隔离恢复及 `0026`、`0027` 迁移，然后由宝塔 Nginx 以 `$request_id` 分流 5% → 25% → 100%。生产每阶段至少 1,800 秒。默认 1 秒采样提高低流量 S0 的候选 P95 样本分辨率，不能缩短观察时间、改变分流比例或放宽停止阈值。真实采样来自 Nginx `mdzx_upstream_timing` 日志并按候选上游地址筛选；读 P95 只使用 `/api/v1/health/live` 的 GET/HEAD，写 P95 与持久化一致性只使用 `/api/v1/platform/operations/releases/write-probe` 的写请求，5xx 比例仍覆盖阶段内全部候选请求。任务同时发送这两个安全探针，弥补 S0 无客户请求时的最低样本，但不把探针数量冒充用户流量。
 
 写探针只接受 `RELEASE_PROBE_SIGNING_KEY` 生成的 HMAC-SHA256 签名。代理安全的 canonical payload 固定覆盖时间戳、唯一 nonce、release_id 和 sample_id；宝塔 Nginx 会生成 32 位十六进制 `$request_id` 并覆盖 `X-Request-ID`，所以 request_id/trace_id 不参与签名，但 API 必须接受 UUID 或该受限代理格式并保存实际传入的追踪字段。默认只接受 60 秒时间窗口。API 不接收浏览器会话或 `platform:operate` 作为替代授权，也不保存签名或原始 nonce。每个有效样本只执行一条带唯一键的 InnoDB autocommit INSERT，一次提交同时形成持久化与审计事实。每阶段候选写路由必须全部返回 202，且候选构建新增的持久化样本数必须与候选 Nginx 写样本数完全一致；401、遗漏写入或数量不一致均失败关闭。这样测量真实 MySQL 写提交，同时避免用密码重置业务链的三次独立提交放大同机磁盘周期性 fsync 延迟；MySQL 的 `innodb_flush_log_at_trx_commit=1` 和 `sync_binlog=1` 不变，600ms 门槛不变。
 

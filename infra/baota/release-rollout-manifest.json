@@ -30,6 +30,7 @@
   "canary": {
     "percentages": [5, 25, 100],
     "minimumObservationSeconds": 1800,
+    "syntheticProbeIntervalSeconds": 1,
     "routingKey": "$request_id",
     "measurementSource": "baota-nginx-upstream-timing-log",
     "syntheticReadPath": "/api/v1/health/live",

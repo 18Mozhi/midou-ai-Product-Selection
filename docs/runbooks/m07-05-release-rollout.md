@@ -4,7 +4,7 @@
 
 在宝塔创建同机私有 Node 项目 `product-scout-api-canary`，形成 4101/4103 两个发布槽。首次发布把候选 release 放在 4103，候选应用环境必须设置 `APP_PORT=4103`，发布控制器设置 `RELEASE_STABLE_API_PORT=4101`、`RELEASE_CANDIDATE_API_PORT=4103`；成功后下一版本放在 4101，并同时对调应用端口与发布控制器的两个槽位变量。`APP_PORT` 是 Node API 的实际监听端口，两个 `RELEASE_*_API_PORT` 只用于 Nginx 流量编排。两个槽只能监听 `127.0.0.1`，不得覆盖当前稳定槽后再开始灰度。创建手工计划任务 `product-scout-release-rollout`，命令为 `node <candidate>/scripts/run-baota-release-rollout.mjs --run --env-file <宝塔受限环境文件>`。不得通过 SSH 前台、systemd、独立 PM2 或宿主 crontab 常驻运行。
 
-受限环境必须按 `config/env.example` 设置 release、Nginx、端口、采样、阈值、数据库和应用身份变量。API 候选项目与发布任务必须注入同一个随机 `RELEASE_PROBE_SIGNING_KEY`（至少 32 字符），只保存在宝塔受限环境；`RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS` 默认 60，可调 10–300 秒。生产 `RELEASE_CANARY_OBSERVE_SECONDS` 不得低于 1800。候选 `BUILD_SHA` 必须等于候选 `/health/version`，Nginx 配置必须在 `/www/server/panel/vhost/nginx/`，计时日志必须在 `/www/wwwlogs/`。真实密码、Cookie、Token、私钥和 `.env` 不得复制到任务日志或仓库。
+受限环境必须按 `config/env.example` 设置 release、Nginx、端口、采样、阈值、数据库和应用身份变量。API 候选项目与发布任务必须注入同一个随机 `RELEASE_PROBE_SIGNING_KEY`（至少 32 字符），只保存在宝塔受限环境；`RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS` 默认 60，可调 10–300 秒。生产 `RELEASE_CANARY_OBSERVE_SECONDS` 不得低于 1800，`RELEASE_SAMPLE_INTERVAL_SECONDS=1` 固定采用 1 秒采样以提高低流量 S0 的候选 P95 样本分辨率；不得用采样调整缩短观察或放宽阈值。候选 `BUILD_SHA` 必须等于候选 `/health/version`，Nginx 配置必须在 `/www/server/panel/vhost/nginx/`，计时日志必须在 `/www/wwwlogs/`。真实密码、Cookie、Token、私钥和 `.env` 不得复制到任务日志或仓库。
 
 ## 执行与观察
 

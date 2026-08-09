@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "ScoutOps M07-05 production rollout evidence",
   "type": "object",
-  "required": ["schemaVersion", "module", "manager", "topology", "backupServerUsed", "releaseId", "buildSha", "appVersion", "configFingerprint", "migrationVersion", "writeProbe", "percentages", "minimumObservationSeconds", "gates", "automaticStopArmed", "rollbackTarget", "requestId", "traceId", "capturedAt"],
+  "required": ["schemaVersion", "module", "manager", "topology", "backupServerUsed", "releaseId", "buildSha", "appVersion", "configFingerprint", "migrationVersion", "writeProbe", "percentages", "minimumObservationSeconds", "sampleIntervalSeconds", "gates", "automaticStopArmed", "rollbackTarget", "requestId", "traceId", "capturedAt"],
   "properties": {
     "schemaVersion": {"const": 1},
     "module": {"const": "M07-05"},
@@ -17,6 +17,7 @@
     "writeProbe": {"type": "object", "required": ["path", "signed", "canonicalFields", "proxyRequestIdsExcluded", "candidatePersistenceMatched", "durableStatementsPerSample"], "properties": {"path": {"const": "/api/v1/platform/operations/releases/write-probe"}, "signed": {"const": true}, "canonicalFields": {"const": ["timestamp", "nonce", "release_id", "sample_id"]}, "proxyRequestIdsExcluded": {"const": true}, "candidatePersistenceMatched": {"const": true}, "durableStatementsPerSample": {"const": 1}}, "additionalProperties": false},
     "percentages": {"const": [5, 25, 100]},
     "minimumObservationSeconds": {"type": "integer", "minimum": 1800},
+    "sampleIntervalSeconds": {"const": 1},
     "gates": {
       "type": "array", "minItems": 3, "maxItems": 3,
       "items": {
