@@ -1419,6 +1419,7 @@
       "scope": "ordinary member real keyword ASIN or product URL journey through enabled google_news_search collection task first verifiable result or succeeded_empty or explicit block then audited decision and evidence view",
       "thresholds": {"createApiMs": 3000, "acceptedVisibleMs": 15000, "terminalMs": 180000, "relaxationAllowed": false},
       "permission": {"create": "task:create", "read": "opportunity:read", "decide": "opportunity:decide", "forbiddenMemberCapabilities": ["provider:configure", "collection:replay", "platform:operate", "platform:superadmin"]},
+      "sessionContext": "the dedicated account must have exactly one active acceptance organization; every new login selects its active default workspace through POST /api/v1/auth/context before navigation and capability guards",
       "configuration": ["SELECTION_ACCEPTANCE_DEADLINE_MS", "SELECTION_ACCEPTANCE_BASE_URL", "SELECTION_ACCEPTANCE_EMAIL", "SELECTION_ACCEPTANCE_PASSWORD", "SELECTION_ACCEPTANCE_INPUT_KIND", "SELECTION_ACCEPTANCE_INPUT_VALUE", "SELECTION_ACCEPTANCE_EVIDENCE_FILE"],
       "data": ["selection_journeys", "selection_journey_decisions", "selection_journey_events", "selection_journey_outbox", "selection_journey_operations"],
       "runtimeBoundary": "finite Baota task on the current Huizhou single host; no daemon backup server multi-node or 10000-user claim",

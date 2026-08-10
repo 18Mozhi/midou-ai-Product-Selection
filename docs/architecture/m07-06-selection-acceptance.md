@@ -25,4 +25,4 @@ M07-06 把现有真实来源、采集任务、原始证据、趋势投影、机�
 
 ## 生产验收
 
-宝塔有限任务 `product-scout-selection-acceptance` 运行 `node scripts/run-baota-selection-acceptance.mjs --production`。它以宝塔受限环境中的专用普通 `member` 登录，校验最小权限，创建真实任务、轮询终态、查看证据、保存 `observe` 决策并写 mode 0600 证据。任务最多 240 秒，不创建 daemon、systemd、独立 PM2、宿主 crontab、备用服务器或面板外服务。
+宝塔有限任务 `product-scout-selection-acceptance` 运行 `node scripts/run-baota-selection-acceptance.mjs --production`。它以宝塔受限环境中的专用普通 `member` 登录，读取唯一有效验收组织及其默认工作区并通过 `/auth/context` 绑定新会话，随后校验最小权限、创建真实任务、轮询终态、查看证据、保存 `observe` 决策并写 mode 0600 证据。任务最多 240 秒，不创建 daemon、systemd、独立 PM2、宿主 crontab、备用服务器或面板外服务。

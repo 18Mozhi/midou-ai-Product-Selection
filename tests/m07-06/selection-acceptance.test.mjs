@@ -77,3 +77,22 @@ test("M07-06.A08/A12/A16 validates input and refuses deadline relaxation", async
   assert.equal(accepted.providerCode, "google_news_search");
   assert.equal(accepted.deadlineAt.toISOString(), "2026-08-10T12:03:00.000Z");
 });
+
+test("M07-06.A09/A16 production runner selects tenant context before member guard", async () => {
+  const [runner, manifestRaw] = await Promise.all([
+    read("scripts/run-baota-selection-acceptance.mjs"),
+    read("infra/baota/selection-acceptance-manifest.json"),
+  ]);
+  const manifest = JSON.parse(manifestRaw);
+  const memberships = runner.indexOf('request("/org/memberships"');
+  const workspaces = runner.indexOf('request(`/org/${organization.id}/workspaces`');
+  const context = runner.indexOf('request("/auth/context"');
+  const guard = runner.indexOf('request("/me/navigation?shell=member"');
+  assert.ok(memberships > 0, "production runner must list the account organizations after login");
+  assert.ok(workspaces > memberships, "production runner must resolve a workspace from the selected organization");
+  assert.ok(context > workspaces, "production runner must bind the new login session to organization/workspace context");
+  assert.ok(guard > context, "member capability guard must run only after tenant context is selected");
+  assert.match(runner, /"idempotency-key":randomUUID\(\)/);
+  assert.equal(manifest.memberBoundary.sessionContextRequired, true);
+  assert.equal(manifest.memberBoundary.exactlyOneActiveOrganization, true);
+});

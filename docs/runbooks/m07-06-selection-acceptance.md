@@ -14,7 +14,7 @@ node scripts/run-baota-selection-acceptance.mjs --production
 
 1. 先在宝塔确认 Node API、Node Worker、Python Crawler、MySQL、Redis 和网站均健康，当前版本 `/api/v1/health/version` 与发布 commit 一致。
 2. 确认 `google_news_search` 已由平台来源所有者复核并启用；普通成员不进入 Provider 配置页。
-3. 运行有限任务。它验证账号仅具备 `task:create`、`opportunity:read`、`opportunity:decide` 等成员权限，不具备 `provider:configure`、`collection:replay` 或 `platform:*`。
+3. 运行有限任务。它在每次新登录后先读取该专用账号唯一的有效组织和默认工作区，通过 `/auth/context` 绑定本次会话，再验证账号仅具备 `task:create`、`opportunity:read`、`opportunity:decide` 等成员权限，不具备 `provider:configure`、`collection:replay` 或 `platform:*`；缺少、多个或无有效工作区时直接阻断。
 4. 任务必须在 3000 ms 内返回 202，15000 ms 内读取到已接收/运行/终态，180000 ms 内得到 `result_ready`、`succeeded_empty`、`blocked` 或 `failed`，随后写入人工决策并查看原始证据或明确空/受阻任务证据。
 5. 复制 mode 0600 的 `SELECTION_ACCEPTANCE_EVIDENCE_FILE` 到同 commit 验收工作区，执行 `node scripts/verify-selection-acceptance-production.mjs --production`，再执行 `npm run verify:module -- M07-06`。
 

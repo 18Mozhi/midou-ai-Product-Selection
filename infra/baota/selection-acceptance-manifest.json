@@ -29,6 +29,8 @@
   "memberBoundary": {
     "requiredCapabilities": ["task:create", "opportunity:read", "opportunity:decide"],
     "forbiddenPlatformCapabilities": ["provider:configure", "collection:replay", "platform:operate", "platform:superadmin"],
+    "sessionContextRequired": true,
+    "exactlyOneActiveOrganization": true,
     "providerConfigurationTouchedByMember": false
   },
   "rollback": {
