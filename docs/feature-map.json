@@ -1411,6 +1411,19 @@
       "productionEvidence": {"releaseId": "02981c43-3ee6-4d2e-9290-4f24a6de55a2", "buildSha": "35078a42dfd4ceb423b6a4d3cdcaa02ff874cbba", "capturedAt": "2026-08-10T10:41:14.658Z", "sha256": "824962ba1e075d551d1ed2efd51e76ac657367f88d967ba1253a6355577cedb0", "gates": [{"percent": 5, "observeSeconds": 1800, "sampleCount": 177, "errorRate": 0, "readP95": 3, "writeP95": 158, "asyncLag": 0, "durableWriteSamples": 89}, {"percent": 25, "observeSeconds": 1800, "sampleCount": 866, "errorRate": 0, "readP95": 2, "writeP95": 8, "asyncLag": 0, "durableWriteSamples": 448}, {"percent": 100, "observeSeconds": 1800, "sampleCount": 3218, "errorRate": 0, "readP95": 2, "writeP95": 5, "asyncLag": 0, "durableWriteSamples": 1609}]},
       "verificationRunId": "868ff3d0-5596-4fb5-84b4-7c514fada163",
       "status": "module_verified"
+    },
+    "selectionAcceptance": {
+      "module": "M07-06",
+      "entrypoints": ["../apps/api/src/selection-journey-service.ts", "../apps/api/src/mysql-selection-journey-repository.ts", "../apps/api/src/selection-journey-routes.ts", "../apps/web/src/components/SelectionJourney.vue", "../scripts/run-baota-selection-acceptance.mjs"],
+      "routes": ["/opportunities/start", "/api/v1/selection-journeys", "/api/v1/selection-journeys/{id}", "/api/v1/selection-journeys/{id}/decisions"],
+      "scope": "ordinary member real keyword ASIN or product URL journey through enabled google_news_search collection task first verifiable result or succeeded_empty or explicit block then audited decision and evidence view",
+      "thresholds": {"createApiMs": 3000, "acceptedVisibleMs": 15000, "terminalMs": 180000, "relaxationAllowed": false},
+      "permission": {"create": "task:create", "read": "opportunity:read", "decide": "opportunity:decide", "forbiddenMemberCapabilities": ["provider:configure", "collection:replay", "platform:operate", "platform:superadmin"]},
+      "configuration": ["SELECTION_ACCEPTANCE_DEADLINE_MS", "SELECTION_ACCEPTANCE_BASE_URL", "SELECTION_ACCEPTANCE_EMAIL", "SELECTION_ACCEPTANCE_PASSWORD", "SELECTION_ACCEPTANCE_INPUT_KIND", "SELECTION_ACCEPTANCE_INPUT_VALUE", "SELECTION_ACCEPTANCE_EVIDENCE_FILE"],
+      "data": ["selection_journeys", "selection_journey_decisions", "selection_journey_events", "selection_journey_outbox", "selection_journey_operations"],
+      "runtimeBoundary": "finite Baota task on the current Huizhou single host; no daemon backup server multi-node or 10000-user claim",
+      "imageEvidence": ["core 01 and 04-10", "concept 53 mobile home", "concept 54 mobile opportunity detail", "concept 72 not found", "desktop and 390 real journey states"],
+      "status": "implementation_in_progress"
     }
   },
   "phaseVerification": {
@@ -1527,6 +1540,12 @@
       "view": "OpportunityWorkspace",
       "domain": "opportunities",
       "status": "M04-02_module_verified"
+    },
+    {
+      "path": "/opportunities/start",
+      "view": "SelectionJourney",
+      "domain": "selection_acceptance",
+      "status": "M07-06_implementation_in_progress"
     },
     {
       "path": "/opportunities/{opportunityId}",

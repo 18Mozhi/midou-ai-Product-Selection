@@ -1,0 +1,34 @@
+# M07-06 真实选品生产验收与回滚
+
+## 宝塔对象与配置
+
+在当前惠州单机的宝塔计划任务中创建或更新有限任务 `product-scout-selection-acceptance`，工作目录指向当前发布目录，命令为：
+
+```text
+node scripts/run-baota-selection-acceptance.mjs --production
+```
+
+任务超时 240 秒、只允许手工或发布后单次执行，不设置常驻循环。`SELECTION_ACCEPTANCE_EMAIL` 与 `SELECTION_ACCEPTANCE_PASSWORD` 只放宝塔受限任务环境；账号必须是普通 `member`、不启用 MFA、没有平台角色。输入与证据路径按 `config/env.example` 设置，`SELECTION_ACCEPTANCE_DEADLINE_MS=180000` 不得调整。配置变更在启动读取；修改后通过宝塔重启 Node API，有限任务本身直接重新执行。
+
+## 执行与判定
+
+1. 先在宝塔确认 Node API、Node Worker、Python Crawler、MySQL、Redis 和网站均健康，当前版本 `/api/v1/health/version` 与发布 commit 一致。
+2. 确认 `google_news_search` 已由平台来源所有者复核并启用；普通成员不进入 Provider 配置页。
+3. 运行有限任务。它验证账号仅具备 `task:create`、`opportunity:read`、`opportunity:decide` 等成员权限，不具备 `provider:configure`、`collection:replay` 或 `platform:*`。
+4. 任务必须在 3000 ms 内返回 202，15000 ms 内读取到已接收/运行/终态，180000 ms 内得到 `result_ready`、`succeeded_empty`、`blocked` 或 `failed`，随后写入人工决策并查看原始证据或明确空/受阻任务证据。
+5. 复制 mode 0600 的 `SELECTION_ACCEPTANCE_EVIDENCE_FILE` 到同 commit 验收工作区，执行 `node scripts/verify-selection-acceptance-production.mjs --production`，再执行 `npm run verify:module -- M07-06`。
+
+任一阈值、权限、来源、证据或决策失败都返回非零；`blocked` 不能当作模块通过。业务终态 `blocked` 可以作为真实旅程的受控结果，但生产证据和模块门仍必须完整通过。
+
+## 日志与排查
+
+在宝塔计划任务日志按 `request_id`/`trace_id` 关联 Node API、Worker 和 Crawler。不要打印账号密码、会话 Cookie、Token、Provider 凭证或原始响应正文。优先检查：来源是否 enabled、Worker 是否领取任务、`collection_task_events` 的状态、`raw_evidence` 是否落盘、趋势投影是否产生主题，以及决策权限是否有效。
+
+## 回滚
+
+1. 在网站导航隐藏 `/opportunities/start` 或通过宝塔切回上一已验证同机版本；通过宝塔重启网站与 Node API。
+2. 停止新的 M07-06 有限任务，不停止或删除既有采集任务、审计、Outbox 和原始证据。
+3. 如必须回滚迁移，先导出 `selection_journeys`、决策、事件、Outbox 和操作记录，再执行 `0028_selection_journeys_m07_06.down.sql`。该 down 会删除五张 M07-06 表，因此没有导出不得执行。
+4. 回滚后复核既有 `/opportunities`、采集任务和 Provider 配置未变化；所有生产操作仍只通过宝塔。
+
+当前恢复边界仍是惠州单机内的应用/逻辑数据回滚；不使用备用服务器，不声明整机、磁盘、机房、多节点或 10,000 用户能力。

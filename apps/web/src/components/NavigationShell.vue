@@ -11,6 +11,7 @@ import DataQualityCenter from "./DataQualityCenter.vue";
 import ProviderSourceCenter from "./ProviderSourceCenter.vue";
 import TrendDashboard from "./TrendDashboard.vue";
 import OpportunityWorkspace from "./OpportunityWorkspace.vue";
+import SelectionJourney from "./SelectionJourney.vue";
 import ScoreRuleConsole from "./ScoreRuleConsole.vue";
 import CostRuleConsole from "./CostRuleConsole.vue";
 import CompetitorMonitor from "./CompetitorMonitor.vue";
@@ -235,7 +236,9 @@ const shellTitle = computed(() =>
       : "平台管理后台",
 );
 const pageTitle = computed(() =>
-  routePath === "/opportunities/scoring-rules"
+  routePath === "/opportunities/start"
+    ? "真实选品"
+    : routePath === "/opportunities/scoring-rules"
     ? "评分规则"
     : routePath === "/sourcing/cost-rules"
       ? "费用与利润规则"
@@ -271,6 +274,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
     () =>
       props.shell === "member" && routePath === "/opportunities/scoring-rules",
   ),
+  isSelectionJourney=computed(()=>props.shell==="member"&&routePath==="/opportunities/start"),
   isOpportunities = computed(
     () =>
       props.shell === "member" &&
@@ -556,6 +560,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           v-else-if="isScoringRules"
           :api-base-url="apiBaseUrl"
         />
+        <SelectionJourney v-else-if="isSelectionJourney" :api-base-url="apiBaseUrl" />
         <OpportunityWorkspace
           v-else-if="isOpportunities"
           :api-base-url="apiBaseUrl"

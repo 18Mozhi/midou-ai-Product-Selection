@@ -100,6 +100,8 @@ import { registerBackupRecoveryRoutes } from "./backup-recovery-routes.js";
 import { ReleaseRolloutService, ReleaseWriteProbeService } from "./release-rollout-service.js";
 import { MySqlReleaseRolloutRepository } from "./mysql-release-rollout-repository.js";
 import { registerReleaseRolloutRoutes } from "./release-rollout-routes.js";
+import { SelectionJourneyService } from "./selection-journey-service.js";
+import { MySqlSelectionJourneyRepository } from "./mysql-selection-journey-repository.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -312,6 +314,13 @@ const app = buildApp({
     auth: localAuth,
     secureCookie: config.nodeEnv === "production",
     webOrigin: config.app.webOrigin,
+  },
+  selectionJourneys:{
+    service:new SelectionJourneyService(new MySqlSelectionJourneyRepository(pool),config.selectionAcceptance.deadlineMs),
+    authorization,
+    auth:localAuth,
+    secureCookie:config.nodeEnv==="production",
+    webOrigin:config.app.webOrigin,
   },
   scoring: {
     service: new ScoringService(new MySqlScoringRepository(pool)),

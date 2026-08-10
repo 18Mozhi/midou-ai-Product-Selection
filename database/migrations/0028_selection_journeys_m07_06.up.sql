@@ -1,0 +1,102 @@
+CREATE TABLE `selection_journeys` (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `organization_id` char(36) CHARACTER SET ascii NOT NULL,
+  `workspace_id` char(36) CHARACTER SET ascii NOT NULL,
+  `input_kind` enum('keyword','asin','product_url') NOT NULL,
+  `input_value` varchar(200) NOT NULL,
+  `input_sha256` char(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `provider_id` char(36) CHARACTER SET ascii NOT NULL,
+  `provider_code` varchar(80) CHARACTER SET ascii NOT NULL,
+  `task_id` char(36) CHARACTER SET ascii NOT NULL,
+  `state` enum('accepted','running','result_ready','succeeded_empty','blocked','failed','decided') NOT NULL,
+  `opportunity_id` char(36) CHARACTER SET ascii DEFAULT NULL,
+  `deadline_at` datetime(3) NOT NULL,
+  `decided_at` datetime(3) DEFAULT NULL,
+  `request_id` varchar(128) CHARACTER SET ascii NOT NULL,
+  `trace_id` varchar(128) CHARACTER SET ascii NOT NULL,
+  `created_by` char(36) CHARACTER SET ascii NOT NULL,
+  `version` int unsigned NOT NULL DEFAULT 1,
+  `created_at` datetime(3) NOT NULL,
+  `updated_at` datetime(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_selection_journey_task` (`task_id`),
+  KEY `idx_selection_journey_scope_time` (`organization_id`,`workspace_id`,`created_at`,`id`),
+  KEY `idx_selection_journey_state_deadline` (`state`,`deadline_at`),
+  KEY `idx_selection_journey_trace` (`trace_id`),
+  CONSTRAINT `fk_selection_journey_org` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
+  CONSTRAINT `fk_selection_journey_workspace` FOREIGN KEY (`workspace_id`) REFERENCES `workspaces` (`id`),
+  CONSTRAINT `fk_selection_journey_provider` FOREIGN KEY (`provider_id`) REFERENCES `providers` (`id`),
+  CONSTRAINT `fk_selection_journey_task` FOREIGN KEY (`task_id`) REFERENCES `collection_tasks` (`id`),
+  CONSTRAINT `fk_selection_journey_opportunity` FOREIGN KEY (`opportunity_id`) REFERENCES `opportunities` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_selection_journey_creator` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `selection_journey_decisions` (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `journey_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `organization_id` char(36) CHARACTER SET ascii NOT NULL,
+  `workspace_id` char(36) CHARACTER SET ascii NOT NULL,
+  `opportunity_id` char(36) CHARACTER SET ascii DEFAULT NULL,
+  `action` enum('adopt','observe','reject') NOT NULL,
+  `reason` varchar(1000) NOT NULL,
+  `actor_id` char(36) CHARACTER SET ascii NOT NULL,
+  `request_id` varchar(128) CHARACTER SET ascii NOT NULL,
+  `trace_id` varchar(128) CHARACTER SET ascii NOT NULL,
+  `created_at` datetime(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_selection_journey_decision` (`journey_id`),
+  KEY `idx_selection_decision_scope_time` (`organization_id`,`workspace_id`,`created_at`),
+  CONSTRAINT `fk_selection_decision_journey` FOREIGN KEY (`journey_id`) REFERENCES `selection_journeys` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_selection_decision_opportunity` FOREIGN KEY (`opportunity_id`) REFERENCES `opportunities` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_selection_decision_actor` FOREIGN KEY (`actor_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `selection_journey_events` (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `journey_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `organization_id` char(36) CHARACTER SET ascii NOT NULL,
+  `workspace_id` char(36) CHARACTER SET ascii NOT NULL,
+  `event_type` varchar(100) CHARACTER SET ascii NOT NULL,
+  `actor_type` enum('user','worker','system') NOT NULL,
+  `actor_id` varchar(120) CHARACTER SET ascii NOT NULL,
+  `request_id` varchar(128) CHARACTER SET ascii NOT NULL,
+  `trace_id` varchar(128) CHARACTER SET ascii NOT NULL,
+  `payload_json` json NOT NULL,
+  `occurred_at` datetime(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_selection_event_scope_time` (`organization_id`,`workspace_id`,`occurred_at`),
+  KEY `idx_selection_event_journey_time` (`journey_id`,`occurred_at`),
+  CONSTRAINT `fk_selection_event_journey` FOREIGN KEY (`journey_id`) REFERENCES `selection_journeys` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `selection_journey_outbox` (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `journey_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `organization_id` char(36) CHARACTER SET ascii NOT NULL,
+  `workspace_id` char(36) CHARACTER SET ascii NOT NULL,
+  `event_type` varchar(100) CHARACTER SET ascii NOT NULL,
+  `payload_json` json NOT NULL,
+  `status` enum('queued','published','failed') NOT NULL DEFAULT 'queued',
+  `attempt_count` tinyint unsigned NOT NULL DEFAULT 0,
+  `available_at` datetime(3) NOT NULL,
+  `request_id` varchar(128) CHARACTER SET ascii NOT NULL,
+  `trace_id` varchar(128) CHARACTER SET ascii NOT NULL,
+  `created_at` datetime(3) NOT NULL,
+  `updated_at` datetime(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_selection_outbox_claim` (`status`,`available_at`,`created_at`),
+  CONSTRAINT `fk_selection_outbox_journey` FOREIGN KEY (`journey_id`) REFERENCES `selection_journeys` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `selection_journey_operations` (
+  `id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `actor_id` char(36) CHARACTER SET ascii NOT NULL,
+  `route` varchar(255) CHARACTER SET ascii NOT NULL,
+  `idempotency_key` varchar(128) CHARACTER SET ascii NOT NULL,
+  `journey_id` char(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `created_at` datetime(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_selection_operation` (`actor_id`,`route`,`idempotency_key`),
+  KEY `idx_selection_operation_journey` (`journey_id`),
+  CONSTRAINT `fk_selection_operation_journey` FOREIGN KEY (`journey_id`) REFERENCES `selection_journeys` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

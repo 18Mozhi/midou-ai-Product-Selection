@@ -147,6 +147,8 @@ import { CommercialError } from "./commercial-service.js";
 import { registerCommercialRoutes, type CommercialRouteOptions } from "./commercial-routes.js";
 import { registerBackupRecoveryRoutes, type BackupRecoveryRouteOptions } from "./backup-recovery-routes.js";
 import { registerReleaseRolloutRoutes, type ReleaseRolloutRouteOptions } from "./release-rollout-routes.js";
+import { SelectionJourneyError } from "./selection-journey-service.js";
+import { registerSelectionJourneyRoutes, type SelectionJourneyRouteOptions } from "./selection-journey-routes.js";
 
 export interface BuildAppOptions {
   version?: string;
@@ -172,6 +174,7 @@ export interface BuildAppOptions {
   providerSources?: ProviderSourceRouteOptions;
   trends?: TrendRouteOptions;
   opportunities?: OpportunityRouteOptions;
+  selectionJourneys?: SelectionJourneyRouteOptions;
   scoring?: ScoringRouteOptions;
   profit?: ProfitRouteOptions;
   competitors?: CompetitorRouteOptions;
@@ -342,6 +345,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if (options.trends) registerTrendRoutes(app, options.trends);
   if (options.opportunities)
     registerOpportunityRoutes(app, options.opportunities);
+  if(options.selectionJourneys)registerSelectionJourneyRoutes(app,options.selectionJourneys);
   if (options.scoring) registerScoringRoutes(app, options.scoring);
   if (options.profit) registerProfitRoutes(app, options.profit);
   if (options.competitors) registerCompetitorRoutes(app, options.competitors);
@@ -451,6 +455,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         error instanceof OpportunityServiceError
           ? (error as OpportunityServiceError)
           : null;
+      const selectionJourneyError=error instanceof SelectionJourneyError?error:null;
       const scoringError =
         error instanceof ScoringServiceError
           ? (error as ScoringServiceError)
@@ -501,6 +506,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         commercialError?.statusCode ??
         trendError?.statusCode ??
         opportunityError?.statusCode ??
+        selectionJourneyError?.statusCode ??
         scoringError?.statusCode ??
         profitError?.statusCode ??
         competitorError?.statusCode ??
@@ -546,6 +552,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         commercialError?.code ??
             trendError?.code ??
             opportunityError?.code ??
+            selectionJourneyError?.code ??
             scoringError?.code ??
             profitError?.code ??
             competitorError?.code ??
@@ -569,6 +576,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             commercialError?.message ??
             trendError?.message ??
             opportunityError?.message ??
+            selectionJourneyError?.message ??
             scoringError?.message ??
             profitError?.message ??
             competitorError?.message ??
@@ -619,6 +627,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         commercialError?.actionHint ??
             trendError?.actionHint ??
             opportunityError?.actionHint ??
+            selectionJourneyError?.actionHint ??
             scoringError?.actionHint ??
             profitError?.actionHint ??
             competitorError?.actionHint ??

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "module": "M07-06",
+  "productionManager": "baota",
+  "topology": "single_host_huizhou",
+  "backupServerUsed": false,
+  "task": {
+    "name": "product-scout-selection-acceptance",
+    "kind": "finite_shell_task",
+    "schedule": "manual",
+    "command": "node scripts/run-baota-selection-acceptance.mjs --production",
+    "workingDirectory": "current release directory",
+    "daemon": false,
+    "timeoutSeconds": 240
+  },
+  "journey": {
+    "page": "/opportunities/start",
+    "createPath": "/api/v1/selection-journeys",
+    "deadlineMs": 180000,
+    "acceptedVisibleMs": 15000,
+    "providerCode": "google_news_search",
+    "allowedOutcomes": ["result_ready", "succeeded_empty", "blocked", "failed"],
+    "decisionActions": ["observe", "reject", "adopt"]
+  },
+  "restrictedEnvironment": [
+    "SELECTION_ACCEPTANCE_EMAIL",
+    "SELECTION_ACCEPTANCE_PASSWORD"
+  ],
+  "memberBoundary": {
+    "requiredCapabilities": ["task:create", "opportunity:read", "opportunity:decide"],
+    "forbiddenPlatformCapabilities": ["provider:configure", "collection:replay", "platform:operate", "platform:superadmin"],
+    "providerConfigurationTouchedByMember": false
+  },
+  "rollback": {
+    "application": "BaoTa switches current release to the previous verified same-host release and restarts the managed Node API and web site",
+    "database": "stop the member entry, preserve audit/evidence, then apply 0028_selection_journeys_m07_06.down.sql only after exporting journey records",
+    "productionServiceOutsideBaoTa": false
+  }
+}

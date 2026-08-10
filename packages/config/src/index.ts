@@ -130,6 +130,7 @@ export interface RuntimeConfig {
   commercial: { recentLimit:number };
   backupRecovery: { primaryRegion:string; recoveryRegion:string; rpoMinutes:number; rtoMinutes:number; maximumDrillAgeDays:number };
   releaseRollout: { minimumObservationSeconds:number; maximumEvidenceAgeMinutes:number; errorRateStopPercent:number; readP95StopMs:number; writeP95StopMs:number; asyncLagStopSeconds:number; probeTimestampToleranceSeconds:number };
+  selectionAcceptance:{deadlineMs:number};
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -600,6 +601,7 @@ export function loadRuntimeConfig(
       asyncLagStopSeconds: integer(env,"RELEASE_ASYNC_LAG_STOP_SECONDS",60,1,3600),
       probeTimestampToleranceSeconds: integer(env,"RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS",60,10,300),
     },
+    selectionAcceptance:{deadlineMs:integer(env,"SELECTION_ACCEPTANCE_DEADLINE_MS",180000,180000,180000)},
     evidence: {
       maxRawBytes: integer(
         env,

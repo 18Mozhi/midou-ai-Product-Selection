@@ -2040,6 +2040,47 @@ paths:
         - { name: X-ScoutOps-Timestamp, in: header, required: true, schema: { type: integer, format: int64 } }
         - { name: X-ScoutOps-Nonce, in: header, required: true, schema: { type: string, minLength: 16, maxLength: 128 } }
       responses: { '200': { description: Authenticated status with status:read scope }, '401': { $ref: '#/components/responses/Error' }, '403': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' }, '429': { $ref: '#/components/responses/Error' } }
+  /selection-journeys:
+    post:
+      summary: Accept a member-scoped real selection journey within the fixed 180000 ms contract
+      description: POST /api/v1/selection-journeys selects the enabled google_news_search source server-side; members never submit provider IDs or organization/workspace IDs.
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: task:create
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SelectionJourneyCreateInput' } } } }
+      responses:
+        '202': { description: Real task accepted, content: { application/json: { schema: { $ref: '#/components/schemas/SelectionJourneyEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /selection-journeys/{journeyId}:
+    get:
+      summary: Read real task result, succeeded_empty, explicit block, decision and evidence state
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: opportunity:read
+      parameters: [{ name: journeyId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: Scoped real selection journey, content: { application/json: { schema: { $ref: '#/components/schemas/SelectionJourneyEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /selection-journeys/{journeyId}/decisions:
+    post:
+      summary: Record the audited human decision after a real terminal outcome
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: opportunity:decide
+      parameters:
+        - { name: journeyId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SelectionJourneyDecisionInput' } } } }
+      responses:
+        '201': { description: Audited decision and optional evidence-linked opportunity, content: { application/json: { schema: { $ref: '#/components/schemas/SelectionJourneyEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
 components:
   securitySchemes:
     BearerAuth:
@@ -2110,6 +2151,53 @@ components:
         application/json:
           schema: { $ref: '#/components/schemas/ErrorEnvelope' }
   schemas:
+    SelectionJourneyCreateInput:
+      type: object
+      additionalProperties: false
+      required: [input_kind, input_value]
+      properties:
+        input_kind: { type: string, enum: [keyword, asin, product_url] }
+        input_value: { type: string, minLength: 1, maxLength: 200 }
+    SelectionJourneyDecisionInput:
+      type: object
+      additionalProperties: false
+      required: [action, reason]
+      properties:
+        action: { type: string, enum: [adopt, observe, reject] }
+        reason: { type: string, minLength: 1, maxLength: 1000 }
+    SelectionJourneyEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          required: [id, organization_id, workspace_id, input_kind, input_value, provider_code, task_id, task_status, state, available_result_count, accepted_at, elapsed_ms, deadline_ms, within_deadline, request_id, trace_id]
+          properties:
+            id: { type: string, format: uuid }
+            organization_id: { type: string, format: uuid }
+            workspace_id: { type: string, format: uuid }
+            input_kind: { type: string, enum: [keyword, asin, product_url] }
+            input_value: { type: string }
+            provider_code: { type: string, enum: [google_news_search] }
+            task_id: { type: string, format: uuid }
+            task_status: { type: string }
+            state: { type: string, enum: [accepted, running, result_ready, succeeded_empty, blocked, failed, decided] }
+            coverage_status: { type: string, nullable: true }
+            available_result_count: { type: integer, minimum: 0 }
+            first_result: { type: object, nullable: true, additionalProperties: true }
+            blocked_reason: { type: string, nullable: true }
+            decision: { type: object, nullable: true, additionalProperties: true }
+            opportunity_id: { type: string, format: uuid, nullable: true }
+            accepted_at: { type: string, format: date-time }
+            terminal_at: { type: string, format: date-time, nullable: true }
+            decided_at: { type: string, format: date-time, nullable: true }
+            elapsed_ms: { type: integer, minimum: 0 }
+            deadline_ms: { type: integer, enum: [180000] }
+            within_deadline: { type: boolean }
+            request_id: { type: string }
+            trace_id: { type: string }
+        request_id: { type: string }
+        trace_id: { type: string }
     OneTimeSecretEnvelope:
       type: object
       required: [data, request_id, trace_id]
