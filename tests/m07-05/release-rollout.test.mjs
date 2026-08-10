@@ -103,16 +103,23 @@ test("M07-05 Playwright verification uses isolated configurable API and Web port
 });
 
 test("M07-05 Playwright verification can use the BaoTa host system Chromium", async () => {
-  const [playwrightConfig, envExample, schema, featureMap, runbook, blueprint, phasePlan, moduleManifest, hostVerifier] = await Promise.all([
+  const [playwrightConfig, envExample, schema, featureMap, architecture, runbook, blueprint, phasePlan, moduleManifest, hostVerifier, ...linuxSnapshots] = await Promise.all([
     read("playwright.config.ts"),
     read("config/env.example"),
     read("config/schema.json"),
     read("docs/feature-map.json"),
+    read("docs/architecture/m07-05-release-rollout.md"),
     read("docs/runbooks/m07-05-release-rollout.md"),
     read("new-product-enterprise-blueprint.md"),
     read("plans/phase-07-release-production.md"),
     read("verification/modules/M07-05.json").then(JSON.parse),
     read("scripts/verify-playwright-host.mjs"),
+    ...[
+      "m07-05-release-rollout-desktop-desktop-chromium-linux.png",
+      "m07-05-release-rollout-desktop-mobile-390-linux.png",
+      "m07-05-release-rollout-mobile-390-desktop-chromium-linux.png",
+      "m07-05-release-rollout-mobile-390-mobile-390-linux.png",
+    ].map((name) => read(`tests/e2e/m07-05-release-rollout.spec.ts-snapshots/${name}`)),
   ]);
   for (const source of [playwrightConfig, envExample, schema, featureMap, runbook, blueprint, phasePlan]) {
     assert.match(source, /PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH/);
@@ -121,6 +128,9 @@ test("M07-05 Playwright verification can use the BaoTa host system Chromium", as
   assert.match(playwrightConfig, /executablePath/);
   assert.match(envExample, /^PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$/m);
   assert.match(runbook, /\/usr\/bin\/chromium/);
+  for (const source of [featureMap, architecture, runbook, blueprint, phasePlan]) assert.match(source, /fonts-noto-cjk/);
+  assert.equal(linuxSnapshots.length, 4);
+  for (const snapshot of linuxSnapshots) assert.ok(snapshot.length > 100_000);
   assert.ok(moduleManifest.commands.includes("node scripts/verify-playwright-host.mjs"));
   assert.match(hostVerifier, /fc-list/);
   assert.match(hostVerifier, /:lang=zh/);
