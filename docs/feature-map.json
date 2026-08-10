@@ -57,9 +57,10 @@
       "M07-01",
       "M07-02",
       "M07-03",
-      "M07-04"
+      "M07-04",
+      "M07-05"
     ],
-    "activeModules": ["M07-05"],
+    "activeModules": ["M07-06"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1407,7 +1408,9 @@
       "browserHostPrerequisite": {"chromium": "/usr/bin/chromium", "package": "fonts-noto-cjk", "version": "1:20201206-cjk+repack1-1", "authorization": "explicit user approval on 2026-08-10", "manager": "baota finite task", "evidence": "/www/server/panel/data/scoutops-m0705-font-install-before-*.json mode 0600", "rollback": "Baota finite task removes fonts-noto-cjk and refreshes font cache", "e2eStartupTimeoutMs": 300000},
       "runtimeBoundary": "finite Baota task and two same-host local-only Node API projects; no new external daemon, backup server, multi-node or 10000-user claim",
       "imageEvidence": ["core 10 platform cockpit", "concept 61 platform operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 release states", "four reviewed Linux Chromium visual baselines with Chinese glyphs"],
-      "status": "in_progress"
+      "productionEvidence": {"releaseId": "02981c43-3ee6-4d2e-9290-4f24a6de55a2", "buildSha": "35078a42dfd4ceb423b6a4d3cdcaa02ff874cbba", "capturedAt": "2026-08-10T10:41:14.658Z", "sha256": "824962ba1e075d551d1ed2efd51e76ac657367f88d967ba1253a6355577cedb0", "gates": [{"percent": 5, "observeSeconds": 1800, "sampleCount": 177, "errorRate": 0, "readP95": 3, "writeP95": 158, "asyncLag": 0, "durableWriteSamples": 89}, {"percent": 25, "observeSeconds": 1800, "sampleCount": 866, "errorRate": 0, "readP95": 2, "writeP95": 8, "asyncLag": 0, "durableWriteSamples": 448}, {"percent": 100, "observeSeconds": 1800, "sampleCount": 3218, "errorRate": 0, "readP95": 2, "writeP95": 5, "asyncLag": 0, "durableWriteSamples": 1609}]},
+      "verificationRunId": "868ff3d0-5596-4fb5-84b4-7c514fada163",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -1637,7 +1640,7 @@
       "path": "/platform-admin/releases",
       "view": "ReleaseRolloutCenter",
       "domain": "release-operations",
-      "status": "M07-05_in_progress"
+      "status": "M07-05_module_verified"
     }
   ],
   "apiGroups": [
@@ -1749,7 +1752,7 @@
       "name": "product-scout-api-canary",
       "kind": "baota-node-project",
       "responsibility": "same-host M07-05 candidate API and audited rollback pairing",
-      "status": "M07-05_in_progress"
+      "status": "M07-05_module_verified"
     },
     {
       "name": "product-scout-worker",
