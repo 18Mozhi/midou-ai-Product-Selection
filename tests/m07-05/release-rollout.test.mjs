@@ -100,6 +100,9 @@ test("M07-05 Playwright verification uses isolated configurable API and Web port
   }
   assert.match(envExample, /^PLAYWRIGHT_API_PORT=4101$/m);
   assert.match(envExample, /^PLAYWRIGHT_WEB_PORT=5173$/m);
+  assert.equal(playwrightConfig.match(/timeout:\s*300_000/g)?.length, 2);
+  assert.match(featureMap, /"e2eStartupTimeoutMs":\s*300000/);
+  assert.match(runbook, /启动等待上限为 300 秒/);
 });
 
 test("M07-05 Playwright verification can use the BaoTa host system Chromium", async () => {

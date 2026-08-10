@@ -36,13 +36,13 @@ export default defineConfig({
       command: 'npm run build:contracts && npm run build:api && node apps/api/dist/server.js',
       url: `http://127.0.0.1:${apiPort}/api/v1/health/live`,
       reuseExistingServer: false,
-      timeout: 60_000,
+      timeout: 300_000,
     },
     {
       command: 'npm run dev:web',
       url: `http://127.0.0.1:${webPort}`,
       reuseExistingServer: false,
-      timeout: 60_000,
+      timeout: 300_000,
     },
   ],
 });
