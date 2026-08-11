@@ -18,13 +18,13 @@ MySQL 5.7 的宝塔受限 `my.cnf` 必须显式设置 `innodb_flush_log_at_trx_c
 5. 生产证据写入 Git 忽略的 `.artifacts/verification/release-rollout-production-evidence.json`，再执行 `node scripts/verify-release-rollout-production.mjs --production`。
 6. 从宝塔 `product-scout-release-gate` 有限任务执行 `npm run verify:module -- M07-05`。任务运行前确认 `schema_migrations` 同时登记 `0007_m00_08_deployment_releases.up.sql`、`0026_release_rollout_m07_05.up.sql` 和 `0027_release_write_probe_m07_05.up.sql`。若表已存在但 0007 账本缺失，必须先逐字段、引擎、字符集和索引比对实际表与 0007 文件，并核对 SHA-256 后只补账本行、保留 0600 前后证据；不得重跑 `CREATE TABLE`、删除表或伪造 checksum。live 验收由 MySQL `UTC_TIMESTAMP(3)` 创建唯一测试发布与 gate 时间，避免宝塔任务进程本地时区或较新的真实发布遮蔽，并在成功或失败后清理全部探针数据。生产稳定/候选已占用 4101/4103 时，宝塔验收任务设置 `APP_PORT=4201`、`PLAYWRIGHT_API_PORT=4201`、`PLAYWRIGHT_WEB_PORT=5273`，让 Playwright 仅启动有限的隔离临时 API/Web；两个临时服务的启动等待上限为 300 秒，以覆盖 Debian 单机隔离工作区的真实构建耗时，超时仍失败关闭且不影响生产超时或灰度阈值。当前 Debian 11 主机还设置 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium` 复用已安装的系统 Chromium，因为 Playwright 1.62.1 不为该系统下载自带浏览器。E2E 前的 `node scripts/verify-playwright-host.mjs` 必须确认绝对路径可执行且 `fc-list :lang=zh` 非空；缺字体时不得接纳方框字 Linux 快照。主机已按用户 2026-08-10 明确授权，通过宝塔有限任务安装 Debian 官方 `fonts-noto-cjk` `1:20201206-cjk+repack1-1` 并刷新字体缓存，安装前证据为 `/www/server/panel/data/scoutops-m0705-font-install-before-*.json`（0600）；未重启生产服务。回滚时确认无 Playwright/验收进程后，通过同一宝塔有限任务执行 `apt-get remove -y fonts-noto-cjk && fc-cache -f`，再确认 `fc-list :lang=zh` 为空并使 M07-05 失败关闭。不得安装未知浏览器、复用生产 API，也不得把临时进程登记为生产服务。
 
-## 2026-08-10 生产签发证据
+## 2026-08-12 生产签发证据
 
-- 发布 ID：`02981c43-3ee6-4d2e-9290-4f24a6de55a2`；候选构建：`35078a42dfd4ceb423b6a4d3cdcaa02ff874cbba`；证据捕获：`2026-08-10T10:41:14.658Z`；SHA-256：`824962ba1e075d551d1ed2efd51e76ac657367f88d967ba1253a6355577cedb0`。
-- 5%：1,800 秒、177 样本、5xx 0%、读 P95 3 ms、写 P95 158 ms、异步延迟 0、持久化写样本 89。
-- 25%：1,800 秒、866 样本、5xx 0%、读 P95 2 ms、写 P95 8 ms、异步延迟 0、持久化写样本 448。
-- 100%：1,800 秒、3,218 样本、5xx 0%、读 P95 2 ms、写 P95 5 ms、异步延迟 0、持久化写样本 1,609。
-- `npm run verify:module -- M07-05` 在宝塔有限任务中 10/10 命令通过；run_id/trace_id：`868ff3d0-5596-4fb5-84b4-7c514fada163`。验收完成后已恢复 `product-scout-release-gate` 原 M07-02 脚本及 `0750` 权限。
+- 发布 ID：`8b6114fe-fafa-4c6c-8a5d-ebd52ffe65ae`；候选构建：`e22968896ab087647ad171f00a6f107c6824acf9`；证据捕获：`2026-08-11T19:22:54.886Z`；SHA-256：`649a4b18ddec6d5f4967dce0ce2f992c4c5aa5ce45a4cb272ce0c31597376d1d`。
+- 5%：1,800 秒、160 样本、5xx 0%、读 P95 3 ms、写 P95 6 ms、异步延迟 0、持久化写样本 84；到达上游前中断和投递失败均为 0。
+- 25%：1,800 秒、818 样本、5xx 0%、读 P95 2 ms、写 P95 152 ms、异步延迟 0、持久化写样本 432；到达上游前中断和投递失败均为 0。
+- 100%：1,800 秒、3,199 样本、5xx 0%、读 P95 2 ms、写 P95 276 ms、异步延迟 0、持久化写样本 1,599；到达上游前中断和投递失败均为 0。
+- `npm run verify:module -- M07-05` 在同提交隔离工作区的宝塔有限任务中 11/11 命令通过；run_id/trace_id：`cfadd66f-b1d4-4a3e-ac0f-faa1efac2b1a`，生产证据门 trace_id：`23bd60f3-59f3-4951-9a88-2fb74cc631e6`。验收后 4201/5273 无残留监听，临时 bundle 已删除，任务 14 已恢复为 `product-scout-m0706-candidate-deploy`。
 
 ## 自动停止与人工回滚
 

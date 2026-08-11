@@ -1,6 +1,6 @@
 # P07：S0 发布、生产验收与恢复详细执行计划
 
-> 状态：in_progress（P00 至 P06 已通过阶段门禁；P06 run_id/trace_id：`e1ab135d-20f6-450a-90c0-de9746ef6575`；M07-01 至 M07-05 已通过，M07-05 run_id/trace_id：`868ff3d0-5596-4fb5-84b4-7c514fada163`，当前执行 M07-06）
+> 状态：in_progress（P00 至 P06 已通过阶段门禁；P06 run_id/trace_id：`e1ab135d-20f6-450a-90c0-de9746ef6575`；M07-01 至 M07-05 已通过，M07-05 最新同提交生产验收 run_id/trace_id：`cfadd66f-b1d4-4a3e-ac0f-faa1efac2b1a`，当前执行 M07-06）
 > 上游总纲：`new-product-enterprise-blueprint.md`
 > 阶段索引：`plans/README.md`
 > 最低行数：1,000；`npm run verify:plans` 必须自动校验。
@@ -1355,7 +1355,7 @@
 #### M07-05.A99 模块关卡
 - [x] 原子任务 A01–A17 全部有实现证据和测试名称。
 - [x] 组织隔离、权限、审计、配置、错误状态、图片/响应式（适用时）已覆盖。
-- [x] `npm run verify:module -- M07-05` 返回 0；run_id/trace_id：`868ff3d0-5596-4fb5-84b4-7c514fada163`。
+- [x] `npm run verify:module -- M07-05` 在构建 `e22968896ab087647ad171f00a6f107c6824acf9` 的同提交隔离工作区返回 0，11/11 命令通过；run_id/trace_id：`cfadd66f-b1d4-4a3e-ac0f-faa1efac2b1a`。生产发布 `8b6114fe-fafa-4c6c-8a5d-ebd52ffe65ae` 的 5%/25%/100% 均完整观察 1,800 秒并通过原阈值。
 
 ### M07-06 原子任务索引
 - 模块目标：真实选品验收。
