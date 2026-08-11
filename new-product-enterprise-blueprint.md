@@ -930,6 +930,8 @@ M07-03 部署合同以 `infra/baota/service-manifest.json` schema v2 锁定惠�
 
 M07-05 发布合同以 `infra/baota/release-rollout-manifest.json` 锁定 4101 稳定 API、4103 同机候选 API、宝塔手工发布任务和 Nginx 5% → 25% → 100% 分流。生产每阶段至少观察 30 分钟，并以 1 秒采样提高低流量 S0 的候选 P95 样本分辨率；采样频率不得用于缩短观察、改变比例或放宽阈值。候选读写 P95、5xx、MySQL 异步延迟和最小样本全部来自运行证据；写样本使用宝塔受限 HMAC 签名、唯一 sample/nonce、单次 InnoDB 提交并保留代理实际 request_id/trace_id 的 M07-05 专用探针。签名 canonical 只覆盖 timestamp、nonce、release_id、sample_id，不能绑定会被宝塔 Nginx 覆盖的追踪头；候选必须返回 202，且候选 build 的持久化增量必须与候选 Nginx 写样本完全一致。不能用多次业务提交或幂等回放替代。缺样本、探针拒绝、持久化数量不一致或超过阈值必须自动把流量退回 4101 并追加停止/回滚审计。宝塔模块验收的 Playwright API/Web 使用可配置的隔离临时端口，不能占用或复用 4101/4103 生产槽，命令结束即关闭；隔离服务启动等待固定为 300 秒，以覆盖 Debian 单机真实构建耗时，超时继续失败关闭且不改变生产门禁。`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` 可显式选择主机既有 Chromium 的绝对路径，空值保持本地默认浏览器。Linux 视觉门还必须通过自动主机预检确认 Chromium 可执行和中文字体存在，禁止接受方框字快照；惠州 Debian 11 主机经明确授权由宝塔有限任务安装 Debian 官方 `fonts-noto-cjk` 固定版本并保留 0600 安装前证据，回滚也只能由宝塔任务删除包并刷新字体缓存。候选项目不是备用服务器，也不提供主机故障保护、多节点或 10,000 用户能力。
 
+M07-05 的 MySQL 异步延迟只测量宝塔 Node Worker 实际可领取的显式队列到期工作与过期租约；没有当前消费者的领域审计/后续投递 Outbox 必须保留事实，但不冒充可执行队列。队列表由发布 manifest、`scripts/release-rollout-async-lag.mjs` 和自动测试共同锁定，禁止动态扫描任意 `status + available_at` 表、删除审计记录或放宽 60 秒停止阈值。
+
 M07-03 已由模块自动验收 `8cb425c1-1606-4e4c-a736-8d29e27caf32` 通过：全仓构建、MySQL 5.7/Redis/API 真实探针、Python 心跳、桌面/390px 生产状态视觉、文档门和同 commit 生产证据均成功。该结果只证明 S0 宝塔部署完成，不代表 M07-04 同机隔离恢复、P07 或 P08 容量完成。
 
 M07-04 使用 `backup_recovery_runs` 与 `backup_recovery_assets` 记录惠州当前主机、同机独立加密恢复目录、AES-256-GCM 资产、实际 RPO/RTO 和逻辑隔离演练核验。`/api/v1/platform/operations/backup-recovery` 仅向 `platform:operate` 返回脱敏事实；备份和恢复只由宝塔计划任务执行。状态严格失败关闭：缺恢复副本完整性证据或缺 90 天内隔离恢复时为 `blocked/stale`，不得写成 `verified`。生产验收要求本机逻辑损坏场景下 MySQL RPO 不超过 15 分钟、RTO 不超过 4 小时，并核验业务数据、审计链、证据哈希和权限边界；该验收明确不保护整机、磁盘或机房故障，也不构成异地灾备能力。

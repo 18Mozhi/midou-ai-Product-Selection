@@ -55,6 +55,24 @@
     "readP95MsInclusive": 300,
     "writeP95MsInclusive": 600,
     "asyncLagSecondsInclusive": 60,
+    "asyncQueueTables": [
+      "auth_delivery_outbox",
+      "collection_tasks",
+      "trend_projection_jobs",
+      "opportunity_refresh_jobs",
+      "opportunity_score_jobs",
+      "opportunity_profit_jobs",
+      "competitor_snapshot_jobs",
+      "sourcing_projection_jobs",
+      "ai_analysis_requests",
+      "sourcing_outbox",
+      "approval_escalation_jobs",
+      "outbox_events",
+      "automation_executions",
+      "report_exports",
+      "webhook_deliveries"
+    ],
+    "asyncQueueScope": "only due work or expired leases claimed by the Baota-managed Node Worker; domain audit outboxes without a runtime consumer are excluded",
     "action": "route-100-percent-to-the-runtime-stable-slot-and-record-audited-rollback"
   },
   "nginx": {

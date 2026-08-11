@@ -4,6 +4,7 @@ import { spawn } from "node:child_process";
 import { mkdir, open, readFile, stat, writeFile } from "node:fs/promises";
 import { basename, dirname, isAbsolute, resolve } from "node:path";
 import mysql from "mysql2/promise";
+import { asyncLagSeconds } from "./release-rollout-async-lag.mjs";
 
 const argv = process.argv.slice(2), arg = (name) => argv[argv.indexOf(name) + 1];
 const requestId = randomUUID(), traceId = randomUUID();
@@ -86,18 +87,6 @@ if (argv.includes("--self-test")) {
   const thresholds = { errorRate: 1, readP95: 300, writeP95: 600, asyncLag: 60 };
   if (records.length !== 2 || records[1].path !== "/api/v1/platform/operations/releases/write-probe" || metrics.readP95 !== 100 || metrics.writeP95 !== 200 || writeProbeBreach([records[1]], 1) !== null || writeProbeBreach([{ ...records[1], status: 401 }], 0) !== "release_write_probe_rejected" || writeProbeBreach([records[1]], 0) !== "release_write_probe_persistence_mismatch" || breachFor(metrics, 1, 1, 1, thresholds) !== null || breachFor(metrics, 0, 1, 1, thresholds) !== "insufficient_candidate_samples" || breachFor({ ...metrics, errorRate: 1 }, 1, 1, 1, thresholds) !== "error_rate_threshold_exceeded" || splitConfig(0, 4101, 4103).includes(":4103") || !siteConfig("server { location /api/ { proxy_pass http://127.0.0.1:4101; }\n}", "/www/wwwlogs/test.log").includes("$scoutops_release_upstream")) throw fail("release_self_test_failed", "release parser, write persistence, thresholds, stable fallback or Nginx rendering drifted");
   process.stdout.write(`${JSON.stringify({ module: "M07-05", status: "passed", upstream_parser: "passed", fail_closed_thresholds: "passed", stable_fallback: "passed", request_id: requestId, trace_id: traceId })}\n`); process.exit(0);
-}
-
-async function asyncLagSeconds(pool) {
-  const [tables] = await pool.query("SELECT TABLE_NAME table_name FROM information_schema.columns WHERE table_schema=DATABASE() AND COLUMN_NAME IN ('status','available_at') GROUP BY TABLE_NAME HAVING COUNT(DISTINCT COLUMN_NAME)=2 ORDER BY TABLE_NAME");
-  let maximum = 0;
-  for (const row of tables) {
-    const table = String(row.table_name);
-    if (!/^[a-z0-9_]+$/.test(table)) continue;
-    const [values] = await pool.query(`SELECT COALESCE(MAX(GREATEST(0,TIMESTAMPDIFF(SECOND,available_at,UTC_TIMESTAMP(3)))),0) lag_seconds FROM \`${table}\` WHERE available_at<=UTC_TIMESTAMP(3) AND status IN ('queued','pending','scheduled','failed_retryable')`);
-    maximum = Math.max(maximum, Number(values[0]?.lag_seconds ?? 0));
-  }
-  return maximum;
 }
 
 async function fetchIdentity(baseUrl) {

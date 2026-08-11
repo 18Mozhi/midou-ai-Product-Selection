@@ -2,8 +2,48 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
+import {
+  RELEASE_ASYNC_QUEUE_PROBES,
+  asyncLagSeconds,
+} from "../../scripts/release-rollout-async-lag.mjs";
 
 const read = (path) => readFile(path, "utf8");
+
+test("M07-05 async lag probes only queues consumed by the BaoTa Worker", async () => {
+  const tables = RELEASE_ASYNC_QUEUE_PROBES.map((probe) => probe.table);
+  for (const table of [
+    "collection_task_outbox",
+    "evidence_data_outbox",
+    "selection_journey_outbox",
+    "trend_outbox",
+  ])
+    assert.ok(!tables.includes(table), `${table} has no runtime consumer`);
+  for (const table of [
+    "collection_tasks",
+    "trend_projection_jobs",
+    "opportunity_refresh_jobs",
+    "sourcing_projection_jobs",
+    "ai_analysis_requests",
+    "outbox_events",
+    "webhook_deliveries",
+  ])
+    assert.ok(tables.includes(table), `${table} must remain release-gated`);
+
+  const queried = [];
+  const pool = {
+    query: async (sql) => {
+      queried.push(sql);
+      return [[{ lag_seconds: sql.includes("collection_tasks") ? 42 : 0 }]];
+    },
+  };
+  assert.equal(await asyncLagSeconds(pool), 42);
+  assert.equal(queried.length, RELEASE_ASYNC_QUEUE_PROBES.length);
+  assert.ok(queried.every((sql) => !sql.includes("selection_journey_outbox")));
+  assert.match(
+    RELEASE_ASYNC_QUEUE_PROBES.find((probe) => probe.table === "collection_tasks").sql,
+    /CASE WHEN status IN \('leased','running'\) THEN lease_expires_at/,
+  );
+});
 
 test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundaries", async () => {
   const [manifest, up, down, runner] = await Promise.all([
@@ -16,6 +56,7 @@ test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundar
   assert.equal(manifest.productionManager, "baota");
   assert.deepEqual(manifest.canary.percentages, [5, 25, 100]);
   assert.equal(manifest.canary.minimumObservationSeconds, 1800);
+  assert.deepEqual(manifest.automaticStop.asyncQueueTables, RELEASE_ASYNC_QUEUE_PROBES.map((probe) => probe.table));
   assert.deepEqual(manifest.canary.syntheticWriteCanonicalFields, ["timestamp", "nonce", "release_id", "sample_id"]);
   assert.equal(manifest.canary.proxyRequestIdsExcludedFromSignature, true);
   assert.equal(manifest.canary.candidatePersistenceParityRequired, true);
