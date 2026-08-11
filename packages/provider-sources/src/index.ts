@@ -1,5 +1,7 @@
 import { createHash } from 'node:crypto';
 import { ProviderAdapterFailure, type AdapterHealthContext, type AdapterHealthSignal, type AdapterInvocationContext, type ProviderAdapter, type ProviderCollectBatch, type ProviderCollectRequest, type ProviderNormalizedRecord, type ProviderRawRecord } from '@scoutops/provider-adapters';
+export { createProviderSourceFetch } from './proxy-fetch.js';
+export type { ProviderSourceFetchDependencies, ProviderSourceProxyConfig } from './proxy-fetch.js';
 
 export interface BuiltinSourceDefinition{code:'google_news_search'|'manual_product_supply_csv';name:string;access_mode:'public_rss'|'import';target_url:string;markets:string[];languages:string[];fields:string[];schedule_minutes:number;concurrency_limit:number;timeout_ms:number;retry_limit:number;circuit_failure_threshold:number;dedupe_key:string;retention_days:number;failure_rules:string[];parser_version:string;healthcheck_url:string|null;owner_label:string;status:'disabled';category:'trend'|'product_supply';production_policy:'owner_review_required'|'ready_for_owner_enablement';policy_note:string;}
 export const BUILTIN_PROVIDER_SOURCES:readonly BuiltinSourceDefinition[]=[

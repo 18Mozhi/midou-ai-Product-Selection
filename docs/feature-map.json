@@ -550,6 +550,7 @@
       "module": "M03-03",
       "entrypoints": [
         "../packages/provider-adapters/src/index.ts",
+        "../packages/provider-sources/src/proxy-fetch.ts",
         "../apps/api/src/provider-adapter-service.ts",
         "../apps/api/src/mysql-provider-adapter-repository.ts",
         "../apps/api/src/provider-adapter-routes.ts",
@@ -567,7 +568,11 @@
       "configuration": [
         "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS",
         "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES",
-        "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH"
+        "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH",
+        "PROVIDER_PROXY_URL",
+        "PROVIDER_PROXY_USERNAME",
+        "PROVIDER_PROXY_PASSWORD",
+        "PROVIDER_PROXY_CONNECT_TIMEOUT_MS"
       ],
       "downstream": {
         "M03-04": "authenticated browser execution",
@@ -755,6 +760,7 @@
       "module": "M03-07",
       "entrypoints": [
         "../packages/provider-sources/src/index.ts",
+        "../packages/provider-sources/src/proxy-fetch.ts",
         "../apps/api/src/provider-source-service.ts",
         "../apps/api/src/mysql-provider-source-repository.ts",
         "../apps/api/src/provider-source-routes.ts",
@@ -773,7 +779,7 @@
         "manual_product_supply_csv explicit import"
       ],
       "admissionBoundary": "catalog and provisioning are disabled by default; Google endpoint availability is not production authorization; owners explicitly review and enable provider definitions",
-      "outboundBoundary": "Google News uses one exact code-owned URL template and rejects redirects; CSV uses inline content; callers cannot supply an outbound URL",
+      "outboundBoundary": "Google News uses one exact code-owned URL template and rejects redirects; an optional Baota-restricted project HTTP CONNECT proxy is applied only to news.google.com without setting global HTTP_PROXY or HTTPS_PROXY; CSV uses inline content; callers cannot supply an outbound URL or proxy",
       "limits": "Google RSS 2MB and 20 persisted records per task; CSV 1MB, exact 8-column header, 100 parsed rows and 20 persisted records per task",
       "permission": "provider:configure for catalog/provision; collection:replay for scoped task creation; writes require same-origin Origin and Idempotency-Key",
       "persistence": "MySQL 5.7 replay correlation plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
@@ -781,6 +787,10 @@
         "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS",
         "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES",
         "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH",
+        "PROVIDER_PROXY_URL",
+        "PROVIDER_PROXY_USERNAME",
+        "PROVIDER_PROXY_PASSWORD",
+        "PROVIDER_PROXY_CONNECT_TIMEOUT_MS",
         "COLLECTION_TASK_POLL_MS",
         "COLLECTION_TASK_LEASE_SECONDS",
         "EVIDENCE_ROOT",
@@ -1420,7 +1430,7 @@
       "thresholds": {"createApiMs": 3000, "acceptedVisibleMs": 15000, "terminalMs": 180000, "relaxationAllowed": false},
       "permission": {"create": "task:create", "read": "opportunity:read", "decide": "opportunity:decide", "forbiddenMemberCapabilities": ["provider:configure", "collection:replay", "platform:operate", "platform:superadmin"]},
       "sessionContext": "the dedicated account must have exactly one active acceptance organization; every new login selects its active default workspace through POST /api/v1/auth/context before navigation and capability guards",
-      "configuration": ["SELECTION_ACCEPTANCE_DEADLINE_MS", "SELECTION_ACCEPTANCE_BASE_URL", "SELECTION_ACCEPTANCE_EMAIL", "SELECTION_ACCEPTANCE_PASSWORD", "SELECTION_ACCEPTANCE_INPUT_KIND", "SELECTION_ACCEPTANCE_INPUT_VALUE", "SELECTION_ACCEPTANCE_EVIDENCE_FILE"],
+      "configuration": ["SELECTION_ACCEPTANCE_DEADLINE_MS", "SELECTION_ACCEPTANCE_BASE_URL", "SELECTION_ACCEPTANCE_EMAIL", "SELECTION_ACCEPTANCE_PASSWORD", "SELECTION_ACCEPTANCE_INPUT_KIND", "SELECTION_ACCEPTANCE_INPUT_VALUE", "SELECTION_ACCEPTANCE_EVIDENCE_FILE", "PROVIDER_PROXY_URL", "PROVIDER_PROXY_USERNAME", "PROVIDER_PROXY_PASSWORD", "PROVIDER_PROXY_CONNECT_TIMEOUT_MS"],
       "data": ["selection_journeys", "selection_journey_decisions", "selection_journey_events", "selection_journey_outbox", "selection_journey_operations"],
       "runtimeBoundary": "finite Baota task on the current Huizhou single host; no daemon backup server multi-node or 10000-user claim",
       "imageEvidence": ["core 01 and 04-10", "concept 53 mobile home", "concept 54 mobile opportunity detail", "concept 72 not found", "desktop and 390 real journey states"],

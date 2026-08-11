@@ -62,6 +62,12 @@ export interface RuntimeConfig {
     healthTimeoutMs: number;
     maxResponseBytes: number;
     maxItemsPerBatch: number;
+    proxy?: {
+      url: string;
+      username: string;
+      password: string;
+      connectTimeoutMs: number;
+    };
   };
   playwright: {
     browser: "chromium";
@@ -161,6 +167,55 @@ function httpUrl(env: NodeJS.ProcessEnv, key: string, fallback: string) {
     throw new ConfigError(key, "must be an absolute http(s) URL");
   }
 }
+function providerProxy(env: NodeJS.ProcessEnv) {
+  const rawUrl = text(env, "PROVIDER_PROXY_URL"),
+    username = text(env, "PROVIDER_PROXY_USERNAME"),
+    password = env.PROVIDER_PROXY_PASSWORD ?? "",
+    connectTimeoutMs = integer(
+      env,
+      "PROVIDER_PROXY_CONNECT_TIMEOUT_MS",
+      5000,
+      100,
+      10000,
+    );
+  if (!rawUrl) {
+    if (username || password)
+      throw new ConfigError(
+        "PROVIDER_PROXY_URL",
+        "is required when Provider proxy credentials are configured",
+      );
+    return undefined;
+  }
+  let url: URL;
+  try {
+    url = new URL(rawUrl);
+  } catch {
+    throw new ConfigError("PROVIDER_PROXY_URL", "must be an absolute HTTP URL");
+  }
+  if (
+    url.protocol !== "http:" ||
+    url.username ||
+    url.password ||
+    (url.pathname !== "/" && url.pathname !== "") ||
+    url.search ||
+    url.hash
+  )
+    throw new ConfigError(
+      "PROVIDER_PROXY_URL",
+      "must be an HTTP origin without credentials, path, query or fragment",
+    );
+  if (!username)
+    throw new ConfigError(
+      "PROVIDER_PROXY_USERNAME",
+      "is required when Provider proxy is enabled",
+    );
+  if (!password)
+    throw new ConfigError(
+      "PROVIDER_PROXY_PASSWORD",
+      "is required when Provider proxy is enabled",
+    );
+  return { url: url.toString(), username, password, connectTimeoutMs };
+}
 function secret(
   env: NodeJS.ProcessEnv,
   key: string,
@@ -202,6 +257,7 @@ export function loadRuntimeConfig(
   );
   if (evidenceRoot === exportRoot)
     throw new ConfigError("EXPORT_ROOT", "must not equal EVIDENCE_ROOT");
+  const configuredProviderProxy = providerProxy(env);
   const base = {
     target,
     nodeEnv,
@@ -295,6 +351,7 @@ export function loadRuntimeConfig(
         1,
         5000,
       ),
+      ...(configuredProviderProxy ? { proxy: configuredProviderProxy } : {}),
     },
     playwright: {
       browser: "chromium" as const,
@@ -656,6 +713,18 @@ export function loadRuntimeConfig(
         base.security.evidenceDownloadSigningKey,
       ),
       releaseProbeSigningKey: Boolean(base.security.releaseProbeSigningKey),
+    },
+    providerAdapters: {
+      ...base.providerAdapters,
+      ...(base.providerAdapters.proxy
+        ? {
+            proxy: {
+              ...base.providerAdapters.proxy,
+              username: Boolean(base.providerAdapters.proxy.username),
+              password: Boolean(base.providerAdapters.proxy.password),
+            },
+          }
+        : {}),
     },
   };
   return {

@@ -10,6 +10,8 @@ node scripts/run-baota-selection-acceptance.mjs --production
 
 任务超时 240 秒、只允许手工或发布后单次执行，不设置常驻循环。`SELECTION_ACCEPTANCE_EMAIL` 与 `SELECTION_ACCEPTANCE_PASSWORD` 只放宝塔受限任务环境；账号必须是普通 `member`、不启用 MFA、没有平台角色。输入与证据路径按 `config/env.example` 设置，`SELECTION_ACCEPTANCE_DEADLINE_MS=180000` 不得调整。配置变更在启动读取；修改后通过宝塔重启 Node API，有限任务本身直接重新执行。
 
+若惠州出口不能直连 Google News，只在 ScoutOps Node API、Node Worker 和来源启用有限任务的宝塔受限环境配置四个 `PROVIDER_PROXY_*` 变量。不得设置系统或其他项目的 `HTTP_PROXY`/`HTTPS_PROXY`；普通 member 验收任务不读取或回显代理凭证。代理连接超时可在 100–10000 ms 内调整，但 Provider 健康门仍固定 10000 ms，M07-06 终态仍固定 180000 ms。
+
 ## 执行与判定
 
 1. 先在宝塔确认 Node API、Node Worker、Python Crawler、MySQL、Redis 和网站均健康，当前版本 `/api/v1/health/version` 与发布 commit 一致。
@@ -24,11 +26,14 @@ node scripts/run-baota-selection-acceptance.mjs --production
 
 在宝塔计划任务日志按 `request_id`/`trace_id` 关联 Node API、Worker 和 Crawler。不要打印账号密码、会话 Cookie、Token、Provider 凭证或原始响应正文。优先检查：来源是否 enabled、Worker 是否领取任务、`collection_task_events` 的状态、`raw_evidence` 是否落盘、趋势投影是否产生主题，以及决策权限是否有效。
 
+代理异常先检查 OpenClash 监听、Basic 认证以及 API/Worker 是否通过宝塔重启读取新配置；只记录 CONNECT 状态、耗时和错误码，不记录代理用户名或密码。
+
 ## 回滚
 
 1. 在网站导航隐藏 `/opportunities/start` 或通过宝塔切回上一已验证同机版本；通过宝塔重启网站与 Node API。
 2. 停止新的 M07-06 有限任务，不停止或删除既有采集任务、审计、Outbox 和原始证据。
 3. 如必须回滚迁移，先导出 `selection_journeys`、决策、事件、Outbox 和操作记录，再执行 `0028_selection_journeys_m07_06.down.sql`。该 down 会删除五张 M07-06 表，因此没有导出不得执行。
 4. 回滚后复核既有 `/opportunities`、采集任务和 Provider 配置未变化；所有生产操作仍只通过宝塔。
+5. 如回滚项目代理，先禁用 `google_news_search`，删除 ScoutOps 宝塔对象中的四个 `PROVIDER_PROXY_*` 变量并重启 API/Worker；禁止影响系统或其他项目网络设置。
 
 当前恢复边界仍是惠州单机内的应用/逻辑数据回滚；不使用备用服务器，不声明整机、磁盘、机房、多节点或 10,000 用户能力。

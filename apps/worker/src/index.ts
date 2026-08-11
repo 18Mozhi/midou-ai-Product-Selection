@@ -2,7 +2,10 @@ import { loadRuntimeConfig } from "@scoutops/config";
 import { createDatabasePool } from "@scoutops/database";
 import { createRedisConnection, ScopedRedisStore } from "@scoutops/redis";
 import { ProviderAdapterRegistry } from "@scoutops/provider-adapters";
-import { createBuiltinSourceAdapters } from "@scoutops/provider-sources";
+import {
+  createBuiltinSourceAdapters,
+  createProviderSourceFetch,
+} from "@scoutops/provider-sources";
 import {
   PendingMailProvider,
   processAuthDeliveryOnce,
@@ -40,7 +43,10 @@ const registry = new ProviderAdapterRegistry({
   maxResponseBytes: config.providerAdapters.maxResponseBytes,
   maxItemsPerBatch: config.providerAdapters.maxItemsPerBatch,
 });
-for (const adapter of createBuiltinSourceAdapters()) registry.register(adapter);
+for (const adapter of createBuiltinSourceAdapters(
+  createProviderSourceFetch(config.providerAdapters.proxy),
+))
+  registry.register(adapter);
 const collectionRepository = new MySqlCollectionTaskWorkerRepository(pool);
 const coordinator = new ScopedRedisCollectionCoordinator(redisStore);
 const executor = new ProviderSourceExecutor(

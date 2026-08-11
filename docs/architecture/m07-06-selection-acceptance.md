@@ -18,6 +18,7 @@ M07-06 把现有真实来源、采集任务、原始证据、趋势投影、机�
 - 不授予成员 `provider:configure`、`collection:replay` 或任何 `platform:*` 权限。
 - 创建与决策同时写业务、事件、Outbox 和幂等操作；原始采集、证据落盘、趋势投影继续由宝塔 Node Worker/Python Crawler 执行。
 - 浏览器只看到脱敏 DTO，不读取数据库、Redis、凭证、Cookie 内容或 Provider 密钥。
+- 如 Google News 需要项目专用出口，只有 API/Worker 内的固定 `news.google.com` 请求使用宝塔受限 `PROVIDER_PROXY_*`；验收成员、浏览器、其他 Provider 和系统环境均看不到或不继承代理。
 
 ## 页面依据
 

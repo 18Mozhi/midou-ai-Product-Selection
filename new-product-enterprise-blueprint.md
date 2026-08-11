@@ -665,6 +665,8 @@ MySQL 5.7 保存组织/工作区范围化的原始证据元数据、规范记录
 
 目录项默认 `disabled`。Google RSS 的端点可访问不等于生产授权，所有者必须复核当前条款、频率、展示字段和保存期限后显式启用。目录/登记要求 `provider:configure`，回放要求 `collection:replay`、同源 Origin、Idempotency-Key、启用 Provider 以及活动组织/工作区。API 在事务中写 M03-07 replay run 与 M03-05 task/subquery/event/outbox；宝塔 Node Worker 使用 Redis 租约执行真实适配器，将原始内容先交给 M03-06 证据持久化，再保存规范化字段与逐字段 provenance。生产服务仍全部由宝塔管理；本模块不创建面板外服务。
 
+当惠州出口不能直连 Google News 时，只允许在 ScoutOps 的宝塔 Node API、Node Worker 和有限来源任务中注入 `PROVIDER_PROXY_*` 项目配置。代码仅对固定 `news.google.com` HTTPS 请求建立带 Basic 认证的 HTTP CONNECT，其他 Provider、AI、API 请求和系统进程继续直连；禁止设置全局 `HTTP_PROXY`/`HTTPS_PROXY`，禁止将代理地址或凭证下发浏览器、写入 Provider DTO、日志或 Git。代理不能放宽 10 秒健康门、2 MB 响应和每任务 20 条限制。
+
 P03 已于阶段自动验收 `01b8e9ff-d2c4-4a5a-80b3-673ee96dbea7` 通过；M03-01 至 M03-07 的构建、MySQL 5.7、Redis、浏览器、真实来源探针、证据链、权限、视觉与文档门均重新执行成功。此结论只证明 P03，不代表 P04–P08 或多节点/10,000 用户能力完成。
 
 ---
@@ -937,6 +939,8 @@ M07-04 已由模块自动验收 `d1ede17d-0f7b-4f42-b80c-2d5dac118651` 通过：
 M07-05 已由模块自动验收 `868ff3d0-5596-4fb5-84b4-7c514fada163` 通过：宝塔同机候选构建 `35078a42dfd4ceb423b6a4d3cdcaa02ff874cbba` 完成 5%/25%/100% 三阶段各 1,800 秒生产观察，样本分别为 177/866/3,218，5xx 均为 0%，读 P95 为 3/2/2 ms，写 P95 为 158/8/5 ms，异步延迟均为 0，候选写探针持久化与样本一致；Linux Chromium、中文字体、桌面/390px E2E、MySQL 5.7 真实探针、文档门和公网同 commit 身份也全部通过。该结果只证明惠州当前单机的应用发布与同机回滚能力，不是备用服务器、主机故障保护、多节点或 10,000 用户能力。
 
 M07-06 通过 `/opportunities/start` 和 `/api/v1/selection-journeys` 把普通成员的真实输入、采集任务、首个原始证据或 `succeeded_empty`/明确受阻终态、人工决策与证据查看串成一条可计时旅程。服务器从已登录会话解析组织和工作区并选择已启用 `google_news_search`，成员只需 `task:create`、`opportunity:read` 和 `opportunity:decide`，不得获得或使用 `provider:configure`、`collection:replay` 或平台权限。`SELECTION_ACCEPTANCE_DEADLINE_MS` 固定为 `180000`，启动检查拒绝放宽；创建、15 秒可见和 180 秒终态均由惠州单机宝塔有限任务的真实生产证据签发。演示数据、平台管理员代操作、手填组织 ID 或直接写库都不能计入验收。当前该模块仍在实施和生产签发中，不能据此宣称 P07 或 P08 完成。
+
+M07-06 可复用上述 ScoutOps 项目专用 HTTP CONNECT 代理访问固定 Google News 来源，但代理配置不属于成员输入，普通成员验收账号也不得获得或读取代理凭证。生产签发仍以同一惠州单机、同一构建、固定 10 秒来源健康门和 180 秒旅程门为准；代理仅改变允许的出站传输路径，不改变来源、数据合同、权限或阈值。
 
 ### 13.2 数据质量量化门槛
 

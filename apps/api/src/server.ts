@@ -41,7 +41,10 @@ import { MySqlCollectionTaskRepository } from "./mysql-collection-task-repositor
 import { DataQualityService } from "./data-quality-service.js";
 import { MySqlDataQualityRepository } from "./mysql-data-quality-repository.js";
 import { registerDataQualityRoutes } from "./data-quality-routes.js";
-import { createBuiltinSourceAdapters } from "@scoutops/provider-sources";
+import {
+  createBuiltinSourceAdapters,
+  createProviderSourceFetch,
+} from "@scoutops/provider-sources";
 import { ProviderSourceService } from "./provider-source-service.js";
 import { MySqlProviderSourceRepository } from "./mysql-provider-source-repository.js";
 import { TrendService } from "./trend-service.js";
@@ -170,7 +173,9 @@ const providerAdapterRegistry = new ProviderAdapterRegistry({
   maxResponseBytes: config.providerAdapters.maxResponseBytes,
   maxItemsPerBatch: config.providerAdapters.maxItemsPerBatch,
 });
-for (const adapter of createBuiltinSourceAdapters())
+for (const adapter of createBuiltinSourceAdapters(
+  createProviderSourceFetch(config.providerAdapters.proxy),
+))
   providerAdapterRegistry.register(adapter);
 const app = buildApp({
   logger: true,

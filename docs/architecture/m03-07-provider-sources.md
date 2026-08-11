@@ -24,8 +24,9 @@ CSV 来源固定为 `inline://product-supply-csv-v1`，表头严格为 `external
 - 所有写请求要求登录 Session、同源 Origin 和 Idempotency-Key。
 - 回放前验证 Provider 已启用，组织与工作区存在、相属且均为 active。
 - 外连地址由代码目录固定，未提供通用 URL、Header、Cookie 或凭证注入面。
+- 可选 HTTP CONNECT 代理只由 `createProviderSourceFetch` 应用于固定的 `news.google.com` HTTPS 请求；其他 Provider、API、AI、数据库和系统进程继续直连。代理 URL、用户名和密码只能来自宝塔 Node API/Worker 与有限任务的项目受限环境，禁止设置全局 `HTTP_PROXY`/`HTTPS_PROXY`，禁止把代理字段放入请求、Provider DTO 或浏览器。
 - retryable 网络、DNS、超时按 M03-05 的 1/5/15 分钟退避；限流使用延后时间；权限、来源变化、解析失败和空结果保留明确状态与错误码。
 
 ## 运行配置
 
-本模块复用 `PROVIDER_ADAPTER_*`、`COLLECTION_TASK_*`、`EVIDENCE_ROOT` 和 `EVIDENCE_MAX_RAW_BYTES`。代码内部对首批来源施加更小的 2 MB/1 MB/20 条上限，因此没有新增可绕过安全边界的 URL 或批量环境变量。配置指纹包含运行时上限；修改后必须由宝塔分别重启 Node API 和 Node Worker。
+本模块复用 `PROVIDER_ADAPTER_*`、`COLLECTION_TASK_*`、`EVIDENCE_ROOT` 和 `EVIDENCE_MAX_RAW_BYTES`。当惠州出口不能直连 Google News 时，可配置 `PROVIDER_PROXY_URL`、`PROVIDER_PROXY_USERNAME`、`PROVIDER_PROXY_PASSWORD` 和 `PROVIDER_PROXY_CONNECT_TIMEOUT_MS`；启动校验要求 HTTP origin、分离认证且四项成组，配置指纹只记录凭证是否存在，不记录明文。代码内部对首批来源施加更小的 2 MB/1 MB/20 条上限，因此代理不能放宽响应、条数或 10 秒健康门禁。修改后必须由宝塔分别重启 Node API 和 Node Worker。

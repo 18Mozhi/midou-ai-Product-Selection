@@ -58,6 +58,8 @@ test("M07-06.A07-A17 keeps UI, contracts, production evidence and rollback synch
     "180000",
     "task:create",
     "opportunity:decide",
+    "PROVIDER_PROXY_URL",
+    "PROVIDER_PROXY_PASSWORD",
     "回滚",
   ]) assert.match(all, new RegExp(token));
   assert.match(files[0], /390/);

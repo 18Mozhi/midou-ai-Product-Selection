@@ -1434,7 +1434,7 @@ paths:
   /platform/provider-adapters/{providerId}/health-check:
     post:
       summary: Run a bounded healthCheck through the registered Provider adapter
-      description: Unregistered adapters fail closed as blocked/adapter_not_registered. The endpoint never guesses a Provider request contract.
+      description: Unregistered adapters fail closed as blocked/adapter_not_registered. The endpoint never guesses a Provider request contract. When the optional project-scoped HTTP CONNECT proxy is configured, only the fixed news.google.com adapter request uses it; proxy configuration is never returned by this API.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -1450,7 +1450,7 @@ paths:
   /platform/provider-sources:
     get:
       summary: List the fixed first-provider source catalog and provisioning state
-      description: Requires provider:configure. Catalog entries are code-owned and disabled by default; no arbitrary outbound URL or raw replay input is returned.
+      description: Requires provider:configure. Catalog entries are code-owned and disabled by default; no arbitrary outbound URL or raw replay input is returned. Provider-only proxy credentials remain in Baota restricted runtime configuration and are never exposed to members or Provider DTOs.
       security: [{ HttpOnlySession: [] }]
       responses:
         '200': { description: Built-in source catalog, content: { application/json: { schema: { $ref: '#/components/schemas/ProviderSourceCatalogEnvelope' } } } }
@@ -2043,7 +2043,7 @@ paths:
   /selection-journeys:
     post:
       summary: Accept a member-scoped real selection journey within the fixed 180000 ms contract
-      description: POST /api/v1/selection-journeys selects the enabled google_news_search source server-side; members never submit provider IDs or organization/workspace IDs.
+      description: POST /api/v1/selection-journeys selects the enabled google_news_search source server-side; members never submit provider IDs, proxy settings or organization/workspace IDs.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: task:create
       parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
