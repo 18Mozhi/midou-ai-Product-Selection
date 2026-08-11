@@ -35,7 +35,7 @@
   },
   "rollback": {
     "application": "BaoTa switches current release to the previous verified same-host release and restarts the managed Node API and web site",
-    "database": "stop the member entry, preserve audit/evidence, then apply 0028_selection_journeys_m07_06.down.sql only after exporting journey records",
+    "database": "stop the member entry, preserve audit/evidence, switch to the prior code, export and roll back 0029_collection_task_evidence_links_m07_06 before optionally rolling back 0028_selection_journeys_m07_06",
     "productionServiceOutsideBaoTa": false
   }
 }

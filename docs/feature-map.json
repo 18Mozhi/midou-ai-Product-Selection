@@ -1424,14 +1424,15 @@
     },
     "selectionAcceptance": {
       "module": "M07-06",
-      "entrypoints": ["../apps/api/src/selection-journey-service.ts", "../apps/api/src/mysql-selection-journey-repository.ts", "../apps/api/src/selection-journey-routes.ts", "../apps/web/src/components/SelectionJourney.vue", "../scripts/run-baota-selection-acceptance.mjs"],
+      "entrypoints": ["../apps/api/src/selection-journey-service.ts", "../apps/api/src/mysql-selection-journey-repository.ts", "../apps/api/src/selection-journey-routes.ts", "../apps/worker/src/evidence-persistence.ts", "../apps/web/src/components/SelectionJourney.vue", "../scripts/run-baota-selection-acceptance.mjs"],
       "routes": ["/opportunities/start", "/api/v1/selection-journeys", "/api/v1/selection-journeys/{id}", "/api/v1/selection-journeys/{id}/decisions"],
       "scope": "ordinary member real keyword ASIN or product URL journey through enabled google_news_search collection task first verifiable result or succeeded_empty or explicit block then audited decision and evidence view",
       "thresholds": {"createApiMs": 3000, "acceptedVisibleMs": 15000, "terminalMs": 180000, "relaxationAllowed": false},
       "permission": {"create": "task:create", "read": "opportunity:read", "decide": "opportunity:decide", "forbiddenMemberCapabilities": ["provider:configure", "collection:replay", "platform:operate", "platform:superadmin"]},
       "sessionContext": "the dedicated account must have exactly one active acceptance organization; every new login selects its active default workspace through POST /api/v1/auth/context before navigation and capability guards",
       "configuration": ["SELECTION_ACCEPTANCE_DEADLINE_MS", "SELECTION_ACCEPTANCE_BASE_URL", "SELECTION_ACCEPTANCE_EMAIL", "SELECTION_ACCEPTANCE_PASSWORD", "SELECTION_ACCEPTANCE_INPUT_KIND", "SELECTION_ACCEPTANCE_INPUT_VALUE", "SELECTION_ACCEPTANCE_EVIDENCE_FILE", "PROVIDER_PROXY_URL", "PROVIDER_PROXY_USERNAME", "PROVIDER_PROXY_PASSWORD", "PROVIDER_PROXY_CONNECT_TIMEOUT_MS"],
-      "data": ["selection_journeys", "selection_journey_decisions", "selection_journey_events", "selection_journey_outbox", "selection_journey_operations"],
+      "data": ["selection_journeys", "selection_journey_decisions", "selection_journey_events", "selection_journey_outbox", "selection_journey_operations", "collection_task_evidence_links"],
+      "evidenceAssociation": "every captured or deduplicated evidence result is linked to the current collection task only after organization workspace subquery and provider scope validation",
       "runtimeBoundary": "finite Baota task on the current Huizhou single host; no daemon backup server multi-node or 10000-user claim",
       "imageEvidence": ["core 01 and 04-10", "concept 53 mobile home", "concept 54 mobile opportunity detail", "concept 72 not found", "desktop and 390 real journey states"],
       "status": "implementation_in_progress"

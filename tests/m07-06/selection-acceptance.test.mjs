@@ -1,14 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 
 const read = (path) => readFile(path, "utf8");
 
 test("M07-06.A01-A06 exposes a member-scoped real selection journey", async () => {
-  const [{ SelectionJourneyService }, routes, migration] = await Promise.all([
+  const [{ SelectionJourneyService }, routes, journeyMigration, evidenceLinkMigration, evidenceLinkRollback] = await Promise.all([
     import("../../apps/api/dist/selection-journey-service.js"),
     read("apps/api/src/selection-journey-routes.ts"),
     read("database/migrations/0028_selection_journeys_m07_06.up.sql"),
+    read("database/migrations/0029_collection_task_evidence_links_m07_06.up.sql"),
+    read("database/migrations/0029_collection_task_evidence_links_m07_06.down.sql"),
   ]);
   const created = [];
   const service = new SelectionJourneyService({
@@ -30,10 +33,14 @@ test("M07-06.A01-A06 exposes a member-scoped real selection journey", async () =
   assert.match(routes, /task:create/);
   assert.match(routes, /opportunity:decide/);
   assert.doesNotMatch(routes, /collection:replay|provider:configure/);
-  assert.match(migration, /CREATE TABLE `selection_journeys`/);
-  assert.match(migration, /organization_id/);
-  assert.match(migration, /workspace_id/);
-  assert.doesNotMatch(migration, /utf8mb4_0900|CHECK\s*\(/i);
+  assert.match(journeyMigration, /CREATE TABLE `selection_journeys`/);
+  assert.match(journeyMigration, /organization_id/);
+  assert.match(journeyMigration, /workspace_id/);
+  assert.match(evidenceLinkMigration, /CREATE TABLE `collection_task_evidence_links`/);
+  assert.match(evidenceLinkMigration, /UNIQUE KEY `uq_collection_task_evidence`/);
+  assert.match(evidenceLinkMigration, /INSERT INTO `collection_task_evidence_links`/);
+  assert.match(evidenceLinkRollback, /DROP TABLE IF EXISTS `collection_task_evidence_links`/);
+  assert.doesNotMatch(`${journeyMigration}\n${evidenceLinkMigration}`, /utf8mb4_0900|CHECK\s*\(/i);
 });
 
 test("M07-06.A07-A17 keeps UI, contracts, production evidence and rollback synchronized", async () => {
@@ -97,4 +104,78 @@ test("M07-06.A09/A16 production runner selects tenant context before member guar
   assert.match(runner, /"idempotency-key":randomUUID\(\)/);
   assert.equal(manifest.memberBoundary.sessionContextRequired, true);
   assert.equal(manifest.memberBoundary.exactlyOneActiveOrganization, true);
+});
+
+test("M07-06.A04/A05/A14 links deduplicated evidence to every scoped collection task", async () => {
+  const { MySqlEvidencePersistence } = await import("../../apps/worker/dist/evidence-persistence.js");
+  const ids = {
+    organization: "11111111-1111-4111-8111-111111111111",
+    workspace: "22222222-2222-4222-8222-222222222222",
+    task: "33333333-3333-4333-8333-333333333333",
+    subquery: "44444444-4444-4444-8444-444444444444",
+    provider: "55555555-5555-4555-8555-555555555555",
+    actor: "66666666-6666-4666-8666-666666666666",
+    evidence: "77777777-7777-4777-8777-777777777777",
+    record: "88888888-8888-4888-8888-888888888888",
+  };
+  const content = Buffer.from("existing evidence");
+  const contentHash = createHash("sha256").update(content).digest("hex");
+  const statements = [];
+  const connection = {
+    beginTransaction: async () => statements.push("BEGIN"),
+    commit: async () => statements.push("COMMIT"),
+    rollback: async () => statements.push("ROLLBACK"),
+    release: () => statements.push("RELEASE"),
+    query: async (sql) => {
+      statements.push(sql);
+      if (sql.includes("FROM collection_tasks t")) return [[{ retention_days: 90 }]];
+      if (sql.includes("FROM raw_evidence e")) return [[{ evidence_id: ids.evidence, content_sha256: contentHash, record_id: ids.record }]];
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const pool = {
+    query: connection.query,
+    getConnection: async () => connection,
+  };
+  const persistence = new MySqlEvidencePersistence(pool, "unused-for-deduplicated-evidence", 1024);
+  const evidenceInput = {
+    organizationId: ids.organization,
+    workspaceId: ids.workspace,
+    taskId: ids.task,
+    subqueryId: ids.subquery,
+    providerId: ids.provider,
+    sourceUrl: "https://example.test/source",
+    canonicalUrl: "https://example.test/item",
+    dedupeKey: "existing-item",
+    contentType: "application/json",
+    content,
+    capturedAt: new Date("2026-08-11T12:00:00.000Z"),
+    parserVersion: "parser-v1",
+    adapterVersion: "adapter-v1",
+    recordKey: "existing-item",
+    recordSchemaVersion: "provider-source-v1",
+    normalizedPayload: { title: "Existing item" },
+    provenance: [{ fieldPath: "title", sourcePath: "$.title", transformVersion: "parser-v1", sourceValueHash: contentHash }],
+    requestId: "m07-06-dedupe-request",
+    traceId: "m07-06-dedupe-trace",
+    actorId: ids.actor,
+  };
+  const result = await persistence.persist(evidenceInput);
+  assert.equal(result.deduplicated, true);
+  assert.ok(statements.some((sql) => typeof sql === "string" && sql.includes("INSERT INTO collection_task_evidence_links")), "deduplicated evidence must be linked to the current task");
+  assert.ok(statements.some((sql) => typeof sql === "string" && sql.includes("FROM collection_tasks t")), "task, subquery, provider and tenant scope must be validated before linking");
+  assert.ok(statements.includes("COMMIT"));
+
+  const rejectedStatements = [];
+  const rejectedConnection = {
+    beginTransaction: async () => rejectedStatements.push("BEGIN"),
+    commit: async () => rejectedStatements.push("COMMIT"),
+    rollback: async () => rejectedStatements.push("ROLLBACK"),
+    release: () => rejectedStatements.push("RELEASE"),
+    query: async (sql) => (rejectedStatements.push(sql), [[]]),
+  };
+  const rejectedPersistence = new MySqlEvidencePersistence({getConnection:async()=>rejectedConnection}, "unused", 1024);
+  await assert.rejects(() => rejectedPersistence.persist(evidenceInput), {code:"evidence_scope_or_task_invalid"});
+  assert.ok(!rejectedStatements.some((sql) => typeof sql === "string" && sql.includes("INSERT INTO collection_task_evidence_links")), "invalid task scope must never create an evidence association");
+  assert.ok(rejectedStatements.includes("ROLLBACK"));
 });

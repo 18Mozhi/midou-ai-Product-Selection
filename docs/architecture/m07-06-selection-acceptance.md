@@ -8,9 +8,9 @@ M07-06 把现有真实来源、采集任务、原始证据、趋势投影、机�
 
 ## 数据和状态
 
-迁移 `0028_selection_journeys_m07_06.up.sql` 新增 `selection_journeys`、一次性 `selection_journey_decisions`、追加式事件、Outbox 和幂等操作表。全部业务记录带组织、工作区、请求、链路和时间字段；任务仍由既有 `collection_tasks`、`collection_subqueries`、原始证据和 Worker 状态机承担事实真相。
+迁移 `0028_selection_journeys_m07_06.up.sql` 新增 `selection_journeys`、一次性 `selection_journey_decisions`、追加式事件、Outbox 和幂等操作表。迁移 `0029_collection_task_evidence_links_m07_06.up.sql` 新增范围化的 `collection_task_evidence_links`，并为既有原始证据回填首个采集任务关联。全部业务记录带组织、工作区、请求、链路和时间字段；任务仍由既有 `collection_tasks`、`collection_subqueries`、原始证据和 Worker 状态机承担事实真相。
 
-旅程读取模型不复制结果：它按 `task_id` 读取 `raw_evidence`、`normalized_records` 和可用的 `trend_signals`。有原始证据为 `result_ready`；真实空结果为 `succeeded_empty`；登录、验证码、robots、权限或终止失败保留明确错误码。没有证据时禁止 `adopt`。有趋势信号时，决策事务复用或创建来源主题唯一的机会，并把原始证据链接和 `opportunity_decisions` 同步写入；空/受阻时仍保存旅程人工决策，但不会捏造机会。
+旅程读取模型不复制结果：它按当前 `task_id` 通过 `collection_task_evidence_links` 读取 `raw_evidence`、`normalized_records` 和可用的 `trend_signals`。同一组织、工作区和 Provider 再次采集相同去重键时，Worker 复用不可变原始证据，但必须先校验当前任务/子查询范围并追加 `deduplicated` 关联及审计事件；因此重复真实输入仍能在本次旅程中得到可验证结果。有原始证据为 `result_ready`；真实空结果为 `succeeded_empty`；登录、验证码、robots、权限或终止失败保留明确错误码。没有证据时禁止 `adopt`。有趋势信号时，决策事务复用或创建来源主题唯一的机会，并把原始证据链接和 `opportunity_decisions` 同步写入；空/受阻时仍保存旅程人工决策，但不会捏造机会。
 
 ## 权限、审计和异步边界
 

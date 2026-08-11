@@ -940,7 +940,7 @@ M07-04 已由模块自动验收 `d1ede17d-0f7b-4f42-b80c-2d5dac118651` 通过：
 
 M07-05 已由模块自动验收 `868ff3d0-5596-4fb5-84b4-7c514fada163` 通过：宝塔同机候选构建 `35078a42dfd4ceb423b6a4d3cdcaa02ff874cbba` 完成 5%/25%/100% 三阶段各 1,800 秒生产观察，样本分别为 177/866/3,218，5xx 均为 0%，读 P95 为 3/2/2 ms，写 P95 为 158/8/5 ms，异步延迟均为 0，候选写探针持久化与样本一致；Linux Chromium、中文字体、桌面/390px E2E、MySQL 5.7 真实探针、文档门和公网同 commit 身份也全部通过。该结果只证明惠州当前单机的应用发布与同机回滚能力，不是备用服务器、主机故障保护、多节点或 10,000 用户能力。
 
-M07-06 通过 `/opportunities/start` 和 `/api/v1/selection-journeys` 把普通成员的真实输入、采集任务、首个原始证据或 `succeeded_empty`/明确受阻终态、人工决策与证据查看串成一条可计时旅程。服务器从已登录会话解析组织和工作区并选择已启用 `google_news_search`，成员只需 `task:create`、`opportunity:read` 和 `opportunity:decide`，不得获得或使用 `provider:configure`、`collection:replay` 或平台权限。`SELECTION_ACCEPTANCE_DEADLINE_MS` 固定为 `180000`，启动检查拒绝放宽；创建、15 秒可见和 180 秒终态均由惠州单机宝塔有限任务的真实生产证据签发。演示数据、平台管理员代操作、手填组织 ID 或直接写库都不能计入验收。当前该模块仍在实施和生产签发中，不能据此宣称 P07 或 P08 完成。
+M07-06 通过 `/opportunities/start` 和 `/api/v1/selection-journeys` 把普通成员的真实输入、采集任务、首个原始证据或 `succeeded_empty`/明确受阻终态、人工决策与证据查看串成一条可计时旅程。服务器从已登录会话解析组织和工作区并选择已启用 `google_news_search`，成员只需 `task:create`、`opportunity:read` 和 `opportunity:decide`，不得获得或使用 `provider:configure`、`collection:replay` 或平台权限。原始证据继续按组织、工作区、Provider 和来源键去重，但每次任务必须通过 `collection_task_evidence_links` 保存范围化关联；重复输入复用不可变证据时也必须先校验任务、子查询和租户范围并写关联审计，不能因命中旧证据而让新旅程停在 accepted。`SELECTION_ACCEPTANCE_DEADLINE_MS` 固定为 `180000`，启动检查拒绝放宽；创建、15 秒可见和 180 秒终态均由惠州单机宝塔有限任务的真实生产证据签发。演示数据、平台管理员代操作、手填组织 ID 或直接写库都不能计入验收。当前该模块仍在实施和生产签发中，不能据此宣称 P07 或 P08 完成。
 
 M07-06 可复用上述 ScoutOps 项目专用 HTTP CONNECT 代理访问固定 Google News 来源，但代理配置不属于成员输入，普通成员验收账号也不得获得或读取代理凭证。生产签发仍以同一惠州单机、同一构建、固定 10 秒来源健康门和 180 秒旅程门为准；代理仅改变允许的出站传输路径，不改变来源、数据合同、权限或阈值。
 
