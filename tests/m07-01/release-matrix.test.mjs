@@ -39,7 +39,7 @@ test('M07-01.A06/A09/A10/A13 contracts guards and existing configuration stay sy
 
 test('M07-01.A07/A08/A15 every prior browser contract is assigned exactly once', async () => {
   const assigned = Object.values(matrix.browserGroups).flat();
-  const actual = (await readdir(resolve(root, 'tests/e2e'))).filter((name) => name.endsWith('.spec.ts') && name !== 'm07-01-performance.spec.ts');
+  const actual = (await readdir(resolve(root, 'tests/e2e'))).filter((name) => /^m0[0-6]-.*\.spec\.ts$/.test(name));
   assert.equal(assigned.length, 46);
   assert.equal(new Set(assigned).size, assigned.length);
   assert.deepEqual([...assigned].sort(), actual.sort());
