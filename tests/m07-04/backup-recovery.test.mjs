@@ -98,3 +98,12 @@ test('M07-04.A04/A08/A12/A16 service fails closed and expires old drills', async
   assert.equal((await read([backup, { ...currentDrill, permission_boundary_verified: false }], [replica])).state, 'blocked');
   assert.equal((await read([{ ...backup, id: 'newer-backup' }, currentDrill], [replica])).state, 'blocked');
 });
+
+test('M07-04.A14 live verification isolates probe chronology from production runs', async () => {
+  const live = await read('scripts/verify-backup-recovery-live.mjs');
+  assert.match(live, /SELECT MAX\(started_at\) latest_started_at FROM backup_recovery_runs/);
+  assert.match(live, /backupStartedAt/);
+  assert.match(live, /drillStartedAt/);
+  assert.match(live, /observedAt/);
+  assert.doesNotMatch(live, /new Date\(["']2026-08-08T13:30:00\.000Z["']\)/);
+});

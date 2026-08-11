@@ -7,7 +7,7 @@ import { MySqlBackupRecoveryRepository } from "../apps/api/dist/mysql-backup-rec
 
 const pool = createDatabasePool(loadRuntimeConfig(process.env, "api")), requestId = randomUUID(), traceId = randomUUID();
 const id = { actor: randomUUID(), backup: randomUUID(), drill: randomUUID(), localAsset: randomUUID(), replicaAsset: randomUUID() };
-const now = new Date("2026-08-08T13:30:00.000Z"), email = `m07-04-${requestId.slice(0, 8)}@test.local`;
+const email = `m07-04-${requestId.slice(0, 8)}@test.local`;
 async function migrate() {
   const [rows] = await pool.query("SELECT COUNT(*) n FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='backup_recovery_runs'");
   if (Number(rows[0].n)) return;
@@ -23,16 +23,21 @@ try {
   const runtime = versions[0];
   if (!String(runtime.version).startsWith("5.7.") || runtime.charset !== "utf8mb4" || runtime.database_name !== "product_scout" || !String(runtime.account_name).startsWith("product_scout@")) throw new Error("requires MySQL57 utf8mb4 product_scout business account");
   await migrate(); await cleanup();
-  await pool.query("INSERT INTO users(id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES(?,?,?,'probe','active',?,?,1,?,?)", [id.actor, email, email, now, now, now, now]);
+  const [timelineRows] = await pool.query("SELECT MAX(started_at) latest_started_at FROM backup_recovery_runs");
+  const latestStartedAt = timelineRows[0]?.latest_started_at ? new Date(timelineRows[0].latest_started_at).getTime() : 0;
+  const timelineStart = Math.max(Date.now(), Number.isFinite(latestStartedAt) ? latestStartedAt : 0) + 1_000;
+  const backupStartedAt = new Date(timelineStart), drillStartedAt = new Date(timelineStart + 1_000), observedAt = new Date(timelineStart + 2_000);
+  const retentionUntil = new Date(observedAt.getTime() + 90 * 86_400_000);
+  await pool.query("INSERT INTO users(id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES(?,?,?,'probe','active',?,?,1,?,?)", [id.actor, email, email, observedAt, observedAt, observedAt, observedAt]);
   const runSql = "INSERT INTO backup_recovery_runs(id,run_type,scope_type,primary_region,recovery_region,status,rpo_target_minutes,rto_target_minutes,actual_rpo_minutes,actual_rto_minutes,source_cutoff_at,started_at,finished_at,isolated,encrypted,integrity_verified,permission_boundary_verified,audit_chain_verified,evidence_hash_verified,request_id,trace_id,metadata) VALUES(?,?,'platform','惠州','惠州',?,15,240,?,?,?,?,?,?,1,1,?,?,?, ?,?,?)";
-  await pool.query(runSql, [id.backup, "backup", "verified", 5, null, now, now, now, 0, 0, 0, 0, requestId, traceId, JSON.stringify({ manager: "baota" })]);
-  await pool.query("INSERT INTO backup_recovery_assets(id,run_id,asset_kind,region,storage_role,bundle_name,bundle_sha256,plaintext_sha256,size_bytes,encrypted,integrity_verified,retention_until) VALUES(?,?,'mysql_full','惠州','primary_backup','mysql-local.bundle',?,?,4096,1,1,?)", [id.localAsset, id.backup, "a".repeat(64), "b".repeat(64), new Date("2026-11-06T00:00:00Z")]);
+  await pool.query(runSql, [id.backup, "backup", "verified", 5, null, backupStartedAt, backupStartedAt, backupStartedAt, 0, 0, 0, 0, requestId, traceId, JSON.stringify({ manager: "baota" })]);
+  await pool.query("INSERT INTO backup_recovery_assets(id,run_id,asset_kind,region,storage_role,bundle_name,bundle_sha256,plaintext_sha256,size_bytes,encrypted,integrity_verified,retention_until) VALUES(?,?,'mysql_full','惠州','primary_backup','mysql-local.bundle',?,?,4096,1,1,?)", [id.localAsset, id.backup, "a".repeat(64), "b".repeat(64), retentionUntil]);
   const policy = { primaryRegion: "惠州", recoveryRegion: "惠州", rpoMinutes: 15, rtoMinutes: 240, maximumDrillAgeDays: 90 };
-  const service = new BackupRecoveryService(new MySqlBackupRecoveryRepository(pool), policy, () => now);
+  const service = new BackupRecoveryService(new MySqlBackupRecoveryRepository(pool), policy, () => observedAt);
   const blocked = await service.read({ actorId: id.actor, requestId, traceId });
   if (blocked.state !== "blocked" || blocked.recovery_copy_verified) throw new Error("unverified local recovery copy must fail closed");
-  await pool.query(runSql, [id.drill, "restore_drill", "verified", null, 18, now, now, now, 1, 1, 1, 1, requestId, traceId, JSON.stringify({ isolated: true })]);
-  await pool.query("INSERT INTO backup_recovery_assets(id,run_id,asset_kind,region,storage_role,bundle_name,bundle_sha256,plaintext_sha256,size_bytes,encrypted,integrity_verified,retention_until) VALUES(?,?,'mysql_full','惠州','recovery_copy','mysql-recovery-copy.bundle',?,?,4096,1,1,?)", [id.replicaAsset, id.backup, "c".repeat(64), "b".repeat(64), new Date("2026-11-06T00:00:00Z")]);
+  await pool.query(runSql, [id.drill, "restore_drill", "verified", null, 18, drillStartedAt, drillStartedAt, drillStartedAt, 1, 1, 1, 1, requestId, traceId, JSON.stringify({ isolated: true })]);
+  await pool.query("INSERT INTO backup_recovery_assets(id,run_id,asset_kind,region,storage_role,bundle_name,bundle_sha256,plaintext_sha256,size_bytes,encrypted,integrity_verified,retention_until) VALUES(?,?,'mysql_full','惠州','recovery_copy','mysql-recovery-copy.bundle',?,?,4096,1,1,?)", [id.replicaAsset, id.backup, "c".repeat(64), "b".repeat(64), retentionUntil]);
   const verified = await service.read({ actorId: id.actor, requestId, traceId });
   if (verified.state !== "verified" || !verified.recovery_copy_verified || verified.latest_drill?.permission_boundary_verified !== true) throw new Error("verified recovery state mismatch");
   const [audits] = await pool.query("SELECT COUNT(*) n FROM platform_audit_events WHERE actor_id=? AND action='platform.backup_recovery.read' AND request_id=? AND trace_id=?", [id.actor, requestId, traceId]);
