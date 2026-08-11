@@ -18,6 +18,10 @@ test('M07-04.A01-A05 freezes encrypted S0 backup and isolated restore contracts'
   assert.equal(manifest.recoveryDrill.isolated, true);
   const runner = await read('scripts/run-baota-backup-drill.mjs');
   assert.match(runner, /mysqldump/); assert.match(runner, /same_host_local_isolation/);
+  assert.match(runner, /BACKUP_MYSQL_SOCKET/);
+  assert.match(runner, /socketPath:\s*adminSocket/);
+  assert.match(runner, /"--socket",\s*adminSocket/);
+  assert.doesNotMatch(runner, /adminPool\s*=\s*mysql\.createPool\(\{\s*host:\s*db\.host/);
   assert.doesNotMatch(runner, /systemctl|\bpm2\b|crontab/i);
 });
 
@@ -72,7 +76,7 @@ test('M07-04.A10/A13/A17 config, OpenAPI, Feature Map and runbooks stay synchron
     'scripts/run-baota-backup-drill.mjs',
     'verification/modules/M07-04.json',
   ].map(read))).join('\n');
-  for (const token of ['M07-04', 'BACKUP_ENCRYPTION_KEY', 'RPO', 'RTO', '同机', '隔离', '回滚']) assert.match(all, new RegExp(token));
+  for (const token of ['M07-04', 'BACKUP_ENCRYPTION_KEY', 'BACKUP_MYSQL_SOCKET', 'RPO', 'RTO', '同机', '隔离', '回滚']) assert.match(all, new RegExp(token));
 });
 
 test('M07-04.A04/A08/A12/A16 service fails closed and expires old drills', async () => {

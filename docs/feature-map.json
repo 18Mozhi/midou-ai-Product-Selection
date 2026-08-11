@@ -1400,7 +1400,7 @@
       "scope": "MySQL evidence export and non-secret config encrypted backups on the current Huizhou host with a separate encrypted recovery root",
       "truthBoundary": "verified only after same-host encrypted-copy integrity and a logically isolated restore check business data audit chain evidence hashes and permission boundaries within 90 days; host disk and site failure are not protected",
       "permission": "platform:operate read only; backup and restore execute only in Baota scheduled tasks",
-      "configuration": ["BACKUP_PRIMARY_REGION", "BACKUP_RECOVERY_REGION", "BACKUP_RPO_MINUTES", "BACKUP_RTO_MINUTES", "BACKUP_MAX_DRILL_AGE_DAYS", "BACKUP_RETENTION_DAYS", "BACKUP_PRIMARY_ROOT", "BACKUP_LOCAL_COPY_ROOT", "BACKUP_DRILL_ROOT", "BACKUP_ENCRYPTION_KEY", "BACKUP_MYSQL_CLIENT", "BACKUP_MYSQLDUMP_CLIENT", "BACKUP_MYSQLBINLOG_CLIENT", "BACKUP_MYSQL_ADMIN_PASSWORD_FILE", "BACKUP_RELEASE_ROOT"],
+      "configuration": ["BACKUP_PRIMARY_REGION", "BACKUP_RECOVERY_REGION", "BACKUP_RPO_MINUTES", "BACKUP_RTO_MINUTES", "BACKUP_MAX_DRILL_AGE_DAYS", "BACKUP_RETENTION_DAYS", "BACKUP_PRIMARY_ROOT", "BACKUP_LOCAL_COPY_ROOT", "BACKUP_DRILL_ROOT", "BACKUP_ENCRYPTION_KEY", "BACKUP_MYSQL_CLIENT", "BACKUP_MYSQLDUMP_CLIENT", "BACKUP_MYSQLBINLOG_CLIENT", "BACKUP_MYSQL_SOCKET", "BACKUP_MYSQL_ADMIN_PASSWORD_FILE", "BACKUP_RELEASE_ROOT"],
       "runtimeBoundary": "S0 finite Baota tasks with AES-256-GCM on one host; no new daemon, offsite recovery, host-failure protection or multi-node claim",
       "imageEvidence": ["concept 61 platform operations overview", "core 10 platform cockpit", "desktop and 390 recovery states"],
       "verificationRunId": "d1ede17d-0f7b-4f42-b80c-2d5dac118651",

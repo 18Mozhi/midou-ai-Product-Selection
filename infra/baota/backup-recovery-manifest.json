@@ -6,7 +6,7 @@
   "recoveryRegion": "惠州",
   "topology": "S0-single-host-local-isolation",
   "targets": {
-    "mysql": { "strategy": "daily-full-plus-binlog", "rpoMinutes": 15, "rtoMinutes": 240 },
+    "mysql": { "strategy": "daily-full-plus-binlog", "rpoMinutes": 15, "rtoMinutes": 240, "businessConnection": "product_scout-over-tcp", "adminTransport": "unix-socket" },
     "evidence": { "strategy": "daily-encrypted-copy", "organizationScoped": true },
     "exports": { "strategy": "daily-encrypted-copy", "organizationScoped": true },
     "config": { "strategy": "versioned-pre-migration-copy", "containsSecrets": false }

@@ -53,6 +53,8 @@ x-scoutops-backup-recovery:
   topology: same-host-local-isolation
   mysqlRpoMinutes: 15
   mysqlRtoMinutes: 240
+  mysqlBusinessConnection: product_scout-over-tcp
+  mysqlAdminTransport: unix-socket
   encryption: aes-256-gcm
   recoveryVerifiedByDefault: false
   productionEvidence: .artifacts/verification/backup-recovery-production-evidence.json

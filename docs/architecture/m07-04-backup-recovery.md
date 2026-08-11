@@ -8,7 +8,7 @@ MySQL 目标为 RPO 不超过 15 分钟、RTO 不超过 240 分钟。`backup_rec
 
 ## 数据流与失败关闭
 
-宝塔任务生成逻辑备份或文件清单，`scripts/backup-recovery.mjs` 使用 AES-256-GCM 加密并校验 SHA-256，随后写入当前主机内独立的恢复副本根目录。只有恢复副本完整性通过，且 90 天内同机逻辑隔离恢复对业务数据、审计链、证据哈希和权限边界全部通过，API 状态才为 `verified`。无记录为 `empty`，缺同机恢复副本或演练为 `blocked`，过期演练为 `stale`。
+宝塔任务生成逻辑备份或文件清单，`scripts/backup-recovery.mjs` 使用 AES-256-GCM 加密并校验 SHA-256，随后写入当前主机内独立的恢复副本根目录。业务元数据连接继续固定为 `product_scout@127.0.0.1`；只有 `mysqldump`、binlog 切换和隔离恢复库等管理员步骤通过 `BACKUP_MYSQL_SOCKET` 指向的本机 Unix socket 使用宝塔受限 root 凭据，禁止为此新增 `root@127.0.0.1` 或把全局权限授予业务账号。只有恢复副本完整性通过，且 90 天内同机逻辑隔离恢复对业务数据、审计链、证据哈希和权限边界全部通过，API 状态才为 `verified`。无记录为 `empty`，缺同机恢复副本或演练为 `blocked`，过期演练为 `stale`。
 
 密钥只来自宝塔受限环境 `BACKUP_ENCRYPTION_KEY`，不得进入数据库、浏览器、日志或 Git。异步备份由宝塔计划任务承担，因此 Worker/Crawler/Outbox 对本模块不适用；这不是绕过异步要求，而是生产管理边界决定的有限任务模型。
 

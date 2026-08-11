@@ -83,12 +83,14 @@ try {
   if (new Set([primaryRoot, copyRoot, drillRoot]).size !== 3) throw fail("backup_path_overlap", "backup roots must be different");
   await Promise.all([mkdir(primaryRoot, { recursive: true, mode: 0o700 }), mkdir(copyRoot, { recursive: true, mode: 0o700 }), mkdir(drillRoot, { recursive: true, mode: 0o700 })]);
   const mysqlClient = runtime.BACKUP_MYSQL_CLIENT || "/www/server/mysql/bin/mysql", dumpClient = runtime.BACKUP_MYSQLDUMP_CLIENT || "/www/server/mysql/bin/mysqldump", binlogClient = runtime.BACKUP_MYSQLBINLOG_CLIENT || "/www/server/mysql/bin/mysqlbinlog";
+  const adminSocket = resolve(runtime.BACKUP_MYSQL_SOCKET || "");
+  if (!isAbsolute(runtime.BACKUP_MYSQL_SOCKET || "") || !(await stat(adminSocket).catch(() => null))?.isSocket()) throw fail("backup_mysql_socket_invalid", "BACKUP_MYSQL_SOCKET must be an existing absolute MySQL Unix socket");
   const adminPasswordFile = resolve(runtime.BACKUP_MYSQL_ADMIN_PASSWORD_FILE || "");
   if (!isAbsolute(runtime.BACKUP_MYSQL_ADMIN_PASSWORD_FILE || "") || !adminPasswordFile.startsWith("/www/server/panel/data/")) throw fail("backup_admin_credential_path_invalid", "BACKUP_MYSQL_ADMIN_PASSWORD_FILE must be a Baota restricted data path");
   const adminPassword = (await readFile(adminPasswordFile, "utf8")).trim();
   const db = { host: runtime.DB_HOST || "127.0.0.1", port: Number(runtime.DB_PORT || 3306), database: runtime.DB_NAME || "product_scout", user: runtime.DB_USER || "product_scout", password: runtime.DB_PASSWORD || "" };
   databasePool = mysql.createPool({ ...db, connectionLimit: 2, charset: "utf8mb4" });
-  adminPool = mysql.createPool({ host: db.host, port: db.port, user: "root", password: adminPassword, connectionLimit: 2, charset: "utf8mb4" });
+  adminPool = mysql.createPool({ socketPath: adminSocket, user: "root", password: adminPassword, connectionLimit: 2, charset: "utf8mb4" });
   const [runtimeRows] = await databasePool.query("SELECT VERSION() version,@@character_set_server charset,CURRENT_USER() account");
   if (!String(runtimeRows[0].version).startsWith("5.7.") || runtimeRows[0].charset !== "utf8mb4" || !String(runtimeRows[0].account).startsWith("product_scout@")) throw fail("mysql_runtime_invalid", "MySQL 5.7 utf8mb4 product_scout business account required");
   const releaseRoot = resolve(runtime.BACKUP_RELEASE_ROOT || process.cwd());
@@ -97,7 +99,7 @@ try {
   const sourceCutoffAt = new Date(), dumpPath = join(workingRoot, "product_scout.sql");
   const [[binlogPolicy]] = await adminPool.query("SELECT @@log_bin log_bin,@@binlog_format binlog_format,@@expire_logs_days expire_logs_days,@@datadir data_dir");
   if (Number(binlogPolicy.log_bin) !== 1 || Number(binlogPolicy.expire_logs_days) < 1) throw fail("backup_pitr_unavailable", "MySQL binary logging and at least one day retention are required");
-  await run(dumpClient, ["--host", db.host, "--port", String(db.port), "--user", "root", "--single-transaction", "--master-data=2", "--flush-logs", "--routines", "--triggers", "--events", "--hex-blob", "--set-gtid-purged=OFF", `--result-file=${dumpPath}`, db.database], { env: { ...process.env, MYSQL_PWD: adminPassword } });
+  await run(dumpClient, ["--socket", adminSocket, "--user", "root", "--single-transaction", "--master-data=2", "--flush-logs", "--routines", "--triggers", "--events", "--hex-blob", "--set-gtid-purged=OFF", `--result-file=${dumpPath}`, db.database], { env: { ...process.env, MYSQL_PWD: adminPassword } });
   const masterCoordinates = await readMasterCoordinates(dumpPath);
   await adminPool.query("FLUSH BINARY LOGS");
   const [binaryLogs] = await adminPool.query("SHOW BINARY LOGS");
@@ -126,7 +128,7 @@ try {
   restoreDatabase = `product_scout_restore_m0704_${requestId.replaceAll("-", "").slice(0, 12)}`;
   await adminPool.query(`CREATE DATABASE ${sqlIdentifier(restoreDatabase)} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
   const restoreSqlFd = openSync(restored.mysql_full, "r");
-  try { await run(mysqlClient, ["--host", db.host, "--port", String(db.port), "--user", "root", restoreDatabase], { env: { ...process.env, MYSQL_PWD: adminPassword }, stdio: [restoreSqlFd, "ignore", "pipe"] }); }
+  try { await run(mysqlClient, ["--socket", adminSocket, "--user", "root", restoreDatabase], { env: { ...process.env, MYSQL_PWD: adminPassword }, stdio: [restoreSqlFd, "ignore", "pipe"] }); }
   finally { closeSync(restoreSqlFd); }
   const [sourceCounts, restoreCounts] = await Promise.all([tableCounts(adminPool, db.database), tableCounts(adminPool, restoreDatabase)]);
   if (JSON.stringify(sourceCounts) !== JSON.stringify(restoreCounts)) throw fail("restore_business_data_mismatch", "restored table counts differ from production snapshot");

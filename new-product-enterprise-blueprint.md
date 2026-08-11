@@ -934,7 +934,7 @@ M07-05 的 MySQL 异步延迟只测量宝塔 Node Worker 实际可领取的显�
 
 M07-03 已由模块自动验收 `8cb425c1-1606-4e4c-a736-8d29e27caf32` 通过：全仓构建、MySQL 5.7/Redis/API 真实探针、Python 心跳、桌面/390px 生产状态视觉、文档门和同 commit 生产证据均成功。该结果只证明 S0 宝塔部署完成，不代表 M07-04 同机隔离恢复、P07 或 P08 容量完成。
 
-M07-04 使用 `backup_recovery_runs` 与 `backup_recovery_assets` 记录惠州当前主机、同机独立加密恢复目录、AES-256-GCM 资产、实际 RPO/RTO 和逻辑隔离演练核验。`/api/v1/platform/operations/backup-recovery` 仅向 `platform:operate` 返回脱敏事实；备份和恢复只由宝塔计划任务执行。状态严格失败关闭：缺恢复副本完整性证据或缺 90 天内隔离恢复时为 `blocked/stale`，不得写成 `verified`。生产验收要求本机逻辑损坏场景下 MySQL RPO 不超过 15 分钟、RTO 不超过 4 小时，并核验业务数据、审计链、证据哈希和权限边界；该验收明确不保护整机、磁盘或机房故障，也不构成异地灾备能力。
+M07-04 使用 `backup_recovery_runs` 与 `backup_recovery_assets` 记录惠州当前主机、同机独立加密恢复目录、AES-256-GCM 资产、实际 RPO/RTO 和逻辑隔离演练核验。`/api/v1/platform/operations/backup-recovery` 仅向 `platform:operate` 返回脱敏事实；备份和恢复只由宝塔计划任务执行。业务元数据连接固定使用 `product_scout@127.0.0.1`，管理员备份步骤只通过 `BACKUP_MYSQL_SOCKET` 使用已有 `root@localhost` 受限凭据，不新增 TCP root 账号。状态严格失败关闭：缺恢复副本完整性证据或缺 90 天内隔离恢复时为 `blocked/stale`，不得写成 `verified`。生产验收要求本机逻辑损坏场景下 MySQL RPO 不超过 15 分钟、RTO 不超过 4 小时，并核验业务数据、审计链、证据哈希和权限边界；该验收明确不保护整机、磁盘或机房故障，也不构成异地灾备能力。
 
 M07-04 已由模块自动验收 `d1ede17d-0f7b-4f42-b80c-2d5dac118651` 通过：同 commit 宝塔任务完成全量库、binlog、证据、导出与非秘密配置加密备份，恢复副本完整性、175 张表、审计链、证据哈希和权限边界均通过；实测 RPO 0.03 分钟、RTO 0.45 分钟。该结果只证明当前惠州单机的逻辑恢复能力，不保护整机、磁盘或机房故障，也不代表 P07、P08 多节点或 10,000 用户能力完成。
 
