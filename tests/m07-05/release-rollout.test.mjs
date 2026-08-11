@@ -245,6 +245,29 @@ test("M07-05 warms a signed single-transaction release write probe and measures 
   assert.doesNotMatch(runner, /auth\/password-reset\/request/);
 });
 
+test("M07-05 retries only pre-upstream transport aborts without relaxing candidate rejection gates", async () => {
+  const [runner, manifest, architecture, runbook] = await Promise.all([
+    read("scripts/run-baota-release-rollout.mjs"),
+    read("infra/baota/release-rollout-manifest.json").then(JSON.parse),
+    read("docs/architecture/m07-05-release-rollout.md"),
+    read("docs/runbooks/m07-05-release-rollout.md"),
+  ]);
+  assert.equal(manifest.canary.transportDeliveryRetryAttempts, 1);
+  assert.equal(manifest.canary.transportAbortRetryScope, "nginx-499-before-upstream-only");
+  assert.match(runner, /upstream_status/);
+  assert.match(runner, /upstreamReached/);
+  assert.match(runner, /sendWriteProbeWithDeliveryRetry/);
+  assert.match(runner, /response\.status !== 499/);
+  assert.match(runner, /sampleId/);
+  assert.match(runner, /release_write_probe_rejected/);
+  assert.match(runner, /release_write_probe_persistence_mismatch/);
+  for (const source of [architecture, runbook]) {
+    assert.match(source, /到达上游前/);
+    assert.match(source, /同一 sample_id/);
+    assert.match(source, /不得重试候选拒绝/);
+  }
+});
+
 test("M07-05 uses one-second production sampling without relaxing rollout gates", async () => {
   const [manifest, runner, envExample, openapi, featureMap, architecture, runbook, verifier, evidenceSchema] = await Promise.all([
     read("infra/baota/release-rollout-manifest.json").then(JSON.parse),

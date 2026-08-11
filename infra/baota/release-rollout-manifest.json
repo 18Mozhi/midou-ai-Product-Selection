@@ -38,6 +38,9 @@
     "syntheticWriteCanonicalFields": ["timestamp", "nonce", "release_id", "sample_id"],
     "proxyRequestIdsExcludedFromSignature": true,
     "candidatePersistenceParityRequired": true,
+    "transportDeliveryRetryAttempts": 1,
+    "transportAbortRetryScope": "nginx-499-before-upstream-only",
+    "candidateNon202RetryAllowed": false,
     "syntheticWriteContract": "proxy-safe HMAC over timestamp/nonce/release/sample, one durable MySQL autocommit statement, candidate 202 and persistence parity, immutable proxy request and trace audit",
     "minimumCandidateSamplesPerMethod": 5
   },

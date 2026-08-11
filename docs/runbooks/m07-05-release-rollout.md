@@ -12,7 +12,7 @@ MySQL 5.7 的宝塔受限 `my.cnf` 必须显式设置 `innodb_flush_log_at_trx_c
 
 1. 在宝塔确认稳定/候选 API 的 live、ready、version，确认 MySQL 5.7、Redis、Worker、Crawler 正常。
 2. 运行 M07-01、M07-02、M07-04 门禁并确认最近隔离恢复为 verified。
-3. 从宝塔手工执行发布任务。任务先验证 `0027` 写探针迁移和候选签名写入，再依次配置 5%、25%、100%，每阶段至少观察 30 分钟；宝塔日志应持续显示 request_id/trace_id，但不显示秘密。Nginx 会用 32 位十六进制 `$request_id` 覆盖 `X-Request-ID`，因此签名 canonical 只含 timestamp、nonce、release_id、sample_id；API 仍保存代理传入的追踪值。候选写探针必须返回 202，且候选构建的新增持久化行数必须与候选 Nginx 写样本数相等，否则自动回到稳定槽。
+3. 从宝塔手工执行发布任务。任务先验证 `0027` 写探针迁移和候选签名写入，再依次配置 5%、25%、100%，每阶段至少观察 30 分钟；宝塔日志应持续显示 request_id/trace_id，但不显示秘密。Nginx 会用 32 位十六进制 `$request_id` 覆盖 `X-Request-ID`，因此签名 canonical 只含 timestamp、nonce、release_id、sample_id；API 仍保存代理传入的追踪值。只有 Nginx 499 且 `upstream_status="-"` 的到达上游前中断可用同一 sample_id 重试一次，证据必须记录次数；不得重试候选拒绝，重试仍无法送达时失败关闭。候选已到达上游的写探针必须返回 202，且候选构建的新增持久化行数必须与候选 Nginx 已到达上游的写样本数相等，否则自动回到稳定槽。
 4. 在 `/platform-admin/releases` 查看当前 release、三阶段样本、5xx、读写 P95、异步延迟和阻断项。API 只读，不能从浏览器触发发布。
    异步延迟清单必须与 `infra/baota/release-rollout-manifest.json` 的 `automaticStop.asyncQueueTables` 一致，只包含宝塔 Worker 可领取的到期工作和过期租约。领域审计 Outbox 没有当前消费者时保留原状态与证据，但不计入可执行队列延迟；禁止删除这些记录或放宽 60 秒阈值来通过灰度。
 5. 生产证据写入 Git 忽略的 `.artifacts/verification/release-rollout-production-evidence.json`，再执行 `node scripts/verify-release-rollout-production.mjs --production`。
