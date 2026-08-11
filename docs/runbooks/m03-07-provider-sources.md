@@ -28,6 +28,8 @@
 
 每次故障注入后以 request_id/trace_id 核对 `collection_task_events`、`collection_task_attempts`、`provider_source_replay_runs` 和 `raw_evidence`，并确认其他组织查询不到本组织数据。
 
+`verify-provider-sources-live.mjs` 只使用随机 `m03-07-…@example.test` 测试账号与对应 `m0307-…` 组织。M07-06 的证据关联迁移生效后，清理必须先按该测试组织删除 `collection_task_evidence_links`，再删除规范化记录、原始证据、任务、Provider、工作区、组织和测试账号；结束前还要查询确认这些测试主记录全部为零。若仍有记录，验收必须以 `provider_sources_live_cleanup_failed` 失败关闭，禁止输出 `cleanup: passed`，更不得扩大条件删除真实业务数据。
+
 ## 回滚
 
 先在来源定义中将两个来源置为 `disabled`，等待正在运行的任务结束或按 M03-05 恢复规则处理，然后在宝塔停止 Node Worker。回滚应用代码；若确认没有任何 M03-07 回放数据需要保留，先备份并执行 `0016g_provider_sources_m03_07.down.sql`。Down 只删除 replay run 与幂等操作表，不删除 Provider、M03-05 任务或 M03-06 证据；如需删除这些业务记录，必须另行获得数据删除授权。最后由宝塔启动/重启 Node API 与 Node Worker并复查健康状态。

@@ -783,6 +783,7 @@
       "limits": "Google RSS 2MB and 20 persisted records per task; CSV 1MB, exact 8-column header, 100 parsed rows and 20 persisted records per task",
       "permission": "provider:configure for catalog/provision; collection:replay for scoped task creation; writes require same-origin Origin and Idempotency-Key",
       "persistence": "MySQL 5.7 replay correlation plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
+      "liveVerificationCleanup": "random m03-07 example.test scope only; delete M07-06 collection_task_evidence_links before evidence/task/provider principals and fail closed unless provider, workspace, organization and user are all absent",
       "configuration": [
         "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS",
         "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES",
