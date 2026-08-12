@@ -2045,7 +2045,7 @@ paths:
   /selection-journeys:
     post:
       summary: Accept a member-scoped real selection journey within the fixed 180000 ms contract
-      description: POST /api/v1/selection-journeys selects the enabled google_news_search source server-side; members never submit provider IDs, proxy settings or organization/workspace IDs. Repeated real inputs may reuse immutable evidence, but the server always records a tenant-scoped association to the newly accepted task.
+      description: POST /api/v1/selection-journeys selects the enabled google_news_search source server-side; members never submit provider IDs, proxy settings or organization/workspace IDs. Repeated real inputs may reuse immutable evidence, but the server always records a tenant-scoped association to the newly accepted task. When only an unconsumed RSS wrapper changes, evidence.linked records content_changed plus existing_content_sha256 and observed_content_sha256; any canonical URL, parser, adapter, schema or normalized payload change still fails with an evidence dedupe conflict.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: task:create
       parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]

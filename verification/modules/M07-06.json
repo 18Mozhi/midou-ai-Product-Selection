@@ -8,7 +8,7 @@
     {"id":"M07-06.A02","evidence":"selection journey decision event outbox operation state and evidence read contracts"},
     {"id":"M07-06.A03","evidence":"reversible MySQL57 utf8mb4 0028 journey and 0029 scoped task evidence association migrations with backfill indexes and foreign keys"},
     {"id":"M07-06.A04","evidence":"transactional idempotent member task creation repeatable deduplicated evidence read and audited decision service"},
-    {"id":"M07-06.A05","evidence":"existing Baota Node Worker Python Crawler collection evidence and trend projection chain reuses immutable evidence while linking every current task without a new daemon"},
+    {"id":"M07-06.A05","evidence":"existing Baota Node Worker Python Crawler collection evidence and trend projection chain reuses immutable evidence while linking every current task and auditing harmless RSS wrapper hash changes without a new daemon"},
     {"id":"M07-06.A06","evidence":"OpenAPI member create read and decision DTO errors idempotency and fixed deadline contract"},
     {"id":"M07-06.A07","evidence":"image-grounded dark desktop real journey result decision and evidence layout"},
     {"id":"M07-06.A08","evidence":"accepted running result succeeded_empty blocked failed decided forbidden expired and dependency states"},

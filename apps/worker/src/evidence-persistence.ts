@@ -7,7 +7,23 @@ import { buildScopedFilePath, writeScopedFile } from '@scoutops/storage';
 import { evaluateQualityMetric, validateEvidenceInput, type EvidencePersistInput, type QualityMetricCode } from '@scoutops/data-quality';
 
 type ValidatedEvidence = ReturnType<typeof validateEvidenceInput>;
-type ExistingEvidence = RowDataPacket & { evidence_id:string;content_sha256:string;record_id:string };
+type ExistingEvidence = RowDataPacket & {
+  evidence_id:string;
+  content_sha256:string;
+  record_id:string;
+  normalized_payload:unknown;
+  canonical_url:string;
+  parser_version:string;
+  adapter_version:string;
+  schema_version:string;
+};
+
+const jsonValue=(value:unknown)=>typeof value==='string'?JSON.parse(value):value;
+const stableJson=(value:unknown):string=>{
+  if(value===null||typeof value!=='object')return JSON.stringify(value);
+  if(Array.isArray(value))return `[${value.map(stableJson).join(',')}]`;
+  return `{${Object.entries(value as Record<string,unknown>).sort(([left],[right])=>left.localeCompare(right)).map(([key,item])=>`${JSON.stringify(key)}:${stableJson(item)}`).join(',')}}`;
+};
 
 export class EvidencePersistenceError extends Error {
   constructor(readonly code:string) {
@@ -127,16 +143,27 @@ export class MySqlEvidencePersistence {
 
   private async findExisting(connection:PoolConnection,value:ValidatedEvidence) {
     const [rows] = await connection.query<ExistingEvidence[]>(
-      "SELECT e.id evidence_id,e.content_sha256,n.id record_id FROM raw_evidence e JOIN normalized_records n ON n.raw_evidence_id=e.id AND n.status='active' WHERE e.organization_id=? AND e.workspace_id=? AND e.provider_id=? AND e.dedupe_key=? ORDER BY n.record_version DESC,n.created_at DESC,n.id DESC LIMIT 1 FOR UPDATE",
+      "SELECT e.id evidence_id,e.content_sha256,e.canonical_url,e.parser_version,e.adapter_version,n.id record_id,n.schema_version,n.payload_json normalized_payload FROM raw_evidence e JOIN normalized_records n ON n.raw_evidence_id=e.id AND n.status='active' WHERE e.organization_id=? AND e.workspace_id=? AND e.provider_id=? AND e.dedupe_key=? ORDER BY n.record_version DESC,n.created_at DESC,n.id DESC LIMIT 1 FOR UPDATE",
       [value.organizationId,value.workspaceId,value.providerId,value.dedupeKey],
     );
     return rows[0] ?? null;
   }
 
   private async linkExisting(connection:PoolConnection,value:ValidatedEvidence,existing:ExistingEvidence,now:Date) {
-    if (String(existing.content_sha256) !== value.contentHash) throw new EvidencePersistenceError('evidence_dedupe_conflict');
-    await this.link(connection,value,String(existing.evidence_id),String(existing.record_id),'deduplicated',now);
-    return {evidence_id:String(existing.evidence_id),normalized_record_id:String(existing.record_id),deduplicated:true};
+    const contentChanged=String(existing.content_sha256)!==value.contentHash;
+    if(contentChanged&&(
+      String(existing.canonical_url)!==value.canonicalUrl||
+      String(existing.parser_version)!==value.parserVersion||
+      String(existing.adapter_version)!==value.adapterVersion||
+      String(existing.schema_version)!==value.recordSchemaVersion||
+      stableJson(jsonValue(existing.normalized_payload))!==stableJson(value.normalizedPayload)
+    ))throw new EvidencePersistenceError('evidence_dedupe_conflict');
+    await this.link(connection,value,String(existing.evidence_id),String(existing.record_id),'deduplicated',now,contentChanged?{
+      content_changed:true,
+      existing_content_sha256:String(existing.content_sha256),
+      observed_content_sha256:value.contentHash,
+    }:undefined);
+    return {evidence_id:String(existing.evidence_id),normalized_record_id:String(existing.record_id),deduplicated:true,content_changed:contentChanged};
   }
 
   private async recoverDuplicate(value:ValidatedEvidence,originalError:unknown) {
@@ -157,13 +184,13 @@ export class MySqlEvidencePersistence {
     }
   }
 
-  private async link(connection:PoolConnection,value:ValidatedEvidence,evidenceId:string,recordId:string,linkType:'captured'|'deduplicated',now:Date) {
+  private async link(connection:PoolConnection,value:ValidatedEvidence,evidenceId:string,recordId:string,linkType:'captured'|'deduplicated',now:Date,observation?:Record<string,unknown>) {
     const [result] = await connection.query<ResultSetHeader>(
       'INSERT INTO collection_task_evidence_links (id,organization_id,workspace_id,collection_task_id,collection_subquery_id,provider_id,raw_evidence_id,normalized_record_id,link_type,request_id,trace_id,created_by,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE id=id',
       [randomUUID(),value.organizationId,value.workspaceId,value.taskId,value.subqueryId,value.providerId,evidenceId,recordId,linkType,value.requestId,value.traceId,value.actorId,now],
     );
     if(linkType==='deduplicated'&&result.affectedRows>0) {
-      const payload={collection_task_id:value.taskId,collection_subquery_id:value.subqueryId,normalized_record_id:recordId,link_type:linkType};
+      const payload={collection_task_id:value.taskId,collection_subquery_id:value.subqueryId,normalized_record_id:recordId,link_type:linkType,...observation};
       await this.event(connection,value,'evidence.linked','raw_evidence',evidenceId,payload,now);
       await this.outbox(connection,value,'evidence.linked','raw_evidence',evidenceId,payload,now);
     }

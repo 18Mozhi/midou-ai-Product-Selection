@@ -67,6 +67,7 @@ test("M07-06.A07-A17 keeps UI, contracts, production evidence and rollback synch
     "opportunity:decide",
     "PROVIDER_PROXY_URL",
     "PROVIDER_PROXY_PASSWORD",
+    "content_changed",
     "回滚",
   ]) assert.match(all, new RegExp(token));
   assert.match(files[0], /390/);
@@ -138,7 +139,16 @@ test("M07-06.A04/A05/A14 links deduplicated evidence to every scoped collection 
     query: async (sql) => {
       statements.push(sql);
       if (sql.includes("FROM collection_tasks t")) return [[{ retention_days: 90 }]];
-      if (sql.includes("FROM raw_evidence e")) return [[{ evidence_id: ids.evidence, content_sha256: contentHash, record_id: ids.record }]];
+      if (sql.includes("FROM raw_evidence e")) return [[{
+        evidence_id: ids.evidence,
+        content_sha256: contentHash,
+        record_id: ids.record,
+        normalized_payload: { title: "Existing item" },
+        canonical_url: "https://example.test/item",
+        parser_version: "parser-v1",
+        adapter_version: "adapter-v1",
+        schema_version: "provider-source-v1",
+      }]];
       return [{ affectedRows: 1 }];
     },
   };
@@ -174,6 +184,58 @@ test("M07-06.A04/A05/A14 links deduplicated evidence to every scoped collection 
   assert.ok(statements.some((sql) => typeof sql === "string" && sql.includes("INSERT INTO collection_task_evidence_links")), "deduplicated evidence must be linked to the current task");
   assert.ok(statements.some((sql) => typeof sql === "string" && sql.includes("FROM collection_tasks t")), "task, subquery, provider and tenant scope must be validated before linking");
   assert.ok(statements.includes("COMMIT"));
+
+  const changedContentStatements = [];
+  const changedContentConnection = {
+    beginTransaction: async () => changedContentStatements.push("BEGIN"),
+    commit: async () => changedContentStatements.push("COMMIT"),
+    rollback: async () => changedContentStatements.push("ROLLBACK"),
+    release: () => changedContentStatements.push("RELEASE"),
+    query: async (sql, values) => {
+      changedContentStatements.push({ sql, values });
+      if (sql.includes("FROM collection_tasks t")) return [[{ retention_days: 90 }]];
+      if (sql.includes("FROM raw_evidence e")) return [[{
+        evidence_id: ids.evidence,
+        content_sha256: contentHash,
+        record_id: ids.record,
+        normalized_payload: { title: "Existing item" },
+        canonical_url: "https://example.test/item",
+        parser_version: "parser-v1",
+        adapter_version: "adapter-v1",
+        schema_version: "provider-source-v1",
+      }]];
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const changedContentPersistence = new MySqlEvidencePersistence(
+    { getConnection: async () => changedContentConnection },
+    "unused-for-deduplicated-evidence",
+    1024,
+  );
+  const changedContentResult = await changedContentPersistence.persist({
+    ...evidenceInput,
+    content: Buffer.from("same normalized fields, changed source wrapper"),
+  });
+  assert.equal(changedContentResult.deduplicated, true);
+  assert.equal(changedContentResult.content_changed, true);
+  const linkedEvent = changedContentStatements.find((entry) =>
+    typeof entry === "object" && entry.sql.includes("INSERT INTO evidence_data_events") && entry.values?.[3] === "evidence.linked"
+  );
+  assert.ok(linkedEvent, "changed source wrapper must preserve an audited scoped evidence link");
+  assert.match(String(linkedEvent.values[9]), /existing_content_sha256/);
+  assert.match(String(linkedEvent.values[9]), /observed_content_sha256/);
+  assert.ok(changedContentStatements.includes("COMMIT"));
+
+  const changedFieldsPersistence = new MySqlEvidencePersistence(
+    { getConnection: async () => changedContentConnection },
+    "unused-for-deduplicated-evidence",
+    1024,
+  );
+  await assert.rejects(() => changedFieldsPersistence.persist({
+    ...evidenceInput,
+    content: Buffer.from("changed source and changed normalized fields"),
+    normalizedPayload: { title: "Changed item" },
+  }), { code: "evidence_dedupe_conflict" });
 
   const rejectedStatements = [];
   const rejectedConnection = {
