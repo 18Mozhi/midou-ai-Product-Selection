@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "module": "M07-05",
   "stage": "S0",
   "productionManager": "baota",
@@ -52,6 +52,14 @@
     "verificationAccount": "existing product_scout@127.0.0.1 account with global REPLICATION CLIENT",
     "authorization": "explicit user approval on 2026-08-10",
     "rollback": "restore the BaoTa-restricted my.cnf backup and restart MySQL through BaoTa"
+  },
+  "mysqlResourceProfile": {
+    "innodbBufferPoolBytes": 4294967296,
+    "innodbBufferPoolInstances": 4,
+    "innodbIoCapacity": 1000,
+    "innodbIoCapacityMax": 4000,
+    "innodbFlushNeighbors": 0,
+    "innodbFlushMethod": "O_DIRECT"
   },
   "automaticStop": {
     "errorRatePercentExclusive": 1,

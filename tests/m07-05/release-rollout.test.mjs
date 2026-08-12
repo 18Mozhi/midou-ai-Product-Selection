@@ -62,7 +62,7 @@ test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundar
   assert.deepEqual(manifest.canary.syntheticWriteCanonicalFields, ["timestamp", "nonce", "release_id", "sample_id"]);
   assert.equal(manifest.canary.proxyRequestIdsExcludedFromSignature, true);
   assert.equal(manifest.canary.candidatePersistenceParityRequired, true);
-  assert.equal(manifest.schemaVersion, 2);
+  assert.equal(manifest.schemaVersion, 3);
   assert.deepEqual(manifest.mysqlDurability, {
     innodbFlushLogAtTrxCommit: 2,
     syncBinlog: 1,
@@ -72,7 +72,17 @@ test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundar
     authorization: "explicit user approval on 2026-08-10",
     rollback: "restore the BaoTa-restricted my.cnf backup and restart MySQL through BaoTa",
   });
+  assert.deepEqual(manifest.mysqlResourceProfile, {
+    innodbBufferPoolBytes: 4294967296,
+    innodbBufferPoolInstances: 4,
+    innodbIoCapacity: 1000,
+    innodbIoCapacityMax: 4000,
+    innodbFlushNeighbors: 0,
+    innodbFlushMethod: "O_DIRECT",
+  });
   assert.match(runner, /release_mysql_durability_contract_invalid/);
+  assert.match(runner, /release_mysql_resource_profile_invalid/);
+  assert.match(runner, /@@global\.innodb_buffer_pool_size/);
   assert.match(runner, /SHOW MASTER STATUS/);
   assert.match(up, /CREATE TABLE `deployment_release_gates`/);
   assert.match(down, /DROP TABLE IF EXISTS `deployment_release_gates`/);
@@ -289,9 +299,13 @@ test("M07-05 uses one-second production sampling without relaxing rollout gates"
   assert.match(verifier, /sampleIntervalSeconds !== 1/);
   assert.ok(evidenceSchema.required.includes("sampleIntervalSeconds"));
   assert.ok(evidenceSchema.required.includes("mysqlDurability"));
-  assert.equal(evidenceSchema.properties.schemaVersion.const, 2);
+  assert.ok(evidenceSchema.required.includes("mysqlResourceProfile"));
+  assert.equal(evidenceSchema.properties.schemaVersion.const, 3);
   assert.equal(evidenceSchema.properties.mysqlDurability.properties.innodbFlushLogAtTrxCommit.const, 2);
   assert.equal(evidenceSchema.properties.mysqlDurability.properties.productScoutBinlogExcluded.const, true);
+  assert.equal(evidenceSchema.properties.mysqlResourceProfile.properties.innodbBufferPoolBytes.const, 4294967296);
+  assert.equal(evidenceSchema.properties.mysqlResourceProfile.properties.innodbFlushMethod.const, "O_DIRECT");
+  assert.match(verifier, /release_mysql_resource_profile_invalid/);
   assert.equal(evidenceSchema.properties.sampleIntervalSeconds.const, 1);
   assert.equal(manifest.canary.minimumObservationSeconds, 1800);
   assert.equal(manifest.automaticStop.writeP95MsInclusive, 600);
