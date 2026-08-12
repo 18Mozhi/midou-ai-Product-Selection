@@ -75,7 +75,7 @@
       "report_exports",
       "webhook_deliveries"
     ],
-    "asyncQueueScope": "only due work or expired leases claimed by the Baota-managed Node Worker; domain audit outboxes without a runtime consumer are excluded",
+    "asyncQueueScope": "only due work or expired leases claimed by the Baota-managed Node Worker; DATETIME(3) due and lag comparisons use the same MySQL session NOW(3) clock as the Worker; domain audit outboxes without a runtime consumer are excluded",
     "action": "route-100-percent-to-the-runtime-stable-slot-and-record-audited-rollback"
   },
   "nginx": {

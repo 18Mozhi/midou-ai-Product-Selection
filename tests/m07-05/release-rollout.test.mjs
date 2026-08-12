@@ -39,6 +39,8 @@ test("M07-05 async lag probes only queues consumed by the BaoTa Worker", async (
   assert.equal(await asyncLagSeconds(pool), 42);
   assert.equal(queried.length, RELEASE_ASYNC_QUEUE_PROBES.length);
   assert.ok(queried.every((sql) => !sql.includes("selection_journey_outbox")));
+  assert.ok(queried.every((sql) => sql.includes("NOW(3)")));
+  assert.ok(queried.every((sql) => !sql.includes("UTC_TIMESTAMP")));
   assert.match(
     RELEASE_ASYNC_QUEUE_PROBES.find((probe) => probe.table === "collection_tasks").sql,
     /CASE WHEN status IN \('leased','running'\) THEN lease_expires_at/,
