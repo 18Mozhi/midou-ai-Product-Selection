@@ -87,6 +87,15 @@ test("M07-06.A08/A12/A16 validates input and refuses deadline relaxation", async
   assert.equal(accepted.deadlineAt.toISOString(), "2026-08-10T12:03:00.000Z");
 });
 
+test("M07-06.A04/A08 keeps a journey running until the collection task is terminal", async () => {
+  const repository = await read("apps/api/src/mysql-selection-journey-repository.ts");
+  const taskGate = repository.indexOf("if(!terminal.has(String(row.status)))");
+  const resultGate = repository.indexOf('if(hasResult)return"result_ready"');
+  assert.ok(taskGate > 0, "journey state must first verify the collection task terminal status");
+  assert.ok(resultGate > taskGate, "persisted evidence cannot expose result_ready while the task is retrying");
+  assert.match(repository, /if\(\["leased","running","retry_scheduled","rate_limited"\]\.includes\(String\(row\.status\)\)\)return"running"/);
+});
+
 test("M07-06.A09/A16 production runner selects tenant context before member guard", async () => {
   const [runner, manifestRaw] = await Promise.all([
     read("scripts/run-baota-selection-acceptance.mjs"),

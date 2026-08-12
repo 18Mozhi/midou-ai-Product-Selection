@@ -8,11 +8,14 @@ const json=(value:unknown)=>typeof value==="string"?JSON.parse(value):value;
 const terminal=new Set(["succeeded","succeeded_empty","completed_with_warnings","failed_terminal","dead_letter","blocked_login","blocked_captcha","blocked_robots","permission_denied"]);
 function state(row:{status:unknown},hasResult:boolean,hasDecision:boolean):SelectionJourneyState{
  if(hasDecision)return"decided";
+ if(!terminal.has(String(row.status))){
+  if(["leased","running","retry_scheduled","rate_limited"].includes(String(row.status)))return"running";
+  return"accepted";
+ }
  if(hasResult)return"result_ready";
  if(row.status==="succeeded_empty")return"succeeded_empty";
  if(String(row.status).startsWith("blocked_")||row.status==="permission_denied")return"blocked";
  if(["failed_terminal","dead_letter"].includes(String(row.status)))return"failed";
- if(["leased","running","retry_scheduled","rate_limited"].includes(String(row.status)))return"running";
  return"accepted";
 }
 
