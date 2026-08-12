@@ -250,3 +250,80 @@ test("M07-06.A04/A05/A14 links deduplicated evidence to every scoped collection 
   assert.ok(!rejectedStatements.some((sql) => typeof sql === "string" && sql.includes("INSERT INTO collection_task_evidence_links")), "invalid task scope must never create an evidence association");
   assert.ok(rejectedStatements.includes("ROLLBACK"));
 });
+
+test("M07-06.A05/A08 keeps a real journey terminal when one record has a dedupe conflict", async () => {
+  const [{ ProviderSourceExecutor }, { EvidencePersistenceError }] = await Promise.all([
+    import("../../apps/worker/dist/provider-source-executor.js"),
+    import("../../apps/worker/dist/evidence-persistence.js"),
+  ]);
+  const replayUpdates = [];
+  const pool = {
+    query: async (sql, values) => {
+      if (sql.includes("FROM providers p")) return [[{
+        id: "55555555-5555-4555-8555-555555555555",
+        code: "google_news_search",
+        access_mode: "public_rss",
+        target_url: "https://news.google.com/rss/search?q={urlEncodedQuery}&hl=en-US&gl=US&ceid=US:en",
+        parser_version: "google-news-rss-v1",
+        timeout_ms: 20000,
+        fields_json: ["title", "summary", "publisher"],
+        status: "enabled",
+        created_by: "66666666-6666-4666-8666-666666666666",
+      }]];
+      if (sql.includes("UPDATE provider_source_replay_runs SET status=?")) replayUpdates.push(values);
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const records = ["first", "conflict", "third"].map((id) => ({
+    externalId: id,
+    observedAt: "2026-08-12T12:00:00.000Z",
+    evidenceRef: `google-news-rss:${id}`,
+    payload: {
+      raw_content: `<item>${id}</item>`,
+      content_type: "application/rss+xml",
+      canonical_url: `https://example.test/${id}`,
+      fields: { title: id, summary: id, publisher: "Example" },
+      source_paths: { title: "rss.item.title", summary: "rss.item.description", publisher: "rss.item.source" },
+    },
+  }));
+  const registry = {
+    collect: async () => ({ records, nextCursor: null }),
+    normalize: (_code, raw) => ({
+      external_id: raw.externalId,
+      observed_at: raw.observedAt,
+      canonical_url: raw.payload.canonical_url,
+      fields: raw.payload.fields,
+      evidence_ref: raw.evidenceRef,
+      provenance: { adapter_version: "google-news-rss-adapter-v1" },
+    }),
+  };
+  const persisted = [];
+  const evidence = {
+    persist: async (input) => {
+      persisted.push(input.dedupeKey);
+      if (input.dedupeKey === "conflict") throw new EvidencePersistenceError("evidence_dedupe_conflict");
+      return { evidence_id: input.dedupeKey, normalized_record_id: input.dedupeKey, deduplicated: false };
+    },
+  };
+  const executor = new ProviderSourceExecutor(pool, registry, evidence, "m07-06-test-worker");
+  const outcomes = await executor.execute({
+    id: "33333333-3333-4333-8333-333333333333",
+    organizationId: "11111111-1111-4111-8111-111111111111",
+    workspaceId: "22222222-2222-4222-8222-222222222222",
+    attemptCount: 1,
+    requestId: "m07-06-conflict-request",
+    traceId: "m07-06-conflict-trace",
+    leaseToken: "not-used-by-executor",
+    subqueries: [{ id: "44444444-4444-4444-8444-444444444444", providerId: "55555555-5555-4555-8555-555555555555", ordinal: 0, required: true, target: { query: "portable blender" } }],
+  }, async () => {});
+  assert.deepEqual(persisted, ["first", "conflict", "third"], "a conflicting record must not discard later independent records");
+  assert.deepEqual(outcomes, [{
+    id: "44444444-4444-4444-8444-444444444444",
+    required: true,
+    status: "failed",
+    availableResultCount: 2,
+    missingFields: [],
+    errorCode: "validation_failed",
+  }]);
+  assert.deepEqual(replayUpdates[0]?.slice(0, 3), ["completed_with_warnings", 2, "validation_failed"]);
+});

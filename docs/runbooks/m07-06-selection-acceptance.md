@@ -24,7 +24,7 @@ node scripts/run-baota-selection-acceptance.mjs --production
 
 ## 日志与排查
 
-在宝塔计划任务日志按 `request_id`/`trace_id` 关联 Node API、Worker 和 Crawler。不要打印账号密码、会话 Cookie、Token、Provider 凭证或原始响应正文。优先检查：来源是否 enabled、Worker 是否领取任务、`collection_task_events` 的状态、当前任务在 `collection_task_evidence_links` 是否存在关联、对应 `raw_evidence` 是否有效、趋势投影是否产生主题，以及决策权限是否有效。任务报告结果数大于零但关联数为零属于持久化失败，不得换关键词、放宽 180 秒门或把它判为空结果。若 `evidence.linked` 出现 `content_changed=true`，核对两个 SHA-256、规范 URL、Parser/Adapter/Schema 和规范载荷；仅未消费的 RSS 包装变化允许复用旧不可变证据，规范事实变化仍必须得到 `evidence_dedupe_conflict`。回滚本修复只需切回上一 Worker 构建并由宝塔重启 Node Worker，不需要迁移或删除关联、事件、Outbox、证据。
+在宝塔计划任务日志按 `request_id`/`trace_id` 关联 Node API、Worker 和 Crawler。不要打印账号密码、会话 Cookie、Token、Provider 凭证或原始响应正文。优先检查：来源是否 enabled、Worker 是否领取任务、`collection_task_events` 的状态、当前任务在 `collection_task_evidence_links` 是否存在关联、对应 `raw_evidence` 是否有效、趋势投影是否产生主题，以及决策权限是否有效。任务报告结果数大于零但关联数为零属于持久化失败，不得换关键词、放宽 180 秒门或把它判为空结果。若 `evidence.linked` 出现 `content_changed=true`，核对两个 SHA-256、规范 URL、Parser/Adapter/Schema 和规范载荷；仅未消费的 RSS 包装变化允许复用旧不可变证据。规范事实变化仍必须得到单条 `evidence_dedupe_conflict`，不得覆盖旧证据；Worker 应继续处理其他独立记录，有可用记录时以 `completed_with_warnings / partial` 终止，不得把该冲突作为网络错误重试整个来源。回滚本修复只需切回上一 Worker 构建并由宝塔重启 Node Worker，不需要迁移或删除关联、事件、Outbox、证据。
 
 代理异常先检查 OpenClash 监听、Basic 认证以及 API/Worker 是否通过宝塔重启读取新配置；只记录 CONNECT 状态、耗时和错误码，不记录代理用户名或密码。
 
