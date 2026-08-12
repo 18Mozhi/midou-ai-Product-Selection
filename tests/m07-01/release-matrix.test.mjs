@@ -14,6 +14,12 @@ test('M07-01.A01/A02/A11/A12 release matrix has frozen scope, dimensions and obs
   assert.equal(new Set(matrix.liveScenarios.map(({ id }) => id)).size, matrix.liveScenarios.length);
 });
 
+test('M07-01.A04 node matrix only enables strip-types when the running Node supports it', async () => {
+  const verifier = await readFile(resolve(root, 'scripts/verify-release-matrix.mjs'), 'utf8');
+  assert.match(verifier, /process\.allowedNodeEnvironmentFlags\.has\(stripTypes\)/);
+  assert.match(verifier, /:\s*\['--test', \.\.\.tests\]/);
+});
+
 test('M07-01.A03/A04/A05/A14/A16 matrix invokes existing reversible MySQL Redis Worker and failure drills', async () => {
   for (const scenario of matrix.liveScenarios) {
     assert.equal(scenario.program, 'node');

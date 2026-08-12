@@ -49,7 +49,11 @@ await validate();
 const mode = process.argv[2] ?? '--validate';
 if (mode === '--node') {
   const tests = await filesUnder(resolve(root, 'tests'), '.test.mjs');
-  run('node', ['--experimental-strip-types', '--test', ...tests], 'node-test-matrix');
+  const stripTypes = '--experimental-strip-types';
+  const nodeTestArgs = process.allowedNodeEnvironmentFlags.has(stripTypes)
+    ? [stripTypes, '--test', ...tests]
+    : ['--test', ...tests];
+  run('node', nodeTestArgs, 'node-test-matrix');
 } else if (mode === '--live') {
   for (const scenario of matrix.liveScenarios) run(scenario.program, scenario.args, scenario.id);
 } else if (mode === '--browser') {
