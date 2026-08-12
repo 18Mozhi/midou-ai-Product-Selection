@@ -33,6 +33,12 @@ test('M07-01.A03/A04/A05/A14/A16 matrix invokes existing reversible MySQL Redis 
   for (const up of ups) assert.ok(migrations.includes(up.replace('.up.sql', '.down.sql')), `${up} lacks rollback`);
 });
 
+test('M07-01 live data-quality drill distinguishes wrapper drift from normalized fact conflicts', async () => {
+  const verifier = await readFile(resolve(root, 'scripts/verify-evidence-data-quality-live.mjs'), 'utf8');
+  assert.match(verifier, /normalizedPayload:\{title:'Changed item'\}/);
+  assert.match(verifier, /dedupe conflict was not rejected/);
+});
+
 test('M07-01.A06/A09/A10/A13 contracts guards and existing configuration stay synchronized', async () => {
   const openapi = await readFile(resolve(root, 'docs/openapi.yaml'), 'utf8');
   const env = await readFile(resolve(root, 'config/env.example'), 'utf8');
