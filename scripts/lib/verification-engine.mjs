@@ -55,7 +55,10 @@ export function validateModuleRegistry(registry, requestedModuleId) {
 }
 
 function resolveReportDirectory(root, requested) {
-  const reportDir = resolve(root, requested || '.artifacts/verification');
+  const normalizedRequested = (requested || '.artifacts/verification')
+    .replaceAll('\\', sep)
+    .replaceAll('/', sep);
+  const reportDir = resolve(root, normalizedRequested);
   const pathFromRoot = relative(root, reportDir);
   if (pathFromRoot.startsWith(`..${sep}`) || pathFromRoot === '..' || isAbsolute(pathFromRoot)) {
     throw new VerificationError('VERIFY_REPORT_DIR must stay inside the project workspace', {

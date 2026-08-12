@@ -35,6 +35,10 @@ test('M00-07.A10 timeout and report directory are validated', () => {
     () => verificationConfig(process.cwd(), { VERIFY_REPORT_DIR: '..\\outside' }),
     (error) => error.code === 'report_path_outside_workspace',
   );
+  assert.throws(
+    () => verificationConfig(process.cwd(), { VERIFY_REPORT_DIR: '../outside' }),
+    (error) => error.code === 'report_path_outside_workspace',
+  );
 });
 
 test('M00-07.A11 common secret values are redacted from reports', () => {

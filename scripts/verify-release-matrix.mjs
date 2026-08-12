@@ -52,7 +52,7 @@ if (mode === '--node') {
   const stripTypes = '--experimental-strip-types';
   const nodeTestArgs = process.allowedNodeEnvironmentFlags.has(stripTypes)
     ? [stripTypes, '--test', ...tests]
-    : ['--test', ...tests];
+    : ['--loader', resolve(root, 'scripts/lib/typescript-test-loader.mjs'), '--test', ...tests];
   run('node', nodeTestArgs, 'node-test-matrix');
 } else if (mode === '--live') {
   for (const scenario of matrix.liveScenarios) run(scenario.program, scenario.args, scenario.id);

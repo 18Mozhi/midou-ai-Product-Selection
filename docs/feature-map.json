@@ -1364,7 +1364,7 @@
     },
     "releaseTestMatrix": {
       "module": "M07-01",
-      "entrypoints": ["../verification/release-matrix.json", "../scripts/verify-release-matrix.mjs"],
+      "entrypoints": ["../verification/release-matrix.json", "../scripts/verify-release-matrix.mjs", "../scripts/lib/typescript-test-loader.mjs"],
       "scope": "P00-P06 role source collection task quality desktop mobile performance and security regression matrix",
       "runtimeBoundary": "local CI or Baota-controlled release task only; no production API table page permission daemon or multi-node claim",
       "browserGroups": ["p00", "p01", "p02", "p03", "p04", "p05", "p06"],
