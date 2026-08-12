@@ -1250,6 +1250,7 @@
 - 实现动作：更新 schema、env.example、宝塔说明、启动检查和密钥泄露扫描。
 - E2E 运行合同：`PLAYWRIGHT_API_PORT`、`PLAYWRIGHT_WEB_PORT` 默认保持 4101/5173；宝塔验收时与 `APP_PORT` 配合改用未占用的隔离临时端口，不得复用生产 API。隔离 API/Web 启动等待固定为 300 秒，覆盖 Debian 单机真实构建耗时；超时仍失败关闭且不得据此放宽生产门禁。`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` 仅接受可选绝对路径，用于复用宝塔主机已验证的系统 Chromium；空值保持 Playwright 默认浏览器。模块命令在截图前验证 Linux Chromium 可执行和中文字体存在，任一缺失都失败关闭，不得用方框字建立视觉基线。惠州 Debian 11 主机按明确授权通过宝塔有限任务安装固定版本 Debian 官方 `fonts-noto-cjk`，保留 0600 安装前证据；四张 Linux 基线必须经中文渲染人工检查，回滚通过宝塔删除字体包并刷新缓存。
 - MySQL 持久性合同：惠州当前共享 MySQL 经明确授权使用 `innodb_flush_log_at_trx_commit=2`、`sync_binlog=1`、`binlog-ignore-db=product_scout`；主机或操作系统故障最多可能丢失约 1 秒事务，且 ScoutOps 不具备 binlog/PITR。现有 `product_scout@127.0.0.1` 账号经明确授权增加全局只读 `REPLICATION CLIENT`，只用于发布任务读取 `SHOW MASTER STATUS`，不得授予 `SUPER`。生产证据必须携带该合同，漂移时失败关闭。配置和权限仅由宝塔受限路径留存快照并回滚，不新增面板外服务。
+- MySQL 资源合同：惠州 16 GiB 单机使用 `innodb_buffer_pool_size=4096M`、`innodb_buffer_pool_instances=4`、`innodb_io_capacity=1000`、`innodb_io_capacity_max=4000`、`innodb_flush_neighbors=0`、`innodb_flush_method=O_DIRECT`。候选配置先由 MySQL 5.7 解析，保存 0600 快照后只通过宝塔重启；两 API 槽、Worker、Crawler 任一健康失败时自动还原并由宝塔回滚重启。资源调优不得放宽 5/25/100、1,800 秒或读写停止阈值。
 - 前置输入：模块已声明的依赖、总计划、OpenAPI、Feature Map、环境 schema 和图片包。
 - 数据规则：字段保留来源、时间、版本、审计和组织范围；禁止跨组织查询和静默覆盖。
 - 页面规则：提供桌面与 390px 状态；不得显示内部凭证、Cookie、队列细节或其他组织数据。

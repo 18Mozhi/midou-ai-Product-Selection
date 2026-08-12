@@ -28,6 +28,13 @@ x-scoutops-mysql:
   requiredVersion: '5.7'
   requiredCharset: utf8mb4
   requiredDatabaseAndAccount: product_scout
+  baotaSingleHostResourceProfile:
+    innodbBufferPoolSize: 4096M
+    innodbBufferPoolInstances: 4
+    innodbIoCapacity: 1000
+    innodbIoCapacityMax: 4000
+    innodbFlushNeighbors: 0
+    innodbFlushMethod: O_DIRECT
 x-scoutops-file-audit:
   runtimeApiExposed: false
   reason: M00-06 provides backend-only path, grant and audit contracts; authorized download routing is added with identity modules.

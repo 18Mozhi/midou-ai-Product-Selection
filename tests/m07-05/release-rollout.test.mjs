@@ -112,7 +112,7 @@ test("M07-05.A06-A17 API, UI, config and documentation contracts stay synchroniz
     "docs/runbooks/m07-05-release-rollout.md",
     "verification/modules/M07-05.json",
   ].map(read))).join("\n");
-  for (const token of ["M07-05", "platform:operate", "/api/v1/platform/operations/releases", "RELEASE_CANARY_OBSERVE_SECONDS", "innodb_flush_log_at_trx_commit=2", "binlog-ignore-db=product_scout", "REPLICATION CLIENT", "5", "25", "100", "回滚"]) assert.match(all, new RegExp(token));
+  for (const token of ["M07-05", "platform:operate", "/api/v1/platform/operations/releases", "RELEASE_CANARY_OBSERVE_SECONDS", "innodb_flush_log_at_trx_commit=2", "binlog-ignore-db=product_scout", "innodb_buffer_pool_size=4096M", "innodb_io_capacity=1000", "REPLICATION CLIENT", "5", "25", "100", "回滚"]) assert.match(all, new RegExp(token));
   assert.doesNotMatch(await read("apps/api/src/release-rollout-service.ts"), /password|cookie|token|private_key/i);
 });
 
