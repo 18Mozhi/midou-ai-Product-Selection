@@ -24,7 +24,7 @@ test('M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await expect(page.getByText('数据不足',{exact:true}).first()).toBeVisible();
   await expect(page.getByText('insufficient_data',{exact:true}).first()).toBeVisible();
   await expect(page).toHaveScreenshot('m04-02-opportunity-list.png',{fullPage:true});
-  await page.getByRole('button',{name:'＋ 创建机会'}).click();
+  await page.getByRole('button',{name:'＋ 手工创建机会',exact:true}).click();
   const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
   await dialog.getByLabel('机会名称').fill('手工验证机会');
   await dialog.getByRole('button',{name:'创建机会',exact:true}).click();
