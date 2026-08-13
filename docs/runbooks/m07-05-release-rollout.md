@@ -30,6 +30,17 @@ MySQL 5.7 的宝塔受限 `my.cnf` 必须显式设置 `innodb_flush_log_at_trx_c
 - 100%：1,800 秒、3,199 样本、5xx 0%、读 P95 2 ms、写 P95 276 ms、异步延迟 0、持久化写样本 1,599；到达上游前中断和投递失败均为 0。
 - `npm run verify:module -- M07-05` 在同提交隔离工作区的宝塔有限任务中 11/11 命令通过；run_id/trace_id：`cfadd66f-b1d4-4a3e-ac0f-faa1efac2b1a`，生产证据门 trace_id：`23bd60f3-59f3-4951-9a88-2fb74cc631e6`。验收后 4201/5273 无残留监听，临时 bundle 已删除，任务 14 已恢复为 `product-scout-m0706-candidate-deploy`。
 
+## 2026-08-13 schema v4 生产签发证据
+
+宝塔仅手工任务在 MySQL 会话命名锁与独立 release 尝试模型下重新完成发布 `f1e33e3b-ab99-4b6e-8d30-e94285b6cd1e`，候选构建为 `eabce9a0bbad5b711de9f7f36e2f02db0737d25b`，证据捕获于 `2026-08-13T10:24:01.231Z`，SHA-256 为 `b454dc3cd3cbc3c1b5eb216722bb84756f30a945e5cacecc6ff5e75f09bf18bf`。并发演练中第二个手工实例在迁移、门禁和 Nginx 变更前返回 `release_rollout_lock_busy`，已有 release/gate/event 与流量配置保持不变。
+
+- 5%：1,800 秒、162 样本、5xx 0%、读 P95 3 ms、写 P95 6 ms、异步延迟 0、82 个候选写样本全部持久化。
+- 25%：1,801 秒、787 样本、5xx 0%、读 P95 2 ms、写 P95 7 ms、异步延迟 0、373 个候选写样本全部持久化。
+- 100%：1,800 秒、3,304 样本、5xx 0%、读 P95 2 ms、写 P95 5 ms、异步延迟 0、1,644 个候选写样本全部持久化。
+- 三阶段到达上游前中断与投递失败均为 0；`npm run verify:module -- M07-05` 的 11/11 命令通过，run_id/trace_id 为 `82f35776-52a9-4e00-90bc-a7ca76d452cb`。
+
+该证据完成 M07-05 模块签发，但包含本收尾文档的最终提交仍必须重新通过生产灰度和 P07 阶段门；不得据此提前声明 P07 或 P08 完成。
+
 ## 自动停止与人工回滚
 
 脚本在样本不足或阈值超限时自动把 candidate 比例改为 0%，Nginx 检查通过后 reload，并记录 automatic_stop/rollback。若任务进程异常退出，在宝塔将 `000-product-scout-release-upstream.conf` 设为只含本次 `RELEASE_STABLE_API_PORT`，先运行宝塔 Nginx 配置检查再 reload。确认公网 `/health/version` 返回稳定构建后，在宝塔停止失败候选槽。每次执行生成独立 release ID；不得删除、复用或覆盖失败 release、gate/event、备份或审计记录。回滚 `0027a_release_rollout_attempts_m07_05.down.sql` 前必须确认没有相同 stage/build 的多次尝试，否则恢复唯一键会失败并必须保留 0027a。

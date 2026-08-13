@@ -22,6 +22,12 @@ node scripts/run-baota-selection-acceptance.mjs --production
 
 任一阈值、权限、来源、证据或决策失败都返回非零；`blocked` 不能当作模块通过。业务终态 `blocked` 可以作为真实旅程的受控结果，但生产证据和模块门仍必须完整通过。
 
+## 2026-08-13 生产验收证据
+
+构建 `eabce9a0bbad5b711de9f7f36e2f02db0737d25b` 由宝塔有限任务以专用普通 `member` 完成真实 `google_news_search` 旅程：创建 API 116 ms、已接收状态可见 204 ms、`result_ready` 终态 4,399 ms，固定 3 秒/15 秒/180 秒门均未放宽；成员随后保存 `observe` 决策并查看原始证据。mode 0600 生产证据捕获于 `2026-08-13T10:40:37.496Z`，SHA-256 为 `e7685a91f01ef3115f4aaac7e09a266dbc169a3ac43241a2af45ff583a4cf567`。
+
+同提交 `npm run verify:module -- M07-06` 的 11/11 命令通过，覆盖构建、7 个定向测试、真实 MySQL 5.7、生产证据验证、Linux Chromium 与中文字体预检、桌面/390px Playwright 和文档门；run_id/trace_id 为 `e2e2654a-6364-4cc6-a7b1-4997dfd3d39f`。该结果完成 M07-06 模块签发，但仍不能代替 P07 阶段门或 P08 容量验收。
+
 ## 日志与排查
 
 在宝塔计划任务日志按 `request_id`/`trace_id` 关联 Node API、Worker 和 Crawler。不要打印账号密码、会话 Cookie、Token、Provider 凭证或原始响应正文。优先检查：来源是否 enabled、Worker 是否领取任务、`collection_task_events` 的状态、当前任务在 `collection_task_evidence_links` 是否存在关联、对应 `raw_evidence` 是否有效、趋势投影是否产生主题，以及决策权限是否有效。任务报告结果数大于零但关联数为零属于持久化失败，不得换关键词、放宽 180 秒门或把它判为空结果。若 `evidence.linked` 出现 `content_changed=true`，核对两个 SHA-256、规范 URL、Parser/Adapter/Schema 和规范载荷；仅未消费的 RSS 包装变化允许复用旧不可变证据。规范事实变化仍必须得到单条 `evidence_dedupe_conflict`，不得覆盖旧证据；Worker 应继续处理其他独立记录，有可用记录时以 `completed_with_warnings / partial` 终止，不得把该冲突作为网络错误重试整个来源。回滚本修复只需切回上一 Worker 构建并由宝塔重启 Node Worker，不需要迁移或删除关联、事件、Outbox、证据。

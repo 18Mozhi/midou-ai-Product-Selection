@@ -57,9 +57,11 @@
       "M07-01",
       "M07-02",
       "M07-03",
-      "M07-04"
+      "M07-04",
+      "M07-05",
+      "M07-06"
     ],
-    "activeModules": ["M07-05"],
+    "activeModules": [],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1425,7 +1427,9 @@
       "imageEvidence": ["core 10 platform cockpit", "concept 61 platform operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 release states", "four reviewed Linux Chromium visual baselines with Chinese glyphs"],
       "supersededProductionEvidence": {"releaseId": "8b6114fe-fafa-4c6c-8a5d-ebd52ffe65ae", "buildSha": "e22968896ab087647ad171f00a6f107c6824acf9", "capturedAt": "2026-08-11T19:22:54.886Z", "sha256": "649a4b18ddec6d5f4967dce0ce2f992c4c5aa5ce45a4cb272ce0c31597376d1d", "reason": "schema v3 lacked manual-only task and cross-process lock evidence"},
       "lastFailedProductionAttempt": {"buildSha": "391f4a006263980015a60914536790badc62f068", "failureCode": "release_concurrency_conflict", "rollback": "stable 5140355 on port 4101", "evidenceAccepted": false},
-      "status": "implementation_in_progress"
+      "latestVerifiedProductionEvidence": {"releaseId": "f1e33e3b-ab99-4b6e-8d30-e94285b6cd1e", "buildSha": "eabce9a0bbad5b711de9f7f36e2f02db0737d25b", "capturedAt": "2026-08-13T10:24:01.231Z", "sha256": "b454dc3cd3cbc3c1b5eb216722bb84756f30a945e5cacecc6ff5e75f09bf18bf", "observationSeconds": [1800, 1801, 1800], "sampleCounts": [162, 787, 3304], "errorRates": [0, 0, 0], "readP95Ms": [3, 2, 2], "writeP95Ms": [6, 7, 5], "asyncLagSeconds": [0, 0, 0], "durableWriteSamples": [82, 373, 1644]},
+      "verificationRunId": "82f35776-52a9-4e00-90bc-a7ca76d452cb",
+      "status": "module_verified"
     },
     "selectionAcceptance": {
       "module": "M07-06",
@@ -1440,7 +1444,9 @@
       "evidenceAssociation": "every captured or deduplicated evidence result is linked to the current collection task only after organization workspace subquery and provider scope validation; an RSS wrapper-only hash change may reuse immutable evidence only when canonical URL parser adapter schema and normalized payload are identical, and evidence.linked audits content_changed plus both hashes; a normalized fact conflict fails closed per record without overwriting evidence or retrying the whole source, while independent records continue and yield completed_with_warnings when any remain available",
       "runtimeBoundary": "finite Baota task on the current Huizhou single host; no daemon backup server multi-node or 10000-user claim",
       "imageEvidence": ["core 01 and 04-10", "concept 53 mobile home", "concept 54 mobile opportunity detail", "concept 72 not found", "desktop and 390 real journey states"],
-      "status": "implementation_in_progress"
+      "latestVerifiedProductionEvidence": {"buildSha": "eabce9a0bbad5b711de9f7f36e2f02db0737d25b", "capturedAt": "2026-08-13T10:40:37.496Z", "sha256": "e7685a91f01ef3115f4aaac7e09a266dbc169a3ac43241a2af45ff583a4cf567", "createApiMs": 116, "acceptedVisibleMs": 204, "terminalMs": 4399, "terminalState": "result_ready", "decisionAction": "observe", "evidenceViewed": true},
+      "verificationRunId": "e2e2654a-6364-4cc6-a7b1-4997dfd3d39f",
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -1562,7 +1568,7 @@
       "path": "/opportunities/start",
       "view": "SelectionJourney",
       "domain": "selection_acceptance",
-      "status": "M07-06_implementation_in_progress"
+      "status": "M07-06_module_verified"
     },
     {
       "path": "/opportunities/{opportunityId}",
@@ -1676,7 +1682,7 @@
       "path": "/platform-admin/releases",
       "view": "ReleaseRolloutCenter",
       "domain": "release-operations",
-      "status": "M07-05_reverification_in_progress"
+      "status": "M07-05_module_verified"
     }
   ],
   "apiGroups": [
@@ -1788,7 +1794,7 @@
       "name": "product-scout-api-canary",
       "kind": "baota-node-project",
       "responsibility": "same-host M07-05 candidate API and audited rollback pairing",
-      "status": "M07-05_reverification_in_progress"
+      "status": "M07-05_module_verified"
     },
     {
       "name": "product-scout-worker",
