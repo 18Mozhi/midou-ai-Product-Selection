@@ -1017,6 +1017,7 @@
         "SOURCING_PROJECTION_LEASE_SECONDS"
       ],
       "runtimeBoundary": "projection runs inside the Baota-managed Node Worker; P05 consumes queued purchase task outbox records and M04-04 remains the cost and exchange-rate truth",
+      "liveVerificationIsolation": "the M04-06 probe persists collection_task_evidence_links introduced by M07-06, lets the Baota-managed production Worker project the queue item, and polls only its exact job_id plus organization/workspace scope, so it cannot consume or report an unrelated production queue item",
       "imageEvidence": [
         "concept 45 supplier search",
         "concept 46 supplier detail",
