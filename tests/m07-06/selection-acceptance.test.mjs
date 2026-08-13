@@ -116,6 +116,15 @@ test("M07-06.A09/A16 production runner selects tenant context before member guar
   assert.equal(manifest.memberBoundary.exactlyOneActiveOrganization, true);
 });
 
+test("M07-06.A04 live verification accepts an already running journey", async () => {
+  const verifier = await read("scripts/verify-selection-acceptance-live.mjs");
+  assert.match(
+    verifier,
+    /\["accepted","running"\]\.includes\(created\.state\)/,
+    "the production worker may advance a newly committed journey before create() reads it back",
+  );
+});
+
 test("M07-06.A04/A05/A14 links deduplicated evidence to every scoped collection task", async () => {
   const { MySqlEvidencePersistence } = await import("../../apps/worker/dist/evidence-persistence.js");
   const ids = {
