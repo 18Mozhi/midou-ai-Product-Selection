@@ -122,7 +122,7 @@ async function event(pool, releaseId, gateId, type, reasonCode = null, metadata 
   await pool.query("INSERT INTO deployment_release_gate_events(id,release_id,gate_id,event_type,actor_type,actor_id,reason_code,request_id,trace_id,occurred_at,metadata) VALUES(?,?,?,?, 'baota_task',NULL,?,?,?,?,?)", [randomUUID(), releaseId, gateId, type, reasonCode, requestId, traceId, new Date(), JSON.stringify(metadata)]);
 }
 
-let pool, runtime, originalSite = "", sitePath, splitPath, nginxBin = "", stablePort = 0, candidatePort = 0, nginxConfigured = false;
+let pool, lockConnection, lockName = "", lockAcquired = false, runtime, originalSite = "", sitePath, splitPath, nginxBin = "", stablePort = 0, candidatePort = 0, nginxConfigured = false;
 try {
   const envFile = arg("--env-file");
   if (!argv.includes("--run") || !envFile) throw fail("release_arguments_invalid", "use --run --env-file <Baota restricted env file>");
@@ -140,6 +140,12 @@ try {
   if (!releaseRoot.startsWith("/www/wwwroot/") || !sitePath.startsWith("/www/server/panel/vhost/nginx/") || !splitPath.startsWith("/www/server/panel/vhost/nginx/") || !timingLog.startsWith("/www/wwwlogs/") || !evidencePath.startsWith(`${releaseRoot}/.artifacts/verification/`)) throw fail("release_baota_path_invalid", "release, Nginx, log and evidence paths must remain under Baota-managed roots");
   pool = mysql.createPool({ host: runtime.DB_HOST, port: Number(runtime.DB_PORT), user: runtime.DB_USER, password: runtime.DB_PASSWORD, database: runtime.DB_NAME, waitForConnections: true, connectionLimit: 2, timezone: "Z" });
   await pool.query("SELECT 1");
+  lockName = runtime.RELEASE_ROLLOUT_LOCK_NAME ?? "scoutops:m07-05:release-rollout";
+  if (!/^[a-z0-9:_-]{1,64}$/.test(lockName)) throw fail("release_rollout_lock_name_invalid", "RELEASE_ROLLOUT_LOCK_NAME must be a stable lowercase MySQL lock name");
+  lockConnection = await pool.getConnection();
+  const [[lockRow]] = await lockConnection.query("SELECT GET_LOCK(?, 0) acquired", [lockName]);
+  if (Number(lockRow?.acquired) !== 1) throw fail("release_rollout_lock_busy", "another BaoTa release rollout already owns the MySQL session named lock");
+  lockAcquired = true;
   const [[durabilityRow]] = await pool.query("SELECT @@innodb_flush_log_at_trx_commit innodb_flush_log_at_trx_commit,@@sync_binlog sync_binlog,@@global.innodb_buffer_pool_size innodb_buffer_pool_size,@@global.innodb_buffer_pool_instances innodb_buffer_pool_instances,@@global.innodb_io_capacity innodb_io_capacity,@@global.innodb_io_capacity_max innodb_io_capacity_max,@@global.innodb_flush_neighbors innodb_flush_neighbors,@@global.innodb_flush_method innodb_flush_method");
   const [masterStatusRows] = await pool.query("SHOW MASTER STATUS");
   const ignoredDatabases = String(masterStatusRows[0]?.Binlog_Ignore_DB ?? "").split(",").map((value) => value.trim()).filter(Boolean);
@@ -151,14 +157,11 @@ try {
   const identity = await fetchIdentity(candidateBase);
   if (identity.build_sha !== runtime.BUILD_SHA) throw fail("candidate_build_mismatch", "candidate build_sha differs from the release task BUILD_SHA");
   const migrations = [];
-  for (const name of ["0026_release_rollout_m07_05.up.sql", "0027_release_write_probe_m07_05.up.sql"]) migrations.push(await applyMigration(pool, releaseRoot, name));
+  for (const name of ["0026_release_rollout_m07_05.up.sql", "0027_release_write_probe_m07_05.up.sql", "0027a_release_rollout_attempts_m07_05.up.sql"]) migrations.push(await applyMigration(pool, releaseRoot, name));
   const migrationName = migrations.at(-1).name;
   const releaseId = randomUUID(), now = new Date();
-  const [sameBuildRows] = await pool.query("SELECT id FROM deployment_releases WHERE stage='S0' AND build_sha=?", [runtime.BUILD_SHA]);
-  const sameBuild = sameBuildRows[0];
-  const effectiveReleaseId = sameBuild?.id ?? releaseId;
-  if (sameBuild) { await pool.query("DELETE FROM deployment_release_gates WHERE release_id=?", [effectiveReleaseId]); await pool.query("UPDATE deployment_releases SET app_version=?,config_fingerprint=?,migration_version=?,status='deploying',request_id=?,trace_id=?,started_at=?,finished_at=NULL,updated_at=? WHERE id=?", [runtime.APP_VERSION, identity.config_fingerprint, migrationName, requestId, traceId, now, now, effectiveReleaseId]); }
-  else await pool.query("INSERT INTO deployment_releases(id,stage,app_version,build_sha,config_fingerprint,migration_version,status,approved_by,request_id,trace_id,started_at,finished_at,created_at,updated_at) VALUES(?,'S0',?,?,?,?,'deploying',NULL,?,?,?,?,?,?)", [effectiveReleaseId, runtime.APP_VERSION, runtime.BUILD_SHA, identity.config_fingerprint, migrationName, requestId, traceId, now, null, now, now]);
+  const effectiveReleaseId = releaseId;
+  await pool.query("INSERT INTO deployment_releases(id,stage,app_version,build_sha,config_fingerprint,migration_version,status,approved_by,request_id,trace_id,started_at,finished_at,created_at,updated_at) VALUES(?,'S0',?,?,?,?,'deploying',NULL,?,?,?,?,?,?)", [effectiveReleaseId, runtime.APP_VERSION, runtime.BUILD_SHA, identity.config_fingerprint, migrationName, requestId, traceId, now, null, now, now]);
   const warmupCorrelation = randomUUID(), warmupResponse = await sendWriteProbeWithDeliveryRetry(candidateBase, runtime, effectiveReleaseId, warmupCorrelation);
   if (warmupResponse.status !== 202) throw fail("candidate_write_warmup_failed", "candidate signed release write probe did not return accepted");
   const preflightGate = await writeGate(pool, effectiveReleaseId, "preflight", "passed", { metadata: { candidate_port: candidatePort, identity_verified: true, manager: "baota", mysql_durability: mysqlDurability, mysql_resource_profile: mysqlResourceProfile } }); await event(pool, effectiveReleaseId, preflightGate, "passed");
@@ -200,14 +203,20 @@ try {
       await pool.query("UPDATE deployment_releases SET status='rolled_back',finished_at=UTC_TIMESTAMP(3),updated_at=UTC_TIMESTAMP(3) WHERE id=?", [effectiveReleaseId]);
       throw fail(breach, `canary ${percent}% failed and traffic was rolled back to the stable Baota project`);
     }
-    await writeGate(pool, effectiveReleaseId, `canary_${percent}`, "passed", { ...metrics, startedAt: gateStarted, metadata: { read_samples: reads.length, write_samples: writes.length, durable_write_samples: durableWriteSamples, pre_upstream_transport_aborts: transportAborts.length, write_delivery_failures: writeDeliveryFailures } }); await event(pool, effectiveReleaseId, runningGate, "passed", null, { ...metrics, durableWriteSamples, preUpstreamTransportAborts: transportAborts.length }); gates.push({ ...metrics, readSamples: reads.length, writeSamples: writes.length, durableWriteSamples, preUpstreamTransportAborts: transportAborts.length });
+    await writeGate(pool, effectiveReleaseId, `canary_${percent}`, "passed", { ...metrics, startedAt: gateStarted, metadata: { read_samples: reads.length, write_samples: writes.length, durable_write_samples: durableWriteSamples, pre_upstream_transport_aborts: transportAborts.length, write_delivery_failures: writeDeliveryFailures } }); await event(pool, effectiveReleaseId, runningGate, "passed", null, { ...metrics, durableWriteSamples, preUpstreamTransportAborts: transportAborts.length, writeDeliveryFailures }); gates.push({ ...metrics, readSamples: reads.length, writeSamples: writes.length, durableWriteSamples, preUpstreamTransportAborts: transportAborts.length, writeDeliveryFailures });
   }
   await pool.query("UPDATE deployment_releases SET status='healthy',finished_at=UTC_TIMESTAMP(3),updated_at=UTC_TIMESTAMP(3) WHERE id=?", [effectiveReleaseId]);
-  const evidence = { schemaVersion: 3, module: "M07-05", manager: "baota", topology: "single_host_stable_and_candidate", backupServerUsed: false, releaseId: effectiveReleaseId, buildSha: runtime.BUILD_SHA, appVersion: runtime.APP_VERSION, configFingerprint: identity.config_fingerprint, migrationVersion: migrationName, mysqlDurability, mysqlResourceProfile, writeProbe: { path: "/api/v1/platform/operations/releases/write-probe", signed: true, canonicalFields: ["timestamp","nonce","release_id","sample_id"], proxyRequestIdsExcluded: true, candidatePersistenceMatched: true, durableStatementsPerSample: 1, preUpstreamTransportRetryAttempts: 1, candidateResponsesRemainFailClosed: true }, percentages: [5,25,100], minimumObservationSeconds: observeSeconds, sampleIntervalSeconds: intervalSeconds, gates, automaticStopArmed: true, rollbackTarget: { sameHost: true, stablePort }, requestId, traceId, capturedAt: new Date().toISOString() };
+  const evidence = { schemaVersion: 4, module: "M07-05", manager: "baota", topology: "single_host_stable_and_candidate", backupServerUsed: false, releaseId: effectiveReleaseId, buildSha: runtime.BUILD_SHA, appVersion: runtime.APP_VERSION, configFingerprint: identity.config_fingerprint, migrationVersion: migrationName, concurrencyProtection: { taskTrigger: "manual_only", lock: "mysql_session_named_lock", lockName, lockTimeoutSeconds: 0, acquired: true, attemptHistoryPreserved: true }, mysqlDurability, mysqlResourceProfile, writeProbe: { path: "/api/v1/platform/operations/releases/write-probe", signed: true, canonicalFields: ["timestamp","nonce","release_id","sample_id"], proxyRequestIdsExcluded: true, candidatePersistenceMatched: true, durableStatementsPerSample: 1, preUpstreamTransportRetryAttempts: 1, candidateResponsesRemainFailClosed: true }, percentages: [5,25,100], minimumObservationSeconds: observeSeconds, sampleIntervalSeconds: intervalSeconds, gates, automaticStopArmed: true, rollbackTarget: { sameHost: true, stablePort }, requestId, traceId, capturedAt: new Date().toISOString() };
   await mkdir(dirname(evidencePath), { recursive: true, mode: 0o700 }); await writeFile(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`, { mode: 0o600 }); process.stdout.write(`${JSON.stringify(evidence)}\n`);
 } catch (error) {
   if (nginxConfigured && splitPath && stablePort && candidatePort) {
     try { await writeFile(splitPath, splitConfig(0, stablePort, candidatePort), { mode: 0o600 }); await run(nginxBin, ["-t"]); await run(nginxBin, ["-s", "reload"]); } catch {}
   }
   process.stderr.write(`${JSON.stringify({ module: "M07-05", status: "blocked", code: error.code ?? "release_rollout_failed", message: error.message, request_id: requestId, trace_id: traceId })}\n`); process.exitCode = 2;
-} finally { if (pool) await pool.end(); }
+} finally {
+  if (lockConnection) {
+    if (lockAcquired) { try { await lockConnection.query("SELECT RELEASE_LOCK(?) released", [lockName]); } catch {} }
+    lockConnection.release();
+  }
+  if (pool) await pool.end();
+}

@@ -13,7 +13,7 @@ test('M07-03.A01-A05 S0 manifest freezes target, ten Baota objects and signed he
   assert.deepEqual(manifest.target, {host:'192.168.1.220',domain:'midouai.mozhiz.cn',primaryRegion:'惠州',recoveryRegion:'惠州',publicPorts:[80,443],privatePorts:[4101,4103,3306,6379]});
   assert.equal(manifest.objects.length, 10);
   assert.ok(manifest.objects.some((item) => item.name === 'product-scout-api-canary' && item.port === 4103 && item.bind === '127.0.0.1'));
-  assert.ok(manifest.objects.some((item) => item.name === 'product-scout-release-rollout' && item.kind === 'baota-scheduled-task'));
+  assert.ok(manifest.objects.some((item) => item.name === 'product-scout-release-rollout' && item.kind === 'baota-scheduled-task' && item.schedule === 'manual-only-disabled-schedule' && item.concurrentRuns === 1 && item.lock === 'mysql_session_named_lock'));
   assert.equal(manifest.objects.find((item) => item.name === 'product-scout-web').buildCommand, 'npm ci && npm run build:web');
   assert.equal(manifest.objects.find((item) => item.name === 'product-scout-backup').status, 'owned-by-M07-04');
 });

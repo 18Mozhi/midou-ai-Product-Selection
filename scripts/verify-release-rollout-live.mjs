@@ -8,7 +8,7 @@ import { MySqlReleaseRolloutRepository } from "../apps/api/dist/mysql-release-ro
 const pool = createDatabasePool(loadRuntimeConfig(process.env, "api")), requestId = randomUUID(), traceId = randomUUID();
 const ids = { actor: randomUUID(), release: randomUUID() }, now = new Date(), email = `m07-05-${requestId.slice(0,8)}@test.local`;
 async function migrate() {
-  for (const name of ["0007_m00_08_deployment_releases.up.sql", "0026_release_rollout_m07_05.up.sql", "0027_release_write_probe_m07_05.up.sql"]) {
+  for (const name of ["0007_m00_08_deployment_releases.up.sql", "0026_release_rollout_m07_05.up.sql", "0027_release_write_probe_m07_05.up.sql", "0027a_release_rollout_attempts_m07_05.up.sql"]) {
     const sql = await readFile(`database/migrations/${name}`, "utf8"), checksum = createHash("sha256").update(sql.replace(/\r\n/g, "\n")).digest("hex");
     const [existing] = await pool.query("SELECT checksum FROM schema_migrations WHERE name=?", [name]);
     if (existing.length) { if (existing[0].checksum !== checksum) throw new Error(`${name} checksum drift`); continue; }
@@ -27,7 +27,7 @@ try {
   if (!String(runtime.version).startsWith("5.7.") || runtime.charset !== "utf8mb4" || runtime.database_name !== "product_scout" || !String(runtime.account_name).startsWith("product_scout@")) throw new Error("requires MySQL57 utf8mb4 product_scout business account");
   await migrate(); await cleanup();
   await pool.query("INSERT INTO users(id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES(?,?,?,'probe','active',?,?,1,?,?)", [ids.actor,email,email,now,now,now,now]);
-  await pool.query("INSERT INTO deployment_releases(id,stage,app_version,build_sha,config_fingerprint,migration_version,status,approved_by,request_id,trace_id,started_at,finished_at,created_at,updated_at) VALUES(?,'S0','0.1.0',?,?,?,'healthy',NULL,?,?,UTC_TIMESTAMP(3),UTC_TIMESTAMP(3),UTC_TIMESTAMP(3),UTC_TIMESTAMP(3))", [ids.release,"a".repeat(40),"b".repeat(64),"0027_release_write_probe_m07_05.up.sql",requestId,traceId]);
+  await pool.query("INSERT INTO deployment_releases(id,stage,app_version,build_sha,config_fingerprint,migration_version,status,approved_by,request_id,trace_id,started_at,finished_at,created_at,updated_at) VALUES(?,'S0','0.1.0',?,?,?,'healthy',NULL,?,?,UTC_TIMESTAMP(3),UTC_TIMESTAMP(3),UTC_TIMESTAMP(3),UTC_TIMESTAMP(3))", [ids.release,"a".repeat(40),"b".repeat(64),"0027a_release_rollout_attempts_m07_05.up.sql",requestId,traceId]);
   const signingKey="m07-05-live-signing-key-with-32-characters",sampleId=randomUUID(),nonce=randomUUID(),timestamp=Math.floor(now.getTime()/1000),signatureInput={timestamp,nonce,requestId,traceId,releaseId:ids.release,sampleId},proxyRequestId="c".repeat(32),proxyTraceId=randomUUID();
   const writeProbe = new ReleaseWriteProbeService(new MySqlReleaseRolloutRepository(pool),signingKey,"a".repeat(40),60,()=>now);
   await writeProbe.record({...signatureInput,requestId:proxyRequestId,traceId:proxyTraceId,signature:signReleaseProbe(signatureInput,signingKey)});

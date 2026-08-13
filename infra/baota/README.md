@@ -4,6 +4,8 @@
 
 发布顺序：确认 M07-04 备份前置能力 → 拉取签发构建 → `npm ci` → `npm run build` → 升序迁移 → `npm run verify:module -- M07-02` → 在宝塔重启 API/Worker/Crawler → 检查 live/ready/version、心跳和日志 → 发布网站。Nginx 片段只合并到宝塔网站配置，TLS 证书由宝塔网站管理；`/api/`、`/open/` 和 SSE 均只反代本机 API。
 
+`product-scout-release-rollout` 只作为宝塔面板内的手工有限任务存在，必须停用每日、每小时等自动日调度；执行器通过 MySQL 会话级命名锁限制为单实例，锁忙以 `release_rollout_lock_busy` 失败关闭。每次尝试保留独立 release ID，禁止覆盖旧失败门禁。
+
 本地或 CI 运行 `node scripts/verify-baota-deployment.mjs --preflight` 只证明发布包可用。每次发布后都要重新生成不含秘密的 `.artifacts/verification/baota-production-evidence.json`，并运行 `node scripts/verify-baota-deployment.mjs --production`；证据 commit 必须等于当前 Git HEAD。缺少、过期或矛盾的证据必须返回 blocked，不能人工跳过。
 
 回滚顺序：冻结新写入 → 在宝塔恢复上一构建/环境 → 逆序执行本次迁移 down（确认数据影响后）→ 重启后台项目 → 验证健康与审计 → 恢复网站。数据库、证据、导出由宝塔写入当前主机内独立加密恢复目录；它不保护整机故障。生产不得用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。

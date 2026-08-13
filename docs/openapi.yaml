@@ -73,6 +73,13 @@ x-scoutops-release-rollout:
   percentages: [5, 25, 100]
   minimumObservationSeconds: 1800
   syntheticProbeIntervalSeconds: 1
+  taskTrigger: manual_only
+  concurrencyProtection:
+    concurrentRuns: 1
+    lock: mysql_session_named_lock
+    lockName: 'scoutops:m07-05:release-rollout'
+    lockTimeoutSeconds: 0
+    attemptHistoryPreserved: true
   mysqlDurability:
     innodbFlushLogAtTrxCommit: 2
     syncBinlog: 1

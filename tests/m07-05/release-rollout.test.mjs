@@ -48,10 +48,12 @@ test("M07-05 async lag probes only queues consumed by the BaoTa Worker", async (
 });
 
 test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundaries", async () => {
-  const [manifest, up, down, runner] = await Promise.all([
+  const [manifest, up, down, attemptUp, attemptDown, runner] = await Promise.all([
     read("infra/baota/release-rollout-manifest.json").then(JSON.parse),
     read("database/migrations/0026_release_rollout_m07_05.up.sql"),
     read("database/migrations/0026_release_rollout_m07_05.down.sql"),
+    read("database/migrations/0027a_release_rollout_attempts_m07_05.up.sql"),
+    read("database/migrations/0027a_release_rollout_attempts_m07_05.down.sql"),
     read("scripts/run-baota-release-rollout.mjs"),
   ]);
   assert.equal(manifest.module, "M07-05");
@@ -62,7 +64,7 @@ test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundar
   assert.deepEqual(manifest.canary.syntheticWriteCanonicalFields, ["timestamp", "nonce", "release_id", "sample_id"]);
   assert.equal(manifest.canary.proxyRequestIdsExcludedFromSignature, true);
   assert.equal(manifest.canary.candidatePersistenceParityRequired, true);
-  assert.equal(manifest.schemaVersion, 3);
+  assert.equal(manifest.schemaVersion, 4);
   assert.deepEqual(manifest.mysqlDurability, {
     innodbFlushLogAtTrxCommit: 2,
     syncBinlog: 1,
@@ -86,11 +88,61 @@ test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundar
   assert.match(runner, /SHOW MASTER STATUS/);
   assert.match(up, /CREATE TABLE `deployment_release_gates`/);
   assert.match(down, /DROP TABLE IF EXISTS `deployment_release_gates`/);
+  assert.match(attemptUp, /DROP INDEX `uq_deployment_build_stage`/);
+  assert.match(attemptUp, /ADD KEY `idx_deployment_build_stage`/);
+  assert.match(attemptDown, /ADD UNIQUE KEY `uq_deployment_build_stage`/);
+  assert.doesNotMatch(attemptDown, /DELETE|UPDATE|INSERT/i);
+  assert.doesNotMatch(attemptUp, /CHECK\s*\(|utf8mb4_0900|CREATE\s+INDEX\s+.*WHERE/i);
   assert.doesNotMatch(up, /CHECK\s*\(|utf8mb4_0900|CREATE\s+INDEX\s+.*WHERE/i);
   assert.match(runner, /automatic_stop/);
   assert.doesNotMatch(runner, /systemctl|\bpm2\b|crontab/i);
   assert.equal(manifest.restrictedConfig.secretValuesInManifest, false);
   assert.equal(manifest.restrictedConfig.browserExposedReleaseConfiguration, false);
+});
+
+test("M07-05 serializes BaoTa rollout instances and requires manual-only task triggering", async () => {
+  const [runner, manifest, runbook, architecture, featureMap, envExample, verifier] = await Promise.all([
+    read("scripts/run-baota-release-rollout.mjs"),
+    read("infra/baota/release-rollout-manifest.json").then(JSON.parse),
+    read("docs/runbooks/m07-05-release-rollout.md"),
+    read("docs/architecture/m07-05-release-rollout.md"),
+    read("docs/feature-map.json"),
+    read("config/env.example"),
+    read("scripts/verify-release-rollout-production.mjs"),
+  ]);
+  assert.deepEqual(manifest.task, {
+    manager: "baota",
+    trigger: "manual_only",
+    concurrentRuns: 1,
+    lock: "mysql_session_named_lock",
+    lockTimeoutSeconds: 0,
+  });
+  const manifestRolloutTask = manifest.objects.find((item) => item.name === "product-scout-release-rollout");
+  assert.equal(manifestRolloutTask.schedule, "manual-only-disabled-schedule");
+  assert.equal(manifestRolloutTask.concurrentRuns, 1);
+  assert.equal(manifestRolloutTask.lockName, "scoutops:m07-05:release-rollout");
+  const serviceManifest = JSON.parse(await read("infra/baota/service-manifest.json"));
+  const rolloutTask = serviceManifest.objects.find((item) => item.name === "product-scout-release-rollout");
+  assert.equal(rolloutTask.schedule, "manual-only-disabled-schedule");
+  assert.equal(rolloutTask.concurrentRuns, 1);
+  assert.equal(rolloutTask.lockName, "scoutops:m07-05:release-rollout");
+  assert.match(runner, /GET_LOCK\(\?,\s*0\)/);
+  assert.match(runner, /RELEASE_LOCK\(\?\)/);
+  assert.match(runner, /release_rollout_lock_busy/);
+  assert.match(runner, /lockConnection\.release\(\)/);
+  assert.ok(runner.indexOf("GET_LOCK") < runner.indexOf("0026_release_rollout_m07_05.up.sql"));
+  assert.doesNotMatch(runner, /DELETE FROM deployment_release_gates/);
+  assert.doesNotMatch(runner, /SELECT id FROM deployment_releases WHERE stage='S0' AND build_sha/);
+  assert.match(envExample, /^RELEASE_ROLLOUT_LOCK_NAME=scoutops:m07-05:release-rollout$/m);
+  assert.match(await read("packages/config/src/index.ts"), /RELEASE_ROLLOUT_LOCK_NAME","scoutops:m07-05:release-rollout"/);
+  for (const source of [runbook, architecture, featureMap]) {
+    assert.match(source, /仅手工触发/);
+    assert.match(source, /MySQL 会话级命名锁/);
+    assert.match(source, /release_rollout_lock_busy/);
+  }
+  assert.match(verifier, /concurrencyProtection/);
+  assert.match(verifier, /manual_only/);
+  assert.match(verifier, /mysql_session_named_lock/);
 });
 
 test("M07-05.A04/A08/A12/A16 release truth fails closed across current-release boundaries", async () => {
@@ -200,12 +252,14 @@ test("M07-05 Playwright verification can use the BaoTa host system Chromium", as
   assert.equal((await verifyPlaywrightHost({ platform: "linux", env: { PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: "/usr/bin/chromium" }, assertExecutable: executable, run: () => ({ status: 0, stdout: "/font/NotoSansCJK.ttc: Noto Sans CJK SC" }) })).status, "passed");
 });
 
-test("M07-05 MySQL single-row gates use object presence instead of array length", async () => {
+test("M07-05 MySQL single-row gates and immutable attempts use object presence", async () => {
   const runner = await read("scripts/run-baota-release-rollout.mjs");
-  assert.doesNotMatch(runner, /\b(?:existing|backup|sameBuild)\.length\b/);
+  assert.doesNotMatch(runner, /\b(?:existing|backup)\.length\b/);
   assert.match(runner, /if \(!existing\)/);
   assert.match(runner, /if \(!backup\)/);
-  assert.match(runner, /if \(sameBuild\)/);
+  assert.doesNotMatch(runner, /sameBuild/);
+  assert.match(runner, /const effectiveReleaseId = releaseId/);
+  assert.doesNotMatch(runner, /DELETE FROM deployment_release_gates/);
 });
 
 test("M07-05 live verification timestamps its probe after any existing production release", async () => {
@@ -300,7 +354,7 @@ test("M07-05 uses one-second production sampling without relaxing rollout gates"
   assert.ok(evidenceSchema.required.includes("sampleIntervalSeconds"));
   assert.ok(evidenceSchema.required.includes("mysqlDurability"));
   assert.ok(evidenceSchema.required.includes("mysqlResourceProfile"));
-  assert.equal(evidenceSchema.properties.schemaVersion.const, 3);
+  assert.equal(evidenceSchema.properties.schemaVersion.const, 4);
   assert.equal(evidenceSchema.properties.mysqlDurability.properties.innodbFlushLogAtTrxCommit.const, 2);
   assert.equal(evidenceSchema.properties.mysqlDurability.properties.productScoutBinlogExcluded.const, true);
   assert.equal(evidenceSchema.properties.mysqlResourceProfile.properties.innodbBufferPoolBytes.const, 4294967296);

@@ -104,7 +104,10 @@
     {
       "name": "product-scout-release-rollout",
       "kind": "baota-scheduled-task",
-      "schedule": "manual-release-gate",
+      "schedule": "manual-only-disabled-schedule",
+      "concurrentRuns": 1,
+      "lock": "mysql_session_named_lock",
+      "lockName": "scoutops:m07-05:release-rollout",
       "workingDirectory": "<CANDIDATE_RELEASE_ROOT>",
       "command": "node scripts/run-baota-release-rollout.mjs --run --env-file <BAOTA_RESTRICTED_ENV_FILE>",
       "public": false,

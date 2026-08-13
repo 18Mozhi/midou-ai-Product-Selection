@@ -12,6 +12,8 @@ Playwright 默认继续使用本地开发端口 4101/5173；宝塔模块验收�
 
 ## 流量、指标与失败关闭
 
+宝塔发布任务仅手工触发，不能配置自动日调度。执行器在迁移、门禁写入或 Nginx 改动之前，以独立 MySQL 连接取得 `scoutops:m07-05:release-rollout` MySQL 会话级命名锁并持有到整轮 `finally`；另一实例使用 0 秒等待，拿不到锁即以 `release_rollout_lock_busy` 失败关闭。每次手工执行创建独立 release ID，禁止删除或覆盖同构建的旧失败门禁。
+
 宝塔手工发布任务执行 `scripts/run-baota-release-rollout.mjs`。任务将候选构建身份与 `/health/version` 对齐，验证最近 M07-04 隔离恢复及 `0026`、`0027` 迁移，然后由宝塔 Nginx 以 `$request_id` 分流 5% → 25% → 100%。生产每阶段至少 1,800 秒。默认 1 秒采样提高低流量 S0 的候选 P95 样本分辨率，不能缩短观察时间、改变分流比例或放宽停止阈值。真实采样来自 Nginx `mdzx_upstream_timing` 日志并按候选上游地址筛选；读 P95 只使用 `/api/v1/health/live` 的 GET/HEAD，写 P95 与持久化一致性只使用 `/api/v1/platform/operations/releases/write-probe` 的写请求，5xx 比例仍覆盖阶段内全部候选请求。任务同时发送这两个安全探针，弥补 S0 无客户请求时的最低样本，但不把探针数量冒充用户流量。
 
 写探针只接受 `RELEASE_PROBE_SIGNING_KEY` 生成的 HMAC-SHA256 签名。代理安全的 canonical payload 固定覆盖时间戳、唯一 nonce、release_id 和 sample_id；宝塔 Nginx 会生成 32 位十六进制 `$request_id` 并覆盖 `X-Request-ID`，所以 request_id/trace_id 不参与签名，但 API 必须接受 UUID 或该受限代理格式并保存实际传入的追踪字段。默认只接受 60 秒时间窗口。API 不接收浏览器会话或 `platform:operate` 作为替代授权，也不保存签名或原始 nonce。每个有效样本只执行一条带唯一键的 InnoDB autocommit INSERT，一次提交同时形成持久化与审计事实。若宝塔 Nginx 记录 499 且 `upstream_status="-"`，证明连接在到达上游前由采样客户端中断；发布任务仅允许使用同一 sample_id 重试一次送达，并在证据中单独计数。已经到达候选的任意非 202 响应不得重试候选拒绝、不得从候选样本删除，重试仍未取得上游响应也必须失败关闭。每阶段候选写路由必须全部返回 202，且候选构建新增的持久化样本数必须与候选 Nginx 已到达上游的写样本数完全一致；401、遗漏写入或数量不一致均失败关闭。这样测量真实 MySQL 写提交，同时避免用密码重置业务链的三次独立提交放大同机磁盘周期性 fsync 延迟。当前单机共享 MySQL 经明确授权采用 `innodb_flush_log_at_trx_commit=2`、`sync_binlog=1`，并通过 `binlog-ignore-db=product_scout` 排除 ScoutOps binlog；mysqld 进程故障仍由操作系统页缓存保留 redo，但主机或操作系统故障最多可能丢失约 1 秒已提交事务。现有本地账号 `product_scout@127.0.0.1` 经明确授权增加全局只读 `REPLICATION CLIENT`，仅用于发布任务执行 `SHOW MASTER STATUS` 验证该合同，不授予 `SUPER`。600ms 门槛保持不变，发布任务必须在 preflight 和生产证据中验证该合同，配置漂移时失败关闭。
@@ -22,4 +24,6 @@ Playwright 默认继续使用本地开发端口 4101/5173；宝塔模块验收�
 
 ## 数据迁移与回滚
 
-迁移 `0026_release_rollout_m07_05.up.sql` 与 `0027_release_write_probe_m07_05.up.sql` 兼容 MySQL 5.7/utf8mb4。应用回滚不删除 gate/event/probe 审计。只有确认无发布记录依赖后才能先执行 `0027`、再执行 `0026` 的 down migration；执行前必须先导出发布审计。回滚配置时由宝塔任务写入 0% candidate 分流、执行 Nginx `-t` 后由宝塔 Nginx reload，不使用 systemd、独立 PM2、宿主 crontab 或面板外服务。
+`0027a_release_rollout_attempts_m07_05.up.sql` 将 `(stage, build_sha)` 唯一键替换为普通查询索引，允许同一构建的多次发布尝试保留独立审计。它兼容 MySQL 5.7/utf8mb4；down 迁移只有在不存在重复 stage/build 时才能恢复唯一键，否则必须保留 0027a。完整逆序为 0027a → 0027 → 0026，执行前先导出发布审计。
+
+迁移 `0026_release_rollout_m07_05.up.sql`、`0027_release_write_probe_m07_05.up.sql` 与 `0027a_release_rollout_attempts_m07_05.up.sql` 兼容 MySQL 5.7/utf8mb4。应用回滚不删除 gate/event/probe 审计。只有确认无发布记录依赖后才能按 `0027a`、`0027`、`0026` 的逆序执行 down migration；执行前必须先导出发布审计。回滚配置时由宝塔任务写入 0% candidate 分流、执行 Nginx `-t` 后由宝塔 Nginx reload，不使用 systemd、独立 PM2、宿主 crontab 或面板外服务。

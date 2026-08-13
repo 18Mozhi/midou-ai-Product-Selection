@@ -1,10 +1,17 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "module": "M07-05",
   "stage": "S0",
   "productionManager": "baota",
   "topology": "single-host-stable-and-candidate",
   "capacityClaim": "S0 single host only; no backup server, multi-node or 10000-user claim",
+  "task": {
+    "manager": "baota",
+    "trigger": "manual_only",
+    "concurrentRuns": 1,
+    "lock": "mysql_session_named_lock",
+    "lockTimeoutSeconds": 0
+  },
   "objects": [
     {
       "name": "product-scout-api",
@@ -23,7 +30,10 @@
     {
       "name": "product-scout-release-rollout",
       "kind": "baota-scheduled-task",
-      "schedule": "manual-release-gate",
+      "schedule": "manual-only-disabled-schedule",
+      "concurrentRuns": 1,
+      "lock": "mysql_session_named_lock",
+      "lockName": "scoutops:m07-05:release-rollout",
       "command": "node scripts/run-baota-release-rollout.mjs --run --env-file <BAOTA_RESTRICTED_ENV_FILE>"
     }
   ],

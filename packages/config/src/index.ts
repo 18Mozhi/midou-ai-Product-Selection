@@ -135,7 +135,7 @@ export interface RuntimeConfig {
   openPlatform: { clientTtlDays:number; defaultQuotaPerMinute:number; maxQuotaPerMinute:number; timestampToleranceSeconds:number; nonceTtlSeconds:number; webhookPollMs:number; webhookLeaseSeconds:number; webhookTimeoutMs:number };
   commercial: { recentLimit:number };
   backupRecovery: { primaryRegion:string; recoveryRegion:string; rpoMinutes:number; rtoMinutes:number; maximumDrillAgeDays:number };
-  releaseRollout: { minimumObservationSeconds:number; maximumEvidenceAgeMinutes:number; errorRateStopPercent:number; readP95StopMs:number; writeP95StopMs:number; asyncLagStopSeconds:number; probeTimestampToleranceSeconds:number };
+  releaseRollout: { minimumObservationSeconds:number; maximumEvidenceAgeMinutes:number; errorRateStopPercent:number; readP95StopMs:number; writeP95StopMs:number; asyncLagStopSeconds:number; probeTimestampToleranceSeconds:number; lockName:string };
   selectionAcceptance:{deadlineMs:number};
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
@@ -657,6 +657,7 @@ export function loadRuntimeConfig(
       writeP95StopMs: integer(env,"RELEASE_WRITE_P95_STOP_MS",600,1,60000),
       asyncLagStopSeconds: integer(env,"RELEASE_ASYNC_LAG_STOP_SECONDS",60,1,3600),
       probeTimestampToleranceSeconds: integer(env,"RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS",60,10,300),
+      lockName: text(env,"RELEASE_ROLLOUT_LOCK_NAME","scoutops:m07-05:release-rollout"),
     },
     selectionAcceptance:{deadlineMs:integer(env,"SELECTION_ACCEPTANCE_DEADLINE_MS",180000,180000,180000)},
     evidence: {
