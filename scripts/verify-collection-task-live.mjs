@@ -10,7 +10,7 @@ import { MySqlCollectionTaskRepository } from '../apps/api/dist/mysql-collection
 const requestId=randomUUID(),traceId=requestId,config=loadRuntimeConfig(process.env,'worker'),pool=createDatabasePool(config),redis=createRedisConnection(config),store=new ScopedRedisStore(redis);
 const ids={actor:randomUUID(),organization:randomUUID(),workspace:randomUUID(),provider:randomUUID(),success:randomUUID(),retry:randomUUID(),rate:randomUUID(),blocked:randomUUID(),dead:randomUUID(),expired:randomUUID(),conflict:randomUUID(),outsideActor:randomUUID(),outsideOrganization:randomUUID(),outsideWorkspace:randomUUID(),outsideTask:randomUUID()};
 const taskIds=new Set([ids.success,ids.retry,ids.rate,ids.blocked,ids.dead,ids.expired,ids.conflict,ids.outsideTask]);
-const now=new Date('2026-08-07T12:00:00.000Z');
+const now=new Date();
 let redisReady=false;
 
 async function ensureMigration(path){const sql=await readFile(path,'utf8');for(const statement of sql.split(';').map(value=>value.trim()).filter(Boolean)){const table=statement.match(/^CREATE TABLE `([^`]+)`/)?.[1];if(!table)throw new Error('unexpected migration statement');const[rows]=await pool.query('SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?',[table]);if(Number(rows[0].count)===0)await pool.query(statement);}}

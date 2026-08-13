@@ -15,6 +15,7 @@
 1. 备份 MySQL，确认使用 `product_scout` 业务账号、MySQL 5.7 与 utf8mb4。
 2. 停止 Node Worker，执行 `0016e_collection_tasks_m03_05.up.sql`。
 3. 复用现有依赖构建，运行 `npm run verify:module -- M03-05`；验收包含状态规则、API 合同、真实 MySQL/Redis 事务、桌面和 390px 浏览器状态。
+4. 真实状态机验收必须使用执行时当前时间作为租约基准，不能使用历史固定时间；否则生产 Worker 会按真实时钟将刚创建的验收租约回收为过期租约并返回 `collection_task_lease_invalid`。
 4. 由宝塔启动 Node API。Node Worker 的真实采集轮询须等 M03-07 Provider 执行器完成后再启用。
 5. 在 `/platform-admin/collection` 核对任务、覆盖、子查询、尝试、事件及死信重放；M03-04 运行记录位于子页 `/platform-admin/collection/browser-runtime`。
 

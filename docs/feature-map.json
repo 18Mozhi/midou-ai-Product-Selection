@@ -693,6 +693,7 @@
         "COLLECTION_TASK_LEASE_SECONDS"
       ],
       "runtimeBoundary": "engine and synthetic live verification only; real Provider executor starts at M03-07 and evidence persistence starts at M03-06",
+      "liveVerificationClock": "execution-time current clock; historical fixed timestamps are forbidden because the production Worker must not recover a newly-created verification lease as expired",
       "downstream": {
         "M03-06": "raw evidence normalized records and field provenance",
         "M03-07": "approved real provider executors"
