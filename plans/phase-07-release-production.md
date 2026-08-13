@@ -1122,7 +1122,7 @@
 ### M07-05 原子任务索引
 - 模块目标：发布与回滚。
 - 业务说明：版本、迁移、灰度、监控、自动停止与回滚 Runbook。
-- 生产写门：使用宝塔受限 HMAC 签名的 `/api/v1/platform/operations/releases/write-probe`；canonical 固定为 timestamp/nonce/release_id/sample_id，避免宝塔 Nginx 重写 request_id 破坏签名，同时保存代理实际 request/trace 审计。每个唯一样本只执行一次 MySQL 持久化提交；仅 Nginx 499 且没有 upstream_status 的到达上游前中断可用同一 sample_id 重试一次，证据单独计数，重试仍未送达即失败；不得重试候选拒绝。候选已到达上游的响应必须为 202，且候选 build 的持久化增量必须与候选已到达上游的 Nginx 写样本完全一致；默认 1 秒采样提高低流量 S0 的 P95 样本分辨率，不得用采样调整、幂等回放、密码重置多提交链、放宽 600ms 阈值或降低 1,800 秒观察替代。
+- 生产写门：使用宝塔受限 HMAC 签名的 `/api/v1/platform/operations/releases/write-probe`；canonical 固定为 timestamp/nonce/release_id/sample_id，避免宝塔 Nginx 重写 request_id 破坏签名，同时保存代理实际 request/trace 审计。生产探针将 TCP 连接固定到本机 `127.0.0.1` 的宝塔 Nginx，但保留正式域名 TLS/SNI/Host 与证书校验，避免公网回环波动；不得直连 API 槽或关闭 TLS 验证。每个唯一样本只执行一次 MySQL 持久化提交；仅 Nginx 499 且没有 upstream_status 的到达上游前中断可用同一 sample_id 重试一次，证据单独计数，重试仍未送达即失败；不得重试候选拒绝。候选已到达上游的响应必须为 202，且候选 build 的持久化增量必须与候选已到达上游的 Nginx 写样本完全一致；默认 1 秒采样提高低流量 S0 的 P95 样本分辨率，不得用采样调整、幂等回放、密码重置多提交链、放宽 600ms 阈值或降低 1,800 秒观察替代。
 - 并发门：宝塔任务仅手工触发，不得配置自动日调度；执行器在迁移、门禁或 Nginx 改动前取得 `scoutops:m07-05:release-rollout` MySQL 会话级命名锁并持有整轮，第二实例以 `release_rollout_lock_busy` 失败关闭。迁移 `0027a_release_rollout_attempts_m07_05` 让同一 stage/build 的每次执行拥有独立 release ID，不得覆盖失败历史。
 - 图片依据：按本阶段第 3 节映射读取；页面、布局和交互均须保留可验证截图。
 - 数据边界：任何组织可见记录、文件、队列、事件和导出均执行 organization_id/workspace_id 约束。

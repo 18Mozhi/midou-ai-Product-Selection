@@ -73,6 +73,11 @@ x-scoutops-release-rollout:
   percentages: [5, 25, 100]
   minimumObservationSeconds: 1800
   syntheticProbeIntervalSeconds: 1
+  publicProbe:
+    connectAddress: 127.0.0.1
+    tlsSniHostPreserved: true
+    manager: baota-nginx
+    purpose: 避免公网回环波动，同时保留正式 HTTPS 与宝塔 Nginx 的真实发布采样
   taskTrigger: manual_only
   concurrencyProtection:
     concurrentRuns: 1

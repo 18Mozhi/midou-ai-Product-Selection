@@ -2,6 +2,7 @@
 import { createHash, createHmac, randomUUID } from "node:crypto";
 import { spawn } from "node:child_process";
 import { mkdir, open, readFile, stat, writeFile } from "node:fs/promises";
+import { request as httpsRequest } from "node:https";
 import { basename, dirname, isAbsolute, resolve } from "node:path";
 import mysql from "mysql2/promise";
 import { asyncLagSeconds } from "./release-rollout-async-lag.mjs";
@@ -47,17 +48,46 @@ function parseTimingLines(source, candidatePort) {
 
 const probeCanonical = ({ timestamp, nonce, releaseId, sampleId }) => [timestamp, nonce, releaseId, sampleId].join("\n");
 const probeSignature = (input, signingKey) => createHmac("sha256", signingKey).update(probeCanonical(input)).digest("hex");
+const pinnedLookup = (connectAddress) => (_hostname, options, callback) => options.all ? callback(null, [{ address: connectAddress, family: 4 }]) : callback(null, connectAddress, 4);
 
-async function sendWriteProbe(baseUrl, runtime, releaseId, correlation) {
-  const timestamp = Math.floor(Date.now() / 1000), nonce = randomUUID(), input = { timestamp, nonce, requestId: correlation, traceId: correlation, releaseId, sampleId: correlation };
-  return fetch(`${baseUrl}/api/v1/platform/operations/releases/write-probe`, { method: "POST", headers: { accept: "application/json", "content-type": "application/json", origin: runtime.WEB_ORIGIN, "x-request-id": correlation, "x-trace-id": correlation, "x-release-probe-timestamp": String(timestamp), "x-release-probe-nonce": nonce, "x-release-probe-signature": probeSignature(input, runtime.RELEASE_PROBE_SIGNING_KEY) }, body: JSON.stringify({ release_id: releaseId, sample_id: correlation }), signal: AbortSignal.timeout(10_000) });
+function requestViaPinnedAddress(baseUrl, path, options, connectAddress) {
+  const target = new URL(path, `${baseUrl}/`);
+  const body = options.body ?? null;
+  const headers = { ...options.headers };
+  if (body !== null && headers["content-length"] === undefined) headers["content-length"] = Buffer.byteLength(body);
+  return new Promise((done, reject) => {
+    const request = httpsRequest({
+      protocol: target.protocol,
+      hostname: target.hostname,
+      port: target.port || 443,
+      path: `${target.pathname}${target.search}`,
+      method: options.method ?? "GET",
+      headers,
+      servername: target.hostname,
+      lookup: pinnedLookup(connectAddress),
+    }, (response) => {
+      response.resume();
+      response.once("end", () => done({ status: response.statusCode ?? 0 }));
+      response.once("error", reject);
+    });
+    request.setTimeout(10_000, () => request.destroy(fail("release_public_probe_timeout", "public probe timed out before the Baota Nginx response")));
+    request.once("error", reject);
+    if (body !== null) request.write(body);
+    request.end();
+  });
 }
 
-async function sendWriteProbeWithDeliveryRetry(baseUrl, runtime, releaseId, correlation) {
+async function sendWriteProbe(baseUrl, runtime, releaseId, correlation, connectAddress = null) {
+  const timestamp = Math.floor(Date.now() / 1000), nonce = randomUUID(), input = { timestamp, nonce, requestId: correlation, traceId: correlation, releaseId, sampleId: correlation };
+  const options = { method: "POST", headers: { accept: "application/json", "content-type": "application/json", origin: runtime.WEB_ORIGIN, "x-request-id": correlation, "x-trace-id": correlation, "x-release-probe-timestamp": String(timestamp), "x-release-probe-nonce": nonce, "x-release-probe-signature": probeSignature(input, runtime.RELEASE_PROBE_SIGNING_KEY) }, body: JSON.stringify({ release_id: releaseId, sample_id: correlation }) };
+  return connectAddress ? requestViaPinnedAddress(baseUrl, "/api/v1/platform/operations/releases/write-probe", options, connectAddress) : fetch(`${baseUrl}/api/v1/platform/operations/releases/write-probe`, { ...options, signal: AbortSignal.timeout(10_000) });
+}
+
+async function sendWriteProbeWithDeliveryRetry(baseUrl, runtime, releaseId, correlation, connectAddress = null) {
   let lastError;
   for (let attempt = 0; attempt <= 1; attempt += 1) {
     try {
-      const response = await sendWriteProbe(baseUrl, runtime, releaseId, correlation);
+      const response = await sendWriteProbe(baseUrl, runtime, releaseId, correlation, connectAddress);
       if (response.status !== 499) return response;
       lastError = fail("release_write_probe_transport_aborted", "write probe transport closed before an upstream response");
     } catch (error) { lastError = error; }
@@ -172,7 +202,10 @@ try {
   const migrationGate = await writeGate(pool, effectiveReleaseId, "migration", "passed", { metadata: { migration: migrationName, migrations } }); await event(pool, effectiveReleaseId, migrationGate, "passed");
   originalSite = await readFile(sitePath, "utf8"); const rolloutSite = siteConfig(originalSite, timingLog); await writeFile(sitePath, rolloutSite, { mode: 0o600 });
   nginxBin = runtime.RELEASE_NGINX_BIN ?? "/www/server/nginx/sbin/nginx"; nginxConfigured = true;
-  const publicBase = (runtime.RELEASE_PUBLIC_BASE_URL ?? "https://midouai.mozhiz.cn").replace(/\/$/, "");
+  const publicBase = (runtime.RELEASE_PUBLIC_BASE_URL ?? "https://midouai.mozhiz.cn").replace(/\/$/, ""), publicConnectAddress = runtime.RELEASE_PUBLIC_CONNECT_ADDRESS ?? "127.0.0.1";
+  let publicTarget;
+  try { publicTarget = new URL(publicBase); } catch { throw fail("release_public_origin_invalid", "RELEASE_PUBLIC_BASE_URL must be a valid HTTPS origin"); }
+  if (publicTarget.origin !== new URL(webOrigin).origin || publicTarget.protocol !== "https:" || publicTarget.pathname !== "/" || publicTarget.search || publicTarget.hash || publicConnectAddress !== "127.0.0.1") throw fail("release_public_origin_invalid", "public probes must preserve the production HTTPS origin and connect only to the same-host Baota Nginx loopback");
   const thresholds = { errorRate: Number(runtime.RELEASE_5XX_STOP_BASIS_POINTS ?? 100) / 100, readP95: Number(runtime.RELEASE_READ_P95_STOP_MS ?? 300), writeP95: Number(runtime.RELEASE_WRITE_P95_STOP_MS ?? 600), asyncLag: Number(runtime.RELEASE_ASYNC_LAG_STOP_SECONDS ?? 60) };
   const gates = [];
   for (const percent of [5, 25, 100]) {
@@ -184,8 +217,8 @@ try {
       const correlation = randomUUID();
       const common = { "x-request-id": correlation, "x-trace-id": correlation };
       const settled = await Promise.allSettled([
-        fetch(`${publicBase}/api/v1/health/live`, { headers: { ...common, accept: "application/json" }, signal: AbortSignal.timeout(10_000) }),
-        sendWriteProbeWithDeliveryRetry(publicBase, runtime, effectiveReleaseId, correlation),
+        requestViaPinnedAddress(publicBase, "/api/v1/health/live", { headers: { ...common, accept: "application/json" } }, publicConnectAddress),
+        sendWriteProbeWithDeliveryRetry(publicBase, runtime, effectiveReleaseId, correlation, publicConnectAddress),
       ]);
       if (settled[1].status === "rejected") writeDeliveryFailures += 1;
       lagSamples.push(await asyncLagSeconds(pool)); await sleep(intervalSeconds * 1000);
@@ -206,7 +239,7 @@ try {
     await writeGate(pool, effectiveReleaseId, `canary_${percent}`, "passed", { ...metrics, startedAt: gateStarted, metadata: { read_samples: reads.length, write_samples: writes.length, durable_write_samples: durableWriteSamples, pre_upstream_transport_aborts: transportAborts.length, write_delivery_failures: writeDeliveryFailures } }); await event(pool, effectiveReleaseId, runningGate, "passed", null, { ...metrics, durableWriteSamples, preUpstreamTransportAborts: transportAborts.length, writeDeliveryFailures }); gates.push({ ...metrics, readSamples: reads.length, writeSamples: writes.length, durableWriteSamples, preUpstreamTransportAborts: transportAborts.length, writeDeliveryFailures });
   }
   await pool.query("UPDATE deployment_releases SET status='healthy',finished_at=UTC_TIMESTAMP(3),updated_at=UTC_TIMESTAMP(3) WHERE id=?", [effectiveReleaseId]);
-  const evidence = { schemaVersion: 4, module: "M07-05", manager: "baota", topology: "single_host_stable_and_candidate", backupServerUsed: false, releaseId: effectiveReleaseId, buildSha: runtime.BUILD_SHA, appVersion: runtime.APP_VERSION, configFingerprint: identity.config_fingerprint, migrationVersion: migrationName, concurrencyProtection: { taskTrigger: "manual_only", lock: "mysql_session_named_lock", lockName, lockTimeoutSeconds: 0, acquired: true, attemptHistoryPreserved: true }, mysqlDurability, mysqlResourceProfile, writeProbe: { path: "/api/v1/platform/operations/releases/write-probe", signed: true, canonicalFields: ["timestamp","nonce","release_id","sample_id"], proxyRequestIdsExcluded: true, candidatePersistenceMatched: true, durableStatementsPerSample: 1, preUpstreamTransportRetryAttempts: 1, candidateResponsesRemainFailClosed: true }, percentages: [5,25,100], minimumObservationSeconds: observeSeconds, sampleIntervalSeconds: intervalSeconds, gates, automaticStopArmed: true, rollbackTarget: { sameHost: true, stablePort }, requestId, traceId, capturedAt: new Date().toISOString() };
+  const evidence = { schemaVersion: 5, module: "M07-05", manager: "baota", topology: "single_host_stable_and_candidate", backupServerUsed: false, releaseId: effectiveReleaseId, buildSha: runtime.BUILD_SHA, appVersion: runtime.APP_VERSION, configFingerprint: identity.config_fingerprint, migrationVersion: migrationName, concurrencyProtection: { taskTrigger: "manual_only", lock: "mysql_session_named_lock", lockName, lockTimeoutSeconds: 0, acquired: true, attemptHistoryPreserved: true }, publicProbe: { origin: publicTarget.origin, connectAddress: publicConnectAddress, tlsHostnamePreserved: true, manager: "baota_nginx" }, mysqlDurability, mysqlResourceProfile, writeProbe: { path: "/api/v1/platform/operations/releases/write-probe", signed: true, canonicalFields: ["timestamp","nonce","release_id","sample_id"], proxyRequestIdsExcluded: true, candidatePersistenceMatched: true, durableStatementsPerSample: 1, preUpstreamTransportRetryAttempts: 1, candidateResponsesRemainFailClosed: true }, percentages: [5,25,100], minimumObservationSeconds: observeSeconds, sampleIntervalSeconds: intervalSeconds, gates, automaticStopArmed: true, rollbackTarget: { sameHost: true, stablePort }, requestId, traceId, capturedAt: new Date().toISOString() };
   await mkdir(dirname(evidencePath), { recursive: true, mode: 0o700 }); await writeFile(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`, { mode: 0o600 }); process.stdout.write(`${JSON.stringify(evidence)}\n`);
 } catch (error) {
   if (nginxConfigured && splitPath && stablePort && candidatePort) {

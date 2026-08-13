@@ -64,7 +64,7 @@ test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundar
   assert.deepEqual(manifest.canary.syntheticWriteCanonicalFields, ["timestamp", "nonce", "release_id", "sample_id"]);
   assert.equal(manifest.canary.proxyRequestIdsExcludedFromSignature, true);
   assert.equal(manifest.canary.candidatePersistenceParityRequired, true);
-  assert.equal(manifest.schemaVersion, 4);
+  assert.equal(manifest.schemaVersion, 5);
   assert.deepEqual(manifest.mysqlDurability, {
     innodbFlushLogAtTrxCommit: 2,
     syncBinlog: 1,
@@ -334,6 +334,32 @@ test("M07-05 retries only pre-upstream transport aborts without relaxing candida
   }
 });
 
+test("M07-05 reaches the BaoTa Nginx loopback while preserving production TLS identity", async () => {
+  const [runner, manifest, envExample, schema, featureMap, architecture, runbook, blueprint] = await Promise.all([
+    read("scripts/run-baota-release-rollout.mjs"),
+    read("infra/baota/release-rollout-manifest.json").then(JSON.parse),
+    read("config/env.example"),
+    read("config/schema.json").then(JSON.parse),
+    read("docs/feature-map.json"),
+    read("docs/architecture/m07-05-release-rollout.md"),
+    read("docs/runbooks/m07-05-release-rollout.md"),
+    read("new-product-enterprise-blueprint.md"),
+  ]);
+  assert.equal(manifest.canary.publicProbeConnectAddress, "127.0.0.1");
+  assert.equal(manifest.canary.publicProbePreservesTlsHostname, true);
+  assert.match(runner, /RELEASE_PUBLIC_CONNECT_ADDRESS \?\? "127\.0\.0\.1"/);
+  assert.match(runner, /lookup:/);
+  assert.match(runner, /options\.all \? callback\(null, \[\{ address: connectAddress, family: 4 \}\]\)/);
+  assert.match(runner, /servername: target\.hostname/);
+  assert.doesNotMatch(runner, /rejectUnauthorized:\s*false/);
+  assert.match(envExample, /^RELEASE_PUBLIC_CONNECT_ADDRESS=127\.0\.0\.1$/m);
+  assert.ok(schema.backendGroups.releaseRollout.includes("RELEASE_PUBLIC_CONNECT_ADDRESS"));
+  for (const source of [featureMap, architecture, runbook, blueprint]) {
+    assert.match(source, /公网回环/);
+    assert.match(source, /TLS\/SNI\/Host/);
+  }
+});
+
 test("M07-05 uses one-second production sampling without relaxing rollout gates", async () => {
   const [manifest, runner, envExample, openapi, featureMap, architecture, runbook, verifier, evidenceSchema] = await Promise.all([
     read("infra/baota/release-rollout-manifest.json").then(JSON.parse),
@@ -354,7 +380,10 @@ test("M07-05 uses one-second production sampling without relaxing rollout gates"
   assert.ok(evidenceSchema.required.includes("sampleIntervalSeconds"));
   assert.ok(evidenceSchema.required.includes("mysqlDurability"));
   assert.ok(evidenceSchema.required.includes("mysqlResourceProfile"));
-  assert.equal(evidenceSchema.properties.schemaVersion.const, 4);
+  assert.equal(evidenceSchema.properties.schemaVersion.const, 5);
+  assert.ok(evidenceSchema.required.includes("publicProbe"));
+  assert.equal(evidenceSchema.properties.publicProbe.properties.connectAddress.const, "127.0.0.1");
+  assert.equal(evidenceSchema.properties.publicProbe.properties.tlsHostnamePreserved.const, true);
   assert.equal(evidenceSchema.properties.mysqlDurability.properties.innodbFlushLogAtTrxCommit.const, 2);
   assert.equal(evidenceSchema.properties.mysqlDurability.properties.productScoutBinlogExcluded.const, true);
   assert.equal(evidenceSchema.properties.mysqlResourceProfile.properties.innodbBufferPoolBytes.const, 4294967296);

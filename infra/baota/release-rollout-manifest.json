@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "module": "M07-05",
   "stage": "S0",
   "productionManager": "baota",
@@ -41,6 +41,9 @@
     "percentages": [5, 25, 100],
     "minimumObservationSeconds": 1800,
     "syntheticProbeIntervalSeconds": 1,
+    "publicProbeConnectAddress": "127.0.0.1",
+    "publicProbePreservesTlsHostname": true,
+    "publicProbeTransport": "production HTTPS origin with TLS/SNI/Host preserved over the same-host Baota Nginx loopback; no public-IP hairpin dependency",
     "routingKey": "$request_id",
     "measurementSource": "baota-nginx-upstream-timing-log",
     "syntheticReadPath": "/api/v1/health/live",
