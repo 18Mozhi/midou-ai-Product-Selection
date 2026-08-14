@@ -920,11 +920,11 @@ P07 发布门禁首先由 `verification/release-matrix.json` 冻结 P00–P06 �
 
 本地浏览器门禁测量代表性页面 LCP、CLS 和交互响应代理，不能替代真实用户 INP、生产核心 API P95、队列等待或三分钟真实来源旅程；这些生产/预发布签发项仍分别由 M07-05 和 M07-06 完成。矩阵复用 `VERIFY_COMMAND_TIMEOUT_MS` 与 `VERIFY_REPORT_DIR`，完整发布任务可将前者临时调至 900000 毫秒，不新增环境变量。
 
-M07-01 已由模块自动验收 `f12a7160-90ba-437c-9e6f-fc23149b9077` 通过：构建、248 个 Node 测试、9 条 MySQL 5.7/Redis 真实链路、216 个桌面/390px 浏览器用例、性能预算探针和文档门均重新执行成功。该结果只证明全链路回归矩阵本身完成，不代表 P07、生产签发、真实选品验收、P08 多节点或 10,000 用户能力完成。
+M07-01 最新同提交模块自动验收 `6eaae7d4-46e0-4798-b6c4-4b515fa90a45` 通过：构建、289 个 Node 测试、MySQL 5.7/Redis 真实链路、216 个桌面/390px 浏览器用例、2 项性能预算探针和文档门均重新执行成功。该结果只证明全链路回归矩阵本身完成，不代表 P08 多节点或 10,000 用户能力完成。
 
 M07-02 安全门禁由 `verification/security-gate.json` 冻结依赖漏洞、版本库秘密、浏览器危险 DOM 与敏感存储、新窗口 opener、SQL 插值、CSRF、Webhook SSRF、上传入口、越权、日志脱敏和宝塔边缘响应头规则；`scripts/verify-security-gate.mjs` 对扫描异常和任一发现失败闭合，并输出脱敏 `run_id`/`trace_id` 报告。它不新增生产表、API、页面、权限或常驻服务；MySQL 5.7 权限和安全运营链路使用既有真实验收重跑。HSTS 只有在生产 TLS 全链路确认后才允许配置，当前不得虚假声明。
 
-M07-02 已由模块自动验收 `3bd453d5-0016-418e-8c33-e42132341def` 通过：全仓构建、策略单测、0 高危/严重生产依赖漏洞、静态安全门、MySQL 5.7 RBAC 隔离与脱敏安全运营真实链路、文档门均重新执行成功。该结果只证明发布安全门禁完成，不代表 P07 生产部署、备份恢复、发布签发、真实选品验收或 P08 容量完成。
+M07-02 最新同提交模块自动验收 `489e59a2-ee7e-426e-9321-7b22181f0c1b` 通过：全仓构建、策略单测、0 高危/严重生产依赖漏洞、静态安全门、MySQL 5.7 RBAC 隔离与脱敏安全运营真实链路、文档门均重新执行成功。该结果不代表 P08 容量或高可用能力完成。
 
 M07-03 部署合同以 `infra/baota/service-manifest.json` schema v2 锁定惠州 `192.168.1.220`、`midouai.mozhiz.cn`、十个宝塔对象（含 M07-05 同机候选 API 与发布任务）、环境分组、日志秘密排除和 S0 容量边界。`scripts/verify-baota-deployment.mjs --preflight` 只验证发布包；`--production` 必须同时看到 manifest healthy 签发与忽略目录中的结构化生产证据，覆盖面板对象、当前 Git commit 的同一发布身份、live/ready/version、Worker/Crawler 心跳、MySQL 5.7/utf8mb4、本机 Redis 和日志。生产对象全部由宝塔创建和管理；M07-04 只验证同机逻辑恢复，M07-05 增加同机候选 API 与渐进发布，但仍只声明 S0 单机容量且没有备用服务器。
 
@@ -934,19 +934,21 @@ M07-05 宝塔发布任务必须仅手工触发，不得配置每日或其他自�
 
 M07-05 的 MySQL 异步延迟只测量宝塔 Node Worker 实际可领取的显式队列到期工作与过期租约；没有当前消费者的领域审计/后续投递 Outbox 必须保留事实，但不冒充可执行队列。队列表由发布 manifest、`scripts/release-rollout-async-lag.mjs` 和自动测试共同锁定；队列 `DATETIME(3)` 与 Worker 统一使用 MySQL 会话 `NOW(3)` 判断到期，避免非 UTC MySQL 系统时区与 `UTC_TIMESTAMP(3)` 混用导致固定时差假积压。禁止动态扫描任意 `status + available_at` 表、删除审计记录或放宽 60 秒停止阈值。
 
-M07-03 已由模块自动验收 `8cb425c1-1606-4e4c-a736-8d29e27caf32` 通过：全仓构建、MySQL 5.7/Redis/API 真实探针、Python 心跳、桌面/390px 生产状态视觉、文档门和同 commit 生产证据均成功。该结果只证明 S0 宝塔部署完成，不代表 M07-04 同机隔离恢复、P07 或 P08 容量完成。
+M07-03 最新同提交模块自动验收 `eae6ebd9-8fb2-4124-8345-98dccacb6450` 通过：全仓构建、MySQL 5.7/Redis/API 真实探针、Python 心跳、桌面/390px 生产状态视觉、文档门和同 commit 生产证据均成功。该结果只证明 S0 宝塔部署完成，不代表 P08 容量完成。
 
 M07-04 使用 `backup_recovery_runs` 与 `backup_recovery_assets` 记录惠州当前主机、同机独立加密恢复目录、AES-256-GCM 资产、实际 RPO/RTO 和逻辑隔离演练核验。`/api/v1/platform/operations/backup-recovery` 仅向 `platform:operate` 返回脱敏事实；备份和恢复只由宝塔计划任务执行。业务元数据连接固定使用 `product_scout@127.0.0.1`，管理员备份步骤只通过 `BACKUP_MYSQL_SOCKET` 使用已有 `root@localhost` 受限凭据，不新增 TCP root 账号。状态严格失败关闭：缺恢复副本完整性证据或缺 90 天内隔离恢复时为 `blocked/stale`，不得写成 `verified`。生产验收要求本机逻辑损坏场景下 MySQL RPO 不超过 15 分钟、RTO 不超过 4 小时，并核验业务数据、审计链、证据哈希和权限边界；该验收明确不保护整机、磁盘或机房故障，也不构成异地灾备能力。
 
-M07-04 已由模块自动验收 `d1ede17d-0f7b-4f42-b80c-2d5dac118651` 通过：同 commit 宝塔任务完成全量库、binlog、证据、导出与非秘密配置加密备份，恢复副本完整性、175 张表、审计链、证据哈希和权限边界均通过；实测 RPO 0.03 分钟、RTO 0.45 分钟。该结果只证明当前惠州单机的逻辑恢复能力，不保护整机、磁盘或机房故障，也不代表 P07、P08 多节点或 10,000 用户能力完成。
+M07-04 最新同提交模块自动验收 `46a76ff6-6059-41e4-bfec-c5693209b604` 通过：宝塔任务完成全量库、binlog、证据、导出与非秘密配置加密备份，恢复副本完整性、175 张表、审计链、证据哈希和权限边界均通过。该结果只证明当前惠州单机的逻辑恢复能力，不保护整机、磁盘或机房故障，也不代表 P08 多节点或 10,000 用户能力完成。
 
-M07-05 已由 schema v4 同提交模块自动验收 `82f35776-52a9-4e00-90bc-a7ca76d452cb` 通过：宝塔同机候选构建 `eabce9a0bbad5b711de9f7f36e2f02db0737d25b` 的发布 `f1e33e3b-ab99-4b6e-8d30-e94285b6cd1e` 完成 5%/25%/100% 三阶段 1,800/1,801/1,800 秒生产观察，样本分别为 162/787/3,304，5xx 均为 0%，读 P95 为 3/2/2 ms，写 P95 为 6/7/5 ms，异步延迟均为 0，候选写探针持久化分别为 82/373/1,644 且与候选写样本一致，到达上游前中断和投递失败均为 0；宝塔任务仅手工触发，第二实例被 MySQL 会话命名锁以 `release_rollout_lock_busy` 阻断且历史尝试保留。Linux Chromium、中文字体、桌面/390px E2E、MySQL 5.7 真实探针、文档门和生产同 commit 身份共 11/11 命令全部通过。该结果只证明惠州当前单机的应用发布与同机回滚能力，不是备用服务器、主机故障保护、多节点或 10,000 用户能力。
+M07-05 已由 schema v5 同提交模块自动验收 `0784e022-93e4-421d-9524-ef818ecfcda1` 通过：宝塔同机候选构建 `162cb10664e6029284cf36594fba0d21a2e41f21` 的发布 `ef868169-253b-41ec-97a2-d3a8a822ed9c` 完成 5%/25%/100% 三阶段各 1,800 秒生产观察，样本分别为 211/883/3,578，错误率均为 0，读 P95 为 2/2/2 ms，写 P95 为 5/5/4 ms，异步延迟均为 0，候选写探针持久化分别为 105/446/1,771 且与候选写样本一致，到达上游前中断和投递失败均为 0；宝塔任务仅手工触发，第二实例被 MySQL 会话命名锁以 `release_rollout_lock_busy` 阻断且历史尝试保留。Linux Chromium、中文字体、桌面/390px E2E、MySQL 5.7 真实探针、文档门和生产同 commit 身份共 11/11 命令全部通过。证据 SHA-256 为 `7e3acbf0619f0370e025303ef0792b2697b6829d1d79d3eeb85e66fc4da88398`。该结果只证明惠州当前单机的应用发布与同机回滚能力，不是备用服务器、主机故障保护、多节点或 10,000 用户能力。
 
-此前同机发布复验发现共享 MySQL 在其他数据库全表扫描期间，稳定与候选槽的单行写探针 P95 同步超过 600 ms，自动停止与回滚按合同生效。惠州 16 GiB 单机因此由宝塔有限任务固定 `innodb_buffer_pool_size=4096M`、`innodb_buffer_pool_instances=4`、`innodb_io_capacity=1000`、`innodb_io_capacity_max=4000`、`innodb_flush_neighbors=0`、`innodb_flush_method=O_DIRECT`，保留 0600 回滚快照并通过两 API 槽、Worker、Crawler 健康门；`flush_log=2/sync_binlog=1` 持久性合同和 5/25/100、1,800 秒、600 ms 门槛均未放宽。上述 schema v4 完整生产灰度已在该资源配置下重新签发。
+此前同机发布复验发现共享 MySQL 在其他数据库全表扫描期间，稳定与候选槽的单行写探针 P95 同步超过 600 ms，自动停止与回滚按合同生效。惠州 16 GiB 单机因此由宝塔有限任务固定 `innodb_buffer_pool_size=4096M`、`innodb_buffer_pool_instances=4`、`innodb_io_capacity=1000`、`innodb_io_capacity_max=4000`、`innodb_flush_neighbors=0`、`innodb_flush_method=O_DIRECT`，保留 0600 回滚快照并通过两 API 槽、Worker、Crawler 健康门；`flush_log=2/sync_binlog=1` 持久性合同和 5/25/100、1,800 秒、600 ms 门槛均未放宽。上述 schema v5 完整生产灰度已在该资源配置下重新签发。
 
-M07-06 通过 `/opportunities/start` 和 `/api/v1/selection-journeys` 把普通成员的真实输入、采集任务、首个原始证据或 `succeeded_empty`/明确受阻终态、人工决策与证据查看串成一条可计时旅程。服务器从已登录会话解析组织和工作区并选择已启用 `google_news_search`，成员只需 `task:create`、`opportunity:read` 和 `opportunity:decide`，不得获得或使用 `provider:configure`、`collection:replay` 或平台权限。原始证据继续按组织、工作区、Provider 和来源键去重，但每次任务必须通过 `collection_task_evidence_links` 保存范围化关联；重复输入复用不可变证据时也必须先校验任务、子查询和租户范围并写关联审计，不能因命中旧证据而让新旅程停在 accepted。若同 GUID 的 Google RSS 仅改变未消费 XML 包装且规范 URL、Parser、Adapter、Schema 与规范载荷完全一致，复用旧不可变证据并在 `evidence.linked` 记录 `content_changed` 及新旧内容哈希；规范事实任一变化仍以去重冲突失败关闭，禁止覆盖。`SELECTION_ACCEPTANCE_DEADLINE_MS` 固定为 `180000`，启动检查拒绝放宽；创建、15 秒可见和 180 秒终态均由惠州单机宝塔有限任务的真实生产证据签发。构建 `eabce9a0bbad5b711de9f7f36e2f02db0737d25b` 的真实旅程在 116/204/4,399 ms 完成创建、可见和 `result_ready` 终态，普通 member 已记录 `observe` 决策并查看原始证据；模块自动验收 `e2e2654a-6364-4cc6-a7b1-4997dfd3d39f` 的 11/11 命令通过。演示数据、平台管理员代操作、手填组织 ID 或直接写库都不能计入验收；该结果仍不能代替 P07 阶段门或 P08 容量验收。
+M07-06 通过 `/opportunities/start` 和 `/api/v1/selection-journeys` 把普通成员的真实输入、采集任务、首个原始证据或 `succeeded_empty`/明确受阻终态、人工决策与证据查看串成一条可计时旅程。服务器从已登录会话解析组织和工作区并选择已启用 `google_news_search`，成员只需 `task:create`、`opportunity:read` 和 `opportunity:decide`，不得获得或使用 `provider:configure`、`collection:replay` 或平台权限。原始证据继续按组织、工作区、Provider 和来源键去重，但每次任务必须通过 `collection_task_evidence_links` 保存范围化关联；重复输入复用不可变证据时也必须先校验任务、子查询和租户范围并写关联审计，不能因命中旧证据而让新旅程停在 accepted。若同 GUID 的 Google RSS 仅改变未消费 XML 包装且规范 URL、Parser、Adapter、Schema 与规范载荷完全一致，复用旧不可变证据并在 `evidence.linked` 记录 `content_changed` 及新旧内容哈希；规范事实任一变化仍以去重冲突失败关闭，禁止覆盖。`SELECTION_ACCEPTANCE_DEADLINE_MS` 固定为 `180000`，启动检查拒绝放宽；创建、15 秒可见和 180 秒终态均由惠州单机宝塔有限任务的真实生产证据签发。构建 `162cb10664e6029284cf36594fba0d21a2e41f21` 的最新真实旅程以 4,081 ms 进入 `result_ready` 终态，普通 member 已记录 `observe` 决策并查看原始证据；模块自动验收 `78001216-8e65-44fb-81cf-9570f9f9534b` 的 11/11 命令通过，证据 SHA-256 为 `bff46ad304128bf14240517c538a3091aeff5d67ecc49c0518c6e9c4a63643c5`。演示数据、平台管理员代操作、手填组织 ID 或直接写库都不能计入验收；该结果不能代替 P08 容量验收。
 
 M07-06 可复用上述 ScoutOps 项目专用 HTTP CONNECT 代理访问固定 Google News 来源，但代理配置不属于成员输入，普通成员验收账号也不得获得或读取代理凭证。生产签发仍以同一惠州单机、同一构建、固定 10 秒来源健康门和 180 秒旅程门为准；代理仅改变允许的出站传输路径，不改变来源、数据合同、权限或阈值。
+
+P07 已在实现提交 `162cb10664e6029284cf36594fba0d21a2e41f21` 上完成 M07-01 至 M07-06 依赖顺序模块验收、`npm run verify:phase -- P07`、文档、计划、安全、宝塔、恢复、灰度和真实旅程收尾门；run_id/trace_id 为 `5966a752-76b0-4d93-ad1a-30de0cb091d2`。阶段报告和收尾报告 SHA-256 分别为 `323e5e6b7ca4feff8a2602bee7cefd242483039022286b3fa339cfdc6d23cf1e` 与 `db35570d10845f4f6316c5a812cc70eafee83c3383b392007e1a93494a0fa756`。包含本状态记录的后续提交仍必须先重新生成匹配 Git HEAD 的宝塔生产证据并重跑 P07 阶段门，才能实际开始 P08；此处不声明备用服务器、主机故障保护、多节点或 10,000 用户能力。
 
 ### 13.2 数据质量量化门槛
 

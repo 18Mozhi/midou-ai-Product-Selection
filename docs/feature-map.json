@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "project": "ScoutOps / 实时选品运营平台",
-  "status": "P00_P01_P02_P03_P04_P05_P06_completed_P07_in_progress",
+  "status": "P00_P01_P02_P03_P04_P05_P06_P07_completed_P08_pending",
   "sourceOfTruth": "../new-product-enterprise-blueprint.md",
   "locateCommand": "node scripts/locate_flow_v4.mjs \"<keyword>\"",
   "deliveryPlan": "../plans/README.md",
   "implementation": {
-    "currentPhase": "P07",
+    "currentPhase": "P08",
     "completedModules": [
       "M00-01",
       "M00-07",
@@ -1428,8 +1428,8 @@
       "imageEvidence": ["core 10 platform cockpit", "concept 61 platform operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 release states", "four reviewed Linux Chromium visual baselines with Chinese glyphs"],
       "supersededProductionEvidence": {"releaseId": "8b6114fe-fafa-4c6c-8a5d-ebd52ffe65ae", "buildSha": "e22968896ab087647ad171f00a6f107c6824acf9", "capturedAt": "2026-08-11T19:22:54.886Z", "sha256": "649a4b18ddec6d5f4967dce0ce2f992c4c5aa5ce45a4cb272ce0c31597376d1d", "reason": "schema v3 lacked manual-only task and cross-process lock evidence"},
       "lastFailedProductionAttempt": {"releaseId": "386e3a32-578b-44c3-8ed6-8ccbd2e52942", "buildSha": "b8d4611e398cb24599d7dff42482ad439f068db3", "failureCode": "release_write_probe_delivery_failed", "rollback": "stable 95a3563 on port 4101 via BaoTa finite task", "evidenceAccepted": false, "cause": "server public-IP hairpin stopped delivering probes while both local API slots remained healthy"},
-      "latestVerifiedProductionEvidence": {"releaseId": "f1e33e3b-ab99-4b6e-8d30-e94285b6cd1e", "buildSha": "eabce9a0bbad5b711de9f7f36e2f02db0737d25b", "capturedAt": "2026-08-13T10:24:01.231Z", "sha256": "b454dc3cd3cbc3c1b5eb216722bb84756f30a945e5cacecc6ff5e75f09bf18bf", "observationSeconds": [1800, 1801, 1800], "sampleCounts": [162, 787, 3304], "errorRates": [0, 0, 0], "readP95Ms": [3, 2, 2], "writeP95Ms": [6, 7, 5], "asyncLagSeconds": [0, 0, 0], "durableWriteSamples": [82, 373, 1644]},
-      "verificationRunId": "82f35776-52a9-4e00-90bc-a7ca76d452cb",
+      "latestVerifiedProductionEvidence": {"releaseId": "ef868169-253b-41ec-97a2-d3a8a822ed9c", "buildSha": "162cb10664e6029284cf36594fba0d21a2e41f21", "capturedAt": "2026-08-14T00:40:00.439Z", "sha256": "7e3acbf0619f0370e025303ef0792b2697b6829d1d79d3eeb85e66fc4da88398", "schemaVersion": 5, "observationSeconds": [1800, 1800, 1800], "sampleCounts": [211, 883, 3578], "errorRates": [0, 0, 0], "readP95Ms": [2, 2, 2], "writeP95Ms": [5, 5, 4], "asyncLagSeconds": [0, 0, 0], "durableWriteSamples": [105, 446, 1771]},
+      "verificationRunId": "0784e022-93e4-421d-9524-ef818ecfcda1",
       "status": "module_verified"
     },
     "selectionAcceptance": {
@@ -1445,8 +1445,8 @@
       "evidenceAssociation": "every captured or deduplicated evidence result is linked to the current collection task only after organization workspace subquery and provider scope validation; an RSS wrapper-only hash change may reuse immutable evidence only when canonical URL parser adapter schema and normalized payload are identical, and evidence.linked audits content_changed plus both hashes; a normalized fact conflict fails closed per record without overwriting evidence or retrying the whole source, while independent records continue and yield completed_with_warnings when any remain available",
       "runtimeBoundary": "finite Baota task on the current Huizhou single host; no daemon backup server multi-node or 10000-user claim",
       "imageEvidence": ["core 01 and 04-10", "concept 53 mobile home", "concept 54 mobile opportunity detail", "concept 72 not found", "desktop and 390 real journey states"],
-      "latestVerifiedProductionEvidence": {"buildSha": "eabce9a0bbad5b711de9f7f36e2f02db0737d25b", "capturedAt": "2026-08-13T10:40:37.496Z", "sha256": "e7685a91f01ef3115f4aaac7e09a266dbc169a3ac43241a2af45ff583a4cf567", "createApiMs": 116, "acceptedVisibleMs": 204, "terminalMs": 4399, "terminalState": "result_ready", "decisionAction": "observe", "evidenceViewed": true},
-      "verificationRunId": "e2e2654a-6364-4cc6-a7b1-4997dfd3d39f",
+      "latestVerifiedProductionEvidence": {"buildSha": "162cb10664e6029284cf36594fba0d21a2e41f21", "capturedAt": "2026-08-14T01:04:29.115Z", "sha256": "bff46ad304128bf14240517c538a3091aeff5d67ecc49c0518c6e9c4a63643c5", "journeyId": "414b07cc-af3f-4e56-925e-8a7a13a9a0ca", "terminalMs": 4081, "terminalState": "result_ready", "decisionAction": "observe", "decisionRecorded": true, "evidenceViewed": true},
+      "verificationRunId": "78001216-8e65-44fb-81cf-9570f9f9534b",
       "status": "module_verified"
     }
   },
@@ -1496,6 +1496,14 @@
       "runId": "e1ab135d-20f6-450a-90c0-de9746ef6575",
       "status": "phase_verified",
       "modules": ["M06-01", "M06-02", "M06-03", "M06-04", "M06-05", "M06-06"]
+    },
+    "P07": {
+      "runId": "5966a752-76b0-4d93-ad1a-30de0cb091d2",
+      "status": "phase_verified",
+      "buildSha": "162cb10664e6029284cf36594fba0d21a2e41f21",
+      "reportSha256": "323e5e6b7ca4feff8a2602bee7cefd242483039022286b3fa339cfdc6d23cf1e",
+      "closureSha256": "db35570d10845f4f6316c5a812cc70eafee83c3383b392007e1a93494a0fa756",
+      "modules": ["M07-01", "M07-02", "M07-03", "M07-04", "M07-05", "M07-06"]
     }
   },
   "uiReference": {
