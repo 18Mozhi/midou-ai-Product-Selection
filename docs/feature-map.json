@@ -1485,6 +1485,22 @@
       "loadBalancingEnabled": false,
       "backupServerUsed": false,
       "status": "module_verified"
+    },
+    "mysqlResilience": {
+      "module": "M08-03",
+      "entrypoints": ["../packages/database/src/index.ts", "../apps/api/src/mysql-resilience-probe.ts", "../apps/api/src/mysql-resilience-service.ts", "../apps/api/src/mysql-resilience-repository.ts", "../apps/api/src/mysql-resilience-routes.ts", "../apps/web/src/components/MySqlResilienceCenter.vue", "../infra/baota/mysql-single-primary-manifest.json", "../scripts/verify-mysql-resilience-production.mjs"],
+      "routes": ["/platform-admin/mysql", "/api/v1/platform/operations/mysql"],
+      "scope": "M08-03 current Huizhou BaoTa MySQL 5.7 single-primary durability I/O slow-query capacity and recovery evidence",
+      "truthBoundary": "ready requires MySQL 5.7 writable single primary, ROW binlog that includes product_scout, the reviewed durability contract, readable master status, no replica, resource watermarks and current encrypted same-host isolated recovery evidence",
+      "permission": "the operations view requires platform:operate and transactionally appends observation view and platform audit with request_id trace_id; no host port account password path binlog name or SQL is returned",
+      "configuration": ["MYSQL_CONNECTION_WARNING_PERCENT", "MYSQL_CONNECTION_STOP_PERCENT", "MYSQL_DATA_WARNING_PERCENT", "MYSQL_DATA_STOP_PERCENT", "MYSQL_SLOW_QUERY_WARNING_PER_MINUTE", "MYSQL_SLOW_QUERY_STOP_PER_MINUTE", "MYSQL_BUFFER_POOL_HIT_WARNING_PERCENT", "MYSQL_MAX_RECOVERY_DRILL_AGE_DAYS", "MYSQL_MAX_RPO_MINUTES", "MYSQL_MAX_RTO_MINUTES", "MYSQL_RESILIENCE_PRODUCTION_EVIDENCE_FILE", "MYSQL_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES"],
+      "runtimeBoundary": "one BaoTa MySQL 5.7 primary and one current API on the current Huizhou host with no read replica load balancer backup server or capacity claim",
+      "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 MySQL resilience baselines"],
+      "status": "implementation_ready_production_pending",
+      "capacityClaim": "unverified",
+      "loadBalancingEnabled": false,
+      "replicaEnabled": false,
+      "backupServerUsed": false
     }
   },
   "phaseVerification": {
@@ -1741,6 +1757,12 @@
       "view": "RedisResilienceCenter",
       "domain": "redis-resilience",
       "status": "M08-02_module_verified"
+    },
+    {
+      "path": "/platform-admin/mysql",
+      "view": "MySqlResilienceCenter",
+      "domain": "mysql-resilience",
+      "status": "M08-03_implementation_ready_production_pending"
     }
   ],
   "apiGroups": [
@@ -1834,6 +1856,7 @@
     },
     { "prefix": "/api/v1/platform/operations/topology", "domain": "runtime-topology", "status": "M08-01_single_server_module_verified" },
     { "prefix": "/api/v1/platform/operations/redis", "domain": "redis-resilience", "status": "M08-02_module_verified" },
+    { "prefix": "/api/v1/platform/operations/mysql", "domain": "mysql-resilience", "status": "M08-03_implementation_ready_production_pending" },
     { "prefix": "/api/v1/platform/commercial", "domain": "commercial-operations", "status": "M06-06_module_verified" },
     { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
   ],

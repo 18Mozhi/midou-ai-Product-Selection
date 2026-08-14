@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "module": "M08-03",
+  "stage": "S0",
+  "status": "implementation_ready",
+  "manager": "baota",
+  "mode": "single_primary",
+  "engine": "MySQL 5.7",
+  "productionRegion": "惠州",
+  "durability": {"logBin": true, "binlogFormat": "ROW", "innodb_flush_log_at_trx_commit": 2, "sync_binlog": 1},
+  "limits": {"connectionWarningPercent":75,"connectionStopPercent":90,"dataWarningPercent":75,"dataStopPercent":90,"slowQueryWarningPerMinute":5,"slowQueryStopPerMinute":20},
+  "recovery": {"maximumRpoMinutes":15,"maximumRtoMinutes":240,"maximumDrillAgeDays":90,"sameHostEncryptedCopy":true,"isolatedRestoreRequired":true},
+  "topologyClaims": {"singlePrimary":true,"replicaEnabled":false,"loadBalancingEnabled":false,"backupServerUsed":false,"capacityClaim":"unverified"},
+  "productionActions": [
+    "Use a BaoTa finite task to back up the active MySQL configuration, inspect MySQL 5.7 variables and apply only the reviewed durability and I/O baseline",
+    "Restart MySQL only through BaoTa and verify API Worker Crawler database readiness, master status, scoped read write cleanup, encrypted backup and isolated restore evidence",
+    "On any failure restore the exact configuration backup and roll back the MySQL restart through BaoTa"
+  ],
+  "forbiddenManagers": ["systemd","standalone_pm2","host_crontab","screen_docker_compose"],
+  "rollback": "Restore the exact BaoTa MySQL configuration backup, restart MySQL through BaoTa, verify the single primary and dependent services, and preserve request_id trace_id evidence."
+}

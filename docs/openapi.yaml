@@ -189,6 +189,22 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '429': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/operations/mysql:
+    get:
+      summary: Read audited MySQL 5.7 single-primary resilience facts
+      description: M08-03 reports sanitized durability, connection, storage, I/O, slow-query and recovery facts for the current BaoTa MySQL 5.7 single primary. It never returns host, port, account, password, data path, binlog filename or SQL text and makes no replica, load-balancing, backup-server or capacity claim.
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: platform:operate
+      responses:
+        '200':
+          description: Current MySQL single-primary resilience state is ready, warning or blocked
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MySqlResilienceEnvelope' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
   /auth/register:
     post:
       summary: Register a local email account and queue verification delivery
@@ -2328,6 +2344,62 @@ components:
             single_instance: { type: boolean, enum: [true] }
             sentinel_enabled: { type: boolean, enum: [false] }
             cluster_enabled: { type: boolean, enum: [false] }
+            capacity_claim: { type: string, enum: [unverified] }
+            observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
+    MySqlResilienceEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          required: [state, mode, durability, connections, storage, io, slow_queries, recovery, findings, single_primary, replica_enabled, backup_server_used, capacity_claim, observed_at]
+          properties:
+            state: { type: string, enum: [ready, warning, blocked] }
+            mode: { type: string, enum: [single_primary] }
+            durability:
+              type: object
+              additionalProperties: false
+              required: [log_bin_enabled, binlog_format, innodb_flush_log_at_trx_commit, sync_binlog]
+              properties: { log_bin_enabled: { type: boolean }, binlog_format: { type: string, enum: [ROW, MIXED, STATEMENT, unknown] }, innodb_flush_log_at_trx_commit: { type: integer }, sync_binlog: { type: integer } }
+            connections:
+              type: object
+              additionalProperties: false
+              required: [connected, running, maximum, usage_basis_points]
+              properties: { connected: { type: integer, minimum: 0 }, running: { type: integer, minimum: 0 }, maximum: { type: integer, minimum: 0 }, usage_basis_points: { type: integer, minimum: 0, maximum: 10000 } }
+            storage:
+              type: object
+              additionalProperties: false
+              required: [used_bytes, total_bytes, usage_basis_points]
+              properties: { used_bytes: { type: integer, minimum: 0 }, total_bytes: { type: integer, minimum: 0 }, usage_basis_points: { type: integer, minimum: 0, maximum: 10000 } }
+            io:
+              type: object
+              additionalProperties: false
+              required: [buffer_pool_bytes, buffer_pool_data_bytes, buffer_pool_hit_rate_basis_points, innodb_log_waits, innodb_row_lock_waits]
+              properties: { buffer_pool_bytes: { type: integer, minimum: 0 }, buffer_pool_data_bytes: { type: integer, minimum: 0 }, buffer_pool_hit_rate_basis_points: { type: integer, minimum: 0, maximum: 10000 }, innodb_log_waits: { type: integer, minimum: 0 }, innodb_row_lock_waits: { type: integer, minimum: 0 } }
+            slow_queries:
+              type: object
+              additionalProperties: false
+              required: [per_minute, long_query_time_seconds]
+              properties: { per_minute: { type: number, minimum: 0 }, long_query_time_seconds: { type: number, minimum: 0 } }
+            recovery:
+              type: object
+              additionalProperties: false
+              required: [status, actual_rpo_minutes, actual_rto_minutes, drill_age_days]
+              properties: { status: { type: string, enum: [verified, stale, blocked, empty] }, actual_rpo_minutes: { type: [number, 'null'] }, actual_rto_minutes: { type: [number, 'null'] }, drill_age_days: { type: [number, 'null'] } }
+            findings:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: [code, severity, action_hint]
+                properties: { code: { type: string }, severity: { type: string, enum: [warning, blocked] }, action_hint: { type: string } }
+            single_primary: { type: boolean, enum: [true] }
+            replica_enabled: { type: boolean, enum: [false] }
+            backup_server_used: { type: boolean, enum: [false] }
             capacity_claim: { type: string, enum: [unverified] }
             observed_at: { type: string, format: date-time }
         request_id: { type: string }

@@ -111,6 +111,10 @@ import { registerRuntimeTopologyRoutes } from "./runtime-topology-routes.js";
 import { RedisResilienceService } from "./redis-resilience-service.js";
 import { MySqlRedisResilienceRepository } from "./mysql-redis-resilience-repository.js";
 import { registerRedisResilienceRoutes } from "./redis-resilience-routes.js";
+import { MySqlResilienceProbe } from "./mysql-resilience-probe.js";
+import { MySqlResilienceRepository } from "./mysql-resilience-repository.js";
+import { MySqlResilienceService } from "./mysql-resilience-service.js";
+import { registerMySqlResilienceRoutes } from "./mysql-resilience-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -127,6 +131,11 @@ const redisResilienceService = new RedisResilienceService(
   {snapshot:async()=>{await redisStore.connect();return inspectRedisResilience(redisClient);}},
   new MySqlRedisResilienceRepository(pool),
   config.redisResilience,
+);
+const mysqlResilienceService = new MySqlResilienceService(
+  new MySqlResilienceProbe(pool),
+  new MySqlResilienceRepository(pool),
+  config.mysqlResilience,
 );
 const authRepository = new MySqlAuthRepository(pool);
 const authOutbox = new MySqlAuthOutboxStore(pool);
@@ -464,6 +473,7 @@ const releaseRolloutRepository = new MySqlReleaseRolloutRepository(pool);
 registerReleaseRolloutRoutes(app,{service:new ReleaseRolloutService(releaseRolloutRepository,{percentages:[5,25,100],...config.releaseRollout}),writeProbeService:new ReleaseWriteProbeService(releaseRolloutRepository,config.security.releaseProbeSigningKey,config.app.buildSha,config.releaseRollout.probeTimestampToleranceSeconds),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerRuntimeTopologyRoutes(app,{service:runtimeTopologyService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerRedisResilienceRoutes(app,{service:redisResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
+registerMySqlResilienceRoutes(app,{service:mysqlResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {
     evidenceRoot: config.storage.evidenceRoot,

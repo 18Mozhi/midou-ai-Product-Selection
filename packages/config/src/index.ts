@@ -45,6 +45,20 @@ export interface RuntimeConfig {
     productionEvidenceFile: string;
     maximumEvidenceAgeMinutes: number;
   };
+  mysqlResilience: {
+    connectionWarningBasisPoints: number;
+    connectionStopBasisPoints: number;
+    dataWarningBasisPoints: number;
+    dataStopBasisPoints: number;
+    slowQueryWarningPerMinute: number;
+    slowQueryStopPerMinute: number;
+    bufferPoolHitWarningBasisPoints: number;
+    maximumRecoveryDrillAgeDays: number;
+    maximumRpoMinutes: number;
+    maximumRtoMinutes: number;
+    productionEvidenceFile: string;
+    maximumEvidenceAgeMinutes: number;
+  };
   ai: {
     baseUrl: string;
     model: string;
@@ -318,6 +332,20 @@ export function loadRuntimeConfig(
       connectionStopBasisPoints: integer(env, "REDIS_CONNECTION_STOP_PERCENT", 90, 2, 100) * 100,
       productionEvidenceFile: resolve(cwd, text(env, "REDIS_RESILIENCE_PRODUCTION_EVIDENCE_FILE", "./.artifacts/verification/m08-02-redis-resilience-production-evidence.json")),
       maximumEvidenceAgeMinutes: integer(env, "REDIS_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES", 60, 1, 1440),
+    },
+    mysqlResilience: {
+      connectionWarningBasisPoints: integer(env,"MYSQL_CONNECTION_WARNING_PERCENT",75,1,99)*100,
+      connectionStopBasisPoints: integer(env,"MYSQL_CONNECTION_STOP_PERCENT",90,2,100)*100,
+      dataWarningBasisPoints: integer(env,"MYSQL_DATA_WARNING_PERCENT",75,1,99)*100,
+      dataStopBasisPoints: integer(env,"MYSQL_DATA_STOP_PERCENT",90,2,100)*100,
+      slowQueryWarningPerMinute: integer(env,"MYSQL_SLOW_QUERY_WARNING_PER_MINUTE",5,0,100000),
+      slowQueryStopPerMinute: integer(env,"MYSQL_SLOW_QUERY_STOP_PER_MINUTE",20,1,100000),
+      bufferPoolHitWarningBasisPoints: integer(env,"MYSQL_BUFFER_POOL_HIT_WARNING_PERCENT",99,1,100)*100,
+      maximumRecoveryDrillAgeDays: integer(env,"MYSQL_RECOVERY_DRILL_MAX_AGE_DAYS",90,1,365),
+      maximumRpoMinutes: integer(env,"MYSQL_RECOVERY_RPO_MAX_MINUTES",15,1,1440),
+      maximumRtoMinutes: integer(env,"MYSQL_RECOVERY_RTO_MAX_MINUTES",240,1,10080),
+      productionEvidenceFile: resolve(cwd,text(env,"MYSQL_RESILIENCE_PRODUCTION_EVIDENCE_FILE","./.artifacts/verification/m08-03-mysql-resilience-production-evidence.json")),
+      maximumEvidenceAgeMinutes: integer(env,"MYSQL_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES",60,1,1440),
     },
     ai: {
       baseUrl: httpUrl(env, "AI_BASE_URL", "http://192.168.1.203:8588/v1"),
@@ -725,6 +753,9 @@ export function loadRuntimeConfig(
   if(base.runtimeTopology.mode!=="single_host")throw new ConfigError("RUNTIME_TOPOLOGY_MODE","must be single_host");
   if(base.redisResilience.memoryWarningBasisPoints>=base.redisResilience.memoryStopBasisPoints)throw new ConfigError("REDIS_MEMORY_WARNING_PERCENT","must be less than REDIS_MEMORY_STOP_PERCENT");
   if(base.redisResilience.connectionWarningBasisPoints>=base.redisResilience.connectionStopBasisPoints)throw new ConfigError("REDIS_CONNECTION_WARNING_PERCENT","must be less than REDIS_CONNECTION_STOP_PERCENT");
+  if(base.mysqlResilience.connectionWarningBasisPoints>=base.mysqlResilience.connectionStopBasisPoints)throw new ConfigError("MYSQL_CONNECTION_WARNING_PERCENT","must be less than MYSQL_CONNECTION_STOP_PERCENT");
+  if(base.mysqlResilience.dataWarningBasisPoints>=base.mysqlResilience.dataStopBasisPoints)throw new ConfigError("MYSQL_DATA_WARNING_PERCENT","must be less than MYSQL_DATA_STOP_PERCENT");
+  if(base.mysqlResilience.slowQueryWarningPerMinute>=base.mysqlResilience.slowQueryStopPerMinute)throw new ConfigError("MYSQL_SLOW_QUERY_WARNING_PER_MINUTE","must be less than MYSQL_SLOW_QUERY_STOP_PER_MINUTE");
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.nodeId))throw new ConfigError("RUNTIME_NODE_ID","must be a stable 2-80 character identifier");
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.hostId))throw new ConfigError("RUNTIME_HOST_ID","must be a stable 2-80 character identifier");
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.zone))throw new ConfigError("RUNTIME_NODE_ZONE","must be a stable 2-80 character identifier");

@@ -31,6 +31,7 @@ import BackupRecoveryCenter from "./BackupRecoveryCenter.vue";
 import ReleaseRolloutCenter from "./ReleaseRolloutCenter.vue";
 import RuntimeTopologyCenter from "./RuntimeTopologyCenter.vue";
 import RedisResilienceCenter from "./RedisResilienceCenter.vue";
+import MySqlResilienceCenter from "./MySqlResilienceCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -208,6 +209,12 @@ const platformMenu: MenuItem[] = [
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
+    label: "MySQL 韧性",
+    path: "/platform-admin/mysql",
+    icon: "▤",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
     label: "商业运营",
     path: "/platform-admin/commercial",
     icon: "▰",
@@ -283,6 +290,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   isReleaseRollout = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/releases"),
   isRuntimeTopology = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/topology"),
   isRedisResilience = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/redis"),
+  isMySqlResilience = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/mysql"),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
   ),
@@ -314,7 +322,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
 const phaseLabel = computed(() =>
   isOrganizationAdmin.value
     ? "P06"
-    : isRuntimeTopology.value || isRedisResilience.value
+    : isRuntimeTopology.value || isRedisResilience.value || isMySqlResilience.value
       ? "P08"
     : isBackupRecovery.value || isReleaseRollout.value
       ? "P07"
@@ -353,6 +361,8 @@ const pageSummary = computed(() =>
       ? "当前惠州单机的 API 心跳、宝塔 Nginx 单上游和私有服务只按可审计事实判定；不启用负载均衡或多节点。"
     : isRedisResilience.value
       ? "当前宝塔单 Redis 的持久化、内存与连接上限、告警和恢复状态只按可审计事实判定；不启用 Sentinel、集群或副本。"
+    : isMySqlResilience.value
+      ? "当前宝塔 MySQL 5.7 单主的持久化、I/O、慢查询、容量与隔离恢复只按可审计事实判定；不启用读副本、负载均衡或备用服务器。"
     : isTasks.value || isApprovals.value || isNotifications.value
     ? "任务状态、负责人、期限、评论、转交和 SLA 均由当前工作区真实 API 驱动。"
     : isSourcing.value
@@ -579,6 +589,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <ReleaseRolloutCenter v-else-if="isReleaseRollout" :api-base-url="apiBaseUrl" />
         <RuntimeTopologyCenter v-else-if="isRuntimeTopology" :api-base-url="apiBaseUrl" />
         <RedisResilienceCenter v-else-if="isRedisResilience" :api-base-url="apiBaseUrl" />
+        <MySqlResilienceCenter v-else-if="isMySqlResilience" :api-base-url="apiBaseUrl" />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"

@@ -141,6 +141,24 @@ export interface RedisResilienceDto {
   observed_at: string;
 }
 
+export interface MySqlResilienceFindingDto { code: string; severity: 'warning' | 'blocked'; action_hint: string }
+export interface MySqlResilienceDto {
+  state: 'ready' | 'warning' | 'blocked';
+  mode: 'single_primary';
+  durability: { log_bin_enabled: boolean; binlog_format: 'ROW' | 'MIXED' | 'STATEMENT' | 'unknown'; innodb_flush_log_at_trx_commit: number; sync_binlog: number };
+  connections: { connected: number; running: number; maximum: number; usage_basis_points: number };
+  storage: { used_bytes: number; total_bytes: number; usage_basis_points: number };
+  io: { buffer_pool_bytes: number; buffer_pool_data_bytes: number; buffer_pool_hit_rate_basis_points: number; innodb_log_waits: number; innodb_row_lock_waits: number };
+  slow_queries: { per_minute: number; long_query_time_seconds: number };
+  recovery: { status: 'verified' | 'stale' | 'blocked' | 'empty'; actual_rpo_minutes: number | null; actual_rto_minutes: number | null; drill_age_days: number | null };
+  findings: MySqlResilienceFindingDto[];
+  single_primary: true;
+  replica_enabled: false;
+  backup_server_used: false;
+  capacity_claim: 'unverified';
+  observed_at: string;
+}
+
 export interface DatabaseDependencyStatus {
   status: 'available' | 'unavailable';
   latency_ms: number;

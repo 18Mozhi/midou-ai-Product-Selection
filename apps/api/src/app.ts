@@ -149,6 +149,7 @@ import { registerBackupRecoveryRoutes, type BackupRecoveryRouteOptions } from ".
 import { registerReleaseRolloutRoutes, type ReleaseRolloutRouteOptions } from "./release-rollout-routes.js";
 import { registerRuntimeTopologyRoutes, type RuntimeTopologyRouteOptions } from "./runtime-topology-routes.js";
 import { registerRedisResilienceRoutes, type RedisResilienceRouteOptions } from "./redis-resilience-routes.js";
+import { registerMySqlResilienceRoutes, type MySqlResilienceRouteOptions } from "./mysql-resilience-routes.js";
 import { SelectionJourneyError } from "./selection-journey-service.js";
 import { registerSelectionJourneyRoutes, type SelectionJourneyRouteOptions } from "./selection-journey-routes.js";
 
@@ -198,6 +199,7 @@ export interface BuildAppOptions {
   releaseRollout?: ReleaseRolloutRouteOptions;
   runtimeTopology?: RuntimeTopologyRouteOptions;
   redisResilience?: RedisResilienceRouteOptions;
+  mysqlResilience?: MySqlResilienceRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -373,6 +375,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if(options.releaseRollout)registerReleaseRolloutRoutes(app,options.releaseRollout);
   if(options.runtimeTopology)registerRuntimeTopologyRoutes(app,options.runtimeTopology);
   if(options.redisResilience)registerRedisResilienceRoutes(app,options.redisResilience);
+  if(options.mysqlResilience)registerMySqlResilienceRoutes(app,options.mysqlResilience);
 
   app.setErrorHandler(
     async (
