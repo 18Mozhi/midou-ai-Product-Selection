@@ -1448,6 +1448,23 @@
       "latestVerifiedProductionEvidence": {"buildSha": "162cb10664e6029284cf36594fba0d21a2e41f21", "capturedAt": "2026-08-14T01:04:29.115Z", "sha256": "bff46ad304128bf14240517c538a3091aeff5d67ecc49c0518c6e9c4a63643c5", "journeyId": "414b07cc-af3f-4e56-925e-8a7a13a9a0ca", "terminalMs": 4081, "terminalState": "result_ready", "decisionAction": "observe", "decisionRecorded": true, "evidenceViewed": true},
       "verificationRunId": "78001216-8e65-44fb-81cf-9570f9f9534b",
       "status": "module_verified"
+    },
+    "runtimeTopology": {
+      "module": "M08-01",
+      "entrypoints": ["../packages/runtime-topology/src/index.ts", "../apps/api/src/runtime-topology-service.ts", "../apps/api/src/mysql-runtime-topology-repository.ts", "../apps/api/src/runtime-topology-routes.ts", "../apps/web/src/components/RuntimeTopologyCenter.vue", "../infra/baota/single-server-manifest.json", "../scripts/verify-single-server-production.mjs"],
+      "routes": ["/platform-admin/topology", "/api/v1/health/nodes", "/api/v1/platform/operations/topology"],
+      "scope": "M08-01 configured single-host API heartbeat, BaoTa single-upstream Nginx evidence, sanitized health and audited operations view",
+      "truthBoundary": "ready requires one fresh ready heartbeat from the configured API node on the configured current BaoTa host plus current TLS and single-upstream evidence; no load-balancing, backup-server, multi-node or capacity claim is permitted",
+      "permission": "public health returns sanitized counts; the operations view requires platform:operate and records request_id trace_id read audit",
+      "configuration": ["RUNTIME_TOPOLOGY_MODE", "RUNTIME_NODE_ID", "RUNTIME_HOST_ID", "RUNTIME_NODE_REGION", "RUNTIME_NODE_ZONE", "RUNTIME_NODE_HEARTBEAT_MS", "RUNTIME_NODE_STALE_AFTER_SECONDS", "SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE"],
+      "runtimeBoundary": "the current Huizhou BaoTa host is the permanent S0 production topology; all backend ports remain private and no load balancer, backup server, panel-external service, multi-node or 10000-user claim is allowed",
+      "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 64 monitoring", "concept 69 alerts", "four reviewed Linux Chromium desktop and 390 single-server runtime baselines"],
+      "latestMysqlLiveEvidence": {"status": "mysql_live_passed", "manager": "baota_finite_task", "baseReleaseBuildSha": "a4c2695d3a0071201ad066b22caca5631271eac1", "migration": "0030_load_balancing_m08_01.up.sql", "migrationChecksum": "48a6259d9fbcb6a035d1ae1dfcf535a98f948d4325f908a07d11d6f47510ce28", "mysqlVersion": "5.7.44-log", "heartbeatAppendCount": 2, "probeCleanup": "passed", "capturedAt": "2026-08-14T03:50:32.133Z", "sha256": "57b71ffd1eb836c8bcb9f39f70243d5bf3393b16af6149f9d8bd88016d15a088"},
+      "capacityClaim": "unverified",
+      "loadBalancingEnabled": false,
+      "backupServerUsed": false,
+      "multiNodeClaim": false,
+      "status": "single_server_implementation_ready_pending_production"
     }
   },
   "phaseVerification": {
@@ -1498,11 +1515,11 @@
       "modules": ["M06-01", "M06-02", "M06-03", "M06-04", "M06-05", "M06-06"]
     },
     "P07": {
-      "runId": "5966a752-76b0-4d93-ad1a-30de0cb091d2",
+      "runId": "7b806598-f47a-4448-b09e-4e70fecc6113",
       "status": "phase_verified",
-      "buildSha": "162cb10664e6029284cf36594fba0d21a2e41f21",
-      "reportSha256": "323e5e6b7ca4feff8a2602bee7cefd242483039022286b3fa339cfdc6d23cf1e",
-      "closureSha256": "db35570d10845f4f6316c5a812cc70eafee83c3383b392007e1a93494a0fa756",
+      "buildSha": "a4c2695d3a0071201ad066b22caca5631271eac1",
+      "reportSha256": "b53ad84fb7a84a90aa477753d9588da153a17d700dc97883fa0a766400ce1786",
+      "closureSha256": "bfbd6debf9bd0b6734533e8afe7b24062ad0918d36ca4b65b4f90b819f122a7b",
       "modules": ["M07-01", "M07-02", "M07-03", "M07-04", "M07-05", "M07-06"]
     }
   },
@@ -1536,8 +1553,8 @@
     "deployment": {
       "currentStage": "S0 single-host Baota deployment",
       "scaleStages": [
-        "S1 multi-node after shared storage, Redis/Sentinel, MySQL replica, load balancing and rehearsal",
-        "S2 only after capacity and failover rehearsals"
+        "P08 completes single-host resilience, recovery and measured capacity boundaries",
+        "multi-node and 10000-user capability are explicitly outside the current production contract"
       ]
     }
   },
@@ -1692,13 +1709,19 @@
       "view": "ReleaseRolloutCenter",
       "domain": "release-operations",
       "status": "M07-05_module_verified"
+    },
+    {
+      "path": "/platform-admin/topology",
+      "view": "RuntimeTopologyCenter",
+      "domain": "runtime-topology",
+      "status": "M08-01_single_server_implementation_ready_pending_production"
     }
   ],
   "apiGroups": [
     {
       "prefix": "/api/v1/health",
       "domain": "platform-runtime",
-      "status": "foundation_implemented"
+      "status": "foundation_implemented_M08-01_single_server_runtime_pending_production"
     },
     {
       "prefix": "/api/v1/auth",
@@ -1783,6 +1806,7 @@
       "domain": "platform",
       "status": "M01-06_audit_and_P03_sources_collection_evidence_provider_sources_implemented_remaining_platform_management_planned"
     },
+    { "prefix": "/api/v1/platform/operations/topology", "domain": "runtime-topology", "status": "M08-01_single_server_implementation_ready_pending_production" },
     { "prefix": "/api/v1/platform/commercial", "domain": "commercial-operations", "status": "M06-06_module_verified" },
     { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
   ],

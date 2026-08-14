@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "module": "M08-01",
+  "stage": "S0",
+  "status": "implementation_ready_pending_production",
+  "manager": "baota",
+  "productionRegion": "惠州",
+  "topology": "single_host",
+  "expectedHostCount": 1,
+  "loadBalancingEnabled": false,
+  "backupServerUsed": false,
+  "multiNodeClaim": false,
+  "capacityClaim": "unverified",
+  "host": {
+    "identitySource": "baota_restricted_config",
+    "roles": ["site", "api", "worker", "crawler", "mysql", "redis", "storage"],
+    "privateServices": ["api", "worker", "crawler", "mysql", "redis", "storage"]
+  },
+  "nginx": {
+    "managedBy": "baota_site",
+    "mode": "single_upstream_reverse_proxy",
+    "healthPath": "/api/v1/health/ready",
+    "nodeHealthPath": "/api/v1/health/nodes",
+    "ssePath": "/api/v1/realtime/events",
+    "sseBufferingOff": true,
+    "publicBackendPorts": false
+  },
+  "application": {
+    "nodeHeartbeatTable": "runtime_nodes",
+    "legacyDormantTable": "load_balancer_observations",
+    "platformRoute": "/api/v1/platform/operations/topology",
+    "healthRoute": "/api/v1/health/nodes"
+  },
+  "moduleAcceptanceGates": [
+    "one fresh API heartbeat on the configured current BaoTa host",
+    "BaoTa Nginx TLS and single-upstream reverse proxy probe",
+    "MySQL Redis Worker Crawler and storage remain private to the current host",
+    "load balancing multi-node backup-server and capacity claims remain false"
+  ],
+  "rollback": [
+    "keep RUNTIME_TOPOLOGY_MODE=single_host in the BaoTa Node API project",
+    "route the BaoTa website only to the verified local API upstream",
+    "restart or reload only through BaoTa and verify TLS and API health",
+    "retain runtime node heartbeat audit and production evidence records"
+  ]
+}

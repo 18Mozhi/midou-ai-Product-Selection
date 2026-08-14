@@ -141,6 +141,38 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/HealthVersionEnvelope' }
+  /health/nodes:
+    get:
+      summary: Sanitized single-server API health
+      description: M08-01 fails closed unless the configured API node has a fresh ready heartbeat on the configured current Baota host. It does not expose host identity and does not assert load balancing, high availability or capacity.
+      security: []
+      responses:
+        '200':
+          description: M08-01 single-server runtime gate is ready
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RuntimeNodesHealthEnvelope' }
+        '503':
+          description: The configured single-server API is empty, blocked or stale; sanitized counters are returned for operations probing
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RuntimeNodesHealthEnvelope' }
+  /platform/operations/topology:
+    get:
+      summary: Read audited single-server runtime facts
+      description: Read-only platform operations surface for the current BaoTa host. It explicitly reports that load balancing, backup servers and multi-node claims are disabled; credentials and private endpoints are never returned.
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: platform:operate
+      responses:
+        '200':
+          description: Current M08-01 single-server facts; state may be empty, blocked, stale or ready
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RuntimeTopologyEnvelope' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
   /auth/register:
     post:
       summary: Register a local email account and queue verification delivery
@@ -2173,6 +2205,71 @@ components:
         application/json:
           schema: { $ref: '#/components/schemas/ErrorEnvelope' }
   schemas:
+    RuntimeNodesHealthEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          required: [state, mode, active_api_instances, single_host, stale_node_count, observed_at]
+          properties:
+            state: { type: string, enum: [ready, empty, blocked, stale] }
+            mode: { type: string, enum: [single_host] }
+            active_api_instances: { type: integer, minimum: 0, maximum: 1 }
+            single_host: { type: boolean, enum: [true] }
+            stale_node_count: { type: integer, minimum: 0 }
+            observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
+    RuntimeTopologyEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          required: [state, mode, active_api_instances, single_host, stale_node_count, nodes, blockers, load_balancing_enabled, backup_server_used, multi_node_claim, capacity_claim, observed_at]
+          properties:
+            state: { type: string, enum: [ready, empty, blocked, stale] }
+            mode: { type: string, enum: [single_host] }
+            active_api_instances: { type: integer, minimum: 0, maximum: 1 }
+            single_host: { type: boolean, enum: [true] }
+            stale_node_count: { type: integer, minimum: 0 }
+            nodes:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: [node_id, host_id, role, status, region, zone, build_sha, version, last_heartbeat_at]
+                properties:
+                  node_id: { type: string }
+                  host_id: { type: string }
+                  role: { type: string, enum: [api, worker, crawler] }
+                  status: { type: string, enum: [starting, ready, degraded, draining, stopped] }
+                  region: { type: string }
+                  zone: { type: string }
+                  build_sha: { type: string }
+                  version: { type: string }
+                  last_heartbeat_at: { type: string, format: date-time }
+            blockers:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: [code, actionHint]
+                properties:
+                  code: { type: string }
+                  actionHint: { type: string }
+            load_balancing_enabled: { type: boolean, enum: [false] }
+            backup_server_used: { type: boolean, enum: [false] }
+            multi_node_claim: { type: boolean, enum: [false] }
+            capacity_claim: { type: string, enum: [unverified] }
+            observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
     SelectionJourneyCreateInput:
       type: object
       additionalProperties: false

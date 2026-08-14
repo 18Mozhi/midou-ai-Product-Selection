@@ -147,6 +147,7 @@ import { CommercialError } from "./commercial-service.js";
 import { registerCommercialRoutes, type CommercialRouteOptions } from "./commercial-routes.js";
 import { registerBackupRecoveryRoutes, type BackupRecoveryRouteOptions } from "./backup-recovery-routes.js";
 import { registerReleaseRolloutRoutes, type ReleaseRolloutRouteOptions } from "./release-rollout-routes.js";
+import { registerRuntimeTopologyRoutes, type RuntimeTopologyRouteOptions } from "./runtime-topology-routes.js";
 import { SelectionJourneyError } from "./selection-journey-service.js";
 import { registerSelectionJourneyRoutes, type SelectionJourneyRouteOptions } from "./selection-journey-routes.js";
 
@@ -194,6 +195,7 @@ export interface BuildAppOptions {
   commercial?: CommercialRouteOptions;
   backupRecovery?: BackupRecoveryRouteOptions;
   releaseRollout?: ReleaseRolloutRouteOptions;
+  runtimeTopology?: RuntimeTopologyRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -367,6 +369,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if(options.commercial)registerCommercialRoutes(app,options.commercial);
   if(options.backupRecovery)registerBackupRecoveryRoutes(app,options.backupRecovery);
   if(options.releaseRollout)registerReleaseRolloutRoutes(app,options.releaseRollout);
+  if(options.runtimeTopology)registerRuntimeTopologyRoutes(app,options.runtimeTopology);
 
   app.setErrorHandler(
     async (

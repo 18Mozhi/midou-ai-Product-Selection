@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScoutOps M08-01 BaoTa single-server production evidence",
+  "type": "object",
+  "required": ["schemaVersion", "module", "status", "buildSha", "manager", "topology", "region", "host", "api", "nginx", "loadBalancingEnabled", "backupServerUsed", "multiNodeClaim", "capacityClaim", "capturedAt"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "module": {"const": "M08-01"},
+    "status": {"enum": ["ready", "blocked"]},
+    "buildSha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "manager": {"const": "baota"},
+    "topology": {"const": "single_host"},
+    "region": {"const": "惠州"},
+    "host": {"type": "object", "required": ["hostId", "manager", "region", "roles", "privateServices"], "properties": {"hostId": {"type": "string", "minLength": 2}, "manager": {"const": "baota"}, "region": {"const": "惠州"}, "roles": {"type": "array", "contains": {"const": "api"}}, "privateServices": {"const": true}}, "additionalProperties": false},
+    "api": {"type": "object", "required": ["nodeId", "hostId", "status", "ready", "buildSha", "loopbackHost", "publicPortExposed", "lastHeartbeatAt"], "properties": {"nodeId": {"type": "string", "minLength": 2}, "hostId": {"type": "string", "minLength": 2}, "status": {"const": "ready"}, "ready": {"const": true}, "buildSha": {"type": "string", "pattern": "^[a-f0-9]{40}$"}, "loopbackHost": {"const": "127.0.0.1"}, "publicPortExposed": {"const": false}, "lastHeartbeatAt": {"type": "string", "format": "date-time"}}, "additionalProperties": false},
+    "nginx": {"type": "object", "required": ["managedBy", "mode", "tlsProbeReady", "sseBufferingOff"], "properties": {"managedBy": {"const": "baota_site"}, "mode": {"const": "single_upstream_reverse_proxy"}, "tlsProbeReady": {"const": true}, "sseBufferingOff": {"const": true}}, "additionalProperties": false},
+    "loadBalancingEnabled": {"const": false},
+    "backupServerUsed": {"const": false},
+    "multiNodeClaim": {"const": false},
+    "capacityClaim": {"const": "unverified"},
+    "capturedAt": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

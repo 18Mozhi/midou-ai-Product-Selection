@@ -1,0 +1,37 @@
+{
+  "moduleId": "M08-01",
+  "phaseId": "P08",
+  "name": "S0 BaoTa Single-Server Runtime Baseline",
+  "dependencies": ["M07-06"],
+  "atomicTasks": [
+    {"id":"M08-01.A01","evidence":"freeze the permanent one-host BaoTa scope with no load balancing backup server multi-node or capacity claim"},
+    {"id":"M08-01.A02","evidence":"version one configured API identity heartbeat and single-host runtime evaluation contracts"},
+    {"id":"M08-01.A03","evidence":"preserve the applied MySQL57 utf8mb4 reversible runtime-node migration and mark load-balancer observations dormant"},
+    {"id":"M08-01.A04","evidence":"fail-closed service reports current-node readiness stale heartbeat host mismatch and explicit recovery hints"},
+    {"id":"M08-01.A05","evidence":"the existing BaoTa Node API publishes bounded heartbeats without creating another service"},
+    {"id":"M08-01.A06","evidence":"OpenAPI platform operations and sanitized single-server health endpoint contracts"},
+    {"id":"M08-01.A07","evidence":"image-grounded dark single-server operations cockpit with desktop and 390 layouts"},
+    {"id":"M08-01.A08","evidence":"loading ready blocked stale empty forbidden expired rate-limited and dependency failure states"},
+    {"id":"M08-01.A09","evidence":"platform operate read guard public sanitization audit and no browser infrastructure secrets"},
+    {"id":"M08-01.A10","evidence":"schema env example stable single-host identity heartbeat and ignored evidence configuration"},
+    {"id":"M08-01.A11","evidence":"request trace heartbeat single-upstream TLS and stale-node observability"},
+    {"id":"M08-01.A12","evidence":"configured-node host identity staleness availability and sanitized DTO unit coverage"},
+    {"id":"M08-01.A13","evidence":"OpenAPI Feature Map single-server manifest evidence schema and configuration contract coverage"},
+    {"id":"M08-01.A14","evidence":"real MySQL57 migration heartbeat append repository and local dependency integration"},
+    {"id":"M08-01.A15","evidence":"concepts 61 64 69 and core 10 desktop and 390 Linux visual baselines"},
+    {"id":"M08-01.A16","evidence":"missing stale stopped mismatched node Nginx failure SSE reconnect and application rollback drills"},
+    {"id":"M08-01.A17","evidence":"blueprint plan Feature Map OpenAPI env manifest architecture Runbook production evidence and rollback synchronized"}
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m08-01/single-server-runtime.test.mjs",
+    "node scripts/verify-single-server-production.mjs --preflight",
+    "node scripts/verify-mysql-live.mjs",
+    "node scripts/verify-runtime-topology-live.mjs",
+    "node scripts/verify-redis-live.mjs",
+    "node scripts/verify-api-live.mjs",
+    "npx playwright test tests/e2e/m08-01-single-server.spec.ts",
+    "npm run verify:docs",
+    "node scripts/verify-single-server-production.mjs --production"
+  ]
+}

@@ -1,0 +1,80 @@
+CREATE TABLE `runtime_nodes` (
+  `id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `organization_id` CHAR(36) CHARACTER SET ascii NULL,
+  `workspace_id` CHAR(36) CHARACTER SET ascii NULL,
+  `node_id` VARCHAR(80) CHARACTER SET ascii NOT NULL,
+  `host_id` VARCHAR(80) CHARACTER SET ascii NOT NULL,
+  `role` ENUM('api','worker','crawler','load_balancer') NOT NULL,
+  `manager` ENUM('baota') NOT NULL DEFAULT 'baota',
+  `region_code` VARCHAR(80) NOT NULL,
+  `zone_code` VARCHAR(80) NOT NULL,
+  `build_sha` VARCHAR(64) CHARACTER SET ascii NOT NULL,
+  `app_version` VARCHAR(40) CHARACTER SET ascii NOT NULL,
+  `status` ENUM('starting','ready','degraded','draining','stopped') NOT NULL,
+  `started_at` DATETIME(3) NOT NULL,
+  `last_heartbeat_at` DATETIME(3) NOT NULL,
+  `created_at` DATETIME(3) NOT NULL,
+  `updated_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_runtime_nodes_node_id` (`node_id`),
+  KEY `idx_runtime_nodes_role_heartbeat` (`role`,`last_heartbeat_at`),
+  KEY `idx_runtime_nodes_host_role` (`host_id`,`role`),
+  KEY `idx_runtime_nodes_scope` (`organization_id`,`workspace_id`),
+  CONSTRAINT `fk_runtime_nodes_organization` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `fk_runtime_nodes_workspace` FOREIGN KEY (`workspace_id`) REFERENCES `workspaces` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `runtime_node_heartbeats` (
+  `id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `runtime_node_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `organization_id` CHAR(36) CHARACTER SET ascii NULL,
+  `workspace_id` CHAR(36) CHARACTER SET ascii NULL,
+  `status` ENUM('starting','ready','degraded','draining','stopped') NOT NULL,
+  `active_connections` INT UNSIGNED NOT NULL DEFAULT 0,
+  `sse_connections` INT UNSIGNED NOT NULL DEFAULT 0,
+  `request_rate_per_minute` INT UNSIGNED NOT NULL DEFAULT 0,
+  `error_basis_points` INT UNSIGNED NOT NULL DEFAULT 0,
+  `latency_p95_ms` INT UNSIGNED NOT NULL DEFAULT 0,
+  `request_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `trace_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `observed_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_runtime_heartbeats_node_time` (`runtime_node_id`,`observed_at`),
+  KEY `idx_runtime_heartbeats_scope_time` (`organization_id`,`workspace_id`,`observed_at`),
+  CONSTRAINT `fk_runtime_heartbeats_node` FOREIGN KEY (`runtime_node_id`) REFERENCES `runtime_nodes` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `fk_runtime_heartbeats_organization` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `fk_runtime_heartbeats_workspace` FOREIGN KEY (`workspace_id`) REFERENCES `workspaces` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `load_balancer_observations` (
+  `id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `organization_id` CHAR(36) CHARACTER SET ascii NULL,
+  `workspace_id` CHAR(36) CHARACTER SET ascii NULL,
+  `manager` ENUM('baota') NOT NULL DEFAULT 'baota',
+  `upstream_count` INT UNSIGNED NOT NULL,
+  `healthy_upstream_count` INT UNSIGNED NOT NULL,
+  `distinct_host_count` INT UNSIGNED NOT NULL,
+  `sse_affinity_enabled` TINYINT(1) NOT NULL,
+  `state` ENUM('ready','blocked','stale','failed') NOT NULL,
+  `evidence_sha256` CHAR(64) CHARACTER SET ascii NOT NULL,
+  `request_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `trace_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `observed_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_load_balancer_observed` (`observed_at`),
+  KEY `idx_load_balancer_scope_time` (`organization_id`,`workspace_id`,`observed_at`),
+  CONSTRAINT `fk_load_balancer_organization` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `fk_load_balancer_workspace` FOREIGN KEY (`workspace_id`) REFERENCES `workspaces` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `runtime_topology_views` (
+  `id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `actor_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `request_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `trace_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `observed_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_runtime_topology_actor_time` (`actor_id`,`observed_at`),
+  KEY `idx_runtime_topology_request` (`request_id`),
+  CONSTRAINT `fk_runtime_topology_actor` FOREIGN KEY (`actor_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

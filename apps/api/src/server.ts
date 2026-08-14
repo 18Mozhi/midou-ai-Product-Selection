@@ -105,12 +105,21 @@ import { MySqlReleaseRolloutRepository } from "./mysql-release-rollout-repositor
 import { registerReleaseRolloutRoutes } from "./release-rollout-routes.js";
 import { SelectionJourneyService } from "./selection-journey-service.js";
 import { MySqlSelectionJourneyRepository } from "./mysql-selection-journey-repository.js";
+import { RuntimeTopologyService } from "./runtime-topology-service.js";
+import { MySqlRuntimeTopologyRepository } from "./mysql-runtime-topology-repository.js";
+import { registerRuntimeTopologyRoutes } from "./runtime-topology-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
 const redisClient = createRedisConnection(config);
 redisClient.on("error", () => {});
 const redisStore = new ScopedRedisStore(redisClient);
+const runtimeTopologyRepository = new MySqlRuntimeTopologyRepository(pool);
+const runtimeTopologyService = new RuntimeTopologyService(runtimeTopologyRepository, {
+  expectedNodeId: config.runtimeTopology.nodeId,
+  expectedHostId: config.runtimeTopology.hostId,
+  staleAfterMs: config.runtimeTopology.staleAfterMs,
+});
 const authRepository = new MySqlAuthRepository(pool);
 const authOutbox = new MySqlAuthOutboxStore(pool);
 const authDelivery = config.security.credentialsMasterKey
@@ -445,6 +454,7 @@ registerCommercialRoutes(app,{service:new CommercialService(new MySqlCommercialR
 registerBackupRecoveryRoutes(app,{service:new BackupRecoveryService(new MySqlBackupRecoveryRepository(pool),config.backupRecovery),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 const releaseRolloutRepository = new MySqlReleaseRolloutRepository(pool);
 registerReleaseRolloutRoutes(app,{service:new ReleaseRolloutService(releaseRolloutRepository,{percentages:[5,25,100],...config.releaseRollout}),writeProbeService:new ReleaseWriteProbeService(releaseRolloutRepository,config.security.releaseProbeSigningKey,config.app.buildSha,config.releaseRollout.probeTimestampToleranceSeconds),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
+registerRuntimeTopologyRoutes(app,{service:runtimeTopologyService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {
     evidenceRoot: config.storage.evidenceRoot,
@@ -456,7 +466,14 @@ registerDataQualityRoutes(app, {
   secureCookie: config.nodeEnv === "production",
   webOrigin: config.app.webOrigin,
 });
+let runtimeHeartbeatTimer: ReturnType<typeof setInterval> | undefined;
+const publishRuntimeHeartbeat = async (status: "ready" | "stopped") => {
+  const correlation = `runtime-${config.runtimeTopology.nodeId}-${Date.now()}`;
+  await runtimeTopologyRepository.heartbeat({nodeId:config.runtimeTopology.nodeId,hostId:config.runtimeTopology.hostId,region:config.runtimeTopology.region,zone:config.runtimeTopology.zone,buildSha:config.app.buildSha,version:config.app.version,status,requestId:correlation,traceId:correlation,observedAt:new Date()});
+};
 app.addHook("onClose", async () => {
+  if(runtimeHeartbeatTimer)clearInterval(runtimeHeartbeatTimer);
+  try{await publishRuntimeHeartbeat("stopped");}catch(error){app.log.warn({error},"runtime topology stop heartbeat failed");}
   await redisStore.close();
   await pool.end();
 });
@@ -464,7 +481,20 @@ const { host, port } = config.app;
 
 try {
   await app.listen({ host, port });
+  try {
+    await publishRuntimeHeartbeat("ready");
+  } catch (error) {
+    if (config.nodeEnv === "production") throw error;
+    app.log.warn({ error }, "runtime topology startup heartbeat unavailable outside production");
+  }
+  runtimeHeartbeatTimer=setInterval(()=>{void publishRuntimeHeartbeat("ready").catch(error=>app.log.warn({error},"runtime topology heartbeat failed"));},config.runtimeTopology.heartbeatMs);
+  runtimeHeartbeatTimer.unref();
 } catch (error) {
   app.log.error({ error }, "API startup failed");
+  try {
+    await app.close();
+  } catch (closeError) {
+    app.log.error({ error: closeError }, "API startup cleanup failed");
+  }
   process.exitCode = 1;
 }

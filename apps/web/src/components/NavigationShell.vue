@@ -29,6 +29,7 @@ import OpenPlatformCenter from "./OpenPlatformCenter.vue";
 import CommercialOperationsCenter from "./CommercialOperationsCenter.vue";
 import BackupRecoveryCenter from "./BackupRecoveryCenter.vue";
 import ReleaseRolloutCenter from "./ReleaseRolloutCenter.vue";
+import RuntimeTopologyCenter from "./RuntimeTopologyCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -194,6 +195,12 @@ const platformMenu: MenuItem[] = [
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
+    label: "运行拓扑",
+    path: "/platform-admin/topology",
+    icon: "⌘",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
     label: "商业运营",
     path: "/platform-admin/commercial",
     icon: "▰",
@@ -267,6 +274,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   isPlatformDashboard = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin"),
   isBackupRecovery = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/operations"),
   isReleaseRollout = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/releases"),
+  isRuntimeTopology = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/topology"),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
   ),
@@ -298,6 +306,8 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
 const phaseLabel = computed(() =>
   isOrganizationAdmin.value
     ? "P06"
+    : isRuntimeTopology.value
+      ? "P08"
     : isBackupRecovery.value || isReleaseRollout.value
       ? "P07"
     : isPlatformDashboard.value
@@ -331,6 +341,8 @@ const pageSummary = computed(() =>
       ? "备份副本、RPO/RTO 与隔离恢复结论均来自可审计记录；未验证条件明确阻断。"
     : isReleaseRollout.value
       ? "版本、迁移、渐进观察门、自动停止与回滚均来自宝塔发布任务的审计事实。"
+    : isRuntimeTopology.value
+      ? "当前惠州单机的 API 心跳、宝塔 Nginx 单上游和私有服务只按可审计事实判定；不启用负载均衡或多节点。"
     : isTasks.value || isApprovals.value || isNotifications.value
     ? "任务状态、负责人、期限、评论、转交和 SLA 均由当前工作区真实 API 驱动。"
     : isSourcing.value
@@ -555,6 +567,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <PlatformDashboard v-else-if="isPlatformDashboard" :api-base-url="apiBaseUrl" />
         <BackupRecoveryCenter v-else-if="isBackupRecovery" :api-base-url="apiBaseUrl" />
         <ReleaseRolloutCenter v-else-if="isReleaseRollout" :api-base-url="apiBaseUrl" />
+        <RuntimeTopologyCenter v-else-if="isRuntimeTopology" :api-base-url="apiBaseUrl" />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"

@@ -104,6 +104,16 @@ export interface RuntimeConfig {
   };
   identity: { workerId: string; crawlerId: string };
   runtime: { workerHeartbeatMs: number; crawlerHeartbeatSeconds: number };
+  runtimeTopology: {
+    mode: "single_host";
+    nodeId: string;
+    hostId: string;
+    region: string;
+    zone: string;
+    heartbeatMs: number;
+    staleAfterMs: number;
+    productionEvidenceFile: string;
+  };
   collectionTasks: { pollMs: number; leaseSeconds: number };
   trends: { projectionPollMs: number; projectionLeaseSeconds: number };
   opportunities: { refreshPollMs: number; refreshLeaseSeconds: number };
@@ -460,6 +470,16 @@ export function loadRuntimeConfig(
         60,
       ),
     },
+    runtimeTopology: {
+      mode: text(env, "RUNTIME_TOPOLOGY_MODE", "single_host") as "single_host",
+      nodeId: text(env, "RUNTIME_NODE_ID", "api-primary"),
+      hostId: text(env, "RUNTIME_HOST_ID", "huizhou-single-host"),
+      region: text(env, "RUNTIME_NODE_REGION", "惠州"),
+      zone: text(env, "RUNTIME_NODE_ZONE", "primary"),
+      heartbeatMs: integer(env, "RUNTIME_NODE_HEARTBEAT_MS", 30000, 5000, 60000),
+      staleAfterMs: integer(env, "RUNTIME_NODE_STALE_AFTER_SECONDS", 90, 30, 600) * 1000,
+      productionEvidenceFile: text(env, "SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE", "./.artifacts/verification/m08-01-single-server-production-evidence.json"),
+    },
     collectionTasks: {
       pollMs: integer(env, "COLLECTION_TASK_POLL_MS", 2000, 250, 60000),
       leaseSeconds: integer(
@@ -686,6 +706,11 @@ export function loadRuntimeConfig(
     throw new ConfigError("PLATFORM_DASHBOARD_DEFAULT_WINDOW", "must be 15m, 24h, 7d or 30d");
   if(!["24h","7d","30d"].includes(base.securityOperations.defaultWindow))throw new ConfigError("SECURITY_OPERATIONS_DEFAULT_WINDOW","must be 24h, 7d or 30d");
   if(base.openPlatform.defaultQuotaPerMinute>base.openPlatform.maxQuotaPerMinute)throw new ConfigError("OPEN_API_DEFAULT_QUOTA_PER_MINUTE","must not exceed OPEN_API_MAX_QUOTA_PER_MINUTE");
+  if(base.runtimeTopology.mode!=="single_host")throw new ConfigError("RUNTIME_TOPOLOGY_MODE","must be single_host");
+  if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.nodeId))throw new ConfigError("RUNTIME_NODE_ID","must be a stable 2-80 character identifier");
+  if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.hostId))throw new ConfigError("RUNTIME_HOST_ID","must be a stable 2-80 character identifier");
+  if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.zone))throw new ConfigError("RUNTIME_NODE_ZONE","must be a stable 2-80 character identifier");
+  if(production&&(!env.RUNTIME_NODE_ID?.trim()||!env.RUNTIME_HOST_ID?.trim()))throw new ConfigError("RUNTIME_NODE_ID","and RUNTIME_HOST_ID are required in single-host production");
   if (!/^[A-Za-z0-9._-]{1,80}$/.test(base.security.credentialsMasterKeyVersion))
     throw new ConfigError(
       "CREDENTIALS_MASTER_KEY_VERSION",
