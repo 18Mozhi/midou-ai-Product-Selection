@@ -1,0 +1,11 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","title":"ScoutOps M08-04 BaoTa local-file resilience production evidence","type":"object",
+  "required":["schemaVersion","module","status","buildSha","manager","mode","region","directories","integrity","recovery","singleHost","sharedStorageEnabled","loadBalancingEnabled","backupServerUsed","capacityClaim","capturedAt"],
+  "properties":{
+    "schemaVersion":{"const":1},"module":{"const":"M08-04"},"status":{"const":"ready"},"buildSha":{"type":"string","pattern":"^[a-f0-9]{40}$"},"manager":{"const":"baota"},"mode":{"const":"local_managed_directories"},"region":{"const":"惠州"},
+    "directories":{"type":"array","minItems":2,"maxItems":2,"items":{"type":"object","required":["kind","available","writable","organizationScoped","workspaceScoped","publiclyServed","usageBasisPoints"],"properties":{"kind":{"enum":["evidence","export"]},"available":{"const":true},"writable":{"const":true},"organizationScoped":{"const":true},"workspaceScoped":{"const":true},"publiclyServed":{"const":false},"usageBasisPoints":{"type":"integer","minimum":0,"maximum":8999}},"additionalProperties":false}},
+    "integrity":{"type":"object","required":["sampledFiles","verifiedFiles","mismatchFiles","missingFiles"],"properties":{"sampledFiles":{"type":"integer","minimum":1},"verifiedFiles":{"type":"integer","minimum":1},"mismatchFiles":{"const":0},"missingFiles":{"const":0}},"additionalProperties":false},
+    "recovery":{"type":"object","required":["encryptedSameHostCopy","isolatedRestoreVerified","drillAgeDays"],"properties":{"encryptedSameHostCopy":{"const":true},"isolatedRestoreVerified":{"const":true},"drillAgeDays":{"type":"number","minimum":0,"maximum":90}},"additionalProperties":false},
+    "singleHost":{"const":true},"sharedStorageEnabled":{"const":false},"loadBalancingEnabled":{"const":false},"backupServerUsed":{"const":false},"capacityClaim":{"const":"unverified"},"capturedAt":{"type":"string","format":"date-time"}
+  },"additionalProperties":false
+}

@@ -13,7 +13,7 @@
     "buildSha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
     "appVersion": {"type": "string", "minLength": 1},
     "configFingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-    "migrationVersion": {"const": "0032a_compact_release_write_probe_m08_03.up.sql"},
+    "migrationVersion": {"const": "0033_file_resilience_m08_04.up.sql"},
     "concurrencyProtection": {"type": "object", "required": ["taskTrigger", "lock", "lockName", "lockTimeoutSeconds", "acquired", "attemptHistoryPreserved"], "properties": {"taskTrigger": {"const": "manual_only"}, "lock": {"const": "mysql_session_named_lock"}, "lockName": {"const": "scoutops:m07-05:release-rollout"}, "lockTimeoutSeconds": {"const": 0}, "acquired": {"const": true}, "attemptHistoryPreserved": {"const": true}}, "additionalProperties": false},
     "publicProbe": {"type": "object", "required": ["origin", "connectAddress", "tlsHostnamePreserved", "manager"], "properties": {"origin": {"const": "https://midouai.mozhiz.cn"}, "connectAddress": {"const": "127.0.0.1"}, "tlsHostnamePreserved": {"const": true}, "manager": {"const": "baota_nginx"}}, "additionalProperties": false},
     "mysqlDurability": {"type": "object", "required": ["innodbFlushLogAtTrxCommit", "syncBinlog", "binlogFormat", "productScoutBinlogExcluded", "osCrashDataLossWindowSeconds"], "properties": {"innodbFlushLogAtTrxCommit": {"const": 2}, "syncBinlog": {"const": 1}, "binlogFormat": {"const": "ROW"}, "productScoutBinlogExcluded": {"const": false}, "osCrashDataLossWindowSeconds": {"const": 1}}, "additionalProperties": false},

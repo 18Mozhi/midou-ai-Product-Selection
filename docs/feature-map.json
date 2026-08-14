@@ -1505,6 +1505,22 @@
       "loadBalancingEnabled": false,
       "replicaEnabled": false,
       "backupServerUsed": false
+    },
+    "fileResilience": {
+      "module": "M08-04",
+      "entrypoints": ["../packages/storage/src/index.ts", "../database/migrations/0033_file_resilience_m08_04.up.sql", "../apps/api/src/file-resilience-probe.ts", "../apps/api/src/file-resilience-service.ts", "../apps/api/src/file-resilience-repository.ts", "../apps/api/src/file-resilience-routes.ts", "../apps/web/src/components/FileResilienceCenter.vue", "../infra/baota/local-file-storage-manifest.json", "../scripts/verify-file-resilience-production.mjs"],
+      "routes": ["/platform-admin/files", "/api/v1/platform/operations/files"],
+      "scope": "M08-04 current Huizhou BaoTa local evidence and export directory resilience with scoped paths checksums watermarks and same-host recovery evidence",
+      "truthBoundary": "ready requires two distinct readable writable organization-and-workspace-scoped local managed roots outside the public site, bounded checksum samples with no mismatch or missing files, plus current evidence/export encrypted same-host copies and isolated recovery verification",
+      "permission": "the operations view requires platform:operate and transactionally appends observation view and platform audit with request_id trace_id; no host path filename hash organization workspace account or credential is returned",
+      "configuration": ["FILE_STORAGE_WARNING_PERCENT", "FILE_STORAGE_STOP_PERCENT", "FILE_STORAGE_CHECKSUM_SAMPLE_LIMIT", "FILE_STORAGE_RECOVERY_DRILL_MAX_AGE_DAYS", "FILE_STORAGE_PRODUCTION_EVIDENCE_FILE", "FILE_STORAGE_EVIDENCE_MAX_AGE_MINUTES"],
+      "runtimeBoundary": "two BaoTa-managed local directories and one current API on the current Huizhou host with no shared storage load balancer backup server or capacity claim",
+      "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 local-file resilience baselines"],
+      "status": "implementation_ready_production_pending",
+      "capacityClaim": "unverified",
+      "sharedStorageEnabled": false,
+      "loadBalancingEnabled": false,
+      "backupServerUsed": false
     }
   },
   "phaseVerification": {
@@ -1767,6 +1783,12 @@
       "view": "MySqlResilienceCenter",
       "domain": "mysql-resilience",
       "status": "M08-03_module_verified"
+    },
+    {
+      "path": "/platform-admin/files",
+      "view": "FileResilienceCenter",
+      "domain": "file-resilience",
+      "status": "M08-04_implementation_ready_production_pending"
     }
   ],
   "apiGroups": [
@@ -1861,6 +1883,7 @@
     { "prefix": "/api/v1/platform/operations/topology", "domain": "runtime-topology", "status": "M08-01_single_server_module_verified" },
     { "prefix": "/api/v1/platform/operations/redis", "domain": "redis-resilience", "status": "M08-02_module_verified" },
     { "prefix": "/api/v1/platform/operations/mysql", "domain": "mysql-resilience", "status": "M08-03_module_verified" },
+    { "prefix": "/api/v1/platform/operations/files", "domain": "file-resilience", "status": "M08-04_implementation_ready_production_pending" },
     { "prefix": "/api/v1/platform/commercial", "domain": "commercial-operations", "status": "M06-06_module_verified" },
     { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
   ],

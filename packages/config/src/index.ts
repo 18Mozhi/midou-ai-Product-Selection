@@ -59,6 +59,14 @@ export interface RuntimeConfig {
     productionEvidenceFile: string;
     maximumEvidenceAgeMinutes: number;
   };
+  fileResilience: {
+    usageWarningBasisPoints:number;
+    usageStopBasisPoints:number;
+    checksumSampleLimit:number;
+    maximumRecoveryDrillAgeDays:number;
+    productionEvidenceFile:string;
+    maximumEvidenceAgeMinutes:number;
+  };
   ai: {
     baseUrl: string;
     model: string;
@@ -346,6 +354,14 @@ export function loadRuntimeConfig(
       maximumRtoMinutes: integer(env,"MYSQL_RECOVERY_RTO_MAX_MINUTES",240,1,10080),
       productionEvidenceFile: resolve(cwd,text(env,"MYSQL_RESILIENCE_PRODUCTION_EVIDENCE_FILE","./.artifacts/verification/m08-03-mysql-resilience-production-evidence.json")),
       maximumEvidenceAgeMinutes: integer(env,"MYSQL_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES",60,1,1440),
+    },
+    fileResilience: {
+      usageWarningBasisPoints:integer(env,"FILE_STORAGE_WARNING_PERCENT",75,1,99)*100,
+      usageStopBasisPoints:integer(env,"FILE_STORAGE_STOP_PERCENT",90,2,100)*100,
+      checksumSampleLimit:integer(env,"FILE_STORAGE_CHECKSUM_SAMPLE_LIMIT",20,1,100),
+      maximumRecoveryDrillAgeDays:integer(env,"FILE_STORAGE_RECOVERY_DRILL_MAX_AGE_DAYS",90,1,365),
+      productionEvidenceFile:resolve(cwd,text(env,"FILE_STORAGE_PRODUCTION_EVIDENCE_FILE","./.artifacts/verification/m08-04-file-resilience-production-evidence.json")),
+      maximumEvidenceAgeMinutes:integer(env,"FILE_STORAGE_EVIDENCE_MAX_AGE_MINUTES",60,1,1440),
     },
     ai: {
       baseUrl: httpUrl(env, "AI_BASE_URL", "http://192.168.1.203:8588/v1"),
@@ -756,6 +772,7 @@ export function loadRuntimeConfig(
   if(base.mysqlResilience.connectionWarningBasisPoints>=base.mysqlResilience.connectionStopBasisPoints)throw new ConfigError("MYSQL_CONNECTION_WARNING_PERCENT","must be less than MYSQL_CONNECTION_STOP_PERCENT");
   if(base.mysqlResilience.dataWarningBasisPoints>=base.mysqlResilience.dataStopBasisPoints)throw new ConfigError("MYSQL_DATA_WARNING_PERCENT","must be less than MYSQL_DATA_STOP_PERCENT");
   if(base.mysqlResilience.slowQueryWarningPerMinute>=base.mysqlResilience.slowQueryStopPerMinute)throw new ConfigError("MYSQL_SLOW_QUERY_WARNING_PER_MINUTE","must be less than MYSQL_SLOW_QUERY_STOP_PER_MINUTE");
+  if(base.fileResilience.usageWarningBasisPoints>=base.fileResilience.usageStopBasisPoints)throw new ConfigError("FILE_STORAGE_WARNING_PERCENT","must be less than FILE_STORAGE_STOP_PERCENT");
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.nodeId))throw new ConfigError("RUNTIME_NODE_ID","must be a stable 2-80 character identifier");
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.hostId))throw new ConfigError("RUNTIME_HOST_ID","must be a stable 2-80 character identifier");
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.zone))throw new ConfigError("RUNTIME_NODE_ZONE","must be a stable 2-80 character identifier");

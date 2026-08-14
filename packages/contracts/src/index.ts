@@ -159,6 +159,22 @@ export interface MySqlResilienceDto {
   observed_at: string;
 }
 
+export interface FileResilienceFindingDto { code:string; severity:'warning'|'blocked'; action_hint:string }
+export interface FileResilienceDto {
+  state:'ready'|'warning'|'blocked';
+  mode:'local_managed_directories';
+  directories:Array<{kind:'evidence'|'export';available:boolean;writable:boolean;used_bytes:number;total_bytes:number;usage_basis_points:number;active_files:number;indexed_bytes:number}>;
+  integrity:{sampled_files:number;verified_files:number;mismatch_files:number;missing_files:number};
+  recovery:{status:'verified'|'stale'|'blocked'|'empty';encrypted_same_host_copy:boolean;isolated_restore_verified:boolean;drill_age_days:number|null};
+  findings:FileResilienceFindingDto[];
+  organization_scoped:true;
+  public_access_enabled:false;
+  shared_storage_enabled:false;
+  backup_server_used:false;
+  capacity_claim:'unverified';
+  observed_at:string;
+}
+
 export interface DatabaseDependencyStatus {
   status: 'available' | 'unavailable';
   latency_ms: number;

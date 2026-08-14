@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "module": "M08-04",
+  "stage": "S0",
+  "status": "implementation_ready",
+  "manager": "baota",
+  "mode": "local_managed_directories",
+  "productionRegion": "惠州",
+  "directories": [
+    {"kind":"evidence","organizationScoped":true,"workspaceScoped":true,"publiclyServed":false},
+    {"kind":"export","organizationScoped":true,"workspaceScoped":true,"publiclyServed":false}
+  ],
+  "limits": {"usageWarningPercent":75,"usageStopPercent":90,"checksumSampleLimit":20,"maximumRecoveryDrillAgeDays":90},
+  "recovery": {"sameHostEncryptedCopy":true,"isolatedRestoreRequired":true,"backupServerUsed":false},
+  "topologyClaims": {"singleHost":true,"sharedStorageEnabled":false,"loadBalancingEnabled":false,"backupServerUsed":false,"capacityClaim":"unverified"},
+  "productionActions": [
+    "Use a BaoTa finite task to verify restricted evidence and export roots, ownership, mode, capacity and absence from the public Nginx root",
+    "Create bounded organization-scoped write checksum cleanup probes and verify current evidence/export encrypted recovery-copy plus isolated-restore evidence",
+    "On failure stop new large-file work, preserve evidence, restore the prior application through BaoTa and never delete unknown files"
+  ],
+  "forbiddenManagers": ["systemd","standalone_pm2","host_crontab","screen_docker_compose"],
+  "rollback": "Restore the previous BaoTa application and restricted root configuration, keep file data and audit evidence, then roll back 0033 only after the previous Worker no longer writes content_sha256."
+}

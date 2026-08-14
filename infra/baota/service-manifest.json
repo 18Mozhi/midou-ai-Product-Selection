@@ -33,7 +33,7 @@
       "port": 4101,
       "public": false,
       "healthPaths": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
-      "environmentGroups": ["app", "database", "redis", "storage", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial", "backupRecovery", "releaseRollout"],
+      "environmentGroups": ["app", "database", "redis", "storage", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial", "backupRecovery", "releaseRollout", "fileResilience"],
       "logSource": "stdout/stderr",
       "gracefulSignals": ["SIGTERM", "SIGINT"]
     },
@@ -59,7 +59,7 @@
       "public": false,
       "purpose": "M07-05 same-host release slot B; stable and candidate roles alternate by audited release",
       "healthPaths": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
-      "environmentGroups": ["app", "database", "redis", "storage", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial", "backupRecovery", "releaseRollout"],
+      "environmentGroups": ["app", "database", "redis", "storage", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial", "backupRecovery", "releaseRollout", "fileResilience"],
       "logSource": "stdout/stderr",
       "gracefulSignals": ["SIGTERM", "SIGINT"]
     },

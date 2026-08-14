@@ -184,7 +184,7 @@ test("M08-03.A10/A13 keeps historical probes immutable and writes new durability
   assert.doesNotMatch(up,/PRIMARY KEY \(`id`\)/);assert.match(down,/DROP TABLE IF EXISTS `deployment_release_write_samples`/);
   assert.match(repository,/INSERT INTO deployment_release_write_samples/);assert.doesNotMatch(repository,/INSERT INTO deployment_release_write_probes/);
   assert.match(runner,/deployment_release_write_samples/);assert.match(runner,/0032a_compact_release_write_probe_m08_03\.up\.sql/);
-  assert.match(verifier,/0032a_compact_release_write_probe_m08_03\.up\.sql/);assert.match(schema,/0032a_compact_release_write_probe_m08_03\.up\.sql/);
+  assert.match(verifier,/0033_file_resilience_m08_04\.up\.sql/);assert.match(schema,/0033_file_resilience_m08_04\.up\.sql/);
   assert.match(runbook,/历史探针|旧表/);assert.match(runbook,/只读|保留/);
 });
 

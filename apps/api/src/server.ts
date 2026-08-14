@@ -115,6 +115,10 @@ import { MySqlResilienceProbe } from "./mysql-resilience-probe.js";
 import { MySqlResilienceRepository } from "./mysql-resilience-repository.js";
 import { MySqlResilienceService } from "./mysql-resilience-service.js";
 import { registerMySqlResilienceRoutes } from "./mysql-resilience-routes.js";
+import { FileResilienceProbe } from "./file-resilience-probe.js";
+import { FileResilienceRepository } from "./file-resilience-repository.js";
+import { FileResilienceService } from "./file-resilience-service.js";
+import { registerFileResilienceRoutes } from "./file-resilience-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -136,6 +140,11 @@ const mysqlResilienceService = new MySqlResilienceService(
   new MySqlResilienceProbe(pool),
   new MySqlResilienceRepository(pool),
   config.mysqlResilience,
+);
+const fileResilienceService = new FileResilienceService(
+  new FileResilienceProbe(pool,config.storage.evidenceRoot,config.storage.exportRoot,config.fileResilience.checksumSampleLimit,config.fileResilience.maximumRecoveryDrillAgeDays),
+  new FileResilienceRepository(pool),
+  {usageWarningBasisPoints:config.fileResilience.usageWarningBasisPoints,usageStopBasisPoints:config.fileResilience.usageStopBasisPoints,maximumRecoveryDrillAgeDays:config.fileResilience.maximumRecoveryDrillAgeDays},
 );
 const authRepository = new MySqlAuthRepository(pool);
 const authOutbox = new MySqlAuthOutboxStore(pool);
@@ -474,6 +483,7 @@ registerReleaseRolloutRoutes(app,{service:new ReleaseRolloutService(releaseRollo
 registerRuntimeTopologyRoutes(app,{service:runtimeTopologyService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerRedisResilienceRoutes(app,{service:redisResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerMySqlResilienceRoutes(app,{service:mysqlResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
+registerFileResilienceRoutes(app,{service:fileResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {
     evidenceRoot: config.storage.evidenceRoot,

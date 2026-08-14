@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { rm } from "node:fs/promises";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import { buildScopedFilePath, writeScopedFile } from "@scoutops/storage";
@@ -41,6 +41,7 @@ export class ReportExportWorker {
           code: "row_limit_exceeded",
         });
       const content = csvBuffer(rows);
+      const contentSha256 = createHash("sha256").update(content).digest("hex");
       await writeScopedFile(
         this.root,
         {
@@ -56,8 +57,8 @@ export class ReportExportWorker {
       try {
         await connection.beginTransaction();
         await connection.query(
-          "UPDATE report_exports SET status='succeeded',row_count=?,byte_size=?,lease_expires_at=NULL,last_error_code=NULL,version=version+1,updated_at=? WHERE id=?",
-          [rows.length, content.byteLength, now, job.id],
+          "UPDATE report_exports SET status='succeeded',row_count=?,byte_size=?,content_sha256=?,lease_expires_at=NULL,last_error_code=NULL,version=version+1,updated_at=? WHERE id=?",
+          [rows.length, content.byteLength, contentSha256, now, job.id],
         );
         await this.record(
           job,

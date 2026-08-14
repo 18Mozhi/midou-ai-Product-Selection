@@ -206,6 +206,22 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '429': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/operations/files:
+    get:
+      summary: Read audited local managed file resilience facts
+      description: M08-04 reports sanitized evidence/export directory availability, capacity, checksum sampling and same-host encrypted recovery facts for the current BaoTa host. It never returns paths, filenames, hashes, organization identifiers or file content and makes no shared-storage, backup-server or capacity claim.
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: platform:operate
+      responses:
+        '200':
+          description: Current local file resilience state is ready, warning or blocked
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FileResilienceEnvelope' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
   /auth/register:
     post:
       summary: Register a local email account and queue verification delivery
@@ -2400,6 +2416,52 @@ components:
                 properties: { code: { type: string }, severity: { type: string, enum: [warning, blocked] }, action_hint: { type: string } }
             single_primary: { type: boolean, enum: [true] }
             replica_enabled: { type: boolean, enum: [false] }
+            backup_server_used: { type: boolean, enum: [false] }
+            capacity_claim: { type: string, enum: [unverified] }
+            observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
+    FileResilienceEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          required: [state, mode, directories, integrity, recovery, findings, organization_scoped, public_access_enabled, shared_storage_enabled, backup_server_used, capacity_claim, observed_at]
+          properties:
+            state: { type: string, enum: [ready, warning, blocked] }
+            mode: { type: string, enum: [local_managed_directories] }
+            directories:
+              type: array
+              minItems: 2
+              maxItems: 2
+              items:
+                type: object
+                additionalProperties: false
+                required: [kind, available, writable, used_bytes, total_bytes, usage_basis_points, active_files, indexed_bytes]
+                properties: { kind: { type: string, enum: [evidence, export] }, available: { type: boolean }, writable: { type: boolean }, used_bytes: { type: integer, minimum: 0 }, total_bytes: { type: integer, minimum: 0 }, usage_basis_points: { type: integer, minimum: 0, maximum: 10000 }, active_files: { type: integer, minimum: 0 }, indexed_bytes: { type: integer, minimum: 0 } }
+            integrity:
+              type: object
+              additionalProperties: false
+              required: [sampled_files, verified_files, mismatch_files, missing_files]
+              properties: { sampled_files: { type: integer, minimum: 0 }, verified_files: { type: integer, minimum: 0 }, mismatch_files: { type: integer, minimum: 0 }, missing_files: { type: integer, minimum: 0 } }
+            recovery:
+              type: object
+              additionalProperties: false
+              required: [status, encrypted_same_host_copy, isolated_restore_verified, drill_age_days]
+              properties: { status: { type: string, enum: [verified, stale, blocked, empty] }, encrypted_same_host_copy: { type: boolean }, isolated_restore_verified: { type: boolean }, drill_age_days: { type: [number, 'null'] } }
+            findings:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: [code, severity, action_hint]
+                properties: { code: { type: string }, severity: { type: string, enum: [warning, blocked] }, action_hint: { type: string } }
+            organization_scoped: { type: boolean, enum: [true] }
+            public_access_enabled: { type: boolean, enum: [false] }
+            shared_storage_enabled: { type: boolean, enum: [false] }
             backup_server_used: { type: boolean, enum: [false] }
             capacity_claim: { type: string, enum: [unverified] }
             observed_at: { type: string, format: date-time }
