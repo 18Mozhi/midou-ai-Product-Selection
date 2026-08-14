@@ -14,6 +14,8 @@
 4. 重启后验证 PING、AOF/RDB 状态、上限、拒绝连接/淘汰键、随机组织范围 set/get/TTL/delete 清理、API readiness、Worker 与 Crawler 健康。
 5. 生产证据只记录脱敏状态、数字、构建身份、时间与 request_id/trace_id，权限 0600；不得记录密码、连接 URL、实际业务键或载荷。
 
+当前已验证基线为提交 `cb81e04381c8424057c481853bceac749592cc6c`、单一 4101 API、停止的 4103 候选及 Redis 生产证据 SHA-256 `7baf6a349f410431c7c655cf8e5fdda8eda7a5b335e62ee1ecef052dcb56482a`。后续调整 Redis 配置、应用构建或运行拓扑后必须重新签发同提交证据并重跑 `npm run verify:module -- M08-02`；不得把发布期临时灰度保留为负载均衡。
+
 ## 告警与降载
 
 - 内存或连接达到 75%：warning，检查缓存增长、队列积压、SSE 与连接泄漏。

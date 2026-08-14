@@ -19,3 +19,5 @@ ScoutOps 在当前惠州单台服务器上只运行一个由宝塔管理的 Redi
 ## 失败与恢复边界
 
 Redis 不可用时 API readiness 保持失败，依赖 Redis 的新异步操作停止；已持久化的 MySQL 事实、审计和 Outbox 不得被改写为成功。恢复只能由宝塔执行配置备份、有限重启、PING、持久化状态、组织隔离 set/get/TTL/delete、API、Worker 与 Crawler 核验。该恢复不保护整机、磁盘或机房故障。
+
+提交 `cb81e04381c8424057c481853bceac749592cc6c` 已在当前惠州单机完成生产验证：Redis 7.4.7 仅监听 `127.0.0.1:6379`，AOF everysec、RDB、512 MiB/noeviction 与 512 连接上限生效；5%/25%/100% 各观察 1,800 秒后收敛到一个 4101 API，4103 停止且 Nginx 无上游池。schema v1 证据 SHA-256 为 `7baf6a349f410431c7c655cf8e5fdda8eda7a5b335e62ee1ecef052dcb56482a`；这只证明单机资源保护与恢复链路，不形成负载均衡、高可用或容量声明。

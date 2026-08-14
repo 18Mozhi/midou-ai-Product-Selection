@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "module": "M08-02",
   "stage": "S0",
-  "status": "implementation_ready_pending_production",
+  "status": "production_verified",
   "manager": "baota",
   "mode": "single_instance",
   "productionRegion": "惠州",
@@ -29,6 +29,16 @@
     "replicaEnabled": false,
     "backupServerUsed": false,
     "capacityClaim": "unverified"
+  },
+  "latestProductionEvidence": {
+    "buildSha": "cb81e04381c8424057c481853bceac749592cc6c",
+    "capturedAt": "2026-08-14T12:37:03.140653Z",
+    "sha256": "7baf6a349f410431c7c655cf8e5fdda8eda7a5b335e62ee1ecef052dcb56482a",
+    "verificationRunId": "d0f8b44f-bbaf-4aa8-a618-6c0e01796676",
+    "activeApiInstances": 1,
+    "singleUpstreamPort": 4101,
+    "candidateStopped": true,
+    "loadBalancingEnabled": false
   },
   "productionActions": [
     "Use a BaoTa finite task to back up redis.conf, apply the exact persistence and limit directives, validate redis-server --test-memory is not used as a config substitute, and restart only the BaoTa Redis service",
