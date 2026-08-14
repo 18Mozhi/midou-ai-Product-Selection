@@ -37,6 +37,14 @@ export interface RuntimeConfig {
     password: string;
     connectTimeoutMs: number;
   };
+  redisResilience: {
+    memoryWarningBasisPoints: number;
+    memoryStopBasisPoints: number;
+    connectionWarningBasisPoints: number;
+    connectionStopBasisPoints: number;
+    productionEvidenceFile: string;
+    maximumEvidenceAgeMinutes: number;
+  };
   ai: {
     baseUrl: string;
     model: string;
@@ -302,6 +310,14 @@ export function loadRuntimeConfig(
         100,
         30000,
       ),
+    },
+    redisResilience: {
+      memoryWarningBasisPoints: integer(env, "REDIS_MEMORY_WARNING_PERCENT", 75, 1, 99) * 100,
+      memoryStopBasisPoints: integer(env, "REDIS_MEMORY_STOP_PERCENT", 90, 2, 100) * 100,
+      connectionWarningBasisPoints: integer(env, "REDIS_CONNECTION_WARNING_PERCENT", 75, 1, 99) * 100,
+      connectionStopBasisPoints: integer(env, "REDIS_CONNECTION_STOP_PERCENT", 90, 2, 100) * 100,
+      productionEvidenceFile: resolve(cwd, text(env, "REDIS_RESILIENCE_PRODUCTION_EVIDENCE_FILE", "./.artifacts/verification/m08-02-redis-resilience-production-evidence.json")),
+      maximumEvidenceAgeMinutes: integer(env, "REDIS_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES", 60, 1, 1440),
     },
     ai: {
       baseUrl: httpUrl(env, "AI_BASE_URL", "http://192.168.1.203:8588/v1"),
@@ -707,6 +723,8 @@ export function loadRuntimeConfig(
   if(!["24h","7d","30d"].includes(base.securityOperations.defaultWindow))throw new ConfigError("SECURITY_OPERATIONS_DEFAULT_WINDOW","must be 24h, 7d or 30d");
   if(base.openPlatform.defaultQuotaPerMinute>base.openPlatform.maxQuotaPerMinute)throw new ConfigError("OPEN_API_DEFAULT_QUOTA_PER_MINUTE","must not exceed OPEN_API_MAX_QUOTA_PER_MINUTE");
   if(base.runtimeTopology.mode!=="single_host")throw new ConfigError("RUNTIME_TOPOLOGY_MODE","must be single_host");
+  if(base.redisResilience.memoryWarningBasisPoints>=base.redisResilience.memoryStopBasisPoints)throw new ConfigError("REDIS_MEMORY_WARNING_PERCENT","must be less than REDIS_MEMORY_STOP_PERCENT");
+  if(base.redisResilience.connectionWarningBasisPoints>=base.redisResilience.connectionStopBasisPoints)throw new ConfigError("REDIS_CONNECTION_WARNING_PERCENT","must be less than REDIS_CONNECTION_STOP_PERCENT");
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.nodeId))throw new ConfigError("RUNTIME_NODE_ID","must be a stable 2-80 character identifier");
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.hostId))throw new ConfigError("RUNTIME_HOST_ID","must be a stable 2-80 character identifier");
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.zone))throw new ConfigError("RUNTIME_NODE_ZONE","must be a stable 2-80 character identifier");

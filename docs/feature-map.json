@@ -108,7 +108,7 @@
       "purposes": ["cache", "queue", "rate", "sse"],
       "keyScope": "scoutops:v1:<purpose>:org:<organization_id>:ws:<workspace_id>:...",
       "ttlPolicy": { "cache": 300, "queue": 86400, "rate": 60, "sse": 86400 },
-      "runtimeEndpoint": "deferred_to_M00-05",
+      "runtimeEndpoint": "/api/v1/platform/operations/redis",
       "status": "module_verified"
     },
     "apiFoundation": {
@@ -1467,6 +1467,20 @@
       "backupServerUsed": false,
       "multiNodeClaim": false,
       "status": "module_verified"
+    },
+    "redisResilience": {
+      "module": "M08-02",
+      "entrypoints": ["../packages/redis/src/index.ts", "../apps/api/src/redis-resilience-service.ts", "../apps/api/src/mysql-redis-resilience-repository.ts", "../apps/api/src/redis-resilience-routes.ts", "../apps/web/src/components/RedisResilienceCenter.vue", "../infra/baota/redis-single-instance-manifest.json", "../scripts/verify-redis-resilience-production.mjs"],
+      "routes": ["/platform-admin/redis", "/api/v1/platform/operations/redis"],
+      "scope": "M08-02 current Huizhou BaoTa Redis single-instance persistence resource limits fail-closed alerts restart and recovery evidence",
+      "truthBoundary": "ready requires loopback protected-mode AOF everysec RDB save rules nonzero maxmemory noeviction bounded maxclients zero rejected connections zero evicted keys and a current BaoTa recovery drill",
+      "permission": "the operations view requires platform:operate and transactionally appends a platform audit with request_id and trace_id; no connection URL password raw key or payload is returned",
+      "configuration": ["REDIS_MEMORY_WARNING_PERCENT", "REDIS_MEMORY_STOP_PERCENT", "REDIS_CONNECTION_WARNING_PERCENT", "REDIS_CONNECTION_STOP_PERCENT", "REDIS_RESILIENCE_PRODUCTION_EVIDENCE_FILE", "REDIS_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES"],
+      "runtimeBoundary": "one BaoTa Redis on the current Huizhou host with no Sentinel cluster replica backup server or capacity claim",
+      "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 Redis resilience baselines"],
+      "limits": {"maxmemoryBytes": 536870912, "maxmemoryPolicy": "noeviction", "maxclients": 512, "memoryWarningPercent": 75, "memoryStopPercent": 90, "connectionWarningPercent": 75, "connectionStopPercent": 90},
+      "capacityClaim": "unverified",
+      "status": "implementation_ready_pending_production"
     }
   },
   "phaseVerification": {
@@ -1717,6 +1731,12 @@
       "view": "RuntimeTopologyCenter",
       "domain": "runtime-topology",
       "status": "M08-01_single_server_module_verified"
+    },
+    {
+      "path": "/platform-admin/redis",
+      "view": "RedisResilienceCenter",
+      "domain": "redis-resilience",
+      "status": "M08-02_implementation_ready_pending_production"
     }
   ],
   "apiGroups": [
@@ -1809,6 +1829,7 @@
       "status": "M01-06_audit_and_P03_sources_collection_evidence_provider_sources_implemented_remaining_platform_management_planned"
     },
     { "prefix": "/api/v1/platform/operations/topology", "domain": "runtime-topology", "status": "M08-01_single_server_module_verified" },
+    { "prefix": "/api/v1/platform/operations/redis", "domain": "redis-resilience", "status": "M08-02_implementation_ready_pending_production" },
     { "prefix": "/api/v1/platform/commercial", "domain": "commercial-operations", "status": "M06-06_module_verified" },
     { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
   ],

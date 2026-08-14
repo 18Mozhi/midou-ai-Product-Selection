@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScoutOps M08-02 BaoTa Redis single-instance production evidence",
+  "type": "object",
+  "required": ["schemaVersion","module","status","buildSha","manager","mode","region","network","persistence","limits","runtime","restart","sentinelEnabled","clusterEnabled","replicaEnabled","backupServerUsed","capacityClaim","capturedAt"],
+  "properties": {
+    "schemaVersion": {"const": 1}, "module": {"const": "M08-02"}, "status": {"const": "ready"},
+    "buildSha": {"type":"string","pattern":"^[a-f0-9]{40}$"}, "manager": {"const":"baota"}, "mode": {"const":"single_instance"}, "region": {"const":"惠州"},
+    "network": {"type":"object","required":["bindLoopback","protectedMode","publicPortExposed"],"properties":{"bindLoopback":{"const":true},"protectedMode":{"const":true},"publicPortExposed":{"const":false}},"additionalProperties":false},
+    "persistence": {"type":"object","required":["appendonly","appendfsync","rdbEnabled","aofLastWriteStatus","rdbLastSaveStatus"],"properties":{"appendonly":{"const":true},"appendfsync":{"const":"everysec"},"rdbEnabled":{"const":true},"aofLastWriteStatus":{"const":"ok"},"rdbLastSaveStatus":{"const":"ok"}},"additionalProperties":false},
+    "limits": {"type":"object","required":["usedMemoryBytes","maxmemoryBytes","maxmemoryPolicy","connectedClients","maxclients","rejectedConnections","evictedKeys"],"properties":{"usedMemoryBytes":{"type":"integer","minimum":0},"maxmemoryBytes":{"const":536870912},"maxmemoryPolicy":{"const":"noeviction"},"connectedClients":{"type":"integer","minimum":0},"maxclients":{"const":512},"rejectedConnections":{"const":0},"evictedKeys":{"const":0}},"additionalProperties":false},
+    "runtime": {"type":"object","required":["ping","scopedRoundTripCleanup","apiReadiness","workerReady","crawlerReady"],"properties":{"ping":{"const":"PONG"},"scopedRoundTripCleanup":{"const":true},"apiReadiness":{"const":true},"workerReady":{"const":true},"crawlerReady":{"const":true}},"additionalProperties":false},
+    "restart": {"type":"object","required":["managedByBaoTa","configurationBackup","restartCompleted","recoveryVerifiedAt"],"properties":{"managedByBaoTa":{"const":true},"configurationBackup":{"const":true},"restartCompleted":{"const":true},"recoveryVerifiedAt":{"type":"string","format":"date-time"}},"additionalProperties":false},
+    "sentinelEnabled":{"const":false},"clusterEnabled":{"const":false},"replicaEnabled":{"const":false},"backupServerUsed":{"const":false},"capacityClaim":{"const":"unverified"},"capturedAt":{"type":"string","format":"date-time"}
+  },
+  "additionalProperties": false
+}

@@ -17,8 +17,8 @@ x-scoutops-verification:
   releaseMatrixRuntimeApiExposed: false
   securityGateRuntimeApiExposed: false
 x-scoutops-redis:
-  runtimeApiExposed: false
-  reason: M00-04 provides a backend-only scoped connection contract; M00-05 owns readiness routing and authorization middleware.
+  runtimeApiExposed: true
+  reason: M00-04 provides the backend-only scoped key contract; M08-02 adds a platform:operate protected and audited single-instance resilience view without exposing connection details or keys.
   keyScope: 'scoutops:v1:<purpose>:org:<organization_id>:ws:<workspace_id>:...'
   purposes: [cache, queue, rate, sse]
   secretFields: [REDIS_PASSWORD]
@@ -169,6 +169,22 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/RuntimeTopologyEnvelope' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/operations/redis:
+    get:
+      summary: Read audited Redis single-instance resilience facts
+      description: M08-02 reports sanitized AOF/RDB, memory, connection and fail-closed findings for the current BaoTa Redis. It never returns host, port, password, keys or queue payloads and makes no Sentinel, cluster, replica or capacity claim.
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: platform:operate
+      responses:
+        '200':
+          description: Current Redis resilience state is ready, warning or blocked
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RedisResilienceEnvelope' }
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '429': { $ref: '#/components/responses/Error' }
@@ -2266,6 +2282,52 @@ components:
             load_balancing_enabled: { type: boolean, enum: [false] }
             backup_server_used: { type: boolean, enum: [false] }
             multi_node_claim: { type: boolean, enum: [false] }
+            capacity_claim: { type: string, enum: [unverified] }
+            observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
+    RedisResilienceEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          required: [state, mode, persistence, memory, connections, evicted_keys, findings, single_instance, sentinel_enabled, cluster_enabled, capacity_claim, observed_at]
+          properties:
+            state: { type: string, enum: [ready, warning, blocked] }
+            mode: { type: string, enum: [single_instance] }
+            persistence:
+              type: object
+              additionalProperties: false
+              required: [aof_enabled, rdb_enabled, aof_last_write_status, rdb_last_save_status]
+              properties:
+                aof_enabled: { type: boolean }
+                rdb_enabled: { type: boolean }
+                aof_last_write_status: { type: string, enum: [ok, err, unknown] }
+                rdb_last_save_status: { type: string, enum: [ok, err, unknown] }
+            memory:
+              type: object
+              additionalProperties: false
+              required: [used_bytes, max_bytes, usage_basis_points]
+              properties: { used_bytes: { type: integer, minimum: 0 }, max_bytes: { type: integer, minimum: 0 }, usage_basis_points: { type: integer, minimum: 0, maximum: 10000 } }
+            connections:
+              type: object
+              additionalProperties: false
+              required: [connected, maximum, usage_basis_points, rejected]
+              properties: { connected: { type: integer, minimum: 0 }, maximum: { type: integer, minimum: 0 }, usage_basis_points: { type: integer, minimum: 0, maximum: 10000 }, rejected: { type: integer, minimum: 0 } }
+            evicted_keys: { type: integer, minimum: 0 }
+            findings:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: [code, severity, action_hint]
+                properties: { code: { type: string }, severity: { type: string, enum: [warning, blocked] }, action_hint: { type: string } }
+            single_instance: { type: boolean, enum: [true] }
+            sentinel_enabled: { type: boolean, enum: [false] }
+            cluster_enabled: { type: boolean, enum: [false] }
             capacity_claim: { type: string, enum: [unverified] }
             observed_at: { type: string, format: date-time }
         request_id: { type: string }

@@ -1,0 +1,36 @@
+{
+  "moduleId": "M08-02",
+  "phaseId": "P08",
+  "name": "S0 BaoTa Redis Single-Instance Resilience",
+  "dependencies": ["M08-01"],
+  "atomicTasks": [
+    {"id":"M08-02.A01","evidence":"freeze one BaoTa Redis with no Sentinel cluster replica backup server or capacity claim"},
+    {"id":"M08-02.A02","evidence":"single-instance persistence memory connection finding and capacity-unverified contracts"},
+    {"id":"M08-02.A03","evidence":"0031 MySQL57 utf8mb4 reversible observations views and audit migration"},
+    {"id":"M08-02.A04","evidence":"fail-closed Redis evaluation and audited read service"},
+    {"id":"M08-02.A05","evidence":"existing Worker Crawler leases retries and idempotency resume after Redis recovery without a new daemon"},
+    {"id":"M08-02.A06","evidence":"OpenAPI protected platform operations Redis DTO without connection or key disclosure"},
+    {"id":"M08-02.A07","evidence":"image-grounded dark Redis operations cockpit with desktop and 390 layouts"},
+    {"id":"M08-02.A08","evidence":"loading ready warning blocked empty forbidden expired rate-limited unavailable and recovering states"},
+    {"id":"M08-02.A09","evidence":"platform operate guard transactional read audit and backend-only Redis credentials"},
+    {"id":"M08-02.A10","evidence":"schema env example watermarks ignored production evidence and BaoTa restart requirements"},
+    {"id":"M08-02.A11","evidence":"request trace persistence memory connection rejected evicted and recovery observability"},
+    {"id":"M08-02.A12","evidence":"persistence limit warning stop unavailable and configuration unit branches"},
+    {"id":"M08-02.A13","evidence":"OpenAPI Feature Map manifest evidence schema and DTO contract coverage"},
+    {"id":"M08-02.A14","evidence":"real MySQL57 migration Redis inspection scoped round trip cleanup API Worker and Crawler integration"},
+    {"id":"M08-02.A15","evidence":"concepts 61 64 69 and core 10 desktop and 390 Linux visual baselines"},
+    {"id":"M08-02.A16","evidence":"AOF disabled unbounded memory threshold rejection dependency failure BaoTa restart rollback and recovery drills"},
+    {"id":"M08-02.A17","evidence":"blueprint plan Feature Map OpenAPI env manifest architecture Runbook production evidence and rollback synchronized"}
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m08-02/redis-single-instance-resilience.test.mjs",
+    "node scripts/verify-redis-resilience-production.mjs --preflight",
+    "node scripts/verify-mysql-live.mjs",
+    "node scripts/verify-redis-resilience-live.mjs",
+    "node scripts/verify-api-live.mjs",
+    "npx playwright test tests/e2e/m08-02-redis-resilience.spec.ts",
+    "npm run verify:docs",
+    "node scripts/verify-redis-resilience-production.mjs --production"
+  ]
+}

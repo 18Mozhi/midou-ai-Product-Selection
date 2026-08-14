@@ -1,7 +1,7 @@
 import { buildApp } from "./app.js";
 import { loadRuntimeConfig } from "@scoutops/config";
 import { createDatabasePool } from "@scoutops/database";
-import { createRedisConnection, ScopedRedisStore } from "@scoutops/redis";
+import { createRedisConnection, inspectRedisResilience, ScopedRedisStore } from "@scoutops/redis";
 import {
   createArgon2PasswordHasher,
   EncryptedOutboxAuthDelivery,
@@ -108,6 +108,9 @@ import { MySqlSelectionJourneyRepository } from "./mysql-selection-journey-repos
 import { RuntimeTopologyService } from "./runtime-topology-service.js";
 import { MySqlRuntimeTopologyRepository } from "./mysql-runtime-topology-repository.js";
 import { registerRuntimeTopologyRoutes } from "./runtime-topology-routes.js";
+import { RedisResilienceService } from "./redis-resilience-service.js";
+import { MySqlRedisResilienceRepository } from "./mysql-redis-resilience-repository.js";
+import { registerRedisResilienceRoutes } from "./redis-resilience-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -120,6 +123,11 @@ const runtimeTopologyService = new RuntimeTopologyService(runtimeTopologyReposit
   expectedHostId: config.runtimeTopology.hostId,
   staleAfterMs: config.runtimeTopology.staleAfterMs,
 });
+const redisResilienceService = new RedisResilienceService(
+  {snapshot:async()=>{await redisStore.connect();return inspectRedisResilience(redisClient);}},
+  new MySqlRedisResilienceRepository(pool),
+  config.redisResilience,
+);
 const authRepository = new MySqlAuthRepository(pool);
 const authOutbox = new MySqlAuthOutboxStore(pool);
 const authDelivery = config.security.credentialsMasterKey
@@ -455,6 +463,7 @@ registerBackupRecoveryRoutes(app,{service:new BackupRecoveryService(new MySqlBac
 const releaseRolloutRepository = new MySqlReleaseRolloutRepository(pool);
 registerReleaseRolloutRoutes(app,{service:new ReleaseRolloutService(releaseRolloutRepository,{percentages:[5,25,100],...config.releaseRollout}),writeProbeService:new ReleaseWriteProbeService(releaseRolloutRepository,config.security.releaseProbeSigningKey,config.app.buildSha,config.releaseRollout.probeTimestampToleranceSeconds),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerRuntimeTopologyRoutes(app,{service:runtimeTopologyService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
+registerRedisResilienceRoutes(app,{service:redisResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {
     evidenceRoot: config.storage.evidenceRoot,

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "module": "M08-02",
+  "stage": "S0",
+  "status": "implementation_ready_pending_production",
+  "manager": "baota",
+  "mode": "single_instance",
+  "productionRegion": "惠州",
+  "bind": "127.0.0.1",
+  "protectedMode": true,
+  "persistence": {
+    "appendonly": true,
+    "appendfsync": "everysec",
+    "rdbSaveRulesRequired": true
+  },
+  "limits": {
+    "maxmemoryBytes": 536870912,
+    "maxmemoryPolicy": "noeviction",
+    "maxclients": 512,
+    "memoryWarningPercent": 75,
+    "memoryStopPercent": 90,
+    "connectionWarningPercent": 75,
+    "connectionStopPercent": 90
+  },
+  "topologyClaims": {
+    "singleInstance": true,
+    "sentinelEnabled": false,
+    "clusterEnabled": false,
+    "replicaEnabled": false,
+    "backupServerUsed": false,
+    "capacityClaim": "unverified"
+  },
+  "productionActions": [
+    "Use a BaoTa finite task to back up redis.conf, apply the exact persistence and limit directives, validate redis-server --test-memory is not used as a config substitute, and restart only the BaoTa Redis service",
+    "After restart verify PING, AOF and RDB status, maxmemory, maxclients, noeviction, scoped set get ttl delete, API readiness and existing Worker Crawler health",
+    "On failure restore the backed-up redis.conf and restart Redis through BaoTa before dependent services resume"
+  ],
+  "forbiddenManagers": ["systemd", "standalone_pm2", "host_crontab", "screen_docker_compose"],
+  "rollback": "Restore the exact BaoTa Redis configuration backup, restart the BaoTa Redis service, verify persistence plus scoped read/write cleanup, and preserve failure evidence. Never FLUSHALL or wildcard-delete keys."
+}

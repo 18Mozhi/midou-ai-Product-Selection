@@ -74,6 +74,102 @@ export interface RedisConnection {
   eval(script: string, options: { keys: string[]; arguments: string[] }): Promise<unknown>;
 }
 
+export type RedisResilienceState = 'ready' | 'warning' | 'blocked';
+export interface RedisResilienceSnapshot {
+  available: boolean;
+  loading: boolean;
+  appendOnlyEnabled: boolean;
+  rdbEnabled: boolean;
+  aofLastWriteStatus: 'ok' | 'err' | 'unknown';
+  rdbLastSaveStatus: 'ok' | 'err' | 'unknown';
+  usedMemoryBytes: number;
+  maxMemoryBytes: number;
+  maxMemoryPolicy: string;
+  connectedClients: number;
+  maxClients: number;
+  rejectedConnections: number;
+  evictedKeys: number;
+  uptimeSeconds: number;
+}
+export interface RedisResiliencePolicy {
+  memoryWarningBasisPoints: number;
+  memoryStopBasisPoints: number;
+  connectionWarningBasisPoints: number;
+  connectionStopBasisPoints: number;
+}
+export interface RedisResilienceFinding { code: string; severity: 'warning' | 'blocked'; actionHint: string }
+export interface RedisResilienceEvaluation {
+  state: RedisResilienceState;
+  memoryUsageBasisPoints: number;
+  connectionUsageBasisPoints: number;
+  findings: RedisResilienceFinding[];
+  singleInstance: true;
+  sentinelEnabled: false;
+  clusterEnabled: false;
+  capacityClaim: 'unverified';
+}
+
+const ratioBasisPoints = (used: number, maximum: number) => maximum > 0 ? Math.min(10000, Math.round((used / maximum) * 10000)) : 10000;
+
+export function evaluateRedisResilience(snapshot: RedisResilienceSnapshot, policy: RedisResiliencePolicy): RedisResilienceEvaluation {
+  const findings: RedisResilienceFinding[] = [];
+  const blocked = (code: string, actionHint: string) => findings.push({code, severity: 'blocked', actionHint} as const);
+  const warning = (code: string, actionHint: string) => findings.push({code, severity: 'warning', actionHint} as const);
+  if (!snapshot.available) blocked('redis_unavailable', '在宝塔检查并恢复当前单 Redis 服务后重新核验。');
+  if (snapshot.loading) blocked('redis_loading', '等待宝塔 Redis 完成持久化数据加载后重新核验。');
+  if (!snapshot.appendOnlyEnabled) blocked('redis_aof_disabled', '通过宝塔启用 AOF everysec 并执行受控重启。');
+  if (!snapshot.rdbEnabled) blocked('redis_rdb_disabled', '通过宝塔保留受控 RDB save 规则。');
+  if (snapshot.aofLastWriteStatus !== 'ok') blocked('redis_aof_write_failed', '在宝塔检查 AOF 写入状态、磁盘空间和 Redis 日志。');
+  if (snapshot.rdbLastSaveStatus !== 'ok') blocked('redis_rdb_save_failed', '在宝塔检查 RDB 保存状态、磁盘空间和 Redis 日志。');
+  if (snapshot.maxMemoryBytes <= 0) blocked('redis_memory_unbounded', '通过宝塔为单 Redis 设置非零 maxmemory 上限。');
+  if (snapshot.maxMemoryPolicy !== 'noeviction') blocked('redis_eviction_policy_invalid', '通过宝塔恢复 noeviction，禁止静默淘汰协调数据。');
+  if (snapshot.maxClients <= 0) blocked('redis_connections_unbounded', '通过宝塔设置非零 maxclients 上限。');
+  const memoryUsageBasisPoints = ratioBasisPoints(snapshot.usedMemoryBytes, snapshot.maxMemoryBytes);
+  const connectionUsageBasisPoints = ratioBasisPoints(snapshot.connectedClients, snapshot.maxClients);
+  if (snapshot.maxMemoryBytes > 0 && memoryUsageBasisPoints >= policy.memoryStopBasisPoints) blocked('redis_memory_stop', '停止新异步任务并在宝塔检查内存与积压。');
+  else if (snapshot.maxMemoryBytes > 0 && memoryUsageBasisPoints >= policy.memoryWarningBasisPoints) warning('redis_memory_warning', '检查缓存、队列和 SSE 协调数据增长。');
+  if (snapshot.maxClients > 0 && connectionUsageBasisPoints >= policy.connectionStopBasisPoints) blocked('redis_connections_stop', '停止新增连接并在宝塔检查连接泄漏。');
+  else if (snapshot.maxClients > 0 && connectionUsageBasisPoints >= policy.connectionWarningBasisPoints) warning('redis_connections_warning', '检查 API、Worker 与 Crawler 的 Redis 连接。');
+  if (snapshot.rejectedConnections > 0) blocked('redis_connections_rejected', '在宝塔核对拒绝连接增量和受影响能力。');
+  if (snapshot.evictedKeys > 0) blocked('redis_keys_evicted', '停止依赖 Redis 的新操作并核对是否存在数据淘汰。');
+  return {
+    state: findings.some((item) => item.severity === 'blocked') ? 'blocked' : findings.length ? 'warning' : 'ready',
+    memoryUsageBasisPoints, connectionUsageBasisPoints, findings,
+    singleInstance: true, sentinelEnabled: false, clusterEnabled: false, capacityClaim: 'unverified',
+  };
+}
+
+export interface RedisResilienceConnection {
+  ping(): Promise<string>;
+  info(section?: string): Promise<string>;
+  configGet(parameter: string): Promise<Record<string, string>>;
+}
+
+const infoValues = (raw: string) => Object.fromEntries(raw.split(/\r?\n/).filter((line) => line && !line.startsWith('#') && line.includes(':')).map((line) => {
+  const index = line.indexOf(':'); return [line.slice(0, index), line.slice(index + 1)];
+}));
+const safeNumber = (value: string | undefined) => { const parsed = Number(value ?? '0'); return Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : 0; };
+
+export async function inspectRedisResilience(client: RedisResilienceConnection): Promise<RedisResilienceSnapshot> {
+  try {
+    if (await client.ping() !== 'PONG') throw new Error('unexpected ping');
+    const [serverRaw, persistenceRaw, memoryRaw, clientsRaw, statsRaw, appendOnly, save, maxMemory, policy, maxClients] = await Promise.all([
+      client.info('server'), client.info('persistence'), client.info('memory'), client.info('clients'), client.info('stats'),
+      client.configGet('appendonly'), client.configGet('save'), client.configGet('maxmemory'), client.configGet('maxmemory-policy'), client.configGet('maxclients'),
+    ]);
+    const server = infoValues(serverRaw), persistence = infoValues(persistenceRaw), memory = infoValues(memoryRaw), clients = infoValues(clientsRaw), stats = infoValues(statsRaw);
+    return {
+      available: true, loading: persistence.loading === '1', appendOnlyEnabled: appendOnly.appendonly === 'yes', rdbEnabled: Boolean(save.save?.trim()),
+      aofLastWriteStatus: persistence.aof_last_write_status === 'ok' ? 'ok' : persistence.aof_last_write_status === 'err' ? 'err' : persistence.aof_last_bgrewrite_status === 'ok' ? 'ok' : 'unknown',
+      rdbLastSaveStatus: persistence.rdb_last_bgsave_status === 'ok' ? 'ok' : persistence.rdb_last_bgsave_status === 'err' ? 'err' : 'unknown',
+      usedMemoryBytes: safeNumber(memory.used_memory), maxMemoryBytes: safeNumber(maxMemory.maxmemory ?? memory.maxmemory), maxMemoryPolicy: policy['maxmemory-policy'] ?? memory.maxmemory_policy ?? 'unknown',
+      connectedClients: safeNumber(clients.connected_clients), maxClients: safeNumber(maxClients.maxclients ?? clients.maxclients), rejectedConnections: safeNumber(stats.rejected_connections), evictedKeys: safeNumber(stats.evicted_keys), uptimeSeconds: safeNumber(server.uptime_in_seconds),
+    };
+  } catch {
+    return {available:false,loading:false,appendOnlyEnabled:false,rdbEnabled:false,aofLastWriteStatus:'unknown',rdbLastSaveStatus:'unknown',usedMemoryBytes:0,maxMemoryBytes:0,maxMemoryPolicy:'unknown',connectedClients:0,maxClients:0,rejectedConnections:0,evictedKeys:0,uptimeSeconds:0};
+  }
+}
+
 export function createRedisConnection(config: RuntimeConfig): RedisClientType {
   return createClient({
     socket: { host: config.redis.host, port: config.redis.port, connectTimeout: config.redis.connectTimeoutMs },

@@ -1,0 +1,15 @@
+export function validateRedisResilienceEvidence({evidence, manifest, head, now=Date.now(), maxAgeMs=3_600_000}) {
+  if(manifest?.schemaVersion!==1||manifest?.module!=="M08-02"||manifest?.manager!=="baota"||manifest?.mode!=="single_instance"||manifest?.productionRegion!=="惠州")throw new Error("redis_resilience_manifest_invalid");
+  if(evidence?.schemaVersion!==1||evidence?.module!=="M08-02"||evidence?.status!=="ready"||evidence?.buildSha!==head||evidence?.manager!=="baota"||evidence?.mode!=="single_instance"||evidence?.region!=="惠州")throw new Error("redis_resilience_evidence_identity_invalid");
+  if(evidence.sentinelEnabled!==false||evidence.clusterEnabled!==false||evidence.replicaEnabled!==false||evidence.backupServerUsed!==false||evidence.capacityClaim!=="unverified")throw new Error("redis_resilience_claim_invalid");
+  if(evidence.network?.bindLoopback!==true||evidence.network?.protectedMode!==true||evidence.network?.publicPortExposed!==false)throw new Error("redis_resilience_network_invalid");
+  if(evidence.persistence?.appendonly!==true||evidence.persistence?.appendfsync!=="everysec"||evidence.persistence?.rdbEnabled!==true||evidence.persistence?.aofLastWriteStatus!=="ok"||evidence.persistence?.rdbLastSaveStatus!=="ok")throw new Error("redis_resilience_persistence_invalid");
+  const limits=evidence.limits??{}, expected=manifest.limits??{};
+  if(limits.maxmemoryBytes!==expected.maxmemoryBytes||limits.maxmemoryPolicy!==expected.maxmemoryPolicy||limits.maxclients!==expected.maxclients||!Number.isSafeInteger(limits.usedMemoryBytes)||limits.usedMemoryBytes<0||limits.usedMemoryBytes>limits.maxmemoryBytes||!Number.isSafeInteger(limits.connectedClients)||limits.connectedClients<0||limits.connectedClients>limits.maxclients||limits.rejectedConnections!==0||limits.evictedKeys!==0)throw new Error("redis_resilience_limits_invalid");
+  if(evidence.runtime?.ping!=="PONG"||evidence.runtime?.scopedRoundTripCleanup!==true||evidence.runtime?.apiReadiness!==true||evidence.runtime?.workerReady!==true||evidence.runtime?.crawlerReady!==true)throw new Error("redis_resilience_runtime_invalid");
+  if(evidence.restart?.managedByBaoTa!==true||evidence.restart?.configurationBackup!==true||evidence.restart?.restartCompleted!==true)throw new Error("redis_resilience_restart_invalid");
+  if(!Number.isSafeInteger(maxAgeMs)||maxAgeMs<60_000||maxAgeMs>86_400_000)throw new Error("redis_resilience_max_age_invalid");
+  const capturedAt=Date.parse(evidence.capturedAt), recoveredAt=Date.parse(evidence.restart.recoveryVerifiedAt);
+  if(!Number.isFinite(capturedAt)||!Number.isFinite(recoveredAt)||capturedAt>now+30_000||recoveredAt>now+30_000||now-capturedAt>maxAgeMs||now-recoveredAt>maxAgeMs)throw new Error("redis_resilience_evidence_stale");
+  return {maxmemoryBytes:limits.maxmemoryBytes,maxclients:limits.maxclients,memoryUsageBasisPoints:Math.round(limits.usedMemoryBytes/limits.maxmemoryBytes*10000),connectionUsageBasisPoints:Math.round(limits.connectedClients/limits.maxclients*10000)};
+}

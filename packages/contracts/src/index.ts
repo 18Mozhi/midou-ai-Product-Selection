@@ -125,6 +125,22 @@ export interface RedisDependencyStatus {
   trace_id: string;
 }
 
+export interface RedisResilienceFindingDto { code: string; severity: 'warning' | 'blocked'; action_hint: string }
+export interface RedisResilienceDto {
+  state: 'ready' | 'warning' | 'blocked';
+  mode: 'single_instance';
+  persistence: { aof_enabled: boolean; rdb_enabled: boolean; aof_last_write_status: 'ok' | 'err' | 'unknown'; rdb_last_save_status: 'ok' | 'err' | 'unknown' };
+  memory: { used_bytes: number; max_bytes: number; usage_basis_points: number };
+  connections: { connected: number; maximum: number; usage_basis_points: number; rejected: number };
+  evicted_keys: number;
+  findings: RedisResilienceFindingDto[];
+  single_instance: true;
+  sentinel_enabled: false;
+  cluster_enabled: false;
+  capacity_claim: 'unverified';
+  observed_at: string;
+}
+
 export interface DatabaseDependencyStatus {
   status: 'available' | 'unavailable';
   latency_ms: number;
