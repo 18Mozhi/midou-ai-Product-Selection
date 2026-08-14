@@ -5,6 +5,8 @@ import test from "node:test";
 const requiredFiles = [
   "database/migrations/0032_mysql_resilience_m08_03.up.sql",
   "database/migrations/0032_mysql_resilience_m08_03.down.sql",
+  "database/migrations/0032a_compact_release_write_probe_m08_03.up.sql",
+  "database/migrations/0032a_compact_release_write_probe_m08_03.down.sql",
   "apps/api/src/mysql-resilience-probe.ts",
   "apps/api/src/mysql-resilience-service.ts",
   "apps/api/src/mysql-resilience-repository.ts",
@@ -164,6 +166,26 @@ test("M08-03.A10/A13 upgrades the release gate to ROW binlog inclusion without c
   assert.equal(contract.schemaVersion,6);assert.equal(contract.mysqlDurability.binlogFormat,"ROW");assert.equal(contract.mysqlDurability.productScoutBinlogExcluded,false);
   assert.deepEqual(contract.canary.percentages,[5,25,100]);assert.equal(contract.canary.minimumObservationSeconds,1800);assert.equal(contract.automaticStop.writeP95MsInclusive,600);
   for(const source of Object.values(sources)){assert.match(source,/binlogFormat|binlog_format|binlog-format/);assert.doesNotMatch(source,/binlog-ignore-db=product_scout|productScoutBinlogExcluded["']?\s*[:=]\s*true/);}
+});
+
+test("M08-03.A10/A13 keeps historical probes immutable and writes new durability samples to a compact MySQL57 table", async () => {
+  const [up,down,repository,runner,verifier,schema,runbook]=await Promise.all([
+    "database/migrations/0032a_compact_release_write_probe_m08_03.up.sql",
+    "database/migrations/0032a_compact_release_write_probe_m08_03.down.sql",
+    "apps/api/src/mysql-release-rollout-repository.ts",
+    "scripts/run-baota-release-rollout.mjs",
+    "scripts/verify-release-rollout-production.mjs",
+    "verification/release-rollout-production-evidence.schema.json",
+    "docs/runbooks/m08-03-mysql-resilience.md",
+  ].map((path)=>readFile(path,"utf8")));
+  assert.match(up,/CREATE TABLE `deployment_release_write_samples`/);
+  assert.match(up,/`seq_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT/);
+  assert.match(up,/`sample_id` BINARY\(16\)/);assert.match(up,/`build_sha` BINARY\(20\)/);assert.match(up,/`nonce_hash` BINARY\(32\)/);
+  assert.doesNotMatch(up,/PRIMARY KEY \(`id`\)/);assert.match(down,/DROP TABLE IF EXISTS `deployment_release_write_samples`/);
+  assert.match(repository,/INSERT INTO deployment_release_write_samples/);assert.doesNotMatch(repository,/INSERT INTO deployment_release_write_probes/);
+  assert.match(runner,/deployment_release_write_samples/);assert.match(runner,/0032a_compact_release_write_probe_m08_03\.up\.sql/);
+  assert.match(verifier,/0032a_compact_release_write_probe_m08_03\.up\.sql/);assert.match(schema,/0032a_compact_release_write_probe_m08_03\.up\.sql/);
+  assert.match(runbook,/历史探针|旧表/);assert.match(runbook,/只读|保留/);
 });
 
 test("M08-03.A07/A08/A15/A16 UI and production evidence cover full states and recovery", async () => {

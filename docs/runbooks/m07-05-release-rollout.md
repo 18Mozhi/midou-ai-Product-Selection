@@ -14,7 +14,7 @@ MySQL 5.7 的宝塔受限 `my.cnf` 必须显式设置 `innodb_flush_log_at_trx_c
 
 1. 在宝塔确认稳定/候选 API 的 live、ready、version，确认 MySQL 5.7、Redis、Worker、Crawler 正常；确认发布任务仅手工触发、系统计划中没有自动日调度、当前没有其他发布实例。重复启动必须返回 `release_rollout_lock_busy`，不得清理或覆盖已有失败门禁。
 2. 运行 M07-01、M07-02、M07-04 门禁并确认最近隔离恢复为 verified。
-3. 从宝塔手工执行发布任务。任务先验证 `0027` 写探针迁移和候选签名写入，再依次配置 5%、25%、100%，每阶段至少观察 30 分钟；宝塔日志应持续显示 request_id/trace_id，但不显示秘密。Nginx 会用 32 位十六进制 `$request_id` 覆盖 `X-Request-ID`，因此签名 canonical 只含 timestamp、nonce、release_id、sample_id；API 仍保存代理传入的追踪值。只有 Nginx 499 且 `upstream_status="-"` 的到达上游前中断可用同一 sample_id 重试一次，证据必须记录次数；不得重试候选拒绝，重试仍无法送达时失败关闭。候选已到达上游的写探针必须返回 202，且候选构建的新增持久化行数必须与候选 Nginx 已到达上游的写样本数相等，否则自动回到稳定槽。
+3. 从宝塔手工执行发布任务。任务先验证历史 `0027` 迁移和 `0032a_compact_release_write_probe_m08_03` 紧凑写样本迁移，再验证候选签名写入；历史 `deployment_release_write_probes` 只读保留，新样本只能进入 `deployment_release_write_samples`。随后依次配置 5%、25%、100%，每阶段至少观察 30 分钟；宝塔日志应持续显示 request_id/trace_id，但不显示秘密。Nginx 会用 32 位十六进制 `$request_id` 覆盖 `X-Request-ID`，因此签名 canonical 只含 timestamp、nonce、release_id、sample_id；API 仍保存代理传入的追踪值。只有 Nginx 499 且 `upstream_status="-"` 的到达上游前中断可用同一 sample_id 重试一次，证据必须记录次数；不得重试候选拒绝，重试仍无法送达时失败关闭。候选已到达上游的写探针必须返回 202，且候选构建的新增持久化行数必须与候选 Nginx 已到达上游的写样本数相等，否则自动回到稳定槽。
 4. 在 `/platform-admin/releases` 查看当前 release、三阶段样本、5xx、读写 P95、异步延迟和阻断项。API 只读，不能从浏览器触发发布。
    异步延迟清单必须与 `infra/baota/release-rollout-manifest.json` 的 `automaticStop.asyncQueueTables` 一致，只包含宝塔 Worker 可领取的到期工作和过期租约。队列 `DATETIME(3)` 的到期判断与等待时长必须和 Worker 一样使用 MySQL 当前会话 `NOW(3)`；若 MySQL `@@system_time_zone` 不是 UTC，禁止把 `UTC_TIMESTAMP(3)` 与这些会话本地时间直接比较，否则会制造固定时差的假积压。领域审计 Outbox 没有当前消费者时保留原状态与证据，但不计入可执行队列延迟；禁止删除这些记录或放宽 60 秒阈值来通过灰度。
 5. 生产证据写入 Git 忽略的 `.artifacts/verification/release-rollout-production-evidence.json`，再执行 `node scripts/verify-release-rollout-production.mjs --production`。
@@ -51,4 +51,4 @@ MySQL 5.7 的宝塔受限 `my.cnf` 必须显式设置 `innodb_flush_log_at_trx_c
 
 若撤销已授权的 MySQL 持久性合同，先确保发布任务没有运行且 Nginx 已全量指向稳定槽，从 `/www/server/panel/data/scoutops-m0705-durability-before-*.cnf` 恢复 `/etc/my.cnf`，再通过宝塔重启 MySQL。验收 `innodb_flush_log_at_trx_commit=1`、`Binlog_Ignore_DB` 不含 `product_scout`、稳定/候选 ready 均为 200。撤销后 M07-05 生产门必须重新执行，旧证据失效。
 
-若需要撤销写探针，先停止发布任务并把 candidate 比例恢复为 0%，导出 `deployment_release_write_probes` 和 gate/event 审计，再执行 `0027_release_write_probe_m07_05.down.sql`，最后由宝塔重启 API。不得在仍有 M07-05 发布任务运行时删除该表或轮换签名密钥。
+若需要撤销紧凑写探针，先停止发布任务并把 candidate 比例恢复为 0%，导出 `deployment_release_write_samples` 和 gate/event 审计，回滚 API 后执行 `0032a_compact_release_write_probe_m08_03.down.sql`，最后由宝塔重启 API。原 `deployment_release_write_probes` 历史表保留，可供旧版本回滚继续使用；不得在仍有 M07-05 发布任务运行时删除任一表或轮换签名密钥。

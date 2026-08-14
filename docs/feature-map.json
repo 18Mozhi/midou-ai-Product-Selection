@@ -1411,7 +1411,7 @@
     },
     "releaseRollout": {
       "module": "M07-05",
-      "entrypoints": ["../infra/baota/release-rollout-manifest.json", "../scripts/run-baota-release-rollout.mjs", "../scripts/release-rollout-async-lag.mjs", "../scripts/verify-playwright-host.mjs", "../apps/api/src/release-rollout-service.ts", "../apps/api/src/mysql-release-rollout-repository.ts", "../apps/api/src/release-rollout-routes.ts", "../apps/web/src/components/ReleaseRolloutCenter.vue"],
+      "entrypoints": ["../infra/baota/release-rollout-manifest.json", "../database/migrations/0032a_compact_release_write_probe_m08_03.up.sql", "../scripts/run-baota-release-rollout.mjs", "../scripts/release-rollout-async-lag.mjs", "../scripts/verify-playwright-host.mjs", "../apps/api/src/release-rollout-service.ts", "../apps/api/src/mysql-release-rollout-repository.ts", "../apps/api/src/release-rollout-routes.ts", "../apps/web/src/components/ReleaseRolloutCenter.vue"],
       "routes": ["/platform-admin/releases", "/api/v1/platform/operations/releases", "/api/v1/platform/operations/releases/write-probe"],
       "scope": "惠州当前单机内宝塔 stable API 与 candidate API 的 5 25 100 渐进发布",
       "truthBoundary": "verified only from a manually triggered single rollout instance holding the MySQL session named lock, a distinct immutable release attempt, current release gates with at least 30 minutes per stage, real Baota Nginx candidate samples reached through 127.0.0.1 while preserving the production TLS/SNI/Host and certificate validation so public-IP hairpin availability cannot pollute the result, proxy-safe HMAC candidate writes returning 202 with exact candidate-build persistence parity, current build identity, and due or expired work from the explicit Baota Worker-consumed MySQL queue list; a second instance fails closed as release_rollout_lock_busy before migration, gate or Nginx mutation; queue DATETIME(3) due and lag comparisons use the same MySQL session NOW(3) clock as the Worker so a non-UTC MySQL system timezone cannot create fixed-offset false backlog; domain audit or future-delivery outboxes without a runtime consumer are preserved but are not executable queue lag, while the 60-second stop threshold remains unchanged; live MySQL verification uses UTC_TIMESTAMP(3) only for its execution-time unique release probe so process timezone or an existing newer production release cannot shadow it, then cleans all probe rows; Linux visual verification also fails closed unless the configured Chromium is executable and fontconfig reports a Chinese font, so tofu screenshots cannot become baselines; no backup server or P08 capacity claim",
@@ -1420,14 +1420,15 @@
       "mysqlResourceProfile": {"hostMemoryGiB": 16, "innodbBufferPoolSize": "4096M", "innodbBufferPoolInstances": 4, "innodbIoCapacity": 1000, "innodbIoCapacityMax": 4000, "innodbFlushNeighbors": 0, "innodbFlushMethod": "O_DIRECT", "manager": "baota finite task", "rollbackEvidence": "/www/server/panel/data/scoutops-m0705-mysql-resource-before-*.cnf"},
       "samplingPolicy": "1 秒采样提高低流量 S0 的候选 P95 样本分辨率；5/25/100、每阶段 1800 秒和全部停止阈值保持不变",
       "publicProbeTransportPolicy": "RELEASE_PUBLIC_CONNECT_ADDRESS 固定为 127.0.0.1，经本机宝塔 Nginx 探测并完整保留正式域名 TLS/SNI/Host 与证书校验，避免公网回环；禁止直连 API 槽或关闭 TLS 验证",
-      "writeProbeTransportPolicy": "仅 Nginx 499 且 upstream_status 为空的到达上游前中断使用同一 sample_id 重试一次并留证；不得重试候选非 202 响应，重试耗尽、候选拒绝或已到达上游写样本与持久化不一致均失败关闭",
+      "writeProbeTransportPolicy": "仅 Nginx 499 且 upstream_status 为空的到达上游前中断使用同一 sample_id 重试一次并留证；不得重试候选非 202 响应，重试耗尽、候选拒绝或已到达上游写样本与持久化不一致均失败关闭；0032a 起新样本写入自增 BIGINT 与 BINARY 键的紧凑 MySQL57 表，0027 历史宽表只读保留",
+      "writeProbeStorage": {"currentTable": "deployment_release_write_samples", "migration": "0032a_compact_release_write_probe_m08_03.up.sql", "primaryKey": "BIGINT UNSIGNED AUTO_INCREMENT", "binaryKeys": ["sample_id", "build_sha", "nonce_hash"], "historicalTable": "deployment_release_write_probes", "historicalRowsMutated": false},
       "permission": "platform:operate protects the browser read API; the write probe requires a short-lived HMAC request from the Baota rollout task and is not a user-session API; release, automatic stop and rollback execute only in the Baota scheduled task; the existing local product_scout MySQL account has global REPLICATION CLIENT solely so the task can verify SHOW MASTER STATUS",
       "configuration": ["PLAYWRIGHT_API_PORT", "PLAYWRIGHT_WEB_PORT", "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH", "RELEASE_CANARY_OBSERVE_SECONDS", "RELEASE_SAMPLE_INTERVAL_SECONDS", "RELEASE_MINIMUM_CANDIDATE_SAMPLES", "RELEASE_EVIDENCE_MAX_AGE_MINUTES", "RELEASE_5XX_STOP_BASIS_POINTS", "RELEASE_READ_P95_STOP_MS", "RELEASE_WRITE_P95_STOP_MS", "RELEASE_ASYNC_LAG_STOP_SECONDS", "RELEASE_PROBE_SIGNING_KEY", "RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS", "RELEASE_ROLLOUT_LOCK_NAME", "RELEASE_ROOT", "RELEASE_PRODUCTION_EVIDENCE_FILE", "RELEASE_STABLE_API_PORT", "RELEASE_CANDIDATE_API_PORT", "RELEASE_CANDIDATE_BASE_URL", "RELEASE_PUBLIC_BASE_URL", "RELEASE_PUBLIC_CONNECT_ADDRESS", "RELEASE_NGINX_BIN", "RELEASE_NGINX_SITE_CONFIG", "RELEASE_NGINX_SPLIT_CONFIG", "RELEASE_NGINX_TIMING_LOG"],
       "browserHostPrerequisite": {"chromium": "/usr/bin/chromium", "package": "fonts-noto-cjk", "version": "1:20201206-cjk+repack1-1", "authorization": "explicit user approval on 2026-08-10", "manager": "baota finite task", "evidence": "/www/server/panel/data/scoutops-m0705-font-install-before-*.json mode 0600", "rollback": "Baota finite task removes fonts-noto-cjk and refreshes font cache", "e2eStartupTimeoutMs": 300000},
       "runtimeBoundary": "finite Baota task and two same-host local-only Node API projects; no new external daemon, backup server, multi-node or 10000-user claim",
       "imageEvidence": ["core 10 platform cockpit", "concept 61 platform operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 release states", "four reviewed Linux Chromium visual baselines with Chinese glyphs"],
       "supersededProductionEvidence": {"releaseId": "8b6114fe-fafa-4c6c-8a5d-ebd52ffe65ae", "buildSha": "e22968896ab087647ad171f00a6f107c6824acf9", "capturedAt": "2026-08-11T19:22:54.886Z", "sha256": "649a4b18ddec6d5f4967dce0ce2f992c4c5aa5ce45a4cb272ce0c31597376d1d", "reason": "schema v3 lacked manual-only task and cross-process lock evidence"},
-      "lastFailedProductionAttempt": {"releaseId": "386e3a32-578b-44c3-8ed6-8ccbd2e52942", "buildSha": "b8d4611e398cb24599d7dff42482ad439f068db3", "failureCode": "release_write_probe_delivery_failed", "rollback": "stable 95a3563 on port 4101 via BaoTa finite task", "evidenceAccepted": false, "cause": "server public-IP hairpin stopped delivering probes while both local API slots remained healthy"},
+      "lastFailedProductionAttempt": {"releaseId": "cbd75718-216b-4d0e-b744-df76d334b7d2", "buildSha": "0c6748b55f99438c521142b0789164b54db188aa", "failureCode": "write_p95_threshold_exceeded", "failedStage": 100, "observeSeconds": 1800, "writeP95Ms": 634, "thresholdMs": 600, "rollback": "stable cb81e04 on port 4101 via BaoTa rollout task", "evidenceAccepted": false, "cause": "historical wide random-index probe table accumulated about 192k rows and amplified periodic fsync tail latency; compact-table repair pending re-verification"},
       "latestVerifiedProductionEvidence": {"releaseId": "ef868169-253b-41ec-97a2-d3a8a822ed9c", "buildSha": "162cb10664e6029284cf36594fba0d21a2e41f21", "capturedAt": "2026-08-14T00:40:00.439Z", "sha256": "7e3acbf0619f0370e025303ef0792b2697b6829d1d79d3eeb85e66fc4da88398", "schemaVersion": 5, "observationSeconds": [1800, 1800, 1800], "sampleCounts": [211, 883, 3578], "errorRates": [0, 0, 0], "readP95Ms": [2, 2, 2], "writeP95Ms": [5, 5, 4], "asyncLagSeconds": [0, 0, 0], "durableWriteSamples": [105, 446, 1771]},
       "verificationRunId": "0784e022-93e4-421d-9524-ef818ecfcda1",
       "status": "module_verified"
@@ -1488,15 +1489,16 @@
     },
     "mysqlResilience": {
       "module": "M08-03",
-      "entrypoints": ["../packages/database/src/index.ts", "../apps/api/src/mysql-resilience-probe.ts", "../apps/api/src/mysql-resilience-service.ts", "../apps/api/src/mysql-resilience-repository.ts", "../apps/api/src/mysql-resilience-routes.ts", "../apps/web/src/components/MySqlResilienceCenter.vue", "../infra/baota/mysql-single-primary-manifest.json", "../scripts/verify-mysql-resilience-production.mjs"],
+      "entrypoints": ["../packages/database/src/index.ts", "../database/migrations/0032a_compact_release_write_probe_m08_03.up.sql", "../apps/api/src/mysql-resilience-probe.ts", "../apps/api/src/mysql-resilience-service.ts", "../apps/api/src/mysql-resilience-repository.ts", "../apps/api/src/mysql-resilience-routes.ts", "../apps/web/src/components/MySqlResilienceCenter.vue", "../infra/baota/mysql-single-primary-manifest.json", "../scripts/verify-mysql-resilience-production.mjs"],
       "routes": ["/platform-admin/mysql", "/api/v1/platform/operations/mysql"],
       "scope": "M08-03 current Huizhou BaoTa MySQL 5.7 single-primary durability I/O slow-query capacity and recovery evidence",
-      "truthBoundary": "ready requires MySQL 5.7 writable single primary, ROW binlog that includes product_scout, the reviewed durability contract, readable master status, no replica, resource watermarks and current encrypted same-host isolated recovery evidence",
+      "truthBoundary": "ready requires MySQL 5.7 writable single primary, ROW binlog that includes product_scout, the reviewed durability contract, readable master status, no replica, resource watermarks and current encrypted same-host isolated recovery evidence; release durability samples use the compact 0032a table without deleting historical probe evidence",
       "permission": "the operations view requires platform:operate and transactionally appends observation view and platform audit with request_id trace_id; no host port account password path binlog name or SQL is returned",
       "configuration": ["MYSQL_CONNECTION_WARNING_PERCENT", "MYSQL_CONNECTION_STOP_PERCENT", "MYSQL_DATA_WARNING_PERCENT", "MYSQL_DATA_STOP_PERCENT", "MYSQL_SLOW_QUERY_WARNING_PER_MINUTE", "MYSQL_SLOW_QUERY_STOP_PER_MINUTE", "MYSQL_BUFFER_POOL_HIT_WARNING_PERCENT", "MYSQL_MAX_RECOVERY_DRILL_AGE_DAYS", "MYSQL_MAX_RPO_MINUTES", "MYSQL_MAX_RTO_MINUTES", "MYSQL_RESILIENCE_PRODUCTION_EVIDENCE_FILE", "MYSQL_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES"],
       "runtimeBoundary": "one BaoTa MySQL 5.7 primary and one current API on the current Huizhou host with no read replica load balancer backup server or capacity claim",
       "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 MySQL resilience baselines"],
-      "status": "implementation_ready_production_pending",
+      "lastFailedProductionAttempt": {"releaseId": "cbd75718-216b-4d0e-b744-df76d334b7d2", "buildSha": "0c6748b55f99438c521142b0789164b54db188aa", "failedStage": 100, "writeP95Ms": 634, "thresholdMs": 600, "automaticRollbackVerified": true, "stablePort": 4101, "candidatePort": 4103},
+      "status": "compact_probe_repair_ready_production_pending",
       "capacityClaim": "unverified",
       "loadBalancingEnabled": false,
       "replicaEnabled": false,
@@ -1762,7 +1764,7 @@
       "path": "/platform-admin/mysql",
       "view": "MySqlResilienceCenter",
       "domain": "mysql-resilience",
-      "status": "M08-03_implementation_ready_production_pending"
+      "status": "M08-03_compact_probe_repair_ready_production_pending"
     }
   ],
   "apiGroups": [
@@ -1856,7 +1858,7 @@
     },
     { "prefix": "/api/v1/platform/operations/topology", "domain": "runtime-topology", "status": "M08-01_single_server_module_verified" },
     { "prefix": "/api/v1/platform/operations/redis", "domain": "redis-resilience", "status": "M08-02_module_verified" },
-    { "prefix": "/api/v1/platform/operations/mysql", "domain": "mysql-resilience", "status": "M08-03_implementation_ready_production_pending" },
+    { "prefix": "/api/v1/platform/operations/mysql", "domain": "mysql-resilience", "status": "M08-03_compact_probe_repair_ready_production_pending" },
     { "prefix": "/api/v1/platform/commercial", "domain": "commercial-operations", "status": "M06-06_module_verified" },
     { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
   ],

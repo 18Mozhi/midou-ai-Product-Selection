@@ -105,7 +105,7 @@ async function applyMigration(pool, releaseRoot, migrationName) {
 }
 
 async function writeProbeCount(pool, releaseId, buildSha) {
-  const [[row]] = await pool.query("SELECT COUNT(*) sample_count FROM deployment_release_write_probes WHERE release_id=? AND build_sha=?", [releaseId, buildSha]);
+  const [[row]] = await pool.query("SELECT COUNT(*) sample_count FROM deployment_release_write_samples WHERE release_id=? AND build_sha=?", [releaseId, Buffer.from(buildSha, "hex")]);
   return Number(row?.sample_count ?? 0);
 }
 
@@ -187,7 +187,7 @@ try {
   const identity = await fetchIdentity(candidateBase);
   if (identity.build_sha !== runtime.BUILD_SHA) throw fail("candidate_build_mismatch", "candidate build_sha differs from the release task BUILD_SHA");
   const migrations = [];
-  for (const name of ["0026_release_rollout_m07_05.up.sql", "0027_release_write_probe_m07_05.up.sql", "0027a_release_rollout_attempts_m07_05.up.sql", "0032_mysql_resilience_m08_03.up.sql"]) migrations.push(await applyMigration(pool, releaseRoot, name));
+  for (const name of ["0026_release_rollout_m07_05.up.sql", "0027_release_write_probe_m07_05.up.sql", "0027a_release_rollout_attempts_m07_05.up.sql", "0032_mysql_resilience_m08_03.up.sql", "0032a_compact_release_write_probe_m08_03.up.sql"]) migrations.push(await applyMigration(pool, releaseRoot, name));
   const migrationName = migrations.at(-1).name;
   const releaseId = randomUUID(), now = new Date();
   const effectiveReleaseId = releaseId;

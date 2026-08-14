@@ -17,6 +17,9 @@ export class MySqlReleaseRolloutRepository implements ReleaseRolloutRepository {
     return { releases, gates };
   }
   async writeProbe(input: { releaseId: string; sampleId: string; buildSha: string; nonce: string; requestId: string; traceId: string; observedAt: Date }) {
-    await this.pool.query("INSERT INTO deployment_release_write_probes(id,release_id,sample_id,build_sha,nonce_hash,request_id,trace_id,observed_at,schema_version) VALUES(?,?,?,?,?,?,?,?,1) ON DUPLICATE KEY UPDATE id=id", [randomUUID(), input.releaseId, input.sampleId, input.buildSha, createHash("sha256").update(input.nonce).digest("hex"), input.requestId, input.traceId, input.observedAt]);
+    const sampleId = Buffer.from(input.sampleId.replaceAll("-", ""), "hex");
+    const buildSha = Buffer.from(input.buildSha, "hex");
+    const nonceHash = createHash("sha256").update(input.nonce).digest();
+    await this.pool.query("INSERT INTO deployment_release_write_samples(release_id,sample_id,build_sha,nonce_hash,request_id,trace_id,observed_at,schema_version) VALUES(?,?,?,?,?,?,?,2) ON DUPLICATE KEY UPDATE seq_id=seq_id", [input.releaseId, sampleId, buildSha, nonceHash, input.requestId, input.traceId, input.observedAt]);
   }
 }

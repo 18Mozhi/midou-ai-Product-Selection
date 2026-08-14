@@ -1972,7 +1972,7 @@ paths:
   /platform/operations/releases/write-probe:
     post:
       summary: Record one signed durable release write sample
-      description: Internal M07-05 Baota-task endpoint. The task signs timestamp, nonce, release ID and sample ID with the restricted RELEASE_PROBE_SIGNING_KEY. Request and trace IDs are deliberately excluded from the canonical signature because Baota Nginx owns and rewrites proxy audit headers; the API accepts UUID audit IDs or Nginx's restricted 32-hex request ID and stores the values it actually receives. A valid request performs exactly one idempotent MySQL autocommit insert that preserves build, request and trace audit fields. It is not a browser or user-session API.
+      description: Internal M07-05 Baota-task endpoint. The task signs timestamp, nonce, release ID and sample ID with the restricted RELEASE_PROBE_SIGNING_KEY. Request and trace IDs are deliberately excluded from the canonical signature because Baota Nginx owns and rewrites proxy audit headers; the API accepts UUID audit IDs or Nginx's restricted 32-hex request ID and stores the values it actually receives. A valid request performs exactly one idempotent MySQL autocommit insert into the compact MySQL 5.7 durability-sample table, using binary sample, build and nonce keys while preserving build, request and trace audit facts. Historical wide probe rows remain immutable and are not copied or deleted by this endpoint. It is not a browser or user-session API.
       security: [{ ReleaseProbeHmac: [] }]
       parameters:
         - { name: X-Release-Probe-Timestamp, in: header, required: true, schema: { type: integer, format: int64 } }

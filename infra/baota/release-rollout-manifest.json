@@ -54,7 +54,7 @@
     "transportDeliveryRetryAttempts": 1,
     "transportAbortRetryScope": "nginx-499-before-upstream-only",
     "candidateNon202RetryAllowed": false,
-    "syntheticWriteContract": "proxy-safe HMAC over timestamp/nonce/release/sample, one durable MySQL autocommit statement, candidate 202 and persistence parity, immutable proxy request and trace audit",
+    "syntheticWriteContract": "proxy-safe HMAC over timestamp/nonce/release/sample, one durable MySQL autocommit statement into the compact MySQL57 sample table, candidate 202 and persistence parity, immutable proxy request and trace audit; historical wide probe rows remain read-only",
     "minimumCandidateSamplesPerMethod": 5
   },
   "mysqlDurability": {

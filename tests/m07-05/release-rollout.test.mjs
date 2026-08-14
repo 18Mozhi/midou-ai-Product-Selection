@@ -288,11 +288,13 @@ test("M07-05 signed release write probe rejects stale or forged requests before 
   assert.equal(writes.length, 1);
 });
 
-test("M07-05 warms a signed single-transaction release write probe and measures unique writes", async () => {
-  const [runner, up, down, routes, repository, envExample] = await Promise.all([
+test("M07-05 warms a signed single-transaction release write probe and measures unique compact writes", async () => {
+  const [runner, up, down, compactUp, compactDown, routes, repository, envExample] = await Promise.all([
     read("scripts/run-baota-release-rollout.mjs"),
     read("database/migrations/0027_release_write_probe_m07_05.up.sql"),
     read("database/migrations/0027_release_write_probe_m07_05.down.sql"),
+    read("database/migrations/0032a_compact_release_write_probe_m08_03.up.sql"),
+    read("database/migrations/0032a_compact_release_write_probe_m08_03.down.sql"),
     read("apps/api/src/release-rollout-routes.ts"),
     read("apps/api/src/mysql-release-rollout-repository.ts"),
     read("config/env.example"),
@@ -306,8 +308,11 @@ test("M07-05 warms a signed single-transaction release write probe and measures 
   assert.match(runner, /durableWriteSamples/);
   assert.match(up, /CREATE TABLE `deployment_release_write_probes`/);
   assert.match(down, /DROP TABLE IF EXISTS `deployment_release_write_probes`/);
+  assert.match(compactUp, /CREATE TABLE `deployment_release_write_samples`/);
+  assert.match(compactUp, /BIGINT UNSIGNED NOT NULL AUTO_INCREMENT/);
+  assert.match(compactDown, /DROP TABLE IF EXISTS `deployment_release_write_samples`/);
   assert.match(routes, /x-release-probe-signature/);
-  assert.match(repository, /INSERT INTO deployment_release_write_probes/);
+  assert.match(repository, /INSERT INTO deployment_release_write_samples/);
   assert.match(envExample, /RELEASE_PROBE_SIGNING_KEY=/);
   assert.doesNotMatch(runner, /auth\/password-reset\/request/);
 });

@@ -12,6 +12,7 @@
 4. 只通过宝塔重启 MySQL，然后核对 API、Worker、Crawler、受限随机读写清理、慢查询/连接/容量水位。
 5. 使用现有宝塔备份任务完成同机独立加密目录副本及隔离恢复库验证；RPO 不超过 15 分钟、RTO 不超过 240 分钟、演练不超过 90 天。
 6. 生产证据必须与当前提交一致，且明确 `loadBalancingEnabled=false`、`replicaEnabled=false`、`backupServerUsed=false`、`capacityClaim=unverified`。
+7. 应用 `0032a_compact_release_write_probe_m08_03` 后，先以业务账号验证新表的一次签名写入和清理；新灰度只统计 `deployment_release_write_samples`。旧表 `deployment_release_write_probes` 作为历史探针证据只读保留，不允许为降低表大小而直接删除。
 
 ## 告警
 
@@ -21,4 +22,4 @@
 
 ## 回滚
 
-异常时立即在宝塔恢复本次操作前的精确配置备份，并通过宝塔回滚重启 MySQL；随后核对单主、主状态、API/Worker/Crawler、随机读写清理和 M07-04 恢复证据。保留失败 `request_id`、`trace_id`、配置摘要与重启日志，不删除真实失败记录。
+异常时立即在宝塔恢复本次操作前的精确配置备份，并通过宝塔回滚重启 MySQL；随后核对单主、主状态、API/Worker/Crawler、随机读写清理和 M07-04 恢复证据。若异常仅来自紧凑探针迁移，先回滚 API，再执行 `0032a_compact_release_write_probe_m08_03.down.sql`；旧探针表仍可供上一版本使用。保留失败 `request_id`、`trace_id`、配置摘要与重启日志，不删除真实失败记录。

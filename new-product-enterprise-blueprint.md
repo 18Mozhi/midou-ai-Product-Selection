@@ -950,7 +950,7 @@ M08-01 已按“长期仅一台服务器、不进行负载均衡”的最新生�
 
 M08-02 已将同一台服务器上的宝塔 Redis 固定为 S0 单实例韧性边界：仅监听本机并保持 protected-mode，启用 AOF everysec 且保留 RDB save 规则，设置 `maxmemory 512mb`、`maxmemory-policy noeviction` 与 `maxclients 512`。平台运维 API 和桌面/390px 页面只返回脱敏的持久化、内存、连接、拒绝/淘汰与恢复结论，要求 `platform:operate` 并同步写入 MySQL 5.7 审计。提交 `cb81e04381c8424057c481853bceac749592cc6c` 已完成宝塔配置备份、受控重启、PING、随机范围读写清理、API/Worker/Crawler 恢复及 5%/25%/100% 各 1,800 秒观察；晋级后只保留 4101 单 API，4103 停止，schema v1 生产证据 SHA-256 为 `7baf6a349f410431c7c655cf8e5fdda8eda7a5b335e62ee1ecef052dcb56482a`。上述上限是资源保护配置，不是容量承诺；不启用负载均衡、Sentinel、Redis Cluster、副本或备用服务器。
 
-M08-03 将同一台惠州服务器上的宝塔 MySQL 5.7 固定为 S0 单主韧性边界：`product_scout` 仍是唯一业务事实库，核验可写单主、ROW binlog、`innodb_flush_log_at_trx_commit=2`、`sync_binlog=1`、I/O/连接/慢查询/数据盘水位，以及 M07-04 同机独立加密副本和隔离恢复记录。平台运维 API 和桌面/390px 页面要求 `platform:operate`，观测、查看记录和审计在同一事务写入，并且不返回连接、账号、路径、binlog 文件或 SQL。实现与生产预检就绪后仍必须通过宝塔迁移、受控配置/重启、恢复验证和同提交生产验收才可完成模块；不建设读副本、负载均衡或备用服务器，也不宣称容量能力。
+M08-03 将同一台惠州服务器上的宝塔 MySQL 5.7 固定为 S0 单主韧性边界：`product_scout` 仍是唯一业务事实库，核验可写单主、ROW binlog、`innodb_flush_log_at_trx_commit=2`、`sync_binlog=1`、I/O/连接/慢查询/数据盘水位，以及 M07-04 同机独立加密副本和隔离恢复记录。平台运维 API 和桌面/390px 页面要求 `platform:operate`，观测、查看记录和审计在同一事务写入，并且不返回连接、账号、路径、binlog 文件或 SQL。构建 `0c6748b55f99438c521142b0789164b54db188aa` 的首次生产复验在完成 5%/25% 后，于 100% 完整 1,800 秒窗口得到写 P95 634ms，超过固定 600ms 门槛并由宝塔任务自动回滚到单机 4101；错误率、读 P95、异步延迟和持久化数量一致性均正常。诊断确认历史 `deployment_release_write_probes` 已积累约 19.2 万宽随机索引行，因此 `0032a_compact_release_write_probe_m08_03` 让新样本改用自增 BIGINT 主键及 BINARY sample/build/nonce 键，旧表和真实失败记录只读保留，签名/202/单语句提交/门槛均不变。紧凑修复仍必须通过宝塔迁移和完整同提交 5/25/100 复验才可完成模块；不建设读副本、负载均衡或备用服务器，也不宣称容量能力。
 
 ### 13.2 数据质量量化门槛
 
