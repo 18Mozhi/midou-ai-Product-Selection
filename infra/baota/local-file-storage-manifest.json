@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "module": "M08-04",
   "stage": "S0",
-  "status": "implementation_ready",
+  "status": "production_verified",
   "manager": "baota",
   "mode": "local_managed_directories",
   "productionRegion": "惠州",
@@ -13,6 +13,7 @@
   "limits": {"usageWarningPercent":75,"usageStopPercent":90,"checksumSampleLimit":20,"maximumRecoveryDrillAgeDays":90},
   "recovery": {"sameHostEncryptedCopy":true,"isolatedRestoreRequired":true,"backupServerUsed":false},
   "topologyClaims": {"singleHost":true,"sharedStorageEnabled":false,"loadBalancingEnabled":false,"backupServerUsed":false,"capacityClaim":"unverified"},
+  "productionEvidence": {"buildSha":"a8024c1589b99b27a02e8eb58a561c3f0263add6","sha256":"80a2927dfae3ca9dd2a95d6850d527dac682b6058c2cdd5fd4c3ce6c49447365","verificationRunId":"db0d5d96-d5c7-43e9-8190-a7cff7775129"},
   "productionActions": [
     "Use a BaoTa finite task to verify restricted evidence and export roots, ownership, mode, capacity and absence from the public Nginx root",
     "Create bounded organization-scoped write checksum cleanup probes and verify current evidence/export encrypted recovery-copy plus isolated-restore evidence",
