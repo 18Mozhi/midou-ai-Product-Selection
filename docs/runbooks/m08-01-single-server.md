@@ -35,6 +35,8 @@ SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE=./.artifacts/verification/m08-01-single-s
 5. 由宝塔有限任务签发 schema v1 的生产证据，文件权限保持 0600，不写入 Git。
 6. 执行 `node scripts/verify-single-server-production.mjs --production` 和 `npm run verify:module -- M08-01`。
 
+当前生产验收已通过：构建 `b55f7f814d7153e6a4a7958eb41a9bf6ff1e60e8`、证据 SHA-256 `0c7cd53311f9c778407e699747bc8d9b9d27b1fad18635fee1c05ff54a74e13c`、run_id/trace_id `fa76e44f-53d7-49da-8884-bac921aad580`。永久路由为本机 4101 单上游，4103 候选已停止。
+
 视觉验收由宝塔有限任务在 Linux Chromium 上执行：桌面与 390px 两个项目的四张基线先更新、再无更新复跑，两轮均为 4/4 通过；取回基线后已恢复原宝塔任务并删除临时源码、脚本和归档。
 
 ## 故障演练

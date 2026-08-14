@@ -1460,11 +1460,13 @@
       "runtimeBoundary": "the current Huizhou BaoTa host is the permanent S0 production topology; all backend ports remain private and no load balancer, backup server, panel-external service, multi-node or 10000-user claim is allowed",
       "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 64 monitoring", "concept 69 alerts", "four reviewed Linux Chromium desktop and 390 single-server runtime baselines"],
       "latestMysqlLiveEvidence": {"status": "mysql_live_passed", "manager": "baota_finite_task", "baseReleaseBuildSha": "a4c2695d3a0071201ad066b22caca5631271eac1", "migration": "0030_load_balancing_m08_01.up.sql", "migrationChecksum": "48a6259d9fbcb6a035d1ae1dfcf535a98f948d4325f908a07d11d6f47510ce28", "mysqlVersion": "5.7.44-log", "heartbeatAppendCount": 2, "probeCleanup": "passed", "capturedAt": "2026-08-14T03:50:32.133Z", "sha256": "57b71ffd1eb836c8bcb9f39f70243d5bf3393b16af6149f9d8bd88016d15a088"},
+      "latestProductionEvidence": {"buildSha": "b55f7f814d7153e6a4a7958eb41a9bf6ff1e60e8", "capturedAt": "2026-08-14T09:00:58.420Z", "sha256": "0c7cd53311f9c778407e699747bc8d9b9d27b1fad18635fee1c05ff54a74e13c", "activeApiInstances": 1, "singleUpstreamPort": 4101, "candidateStopped": true},
+      "verificationRunId": "fa76e44f-53d7-49da-8884-bac921aad580",
       "capacityClaim": "unverified",
       "loadBalancingEnabled": false,
       "backupServerUsed": false,
       "multiNodeClaim": false,
-      "status": "single_server_implementation_ready_pending_production"
+      "status": "module_verified"
     }
   },
   "phaseVerification": {
@@ -1714,14 +1716,14 @@
       "path": "/platform-admin/topology",
       "view": "RuntimeTopologyCenter",
       "domain": "runtime-topology",
-      "status": "M08-01_single_server_implementation_ready_pending_production"
+      "status": "M08-01_single_server_module_verified"
     }
   ],
   "apiGroups": [
     {
       "prefix": "/api/v1/health",
       "domain": "platform-runtime",
-      "status": "foundation_implemented_M08-01_single_server_runtime_pending_production"
+      "status": "foundation_implemented_M08-01_single_server_runtime_verified"
     },
     {
       "prefix": "/api/v1/auth",
@@ -1806,7 +1808,7 @@
       "domain": "platform",
       "status": "M01-06_audit_and_P03_sources_collection_evidence_provider_sources_implemented_remaining_platform_management_planned"
     },
-    { "prefix": "/api/v1/platform/operations/topology", "domain": "runtime-topology", "status": "M08-01_single_server_implementation_ready_pending_production" },
+    { "prefix": "/api/v1/platform/operations/topology", "domain": "runtime-topology", "status": "M08-01_single_server_module_verified" },
     { "prefix": "/api/v1/platform/commercial", "domain": "commercial-operations", "status": "M06-06_module_verified" },
     { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
   ],

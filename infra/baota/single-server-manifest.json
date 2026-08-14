@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "module": "M08-01",
   "stage": "S0",
-  "status": "implementation_ready_pending_production",
+  "status": "production_verified",
   "manager": "baota",
   "productionRegion": "惠州",
   "topology": "single_host",
@@ -30,6 +30,15 @@
     "legacyDormantTable": "load_balancer_observations",
     "platformRoute": "/api/v1/platform/operations/topology",
     "healthRoute": "/api/v1/health/nodes"
+  },
+  "latestProductionEvidence": {
+    "buildSha": "b55f7f814d7153e6a4a7958eb41a9bf6ff1e60e8",
+    "capturedAt": "2026-08-14T09:00:58.420Z",
+    "sha256": "0c7cd53311f9c778407e699747bc8d9b9d27b1fad18635fee1c05ff54a74e13c",
+    "verificationRunId": "fa76e44f-53d7-49da-8884-bac921aad580",
+    "activeApiInstances": 1,
+    "singleUpstreamPort": 4101,
+    "candidateStopped": true
   },
   "moduleAcceptanceGates": [
     "one fresh API heartbeat on the configured current BaoTa host",
