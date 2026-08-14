@@ -64,11 +64,12 @@ test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundar
   assert.deepEqual(manifest.canary.syntheticWriteCanonicalFields, ["timestamp", "nonce", "release_id", "sample_id"]);
   assert.equal(manifest.canary.proxyRequestIdsExcludedFromSignature, true);
   assert.equal(manifest.canary.candidatePersistenceParityRequired, true);
-  assert.equal(manifest.schemaVersion, 5);
+  assert.equal(manifest.schemaVersion, 6);
   assert.deepEqual(manifest.mysqlDurability, {
     innodbFlushLogAtTrxCommit: 2,
     syncBinlog: 1,
-    productScoutBinlogExcluded: true,
+    binlogFormat: "ROW",
+    productScoutBinlogExcluded: false,
     osCrashDataLossWindowSeconds: 1,
     verificationAccount: "existing product_scout@127.0.0.1 account with global REPLICATION CLIENT",
     authorization: "explicit user approval on 2026-08-10",
@@ -174,7 +175,7 @@ test("M07-05.A06-A17 API, UI, config and documentation contracts stay synchroniz
     "docs/runbooks/m07-05-release-rollout.md",
     "verification/modules/M07-05.json",
   ].map(read))).join("\n");
-  for (const token of ["M07-05", "platform:operate", "/api/v1/platform/operations/releases", "RELEASE_CANARY_OBSERVE_SECONDS", "innodb_flush_log_at_trx_commit=2", "binlog-ignore-db=product_scout", "innodb_buffer_pool_size=4096M", "innodb_io_capacity=1000", "REPLICATION CLIENT", "5", "25", "100", "回滚"]) assert.match(all, new RegExp(token));
+  for (const token of ["M07-05", "platform:operate", "/api/v1/platform/operations/releases", "RELEASE_CANARY_OBSERVE_SECONDS", "innodb_flush_log_at_trx_commit=2", "binlog-format=ROW", "innodb_buffer_pool_size=4096M", "innodb_io_capacity=1000", "REPLICATION CLIENT", "5", "25", "100", "回滚"]) assert.match(all, new RegExp(token));
   assert.doesNotMatch(await read("apps/api/src/release-rollout-service.ts"), /password|cookie|token|private_key/i);
 });
 
@@ -380,12 +381,13 @@ test("M07-05 uses one-second production sampling without relaxing rollout gates"
   assert.ok(evidenceSchema.required.includes("sampleIntervalSeconds"));
   assert.ok(evidenceSchema.required.includes("mysqlDurability"));
   assert.ok(evidenceSchema.required.includes("mysqlResourceProfile"));
-  assert.equal(evidenceSchema.properties.schemaVersion.const, 5);
+  assert.equal(evidenceSchema.properties.schemaVersion.const, 6);
   assert.ok(evidenceSchema.required.includes("publicProbe"));
   assert.equal(evidenceSchema.properties.publicProbe.properties.connectAddress.const, "127.0.0.1");
   assert.equal(evidenceSchema.properties.publicProbe.properties.tlsHostnamePreserved.const, true);
   assert.equal(evidenceSchema.properties.mysqlDurability.properties.innodbFlushLogAtTrxCommit.const, 2);
-  assert.equal(evidenceSchema.properties.mysqlDurability.properties.productScoutBinlogExcluded.const, true);
+  assert.equal(evidenceSchema.properties.mysqlDurability.properties.binlogFormat.const, "ROW");
+  assert.equal(evidenceSchema.properties.mysqlDurability.properties.productScoutBinlogExcluded.const, false);
   assert.equal(evidenceSchema.properties.mysqlResourceProfile.properties.innodbBufferPoolBytes.const, 4294967296);
   assert.equal(evidenceSchema.properties.mysqlResourceProfile.properties.innodbFlushMethod.const, "O_DIRECT");
   assert.match(verifier, /release_mysql_resource_profile_invalid/);

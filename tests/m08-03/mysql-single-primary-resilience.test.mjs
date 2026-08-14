@@ -155,6 +155,17 @@ test("M08-03.A04/A14 probe follows the real M07-04 backup and isolated recovery 
   assert.equal(snapshot.backupStatus,"verified");assert.equal(snapshot.actualRpoMinutes,1);assert.equal(snapshot.actualRtoMinutes,3);assert.equal(snapshot.recoveryDrillAgeDays,0.04);
 });
 
+test("M08-03.A10/A13 upgrades the release gate to ROW binlog inclusion without changing canary thresholds", async () => {
+  const [manifest,runner,verifier,schema,featureMap,plan,architecture,runbook]=await Promise.all([
+    "infra/baota/release-rollout-manifest.json","scripts/run-baota-release-rollout.mjs","scripts/verify-release-rollout-production.mjs","verification/release-rollout-production-evidence.schema.json","docs/feature-map.json","plans/phase-07-release-production.md","docs/architecture/m07-05-release-rollout.md","docs/runbooks/m07-05-release-rollout.md",
+  ].map(async(path)=>[path,await readFile(path,"utf8")]));
+  const sources=Object.fromEntries([manifest,runner,verifier,schema,featureMap,plan,architecture,runbook]);
+  const contract=JSON.parse(sources["infra/baota/release-rollout-manifest.json"]);
+  assert.equal(contract.schemaVersion,6);assert.equal(contract.mysqlDurability.binlogFormat,"ROW");assert.equal(contract.mysqlDurability.productScoutBinlogExcluded,false);
+  assert.deepEqual(contract.canary.percentages,[5,25,100]);assert.equal(contract.canary.minimumObservationSeconds,1800);assert.equal(contract.automaticStop.writeP95MsInclusive,600);
+  for(const source of Object.values(sources)){assert.match(source,/binlogFormat|binlog_format|binlog-format/);assert.doesNotMatch(source,/binlog-ignore-db=product_scout|productScoutBinlogExcluded["']?\s*[:=]\s*true/);}
+});
+
 test("M08-03.A07/A08/A15/A16 UI and production evidence cover full states and recovery", async () => {
   const [ui, e2e, manifest, architecture, runbook] = await Promise.all([
     "apps/web/src/components/MySqlResilienceCenter.vue", "tests/e2e/m08-03-mysql-resilience.spec.ts",
