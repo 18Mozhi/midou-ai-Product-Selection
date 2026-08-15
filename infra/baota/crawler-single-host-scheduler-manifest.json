@@ -1,0 +1,9 @@
+{
+  "schemaVersion":1,"module":"M08-05","stage":"S0","status":"implementation_ready","manager":"baota","mode":"single_host_scheduler","productionRegion":"惠州",
+  "limits":{"maximumWorkers":1,"maximumCrawlers":1,"maximumProviderConcurrency":1,"maximumLoadPercent":85,"minimumAvailableMemoryMb":1024,"minimumFreeDiskMb":4096,"staleAfterSeconds":90},
+  "leases":{"truthStore":"MySQL 5.7","workerGlobalSlot":1,"crawlerGlobalSlot":1,"browserProfileExclusive":true,"providerConfiguredLimitCappedAt":1,"redisPurpose":"scoped queue coordination only"},
+  "topologyClaims":{"singleHost":true,"loadBalancingEnabled":false,"backupServerUsed":false,"multiNode":false,"capacityClaim":"unverified"},
+  "productionActions":["Use a BaoTa finite task to verify one Node Worker and one Python Crawler process, MySQL scheduler lease constraints, provider caps and resource stop gates","On an expired probe lease verify idempotent recovery, audit correlation and cleanup without terminating active tasks","On failure stop new collection claims, preserve task and audit truth, restore the previous application through BaoTa and remove only probe rows"],
+  "forbiddenManagers":["systemd","standalone_pm2","host_crontab","screen_docker_compose"],
+  "rollback":"Through BaoTa restore the previous API, Worker and Crawler release, keep scheduler and audit rows, then roll back 0034 only after the previous release no longer reads or writes crawler_scheduler_leases."
+}

@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","title":"ScoutOps M08-05 BaoTa single-host Crawler scheduler production evidence","type":"object",
+  "required":["schemaVersion","module","status","buildSha","manager","mode","region","processes","leases","providers","profiles","resource","recovery","singleHost","loadBalancingEnabled","backupServerUsed","multiNode","capacityClaim","capturedAt"],
+  "properties":{
+    "schemaVersion":{"const":1},"module":{"const":"M08-05"},"status":{"const":"ready"},"buildSha":{"type":"string","pattern":"^[a-f0-9]{40}$"},"manager":{"const":"baota"},"mode":{"const":"single_host_scheduler"},"region":{"const":"惠州"},
+    "processes":{"type":"object","required":["workerInstances","crawlerInstances"],"properties":{"workerInstances":{"const":1},"crawlerInstances":{"const":1}},"additionalProperties":false},
+    "leases":{"type":"object","required":["maximumWorkers","maximumCrawlers","activeWorkers","activeCrawlers","duplicateCount"],"properties":{"maximumWorkers":{"const":1},"maximumCrawlers":{"const":1},"activeWorkers":{"type":"integer","minimum":0,"maximum":1},"activeCrawlers":{"type":"integer","minimum":0,"maximum":1},"duplicateCount":{"const":0}},"additionalProperties":false},
+    "providers":{"type":"object","required":["maximumConcurrency","quotaExceededCount"],"properties":{"maximumConcurrency":{"const":1},"quotaExceededCount":{"const":0}},"additionalProperties":false},
+    "profiles":{"type":"object","required":["exclusive","duplicateCount"],"properties":{"exclusive":{"const":true},"duplicateCount":{"const":0}},"additionalProperties":false},
+    "resource":{"type":"object","required":["loadBasisPoints","availableMemoryMb","freeDiskMb","stopGatePassed"],"properties":{"loadBasisPoints":{"type":"integer","minimum":0,"maximum":8499},"availableMemoryMb":{"type":"integer","minimum":1024},"freeDiskMb":{"type":"integer","minimum":4096},"stopGatePassed":{"const":true}},"additionalProperties":false},
+    "recovery":{"type":"object","required":["expiredLeaseRecovered","idempotentReplayVerified","auditVerified","probeRowsCleaned"],"properties":{"expiredLeaseRecovered":{"const":true},"idempotentReplayVerified":{"const":true},"auditVerified":{"const":true},"probeRowsCleaned":{"const":true}},"additionalProperties":false},
+    "singleHost":{"const":true},"loadBalancingEnabled":{"const":false},"backupServerUsed":{"const":false},"multiNode":{"const":false},"capacityClaim":{"const":"unverified"},"capturedAt":{"type":"string","format":"date-time"}
+  },"additionalProperties":false
+}

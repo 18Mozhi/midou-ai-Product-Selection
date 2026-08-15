@@ -67,6 +67,17 @@ export interface RuntimeConfig {
     productionEvidenceFile:string;
     maximumEvidenceAgeMinutes:number;
   };
+  crawlerScheduler:{
+    maximumWorkers:1;
+    maximumCrawlers:1;
+    maximumProviderConcurrency:1;
+    maximumLoadBasisPoints:number;
+    minimumAvailableMemoryMb:number;
+    minimumFreeDiskMb:number;
+    staleAfterSeconds:number;
+    productionEvidenceFile:string;
+    maximumEvidenceAgeMinutes:number;
+  };
   ai: {
     baseUrl: string;
     model: string;
@@ -362,6 +373,17 @@ export function loadRuntimeConfig(
       maximumRecoveryDrillAgeDays:integer(env,"FILE_STORAGE_RECOVERY_DRILL_MAX_AGE_DAYS",90,1,365),
       productionEvidenceFile:resolve(cwd,text(env,"FILE_STORAGE_PRODUCTION_EVIDENCE_FILE","./.artifacts/verification/m08-04-file-resilience-production-evidence.json")),
       maximumEvidenceAgeMinutes:integer(env,"FILE_STORAGE_EVIDENCE_MAX_AGE_MINUTES",60,1,1440),
+    },
+    crawlerScheduler:{
+      maximumWorkers:1 as const,
+      maximumCrawlers:1 as const,
+      maximumProviderConcurrency:1 as const,
+      maximumLoadBasisPoints:integer(env,"CRAWLER_SCHEDULER_MAX_LOAD_PERCENT",85,1,100)*100,
+      minimumAvailableMemoryMb:integer(env,"CRAWLER_SCHEDULER_MIN_AVAILABLE_MEMORY_MB",1024,128,1048576),
+      minimumFreeDiskMb:integer(env,"CRAWLER_SCHEDULER_MIN_FREE_DISK_MB",4096,128,1073741824),
+      staleAfterSeconds:integer(env,"CRAWLER_SCHEDULER_STALE_AFTER_SECONDS",90,30,600),
+      productionEvidenceFile:resolve(cwd,text(env,"CRAWLER_SCHEDULER_PRODUCTION_EVIDENCE_FILE","./.artifacts/verification/m08-05-crawler-scheduler-production-evidence.json")),
+      maximumEvidenceAgeMinutes:integer(env,"CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES",60,1,1440),
     },
     ai: {
       baseUrl: httpUrl(env, "AI_BASE_URL", "http://192.168.1.203:8588/v1"),

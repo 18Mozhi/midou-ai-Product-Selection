@@ -151,6 +151,8 @@ import { registerRuntimeTopologyRoutes, type RuntimeTopologyRouteOptions } from 
 import { registerRedisResilienceRoutes, type RedisResilienceRouteOptions } from "./redis-resilience-routes.js";
 import { registerMySqlResilienceRoutes, type MySqlResilienceRouteOptions } from "./mysql-resilience-routes.js";
 import { registerFileResilienceRoutes, type FileResilienceRouteOptions } from "./file-resilience-routes.js";
+import { CrawlerSchedulerError } from "./crawler-scheduler-service.js";
+import { registerCrawlerSchedulerRoutes, type CrawlerSchedulerRouteOptions } from "./crawler-scheduler-routes.js";
 import { SelectionJourneyError } from "./selection-journey-service.js";
 import { registerSelectionJourneyRoutes, type SelectionJourneyRouteOptions } from "./selection-journey-routes.js";
 
@@ -202,6 +204,7 @@ export interface BuildAppOptions {
   redisResilience?: RedisResilienceRouteOptions;
   mysqlResilience?: MySqlResilienceRouteOptions;
   fileResilience?: FileResilienceRouteOptions;
+  crawlerScheduler?: CrawlerSchedulerRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -379,6 +382,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if(options.redisResilience)registerRedisResilienceRoutes(app,options.redisResilience);
   if(options.mysqlResilience)registerMySqlResilienceRoutes(app,options.mysqlResilience);
   if(options.fileResilience)registerFileResilienceRoutes(app,options.fileResilience);
+  if(options.crawlerScheduler)registerCrawlerSchedulerRoutes(app,options.crawlerScheduler);
 
   app.setErrorHandler(
     async (
@@ -459,6 +463,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
       const securityOperationsError = error instanceof SecurityOperationsError ? error : null;
       const openPlatformError = error instanceof OpenPlatformError ? error : null;
       const commercialError = error instanceof CommercialError ? error : null;
+      const crawlerSchedulerError=error instanceof CrawlerSchedulerError?error:null;
       const trendError =
         error instanceof TrendServiceError
           ? (error as TrendServiceError)
@@ -516,6 +521,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         securityOperationsError?.statusCode ??
         openPlatformError?.statusCode ??
         commercialError?.statusCode ??
+        crawlerSchedulerError?.statusCode ??
         trendError?.statusCode ??
         opportunityError?.statusCode ??
         selectionJourneyError?.statusCode ??
@@ -562,6 +568,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         securityOperationsError?.code ??
         openPlatformError?.code ??
         commercialError?.code ??
+        crawlerSchedulerError?.code ??
             trendError?.code ??
             opportunityError?.code ??
             selectionJourneyError?.code ??
@@ -586,6 +593,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             securityOperationsError?.message ??
             openPlatformError?.message ??
             commercialError?.message ??
+            crawlerSchedulerError?.message ??
             trendError?.message ??
             opportunityError?.message ??
             selectionJourneyError?.message ??
@@ -637,6 +645,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         securityOperationsError?.actionHint ??
         openPlatformError?.actionHint ??
         commercialError?.actionHint ??
+        crawlerSchedulerError?.actionHint ??
             trendError?.actionHint ??
             opportunityError?.actionHint ??
             selectionJourneyError?.actionHint ??

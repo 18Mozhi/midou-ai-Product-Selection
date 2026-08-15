@@ -65,7 +65,7 @@
       "M08-03",
       "M08-04"
     ],
-    "activeModules": [],
+    "activeModules": ["M08-05"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1527,6 +1527,25 @@
       "sharedStorageEnabled": false,
       "loadBalancingEnabled": false,
       "backupServerUsed": false
+    },
+    "crawlerSingleHostScheduler": {
+      "module": "M08-05",
+      "entrypoints": ["../database/migrations/0034_crawler_scheduler_m08_05.up.sql", "../apps/api/src/crawler-scheduler-service.ts", "../apps/api/src/crawler-scheduler-repository.ts", "../apps/api/src/crawler-scheduler-probe.ts", "../apps/api/src/crawler-scheduler-routes.ts", "../apps/worker/src/single-host-resource-probe.ts", "../apps/worker/src/collection-task-worker.ts", "../apps/api/src/mysql-crawler-runtime-repository.ts", "../apps/web/src/components/CrawlerSchedulerCenter.vue", "../infra/baota/crawler-single-host-scheduler-manifest.json", "../scripts/verify-crawler-scheduler-production.mjs"],
+      "routes": ["/platform-admin/crawler-scheduler", "/api/v1/platform/operations/crawler-scheduler", "/api/v1/platform/operations/crawler-scheduler/recover-expired"],
+      "scope": "M08-05 current Huizhou BaoTa single-host Crawler and Worker scheduling with one global slot each, provider effective concurrency one, exclusive browser profiles, MySQL lease truth and host resource stop gates",
+      "truthBoundary": "ready requires exactly one BaoTa Node Worker and one BaoTa Python Crawler process, no global provider or profile lease overflow, a current resource observation below the fixed stop gates and MySQL 5.7 as lease truth",
+      "permission": "platform operations read and idempotent expired-slot recovery require platform:operate; responses exclude task payloads scope identifiers lease tokens hashes credentials cookies and paths while observation recovery and failure retain request_id trace_id and audit",
+      "configuration": ["CRAWLER_SCHEDULER_MAX_LOAD_PERCENT", "CRAWLER_SCHEDULER_MIN_AVAILABLE_MEMORY_MB", "CRAWLER_SCHEDULER_MIN_FREE_DISK_MB", "CRAWLER_SCHEDULER_STALE_AFTER_SECONDS", "CRAWLER_SCHEDULER_PRODUCTION_EVIDENCE_FILE", "CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES"],
+      "runtimeBoundary": "one BaoTa Node Worker and one BaoTa Python Crawler on the current Huizhou host; Redis remains scoped queue coordination and MySQL 5.7 remains lease truth; no load balancer backup server multi-node or capacity claim",
+      "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 62 source management", "concept 63 task monitor", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 scheduler baselines"],
+      "status": "implementation_ready_production_pending",
+      "capacityClaim": "unverified",
+      "maximumWorkers": 1,
+      "maximumCrawlers": 1,
+      "maximumProviderConcurrency": 1,
+      "loadBalancingEnabled": false,
+      "backupServerUsed": false,
+      "multiNode": false
     }
   },
   "phaseVerification": {
@@ -1795,6 +1814,12 @@
       "view": "FileResilienceCenter",
       "domain": "file-resilience",
       "status": "M08-04_module_verified"
+    },
+    {
+      "path": "/platform-admin/crawler-scheduler",
+      "view": "CrawlerSchedulerCenter",
+      "domain": "crawler-single-host-scheduler",
+      "status": "M08-05_implementation_ready_production_pending"
     }
   ],
   "apiGroups": [
@@ -1890,6 +1915,7 @@
     { "prefix": "/api/v1/platform/operations/redis", "domain": "redis-resilience", "status": "M08-02_module_verified" },
     { "prefix": "/api/v1/platform/operations/mysql", "domain": "mysql-resilience", "status": "M08-03_module_verified" },
     { "prefix": "/api/v1/platform/operations/files", "domain": "file-resilience", "status": "M08-04_module_verified" },
+    { "prefix": "/api/v1/platform/operations/crawler-scheduler", "domain": "crawler-single-host-scheduler", "status": "M08-05_implementation_ready_production_pending" },
     { "prefix": "/api/v1/platform/commercial", "domain": "commercial-operations", "status": "M06-06_module_verified" },
     { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
   ],

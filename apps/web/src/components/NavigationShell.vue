@@ -33,6 +33,7 @@ import RuntimeTopologyCenter from "./RuntimeTopologyCenter.vue";
 import RedisResilienceCenter from "./RedisResilienceCenter.vue";
 import MySqlResilienceCenter from "./MySqlResilienceCenter.vue";
 import FileResilienceCenter from "./FileResilienceCenter.vue";
+import CrawlerSchedulerCenter from "./CrawlerSchedulerCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -222,6 +223,12 @@ const platformMenu: MenuItem[] = [
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
+    label: "Crawler 调度",
+    path: "/platform-admin/crawler-scheduler",
+    icon: "⌁",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
     label: "商业运营",
     path: "/platform-admin/commercial",
     icon: "▰",
@@ -299,6 +306,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   isRedisResilience = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/redis"),
   isMySqlResilience = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/mysql"),
   isFileResilience = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/files"),
+  isCrawlerScheduler = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/crawler-scheduler"),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
   ),
@@ -601,6 +609,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <RedisResilienceCenter v-else-if="isRedisResilience" :api-base-url="apiBaseUrl" />
         <MySqlResilienceCenter v-else-if="isMySqlResilience" :api-base-url="apiBaseUrl" />
         <FileResilienceCenter v-else-if="isFileResilience" :api-base-url="apiBaseUrl" />
+        <CrawlerSchedulerCenter v-else-if="isCrawlerScheduler" :api-base-url="apiBaseUrl" />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"

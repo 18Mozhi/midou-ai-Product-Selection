@@ -119,6 +119,10 @@ import { FileResilienceProbe } from "./file-resilience-probe.js";
 import { FileResilienceRepository } from "./file-resilience-repository.js";
 import { FileResilienceService } from "./file-resilience-service.js";
 import { registerFileResilienceRoutes } from "./file-resilience-routes.js";
+import { CrawlerSchedulerService } from "./crawler-scheduler-service.js";
+import { CrawlerSchedulerRepository } from "./crawler-scheduler-repository.js";
+import { CrawlerSchedulerHostProbe } from "./crawler-scheduler-probe.js";
+import { registerCrawlerSchedulerRoutes } from "./crawler-scheduler-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -146,6 +150,7 @@ const fileResilienceService = new FileResilienceService(
   new FileResilienceRepository(pool),
   {usageWarningBasisPoints:config.fileResilience.usageWarningBasisPoints,usageStopBasisPoints:config.fileResilience.usageStopBasisPoints,maximumRecoveryDrillAgeDays:config.fileResilience.maximumRecoveryDrillAgeDays},
 );
+const crawlerSchedulerService=new CrawlerSchedulerService(new CrawlerSchedulerRepository(pool),new CrawlerSchedulerHostProbe(config.storage.evidenceRoot),config.crawlerScheduler);
 const authRepository = new MySqlAuthRepository(pool);
 const authOutbox = new MySqlAuthOutboxStore(pool);
 const authDelivery = config.security.credentialsMasterKey
@@ -484,6 +489,7 @@ registerRuntimeTopologyRoutes(app,{service:runtimeTopologyService,authorization,
 registerRedisResilienceRoutes(app,{service:redisResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerMySqlResilienceRoutes(app,{service:mysqlResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerFileResilienceRoutes(app,{service:fileResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
+registerCrawlerSchedulerRoutes(app,{service:crawlerSchedulerService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production",webOrigin:config.app.webOrigin});
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {
     evidenceRoot: config.storage.evidenceRoot,

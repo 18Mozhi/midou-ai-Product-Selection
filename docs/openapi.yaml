@@ -222,6 +222,31 @@ paths:
         '403': { $ref: '#/components/responses/Error' }
         '429': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
+  /platform/operations/crawler-scheduler:
+    get:
+      summary: Read audited S0 single-host Crawler scheduler facts
+      description: M08-05 reports sanitized Worker/Crawler process counts, global and provider lease aggregates, browser-profile exclusivity and host resource watermarks. It never returns scope identifiers, task payloads, lease tokens or hashes, credentials, cookies or paths and makes no load-balancing, backup-server, multi-node or capacity claim.
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: platform:operate
+      responses:
+        '200': { description: Current single-host scheduler state is ready, warning or blocked, content: { application/json: { schema: { $ref: '#/components/schemas/CrawlerSchedulerEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/operations/crawler-scheduler/recover-expired:
+    post:
+      summary: Idempotently recover only expired single-host scheduler slots
+      description: M08-05 deletes only scheduler leases whose expires_at is not later than server time, records a platform audit event and never terminates a valid collection or browser run.
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: platform:operate
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      responses:
+        '200': { description: Expired slots recovered or an earlier idempotent result replayed }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /auth/register:
     post:
       summary: Register a local email account and queue verification delivery
@@ -2465,6 +2490,53 @@ components:
             backup_server_used: { type: boolean, enum: [false] }
             capacity_claim: { type: string, enum: [unverified] }
             observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
+    CrawlerSchedulerEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          required: [state, topology, leases, providers, profiles, resource, findings, observed_at, capacity_claim]
+          properties:
+            state: { type: string, enum: [ready, warning, blocked] }
+            topology:
+              type: object
+              additionalProperties: false
+              required: [mode, worker_instances, crawler_instances, maximum_workers, maximum_crawlers]
+              properties: { mode: { type: string, enum: [single_host] }, worker_instances: { type: integer, minimum: 0 }, crawler_instances: { type: integer, minimum: 0 }, maximum_workers: { type: integer, enum: [1] }, maximum_crawlers: { type: integer, enum: [1] } }
+            leases:
+              type: object
+              additionalProperties: false
+              required: [active_worker, active_crawler, duplicate_count]
+              properties: { active_worker: { type: integer, minimum: 0 }, active_crawler: { type: integer, minimum: 0 }, duplicate_count: { type: integer, minimum: 0 } }
+            providers:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: [id, code, configured_concurrency, effective_concurrency, active_leases]
+                properties: { id: { type: string, format: uuid }, code: { type: string }, configured_concurrency: { type: integer, minimum: 1 }, effective_concurrency: { type: integer, enum: [1] }, active_leases: { type: integer, minimum: 0 } }
+            profiles:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: [id, active_leases]
+                properties: { id: { type: string, format: uuid }, active_leases: { type: integer, minimum: 0, maximum: 1 } }
+            resource:
+              type: object
+              additionalProperties: false
+              required: [load_basis_points, available_memory_mb, free_disk_mb, observed_at]
+              properties: { load_basis_points: { type: integer, minimum: 0 }, available_memory_mb: { type: integer, minimum: 0 }, free_disk_mb: { type: integer, minimum: 0 }, observed_at: { type: string, format: date-time } }
+            findings:
+              type: array
+              items: { type: object, additionalProperties: false, required: [code, severity, action_hint], properties: { code: { type: string }, severity: { type: string, enum: [warning, blocked] }, action_hint: { type: string } } }
+            observed_at: { type: string, format: date-time }
+            capacity_claim: { type: string, enum: [unverified] }
         request_id: { type: string }
         trace_id: { type: string }
     SelectionJourneyCreateInput:

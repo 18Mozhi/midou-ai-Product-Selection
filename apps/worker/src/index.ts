@@ -17,6 +17,7 @@ import {
 } from "./collection-task-worker.js";
 import { MySqlEvidencePersistence } from "./evidence-persistence.js";
 import { ProviderSourceExecutor } from "./provider-source-executor.js";
+import { SingleHostResourceProbe } from "./single-host-resource-probe.js";
 import { MySqlTrendProjectionWorker } from "./trend-projection-worker.js";
 import { MySqlOpportunityRefreshWorker } from "./opportunity-refresh-worker.js";
 import { MySqlOpportunityScoringWorker } from "./opportunity-scoring-worker.js";
@@ -48,6 +49,7 @@ for (const adapter of createBuiltinSourceAdapters(
 ))
   registry.register(adapter);
 const collectionRepository = new MySqlCollectionTaskWorkerRepository(pool);
+const collectionResourceProbe=new SingleHostResourceProbe(config.storage.evidenceRoot,config.crawlerScheduler);
 const coordinator = new ScopedRedisCollectionCoordinator(redisStore);
 const executor = new ProviderSourceExecutor(
   pool,
@@ -209,6 +211,7 @@ const pollCollection = async () => {
       executor,
       workerId: config.identity.workerId,
       leaseSeconds: config.collectionTasks.leaseSeconds,
+      resourceProbe:collectionResourceProbe,
     });
     if (result.status !== "idle")
       console.log(
