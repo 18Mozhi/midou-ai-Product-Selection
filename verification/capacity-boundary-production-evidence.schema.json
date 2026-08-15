@@ -2,27 +2,38 @@
   "$schema":"https://json-schema.org/draft/2020-12/schema",
   "title":"ScoutOps M08-06 BaoTa single-host measured capacity boundary production evidence",
   "type":"object",
-  "required":["schemaVersion","module","status","buildSha","manager","mode","region","measuredConcurrentUsers","stages","planning","performance","resource","resilience","singleHost","loadBalancingEnabled","backupServerUsed","multiNode","capacityClaim","capturedAt"],
+  "required":["schemaVersion","module","status","buildSha","manager","mode","region","singleHost","loadBalancingEnabled","backupServerUsed","multiNode","capacityClaim","capturedAt"],
   "properties":{
     "schemaVersion":{"const":1},
     "module":{"const":"M08-06"},
-    "status":{"const":"ready"},
+    "status":{"enum":["ready","blocked"]},
     "buildSha":{"type":"string","pattern":"^[a-f0-9]{40}$"},
     "manager":{"const":"baota"},
     "mode":{"const":"single_host_measured_boundary"},
     "region":{"const":"惠州"},
     "measuredConcurrentUsers":{"type":"integer","minimum":1,"maximum":20},
-    "stages":{"type":"array","minItems":3,"maxItems":3,"prefixItems":[{"type":"object","required":["concurrentUsers","durationSeconds","readP95Ms","writeP95Ms","errorRateBasisPoints","asyncLagSeconds"],"properties":{"concurrentUsers":{"const":5},"durationSeconds":{"type":"integer","minimum":60},"readP95Ms":{"type":"integer","minimum":0,"maximum":300},"writeP95Ms":{"type":"integer","minimum":0,"maximum":600},"errorRateBasisPoints":{"type":"integer","minimum":0,"maximum":99},"asyncLagSeconds":{"type":"integer","minimum":0,"maximum":60}},"additionalProperties":false},{"type":"object","required":["concurrentUsers","durationSeconds","readP95Ms","writeP95Ms","errorRateBasisPoints","asyncLagSeconds"],"properties":{"concurrentUsers":{"const":10},"durationSeconds":{"type":"integer","minimum":60},"readP95Ms":{"type":"integer","minimum":0,"maximum":300},"writeP95Ms":{"type":"integer","minimum":0,"maximum":600},"errorRateBasisPoints":{"type":"integer","minimum":0,"maximum":99},"asyncLagSeconds":{"type":"integer","minimum":0,"maximum":60}},"additionalProperties":false},{"type":"object","required":["concurrentUsers","durationSeconds","readP95Ms","writeP95Ms","errorRateBasisPoints","asyncLagSeconds"],"properties":{"concurrentUsers":{"const":20},"durationSeconds":{"type":"integer","minimum":60},"readP95Ms":{"type":"integer","minimum":0,"maximum":300},"writeP95Ms":{"type":"integer","minimum":0,"maximum":600},"errorRateBasisPoints":{"type":"integer","minimum":0,"maximum":99},"asyncLagSeconds":{"type":"integer","minimum":0,"maximum":60}},"additionalProperties":false}],"items":false},
+    "stages":{"type":"array","minItems":3,"maxItems":3,"prefixItems":[{"allOf":[{"$ref":"#/$defs/readyStageResult"},{"type":"object","properties":{"concurrentUsers":{"const":5}}}]},{"allOf":[{"$ref":"#/$defs/readyStageResult"},{"type":"object","properties":{"concurrentUsers":{"const":10}}}]},{"allOf":[{"$ref":"#/$defs/readyStageResult"},{"type":"object","properties":{"concurrentUsers":{"const":20}}}]}],"items":false},
     "planning":{"type":"object","required":["users","concurrentMinimum","concurrentMaximum","promise"],"properties":{"users":{"const":100},"concurrentMinimum":{"const":5},"concurrentMaximum":{"const":20},"promise":{"const":false}},"additionalProperties":false},
     "performance":{"type":"object","required":["readP95Ms","writeP95Ms","errorRateBasisPoints","asyncLagSeconds","samples"],"properties":{"readP95Ms":{"type":"integer","minimum":0,"maximum":300},"writeP95Ms":{"type":"integer","minimum":0,"maximum":600},"errorRateBasisPoints":{"type":"integer","minimum":0,"maximum":99},"asyncLagSeconds":{"type":"integer","minimum":0,"maximum":60},"samples":{"type":"integer","minimum":1}},"additionalProperties":false},
     "resource":{"type":"object","required":["loadBasisPoints","availableMemoryMb","freeDiskMb","stopGatePassed"],"properties":{"loadBasisPoints":{"type":"integer","minimum":0,"maximum":8499},"availableMemoryMb":{"type":"integer","minimum":1024},"freeDiskMb":{"type":"integer","minimum":4096},"stopGatePassed":{"const":true}},"additionalProperties":false},
     "resilience":{"type":"object","required":["archiveVerified","recoveryVerified","auditVerified","probeRowsCleaned"],"properties":{"archiveVerified":{"const":true},"recoveryVerified":{"const":true},"auditVerified":{"const":true},"probeRowsCleaned":{"const":true}},"additionalProperties":false},
+    "failure":{"type":"object","required":["code","message","failedStage"],"properties":{"code":{"type":"string","minLength":1},"message":{"type":"string","minLength":1},"failedStage":{"type":["integer","null"],"enum":[null,5,10,20]}},"additionalProperties":false},
+    "completedStages":{"type":"array","maxItems":3,"items":{"$ref":"#/$defs/stageResult"}},
+    "thresholds":{"type":"object","required":["readP95Ms","writeP95Ms","errorRateBasisPoints","asyncLagSeconds"],"properties":{"readP95Ms":{"type":"number","minimum":0},"writeP95Ms":{"type":"number","minimum":0},"errorRateBasisPoints":{"type":"number","minimum":0},"asyncLagSeconds":{"type":"number","minimum":0}},"additionalProperties":false},
     "singleHost":{"const":true},
     "loadBalancingEnabled":{"const":false},
     "backupServerUsed":{"const":false},
     "multiNode":{"const":false},
-    "capacityClaim":{"const":"measured_single_host_limited"},
+    "capacityClaim":{"enum":["measured_single_host_limited","unverified"]},
     "capturedAt":{"type":"string","format":"date-time"}
   },
+  "$defs":{
+    "stageResult":{"type":"object","required":["concurrentUsers","durationSeconds","readP95Ms","writeP95Ms","errorRateBasisPoints","asyncLagSeconds"],"properties":{"concurrentUsers":{"enum":[5,10,20]},"durationSeconds":{"type":"integer","minimum":60},"readP95Ms":{"type":["integer","null"],"minimum":0},"writeP95Ms":{"type":["integer","null"],"minimum":0},"errorRateBasisPoints":{"type":"integer","minimum":0,"maximum":10000},"asyncLagSeconds":{"type":"integer","minimum":0}},"additionalProperties":false},
+    "readyStageResult":{"allOf":[{"$ref":"#/$defs/stageResult"},{"type":"object","properties":{"readP95Ms":{"type":"integer","maximum":300},"writeP95Ms":{"type":"integer","maximum":600},"errorRateBasisPoints":{"type":"integer","maximum":99},"asyncLagSeconds":{"type":"integer","maximum":60}}}]}
+  },
+  "allOf":[
+    {"if":{"type":"object","properties":{"status":{"const":"ready"}}},"then":{"type":"object","required":["measuredConcurrentUsers","stages","planning","performance","resource","resilience"],"properties":{"measuredConcurrentUsers":{},"stages":{},"planning":{},"performance":{},"resource":{},"resilience":{},"capacityClaim":{"const":"measured_single_host_limited"}}}},
+    {"if":{"type":"object","properties":{"status":{"const":"blocked"}}},"then":{"type":"object","required":["failure","completedStages","thresholds"],"properties":{"failure":{},"completedStages":{},"thresholds":{},"capacityClaim":{"const":"unverified"}}}}
+  ],
   "additionalProperties":false
 }

@@ -1559,6 +1559,7 @@
       "permission": "platform operations read and idempotent archive_recovery attestation require platform:operate; responses exclude customer payloads paths filenames hashes credentials cookies and SQL while view drill and failure retain request_id trace_id and audit",
       "configuration": ["CAPACITY_BOUNDARY_READ_P95_MS", "CAPACITY_BOUNDARY_WRITE_P95_MS", "CAPACITY_BOUNDARY_ERROR_RATE_PERCENT", "CAPACITY_BOUNDARY_ASYNC_LAG_SECONDS", "CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE", "CAPACITY_BOUNDARY_EVIDENCE_MAX_AGE_MINUTES", "CAPACITY_BOUNDARY_STAGE_SECONDS"],
       "runtimeBoundary": "existing BaoTa API Worker Crawler MySQL Redis Nginx and finite tasks on one Huizhou host only; no persistent load balancer backup server multi-node or 10000-user claim",
+      "failureEvidence": {"schemaVersion":1,"status":"blocked","requiredFields":["failure.code","failure.failedStage","completedStages","thresholds"],"capacityClaim":"unverified","atomicWrite":true},
       "imageEvidence": ["concept 61 operations", "concept 63 task monitor", "concept 64 monitoring", "concept 65 logs", "concept 66 security audit", "concept 69 alerts", "core 10 platform cockpit", "desktop and 390 capacity baselines"],
       "status": "implementation_ready_production_pending",
       "capacityClaim": "unverified",
