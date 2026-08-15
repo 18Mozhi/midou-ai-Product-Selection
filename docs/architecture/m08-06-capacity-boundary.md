@@ -6,7 +6,7 @@ M08-06 只收口惠州当前单台宝塔服务器的实测容量边界：规划�
 
 ## 事实链与失败关闭
 
-宝塔有限任务固定按 5→10→20 并发逐档执行，每档生产测量不少于 `CAPACITY_BOUNDARY_STAGE_SECONDS=60` 秒；每个虚拟用户顺序完成一次 TLS 核心读和一次签名持久写，同一轮用户并发发起。任务把聚合事实写入 MySQL 5.7 的 `capacity_boundary_observations`；API 只读取最新 `production_benchmark`，用固定停止线重新判定，并把每次读取和 `request_id`/`trace_id` 写入平台审计。页面上的规划数永远与实测数分开。低档位越线即停止，证据过期、没有实测并发、任一性能或资源门失败、归档或恢复未验证时都失败关闭，不得跳档、缩短到 60 秒以下、用规划值/截图或旧提交窗口补足。
+宝塔有限任务固定按 5→10→20 并发逐档执行，每档生产测量不少于 `CAPACITY_BOUNDARY_STAGE_SECONDS=60` 秒；每个虚拟用户顺序完成一次 TLS 核心读和一次签名持久写，同一轮用户并发发起。生产发布包不依赖 `.git` 元数据，任务在测量前必须确认宝塔受限环境注入的 `BUILD_SHA`、本机宝塔 Nginx TLS `/api/v1/health/version` 返回的构建和 MySQL 中 `healthy` 发布记录三者一致。任务把聚合事实写入 MySQL 5.7 的 `capacity_boundary_observations`；API 只读取最新 `production_benchmark`，用固定停止线重新判定，并把每次读取和 `request_id`/`trace_id` 写入平台审计。页面上的规划数永远与实测数分开。低档位越线即停止，证据过期、没有实测并发、任一性能或资源门失败、归档或恢复未验证时都失败关闭，不得跳档、缩短到 60 秒以下、用规划值/截图或旧提交窗口补足。
 
 停止线为读 P95 300 ms、写 P95 600 ms、错误率 1%、异步滞后 60 秒、归一化主机负载 85%、可用内存 1024 MB、可用磁盘 4096 MB。接近停止线进入 `warning` 并降载后台工作；越线进入 `blocked` 并停止新增后台工作。既有 Node Worker、Python Crawler、MySQL 和 Redis 仍由宝塔管理，不增加守护进程。
 

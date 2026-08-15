@@ -15,7 +15,7 @@
 - 最新 `production_benchmark` 必须属于当前提交；页面和生产 verifier 会拒绝缺失、未来时间或超过配置时效的证据。
 - 归档与恢复只复用 M08-04 已验证的本机加密目录和隔离恢复库，不使用备用服务器，也不把客户数据移出中国境内。
 
-宝塔有限任务在当前已晋级 release 根目录运行 `node scripts/capture-capacity-boundary-production.mjs --run --env-file <宝塔受限环境文件>`。环境文件必须保持 0600，任务输出只留脱敏指标与 request_id/trace_id；真实数据库密码和签名密钥不得打印。任务开始即把旧证据标为 blocked，只有三档、持久写数量、资源门、归档/恢复和事务审计全部通过才原子替换为 schema v1 ready 证据。
+宝塔有限任务在当前已晋级 release 根目录运行 `node scripts/capture-capacity-boundary-production.mjs --run --env-file <宝塔受限环境文件>`。release 包不要求包含 `.git`；任务以环境中的 40 位 `BUILD_SHA` 为期望值，并通过本机宝塔 Nginx TLS 版本接口和 MySQL `healthy` 发布记录交叉确认同一提交。环境文件必须保持 0600，任务输出只留脱敏指标与 request_id/trace_id；真实数据库密码和签名密钥不得打印。任务开始即把旧证据标为 blocked，只有三档、持久写数量、资源门、归档/恢复和事务审计全部通过才原子替换为 schema v1 ready 证据。
 
 ## 告警与降级
 
