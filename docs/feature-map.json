@@ -1549,6 +1549,24 @@
       "loadBalancingEnabled": false,
       "backupServerUsed": false,
       "multiNode": false
+    },
+    "capacityBoundary": {
+      "module": "M08-06",
+      "entrypoints": ["../database/migrations/0035_capacity_boundary_m08_06.up.sql", "../apps/api/src/capacity-boundary-service.ts", "../apps/api/src/capacity-boundary-repository.ts", "../apps/api/src/capacity-boundary-routes.ts", "../apps/web/src/components/CapacityBoundaryCenter.vue", "../infra/baota/capacity-boundary-manifest.json", "../scripts/capture-capacity-boundary-production.mjs", "../scripts/verify-capacity-boundary-production.mjs"],
+      "routes": ["/platform-admin/capacity", "/api/v1/platform/operations/capacity", "/api/v1/platform/operations/capacity/drills"],
+      "scope": "M08-06 measured capacity boundary and P08 closure for the current Huizhou BaoTa single host; planning 100 users and planning concurrency 5-20 remain non-promissory until controlled same-commit production evidence",
+      "truthBoundary": "ready requires a current controlled measured concurrency snapshot at or below 20, read P95 at most 300ms, write P95 at most 600ms, error rate below 1 percent, asynchronous lag at most 60 seconds, host resources below fixed stop gates and verified archive plus isolated recovery",
+      "permission": "platform operations read and idempotent archive_recovery attestation require platform:operate; responses exclude customer payloads paths filenames hashes credentials cookies and SQL while view drill and failure retain request_id trace_id and audit",
+      "configuration": ["CAPACITY_BOUNDARY_READ_P95_MS", "CAPACITY_BOUNDARY_WRITE_P95_MS", "CAPACITY_BOUNDARY_ERROR_RATE_PERCENT", "CAPACITY_BOUNDARY_ASYNC_LAG_SECONDS", "CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE", "CAPACITY_BOUNDARY_EVIDENCE_MAX_AGE_MINUTES", "CAPACITY_BOUNDARY_STAGE_SECONDS"],
+      "runtimeBoundary": "existing BaoTa API Worker Crawler MySQL Redis Nginx and finite tasks on one Huizhou host only; no persistent load balancer backup server multi-node or 10000-user claim",
+      "imageEvidence": ["concept 61 operations", "concept 63 task monitor", "concept 64 monitoring", "concept 65 logs", "concept 66 security audit", "concept 69 alerts", "core 10 platform cockpit", "desktop and 390 capacity baselines"],
+      "status": "implementation_ready_production_pending",
+      "capacityClaim": "unverified",
+      "planningUsers": 100,
+      "planningConcurrentUsers": [5, 20],
+      "loadBalancingEnabled": false,
+      "backupServerUsed": false,
+      "multiNode": false
     }
   },
   "phaseVerification": {
@@ -1823,6 +1841,12 @@
       "view": "CrawlerSchedulerCenter",
       "domain": "crawler-single-host-scheduler",
       "status": "M08-05_module_verified"
+    },
+    {
+      "path": "/platform-admin/capacity",
+      "view": "CapacityBoundaryCenter",
+      "domain": "capacity-boundary",
+      "status": "M08-06_implementation_ready_production_pending"
     }
   ],
   "apiGroups": [
@@ -1919,6 +1943,7 @@
     { "prefix": "/api/v1/platform/operations/mysql", "domain": "mysql-resilience", "status": "M08-03_module_verified" },
     { "prefix": "/api/v1/platform/operations/files", "domain": "file-resilience", "status": "M08-04_module_verified" },
     { "prefix": "/api/v1/platform/operations/crawler-scheduler", "domain": "crawler-single-host-scheduler", "status": "M08-05_module_verified" },
+    { "prefix": "/api/v1/platform/operations/capacity", "domain": "capacity-boundary", "status": "M08-06_implementation_ready_production_pending" },
     { "prefix": "/api/v1/platform/commercial", "domain": "commercial-operations", "status": "M06-06_module_verified" },
     { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
   ],

@@ -705,6 +705,8 @@ P00 交付 `infra/baota/service-manifest.json` 与 Nginx 模板作为 S0 创建�
 
 P08 不再是多节点扩展阶段，而是把这套单机合同做成可观测、可降载、可恢复、可回滚的最终生产边界。任何页面、API、证据或文档都必须明确 `load_balancing_enabled=false`、`backup_server_used=false`、`multi_node_claim=false` 和 `capacity_claim=unverified`，直到 M08-06 的单机实测仅形成有限容量边界；即使阶段完成，也不得宣称多节点、高可用或 10,000 用户能力。
 
+M08-06 的实现合同使用 MySQL 5.7 `capacity_boundary_observations` 保存同提交受控基线和 API 复核观测，以固定的核心读 P95 300 ms、核心写 P95 600 ms、错误率 1%、异步滞后 60 秒及现有单机资源停止线失败关闭。宝塔有限任务固定按 5→10→20 并发逐档测量，每档生产窗口不少于 60 秒；低档位越线立即停止，三档不能通过配置跳过。`GET /api/v1/platform/operations/capacity` 只向 `platform:operate` 返回实测档位、规划值、脱敏性能/资源/韧性和降载结论；`POST /api/v1/platform/operations/capacity/drills` 只允许同源、幂等地签认已被生产事实验证的本机加密归档与隔离恢复，不创建服务或拓扑。规划 100 用户和 5–20 并发只是测量安排；只有同提交生产证据通过后才允许 `capacity_claim=measured_single_host_limited`，且仅限实测档位，不等于 100 人同时在线承诺。当前实现已完成本地定向测试，仍等待同提交生产灰度、容量基线和模块门，因此 P08 尚未完成。
+
 #### 9.1.2 已确定的基础设施基线
 
 | 能力 | 基线决策 | 约束 |

@@ -1584,6 +1584,8 @@
 - [ ] 组织隔离、权限、审计、配置、错误状态、图片/响应式（适用时）已覆盖。
 - [ ] `npm run verify:module -- 模块 ID` 返回 0；失败报告可定位到原子任务。
 
+当前状态：失败测试已先于实现运行并以 6/6 失败证明 M08-06 原先没有真实迁移、服务、API、配置、生产证据和页面。现已完成 MySQL 5.7 `0035` 迁移与回滚、固定停止线容量判定、事务观测/审计与幂等演练签认、`platform:operate` API、桌面/390px 深色容量驾驶舱、全状态、OpenAPI、Feature Map、env/schema、固定 5→10→20 且每档不少于 60 秒的宝塔有限容量任务、生产证据 schema/verifier、宝塔 Runbook 和自动测试；新增演练事务回归后定向测试为 7/7 通过。当前仍为 `implementation_ready_production_pending`：必须在包含全部实现的同一提交上重新完成 5%/25%/100% 各 1,800 秒灰度、受控单机容量基线、schema v1 生产证据和 `npm run verify:module -- M08-06`，在此之前 A99 不勾选、P08 不完成，`capacity_claim` 保持 `unverified`。
+
 ## 9. 阶段交付证据目录
 
 - 模块报告：每个模块产出 verify:module 输出。

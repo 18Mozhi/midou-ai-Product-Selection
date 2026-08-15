@@ -78,6 +78,15 @@ export interface RuntimeConfig {
     productionEvidenceFile:string;
     maximumEvidenceAgeMinutes:number;
   };
+  capacityBoundary:{
+    readP95StopMs:number;
+    writeP95StopMs:number;
+    errorRateStopBasisPoints:number;
+    asyncLagStopSeconds:number;
+    productionEvidenceFile:string;
+    maximumEvidenceAgeMinutes:number;
+    stageSeconds:number;
+  };
   ai: {
     baseUrl: string;
     model: string;
@@ -384,6 +393,15 @@ export function loadRuntimeConfig(
       staleAfterSeconds:integer(env,"CRAWLER_SCHEDULER_STALE_AFTER_SECONDS",90,30,600),
       productionEvidenceFile:resolve(cwd,text(env,"CRAWLER_SCHEDULER_PRODUCTION_EVIDENCE_FILE","./.artifacts/verification/m08-05-crawler-scheduler-production-evidence.json")),
       maximumEvidenceAgeMinutes:integer(env,"CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES",60,1,1440),
+    },
+    capacityBoundary:{
+      readP95StopMs:integer(env,"CAPACITY_BOUNDARY_READ_P95_MS",300,1,60000),
+      writeP95StopMs:integer(env,"CAPACITY_BOUNDARY_WRITE_P95_MS",600,1,60000),
+      errorRateStopBasisPoints:integer(env,"CAPACITY_BOUNDARY_ERROR_RATE_PERCENT",1,1,100)*100,
+      asyncLagStopSeconds:integer(env,"CAPACITY_BOUNDARY_ASYNC_LAG_SECONDS",60,1,86400),
+      productionEvidenceFile:resolve(cwd,text(env,"CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE","./.artifacts/verification/m08-06-capacity-boundary-production-evidence.json")),
+      maximumEvidenceAgeMinutes:integer(env,"CAPACITY_BOUNDARY_EVIDENCE_MAX_AGE_MINUTES",60,1,1440),
+      stageSeconds:integer(env,"CAPACITY_BOUNDARY_STAGE_SECONDS",60,60,3600),
     },
     ai: {
       baseUrl: httpUrl(env, "AI_BASE_URL", "http://192.168.1.203:8588/v1"),

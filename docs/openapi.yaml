@@ -247,6 +247,42 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /platform/operations/capacity:
+    get:
+      summary: Read audited S0 measured single-host capacity boundary
+      description: M08-06 reports only the latest same-commit controlled measurement, fixed latency/error/lag/resource gates and existing archive/recovery verification for the current Huizhou BaoTa host. Planning 100 users and 5-20 concurrent users are not promises. The response never claims load balancing, a backup server, multi-node or 10,000-user capability.
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: platform:operate
+      responses:
+        '200': { description: Current measured single-host capacity state is ready, warning or blocked, content: { application/json: { schema: { $ref: '#/components/schemas/CapacityBoundaryEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/operations/capacity/drills:
+    post:
+      summary: Idempotently attest an already verified archive and isolated recovery drill
+      description: M08-06 records an archive_recovery attestation only when the latest measured observation already contains verified archive and recovery facts. It creates no service, backup server or new topology.
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: platform:operate
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [kind, reason]
+              properties:
+                kind: { type: string, enum: [archive_recovery] }
+                reason: { type: string, minLength: 2, maxLength: 500 }
+      responses:
+        '200': { description: Verified drill attested or an earlier idempotent result replayed }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
   /auth/register:
     post:
       summary: Register a local email account and queue verification delivery
@@ -2537,6 +2573,52 @@ components:
               items: { type: object, additionalProperties: false, required: [code, severity, action_hint], properties: { code: { type: string }, severity: { type: string, enum: [warning, blocked] }, action_hint: { type: string } } }
             observed_at: { type: string, format: date-time }
             capacity_claim: { type: string, enum: [unverified] }
+        request_id: { type: string }
+        trace_id: { type: string }
+    CapacityBoundaryEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          required: [state, boundary, performance, resource, resilience, degradation, findings, single_host, load_balancing_enabled, backup_server_used, multi_node_claim, observed_at]
+          properties:
+            state: { type: string, enum: [ready, warning, blocked] }
+            boundary:
+              type: object
+              additionalProperties: false
+              required: [measured_concurrency, planning_users, planning_concurrency_min, planning_concurrency_max, capacity_claim]
+              properties: { measured_concurrency: { type: integer, minimum: 1, maximum: 20 }, planning_users: { type: integer, enum: [100] }, planning_concurrency_min: { type: integer, enum: [5] }, planning_concurrency_max: { type: integer, enum: [20] }, capacity_claim: { type: string, enum: [unverified, measured_single_host_limited] } }
+            performance:
+              type: object
+              additionalProperties: false
+              required: [read_p95_ms, write_p95_ms, error_rate_basis_points, async_lag_seconds]
+              properties: { read_p95_ms: { type: integer, minimum: 0 }, write_p95_ms: { type: integer, minimum: 0 }, error_rate_basis_points: { type: integer, minimum: 0 }, async_lag_seconds: { type: integer, minimum: 0 } }
+            resource:
+              type: object
+              additionalProperties: false
+              required: [load_basis_points, available_memory_mb, free_disk_mb]
+              properties: { load_basis_points: { type: integer, minimum: 0 }, available_memory_mb: { type: integer, minimum: 0 }, free_disk_mb: { type: integer, minimum: 0 } }
+            resilience:
+              type: object
+              additionalProperties: false
+              required: [archive_verified, recovery_verified]
+              properties: { archive_verified: { type: boolean }, recovery_verified: { type: boolean } }
+            degradation:
+              type: object
+              additionalProperties: false
+              required: [mode, actions]
+              properties: { mode: { type: string, enum: [normal, shed_background, stop_new_work] }, actions: { type: array, items: { type: string } } }
+            findings:
+              type: array
+              items: { type: object, additionalProperties: false, required: [code, severity, action_hint], properties: { code: { type: string }, severity: { type: string, enum: [warning, blocked] }, action_hint: { type: string } } }
+            single_host: { type: boolean, enum: [true] }
+            load_balancing_enabled: { type: boolean, enum: [false] }
+            backup_server_used: { type: boolean, enum: [false] }
+            multi_node_claim: { type: boolean, enum: [false] }
+            observed_at: { type: string, format: date-time }
         request_id: { type: string }
         trace_id: { type: string }
     SelectionJourneyCreateInput:

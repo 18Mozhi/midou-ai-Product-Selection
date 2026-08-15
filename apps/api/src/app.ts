@@ -153,6 +153,8 @@ import { registerMySqlResilienceRoutes, type MySqlResilienceRouteOptions } from 
 import { registerFileResilienceRoutes, type FileResilienceRouteOptions } from "./file-resilience-routes.js";
 import { CrawlerSchedulerError } from "./crawler-scheduler-service.js";
 import { registerCrawlerSchedulerRoutes, type CrawlerSchedulerRouteOptions } from "./crawler-scheduler-routes.js";
+import { CapacityBoundaryError } from "./capacity-boundary-service.js";
+import { registerCapacityBoundaryRoutes, type CapacityBoundaryRouteOptions } from "./capacity-boundary-routes.js";
 import { SelectionJourneyError } from "./selection-journey-service.js";
 import { registerSelectionJourneyRoutes, type SelectionJourneyRouteOptions } from "./selection-journey-routes.js";
 
@@ -205,6 +207,7 @@ export interface BuildAppOptions {
   mysqlResilience?: MySqlResilienceRouteOptions;
   fileResilience?: FileResilienceRouteOptions;
   crawlerScheduler?: CrawlerSchedulerRouteOptions;
+  capacityBoundary?: CapacityBoundaryRouteOptions;
 }
 
 export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
@@ -383,6 +386,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if(options.mysqlResilience)registerMySqlResilienceRoutes(app,options.mysqlResilience);
   if(options.fileResilience)registerFileResilienceRoutes(app,options.fileResilience);
   if(options.crawlerScheduler)registerCrawlerSchedulerRoutes(app,options.crawlerScheduler);
+  if(options.capacityBoundary)registerCapacityBoundaryRoutes(app,options.capacityBoundary);
 
   app.setErrorHandler(
     async (
@@ -464,6 +468,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
       const openPlatformError = error instanceof OpenPlatformError ? error : null;
       const commercialError = error instanceof CommercialError ? error : null;
       const crawlerSchedulerError=error instanceof CrawlerSchedulerError?error:null;
+      const capacityBoundaryError=error instanceof CapacityBoundaryError?error:null;
       const trendError =
         error instanceof TrendServiceError
           ? (error as TrendServiceError)
@@ -522,6 +527,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         openPlatformError?.statusCode ??
         commercialError?.statusCode ??
         crawlerSchedulerError?.statusCode ??
+        capacityBoundaryError?.statusCode ??
         trendError?.statusCode ??
         opportunityError?.statusCode ??
         selectionJourneyError?.statusCode ??
@@ -569,6 +575,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         openPlatformError?.code ??
         commercialError?.code ??
         crawlerSchedulerError?.code ??
+        capacityBoundaryError?.code ??
             trendError?.code ??
             opportunityError?.code ??
             selectionJourneyError?.code ??
@@ -594,6 +601,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             openPlatformError?.message ??
             commercialError?.message ??
             crawlerSchedulerError?.message ??
+            capacityBoundaryError?.message ??
             trendError?.message ??
             opportunityError?.message ??
             selectionJourneyError?.message ??
@@ -646,6 +654,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
         openPlatformError?.actionHint ??
         commercialError?.actionHint ??
         crawlerSchedulerError?.actionHint ??
+        capacityBoundaryError?.actionHint ??
             trendError?.actionHint ??
             opportunityError?.actionHint ??
             selectionJourneyError?.actionHint ??

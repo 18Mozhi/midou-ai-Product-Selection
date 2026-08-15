@@ -1,0 +1,23 @@
+{
+  "moduleId":"M08-06","phaseId":"P08","name":"S0 Measured Capacity Boundary and Closure","dependencies":["M08-01","M08-02","M08-03","M08-04","M08-05"],
+  "atomicTasks":[
+    {"id":"M08-06.A01","evidence":"freeze measured single-host boundary degradation archive recovery and explicit non-goals"},
+    {"id":"M08-06.A02","evidence":"capacity snapshot baseline finding degradation and drill contracts"},
+    {"id":"M08-06.A03","evidence":"0035 MySQL57 capacity observation drill operation indexes and rollback"},
+    {"id":"M08-06.A04","evidence":"fail-closed evaluator audited read idempotent drill attestation and transactional repository"},
+    {"id":"M08-06.A05","evidence":"existing Worker Crawler queues and outbox retain fixed single-host admission and degradation boundaries"},
+    {"id":"M08-06.A06","evidence":"OpenAPI platform operations read and drill contracts exclude credentials paths payloads and topology claims"},
+    {"id":"M08-06.A07","evidence":"image-grounded dark capacity cockpit with desktop and 390 layouts"},
+    {"id":"M08-06.A08","evidence":"loading ready warning blocked empty forbidden expired rate_limited unavailable and verifying states"},
+    {"id":"M08-06.A09","evidence":"platform:operate same-origin idempotency audit request_id trace_id and backend-only metrics"},
+    {"id":"M08-06.A10","evidence":"schema env example measured thresholds evidence age and BaoTa restart requirements"},
+    {"id":"M08-06.A11","evidence":"read write error queue resource recovery drill and correlation observability"},
+    {"id":"M08-06.A12","evidence":"latency error resource queue stale drill and no-capacity-claim unit branches"},
+    {"id":"M08-06.A13","evidence":"OpenAPI Feature Map manifest evidence schema DTO and route contract coverage"},
+    {"id":"M08-06.A14","evidence":"real MySQL57 migration observation drill audit API and single-host integration"},
+    {"id":"M08-06.A15","evidence":"concepts 61 63 64 65 66 69 and core 10 desktop and 390 Linux visual baselines"},
+    {"id":"M08-06.A16","evidence":"load threshold queue pressure stale evidence archive recovery BaoTa rollback and probe cleanup drills"},
+    {"id":"M08-06.A17","evidence":"blueprint plan Feature Map OpenAPI env manifest architecture Runbook production evidence and rollback synchronized"}
+  ],
+  "commands":["npm run build","node --test tests/m08-06/capacity-boundary-closure.test.mjs","node scripts/capture-capacity-boundary-production.mjs --self-test","node scripts/verify-capacity-boundary-production.mjs --preflight","node scripts/verify-mysql-live.mjs","node scripts/verify-capacity-boundary-live.mjs","node scripts/verify-api-live.mjs","npx playwright test tests/e2e/m08-06-capacity-boundary.spec.ts","npm run verify:docs","node scripts/verify-capacity-boundary-production.mjs --production"]
+}

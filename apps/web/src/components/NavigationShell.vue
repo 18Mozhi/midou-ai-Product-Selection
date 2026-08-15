@@ -34,6 +34,7 @@ import RedisResilienceCenter from "./RedisResilienceCenter.vue";
 import MySqlResilienceCenter from "./MySqlResilienceCenter.vue";
 import FileResilienceCenter from "./FileResilienceCenter.vue";
 import CrawlerSchedulerCenter from "./CrawlerSchedulerCenter.vue";
+import CapacityBoundaryCenter from "./CapacityBoundaryCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -229,6 +230,12 @@ const platformMenu: MenuItem[] = [
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
+    label: "容量边界",
+    path: "/platform-admin/capacity",
+    icon: "◫",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
     label: "商业运营",
     path: "/platform-admin/commercial",
     icon: "▰",
@@ -307,6 +314,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   isMySqlResilience = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/mysql"),
   isFileResilience = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/files"),
   isCrawlerScheduler = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/crawler-scheduler"),
+  isCapacityBoundary = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/capacity"),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
   ),
@@ -610,6 +618,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <MySqlResilienceCenter v-else-if="isMySqlResilience" :api-base-url="apiBaseUrl" />
         <FileResilienceCenter v-else-if="isFileResilience" :api-base-url="apiBaseUrl" />
         <CrawlerSchedulerCenter v-else-if="isCrawlerScheduler" :api-base-url="apiBaseUrl" />
+        <CapacityBoundaryCenter v-else-if="isCapacityBoundary" :api-base-url="apiBaseUrl" />
         <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"

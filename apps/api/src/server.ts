@@ -123,6 +123,9 @@ import { CrawlerSchedulerService } from "./crawler-scheduler-service.js";
 import { CrawlerSchedulerRepository } from "./crawler-scheduler-repository.js";
 import { CrawlerSchedulerHostProbe } from "./crawler-scheduler-probe.js";
 import { registerCrawlerSchedulerRoutes } from "./crawler-scheduler-routes.js";
+import { CapacityBoundaryService } from "./capacity-boundary-service.js";
+import { CapacityBoundaryRepository } from "./capacity-boundary-repository.js";
+import { registerCapacityBoundaryRoutes } from "./capacity-boundary-routes.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -151,6 +154,7 @@ const fileResilienceService = new FileResilienceService(
   {usageWarningBasisPoints:config.fileResilience.usageWarningBasisPoints,usageStopBasisPoints:config.fileResilience.usageStopBasisPoints,maximumRecoveryDrillAgeDays:config.fileResilience.maximumRecoveryDrillAgeDays},
 );
 const crawlerSchedulerService=new CrawlerSchedulerService(new CrawlerSchedulerRepository(pool),new CrawlerSchedulerHostProbe(config.storage.evidenceRoot),config.crawlerScheduler);
+const capacityBoundaryService=new CapacityBoundaryService(new CapacityBoundaryRepository(pool),{readP95StopMs:config.capacityBoundary.readP95StopMs,writeP95StopMs:config.capacityBoundary.writeP95StopMs,errorRateStopBasisPoints:config.capacityBoundary.errorRateStopBasisPoints,asyncLagStopSeconds:config.capacityBoundary.asyncLagStopSeconds,maximumLoadBasisPoints:config.crawlerScheduler.maximumLoadBasisPoints,minimumAvailableMemoryMb:config.crawlerScheduler.minimumAvailableMemoryMb,minimumFreeDiskMb:config.crawlerScheduler.minimumFreeDiskMb,maximumEvidenceAgeMinutes:config.capacityBoundary.maximumEvidenceAgeMinutes});
 const authRepository = new MySqlAuthRepository(pool);
 const authOutbox = new MySqlAuthOutboxStore(pool);
 const authDelivery = config.security.credentialsMasterKey
@@ -490,6 +494,7 @@ registerRedisResilienceRoutes(app,{service:redisResilienceService,authorization,
 registerMySqlResilienceRoutes(app,{service:mysqlResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerFileResilienceRoutes(app,{service:fileResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
 registerCrawlerSchedulerRoutes(app,{service:crawlerSchedulerService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production",webOrigin:config.app.webOrigin});
+registerCapacityBoundaryRoutes(app,{service:capacityBoundaryService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production",webOrigin:config.app.webOrigin});
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {
     evidenceRoot: config.storage.evidenceRoot,
