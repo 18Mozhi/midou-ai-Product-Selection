@@ -63,9 +63,10 @@
       "M08-01",
       "M08-02",
       "M08-03",
-      "M08-04"
+      "M08-04",
+      "M08-05"
     ],
-    "activeModules": ["M08-05"],
+    "activeModules": ["M08-06"],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -1538,7 +1539,9 @@
       "configuration": ["CRAWLER_SCHEDULER_MAX_LOAD_PERCENT", "CRAWLER_SCHEDULER_MIN_AVAILABLE_MEMORY_MB", "CRAWLER_SCHEDULER_MIN_FREE_DISK_MB", "CRAWLER_SCHEDULER_STALE_AFTER_SECONDS", "CRAWLER_SCHEDULER_PRODUCTION_EVIDENCE_FILE", "CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES"],
       "runtimeBoundary": "one BaoTa Node Worker and one BaoTa Python Crawler on the current Huizhou host; Redis remains scoped queue coordination and MySQL 5.7 remains lease truth; no load balancer backup server multi-node or capacity claim",
       "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 62 source management", "concept 63 task monitor", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 scheduler baselines"],
-      "status": "implementation_ready_production_pending",
+      "latestProductionEvidence": {"releaseId":"a21e286f-836e-4c0c-ac76-3fc5fcf298c8","buildSha":"efdb35081bdc5002eea1729e0af4583be3ae7523","rolloutSha256":"7739d5b5ee727f373e5a63267dedd5c4a25547f1214642025baa31a47947e3f4","schedulerEvidenceSha256":"50806f678946c2b1acffec8ed21271f62c0bd61ade4cdc737778216b2850a247","observationSeconds":[1800,1800,1800],"sampleCounts":[169,792,3388],"writeP95Ms":[456,350,290],"workerInstances":1,"crawlerInstances":1,"maximumProviderConcurrency":1,"singleUpstreamPort":4101,"candidateStopped":true},
+      "verificationRunId": "a6e9e5d7-dffd-4732-8706-29cd9cdc6ecb",
+      "status": "module_verified",
       "capacityClaim": "unverified",
       "maximumWorkers": 1,
       "maximumCrawlers": 1,
@@ -1819,7 +1822,7 @@
       "path": "/platform-admin/crawler-scheduler",
       "view": "CrawlerSchedulerCenter",
       "domain": "crawler-single-host-scheduler",
-      "status": "M08-05_implementation_ready_production_pending"
+      "status": "M08-05_module_verified"
     }
   ],
   "apiGroups": [
@@ -1915,7 +1918,7 @@
     { "prefix": "/api/v1/platform/operations/redis", "domain": "redis-resilience", "status": "M08-02_module_verified" },
     { "prefix": "/api/v1/platform/operations/mysql", "domain": "mysql-resilience", "status": "M08-03_module_verified" },
     { "prefix": "/api/v1/platform/operations/files", "domain": "file-resilience", "status": "M08-04_module_verified" },
-    { "prefix": "/api/v1/platform/operations/crawler-scheduler", "domain": "crawler-single-host-scheduler", "status": "M08-05_implementation_ready_production_pending" },
+    { "prefix": "/api/v1/platform/operations/crawler-scheduler", "domain": "crawler-single-host-scheduler", "status": "M08-05_module_verified" },
     { "prefix": "/api/v1/platform/commercial", "domain": "commercial-operations", "status": "M06-06_module_verified" },
     { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
   ],

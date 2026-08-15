@@ -1,5 +1,5 @@
 {
-  "schemaVersion":1,"module":"M08-05","stage":"S0","status":"implementation_ready","manager":"baota","mode":"single_host_scheduler","productionRegion":"惠州",
+  "schemaVersion":1,"module":"M08-05","stage":"S0","status":"production_verified","manager":"baota","mode":"single_host_scheduler","productionRegion":"惠州",
   "limits":{"maximumWorkers":1,"maximumCrawlers":1,"maximumProviderConcurrency":1,"maximumLoadPercent":85,"minimumAvailableMemoryMb":1024,"minimumFreeDiskMb":4096,"staleAfterSeconds":90},
   "leases":{"truthStore":"MySQL 5.7","workerGlobalSlot":1,"crawlerGlobalSlot":1,"browserProfileExclusive":true,"providerConfiguredLimitCappedAt":1,"redisPurpose":"scoped queue coordination only"},
   "topologyClaims":{"singleHost":true,"loadBalancingEnabled":false,"backupServerUsed":false,"multiNode":false,"capacityClaim":"unverified"},
