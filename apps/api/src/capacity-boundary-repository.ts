@@ -3,6 +3,7 @@ import type {Pool,RowDataPacket} from "mysql2/promise";
 import type {CapacityBoundaryRepositoryContract as Contract,CapacityBoundaryStopReason} from "./capacity-boundary-service.js";
 
 const n=(v:unknown)=>Number(v??0),b=(v:unknown)=>Boolean(Number(v));
+const utcDateTime=(value:unknown)=>{const parsed=new Date(String(value));if(!Number.isFinite(parsed.getTime()))throw new Error("capacity_observed_at_invalid");return parsed.toISOString();};
 const findingCodes=(value:unknown):string[]=>{try{const parsed=typeof value==="string"?JSON.parse(value):value;return Array.isArray(parsed)?parsed.filter((item):item is string=>typeof item==="string"):[];}catch{return[];}};
 function boundaryStop(value:unknown):{boundary_stop_reason:CapacityBoundaryStopReason|null;failed_next_concurrency:number|null;failed_next_code:string|null}{
   const codes=findingCodes(value),next=codes.map(code=>code.match(/^capacity_boundary_stop:next_stage_gate_failed:(5|10|20):([a-z0-9_]+)$/)).find(Boolean);
@@ -14,9 +15,9 @@ function boundaryStop(value:unknown):{boundary_stop_reason:CapacityBoundaryStopR
 export class CapacityBoundaryRepository implements Contract{
   constructor(private readonly pool:Pool){}
   async snapshot(_now:Date){
-    const[rows]=await this.pool.query<RowDataPacket[]>("SELECT measured_concurrency,read_p95_ms,write_p95_ms,error_rate_basis_points,async_lag_seconds,load_basis_points,available_memory_mb,free_disk_mb,archive_verified,recovery_verified,finding_codes_json,observed_at FROM capacity_boundary_observations WHERE source='production_benchmark' ORDER BY observed_at DESC LIMIT 1");
+    const[rows]=await this.pool.query<RowDataPacket[]>("SELECT measured_concurrency,read_p95_ms,write_p95_ms,error_rate_basis_points,async_lag_seconds,load_basis_points,available_memory_mb,free_disk_mb,archive_verified,recovery_verified,finding_codes_json,CONCAT(DATE_FORMAT(observed_at,'%Y-%m-%dT%H:%i:%s.'),LPAD(FLOOR(MICROSECOND(observed_at)/1000),3,'0'),'Z') observed_at_utc FROM capacity_boundary_observations WHERE source='production_benchmark' ORDER BY observed_at DESC LIMIT 1");
     const r=rows[0];
-    return r?{measured_concurrency:n(r.measured_concurrency),read_p95_ms:n(r.read_p95_ms),write_p95_ms:n(r.write_p95_ms),error_rate_basis_points:n(r.error_rate_basis_points),async_lag_seconds:n(r.async_lag_seconds),load_basis_points:n(r.load_basis_points),available_memory_mb:n(r.available_memory_mb),free_disk_mb:n(r.free_disk_mb),archive_verified:b(r.archive_verified),recovery_verified:b(r.recovery_verified),...boundaryStop(r.finding_codes_json),observed_at:new Date(r.observed_at).toISOString()}:null;
+    return r?{measured_concurrency:n(r.measured_concurrency),read_p95_ms:n(r.read_p95_ms),write_p95_ms:n(r.write_p95_ms),error_rate_basis_points:n(r.error_rate_basis_points),async_lag_seconds:n(r.async_lag_seconds),load_basis_points:n(r.load_basis_points),available_memory_mb:n(r.available_memory_mb),free_disk_mb:n(r.free_disk_mb),archive_verified:b(r.archive_verified),recovery_verified:b(r.recovery_verified),...boundaryStop(r.finding_codes_json),observed_at:utcDateTime(r.observed_at_utc)}:null;
   }
   async recordView(input:Parameters<Contract["recordView"]>[0]){
     const c=await this.pool.getConnection(),id=randomUUID();

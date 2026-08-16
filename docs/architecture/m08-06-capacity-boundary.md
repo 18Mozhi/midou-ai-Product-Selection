@@ -18,6 +18,8 @@ M08-06 只收口惠州当前单台宝塔服务器的实测容量边界：规划�
 
 ## 数据与合同
 
+容量采集以 UTC 写入 `capacity_boundary_observations.observed_at`。读取最新 `production_benchmark` 时，仓储在 MySQL 5.7 内把 `DATETIME(3)` 格式化为带 `Z` 的毫秒级文本，再做 ISO 解析；不得直接把驱动按主库 `system_time_zone` 构造的 `Date` 当作证据时间，避免刚签发的证据因时区偏移被误判为未来或过期。
+
 - `capacity_boundary_observations`：同提交生产基线和 API 复核观测。
 - `capacity_boundary_drills`：已验证的归档/隔离恢复签认。
 - `capacity_boundary_operations`：幂等响应事实。
