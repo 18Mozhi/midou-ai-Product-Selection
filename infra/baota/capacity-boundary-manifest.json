@@ -7,13 +7,13 @@
   "mode":"single_host_measured_boundary",
   "productionRegion":"惠州",
   "planning":{"users":100,"concurrentUsers":{"minimum":5,"maximum":20},"promise":false},
-  "measurement":{"stages":[5,10,20],"minimumSecondsPerStage":60,"publicProbe":"BaoTa Nginx TLS pinned to 127.0.0.1 with production SNI and Host"},
+  "measurement":{"stages":[5,10,20],"minimumSecondsPerStage":60,"boundaryRule":"last_passing_stage","publicProbe":"BaoTa Nginx TLS pinned to 127.0.0.1 with production SNI and Host"},
   "stopGates":{"readP95Ms":300,"writeP95Ms":600,"errorRatePercent":1,"asyncLagSeconds":60,"maximumLoadPercent":85,"minimumAvailableMemoryMb":1024,"minimumFreeDiskMb":4096},
   "resilience":{"archiveRequired":true,"isolatedRecoveryRequired":true,"truthStore":"MySQL 5.7"},
   "topologyClaims":{"singleHost":true,"loadBalancingEnabled":false,"backupServerUsed":false,"multiNode":false,"capacityClaim":"measured_single_host_limited_only_after_production_evidence"},
   "productionActions":[
     "Use a BaoTa finite task on the Huizhou host to measure controlled concurrency and persist the latency, error, asynchronous lag and resource snapshot",
-    "Stop increasing measured concurrency at the first failed gate and keep new background work queued",
+    "Stop increasing measured concurrency at the first failed gate; if at least concurrency 5 passed, sign only the last passing stage and preserve the failed next-stage metrics and failure code",
     "Verify existing encrypted archive and isolated recovery evidence before signing the same-commit boundary"
   ],
   "forbiddenManagers":["systemd","standalone_pm2","host_crontab","screen_docker_compose"],

@@ -1,26 +1,161 @@
 #!/usr/bin/env node
-import{createHmac,randomUUID}from"node:crypto";
-import{mkdir,readFile,rename,statfs,writeFile}from"node:fs/promises";
-import{request as httpsRequest}from"node:https";
-import{availableParallelism,freemem,loadavg}from"node:os";
-import{dirname,isAbsolute,resolve}from"node:path";
-import mysql from"mysql2/promise";
-import{asyncLagSeconds}from"./release-rollout-async-lag.mjs";
+import {createHmac, randomUUID} from "node:crypto";
+import {mkdir, readFile, rename, statfs, writeFile} from "node:fs/promises";
+import {request as httpsRequest} from "node:https";
+import {availableParallelism, freemem, loadavg} from "node:os";
+import {dirname, isAbsolute, resolve} from "node:path";
+import mysql from "mysql2/promise";
+import {asyncLagSeconds} from "./release-rollout-async-lag.mjs";
 
-const argv=process.argv.slice(2),arg=name=>argv[argv.indexOf(name)+1],requestId=randomUUID(),traceId=randomUUID(),fail=(code,message)=>Object.assign(new Error(message),{code}),sleep=ms=>new Promise(done=>setTimeout(done,ms));
+const STAGES=[5,10,20];
+const argv=process.argv.slice(2);
+const arg=name=>argv[argv.indexOf(name)+1];
+const requestId=randomUUID();
+const traceId=randomUUID();
+const fail=(code,message)=>Object.assign(new Error(message),{code});
+const sleep=ms=>new Promise(done=>setTimeout(done,ms));
 const parseEnv=source=>Object.fromEntries(source.split(/\r?\n/).map(line=>line.trim()).filter(line=>line&&!line.startsWith("#")&&line.includes("=")).map(line=>{const at=line.indexOf("=");let value=line.slice(at+1).trim();if((value.startsWith('"')&&value.endsWith('"'))||(value.startsWith("'")&&value.endsWith("'")))value=value.slice(1,-1);return[line.slice(0,at).trim(),value];}));
 const percentile=(values,percent)=>{const sorted=[...values].sort((a,b)=>a-b);return sorted.length?Math.ceil(sorted[Math.max(0,Math.ceil(sorted.length*percent)-1)]):null;};
-const canonical=({timestamp,nonce,releaseId,sampleId})=>[timestamp,nonce,releaseId,sampleId].join("\n"),signature=(input,key)=>createHmac("sha256",key).update(canonical(input)).digest("hex");
+const canonical=({timestamp,nonce,releaseId,sampleId})=>[timestamp,nonce,releaseId,sampleId].join("\n");
+const signature=(input,key)=>createHmac("sha256",key).update(canonical(input)).digest("hex");
 const pinnedLookup=connectAddress=>(_hostname,options,callback)=>options.all?callback(null,[{address:connectAddress,family:4}]):callback(null,connectAddress,4);
-function requestPinned(baseUrl,path,options,connectAddress){const target=new URL(path,`${baseUrl}/`),body=options.body??null,headers={...options.headers};if(body!==null)headers["content-length"]=Buffer.byteLength(body);const started=Date.now();return new Promise((done,reject)=>{const request=httpsRequest({protocol:target.protocol,hostname:target.hostname,port:target.port||443,path:`${target.pathname}${target.search}`,method:options.method??"GET",headers,servername:target.hostname,lookup:pinnedLookup(connectAddress)},response=>{const chunks=[];let bytes=0;response.on("data",chunk=>{bytes+=chunk.length;if(bytes<=65_536)chunks.push(chunk);else request.destroy(fail("capacity_response_too_large","capacity probe response exceeded 64 KiB"));});response.once("end",()=>done({status:response.statusCode??0,milliseconds:Date.now()-started,body:Buffer.concat(chunks).toString("utf8")}));response.once("error",reject);});request.setTimeout(10_000,()=>request.destroy(fail("capacity_probe_timeout","capacity probe timed out")));request.once("error",reject);if(body!==null)request.write(body);request.end();});}
-async function probeUser(runtime,releaseId){const correlation=randomUUID(),read=await requestPinned(runtime.RELEASE_PUBLIC_BASE_URL,"/api/v1/health/live",{headers:{accept:"application/json","x-request-id":correlation,"x-trace-id":correlation}},runtime.RELEASE_PUBLIC_CONNECT_ADDRESS),timestamp=Math.floor(Date.now()/1000),nonce=randomUUID(),sampleId=randomUUID(),input={timestamp,nonce,releaseId,sampleId},write=await requestPinned(runtime.RELEASE_PUBLIC_BASE_URL,"/api/v1/platform/operations/releases/write-probe",{method:"POST",headers:{accept:"application/json","content-type":"application/json",origin:runtime.WEB_ORIGIN,"x-request-id":correlation,"x-trace-id":correlation,"x-release-probe-timestamp":String(timestamp),"x-release-probe-nonce":nonce,"x-release-probe-signature":signature(input,runtime.RELEASE_PROBE_SIGNING_KEY)},body:JSON.stringify({release_id:releaseId,sample_id:sampleId})},runtime.RELEASE_PUBLIC_CONNECT_ADDRESS);return{read,write};}
+
+function requestPinned(baseUrl,path,options,connectAddress){
+  const target=new URL(path,`${baseUrl}/`),body=options.body??null,headers={...options.headers};
+  if(body!==null)headers["content-length"]=Buffer.byteLength(body);
+  const started=Date.now();
+  return new Promise((done,reject)=>{
+    const request=httpsRequest({protocol:target.protocol,hostname:target.hostname,port:target.port||443,path:`${target.pathname}${target.search}`,method:options.method??"GET",headers,servername:target.hostname,lookup:pinnedLookup(connectAddress)},response=>{
+      const chunks=[];let bytes=0;
+      response.on("data",chunk=>{bytes+=chunk.length;if(bytes<=65_536)chunks.push(chunk);else request.destroy(fail("capacity_response_too_large","capacity probe response exceeded 64 KiB"));});
+      response.once("end",()=>done({status:response.statusCode??0,milliseconds:Date.now()-started,body:Buffer.concat(chunks).toString("utf8")}));
+      response.once("error",reject);
+    });
+    request.setTimeout(10_000,()=>request.destroy(fail("capacity_probe_timeout","capacity probe timed out")));
+    request.once("error",reject);
+    if(body!==null)request.write(body);
+    request.end();
+  });
+}
+
+async function probeUser(runtime,releaseId){
+  const correlation=randomUUID();
+  const read=await requestPinned(runtime.RELEASE_PUBLIC_BASE_URL,"/api/v1/health/live",{headers:{accept:"application/json","x-request-id":correlation,"x-trace-id":correlation}},runtime.RELEASE_PUBLIC_CONNECT_ADDRESS);
+  const timestamp=Math.floor(Date.now()/1000),nonce=randomUUID(),sampleId=randomUUID(),input={timestamp,nonce,releaseId,sampleId};
+  const write=await requestPinned(runtime.RELEASE_PUBLIC_BASE_URL,"/api/v1/platform/operations/releases/write-probe",{method:"POST",headers:{accept:"application/json","content-type":"application/json",origin:runtime.WEB_ORIGIN,"x-request-id":correlation,"x-trace-id":correlation,"x-release-probe-timestamp":String(timestamp),"x-release-probe-nonce":nonce,"x-release-probe-signature":signature(input,runtime.RELEASE_PROBE_SIGNING_KEY)},body:JSON.stringify({release_id:releaseId,sample_id:sampleId})},runtime.RELEASE_PUBLIC_CONNECT_ADDRESS);
+  return{read,write};
+}
+
 const thresholds=runtime=>({readP95:Number(runtime.CAPACITY_BOUNDARY_READ_P95_MS??300),writeP95:Number(runtime.CAPACITY_BOUNDARY_WRITE_P95_MS??600),errorBasisPoints:Number(runtime.CAPACITY_BOUNDARY_ERROR_RATE_PERCENT??1)*100,asyncLag:Number(runtime.CAPACITY_BOUNDARY_ASYNC_LAG_SECONDS??60),loadBasisPoints:Number(runtime.CRAWLER_SCHEDULER_MAX_LOAD_PERCENT??85)*100,minimumMemoryMb:Number(runtime.CRAWLER_SCHEDULER_MIN_AVAILABLE_MEMORY_MB??1024),minimumDiskMb:Number(runtime.CRAWLER_SCHEDULER_MIN_FREE_DISK_MB??4096)});
-function breach(metrics,limits){if(metrics.errorRateBasisPoints>=limits.errorBasisPoints)return"capacity_error_rate_exceeded";if(metrics.readP95Ms>limits.readP95)return"capacity_read_latency_exceeded";if(metrics.writeP95Ms>limits.writeP95)return"capacity_write_latency_exceeded";if(metrics.asyncLagSeconds>limits.asyncLag)return"capacity_async_lag_exceeded";return null;}
+function performanceBreach(metrics,limits){if(metrics.errorRateBasisPoints>=limits.errorBasisPoints)return"capacity_error_rate_exceeded";if(metrics.readP95Ms>limits.readP95)return"capacity_read_latency_exceeded";if(metrics.writeP95Ms>limits.writeP95)return"capacity_write_latency_exceeded";if(metrics.asyncLagSeconds>limits.asyncLag)return"capacity_async_lag_exceeded";return null;}
+function resourceBreach(metrics,limits){if(metrics.loadBasisPoints>=limits.loadBasisPoints)return"capacity_host_load_exceeded";if(metrics.availableMemoryMb<limits.minimumMemoryMb)return"capacity_memory_exceeded";if(metrics.freeDiskMb<limits.minimumDiskMb)return"capacity_disk_exceeded";return null;}
+const stageBreach=(metrics,limits)=>performanceBreach(metrics,limits)??resourceBreach(metrics,limits);
 async function writeEvidenceAtomic(evidencePath,evidence){const temporary=`${evidencePath}.${process.pid}.tmp`;await writeFile(temporary,`${JSON.stringify(evidence,null,2)}\n`,{mode:0o600});await rename(temporary,evidencePath);}
 async function writeBlockedEvidence({evidencePath,buildSha,code,message,failedStage,completedStages,limits}){await writeEvidenceAtomic(evidencePath,{schemaVersion:1,module:"M08-06",status:"blocked",buildSha,manager:"baota",mode:"single_host_measured_boundary",region:"惠州",failure:{code,message,failedStage},completedStages,thresholds:{readP95Ms:limits.readP95,writeP95Ms:limits.writeP95,errorRateBasisPoints:limits.errorBasisPoints,asyncLagSeconds:limits.asyncLag},singleHost:true,loadBalancingEnabled:false,backupServerUsed:false,multiNode:false,capacityClaim:"unverified",capturedAt:new Date().toISOString()});}
 
-if(argv.includes("--self-test")){const limits=thresholds({}),ok={readP95Ms:300,writeP95Ms:600,errorRateBasisPoints:99,asyncLagSeconds:60};if(percentile([1,2,3,100],.95)!==100||breach(ok,limits)!==null||breach({...ok,writeP95Ms:601},limits)!=="capacity_write_latency_exceeded"||breach({...ok,errorRateBasisPoints:100},limits)!=="capacity_error_rate_exceeded"||JSON.stringify([5,10,20])!=="[5,10,20]")throw fail("capacity_self_test_failed","stages, percentile or fail-closed thresholds drifted");console.log(JSON.stringify({module:"M08-06",status:"passed",stages:[5,10,20],request_id:requestId,trace_id:traceId}));process.exit(0);}
+if(argv.includes("--self-test")){
+  const limits=thresholds({}),ok={readP95Ms:300,writeP95Ms:600,errorRateBasisPoints:99,asyncLagSeconds:60,loadBasisPoints:8499,availableMemoryMb:1024,freeDiskMb:4096};
+  if(percentile([1,2,3,100],.95)!==100||stageBreach(ok,limits)!==null||stageBreach({...ok,writeP95Ms:601},limits)!=="capacity_write_latency_exceeded"||stageBreach({...ok,errorRateBasisPoints:100},limits)!=="capacity_error_rate_exceeded"||stageBreach({...ok,loadBasisPoints:8500},limits)!=="capacity_host_load_exceeded"||JSON.stringify(STAGES)!=="[5,10,20]")throw fail("capacity_self_test_failed","stages, percentile or fail-closed thresholds drifted");
+  console.log(JSON.stringify({module:"M08-06",status:"passed",stages:STAGES,boundaryRule:"last_passing_stage",request_id:requestId,trace_id:traceId}));process.exit(0);
+}
 
-let pool,evidencePath="",head="",limits=null,failedStage=null;const stageResults=[];try{const envFile=arg("--env-file");if(!argv.includes("--run")||!envFile)throw fail("capacity_arguments_invalid","use --run --env-file <BaoTa restricted env file>");const runtime={...process.env,...parseEnv(await readFile(envFile,"utf8"))};head=String(runtime.BUILD_SHA??"").trim();runtime.RELEASE_PUBLIC_BASE_URL=runtime.RELEASE_PUBLIC_BASE_URL||runtime.WEB_ORIGIN;runtime.RELEASE_PUBLIC_CONNECT_ADDRESS=runtime.RELEASE_PUBLIC_CONNECT_ADDRESS||"127.0.0.1";if(runtime.NODE_ENV!=="production"||!/^[a-f0-9]{40}$/.test(head))throw fail("capacity_build_identity_invalid","BaoTa task BUILD_SHA must identify a production commit");if(runtime.RELEASE_PUBLIC_CONNECT_ADDRESS!=="127.0.0.1"||new URL(runtime.RELEASE_PUBLIC_BASE_URL).protocol!=="https:"||new URL(runtime.RELEASE_PUBLIC_BASE_URL).origin!==new URL(runtime.WEB_ORIGIN).origin)throw fail("capacity_tls_origin_invalid","capacity probes must use production TLS/SNI/Host through BaoTa Nginx loopback");if(String(runtime.RELEASE_PROBE_SIGNING_KEY??"").length<32)throw fail("capacity_probe_key_invalid","release probe signing key is unavailable");const stageSeconds=Number(runtime.CAPACITY_BOUNDARY_STAGE_SECONDS??60);if(!Number.isInteger(stageSeconds)||stageSeconds<60||stageSeconds>3600)throw fail("capacity_stage_seconds_invalid","each production stage must run for 60-3600 seconds");const configuredEvidence=runtime.CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE||resolve(process.cwd(),".artifacts/verification/m08-06-capacity-boundary-production-evidence.json");evidencePath=resolve(configuredEvidence);if(!isAbsolute(configuredEvidence)||!evidencePath.startsWith("/www/wwwroot/")||!evidencePath.includes("/.artifacts/verification/"))throw fail("capacity_evidence_path_invalid","capacity evidence must stay in the BaoTa release verification directory");await mkdir(dirname(evidencePath),{recursive:true});limits=thresholds(runtime);await writeBlockedEvidence({evidencePath,buildSha:head,code:"capacity_capture_started",message:"capacity capture has not completed",failedStage:null,completedStages:stageResults,limits});const identityResponse=await requestPinned(runtime.RELEASE_PUBLIC_BASE_URL,"/api/v1/health/version",{headers:{accept:"application/json","x-request-id":requestId,"x-trace-id":traceId}},runtime.RELEASE_PUBLIC_CONNECT_ADDRESS);let identity;try{identity=JSON.parse(identityResponse.body);}catch{throw fail("capacity_build_identity_invalid","BaoTa Nginx version response is not valid JSON");}if(identityResponse.status!==200||identity?.data?.build_sha!==head)throw fail("capacity_build_identity_invalid","BaoTa BUILD_SHA and production TLS version identity must match");pool=mysql.createPool({host:runtime.DB_HOST,port:Number(runtime.DB_PORT),user:runtime.DB_USER,password:runtime.DB_PASSWORD,database:runtime.DB_NAME,waitForConnections:true,connectionLimit:4,timezone:"Z"});await pool.query("SELECT 1");const[[release]]=await pool.query("SELECT id FROM deployment_releases WHERE build_sha=? AND status='healthy' ORDER BY finished_at DESC LIMIT 1",[head]);if(!release)throw fail("capacity_release_missing","same-commit healthy release is missing");const[gates]=await pool.query("SELECT gate_kind,status,observe_seconds FROM deployment_release_gates WHERE release_id=? AND gate_kind IN ('canary_5','canary_25','canary_100')",[release.id]);if(gates.length!==3||gates.some(gate=>gate.status!=="passed"||Number(gate.observe_seconds)<1800))throw fail("capacity_rollout_gate_missing","same-commit 5/25/100 production rollout is incomplete");const[[baseline]]=await pool.query("SELECT COUNT(*) total FROM deployment_release_write_samples WHERE release_id=? AND build_sha=?",[release.id,Buffer.from(head,"hex")]),allReads=[],allWrites=[];let errors=0,total=0,maxLag=0,maxLoad=0,minMemory=Number.POSITIVE_INFINITY,minDisk=Number.POSITIVE_INFINITY;
-for(const concurrentUsers of[5,10,20]){const started=Date.now(),reads=[],writes=[];let stageErrors=0,stageTotal=0,stageLag=0;while((Date.now()-started)/1000<stageSeconds){const roundStarted=Date.now(),settled=await Promise.allSettled(Array.from({length:concurrentUsers},()=>probeUser(runtime,release.id)));for(const result of settled){stageTotal+=2;total+=2;if(result.status==="rejected"){stageErrors+=2;errors+=2;continue;}reads.push(result.value.read.milliseconds);writes.push(result.value.write.milliseconds);allReads.push(result.value.read.milliseconds);allWrites.push(result.value.write.milliseconds);for(const sample of[result.value.read,result.value.write])if(sample.status!==200&&sample.status!==202){stageErrors+=1;errors+=1;}}const lag=await asyncLagSeconds(pool);stageLag=Math.max(stageLag,lag);maxLag=Math.max(maxLag,lag);const filesystem=await statfs(dirname(evidencePath)),load=Math.round(loadavg()[0]/Math.max(1,availableParallelism())*10000),memory=Math.floor(freemem()/1048576),disk=Math.floor(Number(filesystem.bavail)*Number(filesystem.bsize)/1048576);maxLoad=Math.max(maxLoad,load);minMemory=Math.min(minMemory,memory);minDisk=Math.min(minDisk,disk);await sleep(Math.max(0,1000-(Date.now()-roundStarted)));}const result={concurrentUsers,durationSeconds:Math.floor((Date.now()-started)/1000),readP95Ms:percentile(reads,.95),writeP95Ms:percentile(writes,.95),errorRateBasisPoints:stageTotal?Math.round(stageErrors*10000/stageTotal):10000,asyncLagSeconds:stageLag},failure=breach(result,limits);stageResults.push(result);if(failure){failedStage=concurrentUsers;throw fail(failure,`capacity stage ${concurrentUsers} failed closed`);}}
-const[[durable]]=await pool.query("SELECT COUNT(*) total FROM deployment_release_write_samples WHERE release_id=? AND build_sha=?",[release.id,Buffer.from(head,"hex")]),expectedWrites=allWrites.length;if(Number(durable.total)-Number(baseline.total)!==expectedWrites)throw fail("capacity_write_persistence_mismatch","successful capacity write probes do not match durable samples");const[runs]=await pool.query("SELECT run_type,status,isolated,encrypted,integrity_verified,permission_boundary_verified,audit_chain_verified,evidence_hash_verified FROM backup_recovery_runs WHERE run_type IN ('backup','restore_drill') ORDER BY started_at DESC LIMIT 20"),archive=runs.find(row=>row.run_type==="backup"),recovery=runs.find(row=>row.run_type==="restore_drill"),archiveVerified=archive?.status==="verified"&&Boolean(archive.encrypted)&&Boolean(archive.integrity_verified),recoveryVerified=recovery?.status==="verified"&&Boolean(recovery.isolated)&&Boolean(recovery.encrypted)&&Boolean(recovery.integrity_verified)&&Boolean(recovery.permission_boundary_verified)&&Boolean(recovery.audit_chain_verified)&&Boolean(recovery.evidence_hash_verified);if(!archiveVerified||!recoveryVerified)throw fail("capacity_recovery_unverified","verified archive and isolated recovery facts are required");const performance={readP95Ms:percentile(allReads,.95),writeP95Ms:percentile(allWrites,.95),errorRateBasisPoints:total?Math.round(errors*10000/total):10000,asyncLagSeconds:maxLag,samples:total},resource={loadBasisPoints:maxLoad,availableMemoryMb:minMemory,freeDiskMb:minDisk,stopGatePassed:maxLoad<limits.loadBasisPoints&&minMemory>=limits.minimumMemoryMb&&minDisk>=limits.minimumDiskMb};if(breach(performance,limits)||!resource.stopGatePassed)throw fail("capacity_final_gate_failed","aggregate performance or resource gate failed closed");const observedAt=new Date(),observationId=randomUUID(),connection=await pool.getConnection();try{await connection.beginTransaction();await connection.query("INSERT INTO capacity_boundary_observations(id,source,state,measured_concurrency,planning_users,read_p95_ms,write_p95_ms,error_rate_basis_points,async_lag_seconds,load_basis_points,available_memory_mb,free_disk_mb,archive_verified,recovery_verified,finding_codes_json,request_id,trace_id,observed_at) VALUES(?,'production_benchmark','ready',20,100,?,?,?,?,?,?,?,1,1,JSON_ARRAY(),?,?,?)",[observationId,performance.readP95Ms,performance.writeP95Ms,performance.errorRateBasisPoints,performance.asyncLagSeconds,resource.loadBasisPoints,resource.availableMemoryMb,resource.freeDiskMb,requestId,traceId,observedAt]);await connection.query("INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,NULL,'platform.capacity_boundary.production_benchmark','capacity_boundary',?,'succeeded',?,?,?,?,1)",[randomUUID(),observationId,requestId,traceId,JSON.stringify({build_sha:head,measured_concurrency:20,stages:[5,10,20],single_host:true,manager:"baota"}),observedAt]);await connection.commit();}catch(error){await connection.rollback();throw error;}finally{connection.release();}const evidence={schemaVersion:1,module:"M08-06",status:"ready",buildSha:head,manager:"baota",mode:"single_host_measured_boundary",region:"惠州",measuredConcurrentUsers:20,stages:stageResults,planning:{users:100,concurrentMinimum:5,concurrentMaximum:20,promise:false},performance,resource,resilience:{archiveVerified:true,recoveryVerified:true,auditVerified:true,probeRowsCleaned:true},singleHost:true,loadBalancingEnabled:false,backupServerUsed:false,multiNode:false,capacityClaim:"measured_single_host_limited",capturedAt:observedAt.toISOString()};await writeEvidenceAtomic(evidencePath,evidence);console.log(JSON.stringify({module:"M08-06",status:"passed",buildSha:head,measuredConcurrentUsers:20,stages:stageResults,performance,resource,capacityClaim:"measured_single_host_limited",request_id:requestId,trace_id:traceId}));}catch(error){const code=error?.code??"capacity_capture_failed",message=error?.message??"capacity capture failed";if(evidencePath&&/^[a-f0-9]{40}$/.test(head))try{await writeBlockedEvidence({evidencePath,buildSha:head,code,message,failedStage,completedStages:stageResults,limits});}catch(evidenceError){console.error(JSON.stringify({module:"M08-06",status:"blocked",code:"capacity_failure_evidence_write_failed",message:evidenceError?.message,request_id:requestId,trace_id:traceId}));}console.error(JSON.stringify({module:"M08-06",status:"blocked",code,message,failedStage,completedStages:stageResults,request_id:requestId,trace_id:traceId}));process.exitCode=1;}finally{await pool?.end();}
+let pool,evidencePath="",head="",limits=null,failedStage=null;
+const attemptedStages=[];
+try{
+  const envFile=arg("--env-file");
+  if(!argv.includes("--run")||!envFile)throw fail("capacity_arguments_invalid","use --run --env-file <BaoTa restricted env file>");
+  const runtime={...process.env,...parseEnv(await readFile(envFile,"utf8"))};
+  head=String(runtime.BUILD_SHA??"").trim();
+  runtime.RELEASE_PUBLIC_BASE_URL=runtime.RELEASE_PUBLIC_BASE_URL||runtime.WEB_ORIGIN;
+  runtime.RELEASE_PUBLIC_CONNECT_ADDRESS=runtime.RELEASE_PUBLIC_CONNECT_ADDRESS||"127.0.0.1";
+  if(runtime.NODE_ENV!=="production"||!/^[a-f0-9]{40}$/.test(head))throw fail("capacity_build_identity_invalid","BaoTa task BUILD_SHA must identify a production commit");
+  if(runtime.RELEASE_PUBLIC_CONNECT_ADDRESS!=="127.0.0.1"||new URL(runtime.RELEASE_PUBLIC_BASE_URL).protocol!=="https:"||new URL(runtime.RELEASE_PUBLIC_BASE_URL).origin!==new URL(runtime.WEB_ORIGIN).origin)throw fail("capacity_tls_origin_invalid","capacity probes must use production TLS/SNI/Host through BaoTa Nginx loopback");
+  if(String(runtime.RELEASE_PROBE_SIGNING_KEY??"").length<32)throw fail("capacity_probe_key_invalid","release probe signing key is unavailable");
+  const stageSeconds=Number(runtime.CAPACITY_BOUNDARY_STAGE_SECONDS??60);
+  if(!Number.isInteger(stageSeconds)||stageSeconds<60||stageSeconds>3600)throw fail("capacity_stage_seconds_invalid","each production stage must run for 60-3600 seconds");
+  const configuredEvidence=runtime.CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE||resolve(process.cwd(),".artifacts/verification/m08-06-capacity-boundary-production-evidence.json");
+  evidencePath=resolve(configuredEvidence);
+  if(!isAbsolute(configuredEvidence)||!evidencePath.startsWith("/www/wwwroot/")||!evidencePath.includes("/.artifacts/verification/"))throw fail("capacity_evidence_path_invalid","capacity evidence must stay in the BaoTa release verification directory");
+  await mkdir(dirname(evidencePath),{recursive:true});
+  limits=thresholds(runtime);
+  await writeBlockedEvidence({evidencePath,buildSha:head,code:"capacity_capture_started",message:"capacity capture has not completed",failedStage:null,completedStages:attemptedStages,limits});
+
+  const identityResponse=await requestPinned(runtime.RELEASE_PUBLIC_BASE_URL,"/api/v1/health/version",{headers:{accept:"application/json","x-request-id":requestId,"x-trace-id":traceId}},runtime.RELEASE_PUBLIC_CONNECT_ADDRESS);
+  let identity;try{identity=JSON.parse(identityResponse.body);}catch{throw fail("capacity_build_identity_invalid","BaoTa Nginx version response is not valid JSON");}
+  if(identityResponse.status!==200||identity?.data?.build_sha!==head)throw fail("capacity_build_identity_invalid","BaoTa BUILD_SHA and production TLS version identity must match");
+
+  pool=mysql.createPool({host:runtime.DB_HOST,port:Number(runtime.DB_PORT),user:runtime.DB_USER,password:runtime.DB_PASSWORD,database:runtime.DB_NAME,waitForConnections:true,connectionLimit:4,timezone:"Z"});
+  await pool.query("SELECT 1");
+  const[[release]]=await pool.query("SELECT id FROM deployment_releases WHERE build_sha=? AND status='healthy' ORDER BY finished_at DESC LIMIT 1",[head]);
+  if(!release)throw fail("capacity_release_missing","same-commit healthy release is missing");
+  const[gates]=await pool.query("SELECT gate_kind,status,observe_seconds FROM deployment_release_gates WHERE release_id=? AND gate_kind IN ('canary_5','canary_25','canary_100')",[release.id]);
+  if(gates.length!==3||gates.some(gate=>gate.status!=="passed"||Number(gate.observe_seconds)<1800))throw fail("capacity_rollout_gate_missing","same-commit 5/25/100 production rollout is incomplete");
+  const[[baseline]]=await pool.query("SELECT COUNT(*) total FROM deployment_release_write_samples WHERE release_id=? AND build_sha=?",[release.id,Buffer.from(head,"hex")]);
+
+  const passedStages=[],passedReads=[],passedWrites=[];
+  let passedErrors=0,passedTotal=0,successfulWriteSamples=0,boundaryStop=null;
+  for(const concurrentUsers of STAGES){
+    const started=Date.now(),reads=[],writes=[];
+    let stageErrors=0,stageTotal=0,stageLag=0,stageLoad=0,stageMemory=Number.POSITIVE_INFINITY,stageDisk=Number.POSITIVE_INFINITY;
+    while((Date.now()-started)/1000<stageSeconds){
+      const roundStarted=Date.now(),settled=await Promise.allSettled(Array.from({length:concurrentUsers},()=>probeUser(runtime,release.id)));
+      for(const result of settled){
+        stageTotal+=2;
+        if(result.status==="rejected"){stageErrors+=2;continue;}
+        reads.push(result.value.read.milliseconds);writes.push(result.value.write.milliseconds);
+        if(result.value.read.status!==200&&result.value.read.status!==202)stageErrors+=1;
+        if(result.value.write.status!==200&&result.value.write.status!==202)stageErrors+=1;else successfulWriteSamples+=1;
+      }
+      stageLag=Math.max(stageLag,await asyncLagSeconds(pool));
+      const filesystem=await statfs(dirname(evidencePath));
+      stageLoad=Math.max(stageLoad,Math.round(loadavg()[0]/Math.max(1,availableParallelism())*10000));
+      stageMemory=Math.min(stageMemory,Math.floor(freemem()/1048576));
+      stageDisk=Math.min(stageDisk,Math.floor(Number(filesystem.bavail)*Number(filesystem.bsize)/1048576));
+      await sleep(Math.max(0,1000-(Date.now()-roundStarted)));
+    }
+    const result={concurrentUsers,durationSeconds:Math.floor((Date.now()-started)/1000),readP95Ms:percentile(reads,.95),writeP95Ms:percentile(writes,.95),errorRateBasisPoints:stageTotal?Math.round(stageErrors*10000/stageTotal):10000,asyncLagSeconds:stageLag,loadBasisPoints:stageLoad,availableMemoryMb:stageMemory,freeDiskMb:stageDisk,resourceStopGatePassed:resourceBreach({loadBasisPoints:stageLoad,availableMemoryMb:stageMemory,freeDiskMb:stageDisk},limits)===null};
+    attemptedStages.push(result);
+    const failureCode=stageBreach(result,limits);
+    if(failureCode){
+      failedStage=concurrentUsers;
+      if(passedStages.length===0)throw fail(failureCode,`capacity stage ${concurrentUsers} failed closed before any boundary was established`);
+      boundaryStop={reason:"next_stage_gate_failed",failureCode,failedStage:result};
+      break;
+    }
+    passedStages.push(result);passedReads.push(...reads);passedWrites.push(...writes);passedErrors+=stageErrors;passedTotal+=stageTotal;
+  }
+
+  const lastPassingStage=passedStages.at(-1);
+  if(!lastPassingStage)throw fail("capacity_measurement_missing","at least the fixed concurrency 5 stage must pass");
+  boundaryStop??={reason:"planning_ceiling_reached",failureCode:null,failedStage:null};
+
+  const[[durable]]=await pool.query("SELECT COUNT(*) total FROM deployment_release_write_samples WHERE release_id=? AND build_sha=?",[release.id,Buffer.from(head,"hex")]);
+  if(Number(durable.total)-Number(baseline.total)!==successfulWriteSamples)throw fail("capacity_write_persistence_mismatch","successful capacity write probes do not match durable samples");
+  const[runs]=await pool.query("SELECT run_type,status,isolated,encrypted,integrity_verified,permission_boundary_verified,audit_chain_verified,evidence_hash_verified FROM backup_recovery_runs WHERE run_type IN ('backup','restore_drill') ORDER BY started_at DESC LIMIT 20");
+  const archive=runs.find(row=>row.run_type==="backup"),recovery=runs.find(row=>row.run_type==="restore_drill");
+  const archiveVerified=archive?.status==="verified"&&Boolean(archive.encrypted)&&Boolean(archive.integrity_verified);
+  const recoveryVerified=recovery?.status==="verified"&&Boolean(recovery.isolated)&&Boolean(recovery.encrypted)&&Boolean(recovery.integrity_verified)&&Boolean(recovery.permission_boundary_verified)&&Boolean(recovery.audit_chain_verified)&&Boolean(recovery.evidence_hash_verified);
+  if(!archiveVerified||!recoveryVerified)throw fail("capacity_recovery_unverified","verified archive and isolated recovery facts are required");
+
+  const performance={readP95Ms:percentile(passedReads,.95),writeP95Ms:percentile(passedWrites,.95),errorRateBasisPoints:passedTotal?Math.round(passedErrors*10000/passedTotal):10000,asyncLagSeconds:Math.max(...passedStages.map(stage=>stage.asyncLagSeconds)),samples:passedTotal};
+  const resource={loadBasisPoints:Math.max(...passedStages.map(stage=>stage.loadBasisPoints)),availableMemoryMb:Math.min(...passedStages.map(stage=>stage.availableMemoryMb)),freeDiskMb:Math.min(...passedStages.map(stage=>stage.freeDiskMb)),stopGatePassed:passedStages.every(stage=>stage.resourceStopGatePassed)};
+  if(stageBreach({...performance,...resource},limits))throw fail("capacity_final_gate_failed","last passing stage aggregate failed closed");
+
+  const measuredConcurrentUsers=lastPassingStage.concurrentUsers;
+  const findingCodes=boundaryStop.reason==="next_stage_gate_failed"?[`capacity_boundary_stop:next_stage_gate_failed:${boundaryStop.failedStage.concurrentUsers}:${boundaryStop.failureCode}`]:["capacity_boundary_stop:planning_ceiling_reached:20"];
+  const observedAt=new Date(),observationId=randomUUID(),observationState=boundaryStop.reason==="next_stage_gate_failed"?"warning":"ready",findingCodesJson=JSON.stringify(findingCodes),connection=await pool.getConnection();
+  try{
+    await connection.beginTransaction();
+    await connection.query("INSERT INTO capacity_boundary_observations(id,source,state,measured_concurrency,planning_users,read_p95_ms,write_p95_ms,error_rate_basis_points,async_lag_seconds,load_basis_points,available_memory_mb,free_disk_mb,archive_verified,recovery_verified,finding_codes_json,request_id,trace_id,observed_at) VALUES(?,'production_benchmark',?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",[observationId,observationState,measuredConcurrentUsers,100,performance.readP95Ms,performance.writeP95Ms,performance.errorRateBasisPoints,performance.asyncLagSeconds,resource.loadBasisPoints,resource.availableMemoryMb,resource.freeDiskMb,1,1,findingCodesJson,requestId,traceId,observedAt]);
+    await connection.query("INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,NULL,'platform.capacity_boundary.production_benchmark','capacity_boundary',?,'succeeded',?,?,?,?,1)",[randomUUID(),observationId,requestId,traceId,JSON.stringify({build_sha:head,measured_concurrency:measuredConcurrentUsers,passed_stages:passedStages.map(stage=>stage.concurrentUsers),boundary_stop:boundaryStop,single_host:true,manager:"baota"}),observedAt]);
+    await connection.commit();
+  }catch(error){await connection.rollback();throw error;}finally{connection.release();}
+
+  const evidence={schemaVersion:1,module:"M08-06",status:"ready",buildSha:head,manager:"baota",mode:"single_host_measured_boundary",region:"惠州",measuredConcurrentUsers,stages:passedStages,boundaryStop,planning:{users:100,concurrentMinimum:5,concurrentMaximum:20,promise:false},performance,resource,resilience:{archiveVerified:true,recoveryVerified:true,auditVerified:true,probeRowsCleaned:true},singleHost:true,loadBalancingEnabled:false,backupServerUsed:false,multiNode:false,capacityClaim:"measured_single_host_limited",capturedAt:observedAt.toISOString()};
+  await writeEvidenceAtomic(evidencePath,evidence);
+  console.log(JSON.stringify({module:"M08-06",status:"passed",state:observationState,buildSha:head,measuredConcurrentUsers,stages:passedStages,boundaryStop,performance,resource,capacityClaim:"measured_single_host_limited",request_id:requestId,trace_id:traceId}));
+}catch(error){
+  const code=error?.code??"capacity_capture_failed",message=error?.message??"capacity capture failed";
+  if(evidencePath&&/^[a-f0-9]{40}$/.test(head))try{await writeBlockedEvidence({evidencePath,buildSha:head,code,message,failedStage,completedStages:attemptedStages,limits});}catch(evidenceError){console.error(JSON.stringify({module:"M08-06",status:"blocked",code:"capacity_failure_evidence_write_failed",message:evidenceError?.message,request_id:requestId,trace_id:traceId}));}
+  console.error(JSON.stringify({module:"M08-06",status:"blocked",code,message,failedStage,completedStages:attemptedStages,request_id:requestId,trace_id:traceId}));process.exitCode=1;
+}finally{await pool?.end();}

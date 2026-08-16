@@ -250,7 +250,7 @@ paths:
   /platform/operations/capacity:
     get:
       summary: Read audited S0 measured single-host capacity boundary
-      description: M08-06 reports only the latest same-commit controlled measurement, fixed latency/error/lag/resource gates and existing archive/recovery verification for the current Huizhou BaoTa host. Planning 100 users and 5-20 concurrent users are not promises. The response never claims load balancing, a backup server, multi-node or 10,000-user capability.
+      description: M08-06 reports only the latest same-commit controlled measurement, fixed latency/error/lag/resource gates and existing archive/recovery verification for the current Huizhou BaoTa host. Measurement always attempts fixed 5-10-20 order and stops at the first failed gate; concurrency 5 must pass, and any limited claim names only the last passing stage while preserving the failed next stage. Planning 100 users and 5-20 concurrent users are not promises. The response never claims load balancing, a backup server, multi-node or 10,000-user capability.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: platform:operate
       responses:
@@ -2589,8 +2589,16 @@ components:
             boundary:
               type: object
               additionalProperties: false
-              required: [measured_concurrency, planning_users, planning_concurrency_min, planning_concurrency_max, capacity_claim]
-              properties: { measured_concurrency: { type: integer, minimum: 1, maximum: 20 }, planning_users: { type: integer, enum: [100] }, planning_concurrency_min: { type: integer, enum: [5] }, planning_concurrency_max: { type: integer, enum: [20] }, capacity_claim: { type: string, enum: [unverified, measured_single_host_limited] } }
+              required: [measured_concurrency, planning_users, planning_concurrency_min, planning_concurrency_max, capacity_claim, stop_reason, failed_next_concurrency, failed_next_code]
+              properties:
+                measured_concurrency: { type: integer, enum: [5, 10, 20], description: Last continuously passing fixed stage only }
+                planning_users: { type: integer, enum: [100] }
+                planning_concurrency_min: { type: integer, enum: [5] }
+                planning_concurrency_max: { type: integer, enum: [20] }
+                capacity_claim: { type: string, enum: [unverified, measured_single_host_limited] }
+                stop_reason: { type: string, nullable: true, enum: [next_stage_gate_failed, planning_ceiling_reached] }
+                failed_next_concurrency: { type: integer, nullable: true, enum: [10, 20] }
+                failed_next_code: { type: string, nullable: true, description: Sanitized fixed-gate failure code for the attempted next stage }
             performance:
               type: object
               additionalProperties: false

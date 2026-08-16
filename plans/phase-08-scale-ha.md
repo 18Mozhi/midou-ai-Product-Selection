@@ -1584,7 +1584,7 @@
 - [ ] 组织隔离、权限、审计、配置、错误状态、图片/响应式（适用时）已覆盖。
 - [ ] `npm run verify:module -- 模块 ID` 返回 0；失败报告可定位到原子任务。
 
-当前状态：失败测试已先于实现运行并以 6/6 失败证明 M08-06 原先没有真实迁移、服务、API、配置、生产证据和页面。现已完成 MySQL 5.7 `0035` 迁移与回滚、固定停止线容量判定、事务观测/审计与幂等演练签认、`platform:operate` API、桌面/390px 深色容量驾驶舱、全状态、OpenAPI、Feature Map、env/schema、固定 5→10→20 且每档不少于 60 秒的宝塔有限容量任务、生产证据 schema/verifier、宝塔 Runbook 和自动测试；新增演练事务回归后定向测试为 7/7 通过。正式容量采集发生门禁失败时，schema v1 `blocked` 证据会原子保留失败码、失败档位、已完成档位和当次原阈值，禁止只留下空占位或签发容量声明。当前仍为 `implementation_ready_production_pending`：必须在包含全部实现的同一提交上重新完成 5%/25%/100% 各 1,800 秒灰度、受控单机容量基线、schema v1 生产证据和 `npm run verify:module -- M08-06`，在此之前 A99 不勾选、P08 不完成，`capacity_claim` 保持 `unverified`。
+当前状态：失败测试已先于实现运行；本轮又以 12 项中的 2 项失败复现“总纲允许最后通过档位、旧 Schema/verifier 却硬要求并发 20”的验收冲突，修复后定向闭环测试 13/13 通过，API/Web/全仓构建、容量采集 self-test、生产证据 preflight、文档与计划门禁均通过。现有 MySQL 5.7 `0035` 迁移与回滚、固定停止线、事务观测/审计、`platform:operate` API、桌面/390px 驾驶舱、OpenAPI、Feature Map、env/schema、宝塔 Runbook 和自动测试继续保留；容量任务仍固定按 5→10→20 且每档不少于 60 秒执行，固定并发 5 未通过时保留 schema v1 `blocked/unverified`，至少一个档位通过而下一档失败时只签发最后连续通过档位，并在 `boundaryStop`、MySQL finding、API warning 和审计中保留失败下一档，禁止跳档、放宽阈值或把失败档位算入容量。当前仍为 `implementation_ready_production_pending`：必须在包含全部修复的同一提交上重新完成 5%/25%/100% 各 1,800 秒灰度、受控单机容量基线、schema v1 生产证据和 `npm run verify:module -- M08-06`，在此之前 A99 不勾选、P08 不完成，`capacity_claim` 保持 `unverified`。
 
 ## 9. 阶段交付证据目录
 
