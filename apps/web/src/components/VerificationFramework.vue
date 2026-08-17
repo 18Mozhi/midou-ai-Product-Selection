@@ -1,7 +1,7 @@
 <template>
   <header class="topbar">
     <div>
-      <p class="eyebrow">FOUNDATION / M00-07</p>
+      <p class="eyebrow">SYSTEM SETTINGS</p>
       <h1>自动验收框架</h1>
     </div>
     <span class="environment">本地 / CI / 宝塔发布任务</span>

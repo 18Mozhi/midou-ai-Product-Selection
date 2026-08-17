@@ -1,5 +1,7 @@
 # M07-05 宝塔发布与回滚 Runbook
 
+> 历史双槽流程已停用。当前生产只允许一个宝塔 Node 后端 `ai选品`，不得创建第二后端、4103 常驻候选项目或保留临时灰度任务。以下内容仅用于解释旧审计记录；新发布按 `infra/baota/README.md` 的单后端版本目录、原子 `current` 切换、健康失败回滚流程执行。
+
 ## 发布前
 
 在宝塔创建同机私有 Node 项目 `product-scout-api-canary`，形成 4101/4103 两个发布槽。首次发布把候选 release 放在 4103，候选应用环境必须设置 `APP_PORT=4103`，发布控制器设置 `RELEASE_STABLE_API_PORT=4101`、`RELEASE_CANDIDATE_API_PORT=4103`；成功后下一版本放在 4101，并同时对调应用端口与发布控制器的两个槽位变量。`APP_PORT` 是 Node API 的实际监听端口，两个 `RELEASE_*_API_PORT` 只用于 Nginx 流量编排。两个槽只能监听 `127.0.0.1`，不得覆盖当前稳定槽后再开始灰度。创建仅手工触发的宝塔计划任务 `product-scout-release-rollout`，不得设置每日、每小时或其他自动日调度，命令为 `node <candidate>/scripts/run-baota-release-rollout.mjs --run --env-file <宝塔受限环境文件>`。执行器使用 `RELEASE_ROLLOUT_LOCK_NAME=scoutops:m07-05:release-rollout` 的 MySQL 会话级命名锁覆盖整轮 5/25/100；第二实例不能立即取得锁时以 `release_rollout_lock_busy` 失败关闭，不能重置门禁或改流量。不得通过 SSH 前台、systemd、独立 PM2 或宿主 crontab 常驻运行。

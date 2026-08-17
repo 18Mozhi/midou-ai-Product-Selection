@@ -147,7 +147,7 @@ onUnmounted(() => clearInterval(timer));
   <section class="report-center">
     <header>
       <div>
-        <p>COLLABORATION / M05-06</p>
+        <p>COLLABORATION</p>
         <h2>报表与导出</h2>
         <span
           >所有指标都来自当前组织和工作区已落库事实；缺失值保持“数据不足”。</span

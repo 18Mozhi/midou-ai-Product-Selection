@@ -19,7 +19,7 @@ onMounted(load);
 </script>
 <template>
  <section class="competitor-monitor" aria-labelledby="competitor-title">
-  <header class="competitor-head"><div><p>COMPETITIVE INTELLIGENCE / M04-05</p><h2 id="competitor-title">竞品监控</h2><span>每个数字都来自可追溯快照；变化与阈值告警不会覆盖历史。</span></div><div><button type="button" class="ghost" @click="showRule=true">监控规则</button><button type="button" @click="showCreate=true">＋ 添加竞品</button></div></header>
+  <header class="competitor-head"><div><p>COMPETITIVE INTELLIGENCE</p><h2 id="competitor-title">竞品监控</h2><span>每个数字都来自可追溯快照；变化与阈值告警不会覆盖历史。</span></div><div><button type="button" class="ghost" @click="showRule=true">监控规则</button><button type="button" @click="showCreate=true">＋ 添加竞品</button></div></header>
   <p v-if="notice" class="competitor-notice" role="status">{{notice}} <code v-if="requestId">{{requestId}}</code></p>
   <UiStatePanel v-if="state!=='ready'" :kind="state" :request-id="requestId" @primary="load" />
   <div v-else class="competitor-grid"><aside class="competitor-list"><button v-for="item in items" :key="item.id" :class="{selected:selected?.id===item.id}" @click="detail(item)"><span><b>{{item.title}}</b><small>{{item.source_site}} · {{item.market}}</small></span><strong v-if="item.latest_snapshot">{{item.latest_snapshot.currency}} {{item.latest_snapshot.current_price}}</strong><em :data-status="item.status">{{item.status}}</em></button></aside>

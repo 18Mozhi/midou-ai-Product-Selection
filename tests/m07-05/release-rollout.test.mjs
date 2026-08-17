@@ -123,10 +123,8 @@ test("M07-05 serializes BaoTa rollout instances and requires manual-only task tr
   assert.equal(manifestRolloutTask.concurrentRuns, 1);
   assert.equal(manifestRolloutTask.lockName, "scoutops:m07-05:release-rollout");
   const serviceManifest = JSON.parse(await read("infra/baota/service-manifest.json"));
-  const rolloutTask = serviceManifest.objects.find((item) => item.name === "product-scout-release-rollout");
-  assert.equal(rolloutTask.schedule, "manual-only-disabled-schedule");
-  assert.equal(rolloutTask.concurrentRuns, 1);
-  assert.equal(rolloutTask.lockName, "scoutops:m07-05:release-rollout");
+  assert.equal(serviceManifest.objects.some((item) => item.name === "product-scout-release-rollout"), false);
+  assert.equal(serviceManifest.objects.filter((item) => item.kind === "baota-node-project").length, 1);
   assert.match(runner, /GET_LOCK\(\?,\s*0\)/);
   assert.match(runner, /RELEASE_LOCK\(\?\)/);
   assert.match(runner, /release_rollout_lock_busy/);
@@ -179,17 +177,17 @@ test("M07-05.A06-A17 API, UI, config and documentation contracts stay synchroniz
   assert.doesNotMatch(await read("apps/api/src/release-rollout-service.ts"), /password|cookie|token|private_key/i);
 });
 
-test("M07-05 candidate slot binds through the real APP_PORT runtime contract", async () => {
+test("M07-05 historical candidate tooling cannot create a second production backend", async () => {
   const [runtimeConfig, runbook, serviceManifest] = await Promise.all([
     read("packages/config/src/index.ts"),
     read("docs/runbooks/m07-05-release-rollout.md"),
     read("infra/baota/service-manifest.json").then(JSON.parse),
   ]);
-  const candidate = serviceManifest.objects.find((entry) => entry.name === "product-scout-api-canary");
   assert.match(runtimeConfig, /port:\s*integer\(env,\s*"APP_PORT",\s*4101/);
-  assert.match(runbook, /APP_PORT=4103/);
-  assert.doesNotMatch(runbook, /(^|[^A-Z_])API_PORT=4103/m);
-  assert.deepEqual(candidate.runtimeEnvironment, { APP_PORT: 4103 });
+  assert.equal(serviceManifest.objects.filter((entry) => entry.kind === "baota-node-project").length, 1);
+  assert.equal(serviceManifest.objects.find((entry) => entry.kind === "baota-node-project").name, "ai选品");
+  assert.doesNotMatch(JSON.stringify(serviceManifest.objects), /4103|api-canary/);
+  assert.match(runbook, /历史|停用|不得.*第二|单后端/s);
 });
 
 test("M07-05 Playwright verification uses isolated configurable API and Web ports", async () => {

@@ -15,7 +15,7 @@ onMounted(load);
 
 <template>
   <section class="release-center">
-    <header class="hero"><div><p>RELEASE CONTROL · M07-05</p><h2>发布与回滚控制台</h2><span>只展示宝塔发布任务写入的版本、观察门、自动停止与回滚事实。</span></div><button type="button" @click="load">刷新发布事实</button></header>
+    <header class="hero"><div><p>RELEASE CONTROL</p><h2>发布与回滚控制台</h2><span>只展示宝塔发布任务写入的版本、观察门、自动停止与回滚事实。</span></div><button type="button" @click="load">刷新发布事实</button></header>
     <section v-if="state==='loading'" class="state"><b>正在核验当前发布</b><span>读取构建身份、迁移、备份前置和 5% / 25% / 100% 观察门。</span></section>
     <section v-else-if="state==='forbidden'||state==='expired'" class="state danger"><b>{{state==='expired'?'登录已失效':'你没有平台运维权限'}}</b><span>{{hint||'请重新登录或联系平台管理员。'}}</span></section>
     <template v-else-if="data">

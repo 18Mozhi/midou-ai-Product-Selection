@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import DiscoveryOverlay from "./DiscoveryOverlay.vue";
 import HomeDashboard from "./HomeDashboard.vue";
+import LocalIdentity from "./LocalIdentity.vue";
 import ProviderRegistry from "./ProviderRegistry.vue";
 import CredentialAssetCenter from "./CredentialAssetCenter.vue";
 import ProviderAdapterCenter from "./ProviderAdapterCenter.vue";
@@ -130,18 +131,6 @@ const orgMenu: MenuItem[] = [
 const platformMenu: MenuItem[] = [
   { label: "平台驾驶舱", path: "/platform-admin", icon: "⌂" },
   {
-    label: "组织与账号",
-    path: "/platform-admin/organizations",
-    icon: "♙",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "平台管理员",
-    path: "/platform-admin/admins",
-    icon: "♜",
-    capabilities: ["platform:superadmin"],
-  },
-  {
     label: "来源注册中心",
     path: "/platform-admin/providers",
     icon: "◎",
@@ -163,18 +152,6 @@ const platformMenu: MenuItem[] = [
     label: "全量数据",
     path: "/platform-admin/data",
     icon: "▦",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "规则与自动化",
-    path: "/platform-admin/governance",
-    icon: "◇",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "通知运营",
-    path: "/platform-admin/notifications",
-    icon: "○",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
@@ -230,12 +207,6 @@ const platformMenu: MenuItem[] = [
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
-    label: "容量边界",
-    path: "/platform-admin/capacity",
-    icon: "◫",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
     label: "商业运营",
     path: "/platform-admin/commercial",
     icon: "▰",
@@ -278,7 +249,9 @@ const shellTitle = computed(() =>
       : "平台管理后台",
 );
 const pageTitle = computed(() =>
-  routePath === "/opportunities/start"
+  routePath === "/" || routePath === "/home"
+    ? "今日行动"
+    : routePath === "/opportunities/start"
     ? "真实选品"
     : routePath === "/opportunities/scoring-rules"
     ? "评分规则"
@@ -289,7 +262,9 @@ const pageTitle = computed(() =>
         : (activeItem.value?.label ?? shellTitle.value),
 );
 const routePath = window.location.pathname.replace(/\/$/, "") || "/",
-  isHome = computed(() => props.shell === "member" && routePath === "/home"),
+  isHome = computed(() =>
+    props.shell === "member" && (routePath === "/" || routePath === "/home"),
+  ),
   isTasks = computed(
     () => props.shell === "member" && ["/work", "/tasks"].includes(routePath),
   ),
@@ -304,6 +279,9 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   ),
   isReports = computed(
     () => props.shell === "member" && routePath === "/reports",
+  ),
+  isAccountCenter = computed(
+    () => props.shell === "member" && routePath === "/me",
   ),
   isOrganizationAdmin = computed(() => props.shell === "organization_admin" && routePath.startsWith("/org-admin")),
   isPlatformDashboard = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin"),
@@ -343,35 +321,6 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
     const match = routePath.match(/^\/opportunities\/([0-9a-f-]{36})$/i);
     return match?.[1] ?? "";
   });
-const phaseLabel = computed(() =>
-  isOrganizationAdmin.value
-    ? "P06"
-    : isRuntimeTopology.value || isRedisResilience.value || isMySqlResilience.value || isFileResilience.value
-      ? "P08"
-    : isBackupRecovery.value || isReleaseRollout.value
-      ? "P07"
-    : isPlatformDashboard.value
-      ? "P06"
-    : isTasks.value || isApprovals.value || isNotifications.value
-    ? "P05"
-    : isTrends.value ||
-        isOpportunities.value ||
-        isCompetitors.value ||
-        isSourcing.value ||
-        isCostRules.value
-      ? "P04"
-      : props.shell === "platform_admin" &&
-          [
-            "/platform-admin/providers",
-            "/platform-admin/credentials",
-            "/platform-admin/collection",
-            "/platform-admin/data",
-        ].some((path) => routePath.startsWith(path))
-        ? "P03"
-        : props.shell === "platform_admin"
-          ? "P06"
-        : "P02",
-);
 const pageSummary = computed(() =>
   isOrganizationAdmin.value
     ? "组织资料、成员、角色、工作区、团队、审批、Token 与审计均受当前组织权限和审计边界保护。"
@@ -401,11 +350,9 @@ const pageSummary = computed(() =>
             ? "机会、证据覆盖和人工决策由当前组织与工作区的真实 API 驱动。"
             : isTrends.value
               ? "趋势主题、证据、关注和监控规则均由当前组织与工作区的真实 API 驱动。"
-              : phaseLabel.value === "P03"
-                ? "来源、采集运行与证据数据均由对应模块的真实 API 和权限边界驱动。"
-                : phaseLabel.value === "P06"
-                  ? "平台管理数据由真实 API、最小权限、审计与宝塔托管运行边界驱动。"
-                : "导航与权限壳层已就绪；业务数据由对应阶段的真实 API 接入。",
+              : isAccountCenter.value
+                ? "查看本人活动会话、撤销设备会话并管理 MFA；不展示他人账号信息。"
+                : "当前功能由真实 API、最小权限和审计记录驱动。",
 );
 const short = (value: string | null) =>
   value ? `${value.slice(0, 8)}…` : "不适用";
@@ -489,7 +436,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
               ? '/org-admin'
               : '/platform-admin'
         "
-        ><span>S</span><b>ScoutOps</b></a
+        ><span>S</span><b>ai选品</b></a
       >
       <button
         class="role-menu-toggle"
@@ -571,8 +518,8 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <p>{{ stateCopy[1] }}</p>
         <small v-if="actionHint">{{ actionHint }}</small
         ><code v-if="requestId">request_id: {{ requestId }}</code>
-        <a v-if="state === 'expired'" href="/?view=local-identity">重新登录</a
-        ><a v-else-if="state === 'context_required'" href="/?view=tenancy"
+        <a v-if="state === 'expired'" href="/login">重新登录</a
+        ><a v-else-if="state === 'context_required'" href="/select-context"
           >选择组织与工作区</a
         ><a v-else-if="state === 'forbidden'" href="/home">返回成员工作台</a
         ><button v-else-if="state !== 'loading'" type="button" @click="load">
@@ -582,7 +529,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
       <template v-else>
         <header class="role-page-head">
           <div>
-            <p>{{ shellTitle }} / {{ phaseLabel }}</p>
+            <p>{{ shellTitle }}</p>
             <h1>{{ pageTitle }}</h1>
             <span>{{ pageSummary }}</span>
           </div>
@@ -604,6 +551,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           :api-base-url="apiBaseUrl"
         />
         <ReportCenter v-else-if="isReports" :api-base-url="apiBaseUrl" />
+        <LocalIdentity v-else-if="isAccountCenter" />
         <OrganizationAdminCenter
           v-else-if="isOrganizationAdmin"
           :api-base-url="apiBaseUrl"
@@ -736,47 +684,12 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <SecurityOperationsCenter v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/security'" :api-base-url="apiBaseUrl" />
         <OpenPlatformCenter v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/open-platform'" :api-base-url="apiBaseUrl" />
         <CommercialOperationsCenter v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/commercial'" :api-base-url="apiBaseUrl" />
-        <section v-else class="role-ready-panel">
-          <div class="role-ready-hero">
-            <span>S</span>
-            <div>
-              <p>VERIFIED NAVIGATION</p>
-              <h2>服务端已确认此工作台</h2>
-              <p>
-                当前只交付导航、响应式布局与路由状态，不展示示例指标或其他组织数据。
-              </p>
-            </div>
-          </div>
-          <dl>
-            <div>
-              <dt>壳层</dt>
-              <dd>{{ shellTitle }}</dd>
-            </div>
-            <div>
-              <dt>组织范围</dt>
-              <dd>{{ short(guard?.organization_id ?? null) }}</dd>
-            </div>
-            <div>
-              <dt>工作区范围</dt>
-              <dd>{{ short(guard?.workspace_id ?? null) }}</dd>
-            </div>
-            <div>
-              <dt>可见入口</dt>
-              <dd>{{ items.length }} 项</dd>
-            </div>
-          </dl>
-          <div class="role-scope-note">
-            <strong>权限说明</strong>
-            <p>
-              {{
-                shell === "platform_admin"
-                  ? "平台角色与组织角色严格分离；平台壳层不依赖组织上下文。"
-                  : shell === "organization_admin"
-                    ? "仅 organization_admin 可进入；所有后续组织 API 仍需服务端能力与范围 Guard。"
-                    : "活动成员可进入；菜单按服务端 capabilities 过滤，资源 API 仍执行数据范围 Guard。"
-              }}
-            </p>
-          </div>
+        <section v-else class="role-gate-state" aria-live="polite">
+          <span class="role-state-mark" aria-hidden="true">?</span>
+          <p>PAGE NOT FOUND</p>
+          <h2>页面不存在</h2>
+          <p>该地址没有可用功能，请从左侧真实功能菜单重新进入。</p>
+          <a :href="items[0]?.path || '/'">返回工作台</a>
         </section>
       </template>
     </section>

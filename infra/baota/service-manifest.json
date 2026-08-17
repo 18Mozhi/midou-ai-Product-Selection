@@ -1,23 +1,24 @@
 {
-  "schemaVersion": 2,
-  "stage": "S0",
+  "schemaVersion": 3,
+  "stage": "production",
   "deploymentStatus": "healthy",
   "productionDeployed": true,
   "target": {
     "host": "192.168.1.220",
     "domain": "midouai.mozhiz.cn",
+    "deployRoot": "/www/wwwroot/ai选品",
     "primaryRegion": "惠州",
     "recoveryRegion": "惠州",
     "publicPorts": [80, 443],
-    "privatePorts": [4101, 4103, 3306, 6379]
+    "privatePorts": [4101, 3306, 6379]
   },
-  "capacityClaim": "S0 single host; 100 users and 5-20 concurrent business users; no multi-node or 10000-user claim",
+  "runtimeClaim": "惠州单机、单一宝塔 Node 后端；只声明真实功能和当前运行健康，不声明负载均衡、多节点或硬件容量。",
   "objects": [
     {
-      "name": "product-scout-web",
+      "name": "ai选品网站",
       "kind": "baota-site",
-      "workingDirectory": "<RELEASE_ROOT>",
-      "buildCommand": "npm ci && npm run build:web",
+      "workingDirectory": "/www/wwwroot/ai选品/current",
+      "buildCommand": "npm ci && npm run build",
       "publishDirectory": "apps/web/dist",
       "domain": "midouai.mozhiz.cn",
       "public": true,
@@ -25,58 +26,22 @@
       "nginxTemplate": "infra/baota/nginx/scoutops.conf.template"
     },
     {
-      "name": "product-scout-api",
+      "name": "ai选品",
       "kind": "baota-node-project",
-      "workingDirectory": "<RELEASE_ROOT>",
-      "startCommand": "node apps/api/dist/server.js",
+      "workingDirectory": "/www/wwwroot/ai选品/current",
+      "startCommand": "node apps/backend/dist/server.js",
+      "processMode": "foreground",
       "bind": "127.0.0.1",
       "port": 4101,
       "public": false,
       "healthPaths": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
-      "environmentGroups": ["app", "database", "redis", "storage", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial", "backupRecovery", "releaseRollout", "fileResilience"],
+      "managedChildren": ["api", "worker"],
+      "environmentGroups": ["app", "database", "redis", "ai", "storage", "runtime", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "collectionTasks", "trends", "opportunities", "competitorMonitor", "sourcing", "businessTasks", "approvals", "notifications", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial", "backupRecovery", "fileResilience"],
       "logSource": "stdout/stderr",
       "gracefulSignals": ["SIGTERM", "SIGINT"]
     },
     {
-      "name": "product-scout-worker",
-      "kind": "baota-node-project",
-      "workingDirectory": "<RELEASE_ROOT>",
-      "startCommand": "node apps/worker/dist/index.js",
-      "public": false,
-      "environmentGroups": ["app", "database", "redis", "ai", "storage", "runtime", "collectionTasks", "trends", "opportunities", "competitorMonitor", "sourcing", "businessTasks", "approvals", "notifications", "providerAdapters", "playwrightCrawler", "security", "auth", "openPlatform"],
-      "heartbeat": {"maximumAgeSeconds": 60, "service": "product-scout-worker"},
-      "logSource": "stdout/stderr",
-      "gracefulSignals": ["SIGTERM", "SIGINT"]
-    },
-    {
-      "name": "product-scout-api-canary",
-      "kind": "baota-node-project",
-      "workingDirectory": "<CANDIDATE_RELEASE_ROOT>",
-      "startCommand": "node apps/api/dist/server.js",
-      "bind": "127.0.0.1",
-      "port": 4103,
-      "runtimeEnvironment": {"APP_PORT": 4103},
-      "public": false,
-      "purpose": "M07-05 same-host release slot B; stable and candidate roles alternate by audited release",
-      "healthPaths": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
-      "environmentGroups": ["app", "database", "redis", "storage", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial", "backupRecovery", "releaseRollout", "fileResilience"],
-      "logSource": "stdout/stderr",
-      "gracefulSignals": ["SIGTERM", "SIGINT"]
-    },
-    {
-      "name": "product-scout-crawler",
-      "kind": "baota-python-project",
-      "workingDirectory": "<RELEASE_ROOT>/apps/crawler",
-      "startCommand": "python -m scoutops_crawler",
-      "preflightCommand": "python -m scoutops_crawler --once",
-      "public": false,
-      "environmentGroups": ["runtime", "playwrightCrawler", "storage"],
-      "heartbeat": {"maximumAgeSeconds": 60, "service": "product-scout-crawler"},
-      "logSource": "stdout/stderr",
-      "gracefulSignals": ["SIGTERM", "SIGINT"]
-    },
-    {
-      "name": "mysql57-product-scout",
+      "name": "ai选品数据库",
       "kind": "baota-mysql-service",
       "version": "5.7",
       "database": "product_scout",
@@ -86,37 +51,15 @@
       "public": false
     },
     {
-      "name": "redis-product-scout",
+      "name": "ai选品缓存",
       "kind": "baota-redis-service",
       "bind": "127.0.0.1",
       "public": false,
       "purposes": ["cache", "queue", "rate", "sse"]
     },
     {
-      "name": "product-scout-release-gate",
-      "kind": "baota-scheduled-task",
-      "schedule": "manual-before-release",
-      "workingDirectory": "<RELEASE_ROOT>",
-      "command": "npm run verify:module -- M07-02",
-      "public": false,
-      "reportDirectory": ".artifacts/verification"
-    },
-    {
-      "name": "product-scout-release-rollout",
-      "kind": "baota-scheduled-task",
-      "schedule": "manual-only-disabled-schedule",
-      "concurrentRuns": 1,
-      "lock": "mysql_session_named_lock",
-      "lockName": "scoutops:m07-05:release-rollout",
-      "workingDirectory": "<CANDIDATE_RELEASE_ROOT>",
-      "command": "node scripts/run-baota-release-rollout.mjs --run --env-file <BAOTA_RESTRICTED_ENV_FILE>",
-      "public": false,
-      "reportDirectory": ".artifacts/verification"
-    },
-    {
-      "name": "product-scout-backup",
+      "name": "ai选品备份",
       "kind": "baota-backup-task",
-      "status": "owned-by-M07-04",
       "targets": ["product_scout database", "EVIDENCE_ROOT", "EXPORT_ROOT"],
       "recoveryRegion": "惠州",
       "public": false
@@ -129,7 +72,7 @@
   },
   "logging": {
     "managedInBaota": true,
-    "sources": ["site access/error", "Node API stdout/stderr", "Node Worker stdout/stderr", "Python Crawler stdout/stderr", "MySQL", "Redis", "scheduled tasks"],
+    "sources": ["site access/error", "ai选品 stdout/stderr", "MySQL", "Redis", "backup task"],
     "requiredFields": ["service", "status", "observed_at", "request_id or trace_id when request-scoped"],
     "forbiddenFields": ["password", "cookie", "token", "api_key", "private_key", "master_key"]
   },

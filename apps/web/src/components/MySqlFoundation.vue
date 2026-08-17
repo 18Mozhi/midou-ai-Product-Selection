@@ -10,7 +10,7 @@ const copy=computed(()=>({
 }[state.value]));
 </script>
 <template>
-  <header class="topbar"><div><p class="eyebrow">FOUNDATION / M00-03</p><h1>MySQL 5.7 基座</h1></div><span class="environment">契约状态预览 · 非实时监控</span></header>
+  <header class="topbar"><div><p class="eyebrow">SYSTEM SETTINGS</p><h1>MySQL 5.7 基座</h1></div><span class="environment">契约状态预览 · 非实时监控</span></header>
   <section class="status-card" :data-state="state==='available'?'ready':state==='blocked'?'error':'loading'" aria-live="polite">
     <div class="status-heading"><span class="status-dot" aria-hidden="true"></span><div><p class="status-kicker">{{ copy[0] }}</p><h2>{{ copy[1] }}</h2></div></div>
     <div class="state-panel redis-state"><p>{{ copy[2] }}</p><div class="state-actions" aria-label="状态预览"><button type="button" @click="state='available'">合同通过</button><button type="button" @click="state='blocked'">验收受阻</button><button type="button" @click="state='rollback'">回滚中</button></div></div>
@@ -21,5 +21,5 @@ const copy=computed(()=>({
     <article><span class="state-label state-label--blocked">CHECKSUM · SHA-256</span><h3>迁移不可漂移</h3><p>已应用迁移内容变化立即阻断，记录文件名、校验值和 UTC 时间。</p></article>
     <article><span class="state-label state-label--blocked">TX · EXPLICIT</span><h3>显式事务</h3><p>成功提交、失败回滚，连接在 finally 释放；不得跨组织静默写入。</p></article>
   </section>
-  <section class="verification-footnote"><strong>安全边界</strong><p>页面不显示主机、端口、账号、密码、SQL、表数据或其他组织信息。真实依赖状态由 M00-05 的授权 readiness 接入。</p></section>
+  <section class="verification-footnote"><strong>安全边界</strong><p>页面不显示主机、端口、账号、密码、SQL、表数据或其他组织信息。真实依赖状态由统一后端的授权就绪接口返回。</p></section>
 </template>

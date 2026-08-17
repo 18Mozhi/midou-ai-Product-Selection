@@ -188,7 +188,7 @@ onUnmounted(() => stream?.close());
   <section class="notification-center">
     <header>
       <div>
-        <p>COLLABORATION / M05-03</p>
+        <p>COLLABORATION</p>
         <h2>通知中心</h2>
         <span>只显示当前组织、工作区和当前用户的事务事件投影。</span>
       </div>

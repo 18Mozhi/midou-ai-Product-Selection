@@ -1,10 +1,10 @@
-# ScoutOps 宝塔 S0 对象模板
+# ai选品宝塔对象模板
 
-本目录定义并记录 M07-03 已签发的 S0 生产对象；`productionDeployed=true` 与 `deploymentStatus=healthy` 仅在脱敏生产证据、当前 Git commit 和实时健康检查一致时成立。目标是惠州 `192.168.1.220` 与 `midouai.mozhiz.cn`；MySQL 5.7、Redis、Node API、Node Worker、Python Crawler、网站和手动发布门禁均由宝塔面板管理。备份任务已创建，实际恢复演练仍由 M07-04 完成。真实环境变量只保存在宝塔受限配置，不复制到仓库、报告或截图。
+本目录定义 `ai选品` 的宝塔生产对象。目标是惠州 `192.168.1.220`、域名 `midouai.mozhiz.cn`、项目根目录 `/www/wwwroot/ai选品`。生产只创建一个名为 `ai选品` 的前台 Node 项目，由 `node apps/backend/dist/server.js` 统一监督 API 与 Worker；网站、MySQL 5.7、Redis、备份和统一后端均在宝塔中可见和可操作。独立 API、Worker、Canary、Python 常驻项目以及任务结束后的临时验收任务均应删除。
 
-发布顺序：确认 M07-04 备份前置能力 → 拉取签发构建 → `npm ci` → `npm run build` → 升序迁移 → `npm run verify:module -- M07-02` → 在宝塔重启 API/Worker/Crawler → 检查 live/ready/version、心跳和日志 → 发布网站。Nginx 片段只合并到宝塔网站配置，TLS 证书由宝塔网站管理；`/api/`、`/open/` 和 SSE 均只反代本机 API。
+发布顺序：拉取签发构建到新版本目录 → `npm ci` → `npm run build` → 升序迁移 → 全量功能门 → 原子切换 `current` → 在宝塔重启 `ai选品` → 检查 live/ready/version、Worker 心跳和日志 → 发布网站。任一步失败即恢复上一 `current` 并通过宝塔重启。Nginx 只反代本机 `4101`，不创建第二后端。
 
-`product-scout-release-rollout` 只作为宝塔面板内的手工有限任务存在，必须停用每日、每小时等自动日调度；执行器通过 MySQL 会话级命名锁限制为单实例，锁忙以 `release_rollout_lock_busy` 失败关闭。每次尝试保留独立 release ID，禁止覆盖旧失败门禁。
+发布或验收所需的宝塔有限任务只允许手工、单实例运行，并在任务完成后删除；不得把临时任务保留为生产对象。
 
 本地或 CI 运行 `node scripts/verify-baota-deployment.mjs --preflight` 只证明发布包可用。每次发布后都要重新生成不含秘密的 `.artifacts/verification/baota-production-evidence.json`，并运行 `node scripts/verify-baota-deployment.mjs --production`；证据 commit 必须等于当前 Git HEAD。缺少、过期或矛盾的证据必须返回 blocked，不能人工跳过。
 

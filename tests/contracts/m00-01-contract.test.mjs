@@ -36,7 +36,7 @@ test('M00-01.A06/M00-01.A11 health DTO matches OpenAPI and carries request/trace
   assert.equal(response.statusCode, 200);
   const body = response.json();
   assert.deepEqual(body.data, {
-    status: 'ok', service: 'product-scout-api', version: 'test-version', build_sha: 'test-sha',
+    status: 'ok', service: 'ai-selection-backend', version: 'test-version', build_sha: 'test-sha',
   });
   assert.equal(body.request_id, 'request-contract');
   assert.equal(body.trace_id, 'trace-contract');
@@ -53,9 +53,13 @@ test('M00-01.A06/M00-01.A11 health DTO matches OpenAPI and carries request/trace
 
 test('M00-01.A07/M00-01.A08 UI declares layout and complete runtime states', async () => {
   const app = await readFile('apps/web/src/App.vue', 'utf8');
+  const shell = await readFile('apps/web/src/components/NavigationShell.vue', 'utf8');
   const styles = await readFile('apps/web/src/styles.css', 'utf8');
-  for (const state of ['loading', 'ready', 'error']) assert.match(app, new RegExp(state));
-  assert.match(app, /重新检查/);
+  for (const state of ['loading', 'ready', 'expired', 'forbidden', 'context_required', 'rate_limited', 'blocked']) {
+    assert.match(shell, new RegExp(state));
+  }
+  assert.match(shell, /重新检查/);
+  assert.match(app, /NavigationShell/);
   assert.match(styles, /@media \(max-width: 720px\)/);
   assert.match(styles, /grid-template-columns: 236px minmax\(0, 1fr\)/);
 });

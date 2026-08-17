@@ -238,7 +238,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
     ): Promise<
       SuccessEnvelope<{
         status: "ok";
-        service: "product-scout-api";
+        service: "ai-selection-backend";
         version: string;
         build_sha: string;
       }>
@@ -248,7 +248,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
       return {
         data: {
           status: "ok",
-          service: "product-scout-api",
+          service: "ai-selection-backend",
           version,
           build_sha: buildSha,
         },

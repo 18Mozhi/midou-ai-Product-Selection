@@ -85,7 +85,7 @@ onMounted(() => {
 <template>
   <header class="topbar">
     <div>
-      <p class="eyebrow">PRODUCTION / M07-03</p>
+      <p class="eyebrow">PRODUCTION</p>
       <h1>宝塔 S0 生产部署</h1>
     </div>
     <span class="environment">{{ environment }}</span>
@@ -129,13 +129,13 @@ onMounted(() => {
       <h3>本机依赖</h3><p>MySQL 5.7/product_scout/utf8mb4 与本机 Redis 必须同时通过 readiness。</p>
     </article>
     <article>
-      <span class="state-label state-label--blocked">RESTORE DRILL · M07-04</span>
-      <h3>备份与恢复</h3><p>备份任务由宝塔管理；M07-04 仅验收当前主机内的加密副本与隔离恢复，不声明异地灾备。</p>
+      <span class="state-label state-label--blocked">RESTORE DRILL</span>
+      <h3>备份与恢复</h3><p>备份任务由宝塔管理；仅展示当前主机内的加密副本与隔离恢复，不声明异地灾备。</p>
     </article>
   </section>
 
   <section class="verification-footnote">
     <strong>容量声明</strong>
-    <p>当前仅为 S0 单机 100 用户、5–20 并发业务用户基线；P08 前不宣称多节点或 10,000 用户能力。</p>
+    <p>当前只运行惠州这一台服务器；不启用负载均衡、备用服务器或多节点。</p>
   </section>
 </template>

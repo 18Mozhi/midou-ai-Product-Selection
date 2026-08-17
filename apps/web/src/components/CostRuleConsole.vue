@@ -21,7 +21,7 @@ onMounted(load);
 
 <template>
  <section class="cost-console" aria-labelledby="cost-rule-title">
-  <header><div><p>COST GOVERNANCE / M04-04</p><h2 id="cost-rule-title">费用与利润规则</h2><span>所有费率必须显式填写；规则经选品经理与组织管理员双审批后才可发布。</span></div><button type="button" @click="showCreate=true">＋ 新建规则</button></header>
+  <header><div><p>COST GOVERNANCE</p><h2 id="cost-rule-title">费用与利润规则</h2><span>所有费率必须显式填写；规则经选品经理与组织管理员双审批后才可发布。</span></div><button type="button" @click="showCreate=true">＋ 新建规则</button></header>
   <p v-if="notice" class="cost-notice" role="status">{{notice}} <code v-if="requestId">{{requestId}}</code></p>
   <UiStatePanel v-if="state!=='ready'" :kind="state" :request-id="requestId" @primary="load" />
   <div v-else class="cost-layout"><section class="cost-rule-list"><button v-for="rule in rules" :key="rule.id" :class="{selected:selected?.id===rule.id}" @click="selected=rule"><i :data-status="rule.status"></i><span><strong>{{rule.name}}</strong><small>{{rule.market}} · {{rule.platform}} · {{rule.version_code}}</small></span><b>{{rule.status}}</b><em>v{{rule.revision}}</em></button></section>

@@ -3,7 +3,7 @@ defineProps<{ apiBaseUrl: string }>();
 </script>
 <template>
   <header class="topbar">
-    <div><p class="eyebrow">FOUNDATION / M00-02</p><h1>配置边界</h1></div>
+    <div><p class="eyebrow">SYSTEM SETTINGS</p><h1>配置边界</h1></div>
     <span class="environment">浏览器安全视图</span>
   </header>
   <section class="status-card" data-state="ready">

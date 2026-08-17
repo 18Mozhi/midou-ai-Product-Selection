@@ -5,11 +5,20 @@ import { publicConfig } from '../config';
 type IdentityMode = 'login' | 'register' | 'forgot' | 'verify' | 'reset' | 'sessions' | 'mfa' | 'mfa-challenge' | 'security-setup';
 type RequestState = 'idle' | 'loading' | 'success' | 'error' | 'expired' | 'rate_limited' | 'blocked';
 const params = new URLSearchParams(window.location.search);
-const mode = ref<IdentityMode>((params.get('mode') as IdentityMode) || 'login');
+const pathModes: Record<string, IdentityMode> = {
+  '/login': 'login',
+  '/register': 'register',
+  '/forgot-password': 'forgot',
+  '/verify-email': 'verify',
+  '/reset-password': 'reset',
+  '/security/mfa': 'mfa',
+  '/me': 'sessions',
+};
+const mode = ref<IdentityMode>((params.get('mode') as IdentityMode) || pathModes[window.location.pathname] || 'login');
 const requestState = ref<RequestState>(params.get('state') === 'expired' ? 'expired' : 'idle');
 const email = ref(''); const password = ref(''); const confirmPassword = ref(''); const currentPassword=ref('');const mfaCode=ref('');const mfaSecret=ref('');const recoveryCodes=ref<string[]>([]);const mfaEnabled=ref(false);const message = ref('');const actionHint=ref('');const requestId=ref(''); const sessions = ref<Array<{id:string;device_label:string;status:string;last_seen_at:string}>>([]);
 const securitySetup=ref({must_change_password:false,must_enroll_mfa:false});const newPassword=ref('');
-const title = computed(() => ({login:'欢迎回到 ScoutOps',register:'创建本地账号',forgot:'找回密码',verify:'验证邮箱',reset:'设置新密码',sessions:'我的设备会话',mfa:'多因素认证','mfa-challenge':'完成安全验证','security-setup':'完成首次安全设置'})[mode.value]);
+const title = computed(() => ({login:'欢迎回到 ai选品',register:'创建本地账号',forgot:'找回密码',verify:'验证邮箱',reset:'设置新密码',sessions:'我的设备会话',mfa:'多因素认证','mfa-challenge':'完成安全验证','security-setup':'完成首次安全设置'})[mode.value]);
 
 function switchMode(next: IdentityMode) { mode.value=next; requestState.value='idle'; message.value='';actionHint.value='';requestId.value=''; if(next==='sessions')void loadSessions();if(next==='mfa')void loadMfa(); }
 const idempotency = () => crypto.randomUUID();
@@ -34,17 +43,17 @@ async function startMfa(){const result=await request('/me/mfa/totp/enrollment',{
 async function confirmMfa(){const result=await request('/me/mfa/totp/confirm',{code:mfaCode.value});if(result){mfaEnabled.value=true;securitySetup.value.must_enroll_mfa=false;recoveryCodes.value=result.data.recovery_codes;message.value=mode.value==='security-setup'?'首次安全设置已完成。请离线保存恢复码，然后重新登录进入业务功能。':'MFA 已启用。请离线保存一次性恢复码。';}}
 async function disableMfa(){const result=await request('/me/mfa/totp',{current_password:currentPassword.value,code:mfaCode.value},'DELETE');if(result===null&&requestState.value==='success'){mfaEnabled.value=false;message.value='MFA 已停用，所有会话已撤销，请重新登录。';}}
 async function changeSeedPassword(){const result=await request('/me/password',{current_password:currentPassword.value,new_password:newPassword.value});if(result===null&&requestState.value==='success'){securitySetup.value.must_change_password=false;password.value=newPassword.value;currentPassword.value='';newPassword.value='';mode.value='login';message.value='密码已修改且旧会话已撤销。请用新密码重新登录并继续绑定 MFA。';}}
-onMounted(()=>{if(mode.value==='verify'&&params.get('token'))void confirmEmail();});
+onMounted(()=>{if(mode.value==='verify'&&params.get('token'))void confirmEmail();if(mode.value==='sessions')void loadSessions();});
 </script>
 
 <template>
   <main class="identity-page" :data-mode="mode" :data-state="requestState">
     <header class="identity-header">
-      <a class="identity-brand" href="/"><span>S</span>ScoutOps</a>
-      <p>认证与入驻 · P02 / M02-02</p>
+      <a class="identity-brand" href="/"><span>S</span>ai选品</a>
+      <p>账号登录与安全验证</p>
     </header>
     <section class="identity-shell">
-      <aside class="identity-story" aria-label="ScoutOps 产品说明">
+      <aside class="identity-story" aria-label="ai选品 产品说明">
         <p class="identity-kicker">FROM SIGNAL TO ACTION</p>
         <h1>让增长，<em>更有确定性</em></h1>
         <p>账号、密码和会话只在受控后端处理。浏览器不保存认证 Token，也不接触数据库或密钥。</p>
@@ -58,7 +67,7 @@ onMounted(()=>{if(mode.value==='verify'&&params.get('token'))void confirmEmail()
 
       <section class="identity-card" aria-live="polite">
         <div class="identity-card__head">
-          <p>{{ mode === 'sessions' ? 'SECURITY CENTER' : 'SCOUTOPS ACCOUNT' }}</p>
+          <p>{{ mode === 'sessions' ? 'SECURITY CENTER' : 'AI SELECTION ACCOUNT' }}</p>
           <h2>{{ title }}</h2>
           <span v-if="mode==='login'">使用已验证的邮箱和本地密码登录</span>
           <span v-else-if="mode==='register'">先创建账号，再完成邮箱验证</span>
@@ -117,7 +126,7 @@ onMounted(()=>{if(mode.value==='verify'&&params.get('token'))void confirmEmail()
           <button v-if="mode!=='login'" type="button" class="text-button" @click="switchMode('login')">返回登录</button>
           <button type="button" class="text-button" @click="switchMode('sessions')">查看安全会话</button>
           <button type="button" class="text-button" @click="switchMode('mfa')">管理 MFA</button>
-          <a v-if="mode==='login'&&requestState==='success'" class="text-button" href="/?view=tenancy">继续选择组织</a>
+          <a v-if="mode==='login'&&requestState==='success'" class="text-button" href="/select-context">继续选择组织</a>
         </footer>
       </section>
     </section>

@@ -11,7 +11,7 @@ onMounted(load);
 </script>
 <template>
  <section class="org-admin-center" :data-state="state">
-  <header class="org-admin-hero"><div><p>ADMIN CONTROL / M06-01</p><h2>{{title}}</h2><span>所有数量、状态和审计均来自当前组织真实数据。</span></div><button @click="load">刷新数据</button></header>
+  <header class="org-admin-hero"><div><p>ADMIN CONTROL</p><h2>{{title}}</h2><span>所有数量、状态和审计均来自当前组织真实数据。</span></div><button @click="load">刷新数据</button></header>
   <div v-if="notice" class="org-admin-notice">{{notice}} <code v-if="requestId">{{requestId}}</code></div>
   <section v-if="state==='loading'" class="org-admin-state">正在读取当前组织数据…</section>
   <section v-else-if="['error','expired','forbidden','rate_limited','conflict'].includes(state)" class="org-admin-state"><h3>{{state==='expired'?'登录已失效':state==='forbidden'?'无权管理当前组织':state==='rate_limited'?'请求过于频繁':state==='conflict'?'数据版本已变化':'组织后台暂不可用'}}</h3><p>{{notice}}</p><button @click="load">重新加载</button></section>

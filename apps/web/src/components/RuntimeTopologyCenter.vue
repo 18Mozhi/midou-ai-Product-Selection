@@ -57,14 +57,14 @@ onMounted(load);
 <template>
   <section class="topology-center" :data-state="state">
     <header class="topology-hero">
-      <div><p>SINGLE SERVER · M08-01</p><h2>单机运行控制台</h2><span>长期固定为一台惠州宝塔服务器，不启用负载均衡、备用服务器或多节点模式。</span></div>
+      <div><p>SINGLE SERVER</p><h2>单机运行控制台</h2><span>长期固定为一台惠州宝塔服务器，不启用负载均衡、备用服务器或多节点模式。</span></div>
       <button type="button" @click="load">刷新运行事实</button>
     </header>
 
     <section v-if="state === 'loading'" class="topology-state" aria-live="polite"><span class="topology-pulse" aria-hidden="true"></span><div><b>{{ verdict[0] }}</b><p>{{ verdict[1] }}</p></div></section>
     <section v-else-if="['forbidden','expired','rate_limited','unavailable'].includes(state)" class="topology-state topology-state--danger" aria-live="polite">
       <strong aria-hidden="true">!</strong><div><b>{{ verdict[0] }}</b><p>{{ verdict[1] }}</p><code v-if="requestId">request_id {{ requestId }}</code></div>
-      <a v-if="state === 'expired'" href="/?view=local-identity">重新登录</a><button v-else type="button" @click="load">重新核验</button>
+      <a v-if="state === 'expired'" href="/login">重新登录</a><button v-else type="button" @click="load">重新核验</button>
     </section>
 
     <template v-else-if="data">
@@ -97,7 +97,7 @@ onMounted(load);
           <dl>
             <div><dt>管理边界</dt><dd>宝塔面板</dd></div><div><dt>拓扑模式</dt><dd>单机</dd></div>
             <div><dt>负载均衡</dt><dd>{{ data.load_balancing_enabled ? '已启用' : '未启用' }}</dd></div><div><dt>多节点声明</dt><dd>{{ data.multi_node_claim ? '是' : '否' }}</dd></div>
-            <div><dt>备用服务器</dt><dd>{{ data.backup_server_used ? '已使用' : '未使用' }}</dd></div><div><dt>容量结论</dt><dd>{{ data.capacity_claim === 'unverified' ? '未验证' : data.capacity_claim }}</dd></div>
+            <div><dt>备用服务器</dt><dd>{{ data.backup_server_used ? '已使用' : '未使用' }}</dd></div><div><dt>运行方式</dt><dd>ai选品统一后端</dd></div>
           </dl>
         </aside>
       </div>
@@ -105,7 +105,7 @@ onMounted(load);
       <section class="topology-panel topology-blockers">
         <header><div><p>FAIL-CLOSED GATES</p><h3>阻断项</h3></div><span>{{ data.blockers.length }} 项</span></header>
         <div v-if="data.blockers.length"><article v-for="(item,index) in data.blockers" :key="item.code"><span>{{ String(index + 1).padStart(2,'0') }}</span><code>{{ item.code }}</code><p>{{ item.actionHint }}</p></article></div>
-        <div v-else class="topology-clear"><b>当前单机运行门无阻断</b><span>这不代表整机、磁盘或机房故障受到保护。</span></div>
+        <div v-else class="topology-clear"><b>当前单机运行门无阻断</b><span>API、Worker 与采集执行器均由统一后端管理。</span></div>
       </section>
       <footer class="topology-footer"><span>观测 {{ time(data.observed_at) }}</span><span>request_id {{ requestId || '—' }}</span><strong>重启、恢复与回滚只允许通过宝塔执行</strong></footer>
     </template>

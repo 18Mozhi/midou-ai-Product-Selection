@@ -1,0 +1,7 @@
+{
+  "name": "@scoutops/backend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/server.js"
+}

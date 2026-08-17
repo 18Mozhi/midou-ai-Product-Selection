@@ -12,6 +12,10 @@
       "BUILD_SHA",
       "WEB_ORIGIN"
     ],
+    "deployment": [
+      "BAOTA_PROJECT_NAME",
+      "BAOTA_DEPLOY_ROOT"
+    ],
     "database": [
       "DB_HOST",
       "DB_PORT",

@@ -5,17 +5,19 @@ import { readFile } from 'node:fs/promises';
 
 const read = (path) => readFile(path, 'utf8');
 
-test('M07-03.A01-A05 S0 manifest freezes target, ten Baota objects and signed healthy state', async () => {
+test('M07-03.A01-A05 manifest freezes one-backend target and healthy state', async () => {
   const manifest = JSON.parse(await read('infra/baota/service-manifest.json'));
-  assert.equal(manifest.schemaVersion, 2);
+  assert.equal(manifest.schemaVersion, 3);
   assert.equal(manifest.productionDeployed, true);
   assert.equal(manifest.deploymentStatus, 'healthy');
-  assert.deepEqual(manifest.target, {host:'192.168.1.220',domain:'midouai.mozhiz.cn',primaryRegion:'惠州',recoveryRegion:'惠州',publicPorts:[80,443],privatePorts:[4101,4103,3306,6379]});
-  assert.equal(manifest.objects.length, 10);
-  assert.ok(manifest.objects.some((item) => item.name === 'product-scout-api-canary' && item.port === 4103 && item.bind === '127.0.0.1'));
-  assert.ok(manifest.objects.some((item) => item.name === 'product-scout-release-rollout' && item.kind === 'baota-scheduled-task' && item.schedule === 'manual-only-disabled-schedule' && item.concurrentRuns === 1 && item.lock === 'mysql_session_named_lock'));
-  assert.equal(manifest.objects.find((item) => item.name === 'product-scout-web').buildCommand, 'npm ci && npm run build:web');
-  assert.equal(manifest.objects.find((item) => item.name === 'product-scout-backup').status, 'owned-by-M07-04');
+  assert.equal(manifest.target.deployRoot, '/www/wwwroot/ai选品');
+  assert.deepEqual(manifest.target.privatePorts, [4101,3306,6379]);
+  const nodeProjects = manifest.objects.filter((item) => item.kind === 'baota-node-project');
+  assert.equal(nodeProjects.length, 1);
+  assert.equal(nodeProjects[0].name, 'ai选品');
+  assert.equal(nodeProjects[0].startCommand, 'node apps/backend/dist/server.js');
+  assert.equal(nodeProjects[0].processMode, 'foreground');
+  assert.equal(manifest.objects.find((item) => item.name === 'ai选品网站').buildCommand, 'npm ci && npm run build');
 });
 
 test('M07-03.A06-A11 site, runtime, permission, config and logging contracts fail closed', async () => {
@@ -24,7 +26,7 @@ test('M07-03.A06-A11 site, runtime, permission, config and logging contracts fai
   assert.match(nginx, /server_name midouai\.mozhiz\.cn/);
   assert.match(nginx, /location \/open\//);
   assert.match(nginx, /location \/api\/v1\/realtime\/events[\s\S]*proxy_buffering off/);
-  for (const name of ['product-scout-api','product-scout-worker','product-scout-crawler','mysql57-product-scout','redis-product-scout']) assert.equal(manifest.objects.find((item) => item.name === name).public, false);
+  for (const name of ['ai选品','ai选品数据库','ai选品缓存']) assert.equal(manifest.objects.find((item) => item.name === name).public, false);
   assert.deepEqual(manifest.restrictedConfig.browserAllowlist, ['VITE_API_BASE_URL']);
   assert.ok(manifest.logging.forbiddenFields.includes('master_key'));
 });

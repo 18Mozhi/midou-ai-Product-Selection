@@ -166,7 +166,7 @@ onMounted(load);
   <section class="task-workspace">
     <div class="task-title">
       <div>
-        <p>WORK MANAGEMENT / M05-01</p>
+        <p>WORK MANAGEMENT</p>
         <h2>{{ mode === "today" ? "今日工作" : "任务中心" }}</h2>
         <span>任务事实、负责人、期限、评论与转交均来自当前工作区 API。</span>
       </div>

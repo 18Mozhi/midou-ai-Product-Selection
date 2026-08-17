@@ -5,7 +5,7 @@
     {"id":"M08-05.A02","evidence":"single-host scheduler snapshot policy findings leases provider profile and resource contracts"},
     {"id":"M08-05.A03","evidence":"0034 MySQL57 scheduler lease observation operation indexes foreign keys and down rollback"},
     {"id":"M08-05.A04","evidence":"fail-closed evaluator audited read idempotent expired recovery and transaction repository"},
-    {"id":"M08-05.A05","evidence":"existing Node Worker and Python Crawler receive MySQL slots heartbeat release and resource protection without a new daemon"},
+    {"id":"M08-05.A05","evidence":"the unified backend Worker hosts collection execution with MySQL slots heartbeat release and resource protection without a separate Python daemon"},
     {"id":"M08-05.A06","evidence":"OpenAPI platform operations read and recovery contracts exclude scope payload lease token credential cookie and path"},
     {"id":"M08-05.A07","evidence":"image-grounded dark scheduler cockpit with desktop and 390 layouts"},
     {"id":"M08-05.A08","evidence":"loading ready warning blocked empty forbidden expired rate_limited unavailable and recovering states"},

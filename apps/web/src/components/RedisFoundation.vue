@@ -13,7 +13,7 @@ const copy = computed(() => ({
 
 <template>
   <header class="topbar">
-    <div><p class="eyebrow">FOUNDATION / M00-04</p><h1>Redis 基座</h1></div>
+    <div><p class="eyebrow">SYSTEM SETTINGS</p><h1>Redis 基座</h1></div>
     <span class="environment">契约状态预览 · 非实时监控</span>
   </header>
   <section class="status-card" :data-state="state === 'available' ? 'ready' : state === 'unavailable' ? 'error' : 'loading'" aria-live="polite">

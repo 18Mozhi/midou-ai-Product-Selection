@@ -4,7 +4,7 @@
 
 1. 在候选发布迁移中以 `product_scout` 业务账号执行 `0034_crawler_scheduler_m08_05.up.sql`；确认 MySQL 5.7 与三张新表。
 2. 在宝塔 Node API 和 Node Worker 受限环境加入 `CRAWLER_SCHEDULER_*` 配置。并发上限固定 Worker=1、Crawler=1、每来源=1，不提供调大开关。
-3. 只通过宝塔按顺序重启候选 Node API、Node Worker、Python Crawler。不得用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。
+3. 只通过宝塔重启候选 ai选品 统一后端。不得用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。
 4. 执行生产前置、MySQL live、调度 live、API 与浏览器验收；发布仍必须经过 5%/25%/100% 各不少于 1,800 秒且不得放宽错误率、读写 P95 或异步滞后阈值。
 
 ## 日常核验
@@ -27,7 +27,7 @@
 
 ## 回滚
 
-1. 通过宝塔把 Nginx 恢复为单一稳定 4101，上一个应用版本恢复后停止候选 4103；通过宝塔重启上一版 Node Worker 与 Python Crawler。
+1. 通过宝塔把 Nginx 恢复为单一稳定 4101，上一个应用版本恢复后停止候选 4103；通过宝塔重启上一版 ai选品 统一后端。
 2. 保留 `crawler_scheduler_*` 与 `platform_audit_events`，不得为了通过验收删除失败证据。上一版不使用这些表时可暂留。
 3. 只有确认所有 API、Worker、Crawler 已回到不读取/写入 0034 的版本，才用 `0034_crawler_scheduler_m08_05.down.sql` 删除新表。
 4. 数据回滚失败时停止新采集并保持只读排查；不得启用备用服务器、负载均衡或面板外服务绕过。

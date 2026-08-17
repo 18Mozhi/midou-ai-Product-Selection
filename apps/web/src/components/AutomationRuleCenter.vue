@@ -139,7 +139,7 @@ onMounted(load);
   <section class="automation-center">
     <header>
       <div>
-        <p>COLLABORATION / M05-05</p>
+        <p>COLLABORATION</p>
         <h2>自动化规则</h2>
         <span
           >以已落库事务事件触发安全动作；不会自动审批、推荐或变更业务事实。</span

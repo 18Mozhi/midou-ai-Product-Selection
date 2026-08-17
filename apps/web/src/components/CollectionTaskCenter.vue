@@ -23,7 +23,7 @@ onMounted(load);
 
 <template>
   <section class="collection-task-center" aria-labelledby="collection-task-title">
-    <header class="collection-task-title"><div><p>COLLECTION TASKS / M03-05</p><h2 id="collection-task-title">采集任务监控</h2><span>MySQL 是任务事实源；Redis 仅协调排队与租约，所有状态变化保留关联标识。</span></div><a href="/platform-admin/collection/browser-runtime">浏览器运行时</a></header>
+    <header class="collection-task-title"><div><p>COLLECTION TASKS</p><h2 id="collection-task-title">采集任务监控</h2><span>MySQL 是任务事实源；Redis 仅协调排队与租约，所有状态变化保留关联标识。</span></div><a href="/platform-admin/collection/browser-runtime">浏览器运行时</a></header>
     <UiStatePanel v-if="state!=='ready'" :kind="state" :request-id="requestId" @primary="load" />
     <template v-else>
       <div class="collection-task-metrics"><article><small>处理中</small><strong>{{metrics.active}}</strong><span>排队、执行与重试</span></article><article><small>部分完成</small><strong>{{metrics.warnings}}</strong><span>仍有可用证据</span></article><article><small>受阻 / 死信</small><strong>{{metrics.blocked}}</strong><span>不会绕过来源限制</span></article><article><small>可用结果</small><strong>{{metrics.evidence}}</strong><span>当前页合计</span></article></div>

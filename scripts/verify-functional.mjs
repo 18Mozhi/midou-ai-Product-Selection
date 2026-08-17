@@ -6,10 +6,6 @@ const root = process.cwd();
 const timeout = 900_000;
 const npm = 'npm';
 const npx = 'npx';
-const excludedNodeTests = new Set([
-  'tests/m07-03/baota-deployment.test.mjs',
-]);
-
 async function collectNodeTests(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const files = [];
@@ -24,8 +20,7 @@ async function collectNodeTests(directory) {
   return files.sort();
 }
 
-const nodeTests = (await collectNodeTests(resolve(root, 'tests')))
-  .filter((path) => !excludedNodeTests.has(relative(root, path).replaceAll('\\', '/')));
+const nodeTests = await collectNodeTests(resolve(root, 'tests'));
 const steps = [
   { id: 'build', label: 'npm run build', command: npm, args: ['run', 'build'], shell: process.platform === 'win32' },
   { id: 'node-tests', label: `node-tests (${nodeTests.length} files)`, command: process.execPath, args: ['--experimental-strip-types', '--test', '--test-concurrency=4', ...nodeTests] },

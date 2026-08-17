@@ -17,7 +17,9 @@ test('M00-07 exposes a software-only P00-P08 functional acceptance entrypoint', 
     assert.match(verifier, new RegExp(required.replaceAll(':', '\\:')));
   }
   assert.match(verifier, /--experimental-strip-types/);
-  assert.match(verifier, /tests\/m07-03\/baota-deployment\.test\.mjs/);
+  assert.match(verifier, /collectNodeTests/);
+  assert.match(verifier, /entry\.name !== 'e2e'/);
+  assert.doesNotMatch(verifier, /baota-deployment\.test\.mjs.*filter|filter.*baota-deployment\.test\.mjs/);
   assert.doesNotMatch(verifier, /verify-capacity-boundary-live|--production/);
   assert.match(featureMap, /"functionalCommand": "npm run verify:functional"/);
   assert.match(plan, /verify:functional/);

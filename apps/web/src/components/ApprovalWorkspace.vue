@@ -228,7 +228,7 @@ onMounted(load);
   <section class="approval-workspace">
     <header>
       <div>
-        <p>WORK MANAGEMENT / M05-02</p>
+        <p>WORK MANAGEMENT</p>
         <h2>审批中心</h2>
         <span
           >模板版本、节点时限、人工原因与升级记录均来自当前工作区 API。</span

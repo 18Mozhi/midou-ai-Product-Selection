@@ -25,7 +25,7 @@ onMounted(load);
 
 <template>
   <section class="trend-dashboard">
-    <header class="trend-hero"><div><p>MARKET SIGNALS / M04-01</p><h2>热点趋势</h2><span>每个主题保留来源、时间、新鲜度和证据；热度以实际信号数表示，不生成虚构评分。</span></div><div><button type="button" @click="showRule=true">＋ 创建监控</button><button class="secondary" type="button" @click="tab='rules'">订阅管理</button></div></header>
+    <header class="trend-hero"><div><p>MARKET SIGNALS</p><h2>热点趋势</h2><span>每个主题保留来源、时间、新鲜度和证据；热度以实际信号数表示，不生成虚构评分。</span></div><div><button type="button" @click="showRule=true">＋ 创建监控</button><button class="secondary" type="button" @click="tab='rules'">订阅管理</button></div></header>
     <nav class="trend-tabs" aria-label="热点趋势视图"><button :aria-current="tab==='topics'?'page':undefined" @click="tab='topics'">趋势主题</button><button :aria-current="tab==='rules'?'page':undefined" @click="tab='rules'">监控规则 <b>{{rules.length}}</b></button></nav>
     <p v-if="message" class="trend-message" role="status">{{message}} <code v-if="requestId">{{requestId}}</code></p>
     <template v-if="tab==='topics'">

@@ -20,7 +20,7 @@ onMounted(load);
 <template>
   <section class="backup-center">
     <header class="backup-hero">
-      <div><p class="eyebrow">M07-04 · RECOVERY CONTROL</p><h2>备份与恢复控制台</h2><span>惠州当前主机内的加密副本与隔离恢复；不代表整机或异地灾备。</span></div>
+      <div><p class="eyebrow">RECOVERY CONTROL</p><h2>备份与恢复控制台</h2><span>惠州当前主机内的加密副本与隔离恢复；不代表整机或异地灾备。</span></div>
       <button type="button" @click="load">刷新事实</button>
     </header>
     <section v-if="state === 'loading'" class="state-card" data-kind="loading"><b>正在读取备份事实</b><span>校验数据库记录、恢复副本和最近演练。</span></section>

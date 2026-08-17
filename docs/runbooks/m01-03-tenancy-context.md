@@ -6,7 +6,7 @@
 
 执行 `npm run build`、三个 `tests/m01-03` 测试、`node scripts/verify-tenancy-live.mjs`、M01-03 Playwright 和 `npm run verify:module -- M01-03`。真实数据库探针必须显示 MySQL 5.7、product_scout 业务账号、utf8mb4、跨组织拒绝、上下文审计和测试数据清理通过。
 
-人工检查：登录后进入 `/?view=tenancy`，只能看到本人活动成员资格对应的组织；选择组织后只能看到该组织工作区/团队摘要；归档工作区不可进入；选择成功后刷新后续页面应由服务端会话上下文确定范围，浏览器不能提交 actor_id/session_id。
+人工检查：登录后进入 `/select-context`，只能看到本人活动成员资格对应的组织；选择组织后只能看到该组织工作区/团队摘要；归档工作区不可进入；选择成功后刷新后续页面应由服务端会话上下文确定范围，浏览器不能提交 actor_id/session_id。
 
 ## 观测、故障与恢复
 

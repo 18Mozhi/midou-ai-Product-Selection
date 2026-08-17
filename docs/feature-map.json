@@ -162,9 +162,9 @@
       "preflight": "../scripts/verify-baota-s0.mjs",
       "productionDeployed": true,
       "deploymentStatus": "healthy",
-      "target": "192.168.1.220 / midouai.mozhiz.cn",
+      "target": "192.168.1.220 /www/wwwroot/ai选品 (domain: midouai.mozhiz.cn)",
       "productionVerifier": "../scripts/verify-baota-deployment.mjs --production",
-      "capacity": "S0 single host, 100 users and 5-20 concurrent business users",
+      "runtimeScope": "one Huizhou host and one BaoTa-managed ai选品 backend; disk and capacity are not product completion gates",
       "status": "module_verified"
     },
     "localIdentity": {
@@ -327,7 +327,7 @@
         "../apps/web/src/design/tokens.css",
         "../apps/web/src/components/ThemeStudio.vue"
       ],
-      "route": "/?view=theme",
+      "route": "/settings/theme",
       "api": ["GET /api/v1/me/ui-preferences", "PUT /api/v1/me/ui-preferences"],
       "themes": ["deep-ocean", "aurora-purple", "cloud-white"],
       "scope": "signed-in user plus server-resolved active organization and workspace",
@@ -345,13 +345,14 @@
         "../apps/web/src/components/OnboardingGuide.vue"
       ],
       "views": [
-        "/?view=local-identity",
-        "/?view=local-identity&mode=register",
-        "/?view=local-identity&mode=forgot",
-        "/?view=local-identity&mode=verify",
-        "/?view=local-identity&mode=reset",
-        "/?view=tenancy",
-        "/?view=onboarding"
+        "/login",
+        "/register",
+        "/forgot-password",
+        "/verify-email",
+        "/reset-password",
+        "/security/mfa",
+        "/select-context",
+        "/onboarding"
       ],
       "contracts": "reuses M01-01 local identity, M01-02 MFA and M01-03 tenancy APIs without new fields",
       "imageEvidence": [
@@ -1332,7 +1333,7 @@
       "truthBoundary": "no credentials cookies payloads or file paths; controlled replay and source writes remain on existing idempotent versioned M03 endpoints",
       "permission": "platform:operate read guard and collection:replay or provider:configure on existing write routes; correlated global read audit",
       "configuration": ["COLLECTION_CONSOLE_RECENT_LIMIT"],
-      "runtimeBoundary": "observes existing Node Worker and Python Crawler leases retries rate limits and dead letters under Baota; creates no new daemon",
+      "runtimeBoundary": "observes collection Worker leases retries rate limits and dead letters inside the unified BaoTa backend; creates no new daemon",
       "imageEvidence": ["concept 62 source management", "concept 63 collection task monitoring", "concept 64 system monitoring"],
       "verificationRunId": "808ea175-55fc-483f-a1c2-eec161fcf9bd",
       "status": "module_verified"
@@ -1540,10 +1541,10 @@
       "entrypoints": ["../database/migrations/0034_crawler_scheduler_m08_05.up.sql", "../apps/api/src/crawler-scheduler-service.ts", "../apps/api/src/crawler-scheduler-repository.ts", "../apps/api/src/crawler-scheduler-probe.ts", "../apps/api/src/crawler-scheduler-routes.ts", "../apps/worker/src/single-host-resource-probe.ts", "../apps/worker/src/collection-task-worker.ts", "../apps/api/src/mysql-crawler-runtime-repository.ts", "../apps/web/src/components/CrawlerSchedulerCenter.vue", "../infra/baota/crawler-single-host-scheduler-manifest.json", "../scripts/verify-crawler-scheduler-production.mjs"],
       "routes": ["/platform-admin/crawler-scheduler", "/api/v1/platform/operations/crawler-scheduler", "/api/v1/platform/operations/crawler-scheduler/recover-expired"],
       "scope": "M08-05 current Huizhou BaoTa single-host Crawler and Worker scheduling with one global slot each, provider effective concurrency one, exclusive browser profiles, MySQL lease truth and host resource stop gates",
-      "truthBoundary": "ready requires exactly one BaoTa Node Worker and one BaoTa Python Crawler process, no global provider or profile lease overflow, a current resource observation below the fixed stop gates and MySQL 5.7 as lease truth",
+      "truthBoundary": "ready requires exactly one supervised Worker and its collection execution lane inside the unified BaoTa backend, no global provider or profile lease overflow, a current resource observation below the fixed stop gates and MySQL 5.7 as lease truth",
       "permission": "platform operations read and idempotent expired-slot recovery require platform:operate; responses exclude task payloads scope identifiers lease tokens hashes credentials cookies and paths while observation recovery and failure retain request_id trace_id and audit",
       "configuration": ["CRAWLER_SCHEDULER_MAX_LOAD_PERCENT", "CRAWLER_SCHEDULER_MIN_AVAILABLE_MEMORY_MB", "CRAWLER_SCHEDULER_MIN_FREE_DISK_MB", "CRAWLER_SCHEDULER_STALE_AFTER_SECONDS", "CRAWLER_SCHEDULER_PRODUCTION_EVIDENCE_FILE", "CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES"],
-      "runtimeBoundary": "one BaoTa Node Worker and one BaoTa Python Crawler on the current Huizhou host; Redis remains scoped queue coordination and MySQL 5.7 remains lease truth; no load balancer backup server multi-node or capacity claim",
+      "runtimeBoundary": "one supervised Worker with one collection execution lane inside the single BaoTa ai选品 backend on the current Huizhou host; Redis remains scoped queue coordination and MySQL 5.7 remains lease truth; no load balancer backup server multi-node or capacity claim",
       "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 62 source management", "concept 63 task monitor", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 scheduler baselines"],
       "latestProductionEvidence": {"releaseId":"a21e286f-836e-4c0c-ac76-3fc5fcf298c8","buildSha":"efdb35081bdc5002eea1729e0af4583be3ae7523","rolloutSha256":"7739d5b5ee727f373e5a63267dedd5c4a25547f1214642025baa31a47947e3f4","schedulerEvidenceSha256":"50806f678946c2b1acffec8ed21271f62c0bd61ade4cdc737778216b2850a247","observationSeconds":[1800,1800,1800],"sampleCounts":[169,792,3388],"writeP95Ms":[456,350,290],"workerInstances":1,"crawlerInstances":1,"maximumProviderConcurrency":1,"singleUpstreamPort":4101,"candidateStopped":true},
       "verificationRunId": "a6e9e5d7-dffd-4732-8706-29cd9cdc6ecb",
@@ -1963,46 +1964,30 @@
   ],
   "runtime": [
     {
-      "name": "product-scout-web",
+      "name": "ai选品网站",
       "kind": "baota-site",
       "responsibility": "Vue static assets and reverse proxy",
-      "status": "scaffolded_not_deployed"
+      "status": "production_managed"
     },
     {
-      "name": "product-scout-api",
+      "name": "ai选品",
       "kind": "baota-node-project",
-      "responsibility": "HTTP API, RBAC and SSE",
-      "status": "scaffolded_not_deployed"
+      "responsibility": "single foreground backend supervising HTTP API, async Worker and collection execution",
+      "workingDirectory": "/www/wwwroot/ai选品/current",
+      "startCommand": "node apps/backend/dist/server.js",
+      "status": "single_backend_delivery_in_progress"
     },
     {
-      "name": "product-scout-api-canary",
-      "kind": "baota-node-project",
-      "responsibility": "same-host M07-05 candidate API and audited rollback pairing",
-      "status": "M07-05_module_verified"
-    },
-    {
-      "name": "product-scout-worker",
-      "kind": "baota-node-project",
-      "responsibility": "queues, outbox, notifications and reports",
-      "status": "scaffolded_not_deployed"
-    },
-    {
-      "name": "product-scout-crawler",
-      "kind": "baota-python-project",
-      "responsibility": "provider collection and parsing",
-      "status": "scaffolded_not_deployed"
-    },
-    {
-      "name": "mysql57-product-scout",
+      "name": "ai选品数据库",
       "kind": "baota-mysql-service",
       "responsibility": "product_scout data",
-      "status": "template_ready_not_deployed"
+      "status": "production_managed"
     },
     {
-      "name": "redis-product-scout",
+      "name": "ai选品缓存",
       "kind": "baota-redis-service",
       "responsibility": "cache, queue, rate limiting and SSE coordination",
-      "status": "template_ready_local_verified_not_deployed"
+      "status": "production_managed"
     }
   ],
   "externalDependencies": [

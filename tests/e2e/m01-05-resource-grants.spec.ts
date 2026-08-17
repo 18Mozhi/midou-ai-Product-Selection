@@ -51,5 +51,5 @@ test('M01-05.A08 expired session requires reauthentication', async ({ page }) =>
   await page.route('**/api/v1/me/authorization', (route) => route.fulfill({ status: 401, json: { error: { code: 'session_invalid' }, request_id: 'grant-expired', trace_id: 't' } }));
   await page.goto('/?view=resource-grants');
   await expect(page.getByText('登录已过期')).toBeVisible();
-  await expect(page.getByRole('link', { name: '重新登录' })).toHaveAttribute('href', '/?view=local-identity');
+  await expect(page.getByRole('link', { name: '重新登录' })).toHaveAttribute('href', '/login');
 });

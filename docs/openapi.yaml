@@ -50,11 +50,15 @@ x-scoutops-baota-s0:
   manifest: infra/baota/service-manifest.json
   targetHost: 192.168.1.220
   targetDomain: midouai.mozhiz.cn
+  deployRoot: /www/wwwroot/ai选品
+  backendProject: ai选品
+  backendStartCommand: node apps/backend/dist/server.js
+  backendProjectCount: 1
   productionEvidence: .artifacts/verification/baota-production-evidence.json
   livenessPath: /api/v1/health/live
   readinessPath: /api/v1/health/ready
-  asyncRuntimeStatus: structured Worker and Crawler heartbeat logs in Baota
-  capacityClaim: S0 single host only; no multi-node or 10000-user claim
+  asyncRuntimeStatus: structured Worker heartbeat inside the unified BaoTa Node backend
+  completionGate: build, startup, health, permissions and real browser functionality; excludes disk and capacity
 x-scoutops-backup-recovery:
   module: M07-04
   productionManager: baota
@@ -228,7 +232,7 @@ paths:
   /platform/operations/crawler-scheduler:
     get:
       summary: Read audited S0 single-host Crawler scheduler facts
-      description: M08-05 reports sanitized Worker/Crawler process counts, global and provider lease aggregates, browser-profile exclusivity and host resource watermarks. It never returns scope identifiers, task payloads, lease tokens or hashes, credentials, cookies or paths and makes no load-balancing, backup-server, multi-node or capacity claim.
+      description: M08-05 reports the sanitized supervised Worker and its collection-execution lane counts, global and provider lease aggregates, browser-profile exclusivity and host resource watermarks. It never returns scope identifiers, task payloads, lease tokens or hashes, credentials, cookies or paths and makes no load-balancing, backup-server, multi-node or capacity claim.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: platform:operate
       responses:
@@ -3745,7 +3749,7 @@ components:
       required: [status, service, version, build_sha]
       properties:
         status: { type: string, enum: [ok] }
-        service: { type: string, enum: [product-scout-api] }
+        service: { type: string, enum: [ai-selection-backend] }
         version: { type: string }
         build_sha: { type: string }
     HealthLiveEnvelope:
