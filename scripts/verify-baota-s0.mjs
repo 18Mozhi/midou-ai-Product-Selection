@@ -31,6 +31,7 @@ try {
     backend.name !== 'ai选品'
     || backend.processMode !== 'foreground'
     || backend.startCommand !== 'node apps/backend/dist/server.js'
+    || backend.launcher !== 'infra/baota/start-backend.sh'
   ) {
     throw new Error('unified backend contract is invalid');
   }
@@ -51,6 +52,7 @@ try {
     'apps/backend/dist/server.js',
     'apps/api/dist/server.js',
     'apps/worker/dist/index.js',
+    'infra/baota/start-backend.sh',
     'infra/baota/nginx/scoutops.conf.template',
   ]) {
     await access(file);

@@ -1,6 +1,6 @@
 # ai选品宝塔对象模板
 
-本目录定义 `ai选品` 的宝塔生产对象。目标是惠州 `192.168.1.220`、域名 `midouai.mozhiz.cn`、项目根目录 `/www/wwwroot/ai选品`。生产只创建一个名为 `ai选品` 的前台 Node 项目，由 `node apps/backend/dist/server.js` 统一监督 API 与 Worker；网站、MySQL 5.7、Redis、备份和统一后端均在宝塔中可见和可操作。独立 API、Worker、Canary、Python 常驻项目以及任务结束后的临时验收任务均应删除。
+本目录定义 `ai选品` 的宝塔生产对象。目标是惠州 `192.168.1.220`、域名 `midouai.mozhiz.cn`、项目根目录 `/www/wwwroot/ai选品`。生产只创建一个名为 `ai选品` 的前台 Node 项目，由 `infra/baota/start-backend.sh` 启动统一后端，后端再监督 API 与 Worker；网站、MySQL 5.7、Redis、备份和统一后端均在宝塔中可见和可操作。启动器从 `current` 符号链接解析完整 Git SHA 并注入 `BUILD_SHA`，不得在共享配置中固定旧提交。独立 API、Worker、Canary、Python 常驻项目以及任务结束后的临时验收任务均应删除。
 
 发布顺序：拉取签发构建到新版本目录 → `npm ci` → `npm run build` → 升序迁移 → 全量功能门 → 原子切换 `current` → 在宝塔重启 `ai选品` → 检查 live/ready/version、Worker 心跳和日志 → 发布网站。任一步失败即恢复上一 `current` 并通过宝塔重启。Nginx 只反代本机 `4101`，不创建第二后端。
 

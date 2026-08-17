@@ -30,6 +30,7 @@
       "kind": "baota-node-project",
       "workingDirectory": "/www/wwwroot/ai选品/current",
       "startCommand": "node apps/backend/dist/server.js",
+      "launcher": "infra/baota/start-backend.sh",
       "processMode": "foreground",
       "bind": "127.0.0.1",
       "port": 4101,
