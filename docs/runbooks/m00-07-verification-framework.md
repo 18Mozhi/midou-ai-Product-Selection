@@ -6,7 +6,10 @@
 npm run verify:module -- M00-01
 npm run verify:phase -- P00
 npm run verify:all
+npm run verify:functional
 ```
+
+`verify:functional` 用于只验收“项目可构建、可启动、功能完整”的场景，覆盖生产构建、软件功能 Node/Python 测试、桌面/390px E2E、文档、计划、发布矩阵和安全门。它不执行同提交生产部署证据、磁盘诊断、生产负载或容量证据，也不会修改 `capacity_claim`；需要生产运营或容量签发时仍执行原模块、阶段和全量门。
 
 默认单命令超时 120 秒，报告写入 `.artifacts/verification`。可在本地或宝塔受控发布任务中调整：
 
@@ -29,7 +32,7 @@ $env:VERIFY_REPORT_DIR='.artifacts/verification'
 
 ## 回滚
 
-1. 回退 `package.json` 的三类命令和 `scripts/verify-*.mjs`/引擎到上一稳定版本。
+1. 回退 `package.json` 的验收命令和 `scripts/verify-*.mjs`/引擎到上一稳定版本。
 2. 保留失败报告作为证据，不删除报告来掩盖失败。
 3. 如已应用元数据迁移，先导出所需记录，再执行 `0002_m00_07_verification_runs.down.sql`。
 4. 回滚后至少执行上一稳定模块门禁，记录版本、操作者、时间、原因和 trace_id。

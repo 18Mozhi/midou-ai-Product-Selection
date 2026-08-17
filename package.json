@@ -41,6 +41,7 @@
     "verify:module": "node scripts/verify-module.mjs",
     "verify:phase": "node scripts/verify-phase.mjs",
     "verify:all": "node scripts/verify-all.mjs",
+    "verify:functional": "node scripts/verify-functional.mjs",
     "verify:release-matrix": "node scripts/verify-release-matrix.mjs --validate",
     "verify:security-gate": "node scripts/verify-security-gate.mjs",
     "verify:docs": "node scripts/verify-docs.mjs",

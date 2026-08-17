@@ -88,6 +88,8 @@
       "moduleCommand": "npm run verify:module -- <module-id>",
       "phaseCommand": "npm run verify:phase -- <phase-id>",
       "allCommand": "npm run verify:all",
+      "functionalCommand": "npm run verify:functional",
+      "functionalScope": "P00-P08 software build, functional Node/Python tests, desktop/390 E2E, docs, plans, release matrix and security gate; excludes same-commit deployment evidence, disk diagnostics, production load tests and capacity claims",
       "state": "../verification/state.json",
       "reportDirectory": "../.artifacts/verification",
       "runtimeApiExposed": false

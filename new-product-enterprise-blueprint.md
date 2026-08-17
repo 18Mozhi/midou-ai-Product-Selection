@@ -904,6 +904,7 @@ infra/docker-compose.dev.yml
 ### 13.1 自动化覆盖
 
 - 统一入口：模块使用 `npm run verify:module -- <module-id>`，阶段使用 `npm run verify:phase -- <phase-id>`，P00–P08 全量使用 `npm run verify:all`；任一前置缺失、命令失败或超时必须返回非零且输出脱敏 `run_id`/`trace_id` 报告。
+- 软件功能入口：当验收目标仅为“项目可构建、可启动、功能完整”时使用 `npm run verify:functional`，一次覆盖 P00–P08 生产构建、软件功能 Node/Python 测试、桌面/390px E2E、文档、计划、发布矩阵和安全门。该入口不运行同提交生产部署证据、磁盘诊断、生产负载或容量证据，不替代 `verify:module`/`verify:phase`/`verify:all` 的生产运营门，也不得提升容量声明。
 - 单元：领域规则、权限、评分、利润、错误映射、状态机、去重。
 - 契约：OpenAPI、SSE 事件、Provider 输入输出、前后端 DTO。
 - 集成：MySQL 迁移、组织隔离、Redis 队列、租约、Outbox、通知、导出、Webhook、Token。

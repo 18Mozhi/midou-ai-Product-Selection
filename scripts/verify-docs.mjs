@@ -6,7 +6,7 @@ const required = [
   'docs/openapi.yaml', 'docs/feature-map.json', 'config/env.example',
   'infra/docker-compose.dev.yml', 'scripts/locate_flow_v4.mjs',
   'scripts/verify-docs.mjs', 'scripts/verify-plans.mjs', 'package.json', '.gitignore',
-  'scripts/verify-module.mjs', 'scripts/verify-phase.mjs', 'scripts/verify-all.mjs',
+  'scripts/verify-module.mjs', 'scripts/verify-phase.mjs', 'scripts/verify-all.mjs', 'scripts/verify-functional.mjs',
   'scripts/lib/verification-engine.mjs', 'verification/state.json',
   'verification/modules/M00-01.json', 'verification/modules/M00-07.json',
   'verification/modules/M00-02.json', 'config/schema.json',
