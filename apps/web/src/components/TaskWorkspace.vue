@@ -160,7 +160,10 @@ async function addComment() {
     await open(selected.value);
   } catch {}
 }
-onMounted(load);
+onMounted(() => {
+  showCreate.value = new URLSearchParams(window.location.search).get("create") === "1";
+  void load();
+});
 </script>
 <template>
   <section class="task-workspace">

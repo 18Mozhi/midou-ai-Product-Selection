@@ -44,3 +44,18 @@ test('M02-03.A16 forbidden shell shows request id and safe recovery', async ({ p
   await expect(page.getByText('request_id: m02-03-forbidden')).toBeVisible();
   await expect(page.getByRole('link', { name: '返回成员工作台' })).toHaveAttribute('href', '/home');
 });
+
+test('M02-03 regression: public root resolves the authenticated landing instead of rendering a broken member shell', async ({ page }) => {
+  await page.route('**/api/v1/me/landing', (route) => route.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ error: { code: 'session_invalid', message: '请先登录。', action_hint: '重新登录后重试。' }, request_id: 'root-anonymous', trace_id: 'root-anonymous' }) }));
+  await page.goto('/');
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.getByRole('heading', { name: '欢迎回到 ai选品' })).toBeVisible();
+});
+
+test('M02-03 platform shell does not expose member-only search or notifications', async ({ page }) => {
+  await allow(page, 'platform_admin');
+  await page.goto('/platform-admin');
+  await expect(page.getByRole('button', { name: /搜索/ })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: '通知中心' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: '个人中心' })).toHaveAttribute('href', '/me');
+});

@@ -35,6 +35,19 @@ test('M02-03.A03/A05/A09 platform shell works without organization context and c
   assert.equal(migrations.filter((name) => name.includes('m02_03')).length, 0);
 });
 
+test('M02-03 regression: preferred landing sends platform and organization admins to their operation panels', async () => {
+  const platformRepo = new InMemoryAuthorizationRepository();
+  platformRepo.subjects.set(platformRepo.key(actor), { ...orgSubject(), membership_id: null, membership_active: false, role_codes: [], capabilities: [], scopes: [{ scope: 'platform' }], platform_role_codes: ['platform_super_admin'], platform_capabilities: ['platform:superadmin'] });
+  const platform = await new AuthorizationService(platformRepo).resolveLanding(actor, session, { requestId: 'landing-platform', traceId: 'landing-platform' });
+  assert.deepEqual(platform, { shell: 'platform_admin', route: '/platform-admin', reason: 'landing_platform_admin' });
+
+  const organizationRepo = new InMemoryAuthorizationRepository();
+  organizationRepo.contexts.set(session, { user_id: actor, organization_id: org, workspace_id: workspace });
+  organizationRepo.subjects.set(organizationRepo.key(actor, org), orgSubject('organization_admin'));
+  const organization = await new AuthorizationService(organizationRepo).resolveLanding(actor, session, { requestId: 'landing-organization', traceId: 'landing-organization' });
+  assert.deepEqual(organization, { shell: 'organization_admin', route: '/org-admin', reason: 'landing_organization_admin' });
+});
+
 test('M02-03.A06/A13 authenticated API validates shell and preserves error contract', async () => {
   const repo = new InMemoryAuthorizationRepository();
   repo.contexts.set(session, { user_id: actor, organization_id: org, workspace_id: workspace });
@@ -47,11 +60,14 @@ test('M02-03.A06/A13 authenticated API validates shell and preserves error contr
   assert.equal(ok.json().data.organization_id, org);
   const invalid = await app.inject({ method: 'GET', url: '/api/v1/me/navigation?shell=unknown', headers: { cookie: 'scoutops_session=test' } });
   assert.equal(invalid.statusCode, 400);
+  const landing = await app.inject({ method: 'GET', url: '/api/v1/me/landing', headers: { cookie: 'scoutops_session=test', 'x-request-id': 'landing-request', 'x-trace-id': 'landing-trace' } });
+  assert.equal(landing.statusCode, 200);
+  assert.equal(landing.json().data.route, '/home');
   await app.close();
 });
 
 test('M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay explicit', async () => {
-  const [component, app, styles, openapi, env, architecture, runbook, feature, e2e] = await Promise.all(['apps/web/src/components/NavigationShell.vue', 'apps/web/src/App.vue', 'apps/web/src/styles.css', 'docs/openapi.yaml', 'config/env.example', 'docs/architecture/m02-03-navigation-shells.md', 'docs/runbooks/m02-03-navigation-shells.md', 'docs/feature-map.json', 'tests/e2e/m02-03-navigation-shell.spec.ts'].map(read));
+  const [component, app, landingRedirect, styles, openapi, env, architecture, runbook, feature, e2e] = await Promise.all(['apps/web/src/components/NavigationShell.vue', 'apps/web/src/App.vue', 'apps/web/src/components/LandingRedirect.vue', 'apps/web/src/styles.css', 'docs/openapi.yaml', 'config/env.example', 'docs/architecture/m02-03-navigation-shells.md', 'docs/runbooks/m02-03-navigation-shells.md', 'docs/feature-map.json', 'tests/e2e/m02-03-navigation-shell.spec.ts'].map(read));
   for (const shell of ['member', 'organization_admin', 'platform_admin']) assert.match(component + openapi, new RegExp(shell));
   for (const path of ['/home', '/org-admin', '/platform-admin']) assert.match(app + component, new RegExp(path.replaceAll('/', '\\/')));
   for (const state of ['loading', 'expired', 'forbidden', 'context_required', 'rate_limited', 'blocked']) assert.match(component, new RegExp(state));
@@ -59,10 +75,12 @@ test('M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(styles, /@media\(max-width:840px\)/);
   assert.match(component, /aria-current/);
   assert.match(component, /credentials\s*:\s*["']include["']/);
+  assert.match(landingRedirect, /\/me\/landing/);
+  assert.match(openapi, /\/me\/landing:/);
   assert.match(e2e, /keyboard\.press/);
   assert.match(e2e, /toHaveScreenshot/);
   assert.doesNotMatch(env, /NAVIGATION_SHELL_|SHELL_GUARD_/);
   assert.match(architecture, /不新增数据库迁移|无需新增数据库迁移/);
-  assert.match(runbook, /宝塔网站/);
+  assert.match(runbook, /宝塔.*ai选品/s);
   assert.match(feature, /navigationShells/);
 });

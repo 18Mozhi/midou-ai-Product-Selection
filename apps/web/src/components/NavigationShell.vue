@@ -2,7 +2,6 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import DiscoveryOverlay from "./DiscoveryOverlay.vue";
 import HomeDashboard from "./HomeDashboard.vue";
-import LocalIdentity from "./LocalIdentity.vue";
 import ProviderRegistry from "./ProviderRegistry.vue";
 import CredentialAssetCenter from "./CredentialAssetCenter.vue";
 import ProviderAdapterCenter from "./ProviderAdapterCenter.vue";
@@ -280,9 +279,6 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   isReports = computed(
     () => props.shell === "member" && routePath === "/reports",
   ),
-  isAccountCenter = computed(
-    () => props.shell === "member" && routePath === "/me",
-  ),
   isOrganizationAdmin = computed(() => props.shell === "organization_admin" && routePath.startsWith("/org-admin")),
   isPlatformDashboard = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin"),
   isBackupRecovery = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/operations"),
@@ -350,9 +346,7 @@ const pageSummary = computed(() =>
             ? "机会、证据覆盖和人工决策由当前组织与工作区的真实 API 驱动。"
             : isTrends.value
               ? "趋势主题、证据、关注和监控规则均由当前组织与工作区的真实 API 驱动。"
-              : isAccountCenter.value
-                ? "查看本人活动会话、撤销设备会话并管理 MFA；不展示他人账号信息。"
-                : "当前功能由真实 API、最小权限和审计记录驱动。",
+              : "当前功能由真实 API、最小权限和审计记录驱动。",
 );
 const short = (value: string | null) =>
   value ? `${value.slice(0, 8)}…` : "不适用";
@@ -412,7 +406,7 @@ async function load() {
   }
 }
 function shortcut(event: KeyboardEvent) {
-  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+  if (props.shell === "member" && (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
     event.preventDefault();
     discoveryMode.value = "search";
   }
@@ -456,7 +450,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         ><span v-else><small>范围</small>平台全局</span>
       </div>
       <div class="role-top-actions">
-        <button type="button" @click="discoveryMode = 'search'">
+        <button v-if="shell === 'member'" type="button" @click="discoveryMode = 'search'">
           ⌕ <span>搜索</span><kbd>⌘K</kbd>
         </button>
         <button
@@ -466,7 +460,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         >
           ＋ <span>创建</span>
         </button>
-        <a href="/notifications" aria-label="通知中心">○</a
+        <a v-if="shell === 'member'" href="/notifications" aria-label="通知中心">○</a
         ><a href="/me" aria-label="个人中心">◉</a>
       </div>
     </header>
@@ -551,7 +545,6 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           :api-base-url="apiBaseUrl"
         />
         <ReportCenter v-else-if="isReports" :api-base-url="apiBaseUrl" />
-        <LocalIdentity v-else-if="isAccountCenter" />
         <OrganizationAdminCenter
           v-else-if="isOrganizationAdmin"
           :api-base-url="apiBaseUrl"
@@ -705,7 +698,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         :aria-current="activeItem?.path === item.path ? 'page' : undefined"
         ><i>{{ item.icon }}</i
         ><span>{{ item.label }}</span></a
-      ><button type="button" @click="discoveryMode = 'search'">
+      ><button v-if="shell === 'member'" type="button" @click="discoveryMode = 'search'">
         <i>⌕</i><span>搜索</span></button
       ><button type="button" @click="discoveryMode = 'create'">
         <i>＋</i><span>创建</span>
@@ -714,6 +707,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
     <DiscoveryOverlay
       :open="Boolean(discoveryMode)"
       :mode="discoveryMode || 'search'"
+      :shell="shell"
       :api-base-url="apiBaseUrl"
       @close="discoveryMode = null"
     />

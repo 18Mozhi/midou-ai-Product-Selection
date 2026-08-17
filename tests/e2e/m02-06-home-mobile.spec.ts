@@ -41,6 +41,9 @@ test('M02-06.A08/A16 empty then blocked recovery never fabricates metrics', asyn
   await page.goto('/home');
   await expect(page.getByRole('heading', { name: '当前范围还没有首页数据' })).toBeVisible();
   await expect(page.getByText('现在不展示模拟指标')).toBeVisible();
+  await expect(page.getByRole('link', { name: /开始一次选品/ })).toHaveAttribute('href', '/opportunities?create=1');
+  await expect(page.getByRole('link', { name: /添加竞品/ })).toHaveAttribute('href', '/competitors?create=1');
+  await expect(page.getByRole('link', { name: /从 1688 找货/ })).toHaveAttribute('href', '/sourcing?create=1');
   blocked = true;
   await page.reload();
   await expect(page.getByRole('heading', { name: '依赖暂时受阻' })).toBeVisible();

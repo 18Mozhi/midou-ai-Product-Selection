@@ -25,6 +25,7 @@ test('M02-05.A01/A02/A04/A12 trims and validates scoped search inputs', async ()
 test('M02-05.A04/A08/A09/A12 quick entries expose routes only after capability filtering', () => {
   const service = new DiscoveryService({ search: async () => ({ items: [], nextCursor: null }) });
   assert.deepEqual(service.quickActions(['task:create']).map((item) => item.id), ['task']);
+  assert.equal(service.quickActions(['task:create'])[0].route, '/tasks?create=1');
   assert.deepEqual(service.quickActions(['membership:manage', 'workspace:manage']).map((item) => item.id), ['member', 'workspace']);
   assert.equal(service.quickActions([]).length, 0);
   assert.ok(service.quickActions(['task:create']).every((item) => item.route.startsWith('/') && !('method' in item) && !('payload' in item)));
@@ -47,6 +48,23 @@ test('M02-05.A06/A09/A11/A13 API preserves authenticated scope and correlation e
   await app.close();
 });
 
+test('M02-05 regression: platform quick create does not require organization context', async () => {
+  const calls = [];
+  const service = { search: async () => ({ items: [], next_cursor: null }), quickActions: (capabilities) => { calls.push(capabilities); return [{ id: 'provider', label: '配置来源', description: '进入平台来源注册中心', route: '/platform-admin/providers?create=1', required_capability: 'provider:configure' }]; } };
+  const authorization = {
+    resolveSession: async () => { throw new Error('platform quick actions must not resolve organization context'); },
+    authorize: async () => {},
+    guardNavigationShell: async (_actorId, _sessionId, shell) => ({ shell, organization_id: null, workspace_id: null, roles: [], capabilities: [], platform_roles: ['platform_super_admin'], platform_capabilities: ['provider:configure', 'platform:superadmin'], guard_reason: 'navigation_platform_admin_allowed' }),
+  };
+  const auth = { authenticate: async () => ({ user: { id: actor }, session: { id: session } }) };
+  const app = buildApp({ discovery: { service, authorization, auth, secureCookie: false } });
+  const response = await app.inject({ method: 'GET', url: '/api/v1/me/quick-actions?shell=platform_admin', headers: { cookie: 'scoutops_session=test', 'x-request-id': 'platform-actions', 'x-trace-id': 'platform-actions' } });
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(calls[0], ['provider:configure', 'platform:superadmin']);
+  assert.equal(response.json().data[0].route, '/platform-admin/providers?create=1');
+  await app.close();
+});
+
 test('M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit', async () => {
   const [up, down, repo, overlay, shell, openapi, env, architecture, runbook, feature, e2e] = await Promise.all(['database/migrations/0015a_search_documents_m02_05.up.sql', 'database/migrations/0015a_search_documents_m02_05.down.sql', 'apps/api/src/mysql-discovery-repository.ts', 'apps/web/src/components/DiscoveryOverlay.vue', 'apps/web/src/components/NavigationShell.vue', 'docs/openapi.yaml', 'config/env.example', 'docs/architecture/m02-05-discovery.md', 'docs/runbooks/m02-05-discovery.md', 'docs/feature-map.json', 'tests/e2e/m02-05-discovery.spec.ts'].map(read));
   assert.match(up, /organization_id.*workspace_id/);
@@ -57,6 +75,7 @@ test('M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(repo, /required_capability IN/);
   assert.match(openapi, /\/me\/global-search:/);
   assert.match(openapi, /\/me\/quick-actions:/);
+  assert.match(openapi, /name: shell[\s\S]*required: true/);
   assert.match(overlay, /credentials\s*:\s*["']include["']/);
   for (const state of ['loading', 'empty', 'expired', 'forbidden', 'blocked']) assert.match(overlay, new RegExp(state));
   assert.match(shell, /event\.metaKey\s*\|\|\s*event\.ctrlKey/);
@@ -65,7 +84,7 @@ test('M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(e2e, /Control\+K/);
   assert.doesNotMatch(env, /SEARCH_INDEX_|QUICK_CREATE_/);
   assert.match(architecture, /同步|synchronous/i);
-  assert.match(runbook, /宝塔.*Node API/s);
+  assert.match(runbook, /宝塔.*ai选品/s);
   assert.match(feature, /globalDiscovery/);
   const migrations = await readdir('database/migrations');
   assert.ok(migrations.includes('0015a_search_documents_m02_05.up.sql'));

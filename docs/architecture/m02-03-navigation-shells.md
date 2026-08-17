@@ -6,7 +6,8 @@
 
 ## 服务端 Guard 与数据边界
 
-- `GET /api/v1/me/navigation?shell=member|organization_admin|platform_admin` 先验证 HttpOnly 会话，再由 `AuthorizationService.guardNavigationShell` 读取真实角色、能力及可选租户上下文。
+- `GET /api/v1/me/landing` 先验证 HttpOnly 会话，再按真实平台角色、当前组织管理员角色、普通成员上下文的优先级返回 `/platform-admin`、`/org-admin`、`/home` 或 `/select-context`。公开根路径 `/` 和登录/MFA 成功后都消费该结果，不再默认打开成员壳层或设备会话。
+- `GET /api/v1/me/navigation?shell=member|organization_admin|platform_admin` 再由 `AuthorizationService.guardNavigationShell` 读取真实角色、能力及可选租户上下文。
 - 成员壳层要求活动成员资格和已选组织/工作区；组织后台额外要求 `organization_admin`；平台后台要求任一真实平台角色，且不依赖组织上下文。
 - 每次允许或拒绝写入现有 `authorization_decisions`，保留 actor、组织/工作区（适用时）、代表能力、结果、原因、`request_id` 与 `trace_id`。前端菜单只是服务端结果的展示层，不能代替后续 API/Worker/导出/文件/事件/SSE Guard。
 - 菜单只使用服务端返回的 capabilities 过滤。三个壳层不会互相混入菜单，也不读取其他组织数据。
@@ -17,4 +18,4 @@
 
 ## 页面与异常状态
 
-桌面采用顶部组织/工作区/搜索/创建/通知/个人入口、独立左侧导航和主内容区；390px 提供键盘可开的抽屉与固定底部快捷导航。加载、401 登录失效、403 无权、409 未选上下文、429 限流、依赖失败均提供文字、下一步及可用时的 `request_id`。搜索与快捷创建明确标注由 M02-05 接入，不返回伪造结果。
+桌面采用独立顶部栏、侧栏和主内容区；成员壳层提供组织/工作区、搜索、创建、通知和个人入口，组织/平台后台不暴露需要成员工作区上下文的搜索与通知入口。390px 提供键盘可开的抽屉与固定底部快捷导航。加载、401 登录失效、403 无权、409 未选上下文、429 限流、依赖失败均提供文字、下一步及可用时的 `request_id`。

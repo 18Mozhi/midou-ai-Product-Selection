@@ -108,3 +108,10 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
     fullPage: true,
   });
 });
+
+test("M05-01 quick create route opens the task form", async ({ page }) => {
+  await setup(page);
+  await page.goto("/tasks?create=1");
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "新建任务" })).toBeVisible();
+});

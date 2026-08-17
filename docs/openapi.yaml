@@ -501,6 +501,15 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /me/landing:
+    get:
+      summary: Resolve the authenticated user's preferred application landing
+      description: Platform administrators land in the platform console without an organization context. Otherwise the active organization context selects the organization-admin or member workspace; users without an active context are sent to context selection. Every resolution writes an authorization decision.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        '200': { description: Audited role-aware landing route, content: { application/json: { schema: { $ref: '#/components/schemas/LandingEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
   /me/global-search:
     get:
       summary: Search indexed resources in the selected organization and workspace
@@ -520,6 +529,8 @@ paths:
     get:
       summary: List capability-filtered quick-create entry points
       security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: shell, in: query, required: true, schema: { type: string, enum: [member, organization_admin, platform_admin] } }
       responses:
         '200': { description: Navigation entries only; this endpoint performs no business mutation, content: { application/json: { schema: { $ref: '#/components/schemas/QuickActionListEnvelope' } } } }
         '401': { $ref: '#/components/responses/Error' }
@@ -2904,6 +2915,16 @@ components:
         guard_reason: { type: string, enum: [navigation_member_allowed, navigation_organization_admin_allowed, navigation_platform_admin_allowed] }
     NavigationGuardEnvelope:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/NavigationGuardSummary' } } }]
+    LandingSummary:
+      type: object
+      additionalProperties: false
+      required: [shell, route, reason]
+      properties:
+        shell: { type: string, enum: [member, organization_admin, platform_admin, select_context] }
+        route: { type: string, enum: [/home, /org-admin, /platform-admin, /select-context] }
+        reason: { type: string, enum: [landing_member, landing_organization_admin, landing_platform_admin, landing_context_required] }
+    LandingEnvelope:
+      allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/LandingSummary' } } }]
     GlobalSearchResult:
       type: object
       additionalProperties: false

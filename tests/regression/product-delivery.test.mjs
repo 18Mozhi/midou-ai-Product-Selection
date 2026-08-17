@@ -6,7 +6,7 @@ const read = (path) => readFile(path, 'utf8');
 
 // Regression: ISSUE-001 — the production root rendered the M00 foundation harness
 // Found by repository and live-browser QA on 2026-08-17.
-test('production root opens the real member workspace instead of the foundation harness', async () => {
+test('production root resolves the authenticated role landing instead of the foundation harness', async () => {
   const [html, app, shell] = await Promise.all([
     read('apps/web/index.html'),
     read('apps/web/src/App.vue'),
@@ -15,7 +15,7 @@ test('production root opens the real member workspace instead of the foundation 
 
   assert.match(html, /<title>ai选品<\/title>/);
   assert.doesNotMatch(html, /ScoutOps|FOUNDATION|M00-01/);
-  assert.match(app, /routePath\s*===\s*['"]\/['"].*['"]member['"]/s);
+  assert.match(app, /<LandingRedirect\s+v-if="routePath === '\/'"/);
   assert.doesNotMatch(app, /FOUNDATION\s*\/\s*M00-01/);
   assert.doesNotMatch(app, />自动验收</);
   assert.match(shell, /routePath\s*===\s*['"]\/['"]\s*\|\|\s*routePath\s*===\s*['"]\/home['"]/);
@@ -67,9 +67,10 @@ test('unified backend build and lifecycle contracts are registered', async () =>
 // Regression: ISSUE-005 — visible navigation linked to phase placeholders rather than features
 // Found by route-to-component audit on 2026-08-17.
 test('every visible production navigation entry resolves to a real feature surface', async () => {
-  const [shell, identity] = await Promise.all([
+  const [shell, identity, app] = await Promise.all([
     read('apps/web/src/components/NavigationShell.vue'),
     read('apps/web/src/components/LocalIdentity.vue'),
+    read('apps/web/src/App.vue'),
   ]);
 
   for (const placeholder of [
@@ -90,9 +91,8 @@ test('every visible production navigation entry resolves to a real feature surfa
     assert.doesNotMatch(shell, new RegExp(speculativeRoute.replaceAll('/', '\\/')));
   }
 
-  assert.match(shell, /import LocalIdentity/);
-  assert.match(shell, /isAccountCenter/);
-  assert.match(shell, /<LocalIdentity\s+v-else-if="isAccountCenter"/);
+  assert.match(app, /['"]\/me['"]\s*:\s*['"]local-identity['"]/);
+  assert.doesNotMatch(shell, /isAccountCenter|import LocalIdentity/);
   assert.match(identity, /['"]\/me['"]\s*:\s*['"]sessions['"]/);
   assert.match(identity, /pathModes\[window\.location\.pathname\]/);
 });

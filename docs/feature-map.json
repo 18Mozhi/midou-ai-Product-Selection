@@ -369,23 +369,26 @@
       "entrypoints": [
         "../packages/authorization/src/index.ts",
         "../apps/api/src/authorization-routes.ts",
+        "../apps/web/src/components/LandingRedirect.vue",
         "../apps/web/src/components/NavigationShell.vue"
       ],
       "routes": [
+        "/",
         "/home",
         "/org-admin",
         "/platform-admin",
+        "/api/v1/me/landing",
         "/api/v1/me/navigation"
       ],
       "shells": ["member", "organization_admin", "platform_admin"],
-      "guard": "authenticated server-side role and tenancy evaluation with synchronous authorization decision audit",
+      "guard": "root and successful authentication resolve an audited role-aware landing before the selected shell performs its own server-side role and tenancy guard",
       "imageEvidence": [
         "concepts 11, 15-17, 55-71",
         "high-resolution 01 member",
         "high-resolution 09 organization admin",
         "high-resolution 10 platform admin"
       ],
-      "nonGoals": "no business metrics, search results, quick-create mutation, notification count, new persistence, async service or environment value",
+      "nonGoals": "no business metrics, quick-create mutation, new persistence, async service or environment value; platform and organization shells omit member-only search and notification links",
       "verificationRunId": "e0784965-a07b-4eec-84c1-f5e393d7dd27",
       "status": "module_verified"
     },
@@ -431,9 +434,9 @@
         "/api/v1/me/quick-actions",
         "/notifications"
       ],
-      "scope": "server-resolved active organization and workspace plus per-document required capability",
+      "scope": "global search uses the server-resolved organization/workspace; quick actions use the explicitly guarded member, organization_admin or platform_admin shell",
       "searchProjection": "MySQL 5.7 synchronous read model with stable cursor, literal wildcard escaping and internal routes only",
-      "quickCreate": "authorized navigation entries only; no business mutation or optimistic success",
+      "quickCreate": "authorized navigation entries open the owning page's real create state via create=1; the discovery endpoint performs no business mutation or optimistic success",
       "async": "not applicable in M02-05; future resource modules synchronously maintain their own search projections",
       "configuration": "no new environment values; existing VITE_API_BASE_URL only",
       "imageEvidence": [
@@ -1775,9 +1778,9 @@
     },
     {
       "path": "/me",
-      "view": "Profile",
+      "view": "LocalIdentity",
       "domain": "identity",
-      "status": "local_security_sessions_implemented_profile_planned"
+      "status": "local_security_sessions_implemented"
     },
     {
       "path": "/org-admin",

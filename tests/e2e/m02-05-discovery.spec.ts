@@ -24,12 +24,14 @@ test('M02-05.A07/A08/A15 keyboard search is responsive and visual', async ({ pag
 test('M02-05.A07/A08/A09/A15 mobile quick create shows authorized entries only', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await base(page);
-  await page.route('**/api/v1/me/quick-actions', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: [{ id: 'task', label: '创建任务', description: '进入任务创建页', route: '/tasks/new', required_capability: 'task:create' }, { id: 'sourcing', label: '发起找货', description: '进入供应链搜索', route: '/sourcing', required_capability: 'sourcing:read' }], request_id: 'm02-05-actions', trace_id: 'm02-05-actions' }) }));
+  await page.route('**/api/v1/me/quick-actions?**', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: [{ id: 'task', label: '创建任务', description: '进入任务创建页', route: '/tasks?create=1', required_capability: 'task:create' }, { id: 'sourcing', label: '发起找货', description: '进入供应链搜索', route: '/sourcing?create=1', required_capability: 'sourcing:read' }], request_id: 'm02-05-actions', trace_id: 'm02-05-actions' }) }));
   await page.goto('/home');
   await page.getByRole('navigation', { name: '移动快捷导航' }).getByRole('button', { name: '创建' }).click();
   const dialog = page.getByRole('dialog', { name: '快捷创建' });
   await expect(dialog.getByRole('link', { name: /创建任务/ })).toBeVisible();
   await expect(dialog.getByRole('link', { name: /发起找货/ })).toBeVisible();
+  await expect(dialog.getByRole('link', { name: /创建任务/ })).toHaveAttribute('href', '/tasks?create=1');
+  await expect(dialog.getByRole('link', { name: /发起找货/ })).toHaveAttribute('href', '/sourcing?create=1');
   await expect(dialog.getByText('邀请成员')).toHaveCount(0);
   await expect(page).toHaveScreenshot('m02-05-quick-create.png');
 });

@@ -15,6 +15,7 @@ import ThemeStudio from './components/ThemeStudio.vue';
 import OnboardingGuide from './components/OnboardingGuide.vue';
 import NavigationShell from './components/NavigationShell.vue';
 import UiStateShowcase from './components/UiStateShowcase.vue';
+import LandingRedirect from './components/LandingRedirect.vue';
 import { publicConfig } from './config';
 
 const apiBase = publicConfig.apiBaseUrl;
@@ -46,6 +47,7 @@ const publicViews: Record<string, string> = {
   '/select-context': 'tenancy',
   '/onboarding': 'onboarding',
   '/settings/theme': 'theme',
+  '/me': 'local-identity',
 };
 const selectedView = publicViews[routePath] ?? (
   import.meta.env.DEV && requestedInternalView && internalViews.has(requestedInternalView)
@@ -54,9 +56,8 @@ const selectedView = publicViews[routePath] ?? (
 );
 const isInternalView = selectedView !== null;
 const memberRoute =
-  routePath === '/' ||
   routePath === '/home' ||
-  ['/work', '/trends', '/opportunities', '/competitors', '/sourcing', '/tasks', '/notifications', '/automations', '/reports', '/me']
+  ['/work', '/trends', '/opportunities', '/competitors', '/sourcing', '/tasks', '/notifications', '/automations', '/reports']
     .some((path) => routePath === path || routePath.startsWith(`${path}/`));
 const navigationShell = memberRoute
   ? 'member'
@@ -70,7 +71,8 @@ const isNotFoundRoute = !isInternalView && !navigationShell && !isUiStatesView;
 </script>
 
 <template>
-  <LocalIdentity v-if="selectedView === 'local-identity'" />
+  <LandingRedirect v-if="routePath === '/'" :api-base-url="apiBase" />
+  <LocalIdentity v-else-if="selectedView === 'local-identity'" />
   <TenancyChooser v-else-if="selectedView === 'tenancy'" :api-base-url="apiBase" />
   <AuthorizationCenter v-else-if="selectedView === 'authorization'" :api-base-url="apiBase" />
   <ResourceGrantCenter v-else-if="selectedView === 'resource-grants'" :api-base-url="apiBase" />
