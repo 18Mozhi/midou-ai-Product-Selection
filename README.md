@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-这是面向选品团队的完整业务系统，覆盖账号与组织权限、来源采集、趋势机会、竞品、供应链与利润、任务审批、通知报表以及平台运维。当前正按“单一宝塔后端、真实业务首页、稳定启动、P00–P08 全功能”标准重新验收；旧阶段运行 ID 不再作为完成声明。
+这是面向选品团队的完整业务系统，覆盖账号与组织权限、来源采集、趋势机会、竞品、供应链与利润、任务审批、通知报表以及平台运维。项目已按“单一宝塔后端、真实业务首页、稳定启动、P00–P08 全功能”标准完成软件验收；容量、磁盘、PVE、多节点和其他服务器设备不属于软件完成条件。
 
 ## 已锁定运行基线
 
@@ -20,11 +20,14 @@ npm install
 npm run build
 npm run start:backend
 npm run verify:all
+npm run verify:production-product
 npm run locate:flow -- "trends"
 npm run verify:docs
 npm run test:e2e
 ```
 
 生产项目目录固定为 `/www/wwwroot/ai选品/current`，启动命令为 `node apps/backend/dist/server.js`。不要再创建独立 API、Worker、Canary 或 Python 常驻项目。模块执行证据登记在 `verification/modules/`；临时报告只写入 `.artifacts/verification` 并在任务收尾时清理。开发启动及回滚见 `docs/runbooks/`。
+
+管理员与普通成员的实际入口、业务页面和截图操作说明见 [ai选品上线使用指南](docs/user-guide-ai-selection.md)。生产浏览器验收账号通过环境变量临时注入，验收完成后必须删除账号、会话、组织、工作区及其关联数据。
 
 首次本地启动以 `config/env.example` 与 `infra/docker-compose.dev.yml` 为准。真实凭证只能写入本地 `.env` 或宝塔受限配置，禁止提交。

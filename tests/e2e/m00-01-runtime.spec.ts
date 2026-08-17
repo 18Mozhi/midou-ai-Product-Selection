@@ -12,6 +12,11 @@ const navigation = {
 };
 
 async function allowMemberNavigation(page: Page) {
+  await page.route('**/api/v1/me/landing', (route) => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ data: { shell: 'member', route: '/home', reason: 'landing_member' }, request_id: 'm00-runtime-landing', trace_id: 'm00-runtime-landing' }),
+  }));
   await page.route('**/api/v1/me/navigation?**', (route) => route.fulfill({
     status: 200,
     contentType: 'application/json',

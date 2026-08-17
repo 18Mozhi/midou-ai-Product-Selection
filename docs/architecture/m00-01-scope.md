@@ -2,7 +2,7 @@
 
 ## 目标
 
-建立后续模块可复用、可构建的四个运行边界：Vue Web、Node API、Node Worker、Python Crawler，以及唯一共享 DTO 包。当前模块只提供基础健康入口、组织范围断言、Outbox 迁移和运行状态页。
+建立后续模块可复用、可构建的四个逻辑边界：Vue Web、Node API、Node Worker、采集执行器，以及唯一共享 DTO 包。逻辑边界用于代码隔离和本地测试，不对应四个生产项目；生产只运行宝塔中的一个“ai选品”统一 Node 后端，由它监督 API、Worker 和按需采集执行通道。
 
 ## 非目标
 

@@ -1,6 +1,6 @@
 # P08：S0 软件功能与诚实运行状态详细执行计划
 
-> 状态：revalidating_single_backend_delivery；旧完成记录已失效，等待统一后端、真实首页、全功能与同提交生产验收
+> 状态：product_functionally_verified_single_server；统一后端、真实首页、全功能与桌面/移动端自动验收已通过，生产仅保留一个“ai选品”后端
 > 上游总纲：`new-product-enterprise-blueprint.md`
 > 阶段索引：`plans/README.md`
 > 最低行数：1,000；`npm run verify:plans` 必须自动校验。
@@ -1584,7 +1584,7 @@
 - [x] 组织隔离、权限、审计、配置、错误状态、图片/响应式（适用时）已覆盖。
 - [x] `npm run verify:module -- M08-06` 返回 0；失败报告可定位到原子任务。
 
-当前完成合同：M08-06 保留 MySQL 5.7 `0035` 迁移与回滚、固定停止线、事务观测/审计、`platform:operate` API、桌面/390px 驾驶舱、OpenAPI、Feature Map、env/schema、宝塔 Runbook 和自动测试。容量采集与生产签发仍可按 Runbook 独立执行，但不再属于模块、阶段或全量软件完成门；未执行或失败时页面与 API 必须保持 `capacity_claim=unverified`，不得把规划值、旧证据或失败档位包装成容量能力。`npm run verify:module -- M08-06` 已以运行 ID `29af24e4-2ff4-467a-9676-b49cae9b8b14` 通过，状态为 `software_complete_capacity_unverified`。
+当前完成合同：M08-06 保留 MySQL 5.7 `0035` 迁移与回滚、固定停止线、事务观测/审计、`platform:operate` API、桌面/390px 驾驶舱、OpenAPI、Feature Map、env/schema、宝塔 Runbook 和自动测试。容量采集与生产签发仍可按 Runbook 独立执行，但不再属于模块、阶段或全量软件完成门；未执行或失败时页面与 API 必须保持 `capacity_claim=unverified`，不得把规划值、旧证据或失败档位包装成容量能力。`npm run verify:module -- M08-06` 已以运行 ID `29af24e4-2ff4-467a-9676-b49cae9b8b14` 通过，软件状态为 `software_complete_capacity_out_of_scope`。
 
 ## 9. 阶段交付证据目录
 

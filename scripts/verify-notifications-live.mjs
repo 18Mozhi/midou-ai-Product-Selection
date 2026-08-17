@@ -46,6 +46,8 @@ async function migrate() {
   }
 }
 async function cleanup() {
+  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
+
   for (const q of [
     "DELETE FROM notification_operations WHERE actor_id IN (?,?)",
     "DELETE FROM notification_deliveries WHERE organization_id IN (?,?)",

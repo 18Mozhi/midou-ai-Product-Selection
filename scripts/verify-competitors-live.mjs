@@ -20,6 +20,8 @@ async function migrate(){
   for(const statement of sql.split(';').map(v=>v.replace(/^--.*$/gm,'').trim()).filter(Boolean))await pool.query(statement);
 }
 async function cleanup(){
+  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
+
   for(const sql of[
     'DELETE FROM competitor_operations WHERE actor_id=?','DELETE FROM competitor_outbox WHERE organization_id IN (?,?)','DELETE FROM competitor_events WHERE organization_id IN (?,?)','DELETE FROM competitor_alerts WHERE organization_id IN (?,?)','DELETE FROM competitor_changes WHERE organization_id IN (?,?)','DELETE FROM competitor_snapshot_jobs WHERE organization_id IN (?,?)','DELETE FROM competitor_monitor_rules WHERE organization_id IN (?,?)','UPDATE competitors SET latest_snapshot_id=NULL WHERE organization_id IN (?,?)','DELETE FROM competitor_snapshots WHERE organization_id IN (?,?)','DELETE FROM competitors WHERE organization_id IN (?,?)'
   ])try{await pool.query(sql,sql.includes('actor_id')?[ids.actor]:[ids.org,ids.otherOrg]);}catch{}

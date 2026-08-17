@@ -71,7 +71,7 @@ const isNotFoundRoute = !isInternalView && !navigationShell && !isUiStatesView;
 </script>
 
 <template>
-  <LandingRedirect v-if="routePath === '/'" :api-base-url="apiBase" />
+  <LandingRedirect v-if="routePath === '/' && !selectedView" :api-base-url="apiBase" />
   <LocalIdentity v-else-if="selectedView === 'local-identity'" />
   <TenancyChooser v-else-if="selectedView === 'tenancy'" :api-base-url="apiBase" />
   <AuthorizationCenter v-else-if="selectedView === 'authorization'" :api-base-url="apiBase" />

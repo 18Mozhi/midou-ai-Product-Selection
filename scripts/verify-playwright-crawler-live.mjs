@@ -20,6 +20,8 @@ async function ensure(path){
   }
 }
 async function cleanup(){
+  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
+
   const targets=[
     ['DELETE FROM crawler_profile_lease_events WHERE actor_id=?',ids.actorId],
     ['DELETE FROM crawler_browser_run_operations WHERE actor_id=?',ids.actorId],

@@ -14,6 +14,8 @@ const fee_lines=[{type:'platform_fee',mode:'percentage_of_sale',value:10,currenc
 
 async function migrate(){const[rows]=await pool.query("SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='cost_rules'");if(Number(rows[0].count))return;const sql=await readFile('database/migrations/0017d_profit_cost_m04_04.up.sql','utf8');for(const statement of sql.split(';').map(value=>value.trim()).filter(Boolean))await pool.query(statement);}
 async function cleanup(){
+  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
+
   const orgs=[ids.organization,ids.otherOrganization];
   for(const sql of[
     'DELETE FROM cost_operations WHERE actor_id=?',

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 
 const read = (path) => readFile(path, 'utf8');
 
@@ -15,7 +15,7 @@ test('production root resolves the authenticated role landing instead of the fou
 
   assert.match(html, /<title>ai选品<\/title>/);
   assert.doesNotMatch(html, /ScoutOps|FOUNDATION|M00-01/);
-  assert.match(app, /<LandingRedirect\s+v-if="routePath === '\/'"/);
+  assert.match(app, /<LandingRedirect\s+v-if="routePath === '\/' && !selectedView"/);
   assert.doesNotMatch(app, /FOUNDATION\s*\/\s*M00-01/);
   assert.doesNotMatch(app, />自动验收</);
   assert.match(shell, /routePath\s*===\s*['"]\/['"]\s*\|\|\s*routePath\s*===\s*['"]\/home['"]/);
@@ -41,9 +41,14 @@ test('BaoTa exposes exactly one foreground backend named ai选品', async () => 
 // Regression: ISSUE-003 — functional verification skipped the deployment contract
 // Found by verification-runner inspection on 2026-08-17.
 test('full functional verification includes the production deployment contract', async () => {
-  const verifier = await read('scripts/verify-functional.mjs');
+  const [verifier, deploymentTest] = await Promise.all([
+    read('scripts/verify-functional.mjs'),
+    read('tests/m07-03/baota-deployment.test.mjs'),
+  ]);
   assert.doesNotMatch(verifier, /excludedNodeTests/);
   assert.doesNotMatch(verifier, /tests\/m07-03\/baota-deployment\.test\.mjs/);
+  assert.match(deploymentTest, /SCOUTOPS_REQUIRE_PRODUCTION_EVIDENCE/);
+  assert.match(deploymentTest, /--preflight/);
 });
 
 // Regression: ISSUE-004 — BaoTa managed short-lived shell wrappers instead of one app lifecycle
@@ -107,8 +112,34 @@ test('production identity and onboarding use real routes while harness views sta
   ]);
 
   assert.match(app, /import\.meta\.env\.DEV/);
+  assert.match(app, /routePath === '\/' && !selectedView/);
   assert.match(app, /['"]\/login['"]\s*:\s*['"]local-identity['"]/);
   assert.match(app, /['"]\/select-context['"]\s*:\s*['"]tenancy['"]/);
   assert.match(identity, /['"]\/register['"]\s*:\s*['"]register['"]/);
   assert.doesNotMatch(`${shell}\n${identity}`, /\?view=local-identity|\?view=tenancy/);
+});
+
+// Regression: ISSUE-007 — interrupted live checks left organizations and workspaces in production
+// because cleanup attempted to delete the referenced workspace before clearing default_workspace_id.
+test('every live verifier that creates organizations clears the default workspace before deletion', async () => {
+  const files = (await readdir('scripts')).filter((name) => /^verify.*-live\.mjs$/.test(name));
+  const offenders = [];
+  for (const file of files) {
+    const source = await read(`scripts/${file}`);
+    const createsOrganization = source.includes('INSERT INTO organizations');
+    const deletesWorkspace = /DELETE FROM workspaces|\[.workspaces./.test(source);
+    if (createsOrganization && deletesWorkspace && !source.includes('default_workspace_id=NULL')) {
+      offenders.push(file);
+    }
+  }
+  assert.deepEqual(offenders, []);
+});
+
+// Regression: ISSUE-008 — production QA navigated before tenant selection had been persisted.
+test('production product QA waits for the selected tenant context and never embeds QA credentials', async () => {
+  const source = await read('scripts/verify-production-product.mjs');
+  assert.match(source, /getByText\("工作范围已就绪", \{ exact: true \}\)\.waitFor\(\)/);
+  assert.match(source, /SCOUTOPS_QA_ADMIN_EMAIL/);
+  assert.match(source, /SCOUTOPS_QA_MEMBER_EMAIL/);
+  assert.doesNotMatch(source, /qa\.platform\.20260818|qa\.member\.20260818|Qa-Platform|Qa-Member/);
 });

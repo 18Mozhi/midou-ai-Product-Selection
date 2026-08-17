@@ -1,0 +1,43 @@
+# ai选品上线使用指南
+
+## 1. 登录与自动入口
+
+打开 `https://midouai.mozhiz.cn`。未登录用户会进入登录页；登录成功后，系统根据服务端真实角色自动跳转：平台管理员进入“平台驾驶舱”，普通成员先选择组织和工作区，再进入“今日行动”。不需要访问内部测试参数或阶段页面。
+
+## 2. 平台管理员
+
+平台管理员可从左侧菜单进入来源注册、凭证档案、采集控制台、全量数据、安全审计、监控运维和商业运营。顶部“创建”只展示当前账号有权执行的操作。
+
+![平台驾驶舱](./images/user-guide/01-platform-dashboard.png)
+
+![管理员快捷创建](./images/user-guide/02-platform-quick-create.png)
+
+## 3. 普通成员工作台
+
+成员选择组织和工作区后进入“今日行动”，可以继续访问今日工作、热点趋势、选品机会、竞品监控、供应链与利润、任务、审批、通知和个人中心。页面只展示当前组织、工作区及本人权限范围内的真实数据；无数据时提供直接开始选品、添加竞品和找货入口。
+
+![成员今日行动](./images/user-guide/03-member-home.png)
+
+顶部“创建”会根据权限显示创建任务和发起找货，不再出现通用 `ERROR`。
+
+![成员快捷创建](./images/user-guide/04-member-quick-create.png)
+
+## 4. 创建任务
+
+点击“创建任务”后填写标题、说明、优先级和可选截止时间。未指定负责人时系统分配给当前用户；截止时间为空时明确显示“未设置”。
+
+![新建任务](./images/user-guide/05-task-create.png)
+
+## 5. 发起找货
+
+找货从已经完成的采集任务投影结果，选择输入类型并填写引用。只有当前工作区已完成且来源已启用的任务可进入后续供应商对比与采购任务流程。
+
+![发起找货](./images/user-guide/06-sourcing-create.png)
+
+## 6. 验收与故障定位
+
+发布前先执行 `npm run build` 和 `npm run verify:functional`。生产站点使用专用临时账号执行 `npm run verify:production-product`；账号和密码仅通过 `SCOUTOPS_QA_ADMIN_EMAIL`、`SCOUTOPS_QA_ADMIN_PASSWORD`、`SCOUTOPS_QA_MEMBER_EMAIL`、`SCOUTOPS_QA_MEMBER_PASSWORD` 注入，不写入 Git、截图或报告。脚本逐页访问管理员与成员可见菜单，阻断 API 4xx/5xx、控制台错误、阶段占位页、会话丢失以及失效的快捷创建入口。
+
+生产只保留宝塔 Node 项目“ai选品”，工作目录 `/www/wwwroot/ai选品/current`，启动入口 `node apps/backend/dist/server.js`。健康检查使用 `/api/v1/health/live`、`/api/v1/health/ready` 和 `/api/v1/health/version`。后端异常退出时由统一后端监督器拉起 API/Worker；宝塔负责统一项目的启动、停止、重启和日志。
+
+验收结束必须删除临时账号、会话、组织、工作区和关联测试数据，并删除宝塔一次性任务、一次性脚本、本地 `.artifacts` 报告和浏览器控制目录。
