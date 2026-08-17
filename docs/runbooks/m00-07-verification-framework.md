@@ -9,7 +9,7 @@ npm run verify:all
 npm run verify:functional
 ```
 
-`verify:functional` 用于只验收“项目可构建、可启动、功能完整”的场景，覆盖生产构建、软件功能 Node/Python 测试、桌面/390px E2E、文档、计划、发布矩阵和安全门。它不执行同提交生产部署证据、磁盘诊断、生产负载或容量证据，也不会修改 `capacity_claim`；需要生产运营或容量签发时仍执行原模块、阶段和全量门。
+`verify:module`、`verify:phase` 和 `verify:all` 是逐级的软件完成门；模块或阶段成功后会原子更新 `verification/state.json`，后续阶段和全量验收复用已通过项。`verify:functional` 用于执行新鲜的全仓回归，覆盖生产构建、软件功能 Node/Python 测试、桌面/390px E2E、文档、计划、发布矩阵和安全门。以上入口都不执行同提交生产部署证据、磁盘诊断、生产负载或容量证据，也不会修改 `capacity_claim`；容量签发仅是独立可选运营程序。
 
 默认单命令超时 120 秒，报告写入 `.artifacts/verification`。可在本地或宝塔受控发布任务中调整：
 
@@ -24,7 +24,7 @@ $env:VERIFY_REPORT_DIR='.artifacts/verification'
 
 - `failed`：测试/构建返回非零或超时；先按报告中的首个失败命令修复，再重跑当前模块。
 - `blocked`：前置模块/阶段、计划或注册表缺失；完成对应前置，不得改成通过。
-- `passed`：本次注册的全部命令均返回 0。旧报告不替代新改动后的重跑。
+- `passed`：本次注册的全部命令均返回 0，并持久化当前模块或阶段。下游可复用已完成项；相关代码变化后仍应先运行 `verify:functional` 取得新鲜全仓证据。
 
 ## 宝塔与重启
 

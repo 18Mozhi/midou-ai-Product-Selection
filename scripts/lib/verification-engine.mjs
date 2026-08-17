@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, rename, writeFile } from 'node:fs/promises';
 import { isAbsolute, relative, resolve, sep } from 'node:path';
 
 const MODULE_PATTERN = /^M\d{2}-\d{2}$/;
@@ -83,6 +83,37 @@ export function verificationConfig(root = process.cwd(), env = process.env) {
 
 export async function loadVerificationState(root = process.cwd()) {
   return JSON.parse(await readFile(resolve(root, 'verification', 'state.json'), 'utf8'));
+}
+
+async function updateVerificationState(root, update) {
+  const statePath = resolve(root, 'verification', 'state.json');
+  const current = await loadVerificationState(root);
+  const next = update({
+    completedModules: [...new Set(current.completedModules ?? [])],
+    completedPhases: [...new Set(current.completedPhases ?? [])],
+  });
+  const temporaryPath = `${statePath}.${process.pid}.${randomUUID()}.tmp`;
+  await writeFile(temporaryPath, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
+  await rename(temporaryPath, statePath);
+  return next;
+}
+
+async function markModuleCompleted(moduleId, root) {
+  return updateVerificationState(root, (state) => ({
+    ...state,
+    completedModules: state.completedModules.includes(moduleId)
+      ? state.completedModules
+      : [...state.completedModules, moduleId],
+  }));
+}
+
+async function markPhaseCompleted(phaseId, root) {
+  return updateVerificationState(root, (state) => ({
+    ...state,
+    completedPhases: state.completedPhases.includes(phaseId)
+      ? state.completedPhases
+      : [...state.completedPhases, phaseId],
+  }));
 }
 
 export async function loadModuleRegistry(moduleId, root = process.cwd()) {
@@ -187,6 +218,7 @@ export async function runModule(moduleId, options = {}) {
       code: failure?.code, status, details: { report_file: reportFile, failure },
     });
   }
+  await markModuleCompleted(moduleId, root);
   return report;
 }
 
@@ -223,11 +255,17 @@ export async function runPhase(phaseId, options = {}) {
   const runId = randomUUID();
   const startedAt = new Date().toISOString();
   const reports = [];
+  const reusedModules = [];
   let caught = null;
   try {
     await assertPhaseDependencies(phaseId, root);
     const moduleIds = await modulesForPhase(phaseId, root);
-    for (const moduleId of moduleIds) reports.push(await runModule(moduleId, { ...options, config }));
+    const completed = new Set((await loadVerificationState(root)).completedModules ?? []);
+    for (const moduleId of moduleIds) {
+      if (completed.has(moduleId)) reusedModules.push(moduleId);
+      else reports.push(await runModule(moduleId, { ...options, config }));
+    }
+    await markPhaseCompleted(phaseId, root);
   } catch (error) {
     caught = error;
   }
@@ -235,6 +273,7 @@ export async function runPhase(phaseId, options = {}) {
   const report = {
     scope: 'PHASE', id: phaseId, status, run_id: runId, trace_id: runId,
     modules: reports.map((item) => item.id),
+    reused_modules: reusedModules,
     failure: caught ? {
       code: caught instanceof VerificationError ? caught.code : 'verification_failed',
       message: redactVerificationOutput(caught.message),
@@ -256,11 +295,14 @@ export async function runAll(options = {}) {
   const runId = randomUUID();
   const startedAt = new Date().toISOString();
   const phases = [];
+  const reusedPhases = [];
   let caught = null;
   try {
+    const completed = new Set((await loadVerificationState(root)).completedPhases ?? []);
     for (let index = 0; index <= 8; index += 1) {
       const phaseId = `P${String(index).padStart(2, '0')}`;
-      phases.push(await runPhase(phaseId, { ...options, config }));
+      if (completed.has(phaseId)) reusedPhases.push(phaseId);
+      else phases.push(await runPhase(phaseId, { ...options, config }));
     }
   } catch (error) {
     caught = error;
@@ -269,6 +311,7 @@ export async function runAll(options = {}) {
   const report = {
     scope: 'ALL', id: 'P00-P08', status, run_id: runId, trace_id: runId,
     phases: phases.map((item) => item.id),
+    reused_phases: reusedPhases,
     failure: caught ? {
       code: caught instanceof VerificationError ? caught.code : 'verification_failed',
       message: redactVerificationOutput(caught.message),

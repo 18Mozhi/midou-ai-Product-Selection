@@ -7,7 +7,10 @@ servers:
   - url: /api/v1
 x-scoutops-verification:
   runtimeApiExposed: false
-  reason: Verification commands execute only in local, CI, or Baota-controlled release tasks.
+  reason: Software completion commands execute only in local, CI, or Baota-controlled tasks and do not require disk, capacity-load, PVE, or production-resource evidence.
+  completionProfile: software
+  operationalEvidenceRequired: false
+  statePersistence: verification/state.json
   commands:
     module: npm run verify:module -- M00-01
     phase: npm run verify:phase -- P00

@@ -1,5 +1,7 @@
 # M08-06 宝塔单机容量边界 Runbook
 
+本 Runbook 是可选运营测量程序，不属于 M08-06、P08 或 P00–P08 的软件完成门。项目的软件完成只验证迁移、后端/API、前端状态、权限、审计、配置、测试、文档和启动链；未执行本程序时必须保持 `capacity_claim=unverified`。
+
 ## 部署
 
 1. 候选发布使用 `product_scout` 业务账号执行 `0035_capacity_boundary_m08_06.up.sql`，确认 MySQL 5.7 和三张 `capacity_boundary_*` 表。

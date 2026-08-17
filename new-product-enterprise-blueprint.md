@@ -695,7 +695,7 @@ P00 Redis 连接只从后端环境读取 `REDIS_HOST`、`REDIS_PORT`、`REDIS_PA
 
 #### 9.1.1 单机部署与稳定性合同
 
-生产长期固定为**单机企业应用阶段（S0）**，不是已承诺的 10,000 用户高可用 SaaS：惠州 `192.168.1.220` 上由宝塔管理一个网站、一个 API、一个 Worker、一个 Crawler、MySQL 5.7、Redis 和本地受控文件目录。当前决策不增加服务器、不启用负载均衡、Redis Sentinel、MySQL 只读副本、共享文件节点或横向 Crawler。S0 的规划上限仍为 100 用户、5–20 并发业务用户，最终只以 M08-06 实测容量边界为准；同机加密备份与逻辑隔离恢复不保护整机、磁盘或机房故障，也不构成自动高可用或异地灾备。
+生产长期固定为**单机企业应用阶段（S0）**，不是已承诺的 10,000 用户高可用 SaaS：惠州 `192.168.1.220` 上由宝塔管理一个网站、一个 API、一个 Worker、一个 Crawler、MySQL 5.7、Redis 和本地受控文件目录。当前决策不增加服务器、不启用负载均衡、Redis Sentinel、MySQL 只读副本、共享文件节点或横向 Crawler。规划的 100 用户、5–20 并发业务用户不构成承诺；未执行可选容量测量时始终显示 `capacity_claim=unverified`。同机加密备份与逻辑隔离恢复不保护整机、磁盘或机房故障，也不构成自动高可用或异地灾备。
 
 P00 交付 `infra/baota/service-manifest.json` 与 Nginx 模板作为 S0 创建清单；其中 `productionDeployed=false` 在实际宝塔对象创建、配置、发布签发和健康验收前不得改为已部署。Worker/Crawler 使用 5–60 秒受控心跳并响应 SIGTERM/SIGINT；修改心跳配置后在宝塔重启对应项目。
 
@@ -703,9 +703,9 @@ P00 交付 `infra/baota/service-manifest.json` 与 Nginx 模板作为 S0 创建�
 |---|---|---|---|---|
 | S0：惠州单机 | 宝塔网站 Nginx 只反代一个本机 API；不配置上游池；SSE 由单 API 提供并以 `Last-Event-ID` 重放 | MySQL 5.7 单主、单 Redis、宝塔本地受控目录和同机独立加密恢复目录 | 1 Worker、1 Crawler；使用租约、幂等、来源配额和浏览器档案独占 | 人工在宝塔重启、回滚或从同机加密副本隔离恢复；整机、磁盘和机房故障无恢复保证 |
 
-P08 不再是多节点扩展阶段，而是把这套单机合同做成可观测、可降载、可恢复、可回滚的最终生产边界。任何页面、API、证据或文档都必须明确 `load_balancing_enabled=false`、`backup_server_used=false`、`multi_node_claim=false` 和 `capacity_claim=unverified`，直到 M08-06 的单机实测仅形成有限容量边界；即使阶段完成，也不得宣称多节点、高可用或 10,000 用户能力。
+P08 不再是多节点扩展或设备容量验收阶段，而是把相关软件合同做成可启动、功能完整、状态诚实、可测试和可回滚的最终边界。任何页面、API、证据或文档都必须明确 `load_balancing_enabled=false`、`backup_server_used=false`、`multi_node_claim=false` 和 `capacity_claim=unverified`；即使阶段完成，也不得宣称多节点、高可用、实测容量或 10,000 用户能力。
 
-M08-06 的实现合同使用 MySQL 5.7 `capacity_boundary_observations` 保存同提交受控基线和 API 复核观测，以固定的核心读 P95 300 ms、核心写 P95 600 ms、错误率 1%、异步滞后 60 秒及现有单机资源停止线失败关闭。宝塔有限任务固定按 5→10→20 并发逐档测量，每档生产窗口不少于 60 秒；低档位越线立即停止，三档不能通过配置跳过。固定并发 5 未通过时保持 `blocked/unverified`；5 或 10 已通过而下一档失败时，生产证据只签发最后连续通过档位，并保留下一个失败档位的完整脱敏指标和失败码，API 返回 `warning/shed_background` 且不得把失败档位计入容量。`GET /api/v1/platform/operations/capacity` 只向 `platform:operate` 返回实测档位、停止原因、失败下一档、规划值、脱敏性能/资源/韧性和降载结论；`POST /api/v1/platform/operations/capacity/drills` 只允许同源、幂等地签认已被生产事实验证的本机加密归档与隔离恢复，不创建服务或拓扑。规划 100 用户和 5–20 并发只是测量安排；只有同提交生产证据通过后才允许 `capacity_claim=measured_single_host_limited`，且仅限最后通过实测档位，不等于 100 人同时在线承诺。当前实现仍须完成同提交生产灰度、容量基线和模块门，因此 P08 尚未完成。
+M08-06 的软件合同使用 MySQL 5.7 `capacity_boundary_observations` 保存可选观测和 API 复核事实，并完整提供失败关闭、`platform:operate` 权限、审计、桌面/390px 页面、配置、测试和回滚。模块、阶段和全量软件完成门不读取磁盘、主机资源、容量压测或生产资源证据；缺少这些证据时 API 和页面保持 `blocked/unverified`，不得伪造已测能力。若以后单独执行宝塔容量 Runbook，仍必须遵守 5→10→20、固定阈值、首个失败即停和只签发最后连续通过档位的合同；该可选运营程序不改变 P08 软件完成状态。
 
 #### 9.1.2 已确定的基础设施基线
 
@@ -868,7 +868,9 @@ MySQL 必须以 5.7 兼容 SQL、`utf8mb4`、显式索引和迁移脚本为准�
 
 本计划不以 MVP 名义删减工作包或验收范围；WP-00 至 WP-09 共同构成一个整体交付目标。工作包可按依赖顺序实施和验收，但任何未完成工作包不得被包装为“完整上线版本”。
 
-实际执行以 [`plans/README.md`](plans/README.md) 为阶段索引：P00 先一次性完成所有阶段共用的基础框架，P01–P07 再完善业务功能，P08 按最新单机决策完成稳定性、资源保护、恢复和实测容量边界收尾。每个阶段已拆为独立小模块，均定义目标、依赖、交付物和自动验收命令；不得把 P08 表述为多节点扩展或 10,000 用户验收。
+实际执行以 [`plans/README.md`](plans/README.md) 为阶段索引：P00 先一次性完成所有阶段共用的基础框架，P01–P07 再完善业务功能，P08 完成软件功能、诚实状态和全量自动验收收尾。每个阶段已拆为独立小模块，均定义目标、依赖、交付物和自动验收命令；磁盘、容量压测、PVE、备用服务器及其他设备问题不属于软件完成门，也不得把 P08 表述为多节点扩展或 10,000 用户验收。
+
+P00–P08 软件自动验收已经完成：M08-06 模块、P08 阶段及 P00–P08 全量门均返回 `passed`，完成状态由执行器写入 `verification/state.json`。这一结论只证明项目软件可构建、可启动且既定功能与状态合同完整；容量仍为 `unverified`，不包含设备性能、多节点、高可用或用户规模承诺。
 
 | 工作包 | 内容 | 依赖 | 完成标准 |
 |---|---|---|---|
@@ -903,8 +905,8 @@ infra/docker-compose.dev.yml
 
 ### 13.1 自动化覆盖
 
-- 统一入口：模块使用 `npm run verify:module -- <module-id>`，阶段使用 `npm run verify:phase -- <phase-id>`，P00–P08 全量使用 `npm run verify:all`；任一前置缺失、命令失败或超时必须返回非零且输出脱敏 `run_id`/`trace_id` 报告。
-- 软件功能入口：当验收目标仅为“项目可构建、可启动、功能完整”时使用 `npm run verify:functional`，一次覆盖 P00–P08 生产构建、软件功能 Node/Python 测试、桌面/390px E2E、文档、计划、发布矩阵和安全门。该入口不运行同提交生产部署证据、磁盘诊断、生产负载或容量证据，不替代 `verify:module`/`verify:phase`/`verify:all` 的生产运营门，也不得提升容量声明。
+- 统一入口：模块使用 `npm run verify:module -- <module-id>`，阶段使用 `npm run verify:phase -- <phase-id>`，P00–P08 全量使用 `npm run verify:all`；三者是软件完成门，成功后原子持久化完成状态并由下游复用，任一前置缺失、命令失败或超时必须返回非零且输出脱敏 `run_id`/`trace_id` 报告。
+- 软件功能入口：`npm run verify:functional` 一次执行 P00–P08 的新鲜生产构建、软件功能 Node/Python 测试、桌面/390px E2E、文档、计划、发布矩阵和安全门。所有软件完成入口都不运行同提交生产部署证据、磁盘诊断、生产负载或容量证据，也不得提升容量声明。
 - 单元：领域规则、权限、评分、利润、错误映射、状态机、去重。
 - 契约：OpenAPI、SSE 事件、Provider 输入输出、前后端 DTO。
 - 集成：MySQL 迁移、组织隔离、Redis 队列、租约、Outbox、通知、导出、Webhook、Token。
@@ -943,7 +945,7 @@ M07-05 已由 schema v5 同提交模块自动验收 `0784e022-93e4-421d-9524-ef8
 
 此前同机发布复验发现共享 MySQL 在其他数据库全表扫描期间，稳定与候选槽的单行写探针 P95 同步超过 600 ms，自动停止与回滚按合同生效。惠州 16 GiB 单机因此由宝塔有限任务固定 `innodb_buffer_pool_size=4096M`、`innodb_buffer_pool_instances=4`、`innodb_io_capacity=1000`、`innodb_io_capacity_max=4000`、`innodb_flush_neighbors=0`、`innodb_flush_method=O_DIRECT`，保留 0600 回滚快照并通过两 API 槽、Worker、Crawler 健康门；`flush_log=2/sync_binlog=1` 持久性合同和 5/25/100、1,800 秒、600 ms 门槛均未放宽。上述 schema v5 完整生产灰度已在该资源配置下重新签发。
 
-M07-06 通过 `/opportunities/start` 和 `/api/v1/selection-journeys` 把普通成员的真实输入、采集任务、首个原始证据或 `succeeded_empty`/明确受阻终态、人工决策与证据查看串成一条可计时旅程。服务器从已登录会话解析组织和工作区并选择已启用 `google_news_search`，成员只需 `task:create`、`opportunity:read` 和 `opportunity:decide`，不得获得或使用 `provider:configure`、`collection:replay` 或平台权限。原始证据继续按组织、工作区、Provider 和来源键去重，但每次任务必须通过 `collection_task_evidence_links` 保存范围化关联；重复输入复用不可变证据时也必须先校验任务、子查询和租户范围并写关联审计，不能因命中旧证据而让新旅程停在 accepted。若同 GUID 的 Google RSS 仅改变未消费 XML 包装且规范 URL、Parser、Adapter、Schema 与规范载荷完全一致，复用旧不可变证据并在 `evidence.linked` 记录 `content_changed` 及新旧内容哈希；规范事实任一变化仍以去重冲突失败关闭，禁止覆盖。`SELECTION_ACCEPTANCE_DEADLINE_MS` 固定为 `180000`，启动检查拒绝放宽；创建、15 秒可见和 180 秒终态均由惠州单机宝塔有限任务的真实生产证据签发。构建 `162cb10664e6029284cf36594fba0d21a2e41f21` 的最新真实旅程以 4,081 ms 进入 `result_ready` 终态，普通 member 已记录 `observe` 决策并查看原始证据；模块自动验收 `78001216-8e65-44fb-81cf-9570f9f9534b` 的 11/11 命令通过，证据 SHA-256 为 `bff46ad304128bf14240517c538a3091aeff5d67ecc49c0518c6e9c4a63643c5`。演示数据、平台管理员代操作、手填组织 ID 或直接写库都不能计入验收；该结果不能代替 P08 容量验收。
+M07-06 通过 `/opportunities/start` 和 `/api/v1/selection-journeys` 把普通成员的真实输入、采集任务、首个原始证据或 `succeeded_empty`/明确受阻终态、人工决策与证据查看串成一条可计时旅程。服务器从已登录会话解析组织和工作区并选择已启用 `google_news_search`，成员只需 `task:create`、`opportunity:read` 和 `opportunity:decide`，不得获得或使用 `provider:configure`、`collection:replay` 或平台权限。原始证据继续按组织、工作区、Provider 和来源键去重，但每次任务必须通过 `collection_task_evidence_links` 保存范围化关联；重复输入复用不可变证据时也必须先校验任务、子查询和租户范围并写关联审计，不能因命中旧证据而让新旅程停在 accepted。若同 GUID 的 Google RSS 仅改变未消费 XML 包装且规范 URL、Parser、Adapter、Schema 与规范载荷完全一致，复用旧不可变证据并在 `evidence.linked` 记录 `content_changed` 及新旧内容哈希；规范事实任一变化仍以去重冲突失败关闭，禁止覆盖。`SELECTION_ACCEPTANCE_DEADLINE_MS` 固定为 `180000`，启动检查拒绝放宽；创建、15 秒可见和 180 秒终态均由惠州单机宝塔有限任务的真实生产证据签发。构建 `162cb10664e6029284cf36594fba0d21a2e41f21` 的最新真实旅程以 4,081 ms 进入 `result_ready` 终态，普通 member 已记录 `observe` 决策并查看原始证据；模块自动验收 `78001216-8e65-44fb-81cf-9570f9f9534b` 的 11/11 命令通过，证据 SHA-256 为 `bff46ad304128bf14240517c538a3091aeff5d67ecc49c0518c6e9c4a63643c5`。演示数据、平台管理员代操作、手填组织 ID 或直接写库都不能计入验收；该结果不形成容量声明。
 
 M07-06 可复用上述 ScoutOps 项目专用 HTTP CONNECT 代理访问固定 Google News 来源，但代理配置不属于成员输入，普通成员验收账号也不得获得或读取代理凭证。生产签发仍以同一惠州单机、同一构建、固定 10 秒来源健康门和 180 秒旅程门为准；代理仅改变允许的出站传输路径，不改变来源、数据合同、权限或阈值。
 

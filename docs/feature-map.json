@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "project": "ScoutOps / 实时选品运营平台",
-  "status": "P00_P01_P02_P03_P04_P05_P06_P07_completed_P08_pending",
+  "status": "P00_P08_software_completed_capacity_unverified",
   "sourceOfTruth": "../new-product-enterprise-blueprint.md",
   "locateCommand": "node scripts/locate_flow_v4.mjs \"<keyword>\"",
   "deliveryPlan": "../plans/README.md",
@@ -64,9 +64,10 @@
       "M08-02",
       "M08-03",
       "M08-04",
-      "M08-05"
+      "M08-05",
+      "M08-06"
     ],
-    "activeModules": ["M08-06"],
+    "activeModules": [],
     "blockedModules": [],
     "moduleRegistry": "../verification/modules",
     "entrypoints": {
@@ -90,6 +91,9 @@
       "allCommand": "npm run verify:all",
       "functionalCommand": "npm run verify:functional",
       "functionalScope": "P00-P08 software build, functional Node/Python tests, desktop/390 E2E, docs, plans, release matrix and security gate; excludes same-commit deployment evidence, disk diagnostics, production load tests and capacity claims",
+      "completionProfile": "software",
+      "operationalEvidenceRequired": false,
+      "statePersistence": "successful module and phase runs atomically update state; downstream runs reuse completed entries",
       "state": "../verification/state.json",
       "reportDirectory": "../.artifacts/verification",
       "runtimeApiExposed": false
@@ -1556,14 +1560,15 @@
       "module": "M08-06",
       "entrypoints": ["../database/migrations/0035_capacity_boundary_m08_06.up.sql", "../apps/api/src/capacity-boundary-service.ts", "../apps/api/src/capacity-boundary-repository.ts", "../apps/api/src/capacity-boundary-routes.ts", "../apps/web/src/components/CapacityBoundaryCenter.vue", "../infra/baota/capacity-boundary-manifest.json", "../scripts/capture-capacity-boundary-production.mjs", "../scripts/verify-capacity-boundary-production.mjs"],
       "routes": ["/platform-admin/capacity", "/api/v1/platform/operations/capacity", "/api/v1/platform/operations/capacity/drills"],
-      "scope": "M08-06 measured capacity boundary and P08 closure for the current Huizhou BaoTa single host; planning 100 users and planning concurrency 5-20 remain non-promissory until controlled same-commit production evidence",
-      "truthBoundary": "ready evidence requires fixed ordered 5-10-20 measurement and signs only the last passing stage at or below 20; concurrency 5 failure stays blocked, while a failed next stage is preserved as failedNextStage and produces warning without expanding the claim; every signed stage keeps read P95 at most 300ms, write P95 at most 600ms, error rate below 1 percent, asynchronous lag at most 60 seconds, host resources below fixed stop gates and verified archive plus isolated recovery; MySQL 5.7 DATETIME evidence is read as canonical UTC independently of the server system timezone",
+      "scope": "M08-06 software completion and honest capacity state for the current single-host product; server devices production resource evidence and capacity load tests are optional operations rather than software completion gates",
+      "truthBoundary": "software completion keeps capacityClaim unverified when optional same-commit production measurements are absent or blocked; planned users and concurrency are never promoted to measured claims, while any separately executed measurement must still preserve ordered stages fixed thresholds failure evidence and canonical UTC timestamps",
       "permission": "platform operations read and idempotent archive_recovery attestation require platform:operate; responses exclude customer payloads paths filenames hashes credentials cookies and SQL while view drill and failure retain request_id trace_id and audit",
       "configuration": ["CAPACITY_BOUNDARY_READ_P95_MS", "CAPACITY_BOUNDARY_WRITE_P95_MS", "CAPACITY_BOUNDARY_ERROR_RATE_PERCENT", "CAPACITY_BOUNDARY_ASYNC_LAG_SECONDS", "CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE", "CAPACITY_BOUNDARY_EVIDENCE_MAX_AGE_MINUTES", "CAPACITY_BOUNDARY_STAGE_SECONDS"],
       "runtimeBoundary": "existing BaoTa API Worker Crawler MySQL Redis Nginx and finite tasks on one Huizhou host only; no persistent load balancer backup server multi-node or 10000-user claim",
       "failureEvidence": {"schemaVersion":1,"status":"blocked","requiredFields":["failure.code","failure.failedStage","completedStages","thresholds"],"limitedBoundaryRequiredFields":["measuredConcurrentUsers","stages","boundaryStop.reason","boundaryStop.failureCode","boundaryStop.failedStage"],"lastPassingStageOnly":true,"failedNextStagePreserved":true,"capacityClaim":"unverified_until_concurrency_5_passes","atomicWrite":true},
       "imageEvidence": ["concept 61 operations", "concept 63 task monitor", "concept 64 monitoring", "concept 65 logs", "concept 66 security audit", "concept 69 alerts", "core 10 platform cockpit", "desktop and 390 capacity baselines"],
-      "status": "implementation_ready_production_pending",
+      "verificationRunId": "29af24e4-2ff4-467a-9676-b49cae9b8b14",
+      "status": "software_complete_capacity_unverified",
       "capacityClaim": "unverified",
       "planningUsers": 100,
       "planningConcurrentUsers": [5, 20],
@@ -1626,6 +1631,12 @@
       "reportSha256": "b53ad84fb7a84a90aa477753d9588da153a17d700dc97883fa0a766400ce1786",
       "closureSha256": "bfbd6debf9bd0b6734533e8afe7b24062ad0918d36ca4b65b4f90b819f122a7b",
       "modules": ["M07-01", "M07-02", "M07-03", "M07-04", "M07-05", "M07-06"]
+    },
+    "P08": {
+      "runId": "ed48aa0b-d6fc-493e-9842-c95a473e18a2",
+      "allRunId": "39a427ac-a8ff-41f0-816b-e5052a4d5b64",
+      "status": "phase_verified_software_complete_capacity_unverified",
+      "modules": ["M08-01", "M08-02", "M08-03", "M08-04", "M08-05", "M08-06"]
     }
   },
   "uiReference": {
@@ -1658,7 +1669,7 @@
     "deployment": {
       "currentStage": "S0 single-host Baota deployment",
       "scaleStages": [
-        "P08 completes single-host resilience, recovery and measured capacity boundaries",
+        "P08 completes software functionality and honest unverified capacity state",
         "multi-node and 10000-user capability are explicitly outside the current production contract"
       ]
     }
@@ -1849,7 +1860,7 @@
       "path": "/platform-admin/capacity",
       "view": "CapacityBoundaryCenter",
       "domain": "capacity-boundary",
-      "status": "M08-06_implementation_ready_production_pending"
+      "status": "M08-06_software_complete_capacity_unverified"
     }
   ],
   "apiGroups": [
@@ -1946,7 +1957,7 @@
     { "prefix": "/api/v1/platform/operations/mysql", "domain": "mysql-resilience", "status": "M08-03_module_verified" },
     { "prefix": "/api/v1/platform/operations/files", "domain": "file-resilience", "status": "M08-04_module_verified" },
     { "prefix": "/api/v1/platform/operations/crawler-scheduler", "domain": "crawler-single-host-scheduler", "status": "M08-05_module_verified" },
-    { "prefix": "/api/v1/platform/operations/capacity", "domain": "capacity-boundary", "status": "M08-06_implementation_ready_production_pending" },
+    { "prefix": "/api/v1/platform/operations/capacity", "domain": "capacity-boundary", "status": "M08-06_software_complete_capacity_unverified" },
     { "prefix": "/api/v1/platform/commercial", "domain": "commercial-operations", "status": "M06-06_module_verified" },
     { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
   ],

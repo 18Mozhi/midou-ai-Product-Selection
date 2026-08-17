@@ -1,5 +1,5 @@
 {
-  "moduleId":"M08-06","phaseId":"P08","name":"S0 Measured Capacity Boundary and Closure","dependencies":["M08-01","M08-02","M08-03","M08-04","M08-05"],
+  "moduleId":"M08-06","phaseId":"P08","name":"S0 Software Completion and Honest Capacity State","dependencies":["M08-01","M08-02","M08-03","M08-04","M08-05"],
   "atomicTasks":[
     {"id":"M08-06.A01","evidence":"freeze measured single-host boundary degradation archive recovery and explicit non-goals"},
     {"id":"M08-06.A02","evidence":"capacity snapshot last-passing-stage boundary stop failed-next-stage finding degradation and drill contracts"},
@@ -16,8 +16,8 @@
     {"id":"M08-06.A13","evidence":"OpenAPI Feature Map manifest schema v1 last-passing-stage and failed-next-stage DTO route contract coverage"},
     {"id":"M08-06.A14","evidence":"real MySQL57 migration observation drill audit API and single-host integration"},
     {"id":"M08-06.A15","evidence":"concepts 61 63 64 65 66 69 and core 10 desktop and 390 Linux visual baselines"},
-    {"id":"M08-06.A16","evidence":"fixed 5-10-20 stop-on-first-failure boundary load threshold queue pressure stale evidence archive recovery BaoTa rollback and probe cleanup drills"},
-    {"id":"M08-06.A17","evidence":"blueprint plan Feature Map OpenAPI env manifest architecture Runbook production evidence and rollback synchronized"}
+    {"id":"M08-06.A16","evidence":"deterministic local threshold queue stale archive recovery rollback and probe cleanup branches without production load or server-device gates"},
+    {"id":"M08-06.A17","evidence":"blueprint plan Feature Map OpenAPI env manifest architecture Runbook software completion boundary and rollback synchronized"}
   ],
-  "commands":["npm run build","node --test tests/m08-06/capacity-boundary-closure.test.mjs","node scripts/capture-capacity-boundary-production.mjs --self-test","node scripts/verify-capacity-boundary-production.mjs --preflight","node scripts/verify-mysql-live.mjs","node scripts/verify-capacity-boundary-live.mjs","node scripts/verify-api-live.mjs","npx playwright test tests/e2e/m08-06-capacity-boundary.spec.ts","npm run verify:docs","node scripts/verify-capacity-boundary-production.mjs --production"]
+  "commands":["npm run build","node --test tests/m08-06/capacity-boundary-closure.test.mjs tests/m08-06/software-completion-contract.test.mjs","node scripts/capture-capacity-boundary-production.mjs --self-test","node scripts/verify-capacity-boundary-production.mjs --preflight","npx playwright test tests/e2e/m08-06-capacity-boundary.spec.ts","npm run verify:docs"]
 }

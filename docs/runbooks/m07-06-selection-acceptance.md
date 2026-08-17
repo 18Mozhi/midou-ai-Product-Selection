@@ -26,7 +26,7 @@ node scripts/run-baota-selection-acceptance.mjs --production
 
 构建 `eabce9a0bbad5b711de9f7f36e2f02db0737d25b` 由宝塔有限任务以专用普通 `member` 完成真实 `google_news_search` 旅程：创建 API 116 ms、已接收状态可见 204 ms、`result_ready` 终态 4,399 ms，固定 3 秒/15 秒/180 秒门均未放宽；成员随后保存 `observe` 决策并查看原始证据。mode 0600 生产证据捕获于 `2026-08-13T10:40:37.496Z`，SHA-256 为 `e7685a91f01ef3115f4aaac7e09a266dbc169a3ac43241a2af45ff583a4cf567`。
 
-同提交 `npm run verify:module -- M07-06` 的 11/11 命令通过，覆盖构建、7 个定向测试、真实 MySQL 5.7、生产证据验证、Linux Chromium 与中文字体预检、桌面/390px Playwright 和文档门；run_id/trace_id 为 `e2e2654a-6364-4cc6-a7b1-4997dfd3d39f`。该结果完成 M07-06 模块签发，但仍不能代替 P07 阶段门或 P08 容量验收。
+同提交 `npm run verify:module -- M07-06` 的 11/11 命令通过，覆盖构建、7 个定向测试、真实 MySQL 5.7、生产证据验证、Linux Chromium 与中文字体预检、桌面/390px Playwright 和文档门；run_id/trace_id 为 `e2e2654a-6364-4cc6-a7b1-4997dfd3d39f`。该结果完成 M07-06 模块签发，但仍不能代替 P07 阶段门，也不形成容量声明。
 
 ## 日志与排查
 

@@ -26,7 +26,7 @@
     "npm run build",
     "node --test tests/m00-07/verification-engine.unit.test.mjs",
     "node --test tests/m00-07/verification-contract.test.mjs",
-    "node --test tests/m00-07/verification-integration.test.mjs",
+    "node --test tests/m00-07/verification-integration.test.mjs tests/m00-07/verification-completion-state.test.mjs",
     "npx playwright test tests/e2e/m00-07-verification.spec.ts"
   ]
 }
