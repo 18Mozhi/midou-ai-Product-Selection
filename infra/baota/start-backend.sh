@@ -4,8 +4,12 @@ set -eu
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
 ROOT="$(CDPATH= cd -- "$SCRIPT_DIR/../.." && pwd -P)"
 CURRENT="$(readlink -f "$ROOT/current")"
-BUILD_SHA="$(basename "$CURRENT")"
 
+set -a
+. "$ROOT/shared/config/product_scout.env"
+set +a
+
+BUILD_SHA="$(basename "$CURRENT")"
 case "$BUILD_SHA" in
   *[!0-9a-f]*|'')
     echo "invalid current release identity: $BUILD_SHA" >&2
@@ -17,10 +21,6 @@ if [ "${#BUILD_SHA}" -ne 40 ]; then
   echo "current release identity must be a full Git SHA" >&2
   exit 1
 fi
-
-set -a
-. "$ROOT/shared/config/product_scout.env"
-set +a
 
 export APP_HOST=127.0.0.1
 export APP_PORT=4101

@@ -158,6 +158,11 @@ test('BaoTa launcher derives release identity from the current symlink', async (
   assert.match(launcher, /basename/);
   assert.match(launcher, /export BUILD_SHA=/);
   assert.doesNotMatch(launcher, /BUILD_SHA=[a-f0-9]{40}/);
+  assert.ok(
+    launcher.indexOf('. "$ROOT/shared/config/product_scout.env"')
+      < launcher.indexOf('BUILD_SHA="$(basename "$CURRENT")"'),
+    'the restricted environment must load before the current release overrides BUILD_SHA',
+  );
   assert.match(attributes, /\*\.sh\s+text\s+eol=lf/);
   assert.equal(
     manifest.objects.find((item) => item.kind === 'baota-node-project')?.launcher,
