@@ -148,15 +148,17 @@ test('production product QA waits for the selected tenant context and never embe
 // launcher kept the previous release BUILD_SHA, so the version gate could not
 // prove which code was actually running.
 test('BaoTa launcher derives release identity from the current symlink', async () => {
-  const [launcher, manifest] = await Promise.all([
+  const [launcher, manifest, attributes] = await Promise.all([
     read('infra/baota/start-backend.sh'),
     read('infra/baota/service-manifest.json').then(JSON.parse),
+    read('.gitattributes'),
   ]);
 
   assert.match(launcher, /readlink -f .*\/current/);
   assert.match(launcher, /basename/);
   assert.match(launcher, /export BUILD_SHA=/);
   assert.doesNotMatch(launcher, /BUILD_SHA=[a-f0-9]{40}/);
+  assert.match(attributes, /\*\.sh\s+text\s+eol=lf/);
   assert.equal(
     manifest.objects.find((item) => item.kind === 'baota-node-project')?.launcher,
     'infra/baota/start-backend.sh',
