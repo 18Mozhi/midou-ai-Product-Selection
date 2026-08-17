@@ -7,11 +7,14 @@ const read = (path) => readFile(path, 'utf8');
 // Regression: ISSUE-001 — the production root rendered the M00 foundation harness
 // Found by repository and live-browser QA on 2026-08-17.
 test('production root opens the real member workspace instead of the foundation harness', async () => {
-  const [app, shell] = await Promise.all([
+  const [html, app, shell] = await Promise.all([
+    read('apps/web/index.html'),
     read('apps/web/src/App.vue'),
     read('apps/web/src/components/NavigationShell.vue'),
   ]);
 
+  assert.match(html, /<title>ai选品<\/title>/);
+  assert.doesNotMatch(html, /ScoutOps|FOUNDATION|M00-01/);
   assert.match(app, /routePath\s*===\s*['"]\/['"].*['"]member['"]/s);
   assert.doesNotMatch(app, /FOUNDATION\s*\/\s*M00-01/);
   assert.doesNotMatch(app, />自动验收</);
