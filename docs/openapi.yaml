@@ -2362,7 +2362,8 @@ paths:
       responses: { '200': { description: Updated plan version }, '400': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
   /platform/commercial/assignments:
     post:
-      summary: Assign an active quota plan and explicit period to an organization
+      summary: Assign, renew or change an active quota plan and explicit period for an organization
+      description: Creates the current assignment when absent; otherwise updates the same versioned assignment with a new active plan and billing period. Every call requires a reason and writes audit and commercial events.
       security: [{ HttpOnlySession: [] }]
       parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
       responses: { '201': { description: Current organization assignment }, '400': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }

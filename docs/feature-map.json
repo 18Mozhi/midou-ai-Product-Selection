@@ -1414,7 +1414,7 @@
       "module": "M06-06",
       "entrypoints": ["../apps/api/src/commercial-service.ts", "../apps/api/src/mysql-commercial-repository.ts", "../apps/api/src/commercial-routes.ts", "../apps/web/src/components/CommercialOperationsCenter.vue"],
       "routes": ["/platform-admin/commercial", "/api/v1/platform/commercial", "/api/v1/platform/commercial/plans", "/api/v1/platform/commercial/assignments", "/api/v1/platform/commercial/adjustments"],
-      "scope": "quota-only plans, organization current assignment, persisted-period usage and reasoned manual adjustments; no payment deduction",
+      "scope": "quota-only plan create/edit/status, organization member assignment/renewal/change/end, persisted-period usage and reasoned manual adjustments; no payment deduction",
       "truthBoundary": "usage reads collection_tasks, open_api_usage and report_exports by organization and explicit period; no price currency invoice tax or payment provider is defined",
       "permission": "platform:operate read guard; same-origin Idempotency-Key reason and version guard for writes",
       "configuration": ["COMMERCIAL_RECENT_LIMIT"],

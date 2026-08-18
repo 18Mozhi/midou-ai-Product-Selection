@@ -1,1 +1,43 @@
-import{test,expect}from"@playwright/test";const env=(data:any)=>({data,request_id:"m06-06-e2e",trace_id:"m06-06-e2e"}),data={plans:[{id:"p1",code:"growth",name:"成长套餐",description:"仅演示已配置的配额，不包含价格",quotas:{collection_tasks:100,open_api_requests:1000,report_exports:20},status:"active",version:2,updated_at:"2026-08-08T00:00:00Z"}],assignment:{id:"a1",organization_id:"o1",plan_id:"p1",plan_code:"growth",plan_name:"成长套餐",quotas:{collection_tasks:100,open_api_requests:1000,report_exports:20},period_start:"2026-08-01T00:00:00Z",period_end:"2026-09-01T00:00:00Z",status:"active",version:1,updated_at:"2026-08-08T00:00:00Z"},adjustments:[{id:"q1",quota_key:"open_api_requests",delta_value:50,reason:"运营核准",status:"active",effective_at:"2026-08-08T00:00:00Z",expires_at:null,version:1,updated_at:"2026-08-08T00:00:00Z"}],usage:{collection_tasks:42,open_api_requests:380,report_exports:4},effective_quotas:{collection_tasks:100,open_api_requests:1050,report_exports:20},observed_at:"2026-08-08T00:00:00Z",scope:{organization_id:"o1"}};test.beforeEach(async({page})=>{await page.route("**/api/v1/me/navigation?shell=platform_admin",r=>r.fulfill({json:env({shell:"platform_admin",organization_id:null,workspace_id:null,roles:[],capabilities:[],platform_roles:["platform_operations_admin"],platform_capabilities:["platform:operate"],guard_reason:"allowed"})}));await page.route("**/api/v1/platform/commercial?**",r=>r.fulfill({json:env(data)}));});test("M06-06.A07/A08/A15 desktop and 390 quota operations",async({page})=>{await page.goto("/platform-admin/commercial?organization_id=o1");await expect(page.getByRole("heading",{name:"套餐、配额与用量"})).toBeVisible();await expect(page.getByText("380 / 1050")).toBeVisible();await expect(page.getByText(/支付扣款/)).toBeVisible();await expect(page).toHaveScreenshot("m06-06-commercial-desktop.png",{fullPage:true});await page.setViewportSize({width:390,height:844});await page.reload();await expect(page.getByText("成长套餐").first()).toBeVisible();await expect(page).toHaveScreenshot("m06-06-commercial-mobile.png",{fullPage:true});});test("M06-06.A08/A16 confirmation rate limit and dependency recovery",async({page})=>{await page.goto("/platform-admin/commercial?organization_id=o1");await page.getByRole("button",{name:"退役",exact:true}).click();await expect(page.getByText("确认退役套餐？")).toBeVisible();await page.getByRole("button",{name:"取消"}).click();await page.unroute("**/api/v1/platform/commercial?**");let status=429;await page.route("**/api/v1/platform/commercial?**",r=>r.fulfill({status,contentType:"application/json",body:JSON.stringify({error:{message:"blocked"},request_id:"m06-06-state",trace_id:"m06-06-state"})}));await page.reload();await expect(page.getByText("请求过于频繁")).toBeVisible();status=503;await page.reload();await expect(page.getByText("商业运营依赖受阻")).toBeVisible();});
+import { expect, test } from "@playwright/test";
+const env = (data: any) => ({ data, request_id: "m06-06-e2e", trace_id: "m06-06-e2e" });
+const data = { plans: [{ id: "p1", code: "growth", name: "成长套餐", description: "仅演示已配置的配额，不包含价格", quotas: { collection_tasks: 100, open_api_requests: 1000, report_exports: 20 }, status: "active", version: 2, updated_at: "2026-08-08T00:00:00Z" }], assignment: { id: "a1", organization_id: "o1", plan_id: "p1", plan_code: "growth", plan_name: "成长套餐", quotas: { collection_tasks: 100, open_api_requests: 1000, report_exports: 20 }, period_start: "2026-08-01T00:00:00Z", period_end: "2026-09-01T00:00:00Z", status: "active", version: 1, updated_at: "2026-08-08T00:00:00Z" }, adjustments: [{ id: "q1", quota_key: "open_api_requests", delta_value: 50, reason: "运营核准", status: "active", effective_at: "2026-08-08T00:00:00Z", expires_at: null, version: 1, updated_at: "2026-08-08T00:00:00Z" }], usage: { collection_tasks: 42, open_api_requests: 380, report_exports: 4 }, effective_quotas: { collection_tasks: 100, open_api_requests: 1050, report_exports: 20 }, observed_at: "2026-08-08T00:00:00Z", scope: { organization_id: "o1" } };
+test.beforeEach(async ({ page }) => {
+  await page.route("**/api/v1/me/navigation?shell=platform_admin", route => route.fulfill({ json: env({ shell: "platform_admin", organization_id: null, workspace_id: null, roles: [], capabilities: [], platform_roles: ["platform_operations_admin"], platform_capabilities: ["platform:operate"], guard_reason: "allowed" }) }));
+  await page.route("**/api/v1/platform/commercial?**", route => route.fulfill({ json: env(data) }));
+});
+test("M06-06.A07/A08/A15 desktop and 390 member quota operations", async ({ page }) => {
+  await page.goto("/platform-admin/commercial?organization_id=o1");
+  await expect(page.getByRole("heading", { name: "会员、套餐、续期与用量" })).toBeVisible();
+  await expect(page.getByText("380 / 1050")).toBeVisible();
+  await expect(page.getByText(/不虚构价格、支付/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "确认续期/变更" })).toBeVisible();
+  await expect(page).toHaveScreenshot("m06-06-commercial-desktop.png", { fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.reload();
+  await expect(page.getByText("成长套餐").first()).toBeVisible();
+  await expect(page).toHaveScreenshot("m06-06-commercial-mobile.png", { fullPage: true });
+});
+test("M06-06 edit, renew, status confirmation and dependency recovery", async ({ page }) => {
+  let renewal: any = null;
+  await page.route("**/api/v1/platform/commercial/assignments", async route => { renewal = route.request().postDataJSON(); await route.fulfill({ status: 201, json: env({ id: "a1", status: "active", version: 2 }) }); });
+  await page.goto("/platform-admin/commercial?organization_id=o1");
+  await page.getByRole("button", { name: "编辑", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "编辑套餐" })).toBeVisible();
+  await page.getByRole("button", { name: "取消" }).click();
+  await page.getByLabel("结束", { exact: true }).fill("2026-10-01T00:00");
+  await page.getByRole("button", { name: "确认续期/变更" }).click();
+  await expect(page.getByText("确认续期或变更组织套餐？")).toBeVisible();
+  await page.getByRole("button", { name: "确认执行" }).click();
+  await expect.poll(() => renewal).toMatchObject({ organization_id: "o1", plan_id: "p1", reason: "续期或分配套餐" });
+  await page.getByRole("button", { name: "退役", exact: true }).click();
+  await expect(page.getByText("确认退役套餐？")).toBeVisible();
+  await page.getByRole("button", { name: "取消" }).click();
+  await page.unroute("**/api/v1/platform/commercial?**");
+  let status = 429;
+  await page.route("**/api/v1/platform/commercial?**", route => route.fulfill({ status, contentType: "application/json", body: JSON.stringify({ error: { message: "blocked" }, request_id: "m06-06-state", trace_id: "m06-06-state" }) }));
+  await page.reload();
+  await expect(page.getByText("请求过于频繁")).toBeVisible();
+  status = 503;
+  await page.reload();
+  await expect(page.getByText("商业运营依赖受阻")).toBeVisible();
+});

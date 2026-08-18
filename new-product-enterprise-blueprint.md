@@ -333,6 +333,7 @@ M04-07 实现合同：AI 辅助分析只读取当前组织、当前工作区内�
 
 - `/platform-admin/commercial` 与 `/api/v1/platform/commercial/*` 只允许 `platform:operate`；写操作要求同源、`Idempotency-Key`、原因与版本锁。套餐、组织当前分配和人工配额调整均保留版本与审计。
 - 当前计量只读取已有 MySQL 事实：`collection_tasks`、`open_api_usage` 和 `report_exports`，按组织与明确账期聚合。有效配额为基础配额加当前有效人工调整且不低于零；Redis 与浏览器状态不是用量真相。
+- 平台页面必须支持套餐草稿创建与编辑、启用/退役，以及组织会员首次分配、续期或变更套餐和账期、暂停/恢复/结束；续期复用版本化分配写入并保留原因、审计和商业事件，不实现自动扣款。
 - 本模块不实现支付扣款，不定义价格、币种、税率、发票、支付 Provider 或自动强制限额规则。没有权威业务值时不得生成默认套餐或价格。
 - 读取、变更分别写 `commercial_views`、平台审计和不可变 `commercial_events`；组织级变更还同步写事务 outbox。本模块不新增 Worker/Crawler 或面板外服务，仍维持 S0 宝塔 Node API 边界。
 

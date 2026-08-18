@@ -5,7 +5,7 @@
 1. 在宝塔备份 MySQL，确认目标为 MySQL 5.7、`utf8mb4`、业务账号 `product_scout`，执行 `0024_commercial_operations_m06_06.up.sql`。
 2. 在宝塔 Node API 项目设置 `COMMERCIAL_RECENT_LIMIT`。它控制套餐和人工调整单次读取上限，允许 1–500，默认 100；不配置任何价格、支付、发票或税务变量。
 3. 发布 Web 与 Node API 后，在宝塔重启 Node API；配置在启动时读取，不支持动态重载。Web 静态资源按现有站点发布，不创建新服务；Node Worker/Crawler 无需因本模块新增进程。
-4. 使用具有 `platform:operate` 的平台运营管理员访问 `/platform-admin/commercial`。先显式创建套餐草稿并启用，再按组织 UUID、账期分配；人工调整必须填写原因。可用 `?organization_id=<uuid>` 打开组织用量深链接。
+4. 使用具有 `platform:operate` 的平台运营管理员访问 `/platform-admin/commercial`。先显式创建套餐草稿、编辑配额并启用，再按组织 UUID、套餐和账期首次分配；已有分配可修改开始/结束时间后执行“确认续期/变更”，也可暂停、恢复或结束。所有变更和人工调整都必须填写原因。可用 `?organization_id=<uuid>` 打开组织会员与用量深链接。
 5. 用量只统计当前账期的 `collection_tasks`、`open_api_usage`、`report_exports`。若显示不符，先按 request_id/trace_id 检查 Node API 日志，再核对账期和三张事实表；不得用 Redis 缓存值手工覆盖。
 
 ## 验证
