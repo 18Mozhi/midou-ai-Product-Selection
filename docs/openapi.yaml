@@ -2296,7 +2296,7 @@ paths:
   /platform/accounts/organizations:
     post:
       summary: Create an organization with its default workspace
-      description: Requires platform:superadmin, same-origin Origin and Idempotency-Key. The current super administrator becomes the first organization administrator.
+      description: Requires platform:superadmin, same-origin Origin and Idempotency-Key. The current super administrator becomes the first organization administrator and receives the organization data scope.
       security: [{ HttpOnlySession: [] }]
       parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
       requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PlatformOrganizationCreateInput' } } } }

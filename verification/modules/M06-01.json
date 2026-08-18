@@ -17,7 +17,7 @@
     {"id":"M06-01.A11","evidence":"request trace audit idempotency session revocation and no secret exposure"},
     {"id":"M06-01.A12","evidence":"validation database-table contract state scope and migration tests"},
     {"id":"M06-01.A13","evidence":"OpenAPI permissions idempotency reason and fixed-role contract tests"},
-    {"id":"M06-01.A14","evidence":"real MySQL57 organization creation default workspace user session revocation and audit"},
+    {"id":"M06-01.A14","evidence":"real MySQL57 organization creation default workspace organization-admin data scope user session revocation and audit"},
     {"id":"M06-01.A15","evidence":"Playwright admin-member navigation and platform account visual regression"},
     {"id":"M06-01.A16","evidence":"self-disable self-revoke duplicate slug role and dependency fault drills"},
     {"id":"M06-01.A17","evidence":"blueprint plans Feature Map architecture runbook migration rollback and S0 handoff"}

@@ -1341,9 +1341,9 @@
         "/api/v1/platform/accounts/users/{userId}/platform-role"
       ],
       "scope": "platform-super-admin organization, user and fixed platform administrator management with novice labels",
-      "truthBoundary": "only MySQL account metadata and counts; no password hashes, session tokens or credentials; disable user revokes active user_sessions",
+      "truthBoundary": "only MySQL account metadata and counts; no password hashes, session tokens or credentials; organization creation grants the first administrator an organization data scope; disable user revokes active user_sessions",
       "permission": "platform:superadmin plus same-origin Origin, Idempotency-Key and audited reason for writes",
-      "persistence": "platform_account_operations idempotency plus existing organizations, workspaces, memberships, fixed role assignments and platform_audit_events",
+      "persistence": "platform_account_operations idempotency plus existing organizations, workspaces, memberships, fixed role assignments, membership_data_scopes and platform_audit_events",
       "navigationBoundary": "platform, organization-admin and member shells have distinct primary menus; infrastructure pages are removed from the novice platform primary navigation but protected historical routes remain",
       "imageEvidence": ["high resolution 09 organization administration dashboard", "high resolution 10 platform operations cockpit", "concept 62 collection source management"],
       "status": "implemented_pending_live_verification"

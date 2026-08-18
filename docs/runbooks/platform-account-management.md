@@ -1,7 +1,7 @@
 # 平台账号管理运维与回滚
 
-发布时先执行 `0036_automatic_hotspot_sources.up.sql`，再通过宝塔重启统一后端“ai选品”并发布 Web 静态文件。使用活动平台超级管理员检查“组织与用户”：创建一个测试组织应同时出现默认工作区；停用测试用户后旧会话应立即失效；角色变更应出现在平台审计。
+发布时先执行 `0036_automatic_hotspot_sources.up.sql`，再通过宝塔重启统一后端“ai选品”并发布 Web 静态文件。使用活动平台超级管理员检查“组织与用户”：创建一个测试组织应同时出现默认工作区，且首位组织管理员应拥有组织级数据范围；停用测试用户后旧会话应立即失效；角色变更应出现在平台审计。
 
-故障时按 request_id/trace_id 查询 `platform_audit_events`，按 actor/route/idempotency key 查询 `platform_account_operations`。不要直接修改用户密码哈希、会话令牌或角色表来绕过页面规则。
+故障时按 request_id/trace_id 查询 `platform_audit_events`，按 actor/route/idempotency key 查询 `platform_account_operations`。回滚应用不能删除已创建组织、成员关系、角色或数据范围；按审计证据修复。不要直接修改用户密码哈希、会话令牌或角色表来绕过页面规则。
 
 回滚应用前先停止平台账号写入口，再执行 `0036_automatic_hotspot_sources.down.sql`。Down 不恢复已经创建的组织、工作区、成员关系、用户状态或角色变更；这些是已审计业务操作，若要反向修改必须通过当前平台账号 API 或另行获得数据修复授权。

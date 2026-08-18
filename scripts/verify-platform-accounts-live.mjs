@@ -29,6 +29,7 @@ async function cleanup() {
     await pool.query("DELETE FROM user_sessions WHERE user_id IN (?,?)", [ids.actor, ids.target]);
     await pool.query("DELETE FROM platform_role_assignments WHERE user_id IN (?,?) OR created_by=?", [ids.actor, ids.target, ids.actor]);
     if (organizationId) {
+      await pool.query("DELETE FROM membership_data_scopes WHERE membership_id IN (SELECT id FROM memberships WHERE organization_id=?)", [organizationId]);
       await pool.query("DELETE FROM membership_role_assignments WHERE membership_id IN (SELECT id FROM memberships WHERE organization_id=?)", [organizationId]);
       await pool.query("DELETE FROM memberships WHERE organization_id=?", [organizationId]);
       await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE id=?", [organizationId]);
@@ -79,6 +80,8 @@ try {
   if (created.id !== replay.id || !workspaceId) throw new Error("organization_creation_idempotency_failed");
   const [scopeRows] = await pool.query("SELECT o.default_workspace_id,w.organization_id FROM organizations o JOIN workspaces w ON w.id=o.default_workspace_id WHERE o.id=?", [organizationId]);
   if (scopeRows[0]?.default_workspace_id !== workspaceId || scopeRows[0]?.organization_id !== organizationId) throw new Error("default_workspace_relationship_failed");
+  const [adminScopeRows] = await pool.query("SELECT m.status,ra.role_code,ds.scope_type FROM memberships m JOIN membership_role_assignments ra ON ra.membership_id=m.id JOIN membership_data_scopes ds ON ds.membership_id=m.id WHERE m.organization_id=? AND m.user_id=?", [organizationId, ids.actor]);
+  if (adminScopeRows.length !== 1 || adminScopeRows[0]?.status !== "active" || adminScopeRows[0]?.role_code !== "organization_admin" || adminScopeRows[0]?.scope_type !== "organization") throw new Error("organization_admin_scope_failed");
 
   const granted = await service.platformRole(ids.target, { role_code: "platform_operations_admin", enabled: true, reason: "真实数据库验收" }, context("grant-role"));
   const grantReplay = await service.platformRole(ids.target, { role_code: "platform_operations_admin", enabled: true, reason: "幂等重放" }, context("grant-role"));
@@ -99,7 +102,7 @@ try {
 
   await cleanup();
   await assertCleanup();
-  console.log(JSON.stringify({ status: "passed", module: "M06-01", mysql: runtime.version, overview: "passed", organization_default_workspace: "passed", idempotency: "passed", user_session_revocation: "passed", role_grant_revoke: "passed", self_disable_guard: "passed", self_revoke_guard: "passed", platform_audit: "passed", cleanup: "passed", request_id: requestId, trace_id: traceId }, null, 2));
+  console.log(JSON.stringify({ status: "passed", module: "M06-01", mysql: runtime.version, overview: "passed", organization_default_workspace: "passed", organization_admin_scope: "passed", idempotency: "passed", user_session_revocation: "passed", role_grant_revoke: "passed", self_disable_guard: "passed", self_revoke_guard: "passed", platform_audit: "passed", cleanup: "passed", request_id: requestId, trace_id: traceId }, null, 2));
 } catch (error) {
   console.error(JSON.stringify({ status: "blocked", code: error?.code ?? "platform_accounts_live_failed", message: error instanceof Error ? error.message : "unknown", request_id: requestId, trace_id: traceId }));
   process.exitCode = 2;
