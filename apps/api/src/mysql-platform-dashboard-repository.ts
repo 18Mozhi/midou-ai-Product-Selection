@@ -441,7 +441,17 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         observed_at: this.now().toISOString(),
       };
     }
-    const [[services], [collection], [sources], [accounts]] = await Promise.all(
+    const [
+      [views],
+      [collection],
+      [sources],
+      [accounts],
+      [runtimeNodes],
+      [redisObservations],
+      [mysqlObservations],
+      [fileObservations],
+      [schedulerObservations],
+    ] = await Promise.all(
       [
         this.pool.query<RowDataPacket[]>(
           "SELECT COUNT(*) recent_views FROM platform_dashboard_views WHERE observed_at>=DATE_SUB(UTC_TIMESTAMP(3),INTERVAL 15 MINUTE)",
@@ -455,17 +465,101 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         this.pool.query<RowDataPacket[]>(
           "SELECT (SELECT COUNT(*) FROM organizations WHERE status='active') active_organizations,(SELECT COUNT(*) FROM users WHERE status='active') active_users",
         ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT node_id,role,status,build_sha,app_version,last_heartbeat_at FROM runtime_nodes WHERE role='api' ORDER BY last_heartbeat_at DESC LIMIT 1",
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT state,observed_at FROM redis_resilience_observations ORDER BY observed_at DESC LIMIT 1",
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT state,observed_at FROM mysql_resilience_observations ORDER BY observed_at DESC LIMIT 1",
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT state,observed_at FROM file_resilience_observations ORDER BY observed_at DESC LIMIT 1",
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT state,worker_instances,crawler_instances,active_worker_leases,active_crawler_leases,observed_at FROM crawler_scheduler_observations ORDER BY observed_at DESC LIMIT 1",
+        ),
       ],
     );
+    const staleAfterMs = 5 * 60 * 1000,
+      serviceState = (row: any, fallback = "unknown") =>
+        !row
+          ? fallback
+          : this.now().getTime() - new Date(row.observed_at ?? row.last_heartbeat_at).getTime() >
+              staleAfterMs
+            ? "stale"
+            : String(row.state ?? row.status ?? fallback),
+      runtime = runtimeNodes[0],
+      redis = redisObservations[0],
+      mysql = mysqlObservations[0],
+      files = fileObservations[0],
+      scheduler = schedulerObservations[0];
     return {
       domain: i.domain,
       summary: {
-        api: "healthy",
+        api: serviceState(runtime),
         database: "healthy",
-        dashboard_reads: n(services[0]?.recent_views),
+        dashboard_reads: n(views[0]?.recent_views),
         active_organizations: n(accounts[0]?.active_organizations),
         active_users: n(accounts[0]?.active_users),
       },
+      services: [
+        {
+          code: "api",
+          name: "Node API",
+          status: serviceState(runtime),
+          detail: runtime
+            ? `${runtime.app_version} · ${String(runtime.build_sha).slice(0, 12)}`
+            : "尚无运行节点心跳",
+          observed_at: iso(runtime?.last_heartbeat_at),
+          href: "/platform-admin/topology",
+        },
+        {
+          code: "mysql",
+          name: "MySQL",
+          status: serviceState(mysql, "healthy"),
+          detail: mysql ? "最近一次韧性检查" : "本次管理查询成功",
+          observed_at: iso(mysql?.observed_at) ?? this.now().toISOString(),
+          href: "/platform-admin/mysql",
+        },
+        {
+          code: "redis",
+          name: "Redis",
+          status: serviceState(redis),
+          detail: redis ? "最近一次韧性检查" : "尚未执行韧性检查",
+          observed_at: iso(redis?.observed_at),
+          href: "/platform-admin/redis",
+        },
+        {
+          code: "files",
+          name: "文件存储",
+          status: serviceState(files),
+          detail: files ? "最近一次存储检查" : "尚未执行存储检查",
+          observed_at: iso(files?.observed_at),
+          href: "/platform-admin/files",
+        },
+        {
+          code: "worker",
+          name: "Node Worker",
+          status: serviceState(scheduler),
+          detail: scheduler
+            ? `${n(scheduler.worker_instances)} 个实例 · ${n(scheduler.active_worker_leases)} 个活动任务`
+            : "尚无调度器观测",
+          observed_at: iso(scheduler?.observed_at),
+          href: "/platform-admin/crawler-scheduler",
+        },
+        {
+          code: "crawler",
+          name: "Python Crawler",
+          status: serviceState(scheduler),
+          detail: scheduler
+            ? `${n(scheduler.crawler_instances)} 个实例 · ${n(scheduler.active_crawler_leases)} 个活动运行`
+            : "尚无调度器观测",
+          observed_at: iso(scheduler?.observed_at),
+          href: "/platform-admin/crawler-scheduler",
+        },
+      ],
       collections: collection.map((r: any) => ({
         status: r.status,
         total: n(r.total),

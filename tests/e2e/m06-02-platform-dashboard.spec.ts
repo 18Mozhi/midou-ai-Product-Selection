@@ -49,3 +49,15 @@ test("platform completion exposes data governance notifications and user-panel s
   await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
   expect(errors).toEqual([]);
 });
+
+test("system status aggregates real operations observations and management links",async({page})=>{
+  await nav(page);
+  await page.route("**/api/v1/platform/management?**",route=>route.fulfill({json:env({domain:"status",summary:{api:"ready",database:"healthy",dashboard_reads:5,active_organizations:2,active_users:8},services:[{code:"api",name:"Node API",status:"ready",detail:"0.1.0 · abcdef123456",observed_at:"2026-08-18T12:00:00.000Z",href:"/platform-admin/topology"},{code:"mysql",name:"MySQL",status:"healthy",detail:"最近一次韧性检查",observed_at:"2026-08-18T12:00:00.000Z",href:"/platform-admin/mysql"},{code:"redis",name:"Redis",status:"warning",detail:"最近一次韧性检查",observed_at:"2026-08-18T11:59:00.000Z",href:"/platform-admin/redis"},{code:"files",name:"文件存储",status:"stale",detail:"最近一次存储检查",observed_at:"2026-08-18T10:00:00.000Z",href:"/platform-admin/files"},{code:"worker",name:"Node Worker",status:"ready",detail:"1 个实例 · 1 个活动任务",observed_at:"2026-08-18T12:00:00.000Z",href:"/platform-admin/crawler-scheduler"},{code:"crawler",name:"Python Crawler",status:"ready",detail:"1 个实例 · 0 个活动运行",observed_at:"2026-08-18T12:00:00.000Z",href:"/platform-admin/crawler-scheduler"}],collections:[{status:"running",total:1}],sources:[{status:"enabled",total:138}],observed_at:"2026-08-18T12:00:00.000Z"})}));
+  await page.goto("/platform-admin/status");
+  await expect(page.getByRole("heading",{name:"系统状态",level:2})).toBeVisible();
+  await expect(page.getByText("Python Crawler")).toBeVisible();
+  await expect(page.getByText("1 个实例 · 1 个活动任务")).toBeVisible();
+  await expect(page.getByRole("link",{name:/Redis/})).toHaveAttribute("href","/platform-admin/redis");
+  await page.setViewportSize({width:390,height:844});
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+});

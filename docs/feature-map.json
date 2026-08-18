@@ -1362,11 +1362,11 @@
       "module": "M06-02",
       "entrypoints": ["../apps/api/src/platform-dashboard-service.ts", "../apps/api/src/mysql-platform-dashboard-repository.ts", "../apps/api/src/platform-dashboard-routes.ts", "../apps/web/src/components/PlatformDashboard.vue", "../apps/web/src/components/PlatformManagementCenter.vue", "../apps/web/src/components/PlatformDataCenter.vue", "../apps/web/src/components/PlatformGovernanceCenter.vue"],
       "routes": ["/platform-admin", "/platform-admin/data", "/platform-admin/governance", "/platform-admin/content", "/platform-admin/notifications", "/platform-admin/email", "/platform-admin/status", "/api/v1/platform/dashboard", "/api/v1/platform/management", "/api/v1/platform/management/data/exports", "/api/v1/platform/management/content/{topicId}", "/api/v1/platform/management/email/{source}/{deliveryId}/actions"],
-      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, notification delivery, email queue and runtime status management",
+      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, notification delivery, email queue and unified API MySQL Redis file Worker Crawler runtime status management with dedicated operations links",
       "truthBoundary": "no sample remains unknown or null; no credentials, payloads, internal file paths or invented uptime and capacity claims",
       "permission": "platform:operate on the API; platform role navigation guard on the page; dashboard reads and platform data exports write correlated platform audit events",
       "configuration": ["PLATFORM_DASHBOARD_DEFAULT_WINDOW", "PLATFORM_DASHBOARD_QUEUE_WARNING", "PLATFORM_DASHBOARD_ERROR_LIMIT"],
-      "runtimeBoundary": "synchronous MySQL 5.7 read model under Baota Node API; existing Worker and Crawler queues are observed but no dashboard daemon is created",
+      "runtimeBoundary": "synchronous MySQL 5.7 read model under Baota Node API; persisted topology and resilience observations are reused, observations older than five minutes are explicitly stale, and no dashboard daemon or server-side service is created",
       "imageEvidence": ["concept 61 platform operations overview", "high resolution 10 platform operations cockpit"],
       "verificationRunId": "d424c7a8-eb72-4ddd-b9aa-3ce93ffbbe96",
       "status": "implemented_pending_full_verification"

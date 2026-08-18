@@ -2064,7 +2064,7 @@ paths:
   /platform/management:
     get:
       summary: Read platform data, governance, content, notification, email or system-status management facts
-      description: Requires platform:operate. Returns at most 100 cross-organization operational rows for the selected domain without credentials, message secrets or raw crawler payloads.
+      description: Requires platform:operate. Returns at most 100 cross-organization operational rows for the selected domain without credentials, message secrets or raw crawler payloads. The status domain also summarizes the latest persisted BaoTa API topology, Redis, MySQL, file-storage and Worker/Crawler scheduler observations, marking observations older than five minutes as stale and linking to the dedicated operations views.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: domain, in: query, required: true, schema: { type: string, enum: [content, notifications, email, status, data, governance] } }

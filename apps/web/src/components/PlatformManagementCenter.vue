@@ -65,6 +65,12 @@ const stateName = (value: unknown) =>
       dead_letter: "死信",
       failed: "失败",
       healthy: "正常",
+      ready: "正常",
+      warning: "警告",
+      blocked: "阻断",
+      degraded: "降级",
+      unknown: "待检查",
+      stopped: "已停止",
       enabled: "启用",
       disabled: "停用",
       read: "已读",
@@ -477,6 +483,13 @@ onMounted(load);
         </table>
       </div>
       <div v-else class="platform-status-grid">
+        <section class="platform-service-status">
+          <header><h3>服务运行状态</h3><span>5 分钟内观测为实时</span></header>
+          <a v-for="item in data.services" :key="item.code" :href="item.href">
+            <span><b>{{ item.name }}</b><small>{{ item.detail }}</small></span>
+            <span><i :data-state="item.status">{{ stateName(item.status) }}</i><small>{{ when(item.observed_at) }}</small></span>
+          </a>
+        </section>
         <section>
           <h3>采集任务状态</h3>
           <div v-for="item in data.collections" :key="item.status">
@@ -664,6 +677,62 @@ dialog footer button:last-child {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+}
+.platform-service-status {
+  grid-column: 1 / -1;
+}
+.platform-service-status header,
+.platform-service-status a,
+.platform-service-status a > span {
+  display: flex;
+  align-items: center;
+}
+.platform-service-status header,
+.platform-service-status a {
+  justify-content: space-between;
+  gap: 16px;
+}
+.platform-service-status header span,
+.platform-service-status small {
+  color: #7892a5;
+  font-size: 11px;
+}
+.platform-service-status a {
+  padding: 11px 10px;
+  border-bottom: 1px solid #1d3547;
+  text-decoration: none;
+}
+.platform-service-status a > span {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 3px;
+}
+.platform-service-status a > span:last-child {
+  align-items: flex-end;
+}
+.platform-service-status i {
+  border-radius: 999px;
+  padding: 3px 8px;
+  background: #173248;
+  color: #a9c8dc;
+  font-style: normal;
+  font-size: 11px;
+}
+.platform-service-status i[data-state="healthy"],
+.platform-service-status i[data-state="ready"] {
+  background: #123c35;
+  color: #79f0cb;
+}
+.platform-service-status i[data-state="warning"],
+.platform-service-status i[data-state="degraded"],
+.platform-service-status i[data-state="stale"] {
+  background: #473516;
+  color: #ffd27d;
+}
+.platform-service-status i[data-state="blocked"],
+.platform-service-status i[data-state="stopped"] {
+  background: #4a2027;
+  color: #ff9da9;
 }
 .platform-status-grid h3 {
   margin-top: 0;
