@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-import { BUILTIN_PROVIDER_SOURCES, parseStructuredCatalogPage } from '../../packages/provider-sources/dist/index.js';
+import { AUTOMATIC_PROVIDER_SOURCE_HOSTS, BUILTIN_PROVIDER_SOURCES, parseStructuredCatalogPage } from '../../packages/provider-sources/dist/index.js';
 import { ProviderSourceService } from '../../apps/api/dist/provider-source-service.js';
 
 test('automatic source catalog is diversified across real source families and markets', () => {
@@ -17,6 +17,8 @@ test('automatic source catalog is diversified across real source families and ma
   assert.ok(googleNews.length / automatic.length < 0.75, 'Google News must not dominate the automatic catalog');
   assert.deepEqual([...categories].sort(), ['community', 'data', 'ecommerce', 'news']);
   assert.ok(markets.size >= 10, 'major-country market coverage must be explicit');
+  assert.ok(AUTOMATIC_PROVIDER_SOURCE_HOSTS.includes('www.reddit.com'));
+  assert.ok(AUTOMATIC_PROVIDER_SOURCE_HOSTS.includes('b.hatena.ne.jp'));
 });
 
 test('fixed marketplace page parser extracts structured product evidence without an API key', () => {
@@ -27,6 +29,40 @@ test('fixed marketplace page parser extracts structured product evidence without
   assert.equal(records[0].payload.fields.price, 29.9);
   assert.equal(records[0].payload.fields.currency, 'USD');
   assert.match(records[0].evidenceRef, /^structured-public-page:/);
+});
+
+test('Shopify and eBay announcement channels use current public pages and preserve HTML evidence', () => {
+  const shopify = BUILTIN_PROVIDER_SOURCES.find((item) => item.code === 'feed_shopify_blog');
+  const ebay = BUILTIN_PROVIDER_SOURCES.find((item) => item.code === 'feed_ebay_announcements');
+  assert.deepEqual(
+    { accessMode: shopify?.access_mode, parser: shopify?.parser_version, url: shopify?.target_url },
+    { accessMode: 'public_page', parser: 'structured-public-page-v1', url: 'https://www.shopify.com/blog' },
+  );
+  assert.deepEqual(
+    { accessMode: ebay?.access_mode, parser: ebay?.parser_version, url: ebay?.target_url },
+    { accessMode: 'public_page', parser: 'structured-public-page-v1', url: 'https://community.ebay.com/forum/announcements-57928/' },
+  );
+
+  const shopifyRecords = parseStructuredCatalogPage(
+    '<html><body><a href="/blog/topics/marketing">Marketing</a><a href="/blog/how-agentic-commerce-works">How agentic commerce works</a></body></html>',
+    shopify.target_url,
+    shopify.name,
+    20,
+  );
+  assert.equal(shopifyRecords.length, 1);
+  assert.equal(shopifyRecords[0].payload.content_type, 'text/html');
+  assert.equal(shopifyRecords[0].payload.source_paths.title, 'html.anchor.text');
+  assert.match(shopifyRecords[0].evidenceRef, /^public-page-link:/);
+
+  const ebayRecords = parseStructuredCatalogPage(
+    '<html><body><a href="/forum/announcements-57928/topic/seller-update-123/">Seller update</a></body></html>',
+    ebay.target_url,
+    ebay.name,
+    20,
+  );
+  assert.equal(ebayRecords.length, 1);
+  assert.equal(ebayRecords[0].payload.content_type, 'text/html');
+  assert.match(ebayRecords[0].evidenceRef, /^public-page-link:/);
 });
 
 test('provider source configuration is editable through a validated audited service operation', async () => {

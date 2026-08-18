@@ -482,14 +482,26 @@ const publicCatalogPages = [
 ] as const;
 const syndicationChannel = (
   feed: (typeof syndicationFeeds)[number],
-): BuiltinSourceDefinition => ({
+): BuiltinSourceDefinition => {
+  const pageOverride =
+    feed.code === "shopify_blog"
+      ? { url: "https://www.shopify.com/blog", owner: "平台电商来源中心" }
+      : feed.code === "ebay_announcements"
+        ? {
+            url: "https://community.ebay.com/forum/announcements-57928/",
+            owner: "平台电商来源中心",
+          }
+        : null;
+  return {
   code: `feed_${feed.code}`,
   name: feed.name,
-  access_mode: "public_rss",
-  target_url: feed.url,
+  access_mode: pageOverride ? "public_page" : "public_rss",
+  target_url: pageOverride?.url ?? feed.url,
   markets: [feed.market],
   languages: [feed.language],
-  fields: ["title", "summary", "published_at", "source_url", "publisher"],
+  fields: pageOverride
+    ? ["title", "position", "source_url", "publisher", "observed_at"]
+    : ["title", "summary", "published_at", "source_url", "publisher"],
   schedule_minutes: 15,
   concurrency_limit: 1,
   timeout_ms: 20000,
@@ -505,16 +517,20 @@ const syndicationChannel = (
     "parse_failed",
     "empty_result",
   ],
-  parser_version: "syndication-feed-v1",
-  healthcheck_url: feed.url,
-  owner_label: "平台热点中心",
+  parser_version: pageOverride
+    ? "structured-public-page-v1"
+    : "syndication-feed-v1",
+  healthcheck_url: pageOverride?.url ?? feed.url,
+  owner_label: pageOverride?.owner ?? "平台热点中心",
   status: "enabled",
   category: feed.category,
   availability: "automatic",
   production_policy: "automatic_public_feed",
-  policy_note:
-    "公开 RSS/Atom 频道；系统按 15 分钟周期自动采集并保留原文证据，也可在热点页手动刷新。",
-});
+  policy_note: pageOverride
+    ? "固定抓取平台公开内容列表页面，不需要官方 API Key；页面结构变化会明确标记为解析失败。"
+    : "公开 RSS/Atom 频道；系统按 15 分钟周期自动采集并保留原文证据，也可在热点页手动刷新。",
+  };
+};
 const publicCatalogChannel = (
   page: (typeof publicCatalogPages)[number],
 ): BuiltinSourceDefinition => ({
@@ -738,6 +754,14 @@ export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
       "处理用户明确上传的商品与供应链 CSV，不连接或伪造外部平台数据。",
   },
 ];
+
+export const AUTOMATIC_PROVIDER_SOURCE_HOSTS = Object.freeze([
+  ...new Set(
+    BUILTIN_PROVIDER_SOURCES.filter(
+      (item) => item.availability === "automatic",
+    ).map((item) => new URL(item.target_url).hostname.toLowerCase()),
+  ),
+]);
 
 export interface SourceEvidencePayload {
   raw_content: string;
@@ -966,6 +990,7 @@ export function parseStructuredCatalogPage(
       currency: string | null;
       position: number | null;
       raw: string;
+      sourceKind: "jsonld" | "html_anchor";
     }> = [];
   for (const block of jsonLdBlocks(html)) {
     let parsed: unknown;
@@ -1011,6 +1036,7 @@ export function parseStructuredCatalogPage(
           currency,
           position,
           raw: JSON.stringify(item),
+          sourceKind: "jsonld",
         });
     });
   }
@@ -1018,8 +1044,12 @@ export function parseStructuredCatalogPage(
     const host = new URL(pageUrl).hostname,
       pattern = host.includes("amazon.")
         ? /\/dp\/[A-Z0-9]{10}/i
-        : host.includes("ebay.")
+        : host === "www.ebay.com"
           ? /\/itm\//i
+          : host === "community.ebay.com"
+            ? /^\/forum\/announcements-\d+\/topic\//i
+            : host === "www.shopify.com"
+              ? /^\/blog\/(?!topics(?:\/|$)|authors(?:\/|$)|latest\/?$)[^/]+\/?$/i
           : host.includes("walmart.")
             ? /\/ip\//i
             : null;
@@ -1037,6 +1067,7 @@ export function parseStructuredCatalogPage(
             currency: null,
             position: candidates.length + 1,
             raw: match[0],
+            sourceKind: "html_anchor",
           });
         if (candidates.length >= limit) break;
       }
@@ -1056,17 +1087,20 @@ export function parseStructuredCatalogPage(
         publisher: sourceName,
         observed_at: observedAt,
       },
+      isJsonLd = item.sourceKind === "jsonld",
       payload: SourceEvidencePayload = {
         raw_content: item.raw,
-        content_type: "application/ld+json",
+        content_type: isJsonLd ? "application/ld+json" : "text/html",
         canonical_url: item.url,
         fields,
         source_paths: {
-          title: "jsonld.name",
-          price: "jsonld.offers.price",
-          currency: "jsonld.offers.priceCurrency",
-          position: "jsonld.position",
-          source_url: "jsonld.url",
+          title: isJsonLd ? "jsonld.name" : "html.anchor.text",
+          price: isJsonLd ? "jsonld.offers.price" : "not_available",
+          currency: isJsonLd
+            ? "jsonld.offers.priceCurrency"
+            : "not_available",
+          position: isJsonLd ? "jsonld.position" : "html.anchor.order",
+          source_url: isJsonLd ? "jsonld.url" : "html.anchor.href",
           publisher: "crawler.source",
           observed_at: "crawler.observed_at",
         },
@@ -1074,7 +1108,7 @@ export function parseStructuredCatalogPage(
     return {
       externalId: sha(item.url),
       observedAt,
-      evidenceRef: `structured-public-page:${sha(item.url)}`,
+      evidenceRef: `${isJsonLd ? "structured-public-page" : "public-page-link"}:${sha(item.url)}`,
       payload,
     };
   });

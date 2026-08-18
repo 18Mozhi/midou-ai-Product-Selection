@@ -164,13 +164,20 @@ const httpConnectFetch: TunnelFetch = async (url, init, proxy) => {
 export function createProviderSourceFetch(
   proxy: ProviderSourceProxyConfig | undefined,
   dependencies: ProviderSourceFetchDependencies = {},
+  proxyHosts: readonly string[] = ["news.google.com"],
 ): typeof fetch {
   const directFetch = dependencies.directFetch ?? fetch,
-    tunnelFetch = dependencies.tunnelFetch ?? httpConnectFetch;
+    tunnelFetch = dependencies.tunnelFetch ?? httpConnectFetch,
+    allowedProxyHosts = new Set(
+      proxyHosts.map((value) => value.trim().toLowerCase()).filter(Boolean),
+    );
   if (!proxy) return directFetch;
   return (async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = new URL(input instanceof Request ? input.url : String(input));
-    if (url.protocol === "https:" && url.hostname === "news.google.com")
+    if (
+      url.protocol === "https:" &&
+      allowedProxyHosts.has(url.hostname.toLowerCase())
+    )
       return tunnelFetch(url, init, proxy);
     return directFetch(input, init);
   }) as typeof fetch;

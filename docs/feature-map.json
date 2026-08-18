@@ -800,14 +800,14 @@
       "scope": "100+ code-owned hotspot and product-source channels; currently 177 catalog entries including 138 automatic crawler channels across 24 hosts, plus organization/workspace automatic and manual refresh tasks and evidence",
       "sources": [
         "96 automatic Google News fixed RSS market/topic channels",
-        "40 automatic non-Google RSS/Atom news ecommerce community and trend channels",
+        "40 automatic non-Google RSS/Atom or fixed public-page news ecommerce community and trend channels, including current Shopify blog and eBay announcement HTML pages",
         "2 automatic fixed public marketplace pages for Amazon and eBay; Walmart remains a registered controlled-page source because its public endpoint currently returns a human-verification challenge",
         "authenticated-browser or fixed-public-page platform entries without official API dependency",
         "google_news_search manual keyword RSS",
         "manual_product_supply_csv explicit import"
       ],
       "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; official_api is removed from the runtime contract and migrated to public_page; no source fabricates platform data",
-      "outboundBoundary": "Google News uses one exact code-owned URL template and rejects redirects; an optional Baota-restricted project HTTP CONNECT proxy is applied only to news.google.com without setting global HTTP_PROXY or HTTPS_PROXY; CSV uses inline content; callers cannot supply an outbound URL or proxy",
+      "outboundBoundary": "Every automatic URL and proxy host is derived from the code-owned source catalog; the optional Baota-restricted project HTTP CONNECT proxy accepts only those exact HTTPS hosts without setting global HTTP_PROXY or HTTPS_PROXY; Google News rejects redirects, CSV uses inline content, and callers cannot supply an outbound URL or proxy",
       "limits": "Google RSS 2MB and 20 persisted records per task; CSV 1MB, exact 8-column header, 100 parsed rows and 20 persisted records per task",
       "permission": "provider:configure for catalog/provision; collection:replay for scoped replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
       "persistence": "MySQL 5.7 automatic_source_schedules and provider_refresh_operations plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",

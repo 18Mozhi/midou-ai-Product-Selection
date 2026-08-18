@@ -46,6 +46,7 @@ import { DataQualityService } from "./data-quality-service.js";
 import { MySqlDataQualityRepository } from "./mysql-data-quality-repository.js";
 import { registerDataQualityRoutes } from "./data-quality-routes.js";
 import {
+  AUTOMATIC_PROVIDER_SOURCE_HOSTS,
   createBuiltinSourceAdapters,
   createProviderSourceFetch,
 } from "@scoutops/provider-sources";
@@ -267,7 +268,11 @@ const providerAdapterRegistry = new ProviderAdapterRegistry({
   maxItemsPerBatch: config.providerAdapters.maxItemsPerBatch,
 });
 for (const adapter of createBuiltinSourceAdapters(
-  createProviderSourceFetch(config.providerAdapters.proxy),
+  createProviderSourceFetch(
+    config.providerAdapters.proxy,
+    {},
+    AUTOMATIC_PROVIDER_SOURCE_HOSTS,
+  ),
 ))
   providerAdapterRegistry.register(adapter);
 const providerSourceService = new ProviderSourceService(

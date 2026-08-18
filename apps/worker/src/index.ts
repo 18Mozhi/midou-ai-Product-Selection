@@ -3,6 +3,7 @@ import { createDatabasePool } from "@scoutops/database";
 import { createRedisConnection, ScopedRedisStore } from "@scoutops/redis";
 import { ProviderAdapterRegistry } from "@scoutops/provider-adapters";
 import {
+  AUTOMATIC_PROVIDER_SOURCE_HOSTS,
   createBuiltinSourceAdapters,
   createProviderSourceFetch,
 } from "@scoutops/provider-sources";
@@ -46,7 +47,11 @@ const registry = new ProviderAdapterRegistry({
   maxItemsPerBatch: config.providerAdapters.maxItemsPerBatch,
 });
 for (const adapter of createBuiltinSourceAdapters(
-  createProviderSourceFetch(config.providerAdapters.proxy),
+  createProviderSourceFetch(
+    config.providerAdapters.proxy,
+    {},
+    AUTOMATIC_PROVIDER_SOURCE_HOSTS,
+  ),
 ))
   registry.register(adapter);
 const collectionRepository = new MySqlCollectionTaskWorkerRepository(pool);
