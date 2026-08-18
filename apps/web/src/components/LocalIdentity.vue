@@ -31,7 +31,7 @@ async function enterApplication(){const result=await request('/me/landing',undef
 async function confirmEmail(){const token=params.get('token')||'';if(!token)return;const result=await request('/auth/email-verification/confirm',{token});if(result){message.value='邮箱验证完成，现在可以返回登录。';}}
 async function submit() {
   if(mode.value==='register'&&password.value!==confirmPassword.value){requestState.value='error';message.value='两次输入的密码不一致。';return;}
-  if(mode.value==='login'){const result=await request('/auth/login',{email:email.value,password:password.value});if(result?.data?.mfa_required){mode.value='mfa-challenge';requestState.value='idle';message.value='密码已验证，请输入认证器验证码。';}else if(result?.data?.security_setup?.required){securitySetup.value=result.data.security_setup;currentPassword.value=password.value;mode.value='security-setup';requestState.value='idle';message.value='种子账号必须完成改密和 MFA 后才能进入业务功能。';}else if(result)await enterApplication();}
+  if(mode.value==='login'){const result=await request('/auth/login',{email:email.value,password:password.value});if(result?.data?.mfa_required){mode.value='mfa-challenge';requestState.value='idle';message.value='密码已验证，请输入认证器验证码。';return;}if(result?.data?.security_setup?.required){securitySetup.value=result.data.security_setup;currentPassword.value=password.value;mode.value='security-setup';requestState.value='idle';message.value='种子账号必须完成改密和 MFA 后才能进入业务功能。';return;}if(result)await enterApplication();return;}
   if(mode.value==='register'){const result=await request('/auth/register',{email:email.value,password:password.value});if(result){mode.value='verify';message.value='验证邮件已进入受控投递队列。';}}
   if(mode.value==='forgot'){const result=await request('/auth/password-reset/request',{email:email.value});if(result)message.value='如账号存在，重置邮件会进入受控投递队列。';}
   if(mode.value==='reset'){const token=params.get('token')||'';const result=await request('/auth/password-reset/confirm',{token,new_password:password.value});if(result===null&&requestState.value==='success')message.value='密码已更新，请重新登录。';}
@@ -89,7 +89,7 @@ onMounted(()=>{if(mode.value==='verify'&&params.get('token'))void confirmEmail()
           <label v-if="!['reset','mfa-challenge'].includes(mode)">邮箱<input v-model="email" type="email" autocomplete="email" required maxlength="254" placeholder="name@company.com"></label>
           <label v-if="!['forgot','mfa-challenge'].includes(mode)">{{ mode==='reset' ? '新密码' : '密码' }}<input v-model="password" type="password" :autocomplete="mode==='login'?'current-password':'new-password'" required minlength="12" maxlength="128" placeholder="输入安全密码"></label>
           <label v-if="mode==='register'">确认密码<input v-model="confirmPassword" type="password" autocomplete="new-password" required minlength="12" maxlength="128" placeholder="再次输入密码"></label>
-          <div v-if="mode==='login'" class="identity-form-row"><span>会话关闭浏览器后失效</span><button type="button" class="text-button" @click="switchMode('forgot')">忘记密码？</button></div>
+          <div v-if="mode==='login'" class="identity-form-row"><span>登录状态最长保留 30 天，可在安全中心主动退出</span><button type="button" class="text-button" @click="switchMode('forgot')">忘记密码？</button></div>
           <button class="identity-primary" type="submit" :disabled="requestState==='loading'">{{ requestState==='loading' ? '正在安全处理…' : mode==='login'?'登录':mode==='register'?'创建账号':mode==='forgot'?'发送重置说明':mode==='mfa-challenge'?'验证并登录':'更新密码' }}</button>
         </form>
 

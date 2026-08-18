@@ -158,9 +158,9 @@
 
 ## 4. 数据、接口、事件与配置合同
 
-- 数据：trend_topics、opportunities、scores、competitors、suppliers、decisions。每个对象明确 organization_id、workspace_id、时间、版本、索引、审计、保留。
+- 数据：trend_topics、opportunities、scores、competitors、suppliers、decisions。每个对象明确 organization_id、workspace_id、时间、版本、索引、审计、保留。96 条固定热点频道必须进入趋势投影；其中商品型频道的新主题自动生成带真实趋势证据、状态为 `insufficient_data` 的待评估选品，通用新闻/数据/社区频道不自动生成候选。
 - API：`/api/v1/trends/*`、`/api/v1/opportunities/*`、`/api/v1/competitors/*`、`/api/v1/sourcing/*`。编码前写 OpenAPI；编码后契约测试 DTO、权限、错误、分页和幂等。
-- 事件：事务写业务、审计、Outbox；消费者 event_id 幂等；SSE 可重放。
+- 事件：事务写业务、审计、Outbox；自动发现选品写 `opportunity.candidate.discovered`；消费者 event_id 幂等；SSE 可重放。
 - 配置：schema、env.example、宝塔受限环境、启动校验与文档同步；真实值不进入 Git。
 
 ## 5. 模块依赖与验收顺序

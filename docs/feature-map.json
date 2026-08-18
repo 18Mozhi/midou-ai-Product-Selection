@@ -847,8 +847,9 @@
         "/api/v1/trends/monitoring-rules",
         "/api/v1/trends/monitoring-rules/{ruleId}"
       ],
-      "scope": "organization and workspace scoped trend topics signals timelines keywords follows and monitoring rules",
-      "projection": "Baota Node Worker scans normalized records, leases idempotent projection jobs and only projects google_news_search evidence; non-trend records terminate as succeeded_empty",
+      "scope": "organization and workspace scoped manual and automatic trend topics signals timelines keywords follows and monitoring rules",
+      "projection": "Baota Node Worker scans normalized records, leases idempotent projection jobs and projects google_news_search plus 96 fixed gnews market/topic channels; market and language derive from the code-owned provider catalog while non-trend records terminate as succeeded_empty",
+      "automaticProductDiscovery": "viral-products, Amazon, TikTok Shop, Etsy, eBay and new-product automatic channels create one evidence-backed insufficient_data opportunity per new trend topic and emit opportunity.candidate.discovered; general news, data and community channels remain trends only",
       "heatBoundary": "heat is the observed signal count with unit signals; momentum and confidence remain insufficient_data until a measured contract exists",
       "permission": "trend:read for scoped reads; trend:manage for follow relevance and monitoring writes; same-origin Origin and Idempotency-Key required",
       "audit": "user and Worker writes persist trend_events and trend_outbox with request_id and trace_id; original evidence is never deleted by relevance actions",
@@ -884,11 +885,11 @@
         "/api/v1/opportunities/{opportunityId}",
         "/api/v1/opportunities/{opportunityId}/decisions"
       ],
-      "scope": "organization and workspace scoped opportunity candidates, trend evidence links, human decisions and refresh jobs",
+      "scope": "organization and workspace scoped manual and automatically discovered opportunity candidates, trend evidence links, human decisions and refresh jobs",
       "truthBoundary": "M04-02 never invents scores, ROI or risk; unavailable M04-03 to M04-06 inputs remain null, unknown or insufficient_data",
       "refresh": "Baota Node Worker leases opportunity refresh jobs and links only persisted trend signals; trend-only evidence remains partial because competition and cost inputs are absent",
       "permission": "opportunity:read for scoped reads; existing opportunity:decide for candidate creation and required-reason decisions; same-origin Origin and Idempotency-Key required",
-      "audit": "creation, evidence refresh and decision changes persist correlated opportunity_events and opportunity_outbox; decisions do not rewrite scores or evidence",
+      "audit": "manual creation, automatic opportunity.candidate.discovered, evidence refresh and decision changes persist correlated opportunity_events and opportunity_outbox; decisions do not rewrite scores or evidence",
       "configuration": [
         "OPPORTUNITY_REFRESH_POLL_MS",
         "OPPORTUNITY_REFRESH_LEASE_SECONDS"

@@ -406,13 +406,9 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <button v-if="shell === 'member'" type="button" @click="discoveryMode = 'search'">
           ⌕ <span>搜索</span><kbd>⌘K</kbd>
         </button>
-        <button
-          type="button"
-          class="role-create"
-          @click="discoveryMode = 'create'"
-        >
-          ＋ <span>创建</span>
-        </button>
+        <a v-if="shell === 'platform_admin'" class="role-create" href="/platform-admin/accounts?create=1">＋ <span>新建组织</span></a>
+        <a v-else-if="shell === 'organization_admin'" class="role-create" href="/org-admin/members">＋ <span>邀请成员</span></a>
+        <button v-else type="button" class="role-create" @click="discoveryMode = 'create'">＋ <span>创建选品</span></button>
         <a v-if="shell === 'member'" href="/notifications" aria-label="通知中心">○</a
         ><a href="/me" aria-label="个人中心">◉</a>
       </div>
@@ -548,7 +544,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
               :aria-current="
                 routePath === '/platform-admin/providers' ? 'page' : undefined
               "
-              >来源定义</a
+                  >来源设置（高级）</a
             ><a
               href="/platform-admin/providers/adapters"
               :aria-current="
@@ -556,7 +552,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
                   ? 'page'
                   : undefined
               "
-              >适配器运行时</a
+                  >采集程序（高级）</a
             ><a
               href="/platform-admin/providers/sources"
               :aria-current="
@@ -564,7 +560,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
                   ? 'page'
                   : undefined
               "
-              >首批来源</a
+                  >来源频道</a
             >
           </nav>
           <ProviderSourceCenter
@@ -595,13 +591,13 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
             <a
               href="/platform-admin/collection/overview"
               :aria-current="routePath === '/platform-admin/collection/overview' ? 'page' : undefined"
-              >运营总览</a
+                  >采集总览</a
             ><a
               href="/platform-admin/collection"
               :aria-current="
                 routePath === '/platform-admin/collection' ? 'page' : undefined
               "
-              >任务状态机</a
+                  >任务详情</a
             ><a
               href="/platform-admin/collection/browser-runtime"
               :aria-current="
@@ -609,7 +605,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
                   ? 'page'
                   : undefined
               "
-              >浏览器运行时</a
+                  >网页登录采集（高级）</a
             >
           </nav>
           <CollectionOperationsConsole
@@ -654,9 +650,9 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         ><span>{{ item.label }}</span></a
       ><button v-if="shell === 'member'" type="button" @click="discoveryMode = 'search'">
         <i>⌕</i><span>搜索</span></button
-      ><button type="button" @click="discoveryMode = 'create'">
-        <i>＋</i><span>创建</span>
-      </button>
+          ><a v-if="shell === 'platform_admin'" href="/platform-admin/accounts?create=1"><i>＋</i><span>新建组织</span></a
+          ><a v-else-if="shell === 'organization_admin'" href="/org-admin/members"><i>＋</i><span>邀请成员</span></a
+          ><button v-else type="button" @click="discoveryMode = 'create'"><i>＋</i><span>创建选品</span></button>
     </nav>
     <DiscoveryOverlay
       :open="Boolean(discoveryMode)"

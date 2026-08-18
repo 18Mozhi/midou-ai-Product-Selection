@@ -38,3 +38,11 @@ test('M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchron
   assert.equal(parsed.atomicTasks.length, 17);
   assert.deepEqual(parsed.atomicTasks.map((item) => item.id), Array.from({ length: 17 }, (_, index) => `M01-01.A${String(index + 1).padStart(2, '0')}`));
 });
+
+test('M01-01 login waits for a real MFA code and explains the 30-day session', async () => {
+  const ui = await readFile('apps/web/src/components/LocalIdentity.vue', 'utf8');
+  assert.match(ui, /mfa_required[\s\S]*?mode\.value='mfa-challenge'[\s\S]*?return;/);
+  assert.match(ui, /security_setup\?\.required[\s\S]*?mode\.value='security-setup'[\s\S]*?return;/);
+  assert.match(ui, /登录状态最长保留 30 天/);
+  assert.doesNotMatch(ui, /会话关闭浏览器后失效/);
+});

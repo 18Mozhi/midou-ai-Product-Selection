@@ -5,6 +5,7 @@
 - Node API 与 Node Worker 均继续由宝塔面板管理，不创建额外生产服务。
 - `OPPORTUNITY_REFRESH_POLL_MS` 与 `OPPORTUNITY_REFRESH_LEASE_SECONDS` 只放在宝塔受限环境；修改后在面板重启 Node Worker。
 - 上线先执行 MySQL 5.7 迁移 `0017b_opportunities_m04_02.up.sql`，再重启 Node API 和 Node Worker，最后检查 `/api/v1/health/ready`。
+- 发布自动发现选品逻辑后，确认商品型 `gnews_*` 主题能建立 `trend_topic` 来源候选、关联至少一条真实证据并保持 `insufficient_data`；普通新闻与数据频道不得批量生成候选。
 
 ## 观测和处置
 

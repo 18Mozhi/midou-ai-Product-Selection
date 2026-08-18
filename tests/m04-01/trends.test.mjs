@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { normalizeTrendTitle, TrendService, TrendServiceError, validateMonitoringRuleInput } from '../../apps/api/dist/trend-service.js';
-import { normalizeProjectedTrendTitle, TrendProjectionError } from '../../apps/worker/dist/trend-projection-worker.js';
+import { isAutomaticProductDiscoveryProvider, normalizeProjectedTrendTitle, projectedTrendProviderContext, TrendProjectionError } from '../../apps/worker/dist/trend-projection-worker.js';
 import { buildApp } from '../../apps/api/dist/app.js';
 
 const ids={org:'00000000-0000-4000-8000-000000000401',ws:'00000000-0000-4000-8000-000000000402',actor:'00000000-0000-4000-8000-000000000403',topic:'00000000-0000-4000-8000-000000000404',rule:'00000000-0000-4000-8000-000000000405'};
@@ -15,6 +15,19 @@ test('M04-01.A02/A12 title and monitoring contracts normalize without inventing 
   assert.throws(()=>validateMonitoringRuleInput({...ruleInput,include_keywords:[]}),error=>error instanceof TrendServiceError&&error.code==='trend_rule_keywords_invalid');
   assert.throws(()=>validateMonitoringRuleInput({...ruleInput,notification_channel:'email'}),error=>error instanceof TrendServiceError&&error.code==='trend_rule_channel_unavailable');
   assert.throws(()=>normalizeProjectedTrendTitle(''),error=>error instanceof TrendProjectionError&&error.code==='trend_title_invalid'&&!error.retryable);
+});
+
+test('M04-01 automatic hotspot channels project real markets and only product channels discover candidates',()=>{
+  assert.deepEqual(projectedTrendProviderContext('gnews_jp_amazon'),{accepted:true,automatic:true,market:'JP',language:'ja-JP'});
+  assert.deepEqual(projectedTrendProviderContext('gnews_gb_consumer_trends'),{accepted:true,automatic:true,market:'GB',language:'en-GB'});
+  assert.deepEqual(projectedTrendProviderContext('google_news_search'),{accepted:true,automatic:false,market:'US',language:'en-US'});
+  assert.equal(projectedTrendProviderContext('amazon_product').accepted,false);
+  assert.equal(isAutomaticProductDiscoveryProvider('gnews_us_viral_products'),true);
+  assert.equal(isAutomaticProductDiscoveryProvider('gnews_jp_amazon'),true);
+  assert.equal(isAutomaticProductDiscoveryProvider('gnews_gb_new_products'),true);
+  assert.equal(isAutomaticProductDiscoveryProvider('gnews_us_consumer_trends'),false);
+  assert.equal(isAutomaticProductDiscoveryProvider('gnews_us_retail_data'),false);
+  assert.equal(isAutomaticProductDiscoveryProvider('google_news_search'),false);
 });
 
 test('M04-01.A04/A06/A09 service validates pagination versions and scoped writes',async()=>{
@@ -51,4 +64,9 @@ test('M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module',a
   const values=await Promise.all(paths.map(path=>readFile(path,'utf8'))),[up,down,worker,service,repository,routes,web,schema,env,openapi,feature,architecture,runbook,e2e,live,blueprint]=values;
   assert.match(up,/trend_topics[\s\S]*trend_projection_jobs[\s\S]*trend_events[\s\S]*trend_outbox[\s\S]*trend:manage/);
   assert.match(down,/DROP TABLE IF EXISTS `trend_topics`/);assert.match(worker,/succeeded_empty[\s\S]*failed_terminal[\s\S]*dead_letter/);assert.match(service,/insufficient_data/);assert.match(repository,/organization_id=\?[\s\S]*workspace_id=\?/);assert.match(routes,/trend:read[\s\S]*trend:manage/);assert.match(web,/loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/);assert.match(schema,/TREND_PROJECTION_POLL_MS/);assert.match(env,/TREND_PROJECTION_LEASE_SECONDS/);assert.match(openapi,/\/trends\/\{topicId\}\/follow:/);assert.match(feature,/trendDomain/);assert.match(architecture,/heat[\s\S]*signals/);assert.match(runbook,/宝塔[\s\S]*回滚/);assert.match(e2e,/toHaveScreenshot/);assert.match(live,/MySqlTrendProjectionWorker/);assert.match(blueprint,/M04-01 实现合同/);
+  assert.match(worker,/isAutomaticProductDiscoveryProvider[\s\S]*opportunity\.candidate\.discovered/);
+  assert.match(openapi,/商品型自动热点频道[\s\S]*待评估选品/);
+  assert.match(feature,/automaticProductDiscovery/);
+  assert.match(architecture,/商品型热点频道[\s\S]*待评估选品/);
+  assert.match(runbook,/自动发现选品[\s\S]*回滚/);
 });

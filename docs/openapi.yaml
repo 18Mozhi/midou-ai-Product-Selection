@@ -876,6 +876,7 @@ paths:
   /opportunities:
     get:
       summary: List workspace-scoped opportunities without fabricated scores
+      description: 商品型自动热点频道会建立带真实趋势证据的待评估选品；人工创建仍可用。自动候选保持 insufficient_data，不代表系统推荐、采纳或可靠利润。
       security: [{ HttpOnlySession: [] }]
       parameters:
         - $ref: '#/components/parameters/Page'

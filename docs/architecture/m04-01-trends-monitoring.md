@@ -2,13 +2,15 @@
 
 ## 范围与非目标
 
-本模块把 P03 的 `google_news_search` 规范化证据投影为工作区级趋势主题，提供主题列表、详情、时间线、关键词、证据、关注、相关性状态和监控规则。创建机会、机会评分、邮件投递和 AI 摘要分别属于 M04-02、M04-03、后续通知模块和 M04-07，本模块不提前实现或伪装启用。
+本模块把 P03 的手动 `google_news_search` 和 96 条 `gnews_<市场>_<主题>` 自动频道规范化证据投影为工作区级趋势主题，提供主题列表、详情、时间线、关键词、证据、关注、相关性状态和监控规则。机会数据仍由 M04-02 管理；商品型热点频道可自动建立“待评估选品”，但不会自动评分、推荐、采纳或填充利润。机会评分、邮件投递和 AI 摘要分别属于 M04-03、后续通知模块和 M04-07。
 
 ## 数据和异步链路
 
 `normalized_records` 由宝塔管理的 Node Worker 扫描并补建 `trend_projection_jobs`。投影任务使用 MySQL 5.7 租约、四次总尝试和 1/5/15 分钟退避；不可恢复的字段错误进入 `failed_terminal`，可恢复依赖错误耗尽后进入 `dead_letter`，非趋势来源进入 `succeeded_empty`。
 
-Google News 记录按 NFKC、小写和连续空白折叠后的完整标题生成 `topic_key`。相同标题在同一组织与工作区内合并；`trend_signals.normalized_record_id` 唯一，重放不会重复增加热度。`heat.value` 是实际信号数，单位固定为 `signals`。没有批准的时间窗口和置信度算法时，`momentum_percent` 与 `confidence_score` 保持空值，`confidence_status=insufficient_data`。
+Google News 记录按市场、语言以及 NFKC、小写和连续空白折叠后的完整标题生成 `topic_key`。相同市场和语言的相同标题在同一组织与工作区内合并；自动频道从 Provider code 解析真实市场与语言，不能全部伪装为美国。`trend_signals.normalized_record_id` 唯一，重放不会重复增加热度。`heat.value` 是实际信号数，单位固定为 `signals`。没有批准的时间窗口和置信度算法时，`momentum_percent` 与 `confidence_score` 保持空值，`confidence_status=insufficient_data`。
+
+商品型热点频道仅包括爆款商品、Amazon、TikTok Shop、Etsy、eBay 和新品发布。首次出现的新主题由同一 Worker 在同一事务创建 M04-02 的待评估选品、关联当前真实趋势证据并写 `opportunity.candidate.discovered` 审计与 Outbox；后续同主题信号只增补证据。消费趋势、零售数据、搜索数据和社区讨论仍只进入热点中心，避免把每条新闻都冒充商品。自动发现结果保持 `recommendation_status=insufficient_data`，必须由人补齐竞争、成本和风险证据后再决策。
 
 投影、关注、取消关注、相关性和规则变更都在同一事务写 `trend_events` 与 `trend_outbox`，保留 `request_id`、`trace_id` 和组织/工作区范围。相关性更新不删除 `raw_evidence`、`normalized_records` 或 `trend_signals`。
 

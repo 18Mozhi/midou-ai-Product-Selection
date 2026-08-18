@@ -4,6 +4,36 @@ import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from 'mysql
 export type TrendProjectionResult = { status: 'idle' } | { status: 'succeeded' | 'succeeded_empty' | 'failed_terminal' | 'scheduled' | 'dead_letter'; job_id: string; topic_id?: string; error_code?: string; diagnostic?: string };
 interface ClaimedJob { id: string; organizationId: string; workspaceId: string; normalizedRecordId: string; providerId: string; providerCode: string; rawEvidenceId: string; payload: Record<string, unknown>; actorId: string; requestId: string; traceId: string; attemptCount: number }
 
+const automaticTrendLocales = {
+  us: { market: 'US', language: 'en-US' },
+  gb: { market: 'GB', language: 'en-GB' },
+  de: { market: 'DE', language: 'de-DE' },
+  fr: { market: 'FR', language: 'fr-FR' },
+  jp: { market: 'JP', language: 'ja-JP' },
+  kr: { market: 'KR', language: 'ko-KR' },
+  sg: { market: 'SG', language: 'en-SG' },
+  au: { market: 'AU', language: 'en-AU' },
+} as const;
+const automaticTrendTopics = new Set(['consumer_trends', 'viral_products', 'amazon', 'tiktok_shop', 'etsy', 'ebay', 'retail_data', 'search_data', 'social_buzz', 'reddit', 'youtube', 'new_products']);
+const automaticProductTopics = new Set(['viral_products', 'amazon', 'tiktok_shop', 'etsy', 'ebay', 'new_products']);
+
+export type ProjectedTrendProviderContext = { accepted: false } | { accepted: true; automatic: boolean; market: string; language: string };
+
+export function projectedTrendProviderContext(providerCode: string): ProjectedTrendProviderContext {
+  if (providerCode === 'google_news_search') return { accepted: true, automatic: false, market: 'US', language: 'en-US' };
+  const match = /^gnews_([a-z]{2})_(.+)$/.exec(providerCode);
+  if (!match) return { accepted: false };
+  const locale = automaticTrendLocales[match[1] as keyof typeof automaticTrendLocales];
+  if (!locale || !automaticTrendTopics.has(match[2]!)) return { accepted: false };
+  return { accepted: true, automatic: true, ...locale };
+}
+
+export function isAutomaticProductDiscoveryProvider(providerCode: string) {
+  const context = projectedTrendProviderContext(providerCode);
+  const match = /^gnews_[a-z]{2}_(.+)$/.exec(providerCode);
+  return context.accepted && context.automatic && Boolean(match && automaticProductTopics.has(match[1]!));
+}
+
 export function normalizeProjectedTrendTitle(value: unknown) {
   if (typeof value !== 'string' || !value.trim() || value.length > 1000) throw new TrendProjectionError('trend_title_invalid', false);
   return value.trim().normalize('NFKC').toLocaleLowerCase('en-US').replace(/\s+/g, ' ');
@@ -27,7 +57,7 @@ export class MySqlTrendProjectionWorker {
     await this.enqueueMissing();
     const job = await this.claim();
     if (!job) return { status: 'idle' };
-    if (job.providerCode !== 'google_news_search') { await this.finish(job, 'succeeded_empty', null); return { status: 'succeeded_empty', job_id: job.id }; }
+    if (!projectedTrendProviderContext(job.providerCode).accepted) { await this.finish(job, 'succeeded_empty', null); return { status: 'succeeded_empty', job_id: job.id }; }
     try {
       const topicId = await this.project(job);
       return { status: 'succeeded', job_id: job.id, topic_id: topicId };
@@ -63,27 +93,49 @@ export class MySqlTrendProjectionWorker {
 
   private async project(job: ClaimedJob) {
     const title = text(job.payload.title, 'trend_title_invalid', 1000), normalizedTitle = normalizeProjectedTrendTitle(title), publisher = text(job.payload.publisher, 'trend_publisher_invalid', 300), canonicalUrl = http(job.payload.canonical_url), publishedAt = date(job.payload.published_at, 'trend_published_at_invalid'), observedAt = date(job.payload.observed_at, 'trend_observed_at_invalid');
-    const topicKey = createHash('sha256').update(normalizedTitle).digest('hex'), now = this.now(), c = await this.pool.getConnection(); let stage = 'begin';
+    const providerContext = projectedTrendProviderContext(job.providerCode);
+    if (!providerContext.accepted) throw new TrendProjectionError('trend_provider_unsupported', false);
+    const topicKey = createHash('sha256').update(`${providerContext.market}\0${providerContext.language}\0${normalizedTitle}`).digest('hex'), now = this.now(), c = await this.pool.getConnection(); let stage = 'begin';
     try {
       await c.beginTransaction();
       stage = 'topic_lookup';
       const [topics] = await c.query<RowDataPacket[]>('SELECT id FROM trend_topics WHERE organization_id=? AND workspace_id=? AND topic_key=? FOR UPDATE', [job.organizationId, job.workspaceId, topicKey]);
       const topicId = topics[0] ? String(topics[0].id) : randomUUID();
-      if (!topics[0]) { stage = 'topic_insert'; await c.query("INSERT INTO trend_topics (id,organization_id,workspace_id,topic_key,title,category,market,language,status,signal_count,source_count,heat_value,heat_unit,momentum_percent,confidence_score,confidence_status,first_seen_at,last_seen_at,source_fresh_at,version,created_by,created_at,updated_at) VALUES (?,?,?,?,?,NULL,'US','en-US','active',0,0,0,'signals',NULL,NULL,'insufficient_data',?,?,?,1,?,?,?)", [topicId, job.organizationId, job.workspaceId, topicKey, title, publishedAt, publishedAt, observedAt, job.actorId, now, now]); }
+      if (!topics[0]) { stage = 'topic_insert'; await c.query("INSERT INTO trend_topics (id,organization_id,workspace_id,topic_key,title,category,market,language,status,signal_count,source_count,heat_value,heat_unit,momentum_percent,confidence_score,confidence_status,first_seen_at,last_seen_at,source_fresh_at,version,created_by,created_at,updated_at) VALUES (?,?,?,?,?,NULL,?,?,'active',0,0,0,'signals',NULL,NULL,'insufficient_data',?,?,?,1,?,?,?)", [topicId, job.organizationId, job.workspaceId, topicKey, title, providerContext.market, providerContext.language, publishedAt, publishedAt, observedAt, job.actorId, now, now]); }
       stage = 'signal_insert';
-      const [insert] = await c.query<ResultSetHeader>('INSERT IGNORE INTO trend_signals (id,organization_id,workspace_id,topic_id,normalized_record_id,raw_evidence_id,provider_id,title,publisher,canonical_url,published_at,observed_at,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [randomUUID(), job.organizationId, job.workspaceId, topicId, job.normalizedRecordId, job.rawEvidenceId, job.providerId, title, publisher, canonicalUrl, publishedAt, observedAt, job.requestId, job.traceId, now]);
+      const signalId = randomUUID();
+      const [insert] = await c.query<ResultSetHeader>('INSERT IGNORE INTO trend_signals (id,organization_id,workspace_id,topic_id,normalized_record_id,raw_evidence_id,provider_id,title,publisher,canonical_url,published_at,observed_at,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [signalId, job.organizationId, job.workspaceId, topicId, job.normalizedRecordId, job.rawEvidenceId, job.providerId, title, publisher, canonicalUrl, publishedAt, observedAt, job.requestId, job.traceId, now]);
       if (insert.affectedRows) {
         stage = 'topic_aggregate';
         await c.query("UPDATE trend_topics t SET signal_count=(SELECT COUNT(*) FROM trend_signals s WHERE s.topic_id=t.id),source_count=(SELECT COUNT(DISTINCT provider_id) FROM trend_signals s WHERE s.topic_id=t.id),heat_value=(SELECT COUNT(*) FROM trend_signals s WHERE s.topic_id=t.id),first_seen_at=(SELECT MIN(published_at) FROM trend_signals s WHERE s.topic_id=t.id),last_seen_at=(SELECT MAX(published_at) FROM trend_signals s WHERE s.topic_id=t.id),source_fresh_at=GREATEST(source_fresh_at,?),version=version+1,updated_at=? WHERE t.id=?", [observedAt, now, topicId]);
         stage = 'keyword_insert';
-        await c.query("INSERT IGNORE INTO trend_topic_keywords (id,organization_id,workspace_id,topic_id,keyword,keyword_type,language,market,created_at) VALUES (?,?,?,?,?,'primary','en-US','US',?)", [randomUUID(), job.organizationId, job.workspaceId, topicId, normalizedTitle.slice(0, 300), now]);
+        await c.query("INSERT IGNORE INTO trend_topic_keywords (id,organization_id,workspace_id,topic_id,keyword,keyword_type,language,market,created_at) VALUES (?,?,?,?,?,'primary',?,?,?)", [randomUUID(), job.organizationId, job.workspaceId, topicId, normalizedTitle.slice(0, 300), providerContext.language, providerContext.market, now]);
         stage = 'event_insert';
-        await this.event(c, job, 'trend.topic.projected', 'trend_topic', topicId, { normalized_record_id: job.normalizedRecordId, heat_unit: 'signals' });
+        await this.event(c, job, 'trend.topic.projected', 'trend_topic', topicId, { normalized_record_id: job.normalizedRecordId, provider_code: job.providerCode, market: providerContext.market, language: providerContext.language, heat_unit: 'signals' });
+        if (isAutomaticProductDiscoveryProvider(job.providerCode)) {
+          stage = 'automatic_product_discovery';
+          await this.discoverOpportunity(c, job, topicId, signalId, title, providerContext.market, observedAt, now);
+        }
       }
       stage = 'job_complete';
       await c.query("UPDATE trend_projection_jobs SET status='succeeded',lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? WHERE id=? AND status='leased' AND lease_owner=?", [now, job.id, this.workerId]);
       await c.commit(); return topicId;
     } catch (error) { await c.rollback(); if (error instanceof TrendProjectionError) throw error; const wrapped = new Error(`${stage}: ${error instanceof Error ? error.message : 'unknown'}`) as Error & { code?: string }; const code = (error as { code?: string })?.code; if (code) wrapped.code = code; throw wrapped; } finally { c.release(); }
+  }
+
+  private async discoverOpportunity(c: PoolConnection, job: ClaimedJob, topicId: string, signalId: string, title: string, market: string, observedAt: Date, now: Date) {
+    const opportunityId = randomUUID();
+    const [insert] = await c.query<ResultSetHeader>("INSERT IGNORE INTO opportunities (id,organization_id,workspace_id,name,market,category,source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status,overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status,confidence_score,evidence_count,source_count,coverage_status,score_rule_version,scored_at,decision_status,version,created_by,created_at,updated_at) VALUES (?,?,?,?,?,NULL,'trend_topic',?,NULL,'ready','insufficient_data',NULL,NULL,NULL,'insufficient_data','unknown','insufficient_data',NULL,0,0,'partial',NULL,NULL,'pending',1,?,?,?)", [opportunityId, job.organizationId, job.workspaceId, title.slice(0, 200), market, topicId, job.actorId, now, now]);
+    const [rows] = await c.query<RowDataPacket[]>('SELECT id FROM opportunities WHERE organization_id=? AND workspace_id=? AND source_type=\'trend_topic\' AND source_ref_id=? LIMIT 1 FOR UPDATE', [job.organizationId, job.workspaceId, topicId]);
+    const persistedOpportunityId = String(rows[0]?.id ?? opportunityId);
+    await c.query("INSERT IGNORE INTO opportunity_evidence_links (id,organization_id,workspace_id,opportunity_id,evidence_type,evidence_id,provider_id,raw_evidence_id,observed_at,created_at) VALUES (?,?,?,?,'trend_signal',?,?,?,?,?)", [randomUUID(), job.organizationId, job.workspaceId, persistedOpportunityId, signalId, job.providerId, job.rawEvidenceId, observedAt, now]);
+    await c.query("UPDATE opportunities o SET evidence_count=(SELECT COUNT(*) FROM opportunity_evidence_links l WHERE l.opportunity_id=o.id),source_count=(SELECT COUNT(DISTINCT provider_id) FROM opportunity_evidence_links l WHERE l.opportunity_id=o.id),coverage_status='partial',lifecycle_status=IF(lifecycle_status='candidate','ready',lifecycle_status),version=IF(?,version,version+1),updated_at=? WHERE o.id=?", [insert.affectedRows, now, persistedOpportunityId]);
+    if (insert.affectedRows) await this.opportunityEvent(c, job, persistedOpportunityId, { source_type: 'trend_topic', source_ref_id: topicId, provider_code: job.providerCode, recommendation_status: 'insufficient_data', discovery_mode: 'automatic' }, now);
+  }
+
+  private async opportunityEvent(c: PoolConnection, job: ClaimedJob, opportunityId: string, payload: unknown, now: Date) {
+    await c.query("INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES (?,?,?,'opportunity.candidate.discovered','opportunity',?,'worker',?,?,?,?,?)", [randomUUID(), job.organizationId, job.workspaceId, opportunityId, this.workerId, job.requestId, job.traceId, JSON.stringify(payload), now]);
+    await c.query("INSERT INTO opportunity_outbox (id,organization_id,workspace_id,event_type,resource_type,resource_id,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,'opportunity.candidate.discovered','opportunity',?,?,'queued',0,?,?,?,?,?)", [randomUUID(), job.organizationId, job.workspaceId, opportunityId, JSON.stringify(payload), now, job.requestId, job.traceId, now, now]);
   }
 
   private async finish(job: ClaimedJob, status: 'succeeded_empty' | 'failed_terminal' | 'scheduled' | 'dead_letter', errorCode: string | null) {

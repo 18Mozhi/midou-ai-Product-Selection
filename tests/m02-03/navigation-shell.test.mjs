@@ -84,3 +84,10 @@ test('M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(runbook, /宝塔.*ai选品/s);
   assert.match(feature, /navigationShells/);
 });
+
+test('M02-03 each role shell exposes a role-specific primary action', async () => {
+  const component = await read('apps/web/src/components/NavigationShell.vue');
+  assert.match(component, /shell === 'platform_admin'[\s\S]*?href="\/platform-admin\/accounts\?create=1"[\s\S]*?新建组织/);
+  assert.match(component, /shell === 'organization_admin'[\s\S]*?href="\/org-admin\/members"[\s\S]*?邀请成员/);
+  assert.match(component, /shell === 'member'[\s\S]*?创建选品/);
+});
