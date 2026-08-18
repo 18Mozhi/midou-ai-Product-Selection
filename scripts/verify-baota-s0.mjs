@@ -41,7 +41,7 @@ try {
     || pythonProjects[0].name !== 'ai选品-python'
     || pythonProjects[0].workingDirectory !== '/www/wwwroot/ai选品/python'
     || pythonProjects[0].pythonVersion !== '3.12.13'
-    || pythonProjects[0].startCommand !== 'python -m scoutops_crawler'
+    || pythonProjects[0].startCommand !== 'python -m scoutops_crawler --env-file=/www/wwwroot/ai选品/config/product_scout.env'
   ) {
     throw new Error('BaoTa Python crawler contract is invalid');
   }

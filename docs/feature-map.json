@@ -2038,7 +2038,7 @@
       "kind": "baota-python-project",
       "responsibility": "Python 3.12 crawler heartbeat and Python-to-Playwright bridge runtime",
       "workingDirectory": "/www/wwwroot/ai选品/python",
-      "startCommand": "python -m scoutops_crawler",
+      "startCommand": "python -m scoutops_crawler --env-file=/www/wwwroot/ai选品/config/product_scout.env",
       "status": "production_managed"
     },
     {

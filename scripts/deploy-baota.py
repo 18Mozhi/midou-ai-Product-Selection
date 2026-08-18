@@ -42,6 +42,7 @@ NODE_START_COMMAND = (
     f"node --env-file={PROJECT_ROOT}/config/product_scout.env "
     f"--env-file={PROJECT_ROOT}/config/release.env apps/backend/dist/server.js"
 )
+PYTHON_START_COMMAND = f"python -m scoutops_crawler --env-file={PROJECT_ROOT}/config/product_scout.env"
 
 
 class CredentialAttribute(ctypes.Structure):
@@ -178,6 +179,7 @@ def panel_deploy_source(build_sha: str, initialize_layout: bool) -> str:
         "node_version": NODE_VERSION,
         "python_bin": PYTHON_BIN,
         "node_start": NODE_START_COMMAND,
+        "python_start": PYTHON_START_COMMAND,
         "build_sha": build_sha,
         "initialize": initialize_layout,
     }
@@ -257,10 +259,6 @@ try:
     python_model = PythonModel()
     stop_get = public.dict_obj(); stop_get.project_name = v["node_project"]
     panel_ok(node.stop_project(stop_get), "stop Node", ("项目未启动",))
-    if python_row:
-        python_stop = public.dict_obj(); python_stop.name = v["python_project"]
-        panel_ok(python_model.StopProject(python_stop), "stop Python", ("项目停止失败", "项目未启动"))
-
     if rollback.exists():
         shutil.rmtree(rollback)
     rollback.mkdir(mode=0o750)
@@ -348,13 +346,21 @@ try:
         create.env_list = []
         create.env_file = str(env_file)
         create.framework = "python"
-        create.project_cmd = "python -m scoutops_crawler"
+        create.project_cmd = v["python_start"]
         create.auto_run = True
         create.logpath = "/www/wwwlogs/python/ai选品-python"
         panel_ok(python_model.CreateProject(create), "create Python project")
     else:
-        restart = public.dict_obj(); restart.name = v["python_project"]
-        panel_ok(python_model.RestartProject(restart), "restart Python project")
+        change = public.dict_obj(); change.name = v["python_project"]
+        change.data = {{
+            "stype": "command",
+            "project_cmd": v["python_start"],
+            "env_file": str(env_file),
+            "user": "www",
+            "auto_run": True,
+            "logpath": "/www/wwwlogs/python/ai选品-python",
+        }}
+        panel_ok(python_model.ChangeProjectConf(change), "update Python project")
 
     shutil.rmtree(stage)
     result(True, "deployed", node_path=str(root / "backend"), python_path=str(root / "python"))

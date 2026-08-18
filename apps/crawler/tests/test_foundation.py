@@ -1,4 +1,6 @@
+import os
 import sys
+import tempfile
 import unittest
 from unittest.mock import Mock, patch
 from pathlib import Path
@@ -8,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scoutops_crawler.foundation import FoundationTask, validate_task
 from scoutops_crawler.config import ConfigError, load_config
 from scoutops_crawler.playwright_bridge import PlaywrightBridge, PlaywrightBridgeError
+from scoutops_crawler.__main__ import load_env_file
 
 
 class FoundationTaskTest(unittest.TestCase):
@@ -29,6 +32,23 @@ class FoundationTaskTest(unittest.TestCase):
         with self.assertRaises(ConfigError) as raised:
             load_config({"CREDENTIALS_MASTER_KEY_VERSION": "version with spaces"})
         self.assertEqual(raised.exception.key, "CREDENTIALS_MASTER_KEY_VERSION")
+
+    def test_command_mode_loads_restricted_env_without_shell_or_overriding_panel_values(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "runtime.env"
+            path.write_text("# managed by BaoTa\nCRAWLER_ID=from-file\nQUOTED_VALUE='kept private'\n", encoding="utf-8")
+            with patch.dict(os.environ, {"CRAWLER_ID": "panel-wins"}, clear=True):
+                load_env_file(str(path))
+                self.assertEqual(os.environ["CRAWLER_ID"], "panel-wins")
+                self.assertEqual(os.environ["QUOTED_VALUE"], "kept private")
+
+    def test_command_mode_rejects_malformed_env_entry_without_echoing_value(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "runtime.env"
+            path.write_text("INVALID-KEY=secret-value\n", encoding="utf-8")
+            with self.assertRaises(ValueError) as raised:
+                load_env_file(str(path))
+            self.assertNotIn("secret-value", str(raised.exception))
 
     @patch("scoutops_crawler.playwright_bridge.subprocess.run")
     def test_playwright_bridge_uses_stdin_without_shell_and_checks_correlation(self, run: Mock) -> None:

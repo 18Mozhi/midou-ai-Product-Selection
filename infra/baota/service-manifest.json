@@ -45,7 +45,7 @@
       "kind": "baota-python-project",
       "workingDirectory": "/www/wwwroot/ai选品/python",
       "pythonVersion": "3.12.13",
-      "startCommand": "python -m scoutops_crawler",
+      "startCommand": "python -m scoutops_crawler --env-file=/www/wwwroot/ai选品/config/product_scout.env",
       "runMode": "command",
       "processMode": "foreground",
       "public": false,

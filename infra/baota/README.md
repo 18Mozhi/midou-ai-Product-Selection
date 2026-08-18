@@ -8,7 +8,7 @@
 | --- | --- | --- | --- |
 | Vue 前端 | `/www/wwwroot/ai选品/frontend` | 网站 `midouai.mozhiz.cn` | 静态文件，无独立进程 |
 | Node 后端 | `/www/wwwroot/ai选品/backend` | Node 项目 `ai选品` | `node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js` |
-| Python 采集运行时 | `/www/wwwroot/ai选品/python` | Python 项目 `ai选品-python` | Python 3.12.13 命令模式：`python -m scoutops_crawler` |
+| Python 采集运行时 | `/www/wwwroot/ai选品/python` | Python 项目 `ai选品-python` | Python 3.12.13 命令模式：`python -m scoutops_crawler --env-file=/www/wwwroot/ai选品/config/product_scout.env` |
 | 受限配置 | `/www/wwwroot/ai选品/config` | 仅宝塔/受限文件权限 | 不提交、不打印 |
 | 运行数据 | `/www/wwwroot/ai选品/runtime` | Node/Python 共用 | 证据、导出、凭据临时目录与验证数据 |
 | 本机备份 | `/www/wwwroot/ai选品/backups` | 宝塔备份任务 | 仅本项目恢复材料 |
@@ -38,7 +38,7 @@ python scripts/deploy-baota.py
 /www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py python ai选品-python
 ```
 
-宝塔内部会生成自己的管理脚本和 PID 文件，这是面板实现细节；项目配置中的 Node 启动命令必须是上表的直接 `node` 命令，项目目录中不得再保存自定义 Bash 启动器。禁止 systemd、独立 PM2、宿主机 crontab、`nohup`、screen 或屏外 Docker Compose。
+宝塔内部会生成自己的管理脚本和 PID 文件，这是面板实现细节；项目配置中的 Node/Python 启动命令必须是上表的直接命令，项目目录中不得再保存自定义 Bash 启动器。Python 自己读取受限环境文件，避免宝塔命令模式漏传环境。禁止 systemd、独立 PM2、宿主机 crontab、`nohup`、screen 或屏外 Docker Compose。
 
 ## 验证、回滚与维护边界
 
