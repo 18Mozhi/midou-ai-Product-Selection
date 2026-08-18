@@ -141,6 +141,27 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
   });
 });
 
+test("platform administrator can save source schedule, retry and enablement", async ({page}) => {
+  await nav(page, "platform_admin");
+  await catalog(page);
+  let updateBody: any = null;
+  await page.route("**/api/v1/platform/provider-sources/**/configuration", async route => {
+    updateBody = route.request().postDataJSON();
+    expect(route.request().method()).toBe("PUT");
+    expect(route.request().headers()["idempotency-key"]).toBeTruthy();
+    await route.fulfill({json: envelope({...setup[0].provisioned,status:updateBody.status,schedule_minutes:updateBody.schedule_minutes,timeout_ms:updateBody.timeout_ms,retry_limit:updateBody.retry_limit,version:2})});
+  });
+  await page.goto("/platform-admin/providers/sources");
+  await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
+  await page.getByRole("button", {name:"编辑采集配置"}).click();
+  await page.getByLabel("采集频率（分钟）").fill("45");
+  await page.getByLabel("运行状态").selectOption("enabled");
+  await page.getByLabel("变更原因").fill("调整 Amazon 公开来源采集频率");
+  await page.getByRole("button", {name:"保存配置"}).click();
+  await expect.poll(() => updateBody).toMatchObject({schedule_minutes:45,status:"enabled",expected_version:1,reason:"调整 Amazon 公开来源采集频率"});
+  await expect(page.getByRole("status")).toContainText("来源配置已保存");
+});
+
 test("M03-07.A08/A09 member can manually schedule immediate hotspot refresh", async ({
   page,
 }) => {
