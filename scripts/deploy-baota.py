@@ -185,6 +185,7 @@ def panel_deploy_source(build_sha: str, initialize_layout: bool) -> str:
     return f'''import json, os, shutil, sys, traceback
 from pathlib import Path
 sys.path.insert(0, "/www/server/panel")
+sys.path.insert(0, "/www/server/panel/class")
 import public
 import panelSite
 from projectModel.nodejsModel import main as NodeModel
