@@ -2451,7 +2451,7 @@ paths:
   /platform/accounts/organizations:
     post:
       summary: Create an organization with its default workspace
-      description: Requires platform:superadmin, same-origin Origin and Idempotency-Key. The current super administrator becomes the first organization administrator and receives the organization data scope.
+      description: Requires platform:superadmin, same-origin Origin and Idempotency-Key. The selected active user, or the current super administrator by default, becomes the first organization administrator and receives the organization data scope.
       security: [{ HttpOnlySession: [] }]
       parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
       requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PlatformOrganizationCreateInput' } } } }
@@ -2461,6 +2461,44 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /platform/accounts/organizations/{organizationId}:
+    patch:
+      summary: Edit organization profile and retention settings
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: organizationId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PlatformOrganizationUpdateInput' } } } }
+      responses:
+        '200': { description: Organization profile updated and audited, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /platform/accounts/users:
+    post:
+      summary: Create a local user or fixed platform administrator
+      description: The temporary password is hashed with Argon2id and never returned. First login requires password change; platform administrators must also enroll MFA.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PlatformUserCreateInput' } } } }
+      responses:
+        '201': { description: User created and audited, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /platform/accounts/users/{userId}:
+    get:
+      summary: Read user profile, organization memberships and session metadata
+      description: Never returns password hashes, tokens, IP hashes or user-agent hashes.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ name: userId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: User account detail, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
   /platform/accounts/organizations/{organizationId}/status:
     post:
       summary: Stop or restore an organization
@@ -2507,6 +2545,34 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
+  /platform/accounts/users/{userId}/password:
+    post:
+      summary: Force-reset a local password and revoke all active sessions
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: userId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PlatformPasswordResetInput' } } } }
+      responses:
+        '200': { description: Password replaced with Argon2id hash, sessions revoked and operation audited, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /platform/accounts/users/{userId}/sessions/revoke:
+    post:
+      summary: Revoke one or all active sessions for a user
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: userId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PlatformSessionRevokeInput' } } } }
+      responses:
+        '200': { description: Matching active sessions revoked and operation audited, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
 components:
   securitySchemes:
     BearerAuth:
@@ -4046,6 +4112,40 @@ components:
       properties:
         name: { type: string, minLength: 2, maxLength: 120 }
         slug: { type: string, pattern: '^[a-z0-9][a-z0-9-]{1,62}$' }
+        initial_admin_user_id: { type: string, format: uuid }
+    PlatformOrganizationUpdateInput:
+      type: object
+      additionalProperties: false
+      required: [name, timezone, data_retention_days, reason]
+      properties:
+        name: { type: string, minLength: 2, maxLength: 120 }
+        timezone: { type: string, minLength: 1, maxLength: 64 }
+        data_retention_days: { type: integer, minimum: 30, maximum: 3650 }
+        reason: { type: string, minLength: 2, maxLength: 300 }
+    PlatformUserCreateInput:
+      type: object
+      additionalProperties: false
+      required: [email, temporary_password]
+      properties:
+        email: { type: string, format: email, maxLength: 254 }
+        temporary_password: { type: string, minLength: 12, maxLength: 256 }
+        platform_role_code: { type: string, nullable: true, enum: [platform_operations_admin, platform_security_admin, platform_super_admin] }
+        organization_id: { type: string, nullable: true, format: uuid }
+        organization_role_code: { type: string, enum: [member, organization_admin] }
+    PlatformPasswordResetInput:
+      type: object
+      additionalProperties: false
+      required: [temporary_password, reason]
+      properties:
+        temporary_password: { type: string, minLength: 12, maxLength: 256 }
+        reason: { type: string, minLength: 2, maxLength: 300 }
+    PlatformSessionRevokeInput:
+      type: object
+      additionalProperties: false
+      required: [reason]
+      properties:
+        session_id: { type: string, nullable: true, format: uuid }
+        reason: { type: string, minLength: 2, maxLength: 300 }
     PlatformOrganizationStatusInput:
       type: object
       additionalProperties: false

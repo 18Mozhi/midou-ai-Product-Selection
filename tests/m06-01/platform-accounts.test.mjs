@@ -15,6 +15,11 @@ test("M06-01 platform account service validates novice organization and account 
     repository = {
       overview: async (input) => ({ input }),
       createOrganization: async (input) => (calls.push(input), input),
+      updateOrganization: async (input) => (calls.push(input), input),
+      createUser: async (input) => (calls.push(input), input),
+      userDetail: async (input) => ({ input, sessions: [] }),
+      resetUserPassword: async (input) => (calls.push(input), input),
+      revokeUserSessions: async (input) => (calls.push(input), input),
       setOrganizationStatus: async (input) => (calls.push(input), input),
       setUserStatus: async (input) => (calls.push(input), input),
       setPlatformRole: async (input) => (calls.push(input), input),
@@ -22,6 +27,9 @@ test("M06-01 platform account service validates novice organization and account 
     service = new PlatformAccountService(
       repository,
       () => new Date("2026-08-18T00:00:00Z"),
+      { hash: async (value) => `argon2:${value}`, verify: async () => true },
+      12,
+      256,
     );
   await service.createOrganization(
     { name: "米豆选品团队", slug: "midou-team" },
@@ -46,7 +54,13 @@ test("M06-01 platform account service validates novice organization and account 
     },
     context,
   );
-  assert.equal(calls.length, 4);
+  await service.updateOrganization(other,{name:"米豆新团队",timezone:"Asia/Shanghai",data_retention_days:730,reason:"更新组织资料"},context);
+  await service.createUser({email:"new-admin@example.test",temporary_password:"temporary-password",platform_role_code:"platform_operations_admin",organization_id:other,organization_role_code:"organization_admin"},context);
+  await service.resetUserPassword(other,{temporary_password:"next-temporary-password",reason:"管理员强制改密"},context);
+  await service.revokeUserSessions(other,{session_id:null,reason:"撤销全部登录会话"},context);
+  assert.equal(calls.length, 8);
+  assert.equal(calls[5].passwordHash,"argon2:temporary-password");
+  assert.equal("temporary_password" in calls[5],false);
   assert.throws(
     () =>
       service.userStatus(
@@ -86,6 +100,9 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(service, /cannot_disable_self/);
   assert.match(repository, /platform_audit_events/);
   assert.match(repository, /UPDATE user_sessions SET status='revoked'/);
+  assert.match(repository, /user.password.forced_reset/);
+  assert.match(repository, /user.sessions.revoked/);
+  assert.match(repository, /must_change_password=1/);
   assert.match(repository, /INSERT INTO membership_role_assignments/);
   assert.match(
     repository,
@@ -97,6 +114,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
     /UPDATE sessions SET|INSERT INTO membership_roles/,
   );
   assert.match(routes, /platform:superadmin/);
+  assert.match(routes, /users\/:userId\/password/);
+  assert.match(routes, /users\/:userId\/sessions\/revoke/);
   assert.match(web, /组织管理.*用户管理.*管理员管理/s);
   assert.match(navigation, /账号与组织/);
   assert.doesNotMatch(

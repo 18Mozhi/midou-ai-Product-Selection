@@ -553,7 +553,13 @@ registerPlatformDashboardRoutes(app, {
   webOrigin: config.app.webOrigin,
 });
 registerPlatformAccountRoutes(app, {
-  service: new PlatformAccountService(new MySqlPlatformAccountRepository(pool)),
+  service: new PlatformAccountService(
+    new MySqlPlatformAccountRepository(pool),
+    () => new Date(),
+    passwordHasher,
+    config.auth.passwordMinLength,
+    config.auth.passwordMaxLength,
+  ),
   authorization,
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",
