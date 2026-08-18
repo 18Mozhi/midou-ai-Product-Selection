@@ -48,4 +48,5 @@ test('M07-03.A12-A16 preflight always passes and production evidence is opt-in',
 test('M07-03.A17 docs, OpenAPI, Feature Map and evidence schema stay synchronized', async () => {
   const all = (await Promise.all(['docs/openapi.yaml','docs/feature-map.json','docs/architecture/m07-03-baota-deployment.md','docs/runbooks/m07-03-baota-deployment.md','verification/baota-production-evidence.schema.json'].map(read))).join('\n');
   for (const token of ['M07-03','192.168.1.220','midouai.mozhiz.cn','productionDeployed','healthy','宝塔','回滚']) assert.match(all, new RegExp(token.replaceAll('.','\\.')));
+  assert.match(all, /"runtime"[\s\S]*"python"/);
 });
