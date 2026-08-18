@@ -12,7 +12,7 @@ import {
 const policy = {
   passwordMinLength: 12,
   passwordMaxLength: 128,
-  sessionTtlMinutes: 720,
+  sessionTtlMinutes: 43200,
   actionTokenTtlMinutes: 15,
   maxFailedAttempts: 3,
   lockMinutes: 15,

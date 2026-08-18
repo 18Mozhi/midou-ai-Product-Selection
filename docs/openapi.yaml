@@ -319,8 +319,8 @@ paths:
       requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/LocalLoginRequest' } } } }
       responses:
         '200':
-          description: Authenticated; raw session token exists only in Set-Cookie
-          headers: { Set-Cookie: { schema: { type: string }, description: '__Host-scoutops_session with Secure, HttpOnly, SameSite=Strict and Path=/' } }
+          description: Authenticated for the configured 30-day session lifetime; raw session token exists only in Set-Cookie
+          headers: { Set-Cookie: { schema: { type: string }, description: '__Host-scoutops_session with Secure, HttpOnly, SameSite=Strict, Path=/ and Max-Age=2592000' } }
           content: { application/json: { schema: { $ref: '#/components/schemas/LoginEnvelope' } } }
         '202':
           description: Password accepted; TOTP or one-time recovery code is still required
@@ -338,7 +338,7 @@ paths:
       responses:
         '200':
           description: Challenge consumed once; challenge cookie cleared and session cookie set
-          headers: { Set-Cookie: { schema: { type: array, items: { type: string } }, description: 'Session cookie plus expired MFA challenge cookie' } }
+          headers: { Set-Cookie: { schema: { type: array, items: { type: string } }, description: '30-day session cookie with Max-Age=2592000 plus expired MFA challenge cookie' } }
           content: { application/json: { schema: { $ref: '#/components/schemas/LoginEnvelope' } } }
         '401': { $ref: '#/components/responses/Error' }
         '423': { $ref: '#/components/responses/Error' }
@@ -1630,8 +1630,8 @@ paths:
         '503': { $ref: '#/components/responses/Error' }
   /platform/provider-sources:
     get:
-      summary: List the fixed first-provider source catalog and provisioning state
-      description: Requires provider:configure. Catalog entries are code-owned and disabled by default; no arbitrary outbound URL or raw replay input is returned. Provider-only proxy credentials remain in Baota restricted runtime configuration and are never exposed to members or Provider DTOs.
+      summary: List the code-owned 100+ hotspot and product-source channel catalog
+      description: Requires provider:configure. Public RSS channels are automatically registered and enabled; setup-required and manual channels stay disabled until their real contract or explicit input is available. No arbitrary outbound URL, credential, raw replay input or fabricated platform data is returned.
       security: [{ HttpOnlySession: [] }]
       responses:
         '200': { description: Built-in source catalog, content: { application/json: { schema: { $ref: '#/components/schemas/ProviderSourceCatalogEnvelope' } } } }
@@ -1644,10 +1644,27 @@ paths:
       description: Requires provider:configure, same-origin Origin and Idempotency-Key. Provisioning never enables collection.
       security: [{ HttpOnlySession: [] }]
       parameters:
-        - { name: code, in: path, required: true, schema: { type: string, enum: [google_news_search, manual_product_supply_csv] } }
+        - { name: code, in: path, required: true, schema: { type: string, minLength: 2, maxLength: 80 } }
         - { $ref: '#/components/parameters/IdempotencyKey' }
       responses:
         '201': { description: Disabled provisioned Provider, content: { application/json: { schema: { $ref: '#/components/schemas/ProvisionedSourceEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /provider-sources/refresh:
+    post:
+      summary: Manually request an immediate organization hotspot refresh
+      description: Requires trend:read, an active organization/workspace context, same-origin Origin and Idempotency-Key. Schedules only currently enabled automatic public-feed channels; setup-required sources never fabricate results.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/ProviderSourceRefreshInput' } } }
+      responses:
+        '202': { description: Immediate refresh scheduled, content: { application/json: { schema: { $ref: '#/components/schemas/ProviderSourceRefreshEnvelope' } } } }
         '400': { $ref: '#/components/responses/Error' }
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
@@ -2262,6 +2279,78 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /platform/accounts:
+    get:
+      summary: Read novice-facing organization, user and platform-admin management data
+      description: Requires platform:superadmin. Returns factual account metadata only and never returns password hashes, session tokens or credentials.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: query, in: query, schema: { type: string, maxLength: 120 } }
+        - { name: status, in: query, schema: { type: string, maxLength: 30 } }
+      responses:
+        '200': { description: Organization, user and administrator summaries, content: { application/json: { schema: { $ref: '#/components/schemas/PlatformAccountOverviewEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/accounts/organizations:
+    post:
+      summary: Create an organization with its default workspace
+      description: Requires platform:superadmin, same-origin Origin and Idempotency-Key. The current super administrator becomes the first organization administrator.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PlatformOrganizationCreateInput' } } } }
+      responses:
+        '201': { description: Organization and default workspace created, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /platform/accounts/organizations/{organizationId}/status:
+    post:
+      summary: Stop or restore an organization
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: organizationId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PlatformOrganizationStatusInput' } } } }
+      responses:
+        '200': { description: Organization status changed and audited, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /platform/accounts/users/{userId}/status:
+    post:
+      summary: Stop or restore a user login
+      description: Disabling a user also revokes all active sessions; a super administrator cannot disable the currently authenticated account.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: userId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PlatformUserStatusInput' } } } }
+      responses:
+        '200': { description: User status changed and audited, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /platform/accounts/users/{userId}/platform-role:
+    post:
+      summary: Grant or revoke a fixed platform administrator role
+      description: Requires platform:superadmin. Self-revocation of platform_super_admin is rejected; all changes require a reason and are audited.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: userId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PlatformRoleChangeInput' } } } }
+      responses:
+        '200': { description: Platform role changed and audited, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
         '409': { $ref: '#/components/responses/Error' }
 components:
   securitySchemes:
@@ -3712,22 +3801,33 @@ components:
       required: [id, code, status, version, updated_at]
       properties:
         id: { type: string, format: uuid }
-        code: { type: string, enum: [google_news_search, manual_product_supply_csv] }
+        code: { type: string, minLength: 2, maxLength: 80 }
         status: { type: string, enum: [draft, disabled, enabled] }
         version: { type: integer, minimum: 1 }
         updated_at: { type: string, format: date-time }
     ProviderSourceCatalogItem:
       type: object
-      required: [code, name, access_mode, target_url, fields, status, category, production_policy, policy_note]
+      required: [code, name, access_mode, target_url, markets, languages, fields, schedule_minutes, concurrency_limit, timeout_ms, retry_limit, dedupe_key, retention_days, parser_version, owner_label, status, category, availability, production_policy, policy_note]
       properties:
-        code: { type: string, enum: [google_news_search, manual_product_supply_csv] }
+        code: { type: string, minLength: 2, maxLength: 80 }
         name: { type: string }
-        access_mode: { type: string, enum: [public_rss, import] }
-        target_url: { type: string, description: Fixed code-owned technical contract; not caller supplied }
+        access_mode: { type: string, enum: [public_rss, official_api, authenticated_browser, public_page, import, manual] }
+        target_url: { type: string, description: Code-owned target or setup marker; never caller supplied }
+        markets: { type: array, items: { type: string } }
+        languages: { type: array, items: { type: string } }
         fields: { type: array, items: { type: string } }
-        status: { type: string, enum: [disabled] }
-        category: { type: string, enum: [trend, product_supply] }
-        production_policy: { type: string, enum: [owner_review_required, ready_for_owner_enablement] }
+        schedule_minutes: { type: integer, minimum: 1 }
+        concurrency_limit: { type: integer, minimum: 1 }
+        timeout_ms: { type: integer, minimum: 1 }
+        retry_limit: { type: integer, minimum: 0 }
+        dedupe_key: { type: string }
+        retention_days: { type: integer, minimum: 1 }
+        parser_version: { type: string }
+        owner_label: { type: string }
+        status: { type: string, enum: [disabled, enabled] }
+        category: { type: string, enum: [news, ecommerce, data, community, product_supply] }
+        availability: { type: string, enum: [automatic, setup_required, manual] }
+        production_policy: { type: string, enum: [automatic_public_feed, setup_required, ready_for_owner_enablement] }
         policy_note: { type: string }
         provisioned: { allOf: [{ $ref: '#/components/schemas/ProvisionedSource' }], nullable: true }
     ProviderSourceCatalogEnvelope:
@@ -3765,6 +3865,75 @@ components:
         updated_at: { type: string, format: date-time }
     ProviderSourceReplayEnvelope:
       allOf: [{ $ref: '#/components/schemas/SuccessEnvelope' }, { type: object, properties: { data: { $ref: '#/components/schemas/ProviderSourceReplay' } } }]
+    ProviderSourceRefreshInput:
+      type: object
+      additionalProperties: false
+      required: [organization_id, workspace_id]
+      properties:
+        organization_id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+    ProviderSourceRefreshEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/SuccessEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required: [task_id, source_count, status]
+              properties:
+                task_id: { type: string, format: uuid }
+                source_count: { type: integer, minimum: 1, maximum: 100 }
+                status: { type: string, enum: [scheduled] }
+    PlatformOrganizationCreateInput:
+      type: object
+      additionalProperties: false
+      required: [name, slug]
+      properties:
+        name: { type: string, minLength: 2, maxLength: 120 }
+        slug: { type: string, pattern: '^[a-z0-9][a-z0-9-]{1,62}$' }
+    PlatformOrganizationStatusInput:
+      type: object
+      additionalProperties: false
+      required: [status, reason]
+      properties:
+        status: { type: string, enum: [active, archived] }
+        reason: { type: string, minLength: 2, maxLength: 300 }
+    PlatformUserStatusInput:
+      type: object
+      additionalProperties: false
+      required: [status, reason]
+      properties:
+        status: { type: string, enum: [active, disabled] }
+        reason: { type: string, minLength: 2, maxLength: 300 }
+    PlatformRoleChangeInput:
+      type: object
+      additionalProperties: false
+      required: [role_code, enabled, reason]
+      properties:
+        role_code: { type: string, enum: [platform_operations_admin, platform_security_admin, platform_super_admin] }
+        enabled: { type: boolean }
+        reason: { type: string, minLength: 2, maxLength: 300 }
+    PlatformAccountOverview:
+      type: object
+      required: [summary, organizations, users, admins]
+      properties:
+        summary:
+          type: object
+          required: [organizations, active_organizations, users, active_users, platform_admins]
+          properties:
+            organizations: { type: integer, minimum: 0 }
+            active_organizations: { type: integer, minimum: 0 }
+            users: { type: integer, minimum: 0 }
+            active_users: { type: integer, minimum: 0 }
+            platform_admins: { type: integer, minimum: 0 }
+        organizations: { type: array, items: { type: object } }
+        users: { type: array, items: { type: object } }
+        admins: { type: array, items: { type: object } }
+    PlatformAccountOverviewEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/SuccessEnvelope'
+        - type: object
+          properties: { data: { $ref: '#/components/schemas/PlatformAccountOverview' } }
     HealthLiveData:
       type: object
       required: [status, service, version, build_sha]

@@ -15,7 +15,7 @@
     "coreWriteP95Ms": 600
   },
   "dimensions": {
-    "roleScope": ["verify-rbac-live", "m01-04-rbac.spec.ts", "m06-01-organization-admin.spec.ts"],
+    "roleScope": ["verify-rbac-live", "m01-04-rbac.spec.ts", "m06-01-organization-admin.spec.ts", "m06-01-platform-accounts.spec.ts"],
     "sourceCollection": ["verify-provider-sources-live", "verify-collection-task-live", "m03-07-provider-sources.spec.ts"],
     "taskQueue": ["verify-business-tasks-live", "verify-approval-workflow-live", "m05-01-business-tasks.spec.ts"],
     "dataQuality": ["verify-evidence-data-quality-live", "verify-opportunities-live", "verify-sourcing-live"],
@@ -41,7 +41,7 @@
     "p03": ["m03-01-provider-registry.spec.ts", "m03-02-credential-assets.spec.ts", "m03-03-provider-adapter.spec.ts", "m03-04-playwright-crawler.spec.ts", "m03-05-collection-tasks.spec.ts", "m03-06-evidence-data-quality.spec.ts", "m03-07-provider-sources.spec.ts"],
     "p04": ["m04-01-trends.spec.ts", "m04-02-opportunities.spec.ts", "m04-03-scoring.spec.ts", "m04-04-profit.spec.ts", "m04-05-competitors.spec.ts", "m04-06-sourcing.spec.ts", "m04-07-ai-analysis.spec.ts"],
     "p05": ["m05-01-business-tasks.spec.ts", "m05-02-approval-workflow.spec.ts", "m05-03-notifications.spec.ts", "m05-04-realtime.spec.ts", "m05-05-automation-rules.spec.ts", "m05-06-reports.spec.ts"],
-    "p06": ["m06-01-organization-admin.spec.ts", "m06-02-platform-dashboard.spec.ts", "m06-03-collection-console.spec.ts", "m06-04-security-operations.spec.ts", "m06-05-open-platform.spec.ts", "m06-06-commercial.spec.ts"]
+    "p06": ["m06-01-organization-admin.spec.ts", "m06-01-platform-accounts.spec.ts", "m06-02-platform-dashboard.spec.ts", "m06-03-collection-console.spec.ts", "m06-04-security-operations.spec.ts", "m06-05-open-platform.spec.ts", "m06-06-commercial.spec.ts"]
   },
   "requiredEvidence": [
     "docs/openapi.yaml",

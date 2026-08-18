@@ -5,9 +5,9 @@ import { CaptureAuthDelivery, InMemoryAuthRepository, LocalAuthService, createAr
 
 function appFixture(secureCookie = false) {
   const repository = new InMemoryAuthRepository(); const delivery = new CaptureAuthDelivery(); let sequence = 0;
-  const service = new LocalAuthService({ repository, delivery, passwordHasher:createArgon2PasswordHasher({memoryCost:19456,timeCost:2,parallelism:1}), policy:{passwordMinLength:12,passwordMaxLength:128,sessionTtlMinutes:720,actionTokenTtlMinutes:15,maxFailedAttempts:5,lockMinutes:15}, now:()=>new Date('2026-08-07T00:00:00Z'), tokenFactory:()=>Buffer.alloc(32,++sequence).toString('base64url') });
+  const service = new LocalAuthService({ repository, delivery, passwordHasher:createArgon2PasswordHasher({memoryCost:19456,timeCost:2,parallelism:1}), policy:{passwordMinLength:12,passwordMaxLength:128,sessionTtlMinutes:43200,actionTokenTtlMinutes:15,maxFailedAttempts:5,lockMinutes:15}, now:()=>new Date('2026-08-07T00:00:00Z'), tokenFactory:()=>Buffer.alloc(32,++sequence).toString('base64url') });
   const seen = new Map(); const execute=async(input,work)=>{const key=`${input.scope}:${input.route}:${input.method}:${input.key}`;if(seen.has(key))return{...seen.get(key),replayed:true};const result=await work();seen.set(key,result);return result;};const idempotency = { execute,executeSensitive:execute };
-  return { app:buildApp({localAuth:{service,idempotency,webOrigin:'http://127.0.0.1:5173',secureCookie}}), delivery, repository };
+  return { app:buildApp({localAuth:{service,idempotency,webOrigin:'http://127.0.0.1:5173',secureCookie,sessionTtlMinutes:43200}}), delivery, repository };
 }
 
 const headers = (key) => ({ origin:'http://127.0.0.1:5173', 'idempotency-key':key });
@@ -18,7 +18,7 @@ test('M01-01.A06/A09/A13 API sets HttpOnly session and never returns opaque toke
   assert.equal(registration.statusCode,201);assert.doesNotMatch(registration.body,/AQEBAQ|password_hash/);
   const verification=await app.inject({method:'POST',url:'/api/v1/auth/email-verification/confirm',headers:headers('verify-a'),payload:{token:delivery.messages[0].token}});assert.equal(verification.statusCode,200);
   const login=await app.inject({method:'POST',url:'/api/v1/auth/login',headers:{origin:'http://127.0.0.1:5173'},payload:{email:'user@example.com',password:'Correct-Horse-42'}});assert.equal(login.statusCode,200);assert.doesNotMatch(login.body,/AgICAg|token_hash/);
-  const cookie=login.headers['set-cookie'];assert.match(cookie,/scoutops_session=.*HttpOnly; SameSite=Strict/);assert.doesNotMatch(cookie,/Secure/);
+  const cookie=login.headers['set-cookie'];assert.match(cookie,/scoutops_session=.*HttpOnly; SameSite=Strict; Max-Age=2592000/);assert.doesNotMatch(cookie,/Secure/);
   const sessions=await app.inject({method:'GET',url:'/api/v1/me/sessions',headers:{cookie}});assert.equal(sessions.statusCode,200);assert.equal(sessions.json().data.length,1);assert.doesNotMatch(sessions.body,/token_hash/);
   await app.close();
 });

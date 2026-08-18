@@ -14,7 +14,7 @@ async function allow(page: any, shell: 'member' | 'organization_admin' | 'platfo
 for (const item of [
   { shell: 'member' as const, path: '/home', heading: '今日行动', snapshot: 'm02-03-member.png' },
   { shell: 'organization_admin' as const, path: '/org-admin', heading: '组织资料', snapshot: 'm02-03-org-admin.png' },
-  { shell: 'platform_admin' as const, path: '/platform-admin', heading: '平台驾驶舱', snapshot: 'm02-03-platform-admin.png' }
+  { shell: 'platform_admin' as const, path: '/platform-admin', heading: '平台概览', snapshot: 'm02-03-platform-admin.png' }
 ]) test(`M02-03.A07/A09/A15 ${item.shell} shell is isolated responsive and visual`, async ({ page }) => {
   await allow(page, item.shell);
   await page.goto(item.path);
@@ -58,4 +58,14 @@ test('M02-03 platform shell does not expose member-only search or notifications'
   await expect(page.getByRole('button', { name: /搜索/ })).toHaveCount(0);
   await expect(page.getByRole('link', { name: '通知中心' })).toHaveCount(0);
   await expect(page.getByRole('link', { name: '个人中心' })).toHaveAttribute('href', '/me');
+  const accountLinks = page.getByRole('link', { name: '组织与用户' });
+  const accountLinkCount = await accountLinks.count();
+  expect(accountLinkCount).toBeGreaterThanOrEqual(1);
+  for (let index = 0; index < accountLinkCount; index += 1) {
+    await expect(accountLinks.nth(index)).toBeVisible();
+    await expect(accountLinks.nth(index)).toHaveAttribute('href', '/platform-admin/accounts');
+  }
+  await expect(page.getByRole('link', { name: /Redis|MySQL|文件韧性|容量边界/ })).toHaveCount(0);
 });
+
+test('M02-03 member shell never exposes platform administration navigation',async({page})=>{await allow(page,'member');await page.goto('/home');await expect(page.getByRole('link',{name:'组织与用户'})).toHaveCount(0);await expect(page.getByRole('link',{name:'热点来源'})).toHaveCount(0);await expect(page.getByRole('link',{name:'安全与审计'})).toHaveCount(0);await expect(page.getByRole('link',{name:/ai选品 选品工作台/})).toBeVisible();});

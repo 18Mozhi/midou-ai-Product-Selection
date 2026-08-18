@@ -85,6 +85,9 @@ import { registerOrganizationAdminRoutes } from "./organization-admin-routes.js"
 import { PlatformDashboardService } from "./platform-dashboard-service.js";
 import { MySqlPlatformDashboardRepository } from "./mysql-platform-dashboard-repository.js";
 import { registerPlatformDashboardRoutes } from "./platform-dashboard-routes.js";
+import { PlatformAccountService } from "./platform-account-service.js";
+import { MySqlPlatformAccountRepository } from "./mysql-platform-account-repository.js";
+import { registerPlatformAccountRoutes } from "./platform-account-routes.js";
 import { CollectionConsoleService } from "./collection-console-service.js";
 import { MySqlCollectionConsoleRepository } from "./mysql-collection-console-repository.js";
 import { registerCollectionConsoleRoutes } from "./collection-console-routes.js";
@@ -221,6 +224,7 @@ for (const adapter of createBuiltinSourceAdapters(
   createProviderSourceFetch(config.providerAdapters.proxy),
 ))
   providerAdapterRegistry.register(adapter);
+const providerSourceService = new ProviderSourceService(new MySqlProviderSourceRepository(pool));
 const app = buildApp({
   logger: true,
   version: config.app.version,
@@ -256,6 +260,7 @@ const app = buildApp({
     idempotency,
     webOrigin: config.app.webOrigin,
     secureCookie: config.nodeEnv === "production",
+    sessionTtlMinutes: config.auth.sessionTtlMinutes,
   },
   tenancy: {
     service: new TenancyService(new MySqlTenancyRepository(pool)),
@@ -344,7 +349,7 @@ const app = buildApp({
     webOrigin: config.app.webOrigin,
   },
   providerSources: {
-    service: new ProviderSourceService(new MySqlProviderSourceRepository(pool)),
+    service: providerSourceService,
     authorization,
     auth: localAuth,
     secureCookie: config.nodeEnv === "production",
@@ -477,6 +482,13 @@ registerPlatformDashboardRoutes(app, {
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",
 });
+registerPlatformAccountRoutes(app, {
+  service: new PlatformAccountService(new MySqlPlatformAccountRepository(pool)),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
+});
 registerCollectionConsoleRoutes(app, {
   service: new CollectionConsoleService(new MySqlCollectionConsoleRepository(pool), config.collectionConsole.recentLimit),
   authorization,
@@ -520,6 +532,8 @@ app.addHook("onClose", async () => {
 const { host, port } = config.app;
 
 try {
+  const sourceCatalog = await providerSourceService.ensureCatalog();
+  app.log.info({sourceCatalog}, "automatic hotspot source catalog synchronized");
   await app.listen({ host, port });
   try {
     await publishRuntimeHeartbeat("ready");

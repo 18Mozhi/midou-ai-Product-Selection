@@ -34,6 +34,7 @@ import { NotificationOutboxWorker } from "./notification-outbox-worker.js";
 import { AutomationWorker } from "./automation-worker.js";
 import { ReportExportWorker } from "./report-export-worker.js";
 import { WebhookDeliveryWorker } from "./webhook-delivery-worker.js";
+import { MySqlAutomaticSourceScheduler } from "./automatic-source-scheduler.js";
 
 const config = loadRuntimeConfig(process.env, "worker");
 const pool = createDatabasePool(config);
@@ -128,6 +129,7 @@ const reportExports = new ReportExportWorker(
   config.reports.maxRows,
 );
 const webhookDeliveries = new WebhookDeliveryWorker(pool,{workerId:config.identity.workerId,masterKey:config.security.credentialsMasterKey,leaseSeconds:config.openPlatform.webhookLeaseSeconds,timeoutMs:config.openPlatform.webhookTimeoutMs,retrySeconds:[60,300,900]});
+const automaticSourceScheduler = new MySqlAutomaticSourceScheduler(pool);
 let stopping = false,
   authPolling = false,
   collectionPolling = false,
@@ -143,7 +145,8 @@ let stopping = false,
   notificationPolling = false,
   automationPolling = false,
   reportPolling = false,
-  webhookPolling = false;
+  webhookPolling = false,
+  automaticSourcePolling = false;
 
 const heartbeat = () =>
   console.log(
@@ -576,6 +579,7 @@ const pollReports = async () => {
   }
 };
 const pollWebhooks=async()=>{if(stopping||webhookPolling||!config.security.credentialsMasterKey)return;webhookPolling=true;try{await webhookDeliveries.runOnce();}catch(error){console.error(JSON.stringify({service:"product-scout-worker",queue:"webhook_deliveries",status:"dependency_failed",error:error instanceof Error?error.message:"unknown",observed_at:new Date().toISOString()}));}finally{webhookPolling=false;}};
+const pollAutomaticSources=async()=>{if(stopping||automaticSourcePolling)return;automaticSourcePolling=true;try{const result=await automaticSourceScheduler.processOnce();if(result.status!=='idle')console.log(JSON.stringify({service:'product-scout-worker',queue:'automatic_hotspot_sources',...result,observed_at:new Date().toISOString()}));}catch(error){console.error(JSON.stringify({service:'product-scout-worker',queue:'automatic_hotspot_sources',status:'dependency_failed',error:error instanceof Error?error.message:'unknown',observed_at:new Date().toISOString()}));}finally{automaticSourcePolling=false;}};
 
 heartbeat();
 const heartbeatTimer = setInterval(heartbeat, config.runtime.workerHeartbeatMs);
@@ -627,6 +631,7 @@ const reportTimer = setInterval(
   config.reports.pollMs,
 );
 const webhookTimer=setInterval(()=>void pollWebhooks(),config.openPlatform.webhookPollMs);
+const automaticSourceTimer=setInterval(()=>void pollAutomaticSources(),config.automaticSources.pollMs);
 void pollAuth();
 void pollCollection();
 void pollTrends();
@@ -642,6 +647,7 @@ void pollNotifications();
 void pollAutomations();
 void pollReports();
 void pollWebhooks();
+void pollAutomaticSources();
 
 const stop = async (signal: string) => {
   if (stopping) return;
@@ -662,6 +668,7 @@ const stop = async (signal: string) => {
   clearInterval(automationTimer);
   clearInterval(reportTimer);
   clearInterval(webhookTimer);
+  clearInterval(automaticSourceTimer);
   while (
     authPolling ||
     collectionPolling ||
@@ -677,7 +684,8 @@ const stop = async (signal: string) => {
     notificationPolling ||
     automationPolling ||
     reportPolling ||
-    webhookPolling
+    webhookPolling ||
+    automaticSourcePolling
   )
     await new Promise((resolve) => setTimeout(resolve, 25));
   await redisStore.close();

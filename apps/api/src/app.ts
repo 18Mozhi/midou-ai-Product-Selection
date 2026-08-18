@@ -137,6 +137,7 @@ import { OrganizationAdminError } from "./organization-admin-service.js";
 import { registerOrganizationAdminRoutes, type OrganizationAdminRouteOptions } from "./organization-admin-routes.js";
 import { PlatformDashboardError } from "./platform-dashboard-service.js";
 import { registerPlatformDashboardRoutes, type PlatformDashboardRouteOptions } from "./platform-dashboard-routes.js";
+import { registerPlatformAccountRoutes, type PlatformAccountRouteOptions } from "./platform-account-routes.js";
 import { CollectionConsoleError } from "./collection-console-service.js";
 import { registerCollectionConsoleRoutes, type CollectionConsoleRouteOptions } from "./collection-console-routes.js";
 import { SecurityOperationsError } from "./security-operations-service.js";
@@ -196,6 +197,7 @@ export interface BuildAppOptions {
   reports?: ReportRouteOptions;
   organizationAdmin?: OrganizationAdminRouteOptions;
   platformDashboard?: PlatformDashboardRouteOptions;
+  platformAccounts?: PlatformAccountRouteOptions;
   collectionConsole?: CollectionConsoleRouteOptions;
   securityOperations?: SecurityOperationsRouteOptions;
   openPlatform?: OpenPlatformRouteOptions;
@@ -375,6 +377,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if (options.reports) registerReportRoutes(app, options.reports);
   if (options.organizationAdmin) registerOrganizationAdminRoutes(app, options.organizationAdmin);
   if (options.platformDashboard) registerPlatformDashboardRoutes(app, options.platformDashboard);
+  if (options.platformAccounts) registerPlatformAccountRoutes(app, options.platformAccounts);
   if (options.collectionConsole) registerCollectionConsoleRoutes(app, options.collectionConsole);
   if(options.securityOperations)registerSecurityOperationsRoutes(app,options.securityOperations);
   if(options.openPlatform)registerOpenPlatformRoutes(app,options.openPlatform);

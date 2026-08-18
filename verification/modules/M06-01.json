@@ -1,7 +1,26 @@
 {
-  "moduleId":"M06-01","phaseId":"P06","name":"Organization Administration","dependencies":["M01-06","M02-06","M05-06"],
+  "moduleId":"M06-01",
+  "phaseId":"P06",
+  "name":"Organization and Platform Account Administration",
+  "dependencies":["M01-06","M02-06","M05-06"],
   "atomicTasks":[
-    {"id":"M06-01.A01","evidence":"current organization administration scope and explicit P06 exclusions"},{"id":"M06-01.A02","evidence":"profile invitation membership role workspace team approval token operation DTOs"},{"id":"M06-01.A03","evidence":"MySQL57 utf8mb4 0019 migration indexes constraints and rollback"},{"id":"M06-01.A04","evidence":"versioned idempotent transactional organization administration service"},{"id":"M06-01.A05","evidence":"transactional outbox invitation pending provider contract without external daemon"},{"id":"M06-01.A06","evidence":"OpenAPI profile member role workspace team approval token contracts"},{"id":"M06-01.A07","evidence":"high resolution 09 based dashboard concepts 55 to 60 desktop and 390 layout"},{"id":"M06-01.A08","evidence":"loading empty expired forbidden rate limit conflict forms one-time secret recovery"},{"id":"M06-01.A09","evidence":"per-route RBAC same organization guards last admin and default workspace protection"},{"id":"M06-01.A10","evidence":"invitation TTL token TTL and active limit env schema with Baota restart"},{"id":"M06-01.A11","evidence":"request trace audit outbox without token secret hash or cross organization data"},{"id":"M06-01.A12","evidence":"validation state scope token and migration unit tests"},{"id":"M06-01.A13","evidence":"OpenAPI permissions idempotency optimistic version and one-time secret contract tests"},{"id":"M06-01.A14","evidence":"real MySQL57 profile invitation workspace team token isolation audit integration"},{"id":"M06-01.A15","evidence":"Playwright desktop and 390 organization administration visual regression"},{"id":"M06-01.A16","evidence":"self disable last admin default workspace version and dependency fault drills"},{"id":"M06-01.A17","evidence":"blueprint Feature Map env architecture runbook migration rollback and S0 handoff"}
+    {"id":"M06-01.A01","evidence":"organization admin plus platform organization user administrator scope"},
+    {"id":"M06-01.A02","evidence":"profile invitation membership role workspace team and platform account DTOs"},
+    {"id":"M06-01.A03","evidence":"MySQL57 organization platform-account idempotency indexes constraints and rollback"},
+    {"id":"M06-01.A04","evidence":"versioned idempotent transactional organization and platform account services"},
+    {"id":"M06-01.A05","evidence":"transactional audit outbox and no panel-external service"},
+    {"id":"M06-01.A06","evidence":"OpenAPI organization user status fixed platform role and default workspace contracts"},
+    {"id":"M06-01.A07","evidence":"novice organization user administrator tabs desktop and 390 layout"},
+    {"id":"M06-01.A08","evidence":"loading empty error search create stop restore and role interactions"},
+    {"id":"M06-01.A09","evidence":"platform superadmin same-origin self-disable self-revoke and organization guards"},
+    {"id":"M06-01.A10","evidence":"configuration and Baota unified-backend restart contract"},
+    {"id":"M06-01.A11","evidence":"request trace audit idempotency session revocation and no secret exposure"},
+    {"id":"M06-01.A12","evidence":"validation database-table contract state scope and migration tests"},
+    {"id":"M06-01.A13","evidence":"OpenAPI permissions idempotency reason and fixed-role contract tests"},
+    {"id":"M06-01.A14","evidence":"real MySQL57 organization creation default workspace user session revocation and audit"},
+    {"id":"M06-01.A15","evidence":"Playwright admin-member navigation and platform account visual regression"},
+    {"id":"M06-01.A16","evidence":"self-disable self-revoke duplicate slug role and dependency fault drills"},
+    {"id":"M06-01.A17","evidence":"blueprint plans Feature Map architecture runbook migration rollback and S0 handoff"}
   ],
-  "commands":["npm run build","node --test tests/m06-01/organization-admin.test.mjs","node scripts/verify-organization-admin-live.mjs","npx playwright test tests/e2e/m06-01-organization-admin.spec.ts","npm run verify:docs"]
+  "commands":["npm run build","node --test tests/m06-01/organization-admin.test.mjs tests/m06-01/platform-accounts.test.mjs","node scripts/verify-organization-admin-live.mjs","node scripts/verify-platform-accounts-live.mjs","npx playwright test tests/e2e/m06-01-organization-admin.spec.ts tests/e2e/m06-01-platform-accounts.spec.ts","npm run verify:docs"]
 }

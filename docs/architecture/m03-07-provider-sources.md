@@ -1,32 +1,33 @@
-# M03-07 首批来源实现
+# M03-07 全网热点与来源目录
 
-## 已接入来源与边界
+## 面向用户的结果
 
-M03-07 只实现两个已有明确合同的来源：`google_news_search` 使用 Google News 关键词 RSS，`manual_product_supply_csv` 使用操作者显式提交的商品与供应链 CSV。未接入 Amazon、Keepa、1688、eBay 或 Etsy，因为当前仓库没有已确认的生产凭证、授权范围和真实接口合同。
+来源中心不再只显示两个技术条目。代码目录现在包含 100 个以上可解释的“来源频道”，分成新闻、电商、数据、社区和商品供应五类：
 
-Google News 目标固定为 `https://news.google.com/rss/search?q={urlEncodedQuery}&hl=en-US&gl=US&ceid=US:en`。调用方只能提交 1–200 字符关键词，不能提交 URL；适配器拒绝重定向、非 XML 响应、超过 2 MB 的响应和合同变化。端点可访问只证明健康探针可达，不等于允许生产再分发或长期保存，所以目录策略为 `owner_review_required`，登记后仍是 `disabled`。
+- 96 个公开 Google News RSS 固定频道由 8 个市场与 12 个主题组合而成，属于可自动采集频道；系统启动时自动登记并启用。
+- Amazon、Keepa、1688、TikTok Shop、Reddit、YouTube、Similarweb、Semrush 等来源作为真实平台接入项预登记。没有官方凭证、已确认接口合同或合规浏览器档案时，它们保持“待配置”，不会伪造实时数据。
+- Google News 关键词和商品供应 CSV 保留为用户手动采集入口。
 
-CSV 来源固定为 `inline://product-supply-csv-v1`，表头严格为 `external_id,title,price,currency,supplier_name,moq,canonical_url,observed_at`。文件最多 1 MB、101 行（含表头），单任务只持久化前 20 条；价格、币种、MOQ、URL 和时间均在适配器边界验证。
+这里的“100+”是可独立调度、审计和展示的来源频道数量，不宣称它们全部是相互独立的平台。页面明确显示“自动采集 / 待配置 / 手动导入”，小白用户不需要理解 Provider、Adapter 或 Parser 才能知道下一步。
 
-## 数据流
+## 自动与手动数据流
 
-1. 平台运营以 `provider:configure` 读取固定目录并登记来源。登记写入 Provider 版本历史，但状态强制为 `disabled`，不会启动采集。
-2. 所有者在现有来源定义页复核政策、字段、频率和保存期限后显式更新为 `enabled`。
-3. 具备 `collection:replay` 的平台操作者在指定活动组织和工作区创建回放。API 校验同源 Origin 与 Idempotency-Key，在一个事务中写入 `provider_source_replay_runs`、M03-05 task/subquery/event/outbox。
-4. 宝塔 Node Worker 使用 Redis 范围租约领取任务，按 Provider code 解析固定适配器。每条结果先保存 M03-06 原始证据文件，再写规范化记录和逐字段 provenance。
-5. Worker 保存 task、subquery、attempt、replay run 的真实结果；空结果、部分结果、受阻和失败不会伪装为成功。
+1. Node API 启动时以代码目录同步 `providers`。已存在来源只更新合同字段并保留人工状态；新自动频道登记为 `enabled`，待配置与手动来源登记为 `disabled`。
+2. Node Worker 的 `MySqlAutomaticSourceScheduler` 为每个活动组织默认工作区建立 `automatic_source_schedules`。每次按偏移量轮转 16 个自动频道，避免一个任务一次抓取全部频道；完整轮转后等待 15 分钟。
+3. 普通成员在热点页点击“立即获取热点”时，`POST /api/v1/provider-sources/refresh` 用当前组织、工作区和幂等键创建一次包含最多 100 个已启用自动频道的任务。
+4. Worker 继续复用 M03-05 状态机、Redis 范围租约和 M03-06 不可变证据链；每条结果带 Provider、Adapter、Parser 和字段路径溯源。
+5. 待配置来源没有适配器且默认禁用，因此不能进入自动任务；系统宁可显示“需要配置”也不把聚合新闻当成该平台官方销量或价格。
 
-字段血缘保留 RSS 标签路径或 CSV 行列路径、Parser/Adapter 版本和源值 SHA-256。去重范围固定为 organization + workspace + provider + external ID；相同内容幂等，不同内容冲突。
+## 安全、权限与限制
 
-## 权限、隔离与失败
+- 来源目录：`provider:configure`；人工回放：`collection:replay`；热点页立即刷新：`trend:read`。
+- 所有写请求要求 HttpOnly Session、同源 Origin 和 `Idempotency-Key`。
+- 固定 RSS 地址由代码生成，只允许 HTTPS `news.google.com`，拒绝重定向、凭证、任意 URL 和调用方覆盖。
+- 项目专用代理仍只作用于固定 Google News 请求；不设置系统或其他项目的全局代理。
+- RSS 单响应最多 2 MB、单频道单批最多 20 条；原始证据与规范化记录仍按组织、工作区、来源和外部 ID 隔离去重。
 
-- 目录和登记：`provider:configure`；回放：`collection:replay`。
-- 所有写请求要求登录 Session、同源 Origin 和 Idempotency-Key。
-- 回放前验证 Provider 已启用，组织与工作区存在、相属且均为 active。
-- 外连地址由代码目录固定，未提供通用 URL、Header、Cookie 或凭证注入面。
-- 可选 HTTP CONNECT 代理只由 `createProviderSourceFetch` 应用于固定的 `news.google.com` HTTPS 请求；其他 Provider、API、AI、数据库和系统进程继续直连。代理 URL、用户名和密码只能来自宝塔 Node API/Worker 与有限任务的项目受限环境，禁止设置全局 `HTTP_PROXY`/`HTTPS_PROXY`，禁止把代理字段放入请求、Provider DTO 或浏览器。
-- retryable 网络、DNS、超时按 M03-05 的 1/5/15 分钟退避；限流使用延后时间；权限、来源变化、解析失败和空结果保留明确状态与错误码。
+## 配置与运行边界
 
-## 运行配置
+`AUTOMATIC_SOURCE_SCHEDULER_POLL_MS` 控制 Worker 检查到期组织的周期，默认 30000 毫秒；修改后需要通过宝塔重启统一后端“ai选品”。通用采集仍复用 `COLLECTION_TASK_*`、`PROVIDER_ADAPTER_*`、`PROVIDER_PROXY_*` 和 `EVIDENCE_*`。
 
-本模块复用 `PROVIDER_ADAPTER_*`、`COLLECTION_TASK_*`、`EVIDENCE_ROOT` 和 `EVIDENCE_MAX_RAW_BYTES`。当惠州出口不能直连 Google News 时，可配置 `PROVIDER_PROXY_URL`、`PROVIDER_PROXY_USERNAME`、`PROVIDER_PROXY_PASSWORD` 和 `PROVIDER_PROXY_CONNECT_TIMEOUT_MS`；启动校验要求 HTTP origin、分离认证且四项成组，配置指纹只记录凭证是否存在，不记录明文。代码内部对首批来源施加更小的 2 MB/1 MB/20 条上限，因此代理不能放宽响应、条数或 10 秒健康门禁。修改后必须由宝塔分别重启 Node API 和 Node Worker。
+生产只保留一个宝塔 Node 后端项目“ai选品”。API、Worker 与采集职责由该项目统一拉起；不新增独立 Node/Python 项目、面板外服务、负载均衡或多节点能力。

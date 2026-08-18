@@ -35,6 +35,7 @@ import MySqlResilienceCenter from "./MySqlResilienceCenter.vue";
 import FileResilienceCenter from "./FileResilienceCenter.vue";
 import CrawlerSchedulerCenter from "./CrawlerSchedulerCenter.vue";
 import CapacityBoundaryCenter from "./CapacityBoundaryCenter.vue";
+import PlatformAccountCenter from "./PlatformAccountCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -128,40 +129,25 @@ const orgMenu: MenuItem[] = [
   { label: "组织审计", path: "/org-admin/audit", icon: "⊙" },
 ];
 const platformMenu: MenuItem[] = [
-  { label: "平台驾驶舱", path: "/platform-admin", icon: "⌂" },
+  { label: "平台概览", path: "/platform-admin", icon: "⌂" },
+  { label: "组织与用户", path: "/platform-admin/accounts", icon: "♙", capabilities: ["platform:superadmin"] },
   {
-    label: "来源注册中心",
-    path: "/platform-admin/providers",
+    label: "热点来源",
+    path: "/platform-admin/providers/sources",
     icon: "◎",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
-    label: "凭证与档案",
-    path: "/platform-admin/credentials",
-    icon: "⌘",
-    capabilities: ["platform:secure", "platform:superadmin"],
-  },
-  {
-    label: "采集控制台",
-    path: "/platform-admin/collection",
+    label: "采集任务",
+    path: "/platform-admin/collection/overview",
     icon: "↻",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
-    label: "全量数据",
+    label: "数据质量",
     path: "/platform-admin/data",
     icon: "▦",
     capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "Token 与开放 API",
-    path: "/platform-admin/open-platform",
-    icon: "⌁",
-    capabilities: [
-      "platform:operate",
-      "platform:secure",
-      "platform:superadmin",
-    ],
   },
   {
     label: "安全与审计",
@@ -170,45 +156,9 @@ const platformMenu: MenuItem[] = [
     capabilities: ["platform:secure", "platform:superadmin"],
   },
   {
-    label: "监控与运维",
+    label: "高级设置",
     path: "/platform-admin/operations",
     icon: "⌬",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "运行拓扑",
-    path: "/platform-admin/topology",
-    icon: "⌘",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "Redis 韧性",
-    path: "/platform-admin/redis",
-    icon: "◉",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "MySQL 韧性",
-    path: "/platform-admin/mysql",
-    icon: "▤",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "文件韧性",
-    path: "/platform-admin/files",
-    icon: "▣",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "Crawler 调度",
-    path: "/platform-admin/crawler-scheduler",
-    icon: "⌁",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "商业运营",
-    path: "/platform-admin/commercial",
-    icon: "▰",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
 ];
@@ -281,6 +231,7 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   ),
   isOrganizationAdmin = computed(() => props.shell === "organization_admin" && routePath.startsWith("/org-admin")),
   isPlatformDashboard = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin"),
+  isPlatformAccounts = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/accounts"),
   isBackupRecovery = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/operations"),
   isReleaseRollout = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/releases"),
   isRuntimeTopology = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/topology"),
@@ -321,7 +272,9 @@ const pageSummary = computed(() =>
   isOrganizationAdmin.value
     ? "组织资料、成员、角色、工作区、团队、审批、Token 与审计均受当前组织权限和审计边界保护。"
     : isPlatformDashboard.value
-      ? "来源健康、任务、队列、质量、文件增长和告警均来自平台当前运行事实。"
+      ? "先看今天有没有新热点、采集是否正常，再处理需要人工确认的事项。"
+    : isPlatformAccounts.value
+      ? "管理组织、普通用户和平台管理员；不用理解内部权限代码。"
     : isBackupRecovery.value
       ? "备份副本、RPO/RTO 与隔离恢复结论均来自可审计记录；未验证条件明确阻断。"
     : isReleaseRollout.value
@@ -430,7 +383,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
               ? '/org-admin'
               : '/platform-admin'
         "
-        ><span>S</span><b>ai选品</b></a
+        ><span>S</span><b>ai选品</b><em>{{shell==='platform_admin'?'管理员':shell==='organization_admin'?'组织后台':'选品工作台'}}</em></a
       >
       <button
         class="role-menu-toggle"
@@ -552,6 +505,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           :organization-id="guard?.organization_id || ''"
         />
         <PlatformDashboard v-else-if="isPlatformDashboard" :api-base-url="apiBaseUrl" />
+        <PlatformAccountCenter v-else-if="isPlatformAccounts" :api-base-url="apiBaseUrl" />
         <BackupRecoveryCenter v-else-if="isBackupRecovery" :api-base-url="apiBaseUrl" />
         <ReleaseRolloutCenter v-else-if="isReleaseRollout" :api-base-url="apiBaseUrl" />
         <RuntimeTopologyCenter v-else-if="isRuntimeTopology" :api-base-url="apiBaseUrl" />
@@ -560,7 +514,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <FileResilienceCenter v-else-if="isFileResilience" :api-base-url="apiBaseUrl" />
         <CrawlerSchedulerCenter v-else-if="isCrawlerScheduler" :api-base-url="apiBaseUrl" />
         <CapacityBoundaryCenter v-else-if="isCapacityBoundary" :api-base-url="apiBaseUrl" />
-        <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" />
+        <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" :organization-id="guard?.organization_id||''" :workspace-id="guard?.workspace_id||''" />
         <ScoreRuleConsole
           v-else-if="isScoringRules"
           :api-base-url="apiBaseUrl"

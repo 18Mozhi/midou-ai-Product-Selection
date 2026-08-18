@@ -165,6 +165,7 @@ export interface RuntimeConfig {
     productionEvidenceFile: string;
   };
   collectionTasks: { pollMs: number; leaseSeconds: number };
+  automaticSources: { pollMs: number };
   trends: { projectionPollMs: number; projectionLeaseSeconds: number };
   opportunities: { refreshPollMs: number; refreshLeaseSeconds: number };
   scoring: { pollMs: number; leaseSeconds: number };
@@ -526,7 +527,7 @@ export function loadRuntimeConfig(
       sessionTtlMinutes: integer(
         env,
         "AUTH_SESSION_TTL_MINUTES",
-        720,
+        43200,
         5,
         43200,
       ),
@@ -589,6 +590,9 @@ export function loadRuntimeConfig(
         30,
         3600,
       ),
+    },
+    automaticSources: {
+      pollMs: integer(env, "AUTOMATIC_SOURCE_SCHEDULER_POLL_MS", 30000, 5000, 300000),
     },
     trends: {
       projectionPollMs: integer(

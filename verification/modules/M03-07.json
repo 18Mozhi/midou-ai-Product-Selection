@@ -1,1 +1,26 @@
-{"moduleId":"M03-07","phaseId":"P03","name":"First Production Provider Sources","dependencies":["M03-03","M03-04","M03-05","M03-06"],"atomicTasks":[{"id":"M03-07.A01","evidence":"Google News RSS and manual product supply CSV scope policy and non-goals"},{"id":"M03-07.A02","evidence":"source catalog replay input raw normalized and execution contracts"},{"id":"M03-07.A03","evidence":"MySQL57 replay run migration indexes scope and rollback"},{"id":"M03-07.A04","evidence":"built-in source service provisioning replay idempotency and audit"},{"id":"M03-07.A05","evidence":"Worker collection executor adapter normalization evidence persistence retry dead-letter"},{"id":"M03-07.A06","evidence":"catalog provision replay OpenAPI DTO errors version and idempotency"},{"id":"M03-07.A07","evidence":"source implementation page desktop 390 catalog status and replay"},{"id":"M03-07.A08","evidence":"provision replay confirmation loading empty error forbidden blocked recovery"},{"id":"M03-07.A09","evidence":"provider configure collection replay organization workspace and outbound URL guards"},{"id":"M03-07.A10","evidence":"machine-readable source config env Baota policy and startup validation"},{"id":"M03-07.A11","evidence":"live health replay events request trace metrics and policy state"},{"id":"M03-07.A12","evidence":"RSS XML CSV normalization bounds URL and invalid input unit tests"},{"id":"M03-07.A13","evidence":"Provider adapter OpenAPI event and client contract tests"},{"id":"M03-07.A14","evidence":"live Google RSS MySQL57 Redis file task evidence replay and isolation"},{"id":"M03-07.A15","evidence":"Playwright desktop 390 source catalog and replay visual"},{"id":"M03-07.A16","evidence":"timeout rate limit empty parser change duplicate dependency rollback drills"},{"id":"M03-07.A17","evidence":"blueprint Feature Map source inventory URL policy runbook and rollback"}],"commands":["npm run build","node --test tests/m03-07/provider-sources.test.mjs","node scripts/verify-provider-sources-live.mjs","npx playwright test tests/e2e/m03-07-provider-sources.spec.ts","npm run verify:docs"]}
+{
+  "moduleId":"M03-07",
+  "phaseId":"P03",
+  "name":"Automatic Hotspot and Provider Sources",
+  "dependencies":["M03-03","M03-04","M03-05","M03-06"],
+  "atomicTasks":[
+    {"id":"M03-07.A01","evidence":"100+ truthful automatic setup-required and manual source-channel scope"},
+    {"id":"M03-07.A02","evidence":"catalog availability schedule refresh replay raw normalized and execution contracts"},
+    {"id":"M03-07.A03","evidence":"MySQL57 replay automatic schedule refresh idempotency indexes scope and rollback"},
+    {"id":"M03-07.A04","evidence":"startup catalog synchronization and manual refresh service idempotency"},
+    {"id":"M03-07.A05","evidence":"Worker automatic scheduler collection executor evidence persistence retry dead-letter"},
+    {"id":"M03-07.A06","evidence":"catalog provision replay refresh OpenAPI DTO errors and idempotency"},
+    {"id":"M03-07.A07","evidence":"novice source center and trend refresh desktop and 390 layout"},
+    {"id":"M03-07.A08","evidence":"automatic setup-required manual loading empty error forbidden blocked recovery states"},
+    {"id":"M03-07.A09","evidence":"provider configure collection replay trend read scope and fixed outbound URL guards"},
+    {"id":"M03-07.A10","evidence":"automatic scheduler env schema Baota unified-backend policy and startup validation"},
+    {"id":"M03-07.A11","evidence":"scheduled tasks events request trace metrics and truthful policy state"},
+    {"id":"M03-07.A12","evidence":"catalog uniqueness adapter coverage RSS CSV normalization bounds and invalid-input tests"},
+    {"id":"M03-07.A13","evidence":"Provider adapter OpenAPI refresh event and client contract tests"},
+    {"id":"M03-07.A14","evidence":"MySQL57 Redis file task evidence refresh and organization isolation"},
+    {"id":"M03-07.A15","evidence":"Playwright novice source catalog and hotspot refresh user journeys"},
+    {"id":"M03-07.A16","evidence":"timeout rate limit parser change dependency setup-required and rollback drills"},
+    {"id":"M03-07.A17","evidence":"blueprint plan Feature Map source inventory runbook and rollback"}
+  ],
+  "commands":["npm run build","node --test tests/m03-07/provider-sources.test.mjs","node scripts/verify-provider-sources-live.mjs","node scripts/verify-automatic-hotspots-live.mjs","npx playwright test tests/e2e/m03-07-provider-sources.spec.ts","npm run verify:docs"]
+}

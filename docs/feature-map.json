@@ -186,7 +186,8 @@
         "/api/v1/me/password",
         "/api/v1/me/sessions"
       ],
-      "sessionTransport": "opaque Secure HttpOnly SameSite=Strict cookie in production; token hash only in MySQL",
+      "sessionTransport": "30-day opaque Secure HttpOnly SameSite=Strict cookie in production with Max-Age=2592000; token hash only in MySQL",
+      "configuration": ["AUTH_SESSION_TTL_MINUTES=43200"],
       "delivery": "AES-256-GCM MySQL outbox; provider selection pending and explicitly blocked",
       "scope": "local email account and own sessions only; MFA and enterprise identity capabilities are tracked separately by M01-02",
       "status": "module_verified"
@@ -784,24 +785,28 @@
         "../apps/api/src/mysql-provider-source-repository.ts",
         "../apps/api/src/provider-source-routes.ts",
         "../apps/worker/src/provider-source-executor.ts",
+        "../apps/worker/src/automatic-source-scheduler.ts",
         "../apps/web/src/components/ProviderSourceCenter.vue"
       ],
       "routes": [
         "/platform-admin/providers/sources",
         "/api/v1/platform/provider-sources",
         "/api/v1/platform/provider-sources/{code}/provision",
-        "/api/v1/platform/provider-sources/{providerId}/replays"
+        "/api/v1/platform/provider-sources/{providerId}/replays",
+        "/api/v1/provider-sources/refresh"
       ],
-      "scope": "fixed platform source catalog plus organization and workspace scoped replay tasks and evidence",
+      "scope": "100+ code-owned hotspot and product-source channels plus organization/workspace automatic and manual refresh tasks and evidence",
       "sources": [
-        "google_news_search public RSS",
+        "96 automatic Google News fixed RSS market/topic channels",
+        "46 setup-required official API, authenticated browser, public page and RSS platform entries",
+        "google_news_search manual keyword RSS",
         "manual_product_supply_csv explicit import"
       ],
-      "admissionBoundary": "catalog and provisioning are disabled by default; Google endpoint availability is not production authorization; owners explicitly review and enable provider definitions",
+      "admissionBoundary": "new public RSS channels auto-register enabled; setup-required and manual entries remain disabled until real credentials/contracts or explicit input exist; no setup-required platform fabricates data",
       "outboundBoundary": "Google News uses one exact code-owned URL template and rejects redirects; an optional Baota-restricted project HTTP CONNECT proxy is applied only to news.google.com without setting global HTTP_PROXY or HTTPS_PROXY; CSV uses inline content; callers cannot supply an outbound URL or proxy",
       "limits": "Google RSS 2MB and 20 persisted records per task; CSV 1MB, exact 8-column header, 100 parsed rows and 20 persisted records per task",
-      "permission": "provider:configure for catalog/provision; collection:replay for scoped task creation; writes require same-origin Origin and Idempotency-Key",
-      "persistence": "MySQL 5.7 replay correlation plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
+      "permission": "provider:configure for catalog/provision; collection:replay for scoped replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
+      "persistence": "MySQL 5.7 automatic_source_schedules and provider_refresh_operations plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
       "liveVerificationCleanup": "random m03-07 example.test scope only; delete M07-06 collection_task_evidence_links before evidence/task/provider principals and fail closed unless provider, workspace, organization and user are all absent",
       "configuration": [
         "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS",
@@ -813,6 +818,7 @@
         "PROVIDER_PROXY_CONNECT_TIMEOUT_MS",
         "COLLECTION_TASK_POLL_MS",
         "COLLECTION_TASK_LEASE_SECONDS",
+        "AUTOMATIC_SOURCE_SCHEDULER_POLL_MS",
         "EVIDENCE_ROOT",
         "EVIDENCE_MAX_RAW_BYTES"
       ],
@@ -1317,6 +1323,31 @@
       "verificationRunId": "1216cb8f-3a77-43d8-ac72-70c36ef4a9d5",
       "status": "module_verified"
     },
+    "platformAccountManagement": {
+      "module": "M06-01/M06-02 corrective completion",
+      "entrypoints": [
+        "../apps/api/src/platform-account-service.ts",
+        "../apps/api/src/mysql-platform-account-repository.ts",
+        "../apps/api/src/platform-account-routes.ts",
+        "../apps/web/src/components/PlatformAccountCenter.vue",
+        "../apps/web/src/components/NavigationShell.vue"
+      ],
+      "routes": [
+        "/platform-admin/accounts",
+        "/api/v1/platform/accounts",
+        "/api/v1/platform/accounts/organizations",
+        "/api/v1/platform/accounts/organizations/{organizationId}/status",
+        "/api/v1/platform/accounts/users/{userId}/status",
+        "/api/v1/platform/accounts/users/{userId}/platform-role"
+      ],
+      "scope": "platform-super-admin organization, user and fixed platform administrator management with novice labels",
+      "truthBoundary": "only MySQL account metadata and counts; no password hashes, session tokens or credentials; disable user revokes active user_sessions",
+      "permission": "platform:superadmin plus same-origin Origin, Idempotency-Key and audited reason for writes",
+      "persistence": "platform_account_operations idempotency plus existing organizations, workspaces, memberships, fixed role assignments and platform_audit_events",
+      "navigationBoundary": "platform, organization-admin and member shells have distinct primary menus; infrastructure pages are removed from the novice platform primary navigation but protected historical routes remain",
+      "imageEvidence": ["high resolution 09 organization administration dashboard", "high resolution 10 platform operations cockpit", "concept 62 collection source management"],
+      "status": "implemented_pending_live_verification"
+    },
     "platformDashboard": {
       "module": "M06-02",
       "entrypoints": ["../apps/api/src/platform-dashboard-service.ts", "../apps/api/src/mysql-platform-dashboard-repository.ts", "../apps/api/src/platform-dashboard-routes.ts", "../apps/web/src/components/PlatformDashboard.vue"],
@@ -1794,7 +1825,13 @@
       "path": "/platform-admin",
       "view": "PlatformAdmin",
       "domain": "platform",
-      "status": "security_audit_and_provider_registry_implemented_remaining_admin_modules_planned"
+      "status": "novice_dashboard_accounts_sources_collection_quality_security_and_advanced_navigation_implemented"
+    },
+    {
+      "path": "/platform-admin/accounts",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-accounts",
+      "status": "implemented_pending_live_verification"
     },
     {
       "path": "/platform-admin/providers",
@@ -1956,8 +1993,10 @@
     {
       "prefix": "/api/v1/platform",
       "domain": "platform",
-      "status": "M01-06_audit_and_P03_sources_collection_evidence_provider_sources_implemented_remaining_platform_management_planned"
+      "status": "platform_accounts_audit_dashboard_sources_collection_quality_security_open_platform_and_commercial_implemented"
     },
+    { "prefix": "/api/v1/platform/accounts", "domain": "platform-accounts", "status": "implemented_pending_live_verification" },
+    { "prefix": "/api/v1/provider-sources/refresh", "domain": "automatic-hotspot-sources", "status": "implemented_pending_live_verification" },
     { "prefix": "/api/v1/platform/operations/topology", "domain": "runtime-topology", "status": "M08-01_single_server_module_verified" },
     { "prefix": "/api/v1/platform/operations/redis", "domain": "redis-resilience", "status": "M08-02_module_verified" },
     { "prefix": "/api/v1/platform/operations/mysql", "domain": "mysql-resilience", "status": "M08-03_module_verified" },
