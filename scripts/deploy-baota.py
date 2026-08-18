@@ -371,7 +371,7 @@ except Exception as error:
 
 def cleanup_source(build_sha: str, initialize_layout: bool) -> str:
     values = json.dumps({"root": PROJECT_ROOT, "sha": build_sha, "initialize": initialize_layout}, ensure_ascii=False)
-    return f'''import json, shutil
+    return f'''import json, shutil, subprocess
 from pathlib import Path
 v=json.loads({values!r}); root=Path(v["root"])
 if str(root)!="/www/wwwroot/ai选品" or not root.is_dir(): raise SystemExit("unexpected root")
@@ -381,7 +381,10 @@ for target in targets:
     resolved=target.resolve(strict=False)
     if resolved==root or root not in resolved.parents: raise SystemExit("unsafe cleanup target")
     if target.is_symlink(): target.unlink()
-    elif target.is_dir(): shutil.rmtree(target)
+    elif target.is_dir():
+        for user_ini in target.glob("**/.user.ini"):
+            subprocess.run(["chattr", "-i", str(user_ini)], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        shutil.rmtree(target)
     elif target.exists(): target.unlink()
 print("SCOUTOPS_RESULT="+json.dumps({{"status":True,"message":"cleanup complete"}}))
 '''
