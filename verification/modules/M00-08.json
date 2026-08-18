@@ -5,9 +5,9 @@
   "dependencies": ["M00-02", "M00-03", "M00-04", "M00-05", "M00-06"],
   "atomicTasks": [
     {"id":"M00-08.A01","evidence":"architecture scope and validated template or signed healthy lifecycle"},
-    {"id":"M00-08.A02","evidence":"ten Baota deployment object contracts including same-host rollout pair"},
+    {"id":"M00-08.A02","evidence":"fixed-directory BaoTa website Node Python MySQL Redis and backup object contracts"},
     {"id":"M00-08.A03","evidence":"0007 deployment release up/down"},
-    {"id":"M00-08.A04","evidence":"API Worker Crawler stable candidate start and graceful stop contracts"},
+    {"id":"M00-08.A04","evidence":"API Worker and BaoTa Python crawler start heartbeat and graceful stop contracts"},
     {"id":"M00-08.A05","evidence":"heartbeats manual release gate rollout and backup tasks"},
     {"id":"M00-08.A06","evidence":"OpenAPI x-scoutops-baota-s0 health contracts"},
     {"id":"M00-08.A07","evidence":"DeploymentFoundation desktop and 390 based on image 64"},

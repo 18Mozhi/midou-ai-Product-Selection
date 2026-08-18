@@ -5,9 +5,9 @@ import { readFile } from 'node:fs/promises';
 
 const read = (path) => readFile(path, 'utf8');
 
-test('M07-03.A01-A05 manifest freezes one-backend target and healthy state', async () => {
+test('M07-03.A01-A05 manifest freezes fixed Node and Python BaoTa targets and healthy state', async () => {
   const manifest = JSON.parse(await read('infra/baota/service-manifest.json'));
-  assert.equal(manifest.schemaVersion, 3);
+  assert.equal(manifest.schemaVersion, 4);
   assert.equal(manifest.productionDeployed, true);
   assert.equal(manifest.deploymentStatus, 'healthy');
   assert.equal(manifest.target.deployRoot, '/www/wwwroot/ai选品');
@@ -15,9 +15,13 @@ test('M07-03.A01-A05 manifest freezes one-backend target and healthy state', asy
   const nodeProjects = manifest.objects.filter((item) => item.kind === 'baota-node-project');
   assert.equal(nodeProjects.length, 1);
   assert.equal(nodeProjects[0].name, 'ai选品');
-  assert.equal(nodeProjects[0].startCommand, 'node apps/backend/dist/server.js');
+  assert.match(nodeProjects[0].startCommand, /^node --env-file=/);
+  assert.equal(nodeProjects[0].workingDirectory, '/www/wwwroot/ai选品/backend');
   assert.equal(nodeProjects[0].processMode, 'foreground');
-  assert.equal(manifest.objects.find((item) => item.name === 'ai选品网站').buildCommand, 'npm ci && npm run build');
+  const pythonProjects = manifest.objects.filter((item) => item.kind === 'baota-python-project');
+  assert.equal(pythonProjects.length, 1);
+  assert.equal(pythonProjects[0].workingDirectory, '/www/wwwroot/ai选品/python');
+  assert.equal(manifest.objects.find((item) => item.name === 'ai选品网站').workingDirectory, '/www/wwwroot/ai选品/frontend');
 });
 
 test('M07-03.A06-A11 site, runtime, permission, config and logging contracts fail closed', async () => {

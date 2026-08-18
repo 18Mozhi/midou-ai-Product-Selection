@@ -166,7 +166,7 @@
       "deploymentStatus": "healthy",
       "target": "192.168.1.220 /www/wwwroot/ai选品 (domain: midouai.mozhiz.cn)",
       "productionVerifier": "../scripts/verify-baota-deployment.mjs --production",
-      "runtimeScope": "one Huizhou host and one BaoTa-managed ai选品 backend; disk and capacity are not product completion gates",
+      "runtimeScope": "one Huizhou host with fixed frontend backend python config runtime backups directories and BaoTa-managed ai选品 Node plus ai选品-python Python 3.12 projects; disk and capacity are not product completion gates",
       "status": "module_verified"
     },
     "localIdentity": {
@@ -2022,14 +2022,23 @@
       "name": "ai选品网站",
       "kind": "baota-site",
       "responsibility": "Vue static assets and reverse proxy",
+      "workingDirectory": "/www/wwwroot/ai选品/frontend",
       "status": "production_managed"
     },
     {
       "name": "ai选品",
       "kind": "baota-node-project",
-      "responsibility": "single foreground backend supervising HTTP API, async Worker and collection execution",
-      "workingDirectory": "/www/wwwroot/ai选品/current",
-      "startCommand": "node apps/backend/dist/server.js",
+      "responsibility": "single foreground backend supervising HTTP API, async Worker and collection task execution",
+      "workingDirectory": "/www/wwwroot/ai选品/backend",
+      "startCommand": "node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js",
+      "status": "production_managed"
+    },
+    {
+      "name": "ai选品-python",
+      "kind": "baota-python-project",
+      "responsibility": "Python 3.12 crawler heartbeat and Python-to-Playwright bridge runtime",
+      "workingDirectory": "/www/wwwroot/ai选品/python",
+      "startCommand": "python -m scoutops_crawler",
       "status": "production_managed"
     },
     {

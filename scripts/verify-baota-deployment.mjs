@@ -15,15 +15,15 @@ let manifest;
 try { manifest = JSON.parse(await readFile(resolve(root, 'infra/baota/service-manifest.json'), 'utf8')); }
 catch { fail('manifest_invalid', 'infra/baota/service-manifest.json is missing or invalid JSON'); }
 
-if (manifest.schemaVersion !== 3 || manifest.stage !== 'production') fail('manifest_contract_invalid', 'production schemaVersion 3 is required');
+if (manifest.schemaVersion !== 4 || manifest.stage !== 'production') fail('manifest_contract_invalid', 'production schemaVersion 4 is required');
 if (manifest.target?.host !== '192.168.1.220' || manifest.target?.domain !== 'midouai.mozhiz.cn') fail('target_contract_invalid', 'locked production host or domain is missing');
 if (manifest.target?.deployRoot !== '/www/wwwroot/ai选品') fail('deploy_root_invalid', 'production deploy root must be /www/wwwroot/ai选品');
-const expected = ['ai选品网站','ai选品','ai选品数据库','ai选品缓存','ai选品备份'];
+const expected = ['ai选品网站','ai选品','ai选品-python','ai选品数据库','ai选品缓存','ai选品备份'];
 for (const name of expected) if (!manifest.objects.some((item) => item.name === name)) fail('panel_object_missing', name);
 const nodeProjects = manifest.objects.filter((item) => item.kind === 'baota-node-project');
-if (nodeProjects.length !== 1 || nodeProjects[0]?.name !== 'ai选品' || nodeProjects[0]?.processMode !== 'foreground' || nodeProjects[0]?.startCommand !== 'node apps/backend/dist/server.js') fail('single_backend_invalid', 'exactly one foreground ai选品 backend is required');
-if (nodeProjects[0]?.launcher !== 'infra/baota/start-backend.sh') fail('backend_launcher_invalid', 'the tracked BaoTa launcher is required');
-if (manifest.objects.some((item) => item.kind === 'baota-python-project')) fail('python_project_forbidden', 'crawler must not be a separate BaoTa production project');
+if (nodeProjects.length !== 1 || nodeProjects[0]?.name !== 'ai选品' || nodeProjects[0]?.processMode !== 'foreground' || nodeProjects[0]?.workingDirectory !== '/www/wwwroot/ai选品/backend' || !nodeProjects[0]?.startCommand.startsWith('node --env-file=/www/wwwroot/ai选品/config/product_scout.env ')) fail('single_backend_invalid', 'exactly one fixed-directory foreground ai选品 backend is required');
+const pythonProjects = manifest.objects.filter((item) => item.kind === 'baota-python-project');
+if (pythonProjects.length !== 1 || pythonProjects[0]?.name !== 'ai选品-python' || pythonProjects[0]?.workingDirectory !== '/www/wwwroot/ai选品/python' || pythonProjects[0]?.pythonVersion !== '3.12.13' || pythonProjects[0]?.startCommand !== 'python -m scoutops_crawler') fail('python_project_invalid', 'one fixed-directory BaoTa Python 3.12 crawler project is required');
 const commands = manifest.objects.flatMap((item) => [item.startCommand, item.buildCommand, item.command]).filter(Boolean).join('\n');
 if (/systemctl|\bpm2\b|crontab|docker[ -]compose/i.test(commands)) fail('external_manager_forbidden', 'panel-external production manager found');
 for (const item of manifest.objects.filter((object) => !object.public && object.port)) if (item.bind !== '127.0.0.1') fail('private_bind_invalid', item.name);
@@ -31,9 +31,9 @@ if (manifest.restrictedConfig?.secretValuesInManifest !== false || manifest.rest
 if (!manifest.logging?.managedInBaota || manifest.logging.forbiddenFields.length < 6) fail('logging_contract_invalid', 'Baota logging and secret exclusions are required');
 const nginx = await readFile(resolve(root, 'infra/baota/nginx/scoutops.conf.template'), 'utf8');
 for (const token of ['server_name midouai.mozhiz.cn', 'location /api/', 'location /open/', 'location /api/v1/realtime/events', 'proxy_buffering off', '127.0.0.1:4101']) if (!nginx.includes(token)) fail('nginx_contract_invalid', token);
-for (const file of ['apps/web/dist/index.html','apps/api/dist/server.js','apps/worker/dist/index.js','apps/backend/dist/server.js','infra/baota/start-backend.sh','config/env.example','config/schema.json']) await access(resolve(root, file));
-const launcher = await readFile(resolve(root, 'infra/baota/start-backend.sh'), 'utf8');
-if (!/readlink -f .*\/current/.test(launcher) || !/export BUILD_SHA/.test(launcher) || /BUILD_SHA=[a-f0-9]{40}/.test(launcher)) fail('backend_launcher_release_identity_invalid', 'BaoTa launcher must derive BUILD_SHA from the current release symlink');
+for (const file of ['apps/web/dist/index.html','apps/api/dist/server.js','apps/worker/dist/index.js','apps/backend/dist/server.js','apps/crawler/scoutops_crawler/__main__.py','scripts/deploy-baota.py','config/env.example','config/schema.json']) await access(resolve(root, file));
+const deployer = await readFile(resolve(root, 'scripts/deploy-baota.py'), 'utf8');
+if (!deployer.includes('PROJECT_ROOT = "/www/wwwroot/ai选品"') || !deployer.includes('TemporaryDirectory') || /git (pull|clone|checkout)/.test(deployer)) fail('local_upload_contract_invalid', 'deployment must build locally, upload a bounded runtime package and clean temporary artifacts');
 
 if (!production) {
   console.log(JSON.stringify({ module: 'M07-03', status: 'preflight_passed', production_deployed: manifest.productionDeployed === true, objects: expected.length, request_id: id, trace_id: id }, null, 2));

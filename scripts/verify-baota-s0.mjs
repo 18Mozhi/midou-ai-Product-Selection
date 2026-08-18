@@ -6,7 +6,7 @@ const id = randomUUID();
 try {
   const manifest = JSON.parse(await readFile('infra/baota/service-manifest.json', 'utf8'));
   if (
-    manifest.schemaVersion !== 3
+    manifest.schemaVersion !== 4
     || manifest.stage !== 'production'
     || typeof manifest.productionDeployed !== 'boolean'
     || (manifest.productionDeployed && manifest.deploymentStatus !== 'healthy')
@@ -14,7 +14,7 @@ try {
     throw new Error('manifest lifecycle state is invalid');
   }
 
-  const expected = ['ai选品网站', 'ai选品', 'ai选品数据库', 'ai选品缓存', 'ai选品备份'];
+  const expected = ['ai选品网站', 'ai选品', 'ai选品-python', 'ai选品数据库', 'ai选品缓存', 'ai选品备份'];
   if (manifest.objects.length !== expected.length) {
     throw new Error(`expected ${expected.length} BaoTa objects, received ${manifest.objects.length}`);
   }
@@ -30,13 +30,20 @@ try {
   if (
     backend.name !== 'ai选品'
     || backend.processMode !== 'foreground'
-    || backend.startCommand !== 'node apps/backend/dist/server.js'
-    || backend.launcher !== 'infra/baota/start-backend.sh'
+    || backend.workingDirectory !== '/www/wwwroot/ai选品/backend'
+    || !backend.startCommand.startsWith('node --env-file=/www/wwwroot/ai选品/config/product_scout.env ')
   ) {
     throw new Error('unified backend contract is invalid');
   }
-  if (manifest.objects.some((item) => item.kind === 'baota-python-project')) {
-    throw new Error('separate BaoTa Python backend is forbidden');
+  const pythonProjects = manifest.objects.filter((item) => item.kind === 'baota-python-project');
+  if (
+    pythonProjects.length !== 1
+    || pythonProjects[0].name !== 'ai选品-python'
+    || pythonProjects[0].workingDirectory !== '/www/wwwroot/ai选品/python'
+    || pythonProjects[0].pythonVersion !== '3.12.13'
+    || pythonProjects[0].startCommand !== 'python -m scoutops_crawler'
+  ) {
+    throw new Error('BaoTa Python crawler contract is invalid');
   }
 
   const commands = manifest.objects
@@ -52,7 +59,8 @@ try {
     'apps/backend/dist/server.js',
     'apps/api/dist/server.js',
     'apps/worker/dist/index.js',
-    'infra/baota/start-backend.sh',
+    'apps/crawler/scoutops_crawler/__main__.py',
+    'scripts/deploy-baota.py',
     'infra/baota/nginx/scoutops.conf.template',
   ]) {
     await access(file);
@@ -64,6 +72,7 @@ try {
     production_deployed: manifest.productionDeployed,
     objects: expected.length,
     backend: backend.name,
+    python: pythonProjects[0].name,
     process_mode: backend.processMode,
     request_id: id,
     trace_id: id,

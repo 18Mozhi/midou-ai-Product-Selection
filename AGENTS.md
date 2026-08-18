@@ -22,6 +22,25 @@
 - 部署凭证、数据库密码、GitHub Deploy Key、Cookie、Token、私钥和 `.env` 均不得提交、打印或写入文档。只在宝塔受限配置或受限环境变量中维护。
 - 生产主机房在惠州；按 2026-08-08 当前范围，备份与恢复只使用现有主机内由宝塔管理的独立加密目录和隔离恢复库，不配置备用服务器，也不得宣称整机、磁盘、机房或异地灾备能力。真实客户数据、数据库、主文件存储不得离开中国境内。
 
+## 固定生产目录与重复部署命令
+
+- 本项目唯一生产根目录是 `/www/wwwroot/ai选品`。只允许维护以下固定目录，禁止再创建 `current`、`releases`、Git 工作树或长期 staging 目录：
+  - `/www/wwwroot/ai选品/frontend`：Vue 构建后的静态文件，也是宝塔网站 `midouai.mozhiz.cn` 的网站目录。
+  - `/www/wwwroot/ai选品/backend`：Node.js 20 后端运行包，也是宝塔 Node 项目 `ai选品` 的项目目录。
+  - `/www/wwwroot/ai选品/python`：Python 3.12 采集运行包，也是宝塔 Python 项目 `ai选品-python` 的项目目录。
+  - `/www/wwwroot/ai选品/config`：宝塔受限环境文件；不得提交、上传到其他目录或在输出中展示秘密。
+  - `/www/wwwroot/ai选品/runtime`：`evidence`、`exports`、`credential-tmp`、`tmp`、`verification` 等运行数据。
+  - `/www/wwwroot/ai选品/backups`：仅本项目的数据库和文件恢复材料。
+- 服务器不得执行 Git clone、pull、checkout 或 build。代码只在本地构建并用 `python scripts/deploy-baota.py` 上传运行包；该命令会排除 `tests`、截图、文档、计划、源码缓存和本地临时文件，上传完成后删除临时包。
+- 宝塔网站对象：`ai选品网站` / 域名 `midouai.mozhiz.cn` / 目录 `/www/wwwroot/ai选品/frontend`。
+- 宝塔 Node 对象：`ai选品` / 目录 `/www/wwwroot/ai选品/backend` / Node `v20.19.6` / 启动命令 `node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js`。这是宝塔面板中的直接 Node 命令，不得配置项目自带 Bash 启动器。
+- 宝塔 Python 对象：`ai选品-python` / 目录 `/www/wwwroot/ai选品/python` / Python `3.12.13` / 命令模式 / 启动命令 `python -m scoutops_crawler`。Python 项目只允许由宝塔创建、启动、停止、重启和查看日志。
+- 创建或首次整理：在本地仓库根目录运行 `python scripts/deploy-baota.py --initialize-layout`。更新最新版：提交并确认工作树干净后运行 `python scripts/deploy-baota.py`。
+- 宝塔命令行重启 Node：`/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py nodejs ai选品`。
+- 宝塔命令行重启 Python：`/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py python ai选品-python`。
+- 启动和停止必须在宝塔“网站/Node 项目/Python 项目”界面操作；创建服务使用上述本地部署命令调用宝塔项目模型。禁止手工用 `nohup`、`screen`、systemd、独立 PM2、宿主 crontab 或 Docker Compose 代替宝塔。
+- 部署脚本只能读取 Windows 凭据管理器条目 `ssh@192.168.1.220:22/root`，只能修改本项目根目录、网站 ID 29、Node 项目 `ai选品` 和 Python 项目 `ai选品-python`。任何对象身份或路径不匹配都必须失败关闭，不得扩大操作范围。
+
 ## 变更、验证与提交
 
 - 代码、路由、API、事件、配置或权限变更时，同步更新 OpenAPI、`docs/feature-map.json`、测试和运维说明。

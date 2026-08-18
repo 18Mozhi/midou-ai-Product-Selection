@@ -28,9 +28,9 @@ test("production root resolves the authenticated role landing instead of the fou
   assert.doesNotMatch(shell, /\{\{\s*phaseLabel\s*\}\}/);
 });
 
-// Regression: ISSUE-002 — one product was deployed as API, Worker, canary and Python projects
-// Found by BaoTa topology inspection on 2026-08-17.
-test("BaoTa exposes exactly one foreground backend named ai选品", async () => {
+// Regression: ISSUE-002 — API, Worker and canary were split into hard-to-maintain
+// projects while the required Python runtime was not deployed with BaoTa.
+test("BaoTa exposes fixed Node and Python projects without duplicate backends", async () => {
   const manifest = JSON.parse(await read("infra/baota/service-manifest.json"));
   const nodeProjects = manifest.objects.filter(
     (item) => item.kind === "baota-node-project",
@@ -42,12 +42,12 @@ test("BaoTa exposes exactly one foreground backend named ai选品", async () => 
   assert.equal(manifest.target.deployRoot, "/www/wwwroot/ai选品");
   assert.equal(nodeProjects.length, 1);
   assert.equal(nodeProjects[0].name, "ai选品");
-  assert.equal(
-    nodeProjects[0].startCommand,
-    "node apps/backend/dist/server.js",
-  );
+  assert.match(nodeProjects[0].startCommand, /^node --env-file=/);
+  assert.equal(nodeProjects[0].workingDirectory, "/www/wwwroot/ai选品/backend");
   assert.equal(nodeProjects[0].processMode, "foreground");
-  assert.equal(pythonProjects.length, 0);
+  assert.equal(pythonProjects.length, 1);
+  assert.equal(pythonProjects[0].name, "ai选品-python");
+  assert.equal(pythonProjects[0].workingDirectory, "/www/wwwroot/ai选品/python");
   assert.doesNotMatch(
     JSON.stringify(manifest.objects),
     /product-scout-api-canary|product-scout-worker|product-scout-crawler/,
@@ -183,29 +183,20 @@ test("production product QA waits for the selected tenant context and never embe
   );
 });
 
-// Regression: ISSUE-009 — BaoTa reported a successful restart while the shared
-// launcher kept the previous release BUILD_SHA, so the version gate could not
-// prove which code was actually running.
-test("BaoTa launcher derives release identity from the current symlink", async () => {
-  const [launcher, manifest, attributes] = await Promise.all([
-    read("infra/baota/start-backend.sh"),
+// Regression: ISSUE-009 — release identity and service paths must no longer
+// depend on a server-side Git checkout, current symlink or custom Bash launcher.
+test("BaoTa deployment uploads a bounded fixed-layout runtime package", async () => {
+  const [deployer, manifest] = await Promise.all([
+    read("scripts/deploy-baota.py"),
     read("infra/baota/service-manifest.json").then(JSON.parse),
-    read(".gitattributes"),
   ]);
 
-  assert.match(launcher, /readlink -f .*\/current/);
-  assert.match(launcher, /basename/);
-  assert.match(launcher, /export BUILD_SHA=/);
-  assert.doesNotMatch(launcher, /BUILD_SHA=[a-f0-9]{40}/);
-  assert.ok(
-    launcher.indexOf('. "$ROOT/shared/config/product_scout.env"') <
-      launcher.indexOf('BUILD_SHA="$(basename "$CURRENT")"'),
-    "the restricted environment must load before the current release overrides BUILD_SHA",
-  );
-  assert.match(attributes, /\*\.sh\s+text\s+eol=lf/);
-  assert.equal(
-    manifest.objects.find((item) => item.kind === "baota-node-project")
-      ?.launcher,
-    "infra/baota/start-backend.sh",
-  );
+  assert.match(deployer, /PROJECT_ROOT = "\/www\/wwwroot\/ai选品"/);
+  assert.match(deployer, /TemporaryDirectory/);
+  assert.match(deployer, /BUILD_SHA=/);
+  assert.doesNotMatch(deployer, /git (pull|clone|checkout)/);
+  const node = manifest.objects.find((item) => item.kind === "baota-node-project");
+  assert.equal(node?.workingDirectory, "/www/wwwroot/ai选品/backend");
+  assert.match(node?.startCommand ?? "", /^node --env-file=/);
+  assert.equal(manifest.objects.find((item) => item.kind === "baota-python-project")?.workingDirectory, "/www/wwwroot/ai选品/python");
 });

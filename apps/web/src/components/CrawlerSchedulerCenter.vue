@@ -82,7 +82,7 @@ onMounted(() => { if (state.value !== "recovering") void load(); });
 <template>
   <section class="crawler-scheduler" :data-state="state">
     <header class="crawler-scheduler__hero">
-      <div><p>SINGLE HOST SCHEDULER</p><h2>Crawler 单机调度</h2><span>惠州单机由 ai选品 统一后端内的一个 Worker 承载采集执行器；来源并发上限 1，不启用独立 Python 后端。</span></div>
+      <div><p>SINGLE HOST SCHEDULER</p><h2>Crawler 单机调度</h2><span>惠州单机由 ai选品 Worker 领取采集任务，宝塔 Python 3.12 项目提供采集心跳与 Playwright 桥接；来源并发上限 1。</span></div>
       <div><button type="button" @click="load">刷新运行事实</button><button class="danger" type="button" :disabled="saving" @click="confirming=true">回收过期租约</button></div>
     </header>
     <section v-if="!['ready','warning','blocked'].includes(state)" class="crawler-scheduler__state" :data-kind="state" aria-live="polite">

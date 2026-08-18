@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "stage": "production",
   "deploymentStatus": "healthy",
   "productionDeployed": true,
@@ -12,14 +12,14 @@
     "publicPorts": [80, 443],
     "privatePorts": [4101, 3306, 6379]
   },
-  "runtimeClaim": "惠州单机、单一宝塔 Node 后端；只声明真实功能和当前运行健康，不声明负载均衡、多节点或硬件容量。",
+  "runtimeClaim": "惠州单机；宝塔分别管理网站、统一 Node 后端和 Python 采集运行时；只声明真实功能和当前运行健康，不声明负载均衡、多节点或硬件容量。",
   "objects": [
     {
       "name": "ai选品网站",
       "kind": "baota-site",
-      "workingDirectory": "/www/wwwroot/ai选品/current",
-      "buildCommand": "npm ci && npm run build",
-      "publishDirectory": "apps/web/dist",
+      "workingDirectory": "/www/wwwroot/ai选品/frontend",
+      "buildCommand": "npm run build:web (local only)",
+      "publishDirectory": "/www/wwwroot/ai选品/frontend",
       "domain": "midouai.mozhiz.cn",
       "public": true,
       "healthPath": "/",
@@ -28,9 +28,8 @@
     {
       "name": "ai选品",
       "kind": "baota-node-project",
-      "workingDirectory": "/www/wwwroot/ai选品/current",
-      "startCommand": "node apps/backend/dist/server.js",
-      "launcher": "infra/baota/start-backend.sh",
+      "workingDirectory": "/www/wwwroot/ai选品/backend",
+      "startCommand": "node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js",
       "processMode": "foreground",
       "bind": "127.0.0.1",
       "port": 4101,
@@ -38,6 +37,19 @@
       "healthPaths": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
       "managedChildren": ["api", "worker"],
       "environmentGroups": ["app", "database", "redis", "ai", "storage", "runtime", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "collectionTasks", "trends", "opportunities", "competitorMonitor", "sourcing", "businessTasks", "approvals", "notifications", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial", "backupRecovery", "fileResilience"],
+      "logSource": "stdout/stderr",
+      "gracefulSignals": ["SIGTERM", "SIGINT"]
+    },
+    {
+      "name": "ai选品-python",
+      "kind": "baota-python-project",
+      "workingDirectory": "/www/wwwroot/ai选品/python",
+      "pythonVersion": "3.12.13",
+      "startCommand": "python -m scoutops_crawler",
+      "runMode": "command",
+      "processMode": "foreground",
+      "public": false,
+      "purpose": "crawler heartbeat and Python-to-Playwright bridge runtime",
       "logSource": "stdout/stderr",
       "gracefulSignals": ["SIGTERM", "SIGINT"]
     },
@@ -73,7 +85,7 @@
   },
   "logging": {
     "managedInBaota": true,
-    "sources": ["site access/error", "ai选品 stdout/stderr", "MySQL", "Redis", "backup task"],
+    "sources": ["site access/error", "ai选品 stdout/stderr", "ai选品-python stdout/stderr", "MySQL", "Redis", "backup task"],
     "requiredFields": ["service", "status", "observed_at", "request_id or trace_id when request-scoped"],
     "forbiddenFields": ["password", "cookie", "token", "api_key", "private_key", "master_key"]
   },

@@ -38,6 +38,6 @@
 
 发布前先执行 `npm run build` 和 `npm run verify:functional`。生产站点使用专用临时账号执行 `npm run verify:production-product`；账号和密码仅通过 `SCOUTOPS_QA_ADMIN_EMAIL`、`SCOUTOPS_QA_ADMIN_PASSWORD`、`SCOUTOPS_QA_MEMBER_EMAIL`、`SCOUTOPS_QA_MEMBER_PASSWORD` 注入，不写入 Git、截图或报告。脚本逐页访问管理员与成员可见菜单，阻断 API 4xx/5xx、控制台错误、阶段占位页、会话丢失以及失效的快捷创建入口。
 
-生产只保留宝塔 Node 项目“ai选品”，工作目录 `/www/wwwroot/ai选品/current`，启动入口 `node apps/backend/dist/server.js`。健康检查使用 `/api/v1/health/live`、`/api/v1/health/ready` 和 `/api/v1/health/version`。后端异常退出时由统一后端监督器拉起 API/Worker；宝塔负责统一项目的启动、停止、重启和日志。
+生产目录固定为 `/www/wwwroot/ai选品/frontend`（Vue 网站）、`backend`（Node 项目“ai选品”）、`python`（Python 3.12 项目“ai选品-python”）、`config/runtime/backups`。健康检查使用 `/api/v1/health/live`、`/api/v1/health/ready` 和 `/api/v1/health/version`。统一 Node 后端监督 API/Worker，宝塔分别负责网站、Node 和 Python 的启动、停止、重启和日志；服务器不使用 Git 或 `current/releases`。
 
 验收结束必须删除临时账号、会话、组织、工作区和关联测试数据，并删除宝塔一次性任务、一次性脚本、本地 `.artifacts` 报告和浏览器控制目录。

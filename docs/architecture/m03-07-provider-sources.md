@@ -31,4 +31,4 @@
 
 `AUTOMATIC_SOURCE_SCHEDULER_POLL_MS` 控制 Worker 检查到期组织的周期，默认 30000 毫秒；修改后需要通过宝塔重启统一后端“ai选品”。通用采集仍复用 `COLLECTION_TASK_*`、`PROVIDER_ADAPTER_*`、`PROVIDER_PROXY_*` 和 `EVIDENCE_*`。
 
-生产只保留一个宝塔 Node 后端项目“ai选品”。API、Worker 与采集职责由该项目统一拉起；不新增独立 Node/Python 项目、面板外服务、负载均衡或多节点能力。
+生产由宝塔管理 Node 后端项目“ai选品”和 Python 3.12 采集项目“ai选品-python”。API/Worker 由 Node 统一后端拉起，Python 项目提供采集心跳与桥接运行时；不新增独立 Worker、候选后端、面板外服务、负载均衡或多节点能力。

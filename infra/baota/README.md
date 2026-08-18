@@ -1,13 +1,49 @@
-# ai选品宝塔对象模板
+# ai选品宝塔固定目录部署
 
-本目录定义 `ai选品` 的宝塔生产对象。目标是惠州 `192.168.1.220`、域名 `midouai.mozhiz.cn`、项目根目录 `/www/wwwroot/ai选品`。生产只创建一个名为 `ai选品` 的前台 Node 项目，由 `infra/baota/start-backend.sh` 启动统一后端，后端再监督 API 与 Worker；网站、MySQL 5.7、Redis、备份和统一后端均在宝塔中可见和可操作。启动器从 `current` 符号链接解析完整 Git SHA 并注入 `BUILD_SHA`，不得在共享配置中固定旧提交。独立 API、Worker、Canary、Python 常驻项目以及任务结束后的临时验收任务均应删除。
+生产目标固定为惠州 `192.168.1.220`、域名 `midouai.mozhiz.cn`、根目录 `/www/wwwroot/ai选品`。服务器不保存 Git 仓库，也不执行 `git pull` 或源码构建。本地构建完成后，由 `python scripts/deploy-baota.py` 只上传运行包。
 
-发布顺序：拉取签发构建到新版本目录 → `npm ci` → `npm run build` → 升序迁移 → 全量功能门 → 原子切换 `current` → 在宝塔重启 `ai选品` → 检查 live/ready/version、Worker 心跳和日志 → 发布网站。任一步失败即恢复上一 `current` 并通过宝塔重启。Nginx 只反代本机 `4101`，不创建第二后端。
+## 目录与宝塔对象
 
-发布或验收所需的宝塔有限任务只允许手工、单实例运行，并在任务完成后删除；不得把临时任务保留为生产对象。
+| 用途 | 固定目录 | 宝塔对象 | 启动方式 |
+| --- | --- | --- | --- |
+| Vue 前端 | `/www/wwwroot/ai选品/frontend` | 网站 `midouai.mozhiz.cn` | 静态文件，无独立进程 |
+| Node 后端 | `/www/wwwroot/ai选品/backend` | Node 项目 `ai选品` | `node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js` |
+| Python 采集运行时 | `/www/wwwroot/ai选品/python` | Python 项目 `ai选品-python` | Python 3.12.13 命令模式：`python -m scoutops_crawler` |
+| 受限配置 | `/www/wwwroot/ai选品/config` | 仅宝塔/受限文件权限 | 不提交、不打印 |
+| 运行数据 | `/www/wwwroot/ai选品/runtime` | Node/Python 共用 | 证据、导出、凭据临时目录与验证数据 |
+| 本机备份 | `/www/wwwroot/ai选品/backups` | 宝塔备份任务 | 仅本项目恢复材料 |
 
-本地或 CI 运行 `node scripts/verify-baota-deployment.mjs --preflight` 只证明发布包可用。每次发布后都要重新生成不含秘密的 `.artifacts/verification/baota-production-evidence.json`，并运行 `node scripts/verify-baota-deployment.mjs --production`；证据 commit 必须等于当前 Git HEAD。缺少、过期或矛盾的证据必须返回 blocked，不能人工跳过。
+Node 项目仍由统一后端监督 API 与 Worker。Python 项目是宝塔可见、可启停、可查看日志的采集心跳与 Python-to-Playwright 桥接运行时；业务采集任务仍由统一 Worker 领取，不能把 Python 心跳误报为独立任务队列消费者。
 
-回滚顺序：冻结新写入 → 在宝塔恢复上一构建/环境 → 逆序执行本次迁移 down（确认数据影响后）→ 重启后台项目 → 验证健康与审计 → 恢复网站。数据库、证据、导出由宝塔写入当前主机内独立加密恢复目录；它不保护整机故障。生产不得用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。
+## 创建、更新、启动和重启
 
-宝塔官方依据：命令行工具 <https://docs.bt.cn/getting-started/bt-command-line-tool>；资源管理工具 <https://docs.bt.cn/getting-started/btcli-interactive-tool>；API 总览 <https://docs.bt.cn/api/>。官方说明 API 可能随面板版本变化，因此本仓库不猜未公开的 Node/Python 项目接口；真实创建使用面板，自动验收使用应用健康、心跳、依赖与脱敏面板对象证据。
+首次把旧 `current/releases/shared` 结构整理成固定目录：
+
+```powershell
+python scripts/deploy-baota.py --initialize-layout
+```
+
+以后发布最新版：
+
+```powershell
+python scripts/deploy-baota.py
+```
+
+脚本要求 Git 工作树干净，从 Windows 凭据管理器读取 `ssh@192.168.1.220:22/root`，在本地完成构建，只上传 `frontend/backend/python` 运行包，并通过宝塔模型修改或创建本项目对象。临时上传包和 staging 在成功后删除。`tests`、截图、文档、计划、Git 元数据和本地缓存不会上传。
+
+启动、停止优先在宝塔面板的网站、Node 项目和 Python 项目页面操作。命令行重启也必须调用宝塔脚本：
+
+```bash
+/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py nodejs ai选品
+/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py python ai选品-python
+```
+
+宝塔内部会生成自己的管理脚本和 PID 文件，这是面板实现细节；项目配置中的 Node 启动命令必须是上表的直接 `node` 命令，项目目录中不得再保存自定义 Bash 启动器。禁止 systemd、独立 PM2、宿主机 crontab、`nohup`、screen 或屏外 Docker Compose。
+
+## 验证、回滚与维护边界
+
+发布成功必须检查公网 `/api/v1/health/ready`、`/api/v1/health/version` 的 Git SHA、宝塔 Node 状态、Python 心跳日志、Worker 心跳和网站首页。目录或对象身份不匹配时部署脚本失败关闭，不得搜索或修改其他项目。
+
+代码回滚使用本地目标 Git 提交重新运行同一部署命令；数据库迁移回滚仍需先备份并按对应 runbook 判断数据影响。`config`、`runtime`、`backups` 不随代码覆盖。首次整理只有在新 Node/Python 和公网健康通过后，才删除本项目旧 `current`、`releases`、`shared`；不得把这些名称重新引入生产结构。
+
+宝塔官方依据：命令行工具 <https://docs.bt.cn/getting-started/bt-command-line-tool>；资源管理工具 <https://docs.bt.cn/getting-started/btcli-interactive-tool>；API 总览 <https://docs.bt.cn/api/>。

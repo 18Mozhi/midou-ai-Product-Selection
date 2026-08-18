@@ -2,7 +2,7 @@
 
 ## 范围和真实状态
 
-M07-03 当前部署目标为惠州 `192.168.1.220`、`midouai.mozhiz.cn` 与 `/www/wwwroot/ai选品`。宝塔只管理一个名为 `ai选品` 的前台 Node 后端，统一监督 API 与 Worker；网站、MySQL 5.7、Redis、备份与日志仍由宝塔管理。独立 API、Worker、Canary 和 Python 常驻项目属于旧拓扑，迁移完成后必须删除。manifest 只有在同提交生产证据、live/ready/version、Worker 心跳与面板日志均通过时才可签发健康。
+M07-03 当前部署目标为惠州 `192.168.1.220`、`midouai.mozhiz.cn` 与 `/www/wwwroot/ai选品`。宝塔管理网站、统一 Node 后端 `ai选品`、Python 3.12 采集项目 `ai选品-python`、MySQL 5.7、Redis、备份与日志。生产固定使用 `frontend/backend/python/config/runtime/backups`，不保存 Git、`current` 或 `releases`。独立 API、Worker、Canary 和面板外常驻项目禁止创建。manifest 只有在同提交生产证据、live/ready/version、Worker/Python 心跳与面板日志均通过时才可签发健康。
 
 本模块不新增业务表、权限或业务事件，复用可回滚的 `deployment_releases` 保存发布身份、迁移版本、配置指纹、状态、批准人和 request_id/trace_id。生产数据库已按顺序应用 73 个既有 up 迁移。部署页面依据 `images-html/01_72_page_concepts/64_系统监控.jpg` 更新为实时 checking、healthy、blocked、rollback：healthy 同时要求 readiness 和脱敏版本身份，Worker/Crawler 明确由宝塔心跳监测，M07-04 恢复演练不得提前显示成功。
 
@@ -11,9 +11,9 @@ M07-03 当前部署目标为惠州 `192.168.1.220`、`midouai.mozhiz.cn` 与 `/w
 - 网站只公开 80/443；统一后端内的 API 绑定 `127.0.0.1:4101`，MySQL/Redis 只绑定本机，内部 Worker 不监听公网。
 - Nginx 同时反代 `/api/`、`/open/` 和无缓冲 SSE；静态站点回退到 `index.html`，HTTP 强制跳转 HTTPS，并启用 HSTS 与安全响应头。
 - API、Worker、Crawler 从 `config/schema.json` 对应环境组读取宝塔受限配置；浏览器只可读取 `VITE_API_BASE_URL`。
-- Worker/Crawler 输出结构化心跳并优雅处理 SIGTERM/SIGINT。宝塔统一展示和轮转站点、项目与任务日志；日志禁止密码、Cookie、Token、API Key、私钥和主密钥。
+- Worker/Crawler 输出结构化心跳并优雅处理 SIGTERM/SIGINT。Node 和 Python 项目都由宝塔展示、启停并轮转日志；日志禁止密码、Cookie、Token、API Key、私钥和主密钥。
 - S0 只声明 100 用户和 5–20 并发业务用户，不声明多节点或 10,000 用户能力；M07-04 仅签发同机逻辑隔离恢复，不签发整机或异地灾备。
 
 ## 自动证据
 
-`scripts/verify-baota-deployment.mjs --preflight` 校验固定目标、十个面板对象、构建产物、配置分组、Nginx、Python 心跳、外部管理器禁令和秘密边界。`--production` 额外要求 manifest healthy，并读取符合 `verification/baota-production-evidence.schema.json` 的忽略文件；证据 commit 必须等于当前 Git HEAD，并覆盖版本、配置指纹、迁移版本、十个面板对象、live/ready/version、Worker/Crawler 心跳、MySQL 5.7/utf8mb4、本机 Redis 和宝塔日志。新增对象是同一主机的候选 API 与宝塔发布任务，不是备用服务器。缺失、过期或矛盾时返回 blocked/failed。
+`scripts/verify-baota-deployment.mjs --preflight` 校验固定目标、六类基础面板对象、构建产物、本地上传器、配置分组、Nginx、Python 心跳、外部管理器禁令和秘密边界。`--production` 额外要求 manifest healthy，并读取符合 `verification/baota-production-evidence.schema.json` 的忽略文件；证据 commit 必须等于当前 Git HEAD，并覆盖版本、配置指纹、迁移版本、面板对象、live/ready/version、Worker/Crawler 心跳、MySQL 5.7/utf8mb4、本机 Redis 和宝塔日志。缺失、过期或矛盾时返回 blocked/failed。
