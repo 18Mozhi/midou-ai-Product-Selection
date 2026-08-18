@@ -260,7 +260,7 @@ test("M07-06.A04/A05/A14 links deduplicated evidence to every scoped collection 
   assert.ok(rejectedStatements.includes("ROLLBACK"));
 });
 
-test("M07-06.A05/A08 keeps a real journey terminal when one record has a dedupe conflict", async () => {
+test("M03-07 automatic feeds skip conflicting already-seen items while M07-06 required journeys stay explicit", async () => {
   const [{ ProviderSourceExecutor }, { EvidencePersistenceError }] = await Promise.all([
     import("../../apps/worker/dist/provider-source-executor.js"),
     import("../../apps/worker/dist/evidence-persistence.js"),
@@ -307,10 +307,11 @@ test("M07-06.A05/A08 keeps a real journey terminal when one record has a dedupe 
     }),
   };
   const persisted = [];
+  let allRecordsAlreadySeen = false;
   const evidence = {
     persist: async (input) => {
       persisted.push(input.dedupeKey);
-      if (input.dedupeKey === "conflict") throw new EvidencePersistenceError("evidence_dedupe_conflict");
+      if (allRecordsAlreadySeen || input.dedupeKey === "conflict") throw new EvidencePersistenceError("evidence_dedupe_conflict");
       return { evidence_id: input.dedupeKey, normalized_record_id: input.dedupeKey, deduplicated: false };
     },
   };
@@ -323,16 +324,37 @@ test("M07-06.A05/A08 keeps a real journey terminal when one record has a dedupe 
     requestId: "m07-06-conflict-request",
     traceId: "m07-06-conflict-trace",
     leaseToken: "not-used-by-executor",
-    subqueries: [{ id: "44444444-4444-4444-8444-444444444444", providerId: "55555555-5555-4555-8555-555555555555", ordinal: 0, required: true, target: { query: "portable blender" } }],
+    subqueries: [{ id: "44444444-4444-4444-8444-444444444444", providerId: "55555555-5555-4555-8555-555555555555", ordinal: 0, required: false, target: { query: "portable blender" } }],
   }, async () => {});
   assert.deepEqual(persisted, ["first", "conflict", "third"], "a conflicting record must not discard later independent records");
   assert.deepEqual(outcomes, [{
     id: "44444444-4444-4444-8444-444444444444",
-    required: true,
-    status: "failed",
+    required: false,
+    status: "succeeded",
     availableResultCount: 2,
     missingFields: [],
-    errorCode: "validation_failed",
+    errorCode: null,
   }]);
-  assert.deepEqual(replayUpdates[0]?.slice(0, 3), ["completed_with_warnings", 2, "validation_failed"]);
+  assert.deepEqual(replayUpdates[0]?.slice(0, 3), ["succeeded", 2, null], "automatic non-required feeds must not retry an entire source batch");
+
+  allRecordsAlreadySeen = true;
+  const duplicateOnlyOutcomes = await executor.execute({
+    id: "77777777-7777-4777-8777-777777777777",
+    organizationId: "11111111-1111-4111-8111-111111111111",
+    workspaceId: "22222222-2222-4222-8222-222222222222",
+    attemptCount: 1,
+    requestId: "m07-06-duplicate-only-request",
+    traceId: "m07-06-duplicate-only-trace",
+    leaseToken: "not-used-by-executor",
+    subqueries: [{ id: "88888888-8888-4888-8888-888888888888", providerId: "55555555-5555-4555-8555-555555555555", ordinal: 0, required: true, target: { query: "portable blender" } }],
+  }, async () => {});
+  assert.deepEqual(duplicateOnlyOutcomes, [{
+    id: "88888888-8888-4888-8888-888888888888",
+    required: true,
+    status: "failed",
+    availableResultCount: 0,
+    missingFields: [],
+    errorCode: "validation_failed",
+  }], "a required selection journey must keep a normalized-data conflict explicit");
+  assert.deepEqual(replayUpdates[1]?.slice(0, 3), ["failed", 0, "validation_failed"]);
 });
