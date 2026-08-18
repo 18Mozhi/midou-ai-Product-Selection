@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { relative, resolve, sep } from 'node:path';
 import { rm } from 'node:fs/promises';
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
@@ -24,6 +24,14 @@ const stableJson=(value:unknown):string=>{
   if(Array.isArray(value))return `[${value.map(stableJson).join(',')}]`;
   return `{${Object.entries(value as Record<string,unknown>).sort(([left],[right])=>left.localeCompare(right)).map(([key,item])=>`${JSON.stringify(key)}:${stableJson(item)}`).join(',')}}`;
 };
+
+export const evidenceOperationIdempotencyKey=(value:{organizationId:string;workspaceId:string;providerId:string;dedupeKey:string})=>
+  `evidence-v2:${createHash('sha256').update(stableJson({
+    organization_id:value.organizationId,
+    workspace_id:value.workspaceId,
+    provider_id:value.providerId,
+    dedupe_key:value.dedupeKey,
+  })).digest('hex')}`;
 
 export class EvidencePersistenceError extends Error {
   constructor(readonly code:string) {
@@ -92,7 +100,7 @@ export class MySqlEvidencePersistence {
       await this.outbox(connection,value,'evidence.persisted','raw_evidence',evidenceId,{evidence_id:evidenceId,normalized_record_id:recordId},now);
       await connection.query(
         'INSERT INTO evidence_data_operations (id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)',
-        [randomUUID(),value.actorId,'worker:evidence.persist',value.dedupeKey,evidenceId,JSON.stringify({evidence_id:evidenceId,normalized_record_id:recordId}),now],
+        [randomUUID(),value.actorId,'worker:evidence.persist',evidenceOperationIdempotencyKey(value),evidenceId,JSON.stringify({evidence_id:evidenceId,normalized_record_id:recordId}),now],
       );
       await connection.commit();
       target = null;
