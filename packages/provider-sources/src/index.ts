@@ -10,7 +10,10 @@ import {
   type ProviderNormalizedRecord,
   type ProviderRawRecord,
 } from "@scoutops/provider-adapters";
-export { createProviderSourceFetch } from "./proxy-fetch.js";
+export {
+  createProviderSourceFetch,
+  decodeProviderProxyResponseBody,
+} from "./proxy-fetch.js";
 export type {
   ProviderSourceFetchDependencies,
   ProviderSourceProxyConfig,
@@ -879,10 +882,11 @@ export function parseSyndicationFeed(
   if (
     typeof xml !== "string" ||
     Buffer.byteLength(xml) > 2_000_000 ||
-    !/(<rss\b|<feed\b)/i.test(xml)
+    !/(<rss\b|<feed\b|<rdf:RDF\b)/i.test(xml)
   )
     throw new ProviderAdapterFailure("invalid_payload", false);
   const atom = /<feed\b/i.test(xml),
+    rdf = /<rdf:RDF\b/i.test(xml),
     pattern = atom
       ? /<entry(?:\s[^>]*)?>([\s\S]*?)<\/entry>/gi
       : /<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi;
@@ -902,6 +906,7 @@ export function parseSyndicationFeed(
     const published =
       tag(raw, atom ? "published" : "pubDate") ||
       tag(raw, "updated") ||
+      tag(raw, "dc:date") ||
       new Date().toISOString();
     const observedAt = new Date(published);
     if (!Number.isFinite(observedAt.getTime()))
@@ -915,7 +920,11 @@ export function parseSyndicationFeed(
       ).slice(0, 300) || sourceName;
     const payload: SourceEvidencePayload = {
       raw_content: raw,
-      content_type: atom ? "application/atom+xml" : "application/rss+xml",
+      content_type: atom
+        ? "application/atom+xml"
+        : rdf
+          ? "application/rdf+xml"
+          : "application/rss+xml",
       canonical_url: link,
       fields: {
         title,
@@ -925,11 +934,31 @@ export function parseSyndicationFeed(
         publisher,
       },
       source_paths: {
-        title: atom ? "atom.entry.title" : "rss.item.title",
-        summary: atom ? "atom.entry.summary" : "rss.item.description",
-        published_at: atom ? "atom.entry.published" : "rss.item.pubDate",
-        source_url: atom ? "atom.entry.link@href" : "rss.item.link",
-        publisher: atom ? "atom.entry.author.name" : "rss.item.source",
+        title: atom
+          ? "atom.entry.title"
+          : rdf
+            ? "rdf.item.title"
+            : "rss.item.title",
+        summary: atom
+          ? "atom.entry.summary"
+          : rdf
+            ? "rdf.item.description"
+            : "rss.item.description",
+        published_at: atom
+          ? "atom.entry.published"
+          : rdf
+            ? "rdf.item.dc:date"
+            : "rss.item.pubDate",
+        source_url: atom
+          ? "atom.entry.link@href"
+          : rdf
+            ? "rdf.item.link"
+            : "rss.item.link",
+        publisher: atom
+          ? "atom.entry.author.name"
+          : rdf
+            ? "crawler.source"
+            : "rss.item.source",
       },
     };
     return {

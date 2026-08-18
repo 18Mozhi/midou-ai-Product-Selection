@@ -6,6 +6,11 @@ import {
 import { connect as netConnect, type Socket } from "node:net";
 import { connect as tlsConnect } from "node:tls";
 import type { Duplex } from "node:stream";
+import {
+  brotliDecompressSync,
+  gunzipSync,
+  inflateSync,
+} from "node:zlib";
 
 export interface ProviderSourceProxyConfig {
   url: string;
@@ -112,6 +117,37 @@ const responseHeaders = (
   return result;
 };
 
+const MAX_PROXY_RESPONSE_BYTES = 2_000_000;
+export function decodeProviderProxyResponseBody(
+  body: Buffer,
+  contentEncoding: string | null | undefined,
+) {
+  if (body.length > MAX_PROXY_RESPONSE_BYTES)
+    throw new Error("Provider proxy response exceeds 2 MB");
+  const encoding = (contentEncoding ?? "").trim().toLowerCase();
+  if (!encoding || encoding === "identity") return body;
+  try {
+    const options = { maxOutputLength: MAX_PROXY_RESPONSE_BYTES + 1 },
+      decoded =
+        encoding === "gzip"
+          ? gunzipSync(body, options)
+          : encoding === "deflate"
+            ? inflateSync(body, options)
+            : encoding === "br"
+              ? brotliDecompressSync(body, options)
+              : null;
+    if (!decoded)
+      throw new Error(`Provider proxy response encoding is unsupported: ${encoding}`);
+    if (decoded.length > MAX_PROXY_RESPONSE_BYTES)
+      throw new Error("Provider proxy response exceeds 2 MB");
+    return decoded;
+  } catch (error) {
+    if (error instanceof Error && error.message.startsWith("Provider proxy"))
+      throw error;
+    throw new Error("Provider proxy response decompression failed");
+  }
+}
+
 const httpConnectFetch: TunnelFetch = async (url, init, proxy) => {
   const method = (init?.method ?? "GET").toUpperCase();
   if (!["GET", "HEAD"].includes(method) || init?.body)
@@ -141,15 +177,29 @@ const httpConnectFetch: TunnelFetch = async (url, init, proxy) => {
         });
         response.once("end", () => {
           agent.destroy();
-          resolve(
-            new Response(Buffer.concat(chunks), {
-              status: response.statusCode ?? 502,
-              headers: responseHeaders(response.headers),
-              ...(response.statusMessage
-                ? { statusText: response.statusMessage }
-                : {}),
-            }),
-          );
+          try {
+            const headers = responseHeaders(response.headers),
+              contentEncoding = headers.get("content-encoding"),
+              body = decodeProviderProxyResponseBody(
+                Buffer.concat(chunks),
+                contentEncoding,
+              );
+            if (contentEncoding) {
+              headers.delete("content-encoding");
+              headers.delete("content-length");
+            }
+            resolve(
+              new Response(new Uint8Array(body), {
+                status: response.statusCode ?? 502,
+                headers,
+                ...(response.statusMessage
+                  ? { statusText: response.statusMessage }
+                  : {}),
+              }),
+            );
+          } catch (error) {
+            reject(error);
+          }
         });
       },
     );
