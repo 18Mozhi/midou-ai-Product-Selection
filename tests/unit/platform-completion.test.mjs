@@ -56,7 +56,7 @@ test('provider source configuration is editable through a validated audited serv
 
 test('platform navigation exposes complete management domains and role switching', async () => {
   const shell = await readFile(new URL('../../apps/web/src/components/NavigationShell.vue', import.meta.url), 'utf8');
-  for (const label of ['账号与组织', '人员与权限', '内容管理', '通知管理', '套餐与续期', '邮箱管理', '系统状态', '进入用户工作台']) {
+  for (const label of ['账号与组织', '人员与权限', '全量数据', '规则与自动化', '内容管理', '通知管理', '套餐与续期', '邮箱管理', '系统状态', '进入用户工作台']) {
     assert.match(shell, new RegExp(label));
   }
 });

@@ -1,4 +1,192 @@
-html:not([data-theme="cloud-white"]) .role-shell{color-scheme:dark}.role-content{color:var(--so-text)}.role-content :where(input,select,textarea,dialog){border-color:var(--so-border)!important;background:var(--so-panel-soft)!important;color:var(--so-text)!important}.role-content :where(input,textarea)::placeholder{color:var(--so-text-muted)!important}.role-content :where(table,th,td){border-color:var(--so-border)!important}.role-content :where(th,small,dt){color:var(--so-text-muted)!important}
-.role-shell .account-center :where(.account-metrics article,.account-tabs button,.account-table-wrap,tr,dialog),.role-shell .collection-task-center :where(.collection-task-metrics article,.collection-task-table-card,.collection-task-detail,.collection-detail-summary article),.role-shell .platform-management :where(dialog){border-color:var(--so-border)!important;background:var(--so-panel)!important;color:var(--so-text)!important}html:not([data-theme="cloud-white"]) .role-content :where(article,aside,dialog,form,[class*="card"],[class*="panel"],[class*="modal"],[class*="editor"],[class*="table-wrap"],[class*="detail"],[class*="metrics"]){background-color:var(--so-panel)!important;border-color:var(--so-border)!important;color:var(--so-text)!important}.role-shell .account-center :where(h2,h3,strong,td,table),.role-shell .collection-task-center :where(h2,h3,h4,strong,td){color:var(--so-text)!important}.role-shell .account-center :where(td button,.account-tabs button){border-color:var(--so-border)!important;background:var(--so-panel-soft)!important;color:var(--so-text)!important}.role-shell .account-center .account-tabs .on{background:var(--so-primary-strong)!important;color:#fff!important}.role-shell .collection-task-center :where(.collection-task-table-card td b,.collection-subquery>b){background:var(--so-panel-soft)!important;color:var(--so-text)!important}
-@media(hover:hover){.role-shell :is(button,a)[aria-label]{position:relative}.role-shell :is(button,a)[aria-label]::after{content:attr(aria-label);position:absolute;z-index:200;left:50%;bottom:calc(100% + 9px);transform:translate(-50%,4px);max-width:240px;width:max-content;padding:6px 9px;border:1px solid var(--so-border);border-radius:7px;background:#020817;color:#fff;font:12px/1.35 var(--so-font-ui);box-shadow:var(--so-shadow);opacity:0;visibility:hidden;pointer-events:none;transition:opacity var(--so-transition),transform var(--so-transition)}.role-shell :is(button,a)[aria-label]:is(:hover,:focus-visible)::after{opacity:1;visibility:visible;transform:translate(-50%,0)}}
-@media(max-width:700px){.role-shell .account-center .account-table-wrap{background:transparent!important}}
+html:not([data-theme="cloud-white"]) .role-shell {
+  color-scheme: dark;
+}
+.role-content {
+  color: var(--so-text);
+}
+.role-content :where(input, select, textarea, dialog) {
+  border-color: var(--so-border) !important;
+  background: var(--so-panel-soft) !important;
+  color: var(--so-text) !important;
+}
+.role-content :where(input, textarea)::placeholder {
+  color: var(--so-text-muted) !important;
+}
+.role-content :where(table, th, td) {
+  border-color: var(--so-border) !important;
+}
+.role-content :where(th, small, dt) {
+  color: var(--so-text-muted) !important;
+}
+.role-shell
+  .account-center
+  :where(
+    .account-metrics article,
+    .account-tabs button,
+    .account-table-wrap,
+    tr,
+    dialog
+  ),
+.role-shell
+  .collection-task-center
+  :where(
+    .collection-task-metrics article,
+    .collection-task-table-card,
+    .collection-task-detail,
+    .collection-detail-summary article
+  ),
+.role-shell .platform-management :where(dialog) {
+  border-color: var(--so-border) !important;
+  background: var(--so-panel) !important;
+  color: var(--so-text) !important;
+}
+html:not([data-theme="cloud-white"])
+  .role-content
+  :where(
+    article,
+    aside,
+    dialog,
+    form,
+    [class*="card"],
+    [class*="panel"],
+    [class*="modal"],
+    [class*="editor"],
+    [class*="table-wrap"],
+    [class*="detail"],
+    [class*="metrics"]
+  ) {
+  background-color: var(--so-panel) !important;
+  border-color: var(--so-border) !important;
+  color: var(--so-text) !important;
+}
+.role-shell .account-center :where(h2, h3, strong, td, table),
+.role-shell .collection-task-center :where(h2, h3, h4, strong, td) {
+  color: var(--so-text) !important;
+}
+.role-shell .account-center :where(td button, .account-tabs button) {
+  border-color: var(--so-border) !important;
+  background: var(--so-panel-soft) !important;
+  color: var(--so-text) !important;
+}
+.role-shell .account-center .account-tabs .on {
+  background: var(--so-primary-strong) !important;
+  color: #fff !important;
+}
+.role-shell
+  .collection-task-center
+  :where(.collection-task-table-card td b, .collection-subquery > b) {
+  background: var(--so-panel-soft) !important;
+  color: var(--so-text) !important;
+}
+html:not([data-theme="cloud-white"])
+  .role-content
+  :where(
+    .competitor-monitor,
+    .crawler-center,
+    .quality-center,
+    .cost-console,
+    .adapter-center,
+    .source-center,
+    .sourcing-workspace
+  )
+  :where(
+    article,
+    section,
+    aside,
+    form,
+    dialog,
+    [class*="card"],
+    [class*="panel"],
+    [class*="modal"],
+    [class*="detail"],
+    [class*="metrics"],
+    [class*="table"],
+    [class*="grid"]
+  ) {
+  background: var(--so-panel) !important;
+  border-color: var(--so-border) !important;
+  color: var(--so-text) !important;
+}
+html:not([data-theme="cloud-white"])
+  .role-content
+  :where(
+    .competitor-monitor,
+    .crawler-center,
+    .quality-center,
+    .cost-console,
+    .adapter-center,
+    .source-center,
+    .sourcing-workspace
+  )
+  :where(h2, h3, h4, strong, b, td, dd, label, legend) {
+  color: var(--so-text) !important;
+}
+html:not([data-theme="cloud-white"])
+  .role-content
+  :where(
+    .competitor-monitor,
+    .crawler-center,
+    .quality-center,
+    .cost-console,
+    .adapter-center,
+    .source-center,
+    .sourcing-workspace
+  )
+  :where(button, input, select, textarea) {
+  border-color: var(--so-border) !important;
+  background: var(--so-panel-soft) !important;
+  color: var(--so-text) !important;
+}
+html:not([data-theme="cloud-white"])
+  .role-content
+  :where(
+    .competitor-monitor,
+    .crawler-center,
+    .quality-center,
+    .cost-console,
+    .adapter-center,
+    .source-center,
+    .sourcing-workspace
+  )
+  :where(button[type="submit"], button.primary) {
+  background: var(--so-primary-strong) !important;
+  color: #fff !important;
+}
+@media (hover: hover) {
+  .role-shell :is(button, a)[aria-label] {
+    position: relative;
+  }
+  .role-shell :is(button, a)[aria-label]::after {
+    content: attr(aria-label);
+    position: absolute;
+    z-index: 200;
+    left: 50%;
+    bottom: calc(100% + 9px);
+    transform: translate(-50%, 4px);
+    max-width: 240px;
+    width: max-content;
+    padding: 6px 9px;
+    border: 1px solid var(--so-border);
+    border-radius: 7px;
+    background: #020817;
+    color: #fff;
+    font: 12px/1.35 var(--so-font-ui);
+    box-shadow: var(--so-shadow);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity var(--so-transition),
+      transform var(--so-transition);
+  }
+  .role-shell :is(button, a)[aria-label]:is(:hover, :focus-visible)::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+}
+@media (max-width: 700px) {
+  .role-shell .account-center .account-table-wrap {
+    background: transparent !important;
+  }
+}

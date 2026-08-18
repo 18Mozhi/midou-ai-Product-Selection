@@ -52,13 +52,14 @@ test('M02-03 regression: public root resolves the authenticated landing instead 
   await expect(page.getByRole('heading', { name: '欢迎回到 ai选品' })).toBeVisible();
 });
 
-test('M02-03 platform shell does not expose member-only search or notifications', async ({ page }) => {
+test('M02-03 platform shell exposes management navigation without member-only shortcuts', async ({ page }) => {
   await allow(page, 'platform_admin');
   await page.goto('/platform-admin');
   await expect(page.getByRole('button', { name: /搜索/ })).toHaveCount(0);
   await expect(page.getByRole('link', { name: '通知中心' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /通知管理/ })).toHaveAttribute('href', '/platform-admin/notifications');
   await expect(page.getByRole('link', { name: '个人中心' })).toHaveAttribute('href', '/me');
-  const accountLinks = page.getByRole('link', { name: '组织与用户' });
+  const accountLinks = page.getByRole('link', { name: '账号与组织' });
   const accountLinkCount = await accountLinks.count();
   expect(accountLinkCount).toBeGreaterThanOrEqual(1);
   for (let index = 0; index < accountLinkCount; index += 1) {

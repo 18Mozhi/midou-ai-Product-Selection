@@ -1,17 +1,575 @@
 <script setup lang="ts">
-import{computed,onMounted,reactive,ref}from'vue';
-type Tab='organizations'|'users'|'admins';type State='loading'|'ready'|'empty'|'error';
-interface Data{summary:{organizations:number;active_organizations:number;users:number;active_users:number;platform_admins:number};organizations:any[];users:any[];admins:any[]}
-const props=withDefaults(defineProps<{apiBaseUrl:string;initialTab?:Tab}>(),{initialTab:'organizations'}),state=ref<State>('loading'),tab=ref<Tab>(props.initialTab),data=ref<Data|null>(null),query=ref(''),status=ref(''),message=ref(''),busy=ref(''),createOpen=ref(new URLSearchParams(window.location.search).get('create')==='1'),form=reactive({name:'',slug:''});
-const rows=computed(()=>tab.value==='organizations'?data.value?.organizations??[]:tab.value==='users'?data.value?.users??[]:data.value?.admins??[]),statusText=(v:string)=>({active:'正常使用',archived:'已停用',disabled:'已停用',locked:'已锁定',pending_verification:'待验证'}as Record<string,string>)[v]??v,roleText=(v:string)=>({platform_super_admin:'超级管理员',platform_operations_admin:'运营管理员',platform_security_admin:'安全管理员'}as Record<string,string>)[v]??v;
-async function load(){state.value='loading';message.value='';try{const p=new URLSearchParams();if(query.value)p.set('query',query.value);if(status.value)p.set('status',status.value);const r=await fetch(`${props.apiBaseUrl}/platform/accounts?${p}`,{credentials:'include'}),b=await r.json().catch(()=>null);if(!r.ok)throw new Error(b?.error?.action_hint??'读取失败');data.value=b.data;state.value='ready';}catch(e){message.value=e instanceof Error?e.message:'读取失败';state.value='error';}}
-async function write(path:string,body:unknown){busy.value=path;message.value='';try{const r=await fetch(`${props.apiBaseUrl}${path}`,{method:'POST',credentials:'include',headers:{'content-type':'application/json','idempotency-key':crypto.randomUUID()},body:JSON.stringify(body)}),b=await r.json().catch(()=>null);if(!r.ok)throw new Error(b?.error?.action_hint??'操作失败');await load();return true;}catch(e){message.value=e instanceof Error?e.message:'操作失败';return false;}finally{busy.value='';}}
-async function createOrganization(){if(await write('/platform/accounts/organizations',form)){form.name='';form.slug='';createOpen.value=false;message.value='组织和默认工作区已创建。';}}
-const reason=()=>window.prompt('请填写这次操作的原因（会写入审计记录）','平台管理员人工操作')||'';
-async function toggleOrganization(item:any){const why=reason();if(!why)return;await write(`/platform/accounts/organizations/${item.id}/status`,{status:item.status==='active'?'archived':'active',reason:why});}
-async function toggleUser(item:any){const why=reason();if(!why)return;await write(`/platform/accounts/users/${item.id}/status`,{status:item.status==='active'?'disabled':'active',reason:why});}
-async function role(userId:string,roleCode:string,enabled:boolean){const why=reason();if(!why)return;await write(`/platform/accounts/users/${userId}/platform-role`,{role_code:roleCode,enabled,reason:why});}
+import { computed, onMounted, reactive, ref } from "vue";
+type Tab = "organizations" | "users" | "admins";
+type State = "loading" | "ready" | "empty" | "error";
+interface Data {
+  summary: {
+    organizations: number;
+    active_organizations: number;
+    users: number;
+    active_users: number;
+    platform_admins: number;
+  };
+  organizations: any[];
+  users: any[];
+  admins: any[];
+}
+const props = withDefaults(
+    defineProps<{ apiBaseUrl: string; initialTab?: Tab }>(),
+    { initialTab: "organizations" },
+  ),
+  state = ref<State>("loading"),
+  tab = ref<Tab>(props.initialTab),
+  data = ref<Data | null>(null),
+  query = ref(""),
+  status = ref(""),
+  message = ref(""),
+  busy = ref(""),
+  createOpen = ref(
+    new URLSearchParams(window.location.search).get("create") === "1",
+  ),
+  form = reactive({ name: "", slug: "" });
+const rows = computed(() =>
+    tab.value === "organizations"
+      ? (data.value?.organizations ?? [])
+      : tab.value === "users"
+        ? (data.value?.users ?? [])
+        : (data.value?.admins ?? []),
+  ),
+  statusText = (v: string) =>
+    (
+      ({
+        active: "正常使用",
+        archived: "已停用",
+        disabled: "已停用",
+        locked: "已锁定",
+        pending_verification: "待验证",
+      }) as Record<string, string>
+    )[v] ?? v,
+  roleText = (v: string) =>
+    (
+      ({
+        platform_super_admin: "超级管理员",
+        platform_operations_admin: "运营管理员",
+        platform_security_admin: "安全管理员",
+      }) as Record<string, string>
+    )[v] ?? v;
+async function load() {
+  state.value = "loading";
+  message.value = "";
+  try {
+    const p = new URLSearchParams();
+    if (query.value) p.set("query", query.value);
+    if (status.value) p.set("status", status.value);
+    const r = await fetch(`${props.apiBaseUrl}/platform/accounts?${p}`, {
+        credentials: "include",
+      }),
+      b = await r.json().catch(() => null);
+    if (!r.ok) throw new Error(b?.error?.action_hint ?? "读取失败");
+    data.value = b.data;
+    state.value = "ready";
+  } catch (e) {
+    message.value = e instanceof Error ? e.message : "读取失败";
+    state.value = "error";
+  }
+}
+async function write(path: string, body: unknown) {
+  busy.value = path;
+  message.value = "";
+  try {
+    const r = await fetch(`${props.apiBaseUrl}${path}`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+          "idempotency-key": crypto.randomUUID(),
+        },
+        body: JSON.stringify(body),
+      }),
+      b = await r.json().catch(() => null);
+    if (!r.ok) throw new Error(b?.error?.action_hint ?? "操作失败");
+    await load();
+    return true;
+  } catch (e) {
+    message.value = e instanceof Error ? e.message : "操作失败";
+    return false;
+  } finally {
+    busy.value = "";
+  }
+}
+async function createOrganization() {
+  if (await write("/platform/accounts/organizations", form)) {
+    form.name = "";
+    form.slug = "";
+    createOpen.value = false;
+    message.value = "组织和默认工作区已创建。";
+  }
+}
+const reason = () =>
+  window.prompt(
+    "请填写这次操作的原因（会写入审计记录）",
+    "平台管理员人工操作",
+  ) || "";
+async function toggleOrganization(item: any) {
+  const why = reason();
+  if (!why) return;
+  await write(`/platform/accounts/organizations/${item.id}/status`, {
+    status: item.status === "active" ? "archived" : "active",
+    reason: why,
+  });
+}
+async function toggleUser(item: any) {
+  const why = reason();
+  if (!why) return;
+  await write(`/platform/accounts/users/${item.id}/status`, {
+    status: item.status === "active" ? "disabled" : "active",
+    reason: why,
+  });
+}
+async function role(userId: string, roleCode: string, enabled: boolean) {
+  const why = reason();
+  if (!why) return;
+  await write(`/platform/accounts/users/${userId}/platform-role`, {
+    role_code: roleCode,
+    enabled,
+    reason: why,
+  });
+}
 onMounted(load);
 </script>
-<template><section class="account-center"><header class="account-hero"><div><p>组织与用户</p><h2>谁在使用 ai选品，一眼看懂</h2><span>创建组织、启停账号、分配平台管理员。所有操作都会留审计记录。</span></div><button @click="createOpen=true">＋ 新建组织</button></header><div v-if="data" class="account-metrics"><article><small>组织</small><strong>{{data.summary.active_organizations}} / {{data.summary.organizations}}</strong><span>正常 / 全部</span></article><article><small>用户</small><strong>{{data.summary.active_users}} / {{data.summary.users}}</strong><span>可登录 / 全部</span></article><article><small>平台管理员</small><strong>{{data.summary.platform_admins}}</strong><span>拥有平台后台权限</span></article></div><nav class="account-tabs"><button :class="{on:tab==='organizations'}" @click="tab='organizations'">组织管理</button><button :class="{on:tab==='users'}" @click="tab='users'">用户管理</button><button :class="{on:tab==='admins'}" @click="tab='admins'">管理员管理</button></nav><form class="account-filter" @submit.prevent="load"><input v-model="query" placeholder="搜索组织名称或用户邮箱"><select v-model="status"><option value="">全部状态</option><option value="active">正常使用</option><option value="disabled">已停用</option><option value="archived">已停用组织</option></select><button>搜索</button></form><p v-if="message" class="account-message">{{message}}</p><section v-if="state==='loading'" class="account-state">正在读取真实组织与用户…</section><section v-else-if="state==='error'" class="account-state">暂时无法读取。<button @click="load">重新加载</button></section><div v-else class="account-table-wrap"><table v-if="tab==='organizations'"><thead><tr><th>组织</th><th>成员</th><th>工作区</th><th>状态</th><th>操作</th></tr></thead><tbody><tr v-for="item in rows" :key="item.id"><td data-label="组织"><strong>{{item.name}}</strong><small>{{item.slug}}</small></td><td data-label="成员">{{item.member_count}} 人</td><td data-label="工作区">{{item.workspace_count}} 个</td><td data-label="状态"><b :data-status="item.status">{{statusText(item.status)}}</b></td><td data-label="操作"><button :disabled="Boolean(busy)" @click="toggleOrganization(item)">{{item.status==='active'?'停用':'恢复'}}</button></td></tr></tbody></table><table v-else-if="tab==='users'"><thead><tr><th>用户</th><th>所在组织</th><th>平台角色</th><th>状态</th><th>操作</th></tr></thead><tbody><tr v-for="item in rows" :key="item.id"><td data-label="用户"><strong>{{item.email}}</strong><small>注册于 {{new Date(item.created_at).toLocaleDateString()}}</small></td><td data-label="所在组织">{{item.organization_names||'尚未加入组织'}}</td><td data-label="平台角色">{{item.platform_roles.map(roleText).join('、')||'普通用户'}}</td><td data-label="状态"><b :data-status="item.status">{{statusText(item.status)}}</b></td><td data-label="操作"><button :disabled="Boolean(busy)" @click="toggleUser(item)">{{item.status==='active'?'停用登录':'恢复登录'}}</button></td></tr></tbody></table><table v-else><thead><tr><th>管理员</th><th>当前角色</th><th>快捷授权</th></tr></thead><tbody><tr v-for="item in rows" :key="item.id"><td data-label="管理员"><strong>{{item.email}}</strong><small>{{statusText(item.status)}}</small></td><td data-label="当前角色">{{item.roles.map(roleText).join('、')}}</td><td data-label="快捷授权"><button v-for="code in ['platform_operations_admin','platform_security_admin']" :key="code" @click="role(item.id,code,!item.roles.includes(code))">{{item.roles.includes(code)?'撤销':'授予'}}{{roleText(code)}}</button></td></tr></tbody></table><p v-if="!rows.length" class="account-state">没有符合条件的记录。</p></div><dialog :open="createOpen"><form @submit.prevent="createOrganization"><h3>新建组织</h3><p>系统会同时创建“默认工作区”，你无需再配置技术参数。</p><label>组织名称<input v-model="form.name" required minlength="2" maxlength="120" placeholder="例如：米豆选品团队"></label><label>组织标识<input v-model="form.slug" required pattern="[a-z0-9][a-z0-9-]{1,62}" placeholder="例如：midou-team"></label><footer><button type="button" @click="createOpen=false">取消</button><button :disabled="Boolean(busy)">确认创建</button></footer></form></dialog></section></template>
-<style scoped>.account-center{display:grid;gap:18px}.account-hero{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:24px;border-radius:18px;background:linear-gradient(135deg,#10233e,#173f5f);color:white}.account-hero p{margin:0;color:#79e5d1;font-weight:800}.account-hero h2{margin:6px 0;font-size:28px}.account-hero span{opacity:.78}.account-hero button,.account-filter button{border:0;border-radius:10px;padding:11px 16px;background:#38d5b0;color:#08231d;font-weight:800}.account-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.account-metrics article{padding:18px;border:1px solid #dfe8ef;border-radius:14px;background:white;color:#1f3544}.account-metrics small,.account-metrics span{display:block;color:#64748b}.account-metrics strong{display:block;font-size:28px;margin:5px 0;color:#17324a}.account-tabs{display:flex;gap:8px}.account-tabs button{border:1px solid #d7e1e8;border-radius:999px;padding:9px 15px;background:white;color:#17324a}.account-tabs .on{background:#173f5f;color:white}.account-filter{display:flex;gap:10px}.account-filter input,.account-filter select{min-width:180px;padding:10px;border:1px solid #cdd9e1;border-radius:9px;color:#172b3a;background:#fff}.account-table-wrap{overflow:auto;background:white;border:1px solid #dfe8ef;border-radius:14px;color:#243a4a}table{width:100%;border-collapse:collapse;color:#243a4a}th,td{padding:14px;text-align:left;border-bottom:1px solid #eef2f5}th{color:#526879}td strong,td small{display:block}td strong{color:#17324a}td small{color:#718096;margin-top:4px}td button{margin:2px;border:1px solid #bdd2dd;background:#f8fbfc;color:#17324a;border-radius:8px;padding:7px 10px}td b[data-status=active]{color:#087f5b}td b[data-status=disabled],td b[data-status=archived]{color:#b42318}.account-state,.account-message{padding:18px;text-align:center}.account-message{background:#fff8db;color:#5e4a00;border-radius:10px}dialog{position:fixed;inset:0;margin:auto;border:0;border-radius:16px;background:#fff;color:#243a4a;box-shadow:0 24px 80px #0006;z-index:10}dialog form{display:grid;gap:14px;min-width:340px;padding:10px}dialog label{display:grid;gap:6px}dialog input{padding:10px;color:#172b3a;background:#fff}dialog footer{display:flex;justify-content:flex-end;gap:8px}@media(max-width:700px){.account-center{padding-bottom:76px}.account-hero{align-items:flex-start;flex-direction:column}.account-metrics{grid-template-columns:1fr}.account-filter{flex-direction:column}.account-tabs{overflow:auto}.account-table-wrap{overflow:visible;background:transparent;border:0}table,tbody,tr,td{display:block;width:100%}thead{display:none}tr{margin-bottom:12px;padding:9px 14px;border:1px solid #dfe8ef;border-radius:14px;background:#fff}td{display:grid;grid-template-columns:92px minmax(0,1fr);gap:10px;padding:10px 0;border-bottom:1px solid #eef2f5;overflow-wrap:anywhere}td:last-child{border-bottom:0}td:before{content:attr(data-label);color:#64748b;font-size:12px;font-weight:700}td button{width:100%;margin:3px 0}dialog{width:calc(100% - 28px)}dialog form{min-width:0}}</style>
+<template>
+  <section class="account-center">
+    <header class="account-hero">
+      <div>
+        <p>组织与用户</p>
+        <h2>谁在使用 ai选品，一眼看懂</h2>
+        <span
+          >创建组织、启停账号、分配平台管理员。所有操作都会留审计记录。</span
+        >
+      </div>
+      <button @click="createOpen = true">＋ 新建组织</button>
+    </header>
+    <div v-if="data" class="account-metrics">
+      <article>
+        <small>组织</small
+        ><strong
+          >{{ data.summary.active_organizations }} /
+          {{ data.summary.organizations }}</strong
+        ><span>正常 / 全部</span>
+      </article>
+      <article>
+        <small>用户</small
+        ><strong
+          >{{ data.summary.active_users }} / {{ data.summary.users }}</strong
+        ><span>可登录 / 全部</span>
+      </article>
+      <article>
+        <small>平台管理员</small
+        ><strong>{{ data.summary.platform_admins }}</strong
+        ><span>拥有平台后台权限</span>
+      </article>
+    </div>
+    <nav class="account-tabs">
+      <button
+        :class="{ on: tab === 'organizations' }"
+        @click="tab = 'organizations'"
+      >
+        组织管理</button
+      ><button :class="{ on: tab === 'users' }" @click="tab = 'users'">
+        用户管理</button
+      ><button :class="{ on: tab === 'admins' }" @click="tab = 'admins'">
+        管理员管理
+      </button>
+    </nav>
+    <form class="account-filter" @submit.prevent="load">
+      <input v-model="query" placeholder="搜索组织名称或用户邮箱" /><select
+        v-model="status"
+      >
+        <option value="">全部状态</option>
+        <option value="active">正常使用</option>
+        <option value="disabled">已停用</option>
+        <option value="archived">已停用组织</option></select
+      ><button>搜索</button>
+    </form>
+    <p v-if="message" class="account-message">{{ message }}</p>
+    <section v-if="state === 'loading'" class="account-state">
+      正在读取真实组织与用户…
+    </section>
+    <section v-else-if="state === 'error'" class="account-state">
+      暂时无法读取。<button @click="load">重新加载</button>
+    </section>
+    <div v-else class="account-table-wrap">
+      <table v-if="tab === 'organizations'">
+        <thead>
+          <tr>
+            <th>组织</th>
+            <th>成员</th>
+            <th>工作区</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in rows" :key="item.id">
+            <td data-label="组织">
+              <strong>{{ item.name }}</strong
+              ><small>{{ item.slug }}</small>
+            </td>
+            <td data-label="成员">{{ item.member_count }} 人</td>
+            <td data-label="工作区">{{ item.workspace_count }} 个</td>
+            <td data-label="状态">
+              <b :data-status="item.status">{{ statusText(item.status) }}</b>
+            </td>
+            <td data-label="操作">
+              <button
+                :disabled="Boolean(busy)"
+                @click="toggleOrganization(item)"
+              >
+                {{ item.status === "active" ? "停用" : "恢复" }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table v-else-if="tab === 'users'">
+        <thead>
+          <tr>
+            <th>用户</th>
+            <th>所在组织</th>
+            <th>平台角色</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in rows" :key="item.id">
+            <td data-label="用户">
+              <strong>{{ item.email }}</strong
+              ><small
+                >注册于
+                {{ new Date(item.created_at).toLocaleDateString() }}</small
+              >
+            </td>
+            <td data-label="所在组织">
+              {{ item.organization_names || "尚未加入组织" }}
+            </td>
+            <td data-label="平台角色">
+              {{ item.platform_roles.map(roleText).join("、") || "普通用户" }}
+            </td>
+            <td data-label="状态">
+              <b :data-status="item.status">{{ statusText(item.status) }}</b>
+            </td>
+            <td data-label="操作">
+              <button :disabled="Boolean(busy)" @click="toggleUser(item)">
+                {{ item.status === "active" ? "停用登录" : "恢复登录" }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table v-else>
+        <thead>
+          <tr>
+            <th>可授权用户</th>
+            <th>当前平台角色</th>
+            <th>角色管理</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in rows" :key="item.id">
+            <td data-label="用户">
+              <strong>{{ item.email }}</strong
+              ><small>{{ statusText(item.status) }}</small>
+            </td>
+            <td data-label="当前角色">
+              {{ item.roles.map(roleText).join("、") || "尚未授予平台角色" }}
+            </td>
+            <td data-label="角色管理">
+              <button
+                v-for="code in [
+                  'platform_operations_admin',
+                  'platform_security_admin',
+                  'platform_super_admin',
+                ]"
+                :key="code"
+                :disabled="item.status !== 'active' || Boolean(busy)"
+                @click="role(item.id, code, !item.roles.includes(code))"
+              >
+                {{ item.roles.includes(code) ? "撤销" : "授予"
+                }}{{ roleText(code) }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p v-if="!rows.length" class="account-state">没有符合条件的记录。</p>
+    </div>
+    <dialog :open="createOpen">
+      <form @submit.prevent="createOrganization">
+        <h3>新建组织</h3>
+        <p>系统会同时创建“默认工作区”，你无需再配置技术参数。</p>
+        <label
+          >组织名称<input
+            v-model="form.name"
+            required
+            minlength="2"
+            maxlength="120"
+            placeholder="例如：米豆选品团队" /></label
+        ><label
+          >组织标识<input
+            v-model="form.slug"
+            required
+            pattern="[a-z0-9][a-z0-9-]{1,62}"
+            placeholder="例如：midou-team"
+        /></label>
+        <footer>
+          <button type="button" @click="createOpen = false">取消</button
+          ><button :disabled="Boolean(busy)">确认创建</button>
+        </footer>
+      </form>
+    </dialog>
+  </section>
+</template>
+<style scoped>
+.account-center {
+  display: grid;
+  gap: 18px;
+}
+.account-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  padding: 24px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #10233e, #173f5f);
+  color: white;
+}
+.account-hero p {
+  margin: 0;
+  color: #79e5d1;
+  font-weight: 800;
+}
+.account-hero h2 {
+  margin: 6px 0;
+  font-size: 28px;
+}
+.account-hero span {
+  opacity: 0.78;
+}
+.account-hero button,
+.account-filter button {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 16px;
+  background: #38d5b0;
+  color: #08231d;
+  font-weight: 800;
+}
+.account-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.account-metrics article {
+  padding: 18px;
+  border: 1px solid #dfe8ef;
+  border-radius: 14px;
+  background: white;
+  color: #1f3544;
+}
+.account-metrics small,
+.account-metrics span {
+  display: block;
+  color: #64748b;
+}
+.account-metrics strong {
+  display: block;
+  font-size: 28px;
+  margin: 5px 0;
+  color: #17324a;
+}
+.account-tabs {
+  display: flex;
+  gap: 8px;
+}
+.account-tabs button {
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  padding: 9px 15px;
+  background: white;
+  color: #17324a;
+}
+.account-tabs .on {
+  background: #173f5f;
+  color: white;
+}
+.account-filter {
+  display: flex;
+  gap: 10px;
+}
+.account-filter input,
+.account-filter select {
+  min-width: 180px;
+  padding: 10px;
+  border: 1px solid #cdd9e1;
+  border-radius: 9px;
+  color: #172b3a;
+  background: #fff;
+}
+.account-table-wrap {
+  overflow: auto;
+  background: white;
+  border: 1px solid #dfe8ef;
+  border-radius: 14px;
+  color: #243a4a;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #243a4a;
+}
+th,
+td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #eef2f5;
+}
+th {
+  color: #526879;
+}
+td strong,
+td small {
+  display: block;
+}
+td strong {
+  color: #17324a;
+}
+td small {
+  color: #718096;
+  margin-top: 4px;
+}
+td button {
+  margin: 2px;
+  border: 1px solid #bdd2dd;
+  background: #f8fbfc;
+  color: #17324a;
+  border-radius: 8px;
+  padding: 7px 10px;
+}
+td b[data-status="active"] {
+  color: #087f5b;
+}
+td b[data-status="disabled"],
+td b[data-status="archived"] {
+  color: #b42318;
+}
+.account-state,
+.account-message {
+  padding: 18px;
+  text-align: center;
+}
+.account-message {
+  background: #fff8db;
+  color: #5e4a00;
+  border-radius: 10px;
+}
+dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  border: 0;
+  border-radius: 16px;
+  background: #fff;
+  color: #243a4a;
+  box-shadow: 0 24px 80px #0006;
+  z-index: 10;
+}
+dialog form {
+  display: grid;
+  gap: 14px;
+  min-width: 340px;
+  padding: 10px;
+}
+dialog label {
+  display: grid;
+  gap: 6px;
+}
+dialog input {
+  padding: 10px;
+  color: #172b3a;
+  background: #fff;
+}
+dialog footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+@media (max-width: 700px) {
+  .account-center {
+    padding-bottom: 76px;
+  }
+  .account-hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .account-metrics {
+    grid-template-columns: 1fr;
+  }
+  .account-filter {
+    flex-direction: column;
+  }
+  .account-tabs {
+    overflow: auto;
+  }
+  .account-table-wrap {
+    overflow: visible;
+    background: transparent;
+    border: 0;
+  }
+  table,
+  tbody,
+  tr,
+  td {
+    display: block;
+    width: 100%;
+  }
+  thead {
+    display: none;
+  }
+  tr {
+    margin-bottom: 12px;
+    padding: 9px 14px;
+    border: 1px solid #dfe8ef;
+    border-radius: 14px;
+    background: #fff;
+  }
+  td {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eef2f5;
+    overflow-wrap: anywhere;
+  }
+  td:last-child {
+    border-bottom: 0;
+  }
+  td:before {
+    content: attr(data-label);
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  td button {
+    width: 100%;
+    margin: 3px 0;
+  }
+  dialog {
+    width: calc(100% - 28px);
+  }
+  dialog form {
+    min-width: 0;
+  }
+}
+</style>

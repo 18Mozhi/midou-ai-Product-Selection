@@ -83,12 +83,12 @@ test('M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await page.goto('/sourcing?create=1');
   await expect(page.getByRole('heading', { name: '供应链找货', level: 2 })).toBeVisible();
   await expect(page.getByRole('heading', { name: '从已完成采集任务投影找货结果' })).toBeVisible();
-  await page.getByRole('button', { name: '×' }).first().click();
+  await page.getByRole('button', { name: '关闭供应商搜索' }).click();
   await expect(page.getByText('宁波澄净户外用品厂')).toBeVisible();
   await expect(page.getByText('当前候选仍缺：规格、交期、所在地、可信度、稳定性、风险。')).toBeVisible();
   await expect(page.getByText(/evidence 00000000-0000-4000-8000-000000000603/)).toBeVisible();
   await page.getByRole('button', { name: '确认报价' }).click();
   await expect(page.getByRole('heading', { name: '确认完整供应商报价' })).toBeVisible();
-  await page.getByRole('button', { name: '×' }).click();
+  await page.getByRole('button', { name: '关闭报价编辑' }).click();
   await expect(page).toHaveScreenshot('m04-06-sourcing.png', { fullPage: true });
 });

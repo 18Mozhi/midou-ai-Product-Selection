@@ -7,7 +7,8 @@ import CredentialAssetCenter from "./CredentialAssetCenter.vue";
 import ProviderAdapterCenter from "./ProviderAdapterCenter.vue";
 import CollectionRuntimeCenter from "./CollectionRuntimeCenter.vue";
 import CollectionTaskCenter from "./CollectionTaskCenter.vue";
-import DataQualityCenter from "./DataQualityCenter.vue";
+import PlatformDataCenter from "./PlatformDataCenter.vue";
+import PlatformGovernanceCenter from "./PlatformGovernanceCenter.vue";
 import ProviderSourceCenter from "./ProviderSourceCenter.vue";
 import TrendDashboard from "./TrendDashboard.vue";
 import OpportunityWorkspace from "./OpportunityWorkspace.vue";
@@ -37,6 +38,7 @@ import CrawlerSchedulerCenter from "./CrawlerSchedulerCenter.vue";
 import CapacityBoundaryCenter from "./CapacityBoundaryCenter.vue";
 import PlatformAccountCenter from "./PlatformAccountCenter.vue";
 import PlatformManagementCenter from "./PlatformManagementCenter.vue";
+import PersonalCenter from "./PersonalCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -115,8 +117,18 @@ const memberMenu: MenuItem[] = [
     icon: "○",
     capabilities: ["notification:read"],
   },
-  { label: "自动化规则", path: "/automations", icon: "⚙", capabilities: ["team:manage"] },
-  { label: "报表与导出", path: "/reports", icon: "▥", capabilities: ["report:read"] },
+  {
+    label: "自动化规则",
+    path: "/automations",
+    icon: "⚙",
+    capabilities: ["team:manage"],
+  },
+  {
+    label: "报表与导出",
+    path: "/reports",
+    icon: "▥",
+    capabilities: ["report:read"],
+  },
   { label: "个人中心", path: "/me", icon: "◉" },
 ];
 const orgMenu: MenuItem[] = [
@@ -131,13 +143,29 @@ const orgMenu: MenuItem[] = [
 ];
 const platformMenu: MenuItem[] = [
   { label: "平台概览", path: "/platform-admin", icon: "⌂" },
-  { label: "账号与组织", path: "/platform-admin/accounts", icon: "♙", capabilities: ["platform:superadmin"] },
-  { label: "人员与权限", path: "/platform-admin/permissions", icon: "◇", capabilities: ["platform:superadmin"] },
+  {
+    label: "账号与组织",
+    path: "/platform-admin/accounts",
+    icon: "♙",
+    capabilities: ["platform:superadmin"],
+  },
+  {
+    label: "人员与权限",
+    path: "/platform-admin/permissions",
+    icon: "◇",
+    capabilities: ["platform:superadmin"],
+  },
   {
     label: "热点来源",
     path: "/platform-admin/providers/sources",
     icon: "◎",
     capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "凭证与档案",
+    path: "/platform-admin/credentials",
+    icon: "⌘",
+    capabilities: ["platform:superadmin"],
   },
   {
     label: "采集任务",
@@ -146,16 +174,53 @@ const platformMenu: MenuItem[] = [
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
-    label: "数据质量",
+    label: "全量数据",
     path: "/platform-admin/data",
     icon: "▦",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
-  { label: "内容管理", path: "/platform-admin/content", icon: "▤", capabilities: ["platform:operate", "platform:superadmin"] },
-  { label: "通知管理", path: "/platform-admin/notifications", icon: "○", capabilities: ["platform:operate", "platform:superadmin"] },
-  { label: "套餐与续期", path: "/platform-admin/commercial", icon: "¥", capabilities: ["platform:operate", "platform:superadmin"] },
-  { label: "邮箱管理", path: "/platform-admin/email", icon: "@", capabilities: ["platform:operate", "platform:superadmin"] },
-  { label: "系统状态", path: "/platform-admin/status", icon: "●", capabilities: ["platform:operate", "platform:superadmin"] },
+  {
+    label: "规则与自动化",
+    path: "/platform-admin/governance",
+    icon: "⚙",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "内容管理",
+    path: "/platform-admin/content",
+    icon: "▤",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "通知管理",
+    path: "/platform-admin/notifications",
+    icon: "○",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "开放平台",
+    path: "/platform-admin/open-platform",
+    icon: "⇄",
+    capabilities: ["platform:superadmin"],
+  },
+  {
+    label: "套餐与续期",
+    path: "/platform-admin/commercial",
+    icon: "¥",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "邮箱管理",
+    path: "/platform-admin/email",
+    icon: "@",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "系统状态",
+    path: "/platform-admin/status",
+    icon: "●",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
   {
     label: "安全与审计",
     path: "/platform-admin/security",
@@ -208,18 +273,19 @@ const pageTitle = computed(() =>
   routePath === "/" || routePath === "/home"
     ? "今日行动"
     : routePath === "/opportunities/start"
-    ? "真实选品"
-    : routePath === "/opportunities/scoring-rules"
-    ? "评分规则"
-    : routePath === "/sourcing/cost-rules"
-      ? "费用与利润规则"
-      : routePath === "/sourcing"
-        ? "供应链与利润"
-        : (activeItem.value?.label ?? shellTitle.value),
+      ? "真实选品"
+      : routePath === "/opportunities/scoring-rules"
+        ? "评分规则"
+        : routePath === "/sourcing/cost-rules"
+          ? "费用与利润规则"
+          : routePath === "/sourcing"
+            ? "供应链与利润"
+            : (activeItem.value?.label ?? shellTitle.value),
 );
 const routePath = window.location.pathname.replace(/\/$/, "") || "/",
-  isHome = computed(() =>
-    props.shell === "member" && (routePath === "/" || routePath === "/home"),
+  isHome = computed(
+    () =>
+      props.shell === "member" && (routePath === "/" || routePath === "/home"),
   ),
   isTasks = computed(
     () => props.shell === "member" && ["/work", "/tasks"].includes(routePath),
@@ -236,18 +302,74 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   isReports = computed(
     () => props.shell === "member" && routePath === "/reports",
   ),
-  isOrganizationAdmin = computed(() => props.shell === "organization_admin" && routePath.startsWith("/org-admin")),
-  isPlatformDashboard = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin"),
-  isPlatformAccounts = computed(() => props.shell === "platform_admin" && ["/platform-admin/accounts","/platform-admin/permissions"].includes(routePath)),
-  isPlatformManagement = computed(() => props.shell === "platform_admin" && ["/platform-admin/content","/platform-admin/notifications","/platform-admin/email","/platform-admin/status"].includes(routePath)),
-  isBackupRecovery = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/operations"),
-  isReleaseRollout = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/releases"),
-  isRuntimeTopology = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/topology"),
-  isRedisResilience = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/redis"),
-  isMySqlResilience = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/mysql"),
-  isFileResilience = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/files"),
-  isCrawlerScheduler = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/crawler-scheduler"),
-  isCapacityBoundary = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/capacity"),
+  isPersonal = computed(() => props.shell === "member" && routePath === "/me"),
+  isOrganizationAdmin = computed(
+    () =>
+      props.shell === "organization_admin" &&
+      routePath.startsWith("/org-admin"),
+  ),
+  isPlatformDashboard = computed(
+    () => props.shell === "platform_admin" && routePath === "/platform-admin",
+  ),
+  isPlatformAccounts = computed(
+    () =>
+      props.shell === "platform_admin" &&
+      ["/platform-admin/accounts", "/platform-admin/permissions"].includes(
+        routePath,
+      ),
+  ),
+  isPlatformManagement = computed(
+    () =>
+      props.shell === "platform_admin" &&
+      [
+        "/platform-admin/content",
+        "/platform-admin/notifications",
+        "/platform-admin/email",
+        "/platform-admin/status",
+      ].includes(routePath),
+  ),
+  isPlatformGovernance = computed(
+    () =>
+      props.shell === "platform_admin" &&
+      routePath === "/platform-admin/governance",
+  ),
+  isBackupRecovery = computed(
+    () =>
+      props.shell === "platform_admin" &&
+      routePath === "/platform-admin/operations",
+  ),
+  isReleaseRollout = computed(
+    () =>
+      props.shell === "platform_admin" &&
+      routePath === "/platform-admin/releases",
+  ),
+  isRuntimeTopology = computed(
+    () =>
+      props.shell === "platform_admin" &&
+      routePath === "/platform-admin/topology",
+  ),
+  isRedisResilience = computed(
+    () =>
+      props.shell === "platform_admin" && routePath === "/platform-admin/redis",
+  ),
+  isMySqlResilience = computed(
+    () =>
+      props.shell === "platform_admin" && routePath === "/platform-admin/mysql",
+  ),
+  isFileResilience = computed(
+    () =>
+      props.shell === "platform_admin" && routePath === "/platform-admin/files",
+  ),
+  isCrawlerScheduler = computed(
+    () =>
+      props.shell === "platform_admin" &&
+      routePath === "/platform-admin/crawler-scheduler",
+  ),
+  isCapacityBoundary = computed(
+    () =>
+      props.shell === "platform_admin" &&
+      routePath === "/platform-admin/capacity",
+  ),
   isTrends = computed(
     () => props.shell === "member" && routePath === "/trends",
   ),
@@ -255,7 +377,9 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
     () =>
       props.shell === "member" && routePath === "/opportunities/scoring-rules",
   ),
-  isSelectionJourney=computed(()=>props.shell==="member"&&routePath==="/opportunities/start"),
+  isSelectionJourney = computed(
+    () => props.shell === "member" && routePath === "/opportunities/start",
+  ),
   isOpportunities = computed(
     () =>
       props.shell === "member" &&
@@ -281,33 +405,35 @@ const pageSummary = computed(() =>
     ? "组织资料、成员、角色、工作区、团队、审批、Token 与审计均受当前组织权限和审计边界保护。"
     : isPlatformDashboard.value
       ? "先看今天有没有新热点、采集是否正常，再处理需要人工确认的事项。"
-    : isPlatformAccounts.value
-      ? "管理组织、普通用户和平台管理员；不用理解内部权限代码。"
-    : isBackupRecovery.value
-      ? "备份副本、RPO/RTO 与隔离恢复结论均来自可审计记录；未验证条件明确阻断。"
-    : isReleaseRollout.value
-      ? "版本、迁移、渐进观察门、自动停止与回滚均来自宝塔发布任务的审计事实。"
-    : isRuntimeTopology.value
-      ? "当前惠州单机的 API 心跳、宝塔 Nginx 单上游和私有服务只按可审计事实判定；不启用负载均衡或多节点。"
-    : isRedisResilience.value
-      ? "当前宝塔单 Redis 的持久化、内存与连接上限、告警和恢复状态只按可审计事实判定；不启用 Sentinel、集群或副本。"
-    : isMySqlResilience.value
-      ? "当前宝塔 MySQL 5.7 单主的持久化、I/O、慢查询、容量与隔离恢复只按可审计事实判定；不启用读副本、负载均衡或备用服务器。"
-    : isFileResilience.value
-      ? "当前宝塔本机证据与导出目录的组织隔离、容量、校验和与同机恢复只按可审计事实判定；不启用共享存储或备用服务器。"
-    : isTasks.value || isApprovals.value || isNotifications.value
-    ? "任务状态、负责人、期限、评论、转交和 SLA 均由当前工作区真实 API 驱动。"
-    : isSourcing.value
-      ? "供应链候选、版本化报价、最多五家对比和采购任务均保留来源与缺失项。"
-      : isCompetitors.value
-        ? "竞品身份、来源快照、变化记录和阈值告警由真实 API 与 Worker 驱动。"
-        : isCostRules.value
-          ? "版本化费用、双审批、汇率来源与利润计算由真实 API 和 Worker 驱动。"
-          : isOpportunities.value
-            ? "机会、证据覆盖和人工决策由当前组织与工作区的真实 API 驱动。"
-            : isTrends.value
-              ? "趋势主题、证据、关注和监控规则均由当前组织与工作区的真实 API 驱动。"
-              : "当前功能由真实 API、最小权限和审计记录驱动。",
+      : isPlatformAccounts.value
+        ? "管理组织、普通用户和平台管理员；不用理解内部权限代码。"
+        : isBackupRecovery.value
+          ? "备份副本、RPO/RTO 与隔离恢复结论均来自可审计记录；未验证条件明确阻断。"
+          : isReleaseRollout.value
+            ? "版本、迁移、渐进观察门、自动停止与回滚均来自宝塔发布任务的审计事实。"
+            : isRuntimeTopology.value
+              ? "当前惠州单机的 API 心跳、宝塔 Nginx 单上游和私有服务只按可审计事实判定；不启用负载均衡或多节点。"
+              : isRedisResilience.value
+                ? "当前宝塔单 Redis 的持久化、内存与连接上限、告警和恢复状态只按可审计事实判定；不启用 Sentinel、集群或副本。"
+                : isMySqlResilience.value
+                  ? "当前宝塔 MySQL 5.7 单主的持久化、I/O、慢查询、容量与隔离恢复只按可审计事实判定；不启用读副本、负载均衡或备用服务器。"
+                  : isFileResilience.value
+                    ? "当前宝塔本机证据与导出目录的组织隔离、容量、校验和与同机恢复只按可审计事实判定；不启用共享存储或备用服务器。"
+                    : isTasks.value ||
+                        isApprovals.value ||
+                        isNotifications.value
+                      ? "任务状态、负责人、期限、评论、转交和 SLA 均由当前工作区真实 API 驱动。"
+                      : isSourcing.value
+                        ? "供应链候选、版本化报价、最多五家对比和采购任务均保留来源与缺失项。"
+                        : isCompetitors.value
+                          ? "竞品身份、来源快照、变化记录和阈值告警由真实 API 与 Worker 驱动。"
+                          : isCostRules.value
+                            ? "版本化费用、双审批、汇率来源与利润计算由真实 API 和 Worker 驱动。"
+                            : isOpportunities.value
+                              ? "机会、证据覆盖和人工决策由当前组织与工作区的真实 API 驱动。"
+                              : isTrends.value
+                                ? "趋势主题、证据、关注和监控规则均由当前组织与工作区的真实 API 驱动。"
+                                : "当前功能由真实 API、最小权限和审计记录驱动。",
 );
 const short = (value: string | null) =>
   value ? `${value.slice(0, 8)}…` : "不适用";
@@ -367,7 +493,11 @@ async function load() {
   }
 }
 function shortcut(event: KeyboardEvent) {
-  if (props.shell === "member" && (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+  if (
+    props.shell === "member" &&
+    (event.metaKey || event.ctrlKey) &&
+    event.key.toLowerCase() === "k"
+  ) {
     event.preventDefault();
     discoveryMode.value = "search";
   }
@@ -391,7 +521,14 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
               ? '/org-admin'
               : '/platform-admin'
         "
-        ><span>S</span><b>ai选品</b><em>{{shell==='platform_admin'?'管理员':shell==='organization_admin'?'组织后台':'选品工作台'}}</em></a
+        ><span>S</span><b>ai选品</b
+        ><em>{{
+          shell === "platform_admin"
+            ? "管理员"
+            : shell === "organization_admin"
+              ? "组织后台"
+              : "选品工作台"
+        }}</em></a
       >
       <button
         class="role-menu-toggle"
@@ -411,15 +548,51 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         ><span v-else><small>范围</small>平台全局</span>
       </div>
       <div class="role-top-actions">
-        <button v-if="shell === 'member'" type="button" @click="discoveryMode = 'search'">
+        <button
+          v-if="shell === 'member'"
+          type="button"
+          @click="discoveryMode = 'search'"
+        >
           ⌕ <span>搜索</span><kbd>⌘K</kbd>
         </button>
-        <a v-if="shell === 'platform_admin'" class="role-create" href="/platform-admin/accounts?create=1">＋ <span>新建组织</span></a>
-        <a v-else-if="shell === 'organization_admin'" class="role-create" href="/org-admin/members">＋ <span>邀请成员</span></a>
-        <button v-else type="button" class="role-create" @click="discoveryMode = 'create'">＋ <span>创建选品</span></button>
-        <a v-if="shell === 'platform_admin'" class="role-switch" href="/home">进入用户工作台</a>
-        <a v-else-if="guard?.platform_roles?.length" class="role-switch" href="/platform-admin">进入管理后台</a>
-        <a v-if="shell === 'member'" href="/notifications" aria-label="通知中心">○</a
+        <a
+          v-if="shell === 'platform_admin'"
+          class="role-create"
+          href="/platform-admin/accounts?create=1"
+          >＋ <span>新建组织</span></a
+        >
+        <a
+          v-else-if="shell === 'organization_admin'"
+          class="role-create"
+          href="/org-admin/members"
+          >＋ <span>邀请成员</span></a
+        >
+        <button
+          v-else
+          type="button"
+          class="role-create"
+          @click="discoveryMode = 'create'"
+        >
+          ＋ <span>创建选品</span>
+        </button>
+        <a
+          v-if="shell === 'platform_admin'"
+          class="role-switch"
+          href="/home"
+          aria-label="进入用户工作台"
+          ><span class="role-switch-desktop">进入用户工作台</span
+          ><span class="role-switch-mobile">用户面板</span></a
+        >
+        <a
+          v-else-if="guard?.platform_roles?.length"
+          class="role-switch"
+          href="/platform-admin"
+          aria-label="进入管理后台"
+          ><span class="role-switch-desktop">进入管理后台</span
+          ><span class="role-switch-mobile">管理后台</span></a
+        >
+        <a v-if="shell === 'member'" href="/notifications" aria-label="通知中心"
+          >○</a
         ><a href="/me" aria-label="个人中心">◉</a>
       </div>
     </header>
@@ -504,29 +677,81 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           :api-base-url="apiBaseUrl"
         />
         <ReportCenter v-else-if="isReports" :api-base-url="apiBaseUrl" />
+        <PersonalCenter v-else-if="isPersonal" :api-base-url="apiBaseUrl" />
         <OrganizationAdminCenter
           v-else-if="isOrganizationAdmin"
           :api-base-url="apiBaseUrl"
           :route-path="routePath"
           :organization-id="guard?.organization_id || ''"
         />
-        <PlatformDashboard v-else-if="isPlatformDashboard" :api-base-url="apiBaseUrl" />
-        <PlatformAccountCenter v-else-if="isPlatformAccounts" :api-base-url="apiBaseUrl" :initial-tab="routePath === '/platform-admin/permissions' ? 'admins' : 'organizations'" />
-        <PlatformManagementCenter v-else-if="isPlatformManagement" :api-base-url="apiBaseUrl" :domain="routePath.split('/').pop() || 'status'" />
-        <BackupRecoveryCenter v-else-if="isBackupRecovery" :api-base-url="apiBaseUrl" />
-        <ReleaseRolloutCenter v-else-if="isReleaseRollout" :api-base-url="apiBaseUrl" />
-        <RuntimeTopologyCenter v-else-if="isRuntimeTopology" :api-base-url="apiBaseUrl" />
-        <RedisResilienceCenter v-else-if="isRedisResilience" :api-base-url="apiBaseUrl" />
-        <MySqlResilienceCenter v-else-if="isMySqlResilience" :api-base-url="apiBaseUrl" />
-        <FileResilienceCenter v-else-if="isFileResilience" :api-base-url="apiBaseUrl" />
-        <CrawlerSchedulerCenter v-else-if="isCrawlerScheduler" :api-base-url="apiBaseUrl" />
-        <CapacityBoundaryCenter v-else-if="isCapacityBoundary" :api-base-url="apiBaseUrl" />
-        <TrendDashboard v-else-if="isTrends" :api-base-url="apiBaseUrl" :organization-id="guard?.organization_id||''" :workspace-id="guard?.workspace_id||''" />
+        <PlatformDashboard
+          v-else-if="isPlatformDashboard"
+          :api-base-url="apiBaseUrl"
+        />
+        <PlatformAccountCenter
+          v-else-if="isPlatformAccounts"
+          :api-base-url="apiBaseUrl"
+          :initial-tab="
+            routePath === '/platform-admin/permissions'
+              ? 'admins'
+              : 'organizations'
+          "
+        />
+        <PlatformManagementCenter
+          v-else-if="isPlatformManagement"
+          :api-base-url="apiBaseUrl"
+          :domain="routePath.split('/').pop() || 'status'"
+        />
+        <PlatformGovernanceCenter
+          v-else-if="isPlatformGovernance"
+          :api-base-url="apiBaseUrl"
+        />
+        <BackupRecoveryCenter
+          v-else-if="isBackupRecovery"
+          :api-base-url="apiBaseUrl"
+        />
+        <ReleaseRolloutCenter
+          v-else-if="isReleaseRollout"
+          :api-base-url="apiBaseUrl"
+        />
+        <RuntimeTopologyCenter
+          v-else-if="isRuntimeTopology"
+          :api-base-url="apiBaseUrl"
+        />
+        <RedisResilienceCenter
+          v-else-if="isRedisResilience"
+          :api-base-url="apiBaseUrl"
+        />
+        <MySqlResilienceCenter
+          v-else-if="isMySqlResilience"
+          :api-base-url="apiBaseUrl"
+        />
+        <FileResilienceCenter
+          v-else-if="isFileResilience"
+          :api-base-url="apiBaseUrl"
+        />
+        <CrawlerSchedulerCenter
+          v-else-if="isCrawlerScheduler"
+          :api-base-url="apiBaseUrl"
+        />
+        <CapacityBoundaryCenter
+          v-else-if="isCapacityBoundary"
+          :api-base-url="apiBaseUrl"
+        />
+        <TrendDashboard
+          v-else-if="isTrends"
+          :api-base-url="apiBaseUrl"
+          :organization-id="guard?.organization_id || ''"
+          :workspace-id="guard?.workspace_id || ''"
+        />
         <ScoreRuleConsole
           v-else-if="isScoringRules"
           :api-base-url="apiBaseUrl"
         />
-        <SelectionJourney v-else-if="isSelectionJourney" :api-base-url="apiBaseUrl" />
+        <SelectionJourney
+          v-else-if="isSelectionJourney"
+          :api-base-url="apiBaseUrl"
+        />
         <OpportunityWorkspace
           v-else-if="isOpportunities"
           :api-base-url="apiBaseUrl"
@@ -555,7 +780,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
               :aria-current="
                 routePath === '/platform-admin/providers' ? 'page' : undefined
               "
-                  >来源设置（高级）</a
+              >来源设置（高级）</a
             ><a
               href="/platform-admin/providers/adapters"
               :aria-current="
@@ -563,7 +788,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
                   ? 'page'
                   : undefined
               "
-                  >采集程序（高级）</a
+              >采集程序（高级）</a
             ><a
               href="/platform-admin/providers/sources"
               :aria-current="
@@ -571,7 +796,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
                   ? 'page'
                   : undefined
               "
-                  >来源频道</a
+              >来源频道</a
             >
           </nav>
           <ProviderSourceCenter
@@ -601,14 +826,18 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           <nav class="provider-runtime-tabs" aria-label="采集控制台视图">
             <a
               href="/platform-admin/collection/overview"
-              :aria-current="routePath === '/platform-admin/collection/overview' ? 'page' : undefined"
-                  >采集总览</a
+              :aria-current="
+                routePath === '/platform-admin/collection/overview'
+                  ? 'page'
+                  : undefined
+              "
+              >采集总览</a
             ><a
               href="/platform-admin/collection"
               :aria-current="
                 routePath === '/platform-admin/collection' ? 'page' : undefined
               "
-                  >任务详情</a
+              >任务详情</a
             ><a
               href="/platform-admin/collection/browser-runtime"
               :aria-current="
@@ -616,7 +845,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
                   ? 'page'
                   : undefined
               "
-                  >网页登录采集（高级）</a
+              >网页登录采集（高级）</a
             >
           </nav>
           <CollectionOperationsConsole
@@ -624,20 +853,40 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
             :api-base-url="apiBaseUrl"
           />
           <CollectionRuntimeCenter
-            v-else-if="routePath === '/platform-admin/collection/browser-runtime'"
+            v-else-if="
+              routePath === '/platform-admin/collection/browser-runtime'
+            "
             :api-base-url="apiBaseUrl"
           />
           <CollectionTaskCenter v-else :api-base-url="apiBaseUrl" />
         </section>
-        <DataQualityCenter
+        <PlatformDataCenter
           v-else-if="
             shell === 'platform_admin' && routePath === '/platform-admin/data'
           "
           :api-base-url="apiBaseUrl"
         />
-        <SecurityOperationsCenter v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/security'" :api-base-url="apiBaseUrl" />
-        <OpenPlatformCenter v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/open-platform'" :api-base-url="apiBaseUrl" />
-        <CommercialOperationsCenter v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/commercial'" :api-base-url="apiBaseUrl" />
+        <SecurityOperationsCenter
+          v-else-if="
+            shell === 'platform_admin' &&
+            routePath === '/platform-admin/security'
+          "
+          :api-base-url="apiBaseUrl"
+        />
+        <OpenPlatformCenter
+          v-else-if="
+            shell === 'platform_admin' &&
+            routePath === '/platform-admin/open-platform'
+          "
+          :api-base-url="apiBaseUrl"
+        />
+        <CommercialOperationsCenter
+          v-else-if="
+            shell === 'platform_admin' &&
+            routePath === '/platform-admin/commercial'
+          "
+          :api-base-url="apiBaseUrl"
+        />
         <section v-else class="role-gate-state" aria-live="polite">
           <span class="role-state-mark" aria-hidden="true">?</span>
           <p>PAGE NOT FOUND</p>
@@ -659,11 +908,21 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         :aria-current="activeItem?.path === item.path ? 'page' : undefined"
         ><i>{{ item.icon }}</i
         ><span>{{ item.label }}</span></a
-      ><button v-if="shell === 'member'" type="button" @click="discoveryMode = 'search'">
+      ><button
+        v-if="shell === 'member'"
+        type="button"
+        @click="discoveryMode = 'search'"
+      >
         <i>⌕</i><span>搜索</span></button
-          ><a v-if="shell === 'platform_admin'" href="/platform-admin/accounts?create=1"><i>＋</i><span>新建组织</span></a
-          ><a v-else-if="shell === 'organization_admin'" href="/org-admin/members"><i>＋</i><span>邀请成员</span></a
-          ><button v-else type="button" @click="discoveryMode = 'create'"><i>＋</i><span>创建选品</span></button>
+      ><a
+        v-if="shell === 'platform_admin'"
+        href="/platform-admin/accounts?create=1"
+        ><i>＋</i><span>新建组织</span></a
+      ><a v-else-if="shell === 'organization_admin'" href="/org-admin/members"
+        ><i>＋</i><span>邀请成员</span></a
+      ><button v-else type="button" @click="discoveryMode = 'create'">
+        <i>＋</i><span>创建选品</span>
+      </button>
     </nav>
     <DiscoveryOverlay
       :open="Boolean(discoveryMode)"

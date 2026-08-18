@@ -33,7 +33,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'npm run build:contracts && npm run build:api && node apps/api/dist/server.js',
+      command: 'node scripts/run-playwright-api-stub.mjs',
       url: `http://127.0.0.1:${apiPort}/api/v1/health/live`,
       reuseExistingServer: false,
       timeout: 300_000,

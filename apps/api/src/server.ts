@@ -1,7 +1,11 @@
 import { buildApp } from "./app.js";
 import { loadRuntimeConfig } from "@scoutops/config";
 import { createDatabasePool } from "@scoutops/database";
-import { createRedisConnection, inspectRedisResilience, ScopedRedisStore } from "@scoutops/redis";
+import {
+  createRedisConnection,
+  inspectRedisResilience,
+  ScopedRedisStore,
+} from "@scoutops/redis";
 import {
   createArgon2PasswordHasher,
   EncryptedOutboxAuthDelivery,
@@ -70,6 +74,9 @@ import { registerApprovalRoutes } from "./approval-routes.js";
 import { NotificationService } from "./notification-service.js";
 import { MySqlNotificationRepository } from "./mysql-notification-repository.js";
 import { registerNotificationRoutes } from "./notification-routes.js";
+import { PersonalCenterService } from "./personal-center-service.js";
+import { MySqlPersonalCenterRepository } from "./mysql-personal-center-repository.js";
+import { registerPersonalCenterRoutes } from "./personal-center-routes.js";
 import { RealtimeService } from "./realtime-service.js";
 import { MySqlRealtimeRepository } from "./mysql-realtime-repository.js";
 import { registerRealtimeRoutes } from "./realtime-routes.js";
@@ -103,7 +110,10 @@ import { registerCommercialRoutes } from "./commercial-routes.js";
 import { BackupRecoveryService } from "./backup-recovery-service.js";
 import { MySqlBackupRecoveryRepository } from "./mysql-backup-recovery-repository.js";
 import { registerBackupRecoveryRoutes } from "./backup-recovery-routes.js";
-import { ReleaseRolloutService, ReleaseWriteProbeService } from "./release-rollout-service.js";
+import {
+  ReleaseRolloutService,
+  ReleaseWriteProbeService,
+} from "./release-rollout-service.js";
 import { MySqlReleaseRolloutRepository } from "./mysql-release-rollout-repository.js";
 import { registerReleaseRolloutRoutes } from "./release-rollout-routes.js";
 import { SelectionJourneyService } from "./selection-journey-service.js";
@@ -136,13 +146,21 @@ const redisClient = createRedisConnection(config);
 redisClient.on("error", () => {});
 const redisStore = new ScopedRedisStore(redisClient);
 const runtimeTopologyRepository = new MySqlRuntimeTopologyRepository(pool);
-const runtimeTopologyService = new RuntimeTopologyService(runtimeTopologyRepository, {
-  expectedNodeId: config.runtimeTopology.nodeId,
-  expectedHostId: config.runtimeTopology.hostId,
-  staleAfterMs: config.runtimeTopology.staleAfterMs,
-});
+const runtimeTopologyService = new RuntimeTopologyService(
+  runtimeTopologyRepository,
+  {
+    expectedNodeId: config.runtimeTopology.nodeId,
+    expectedHostId: config.runtimeTopology.hostId,
+    staleAfterMs: config.runtimeTopology.staleAfterMs,
+  },
+);
 const redisResilienceService = new RedisResilienceService(
-  {snapshot:async()=>{await redisStore.connect();return inspectRedisResilience(redisClient);}},
+  {
+    snapshot: async () => {
+      await redisStore.connect();
+      return inspectRedisResilience(redisClient);
+    },
+  },
   new MySqlRedisResilienceRepository(pool),
   config.redisResilience,
 );
@@ -152,12 +170,40 @@ const mysqlResilienceService = new MySqlResilienceService(
   config.mysqlResilience,
 );
 const fileResilienceService = new FileResilienceService(
-  new FileResilienceProbe(pool,config.storage.evidenceRoot,config.storage.exportRoot,config.fileResilience.checksumSampleLimit,config.fileResilience.maximumRecoveryDrillAgeDays),
+  new FileResilienceProbe(
+    pool,
+    config.storage.evidenceRoot,
+    config.storage.exportRoot,
+    config.fileResilience.checksumSampleLimit,
+    config.fileResilience.maximumRecoveryDrillAgeDays,
+  ),
   new FileResilienceRepository(pool),
-  {usageWarningBasisPoints:config.fileResilience.usageWarningBasisPoints,usageStopBasisPoints:config.fileResilience.usageStopBasisPoints,maximumRecoveryDrillAgeDays:config.fileResilience.maximumRecoveryDrillAgeDays},
+  {
+    usageWarningBasisPoints: config.fileResilience.usageWarningBasisPoints,
+    usageStopBasisPoints: config.fileResilience.usageStopBasisPoints,
+    maximumRecoveryDrillAgeDays:
+      config.fileResilience.maximumRecoveryDrillAgeDays,
+  },
 );
-const crawlerSchedulerService=new CrawlerSchedulerService(new CrawlerSchedulerRepository(pool),new CrawlerSchedulerHostProbe(config.storage.evidenceRoot),config.crawlerScheduler);
-const capacityBoundaryService=new CapacityBoundaryService(new CapacityBoundaryRepository(pool),{readP95StopMs:config.capacityBoundary.readP95StopMs,writeP95StopMs:config.capacityBoundary.writeP95StopMs,errorRateStopBasisPoints:config.capacityBoundary.errorRateStopBasisPoints,asyncLagStopSeconds:config.capacityBoundary.asyncLagStopSeconds,maximumLoadBasisPoints:config.crawlerScheduler.maximumLoadBasisPoints,minimumAvailableMemoryMb:config.crawlerScheduler.minimumAvailableMemoryMb,minimumFreeDiskMb:config.crawlerScheduler.minimumFreeDiskMb,maximumEvidenceAgeMinutes:config.capacityBoundary.maximumEvidenceAgeMinutes});
+const crawlerSchedulerService = new CrawlerSchedulerService(
+  new CrawlerSchedulerRepository(pool),
+  new CrawlerSchedulerHostProbe(config.storage.evidenceRoot),
+  config.crawlerScheduler,
+);
+const capacityBoundaryService = new CapacityBoundaryService(
+  new CapacityBoundaryRepository(pool),
+  {
+    readP95StopMs: config.capacityBoundary.readP95StopMs,
+    writeP95StopMs: config.capacityBoundary.writeP95StopMs,
+    errorRateStopBasisPoints: config.capacityBoundary.errorRateStopBasisPoints,
+    asyncLagStopSeconds: config.capacityBoundary.asyncLagStopSeconds,
+    maximumLoadBasisPoints: config.crawlerScheduler.maximumLoadBasisPoints,
+    minimumAvailableMemoryMb: config.crawlerScheduler.minimumAvailableMemoryMb,
+    minimumFreeDiskMb: config.crawlerScheduler.minimumFreeDiskMb,
+    maximumEvidenceAgeMinutes:
+      config.capacityBoundary.maximumEvidenceAgeMinutes,
+  },
+);
 const authRepository = new MySqlAuthRepository(pool);
 const authOutbox = new MySqlAuthOutboxStore(pool);
 const authDelivery = config.security.credentialsMasterKey
@@ -224,7 +270,9 @@ for (const adapter of createBuiltinSourceAdapters(
   createProviderSourceFetch(config.providerAdapters.proxy),
 ))
   providerAdapterRegistry.register(adapter);
-const providerSourceService = new ProviderSourceService(new MySqlProviderSourceRepository(pool));
+const providerSourceService = new ProviderSourceService(
+  new MySqlProviderSourceRepository(pool),
+);
 const app = buildApp({
   logger: true,
   version: config.app.version,
@@ -369,12 +417,15 @@ const app = buildApp({
     secureCookie: config.nodeEnv === "production",
     webOrigin: config.app.webOrigin,
   },
-  selectionJourneys:{
-    service:new SelectionJourneyService(new MySqlSelectionJourneyRepository(pool),config.selectionAcceptance.deadlineMs),
+  selectionJourneys: {
+    service: new SelectionJourneyService(
+      new MySqlSelectionJourneyRepository(pool),
+      config.selectionAcceptance.deadlineMs,
+    ),
     authorization,
-    auth:localAuth,
-    secureCookie:config.nodeEnv==="production",
-    webOrigin:config.app.webOrigin,
+    auth: localAuth,
+    secureCookie: config.nodeEnv === "production",
+    webOrigin: config.app.webOrigin,
   },
   scoring: {
     service: new ScoringService(new MySqlScoringRepository(pool)),
@@ -433,6 +484,13 @@ registerNotificationRoutes(app, {
   secureCookie: config.nodeEnv === "production",
   webOrigin: config.app.webOrigin,
 });
+registerPersonalCenterRoutes(app, {
+  service: new PersonalCenterService(new MySqlPersonalCenterRepository(pool)),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
+});
 registerRealtimeRoutes(app, {
   service: new RealtimeService(
     new MySqlRealtimeRepository(pool),
@@ -448,14 +506,21 @@ registerRealtimeRoutes(app, {
   maxConnections: config.realtime.maxConnections,
 });
 registerAutomationRoutes(app, {
-  service: new AutomationService(new MySqlAutomationRepository(pool), config.automations.defaultRateLimit),
+  service: new AutomationService(
+    new MySqlAutomationRepository(pool),
+    config.automations.defaultRateLimit,
+  ),
   authorization,
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",
   webOrigin: config.app.webOrigin,
 });
 registerReportRoutes(app, {
-  service: new ReportService(new MySqlReportRepository(pool), config.reports.exportRoot, config.reports.exportTtlHours),
+  service: new ReportService(
+    new MySqlReportRepository(pool),
+    config.reports.exportRoot,
+    config.reports.exportTtlHours,
+  ),
   authorization,
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",
@@ -475,7 +540,11 @@ registerOrganizationAdminRoutes(app, {
 });
 registerPlatformDashboardRoutes(app, {
   service: new PlatformDashboardService(
-    new MySqlPlatformDashboardRepository(pool, config.platformDashboard.queueWarning, config.platformDashboard.errorLimit),
+    new MySqlPlatformDashboardRepository(
+      pool,
+      config.platformDashboard.queueWarning,
+      config.platformDashboard.errorLimit,
+    ),
     config.platformDashboard.defaultWindow,
   ),
   authorization,
@@ -491,23 +560,116 @@ registerPlatformAccountRoutes(app, {
   webOrigin: config.app.webOrigin,
 });
 registerCollectionConsoleRoutes(app, {
-  service: new CollectionConsoleService(new MySqlCollectionConsoleRepository(pool), config.collectionConsole.recentLimit),
+  service: new CollectionConsoleService(
+    new MySqlCollectionConsoleRepository(pool),
+    config.collectionConsole.recentLimit,
+  ),
   authorization,
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",
 });
-registerSecurityOperationsRoutes(app,{service:new SecurityOperationsService(new MySqlSecurityOperationsRepository(pool),config.securityOperations.defaultWindow,config.securityOperations.recentLimit),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
-registerOpenPlatformRoutes(app,{service:new OpenPlatformService(new MySqlOpenPlatformRepository(pool),config.security.credentialsMasterKey,config.security.credentialsMasterKeyVersion,{clientTtlDays:config.openPlatform.clientTtlDays,defaultQuota:config.openPlatform.defaultQuotaPerMinute,maxQuota:config.openPlatform.maxQuotaPerMinute,timestampToleranceSeconds:config.openPlatform.timestampToleranceSeconds,nonceTtlSeconds:config.openPlatform.nonceTtlSeconds}),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production",webOrigin:config.app.webOrigin,version:config.app.version});
-registerCommercialRoutes(app,{service:new CommercialService(new MySqlCommercialRepository(pool),config.commercial.recentLimit),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production",webOrigin:config.app.webOrigin});
-registerBackupRecoveryRoutes(app,{service:new BackupRecoveryService(new MySqlBackupRecoveryRepository(pool),config.backupRecovery),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
+registerSecurityOperationsRoutes(app, {
+  service: new SecurityOperationsService(
+    new MySqlSecurityOperationsRepository(pool),
+    config.securityOperations.defaultWindow,
+    config.securityOperations.recentLimit,
+  ),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+});
+registerOpenPlatformRoutes(app, {
+  service: new OpenPlatformService(
+    new MySqlOpenPlatformRepository(pool),
+    config.security.credentialsMasterKey,
+    config.security.credentialsMasterKeyVersion,
+    {
+      clientTtlDays: config.openPlatform.clientTtlDays,
+      defaultQuota: config.openPlatform.defaultQuotaPerMinute,
+      maxQuota: config.openPlatform.maxQuotaPerMinute,
+      timestampToleranceSeconds: config.openPlatform.timestampToleranceSeconds,
+      nonceTtlSeconds: config.openPlatform.nonceTtlSeconds,
+    },
+  ),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
+  version: config.app.version,
+});
+registerCommercialRoutes(app, {
+  service: new CommercialService(
+    new MySqlCommercialRepository(pool),
+    config.commercial.recentLimit,
+  ),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
+});
+registerBackupRecoveryRoutes(app, {
+  service: new BackupRecoveryService(
+    new MySqlBackupRecoveryRepository(pool),
+    config.backupRecovery,
+  ),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+});
 const releaseRolloutRepository = new MySqlReleaseRolloutRepository(pool);
-registerReleaseRolloutRoutes(app,{service:new ReleaseRolloutService(releaseRolloutRepository,{percentages:[5,25,100],...config.releaseRollout}),writeProbeService:new ReleaseWriteProbeService(releaseRolloutRepository,config.security.releaseProbeSigningKey,config.app.buildSha,config.releaseRollout.probeTimestampToleranceSeconds),authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
-registerRuntimeTopologyRoutes(app,{service:runtimeTopologyService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
-registerRedisResilienceRoutes(app,{service:redisResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
-registerMySqlResilienceRoutes(app,{service:mysqlResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
-registerFileResilienceRoutes(app,{service:fileResilienceService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production"});
-registerCrawlerSchedulerRoutes(app,{service:crawlerSchedulerService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production",webOrigin:config.app.webOrigin});
-registerCapacityBoundaryRoutes(app,{service:capacityBoundaryService,authorization,auth:localAuth,secureCookie:config.nodeEnv==="production",webOrigin:config.app.webOrigin});
+registerReleaseRolloutRoutes(app, {
+  service: new ReleaseRolloutService(releaseRolloutRepository, {
+    percentages: [5, 25, 100],
+    ...config.releaseRollout,
+  }),
+  writeProbeService: new ReleaseWriteProbeService(
+    releaseRolloutRepository,
+    config.security.releaseProbeSigningKey,
+    config.app.buildSha,
+    config.releaseRollout.probeTimestampToleranceSeconds,
+  ),
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+});
+registerRuntimeTopologyRoutes(app, {
+  service: runtimeTopologyService,
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+});
+registerRedisResilienceRoutes(app, {
+  service: redisResilienceService,
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+});
+registerMySqlResilienceRoutes(app, {
+  service: mysqlResilienceService,
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+});
+registerFileResilienceRoutes(app, {
+  service: fileResilienceService,
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+});
+registerCrawlerSchedulerRoutes(app, {
+  service: crawlerSchedulerService,
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
+});
+registerCapacityBoundaryRoutes(app, {
+  service: capacityBoundaryService,
+  authorization,
+  auth: localAuth,
+  secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
+});
 registerDataQualityRoutes(app, {
   service: new DataQualityService(new MySqlDataQualityRepository(pool), {
     evidenceRoot: config.storage.evidenceRoot,
@@ -522,11 +684,26 @@ registerDataQualityRoutes(app, {
 let runtimeHeartbeatTimer: ReturnType<typeof setInterval> | undefined;
 const publishRuntimeHeartbeat = async (status: "ready" | "stopped") => {
   const correlation = `runtime-${config.runtimeTopology.nodeId}-${Date.now()}`;
-  await runtimeTopologyRepository.heartbeat({nodeId:config.runtimeTopology.nodeId,hostId:config.runtimeTopology.hostId,region:config.runtimeTopology.region,zone:config.runtimeTopology.zone,buildSha:config.app.buildSha,version:config.app.version,status,requestId:correlation,traceId:correlation,observedAt:new Date()});
+  await runtimeTopologyRepository.heartbeat({
+    nodeId: config.runtimeTopology.nodeId,
+    hostId: config.runtimeTopology.hostId,
+    region: config.runtimeTopology.region,
+    zone: config.runtimeTopology.zone,
+    buildSha: config.app.buildSha,
+    version: config.app.version,
+    status,
+    requestId: correlation,
+    traceId: correlation,
+    observedAt: new Date(),
+  });
 };
 app.addHook("onClose", async () => {
-  if(runtimeHeartbeatTimer)clearInterval(runtimeHeartbeatTimer);
-  try{await publishRuntimeHeartbeat("stopped");}catch(error){app.log.warn({error},"runtime topology stop heartbeat failed");}
+  if (runtimeHeartbeatTimer) clearInterval(runtimeHeartbeatTimer);
+  try {
+    await publishRuntimeHeartbeat("stopped");
+  } catch (error) {
+    app.log.warn({ error }, "runtime topology stop heartbeat failed");
+  }
   await redisStore.close();
   await pool.end();
 });
@@ -534,15 +711,25 @@ const { host, port } = config.app;
 
 try {
   const sourceCatalog = await providerSourceService.ensureCatalog();
-  app.log.info({sourceCatalog}, "automatic hotspot source catalog synchronized");
+  app.log.info(
+    { sourceCatalog },
+    "automatic hotspot source catalog synchronized",
+  );
   await app.listen({ host, port });
   try {
     await publishRuntimeHeartbeat("ready");
   } catch (error) {
     if (config.nodeEnv === "production") throw error;
-    app.log.warn({ error }, "runtime topology startup heartbeat unavailable outside production");
+    app.log.warn(
+      { error },
+      "runtime topology startup heartbeat unavailable outside production",
+    );
   }
-  runtimeHeartbeatTimer=setInterval(()=>{void publishRuntimeHeartbeat("ready").catch(error=>app.log.warn({error},"runtime topology heartbeat failed"));},config.runtimeTopology.heartbeatMs);
+  runtimeHeartbeatTimer = setInterval(() => {
+    void publishRuntimeHeartbeat("ready").catch((error) =>
+      app.log.warn({ error }, "runtime topology heartbeat failed"),
+    );
+  }, config.runtimeTopology.heartbeatMs);
   runtimeHeartbeatTimer.unref();
 } catch (error) {
   app.log.error({ error }, "API startup failed");

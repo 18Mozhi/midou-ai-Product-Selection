@@ -342,7 +342,14 @@ onMounted(() => {
       <form @submit.prevent="create">
         <header>
           <h3>从已完成采集任务投影找货结果</h3>
-          <button type="button" @click="showSearch = false">×</button>
+          <button
+            type="button"
+            aria-label="关闭供应商搜索"
+            title="关闭供应商搜索"
+            @click="showSearch = false"
+          >
+            ×
+          </button>
         </header>
         <label
           >采集任务 ID<input
@@ -376,7 +383,14 @@ onMounted(() => {
       <form @submit.prevent="confirm">
         <header>
           <h3>确认完整供应商报价</h3>
-          <button type="button" @click="quoteCandidate = null">×</button>
+          <button
+            type="button"
+            aria-label="关闭报价编辑"
+            title="关闭报价编辑"
+            @click="quoteCandidate = null"
+          >
+            ×
+          </button>
         </header>
         <label>规格<input v-model="quote.specification" required /></label>
         <div class="form-grid">

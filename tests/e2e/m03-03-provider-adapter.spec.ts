@@ -1,6 +1,188 @@
-import{test,expect}from'@playwright/test';
-const navigation={shell:'platform_admin',organization_id:null,workspace_id:null,roles:[],capabilities:[],platform_roles:['platform_super_admin'],platform_capabilities:['platform:operate','platform:secure','platform:superadmin','provider:configure'],guard_reason:'navigation_platform_admin_allowed'},base={provider_status:'disabled',last_checked_at:null,last_latency_ms:null,last_error_code:null,consecutive_failures:0,version:0,updated_at:'1970-01-01T00:00:00.000Z'},items=[{...base,id:'00000000-0000-4000-8000-000000000741',code:'public_signal_rss',name:'公开趋势 RSS',access_mode:'public_rss',adapter_registered:true,adapter_version:'rss-v1',health_status:'ready',last_checked_at:'2026-08-07T19:30:00.000Z',last_latency_ms:84,version:2,updated_at:'2026-08-07T19:30:00.000Z'},{...base,id:'00000000-0000-4000-8000-000000000742',code:'market_login',name:'登录态商品来源',access_mode:'authenticated_browser',adapter_registered:false,adapter_version:null,health_status:'blocked',last_error_code:'adapter_not_registered',consecutive_failures:1,version:1}];
-async function nav(page:any){await page.route('**/api/v1/me/navigation?**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:navigation,request_id:'m03-03-nav',trace_id:'m03-03-nav'})}));}
-test('M03-03.A07/A08/A15 adapter matrix and health state are responsive and visual',async({page})=>{await nav(page);await page.route('**/api/v1/platform/provider-adapters',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:items,request_id:'m03-03-list',trace_id:'m03-03-list'})}));await page.route('**/api/v1/platform/provider-adapters/*/health-check',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{...items[1],last_checked_at:'2026-08-07T19:31:00.000Z',last_latency_ms:0,version:2},request_id:'m03-03-probe',trace_id:'m03-03-probe'})}));await page.goto('/platform-admin/providers/adapters');await expect(page.getByRole('heading',{name:'适配器运行时',level:2})).toBeVisible();await expect(page.getByText('collect · normalize · healthCheck').first()).toBeVisible();await expect(page.getByText('adapter_not_registered')).toBeVisible();await page.getByRole('button',{name:'健康检查'}).last().click();await expect(page.getByRole('status')).toContainText('已记录受阻原因');await page.evaluate(()=>window.scrollTo(0,0));await expect(page).toHaveScreenshot('m03-03-provider-adapters.png',{fullPage:true});});
-test('M03-03.A08/A16 filters and empty results are explicit',async({page})=>{await nav(page);await page.route('**/api/v1/platform/provider-adapters',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:items,request_id:'m03-03-list',trace_id:'m03-03-list'})}));await page.goto('/platform-admin/providers/adapters');await page.getByLabel('接入模式').selectOption('official_api');await expect(page.getByRole('heading',{name:'没有符合筛选条件的适配器'})).toBeVisible();await page.getByRole('button',{name:'清除筛选'}).click();await expect(page.getByText('公开趋势 RSS')).toBeVisible();});
-test('M03-03.A08/A09/A16 empty forbidden and dependency states stay actionable',async({page})=>{await nav(page);let status=200;await page.route('**/api/v1/platform/provider-adapters',route=>route.fulfill(status===200?{status,contentType:'application/json',body:JSON.stringify({data:[],request_id:'m03-03-empty',trace_id:'m03-03-empty'})}:{status,contentType:'application/json',body:JSON.stringify({error:{code:status===403?'authorization_denied':'dependency_unavailable',message:'请求失败',action_hint:'按状态恢复'},request_id:`m03-03-${status}`,trace_id:`m03-03-${status}`})}));await page.goto('/platform-admin/providers/adapters');await expect(page.getByRole('heading',{name:'还没有来源可绑定适配器'})).toBeVisible();status=403;await page.reload();await expect(page.getByRole('heading',{name:'你没有此项权限'})).toBeVisible();status=503;await page.reload();await expect(page.getByRole('heading',{name:'依赖暂时受阻'})).toBeVisible();});
+import { test, expect } from "@playwright/test";
+const navigation = {
+    shell: "platform_admin",
+    organization_id: null,
+    workspace_id: null,
+    roles: [],
+    capabilities: [],
+    platform_roles: ["platform_super_admin"],
+    platform_capabilities: [
+      "platform:operate",
+      "platform:secure",
+      "platform:superadmin",
+      "provider:configure",
+    ],
+    guard_reason: "navigation_platform_admin_allowed",
+  },
+  base = {
+    provider_status: "disabled",
+    last_checked_at: null,
+    last_latency_ms: null,
+    last_error_code: null,
+    consecutive_failures: 0,
+    version: 0,
+    updated_at: "1970-01-01T00:00:00.000Z",
+  },
+  items = [
+    {
+      ...base,
+      id: "00000000-0000-4000-8000-000000000741",
+      code: "public_signal_rss",
+      name: "公开趋势 RSS",
+      access_mode: "public_rss",
+      adapter_registered: true,
+      adapter_version: "rss-v1",
+      health_status: "ready",
+      last_checked_at: "2026-08-07T19:30:00.000Z",
+      last_latency_ms: 84,
+      version: 2,
+      updated_at: "2026-08-07T19:30:00.000Z",
+    },
+    {
+      ...base,
+      id: "00000000-0000-4000-8000-000000000742",
+      code: "market_login",
+      name: "登录态商品来源",
+      access_mode: "authenticated_browser",
+      adapter_registered: false,
+      adapter_version: null,
+      health_status: "blocked",
+      last_error_code: "adapter_not_registered",
+      consecutive_failures: 1,
+      version: 1,
+    },
+  ];
+async function nav(page: any) {
+  await page.route("**/api/v1/me/navigation?**", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: navigation,
+        request_id: "m03-03-nav",
+        trace_id: "m03-03-nav",
+      }),
+    }),
+  );
+}
+test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visual", async ({
+  page,
+}) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/provider-adapters", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: items,
+        request_id: "m03-03-list",
+        trace_id: "m03-03-list",
+      }),
+    }),
+  );
+  await page.route(
+    "**/api/v1/platform/provider-adapters/*/health-check",
+    (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          data: {
+            ...items[1],
+            last_checked_at: "2026-08-07T19:31:00.000Z",
+            last_latency_ms: 0,
+            version: 2,
+          },
+          request_id: "m03-03-probe",
+          trace_id: "m03-03-probe",
+        }),
+      }),
+  );
+  await page.goto("/platform-admin/providers/adapters");
+  await expect(
+    page.getByRole("heading", { name: "适配器运行时", level: 2 }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("collect · normalize · healthCheck").first(),
+  ).toBeVisible();
+  await expect(page.getByText("adapter_not_registered")).toBeVisible();
+  await page.getByRole("button", { name: "健康检查" }).last().click();
+  await expect(page.getByRole("status")).toContainText("已记录受阻原因");
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(page).toHaveScreenshot("m03-03-provider-adapters.png", {
+    fullPage: true,
+  });
+});
+test("M03-03.A08/A16 filters and empty results are explicit", async ({
+  page,
+}) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/provider-adapters", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: items,
+        request_id: "m03-03-list",
+        trace_id: "m03-03-list",
+      }),
+    }),
+  );
+  await page.goto("/platform-admin/providers/adapters");
+  await page.getByLabel("接入模式").selectOption("manual");
+  await expect(
+    page.getByRole("heading", { name: "没有符合筛选条件的适配器" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "清除筛选" }).click();
+  await expect(page.getByText("公开趋势 RSS")).toBeVisible();
+});
+test("M03-03.A08/A09/A16 empty forbidden and dependency states stay actionable", async ({
+  page,
+}) => {
+  await nav(page);
+  let status = 200;
+  await page.route("**/api/v1/platform/provider-adapters", (route) =>
+    route.fulfill(
+      status === 200
+        ? {
+            status,
+            contentType: "application/json",
+            body: JSON.stringify({
+              data: [],
+              request_id: "m03-03-empty",
+              trace_id: "m03-03-empty",
+            }),
+          }
+        : {
+            status,
+            contentType: "application/json",
+            body: JSON.stringify({
+              error: {
+                code:
+                  status === 403
+                    ? "authorization_denied"
+                    : "dependency_unavailable",
+                message: "请求失败",
+                action_hint: "按状态恢复",
+              },
+              request_id: `m03-03-${status}`,
+              trace_id: `m03-03-${status}`,
+            }),
+          },
+    ),
+  );
+  await page.goto("/platform-admin/providers/adapters");
+  await expect(
+    page.getByRole("heading", { name: "还没有来源可绑定适配器" }),
+  ).toBeVisible();
+  status = 403;
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "你没有此项权限" }),
+  ).toBeVisible();
+  status = 503;
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "依赖暂时受阻" }),
+  ).toBeVisible();
+});

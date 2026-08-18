@@ -13,3 +13,39 @@ test("platform completion renders trend and management without overflow or conso
   await page.goto("/platform-admin/content");await expect(page.getByRole('heading',{name:'内容管理',level:2})).toBeVisible();await expect(page.getByText('便携式照明热度上升')).toBeVisible();await page.getByRole('button',{name:'无关'}).click();await expect(page.getByRole('heading',{name:'审核热点内容'})).toBeVisible();
   await page.setViewportSize({width:390,height:844});await page.reload();await expect(page.getByRole('heading',{name:'内容管理',level:2})).toBeVisible();await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);expect(errors).toEqual([]);
 });
+
+test("platform completion exposes data governance notifications and user-panel switch",async({page})=>{
+  const errors:string[]=[];
+  page.on("console",message=>{if(message.type()==="error")errors.push(message.text());});
+  await nav(page);
+  await page.route("**/api/v1/platform/management?**",route=>{
+    const domain=new URL(route.request().url()).searchParams.get("domain");
+    const data=domain==="data"
+      ? {domain,summary:{total:1,active:1},items:[{id:"trend-1",title:"便携照明趋势",organization_name:"米豆选品",workspace_name:"默认工作区",category:"home",market:"US",status:"active",metric_primary:18,metric_secondary:5,updated_at:"2026-08-18T12:00:00.000Z"}],observed_at:"2026-08-18T12:00:00.000Z"}
+      : domain==="governance"
+        ? {domain,summary:{score_rules:1,cost_rules:0,approval_templates:0,automation_rules:1,releases:0,provider_versions:2},score_rules:[{id:"rule-1",name:"标准评分规则",version_code:"score-v1",organization_name:"米豆选品",workspace_name:"默认工作区",status:"active",revision:1,updated_at:"2026-08-18T12:00:00.000Z"}],cost_rules:[],approval_templates:[],automation_rules:[{id:"auto-1",name:"竞品降价提醒",trigger_event_type:"competitor.changed",status:"enabled",version:1,updated_at:"2026-08-18T12:00:00.000Z"}],releases:[],provider_versions_latest_at:"2026-08-18T12:00:00.000Z"}
+        : {domain:"notifications",summary:{total:1,unread:1,critical:0},templates:[{category:"task",title:"任务状态通知",event_pattern:"task.*",status:"active"}],channels:[{code:"in_app",name:"站内通知",status:"enabled",deliveries:[{status:"delivered",total:1}]}],subscriptions:{in_app:3,email:0,disabled:0},alert_routes:[{id:"route-1",name:"竞品变更提醒",event_type:"competitor.changed",action_type:"notify",status:"enabled"}],items:[{id:"notice-1",title:"采集任务完成",recipient_email:"member@example.test",organization_name:"米豆选品",category:"task",severity:"info",read_at:null,delivery_status:"delivered",created_at:"2026-08-18T12:00:00.000Z"}],observed_at:"2026-08-18T12:00:00.000Z"};
+    return route.fulfill({json:env(data)});
+  });
+
+  await page.goto("/platform-admin/data");
+  await expect(page.getByRole("heading",{name:"全量业务数据",level:2})).toBeVisible();
+  await expect(page.getByText("便携照明趋势")).toBeVisible();
+  await expect(page.getByRole("link",{name:"进入用户工作台"})).toHaveAttribute("href","/home");
+
+  await page.goto("/platform-admin/governance");
+  await expect(page.getByRole("heading",{name:"规则、工作流与自动化",level:2})).toBeVisible();
+  await expect(page.getByText("标准评分规则")).toBeVisible();
+  await page.getByRole("button",{name:"自动化规则"}).click();
+  await expect(page.getByText("竞品降价提醒")).toBeVisible();
+
+  await page.goto("/platform-admin/notifications");
+  await expect(page.getByRole("heading",{name:"通知管理",level:2})).toBeVisible();
+  await expect(page.getByText("任务状态通知")).toBeVisible();
+  await expect(page.getByText("member@example.test")).toBeVisible();
+  await page.setViewportSize({width:390,height:844});
+  await page.reload();
+  await expect(page.getByRole("heading",{name:"通知管理",level:2})).toBeVisible();
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  expect(errors).toEqual([]);
+});

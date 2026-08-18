@@ -1444,6 +1444,37 @@ paths:
       responses:
         '200': { $ref: '#/components/responses/Success' }
         '409': { $ref: '#/components/responses/Error' }
+  /me/profile:
+    get:
+      summary: Get current-user personal profile
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+    patch:
+      summary: Update current-user versioned personal profile
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [display_name, locale, timezone, expected_version, reason]
+              properties:
+                display_name: {type: string, minLength: 1, maxLength: 120}
+                avatar_url: {type: string, nullable: true, maxLength: 1000}
+                phone: {type: string, nullable: true, maxLength: 40}
+                locale: {type: string, minLength: 1, maxLength: 20}
+                timezone: {type: string, minLength: 1, maxLength: 64}
+                expected_version: {type: integer, minimum: 0}
+                reason: {type: string, minLength: 1, maxLength: 300}
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '409': { $ref: '#/components/responses/Error' }
+  /me/assets:
+    get:
+      summary: Get current-user followed trends, decisions and assigned tasks in selected scope
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
   /realtime/events:
     get:
       summary: Stream current-recipient notification invalidations with replay
@@ -2032,15 +2063,39 @@ paths:
         '503': { $ref: '#/components/responses/Error' }
   /platform/management:
     get:
-      summary: Read platform content, notification, email or system-status management facts
+      summary: Read platform data, governance, content, notification, email or system-status management facts
       description: Requires platform:operate. Returns at most 100 cross-organization operational rows for the selected domain without credentials, message secrets or raw crawler payloads.
       security: [{ HttpOnlySession: [] }]
       parameters:
-        - { name: domain, in: query, required: true, schema: { type: string, enum: [content, notifications, email, status] } }
+        - { name: domain, in: query, required: true, schema: { type: string, enum: [content, notifications, email, status, data, governance] } }
+        - { name: entity, in: query, schema: { type: string, enum: [trends, opportunities, competitors, suppliers], default: trends } }
         - { name: query, in: query, schema: { type: string, maxLength: 120 } }
         - { name: status, in: query, schema: { type: string, maxLength: 40 } }
       responses:
         '200': { description: Current management facts }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/management/data/exports:
+    post:
+      summary: Export the current cross-organization platform data filter as an audited CSV
+      description: Requires platform:operate and a same-origin request. Exports at most the 100 most recent rows from the same factual query used by the platform data page. The actor, entity, filter, reason and row count are written to platform audit; no raw evidence or credential secret is included.
+      security: [{ HttpOnlySession: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [entity, reason]
+              properties:
+                entity: { type: string, enum: [trends, opportunities, competitors, suppliers] }
+                query: { type: string, maxLength: 120 }
+                status: { type: string, maxLength: 40 }
+                reason: { type: string, minLength: 2, maxLength: 300 }
+      responses:
+        '200': { description: UTF-8 BOM CSV attachment containing the current filtered rows, content: { text/csv: { schema: { type: string } } } }
         '400': { $ref: '#/components/responses/Error' }
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
@@ -2066,6 +2121,33 @@ paths:
                 reason: { type: string, minLength: 2, maxLength: 300 }
       responses:
         '200': { description: Moderated topic status }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/management/email/{source}/{deliveryId}/actions:
+    post:
+      summary: Retry or suppress one email delivery with an audit reason
+      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Account verification/password-reset deliveries only support retry; business notification deliveries support retry or suppress. A retry places the record back into the existing queue and does not bypass provider configuration.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: source, in: path, required: true, schema: { type: string, enum: [account, notification] } }
+        - { name: deliveryId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action, reason]
+              properties:
+                action: { type: string, enum: [retry, suppress] }
+                reason: { type: string, minLength: 2, maxLength: 300 }
+      responses:
+        '200': { description: Updated delivery state and audited operation result }
         '400': { $ref: '#/components/responses/Error' }
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
@@ -3444,7 +3526,7 @@ components:
         - { type: object, properties: { data: { $ref: '#/components/schemas/UiPreference' } } }
     ProviderAccessMode:
       type: string
-      enum: [public_page, public_rss, official_api, authenticated_browser, import, manual]
+      enum: [public_page, public_rss, authenticated_browser, import, manual]
     ProviderDefinitionInput:
       type: object
       additionalProperties: false
@@ -3496,7 +3578,7 @@ components:
         id: { type: string, format: uuid }
         code: { type: string, pattern: '^[a-z0-9_]{2,80}$' }
         name: { type: string }
-        access_mode: { type: string, enum: [public_page, public_rss, official_api, authenticated_browser, import, manual] }
+        access_mode: { type: string, enum: [public_page, public_rss, authenticated_browser, import, manual] }
         provider_status: { type: string, enum: [draft, disabled, enabled] }
         adapter_registered: { type: boolean }
         adapter_version: { type: string, nullable: true }
@@ -3884,7 +3966,7 @@ components:
       properties:
         code: { type: string, minLength: 2, maxLength: 80 }
         name: { type: string }
-        access_mode: { type: string, enum: [public_rss, official_api, authenticated_browser, public_page, import, manual] }
+        access_mode: { type: string, enum: [public_rss, authenticated_browser, public_page, import, manual] }
         target_url: { type: string, description: Code-owned target or setup marker; never caller supplied }
         markets: { type: array, items: { type: string } }
         languages: { type: array, items: { type: string } }
