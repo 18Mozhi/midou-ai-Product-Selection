@@ -1,10 +1,155 @@
 <script setup lang="ts">
-import{computed,onMounted,ref}from'vue';import'../provider-sources.css';
-type State='loading'|'ready'|'empty'|'error'|'expired'|'forbidden'|'blocked';interface Source{code:string;name:string;access_mode:string;category:'news'|'ecommerce'|'data'|'community'|'product_supply';availability:'automatic'|'setup_required'|'manual';policy_note:string;markets:string[];schedule_minutes:number;provisioned:{id:string;status:string}|null}
-const props=defineProps<{apiBaseUrl:string}>(),state=ref<State>('loading'),items=ref<Source[]>([]),query=ref(''),category=ref(''),availability=ref(''),message=ref('');
-const filtered=computed(()=>items.value.filter(item=>(!query.value||`${item.name}${item.code}`.toLowerCase().includes(query.value.toLowerCase()))&&(!category.value||item.category===category.value)&&(!availability.value||item.availability===availability.value))),counts=computed(()=>({all:items.value.length,automatic:items.value.filter(x=>x.availability==='automatic'&&x.provisioned?.status==='enabled').length,setup:items.value.filter(x=>x.availability==='setup_required').length,manual:items.value.filter(x=>x.availability==='manual').length})),categoryText=(v:string)=>({news:'新闻热点',ecommerce:'电商平台',data:'数据平台',community:'社区内容',product_supply:'供应链'}as Record<string,string>)[v]??v,availabilityText=(v:string)=>({automatic:'自动采集中',setup_required:'等待配置',manual:'手动使用'}as Record<string,string>)[v]??v;
-async function load(){state.value='loading';try{const r=await fetch(`${props.apiBaseUrl}/platform/provider-sources`,{credentials:'include'}),b=await r.json().catch(()=>null);if(!r.ok){message.value=b?.error?.action_hint??'读取失败';state.value=r.status===401?'expired':r.status===403?'forbidden':[408,425,429,502,503,504].includes(r.status)?'blocked':'error';return;}items.value=b.data;state.value=items.value.length?'ready':'empty';}catch(e){message.value=e instanceof Error?e.message:'读取失败';state.value='blocked';}}
+import { computed, onMounted, reactive, ref } from "vue";
+
+type ViewState = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+interface ProvisionedSource {
+  id: string;
+  code: string;
+  status: "draft" | "disabled" | "enabled";
+  version: number;
+  schedule_minutes: number;
+  timeout_ms: number;
+  retry_limit: number;
+  updated_at: string;
+}
+interface SourceItem {
+  code: string;
+  name: string;
+  access_mode: string;
+  target_url: string;
+  markets: string[];
+  languages: string[];
+  fields: string[];
+  schedule_minutes: number;
+  timeout_ms: number;
+  retry_limit: number;
+  category: "news" | "ecommerce" | "data" | "community" | "product_supply";
+  availability: "automatic" | "setup_required" | "manual";
+  policy_note: string;
+  provisioned: ProvisionedSource | null;
+}
+
+const props = defineProps<{ apiBaseUrl: string }>();
+const state = ref<ViewState>("loading");
+const items = ref<SourceItem[]>([]);
+const query = ref("");
+const category = ref("");
+const availability = ref("");
+const message = ref("");
+const requestId = ref("");
+const editing = ref<SourceItem | null>(null);
+const saving = ref(false);
+const form = reactive({ schedule_minutes: 15, timeout_ms: 20000, retry_limit: 3, status: "enabled", reason: "调整来源采集配置" });
+
+const filtered = computed(() => items.value.filter((item) => {
+  const term = query.value.trim().toLowerCase();
+  return (!term || `${item.name} ${item.code} ${item.markets.join(" ")} ${item.target_url}`.toLowerCase().includes(term))
+    && (!category.value || item.category === category.value)
+    && (!availability.value || item.availability === availability.value);
+}));
+const counts = computed(() => ({
+  all: items.value.length,
+  automatic: items.value.filter((item) => item.availability === "automatic").length,
+  nonGoogle: items.value.filter((item) => item.availability === "automatic" && !item.target_url.includes("news.google.com")).length,
+  markets: new Set(items.value.flatMap((item) => item.markets)).size,
+}));
+const failure = (status: number): ViewState => status === 401 ? "expired" : status === 403 ? "forbidden" : [408, 425, 429, 502, 503, 504].includes(status) ? "blocked" : "error";
+const categoryText = (value: SourceItem["category"]) => ({ news: "新闻", ecommerce: "电商平台", data: "趋势数据", community: "论坛社区", product_supply: "商品供应链" }[value]);
+const modeText = (value: string) => ({ public_rss: "公开 RSS/Atom 爬虫", public_page: "公开页面爬虫", authenticated_browser: "网页登录爬虫", import: "文件导入", manual: "人工录入" } as Record<string, string>)[value] ?? value;
+
+async function load() {
+  state.value = "loading";
+  message.value = "";
+  try {
+    const response = await fetch(`${props.apiBaseUrl}/platform/provider-sources`, { credentials: "include" });
+    const body = await response.json().catch(() => null);
+    requestId.value = body?.request_id ?? "";
+    if (!response.ok) {
+      message.value = body?.error?.action_hint ?? "读取来源失败";
+      state.value = failure(response.status);
+      return;
+    }
+    items.value = body.data ?? [];
+    state.value = items.value.length ? "ready" : "empty";
+  } catch (error) {
+    message.value = error instanceof Error ? error.message : "来源服务暂不可用";
+    state.value = "blocked";
+  }
+}
+
+function beginEdit(item: SourceItem) {
+  if (!item.provisioned) return;
+  editing.value = item;
+  Object.assign(form, {
+    schedule_minutes: item.provisioned.schedule_minutes,
+    timeout_ms: item.provisioned.timeout_ms,
+    retry_limit: item.provisioned.retry_limit,
+    status: item.provisioned.status === "enabled" ? "enabled" : "disabled",
+    reason: "调整来源采集配置",
+  });
+}
+
+async function save() {
+  if (!editing.value?.provisioned) return;
+  saving.value = true;
+  message.value = "";
+  try {
+    const source = editing.value.provisioned;
+    const response = await fetch(`${props.apiBaseUrl}/platform/provider-sources/${source.id}/configuration`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "content-type": "application/json", "idempotency-key": crypto.randomUUID() },
+      body: JSON.stringify({ ...form, expected_version: source.version }),
+    });
+    const body = await response.json().catch(() => null);
+    requestId.value = body?.request_id ?? requestId.value;
+    if (!response.ok) {
+      message.value = body?.error?.action_hint ?? "来源配置未保存";
+      return;
+    }
+    editing.value = null;
+    await load();
+    message.value = "来源配置已保存；频率、超时、重试和启停状态不会再被启动同步覆盖。";
+  } catch {
+    message.value = "来源配置服务暂不可用，本次没有保存。";
+  } finally {
+    saving.value = false;
+  }
+}
+
 onMounted(load);
 </script>
-<template><section class="source-center novice"><header class="source-guide"><div><p>热点来源</p><h2>{{counts.all}} 个来源频道已经自动登记</h2><span>绿色表示系统会自动采集；黄色表示需要官方账号或凭证；蓝色表示由你手动导入。等待配置的来源不会伪造数据。</span></div><a href="/trends">去看实时热点 →</a></header><div class="source-metrics"><article><small>全部频道</small><strong>{{counts.all}}</strong><span>已自动登记</span></article><article><small>自动采集</small><strong>{{counts.automatic}}</strong><span>每 15 分钟轮询</span></article><article><small>等待配置</small><strong>{{counts.setup}}</strong><span>配置后才能运行</span></article><article><small>手动来源</small><strong>{{counts.manual}}</strong><span>关键词或 CSV</span></article></div><aside class="source-help"><strong>小白怎么用？</strong><ol><li>不用操作：系统自动采集绿色来源。</li><li>想马上更新：到“热点趋势”点“立即获取热点”。</li><li>需要接入 Amazon、1688 等账号时，再处理“等待配置”。</li></ol></aside><form class="source-filter" @submit.prevent><input v-model="query" placeholder="搜索来源，例如 Amazon、Reddit"><select v-model="category"><option value="">全部类型</option><option value="news">新闻热点</option><option value="ecommerce">电商平台</option><option value="data">数据平台</option><option value="community">社区内容</option><option value="product_supply">供应链</option></select><select v-model="availability"><option value="">全部状态</option><option value="automatic">自动采集中</option><option value="setup_required">等待配置</option><option value="manual">手动使用</option></select></form><div v-if="state==='loading'" class="source-state" data-kind="loading">正在读取来源目录…</div><div v-else-if="state==='expired'" class="source-state" data-kind="expired"><strong>登录已过期</strong><p>重新登录后，系统会继续显示真实来源状态。</p><a href="/login">重新登录</a></div><div v-else-if="state==='forbidden'" class="source-state" data-kind="forbidden"><strong>当前账号不能管理平台来源</strong><p>{{message}}</p><a href="/home">返回工作台</a></div><div v-else-if="state==='blocked'" class="source-state" data-kind="blocked"><strong>来源服务暂时不可用</strong><p>{{message}}</p><button @click="load">重新加载</button></div><div v-else-if="state==='error'" class="source-state" data-kind="error">{{message}} <button @click="load">重新加载</button></div><div v-else-if="state==='empty'" class="source-state" data-kind="empty"><strong>还没有来源目录</strong><p>请通过宝塔重启统一后端，让启动同步器登记代码目录。</p><button @click="load">重新加载</button></div><section v-else class="source-list"><article v-for="item in filtered" :key="item.code" :data-availability="item.availability"><header><div><small>{{categoryText(item.category)}} · {{item.markets.join(' / ')}}</small><h3>{{item.name}}</h3></div><b>{{availabilityText(item.availability)}}</b></header><p>{{item.policy_note}}</p><footer><span v-if="item.availability==='automatic'">下次按 {{item.schedule_minutes}} 分钟周期自动获取</span><span v-else-if="item.availability==='setup_required'">需要官方 API、账号授权或来源配置</span><span v-else>由用户主动输入关键词或文件</span><code>{{item.code}}</code></footer></article><p v-if="!filtered.length" class="source-state">没有符合筛选条件的来源。</p></section></section></template>
-<style scoped>.novice{display:grid;gap:16px}.source-guide{display:flex;justify-content:space-between;align-items:center;padding:24px;border-radius:18px;background:linear-gradient(135deg,#092f37,#12515e);color:#fff}.source-guide p{color:#60e1c1;font-weight:800;margin:0}.source-guide h2{font-size:28px;margin:6px 0}.source-guide span{opacity:.8}.source-guide a{white-space:nowrap;color:#092f37;background:#60e1c1;padding:11px 16px;border-radius:10px;font-weight:800}.source-metrics{grid-template-columns:repeat(4,1fr)}.source-help{padding:16px 20px;border:1px solid #b7ded4;background:#effcf8;border-radius:13px;color:#183e36}.source-help strong{color:#0f5f4f}.source-help ol{margin:8px 0 0;padding-left:20px;color:#365f56}.source-filter{display:flex;gap:10px}.source-filter input,.source-filter select{padding:10px;border:1px solid #ccd9df;border-radius:9px;color:#172b3a;background:#fff}.source-filter input{flex:1}.source-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.source-list article{padding:17px;border:1px solid #dfe7eb;border-left:5px solid #38c5a1;border-radius:13px;background:#fff;color:#1f3544}.source-list article[data-availability=setup_required]{border-left-color:#f2b84b}.source-list article[data-availability=manual]{border-left-color:#4f8fe8}.source-list header,.source-list footer{display:flex;justify-content:space-between;gap:12px}.source-list h3{margin:4px 0;color:#152d3d}.source-list small,.source-list p,.source-list footer{color:#526978}.source-list b{white-space:nowrap;color:#875b0b}.source-list article[data-availability=automatic] b{color:#087f5b}.source-list article[data-availability=manual] b{color:#245ea9}.source-list code{font-size:11px;color:#435869}.source-state{padding:30px;text-align:center}@media(max-width:760px){.novice{padding-bottom:76px}.source-guide{align-items:flex-start;flex-direction:column;gap:16px}.source-metrics{grid-template-columns:1fr 1fr}.source-filter{flex-direction:column}.source-list{grid-template-columns:1fr}}</style>
+
+<template>
+  <section class="source-center novice">
+    <header class="source-guide">
+      <div><p>热点来源</p><h2>多平台、多国家来源已自动登记</h2><span>公开 RSS、论坛与电商内容直接由爬虫采集；需要登录的平台使用平台自有浏览器档案，不要求普通用户配置官方 API。</span></div>
+      <a href="/platform-admin/providers">新建或编辑完整技术合同 →</a>
+    </header>
+    <div class="source-metrics">
+      <article><small>全部来源</small><strong>{{ counts.all }}</strong><span>代码目录</span></article>
+      <article><small>自动采集</small><strong>{{ counts.automatic }}</strong><span>已进入调度</span></article>
+      <article><small>非 Google 自动源</small><strong>{{ counts.nonGoogle }}</strong><span>电商 / 论坛 / RSS</span></article>
+      <article><small>市场覆盖</small><strong>{{ counts.markets }}</strong><span>国家与全球市场</span></article>
+    </div>
+    <aside class="source-help"><strong>已经替你配置好的部分</strong><ol><li>公开 RSS/Atom 和论坛频道会自动采集，不需要 Key。</li><li>频率、超时、重试、启停可直接在本页修改。</li><li>网页登录型平台只在登录失效时由管理员维护浏览器档案。</li></ol></aside>
+    <form class="source-filter" @submit.prevent><input v-model="query" placeholder="搜索 Amazon、eBay、Reddit、国家或来源网址"><select v-model="category"><option value="">全部类型</option><option value="news">新闻</option><option value="ecommerce">电商平台</option><option value="data">趋势数据</option><option value="community">论坛社区</option><option value="product_supply">商品供应链</option></select><select v-model="availability"><option value="">全部状态</option><option value="automatic">自动采集</option><option value="setup_required">网页登录待就绪</option><option value="manual">手动来源</option></select></form>
+    <p v-if="message" class="source-message" role="status">{{ message }} <code v-if="requestId">{{ requestId }}</code></p>
+    <div v-if="state === 'loading'" class="source-state">正在读取来源目录…</div>
+    <div v-else-if="state !== 'ready'" class="source-state" :data-kind="state"><strong>{{ state === 'empty' ? '还没有来源目录' : state === 'expired' ? '登录已过期' : state === 'forbidden' ? '当前账号不能管理平台来源' : '来源服务暂不可用' }}</strong><p>{{ message }}</p><button v-if="!['expired','forbidden'].includes(state)" @click="load">重新加载</button></div>
+    <section v-else class="source-list">
+      <article v-for="item in filtered" :key="item.code" :data-availability="item.availability">
+        <header><div><small>{{ categoryText(item.category) }} · {{ item.markets.join(' / ') }}</small><h3>{{ item.name }}</h3></div><b>{{ item.provisioned?.status === 'enabled' ? '已启用' : item.availability === 'automatic' ? '等待同步' : '未启用' }}</b></header>
+        <p>{{ item.policy_note }}</p>
+        <dl><div><dt>采集方式</dt><dd>{{ modeText(item.access_mode) }}</dd></div><div><dt>频率</dt><dd>{{ item.provisioned?.schedule_minutes ?? item.schedule_minutes }} 分钟</dd></div><div><dt>超时 / 重试</dt><dd>{{ item.provisioned?.timeout_ms ?? item.timeout_ms }} ms / {{ item.provisioned?.retry_limit ?? item.retry_limit }} 次</dd></div></dl>
+        <footer><code>{{ item.code }}</code><button v-if="item.provisioned" type="button" @click="beginEdit(item)">编辑采集配置</button><span v-else>统一后端重启后自动同步</span></footer>
+      </article>
+      <p v-if="!filtered.length" class="source-state">没有符合筛选条件的来源。</p>
+    </section>
+    <div v-if="editing" class="source-modal" role="dialog" aria-modal="true" aria-labelledby="source-edit-title"><form @submit.prevent="save"><header><div><p>EDIT SOURCE</p><h3 id="source-edit-title">{{ editing.name }}</h3></div><button type="button" aria-label="关闭来源编辑" @click="editing = null">×</button></header><label>采集频率（分钟）<input v-model.number="form.schedule_minutes" type="number" min="1" max="10080" required></label><label>单次超时（毫秒）<input v-model.number="form.timeout_ms" type="number" min="1000" max="120000" required></label><label>失败重试次数<input v-model.number="form.retry_limit" type="number" min="0" max="10" required></label><label>运行状态<select v-model="form.status"><option value="enabled">启用</option><option value="disabled">停用</option></select></label><label>变更原因<textarea v-model="form.reason" minlength="2" maxlength="500" required></textarea></label><footer><button type="button" @click="editing = null">取消</button><button :disabled="saving">{{ saving ? '保存中…' : '保存配置' }}</button></footer></form></div>
+  </section>
+</template>
+
+<style scoped>
+.novice{display:grid;gap:16px}.source-guide{display:flex;justify-content:space-between;align-items:center;padding:24px;border-radius:18px;background:linear-gradient(135deg,#092f37,#12515e);color:#fff}.source-guide p{color:#60e1c1;font-weight:800;margin:0}.source-guide h2{font-size:28px;margin:6px 0}.source-guide span{opacity:.8}.source-guide a{white-space:nowrap;color:#092f37;background:#60e1c1;padding:11px 16px;border-radius:10px;font-weight:800;text-decoration:none}.source-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.source-metrics article{padding:18px;border:1px solid var(--so-border);border-radius:14px;background:var(--so-panel);color:var(--so-text)}.source-metrics small,.source-metrics span{display:block;color:var(--so-text-muted)}.source-metrics strong{display:block;margin:5px 0;font-size:28px}.source-help{padding:16px 20px;border:1px solid color-mix(in srgb,var(--so-success) 35%,transparent);background:color-mix(in srgb,var(--so-success) 8%,var(--so-panel));border-radius:13px;color:var(--so-text)}.source-help ol{margin:8px 0 0;padding-left:20px;color:var(--so-text-muted)}.source-filter{display:flex;gap:10px}.source-filter input,.source-filter select,.source-modal input,.source-modal select,.source-modal textarea{padding:10px;border:1px solid var(--so-border);border-radius:9px;color:var(--so-text);background:var(--so-panel-soft)}.source-filter input{flex:1}.source-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.source-list article{padding:17px;border:1px solid var(--so-border);border-left:5px solid var(--so-success);border-radius:13px;background:var(--so-panel);color:var(--so-text)}.source-list article[data-availability=setup_required]{border-left-color:var(--so-warning)}.source-list article[data-availability=manual]{border-left-color:var(--so-info)}.source-list header,.source-list footer{display:flex;justify-content:space-between;gap:12px}.source-list h3{margin:4px 0}.source-list small,.source-list p,.source-list footer,.source-list dt{color:var(--so-text-muted)}.source-list b{white-space:nowrap;color:var(--so-success)}.source-list dl{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.source-list dl div{padding:9px;border-radius:8px;background:var(--so-panel-soft)}.source-list dt{font-size:11px}.source-list dd{margin:5px 0 0}.source-list footer{align-items:center}.source-list footer button{color:var(--so-text);border:1px solid var(--so-border);background:var(--so-panel-soft)}.source-message{padding:12px 14px;border:1px solid var(--so-border);border-radius:10px;background:var(--so-panel-soft)}.source-state{padding:30px;text-align:center}.source-modal{position:fixed;z-index:80;inset:0;padding:20px;display:grid;place-items:center;background:#020817cc}.source-modal form{width:min(520px,100%);display:grid;gap:14px;padding:24px;border:1px solid var(--so-border);border-radius:18px;background:var(--so-bg-elevated);box-shadow:var(--so-shadow)}.source-modal header,.source-modal footer{display:flex;align-items:center;justify-content:space-between;gap:12px}.source-modal h3,.source-modal p{margin:0}.source-modal label{display:grid;gap:6px}.source-modal header>button{font-size:22px;color:var(--so-text);background:transparent}.source-modal footer{justify-content:flex-end}.source-modal footer button:first-child{color:var(--so-text);background:var(--so-panel-soft)}@media(max-width:760px){.novice{padding-bottom:76px}.source-guide{align-items:flex-start;flex-direction:column;gap:16px}.source-metrics{grid-template-columns:1fr 1fr}.source-filter{flex-direction:column}.source-list{grid-template-columns:1fr}.source-list dl{grid-template-columns:1fr}}
+</style>

@@ -481,6 +481,7 @@ registerPlatformDashboardRoutes(app, {
   authorization,
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",
+  webOrigin: config.app.webOrigin,
 });
 registerPlatformAccountRoutes(app, {
   service: new PlatformAccountService(new MySqlPlatformAccountRepository(pool)),

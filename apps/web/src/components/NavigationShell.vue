@@ -36,6 +36,7 @@ import FileResilienceCenter from "./FileResilienceCenter.vue";
 import CrawlerSchedulerCenter from "./CrawlerSchedulerCenter.vue";
 import CapacityBoundaryCenter from "./CapacityBoundaryCenter.vue";
 import PlatformAccountCenter from "./PlatformAccountCenter.vue";
+import PlatformManagementCenter from "./PlatformManagementCenter.vue";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -130,7 +131,8 @@ const orgMenu: MenuItem[] = [
 ];
 const platformMenu: MenuItem[] = [
   { label: "平台概览", path: "/platform-admin", icon: "⌂" },
-  { label: "组织与用户", path: "/platform-admin/accounts", icon: "♙", capabilities: ["platform:superadmin"] },
+  { label: "账号与组织", path: "/platform-admin/accounts", icon: "♙", capabilities: ["platform:superadmin"] },
+  { label: "人员与权限", path: "/platform-admin/permissions", icon: "◇", capabilities: ["platform:superadmin"] },
   {
     label: "热点来源",
     path: "/platform-admin/providers/sources",
@@ -149,6 +151,11 @@ const platformMenu: MenuItem[] = [
     icon: "▦",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
+  { label: "内容管理", path: "/platform-admin/content", icon: "▤", capabilities: ["platform:operate", "platform:superadmin"] },
+  { label: "通知管理", path: "/platform-admin/notifications", icon: "○", capabilities: ["platform:operate", "platform:superadmin"] },
+  { label: "套餐与续期", path: "/platform-admin/commercial", icon: "¥", capabilities: ["platform:operate", "platform:superadmin"] },
+  { label: "邮箱管理", path: "/platform-admin/email", icon: "@", capabilities: ["platform:operate", "platform:superadmin"] },
+  { label: "系统状态", path: "/platform-admin/status", icon: "●", capabilities: ["platform:operate", "platform:superadmin"] },
   {
     label: "安全与审计",
     path: "/platform-admin/security",
@@ -231,7 +238,8 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
   ),
   isOrganizationAdmin = computed(() => props.shell === "organization_admin" && routePath.startsWith("/org-admin")),
   isPlatformDashboard = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin"),
-  isPlatformAccounts = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/accounts"),
+  isPlatformAccounts = computed(() => props.shell === "platform_admin" && ["/platform-admin/accounts","/platform-admin/permissions"].includes(routePath)),
+  isPlatformManagement = computed(() => props.shell === "platform_admin" && ["/platform-admin/content","/platform-admin/notifications","/platform-admin/email","/platform-admin/status"].includes(routePath)),
   isBackupRecovery = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/operations"),
   isReleaseRollout = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/releases"),
   isRuntimeTopology = computed(() => props.shell === "platform_admin" && routePath === "/platform-admin/topology"),
@@ -409,6 +417,8 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <a v-if="shell === 'platform_admin'" class="role-create" href="/platform-admin/accounts?create=1">＋ <span>新建组织</span></a>
         <a v-else-if="shell === 'organization_admin'" class="role-create" href="/org-admin/members">＋ <span>邀请成员</span></a>
         <button v-else type="button" class="role-create" @click="discoveryMode = 'create'">＋ <span>创建选品</span></button>
+        <a v-if="shell === 'platform_admin'" class="role-switch" href="/home">进入用户工作台</a>
+        <a v-else-if="guard?.platform_roles?.length" class="role-switch" href="/platform-admin">进入管理后台</a>
         <a v-if="shell === 'member'" href="/notifications" aria-label="通知中心">○</a
         ><a href="/me" aria-label="个人中心">◉</a>
       </div>
@@ -501,7 +511,8 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           :organization-id="guard?.organization_id || ''"
         />
         <PlatformDashboard v-else-if="isPlatformDashboard" :api-base-url="apiBaseUrl" />
-        <PlatformAccountCenter v-else-if="isPlatformAccounts" :api-base-url="apiBaseUrl" />
+        <PlatformAccountCenter v-else-if="isPlatformAccounts" :api-base-url="apiBaseUrl" :initial-tab="routePath === '/platform-admin/permissions' ? 'admins' : 'organizations'" />
+        <PlatformManagementCenter v-else-if="isPlatformManagement" :api-base-url="apiBaseUrl" :domain="routePath.split('/').pop() || 'status'" />
         <BackupRecoveryCenter v-else-if="isBackupRecovery" :api-base-url="apiBaseUrl" />
         <ReleaseRolloutCenter v-else-if="isReleaseRollout" :api-base-url="apiBaseUrl" />
         <RuntimeTopologyCenter v-else-if="isRuntimeTopology" :api-base-url="apiBaseUrl" />

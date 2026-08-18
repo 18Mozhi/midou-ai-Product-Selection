@@ -1632,12 +1632,42 @@ paths:
   /platform/provider-sources:
     get:
       summary: List the code-owned 100+ hotspot and product-source channel catalog
-      description: Requires provider:configure. Public RSS channels are automatically registered and enabled; setup-required and manual channels stay disabled until their real contract or explicit input is available. No arbitrary outbound URL, credential, raw replay input or fabricated platform data is returned.
+      description: Requires provider:configure. Public RSS/Atom feeds and fixed public marketplace pages are automatically registered and enabled; authenticated-browser and manual channels stay disabled until their real login profile or explicit input is available. No official API key is required for built-in channels, and no arbitrary outbound URL, credential, raw replay input or fabricated platform data is returned.
       security: [{ HttpOnlySession: [] }]
       responses:
         '200': { description: Built-in source catalog, content: { application/json: { schema: { $ref: '#/components/schemas/ProviderSourceCatalogEnvelope' } } } }
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/provider-sources/{providerId}/configuration:
+    put:
+      summary: Update an admitted source collection configuration
+      description: Requires provider:configure, same-origin Origin and Idempotency-Key. Updates schedule, timeout, retry limit and enabled state with optimistic version control and a mandatory audited reason; startup catalog sync preserves these administrator-owned fields.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [schedule_minutes, timeout_ms, retry_limit, status, expected_version, reason]
+              properties:
+                schedule_minutes: { type: integer, minimum: 1, maximum: 10080 }
+                timeout_ms: { type: integer, minimum: 1000, maximum: 120000 }
+                retry_limit: { type: integer, minimum: 0, maximum: 10 }
+                status: { type: string, enum: [enabled, disabled] }
+                expected_version: { type: integer, minimum: 1 }
+                reason: { type: string, minLength: 2, maxLength: 500 }
+      responses:
+        '200': { description: Updated source configuration }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
   /platform/provider-sources/{code}/provision:
     post:
@@ -1999,6 +2029,48 @@ paths:
         '401': { $ref: '#/components/responses/Error' }
         '403': { $ref: '#/components/responses/Error' }
         '429': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/management:
+    get:
+      summary: Read platform content, notification, email or system-status management facts
+      description: Requires platform:operate. Returns at most 100 cross-organization operational rows for the selected domain without credentials, message secrets or raw crawler payloads.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: domain, in: query, required: true, schema: { type: string, enum: [content, notifications, email, status] } }
+        - { name: query, in: query, schema: { type: string, maxLength: 120 } }
+        - { name: status, in: query, schema: { type: string, maxLength: 40 } }
+      responses:
+        '200': { description: Current management facts }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+  /platform/management/content/{topicId}:
+    patch:
+      summary: Moderate a platform-visible trend topic
+      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Changes only the topic display status with optimistic version control, an audit event and a mandatory reason.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: topicId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status, expected_version, reason]
+              properties:
+                status: { type: string, enum: [active, irrelevant, stale] }
+                expected_version: { type: integer, minimum: 1 }
+                reason: { type: string, minLength: 2, maxLength: 300 }
+      responses:
+        '200': { description: Moderated topic status }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
         '503': { $ref: '#/components/responses/Error' }
   /platform/operations/backup-recovery:
     get:

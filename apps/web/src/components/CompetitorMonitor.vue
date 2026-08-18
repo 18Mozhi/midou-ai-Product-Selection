@@ -332,7 +332,7 @@ onMounted(() => {
             <p>PROVENANCE REQUIRED</p>
             <h3 id="new-competitor">添加竞品与基线快照</h3>
           </div>
-          <button type="button" @click="showCreate = false">×</button>
+          <button type="button" aria-label="关闭新建竞品" title="关闭新建竞品" @click="showCreate = false">×</button>
         </header>
         <div class="form-grid">
           <label>Provider ID<input v-model="form.provider_id" required /></label
@@ -417,7 +417,7 @@ onMounted(() => {
             <p>EXPLICIT THRESHOLD</p>
             <h3 id="new-rule">新建监控规则</h3>
           </div>
-          <button type="button" @click="showRule = false">×</button>
+          <button type="button" aria-label="关闭告警规则" title="关闭告警规则" @click="showRule = false">×</button>
         </header>
         <label
           >竞品（留空为工作区全局）<select v-model="rule.competitor_id">

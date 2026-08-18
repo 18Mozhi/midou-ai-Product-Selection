@@ -1,8 +1,15 @@
 export type PlatformDashboardWindow="15m"|"24h"|"7d"|"30d";
-export interface PlatformDashboardRepository{read(input:{actorId:string;window:PlatformDashboardWindow;windowMinutes:number;requestId:string;traceId:string}):Promise<unknown>}
+export type PlatformManagementDomain="content"|"notifications"|"email"|"status";
+export interface PlatformDashboardRepository{
+  read(input:{actorId:string;window:PlatformDashboardWindow;windowMinutes:number;requestId:string;traceId:string}):Promise<unknown>;
+  readManagement(input:{actorId:string;domain:PlatformManagementDomain;query:string;status:string;requestId:string;traceId:string}):Promise<unknown>;
+  moderateTrend(input:{actorId:string;topicId:string;status:"active"|"irrelevant"|"stale";expectedVersion:number;reason:string;route:string;idempotencyKey:string;requestId:string;traceId:string;now:Date}):Promise<unknown>;
+}
 export class PlatformDashboardError extends Error{constructor(readonly code:string,readonly statusCode:number,readonly actionHint:string,message=code){super(message);this.name="PlatformDashboardError";}}
 const windows:Record<PlatformDashboardWindow,number>={"15m":15,"24h":1440,"7d":10080,"30d":43200};
 export class PlatformDashboardService{
-  constructor(private readonly repository:PlatformDashboardRepository,private readonly defaultWindow:PlatformDashboardWindow="24h"){}
+  constructor(private readonly repository:PlatformDashboardRepository,private readonly defaultWindow:PlatformDashboardWindow="24h",private readonly now:()=>Date=()=>new Date()){}
   read(input:{actorId:string;window?:unknown;requestId:string;traceId:string}){const window=String(input.window??this.defaultWindow) as PlatformDashboardWindow;if(!(window in windows))throw new PlatformDashboardError("platform_dashboard_window_invalid",400,"选择 15m、24h、7d 或 30d。");return this.repository.read({...input,window,windowMinutes:windows[window]});}
+  management(input:{actorId:string;domain?:unknown;query?:unknown;status?:unknown;requestId:string;traceId:string}){const domain=String(input.domain??"status") as PlatformManagementDomain;if(!["content","notifications","email","status"].includes(domain))throw new PlatformDashboardError("platform_management_domain_invalid",400,"选择有效的管理页面。");const query=String(input.query??"").trim(),status=String(input.status??"").trim();if(query.length>120||status.length>40)throw new PlatformDashboardError("platform_management_filter_invalid",400,"缩短筛选条件后重试。");return this.repository.readManagement({...input,domain,query,status});}
+  moderateTrend(topicId:string,value:any,context:{actorId:string;idempotencyKey:string;requestId:string;traceId:string}){if(!/^[0-9a-f-]{36}$/i.test(topicId))throw new PlatformDashboardError("trend_topic_id_invalid",400,"刷新内容列表后重试。");const status=String(value?.status??"") as "active"|"irrelevant"|"stale",expectedVersion=Number(value?.expected_version),reason=String(value?.reason??"").trim();if(!["active","irrelevant","stale"].includes(status))throw new PlatformDashboardError("trend_topic_status_invalid",400,"选择展示、无关或过期。");if(!Number.isInteger(expectedVersion)||expectedVersion<1)throw new PlatformDashboardError("trend_topic_version_invalid",400,"刷新内容版本后重试。");if(reason.length<2||reason.length>300)throw new PlatformDashboardError("reason_invalid",400,"填写 2–300 字的审核原因。");return this.repository.moderateTrend({topicId,status,expectedVersion,reason,route:`/platform/management/content/${topicId}`,...context,now:this.now()});}
 }

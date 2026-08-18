@@ -791,18 +791,21 @@
       "routes": [
         "/platform-admin/providers/sources",
         "/api/v1/platform/provider-sources",
+        "/api/v1/platform/provider-sources/{providerId}/configuration",
         "/api/v1/platform/provider-sources/{code}/provision",
         "/api/v1/platform/provider-sources/{providerId}/replays",
         "/api/v1/provider-sources/refresh"
       ],
-      "scope": "100+ code-owned hotspot and product-source channels plus organization/workspace automatic and manual refresh tasks and evidence",
+      "scope": "100+ code-owned hotspot and product-source channels; currently 177 catalog entries including 138 automatic crawler channels across 24 hosts, plus organization/workspace automatic and manual refresh tasks and evidence",
       "sources": [
         "96 automatic Google News fixed RSS market/topic channels",
-        "46 setup-required official API, authenticated browser, public page and RSS platform entries",
+        "40 automatic non-Google RSS/Atom news ecommerce community and trend channels",
+        "2 automatic fixed public marketplace pages for Amazon and eBay; Walmart remains a registered controlled-page source because its public endpoint currently returns a human-verification challenge",
+        "authenticated-browser or fixed-public-page platform entries without official API dependency",
         "google_news_search manual keyword RSS",
         "manual_product_supply_csv explicit import"
       ],
-      "admissionBoundary": "new public RSS channels auto-register enabled; setup-required and manual entries remain disabled until real credentials/contracts or explicit input exist; no setup-required platform fabricates data",
+      "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; no source fabricates platform data",
       "outboundBoundary": "Google News uses one exact code-owned URL template and rejects redirects; an optional Baota-restricted project HTTP CONNECT proxy is applied only to news.google.com without setting global HTTP_PROXY or HTTPS_PROXY; CSV uses inline content; callers cannot supply an outbound URL or proxy",
       "limits": "Google RSS 2MB and 20 persisted records per task; CSV 1MB, exact 8-column header, 100 parsed rows and 20 persisted records per task",
       "permission": "provider:configure for catalog/provision; collection:replay for scoped replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
@@ -1351,9 +1354,9 @@
     },
     "platformDashboard": {
       "module": "M06-02",
-      "entrypoints": ["../apps/api/src/platform-dashboard-service.ts", "../apps/api/src/mysql-platform-dashboard-repository.ts", "../apps/api/src/platform-dashboard-routes.ts", "../apps/web/src/components/PlatformDashboard.vue"],
-      "routes": ["/platform-admin", "/api/v1/platform/dashboard"],
-      "scope": "platform-global factual summary of active organizations and users, enabled source health, terminal task success, queue backlog, quality issues, file growth and alerts",
+      "entrypoints": ["../apps/api/src/platform-dashboard-service.ts", "../apps/api/src/mysql-platform-dashboard-repository.ts", "../apps/api/src/platform-dashboard-routes.ts", "../apps/web/src/components/PlatformDashboard.vue", "../apps/web/src/components/PlatformManagementCenter.vue"],
+      "routes": ["/platform-admin", "/platform-admin/content", "/platform-admin/notifications", "/platform-admin/email", "/platform-admin/status", "/api/v1/platform/dashboard", "/api/v1/platform/management", "/api/v1/platform/management/content/{topicId}"],
+      "scope": "platform-global factual summary and task trend chart plus content moderation, notification delivery, email queue and runtime status management",
       "truthBoundary": "no sample remains unknown or null; no credentials, payloads, internal file paths or invented uptime and capacity claims",
       "permission": "platform:operate on the API; platform role navigation guard on the page; every dashboard read writes a correlated platform audit event",
       "configuration": ["PLATFORM_DASHBOARD_DEFAULT_WINDOW", "PLATFORM_DASHBOARD_QUEUE_WARNING", "PLATFORM_DASHBOARD_ERROR_LIMIT"],

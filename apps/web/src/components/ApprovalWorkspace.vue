@@ -329,7 +329,7 @@ onMounted(load);
       </button>
     </div>
     <aside v-if="selected" class="approval-detail">
-      <button class="close" @click="selected = null">×</button>
+      <button class="close" aria-label="关闭审批详情" title="关闭审批详情" @click="selected = null">×</button>
       <p>{{ selected.template_name }} / v{{ selected.version }}</p>
       <h3>{{ selected.title }}</h3>
       <small>{{ selected.resource_type }} · {{ selected.resource_id }}</small>
