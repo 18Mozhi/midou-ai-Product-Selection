@@ -31,6 +31,7 @@ type Search = {
   id: string;
   input_type: string;
   input_ref: string;
+  display_name?: string;
   status: string;
   candidate_count: number;
   missing_fields: string[];
@@ -88,7 +89,8 @@ const missingLabels: Record<string, string> = {
     risk_level: "风险",
   },
   candidates = computed(() => selected.value?.candidates ?? []),
-  filteredItems = computed(() => {const needle=query.value.trim().toLowerCase();return needle?items.value.filter((item)=>`${item.input_ref} ${item.status}`.toLowerCase().includes(needle)):items.value;}),
+  searchName = (item: Search | null | undefined) => item?.display_name || item?.input_ref || "供应商",
+  filteredItems = computed(() => {const needle=query.value.trim().toLowerCase();return needle?items.value.filter((item)=>`${searchName(item)} ${item.input_ref} ${item.status}`.toLowerCase().includes(needle)):items.value;}),
   summary = computed(()=>({total:items.value.length,running:items.value.filter((item)=>['queued','running'].includes(item.status)).length,candidates:items.value.reduce((sum,item)=>sum+item.candidate_count,0),ready:items.value.filter((item)=>item.candidate_count>0).length})),
   missingText = computed(() =>
     (selected.value?.missing_fields ?? [])
@@ -104,7 +106,7 @@ const missingLabels: Record<string, string> = {
     ].filter((value): value is string => Boolean(value));
   }),
   inputTypeText = (value: string) =>
-    ({ keyword: "关键词", image: "图片", url: "商品链接" })[value] ?? value,
+    ({ keyword: "关键词", image: "图片", opportunity: "选品机会", product_url: "商品链接" })[value] ?? "其他输入",
   statusText = (value: string) =>
     ({
       queued: "等待采集",
@@ -114,6 +116,7 @@ const missingLabels: Record<string, string> = {
       ready: "可确认",
       incomplete: "待补齐",
       failed: "采集失败",
+      succeeded_empty: "未找到可用候选",
     })[value] ?? value,
   stabilityText = (value: string | undefined) =>
     ({ stable: "稳定", volatile: "波动", unknown: "待确认" })[value ?? ""] ??
@@ -223,7 +226,7 @@ function choose(candidate: Candidate) {
 async function compare() {
   if (
     await post("/sourcing/comparisons", {
-      name: `${selected.value?.input_ref ?? "供应商"} 报价对比`,
+      name: `${searchName(selected.value)} 报价对比`,
       quote_ids: selectedQuotes.value,
     })
   ) {
@@ -292,7 +295,7 @@ onMounted(() => {
           :class="{ selected: selected?.id === item.id }"
           @click="detail(item)"
         >
-          <b>{{ item.input_ref }}</b
+          <b>{{ searchName(item) }}</b
           ><small>{{ inputTypeText(item.input_type) }} · {{ statusText(item.status) }}</small
           ><em>{{ item.candidate_count }} 个候选</em><strong>查看详情 →</strong>
         </button>
@@ -301,7 +304,8 @@ onMounted(() => {
         <header>
           <div>
             <p>{{ inputTypeText(selected.input_type) }}</p>
-            <h3>{{ selected.input_ref }}</h3>
+            <h3>{{ searchName(selected) }}</h3>
+            <code v-if="selected.input_type === 'opportunity'">机会编号 {{ selected.input_ref }}</code>
           </div>
           <div class="sourcing-actions"><button type="button" :disabled="busy" @click="refreshSearch">重新采集</button><button v-if="selectedQuotes.length >= 2" type="button" @click="compare">对比 {{ selectedQuotes.length }} 家</button><button type="button" class="danger ghost" @click="deleting=selected">删除</button></div>
         </header>
@@ -514,6 +518,6 @@ onMounted(() => {
         </footer>
       </form>
     </div>
-    <div v-if="deleting" class="sourcing-modal" role="dialog" aria-modal="true"><form @submit.prevent="removeSearch"><header><h3>删除找货记录</h3><button type="button" aria-label="关闭删除确认" title="关闭删除确认" @click="deleting=null">×</button></header><p>删除“{{ deleting.input_ref }}”后不再显示在工作台，候选证据和审计记录仍保留。</p><label>删除原因<textarea v-model="deleteReason" required maxlength="500" placeholder="请填写删除原因"></textarea></label><footer><button type="button" class="ghost" @click="deleting=null">取消</button><button type="submit" class="danger" :disabled="busy">确认删除</button></footer></form></div>
+    <div v-if="deleting" class="sourcing-modal" role="dialog" aria-modal="true"><form @submit.prevent="removeSearch"><header><h3>删除找货记录</h3><button type="button" aria-label="关闭删除确认" title="关闭删除确认" @click="deleting=null">×</button></header><p>删除“{{ searchName(deleting) }}”后不再显示在工作台，候选证据和审计记录仍保留。</p><label>删除原因<textarea v-model="deleteReason" required maxlength="500" placeholder="请填写删除原因"></textarea></label><footer><button type="button" class="ghost" @click="deleting=null">取消</button><button type="submit" class="danger" :disabled="busy">确认删除</button></footer></form></div>
   </section>
 </template>

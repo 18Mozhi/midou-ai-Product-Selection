@@ -1068,7 +1068,7 @@
         "/api/v1/sourcing/purchase-tasks"
       ],
       "scope": "organization and workspace scoped searches projection jobs candidates immutable quote versions comparisons purchase tasks events and outbox",
-      "truthBoundary": "a user search queues independent Made-in-China and EC21 public supplier-page crawlers without official API credentials; supplier title price image source URL and observed time are projected with immutable evidence, while unavailable MOQ specification lead location confidence stability and risk stay explicit until evidence-backed human confirmation",
+      "truthBoundary": "a user search queues independent Made-in-China and EC21 public supplier-page crawlers without official API credentials; supplier title price image source URL and observed time are projected with immutable evidence, opportunity searches expose the joined opportunity name as display_name while retaining input_ref only for traceability, and unavailable MOQ specification lead location confidence stability and risk stay explicit until evidence-backed human confirmation",
       "permission": "sourcing:read for scoped lists details and comparison history; supplier_quote:manage for create refresh audited soft delete quote confirmation comparisons and purchase task creation",
       "audit": "writes preserve idempotency request_id trace_id actor immutable evidence references sourcing_events and sourcing_outbox",
       "configuration": [

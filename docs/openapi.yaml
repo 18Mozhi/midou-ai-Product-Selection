@@ -2667,7 +2667,7 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /sourcing/searches:
     get:
-      summary: List workspace-scoped sourcing searches and projection status
+      summary: List sourcing searches with opportunity display names and traceable input references
       security: [{ HttpOnlySession: [] }]
       x-required-capability: sourcing:read
       responses:
