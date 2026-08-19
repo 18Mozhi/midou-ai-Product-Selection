@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed, onUnmounted, reactive, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
+import { statusLabel } from "../ui/status-labels";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../selection-journey.css";
+import "../selection-journey-enhancements.css";
 type Kind = "keyword" | "asin" | "product_url";
 type JourneyState =
   | "accepted"
@@ -30,8 +33,16 @@ interface Journey {
     topic_id: string | null;
   };
   blocked_reason: string | null;
+  blocked_owner: string | null;
+  blocked_next_step: string | null;
+  timeline: Array<{
+    stage: "queued" | "collecting" | "parsing" | "decision";
+    status: "waiting" | "active" | "completed" | "blocked";
+    occurred_at: string | null;
+  }>;
   decision: null | { action: string; reason: string; created_at: string };
   opportunity_id: string | null;
+  verification_task_id: string | null;
   accepted_at: string;
   terminal_at: string | null;
   decided_at: string | null;
@@ -42,6 +53,7 @@ interface Journey {
   trace_id: string;
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   form = reactive<{ input_kind: Kind; input_value: string }>({
     input_kind: "keyword",
     input_value: "",
@@ -79,15 +91,18 @@ const terminal = computed(
         failed: "任务终止失败",
         decided: "旅程已完成决策",
       })[journey.value?.state ?? "accepted"],
-  );
-function failure(status: number) {
-  return status === 401
-    ? "expired"
-    : status === 403
-      ? "forbidden"
-      : [408, 425, 429, 502, 503, 504].includes(status)
-        ? "blocked"
-        : ("error" as const);
+  ),
+  stageLabel = (stage: Journey["timeline"][number]["stage"]) =>
+    ({ queued: "排队", collecting: "采集", parsing: "解析", decision: "决策" })[stage];
+function applyFailure(error: unknown, fallback: string) {
+  if (error instanceof ApiClientError) {
+    state.value = error.kind === "conflict" || error.kind === "rate_limited" ? "blocked" : error.kind;
+    requestId.value = error.requestId;
+    message.value = error.actionHint;
+  } else {
+    state.value = "blocked";
+    message.value = fallback;
+  }
 }
 function stop() {
   if (timer) window.clearTimeout(timer);
@@ -104,28 +119,13 @@ async function create() {
   message.value = "";
   startedAt = Date.now();
   try {
-    const r = await fetch(`${props.apiBaseUrl}/selection-journeys`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-        body: JSON.stringify(form),
-      }),
-      b = await r.json().catch(() => null);
-    requestId.value = b?.request_id ?? "";
-    if (!r.ok) {
-      state.value = failure(r.status);
-      message.value = b?.error?.action_hint ?? "真实任务未创建";
-      return;
-    }
-    journey.value = b.data;
+    const result = await request<Journey>("/selection-journeys", { method: "POST", body: form });
+    requestId.value = result.request_id;
+    journey.value = result.data;
     state.value = "ready";
     schedule();
-  } catch {
-    state.value = "blocked";
-    message.value = "依赖不可用，真实任务未创建。";
+  } catch (error) {
+    applyFailure(error, "依赖不可用，真实任务未创建。");
   } finally {
     busy.value = false;
   }
@@ -133,26 +133,16 @@ async function create() {
 async function load() {
   if (!journey.value) return;
   try {
-    const r = await fetch(
-        `${props.apiBaseUrl}/selection-journeys/${journey.value.id}`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
-      b = await r.json().catch(() => null);
-    requestId.value = b?.request_id ?? requestId.value;
-    if (!r.ok) {
-      state.value = failure(r.status);
-      message.value = b?.error?.action_hint ?? "旅程状态暂不可用";
-      return;
-    }
-    journey.value = b.data;
+    const result = await request<Journey>(`/selection-journeys/${journey.value.id}`);
+    requestId.value = result.request_id;
+    journey.value = result.data;
     state.value = "ready";
     if (Date.now() - startedAt > 180000 && !terminal.value)
       message.value =
         "已超过 180 秒生产验收阈值；任务仍保留，当前验收判定为阻断。";
     schedule();
-  } catch {
-    state.value = "blocked";
-    message.value = "状态连接中断；任务不会因页面关闭而取消。";
+  } catch (error) {
+    applyFailure(error, "状态连接中断；任务不会因页面关闭而取消。");
   }
 }
 async function decide() {
@@ -160,29 +150,13 @@ async function decide() {
   busy.value = true;
   message.value = "";
   try {
-    const r = await fetch(
-        `${props.apiBaseUrl}/selection-journeys/${journey.value.id}/decisions`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-            "idempotency-key": crypto.randomUUID(),
-          },
-          body: JSON.stringify(decision),
-        },
-      ),
-      b = await r.json().catch(() => null);
-    requestId.value = b?.request_id ?? requestId.value;
-    if (!r.ok) {
-      message.value = b?.error?.action_hint ?? "决策未保存";
-      return;
-    }
-    journey.value = b.data;
+    const result = await request<Journey>(`/selection-journeys/${journey.value.id}/decisions`, { method: "POST", body: decision });
+    requestId.value = result.request_id;
+    journey.value = result.data;
     decision.reason = "";
     stop();
-  } catch {
-    message.value = "依赖不可用，决策未写入。";
+  } catch (error) {
+    applyFailure(error, "依赖不可用，决策未写入。");
   } finally {
     busy.value = false;
   }
@@ -289,6 +263,17 @@ onUnmounted(stop);
             }"
           ></i>
         </div>
+        <ol class="selection-timeline" aria-label="选品处理时间轴">
+          <li
+            v-for="step in journey.timeline"
+            :key="step.stage"
+            :data-status="step.status"
+          >
+            <i aria-hidden="true"></i>
+            <span><b>{{ stageLabel(step.stage) }}</b><small>{{ statusLabel(step.status) }}</small></span>
+            <time>{{ step.occurred_at ? new Date(step.occurred_at).toLocaleString('zh-CN', { hour12: false }) : '等待前序步骤' }}</time>
+          </li>
+        </ol>
         <dl>
           <div>
             <dt>输入</dt>
@@ -353,6 +338,10 @@ onUnmounted(stop);
             journey.blocked_reason || "none"
           }}。没有演示数据替代真实结果，任务状态和事件仍作为验收证据。
         </p>
+        <dl v-if="journey.blocked_reason" class="selection-block-owner">
+          <div><dt>责任人</dt><dd>{{ journey.blocked_owner || "采集负责人" }}</dd></div>
+          <div><dt>下一步</dt><dd>{{ journey.blocked_next_step || "查看失败根因后再处理。" }}</dd></div>
+        </dl>
       </article>
       <form
         v-if="terminal && journey.state !== 'decided'"
@@ -413,6 +402,7 @@ onUnmounted(stop);
           :href="`/opportunities/${journey.opportunity_id}`"
           >查看机会、证据与决策历史 ↗</a
         >
+        <a v-if="journey.verification_task_id" :href="`/tasks?task=${journey.verification_task_id}`">打开自动生成的验证任务 ↗</a>
       </article>
       <footer class="selection-footer">
         <span v-if="message" role="status">{{ message }}</span

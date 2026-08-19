@@ -36,8 +36,15 @@ export class MySqlNotificationRepository implements NotificationRepository {
         `SELECT * FROM notifications WHERE ${where.join(" AND ")} ORDER BY created_at DESC,id DESC LIMIT ? OFFSET ?`,
         [...args, i.pageSize, (i.page - 1) * i.pageSize],
       );
+    const grouped = new Map<string, ReturnType<MySqlNotificationRepository["dto"]> & { group_count: number }>();
+    for (const row of rows) {
+      const item = this.dto(row), key = item.root_cause_key ?? `${item.category}:${item.resource_type ?? "none"}:${item.resource_id ?? item.title}`;
+      const existing = grouped.get(key);
+      if (existing) existing.group_count += 1;
+      else grouped.set(key, { ...item, group_count: 1 });
+    }
     return {
-      items: rows.map((r) => this.dto(r)),
+      items: [...grouped.values()],
       page: i.page,
       page_size: i.pageSize,
       total: Number(count[0]?.total ?? 0),
@@ -101,14 +108,16 @@ export class MySqlNotificationRepository implements NotificationRepository {
           "刷新通知后重试。",
         );
       const next = Number(row.version) + 1,
-        readAt = i.value.action === "read" ? now : null;
+        readAt = i.value.action === "read" ? now : i.value.action === "unread" ? null : row.read_at,
+        workflowStatus = i.value.action === "start" ? "in_progress" : i.value.action === "close" ? "closed" : i.value.action === "reopen" ? "open" : row.workflow_status;
       await c.query(
-        "UPDATE notifications SET read_at=?,version=?,updated_at=? WHERE id=?",
-        [readAt, next, now, i.notificationId],
+        "UPDATE notifications SET read_at=?,workflow_status=?,version=?,updated_at=? WHERE id=?",
+        [readAt, workflowStatus, next, now, i.notificationId],
       );
       const result = {
         id: i.notificationId,
         read_at: iso(readAt),
+        workflow_status: workflowStatus,
         version: next,
       };
       await this.audit(
@@ -249,6 +258,19 @@ export class MySqlNotificationRepository implements NotificationRepository {
     }
   }
   private dto(r: RowDataPacket) {
+    const actionRoute = r.resource_id
+      ? r.resource_type === "task"
+        ? `/tasks?task=${r.resource_id}`
+        : r.resource_type === "approval"
+          ? `/tasks/approvals?approval=${r.resource_id}`
+          : r.resource_type === "competitor"
+            ? `/competitors?competitor=${r.resource_id}`
+            : r.resource_type === "opportunity"
+              ? `/opportunities/${r.resource_id}`
+              : r.resource_type === "collection_task"
+                ? `/platform-admin/collection?task=${r.resource_id}`
+                : "/platform-admin/status"
+      : "/platform-admin/status";
     return {
       id: String(r.id),
       category: String(r.category),
@@ -257,6 +279,9 @@ export class MySqlNotificationRepository implements NotificationRepository {
       body: String(r.body),
       resource_type: r.resource_type ? String(r.resource_type) : null,
       resource_id: r.resource_id ? String(r.resource_id) : null,
+      root_cause_key: r.root_cause_key ? String(r.root_cause_key) : null,
+      workflow_status: String(r.workflow_status ?? "open"),
+      action_route: actionRoute,
       read_at: iso(r.read_at),
       version: Number(r.version),
       created_at: iso(r.created_at),

@@ -177,8 +177,26 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
           );
         status = "in_progress";
       }
+      if (i.value.action === "pause") {
+        if (status !== "in_progress")
+          throw new BusinessTaskError(
+            "task_transition_invalid",
+            409,
+            "仅进行中的任务可暂停。",
+          );
+        status = "paused";
+      }
+      if (i.value.action === "resume") {
+        if (status !== "paused")
+          throw new BusinessTaskError(
+            "task_transition_invalid",
+            409,
+            "仅已暂停任务可继续。",
+          );
+        status = "in_progress";
+      }
       if (i.value.action === "complete") {
-        if (!["todo", "in_progress"].includes(status))
+        if (!["todo", "in_progress", "paused"].includes(status))
           throw new BusinessTaskError(
             "task_transition_invalid",
             409,
@@ -326,6 +344,7 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
       assignee_id: String(r.assignee_id),
       source_type: String(r.source_type),
       source_ref_id: r.source_ref_id ? String(r.source_ref_id) : null,
+      collection_task_id: r.collection_task_id ? String(r.collection_task_id) : null,
       due_at: due,
       completed_at: iso(r.completed_at),
       progress_percent: Number(r.progress_percent ?? (status === "completed" ? 100 : 0)),

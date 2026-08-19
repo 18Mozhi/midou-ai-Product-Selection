@@ -1,27 +1,31 @@
 <script setup lang="ts">
-import VerificationFramework from "./components/VerificationFramework.vue";
-import ConfigBoundary from "./components/ConfigBoundary.vue";
-import RedisFoundation from "./components/RedisFoundation.vue";
-import MySqlFoundation from "./components/MySqlFoundation.vue";
-import ApiFoundation from "./components/ApiFoundation.vue";
-import FileAuditFoundation from "./components/FileAuditFoundation.vue";
-import DeploymentFoundation from "./components/DeploymentFoundation.vue";
-import LocalIdentity from "./components/LocalIdentity.vue";
-import TenancyChooser from "./components/TenancyChooser.vue";
-import AuthorizationCenter from "./components/AuthorizationCenter.vue";
-import ResourceGrantCenter from "./components/ResourceGrantCenter.vue";
-import AuditSecurityCenter from "./components/AuditSecurityCenter.vue";
-import ThemeStudio from "./components/ThemeStudio.vue";
-import OnboardingGuide from "./components/OnboardingGuide.vue";
-import NavigationShell from "./components/NavigationShell.vue";
-import UiStateShowcase from "./components/UiStateShowcase.vue";
-import LandingRedirect from "./components/LandingRedirect.vue";
+import { computed, defineAsyncComponent } from "vue";
+import { useRoute } from "vue-router";
 import { publicConfig } from "./config";
 
+const VerificationFramework = defineAsyncComponent(() => import("./components/VerificationFramework.vue"));
+const ConfigBoundary = defineAsyncComponent(() => import("./components/ConfigBoundary.vue"));
+const RedisFoundation = defineAsyncComponent(() => import("./components/RedisFoundation.vue"));
+const MySqlFoundation = defineAsyncComponent(() => import("./components/MySqlFoundation.vue"));
+const ApiFoundation = defineAsyncComponent(() => import("./components/ApiFoundation.vue"));
+const FileAuditFoundation = defineAsyncComponent(() => import("./components/FileAuditFoundation.vue"));
+const DeploymentFoundation = defineAsyncComponent(() => import("./components/DeploymentFoundation.vue"));
+const LocalIdentity = defineAsyncComponent(() => import("./components/LocalIdentity.vue"));
+const TenancyChooser = defineAsyncComponent(() => import("./components/TenancyChooser.vue"));
+const AuthorizationCenter = defineAsyncComponent(() => import("./components/AuthorizationCenter.vue"));
+const ResourceGrantCenter = defineAsyncComponent(() => import("./components/ResourceGrantCenter.vue"));
+const AuditSecurityCenter = defineAsyncComponent(() => import("./components/AuditSecurityCenter.vue"));
+const ThemeStudio = defineAsyncComponent(() => import("./components/ThemeStudio.vue"));
+const OnboardingGuide = defineAsyncComponent(() => import("./components/OnboardingGuide.vue"));
+const NavigationShell = defineAsyncComponent(() => import("./components/NavigationShell.vue"));
+const UiStateShowcase = defineAsyncComponent(() => import("./components/UiStateShowcase.vue"));
+const LandingRedirect = defineAsyncComponent(() => import("./components/LandingRedirect.vue"));
+
 const apiBase = publicConfig.apiBaseUrl;
-const routePath = window.location.pathname.replace(/\/$/, "") || "/";
-const requestedInternalView = new URLSearchParams(window.location.search).get(
-  "view",
+const route = useRoute();
+const routePath = computed(() => route.path.replace(/\/$/, "") || "/");
+const requestedInternalView = computed(() =>
+  typeof route.query.view === "string" ? route.query.view : null,
 );
 const internalViews = new Set([
   "verification",
@@ -50,16 +54,15 @@ const publicViews: Record<string, string> = {
   "/onboarding": "onboarding",
   "/settings/theme": "theme",
 };
-const selectedView =
-  publicViews[routePath] ??
-  (import.meta.env.DEV &&
-  requestedInternalView &&
-  internalViews.has(requestedInternalView)
-    ? requestedInternalView
-    : null);
-const isInternalView = selectedView !== null;
-const memberRoute =
-  routePath === "/home" ||
+const selectedView = computed(() =>
+  publicViews[routePath.value] ??
+  (import.meta.env.DEV && requestedInternalView.value && internalViews.has(requestedInternalView.value)
+    ? requestedInternalView.value
+    : null),
+);
+const isInternalView = computed(() => selectedView.value !== null);
+const memberRoute = computed(() =>
+  routePath.value === "/home" ||
   [
     "/work",
     "/trends",
@@ -71,19 +74,21 @@ const memberRoute =
     "/automations",
     "/reports",
     "/me",
-  ].some((path) => routePath === path || routePath.startsWith(`${path}/`));
-const navigationShell = memberRoute
+  ].some((path) => routePath.value === path || routePath.value.startsWith(`${path}/`)),
+);
+const navigationShell = computed(() => memberRoute.value
   ? "member"
-  : routePath === "/org-admin" || routePath.startsWith("/org-admin/")
+  : routePath.value === "/org-admin" || routePath.value.startsWith("/org-admin/")
     ? "organization_admin"
-    : routePath === "/platform-admin" ||
-        routePath.startsWith("/platform-admin/")
+    : routePath.value === "/platform-admin" ||
+        routePath.value.startsWith("/platform-admin/")
       ? "platform_admin"
-      : null;
-const isUiStatesView =
+      : null);
+const isUiStatesView = computed(() =>
   import.meta.env.DEV &&
-  (requestedInternalView === "ui-states" || routePath === "/ui-states");
-const isNotFoundRoute = !isInternalView && !navigationShell && !isUiStatesView;
+  (requestedInternalView.value === "ui-states" || routePath.value === "/ui-states"),
+);
+const isNotFoundRoute = computed(() => !isInternalView.value && !navigationShell.value && !isUiStatesView.value);
 </script>
 
 <template>

@@ -819,7 +819,7 @@ P00 文件路径固定包含 `organizations/<organization_id>/workspaces/<worksp
 #### 10.4.1 量化发布门槛
 
 - 发布前必须通过构建、数据库迁移、API 健康、Worker 心跳、权限隔离和真实浏览器核心流程；任一项失败不得切换当前版本。
-- 单后端发布使用版本目录、`current` 原子链接与健康失败自动回滚；不再创建常驻候选 API、分流后端或容量观察任务。
+- 单后端发布只覆盖固定的 `frontend`、`backend`、`python` 目录，并在公网健康失败时用本地目标 Git 提交重新部署回滚；不创建版本目录、`current` 链接、常驻候选 API、分流后端或容量观察任务。
 - 磁盘性能、容量压测和硬件指标不属于项目功能完成条件；跨组织/权限异常、数据丢失风险、启动失败或 P1 告警仍必须阻断发布。
 - MySQL 恢复目标为 RPO ≤ 15 分钟、RTO ≤ 4 小时；备份恢复目标环境必须位于中国境内。对象证据与审计链恢复后必须执行组织隔离和哈希校验。发布前最近一次隔离恢复演练不得超过 90 天。
 
@@ -837,7 +837,7 @@ P00 文件路径固定包含 `organizations/<organization_id>/workspaces/<worksp
 
 | 能力 | 宝塔中的可见对象 | 部署方式 |
 |---|---|---|
-| Vue 3 前端 | 网站 `ai选品网站`（域名 `midouai.mozhiz.cn`） | 构建静态文件后发布到 `/www/wwwroot/ai选品/current/apps/web/dist`；HTTPS、缓存和反向代理由网站配置管理 |
+| Vue 3 前端 | 网站 `ai选品网站`（域名 `midouai.mozhiz.cn`） | 构建静态文件后发布到 `/www/wwwroot/ai选品/frontend`；HTTPS、缓存和反向代理由网站配置管理 |
 | 统一后端 | Node 项目 `ai选品` | 唯一宝塔后端以前台命令 `node apps/backend/dist/server.js` 运行；内部监督 HTTP API 与异步 Worker，任一子进程异常退出会自动重启，面板停止/重启信号会传递到全部子进程 |
 | MySQL | MySQL 5.7 服务与数据库 `product_scout` | 账号 `product_scout` 仅授予该库所需权限；密码只在宝塔数据库配置和运行环境变量中保存 |
 | Redis | Redis 服务 | 仅绑定本机或受控内网；用于缓存、队列、限流和 SSE 协调 |

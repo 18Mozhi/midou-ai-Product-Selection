@@ -43,9 +43,7 @@ const stateText = computed(
       }) as Record<State, string[]>
     )[state.value],
 );
-const percent = (v: number | null) =>
-    v == null ? "暂无终态" : `${v.toFixed(1)}%`,
-  bytes = (v: number) => {
+const bytes = (v: number) => {
     if (v < 1024) return `${v} B`;
     if (v < 1048576) return `${(v / 1024).toFixed(1)} KB`;
     if (v < 1073741824) return `${(v / 1048576).toFixed(1)} MB`;
@@ -202,34 +200,13 @@ onMounted(load);
           >
         </div>
       </section>
-      <div class="platform-kpis">
-        <article>
-          <span>正常组织</span
-          ><strong>{{ data.summary.active_organizations }}</strong
-          ><small>当前可使用</small>
-        </article>
-        <article>
-          <span>可登录用户</span><strong>{{ data.summary.active_users }}</strong
-          ><small>当前可登录</small>
-        </article>
-        <article>
-          <span>自动来源</span
-          ><strong>{{ data.summary.enabled_providers }}</strong
-          ><small>系统正在使用</small>
-        </article>
-        <article>
-          <span>采集成功率</span
-          ><strong>{{ percent(data.summary.task_success_rate) }}</strong
-          ><small>已经完成的任务</small>
-        </article>
-        <article>
-          <span>等待处理</span><strong>{{ data.summary.queue_backlog }}</strong
-          ><small>正在处理或排队</small>
-        </article>
-        <article>
-          <span>需要关注</span><strong>{{ data.summary.open_alerts }}</strong
-          ><small>错误或数据问题</small>
-        </article>
+      <div class="platform-action-summary">
+        <a href="/platform-admin/collection/tasks">
+          <span>等待处理</span><strong>{{ data.summary.queue_backlog }}</strong><small>查看排队、运行或受阻的采集任务 →</small>
+        </a>
+        <a href="/platform-admin/collection/overview?root_cause=1">
+          <span>需要关注</span><strong>{{ data.summary.open_alerts }}</strong><small>按错误根因查看异常 →</small>
+        </a>
       </div>
       <div class="platform-dashboard-grid">
         <section class="platform-trend-chart">
@@ -242,7 +219,7 @@ onMounted(load);
             >
           </header>
           <div v-if="!data.task_trend.length" class="platform-inline-empty">
-            当前时间范围还没有趋势数据
+            当前时间范围还没有趋势数据。<a href="/platform-admin/providers/sources">检查来源是否启用</a>，或<a href="/platform-admin/collection/overview">查看采集队列</a>。
           </div>
           <svg
             v-else

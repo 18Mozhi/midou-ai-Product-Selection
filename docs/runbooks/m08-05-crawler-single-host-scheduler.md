@@ -5,7 +5,7 @@
 1. 在候选发布迁移中以 `product_scout` 业务账号执行 `0034_crawler_scheduler_m08_05.up.sql`；确认 MySQL 5.7 与三张新表。
 2. 在宝塔“ai选品”统一后端的受限环境加入 `CRAWLER_SCHEDULER_*` 配置。内部 Worker=1、按需采集执行通道=1、每来源=1，不提供调大开关。
 3. 只通过宝塔重启候选 ai选品 统一后端。不得用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。
-4. 执行生产前置、MySQL live、调度 live、API 与浏览器验收；当前单后端发布使用版本目录与 `current` 原子链接，不创建常驻候选项目。
+4. 执行生产前置、MySQL live、调度 live、API 与浏览器验收；当前单后端只覆盖固定目录，不创建版本目录、`current` 链接或常驻候选项目。
 
 ## 日常核验
 
@@ -27,7 +27,7 @@
 
 ## 回滚
 
-1. 通过宝塔把 `current` 原子链接恢复到上一发布目录，并重启唯一的“ai选品”统一后端；Nginx 始终只指向 4101。
+1. 在本地切换到上一已验证 Git 提交，重新运行 `python scripts/deploy-baota.py`，再通过宝塔重启唯一的“ai选品”统一后端；Nginx 始终只指向 4101。
 2. 保留 `crawler_scheduler_*` 与 `platform_audit_events`，不得为了通过验收删除失败证据。上一版不使用这些表时可暂留。
 3. 只有确认所有 API、Worker、Crawler 已回到不读取/写入 0034 的版本，才用 `0034_crawler_scheduler_m08_05.down.sql` 删除新表。
 4. 数据回滚失败时停止新采集并保持只读排查；不得启用备用服务器、负载均衡或面板外服务绕过。

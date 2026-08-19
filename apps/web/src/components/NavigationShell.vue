@@ -1,46 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
-import DiscoveryOverlay from "./DiscoveryOverlay.vue";
-import HomeDashboard from "./HomeDashboard.vue";
-import ProviderRegistry from "./ProviderRegistry.vue";
-import CredentialAssetCenter from "./CredentialAssetCenter.vue";
-import ProviderAdapterCenter from "./ProviderAdapterCenter.vue";
-import CollectionRuntimeCenter from "./CollectionRuntimeCenter.vue";
-import CollectionTaskCenter from "./CollectionTaskCenter.vue";
-import PlatformDataCenter from "./PlatformDataCenter.vue";
-import PlatformGovernanceCenter from "./PlatformGovernanceCenter.vue";
-import ProviderSourceCenter from "./ProviderSourceCenter.vue";
-import TrendDashboard from "./TrendDashboard.vue";
-import OpportunityWorkspace from "./OpportunityWorkspace.vue";
-import SelectionJourney from "./SelectionJourney.vue";
-import ScoreRuleConsole from "./ScoreRuleConsole.vue";
-import CostRuleConsole from "./CostRuleConsole.vue";
-import CompetitorMonitor from "./CompetitorMonitor.vue";
-import SourcingWorkspace from "./SourcingWorkspace.vue";
-import TaskWorkspace from "./TaskWorkspace.vue";
-import ApprovalWorkspace from "./ApprovalWorkspace.vue";
-import NotificationCenter from "./NotificationCenter.vue";
-import AutomationRuleCenter from "./AutomationRuleCenter.vue";
-import ReportCenter from "./ReportCenter.vue";
-import OrganizationAdminCenter from "./OrganizationAdminCenter.vue";
-import PlatformDashboard from "./PlatformDashboard.vue";
-import CollectionOperationsConsole from "./CollectionOperationsConsole.vue";
-import SecurityOperationsCenter from "./SecurityOperationsCenter.vue";
-import OpenPlatformCenter from "./OpenPlatformCenter.vue";
-import CommercialOperationsCenter from "./CommercialOperationsCenter.vue";
-import BackupRecoveryCenter from "./BackupRecoveryCenter.vue";
-import ReleaseRolloutCenter from "./ReleaseRolloutCenter.vue";
-import RuntimeTopologyCenter from "./RuntimeTopologyCenter.vue";
-import RedisResilienceCenter from "./RedisResilienceCenter.vue";
-import MySqlResilienceCenter from "./MySqlResilienceCenter.vue";
-import FileResilienceCenter from "./FileResilienceCenter.vue";
-import CrawlerSchedulerCenter from "./CrawlerSchedulerCenter.vue";
-import CapacityBoundaryCenter from "./CapacityBoundaryCenter.vue";
-import PlatformAccountCenter from "./PlatformAccountCenter.vue";
-import PlatformManagementCenter from "./PlatformManagementCenter.vue";
-import PersonalCenter from "./PersonalCenter.vue";
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from "vue";
+import { useRoute } from "vue-router";
 import { applyTheme, isThemeId, themes, type ThemeId } from "../design/theme";
 import "../member-workspace-polish.css";
+
+const componentModules = import.meta.glob<{ default: object }>("./*.vue");
+const lazy = (name: string) => {
+  const loader = componentModules[`./${name}.vue`];
+  if (!loader) throw new Error(`missing lazy component: ${name}`);
+  return defineAsyncComponent(loader);
+};
+const DiscoveryOverlay = lazy("DiscoveryOverlay"), HomeDashboard = lazy("HomeDashboard"), ProviderRegistry = lazy("ProviderRegistry"), CredentialAssetCenter = lazy("CredentialAssetCenter"), ProviderAdapterCenter = lazy("ProviderAdapterCenter"), CollectionRuntimeCenter = lazy("CollectionRuntimeCenter"), CollectionTaskCenter = lazy("CollectionTaskCenter"), PlatformDataCenter = lazy("PlatformDataCenter"), PlatformGovernanceCenter = lazy("PlatformGovernanceCenter"), ProviderSourceCenter = lazy("ProviderSourceCenter"), TrendDashboard = lazy("TrendDashboard"), OpportunityWorkspace = lazy("OpportunityWorkspace"), SelectionJourney = lazy("SelectionJourney"), ScoreRuleConsole = lazy("ScoreRuleConsole"), CostRuleConsole = lazy("CostRuleConsole"), CompetitorMonitor = lazy("CompetitorMonitor"), SourcingWorkspace = lazy("SourcingWorkspace"), TaskWorkspace = lazy("TaskWorkspace"), ApprovalWorkspace = lazy("ApprovalWorkspace"), NotificationCenter = lazy("NotificationCenter"), AutomationRuleCenter = lazy("AutomationRuleCenter"), ReportCenter = lazy("ReportCenter"), OrganizationAdminCenter = lazy("OrganizationAdminCenter"), PlatformDashboard = lazy("PlatformDashboard"), CollectionOperationsConsole = lazy("CollectionOperationsConsole"), SecurityOperationsCenter = lazy("SecurityOperationsCenter"), OpenPlatformCenter = lazy("OpenPlatformCenter"), CommercialOperationsCenter = lazy("CommercialOperationsCenter"), BackupRecoveryCenter = lazy("BackupRecoveryCenter"), ReleaseRolloutCenter = lazy("ReleaseRolloutCenter"), RuntimeTopologyCenter = lazy("RuntimeTopologyCenter"), RedisResilienceCenter = lazy("RedisResilienceCenter"), MySqlResilienceCenter = lazy("MySqlResilienceCenter"), FileResilienceCenter = lazy("FileResilienceCenter"), CrawlerSchedulerCenter = lazy("CrawlerSchedulerCenter"), CapacityBoundaryCenter = lazy("CapacityBoundaryCenter"), PlatformAccountCenter = lazy("PlatformAccountCenter"), PlatformManagementCenter = lazy("PlatformManagementCenter"), PersonalCenter = lazy("PersonalCenter");
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -70,6 +40,8 @@ interface MenuItem {
   capabilities?: string[];
 }
 const props = defineProps<{ shell: Shell; apiBaseUrl: string }>();
+const route = useRoute();
+const routePath = computed(() => route.path.replace(/\/$/, "") || "/");
 const state = ref<State>("loading"),
   guard = ref<GuardSummary | null>(null),
   requestId = ref(""),
@@ -263,11 +235,11 @@ const items = computed(() => {
 });
 const activeItem = computed(
   () =>
-    items.value.find((item) => item.path === window.location.pathname) ||
+    items.value.find((item) => item.path === routePath.value) ||
     items.value.find(
       (item) =>
         item.path !== "/" &&
-        window.location.pathname.startsWith(`${item.path}/`),
+        routePath.value.startsWith(`${item.path}/`),
     ) ||
     items.value[0],
 );
@@ -279,52 +251,53 @@ const shellTitle = computed(() =>
       : "平台管理后台",
 );
 const pageTitle = computed(() =>
-  routePath === "/" || routePath === "/home"
+  routePath.value === "/" || routePath.value === "/home"
     ? "今日行动"
-    : routePath === "/opportunities/start"
+    : routePath.value === "/opportunities/start"
       ? "真实选品"
-      : routePath === "/opportunities/scoring-rules"
+      : routePath.value === "/opportunities/scoring-rules"
         ? "评分规则"
-        : routePath === "/sourcing/cost-rules"
+        : routePath.value === "/sourcing/cost-rules"
           ? "费用与利润规则"
-          : routePath === "/sourcing"
+          : routePath.value === "/sourcing"
             ? "供应链与利润"
+            : routePath.value === "/platform-admin/crawler-scheduler"
+              ? "采集调度"
             : (activeItem.value?.label ?? shellTitle.value),
 );
-const routePath = window.location.pathname.replace(/\/$/, "") || "/",
-  isHome = computed(
+const isHome = computed(
     () =>
-      props.shell === "member" && (routePath === "/" || routePath === "/home"),
+      props.shell === "member" && (routePath.value === "/" || routePath.value === "/home"),
   ),
   isTasks = computed(
-    () => props.shell === "member" && ["/work", "/tasks"].includes(routePath),
+    () => props.shell === "member" && ["/work", "/tasks"].includes(routePath.value),
   ),
   isApprovals = computed(
-    () => props.shell === "member" && routePath === "/tasks/approvals",
+    () => props.shell === "member" && routePath.value === "/tasks/approvals",
   ),
   isNotifications = computed(
-    () => props.shell === "member" && routePath === "/notifications",
+    () => props.shell === "member" && routePath.value === "/notifications",
   ),
   isAutomations = computed(
-    () => props.shell === "member" && routePath === "/automations",
+    () => props.shell === "member" && routePath.value === "/automations",
   ),
   isReports = computed(
-    () => props.shell === "member" && routePath === "/reports",
+    () => props.shell === "member" && routePath.value === "/reports",
   ),
-  isPersonal = computed(() => props.shell === "member" && routePath === "/me"),
+  isPersonal = computed(() => props.shell === "member" && routePath.value === "/me"),
   isOrganizationAdmin = computed(
     () =>
       props.shell === "organization_admin" &&
-      routePath.startsWith("/org-admin"),
+      routePath.value.startsWith("/org-admin"),
   ),
   isPlatformDashboard = computed(
-    () => props.shell === "platform_admin" && routePath === "/platform-admin",
+    () => props.shell === "platform_admin" && routePath.value === "/platform-admin",
   ),
   isPlatformAccounts = computed(
     () =>
       props.shell === "platform_admin" &&
       ["/platform-admin/accounts", "/platform-admin/permissions"].includes(
-        routePath,
+        routePath.value,
       ),
   ),
   isPlatformManagement = computed(
@@ -335,78 +308,78 @@ const routePath = window.location.pathname.replace(/\/$/, "") || "/",
         "/platform-admin/notifications",
         "/platform-admin/email",
         "/platform-admin/status",
-      ].includes(routePath),
+      ].includes(routePath.value),
   ),
   isPlatformGovernance = computed(
     () =>
       props.shell === "platform_admin" &&
-      routePath === "/platform-admin/governance",
+      routePath.value === "/platform-admin/governance",
   ),
   isBackupRecovery = computed(
     () =>
       props.shell === "platform_admin" &&
-      routePath === "/platform-admin/operations",
+      routePath.value === "/platform-admin/operations",
   ),
   isReleaseRollout = computed(
     () =>
       props.shell === "platform_admin" &&
-      routePath === "/platform-admin/releases",
+      routePath.value === "/platform-admin/releases",
   ),
   isRuntimeTopology = computed(
     () =>
       props.shell === "platform_admin" &&
-      routePath === "/platform-admin/topology",
+      routePath.value === "/platform-admin/topology",
   ),
   isRedisResilience = computed(
     () =>
-      props.shell === "platform_admin" && routePath === "/platform-admin/redis",
+      props.shell === "platform_admin" && routePath.value === "/platform-admin/redis",
   ),
   isMySqlResilience = computed(
     () =>
-      props.shell === "platform_admin" && routePath === "/platform-admin/mysql",
+      props.shell === "platform_admin" && routePath.value === "/platform-admin/mysql",
   ),
   isFileResilience = computed(
     () =>
-      props.shell === "platform_admin" && routePath === "/platform-admin/files",
+      props.shell === "platform_admin" && routePath.value === "/platform-admin/files",
   ),
   isCrawlerScheduler = computed(
     () =>
       props.shell === "platform_admin" &&
-      routePath === "/platform-admin/crawler-scheduler",
+      routePath.value === "/platform-admin/crawler-scheduler",
   ),
   isCapacityBoundary = computed(
     () =>
       props.shell === "platform_admin" &&
-      routePath === "/platform-admin/capacity",
+      routePath.value === "/platform-admin/capacity",
   ),
   isTrends = computed(
-    () => props.shell === "member" && routePath === "/trends",
+    () => props.shell === "member" && routePath.value === "/trends",
   ),
   isScoringRules = computed(
     () =>
-      props.shell === "member" && routePath === "/opportunities/scoring-rules",
+      props.shell === "member" && routePath.value === "/opportunities/scoring-rules",
   ),
   isSelectionJourney = computed(
-    () => props.shell === "member" && routePath === "/opportunities/start",
+    () => props.shell === "member" && routePath.value === "/opportunities/start",
   ),
   isOpportunities = computed(
     () =>
       props.shell === "member" &&
-      (routePath === "/opportunities" ||
-        routePath.startsWith("/opportunities/")),
+      (routePath.value === "/opportunities" ||
+        routePath.value.startsWith("/opportunities/")),
   ),
   isCompetitors = computed(
-    () => props.shell === "member" && routePath.startsWith("/competitors"),
+    () => props.shell === "member" && routePath.value.startsWith("/competitors"),
   ),
   isSourcing = computed(
-    () => props.shell === "member" && routePath === "/sourcing",
+    () => props.shell === "member" && routePath.value === "/sourcing",
   ),
   isCostRules = computed(
     () =>
-      props.shell === "member" && routePath.startsWith("/sourcing/cost-rules"),
+      props.shell === "member" && routePath.value.startsWith("/sourcing/cost-rules"),
   ),
   opportunityId = computed(() => {
-    const match = routePath.match(/^\/opportunities\/([0-9a-f-]{36})$/i);
+    const match = routePath.value.match(/^\/opportunities\/([0-9a-f-]{36})$/i);
     return match?.[1] ?? "";
   });
 const pageSummary = computed(() =>
@@ -568,9 +541,9 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
 <template>
   <main class="role-shell" :data-shell="shell" :data-state="state">
     <header class="role-topbar">
-      <a
+      <RouterLink
         class="role-brand"
-        :href="
+        :to="
           shell === 'member'
             ? '/home'
             : shell === 'organization_admin'
@@ -584,7 +557,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
             : shell === "organization_admin"
               ? "组织后台"
               : "选品工作台"
-        }}</em></a
+        }}</em></RouterLink
       >
       <button
         class="role-menu-toggle"
@@ -614,17 +587,17 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         >
           ⌕ <span>搜索</span><kbd>快捷键</kbd>
         </button>
-        <a
+        <RouterLink
           v-if="shell === 'platform_admin'"
           class="role-create"
-          href="/platform-admin/accounts?create=1"
-          >＋ <span>新建组织</span></a
+          to="/platform-admin/accounts?create=1"
+          >＋ <span>新建组织</span></RouterLink
         >
-        <a
+        <RouterLink
           v-else-if="shell === 'organization_admin'"
           class="role-create"
-          href="/org-admin/members"
-          >＋ <span>邀请成员</span></a
+          to="/org-admin/members"
+          >＋ <span>邀请成员</span></RouterLink
         >
         <button
           v-else
@@ -634,25 +607,25 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         >
           ＋ <span>创建选品</span>
         </button>
-        <a
+        <RouterLink
           v-if="shell === 'platform_admin'"
           class="role-switch"
-          href="/home"
+          to="/home"
           aria-label="进入用户工作台"
           ><span class="role-switch-desktop">进入用户工作台</span
-          ><span class="role-switch-mobile">用户面板</span></a
+          ><span class="role-switch-mobile">用户面板</span></RouterLink
         >
-        <a
+        <RouterLink
           v-else-if="guard?.platform_roles?.length"
           class="role-switch"
-          href="/platform-admin"
+          to="/platform-admin"
           aria-label="进入管理后台"
           ><span class="role-switch-desktop">进入管理后台</span
-          ><span class="role-switch-mobile">管理后台</span></a
+          ><span class="role-switch-mobile">管理后台</span></RouterLink
         >
-        <a v-if="shell === 'member'" href="/notifications" aria-label="通知中心"
-          >○</a
-        ><a href="/me" aria-label="个人中心">◉</a>
+        <RouterLink v-if="shell === 'member'" to="/notifications" aria-label="通知中心"
+          >○</RouterLink
+        ><RouterLink to="/me" aria-label="个人中心">◉</RouterLink>
       </div>
     </header>
     <aside
@@ -672,14 +645,14 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         }}</small>
       </div>
       <nav v-if="state === 'ready'">
-        <a
+        <RouterLink
           v-for="item in items"
           :key="item.path"
-          :href="item.path"
+          :to="item.path"
           :aria-current="activeItem?.path === item.path ? 'page' : undefined"
           @click="menuOpen = false"
           ><i>{{ item.icon }}</i
-          ><span>{{ item.label }}</span></a
+          ><span>{{ item.label }}</span></RouterLink
         >
       </nav>
     </aside>
@@ -697,22 +670,23 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <p>{{ stateCopy[1] }}</p>
         <small v-if="actionHint">{{ actionHint }}</small
         ><code v-if="requestId">关联编号：{{ requestId }}</code>
-        <a v-if="state === 'expired'" href="/login">重新登录</a
-        ><a v-else-if="state === 'context_required'" href="/select-context"
-          >选择组织与工作区</a
-        ><a v-else-if="state === 'forbidden'" href="/home">返回成员工作台</a
+        <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
+        ><RouterLink v-else-if="state === 'context_required'" to="/select-context"
+          >选择组织与工作区</RouterLink
+        ><RouterLink v-else-if="state === 'forbidden'" to="/home">返回成员工作台</RouterLink
         ><button v-else-if="state !== 'loading'" type="button" @click="load">
           重新检查
         </button>
       </section>
       <template v-else>
-        <header class="role-page-head">
+        <header v-if="!opportunityId" class="role-page-head">
           <div>
             <p>{{ shellTitle }}</p>
             <h1>{{ pageTitle }}</h1>
             <span v-if="pageSummary">{{ pageSummary }}</span>
           </div>
         </header>
+        <KeepAlive :max="12">
         <HomeDashboard v-if="isHome" :api-base-url="apiBaseUrl" />
         <TaskWorkspace
           v-else-if="isTasks"
@@ -944,8 +918,9 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           <p>页面不存在</p>
           <h2>页面不存在</h2>
           <p>该地址没有可用功能，请从左侧真实功能菜单重新进入。</p>
-          <a :href="items[0]?.path || '/'">返回工作台</a>
+          <RouterLink :to="items[0]?.path || '/'">返回工作台</RouterLink>
         </section>
+        </KeepAlive>
       </template>
     </section>
     <nav
@@ -953,26 +928,21 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
       class="role-mobile-nav"
       aria-label="移动快捷导航"
     >
-      <a
-        v-for="item in items.slice(0, 3)"
+      <RouterLink
+        v-for="item in items.slice(0, 4)"
         :key="item.path"
-        :href="item.path"
+        :to="item.path"
         :aria-current="activeItem?.path === item.path ? 'page' : undefined"
         ><i>{{ item.icon }}</i
-        ><span>{{ item.label }}</span></a
-      ><button
-        v-if="shell === 'member'"
-        type="button"
-        @click="discoveryMode = 'search'"
-      >
-        <i>⌕</i><span>搜索</span></button
-      ><button v-if="shell === 'member'" type="button" aria-label="切换界面主题" @click="themeOpen = !themeOpen"><i>◐</i><span>主题</span></button
-      ><a
+        ><span>{{ item.label }}</span></RouterLink
+      ><button v-if="shell === 'member'" type="button" @click="menuOpen = true">
+        <i>☰</i><span>更多</span></button
+      ><RouterLink
         v-if="shell === 'platform_admin'"
-        href="/platform-admin/accounts?create=1"
-        ><i>＋</i><span>新建组织</span></a
-      ><a v-else-if="shell === 'organization_admin'" href="/org-admin/members"
-        ><i>＋</i><span>邀请成员</span></a
+        to="/platform-admin/accounts?create=1"
+        ><i>＋</i><span>新建组织</span></RouterLink
+      ><RouterLink v-else-if="shell === 'organization_admin'" to="/org-admin/members"
+        ><i>＋</i><span>邀请成员</span></RouterLink
       ><button v-else type="button" @click="discoveryMode = 'create'">
         <i>＋</i><span>创建选品</span>
       </button>

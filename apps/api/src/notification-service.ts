@@ -20,11 +20,11 @@ const version = (v: unknown) => {
   return n;
 };
 export function validateNotificationAction(v: any) {
-  if (!["read", "unread"].includes(v?.action))
+  if (!["read", "unread", "start", "close", "reopen"].includes(v?.action))
     throw new NotificationServiceError(
       "notification_action_invalid",
       400,
-      "选择标记已读或未读。",
+      "选择已读、未读、开始处理、关闭或重新打开。",
     );
   return { action: v.action, expected_version: version(v?.expected_version) };
 }

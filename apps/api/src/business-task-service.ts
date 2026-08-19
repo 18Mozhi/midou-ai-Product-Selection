@@ -70,7 +70,7 @@ export function validateTask(v: any) {
 }
 export function validateAction(v: any) {
   const action = v?.action;
-  if (!["start", "complete", "cancel", "delay", "transfer", "progress"].includes(action))
+  if (!["start", "pause", "resume", "complete", "cancel", "delay", "transfer", "progress"].includes(action))
     throw new BusinessTaskError(
       "task_action_invalid",
       400,
@@ -83,7 +83,7 @@ export function validateAction(v: any) {
       400,
       "提交当前任务版本。",
     );
-  const reason = ["cancel", "delay", "transfer"].includes(action)
+  const reason = ["pause", "cancel", "delay", "transfer"].includes(action)
     ? text(v?.reason, "reason", 500)
     : null;
   const dueAt = action === "delay" ? date(v?.due_at) : null;

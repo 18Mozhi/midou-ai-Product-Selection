@@ -11,6 +11,10 @@
 - max pages/scrolls/details：单次执行动作上限；调大前先核对来源合同、并发和站点限制。
 - profile archive/extracted/files：加密档案解包资源上限。
 - Node binary、runner path、runner timeout：Python 到 Node 的固定桥接边界。
+- `CRAWLER_SERVICE_TOKEN` 与 `CRAWLER_ACTOR_ID`：Node/Python 共用的内部服务凭证和专用服务用户；Token 至少 32 字符，只能放宝塔受限环境，服务用户 UUID 必须已存在。
+- `CRAWLER_API_BASE_URL`、组织、工作区和档案 UUID：限定当前 Python 项目的租约范围。
+- `CRAWLER_EXECUTION_REQUEST_FILE`：宝塔受限目录内的单次 Playwright 请求 JSON；同一文件内容只执行一次，内容更新后才再次领取租约。它不等同于采集任务队列。
+- `CRAWLER_LEASE_SECONDS`：30–600 秒；心跳间隔必须小于租约时长。
 
 Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-python` 启动时读取；共享配置修改后应在宝塔分别重启两个项目。不要把密钥、Cookie 或档案内容写入日志或文档。
 
@@ -20,7 +24,7 @@ Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-py
 2. 执行 `0016d_playwright_crawler_m03_04.up.sql`，必须使用 `product_scout` 业务账号且确认 MySQL 5.7/utf8mb4。
 3. 在发布目录复用锁文件安装依赖，安装项目固定的 Playwright Chromium；不得在请求处理中下载浏览器。
 4. 构建后运行 `npm run verify:module -- M03-04`。其中包含真实本地 Chromium、MySQL 5.7 独占租约、Python bridge、桌面和 390px 视觉验收。
-5. 由宝塔重启 `ai选品` 和 `ai选品-python`，在 `/platform-admin/collection` 确认档案、活动租约和最近运行可读，并检查 Python 心跳日志。
+5. 由宝塔重启 `ai选品` 和 `ai选品-python`，在 `/platform-admin/collection/browser-runtime` 确认档案有效期、目标域名、活动租约和最近运行可读，并检查 Python 的 running/completed 日志；没有新请求文件时不应出现空闲心跳。
 
 ## 故障处理
 

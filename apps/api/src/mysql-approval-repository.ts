@@ -219,7 +219,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
 
   async detail(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT r.*,t.name template_name,n.name current_node_name,n.active_approver_id,n.due_at,n.escalated_at FROM approval_requests r JOIN approval_templates t ON t.id=r.template_id LEFT JOIN approval_node_runs n ON n.approval_request_id=r.id AND n.ordinal=r.current_node_ordinal WHERE r.id=? AND r.organization_id=? AND r.workspace_id=?",
+      "SELECT r.*,t.name template_name,v.version_number rule_version,n.name current_node_name,n.active_approver_id,n.due_at,n.escalated_at FROM approval_requests r JOIN approval_templates t ON t.id=r.template_id JOIN approval_template_versions v ON v.id=r.template_version_id LEFT JOIN approval_node_runs n ON n.approval_request_id=r.id AND n.ordinal=r.current_node_ordinal WHERE r.id=? AND r.organization_id=? AND r.workspace_id=?",
       [i.requestIdValue, i.organizationId, i.workspaceId],
     );
     if (!rows[0])
@@ -236,8 +236,18 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         "SELECT id,node_run_id,action,reason,actor_id,created_at FROM approval_actions WHERE approval_request_id=? AND organization_id=? AND workspace_id=? ORDER BY created_at,id",
         [i.requestIdValue, i.organizationId, i.workspaceId],
       );
+    let decisionContext:{evidence_complete:number;evidence_total:number;missing_items:string[];rule_version:string;basis:string[]};
+    if(rows[0].resource_type==="opportunity_decision"){
+      const[facts]=await this.pool.query<RowDataPacket[]>("SELECT evidence_count,source_count,coverage_status,score_rule_version,recommendation_status,profit_status,risk_level FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=? LIMIT 1",[rows[0].resource_id,i.organizationId,i.workspaceId]),fact=facts[0];
+      const missing:string[]=[];
+      if(!fact||Number(fact.evidence_count)===0)missing.push("原始证据");
+      if(!fact||fact.coverage_status==="insufficient")missing.push("来源覆盖");
+      if(!fact||fact.profit_status==="insufficient_data")missing.push("利润成本");
+      decisionContext={evidence_complete:Math.max(0,3-missing.length),evidence_total:3,missing_items:missing,rule_version:String(fact?.score_rule_version??`approval-v${rows[0].rule_version}`),basis:[`建议：${fact?.recommendation_status??"数据不足"}`,`来源：${Number(fact?.source_count??0)} 个`,`风险：${fact?.risk_level??"待识别"}`]};
+    }else decisionContext={evidence_complete:1,evidence_total:1,missing_items:[],rule_version:`approval-v${rows[0].rule_version}`,basis:["任务当前状态、负责人、时限与审批节点"]};
     return {
       ...this.request(rows[0], i.actorId),
+      decision_context: decisionContext,
       nodes: nodes.map((r) => ({
         id: String(r.id),
         ordinal: Number(r.ordinal),

@@ -48,6 +48,8 @@
     "verify:release-matrix": "node scripts/verify-release-matrix.mjs --validate",
     "verify:security-gate": "node scripts/verify-security-gate.mjs",
     "verify:docs": "node scripts/verify-docs.mjs",
+    "verify:frontend-budget": "node scripts/verify-frontend-budget.mjs",
+    "verify:crawler-chain": "node scripts/verify-crawler-production-chain.mjs",
     "verify:plans": "node scripts/verify-plans.mjs",
     "test:e2e": "playwright test"
   },

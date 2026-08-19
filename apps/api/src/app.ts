@@ -295,7 +295,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
     ): Promise<
       | SuccessEnvelope<{
           status: "ready";
-          dependencies: { mysql: "available"; redis: "available" };
+          dependencies: Record<string, "available" | "unavailable">;
         }>
       | ErrorEnvelope
     > => {
@@ -308,12 +308,11 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
             [item.name, await item.check(requestId, traceId)] as const,
         ),
       );
-      const dependencies = Object.fromEntries(results) as Partial<
-        Record<"mysql" | "redis", "available" | "unavailable">
-      >;
+      const dependencies = Object.fromEntries(results) as Record<string, "available" | "unavailable">;
       if (
         dependencies.mysql !== "available" ||
-        dependencies.redis !== "available"
+        dependencies.redis !== "available" ||
+        Object.values(dependencies).some((status) => status !== "available")
       ) {
         reply.code(503);
         return {
@@ -329,7 +328,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
       return {
         data: {
           status: "ready",
-          dependencies: { mysql: "available", redis: "available" },
+          dependencies,
         },
         meta: { observed_at: now().toISOString() },
         request_id: requestId,

@@ -107,6 +107,7 @@ export interface RuntimeConfig {
     credentialsMasterKeyVersion: string;
     evidenceDownloadSigningKey: string;
     releaseProbeSigningKey: string;
+    crawlerServiceToken: string;
   };
   providerAdapters: {
     healthTimeoutMs: number;
@@ -152,7 +153,7 @@ export interface RuntimeConfig {
     maxAttempts: number;
     recoveryCodeCount: number;
   };
-  identity: { workerId: string; crawlerId: string };
+  identity: { workerId: string; crawlerId: string; crawlerActorId: string };
   runtime: { workerHeartbeatMs: number; crawlerHeartbeatSeconds: number };
   runtimeTopology: {
     mode: "single_host";
@@ -162,6 +163,7 @@ export interface RuntimeConfig {
     zone: string;
     heartbeatMs: number;
     staleAfterMs: number;
+    supervisorStateFile: string;
     productionEvidenceFile: string;
   };
   collectionTasks: { pollMs: number; leaseSeconds: number };
@@ -439,6 +441,12 @@ export function loadRuntimeConfig(
         production && target === "api",
         32,
       ),
+      crawlerServiceToken: secret(
+        env,
+        "CRAWLER_SERVICE_TOKEN",
+        production && target === "api",
+        32,
+      ),
     },
     providerAdapters: {
       healthTimeoutMs: integer(
@@ -554,6 +562,7 @@ export function loadRuntimeConfig(
     identity: {
       workerId: text(env, "WORKER_ID", "worker-local"),
       crawlerId: text(env, "CRAWLER_ID", "crawler-local"),
+      crawlerActorId: text(env, "CRAWLER_ACTOR_ID"),
     },
     runtime: {
       workerHeartbeatMs: integer(
@@ -579,6 +588,7 @@ export function loadRuntimeConfig(
       zone: text(env, "RUNTIME_NODE_ZONE", "primary"),
       heartbeatMs: integer(env, "RUNTIME_NODE_HEARTBEAT_MS", 30000, 5000, 60000),
       staleAfterMs: integer(env, "RUNTIME_NODE_STALE_AFTER_SECONDS", 90, 30, 600) * 1000,
+      supervisorStateFile: text(env, "BACKEND_SUPERVISOR_STATE_FILE"),
       productionEvidenceFile: text(env, "SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE", "./.artifacts/verification/m08-01-single-server-production-evidence.json"),
     },
     collectionTasks: {
@@ -821,6 +831,7 @@ export function loadRuntimeConfig(
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.hostId))throw new ConfigError("RUNTIME_HOST_ID","must be a stable 2-80 character identifier");
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.zone))throw new ConfigError("RUNTIME_NODE_ZONE","must be a stable 2-80 character identifier");
   if(production&&(!env.RUNTIME_NODE_ID?.trim()||!env.RUNTIME_HOST_ID?.trim()))throw new ConfigError("RUNTIME_NODE_ID","and RUNTIME_HOST_ID are required in single-host production");
+  if(production&&target==="api"&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(base.identity.crawlerActorId))throw new ConfigError("CRAWLER_ACTOR_ID","must be the UUID of the dedicated crawler service user in production");
   if (!/^[A-Za-z0-9._-]{1,80}$/.test(base.security.credentialsMasterKeyVersion))
     throw new ConfigError(
       "CREDENTIALS_MASTER_KEY_VERSION",
@@ -849,6 +860,7 @@ export function loadRuntimeConfig(
         base.security.evidenceDownloadSigningKey,
       ),
       releaseProbeSigningKey: Boolean(base.security.releaseProbeSigningKey),
+      crawlerServiceToken: Boolean(base.security.crawlerServiceToken),
     },
     providerAdapters: {
       ...base.providerAdapters,

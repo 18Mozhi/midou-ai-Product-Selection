@@ -2,6 +2,7 @@
 import { computed, onMounted, reactive, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import { statusLabel } from "../ui/status-labels";
 import "../trends.css";
 
 type State =
@@ -282,21 +283,6 @@ onMounted(load);
 
 <template>
   <section class="trend-dashboard">
-    <section class="trend-explainer">
-      <div>
-        <p>热点趋势怎么看</p>
-        <h3>不是热搜榜，而是可追溯的选品信号</h3>
-        <span
-          >系统定时抓取新闻、电商、论坛和社媒公开页面，把同一话题合并后展示热度、增长速度、来源数量和证据。点击任一热点即可查看原始来源。</span
-        >
-      </div>
-      <ol>
-        <li><b>热度</b><span>当前收集到的相关信号数</span></li>
-        <li><b>增速</b><span>近期相对上一周期的变化</span></li>
-        <li><b>来源</b><span>支持结论的独立站点数量</span></li>
-        <li><b>可信度</b><span>按证据数量与新鲜度计算</span></li>
-      </ol>
-    </section>
     <header class="trend-hero">
       <div>
         <p>全网热点雷达</p>
@@ -395,7 +381,7 @@ onMounted(load);
             ><span
               ><b>{{ topic.source_count }}</b
               ><small>来源</small></span
-            ><em :data-status="topic.status">{{ topic.status }}</em>
+            ><em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
           </button>
         </section>
         <article
@@ -407,7 +393,7 @@ onMounted(load);
             <div>
               <a href="#trend-list">← 返回趋势列表</a>
               <p>
-                {{ selected.status }} · {{ selected.market }} ·
+                {{ statusLabel(selected.status) }} · {{ selected.market }} ·
                 {{ selected.language }}
               </p>
               <h3>{{ selected.title }}</h3>
@@ -530,6 +516,20 @@ onMounted(load);
           </div>
         </article>
       </div>
+      <details class="trend-explainer">
+        <summary>帮助：热点趋势怎么看</summary>
+        <div>
+          <p>热点趋势怎么看</p>
+          <h3>不是热搜榜，而是可追溯的选品信号</h3>
+          <span>系统定时抓取公开页面，把同一话题合并后展示热度、增长速度、来源数量和证据；点击任一热点可核对原始来源。</span>
+        </div>
+        <ol>
+          <li><b>热度</b><span>当前收集到的相关信号数</span></li>
+          <li><b>增速</b><span>近期相对上一周期的变化</span></li>
+          <li><b>来源</b><span>支持结论的独立站点数量</span></li>
+          <li><b>可信度</b><span>按证据数量与新鲜度计算</span></li>
+        </ol>
+      </details>
     </template>
     <section v-else class="trend-rules">
       <header>
@@ -556,7 +556,7 @@ onMounted(load);
       </div>
       <article v-for="item in rules" :key="item.id">
         <div>
-          <b :data-status="item.status">{{ item.status }}</b>
+          <b :data-status="item.status">{{ statusLabel(item.status) }}</b>
           <h4>{{ item.name }}</h4>
           <span
             >{{ item.market }} · {{ item.language }} ·

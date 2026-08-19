@@ -17,8 +17,16 @@ export interface SelectionJourneyResult {
   available_result_count: number;
   first_result: null | { raw_evidence_id:string; title:string|null; publisher:string|null; canonical_url:string; observed_at:string; topic_id:string|null };
   blocked_reason: string | null;
+  blocked_owner: string | null;
+  blocked_next_step: string | null;
+  timeline: Array<{
+    stage: "queued" | "collecting" | "parsing" | "decision";
+    status: "waiting" | "active" | "completed" | "blocked";
+    occurred_at: string | null;
+  }>;
   decision: null | { action:DecisionAction; reason:string; actor_id:string; created_at:string };
   opportunity_id: string | null;
+  verification_task_id: string | null;
   accepted_at: string;
   terminal_at: string | null;
   decided_at: string | null;

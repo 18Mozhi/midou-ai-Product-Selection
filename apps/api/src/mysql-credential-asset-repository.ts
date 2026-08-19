@@ -242,13 +242,14 @@ export class MySqlCredentialAssetRepository
       const next = input.expectedVersion + 1,
         s = input.sealed;
       await c.query(
-        "UPDATE credential_assets SET payload_ciphertext=?,payload_nonce=?,payload_auth_tag=?,key_version=?,fingerprint=?,rotated_at=?,version=?,updated_by=?,updated_at=? WHERE id=?",
+        "UPDATE credential_assets SET payload_ciphertext=?,payload_nonce=?,payload_auth_tag=?,key_version=?,fingerprint=?,expires_at=?,rotated_at=?,version=?,updated_by=?,updated_at=? WHERE id=?",
         [
           s.ciphertext,
           s.nonce,
           s.authTag,
           input.keyVersion,
           s.fingerprint,
+          input.expiresAt,
           input.now,
           next,
           input.actorId,
@@ -290,6 +291,7 @@ export class MySqlCredentialAssetRepository
         ...rows[0],
         key_version: input.keyVersion,
         fingerprint: s.fingerprint,
+        expires_at: input.expiresAt,
         rotated_at: input.now,
         version: next,
         updated_at: input.now,

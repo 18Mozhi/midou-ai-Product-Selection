@@ -9,7 +9,7 @@
     "kind": "finite_shell_task",
     "schedule": "manual",
     "command": "node scripts/run-baota-selection-acceptance.mjs --production",
-    "workingDirectory": "current release directory",
+    "workingDirectory": "/www/wwwroot/ai选品/backend",
     "daemon": false,
     "timeoutSeconds": 240
   },
@@ -34,7 +34,7 @@
     "providerConfigurationTouchedByMember": false
   },
   "rollback": {
-    "application": "BaoTa switches current release to the previous verified same-host release and restarts the managed Node API and web site",
+    "application": "Redeploy the previous verified local Git commit to the fixed BaoTa directories, then restart the managed Node API and web site",
     "database": "stop the member entry, preserve audit/evidence, switch to the prior code, export and roll back 0029_collection_task_evidence_links_m07_06 before optionally rolling back 0028_selection_journeys_m07_06",
     "productionServiceOutsideBaoTa": false
   }

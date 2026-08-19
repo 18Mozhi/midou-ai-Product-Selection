@@ -28,7 +28,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
   constructor(private readonly pool: Pool) {}
   async list() {
     const [profiles] = await this.pool.query<RowDataPacket[]>(
-      "SELECT p.id,p.code,p.name,p.provider_id,p.status,v.name provider_name,l.run_id,l.lease_owner,l.leased_at,l.heartbeat_at,l.expires_at FROM crawler_profiles p JOIN providers v ON v.id=p.provider_id LEFT JOIN crawler_profile_leases l ON l.crawler_profile_id=p.id ORDER BY p.status='active' DESC,p.name,p.id",
+      "SELECT p.id,p.code,p.name,p.provider_id,p.status,v.name provider_name,v.target_url,a.expires_at credential_expires_at,l.run_id,l.lease_owner,l.leased_at,l.heartbeat_at,l.expires_at FROM crawler_profiles p JOIN providers v ON v.id=p.provider_id JOIN credential_assets a ON a.id=p.credential_asset_id LEFT JOIN crawler_profile_leases l ON l.crawler_profile_id=p.id ORDER BY p.status='active' DESC,p.name,p.id",
     );
     const [runs] = await this.pool.query<RowDataPacket[]>(
       "SELECT * FROM crawler_browser_runs ORDER BY started_at DESC,id DESC LIMIT 100",
@@ -41,6 +41,23 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         provider_id: String(row.provider_id),
         provider_name: String(row.provider_name),
         status: String(row.status),
+        target_domain: (() => {
+          try {
+            return new URL(String(row.target_url)).hostname;
+          } catch {
+            return "来源网址待修复";
+          }
+        })(),
+        credential_expires_at:
+          row.credential_expires_at == null
+            ? null
+            : new Date(row.credential_expires_at).toISOString(),
+        login_status:
+          row.credential_expires_at == null
+            ? ("unknown" as const)
+            : new Date(row.credential_expires_at) <= new Date()
+              ? ("expired" as const)
+              : ("valid" as const),
         lease:
           row.run_id == null
             ? null
@@ -58,6 +75,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
   async acquire(input: Parameters<CrawlerRuntimeRepository["acquire"]>[0]) {
     const c = await this.pool.getConnection(),
       route = "/internal/crawler-runtime/acquire";
+    let committed = false;
     try {
       await c.beginTransaction();
       const [replays] = await c.query<RowDataPacket[]>(
@@ -82,7 +100,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           "当前惠州单机已有 Crawler 运行，请等待全局租约释放。",
         );
       const [scope] = await c.query<RowDataPacket[]>(
-      "SELECT p.provider_id FROM crawler_profiles p JOIN credential_assets a ON a.id=p.credential_asset_id JOIN providers v ON v.id=p.provider_id JOIN workspaces w ON w.id=? AND w.organization_id=? AND w.status='active' WHERE p.id=? AND p.status='active' AND a.status='active' AND a.kind IN ('browser_profile','cookie_bundle') AND v.status='enabled' LIMIT 1",
+      "SELECT p.provider_id,p.updated_by,a.expires_at FROM crawler_profiles p JOIN credential_assets a ON a.id=p.credential_asset_id JOIN providers v ON v.id=p.provider_id JOIN workspaces w ON w.id=? AND w.organization_id=? AND w.status='active' WHERE p.id=? AND p.status='active' AND a.status='active' AND a.kind IN ('browser_profile','cookie_bundle') AND v.status='enabled' LIMIT 1 FOR UPDATE",
         [input.workspaceId, input.organizationId, input.profileId],
       );
       if (!scope[0])
@@ -91,6 +109,23 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           409,
           "确认工作区、Provider、凭证与档案均为启用状态。",
         );
+      if (
+        scope[0].expires_at != null &&
+        new Date(scope[0].expires_at) <= input.now
+      ) {
+        await this.renewalTask(c, {
+          ...input,
+          assigneeId: String(scope[0].updated_by),
+          reason: "credential_expired",
+        });
+        await c.commit();
+        committed = true;
+        throw new CrawlerRuntimeError(
+          "crawler_profile_login_expired",
+          409,
+          "登录档案已到期；任务中心已创建续期任务，更新凭证后再继续采集。",
+        );
+      }
       const [leases] = await c.query<RowDataPacket[]>(
         "SELECT run_id,expires_at FROM crawler_profile_leases WHERE crawler_profile_id=? FOR UPDATE",
         [input.profileId],
@@ -180,13 +215,14 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         ],
       );
       await c.commit();
+      committed = true;
       const [rows] = await this.pool.query<RowDataPacket[]>(
         "SELECT * FROM crawler_browser_runs WHERE id=?",
         [input.runId],
       );
       return { run: run(rows[0]!), replayed: false };
     } catch (error) {
-      await c.rollback();
+      if (!committed) await c.rollback();
       if ((error as { code?: string }).code === "ER_DUP_ENTRY")
         throw new CrawlerRuntimeError(
           "crawler_runtime_conflict",
@@ -251,7 +287,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     try {
       await c.beginTransaction();
       const [lease] = await c.query<RowDataPacket[]>(
-        "SELECT run_id FROM crawler_profile_leases WHERE crawler_profile_id=? AND run_id=? AND lease_token_hash=UNHEX(?) FOR UPDATE",
+        "SELECT l.run_id,r.organization_id,r.workspace_id,p.updated_by FROM crawler_profile_leases l JOIN crawler_browser_runs r ON r.id=l.run_id JOIN crawler_profiles p ON p.id=l.crawler_profile_id WHERE l.crawler_profile_id=? AND l.run_id=? AND l.lease_token_hash=UNHEX(?) FOR UPDATE",
         [input.profileId, input.runId, input.leaseTokenHash],
       );
       if (!lease[0])
@@ -274,6 +310,19 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         ],
       );
       await this.event(c, input, "released", input.runId);
+      if (
+        input.status === "blocked" &&
+        ["blocked_login", "session_expired", "login_required"].includes(
+          input.errorCode ?? "",
+        )
+      )
+        await this.renewalTask(c, {
+          ...input,
+          organizationId: String(lease[0].organization_id),
+          workspaceId: String(lease[0].workspace_id),
+          assigneeId: String(lease[0].updated_by),
+          reason: input.errorCode ?? "blocked_login",
+        });
       await c.query(
         "DELETE FROM crawler_profile_leases WHERE crawler_profile_id=? AND run_id=?",
         [input.profileId, input.runId],
@@ -394,6 +443,71 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         workspaceId,
         action,
         input.actorId,
+        input.requestId,
+        input.traceId,
+        input.now,
+      ],
+    );
+  }
+  private async renewalTask(
+    c: PoolConnection,
+    input: {
+      organizationId: string;
+      workspaceId: string;
+      profileId: string;
+      actorId: string;
+      assigneeId: string;
+      requestId: string;
+      traceId: string;
+      now: Date;
+      reason: string;
+    },
+  ) {
+    const [existing] = await c.query<RowDataPacket[]>(
+      "SELECT id,status FROM tasks WHERE organization_id=? AND workspace_id=? AND source_type='collection_followup' AND source_ref_id=? LIMIT 1 FOR UPDATE",
+      [input.organizationId, input.workspaceId, input.profileId],
+    );
+    const taskId = existing[0] ? String(existing[0].id) : randomUUID();
+    if (!existing[0])
+      await c.query(
+        "INSERT INTO tasks (id,organization_id,workspace_id,title,description,status,priority,assignee_id,source_type,source_ref_id,collection_task_id,due_at,completed_at,created_by,version,created_at,updated_at) VALUES (?,?,?,?,?,'todo','critical',?,'collection_followup',?,NULL,?,NULL,?,1,?,?)",
+        [
+          taskId,
+          input.organizationId,
+          input.workspaceId,
+          "续期网页登录档案",
+          `浏览器档案 ${input.profileId} 登录无效（${input.reason}）；更新凭证并验证目标站点登录状态。`,
+          input.assigneeId,
+          input.profileId,
+          new Date(input.now.getTime() + 24 * 60 * 60 * 1000),
+          input.actorId,
+          input.now,
+          input.now,
+        ],
+      );
+    else if (["completed", "cancelled"].includes(String(existing[0].status)))
+      await c.query(
+        "UPDATE tasks SET status='todo',priority='critical',assignee_id=?,completed_at=NULL,due_at=?,version=version+1,updated_at=? WHERE id=?",
+        [
+          input.assigneeId,
+          new Date(input.now.getTime() + 24 * 60 * 60 * 1000),
+          input.now,
+          taskId,
+        ],
+      );
+    await c.query(
+      "INSERT INTO task_events (id,organization_id,workspace_id,task_id,event_type,actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+      [
+        randomUUID(),
+        input.organizationId,
+        input.workspaceId,
+        taskId,
+        "task.credential_renewal_required",
+        input.actorId,
+        JSON.stringify({
+          crawler_profile_id: input.profileId,
+          reason: input.reason,
+        }),
         input.requestId,
         input.traceId,
         input.now,

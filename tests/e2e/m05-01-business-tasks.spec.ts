@@ -122,7 +122,7 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
   ).toBeVisible();
   await expect(page.getByText("24 小时内到期")).toBeVisible();
   await expect(page.getByText("未设置期限")).toBeVisible();
-  await page.getByRole("button", { name: /核验便携净水杯供应商报价/ }).click();
+  await page.locator(".task-row-main").filter({ hasText: "核验便携净水杯供应商报价" }).click();
   await expect(page.getByText("报价证据已核验，等待确认交期。")).toBeVisible();
   await expect(page.getByRole("button", { name: "转交" })).toBeVisible();
   await expect(page).toHaveScreenshot("m05-01-business-tasks.png", {
@@ -150,11 +150,11 @@ test("member workspace shows Chinese context theme switch and task progress with
   await expect(page.getByText("主题已应用到全部模块。")).toBeVisible();
   const afterTheme = await page.locator(".task-title").evaluate((element) => getComputedStyle(element).backgroundImage);
   expect(afterTheme).not.toBe(beforeTheme);
-  await page.getByRole("button",{name:/核验便携净水杯供应商报价/}).click();
+  await page.locator(".task-row-main").filter({ hasText: "核验便携净水杯供应商报价" }).click();
   await expect(page.getByText("35% · 已完成亚马逊竞品初筛")).toBeVisible();
   await expect(page.getByRole("button",{name:"更新进度"})).toBeVisible();
   await expect(page.getByRole("button",{name:"编辑"})).toBeVisible();
-  await expect(page.getByRole("button",{name:"删除"})).toBeVisible();
+  await expect(page.locator(".task-detail").getByRole("button",{name:"删除",exact:true})).toBeVisible();
 });
 
 test("personal center renders the core profile instead of staying on its loading state", async ({ page }) => {
@@ -177,11 +177,17 @@ test("approval notification and real-selection surfaces follow every member them
     await page.goto(item.path);
     const surface = page.locator(item.selector);
     await expect(surface).toBeVisible();
-    const before = await surface.evaluate((element) => getComputedStyle(element).backgroundColor);
+    const before = await surface.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return `${style.backgroundColor}|${style.backgroundImage}`;
+    });
     await page.getByRole("button", { name: "切换界面主题" }).click();
     await page.getByRole("button", { name: new RegExp(item.theme) }).click();
     await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe(item.expected);
-    const after = await surface.evaluate((element) => getComputedStyle(element).backgroundColor);
+    const after = await surface.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return `${style.backgroundColor}|${style.backgroundImage}`;
+    });
     expect(after).not.toBe(before);
   }
 });

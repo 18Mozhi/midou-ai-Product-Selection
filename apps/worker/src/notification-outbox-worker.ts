@@ -126,7 +126,7 @@ export class NotificationOutboxWorker {
       resourceId = p.resource_id ?? p.task_id ?? p.approval_request_id ?? null,
       notificationId = randomUUID();
     await this.pool.query(
-      "INSERT IGNORE INTO notifications (id,organization_id,workspace_id,recipient_id,source_event_id,category,severity,title,body,resource_type,resource_id,read_at,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?, ?,?,?,?,NULL,1,?,?)",
+      "INSERT IGNORE INTO notifications (id,organization_id,workspace_id,recipient_id,source_event_id,category,severity,title,body,resource_type,resource_id,root_cause_key,read_at,workflow_status,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,NULL,'open',1,?,?)",
       [
         notificationId,
         event.organization_id,
@@ -139,6 +139,7 @@ export class NotificationOutboxWorker {
         body,
         resourceType,
         resourceId,
+        `${String(event.event_type).slice(0,100)}:${String(resourceType).slice(0,80)}:${String(resourceId ?? "none").slice(0,36)}`,
         now,
         now,
       ],

@@ -2,11 +2,12 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import "./styles.css";
 import "./design/tokens.css";
-import "./theme-compat.css";
+import "./accessibility.css";
 import { applyCachedTheme } from "./design/theme";
+import { router } from "./router";
 
 applyCachedTheme();
-createApp(App).mount("#app");
+createApp(App).use(router).mount("#app");
 
 function syncIconTooltips(root: ParentNode) {
   const elements = [

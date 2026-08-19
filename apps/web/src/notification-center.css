@@ -2,6 +2,7 @@
   color: #eef4f6;
   padding-bottom: 48px;
 }
+
 .notification-center header {
   display: flex;
   justify-content: space-between;
@@ -251,4 +252,10 @@
   .notification-detail {
     padding: 24px;
   }
+}
+
+.notification-state {
+  background: var(--so-panel);
+  border-color: var(--so-border);
+  color: var(--so-text-muted);
 }

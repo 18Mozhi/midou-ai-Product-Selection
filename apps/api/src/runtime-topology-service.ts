@@ -10,6 +10,12 @@ export interface RuntimeTopologyPolicy {
   expectedNodeId: string;
   expectedHostId: string;
   staleAfterMs: number;
+  supervisorSnapshot?: () => Promise<null | {
+    supervisor_pid: number;
+    status: string;
+    processes: Record<string, { status: string; pid: number | null; restart_count: number; circuit_open_until: string | null }>;
+    observed_at: string;
+  }>;
 }
 
 export class RuntimeTopologyService {
@@ -18,6 +24,7 @@ export class RuntimeTopologyService {
   private async evaluate() {
     const observedAt = this.now();
     const snapshot = await this.repository.snapshot();
+    const supervisor = await this.policy.supervisorSnapshot?.().catch(() => null) ?? null;
     const evaluation = evaluateRuntimeTopology({
       now: observedAt,
       staleAfterMs: this.policy.staleAfterMs,
@@ -34,7 +41,9 @@ export class RuntimeTopologyService {
       nodes: snapshot.nodes
         .filter((node) => node.nodeId === this.policy.expectedNodeId)
         .map((node) => ({node_id: node.nodeId, host_id: node.hostId, role: node.role, status: node.status, region: node.region, zone: node.zone, build_sha: node.buildSha, version: node.version, last_heartbeat_at: node.lastHeartbeatAt.toISOString()})),
-      blockers: evaluation.blockers,
+      processes: supervisor ? Object.entries(supervisor.processes).map(([name, process]) => ({ name, status: process.status, pid: process.pid, restart_count: process.restart_count, circuit_open_until: process.circuit_open_until })) : [],
+      supervisor_pid: supervisor?.supervisor_pid ?? null,
+      blockers: [...evaluation.blockers, ...(supervisor && supervisor.status !== "ready" ? [{ code: "backend_supervisor_degraded", actionHint: "在宝塔检查 API/Worker 子进程和连续重启记录。" }] : [])],
       load_balancing_enabled: false,
       backup_server_used: false,
       multi_node_claim: false,

@@ -557,7 +557,7 @@
         "/api/v1/platform/credential-assets/{assetId}/revoke",
         "/api/v1/platform/crawler-profiles"
       ],
-      "scope": "platform-global encrypted credential and crawler profile assets, including Playwright storageState JSON, browser cookie JSON, Netscape cookies.txt, tar.gz browser profiles, direct login-page jump and a restricted ai选品 browser helper that reads the user-selected site's current-browser cookies",
+      "scope": "platform-global encrypted credential and crawler profile assets, including Playwright storageState JSON, browser cookie JSON, Netscape cookies.txt, tar.gz browser profiles, direct login-page jump and a restricted ai选品 browser helper that reads the user-selected site's current-browser cookies; cookie domains are validated against the provider target domain and credential rotation can renew the explicit expiry",
       "encryption": "AES-256-GCM with random nonce, authentication tag, asset/type/key-version AAD and Baota-only master key",
       "responseBoundary": "masked fingerprint and metadata only; no decrypt, export, ciphertext, nonce or auth-tag API",
       "permission": "authenticated platform key_rotation:manage; same-origin and Idempotency-Key for writes",
@@ -629,9 +629,12 @@
       "routes": [
         "/platform-admin/collection/browser-runtime",
         "/api/v1/platform/crawler-runtime",
-        "/api/v1/platform/crawler-runtime/recover-expired"
+        "/api/v1/platform/crawler-runtime/recover-expired",
+        "/api/v1/internal/crawler-runtime/acquire",
+        "/api/v1/internal/crawler-runtime/{runId}/heartbeat",
+        "/api/v1/internal/crawler-runtime/{runId}/complete"
       ],
-      "scope": "platform-global encrypted browser profiles and exclusive leases; every browser run is bound to one organization and workspace",
+      "scope": "platform-global encrypted browser profiles and exclusive leases; every browser run is bound to one organization and workspace; expired credentials and login-blocked runs create an assigned collection follow-up task",
       "actions": [
         "bounded search",
         "pagination",
@@ -2360,10 +2363,11 @@
     }
   },
   "technology": {
-    "frontend": ["Vue 3", "TypeScript"],
+    "frontend": ["Vue 3", "TypeScript", "Vue Router 4 with lazy business routes and state preservation"],
     "backend": [
       "Node.js unified production backend",
-      "Python on-demand collection subprocess only"
+      "Python 3.12 crawler consumer managed by BaoTa",
+      "Node.js Playwright runner invoked by the Python crawler bridge"
     ],
     "database": "MySQL 5.7",
     "cacheQueue": "Redis",
@@ -2466,12 +2470,6 @@
       "view": "ReportCenter",
       "domain": "reports-exports",
       "status": "M05-06_module_verified"
-    },
-    {
-      "path": "/me",
-      "view": "LocalIdentity",
-      "domain": "identity",
-      "status": "local_security_sessions_implemented"
     },
     {
       "path": "/org-admin",

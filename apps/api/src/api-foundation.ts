@@ -40,6 +40,6 @@ export function normalizeCorrelationId(value: unknown, fallback: () => string): 
 }
 
 export interface ReadinessCheck {
-  name: 'mysql' | 'redis';
+  name: 'mysql' | 'redis' | 'supervisor';
   check(requestId: string, traceId: string): Promise<'available' | 'unavailable'>;
 }

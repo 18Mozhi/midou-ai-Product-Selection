@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
+import { statusLabel } from "../ui/status-labels";
 import "../opportunities.css";
 import "../opportunity-profit.css";
 import "../opportunity-selection-entry.css";
@@ -161,13 +162,13 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
     observed_at: new Date().toISOString().slice(0, 16),
   });
 const tabs: [Tab, string][] = [
-  ["overview", "概览"],
-  ["market", "市场证据"],
-  ["competition", "竞争对比"],
+  ["overview", "结论"],
+  ["evidence", "证据"],
   ["profit", "利润与成本"],
-  ["risk", "风险分析"],
+  ["risk", "风险"],
+  ["market", "市场"],
+  ["competition", "竞争"],
   ["ai", "AI 辅助"],
-  ["evidence", "证据管理"],
   ["decisions", "决策历史"],
 ];
 const listSummary=computed(()=>({withImage:items.value.filter((item)=>Boolean(item.image_url)).length,competitors:items.value.reduce((sum,item)=>sum+(item.competitor_count??0),0),suppliers:items.value.reduce((sum,item)=>sum+(item.supplier_candidate_count??0),0)}));
@@ -571,7 +572,7 @@ onMounted(() => {
         <header>
           <div>
             <p>
-              {{ detail.lifecycle_status }} · {{ detail.market }} ·
+              {{ statusLabel(detail.lifecycle_status) }} · {{ detail.market }} ·
               {{ detail.category || "未分类" }}
             </p>
             <h3>{{ detail.name }}</h3>
@@ -592,17 +593,18 @@ onMounted(() => {
         <section class="opportunity-decision-bar">
           <div>
             <span>推荐结论</span
-            ><strong>{{ detail.recommendation_status }}</strong
+            ><strong>{{ statusLabel(detail.recommendation_status) }}</strong
             ><small
               >规则版本：{{ detail.score_rule_version ?? "尚未计算" }} ·
-              置信度：{{ detail.confidence.status }}</small
+              置信度：{{ statusLabel(detail.confidence.status) }}</small
             >
           </div>
-          <button @click="startDecision('adopt')">✓ 采纳</button
+          <button :disabled="detail.recommendation_status === 'insufficient_data' || detail.coverage_status === 'insufficient' || detail.evidence_count === 0" :title="detail.recommendation_status === 'insufficient_data' || detail.coverage_status === 'insufficient' || detail.evidence_count === 0 ? '证据不足，先补齐缺失项' : '采纳当前机会'" @click="startDecision('adopt')">✓ 采纳</button
           ><button @click="startDecision('observe')">◉ 继续观察</button
           ><button class="reject" @click="startDecision('reject')">
             × 驳回
           </button>
+          <a v-if="detail.recommendation_status === 'insufficient_data' || detail.coverage_status === 'insufficient'" :href="`/tasks?create=1&title=${encodeURIComponent('补齐机会证据 · ' + detail.name)}&description=${encodeURIComponent('补齐机会 ' + detail.id + ' 的缺失证据，并复核来源新鲜度与可信度。')}`">分派证据补齐任务</a>
         </section>
         <nav class="opportunity-tabs" aria-label="机会详情分区">
           <button
@@ -714,12 +716,12 @@ onMounted(() => {
             <a href="/sourcing/cost-rules">管理费用规则</a>
           </header>
           <div
-            v-if="profit?.latest_run"
+            v-if="profit?.latest_run?.status === 'calculated'"
             class="profit-summary"
             :data-status="profit.latest_run.status"
           >
             <article>
-              <small>状态</small><strong>{{ profit.latest_run.status }}</strong
+              <small>状态</small><strong>{{ statusLabel(profit.latest_run.status) }}</strong
               ><span>规则 {{ profit.latest_run.rule_version_code }}</span>
             </article>
             <article>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import "../notification-center.css";
+import { statusLabel } from "../ui/status-labels";
 type State =
   | "loading"
   | "ready"
@@ -18,6 +19,10 @@ type Item = {
   body: string;
   resource_type: string | null;
   resource_id: string | null;
+  root_cause_key: string | null;
+  workflow_status: "open" | "in_progress" | "closed";
+  action_route: string;
+  group_count: number;
   read_at: string | null;
   version: number;
   created_at: string;
@@ -35,6 +40,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   }),
   selected = ref<Item | null>(null),
   category = ref(""),
+  workflowStatus = ref(""),
   unread = ref(false),
   notice = ref(""),
   requestId = ref(""),
@@ -51,7 +57,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   realtimeState = ref<"connecting" | "connected" | "reconnecting">(
     "connecting",
   ),
-  visible = computed(() => items.value);
+  visible = computed(() => items.value.filter((item) => !workflowStatus.value || item.workflow_status === workflowStatus.value));
 let stream: EventSource | null = null;
 const label = (v: string) =>
     (
@@ -138,6 +144,18 @@ async function markAll() {
       body: JSON.stringify({ action: "read_all" }),
     });
     notice.value = "当前工作区通知已全部标记已读。";
+    await load();
+  } catch {}
+}
+async function updateWorkflow(action: "start" | "close" | "reopen") {
+  if (!selected.value) return;
+  try {
+    const result = await api(`/notifications/${selected.value.id}/actions`, {
+      method: "POST",
+      body: JSON.stringify({ action, expected_version: selected.value.version }),
+    });
+    selected.value = { ...selected.value, ...result };
+    notice.value = action === "start" ? "通知已进入处理中。" : action === "close" ? "通知已关闭。" : "通知已重新打开。";
     await load();
   } catch {}
 }
@@ -242,6 +260,9 @@ onUnmounted(() => stream?.close());
         ><input v-model="unread" type="checkbox" @change="load" /> 仅未读</label
       >
     </nav>
+    <nav aria-label="处理状态筛选">
+      <button v-for="item in [{v:'',t:'全部状态'},{v:'open',t:'未处理'},{v:'in_progress',t:'处理中'},{v:'closed',t:'已关闭'}]" :key="item.v" :aria-pressed="workflowStatus === item.v" @click="workflowStatus = item.v">{{ item.t }}</button>
+    </nav>
     <section v-if="state === 'loading'" class="notification-state">
       正在读取通知…
     </section>
@@ -291,7 +312,7 @@ onUnmounted(() => stream?.close());
           ><strong>{{ item.title }}</strong
           ><small>{{ item.body }}</small></span
         ><em>{{ time(item.created_at) }}</em
-        ><b>{{ item.read_at ? "已读" : "未读" }}</b>
+        ><b>{{ statusLabel(item.workflow_status) }}<small v-if="item.group_count > 1"> · 同根因 {{ item.group_count }} 条</small></b>
       </button>
     </div>
     <aside v-if="selected" class="notification-detail">
@@ -299,6 +320,7 @@ onUnmounted(() => stream?.close());
       <p>{{ label(selected.category) }} · {{ time(selected.created_at) }}</p>
       <h3>{{ selected.title }}</h3>
       <article>{{ selected.body }}</article>
+      <p v-if="selected.group_count > 1">同一根因的 {{ selected.group_count }} 条通知已自动合并展示。</p>
       <dl>
         <div>
           <dt>来源类型</dt>
@@ -316,6 +338,12 @@ onUnmounted(() => stream?.close());
       <small
         >站内消息来自事务消息；页面不显示队列、浏览器凭证或邮件地址。</small
       >
+      <footer class="notification-workflow-actions">
+        <a :href="selected.action_route">定位异常记录</a>
+        <button v-if="selected.workflow_status === 'open'" type="button" @click="updateWorkflow('start')">开始处理</button>
+        <button v-if="selected.workflow_status !== 'closed'" type="button" @click="updateWorkflow('close')">关闭</button>
+        <button v-else type="button" @click="updateWorkflow('reopen')">重新打开</button>
+      </footer>
     </aside>
     <dialog :open="showPreferences">
       <form @submit.prevent="savePreferences">

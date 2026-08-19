@@ -11,6 +11,7 @@ from scoutops_crawler.foundation import FoundationTask, validate_task
 from scoutops_crawler.config import ConfigError, load_config
 from scoutops_crawler.playwright_bridge import PlaywrightBridge, PlaywrightBridgeError
 from scoutops_crawler.__main__ import load_env_file
+from scoutops_crawler.runtime_client import CrawlerRuntimeClient
 
 
 class FoundationTaskTest(unittest.TestCase):
@@ -65,6 +66,16 @@ class FoundationTaskTest(unittest.TestCase):
         run.return_value = Mock(returncode=2, stdout='{"code":"blocked_captcha"}')
         with self.assertRaises(PlaywrightBridgeError):
             PlaywrightBridge(load_config()).run({"request_id": "r1", "trace_id": "t1"})
+
+    def test_runtime_client_maps_playwright_results_to_terminal_api_status(self) -> None:
+        client = CrawlerRuntimeClient(load_config())
+        self.assertEqual(client._terminal_status("blocked_login"), "blocked")
+        self.assertEqual(client._terminal_status("timeout"), "timed_out")
+        self.assertEqual(client._terminal_status("succeeded_empty"), "succeeded")
+
+    def test_runtime_client_does_not_claim_without_scoped_assignment(self) -> None:
+        client = CrawlerRuntimeClient(load_config())
+        self.assertIsNone(client.acquire())
 
 
 if __name__ == "__main__":

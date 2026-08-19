@@ -78,7 +78,21 @@ const required = [
 ];
 
 for (const file of required) await access(resolve(process.cwd(), file));
-JSON.parse(await readFile(resolve(process.cwd(), 'docs/feature-map.json'), 'utf8'));
+const featureMap = JSON.parse(await readFile(resolve(process.cwd(), 'docs/feature-map.json'), 'utf8'));
+const routeCounts = new Map();
+for (const route of featureMap.routes ?? []) routeCounts.set(route.path, (routeCounts.get(route.path) ?? 0) + 1);
+const duplicateRoutes = [...routeCounts].filter(([, count]) => count > 1).map(([path]) => path);
+if (duplicateRoutes.length) throw new Error(`Feature Map contains duplicate routes: ${duplicateRoutes.join(', ')}`);
 const openapi = await readFile(resolve(process.cwd(), 'docs/openapi.yaml'), 'utf8');
 if (!openapi.startsWith('openapi: 3.0.3')) throw new Error('OpenAPI version declaration is missing.');
+const [readme, blueprint, deployment] = await Promise.all([
+  readFile(resolve(process.cwd(), 'README.md'), 'utf8'),
+  readFile(resolve(process.cwd(), 'new-product-enterprise-blueprint.md'), 'utf8'),
+  readFile(resolve(process.cwd(), 'infra/baota/README.md'), 'utf8'),
+]);
+const deploymentTruth = `${readme}\n${blueprint}\n${deployment}`;
+for (const path of ['/www/wwwroot/ai选品/frontend', '/www/wwwroot/ai选品/backend', '/www/wwwroot/ai选品/python']) {
+  if (!deploymentTruth.includes(path)) throw new Error(`Fixed BaoTa path is missing from canonical docs: ${path}`);
+}
+if (/ai选品\/current|使用版本目录、?`current`|`current` 原子/.test(deploymentTruth)) throw new Error('Canonical deployment docs still describe the retired current/releases topology.');
 console.log(`Documentation gate passed (${required.length} required files).`);

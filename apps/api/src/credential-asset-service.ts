@@ -62,6 +62,7 @@ export interface CredentialAssetRepository {
     expectedVersion: number;
     sealed: Sealed;
     keyVersion: string;
+    expiresAt: string | null;
     actorId: string;
     idempotencyKey: string;
     requestId: string;
@@ -315,6 +316,59 @@ function createInput(value: CredentialAssetCreateInput, now: Date) {
     secret_payload: secret(value.secret_payload, value.kind),
   };
 }
+function expiry(value: unknown, now: Date) {
+  if (value == null || value === "") return null;
+  const date = new Date(String(value));
+  if (!Number.isFinite(date.getTime()) || date <= now)
+    throw new CredentialAssetError(
+      "credential_expiry_invalid",
+      400,
+      "到期时间必须晚于当前时间。",
+    );
+  return date.toISOString();
+}
+function cookieDomains(payload: CredentialSecretInput) {
+  if (payload.encoding !== "utf8") return [];
+  const parsed = JSON.parse(payload.value) as {
+    cookies?: Array<{ domain?: unknown }>;
+  };
+  return (parsed.cookies ?? []).map((cookie) => String(cookie.domain ?? ""));
+}
+async function validateProviderDomains(
+  repository: CredentialAssetRepository,
+  providerId: string,
+  payload: CredentialSecretInput,
+) {
+  const provider = (await repository.listProviderOptions()).find(
+    (item) => item.id === providerId,
+  );
+  if (!provider)
+    throw new CredentialAssetError(
+      "credential_provider_invalid",
+      400,
+      "选择已登记且可配置凭证的来源。",
+    );
+  let hostname: string;
+  try {
+    hostname = new URL(provider.target_url).hostname.toLowerCase();
+  } catch {
+    throw new CredentialAssetError(
+      "credential_provider_target_invalid",
+      409,
+      "先修复来源定义中的目标网址，再绑定 Cookie。",
+    );
+  }
+  const invalid = cookieDomains(payload).find((value) => {
+    const domain = value.replace(/^\./, "").toLowerCase();
+    return hostname !== domain && !hostname.endsWith(`.${domain}`);
+  });
+  if (invalid)
+    throw new CredentialAssetError(
+      "credential_cookie_domain_mismatch",
+      400,
+      `Cookie 域名 ${invalid} 与来源站点 ${hostname} 不匹配。`,
+    );
+}
 function expected(value: number) {
   if (!Number.isInteger(value) || value < 1)
     throw new CredentialAssetError(
@@ -399,6 +453,12 @@ export class CredentialAssetService {
         keyVersion: this.keyVersion,
       }),
       { secret_payload, ...metadata } = clean;
+    if (clean.kind === "cookie_bundle")
+      await validateProviderDomains(
+        this.repository,
+        clean.provider_id,
+        clean.secret_payload,
+      );
     return this.repository.createAsset({
       id,
       value: metadata,
@@ -410,7 +470,11 @@ export class CredentialAssetService {
   }
   async rotateAsset(
     id: string,
-    value: { secret_payload: CredentialSecretInput; expected_version: number },
+    value: {
+      secret_payload: CredentialSecretInput;
+      expected_version: number;
+      expires_at?: string | null;
+    },
     context: Context,
   ) {
     if (!uuid.test(id))
@@ -432,9 +496,18 @@ export class CredentialAssetService {
         409,
         "已撤销凭证不能轮换。",
       );
+    const now = this.now(),
+      normalizedSecret = secret(value.secret_payload, record.summary.kind),
+      expiresAt = expiry(value.expires_at ?? record.summary.expires_at, now);
+    if (record.summary.kind === "cookie_bundle")
+      await validateProviderDomains(
+        this.repository,
+        record.summary.provider_id,
+        normalizedSecret,
+      );
     const next = expected(value.expected_version) + 1,
       sealed = sealCredential(
-        secret(value.secret_payload, record.summary.kind),
+        normalizedSecret,
         this.masterKey,
         {
           assetId: id,
@@ -448,8 +521,9 @@ export class CredentialAssetService {
       expectedVersion: value.expected_version,
       sealed,
       keyVersion: this.keyVersion,
+      expiresAt,
       ...context,
-      now: this.now(),
+      now,
     });
   }
   revokeAsset(

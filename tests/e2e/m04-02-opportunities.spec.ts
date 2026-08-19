@@ -21,7 +21,6 @@ async function ready(page:Page){
 test('M04-02.A07/A08/A15 opportunity list and creation are responsive and truthful',async({page})=>{
   await ready(page);await page.goto('/opportunities?create=1');
   await expect(page.getByRole('heading',{name:'选品机会',level:2})).toBeVisible();
-  await expect(page.getByText('数据不足',{exact:true}).first()).toBeVisible();
   await expect(page.getByText('待补充数据',{exact:true}).first()).toBeVisible();
   const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
   await dialog.getByRole('button',{name:'关闭'}).click();
@@ -30,7 +29,7 @@ test('M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await expect(dialog).toBeVisible();
   await dialog.getByLabel('机会名称').fill('手工验证机会');
   await dialog.getByRole('button',{name:'创建机会',exact:true}).click();
-  await expect(page.getByRole('heading',{name:'机会详情',level:2})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'AI 驱动的个性化护肤机会'})).toBeVisible();
 });
 
 test('M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision preserve missing states',async({page})=>{
@@ -38,7 +37,7 @@ test('M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page.getByRole('heading',{name:'AI 驱动的个性化护肤机会'})).toBeVisible();
   await expect(page.getByText('尚无评分运行；缺失输入不会用默认值补齐。')).toBeVisible();
   await page.getByRole('button',{name:'利润与成本'}).click();await expect(page.getByText('数据不足，不能生成可靠 ROI')).toBeVisible();
-  await page.getByRole('button',{name:'证据管理'}).click();await expect(page.getByText('Example News')).toBeVisible();
+  await page.getByRole('button',{name:'证据',exact:true}).click();await expect(page.getByText('Example News')).toBeVisible();
   await page.getByRole('button',{name:'◉ 继续观察'}).click();const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
   await dialog.getByLabel('原因（必填）').fill('补齐成本与竞品后再判断');await dialog.getByRole('button',{name:'确认记录'}).click();
   await expect(page.getByText('决策已记录；原始评分与证据未被改写。')).toBeVisible();

@@ -1,4 +1,5 @@
 import { buildApp } from "./app.js";
+import { readFile } from "node:fs/promises";
 import { loadRuntimeConfig } from "@scoutops/config";
 import { createDatabasePool } from "@scoutops/database";
 import {
@@ -154,6 +155,12 @@ const runtimeTopologyService = new RuntimeTopologyService(
     expectedNodeId: config.runtimeTopology.nodeId,
     expectedHostId: config.runtimeTopology.hostId,
     staleAfterMs: config.runtimeTopology.staleAfterMs,
+    ...(config.runtimeTopology.supervisorStateFile
+      ? {
+          supervisorSnapshot: async () =>
+            JSON.parse(await readFile(config.runtimeTopology.supervisorStateFile, "utf8")),
+        }
+      : {}),
   },
 );
 const redisResilienceService = new RedisResilienceService(
@@ -307,6 +314,19 @@ const app = buildApp({
         }
       },
     },
+    ...(config.runtimeTopology.supervisorStateFile
+      ? [{
+          name: "supervisor" as const,
+          check: async () => {
+            try {
+              const snapshot = JSON.parse(await readFile(config.runtimeTopology.supervisorStateFile, "utf8"));
+              return snapshot?.status === "ready" && snapshot?.processes?.worker?.status === "running" && snapshot?.processes?.api?.status === "running" ? "available" as const : "unavailable" as const;
+            } catch {
+              return "unavailable" as const;
+            }
+          },
+        }]
+      : []),
   ],
   localAuth: {
     service: localAuth,
@@ -394,6 +414,8 @@ const app = buildApp({
     auth: localAuth,
     secureCookie: config.nodeEnv === "production",
     webOrigin: config.app.webOrigin,
+    serviceToken: config.security.crawlerServiceToken,
+    serviceActorId: config.identity.crawlerActorId,
   },
   collectionTasks: {
     service: new CollectionTaskService(new MySqlCollectionTaskRepository(pool)),

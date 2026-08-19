@@ -30,6 +30,8 @@ interface TopologyData {
   single_host: true;
   stale_node_count: number;
   nodes: RuntimeNode[];
+  processes: Array<{ name: string; status: string; pid: number | null; restart_count: number; circuit_open_until: string | null }>;
+  supervisor_pid: number | null;
   blockers: Array<{ code: string; actionHint: string }>;
   load_balancing_enabled: false;
   backup_server_used: false;
@@ -237,6 +239,14 @@ onMounted(load);
             <b>没有当前节点可绘制</b
             ><span>由宝塔托管的后端写入真实心跳后再核验。</span>
           </div>
+          <section v-if="data.processes.length" class="topology-processes">
+            <header><div><p>进程监督</p><h3>API 与 Worker</h3></div><small>监督器 PID {{ data.supervisor_pid ?? '—' }}</small></header>
+            <article v-for="process in data.processes" :key="process.name" :data-node-state="process.status">
+              <span><b>{{ process.name === 'api' ? 'Node API' : 'Node Worker' }}</b><small>{{ process.status }}</small></span>
+              <dl><div><dt>PID</dt><dd>{{ process.pid ?? '—' }}</dd></div><div><dt>重启次数</dt><dd>{{ process.restart_count }}</dd></div></dl>
+              <p v-if="process.circuit_open_until">熔断至 {{ time(process.circuit_open_until) }}</p>
+            </article>
+          </section>
         </section>
 
         <aside class="topology-panel topology-evidence">

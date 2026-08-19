@@ -26,7 +26,7 @@ npm run verify:docs
 npm run test:e2e
 ```
 
-生产项目目录固定为 `/www/wwwroot/ai选品/current`，启动命令为 `node apps/backend/dist/server.js`。不要再创建独立 API、Worker、Canary 或 Python 常驻项目。模块执行证据登记在 `verification/modules/`；临时报告只写入 `.artifacts/verification` 并在任务收尾时清理。开发启动及回滚见 `docs/runbooks/`。
+生产根目录固定为 `/www/wwwroot/ai选品`：前端、Node 后端、Python 采集器分别部署到 `frontend`、`backend`、`python`，受限配置、运行数据和本机备份分别保存在 `config`、`runtime`、`backups`。Node 启动命令为 `node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js`；不得创建 `current`、`releases`、独立 API、Worker 或 Canary 常驻项目。完整部署与回滚见 `infra/baota/README.md`。
 
 管理员与普通成员的实际入口、业务页面和截图操作说明见 [ai选品上线使用指南](docs/user-guide-ai-selection.md)。生产浏览器验收账号通过环境变量临时注入，验收完成后必须删除账号、会话、组织、工作区及其关联数据。
 

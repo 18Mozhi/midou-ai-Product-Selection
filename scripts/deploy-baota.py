@@ -248,12 +248,6 @@ try:
         raise RuntimeError("Python project identity or path mismatch")
 
     if v["initialize"]:
-        current = root / "current"
-        releases = root / "releases"
-        if current.exists() or current.is_symlink():
-            resolved = current.resolve(strict=True)
-            if releases.resolve(strict=True) not in resolved.parents:
-                raise RuntimeError("current does not point inside this project's releases")
         shared = root / "shared"
         if shared.is_dir():
             unexpected = {{child.name for child in shared.iterdir()}} - {{"backups", "config", "credential-tmp", "evidence", "exports", "npm-cache", "tmp", "verification"}}
@@ -295,7 +289,6 @@ try:
         str(root / "shared/credential-tmp"): str(root / "runtime/credential-tmp"),
         str(root / "shared/tmp"): str(root / "runtime/tmp"),
         str(root / "shared/verification"): str(root / "runtime/verification"),
-        str(root / "current/scripts/run-playwright-crawler.mjs"): str(root / "backend/scripts/run-playwright-crawler.mjs"),
     }}
     new_env = old_env
     for old, new in replacements.items():
@@ -423,7 +416,7 @@ def verify_public(build_sha: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Deploy this repository to its fixed BaoTa layout")
-    parser.add_argument("--initialize-layout", action="store_true", help="migrate and delete legacy current/releases/shared")
+    parser.add_argument("--initialize-layout", action="store_true", help="initialize the fixed layout and delete bounded legacy directories")
     parser.add_argument("--skip-build", action="store_true", help="reuse existing local dist outputs")
     args = parser.parse_args()
 
@@ -466,7 +459,7 @@ def main() -> None:
             migrate = (
                 f"cd '{remote_stage}/backend' && "
                 f"'{NODE_BIN}' --env-file='{PROJECT_ROOT}/config/product_scout.env' "
-                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql"
+                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql"
             )
             ssh_exec(client, migrate, timeout=120)
             remote_python(client, panel_deploy_source(build_sha, args.initialize_layout), timeout=300)

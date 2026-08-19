@@ -89,6 +89,7 @@ export function registerCredentialAssetRoutes(
           r.body as {
             secret_payload: CredentialSecretInput;
             expected_version: number;
+            expires_at?: string | null;
           },
           context(r, actorId),
         ),

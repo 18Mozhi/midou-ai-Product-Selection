@@ -11,7 +11,7 @@
 3. 恢复副本：将密文写入当前主机内独立的宝塔受控目录，再从该目录重新计算密文哈希。没有副本端验证不得写 `verified`；此副本不保护整机或磁盘故障。
 4. 记录：以系统审计身份写入 `backup_recovery_runs/assets`，关联 request_id 和 trace_id。失败写明确 failure_code，并由宝塔告警。
 
-宝塔计划任务命令：`node <current>/scripts/run-baota-backup-drill.mjs --run --env-file <宝塔受限环境文件>`。任务必须在宝塔中可见、可停用、可查看日志；不得另建系统 cron 或常驻进程。
+宝塔计划任务命令：`cd /www/wwwroot/ai选品/backend && node scripts/run-baota-backup-drill.mjs --run --env-file /www/wwwroot/ai选品/config/product_scout.env`。任务必须在宝塔中可见、可停用、可查看日志；不得另建系统 cron 或常驻进程。
 
 配置或 socket 路径变化不需要重启 MySQL；在宝塔中重新执行有限备份任务即可生效。若回滚本变更，先停用该任务并恢复受限环境与上一发布代码，再运行一次自检；不得以创建 TCP root 账号作为回滚手段。
 

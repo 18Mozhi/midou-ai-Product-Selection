@@ -3,7 +3,7 @@ import { createLeaseToken, hashLeaseToken } from '@scoutops/playwright-crawler';
 
 export type CrawlerRuntimeStatus='running'|'succeeded'|'blocked'|'failed'|'timed_out'|'cancelled';
 export interface CrawlerRunSummary{id:string;organization_id:string;workspace_id:string;provider_id:string;crawler_profile_id:string;status:CrawlerRuntimeStatus;page_count:number;item_count:number;detail_count:number;duration_ms:number|null;error_code:string|null;request_id:string;trace_id:string;started_at:string;finished_at:string|null;}
-export interface CrawlerProfileRuntime{id:string;code:string;name:string;provider_id:string;provider_name:string;status:string;lease:null|{run_id:string;lease_owner:string;leased_at:string;heartbeat_at:string;expires_at:string};}
+export interface CrawlerProfileRuntime{id:string;code:string;name:string;provider_id:string;provider_name:string;status:string;target_domain:string;credential_expires_at:string|null;login_status:'valid'|'expired'|'unknown';lease:null|{run_id:string;lease_owner:string;leased_at:string;heartbeat_at:string;expires_at:string};}
 export interface CrawlerRuntimeSnapshot{profiles:CrawlerProfileRuntime[];runs:CrawlerRunSummary[];observed_at:string;}
 export interface RuntimeContext{actorId:string;requestId:string;traceId:string;}
 export interface AcquireInput extends RuntimeContext{organizationId:string;workspaceId:string;profileId:string;leaseOwner:string;idempotencyKey:string;leaseSeconds:number;}

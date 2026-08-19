@@ -13,11 +13,11 @@
 | 运行数据 | `/www/wwwroot/ai选品/runtime` | Node/Python 共用 | 证据、导出、凭据临时目录与验证数据 |
 | 本机备份 | `/www/wwwroot/ai选品/backups` | 宝塔备份任务 | 仅本项目恢复材料 |
 
-Node 项目仍由统一后端监督 API 与 Worker。Python 项目是宝塔可见、可启停、可查看日志的采集心跳与 Python-to-Playwright 桥接运行时；业务采集任务仍由统一 Worker 领取，不能把 Python 心跳误报为独立任务队列消费者。
+Node 项目由统一后端监督 API 与 Worker。Python 项目是宝塔可见、可启停、可查看日志的浏览器采集消费者：通过内部服务令牌领取档案租约，执行 Python-to-Playwright 调用链，持续续租并回写完成结果；不再上报无业务任务的“空闲心跳”。
 
 ## 创建、更新、启动和重启
 
-首次把旧 `current/releases/shared` 结构整理成固定目录：
+首次初始化固定目录并清理旧目录：
 
 ```powershell
 python scripts/deploy-baota.py --initialize-layout
@@ -42,7 +42,7 @@ python scripts/deploy-baota.py
 
 ## 验证、回滚与维护边界
 
-发布成功必须检查公网 `/api/v1/health/ready`、`/api/v1/health/version` 的 Git SHA、宝塔 Node 状态、Python 心跳日志、Worker 心跳和网站首页。目录或对象身份不匹配时部署脚本失败关闭，不得搜索或修改其他项目。
+发布成功必须检查公网 `/api/v1/health/ready`、`/api/v1/health/version` 的 Git SHA、宝塔 Node 状态、Python 任务领取/结果回写日志、Worker 心跳和网站首页。目录或对象身份不匹配时部署脚本失败关闭，不得搜索或修改其他项目。
 
 代码回滚使用本地目标 Git 提交重新运行同一部署命令；数据库迁移回滚仍需先备份并按对应 runbook 判断数据影响。`config`、`runtime`、`backups` 不随代码覆盖。首次整理只有在新 Node/Python 和公网健康通过后，才删除本项目旧 `current`、`releases`、`shared`；不得把这些名称重新引入生产结构。
 

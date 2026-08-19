@@ -3220,6 +3220,7 @@ paths:
             schema: { type: integer, minimum: 1, maximum: 200, default: 50 },
           },
           { name: unread, in: query, schema: { type: boolean } },
+          { name: workflow_status, in: query, schema: { type: string, enum: [open, in_progress, closed] } },
           {
             name: category,
             in: query,
@@ -3254,7 +3255,7 @@ paths:
         "404": { $ref: "#/components/responses/Error" }
   /notifications/{notificationId}/actions:
     post:
-      summary: Mark a versioned current-recipient notification read or unread
+      summary: Update the read or handling state of a versioned current-recipient notification
       x-required-capability: notification:read
       parameters:
         [
@@ -3279,7 +3280,7 @@ paths:
                       required: [action, expected_version],
                       properties:
                         {
-                          action: { type: string, enum: [read, unread] },
+                          action: { type: string, enum: [read, unread, start, close, reopen] },
                           expected_version: { type: integer, minimum: 1 },
                         },
                     },
@@ -4245,6 +4246,49 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "503": { $ref: "#/components/responses/Error" }
+  /internal/crawler-runtime/acquire:
+    post:
+      summary: Acquire a scoped crawler profile lease for the BaoTa Python consumer
+      security: [{ CrawlerServiceBearer: [] }]
+      parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [organization_id, workspace_id, profile_id, lease_owner, lease_seconds]
+              properties:
+                organization_id: { type: string, format: uuid }
+                workspace_id: { type: string, format: uuid }
+                profile_id: { type: string, format: uuid }
+                lease_owner: { type: string }
+                lease_seconds: { type: integer, minimum: 30, maximum: 600 }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "401": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+  /internal/crawler-runtime/{runId}/heartbeat:
+    post:
+      summary: Renew a live Python crawler lease
+      security: [{ CrawlerServiceBearer: [] }]
+      parameters:
+        - { name: runId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "401": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+  /internal/crawler-runtime/{runId}/complete:
+    post:
+      summary: Write the terminal Playwright result and release its crawler lease
+      security: [{ CrawlerServiceBearer: [] }]
+      parameters:
+        - { name: runId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "401": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
   /platform/collection/tasks:
     get:
       summary: List scoped collection tasks for platform monitoring
@@ -6038,6 +6082,10 @@ components:
       type: http
       scheme: bearer
       bearerFormat: scoutops-api-client
+    CrawlerServiceBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: crawler-service-token
     ReleaseProbeHmac:
       type: apiKey
       in: header
@@ -6863,9 +6911,22 @@ components:
             first_result:
               { type: object, nullable: true, additionalProperties: true }
             blocked_reason: { type: string, nullable: true }
+            blocked_owner: { type: string, nullable: true }
+            blocked_next_step: { type: string, nullable: true }
+            timeline:
+              type: array
+              items:
+                type: object
+                required: [stage, label, status]
+                properties:
+                  stage: { type: string, enum: [queued, collecting, parsing, decision] }
+                  label: { type: string }
+                  status: { type: string, enum: [waiting, active, completed, blocked] }
+                  occurred_at: { type: string, format: date-time, nullable: true }
             decision:
               { type: object, nullable: true, additionalProperties: true }
             opportunity_id: { type: string, format: uuid, nullable: true }
+            verification_task_id: { type: string, format: uuid, nullable: true }
             accepted_at: { type: string, format: date-time }
             terminal_at: { type: string, format: date-time, nullable: true }
             decided_at: { type: string, format: date-time, nullable: true }
@@ -8405,6 +8466,7 @@ components:
           secret_payload:
             { $ref: "#/components/schemas/CredentialSecretInput" },
           expected_version: { type: integer, minimum: 1 },
+          expires_at: { type: string, format: date-time, nullable: true },
         }
     CredentialAssetRevokeInput:
       type: object
@@ -8515,7 +8577,7 @@ components:
         expires_at: { type: string, format: date-time }
     CrawlerProfileRuntime:
       type: object
-      required: [id, code, name, provider_id, provider_name, status, lease]
+      required: [id, code, name, provider_id, provider_name, status, target_domain, credential_expires_at, login_status, lease]
       properties:
         id: { type: string, format: uuid }
         code: { type: string }
@@ -8523,6 +8585,9 @@ components:
         provider_id: { type: string, format: uuid }
         provider_name: { type: string }
         status: { type: string, enum: [active, disabled, revoked] }
+        target_domain: { type: string }
+        credential_expires_at: { type: string, format: date-time, nullable: true }
+        login_status: { type: string, enum: [valid, expired, unknown] }
         lease:
           {
             allOf: [{ $ref: "#/components/schemas/CrawlerProfileLease" }],
@@ -8628,7 +8693,7 @@ components:
                 total: { type: integer }
     BusinessTaskStatus:
       type: string
-      enum: [todo, in_progress, completed, cancelled]
+      enum: [todo, in_progress, paused, completed, cancelled]
     BusinessTask:
       type: object
       required:
@@ -8656,8 +8721,9 @@ components:
         status: { $ref: "#/components/schemas/BusinessTaskStatus" }
         priority: { type: string, enum: [low, normal, high, critical] }
         assignee_id: { type: string, format: uuid }
-        source_type: { type: string, enum: [manual, sourcing_purchase] }
+        source_type: { type: string, enum: [manual, sourcing_purchase, selection_verification, evidence_completion, collection_followup] }
         source_ref_id: { type: string, format: uuid, nullable: true }
+        collection_task_id: { type: string, format: uuid, nullable: true }
         due_at: { type: string, format: date-time, nullable: true }
         completed_at: { type: string, format: date-time, nullable: true }
         progress_percent: { type: integer, minimum: 0, maximum: 100 }
@@ -8690,7 +8756,7 @@ components:
       required: [action, expected_version]
       properties:
         action:
-          { type: string, enum: [start, complete, cancel, delay, transfer, progress] }
+          { type: string, enum: [start, pause, resume, complete, cancel, delay, transfer, progress] }
         expected_version: { type: integer, minimum: 1 }
         reason:
           {

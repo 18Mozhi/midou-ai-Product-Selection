@@ -156,6 +156,9 @@ function openRotate(asset: Asset) {
   message.value = "";
   assetForm.value = "";
   assetForm.encoding = "utf8";
+  assetForm.expires_at = asset.expires_at
+    ? new Date(asset.expires_at).toISOString().slice(0, 16)
+    : "";
 }
 function openProfile() {
   editor.value = "profile";
@@ -315,6 +318,9 @@ async function saveAsset() {
             value: assetForm.value,
           },
           expected_version: selected.value.version,
+          expires_at: assetForm.expires_at
+            ? new Date(assetForm.expires_at).toISOString()
+            : null,
         })
       : await write("/platform/credential-assets", {
           provider_id: assetForm.provider_id,
@@ -494,6 +500,20 @@ onMounted(async () => {
                 }}
               </dd>
             </div>
+            <div>
+              <dt>登录有效期</dt>
+              <dd>
+                {{
+                  asset.expires_at
+                    ? new Date(asset.expires_at) <= new Date()
+                      ? "已失效"
+                      : new Date(asset.expires_at).toLocaleString("zh-CN", {
+                          hour12: false,
+                        })
+                    : "未设置检测期限"
+                }}
+              </dd>
+            </div>
           </dl>
           <footer>
             <button
@@ -594,7 +614,7 @@ onMounted(async () => {
             required
             autocomplete="new-password"
           /><small>仅本次写入；保存后立即从页面状态清除。</small></label
-        ><label v-if="editor === 'asset'"
+        ><label
           >到期时间（可选）<input
             v-model="assetForm.expires_at"
             type="datetime-local"

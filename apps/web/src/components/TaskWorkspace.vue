@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import "../task-workspace.css";
+import "../task-workspace-enhancements.css";
 type State =
   | "loading"
   | "ready"
@@ -19,6 +20,8 @@ type Task = {
   due_at: string | null;
   sla_status: string;
   source_type: string;
+  source_ref_id: string | null;
+  collection_task_id: string | null;
   progress_percent: number;
   progress_note: string | null;
   version: number;
@@ -31,6 +34,7 @@ const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all" }>(),
   summary = ref<any>({
     todo: 0,
     in_progress: 0,
+    paused: 0,
     completed: 0,
     cancelled: 0,
     overdue: 0,
@@ -39,10 +43,15 @@ const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all" }>(),
   status = ref(""),
   notice = ref(""),
   requestId = ref(""),
+  busy = ref(false),
   showCreate = ref(false),
   deleting = ref<Task | null>(null),
   deleteReason = ref(""),
   editing = ref<Task | null>(null),
+  selectedIds = ref<string[]>([]),
+  batchAction = ref<"pause" | "resume" | "cancel">("pause"),
+  batchReason = ref(""),
+  showBatchImpact = ref(false),
   form = ref({ title: "", description: "", priority: "normal", due_at: "" }),
   comment = ref("");
 const visible = computed(() =>
@@ -54,6 +63,7 @@ const visible = computed(() =>
         todo: "待处理",
         in_progress: "进行中",
         completed: "已完成",
+        paused: "已暂停",
         cancelled: "已取消",
         overdue: "已逾期",
         due_soon: "24 小时内到期",
@@ -61,6 +71,11 @@ const visible = computed(() =>
         not_set: "未设置期限",
       }) as any
     )[v] ?? v,
+  batchTargets = computed(() => tasks.value.filter((task) => selectedIds.value.includes(task.id))),
+  batchEligible = computed(() => batchTargets.value.filter((task) =>
+    batchAction.value === "pause" ? task.status === "in_progress" :
+      batchAction.value === "resume" ? task.status === "paused" :
+        !["completed", "cancelled"].includes(task.status))),
   time = (v: string | null) =>
     v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "未设置";
 async function api(path: string, init?: RequestInit) {
@@ -138,7 +153,7 @@ async function removeTask(){if(!deleting.value||!deleteReason.value.trim())retur
 async function action(name: string) {
   if (!selected.value) return;
   const body: any = { action: name, expected_version: selected.value.version };
-  if (["cancel", "delay", "transfer"].includes(name)) {
+  if (["pause", "cancel", "delay", "transfer"].includes(name)) {
     body.reason = window.prompt("请输入原因")?.trim();
     if (!body.reason) return;
   }
@@ -161,6 +176,35 @@ async function action(name: string) {
     await load();
   } catch {}
 }
+function previewBatch(action: "pause" | "resume" | "cancel") {
+  batchAction.value = action;
+  batchReason.value = "";
+  showBatchImpact.value = true;
+}
+async function confirmBatch() {
+  if (!batchEligible.value.length || (["pause", "cancel"].includes(batchAction.value) && !batchReason.value.trim())) return;
+  busy.value = true;
+  let completed = 0;
+  try {
+    for (const task of batchEligible.value) {
+      await api(`/tasks/${task.id}/actions`, {
+        method: "POST",
+        body: JSON.stringify({
+          action: batchAction.value,
+          expected_version: task.version,
+          ...(["pause", "cancel"].includes(batchAction.value) ? { reason: batchReason.value.trim() } : {}),
+        }),
+      });
+      completed += 1;
+    }
+    notice.value = `批量操作已完成 ${completed} 项；每项均保留独立审计记录。`;
+    selectedIds.value = [];
+    showBatchImpact.value = false;
+    await load();
+  } finally {
+    busy.value = false;
+  }
+}
 async function addComment() {
   if (!selected.value || !comment.value.trim()) return;
   try {
@@ -173,8 +217,12 @@ async function addComment() {
   } catch {}
 }
 onMounted(() => {
-  showCreate.value =
-    new URLSearchParams(window.location.search).get("create") === "1";
+  const query = new URLSearchParams(window.location.search);
+  showCreate.value = query.get("create") === "1";
+  if (showCreate.value) {
+    form.value.title = query.get("title")?.slice(0, 200) ?? "";
+    form.value.description = query.get("description")?.slice(0, 5000) ?? "";
+  }
   void load();
 });
 </script>
@@ -234,7 +282,8 @@ onMounted(() => {
           v-for="x in [
             { v: '', t: '全部' },
             { v: 'todo', t: '待处理' },
-            { v: 'in_progress', t: '进行中' },
+          { v: 'in_progress', t: '进行中' },
+            { v: 'paused', t: '已暂停' },
             { v: 'completed', t: '已完成' },
           ]"
           :key="x.v"
@@ -244,12 +293,19 @@ onMounted(() => {
           {{ x.t }}
         </button>
       </div>
+      <div v-if="selectedIds.length" class="task-batch-bar">
+        <span>已选 {{ selectedIds.length }} 项</span>
+        <button type="button" @click="previewBatch('pause')">批量暂停</button>
+        <button type="button" @click="previewBatch('resume')">批量继续</button>
+        <button type="button" class="danger" @click="previewBatch('cancel')">批量取消</button>
+      </div>
       <section v-if="!visible.length" class="task-state">
         <h3>当前没有任务</h3>
         <p>创建任务后会在此显示；系统不会填充示例业务数据。</p>
       </section>
       <div v-else class="task-list">
         <article v-for="x in visible" :key="x.id">
+        <label class="task-row-select"><input v-model="selectedIds" type="checkbox" :value="x.id" /><span class="sr-only">选择任务：{{ x.title }}</span></label>
         <button class="task-row-main" @click="open(x)">
           <i :data-priority="x.priority"></i
           ><span
@@ -315,12 +371,19 @@ onMounted(() => {
           <dt>负责人</dt>
           <dd>{{ selected.assignee_id }}</dd>
         </div>
+        <div>
+          <dt>底层采集任务</dt>
+          <dd v-if="selected.collection_task_id"><a :href="`/platform-admin/collection?task=${selected.collection_task_id}`">查看关联采集任务</a></dd>
+          <dd v-else>当前业务任务未关联采集任务</dd>
+        </div>
       </dl>
       <div class="task-actions">
         <button v-if="selected.status === 'todo'" @click="action('start')">
           开始</button
+        ><button v-if="selected.status === 'in_progress'" @click="action('pause')">暂停</button
+        ><button v-if="selected.status === 'paused'" @click="action('resume')">继续</button
         ><button
-          v-if="['todo', 'in_progress'].includes(selected.status)"
+          v-if="['todo', 'in_progress', 'paused'].includes(selected.status)"
           @click="action('complete')"
         >
           完成</button
@@ -329,6 +392,11 @@ onMounted(() => {
           @click="action('delay')"
         >
           延期</button
+        ><button
+          v-if="!['completed', 'cancelled'].includes(selected.status)"
+          class="danger"
+          @click="action('cancel')"
+        >取消任务</button
         ><button @click="action('transfer')">转交</button>
         <button @click="updateProgress">更新进度</button><button @click="editTask">编辑</button><button class="danger" @click="askRemove(selected)">删除</button>
       </div>
@@ -351,6 +419,20 @@ onMounted(() => {
         </form>
       </section>
     </aside>
+    <dialog :open="showBatchImpact" class="task-batch-impact">
+      <form @submit.prevent="confirmBatch">
+        <h3>确认批量{{ batchAction === 'pause' ? '暂停' : batchAction === 'resume' ? '继续' : '取消' }}</h3>
+        <p>影响范围会在执行前固定；不符合当前状态的任务不会被修改。</p>
+        <dl>
+          <div><dt>已选择</dt><dd>{{ batchTargets.length }} 项</dd></div>
+          <div><dt>可执行</dt><dd>{{ batchEligible.length }} 项</dd></div>
+          <div><dt>跳过</dt><dd>{{ batchTargets.length - batchEligible.length }} 项</dd></div>
+          <div><dt>关联采集任务</dt><dd>{{ batchEligible.filter(item => item.collection_task_id).length }} 项（仅展示关联，不联动取消底层任务）</dd></div>
+        </dl>
+        <label v-if="batchAction !== 'resume'">操作原因<textarea v-model="batchReason" required maxlength="500"></textarea></label>
+        <div><button type="button" @click="showBatchImpact = false">返回</button><button :disabled="busy || !batchEligible.length">确认执行</button></div>
+      </form>
+    </dialog>
     <dialog :open="Boolean(deleting)" class="task-delete-dialog">
       <form @submit.prevent="removeTask">
         <h3>删除任务</h3>

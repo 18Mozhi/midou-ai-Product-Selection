@@ -2,6 +2,7 @@
   color: #eef5f7;
   padding: 4px 0 48px;
 }
+
 .approval-workspace header {
   display: flex;
   justify-content: space-between;
@@ -295,4 +296,10 @@ dialog form {
   .approval-workspace header button {
     flex: 1;
   }
+}
+
+.approval-state {
+  background: var(--so-panel);
+  border-color: var(--so-border);
+  color: var(--so-text-muted);
 }

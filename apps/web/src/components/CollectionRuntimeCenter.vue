@@ -21,6 +21,9 @@ interface Profile {
   provider_id: string;
   provider_name: string;
   status: string;
+  target_domain: string;
+  credential_expires_at: string | null;
+  login_status: "valid" | "expired" | "unknown";
   lease: Lease | null;
 }
 interface Run {
@@ -227,6 +230,21 @@ onMounted(load);
                 <dd>{{ time(profile.lease.expires_at) }}</dd>
               </div>
             </dl>
+            <p>
+              登录状态：{{
+                profile.login_status === "valid"
+                  ? "有效"
+                  : profile.login_status === "expired"
+                    ? "已失效"
+                    : "未设置检测期限"
+              }}
+              · 绑定站点：{{ profile.target_domain }}
+            </p>
+            <a
+              v-if="profile.login_status === 'expired'"
+              href="/platform-admin/tasks?source_type=collection_followup"
+              >处理续期任务</a
+            >
           </article>
         </div>
       </section>

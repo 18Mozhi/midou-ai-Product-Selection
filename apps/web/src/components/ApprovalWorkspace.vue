@@ -34,6 +34,13 @@ type Approval = {
   version: number;
   nodes?: any[];
   actions?: any[];
+  decision_context?: {
+    evidence_complete: number;
+    evidence_total: number;
+    missing_items: string[];
+    rule_version: string;
+    basis: string[];
+  };
 };
 const props = defineProps<{ apiBaseUrl: string }>(),
   state = ref<ViewState>("loading"),
@@ -340,6 +347,11 @@ onMounted(load);
       <p>{{ selected.template_name }} / v{{ selected.version }}</p>
       <h3>{{ selected.title }}</h3>
       <small>{{ selected.resource_type }} · {{ selected.resource_id }}</small>
+      <section v-if="selected.decision_context" class="approval-decision-context">
+        <header><div><small>证据完整度</small><strong>{{ selected.decision_context.evidence_complete }} / {{ selected.decision_context.evidence_total }}</strong></div><div><small>规则版本</small><strong>{{ selected.decision_context.rule_version }}</strong></div></header>
+        <p v-if="selected.decision_context.missing_items.length">缺失：{{ selected.decision_context.missing_items.join('、') }}</p>
+        <ul><li v-for="basis in selected.decision_context.basis" :key="basis">{{ basis }}</li></ul>
+      </section>
       <div class="approval-timeline">
         <article
           v-for="node in selected.nodes"

@@ -1,6 +1,11 @@
 # M07-05 宝塔发布与回滚 Runbook
 
-> 历史双槽流程已停用。当前生产只允许一个宝塔 Node 后端 `ai选品`，不得创建第二后端、4103 常驻候选项目或保留临时灰度任务。以下内容仅用于解释旧审计记录；新发布按 `infra/baota/README.md` 的单后端版本目录、原子 `current` 切换、健康失败回滚流程执行。
+> 本文以下双槽命令已停用，只用于历史审计。当前发布必须在本地提交且工作树干净后运行
+> `python scripts/deploy-baota.py`，生产只维护 `/www/wwwroot/ai选品/frontend`、
+> `/www/wwwroot/ai选品/backend`、`/www/wwwroot/ai选品/python`、`config`、`runtime`
+> 与 `backups`，并通过宝塔重启既有 `ai选品` 与 `ai选品-python` 项目。
+
+> 历史双槽流程已停用。当前生产只允许一个宝塔 Node 后端 `ai选品`，不得创建第二后端、4103 常驻候选项目或保留临时灰度任务。以下内容仅用于解释旧审计记录；新发布按 `infra/baota/README.md` 覆盖固定目录，并在健康失败时用本地目标 Git 提交重新部署回滚。
 
 ## 发布前
 

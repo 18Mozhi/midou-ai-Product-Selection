@@ -25,6 +25,13 @@ class CrawlerConfig:
     playwright_node_binary: str
     playwright_runner_path: str
     playwright_run_timeout_seconds: int
+    api_base_url: str
+    service_token: str
+    organization_id: str
+    workspace_id: str
+    profile_id: str
+    execution_request_file: str
+    lease_seconds: int
 
 
 def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
@@ -57,6 +64,27 @@ def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
         raise ConfigError("CRAWLER_HEARTBEAT_SECONDS", "must be an integer from 5 to 60") from error
     if heartbeat_seconds < 5 or heartbeat_seconds > 60:
         raise ConfigError("CRAWLER_HEARTBEAT_SECONDS", "must be an integer from 5 to 60")
+    api_base_url = values.get("CRAWLER_API_BASE_URL", "http://127.0.0.1:4101").strip().rstrip("/")
+    service_token = values.get("CRAWLER_SERVICE_TOKEN", "").strip()
+    organization_id = values.get("CRAWLER_ORGANIZATION_ID", "").strip()
+    workspace_id = values.get("CRAWLER_WORKSPACE_ID", "").strip()
+    profile_id = values.get("CRAWLER_PROFILE_ID", "").strip()
+    execution_request_file = values.get("CRAWLER_EXECUTION_REQUEST_FILE", "").strip()
+    try:
+        lease_seconds = int(values.get("CRAWLER_LEASE_SECONDS", "120"))
+    except ValueError as error:
+        raise ConfigError("CRAWLER_LEASE_SECONDS", "must be an integer from 30 to 600") from error
+    if lease_seconds < 30 or lease_seconds > 600:
+        raise ConfigError("CRAWLER_LEASE_SECONDS", "must be an integer from 30 to 600")
+    uuid_pattern = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}", re.I)
+    if production:
+        if len(service_token) < 32:
+            raise ConfigError("CRAWLER_SERVICE_TOKEN", "must contain at least 32 characters in production")
+        for key, value in (("CRAWLER_ORGANIZATION_ID", organization_id), ("CRAWLER_WORKSPACE_ID", workspace_id), ("CRAWLER_PROFILE_ID", profile_id)):
+            if not uuid_pattern.fullmatch(value):
+                raise ConfigError(key, "must be a UUID in production")
+        if not execution_request_file or not Path(execution_request_file).resolve().is_file():
+            raise ConfigError("CRAWLER_EXECUTION_REQUEST_FILE", "must reference the restricted Playwright request JSON in production")
     safe = {
         "crawler_id": crawler_id,
         "evidence_root": evidence_root,
@@ -66,6 +94,12 @@ def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
         "credential_temp_root": credential_temp_root,
         "playwright_runner_path": playwright_runner_path,
         "playwright_run_timeout_seconds": playwright_run_timeout_seconds,
+        "api_base_url": api_base_url,
+        "organization_id": organization_id,
+        "workspace_id": workspace_id,
+        "profile_id": profile_id,
+        "execution_request_file": str(Path(execution_request_file).resolve()) if execution_request_file else "",
+        "lease_seconds": lease_seconds,
     }
     fingerprint = hashlib.sha256(json.dumps(safe, sort_keys=True).encode()).hexdigest()
-    return CrawlerConfig(crawler_id, evidence_root, master_key, fingerprint, heartbeat_seconds, credential_temp_root, master_key_version, playwright_node_binary, playwright_runner_path, playwright_run_timeout_seconds)
+    return CrawlerConfig(crawler_id, evidence_root, master_key, fingerprint, heartbeat_seconds, credential_temp_root, master_key_version, playwright_node_binary, playwright_runner_path, playwright_run_timeout_seconds, api_base_url, service_token, organization_id, workspace_id, profile_id, execution_request_file, lease_seconds)

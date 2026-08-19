@@ -1,0 +1,30 @@
+:root {
+  --so-font-body: 1rem;
+  --so-touch-target: 44px;
+}
+
+html,
+body {
+  font-size: 16px;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-size: var(--so-font-body);
+}
+
+.role-content :where(p, li, dd, td, label, input, select, textarea, button) {
+  font-size: max(var(--so-font-body), 1em);
+}
+
+:where(button, input, select, textarea, [role="button"], .role-mobile-nav a) {
+  min-block-size: var(--so-touch-target);
+}
+
+:where(button, a, input, select, textarea, [role="button"]):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--so-primary) 72%, white);
+  outline-offset: 2px;
+}

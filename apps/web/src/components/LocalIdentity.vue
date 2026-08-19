@@ -284,7 +284,7 @@ onMounted(() => {
           <span>S</span><i></i><i></i><i></i>
         </div>
         <ul>
-          <li><strong>Argon2id</strong><small>密码单向哈希</small></li>
+          <li><strong>安全密码</strong><small>密码不可反向读取</small></li>
           <li><strong>单次令牌</strong><small>验证与重置可追踪</small></li>
           <li><strong>动态双重验证</strong><small>30 秒短时验证码</small></li>
         </ul>
@@ -663,8 +663,7 @@ onMounted(() => {
       </section>
     </section>
     <footer class="identity-footer">
-      <span>安全状态均有文字说明</span><span>企业 SSO：适配层待审批启用</span
-      ><span>生产运行：仅宝塔管理</span>
+      <span>安全状态均有文字说明</span><span>生产运行：仅宝塔管理</span>
     </footer>
   </main>
 </template>
