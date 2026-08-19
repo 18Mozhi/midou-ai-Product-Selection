@@ -269,6 +269,7 @@ export class MySqlTrendProjectionWorker {
                     SELECT 1 FROM collection_subqueries q
                     WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
                       AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id'))=CONVERT(se.resource_id USING utf8mb4) COLLATE utf8mb4_bin
+                      AND CHAR_LENGTH(JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query'))) BETWEEN 1 AND 300
                   )) sourcing_task_missing
            FROM opportunities o
            JOIN competitors c
@@ -295,6 +296,7 @@ export class MySqlTrendProjectionWorker {
                  SELECT 1 FROM collection_subqueries q
                  WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
                    AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id'))=CONVERT(se.resource_id USING utf8mb4) COLLATE utf8mb4_bin
+                   AND CHAR_LENGTH(JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query'))) BETWEEN 1 AND 300
                ))
              )
            ORDER BY o.created_at,o.id

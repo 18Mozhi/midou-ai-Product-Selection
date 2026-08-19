@@ -18,7 +18,7 @@
 - 页面数据不足：核对主题证据数和来源新鲜度。单来源或没有批准的计算规则时，环比与置信度显示数据不足是正确状态。
 - 自动频道采集成功但没有热点：检查 `trend_projection_jobs.last_error_code` 和 Provider code；`gnews_<市场>_<主题>` 应进入投影，只有非趋势来源才是 `succeeded_empty`。
 - 商品型频道有热点但没有自动发现选品：检查同组织、工作区、趋势主题对应的 `opportunities`、`opportunity_evidence_links` 和 `opportunity.candidate.discovered`。自动发现选品只生成待评估候选，不应出现默认评分、利润或推荐。
-- 已有商品机会但图片、竞品快照或供应商仍为空：检查 `collection_subqueries.target_json` 中对应的 `competitor_snapshot` / `sourcing_search`，以及事件 `competitor.collection.auto_scheduled` / `sourcing.collection.auto_scheduled`。Amazon 详情目标必须包含 `page_url`；只有旧版错误使用 `url` 的任务会自动补建一次正确任务。供应商查询最长 300 字符，Made-in-China 失败后仍应继续 EC21。其他已有失败或死信任务不会自动无限重放，应在采集控制台查看错误和证据后人工处理。
+- 已有商品机会但图片、竞品快照或供应商仍为空：检查 `collection_subqueries.target_json` 中对应的 `competitor_snapshot` / `sourcing_search`，以及事件 `competitor.collection.auto_scheduled` / `sourcing.collection.auto_scheduled`。Amazon 详情目标必须包含 `page_url`；供应商目标必须包含 1–300 字符的 `query`。旧版字段错误或超长查询会自动补建一次正确任务，Made-in-China 失败后仍应继续 EC21。其他已有失败或死信任务不会自动无限重放，应在采集控制台查看错误和证据后人工处理。
 
 日志不得输出 Cookie、Token、数据库密码、主密钥或原始证据正文。
 

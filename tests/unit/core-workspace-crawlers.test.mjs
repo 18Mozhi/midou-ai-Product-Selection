@@ -77,6 +77,7 @@ test("automatic downstream tasks use crawler contracts and recover malformed his
   assert.match(worker, /page_url: String\(row\.product_url\)/);
   assert.match(worker, /page_url: canonicalUrl/);
   assert.match(worker, /JSON_EXTRACT\(q\.target_json,'\$\.page_url'\).*IS NOT NULL/s);
+  assert.match(worker, /CHAR_LENGTH\(JSON_UNQUOTE\(JSON_EXTRACT\(q\.target_json,'\$\.query'\)\)\) BETWEEN 1 AND 300/);
   assert.match(worker, /query: String\(row\.name\)\.slice\(0, 300\)/);
   assert.match(worker, /query: title\.slice\(0, 300\)/);
 });
