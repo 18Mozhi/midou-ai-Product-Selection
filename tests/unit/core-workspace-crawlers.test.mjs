@@ -71,3 +71,48 @@ test("collection worker quarantines exhausted queue entries without blocking fre
   assert.match(worker, /status='queued' AND attempt_count<4/);
   assert.match(worker, /retry_exhausted:true/);
 });
+
+test("automatic downstream tasks use crawler contracts and recover malformed historic tasks", async () => {
+  const worker = await readFile("apps/worker/src/trend-projection-worker.ts", "utf8");
+  assert.match(worker, /page_url: String\(row\.product_url\)/);
+  assert.match(worker, /page_url: canonicalUrl/);
+  assert.match(worker, /JSON_EXTRACT\(q\.target_json,'\$\.page_url'\).*IS NOT NULL/s);
+  assert.match(worker, /query: String\(row\.name\)\.slice\(0, 300\)/);
+  assert.match(worker, /query: title\.slice\(0, 300\)/);
+});
+
+test("optional supplier failure keeps the second public crawler running", async () => {
+  const [{ ProviderSourceExecutor }, { ProviderAdapterFailure }] = await Promise.all([
+    import("../../apps/worker/dist/provider-source-executor.js"),
+    import("../../packages/provider-adapters/dist/index.js"),
+  ]);
+  const providerRows = {
+    mic: { id: "55555555-5555-4555-8555-555555555551", code: "made_in_china_search", access_mode: "public_page", target_url: "https://www.made-in-china.com/", parser_version: "mic-v1", timeout_ms: 20000, fields_json: ["title"], status: "enabled", created_by: "66666666-6666-4666-8666-666666666666" },
+    ec21: { id: "55555555-5555-4555-8555-555555555552", code: "ec21_supplier_search", access_mode: "public_page", target_url: "https://www.ec21.com/", parser_version: "ec21-v1", timeout_ms: 20000, fields_json: ["title"], status: "enabled", created_by: "66666666-6666-4666-8666-666666666666" },
+  };
+  const replayUpdates = [];
+  const pool = { query: async (sql, values) => {
+    if (sql.includes("FROM providers p")) return [[values[1] === providerRows.mic.id ? providerRows.mic : providerRows.ec21]];
+    if (sql.includes("UPDATE provider_source_replay_runs SET status=?")) replayUpdates.push(values);
+    return [{ affectedRows: 1 }];
+  } };
+  const collected = [];
+  const registry = {
+    collect: async ({ provider }) => {
+      collected.push(provider.code);
+      if (provider.code === "made_in_china_search") throw new ProviderAdapterFailure("network_error", true);
+      return { records: [{ externalId: "ec21-item", observedAt: "2026-08-19T10:00:00.000Z", evidenceRef: "ec21:item", payload: { raw_content: "<li>item</li>", content_type: "text/html", canonical_url: "https://www.ec21.com/product-details/item.html", fields: { title: "Storage box" }, source_paths: { title: "ec21.html.title" } } }], nextCursor: null };
+    },
+    normalize: (_code, raw, context) => ({ external_id: raw.externalId, observed_at: raw.observedAt, canonical_url: raw.payload.canonical_url, fields: raw.payload.fields, evidence_ref: raw.evidenceRef, provenance: { provider_id: context.provider.id, adapter_key: context.provider.code, adapter_version: "test-v1", parser_version: context.provider.parserVersion } }),
+  };
+  const evidence = { persist: async () => ({ evidence_id: "evidence", normalized_record_id: "normalized", deduplicated: false }) };
+  const executor = new ProviderSourceExecutor(pool, registry, evidence, "supplier-fallback-test");
+  const outcomes = await executor.execute({ id: "33333333-3333-4333-8333-333333333333", organizationId: "11111111-1111-4111-8111-111111111111", workspaceId: "22222222-2222-4222-8222-222222222222", attemptCount: 1, requestId: "supplier-fallback", traceId: "supplier-fallback", leaseToken: "unused", subqueries: [
+    { id: "44444444-4444-4444-8444-444444444441", providerId: providerRows.mic.id, ordinal: 0, required: false, target: { query: "storage box" } },
+    { id: "44444444-4444-4444-8444-444444444442", providerId: providerRows.ec21.id, ordinal: 1, required: false, target: { query: "storage box" } },
+  ] }, async () => {});
+  assert.deepEqual(collected, ["made_in_china_search", "ec21_supplier_search"]);
+  assert.equal(outcomes[0].status, "failed");
+  assert.equal(outcomes[1].status, "succeeded");
+  assert.deepEqual(replayUpdates[0]?.slice(0, 3), ["completed_with_warnings", 1, "network_error"]);
+});

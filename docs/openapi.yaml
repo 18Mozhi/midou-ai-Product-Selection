@@ -1847,7 +1847,7 @@ paths:
   /opportunities:
     get:
       summary: List workspace-scoped opportunities without fabricated scores
-      description: 商品型自动热点频道会建立带真实趋势证据的待评估选品，并自动排队 Amazon 竞品快照与 Made-in-China/EC21 公开供应商搜索；人工创建仍可用。自动候选保持 insufficient_data，不代表系统推荐、采纳或可靠利润。
+      description: 商品型自动热点频道会建立带真实趋势证据的待评估选品，并自动排队 Amazon 竞品快照与 Made-in-China/EC21 公开供应商搜索；Amazon 使用 page_url 商品页目标，供应商关键词最多 300 字符，单一供应商来源失败不会阻断后续公开来源。人工创建仍可用。自动候选保持 insufficient_data，不代表系统推荐、采纳或可靠利润。
       security: [{ HttpOnlySession: [] }]
       parameters:
         - $ref: "#/components/parameters/Page"

@@ -263,6 +263,7 @@ export class MySqlTrendProjectionWorker {
                     SELECT 1 FROM collection_subqueries q
                     WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='competitor_snapshot'
                       AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id'))=CONVERT(c.id USING utf8mb4) COLLATE utf8mb4_bin
+                      AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.page_url')) IS NOT NULL
                   )) competitor_task_missing,
                   (se.resource_id IS NOT NULL AND NOT EXISTS (
                     SELECT 1 FROM collection_subqueries q
@@ -287,6 +288,7 @@ export class MySqlTrendProjectionWorker {
                  SELECT 1 FROM collection_subqueries q
                  WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='competitor_snapshot'
                    AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id'))=CONVERT(c.id USING utf8mb4) COLLATE utf8mb4_bin
+                   AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.page_url')) IS NOT NULL
                ))
                OR
                (se.resource_id IS NOT NULL AND NOT EXISTS (
@@ -322,7 +324,7 @@ export class MySqlTrendProjectionWorker {
                 providerId: providers.amazon,
                 required: true,
                 target: {
-                  url: String(row.product_url),
+                  page_url: String(row.product_url),
                   asin: String(row.external_id),
                   projection_type: "competitor_snapshot",
                   competitor_id: String(row.competitor_id),
@@ -351,7 +353,7 @@ export class MySqlTrendProjectionWorker {
               providerId,
               required: false,
               target: {
-                query: String(row.name),
+                query: String(row.name).slice(0, 300),
                 projection_type: "sourcing_search",
                 search_id: searchId,
               },
@@ -895,7 +897,7 @@ export class MySqlTrendProjectionWorker {
             providerId: providers.amazon,
             required: true,
             target: {
-              url: canonicalUrl,
+              page_url: canonicalUrl,
               asin,
               projection_type: "competitor_snapshot",
               competitor_id: competitorId,
@@ -925,7 +927,7 @@ export class MySqlTrendProjectionWorker {
           providerId,
           required: false,
           target: {
-            query: title.slice(0, 500),
+            query: title.slice(0, 300),
             projection_type: "sourcing_search",
             search_id: searchId,
           },
