@@ -104,19 +104,41 @@ const when = (v: string | null) =>
       ? ((
           {
             network_error: "网络异常",
+            dns_error: "域名解析失败",
             timeout: "请求超时",
             rate_limited: "来源限速",
             login_required: "需要登录",
             session_expired: "登录已失效",
+            blocked_login: "登录已失效",
             captcha: "验证码受阻",
+            blocked_captcha: "验证码受阻",
             robots_disallowed: "站点规则阻止",
             parser_error: "页面解析失败",
             parser_failed: "页面解析失败",
+            parse_failed: "页面解析失败",
+            source_changed: "页面结构已变化",
             validation_failed: "数据校验失败",
             permission_denied: "权限受阻",
           } as Record<string, string>
         )[value] ?? "其他采集错误")
       : "无错误",
+  errorCategory = (value: string) =>
+    (
+      ({
+        network_error: "网络",
+        dns_error: "网络",
+        timeout: "网络",
+        login_required: "登录",
+        session_expired: "登录",
+        blocked_login: "登录",
+        captcha: "验证码",
+        blocked_captcha: "验证码",
+        parser_error: "解析",
+        parser_failed: "解析",
+        parse_failed: "解析",
+        source_changed: "解析",
+      }) as Record<string, string>
+    )[value] ?? "其他",
   drillRootCause = async (value: string) => {
     errorCode.value = errorCode.value === value ? "" : value;
     await load();
@@ -308,6 +330,7 @@ async function confirmBatchReplay() {
               >
                 <b>{{ errorLabel(root.error_code) }}</b>
                 <span>{{ root.total }} 次 · 最近 {{ when(root.latest_at) }}</span>
+                <small>告警类别：{{ errorCategory(root.error_code) }}</small>
               </button>
               <details>
                 <summary>技术详情</summary>

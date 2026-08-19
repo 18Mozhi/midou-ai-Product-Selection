@@ -137,6 +137,28 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
   });
 });
 
+test("M06-03 distinguishes network login captcha and parser alert categories", async ({ page }) => {
+  await navigation(page);
+  await page.route("**/api/v1/platform/collection/console?**", (route) =>
+    route.fulfill({
+      json: envelope({
+        ...data,
+        root_causes: ["network_error", "login_required", "captcha", "parser_failed"].map(
+          (error_code, index) => ({
+            error_code,
+            total: index + 1,
+            latest_at: "2026-08-08T11:00:00Z",
+          }),
+        ),
+      }),
+    }),
+  );
+
+  await page.goto("/platform-admin/collection/overview");
+  for (const category of ["网络", "登录", "验证码", "解析"])
+    await expect(page.getByText(`告警类别：${category}`, { exact: true })).toBeVisible();
+});
+
 test("M06-03.A17 batch safely replays explicitly selected open dead letters", async ({ page }) => {
   const secondTaskId = "00000000-0000-4000-8000-000000000641";
   const batchData = {
