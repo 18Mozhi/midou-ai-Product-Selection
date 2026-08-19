@@ -7,6 +7,8 @@ import {
   parseAmazonProductPage,
   parseEc21SupplierSearchPage,
   parseMadeInChinaSearchPage,
+  Ec21SupplierSearchAdapter,
+  MadeInChinaSearchAdapter,
 } from "../../packages/provider-sources/dist/index.js";
 
 test("core workspace public crawlers are enabled without official API credentials", () => {
@@ -19,6 +21,14 @@ test("core workspace public crawlers are enabled without official API credential
 });
 
 test("EC21 fallback parser preserves supplier price MOQ and product URL",()=>{const html=`<html><body><li class="galleryLs positionR"><div class="front"><h2 class="pdtName"><a href="https://www.ec21.com/product-details/Foldable-Storage-Box--123.html">Foldable <strong>Storage</strong> Box</a></h2><img src="https://image.ec21.com/box.jpg" itemprop="image"><ol><li itemprop="offers"><span itemprop="priceCurrency" content="USD">US$</span><span itemprop="price">3.5</span></li><li><span class="pr5">3000</span><span class="pr5">Set</span>(Min. Order)</li><li class="pdtCompany"><a title="Ningbo Storage Co., Ltd.">Ningbo Storage Co., Ltd.</a></li></ol></div></li></body></html>`;const[record]=parseEc21SupplierSearchPage(html,"https://www.ec21.com/ec-market/storage-box.html",5);assert.equal(record.payload.fields.supplier_name,"Ningbo Storage Co., Ltd.");assert.equal(record.payload.fields.price,3.5);assert.equal(record.payload.fields.moq,3000);assert.match(record.payload.canonical_url,/ec21\.com\/product-details/);});
+
+test("supplier adapters accept proxy responses whose native url field is empty", async () => {
+  const ec21Html=`<html><body><li class="galleryLs"><h2 class="pdtName"><a href="https://www.ec21.com/product-details/Box--123.html">Storage Box</a></h2><span itemprop="priceCurrency" content="USD"></span><span itemprop="price">3.5</span><li class="pdtCompany"><a title="Box Factory"></a></li></li></body></html>`,
+    micHtml=`<html><head><script type="application/ld+json">${JSON.stringify({"@type":"Product",name:"Storage Box",offers:{lowPrice:"3.2",priceCurrency:"USD",seller:{name:"Box Factory"}}})}</script></head><body><a href="https://box.en.made-in-china.com/product/abc.html">box</a></body></html>`,
+    response=(html)=>new Response(html,{status:200,headers:{"content-type":"text/html"}});
+  assert.equal((await new Ec21SupplierSearchAdapter(async()=>response(ec21Html)).collect({target:{query:"storage box"},limit:1},AbortSignal.timeout(1000))).records.length,1);
+  assert.equal((await new MadeInChinaSearchAdapter(async()=>response(micHtml)).collect({target:{query:"storage box"},limit:1},AbortSignal.timeout(1000))).records.length,1);
+});
 
 test("Amazon product parser preserves real listing metrics and evidence URL", () => {
   const html = `<html><body><div data-component-type="s-search-result" data-asin="B0ABCDEF12"><h2><a href="/dp/B0ABCDEF12"><span>Foldable Storage Box</span></a></h2><span class="a-price"><span class="a-offscreen">$29.99</span></span><span aria-label="4.6 out of 5 stars"></span><span aria-label="1,234 ratings"></span><img class="s-image" src="https://images.example/box.jpg"></div></body></html>`;
@@ -80,7 +90,7 @@ test("automatic downstream tasks use crawler contracts and recover malformed his
   assert.match(worker, /CHAR_LENGTH\(JSON_UNQUOTE\(JSON_EXTRACT\(q\.target_json,'\$\.query'\)\)\) BETWEEN 1 AND 300/);
   assert.match(worker, /query: buildSupplierSearchQuery\(String\(row\.name\)\)/);
   assert.match(worker, /query: buildSupplierSearchQuery\(title\)/);
-  assert.match(worker, /query_contract: "supplier-keywords-v1"/);
+  assert.match(worker, /query_contract: "supplier-keywords-v2"/);
 });
 
 test("adapter failures keep their source error across duplicated package instances", async () => {

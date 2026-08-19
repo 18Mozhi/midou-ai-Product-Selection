@@ -188,15 +188,18 @@ const httpConnectFetch: TunnelFetch = async (url, init, proxy) => {
               headers.delete("content-encoding");
               headers.delete("content-length");
             }
-            resolve(
-              new Response(new Uint8Array(body), {
+            const result = new Response(new Uint8Array(body), {
                 status: response.statusCode ?? 502,
                 headers,
                 ...(response.statusMessage
                   ? { statusText: response.statusMessage }
                   : {}),
-              }),
-            );
+              });
+            Object.defineProperty(result, "url", {
+              configurable: true,
+              value: url.toString(),
+            });
+            resolve(result);
           } catch (error) {
             reject(error);
           }

@@ -87,7 +87,7 @@ test('M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module',a
   assert.match(worker,/page_url: String\(row\.product_url\)[\s\S]*query: buildSupplierSearchQuery\(String\(row\.name\)\)/);
   assert.match(worker,/page_url: canonicalUrl[\s\S]*query: buildSupplierSearchQuery\(title\)/);
   assert.match(worker,/CHAR_LENGTH\(JSON_UNQUOTE\(JSON_EXTRACT\(q\.target_json,'\$\.query'\)\)\) BETWEEN 1 AND 300/);
-  assert.match(worker,/query_contract[\s\S]*supplier-keywords-v1/);
+  assert.match(worker,/query_contract[\s\S]*supplier-keywords-v2/);
   assert.match(worker,/input_ref,status[\s\S]*'opportunity'[\s\S]*'queued'/);
   assert.match(worker,/evaluateMonitoringRules[\s\S]*trend\.monitoring_rule\.matched[\s\S]*last_evaluated_at/);
   assert.match(openapi,/商品型自动热点频道[\s\S]*待评估选品/);

@@ -306,7 +306,7 @@ export class MySqlTrendProjectionWorker {
                     WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
                       AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id'))=CONVERT(se.resource_id USING utf8mb4) COLLATE utf8mb4_bin
                       AND CHAR_LENGTH(JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query'))) BETWEEN 1 AND 300
-                      AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query_contract'))='supplier-keywords-v1'
+                      AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query_contract'))='supplier-keywords-v2'
                   )) sourcing_task_missing
            FROM opportunities o
            JOIN competitors c
@@ -334,7 +334,7 @@ export class MySqlTrendProjectionWorker {
                  WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
                    AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id'))=CONVERT(se.resource_id USING utf8mb4) COLLATE utf8mb4_bin
                    AND CHAR_LENGTH(JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query'))) BETWEEN 1 AND 300
-                   AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query_contract'))='supplier-keywords-v1'
+                   AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query_contract'))='supplier-keywords-v2'
                ))
              )
            ORDER BY o.created_at,o.id
@@ -394,7 +394,7 @@ export class MySqlTrendProjectionWorker {
               required: false,
               target: {
                 query: buildSupplierSearchQuery(String(row.name)),
-                query_contract: "supplier-keywords-v1",
+                query_contract: "supplier-keywords-v2",
                 projection_type: "sourcing_search",
                 search_id: searchId,
               },
@@ -969,7 +969,7 @@ export class MySqlTrendProjectionWorker {
           required: false,
           target: {
             query: buildSupplierSearchQuery(title),
-            query_contract: "supplier-keywords-v1",
+            query_contract: "supplier-keywords-v2",
             projection_type: "sourcing_search",
             search_id: searchId,
           },

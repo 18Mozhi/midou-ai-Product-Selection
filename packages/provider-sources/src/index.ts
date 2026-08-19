@@ -2073,7 +2073,7 @@ export class MadeInChinaSearchAdapter extends SourceAdapter {
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36",
       },
     });
-    if (!/(^|\.)made-in-china\.com$/i.test(new URL(response.url).hostname))
+    if (!/(^|\.)made-in-china\.com$/i.test(new URL(response.url || url).hostname))
       throw new ProviderAdapterFailure("permission_denied", false);
     if (response.status === 429)
       throw new ProviderAdapterFailure("rate_limited", true);
@@ -2153,7 +2153,7 @@ export class Ec21SupplierSearchAdapter extends SourceAdapter {
   readonly version="ec21-supplier-search-adapter-v1";
   constructor(private readonly fetcher:typeof fetch=fetch){super();}
   private url(target:Record<string,unknown>|undefined){const query=text(target?.query,"query",300),slug=query.normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu,"-").replace(/^-+|-+$/g,"").slice(0,120);if(!slug)throw new ProviderAdapterFailure("query_invalid",false);return `https://www.ec21.com/ec-market/${encodeURIComponent(slug)}.html`;}
-  private async response(url:string,signal:AbortSignal){const response=await this.fetcher(url,{signal,redirect:"follow",headers:{accept:"text/html,application/xhtml+xml","accept-language":"en-US,en;q=0.9","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36"}});if(new URL(response.url).hostname!=="www.ec21.com")throw new ProviderAdapterFailure("permission_denied",false);if(response.status===429)throw new ProviderAdapterFailure("rate_limited",true);if(response.status>=500)throw new ProviderAdapterFailure("network_error",true);if(!response.ok)throw new ProviderAdapterFailure("permission_denied",false);return response;}
+  private async response(url:string,signal:AbortSignal){const response=await this.fetcher(url,{signal,redirect:"follow",headers:{accept:"text/html,application/xhtml+xml","accept-language":"en-US,en;q=0.9","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36"}});if(new URL(response.url||url).hostname!=="www.ec21.com")throw new ProviderAdapterFailure("permission_denied",false);if(response.status===429)throw new ProviderAdapterFailure("rate_limited",true);if(response.status>=500)throw new ProviderAdapterFailure("network_error",true);if(!response.ok)throw new ProviderAdapterFailure("permission_denied",false);return response;}
   async collect(request:ProviderCollectRequest,signal:AbortSignal){const url=this.url(request.target),response=await this.response(url,signal);return{records:parseEc21SupplierSearchPage(await response.text(),url,Math.min(request.limit,20)),nextCursor:null};}
   async healthCheck(_:AdapterHealthContext,signal:AbortSignal){const started=Date.now(),url=this.url({query:"storage box"});try{const response=await this.response(url,signal);parseEc21SupplierSearchPage(await response.text(),url,1);return{status:"ready" as const,latencyMs:Date.now()-started,errorCode:null,message:"EC21 公开供应商列表可抓取。"};}catch(error){return{status:"degraded" as const,latencyMs:Date.now()-started,errorCode:error instanceof ProviderAdapterFailure?error.code:"network_error",message:"EC21 公开供应商列表当前不可解析。"};}}
 }
