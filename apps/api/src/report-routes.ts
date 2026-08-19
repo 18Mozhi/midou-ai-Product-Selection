@@ -84,6 +84,14 @@ export function registerReportRoutes(
       r,
     ),
   );
+  app.post("/api/v1/report-exports/:id/regenerate", async (r, reply) => {
+    const x = await o.service.regenerate({
+      ...(await write(r)),
+      exportId: (r.params as any).id,
+    });
+    reply.code(202);
+    return env(x, r);
+  });
   app.get("/api/v1/report-exports/:id/download", async (r, reply) => {
     const x = await o.service.download({
       ...(await scope(r)),

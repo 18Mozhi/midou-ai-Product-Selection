@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../report-center.css";
 type ReportType = "opportunity" | "trend" | "team";
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   type = ref<ReportType>("opportunity"),
   state = ref("loading"),
   report = ref<any>(null),
@@ -10,38 +12,27 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   selectedExport = ref<any>(null),
   notice = ref(""),
   requestId = ref(""),
-  busy = ref(false);
+  busy = ref(false),
+  regeneratingId = ref("");
 let timer: number | undefined;
-async function api(path: string, init?: RequestInit) {
-  const r = await fetch(`${props.apiBaseUrl}${path}`, {
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        ...(init?.method && init.method !== "GET"
-          ? { "idempotency-key": crypto.randomUUID() }
-          : {}),
-        ...(init?.headers ?? {}),
-      },
-      ...init,
-    }),
-    b = await r.json().catch(() => null);
-  requestId.value = b?.request_id ?? "";
-  if (!r.ok) {
-    state.value =
-      r.status === 401
-        ? "expired"
-        : r.status === 403
-          ? "forbidden"
-          : r.status === 429
-            ? "rate_limited"
-            : r.status === 409
-              ? "blocked"
-              : "error";
-    notice.value = b?.error?.action_hint ?? "稍后重试。";
-    throw new Error("request_failed");
+async function api<T>(
+  path: string,
+  options: { method?: string; body?: unknown } = {},
+  affectPageState = true,
+) {
+  try {
+    const response = await request<T>(path, options);
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    if (affectPageState)
+      state.value =
+        failure?.kind === "conflict" ? "blocked" : (failure?.kind ?? "error");
+    notice.value = failure?.actionHint ?? "稍后重试。";
+    throw error;
   }
-  return b.data;
 }
 async function load() {
   state.value = "loading";
@@ -65,8 +56,8 @@ async function createExport() {
   try {
     await api("/report-exports", {
       method: "POST",
-      body: JSON.stringify({ report_type: type.value, format: "csv" }),
-    });
+      body: { report_type: type.value, format: "csv" },
+    }, false);
     notice.value = "导出任务已提交，由宝塔 Node Worker 异步生成。";
     await load();
   } catch {
@@ -74,14 +65,41 @@ async function createExport() {
     busy.value = false;
   }
 }
+async function regenerate(item: any) {
+  regeneratingId.value = item.id;
+  try {
+    const replacement = await api<any>(
+      `/report-exports/${item.id}/regenerate`,
+      { method: "POST" },
+      false,
+    );
+    notice.value = `新的${labels[item.report_type as ReportType]}导出已进入队列。`;
+    selectedExport.value = null;
+    await load();
+    const created = exports.value.find((entry) => entry.id === replacement.id);
+    if (created) selectedExport.value = created;
+  } catch {
+  } finally {
+    regeneratingId.value = "";
+  }
+}
 async function download(item: any) {
   try {
+    const correlationId = crypto.randomUUID();
+    requestId.value = correlationId;
     const r = await fetch(
       `${props.apiBaseUrl}/report-exports/${item.id}/download`,
-      { credentials: "include" },
+      {
+        credentials: "include",
+        headers: {
+          "x-request-id": correlationId,
+          "x-trace-id": correlationId,
+        },
+      },
     );
     if (!r.ok) {
       const b = await r.json().catch(() => null);
+      requestId.value = b?.request_id ?? correlationId;
       notice.value = b?.error?.action_hint ?? "下载暂不可用。";
       return;
     }
@@ -113,8 +131,9 @@ const labels: Record<ReportType, string> = {
       : typeof v === "number"
         ? v.toLocaleString("zh-CN")
         : String(v),
-  metricLabel = (v: string) =>
-    (
+  metricLabel = (v: string) => {
+    if (v === "total" && type.value === "team") return "任务总数";
+    return (
       ({
         total: "总量",
         adopted: "已采纳",
@@ -131,6 +150,45 @@ const labels: Record<ReportType, string> = {
         overdue: "逾期任务",
       }) as any
     )[v] ?? v;
+  },
+  seriesLabels: Record<string, string> = {
+    recommend: "推荐",
+    observe: "继续观察",
+    not_recommend: "不推荐",
+    insufficient_data: "数据不足",
+    active: "活跃",
+    stale: "观测过期",
+    irrelevant: "无关",
+  },
+  seriesLabel = (value: unknown) =>
+    type.value === "team"
+      ? String(value)
+      : (seriesLabels[String(value)] ?? "其他"),
+  statusLabels: Record<string, string> = {
+    queued: "排队中",
+    leased: "生成中",
+    retry_scheduled: "等待重试",
+    succeeded: "可下载",
+    dead_letter: "生成失败",
+    expired: "已过期",
+  },
+  statusLabel = (value: unknown) =>
+    statusLabels[String(value)] ?? "状态待确认",
+  statusHint = (item: any) => {
+    if (isExpired(item)) return "文件已过期，可重新生成";
+    if (item.status === "queued") return "正在等待 Worker 领取";
+    if (item.status === "leased") return "Worker 正在生成文件";
+    if (item.status === "retry_scheduled") return "系统将在退避后自动重试";
+    if (item.status === "dead_letter") return "自动重试已结束，可重新生成";
+    return item.row_count == null
+      ? "等待生成"
+      : `${item.row_count} 行 · ${item.byte_size} 字节`;
+  },
+  isExpired = (item: any) =>
+    item.status === "expired" ||
+    new Date(item.expires_at).valueOf() <= Date.now(),
+  canRegenerate = (item: any) =>
+    isExpired(item) || item.status === "dead_letter";
 onMounted(() => {
   void load();
   timer = window.setInterval(() => {
@@ -167,8 +225,12 @@ onUnmounted(() => clearInterval(timer));
         {{ labels[v] }}
       </button>
     </nav>
-    <div v-if="notice" class="report-notice">
-      {{ notice }} <code v-if="requestId">{{ requestId }}</code>
+    <div v-if="notice" class="report-notice" aria-live="polite">
+      {{ notice }}
+      <details v-if="requestId">
+        <summary>技术详情</summary>
+        <code>{{ requestId }}</code>
+      </details>
     </div>
     <section v-if="state === 'loading'" class="report-state">
       正在聚合当前工作区事实…
@@ -231,7 +293,7 @@ onUnmounted(() => clearInterval(timer));
               ></span>
             </div>
             <b>{{ item.value }}</b
-            ><small>{{ item.label }}</small>
+            ><small>{{ seriesLabel(item.label) }}</small>
           </article>
         </div>
         <div v-else class="report-empty">
@@ -250,16 +312,14 @@ onUnmounted(() => clearInterval(timer));
       </header>
       <div v-if="exports.length" class="report-export-list">
         <article v-for="item in exports" :key="item.id">
-          <i :data-status="item.status">{{ item.status }}</i>
+          <i :data-status="isExpired(item) ? 'expired' : item.status">{{
+            isExpired(item) ? "已过期" : statusLabel(item.status)
+          }}</i>
           <div>
             <b>{{ labels[item.report_type as ReportType] }} · CSV</b
-            ><small
-              >{{
-                item.row_count == null
-                  ? "等待生成"
-                  : `${item.row_count} 行 · ${item.byte_size} 字节`
-              }}
-              · 到期
+            ><small>{{ statusHint(item) }}</small
+            ><small class="report-export-expiry"
+              >有效期至
               {{
                 new Date(item.expires_at).toLocaleString("zh-CN", {
                   hour12: false,
@@ -267,13 +327,79 @@ onUnmounted(() => clearInterval(timer));
               }}</small
             >
           </div>
-          <button v-if="item.status === 'succeeded'" @click="download(item)">
+          <button
+            v-if="item.status === 'succeeded' && !isExpired(item)"
+            @click="download(item)"
+          >
             下载</button
-          ><span v-else>{{ item.last_error_code || "处理中" }}</span><button class="secondary" @click="selectedExport = item">查看详情</button>
+          ><button
+            v-else-if="canRegenerate(item)"
+            :disabled="regeneratingId === item.id"
+            @click="regenerate(item)"
+          >
+            {{ regeneratingId === item.id ? "正在提交…" : "重新生成" }}
+          </button>
+          <span v-else>{{ statusLabel(item.status) }}</span
+          ><button class="secondary" @click="selectedExport = item">
+            查看详情
+          </button>
         </article>
       </div>
       <div v-else class="report-empty">尚无导出任务。</div>
     </section>
-    <aside v-if="selectedExport" class="report-detail"><button aria-label="关闭导出详情" @click="selectedExport=null">×</button><p>导出详情</p><h3>{{ labels[selectedExport.report_type as ReportType] }}</h3><dl><div><dt>状态</dt><dd>{{ selectedExport.status === 'succeeded' ? '已完成' : selectedExport.status === 'failed' ? '失败' : '处理中' }}</dd></div><div><dt>数据行数</dt><dd>{{ selectedExport.row_count ?? '等待生成' }}</dd></div><div><dt>文件大小</dt><dd>{{ selectedExport.byte_size == null ? '等待生成' : `${selectedExport.byte_size} 字节` }}</dd></div><div><dt>到期时间</dt><dd>{{ new Date(selectedExport.expires_at).toLocaleString('zh-CN',{hour12:false}) }}</dd></div></dl><p v-if="selectedExport.last_error_code">失败原因：{{ selectedExport.last_error_code }}</p></aside>
+    <aside v-if="selectedExport" class="report-detail">
+      <button aria-label="关闭导出详情" @click="selectedExport = null">×</button>
+      <p>导出详情</p>
+      <h3>{{ labels[selectedExport.report_type as ReportType] }}</h3>
+      <dl>
+        <div>
+          <dt>状态</dt>
+          <dd>
+            {{
+              isExpired(selectedExport)
+                ? "已过期"
+                : statusLabel(selectedExport.status)
+            }}
+          </dd>
+        </div>
+        <div>
+          <dt>数据行数</dt>
+          <dd>{{ selectedExport.row_count ?? "等待生成" }}</dd>
+        </div>
+        <div>
+          <dt>文件大小</dt>
+          <dd>
+            {{
+              selectedExport.byte_size == null
+                ? "等待生成"
+                : `${selectedExport.byte_size} 字节`
+            }}
+          </dd>
+        </div>
+        <div>
+          <dt>文件有效期</dt>
+          <dd>
+            {{
+              new Date(selectedExport.expires_at).toLocaleString("zh-CN", {
+                hour12: false,
+              })
+            }}
+          </dd>
+        </div>
+      </dl>
+      <button
+        v-if="canRegenerate(selectedExport)"
+        :disabled="regeneratingId === selectedExport.id"
+        @click="regenerate(selectedExport)"
+      >
+        {{
+          regeneratingId === selectedExport.id ? "正在提交…" : "重新生成"
+        }}
+      </button>
+      <details v-if="selectedExport.last_error_code">
+        <summary>技术详情</summary>
+        <code>{{ selectedExport.last_error_code }}</code>
+      </details>
+    </aside>
   </section>
 </template>

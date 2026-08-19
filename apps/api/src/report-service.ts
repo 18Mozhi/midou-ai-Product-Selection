@@ -47,6 +47,7 @@ export class ReportService {
     private readonly repo: ReportRepository,
     private readonly exportRoot: string,
     private readonly ttlHours: number,
+    private readonly now = () => new Date(),
   ) {}
   report(i: any) {
     return this.repo.report({ ...i, reportType: reportType(i.reportType) });
@@ -58,6 +59,30 @@ export class ReportService {
     return this.repo.detail({ ...i, exportId: uuid(i.exportId) });
   }
   createExport(i: any) {
+    return this.queueExport(i, "POST:/api/v1/report-exports");
+  }
+  async regenerate(i: any) {
+    const source = await this.detail(i),
+      sourceId = uuid(i.exportId),
+      expired = new Date(source.expires_at).valueOf() <= this.now().valueOf();
+    if (!expired && source.status !== "dead_letter")
+      throw new ReportServiceError(
+        "report_export_still_available",
+        409,
+        source.status === "succeeded"
+          ? "当前文件仍在有效期内，请直接下载。"
+          : "当前导出仍在处理中，请等待完成。",
+      );
+    return this.queueExport(
+      {
+        ...i,
+        value: { report_type: source.report_type, format: source.format },
+        regeneratedFromExportId: sourceId,
+      },
+      `POST:/api/v1/report-exports/${sourceId}/regenerate`,
+    );
+  }
+  private queueExport(i: any, route: string) {
     const type = reportType(i.value?.report_type);
     if (i.value?.format !== "csv")
       throw new ReportServiceError(
@@ -73,9 +98,12 @@ export class ReportService {
         report_type: type,
         format: "csv",
         filename: `scoutops-${type}-${id}.csv`,
-        expires_at: new Date(Date.now() + this.ttlHours * 3600000),
+        expires_at: new Date(this.now().valueOf() + this.ttlHours * 3600000),
       },
-      route: "POST:/api/v1/report-exports",
+      route,
+      ...(i.regeneratedFromExportId
+        ? { regeneratedFromExportId: i.regeneratedFromExportId }
+        : {}),
     });
   }
   async download(i: any) {
@@ -86,7 +114,7 @@ export class ReportService {
         409,
         "等待导出完成后重试。",
       );
-    if (new Date(item.expires_at).valueOf() <= Date.now())
+    if (new Date(item.expires_at).valueOf() <= this.now().valueOf())
       throw new ReportServiceError(
         "report_export_expired",
         410,

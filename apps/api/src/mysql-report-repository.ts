@@ -163,8 +163,20 @@ export class MySqlReportRepository implements ReportRepository {
         status: "queued",
         version: 1,
         expires_at: i.value.expires_at.toISOString(),
+        ...(i.regeneratedFromExportId
+          ? { regenerated_from_export_id: i.regeneratedFromExportId }
+          : {}),
       };
-      await this.record(c, i, "report.export.queued", i.id, result, now);
+      await this.record(
+        c,
+        i,
+        i.regeneratedFromExportId
+          ? "report.export.regenerated"
+          : "report.export.queued",
+        i.id,
+        result,
+        now,
+      );
       await c.query(
         "INSERT INTO report_export_operations (id,actor_id,route_key,idempotency_key,export_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
         [

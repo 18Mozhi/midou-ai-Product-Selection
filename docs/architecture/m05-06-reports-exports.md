@@ -5,3 +5,5 @@
 导出请求持久化为 `report_exports`，由宝塔 Node Worker 以 MySQL 5.7 租约异步生成 CSV。文件路径只由配置根目录、组织、工作区、导出 ID 和服务端文件名组成；CSV 单元格防公式注入，超出行数上限会失败而不是截断。创建与完成写审计和全局 Outbox，幂等键去重创建请求。
 
 下载端点重新执行会话、`report:read` 和组织/工作区隔离，只有未过期的 succeeded 文件可下载。Worker 会删除到期文件并将状态改为 expired。S0 只使用单主机宝塔 API/Worker 与本地受限目录，不宣称共享存储、多节点或 10,000 用户能力。
+
+页面把 `queued`、`leased`、`retry_scheduled`、`succeeded`、`dead_letter` 和 `expired` 映射为用户可理解的排队、生成、等待重试、可下载、生成失败和已过期状态，内部错误码只放在折叠的技术详情中。重新生成只接受已过期（包括文件有效期已到但 Worker 尚未完成清理）或 `dead_letter` 记录；API 读取原记录的报表类型和格式后创建全新的队列任务，旧记录及文件生命周期保持不可变。相同操作者、来源导出和幂等键只返回同一次新建结果，审计与 Outbox 使用 `report.export.regenerated` 并保留 `regenerated_from_export_id`。

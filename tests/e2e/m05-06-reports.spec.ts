@@ -84,7 +84,7 @@ async function setup(page: Page) {
           filename: "scoutops-opportunity.csv",
           row_count: 28,
           byte_size: 4096,
-          expires_at: "2026-08-09T12:00:00.000Z",
+          expires_at: "2026-09-09T12:00:00.000Z",
           last_error_code: null,
           version: 3,
           created_at: "2026-08-08T12:00:00.000Z",
@@ -99,14 +99,64 @@ async function setup(page: Page) {
           filename: "scoutops-trend.csv",
           row_count: null,
           byte_size: null,
-          expires_at: "2026-08-09T12:00:00.000Z",
+          expires_at: "2026-09-09T12:00:00.000Z",
           last_error_code: null,
           version: 2,
           created_at: "2026-08-08T12:02:00.000Z",
           updated_at: "2026-08-08T12:02:01.000Z",
         },
+        {
+          id: "00000000-0000-4000-8000-000000000565",
+          report_type: "team",
+          format: "csv",
+          status: "expired",
+          attempt_count: 1,
+          filename: "scoutops-team.csv",
+          row_count: 6,
+          byte_size: 2048,
+          expires_at: "2026-08-09T12:00:00.000Z",
+          last_error_code: null,
+          version: 4,
+          created_at: "2026-08-07T12:00:00.000Z",
+          updated_at: "2026-08-09T12:00:00.000Z",
+        },
+        {
+          id: "00000000-0000-4000-8000-000000000567",
+          report_type: "opportunity",
+          format: "csv",
+          status: "queued",
+          attempt_count: 0,
+          filename: "scoutops-opportunity-new.csv",
+          row_count: null,
+          byte_size: null,
+          expires_at: "2026-09-09T12:00:00.000Z",
+          last_error_code: null,
+          version: 1,
+          created_at: "2026-08-08T12:03:00.000Z",
+          updated_at: "2026-08-08T12:03:00.000Z",
+        },
       ]),
     }),
+  );
+  await page.route(
+    "**/api/v1/report-exports/00000000-0000-4000-8000-000000000565/regenerate",
+    (r) => {
+      expect(r.request().headers()["idempotency-key"]).toBeTruthy();
+      expect(r.request().headers()["x-request-id"]).toBeTruthy();
+      expect(r.request().headers()["x-trace-id"]).toBeTruthy();
+      r.fulfill({
+        status: 202,
+        json: envelope({
+          id: "00000000-0000-4000-8000-000000000566",
+          report_type: "team",
+          format: "csv",
+          status: "queued",
+          expires_at: "2026-09-19T12:00:00.000Z",
+          regenerated_from_export_id:
+            "00000000-0000-4000-8000-000000000565",
+        }),
+      });
+    },
   );
 }
 test("M05-06.A07/A08/A15 desktop factual report and export lifecycle", async ({
@@ -119,11 +169,19 @@ test("M05-06.A07/A08/A15 desktop factual report and export lifecycle", async ({
   ).toBeVisible();
   await expect(page.getByText("28").first()).toBeVisible();
   await expect(page.getByText("文件到期后由 Worker 清理")).toBeVisible();
+  await expect(page.locator('i[data-status="queued"]')).toHaveText("排队中");
+  await expect(page.locator('i[data-status="leased"]')).toHaveText("生成中");
+  await expect(page.locator('i[data-status="expired"]')).toHaveText("已过期");
+  await expect(page.getByText("expired", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("继续观察", { exact: true })).toBeVisible();
+  await expect(page.getByText("observe", { exact: true })).toHaveCount(0);
   await expect(page).toHaveScreenshot("m05-06-reports-desktop.png", {
     fullPage: true,
   });
   await page.getByRole("button", { name: "趋势分析" }).click();
   await expect(page.getByText("128")).toBeVisible();
+  await page.getByRole("button", { name: "重新生成" }).first().click();
+  await expect(page.getByText("新的团队绩效导出已进入队列。")).toBeVisible();
 });
 test("M05-06.A07/A08/A15 mobile team report layout", async ({ page }) => {
   await setup(page);

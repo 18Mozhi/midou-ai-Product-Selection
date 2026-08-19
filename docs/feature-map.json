@@ -1300,11 +1300,13 @@
         "/reports",
         "/api/v1/reports/{reportType}",
         "/api/v1/report-exports",
+        "/api/v1/report-exports/{reportExportId}",
+        "/api/v1/report-exports/{reportExportId}/regenerate",
         "/api/v1/report-exports/{reportExportId}/download"
       ],
-      "scope": "current organization and workspace factual opportunity trend and team aggregates plus asynchronous CSV exports",
-      "truthBoundary": "aggregates only persisted facts and preserves missing values; CSV row overflow fails instead of truncating and no forecast is generated",
-      "permission": "report:read on API list create detail and file download with current context",
+      "scope": "current organization and workspace factual opportunity trend and team aggregates plus asynchronous CSV exports and idempotent regeneration",
+      "truthBoundary": "aggregates only persisted facts and preserves missing values; CSV row overflow fails instead of truncating; regeneration creates a new queued export only from an expired or final-failure record and preserves the source export",
+      "permission": "report:read on API list create detail regeneration and file download with current context",
       "configuration": [
         "REPORT_EXPORT_POLL_MS",
         "REPORT_EXPORT_LEASE_SECONDS",

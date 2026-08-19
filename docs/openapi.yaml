@@ -3633,6 +3633,22 @@ paths:
         "200": { $ref: "#/components/responses/Success" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+  /report-exports/{reportExportId}/regenerate:
+    post:
+      summary: Queue a new export from an expired or final-failure scoped export
+      x-required-capability: report:read
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: reportExportId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "202": { $ref: "#/components/responses/Success" }
+        "400": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
   /report-exports/{reportExportId}/download:
     get:
       summary: Download one succeeded unexpired scoped CSV export
