@@ -1201,7 +1201,8 @@
         "../apps/api/src/mysql-notification-repository.ts",
         "../apps/api/src/notification-routes.ts",
         "../apps/worker/src/notification-outbox-worker.ts",
-        "../apps/web/src/components/NotificationCenter.vue"
+        "../apps/web/src/components/NotificationCenter.vue",
+        "../database/migrations/0046_notification_workflow_root_cause.up.sql"
       ],
       "routes": [
         "/notifications",
@@ -1209,8 +1210,8 @@
         "/api/v1/notifications/{notificationId}/actions",
         "/api/v1/me/notification-preferences"
       ],
-      "scope": "organization workspace and current recipient scoped notification facts preferences deliveries idempotent operations and audit",
-      "truthBoundary": "source Outbox and recipient are preserved; email mode is placeholder only and M05-04 SSE is not implemented here",
+      "scope": "organization workspace and current recipient scoped notification facts root-cause groups workflow states preferences deliveries idempotent operations and audit",
+      "truthBoundary": "source Outbox and recipient are preserved; open in_progress and closed filters execute before root-cause grouping and pagination, the newest notification represents each group without rewriting older facts; email mode is placeholder only",
       "permission": "notification:read for current-recipient reads actions and self preferences",
       "configuration": [
         "NOTIFICATION_OUTBOX_POLL_MS",

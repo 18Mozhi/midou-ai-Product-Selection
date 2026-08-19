@@ -10,7 +10,7 @@
     },
     {
       "id": "M05-03.A02",
-      "evidence": "recipient notification preference delivery operation contracts"
+      "evidence": "recipient notification workflow root-cause preference delivery operation contracts"
     },
     {
       "id": "M05-03.A03",
@@ -18,7 +18,7 @@
     },
     {
       "id": "M05-03.A04",
-      "evidence": "self inbox pagination version actions preferences idempotency services"
+      "evidence": "self inbox server workflow filtering pre-pagination root-cause grouping version actions preferences idempotency services"
     },
     {
       "id": "M05-03.A05",
@@ -26,11 +26,11 @@
     },
     {
       "id": "M05-03.A06",
-      "evidence": "OpenAPI notification inbox summary detail actions preference contracts"
+      "evidence": "OpenAPI notification grouped inbox workflow summary detail actions preference contracts"
     },
     {
       "id": "M05-03.A07",
-      "evidence": "notification inbox detail preferences desktop and 390 layout"
+      "evidence": "notification Chinese workflow grouped inbox detail preferences desktop and 390 layout"
     },
     {
       "id": "M05-03.A08",
@@ -50,7 +50,7 @@
     },
     {
       "id": "M05-03.A12",
-      "evidence": "actions preferences states version and validation unit tests"
+      "evidence": "actions preferences workflow filters root-cause pagination version and validation unit tests"
     },
     {
       "id": "M05-03.A13",

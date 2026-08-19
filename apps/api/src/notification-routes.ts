@@ -63,6 +63,7 @@ export function registerNotificationRoutes(
         page: q.page,
         pageSize: q.page_size,
         unread: q.unread,
+        workflowStatus: q.workflow_status,
         category: q.category,
       });
     return env(x.items, r, {

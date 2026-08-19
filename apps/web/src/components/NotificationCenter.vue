@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../notification-center.css";
 import { statusLabel } from "../ui/status-labels";
 type State =
@@ -28,6 +29,7 @@ type Item = {
   created_at: string;
 };
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   items = ref<Item[]>([]),
   summary = ref<any>({
@@ -37,6 +39,9 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     approval: 0,
     competitor: 0,
     system: 0,
+    open: 0,
+    in_progress: 0,
+    closed: 0,
   }),
   selected = ref<Item | null>(null),
   category = ref(""),
@@ -56,8 +61,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   busy = ref(false),
   realtimeState = ref<"connecting" | "connected" | "reconnecting">(
     "connecting",
-  ),
-  visible = computed(() => items.value.filter((item) => !workflowStatus.value || item.workflow_status === workflowStatus.value));
+  );
 let stream: EventSource | null = null;
 const label = (v: string) =>
     (
@@ -67,38 +71,58 @@ const label = (v: string) =>
         competitor: "竞品",
         system: "系统",
       }) as any
-    )[v] ?? v,
-  time = (v: string) => new Date(v).toLocaleString("zh-CN", { hour12: false });
-async function api(path: string, init?: RequestInit) {
-  const r = await fetch(`${props.apiBaseUrl}${path}`, {
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        ...(init?.method && init.method !== "GET"
-          ? { "idempotency-key": crypto.randomUUID() }
-          : {}),
-        ...(init?.headers ?? {}),
-      },
-      ...init,
-    }),
-    b = await r.json().catch(() => null);
-  requestId.value = b?.request_id ?? "";
-  if (!r.ok) {
-    state.value =
-      r.status === 401
-        ? "expired"
-        : r.status === 403
-          ? "forbidden"
-          : r.status === 429
-            ? "rate_limited"
-            : r.status === 409
-              ? "version_conflict"
-              : "error";
-    notice.value = b?.error?.action_hint ?? "稍后重试。";
-    throw new Error("request_failed");
+    )[v] ?? "其他",
+  resourceLabel = (v: string | null) =>
+    (
+      ({
+        task: "任务",
+        approval: "审批",
+        approval_request: "审批",
+        competitor: "竞品",
+        opportunity: "机会",
+        collection_task: "采集任务",
+      }) as Record<string, string>
+    )[v ?? ""] ?? "系统记录",
+  severityLabel = (v: string) =>
+    (
+      ({ info: "一般", warning: "需关注", critical: "紧急" }) as Record<
+        string,
+        string
+      >
+    )[v] ?? "待确认",
+  displayBody = (item: Item) =>
+    /^[a-z][a-z0-9_.-]* 已产生新的可审计事件。$/i.test(item.body)
+      ? ({
+          approval: "审批状态已变化，请查看关联记录。",
+          competitor: "竞品监控状态已变化，请查看关联记录。",
+          system: "系统状态已变化，请查看关联记录。",
+          task: "任务状态已变化，请查看关联记录。",
+        }[item.category] ?? "业务状态已变化，请查看关联记录。")
+      : item.body,
+  time = (v: string) =>
+    new Date(v).toLocaleString("zh-CN", { hour12: false });
+async function api<T>(
+  path: string,
+  options: { method?: string; body?: unknown } = {},
+  affectPageState = true,
+) {
+  try {
+    const response = await request<T>(path, options);
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    if (affectPageState)
+      state.value =
+        failure?.kind === "conflict"
+          ? "version_conflict"
+          : failure?.kind === "blocked"
+            ? "error"
+            : (failure?.kind ?? "error");
+    notice.value = failure?.actionHint ?? "稍后重试。";
+    throw error;
   }
-  return b.data;
 }
 async function load() {
   state.value = "loading";
@@ -106,10 +130,12 @@ async function load() {
     const q = new URLSearchParams({ page: "1", page_size: "100" });
     if (category.value) q.set("category", category.value);
     if (unread.value) q.set("unread", "true");
+    if (workflowStatus.value)
+      q.set("workflow_status", workflowStatus.value);
     const [list, sum, pref] = await Promise.all([
-      api(`/notifications?${q}`),
-      api("/notifications/summary"),
-      api("/me/notification-preferences"),
+      api<Item[]>(`/notifications?${q}`),
+      api<any>("/notifications/summary"),
+      api<any>("/me/notification-preferences"),
     ]);
     items.value = list;
     summary.value = sum;
@@ -119,19 +145,23 @@ async function load() {
 }
 async function open(item: Item) {
   try {
-    selected.value = await api(`/notifications/${item.id}`);
-    if (!item.read_at) {
-      await api(`/notifications/${item.id}/actions`, {
-        method: "POST",
-        body: JSON.stringify({
-          action: "read",
-          expected_version: item.version,
-        }),
-      });
+    const detail = await api<Item>(`/notifications/${item.id}`, {}, false);
+    selected.value = detail;
+    if (!detail.read_at) {
+      const result = await api<Partial<Item>>(
+        `/notifications/${item.id}/actions`,
+        {
+          method: "POST",
+          body: {
+            action: "read",
+            expected_version: detail.version,
+          },
+        },
+        false,
+      );
       selected.value = {
-        ...item,
-        read_at: new Date().toISOString(),
-        version: item.version + 1,
+        ...detail,
+        ...result,
       };
       await load();
     }
@@ -139,10 +169,7 @@ async function open(item: Item) {
 }
 async function markAll() {
   try {
-    await api("/notifications/actions", {
-      method: "POST",
-      body: JSON.stringify({ action: "read_all" }),
-    });
+    await api("/notifications/actions", { method: "POST" }, false);
     notice.value = "当前工作区通知已全部标记已读。";
     await load();
   } catch {}
@@ -150,25 +177,38 @@ async function markAll() {
 async function updateWorkflow(action: "start" | "close" | "reopen") {
   if (!selected.value) return;
   try {
-    const result = await api(`/notifications/${selected.value.id}/actions`, {
-      method: "POST",
-      body: JSON.stringify({ action, expected_version: selected.value.version }),
-    });
+    const result = await api<Partial<Item>>(
+      `/notifications/${selected.value.id}/actions`,
+      {
+        method: "POST",
+        body: { action, expected_version: selected.value.version },
+      },
+      false,
+    );
     selected.value = { ...selected.value, ...result };
-    notice.value = action === "start" ? "通知已进入处理中。" : action === "close" ? "通知已关闭。" : "通知已重新打开。";
+    notice.value =
+      action === "start"
+        ? "通知已进入处理中。"
+        : action === "close"
+          ? "通知已关闭。"
+          : "通知已重新打开。";
     await load();
   } catch {}
 }
 async function savePreferences() {
   busy.value = true;
   try {
-    await api("/me/notification-preferences", {
-      method: "PUT",
-      body: JSON.stringify({
-        ...preferences.value,
-        expected_version: preferences.value.version,
-      }),
-    });
+    await api(
+      "/me/notification-preferences",
+      {
+        method: "PUT",
+        body: {
+          ...preferences.value,
+          expected_version: preferences.value.version,
+        },
+      },
+      false,
+    );
     notice.value = "通知偏好已保存；邮件仍为占位投递，不会对外发送。";
     showPreferences.value = false;
     await load();
@@ -223,21 +263,25 @@ onUnmounted(() => stream?.close());
         ><button @click="markAll">全部已读</button>
       </div>
     </header>
-    <div v-if="notice" class="notification-notice">
-      {{ notice }} <code v-if="requestId">{{ requestId }}</code>
+    <div v-if="notice" class="notification-notice" aria-live="polite">
+      {{ notice }}
+      <details v-if="requestId">
+        <summary>技术详情</summary>
+        <code>{{ requestId }}</code>
+      </details>
     </div>
     <section class="notification-summary">
       <article>
         <span>未读</span><b>{{ summary.unread }}</b>
       </article>
       <article>
-        <span>任务</span><b>{{ summary.task }}</b>
+        <span>未处理</span><b>{{ summary.open }}</b>
       </article>
       <article>
-        <span>审批</span><b>{{ summary.approval }}</b>
+        <span>处理中</span><b>{{ summary.in_progress }}</b>
       </article>
       <article>
-        <span>竞品</span><b>{{ summary.competitor }}</b>
+        <span>已关闭</span><b>{{ summary.closed }}</b>
       </article>
     </section>
     <nav>
@@ -261,7 +305,21 @@ onUnmounted(() => stream?.close());
       >
     </nav>
     <nav aria-label="处理状态筛选">
-      <button v-for="item in [{v:'',t:'全部状态'},{v:'open',t:'未处理'},{v:'in_progress',t:'处理中'},{v:'closed',t:'已关闭'}]" :key="item.v" :aria-pressed="workflowStatus === item.v" @click="workflowStatus = item.v">{{ item.t }}</button>
+      <button
+        v-for="item in [
+          { v: '', t: '全部状态' },
+          { v: 'open', t: '未处理' },
+          { v: 'in_progress', t: '处理中' },
+          { v: 'closed', t: '已关闭' },
+        ]"
+        :key="item.v"
+        :aria-pressed="workflowStatus === item.v"
+        @click="
+          workflowStatus = item.v;
+          load();
+        "
+        >{{ item.t }}</button
+      >
     </nav>
     <section v-if="state === 'loading'" class="notification-state">
       正在读取通知…
@@ -294,13 +352,13 @@ onUnmounted(() => stream?.close());
       <p>{{ notice }}</p>
       <button @click="load">重新加载</button>
     </section>
-    <section v-else-if="!visible.length" class="notification-state">
+    <section v-else-if="!items.length" class="notification-state">
       <h3>当前没有通知</h3>
       <p>事务消息尚未投影出面向你的真实事件，系统不会填充示例消息。</p>
     </section>
     <div v-else class="notification-list">
       <button
-        v-for="item in visible"
+        v-for="item in items"
         :key="item.id"
         :class="{ unread: !item.read_at }"
         @click="open(item)"
@@ -310,29 +368,32 @@ onUnmounted(() => stream?.close());
         }}</i
         ><span
           ><strong>{{ item.title }}</strong
-          ><small>{{ item.body }}</small></span
+          ><small>{{ displayBody(item) }}</small></span
         ><em>{{ time(item.created_at) }}</em
-        ><b>{{ statusLabel(item.workflow_status) }}<small v-if="item.group_count > 1"> · 同根因 {{ item.group_count }} 条</small></b>
+        ><b
+          >{{ statusLabel(item.workflow_status)
+          }}<small v-if="item.group_count > 1">
+            · 同根因 {{ item.group_count }} 条</small
+          ></b
+        >
       </button>
     </div>
     <aside v-if="selected" class="notification-detail">
       <button @click="selected = null" aria-label="关闭消息详情">×</button>
       <p>{{ label(selected.category) }} · {{ time(selected.created_at) }}</p>
       <h3>{{ selected.title }}</h3>
-      <article>{{ selected.body }}</article>
-      <p v-if="selected.group_count > 1">同一根因的 {{ selected.group_count }} 条通知已自动合并展示。</p>
+      <article>{{ displayBody(selected) }}</article>
+      <p v-if="selected.group_count > 1">
+        同一根因的 {{ selected.group_count }} 条通知已自动合并展示。
+      </p>
       <dl>
         <div>
-          <dt>来源类型</dt>
-          <dd>{{ selected.resource_type || "未提供" }}</dd>
-        </div>
-        <div>
-          <dt>来源标识</dt>
-          <dd>{{ selected.resource_id || "未提供" }}</dd>
+          <dt>关联记录</dt>
+          <dd>{{ resourceLabel(selected.resource_type) }}</dd>
         </div>
         <div>
           <dt>严重程度</dt>
-          <dd>{{ selected.severity }}</dd>
+          <dd>{{ severityLabel(selected.severity) }}</dd>
         </div>
       </dl>
       <small
@@ -340,10 +401,46 @@ onUnmounted(() => stream?.close());
       >
       <footer class="notification-workflow-actions">
         <a :href="selected.action_route">定位异常记录</a>
-        <button v-if="selected.workflow_status === 'open'" type="button" @click="updateWorkflow('start')">开始处理</button>
-        <button v-if="selected.workflow_status !== 'closed'" type="button" @click="updateWorkflow('close')">关闭</button>
-        <button v-else type="button" @click="updateWorkflow('reopen')">重新打开</button>
+        <button
+          v-if="selected.workflow_status === 'open'"
+          type="button"
+          @click="updateWorkflow('start')"
+          >开始处理</button
+        >
+        <button
+          v-if="selected.workflow_status !== 'closed'"
+          type="button"
+          @click="updateWorkflow('close')"
+          >关闭</button
+        >
+        <button v-else type="button" @click="updateWorkflow('reopen')"
+          >重新打开</button
+        >
       </footer>
+      <details
+        v-if="
+          selected.resource_id ||
+          selected.resource_type ||
+          selected.root_cause_key
+        "
+        class="notification-technical"
+      >
+        <summary>技术详情</summary>
+        <dl>
+          <div>
+            <dt>来源类型</dt>
+            <dd>{{ selected.resource_type || "未提供" }}</dd>
+          </div>
+          <div>
+            <dt>来源标识</dt>
+            <dd>{{ selected.resource_id || "未提供" }}</dd>
+          </div>
+          <div>
+            <dt>根因键</dt>
+            <dd>{{ selected.root_cause_key || "未提供" }}</dd>
+          </div>
+        </dl>
+      </details>
     </aside>
     <dialog :open="showPreferences">
       <form @submit.prevent="savePreferences">

@@ -31,6 +31,7 @@
   font-weight: 700;
   padding: 10px 16px;
   cursor: pointer;
+  min-height: 44px;
 }
 .notification-center .secondary {
   background: #18262e;
@@ -57,8 +58,14 @@
   padding: 12px;
   margin-bottom: 16px;
 }
+.notification-notice details {
+  margin-top: 8px;
+}
 .notification-notice code {
-  float: right;
+  display: block;
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+  color: #91a5ad;
 }
 .notification-summary {
   display: grid;
@@ -113,7 +120,7 @@
 }
 .notification-list > button {
   display: grid;
-  grid-template-columns: 42px 1fr 180px 50px;
+  grid-template-columns: 42px minmax(0, 1fr) 180px minmax(120px, auto);
   align-items: center;
   gap: 14px;
   background: #101c22;
@@ -172,6 +179,7 @@
   color: #8c9ca2;
   font-size: 25px;
   padding: 0;
+  min-width: 44px;
 }
 .notification-detail h3 {
   font-size: 26px;
@@ -200,6 +208,29 @@
 }
 .notification-detail > small {
   color: #74878e;
+}
+.notification-workflow-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 22px;
+}
+.notification-workflow-actions a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px;
+  border: 1px solid #414e91;
+  border-radius: 8px;
+  color: #dce3ff;
+  text-decoration: none;
+}
+.notification-technical {
+  margin-top: 24px;
+  color: #82969e;
+}
+.notification-technical dl {
+  margin-top: 10px;
 }
 .notification-center dialog[open] {
   position: fixed;
@@ -241,16 +272,23 @@
     grid-template-columns: 1fr 1fr;
   }
   .notification-list > button {
-    grid-template-columns: 38px 1fr 40px;
+    grid-template-columns: 38px minmax(0, 1fr);
   }
   .notification-list em {
     display: none;
+  }
+  .notification-list > button > b {
+    grid-column: 2;
   }
   .notification-center nav {
     overflow: auto;
   }
   .notification-detail {
     padding: 24px;
+  }
+  .notification-workflow-actions > * {
+    flex: 1 1 100%;
+    justify-content: center;
   }
 }
 

@@ -111,7 +111,7 @@ ScoutOps 是面向跨境电商团队的实时选品运营平台：持续汇集�
 | `/competitors` | 竞品监控 | 竞品发生了什么变化 | 关注、设阈值、关联机会 |
 | `/sourcing` | 供应链与利润 | 从哪里找货、能否赚钱 | 找货、比较、确认成本、创建采购任务 |
 | `/tasks` | 任务中心 | 系统和同事交给我的事项 | 处理、审批、查看自动化状态 |
-| `/notifications` | 通知中心 | 哪些变动需要我知道 | 已读、订阅、跳转关联业务对象 |
+| `/notifications` | 通知中心 | 哪些变动需要我知道 | 未处理、处理中、已关闭、同根因合并、订阅、跳转关联业务对象 |
 | `/automations` | 自动化规则 | 哪些已确认事件需要稳定跟进 | 创建、暂停、恢复、查看限流与执行记录 |
 | `/reports` | 报表与导出 | 当前机会、趋势和团队事实如何分布 | 切换报表、查看缺失、异步导出、下载未过期文件、重新生成过期或最终失败文件 |
 | `/me` | 个人中心 | 我的资料、权限、安全和偏好 | 编辑资料、管理会话、改密、通知偏好 |
@@ -485,7 +485,7 @@ flowchart LR
 
 #### M05-03 Outbox 与通知实现基线
 
-宝塔 Node Worker 以租约消费任务、审批和竞品事务 Outbox，按 `source_event_id + recipient_id` 去重生成当前组织、工作区、当前用户的站内通知。通知读取必须叠加 recipient_id，已读动作和偏好使用幂等键与版本锁并写审计。偏好可按任务、审批、竞品和渠道控制；邮件在没有真实 Provider 合同前固定为 placeholder，只记录 pending_placeholder 或 suppressed，绝不向外发送。SSE 由 M05-04 从通知事实读取，不与通知 Worker 抢占 Outbox。
+宝塔 Node Worker 以租约消费任务、审批和竞品事务 Outbox，按 `source_event_id + recipient_id` 去重生成当前组织、工作区、当前用户的站内通知。通知读取必须叠加 recipient_id，已读动作和偏好使用幂等键与版本锁并写审计。处理状态固定为 `open`、`in_progress`、`closed`，页面显示未处理、处理中、已关闭；同一 `root_cause_key` 在数据库分页前聚合，并以最新通知作为可操作代表，原始通知事实保持不变。偏好可按任务、审批、竞品和渠道控制；邮件在没有真实 Provider 合同前固定为 placeholder，只记录 pending_placeholder 或 suppressed，绝不向外发送。SSE 由 M05-04 从通知事实读取，不与通知 Worker 抢占 Outbox。
 
 #### M05-04 SSE 与重放实现基线
 

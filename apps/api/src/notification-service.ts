@@ -61,12 +61,18 @@ export class NotificationService {
   constructor(private readonly repo: NotificationRepository) {}
   list(i: any) {
     const page = Math.max(1, Number(i.page) || 1),
-      pageSize = Math.min(200, Math.max(1, Number(i.pageSize) || 50));
+      pageSize = Math.min(200, Math.max(1, Number(i.pageSize) || 50)),
+      workflowStatus = ["open", "in_progress", "closed"].includes(
+        i.workflowStatus,
+      )
+        ? i.workflowStatus
+        : null;
     return this.repo.list({
       ...i,
       page,
       pageSize,
       unread: i.unread === "true",
+      workflowStatus,
       category: ["task", "approval", "competitor", "system"].includes(
         i.category,
       )

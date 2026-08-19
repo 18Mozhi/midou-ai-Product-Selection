@@ -2,6 +2,13 @@ import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 const parse = (v: unknown) =>
   typeof v === "string" ? JSON.parse(v) : (v as any);
+export const notificationBody = (category: string) =>
+  ({
+    approval: "审批状态已变化，请查看关联记录。",
+    competitor: "竞品监控状态已变化，请查看关联记录。",
+    system: "系统状态已变化，请查看关联记录。",
+    task: "任务状态已变化，请查看关联记录。",
+  })[category] ?? "业务状态已变化，请查看关联记录。";
 export class NotificationOutboxWorker {
   constructor(
     private readonly pool: Pool,
@@ -121,7 +128,7 @@ export class NotificationOutboxWorker {
           : category === "competitor"
             ? "竞品监控更新"
             : "任务状态更新",
-      body = `${event.event_type} 已产生新的可审计事件。`,
+      body = notificationBody(category),
       resourceType = p.resource_type ?? category,
       resourceId = p.resource_id ?? p.task_id ?? p.approval_request_id ?? null,
       notificationId = randomUUID();

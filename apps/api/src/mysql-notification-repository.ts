@@ -9,7 +9,15 @@ const parse = <T>(v: unknown): T =>
   iso = (v: unknown) =>
     v == null
       ? null
-      : (v instanceof Date ? v : new Date(String(v))).toISOString();
+      : (v instanceof Date ? v : new Date(String(v))).toISOString(),
+  notificationGroupKeySql = [
+    "COALESCE(root_cause_key,",
+    "CONCAT(category, ':', COALESCE(resource_type, 'none'), ':',",
+    "COALESCE(resource_id, title)))",
+  ].join(" "),
+  notificationGroupKey = (row: any) =>
+    row.root_cause_key ??
+    `${row.category}:${row.resource_type ?? "none"}:${row.resource_id ?? row.title}`;
 export class MySqlNotificationRepository implements NotificationRepository {
   constructor(
     private readonly pool: Pool,
@@ -24,27 +32,61 @@ export class MySqlNotificationRepository implements NotificationRepository {
       ],
       args: any[] = [i.organizationId, i.workspaceId, i.actorId];
     if (i.unread) where.push("read_at IS NULL");
+    if (i.workflowStatus) {
+      where.push("workflow_status=?");
+      args.push(i.workflowStatus);
+    }
     if (i.category) {
       where.push("category=?");
       args.push(i.category);
     }
-    const [count] = await this.pool.query<RowDataPacket[]>(
-        `SELECT COUNT(*) total FROM notifications WHERE ${where.join(" AND ")}`,
+    const baseWhere = where.join(" AND "),
+      groupedSql = `
+        SELECT ${notificationGroupKeySql} group_key,
+               COUNT(*) group_count,
+               MAX(created_at) latest_created_at
+        FROM notifications
+        WHERE ${baseWhere}
+        GROUP BY group_key`,
+      [count] = await this.pool.query<RowDataPacket[]>(
+        `SELECT COUNT(*) total FROM (${groupedSql}) notification_groups`,
         args,
       ),
-      [rows] = await this.pool.query<RowDataPacket[]>(
-        `SELECT * FROM notifications WHERE ${where.join(" AND ")} ORDER BY created_at DESC,id DESC LIMIT ? OFFSET ?`,
+      [groups] = await this.pool.query<RowDataPacket[]>(
+        `${groupedSql}
+         ORDER BY latest_created_at DESC,group_key DESC
+         LIMIT ? OFFSET ?`,
         [...args, i.pageSize, (i.page - 1) * i.pageSize],
       );
-    const grouped = new Map<string, ReturnType<MySqlNotificationRepository["dto"]> & { group_count: number }>();
+    if (!groups.length)
+      return {
+        items: [],
+        page: i.page,
+        page_size: i.pageSize,
+        total: Number(count[0]?.total ?? 0),
+      };
+    const keys = groups.map((row) => String(row.group_key)),
+      placeholders = keys.map(() => "?").join(","),
+      [rows] = await this.pool.query<RowDataPacket[]>(
+        `SELECT *
+         FROM notifications
+         WHERE ${baseWhere}
+           AND ${notificationGroupKeySql} IN (${placeholders})
+         ORDER BY created_at DESC,id DESC`,
+        [...args, ...keys],
+      ),
+      representatives = new Map<string, ReturnType<MySqlNotificationRepository["dto"]>>();
     for (const row of rows) {
-      const item = this.dto(row), key = item.root_cause_key ?? `${item.category}:${item.resource_type ?? "none"}:${item.resource_id ?? item.title}`;
-      const existing = grouped.get(key);
-      if (existing) existing.group_count += 1;
-      else grouped.set(key, { ...item, group_count: 1 });
+      const key = notificationGroupKey(row);
+      if (!representatives.has(key)) representatives.set(key, this.dto(row));
     }
     return {
-      items: [...grouped.values()],
+      items: groups.flatMap((group) => {
+        const item = representatives.get(String(group.group_key));
+        return item
+          ? [{ ...item, group_count: Number(group.group_count) }]
+          : [];
+      }),
       page: i.page,
       page_size: i.pageSize,
       total: Number(count[0]?.total ?? 0),
@@ -52,7 +94,23 @@ export class MySqlNotificationRepository implements NotificationRepository {
   }
   async summary(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT category,COUNT(*) total,SUM(read_at IS NULL) unread FROM notifications WHERE organization_id=? AND workspace_id=? AND recipient_id=? AND EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id AND d.channel='in_app' AND d.status='delivered') GROUP BY category",
+      `SELECT category,
+              COUNT(*) total,
+              SUM(read_at IS NULL) unread,
+              SUM(workflow_status='open') open_count,
+              SUM(workflow_status='in_progress') in_progress_count,
+              SUM(workflow_status='closed') closed_count
+       FROM notifications
+       WHERE organization_id=?
+         AND workspace_id=?
+         AND recipient_id=?
+         AND EXISTS(
+           SELECT 1 FROM notification_deliveries d
+           WHERE d.notification_id=notifications.id
+             AND d.channel='in_app'
+             AND d.status='delivered'
+         )
+       GROUP BY category`,
       [i.organizationId, i.workspaceId, i.actorId],
     );
     const result = {
@@ -62,10 +120,16 @@ export class MySqlNotificationRepository implements NotificationRepository {
       approval: 0,
       competitor: 0,
       system: 0,
+      open: 0,
+      in_progress: 0,
+      closed: 0,
     };
     for (const r of rows) {
       result.total += Number(r.total);
       result.unread += Number(r.unread);
+      result.open += Number(r.open_count);
+      result.in_progress += Number(r.in_progress_count);
+      result.closed += Number(r.closed_count);
       result[r.category as "task"] = Number(r.total);
     }
     return result;
@@ -81,7 +145,28 @@ export class MySqlNotificationRepository implements NotificationRepository {
         404,
         "刷新通知列表。",
       );
-    return this.dto(rows[0]);
+    const item = this.dto(rows[0]),
+      [counts] = await this.pool.query<RowDataPacket[]>(
+        `SELECT COUNT(*) group_count
+         FROM notifications
+         WHERE organization_id=?
+           AND workspace_id=?
+           AND recipient_id=?
+           AND ${notificationGroupKeySql}=?
+           AND EXISTS(
+             SELECT 1 FROM notification_deliveries d
+             WHERE d.notification_id=notifications.id
+               AND d.channel='in_app'
+               AND d.status='delivered'
+           )`,
+        [
+          i.organizationId,
+          i.workspaceId,
+          i.actorId,
+          notificationGroupKey(rows[0]),
+        ],
+      );
+    return { ...item, group_count: Number(counts[0]?.group_count ?? 1) };
   }
   async action(i: any) {
     const old = await this.operation(i);
