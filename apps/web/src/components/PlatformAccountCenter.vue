@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
+import OrganizationCreationWizard from "./OrganizationCreationWizard.vue";
+import PlatformRoleComparison from "./PlatformRoleComparison.vue";
+import PlatformUserDetailDialog from "./PlatformUserDetailDialog.vue";
 type Tab = "organizations" | "users" | "admins";
 type State = "loading" | "ready" | "empty" | "error";
 interface Data {
@@ -23,9 +26,6 @@ const props = withDefaults(
   tab = ref<Tab>(props.initialTab),
   data = ref<Data | null>(null),
   platformRoles = ref<RoleCapabilitySummary[]>([]),
-  compareLeft = ref("platform_operations_admin"),
-  compareRight = ref("platform_security_admin"),
-  compareDifferencesOnly = ref(true),
   query = ref(""),
   status = ref(""),
   message = ref(""),
@@ -43,8 +43,6 @@ const props = withDefaults(
   createOpen = ref(
     new URLSearchParams(window.location.search).get("create") === "1",
   ),
-  createStep = ref<1 | 2>(1),
-  createForm = ref<HTMLFormElement | null>(null),
   form = reactive({ name: "", slug: "", initial_admin_user_id: "" }),
   organizationForm = reactive({
     name: "",
@@ -90,71 +88,7 @@ const rows = computed(() =>
         procurement_member: "采购成员",
         auditor: "审计员",
       }) as Record<string, string>
-    )[v] ?? v,
-  capabilityText = (v: string) =>
-    (
-      ({
-        "task:read": "查看任务",
-        "task:create": "创建任务",
-        "task:update": "更新任务",
-        "task:assign": "分配任务",
-        "trend:read": "查看热点",
-        "trend:manage": "管理热点",
-        "opportunity:read": "查看选品机会",
-        "opportunity:decide": "处理选品机会",
-        "opportunity:approve": "审批选品机会",
-        "competitor:read": "查看竞品",
-        "competitor:manage": "管理竞品",
-        "sourcing:read": "查看供应链",
-        "supplier_quote:manage": "管理供应商报价",
-        "cost:confirm": "确认成本",
-        "notification:read": "查看通知",
-        "organization:manage": "管理组织",
-        "membership:read": "查看成员",
-        "membership:manage": "管理成员",
-        "workspace:manage": "管理工作区",
-        "team:manage": "管理团队",
-        "role:read": "查看角色权限",
-        "role:manage": "分配角色",
-        "organization_token:manage": "管理组织访问凭证",
-        "audit:read": "查看审计",
-        "report:read": "查看报表",
-        "provider:configure": "配置采集来源",
-        "collection:replay": "重放采集任务",
-        "session:manage": "管理登录会话",
-        "platform_token:manage": "管理平台访问凭证",
-        "key_rotation:manage": "管理密钥轮换",
-        "platform:operate": "管理平台运营",
-        "platform:secure": "管理平台安全",
-        "platform:superadmin": "管理平台角色与账号",
-      }) as Record<string, string>
-    )[v] ?? "其他平台权限";
-const comparedRoles = computed(() => ({
-  left: platformRoles.value.find((role) => role.code === compareLeft.value),
-  right: platformRoles.value.find((role) => role.code === compareRight.value),
-}));
-const roleComparison = computed(() => {
-  const left = new Set(comparedRoles.value.left?.capabilities ?? []),
-    right = new Set(comparedRoles.value.right?.capabilities ?? []);
-  return [...new Set([...left, ...right])]
-    .sort((a, b) => capabilityText(a).localeCompare(capabilityText(b), "zh-CN"))
-    .map((capability) => ({
-      capability,
-      label: capabilityText(capability),
-      left: left.has(capability),
-      right: right.has(capability),
-      difference:
-        left.has(capability) === right.has(capability)
-          ? "两者相同"
-          : left.has(capability)
-            ? `仅${comparedRoles.value.left?.name ?? "左侧角色"}`
-            : `仅${comparedRoles.value.right?.name ?? "右侧角色"}`,
-    }))
-    .filter(
-      (item) =>
-        !compareDifferencesOnly.value || item.left !== item.right,
-    );
-});
+    )[v] ?? v;
 async function load() {
   state.value = "loading";
   message.value = "";
@@ -180,10 +114,6 @@ async function load() {
       throw new Error(roleBody?.error?.action_hint ?? "读取平台角色失败");
     data.value = accountBody.data;
     platformRoles.value = roleBody.data;
-    if (!platformRoles.value.some((role) => role.code === compareLeft.value))
-      compareLeft.value = platformRoles.value[0]?.code ?? "";
-    if (!platformRoles.value.some((role) => role.code === compareRight.value))
-      compareRight.value = platformRoles.value[1]?.code ?? compareLeft.value;
     state.value = "ready";
   } catch (e) {
     message.value = e instanceof Error ? e.message : "读取失败";
@@ -226,22 +156,12 @@ async function createOrganization() {
     form.name = "";
     form.slug = "";
     form.initial_admin_user_id = "";
-    createStep.value = 1;
     createOpen.value = false;
     message.value = "组织和默认工作区已创建。";
   }
 }
 function openOrganizationWizard() {
-  createStep.value = 1;
   createOpen.value = true;
-}
-function closeOrganizationWizard() {
-  createStep.value = 1;
-  createOpen.value = false;
-}
-function continueOrganizationWizard() {
-  if (!createForm.value?.reportValidity()) return;
-  createStep.value = 2;
 }
 function askReason(title: string, action: (value: string) => Promise<void>) {
   reasonTitle.value = title;
@@ -452,72 +372,10 @@ onMounted(load);
       暂时无法读取。<button @click="load">重新加载</button>
     </section>
     <template v-else>
-      <section
+      <PlatformRoleComparison
         v-if="tab === 'admins' && platformRoles.length"
-        class="role-comparison"
-      >
-        <header>
-          <div>
-            <p>平台权限</p>
-            <h3>角色权限差异</h3>
-            <span>对比结果来自当前后端角色目录，不以页面按钮推测权限。</span>
-          </div>
-          <label class="role-comparison__toggle"
-            ><input v-model="compareDifferencesOnly" type="checkbox" />只看差异</label
-          >
-        </header>
-        <div class="role-comparison__selectors">
-          <label
-            >左侧角色<select v-model="compareLeft">
-              <option
-                v-for="role in platformRoles"
-                :key="role.code"
-                :value="role.code"
-              >
-                {{ role.name }}
-              </option>
-            </select></label
-          >
-          <label
-            >右侧角色<select v-model="compareRight">
-              <option
-                v-for="role in platformRoles"
-                :key="role.code"
-                :value="role.code"
-              >
-                {{ role.name }}
-              </option>
-            </select></label
-          >
-        </div>
-        <div class="role-comparison__summaries">
-          <article
-            v-for="role in [comparedRoles.left, comparedRoles.right]"
-            :key="role?.code"
-          >
-            <strong>{{ role?.name }}</strong>
-            <span>{{ role?.description }}</span>
-            <small>{{ role?.capabilities.length ?? 0 }} 项权限</small>
-          </article>
-        </div>
-        <div class="role-comparison__matrix" aria-live="polite">
-          <p v-if="!roleComparison.length">当前筛选下，两侧角色没有权限差异。</p>
-          <article v-for="item in roleComparison" :key="item.capability">
-            <h4>{{ item.label }}</h4>
-            <dl>
-              <div>
-                <dt>{{ comparedRoles.left?.name }}</dt>
-                <dd :data-enabled="item.left">{{ item.left ? "拥有" : "无" }}</dd>
-              </div>
-              <div>
-                <dt>{{ comparedRoles.right?.name }}</dt>
-                <dd :data-enabled="item.right">{{ item.right ? "拥有" : "无" }}</dd>
-              </div>
-              <div><dt>差异</dt><dd>{{ item.difference }}</dd></div>
-            </dl>
-          </article>
-        </div>
-      </section>
+        :roles="platformRoles"
+      />
       <div class="account-table-wrap">
       <table v-if="tab === 'organizations'">
         <thead>
@@ -643,78 +501,14 @@ onMounted(load);
       <p v-if="!rows.length" class="account-state">没有符合条件的记录。</p>
       </div>
     </template>
-    <dialog :open="createOpen" class="organization-wizard">
-      <form ref="createForm" @submit.prevent="createOrganization">
-        <h3>新建组织</h3>
-        <ol class="organization-wizard__progress" aria-label="创建组织步骤">
-          <li :aria-current="createStep === 1 ? 'step' : undefined">
-            <span>1</span>组织资料
-          </li>
-          <li :aria-current="createStep === 2 ? 'step' : undefined">
-            <span>2</span>管理员与确认
-          </li>
-        </ol>
-        <section v-if="createStep === 1" class="organization-wizard__step">
-          <p>先填写团队名称和用于系统识别的英文标识。</p>
-          <label
-            >组织名称<input
-              v-model="form.name"
-              required
-              minlength="2"
-              maxlength="120"
-              placeholder="例如：米豆选品团队" /></label
-          ><label
-            >组织标识<input
-              v-model="form.slug"
-              required
-              pattern="[a-z0-9][a-z0-9-]{1,62}"
-              placeholder="例如：midou-team"
-          /></label>
-        </section>
-        <section v-else class="organization-wizard__step">
-          <p>选择首位组织管理员，并在创建前核对影响范围。</p>
-          <label
-            >首位组织管理员<select v-model="form.initial_admin_user_id">
-              <option value="">当前超级管理员</option>
-              <option
-                v-for="item in data?.users || []"
-                :key="item.id"
-                :value="item.id"
-                :disabled="item.status !== 'active'"
-              >
-                {{ item.email }}
-              </option>
-            </select></label
-          >
-          <dl class="organization-wizard__summary">
-            <div><dt>组织</dt><dd>{{ form.name }}</dd></div>
-            <div><dt>组织标识</dt><dd>{{ form.slug }}</dd></div>
-            <div>
-              <dt>创建后</dt>
-              <dd>同时创建默认工作区和组织级数据范围</dd>
-            </div>
-          </dl>
-        </section>
-        <footer>
-          <button type="button" @click="closeOrganizationWizard">取消</button>
-          <button
-            v-if="createStep === 2"
-            type="button"
-            @click="createStep = 1"
-          >
-            上一步
-          </button>
-          <button
-            v-if="createStep === 1"
-            type="button"
-            @click="continueOrganizationWizard"
-          >
-            下一步：选择管理员
-          </button>
-          <button v-else :disabled="Boolean(busy)">确认创建</button>
-        </footer>
-      </form>
-    </dialog>
+    <OrganizationCreationWizard
+      :open="createOpen"
+      :busy="Boolean(busy)"
+      :users="data?.users || []"
+      :form="form"
+      @close="createOpen = false"
+      @submit="createOrganization"
+    />
     <dialog :open="createUserOpen">
       <form @submit.prevent="createUser">
         <h3>新建用户或平台管理员</h3>
@@ -800,77 +594,16 @@ onMounted(load);
         </footer>
       </form>
     </dialog>
-    <dialog :open="detailOpen" class="detail-dialog">
-      <section v-if="detail">
-        <header>
-          <div>
-            <small>账号详情</small>
-            <h3>{{ detail.user.email }}</h3>
-          </div>
-          <button
-            aria-label="关闭账号详情"
-            title="关闭账号详情"
-            @click="detailOpen = false"
-          >
-            ×
-          </button>
-        </header>
-        <div class="detail-grid">
-          <article>
-            <small>账号状态</small
-            ><strong>{{ statusText(detail.user.status) }}</strong>
-          </article>
-          <article>
-            <small>首次安全设置</small
-            ><strong>{{
-              detail.user.must_change_password || detail.user.must_enroll_mfa
-                ? "待完成"
-                : "已完成"
-            }}</strong>
-          </article>
-          <article>
-            <small>组织关系</small
-            ><strong>{{ detail.memberships.length }}</strong>
-          </article>
-          <article>
-            <small>活动会话</small
-            ><strong>{{
-              detail.sessions.filter((x: any) => x.status === "active").length
-            }}</strong>
-          </article>
-        </div>
-        <h4>组织与角色</h4>
-        <p v-if="!detail.memberships.length">尚未加入组织。</p>
-        <ul>
-          <li v-for="item in detail.memberships" :key="item.id">
-            <span>{{ item.organization_name }}</span
-            ><b>{{ item.roles.map(roleText).join("、") }}</b
-            ><small>{{ statusText(item.status) }}</small>
-          </li>
-        </ul>
-        <h4>登录会话</h4>
-        <p v-if="!detail.sessions.length">暂无会话。</p>
-        <ul>
-          <li v-for="session in detail.sessions" :key="session.id">
-            <span>{{ session.device_label }}</span
-            ><b>{{ statusText(session.status) }}</b
-            ><small>{{ new Date(session.last_seen_at).toLocaleString() }}</small
-            ><button
-              v-if="session.status === 'active'"
-              @click="revokeSessions(selected, session.id)"
-            >
-              撤销
-            </button>
-          </li>
-        </ul>
-        <footer>
-          <button @click="openPassword(selected)">强制改密</button
-          ><button @click="revokeSessions(selected)">撤销全部会话</button
-          ><button @click="detailOpen = false">关闭</button>
-        </footer>
-      </section>
-      <section v-else class="account-state">正在读取账号详情…</section>
-    </dialog>
+    <PlatformUserDetailDialog
+      :open="detailOpen"
+      :detail="detail"
+      :selected="selected"
+      :status-text="statusText"
+      :role-text="roleText"
+      @close="detailOpen = false"
+      @reset-password="openPassword"
+      @revoke-sessions="revokeSessions"
+    />
     <dialog :open="passwordOpen">
       <form @submit.prevent="resetPassword">
         <h3>强制重置密码</h3>
@@ -1007,116 +740,6 @@ onMounted(load);
   color: #eef5ff;
   background: #0d2033;
 }
-.role-comparison {
-  padding: 20px;
-  display: grid;
-  gap: 16px;
-  border: 1px solid #263f58;
-  border-radius: 14px;
-  background: #10243a;
-}
-.role-comparison > header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 18px;
-}
-.role-comparison > header p,
-.role-comparison > header h3 {
-  margin: 0;
-}
-.role-comparison > header p {
-  color: #79e5d1;
-  font-size: 12px;
-  font-weight: 800;
-}
-.role-comparison > header h3 {
-  margin-top: 5px;
-  font-size: 22px;
-}
-.role-comparison > header span,
-.role-comparison__summaries span,
-.role-comparison__summaries small {
-  display: block;
-  margin-top: 6px;
-  color: #9aadc1;
-}
-.role-comparison__toggle {
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
-}
-.role-comparison__toggle input {
-  width: 18px;
-  height: 18px;
-}
-.role-comparison__selectors,
-.role-comparison__summaries {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.role-comparison__selectors label {
-  display: grid;
-  gap: 6px;
-  color: #9aadc1;
-}
-.role-comparison__selectors select {
-  min-height: 44px;
-  padding: 9px 11px;
-  border: 1px solid #31506b;
-  border-radius: 9px;
-  color: #eef5ff;
-  background: #0d2033;
-}
-.role-comparison__summaries article {
-  min-width: 0;
-  padding: 14px;
-  border: 1px solid #29465f;
-  border-radius: 10px;
-  background: #0b1d2e;
-}
-.role-comparison__matrix {
-  display: grid;
-  gap: 8px;
-}
-.role-comparison__matrix > p {
-  margin: 0;
-  padding: 16px;
-  color: #9aadc1;
-  text-align: center;
-}
-.role-comparison__matrix article {
-  padding: 12px 14px;
-  display: grid;
-  grid-template-columns: minmax(170px, 0.8fr) minmax(0, 1.6fr);
-  gap: 16px;
-  align-items: center;
-  border: 1px solid #29465f;
-  border-radius: 10px;
-  background: #0b1d2e;
-}
-.role-comparison__matrix h4 {
-  margin: 0;
-}
-.role-comparison__matrix dl {
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-.role-comparison__matrix dt {
-  color: #9aadc1;
-  font-size: 11px;
-}
-.role-comparison__matrix dd {
-  margin: 4px 0 0;
-}
-.role-comparison__matrix dd[data-enabled="true"] {
-  color: #79e5d1;
-}
 .account-table-wrap {
   overflow: auto;
   background: #10243a;
@@ -1214,128 +837,6 @@ dialog footer {
   justify-content: flex-end;
   gap: 8px;
 }
-.organization-wizard {
-  width: min(560px, calc(100% - 28px));
-}
-.organization-wizard__progress {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  list-style: none;
-}
-.organization-wizard__progress li {
-  min-height: 44px;
-  padding: 9px 11px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid #29465f;
-  border-radius: 10px;
-  color: #9aadc1;
-  background: #0b1d2e;
-}
-.organization-wizard__progress li[aria-current="step"] {
-  border-color: #38d5b0;
-  color: #eef5ff;
-}
-.organization-wizard__progress span {
-  width: 24px;
-  height: 24px;
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  color: #08231d;
-  background: #38d5b0;
-  font-weight: 800;
-}
-.organization-wizard__step {
-  display: grid;
-  gap: 14px;
-}
-.organization-wizard__step > p {
-  margin: 0;
-  color: #9aadc1;
-}
-.organization-wizard__summary {
-  margin: 0;
-  padding: 14px;
-  display: grid;
-  gap: 10px;
-  border: 1px solid #29465f;
-  border-radius: 10px;
-  background: #0b1d2e;
-}
-.organization-wizard__summary div {
-  display: grid;
-  grid-template-columns: 86px minmax(0, 1fr);
-  gap: 10px;
-}
-.organization-wizard__summary dt {
-  color: #9aadc1;
-}
-.organization-wizard__summary dd {
-  margin: 0;
-  overflow-wrap: anywhere;
-}
-.organization-wizard footer {
-  flex-wrap: wrap;
-}
-.organization-wizard footer button {
-  min-height: 44px;
-}
-.detail-dialog {
-  width: min(760px, calc(100% - 28px));
-  max-height: 84vh;
-  overflow: auto;
-}
-.detail-dialog > section > header {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-}
-.detail-dialog > section > header button {
-  border: 0;
-  background: transparent;
-  color: #eef5ff;
-  font-size: 26px;
-}
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin: 16px 0;
-}
-.detail-grid article {
-  padding: 12px;
-  border: 1px solid #29465f;
-  border-radius: 10px;
-  background: #0b1d2e;
-}
-.detail-grid small,
-.detail-grid strong {
-  display: block;
-}
-.detail-dialog ul {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  gap: 8px;
-}
-.detail-dialog li {
-  display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #29465f;
-  border-radius: 9px;
-}
-.detail-dialog li small {
-  color: #9aadc1;
-}
 @media (max-width: 700px) {
   .account-center {
     padding-bottom: 76px;
@@ -1352,17 +853,6 @@ dialog footer {
   }
   .account-tabs {
     overflow: auto;
-  }
-  .role-comparison > header {
-    display: grid;
-  }
-  .role-comparison__selectors,
-  .role-comparison__summaries {
-    grid-template-columns: 1fr;
-  }
-  .role-comparison__matrix article,
-  .role-comparison__matrix dl {
-    grid-template-columns: 1fr;
   }
   .account-table-wrap {
     overflow: visible;
@@ -1412,12 +902,6 @@ dialog footer {
   }
   dialog form {
     min-width: 0;
-  }
-  .detail-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .detail-dialog li {
-    grid-template-columns: 1fr;
   }
 }
 </style>

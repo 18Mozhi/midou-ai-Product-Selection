@@ -1389,6 +1389,9 @@
         "../apps/api/src/mysql-platform-account-repository.ts",
         "../apps/api/src/platform-account-routes.ts",
         "../apps/web/src/components/PlatformAccountCenter.vue",
+        "../apps/web/src/components/OrganizationCreationWizard.vue",
+        "../apps/web/src/components/PlatformRoleComparison.vue",
+        "../apps/web/src/components/PlatformUserDetailDialog.vue",
         "../apps/web/src/components/NavigationShell.vue"
       ],
       "routes": [

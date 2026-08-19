@@ -92,11 +92,15 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       "apps/api/src/mysql-platform-account-repository.ts",
       "apps/api/src/platform-account-routes.ts",
       "apps/web/src/components/PlatformAccountCenter.vue",
+      "apps/web/src/components/OrganizationCreationWizard.vue",
+      "apps/web/src/components/PlatformRoleComparison.vue",
+      "apps/web/src/components/PlatformUserDetailDialog.vue",
       "apps/web/src/components/NavigationShell.vue",
       "scripts/verify-platform-accounts-live.mjs",
     ],
     values = await Promise.all(paths.map((path) => readFile(path, "utf8"))),
-    [migration, service, repository, routes, web, navigation, live] = values;
+    [migration, service, repository, routes, accountShell, wizard, comparison, detailDialog, navigation, live] = values,
+    web = [accountShell, wizard, comparison, detailDialog].join("\n");
   assert.match(migration, /platform_account_operations/);
   assert.match(service, /cannot_disable_self/);
   assert.match(repository, /platform_audit_events/);
@@ -121,13 +125,16 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(web, /创建组织步骤/);
   assert.match(web, /下一步：选择管理员/);
   assert.match(web, /同时创建默认工作区和组织级数据范围/);
-  assert.match(web, /createForm\.value\?\.reportValidity\(\)/);
+  assert.match(wizard, /formElement\.value\?\.reportValidity\(\)/);
   assert.match(web, /\/platform\/roles/);
   assert.match(web, /角色权限差异/);
-  assert.match(web, /compareDifferencesOnly/);
+  assert.match(comparison, /differencesOnly/);
   assert.match(web, /不以页面按钮推测权限/);
   for (const capability of CAPABILITIES)
     assert.match(web, new RegExp(capability.replace(":", "\\:")));
+  assert.ok(accountShell.split(/\r?\n/).length < 1000);
+  for (const component of [wizard, comparison, detailDialog])
+    assert.ok(component.split(/\r?\n/).length < 200);
   assert.match(navigation, /账号与组织/);
   assert.doesNotMatch(
     navigation,
