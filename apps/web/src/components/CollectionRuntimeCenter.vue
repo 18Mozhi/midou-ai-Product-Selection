@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import "../crawler-runtime.css";
-type State =
-  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
-type RunStatus =
-  "running" | "succeeded" | "blocked" | "failed" | "timed_out" | "cancelled";
+type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type RunStatus = "running" | "succeeded" | "blocked" | "failed" | "timed_out" | "cancelled";
 interface Lease {
   run_id: string;
   lease_owner: string;
@@ -44,6 +43,7 @@ interface Run {
   finished_at: string | null;
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   profiles = ref<Profile[]>([]),
   runs = ref<Run[]>([]),
@@ -53,13 +53,9 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   status = ref("all"),
   confirming = ref(false),
   saving = ref(false);
-const activeLeases = computed(() =>
-    profiles.value.filter((item) => item.lease),
-  ),
+const activeLeases = computed(() => profiles.value.filter((item) => item.lease)),
   blockedRuns = computed(() =>
-    runs.value.filter((item) =>
-      ["blocked", "failed", "timed_out"].includes(item.status),
-    ),
+    runs.value.filter((item) => ["blocked", "failed", "timed_out"].includes(item.status)),
   ),
   filtered = computed(() =>
     runs.value.filter(
@@ -71,59 +67,46 @@ const activeLeases = computed(() =>
           )),
     ),
   );
-const failure = (code: number): State =>
-  code === 401
-    ? "expired"
-    : code === 403
-      ? "forbidden"
-      : [408, 425, 429, 502, 503, 504].includes(code)
-        ? "blocked"
-        : "error";
+const failure = (kind: ApiFailureKind): State =>
+  kind === "expired" || kind === "forbidden"
+    ? kind
+    : kind === "blocked" || kind === "rate_limited"
+      ? "blocked"
+      : "error";
 async function load() {
   state.value = "loading";
   message.value = "";
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/crawler-runtime`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) {
-      state.value = failure(response.status);
-      return;
-    }
-    profiles.value = body.data.profiles;
-    runs.value = body.data.runs;
-    state.value =
-      profiles.value.length || runs.value.length ? "ready" : "empty";
-  } catch {
-    state.value = "blocked";
+    const response = await request<{ profiles: Profile[]; runs: Run[] }>(
+      "/platform/crawler-runtime",
+    );
+    requestId.value = response.request_id;
+    profiles.value = response.data.profiles;
+    runs.value = response.data.runs;
+    state.value = profiles.value.length || runs.value.length ? "ready" : "empty";
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+      state.value = failure(error.kind);
+    } else state.value = "blocked";
   }
 }
 async function recover() {
   saving.value = true;
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/crawler-runtime/recover-expired`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-            "idempotency-key": crypto.randomUUID(),
-          },
-          body: "{}",
-        },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    message.value = response.ok
-      ? `已回收 ${body.data.recovered} 个过期租约`
-      : (body?.error?.action_hint ?? "回收未完成");
-    if (response.ok) await load();
-  } catch {
-    message.value = "依赖不可用，未执行回收";
+    const response = await request<{ recovered: number }>(
+      "/platform/crawler-runtime/recover-expired",
+      { method: "POST", body: {} },
+    );
+    requestId.value = response.request_id;
+    message.value = `已回收 ${response.data.recovered} 个过期租约`;
+    await load();
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+    } else message.value = "依赖不可用，未执行回收";
   } finally {
     saving.value = false;
     confirming.value = false;
@@ -169,13 +152,9 @@ onMounted(load);
       <div>
         <p>网页采集运行中心</p>
         <h2 id="crawler-title">采集运行监控</h2>
-        <span
-          >查看哪些网页登录档案正在使用、哪些运行失败，以及失败发生的时间和原因。</span
-        >
+        <span>查看哪些网页登录档案正在使用、哪些运行失败，以及失败发生的时间和原因。</span>
       </div>
-      <button type="button" :disabled="saving" @click="confirming = true">
-        回收过期运行
-      </button>
+      <button type="button" :disabled="saving" @click="confirming = true">回收过期运行</button>
     </header>
     <UiStatePanel
       v-if="state !== 'ready'"
@@ -214,11 +193,7 @@ onMounted(load);
               ><small>{{ profile.provider_name }} · {{ profile.code }}</small>
             </div>
             <span>{{
-              profile.lease
-                ? "使用中"
-                : profile.status === "active"
-                  ? "可用"
-                  : "已停用"
+              profile.lease ? "使用中" : profile.status === "active" ? "可用" : "已停用"
             }}</span>
             <dl v-if="profile.lease">
               <div>
@@ -293,20 +268,15 @@ onMounted(load);
                   ><small>{{ item.workspace_id.slice(0, 8) }}</small>
                 </td>
                 <td>
-                  <b :data-status="item.status">{{
-                    statusText(item.status)
-                  }}</b>
+                  <b :data-status="item.status">{{ statusText(item.status) }}</b>
                 </td>
                 <td>
                   {{ item.item_count }} 条<small
-                    >{{ item.page_count }} 页 ·
-                    {{ item.detail_count }} 详情</small
+                    >{{ item.page_count }} 页 · {{ item.detail_count }} 详情</small
                   >
                 </td>
                 <td>
-                  {{
-                    item.duration_ms === null ? "—" : `${item.duration_ms} 毫秒`
-                  }}
+                  {{ item.duration_ms === null ? "—" : `${item.duration_ms} 毫秒` }}
                 </td>
                 <td>{{ time(item.started_at) }}</td>
               </tr>

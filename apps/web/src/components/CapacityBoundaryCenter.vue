@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import "../capacity-boundary.css";
 type State =
@@ -53,10 +54,9 @@ interface Dto {
   observed_at: string;
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>(
-    new URLSearchParams(location.search).get("state") === "verifying"
-      ? "verifying"
-      : "loading",
+    new URLSearchParams(location.search).get("state") === "verifying" ? "verifying" : "loading",
   ),
   data = ref<Dto | null>(null),
   requestId = ref(""),
@@ -67,37 +67,16 @@ const verdict = computed(
   () =>
     (
       ({
-        loading: [
-          "正在读取单机实测边界",
-          "核对延迟、错误率、异步滞后、资源与恢复事实。",
-        ],
-        verifying: [
-          "正在核验归档与恢复演练",
-          "只签认宝塔有限任务已经完成的事实。",
-        ],
-        ready: [
-          "S0 单机实测边界已满足",
-          "当前实测档位低于全部停止线，归档和隔离恢复均已核验。",
-        ],
-        warning: [
-          "单机有限边界已签发",
-          "下一档已触发固定停止线；保持最后通过档位并执行后台降载。",
-        ],
-        blocked: [
-          "单机容量门已阻断",
-          "固定并发 5 尚未通过，停止新增后台工作并按 Runbook 恢复。",
-        ],
+        loading: ["正在读取单机实测边界", "核对延迟、错误率、异步滞后、资源与恢复事实。"],
+        verifying: ["正在核验归档与恢复演练", "只签认宝塔有限任务已经完成的事实。"],
+        ready: ["S0 单机实测边界已满足", "当前实测档位低于全部停止线，归档和隔离恢复均已核验。"],
+        warning: ["单机有限边界已签发", "下一档已触发固定停止线；保持最后通过档位并执行后台降载。"],
+        blocked: ["单机容量门已阻断", "固定并发 5 尚未通过，停止新增后台工作并按 Runbook 恢复。"],
         empty: ["尚无同提交容量基线", "通过宝塔有限任务执行受控基线后再核验。"],
-        forbidden: [
-          "没有平台运维权限",
-          "联系平台管理员授予 platform:operate。",
-        ],
+        forbidden: ["没有平台运维权限", "联系平台管理员授予 platform:operate。"],
         expired: ["登录已失效", "重新登录后核验容量边界。"],
         rate_limited: ["刷新过于频繁", "稍后重试，不扩大当前并发。"],
-        unavailable: [
-          "容量边界事实暂不可用",
-          "检查 MySQL、生产证据与宝塔运行状态后重试。",
-        ],
+        unavailable: ["容量边界事实暂不可用", "检查 MySQL、生产证据与宝塔运行状态后重试。"],
       }) as const
     )[state.value],
 );
@@ -115,69 +94,48 @@ const boundaryHint = computed(() =>
       minute: "2-digit",
       second: "2-digit",
     }).format(new Date(v)),
-  status = (c: number): State =>
-    c === 401
-      ? "expired"
-      : c === 403
-        ? "forbidden"
-        : c === 429
-          ? "rate_limited"
-          : c === 404
-            ? "empty"
-            : "unavailable";
+  status = (error: ApiClientError): State =>
+    error.kind === "expired" || error.kind === "forbidden" || error.kind === "rate_limited"
+      ? error.kind
+      : error.status === 404 || error.code === "capacity_evidence_unavailable"
+        ? "empty"
+        : "unavailable";
 async function load() {
   state.value = "loading";
   message.value = "";
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/operations/capacity`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) {
-      state.value =
-        response.status === 503 &&
-        body?.error?.code === "capacity_evidence_unavailable"
-          ? "empty"
-          : status(response.status);
-      message.value = body?.error?.action_hint ?? "";
-      return;
-    }
-    data.value = body.data ?? null;
+    const response = await request<Dto>("/platform/operations/capacity");
+    requestId.value = response.request_id;
+    data.value = response.data ?? null;
     state.value = data.value ? data.value.state : "empty";
-  } catch {
-    state.value = "unavailable";
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+      state.value = status(error);
+    } else state.value = "unavailable";
   }
 }
 async function attest() {
   saving.value = true;
   state.value = "verifying";
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/operations/capacity/drills`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-            "idempotency-key": crypto.randomUUID(),
-          },
-          body: JSON.stringify({
-            kind: "archive_recovery",
-            reason: "平台运维确认本轮单机容量收尾演练",
-          }),
-        },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    message.value = response.ok
-      ? "归档与隔离恢复演练已签认。"
-      : (body?.error?.action_hint ?? "演练签认未完成");
-    if (response.ok) await load();
-    else state.value = status(response.status);
-  } catch {
-    state.value = "unavailable";
+    const response = await request("/platform/operations/capacity/drills", {
+      method: "POST",
+      body: {
+        kind: "archive_recovery",
+        reason: "平台运维确认本轮单机容量收尾演练",
+      },
+    });
+    requestId.value = response.request_id;
+    message.value = "归档与隔离恢复演练已签认。";
+    await load();
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+      state.value = status(error);
+    } else state.value = "unavailable";
   } finally {
     saving.value = false;
     confirming.value = false;
@@ -200,12 +158,7 @@ onMounted(() => {
       </div>
       <div>
         <button type="button" @click="load">刷新实测事实</button
-        ><button
-          class="danger"
-          type="button"
-          :disabled="saving"
-          @click="confirming = true"
-        >
+        ><button class="danger" type="button" :disabled="saving" @click="confirming = true">
           签认恢复演练
         </button>
       </div>
@@ -221,11 +174,7 @@ onMounted(() => {
         <p>{{ message || verdict[1] }}</p>
         <code v-if="requestId">request_id {{ requestId }}</code>
       </div>
-      <button
-        v-if="!['loading', 'verifying'].includes(state)"
-        type="button"
-        @click="load"
-      >
+      <button v-if="!['loading', 'verifying'].includes(state)" type="button" @click="load">
         重新核验
       </button>
     </section>
@@ -244,26 +193,21 @@ onMounted(() => {
       </section>
       <section class="capacity-boundary__metrics">
         <article>
-          <span>最后通过并发档位</span
-          ><strong>{{ data.boundary.measured_concurrency }}</strong
+          <span>最后通过并发档位</span><strong>{{ data.boundary.measured_concurrency }}</strong
           ><small>{{ boundaryHint }}</small>
         </article>
         <article>
-          <span>95% 核心读取耗时</span
-          ><strong>{{ data.performance.read_p95_ms }} ms</strong
+          <span>95% 核心读取耗时</span><strong>{{ data.performance.read_p95_ms }} ms</strong
           ><small>停止线 300 毫秒</small>
         </article>
         <article>
-          <span>95% 核心写入耗时</span
-          ><strong>{{ data.performance.write_p95_ms }} ms</strong
+          <span>95% 核心写入耗时</span><strong>{{ data.performance.write_p95_ms }} ms</strong
           ><small>停止线 600 毫秒</small>
         </article>
         <article>
           <span>错误率 / 异步滞后</span
           ><strong>{{ pct(data.performance.error_rate_basis_points) }}</strong
-          ><small
-            >{{ data.performance.async_lag_seconds }} 秒 · 停止线 60 秒</small
-          >
+          ><small>{{ data.performance.async_lag_seconds }} 秒 · 停止线 60 秒</small>
         </article>
       </section>
       <div class="capacity-boundary__layout">
@@ -277,15 +221,10 @@ onMounted(() => {
           </header>
           <div class="capacity-boundary__bars">
             <label
-              ><span>归一化负载</span
-              ><b>{{ pct(data.resource.load_basis_points) }}</b
-              ><progress
-                :value="data.resource.load_basis_points"
-                max="10000"
-              ></progress></label
+              ><span>归一化负载</span><b>{{ pct(data.resource.load_basis_points) }}</b
+              ><progress :value="data.resource.load_basis_points" max="10000"></progress></label
             ><label
-              ><span>可用内存</span
-              ><b>{{ data.resource.available_memory_mb }} MB</b
+              ><span>可用内存</span><b>{{ data.resource.available_memory_mb }} MB</b
               ><progress
                 :value="Math.min(data.resource.available_memory_mb, 8192)"
                 max="8192"
@@ -359,8 +298,8 @@ onMounted(() => {
         <div v-else class="capacity-boundary__clear">
           <b>当前实测档位无阻断</b
           ><span
-            >结论仅限本次惠州单机实测；不证明 100 人同时在线、多节点、高可用或
-            10,000 用户能力。</span
+            >结论仅限本次惠州单机实测；不证明 100 人同时在线、多节点、高可用或 10,000
+            用户能力。</span
           >
         </div>
       </section>

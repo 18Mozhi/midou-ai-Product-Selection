@@ -39,6 +39,10 @@ test("migrated frontend surfaces use the shared API client instead of direct fet
     "apps/web/src/components/OpportunityWorkspace.vue",
     "apps/web/src/components/CompetitorMonitor.vue",
     "apps/web/src/components/SourcingWorkspace.vue",
+    "apps/web/src/components/CollectionRuntimeCenter.vue",
+    "apps/web/src/components/CrawlerSchedulerCenter.vue",
+    "apps/web/src/components/RuntimeTopologyCenter.vue",
+    "apps/web/src/components/CapacityBoundaryCenter.vue",
   ];
 
   for (const path of paths) {

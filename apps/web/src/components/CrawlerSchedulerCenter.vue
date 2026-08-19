@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import "../crawler-scheduler.css";
 
@@ -52,10 +53,9 @@ interface Dto {
 }
 
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const state = ref<State>(
-  new URLSearchParams(location.search).get("state") === "recovering"
-    ? "recovering"
-    : "loading",
+  new URLSearchParams(location.search).get("state") === "recovering" ? "recovering" : "loading",
 );
 const data = ref<Dto | null>(null),
   requestId = ref(""),
@@ -68,23 +68,14 @@ const verdict = computed(
       ({
         loading: ["正在核验单机调度", "读取进程、租约和来源并发。"],
         recovering: ["正在回收过期租约", "只处理服务端确认已过期的调度槽位。"],
-        ready: [
-          "采集调度已就绪",
-          "Node Worker 与 Python Crawler 均为一个实例，来源并发 1。",
-        ],
+        ready: ["采集调度已就绪", "Node Worker 与 Python Crawler 均为一个实例，来源并发 1。"],
         warning: ["采集调度需要关注", "继续保持来源并发 1，并按告警项处理。"],
         blocked: ["采集调度已阻断", "保持任务排队，按告警动作通过宝塔恢复。"],
         empty: ["尚无调度观测", "确认宝塔 ai选品 统一后端已运行。"],
-        forbidden: [
-          "没有平台运维权限",
-          "联系平台管理员授予 platform:operate。",
-        ],
+        forbidden: ["没有平台运维权限", "联系平台管理员授予 platform:operate。"],
         expired: ["登录已失效", "重新登录后核验调度状态。"],
         rate_limited: ["刷新过于频繁", "稍后再试，当前租约不受影响。"],
-        unavailable: [
-          "采集调度事实暂不可用",
-          "检查 MySQL、统一后端和受控目录后重试。",
-        ],
+        unavailable: ["采集调度事实暂不可用", "检查 MySQL、统一后端和受控目录后重试。"],
       }) as const
     )[state.value],
 );
@@ -96,34 +87,23 @@ const time = (value: string) =>
     minute: "2-digit",
     second: "2-digit",
   }).format(new Date(value));
-const status = (code: number): State =>
-  code === 401
-    ? "expired"
-    : code === 403
-      ? "forbidden"
-      : code === 429
-        ? "rate_limited"
-        : "unavailable";
+const status = (kind: ApiFailureKind): State =>
+  kind === "expired" || kind === "forbidden" || kind === "rate_limited" ? kind : "unavailable";
 
 async function load() {
   state.value = "loading";
   message.value = "";
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/operations/crawler-scheduler`,
-      { credentials: "include", headers: { accept: "application/json" } },
-    );
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) {
-      state.value = status(response.status);
-      message.value = body?.error?.action_hint ?? "";
-      return;
-    }
-    data.value = body.data ?? null;
+    const response = await request<Dto>("/platform/operations/crawler-scheduler");
+    requestId.value = response.request_id;
+    data.value = response.data ?? null;
     state.value = data.value ? data.value.state : "empty";
-  } catch {
-    state.value = "unavailable";
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+      state.value = status(error.kind);
+    } else state.value = "unavailable";
   }
 }
 
@@ -131,27 +111,19 @@ async function recover() {
   saving.value = true;
   state.value = "recovering";
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/operations/crawler-scheduler/recover-expired`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-        body: "{}",
-      },
+    const response = await request<{ recovered: number }>(
+      "/platform/operations/crawler-scheduler/recover-expired",
+      { method: "POST", body: {} },
     );
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    message.value = response.ok
-      ? `已回收 ${body.data.recovered} 个过期调度槽位`
-      : (body?.error?.action_hint ?? "回收未完成");
-    if (response.ok) await load();
-    else state.value = status(response.status);
-  } catch {
-    state.value = "unavailable";
+    requestId.value = response.request_id;
+    message.value = `已回收 ${response.data.recovered} 个过期调度槽位`;
+    await load();
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+      state.value = status(error.kind);
+    } else state.value = "unavailable";
   } finally {
     saving.value = false;
     confirming.value = false;
@@ -170,18 +142,13 @@ onMounted(() => {
         <p>单机采集调度</p>
         <h2>运行与配额</h2>
         <span
-          >惠州单机由 ai选品 Worker 领取采集任务，宝塔 Python 3.12
-          项目提供采集心跳与 Playwright 桥接；来源并发上限 1。</span
+          >惠州单机由 ai选品 Worker 领取采集任务，宝塔 Python 3.12 项目提供采集心跳与 Playwright
+          桥接；来源并发上限 1。</span
         >
       </div>
       <div>
         <button type="button" @click="load">刷新运行事实</button
-        ><button
-          class="danger"
-          type="button"
-          :disabled="saving"
-          @click="confirming = true"
-        >
+        ><button class="danger" type="button" :disabled="saving" @click="confirming = true">
           回收过期租约
         </button>
       </div>
@@ -198,11 +165,7 @@ onMounted(() => {
         <p>{{ message || verdict[1] }}</p>
         <code v-if="requestId">request_id {{ requestId }}</code>
       </div>
-      <button
-        v-if="!['loading', 'recovering'].includes(state)"
-        type="button"
-        @click="load"
-      >
+      <button v-if="!['loading', 'recovering'].includes(state)" type="button" @click="load">
         重新核验
       </button>
     </section>
@@ -219,15 +182,13 @@ onMounted(() => {
         <article>
           <span>任务处理器</span
           ><strong
-            >{{ data.topology.worker_instances }} /
-            {{ data.topology.maximum_workers }}</strong
+            >{{ data.topology.worker_instances }} / {{ data.topology.maximum_workers }}</strong
           ><small>全局任务槽位 {{ data.leases.active_worker }}</small>
         </article>
         <article>
           <span>Python 采集运行时</span
           ><strong
-            >{{ data.topology.crawler_instances }} /
-            {{ data.topology.maximum_crawlers }}</strong
+            >{{ data.topology.crawler_instances }} / {{ data.topology.maximum_crawlers }}</strong
           ><small>活动浏览器槽位 {{ data.leases.active_crawler }}</small>
         </article>
         <article>
@@ -252,10 +213,7 @@ onMounted(() => {
             <article v-for="item in data.providers" :key="item.id">
               <div>
                 <b>{{ item.code }}</b
-                ><span
-                  >{{ item.active_leases }} /
-                  {{ item.effective_concurrency }}</span
-                >
+                ><span>{{ item.active_leases }} / {{ item.effective_concurrency }}</span>
               </div>
               <progress
                 :value="item.active_leases"
@@ -317,8 +275,7 @@ onMounted(() => {
           </article>
         </div>
         <div v-else class="crawler-scheduler__clear">
-          <b>当前无采集调度阻断</b
-          ><span>Node Worker 与 Python Crawler 均可正常接收任务。</span>
+          <b>当前无采集调度阻断</b><span>Node Worker 与 Python Crawler 均可正常接收任务。</span>
         </div>
       </section>
       <footer>

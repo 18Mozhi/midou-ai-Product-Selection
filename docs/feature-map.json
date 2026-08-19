@@ -94,7 +94,7 @@
       "codeStyleVerifier": "../scripts/verify-code-style.mjs",
       "repositorySqlPolicy": "new or modified Repository SQL lines must not exceed 160 characters; violations fail as repository_sql_max_line_length_failed while untouched historical debt follows touch-to-govern cleanup",
       "workerHandlerBoundary": "apps/worker/src/index.ts owns dependency assembly, non-reentrant polling, logs and priority scheduling only; every business queue handler remains in its independent worker or scheduler module and domain SQL is forbidden in the entrypoint",
-      "frontendApiClientBoundary": "the shared frontend JSON client owns credentials, request_id, trace_id, write idempotency, JSON envelopes and standardized server message/action error mapping; navigation, discovery, home, local identity, tenancy selection, landing resolution, personal center, theme settings, API readiness, business tasks, trends, scoring rules, cost rules, opportunities, competitors and sourcing do not call fetch directly",
+      "frontendApiClientBoundary": "the shared frontend JSON client owns credentials, request_id, trace_id, write idempotency, JSON envelopes and standardized server message/action error mapping; navigation, discovery, home, local identity, tenancy selection, landing resolution, personal center, theme settings, API readiness, business tasks, trends, scoring rules, cost rules, opportunities, competitors, sourcing, browser collection runtime, crawler scheduling, runtime topology and capacity boundary do not call fetch directly",
       "productionProductCommand": "npm run verify:production-product",
       "userGuide": "../docs/user-guide-ai-selection.md",
       "functionalScope": "P00-P08 incremental code style gate, software build, functional Node/Python tests, desktop/390 E2E, docs, plans, release matrix and security gate; excludes same-commit deployment evidence, disk diagnostics, production load tests and capacity claims",
@@ -673,6 +673,7 @@
       ],
       "permission": "authenticated platform collection:replay; same-origin and Idempotency-Key for expired lease recovery",
       "responseBoundary": "profile metadata, lease owner and timing, scoped run counts and correlation only; no credential, ciphertext, lease token, raw plan or temporary path",
+      "apiClientBoundary": "browser-profile and run reads plus idempotent expired-lease recovery use the shared frontend JSON client while credential and lease-token response boundaries remain unchanged",
       "profileArchive": "M03-02 encrypted base64 tar.gz with traversal-safe bounded temporary extraction, or normalized encrypted cookie_bundle materialized as a bounded JSON file; both are unconditionally cleaned up",
       "configuration": [
         "PLAYWRIGHT_HEADLESS",
@@ -1956,6 +1957,7 @@
       ],
       "scope": "M08-01 configured single-host API heartbeat, unified priority Worker scheduler with bounded concurrency and backpressure, BaoTa single-upstream Nginx evidence, sanitized health and audited operations view",
       "truthBoundary": "live proves only the API process, ready proves synchronous dependencies, available additionally requires a fresh running Worker scheduler; runtime status exposes queue delay, recent failure rate, backpressure, heartbeat expiry and restart-loop alerts without task payloads or secrets",
+      "apiClientBoundary": "the platform runtime topology read uses the shared frontend JSON client and preserves distinct expired forbidden rate-limited and unavailable states with correlated action hints",
       "permission": "public health returns sanitized counts; the operations view requires platform:operate and records request_id trace_id read audit",
       "configuration": [
         "RUNTIME_TOPOLOGY_MODE",
@@ -2205,6 +2207,7 @@
       ],
       "scope": "M08-05 current Huizhou BaoTa single-host Crawler and Worker scheduling with one global slot each, provider effective concurrency one, exclusive browser profiles, MySQL lease truth and host resource stop gates",
       "truthBoundary": "ready requires exactly one supervised Node Worker and one separately BaoTa-managed Python Crawler process observed from Linux process facts, no global provider or profile lease overflow, a current resource observation below the fixed stop gates and MySQL 5.7 as lease truth",
+      "apiClientBoundary": "crawler scheduler reads and idempotent expired-slot recovery use the shared frontend JSON client without changing single-host limits, resource stop gates or lease truth",
       "permission": "platform operations read and idempotent expired-slot recovery require platform:operate; responses exclude task payloads scope identifiers lease tokens hashes credentials cookies and paths while observation recovery and failure retain request_id trace_id and audit",
       "configuration": [
         "CRAWLER_SCHEDULER_MAX_LOAD_PERCENT",
@@ -2267,6 +2270,7 @@
       ],
       "scope": "M08-06 software completion and honest capacity state for the current single-host product; server devices production resource evidence and capacity load tests are optional operations rather than software completion gates",
       "truthBoundary": "software completion keeps capacityClaim unverified when optional same-commit production measurements are absent or blocked; planned users and concurrency are never promoted to measured claims, while any separately executed measurement must still preserve ordered stages fixed thresholds failure evidence and canonical UTC timestamps",
+      "apiClientBoundary": "capacity reads and idempotent archive-recovery attestations use the shared frontend JSON client; absent capacity evidence still maps to the explicit empty state rather than an availability or measured-capacity claim",
       "permission": "platform operations read and idempotent archive_recovery attestation require platform:operate; responses exclude customer payloads paths filenames hashes credentials cookies and SQL while view drill and failure retain request_id trace_id and audit",
       "configuration": [
         "CAPACITY_BOUNDARY_READ_P95_MS",

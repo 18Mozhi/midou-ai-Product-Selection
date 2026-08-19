@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../runtime-topology.css";
 
 type ViewState =
@@ -30,7 +31,13 @@ interface TopologyData {
   single_host: true;
   stale_node_count: number;
   nodes: RuntimeNode[];
-  processes: Array<{ name: string; status: string; pid: number | null; restart_count: number; circuit_open_until: string | null }>;
+  processes: Array<{
+    name: string;
+    status: string;
+    pid: number | null;
+    restart_count: number;
+    circuit_open_until: string | null;
+  }>;
   worker_scheduler?: {
     status: "running" | "stopping" | "stopped";
     max_concurrency: number;
@@ -41,7 +48,14 @@ interface TopologyData {
     completed_last_minute: number;
     failed_last_minute: number;
     failure_rate_percent: number;
-    queues: Array<{ name: string; priority: number; running: boolean; queue_delay_ms: number; failed_total: number; deferred_total: number }>;
+    queues: Array<{
+      name: string;
+      priority: number;
+      running: boolean;
+      queue_delay_ms: number;
+      failed_total: number;
+      deferred_total: number;
+    }>;
     observed_at: string;
   } | null;
   supervisor_pid: number | null;
@@ -55,6 +69,7 @@ interface TopologyData {
 }
 
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const state = ref<ViewState>("loading");
 const data = ref<TopologyData | null>(null);
 const requestId = ref("");
@@ -63,33 +78,15 @@ const verdict = computed(
   () =>
     (
       ({
-        loading: [
-          "正在读取单机运行事实",
-          "核对当前 API 心跳、宝塔托管边界和本机入口。",
-        ],
-        ready: [
-          "单机运行门已满足",
-          "当前 API 心跳和主机身份有效；这不是高可用或容量承诺。",
-        ],
+        loading: ["正在读取单机运行事实", "核对当前 API 心跳、宝塔托管边界和本机入口。"],
+        ready: ["单机运行门已满足", "当前 API 心跳和主机身份有效；这不是高可用或容量承诺。"],
         empty: ["尚无当前 API 心跳", "先由宝塔管理的 Node API 写入运行心跳。"],
-        blocked: [
-          "单机运行条件未满足",
-          "主机身份或 API 状态不一致，系统保持失败关闭。",
-        ],
-        stale: [
-          "运行心跳已过期",
-          "通过宝塔检查并恢复当前 Node API 后重新核验。",
-        ],
-        forbidden: [
-          "没有平台运维权限",
-          actionHint.value || "需要 platform:operate 能力。",
-        ],
+        blocked: ["单机运行条件未满足", "主机身份或 API 状态不一致，系统保持失败关闭。"],
+        stale: ["运行心跳已过期", "通过宝塔检查并恢复当前 Node API 后重新核验。"],
+        forbidden: ["没有平台运维权限", actionHint.value || "需要 platform:operate 能力。"],
         expired: ["登录已失效", "重新登录后再核验单机运行状态。"],
         rate_limited: ["刷新过于频繁", "稍后重试；现有结论不会因此升级。"],
-        unavailable: [
-          "运行状态暂不可用",
-          actionHint.value || "在宝塔查看 Node API 日志后重试。",
-        ],
+        unavailable: ["运行状态暂不可用", actionHint.value || "在宝塔查看 Node API 日志后重试。"],
       }) satisfies Record<ViewState, [string, string]>
     )[state.value],
 );
@@ -134,36 +131,29 @@ const visibleQueues = computed(() => {
   return (exceptional.length ? exceptional : queues).slice(0, 6);
 });
 const time = (value?: string) =>
-  value
-    ? new Date(value).toLocaleString("zh-CN", { hour12: false })
-    : "尚无记录";
+  value ? new Date(value).toLocaleString("zh-CN", { hour12: false }) : "尚无记录";
 
 async function load() {
   state.value = "loading";
   actionHint.value = "";
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/operations/topology`,
-      { credentials: "include", headers: { accept: "application/json" } },
-    );
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    actionHint.value = body?.error?.action_hint ?? "";
-    if (!response.ok) {
+    const response = await request<TopologyData>("/platform/operations/topology");
+    requestId.value = response.request_id;
+    data.value = response.data;
+    state.value = response.data.state;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      actionHint.value = error.actionHint;
       state.value =
-        response.status === 401
+        error.kind === "expired"
           ? "expired"
-          : response.status === 403
+          : error.kind === "forbidden"
             ? "forbidden"
-            : response.status === 429
+            : error.kind === "rate_limited"
               ? "rate_limited"
               : "unavailable";
-      return;
-    }
-    data.value = body.data;
-    state.value = body.data.state;
-  } catch {
-    state.value = "unavailable";
+    } else state.value = "unavailable";
   }
 }
 onMounted(load);
@@ -175,18 +165,12 @@ onMounted(load);
       <div>
         <p>单服务器</p>
         <h2>单机运行控制台</h2>
-        <span
-          >长期固定为一台惠州宝塔服务器，不启用负载均衡、备用服务器或多节点模式。</span
-        >
+        <span>长期固定为一台惠州宝塔服务器，不启用负载均衡、备用服务器或多节点模式。</span>
       </div>
       <button type="button" @click="load">刷新运行事实</button>
     </header>
 
-    <section
-      v-if="state === 'loading'"
-      class="topology-state"
-      aria-live="polite"
-    >
+    <section v-if="state === 'loading'" class="topology-state" aria-live="polite">
       <span class="topology-pulse" aria-hidden="true"></span>
       <div>
         <b>{{ verdict[0] }}</b>
@@ -194,9 +178,7 @@ onMounted(load);
       </div>
     </section>
     <section
-      v-else-if="
-        ['forbidden', 'expired', 'rate_limited', 'unavailable'].includes(state)
-      "
+      v-else-if="['forbidden', 'expired', 'rate_limited', 'unavailable'].includes(state)"
       class="topology-state topology-state--danger"
       aria-live="polite"
     >
@@ -211,11 +193,7 @@ onMounted(load);
     </section>
 
     <template v-else-if="data">
-      <section
-        class="topology-verdict"
-        :data-verdict="state"
-        aria-live="polite"
-      >
+      <section class="topology-verdict" :data-verdict="state" aria-live="polite">
         <div>
           <small>S0 · {{ state.toUpperCase() }}</small
           ><strong>{{ verdict[0] }}</strong>
@@ -225,20 +203,16 @@ onMounted(load);
       </section>
       <section class="topology-metrics" aria-label="单机运行指标">
         <article>
-          <span>健康后端实例</span
-          ><strong>{{ data.active_api_instances }}</strong
+          <span>健康后端实例</span><strong>{{ data.active_api_instances }}</strong
           ><small>固定一个本机实例</small>
         </article>
-        <article>
-          <span>运行主机</span><strong>1</strong><small>惠州宝塔单机</small>
-        </article>
+        <article><span>运行主机</span><strong>1</strong><small>惠州宝塔单机</small></article>
         <article>
           <span>过期节点</span><strong>{{ data.stale_node_count }}</strong
           ><small>心跳失败关闭</small>
         </article>
         <article>
-          <span>入口模式</span
-          ><strong class="topology-metric-word">单上游</strong
+          <span>入口模式</span><strong class="topology-metric-word">单上游</strong
           ><small>不做负载均衡</small>
         </article>
       </section>
@@ -289,32 +263,81 @@ onMounted(load);
             </div>
           </div>
           <div v-else class="topology-empty">
-            <b>没有当前节点可绘制</b
-            ><span>由宝塔托管的后端写入真实心跳后再核验。</span>
+            <b>没有当前节点可绘制</b><span>由宝塔托管的后端写入真实心跳后再核验。</span>
           </div>
           <section v-if="data.processes.length" class="topology-processes">
-            <header><div><p>进程监督</p><h3>API 与 Worker</h3></div><small>监督器 PID {{ data.supervisor_pid ?? '—' }}</small></header>
-            <article v-for="process in data.processes" :key="process.name" :data-node-state="process.status">
-              <span><b>{{ process.name === 'api' ? 'Node API' : 'Node Worker' }}</b><small>{{ process.status }}</small></span>
-              <dl><div><dt>PID</dt><dd>{{ process.pid ?? '—' }}</dd></div><div><dt>重启次数</dt><dd>{{ process.restart_count }}</dd></div></dl>
+            <header>
+              <div>
+                <p>进程监督</p>
+                <h3>API 与 Worker</h3>
+              </div>
+              <small>监督器 PID {{ data.supervisor_pid ?? "—" }}</small>
+            </header>
+            <article
+              v-for="process in data.processes"
+              :key="process.name"
+              :data-node-state="process.status"
+            >
+              <span
+                ><b>{{ process.name === "api" ? "Node API" : "Node Worker" }}</b
+                ><small>{{ process.status }}</small></span
+              >
+              <dl>
+                <div>
+                  <dt>PID</dt>
+                  <dd>{{ process.pid ?? "—" }}</dd>
+                </div>
+                <div>
+                  <dt>重启次数</dt>
+                  <dd>{{ process.restart_count }}</dd>
+                </div>
+              </dl>
               <p v-if="process.circuit_open_until">熔断至 {{ time(process.circuit_open_until) }}</p>
             </article>
           </section>
           <section v-if="data.worker_scheduler" class="topology-scheduler">
             <header>
-              <div><p>统一调度</p><h3>队列优先级与背压</h3></div>
-              <span :data-node-state="data.worker_scheduler.status">{{ data.worker_scheduler.status === 'running' ? '运行中' : '未运行' }}</span>
+              <div>
+                <p>统一调度</p>
+                <h3>队列优先级与背压</h3>
+              </div>
+              <span :data-node-state="data.worker_scheduler.status">{{
+                data.worker_scheduler.status === "running" ? "运行中" : "未运行"
+              }}</span>
             </header>
             <dl class="topology-scheduler-metrics">
-              <div><dt>活动任务</dt><dd>{{ data.worker_scheduler.active_runs }} / {{ data.worker_scheduler.max_concurrency }}</dd></div>
-              <div><dt>等待调度</dt><dd>{{ data.worker_scheduler.due_queue_count }}</dd></div>
-              <div><dt>最长延迟</dt><dd>{{ data.worker_scheduler.max_queue_delay_ms }} ms</dd></div>
-              <div><dt>一分钟失败率</dt><dd>{{ data.worker_scheduler.failure_rate_percent }}%</dd></div>
+              <div>
+                <dt>活动任务</dt>
+                <dd>
+                  {{ data.worker_scheduler.active_runs }} /
+                  {{ data.worker_scheduler.max_concurrency }}
+                </dd>
+              </div>
+              <div>
+                <dt>等待调度</dt>
+                <dd>{{ data.worker_scheduler.due_queue_count }}</dd>
+              </div>
+              <div>
+                <dt>最长延迟</dt>
+                <dd>{{ data.worker_scheduler.max_queue_delay_ms }} ms</dd>
+              </div>
+              <div>
+                <dt>一分钟失败率</dt>
+                <dd>{{ data.worker_scheduler.failure_rate_percent }}%</dd>
+              </div>
             </dl>
             <div class="topology-queue-list">
               <article v-for="queue in visibleQueues" :key="queue.name">
-                <span><b>{{ queueLabels[queue.name] ?? '后台任务' }}</b><small>优先级 {{ queue.priority }}</small></span>
-                <span><b>{{ queue.running ? '处理中' : queue.queue_delay_ms > 0 ? '等待中' : '空闲' }}</b><small>延迟 {{ queue.queue_delay_ms }} ms</small></span>
+                <span
+                  ><b>{{ queueLabels[queue.name] ?? "后台任务" }}</b
+                  ><small>优先级 {{ queue.priority }}</small></span
+                >
+                <span
+                  ><b>{{
+                    queue.running ? "处理中" : queue.queue_delay_ms > 0 ? "等待中" : "空闲"
+                  }}</b
+                  ><small>延迟 {{ queue.queue_delay_ms }} ms</small></span
+                >
               </article>
             </div>
             <small>观测 {{ time(data.worker_scheduler.observed_at) }}</small>
@@ -358,11 +381,20 @@ onMounted(load);
       </div>
 
       <section v-if="data.alerts?.length" class="topology-panel topology-alerts">
-        <header><div><p>需要处理</p><h3>运行告警</h3></div><span>{{ data.alerts.length }} 项</span></header>
+        <header>
+          <div>
+            <p>需要处理</p>
+            <h3>运行告警</h3>
+          </div>
+          <span>{{ data.alerts.length }} 项</span>
+        </header>
         <article v-for="item in data.alerts" :key="item.code" :data-severity="item.severity">
-          <strong>{{ alertLabels[item.code] ?? '运行状态异常' }}</strong>
+          <strong>{{ alertLabels[item.code] ?? "运行状态异常" }}</strong>
           <p>{{ item.actionHint }}</p>
-          <details><summary>技术详情</summary><code>{{ item.code }}</code></details>
+          <details>
+            <summary>技术详情</summary>
+            <code>{{ item.code }}</code>
+          </details>
         </article>
       </section>
 
@@ -379,7 +411,10 @@ onMounted(load);
             <span>{{ String(index + 1).padStart(2, "0") }}</span
             ><strong>{{ blockerLabels[item.code] ?? "运行条件未满足" }}</strong>
             <p>{{ item.actionHint }}</p>
-            <details><summary>技术详情</summary><code>{{ item.code }}</code></details>
+            <details>
+              <summary>技术详情</summary>
+              <code>{{ item.code }}</code>
+            </details>
           </article>
         </div>
         <div v-else class="topology-clear">
