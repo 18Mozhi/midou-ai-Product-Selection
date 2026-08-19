@@ -28,6 +28,8 @@ const actor = "00000000-0000-4000-8000-000000000701",
     parser_version: "v1",
     healthcheck_url: "https://example.test/health",
     owner_label: "平台运营",
+    terms_review_status: "pending",
+    terms_reference_url: null,
     status: "disabled",
   };
 test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical contract", async () => {
@@ -57,6 +59,7 @@ test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical co
       traceId: "trace-1",
     });
   assert.equal(created.status, "disabled");
+  assert.equal(created.terms_reviewed_at, null);
   assert.equal(captured.actorId, actor);
   assert.equal(captured.requestId, "request-1");
   assert.equal(created.updated_at, now.toISOString());
@@ -70,6 +73,7 @@ test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical co
     { owner_label: "x" },
     { healthcheck_url: "file:///health" },
     { markets: [] },
+    { terms_review_status: "invalid" },
   ])
     assert.throws(
       () =>
@@ -84,6 +88,35 @@ test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical co
         ),
       ProviderRegistryError,
     );
+  assert.throws(
+    () =>
+      service.create(
+        { ...valid, status: "enabled", terms_review_status: "pending" },
+        {
+          actorId: actor,
+          idempotencyKey: "missing-compliance",
+          requestId: "missing-compliance",
+          traceId: "missing-compliance",
+        },
+      ),
+    (error) =>
+      error instanceof ProviderRegistryError && error.code === "public_source_compliance_required",
+  );
+  const approved = await service.create(
+    {
+      ...valid,
+      status: "enabled",
+      terms_review_status: "approved",
+      terms_reference_url: "https://example.test/terms",
+    },
+    {
+      actorId: actor,
+      idempotencyKey: "approved",
+      requestId: "approved",
+      traceId: "approved",
+    },
+  );
+  assert.equal(approved.terms_reviewed_at, now.toISOString());
 });
 test("M03-01.A04/A06/A09/A11/A13 API enforces platform capability, origin, idempotency and correlation", async () => {
   const calls = [],
@@ -95,10 +128,7 @@ test("M03-01.A04/A06/A09/A11/A13 API enforces platform capability, origin, idemp
     },
     service = {
       list: async () => [definition],
-      create: async (value, context) => (
-        calls.push({ value, context }),
-        definition
-      ),
+      create: async (value, context) => (calls.push({ value, context }), definition),
       update: async () => definition,
     },
     authorization = { authorize: async (input) => calls.push(input) },
@@ -200,6 +230,13 @@ test("M03-01.A03/A06-A10/A13/A15-A17 delivery contracts are complete and platfor
       "new-product-enterprise-blueprint.md",
     ].map(read),
   );
+  const [complianceUp, policy, executor] = await Promise.all(
+    [
+      "database/migrations/0052b_provider_public_compliance.up.sql",
+      "packages/provider-sources/src/public-collection-policy.ts",
+      "apps/worker/src/provider-source-executor.ts",
+    ].map(read),
+  );
   for (const table of ["providers", "provider_versions", "provider_operations"])
     assert.ok(up.includes(`CREATE TABLE \`${table}\``));
   assert.doesNotMatch(up, /organization_id|workspace_id/);
@@ -219,6 +256,9 @@ test("M03-01.A03/A06-A10/A13/A15-A17 delivery contracts are complete and platfor
   assert.match(shell, /ProviderRegistry/);
   assert.match(openapi, /\/platform\/providers\/\{providerId\}:/);
   assert.match(openapi, /ProviderDefinitionInput:/);
+  assert.match(complianceUp, /terms_review_status/);
+  assert.match(policy, /robots\.txt/);
+  assert.match(executor, /assertPublicCollectionPolicy/);
   assert.doesNotMatch(env, /PROVIDER_REGISTRY_|PROVIDER_TARGET_/);
   assert.match(architecture, /平台全局/);
   assert.match(runbook, /宝塔.*Node API/s);

@@ -8439,6 +8439,8 @@ components:
           parser_version,
           healthcheck_url,
           owner_label,
+          terms_review_status,
+          terms_reference_url,
           status,
         ]
       properties:
@@ -8495,6 +8497,10 @@ components:
         healthcheck_url:
           { type: string, format: uri, maxLength: 1000, nullable: true }
         owner_label: { type: string, minLength: 2, maxLength: 120 }
+        terms_review_status:
+          { type: string, enum: [pending, approved, rejected], default: pending }
+        terms_reference_url:
+          { type: string, format: uri, maxLength: 1000, nullable: true }
         status:
           { type: string, enum: [draft, disabled, enabled], default: disabled }
     ProviderDefinitionUpdate:
@@ -8507,9 +8513,11 @@ components:
       allOf:
         - { $ref: "#/components/schemas/ProviderDefinitionInput" }
         - type: object
-          required: [id, version, updated_at]
+          required: [id, terms_reviewed_at, version, updated_at]
           properties:
             id: { type: string, format: uuid }
+            terms_reviewed_at:
+              { type: string, format: date-time, nullable: true }
             version: { type: integer, minimum: 1 }
             updated_at: { type: string, format: date-time }
     ProviderDefinitionEnvelope:

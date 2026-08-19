@@ -2,10 +2,10 @@
 
 ## 部署和启用
 
-1. 在宝塔数据库管理中备份 `product_scout`，使用业务账号执行 `0016a_provider_registry_m03_01.up.sql`。
-2. 在宝塔 Node 项目中发布已验证代码并重启 `product-scout-api`；静态站点发布新的 Web 构建产物。
+1. 在宝塔数据库管理中备份 `product_scout`，使用业务账号依次执行 `0016a_provider_registry_m03_01.up.sql` 与 `0052b_provider_public_compliance.up.sql`。
+2. 在宝塔 Node 项目 `ai选品` 中发布已验证代码并重启统一 Node 进程；静态站点发布新的 Web 构建产物。Python 项目不需要重启。
 3. 本模块不新增环境变量。保留既有 `APP_WEB_ORIGIN`、MySQL 连接和会话配置，不创建 systemd、独立 PM2、宿主机 crontab 或面板外容器。
-4. 以具备 `provider:configure` 的平台管理员访问 `/platform-admin/providers`。登记真实合同后先保持 `disabled`，由项目负责人确认目标地址、访问条款、字段和容量，再改为 `enabled`。
+4. 以具备 `provider:configure` 的平台管理员访问 `/platform-admin/providers`。登记真实合同后先保持 `disabled`，由项目负责人确认目标地址、访问条款、字段和容量，填写真实条款 HTTPS 参考地址并将复核状态设为“已批准”，再改为 `enabled`。迁移不会替现有来源自动填写批准结论；原有公开来源必须逐项复核。
 
 配置调整通过版本化页面完成：频率 1–10080 分钟、并发 1–20、超时 1000–120000ms、重试 0–10、熔断阈值 1–20、保留期 1–3650 天。修改必须基于页面最新版本；409 表示需要刷新后重做，不能覆盖他人的版本。
 
@@ -22,6 +22,8 @@ npm run verify:module -- M03-01
 - 401：会话过期，重新登录。
 - 403：确认平台角色包含 `provider:configure`；写请求还应来自 `APP_WEB_ORIGIN`。
 - 409：刷新最新版本，或为新的业务操作生成新的 Idempotency-Key。
+- `public_source_compliance_required`：公开来源尚未批准条款或缺少 HTTPS 参考地址，保持禁用并由负责人复核。
+- `robots_disallowed`：目标路径被同源 robots 明确禁止，任务进入 robots 受阻；不得绕过，先由负责人复核来源政策。
 - 503/blocked：在宝塔检查 Node API 和 MySQL 状态、连接数与错误日志，携带 request_id/trace_id 定位。
 - 页面空态：表示尚未登记来源，不得以示例数据填充。
 
@@ -29,7 +31,7 @@ M03-01 本身没有 Crawler、Worker、Redis 队列、文件或计划任务，�
 
 ## 回滚与恢复
 
-1. 在宝塔停止 Node API，并记录变更窗口和备份编号。
+1. 在宝塔停止统一 Node 项目 `ai选品`，并记录变更窗口和备份编号。
 2. 若需要保留配置，先在受控位置导出 `providers`、`provider_versions`、`provider_operations`。
 3. 执行 `0016a_provider_registry_m03_01.down.sql`，回滚应用和静态站点版本。
 4. 由宝塔重启 Node API，检查 `/api/v1/health/live` 与 `/api/v1/health/ready`。

@@ -269,6 +269,8 @@ test("optional supplier failure keeps the second public crawler running", async 
       timeout_ms: 20000,
       fields_json: ["title"],
       status: "enabled",
+      terms_review_status: "approved",
+      terms_reference_url: "https://example.test/terms",
       created_by: "66666666-6666-4666-8666-666666666666",
     },
     ec21: {
@@ -280,6 +282,8 @@ test("optional supplier failure keeps the second public crawler running", async 
       timeout_ms: 20000,
       fields_json: ["title"],
       status: "enabled",
+      terms_review_status: "approved",
+      terms_reference_url: "https://example.test/terms",
       created_by: "66666666-6666-4666-8666-666666666666",
     },
   };
@@ -387,6 +391,8 @@ test("required non-retryable login failure blocks the collection task", async ()
     timeout_ms: 20000,
     fields_json: ["title"],
     status: "enabled",
+    terms_review_status: "approved",
+    terms_reference_url: "https://example.com/terms",
     created_by: "66666666-6666-4666-8666-666666666666",
   };
   const pool = {
@@ -474,6 +480,8 @@ test("parser drift pauses the provider before failing the required source", asyn
     timeout_ms: 20000,
     fields_json: ["title"],
     status: "enabled",
+    terms_review_status: "approved",
+    terms_reference_url: "https://example.com/terms",
     version: 4,
     created_by: "66666666-6666-4666-8666-666666666666",
   };

@@ -25,6 +25,7 @@ const allowed = new Set([
   "0051b_provider_parser_sample_replay_runs.up.sql",
   "0051c_provider_parser_sample_operations.up.sql",
   "0052a_amazon_structured_parser.up.sql",
+  "0052b_provider_public_compliance.up.sql",
 ]);
 const requested = process.argv.slice(2);
 

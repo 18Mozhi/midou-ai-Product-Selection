@@ -39,15 +39,17 @@ const config = loadRuntimeConfig(process.env, "worker");
 const pool = createDatabasePool(config);
 const redisClient = createRedisConnection(config);
 const redisStore = new ScopedRedisStore(redisClient);
+const providerFetch = createProviderSourceFetch(
+  config.providerAdapters.proxy,
+  {},
+  AUTOMATIC_PROVIDER_SOURCE_HOSTS,
+);
 const registry = new ProviderAdapterRegistry({
   healthTimeoutMs: config.providerAdapters.healthTimeoutMs,
   maxResponseBytes: config.providerAdapters.maxResponseBytes,
   maxItemsPerBatch: config.providerAdapters.maxItemsPerBatch,
 });
-for (const adapter of createBuiltinSourceAdapters(
-  createProviderSourceFetch(config.providerAdapters.proxy, {}, AUTOMATIC_PROVIDER_SOURCE_HOSTS),
-))
-  registry.register(adapter);
+for (const adapter of createBuiltinSourceAdapters(providerFetch)) registry.register(adapter);
 const collectionRepository = new MySqlCollectionTaskWorkerRepository(pool);
 const collectionResourceProbe = new SingleHostResourceProbe(
   config.storage.evidenceRoot,
@@ -65,6 +67,7 @@ const executor = new ProviderSourceExecutor(
     undefined,
     config.playwright.runTimeoutSeconds * 1000,
   ),
+  providerFetch,
 );
 const trendProjection = new MySqlTrendProjectionWorker(
   pool,

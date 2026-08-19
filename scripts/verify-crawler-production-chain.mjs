@@ -12,6 +12,8 @@ const files = Object.fromEntries(
       "apps/api/src/mysql-credential-asset-repository.ts",
       "apps/worker/src/authenticated-browser-job-client.ts",
       "apps/worker/src/provider-source-executor.ts",
+      "apps/api/src/mysql-provider-source-repository.ts",
+      "packages/provider-sources/src/public-collection-policy.ts",
       "scripts/run-playwright-crawler.mjs",
       "database/migrations/0048_browser_collection_jobs.up.sql",
       "database/migrations/0049_credential_renewal_auto_replay.up.sql",
@@ -19,6 +21,7 @@ const files = Object.fromEntries(
       "database/migrations/0051a_provider_parser_samples.up.sql",
       "database/migrations/0051b_provider_parser_sample_replay_runs.up.sql",
       "database/migrations/0051c_provider_parser_sample_operations.up.sql",
+      "database/migrations/0052b_provider_public_compliance.up.sql",
     ].map(async (path) => [path, await readFile(path, "utf8")]),
   ),
 );
@@ -43,6 +46,10 @@ for (const token of [
   "provider_parser_samples",
   "provider_parser_sample_replay_runs",
   "idempotency_key",
+  "assertPublicCollectionPolicy",
+  "terms_review_status",
+  "terms_review_status='approved'",
+  "robots_disallowed",
 ]) {
   if (!all.includes(token)) throw new Error(`crawler_chain_missing:${token}`);
 }

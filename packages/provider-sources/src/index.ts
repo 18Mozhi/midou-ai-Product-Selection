@@ -14,6 +14,7 @@ import { ALIBABA_1688_BROWSER_PARSER_VERSION } from "./1688-browser-contract.js"
 export { createProviderSourceFetch, decodeProviderProxyResponseBody } from "./proxy-fetch.js";
 export type { ProviderSourceFetchDependencies, ProviderSourceProxyConfig } from "./proxy-fetch.js";
 export * from "./1688-browser-contract.js";
+export * from "./public-collection-policy.js";
 
 export type SourceCategory = "news" | "ecommerce" | "data" | "community" | "product_supply";
 export type SourceAvailability = "automatic" | "setup_required" | "manual";

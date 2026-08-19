@@ -2,8 +2,7 @@
 import { onMounted, reactive, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../provider-registry.css";
-type State =
-  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Provider {
   id: string;
   code: string;
@@ -24,6 +23,9 @@ interface Provider {
   parser_version: string;
   healthcheck_url: string | null;
   owner_label: string;
+  terms_review_status: "pending" | "approved" | "rejected";
+  terms_reference_url: string | null;
+  terms_reviewed_at: string | null;
   status: string;
   version: number;
   updated_at: string;
@@ -55,6 +57,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     parser_version: "v1",
     healthcheck_url: "",
     owner_label: "平台运营",
+    terms_review_status: "pending",
+    terms_reference_url: "",
     status: "disabled",
   });
 const failure = (s: number) =>
@@ -98,6 +102,7 @@ function edit(item?: Provider) {
           fields: item.fields.join(","),
           failure_rules: item.failure_rules.join(","),
           healthcheck_url: item.healthcheck_url ?? "",
+          terms_reference_url: item.terms_reference_url ?? "",
         }
       : {
           code: "",
@@ -114,11 +119,12 @@ function edit(item?: Provider) {
           circuit_failure_threshold: 5,
           dedupe_key: "canonical_url",
           retention_days: 365,
-          failure_rules:
-            "timeout,rate_limited,login_expired,parser_changed,empty",
+          failure_rules: "timeout,rate_limited,login_expired,parser_changed,empty",
           parser_version: "v1",
           healthcheck_url: "",
           owner_label: "平台运营",
+          terms_review_status: "pending",
+          terms_reference_url: "",
           status: "disabled",
         },
   );
@@ -143,11 +149,10 @@ async function save() {
       fields: list(form.fields),
       failure_rules: list(form.failure_rules),
       healthcheck_url: form.healthcheck_url || null,
+      terms_reference_url: form.terms_reference_url || null,
       ...(editing.value ? { expected_version: editing.value.version } : {}),
     },
-    path = editing.value
-      ? `/platform/providers/${editing.value.id}`
-      : "/platform/providers";
+    path = editing.value ? `/platform/providers/${editing.value.id}` : "/platform/providers";
   try {
     const r = await fetch(`${props.apiBaseUrl}${path}`, {
         method: editing.value ? "PUT" : "POST",
@@ -190,10 +195,7 @@ onMounted(load);
       :request-id="requestId"
       @primary="load"
     />
-    <section
-      v-else-if="state === 'empty' && !editorOpen"
-      class="provider-empty"
-    >
+    <section v-else-if="state === 'empty' && !editorOpen" class="provider-empty">
       <h3>还没有来源定义</h3>
       <p>先登记真实目标 URL、字段、频率、并发、超时、去重与失败规则。</p>
       <button type="button" @click="edit()">登记第一个来源</button>
@@ -220,20 +222,24 @@ onMounted(load);
             </td>
             <td>
               {{ item.access_mode
-              }}<small
-                >{{ item.markets.join(" · ") }} /
-                {{ item.languages.join(" · ") }}</small
-              >
+              }}<small>{{ item.markets.join(" · ") }} / {{ item.languages.join(" · ") }}</small>
             </td>
-            <td>
-              {{ item.schedule_minutes }} 分钟 / {{ item.concurrency_limit }}
-            </td>
+            <td>{{ item.schedule_minutes }} 分钟 / {{ item.concurrency_limit }}</td>
             <td>{{ item.timeout_ms }}ms / {{ item.retry_limit }}</td>
             <td>
               {{ item.parser_version }}<small>v{{ item.version }}</small>
             </td>
             <td>
-              <span :data-status="item.status">{{ item.status }}</span>
+              <span :data-status="item.status">{{ item.status }}</span
+              ><small
+                >条款：{{
+                  item.terms_review_status === "approved"
+                    ? "已批准"
+                    : item.terms_review_status === "rejected"
+                      ? "已拒绝"
+                      : "待复核"
+                }}</small
+              >
             </td>
             <td><button type="button" @click="edit(item)">编辑</button></td>
           </tr>
@@ -256,14 +262,9 @@ onMounted(load);
         </button>
       </header>
       <div class="provider-fields">
-        <label
-          >Code<input
-            v-model="form.code"
-            required
-            pattern="[a-z0-9_]{2,80}" /></label
+        <label>Code<input v-model="form.code" required pattern="[a-z0-9_]{2,80}" /></label
         ><label>名称<input v-model="form.name" required /></label
-        ><label class="wide"
-          >目标 URL<input v-model="form.target_url" required /></label
+        ><label class="wide">目标 URL<input v-model="form.target_url" required /></label
         ><label
           >接入模式<select v-model="form.access_mode">
             <option
@@ -307,11 +308,7 @@ onMounted(load);
             min="1000"
             max="120000" /></label
         ><label
-          >重试<input
-            v-model.number="form.retry_limit"
-            type="number"
-            min="0"
-            max="10" /></label
+          >重试<input v-model.number="form.retry_limit" type="number" min="0" max="10" /></label
         ><label
           >熔断阈值<input
             v-model.number="form.circuit_failure_threshold"
@@ -326,10 +323,18 @@ onMounted(load);
             max="3650" /></label
         ><label>去重键<input v-model="form.dedupe_key" /></label
         ><label>解析器版本<input v-model="form.parser_version" /></label
-        ><label class="wide"
-          >失败规则<input v-model="form.failure_rules" /></label
+        ><label class="wide">失败规则<input v-model="form.failure_rules" /></label
         ><label>负责人<input v-model="form.owner_label" /></label
-        ><label>健康检查 URL<input v-model="form.healthcheck_url" /></label>
+        ><label>健康检查 URL<input v-model="form.healthcheck_url" /></label
+        ><label
+          >平台条款复核<select v-model="form.terms_review_status">
+            <option value="pending">待复核</option>
+            <option value="approved">已批准</option>
+            <option value="rejected">已拒绝</option>
+          </select></label
+        ><label class="wide"
+          >条款参考 URL<input v-model="form.terms_reference_url" type="url" placeholder="https://…"
+        /></label>
       </div>
       <p v-if="message" role="status">
         {{ message }} <code v-if="requestId">{{ requestId }}</code>

@@ -120,8 +120,7 @@ export interface SelectedTenancyContext {
   organization: { id: string; name: string };
   workspace: WorkspaceSummary;
 }
-export type AuthorizationDataScope =
-  "own" | "team" | "workspace" | "organization" | "platform";
+export type AuthorizationDataScope = "own" | "team" | "workspace" | "organization" | "platform";
 export interface AuthorizationScopeSummary {
   scope: AuthorizationDataScope;
   workspace_id?: string | null;
@@ -136,8 +135,7 @@ export interface CurrentAuthorizationSummary {
   platform_roles?: string[];
   platform_capabilities?: string[];
 }
-export type NavigationShell =
-  "member" | "organization_admin" | "platform_admin";
+export type NavigationShell = "member" | "organization_admin" | "platform_admin";
 export interface NavigationGuardSummary {
   shell: NavigationShell;
   organization_id: string | null;
@@ -176,8 +174,7 @@ export interface QuickActionSummary {
   required_capability: string;
 }
 export type HomeDashboardKind = "action" | "change" | "follow" | "health";
-export type HomeActionPriority =
-  "overdue" | "blocking" | "high_risk" | "high_value" | "normal";
+export type HomeActionPriority = "overdue" | "blocking" | "high_risk" | "high_value" | "normal";
 export interface HomeDashboardItem {
   id: string;
   kind: HomeDashboardKind;
@@ -222,13 +219,16 @@ export interface ProviderDefinition {
   parser_version: string;
   healthcheck_url: string | null;
   owner_label: string;
+  terms_review_status: "pending" | "approved" | "rejected";
+  terms_reference_url: string | null;
+  terms_reviewed_at: string | null;
   status: "draft" | "disabled" | "enabled";
   version: number;
   updated_at: string;
 }
 export type ProviderDefinitionInput = Omit<
   ProviderDefinition,
-  "id" | "version" | "updated_at"
+  "id" | "terms_reviewed_at" | "version" | "updated_at"
 >;
 export interface ProviderAdapterSummary {
   id: string;
@@ -251,11 +251,7 @@ export interface ProviderAdapterHealthResult extends ProviderAdapterSummary {
   trace_id: string;
 }
 export type CredentialAssetKind =
-  | "api_key"
-  | "account_secret"
-  | "cookie_bundle"
-  | "private_key"
-  | "browser_profile";
+  "api_key" | "account_secret" | "cookie_bundle" | "private_key" | "browser_profile";
 export interface CredentialAssetSummary {
   id: string;
   provider_id: string;
@@ -310,8 +306,7 @@ export interface RoleCapabilitySummary {
   description: string;
   capabilities: string[];
 }
-export type ResourceGrantType =
-  "task" | "opportunity" | "competitor" | "sourcing";
+export type ResourceGrantType = "task" | "opportunity" | "competitor" | "sourcing";
 export type ResourceGrantStatus = "active" | "revoked" | "expired";
 export interface ResourceGrantSummary {
   id: string;

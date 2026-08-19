@@ -1,0 +1,1 @@
+ALTER TABLE `providers` ADD COLUMN `terms_review_status` ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending' AFTER `owner_label`, ADD COLUMN `terms_reference_url` VARCHAR(1000) CHARACTER SET ascii NULL AFTER `terms_review_status`, ADD COLUMN `terms_reviewed_at` DATETIME(3) NULL AFTER `terms_reference_url`;

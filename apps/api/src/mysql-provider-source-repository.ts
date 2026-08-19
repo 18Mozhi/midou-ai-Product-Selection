@@ -648,6 +648,15 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
           409,
           "先在来源定义页完成所有者复核并显式启用。",
         );
+      if (
+        ["public_page", "public_rss"].includes(String(provider.access_mode)) &&
+        (provider.terms_review_status !== "approved" || !provider.terms_reference_url)
+      )
+        throw new ProviderSourceServiceError(
+          "provider_source_compliance_required",
+          409,
+          "先在来源定义页批准平台条款并登记 HTTPS 参考地址。",
+        );
       if ((provider.code === "manual_product_supply_csv") !== "csv_text" in input.target)
         throw new ProviderSourceServiceError(
           "provider_source_target_mismatch",
@@ -843,7 +852,8 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
         );
       const [providers] = await c.query<RowDataPacket[]>(
         [
-          "SELECT id,code FROM providers WHERE status='enabled' AND parser_version IN ",
+          "SELECT id,code FROM providers WHERE status='enabled' AND terms_review_status='approved' ",
+          "AND terms_reference_url IS NOT NULL AND parser_version IN ",
           "('google-news-fixed-rss-v1','syndication-feed-v1','structured-public-page-v1') ORDER BY updated_at ",
           "DESC,code LIMIT 100 FOR UPDATE",
         ].join(""),
@@ -1004,6 +1014,16 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
             "先用真实登录档案完成 1688 固定样本字段回放验收；当前来源只能保持停用。",
           );
       }
+      if (
+        input.status === "enabled" &&
+        ["public_page", "public_rss"].includes(String(current.access_mode)) &&
+        (current.terms_review_status !== "approved" || !current.terms_reference_url)
+      )
+        throw new ProviderSourceServiceError(
+          "provider_source_compliance_required",
+          409,
+          "先在来源定义页批准平台条款并登记 HTTPS 参考地址。",
+        );
       if (Number(current.version) !== input.expectedVersion)
         throw new ProviderSourceServiceError(
           "provider_version_conflict",

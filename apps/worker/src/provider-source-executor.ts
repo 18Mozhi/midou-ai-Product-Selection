@@ -2,10 +2,11 @@ import { createHash, randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
   classifyProviderAdapterFailure,
+  ProviderAdapterFailure,
   type ProviderAdapterRegistry,
   type ProviderRuntimeDefinition,
 } from "@scoutops/provider-adapters";
-import { sourceEvidencePayload } from "@scoutops/provider-sources";
+import { assertPublicCollectionPolicy, sourceEvidencePayload } from "@scoutops/provider-sources";
 import type { CollectionErrorCode, SubqueryOutcome } from "@scoutops/collection-tasks";
 import {
   CollectionExecutionError,
@@ -43,6 +44,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
     private readonly evidence: MySqlEvidencePersistence,
     private readonly workerId: string,
     private readonly browserJobs?: MySqlAuthenticatedBrowserJobClient,
+    private readonly publicPolicyFetch?: typeof fetch,
   ) {}
   async execute(task: ClaimedCollectionTask, heartbeat: () => Promise<void>) {
     await this.pool.query(
@@ -79,7 +81,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
   ): Promise<SubqueryOutcome & { id: string }> {
     const [rows] = await this.pool.query<RowDataPacket[]>(
         [
-          "SELECT p.id,p.code,p.access_mode,p.target_url,p.parser_version,p.timeout_ms,p.fields_json,p.status,t",
+          "SELECT p.id,p.code,p.access_mode,p.target_url,p.parser_version,p.timeout_ms,p.fields_json,p.status",
+          ",p.terms_review_status,p.terms_reference_url,t",
           ".created_by FROM providers p JOIN collection_tasks t ON t.id=? WHERE p.id=? LIMIT 1",
         ].join(""),
         [task.id, query.providerId],
@@ -106,6 +109,17 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       fields: typeof row.fields_json === "string" ? JSON.parse(row.fields_json) : row.fields_json,
     };
     try {
+      if (["public_page", "public_rss"].includes(provider.accessMode)) {
+        if (row.terms_review_status !== "approved" || !row.terms_reference_url)
+          throw new ProviderAdapterFailure("permission_denied", false);
+        if (this.publicPolicyFetch)
+          await assertPublicCollectionPolicy({
+            providerTargetUrl: provider.targetUrl,
+            target: query.target,
+            fetcher: this.publicPolicyFetch,
+            timeoutMs: provider.timeoutMs,
+          });
+      }
       const context = {
           requestId: task.requestId,
           traceId: task.traceId,

@@ -524,7 +524,9 @@
         "../apps/api/src/provider-registry-service.ts",
         "../apps/api/src/mysql-provider-registry-repository.ts",
         "../apps/api/src/provider-registry-routes.ts",
-        "../apps/web/src/components/ProviderRegistry.vue"
+        "../apps/web/src/components/ProviderRegistry.vue",
+        "../packages/provider-sources/src/public-collection-policy.ts",
+        "../apps/worker/src/provider-source-executor.ts"
       ],
       "routes": [
         "/platform-admin/providers",
@@ -549,11 +551,12 @@
         "parser version",
         "healthcheck",
         "owner",
+        "platform terms review status, HTTPS reference and server review time",
         "status"
       ],
       "truth": "MySQL 5.7 current definition plus immutable correlated versions and idempotent operations",
       "permission": "authenticated platform provider:configure; same-origin and Idempotency-Key for writes",
-      "async": "not applicable in M03-01; collection scheduling, queues, leases and health execution belong to later modules",
+      "async": "public_page and public_rss execution requires approved terms metadata and a same-origin robots.txt preflight before adapter collection; blocked robots remain blocked_robots",
       "configuration": "no new environment values or secrets; existing APP_WEB_ORIGIN and MySQL configuration only",
       "imageEvidence": ["concept 62 provider management"],
       "verificationRunId": "fb4fe378-9280-48a6-a0de-d90b0513d33f",
