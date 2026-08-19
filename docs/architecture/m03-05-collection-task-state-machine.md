@@ -18,6 +18,8 @@ M03-05 交付组织/工作区范围化的任务、子查询、执行尝试、租
 
 调度和领取均使用 `SELECT ... FOR UPDATE`。租约令牌只在 Worker 内存中存在，MySQL 保存带域分离的 SHA-256 摘要；任务详情和 API 永不返回令牌或内部 `target_json`。到期 `leased/running` 任务由调度器回收并按同一退避规则处理。
 
+队列领取前包含重试耗尽自愈：历史异常记录若保持 `queued` 且 `attempt_count >= 4`，Worker 会以系统身份转入 `dead_letter` 并保留事件、Outbox 与死信审计；正常领取查询只接受 `attempt_count < 4`，因此单条坏记录不能形成队头阻塞。
+
 每次状态变化在同一事务写 `collection_task_events` 和 `collection_task_outbox`，保留 organization/workspace、request_id/trace_id、操作主体和脱敏元数据。死信重放只允许 `collection:replay`，要求同源 Origin、Idempotency-Key 和 2–500 字原因；新任务复制内部子查询，原任务改为 `manually_replayed`，全部历史不覆盖。
 
 ## 页面与权限

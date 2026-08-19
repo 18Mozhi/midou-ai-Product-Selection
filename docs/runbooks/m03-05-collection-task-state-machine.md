@@ -21,6 +21,7 @@
 
 ## 故障与恢复
 
+- Worker 每次轮询先回收过期租约，并将仍处于 `queued` 且已耗尽 4 次尝试的历史异常任务自动转入 `dead_letter`；写入 `collection_attempt_overflow`、任务事件、Outbox 和死信记录后，继续领取 `attempt_count < 4` 的新任务，避免一个损坏任务阻塞整条采集队列。
 - `retry_scheduled`：核对 `available_at` 和 attempt_count，等待锁定退避；不得手工提前改库。
 - `rate_limited`：遵守来源 reset 时间，不改造成固定快速重试。
 - `blocked_login/blocked_captcha/blocked_robots`：停止自动执行，核对合法账户、来源政策和人工恢复条件；不得绕过。

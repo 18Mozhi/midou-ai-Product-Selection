@@ -63,3 +63,11 @@ test("opportunity summaries reuse crawled Amazon images and real downstream coun
   assert.match(repository, /competitor_count/);
   assert.match(repository, /supplier_candidate_count/);
 });
+
+test("collection worker quarantines exhausted queue entries without blocking fresh crawls", async () => {
+  const worker = await readFile("apps/worker/src/collection-task-worker.ts", "utf8");
+  assert.match(worker, /status='queued' AND attempt_count>=4/);
+  assert.match(worker, /collection_attempt_overflow/);
+  assert.match(worker, /status='queued' AND attempt_count<4/);
+  assert.match(worker, /retry_exhausted:true/);
+});

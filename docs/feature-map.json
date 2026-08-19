@@ -715,6 +715,7 @@
       ],
       "coverage": ["complete", "partial", "insufficient"],
       "retryPolicy": "maximum 4 total attempts; 1, 5 and 15 minute backoff plus at most 20 percent jitter; rate limit uses reset time",
+      "queueRecovery": "queued rows with attempt_count at or above 4 are transactionally quarantined to dead_letter with collection_attempt_overflow event, outbox and dead-letter audit; normal claims require attempt_count below 4 so an exhausted head row cannot block fresh crawls",
       "permission": "authenticated platform collection:replay; same-origin Origin, Idempotency-Key and reason for dead-letter replay",
       "responseBoundary": "task status, coverage, scoped counts, subqueries, attempts, events, dead-letter and correlation; no target_json, lease token or credential",
       "configuration": [
