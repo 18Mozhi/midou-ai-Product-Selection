@@ -60,6 +60,10 @@ async function setup(page: Page) {
   await page.route("**/api/v1/me/sessions", (r) => r.fulfill({ json: env([]) }));
   await page.route("**/api/v1/me/notification-preferences", (r) => r.fulfill({ json: env({ version: 1, in_app_enabled: true, email_enabled: false, task_enabled: true, approval_enabled: true, competitor_enabled: true }) }));
   await page.route("**/api/v1/me/assets", (r) => r.fulfill({ json: env({ followed_trends: [], decisions: [], tasks: [] }) }));
+  await page.route("**/api/v1/tasks/approvals?*", (r) => r.fulfill({ json: env([]) }));
+  await page.route("**/api/v1/tasks/approval-templates", (r) => r.fulfill({ json: env([]) }));
+  await page.route("**/api/v1/notifications?*", (r) => r.fulfill({ json: env([]) }));
+  await page.route("**/api/v1/notifications/summary", (r) => r.fulfill({ json: env({ total: 0, unread: 0, task: 0, approval: 0, competitor: 0, system: 0 }) }));
   await page.route("**/api/v1/tasks/summary", (r) =>
     r.fulfill({
       json: env({
@@ -160,4 +164,24 @@ test("personal center renders the core profile instead of staying on its loading
   await expect(page.getByLabel("显示名称")).toHaveValue("测试成员");
   await expect(page.getByText("正在读取个人中心")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "保存资料" })).toBeVisible();
+});
+
+test("approval notification and real-selection surfaces follow every member theme", async ({ page }) => {
+  await setup(page);
+  const cases = [
+    { path: "/tasks/approvals", selector: ".approval-state", theme: "极光紫", expected: "aurora-purple" },
+    { path: "/notifications", selector: ".notification-state", theme: "云雾白", expected: "cloud-white" },
+    { path: "/opportunities/start", selector: ".selection-start", theme: "深海蓝", expected: "deep-ocean" },
+  ];
+  for (const item of cases) {
+    await page.goto(item.path);
+    const surface = page.locator(item.selector);
+    await expect(surface).toBeVisible();
+    const before = await surface.evaluate((element) => getComputedStyle(element).backgroundColor);
+    await page.getByRole("button", { name: "切换界面主题" }).click();
+    await page.getByRole("button", { name: new RegExp(item.theme) }).click();
+    await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe(item.expected);
+    const after = await surface.evaluate((element) => getComputedStyle(element).backgroundColor);
+    expect(after).not.toBe(before);
+  }
 });

@@ -40,7 +40,16 @@ html:not([data-theme="cloud-white"]) .role-shell {
   background: var(--so-panel) !important;
   color: var(--so-text) !important;
 }
-.role-content :where(.competitor-monitor, .sourcing-workspace, .automation-center, .report-center) {
+.role-content
+  :where(
+    .competitor-monitor,
+    .sourcing-workspace,
+    .automation-center,
+    .report-center,
+    .approval-workspace,
+    .notification-center,
+    .selection-journey
+  ) {
   color: var(--so-text) !important;
 }
 .role-content .competitor-monitor {
@@ -129,7 +138,10 @@ html
     .cost-console,
     .adapter-center,
     .source-center,
-    .sourcing-workspace
+    .sourcing-workspace,
+    .approval-workspace,
+    .notification-center,
+    .selection-journey
   )
   :where(
     article,
@@ -158,7 +170,10 @@ html
     .cost-console,
     .adapter-center,
     .source-center,
-    .sourcing-workspace
+    .sourcing-workspace,
+    .approval-workspace,
+    .notification-center,
+    .selection-journey
   )
   :where(h2, h3, h4, strong, b, td, dd, label, legend) {
   color: var(--so-text) !important;
@@ -172,7 +187,10 @@ html
     .cost-console,
     .adapter-center,
     .source-center,
-    .sourcing-workspace
+    .sourcing-workspace,
+    .approval-workspace,
+    .notification-center,
+    .selection-journey
   )
   :where(button, input, select, textarea) {
   border-color: var(--so-border) !important;
@@ -188,11 +206,117 @@ html
     .cost-console,
     .adapter-center,
     .source-center,
-    .sourcing-workspace
+    .sourcing-workspace,
+    .approval-workspace,
+    .notification-center,
+    .selection-journey
   )
   :where(button[type="submit"], button.primary) {
   background: var(--so-primary-strong) !important;
   color: #fff !important;
+}
+.role-content
+  :where(.approval-workspace, .notification-center, .selection-journey)
+  :where(h2, h3, h4, strong, b, dd, label) {
+  color: var(--so-text) !important;
+}
+.role-content
+  :where(.approval-workspace, .notification-center, .selection-journey)
+  :where(header span, small, dt, em, code, .readonly, .selection-footer) {
+  color: var(--so-text-muted) !important;
+}
+.role-content
+  :where(
+    .approval-workspace header p,
+    .approval-detail > p,
+    .notification-center header p,
+    .notification-detail > p,
+    .selection-journey > header p,
+    .selection-evidence header p,
+    .selection-decision header p
+  ) {
+  color: var(--so-primary) !important;
+}
+.role-content :where(.approval-notice, .notification-notice) {
+  border-color: color-mix(in srgb, var(--so-primary) 45%, var(--so-border)) !important;
+  background: color-mix(in srgb, var(--so-primary) 10%, var(--so-panel)) !important;
+  color: var(--so-text) !important;
+}
+.role-content
+  :where(
+    .approval-workspace nav button,
+    .notification-center nav button,
+    .approval-workspace .secondary,
+    .notification-center .secondary,
+    .approval-detail .close,
+    .notification-detail > button,
+    .selection-kind span,
+    .selection-actions span,
+    .readonly
+  ) {
+  border-color: var(--so-border) !important;
+  background: var(--so-panel-soft) !important;
+  color: var(--so-text-muted) !important;
+}
+.role-content
+  :where(
+    .approval-workspace nav button[aria-pressed="true"],
+    .notification-center nav button[aria-pressed="true"],
+    .selection-kind input:checked + span,
+    .selection-actions input:checked + span
+  ) {
+  border-color: var(--so-primary) !important;
+  background: color-mix(in srgb, var(--so-primary) 16%, var(--so-panel-soft)) !important;
+  color: var(--so-text) !important;
+}
+.role-content
+  :where(
+    .approval-workspace > header button:not(.secondary),
+    .approval-state > button,
+    .approval-detail section > div button:not(.danger),
+    .approval-workspace dialog form > div button:not(.secondary),
+    .template-list button,
+    .notification-center > header button:not(.secondary),
+    .notification-state > button,
+    .notification-center dialog form > div button:not(.secondary),
+    .selection-start > button,
+    .selection-decision > button,
+    .selection-footer button
+  ) {
+  border-color: transparent !important;
+  background: linear-gradient(120deg, var(--so-primary-strong), var(--so-primary)) !important;
+  color: var(--so-on-primary) !important;
+}
+.role-content .approval-detail .danger {
+  border-color: color-mix(in srgb, var(--so-danger) 40%, var(--so-border)) !important;
+  background: color-mix(in srgb, var(--so-danger) 13%, var(--so-panel-soft)) !important;
+  color: var(--so-danger) !important;
+}
+.role-content
+  :where(
+    .approval-mark,
+    .notification-list i,
+    .selection-start aside,
+    .selection-progress,
+    .selection-status dl div
+  ) {
+  border-color: var(--so-border) !important;
+  background: color-mix(in srgb, var(--so-primary) 10%, var(--so-panel-soft)) !important;
+}
+.role-content :where(.approval-mark, .notification-list i, .selection-status small) {
+  color: var(--so-primary) !important;
+}
+.role-content :where(.realtime-badge, .approval-list em[data-status="approved"], .selection-complete p) {
+  color: var(--so-success) !important;
+}
+.role-content :where(.realtime-badge[data-state="reconnecting"], .selection-footer span) {
+  color: var(--so-warning) !important;
+}
+.role-content :where(.approval-metrics .alert b, .approval-list em[data-status="rejected"]) {
+  color: var(--so-danger) !important;
+}
+.role-content .selection-progress i {
+  background: linear-gradient(90deg, var(--so-success), var(--so-primary), var(--so-chart-2)) !important;
 }
 @media (hover: hover) {
   .role-shell :is(button, a)[aria-label] {

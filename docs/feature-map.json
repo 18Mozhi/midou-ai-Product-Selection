@@ -339,7 +339,7 @@
       "scope": "signed-in user plus server-resolved active organization and workspace",
       "truth": "versioned synchronous MySQL preference, transactionally paired with audit and idempotency record",
       "bootstrap": "cached theme is applied before Vue mounts, then reconciled with the signed-in server preference; failed writes restore the previous theme",
-      "legacyCompatibility": "all member workspace modules consume semantic theme tokens in deep-ocean, aurora-purple and cloud-white",
+      "legacyCompatibility": "all member workspace modules consume semantic theme tokens in deep-ocean, aurora-purple and cloud-white; approval, notification and real-selection journey cards, dialogs, filters, inputs and action states are explicitly covered",
       "accessibility": "status icon plus text; charts include value, period, source and freshness; keyboard radiogroup and visible focus",
       "async": "not applicable; preference reads and writes are synchronous and create no Worker, Crawler, queue, file, export, SSE or provider work",
       "verificationRunId": "3c8eef1b-fedd-48fe-9478-b6f38272dccf",

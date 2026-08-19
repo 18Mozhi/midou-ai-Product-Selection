@@ -14,6 +14,9 @@ test("dark role shells override every production module that still carries legac
     "adapter-center",
     "source-center",
     "sourcing-workspace",
+    "approval-workspace",
+    "notification-center",
+    "selection-journey",
   ])
     assert.match(css, new RegExp(root));
   assert.match(css, /html:not\(\[data-theme="cloud-white"\]\)/);
@@ -37,6 +40,8 @@ test("saved theme is restored before Vue mounts and legacy modules use semantic 
   for (const alias of ["--surface", "--text-primary", "--accent", "--border"])
     assert.match(tokens, new RegExp(alias));
   assert.match(compat, /html\s+\.role-content[\s\S]*background:\s*var\(--so-panel\)\s*!important/);
+  assert.match(compat, /\.approval-workspace[\s\S]*\.notification-center[\s\S]*\.selection-journey/);
+  assert.match(compat, /var\(--so-on-primary\)/);
   assert.doesNotMatch(task, /#(?:0d203a|16284f|0b1c31|ffffff|fff)\b/i);
   assert.doesNotMatch(personal, /linear-gradient\(135deg,\s*#0d2342/);
 });
