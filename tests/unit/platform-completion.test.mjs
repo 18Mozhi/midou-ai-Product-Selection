@@ -10,46 +10,44 @@ import {
 import { ProviderSourceService } from "../../apps/api/dist/provider-source-service.js";
 
 test("automatic source catalog is diversified across real source families and markets", () => {
-  const automatic = BUILTIN_PROVIDER_SOURCES.filter(
-    (item) => item.availability === "automatic",
-  );
-  const googleNews = automatic.filter(
-    (item) => item.parser_version === "google-news-fixed-rss-v1",
-  );
-  const hosts = new Set(
-    automatic.map((item) => new URL(item.target_url).hostname),
-  );
+  const automatic = BUILTIN_PROVIDER_SOURCES.filter((item) => item.availability === "automatic");
+  const googleNews = automatic.filter((item) => item.parser_version === "google-news-fixed-rss-v1");
+  const hosts = new Set(automatic.map((item) => new URL(item.target_url).hostname));
   const categories = new Set(automatic.map((item) => item.category));
   const markets = new Set(automatic.flatMap((item) => item.markets));
 
-  assert.ok(
-    automatic.length >= 100,
-    "at least 100 automatic channels must remain available",
-  );
-  assert.ok(
-    hosts.size >= 8,
-    "automatic channels must span at least eight real source hosts",
-  );
+  assert.ok(automatic.length >= 100, "at least 100 automatic channels must remain available");
+  assert.ok(hosts.size >= 8, "automatic channels must span at least eight real source hosts");
   assert.ok(
     googleNews.length / automatic.length < 0.75,
     "Google News must not dominate the automatic catalog",
   );
-  assert.deepEqual([...categories].sort(), [
-    "community",
-    "data",
-    "ecommerce",
-    "news",
-  ]);
-  assert.ok(
-    markets.size >= 10,
-    "major-country market coverage must be explicit",
-  );
+  assert.deepEqual([...categories].sort(), ["community", "data", "ecommerce", "news"]);
+  assert.ok(markets.size >= 10, "major-country market coverage must be explicit");
   assert.ok(AUTOMATIC_PROVIDER_SOURCE_HOSTS.includes("www.reddit.com"));
   assert.ok(AUTOMATIC_PROVIDER_SOURCE_HOSTS.includes("b.hatena.ne.jp"));
 });
 
 test("fixed marketplace page parser extracts structured product evidence without an API key", () => {
-  const html = `<html><head><script type="application/ld+json">${JSON.stringify({ "@type": "ItemList", itemListElement: [{ "@type": "ListItem", position: 1, item: { "@type": "Product", name: "Portable Desk Lamp", url: "/dp/B0ABCDEFGHI", image: "/images/lamp.jpg", offers: { price: "29.90", priceCurrency: "USD" } } }] })}</script></head></html>`;
+  const catalog = {
+      "@type": "ItemList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          item: {
+            "@type": "Product",
+            name: "Portable Desk Lamp",
+            url: "/dp/B0ABCDEFGHI",
+            image: "/images/lamp.jpg",
+            offers: { price: "29.90", priceCurrency: "USD" },
+          },
+        },
+      ],
+    },
+    html =
+      '<html><head><script type="application/ld+json">' +
+      `${JSON.stringify(catalog)}</script></head></html>`;
   const records = parseStructuredCatalogPage(
     html,
     "https://www.amazon.com/Best-Sellers/zgbs",
@@ -65,12 +63,8 @@ test("fixed marketplace page parser extracts structured product evidence without
 });
 
 test("Shopify and eBay announcement channels use current public pages and preserve HTML evidence", () => {
-  const shopify = BUILTIN_PROVIDER_SOURCES.find(
-    (item) => item.code === "feed_shopify_blog",
-  );
-  const ebay = BUILTIN_PROVIDER_SOURCES.find(
-    (item) => item.code === "feed_ebay_announcements",
-  );
+  const shopify = BUILTIN_PROVIDER_SOURCES.find((item) => item.code === "feed_shopify_blog");
+  const ebay = BUILTIN_PROVIDER_SOURCES.find((item) => item.code === "feed_ebay_announcements");
   assert.deepEqual(
     {
       accessMode: shopify?.access_mode,
@@ -104,10 +98,7 @@ test("Shopify and eBay announcement channels use current public pages and preser
   );
   assert.equal(shopifyRecords.length, 1);
   assert.equal(shopifyRecords[0].payload.content_type, "text/html");
-  assert.equal(
-    shopifyRecords[0].payload.source_paths.title,
-    "html.anchor.text",
-  );
+  assert.equal(shopifyRecords[0].payload.source_paths.title, "html.anchor.text");
   assert.match(shopifyRecords[0].evidenceRef, /^public-page-link:/);
 
   const ebayRecords = parseStructuredCatalogPage(
@@ -151,10 +142,7 @@ test("provider source configuration is editable through a validated audited serv
       };
     },
   };
-  const service = new ProviderSourceService(
-    repository,
-    () => new Date("2026-08-18T00:00:00.000Z"),
-  );
+  const service = new ProviderSourceService(repository, () => new Date("2026-08-18T00:00:00.000Z"));
   const result = await service.updateConfiguration(
     "00000000-0000-4000-8000-000000000111",
     {
@@ -180,10 +168,7 @@ test("provider source configuration is editable through a validated audited serv
 
 test("platform navigation exposes complete management domains and role switching", async () => {
   const shell = await readFile(
-    new URL(
-      "../../apps/web/src/components/NavigationShell.vue",
-      import.meta.url,
-    ),
+    new URL("../../apps/web/src/components/NavigationShell.vue", import.meta.url),
     "utf8",
   );
   for (const label of [
@@ -205,35 +190,24 @@ test("platform navigation exposes complete management domains and role switching
 
 test("platform management and dashboard expose operational details instead of placeholder cards", async () => {
   const management = await readFile(
-    new URL(
-      "../../apps/web/src/components/PlatformManagementCenter.vue",
-      import.meta.url,
-    ),
+    new URL("../../apps/web/src/components/PlatformManagementCenter.vue", import.meta.url),
     "utf8",
   );
   const dashboard = await readFile(
-    new URL(
-      "../../apps/web/src/components/PlatformDashboard.vue",
-      import.meta.url,
-    ),
+    new URL("../../apps/web/src/components/PlatformDashboard.vue", import.meta.url),
     "utf8",
   );
-  const theme = await readFile(
-    new URL("../../apps/web/src/theme-compat.css", import.meta.url),
-    "utf8",
-  );
+  const main = await readFile(new URL("../../apps/web/src/main.ts", import.meta.url), "utf8");
   for (const label of ["审核热点内容", "投递", "接收邮箱", "采集任务状态"])
     assert.match(management, new RegExp(label));
   assert.match(dashboard, /采集任务成功和失败趋势折线图/);
-  assert.match(theme, /\[aria-label\]::after/);
+  assert.match(main, /button\[aria-label\],a\[aria-label\]/);
+  assert.match(main, /element\.title = label/);
 });
 
 test("collection task detail renders attempts events and dead-letter facts", async () => {
   const component = await readFile(
-    new URL(
-      "../../apps/web/src/components/CollectionTaskCenter.vue",
-      import.meta.url,
-    ),
+    new URL("../../apps/web/src/components/CollectionTaskCenter.vue", import.meta.url),
     "utf8",
   );
   for (const label of ["执行尝试", "状态事件", "死信记录"]) {
@@ -243,16 +217,10 @@ test("collection task detail renders attempts events and dead-letter facts", asy
 
 test("platform account overview query remains compatible with MySQL 5.7 aggregate ordering", async () => {
   const repository = await readFile(
-    new URL(
-      "../../apps/api/src/mysql-platform-account-repository.ts",
-      import.meta.url,
-    ),
+    new URL("../../apps/api/src/mysql-platform-account-repository.ts", import.meta.url),
     "utf8",
   );
-  assert.match(
-    repository,
-    /ORDER BY \(MIN\(pra\.created_at\) IS NULL\),MIN\(pra\.created_at\)/,
-  );
+  assert.match(repository, /ORDER BY \(MIN\(pra\.created_at\) IS NULL\),MIN\(pra\.created_at\)/);
   assert.doesNotMatch(repository, /ORDER BY \(granted_at IS NULL\)/);
 });
 
@@ -272,13 +240,9 @@ test("frontend primary headings and platform operations use Chinese labels", asy
   ];
   const sources = await Promise.all(
     files.map((name) =>
-      readFile(
-        new URL(`../../apps/web/src/components/${name}`, import.meta.url),
-        "utf8",
-      ),
+      readFile(new URL(`../../apps/web/src/components/${name}`, import.meta.url), "utf8"),
     ),
   );
-  for (const source of sources)
-    assert.doesNotMatch(source, />[A-Z][A-Z0-9 &/+._·:-]{3,}</);
+  for (const source of sources) assert.doesNotMatch(source, />[A-Z][A-Z0-9 &/+._·:-]{3,}</);
   assert.ok(sources.join("\n").includes("智能选品"));
 });

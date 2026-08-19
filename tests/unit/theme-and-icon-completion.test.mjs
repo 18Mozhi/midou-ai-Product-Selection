@@ -1,37 +1,28 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 
-test("dark role shells override every production module that still carries legacy white surfaces", async () => {
-  const css = await readFile("apps/web/src/theme-compat.css", "utf8");
-  for (const root of [
-    "account-center",
-    "collection-task-center",
-    "competitor-monitor",
-    "crawler-center",
-    "quality-center",
-    "cost-console",
-    "adapter-center",
-    "source-center",
-    "sourcing-workspace",
-    "approval-workspace",
-    "notification-center",
-    "selection-journey",
-  ])
-    assert.match(css, new RegExp(root));
-  assert.match(css, /html:not\(\[data-theme="cloud-white"\]\)/);
-  assert.match(css, /background:\s*var\(--so-panel\)\s*!important/);
+test("production CSS has no global compatibility patch or important overrides", async () => {
+  const paths = (await readdir("apps/web/src", { recursive: true }))
+    .filter((path) => path.endsWith(".css"))
+    .map((path) => `apps/web/src/${path.replaceAll("\\", "/")}`);
+  const sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
+
+  assert.ok(!paths.includes("apps/web/src/theme-compat.css"));
+  for (const [index, source] of sources.entries())
+    assert.doesNotMatch(source, /!important/, paths[index]);
 });
 
-test("saved theme is restored before Vue mounts and legacy modules use semantic theme tokens", async () => {
-  const [main, theme, tokens, compat, task, personal] = await Promise.all(
+test("saved theme is restored before Vue mounts and modules use semantic theme tokens", async () => {
+  const [main, theme, tokens, task, personal, approval, notification] = await Promise.all(
     [
       "apps/web/src/main.ts",
       "apps/web/src/design/theme.ts",
       "apps/web/src/design/tokens.css",
-      "apps/web/src/theme-compat.css",
       "apps/web/src/task-workspace.css",
       "apps/web/src/components/PersonalCenter.vue",
+      "apps/web/src/approval-workspace.css",
+      "apps/web/src/notification-center.css",
     ].map((path) => readFile(path, "utf8")),
   );
   assert.match(main, /applyCachedTheme\(\);[\s\S]*createApp/);
@@ -39,25 +30,28 @@ test("saved theme is restored before Vue mounts and legacy modules use semantic 
   assert.match(theme, /localStorage\.getItem/);
   for (const alias of ["--surface", "--text-primary", "--accent", "--border"])
     assert.match(tokens, new RegExp(alias));
-  assert.match(compat, /html\s+\.role-content[\s\S]*background:\s*var\(--so-panel\)\s*!important/);
-  assert.match(compat, /\.approval-workspace[\s\S]*\.notification-center[\s\S]*\.selection-journey/);
-  assert.match(compat, /var\(--so-on-primary\)/);
+  for (const source of [task, approval, notification]) {
+    assert.match(source, /var\(--so-panel/);
+    assert.match(source, /var\(--so-border/);
+  }
   assert.doesNotMatch(task, /#(?:0d203a|16284f|0b1c31|ffffff|fff)\b/i);
   assert.doesNotMatch(personal, /linear-gradient\(135deg,\s*#0d2342/);
 });
 
 test("icon-only production actions expose hover and focus names", async () => {
-  const [theme, shell, credentials, registry, sourcing] = await Promise.all(
+  const [main, shell, credentials, registry, sourcing] = await Promise.all(
     [
-      "apps/web/src/theme-compat.css",
+      "apps/web/src/main.ts",
       "apps/web/src/components/NavigationShell.vue",
       "apps/web/src/components/CredentialAssetCenter.vue",
       "apps/web/src/components/ProviderRegistry.vue",
       "apps/web/src/components/SourcingWorkspace.vue",
     ].map((path) => readFile(path, "utf8")),
   );
-  assert.match(theme, /content:\s*attr\(aria-label\)/);
-  for (const label of ["通知中心", "个人中心"]) assert.match(shell, new RegExp(`aria-label="${label}"`));
+  assert.match(main, /button\[aria-label\],a\[aria-label\]/);
+  assert.match(main, /element\.title = label/);
+  for (const label of ["通知中心", "个人中心"])
+    assert.match(shell, new RegExp(`aria-label="${label}"`));
   for (const label of ["关闭凭证编辑", "关闭浏览器档案编辑"])
     assert.match(credentials, new RegExp(label));
   assert.match(registry, /关闭来源设置编辑/);

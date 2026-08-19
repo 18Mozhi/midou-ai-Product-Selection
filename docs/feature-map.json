@@ -343,8 +343,7 @@
         "../apps/web/src/design/theme.ts",
         "../apps/web/src/design/tokens.css",
         "../apps/web/src/components/ThemeStudio.vue",
-        "../apps/web/src/components/NavigationShell.vue",
-        "../apps/web/src/theme-compat.css"
+        "../apps/web/src/components/NavigationShell.vue"
       ],
       "route": "/settings/theme",
       "api": ["GET /api/v1/me/ui-preferences", "PUT /api/v1/me/ui-preferences"],
@@ -353,7 +352,7 @@
       "truth": "versioned synchronous MySQL preference, transactionally paired with audit and idempotency record",
       "bootstrap": "cached theme is applied before Vue mounts, then reconciled with the signed-in server preference; failed writes restore the previous theme",
       "apiClientBoundary": "standalone theme settings and shell theme controls share the same frontend API client and preserve version conflict, scope, correlation and rollback behavior",
-      "legacyCompatibility": "all member workspace modules consume semantic theme tokens in deep-ocean, aurora-purple and cloud-white; approval, notification and real-selection journey cards, dialogs, filters, inputs and action states are explicitly covered",
+      "styleBoundary": "all production CSS consumes semantic theme tokens directly or component-local semantic aliases; the obsolete unimported global theme-compat patch is removed and the unit gate rejects every !important override",
       "accessibility": "status icon plus text; charts include value, period, source and freshness; keyboard radiogroup and visible focus",
       "async": "not applicable; preference reads and writes are synchronous and create no Worker, Crawler, queue, file, export, SSE or provider work",
       "verificationRunId": "3c8eef1b-fedd-48fe-9478-b6f38272dccf",

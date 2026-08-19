@@ -145,8 +145,8 @@ dialog form > div {
 .approval-list em[data-status="approved"] {
   color: #83d991;
 }
-.approval-mark {
-  display: grid !important;
+.approval-list .approval-mark {
+  display: grid;
   place-items: center;
   width: 32px;
   height: 32px;

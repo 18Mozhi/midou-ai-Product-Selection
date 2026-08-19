@@ -1,1 +1,265 @@
-.mysql-resilience{--ink:#e9f5ff;--muted:#85a4bd;--line:#173c56;display:grid;gap:18px;color:var(--ink);font-family:"Noto Sans SC",system-ui,sans-serif}.mysql-resilience__hero,.mysql-resilience__verdict,.mysql-resilience__panel,.mysql-resilience__state,.mysql-resilience__metrics article{border:1px solid var(--line);background:linear-gradient(145deg,#071722,#0a2130);box-shadow:0 18px 45px #020b12a8}.mysql-resilience__hero{display:flex;align-items:end;justify-content:space-between;padding:26px;border-radius:18px;background:radial-gradient(circle at 80% 10%,#0b56704f,transparent 42%),linear-gradient(145deg,#06131e,#092739)}.mysql-resilience__hero p,.mysql-resilience__panel header p{margin:0;color:#44d7ff;font-size:11px;letter-spacing:.18em}.mysql-resilience__hero h2{margin:7px 0 8px;font-size:28px}.mysql-resilience__hero span,.mysql-resilience__verdict p,.mysql-resilience__panel small{color:var(--muted)}.mysql-resilience button{border:1px solid #2fc9ef;background:#0c3344;color:#dff9ff;border-radius:10px;padding:10px 15px;cursor:pointer}.mysql-resilience__state{display:flex;gap:14px;align-items:center;padding:22px;border-radius:14px}.mysql-resilience__state i{width:22px;height:22px;border:2px solid #32d6ff;border-right-color:transparent;border-radius:50%;animation:mysql-spin .8s linear infinite}.mysql-resilience__state b{font-size:18px}.mysql-resilience__state p{margin:5px 0;color:var(--muted)}.mysql-resilience__state--danger{border-color:#8b3644}.mysql-resilience__state--danger>strong{font-size:26px;color:#ff778b}.mysql-resilience__verdict{display:flex;align-items:center;gap:22px;padding:20px 22px;border-radius:14px;border-left:4px solid #37e0b1}.mysql-resilience__verdict[data-verdict="warning"]{border-left-color:#ffc857}.mysql-resilience__verdict[data-verdict="blocked"]{border-left-color:#ff647a}.mysql-resilience__verdict div{display:grid}.mysql-resilience__verdict small{color:#45d8ff}.mysql-resilience__verdict strong{font-size:20px}.mysql-resilience__verdict p{flex:1}.mysql-resilience__verdict em{font-style:normal;color:#89e9cf}.mysql-resilience__metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.mysql-resilience__metrics article{display:grid;gap:5px;padding:18px;border-radius:14px}.mysql-resilience__metrics span{color:var(--muted);font-size:12px}.mysql-resilience__metrics strong{font-size:24px;color:#d9f9ff}.mysql-resilience__metrics small{color:#6ea2bd}.mysql-resilience__layout{display:grid;grid-template-columns:1.35fr 1fr;gap:14px}.mysql-resilience__panel{padding:20px;border-radius:16px}.mysql-resilience__panel header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:12px}.mysql-resilience__panel h3{margin:4px 0 0}.mysql-resilience__panel dl{margin:14px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.mysql-resilience__panel dl div{padding:11px;background:#071925;border-radius:9px}.mysql-resilience__panel dt{font-size:12px;color:var(--muted)}.mysql-resilience__panel dd{margin:5px 0 0;color:#bcefff}.mysql-resilience__findings>div{display:grid;gap:8px;margin-top:14px}.mysql-resilience__findings article{display:grid;grid-template-columns:34px 240px 1fr;gap:10px;padding:11px;border-left:3px solid #ffc857;background:#071925}.mysql-resilience__findings article[data-severity="blocked"]{border-color:#ff647a}.mysql-resilience__findings p{margin:0;color:var(--muted)}.mysql-resilience__clear{padding:18px;background:#08241f!important}.mysql-resilience__clear span{display:block;color:var(--muted);margin-top:5px}.mysql-resilience__footer{display:flex;flex-wrap:wrap;justify-content:space-between;color:var(--muted);font-size:12px}.mysql-resilience__footer strong{color:#55d8b6}@keyframes mysql-spin{to{transform:rotate(360deg)}}@media(max-width:900px){.mysql-resilience__metrics{grid-template-columns:repeat(2,1fr)}.mysql-resilience__layout{grid-template-columns:1fr}}@media(max-width:520px){.mysql-resilience{gap:12px}.mysql-resilience__hero{align-items:stretch;flex-direction:column;gap:18px;padding:19px}.mysql-resilience__hero h2{font-size:23px}.mysql-resilience__metrics{grid-template-columns:1fr 1fr;gap:8px}.mysql-resilience__metrics article{padding:13px}.mysql-resilience__metrics strong{font-size:20px}.mysql-resilience__verdict{align-items:flex-start;flex-direction:column;gap:8px}.mysql-resilience__panel dl{grid-template-columns:1fr}.mysql-resilience__findings article{grid-template-columns:28px 1fr}.mysql-resilience__findings article p{grid-column:2}.mysql-resilience__footer{display:grid;gap:4px}}
+.mysql-resilience {
+  --ink: #e9f5ff;
+  --muted: #85a4bd;
+  --line: #173c56;
+  display: grid;
+  gap: 18px;
+  color: var(--ink);
+  font-family: "Noto Sans SC", system-ui, sans-serif;
+}
+.mysql-resilience__hero,
+.mysql-resilience__verdict,
+.mysql-resilience__panel,
+.mysql-resilience__state,
+.mysql-resilience__metrics article {
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg, #071722, #0a2130);
+  box-shadow: 0 18px 45px #020b12a8;
+}
+.mysql-resilience__hero {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  padding: 26px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 80% 10%, #0b56704f, transparent 42%),
+    linear-gradient(145deg, #06131e, #092739);
+}
+.mysql-resilience__hero p,
+.mysql-resilience__panel header p {
+  margin: 0;
+  color: #44d7ff;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+}
+.mysql-resilience__hero h2 {
+  margin: 7px 0 8px;
+  font-size: 28px;
+}
+.mysql-resilience__hero span,
+.mysql-resilience__verdict p,
+.mysql-resilience__panel small {
+  color: var(--muted);
+}
+.mysql-resilience button {
+  border: 1px solid #2fc9ef;
+  background: #0c3344;
+  color: #dff9ff;
+  border-radius: 10px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+.mysql-resilience__state {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 22px;
+  border-radius: 14px;
+}
+.mysql-resilience__state i {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #32d6ff;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: mysql-spin 0.8s linear infinite;
+}
+.mysql-resilience__state b {
+  font-size: 18px;
+}
+.mysql-resilience__state p {
+  margin: 5px 0;
+  color: var(--muted);
+}
+.mysql-resilience__state--danger {
+  border-color: #8b3644;
+}
+.mysql-resilience__state--danger > strong {
+  font-size: 26px;
+  color: #ff778b;
+}
+.mysql-resilience__verdict {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 20px 22px;
+  border-radius: 14px;
+  border-left: 4px solid #37e0b1;
+}
+.mysql-resilience__verdict[data-verdict="warning"] {
+  border-left-color: #ffc857;
+}
+.mysql-resilience__verdict[data-verdict="blocked"] {
+  border-left-color: #ff647a;
+}
+.mysql-resilience__verdict div {
+  display: grid;
+}
+.mysql-resilience__verdict small {
+  color: #45d8ff;
+}
+.mysql-resilience__verdict strong {
+  font-size: 20px;
+}
+.mysql-resilience__verdict p {
+  flex: 1;
+}
+.mysql-resilience__verdict em {
+  font-style: normal;
+  color: #89e9cf;
+}
+.mysql-resilience__metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.mysql-resilience__metrics article {
+  display: grid;
+  gap: 5px;
+  padding: 18px;
+  border-radius: 14px;
+}
+.mysql-resilience__metrics span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.mysql-resilience__metrics strong {
+  font-size: 24px;
+  color: #d9f9ff;
+}
+.mysql-resilience__metrics small {
+  color: #6ea2bd;
+}
+.mysql-resilience__layout {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 14px;
+}
+.mysql-resilience__panel {
+  padding: 20px;
+  border-radius: 16px;
+}
+.mysql-resilience__panel header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+.mysql-resilience__panel h3 {
+  margin: 4px 0 0;
+}
+.mysql-resilience__panel dl {
+  margin: 14px 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.mysql-resilience__panel dl div {
+  padding: 11px;
+  background: #071925;
+  border-radius: 9px;
+}
+.mysql-resilience__panel dt {
+  font-size: 12px;
+  color: var(--muted);
+}
+.mysql-resilience__panel dd {
+  margin: 5px 0 0;
+  color: #bcefff;
+}
+.mysql-resilience__findings > div {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+.mysql-resilience__findings article {
+  display: grid;
+  grid-template-columns: 34px 240px 1fr;
+  gap: 10px;
+  padding: 11px;
+  border-left: 3px solid #ffc857;
+  background: #071925;
+}
+.mysql-resilience__findings article[data-severity="blocked"] {
+  border-color: #ff647a;
+}
+.mysql-resilience__findings p {
+  margin: 0;
+  color: var(--muted);
+}
+.mysql-resilience .mysql-resilience__clear {
+  padding: 18px;
+  background: #08241f;
+}
+.mysql-resilience__clear span {
+  display: block;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.mysql-resilience__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 12px;
+}
+.mysql-resilience__footer strong {
+  color: #55d8b6;
+}
+@keyframes mysql-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 900px) {
+  .mysql-resilience__metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .mysql-resilience__layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 520px) {
+  .mysql-resilience {
+    gap: 12px;
+  }
+  .mysql-resilience__hero {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 18px;
+    padding: 19px;
+  }
+  .mysql-resilience__hero h2 {
+    font-size: 23px;
+  }
+  .mysql-resilience__metrics {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .mysql-resilience__metrics article {
+    padding: 13px;
+  }
+  .mysql-resilience__metrics strong {
+    font-size: 20px;
+  }
+  .mysql-resilience__verdict {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .mysql-resilience__panel dl {
+    grid-template-columns: 1fr;
+  }
+  .mysql-resilience__findings article {
+    grid-template-columns: 28px 1fr;
+  }
+  .mysql-resilience__findings article p {
+    grid-column: 2;
+  }
+  .mysql-resilience__footer {
+    display: grid;
+    gap: 4px;
+  }
+}
