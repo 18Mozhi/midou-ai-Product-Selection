@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import { statusLabel } from "../ui/status-labels";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import "../crawler-scheduler.css";
 
@@ -29,6 +30,17 @@ interface Dto {
     active_crawler: number;
     duplicate_count: number;
   };
+  active_leases: Array<{
+    slot_type: "worker" | "crawler" | "provider";
+    provider_name: string | null;
+    task_id: string | null;
+    task_status: string | null;
+    run_id: string | null;
+    process_role: "node_worker" | "python_crawler";
+    process_ref: string;
+    heartbeat_at: string;
+    expires_at: string;
+  }>;
   providers: Array<{
     id: string;
     code: string;
@@ -87,6 +99,8 @@ const time = (value: string) =>
     minute: "2-digit",
     second: "2-digit",
   }).format(new Date(value));
+const processLabel = (value: "node_worker" | "python_crawler") =>
+  value === "node_worker" ? "Node Worker" : "Python Crawler";
 const status = (kind: ApiFailureKind): State =>
   kind === "expired" || kind === "forbidden" || kind === "rate_limited" ? kind : "unavailable";
 
@@ -255,6 +269,40 @@ onMounted(() => {
           </dl>
         </aside>
       </div>
+      <section
+        v-if="data.active_leases.length"
+        class="crawler-scheduler__panel crawler-scheduler__associations"
+      >
+        <header>
+          <div>
+            <p>实时关联</p>
+            <h3>租约、进程与采集任务</h3>
+          </div>
+          <span>{{ data.active_leases.length }} 个活动槽位</span>
+        </header>
+        <div>
+          <article
+            v-for="(item, index) in data.active_leases"
+            :key="`${item.slot_type}:${item.task_id}:${item.run_id}:${index}`"
+          >
+            <div>
+              <b>{{ processLabel(item.process_role) }}</b>
+              <span>{{ item.provider_name || "全局调度槽位" }}</span>
+            </div>
+            <p>
+              采集任务：{{ statusLabel(item.task_status) }} · 最近心跳
+              {{ time(item.heartbeat_at) }} · 租约到期 {{ time(item.expires_at) }}
+            </p>
+            <details>
+              <summary>查看技术详情</summary>
+              <code>任务 UUID {{ item.task_id || "未关联" }}</code>
+              <code>进程标识 {{ item.process_ref }}</code>
+              <code>槽位类型 {{ item.slot_type }}</code>
+              <code v-if="item.run_id">运行 UUID {{ item.run_id }}</code>
+            </details>
+          </article>
+        </div>
+      </section>
       <section class="crawler-scheduler__panel crawler-scheduler__findings">
         <header>
           <div>

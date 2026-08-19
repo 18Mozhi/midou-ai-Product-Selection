@@ -2226,6 +2226,7 @@
       ],
       "scope": "M08-05 current Huizhou BaoTa single-host Crawler and Worker scheduling with one global slot each, provider effective concurrency one, exclusive browser profiles, MySQL lease truth and host resource stop gates",
       "truthBoundary": "ready requires exactly one supervised Node Worker and one separately BaoTa-managed Python Crawler process observed from Linux process facts, no global provider or profile lease overflow, a current resource observation below the fixed stop gates and MySQL 5.7 as lease truth",
+      "leaseAssociationBoundary": "the operations API reads up to 100 active crawler_scheduler_leases and links each slot to its logical Node Worker or Python Crawler role, collection task status, provider name, heartbeat and expiry; task run process and slot identifiers stay inside technical details, while scope IDs targets tokens hashes credentials and payloads remain excluded",
       "apiClientBoundary": "crawler scheduler reads and idempotent expired-slot recovery use the shared frontend JSON client without changing single-host limits, resource stop gates or lease truth",
       "permission": "platform operations read and idempotent expired-slot recovery require platform:operate; responses exclude task payloads scope identifiers lease tokens hashes credentials cookies and paths while observation recovery and failure retain request_id trace_id and audit",
       "configuration": [

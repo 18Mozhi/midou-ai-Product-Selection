@@ -12,7 +12,7 @@ Linux 主机探针分别读取 `/proc/*/cmdline`：Node Worker 只匹配 Worker 
 
 浏览器运行继续使用 M03-04 的 `crawler_profile_leases`，并通过 `browser_collection_jobs.collection_task_id/collection_subquery_id` 关联 Worker 已领取的业务任务。只有全局 Crawler 槽位、档案独占租约和浏览器作业租约同时成功才允许运行，心跳、完成和恢复同步处理三个租约。来源原有 `providers.concurrency_limit` 保留为配置事实，但 S0 有效值固定 `min(configured, 1)`。
 
-平台运维接口 `/api/v1/platform/operations/crawler-scheduler` 只向 `platform:operate` 返回分别观测的 Node Worker/Python Crawler 进程计数、聚合租约、来源有效并发、档案聚合和资源水位；不返回组织/工作区标识、任务目标、租约令牌、哈希、凭证、Cookie、文件路径或队列载荷。读取写入观测和平台审计，过期回收要求同源和 Idempotency-Key。
+平台运维接口 `/api/v1/platform/operations/crawler-scheduler` 只向 `platform:operate` 返回分别观测的 Node Worker/Python Crawler 进程计数、聚合租约、来源有效并发、档案聚合、资源水位，以及最多 100 个活动槽位到逻辑进程角色和采集任务的关联。关联直接读取 `crawler_scheduler_leases` 的任务、运行、进程标识、心跳和到期事实；来源槽位联表展示来源名称。任务 UUID、运行 UUID、进程标识和槽位类型只放在可展开技术详情中，不返回组织/工作区标识、任务目标、租约令牌、哈希、凭证、Cookie、文件路径或队列载荷。读取写入观测和平台审计，过期回收要求同源和 Idempotency-Key。
 
 ## 数据与失败关闭
 
@@ -23,7 +23,7 @@ Linux 主机探针分别读取 `/proc/*/cmdline`：Node Worker 只匹配 Worker 
 
 ## 页面与图片
 
-已依次读取 `images-html/README.txt`、`manifest.json` 和当前页面图片。布局取自 `61_平台运营-概览.jpg` 的平台总览、`62_采集来源管理.jpg` 的来源配额、`63_采集任务监控.jpg` 的调度状态、`64_系统监控.jpg` 的资源水位、`69_异常告警.jpg` 的失败关闭面板，并沿用 `10_霓虹科技平台驾驶舱_dashboard.png` 的深色霓虹平台驾驶舱。页面菜单和唯一一级标题统一为“采集调度”，内容模块标题为“运行与配额”。桌面为结论、四项指标、来源/档案双栏和告警；390px 折叠为卡片且不隐藏风险、时间、数值或 CTA。图片示例不作为生产事实。
+已依次读取 `images-html/README.txt`、`manifest.json` 和当前页面图片。布局取自 `61_平台运营-概览.jpg` 的平台总览、`62_采集来源管理.jpg` 的来源配额、`63_采集任务监控.jpg` 的调度状态、`64_系统监控.jpg` 的资源水位、`69_异常告警.jpg` 的失败关闭面板，并沿用 `10_霓虹科技平台驾驶舱_dashboard.png` 的深色霓虹平台驾驶舱。页面菜单和唯一一级标题统一为“采集调度”，内容模块标题为“运行与配额”。桌面为结论、四项指标、来源/档案双栏、活动租约关联和告警；390px 折叠为卡片且不隐藏风险、时间、数值或 CTA。没有活动槽位时不展示空关联面板，图片示例不作为生产事实。
 
 ## 合同边界
 

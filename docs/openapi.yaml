@@ -6817,6 +6817,7 @@ components:
               state,
               topology,
               leases,
+              active_leases,
               providers,
               profiles,
               resource,
@@ -6857,6 +6858,35 @@ components:
                   active_crawler: { type: integer, minimum: 0 },
                   duplicate_count: { type: integer, minimum: 0 },
                 }
+            active_leases:
+              type: array
+              maxItems: 100
+              description: Active scheduler slots linked to their logical process role and collection task; opaque identifiers are technical details only.
+              items:
+                type: object
+                additionalProperties: false
+                required:
+                  [
+                    slot_type,
+                    provider_name,
+                    task_id,
+                    task_status,
+                    run_id,
+                    process_role,
+                    process_ref,
+                    heartbeat_at,
+                    expires_at,
+                  ]
+                properties:
+                  slot_type: { type: string, enum: [worker, crawler, provider] }
+                  provider_name: { type: string, nullable: true }
+                  task_id: { type: string, format: uuid, nullable: true }
+                  task_status: { type: string, nullable: true }
+                  run_id: { type: string, format: uuid, nullable: true }
+                  process_role: { type: string, enum: [node_worker, python_crawler] }
+                  process_ref: { type: string, maxLength: 160 }
+                  heartbeat_at: { type: string, format: date-time }
+                  expires_at: { type: string, format: date-time }
             providers:
               type: array
               items:

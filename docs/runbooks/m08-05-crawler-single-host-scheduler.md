@@ -11,6 +11,7 @@
 
 - 宝塔必须恰好有一个“ai选品”Node 项目和一个“ai选品-python”Python 项目。Node 项目只监听 4101 并托管 API/Worker；Python 项目不监听公网端口，只领取 `browser_collection_jobs` 并在执行期间维持 Crawler 心跳和 Playwright 桥接，空闲时不得上报伪运行心跳。不得创建额外 Worker、Crawler 或常驻 4103 候选。
 - `crawler_scheduler_leases` 的 Worker/Crawler 活动槽位分别不超过 1；每来源活动槽位不超过有效并发 1；每个浏览器档案只允许一个租约。
+- 采集调度页的“租约、进程与采集任务”必须把每个活动槽位关联到 Node Worker 或 Python Crawler、当前任务状态、最近心跳和到期时间。任务 UUID、运行 UUID、进程标识与槽位类型仅在“技术详情”中查看；页面不得展示组织/工作区、任务输入、租约令牌或凭证。
 - 资源停止线默认：归一化负载 85%、可用内存 1024 MB、证据盘可用空间 4096 MB。触线时任务保持排队，不得通过放宽阈值绕过。
 - 页面和日志只用 request_id/trace_id 关联，不复制租约令牌、哈希、Cookie、凭证或任务输入。
 

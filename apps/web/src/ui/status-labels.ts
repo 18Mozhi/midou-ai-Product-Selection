@@ -17,10 +17,13 @@ const labels: Record<string, string> = {
   in_progress: "处理中",
   insufficient: "证据不足",
   insufficient_data: "数据不足",
+  leased: "已领取",
   observing: "持续观察",
   open: "未处理",
   paused: "已暂停",
+  parsing: "解析中",
   pending: "待处理",
+  persisted: "已持久化",
   queued: "排队中",
   rate_limited: "限速等待",
   rejected: "已驳回",
@@ -31,10 +34,10 @@ const labels: Record<string, string> = {
   succeeded: "成功",
   succeeded_empty: "成功但无结果",
   todo: "待处理",
+  validating: "校验中",
 };
 
 export const statusLabel = (value: string | null | undefined) =>
   value ? (labels[value] ?? "待确认") : "未提供";
 
-export const technicalStatus = (value: string | null | undefined) =>
-  value ?? "unknown";
+export const technicalStatus = (value: string | null | undefined) => value ?? "unknown";
