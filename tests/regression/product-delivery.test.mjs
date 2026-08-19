@@ -15,15 +15,12 @@ test("production root resolves the authenticated role landing instead of the fou
 
   assert.match(html, /<title>智能选品<\/title>/);
   assert.doesNotMatch(html, /ScoutOps|FOUNDATION|M00-01/);
-  assert.match(
-    app,
-    /<LandingRedirect\s+v-if="routePath === '\/' && !selectedView"/,
-  );
+  assert.match(app, /<LandingRedirect\s+v-if="routePath === '\/' && !selectedView"/);
   assert.doesNotMatch(app, /FOUNDATION\s*\/\s*M00-01/);
   assert.doesNotMatch(app, />自动验收</);
   assert.match(
     shell,
-    /routePath\s*===\s*['"]\/['"]\s*\|\|\s*routePath\s*===\s*['"]\/home['"]/,
+    /routePath\.value\s*===\s*["']\/["']\s*\|\|\s*routePath\.value\s*===\s*["']\/home["']/,
   );
   assert.doesNotMatch(shell, /\{\{\s*phaseLabel\s*\}\}/);
 });
@@ -32,12 +29,8 @@ test("production root resolves the authenticated role landing instead of the fou
 // projects while the required Python runtime was not deployed with BaoTa.
 test("BaoTa exposes fixed Node and Python projects without duplicate backends", async () => {
   const manifest = JSON.parse(await read("infra/baota/service-manifest.json"));
-  const nodeProjects = manifest.objects.filter(
-    (item) => item.kind === "baota-node-project",
-  );
-  const pythonProjects = manifest.objects.filter(
-    (item) => item.kind === "baota-python-project",
-  );
+  const nodeProjects = manifest.objects.filter((item) => item.kind === "baota-node-project");
+  const pythonProjects = manifest.objects.filter((item) => item.kind === "baota-python-project");
 
   assert.equal(manifest.target.deployRoot, "/www/wwwroot/ai选品");
   assert.equal(nodeProjects.length, 1);
@@ -77,10 +70,7 @@ test("unified backend build and lifecycle contracts are registered", async () =>
     read("apps/backend/src/server.ts"),
   ]);
 
-  assert.equal(
-    packageJson.scripts["build:backend"],
-    "tsc -p apps/backend/tsconfig.json",
-  );
+  assert.equal(packageJson.scripts["build:backend"], "tsc -p apps/backend/tsconfig.json");
   assert.match(packageJson.scripts.build, /build:backend/);
   assert.equal(backendPackage.name, "@scoutops/backend");
   assert.match(supervisor, /restart/i);
@@ -106,14 +96,8 @@ test("every visible production navigation entry resolves to a real feature surfa
     assert.doesNotMatch(shell, new RegExp(placeholder));
   }
 
-  for (const speculativeRoute of [
-    "/platform-admin/organizations",
-    "/platform-admin/admins",
-  ]) {
-    assert.doesNotMatch(
-      shell,
-      new RegExp(speculativeRoute.replaceAll("/", "\\/")),
-    );
+  for (const speculativeRoute of ["/platform-admin/organizations", "/platform-admin/admins"]) {
+    assert.doesNotMatch(shell, new RegExp(speculativeRoute.replaceAll("/", "\\/")));
   }
 
   assert.doesNotMatch(app, /['"]\/me['"]\s*:\s*['"]local-identity['"]/);
@@ -138,30 +122,19 @@ test("production identity and onboarding use real routes while harness views sta
   assert.match(app, /['"]\/login['"]\s*:\s*['"]local-identity['"]/);
   assert.match(app, /['"]\/select-context['"]\s*:\s*['"]tenancy['"]/);
   assert.match(identity, /['"]\/register['"]\s*:\s*['"]register['"]/);
-  assert.doesNotMatch(
-    `${shell}\n${identity}`,
-    /\?view=local-identity|\?view=tenancy/,
-  );
+  assert.doesNotMatch(`${shell}\n${identity}`, /\?view=local-identity|\?view=tenancy/);
 });
 
 // Regression: ISSUE-007 — interrupted live checks left organizations and workspaces in production
 // because cleanup attempted to delete the referenced workspace before clearing default_workspace_id.
 test("every live verifier that creates organizations clears the default workspace before deletion", async () => {
-  const files = (await readdir("scripts")).filter((name) =>
-    /^verify.*-live\.mjs$/.test(name),
-  );
+  const files = (await readdir("scripts")).filter((name) => /^verify.*-live\.mjs$/.test(name));
   const offenders = [];
   for (const file of files) {
     const source = await read(`scripts/${file}`);
     const createsOrganization = source.includes("INSERT INTO organizations");
-    const deletesWorkspace = /DELETE FROM workspaces|\[.workspaces./.test(
-      source,
-    );
-    if (
-      createsOrganization &&
-      deletesWorkspace &&
-      !source.includes("default_workspace_id=NULL")
-    ) {
+    const deletesWorkspace = /DELETE FROM workspaces|\[.workspaces./.test(source);
+    if (createsOrganization && deletesWorkspace && !source.includes("default_workspace_id=NULL")) {
       offenders.push(file);
     }
   }
@@ -171,16 +144,10 @@ test("every live verifier that creates organizations clears the default workspac
 // Regression: ISSUE-008 — production QA navigated before tenant selection had been persisted.
 test("production product QA waits for the selected tenant context and never embeds QA credentials", async () => {
   const source = await read("scripts/verify-production-product.mjs");
-  assert.match(
-    source,
-    /getByText\("工作范围已就绪", \{ exact: true \}\)\.waitFor\(\)/,
-  );
+  assert.match(source, /getByText\("工作范围已就绪", \{ exact: true \}\)\.waitFor\(\)/);
   assert.match(source, /SCOUTOPS_QA_ADMIN_EMAIL/);
   assert.match(source, /SCOUTOPS_QA_MEMBER_EMAIL/);
-  assert.doesNotMatch(
-    source,
-    /qa\.platform\.20260818|qa\.member\.20260818|Qa-Platform|Qa-Member/,
-  );
+  assert.doesNotMatch(source, /qa\.platform\.20260818|qa\.member\.20260818|Qa-Platform|Qa-Member/);
 });
 
 // Regression: ISSUE-009 — release identity and service paths must no longer
@@ -198,5 +165,8 @@ test("BaoTa deployment uploads a bounded fixed-layout runtime package", async ()
   const node = manifest.objects.find((item) => item.kind === "baota-node-project");
   assert.equal(node?.workingDirectory, "/www/wwwroot/ai选品/backend");
   assert.match(node?.startCommand ?? "", /^node --env-file=/);
-  assert.equal(manifest.objects.find((item) => item.kind === "baota-python-project")?.workingDirectory, "/www/wwwroot/ai选品/python");
+  assert.equal(
+    manifest.objects.find((item) => item.kind === "baota-python-project")?.workingDirectory,
+    "/www/wwwroot/ai选品/python",
+  );
 });
