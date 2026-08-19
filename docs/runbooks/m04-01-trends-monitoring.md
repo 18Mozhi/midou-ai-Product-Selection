@@ -18,6 +18,7 @@
 - 页面数据不足：核对主题证据数和来源新鲜度。单来源或没有批准的计算规则时，环比与置信度显示数据不足是正确状态。
 - 自动频道采集成功但没有热点：检查 `trend_projection_jobs.last_error_code` 和 Provider code；`gnews_<市场>_<主题>` 应进入投影，只有非趋势来源才是 `succeeded_empty`。
 - 商品型频道有热点但没有自动发现选品：检查同组织、工作区、趋势主题对应的 `opportunities`、`opportunity_evidence_links` 和 `opportunity.candidate.discovered`。自动发现选品只生成待评估候选，不应出现默认评分、利润或推荐。
+- 已有商品机会但图片、竞品快照或供应商仍为空：检查 `collection_subqueries.target_json` 中对应的 `competitor_snapshot` / `sourcing_search`，以及事件 `competitor.collection.auto_scheduled` / `sourcing.collection.auto_scheduled`。新版 Worker 会为从未建立下游子查询的历史自动机会补排一次高优先级任务；已有失败或死信任务不会自动无限重放，应在采集控制台查看错误和证据后人工处理。
 
 日志不得输出 Cookie、Token、数据库密码、主密钥或原始证据正文。
 
@@ -36,4 +37,4 @@
 
 发布前在宝塔备份 `product_scout`，确认 `0017a_trends_m04_01.up.sql` 已应用，再以业务账号执行 `0043_trend_rule_collection_schedule.up.sql`。发布本地构建后，通过宝塔重启统一 Node 后端“ai选品”；该后端包含 API 与 Worker，不创建新服务。
 
-规则周期允许 15–10080 分钟。迁移前已经启用且 `next_collection_at` 为空的规则会在 Worker 下一次轮询时立即进入首批采集。没有运行时依次检查 `trend_monitoring_rules.next_collection_at`、`collection_interval_minutes`、`source_cursor`、`last_collection_task_id` 和 Worker 的 `queue=automatic_hotspot_sources` 日志。Google、非 Google RSS/论坛及公开榜单均应进入趋势投影。只回滚本扩展时先停止后端，再执行 `0043_trend_rule_collection_schedule.down.sql` 并回滚代码；已生成的任务、证据、机会、竞品和找货记录必须保留。
+规则周期允许 15–10080 分钟。迁移前已经启用且 `next_collection_at` 为空的规则会在 Worker 下一次轮询时立即进入首批采集。没有运行时依次检查 `trend_monitoring_rules.next_collection_at`、`collection_interval_minutes`、`source_cursor`、`last_collection_task_id` 和 Worker 的 `queue=automatic_hotspot_sources` 日志。Google、非 Google RSS/论坛及公开榜单均应进入趋势投影；商品型榜单随后还应出现高优先级 Amazon 商品快照和 Made-in-China/EC21 供应商任务。只回滚本扩展时先停止后端，再执行 `0043_trend_rule_collection_schedule.down.sql` 并回滚代码；已生成的任务、证据、机会、竞品和找货记录必须保留。

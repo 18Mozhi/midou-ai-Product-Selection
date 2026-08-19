@@ -72,6 +72,11 @@ test('M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module',a
   assert.match(up,/trend_topics[\s\S]*trend_projection_jobs[\s\S]*trend_events[\s\S]*trend_outbox[\s\S]*trend:manage/);
   assert.match(down,/DROP TABLE IF EXISTS `trend_topics`/);assert.match(worker,/succeeded_empty[\s\S]*failed_terminal[\s\S]*dead_letter/);assert.match(service,/insufficient_data/);assert.match(repository,/organization_id=\?[\s\S]*workspace_id=\?/);assert.match(routes,/trend:read[\s\S]*trend:manage/);assert.match(web,/loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/);assert.match(schema,/TREND_PROJECTION_POLL_MS/);assert.match(env,/TREND_PROJECTION_LEASE_SECONDS/);assert.match(openapi,/\/trends\/\{topicId\}\/follow:/);assert.match(feature,/trendDomain/);assert.match(architecture,/heat[\s\S]*signals/);assert.match(runbook,/宝塔[\s\S]*回滚/);assert.match(e2e,/toHaveScreenshot/);assert.match(live,/MySqlTrendProjectionWorker/);assert.match(blueprint,/M04-01 实现合同/);
   assert.match(worker,/isAutomaticProductDiscoveryProvider[\s\S]*opportunity\.candidate\.discovered/);
+  assert.match(worker,/enqueueMissingAutomaticDownstream[\s\S]*competitor_snapshot[\s\S]*sourcing_search/);
+  assert.match(worker,/competitor\.collection\.auto_scheduled[\s\S]*sourcing\.collection\.auto_scheduled/);
+  assert.match(worker,/CONVERT\(o\.id USING utf8mb4\) COLLATE utf8mb4_bin/);
+  assert.match(worker,/CONVERT\(c\.id USING utf8mb4\) COLLATE utf8mb4_bin/);
+  assert.match(worker,/input_ref,status[\s\S]*'opportunity'[\s\S]*'queued'/);
   assert.match(worker,/evaluateMonitoringRules[\s\S]*trend\.monitoring_rule\.matched[\s\S]*last_evaluated_at/);
   assert.match(openapi,/商品型自动热点频道[\s\S]*待评估选品/);
   assert.match(feature,/automaticProductDiscovery/);

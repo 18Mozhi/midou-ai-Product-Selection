@@ -199,6 +199,7 @@ export class MySqlTrendProjectionWorker {
   ) {}
 
   async processOnce(): Promise<TrendProjectionResult> {
+    await this.enqueueMissingAutomaticDownstream();
     await this.enqueueMissing();
     const job = await this.claim();
     if (!job) return { status: "idle" };
@@ -245,6 +246,223 @@ export class MySqlTrendProjectionWorker {
     await this.pool.query(
       "INSERT IGNORE INTO trend_projection_jobs (id,organization_id,workspace_id,normalized_record_id,status,attempt_count,available_at,lease_owner,lease_expires_at,last_error_code,request_id,trace_id,created_at,updated_at) SELECT UUID(),n.organization_id,n.workspace_id,n.id,'scheduled',0,?,NULL,NULL,NULL,n.request_id,n.trace_id,?,? FROM normalized_records n JOIN providers p ON p.id=n.provider_id LEFT JOIN trend_projection_jobs j ON j.normalized_record_id=n.id WHERE n.status='active' AND j.id IS NULL AND p.code NOT IN ('amazon_product','made_in_china_search') ORDER BY n.created_at LIMIT 100",
       [now, now, now],
+    );
+  }
+
+  private async enqueueMissingAutomaticDownstream() {
+    const c = await this.pool.getConnection(),
+      now = this.now();
+    try {
+      await c.beginTransaction();
+      const providers = await this.downstreamProviders(c),
+        [rows] = await c.query<RowDataPacket[]>(
+          `SELECT o.id opportunity_id,o.organization_id,o.workspace_id,o.name,o.market,o.created_by,
+                  c.id competitor_id,c.external_id,c.product_url,c.latest_snapshot_id,
+                  se.resource_id search_id,
+                  (c.latest_snapshot_id IS NULL AND NOT EXISTS (
+                    SELECT 1 FROM collection_subqueries q
+                    WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='competitor_snapshot'
+                      AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id'))=CONVERT(c.id USING utf8mb4) COLLATE utf8mb4_bin
+                  )) competitor_task_missing,
+                  (se.resource_id IS NOT NULL AND NOT EXISTS (
+                    SELECT 1 FROM collection_subqueries q
+                    WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
+                      AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id'))=CONVERT(se.resource_id USING utf8mb4) COLLATE utf8mb4_bin
+                  )) sourcing_task_missing
+           FROM opportunities o
+           JOIN competitors c
+             ON c.opportunity_id=o.id
+            AND c.organization_id=o.organization_id
+            AND c.workspace_id=o.workspace_id
+            AND c.deleted_at IS NULL
+           LEFT JOIN sourcing_events se
+             ON se.organization_id=o.organization_id
+            AND se.workspace_id=o.workspace_id
+            AND se.event_type='sourcing.search.seeded_from_opportunity'
+            AND JSON_UNQUOTE(JSON_EXTRACT(se.payload_json,'$.opportunity_id'))=CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_bin
+           WHERE o.source_type='trend_topic'
+             AND o.lifecycle_status<>'deleted'
+             AND (
+               (c.latest_snapshot_id IS NULL AND NOT EXISTS (
+                 SELECT 1 FROM collection_subqueries q
+                 WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='competitor_snapshot'
+                   AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id'))=CONVERT(c.id USING utf8mb4) COLLATE utf8mb4_bin
+               ))
+               OR
+               (se.resource_id IS NOT NULL AND NOT EXISTS (
+                 SELECT 1 FROM collection_subqueries q
+                 WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
+                   AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id'))=CONVERT(se.resource_id USING utf8mb4) COLLATE utf8mb4_bin
+               ))
+             )
+           ORDER BY o.created_at,o.id
+           LIMIT 20 FOR UPDATE`,
+        );
+      for (const row of rows) {
+        const context = {
+          organizationId: String(row.organization_id),
+          workspaceId: String(row.workspace_id),
+          actorId: String(row.created_by),
+          requestId: `auto-downstream-${randomUUID()}`,
+          traceId: `auto-downstream-${String(row.opportunity_id)}`,
+        };
+        if (
+          providers.amazon &&
+          Boolean(row.competitor_task_missing) &&
+          !row.latest_snapshot_id &&
+          row.product_url &&
+          row.external_id
+        ) {
+          await this.scheduleCoreCollection(
+            c,
+            context,
+            randomUUID(),
+            [
+              {
+                providerId: providers.amazon,
+                required: true,
+                target: {
+                  url: String(row.product_url),
+                  asin: String(row.external_id),
+                  projection_type: "competitor_snapshot",
+                  competitor_id: String(row.competitor_id),
+                },
+              },
+            ],
+            "competitor.collection.auto_scheduled",
+            now,
+          );
+        }
+        const searchId = row.search_id == null ? null : String(row.search_id),
+          supplierProviderIds = [providers.madeInChina, providers.ec21].filter(
+            (value): value is string => Boolean(value),
+          );
+        if (
+          searchId &&
+          Boolean(row.sourcing_task_missing) &&
+          supplierProviderIds.length
+        ) {
+          const taskId = randomUUID();
+          await c.query(
+            "UPDATE sourcing_searches SET collection_task_id=?,input_ref=?,status='queued',candidate_count=0,missing_fields_json='[]',updated_at=? WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL",
+            [
+              taskId,
+              row.opportunity_id,
+              now,
+              searchId,
+              context.organizationId,
+              context.workspaceId,
+            ],
+          );
+          await this.scheduleCoreCollection(
+            c,
+            context,
+            taskId,
+            supplierProviderIds.map((providerId) => ({
+              providerId,
+              required: false,
+              target: {
+                query: String(row.name),
+                projection_type: "sourcing_search",
+                search_id: searchId,
+              },
+            })),
+            "sourcing.collection.auto_scheduled",
+            now,
+          );
+        }
+      }
+      await c.commit();
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+
+  private async downstreamProviders(c: PoolConnection) {
+    const [rows] = await c.query<RowDataPacket[]>(
+      "SELECT id,code FROM providers WHERE code IN ('amazon_product','made_in_china_search','ec21_supplier_search') AND status='enabled' AND access_mode='public_page' FOR UPDATE",
+    );
+    const values = new Map(rows.map((row) => [String(row.code), String(row.id)]));
+    return {
+      amazon: values.get("amazon_product") ?? null,
+      madeInChina: values.get("made_in_china_search") ?? null,
+      ec21: values.get("ec21_supplier_search") ?? null,
+    };
+  }
+
+  private async scheduleCoreCollection(
+    c: PoolConnection,
+    context: {
+      organizationId: string;
+      workspaceId: string;
+      actorId: string;
+      requestId: string;
+      traceId: string;
+    },
+    taskId: string,
+    subqueries: Array<{
+      providerId: string;
+      required: boolean;
+      target: Record<string, unknown>;
+    }>,
+    eventType: string,
+    now: Date,
+  ) {
+    if (!subqueries.length) return;
+    await c.query(
+      "INSERT INTO collection_tasks(id,organization_id,workspace_id,status,coverage_status,priority,scheduled_at,available_at,attempt_count,successful_subquery_count,failed_subquery_count,blocked_subquery_count,available_result_count,missing_fields_json,request_id,trace_id,version,created_by,created_at,updated_at) VALUES(?,?,?,'scheduled',NULL,'high',?,?,0,0,0,0,0,'[]',?,?,1,?,?,?)",
+      [
+        taskId,
+        context.organizationId,
+        context.workspaceId,
+        now,
+        now,
+        context.requestId,
+        context.traceId,
+        context.actorId,
+        now,
+        now,
+      ],
+    );
+    for (let index = 0; index < subqueries.length; index += 1) {
+      const subquery = subqueries[index]!;
+      await c.query(
+        "INSERT INTO collection_subqueries(id,task_id,organization_id,workspace_id,provider_id,ordinal,target_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,version,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,'pending',0,'[]',NULL,0,1,?,?)",
+        [
+          randomUUID(),
+          taskId,
+          context.organizationId,
+          context.workspaceId,
+          subquery.providerId,
+          index + 1,
+          JSON.stringify(subquery.target),
+          subquery.required ? 1 : 0,
+          now,
+          now,
+        ],
+      );
+    }
+    await c.query(
+      "INSERT INTO collection_task_events(id,task_id,organization_id,workspace_id,event_type,from_status,to_status,actor_type,actor_id,request_id,trace_id,metadata_json,occurred_at) VALUES(?,?,?,?,?,NULL,'scheduled','worker',?,?,?,?,?)",
+      [
+        randomUUID(),
+        taskId,
+        context.organizationId,
+        context.workspaceId,
+        eventType,
+        this.workerId,
+        context.requestId,
+        context.traceId,
+        JSON.stringify({
+          automatic: true,
+          source: "automatic_product_discovery",
+          subquery_count: subqueries.length,
+        }),
+        now,
+      ],
     );
   }
 
@@ -618,11 +836,13 @@ export class MySqlTrendProjectionWorker {
       asin = /\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:[/?]|$)/i.exec(
         canonicalUrl,
       )?.[1]?.toUpperCase();
-    if (asin)
+    let competitorId: string | null = null;
+    if (asin) {
+      const proposedCompetitorId = randomUUID();
       await c.query(
         "INSERT IGNORE INTO competitors (id,organization_id,workspace_id,opportunity_id,provider_id,market,source_site,external_id,product_url,title,status,latest_snapshot_id,revision,created_by,created_at,updated_at) VALUES (?,?,?,?,?,?,'Amazon',?,?,?,'active',NULL,1,?,?,?)",
         [
-          randomUUID(),
+          proposedCompetitorId,
           job.organizationId,
           job.workspaceId,
           opportunityId,
@@ -636,21 +856,21 @@ export class MySqlTrendProjectionWorker {
           now,
         ],
       );
+      const [competitors] = await c.query<RowDataPacket[]>(
+        "SELECT id FROM competitors WHERE organization_id=? AND workspace_id=? AND market=? AND source_site='Amazon' AND external_id=? AND deleted_at IS NULL LIMIT 1 FOR UPDATE",
+        [job.organizationId, job.workspaceId, market, asin],
+      );
+      competitorId = String(competitors[0]?.id ?? proposedCompetitorId);
+    }
     const searchId = randomUUID();
     await c.query(
-      "INSERT INTO sourcing_searches (id,organization_id,workspace_id,collection_task_id,input_type,input_ref,status,candidate_count,missing_fields_json,request_id,trace_id,created_by,created_at,updated_at) VALUES (?,?,?,?,'opportunity',?,'succeeded_empty',0,?,?,?,?,?,?)",
+      "INSERT INTO sourcing_searches (id,organization_id,workspace_id,collection_task_id,input_type,input_ref,status,candidate_count,missing_fields_json,request_id,trace_id,created_by,created_at,updated_at) VALUES (?,?,?,?,'opportunity',?,'queued',0,'[]',?,?,?,?,?)",
       [
         searchId,
         job.organizationId,
         job.workspaceId,
-        job.collectionTaskId,
-        title.slice(0, 2048),
-        JSON.stringify([
-          "supplier_name",
-          "supplier_quote",
-          "moq",
-          "lead_time_days",
-        ]),
+        null,
+        opportunityId,
         job.requestId,
         job.traceId,
         job.actorId,
@@ -658,6 +878,71 @@ export class MySqlTrendProjectionWorker {
         now,
       ],
     );
+    const providers = await this.downstreamProviders(c);
+    if (competitorId && asin && providers.amazon) {
+      await this.scheduleCoreCollection(
+        c,
+        {
+          organizationId: job.organizationId,
+          workspaceId: job.workspaceId,
+          actorId: job.actorId,
+          requestId: job.requestId,
+          traceId: job.traceId,
+        },
+        randomUUID(),
+        [
+          {
+            providerId: providers.amazon,
+            required: true,
+            target: {
+              url: canonicalUrl,
+              asin,
+              projection_type: "competitor_snapshot",
+              competitor_id: competitorId,
+            },
+          },
+        ],
+        "competitor.collection.auto_scheduled",
+        now,
+      );
+    }
+    const supplierProviderIds = [providers.madeInChina, providers.ec21].filter(
+      (value): value is string => Boolean(value),
+    );
+    if (supplierProviderIds.length) {
+      const supplierTaskId = randomUUID();
+      await c.query(
+        "UPDATE sourcing_searches SET collection_task_id=? WHERE id=?",
+        [supplierTaskId, searchId],
+      );
+      await this.scheduleCoreCollection(
+        c,
+        {
+          organizationId: job.organizationId,
+          workspaceId: job.workspaceId,
+          actorId: job.actorId,
+          requestId: job.requestId,
+          traceId: job.traceId,
+        },
+        supplierTaskId,
+        supplierProviderIds.map((providerId) => ({
+          providerId,
+          required: false,
+          target: {
+            query: title.slice(0, 500),
+            projection_type: "sourcing_search",
+            search_id: searchId,
+          },
+        })),
+        "sourcing.collection.auto_scheduled",
+        now,
+      );
+    } else {
+      await c.query(
+        "UPDATE sourcing_searches SET status='succeeded_empty',missing_fields_json=?,updated_at=? WHERE id=?",
+        [JSON.stringify(["supplier_crawler"]), now, searchId],
+      );
+    }
     await c.query(
       "INSERT INTO sourcing_events (id,organization_id,workspace_id,event_type,resource_id,actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?,?,'sourcing.search.seeded_from_opportunity',?,'ai-selection-worker',?,?,?,?)",
       [
