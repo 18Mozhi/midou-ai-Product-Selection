@@ -11,6 +11,12 @@ interface ProvisionedSource {
   timeout_ms: number;
   retry_limit: number;
   updated_at: string;
+  last_success: {
+    task_id: string;
+    status: "succeeded" | "succeeded_empty";
+    available_result_count: number;
+    finished_at: string;
+  } | null;
 }
 interface SourceItem {
   code: string;
@@ -23,6 +29,7 @@ interface SourceItem {
   schedule_minutes: number;
   timeout_ms: number;
   retry_limit: number;
+  owner_label: string;
   category: "news" | "ecommerce" | "data" | "community" | "product_supply";
   availability: "automatic" | "setup_required" | "manual";
   policy_note: string;
@@ -120,8 +127,7 @@ const statusText = (item: SourceItem) => {
       : item.provisioned
         ? "已停用"
         : "等待同步";
-  if (item.availability === "setup_required")
-    return item.access_mode === "authenticated_browser" ? "需登录并验收解析" : "等待解析验收";
+  if (item.availability === "setup_required") return "待实施";
   return "手动维护";
 };
 const modeText = (value: string) =>
@@ -140,6 +146,18 @@ const displayValue = (value: unknown) => {
   const text = typeof value === "string" ? value : JSON.stringify(value);
   return text == null ? "未提供" : text.length > 240 ? `${text.slice(0, 240)}…` : text;
 };
+const successText = (item: SourceItem) => {
+  const success = item.provisioned?.last_success;
+  if (!success) return "尚无成功任务";
+  const count = success.available_result_count
+    ? `${success.available_result_count} 条结果`
+    : "成功但无结果";
+  return `${new Date(success.finished_at).toLocaleString("zh-CN")} · ${count}`;
+};
+const slaText = (item: SourceItem) =>
+  item.availability === "automatic"
+    ? `≤ ${item.provisioned?.schedule_minutes ?? item.schedule_minutes} 分钟（沿用采集计划）`
+    : "未设自动 SLA";
 
 async function load() {
   state.value = "loading";
@@ -446,6 +464,25 @@ onMounted(load);
             <dd>
               {{ item.provisioned?.timeout_ms ?? item.timeout_ms }} ms /
               {{ item.provisioned?.retry_limit ?? item.retry_limit }} 次
+            </dd>
+          </div>
+          <div>
+            <dt>负责人</dt>
+            <dd>{{ item.owner_label }}</dd>
+          </div>
+          <div>
+            <dt>更新 SLA</dt>
+            <dd>{{ slaText(item) }}</dd>
+          </div>
+          <div>
+            <dt>最近成功任务</dt>
+            <dd>{{ successText(item) }}</dd>
+          </div>
+          <div>
+            <dt>影响范围</dt>
+            <dd>
+              {{ categoryText(item.category) }} · {{ item.markets.join(" / ") }} ·
+              {{ item.fields.length }} 类字段
             </dd>
           </div>
         </dl>

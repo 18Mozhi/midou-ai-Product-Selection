@@ -29,6 +29,12 @@ export interface ProvisionedSource {
   timeout_ms: number;
   retry_limit: number;
   updated_at: string;
+  last_success: {
+    task_id: string;
+    status: "succeeded" | "succeeded_empty";
+    available_result_count: number;
+    finished_at: string;
+  } | null;
 }
 export interface ProviderSourceCatalogItem extends BuiltinSourceDefinition {
   provisioned: ProvisionedSource | null;

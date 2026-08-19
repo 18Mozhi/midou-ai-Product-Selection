@@ -852,7 +852,7 @@
         "/api/v1/platform/provider-sources/{providerId}/replays",
         "/api/v1/provider-sources/refresh"
       ],
-      "scope": "100+ code-owned hotspot and product-source channels; currently 180 catalog entries including 138 automatic crawler channels across 24 hosts, plus organization/workspace automatic and user-operated core collection tasks and evidence",
+      "scope": "100+ code-owned hotspot and product-source channels; currently 180 catalog entries including 138 automatic crawler channels across 24 hosts, plus organization/workspace automatic and user-operated core collection tasks and evidence; each source exposes its code-owned owner, explicit market/category/field impact, schedule-derived update target and latest persisted successful subquery without inventing an independent SLA",
       "sources": [
         "96 automatic Google News fixed RSS market/topic channels",
         "40 automatic non-Google RSS/Atom or fixed public-page news ecommerce community and trend channels, including current Shopify blog and eBay announcement HTML pages",

@@ -18,6 +18,14 @@ const provisioned = (row: RowDataPacket): ProvisionedSource => ({
   timeout_ms: Number(row.timeout_ms),
   retry_limit: Number(row.retry_limit),
   updated_at: iso(row.updated_at),
+  last_success: row.last_success_task_id
+    ? {
+        task_id: String(row.last_success_task_id),
+        status: row.last_success_status,
+        available_result_count: Number(row.last_success_result_count),
+        finished_at: iso(row.last_success_finished_at),
+      }
+    : null,
 });
 const replay = (row: RowDataPacket): ProviderSourceReplay => ({
   id: String(row.id),
@@ -60,7 +68,16 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
   async listProvisioned(codes: string[]) {
     if (!codes.length) return [];
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      `SELECT id,code,status,version,schedule_minutes,timeout_ms,retry_limit,updated_at FROM providers WHERE code IN (${codes.map(() => "?").join(",")})`,
+      [
+        "SELECT p.id,p.code,p.status,p.version,p.schedule_minutes,p.timeout_ms,p.retry_limit,p.updated_at,",
+        "last_success.task_id last_success_task_id,last_success.status last_success_status,",
+        "last_success.available_result_count last_success_result_count,",
+        "last_success.finished_at last_success_finished_at FROM providers p LEFT JOIN collection_subqueries ",
+        "last_success ON last_success.id=(SELECT candidate.id FROM collection_subqueries candidate WHERE ",
+        "candidate.provider_id=p.id AND candidate.status IN ('succeeded','succeeded_empty') AND ",
+        "candidate.finished_at IS NOT NULL ORDER BY candidate.finished_at DESC,candidate.id DESC LIMIT 1) ",
+        `WHERE p.code IN (${codes.map(() => "?").join(",")})`,
+      ].join(""),
       codes,
     );
     return rows.map(provisioned);
@@ -549,6 +566,7 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
         timeout_ms: d.timeout_ms,
         retry_limit: d.retry_limit,
         updated_at: input.now.toISOString(),
+        last_success: null,
       };
       await c.query(
         [
@@ -1084,6 +1102,7 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
         timeout_ms: input.timeoutMs,
         retry_limit: input.retryLimit,
         updated_at: input.now.toISOString(),
+        last_success: null,
       };
     } catch (error) {
       await c.rollback();

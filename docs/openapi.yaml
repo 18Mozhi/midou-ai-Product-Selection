@@ -9275,13 +9275,26 @@ components:
                 expires_at: { type: string, format: date-time }
     ProvisionedSource:
       type: object
-      required: [id, code, status, version, updated_at]
+      required:
+        [id, code, status, version, schedule_minutes, timeout_ms, retry_limit, updated_at, last_success]
       properties:
         id: { type: string, format: uuid }
         code: { type: string, minLength: 2, maxLength: 80 }
         status: { type: string, enum: [draft, disabled, enabled] }
         version: { type: integer, minimum: 1 }
+        schedule_minutes: { type: integer, minimum: 1 }
+        timeout_ms: { type: integer, minimum: 1000 }
+        retry_limit: { type: integer, minimum: 0 }
         updated_at: { type: string, format: date-time }
+        last_success:
+          nullable: true
+          type: object
+          required: [task_id, status, available_result_count, finished_at]
+          properties:
+            task_id: { type: string, format: uuid }
+            status: { type: string, enum: [succeeded, succeeded_empty] }
+            available_result_count: { type: integer, minimum: 0 }
+            finished_at: { type: string, format: date-time }
     ProviderSourceCatalogItem:
       type: object
       required:

@@ -8,6 +8,7 @@ import {
   parseStructuredCatalogPage,
 } from "../../packages/provider-sources/dist/index.js";
 import { ProviderSourceService } from "../../apps/api/dist/provider-source-service.js";
+import { MySqlProviderSourceRepository } from "../../apps/api/dist/mysql-provider-source-repository.js";
 
 test("automatic source catalog is diversified across real source families and markets", () => {
   const automatic = BUILTIN_PROVIDER_SOURCES.filter((item) => item.availability === "automatic");
@@ -164,6 +165,45 @@ test("provider source configuration is editable through a validated audited serv
   assert.equal(result.version, 2);
   assert.equal(updateInput.scheduleMinutes, 30);
   assert.equal(updateInput.reason, "调整采集频率");
+});
+
+test("source catalog exposes the latest persisted successful task without inventing SLA facts", async () => {
+  let sql = "";
+  const repository = new MySqlProviderSourceRepository({
+      query: async (statement) => {
+        sql = statement;
+        return [
+          [
+            {
+              id: "00000000-0000-4000-8000-000000000121",
+              code: "gnews_us_consumer_trends",
+              status: "enabled",
+              version: 1,
+              schedule_minutes: 30,
+              timeout_ms: 15000,
+              retry_limit: 2,
+              updated_at: "2026-08-20T03:00:00.000Z",
+              last_success_task_id: "00000000-0000-4000-8000-000000000122",
+              last_success_status: "succeeded",
+              last_success_result_count: 7,
+              last_success_finished_at: "2026-08-20T02:30:00.000Z",
+            },
+          ],
+        ];
+      },
+    }),
+    [source] = await repository.listProvisioned(["gnews_us_consumer_trends"]);
+  assert.equal(source.last_success.available_result_count, 7);
+  assert.equal(source.last_success.finished_at, "2026-08-20T02:30:00.000Z");
+  assert.match(sql, /candidate\.status IN \('succeeded','succeeded_empty'\)/);
+  assert.match(sql, /candidate\.finished_at DESC,candidate\.id DESC/);
+
+  const web = await readFile("apps/web/src/components/ProviderSourceCenter.vue", "utf8");
+  assert.match(web, /更新 SLA/);
+  assert.match(web, /沿用采集计划/);
+  assert.match(web, /最近成功任务/);
+  assert.match(web, /影响范围/);
+  assert.match(web, /待实施/);
 });
 
 test("platform navigation exposes complete management domains and role switching", async () => {
