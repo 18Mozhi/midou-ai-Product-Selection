@@ -252,7 +252,7 @@ paths:
   /platform/operations/crawler-scheduler:
     get:
       summary: Read audited S0 single-host Crawler scheduler facts
-      description: M08-05 reports separately observed process counts for the supervised Node Worker and the BaoTa-managed Python Crawler, plus global and provider lease aggregates, browser-profile exclusivity and host resource watermarks. It never returns scope identifiers, task payloads, lease tokens or hashes, credentials, cookies or paths and makes no load-balancing, backup-server, multi-node or capacity claim.
+      description: M08-05 reports separately observed process counts for the supervised Node Worker and the BaoTa-managed Python Crawler, plus global and provider lease aggregates, provider-level due queue counts and longest waits, browser-profile exclusivity and host resource watermarks. Queue facts count distinct provider tasks only after available_at is due, so future retry or rate-limit backoff is not reported as current waiting. It never returns scope identifiers, task payloads, lease tokens or hashes, credentials, cookies or paths and makes no load-balancing, backup-server, multi-node or capacity claim.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: platform:operate
       responses:
@@ -6899,6 +6899,8 @@ components:
                     configured_concurrency,
                     effective_concurrency,
                     active_leases,
+                    queued_tasks,
+                    longest_queue_wait_seconds,
                   ]
                 properties:
                   {
@@ -6907,6 +6909,9 @@ components:
                     configured_concurrency: { type: integer, minimum: 1 },
                     effective_concurrency: { type: integer, enum: [1] },
                     active_leases: { type: integer, minimum: 0 },
+                    queued_tasks: { type: integer, minimum: 0 },
+                    longest_queue_wait_seconds:
+                      { type: integer, minimum: 0 },
                   }
             profiles:
               type: array

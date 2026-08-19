@@ -47,6 +47,8 @@ interface Dto {
     configured_concurrency: number;
     effective_concurrency: number;
     active_leases: number;
+    queued_tasks: number;
+    longest_queue_wait_seconds: number;
   }>;
   profiles: Array<{ id: string; active_leases: number }>;
   resource: {
@@ -101,6 +103,12 @@ const time = (value: string) =>
   }).format(new Date(value));
 const processLabel = (value: "node_worker" | "python_crawler") =>
   value === "node_worker" ? "Node Worker" : "Python Crawler";
+const duration = (seconds: number) => {
+  if (seconds < 60) return `${seconds} 秒`;
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} 分钟`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} 小时`;
+  return `${Math.floor(seconds / 86400)} 天`;
+};
 const status = (kind: ApiFailureKind): State =>
   kind === "expired" || kind === "forbidden" || kind === "rate_limited" ? kind : "unavailable";
 
@@ -219,7 +227,7 @@ onMounted(() => {
           <header>
             <div>
               <p>来源配额</p>
-              <h3>来源并发门</h3>
+              <h3>来源并发与排队</h3>
             </div>
             <span>配置值会被单机上限收紧到 1</span>
           </header>
@@ -236,6 +244,10 @@ onMounted(() => {
               ><small
                 >来源配置 {{ item.configured_concurrency }} · 当前有效
                 {{ item.effective_concurrency }}</small
+              >
+              <small
+                >等待 {{ item.queued_tasks }} 个任务 · 最长
+                {{ duration(item.longest_queue_wait_seconds) }}</small
               >
             </article>
             <p v-if="!data.providers.length">当前没有启用来源。</p>

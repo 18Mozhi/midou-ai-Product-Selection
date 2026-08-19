@@ -31,6 +31,8 @@ test("M08-05.A01-A17 deliver a BaoTa-only single-host Crawler scheduler", async 
     "provider",
     "profile",
     "lease",
+    "queued_tasks",
+    "longest_queue_wait_seconds",
     "resource",
     "platform:operate",
     "request_id",
@@ -63,6 +65,8 @@ test("M08-05.A02/A04/A12 fails closed on process counts leases provider quotas a
     configured_concurrency: 3,
     effective_concurrency: 1,
     active_leases: 0,
+    queued_tasks: 0,
+    longest_queue_wait_seconds: 0,
   };
   const base = {
     worker_instances: 1,
@@ -493,14 +497,18 @@ test("M08-05.A07/A08/A15/A16 UI and rollback cover the full image-grounded state
   );
 });
 
-test("M08-05 links active leases to logical processes and collection tasks without returning secrets", async () => {
+test("M08-05 links leases and due provider queues without returning secrets", async () => {
   const { CrawlerSchedulerRepository } =
       await import("../../apps/api/dist/crawler-scheduler-repository.js"),
-    now = new Date("2026-08-15T08:00:00.000Z"),
-    pool = {
-      query: async (sql) => {
+    now = new Date("2026-08-15T08:00:00.000Z");
+  let providerQuery = "",
+    providerValues = [];
+  const pool = {
+      query: async (sql, values) => {
         if (sql.startsWith("SELECT slot_type,COUNT")) return [[{ slot_type: "worker", total: 1 }]];
-        if (sql.startsWith("SELECT p.id,p.code"))
+        if (sql.startsWith("SELECT p.id,p.code")) {
+          providerQuery = sql;
+          providerValues = values;
           return [
             [
               {
@@ -509,9 +517,12 @@ test("M08-05 links active leases to logical processes and collection tasks witho
                 configured_concurrency: 2,
                 effective_concurrency: 1,
                 active_leases: 1,
+                queued_tasks: 4,
+                longest_queue_wait_seconds: 125,
               },
             ],
           ];
+        }
         if (sql.startsWith("SELECT p.id,COUNT")) return [[]];
         if (sql.includes("SELECT COUNT(*) total")) return [[{ total: 0 }]];
         if (sql.startsWith("SELECT l.slot_type"))
@@ -533,6 +544,19 @@ test("M08-05 links active leases to logical processes and collection tasks witho
       },
     },
     result = await new CrawlerSchedulerRepository(pool).snapshot(now);
+  assert.match(providerQuery, /COUNT\(DISTINCT t\.id\) queued_tasks/);
+  assert.match(providerQuery, /TIMESTAMPDIFF\(SECOND,t\.available_at,\?\)/);
+  assert.match(providerQuery, /t\.available_at<=\?/);
+  assert.deepEqual(providerValues, [now, now, now]);
+  assert.deepEqual(result.providers[0], {
+    id: "provider",
+    code: "source",
+    configured_concurrency: 2,
+    effective_concurrency: 1,
+    active_leases: 1,
+    queued_tasks: 4,
+    longest_queue_wait_seconds: 125,
+  });
   assert.deepEqual(result.active_leases, [
     {
       slot_type: "provider",

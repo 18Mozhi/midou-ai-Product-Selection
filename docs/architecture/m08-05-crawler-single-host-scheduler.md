@@ -12,7 +12,7 @@ Linux 主机探针分别读取 `/proc/*/cmdline`：Node Worker 只匹配 Worker 
 
 浏览器运行继续使用 M03-04 的 `crawler_profile_leases`，并通过 `browser_collection_jobs.collection_task_id/collection_subquery_id` 关联 Worker 已领取的业务任务。只有全局 Crawler 槽位、档案独占租约和浏览器作业租约同时成功才允许运行，心跳、完成和恢复同步处理三个租约。来源原有 `providers.concurrency_limit` 保留为配置事实，但 S0 有效值固定 `min(configured, 1)`。
 
-平台运维接口 `/api/v1/platform/operations/crawler-scheduler` 只向 `platform:operate` 返回分别观测的 Node Worker/Python Crawler 进程计数、聚合租约、来源有效并发、档案聚合、资源水位，以及最多 100 个活动槽位到逻辑进程角色和采集任务的关联。关联直接读取 `crawler_scheduler_leases` 的任务、运行、进程标识、心跳和到期事实；来源槽位联表展示来源名称。任务 UUID、运行 UUID、进程标识和槽位类型只放在可展开技术详情中，不返回组织/工作区标识、任务目标、租约令牌、哈希、凭证、Cookie、文件路径或队列载荷。读取写入观测和平台审计，过期回收要求同源和 Idempotency-Key。
+平台运维接口 `/api/v1/platform/operations/crawler-scheduler` 只向 `platform:operate` 返回分别观测的 Node Worker/Python Crawler 进程计数、聚合租约、来源有效并发、来源排队、档案聚合、资源水位，以及最多 100 个活动槽位到逻辑进程角色和采集任务的关联。来源排队直接按 `collection_subqueries.provider_id` 关联业务任务，只统计 `available_at <=` 当前服务端时间且状态为 `scheduled`、`queued`、`retry_scheduled` 或 `rate_limited` 的可领取任务；同一任务同一来源只计一次，最长等待按 `available_at` 计算，尚未到期的退避或限流任务不冒充当前积压。关联直接读取 `crawler_scheduler_leases` 的任务、运行、进程标识、心跳和到期事实；来源槽位联表展示来源名称。任务 UUID、运行 UUID、进程标识和槽位类型只放在可展开技术详情中，不返回组织/工作区标识、任务目标、租约令牌、哈希、凭证、Cookie、文件路径或队列载荷。读取写入观测和平台审计，过期回收要求同源和 Idempotency-Key。
 
 ## 数据与失败关闭
 

@@ -172,7 +172,11 @@
   accent-color: #39d5ae;
 }
 .crawler-scheduler__sources small {
+  display: block;
   color: var(--muted);
+}
+.crawler-scheduler__sources small + small {
+  margin-top: 4px;
 }
 .crawler-scheduler dl {
   display: grid;

@@ -16,14 +16,29 @@ export class CrawlerSchedulerRepository implements Contract {
       ),
       this.pool.query<RowDataPacket[]>(
         `SELECT p.id,p.code,p.concurrency_limit configured_concurrency,
-          LEAST(p.concurrency_limit,1) effective_concurrency,COUNT(l.slot_key) active_leases
+          LEAST(p.concurrency_limit,1) effective_concurrency,
+          COALESCE(l.active_leases,0) active_leases,
+          COALESCE(w.queued_tasks,0) queued_tasks,
+          COALESCE(w.longest_queue_wait_seconds,0) longest_queue_wait_seconds
          FROM providers p
-         LEFT JOIN crawler_scheduler_leases l
-           ON l.slot_type='provider' AND l.slot_key=p.id AND l.expires_at>?
+         LEFT JOIN (
+           SELECT slot_key provider_id,COUNT(*) active_leases
+           FROM crawler_scheduler_leases
+           WHERE slot_type='provider' AND expires_at>?
+           GROUP BY slot_key
+         ) l ON l.provider_id=p.id
+         LEFT JOIN (
+           SELECT q.provider_id,COUNT(DISTINCT t.id) queued_tasks,
+             MAX(TIMESTAMPDIFF(SECOND,t.available_at,?)) longest_queue_wait_seconds
+           FROM collection_subqueries q
+           JOIN collection_tasks t ON t.id=q.task_id
+           WHERE t.status IN ('scheduled','queued','retry_scheduled','rate_limited')
+             AND t.available_at<=?
+           GROUP BY q.provider_id
+         ) w ON w.provider_id=p.id
          WHERE p.status='enabled'
-         GROUP BY p.id,p.code,p.concurrency_limit
          ORDER BY p.code`,
-        [now],
+        [now, now, now],
       ),
       this.pool.query<RowDataPacket[]>(
         `SELECT p.id,COUNT(l.crawler_profile_id) active_leases
@@ -82,6 +97,8 @@ export class CrawlerSchedulerRepository implements Contract {
         configured_concurrency: n(row.configured_concurrency),
         effective_concurrency: n(row.effective_concurrency),
         active_leases: n(row.active_leases),
+        queued_tasks: n(row.queued_tasks),
+        longest_queue_wait_seconds: n(row.longest_queue_wait_seconds),
       })),
       profiles: profiles.map((row) => ({
         id: String(row.id),

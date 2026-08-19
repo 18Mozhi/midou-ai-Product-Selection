@@ -14,6 +14,8 @@ export interface CrawlerSchedulerProvider {
   configured_concurrency: number;
   effective_concurrency: number;
   active_leases: number;
+  queued_tasks: number;
+  longest_queue_wait_seconds: number;
 }
 export interface CrawlerSchedulerProfile {
   id: string;

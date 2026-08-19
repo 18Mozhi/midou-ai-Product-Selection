@@ -18,6 +18,8 @@ const envelope = (data: unknown) => ({ data, request_id: "m08-05-e2e", trace_id:
         configured_concurrency: 3,
         effective_concurrency: 1,
         active_leases: 0,
+        queued_tasks: 3,
+        longest_queue_wait_seconds: 125,
       },
       {
         id: "00000000-0000-4000-8000-000000000852",
@@ -25,6 +27,8 @@ const envelope = (data: unknown) => ({ data, request_id: "m08-05-e2e", trace_id:
         configured_concurrency: 1,
         effective_concurrency: 1,
         active_leases: 0,
+        queued_tasks: 0,
+        longest_queue_wait_seconds: 0,
       },
     ],
     profiles: [{ id: "00000000-0000-4000-8000-000000000853", active_leases: 0 }],
@@ -64,6 +68,8 @@ test("M08-05.A07/A08/A15 desktop and 390 single-host scheduler truth", async ({ 
   await expect(page.getByRole("heading", { level: 2, name: "运行与配额" })).toBeVisible();
   await expect(page.getByText("采集调度已就绪")).toBeVisible();
   await expect(page.getByText("1 / 1")).toHaveCount(2);
+  await expect(page.getByText("等待 3 个任务 · 最长 2 分钟")).toBeVisible();
+  await expect(page.getByText("等待 0 个任务 · 最长 0 秒")).toBeVisible();
   await expect(page).toHaveScreenshot("m08-05-crawler-scheduler-desktop.png", { fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
