@@ -139,7 +139,7 @@ async function load() {
     ]);
     items.value = list;
     summary.value = sum;
-    preferences.value = pref;
+    preferences.value = { ...pref, email_enabled: false };
     state.value = list.length ? "ready" : "empty";
   } catch {}
 }
@@ -204,12 +204,13 @@ async function savePreferences() {
         method: "PUT",
         body: {
           ...preferences.value,
+          email_enabled: false,
           expected_version: preferences.value.version,
         },
       },
       false,
     );
-    notice.value = "通知偏好已保存；邮件仍为占位投递，不会对外发送。";
+    notice.value = "通知偏好已保存；邮件服务接通前仅使用站内通知。";
     showPreferences.value = false;
     await load();
   } catch {
@@ -449,8 +450,12 @@ onUnmounted(() => stream?.close());
           ><input v-model="preferences.in_app_enabled" type="checkbox" />
           站内通知</label
         ><label
-          ><input v-model="preferences.email_enabled" type="checkbox" />
-          邮件占位（当前不会发送）</label
+          ><input
+            v-model="preferences.email_enabled"
+            type="checkbox"
+            disabled
+          />
+          邮件通知（服务未接入，暂不可用）</label
         ><label
           ><input v-model="preferences.task_enabled" type="checkbox" />
           任务事件</label

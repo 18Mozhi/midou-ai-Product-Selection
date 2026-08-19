@@ -39,6 +39,11 @@ test("M05-03.A01/A02/A04/A12 locks self notification actions and preferences", (
     competitor_enabled: false,
   });
   assert.equal(p.competitor_enabled, false);
+  assert.throws(
+    () => validatePreferences({ ...p, email_enabled: true }),
+    (e) =>
+      e instanceof NotificationServiceError && e.code === "mail_provider_pending",
+  );
 });
 test("M05-03 validates and forwards workflow status filters", async () => {
   const calls = [],

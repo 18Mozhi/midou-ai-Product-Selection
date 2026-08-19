@@ -177,3 +177,4 @@ button { border: 0; border-radius: 11px; padding: 10px 15px; color: #07111f; bac
   }
 }
 .role-brand b,.role-brand em{white-space:nowrap}.role-brand em{color:var(--so-text-muted);font-size:13px;font-style:normal;font-weight:500}
+.role-shell dialog[open]{z-index:40;max-height:calc(100dvh - 28px);overflow:auto}

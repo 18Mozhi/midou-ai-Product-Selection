@@ -17,8 +17,8 @@
 | 全量数据 | `/platform-admin/data` | 已闭环 | 无 | 跨组织热点、机会、竞品、供应商、证据质量与带原因审计的受控 CSV 导出 |
 | 规则与自动化 | `/platform-admin/governance` | 已闭环 | 无 | 评分、费用/风险、工作流、自动化、配置版本、审批、灰度和回滚总览及受权限保护的操作入口 |
 | 内容管理 | `/platform-admin/content` | 已闭环 | 无 | 跨组织热点筛选、展示/无关/过期状态、版本锁、原因、幂等和审计 |
-| 通知运营 | `/platform-admin/notifications` | 已闭环 | 系统模板由 Worker 固定合同管理，不允许页面任意改写；用户偏好仍由本人修改 | 模板合同、站内/邮件渠道状态、订阅聚合、通知投递、失败重试、抑制和自动化/竞品告警路由入口 |
-| 邮箱管理 | `/platform-admin/email` | 已闭环 | 生产邮件服务商仍按总纲保持 `pending_provider_selection` | 账号/业务邮件队列、失败/死信、重新投递、业务通知抑制、幂等和审计 |
+| 通知运营 | `/platform-admin/notifications` | 已闭环 | 系统模板由 Worker 固定合同管理；邮件 Provider 未接入前邮件选项固定关闭 | 模板合同、渠道状态、站内通知、订阅聚合、投递记录和自动化/竞品告警路由入口 |
+| 邮箱管理 | 无用户入口 | 受阻 | 生产邮件服务商仍按总纲保持 `pending_provider_selection` | 导航、直达页、偏好和草稿邮件入口已关闭；历史投递与审计事实及安全处置 API 保留 |
 | Token 与开放 API | `/platform-admin/open-platform` | 已闭环 | 无 | Client、scope、配额、密钥轮换/撤销、Webhook、签名、测试、投递和重放 |
 | 商业运营 | `/platform-admin/commercial` | 已闭环 | 不包含未经确认的价格、支付、发票和税务 | 套餐草稿/启用/退役、分配、暂停/恢复、用量、账期、配额调整/撤销和审计 |
 | 安全与审计 | `/platform-admin/security` | 已闭环 | 无 | 登录/风险、会话、凭证生命周期、Token 元数据、审计链路 |

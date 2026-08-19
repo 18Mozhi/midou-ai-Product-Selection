@@ -3382,7 +3382,8 @@ paths:
                           email_enabled:
                             {
                               type: boolean,
-                              description: Creates placeholder delivery only,
+                              enum: [false],
+                              description: Must remain false until a production mail provider is approved and connected,
                             },
                           task_enabled: { type: boolean },
                           approval_enabled: { type: boolean },
@@ -4880,8 +4881,8 @@ paths:
         "503": { $ref: "#/components/responses/Error" }
   /platform/management/messages:
     post:
-      summary: Create a platform notification or email draft
-      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Creates only a draft; no recipient delivery occurs until an explicit publish action.
+      summary: Create a platform in-app notification draft
+      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Mail drafts and email_enabled are rejected with mail_provider_pending until a production mail provider is approved and connected.
       security: [{ HttpOnlySession: [] }]
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       requestBody:
@@ -4898,8 +4899,8 @@ paths:
         "503": { $ref: "#/components/responses/Error" }
   /platform/management/messages/{messageId}:
     patch:
-      summary: Edit a platform notification or email draft
-      description: Requires platform:operate, same-origin Origin, Idempotency-Key, expected version and an audited reason. Published or cancelled messages remain immutable.
+      summary: Edit a platform in-app notification draft
+      description: Requires platform:operate, same-origin Origin, Idempotency-Key, expected version and an audited reason. Published or cancelled messages remain immutable; mail remains unavailable.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
@@ -4931,8 +4932,8 @@ paths:
         "503": { $ref: "#/components/responses/Error" }
   /platform/management/messages/{messageId}/actions:
     post:
-      summary: Publish or cancel a platform notification or email draft
-      description: Publishing resolves the selected audience transactionally, creates in-app notifications immediately and queues email deliveries without pretending that an unconfigured email provider has sent them.
+      summary: Publish or cancel a platform in-app notification draft
+      description: Publishing resolves the selected audience transactionally and creates in-app notifications immediately. Existing historical mail drafts may be cancelled but cannot be published while the mail provider remains pending.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
@@ -7130,7 +7131,7 @@ components:
           email_enabled,
         ]
       properties:
-        kind: { type: string, enum: [notification, email] }
+        kind: { type: string, enum: [notification] }
         title: { type: string, minLength: 2, maxLength: 200 }
         body: { type: string, minLength: 2, maxLength: 2000 }
         category: { type: string, enum: [task, approval, competitor, system] }
@@ -7139,7 +7140,12 @@ components:
         organization_id: { type: string, format: uuid, nullable: true }
         user_id: { type: string, format: uuid, nullable: true }
         in_app_enabled: { type: boolean }
-        email_enabled: { type: boolean }
+        email_enabled:
+          {
+            type: boolean,
+            enum: [false],
+            description: Must remain false while the mail provider is pending,
+          }
     AiAnalysisQueueInput:
       type: object
       additionalProperties: false

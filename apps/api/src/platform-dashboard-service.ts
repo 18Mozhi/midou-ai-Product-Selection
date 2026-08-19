@@ -311,6 +311,12 @@ export class PlatformDashboardService {
         400,
         "选择站内通知或邮件。",
       );
+    if (kind === "email" || emailEnabled)
+      throw new PlatformDashboardError(
+        "mail_provider_pending",
+        503,
+        "邮件服务尚未接入，请改用站内通知。",
+      );
     if (title.length < 2 || title.length > 200)
       throw new PlatformDashboardError(
         "platform_message_title_invalid",
@@ -360,13 +366,7 @@ export class PlatformDashboardService {
       throw new PlatformDashboardError(
         "platform_message_channel_invalid",
         400,
-        "至少选择站内通知或邮件一种发送方式。",
-      );
-    if (kind === "email" && !emailEnabled)
-      throw new PlatformDashboardError(
-        "platform_message_email_channel_required",
-        400,
-        "邮件草稿必须启用邮件发送。",
+        "必须启用站内通知。",
       );
     return {
       kind,

@@ -46,6 +46,12 @@ export function validatePreferences(v: any) {
       );
     result[key] = v[key];
   }
+  if (result.email_enabled)
+    throw new NotificationServiceError(
+      "mail_provider_pending",
+      503,
+      "邮件服务尚未接入，请关闭邮件通知并使用站内通知。",
+    );
   return result;
 }
 export interface NotificationRepository {

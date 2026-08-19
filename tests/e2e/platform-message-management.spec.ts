@@ -86,6 +86,9 @@ test("platform administrator can create and publish a Chinese notification", asy
   const dialog = page
     .getByRole("dialog")
     .filter({ has: page.getByRole("heading", { name: "平台通知" }) });
+  await expect(
+    dialog.getByRole("checkbox", { name: "邮件（服务未接入）" }),
+  ).toBeDisabled();
   await dialog.getByLabel("标题").fill("系统维护提醒");
   await dialog
     .getByLabel("正文")
@@ -105,4 +108,26 @@ test("platform administrator can create and publish a Chinese notification", asy
     page.getByText("发布完成：覆盖 3 人，站内 3 条，邮件队列 0 条。"),
   ).toBeVisible();
   await expect(page.getByText("已发布", { exact: true })).toBeVisible();
+});
+
+test("mail management entry stays closed while provider is pending", async ({
+  page,
+}) => {
+  await page.route("**/api/v1/me/navigation?**", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "platform_admin",
+        organization_id: null,
+        workspace_id: null,
+        roles: [],
+        capabilities: [],
+        platform_roles: ["platform_super_admin"],
+        platform_capabilities: ["platform:operate"],
+        guard_reason: "navigation_platform_admin_allowed",
+      }),
+    }),
+  );
+  await page.goto("/platform-admin/email");
+  await expect(page.getByRole("heading", { name: "页面不存在" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "邮箱管理" })).toHaveCount(0);
 });

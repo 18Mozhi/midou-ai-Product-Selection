@@ -194,12 +194,13 @@ test("platform navigation exposes complete management domains and role switching
     "内容管理",
     "通知管理",
     "配额管理",
-    "邮箱管理",
     "系统状态",
     "进入用户工作台",
   ]) {
     assert.match(shell, new RegExp(label));
   }
+  assert.doesNotMatch(shell, /label: "邮箱管理"/);
+  assert.doesNotMatch(shell, /path: "\/platform-admin\/email"/);
 });
 
 test("platform management and dashboard expose operational details instead of placeholder cards", async () => {

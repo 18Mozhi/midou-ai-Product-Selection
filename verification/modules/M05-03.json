@@ -6,7 +6,7 @@
   "atomicTasks": [
     {
       "id": "M05-03.A01",
-      "evidence": "scope Outbox in-app notifications email placeholder preferences only"
+      "evidence": "scope Outbox in-app notifications with email preference fixed off while provider is pending"
     },
     {
       "id": "M05-03.A02",
@@ -30,7 +30,7 @@
     },
     {
       "id": "M05-03.A07",
-      "evidence": "notification Chinese workflow grouped inbox detail preferences desktop and 390 layout"
+      "evidence": "notification Chinese workflow grouped inbox detail preferences with disabled email control desktop and 390 layout"
     },
     {
       "id": "M05-03.A08",
@@ -50,7 +50,7 @@
     },
     {
       "id": "M05-03.A12",
-      "evidence": "actions preferences workflow filters root-cause pagination version and validation unit tests"
+      "evidence": "actions preferences pending mail provider guard workflow filters root-cause pagination version and validation unit tests"
     },
     {
       "id": "M05-03.A13",

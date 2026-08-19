@@ -804,6 +804,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           409,
           "草稿已被其他管理员修改，刷新后重试。",
         );
+      if (i.action === "publish" && message.email_enabled)
+        throw new PlatformDashboardError(
+          "mail_provider_pending",
+          503,
+          "邮件服务尚未接入；可取消历史邮件草稿，不能发布或重试。",
+        );
       const next = i.expectedVersion + 1;
       if (i.action === "cancel") {
         await c.query(

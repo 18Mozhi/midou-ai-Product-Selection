@@ -399,7 +399,7 @@
         "high-resolution 10 platform admin"
       ],
       "contextPresentation": "member and organization shells receive persisted organization_name and workspace_name; the UI never exposes UUID fragments as labels",
-      "routeIntegrity": "Vue Router owns browser history; the Feature Map frontend route registry has unique paths, /me has exactly one PersonalCenter owner, lazy business components and KeepAlive preserve bounded page state; the 390px scheduler E2E measures the final handoff against the fixed bottom navigation and requires zero overlap",
+      "routeIntegrity": "Vue Router owns browser history; the Feature Map frontend route registry has unique paths, /me has exactly one PersonalCenter owner, lazy business components and KeepAlive preserve bounded page state; the 390px scheduler E2E measures the final handoff against the fixed bottom navigation and requires zero overlap, and shell dialogs render above the bottom bar with bounded viewport height",
       "mobileNavigation": "at 840px and below every shell renders up to four authorized primary routes plus one More control in a five-column bottom bar; More opens the complete permission-filtered drawer and quick-create actions do not add a sixth bottom item",
       "memberPresentation": "member shell exposes quick theme switching, larger Chinese typography and removes internal guard codes and security implementation slogans from ordinary pages",
       "nonGoals": "no quick-create mutation, new persistence, async service or environment value; platform and organization shells omit member-only search and notification links",
@@ -1218,7 +1218,7 @@
         "/api/v1/me/notification-preferences"
       ],
       "scope": "organization workspace and current recipient scoped notification facts root-cause groups workflow states preferences deliveries idempotent operations and audit",
-      "truthBoundary": "source Outbox and recipient are preserved; open in_progress and closed filters execute before root-cause grouping and pagination, the newest notification represents each group without rewriting older facts; email mode is placeholder only",
+      "truthBoundary": "source Outbox and recipient are preserved; open in_progress and closed filters execute before root-cause grouping and pagination, the newest notification represents each group without rewriting older facts; self-service email preference is fixed off while the mail provider is pending, and historical placeholder facts are preserved",
       "permission": "notification:read for current-recipient reads actions and self preferences",
       "configuration": [
         "NOTIFICATION_OUTBOX_POLL_MS",
@@ -1427,7 +1427,6 @@
         "/platform-admin/governance",
         "/platform-admin/content",
         "/platform-admin/notifications",
-        "/platform-admin/email",
         "/platform-admin/status",
         "/api/v1/platform/dashboard",
         "/api/v1/platform/management",
@@ -1438,8 +1437,8 @@
         "/api/v1/platform/management/messages/{messageId}/actions",
         "/api/v1/platform/management/email/{source}/{deliveryId}/actions"
       ],
-      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, notification and email draft creation editing publishing cancellation and delivery management, plus unified backend database cache file task-processing and crawler status management with dedicated operations links",
-      "truthBoundary": "no sample remains unknown or null; no credentials, payloads, internal file paths or invented uptime and capacity claims",
+      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, plus unified backend database cache file task-processing and crawler status management with dedicated operations links",
+      "truthBoundary": "no sample remains unknown or null; no credentials, payloads, internal file paths or invented uptime and capacity claims; /platform-admin/email and all email enable controls stay closed while Mail provider is pending_provider_selection",
       "permission": "platform:operate on the API; platform role navigation guard on the page; dashboard reads and platform data exports write correlated platform audit events",
       "configuration": [
         "PLATFORM_DASHBOARD_DEFAULT_WINDOW",
@@ -2783,7 +2782,8 @@
     {
       "name": "Mail provider",
       "contract": "must support delivery, bounce, complaint, delay, failure and suppression callbacks",
-      "status": "pending_provider_selection"
+      "status": "pending_provider_selection",
+      "uiEntry": "closed"
     },
     {
       "name": "GitHub public repository",

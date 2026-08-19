@@ -191,12 +191,6 @@ const platformMenu: MenuItem[] = [
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
-    label: "邮箱管理",
-    path: "/platform-admin/email",
-    icon: "@",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
     label: "系统状态",
     path: "/platform-admin/status",
     icon: "●",
@@ -306,7 +300,6 @@ const isHome = computed(
       [
         "/platform-admin/content",
         "/platform-admin/notifications",
-        "/platform-admin/email",
         "/platform-admin/status",
       ].includes(routePath.value),
   ),

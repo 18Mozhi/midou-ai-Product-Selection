@@ -1,11 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import {
+  PlatformDashboardError,
+  PlatformDashboardService,
+} from "../../apps/api/dist/platform-dashboard-service.js";
 
 test("platform notification operations expose templates channels subscriptions delivery retry and alert routes", async () => {
-  const [web, repository, worker] = await Promise.all(
+  const [web, styles, repository, worker] = await Promise.all(
     [
       "apps/web/src/components/PlatformManagementCenter.vue",
+      "apps/web/src/styles.css",
       "apps/api/src/mysql-platform-dashboard-repository.ts",
       "apps/worker/src/notification-outbox-worker.ts",
     ].map((path) => readFile(path, "utf8")),
@@ -19,6 +24,9 @@ test("platform notification operations expose templates channels subscriptions d
     "新增或编辑自动化路由",
   ])
     assert.match(web, new RegExp(label));
+  assert.match(web, /邮件服务未接入，管理入口已关闭/);
+  assert.doesNotMatch(web, /href="\/platform-admin\/email"/);
+  assert.match(styles, /\.role-shell dialog\[open\]\{z-index:40/);
   for (const fact of [
     "notification_preferences",
     "notification_deliveries",
@@ -32,7 +40,7 @@ test("platform notification operations expose templates channels subscriptions d
   assert.match(worker, /竞品监控更新/);
 });
 
-test("platform notification and email drafts support create edit publish and cancel", async () => {
+test("platform notification drafts remain available while mail drafts fail closed", async () => {
   const [web, service, routes, migration, openapi, featureMap] =
     await Promise.all(
       [
@@ -44,7 +52,7 @@ test("platform notification and email drafts support create edit publish and can
         "docs/feature-map.json",
       ].map((path) => readFile(path, "utf8")),
     );
-  for (const label of ["发布通知", "发送邮件", "编辑草稿", "取消草稿"])
+  for (const label of ["发布通知", "编辑草稿", "取消草稿"])
     assert.match(web, new RegExp(label));
   for (const operation of ["createMessage", "updateMessage", "messageAction"])
     assert.match(service, new RegExp(operation));
@@ -55,4 +63,32 @@ test("platform notification and email drafts support create edit publish and can
     /platform\/management\/messages\/\{messageId\}\/actions/,
   );
   assert.match(featureMap, /0040_platform_messages\.up\.sql/);
+  assert.match(featureMap, /pending_provider_selection/);
+  assert.match(service, /mail_provider_pending/);
+});
+
+test("platform message service rejects mail even when the UI is bypassed", () => {
+  const service = new PlatformDashboardService({
+    createMessage: async () => ({ status: "draft" }),
+  });
+  const common = {
+    title: "系统通知",
+    body: "仅通过站内通知发布。",
+    category: "system",
+    severity: "info",
+    audience_type: "all_users",
+    organization_id: null,
+    user_id: null,
+    in_app_enabled: true,
+  };
+  for (const value of [
+    { ...common, kind: "email", email_enabled: true },
+    { ...common, kind: "notification", email_enabled: true },
+  ])
+    assert.throws(
+      () => service.createMessage(value, {}),
+      (error) =>
+        error instanceof PlatformDashboardError &&
+        error.code === "mail_provider_pending",
+    );
 });

@@ -308,7 +308,7 @@ M04-07 实现合同：AI 辅助分析只读取当前组织、当前工作区内�
 - 每次读取写入 `platform_dashboard_views` 和全局 `platform_audit_events`，携带 request_id、trace_id、操作者、时间窗与观测时间。
 - `PLATFORM_DASHBOARD_DEFAULT_WINDOW`、`PLATFORM_DASHBOARD_QUEUE_WARNING`、`PLATFORM_DASHBOARD_ERROR_LIMIT` 由宝塔环境配置并在重启 Node API 后生效；驾驶舱仅观察既有队列，不创建面板外服务，也不声明 P08 容量。
 - 平台数据页在同一 `platform:operate` 边界内读取最近 100 条跨组织热点、机会、竞品或供应商事实，并将带原因的 CSV 导出范围与记录数写入平台审计；不导出原始证据和秘密。治理页统一核对评分/费用规则、审批模板、自动化、Provider 配置版本和宝塔发布灰度/回滚事实，写操作仍进入原模块的版本锁、审批、幂等和审计接口。
-- 通知运营页展示 Worker 固定的任务、审批、竞品和系统模板合同、站内/邮件渠道、用户订阅聚合、投递记录和自动化/竞品告警路由；失败邮件可重试，业务通知邮件可抑制。系统模板不可在浏览器任意改写，邮件在 Provider 未确认前继续显示 `pending_provider_selection`。
+- 通知运营页展示 Worker 固定的任务、审批、竞品和系统模板合同、站内/邮件渠道、用户订阅聚合、投递记录和自动化/竞品告警路由。系统模板不可在浏览器任意改写；邮件在 Provider 未确认前继续显示 `pending_provider_selection`，独立邮件管理入口、用户邮件偏好和平台邮件草稿入口保持关闭，历史投递事实与安全处置 API 保留审计。
 
 #### M06-03 来源与采集控制台实现基线
 

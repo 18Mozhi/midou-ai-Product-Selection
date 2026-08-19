@@ -138,3 +138,16 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
     .poll(() => listRequests.some((url) => url.includes("workflow_status=in_progress")))
     .toBe(true);
 });
+
+test("M05-03 mail preference stays disabled until the provider is connected", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/notifications");
+  await page.getByRole("button", { name: "通知偏好" }).click();
+  await expect(
+    page.getByRole("checkbox", {
+      name: "邮件通知（服务未接入，暂不可用）",
+    }),
+  ).toBeDisabled();
+});

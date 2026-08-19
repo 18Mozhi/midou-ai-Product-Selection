@@ -232,7 +232,7 @@ function openMessage(item?: any) {
         organization_id: item.organization_id ?? "",
         user_id: item.user_id ?? "",
         in_app_enabled: Boolean(item.in_app_enabled),
-        email_enabled: Boolean(item.email_enabled),
+        email_enabled: false,
         reason: "编辑平台消息",
         expected_version: item.version,
       }
@@ -552,7 +552,7 @@ onMounted(load);
           <article>
             <header>
               <h3>渠道状态</h3>
-              <a href="/platform-admin/email">管理失败投递</a>
+              <span>邮件服务未接入，管理入口已关闭</span>
             </header>
             <ul>
               <li v-for="item in data.channels" :key="item.code">
@@ -874,8 +874,8 @@ onMounted(load);
             ><input
               v-model="messageForm.email_enabled"
               type="checkbox"
-              :disabled="messageForm.kind === 'email'"
-            />邮件</label
+              disabled
+            />邮件（服务未接入）</label
           >
         </fieldset>
         <label v-if="messageEditor?.id"
@@ -886,7 +886,7 @@ onMounted(load);
             maxlength="300"
         /></label>
         <p class="dialog-help">
-          邮件会先进入投递队列；如果邮件服务尚未在宝塔配置，记录会明确显示“待配置”，不会伪装成已送达。
+          邮件服务尚未接入，当前只能发布站内通知；历史邮件记录仍保留审计事实。
         </p>
         <footer>
           <button type="button" @click="messageEditor = null">取消</button
