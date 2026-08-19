@@ -1,1 +1,278 @@
-.cost-console{display:grid;gap:18px;color:#172033}.cost-console>header{display:flex;align-items:flex-end;justify-content:space-between;gap:20px}.cost-console p{margin:0;color:#ef6c32;font-size:11px;letter-spacing:.12em}.cost-console h2{margin:5px 0;font-size:28px}.cost-console header span{color:#687588}.cost-console button{border:0;border-radius:8px;background:#17263b;color:#fff;padding:10px 15px;cursor:pointer}.cost-console>header>button,.cost-rule-detail footer button:last-child{background:#ef6c32}.cost-notice{padding:11px 14px;background:#fff8f3;border:1px solid #f2cfbc;border-radius:8px;letter-spacing:0!important}.cost-layout{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(420px,1.4fr);gap:16px}.cost-rule-list,.cost-rule-detail{background:#fff;border:1px solid #e0e5eb;border-radius:12px;overflow:hidden}.cost-rule-list>button{width:100%;display:grid;grid-template-columns:10px 1fr auto auto;gap:12px;align-items:center;border-radius:0;border-bottom:1px solid #edf0f3;background:#fff;color:#26364a;text-align:left}.cost-rule-list>button.selected{background:#fff7f2;box-shadow:inset 3px 0 #ef6c32}.cost-rule-list i{width:8px;height:8px;border-radius:50%;background:#9aa6b5}.cost-rule-list i[data-status=active]{background:#2a9a6b}.cost-rule-list span{display:grid;gap:4px}.cost-rule-list small,.cost-rule-list em{color:#7b8797;font-style:normal}.cost-rule-list b{font-size:11px}.cost-rule-detail{padding:22px}.cost-rule-detail>header{display:flex;justify-content:space-between}.cost-rule-detail h3{margin:5px 0;font-size:24px}.cost-rule-detail>header>b{height:max-content;padding:7px 10px;background:#edf7f2;color:#24805d;border-radius:20px}.cost-fees{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:22px 0}.cost-fees article{display:grid;gap:5px;padding:14px;background:#f7f8fa;border-radius:8px}.cost-fees strong{font-size:22px}.cost-fees span,.cost-fees small{color:#778395}.cost-rule-detail section{border-top:1px solid #e5e8ec;padding-top:16px}.cost-rule-detail section p{display:flex;gap:8px;margin:10px 0}.cost-rule-detail section b{padding:7px 10px;background:#f1f3f5;color:#687588;border-radius:6px}.cost-rule-detail section b[data-done=true]{background:#e7f5ee;color:#207553}.cost-rule-detail footer{display:flex;gap:8px;margin-top:20px}.cost-modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;background:rgba(15,24,36,.55)}.cost-modal form{width:min(620px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:14px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.25)}.cost-modal form>header{display:flex;justify-content:space-between}.cost-modal label{display:grid;gap:6px;margin:12px 0;color:#536174;font-size:12px}.cost-modal form>div,.cost-modal fieldset{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.cost-modal input{box-sizing:border-box;width:100%;padding:10px;border:1px solid #d6dde5;border-radius:7px}.cost-modal fieldset{border:1px solid #dde3ea;border-radius:9px;margin:16px 0}.cost-modal aside{padding:11px;background:#fff7f2;color:#7b4c32}.cost-modal footer{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.cost-modal footer button:first-child{background:#eef1f4;color:#344255}@media(max-width:820px){.cost-layout{grid-template-columns:1fr}.cost-console>header{align-items:flex-start;flex-direction:column}.cost-modal form>div,.cost-modal fieldset{grid-template-columns:1fr}}
+.cost-console {
+  display: grid;
+  gap: 18px;
+  color: var(--so-text);
+}
+
+.cost-console > header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.cost-console p {
+  margin: 0;
+  color: var(--so-primary);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.cost-console h2 {
+  margin: 5px 0;
+  font-size: 28px;
+}
+
+.cost-console header span,
+.cost-rule-list small,
+.cost-rule-list em,
+.cost-fees span,
+.cost-fees small,
+.cost-modal label {
+  color: var(--so-text-muted);
+}
+
+.cost-console button {
+  padding: 10px 15px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+  cursor: pointer;
+}
+
+.cost-console > header > button,
+.cost-rule-detail footer button:last-child {
+  border-color: var(--so-primary);
+  color: var(--so-on-primary);
+  background: var(--so-primary);
+}
+
+.cost-notice {
+  padding: 11px 14px;
+  border: 1px solid color-mix(in srgb, var(--so-warning) 42%, var(--so-border));
+  border-radius: 8px;
+  color: var(--so-warning);
+  background: color-mix(in srgb, var(--so-warning) 10%, var(--so-panel));
+  letter-spacing: 0;
+}
+
+.cost-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(420px, 1.4fr);
+  gap: 16px;
+}
+
+.cost-rule-list,
+.cost-rule-detail {
+  overflow: hidden;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  color: var(--so-text);
+  background: var(--so-panel);
+}
+
+.cost-rule-list > button {
+  display: grid;
+  grid-template-columns: 10px 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--so-border);
+  border-radius: 0;
+  color: var(--so-text);
+  background: var(--so-panel);
+  text-align: left;
+}
+
+.cost-rule-list > button.selected {
+  background: color-mix(in srgb, var(--so-primary) 10%, var(--so-panel));
+  box-shadow: inset 3px 0 var(--so-primary);
+}
+
+.cost-rule-list i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--so-text-muted);
+}
+
+.cost-rule-list i[data-status="active"] {
+  background: var(--so-success);
+}
+
+.cost-rule-list span {
+  display: grid;
+  gap: 4px;
+}
+
+.cost-rule-list small,
+.cost-rule-list em {
+  font-style: normal;
+}
+
+.cost-rule-list b {
+  font-size: 11px;
+}
+
+.cost-rule-detail {
+  padding: 22px;
+}
+
+.cost-rule-detail > header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cost-rule-detail h3 {
+  margin: 5px 0;
+  font-size: 24px;
+}
+
+.cost-rule-detail > header > b {
+  height: max-content;
+  padding: 7px 10px;
+  border-radius: 20px;
+  color: var(--so-success);
+  background: color-mix(in srgb, var(--so-success) 13%, var(--so-panel-soft));
+}
+
+.cost-fees {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 22px 0;
+}
+
+.cost-fees article {
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+  border-radius: 8px;
+  background: var(--so-panel-soft);
+}
+
+.cost-fees strong {
+  font-size: 22px;
+}
+
+.cost-rule-detail section {
+  padding-top: 16px;
+  border-top: 1px solid var(--so-border);
+}
+
+.cost-rule-detail section p {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.cost-rule-detail section b {
+  padding: 7px 10px;
+  border-radius: 6px;
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
+
+.cost-rule-detail section b[data-done="true"] {
+  color: var(--so-success);
+  background: color-mix(in srgb, var(--so-success) 13%, var(--so-panel-soft));
+}
+
+.cost-rule-detail footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.cost-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(3, 10, 20, 0.72);
+}
+
+.cost-modal form {
+  overflow: auto;
+  width: min(620px, 100%);
+  max-height: 90vh;
+  padding: 24px;
+  border: 1px solid var(--so-border);
+  border-radius: 14px;
+  color: var(--so-text);
+  background: var(--so-bg-elevated);
+  box-shadow: var(--so-shadow);
+}
+
+.cost-modal form > header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cost-modal label {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+  font-size: 12px;
+}
+
+.cost-modal form > div,
+.cost-modal fieldset {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 12px;
+}
+
+.cost-modal input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 7px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+
+.cost-modal fieldset {
+  margin: 16px 0;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+}
+
+.cost-modal aside {
+  padding: 11px;
+  color: var(--so-warning);
+  background: color-mix(in srgb, var(--so-warning) 10%, var(--so-panel));
+}
+
+.cost-modal footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.cost-modal footer button:first-child {
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+
+@media(max-width:820px) {
+  .cost-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-console > header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cost-modal form > div,
+  .cost-modal fieldset {
+    grid-template-columns: 1fr;
+  }
+}

@@ -2,7 +2,6 @@
 import { computed, onMounted, reactive, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../profit.css";
-import "../profit-theme.css";
 
 type State =
   "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";

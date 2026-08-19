@@ -19,9 +19,9 @@ test('M04-04.A01/A02/A04/A12 requires every explicit fee and provenance',()=>{
 });
 
 test('M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists',async()=>{
-  const paths=['database/migrations/0017d_profit_cost_m04_04.up.sql','database/migrations/0017d_profit_cost_m04_04.down.sql','apps/api/src/profit-service.ts','apps/api/src/mysql-profit-repository.ts','apps/api/src/profit-routes.ts','apps/worker/src/opportunity-profit-worker.ts','apps/web/src/components/CostRuleConsole.vue','apps/web/src/components/OpportunityWorkspace.vue','apps/web/src/profit.css','apps/web/src/opportunity-profit.css','config/schema.json','config/env.example','docs/openapi.yaml','docs/feature-map.json','docs/architecture/m04-04-profit-cost.md','docs/runbooks/m04-04-profit-cost.md','tests/e2e/m04-04-profit.spec.ts','scripts/verify-profit-live.mjs','new-product-enterprise-blueprint.md'];
+  const paths=['database/migrations/0017d_profit_cost_m04_04.up.sql','database/migrations/0017d_profit_cost_m04_04.down.sql','apps/api/src/profit-service.ts','apps/api/src/mysql-profit-repository.ts','apps/api/src/profit-routes.ts','apps/worker/src/opportunity-profit-worker.ts','apps/web/src/components/CostRuleConsole.vue','apps/web/src/components/OpportunityWorkspace.vue','apps/web/src/components/OpportunityProfitPanel.vue','apps/web/src/profit.css','apps/web/src/opportunity-profit.css','config/schema.json','config/env.example','docs/openapi.yaml','docs/feature-map.json','docs/architecture/m04-04-profit-cost.md','docs/runbooks/m04-04-profit-cost.md','tests/e2e/m04-04-profit.spec.ts','scripts/verify-profit-live.mjs','new-product-enterprise-blueprint.md'];
   const values=await Promise.all(paths.map(path=>readFile(path,'utf8')));
-  const [up,down,service,repository,routes,worker,consoleUi,opportunityUi,ruleCss,profitCss,schema,env,openapi,feature,architecture,runbook,e2e,live,blueprint]=values;
+  const [up,down,service,repository,routes,worker,consoleUi,opportunityShell,profitPanel,ruleCss,profitCss,schema,env,openapi,feature,architecture,runbook,e2e,live,blueprint]=values;
   assert.match(up,/cost_rules[\s\S]*exchange_rate_quotes[\s\S]*opportunity_profit_runs[\s\S]*opportunity_profit_components/);
   assert.match(down,/DROP TABLE IF EXISTS `cost_rules`/);
   assert.match(service,/cost_rule_fee_lines_invalid[\s\S]*validateExchangeQuote[\s\S]*cost_rule_approval_role_forbidden/);
@@ -29,8 +29,14 @@ test('M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists',async()=>{
   assert.match(routes,/cost:confirm[\s\S]*profit-runs/);
   assert.match(worker,/insufficient_data[\s\S]*net_profit[\s\S]*dead_letter/);
   for(const state of['loading','ready','empty','error','expired','forbidden','blocked'])assert.match(consoleUi,new RegExp(state));
-  assert.match(opportunityUi,/profit-analysis[\s\S]*确认成本输入[\s\S]*重新计算/);
+  assert.match(opportunityShell,/profit-analysis[\s\S]*OpportunityProfitPanel/);
+  assert.match(profitPanel,/确认成本输入[\s\S]*重新计算/);
+  assert.ok(opportunityShell.split(/\r?\n/).length<1000);
+  assert.ok(profitPanel.split(/\r?\n/).length<200);
   assert.match(ruleCss,/@media\(max-width:820px\)/);
+  assert.match(ruleCss,/var\(--so-panel\)/);
+  assert.match(ruleCss,/var\(--so-primary\)/);
+  assert.doesNotMatch(ruleCss,/!important|#[0-9a-f]{3,8}\b/i);
   assert.match(profitCss,/@media\(max-width:640px\)/);
   assert.match(schema,/PROFIT_CALCULATION_POLL_MS/);
   assert.match(env,/PROFIT_CALCULATION_LEASE_SECONDS/);

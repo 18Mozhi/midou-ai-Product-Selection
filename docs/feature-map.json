@@ -999,7 +999,8 @@
         "../apps/api/src/profit-routes.ts",
         "../apps/worker/src/opportunity-profit-worker.ts",
         "../apps/web/src/components/CostRuleConsole.vue",
-        "../apps/web/src/components/OpportunityWorkspace.vue"
+        "../apps/web/src/components/OpportunityWorkspace.vue",
+        "../apps/web/src/components/OpportunityProfitPanel.vue"
       ],
       "routes": [
         "/sourcing/cost-rules",
