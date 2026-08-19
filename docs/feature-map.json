@@ -2426,6 +2426,12 @@
       "status": "implemented"
     },
     {
+      "path": "/settings/theme",
+      "view": "ThemeStudio",
+      "domain": "personal-preferences",
+      "status": "M02-01_module_verified"
+    },
+    {
       "path": "/work",
       "view": "TaskWorkspace",
       "domain": "tasks",
@@ -2511,13 +2517,55 @@
     },
     {
       "path": "/org-admin",
-      "view": "OrganizationAdmin",
+      "view": "OrganizationAdminCenter",
       "domain": "organization",
-      "status": "roles_and_resource_grants_implemented_remaining_management_planned"
+      "status": "M06-01_module_verified"
+    },
+    {
+      "path": "/org-admin/members",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-members",
+      "status": "M06-01_module_verified"
+    },
+    {
+      "path": "/org-admin/roles",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-roles",
+      "status": "M06-01_module_verified"
+    },
+    {
+      "path": "/org-admin/workspaces",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-workspaces-teams",
+      "status": "M06-01_module_verified"
+    },
+    {
+      "path": "/org-admin/approvals",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-approvals",
+      "status": "M06-01_module_verified"
+    },
+    {
+      "path": "/org-admin/data",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-data",
+      "status": "M06-01_module_verified"
+    },
+    {
+      "path": "/org-admin/tokens",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-tokens",
+      "status": "M06-01_module_verified"
+    },
+    {
+      "path": "/org-admin/audit",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-audit",
+      "status": "M06-01_module_verified"
     },
     {
       "path": "/platform-admin",
-      "view": "PlatformAdmin",
+      "view": "PlatformDashboard",
       "domain": "platform",
       "status": "novice_dashboard_accounts_sources_collection_quality_security_and_advanced_navigation_implemented"
     },
@@ -2528,10 +2576,22 @@
       "status": "implemented_pending_live_verification"
     },
     {
+      "path": "/platform-admin/permissions",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-accounts-permissions",
+      "status": "implemented_pending_live_verification"
+    },
+    {
       "path": "/platform-admin/providers",
       "view": "ProviderRegistry",
       "domain": "platform",
       "status": "M03-01_implemented"
+    },
+    {
+      "path": "/platform-admin/providers/adapters",
+      "view": "ProviderAdapterCenter",
+      "domain": "provider-adapters",
+      "status": "M03-03_module_verified"
     },
     {
       "path": "/platform-admin/providers/sources",
@@ -2540,10 +2600,64 @@
       "status": "M03-07_module_verified"
     },
     {
+      "path": "/platform-admin/credentials",
+      "view": "CredentialAssetCenter",
+      "domain": "credential-assets",
+      "status": "M03-02_module_verified"
+    },
+    {
+      "path": "/platform-admin/collection",
+      "view": "CollectionTaskCenter",
+      "domain": "collection-tasks",
+      "status": "M03-05_module_verified"
+    },
+    {
+      "path": "/platform-admin/collection/overview",
+      "view": "CollectionOperationsConsole",
+      "domain": "collection-operations",
+      "status": "M06-03_module_verified"
+    },
+    {
+      "path": "/platform-admin/collection/browser-runtime",
+      "view": "CollectionRuntimeCenter",
+      "domain": "playwright-crawler-runtime",
+      "status": "M03-04_module_verified"
+    },
+    {
       "path": "/platform-admin/data",
-      "view": "DataQualityCenter",
-      "domain": "platform",
-      "status": "M03-06_implemented"
+      "view": "PlatformDataCenter",
+      "domain": "platform-data",
+      "status": "M06-02_module_verified"
+    },
+    {
+      "path": "/platform-admin/governance",
+      "view": "PlatformGovernanceCenter",
+      "domain": "platform-governance",
+      "status": "M06-02_module_verified"
+    },
+    {
+      "path": "/platform-admin/content",
+      "view": "PlatformManagementCenter",
+      "domain": "platform-content",
+      "status": "M06-02_module_verified"
+    },
+    {
+      "path": "/platform-admin/notifications",
+      "view": "PlatformManagementCenter",
+      "domain": "platform-notifications",
+      "status": "M06-02_module_verified"
+    },
+    {
+      "path": "/platform-admin/status",
+      "view": "PlatformManagementCenter",
+      "domain": "platform-system-status",
+      "status": "M06-02_module_verified"
+    },
+    {
+      "path": "/platform-admin/security",
+      "view": "SecurityOperationsCenter",
+      "domain": "security-operations",
+      "status": "M06-04_module_verified"
     },
     {
       "path": "/platform-admin/open-platform",
@@ -2556,6 +2670,12 @@
       "view": "CommercialOperationsCenter",
       "domain": "commercial-operations",
       "status": "M06-06_module_verified"
+    },
+    {
+      "path": "/platform-admin/operations",
+      "view": "BackupRecoveryCenter",
+      "domain": "backup-recovery",
+      "status": "M07-04_module_verified"
     },
     {
       "path": "/platform-admin/releases",
