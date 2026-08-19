@@ -4373,7 +4373,7 @@ paths:
   /internal/crawler-runtime/jobs/{jobId}/complete:
     post:
       summary: Write a bounded Playwright result back to its business subquery job
-      description: Correlates job, browser run, profile and lease token, stores at most 2 MB of structured result JSON, releases all crawler leases and creates a credential-renewal task for login expiry.
+      description: Correlates job, browser run, profile and lease token, stores at most 2 MB of structured result JSON, including hash-verified bounded screenshot and DOM-fragment artifacts with parser version when the source contract requests evidence, releases all crawler leases and creates a credential-renewal task for login expiry.
       security: [{ CrawlerServiceBearer: [] }]
       parameters:
         - { name: jobId, in: path, required: true, schema: { type: string, format: uuid } }

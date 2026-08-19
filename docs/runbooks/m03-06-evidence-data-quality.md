@@ -14,7 +14,7 @@
 ## 发布验证
 
 1. 备份 MySQL 与证据目录，确认数据库是 MySQL 5.7、utf8mb4、`product_scout` 业务账号。
-2. 在宝塔停止 Node Worker，执行 `0016f_evidence_quality_m03_06.up.sql`。
+2. 在宝塔停止 Node Worker，执行 `0016f_evidence_quality_m03_06.up.sql`；登录型浏览器证据还需在 0048、0049 之后执行 `0050_browser_evidence_artifacts.up.sql`。
 3. 复用现有依赖构建并运行 `npm run verify:module -- M03-06`。验收包含 MySQL 5.7 事务、文件完整性、去重冲突、字段溯源、质量阈值、组织隔离、受控下载、审计及桌面/390px 页面。
 4. 由宝塔重启 Node API 与 Node Worker；M03-07 完成前不要接入或启动真实 Provider 执行器。
 5. 在 `/platform-admin/data` 核对证据、质量问题、核对运行、详情血缘和短时下载。使用 request_id/trace_id 关联 Node Worker、Node API、事件与 Outbox。
@@ -26,6 +26,7 @@
 - `insufficient_sample`：保留警告问题并增加合法样本，不得按通过处理。
 - MySQL 写入失败：事务回滚并删除本次精确文件；检查宝塔 Node Worker 日志，确认无孤儿文件后重试。
 - 文件系统写入失败：不进入数据库事务；检查目录容量、权限和挂载状态。
+- `browser_evidence_invalid` / `browser_evidence_conflict`：停止对应来源，核对完成结果中的 DOM、截图、SHA-256 和解析版本；不得跳过哈希或覆盖同一作业的旧制品。
 - 下载签名密钥缺失：API 返回 503，列表和详情仍可用；在宝塔补齐密钥并重启 Node API。
 - Outbox 积压：证据事实仍以 MySQL 为准，暂停下游消费并修复发布器，不删除事件或宽泛重放。
 

@@ -4,6 +4,8 @@
 
 M03-06 把采集结果拆成不可静默覆盖的三层事实：`raw_evidence` 保存原始内容元数据与文件哈希，`normalized_records` 保存有版本的规范记录，`field_provenance` 把每个规范字段关联到原文路径、转换版本和原值哈希。MySQL 5.7 是元数据、质量问题、核对运行、事件和 Outbox 的事实源；`EVIDENCE_ROOT` 是宝塔管理的中国境内受控文件目录。Redis 不保存证据真相。
 
+登录型浏览器采集另以 `browser_evidence_artifacts` 保存截图与 DOM 片段索引。每个制品绑定组织、工作区、业务任务、子查询、Provider、浏览器作业、采集时间和解析版本，文件继续复用 `file_assets` 与 `EVIDENCE_ROOT`；制品不伪装成已规范化业务记录。
+
 来源专属去重键由已批准 Provider 合同提供。相同组织、工作区、Provider 和去重键的相同内容是幂等重放；不同内容返回 `evidence_dedupe_conflict`，不得静默覆盖。真实 Provider、真实 URL、选择器和回放样例由 M03-07 接入，本模块不猜外部接口。
 
 ## 持久化、质量与更正

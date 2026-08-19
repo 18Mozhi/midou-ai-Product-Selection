@@ -31,8 +31,64 @@ export function create1688BrowserExecutionRequest(target: Record<string, unknown
         login: 'input[type="password"]',
         captcha: 'iframe[src*="captcha"], [class*="captcha"]',
       },
+      evidence: { parser_version: ALIBABA_1688_BROWSER_PARSER_VERSION },
     },
   };
+}
+
+export interface BrowserEvidenceArtifactContract {
+  kind: "dom_fragment" | "screenshot";
+  source_url: string;
+  content_type: "text/html" | "image/jpeg";
+  content: Buffer;
+  content_sha256: string;
+  captured_at: Date;
+  parser_version: string;
+}
+
+export function parseBrowserEvidenceArtifacts(input: unknown): BrowserEvidenceArtifactContract[] {
+  if (input == null) throw new ProviderAdapterFailure("source_changed", false);
+  if (!Array.isArray(input)) throw new ProviderAdapterFailure("source_changed", false);
+  if (input.length !== 2) failure();
+  const artifacts = input.map((raw) => {
+    const value = object(raw),
+      kind = requiredText(value.kind, 40),
+      contentType = requiredText(value.content_type, 80),
+      sourceUrl = https1688Url(value.source_url).toString(),
+      parserVersion = requiredText(value.parser_version, 120),
+      capturedAt = new Date(observedAt(value.captured_at)),
+      encoded = requiredText(value.content_base64, 1_500_000),
+      content = Buffer.from(encoded, "base64"),
+      contentHash = requiredText(value.content_sha256, 64);
+    if (
+      !["dom_fragment", "screenshot"].includes(kind) ||
+      (kind === "dom_fragment" ? contentType !== "text/html" : contentType !== "image/jpeg") ||
+      parserVersion !== ALIBABA_1688_BROWSER_PARSER_VERSION ||
+      !content.byteLength ||
+      (kind === "dom_fragment" &&
+        (content.byteLength > 250_000 || !Buffer.from(content.toString("utf8")).equals(content))) ||
+      (kind === "screenshot" &&
+        (content.byteLength > 800_000 ||
+          content[0] !== 0xff ||
+          content[1] !== 0xd8 ||
+          content[2] !== 0xff)) ||
+      content.toString("base64") !== encoded ||
+      !/^[a-f0-9]{64}$/.test(contentHash) ||
+      createHash("sha256").update(content).digest("hex") !== contentHash
+    )
+      failure();
+    return {
+      kind: kind as BrowserEvidenceArtifactContract["kind"],
+      source_url: sourceUrl,
+      content_type: contentType as BrowserEvidenceArtifactContract["content_type"],
+      content,
+      content_sha256: contentHash,
+      captured_at: capturedAt,
+      parser_version: parserVersion,
+    };
+  });
+  if (new Set(artifacts.map((item) => item.kind)).size !== 2) failure();
+  return artifacts;
 }
 
 export function parse1688BrowserRunResult(input: {

@@ -11,6 +11,7 @@
 ## 数据与租约
 
 - `browser_collection_jobs` 以 `collection_subquery_id` 唯一关联业务任务；状态、结果、错误、Crawler 实例与租约时间均在 MySQL 5.7 保存。
+- 请求证据的来源计划会在首个列表页滚动完成后采集一份最多 250 KB 的条目 DOM 片段和一份最多 800 KB 的视口 JPEG。结果携带来源 URL、采集时间、SHA-256 与解析版本；Worker 重算哈希后写入 `EVIDENCE_ROOT`，并用 `browser_evidence_artifacts` 关联浏览器作业、业务任务和子查询。Cookie、档案和请求头不进入制品或日志。
 - 凭证过期或登录失效会创建关联 `collection_task_id` 的 `collection_followup` 续期任务。凭证轮换后，仍处于业务任务执行期的 blocked job 清除旧运行与租约字段并原位回到 `queued`；业务任务已终态时不改写旧作业，而是由 M03-05 克隆任务和子查询自动重放。
 - `crawler_profiles` 与 `crawler_profile_leases` 是平台全局资产。同一档案以主键锁和 `SELECT ... FOR UPDATE` 保证仅一个活动租约。
 - `crawler_browser_runs` 必须携带 `organization_id`、`workspace_id`、Provider、档案、请求人及 request_id/trace_id；业务范围不从平台档案继承或猜测。
@@ -27,8 +28,8 @@ Python Crawler 不读取静态执行请求文件。它使用服务 Token 调用 
 
 ## 权限与响应
 
-平台监控 `GET /api/v1/platform/crawler-runtime` 与过期回收 `POST /api/v1/platform/crawler-runtime/recover-expired` 要求已登录且具备 `collection:replay`。写操作校验同源 Origin 和 Idempotency-Key。平台响应只含档案元数据、租约时间/实例、范围化运行统计和 correlation，不含凭证明文、密文、临时路径、执行计划或租约令牌。只有 Crawler 服务 Token 可以访问 job acquire/heartbeat/complete；内部 acquire 返回密文而非明文，完成结果限制为 2 MB 并同时核对 job、run、profile 和租约摘要。
+平台监控 `GET /api/v1/platform/crawler-runtime` 与过期回收 `POST /api/v1/platform/crawler-runtime/recover-expired` 要求已登录且具备 `collection:replay`。写操作校验同源 Origin 和 Idempotency-Key。平台响应只含档案元数据、租约时间/实例、范围化运行统计和 correlation，不含凭证明文、密文、临时路径、执行计划或租约令牌。只有 Crawler 服务 Token 可以访问 job acquire/heartbeat/complete；内部 acquire 返回密文而非明文，完成结果限制为 2 MB 并同时核对 job、run、profile 和租约摘要。DOM 与截图必须成对出现、类型与解析版本符合来源合同且哈希一致，否则按解析漂移失败关闭，不能落入证据目录。
 
 ## 回滚
 
-先在宝塔停止 Python Crawler，再停止统一 Node 后端，确认没有 `browser_collection_jobs.status='leased'`，依次执行 `0049_credential_renewal_auto_replay.down.sql`、`0048_browser_collection_jobs.down.sql`，再按既有流程回退 `0016d_playwright_crawler_m03_04.down.sql`。回滚会删除业务作业关联、低层浏览器运行与租约审计表，执行前必须备份；不得在仍有活动租约时回滚。
+先在宝塔停止 Python Crawler，再停止统一 Node 后端，确认没有 `browser_collection_jobs.status='leased'`，依次执行 `0050_browser_evidence_artifacts.down.sql`、`0049_credential_renewal_auto_replay.down.sql`、`0048_browser_collection_jobs.down.sql`，再按既有流程回退 `0016d_playwright_crawler_m03_04.down.sql`。0050 down 只删除制品索引，不删除 `EVIDENCE_ROOT` 中的文件，回滚时必须依据清单精确处理。回滚会删除业务作业关联、低层浏览器运行与租约审计表，执行前必须备份；不得在仍有活动租约时回滚。

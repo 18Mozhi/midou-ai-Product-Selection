@@ -20,10 +20,10 @@ Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-py
 ## 发布与验证
 
 1. 备份 MySQL，并确认没有本模块 running 租约。
-2. 执行 `0016d_playwright_crawler_m03_04.up.sql`、`0048_browser_collection_jobs.up.sql` 与 `0049_credential_renewal_auto_replay.up.sql`，必须使用 `product_scout` 业务账号且确认 MySQL 5.7/utf8mb4；已应用的迁移不可重复手工执行。
+2. 执行 `0016d_playwright_crawler_m03_04.up.sql`、`0048_browser_collection_jobs.up.sql`、`0049_credential_renewal_auto_replay.up.sql` 与 `0050_browser_evidence_artifacts.up.sql`，必须使用 `product_scout` 业务账号且确认 MySQL 5.7/utf8mb4；已应用的迁移不可重复手工执行。
 3. 在发布目录复用锁文件安装依赖，安装项目固定的 Playwright Chromium；不得在请求处理中下载浏览器。
 4. 构建后运行 `npm run verify:module -- M03-04`。其中包含真实本地 Chromium、MySQL 5.7 独占租约、Python bridge、桌面和 390px 视觉验收。
-5. 由宝塔重启 `ai选品` 和 `ai选品-python`，在 `/platform-admin/collection/browser-runtime` 确认档案有效期、目标域名、活动租约和最近运行可读，并检查 Python 的 running/completed 日志；没有 `browser_collection_jobs.status='queued'` 时不应出现空闲心跳。
+5. 由宝塔重启 `ai选品` 和 `ai选品-python`，在 `/platform-admin/collection/browser-runtime` 确认档案有效期、目标域名、活动租约和最近运行可读，并检查 Python 的 running/completed 日志；成功作业应在 `browser_evidence_artifacts` 同时出现 `dom_fragment` 与 `screenshot`，解析版本与 Provider 一致，文件位于受控 `EVIDENCE_ROOT` 而非网站目录；没有 `browser_collection_jobs.status='queued'` 时不应出现空闲心跳。
 
 ## 故障处理
 
@@ -36,4 +36,4 @@ Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-py
 
 ## 回滚与清理
 
-回滚前从宝塔停止 `ai选品` 和 `ai选品-python`，确认或回收所有过期租约并备份。先执行 0049 down，再执行浏览器作业 down migration；从本地重新上传目标版本后再由宝塔启动两个项目。临时档案默认位于 `CREDENTIAL_TEMP_ROOT`；异常残留只能在确认路径属于该根目录、没有活跃 Chromium 后清理，不能递归删除宽泛目录。
+回滚前从宝塔停止 `ai选品` 和 `ai选品-python`，确认或回收所有过期租约并备份。先执行 0050 down，再执行 0049 down 和浏览器作业 down migration；0050 down 不删除证据文件，按备份与索引清单精确处理；从本地重新上传目标版本后再由宝塔启动两个项目。临时档案默认位于 `CREDENTIAL_TEMP_ROOT`；异常残留只能在确认路径属于该根目录、没有活跃 Chromium 后清理，不能递归删除宽泛目录。

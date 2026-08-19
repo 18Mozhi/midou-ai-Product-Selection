@@ -15,6 +15,7 @@ const files = Object.fromEntries(
       "scripts/run-playwright-crawler.mjs",
       "database/migrations/0048_browser_collection_jobs.up.sql",
       "database/migrations/0049_credential_renewal_auto_replay.up.sql",
+      "database/migrations/0050_browser_evidence_artifacts.up.sql",
     ].map(async (path) => [path, await readFile(path, "utf8")]),
   ),
 );
@@ -32,6 +33,10 @@ for (const token of [
   "lease_token",
   "automatically_replayed",
   "task.credential_renewal_completed",
+  "browser_evidence_artifacts",
+  "dom_fragment",
+  "screenshot",
+  "parser_version",
 ]) {
   if (!all.includes(token)) throw new Error(`crawler_chain_missing:${token}`);
 }

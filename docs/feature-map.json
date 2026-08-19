@@ -649,6 +649,7 @@
         "../apps/worker/src/authenticated-browser-job-client.ts",
         "../database/migrations/0048_browser_collection_jobs.up.sql",
         "../database/migrations/0049_credential_renewal_auto_replay.up.sql",
+        "../database/migrations/0050_browser_evidence_artifacts.up.sql",
         "../apps/web/src/components/CollectionRuntimeCenter.vue"
       ],
       "routes": [
@@ -662,7 +663,7 @@
         "/api/v1/internal/crawler-runtime/jobs/{jobId}/heartbeat",
         "/api/v1/internal/crawler-runtime/jobs/{jobId}/complete"
       ],
-      "scope": "Node Worker owns the business collection task and enqueues one browser_collection_job per authenticated-browser subquery; the BaoTa Python Crawler claims that job, renews the job/profile/single-host leases together, calls the fixed Node Playwright runner and writes the bounded result back to the same task and subquery; expired credentials and login-blocked runs create an assigned collection follow-up task linked to the collection task, and a validated credential rotation completes the follow-up then requeues or clones the blocked work for login verification",
+      "scope": "Node Worker owns the business collection task and enqueues one browser_collection_job per authenticated-browser subquery; the BaoTa Python Crawler claims that job, renews the job/profile/single-host leases together, calls the fixed Node Playwright runner and writes the bounded result back to the same task and subquery; evidence-enabled plans return a bounded JPEG screenshot and item DOM fragment with SHA-256 and parser version, which the Worker persists under EVIDENCE_ROOT and links to the browser job, business task and subquery; expired credentials and login-blocked runs create an assigned collection follow-up task linked to the collection task, and a validated credential rotation completes the follow-up then requeues or clones the blocked work for login verification",
       "actions": [
         "bounded search",
         "pagination",
@@ -774,6 +775,7 @@
       "entrypoints": [
         "../packages/data-quality/src/index.ts",
         "../apps/worker/src/evidence-persistence.ts",
+        "../database/migrations/0050_browser_evidence_artifacts.up.sql",
         "../apps/api/src/data-quality-service.ts",
         "../apps/api/src/mysql-data-quality-repository.ts",
         "../apps/api/src/data-quality-routes.ts",
@@ -787,7 +789,7 @@
         "/api/v1/platform/data/evidence/{evidenceId}/download-grant",
         "/api/v1/platform/data/evidence/{evidenceId}/download"
       ],
-      "scope": "organization and workspace scoped immutable raw evidence, versioned normalized records, field provenance, reconciliation, quality issues, events and outbox in MySQL 5.7 plus Baota-controlled evidence files",
+      "scope": "organization and workspace scoped immutable raw evidence, browser screenshots and DOM fragments linked to task/subquery/job/parser version, versioned normalized records, field provenance, reconciliation, quality issues, events and outbox in MySQL 5.7 plus Baota-controlled evidence files",
       "dedupeBoundary": "provider-supplied key scoped by organization workspace and provider; identical content replays, different content conflicts",
       "qualityMetrics": [
         "title_accuracy",

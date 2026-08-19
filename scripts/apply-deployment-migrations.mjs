@@ -20,6 +20,7 @@ const allowed = new Set([
   "0047_approval_decision_context_snapshot.up.sql",
   "0048_browser_collection_jobs.up.sql",
   "0049_credential_renewal_auto_replay.up.sql",
+  "0050_browser_evidence_artifacts.up.sql",
 ]);
 const requested = process.argv.slice(2);
 

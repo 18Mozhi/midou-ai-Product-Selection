@@ -113,25 +113,46 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           workspaceId: task.workspaceId,
           provider,
         },
-        batch =
+        browserCollection =
           provider.accessMode === "authenticated_browser"
-            ? {
-                records: await this.browserJobs!.collect(
-                  {
-                    organizationId: task.organizationId,
-                    workspaceId: task.workspaceId,
-                    taskId: task.id,
-                    subqueryId: query.id,
-                    provider,
-                    target: query.target,
-                    requestId: task.requestId,
-                    traceId: task.traceId,
-                  },
-                  heartbeat,
-                ),
-                nextCursor: null,
-              }
-            : await this.registry.collect({ ...context, target: query.target, limit: 20 });
+            ? await this.browserJobs!.collect(
+                {
+                  organizationId: task.organizationId,
+                  workspaceId: task.workspaceId,
+                  taskId: task.id,
+                  subqueryId: query.id,
+                  provider,
+                  target: query.target,
+                  requestId: task.requestId,
+                  traceId: task.traceId,
+                },
+                heartbeat,
+              )
+            : null,
+        batch = browserCollection
+          ? { records: browserCollection.records, nextCursor: null }
+          : await this.registry.collect({ ...context, target: query.target, limit: 20 });
+      if (browserCollection)
+        for (const artifact of browserCollection.artifacts)
+          await this.evidence.persistBrowserArtifact({
+            organizationId: task.organizationId,
+            workspaceId: task.workspaceId,
+            taskId: task.id,
+            subqueryId: query.id,
+            providerId: provider.id,
+            browserJobId: browserCollection.browserJobId,
+            kind: artifact.kind,
+            sourceUrl: artifact.source_url,
+            contentType: artifact.content_type,
+            content: artifact.content,
+            contentHash: artifact.content_sha256,
+            capturedAt: artifact.captured_at,
+            parserVersion: artifact.parser_version,
+            requestId: task.requestId,
+            traceId: task.traceId,
+            actorId: String(row.created_by),
+          });
+      if (browserCollection?.parseError) throw browserCollection.parseError;
       let available = 0,
         hasDedupeConflict = false;
       for (const raw of batch.records) {

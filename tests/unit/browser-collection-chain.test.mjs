@@ -1,10 +1,15 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 import { buildApp } from "../../apps/api/dist/app.js";
 import { MySqlProviderSourceRepository } from "../../apps/api/dist/mysql-provider-source-repository.js";
 import { ProviderSourceServiceError } from "../../apps/api/dist/provider-source-service.js";
 import { MySqlAuthenticatedBrowserJobClient } from "../../apps/worker/dist/authenticated-browser-job-client.js";
+import { MySqlEvidencePersistence } from "../../apps/worker/dist/evidence-persistence.js";
 import {
   ALIBABA_1688_BROWSER_PARSER_VERSION,
   ALIBABA_1688_SNAPSHOT_SCHEMAS,
@@ -50,22 +55,39 @@ const searchSnapshot = {
     },
   ],
 };
+const artifact = (kind, contentType, content) => {
+  const buffer = Buffer.from(content);
+  return {
+    kind,
+    source_url: "https://s.1688.com/selloffer/offer_search.htm?keywords=lamp",
+    content_type: contentType,
+    content_base64: buffer.toString("base64"),
+    content_sha256: createHash("sha256").update(buffer).digest("hex"),
+    captured_at: "2026-08-20T01:00:00.000Z",
+    parser_version: ALIBABA_1688_BROWSER_PARSER_VERSION,
+  };
+};
 
 test("authenticated browser job client links a business subquery and parses the returned fixed snapshot", async () => {
   const statements = [];
   const pool = {
     query: async (sql, values) => {
       statements.push({ sql, values });
-      if (sql.startsWith("SELECT status"))
+      if (sql.startsWith("SELECT id,status"))
         return [
           [
             {
+              id: ids.job,
               status: "succeeded",
               error_code: null,
               result_json: {
                 status: "succeeded",
                 error_code: null,
                 snapshots: { search: searchSnapshot },
+                artifacts: [
+                  artifact("dom_fragment", "text/html", '<a href="/offer/123">桌面灯</a>'),
+                  artifact("screenshot", "image/jpeg", Buffer.from([0xff, 0xd8, 0xff, 0x00])),
+                ],
               },
             },
           ],
@@ -74,7 +96,7 @@ test("authenticated browser job client links a business subquery and parses the 
     },
   };
   let heartbeats = 0;
-  const records = await new MySqlAuthenticatedBrowserJobClient(pool, 1, async () => {}).collect(
+  const collection = await new MySqlAuthenticatedBrowserJobClient(pool, 1, async () => {}).collect(
     {
       organizationId: ids.org,
       workspaceId: ids.workspace,
@@ -97,13 +119,65 @@ test("authenticated browser job client links a business subquery and parses the 
       heartbeats += 1;
     },
   );
-  assert.equal(records[0].externalId, "1688-search:1234567890");
+  assert.equal(collection.records[0].externalId, "1688-search:1234567890");
+  assert.equal(collection.parseError, null);
+  assert.equal(collection.artifacts.length, 2);
+  assert.equal(collection.artifacts[0].parser_version, ALIBABA_1688_BROWSER_PARSER_VERSION);
   assert.equal(heartbeats, 1);
   assert.match(statements[0].sql, /browser_collection_jobs/);
   assert.equal(
     JSON.parse(statements[0].values[6]).plan.start_url,
     create1688BrowserExecutionRequest({ query: "桌面灯" }).plan.start_url,
   );
+});
+
+test("browser screenshot and DOM fragment are persisted with task, job and parser version", async () => {
+  const root = await mkdtemp(join(tmpdir(), "scoutops-browser-evidence-")),
+    statements = [],
+    connection = {
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release: () => {},
+      query: async (sql, values) => {
+        statements.push({ sql, values });
+        if (sql.startsWith("SELECT p.retention_days")) return [[{ retention_days: 7 }]];
+        if (sql.startsWith("SELECT id,content_sha256")) return [[]];
+        return [{ affectedRows: 1 }];
+      },
+    },
+    pool = { getConnection: async () => connection },
+    content = Buffer.from('<a href="/offer/123">桌面灯</a>');
+  try {
+    const result = await new MySqlEvidencePersistence(pool, root, 1_000_000).persistBrowserArtifact(
+      {
+        organizationId: ids.org,
+        workspaceId: ids.workspace,
+        taskId: ids.task,
+        subqueryId: ids.subquery,
+        providerId: ids.provider,
+        browserJobId: ids.job,
+        kind: "dom_fragment",
+        sourceUrl: "https://s.1688.com/selloffer/offer_search.htm?keywords=lamp",
+        contentType: "text/html",
+        content,
+        contentHash: createHash("sha256").update(content).digest("hex"),
+        capturedAt: new Date("2026-08-20T01:00:00.000Z"),
+        parserVersion: ALIBABA_1688_BROWSER_PARSER_VERSION,
+        requestId: "browser-evidence-request",
+        traceId: "browser-evidence-trace",
+        actorId: ids.actor,
+      },
+    );
+    assert.equal(result.deduplicated, false);
+    const inserted = statements.find((item) =>
+      item.sql.startsWith("INSERT INTO browser_evidence_artifacts"),
+    );
+    assert.equal(inserted.values[6], ids.job);
+    assert.equal(inserted.values[14], ALIBABA_1688_BROWSER_PARSER_VERSION);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
 
 test("internal browser job API returns encrypted assignment only to the crawler service", async () => {

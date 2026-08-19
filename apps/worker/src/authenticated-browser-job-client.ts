@@ -7,7 +7,9 @@ import {
 } from "@scoutops/provider-adapters";
 import {
   create1688BrowserExecutionRequest,
+  parseBrowserEvidenceArtifacts,
   parse1688BrowserRunResult,
+  type BrowserEvidenceArtifactContract,
 } from "@scoutops/provider-sources";
 
 interface BrowserJobInput {
@@ -19,6 +21,13 @@ interface BrowserJobInput {
   target: Record<string, unknown>;
   requestId: string;
   traceId: string;
+}
+
+export interface AuthenticatedBrowserCollection {
+  browserJobId: string;
+  records: ProviderRawRecord[];
+  artifacts: BrowserEvidenceArtifactContract[];
+  parseError: ProviderAdapterFailure | null;
 }
 
 const requestFor = (provider: ProviderRuntimeDefinition, target: Record<string, unknown>) => {
@@ -49,7 +58,7 @@ export class MySqlAuthenticatedBrowserJobClient {
   async collect(
     input: BrowserJobInput,
     heartbeat: () => Promise<void>,
-  ): Promise<ProviderRawRecord[]> {
+  ): Promise<AuthenticatedBrowserCollection> {
     const executionRequest = requestFor(input.provider, input.target),
       jobId = randomUUID(),
       started = Date.now(),
@@ -80,15 +89,29 @@ export class MySqlAuthenticatedBrowserJobClient {
     while (Date.now() <= deadline) {
       await heartbeat();
       const [rows] = await this.pool.query<RowDataPacket[]>(
-        "SELECT status,result_json,error_code FROM browser_collection_jobs WHERE collection_subquery_id=? LIMIT 1",
+        "SELECT id,status,result_json,error_code FROM browser_collection_jobs WHERE collection_subquery_id=? LIMIT 1",
         [input.subqueryId],
       );
       const row = rows[0];
       if (!row) throw new ProviderAdapterFailure("dependency_unavailable", true);
       if (row.status === "succeeded") {
         const result =
-          typeof row.result_json === "string" ? JSON.parse(row.result_json) : row.result_json;
-        return recordsFor(input.provider, result as Record<string, unknown>);
+            typeof row.result_json === "string" ? JSON.parse(row.result_json) : row.result_json,
+          artifacts = parseBrowserEvidenceArtifacts((result as Record<string, unknown>).artifacts);
+        let records: ProviderRawRecord[] = [],
+          parseError: ProviderAdapterFailure | null = null;
+        try {
+          records = recordsFor(input.provider, result as Record<string, unknown>);
+        } catch (error) {
+          if (!(error instanceof ProviderAdapterFailure)) throw error;
+          parseError = error;
+        }
+        return {
+          browserJobId: String(row.id),
+          records,
+          artifacts,
+          parseError,
+        };
       }
       if (["blocked", "failed", "timed_out", "cancelled"].includes(String(row.status))) {
         const errorCode = String(
