@@ -13,7 +13,7 @@ test("production root resolves the authenticated role landing instead of the fou
     read("apps/web/src/components/NavigationShell.vue"),
   ]);
 
-  assert.match(html, /<title>ai选品<\/title>/);
+  assert.match(html, /<title>智能选品<\/title>/);
   assert.doesNotMatch(html, /ScoutOps|FOUNDATION|M00-01/);
   assert.match(
     app,
