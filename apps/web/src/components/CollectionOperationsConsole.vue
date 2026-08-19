@@ -20,10 +20,10 @@ async function load() {
   q.set("window", timeWindow.value);
   if (errorCode.value) q.set("error_code", errorCode.value);
   try {
-    const r = await fetch(
-        `${props.apiBaseUrl}/platform/collection/console?${q}`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
+    const r = await fetch(`${props.apiBaseUrl}/platform/collection/console?${q}`, {
+        credentials: "include",
+        headers: { accept: "application/json" },
+      }),
       b = await r.json().catch(() => null);
     requestId.value = b?.request_id ?? "";
     hint.value = b?.error?.action_hint ?? "";
@@ -62,29 +62,33 @@ const when = (v: string | null) =>
     data_quality: "数据质量",
   },
   healthLabel = (value: string) =>
-    ({
-      ready: "正常",
-      healthy: "正常",
-      warning: "需要关注",
-      degraded: "性能下降",
-      critical: "严重异常",
-      unknown: "尚未检查",
-    } as Record<string, string>)[value] ?? "状态待确认",
+    (
+      ({
+        ready: "正常",
+        healthy: "正常",
+        warning: "需要关注",
+        degraded: "性能下降",
+        critical: "严重异常",
+        unknown: "尚未检查",
+      }) as Record<string, string>
+    )[value] ?? "状态待确认",
   errorLabel = (value: string | null) =>
     value
-      ? ({
-          network_error: "网络异常",
-          timeout: "请求超时",
-          rate_limited: "来源限速",
-          login_required: "需要登录",
-          session_expired: "登录已失效",
-          captcha: "验证码受阻",
-          robots_disallowed: "站点规则阻止",
-          parser_error: "页面解析失败",
-          parser_failed: "页面解析失败",
-          validation_failed: "数据校验失败",
-          permission_denied: "权限受阻",
-        } as Record<string, string>)[value] ?? "其他采集错误"
+      ? ((
+          {
+            network_error: "网络异常",
+            timeout: "请求超时",
+            rate_limited: "来源限速",
+            login_required: "需要登录",
+            session_expired: "登录已失效",
+            captcha: "验证码受阻",
+            robots_disallowed: "站点规则阻止",
+            parser_error: "页面解析失败",
+            parser_failed: "页面解析失败",
+            validation_failed: "数据校验失败",
+            permission_denied: "权限受阻",
+          } as Record<string, string>
+        )[value] ?? "其他采集错误")
       : "无错误",
   drillRootCause = async (value: string) => {
     errorCode.value = errorCode.value === value ? "" : value;
@@ -102,21 +106,13 @@ const when = (v: string | null) =>
         >
       </div>
       <form @submit.prevent="load">
-        <input
-          v-model="org"
-          aria-label="组织 ID 筛选"
-          placeholder="组织 ID（可选）"
-        /><input
+        <input v-model="org" aria-label="组织 ID 筛选" placeholder="组织 ID（可选）" /><input
           v-model="workspace"
           aria-label="工作区 ID 筛选"
           placeholder="工作区 ID（可选）"
         /><select v-model="provider" aria-label="采集来源筛选">
           <option value="">全部来源</option>
-          <option
-            v-for="source in data?.source_options ?? []"
-            :key="source.id"
-            :value="source.id"
-          >
+          <option v-for="source in data?.source_options ?? []" :key="source.id" :value="source.id">
             {{ source.name }}
           </option></select
         ><select v-model="timeWindow" aria-label="观测时间筛选">
@@ -127,11 +123,7 @@ const when = (v: string | null) =>
         ><button>应用范围</button>
       </form>
     </header>
-    <section
-      v-if="state !== 'ready'"
-      class="platform-dashboard-state"
-      :data-kind="state"
-    >
+    <section v-if="state !== 'ready'" class="platform-dashboard-state" :data-kind="state">
       <h3>
         {{
           state === "loading"
@@ -149,10 +141,7 @@ const when = (v: string | null) =>
       </h3>
       <p>{{ hint || "刷新或检查宝塔 Node API 与 MySQL 后重试。" }}</p>
       <code v-if="requestId">request_id: {{ requestId }}</code
-      ><button
-        v-if="!['loading', 'expired', 'forbidden'].includes(state)"
-        @click="load"
-      >
+      ><button v-if="!['loading', 'expired', 'forbidden'].includes(state)" @click="load">
         重新读取
       </button>
     </section>
@@ -211,7 +200,7 @@ const when = (v: string | null) =>
           <header>
             <div>
               <h3>错误根因</h3>
-              <small>按真实任务尝试错误码聚合，选择后下钻尝试与死信。</small>
+              <small>按真实死信错误码聚合失败任务，选择后下钻尝试与死信。</small>
             </div>
             <button
               v-if="errorCode"
@@ -283,16 +272,16 @@ const when = (v: string | null) =>
               ><span
                 >{{ statusLabel(d.status) }} · {{ d.organization_id.slice(0, 8) }}… ·
                 {{ when(d.created_at) }}</span
-              ><a :href="`/platform-admin/collection?task=${d.task_id}`"
-                >查看并受控重放</a
-              ><details><summary>技术详情</summary><code>{{ d.error_code }}</code></details>
+              ><a :href="`/platform-admin/collection?task=${d.task_id}`">查看并受控重放</a>
+              <details>
+                <summary>技术详情</summary>
+                <code>{{ d.error_code }}</code>
+              </details>
             </li>
           </ul>
         </section>
       </div>
-      <footer>
-        观测时间 {{ when(data.observed_at) }} · request_id {{ requestId }}
-      </footer></template
+      <footer>观测时间 {{ when(data.observed_at) }} · request_id {{ requestId }}</footer></template
     >
   </section>
 </template>

@@ -1519,7 +1519,7 @@
         "/api/v1/platform/collection/console"
       ],
       "scope": "platform source definitions and health plus task attempt dead-letter and quality summaries filtered by real provider association optional organization and workspace exact error root and 24h 7d 30d or all time window",
-      "truthBoundary": "error roots aggregate exact collection_task_attempts.error_code values and drill attempts and dead letters without inferred mappings; internal link keys stay out of user-facing copy; no credentials cookies payloads or file paths; controlled replay and source writes remain on existing idempotent versioned M03 endpoints",
+      "truthBoundary": "dead-letter roots aggregate exact collection_dead_letters.error_code values and count only failed tasks already in dead letter, while the same exact root drills attempts and dead letters without inferred mappings; internal link keys stay out of user-facing copy; no credentials cookies payloads or file paths; controlled replay and source writes remain on existing idempotent versioned M03 endpoints",
       "permission": "platform:operate read guard and collection:replay or provider:configure on existing write routes; correlated global read audit",
       "configuration": ["COLLECTION_CONSOLE_RECENT_LIMIT"],
       "runtimeBoundary": "observes collection Worker leases retries rate limits and dead letters inside the unified BaoTa backend; creates no new daemon",

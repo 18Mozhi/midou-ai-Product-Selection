@@ -7,8 +7,7 @@ import {
 } from "./collection-console-service.js";
 
 const numberValue = (value: unknown) => Number(value ?? 0);
-const iso = (value: unknown) =>
-  value ? new Date(value as string | Date).toISOString() : null;
+const iso = (value: unknown) => (value ? new Date(value as string | Date).toISOString() : null);
 const windowMilliseconds: Record<string, number | null> = {
   "24h": 24 * 60 * 60 * 1000,
   "7d": 7 * 24 * 60 * 60 * 1000,
@@ -16,9 +15,7 @@ const windowMilliseconds: Record<string, number | null> = {
   all: null,
 };
 
-export class MySqlCollectionConsoleRepository
-  implements CollectionConsoleRepository
-{
+export class MySqlCollectionConsoleRepository implements CollectionConsoleRepository {
   constructor(
     private readonly pool: Pool,
     private readonly now = () => new Date(),
@@ -33,11 +30,7 @@ export class MySqlCollectionConsoleRepository
     const deadFilter = this.deadFilter(input, since);
     const qualityFilter = this.qualityFilter(input, since);
     const attemptFilter = this.attemptFilter(input, since);
-    const attemptRootFilter = this.attemptFilter(
-      { ...input, errorCode: null },
-      since,
-      true,
-    );
+    const deadRootFilter = this.deadFilter({ ...input, errorCode: null }, since);
 
     const [[sourceRows], [taskRows], [deadRows], [qualityRows], [attemptRows], [rootRows]] =
       await Promise.all([
@@ -87,14 +80,12 @@ export class MySqlCollectionConsoleRepository
           [...attemptFilter.values, input.recentLimit],
         ),
         this.pool.query<RowDataPacket[]>(
-          `SELECT a.error_code, COUNT(*) total,
-                  MAX(COALESCE(a.finished_at, a.started_at, a.created_at)) latest_at
-             FROM collection_task_attempts a
-             JOIN collection_tasks t ON t.id = a.task_id
-             ${attemptRootFilter.sql}
-         GROUP BY a.error_code
-         ORDER BY total DESC, latest_at DESC, a.error_code`,
-          attemptRootFilter.values,
+          `SELECT d.error_code, COUNT(*) total, MAX(d.created_at) latest_at
+             FROM collection_dead_letters d
+             ${deadRootFilter.sql}
+         GROUP BY d.error_code
+         ORDER BY total DESC, latest_at DESC, d.error_code`,
+          deadRootFilter.values,
         ),
       ]);
 
@@ -102,8 +93,7 @@ export class MySqlCollectionConsoleRepository
       ...row,
       schedule_minutes: numberValue(row.schedule_minutes),
       concurrency_limit: numberValue(row.concurrency_limit),
-      last_latency_ms:
-        row.last_latency_ms == null ? null : numberValue(row.last_latency_ms),
+      last_latency_ms: row.last_latency_ms == null ? null : numberValue(row.last_latency_ms),
       consecutive_failures: numberValue(row.consecutive_failures),
       last_checked_at: iso(row.last_checked_at),
       health_status: row.health_status ?? "unknown",
@@ -181,10 +171,7 @@ export class MySqlCollectionConsoleRepository
           404,
           "选择存在的工作区。",
         );
-      if (
-        input.organizationId &&
-        String(rows[0].organization_id) !== input.organizationId
-      )
+      if (input.organizationId && String(rows[0].organization_id) !== input.organizationId)
         throw new CollectionConsoleError(
           "collection_console_scope_mismatch",
           409,
@@ -258,11 +245,7 @@ export class MySqlCollectionConsoleRepository
     return this.where(conditions, values);
   }
 
-  private attemptFilter(
-    input: any,
-    since: Date | null,
-    requireError = false,
-  ) {
+  private attemptFilter(input: any, since: Date | null, requireError = false) {
     const conditions: string[] = [];
     const values: unknown[] = [];
     this.scopeConditions(conditions, values, "t", input);
@@ -285,12 +268,7 @@ export class MySqlCollectionConsoleRepository
     return this.where(conditions, values);
   }
 
-  private scopeConditions(
-    conditions: string[],
-    values: unknown[],
-    alias: string,
-    input: any,
-  ) {
+  private scopeConditions(conditions: string[], values: unknown[], alias: string, input: any) {
     if (input.organizationId) {
       conditions.push(`${alias}.organization_id = ?`);
       values.push(input.organizationId);

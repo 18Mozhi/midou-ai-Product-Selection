@@ -14,9 +14,7 @@ const data = {
     window: "24h",
     error_code: null,
   },
-  source_options: [
-    { id: providerId, code: "news", name: "公开趋势 RSS" },
-  ],
+  source_options: [{ id: providerId, code: "news", name: "公开趋势 RSS" }],
   sources: [
     {
       id: providerId,
@@ -68,7 +66,7 @@ const data = {
   root_causes: [
     {
       error_code: "parser_failed",
-      total: 3,
+      total: 1,
       latest_at: "2026-08-08T11:00:00Z",
     },
   ],
@@ -84,21 +82,19 @@ const data = {
 };
 
 async function navigation(page: Page) {
-  await page.route(
-    "**/api/v1/me/navigation?shell=platform_admin",
-    (route) =>
-      route.fulfill({
-        json: envelope({
-          shell: "platform_admin",
-          organization_id: null,
-          workspace_id: null,
-          roles: [],
-          capabilities: [],
-          platform_roles: ["platform_operations_admin"],
-          platform_capabilities: ["platform:operate"],
-          guard_reason: "allowed",
-        }),
+  await page.route("**/api/v1/me/navigation?shell=platform_admin", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "platform_admin",
+        organization_id: null,
+        workspace_id: null,
+        roles: [],
+        capabilities: [],
+        platform_roles: ["platform_operations_admin"],
+        platform_capabilities: ["platform:operate"],
+        guard_reason: "allowed",
       }),
+    }),
   );
 }
 
@@ -112,9 +108,7 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
     return route.fulfill({ json: envelope(data) });
   });
   await page.goto("/platform-admin/collection/overview");
-  await expect(
-    page.getByRole("heading", { name: "来源与采集控制台", level: 2 }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "来源与采集控制台", level: 2 })).toBeVisible();
   await expect(
     page.locator(".collection-ops table").first().getByText("公开趋势 RSS"),
   ).toBeVisible();
@@ -137,9 +131,7 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByText("最近尝试")).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "应用范围" }),
-  ).toHaveCSS("white-space", "nowrap");
+  await expect(page.getByRole("button", { name: "应用范围" })).toHaveCSS("white-space", "nowrap");
   await expect(page).toHaveScreenshot("m06-03-collection-console-mobile.png", {
     fullPage: true,
   });
@@ -174,15 +166,11 @@ test("M06-03.A08/A16 empty forbidden blocked", async ({ page }) => {
     ),
   );
   await page.goto("/platform-admin/collection/overview");
-  await expect(
-    page.getByRole("heading", { name: "当前范围没有采集事实" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "当前范围没有采集事实" })).toBeVisible();
   status = 403;
   await page.reload();
   await expect(page.getByRole("heading", { name: "你没有此项权限" })).toBeVisible();
   status = 503;
   await page.reload();
-  await expect(
-    page.getByRole("heading", { name: "采集控制台依赖受阻" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "采集控制台依赖受阻" })).toBeVisible();
 });

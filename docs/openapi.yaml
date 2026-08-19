@@ -5323,7 +5323,7 @@ paths:
   /platform/collection/console:
     get:
       summary: Read the audited source and collection operations console
-      description: Requires platform:operate. Optional organization_id, workspace_id, provider_id, window and exact error_code scope task, attempt, dead-letter and quality rows; source definitions remain platform-global. Write and replay actions use their existing versioned idempotent endpoints.
+      description: Requires platform:operate. Optional organization_id, workspace_id, provider_id, window and exact error_code scope task, attempt, dead-letter and quality rows; root causes count exact collection_dead_letters.error_code facts only, excluding attempts that have not entered dead letter. Source definitions remain platform-global. Write and replay actions use their existing versioned idempotent endpoints.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
@@ -5360,7 +5360,7 @@ paths:
             description: Source health,
             task states,
             recent attempts,
-            dead letters,
+            dead letters grouped by exact failure root,
             quality summary and controlled action links,
             content: { application/json: { schema: { type: object } } },
           }

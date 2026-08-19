@@ -318,7 +318,7 @@ M04-07 实现合同：AI 辅助分析只读取当前组织、当前工作区内�
 
 #### M06-03 来源与采集控制台实现基线
 
-- `/platform-admin/collection/overview` 汇总平台来源定义与健康；任务、尝试、死信和质量问题可按真实来源、`organization_id` / `workspace_id` 与 24 小时/7 天/30 天/全部时间精确筛选。错误根因按任务尝试的真实 `error_code` 聚合并下钻尝试与死信，内部模块键和原始错误码不作为主界面文案；来源写入、健康检查和死信重放继续使用 M03 已有版本锁、幂等、权限和审计接口。
+- `/platform-admin/collection/overview` 汇总平台来源定义与健康；任务、尝试、死信和质量问题可按真实来源、`organization_id` / `workspace_id` 与 24 小时/7 天/30 天/全部时间精确筛选。错误根因按 `collection_dead_letters.error_code` 聚合已经进入死信的失败任务，不把仍在重试的尝试计入死信数量；选择根因后以同一真实错误码下钻尝试与死信。内部模块键和原始错误码不作为主界面文案；来源写入、健康检查和死信重放继续使用 M03 已有版本锁、幂等、权限和审计接口。
 - 控制台不返回凭证、Cookie、采集 payload 或文件路径。读取要求 `platform:operate` 并记录全局审计；重放仍要求 `collection:replay`、同源、原因与 `Idempotency-Key`。
 - `COLLECTION_CONSOLE_RECENT_LIMIT` 仅控制最近尝试和死信行数，修改后由宝塔重启 Node API；现有 Worker/Crawler 负责租约、重试、限流和死信，控制台不创建新进程。
 

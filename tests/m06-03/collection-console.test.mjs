@@ -33,14 +33,12 @@ test("M06-03.A01/A02/A04/A12 validates scope source time and exact error filters
   assert.throws(
     () => service.read({ organizationId: "bad" }),
     (error) =>
-      error instanceof CollectionConsoleError &&
-      error.code === "collection_console_scope_invalid",
+      error instanceof CollectionConsoleError && error.code === "collection_console_scope_invalid",
   );
   assert.throws(
     () => service.read({ window: "yesterday" }),
     (error) =>
-      error instanceof CollectionConsoleError &&
-      error.code === "collection_console_window_invalid",
+      error instanceof CollectionConsoleError && error.code === "collection_console_window_invalid",
   );
   assert.throws(
     () => service.read({ errorCode: "not allowed!" }),
@@ -70,11 +68,7 @@ test("M06-03.A03/A05/A09/A11/A16 reads audited real source and root-cause relati
     repository,
     /collection_subqueries source_scope[\s\S]*source_scope\.provider_id = \?/,
   );
-  assert.match(repository, /a\.error_code IS NOT NULL/);
-  assert.match(
-    repository,
-    /SELECT a\.error_code, COUNT\(\*\) total[\s\S]*GROUP BY a\.error_code/,
-  );
+  assert.match(repository, /SELECT d\.error_code, COUNT\(\*\) total[\s\S]*GROUP BY d\.error_code/);
   assert.match(repository, /provider_filter_id[\s\S]*window[\s\S]*error_code/);
   assert.match(route, /providerId: query\.provider_id/);
   assert.match(route, /window: query\.window/);
@@ -101,25 +95,31 @@ test("M06-03 repository applies one source and time scope to task facts without 
         return [[{ organization_id: organizationId }]];
       if (sql.includes("SELECT id FROM providers WHERE")) return [[{ id: providerId }]];
       if (sql.includes("FROM providers p"))
-        return [[{
-          id: providerId,
-          code: "news",
-          name: "公开趋势 RSS",
-          status: "enabled",
-          owner_label: "运营组",
-          schedule_minutes: 60,
-          concurrency_limit: 1,
-          parser_version: "v1",
-          health_status: "ready",
-          consecutive_failures: 0,
-        }]];
+        return [
+          [
+            {
+              id: providerId,
+              code: "news",
+              name: "公开趋势 RSS",
+              status: "enabled",
+              owner_label: "运营组",
+              schedule_minutes: 60,
+              concurrency_limit: 1,
+              parser_version: "v1",
+              health_status: "ready",
+              consecutive_failures: 0,
+            },
+          ],
+        ];
       if (sql.includes("SELECT t.status")) return [[{ status: "running", total: 2 }]];
+      if (sql.includes("SELECT d.error_code, COUNT(*)"))
+        return [
+          [{ error_code: "parser_failed", total: 1, latest_at: new Date("2026-08-19T01:00:00Z") }],
+        ];
       if (sql.includes("FROM collection_dead_letters"))
         return [[{ error_code: "parser_failed", created_at: new Date("2026-08-19T01:00:00Z") }]];
       if (sql.includes("FROM data_quality_issues"))
         return [[{ severity: "warning", status: "open", total: 1 }]];
-      if (sql.includes("SELECT a.error_code"))
-        return [[{ error_code: "parser_failed", total: 3, latest_at: new Date("2026-08-19T01:00:00Z") }]];
       if (sql.includes("FROM collection_task_attempts"))
         return [[{ attempt_number: 2, started_at: null, finished_at: null }]];
       throw new Error(`unexpected query: ${sql}`);
@@ -151,13 +151,20 @@ test("M06-03 repository applies one source and time scope to task facts without 
   });
   assert.equal(result.sources.length, 1);
   assert.equal(result.root_causes[0].error_code, "parser_failed");
+  assert.equal(result.root_causes[0].total, 1);
   assert.equal(result.filters.provider_id, providerId);
   for (const [sql, values] of calls)
     assert.equal((sql.match(/\?/g) ?? []).length, values.length, sql);
   const factQueries = calls.filter(([sql]) =>
-    /collection_tasks|collection_dead_letters|data_quality_issues|collection_task_attempts/.test(sql),
+    /collection_tasks|collection_dead_letters|data_quality_issues|collection_task_attempts/.test(
+      sql,
+    ),
   );
-  assert.ok(factQueries.every(([sql]) => sql.includes("source_scope.provider_id = ?") || sql.includes("q.provider_id = ?")));
+  assert.ok(
+    factQueries.every(
+      ([sql]) => sql.includes("source_scope.provider_id = ?") || sql.includes("q.provider_id = ?"),
+    ),
+  );
   assert.ok(factQueries.every(([sql]) => />= \?/.test(sql)));
 });
 
