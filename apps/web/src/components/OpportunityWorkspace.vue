@@ -86,7 +86,7 @@ interface Detail extends Opportunity {
     execution: string;
   };
 }
-const opportunityStatus = (value:string) => ({ pending:"待判断", adopted:"已采纳", observing:"观察中", rejected:"已驳回", insufficient_data:"待补充数据", calculated:"已计算", unknown:"待识别", low:"低", medium:"中", high:"高", manual:"手动创建", trend_topic:"热点自动发现" } as Record<string,string>)[value] ?? value;
+const opportunityStatus = (value:string) => ({ pending:"待判断", adopt:"采纳", adopted:"已采纳", observe:"继续观察", observing:"观察中", reject:"驳回", rejected:"已驳回", insufficient:"不完整", partial:"部分完整", complete:"完整", insufficient_data:"待补充数据", calculated:"已计算", unknown:"待识别", low:"低", medium:"中", high:"高", manual:"手动创建", trend_topic:"热点自动发现" } as Record<string,string>)[value] ?? value;
 interface ProfitAnalysis {
   latest_run: null | {
     id: string;
@@ -144,7 +144,7 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
   showDecision = ref(false),
   decisionAction = ref<"adopt" | "observe" | "reject">("observe"),
   decisionReason = ref(""),
-  filters = reactive({ q: "", market: "", decision_status: "" }),
+  filters = reactive({ q: "", market: "", decision_status: "", coverage_status: "" }),
   form = reactive({
     name: "",
     market: "US",
@@ -507,6 +507,13 @@ onMounted(() => {
             <option value="rejected">已驳回</option>
           </select></label
         ><label
+          >证据完整度<select v-model="filters.coverage_status">
+            <option value="">全部完整度</option>
+            <option value="insufficient">不完整</option>
+            <option value="partial">部分完整</option>
+            <option value="complete">完整</option>
+          </select></label
+        ><label
           >机会名称<input
             v-model="filters.q"
             maxlength="200"
@@ -585,7 +592,7 @@ onMounted(() => {
             <h3>{{ detail.name }}</h3>
             <span
               >更新 {{ freshness(detail.updated_at) }} · v{{ detail.version }} ·
-              来源 {{ detail.source_type }}</span
+              来源 {{ opportunityStatus(detail.source_type) }}</span
             >
           </div>
           <div>
@@ -669,7 +676,7 @@ onMounted(() => {
               {{ detail.source_count }} 个来源</strong
             ><span
               >覆盖状态：{{
-                detail.coverage_status
+                opportunityStatus(detail.coverage_status)
               }}。市场、竞争、成本三类未齐全时不能自动推荐。</span
             >
           </article>
@@ -679,7 +686,7 @@ onMounted(() => {
             <strong>{{
               profit?.latest_run?.status === "calculated"
                 ? `${profit.latest_run.net_margin_percent}%`
-                : detail.profit_status
+                : opportunityStatus(detail.profit_status)
             }}</strong
             ><span v-if="profit?.latest_run?.status === 'calculated'"
               >净利润 {{ profit.latest_run.net_profit }}
@@ -692,7 +699,7 @@ onMounted(() => {
           <article>
             <p>风险</p>
             <h4>风险</h4>
-            <strong>{{ detail.risk_level }}</strong
+            <strong>{{ opportunityStatus(detail.risk_level) }}</strong
             ><span>尚无适用风险输入，不以“低风险”代替未知。</span>
           </article>
         </section>
@@ -974,7 +981,7 @@ onMounted(() => {
             尚无决策记录。
           </p>
           <article v-for="item in detail.decisions" :key="item.id">
-            <b>{{ item.action }}</b>
+            <b>{{ opportunityStatus(item.action) }}</b>
             <div>
               <strong>{{ item.reason }}</strong
               ><small

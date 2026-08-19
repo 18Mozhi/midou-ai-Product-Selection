@@ -924,8 +924,8 @@
         "/api/v1/opportunities/{opportunityId}/competitor-discovery",
         "/api/v1/imports/erp-products"
       ],
-      "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs",
-      "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; scores ROI and risk are never invented, and missing downstream fields remain null unknown or insufficient_data",
+      "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs; the list filters persisted evidence coverage with coverage_status",
+      "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese",
       "refresh": "Baota Node Worker leases opportunity refresh jobs and links only persisted trend signals; trend-only evidence remains partial because competition and cost inputs are absent",
       "productImages": "structured marketplace crawlers extract JSON-LD or linked product image URLs; ERP imports map the confirmed product image field; opportunity list resolves the newest scoped evidence image and otherwise shows an explicit pending-capture placeholder",
       "erpImport": "the restricted browser helper reads the existing ERP Authorization token only inside the logged-in ERP tab and imports immutable evidence, opportunities, actual ASIN competitors and evidence-linked ERP historical-cost supplier candidates; missing MOQ specification lead time and location stay explicit rather than being presented as confirmed quotes",
