@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
+import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../scoring.css";
-type State =
-  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type Action = "submit" | "approve" | "reject" | "activate" | "rollback";
 interface Dimension {
   code: string;
@@ -26,6 +26,7 @@ interface Rule {
   updated_at: string;
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   rules = ref<Rule[]>([]),
   requestId = ref(""),
@@ -60,12 +61,12 @@ const form = reactive({
     evidence_group: "other",
   })),
 });
-const stateFrom = (status: number): State =>
-    status === 401
+const stateFrom = (kind: ApiFailureKind): State =>
+    kind === "expired"
       ? "expired"
-      : status === 403
+      : kind === "forbidden"
         ? "forbidden"
-        : [408, 425, 429, 502, 503, 504].includes(status)
+        : kind === "blocked" || kind === "rate_limited"
           ? "blocked"
           : "error",
   time = (value: string | null) =>
@@ -81,44 +82,31 @@ const stateFrom = (status: number): State =>
 async function load() {
   state.value = "loading";
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/opportunity-score-rules`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) {
-      state.value = stateFrom(response.status);
-      return;
-    }
-    rules.value = body.data;
+    const response = await request<Rule[]>("/opportunity-score-rules");
+    requestId.value = response.request_id;
+    rules.value = response.data;
     state.value = rules.value.length ? "ready" : "empty";
-  } catch {
-    state.value = "blocked";
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+      state.value = stateFrom(error.kind);
+    } else state.value = "blocked";
   }
 }
 async function post(path: string, body: unknown) {
   busy.value = true;
   message.value = "";
   try {
-    const response = await fetch(`${props.apiBaseUrl}${path}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          accept: "application/json",
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-        body: JSON.stringify(body),
-      }),
-      result = await response.json().catch(() => null);
-    requestId.value = result?.request_id ?? "";
-    if (!response.ok) {
-      message.value = result?.error?.action_hint ?? "操作未完成。";
+    const response = await request<any>(path, { method: "POST", body });
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
       return null;
     }
-    return result.data;
-  } catch {
     message.value = "依赖暂不可用，未写入状态。";
     return null;
   } finally {
@@ -151,17 +139,12 @@ function begin(rule: Rule, value: Action) {
 }
 async function runAction() {
   if (!selected.value) return;
-  const result = await post(
-    `/opportunity-score-rules/${selected.value.id}/actions`,
-    {
-      action: action.value,
-      reason: reason.value,
-      expected_revision: selected.value.revision,
-      ...(action.value === "rollback"
-        ? { target_rule_id: targetRuleId.value }
-        : {}),
-    },
-  );
+  const result = await post(`/opportunity-score-rules/${selected.value.id}/actions`, {
+    action: action.value,
+    reason: reason.value,
+    expected_revision: selected.value.revision,
+    ...(action.value === "rollback" ? { target_rule_id: targetRuleId.value } : {}),
+  });
   if (result) {
     showAction.value = false;
     await load();
@@ -176,9 +159,7 @@ onMounted(() => void load());
       <div>
         <p>版本化评分</p>
         <h2>评分规则引擎</h2>
-        <span
-          >权重、阈值、证据覆盖与计算结果均版本化；历史结果不会被新规则或回滚改写。</span
-        >
+        <span>权重、阈值、证据覆盖与计算结果均版本化；历史结果不会被新规则或回滚改写。</span>
       </div>
       <button type="button" @click="showCreate = true">＋ 新建规则草稿</button>
     </header>
@@ -198,8 +179,7 @@ onMounted(() => void load());
     </section>
     <section v-else class="score-rule-list">
       <header>
-        <span>版本</span><span>阈值</span><span>维度与权重</span
-        ><span>状态</span><span>操作</span>
+        <span>版本</span><span>阈值</span><span>维度与权重</span><span>状态</span><span>操作</span>
       </header>
       <article v-for="rule in rules" :key="rule.id">
         <div>
@@ -222,29 +202,13 @@ onMounted(() => void load());
           ><small>审批 {{ time(rule.approved_at) }}</small>
         </div>
         <nav>
-          <button v-if="rule.status === 'draft'" @click="begin(rule, 'submit')">
-            提交</button
-          ><button
-            v-if="rule.status === 'pending_approval'"
-            @click="begin(rule, 'approve')"
-          >
+          <button v-if="rule.status === 'draft'" @click="begin(rule, 'submit')">提交</button
+          ><button v-if="rule.status === 'pending_approval'" @click="begin(rule, 'approve')">
             批准</button
-          ><button
-            v-if="rule.status === 'pending_approval'"
-            @click="begin(rule, 'reject')"
-          >
+          ><button v-if="rule.status === 'pending_approval'" @click="begin(rule, 'reject')">
             拒绝</button
-          ><button
-            v-if="rule.status === 'approved'"
-            @click="begin(rule, 'activate')"
-          >
-            启用</button
-          ><button
-            v-if="rule.status === 'active'"
-            @click="begin(rule, 'rollback')"
-          >
-            回滚
-          </button>
+          ><button v-if="rule.status === 'approved'" @click="begin(rule, 'activate')">启用</button
+          ><button v-if="rule.status === 'active'" @click="begin(rule, 'rollback')">回滚</button>
         </nav>
       </article>
     </section>
@@ -261,9 +225,7 @@ onMounted(() => void load());
             <p>不使用默认数值</p>
             <h3 id="score-rule-create-title">新建评分规则草稿</h3>
           </div>
-          <button type="button" aria-label="关闭" @click="showCreate = false">
-            ×
-          </button>
+          <button type="button" aria-label="关闭" @click="showCreate = false">×</button>
         </header>
         <div>
           <label
@@ -272,9 +234,7 @@ onMounted(() => void load());
               required
               maxlength="64"
               placeholder="例如 org-v1" /></label
-          ><label
-            >规则名称<input v-model="form.name" required maxlength="160"
-          /></label>
+          ><label>规则名称<input v-model="form.name" required maxlength="160" /></label>
         </div>
         <div>
           <label
@@ -296,10 +256,7 @@ onMounted(() => void load());
           /></label>
         </div>
         <section class="score-dimension-form">
-          <header>
-            <b>评分维度</b
-            ><small>仅权重大于 0 的维度会提交；合计必须为 100。</small>
-          </header>
+          <header><b>评分维度</b><small>仅权重大于 0 的维度会提交；合计必须为 100。</small></header>
           <div v-for="item in form.dimensions" :key="item.code">
             <span>{{ item.label }}</span
             ><label
@@ -316,9 +273,7 @@ onMounted(() => void load());
                 <option value="cost">成本</option>
                 <option value="other">其他</option>
               </select></label
-            ><label
-              ><input v-model="item.required" type="checkbox" /> 必填</label
-            >
+            ><label><input v-model="item.required" type="checkbox" /> 必填</label>
           </div>
         </section>
         <aside>规则不会自动生效；需持有相应权限的人员提交、批准并启用。</aside>
@@ -341,27 +296,16 @@ onMounted(() => void load());
         <header>
           <div>
             <p>留痕状态变更</p>
-            <h3 id="score-rule-action-title">
-              {{ action }} · {{ selected.version_code }}
-            </h3>
+            <h3 id="score-rule-action-title">{{ action }} · {{ selected.version_code }}</h3>
           </div>
-          <button type="button" aria-label="关闭" @click="showAction = false">
-            ×
-          </button>
+          <button type="button" aria-label="关闭" @click="showAction = false">×</button>
         </header>
-        <label
-          >原因（必填）<textarea
-            v-model="reason"
-            required
-            maxlength="1000"
-          ></textarea></label
+        <label>原因（必填）<textarea v-model="reason" required maxlength="1000"></textarea></label
         ><label v-if="action === 'rollback'"
           >回滚目标版本<select v-model="targetRuleId" required>
             <option value="">请选择已批准或停用版本</option>
             <option
-              v-for="rule in rules.filter((item) =>
-                ['approved', 'retired'].includes(item.status),
-              )"
+              v-for="rule in rules.filter((item) => ['approved', 'retired'].includes(item.status))"
               :key="rule.id"
               :value="rule.id"
             >
@@ -369,9 +313,7 @@ onMounted(() => void load());
             </option>
           </select></label
         >
-        <aside>
-          状态变化和原因会写入审计与事务消息；历史评分运行保持不变。
-        </aside>
+        <aside>状态变化和原因会写入审计与事务消息；历史评分运行保持不变。</aside>
         <footer>
           <button type="button" @click="showAction = false">取消</button
           ><button type="submit" :disabled="busy">确认 {{ action }}</button>

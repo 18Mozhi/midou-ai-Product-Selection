@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../profit.css";
 
-type State =
-  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type FeeType = "platform_fee" | "payment_fee" | "tax" | "fulfillment";
 interface Rule {
   id: string;
@@ -26,7 +26,8 @@ interface Rule {
   updated_at: string;
 }
 const props = defineProps<{ apiBaseUrl: string; roles: string[] }>();
-const state = ref<State>("loading"),
+const request = createApiClient(props.apiBaseUrl),
+  state = ref<State>("loading"),
   rules = ref<Rule[]>([]),
   selected = ref<Rule | null>(null),
   requestId = ref(""),
@@ -47,57 +48,44 @@ const form = reactive({
 });
 const canSelection = computed(() => props.roles.includes("selection_manager")),
   canAdmin = computed(() => props.roles.includes("organization_admin"));
-const stateFrom = (status: number): State =>
-  status === 401
+const stateFrom = (kind: ApiFailureKind): State =>
+  kind === "expired"
     ? "expired"
-    : status === 403
+    : kind === "forbidden"
       ? "forbidden"
-      : [408, 425, 429, 502, 503, 504].includes(status)
+      : kind === "blocked" || kind === "rate_limited"
         ? "blocked"
         : "error";
 async function load() {
   state.value = "loading";
   try {
-    const response = await fetch(`${props.apiBaseUrl}/cost-rules`, {
-        credentials: "include",
-      }),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) {
-      state.value = stateFrom(response.status);
-      return;
-    }
-    rules.value = body.data;
+    const response = await request<Rule[]>("/cost-rules");
+    requestId.value = response.request_id;
+    rules.value = response.data;
     selected.value =
-      rules.value.find((item) => item.id === selected.value?.id) ??
-      rules.value[0] ??
-      null;
+      rules.value.find((item) => item.id === selected.value?.id) ?? rules.value[0] ?? null;
     state.value = rules.value.length ? "ready" : "empty";
-  } catch {
-    state.value = "blocked";
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      notice.value = error.actionHint;
+      state.value = stateFrom(error.kind);
+    } else state.value = "blocked";
   }
 }
 async function post(path: string, body: unknown) {
   busy.value = true;
   notice.value = "";
   try {
-    const response = await fetch(`${props.apiBaseUrl}${path}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-        body: JSON.stringify(body),
-      }),
-      result = await response.json().catch(() => null);
-    requestId.value = result?.request_id ?? "";
-    if (!response.ok) {
-      notice.value = result?.error?.action_hint ?? "操作未完成。";
+    const response = await request<any>(path, { method: "POST", body });
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      notice.value = error.actionHint;
       return null;
     }
-    return result.data;
-  } catch {
     notice.value = "依赖暂不可用，未写入状态。";
     return null;
   } finally {
@@ -171,21 +159,14 @@ onMounted(load);
       <div>
         <p>费用治理</p>
         <h2 id="cost-rule-title">费用与利润规则</h2>
-        <span
-          >所有费率必须显式填写；规则经选品经理与组织管理员双审批后才可发布。</span
-        >
+        <span>所有费率必须显式填写；规则经选品经理与组织管理员双审批后才可发布。</span>
       </div>
       <button type="button" @click="showCreate = true">＋ 新建规则</button>
     </header>
     <p v-if="notice" class="cost-notice" role="status">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
     </p>
-    <UiStatePanel
-      v-if="state !== 'ready'"
-      :kind="state"
-      :request-id="requestId"
-      @primary="load"
-    />
+    <UiStatePanel v-if="state !== 'ready'" :kind="state" :request-id="requestId" @primary="load" />
     <div v-else class="cost-layout">
       <section class="cost-rule-list">
         <button
@@ -197,10 +178,7 @@ onMounted(load);
           <i :data-status="rule.status"></i
           ><span
             ><strong>{{ rule.name }}</strong
-            ><small
-              >{{ rule.market }} · {{ rule.platform }} ·
-              {{ rule.version_code }}</small
-            ></span
+            ><small>{{ rule.market }} · {{ rule.platform }} · {{ rule.version_code }}</small></span
           ><b>{{ rule.status }}</b
           ><em>v{{ rule.revision }}</em>
         </button>
@@ -222,32 +200,20 @@ onMounted(load);
             <small>{{ fee.type }}</small
             ><strong
               >{{ fee.value
-              }}{{
-                fee.mode === "percentage_of_sale" ? "%" : ` ${fee.currency}`
-              }}</strong
+              }}{{ fee.mode === "percentage_of_sale" ? "%" : ` ${fee.currency}` }}</strong
             ><span>{{ fee.mode }}</span>
           </article>
         </div>
         <section>
           <h4>审批链</h4>
           <p>
-            <b :data-done="selected.approvals.includes('selection_manager')"
-              >选品经理</b
-            ><b :data-done="selected.approvals.includes('organization_admin')"
-              >组织管理员</b
-            >
+            <b :data-done="selected.approvals.includes('selection_manager')">选品经理</b
+            ><b :data-done="selected.approvals.includes('organization_admin')">组织管理员</b>
           </p>
-          <small
-            >审批和发布均写入审计、事件与事务消息；回滚通过后端
-            保留全部历史。</small
-          >
+          <small>审批和发布均写入审计、事件与事务消息；回滚通过后端 保留全部历史。</small>
         </section>
         <footer>
-          <button
-            v-if="selected.status === 'draft'"
-            :disabled="busy"
-            @click="action('submit')"
-          >
+          <button v-if="selected.status === 'draft'" :disabled="busy" @click="action('submit')">
             提交审批</button
           ><button
             v-if="
@@ -292,16 +258,11 @@ onMounted(load);
             <p>不使用默认费用</p>
             <h3 id="new-cost-rule">新建费用规则</h3>
           </div>
-          <button type="button" aria-label="关闭" @click="showCreate = false">
-            ×
-          </button>
+          <button type="button" aria-label="关闭" @click="showCreate = false">×</button>
         </header>
         <div>
-          <label
-            >市场<input v-model="form.market" required maxlength="40" /></label
-          ><label
-            >平台<input v-model="form.platform" required maxlength="80"
-          /></label>
+          <label>市场<input v-model="form.market" required maxlength="40" /></label
+          ><label>平台<input v-model="form.platform" required maxlength="80" /></label>
         </div>
         <label
           >版本号<input
@@ -309,11 +270,8 @@ onMounted(load);
             required
             maxlength="64"
             placeholder="例如 US-AMZ-2026-01" /></label
-        ><label
-          >规则名称<input v-model="form.name" required maxlength="160" /></label
-        ><label
-          >生效日期<input v-model="form.effective_from" required type="date"
-        /></label>
+        ><label>规则名称<input v-model="form.name" required maxlength="160" /></label
+        ><label>生效日期<input v-model="form.effective_from" required type="date" /></label>
         <fieldset>
           <legend>显式费用</legend>
           <label
@@ -347,9 +305,7 @@ onMounted(load);
               type="number"
               min="0"
               step="0.000001" /></label
-          ><label
-            >履约币种<input v-model="form.currency" required maxlength="3"
-          /></label>
+          ><label>履约币种<input v-model="form.currency" required maxlength="3" /></label>
         </fieldset>
         <aside>不提供默认费率；每个数字都成为版本化规则的一部分。</aside>
         <footer>

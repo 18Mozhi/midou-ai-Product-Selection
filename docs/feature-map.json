@@ -94,7 +94,7 @@
       "codeStyleVerifier": "../scripts/verify-code-style.mjs",
       "repositorySqlPolicy": "new or modified Repository SQL lines must not exceed 160 characters; violations fail as repository_sql_max_line_length_failed while untouched historical debt follows touch-to-govern cleanup",
       "workerHandlerBoundary": "apps/worker/src/index.ts owns dependency assembly, non-reentrant polling, logs and priority scheduling only; every business queue handler remains in its independent worker or scheduler module and domain SQL is forbidden in the entrypoint",
-      "frontendApiClientBoundary": "the shared frontend JSON client owns credentials, request_id, trace_id, write idempotency, JSON envelopes and standardized server message/action error mapping; navigation, discovery, home, local identity, tenancy selection, landing resolution, personal center, theme settings and API readiness surfaces do not call fetch directly",
+      "frontendApiClientBoundary": "the shared frontend JSON client owns credentials, request_id, trace_id, write idempotency, JSON envelopes and standardized server message/action error mapping; navigation, discovery, home, local identity, tenancy selection, landing resolution, personal center, theme settings, API readiness, business tasks, trends, scoring rules and cost rules do not call fetch directly",
       "productionProductCommand": "npm run verify:production-product",
       "userGuide": "../docs/user-guide-ai-selection.md",
       "functionalScope": "P00-P08 incremental code style gate, software build, functional Node/Python tests, desktop/390 E2E, docs, plans, release matrix and security gate; excludes same-commit deployment evidence, disk diagnostics, production load tests and capacity claims",
@@ -897,6 +897,7 @@
       "scope": "organization and workspace scoped manual and automatic trend topics signals timelines keywords follows and monitoring rules",
       "presentationBoundary": "the trend list precedes the collapsed help panel and exposes source count, source freshness and measured-or-insufficient confidence on every item; follow, monitoring and opportunity conversion remain distinct actions",
       "timelineFilter": "trend detail returns aggregate timeline plus source-scoped points grouped by the real provider_id and publisher label so the browser can filter without inventing client-side attribution",
+      "apiClientBoundary": "trend reads, follow/relevance writes, monitoring-rule writes and source refresh use the shared frontend API client with correlation, idempotency and standardized recovery hints",
       "projection": "Baota Node Worker scans normalized records, leases idempotent projection jobs and projects manual Google News plus every code-owned automatic Google/non-Google RSS, forum and fixed public marketplace source; market and language derive from the source catalog while unsupported records terminate as succeeded_empty",
       "automaticProductDiscovery": "only concrete product evidence with a product URL or explicit price plus image creates an automatic opportunity; every newly discovered Amazon product automatically queues a high-priority public-page competitor snapshot with page_url and Made-in-China plus EC21 supplier searches using the supplier-keywords-v2 auditable generic keyword contract capped at 120 characters and preserving the requested URL across the restricted proxy transport; an optional supplier failure does not block the next source, and the Worker backfills exactly one missing or legacy malformed downstream task for historical automatic products; community posts and seller news remain trend evidence unless a user monitoring rule explicitly matches",
       "monitoringRuleEvaluation": "each rule stores a 15–10080 minute interval and source cursor; the Baota Worker schedules market-matching sources with the rule keywords, then every newly projected topic evaluates include and negative keywords plus market and language; matched topics are followed, promoted to evidence-backed opportunities and auditable",
@@ -987,6 +988,7 @@
       ],
       "scope": "organization and workspace scoped versioned rules inputs jobs immutable runs components approvals and rollback",
       "truthBoundary": "no default weights thresholds or missing scores; below 50 percent is insufficient and recommendation requires at least 80 percent plus market competition and cost evidence",
+      "apiClientBoundary": "score-rule reads and lifecycle writes use the shared frontend API client without changing rule versions, evidence thresholds or approval transitions",
       "permission": "opportunity:read for rule and explanation reads; opportunity:decide for draft submit input and rerun; opportunity:approve for approve reject activate and rollback",
       "audit": "rule transitions input writes and scoring runs persist correlated opportunity_events and opportunity_outbox while historical runs remain immutable",
       "configuration": [
@@ -1024,6 +1026,7 @@
       ],
       "scope": "organization and workspace scoped versioned fee rules dual approvals exchange quotes cost inputs jobs immutable profit runs components and rollback",
       "truthBoundary": "all four fees are explicit; missing required inputs or an approved historical exchange rate stays insufficient_data and never emits numeric ROI",
+      "apiClientBoundary": "cost-rule reads and lifecycle writes use the shared frontend API client without browser-side ROI calculation or inferred fee values",
       "permission": "opportunity:read for rules and profit analysis; cost:confirm for rates inputs and reruns; opportunity:approve for rule creation approval publish reject and rollback",
       "audit": "rule transitions rates inputs and profit runs persist correlated opportunity_events and opportunity_outbox while historical inputs and runs remain immutable",
       "configuration": [
@@ -1176,6 +1179,7 @@
       ],
       "scope": "organization and workspace scoped business tasks with create edit auditable soft-delete start complete cancel delay transfer progress immutable comments events idempotent operations audit and outbox",
       "truthBoundary": "SLA is derived only from persisted due_at; missing upstream deadlines remain not_set and M05-02 approvals M05-03 notifications M05-04 SSE are not fabricated",
+      "apiClientBoundary": "task list, detail, create, edit, comments, progress, soft-delete and single or batch lifecycle actions use the shared frontend API client; each write retains its independent idempotency key",
       "permission": "task:read for reads, task:create for creation, task:update for content progress soft-delete status due and comments, task:assign for transfer",
       "configuration": [
         "BUSINESS_TASK_PROJECTION_POLL_MS",

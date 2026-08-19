@@ -1,19 +1,13 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import { statusLabel } from "../ui/status-labels";
 import "../trends.css";
 import "../trends-quality.css";
 
-type State =
-  | "loading"
-  | "ready"
-  | "empty"
-  | "error"
-  | "expired"
-  | "forbidden"
-  | "blocked";
+type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Topic {
   id: string;
   title: string;
@@ -86,6 +80,7 @@ const props = defineProps<{
     organizationId: string;
     workspaceId: string;
   }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   topics = ref<Topic[]>([]),
   selected = ref<Detail | null>(null),
@@ -120,47 +115,54 @@ const confidenceLabel = (topic: Topic) =>
   topic.confidence.status === "measured"
     ? `可信度 ${topic.confidence.score} / 100`
     : "可信度 数据不足";
-const stateFrom = (status: number): State =>
-  status === 401
+const stateFrom = (kind: ApiFailureKind): State =>
+  kind === "expired"
     ? "expired"
-    : status === 403
+    : kind === "forbidden"
       ? "forbidden"
-      : [408, 425, 429, 502, 503, 504].includes(status)
+      : kind === "blocked" || kind === "rate_limited"
         ? "blocked"
         : "error";
 const timelinePoints = computed(() => {
-    if (!selected.value || !timelineSource.value)
-      return selected.value?.timeline ?? [];
+    if (!selected.value || !timelineSource.value) return selected.value?.timeline ?? [];
     return (
-      selected.value.timeline_sources.find(
-        (source) => source.source_id === timelineSource.value,
-      )?.points.map((point) => ({ ...point, source_count: 1 })) ?? []
+      selected.value.timeline_sources
+        .find((source) => source.source_id === timelineSource.value)
+        ?.points.map((point) => ({ ...point, source_count: 1 })) ?? []
     );
   }),
   timelineSourceLabel = computed(
     () =>
-      selected.value?.timeline_sources.find(
-        (source) => source.source_id === timelineSource.value,
-      )?.source_label ?? "全部来源",
+      selected.value?.timeline_sources.find((source) => source.source_id === timelineSource.value)
+        ?.source_label ?? "全部来源",
   ),
   maxSignal = computed(() =>
-    Math.max(
-      1,
-      ...(timelinePoints.value.map((item) => item.signal_count) ?? [1]),
-    ),
+    Math.max(1, ...(timelinePoints.value.map((item) => item.signal_count) ?? [1])),
   );
-async function read(path: string) {
-  const response = await fetch(`${props.apiBaseUrl}${path}`, {
-      credentials: "include",
-      headers: { accept: "application/json" },
-    }),
-    body = await response.json().catch(() => null);
-  requestId.value = body?.request_id ?? "";
-  if (!response.ok) {
-    state.value = stateFrom(response.status);
-    throw new Error("read_failed");
+const opportunityRoute = computed(() => {
+  const topic = selected.value;
+  if (!topic) return "/opportunities";
+  return (
+    "/opportunities" +
+    `?source_topic_id=${encodeURIComponent(topic.id)}` +
+    `&name=${encodeURIComponent(topic.title)}` +
+    `&market=${encodeURIComponent(topic.market)}` +
+    `&category=${encodeURIComponent(topic.category || "")}`
+  );
+});
+async function read<T = any>(path: string) {
+  try {
+    const response = await request<T>(path);
+    requestId.value = response.request_id;
+    return response;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+      state.value = stateFrom(error.kind);
+    }
+    throw error;
   }
-  return body;
 }
 async function load() {
   state.value = "loading";
@@ -181,14 +183,12 @@ async function load() {
       state.value = "empty";
       return;
     }
-    const current =
-      topics.value.find((item) => item.id === selected.value?.id) ??
-      topics.value[0];
+    const current = topics.value.find((item) => item.id === selected.value?.id) ?? topics.value[0];
     selected.value = (await read(`/trends/${current.id}`)).data;
     timelineSource.value = "";
     state.value = "ready";
   } catch (error) {
-    if ((error as Error).message !== "read_failed") state.value = "blocked";
+    if (!(error instanceof ApiClientError)) state.value = "blocked";
   }
 }
 async function selectTopic(topic: Topic) {
@@ -204,24 +204,18 @@ async function write(path: string, method: string, body?: unknown) {
   busy.value = path;
   message.value = "";
   try {
-    const response = await fetch(`${props.apiBaseUrl}${path}`, {
-        method,
-        credentials: "include",
-        headers: {
-          accept: "application/json",
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-        ...(body ? { body: JSON.stringify(body) } : {}),
-      }),
-      result = await response.json().catch(() => null);
-    requestId.value = result?.request_id ?? "";
-    if (!response.ok) {
-      message.value = result?.error?.action_hint ?? "操作未完成。";
+    const response = await request<any>(path, {
+      method,
+      ...(body ? { body } : {}),
+    });
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
       return null;
     }
-    return result.data;
-  } catch {
     message.value = "依赖暂不可用，未写入任何状态。";
     return null;
   } finally {
@@ -315,34 +309,19 @@ onMounted(load);
       <div>
         <p>全网热点雷达</p>
         <h2>系统自动找热点，你也可以马上刷新</h2>
-        <span
-          >新闻、电商、数据与社区频道每 15
-          分钟自动采集；所有结论都能打开原文核对。</span
-        >
+        <span>新闻、电商、数据与社区频道每 15 分钟自动采集；所有结论都能打开原文核对。</span>
       </div>
       <div>
-        <button
-          type="button"
-          :disabled="Boolean(busy)"
-          @click="refreshHotspots"
-        >
+        <button type="button" :disabled="Boolean(busy)" @click="refreshHotspots">
           ↻ 立即获取热点</button
         ><button type="button" @click="showRule = true">＋ 创建监控</button
-        ><button class="secondary" type="button" @click="tab = 'rules'">
-          订阅管理
-        </button>
+        ><button class="secondary" type="button" @click="tab = 'rules'">订阅管理</button>
       </div>
     </header>
     <nav class="trend-tabs" aria-label="热点趋势视图">
-      <button
-        :aria-current="tab === 'topics' ? 'page' : undefined"
-        @click="tab = 'topics'"
-      >
+      <button :aria-current="tab === 'topics' ? 'page' : undefined" @click="tab = 'topics'">
         趋势主题</button
-      ><button
-        :aria-current="tab === 'rules' ? 'page' : undefined"
-        @click="tab = 'rules'"
-      >
+      ><button :aria-current="tab === 'rules' ? 'page' : undefined" @click="tab = 'rules'">
         监控规则 <b>{{ rules.length }}</b>
       </button>
     </nav>
@@ -357,10 +336,7 @@ onMounted(load);
             <option value="US">US</option>
           </select></label
         ><label
-          >分类<input
-            v-model="filters.category"
-            maxlength="80"
-            placeholder="全部分类" /></label
+          >分类<input v-model="filters.category" maxlength="80" placeholder="全部分类" /></label
         ><label
           >状态<select v-model="filters.status">
             <option value="active">活跃</option>
@@ -369,10 +345,7 @@ onMounted(load);
             <option value="">全部状态</option>
           </select></label
         ><label class="search"
-          >关键词<input
-            v-model="filters.q"
-            maxlength="200"
-            placeholder="搜索主题或关键词" /></label
+          >关键词<input v-model="filters.q" maxlength="200" placeholder="搜索主题或关键词" /></label
         ><button type="submit">筛选</button>
       </form>
       <UiStatePanel
@@ -405,19 +378,14 @@ onMounted(load);
               ><small
                 >{{ topic.source_count }} 个来源 · 新鲜度
                 {{ freshness(topic.source_fresh_at) }}</small
-              ><small>{{ confidenceLabel(topic) }}</small
-              ></span
+              ><small>{{ confidenceLabel(topic) }}</small></span
             ><span class="topic-heat"
               ><b>{{ topic.heat.value }}</b
               ><small>热度 / 条信号</small></span
             ><em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
           </button>
         </section>
-        <article
-          v-if="selected"
-          class="trend-detail"
-          :aria-busy="busy === 'detail'"
-        >
+        <article v-if="selected" class="trend-detail" :aria-busy="busy === 'detail'">
           <header>
             <div>
               <a href="#trend-list">← 返回趋势列表</a>
@@ -440,12 +408,8 @@ onMounted(load);
             <button type="button" @click="follow">
               {{ selected.followed ? "★ 已关注" : "☆ 关注" }}</button
             ><button type="button" @click="showRule = true">创建监控</button
-            ><a
-              :href="`/opportunities?source_topic_id=${encodeURIComponent(selected.id)}&name=${encodeURIComponent(selected.title)}&market=${encodeURIComponent(selected.market)}&category=${encodeURIComponent(selected.category || '')}`"
-              >转为机会</a
-            ><button class="quiet" type="button" @click="irrelevant = true">
-              标记无关
-            </button>
+            ><a :href="opportunityRoute">转为机会</a
+            ><button class="quiet" type="button" @click="irrelevant = true">标记无关</button>
           </div>
           <section class="trend-conclusion">
             <div>
@@ -470,9 +434,7 @@ onMounted(load);
                 <dt>环比</dt>
                 <dd>
                   {{
-                    selected.momentum_percent == null
-                      ? "数据不足"
-                      : `${selected.momentum_percent}%`
+                    selected.momentum_percent == null ? "数据不足" : `${selected.momentum_percent}%`
                   }}
                 </dd>
               </div>
@@ -498,8 +460,7 @@ onMounted(load);
               ><span
                 ><strong>{{ item.title }}</strong
                 ><small
-                  >{{ item.publisher }} · 发布
-                  {{ freshness(item.published_at) }} · 采集
+                  >{{ item.publisher }} · 发布 {{ freshness(item.published_at) }} · 采集
                   {{ freshness(item.observed_at) }}</small
                 ></span
               ><b>查看原文 ↗</b></a
@@ -551,8 +512,7 @@ onMounted(load);
                   v-for="item in selected.keywords"
                   :key="`${item.type}-${item.keyword}`"
                   :data-type="item.type"
-                  >{{ item.keyword
-                  }}<small>{{ item.type }} · {{ item.market }}</small></span
+                  >{{ item.keyword }}<small>{{ item.type }} · {{ item.market }}</small></span
                 >
               </div>
             </section>
@@ -564,7 +524,9 @@ onMounted(load);
         <div>
           <p>热点趋势怎么看</p>
           <h3>不是热搜榜，而是可追溯的选品信号</h3>
-          <span>系统定时抓取公开页面，把同一话题合并后展示热度、增长速度、来源数量和证据；点击任一热点可核对原始来源。</span>
+          <span
+            >系统定时抓取公开页面，把同一话题合并后展示热度、增长速度、来源数量和证据；点击任一热点可核对原始来源。</span
+          >
         </div>
         <ol>
           <li><b>热度</b><span>当前收集到的相关信号数</span></li>
@@ -584,27 +546,20 @@ onMounted(load);
         <button type="button" @click="showRule = true">＋ 创建规则</button>
       </header>
       <UiStatePanel
-        v-if="
-          state === 'loading' ||
-          ['error', 'expired', 'forbidden', 'blocked'].includes(state)
-        "
+        v-if="state === 'loading' || ['error', 'expired', 'forbidden', 'blocked'].includes(state)"
         :kind="state"
         :request-id="requestId"
         @primary="load"
       />
       <div v-else-if="!rules.length" class="trend-rule-empty">
-        <strong>还没有监控规则</strong
-        ><span>按关键词、市场和语言建立第一条规则。</span
+        <strong>还没有监控规则</strong><span>按关键词、市场和语言建立第一条规则。</span
         ><button type="button" @click="showRule = true">创建监控规则</button>
       </div>
       <article v-for="item in rules" :key="item.id">
         <div>
           <b :data-status="item.status">{{ statusLabel(item.status) }}</b>
           <h4>{{ item.name }}</h4>
-          <span
-            >{{ item.market }} · {{ item.language }} ·
-            {{ item.category || "全部分类" }}</span
-          >
+          <span>{{ item.market }} · {{ item.language }} · {{ item.category || "全部分类" }}</span>
         </div>
         <p>
           <strong>包含</strong>{{ item.include_keywords.join(" · ")
@@ -624,11 +579,7 @@ onMounted(load);
           <div>
             <dt>最后评估</dt>
             <dd>
-              {{
-                item.last_evaluated_at
-                  ? freshness(item.last_evaluated_at)
-                  : "尚未评估"
-              }}
+              {{ item.last_evaluated_at ? freshness(item.last_evaluated_at) : "尚未评估" }}
             </dd>
           </div>
           <div>
@@ -654,32 +605,20 @@ onMounted(load);
             <p>监控规则</p>
             <h3 id="trend-rule-title">创建趋势监控</h3>
           </div>
-          <button type="button" aria-label="关闭" @click="showRule = false">
-            ×
-          </button>
+          <button type="button" aria-label="关闭" @click="showRule = false">×</button>
         </header>
-        <label
-          >规则名称<input v-model="form.name" required maxlength="120" /></label
+        <label>规则名称<input v-model="form.name" required maxlength="120" /></label
         ><label
           >包含关键词（逗号分隔）<input
             v-model="form.include_keywords"
             required
             maxlength="500" /></label
-        ><label
-          >排除关键词（可选）<input
-            v-model="form.negative_keywords"
-            maxlength="500"
-        /></label>
+        ><label>排除关键词（可选）<input v-model="form.negative_keywords" maxlength="500" /></label>
         <div>
-          <label
-            >市场<input v-model="form.market" required maxlength="40" /></label
-          ><label
-            >语言<input v-model="form.language" required maxlength="40"
-          /></label>
+          <label>市场<input v-model="form.market" required maxlength="40" /></label
+          ><label>语言<input v-model="form.language" required maxlength="40" /></label>
         </div>
-        <label
-          >分类（可选）<input v-model="form.category" maxlength="80"
-        /></label>
+        <label>分类（可选）<input v-model="form.category" maxlength="80" /></label>
         <label
           >自动采集周期<select v-model.number="form.collection_interval_minutes">
             <option :value="15">每 15 分钟</option>
@@ -691,10 +630,7 @@ onMounted(load);
             <option :value="1440">每天</option>
           </select></label
         >
-        <aside>
-          <strong>通知渠道</strong
-          ><span>站内通知。邮件服务尚未确认，不能选择。</span>
-        </aside>
+        <aside><strong>通知渠道</strong><span>站内通知。邮件服务尚未确认，不能选择。</span></aside>
         <footer>
           <button type="button" @click="showRule = false">取消</button
           ><button type="submit" :disabled="Boolean(busy)">
