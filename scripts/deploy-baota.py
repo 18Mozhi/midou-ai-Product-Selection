@@ -99,9 +99,17 @@ def copy_tree(source: Path, target: Path) -> None:
     shutil.copytree(source, target, ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"))
 
 
+def local_npm_executable() -> str:
+    command = "npm.cmd" if os.name == "nt" else "npm"
+    executable = shutil.which(command)
+    if not executable:
+        raise RuntimeError(f"local build command is unavailable: {command}")
+    return executable
+
+
 def build_package(repo: Path, build_sha: str, skip_build: bool, temp_root: Path) -> Path:
     if not skip_build:
-        subprocess.run(["npm", "run", "build"], cwd=repo, check=True)
+        subprocess.run([local_npm_executable(), "run", "build"], cwd=repo, check=True)
 
     package_root = temp_root / "package"
     frontend = package_root / "frontend"

@@ -10,6 +10,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /apply-deployment-migrations\.mjs/);
   assert.match(deploy, /0040_platform_messages\.up\.sql/);
   assert.match(deploy, /0041_member_workspace_tasks\.up\.sql/);
+  assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
   assert.match(deploy, /remote_python\(client, panel_deploy_source/);
   assert.ok(
     deploy.indexOf("ssh_exec(client, migrate") <
