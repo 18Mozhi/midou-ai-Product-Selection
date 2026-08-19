@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { statusLabel } from "../ui/status-labels";
+import ConfirmDialog from "./ConfirmDialog.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const state = ref("loading"),
   data = ref<any>(null),
@@ -10,7 +11,29 @@ const state = ref("loading"),
   timeWindow = ref("24h"),
   errorCode = ref(""),
   requestId = ref(""),
-  hint = ref("");
+  hint = ref(""),
+  selectedDeadLetterIds = ref<string[]>([]),
+  batchReason = ref(""),
+  batchPreview = ref(false),
+  batchId = ref(""),
+  batchBusy = ref(false),
+  batchNotice = ref("");
+const selectedDeadLetters = computed(() =>
+    (data.value?.dead_letters ?? []).filter(
+      (item: any) => item.status === "open" && selectedDeadLetterIds.value.includes(item.id),
+    ),
+  ),
+  batchImpact = computed(() => {
+    const items = selectedDeadLetters.value,
+      roots = new Map<string, number>();
+    for (const item of items) roots.set(item.error_code, (roots.get(item.error_code) ?? 0) + 1);
+    const rootSummary = [...roots.entries()]
+        .map(([code, total]) => `${errorLabel(code)} ${total} 条`)
+        .join("、"),
+      organizationCount = new Set(items.map((item: any) => item.organization_id)).size,
+      workspaceCount = new Set(items.map((item: any) => item.workspace_id)).size;
+    return `${items.length} 条开放死信；${organizationCount} 个组织；${workspaceCount} 个工作区；根因：${rootSummary || "无"}。`;
+  });
 async function load() {
   state.value = "loading";
   const q = new URLSearchParams();
@@ -39,6 +62,10 @@ async function load() {
       return;
     }
     data.value = b.data;
+    const openIds = new Set(
+      b.data.dead_letters.filter((item: any) => item.status === "open").map((item: any) => item.id),
+    );
+    selectedDeadLetterIds.value = selectedDeadLetterIds.value.filter((id) => openIds.has(id));
     state.value =
       b.data.sources.length +
       b.data.task_states.length +
@@ -94,6 +121,63 @@ const when = (v: string | null) =>
     errorCode.value = errorCode.value === value ? "" : value;
     await load();
   };
+
+function toggleDeadLetter(id: string, checked: boolean) {
+  if (!checked) {
+    selectedDeadLetterIds.value = selectedDeadLetterIds.value.filter((value) => value !== id);
+    return;
+  }
+  if (selectedDeadLetterIds.value.length >= 20) {
+    batchNotice.value = "每批最多选择 20 条开放死信。";
+    return;
+  }
+  selectedDeadLetterIds.value = [...selectedDeadLetterIds.value, id];
+}
+
+function previewBatchReplay() {
+  if (!selectedDeadLetters.value.length) {
+    batchNotice.value = "请先选择要重放的开放死信。";
+    return;
+  }
+  if (batchReason.value.trim().length < 2 || batchReason.value.length > 500) {
+    batchNotice.value = "重放原因需要 2–500 字符。";
+    return;
+  }
+  batchId.value = crypto.randomUUID();
+  batchPreview.value = true;
+}
+
+async function confirmBatchReplay() {
+  batchBusy.value = true;
+  const succeeded = new Set<string>();
+  let failed = 0;
+  for (const item of selectedDeadLetters.value) {
+    try {
+      const response = await fetch(
+        `${props.apiBaseUrl}/platform/collection/tasks/${item.task_id}/replay`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            accept: "application/json",
+            "content-type": "application/json",
+            "idempotency-key": `dead-batch:${batchId.value}:${item.task_id}`,
+          },
+          body: JSON.stringify({ reason: batchReason.value.trim() }),
+        },
+      );
+      if (response.ok) succeeded.add(item.id);
+      else failed += 1;
+    } catch {
+      failed += 1;
+    }
+  }
+  selectedDeadLetterIds.value = selectedDeadLetterIds.value.filter((id) => !succeeded.has(id));
+  batchNotice.value = `批量重放完成：成功 ${succeeded.size} 条，失败 ${failed} 条；每条均保留独立任务历史、幂等记录与审计。`;
+  batchPreview.value = false;
+  batchBusy.value = false;
+  await load();
+}
 </script>
 <template>
   <section class="collection-ops">
@@ -266,6 +350,33 @@ const when = (v: string | null) =>
         </section>
         <section>
           <h3>开放与已重放死信</h3>
+          <p v-if="batchNotice" aria-live="polite">{{ batchNotice }}</p>
+          <details>
+            <summary>批量安全重放</summary>
+            <p>
+              只处理明确勾选的开放死信，每批最多 20 条；执行前会固定展示根因、组织和工作区影响范围。
+            </p>
+            <label v-for="d in data.dead_letters" :key="`select-${d.id}`">
+              <input
+                type="checkbox"
+                :checked="selectedDeadLetterIds.includes(d.id)"
+                :disabled="d.status !== 'open' || batchBusy"
+                @change="toggleDeadLetter(d.id, ($event.target as HTMLInputElement).checked)"
+              />
+              选择{{ errorLabel(d.error_code) }}死信 {{ d.task_id.slice(0, 8) }}…
+            </label>
+            <label>
+              批量重放原因
+              <textarea
+                v-model="batchReason"
+                maxlength="500"
+                placeholder="说明恢复条件和重放原因（2–500 字）"
+              ></textarea>
+            </label>
+            <button type="button" :disabled="batchBusy" @click="previewBatchReplay">
+              预览批量重放
+            </button>
+          </details>
           <ul>
             <li v-for="d in data.dead_letters" :key="d.id">
               <b>{{ errorLabel(d.error_code) }}</b
@@ -283,5 +394,16 @@ const when = (v: string | null) =>
       </div>
       <footer>观测时间 {{ when(data.observed_at) }} · request_id {{ requestId }}</footer></template
     >
+    <ConfirmDialog
+      :open="batchPreview"
+      title="确认批量重放开放死信？"
+      description="系统将逐条调用既有受控重放事务；并发状态变化或已处理任务会安全失败，不会覆盖原任务。"
+      :impact="batchImpact"
+      confirm-label="确认批量重放"
+      destructive
+      confirmation-text="确认重放"
+      @cancel="batchPreview = false"
+      @confirm="confirmBatchReplay"
+    />
   </section>
 </template>

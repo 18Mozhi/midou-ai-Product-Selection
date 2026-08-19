@@ -137,6 +137,71 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
   });
 });
 
+test("M06-03.A17 batch safely replays explicitly selected open dead letters", async ({ page }) => {
+  const secondTaskId = "00000000-0000-4000-8000-000000000641";
+  const batchData = {
+    ...data,
+    dead_letters: [
+      data.dead_letters[0],
+      {
+        ...data.dead_letters[0],
+        id: "d2",
+        task_id: secondTaskId,
+        organization_id: "00000000-0000-4000-8000-000000000642",
+        workspace_id: "00000000-0000-4000-8000-000000000643",
+        error_code: "timeout",
+      },
+    ],
+  };
+  const replays: Array<{ url: string; key: string; body: { reason: string } }> = [];
+
+  await navigation(page);
+  await page.route("**/api/v1/platform/collection/console?**", (route) =>
+    route.fulfill({ json: envelope(batchData) }),
+  );
+  await page.route("**/api/v1/platform/collection/tasks/*/replay", async (route) => {
+    const request = route.request();
+    replays.push({
+      url: request.url(),
+      key: request.headers()["idempotency-key"] ?? "",
+      body: request.postDataJSON(),
+    });
+    await route.fulfill({
+      json: envelope({ task: { id: "00000000-0000-4000-8000-000000000650" } }),
+    });
+  });
+
+  await page.goto("/platform-admin/collection/overview");
+  await page.getByText("批量安全重放").click();
+  await page.getByRole("checkbox").nth(0).check();
+  await page.getByRole("checkbox").nth(1).check();
+  await page
+    .getByPlaceholder("说明恢复条件和重放原因（2–500 字）")
+    .fill("解析器已完成固定样本回放");
+  await page.getByRole("button", { name: "预览批量重放" }).click();
+
+  await expect(page.getByRole("heading", { name: "确认批量重放开放死信？" })).toBeVisible();
+  await expect(page.getByText(/2 条开放死信；2 个组织；2 个工作区/)).toBeVisible();
+  await expect(page.getByText(/页面解析失败 1 条/)).toBeVisible();
+  await expect(page.getByText(/请求超时 1 条/)).toBeVisible();
+  await page.getByLabel("我已阅读影响范围，并确认只处理上述对象").check();
+  await page.getByPlaceholder("确认重放").fill("确认重放");
+  await page.getByRole("button", { name: "确认批量重放", exact: true }).click();
+
+  await expect.poll(() => replays.length).toBe(2);
+  await expect(page.getByText(/批量重放完成：成功 2 条，失败 0 条/)).toBeVisible();
+  expect(replays.map((replay) => replay.body.reason)).toEqual([
+    "解析器已完成固定样本回放",
+    "解析器已完成固定样本回放",
+  ]);
+  expect(new Set(replays.map((replay) => replay.key)).size).toBe(2);
+  for (const replay of replays) {
+    expect(replay.key).toMatch(/^dead-batch:[0-9a-f-]{36}:[0-9a-f-]{36}$/);
+  }
+  expect(replays[0].url).toContain(data.dead_letters[0].task_id);
+  expect(replays[1].url).toContain(secondTaskId);
+});
+
 test("M06-03.A08/A16 empty forbidden blocked", async ({ page }) => {
   await navigation(page);
   let status = 200;

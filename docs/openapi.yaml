@@ -4536,7 +4536,7 @@ paths:
   /platform/collection/tasks/{taskId}/replay:
     post:
       summary: Manually replay one dead-letter task while retaining all history
-      description: Requires collection:replay, same-origin Origin, Idempotency-Key and a 2-500 character reason.
+      description: Requires collection:replay, same-origin Origin, Idempotency-Key and a 2-500 character reason. The operations console may compose at most 20 independently selected open dead letters as separate calls after an impact preview; every call remains independently authorized, idempotent and audited and retains its original task history.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
