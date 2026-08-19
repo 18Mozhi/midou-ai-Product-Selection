@@ -33,6 +33,7 @@
     "build:web": "vite build --config apps/web/vite.config.ts",
     "build": "npm run build:contracts && npm run build:config && npm run build:database && npm run build:redis && npm run build:storage && npm run build:credentials && npm run build:provider-adapters && npm run build:playwright-crawler && npm run build:collection-tasks && npm run build:data-quality && npm run build:runtime-topology && npm run build:provider-sources && npm run build:auth && npm run build:tenancy && npm run build:authorization && npm run build:resource-grants && npm run build:audit && npm run build:preferences && npm run build:api && npm run build:worker && npm run build:backend && npm run build:web",
     "start:backend": "node apps/backend/dist/server.js",
+    "start:e2e-api": "npm run build:contracts && npm run build:api && node scripts/run-playwright-api-test-server.mjs",
     "dev:api": "npm run build:contracts && node --watch apps/api/dist/server.js",
     "dev:worker": "npm run build:contracts && node --watch apps/worker/dist/index.js",
     "dev:web": "vite --config apps/web/vite.config.ts",
