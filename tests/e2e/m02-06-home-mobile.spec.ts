@@ -19,6 +19,12 @@ test('M02-06.A07/A08/A15 verified home dashboard is responsive and visual', asyn
   await expect(page.getByRole('heading', { name: '今天最值得做什么？' })).toBeVisible();
   await expect(page.getByText('处理逾期采集复核')).toBeVisible();
   await expect(page.getByText('竞品来源延迟')).toBeVisible();
+  await expect(page.getByRole('heading', { name: '异常与数据健康' })).toBeVisible();
+  const changeAction = page.getByRole('link', { name: /户外照明热度变化.*去处理/ });
+  await expect(changeAction).toHaveAttribute('href', '/trends/1');
+  await expect(page.locator('.home-priority-grid')).toContainText('今日行动');
+  await expect(page.locator('.home-priority-grid')).toContainText('异常与数据健康');
+  await expect(page.locator('.home-secondary')).toContainText('变化与关注');
   await expect(page).toHaveScreenshot('m02-06-home.png', { fullPage: true });
 });
 

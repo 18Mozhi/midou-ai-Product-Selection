@@ -4,7 +4,7 @@
 
 1. 在宝塔 MySQL 5.7 使用 `product_scout` 业务账号执行 `0015b_home_dashboard_m02_06.up.sql`，确认表字符集为 `utf8mb4`、UUID 外键为 ASCII。
 2. 通过宝塔 Node 项目发布并重启 Node API，使 `/api/v1/me/home-dashboard` 生效；通过宝塔网站发布 Vue Web 静态资源。Node Worker、Python Crawler 和 Redis 无变更，不重启，不创建面板外服务。
-3. 不新增环境变量。验证桌面与 390px `/home`、空状态三个入口、行动排序、变化来源数/时间、仅本人健康提示，以及 `/opportunities/{uuid}` 的诚实骨架。
+3. 不新增环境变量。验证桌面与 390px `/home` 首屏只突出今日行动和异常、变化项有明确“去处理”动作、首页无全链路教学、空状态三个入口、行动排序、变化来源数/时间、仅本人健康提示，以及 `/opportunities/{uuid}` 的诚实骨架。
 
 ## 故障定位
 

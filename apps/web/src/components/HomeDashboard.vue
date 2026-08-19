@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../home-dashboard.css";
+import "../home-dashboard-priority.css";
 type State =
   "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Item {
@@ -105,13 +106,7 @@ onMounted(load);
             <dd>{{ data?.actions.length ?? 0 }}</dd>
           </div>
           <div>
-            <dt>值得关注</dt>
-            <dd>
-              {{ (data?.changes.length ?? 0) + (data?.follows.length ?? 0) }}
-            </dd>
-          </div>
-          <div>
-            <dt>健康提示</dt>
+            <dt>异常与健康</dt>
             <dd>{{ data?.health.length ?? 0 }}</dd>
           </div>
         </dl>
@@ -134,7 +129,8 @@ onMounted(load);
           >
         </nav>
       </section>
-      <div v-else class="home-grid">
+      <template v-else>
+        <div class="home-priority-grid">
         <section class="home-actions">
           <header>
             <div>
@@ -166,48 +162,11 @@ onMounted(load);
             </dl></a
           >
         </section>
-        <section class="home-radar">
-          <header>
-            <div>
-              <p>02 / 信号</p>
-              <h3>变化雷达</h3>
-            </div>
-            <a href="/trends">全部变化 →</a>
-          </header>
-          <a v-for="item in data?.changes" :key="item.id" :href="item.route"
-            ><i>⌁</i>
-            <div>
-              <strong>{{ item.title }}</strong
-              ><small>{{ item.reason }}</small>
-            </div>
-            <span
-              >{{ item.source_count ?? 0 }} 来源<br />{{
-                date(item.observed_at)
-              }}</span
-            ></a
-          >
-        </section>
-        <section class="home-follows">
-          <header>
-            <div>
-              <p>03 / 关注中</p>
-              <h3>我的关注</h3>
-            </div>
-          </header>
-          <a v-for="item in data?.follows" :key="item.id" :href="item.route"
-            ><i>◎</i>
-            <div>
-              <strong>{{ item.title }}</strong
-              ><small>{{ item.reason }}</small>
-            </div>
-            <span>{{ date(item.observed_at) }}</span></a
-          >
-        </section>
         <section class="home-health">
           <header>
             <div>
-              <p>04 / 可信度</p>
-              <h3>数据健康提示</h3>
+              <p>02 / 异常</p>
+              <h3>异常与数据健康</h3>
             </div>
             <span>仅影响本人</span>
           </header>
@@ -224,7 +183,62 @@ onMounted(load);
             <b>去处理 →</b></a
           >
         </section>
-      </div>
+        </div>
+        <section
+          class="home-secondary"
+          aria-labelledby="home-secondary-title"
+        >
+        <header>
+          <div>
+            <p>后续关注</p>
+            <h3 id="home-secondary-title">变化与关注</h3>
+          </div>
+          <span>完成今日行动和异常处理后再查看</span>
+        </header>
+        <div class="home-secondary-grid">
+          <section class="home-radar">
+            <header>
+              <div>
+                <p>03 / 信号</p>
+                <h3>变化雷达</h3>
+              </div>
+              <a href="/trends">全部变化 →</a>
+            </header>
+            <a v-for="item in data?.changes" :key="item.id" :href="item.route"
+              ><i>⌁</i>
+              <div>
+                <strong>{{ item.title }}</strong
+                ><small>{{ item.reason }}</small>
+              </div>
+              <span
+                >{{ item.source_count ?? 0 }} 来源<br />{{
+                  date(item.observed_at)
+                }}<b>去处理 →</b></span
+              ></a
+            >
+          </section>
+          <section class="home-follows">
+            <header>
+              <div>
+                <p>04 / 关注中</p>
+                <h3>我的关注</h3>
+              </div>
+            </header>
+            <a
+              v-for="item in data?.follows"
+              :key="item.id"
+              :href="item.route"
+              ><i>◎</i>
+              <div>
+                <strong>{{ item.title }}</strong
+                ><small>{{ item.reason }}</small>
+              </div>
+              <span>{{ date(item.observed_at) }}</span></a
+            >
+          </section>
+          </div>
+        </section>
+      </template>
       <footer class="home-truth">
         <span>共 {{ total }} 条可见投影</span
         ><span>生成时间 {{ date(data?.generated_at ?? null) }}</span

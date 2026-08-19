@@ -474,13 +474,13 @@
         "/opportunities/{opportunityId}"
       ],
       "sections": [
-        "full-chain data overview",
-        "today actions",
-        "change radar",
-        "my follows",
-        "current-user data health",
+        "first fold today actions",
+        "first fold current-user anomalies and data health",
+        "secondary actionable change radar",
+        "secondary my follows",
         "actionable empty state"
       ],
+      "presentationBoundary": "the first fold prioritizes today actions and current-user anomalies only; full-chain teaching stays in first-time onboarding; every change keeps an explicit action to its stored internal route",
       "actionOrder": [
         "overdue",
         "blocking",

@@ -1,0 +1,104 @@
+.home-hero dl {
+  grid-template-columns: repeat(2, 120px);
+}
+
+.home-priority-grid,
+.home-secondary-grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(310px, 0.65fr);
+  gap: 14px;
+}
+
+.home-priority-grid > section,
+.home-secondary-grid > section {
+  padding: 22px;
+  border: 1px solid var(--so-border);
+  border-radius: 19px;
+  background: linear-gradient(145deg, var(--so-panel), var(--so-bg-elevated));
+}
+
+.home-priority-grid > section > header,
+.home-secondary-grid > section > header {
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.home-priority-grid h3,
+.home-secondary-grid h3 {
+  font-size: 20px;
+}
+
+.home-priority-grid header p,
+.home-secondary-grid header p,
+.home-secondary > header p {
+  margin: 0 0 7px;
+  color: var(--so-primary);
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.17em;
+}
+
+.home-priority-grid header > span,
+.home-secondary-grid header > span,
+.home-secondary-grid header > a {
+  color: var(--so-text-muted);
+  font-size: 10px;
+  text-decoration: none;
+}
+
+.home-secondary {
+  margin-top: 14px;
+  padding-top: 20px;
+  border-top: 1px solid var(--so-border);
+}
+
+.home-secondary > header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.home-secondary > header h3 {
+  font-size: 20px;
+}
+
+.home-secondary > header span {
+  color: var(--so-text-muted);
+  font-size: 10px;
+}
+
+.home-secondary-grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.home-radar > a > span b {
+  display: block;
+  margin-top: 6px;
+  color: var(--so-primary);
+  font-size: 10px;
+}
+
+.home-priority-grid .home-health {
+  grid-column: auto;
+}
+
+@media (max-width: 840px) {
+  .home-hero dl {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-priority-grid,
+  .home-secondary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-secondary > header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
