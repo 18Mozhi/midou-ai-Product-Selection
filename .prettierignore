@@ -1,0 +1,10 @@
+node_modules
+**/dist
+.artifacts
+.agents
+.codex
+images-html
+browser-helper
+package-lock.json
+verification/state.json
+tests/e2e/**/*-snapshots

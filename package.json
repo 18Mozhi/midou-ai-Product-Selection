@@ -48,6 +48,9 @@
     "verify:release-matrix": "node scripts/verify-release-matrix.mjs --validate",
     "verify:security-gate": "node scripts/verify-security-gate.mjs",
     "verify:docs": "node scripts/verify-docs.mjs",
+    "format:check": "node scripts/verify-code-style.mjs --check",
+    "format:write": "node scripts/verify-code-style.mjs --write",
+    "verify:code-style": "npm run format:check",
     "verify:frontend-budget": "node scripts/verify-frontend-budget.mjs",
     "verify:crawler-chain": "node scripts/verify-crawler-production-chain.mjs",
     "verify:plans": "node scripts/verify-plans.mjs",
@@ -66,6 +69,7 @@
     "@types/node": "^26.1.2",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
+    "prettier": "3.9.6",
     "typescript": "^5.9.3",
     "vite": "^7.1.7",
     "vue-tsc": "^3.1.0"
