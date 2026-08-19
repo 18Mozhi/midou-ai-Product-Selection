@@ -13,6 +13,26 @@ test("production CSS has no global compatibility patch or important overrides", 
     assert.doesNotMatch(source, /!important/, paths[index]);
 });
 
+test("body copy and interactive controls preserve the accessibility floor", async () => {
+  const [accessibility, member] = await Promise.all(
+    ["apps/web/src/accessibility.css", "apps/web/src/member-workspace-polish.css"].map((path) =>
+      readFile(path, "utf8"),
+    ),
+  );
+
+  assert.match(accessibility, /--so-font-body:\s*1rem/);
+  assert.match(accessibility, /--so-touch-target:\s*44px/);
+  assert.match(
+    accessibility,
+    /#app\s+:where\(p, li, dd, td, label, input, select, textarea, button\)/,
+  );
+  for (const property of ["min-width", "min-height", "min-inline-size", "min-block-size"])
+    assert.match(accessibility, new RegExp(`${property}: var\\(--so-touch-target\\)`));
+  assert.match(member, /\.role-content\s*\{\s*font-size:\s*16px/);
+  assert.match(member, /textarea\s*\{\s*font-size:\s*16px/);
+  assert.doesNotMatch(member, /font-size:\s*(?:14|15)px/);
+});
+
 test("saved theme is restored before Vue mounts and modules use semantic theme tokens", async () => {
   const [main, theme, tokens, task, personal, approval, notification] = await Promise.all(
     [

@@ -342,6 +342,7 @@
         "../apps/api/src/ui-preference-routes.ts",
         "../apps/web/src/design/theme.ts",
         "../apps/web/src/design/tokens.css",
+        "../apps/web/src/accessibility.css",
         "../apps/web/src/components/ThemeStudio.vue",
         "../apps/web/src/components/NavigationShell.vue"
       ],
@@ -353,7 +354,7 @@
       "bootstrap": "cached theme is applied before Vue mounts, then reconciled with the signed-in server preference; failed writes restore the previous theme",
       "apiClientBoundary": "standalone theme settings and shell theme controls share the same frontend API client and preserve version conflict, scope, correlation and rollback behavior",
       "styleBoundary": "all production CSS consumes semantic theme tokens directly or component-local semantic aliases; the obsolete unimported global theme-compat patch is removed and the unit gate rejects every !important override",
-      "accessibility": "status icon plus text; charts include value, period, source and freshness; keyboard radiogroup and visible focus",
+      "accessibility": "status icon plus text; charts include value, period, source and freshness; keyboard radiogroup and visible focus; body copy and form controls have a computed 16px floor, while buttons, fields, role buttons and mobile navigation targets have a computed 44px by 44px floor enforced without !important",
       "async": "not applicable; preference reads and writes are synchronous and create no Worker, Crawler, queue, file, export, SSE or provider work",
       "verificationRunId": "3c8eef1b-fedd-48fe-9478-b6f38272dccf",
       "status": "module_verified"

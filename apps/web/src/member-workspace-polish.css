@@ -4,7 +4,7 @@
   line-height: 1.6;
 }
 .role-shell[data-shell="member"] .role-content {
-  font-size: 15px;
+  font-size: 16px;
 }
 .role-shell[data-shell="member"] .role-page-head h1 {
   font-size: clamp(28px, 3vw, 38px);
@@ -21,7 +21,7 @@
 .role-shell[data-shell="member"] input,
 .role-shell[data-shell="member"] select,
 .role-shell[data-shell="member"] textarea {
-  font-size: 14px;
+  font-size: 16px;
 }
 .role-context span {
   max-width: 220px;

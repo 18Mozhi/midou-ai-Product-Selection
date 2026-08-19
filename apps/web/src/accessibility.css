@@ -16,11 +16,14 @@ textarea {
   font-size: var(--so-font-body);
 }
 
-.role-content :where(p, li, dd, td, label, input, select, textarea, button) {
+#app :where(p, li, dd, td, label, input, select, textarea, button) {
   font-size: max(var(--so-font-body), 1em);
 }
 
-:where(button, input, select, textarea, [role="button"], .role-mobile-nav a) {
+#app :where(button, input, select, textarea, [role="button"], .role-mobile-nav a) {
+  min-width: var(--so-touch-target);
+  min-height: var(--so-touch-target);
+  min-inline-size: var(--so-touch-target);
   min-block-size: var(--so-touch-target);
 }
 
