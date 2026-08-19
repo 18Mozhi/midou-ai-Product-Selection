@@ -935,16 +935,13 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         :aria-current="activeItem?.path === item.path ? 'page' : undefined"
         ><i>{{ item.icon }}</i
         ><span>{{ item.label }}</span></RouterLink
-      ><button v-if="shell === 'member'" type="button" @click="menuOpen = true">
-        <i>☰</i><span>更多</span></button
-      ><RouterLink
-        v-if="shell === 'platform_admin'"
-        to="/platform-admin/accounts?create=1"
-        ><i>＋</i><span>新建组织</span></RouterLink
-      ><RouterLink v-else-if="shell === 'organization_admin'" to="/org-admin/members"
-        ><i>＋</i><span>邀请成员</span></RouterLink
-      ><button v-else type="button" @click="discoveryMode = 'create'">
-        <i>＋</i><span>创建选品</span>
+      ><button
+        type="button"
+        aria-controls="role-navigation"
+        :aria-expanded="menuOpen"
+        @click="menuOpen = true"
+      >
+        <i>☰</i><span>更多</span>
       </button>
     </nav>
     <div v-if="shell === 'member' && themeOpen" class="role-theme-menu">

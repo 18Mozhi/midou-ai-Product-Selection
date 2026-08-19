@@ -39,6 +39,28 @@ test('M02-03.A08 mobile drawer is keyboard operable', async ({ page }) => {
   await expect(drawer.getByRole('link', { name: '今日工作' })).toBeVisible();
 });
 
+for (const item of [
+  { shell: 'member' as const, path: '/home' },
+  { shell: 'organization_admin' as const, path: '/org-admin' },
+  { shell: 'platform_admin' as const, path: '/platform-admin' },
+]) test(`M02-03 ${item.shell} mobile navigation is four primary items plus more`, async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await allow(page, item.shell);
+  await page.goto(item.path);
+  const navigation = page.getByRole('navigation', { name: '移动快捷导航' });
+  await expect(navigation.locator(':scope > *')).toHaveCount(5);
+  await expect(navigation.getByRole('link')).toHaveCount(4);
+  const more = navigation.getByRole('button', { name: '更多' });
+  await expect(more).toHaveCount(1);
+  await expect(navigation.getByText(/创建选品|邀请成员|新建组织/)).toHaveCount(0);
+  if (item.shell === 'member' && testInfo.project.name === 'mobile-390') {
+    await expect(navigation).toHaveScreenshot('m02-03-mobile-navigation-five-items.png');
+  }
+  await more.click();
+  await expect(more).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('#role-navigation')).toHaveClass(/is-open/);
+});
+
 test('M02-03.A16 forbidden shell shows request id and safe recovery', async ({ page }) => {
   await page.route('**/api/v1/me/navigation?**', (route) => route.fulfill({ status: 403, contentType: 'application/json', body: JSON.stringify({ error: { code: 'navigation_shell_forbidden', message: '权限检查未通过。', action_hint: '返回有权访问的工作台。' }, request_id: 'm02-03-forbidden', trace_id: 'm02-03-trace' }) }));
   await page.goto('/platform-admin');

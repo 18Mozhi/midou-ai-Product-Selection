@@ -73,6 +73,12 @@ test('M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   for (const state of ['loading', 'expired', 'forbidden', 'context_required', 'rate_limited', 'blocked']) assert.match(component, new RegExp(state));
   assert.match(styles, /\.role-mobile-nav/);
   assert.match(styles, /@media\(max-width:840px\)/);
+  assert.match(styles, /role-mobile-nav\{[^}]*grid-template-columns:repeat\(5,minmax\(0,1fr\)\)/);
+  assert.match(component, /v-for="item in items\.slice\(0, 4\)"/);
+  assert.match(component, /aria-controls="role-navigation"[\s\S]*?<span>更多<\/span>/);
+  assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>新建组织<\/span>/);
+  assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>邀请成员<\/span>/);
+  assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>创建选品<\/span>/);
   assert.match(component, /aria-current/);
   assert.match(component, /credentials\s*:\s*["']include["']/);
   assert.match(landingRedirect, /\/me\/landing/);
@@ -85,9 +91,9 @@ test('M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(feature, /navigationShells/);
 });
 
-test('M02-03 each role shell exposes a role-specific primary action', async () => {
+test('M02-03 each role shell keeps its role-specific primary action in the top bar', async () => {
   const component = await read('apps/web/src/components/NavigationShell.vue');
-  assert.match(component, /shell === 'platform_admin'[\s\S]*?href="\/platform-admin\/accounts\?create=1"[\s\S]*?新建组织/);
-  assert.match(component, /shell === 'organization_admin'[\s\S]*?href="\/org-admin\/members"[\s\S]*?邀请成员/);
-  assert.match(component, /shell === 'member'[\s\S]*?创建选品/);
+  assert.match(component, /v-if="shell === 'platform_admin'"\s+class="role-create"\s+to="\/platform-admin\/accounts\?create=1"[\s\S]*?新建组织/);
+  assert.match(component, /v-else-if="shell === 'organization_admin'"\s+class="role-create"\s+to="\/org-admin\/members"[\s\S]*?邀请成员/);
+  assert.match(component, /v-else\s+type="button"\s+class="role-create"[\s\S]*?创建选品/);
 });
