@@ -1430,6 +1430,9 @@
         "../apps/api/src/platform-dashboard-routes.ts",
         "../apps/web/src/components/PlatformDashboard.vue",
         "../apps/web/src/components/PlatformManagementCenter.vue",
+        "../apps/web/src/components/PlatformMessageWorkbench.vue",
+        "../apps/web/src/components/PlatformMessageEditor.vue",
+        "../apps/web/src/components/PlatformNotificationOperations.vue",
         "../apps/web/src/components/PlatformDataCenter.vue",
         "../apps/web/src/components/PlatformGovernanceCenter.vue",
         "../database/migrations/0040_platform_messages.up.sql"

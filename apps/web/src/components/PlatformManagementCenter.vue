@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
+import PlatformMessageEditor from "./PlatformMessageEditor.vue";
+import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
+import PlatformNotificationOperations from "./PlatformNotificationOperations.vue";
 
 type Domain = "content" | "notifications" | "email" | "status";
 const props = defineProps<{ apiBaseUrl: string; domain: string }>();
@@ -408,85 +411,16 @@ onMounted(load);
           ><strong :data-state="value">{{ stateName(value) }}</strong>
         </article>
       </div>
-      <section
+      <PlatformMessageWorkbench
         v-if="['notifications', 'email'].includes(domain)"
-        class="message-workbench"
-      >
-        <header>
-          <div>
-            <h3>
-              {{
-                domain === "email" ? "邮件草稿与发送记录" : "通知草稿与发布记录"
-              }}
-            </h3>
-            <span
-              >先保存草稿，确认接收范围和发送方式后再发布；已发布内容不可直接篡改。</span
-            >
-          </div>
-          <button type="button" @click="openMessage()">
-            ＋ {{ domain === "email" ? "新建邮件草稿" : "新建通知草稿" }}
-          </button>
-        </header>
-        <div class="message-list">
-          <article
-            v-for="item in data.messages"
-            :key="item.id"
-            :data-status="item.status"
-          >
-            <header>
-              <div>
-                <small
-                  >{{ stateName(item.kind) }} · {{ stateName(item.category) }} ·
-                  {{ stateName(item.severity) }}</small
-                >
-                <h4>{{ item.title }}</h4>
-              </div>
-              <b>{{ stateName(item.status) }}</b>
-            </header>
-            <p>{{ item.body }}</p>
-            <dl>
-              <div>
-                <dt>接收范围</dt>
-                <dd>
-                  {{
-                    item.audience_type === "all_users"
-                      ? "全部活动用户"
-                      : item.audience_type === "organization"
-                        ? item.organization_name
-                        : item.user_email
-                  }}
-                </dd>
-              </div>
-              <div>
-                <dt>发送方式</dt>
-                <dd>
-                  {{
-                    [
-                      item.in_app_enabled ? "站内通知" : "",
-                      item.email_enabled ? "邮件" : "",
-                    ]
-                      .filter(Boolean)
-                      .join("、")
-                  }}
-                </dd>
-              </div>
-              <div>
-                <dt>更新时间</dt>
-                <dd>{{ when(item.updated_at) }}</dd>
-              </div>
-            </dl>
-            <footer v-if="item.status === 'draft'">
-              <button @click="openMessage(item)">编辑</button
-              ><button @click="messageAction(item, 'publish')">
-                {{ item.kind === "email" ? "发送" : "发布" }}</button
-              ><button @click="messageAction(item, 'cancel')">取消草稿</button>
-            </footer>
-          </article>
-          <p v-if="!data.messages.length" class="message-empty">
-            还没有草稿。点击右上角即可创建。
-          </p>
-        </div>
-      </section>
+        :domain="domain"
+        :messages="data.messages"
+        :state-name="stateName"
+        :when="when"
+        @create="openMessage()"
+        @edit="openMessage"
+        @action="messageAction"
+      />
       <div v-if="domain === 'content'" class="platform-management-table">
         <table>
           <thead>
@@ -535,108 +469,12 @@ onMounted(load);
           </tbody>
         </table>
       </div>
-      <section v-else-if="domain === 'notifications'" class="notification-ops">
-        <div class="notification-ops-grid">
-          <article>
-            <header>
-              <h3>系统模板</h3>
-              <span>由系统事件触发的内置通知模板</span>
-            </header>
-            <ul>
-              <li v-for="item in data.templates" :key="item.category">
-                <strong>{{ item.title }}</strong
-                ><small>{{ stateName(item.status) }}</small>
-              </li>
-            </ul>
-          </article>
-          <article>
-            <header>
-              <h3>渠道状态</h3>
-              <span>邮件服务未接入，管理入口已关闭</span>
-            </header>
-            <ul>
-              <li v-for="item in data.channels" :key="item.code">
-                <strong>{{ item.name }} · {{ item.status }}</strong
-                ><small>{{
-                  item.deliveries
-                    .map((x: any) => `${x.status}:${x.total}`)
-                    .join("，") || "暂无投递"
-                }}</small>
-              </li>
-            </ul>
-          </article>
-          <article>
-            <header>
-              <h3>用户订阅</h3>
-              <a href="/me">个人偏好入口</a>
-            </header>
-            <dl>
-              <div v-for="(value, key) in data.subscriptions" :key="key">
-                <dt>{{ key }}</dt>
-                <dd>{{ value }}</dd>
-              </div>
-            </dl>
-          </article>
-          <article>
-            <header>
-              <h3>告警路由</h3>
-              <a href="/platform-admin/governance">规则总览</a>
-            </header>
-            <ul>
-              <li v-for="item in data.alert_routes.slice(0, 6)" :key="item.id">
-                <strong>{{ item.name }}</strong
-                ><small
-                  >触发后{{
-                    item.action_type === "notify_owner"
-                      ? "通知负责人"
-                      : "创建人工任务"
-                  }}
-                  · {{ stateName(item.status) }}</small
-                >
-              </li>
-            </ul>
-            <p v-if="!data.alert_routes.length">暂无告警路由。</p>
-          </article>
-        </div>
-        <div class="platform-management-table">
-          <header class="notification-delivery-head">
-            <div>
-              <h3>通知与投递记录</h3>
-              <span>按接收人、组织、类型和渠道查看</span>
-            </div>
-            <a href="/automations">新增或编辑自动化路由</a>
-          </header>
-          <table>
-            <thead>
-              <tr>
-                <th>通知</th>
-                <th>接收人</th>
-                <th>组织</th>
-                <th>类型 / 级别</th>
-                <th>阅读</th>
-                <th>投递</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in data.items" :key="item.id">
-                <td data-label="通知">
-                  <strong>{{ item.title }}</strong
-                  ><small>{{ when(item.created_at) }}</small>
-                </td>
-                <td data-label="接收人">{{ item.recipient_email }}</td>
-                <td data-label="组织">{{ item.organization_name }}</td>
-                <td data-label="类型 / 级别">
-                  {{ item.category }} / {{ item.severity }}
-                </td>
-                <td data-label="阅读">{{ item.read_at ? "已读" : "未读" }}</td>
-                <td data-label="投递">
-                  {{ item.delivery_status || "无渠道记录" }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <PlatformNotificationOperations
+        v-else-if="domain === 'notifications'"
+        :data="data"
+        :state-name="stateName"
+        :when="when"
+      />
       <div v-else-if="domain === 'email'" class="platform-management-table">
         <table>
           <thead>
@@ -784,118 +622,15 @@ onMounted(load);
         </footer>
       </form>
     </dialog>
-    <dialog :open="Boolean(messageEditor)" class="message-dialog">
-      <form @submit.prevent="saveMessage">
-        <header>
-          <div>
-            <small>{{ messageEditor?.id ? "编辑草稿" : "新建草稿" }}</small>
-            <h3>
-              {{ messageForm.kind === "email" ? "平台邮件" : "平台通知" }}
-            </h3>
-          </div>
-          <button type="button" aria-label="关闭" @click="messageEditor = null">
-            ×
-          </button>
-        </header>
-        <label
-          >标题<input
-            v-model="messageForm.title"
-            required
-            minlength="2"
-            maxlength="200"
-            placeholder="接收人看到的标题"
-        /></label>
-        <label
-          >正文<textarea
-            v-model="messageForm.body"
-            required
-            minlength="2"
-            maxlength="2000"
-            rows="7"
-            placeholder="写清楚事项、影响和需要采取的行动"
-          ></textarea>
-        </label>
-        <div class="message-form-grid">
-          <label
-            >消息类型<select v-model="messageForm.category">
-              <option value="system">系统通知</option>
-              <option value="task">任务通知</option>
-              <option value="approval">审批通知</option>
-              <option value="competitor">竞品通知</option>
-            </select></label
-          ><label
-            >重要程度<select v-model="messageForm.severity">
-              <option value="info">普通</option>
-              <option value="warning">重要</option>
-              <option value="critical">严重</option>
-            </select></label
-          >
-        </div>
-        <label
-          >接收范围<select v-model="messageForm.audience_type">
-            <option value="all_users">全部活动用户</option>
-            <option value="organization">指定组织</option>
-            <option value="user">指定用户</option>
-          </select></label
-        >
-        <label v-if="messageForm.audience_type === 'organization'"
-          >选择组织<select v-model="messageForm.organization_id" required>
-            <option value="">请选择</option>
-            <option
-              v-for="item in data?.audience_options?.organizations || []"
-              :key="item.id"
-              :value="item.id"
-            >
-              {{ item.name }}
-            </option>
-          </select></label
-        >
-        <label v-if="messageForm.audience_type === 'user'"
-          >选择用户<select v-model="messageForm.user_id" required>
-            <option value="">请选择</option>
-            <option
-              v-for="item in data?.audience_options?.users || []"
-              :key="item.id"
-              :value="item.id"
-            >
-              {{ item.email }}
-            </option>
-          </select></label
-        >
-        <fieldset>
-          <legend>发送方式</legend>
-          <label
-            ><input
-              v-model="messageForm.in_app_enabled"
-              type="checkbox"
-              :disabled="messageForm.kind === 'email'"
-            />站内通知</label
-          ><label
-            ><input
-              v-model="messageForm.email_enabled"
-              type="checkbox"
-              disabled
-            />邮件（服务未接入）</label
-          >
-        </fieldset>
-        <label v-if="messageEditor?.id"
-          >修改原因<input
-            v-model="messageForm.reason"
-            required
-            minlength="2"
-            maxlength="300"
-        /></label>
-        <p class="dialog-help">
-          邮件服务尚未接入，当前只能发布站内通知；历史邮件记录仍保留审计事实。
-        </p>
-        <footer>
-          <button type="button" @click="messageEditor = null">取消</button
-          ><button :disabled="messageSaving">
-            {{ messageSaving ? "保存中…" : "保存草稿" }}
-          </button>
-        </footer>
-      </form>
-    </dialog>
+    <PlatformMessageEditor
+      :open="Boolean(messageEditor)"
+      :editor="messageEditor"
+      :form="messageForm"
+      :saving="messageSaving"
+      :audience-options="data?.audience_options"
+      @close="messageEditor = null"
+      @save="saveMessage"
+    />
   </section>
 </template>
 
@@ -938,113 +673,6 @@ onMounted(load);
   background: #31d6c4;
   color: #08231d;
   font-weight: 800;
-}
-.message-workbench {
-  display: grid;
-  gap: 14px;
-  padding: 18px;
-  border: 1px solid #28475b;
-  border-radius: 14px;
-  background: #0d1d29;
-}
-.message-workbench > header,
-.message-list article > header,
-.message-list article > footer,
-.message-dialog header {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  align-items: center;
-}
-.message-workbench h3,
-.message-list h4 {
-  margin: 0 0 5px;
-}
-.message-workbench header span,
-.message-list small,
-.message-list dt,
-.dialog-help {
-  color: #8198aa;
-}
-.message-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-.message-list article {
-  padding: 15px;
-  border: 1px solid #244256;
-  border-left: 4px solid #8198aa;
-  border-radius: 11px;
-  background: #0a1925;
-}
-.message-list article[data-status="draft"] {
-  border-left-color: #d5a646;
-}
-.message-list article[data-status="published"] {
-  border-left-color: #35d4a1;
-}
-.message-list article p {
-  min-height: 42px;
-  color: #b8c8d5;
-  white-space: pre-wrap;
-}
-.message-list dl {
-  display: grid;
-  gap: 7px;
-  margin: 12px 0;
-}
-.message-list dl div {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-.message-list dd {
-  margin: 0;
-  text-align: right;
-}
-.message-empty {
-  grid-column: 1 / -1;
-  padding: 22px;
-  text-align: center;
-  color: #8198aa;
-}
-.message-dialog {
-  width: min(620px, calc(100% - 28px));
-}
-.message-dialog form {
-  display: grid;
-  gap: 12px;
-}
-.message-dialog label {
-  display: grid;
-  gap: 6px;
-}
-.message-dialog header button {
-  border: 0;
-  background: transparent;
-  font-size: 24px;
-  color: #dce8f3;
-}
-.message-form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.message-dialog fieldset {
-  display: flex;
-  gap: 18px;
-  padding: 10px 12px;
-  border: 1px solid #31536a;
-  border-radius: 9px;
-}
-.message-dialog fieldset label {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-.message-dialog fieldset input {
-  width: auto;
 }
 .platform-management button,
 .platform-management select,
@@ -1254,81 +882,7 @@ dialog footer {
   justify-content: flex-end;
   gap: 8px;
 }
-.notification-ops {
-  display: grid;
-  gap: 14px;
-}
-.notification-ops-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-.notification-ops-grid article {
-  padding: 16px;
-  border: 1px solid #20384b;
-  border-radius: 13px;
-  background: #0d1d29;
-}
-.notification-ops-grid header,
-.notification-delivery-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-.notification-ops-grid h3,
-.notification-delivery-head h3 {
-  margin: 0;
-}
-.notification-ops-grid header span,
-.notification-delivery-head span {
-  color: #7892a5;
-  font-size: 11px;
-}
-.notification-ops-grid a,
-.notification-delivery-head a {
-  color: #4fe3cf;
-  font-size: 11px;
-}
-.notification-ops-grid ul {
-  list-style: none;
-  margin: 12px 0 0;
-  padding: 0;
-}
-.notification-ops-grid li {
-  padding: 9px 0;
-  border-top: 1px solid #1d3547;
-}
-.notification-ops-grid li strong,
-.notification-ops-grid li small {
-  display: block;
-}
-.notification-ops-grid li small {
-  margin-top: 4px;
-  color: #7892a5;
-}
-.notification-ops-grid dl {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-.notification-ops-grid dl div {
-  padding: 9px;
-  border-radius: 8px;
-  background: #0b1d29;
-}
-.notification-ops-grid dd {
-  margin: 4px 0 0;
-  font-weight: 800;
-}
-.notification-delivery-head {
-  margin-bottom: 12px;
-}
 @media (max-width: 700px) {
-  .message-list,
-  .message-form-grid {
-    grid-template-columns: 1fr;
-  }
   .platform-management-hero {
     align-items: flex-start;
     flex-direction: column;
@@ -1337,9 +891,6 @@ dialog footer {
     flex-direction: column;
   }
   .platform-status-grid {
-    grid-template-columns: 1fr;
-  }
-  .notification-ops-grid {
     grid-template-columns: 1fr;
   }
   .platform-management-table {

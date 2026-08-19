@@ -50,11 +50,20 @@ test("platform email management validates source, action and audited reason", as
 test("platform email management keeps UI, route, OpenAPI and audit operation aligned", async () => {
   const [web, route, repository, openapi] = await Promise.all(
     [
-      "apps/web/src/components/PlatformManagementCenter.vue",
+      [
+        "apps/web/src/components/PlatformManagementCenter.vue",
+        "apps/web/src/components/PlatformNotificationOperations.vue",
+      ],
       "apps/api/src/platform-dashboard-routes.ts",
       "apps/api/src/mysql-platform-dashboard-repository.ts",
       "docs/openapi.yaml",
-    ].map((path) => readFile(path, "utf8")),
+    ].map((path) =>
+      Array.isArray(path)
+        ? Promise.all(path.map((file) => readFile(file, "utf8"))).then(
+            (sources) => sources.join("\n"),
+          )
+        : readFile(path, "utf8"),
+    ),
   );
   assert.match(web, /重新投递/);
   assert.match(web, /抑制投递/);

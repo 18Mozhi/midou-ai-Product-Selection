@@ -9,11 +9,22 @@ import {
 test("platform notification operations expose templates channels subscriptions delivery retry and alert routes", async () => {
   const [web, styles, repository, worker] = await Promise.all(
     [
-      "apps/web/src/components/PlatformManagementCenter.vue",
+      [
+        "apps/web/src/components/PlatformManagementCenter.vue",
+        "apps/web/src/components/PlatformMessageWorkbench.vue",
+        "apps/web/src/components/PlatformMessageEditor.vue",
+        "apps/web/src/components/PlatformNotificationOperations.vue",
+      ],
       "apps/web/src/styles.css",
       "apps/api/src/mysql-platform-dashboard-repository.ts",
       "apps/worker/src/notification-outbox-worker.ts",
-    ].map((path) => readFile(path, "utf8")),
+    ].map((path) =>
+      Array.isArray(path)
+        ? Promise.all(path.map((file) => readFile(file, "utf8"))).then(
+            (sources) => sources.join("\n"),
+          )
+        : readFile(path, "utf8"),
+    ),
   );
   for (const label of [
     "系统模板",
@@ -44,13 +55,23 @@ test("platform notification drafts remain available while mail drafts fail close
   const [web, service, routes, migration, openapi, featureMap] =
     await Promise.all(
       [
-        "apps/web/src/components/PlatformManagementCenter.vue",
+        [
+          "apps/web/src/components/PlatformManagementCenter.vue",
+          "apps/web/src/components/PlatformMessageWorkbench.vue",
+          "apps/web/src/components/PlatformMessageEditor.vue",
+        ],
         "apps/api/src/platform-dashboard-service.ts",
         "apps/api/src/platform-dashboard-routes.ts",
         "database/migrations/0040_platform_messages.up.sql",
         "docs/openapi.yaml",
         "docs/feature-map.json",
-      ].map((path) => readFile(path, "utf8")),
+      ].map((path) =>
+        Array.isArray(path)
+          ? Promise.all(path.map((file) => readFile(file, "utf8"))).then(
+              (sources) => sources.join("\n"),
+            )
+          : readFile(path, "utf8"),
+      ),
     );
   for (const label of ["发布通知", "编辑草稿", "取消草稿"])
     assert.match(web, new RegExp(label));
@@ -91,4 +112,20 @@ test("platform message service rejects mail even when the UI is bypassed", () =>
         error instanceof PlatformDashboardError &&
         error.code === "mail_provider_pending",
     );
+});
+
+test("platform management keeps orchestration and message views in bounded components", async () => {
+  const limits = new Map([
+    ["apps/web/src/components/PlatformManagementCenter.vue", 1_000],
+    ["apps/web/src/components/PlatformMessageWorkbench.vue", 200],
+    ["apps/web/src/components/PlatformMessageEditor.vue", 200],
+    ["apps/web/src/components/PlatformNotificationOperations.vue", 200],
+  ]);
+  for (const [path, limit] of limits) {
+    const source = await readFile(path, "utf8");
+    assert.ok(
+      source.split(/\r?\n/u).length < limit,
+      `${path} must remain below ${limit} lines`,
+    );
+  }
 });

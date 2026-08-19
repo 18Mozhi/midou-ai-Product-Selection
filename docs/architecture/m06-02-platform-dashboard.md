@@ -7,3 +7,5 @@
 驾驶舱同步读取既有 Worker/Crawler/Outbox 状态，不拥有异步任务，也不新建常驻进程。队列告警阈值只影响显示状态。当前仍是宝塔 S0 单机交付，不代表多节点或 10,000 用户能力。
 
 生产邮件 Provider 当前为 `pending_provider_selection`。平台导航不提供 `/platform-admin/email` 入口，直接访问也不装载邮件管理页面；通知偏好和平台通知草稿的邮件开关固定关闭。Node API 同时拒绝启用邮件偏好、创建邮件草稿、为通知启用邮件或发布历史邮件草稿，防止绕过前端。历史邮件投递、草稿、审计和安全处置 API 不删除，待 Provider 合同、回调与合规验收完成后再单独开放。
+
+平台管理页由 `PlatformManagementCenter.vue` 统一持有读取、写入、审核和加载状态；消息列表、消息编辑器与通知运营事实分别下沉到 `PlatformMessageWorkbench.vue`、`PlatformMessageEditor.vue` 和 `PlatformNotificationOperations.vue`。子组件只通过属性和事件协作，不直接访问 API，也不改变既有权限、审计或消息状态合同。
