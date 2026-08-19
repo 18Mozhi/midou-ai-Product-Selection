@@ -3,8 +3,7 @@ import { computed, onMounted, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import "../data-quality.css";
-type State =
-  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Evidence {
   id: string;
   organization_id: string;
@@ -46,6 +45,8 @@ interface Run {
     value: number;
     threshold: number;
     status: string;
+    numerator?: number;
+    denominator?: number;
   }>;
   status: string;
   window_ended_at: string;
@@ -70,12 +71,7 @@ const filteredEvidence = computed(() =>
     evidence.value.filter(
       (item) =>
         !query.value ||
-        [
-          item.id,
-          item.provider_name,
-          item.canonical_url,
-          item.content_sha256,
-        ].some((value) =>
+        [item.id, item.provider_name, item.canonical_url, item.content_sha256].some((value) =>
           value.toLowerCase().includes(query.value.toLowerCase()),
         ),
     ),
@@ -91,11 +87,39 @@ const filteredEvidence = computed(() =>
   ),
   metrics = computed(() => ({
     open: issues.value.filter((item) => item.status === "open").length,
-    critical: issues.value.filter(
-      (item) => item.status === "open" && item.severity === "critical",
-    ).length,
+    critical: issues.value.filter((item) => item.status === "open" && item.severity === "critical")
+      .length,
     passed: runs.value.filter((item) => item.status === "passed").length,
-  }));
+  })),
+  qualityHighlightCodes = [
+    "title_accuracy",
+    "price_accuracy",
+    "currency_accuracy",
+    "external_id_accuracy",
+    "canonical_url_accuracy",
+    "duplicate_ratio",
+    "source_freshness",
+  ],
+  qualityHighlights = computed(() => {
+    const latest = new Map<
+      string,
+      Run["metrics"][number] & {
+        provider_name: string;
+        window_ended_at: string;
+        sample_count: number;
+      }
+    >();
+    for (const run of runs.value)
+      for (const metric of run.metrics)
+        if (qualityHighlightCodes.includes(metric.code) && !latest.has(metric.code))
+          latest.set(metric.code, {
+            ...metric,
+            provider_name: run.provider_name,
+            window_ended_at: run.window_ended_at,
+            sample_count: run.sample_count,
+          });
+    return qualityHighlightCodes.map((code) => ({ code, metric: latest.get(code) ?? null }));
+  });
 const failure = (code: number): State =>
     code === 401
       ? "expired"
@@ -129,7 +153,9 @@ const failure = (code: number): State =>
       ai_classification_approval: "AI 分类抽检",
       source_freshness: "来源新鲜度",
       source_success_rate: "来源成功率",
-    })[value] ?? value;
+    })[value] ?? value,
+  qualityStatusLabel = (value: string) =>
+    ({ passed: "通过", failed: "未通过", insufficient_sample: "样本不足" })[value] ?? "状态未知";
 async function load() {
   state.value = "loading";
   notice.value = "";
@@ -150,19 +176,16 @@ async function load() {
     totalEvidence.value = body.data.totalEvidence ?? 0;
     totalIssues.value = body.data.totalIssues ?? 0;
     state.value =
-      evidence.value.length || issues.value.length || runs.value.length
-        ? "ready"
-        : "empty";
+      evidence.value.length || issues.value.length || runs.value.length ? "ready" : "empty";
   } catch {
     state.value = "blocked";
   }
 }
 async function openEvidence(id: string) {
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/data/evidence/${id}`,
-        { credentials: "include" },
-      ),
+    const response = await fetch(`${props.apiBaseUrl}/platform/data/evidence/${id}`, {
+        credentials: "include",
+      }),
       body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? requestId.value;
     if (!response.ok) {
@@ -250,9 +273,7 @@ onMounted(load);
       <div>
         <p>证据与数据质量</p>
         <h2 id="quality-title">证据与数据质量</h2>
-        <span
-          >任务成功不替代字段准确率；原文、规范记录和字段溯源始终可关联。</span
-        >
+        <span>任务成功不替代字段准确率；原文、规范记录和字段溯源始终可关联。</span>
       </div>
       <b>中国境内受控存储</b>
     </header>
@@ -280,6 +301,36 @@ onMounted(load);
           ><span>按来源与解析器</span>
         </article>
       </div>
+      <section class="quality-card" aria-labelledby="quality-highlight-title">
+        <header>
+          <div>
+            <h3 id="quality-highlight-title">采集质量指标</h3>
+            <span>每项取最近一次已持久化核对，不合成无依据的总分。</span>
+          </div>
+        </header>
+        <div class="quality-run-grid">
+          <article v-for="item in qualityHighlights" :key="item.code">
+            <header>
+              <strong>{{ metricLabel(item.code) }}</strong>
+              <b v-if="item.metric" :data-status="item.metric.status">
+                {{ qualityStatusLabel(item.metric.status) }}
+              </b>
+            </header>
+            <template v-if="item.metric">
+              <p>
+                <strong>{{ (item.metric.value * 100).toFixed(1) }}%</strong>
+                · 门槛 {{ (item.metric.threshold * 100).toFixed(1) }}%
+              </p>
+              <small>
+                {{ item.metric.provider_name }} ·
+                {{ item.metric.denominator ?? item.metric.sample_count }} 个样本 ·
+                {{ time(item.metric.window_ended_at) }}
+              </small>
+            </template>
+            <p v-else>暂无核对数据</p>
+          </article>
+        </div>
+      </section>
       <section class="quality-card">
         <header>
           <nav aria-label="数据质量视图">
@@ -288,15 +339,9 @@ onMounted(load);
               @click="tab = 'evidence'"
             >
               证据</button
-            ><button
-              :aria-current="tab === 'issues' ? 'page' : undefined"
-              @click="tab = 'issues'"
-            >
+            ><button :aria-current="tab === 'issues' ? 'page' : undefined" @click="tab = 'issues'">
               质量问题</button
-            ><button
-              :aria-current="tab === 'runs' ? 'page' : undefined"
-              @click="tab = 'runs'"
-            >
+            ><button :aria-current="tab === 'runs' ? 'page' : undefined" @click="tab = 'runs'">
               核对运行
             </button>
           </nav>
@@ -337,18 +382,14 @@ onMounted(load);
                   >
                 </td>
                 <td>
-                  {{ item.content_type
-                  }}<small>{{ size(item.size_bytes) }}</small>
+                  {{ item.content_type }}<small>{{ size(item.size_bytes) }}</small>
                 </td>
                 <td>
-                  {{ time(item.captured_at)
-                  }}<small>至 {{ time(item.retention_until) }}</small>
+                  {{ time(item.captured_at) }}<small>至 {{ time(item.retention_until) }}</small>
                 </td>
                 <td>
                   <button @click="openEvidence(item.id)">详情</button
-                  ><button class="secondary" @click="grantDownload(item)">
-                    下载
-                  </button>
+                  ><button class="secondary" @click="grantDownload(item)">下载</button>
                 </td>
               </tr>
             </tbody>
@@ -380,10 +421,7 @@ onMounted(load);
                   >
                 </td>
                 <td>
-                  {{
-                    item.actual_value === null
-                      ? "—"
-                      : `${(item.actual_value * 100).toFixed(1)}%`
+                  {{ item.actual_value === null ? "—" : `${(item.actual_value * 100).toFixed(1)}%`
                   }}<small>{{
                     item.threshold_value === null
                       ? "—"
@@ -392,10 +430,7 @@ onMounted(load);
                 </td>
                 <td>{{ time(item.updated_at) }}</td>
                 <td>
-                  <button
-                    v-if="item.status === 'open'"
-                    @click="beginResolve(item)"
-                  >
+                  <button v-if="item.status === 'open'" @click="beginResolve(item)">
                     记录解决
                   </button>
                 </td>
@@ -410,18 +445,16 @@ onMounted(load);
                 <strong>{{ run.provider_name }}</strong
                 ><small>{{ run.market }} · {{ run.parser_version }}</small>
               </div>
-              <b :data-status="run.status">{{ run.status }}</b>
+              <b :data-status="run.status">{{ qualityStatusLabel(run.status) }}</b>
             </header>
-            <p>
-              {{ run.sample_count }} 个样本 · {{ time(run.window_ended_at) }}
-            </p>
+            <p>{{ run.sample_count }} 个样本 · {{ time(run.window_ended_at) }}</p>
             <ul>
               <li v-for="metric in run.metrics" :key="metric.code">
                 <span>{{ metricLabel(metric.code) }}</span
                 ><strong>{{ (metric.value * 100).toFixed(1) }}%</strong
                 ><small
                   >门槛 {{ (metric.threshold * 100).toFixed(1) }}% ·
-                  {{ metric.status }}</small
+                  {{ qualityStatusLabel(metric.status) }}</small
                 >
               </li>
             </ul>
@@ -485,10 +518,7 @@ onMounted(load);
             maxlength="500"
             placeholder="说明修复方式与验证依据（2–500 字）"
           ></textarea></label
-        ><button
-          :disabled="reason.trim().length < 2 || saving"
-          @click="confirming = true"
-        >
+        ><button :disabled="reason.trim().length < 2 || saving" @click="confirming = true">
           确认前检查
         </button>
       </aside></template

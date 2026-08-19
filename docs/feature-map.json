@@ -803,6 +803,7 @@
         "source_freshness",
         "source_success_rate"
       ],
+      "presentationBoundary": "the quality page surfaces the latest persisted title price currency external-id and canonical-url accuracy metrics plus duplicate ratio and source freshness individually; it preserves threshold sample count and insufficient-sample truth, shows no-data explicitly, and never invents a composite accuracy score",
       "permission": "authenticated platform platform:operate; same-origin Origin, Idempotency-Key and optimistic version for issue resolution; controlled download grants and accesses are audited",
       "responseBoundary": "metadata, normalized versions, provenance and issues only; no raw content, storage path, credential or cookie outside the integrity-checked download endpoint",
       "configuration": [

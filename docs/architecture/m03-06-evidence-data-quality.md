@@ -14,6 +14,8 @@ Node Worker 先在组织/工作区隔离目录写临时目标，再在事务中�
 
 核对按 Provider、Parser 版本、市场和时间窗记录样本量及冻结阈值。标题、价格、币种、外部 ID、规范 URL、重复、供应商误匹配、AI 抽检、新鲜度和来源成功率均保留分子、分母、阈值与样本不足状态。失败或样本不足创建质量问题；解决问题只追加原因、操作人、版本、事件和 Outbox，不修改原始证据、历史记录或历史核对。
 
+采集质量页把最近一次已持久化核对中的标题、价格、币种、外部 ID、规范 URL 准确率，以及重复率和来源新鲜度分别展示。页面沿用 `metrics_json` 的真实值、阈值、样本量与 `passed / failed / insufficient_sample`，只将状态中文化；缺少某项核对时显示“暂无核对数据”，不合成没有版本化合同的总准确率。
+
 ## API、权限与下载
 
 `/platform-admin/data` 及 `/api/v1/platform/data*` 只允许已认证且具备 `platform:operate` 的平台角色。列表可按组织和工作区筛选；服务端仍是权限边界。质量问题解决要求同源 Origin、Idempotency-Key、原因和 `expected_version`。
