@@ -74,6 +74,16 @@ html:not([data-theme="cloud-white"]) .role-shell {
   color: var(--so-text) !important;
   background: color-mix(in srgb, var(--so-primary) 9%, var(--so-panel)) !important;
 }
+.role-content .sourcing-layout main {
+  border-color: var(--so-border) !important;
+  background: var(--so-panel) !important;
+  color: var(--so-text) !important;
+}
+.role-content .supplier-cards dl div {
+  border: 1px solid var(--so-border) !important;
+  background: var(--so-panel-soft) !important;
+  color: var(--so-text) !important;
+}
 .role-content :where(.competitor-source span, .competitor-list em, .supplier-cards article[data-ready="true"]) {
   color: var(--so-success) !important;
   border-color: var(--so-success) !important;

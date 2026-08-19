@@ -12,17 +12,17 @@ const copy = computed(
   () =>
     ({
       available: [
-        "AVAILABLE · 可连接",
+        "可用 · 可连接",
         "依赖连接可用",
         "真实健康结果由后端就绪检查返回；本页不读取主机、密码或队列内容。",
       ],
       unavailable: [
-        "UNAVAILABLE · 已阻塞",
+        "不可用 · 已阻塞",
         "缓存服务依赖不可用",
         "停止依赖缓存服务的操作，保留关联编号与链路编号，并按处置手册在宝塔检查服务。",
       ],
       recovering: [
-        "RECOVERING · 恢复检查",
+        "恢复中 · 恢复检查",
         "等待有限重试完成",
         "连接恢复后先执行隔离读写与清理检查，再恢复缓存、队列、限流和 SSE 协调。",
       ],
@@ -70,22 +70,22 @@ const copy = computed(
     aria-label="缓存服务用途和过期策略"
   >
     <article>
-      <span class="state-label state-label--passed">CACHE · 300s</span>
+      <span class="state-label state-label--passed">缓存 · 300 秒</span>
       <h3>缓存</h3>
       <p>默认 5 分钟，最长 1 小时；数据库始终是事实源。</p>
     </article>
     <article>
-      <span class="state-label state-label--passed">QUEUE · 24h</span>
+      <span class="state-label state-label--passed">队列 · 24 小时</span>
       <h3>队列与租约</h3>
       <p>默认 24 小时，最长 7 天；任务载荷强制组织与工作区范围。</p>
     </article>
     <article>
-      <span class="state-label state-label--blocked">RATE · 60s</span>
+      <span class="state-label state-label--blocked">限流 · 60 秒</span>
       <h3>限流</h3>
       <p>首次计数原子设置 TTL，窗口最长 1 小时，不产生永久键。</p>
     </article>
     <article>
-      <span class="state-label state-label--blocked">SSE · 24h</span>
+      <span class="state-label state-label--blocked">实时事件 · 24 小时</span>
       <h3>SSE 协调</h3>
       <p>按总纲保留 24 小时协调窗口，事件只触发授权范围内的数据失效。</p>
     </article>

@@ -36,6 +36,8 @@ interface Provider {
   id: string;
   code: string;
   name: string;
+  target_url: string;
+  access_mode: string;
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
   state = ref<State>("loading"),
@@ -51,6 +53,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   loginFileName = ref(""),
   loginPayload = ref(""),
   loginProvider = ref<Provider | null>(null),
+  loginMode = ref<"cookie_file" | "archive" | "browser">("cookie_file"),
   assetForm = reactive({
     provider_id: "",
     name: "",
@@ -79,8 +82,18 @@ const failure = (s: number): State =>
           : "error",
   browserAssets = computed(() =>
     assets.value.filter(
-      (item) => item.kind === "browser_profile" && item.status === "active",
+      (item) =>
+        ["browser_profile", "cookie_bundle"].includes(item.kind) &&
+      item.status === "active",
     ),
+  ),
+  loginProviders = computed(() =>
+    providers.value.filter(
+      (item) => item.access_mode === "authenticated_browser",
+    ),
+  ),
+  loginNeedsAuthentication = computed(
+    () => loginProvider.value?.access_mode === "authenticated_browser",
   );
 const kindText = (value: string) =>
   (
@@ -161,9 +174,10 @@ function openProfile() {
   });
 }
 function openLogin(provider?: Provider) {
-  loginProvider.value = provider ?? providers.value[0] ?? null;
+  loginProvider.value = provider ?? loginProviders.value[0] ?? null;
   loginFileName.value = "";
   loginPayload.value = "";
+  loginMode.value = "cookie_file";
   message.value = "";
   editor.value = "login";
 }
@@ -172,23 +186,97 @@ async function chooseLoginArchive(event: Event) {
   loginFileName.value = "";
   loginPayload.value = "";
   if (!file) return;
-  if (!file.name.toLowerCase().endsWith(".tar.gz")) {
-    message.value = "请选择 .tar.gz 格式的浏览器登录档案。";
-    return;
+  if (loginMode.value === "archive") {
+    if (!file.name.toLowerCase().endsWith(".tar.gz")) {
+      message.value = "完整浏览器档案请选择 .tar.gz 文件。";
+      return;
+    }
+    if (file.size > 6_000_000) {
+      message.value = "浏览器档案压缩后不能超过 6 兆字节。";
+      return;
+    }
+    const dataUrl = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result ?? ""));
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+    });
+    loginPayload.value = dataUrl.slice(dataUrl.indexOf(",") + 1);
+  } else {
+    if (!/\.(json|txt|cookies)$/i.test(file.name)) {
+      message.value = "Cookie 请上传 .json、.txt 或 .cookies 文件。";
+      return;
+    }
+    if (file.size > 2_000_000) {
+      message.value = "Cookie 文件不能超过 2 兆字节。";
+      return;
+    }
+    loginPayload.value = await file.text();
   }
-  if (file.size > 6_000_000) {
-    message.value =
-      "登录档案压缩后不能超过 6 兆字节；只保留登录所需的浏览器资料后重试。";
-    return;
-  }
-  const dataUrl = await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result ?? ""));
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
   loginFileName.value = file.name;
-  loginPayload.value = dataUrl.slice(dataUrl.indexOf(",") + 1);
+}
+function openLoginPage() {
+  const url = loginProvider.value?.target_url;
+  if (!url?.startsWith("http")) {
+    message.value = "该来源还没有可打开的登录页面。";
+    return;
+  }
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+function browserBridge<T>(action: string, payload: Record<string, unknown>) {
+  return new Promise<T>((resolve, reject) => {
+    const request_id = crypto.randomUUID();
+    const timeout = window.setTimeout(() => {
+      window.removeEventListener("message", receive);
+      reject(new Error("browser_helper_unavailable"));
+    }, 15000);
+    function receive(event: MessageEvent) {
+      if (
+        event.source !== window ||
+        event.data?.type !== "SCOUTOPS_BROWSER_BRIDGE_RESULT" ||
+        event.data?.request_id !== request_id
+      )
+        return;
+      window.clearTimeout(timeout);
+      window.removeEventListener("message", receive);
+      if (!event.data.ok)
+        reject(new Error(String(event.data.error || "browser_helper_failed")));
+      else resolve(event.data.data as T);
+    }
+    window.addEventListener("message", receive);
+    window.postMessage(
+      {
+        type: "SCOUTOPS_BROWSER_BRIDGE_REQUEST",
+        request_id,
+        action,
+        payload,
+      },
+      location.origin,
+    );
+  });
+}
+async function acquireBrowserCookies() {
+  const provider = loginProvider.value;
+  if (!provider?.target_url?.startsWith("http")) {
+    message.value = "请先选择有真实网址的来源。";
+    return;
+  }
+  saving.value = true;
+  message.value = "正在请求浏览器助手读取当前来源域名的 Cookie…";
+  try {
+    const result = await browserBridge<{ cookies: unknown[] }>("cookies.read", {
+      target_url: provider.target_url,
+    });
+    loginPayload.value = JSON.stringify(result.cookies);
+    loginFileName.value = `浏览器读取 · ${result.cookies.length} 条 Cookie`;
+    loginMode.value = "browser";
+    message.value = "已读取 Cookie；确认来源后点击“加密保存并启用”。";
+  } catch {
+    message.value =
+      "未检测到浏览器助手或未授予该网站权限。请先下载并加载浏览器助手，或改用 Cookie 文件上传。";
+  } finally {
+    saving.value = false;
+  }
 }
 async function write(path: string, body: unknown) {
   saving.value = true;
@@ -264,9 +352,12 @@ async function saveLogin() {
         .slice(0, 45) || "source";
   const asset = await write("/platform/credential-assets", {
     provider_id: provider.id,
-    name: `${provider.name} 网页登录档案`,
-    kind: "browser_profile",
-    secret_payload: { encoding: "base64", value: loginPayload.value },
+    name: `${provider.name} ${loginMode.value === "archive" ? "浏览器" : "Cookie"}登录档案`,
+    kind: loginMode.value === "archive" ? "browser_profile" : "cookie_bundle",
+    secret_payload: {
+      encoding: loginMode.value === "archive" ? "base64" : "utf8",
+      value: loginPayload.value,
+    },
     expires_at: null,
   });
   if (!asset) return;
@@ -288,7 +379,7 @@ async function saveLogin() {
   }
   editor.value = null;
   await load();
-  message.value = `${provider.name} 网页登录已配置，后续采集会使用加密档案。`;
+  message.value = `${provider.name} 网页登录档案已加密保存；该来源完成解析验收后，采集任务才会使用此档案。`;
 }
 async function revoke() {
   const target = revokeTarget.value;
@@ -324,7 +415,9 @@ onMounted(async () => {
         >
       </div>
       <div>
-        <button type="button" @click="openLogin()">＋ 配置网页登录</button
+        <a class="helper-download" href="/browser-helper/scoutops-browser-helper.zip"
+          >下载浏览器助手</a
+        ><button type="button" @click="openLogin()">＋ 配置网页登录</button
         ><button type="button" @click="openProfile">＋ 关联运行档案</button
         ><button type="button" class="primary" @click="openAsset">
           ＋ 凭证资产
@@ -602,36 +695,74 @@ onMounted(async () => {
         </button>
       </header>
       <aside class="login-guide">
-        <strong>为什么需要这一步？</strong>
+        <strong>支持哪些格式？</strong>
         <p>
-          亚马逊、亿贝等来源会要求网页登录。系统不会要求你填写官方接口，也不会在网页里记录平台密码；它只接收已登录浏览器的压缩档案并加密保存。
+          首选 Cookie JSON、Playwright storageState JSON 或 Netscape
+          cookies.txt；也可上传专用 Chromium 的 .tar.gz 档案。公开页面不要求登录，可直接匿名测试。
         </p>
         <ol>
-          <li>在专用浏览器中登录目标网站并确认能正常打开页面。</li>
-          <li>
-            将该专用浏览器的用户资料目录压缩为
-            <code>.tar.gz</code> 格式，压缩后不超过 6 兆字节。
-          </li>
-          <li>选择来源并上传，系统会同时创建加密资料和可运行档案。</li>
+          <li>“从当前浏览器读取”只读取当前所选来源域名。</li>
+          <li>Cookie 不在页面回显，保存后立即从页面内存清除。</li>
+          <li>完整浏览器档案仅用于确实依赖浏览器状态的网站。</li>
         </ol>
       </aside>
       <div class="credential-fields">
         <label
           >需要登录的来源<select v-model="loginProvider" required>
             <option :value="null" disabled>请选择</option>
-            <option v-for="item in providers" :key="item.id" :value="item">
+            <option
+              v-for="item in loginProviders"
+              :key="item.id"
+              :value="item"
+            >
               {{ item.name }}
             </option>
           </select></label
-        ><label class="archive-picker"
-          >浏览器登录档案<input
+        ><label
+          >导入方式<select
+            v-model="loginMode"
+            @change="loginPayload = ''; loginFileName = ''"
+          >
+            <option value="cookie_file">上传 Cookie 文件</option>
+            <option value="browser">从当前浏览器读取</option>
+            <option value="archive">完整浏览器档案</option>
+          </select></label
+        ><label v-if="loginMode !== 'browser'" class="archive-picker"
+          >{{ loginMode === "archive" ? "浏览器登录档案" : "Cookie 文件" }}<input
             type="file"
-            accept=".gz,application/gzip"
+            :accept="
+              loginMode === 'archive'
+                ? '.gz,application/gzip'
+                : '.json,.txt,.cookies,application/json,text/plain'
+            "
             required
             @change="chooseLoginArchive"
-          /><small>{{ loginFileName || "请选择 .tar.gz 文件" }}</small></label
+          /><small>{{
+            loginFileName ||
+            (loginMode === "archive"
+              ? "请选择 .tar.gz 文件"
+              : "请选择 Cookie JSON 或 cookies.txt")
+          }}</small></label
         >
       </div>
+      <aside v-if="loginProvider" class="login-provider-status">
+        <div>
+          <strong>{{ loginProvider.name }}</strong>
+          <span v-if="loginNeedsAuthentication">该来源需要登录状态</span>
+          <span v-else>该来源是公开页面，可不登录直接测试</span>
+        </div>
+        <button type="button" @click="openLoginPage">
+          打开{{ loginNeedsAuthentication ? "登录" : "来源" }}页面 ↗
+        </button>
+        <button
+          v-if="loginMode === 'browser'"
+          type="button"
+          :disabled="saving"
+          @click="acquireBrowserCookies"
+        >
+          从当前浏览器读取 Cookie
+        </button>
+      </aside>
       <p v-if="message" role="status">{{ message }}</p>
       <footer>
         <button
@@ -643,7 +774,7 @@ onMounted(async () => {
         >
           取消</button
         ><button :disabled="saving || !loginProvider || !loginPayload">
-          {{ saving ? "加密保存中…" : "保存并启用" }}
+          {{ saving ? "加密保存中…" : "加密保存并启用" }}
         </button>
       </footer>
     </form>

@@ -613,6 +613,45 @@ const googleChannel = (
   policy_note:
     "公开 RSS 热点频道；系统每 15 分钟自动采集，也可在热点页手动刷新。",
 });
+const setupTargetUrls: Readonly<Record<string, string>> = {
+  amazon_product: "https://www.amazon.com/",
+  keepa: "https://keepa.com/#!finder",
+  amazon_bestsellers: "https://www.amazon.com/Best-Sellers/zgbs",
+  tiktok_shop: "https://shop.tiktok.com/",
+  temu: "https://www.temu.com/",
+  shein: "https://www.shein.com/",
+  aliexpress: "https://www.aliexpress.com/",
+  ebay_browse: "https://www.ebay.com/",
+  etsy_listings: "https://www.etsy.com/",
+  walmart: "https://www.walmart.com/",
+  target: "https://www.target.com/",
+  bestbuy: "https://www.bestbuy.com/",
+  wayfair: "https://www.wayfair.com/",
+  homedepot: "https://www.homedepot.com/",
+  lowes: "https://www.lowes.com/",
+  costco: "https://www.costco.com/",
+  "1688_search": "https://s.1688.com/selloffer/offer_search.htm",
+  taobao: "https://www.taobao.com/",
+  tmall: "https://www.tmall.com/",
+  jd: "https://www.jd.com/",
+  pinduoduo: "https://mobile.yangkeduo.com/",
+  douyin: "https://www.douyin.com/",
+  xiaohongshu: "https://www.xiaohongshu.com/explore",
+  reddit_search: "https://www.reddit.com/search/",
+  youtube_search: "https://www.youtube.com/results",
+  pinterest: "https://www.pinterest.com/",
+  instagram: "https://www.instagram.com/",
+  facebook: "https://www.facebook.com/",
+  quora: "https://www.quora.com/",
+  google_trends: "https://trends.google.com/trending",
+  similarweb: "https://www.similarweb.com/top-websites/",
+  semrush: "https://www.semrush.com/trending-websites/",
+  exploding_topics: "https://explodingtopics.com/",
+  statista: "https://www.statista.com/",
+  kaggle: "https://www.kaggle.com/datasets",
+  world_bank: "https://data.worldbank.org/",
+  oecd: "https://data-explorer.oecd.org/",
+};
 const setupSources: readonly BuiltinSourceDefinition[] = [
   ["amazon_product", "Amazon 商品页面", "public_page", "ecommerce"],
   ["keepa", "Keepa 网页价格历史", "authenticated_browser", "data"],
@@ -655,7 +694,7 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
   code: String(code),
   name: String(name),
   access_mode: access as BuiltinSourceDefinition["access_mode"],
-  target_url: `setup://${code}`,
+  target_url: setupTargetUrls[String(code)]!,
   markets: ["GLOBAL"],
   languages: ["und"],
   fields: ["title", "observed_at", "source_url"],
@@ -680,7 +719,9 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
   availability: "setup_required",
   production_policy: "setup_required",
   policy_note:
-    "来源已登记为公开页面或网页登录爬虫；目标页面与字段回放完成后即可启用，不要求官方 API Key。",
+    access === "authenticated_browser"
+      ? "已配置平台真实登录入口；上传 Cookie 或读取当前浏览器 Cookie 后，还需完成该平台页面解析合同才会进入自动采集，不要求官方 API Key。"
+      : "已配置平台真实公开入口；页面字段解析合同验收通过后即可启用匿名爬虫，不要求登录或官方 API Key。",
 }));
 export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
   {
@@ -721,6 +762,42 @@ export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
   ...syndicationFeeds.map(syndicationChannel),
   ...publicCatalogPages.map(publicCatalogChannel),
   ...setupSources,
+  {
+    code: "erp_product_catalog",
+    name: "米豆 ERP 商品库",
+    access_mode: "import",
+    target_url: "https://medou.medouai.com/#/ProductList",
+    markets: ["GLOBAL"],
+    languages: ["zh-CN"],
+    fields: [
+      "spu",
+      "title",
+      "image_url",
+      "asin_list",
+      "supplier_code",
+      "cost_cny",
+      "cost_usd",
+      "store_id",
+      "observed_at",
+    ],
+    schedule_minutes: 1440,
+    concurrency_limit: 1,
+    timeout_ms: 120000,
+    retry_limit: 1,
+    circuit_failure_threshold: 3,
+    dedupe_key: "spu_or_row_id",
+    retention_days: 365,
+    failure_rules: ["login_required", "validation_failed", "empty_result"],
+    parser_version: "erp-product-catalog-v1",
+    healthcheck_url: null,
+    owner_label: "平台选品中心",
+    status: "enabled",
+    category: "product_supply",
+    availability: "manual",
+    production_policy: "ready_for_owner_enablement",
+    policy_note:
+      "通过本机浏览器助手读取用户已登录的 ERP 商品列表；登录令牌不上传，只接收商品结果并保留原始证据。",
+  },
   {
     code: "manual_product_supply_csv",
     name: "商品与供应链 CSV 导入",
@@ -1503,7 +1580,7 @@ export class FixedSyndicationFeedAdapter extends SourceAdapter {
   private async response(target: string, signal: AbortSignal) {
     const response = await this.fetcher(this.url(target), {
       signal,
-      redirect: "follow",
+      redirect: "error",
       headers: {
         accept:
           "application/rss+xml, application/atom+xml, application/xml;q=0.9",
@@ -1571,7 +1648,7 @@ export class FixedStructuredPublicPageAdapter extends SourceAdapter {
   private async response(target: string, signal: AbortSignal) {
     const response = await this.fetcher(this.url(target), {
       signal,
-      redirect: "follow",
+      redirect: "error",
       headers: {
         accept: "text/html,application/xhtml+xml",
         "user-agent": "Mozilla/5.0 (compatible; ScoutOpsCatalogCrawler/1.0)",

@@ -6,10 +6,10 @@ const state = ref<State>("loading");
 const requestId = ref("");
 const copy = computed(() =>
   state.value === "loading"
-    ? ["CHECKING · 检查中", "正在验证同步依赖"]
+    ? ["检查中", "正在验证同步依赖"]
     : state.value === "ready"
-      ? ["READY · 可承载同步流量", "API readiness 通过"]
-      : ["UNAVAILABLE · 已阻塞", "API 依赖暂不可用"],
+      ? ["就绪 · 可承载同步流量", "后端接口就绪检查通过"]
+      : ["不可用 · 已阻塞", "后端接口依赖暂不可用"],
 );
 async function check() {
   state.value = "loading";

@@ -8,7 +8,7 @@ test.beforeEach(async({page})=>navigation(page));
 test("M08-02.A07/A08/A15 desktop and 390 Redis resilience truth",async({page})=>{
   await page.route("**/api/v1/platform/operations/redis",route=>route.fulfill({json:envelope(base)}));
   await page.goto("/platform-admin/redis");
-  await expect(page.getByRole("heading",{name:"Redis 单实例韧性"})).toBeVisible();
+  await expect(page.getByRole("heading",{name:"缓存服务单实例韧性"})).toBeVisible();
   await expect(page.getByText("单 Redis 韧性门已满足")).toBeVisible();
   await expect(page.getByText("512.0 MiB")).toBeVisible();
   await expect(page).toHaveScreenshot("m08-02-redis-resilience-desktop.png",{fullPage:true});
@@ -24,5 +24,5 @@ test("M08-02.A08/A09/A16 warning blocked empty forbidden expired rate limited un
   response={...base,state:"blocked",findings:[{code:"redis_aof_disabled",severity:"blocked",action_hint:"通过宝塔恢复。"}]};await page.reload();await expect(page.getByText("Redis 韧性门已阻断")).toBeVisible();
   response=null;await page.reload();await expect(page.getByText("尚无 Redis 观测")).toBeVisible();
   for(const [next,label] of [[403,"没有平台运维权限"],[401,"登录已失效"],[429,"刷新过于频繁"],[503,"Redis 运行事实暂不可用"]] as const){status=next;await page.reload();await expect(page.getByText(label)).toBeVisible();}
-  await page.goto("/platform-admin/redis?state=recovering");await expect(page.getByRole("heading",{name:"Redis 单实例韧性"})).toBeVisible();
+  await page.goto("/platform-admin/redis?state=recovering");await expect(page.getByRole("heading",{name:"缓存服务单实例韧性"})).toBeVisible();
 });

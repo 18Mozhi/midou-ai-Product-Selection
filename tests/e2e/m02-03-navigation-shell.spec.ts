@@ -21,6 +21,8 @@ for (const item of [
   await expect(page.getByRole('heading', { name: item.heading, level: 1 })).toBeVisible();
   await expect(page.locator('.role-shell')).toHaveAttribute('data-state', 'ready');
   await expect(page.locator('.role-sidebar')).toHaveAttribute('aria-label', new RegExp(item.shell === 'member' ? '成员' : item.shell === 'organization_admin' ? '组织' : '平台'));
+  await expect(page.getByRole('link', { name: /智能选品/ }).first()).toBeVisible();
+  await expect(page.getByText(/navigation_(member|organization_admin|platform_admin)_allowed/)).toHaveCount(0);
   await expect(page).toHaveScreenshot(item.snapshot, { fullPage: true });
 });
 
@@ -41,7 +43,7 @@ test('M02-03.A16 forbidden shell shows request id and safe recovery', async ({ p
   await page.route('**/api/v1/me/navigation?**', (route) => route.fulfill({ status: 403, contentType: 'application/json', body: JSON.stringify({ error: { code: 'navigation_shell_forbidden', message: '权限检查未通过。', action_hint: '返回有权访问的工作台。' }, request_id: 'm02-03-forbidden', trace_id: 'm02-03-trace' }) }));
   await page.goto('/platform-admin');
   await expect(page.getByRole('heading', { name: '无权进入此工作台' })).toBeVisible();
-  await expect(page.getByText('request_id: m02-03-forbidden')).toBeVisible();
+  await expect(page.getByText('关联编号：m02-03-forbidden')).toBeVisible();
   await expect(page.getByRole('link', { name: '返回成员工作台' })).toHaveAttribute('href', '/home');
 });
 
@@ -49,7 +51,7 @@ test('M02-03 regression: public root resolves the authenticated landing instead 
   await page.route('**/api/v1/me/landing', (route) => route.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ error: { code: 'session_invalid', message: '请先登录。', action_hint: '重新登录后重试。' }, request_id: 'root-anonymous', trace_id: 'root-anonymous' }) }));
   await page.goto('/');
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByRole('heading', { name: '欢迎回到 ai选品' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '欢迎回到智能选品' })).toBeVisible();
 });
 
 test('M02-03 platform shell exposes management navigation without member-only shortcuts', async ({ page }) => {
@@ -69,4 +71,4 @@ test('M02-03 platform shell exposes management navigation without member-only sh
   await expect(page.getByRole('link', { name: /Redis|MySQL|文件韧性|容量边界/ })).toHaveCount(0);
 });
 
-test('M02-03 member shell never exposes platform administration navigation',async({page})=>{await allow(page,'member');await page.goto('/home');await expect(page.getByRole('link',{name:'组织与用户'})).toHaveCount(0);await expect(page.getByRole('link',{name:'热点来源'})).toHaveCount(0);await expect(page.getByRole('link',{name:'安全与审计'})).toHaveCount(0);await expect(page.getByRole('link',{name:/ai选品 选品工作台/})).toBeVisible();});
+test('M02-03 member shell never exposes platform administration navigation',async({page})=>{await allow(page,'member');await page.goto('/home');await expect(page.getByRole('link',{name:'组织与用户'})).toHaveCount(0);await expect(page.getByRole('link',{name:'热点来源'})).toHaveCount(0);await expect(page.getByRole('link',{name:'安全与审计'})).toHaveCount(0);await expect(page.getByRole('link',{name:/智能选品 选品工作台/})).toBeVisible();});

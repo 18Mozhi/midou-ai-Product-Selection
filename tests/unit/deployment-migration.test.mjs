@@ -9,6 +9,8 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   ]);
   assert.match(deploy, /apply-deployment-migrations\.mjs/);
   assert.match(deploy, /0040_platform_messages\.up\.sql/);
+  assert.match(deploy, /0042_erp_product_import\.up\.sql/);
+  assert.match(deploy, /0043_trend_rule_collection_schedule\.up\.sql/);
   assert.match(deploy, /0041_member_workspace_tasks\.up\.sql/);
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
   assert.match(deploy, /remote_python\(client, panel_deploy_source/);
@@ -18,8 +20,24 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   );
   assert.match(
     runner,
-    /allowed = new Set\(\["0040_platform_messages\.up\.sql", "0041_member_workspace_tasks\.up\.sql"\]\)/,
+    /"0040_platform_messages\.up\.sql"[\s\S]*"0041_member_workspace_tasks\.up\.sql"[\s\S]*"0042_erp_product_import\.up\.sql"[\s\S]*"0043_trend_rule_collection_schedule\.up\.sql"/,
   );
   assert.match(runner, /migration_checksum_drift/);
   assert.doesNotMatch(runner, /readdir|glob/);
+});
+
+test("allowlisted deployment migrations remain single-statement for the locked MySQL runner", async () => {
+  for (const name of [
+    "0040_platform_messages.up.sql",
+    "0041_member_workspace_tasks.up.sql",
+    "0042_erp_product_import.up.sql",
+    "0043_trend_rule_collection_schedule.up.sql",
+  ]) {
+    const sql = await readFile(`database/migrations/${name}`, "utf8");
+    const statements = sql
+      .split(";")
+      .map((value) => value.trim())
+      .filter(Boolean);
+    assert.equal(statements.length, 1, `${name} must remain single-statement`);
+  }
 });

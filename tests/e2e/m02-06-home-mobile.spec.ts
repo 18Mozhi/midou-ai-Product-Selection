@@ -47,5 +47,5 @@ test('M02-06.A08/A16 empty then blocked recovery never fabricates metrics', asyn
   blocked = true;
   await page.reload();
   await expect(page.getByRole('heading', { name: '依赖暂时受阻' })).toBeVisible();
-  await expect(page.getByText('request_id')).toBeVisible();
+  await expect(page.getByText('关联编号')).toBeVisible();
 });

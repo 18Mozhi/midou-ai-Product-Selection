@@ -4,7 +4,12 @@ import { basename, resolve } from "node:path";
 
 import mysql from "mysql2/promise";
 
-const allowed = new Set(["0040_platform_messages.up.sql", "0041_member_workspace_tasks.up.sql"]);
+const allowed = new Set([
+  "0040_platform_messages.up.sql",
+  "0041_member_workspace_tasks.up.sql",
+  "0042_erp_product_import.up.sql",
+  "0043_trend_rule_collection_schedule.up.sql",
+]);
 const requested = process.argv.slice(2);
 
 if (

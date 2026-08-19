@@ -545,7 +545,9 @@
         "../apps/api/src/credential-asset-service.ts",
         "../apps/api/src/mysql-credential-asset-repository.ts",
         "../apps/api/src/credential-asset-routes.ts",
-        "../apps/web/src/components/CredentialAssetCenter.vue"
+        "../apps/web/src/components/CredentialAssetCenter.vue",
+        "../browser-helper/scoutops-browser-helper/manifest.json",
+        "../browser-helper/scoutops-browser-helper/service-worker.js"
       ],
       "routes": [
         "/platform-admin/credentials",
@@ -555,7 +557,7 @@
         "/api/v1/platform/credential-assets/{assetId}/revoke",
         "/api/v1/platform/crawler-profiles"
       ],
-      "scope": "platform-global encrypted credential and crawler profile assets, including a novice Chinese browser-login archive wizard that creates the credential and runnable profile without an official provider API",
+      "scope": "platform-global encrypted credential and crawler profile assets, including Playwright storageState JSON, browser cookie JSON, Netscape cookies.txt, tar.gz browser profiles, direct login-page jump and a restricted ai选品 browser helper that reads the user-selected site's current-browser cookies",
       "encryption": "AES-256-GCM with random nonce, authentication tag, asset/type/key-version AAD and Baota-only master key",
       "responseBoundary": "masked fingerprint and metadata only; no decrypt, export, ciphertext, nonce or auth-tag API",
       "permission": "authenticated platform key_rotation:manage; same-origin and Idempotency-Key for writes",
@@ -647,7 +649,7 @@
       ],
       "permission": "authenticated platform collection:replay; same-origin and Idempotency-Key for expired lease recovery",
       "responseBoundary": "profile metadata, lease owner and timing, scoped run counts and correlation only; no credential, ciphertext, lease token, raw plan or temporary path",
-      "profileArchive": "M03-02 encrypted base64 tar.gz, traversal-safe bounded temporary extraction and unconditional cleanup",
+      "profileArchive": "M03-02 encrypted base64 tar.gz with traversal-safe bounded temporary extraction, or normalized encrypted cookie_bundle materialized as a bounded JSON file; both are unconditionally cleaned up",
       "configuration": [
         "PLAYWRIGHT_HEADLESS",
         "PLAYWRIGHT_NAVIGATION_TIMEOUT_MS",
@@ -795,7 +797,8 @@
         "../apps/worker/src/provider-source-executor.ts",
         "../apps/worker/src/automatic-source-scheduler.ts",
         "../apps/web/src/components/ProviderSourceCenter.vue",
-        "../database/migrations/0038_remove_official_api_provider_mode.up.sql"
+        "../database/migrations/0038_remove_official_api_provider_mode.up.sql",
+        "../database/migrations/0043_trend_rule_collection_schedule.up.sql"
       ],
       "routes": [
         "/platform-admin/providers/sources",
@@ -818,7 +821,7 @@
       "outboundBoundary": "Every automatic URL and proxy host is derived from the code-owned source catalog; the optional Baota-restricted project HTTP CONNECT proxy accepts only those exact HTTPS hosts without setting global HTTP_PROXY or HTTPS_PROXY; Google News rejects redirects, CSV uses inline content, and callers cannot supply an outbound URL or proxy",
       "limits": "Google RSS 2MB and 20 persisted records per task; CSV 1MB, exact 8-column header, 100 parsed rows and 20 persisted records per task",
       "permission": "provider:configure for catalog/provision; collection:replay for scoped replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
-      "persistence": "MySQL 5.7 automatic_source_schedules and provider_refresh_operations plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
+      "persistence": "MySQL 5.7 automatic_source_schedules, per-rule collection interval/cursor/last-task state and provider_refresh_operations plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
       "liveVerificationCleanup": "random m03-07 example.test scope only; delete M07-06 collection_task_evidence_links before evidence/task/provider principals and fail closed unless provider, workspace, organization and user are all absent",
       "configuration": [
         "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS",
@@ -848,7 +851,9 @@
         "../apps/api/src/mysql-trend-repository.ts",
         "../apps/api/src/trend-routes.ts",
         "../apps/worker/src/trend-projection-worker.ts",
-        "../apps/web/src/components/TrendDashboard.vue"
+        "../apps/worker/src/automatic-source-scheduler.ts",
+        "../apps/web/src/components/TrendDashboard.vue",
+        "../database/migrations/0043_trend_rule_collection_schedule.up.sql"
       ],
       "routes": [
         "/trends",
@@ -860,9 +865,9 @@
         "/api/v1/trends/monitoring-rules/{ruleId}"
       ],
       "scope": "organization and workspace scoped manual and automatic trend topics signals timelines keywords follows and monitoring rules",
-      "projection": "Baota Node Worker scans normalized records, leases idempotent projection jobs and projects google_news_search plus 96 fixed gnews market/topic channels; market and language derive from the code-owned provider catalog while non-trend records terminate as succeeded_empty",
-      "automaticProductDiscovery": "viral-products, Amazon, TikTok Shop, Etsy, eBay and new-product automatic channels create one evidence-backed insufficient_data opportunity per new trend topic and emit opportunity.candidate.discovered; general news, data and community channels remain trends only",
-      "monitoringRuleEvaluation": "every newly projected topic evaluates enabled include and negative keywords plus market and language; matched topics are automatically followed for the rule owner, the rule last_evaluated_at is updated, and an auditable trend.monitoring_rule.matched event is emitted",
+      "projection": "Baota Node Worker scans normalized records, leases idempotent projection jobs and projects manual Google News plus every code-owned automatic Google/non-Google RSS, forum and fixed public marketplace source; market and language derive from the source catalog while unsupported records terminate as succeeded_empty",
+      "automaticProductDiscovery": "product-oriented Google channels and automatic ecommerce sources create one evidence-backed insufficient_data opportunity per new trend topic; Amazon product URLs additionally seed a real ASIN competitor without fake snapshot metrics, and each new opportunity seeds a transparent pending sourcing search",
+      "monitoringRuleEvaluation": "each rule stores a 15–10080 minute interval and source cursor; the Baota Worker schedules market-matching sources with the rule keywords, then every newly projected topic evaluates include and negative keywords plus market and language; matched topics are followed, promoted to evidence-backed opportunities and auditable",
       "heatBoundary": "heat is the observed signal count with unit signals; momentum and confidence remain insufficient_data until a measured contract exists",
       "permission": "trend:read for scoped reads; trend:manage for follow relevance and monitoring writes; same-origin Origin and Idempotency-Key required",
       "audit": "user and Worker writes persist trend_events and trend_outbox with request_id and trace_id; original evidence is never deleted by relevance actions",
@@ -889,19 +894,24 @@
         "../apps/api/src/mysql-opportunity-repository.ts",
         "../apps/api/src/opportunity-routes.ts",
         "../apps/worker/src/opportunity-refresh-worker.ts",
-        "../apps/web/src/components/OpportunityWorkspace.vue"
+        "../apps/api/src/erp-product-import-service.ts",
+        "../apps/api/src/erp-product-import-routes.ts",
+        "../apps/web/src/components/OpportunityWorkspace.vue",
+        "../database/migrations/0042_erp_product_import.up.sql"
       ],
       "routes": [
         "/opportunities",
         "/opportunities/{opportunityId}",
         "/api/v1/opportunities",
         "/api/v1/opportunities/{opportunityId}",
-        "/api/v1/opportunities/{opportunityId}/decisions"
+        "/api/v1/opportunities/{opportunityId}/decisions",
+        "/api/v1/imports/erp-products"
       ],
-      "scope": "organization and workspace scoped manual and automatically discovered opportunity candidates, trend evidence links, human decisions and refresh jobs",
+      "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs",
       "truthBoundary": "M04-02 never invents scores, ROI or risk; unavailable M04-03 to M04-06 inputs remain null, unknown or insufficient_data",
       "refresh": "Baota Node Worker leases opportunity refresh jobs and links only persisted trend signals; trend-only evidence remains partial because competition and cost inputs are absent",
-      "productImages": "structured marketplace crawlers extract JSON-LD or linked product image URLs into normalized evidence; opportunity list resolves the newest scoped evidence image and otherwise shows an explicit pending-capture placeholder",
+      "productImages": "structured marketplace crawlers extract JSON-LD or linked product image URLs; ERP imports map the confirmed product image field; opportunity list resolves the newest scoped evidence image and otherwise shows an explicit pending-capture placeholder",
+      "erpImport": "the restricted browser helper reads the existing ERP Authorization token only inside the logged-in ERP tab, calls the confirmed product-list endpoint locally, sends no token to ai选品, and imports 1–500 rows into immutable evidence, opportunities, actual ASIN competitors and explicit pending sourcing searches whose detail exposes confirmed ERP supplier codes and historical reference costs without presenting them as live quotes",
       "permission": "opportunity:read for scoped reads; existing opportunity:decide for candidate creation and required-reason decisions; same-origin Origin and Idempotency-Key required",
       "audit": "manual creation, automatic opportunity.candidate.discovered, evidence refresh and decision changes persist correlated opportunity_events and opportunity_outbox; decisions do not rewrite scores or evidence",
       "configuration": [

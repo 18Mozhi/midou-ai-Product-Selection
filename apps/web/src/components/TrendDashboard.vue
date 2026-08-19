@@ -5,7 +5,13 @@ import ConfirmDialog from "./ConfirmDialog.vue";
 import "../trends.css";
 
 type State =
-  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+  | "loading"
+  | "ready"
+  | "empty"
+  | "error"
+  | "expired"
+  | "forbidden"
+  | "blocked";
 interface Topic {
   id: string;
   title: string;
@@ -59,8 +65,12 @@ interface Rule {
   language: string;
   category: string | null;
   notification_channel: "in_app";
+  collection_interval_minutes: number;
   status: "enabled" | "paused";
   last_evaluated_at: string | null;
+  last_collection_at: string | null;
+  next_collection_at: string | null;
+  last_collection_task_id: string | null;
   version: number;
   updated_at: string;
 }
@@ -88,6 +98,7 @@ const props = defineProps<{
     market: "US",
     language: "en-US",
     category: "",
+    collection_interval_minutes: 60,
   });
 const freshness = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
@@ -229,6 +240,7 @@ async function createRule() {
     language: form.language,
     category: form.category || null,
     notification_channel: "in_app",
+    collection_interval_minutes: form.collection_interval_minutes,
   });
   if (result) {
     showRule.value = false;
@@ -239,6 +251,7 @@ async function createRule() {
       market: "US",
       language: "en-US",
       category: "",
+      collection_interval_minutes: 60,
     });
     await load();
     message.value = "监控规则已启用；当前仅发送站内通知。";
@@ -249,6 +262,7 @@ async function toggleRule(item: Rule) {
   const result = await write(`/trends/monitoring-rules/${item.id}`, "PATCH", {
     status: item.status === "enabled" ? "paused" : "enabled",
     expected_version: item.version,
+    collection_interval_minutes: item.collection_interval_minutes,
   });
   if (result) {
     Object.assign(item, result);
@@ -268,7 +282,21 @@ onMounted(load);
 
 <template>
   <section class="trend-dashboard">
-    <section class="trend-explainer"><div><p>热点趋势怎么看</p><h3>不是热搜榜，而是可追溯的选品信号</h3><span>系统定时抓取新闻、电商、论坛和社媒公开页面，把同一话题合并后展示热度、增长速度、来源数量和证据。点击任一热点即可查看原始来源。</span></div><ol><li><b>热度</b><span>当前收集到的相关信号数</span></li><li><b>增速</b><span>近期相对上一周期的变化</span></li><li><b>来源</b><span>支持结论的独立站点数量</span></li><li><b>可信度</b><span>按证据数量与新鲜度计算</span></li></ol></section>
+    <section class="trend-explainer">
+      <div>
+        <p>热点趋势怎么看</p>
+        <h3>不是热搜榜，而是可追溯的选品信号</h3>
+        <span
+          >系统定时抓取新闻、电商、论坛和社媒公开页面，把同一话题合并后展示热度、增长速度、来源数量和证据。点击任一热点即可查看原始来源。</span
+        >
+      </div>
+      <ol>
+        <li><b>热度</b><span>当前收集到的相关信号数</span></li>
+        <li><b>增速</b><span>近期相对上一周期的变化</span></li>
+        <li><b>来源</b><span>支持结论的独立站点数量</span></li>
+        <li><b>可信度</b><span>按证据数量与新鲜度计算</span></li>
+      </ol>
+    </section>
     <header class="trend-hero">
       <div>
         <p>全网热点雷达</p>
@@ -547,6 +575,10 @@ onMounted(load);
             <dd>站内</dd>
           </div>
           <div>
+            <dt>采集周期</dt>
+            <dd>每 {{ item.collection_interval_minutes }} 分钟</dd>
+          </div>
+          <div>
             <dt>最后评估</dt>
             <dd>
               {{
@@ -605,6 +637,17 @@ onMounted(load);
         <label
           >分类（可选）<input v-model="form.category" maxlength="80"
         /></label>
+        <label
+          >自动采集周期<select v-model.number="form.collection_interval_minutes">
+            <option :value="15">每 15 分钟</option>
+            <option :value="30">每 30 分钟</option>
+            <option :value="60">每 1 小时</option>
+            <option :value="180">每 3 小时</option>
+            <option :value="360">每 6 小时</option>
+            <option :value="720">每 12 小时</option>
+            <option :value="1440">每天</option>
+          </select></label
+        >
         <aside>
           <strong>通知渠道</strong
           ><span>站内通知。邮件服务尚未确认，不能选择。</span>

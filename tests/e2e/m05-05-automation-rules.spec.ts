@@ -74,7 +74,7 @@ test("M05-05.A07/A08/A15 desktop rules and execution drawer", async ({
     page.getByRole("heading", { name: "自动化规则", level: 2 }),
   ).toBeVisible();
   await expect(page.getByText("审批超时人工跟进")).toBeVisible();
-  await expect(page.getByText("成员访问已授权", { exact: true })).toBeVisible();
+  await expect(page.getByText(/成员访问已授权|navigation_member_allowed/)).toHaveCount(0);
   await expect(page.getByRole("article").getByText("重要", { exact: true })).toBeVisible();
   await expect(page).toHaveScreenshot("m05-05-automation-rules-desktop.png", {
     fullPage: true,

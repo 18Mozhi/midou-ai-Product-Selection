@@ -40,7 +40,7 @@ test('M00-07.A06 runtime API stays closed while OpenAPI documents report contrac
 
 test('M00-07.A07/M00-07.A08 UI exposes commands and passed/failed/blocked text states', async () => {
   const component = await readFile('apps/web/src/components/VerificationFramework.vue', 'utf8');
-  for (const text of ['verify:module', 'verify:phase', 'verify:all', 'PASSED', 'FAILED', 'BLOCKED']) {
+  for (const text of ['verify:module', 'verify:phase', 'verify:all', '通过', '失败', '前置未满足']) {
     assert.match(component, new RegExp(text));
   }
 });

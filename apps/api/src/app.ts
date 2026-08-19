@@ -84,6 +84,10 @@ import {
   registerOpportunityRoutes,
   type OpportunityRouteOptions,
 } from "./opportunity-routes.js";
+import {
+  registerErpProductImportRoutes,
+  type ErpProductImportRouteOptions,
+} from "./erp-product-import-routes.js";
 import { ScoringServiceError } from "./scoring-service.js";
 import {
   registerScoringRoutes,
@@ -183,6 +187,7 @@ export interface BuildAppOptions {
   providerSources?: ProviderSourceRouteOptions;
   trends?: TrendRouteOptions;
   opportunities?: OpportunityRouteOptions;
+  erpProductImport?: ErpProductImportRouteOptions;
   selectionJourneys?: SelectionJourneyRouteOptions;
   scoring?: ScoringRouteOptions;
   profit?: ProfitRouteOptions;
@@ -361,6 +366,8 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   if (options.trends) registerTrendRoutes(app, options.trends);
   if (options.opportunities)
     registerOpportunityRoutes(app, options.opportunities);
+  if (options.erpProductImport)
+    registerErpProductImportRoutes(app, options.erpProductImport);
   if(options.selectionJourneys)registerSelectionJourneyRoutes(app,options.selectionJourneys);
   if (options.scoring) registerScoringRoutes(app, options.scoring);
   if (options.profit) registerProfitRoutes(app, options.profit);

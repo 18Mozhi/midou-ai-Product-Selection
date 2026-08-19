@@ -12,6 +12,8 @@ test('M04-01.A02/A12 title and monitoring contracts normalize without inventing 
   assert.equal(normalizeTrendTitle('  AI  Skin Care  '),'ai skin care');
   assert.equal(normalizeProjectedTrendTitle('  AI  Skin Care  '),'ai skin care');
   assert.deepEqual(validateMonitoringRuleInput(ruleInput).include_keywords,['ai skincare']);
+  assert.equal(validateMonitoringRuleInput(ruleInput).collection_interval_minutes,60);
+  assert.throws(()=>validateMonitoringRuleInput({...ruleInput,collection_interval_minutes:5}),error=>error instanceof TrendServiceError&&error.code==='trend_rule_interval_invalid');
   assert.throws(()=>validateMonitoringRuleInput({...ruleInput,include_keywords:[]}),error=>error instanceof TrendServiceError&&error.code==='trend_rule_keywords_invalid');
   assert.throws(()=>validateMonitoringRuleInput({...ruleInput,notification_channel:'email'}),error=>error instanceof TrendServiceError&&error.code==='trend_rule_channel_unavailable');
   assert.throws(()=>normalizeProjectedTrendTitle(''),error=>error instanceof TrendProjectionError&&error.code==='trend_title_invalid'&&!error.retryable);
@@ -22,6 +24,11 @@ test('M04-01 automatic hotspot channels project real markets and only product ch
   assert.deepEqual(projectedTrendProviderContext('gnews_gb_consumer_trends'),{accepted:true,automatic:true,market:'GB',language:'en-GB'});
   assert.deepEqual(projectedTrendProviderContext('google_news_search'),{accepted:true,automatic:false,market:'US',language:'en-US'});
   assert.equal(projectedTrendProviderContext('amazon_product').accepted,false);
+  assert.deepEqual(projectedTrendProviderContext('page_amazon_bestsellers_us'),{accepted:true,automatic:true,market:'US',language:'en-US'});
+  assert.equal(projectedTrendProviderContext('feed_reddit_buyitforlife').accepted,true);
+  assert.equal(isAutomaticProductDiscoveryProvider('page_amazon_bestsellers_us'),true);
+  assert.equal(isAutomaticProductDiscoveryProvider('page_ebay_deals_us'),true);
+  assert.equal(isAutomaticProductDiscoveryProvider('feed_reddit_buyitforlife'),false);
   assert.equal(isAutomaticProductDiscoveryProvider('gnews_us_viral_products'),true);
   assert.equal(isAutomaticProductDiscoveryProvider('gnews_jp_amazon'),true);
   assert.equal(isAutomaticProductDiscoveryProvider('gnews_gb_new_products'),true);

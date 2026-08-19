@@ -134,6 +134,8 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
   busy = ref(false),
   tab = ref<Tab>("overview"),
   showCreate = ref(false),
+  showErpImport = ref(false),
+  erpImportLimit = ref(200),
   showDecision = ref(false),
   decisionAction = ref<"adopt" | "observe" | "reject">("observe"),
   decisionReason = ref(""),
@@ -270,6 +272,88 @@ async function create() {
     window.location.href = `/opportunities/${result.id}`;
   }
 }
+function browserBridge<T>(action: string, payload: Record<string, unknown>) {
+  return new Promise<T>((resolve, reject) => {
+    const request_id = crypto.randomUUID();
+    const timeout = window.setTimeout(() => {
+      window.removeEventListener("message", receive);
+      reject(new Error("browser_helper_unavailable"));
+    }, 120000);
+    function receive(event: MessageEvent) {
+      if (
+        event.source !== window ||
+        event.data?.type !== "SCOUTOPS_BROWSER_BRIDGE_RESULT" ||
+        event.data?.request_id !== request_id
+      )
+        return;
+      window.clearTimeout(timeout);
+      window.removeEventListener("message", receive);
+      if (!event.data.ok)
+        reject(new Error(String(event.data.error || "browser_helper_failed")));
+      else resolve(event.data.data as T);
+    }
+    window.addEventListener("message", receive);
+    window.postMessage(
+      {
+        type: "SCOUTOPS_BROWSER_BRIDGE_REQUEST",
+        request_id,
+        action,
+        payload,
+      },
+      location.origin,
+    );
+  });
+}
+async function persistErpProducts(data: {
+  items: unknown[];
+  source_url: string;
+  captured_at: string;
+  total?: number;
+}) {
+  const result = await write("/imports/erp-products", data);
+  if (!result) return;
+  showErpImport.value = false;
+  await load();
+  message.value = `ERP 已读取 ${result.received_count} 条：新增 ${result.opportunity_count} 个机会、${result.competitor_count} 个亚马逊待采集竞品、${result.sourcing_search_count} 个货源匹配任务；原始记录已保存为证据。`;
+}
+async function importFromErpBrowser() {
+  busy.value = true;
+  message.value = "正在从已登录的 ERP 商品列表读取数据…";
+  try {
+    const data = await browserBridge<{
+      items: unknown[];
+      source_url: string;
+      captured_at: string;
+      total: number;
+    }>("erp.products.read", { limit: Number(erpImportLimit.value) });
+    busy.value = false;
+    await persistErpProducts(data);
+  } catch (error) {
+    busy.value = false;
+    const code = error instanceof Error ? error.message : "";
+    message.value =
+      code === "erp_login_page_opened"
+        ? "已打开 ERP 登录页。登录完成并进入商品列表后，再点击“从当前浏览器读取”。"
+        : code === "erp_login_required"
+          ? "ERP 登录状态无效，请在 ERP 页面重新登录。"
+          : "未检测到浏览器助手或 ERP 权限未授予。请先下载并加载浏览器助手。";
+  }
+}
+async function importErpFile(event: Event) {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (!file) return;
+  try {
+    const parsed = JSON.parse(await file.text());
+    const items = Array.isArray(parsed) ? parsed : parsed?.list;
+    await persistErpProducts({
+      items,
+      source_url: "https://medou.medouai.com/#/ProductList",
+      captured_at: new Date().toISOString(),
+    });
+  } catch {
+    message.value = "ERP JSON 文件格式无效；应为接口返回的 list 数组或商品数组。";
+  }
+}
 function startDecision(action: "adopt" | "observe" | "reject") {
   decisionAction.value = action;
   decisionReason.value = "";
@@ -379,6 +463,9 @@ onMounted(() => {
       </div>
       <div v-if="!opportunityId" class="opportunity-hero-actions">
         <a href="/opportunities/start">开始真实选品</a
+        ><button type="button" class="ghost" @click="showErpImport = true">
+          从 ERP 导入
+        </button
         ><button type="button" @click="showCreate = true">
           ＋ 手工创建机会
         </button>
@@ -884,6 +971,34 @@ onMounted(() => {
         </section>
       </article></template
     >
+    <div
+      v-if="showErpImport"
+      class="opportunity-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="erp-import-title"
+    >
+      <form @submit.prevent="importFromErpBrowser">
+        <header>
+          <div>
+            <p>使用已有商品数据补齐系统</p>
+            <h3 id="erp-import-title">从米豆 ERP 商品列表导入</h3>
+          </div>
+          <button type="button" aria-label="关闭 ERP 导入" @click="showErpImport = false">×</button>
+        </header>
+        <aside class="erp-import-guide">
+          <strong>真实数据流</strong>
+          <span>浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 ai选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。</span>
+        </aside>
+        <label>本次导入数量<input v-model.number="erpImportLimit" type="number" min="1" max="500" required /></label>
+        <label class="erp-file-fallback">没有安装助手时上传 ERP JSON<input type="file" accept=".json,application/json" @change="importErpFile" /><small>接受接口返回的 list 数组或商品数组。</small></label>
+        <footer>
+          <a href="/browser-helper/scoutops-browser-helper.zip">下载浏览器助手</a>
+          <button type="button" @click="showErpImport = false">取消</button>
+          <button type="submit" :disabled="busy">{{ busy ? "读取并导入中…" : "从当前浏览器读取" }}</button>
+        </footer>
+      </form>
+    </div>
     <div
       v-if="showCreate"
       class="opportunity-modal"

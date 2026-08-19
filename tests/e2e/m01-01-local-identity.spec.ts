@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('M01-01.A07/A15 local identity login and registration are visually stable', async ({ page }) => {
   await page.goto('/login');
-  await expect(page.getByRole('heading', { name: '欢迎回到 ai选品' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '欢迎回到智能选品' })).toBeVisible();
   await expect(page).toHaveScreenshot('m01-01-login.png', { fullPage: true });
   await page.getByRole('button', { name: '创建本地账号' }).click();
   await expect(page.getByRole('heading', { name: '创建本地账号' })).toBeVisible();

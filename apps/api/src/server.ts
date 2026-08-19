@@ -56,6 +56,7 @@ import { TrendService } from "./trend-service.js";
 import { MySqlTrendRepository } from "./mysql-trend-repository.js";
 import { OpportunityService } from "./opportunity-service.js";
 import { MySqlOpportunityRepository } from "./mysql-opportunity-repository.js";
+import { ErpProductImportService } from "./erp-product-import-service.js";
 import { ScoringService } from "./scoring-service.js";
 import { MySqlScoringRepository } from "./mysql-scoring-repository.js";
 import { ProfitService } from "./profit-service.js";
@@ -417,6 +418,17 @@ const app = buildApp({
   },
   opportunities: {
     service: new OpportunityService(new MySqlOpportunityRepository(pool)),
+    authorization,
+    auth: localAuth,
+    secureCookie: config.nodeEnv === "production",
+    webOrigin: config.app.webOrigin,
+  },
+  erpProductImport: {
+    service: new ErpProductImportService(
+      pool,
+      config.storage.evidenceRoot,
+      config.evidence.maxRawBytes,
+    ),
     authorization,
     auth: localAuth,
     secureCookie: config.nodeEnv === "production",

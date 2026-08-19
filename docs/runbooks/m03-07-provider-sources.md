@@ -39,3 +39,10 @@
 ## 本次发布重启要求
 
 来源适配器、自动调度筛选和 API 路由都在进程启动时加载。发布后必须通过宝塔重启统一 Node API 与 Node Worker；不需要重启 MySQL、Redis 或创建新服务。
+
+## 网页登录与匿名测试
+
+- `public_page` 与 `public_rss` 直接使用“匿名测试”，不要求登录档案。
+- 登录型来源可先“打开登录页”，再上传 Playwright `storageState` JSON、浏览器 Cookie JSON、Netscape `cookies.txt` 或完整 `.tar.gz` 浏览器档案。
+- 也可由浏览器助手在用户点击后按目标域名读取当前浏览器 Cookie。扩展桥接只接受 `midouai.mozhiz.cn` 与本地开发来源，Cookie 进入 API 后规范化、加密且不再返回。
+- 完整档案与 Cookie 文件是不同格式；不允许把 Cookie JSON 当作 tar.gz 解压。

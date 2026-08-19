@@ -51,6 +51,14 @@ const incompleteCandidate = {
 };
 
 async function setup(page: Page) {
+  let preference = { theme: 'deep-ocean', version: 1 };
+  await page.route('**/api/v1/me/ui-preferences', async route => {
+    if (route.request().method() === 'PUT') {
+      const body = route.request().postDataJSON() as { theme: string };
+      preference = { theme: body.theme, version: preference.version + 1 };
+    }
+    await route.fulfill({ json: envelope(preference) });
+  });
   await page.route('**/api/v1/me/navigation?shell=member', route => route.fulfill({
     json: envelope({
       shell: 'member',
@@ -86,9 +94,24 @@ test('M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await page.getByRole('button', { name: '关闭供应商搜索' }).click();
   await expect(page.getByText('宁波澄净户外用品厂')).toBeVisible();
   await expect(page.getByText('当前候选仍缺：规格、交期、所在地、可信度、稳定性、风险。')).toBeVisible();
-  await expect(page.getByText(/evidence 00000000-0000-4000-8000-000000000603/)).toBeVisible();
+  await expect(page.getByText(/证据 00000000-0000-4000-8000-000000000603/)).toBeVisible();
   await page.getByRole('button', { name: '确认报价' }).click();
   await expect(page.getByRole('heading', { name: '确认完整供应商报价' })).toBeVisible();
   await page.getByRole('button', { name: '关闭报价编辑' }).click();
+  await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page).toHaveScreenshot('m04-06-sourcing.png', { fullPage: true });
+});
+
+test('供应链详情完整跟随深色与浅色主题', async ({ page }) => {
+  await setup(page);
+  await page.goto('/sourcing');
+  const surface = page.locator('.sourcing-layout main');
+  await expect(surface).toBeVisible();
+  const deepBackground = await surface.evaluate(element => getComputedStyle(element).backgroundColor);
+  expect(deepBackground).not.toBe('rgb(255, 255, 255)');
+  await page.getByRole('button', { name: '切换界面主题' }).click();
+  await page.getByRole('button', { name: /云雾白/ }).click();
+  await expect.poll(() => page.locator('html').getAttribute('data-theme')).toBe('cloud-white');
+  const lightBackground = await surface.evaluate(element => getComputedStyle(element).backgroundColor);
+  expect(lightBackground).not.toBe(deepBackground);
 });

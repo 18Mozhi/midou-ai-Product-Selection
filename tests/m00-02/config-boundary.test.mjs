@@ -30,7 +30,7 @@ test('M00-02.A06/A11/A14 version endpoint returns fingerprint but no config valu
 });
 test('M00-02.A07/A08/A13/A17 UI, OpenAPI, Feature Map and rollback are synchronized', async () => {
   const [ui,api,map,runbook]=await Promise.all(['apps/web/src/components/ConfigBoundary.vue','docs/openapi.yaml','docs/feature-map.json','docs/runbooks/m00-02-config-boundary.md'].map(p=>readFile(p,'utf8')));
-  for(const state of ['VALIDATED','REJECTED','RESTART']) assert.match(ui,new RegExp(state)); assert.match(api,/HealthVersionEnvelope/); assert.match(map,/browserAllowlist/); assert.match(runbook,/## 回滚/);
+  for(const state of ['已校验','拒绝启动','需要重启']) assert.match(ui,new RegExp(state)); assert.match(api,/HealthVersionEnvelope/); assert.match(map,/browserAllowlist/); assert.match(runbook,/## 回滚/);
 });
 test('M00-02.A05/A16 worker and crawler startup sources call validated loaders', async () => {
   assert.match(await readFile('apps/worker/src/index.ts','utf8'),/loadRuntimeConfig/); assert.match(await readFile('apps/crawler/scoutops_crawler/__main__.py','utf8'),/load_config/);

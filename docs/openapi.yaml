@@ -1664,11 +1664,14 @@ paths:
                   schema:
                     {
                       type: object,
-                      required: [status, expected_version],
+                      required:
+                        [status, expected_version, collection_interval_minutes],
                       properties:
                         {
                           status: { type: string, enum: [enabled, paused] },
                           expected_version: { type: integer, minimum: 1 },
+                          collection_interval_minutes:
+                            { type: integer, minimum: 15, maximum: 10080 },
                         },
                     },
                 },
@@ -1818,6 +1821,27 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+  /imports/erp-products:
+    post:
+      summary: Import the current user's existing Midou ERP product list as evidence-backed opportunities
+      description: The browser helper reads the ERP Authorization token locally, calls the confirmed ERP product-list endpoint, and sends only product rows to this API. The token is never accepted or persisted by this route.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ErpProductImportInput" }
+      responses:
+        "201":
+          description: Idempotent import result with collection task and projection counts
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErpProductImportEnvelope" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
   /opportunities:
     get:
@@ -2624,7 +2648,7 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /sourcing/searches/{searchId}:
     get:
-      summary: Read supplier candidates, evidence references and explicit missing fields
+      summary: Read supplier candidates, ERP catalog references, evidence references and explicit missing fields
       security: [{ HttpOnlySession: [] }]
       x-required-capability: sourcing:read
       parameters:
@@ -8231,7 +8255,7 @@ components:
             minLength: 1,
             maxLength: 8000000,
             writeOnly: true,
-            description: Accepted only for encryption; compressed browser login archives are limited to 6 MB by the web client and the value is never returned or logged,
+            description: Accepted only for encryption. browser_profile is a base64 tar.gz archive limited to 6 MB by the web client; cookie_bundle accepts UTF-8 Playwright storageState JSON, browser cookie JSON, or Netscape cookies.txt and is normalized before encryption. The value is never returned or logged,
           }
     CredentialAssetCreateInput:
       type: object
@@ -9492,7 +9516,8 @@ components:
         trace_id: { type: string }
     TrendMonitoringRuleInput:
       type: object
-      required: [name, include_keywords, market, language, notification_channel]
+      required:
+        [name, include_keywords, market, language, notification_channel, collection_interval_minutes]
       properties:
         name: { type: string, minLength: 1, maxLength: 120 }
         include_keywords:
@@ -9519,17 +9544,30 @@ components:
             enum: [in_app],
             description: Email provider is not selected in M04-01,
           }
+        collection_interval_minutes:
+          {
+            type: integer,
+            minimum: 15,
+            maximum: 10080,
+            description: Baota Worker collection interval for this rule,
+          }
     TrendMonitoringRule:
       allOf:
         - { $ref: "#/components/schemas/TrendMonitoringRuleInput" }
         - type: object
           required:
-            [id, status, last_evaluated_at, version, created_at, updated_at]
+            [id, status, last_evaluated_at, last_collection_at, next_collection_at, last_collection_task_id, version, created_at, updated_at]
           properties:
             id: { type: string, format: uuid }
             status: { type: string, enum: [enabled, paused] }
             last_evaluated_at:
               { type: string, format: date-time, nullable: true }
+            last_collection_at:
+              { type: string, format: date-time, nullable: true }
+            next_collection_at:
+              { type: string, format: date-time, nullable: true }
+            last_collection_task_id:
+              { type: string, format: uuid, nullable: true }
             version: { type: integer, minimum: 1 }
             created_at: { type: string, format: date-time }
             updated_at: { type: string, format: date-time }
@@ -9555,6 +9593,38 @@ components:
           request_id: { type: string },
           trace_id: { type: string },
         }
+    ErpProductImportInput:
+      type: object
+      additionalProperties: false
+      required: [source_url, captured_at, items]
+      properties:
+        source_url:
+          { type: string, enum: ["https://medou.medouai.com/#/ProductList"] }
+        captured_at: { type: string, format: date-time }
+        items:
+          type: array
+          minItems: 1
+          maxItems: 500
+          items: { type: object, additionalProperties: true }
+    ErpProductImportResult:
+      type: object
+      required: [task_id, received_count, imported_count, deduplicated_count, opportunity_count, competitor_count, sourcing_search_count, status]
+      properties:
+        task_id: { type: string, format: uuid }
+        received_count: { type: integer, minimum: 1, maximum: 500 }
+        imported_count: { type: integer, minimum: 0 }
+        deduplicated_count: { type: integer, minimum: 0 }
+        opportunity_count: { type: integer, minimum: 0 }
+        competitor_count: { type: integer, minimum: 0 }
+        sourcing_search_count: { type: integer, minimum: 0 }
+        status: { type: string, enum: [succeeded, succeeded_empty] }
+    ErpProductImportEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        data: { $ref: "#/components/schemas/ErpProductImportResult" }
+        request_id: { type: string }
+        trace_id: { type: string }
     OpportunityCreateInput:
       type: object
       additionalProperties: false

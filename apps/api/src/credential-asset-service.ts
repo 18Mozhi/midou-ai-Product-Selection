@@ -34,7 +34,15 @@ interface Sealed {
 }
 export interface CredentialAssetRepository {
   listAssets(): Promise<CredentialAssetSummary[]>;
-  listProviderOptions(): Promise<{ id: string; code: string; name: string }[]>;
+  listProviderOptions(): Promise<
+    {
+      id: string;
+      code: string;
+      name: string;
+      target_url: string;
+      access_mode: string;
+    }[]
+  >;
   getCipherRecord(
     id: string,
   ): Promise<CredentialCipherRecord & { summary: CredentialAssetSummary }>;
@@ -90,7 +98,149 @@ const uuid =
     "private_key",
     "browser_profile",
   ];
-function secret(value: CredentialSecretInput) {
+type CookieSameSite = "Strict" | "Lax" | "None";
+interface NormalizedCookie {
+  name: string;
+  value: string;
+  domain: string;
+  path: string;
+  expires?: number;
+  httpOnly?: boolean;
+  secure?: boolean;
+  sameSite?: CookieSameSite;
+}
+const cookieText = (value: unknown, field: string, maximum: number) => {
+  if (typeof value !== "string" || !value.trim() || value.length > maximum)
+    throw new CredentialAssetError(
+      "credential_cookie_invalid",
+      400,
+      `Cookie ${field} 格式无效。`,
+    );
+  return value.trim();
+};
+const normalizeSameSite = (value: unknown): CookieSameSite | undefined => {
+  if (value == null || value === "") return undefined;
+  const normalized = String(value).toLowerCase();
+  if (normalized === "strict") return "Strict";
+  if (normalized === "lax") return "Lax";
+  if (["none", "no_restriction"].includes(normalized)) return "None";
+  if (normalized === "unspecified") return undefined;
+  throw new CredentialAssetError(
+    "credential_cookie_invalid",
+    400,
+    "Cookie sameSite 只支持 Strict、Lax 或 None。",
+  );
+};
+const normalizeCookie = (input: Record<string, unknown>): NormalizedCookie => {
+  const domain = cookieText(input.domain, "domain", 255).toLowerCase();
+  if (
+    !/^\.?[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/i.test(domain) ||
+    domain.includes("..")
+  )
+    throw new CredentialAssetError(
+      "credential_cookie_invalid",
+      400,
+      "Cookie domain 格式无效。",
+    );
+  const rawExpires = input.expires ?? input.expirationDate;
+  const expires = rawExpires == null ? undefined : Number(rawExpires);
+  if (
+    expires !== undefined &&
+    (!Number.isFinite(expires) || (expires < 0 && expires !== -1))
+  )
+    throw new CredentialAssetError(
+      "credential_cookie_invalid",
+      400,
+      "Cookie expires 格式无效。",
+    );
+  const sameSite = normalizeSameSite(input.sameSite);
+  return {
+    name: cookieText(input.name, "name", 256),
+    value: typeof input.value === "string" ? input.value : "",
+    domain,
+    path:
+      typeof input.path === "string" && input.path.startsWith("/")
+        ? input.path.slice(0, 1024)
+        : "/",
+    ...(expires !== undefined && expires > 0 ? { expires } : {}),
+    ...(input.httpOnly != null ? { httpOnly: Boolean(input.httpOnly) } : {}),
+    ...(input.secure != null ? { secure: Boolean(input.secure) } : {}),
+    ...(sameSite ? { sameSite } : {}),
+  };
+};
+const parseNetscapeCookies = (raw: string) => {
+  const cookies: NormalizedCookie[] = [];
+  for (const line of raw.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (
+      !trimmed ||
+      (trimmed.startsWith("#") && !trimmed.startsWith("#HttpOnly_"))
+    )
+      continue;
+    const values = trimmed.split("\t");
+    if (values.length !== 7)
+      throw new CredentialAssetError(
+        "credential_cookie_invalid",
+        400,
+        "Netscape cookies.txt 每行必须包含 7 列。",
+      );
+    const httpOnly = values[0]!.startsWith("#HttpOnly_");
+    const domain = httpOnly ? values[0]!.slice(10) : values[0]!;
+    cookies.push(
+      normalizeCookie({
+        domain,
+        path: values[2],
+        secure: values[3]?.toUpperCase() === "TRUE",
+        expires: Number(values[4] || 0),
+        name: values[5],
+        value: values[6] ?? "",
+        httpOnly,
+      }),
+    );
+  }
+  return cookies;
+};
+export function normalizeCookieBundle(raw: string): CredentialSecretInput {
+  if (typeof raw !== "string" || !raw.trim() || raw.length > 2_000_000)
+    throw new CredentialAssetError(
+      "credential_cookie_invalid",
+      400,
+      "Cookie 文件不能为空且不能超过 2 兆字符。",
+    );
+  let cookies: NormalizedCookie[];
+  try {
+    const parsed = JSON.parse(raw) as
+      | Record<string, unknown>
+      | Array<Record<string, unknown>>;
+    const values = Array.isArray(parsed)
+      ? parsed
+      : Array.isArray(parsed.cookies)
+        ? (parsed.cookies as Array<Record<string, unknown>>)
+        : [];
+    cookies = values.map(normalizeCookie);
+  } catch (error) {
+    if (error instanceof CredentialAssetError) throw error;
+    cookies = parseNetscapeCookies(raw);
+  }
+  if (!cookies.length || cookies.length > 500)
+    throw new CredentialAssetError(
+      "credential_cookie_invalid",
+      400,
+      "Cookie 文件需包含 1–500 条有效记录。",
+    );
+  const identities = new Set<string>();
+  const unique = cookies.filter((cookie) => {
+    const key = `${cookie.domain}\0${cookie.path}\0${cookie.name}`;
+    if (identities.has(key)) return false;
+    identities.add(key);
+    return true;
+  });
+  return {
+    encoding: "utf8",
+    value: JSON.stringify({ format: "scoutops-cookie-bundle-v1", cookies: unique }),
+  };
+}
+function secret(value: CredentialSecretInput, kind?: string) {
   if (
     !value ||
     !["utf8", "base64"].includes(value.encoding) ||
@@ -112,6 +262,15 @@ function secret(value: CredentialSecretInput) {
       400,
       "base64 载荷格式无效。",
     );
+  if (kind === "cookie_bundle") {
+    if (value.encoding !== "utf8")
+      throw new CredentialAssetError(
+        "credential_cookie_invalid",
+        400,
+        "Cookie 档案请使用 JSON、Playwright storageState 或 Netscape cookies.txt。",
+      );
+    return normalizeCookieBundle(value.value);
+  }
   return value;
 }
 function createInput(value: CredentialAssetCreateInput, now: Date) {
@@ -153,7 +312,7 @@ function createInput(value: CredentialAssetCreateInput, now: Date) {
     name: value.name.trim(),
     kind: value.kind,
     expires_at,
-    secret_payload: secret(value.secret_payload),
+    secret_payload: secret(value.secret_payload, value.kind),
   };
 }
 function expected(value: number) {
@@ -274,12 +433,16 @@ export class CredentialAssetService {
         "已撤销凭证不能轮换。",
       );
     const next = expected(value.expected_version) + 1,
-      sealed = sealCredential(secret(value.secret_payload), this.masterKey, {
-        assetId: id,
-        assetVersion: next,
-        kind: record.summary.kind,
-        keyVersion: this.keyVersion,
-      });
+      sealed = sealCredential(
+        secret(value.secret_payload, record.summary.kind),
+        this.masterKey,
+        {
+          assetId: id,
+          assetVersion: next,
+          kind: record.summary.kind,
+          keyVersion: this.keyVersion,
+        },
+      );
     return this.repository.rotateAsset({
       id,
       expectedVersion: value.expected_version,

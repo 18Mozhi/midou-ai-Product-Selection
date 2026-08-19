@@ -93,6 +93,22 @@ const latest = computed(() => selected.value?.latest_snapshot ?? null),
         : [408, 425, 429, 502, 503, 504].includes(s)
           ? "blocked"
           : "error";
+const statusText = (value: string) =>
+    ({ active: "监控中", paused: "已暂停" })[value] ?? value,
+  availabilityText = (value: string) =>
+    ({ in_stock: "有货", out_of_stock: "缺货", unknown: "未知" })[value] ?? value,
+  sourceStatusText = (value: string) =>
+    ({ healthy: "来源正常", degraded: "来源异常", unavailable: "来源不可用" })[value] ?? value,
+  freshnessText = (value: string) =>
+    ({ fresh: "数据新鲜", stale: "数据已过期", unknown: "时效未知" })[value] ?? value,
+  fieldText = (value: string) =>
+    ({ current_price: "当前价格", price: "价格", availability: "库存", rank: "排名", rank_value: "排名", review_count: "评论数", rating_value: "评分" })[value] ?? value,
+  changeValueText = (field: string, value: string) =>
+    field === "availability" ? availabilityText(value) : value,
+  impactText = (value: string) =>
+    value
+      .replace(/\bin_stock\b/g, "有货")
+      .replace(/\bout_of_stock\b/g, "缺货");
 async function load() {
   state.value = "loading";
   try {
@@ -260,7 +276,8 @@ onMounted(() => {
           ><strong v-if="item.latest_snapshot"
             >{{ item.latest_snapshot.currency }}
             {{ item.latest_snapshot.current_price }}</strong
-          ><em :data-status="item.status">{{ item.status }}</em>
+          ><strong v-else class="competitor-pending">等待首次采集</strong
+          ><em :data-status="item.status">{{ statusText(item.status) }}</em>
         </button>
       </aside>
       <article v-if="selected" class="competitor-detail">
@@ -292,14 +309,26 @@ onMounted(() => {
             ><b>{{ latest.review_count }} / {{ latest.rating_value }}</b>
           </article>
           <article>
-            <small>库存</small><b>{{ latest.availability }}</b>
+            <small>库存</small><b>{{ availabilityText(latest.availability) }}</b>
           </article>
+        </section>
+        <section v-else class="competitor-baseline-pending">
+          <strong>已建立竞品，正在等待第一个真实快照</strong>
+          <p>
+            该商品由 ERP 中的 Amazon ASIN 建立。价格、排名、评论、评分和库存尚未从商品页采集到，因此这里不会用 0 或演示数据代替。
+          </p>
+          <a
+            :href="selected.product_url"
+            target="_blank"
+            rel="noopener noreferrer"
+            >先查看 Amazon 商品页 ↗</a
+          >
         </section>
         <div v-if="latest" class="competitor-source">
           <span :data-health="latest.source_status">{{
-            latest.source_status
+            sourceStatusText(latest.source_status)
           }}</span>
-          <p>采集于 {{ latest.captured_at }} · {{ latest.freshness }}</p>
+          <p>采集于 {{ latest.captured_at }} · {{ freshnessText(latest.freshness) }}</p>
           <code>证据 {{ latest.evidence_id }}</code>
         </div>
         <section class="competitor-history">
@@ -308,10 +337,10 @@ onMounted(() => {
             <span>字段 · 前值 · 当前值 · 时间 · 证据 · 影响</span>
           </header>
           <article v-for="change in selected.changes ?? []" :key="change.id">
-            <b>{{ change.field }}</b
-            ><strong>{{ change.previous }} → {{ change.current }}</strong
+            <b>{{ fieldText(change.field) }}</b
+            ><strong>{{ changeValueText(change.field, change.previous) }} → {{ changeValueText(change.field, change.current) }}</strong
             ><time>{{ change.changed_at }}</time>
-            <p>{{ change.impact_explanation }}</p>
+            <p>{{ impactText(change.impact_explanation) }}</p>
             <code>证据 {{ change.evidence_id }}</code>
           </article>
           <p v-if="!selected.changes?.length">

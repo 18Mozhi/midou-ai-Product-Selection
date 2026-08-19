@@ -27,6 +27,10 @@ const automatic = Array.from({ length: 138 }, (_, index) => ({
   availability: "automatic",
   policy_note: "公开 RSS/Atom 或固定页面爬虫，系统会自动采集并保留原文证据。",
   markets: ["GLOBAL"],
+  languages: ["zh-CN"],
+  fields: ["title", "url", "published_at"],
+  timeout_ms: 20000,
+  retry_limit: 3,
   schedule_minutes: 15,
   provisioned: {
     id: `00000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
@@ -50,6 +54,10 @@ const setup = [
   availability: "setup_required",
   policy_note: "来源已登记；配置自有账号浏览器档案后才会运行，不依赖官方 API。",
   markets: ["GLOBAL"],
+  languages: ["zh-CN"],
+  fields: ["title", "url"],
+  timeout_ms: 20000,
+  retry_limit: 3,
   schedule_minutes: 30,
   provisioned: {
     id: `10000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
@@ -71,6 +79,10 @@ const manual = [
     availability: "manual",
     policy_note: "由用户输入关键词后立即采集。",
     markets: ["GLOBAL"],
+    languages: ["zh-CN"],
+    fields: ["title", "url", "published_at"],
+    timeout_ms: 20000,
+    retry_limit: 3,
     schedule_minutes: 15,
     provisioned: {
       id: "20000000-0000-4000-8000-000000000001",
@@ -87,6 +99,10 @@ const manual = [
     availability: "manual",
     policy_note: "只处理用户明确上传的文件。",
     markets: ["GLOBAL"],
+    languages: ["zh-CN"],
+    fields: ["title", "url"],
+    timeout_ms: 20000,
+    retry_limit: 3,
     schedule_minutes: 10080,
     provisioned: {
       id: "20000000-0000-4000-8000-000000000002",
@@ -130,12 +146,13 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
     page.getByRole("heading", { name: "Amazon 登录页" }),
   ).toBeVisible();
   await expect(
-    page.getByText("未启用", { exact: true }).last(),
+    page.getByText("需登录并验收解析", { exact: true }).last(),
   ).toBeVisible();
-  await page.getByRole("button", { name: "编辑采集配置" }).click();
+  await page.getByRole("button", { name: "编辑采集设置" }).click();
   await expect(page.getByLabel("采集频率（分钟）")).toHaveValue("30");
-  await expect(page.getByLabel("运行状态")).toHaveValue("disabled");
+  await expect(page.getByLabel("来源设置状态（解析验收前不会自动采集）")).toHaveValue("disabled");
   await page.getByRole("button", { name: "关闭来源编辑" }).click();
+  await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page).toHaveScreenshot("m03-07-provider-sources.png", {
     fullPage: true,
   });
@@ -153,13 +170,13 @@ test("platform administrator can save source schedule, retry and enablement", as
   });
   await page.goto("/platform-admin/providers/sources");
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
-  await page.getByRole("button", {name:"编辑采集配置"}).click();
+  await page.getByRole("button", {name:"编辑采集设置"}).click();
   await page.getByLabel("采集频率（分钟）").fill("45");
-  await page.getByLabel("运行状态").selectOption("enabled");
+  await page.getByLabel("来源设置状态（解析验收前不会自动采集）").selectOption("enabled");
   await page.getByLabel("变更原因").fill("调整 Amazon 公开来源采集频率");
   await page.getByRole("button", {name:"保存配置"}).click();
   await expect.poll(() => updateBody).toMatchObject({schedule_minutes:45,status:"enabled",expected_version:1,reason:"调整 Amazon 公开来源采集频率"});
-  await expect(page.getByRole("status")).toContainText("来源配置已保存");
+  await expect(page.getByRole("status")).toContainText("来源设置已保存");
 });
 
 test("M03-07.A08/A09 member can manually schedule immediate hotspot refresh", async ({

@@ -9,7 +9,7 @@ test("M06-06.A07/A08/A15 desktop and 390 member quota operations", async ({ page
   await page.goto("/platform-admin/commercial?organization_id=o1");
   await expect(page.getByRole("heading", { name: "会员、套餐、续期与用量" })).toBeVisible();
   await expect(page.getByText("380 / 1050")).toBeVisible();
-  await expect(page.getByText(/不虚构价格、支付/)).toBeVisible();
+  await expect(page.getByText("仅演示已配置的配额，不包含价格")).toBeVisible();
   await expect(page.getByRole("button", { name: "确认续期/变更" })).toBeVisible();
   await expect(page).toHaveScreenshot("m06-06-commercial-desktop.png", { fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });

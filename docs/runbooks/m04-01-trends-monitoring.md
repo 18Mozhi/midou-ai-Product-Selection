@@ -31,3 +31,9 @@
 ## 故障演练
 
 自动验收覆盖租约回收、幂等投影、非趋势空成功、非法字段终止、可恢复依赖重试/死信、跨组织读取拒绝、版本冲突和相关性操作不删除证据。
+
+## 规则周期发布与排障
+
+发布前在宝塔备份 `product_scout`，确认 `0017a_trends_m04_01.up.sql` 已应用，再以业务账号执行 `0043_trend_rule_collection_schedule.up.sql`。发布本地构建后，通过宝塔重启统一 Node 后端“ai选品”；该后端包含 API 与 Worker，不创建新服务。
+
+规则周期允许 15–10080 分钟。迁移前已经启用且 `next_collection_at` 为空的规则会在 Worker 下一次轮询时立即进入首批采集。没有运行时依次检查 `trend_monitoring_rules.next_collection_at`、`collection_interval_minutes`、`source_cursor`、`last_collection_task_id` 和 Worker 的 `queue=automatic_hotspot_sources` 日志。Google、非 Google RSS/论坛及公开榜单均应进入趋势投影。只回滚本扩展时先停止后端，再执行 `0043_trend_rule_collection_schedule.down.sql` 并回滚代码；已生成的任务、证据、机会、竞品和找货记录必须保留。

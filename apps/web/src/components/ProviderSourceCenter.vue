@@ -40,6 +40,7 @@ const message = ref("");
 const requestId = ref("");
 const editing = ref<SourceItem | null>(null);
 const saving = ref(false);
+const testing = ref<string | null>(null);
 const form = reactive({
   schedule_minutes: 15,
   timeout_ms: 20000,
@@ -88,6 +89,19 @@ const categoryText = (value: SourceItem["category"]) =>
     community: "论坛社区",
     product_supply: "商品供应链",
   })[value];
+const statusText = (item: SourceItem) => {
+  if (item.availability === "automatic")
+    return item.provisioned?.status === "enabled"
+      ? "已启用"
+      : item.provisioned
+        ? "已停用"
+        : "等待同步";
+  if (item.availability === "setup_required")
+    return item.access_mode === "authenticated_browser"
+      ? "需登录并验收解析"
+      : "等待解析验收";
+  return "手动维护";
+};
 const modeText = (value: string) =>
   (
     ({
@@ -139,6 +153,7 @@ async function save() {
   saving.value = true;
   message.value = "";
   try {
+    const isAutomatic = editing.value.availability === "automatic";
     const source = editing.value.provisioned;
     const response = await fetch(
       `${props.apiBaseUrl}/platform/provider-sources/${source.id}/configuration`,
@@ -161,11 +176,45 @@ async function save() {
     editing.value = null;
     await load();
     message.value =
-      "来源配置已保存；频率、超时、重试和启停状态不会再被启动同步覆盖。";
+      isAutomatic
+        ? "来源配置已保存；频率、超时、重试和启停状态不会再被启动同步覆盖。"
+        : "来源设置已保存；该来源完成解析合同验收前不会进入自动采集。";
   } catch {
     message.value = "来源配置服务暂不可用，本次没有保存。";
   } finally {
     saving.value = false;
+  }
+}
+async function testSource(item: SourceItem) {
+  if (!item.provisioned) return;
+  testing.value = item.provisioned.id;
+  message.value = "";
+  try {
+    const response = await fetch(
+      `${props.apiBaseUrl}/platform/provider-adapters/${item.provisioned.id}/health-check`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+          "idempotency-key": crypto.randomUUID(),
+        },
+      },
+    );
+    const body = await response.json().catch(() => null);
+    requestId.value = body?.request_id ?? requestId.value;
+    if (!response.ok) {
+      message.value = body?.error?.action_hint ?? "来源测试未完成";
+      return;
+    }
+    message.value =
+      body.data?.health_status === "ready"
+        ? `${item.name} 匿名采集测试通过，未使用登录凭证。`
+        : `${item.name} 已完成测试：${body.data?.last_error_code ?? "来源暂不可用"}。`;
+  } catch {
+    message.value = "来源测试服务暂不可用，本次没有修改配置。";
+  } finally {
+    testing.value = null;
   }
 }
 
@@ -179,9 +228,7 @@ onMounted(load);
         <p>热点来源</p>
         <h2>多平台、多国家来源已自动登记</h2>
         <span
-          >公开
-          RSS、论坛与电商内容直接由爬虫采集；需要登录的平台使用平台自有浏览器档案，不要求普通用户配置官方
-          API。</span
+          >公开 RSS、论坛与电商内容直接由爬虫采集；需要登录的平台可保存浏览器档案，完成解析验收后才会进入自动采集，不需要配置官方 API。</span
         >
       </div>
       <a href="/platform-admin/providers">管理来源规则</a>
@@ -209,7 +256,7 @@ onMounted(load);
       <ol>
         <li>公开信息订阅和论坛频道会自动采集，不需要密钥。</li>
         <li>频率、超时、重试、启停可直接在本页修改。</li>
-        <li>网页登录型平台只在登录失效时由管理员维护浏览器档案。</li>
+        <li>网页登录型平台先保存浏览器档案，完成解析验收后才进入自动采集。</li>
       </ol>
     </aside>
     <form class="source-filter" @submit.prevent>
@@ -226,7 +273,7 @@ onMounted(load);
       ><select v-model="availability">
         <option value="">全部状态</option>
         <option value="automatic">自动采集</option>
-        <option value="setup_required">需要配置网页登录</option>
+        <option value="setup_required">需要完成配置</option>
         <option value="manual">手动来源</option>
       </select>
     </form>
@@ -263,17 +310,19 @@ onMounted(load);
             >
             <h3>{{ item.name }}</h3>
           </div>
-          <b>{{
-            item.provisioned?.status === "enabled"
-              ? "已启用"
-              : item.availability === "automatic"
-                ? "等待同步"
-                : item.availability === "setup_required"
-                  ? "需要登录"
-                  : "手动维护"
-          }}</b>
+          <b>{{ statusText(item) }}</b>
         </header>
-        <p>{{ item.policy_note }}</p>
+        <p>
+          {{ item.policy_note }}
+          <a
+            v-if="item.target_url.startsWith('https://')"
+            class="source-target"
+            :href="item.target_url"
+            target="_blank"
+            rel="noopener noreferrer"
+            >查看来源页面 ↗</a
+          >
+        </p>
         <dl>
           <div>
             <dt>采集方式</dt>
@@ -299,16 +348,33 @@ onMounted(load);
             >{{ item.languages.join(" / ") }} ·
             {{ item.fields.length }} 类数据字段</span
           ><button
+            v-if="
+              item.provisioned &&
+              item.availability === 'automatic' &&
+              ['public_page', 'public_rss'].includes(item.access_mode)
+            "
+            type="button"
+            :disabled="testing === item.provisioned.id"
+            @click="testSource(item)"
+          >
+            {{ testing === item.provisioned.id ? "测试中…" : "匿名测试" }}</button
+          ><button
             v-if="item.provisioned"
             type="button"
             @click="beginEdit(item)"
           >
             编辑采集设置</button
           ><a
-            v-else-if="item.availability === 'setup_required'"
+            v-if="item.access_mode === 'authenticated_browser'"
             :href="`/platform-admin/credentials?provider_code=${encodeURIComponent(item.code)}&mode=login`"
             >配置网页登录</a
-          ><span v-else>等待系统登记</span>
+          ><span
+            v-if="
+              !item.provisioned &&
+              item.access_mode !== 'authenticated_browser'
+            "
+            >等待系统登记</span
+          >
         </footer>
       </article>
       <p v-if="!filtered.length" class="source-state">
@@ -358,7 +424,11 @@ onMounted(load);
             max="10"
             required /></label
         ><label
-          >运行状态<select v-model="form.status">
+          >{{
+            editing.availability === "automatic"
+              ? "运行状态"
+              : "来源设置状态（解析验收前不会自动采集）"
+          }}<select v-model="form.status">
             <option value="enabled">启用</option>
             <option value="disabled">停用</option>
           </select></label
@@ -505,6 +575,14 @@ onMounted(load);
 }
 .source-list article > p {
   margin: 0;
+}
+.source-target {
+  display: block;
+  margin-top: 6px;
+  color: var(--so-info);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  text-decoration: none;
 }
 .source-list h3 {
   margin: 4px 0;

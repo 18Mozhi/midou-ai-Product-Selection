@@ -36,6 +36,17 @@ type Search = {
   missing_fields: string[];
   created_at: string;
   candidates?: Candidate[];
+  erp_reference?: {
+    normalized_record_id: string;
+    evidence_id: string;
+    title: string;
+    image_url: string | null;
+    supplier_code: string | null;
+    cost_cny: number | null;
+    cost_usd: number | null;
+    source_url: string;
+    observed_at: string;
+  } | null;
 };
 const props = defineProps<{ apiBaseUrl: string }>(),
   state = ref<State>("loading"),
@@ -76,6 +87,33 @@ const missingLabels: Record<string, string> = {
       .map((x) => missingLabels[x] ?? x)
       .join("、"),
   ),
+  erpCosts = computed(() => {
+    const reference = selected.value?.erp_reference;
+    if (!reference) return [];
+    return [
+      reference.cost_cny == null ? null : `人民币 ${reference.cost_cny}`,
+      reference.cost_usd == null ? null : `美元 ${reference.cost_usd}`,
+    ].filter((value): value is string => Boolean(value));
+  }),
+  inputTypeText = (value: string) =>
+    ({ keyword: "关键词", image: "图片", url: "商品链接" })[value] ?? value,
+  statusText = (value: string) =>
+    ({
+      queued: "等待采集",
+      running: "采集中",
+      completed: "已完成",
+      completed_with_warnings: "已完成但有缺失",
+      ready: "可确认",
+      incomplete: "待补齐",
+      failed: "采集失败",
+    })[value] ?? value,
+  stabilityText = (value: string | undefined) =>
+    ({ stable: "稳定", volatile: "波动", unknown: "待确认" })[value ?? ""] ??
+    (value || "缺失"),
+  riskText = (value: string | undefined) =>
+    ({ low: "低", medium: "中", high: "高", unknown: "待确认" })[
+      value ?? ""
+    ] ?? (value || "缺失"),
   stateFrom = (s: number): State =>
     s === 401
       ? "expired"
@@ -245,14 +283,14 @@ onMounted(() => {
           @click="detail(item)"
         >
           <b>{{ item.input_ref }}</b
-          ><small>{{ item.input_type }} · {{ item.status }}</small
+          ><small>{{ inputTypeText(item.input_type) }} · {{ statusText(item.status) }}</small
           ><em>{{ item.candidate_count }} 个候选</em>
         </button>
       </aside>
       <main v-if="selected">
         <header>
           <div>
-            <p>{{ selected.input_type }}</p>
+            <p>{{ inputTypeText(selected.input_type) }}</p>
             <h3>{{ selected.input_ref }}</h3>
           </div>
           <button
@@ -266,6 +304,44 @@ onMounted(() => {
         <p v-if="selected.missing_fields.length" class="missing">
           当前候选仍缺：{{ missingText }}。必须人工带证据确认。
         </p>
+        <section
+          v-if="selected.erp_reference"
+          class="sourcing-erp-reference"
+        >
+          <img
+            v-if="selected.erp_reference.image_url"
+            :src="selected.erp_reference.image_url"
+            :alt="selected.erp_reference.title"
+          />
+          <div>
+            <small>ERP 货源线索 · 不是已确认报价</small>
+            <h4>{{ selected.erp_reference.title }}</h4>
+            <p>
+              供应商编码：{{ selected.erp_reference.supplier_code ?? "ERP 未提供" }}
+            </p>
+            <p>
+              ERP 历史参考成本：{{ erpCosts.length ? erpCosts.join(" / ") : "未提供" }}
+            </p>
+            <span
+              >仍需爬取供应商商品页、最小起订量、规格、交期与所在地后，才能形成可比较报价。</span
+            >
+            <footer>
+              <a
+                :href="selected.erp_reference.source_url"
+                target="_blank"
+                rel="noopener noreferrer"
+                >打开 ERP 商品列表 ↗</a
+              ><code>证据 {{ selected.erp_reference.evidence_id }}</code>
+            </footer>
+          </div>
+        </section>
+        <section v-if="!candidates.length" class="sourcing-pending">
+          <strong>找货任务已经建立，尚未取得真实供应商报价</strong>
+          <p>
+            ERP 商品已经作为找货输入保留。系统不会虚构供应商、起订量或报价；请等待已启用的货源爬虫完成，或从“新建找货”导入带证据的供应链结果。
+          </p>
+          <span v-if="selected.missing_fields.length">待补齐：{{ missingText }}</span>
+        </section>
         <section class="supplier-cards">
           <article
             v-for="item in candidates"
@@ -280,7 +356,7 @@ onMounted(() => {
                   @change="choose(item)"
                 />加入对比</label
               ><b>{{ item.supplier_name }}</b
-              ><span>{{ item.status }}</span>
+              ><span>{{ statusText(item.status) }}</span>
             </header>
             <h4>{{ item.product_title }}</h4>
             <dl>
@@ -308,8 +384,8 @@ onMounted(() => {
               <div>
                 <dt>稳定性 / 风险</dt>
                 <dd>
-                  {{ item.quote?.stability_status ?? "缺失" }} /
-                  {{ item.quote?.risk_level ?? "缺失" }}
+                  {{ stabilityText(item.quote?.stability_status) }} /
+                  {{ riskText(item.quote?.risk_level) }}
                 </dd>
               </div>
             </dl>

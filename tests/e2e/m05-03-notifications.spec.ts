@@ -75,7 +75,7 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
   ).toBeVisible();
   await expect(page.getByText("审批状态更新")).toBeVisible();
   await page.getByRole("button", { name: /审批状态更新/ }).click();
-  await expect(page.getByText("站内消息来自事务 Outbox")).toBeVisible();
+  await expect(page.getByText(/站内消息来自事务消息/)).toBeVisible();
   await expect(page).toHaveScreenshot("m05-03-notifications.png", {
     fullPage: true,
   });
