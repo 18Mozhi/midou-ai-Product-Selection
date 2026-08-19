@@ -5,7 +5,25 @@
 > `/www/wwwroot/ai选品/backend`、`/www/wwwroot/ai选品/python`、`config`、`runtime`
 > 与 `backups`，并通过宝塔重启既有 `ai选品` 与 `ai选品-python` 项目。
 
-> 历史双槽流程已停用。当前生产只允许一个宝塔 Node 后端 `ai选品`，不得创建第二后端、4103 常驻候选项目或保留临时灰度任务。以下内容仅用于解释旧审计记录；新发布按 `infra/baota/README.md` 覆盖固定目录，并在健康失败时用本地目标 Git 提交重新部署回滚。
+当前生产只允许一个宝塔 Node 后端 `ai选品`。不得创建第二后端、分流后端或常驻灰度
+任务。当前操作步骤如下：
+
+1. 在本地确认目标提交已经完成 `npm run verify:release-matrix`、
+   `npm run verify:runtime-docs`、`npm run verify:docs` 和风险匹配的构建/测试，且工作树
+   干净。
+2. 首次整理固定目录时运行 `python scripts/deploy-baota.py --initialize-layout`；后续发布
+   运行 `python scripts/deploy-baota.py`。脚本只读取既定 Windows 凭据管理器条目，只能
+   更新当前项目的固定目录和宝塔对象。
+3. 脚本更新网站、统一 Node 后端与 Python Crawler 后，通过宝塔管理的既有项目完成
+   重启。禁止在服务器执行 Git、构建、systemd、独立 PM2、宿主 crontab 或屏外服务。
+4. 发布后核验公网版本、live、ready、available，确认 Node 内 API/Worker、Python
+   Crawler、MySQL 5.7 与 Redis 的当前状态。任一门失败时，以本地目标 Git 提交重新
+   构建并执行同一部署命令回滚，不删除发布、审计或业务数据。
+
+## 历史双槽审计资料（不可执行）
+
+以下命令、端口、变量与观察记录只用于解释既有 M07-05 发布证据。旧执行器已经退出
+当前生产调用链，禁止照此新建项目、计划任务或流量分配。
 
 ## 发布前
 

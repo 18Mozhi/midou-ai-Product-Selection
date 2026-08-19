@@ -1741,6 +1741,9 @@
     "releaseRollout": {
       "module": "M07-05",
       "entrypoints": [
+        "../infra/baota/service-manifest.json",
+        "../scripts/deploy-baota.py",
+        "../scripts/verify-runtime-doc-consistency.mjs",
         "../infra/baota/release-rollout-manifest.json",
         "../database/migrations/0032a_compact_release_write_probe_m08_03.up.sql",
         "../scripts/run-baota-release-rollout.mjs",
@@ -1756,7 +1759,19 @@
         "/api/v1/platform/operations/releases",
         "/api/v1/platform/operations/releases/write-probe"
       ],
-      "scope": "惠州当前单机内宝塔 stable API 与 candidate API 的 5 25 100 渐进发布",
+      "scope": "当前发布使用固定目录和单一宝塔 Node 后端；旧双槽渐进发布仅保留为只读审计事实",
+      "executionStatus": "historical_disabled_by_single_node_topology",
+      "currentDeploymentEntrypoint": "../scripts/deploy-baota.py",
+      "currentRuntimeManifest": "../infra/baota/service-manifest.json",
+      "currentTopology": {
+        "nodeProjects": 1,
+        "nodeProjectName": "ai选品",
+        "nodePort": 4101,
+        "managedChildren": ["api", "worker"],
+        "pythonProjects": 1,
+        "pythonProjectName": "ai选品-python",
+        "persistentCandidateProjects": 0
+      },
       "truthBoundary": "verified only from a manually triggered single rollout instance holding the MySQL session named lock, a distinct immutable release attempt, current release gates with at least 30 minutes per stage, real Baota Nginx candidate samples reached through 127.0.0.1 while preserving the production TLS/SNI/Host and certificate validation so public-IP hairpin availability cannot pollute the result, proxy-safe HMAC candidate writes returning 202 with exact candidate-build persistence parity, current build identity, and due or expired work from the explicit Baota Worker-consumed MySQL queue list; a second instance fails closed as release_rollout_lock_busy before migration, gate or Nginx mutation; queue DATETIME(3) due and lag comparisons use the same MySQL session NOW(3) clock as the Worker so a non-UTC MySQL system timezone cannot create fixed-offset false backlog; domain audit or future-delivery outboxes without a runtime consumer are preserved but are not executable queue lag, while the 60-second stop threshold remains unchanged; live MySQL verification uses UTC_TIMESTAMP(3) only for its execution-time unique release probe so process timezone or an existing newer production release cannot shadow it, then cleans all probe rows; Linux visual verification also fails closed unless the configured Chromium is executable and fontconfig reports a Chinese font, so tofu screenshots cannot become baselines; no backup server or P08 capacity claim",
       "concurrencyPolicy": {
         "description": "宝塔任务仅手工触发；禁止自动日调度；MySQL 会话级命名锁忙时以 release_rollout_lock_busy 失败关闭",
@@ -1828,6 +1843,7 @@
         "RELEASE_NGINX_SPLIT_CONFIG",
         "RELEASE_NGINX_TIMING_LOG"
       ],
+      "configurationStatus": "historical rollout settings retained for audit and rollback archaeology; not current production deployment inputs",
       "browserHostPrerequisite": {
         "chromium": "/usr/bin/chromium",
         "package": "fonts-noto-cjk",
@@ -1838,7 +1854,7 @@
         "rollback": "Baota finite task removes fonts-noto-cjk and refreshes font cache",
         "e2eStartupTimeoutMs": 300000
       },
-      "runtimeBoundary": "historical rollout code remains for rollback archaeology, but current production runs one BaoTa project named ai选品 on port 4101 and no persistent candidate project; no external daemon, backup server, multi-node or 10000-user claim",
+      "runtimeBoundary": "historical rollout code and evidence remain for rollback archaeology only; current production deployment is python scripts/deploy-baota.py and runs one BaoTa Node project named ai选品 on port 4101 plus one Python project named ai选品-python, with no second backend, rollout task, external daemon, backup server, multi-node or 10000-user claim",
       "imageEvidence": [
         "core 10 platform cockpit",
         "concept 61 platform operations",

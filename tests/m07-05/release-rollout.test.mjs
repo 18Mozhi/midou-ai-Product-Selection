@@ -60,8 +60,16 @@ test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundar
   assert.equal(manifest.productionManager, "baota");
   assert.deepEqual(manifest.canary.percentages, [5, 25, 100]);
   assert.equal(manifest.canary.minimumObservationSeconds, 1800);
-  assert.deepEqual(manifest.automaticStop.asyncQueueTables, RELEASE_ASYNC_QUEUE_PROBES.map((probe) => probe.table));
-  assert.deepEqual(manifest.canary.syntheticWriteCanonicalFields, ["timestamp", "nonce", "release_id", "sample_id"]);
+  assert.deepEqual(
+    manifest.automaticStop.asyncQueueTables,
+    RELEASE_ASYNC_QUEUE_PROBES.map((probe) => probe.table),
+  );
+  assert.deepEqual(manifest.canary.syntheticWriteCanonicalFields, [
+    "timestamp",
+    "nonce",
+    "release_id",
+    "sample_id",
+  ]);
   assert.equal(manifest.canary.proxyRequestIdsExcludedFromSignature, true);
   assert.equal(manifest.canary.candidatePersistenceParityRequired, true);
   assert.equal(manifest.schemaVersion, 6);
@@ -102,15 +110,16 @@ test("M07-05.A01-A05 freezes Baota rollout, migration and automatic-stop boundar
 });
 
 test("M07-05 serializes BaoTa rollout instances and requires manual-only task triggering", async () => {
-  const [runner, manifest, runbook, architecture, featureMap, envExample, verifier] = await Promise.all([
-    read("scripts/run-baota-release-rollout.mjs"),
-    read("infra/baota/release-rollout-manifest.json").then(JSON.parse),
-    read("docs/runbooks/m07-05-release-rollout.md"),
-    read("docs/architecture/m07-05-release-rollout.md"),
-    read("docs/feature-map.json"),
-    read("config/env.example"),
-    read("scripts/verify-release-rollout-production.mjs"),
-  ]);
+  const [runner, manifest, runbook, architecture, featureMap, envExample, verifier] =
+    await Promise.all([
+      read("scripts/run-baota-release-rollout.mjs"),
+      read("infra/baota/release-rollout-manifest.json").then(JSON.parse),
+      read("docs/runbooks/m07-05-release-rollout.md"),
+      read("docs/architecture/m07-05-release-rollout.md"),
+      read("docs/feature-map.json"),
+      read("config/env.example"),
+      read("scripts/verify-release-rollout-production.mjs"),
+    ]);
   assert.deepEqual(manifest.task, {
     manager: "baota",
     trigger: "manual_only",
@@ -118,13 +127,21 @@ test("M07-05 serializes BaoTa rollout instances and requires manual-only task tr
     lock: "mysql_session_named_lock",
     lockTimeoutSeconds: 0,
   });
-  const manifestRolloutTask = manifest.objects.find((item) => item.name === "product-scout-release-rollout");
+  const manifestRolloutTask = manifest.objects.find(
+    (item) => item.name === "product-scout-release-rollout",
+  );
   assert.equal(manifestRolloutTask.schedule, "manual-only-disabled-schedule");
   assert.equal(manifestRolloutTask.concurrentRuns, 1);
   assert.equal(manifestRolloutTask.lockName, "scoutops:m07-05:release-rollout");
   const serviceManifest = JSON.parse(await read("infra/baota/service-manifest.json"));
-  assert.equal(serviceManifest.objects.some((item) => item.name === "product-scout-release-rollout"), false);
-  assert.equal(serviceManifest.objects.filter((item) => item.kind === "baota-node-project").length, 1);
+  assert.equal(
+    serviceManifest.objects.some((item) => item.name === "product-scout-release-rollout"),
+    false,
+  );
+  assert.equal(
+    serviceManifest.objects.filter((item) => item.kind === "baota-node-project").length,
+    1,
+  );
   assert.match(runner, /GET_LOCK\(\?,\s*0\)/);
   assert.match(runner, /RELEASE_LOCK\(\?\)/);
   assert.match(runner, /release_rollout_lock_busy/);
@@ -133,7 +150,10 @@ test("M07-05 serializes BaoTa rollout instances and requires manual-only task tr
   assert.doesNotMatch(runner, /DELETE FROM deployment_release_gates/);
   assert.doesNotMatch(runner, /SELECT id FROM deployment_releases WHERE stage='S0' AND build_sha/);
   assert.match(envExample, /^RELEASE_ROLLOUT_LOCK_NAME=scoutops:m07-05:release-rollout$/m);
-  assert.match(await read("packages/config/src/index.ts"), /RELEASE_ROLLOUT_LOCK_NAME","scoutops:m07-05:release-rollout"/);
+  assert.match(
+    await read("packages/config/src/index.ts"),
+    /RELEASE_ROLLOUT_LOCK_NAME",\s*"scoutops:m07-05:release-rollout"/,
+  );
   for (const source of [runbook, architecture, featureMap]) {
     assert.match(source, /仅手工触发/);
     assert.match(source, /MySQL 会话级命名锁/);
@@ -146,35 +166,129 @@ test("M07-05 serializes BaoTa rollout instances and requires manual-only task tr
 
 test("M07-05.A04/A08/A12/A16 release truth fails closed across current-release boundaries", async () => {
   const { ReleaseRolloutService } = await import("../../apps/api/dist/release-rollout-service.js");
-  const current = { id: "release-current", build_sha: "a".repeat(40), status: "deploying", started_at: "2026-08-08T12:00:00.000Z" };
-  const policy = { percentages: [5, 25, 100], minimumObservationSeconds: 1800, maximumEvidenceAgeMinutes: 30 };
-  const readState = async (releases, gates) => new ReleaseRolloutService({ read: async () => ({ releases, gates }) }, policy, () => new Date("2026-08-08T12:30:00.000Z")).read({ actorId: "actor", requestId: "request", traceId: "trace" });
+  const current = {
+    id: "release-current",
+    build_sha: "a".repeat(40),
+    status: "deploying",
+    started_at: "2026-08-08T12:00:00.000Z",
+  };
+  const policy = {
+    percentages: [5, 25, 100],
+    minimumObservationSeconds: 1800,
+    maximumEvidenceAgeMinutes: 30,
+  };
+  const readState = async (releases, gates) =>
+    new ReleaseRolloutService(
+      { read: async () => ({ releases, gates }) },
+      policy,
+      () => new Date("2026-08-08T12:30:00.000Z"),
+    ).read({ actorId: "actor", requestId: "request", traceId: "trace" });
   assert.equal((await readState([], [])).state, "empty");
   assert.equal((await readState([current], [])).state, "blocked");
-  const passed = [5, 25, 100].map((percent) => ({ release_id: current.id, gate_kind: `canary_${percent}`, status: "passed", traffic_percent: percent, observe_seconds: 1800, sample_count: 20, error_rate_percent: 0, read_p95_ms: 100, write_p95_ms: 200, async_lag_seconds: 2, finished_at: "2026-08-08T12:20:00.000Z" }));
+  const passed = [5, 25, 100].map((percent) => ({
+    release_id: current.id,
+    gate_kind: `canary_${percent}`,
+    status: "passed",
+    traffic_percent: percent,
+    observe_seconds: 1800,
+    sample_count: 20,
+    error_rate_percent: 0,
+    read_p95_ms: 100,
+    write_p95_ms: 200,
+    async_lag_seconds: 2,
+    finished_at: "2026-08-08T12:20:00.000Z",
+  }));
   assert.equal((await readState([{ ...current, status: "healthy" }], passed)).state, "verified");
-  assert.equal((await readState([{ ...current, status: "failed" }], [...passed, { release_id: current.id, gate_kind: "automatic_stop", status: "stopped", traffic_percent: 25, observe_seconds: 10, finished_at: "2026-08-08T12:10:00.000Z" }])).state, "stopped");
-  assert.equal((await readState([{ ...current, status: "rolled_back" }], [{ release_id: current.id, gate_kind: "rollback", status: "rolled_back", traffic_percent: 0, observe_seconds: 0, finished_at: "2026-08-08T12:15:00.000Z" }])).state, "rolled_back");
-  assert.equal((await readState([{ ...current, id: "new-release", status: "healthy" }], passed)).state, "blocked");
-  assert.equal((await readState([{ ...current, status: "healthy" }], passed.map((gate, index) => index ? gate : { ...gate, write_p95_ms: null }))).state, "blocked");
+  assert.equal(
+    (
+      await readState(
+        [{ ...current, status: "failed" }],
+        [
+          ...passed,
+          {
+            release_id: current.id,
+            gate_kind: "automatic_stop",
+            status: "stopped",
+            traffic_percent: 25,
+            observe_seconds: 10,
+            finished_at: "2026-08-08T12:10:00.000Z",
+          },
+        ],
+      )
+    ).state,
+    "stopped",
+  );
+  assert.equal(
+    (
+      await readState(
+        [{ ...current, status: "rolled_back" }],
+        [
+          {
+            release_id: current.id,
+            gate_kind: "rollback",
+            status: "rolled_back",
+            traffic_percent: 0,
+            observe_seconds: 0,
+            finished_at: "2026-08-08T12:15:00.000Z",
+          },
+        ],
+      )
+    ).state,
+    "rolled_back",
+  );
+  assert.equal(
+    (await readState([{ ...current, id: "new-release", status: "healthy" }], passed)).state,
+    "blocked",
+  );
+  assert.equal(
+    (
+      await readState(
+        [{ ...current, status: "healthy" }],
+        passed.map((gate, index) => (index ? gate : { ...gate, write_p95_ms: null })),
+      )
+    ).state,
+    "blocked",
+  );
 });
 
 test("M07-05.A06-A17 API, UI, config and documentation contracts stay synchronized", async () => {
-  const all = (await Promise.all([
-    "apps/api/src/release-rollout-routes.ts",
-    "apps/api/src/release-rollout-service.ts",
-    "apps/api/src/mysql-release-rollout-repository.ts",
-    "apps/web/src/components/ReleaseRolloutCenter.vue",
-    "config/env.example",
-    "config/schema.json",
-    "docs/openapi.yaml",
-    "docs/feature-map.json",
-    "docs/architecture/m07-05-release-rollout.md",
-    "docs/runbooks/m07-05-release-rollout.md",
-    "verification/modules/M07-05.json",
-  ].map(read))).join("\n");
-  for (const token of ["M07-05", "platform:operate", "/api/v1/platform/operations/releases", "RELEASE_CANARY_OBSERVE_SECONDS", "innodb_flush_log_at_trx_commit=2", "binlog-format=ROW", "innodb_buffer_pool_size=4096M", "innodb_io_capacity=1000", "REPLICATION CLIENT", "5", "25", "100", "回滚"]) assert.match(all, new RegExp(token));
-  assert.doesNotMatch(await read("apps/api/src/release-rollout-service.ts"), /password|cookie|token|private_key/i);
+  const all = (
+    await Promise.all(
+      [
+        "apps/api/src/release-rollout-routes.ts",
+        "apps/api/src/release-rollout-service.ts",
+        "apps/api/src/mysql-release-rollout-repository.ts",
+        "apps/web/src/components/ReleaseRolloutCenter.vue",
+        "config/env.example",
+        "config/schema.json",
+        "docs/openapi.yaml",
+        "docs/feature-map.json",
+        "docs/architecture/m07-05-release-rollout.md",
+        "docs/runbooks/m07-05-release-rollout.md",
+        "verification/modules/M07-05.json",
+      ].map(read),
+    )
+  ).join("\n");
+  for (const token of [
+    "M07-05",
+    "platform:operate",
+    "/api/v1/platform/operations/releases",
+    "RELEASE_CANARY_OBSERVE_SECONDS",
+    "innodb_flush_log_at_trx_commit=2",
+    "binlog-format=ROW",
+    "innodb_buffer_pool_size=4096M",
+    "innodb_io_capacity=1000",
+    "REPLICATION CLIENT",
+    "5",
+    "25",
+    "100",
+    "回滚",
+  ])
+    assert.match(all, new RegExp(token));
+  assert.doesNotMatch(
+    await read("apps/api/src/release-rollout-service.ts"),
+    /password|cookie|token|private_key/i,
+  );
 });
 
 test("M07-05 historical candidate tooling cannot create a second production backend", async () => {
@@ -184,23 +298,32 @@ test("M07-05 historical candidate tooling cannot create a second production back
     read("infra/baota/service-manifest.json").then(JSON.parse),
   ]);
   assert.match(runtimeConfig, /port:\s*integer\(env,\s*"APP_PORT",\s*4101/);
-  assert.equal(serviceManifest.objects.filter((entry) => entry.kind === "baota-node-project").length, 1);
-  assert.equal(serviceManifest.objects.find((entry) => entry.kind === "baota-node-project").name, "ai选品");
+  assert.equal(
+    serviceManifest.objects.filter((entry) => entry.kind === "baota-node-project").length,
+    1,
+  );
+  assert.equal(
+    serviceManifest.objects.find((entry) => entry.kind === "baota-node-project").name,
+    "ai选品",
+  );
   assert.doesNotMatch(JSON.stringify(serviceManifest.objects), /4103|api-canary/);
   assert.match(runbook, /历史|停用|不得.*第二|单后端/s);
 });
 
 test("M07-05 Playwright verification uses isolated configurable API and Web ports", async () => {
-  const [playwrightConfig, viteConfig, envExample, schema, featureMap, runbook] = await Promise.all([
-    read("playwright.config.ts"),
-    read("apps/web/vite.config.ts"),
-    read("config/env.example"),
-    read("config/schema.json"),
-    read("docs/feature-map.json"),
-    read("docs/runbooks/m07-05-release-rollout.md"),
-  ]);
+  const [playwrightConfig, viteConfig, envExample, schema, featureMap, runbook] = await Promise.all(
+    [
+      read("playwright.config.ts"),
+      read("apps/web/vite.config.ts"),
+      read("config/env.example"),
+      read("config/schema.json"),
+      read("docs/feature-map.json"),
+      read("docs/runbooks/m07-05-release-rollout.md"),
+    ],
+  );
   for (const name of ["PLAYWRIGHT_API_PORT", "PLAYWRIGHT_WEB_PORT"]) {
-    for (const source of [playwrightConfig, viteConfig, envExample, schema, featureMap, runbook]) assert.match(source, new RegExp(name));
+    for (const source of [playwrightConfig, viteConfig, envExample, schema, featureMap, runbook])
+      assert.match(source, new RegExp(name));
   }
   assert.match(envExample, /^PLAYWRIGHT_API_PORT=4101$/m);
   assert.match(envExample, /^PLAYWRIGHT_WEB_PORT=5173$/m);
@@ -210,7 +333,19 @@ test("M07-05 Playwright verification uses isolated configurable API and Web port
 });
 
 test("M07-05 Playwright verification can use the BaoTa host system Chromium", async () => {
-  const [playwrightConfig, envExample, schema, featureMap, architecture, runbook, blueprint, phasePlan, moduleManifest, hostVerifier, ...linuxSnapshots] = await Promise.all([
+  const [
+    playwrightConfig,
+    envExample,
+    schema,
+    featureMap,
+    architecture,
+    runbook,
+    blueprint,
+    phasePlan,
+    moduleManifest,
+    hostVerifier,
+    ...linuxSnapshots
+  ] = await Promise.all([
     read("playwright.config.ts"),
     read("config/env.example"),
     read("config/schema.json"),
@@ -228,14 +363,23 @@ test("M07-05 Playwright verification can use the BaoTa host system Chromium", as
       "m07-05-release-rollout-mobile-390-mobile-390-linux.png",
     ].map((name) => read(`tests/e2e/m07-05-release-rollout.spec.ts-snapshots/${name}`)),
   ]);
-  for (const source of [playwrightConfig, envExample, schema, featureMap, runbook, blueprint, phasePlan]) {
+  for (const source of [
+    playwrightConfig,
+    envExample,
+    schema,
+    featureMap,
+    runbook,
+    blueprint,
+    phasePlan,
+  ]) {
     assert.match(source, /PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH/);
   }
   assert.match(playwrightConfig, /launchOptions/);
   assert.match(playwrightConfig, /executablePath/);
   assert.match(envExample, /^PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$/m);
   assert.match(runbook, /\/usr\/bin\/chromium/);
-  for (const source of [featureMap, architecture, runbook, blueprint, phasePlan]) assert.match(source, /fonts-noto-cjk/);
+  for (const source of [featureMap, architecture, runbook, blueprint, phasePlan])
+    assert.match(source, /fonts-noto-cjk/);
   assert.equal(linuxSnapshots.length, 4);
   for (const snapshot of linuxSnapshots) assert.ok(snapshot.length > 100_000);
   assert.ok(moduleManifest.commands.includes("node scripts/verify-playwright-host.mjs"));
@@ -245,10 +389,26 @@ test("M07-05 Playwright verification can use the BaoTa host system Chromium", as
   const { verifyPlaywrightHost } = await import("../../scripts/verify-playwright-host.mjs");
   const executable = async () => {};
   await assert.rejects(
-    () => verifyPlaywrightHost({ platform: "linux", env: { PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: "/usr/bin/chromium" }, assertExecutable: executable, run: () => ({ status: 0, stdout: "" }) }),
+    () =>
+      verifyPlaywrightHost({
+        platform: "linux",
+        env: { PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: "/usr/bin/chromium" },
+        assertExecutable: executable,
+        run: () => ({ status: 0, stdout: "" }),
+      }),
     { code: "playwright_chinese_font_missing" },
   );
-  assert.equal((await verifyPlaywrightHost({ platform: "linux", env: { PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: "/usr/bin/chromium" }, assertExecutable: executable, run: () => ({ status: 0, stdout: "/font/NotoSansCJK.ttc: Noto Sans CJK SC" }) })).status, "passed");
+  assert.equal(
+    (
+      await verifyPlaywrightHost({
+        platform: "linux",
+        env: { PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: "/usr/bin/chromium" },
+        assertExecutable: executable,
+        run: () => ({ status: 0, stdout: "/font/NotoSansCJK.ttc: Noto Sans CJK SC" }),
+      })
+    ).status,
+    "passed",
+  );
 });
 
 test("M07-05 MySQL single-row gates and immutable attempts use object presence", async () => {
@@ -271,32 +431,63 @@ test("M07-05 live verification timestamps its probe after any existing productio
 });
 
 test("M07-05 signed release write probe rejects stale or forged requests before the durable write", async () => {
-  const { ReleaseWriteProbeService, signReleaseProbe } = await import("../../apps/api/dist/release-rollout-service.js");
-  const now = new Date("2026-08-08T18:00:00.000Z"), signingKey = "m07-05-test-signing-key-with-32-characters", writes = [];
-  const service = new ReleaseWriteProbeService({ writeProbe: async (input) => writes.push(input) }, signingKey, "a".repeat(40), 60, () => now);
-  const input = { timestamp: Math.floor(now.getTime() / 1000), nonce: randomUUID(), requestId: randomUUID(), traceId: randomUUID(), releaseId: randomUUID(), sampleId: randomUUID() };
+  const { ReleaseWriteProbeService, signReleaseProbe } =
+    await import("../../apps/api/dist/release-rollout-service.js");
+  const now = new Date("2026-08-08T18:00:00.000Z"),
+    signingKey = "m07-05-test-signing-key-with-32-characters",
+    writes = [];
+  const service = new ReleaseWriteProbeService(
+    { writeProbe: async (input) => writes.push(input) },
+    signingKey,
+    "a".repeat(40),
+    60,
+    () => now,
+  );
+  const input = {
+    timestamp: Math.floor(now.getTime() / 1000),
+    nonce: randomUUID(),
+    requestId: randomUUID(),
+    traceId: randomUUID(),
+    releaseId: randomUUID(),
+    sampleId: randomUUID(),
+  };
   const proxiedInput = { ...input, requestId: "f".repeat(32), traceId: randomUUID() };
-  const accepted = await service.record({ ...proxiedInput, signature: signReleaseProbe(input, signingKey) });
+  const accepted = await service.record({
+    ...proxiedInput,
+    signature: signReleaseProbe(input, signingKey),
+  });
   assert.equal(accepted.accepted, true);
   assert.equal(writes.length, 1);
   assert.equal(writes[0].requestId, proxiedInput.requestId);
   assert.equal(writes[0].traceId, proxiedInput.traceId);
-  await assert.rejects(() => service.record({ ...input, sampleId: randomUUID(), signature: "0".repeat(64) }), { code: "release_probe_signature_invalid" });
-  await assert.rejects(() => service.record({ ...input, timestamp: input.timestamp - 61, signature: signReleaseProbe({ ...input, timestamp: input.timestamp - 61 }, signingKey) }), { code: "release_probe_timestamp_invalid" });
+  await assert.rejects(
+    () => service.record({ ...input, sampleId: randomUUID(), signature: "0".repeat(64) }),
+    { code: "release_probe_signature_invalid" },
+  );
+  await assert.rejects(
+    () =>
+      service.record({
+        ...input,
+        timestamp: input.timestamp - 61,
+        signature: signReleaseProbe({ ...input, timestamp: input.timestamp - 61 }, signingKey),
+      }),
+    { code: "release_probe_timestamp_invalid" },
+  );
   assert.equal(writes.length, 1);
 });
 
 test("M07-05 warms a signed single-transaction release write probe and measures unique compact writes", async () => {
-  const [runner, up, down, compactUp, compactDown, routes, repository, envExample] = await Promise.all([
-    read("scripts/run-baota-release-rollout.mjs"),
-    read("database/migrations/0027_release_write_probe_m07_05.up.sql"),
-    read("database/migrations/0027_release_write_probe_m07_05.down.sql"),
-    read("database/migrations/0032a_compact_release_write_probe_m08_03.up.sql"),
-    read("database/migrations/0032a_compact_release_write_probe_m08_03.down.sql"),
-    read("apps/api/src/release-rollout-routes.ts"),
-    read("apps/api/src/mysql-release-rollout-repository.ts"),
-    read("config/env.example"),
-  ]);
+  const [runner, up, down, compactUp, compactDown, routes, repository, envExample] =
+    await Promise.all([
+      read("scripts/run-baota-release-rollout.mjs"),
+      read("database/migrations/0027_release_write_probe_m07_05.up.sql"),
+      read("database/migrations/0027_release_write_probe_m07_05.down.sql"),
+      read("database/migrations/0032a_compact_release_write_probe_m08_03.up.sql"),
+      read("database/migrations/0032a_compact_release_write_probe_m08_03.down.sql"),
+      read("apps/api/src/release-rollout-routes.ts"),
+      read("apps/api/src/mysql-release-rollout-repository.ts"),
+      read("config/env.example"),
+    ]);
   assert.match(runner, /candidate_write_warmup_failed/);
   assert.match(runner, /\/api\/v1\/platform\/operations\/releases\/write-probe/);
   assert.match(runner, /RELEASE_PROBE_SIGNING_KEY/);
@@ -339,21 +530,25 @@ test("M07-05 retries only pre-upstream transport aborts without relaxing candida
 });
 
 test("M07-05 reaches the BaoTa Nginx loopback while preserving production TLS identity", async () => {
-  const [runner, manifest, envExample, schema, featureMap, architecture, runbook, blueprint] = await Promise.all([
-    read("scripts/run-baota-release-rollout.mjs"),
-    read("infra/baota/release-rollout-manifest.json").then(JSON.parse),
-    read("config/env.example"),
-    read("config/schema.json").then(JSON.parse),
-    read("docs/feature-map.json"),
-    read("docs/architecture/m07-05-release-rollout.md"),
-    read("docs/runbooks/m07-05-release-rollout.md"),
-    read("new-product-enterprise-blueprint.md"),
-  ]);
+  const [runner, manifest, envExample, schema, featureMap, architecture, runbook, blueprint] =
+    await Promise.all([
+      read("scripts/run-baota-release-rollout.mjs"),
+      read("infra/baota/release-rollout-manifest.json").then(JSON.parse),
+      read("config/env.example"),
+      read("config/schema.json").then(JSON.parse),
+      read("docs/feature-map.json"),
+      read("docs/architecture/m07-05-release-rollout.md"),
+      read("docs/runbooks/m07-05-release-rollout.md"),
+      read("new-product-enterprise-blueprint.md"),
+    ]);
   assert.equal(manifest.canary.publicProbeConnectAddress, "127.0.0.1");
   assert.equal(manifest.canary.publicProbePreservesTlsHostname, true);
   assert.match(runner, /RELEASE_PUBLIC_CONNECT_ADDRESS \?\? "127\.0\.0\.1"/);
   assert.match(runner, /lookup:/);
-  assert.match(runner, /options\.all \? callback\(null, \[\{ address: connectAddress, family: 4 \}\]\)/);
+  assert.match(
+    runner,
+    /options\.all \? callback\(null, \[\{ address: connectAddress, family: 4 \}\]\)/,
+  );
   assert.match(runner, /servername: target\.hostname/);
   assert.doesNotMatch(runner, /rejectUnauthorized:\s*false/);
   assert.match(envExample, /^RELEASE_PUBLIC_CONNECT_ADDRESS=127\.0\.0\.1$/m);
@@ -365,7 +560,17 @@ test("M07-05 reaches the BaoTa Nginx loopback while preserving production TLS id
 });
 
 test("M07-05 uses one-second production sampling without relaxing rollout gates", async () => {
-  const [manifest, runner, envExample, openapi, featureMap, architecture, runbook, verifier, evidenceSchema] = await Promise.all([
+  const [
+    manifest,
+    runner,
+    envExample,
+    openapi,
+    featureMap,
+    architecture,
+    runbook,
+    verifier,
+    evidenceSchema,
+  ] = await Promise.all([
     read("infra/baota/release-rollout-manifest.json").then(JSON.parse),
     read("scripts/run-baota-release-rollout.mjs"),
     read("config/env.example"),
@@ -379,7 +584,8 @@ test("M07-05 uses one-second production sampling without relaxing rollout gates"
   assert.equal(manifest.canary.syntheticProbeIntervalSeconds, 1);
   assert.match(runner, /RELEASE_SAMPLE_INTERVAL_SECONDS \?\? 1/);
   assert.match(envExample, /^RELEASE_SAMPLE_INTERVAL_SECONDS=1$/m);
-  for (const source of [openapi, featureMap, architecture, runbook]) assert.match(source, /1 秒采样/);
+  for (const source of [openapi, featureMap, architecture, runbook])
+    assert.match(source, /1 秒采样/);
   assert.match(verifier, /sampleIntervalSeconds !== 1/);
   assert.ok(evidenceSchema.required.includes("sampleIntervalSeconds"));
   assert.ok(evidenceSchema.required.includes("mysqlDurability"));
@@ -388,11 +594,23 @@ test("M07-05 uses one-second production sampling without relaxing rollout gates"
   assert.ok(evidenceSchema.required.includes("publicProbe"));
   assert.equal(evidenceSchema.properties.publicProbe.properties.connectAddress.const, "127.0.0.1");
   assert.equal(evidenceSchema.properties.publicProbe.properties.tlsHostnamePreserved.const, true);
-  assert.equal(evidenceSchema.properties.mysqlDurability.properties.innodbFlushLogAtTrxCommit.const, 2);
+  assert.equal(
+    evidenceSchema.properties.mysqlDurability.properties.innodbFlushLogAtTrxCommit.const,
+    2,
+  );
   assert.equal(evidenceSchema.properties.mysqlDurability.properties.binlogFormat.const, "ROW");
-  assert.equal(evidenceSchema.properties.mysqlDurability.properties.productScoutBinlogExcluded.const, false);
-  assert.equal(evidenceSchema.properties.mysqlResourceProfile.properties.innodbBufferPoolBytes.const, 4294967296);
-  assert.equal(evidenceSchema.properties.mysqlResourceProfile.properties.innodbFlushMethod.const, "O_DIRECT");
+  assert.equal(
+    evidenceSchema.properties.mysqlDurability.properties.productScoutBinlogExcluded.const,
+    false,
+  );
+  assert.equal(
+    evidenceSchema.properties.mysqlResourceProfile.properties.innodbBufferPoolBytes.const,
+    4294967296,
+  );
+  assert.equal(
+    evidenceSchema.properties.mysqlResourceProfile.properties.innodbFlushMethod.const,
+    "O_DIRECT",
+  );
   assert.match(verifier, /release_mysql_resource_profile_invalid/);
   assert.equal(evidenceSchema.properties.sampleIntervalSeconds.const, 1);
   assert.equal(manifest.canary.minimumObservationSeconds, 1800);

@@ -4,7 +4,18 @@
 > `/www/wwwroot/ai选品/backend`，不创建 `current`、`releases`、长期候选槽或第二个
 > Node 项目。下文双槽内容只保留为 2026-08-08 历史签发审计，不能作为当前部署步骤。
 
-> 历史双槽架构已停用。当前生产只允许一个宝塔 Node 后端“ai选品”和 4101 单端口；下文双槽内容只用于解释旧审计记录，不能作为新建第二后端或常驻候选项目的依据。
+当前发布只允许从本地干净工作树执行 `python scripts/deploy-baota.py`，覆盖固定的
+`frontend`、`backend` 与 `python` 运行包。生产拓扑以
+`infra/baota/service-manifest.json` 为准：宝塔网站 `ai选品网站`、统一 Node 后端
+`ai选品`（本机 4101，监督 API 与 Worker）以及 Python Crawler
+`ai选品-python`。发布后分别核验 live、ready、available 与 version；失败时以本地目标
+Git 提交重新构建并部署回滚。`scripts/verify-runtime-doc-consistency.mjs` 同时接入文档门和
+发布矩阵，任何文档再次要求第二 Node 后端都会失败关闭。
+
+## 历史双槽审计资料（不可执行）
+
+以下双槽架构已停用，只用于解释既有发布表、门禁事件和生产证据。不得据此创建第二
+后端、改写当前固定目录或执行旧发布控制器。
 
 ## 范围与事实边界
 

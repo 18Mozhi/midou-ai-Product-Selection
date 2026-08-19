@@ -4,10 +4,10 @@
 
 ## 部署
 
-1. 候选发布使用 `product_scout` 业务账号执行 `0035_capacity_boundary_m08_06.up.sql`，确认 MySQL 5.7 和三张 `capacity_boundary_*` 表。
+1. 当前固定目录发布使用 `product_scout` 业务账号执行 `0035_capacity_boundary_m08_06.up.sql`，确认 MySQL 5.7 和三张 `capacity_boundary_*` 表。
 2. 在宝塔 Node API 受限环境同步 `CAPACITY_BOUNDARY_*` 配置；阈值变化必须重新构建、重新完成同提交灰度和容量证据，不能为了通过门禁临时放宽。
-3. 只通过宝塔启动候选 API、Worker、Crawler 和有限容量任务。不得使用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。
-4. 发布按 5%/25%/100% 各不少于 1,800 秒观察；任一错误率、读写 P95 或异步滞后门失败立即止损，不复用旧提交观察窗。
+3. 只通过宝塔启动既有 `ai选品` Node 项目、`ai选品-python` Python 项目和有限容量任务。不得使用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。
+4. 发布后按当前固定单后端门核验错误率、读写 P95 与异步滞后；任一门失败立即止损，不复用旧提交观察窗。
 5. 同提交容量基线、MySQL live、API、桌面与 390px 旅程、文档和生产证据全部通过后，才能显示实测单机有限边界。
 
 ## 受控基线
@@ -28,7 +28,7 @@
 
 ## 回滚
 
-1. 立即通过宝塔将 Nginx 恢复到单一稳定 4101，停止候选 4103，并通过宝塔恢复上一版 API、Worker、Crawler。
+1. 立即通过宝塔保持 Nginx 的单一 4101 上游，并以本地目标 Git 提交重新构建、部署上一版 API、Worker、Crawler。
 2. 保留 `capacity_boundary_*` 与 `platform_audit_events`，不得删除失败样本或修改阈值伪造通过。
 3. 只有确认上一版不再读取/写入 0035 表后，才使用 `0035_capacity_boundary_m08_06.down.sql` 删除新表；否则表保持兼容留存。
 4. 回滚后重新核验 TLS、单一 4101、MySQL/Redis、稳定版本健康与审计链。不得启用备用服务器、负载均衡、多节点或面板外服务绕过。

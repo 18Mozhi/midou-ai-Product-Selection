@@ -4,7 +4,7 @@
 
 1. 在候选发布迁移中以 `product_scout` 业务账号执行 `0034_crawler_scheduler_m08_05.up.sql`；确认 MySQL 5.7 与三张新表。
 2. 在宝塔“ai选品”统一后端的受限环境加入 `CRAWLER_SCHEDULER_*` 配置。Node Worker=1、宝塔 Python Crawler=1、每来源=1，不提供调大开关。
-3. 只通过宝塔分别重启候选 `ai选品` Node 项目和 `ai选品-python` Python 项目。不得用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。
+3. 只通过宝塔分别重启既有 `ai选品` Node 项目和 `ai选品-python` Python 项目。不得用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。
 4. 执行生产前置、MySQL live、调度 live、API 与浏览器验收；当前单后端只覆盖固定目录，不创建版本目录、`current` 链接或常驻候选项目。
 
 ## 日常核验

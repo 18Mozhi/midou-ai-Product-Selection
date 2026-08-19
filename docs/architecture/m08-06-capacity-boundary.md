@@ -26,4 +26,4 @@ M08-06 收口容量状态的软件合同：规划用户数 100、规划并发区
 - GET `/api/v1/platform/operations/capacity`：平台运维容量事实。
 - POST `/api/v1/platform/operations/capacity/drills`：只签认 `archive_recovery`。
 
-MySQL 固定 5.7/utf8mb4。长期运行和有限任务只能由宝塔创建、展示、停止、重启和取证；临时灰度的 4101/4103 不构成负载均衡，晋级后恢复单一 4101。
+MySQL 固定 5.7/utf8mb4。长期运行和有限任务只能由宝塔创建、展示、停止、重启和取证；当前生产始终使用单一 4101 Node 上游，不创建第二后端或负载均衡。
