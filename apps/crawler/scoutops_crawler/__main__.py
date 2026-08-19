@@ -11,6 +11,14 @@ from .playwright_bridge import PlaywrightBridge, PlaywrightBridgeError
 from .runtime_client import CrawlerRuntimeClient, RuntimeClientError
 
 ENV_KEY = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
+SENSITIVE_LOG_KEY = re.compile(
+    r"(?:password|secret|token|cookie|authorization|api[_-]?key|private[_-]?key|credential|master[_-]?key)",
+    re.IGNORECASE,
+)
+SENSITIVE_LOG_VALUE = re.compile(
+    r"(?i)\b(password|secret|token|cookie|authorization|api[_-]?key|private[_-]?key|credential|master[_-]?key)"
+    r"(\s*[=:]\s*)([^\s,;]+)"
+)
 
 
 def load_env_file(path: str | None) -> None:
@@ -37,8 +45,35 @@ def load_env_file(path: str | None) -> None:
             raise ValueError(f"invalid environment value at line {line_number}")
         os.environ.setdefault(key, value)
 
+def redact_log_value(value, key: str = ""):
+    """Remove credential material before a crawler event reaches BaoTa logs."""
+    if key and SENSITIVE_LOG_KEY.search(key):
+        return "[REDACTED]"
+    if isinstance(value, dict):
+        return {name: redact_log_value(item, str(name)) for name, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [redact_log_value(item) for item in value]
+    if isinstance(value, str):
+        return SENSITIVE_LOG_VALUE.sub(r"\1\2[REDACTED]", value)
+    return value
+
+
 def event(config, status: str, **fields) -> None:
-    print(json.dumps({"service":"product-scout-crawler","status":status,"crawler_id":config.crawler_id,"config_fingerprint":config.fingerprint,"observed_at":datetime.now(timezone.utc).isoformat(), **fields}, ensure_ascii=False), flush=True)
+    safe_fields = redact_log_value(fields)
+    print(
+        json.dumps(
+            {
+                "service": "product-scout-crawler",
+                "status": status,
+                "crawler_id": config.crawler_id,
+                "config_fingerprint": config.fingerprint,
+                "observed_at": datetime.now(timezone.utc).isoformat(),
+                **safe_fields,
+            },
+            ensure_ascii=False,
+        ),
+        flush=True,
+    )
 
 
 def run_once(config, stopped: threading.Event) -> bool:

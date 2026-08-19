@@ -9,6 +9,7 @@ M03-02 交付平台全局的 `credential_assets` 与 `crawler_profiles`。账号
 ## 加密、版本和审计
 
 - `@scoutops/credentials` 使用 AES-256-GCM、96 位随机 nonce 和 128 位认证标签；主密钥经域分离的 SHA-256 派生为 256 位数据密钥，AAD 绑定资产 ID、资产类型和 key_version。
+- Cookie 写入响应显式使用 `Cache-Control: no-store`；API 在调用 Repository 前只保留密文、nonce、认证标签和不可逆指纹。Python Crawler 的宝塔结构化日志入口对 cookie、credential、token、authorization、secret 与 master key 类字段递归脱敏，即使后续调用方误传嵌套字段也不能输出明文。
 - `credential_assets` 保存当前密文；`credential_asset_versions` 保存 create、rotate、revoke 的不可变密文版本、操作人和 request_id/trace_id。
 - `credential_asset_operations` 与 `crawler_profile_operations` 以操作人、路由和 Idempotency-Key 唯一；所有写入使用 MySQL 5.7 事务和乐观锁。
 - `crawler_profiles` 只能引用同一 Provider 下 active、类型为 `browser_profile` 或 `cookie_bundle` 的凭证资产；版本快照保存于 `crawler_profile_versions`。

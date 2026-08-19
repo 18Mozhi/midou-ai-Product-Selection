@@ -4163,6 +4163,14 @@ paths:
         "201":
           {
             description: Masked created asset,
+            headers:
+              {
+                Cache-Control:
+                  {
+                    description: Sensitive credential writes are never cacheable,
+                    schema: { type: string, enum: [no-store] },
+                  },
+              },
             content:
               {
                 application/json:
@@ -4207,6 +4215,14 @@ paths:
         "200":
           {
             description: Masked rotated asset,
+            headers:
+              {
+                Cache-Control:
+                  {
+                    description: Sensitive credential writes are never cacheable,
+                    schema: { type: string, enum: [no-store] },
+                  },
+              },
             content:
               {
                 application/json:
@@ -4250,6 +4266,14 @@ paths:
         "200":
           {
             description: Masked revoked asset,
+            headers:
+              {
+                Cache-Control:
+                  {
+                    description: Sensitive credential writes are never cacheable,
+                    schema: { type: string, enum: [no-store] },
+                  },
+              },
             content:
               {
                 application/json:

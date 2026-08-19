@@ -41,12 +41,7 @@ export function registerCredentialAssetRoutes(
     },
     write = async (r: FastifyRequest) => {
       if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ScoutOps 页面重试。",
-        );
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
       return actor(r);
     },
     context = (r: FastifyRequest, actorId: string) => ({
@@ -64,25 +59,19 @@ export function registerCredentialAssetRoutes(
     reply.header("cache-control", "private, no-store");
     return envelope(await o.service.listAssets(), r);
   });
-  app.post(
-    "/api/v1/platform/credential-assets",
-    { bodyLimit: 10_000_000 },
-    async (r, reply) => {
-      const actorId = await write(r),
-        data = await o.service.createAsset(
-          r.body as CredentialAssetCreateInput,
-          context(r, actorId),
-        );
-      reply.code(201);
-      return envelope(data, r);
-    },
-  );
+  app.post("/api/v1/platform/credential-assets", { bodyLimit: 10_000_000 }, async (r, reply) => {
+    const actorId = await write(r),
+      data = await o.service.createAsset(r.body as CredentialAssetCreateInput, context(r, actorId));
+    reply.code(201).header("cache-control", "no-store");
+    return envelope(data, r);
+  });
   app.post(
     "/api/v1/platform/credential-assets/:assetId/rotate",
     { bodyLimit: 10_000_000 },
-    async (r) => {
+    async (r, reply) => {
       const actorId = await write(r),
         assetId = (r.params as { assetId: string }).assetId;
+      reply.header("cache-control", "no-store");
       return envelope(
         await o.service.rotateAsset(
           assetId,
@@ -97,9 +86,10 @@ export function registerCredentialAssetRoutes(
       );
     },
   );
-  app.post("/api/v1/platform/credential-assets/:assetId/revoke", async (r) => {
+  app.post("/api/v1/platform/credential-assets/:assetId/revoke", async (r, reply) => {
     const actorId = await write(r),
       assetId = (r.params as { assetId: string }).assetId;
+    reply.header("cache-control", "no-store");
     return envelope(
       await o.service.revokeAsset(
         assetId,
@@ -116,10 +106,7 @@ export function registerCredentialAssetRoutes(
   });
   app.post("/api/v1/platform/crawler-profiles", async (r, reply) => {
     const actorId = await write(r),
-      data = await o.service.createProfile(
-        r.body as CrawlerProfileInput,
-        context(r, actorId),
-      );
+      data = await o.service.createProfile(r.body as CrawlerProfileInput, context(r, actorId));
     reply.code(201);
     return envelope(data, r);
   });

@@ -1,7 +1,10 @@
+import io
+import json
 import os
 import sys
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from unittest.mock import Mock, patch
 from pathlib import Path
 
@@ -10,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scoutops_crawler.foundation import FoundationTask, validate_task
 from scoutops_crawler.config import ConfigError, load_config
 from scoutops_crawler.playwright_bridge import PlaywrightBridge, PlaywrightBridgeError
-from scoutops_crawler.__main__ import load_env_file
+from scoutops_crawler.__main__ import event, load_env_file
 from scoutops_crawler.runtime_client import CrawlerRuntimeClient
 
 
@@ -50,6 +53,27 @@ class FoundationTaskTest(unittest.TestCase):
             with self.assertRaises(ValueError) as raised:
                 load_env_file(str(path))
             self.assertNotIn("secret-value", str(raised.exception))
+
+    def test_structured_events_redact_cookie_token_and_nested_credentials(self) -> None:
+        output = io.StringIO()
+        with redirect_stdout(output):
+            event(
+                load_config(),
+                "security_probe",
+                request_id="request-safe",
+                detail="cookie=session-secret authorization=Bearer-secret",
+                credential={"cookies": [{"name": "sid", "value": "nested-secret"}]},
+                lease_token="lease-secret",
+            )
+        serialized = output.getvalue()
+        payload = json.loads(serialized)
+        self.assertEqual(payload["request_id"], "request-safe")
+        self.assertNotIn("session-secret", serialized)
+        self.assertNotIn("Bearer-secret", serialized)
+        self.assertNotIn("nested-secret", serialized)
+        self.assertNotIn("lease-secret", serialized)
+        self.assertEqual(payload["credential"], "[REDACTED]")
+        self.assertEqual(payload["lease_token"], "[REDACTED]")
 
     @patch("scoutops_crawler.playwright_bridge.subprocess.run")
     def test_playwright_bridge_uses_stdin_without_shell_and_checks_correlation(self, run: Mock) -> None:

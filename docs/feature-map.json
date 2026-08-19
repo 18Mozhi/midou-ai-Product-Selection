@@ -584,6 +584,7 @@
       ],
       "scope": "platform-global encrypted credential and crawler profile assets, including Playwright storageState JSON, browser cookie JSON, Netscape cookies.txt, tar.gz browser profiles, direct login-page jump and a restricted ai选品 browser helper that reads the user-selected site's current-browser cookies; cookie domains are validated against the provider target domain; credential rotation completes active renewal work and transactionally requeues a live login-blocked browser job or clones a terminal login-blocked collection task for automatic replay",
       "encryption": "AES-256-GCM with random nonce, authentication tag, asset/type/key-version AAD and Baota-only master key",
+      "loggingBoundary": "credential mutation responses are no-store; API repositories receive only sealed payloads; BaoTa Python crawler events recursively redact cookie credential token authorization secret and master-key fields",
       "responseBoundary": "masked fingerprint and metadata only; no decrypt, export, ciphertext, nonce or auth-tag API",
       "permission": "authenticated platform key_rotation:manage; same-origin and Idempotency-Key for writes",
       "temporaryMaterialization": "authorized Worker/Crawler callback under CREDENTIAL_TEMP_ROOT with finally buffer clearing and exact directory deletion",

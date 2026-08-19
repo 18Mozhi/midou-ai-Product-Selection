@@ -15,15 +15,16 @@
 - `CRAWLER_API_BASE_URL`：固定指向本机统一 Node API。组织、工作区、档案和执行计划由 Worker 创建的 `browser_collection_jobs` 决定，不再配置静态 UUID 或请求文件。
 - `CRAWLER_LEASE_SECONDS`：30–600 秒；心跳间隔必须小于租约时长。
 
-Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-python` 启动时读取；共享配置修改后应在宝塔分别重启两个项目。不要把密钥、Cookie 或档案内容写入日志或文档。
+Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-python` 启动时读取；共享配置或凭证安全边界代码修改后应在宝塔分别重启两个项目。Cookie 写入 API 必须返回 `Cache-Control: no-store`，入库前转换为 AES-256-GCM 密文；Python 结构化事件会递归脱敏 cookie、credential、token、authorization、secret 与 master key 类字段。不要把密钥、Cookie 或档案内容写入日志或文档。
 
 ## 发布与验证
 
 1. 备份 MySQL，并确认没有本模块 running 租约。
 2. 执行 `0016d_playwright_crawler_m03_04.up.sql`、`0048_browser_collection_jobs.up.sql`、`0049_credential_renewal_auto_replay.up.sql` 与 `0050_browser_evidence_artifacts.up.sql`，必须使用 `product_scout` 业务账号且确认 MySQL 5.7/utf8mb4；已应用的迁移不可重复手工执行。
-3. 在发布目录复用锁文件安装依赖，安装项目固定的 Playwright Chromium；不得在请求处理中下载浏览器。
-4. 构建后运行 `npm run verify:module -- M03-04`。其中包含真实本地 Chromium、MySQL 5.7 独占租约、Python bridge、桌面和 390px 视觉验收。
-5. 由宝塔重启 `ai选品` 和 `ai选品-python`，在 `/platform-admin/collection/browser-runtime` 确认档案有效期、目标域名、活动租约和最近运行可读，并检查 Python 的 running/completed 日志；成功作业应在 `browser_evidence_artifacts` 同时出现 `dom_fragment` 与 `screenshot`，解析版本与 Provider 一致，文件位于受控 `EVIDENCE_ROOT` 而非网站目录；没有 `browser_collection_jobs.status='queued'` 时不应出现空闲心跳。
+3. 本地运行 `python -m unittest discover -s apps/crawler/tests -p "test_*.py"` 与 `node --test tests/unit/credential-cookie-security-boundary.test.mjs`，确认日志脱敏、Cookie 入库密文和 `no-store` 响应边界。
+4. 在发布目录复用锁文件安装依赖，安装项目固定的 Playwright Chromium；不得在请求处理中下载浏览器。
+5. 构建后运行 `npm run verify:module -- M03-04`。其中包含真实本地 Chromium、MySQL 5.7 独占租约、Python bridge、桌面和 390px 视觉验收。
+6. 由宝塔重启 `ai选品` 和 `ai选品-python`，在 `/platform-admin/collection/browser-runtime` 确认档案有效期、目标域名、活动租约和最近运行可读，并检查 Python 的 running/completed 日志；成功作业应在 `browser_evidence_artifacts` 同时出现 `dom_fragment` 与 `screenshot`，解析版本与 Provider 一致，文件位于受控 `EVIDENCE_ROOT` 而非网站目录；没有 `browser_collection_jobs.status='queued'` 时不应出现空闲心跳。
 
 ## 故障处理
 
