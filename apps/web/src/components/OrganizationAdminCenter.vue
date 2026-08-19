@@ -73,7 +73,11 @@ async function load() {
   try {
     summary.value = await api("/org/admin/summary");
     if (view.value === "summary") {
-      data.value = await api("/org/admin/profile");
+      const [profile, workspaces] = await Promise.all([
+        api("/org/admin/profile"),
+        api("/org/admin/workspaces"),
+      ]);
+      data.value = { ...profile, workspace_options: workspaces };
       form.value = {
         name: data.value.name,
         logo_url: data.value.logo_url ?? "",
@@ -89,11 +93,12 @@ async function load() {
     else if (view.value === "data")
       data.value = { exports: await api("/report-exports") };
     else if (view.value === "workspaces") {
-      const [workspaces, teams] = await Promise.all([
+      const [workspaces, teams, members] = await Promise.all([
         api("/org/admin/workspaces"),
         api("/org/admin/teams"),
+        api("/org/admin/members"),
       ]);
-      data.value = { workspaces, teams };
+      data.value = { workspaces, teams, members: members.items ?? [] };
     } else data.value = await api(`/org/admin/${view.value}`);
     state.value = (
       Array.isArray(data.value)
@@ -154,7 +159,7 @@ async function workspaceAction(item: any) {
 async function teamMemberAction(item: any, action: "assign" | "remove") {
   const membership_id = teamMembers.value[item.id]?.trim();
   if (!membership_id) {
-    notice.value = "请先填写当前组织成员 ID。";
+    notice.value = "请先选择当前组织成员。";
     return;
   }
   const reason = auditedReason(
@@ -178,7 +183,13 @@ async function tokenAction(item: any, action: "rotate" | "revoke") {
     reason,
   });
 }
-const rows = computed(() =>
+const activeMembers = computed(() =>
+    (data.value?.members ?? []).filter((item: any) => item.status === "active"),
+  ),
+  workspaceName = (id: string) =>
+    data.value?.workspace_options?.find((item: any) => item.id === id)?.name ??
+    "未找到对应工作区",
+  rows = computed(() =>
     view.value === "members"
       ? (data.value?.items ?? [])
       : view.value === "roles"
@@ -223,6 +234,7 @@ const statusText = (v: string) =>
       locked: "已锁定",
       pending_delivery: "等待邮件服务",
       pending_acceptance: "等待接受",
+      pending: "待处理",
       accepted: "已接受",
       expired: "已过期",
       revoked: "已撤销",
@@ -371,7 +383,7 @@ onMounted(load);
             </div>
             <div>
               <dt>默认工作区</dt>
-              <dd>{{ data?.default_workspace_id }}</dd>
+              <dd>{{ workspaceName(data?.default_workspace_id) }}</dd>
             </div>
           </dl>
         </article>
@@ -409,10 +421,16 @@ onMounted(load);
               max="3650"
               :placeholder="String(data?.data_retention_days)" /></label
           ><label
-            >默认工作区 ID<input
-              v-model="form.default_workspace_id"
-              :placeholder="data?.default_workspace_id"
-              required /></label
+            >默认工作区<select v-model="form.default_workspace_id" required>
+              <option disabled value="">请选择工作区</option>
+              <option
+                v-for="workspace in data?.workspace_options"
+                :key="workspace.id"
+                :value="workspace.id"
+              >
+                {{ workspace.name }}
+              </option>
+            </select></label
           ><label
             >变更原因<textarea
               v-model="form.reason"
@@ -473,7 +491,10 @@ onMounted(load);
               >
             </div>
             <div class="org-admin-actions">
-              <code title="成员 ID">{{ x.id }}</code>
+              <details class="org-admin-technical">
+                <summary>技术详情</summary>
+                <code>成员 ID：{{ x.id }}</code>
+              </details>
               <select v-model="memberRoles[x.id]" aria-label="选择成员角色">
                 <option
                   v-for="role in [
@@ -535,8 +556,16 @@ onMounted(load);
           <h3>创建团队</h3>
           <label>名称<input v-model="form.name" required /></label
           ><label
-            >负责人（成员 ID，可选）<input
-              v-model="form.lead_membership_id" /></label
+            >负责人（可选）<select v-model="form.lead_membership_id">
+              <option value="">暂不设置</option>
+              <option
+                v-for="member in activeMembers"
+                :key="member.id"
+                :value="member.id"
+              >
+                {{ member.email }}
+              </option>
+            </select></label
           ><label
             >默认工作流程（可选）<input
               v-model="form.default_workflow_key" /></label
@@ -576,11 +605,19 @@ onMounted(load);
               >
             </div>
             <div class="org-admin-actions">
-              <input
+              <select
                 v-model="teamMembers[x.id]"
-                aria-label="团队成员 ID"
-                placeholder="成员 ID"
-              />
+                aria-label="选择团队成员"
+              >
+                <option value="">请选择成员</option>
+                <option
+                  v-for="member in activeMembers"
+                  :key="member.id"
+                  :value="member.id"
+                >
+                  {{ member.email }}
+                </option>
+              </select>
               <button
                 type="button"
                 :disabled="busy"
@@ -609,11 +646,12 @@ onMounted(load);
         </div>
         <div v-for="x in rows" :key="x.id" class="org-admin-line">
           <div>
-            <b>业务申请 · {{ x.resource_id }}</b
-            ><small
-              >当前步骤 {{ x.current_node_key }} ·
-              {{ fmt(x.requested_at) }}</small
-            >
+            <b>业务申请</b><small>提交于 {{ fmt(x.requested_at) }}</small>
+            <details class="org-admin-technical">
+              <summary>技术详情</summary>
+              <code>记录 ID：{{ x.resource_id }}</code>
+              <code>流程节点：{{ x.current_node_key }}</code>
+            </details>
           </div>
           <i>{{ statusText(x.status) }}</i>
         </div>

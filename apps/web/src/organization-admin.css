@@ -200,6 +200,23 @@
   color: var(--so-text-muted);
   font-size: 9px;
 }
+.org-admin-technical {
+  margin-top: 7px;
+  color: var(--so-text-muted);
+  font-size: 11px;
+}
+.org-admin-technical summary {
+  width: fit-content;
+  cursor: pointer;
+  color: #92c8ff;
+}
+.org-admin-technical code {
+  display: block;
+  margin-top: 6px;
+  word-break: break-all;
+  color: var(--so-text-muted);
+  font-size: 10px;
+}
 .org-admin-actions input,
 .org-admin-actions select {
   width: auto;

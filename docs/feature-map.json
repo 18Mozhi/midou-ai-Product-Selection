@@ -1355,6 +1355,7 @@
       ],
       "scope": "current organization profile members invitations fixed roles workspaces teams approvals exports tokens and audit",
       "truthBoundary": "all counters and lists are MySQL facts; invitation delivery stays pending until a provider exists; token secrets are returned once and never stored",
+      "presentationBoundary": "organization profile and member management remain separate routes; capability codes are translated to novice Chinese labels; workspace and membership UUIDs are used only as form values and are visible only inside collapsed technical details",
       "permission": "organization admin shell plus per-route organization manage membership role workspace team approval token audit and report capabilities",
       "configuration": [
         "ORG_INVITATION_TTL_HOURS",
