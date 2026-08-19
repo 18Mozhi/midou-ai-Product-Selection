@@ -2,11 +2,13 @@
 
 ## 宝塔部署
 
-1. 在宝塔备份 `product_scout`，使用业务账号执行 `0016b_credential_assets_m03_02.up.sql`。
+1. 在宝塔备份 `product_scout`，使用业务账号按顺序执行 `0016b_credential_assets_m03_02.up.sql` 与 `0049_credential_renewal_auto_replay.up.sql`；已存在 M03-02 表时只执行未应用的 0049。
 2. 在 API、Worker 与 Crawler 项目的宝塔受限环境中配置同一真实 `CREDENTIALS_MASTER_KEY`，长度至少 32 字符；设置同一非秘密 `CREDENTIALS_MASTER_KEY_VERSION`（初始建议 `v1`）和各自主机的 `CREDENTIAL_TEMP_ROOT`。
 3. 不把主密钥写入 `.env`、数据库、Git、镜像、文档、命令参数、日志或截图。生产临时目录应位于宝塔受控的本地路径，不得指向站点公开目录。
 4. 由宝塔重启 Node API、Node Worker 和 Python Crawler。静态站点发布 Web 构建产物；不得创建 systemd、独立 PM2、宿主机 crontab或面板外容器。
 5. 以具备 `key_rotation:manage` 的平台安全管理员访问 `/platform-admin/credentials`。普通密钥只写入一次，保存后只能看到指纹和版本。需要网页登录的来源可从来源页进入“配置网页登录”，上传已登录专用浏览器的 `.tar.gz` 压缩档案（压缩后不超过 6 兆字节）；系统加密保存并创建可运行采集档案，不要求官方接口。
+
+轮换活动浏览器凭证后，系统自动完成该档案的续期任务，并恢复因 `credential_expired`、`blocked_login`、`session_expired` 或 `login_required` 受阻的浏览器作业。运行中任务原位重新排队；已终态任务生成新的 scheduled 任务并保留旧任务。轮换成功不代表网页登录已经验证，必须继续观察自动重放结果；若新凭证仍失效，任务会再次进入登录受阻并重新创建续期任务。
 
 修改 `CREDENTIALS_MASTER_KEY`、`CREDENTIALS_MASTER_KEY_VERSION` 或 `CREDENTIAL_TEMP_ROOT` 后必须在宝塔重启 API、Worker 和 Crawler；这些值不是动态读取。
 
@@ -37,7 +39,8 @@ npm run verify:module -- M03-02
 - `credential_master_key_unavailable`：在宝塔检查主密钥是否存在并重启 Node API；不要在日志中粘贴值。
 - 401/403：重新登录或核对 `key_rotation:manage`，前端可见性不是授权依据。
 - 409：刷新资产版本；已撤销资产不能轮换，profile 必须引用同 Provider 的 active browser_profile 资产。
+- 轮换后仍为 `blocked_login`：凭证格式和域名校验已通过，但目标站点登录验证失败；检查合法账号状态与档案有效期，不得直接改库跳过或把轮换响应当成登录成功证据。
 - `ciphertext_invalid`：停止使用该资产，保留 request_id/trace_id，检查 key_version、认证标签和最近轮换记录，不回退为明文。
 - 临时目录残留：立即停止对应宝塔 Worker/Crawler，记录任务 ID，删除经确认位于 `CREDENTIAL_TEMP_ROOT` 下的准确任务目录后再恢复；不得对宽泛目录执行递归删除。
 
-回滚前按架构文档备份并停止三个服务。执行 down 迁移会删除全部平台凭证密文、档案引用与审计版本，恢复时必须同时恢复六张表和当时对应的主密钥版本。
+回滚前按架构文档备份并停止统一 Node 后端与 Python Crawler。先执行 0049 down 将 `automatically_replayed` 兼容回旧状态，再执行 M03-02 down；后者会删除全部平台凭证密文、档案引用与审计版本，恢复时必须同时恢复六张表和当时对应的主密钥版本。

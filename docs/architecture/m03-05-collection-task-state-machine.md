@@ -13,6 +13,7 @@ M03-05 交付组织/工作区范围化的任务、子查询、执行尝试、租
 - `rate_limited` 严格使用来源给出的未来 reset 时间；登录、会话、验证码、robots 与权限问题不自动重试或绕过。
 - 多来源结果逐项保留。无任何可用结果为 `succeeded_empty / insufficient`；有可用结果但必需来源、字段、失败或受阻不完整时为 `completed_with_warnings`；必需覆盖全部满足才为 `succeeded / complete`。
 - `insufficient` 是下游硬边界，不得形成自动“推荐”。
+- 必需来源的登录、验证码、robots、权限或解析漂移错误不能降级成普通空成功：执行器抛出统一业务错误，由状态机落到对应受阻或终止状态；仅非必需来源允许保留单项失败并继续其他来源。来源正常返回零条记录时仍按事实记录 `succeeded_empty`。
 
 ## 并发、幂等与审计
 
@@ -22,10 +23,12 @@ M03-05 交付组织/工作区范围化的任务、子查询、执行尝试、租
 
 每次状态变化在同一事务写 `collection_task_events` 和 `collection_task_outbox`，保留 organization/workspace、request_id/trace_id、操作主体和脱敏元数据。死信重放只允许 `collection:replay`，要求同源 Origin、Idempotency-Key 和 2–500 字原因；新任务复制内部子查询，原任务改为 `manually_replayed`，全部历史不覆盖。
 
+浏览器凭证续期是独立的系统恢复路径：安全管理员成功轮换经过格式、域名和有效期校验的凭证后，仍在执行期的 blocked browser job 原位重新排队；已经处于 `blocked_login` 的任务，以及历史上因旧映射落成 `succeeded_empty` 或 `completed_with_warnings` 且存在登录受阻作业的任务，改为 `automatically_replayed`，复制全部子查询创建新 `scheduled` 任务并写事件与 Outbox。原任务、尝试、作业和错误均不覆盖；新任务再次验证真实登录，失败时重新受阻。
+
 ## 页面与权限
 
 `/platform-admin/collection` 展示任务状态、覆盖、子查询、尝试和事件，`/platform-admin/collection/browser-runtime` 保留 M03-04 底层运行视图。列表、详情和人工重放均由服务端校验 `collection:replay`；前端菜单和按钮不是权限边界。页面覆盖加载、空、错误、过期、无权、依赖受阻、恢复、桌面与 390px。
 
 ## 回滚
 
-先在宝塔停止 Node Worker，再停止 Node API，确认没有有效任务租约并备份。执行 `0016e_collection_tasks_m03_05.down.sql` 后回退本模块代码、OpenAPI 与配置，再由宝塔启动旧版本。回滚删除任务、尝试、事件、Outbox 和死信历史，必须经过生产变更审批；不得在 Worker 运行时执行。
+先在宝塔停止统一 Node 后端与 Python Crawler，确认没有有效任务租约并备份。先执行 `0049_credential_renewal_auto_replay.down.sql`，再按需执行 `0016e_collection_tasks_m03_05.down.sql`，随后回退本模块代码、OpenAPI 与配置并由宝塔启动旧版本。回滚 M03-05 会删除任务、尝试、事件、Outbox 和死信历史，必须经过生产变更审批；不得在 Worker 运行时执行。

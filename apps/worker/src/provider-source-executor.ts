@@ -1,5 +1,5 @@
-import { createHash } from "node:crypto";
-import type { Pool, RowDataPacket } from "mysql2/promise";
+import { createHash, randomUUID } from "node:crypto";
+import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
   classifyProviderAdapterFailure,
   type ProviderAdapterRegistry,
@@ -85,7 +85,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         [task.id, query.providerId],
       ),
       row = rows[0];
-    if (!row || row.status !== "enabled")
+    if (!row || row.status !== "enabled") {
+      if (query.required) throw new CollectionExecutionError("permission_denied");
       return {
         id: query.id,
         required: query.required,
@@ -94,6 +95,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         missingFields: [],
         errorCode: "permission_denied",
       };
+    }
     const provider: ProviderRuntimeDefinition = {
       id: String(row.id),
       code: String(row.code),
@@ -209,7 +211,9 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           "robots_disallowed",
           "permission_denied",
         ].includes(mapped);
-      if (failure.retryable && query.required) {
+      if (mapped === "source_changed")
+        await this.pauseProviderForParserDrift(task, provider, String(row.created_by), failure);
+      if (query.required) {
         if (mapped === "rate_limited")
           throw new CollectionExecutionError(mapped, new Date(Date.now() + 300000));
         throw new CollectionExecutionError(mapped);
@@ -223,5 +227,103 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         errorCode: mapped,
       };
     }
+  }
+
+  private async pauseProviderForParserDrift(
+    task: ClaimedCollectionTask,
+    provider: ProviderRuntimeDefinition,
+    actorId: string,
+    failure: { code: string; retryable: boolean },
+  ) {
+    const connection = await this.pool.getConnection(),
+      now = new Date();
+    try {
+      await connection.beginTransaction();
+      const [rows] = await connection.query<RowDataPacket[]>(
+          "SELECT * FROM providers WHERE id=? FOR UPDATE",
+          [provider.id],
+        ),
+        current = rows[0];
+      if (!current || current.status !== "enabled") {
+        await connection.commit();
+        return;
+      }
+      const nextVersion = Number(current.version) + 1,
+        snapshot = {
+          ...current,
+          status: "disabled",
+          version: nextVersion,
+          updated_by: actorId,
+          updated_at: now.toISOString(),
+        };
+      await connection.query(
+        "UPDATE providers SET status='disabled',version=?,updated_by=?,updated_at=? WHERE id=? AND status='enabled'",
+        [nextVersion, actorId, now, provider.id],
+      );
+      await this.recordProviderPause(
+        connection,
+        task,
+        provider,
+        actorId,
+        nextVersion,
+        snapshot,
+        failure,
+        now,
+      );
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+  }
+
+  private async recordProviderPause(
+    connection: PoolConnection,
+    task: ClaimedCollectionTask,
+    provider: ProviderRuntimeDefinition,
+    actorId: string,
+    version: number,
+    snapshot: Record<string, unknown>,
+    failure: { code: string; retryable: boolean },
+    now: Date,
+  ) {
+    await connection.query(
+      "INSERT INTO provider_versions (id,provider_id,version,snapshot_json,actor_id,action,request_id,trace_id,created_at) VALUES (?,?,?,?,?,'updated',?,?,?)",
+      [
+        randomUUID(),
+        provider.id,
+        version,
+        JSON.stringify(snapshot),
+        actorId,
+        task.requestId,
+        task.traceId,
+        now,
+      ],
+    );
+    await connection.query(
+      [
+        "INSERT INTO platform_audit_events (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,",
+        "outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES ",
+        "(?,?,?,?,'provider.parser_drift.auto_paused','provider',?,'succeeded',?,?,?,?,1)",
+      ].join(""),
+      [
+        randomUUID(),
+        task.organizationId,
+        task.workspaceId,
+        actorId,
+        provider.id,
+        task.requestId,
+        task.traceId,
+        JSON.stringify({
+          provider_code: provider.code,
+          parser_version: provider.parserVersion,
+          error_code: failure.code,
+          retryable: failure.retryable,
+        }),
+        now,
+      ],
+    );
   }
 }

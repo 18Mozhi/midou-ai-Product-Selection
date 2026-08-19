@@ -5,8 +5,7 @@ import ConfirmDialog from "./ConfirmDialog.vue";
 import "../collection-tasks.css";
 import "../collection-task-detail.css";
 
-type ViewState =
-  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type ViewState = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Task {
   id: string;
   organization_id: string;
@@ -58,12 +57,7 @@ const filtered = computed(() =>
   tasks.value.filter(
     (item) =>
       !query.value ||
-      [
-        item.id,
-        item.organization_id,
-        item.workspace_id,
-        item.last_error_code,
-      ].some((value) =>
+      [item.id, item.organization_id, item.workspace_id, item.last_error_code].some((value) =>
         value?.toLowerCase().includes(query.value.toLowerCase()),
       ),
   ),
@@ -82,19 +76,14 @@ const metrics = computed(() => ({
       "rate_limited",
     ].includes(item.status),
   ).length,
-  warnings: tasks.value.filter(
-    (item) => item.status === "completed_with_warnings",
-  ).length,
+  warnings: tasks.value.filter((item) => item.status === "completed_with_warnings").length,
   blocked: tasks.value.filter(
     (item) =>
       item.status.startsWith("blocked_") ||
       item.status === "dead_letter" ||
       item.status === "failed_terminal",
   ).length,
-  evidence: tasks.value.reduce(
-    (sum, item) => sum + item.available_result_count,
-    0,
-  ),
+  evidence: tasks.value.reduce((sum, item) => sum + item.available_result_count, 0),
 }));
 const failure = (code: number): ViewState =>
   code === 401
@@ -112,11 +101,7 @@ const time = (value: string) =>
     minute: "2-digit",
   }).format(new Date(value));
 const cell = (value: unknown) =>
-  value == null
-    ? "—"
-    : typeof value === "object"
-      ? JSON.stringify(value)
-      : String(value);
+  value == null ? "—" : typeof value === "object" ? JSON.stringify(value) : String(value);
 const label = (value: string | null) =>
   value
     ? ({
@@ -138,6 +123,7 @@ const label = (value: string | null) =>
         failed_terminal: "终止失败",
         dead_letter: "死信",
         manually_replayed: "已人工重放",
+        automatically_replayed: "凭证续期后已自动重放",
         complete: "完整",
         partial: "部分",
         insufficient: "不足",
@@ -152,10 +138,10 @@ async function load() {
   });
   if (status.value !== "all") params.set("status", status.value);
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/collection/tasks?${params}`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
+    const response = await fetch(`${props.apiBaseUrl}/platform/collection/tasks?${params}`, {
+        credentials: "include",
+        headers: { accept: "application/json" },
+      }),
       body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? "";
     if (!response.ok) {
@@ -172,10 +158,10 @@ async function load() {
 async function openTask(id: string) {
   detailLoading.value = true;
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/collection/tasks/${id}`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
+    const response = await fetch(`${props.apiBaseUrl}/platform/collection/tasks/${id}`, {
+        credentials: "include",
+        headers: { accept: "application/json" },
+      }),
       body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? requestId.value;
     if (!response.ok) {
@@ -227,26 +213,16 @@ onMounted(load);
 </script>
 
 <template>
-  <section
-    class="collection-task-center"
-    aria-labelledby="collection-task-title"
-  >
+  <section class="collection-task-center" aria-labelledby="collection-task-title">
     <header class="collection-task-title">
       <div>
         <p>平台采集任务中心</p>
         <h2 id="collection-task-title">采集任务监控</h2>
-        <span
-          >集中查看任务进度、来源覆盖、失败原因和重试记录；每个任务都可以展开详情。</span
-        >
+        <span>集中查看任务进度、来源覆盖、失败原因和重试记录；每个任务都可以展开详情。</span>
       </div>
       <a href="/platform-admin/collection/browser-runtime">浏览器运行时</a>
     </header>
-    <UiStatePanel
-      v-if="state !== 'ready'"
-      :kind="state"
-      :request-id="requestId"
-      @primary="load"
-    />
+    <UiStatePanel v-if="state !== 'ready'" :kind="state" :request-id="requestId" @primary="load" />
     <template v-else>
       <div class="collection-task-metrics">
         <article>
@@ -270,9 +246,7 @@ onMounted(load);
         <header>
           <div>
             <h3>任务队列</h3>
-            <span>{{
-              notice || `共 ${total} 个任务；覆盖不足不会自动给出推荐结论。`
-            }}</span>
+            <span>{{ notice || `共 ${total} 个任务；覆盖不足不会自动给出推荐结论。` }}</span>
           </div>
           <div>
             <input
@@ -306,9 +280,7 @@ onMounted(load);
               <tr v-for="item in filtered" :key="item.id">
                 <td>
                   <strong>{{ item.id.slice(0, 8) }}…</strong
-                  ><small
-                    >{{ item.priority }} · 第 {{ item.attempt_count }} 次</small
-                  >
+                  ><small>{{ item.priority }} · 第 {{ item.attempt_count }} 次</small>
                 </td>
                 <td>
                   <span>{{ item.organization_id.slice(0, 8) }}…</span
@@ -326,14 +298,11 @@ onMounted(load);
                 </td>
                 <td>
                   {{ item.available_result_count }} 条<small>{{
-                    item.missing_fields.length
-                      ? `缺 ${item.missing_fields.join("、")}`
-                      : "字段完整"
+                    item.missing_fields.length ? `缺 ${item.missing_fields.join("、")}` : "字段完整"
                   }}</small>
                 </td>
                 <td>
-                  {{ time(item.updated_at)
-                  }}<small>{{ item.last_error_code || "无错误" }}</small>
+                  {{ time(item.updated_at) }}<small>{{ item.last_error_code || "无错误" }}</small>
                 </td>
                 <td>
                   <button type="button" @click="openTask(item.id)">查看</button>
@@ -346,11 +315,7 @@ onMounted(load);
           </table>
         </div>
       </section>
-      <aside
-        v-if="detail || detailLoading"
-        class="collection-task-detail"
-        aria-live="polite"
-      >
+      <aside v-if="detail || detailLoading" class="collection-task-detail" aria-live="polite">
         <p v-if="detailLoading">正在读取任务详情…</p>
         <template v-else-if="detail"
           ><header>
@@ -370,12 +335,10 @@ onMounted(load);
           </header>
           <div class="collection-detail-summary">
             <article>
-              <small>状态</small
-              ><strong>{{ label(detail.task.status) }}</strong>
+              <small>状态</small><strong>{{ label(detail.task.status) }}</strong>
             </article>
             <article>
-              <small>覆盖</small
-              ><strong>{{ label(detail.task.coverage_status) }}</strong>
+              <small>覆盖</small><strong>{{ label(detail.task.coverage_status) }}</strong>
             </article>
             <article>
               <small>尝试</small><strong>{{ detail.attempts.length }}</strong>
@@ -386,53 +349,34 @@ onMounted(load);
           </div>
           <section>
             <h4>子查询覆盖</h4>
-            <article
-              v-for="item in detail.subqueries"
-              :key="item.id"
-              class="collection-subquery"
-            >
+            <article v-for="item in detail.subqueries" :key="item.id" class="collection-subquery">
               <div>
                 <strong>{{ item.provider_name }}</strong
                 ><small>{{ item.is_required ? "必需来源" : "可选来源" }}</small>
               </div>
               <b :data-status="item.status">{{ label(item.status) }}</b
-              ><span
-                >{{ item.available_result_count }} 条 ·
-                {{ item.error_code || "无错误" }}</span
-              >
+              ><span>{{ item.available_result_count }} 条 · {{ item.error_code || "无错误" }}</span>
             </article>
           </section>
           <section class="collection-detail-history">
             <h4>执行尝试</h4>
-            <div v-if="!detail.attempts.length" class="collection-detail-empty">
-              尚无执行尝试。
-            </div>
-            <article
-              v-for="(item, index) in detail.attempts"
-              :key="cell(item.id) || index"
-            >
+            <div v-if="!detail.attempts.length" class="collection-detail-empty">尚无执行尝试。</div>
+            <article v-for="(item, index) in detail.attempts" :key="cell(item.id) || index">
               <strong
                 >第 {{ cell(item.attempt_number) || index + 1 }} 次 ·
                 {{ label(cell(item.status)) }}</strong
               ><span
                 >执行器 {{ cell(item.worker_id || item.lease_owner) }} · 开始
-                {{ cell(item.started_at) }} · 完成
-                {{ cell(item.finished_at) }}</span
+                {{ cell(item.started_at) }} · 完成 {{ cell(item.finished_at) }}</span
               ><small>{{ cell(item.error_code || "无错误") }}</small>
             </article>
           </section>
           <section class="collection-detail-history">
             <h4>状态事件</h4>
-            <div v-if="!detail.events.length" class="collection-detail-empty">
-              尚无状态事件。
-            </div>
-            <article
-              v-for="(item, index) in detail.events"
-              :key="cell(item.id) || index"
-            >
+            <div v-if="!detail.events.length" class="collection-detail-empty">尚无状态事件。</div>
+            <article v-for="(item, index) in detail.events" :key="cell(item.id) || index">
               <strong
-                >{{ cell(item.event_type) }} ·
-                {{ label(cell(item.from_status)) }} →
+                >{{ cell(item.event_type) }} · {{ label(cell(item.from_status)) }} →
                 {{ label(cell(item.to_status)) }}</strong
               ><span
                 >{{ cell(item.actor_type) }} · {{ cell(item.actor_id) }} ·
@@ -446,15 +390,10 @@ onMounted(load);
               该任务没有死信记录。
             </div>
             <article v-else>
-              <strong>{{
-                cell(detail.dead_letter.error_code || detail.dead_letter.status)
-              }}</strong
+              <strong>{{ cell(detail.dead_letter.error_code || detail.dead_letter.status) }}</strong
               ><span
                 >进入死信：{{
-                  cell(
-                    detail.dead_letter.created_at ||
-                      detail.dead_letter.updated_at,
-                  )
+                  cell(detail.dead_letter.created_at || detail.dead_letter.updated_at)
                 }}</span
               ><small>{{ cell(detail.dead_letter) }}</small>
             </article>

@@ -13,7 +13,7 @@
 ## 发布与验证
 
 1. 备份 MySQL，确认使用 `product_scout` 业务账号、MySQL 5.7 与 utf8mb4。
-2. 停止 Node Worker，执行 `0016e_collection_tasks_m03_05.up.sql`。
+2. 停止统一 Node 后端与 Python Crawler，执行 `0016e_collection_tasks_m03_05.up.sql` 与 `0049_credential_renewal_auto_replay.up.sql`；已有状态机表时只应用未执行的 0049。
 3. 复用现有依赖构建，运行 `npm run verify:module -- M03-05`；验收包含状态规则、API 合同、真实 MySQL/Redis 事务、桌面和 390px 浏览器状态。
 4. 真实状态机验收必须使用执行时当前时间作为租约基准，不能使用历史固定时间；否则生产 Worker 会按真实时钟将刚创建的验收租约回收为过期租约并返回 `collection_task_lease_invalid`。
 4. 由宝塔启动 Node API。Node Worker 的真实采集轮询须等 M03-07 Provider 执行器完成后再启用。
@@ -25,10 +25,11 @@
 - `retry_scheduled`：核对 `available_at` 和 attempt_count，等待锁定退避；不得手工提前改库。
 - `rate_limited`：遵守来源 reset 时间，不改造成固定快速重试。
 - `blocked_login/blocked_captcha/blocked_robots`：停止自动执行，核对合法账户、来源政策和人工恢复条件；不得绕过。
+- `blocked_login` 且存在续期任务：由安全管理员轮换对应凭证。续期任务会自动完成，旧任务标记“凭证续期后已自动重放”，新任务进入 scheduled；应继续核对新任务是否真实通过登录，禁止把轮换 HTTP 200 当成目标站登录成功。
 - `dead_letter`：修复原因后由具备 `collection:replay` 的人员填写原因并人工重放；新旧任务必须同时可查。
 - 租约过期或 Redis 协调冲突：调度器把 MySQL 租约回收为重试或死信；用 request_id/trace_id 关联 Worker、事件和 Outbox。
 - MySQL 或 Redis 不可用：停止领取新任务，在宝塔恢复依赖后重试；Redis 恢复不能作为任务完成依据。
 
 ## 回滚
 
-在宝塔停止 Node Worker 与 Node API，确认没有有效租约并备份，再执行 down migration。回退代码/config 后由宝塔恢复旧版本。不得单独删除任务表、Redis 宽泛 key 前缀或历史审计；验收产生的探针数据由验证脚本按精确 ID 在 finally 清理。
+在宝塔停止统一 Node 后端与 Python Crawler，确认没有有效租约并备份，先执行 0049 down，再按需执行 M03-05 down。回退代码/config 后由宝塔恢复旧版本。不得单独删除任务表、Redis 宽泛 key 前缀或历史审计；验收产生的探针数据由验证脚本按精确 ID 在 finally 清理。

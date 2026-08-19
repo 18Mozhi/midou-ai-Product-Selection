@@ -1,17 +1,223 @@
-export const COLLECTION_TASK_STATUSES=['draft','scheduled','queued','leased','running','parsing','validating','persisted','retry_scheduled','blocked_login','blocked_captcha','blocked_robots','rate_limited','succeeded','succeeded_empty','completed_with_warnings','failed_terminal','dead_letter','manually_replayed']as const;
-export type CollectionTaskStatus=typeof COLLECTION_TASK_STATUSES[number];
-export type CoverageStatus='complete'|'partial'|'insufficient';
-export const COLLECTION_ERROR_CODES=['network_error','timeout','dns_error','login_required','session_expired','captcha','rate_limited','robots_disallowed','source_changed','parse_failed','validation_failed','empty_result','permission_denied']as const;
-export type CollectionErrorCode=typeof COLLECTION_ERROR_CODES[number];
-export type SubqueryStatus='pending'|'running'|'succeeded'|'succeeded_empty'|'failed'|'blocked';
-export interface SubqueryOutcome{required:boolean;status:SubqueryStatus;availableResultCount:number;missingFields:string[];errorCode:CollectionErrorCode|null;}
-export interface CoverageSummary{terminalStatus:'succeeded'|'succeeded_empty'|'completed_with_warnings';coverageStatus:CoverageStatus;successfulSubqueryCount:number;failedSubqueryCount:number;blockedSubqueryCount:number;availableResultCount:number;missingFields:string[];}
-export class CollectionTaskError extends Error{constructor(readonly code:string){super(code);this.name='CollectionTaskError';}}
-const transitions:Record<CollectionTaskStatus,readonly CollectionTaskStatus[]>={draft:['scheduled'],scheduled:['queued'],queued:['leased'],leased:['running','retry_scheduled','dead_letter'],running:['parsing','retry_scheduled','blocked_login','blocked_captcha','blocked_robots','rate_limited','failed_terminal','dead_letter'],parsing:['validating','retry_scheduled','blocked_login','blocked_captcha','blocked_robots','rate_limited','failed_terminal','dead_letter'],validating:['persisted','retry_scheduled','blocked_login','blocked_captcha','blocked_robots','rate_limited','failed_terminal','dead_letter'],persisted:['succeeded','succeeded_empty','completed_with_warnings'],retry_scheduled:['queued','dead_letter'],blocked_login:[],blocked_captcha:[],blocked_robots:[],rate_limited:['queued'],succeeded:[],succeeded_empty:[],completed_with_warnings:[],failed_terminal:[],dead_letter:['manually_replayed'],manually_replayed:[]};
-export function assertTaskTransition(from:CollectionTaskStatus,to:CollectionTaskStatus){if(!transitions[from]?.includes(to))throw new CollectionTaskError('collection_transition_invalid');return to;}
-export function classifyCollectionFailure(code:CollectionErrorCode,attemptCount:number,maxAttempts=4):{status:CollectionTaskStatus;retryable:boolean}{if(!Number.isInteger(attemptCount)||attemptCount<1||maxAttempts!==4)throw new CollectionTaskError('collection_attempt_invalid');if(code==='login_required'||code==='session_expired')return{status:'blocked_login',retryable:false};if(code==='captcha')return{status:'blocked_captcha',retryable:false};if(code==='robots_disallowed')return{status:'blocked_robots',retryable:false};if(code==='rate_limited')return{status:'rate_limited',retryable:false};if(code==='permission_denied'||code==='source_changed'||code==='empty_result')return{status:'failed_terminal',retryable:false};return attemptCount>=maxAttempts?{status:'dead_letter',retryable:false}:{status:'retry_scheduled',retryable:true};}
-export function retryAvailableAt(attemptCount:number,now:Date,jitterUnit:number){if(!Number.isInteger(attemptCount)||attemptCount<1||attemptCount>3||!Number.isFinite(jitterUnit)||jitterUnit<0||jitterUnit>1)throw new CollectionTaskError('collection_retry_input_invalid');const seconds=[60,300,900][attemptCount-1]!,jitter=Math.floor(seconds*.2*jitterUnit);return new Date(now.getTime()+(seconds+jitter)*1000);}
-export function rateLimitAvailableAt(now:Date,resetAt:Date){if(!Number.isFinite(resetAt.getTime())||resetAt<=now)throw new CollectionTaskError('collection_rate_limit_reset_invalid');return resetAt;}
-const field=/^[A-Za-z0-9._-]{1,120}$/;
-export function summarizeCoverage(outcomes:readonly SubqueryOutcome[]):CoverageSummary{if(!outcomes.length)throw new CollectionTaskError('collection_subqueries_required');let successful=0,failed=0,blocked=0,available=0;const missing=new Set<string>();for(const item of outcomes){if(!['pending','running','succeeded','succeeded_empty','failed','blocked'].includes(item.status)||!Number.isSafeInteger(item.availableResultCount)||item.availableResultCount<0||item.missingFields.some(value=>!field.test(value)))throw new CollectionTaskError('collection_subquery_outcome_invalid');if(['pending','running'].includes(item.status))throw new CollectionTaskError('collection_subquery_not_terminal');if(item.status==='succeeded'||item.status==='succeeded_empty')successful+=1;else if(item.status==='failed')failed+=1;else blocked+=1;available+=item.availableResultCount;for(const value of item.missingFields)missing.add(value);}const requiredUnmet=outcomes.some(item=>item.required&&(item.status!=='succeeded'||item.availableResultCount===0||item.missingFields.length>0)),hasWarnings=failed>0||blocked>0||missing.size>0||requiredUnmet;if(available===0)return{terminalStatus:'succeeded_empty',coverageStatus:'insufficient',successfulSubqueryCount:successful,failedSubqueryCount:failed,blockedSubqueryCount:blocked,availableResultCount:0,missingFields:[...missing].sort()};return{terminalStatus:hasWarnings?'completed_with_warnings':'succeeded',coverageStatus:requiredUnmet?'insufficient':hasWarnings?'partial':'complete',successfulSubqueryCount:successful,failedSubqueryCount:failed,blockedSubqueryCount:blocked,availableResultCount:available,missingFields:[...missing].sort()};}
-export function isTerminalTaskStatus(status:CollectionTaskStatus){return['blocked_login','blocked_captcha','blocked_robots','succeeded','succeeded_empty','completed_with_warnings','failed_terminal','dead_letter','manually_replayed'].includes(status);}
+export const COLLECTION_TASK_STATUSES = [
+  "draft",
+  "scheduled",
+  "queued",
+  "leased",
+  "running",
+  "parsing",
+  "validating",
+  "persisted",
+  "retry_scheduled",
+  "blocked_login",
+  "blocked_captcha",
+  "blocked_robots",
+  "rate_limited",
+  "succeeded",
+  "succeeded_empty",
+  "completed_with_warnings",
+  "failed_terminal",
+  "dead_letter",
+  "manually_replayed",
+  "automatically_replayed",
+] as const;
+export type CollectionTaskStatus = (typeof COLLECTION_TASK_STATUSES)[number];
+export type CoverageStatus = "complete" | "partial" | "insufficient";
+export const COLLECTION_ERROR_CODES = [
+  "network_error",
+  "timeout",
+  "dns_error",
+  "login_required",
+  "session_expired",
+  "captcha",
+  "rate_limited",
+  "robots_disallowed",
+  "source_changed",
+  "parse_failed",
+  "validation_failed",
+  "empty_result",
+  "permission_denied",
+] as const;
+export type CollectionErrorCode = (typeof COLLECTION_ERROR_CODES)[number];
+export type SubqueryStatus =
+  "pending" | "running" | "succeeded" | "succeeded_empty" | "failed" | "blocked";
+export interface SubqueryOutcome {
+  required: boolean;
+  status: SubqueryStatus;
+  availableResultCount: number;
+  missingFields: string[];
+  errorCode: CollectionErrorCode | null;
+}
+export interface CoverageSummary {
+  terminalStatus: "succeeded" | "succeeded_empty" | "completed_with_warnings";
+  coverageStatus: CoverageStatus;
+  successfulSubqueryCount: number;
+  failedSubqueryCount: number;
+  blockedSubqueryCount: number;
+  availableResultCount: number;
+  missingFields: string[];
+}
+export class CollectionTaskError extends Error {
+  constructor(readonly code: string) {
+    super(code);
+    this.name = "CollectionTaskError";
+  }
+}
+const transitions: Record<CollectionTaskStatus, readonly CollectionTaskStatus[]> = {
+  draft: ["scheduled"],
+  scheduled: ["queued"],
+  queued: ["leased"],
+  leased: ["running", "retry_scheduled", "dead_letter"],
+  running: [
+    "parsing",
+    "retry_scheduled",
+    "blocked_login",
+    "blocked_captcha",
+    "blocked_robots",
+    "rate_limited",
+    "failed_terminal",
+    "dead_letter",
+  ],
+  parsing: [
+    "validating",
+    "retry_scheduled",
+    "blocked_login",
+    "blocked_captcha",
+    "blocked_robots",
+    "rate_limited",
+    "failed_terminal",
+    "dead_letter",
+  ],
+  validating: [
+    "persisted",
+    "retry_scheduled",
+    "blocked_login",
+    "blocked_captcha",
+    "blocked_robots",
+    "rate_limited",
+    "failed_terminal",
+    "dead_letter",
+  ],
+  persisted: ["succeeded", "succeeded_empty", "completed_with_warnings"],
+  retry_scheduled: ["queued", "dead_letter"],
+  blocked_login: ["automatically_replayed"],
+  blocked_captcha: [],
+  blocked_robots: [],
+  rate_limited: ["queued"],
+  succeeded: [],
+  succeeded_empty: ["automatically_replayed"],
+  completed_with_warnings: ["automatically_replayed"],
+  failed_terminal: [],
+  dead_letter: ["manually_replayed"],
+  manually_replayed: [],
+  automatically_replayed: [],
+};
+export function assertTaskTransition(from: CollectionTaskStatus, to: CollectionTaskStatus) {
+  if (!transitions[from]?.includes(to))
+    throw new CollectionTaskError("collection_transition_invalid");
+  return to;
+}
+export function classifyCollectionFailure(
+  code: CollectionErrorCode,
+  attemptCount: number,
+  maxAttempts = 4,
+): { status: CollectionTaskStatus; retryable: boolean } {
+  if (!Number.isInteger(attemptCount) || attemptCount < 1 || maxAttempts !== 4)
+    throw new CollectionTaskError("collection_attempt_invalid");
+  if (code === "login_required" || code === "session_expired")
+    return { status: "blocked_login", retryable: false };
+  if (code === "captcha") return { status: "blocked_captcha", retryable: false };
+  if (code === "robots_disallowed") return { status: "blocked_robots", retryable: false };
+  if (code === "rate_limited") return { status: "rate_limited", retryable: false };
+  if (code === "permission_denied" || code === "source_changed" || code === "empty_result")
+    return { status: "failed_terminal", retryable: false };
+  return attemptCount >= maxAttempts
+    ? { status: "dead_letter", retryable: false }
+    : { status: "retry_scheduled", retryable: true };
+}
+export function retryAvailableAt(attemptCount: number, now: Date, jitterUnit: number) {
+  if (
+    !Number.isInteger(attemptCount) ||
+    attemptCount < 1 ||
+    attemptCount > 3 ||
+    !Number.isFinite(jitterUnit) ||
+    jitterUnit < 0 ||
+    jitterUnit > 1
+  )
+    throw new CollectionTaskError("collection_retry_input_invalid");
+  const seconds = [60, 300, 900][attemptCount - 1]!,
+    jitter = Math.floor(seconds * 0.2 * jitterUnit);
+  return new Date(now.getTime() + (seconds + jitter) * 1000);
+}
+export function rateLimitAvailableAt(now: Date, resetAt: Date) {
+  if (!Number.isFinite(resetAt.getTime()) || resetAt <= now)
+    throw new CollectionTaskError("collection_rate_limit_reset_invalid");
+  return resetAt;
+}
+const field = /^[A-Za-z0-9._-]{1,120}$/;
+export function summarizeCoverage(outcomes: readonly SubqueryOutcome[]): CoverageSummary {
+  if (!outcomes.length) throw new CollectionTaskError("collection_subqueries_required");
+  let successful = 0,
+    failed = 0,
+    blocked = 0,
+    available = 0;
+  const missing = new Set<string>();
+  for (const item of outcomes) {
+    if (
+      !["pending", "running", "succeeded", "succeeded_empty", "failed", "blocked"].includes(
+        item.status,
+      ) ||
+      !Number.isSafeInteger(item.availableResultCount) ||
+      item.availableResultCount < 0 ||
+      item.missingFields.some((value) => !field.test(value))
+    )
+      throw new CollectionTaskError("collection_subquery_outcome_invalid");
+    if (["pending", "running"].includes(item.status))
+      throw new CollectionTaskError("collection_subquery_not_terminal");
+    if (item.status === "succeeded" || item.status === "succeeded_empty") successful += 1;
+    else if (item.status === "failed") failed += 1;
+    else blocked += 1;
+    available += item.availableResultCount;
+    for (const value of item.missingFields) missing.add(value);
+  }
+  const requiredUnmet = outcomes.some(
+      (item) =>
+        item.required &&
+        (item.status !== "succeeded" ||
+          item.availableResultCount === 0 ||
+          item.missingFields.length > 0),
+    ),
+    hasWarnings = failed > 0 || blocked > 0 || missing.size > 0 || requiredUnmet;
+  if (available === 0)
+    return {
+      terminalStatus: "succeeded_empty",
+      coverageStatus: "insufficient",
+      successfulSubqueryCount: successful,
+      failedSubqueryCount: failed,
+      blockedSubqueryCount: blocked,
+      availableResultCount: 0,
+      missingFields: [...missing].sort(),
+    };
+  return {
+    terminalStatus: hasWarnings ? "completed_with_warnings" : "succeeded",
+    coverageStatus: requiredUnmet ? "insufficient" : hasWarnings ? "partial" : "complete",
+    successfulSubqueryCount: successful,
+    failedSubqueryCount: failed,
+    blockedSubqueryCount: blocked,
+    availableResultCount: available,
+    missingFields: [...missing].sort(),
+  };
+}
+export function isTerminalTaskStatus(status: CollectionTaskStatus) {
+  return [
+    "blocked_login",
+    "blocked_captcha",
+    "blocked_robots",
+    "succeeded",
+    "succeeded_empty",
+    "completed_with_warnings",
+    "failed_terminal",
+    "dead_letter",
+    "manually_replayed",
+    "automatically_replayed",
+  ].includes(status);
+}

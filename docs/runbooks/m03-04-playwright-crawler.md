@@ -20,7 +20,7 @@ Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-py
 ## 发布与验证
 
 1. 备份 MySQL，并确认没有本模块 running 租约。
-2. 执行 `0016d_playwright_crawler_m03_04.up.sql` 与 `0048_browser_collection_jobs.up.sql`，必须使用 `product_scout` 业务账号且确认 MySQL 5.7/utf8mb4。
+2. 执行 `0016d_playwright_crawler_m03_04.up.sql`、`0048_browser_collection_jobs.up.sql` 与 `0049_credential_renewal_auto_replay.up.sql`，必须使用 `product_scout` 业务账号且确认 MySQL 5.7/utf8mb4；已应用的迁移不可重复手工执行。
 3. 在发布目录复用锁文件安装依赖，安装项目固定的 Playwright Chromium；不得在请求处理中下载浏览器。
 4. 构建后运行 `npm run verify:module -- M03-04`。其中包含真实本地 Chromium、MySQL 5.7 独占租约、Python bridge、桌面和 390px 视觉验收。
 5. 由宝塔重启 `ai选品` 和 `ai选品-python`，在 `/platform-admin/collection/browser-runtime` 确认档案有效期、目标域名、活动租约和最近运行可读，并检查 Python 的 running/completed 日志；没有 `browser_collection_jobs.status='queued'` 时不应出现空闲心跳。
@@ -28,6 +28,7 @@ Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-py
 ## 故障处理
 
 - `blocked_login` / `blocked_captcha` / `blocked_robots`：停止自动重试，平台管理员核对合法账户、档案与来源政策；不得自动绕过。
+- `blocked_login` / `credential_expired` 的续期：任务中心会出现关联业务采集任务的续期项。轮换凭证后观察新的自动重放任务；轮换只确认输入格式和站点域名，自动重放才确认登录是否真实恢复。
 - `rate_limited`：遵守 Retry-After 与 M03-05 的后续重试策略；本模块只记录受阻结果。
 - `timeout` / `dependency_failed`：在宝塔“ai选品”日志中检查子执行器、Node runner 路径和 Chromium 安装，使用 request_id/trace_id 关联。
 - `crawler_profile_lease_conflict`：等待有效租约结束。只有 `expires_at` 已过期时才在监控页输入“确认回收”。
@@ -35,4 +36,4 @@ Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-py
 
 ## 回滚与清理
 
-回滚前从宝塔停止 `ai选品` 和 `ai选品-python`，确认或回收所有过期租约并备份。执行 down migration 后从本地重新上传目标版本，再从宝塔启动两个项目。临时档案默认位于 `CREDENTIAL_TEMP_ROOT`；异常残留只能在确认路径属于该根目录、没有活跃 Chromium 后清理，不能递归删除宽泛目录。
+回滚前从宝塔停止 `ai选品` 和 `ai选品-python`，确认或回收所有过期租约并备份。先执行 0049 down，再执行浏览器作业 down migration；从本地重新上传目标版本后再由宝塔启动两个项目。临时档案默认位于 `CREDENTIAL_TEMP_ROOT`；异常残留只能在确认路径属于该根目录、没有活跃 Chromium 后清理，不能递归删除宽泛目录。

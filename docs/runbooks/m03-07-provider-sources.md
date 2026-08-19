@@ -24,7 +24,8 @@
 - `adapter_not_registered`：来源仍处于待配置状态或部署版本不一致；不要伪造成功。
 - `provider_source_setup_required`：1688 真实登录固定样本尚未通过字段回放；保持来源停用，完成样本验收和解析器版本更新后再发布解除门禁的代码版本。
 - `rate_limited`：保留任务和证据，等待状态机退避；不要提高并发绕过限制。
-- `source_changed` / `parse_failed`：停用对应频道，保留 trace_id，更新解析器和合同测试后再恢复。
+- `source_changed`：系统已事务化停用对应 Provider，并写 Provider 版本和 `provider.parser_drift.auto_paused` 平台审计；保留 trace_id，更新解析器和合同测试、完成固定样本差异回放后再由来源负责人显式恢复。
+- `parse_failed`：任务按失败分类处理但不会自动停源；先用 trace_id 判断是单条脏数据还是稳定页面合同漂移，只有确认合同漂移并发布新解析器后再调整来源状态。
 - 1688 的 `source_changed`：对照失败快照的 `schema_version`、DOM 片段与 `source_paths`，更新受控浏览器提取器和固定样本回放；不得放宽到任意 1688 URL、吞掉缺失字段或用空记录冒充成功。
 - 1688 的 `source_configuration_invalid`：检查是否为 HTTPS 1688 域名、搜索入口是否为 `s.1688.com`，以及详情 URL 中商品 ID 是否与记录一致。该错误不是登录续期信号，不能通过重放绕过。
 - 固定公开榜单页面无结果：先核对页面是否调整结构或返回地区/验证页面；解析器会以 `source_changed` 失败，不会把空白或错误页当成商品数据。
@@ -42,7 +43,7 @@
 
 ## 本次发布重启要求
 
-来源目录、1688 解析合同和浏览器作业客户端都在 Node 进程启动时加载；Python Crawler 的领取合同也已改变。发布时应用 `0048_browser_collection_jobs.up.sql`，通过宝塔重启统一 Node 后端与 `ai选品-python`；MySQL 与 Redis 不需要重启，也不创建新服务。`1688_search` 在真实登录固定样本字段提取验收前继续保持停用。
+来源目录、1688 解析合同、失败映射和凭证续期重放逻辑都在 Node 进程启动时加载。发布时按顺序应用 `0048_browser_collection_jobs.up.sql` 与 `0049_credential_renewal_auto_replay.up.sql`，通过宝塔重启统一 Node 后端；若 0048 和 Python 领取合同尚未随前版部署，再同时重启 `ai选品-python`，仅发布本次 0049 与 Node 代码时 Python 无需重启。MySQL 与 Redis 不需要重启，也不创建新服务。`1688_search` 在真实登录固定样本字段提取验收前继续保持停用。
 
 ## 网页登录与匿名测试
 

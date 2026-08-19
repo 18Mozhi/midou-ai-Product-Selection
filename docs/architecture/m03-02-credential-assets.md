@@ -11,7 +11,8 @@ M03-02 交付平台全局的 `credential_assets` 与 `crawler_profiles`。账号
 - `@scoutops/credentials` 使用 AES-256-GCM、96 位随机 nonce 和 128 位认证标签；主密钥经域分离的 SHA-256 派生为 256 位数据密钥，AAD 绑定资产 ID、资产类型和 key_version。
 - `credential_assets` 保存当前密文；`credential_asset_versions` 保存 create、rotate、revoke 的不可变密文版本、操作人和 request_id/trace_id。
 - `credential_asset_operations` 与 `crawler_profile_operations` 以操作人、路由和 Idempotency-Key 唯一；所有写入使用 MySQL 5.7 事务和乐观锁。
-- `crawler_profiles` 只能引用同一 Provider 下 active、类型为 `browser_profile` 的凭证资产；版本快照保存于 `crawler_profile_versions`。
+- `crawler_profiles` 只能引用同一 Provider 下 active、类型为 `browser_profile` 或 `cookie_bundle` 的凭证资产；版本快照保存于 `crawler_profile_versions`。
+- 浏览器凭证轮换在同一事务完成活动续期任务并恢复关联登录作业：仍处于执行期的作业原位回到 `queued`；已经因登录问题终态的采集任务保留全部历史、标记为 `automatically_replayed`，再复制子查询创建新的 `scheduled` 任务。轮换只校验凭证格式、域名绑定和显式有效期，新的重放才验证真实登录；登录仍无效时会再次受阻并重新创建续期任务。
 - 撤销不可恢复，历史密文与审计保留；撤销后轮换失败关闭。
 
 常驻运行只读取宝塔受限环境中的 `CREDENTIALS_MASTER_KEY` 与非秘密 `CREDENTIALS_MASTER_KEY_VERSION`。主密钥轮换由宝塔一次性任务运行 `scripts/rotate-credential-master-key.mjs`：逐个 active 资产解密、用新密钥重加密、写新版本并校验，幂等键允许安全续跑。只有全部 active 资产切换成功后，才能更新常驻配置并撤销旧密钥。轮换不会覆写不可变历史版本；旧密钥撤销后，旧版本密文只保留审计证据且不可再解密，运行时只使用已重加密的当前 active 版本。
@@ -22,4 +23,4 @@ M03-02 交付平台全局的 `credential_assets` 与 `crawler_profiles`。账号
 
 ## 回滚
 
-先在宝塔停止 API、Worker 和 Crawler，确认没有凭证写入或主密钥轮换任务；备份数据库后执行 `0016b_credential_assets_m03_02.down.sql`。回滚按 profile operations、profile versions、profiles、asset operations、asset versions、assets 顺序删除。随后回滚代码与配置并由宝塔重启。删除表会永久失去密文和版本审计，未验证备份恢复前禁止生产执行。
+先在宝塔停止统一 Node 后端和 Python Crawler，确认没有凭证写入、自动重放或主密钥轮换任务；备份数据库后先执行 `0049_credential_renewal_auto_replay.down.sql`，再执行 `0016b_credential_assets_m03_02.down.sql`。回滚按 profile operations、profile versions、profiles、asset operations、asset versions、assets 顺序删除。随后回滚代码与配置并由宝塔重启。删除表会永久失去密文和版本审计，未验证备份恢复前禁止生产执行。

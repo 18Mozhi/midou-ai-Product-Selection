@@ -11,6 +11,7 @@
 ## 数据与租约
 
 - `browser_collection_jobs` 以 `collection_subquery_id` 唯一关联业务任务；状态、结果、错误、Crawler 实例与租约时间均在 MySQL 5.7 保存。
+- 凭证过期或登录失效会创建关联 `collection_task_id` 的 `collection_followup` 续期任务。凭证轮换后，仍处于业务任务执行期的 blocked job 清除旧运行与租约字段并原位回到 `queued`；业务任务已终态时不改写旧作业，而是由 M03-05 克隆任务和子查询自动重放。
 - `crawler_profiles` 与 `crawler_profile_leases` 是平台全局资产。同一档案以主键锁和 `SELECT ... FOR UPDATE` 保证仅一个活动租约。
 - `crawler_browser_runs` 必须携带 `organization_id`、`workspace_id`、Provider、档案、请求人及 request_id/trace_id；业务范围不从平台档案继承或猜测。
 - 数据库只保存带域分离前缀的 SHA-256 租约令牌摘要。令牌只在首次成功获得租约时交给内部 Crawler，幂等重放不再次返回令牌，监控 API 永不返回令牌。
@@ -30,4 +31,4 @@ Python Crawler 不读取静态执行请求文件。它使用服务 Token 调用 
 
 ## 回滚
 
-先在宝塔停止 Python Crawler，再停止统一 Node 后端，确认没有 `browser_collection_jobs.status='leased'`，执行 `0048_browser_collection_jobs.down.sql` 后再按既有流程回退 `0016d_playwright_crawler_m03_04.down.sql`。回滚会删除业务作业关联、低层浏览器运行与租约审计表，执行前必须备份；不得在仍有活动租约时回滚。
+先在宝塔停止 Python Crawler，再停止统一 Node 后端，确认没有 `browser_collection_jobs.status='leased'`，依次执行 `0049_credential_renewal_auto_replay.down.sql`、`0048_browser_collection_jobs.down.sql`，再按既有流程回退 `0016d_playwright_crawler_m03_04.down.sql`。回滚会删除业务作业关联、低层浏览器运行与租约审计表，执行前必须备份；不得在仍有活动租约时回滚。

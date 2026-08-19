@@ -1,0 +1,1 @@
+ALTER TABLE `collection_tasks` MODIFY `status` ENUM('draft','scheduled','queued','leased','running','parsing','validating','persisted','retry_scheduled','blocked_login','blocked_captcha','blocked_robots','rate_limited','succeeded','succeeded_empty','completed_with_warnings','failed_terminal','dead_letter','manually_replayed','automatically_replayed') NOT NULL;

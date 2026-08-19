@@ -15,6 +15,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /0041_member_workspace_tasks\.up\.sql/);
   assert.match(deploy, /0047_approval_decision_context_snapshot\.up\.sql/);
   assert.match(deploy, /0048_browser_collection_jobs\.up\.sql/);
+  assert.match(deploy, /0049_credential_renewal_auto_replay\.up\.sql/);
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
   assert.match(deploy, /remote_python\(client, panel_deploy_source/);
   assert.ok(
@@ -32,6 +33,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     "0046_notification_workflow_root_cause.up.sql",
     "0047_approval_decision_context_snapshot.up.sql",
     "0048_browser_collection_jobs.up.sql",
+    "0049_credential_renewal_auto_replay.up.sql",
   ];
   let previousIndex = -1;
   for (const migration of orderedMigrations) {
@@ -59,6 +61,7 @@ test("allowlisted deployment migrations remain single-statement for the locked M
     "0046_notification_workflow_root_cause.up.sql",
     "0047_approval_decision_context_snapshot.up.sql",
     "0048_browser_collection_jobs.up.sql",
+    "0049_credential_renewal_auto_replay.up.sql",
   ]) {
     const sql = await readFile(`database/migrations/${name}`, "utf8");
     const statements = sql

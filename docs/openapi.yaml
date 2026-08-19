@@ -4126,6 +4126,7 @@ paths:
   /platform/credential-assets/{assetId}/rotate:
     post:
       summary: Replace the encrypted payload and append a credential version
+      description: Validates and rotates the encrypted credential in one transaction. Active crawler profiles bound to the asset complete their renewal task; login-blocked browser jobs are requeued while their collection task is active, or cloned into a new scheduled task after a terminal login block. Rotation validates credential structure and domain binding, while the replay is the live login verification and may block again if the renewed session is still invalid.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
@@ -8991,6 +8992,7 @@ components:
           failed_terminal,
           dead_letter,
           manually_replayed,
+          automatically_replayed,
         ]
     CoverageStatus:
       type: string

@@ -493,10 +493,10 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       if (row.expires_at != null && new Date(row.expires_at) <= input.now) {
         await c.query(
           [
-            "UPDATE browser_collection_jobs SET status='blocked',error_code='credential_expired',finished_at=?,up",
-            "dated_at=? WHERE id=?",
+            "UPDATE browser_collection_jobs SET status='blocked',crawler_profile_id=?,error_code='credential_expired',",
+            "finished_at=?,updated_at=? WHERE id=?",
           ].join(""),
-          [input.now, input.now, row.id],
+          [row.profile_id, input.now, input.now, row.id],
         );
         await this.renewalTask(c, {
           organizationId: String(row.organization_id),
@@ -508,6 +508,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           traceId: String(row.trace_id),
           now: input.now,
           reason: "credential_expired",
+          collectionTaskId: String(row.collection_task_id),
         });
         await c.commit();
         return null;
@@ -804,6 +805,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           traceId: input.traceId,
           now: input.now,
           reason: input.errorCode ?? "blocked_login",
+          collectionTaskId: String(row.collection_task_id),
         });
       await this.event(
         c,
@@ -879,6 +881,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       traceId: string;
       now: Date;
       reason: string;
+      collectionTaskId?: string;
     },
   ) {
     const [existing] = await c.query<RowDataPacket[]>(
@@ -894,7 +897,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         [
           "INSERT INTO tasks (id,organization_id,workspace_id,title,description,status,priority,assignee_id,sou",
           "rce_type,source_ref_id,collection_task_id,due_at,completed_at,created_by,version,created_at,updated_",
-          "at) VALUES (?,?,?,?,?,'todo','critical',?,'collection_followup',?,NULL,?,NULL,?,1,?,?)",
+          "at) VALUES (?,?,?,?,?,'todo','critical',?,'collection_followup',?,?,?,NULL,?,1,?,?)",
         ].join(""),
         [
           taskId,
@@ -904,6 +907,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           `浏览器档案 ${input.profileId} 登录无效（${input.reason}）；更新凭证并验证目标站点登录状态。`,
           input.assigneeId,
           input.profileId,
+          input.collectionTaskId ?? null,
           new Date(input.now.getTime() + 24 * 60 * 60 * 1000),
           input.actorId,
           input.now,
@@ -913,10 +917,21 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     else if (["completed", "cancelled"].includes(String(existing[0].status)))
       await c.query(
         [
-          "UPDATE tasks SET status='todo',priority='critical',assignee_id=?,completed_at=NULL,due_at=?,version=",
-          "version+1,updated_at=? WHERE id=?",
+          "UPDATE tasks SET status='todo',priority='critical',assignee_id=?,collection_task_id=COALESCE(?,",
+          "collection_task_id),completed_at=NULL,due_at=?,version=version+1,updated_at=? WHERE id=?",
         ].join(""),
-        [input.assigneeId, new Date(input.now.getTime() + 24 * 60 * 60 * 1000), input.now, taskId],
+        [
+          input.assigneeId,
+          input.collectionTaskId ?? null,
+          new Date(input.now.getTime() + 24 * 60 * 60 * 1000),
+          input.now,
+          taskId,
+        ],
+      );
+    else if (input.collectionTaskId)
+      await c.query(
+        "UPDATE tasks SET collection_task_id=?,version=version+1,updated_at=? WHERE id=?",
+        [input.collectionTaskId, input.now, taskId],
       );
     await c.query(
       [
@@ -932,6 +947,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         input.actorId,
         JSON.stringify({
           crawler_profile_id: input.profileId,
+          collection_task_id: input.collectionTaskId ?? null,
           reason: input.reason,
         }),
         input.requestId,

@@ -9,10 +9,12 @@ const files = Object.fromEntries(
       "apps/crawler/scoutops_crawler/config.py",
       "apps/api/src/crawler-runtime-routes.ts",
       "apps/api/src/mysql-crawler-runtime-repository.ts",
+      "apps/api/src/mysql-credential-asset-repository.ts",
       "apps/worker/src/authenticated-browser-job-client.ts",
       "apps/worker/src/provider-source-executor.ts",
       "scripts/run-playwright-crawler.mjs",
       "database/migrations/0048_browser_collection_jobs.up.sql",
+      "database/migrations/0049_credential_renewal_auto_replay.up.sql",
     ].map(async (path) => [path, await readFile(path, "utf8")]),
   ),
 );
@@ -28,6 +30,8 @@ for (const token of [
   "run-playwright-crawler.mjs",
   "runWithEncryptedProfile",
   "lease_token",
+  "automatically_replayed",
+  "task.credential_renewal_completed",
 ]) {
   if (!all.includes(token)) throw new Error(`crawler_chain_missing:${token}`);
 }

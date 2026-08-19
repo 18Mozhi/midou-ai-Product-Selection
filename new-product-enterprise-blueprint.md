@@ -438,11 +438,13 @@ retry_scheduled
   → dead_letter (超过最大重试)
 dead_letter
   → manually_replayed (管理员动作，保留历史尝试)
+blocked_login | succeeded_empty | completed_with_warnings
+  → automatically_replayed (仅凭证续期恢复；存在对应登录受阻作业，保留原任务并创建新任务)
 ```
 
 统一错误码：`network_error`、`timeout`、`dns_error`、`login_required`、`session_expired`、`captcha`、`rate_limited`、`robots_disallowed`、`source_changed`、`parse_failed`、`validation_failed`、`empty_result`、`permission_denied`。
 
-执行纪律：租约到期且没有成功心跳的 `leased` 或 `running` 任务由调度器回收为 `retry_scheduled`；同一任务最多自动尝试 4 次（首次执行加 3 次重试），采用 1、5、15 分钟指数退避并叠加不超过 20% 的随机抖动。`rate_limited` 以响应中的重置时间为准，`blocked_login`、`blocked_captcha`、`blocked_robots` 和 `permission_denied` 不自动重试。多来源任务逐项保存子查询结果与错误：全部满足所需覆盖时为 `succeeded`，没有任何可用结果时为 `succeeded_empty`，至少一项有可用结果但存在失败、受阻或缺少必需来源时为 `completed_with_warnings`。任务同时保存 `coverage_status`（`complete`、`partial`、`insufficient`）、成功/失败/受阻子查询数、缺失字段和可用证据；页面必须显示成功覆盖、失败范围和可继续使用的证据。评分服务根据覆盖状态降低置信度；`insufficient` 不得产生“推荐”自动结论。仅具备 `collection:replay` 且属于平台运营管理员或来源负责人角色的人员可人工重放，重放必须指定原因并保留原任务及全部尝试记录。
+执行纪律：租约到期且没有成功心跳的 `leased` 或 `running` 任务由调度器回收为 `retry_scheduled`；同一任务最多自动尝试 4 次（首次执行加 3 次重试），采用 1、5、15 分钟指数退避并叠加不超过 20% 的随机抖动。`rate_limited` 以响应中的重置时间为准，`blocked_login`、`blocked_captcha`、`blocked_robots` 和 `permission_denied` 不自动重试。必需来源的登录、验证码、robots、权限或解析漂移错误必须进入统一受阻/失败状态，不能降级成普通空成功；非必需来源才允许保留单项失败并继续其余来源，来源正常返回零条记录时仍如实记为 `succeeded_empty`。多来源任务逐项保存子查询结果与错误：全部满足所需覆盖时为 `succeeded`，没有任何可用结果时为 `succeeded_empty`，至少一项有可用结果但存在失败、受阻或缺少必需来源时为 `completed_with_warnings`。任务同时保存 `coverage_status`（`complete`、`partial`、`insufficient`）、成功/失败/受阻子查询数、缺失字段和可用证据；页面必须显示成功覆盖、失败范围和可继续使用的证据。评分服务根据覆盖状态降低置信度；`insufficient` 不得产生“推荐”自动结论。仅具备 `collection:replay` 且属于平台运营管理员或来源负责人角色的人员可人工重放，重放必须指定原因并保留原任务及全部尝试记录。凭证轮换只校验结构、域名与显式有效期；系统随后完成续期任务并恢复对应作业，运行中作业原位排队，终态任务保留历史并克隆新任务，真实登录仍由新任务验证，失败时再次进入 `blocked_login`。
 
 ### 5.5 调度策略与不重复授权规则
 
@@ -672,7 +674,7 @@ Resource Grant 只补充 RBAC/Data Scope 无法覆盖的指定资源例外：目
 
 MySQL 5.7 是采集任务、子查询、执行尝试、租约、死信、事件和 Outbox 的事实源；Redis 只保存按组织/工作区隔离的就绪信号与短租约，不能决定任务完成。调度与领取使用行锁，Worker 仅持有原始租约令牌，数据库保存带域分离的 SHA-256 摘要。租约到期或 Redis 协调冲突必须显式回收，不能让任务永久停留在 leased。
 
-任务严格执行 5.4 的状态、总尝试 4 次、1/5/15 分钟退避与受阻规则；子查询逐项保存结果与缺失字段，再计算 `complete/partial/insufficient`。人工重放仅针对 `dead_letter`，要求 `collection:replay`、同源 Origin、Idempotency-Key 与原因，创建新的 scheduled 任务并保留原任务全部历史。监控 API 不返回内部 target、租约令牌或凭证。M03-05 不保存 M03-06 原始证据，也不在 M03-07 前注册或启动真实来源执行器。
+任务严格执行 5.4 的状态、总尝试 4 次、1/5/15 分钟退避与受阻规则；子查询逐项保存结果与缺失字段，再计算 `complete/partial/insufficient`。人工重放仅针对 `dead_letter`，要求 `collection:replay`、同源 Origin、Idempotency-Key 与原因，创建新的 scheduled 任务并保留原任务全部历史。凭证续期自动重放只处理存在登录受阻浏览器作业的任务，不复用人工重放权限或覆盖旧历史。监控 API 不返回内部 target、租约令牌或凭证。M03-05 不保存 M03-06 原始证据，也不在 M03-07 前注册或启动真实来源执行器。
 
 #### 8.3.12 M03-06 证据与数据质量实现基线
 
@@ -690,7 +692,7 @@ MySQL 5.7 保存组织/工作区范围化的原始证据元数据、规范记录
 
 `1688_search` 的浏览器提取结果必须按版本化合同进入来源规范化层：搜索、商品详情、供应商分别使用 `1688.search.v1`、`1688.offer-detail.v1`、`1688.supplier.v1`，解析器版本为 `1688-browser-contract-v1`。合同只接受 HTTPS 的 1688 域名，搜索入口限定 `s.1688.com`，商品详情路径中的数字商品 ID 必须与记录一致。搜索合同覆盖标题、供应商、报价、币种、MOQ、地点和规范链接；详情合同补规格与交期；供应商合同独立保存供应商名称、地点和规范链接。每条输出必须保留观测时间、最多 250 KB 的 DOM 证据片段及必需字段路径，缺失事实写入 `missing_fields_json`，不得补零或猜值。
 
-该合同不是生产接通声明。当前已注册 1688 的登录型作业路由、Worker 到 Python 的业务任务领取/心跳/结果回写链和规范化适配器；但真实登录页面的字段提取尚未用平台档案与固定样本共同验收，因此 `1688_search` 继续保持 `setup_required / disabled`，不得宣称自动采集可用。页面结构、字段路径或 schema 漂移时以 `source_changed` 失败关闭，跨站或身份不一致以 `source_configuration_invalid` 拒绝。
+该合同不是生产接通声明。当前已注册 1688 的登录型作业路由、Worker 到 Python 的业务任务领取/心跳/结果回写链和规范化适配器；但真实登录页面的字段提取尚未用平台档案与固定样本共同验收，因此 `1688_search` 继续保持 `setup_required / disabled`，不得宣称自动采集可用。页面结构、字段路径或 schema 漂移时以 `source_changed` 失败关闭，并在同一事务停用对应 Provider、写版本与平台审计；跨站或身份不一致以 `source_configuration_invalid` 拒绝。
 
 当惠州出口不能直连 Google News 时，只允许在 ScoutOps 的宝塔 Node API、Node Worker 和有限来源任务中注入 `PROVIDER_PROXY_*` 项目配置。代码仅对固定 `news.google.com` HTTPS 请求建立带 Basic 认证的 HTTP CONNECT，其他 Provider、AI、API 请求和系统进程继续直连；禁止设置全局 `HTTP_PROXY`/`HTTPS_PROXY`，禁止将代理地址或凭证下发浏览器、写入 Provider DTO、日志或 Git。代理不能放宽 10 秒健康门、2 MB 响应和每任务 20 条限制。
 
