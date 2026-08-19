@@ -12,6 +12,7 @@
 
 - 找货任务不投影：确认 `made_in_china_search` 与 `ec21_supplier_search` 为 `enabled/public_page`，关联采集任务属于同一组织/工作区并进入成功、空成功或带警告完成；再按精确任务编号检查各子查询和 `core_collection_projection_runs`。旧的 `product-supply-csv-v1` 投影仍兼容。
 - 候选不能对比：检查缺失项；采购成员必须带 Evidence ID 确认规格、交期、所在地、可信度、稳定性和风险。
+- 对比页面：已保存的每一份对比必须按相同顺序显示供应商、规格、MOQ、报价与交期。当前两个来源均为公开页，不存在登录档案续期入口；不要把验证码或网络失败伪装成登录受阻。
 - 采购任务被拒绝：数量不得低于现行报价 MOQ。
 - 队列异常：在宝塔 Worker 日志搜索 `sourcing_projection`，再检查租约、尝试次数和 `last_error_code`。配置修改后必须重启 Worker。
 

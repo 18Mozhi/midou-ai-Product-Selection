@@ -50,6 +50,21 @@ type Search = {
     observed_at: string;
   } | null;
 };
+type ComparisonQuote = {
+  id: string;
+  supplier_name: string;
+  product_title: string;
+  specification: string;
+  moq: number;
+  quoted_price: number;
+  currency: string;
+  lead_time_days: number;
+  location: string;
+  confidence_value: number;
+  stability_status: string;
+  risk_level: string;
+  evidence_id: string;
+};
 const props = defineProps<{ apiBaseUrl: string }>(),
   state = ref<State>("loading"),
   items = ref<Search[]>([]),
@@ -61,7 +76,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   query = ref(""),
   deleting = ref<Search | null>(null),
   deleteReason = ref(""),
-  comparisons = ref<Array<{id:string;name:string;quotes:unknown[];created_at:string}>>([]),
+  comparisons = ref<Array<{id:string;name:string;quotes:ComparisonQuote[];created_at:string}>>([]),
   quoteCandidate = ref<Candidate | null>(null),
   selectedQuotes = ref<string[]>([]),
   form = reactive({
@@ -416,7 +431,28 @@ onMounted(() => {
             </footer>
           </article>
         </section>
-        <section class="sourcing-comparisons"><header><div><small>已保存记录</small><h4>供应商报价对比历史</h4></div><span>{{ comparisons.length }} 份</span></header><article v-for="comparison in comparisons" :key="comparison.id"><div><b>{{ comparison.name }}</b><small>{{ new Date(comparison.created_at).toLocaleString('zh-CN',{hour12:false}) }}</small></div><strong>{{ comparison.quotes.length }} 家现行报价</strong></article><p v-if="!comparisons.length">选择两家以上已确认报价后，可保存对比记录。</p></section>
+        <section class="sourcing-comparisons">
+          <header><div><small>已保存记录</small><h4>供应商报价对比历史</h4></div><span>{{ comparisons.length }} 份</span></header>
+          <article v-for="comparison in comparisons" :key="comparison.id">
+            <header>
+              <div><b>{{ comparison.name }}</b><small>{{ new Date(comparison.created_at).toLocaleString('zh-CN',{hour12:false}) }}</small></div>
+              <strong>{{ comparison.quotes.length }} 家现行报价</strong>
+            </header>
+            <div class="sourcing-comparison-grid" aria-label="规格、最小起订量与交期对比">
+              <section v-for="item in comparison.quotes" :key="item.id">
+                <b>{{ item.supplier_name }}</b>
+                <small>{{ item.product_title }}</small>
+                <dl>
+                  <div><dt>规格</dt><dd>{{ item.specification }}</dd></div>
+                  <div><dt>最小起订量</dt><dd>{{ item.moq }}</dd></div>
+                  <div><dt>报价</dt><dd>{{ item.currency }} {{ item.quoted_price }}</dd></div>
+                  <div><dt>交期</dt><dd>{{ item.lead_time_days }} 天</dd></div>
+                </dl>
+              </section>
+            </div>
+          </article>
+          <p v-if="!comparisons.length">选择两家以上已确认报价后，可保存对比记录。</p>
+        </section>
       </main>
     </div>
     <div

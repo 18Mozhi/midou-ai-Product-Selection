@@ -1041,7 +1041,7 @@
         "/api/v1/competitor-monitor-rules"
       ],
       "scope": "organization and workspace scoped competitor identities immutable source snapshots comparison jobs changes threshold rules alerts events and outbox",
-      "truthBoundary": "Amazon identities can be added by product URL and are collected from the public product page without an official API; nullable price rank reviews rating and availability remain visibly missing when the page does not expose them, and no zero or sample value is substituted",
+      "truthBoundary": "Amazon identities can be added by product URL and are collected from the public product page without an official API; nullable price rank reviews rating and availability remain visibly missing when the page does not expose them, no zero or sample value is substituted, and detail views distinguish the oldest baseline, current snapshot, recorded changes and applicable explicit thresholds while price changes use the currency from their evidence-linked snapshot",
       "permission": "competitor:read for scoped list and full detail; competitor:manage for create collect thresholds pause resume and audited soft delete; auditors remain read only",
       "audit": "user and Worker writes preserve request_id trace_id evidence source references immutable changes and queued downstream delivery state",
       "configuration": [
@@ -1079,7 +1079,7 @@
         "/api/v1/sourcing/purchase-tasks"
       ],
       "scope": "organization and workspace scoped searches projection jobs candidates immutable quote versions comparisons purchase tasks events and outbox",
-      "truthBoundary": "a user search queues independent Made-in-China and EC21 public supplier-page crawlers without official API credentials; supplier title price image source URL and observed time are projected with immutable evidence, opportunity searches expose the joined opportunity name as display_name while retaining input_ref only for traceability, and unavailable MOQ specification lead location confidence stability and risk stay explicit until evidence-backed human confirmation",
+      "truthBoundary": "a user search queues independent Made-in-China and EC21 public supplier-page crawlers without official API credentials; supplier title price image source URL and observed time are projected with immutable evidence, opportunity searches expose the joined opportunity name as display_name while retaining input_ref only for traceability, unavailable MOQ specification lead location confidence stability and risk stay explicit until evidence-backed human confirmation, and saved comparisons use one consistent supplier specification MOQ price and lead-time field order; no login-renewal link is fabricated while this domain has only public-page executors",
       "permission": "sourcing:read for scoped lists details and comparison history; supplier_quote:manage for create refresh audited soft delete quote confirmation comparisons and purchase task creation",
       "audit": "writes preserve idempotency request_id trace_id actor immutable evidence references sourcing_events and sourcing_outbox",
       "configuration": [

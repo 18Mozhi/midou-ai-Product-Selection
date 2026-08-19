@@ -13,6 +13,7 @@
 - 队列积压：检查 `competitor_snapshot_jobs` 的 `status/available_at/lease_expires_at/last_error_code`，再看宝塔 Worker 日志中的 `queue=competitor_monitor`。
 - 快照不更新：确认竞品为 `active`、`amazon_product` 为 `enabled/public_page`，查看对应 `collection_tasks`、`collection_subqueries` 和 `core_collection_projection_runs`。页面没有披露的指标允许为空，不要手工补零。
 - 告警未产生：核对规则范围、指标、方向和显式阈值。首个快照只是基线。
+- 页面核对：详情应同时显示最早基线、当前快照、变化数和适用阈值；价格变化必须显示证据快照币种与变化时间。该呈现不新增配置，发布静态资源即可生效。
 - 配置修改后必须在宝塔重启 Node Worker；API 配置未动态读取。
 
 ## 回滚

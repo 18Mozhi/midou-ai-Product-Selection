@@ -279,11 +279,17 @@
   border: 1px solid #cbd8e7;
 }
 .sourcing-comparisons { margin-top:20px; padding-top:18px; border-top:1px solid var(--so-border); }
-.sourcing-comparisons > header,.sourcing-comparisons article { display:flex; align-items:center; justify-content:space-between; gap:14px; }
+.sourcing-comparisons > header,.sourcing-comparisons article > header { display:flex; align-items:center; justify-content:space-between; gap:14px; }
 .sourcing-comparisons h4 { margin:4px 0 0; }
 .sourcing-comparisons small { display:block; color:var(--so-text-muted); }
 .sourcing-comparisons article { margin-top:10px; padding:13px 14px; border:1px solid var(--so-border); border-radius:10px; background:var(--so-panel-soft); }
 .sourcing-comparisons > p { padding:18px; color:var(--so-text-muted); text-align:center; background:var(--so-panel-soft); }
+.sourcing-comparison-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:10px; margin-top:12px; }
+.sourcing-comparison-grid > section { min-width:0; padding:12px; border:1px solid var(--so-border); border-radius:9px; background:var(--so-panel); }
+.sourcing-comparison-grid dl { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 0; }
+.sourcing-comparison-grid dl div { min-width:0; padding:8px; background:var(--so-panel-soft); }
+.sourcing-comparison-grid dt { color:var(--so-text-muted); font-size:11px; }
+.sourcing-comparison-grid dd { margin:5px 0 0; overflow-wrap:anywhere; color:var(--so-text); font-weight:700; }
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -314,6 +320,10 @@
     display: grid;
   }
   .supplier-cards dl {
+    grid-template-columns: 1fr;
+  }
+  .sourcing-comparison-grid,
+  .sourcing-comparison-grid dl {
     grid-template-columns: 1fr;
   }
   .sourcing-erp-reference {

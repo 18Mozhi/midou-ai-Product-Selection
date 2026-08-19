@@ -79,6 +79,15 @@ const form = reactive({
     threshold_value: 1,
   });
 const latest = computed(() => selected.value?.latest_snapshot ?? null),
+  baseline = computed(() => {
+    const snapshots = selected.value?.snapshots ?? [];
+    return snapshots.length ? snapshots[snapshots.length - 1] : latest.value;
+  }),
+  applicableRules = computed(() =>
+    rules.value.filter(
+      (item) => !item.competitor_id || item.competitor_id === selected.value?.id,
+    ),
+  ),
   filteredItems = computed(() => { const needle=query.value.trim().toLowerCase(); return needle?items.value.filter((item)=>`${item.title} ${item.external_id} ${item.source_site}`.toLowerCase().includes(needle)):items.value; }),
   summary = computed(() => ({ total:items.value.length, active:items.value.filter((item)=>item.status==='active').length, pending:items.value.filter((item)=>!item.latest_snapshot).length, snapshots:items.value.reduce((sum,item)=>sum+(item.snapshot_count??0),0) })),
   stateFrom = (s: number): State =>
@@ -104,7 +113,32 @@ const statusText = (value: string) =>
   impactText = (value: string) =>
     value
       .replace(/\bin_stock\b/g, "有货")
-      .replace(/\bout_of_stock\b/g, "缺货");
+      .replace(/\bout_of_stock\b/g, "缺货"),
+  timeText = (value: string) =>
+    new Intl.DateTimeFormat("zh-CN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(new Date(value)),
+  snapshotPrice = (snapshot: Snapshot | null) =>
+    snapshot?.current_price == null
+      ? "价格未采到"
+      : `${snapshot.currency ?? "币种未采到"} ${snapshot.current_price}`,
+  changeCurrency = (change: NonNullable<Competitor["changes"]>[number]) =>
+    selected.value?.snapshots?.find(
+      (snapshot) => snapshot.evidence_id === change.evidence_id,
+    )?.currency ?? null,
+  changeText = (change: NonNullable<Competitor["changes"]>[number]) =>
+    `${change.field === "current_price" ? `${changeCurrency(change) ?? "币种未采到"} ` : ""}${changeValueText(change.field, change.previous)} → ${changeValueText(change.field, change.current)}`,
+  directionText = (value: string) =>
+    ({ increase: "增加", decrease: "减少", change: "任意变化", became_unavailable: "变为缺货" } as Record<string,string>)[value] ?? value,
+  ruleText = (item: Rule) =>
+    item.metric === "availability"
+      ? `${fieldText(item.metric)} · ${directionText(item.direction)}`
+      : `${fieldText(item.metric)} · ${directionText(item.direction)} ${item.metric === "price" ? `${latest.value?.currency ?? "币种未采到"} ` : ""}${item.threshold_value ?? "未提供"}`;
 async function load() {
   state.value = "loading";
   try {
@@ -310,11 +344,36 @@ onMounted(() => {
             >先查看 Amazon 商品页 ↗</a
           >
         </section>
+        <section v-if="latest" class="competitor-comparison" aria-label="基线、变动与阈值">
+          <article>
+            <small>基线快照</small>
+            <b>{{ snapshotPrice(baseline) }}</b>
+            <time>{{ baseline ? timeText(baseline.captured_at) : "尚未建立" }}</time>
+          </article>
+          <article>
+            <small>当前快照</small>
+            <b>{{ snapshotPrice(latest) }}</b>
+            <time>{{ timeText(latest.captured_at) }}</time>
+          </article>
+          <article>
+            <small>已记录变动</small>
+            <b>{{ selected.changes?.length ?? 0 }} 项</b>
+            <span>首个快照只建立基线，后续快照才记录变化。</span>
+          </article>
+          <article>
+            <small>生效阈值</small>
+            <b>{{ applicableRules.length }} 条</b>
+            <ul v-if="applicableRules.length">
+              <li v-for="item in applicableRules" :key="item.id">{{ ruleText(item) }}</li>
+            </ul>
+            <span v-else>尚未配置适用于该竞品的阈值。</span>
+          </article>
+        </section>
         <div v-if="latest" class="competitor-source">
           <span :data-health="latest.source_status">{{
             sourceStatusText(latest.source_status)
           }}</span>
-          <p>采集于 {{ latest.captured_at }} · {{ freshnessText(latest.freshness) }}</p>
+          <p>采集于 {{ timeText(latest.captured_at) }} · {{ freshnessText(latest.freshness) }}</p>
           <code>证据 {{ latest.evidence_id }}</code>
         </div>
         <section class="competitor-history">
@@ -324,8 +383,8 @@ onMounted(() => {
           </header>
           <article v-for="change in selected.changes ?? []" :key="change.id">
             <b>{{ fieldText(change.field) }}</b
-            ><strong>{{ changeValueText(change.field, change.previous) }} → {{ changeValueText(change.field, change.current) }}</strong
-            ><time>{{ change.changed_at }}</time>
+            ><strong>{{ changeText(change) }}</strong
+            ><time>{{ timeText(change.changed_at) }}</time>
             <p>{{ impactText(change.impact_explanation) }}</p>
             <code>证据 {{ change.evidence_id }}</code>
           </article>
@@ -335,7 +394,7 @@ onMounted(() => {
         </section>
         <section class="competitor-history snapshot-history">
           <header><h4>采集快照</h4><span>价格 · 评分 · 评论 · 采集时间 · 证据</span></header>
-          <article v-for="snapshot in selected.snapshots ?? []" :key="snapshot.id"><b>{{ snapshot.current_price == null ? "价格未采到" : `${snapshot.currency ?? ""} ${snapshot.current_price}` }}</b><strong>评分 {{ snapshot.rating_value ?? "未采到" }} · 评论 {{ snapshot.review_count ?? "未采到" }}</strong><time>{{ snapshot.captured_at }}</time><code>证据 {{ snapshot.evidence_id }}</code></article>
+          <article v-for="snapshot in selected.snapshots ?? []" :key="snapshot.id"><b>{{ snapshotPrice(snapshot) }}</b><strong>评分 {{ snapshot.rating_value ?? "未采到" }} · 评论 {{ snapshot.review_count ?? "未采到" }}</strong><time>{{ timeText(snapshot.captured_at) }}</time><code>证据 {{ snapshot.evidence_id }}</code></article>
           <p v-if="!selected.snapshots?.length">尚无快照；点击“立即采集”可重新读取公开商品页。</p>
         </section>
       </article>

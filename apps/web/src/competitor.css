@@ -185,6 +185,38 @@
   color: var(--so-text-muted, #65768b);
   line-height: 1.7;
 }
+.competitor-comparison {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+.competitor-comparison article {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+}
+.competitor-comparison small,
+.competitor-comparison time,
+.competitor-comparison span {
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.competitor-comparison b {
+  color: var(--so-text);
+  font-size: 18px;
+}
+.competitor-comparison ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--so-text);
+  font-size: 12px;
+}
 .competitor-history {
   margin-top: 26px;
 }
@@ -309,6 +341,9 @@
   .competitor-metrics {
     grid-template-columns: 1fr 1fr;
   }
+  .competitor-comparison {
+    grid-template-columns: 1fr 1fr;
+  }
   .competitor-summary { grid-template-columns:1fr 1fr; }
   .competitor-source {
     align-items: flex-start;
@@ -328,6 +363,9 @@
   }
   .competitor-detail > header {
     display: grid;
+  }
+  .competitor-comparison {
+    grid-template-columns: 1fr;
   }
   .competitor-history > article {
     grid-template-columns: 1fr;
