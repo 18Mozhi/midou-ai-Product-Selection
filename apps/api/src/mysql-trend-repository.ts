@@ -9,6 +9,7 @@ import {
   TrendServiceError,
   type TrendMonitoringRule,
   type TrendRepository,
+  type TrendTopicDetail,
   type TrendTopicSummary,
 } from "./trend-service.js";
 
@@ -119,20 +120,39 @@ export class MySqlTrendRepository implements TrendRepository {
       [input.actorId, input.topicId, input.organizationId, input.workspaceId],
     );
     if (!rows[0]) return null;
-    const [[keywordRows], [signalRows], [timelineRows]] = await Promise.all([
-      this.pool.query<RowDataPacket[]>(
-        "SELECT keyword,keyword_type,language,market FROM trend_topic_keywords WHERE topic_id=? AND organization_id=? AND workspace_id=? ORDER BY FIELD(keyword_type,'primary','related','negative'),keyword",
-        [input.topicId, input.organizationId, input.workspaceId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT id,title,publisher,canonical_url,published_at,observed_at,provider_id,raw_evidence_id FROM trend_signals WHERE topic_id=? AND organization_id=? AND workspace_id=? ORDER BY published_at DESC LIMIT 100",
-        [input.topicId, input.organizationId, input.workspaceId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') at,COUNT(*) signal_count,COUNT(DISTINCT provider_id) source_count FROM trend_signals WHERE topic_id=? AND organization_id=? AND workspace_id=? GROUP BY DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') ORDER BY MIN(published_at)",
-        [input.topicId, input.organizationId, input.workspaceId],
-      ),
-    ]);
+    const [[keywordRows], [signalRows], [timelineRows], [timelineSourceRows]] =
+      await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          "SELECT keyword,keyword_type,language,market FROM trend_topic_keywords WHERE topic_id=? AND organization_id=? AND workspace_id=? ORDER BY FIELD(keyword_type,'primary','related','negative'),keyword",
+          [input.topicId, input.organizationId, input.workspaceId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT id,title,publisher,canonical_url,published_at,observed_at,provider_id,raw_evidence_id FROM trend_signals WHERE topic_id=? AND organization_id=? AND workspace_id=? ORDER BY published_at DESC LIMIT 100",
+          [input.topicId, input.organizationId, input.workspaceId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') at,
+                  COUNT(*) signal_count,
+                  COUNT(DISTINCT provider_id) source_count
+             FROM trend_signals
+            WHERE topic_id=? AND organization_id=? AND workspace_id=?
+            GROUP BY DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z')
+            ORDER BY MIN(published_at)`,
+          [input.topicId, input.organizationId, input.workspaceId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT provider_id,
+                  MAX(publisher) source_label,
+                  DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') at,
+                  COUNT(*) signal_count
+             FROM trend_signals
+            WHERE topic_id=? AND organization_id=? AND workspace_id=?
+            GROUP BY provider_id,
+                     DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z')
+            ORDER BY provider_id,MIN(published_at)`,
+          [input.topicId, input.organizationId, input.workspaceId],
+        ),
+      ]);
     const summary = topic(rows[0]),
       evidence = signalRows.map((row) => ({
         id: String(row.id),
@@ -144,6 +164,23 @@ export class MySqlTrendRepository implements TrendRepository {
         provider_id: String(row.provider_id),
         raw_evidence_id: String(row.raw_evidence_id),
       }));
+    const timelineSources = new Map<
+      string,
+      TrendTopicDetail["timeline_sources"][number]
+    >();
+    for (const row of timelineSourceRows) {
+      const sourceId = String(row.provider_id),
+        current = timelineSources.get(sourceId) ?? {
+          source_id: sourceId,
+          source_label: String(row.source_label),
+          points: [],
+        };
+      current.points.push({
+        at: String(row.at),
+        signal_count: Number(row.signal_count),
+      });
+      timelineSources.set(sourceId, current);
+    }
     return {
       ...summary,
       keywords: keywordRows.map((row) => ({
@@ -157,6 +194,7 @@ export class MySqlTrendRepository implements TrendRepository {
         signal_count: Number(row.signal_count),
         source_count: Number(row.source_count),
       })),
+      timeline_sources: [...timelineSources.values()],
       evidence,
       data_quality: {
         coverage_status:

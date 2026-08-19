@@ -7,6 +7,8 @@
 3. 由宝塔先重启 Node Worker，再重启 Node API。Web 静态产物随网站发布；不得创建 systemd、独立 PM2、宿主 crontab或面板外容器。
 4. 检查 Worker 日志中的 `queue=trend_projection`，再运行 `npm run verify:module -- M04-01`。
 
+发布后在桌面和 390px `/trends` 核对列表项的来源数、新鲜度和可信度，确认帮助面板位于列表之后且默认折叠；进入详情后依次选择“全部来源”和各来源，时间线点数应与 `timeline_sources` 一致。关注、创建监控和转为机会必须仍进入各自原有动作。
+
 配置在进程启动时读取，修改轮询或租约后必须由宝塔重启 Node Worker。API 合同或代码发布后必须由宝塔重启 Node API。
 
 ## 观测与处置

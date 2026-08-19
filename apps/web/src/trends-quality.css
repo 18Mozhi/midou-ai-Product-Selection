@@ -1,0 +1,50 @@
+.trend-list > button {
+  grid-template-columns: 42px minmax(170px, 1fr) 70px auto;
+}
+
+.trend-list > button > span:nth-of-type(2) small + small {
+  margin-top: 3px;
+}
+
+.trend-lower > section:first-child > header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.timeline-source-filter {
+  min-width: 140px;
+  display: grid;
+  gap: 4px;
+  color: var(--so-text-muted);
+  font-size: 9px;
+}
+
+.timeline-source-filter select {
+  min-height: 36px;
+  padding: 7px 9px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  color: var(--so-text);
+  background: var(--so-bg);
+}
+
+@media (max-width: 640px) {
+  .trend-list > button {
+    grid-template-columns: 38px minmax(0, 1fr) 54px;
+  }
+
+  .trend-list > button em {
+    display: none;
+  }
+
+  .trend-lower > section:first-child > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .timeline-source-filter {
+    width: 100%;
+  }
+}

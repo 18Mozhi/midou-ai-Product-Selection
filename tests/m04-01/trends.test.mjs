@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { normalizeTrendTitle, TrendService, TrendServiceError, validateMonitoringRuleInput } from '../../apps/api/dist/trend-service.js';
 import { buildSupplierSearchQuery, isAutomaticProductDiscoveryProvider, normalizeProjectedTrendTitle, projectedTrendProviderContext, TrendProjectionError } from '../../apps/worker/dist/trend-projection-worker.js';
 import { buildApp } from '../../apps/api/dist/app.js';
+import { MySqlTrendRepository } from '../../apps/api/dist/mysql-trend-repository.js';
 
 const ids={org:'00000000-0000-4000-8000-000000000401',ws:'00000000-0000-4000-8000-000000000402',actor:'00000000-0000-4000-8000-000000000403',topic:'00000000-0000-4000-8000-000000000404',rule:'00000000-0000-4000-8000-000000000405'};
 const ruleInput={name:'AI 护肤观察',include_keywords:['AI skincare'],negative_keywords:[],market:'US',language:'en-US',category:'beauty',notification_channel:'in_app'};
@@ -44,6 +45,19 @@ test('M04-01 supplier discovery derives auditable generic product keywords',()=>
   assert.equal(buildSupplierSearchQuery('Generic Foldable Storage Organizer, Large Blue'),'Generic Foldable Storage Organizer');
 });
 
+test('M04-01 source timeline groups real provider points without client attribution',async()=>{
+  const at='2026-08-07T14:00:00.000Z',source='00000000-0000-4000-8000-000000000407',responses=[
+    [[{id:ids.topic,title:'AI skincare',category:'beauty',market:'US',language:'en-US',status:'active',signal_count:2,source_count:1,heat_value:2,momentum_percent:null,confidence_score:null,confidence_status:'insufficient_data',first_seen_at:at,last_seen_at:at,source_fresh_at:at,followed:0,version:1}],[]],
+    [[],[]],
+    [[],[]],
+    [[{at,signal_count:2,source_count:1}],[]],
+    [[{provider_id:source,source_label:'Example News',at,signal_count:2}],[]],
+  ],pool={query:async()=>responses.shift()};
+  const result=await new MySqlTrendRepository(pool).get({organizationId:ids.org,workspaceId:ids.ws,actorId:ids.actor,topicId:ids.topic});
+  assert.deepEqual(result.timeline_sources,[{source_id:source,source_label:'Example News',points:[{at,signal_count:2}]}]);
+  assert.deepEqual(result.timeline,[{at,signal_count:2,source_count:1}]);
+});
+
 test('M04-01.A04/A06/A09 service validates pagination versions and scoped writes',async()=>{
   const calls=[];const repository={
     async list(input){calls.push(['list',input]);return{items:[],total:0};},async get(){return null;},async listRules(){return[];},
@@ -77,7 +91,7 @@ test('M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module',a
   const paths=['database/migrations/0017a_trends_m04_01.up.sql','database/migrations/0017a_trends_m04_01.down.sql','apps/worker/src/trend-projection-worker.ts','apps/api/src/trend-service.ts','apps/api/src/mysql-trend-repository.ts','apps/api/src/trend-routes.ts','apps/web/src/components/TrendDashboard.vue','config/schema.json','config/env.example','docs/openapi.yaml','docs/feature-map.json','docs/architecture/m04-01-trends-monitoring.md','docs/runbooks/m04-01-trends-monitoring.md','tests/e2e/m04-01-trends.spec.ts','scripts/verify-trends-live.mjs','new-product-enterprise-blueprint.md'];
   const values=await Promise.all(paths.map(path=>readFile(path,'utf8'))),[up,down,worker,service,repository,routes,web,schema,env,openapi,feature,architecture,runbook,e2e,live,blueprint]=values;
   assert.match(up,/trend_topics[\s\S]*trend_projection_jobs[\s\S]*trend_events[\s\S]*trend_outbox[\s\S]*trend:manage/);
-  assert.match(down,/DROP TABLE IF EXISTS `trend_topics`/);assert.match(worker,/succeeded_empty[\s\S]*failed_terminal[\s\S]*dead_letter/);assert.match(service,/insufficient_data/);assert.match(repository,/organization_id=\?[\s\S]*workspace_id=\?/);assert.match(routes,/trend:read[\s\S]*trend:manage/);assert.match(web,/loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/);assert.match(schema,/TREND_PROJECTION_POLL_MS/);assert.match(env,/TREND_PROJECTION_LEASE_SECONDS/);assert.match(openapi,/\/trends\/\{topicId\}\/follow:/);assert.match(feature,/trendDomain/);assert.match(architecture,/heat[\s\S]*signals/);assert.match(runbook,/宝塔[\s\S]*回滚/);assert.match(e2e,/toHaveScreenshot/);assert.match(live,/MySqlTrendProjectionWorker/);assert.match(blueprint,/M04-01 实现合同/);
+  assert.match(down,/DROP TABLE IF EXISTS `trend_topics`/);assert.match(worker,/succeeded_empty[\s\S]*failed_terminal[\s\S]*dead_letter/);assert.match(service,/timeline_sources[\s\S]*insufficient_data/);assert.match(repository,/GROUP BY provider_id[\s\S]*timeline_sources/);assert.match(repository,/organization_id=\?[\s\S]*workspace_id=\?/);assert.match(routes,/trend:read[\s\S]*trend:manage/);assert.match(web,/loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/);assert.match(web,/来源筛选[\s\S]*timeline_sources/);assert.match(web,/个来源[\s\S]*新鲜度[\s\S]*可信度/);assert.match(schema,/TREND_PROJECTION_POLL_MS/);assert.match(env,/TREND_PROJECTION_LEASE_SECONDS/);assert.match(openapi,/\/trends\/\{topicId\}\/follow:[\s\S]*timeline_sources/);assert.match(feature,/trendDomain[\s\S]*timelineFilter/);assert.match(architecture,/heat[\s\S]*signals/);assert.match(runbook,/宝塔[\s\S]*回滚/);assert.match(e2e,/toHaveScreenshot/);assert.match(live,/MySqlTrendProjectionWorker/);assert.match(blueprint,/M04-01 实现合同/);
   assert.match(worker,/isAutomaticProductDiscoveryProvider[\s\S]*opportunity\.candidate\.discovered/);
   assert.match(worker,/enqueueMissingAutomaticDownstream[\s\S]*competitor_snapshot[\s\S]*sourcing_search/);
   assert.match(worker,/competitor\.collection\.auto_scheduled[\s\S]*sourcing\.collection\.auto_scheduled/);

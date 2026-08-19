@@ -44,6 +44,11 @@ export interface TrendTopicDetail extends TrendTopicSummary {
     market: string;
   }>;
   timeline: Array<{ at: string; signal_count: number; source_count: number }>;
+  timeline_sources: Array<{
+    source_id: string;
+    source_label: string;
+    points: Array<{ at: string; signal_count: number }>;
+  }>;
   evidence: TrendSignal[];
   data_quality: {
     coverage_status: "covered" | "insufficient_data";

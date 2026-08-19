@@ -4,6 +4,7 @@ import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import { statusLabel } from "../ui/status-labels";
 import "../trends.css";
+import "../trends-quality.css";
 
 type State =
   | "loading"
@@ -42,6 +43,11 @@ interface Detail extends Topic {
     market: string;
   }>;
   timeline: Array<{ at: string; signal_count: number; source_count: number }>;
+  timeline_sources: Array<{
+    source_id: string;
+    source_label: string;
+    points: Array<{ at: string; signal_count: number }>;
+  }>;
   evidence: Array<{
     id: string;
     title: string;
@@ -91,6 +97,7 @@ const props = defineProps<{
   showRule = ref(false),
   irrelevant = ref(false),
   total = ref(0),
+  timelineSource = ref(""),
   filters = reactive({ q: "", market: "", category: "", status: "active" }),
   form = reactive({
     name: "",
@@ -109,6 +116,10 @@ const freshness = (value: string) =>
     minute: "2-digit",
     hour12: false,
   }).format(new Date(value));
+const confidenceLabel = (topic: Topic) =>
+  topic.confidence.status === "measured"
+    ? `可信度 ${topic.confidence.score} / 100`
+    : "可信度 数据不足";
 const stateFrom = (status: number): State =>
   status === 401
     ? "expired"
@@ -117,12 +128,27 @@ const stateFrom = (status: number): State =>
       : [408, 425, 429, 502, 503, 504].includes(status)
         ? "blocked"
         : "error";
-const maxSignal = computed(() =>
-  Math.max(
-    1,
-    ...(selected.value?.timeline.map((item) => item.signal_count) ?? [1]),
+const timelinePoints = computed(() => {
+    if (!selected.value || !timelineSource.value)
+      return selected.value?.timeline ?? [];
+    return (
+      selected.value.timeline_sources.find(
+        (source) => source.source_id === timelineSource.value,
+      )?.points.map((point) => ({ ...point, source_count: 1 })) ?? []
+    );
+  }),
+  timelineSourceLabel = computed(
+    () =>
+      selected.value?.timeline_sources.find(
+        (source) => source.source_id === timelineSource.value,
+      )?.source_label ?? "全部来源",
   ),
-);
+  maxSignal = computed(() =>
+    Math.max(
+      1,
+      ...(timelinePoints.value.map((item) => item.signal_count) ?? [1]),
+    ),
+  );
 async function read(path: string) {
   const response = await fetch(`${props.apiBaseUrl}${path}`, {
       credentials: "include",
@@ -159,6 +185,7 @@ async function load() {
       topics.value.find((item) => item.id === selected.value?.id) ??
       topics.value[0];
     selected.value = (await read(`/trends/${current.id}`)).data;
+    timelineSource.value = "";
     state.value = "ready";
   } catch (error) {
     if ((error as Error).message !== "read_failed") state.value = "blocked";
@@ -168,6 +195,7 @@ async function selectTopic(topic: Topic) {
   busy.value = "detail";
   try {
     selected.value = (await read(`/trends/${topic.id}`)).data;
+    timelineSource.value = "";
   } finally {
     busy.value = "";
   }
@@ -373,14 +401,15 @@ onMounted(load);
               ><strong>{{ topic.title }}</strong
               ><small
                 >{{ topic.market }} · {{ topic.category || "未分类" }} ·
-                {{ freshness(topic.last_seen_at) }}</small
+                {{ statusLabel(topic.status) }}</small
+              ><small
+                >{{ topic.source_count }} 个来源 · 新鲜度
+                {{ freshness(topic.source_fresh_at) }}</small
+              ><small>{{ confidenceLabel(topic) }}</small
               ></span
             ><span class="topic-heat"
               ><b>{{ topic.heat.value }}</b
               ><small>热度 / 条信号</small></span
-            ><span
-              ><b>{{ topic.source_count }}</b
-              ><small>来源</small></span
             ><em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
           </button>
         </section>
@@ -479,15 +508,29 @@ onMounted(load);
           <div class="trend-lower">
             <section>
               <header>
-                <p>信号时间线</p>
-                <h4>信号时间线</h4>
+                <div>
+                  <p>信号时间线</p>
+                  <h4>信号时间线</h4>
+                </div>
+                <label class="timeline-source-filter"
+                  >来源筛选<select v-model="timelineSource">
+                    <option value="">全部来源</option>
+                    <option
+                      v-for="source in selected.timeline_sources"
+                      :key="source.source_id"
+                      :value="source.source_id"
+                    >
+                      {{ source.source_label }}
+                    </option>
+                  </select></label
+                >
               </header>
               <div
                 class="timeline-bars"
                 role="img"
-                :aria-label="`信号时间线，共 ${selected.timeline.length} 个时间点`"
+                :aria-label="`信号时间线，来源 ${timelineSourceLabel}，共 ${timelinePoints.length} 个时间点`"
               >
-                <span v-for="point in selected.timeline" :key="point.at"
+                <span v-for="point in timelinePoints" :key="point.at"
                   ><i
                     :style="{
                       height: `${Math.max(12, (point.signal_count / maxSignal) * 100)}%`,

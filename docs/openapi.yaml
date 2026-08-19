@@ -9715,7 +9715,7 @@ components:
           allOf:
             - { $ref: "#/components/schemas/TrendTopicSummary" }
             - type: object
-              required: [keywords, timeline, evidence, data_quality]
+              required: [keywords, timeline, timeline_sources, evidence, data_quality]
               properties:
                 keywords:
                   {
@@ -9752,6 +9752,22 @@ components:
                           },
                       },
                   }
+                timeline_sources:
+                  type: array
+                  items:
+                    type: object
+                    required: [source_id, source_label, points]
+                    properties:
+                      source_id: { type: string, format: uuid }
+                      source_label: { type: string }
+                      points:
+                        type: array
+                        items:
+                          type: object
+                          required: [at, signal_count]
+                          properties:
+                            at: { type: string, format: date-time }
+                            signal_count: { type: integer, minimum: 0 }
                 evidence:
                   {
                     type: array,
