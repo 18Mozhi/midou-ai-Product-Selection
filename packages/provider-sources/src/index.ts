@@ -1723,6 +1723,105 @@ const cleanUrl = (value: string, base: string) => {
   }
 };
 
+const amazonAsin = (...values: unknown[]) => {
+  for (const value of values) {
+    const match = String(value ?? "")
+      .toUpperCase()
+      .match(/(?:^|[:/])([A-Z0-9]{10})(?:[/?#]|$)/);
+    if (match?.[1]) return match[1];
+  }
+  return null;
+};
+const amazonStructuredRecords = (html: string, pageUrl: string, limit: number) => {
+  const observedAt = new Date().toISOString(),
+    records: ProviderRawRecord[] = [],
+    seen = new Set<string>();
+  for (const block of jsonLdBlocks(html)) {
+    let document: unknown;
+    try {
+      document = JSON.parse(entity(block));
+    } catch {
+      continue;
+    }
+    walkJson(document, (product) => {
+      if (records.length >= Math.min(20, limit)) return;
+      const types = Array.isArray(product["@type"]) ? product["@type"] : [product["@type"]],
+        isProduct = types.some((type) => String(type).toLowerCase() === "product");
+      if (!isProduct) return;
+      const asin = amazonAsin(product.sku, product.productID, product.url, pageUrl);
+      if (!asin || seen.has(asin)) return;
+      const title = String(product.name ?? "").trim();
+      if (!title) return;
+      const offers = Array.isArray(product.offers) ? product.offers : [product.offers],
+        offer = offers.find((value): value is Record<string, unknown> =>
+          Boolean(value && typeof value === "object"),
+        ),
+        aggregateRating =
+          product.aggregateRating && typeof product.aggregateRating === "object"
+            ? (product.aggregateRating as Record<string, unknown>)
+            : null,
+        image = Array.isArray(product.image) ? product.image[0] : product.image,
+        imageValue =
+          image && typeof image === "object"
+            ? ((image as Record<string, unknown>).url ??
+              (image as Record<string, unknown>).contentUrl)
+            : image,
+        sourceUrl = `https://www.amazon.com/dp/${asin}`,
+        price = money(String(offer?.price ?? offer?.lowPrice ?? "")),
+        currencyValue = String(offer?.priceCurrency ?? "").toUpperCase(),
+        rating = Number(aggregateRating?.ratingValue),
+        reviews = countValue(
+          String(aggregateRating?.reviewCount ?? aggregateRating?.ratingCount ?? ""),
+        ),
+        availabilityValue = String(offer?.availability ?? ""),
+        fields = {
+          asin,
+          title: title.slice(0, 1000),
+          price,
+          currency: price != null && /^[A-Z]{3}$/.test(currencyValue) ? currencyValue : null,
+          position: null,
+          review_count: reviews,
+          rating_value: Number.isFinite(rating) && rating >= 0 && rating <= 5 ? rating : null,
+          availability: availabilityValue
+            ? (availabilityValue.split(/[\/#]/).filter(Boolean).at(-1)?.toLowerCase() ?? "unknown")
+            : "unknown",
+          image_url: absoluteUrl(imageValue, pageUrl) || null,
+          source_url: sourceUrl,
+          publisher: "Amazon",
+          observed_at: observedAt,
+        },
+        payload: SourceEvidencePayload = {
+          raw_content: JSON.stringify(product),
+          content_type: "application/ld+json",
+          canonical_url: sourceUrl,
+          fields,
+          source_paths: {
+            asin: "amazon.jsonld.Product.sku_or_productID_or_url",
+            title: "amazon.jsonld.Product.name",
+            price: "amazon.jsonld.Product.offers.price_or_lowPrice",
+            currency: "amazon.jsonld.Product.offers.priceCurrency",
+            position: "amazon.jsonld.Product.position",
+            review_count: "amazon.jsonld.Product.aggregateRating.reviewCount_or_ratingCount",
+            rating_value: "amazon.jsonld.Product.aggregateRating.ratingValue",
+            availability: "amazon.jsonld.Product.offers.availability",
+            image_url: "amazon.jsonld.Product.image",
+            source_url: "amazon.jsonld.Product.url_or_sku",
+            publisher: "crawler.provider",
+            observed_at: "crawler.observed_at",
+          },
+        };
+      seen.add(asin);
+      records.push({
+        externalId: asin,
+        observedAt,
+        evidenceRef: `amazon-product:${asin}:${sha(sourceUrl)}`,
+        payload,
+      });
+    });
+  }
+  return records;
+};
+
 export function parseAmazonProductPage(
   html: string,
   pageUrl: string,
@@ -1730,6 +1829,8 @@ export function parseAmazonProductPage(
 ): ProviderRawRecord[] {
   if (typeof html !== "string" || Buffer.byteLength(html) > 5_000_000 || !/<html\b/i.test(html))
     throw new ProviderAdapterFailure("invalid_payload", false);
+  const structuredRecords = amazonStructuredRecords(html, pageUrl, limit);
+  if (structuredRecords.length) return structuredRecords;
   const observedAt = new Date().toISOString(),
     resultBlockPattern = new RegExp(
       "<div\\b(?=[^>]*data-component-type=[\"']s-search-result[\"'])" +
@@ -1820,7 +1921,7 @@ export function parseAmazonProductPage(
 export class AmazonProductSearchAdapter extends SourceAdapter {
   readonly key = "amazon_product";
   readonly accessMode = "public_page" as const;
-  readonly version = "amazon-product-search-adapter-v1";
+  readonly version = "amazon-structured-product-adapter-v2";
   constructor(private readonly fetcher: typeof fetch = fetch) {
     super();
   }

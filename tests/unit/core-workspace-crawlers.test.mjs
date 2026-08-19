@@ -104,6 +104,40 @@ test("Amazon product parser preserves real listing metrics and evidence URL", ()
   assert.equal(record.payload.canonical_url, "https://www.amazon.com/dp/B0ABCDEF12");
 });
 
+test("Amazon product parser prefers versioned JSON-LD product facts", () => {
+  const product = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      sku: "B0ZYXWV987",
+      name: "Structured Storage Box",
+      url: "https://www.amazon.com/dp/B0ZYXWV987?ref_=search",
+      image: ["https://images.example/structured-box.jpg"],
+      offers: {
+        "@type": "Offer",
+        price: "31.50",
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
+      },
+      aggregateRating: { ratingValue: "4.8", reviewCount: "2,345" },
+    },
+    html = [
+      '<html><head><script type="application/ld+json">',
+      JSON.stringify(product),
+      '</script></head><body><div data-component-type="s-search-result" ',
+      'data-asin="B0FALLBACK1"><h2><span>Fallback title</span></h2></div></body></html>',
+    ].join(""),
+    [record] = parseAmazonProductPage(html, "https://www.amazon.com/s?k=storage+box", 5);
+  assert.equal(record.externalId, "B0ZYXWV987");
+  assert.equal(record.payload.content_type, "application/ld+json");
+  assert.equal(record.payload.fields.price, 31.5);
+  assert.equal(record.payload.fields.currency, "USD");
+  assert.equal(record.payload.fields.rating_value, 4.8);
+  assert.equal(record.payload.fields.review_count, 2345);
+  assert.equal(record.payload.fields.availability, "instock");
+  assert.equal(record.payload.canonical_url, "https://www.amazon.com/dp/B0ZYXWV987");
+  assert.match(record.payload.source_paths.title, /jsonld/);
+});
+
 test("public supplier parser keeps missing MOQ truthful instead of inventing a value", () => {
   const product = {
     "@context": "https://schema.org",
@@ -135,15 +169,18 @@ test("public supplier parser keeps missing MOQ truthful instead of inventing a v
 });
 
 test("core workspace migration is MySQL 5.7 compatible and keeps crawler projections auditable", async () => {
-  const [up, down, enable] = await Promise.all([
+  const [up, down, enable, structuredParser] = await Promise.all([
     readFile("database/migrations/0044e_core_collection_projection.up.sql", "utf8"),
     readFile("database/migrations/0044e_core_collection_projection.down.sql", "utf8"),
     readFile("database/migrations/0044f_enable_amazon_public_crawler.up.sql", "utf8"),
+    readFile("database/migrations/0052a_amazon_structured_parser.up.sql", "utf8"),
   ]);
   assert.match(up, /core_collection_projection_runs/);
   assert.match(enable, /amazon_product/);
+  assert.match(structuredParser, /amazon-structured-product-v2/);
   assert.match(down, /DROP TABLE IF EXISTS `core_collection_projection_runs`/);
   assert.doesNotMatch(up, /CHECK\s*\(|utf8mb4_0900|JSON_TABLE|WITH\s+RECURSIVE/i);
+  assert.doesNotMatch(structuredParser, /CHECK\s*\(|utf8mb4_0900|JSON_TABLE|WITH\s+RECURSIVE/i);
 });
 
 test("core list pages expose explicit detail and operational actions", async () => {

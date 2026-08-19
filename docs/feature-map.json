@@ -861,7 +861,7 @@
         "authenticated-browser or fixed-public-page platform entries without official API dependency",
         "google_news_search manual keyword RSS",
         "manual_product_supply_csv explicit import",
-        "amazon_product public search and product-page crawler",
+        "amazon_product public search and product-page crawler with Schema.org Product JSON-LD primary parsing and semantic HTML fallback",
         "made_in_china_search public supplier product crawler",
         "ec21_supplier_search independent public supplier fallback crawler",
         "1688_search registered authenticated-browser job routing and versioned output contracts for search offers, offer details and suppliers; source remains setup-required and disabled until a real logged-in fixed sample proves field extraction"
