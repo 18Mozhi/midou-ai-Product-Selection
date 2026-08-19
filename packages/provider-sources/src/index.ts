@@ -799,6 +799,66 @@ export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
       "通过本机浏览器助手读取用户已登录的 ERP 商品列表；登录令牌不上传，只接收商品结果并保留原始证据。",
   },
   {
+    code: "made_in_china_search",
+    name: "中国制造网供应商搜索",
+    access_mode: "public_page",
+    target_url: "https://www.made-in-china.com/",
+    markets: ["GLOBAL"],
+    languages: ["en-US", "zh-CN"],
+    fields: [
+      "title",
+      "supplier_name",
+      "price",
+      "currency",
+      "moq",
+      "image_url",
+      "source_url",
+      "observed_at",
+    ],
+    schedule_minutes: 1440,
+    concurrency_limit: 1,
+    timeout_ms: 30000,
+    retry_limit: 2,
+    circuit_failure_threshold: 4,
+    dedupe_key: "source_url",
+    retention_days: 180,
+    failure_rules: ["network_error", "rate_limited", "source_changed"],
+    parser_version: "made-in-china-search-v1",
+    healthcheck_url: "https://www.made-in-china.com/",
+    owner_label: "平台供应链中心",
+    status: "enabled",
+    category: "product_supply",
+    availability: "manual",
+    production_policy: "ready_for_owner_enablement",
+    policy_note:
+      "用户发起找货时抓取公开供应商搜索页，不需要官方 API；价格和供应商均保留原页证据，MOQ 缺失时不会填充默认值。",
+  },
+  {
+    code: "ec21_supplier_search",
+    name: "EC21 国际供应商搜索",
+    access_mode: "public_page",
+    target_url: "https://www.ec21.com/",
+    markets: ["GLOBAL"],
+    languages: ["en-US"],
+    fields: ["title", "supplier_name", "price", "currency", "moq", "image_url", "source_url", "observed_at"],
+    schedule_minutes: 1440,
+    concurrency_limit: 1,
+    timeout_ms: 30000,
+    retry_limit: 2,
+    circuit_failure_threshold: 4,
+    dedupe_key: "source_url",
+    retention_days: 180,
+    failure_rules: ["network_error", "rate_limited", "source_changed"],
+    parser_version: "ec21-supplier-search-v1",
+    healthcheck_url: "https://www.ec21.com/ec-market/storage-box.html",
+    owner_label: "平台供应链中心",
+    status: "enabled",
+    category: "product_supply",
+    availability: "manual",
+    production_policy: "ready_for_owner_enablement",
+    policy_note: "用户发起找货时抓取 EC21 公开供应商商品列表；与中国制造网并行执行，单一来源受限时不会伪造结果。",
+  },
+  {
     code: "manual_product_supply_csv",
     name: "商品与供应链 CSV 导入",
     access_mode: "import",
@@ -838,7 +898,9 @@ export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
 export const AUTOMATIC_PROVIDER_SOURCE_HOSTS = Object.freeze([
   ...new Set(
     BUILTIN_PROVIDER_SOURCES.filter(
-      (item) => item.availability === "automatic",
+      (item) =>
+        item.availability === "automatic" ||
+        ["amazon_product", "made_in_china_search", "ec21_supplier_search"].includes(item.code),
     ).map((item) => new URL(item.target_url).hostname.toLowerCase()),
   ),
 ]);
@@ -1708,6 +1770,393 @@ export class FixedStructuredPublicPageAdapter extends SourceAdapter {
     }
   }
 }
+
+const money = (value: string | undefined) => {
+  if (!value) return null;
+  const parsed = Number(value.replace(/[^0-9.]/g, ""));
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
+};
+const countValue = (value: string | undefined) => {
+  if (!value) return null;
+  const parsed = Number(value.replace(/[^0-9]/g, ""));
+  return Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : null;
+};
+const cleanUrl = (value: string, base: string) => {
+  try {
+    const url = new URL(entity(value), base);
+    url.hash = "";
+    url.search = "";
+    return httpUrl(url.toString());
+  } catch {
+    return "";
+  }
+};
+
+export function parseAmazonProductPage(
+  html: string,
+  pageUrl: string,
+  limit = 20,
+): ProviderRawRecord[] {
+  if (
+    typeof html !== "string" ||
+    Buffer.byteLength(html) > 5_000_000 ||
+    !/<html\b/i.test(html)
+  )
+    throw new ProviderAdapterFailure("invalid_payload", false);
+  const observedAt = new Date().toISOString(),
+    blocks = [
+      ...html.matchAll(
+        /<div\b(?=[^>]*data-component-type=["']s-search-result["'])(?=[^>]*data-asin=["']([A-Z0-9]{10})["'])[^>]*>([\s\S]*?)(?=<div\b(?=[^>]*data-component-type=["']s-search-result["'])|<\/body>)/gi,
+      ),
+    ],
+    directAsin = /\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:[/?]|$)/i.exec(
+      pageUrl,
+    )?.[1]?.toUpperCase(),
+    sourceBlocks = blocks.length
+      ? blocks.map((match) => ({ asin: match[1]!, html: match[2]! }))
+      : directAsin
+        ? [{ asin: directAsin, html }]
+        : [];
+  const records: ProviderRawRecord[] = [];
+  for (const [index, item] of sourceBlocks.entries()) {
+    const title = stripHtml(
+        item.html.match(
+          /<(?:h1|h2)\b[^>]*>[\s\S]*?<span\b[^>]*>([\s\S]*?)<\/span>/i,
+        )?.[1] ??
+          item.html.match(/id=["']productTitle["'][^>]*>([\s\S]*?)<\//i)?.[1] ??
+          "",
+      ),
+      href =
+        item.html.match(
+          new RegExp(`href=["']([^"']*\\/(?:dp|gp\\/product)\\/${item.asin}[^"']*)["']`, "i"),
+        )?.[1] ?? `/dp/${item.asin}`,
+      sourceUrl = cleanUrl(href, pageUrl),
+      priceText =
+        item.html.match(/class=["'][^"']*a-offscreen[^"']*["'][^>]*>([^<]+)</i)?.[1] ??
+        item.html.match(/class=["'][^"']*a-price-whole[^"']*["'][^>]*>([^<]+)/i)?.[1],
+      ratingText =
+        item.html.match(/([0-5](?:\.[0-9])?)\s+out of 5 stars/i)?.[1] ??
+        item.html.match(/([0-5](?:\.[0-9])?)\s*\/\s*5/i)?.[1],
+      reviewText =
+        item.html.match(/aria-label=["']([0-9,.]+)\s+(?:ratings|reviews)["']/i)?.[1] ??
+        item.html.match(/class=["'][^"']*s-underline-text[^"']*["'][^>]*>([0-9,.]+)</i)?.[1],
+      imageUrl = absoluteUrl(
+        item.html.match(/<img\b[^>]*class=["'][^"']*s-image[^"']*["'][^>]*(?:src|data-src)=["']([^"']+)/i)?.[1] ??
+          item.html.match(/id=["']landingImage["'][^>]*(?:src|data-old-hires)=["']([^"']+)/i)?.[1],
+        pageUrl,
+      ) || null,
+      price = money(priceText),
+      rating = ratingText ? Number(ratingText) : null,
+      reviews = countValue(reviewText);
+    if (!title || !sourceUrl) continue;
+    const fields = {
+        asin: item.asin,
+        title: title.slice(0, 1000),
+        price,
+        currency: price == null ? null : "USD",
+        position: blocks.length ? index + 1 : null,
+        review_count: reviews,
+        rating_value:
+          rating != null && Number.isFinite(rating) && rating >= 0 && rating <= 5
+            ? rating
+            : null,
+        availability: "unknown",
+        image_url: imageUrl,
+        source_url: sourceUrl,
+        publisher: "Amazon",
+        observed_at: observedAt,
+      },
+      payload: SourceEvidencePayload = {
+        raw_content: item.html,
+        content_type: "text/html",
+        canonical_url: sourceUrl,
+        fields,
+        source_paths: Object.fromEntries(
+          Object.keys(fields).map((key) => [key, `amazon.html.${key}`]),
+        ),
+      };
+    records.push({
+      externalId: item.asin,
+      observedAt,
+      evidenceRef: `amazon-product:${item.asin}:${sha(sourceUrl)}`,
+      payload,
+    });
+    if (records.length >= Math.min(20, limit)) break;
+  }
+  if (!records.length)
+    throw new ProviderAdapterFailure("source_changed", false);
+  return records;
+}
+
+export class AmazonProductSearchAdapter extends SourceAdapter {
+  readonly key = "amazon_product";
+  readonly accessMode = "public_page" as const;
+  readonly version = "amazon-product-search-adapter-v1";
+  constructor(private readonly fetcher: typeof fetch = fetch) {
+    super();
+  }
+  private url(target: Record<string, unknown> | undefined) {
+    const page = typeof target?.page_url === "string" ? target.page_url : null;
+    if (page) {
+      const url = new URL(page);
+      if (url.protocol !== "https:" || url.hostname !== "www.amazon.com")
+        throw new ProviderAdapterFailure("source_configuration_invalid", false);
+      return url.toString();
+    }
+    const query = text(target?.query, "query", 300);
+    return `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
+  }
+  private async response(url: string, signal: AbortSignal) {
+    const response = await this.fetcher(url, {
+      signal,
+      redirect: "error",
+      headers: {
+        accept: "text/html,application/xhtml+xml",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36",
+      },
+    });
+    if (response.status === 429)
+      throw new ProviderAdapterFailure("rate_limited", true);
+    if (response.status >= 500)
+      throw new ProviderAdapterFailure("network_error", true);
+    if (!response.ok)
+      throw new ProviderAdapterFailure("permission_denied", false);
+    return response;
+  }
+  async collect(request: ProviderCollectRequest, signal: AbortSignal) {
+    const url = this.url(request.target),
+      response = await this.response(url, signal);
+    return {
+      records: parseAmazonProductPage(
+        await response.text(),
+        url,
+        Math.min(request.limit, 20),
+      ),
+      nextCursor: null,
+    };
+  }
+  async healthCheck(_: AdapterHealthContext, signal: AbortSignal) {
+    const started = Date.now(),
+      url = "https://www.amazon.com/s?k=storage+box";
+    try {
+      const response = await this.response(url, signal);
+      parseAmazonProductPage(await response.text(), url, 1);
+      return {
+        status: "ready" as const,
+        latencyMs: Date.now() - started,
+        errorCode: null,
+        message: "Amazon 公开商品搜索页面可抓取。",
+      };
+    } catch (error) {
+      return {
+        status: "degraded" as const,
+        latencyMs: Date.now() - started,
+        errorCode:
+          error instanceof ProviderAdapterFailure ? error.code : "network_error",
+        message: "Amazon 公开商品页当前不可解析。",
+      };
+    }
+  }
+}
+
+export function parseMadeInChinaSearchPage(
+  html: string,
+  pageUrl: string,
+  limit = 20,
+): ProviderRawRecord[] {
+  if (
+    typeof html !== "string" ||
+    Buffer.byteLength(html) > 5_000_000 ||
+    !/<html\b/i.test(html)
+  )
+    throw new ProviderAdapterFailure("invalid_payload", false);
+  const observedAt = new Date().toISOString(),
+    links = [
+      ...new Set(
+        [...html.matchAll(/href=["'](https:\/\/[^"']+\.made-in-china\.com\/product\/[^"']+)["']/gi)]
+          .map((match) => cleanUrl(match[1]!, pageUrl))
+          .filter(Boolean),
+      ),
+    ],
+    products: Record<string, unknown>[] = [];
+  for (const block of jsonLdBlocks(html)) {
+    try {
+      walkJson(JSON.parse(entity(block)), (item) => {
+        const types = Array.isArray(item["@type"])
+          ? item["@type"]
+          : [item["@type"]];
+        if (types.some((type) => String(type) === "Product")) products.push(item);
+      });
+    } catch {}
+  }
+  const records: ProviderRawRecord[] = [];
+  for (const [index, item] of products.entries()) {
+    const offers =
+        item.offers && typeof item.offers === "object"
+          ? (item.offers as Record<string, unknown>)
+          : {},
+      seller =
+        offers.seller && typeof offers.seller === "object"
+          ? (offers.seller as Record<string, unknown>)
+          : {},
+      title = String(item.name ?? "").trim(),
+      supplier = String(seller.name ?? "").trim(),
+      sourceUrl = links[index] ?? links.find((url) => url.includes("/product/")) ?? "",
+      priceValue = Number(offers.lowPrice ?? offers.price),
+      price = Number.isFinite(priceValue) && priceValue >= 0 ? priceValue : null,
+      currency = offers.priceCurrency
+        ? String(offers.priceCurrency).toUpperCase()
+        : null,
+      imageUrl = absoluteUrl(item.image, pageUrl) || null;
+    if (!title || !supplier || !sourceUrl || price == null || !currency) continue;
+    const fields = {
+        title: title.slice(0, 1000),
+        supplier_name: supplier.slice(0, 500),
+        price,
+        currency,
+        moq: null,
+        image_url: imageUrl,
+        source_url: sourceUrl,
+        publisher: "中国制造网",
+        observed_at: observedAt,
+      },
+      payload: SourceEvidencePayload = {
+        raw_content: JSON.stringify(item),
+        content_type: "application/ld+json",
+        canonical_url: sourceUrl,
+        fields,
+        source_paths: Object.fromEntries(
+          Object.keys(fields).map((key) => [key, `jsonld.product.${key}`]),
+        ),
+      };
+    records.push({
+      externalId: sha(sourceUrl),
+      observedAt,
+      evidenceRef: `made-in-china-product:${sha(sourceUrl)}`,
+      payload,
+    });
+    if (records.length >= Math.min(20, limit)) break;
+  }
+  if (!records.length)
+    throw new ProviderAdapterFailure("source_changed", false);
+  return records;
+}
+
+export class MadeInChinaSearchAdapter extends SourceAdapter {
+  readonly key = "made_in_china_search";
+  readonly accessMode = "public_page" as const;
+  readonly version = "made-in-china-search-adapter-v1";
+  constructor(private readonly fetcher: typeof fetch = fetch) {
+    super();
+  }
+  private url(target: Record<string, unknown> | undefined) {
+    const query = text(target?.query, "query", 300),
+      slug = query
+        .normalize("NFKD")
+        .replace(/[^A-Za-z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "")
+        .slice(0, 120);
+    if (!slug)
+      throw new ProviderAdapterFailure("query_invalid", false);
+    return `https://www.made-in-china.com/products-search/hot-china-products/${slug}.html`;
+  }
+  private async response(url: string, signal: AbortSignal) {
+    const response = await this.fetcher(url, {
+      signal,
+      redirect: "follow",
+      headers: {
+        accept: "text/html,application/xhtml+xml",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36",
+      },
+    });
+    if (!/(^|\.)made-in-china\.com$/i.test(new URL(response.url).hostname))
+      throw new ProviderAdapterFailure("permission_denied", false);
+    if (response.status === 429)
+      throw new ProviderAdapterFailure("rate_limited", true);
+    if (response.status >= 500)
+      throw new ProviderAdapterFailure("network_error", true);
+    if (!response.ok)
+      throw new ProviderAdapterFailure("permission_denied", false);
+    return response;
+  }
+  async collect(request: ProviderCollectRequest, signal: AbortSignal) {
+    const url = this.url(request.target),
+      response = await this.response(url, signal);
+    return {
+      records: parseMadeInChinaSearchPage(
+        await response.text(),
+        url,
+        Math.min(request.limit, 20),
+      ),
+      nextCursor: null,
+    };
+  }
+  async healthCheck(_: AdapterHealthContext, signal: AbortSignal) {
+    const started = Date.now(),
+      url = this.url({ query: "storage box" });
+    try {
+      const response = await this.response(url, signal);
+      parseMadeInChinaSearchPage(await response.text(), url, 1);
+      return {
+        status: "ready" as const,
+        latencyMs: Date.now() - started,
+        errorCode: null,
+        message: "公开供应商商品页可抓取。",
+      };
+    } catch (error) {
+      return {
+        status: "degraded" as const,
+        latencyMs: Date.now() - started,
+        errorCode:
+          error instanceof ProviderAdapterFailure ? error.code : "network_error",
+        message: "供应商公开页面当前不可解析。",
+      };
+    }
+  }
+}
+
+export function parseEc21SupplierSearchPage(html: string, pageUrl: string, limit = 20): ProviderRawRecord[] {
+  if (typeof html !== "string" || Buffer.byteLength(html) > 5_000_000 || !/<html\b/i.test(html))
+    throw new ProviderAdapterFailure("invalid_payload", false);
+  const starts = [...html.matchAll(/<li\b[^>]*class=["'][^"']*galleryLs[^"']*["'][^>]*>/gi)].map((match) => match.index ?? 0),
+    observedAt = new Date().toISOString(),
+    records: ProviderRawRecord[] = [];
+  for (let index = 0; index < starts.length; index++) {
+    const block = html.slice(starts[index]!, starts[index + 1] ?? Math.min(html.length, starts[index]! + 20000)),
+      link = block.match(/<h2\b[^>]*class=["'][^"']*pdtName[^"']*["'][^>]*>\s*<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/i),
+      sourceUrl = link?.[1] ? cleanUrl(link[1], pageUrl) : "",
+      title = link?.[2] ? stripHtml(link[2]).trim() : "",
+      currency = block.match(/itemprop=["']priceCurrency["'][^>]*content=["']([A-Za-z]{3})["']/i)?.[1]?.toUpperCase() ?? null,
+      priceText = block.match(/itemprop=["']price["'][^>]*>([^<]+)/i)?.[1],
+      price = money(priceText),
+      moqText = block.match(/<span\b[^>]*class=["'][^"']*pr5[^"']*["'][^>]*>([0-9,.]+)<\/span>\s*<span\b[^>]*class=["'][^"']*pr5[^"']*["'][^>]*>[^<]*<\/span>\s*\(Min\. Order\)/i)?.[1],
+      moq = countValue(moqText),
+      supplier = block.match(/class=["'][^"']*pdtCompany[^"']*["'][\s\S]{0,1000}?<a\b[^>]*title=["']([^"']+)["']/i)?.[1]?.trim() ?? "",
+      imageUrl = absoluteUrl(block.match(/<img\b[^>]*(?:src|data-src)=["']([^"']+)["'][^>]*itemprop=["']image["']/i)?.[1], pageUrl) || null;
+    if (!sourceUrl || !/^https:\/\/www\.ec21\.com\/product-/i.test(sourceUrl) || !title || !supplier || price == null || !currency) continue;
+    const fields = { title:title.slice(0,1000), supplier_name:supplier.slice(0,500), price, currency, moq, image_url:imageUrl, source_url:sourceUrl, publisher:"EC21", observed_at:observedAt },
+      payload: SourceEvidencePayload = { raw_content:block.slice(0,20000), content_type:"text/html", canonical_url:sourceUrl, fields, source_paths:Object.fromEntries(Object.keys(fields).map((key)=>[key,`ec21.html.${key}`])) };
+    records.push({ externalId:sha(sourceUrl), observedAt, evidenceRef:`ec21-product:${sha(sourceUrl)}`, payload });
+    if (records.length >= Math.min(20, limit)) break;
+  }
+  if (!records.length) throw new ProviderAdapterFailure("source_changed", false);
+  return records;
+}
+
+export class Ec21SupplierSearchAdapter extends SourceAdapter {
+  readonly key="ec21_supplier_search";
+  readonly accessMode="public_page" as const;
+  readonly version="ec21-supplier-search-adapter-v1";
+  constructor(private readonly fetcher:typeof fetch=fetch){super();}
+  private url(target:Record<string,unknown>|undefined){const query=text(target?.query,"query",300),slug=query.normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu,"-").replace(/^-+|-+$/g,"").slice(0,120);if(!slug)throw new ProviderAdapterFailure("query_invalid",false);return `https://www.ec21.com/ec-market/${encodeURIComponent(slug)}.html`;}
+  private async response(url:string,signal:AbortSignal){const response=await this.fetcher(url,{signal,redirect:"follow",headers:{accept:"text/html,application/xhtml+xml","accept-language":"en-US,en;q=0.9","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36"}});if(new URL(response.url).hostname!=="www.ec21.com")throw new ProviderAdapterFailure("permission_denied",false);if(response.status===429)throw new ProviderAdapterFailure("rate_limited",true);if(response.status>=500)throw new ProviderAdapterFailure("network_error",true);if(!response.ok)throw new ProviderAdapterFailure("permission_denied",false);return response;}
+  async collect(request:ProviderCollectRequest,signal:AbortSignal){const url=this.url(request.target),response=await this.response(url,signal);return{records:parseEc21SupplierSearchPage(await response.text(),url,Math.min(request.limit,20)),nextCursor:null};}
+  async healthCheck(_:AdapterHealthContext,signal:AbortSignal){const started=Date.now(),url=this.url({query:"storage box"});try{const response=await this.response(url,signal);parseEc21SupplierSearchPage(await response.text(),url,1);return{status:"ready" as const,latencyMs:Date.now()-started,errorCode:null,message:"EC21 公开供应商列表可抓取。"};}catch(error){return{status:"degraded" as const,latencyMs:Date.now()-started,errorCode:error instanceof ProviderAdapterFailure?error.code:"network_error",message:"EC21 公开供应商列表当前不可解析。"};}}
+}
 export class ManualProductSupplyCsvAdapter extends SourceAdapter {
   readonly key = "manual_product_supply_csv";
   readonly accessMode = "import" as const;
@@ -1781,6 +2230,9 @@ export function createBuiltinSourceAdapters(fetcher: typeof fetch = fetch) {
             )
           : new FixedGoogleNewsRssAdapter(item.code, item.target_url, fetcher),
     ),
+    new AmazonProductSearchAdapter(fetcher),
+    new MadeInChinaSearchAdapter(fetcher),
+    new Ec21SupplierSearchAdapter(fetcher),
     new ManualProductSupplyCsvAdapter(),
   ];
 }

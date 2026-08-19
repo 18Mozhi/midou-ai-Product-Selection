@@ -123,6 +123,24 @@ export function isAutomaticProductDiscoveryProvider(providerCode: string) {
   );
 }
 
+export function isConcreteProductEvidence(
+  payload: Record<string, unknown>,
+  canonicalUrl: string,
+) {
+  const urlLooksLikeProduct = [
+    /\/(?:dp|gp\/product)\/[A-Z0-9]{10}(?:[/?]|$)/i,
+    /\/itm\//i,
+    /\/ip\//i,
+    /\.made-in-china\.com\/product\//i,
+    /\/product\/[^/]+/i,
+  ].some((pattern) => pattern.test(canonicalUrl));
+  const price = payload.price == null ? null : Number(payload.price);
+  return (
+    urlLooksLikeProduct ||
+    (Number.isFinite(price) && price! >= 0 && typeof payload.image_url === "string")
+  );
+}
+
 export function normalizeProjectedTrendTitle(value: unknown) {
   if (typeof value !== "string" || !value.trim() || value.length > 1000)
     throw new TrendProjectionError("trend_title_invalid", false);
@@ -225,7 +243,7 @@ export class MySqlTrendProjectionWorker {
   private async enqueueMissing() {
     const now = this.now();
     await this.pool.query(
-      "INSERT IGNORE INTO trend_projection_jobs (id,organization_id,workspace_id,normalized_record_id,status,attempt_count,available_at,lease_owner,lease_expires_at,last_error_code,request_id,trace_id,created_at,updated_at) SELECT UUID(),n.organization_id,n.workspace_id,n.id,'scheduled',0,?,NULL,NULL,NULL,n.request_id,n.trace_id,?,? FROM normalized_records n LEFT JOIN trend_projection_jobs j ON j.normalized_record_id=n.id WHERE n.status='active' AND j.id IS NULL ORDER BY n.created_at LIMIT 100",
+      "INSERT IGNORE INTO trend_projection_jobs (id,organization_id,workspace_id,normalized_record_id,status,attempt_count,available_at,lease_owner,lease_expires_at,last_error_code,request_id,trace_id,created_at,updated_at) SELECT UUID(),n.organization_id,n.workspace_id,n.id,'scheduled',0,?,NULL,NULL,NULL,n.request_id,n.trace_id,?,? FROM normalized_records n JOIN providers p ON p.id=n.provider_id LEFT JOIN trend_projection_jobs j ON j.normalized_record_id=n.id WHERE n.status='active' AND j.id IS NULL AND p.code NOT IN ('amazon_product','made_in_china_search') ORDER BY n.created_at LIMIT 100",
       [now, now, now],
     );
   }
@@ -404,7 +422,8 @@ export class MySqlTrendProjectionWorker {
           },
         );
         if (
-          isAutomaticProductDiscoveryProvider(job.providerCode) ||
+          (isAutomaticProductDiscoveryProvider(job.providerCode) &&
+            isConcreteProductEvidence(job.payload, canonicalUrl)) ||
           matchedRule
         ) {
           stage = "automatic_product_discovery";

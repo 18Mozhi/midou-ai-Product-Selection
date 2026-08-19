@@ -1564,6 +1564,7 @@ paths:
         - $ref: "#/components/parameters/PageSize"
         - { name: q, in: query, schema: { type: string, maxLength: 200 } }
         - { name: market, in: query, schema: { type: string, maxLength: 40 } }
+        - { name: scope, in: query, description: product hides non-product news leads by default; all exposes every traceable lead., schema: { type: string, enum: [product, all], default: product } }
         - { name: category, in: query, schema: { type: string, maxLength: 80 } }
         - {
             name: status,
@@ -2365,6 +2366,19 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+  /opportunities/{opportunityId}/competitor-discovery:
+    post:
+      summary: Crawl public Amazon search results and project competitors with immutable evidence
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: competitor:manage
+      parameters:
+        - { name: opportunityId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      responses:
+        "202": { $ref: "#/components/responses/Success" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
   /competitors:
     get:
       summary: List workspace-scoped competitors with latest source snapshot
@@ -2400,7 +2414,7 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
     post:
-      summary: Create a competitor and immutable baseline snapshot
+      summary: Create a competitor and either accept a supplied baseline or queue public-page collection
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:manage
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
@@ -2439,6 +2453,41 @@ paths:
         "200": { $ref: "#/components/responses/Success" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+    delete:
+      summary: Soft-delete competitor monitoring while preserving snapshots and audit history
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: competitor:manage
+      parameters:
+        - { name: competitorId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [expected_revision, reason]
+              properties:
+                expected_revision: { type: integer, minimum: 1 }
+                reason: { type: string, minLength: 1, maxLength: 500 }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+  /competitors/{competitorId}/collect:
+    post:
+      summary: Queue a fresh public Amazon product-page collection and evidence projection
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: competitor:manage
+      parameters:
+        - { name: competitorId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      responses:
+        "202": { $ref: "#/components/responses/Success" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
   /competitors/{competitorId}/snapshots:
     post:
       summary: Accept a complete Provider-backed snapshot for asynchronous comparison
@@ -2626,7 +2675,7 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
     post:
-      summary: Project supplier candidates from a completed same-workspace collection task
+      summary: Queue public supplier-page collection or project a completed same-workspace task
       security: [{ HttpOnlySession: [] }]
       x-required-capability: supplier_quote:manage
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
@@ -2664,6 +2713,38 @@ paths:
         "200": { $ref: "#/components/responses/Success" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+    delete:
+      summary: Soft-delete a sourcing search while preserving candidates and audit history
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: supplier_quote:manage
+      parameters:
+        - { name: searchId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties: { reason: { type: string, minLength: 1, maxLength: 500 } }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+  /sourcing/searches/{searchId}/refresh:
+    post:
+      summary: Re-run public supplier-page collection for an existing sourcing search
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: supplier_quote:manage
+      parameters:
+        - { name: searchId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      responses:
+        "202": { $ref: "#/components/responses/Success" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
   /sourcing/quotes:
     post:
       summary: Confirm a complete immutable supplier quote version with evidence
@@ -6918,13 +6999,14 @@ components:
     SourcingSearchInput:
       type: object
       additionalProperties: false
-      required: [collection_task_id, input_type, input_ref]
+      required: [input_type, input_ref]
       properties:
         collection_task_id:
           {
             type: string,
             format: uuid,
-            description: Completed collection task in the active organization and workspace.,
+            nullable: true,
+            description: Optional completed collection task; omit it to start the public supplier crawler.,
           }
         input_type:
           { type: string, enum: [keyword, image, opportunity, product_url] }
@@ -6936,6 +7018,7 @@ components:
         [
           candidate_id,
           specification,
+          moq,
           lead_time_days,
           location,
           confidence_value,
@@ -6947,6 +7030,7 @@ components:
       properties:
         candidate_id: { type: string, format: uuid }
         specification: { type: string, minLength: 1, maxLength: 1000 }
+        moq: { type: integer, minimum: 1, maximum: 4294967295 }
         lead_time_days: { type: integer, minimum: 0, maximum: 3650 }
         location: { type: string, minLength: 1, maxLength: 255 }
         confidence_value: { type: number, minimum: 0, maximum: 100 }
@@ -7012,25 +7096,18 @@ components:
         evidence_id: { type: string, format: uuid }
     CompetitorCreateInput:
       type: object
-      required:
-        [
-          provider_id,
-          market,
-          source_site,
-          external_id,
-          product_url,
-          title,
-          snapshot,
-        ]
+      required: [product_url, title]
       properties:
-        provider_id: { type: string, format: uuid }
+        provider_id: { type: string, format: uuid, nullable: true }
         opportunity_id: { type: string, format: uuid, nullable: true }
         market: { type: string, minLength: 1, maxLength: 40 }
         source_site: { type: string, minLength: 1, maxLength: 120 }
         external_id: { type: string, minLength: 1, maxLength: 255 }
         product_url: { type: string, format: uri }
         title: { type: string, minLength: 1, maxLength: 500 }
-        snapshot: { $ref: "#/components/schemas/CompetitorSnapshotInput" }
+        snapshot:
+          allOf: [{ $ref: "#/components/schemas/CompetitorSnapshotInput" }]
+          nullable: true
     CompetitorRuleInput:
       type: object
       required: [metric, direction]
@@ -9381,6 +9458,8 @@ components:
         status: { type: string, enum: [active, irrelevant, stale] }
         signal_count: { type: integer, minimum: 0 }
         source_count: { type: integer, minimum: 0 }
+        competitor_count: { type: integer, minimum: 0 }
+        supplier_candidate_count: { type: integer, minimum: 0 }
         heat:
           type: object
           required: [value, unit]
@@ -9977,6 +10056,8 @@ components:
           confidence,
           evidence_count,
           source_count,
+          competitor_count,
+          supplier_candidate_count,
           coverage_status,
           decision_status,
           version,

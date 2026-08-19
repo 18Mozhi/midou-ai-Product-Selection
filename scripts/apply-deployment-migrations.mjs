@@ -9,6 +9,12 @@ const allowed = new Set([
   "0041_member_workspace_tasks.up.sql",
   "0042_erp_product_import.up.sql",
   "0043_trend_rule_collection_schedule.up.sql",
+  "0044a_competitor_soft_delete.up.sql",
+  "0044b_sourcing_soft_delete.up.sql",
+  "0044c_truthful_missing_metrics.up.sql",
+  "0044d_nullable_competitor_metrics.up.sql",
+  "0044e_core_collection_projection.up.sql",
+  "0044f_enable_amazon_public_crawler.up.sql",
 ]);
 const requested = process.argv.slice(2);
 

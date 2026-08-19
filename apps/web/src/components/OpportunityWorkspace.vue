@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../opportunities.css";
 import "../opportunity-profit.css";
@@ -35,6 +35,8 @@ interface Opportunity {
   confidence: { status: string; score: number | null };
   evidence_count: number;
   source_count: number;
+  competitor_count: number;
+  supplier_candidate_count: number;
   coverage_status: string;
   decision_status: string;
   version: number;
@@ -132,6 +134,8 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
   requestId = ref(""),
   message = ref(""),
   busy = ref(false),
+  listScope = ref<"product" | "all">("product"),
+  downstream = ref({ competitors:0, snapshots:0, searches:0, suppliers:0 }),
   tab = ref<Tab>("overview"),
   showCreate = ref(false),
   showErpImport = ref(false),
@@ -166,6 +170,7 @@ const tabs: [Tab, string][] = [
   ["evidence", "证据管理"],
   ["decisions", "决策历史"],
 ];
+const listSummary=computed(()=>({withImage:items.value.filter((item)=>Boolean(item.image_url)).length,competitors:items.value.reduce((sum,item)=>sum+(item.competitor_count??0),0),suppliers:items.value.reduce((sum,item)=>sum+(item.supplier_candidate_count??0),0)}));
 const stateFrom = (status: number): State =>
   status === 401
     ? "expired"
@@ -218,10 +223,11 @@ async function load() {
         await read(`/opportunities/${props.opportunityId}/profit-analysis`)
       ).data;
       await loadAi();
+      try{const [competitorsResponse,sourcingResponse]=await Promise.all([fetch(`${props.apiBaseUrl}/competitors`,{credentials:'include'}),fetch(`${props.apiBaseUrl}/sourcing/searches`,{credentials:'include'})]),[competitorsBody,sourcingBody]=await Promise.all([competitorsResponse.json(),sourcingResponse.json()]);const competitors=competitorsResponse.ok?competitorsBody.data.filter((item:any)=>item.opportunity_id===props.opportunityId):[],searches=sourcingResponse.ok?sourcingBody.data.filter((item:any)=>item.input_type==='opportunity'&&item.input_ref===props.opportunityId):[];downstream.value={competitors:competitors.length,snapshots:competitors.reduce((sum:number,item:any)=>sum+Number(item.snapshot_count??0),0),searches:searches.length,suppliers:searches.reduce((sum:number,item:any)=>sum+Number(item.candidate_count??0),0)};}catch{downstream.value={competitors:0,snapshots:0,searches:0,suppliers:0};}
       state.value = "ready";
       return;
     }
-    const params = new URLSearchParams({ page: "1", page_size: "20" });
+    const params = new URLSearchParams({ page: "1", page_size: "20", scope:listScope.value });
     for (const [key, value] of Object.entries(filters))
       if (value) params.set(key, value);
     const result = await read(`/opportunities?${params}`);
@@ -232,6 +238,8 @@ async function load() {
     if ((error as Error).message !== "read_failed") state.value = "blocked";
   }
 }
+async function discoverCompetitors(){if(!detail.value)return;const result=await write(`/opportunities/${detail.value.id}/competitor-discovery`,{});if(result)message.value=`Amazon 竞品采集已排队，任务编号 ${result.task_id}。`;}
+async function discoverSuppliers(){if(!detail.value)return;const result=await write('/sourcing/searches',{input_type:'opportunity',input_ref:detail.value.id});if(result)message.value=`公开供应商采集已排队，任务编号 ${result.task_id}。`;}
 async function write(path: string, body: unknown) {
   busy.value = true;
   message.value = "";
@@ -495,8 +503,10 @@ onMounted(() => {
             v-model="filters.q"
             maxlength="200"
             placeholder="搜索机会" /></label
+        ><label>显示范围<select v-model="listScope"><option value="product">可分析商品</option><option value="all">全部线索</option></select></label
         ><button type="submit">筛选</button>
       </form>
+      <section class="opportunity-list-summary" aria-label="选品机会数据总览"><article><span>当前结果</span><b>{{ total }}</b></article><article><span>已补商品图</span><b>{{ listSummary.withImage }}</b></article><article><span>关联竞品</span><b>{{ listSummary.competitors }}</b></article><article><span>供应商候选</span><b>{{ listSummary.suppliers }}</b></article></section>
       <UiStatePanel
         v-if="state !== 'ready'"
         :kind="state"
@@ -525,16 +535,16 @@ onMounted(() => {
           >
           <dl>
             <div>
-              <dt>综合评分</dt>
-              <dd>{{ item.overall_score ?? "数据不足" }}</dd>
+              <dt>证据 / 来源</dt>
+              <dd>{{ item.evidence_count }} / {{ item.source_count }}</dd>
             </div>
             <div>
-              <dt>趋势</dt>
-              <dd>{{ item.trend_score ?? "数据不足" }}</dd>
+              <dt>关联竞品</dt>
+              <dd>{{ item.competitor_count }}</dd>
             </div>
             <div>
-              <dt>竞争</dt>
-              <dd>{{ item.competition_score ?? "数据不足" }}</dd>
+              <dt>供应商候选</dt>
+              <dd>{{ item.supplier_candidate_count }}</dd>
             </div>
             <div>
               <dt>利润</dt>
@@ -545,9 +555,7 @@ onMounted(() => {
               <dd>{{ opportunityStatus(item.risk_level) }}</dd>
             </div>
           </dl>
-          <b :data-status="item.decision_status">{{
-            opportunityStatus(item.decision_status)
-          }}</b></a
+          <b :data-status="item.decision_status">{{ opportunityStatus(item.decision_status) }} · 查看详情 →</b></a
         >
       </section></template
     >
@@ -559,7 +567,7 @@ onMounted(() => {
         @primary="load"
       />
       <article v-else class="opportunity-detail">
-        <section v-if="detail.recommendation_status === 'insufficient_data'" class="opportunity-next-steps"><div><b>为什么还不能给出结论？</b><span>系统只在证据足够时评分。按下面顺序补齐真实数据后，评分、利润和风险会自动更新。</span></div><a :href="`/competitors?create=1&opportunity_id=${detail.id}`">① 匹配亚马逊竞品</a><a :href="`/sourcing?create=1&opportunity_id=${detail.id}`">② 查找货源与报价</a><a href="/opportunities/scoring-rules">③ 检查评分规则</a></section>
+        <section v-if="detail.recommendation_status === 'insufficient_data'" class="opportunity-next-steps"><div><b>为什么还不能给出结论？</b><span>系统只在证据足够时评分。可直接启动真实网页采集，不需要填写官方 API。</span></div><button type="button" :disabled="busy" @click="discoverCompetitors">① 采集 Amazon 竞品</button><button type="button" :disabled="busy" @click="discoverSuppliers">② 采集公开供应商</button><a href="/opportunities/scoring-rules">③ 检查评分规则</a></section>
         <header>
           <div>
             <p>
@@ -608,6 +616,7 @@ onMounted(() => {
           </button>
         </nav>
         <section v-if="tab === 'overview'" class="opportunity-overview">
+          <article class="opportunity-downstream"><p>下游补全</p><h4>竞品与供应链数据</h4><strong>{{ downstream.competitors + downstream.suppliers }} 项</strong><span>{{ downstream.competitors }} 个竞品 · {{ downstream.snapshots }} 个快照 · {{ downstream.suppliers }} 个供应商候选</span><footer><button type="button" :disabled="busy" @click="discoverCompetitors">采集竞品</button><button type="button" :disabled="busy" @click="discoverSuppliers">采集供应商</button><a :href="`/competitors`">查看竞品详情</a><a :href="`/sourcing`">查看供应链详情</a></footer></article>
           <article class="opportunity-score">
             <p>评分解释</p>
             <h4>机会评分解读</h4>
@@ -690,8 +699,7 @@ onMounted(() => {
         <section v-else-if="tab === 'competition'" class="opportunity-section">
           <p>竞争情况</p>
           <h4>竞争对比</h4>
-          <strong>数据不足</strong
-          ><span>尚未关联竞品快照；不显示示例价格、评价或排名。</span>
+          <strong>{{ downstream.competitors }} 个竞品 · {{ downstream.snapshots }} 个真实快照</strong><span v-if="downstream.snapshots">快照已经保留价格、评分、评论、采集时间和原始证据，可进入竞品工作台查看变化历史。</span><span v-else>尚未关联竞品快照；点击下方按钮即可采集公开 Amazon 商品页。</span><footer><button type="button" :disabled="busy" @click="discoverCompetitors">立即采集竞品</button><a href="/competitors">打开竞品监控详情</a></footer>
         </section>
         <section v-else-if="tab === 'profit'" class="opportunity-profit">
           <header>

@@ -808,18 +808,21 @@
         "/api/v1/platform/provider-sources/{providerId}/replays",
         "/api/v1/provider-sources/refresh"
       ],
-      "scope": "100+ code-owned hotspot and product-source channels; currently 177 catalog entries including 138 automatic crawler channels across 24 hosts, plus organization/workspace automatic and manual refresh tasks and evidence",
+      "scope": "100+ code-owned hotspot and product-source channels; currently 180 catalog entries including 138 automatic crawler channels across 24 hosts, plus organization/workspace automatic and user-operated core collection tasks and evidence",
       "sources": [
         "96 automatic Google News fixed RSS market/topic channels",
         "40 automatic non-Google RSS/Atom or fixed public-page news ecommerce community and trend channels, including current Shopify blog and eBay announcement HTML pages",
         "2 automatic fixed public marketplace pages for Amazon and eBay; Walmart remains a registered controlled-page source because its public endpoint currently returns a human-verification challenge",
         "authenticated-browser or fixed-public-page platform entries without official API dependency",
         "google_news_search manual keyword RSS",
-        "manual_product_supply_csv explicit import"
+        "manual_product_supply_csv explicit import",
+        "amazon_product public search and product-page crawler",
+        "made_in_china_search public supplier product crawler",
+        "ec21_supplier_search independent public supplier fallback crawler"
       ],
       "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; official_api is removed from the runtime contract and migrated to public_page; no source fabricates platform data",
       "outboundBoundary": "Every automatic URL and proxy host is derived from the code-owned source catalog; the optional Baota-restricted project HTTP CONNECT proxy accepts only those exact HTTPS hosts without setting global HTTP_PROXY or HTTPS_PROXY; Google News rejects redirects, CSV uses inline content, and callers cannot supply an outbound URL or proxy",
-      "limits": "Google RSS 2MB and 20 persisted records per task; CSV 1MB, exact 8-column header, 100 parsed rows and 20 persisted records per task",
+      "limits": "Google RSS 2MB and 20 persisted records per task; Amazon Made-in-China and EC21 public pages 5MB and 20 product records per source task; CSV 1MB exact 8-column header 100 parsed rows and 20 persisted records per task",
       "permission": "provider:configure for catalog/provision; collection:replay for scoped replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
       "persistence": "MySQL 5.7 automatic_source_schedules, per-rule collection interval/cursor/last-task state and provider_refresh_operations plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
       "liveVerificationCleanup": "random m03-07 example.test scope only; delete M07-06 collection_task_evidence_links before evidence/task/provider principals and fail closed unless provider, workspace, organization and user are all absent",
@@ -866,7 +869,7 @@
       ],
       "scope": "organization and workspace scoped manual and automatic trend topics signals timelines keywords follows and monitoring rules",
       "projection": "Baota Node Worker scans normalized records, leases idempotent projection jobs and projects manual Google News plus every code-owned automatic Google/non-Google RSS, forum and fixed public marketplace source; market and language derive from the source catalog while unsupported records terminate as succeeded_empty",
-      "automaticProductDiscovery": "product-oriented Google channels and automatic ecommerce sources create one evidence-backed insufficient_data opportunity per new trend topic; Amazon product URLs additionally seed a real ASIN competitor without fake snapshot metrics, and each new opportunity seeds a transparent pending sourcing search",
+      "automaticProductDiscovery": "only concrete product evidence with a product URL or explicit price plus image creates an automatic opportunity; community posts and seller news remain trend evidence unless a user monitoring rule explicitly matches, preventing non-product articles from filling the product workspace",
       "monitoringRuleEvaluation": "each rule stores a 15–10080 minute interval and source cursor; the Baota Worker schedules market-matching sources with the rule keywords, then every newly projected topic evaluates include and negative keywords plus market and language; matched topics are followed, promoted to evidence-backed opportunities and auditable",
       "heatBoundary": "heat is the observed signal count with unit signals; momentum and confidence remain insufficient_data until a measured contract exists",
       "permission": "trend:read for scoped reads; trend:manage for follow relevance and monitoring writes; same-origin Origin and Idempotency-Key required",
@@ -896,6 +899,7 @@
         "../apps/worker/src/opportunity-refresh-worker.ts",
         "../apps/api/src/erp-product-import-service.ts",
         "../apps/api/src/erp-product-import-routes.ts",
+        "../apps/worker/src/core-collection-projection-worker.ts",
         "../apps/web/src/components/OpportunityWorkspace.vue",
         "../database/migrations/0042_erp_product_import.up.sql"
       ],
@@ -905,13 +909,14 @@
         "/api/v1/opportunities",
         "/api/v1/opportunities/{opportunityId}",
         "/api/v1/opportunities/{opportunityId}/decisions",
+        "/api/v1/opportunities/{opportunityId}/competitor-discovery",
         "/api/v1/imports/erp-products"
       ],
       "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs",
-      "truthBoundary": "M04-02 never invents scores, ROI or risk; unavailable M04-03 to M04-06 inputs remain null, unknown or insufficient_data",
+      "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; scores ROI and risk are never invented, and missing downstream fields remain null unknown or insufficient_data",
       "refresh": "Baota Node Worker leases opportunity refresh jobs and links only persisted trend signals; trend-only evidence remains partial because competition and cost inputs are absent",
       "productImages": "structured marketplace crawlers extract JSON-LD or linked product image URLs; ERP imports map the confirmed product image field; opportunity list resolves the newest scoped evidence image and otherwise shows an explicit pending-capture placeholder",
-      "erpImport": "the restricted browser helper reads the existing ERP Authorization token only inside the logged-in ERP tab, calls the confirmed product-list endpoint locally, sends no token to ai选品, and imports 1–500 rows into immutable evidence, opportunities, actual ASIN competitors and explicit pending sourcing searches whose detail exposes confirmed ERP supplier codes and historical reference costs without presenting them as live quotes",
+      "erpImport": "the restricted browser helper reads the existing ERP Authorization token only inside the logged-in ERP tab and imports immutable evidence, opportunities, actual ASIN competitors and evidence-linked ERP historical-cost supplier candidates; missing MOQ specification lead time and location stay explicit rather than being presented as confirmed quotes",
       "permission": "opportunity:read for scoped reads; existing opportunity:decide for candidate creation and required-reason decisions; same-origin Origin and Idempotency-Key required",
       "audit": "manual creation, automatic opportunity.candidate.discovered, evidence refresh and decision changes persist correlated opportunity_events and opportunity_outbox; decisions do not rewrite scores or evidence",
       "configuration": [
@@ -1011,6 +1016,7 @@
         "../apps/api/src/mysql-competitor-repository.ts",
         "../apps/api/src/competitor-routes.ts",
         "../apps/worker/src/competitor-monitor-worker.ts",
+        "../apps/worker/src/core-collection-projection-worker.ts",
         "../apps/web/src/components/CompetitorMonitor.vue"
       ],
       "routes": [
@@ -1019,11 +1025,12 @@
         "/api/v1/competitors/{competitorId}",
         "/api/v1/competitors/{competitorId}/snapshots",
         "/api/v1/competitors/{competitorId}/actions",
+        "/api/v1/competitors/{competitorId}/collect",
         "/api/v1/competitor-monitor-rules"
       ],
       "scope": "organization and workspace scoped competitor identities immutable source snapshots comparison jobs changes threshold rules alerts events and outbox",
-      "truthBoundary": "complete snapshots from enabled Providers only; the baseline creates no change and missing source values are never replaced by examples",
-      "permission": "competitor:read for scoped reads; competitor:manage for identities snapshots thresholds pause and resume; auditors remain read only",
+      "truthBoundary": "Amazon identities can be added by product URL and are collected from the public product page without an official API; nullable price rank reviews rating and availability remain visibly missing when the page does not expose them, and no zero or sample value is substituted",
+      "permission": "competitor:read for scoped list and full detail; competitor:manage for create collect thresholds pause resume and audited soft delete; auditors remain read only",
       "audit": "user and Worker writes preserve request_id trace_id evidence source references immutable changes and queued downstream delivery state",
       "configuration": [
         "COMPETITOR_MONITOR_POLL_MS",
@@ -1047,19 +1054,21 @@
         "../apps/api/src/mysql-sourcing-repository.ts",
         "../apps/api/src/sourcing-routes.ts",
         "../apps/worker/src/sourcing-projection-worker.ts",
+        "../apps/worker/src/core-collection-projection-worker.ts",
         "../apps/web/src/components/SourcingWorkspace.vue"
       ],
       "routes": [
         "/sourcing",
         "/api/v1/sourcing/searches",
         "/api/v1/sourcing/searches/{searchId}",
+        "/api/v1/sourcing/searches/{searchId}/refresh",
         "/api/v1/sourcing/quotes",
         "/api/v1/sourcing/comparisons",
         "/api/v1/sourcing/purchase-tasks"
       ],
       "scope": "organization and workspace scoped searches projection jobs candidates immutable quote versions comparisons purchase tasks events and outbox",
-      "truthBoundary": "only completed same-workspace product-supply-csv-v1 collection facts are projected; missing specification lead location confidence stability or risk stays explicit until evidence-backed confirmation",
-      "permission": "sourcing:read for scoped reads; supplier_quote:manage for searches quote confirmation comparisons and purchase task creation",
+      "truthBoundary": "a user search queues independent Made-in-China and EC21 public supplier-page crawlers without official API credentials; supplier title price image source URL and observed time are projected with immutable evidence, while unavailable MOQ specification lead location confidence stability and risk stay explicit until evidence-backed human confirmation",
+      "permission": "sourcing:read for scoped lists details and comparison history; supplier_quote:manage for create refresh audited soft delete quote confirmation comparisons and purchase task creation",
       "audit": "writes preserve idempotency request_id trace_id actor immutable evidence references sourcing_events and sourcing_outbox",
       "configuration": [
         "SOURCING_PROJECTION_POLL_MS",

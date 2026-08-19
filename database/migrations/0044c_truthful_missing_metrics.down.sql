@@ -1,0 +1,1 @@
+ALTER TABLE `sourcing_candidates` MODIFY COLUMN `moq` INT UNSIGNED NULL;

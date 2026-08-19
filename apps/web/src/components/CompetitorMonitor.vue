@@ -6,11 +6,11 @@ type State =
   "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Snapshot {
   id: string;
-  current_price: number;
-  currency: string;
-  rank_value: number;
-  review_count: number;
-  rating_value: number;
+  current_price: number | null;
+  currency: string | null;
+  rank_value: number | null;
+  review_count: number | null;
+  rating_value: number | null;
   availability: string;
   captured_at: string;
   freshness: string;
@@ -26,7 +26,9 @@ interface Competitor {
   title: string;
   status: string;
   revision: number;
+  snapshot_count: number;
   latest_snapshot: Snapshot | null;
+  snapshots?: Snapshot[];
   changes?: Array<{
     id: string;
     field: string;
@@ -60,23 +62,15 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   notice = ref(""),
   busy = ref(false),
   showCreate = ref(false),
-  showRule = ref(false);
+  showRule = ref(false),
+  query = ref(""),
+  deleting = ref<Competitor | null>(null),
+  deleteReason = ref("");
 const form = reactive({
-    provider_id: "",
     market: "US",
-    source_site: "",
-    external_id: "",
     product_url: "",
     title: "",
-    current_price: 0,
-    currency: "USD",
-    rank_value: 0,
-    review_count: 0,
-    rating_value: 0,
-    availability: "in_stock",
-    captured_at: new Date().toISOString().slice(0, 16),
-    source_ref_id: "",
-    evidence_id: "",
+    opportunity_id: "",
   }),
   rule = reactive({
     competitor_id: "",
@@ -85,6 +79,8 @@ const form = reactive({
     threshold_value: 1,
   });
 const latest = computed(() => selected.value?.latest_snapshot ?? null),
+  filteredItems = computed(() => { const needle=query.value.trim().toLowerCase(); return needle?items.value.filter((item)=>`${item.title} ${item.external_id} ${item.source_site}`.toLowerCase().includes(needle)):items.value; }),
+  summary = computed(() => ({ total:items.value.length, active:items.value.filter((item)=>item.status==='active').length, pending:items.value.filter((item)=>!item.latest_snapshot).length, snapshots:items.value.reduce((sum,item)=>sum+(item.snapshot_count??0),0) })),
   stateFrom = (s: number): State =>
     s === 401
       ? "expired"
@@ -179,32 +175,19 @@ async function post(path: string, body: unknown) {
 }
 async function create() {
   const result = await post("/competitors", {
-    provider_id: form.provider_id,
     market: form.market,
-    source_site: form.source_site,
-    external_id: form.external_id,
     product_url: form.product_url,
     title: form.title,
-    snapshot: {
-      current_price: Number(form.current_price),
-      currency: form.currency,
-      rank_value: Number(form.rank_value),
-      review_count: Number(form.review_count),
-      rating_value: Number(form.rating_value),
-      availability: form.availability,
-      captured_at: new Date(form.captured_at).toISOString(),
-      freshness: "fresh",
-      source_status: "healthy",
-      source_ref_id: form.source_ref_id,
-      evidence_id: form.evidence_id,
-    },
+    ...(form.opportunity_id ? { opportunity_id:form.opportunity_id } : {}),
   });
   if (result) {
     showCreate.value = false;
     await load();
-    notice.value = "竞品与首个来源快照已进入比较队列。";
+    notice.value = "竞品已建立，商品页公开数据采集已排队。";
   }
 }
+async function collect(){if(!selected.value)return;const result=await post(`/competitors/${selected.value.id}/collect`,{});if(result)notice.value=`已开始重新采集，任务编号 ${result.task_id}。`;}
+async function remove(){if(!deleting.value||!deleteReason.value.trim())return;busy.value=true;try{const r=await fetch(`${props.apiBaseUrl}/competitors/${deleting.value.id}`,{method:'DELETE',credentials:'include',headers:{'content-type':'application/json','idempotency-key':crypto.randomUUID()},body:JSON.stringify({expected_revision:deleting.value.revision,reason:deleteReason.value.trim()})}),b=await r.json().catch(()=>null);if(!r.ok){notice.value=b?.error?.action_hint??'删除未完成。';return;}notice.value='竞品已从监控列表删除，历史审计仍保留。';selected.value=null;deleting.value=null;deleteReason.value='';await load();}finally{busy.value=false;}}
 async function createRule() {
   const result = await post("/competitor-monitor-rules", {
     competitor_id: rule.competitor_id || null,
@@ -256,6 +239,10 @@ onMounted(() => {
     <p v-if="notice" class="competitor-notice" role="status">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
     </p>
+    <section class="competitor-summary" aria-label="竞品监控数据总览">
+      <article><span>竞品总数</span><b>{{ summary.total }}</b></article><article><span>监控中</span><b>{{ summary.active }}</b></article><article><span>待首次采集</span><b>{{ summary.pending }}</b></article><article><span>历史快照</span><b>{{ summary.snapshots }}</b></article>
+    </section>
+    <div class="competitor-toolbar"><label>搜索竞品<input v-model="query" type="search" placeholder="商品标题、ASIN 或来源站点" /></label><span>共 {{ filteredItems.length }} 条结果</span></div>
     <UiStatePanel
       v-if="state !== 'ready'"
       :kind="state"
@@ -265,7 +252,7 @@ onMounted(() => {
     <div v-else class="competitor-grid">
       <aside class="competitor-list">
         <button
-          v-for="item in items"
+          v-for="item in filteredItems"
           :key="item.id"
           :class="{ selected: selected?.id === item.id }"
           @click="detail(item)"
@@ -278,6 +265,7 @@ onMounted(() => {
             {{ item.latest_snapshot.current_price }}</strong
           ><strong v-else class="competitor-pending">等待首次采集</strong
           ><em :data-status="item.status">{{ statusText(item.status) }}</em>
+          <small class="competitor-detail-entry">查看详情 →</small>
         </button>
       </aside>
       <article v-if="selected" class="competitor-detail">
@@ -292,21 +280,19 @@ onMounted(() => {
               >查看来源商品 ↗</a
             >
           </div>
-          <button class="ghost" type="button" :disabled="busy" @click="toggle">
-            {{ selected.status === "active" ? "暂停监控" : "恢复监控" }}
-          </button>
+          <div class="competitor-actions"><button type="button" :disabled="busy" @click="collect">立即采集</button><button class="ghost" type="button" :disabled="busy" @click="toggle">{{ selected.status === "active" ? "暂停监控" : "恢复监控" }}</button><button class="danger ghost" type="button" :disabled="busy" @click="deleting=selected">删除</button></div>
         </header>
         <section v-if="latest" class="competitor-metrics">
           <article>
             <small>当前价格</small
-            ><b>{{ latest.currency }} {{ latest.current_price }}</b>
+            ><b>{{ latest.current_price == null ? "未采到" : `${latest.currency ?? ""} ${latest.current_price}` }}</b>
           </article>
           <article>
-            <small>排名</small><b>#{{ latest.rank_value }}</b>
+            <small>排名</small><b>{{ latest.rank_value == null ? "未采到" : `#${latest.rank_value}` }}</b>
           </article>
           <article>
             <small>评论 / 评分</small
-            ><b>{{ latest.review_count }} / {{ latest.rating_value }}</b>
+            ><b>{{ latest.review_count == null ? "未采到" : latest.review_count }} / {{ latest.rating_value == null ? "未采到" : latest.rating_value }}</b>
           </article>
           <article>
             <small>库存</small><b>{{ availabilityText(latest.availability) }}</b>
@@ -347,6 +333,11 @@ onMounted(() => {
             尚无变化；首个快照只建立基线，不制造变化。
           </p>
         </section>
+        <section class="competitor-history snapshot-history">
+          <header><h4>采集快照</h4><span>价格 · 评分 · 评论 · 采集时间 · 证据</span></header>
+          <article v-for="snapshot in selected.snapshots ?? []" :key="snapshot.id"><b>{{ snapshot.current_price == null ? "价格未采到" : `${snapshot.currency ?? ""} ${snapshot.current_price}` }}</b><strong>评分 {{ snapshot.rating_value ?? "未采到" }} · 评论 {{ snapshot.review_count ?? "未采到" }}</strong><time>{{ snapshot.captured_at }}</time><code>证据 {{ snapshot.evidence_id }}</code></article>
+          <p v-if="!selected.snapshots?.length">尚无快照；点击“立即采集”可重新读取公开商品页。</p>
+        </section>
       </article>
     </div>
     <div
@@ -359,8 +350,8 @@ onMounted(() => {
       <form @submit.prevent="create">
         <header>
           <div>
-            <p>必须提供来源依据</p>
-            <h3 id="new-competitor">添加竞品与基线快照</h3>
+            <p>公开网页爬虫</p>
+            <h3 id="new-competitor">添加 Amazon 竞品</h3>
           </div>
           <button
             type="button"
@@ -371,65 +362,13 @@ onMounted(() => {
             ×
           </button>
         </header>
-        <div class="form-grid">
-          <label>来源编号<input v-model="form.provider_id" required /></label
-          ><label>市场<input v-model="form.market" required /></label
-          ><label>来源站点<input v-model="form.source_site" required /></label
-          ><label
-            >外部商品 ID<input v-model="form.external_id" required
-          /></label>
-        </div>
+        <div class="form-grid"><label>市场<input v-model="form.market" required /></label><label>关联机会编号（可选）<input v-model="form.opportunity_id" /></label></div>
         <label
           >商品网址<input
             v-model="form.product_url"
             required
             type="url" /></label
-        ><label>标题<input v-model="form.title" required /></label>
-        <fieldset>
-          <legend>不可变来源快照</legend>
-          <label
-            >价格<input
-              v-model.number="form.current_price"
-              type="number"
-              min="0"
-              step="0.000001"
-              required /></label
-          ><label
-            >币种<input v-model="form.currency" maxlength="3" required /></label
-          ><label
-            >排名<input
-              v-model.number="form.rank_value"
-              type="number"
-              min="0"
-              required /></label
-          ><label
-            >评论数<input
-              v-model.number="form.review_count"
-              type="number"
-              min="0"
-              required /></label
-          ><label
-            >评分<input
-              v-model.number="form.rating_value"
-              type="number"
-              min="0"
-              max="5"
-              step="0.01"
-              required /></label
-          ><label
-            >库存<select v-model="form.availability">
-              <option value="in_stock">有货</option>
-              <option value="out_of_stock">缺货</option>
-              <option value="unknown">未知</option>
-            </select></label
-          ><label
-            >采集时间<input
-              v-model="form.captured_at"
-              type="datetime-local"
-              required /></label
-          ><label>来源引用<input v-model="form.source_ref_id" required /></label
-          ><label>证据编号<input v-model="form.evidence_id" required /></label>
-        </fieldset>
+        ><label>内部备注标题<input v-model="form.title" required placeholder="例如：Amazon 收纳箱头部竞品" /></label><aside>提交后直接读取公开 Amazon 商品页并建立首个证据快照，不需要填写官方 API 或手工填写价格。</aside>
         <footer>
           <button type="button" class="ghost" @click="showCreate = false">
             取消</button
@@ -504,6 +443,14 @@ onMounted(() => {
             取消</button
           ><button type="submit" :disabled="busy">启用规则</button>
         </footer>
+      </form>
+    </div>
+    <div v-if="deleting" class="competitor-modal" role="dialog" aria-modal="true">
+      <form class="rule-form" @submit.prevent="remove">
+        <header><div><p>保留审计记录</p><h3>删除竞品监控</h3></div><button type="button" aria-label="关闭删除确认" title="关闭删除确认" @click="deleting=null">×</button></header>
+        <p>删除“{{ deleting.title }}”后不再继续监控，已有快照与审计记录仍保留。</p>
+        <label>删除原因<textarea v-model="deleteReason" required maxlength="500" placeholder="请填写删除原因"></textarea></label>
+        <footer><button type="button" class="ghost" @click="deleting=null">取消</button><button type="submit" class="danger" :disabled="busy">确认删除</button></footer>
       </form>
     </div>
   </section>

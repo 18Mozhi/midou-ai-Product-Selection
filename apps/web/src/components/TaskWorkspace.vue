@@ -40,6 +40,8 @@ const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all" }>(),
   notice = ref(""),
   requestId = ref(""),
   showCreate = ref(false),
+  deleting = ref<Task | null>(null),
+  deleteReason = ref(""),
   editing = ref<Task | null>(null),
   form = ref({ title: "", description: "", priority: "normal", due_at: "" }),
   comment = ref("");
@@ -131,7 +133,8 @@ async function create() {
 }
 function editTask(){if(!selected.value)return;editing.value=selected.value;form.value={title:selected.value.title,description:selected.value.description,priority:selected.value.priority,due_at:selected.value.due_at?new Date(selected.value.due_at).toISOString().slice(0,16):""};showCreate.value=true;}
 async function updateProgress(){if(!selected.value)return;const raw=window.prompt("请输入完成进度（0-100）",String(selected.value.progress_percent??0));if(raw===null)return;const progress=Number(raw);const note=window.prompt("本次进展说明")?.trim();if(!note)return;try{await api(`/tasks/${selected.value.id}/actions`,{method:"POST",body:JSON.stringify({action:"progress",expected_version:selected.value.version,progress_percent:progress,progress_note:note})});notice.value="任务进度已更新。";await open(selected.value);await load();}catch{}}
-async function removeTask(){if(!selected.value)return;const reason=window.prompt("删除原因（任务会保留审计记录）")?.trim();if(!reason)return;try{await api(`/tasks/${selected.value.id}`,{method:"DELETE",body:JSON.stringify({expected_version:selected.value.version,reason})});notice.value="任务已删除，历史审计记录仍然保留。";selected.value=null;await load();}catch{}}
+function askRemove(task:Task){deleting.value=task;deleteReason.value="";}
+async function removeTask(){if(!deleting.value||!deleteReason.value.trim())return;try{await api(`/tasks/${deleting.value.id}`,{method:"DELETE",body:JSON.stringify({expected_version:deleting.value.version,reason:deleteReason.value.trim()})});notice.value="任务已删除，历史审计记录仍然保留。";if(selected.value?.id===deleting.value.id)selected.value=null;deleting.value=null;deleteReason.value="";await load();}catch{}}
 async function action(name: string) {
   if (!selected.value) return;
   const body: any = { action: name, expected_version: selected.value.version };
@@ -246,7 +249,8 @@ onMounted(() => {
         <p>创建任务后会在此显示；系统不会填充示例业务数据。</p>
       </section>
       <div v-else class="task-list">
-        <button v-for="x in visible" :key="x.id" @click="open(x)">
+        <article v-for="x in visible" :key="x.id">
+        <button class="task-row-main" @click="open(x)">
           <i :data-priority="x.priority"></i
           ><span
             ><strong>{{ x.title }}</strong
@@ -256,8 +260,10 @@ onMounted(() => {
           ><span
             ><strong>{{ label(x.sla_status) }}</strong
             ><small>{{ time(x.due_at) }}</small></span
-          ><b>查看 →</b>
+          ><b>查看详情 →</b>
         </button>
+        <button class="task-row-delete" type="button" :aria-label="`删除任务：${x.title}`" :title="`删除任务：${x.title}`" @click="askRemove(x)">删除</button>
+        </article>
       </div></template
     >
     <dialog :open="showCreate">
@@ -324,7 +330,7 @@ onMounted(() => {
         >
           延期</button
         ><button @click="action('transfer')">转交</button>
-        <button @click="updateProgress">更新进度</button><button @click="editTask">编辑</button><button class="danger" @click="removeTask">删除</button>
+        <button @click="updateProgress">更新进度</button><button @click="editTask">编辑</button><button class="danger" @click="askRemove(selected)">删除</button>
       </div>
       <section><h4>运行记录</h4><article v-for="x in selected.events" :key="x.id"><b>{{ label(x.event_type.replace('task.','')) }}</b><p>{{ x.payload?.progress_note || x.payload?.reason || "任务状态已更新" }}</p><small>{{ time(x.created_at) }}</small></article><p v-if="!selected.events?.length">暂无运行记录。</p></section>
       <section>
@@ -345,5 +351,13 @@ onMounted(() => {
         </form>
       </section>
     </aside>
+    <dialog :open="Boolean(deleting)" class="task-delete-dialog">
+      <form @submit.prevent="removeTask">
+        <h3>删除任务</h3>
+        <p>将删除“{{ deleting?.title }}”。任务列表不再显示，但审计记录会保留。</p>
+        <label>删除原因<textarea v-model="deleteReason" maxlength="500" required placeholder="请填写删除原因"></textarea></label>
+        <div><button type="button" @click="deleting=null;deleteReason=''">取消</button><button class="danger" type="submit">确认删除</button></div>
+      </form>
+    </dialog>
   </section>
 </template>

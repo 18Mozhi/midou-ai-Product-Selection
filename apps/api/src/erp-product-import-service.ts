@@ -762,9 +762,9 @@ export class ErpProductImportService {
       "SELECT id FROM sourcing_searches WHERE organization_id=? AND workspace_id=? AND input_type='opportunity' AND input_ref=? LIMIT 1",
       [input.context.organizationId, input.context.workspaceId, opportunityId],
     );
+    const searchId = searches[0] ? String(searches[0].id) : randomUUID();
     let sourcingCreated = 0;
     if (!searches[0]) {
-      const searchId = randomUUID();
       await c.query(
         "INSERT INTO sourcing_searches (id,organization_id,workspace_id,collection_task_id,input_type,input_ref,status,candidate_count,missing_fields_json,request_id,trace_id,created_by,created_at,updated_at) VALUES (?,?,?,?,'opportunity',?,'succeeded_empty',0,?,?,?,?,?,?)",
         [
@@ -788,6 +788,39 @@ export class ErpProductImportService {
         ],
       );
       sourcingCreated = 1;
+    }
+    const referenceCost = input.value.cost_cny ?? input.value.cost_usd;
+    if (input.value.supplier_code && referenceCost != null) {
+      await c.query(
+        "INSERT IGNORE INTO sourcing_candidates (id,organization_id,workspace_id,search_id,provider_id,normalized_record_id,raw_evidence_id,external_id,supplier_name,product_title,specification,moq,quoted_price,currency,lead_time_days,location,original_url,observed_at,confidence_value,status,missing_fields_json,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,NULL,NULL,?,?,NULL,NULL,?,?,NULL,'incomplete',?,?)",
+        [
+          randomUUID(),
+          input.context.organizationId,
+          input.context.workspaceId,
+          searchId,
+          input.providerId,
+          input.recordId,
+          input.evidenceId,
+          createHash("sha256").update(`erp-cost\0${input.value.external_id}`).digest("hex"),
+          input.value.supplier_code,
+          input.value.title,
+          referenceCost,
+          input.value.cost_cny != null ? "CNY" : "USD",
+          input.value.source_url,
+          new Date(input.value.observed_at),
+          JSON.stringify(["moq", "specification", "lead_time_days", "location", "confidence_value", "stability_status", "risk_level"]),
+          input.now,
+        ],
+      );
+      await c.query(
+        "UPDATE sourcing_searches SET status='completed_with_warnings',candidate_count=(SELECT COUNT(*) FROM sourcing_candidates WHERE search_id=?),missing_fields_json=?,updated_at=? WHERE id=?",
+        [
+          searchId,
+          JSON.stringify(["moq", "specification", "lead_time_days", "location", "confidence_value", "stability_status", "risk_level"]),
+          input.now,
+          searchId,
+        ],
+      );
     }
     return {
       opportunityCreated: existingOpportunity[0] ? 0 : 1,

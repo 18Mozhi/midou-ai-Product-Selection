@@ -15,8 +15,11 @@
 .task-filter { display: flex; gap: 8px; overflow: auto; }
 .task-filter button[aria-pressed="true"] { border-color: var(--so-primary); color: var(--so-primary); background: color-mix(in srgb, var(--so-primary) 14%, var(--so-panel-soft)); }
 .task-list { display: grid; border: 1px solid var(--so-border); border-radius: 18px; overflow: hidden; background: var(--so-panel); }
-.task-list > button { display: grid; grid-template-columns: 8px minmax(180px, 2fr) 100px minmax(150px, 1fr) 80px; align-items: center; padding: 16px 18px; border: 0; border-bottom: 1px solid var(--so-border); border-radius: 0; color: var(--so-text); background: var(--so-panel); text-align: left; }
-.task-list > button:hover { background: var(--so-panel-soft); }
+.task-list > article { position: relative; border-bottom: 1px solid var(--so-border); }
+.task-list > article:last-child { border-bottom: 0; }
+.task-row-main { width: 100%; display: grid; grid-template-columns: 8px minmax(180px, 2fr) 100px minmax(150px, 1fr) 80px; align-items: center; padding: 16px 82px 16px 18px; border: 0; border-radius: 0; color: var(--so-text); background: var(--so-panel); text-align: left; }
+.task-row-main:hover { background: var(--so-panel-soft); }
+.task-row-delete { position: absolute; z-index: 1; right: 14px; top: 50%; transform: translateY(-50%); padding: 7px 10px; border: 1px solid color-mix(in srgb, var(--so-danger) 36%, var(--so-border)); color: var(--so-danger); background: color-mix(in srgb, var(--so-danger) 6%, var(--so-panel)); }
 .task-list i { width: 5px; height: 36px; border-radius: 5px; background: var(--so-success); }
 .task-list i[data-priority="high"], .task-list i[data-priority="critical"] { background: var(--so-danger); }
 .task-list span strong, .task-list span small { display: block; }
@@ -35,7 +38,8 @@
 .task-detail dd { margin: 5px 0 0; word-break: break-all; }
 .task-actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
 .task-actions .danger { color: var(--so-danger); border-color: color-mix(in srgb, var(--so-danger) 42%, var(--so-border)); background: color-mix(in srgb, var(--so-danger) 7%, var(--so-panel-soft)); }
+.task-delete-dialog form > div .danger { color: var(--so-on-primary); background: var(--so-danger); border-color: var(--so-danger); }
 .task-detail article { margin: 8px 0; padding: 12px; border-left: 2px solid var(--so-primary); background: var(--so-panel); }
 .task-detail article p { white-space: pre-wrap; }
 .task-detail form { display: grid; gap: 8px; }
-@media(max-width:700px){.task-title{display:grid;gap:16px}.task-metrics{grid-template-columns:repeat(2,1fr)}.task-list>button{grid-template-columns:6px 1fr auto}.task-list>button>span:nth-of-type(2),.task-list>button>b{grid-column:2/4}.task-notice code{display:block;float:none;margin-top:6px}.task-detail{top:60px;padding-bottom:90px}}
+@media(max-width:700px){.task-title{display:grid;gap:16px}.task-metrics{grid-template-columns:repeat(2,1fr)}.task-row-main{grid-template-columns:6px 1fr auto;padding-right:72px}.task-row-main>span:nth-of-type(2),.task-row-main>b{grid-column:2/4}.task-notice code{display:block;float:none;margin-top:6px}.task-detail{top:60px;padding-bottom:90px}}

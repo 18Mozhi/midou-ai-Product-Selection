@@ -1,6 +1,6 @@
 .competitor-monitor {
-  --ink: #10243f;
-  --blue: #1768e5;
+  --ink: var(--so-text);
+  --blue: var(--so-primary);
   display: grid;
   gap: 18px;
 }
@@ -29,7 +29,7 @@
 .competitor-head span {
   display: block;
   margin-top: 7px;
-  color: #64748b;
+  color: var(--so-text-muted);
 }
 .competitor-head > div:last-child {
   display: flex;
@@ -46,17 +46,25 @@
   cursor: pointer;
 }
 .competitor-monitor button.ghost {
-  background: white;
-  color: #32506f;
-  border: 1px solid #cad7e6;
+  background: var(--so-panel);
+  color: var(--so-text);
+  border: 1px solid var(--so-border);
 }
+.competitor-monitor button.danger { color: var(--so-danger); border-color: color-mix(in srgb,var(--so-danger) 35%,var(--so-border)); }
 .competitor-notice {
   margin: 0;
   padding: 12px 15px;
   border-left: 3px solid #2b77e8;
-  background: #eef5ff;
-  color: #24415f;
+  background: color-mix(in srgb,var(--so-primary) 10%,var(--so-panel));
+  color: var(--so-text);
 }
+.competitor-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.competitor-summary article { padding:16px 18px; border:1px solid var(--so-border); border-radius:14px; background:var(--so-panel); box-shadow:var(--so-shadow-soft); }
+.competitor-summary span,.competitor-toolbar span { display:block; color:var(--so-text-muted); font-size:12px; }
+.competitor-summary b { display:block; margin-top:8px; color:var(--so-text); font-size:25px; }
+.competitor-toolbar { display:flex; align-items:end; justify-content:space-between; gap:16px; padding:14px 16px; border:1px solid var(--so-border); border-radius:12px; background:var(--so-panel); }
+.competitor-toolbar label { display:grid; gap:6px; width:min(420px,100%); color:var(--so-text-muted); font-size:12px; font-weight:700; }
+.competitor-toolbar input,.competitor-modal textarea { padding:10px 12px; border:1px solid var(--so-border); border-radius:8px; color:var(--so-text); background:var(--so-panel-soft); font:inherit; }
 .competitor-grid {
   display: grid;
   grid-template-columns: minmax(240px, 320px) 1fr;
@@ -72,7 +80,7 @@
   display: grid;
   grid-template-columns: 1fr auto;
   text-align: left;
-  background: white;
+  background: var(--so-panel);
   color: var(--ink);
   border: 1px solid #dae3ed;
   padding: 15px;
@@ -102,8 +110,9 @@
   text-transform: uppercase;
   color: #16835f;
 }
+.competitor-list .competitor-detail-entry { grid-column:1; margin-top:8px; color:var(--so-primary); font-weight:700; }
 .competitor-detail {
-  background: white;
+  background: var(--so-panel);
   border: 1px solid #dce5ee;
   border-radius: 14px;
   padding: 24px;
@@ -118,6 +127,7 @@
   color: #1768e5;
   font-size: 13px;
 }
+.competitor-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; }
 .competitor-metrics {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -127,12 +137,12 @@
 .competitor-metrics article {
   padding: 17px;
   border-radius: 10px;
-  background: #f6f9fc;
+  background: var(--so-panel-soft);
   border: 1px solid #e4ebf2;
 }
 .competitor-metrics small {
   display: block;
-  color: #738398;
+  color: var(--so-text-muted);
   margin-bottom: 8px;
 }
 .competitor-metrics b {
@@ -144,8 +154,8 @@
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
-  background: #0f2947;
-  color: #dbeafe;
+  background: var(--so-inverse-bg,#0f2947);
+  color: var(--so-inverse-text,#dbeafe);
   border-radius: 10px;
 }
 .competitor-source span {
@@ -206,7 +216,7 @@
   padding: 30px;
   text-align: center;
   color: #718096;
-  background: #f8fafc;
+  background: var(--so-panel-soft);
 }
 .competitor-modal {
   position: fixed;
@@ -221,7 +231,7 @@
   width: min(740px, 100%);
   max-height: 90vh;
   overflow: auto;
-  background: white;
+  background: var(--so-bg-elevated);
   border-radius: 14px;
   padding: 24px;
   box-shadow: 0 25px 80px #0004;
@@ -259,8 +269,8 @@
   border-radius: 8px;
   padding: 10px;
   font: inherit;
-  color: #18324d;
-  background: white;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
 }
 .form-grid,
 .competitor-modal fieldset {
@@ -280,8 +290,8 @@
 .competitor-modal aside {
   margin: 16px 0;
   padding: 12px;
-  background: #f2f6fb;
-  color: #53657a;
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
 }
 .competitor-modal footer {
   justify-content: flex-end;
@@ -299,6 +309,7 @@
   .competitor-metrics {
     grid-template-columns: 1fr 1fr;
   }
+  .competitor-summary { grid-template-columns:1fr 1fr; }
   .competitor-source {
     align-items: flex-start;
     flex-direction: column;

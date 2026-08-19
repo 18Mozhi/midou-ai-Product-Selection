@@ -36,6 +36,7 @@ import { AutomationWorker } from "./automation-worker.js";
 import { ReportExportWorker } from "./report-export-worker.js";
 import { WebhookDeliveryWorker } from "./webhook-delivery-worker.js";
 import { MySqlAutomaticSourceScheduler } from "./automatic-source-scheduler.js";
+import { CoreCollectionProjectionWorker } from "./core-collection-projection-worker.js";
 
 const config = loadRuntimeConfig(process.env, "worker");
 const pool = createDatabasePool(config);
@@ -135,6 +136,10 @@ const reportExports = new ReportExportWorker(
 );
 const webhookDeliveries = new WebhookDeliveryWorker(pool,{workerId:config.identity.workerId,masterKey:config.security.credentialsMasterKey,leaseSeconds:config.openPlatform.webhookLeaseSeconds,timeoutMs:config.openPlatform.webhookTimeoutMs,retrySeconds:[60,300,900]});
 const automaticSourceScheduler = new MySqlAutomaticSourceScheduler(pool);
+const coreCollectionProjection = new CoreCollectionProjectionWorker(
+  pool,
+  config.identity.workerId,
+);
 let stopping = false,
   authPolling = false,
   collectionPolling = false,
@@ -152,6 +157,7 @@ let stopping = false,
   reportPolling = false,
   webhookPolling = false,
   automaticSourcePolling = false;
+let coreProjectionPolling = false;
 
 const heartbeat = () =>
   console.log(
@@ -171,6 +177,7 @@ const heartbeat = () =>
       notification_outbox: "registered",
       automation_rules: "registered",
       report_exports: "registered",
+      core_collection_projection: "registered",
       webhook_deliveries: "registered",
       config_fingerprint: config.configFingerprint,
       observed_at: new Date().toISOString(),
@@ -585,6 +592,7 @@ const pollReports = async () => {
 };
 const pollWebhooks=async()=>{if(stopping||webhookPolling||!config.security.credentialsMasterKey)return;webhookPolling=true;try{await webhookDeliveries.runOnce();}catch(error){console.error(JSON.stringify({service:"product-scout-worker",queue:"webhook_deliveries",status:"dependency_failed",error:error instanceof Error?error.message:"unknown",observed_at:new Date().toISOString()}));}finally{webhookPolling=false;}};
 const pollAutomaticSources=async()=>{if(stopping||automaticSourcePolling)return;automaticSourcePolling=true;try{const result=await automaticSourceScheduler.processOnce();if(result.status!=='idle')console.log(JSON.stringify({service:'product-scout-worker',queue:'automatic_hotspot_sources',...result,observed_at:new Date().toISOString()}));}catch(error){console.error(JSON.stringify({service:'product-scout-worker',queue:'automatic_hotspot_sources',status:'dependency_failed',error:error instanceof Error?error.message:'unknown',observed_at:new Date().toISOString()}));}finally{automaticSourcePolling=false;}};
+const pollCoreProjection=async()=>{if(stopping||coreProjectionPolling)return;coreProjectionPolling=true;try{const result=await coreCollectionProjection.processOnce();if(result.status!=='idle')console.log(JSON.stringify({service:'product-scout-worker',queue:'core_collection_projection',...result,observed_at:new Date().toISOString()}));}catch(error){console.error(JSON.stringify({service:'product-scout-worker',queue:'core_collection_projection',status:'dependency_failed',error:error instanceof Error?error.message:'unknown',observed_at:new Date().toISOString()}));}finally{coreProjectionPolling=false;}};
 
 heartbeat();
 const heartbeatTimer = setInterval(heartbeat, config.runtime.workerHeartbeatMs);
@@ -637,6 +645,7 @@ const reportTimer = setInterval(
 );
 const webhookTimer=setInterval(()=>void pollWebhooks(),config.openPlatform.webhookPollMs);
 const automaticSourceTimer=setInterval(()=>void pollAutomaticSources(),config.automaticSources.pollMs);
+const coreProjectionTimer=setInterval(()=>void pollCoreProjection(),2000);
 void pollAuth();
 void pollCollection();
 void pollTrends();
@@ -653,6 +662,7 @@ void pollAutomations();
 void pollReports();
 void pollWebhooks();
 void pollAutomaticSources();
+void pollCoreProjection();
 
 const stop = async (signal: string) => {
   if (stopping) return;
@@ -674,6 +684,7 @@ const stop = async (signal: string) => {
   clearInterval(reportTimer);
   clearInterval(webhookTimer);
   clearInterval(automaticSourceTimer);
+  clearInterval(coreProjectionTimer);
   while (
     authPolling ||
     collectionPolling ||
@@ -691,6 +702,7 @@ const stop = async (signal: string) => {
     reportPolling ||
     webhookPolling ||
     automaticSourcePolling
+    || coreProjectionPolling
   )
     await new Promise((resolve) => setTimeout(resolve, 25));
   await redisStore.close();

@@ -2,13 +2,13 @@
 
 ## 边界
 
-本模块只接受已启用 Provider 对应的、字段完整且带 `source_ref_id` 与 `evidence_id` 的快照。API 不模拟外部采集，也不以示例值补齐缺失字段。竞品身份按组织、工作区、市场、来源站点和外部商品 ID 唯一。
+本模块支持两条真实入口：外部 Provider 提交带证据的完整快照；普通成员提交 Amazon 商品 URL 后，由已启用的 `amazon_product` 公开页面适配器采集。后者不需要官方 API，也不以示例值补齐页面没有披露的字段。竞品身份按组织、工作区、市场、来源站点和外部商品 ID 唯一。
 
 ## 数据流
 
-`competitors` 保存身份和当前指针；`competitor_snapshots` 保存不可变快照。API 写入快照后仅创建 `competitor_snapshot_jobs`，宝塔 Node Worker 比较上一快照并把字段、前值、当前值、变化时间、证据和影响解释写入 `competitor_changes`。达到显式阈值时，`competitor_alerts` 同时记录通知和任务的 `queued` 状态，并写 `competitor_outbox`，由 P05 的通知与任务模块消费。
+`competitors` 保存身份、软删除状态和当前指针；`competitor_snapshots` 保存不可变快照。公开页采集先进入现有 `collection_tasks`，`CoreCollectionProjectionWorker` 把规范记录投影为快照，再由竞品比较 Worker 生成字段变化。达到显式阈值时，`competitor_alerts` 同时记录通知和任务的 `queued` 状态，并写 `competitor_outbox`，由 P05 的通知与任务模块消费。
 
-快照必含价格、货币、排名、评论数、评分、库存、采集时间、新鲜度和来源状态。首个快照建立基线，不制造变化。数值阈值按绝对变化量判断，库存仅支持任意变化或变为缺货。
+公开页快照始终保存采集时间、来源状态、原始证据和商品地址；价格、货币、排名、评论数、评分和库存按页面真实披露保存，可为空但不能用零代替。首个快照建立基线，不制造变化。数值阈值按绝对变化量判断，库存仅支持任意变化或变为缺货。
 
 ## 运行与隔离
 
