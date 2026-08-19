@@ -154,7 +154,14 @@ export interface RuntimeConfig {
     recoveryCodeCount: number;
   };
   identity: { workerId: string; crawlerId: string; crawlerActorId: string };
-  runtime: { workerHeartbeatMs: number; crawlerHeartbeatSeconds: number };
+  runtime: {
+    workerHeartbeatMs: number;
+    crawlerHeartbeatSeconds: number;
+    workerMaxConcurrency: number;
+    workerSchedulerTickMs: number;
+    workerSchedulerStateFile: string;
+    workerSchedulerStaleAfterMs: number;
+  };
   runtimeTopology: {
     mode: "single_host";
     nodeId: string;
@@ -163,6 +170,7 @@ export interface RuntimeConfig {
     zone: string;
     heartbeatMs: number;
     staleAfterMs: number;
+    restartAlertThreshold: number;
     supervisorStateFile: string;
     productionEvidenceFile: string;
   };
@@ -579,6 +587,18 @@ export function loadRuntimeConfig(
         5,
         60,
       ),
+      workerMaxConcurrency: integer(env, "WORKER_MAX_CONCURRENCY", 4, 1, 32),
+      workerSchedulerTickMs: integer(
+        env,
+        "WORKER_SCHEDULER_TICK_MS",
+        250,
+        100,
+        5000,
+      ),
+      workerSchedulerStateFile: text(env, "WORKER_SCHEDULER_STATE_FILE"),
+      workerSchedulerStaleAfterMs:
+        integer(env, "WORKER_SCHEDULER_STALE_AFTER_SECONDS", 90, 15, 600) *
+        1000,
     },
     runtimeTopology: {
       mode: text(env, "RUNTIME_TOPOLOGY_MODE", "single_host") as "single_host",
@@ -588,6 +608,13 @@ export function loadRuntimeConfig(
       zone: text(env, "RUNTIME_NODE_ZONE", "primary"),
       heartbeatMs: integer(env, "RUNTIME_NODE_HEARTBEAT_MS", 30000, 5000, 60000),
       staleAfterMs: integer(env, "RUNTIME_NODE_STALE_AFTER_SECONDS", 90, 30, 600) * 1000,
+      restartAlertThreshold: integer(
+        env,
+        "BACKEND_RESTART_CIRCUIT_THRESHOLD",
+        5,
+        2,
+        50,
+      ),
       supervisorStateFile: text(env, "BACKEND_SUPERVISOR_STATE_FILE"),
       productionEvidenceFile: text(env, "SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE", "./.artifacts/verification/m08-01-single-server-production-evidence.json"),
     },

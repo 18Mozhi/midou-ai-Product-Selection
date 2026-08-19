@@ -2,7 +2,7 @@
 
 ## 健康与发布检查
 
-`/api/v1/health/live` 只确认进程；`/api/v1/health/ready` 要求 MySQL 与 Redis 均可用。先运行 `npm run build`、`node --test tests/m00-05/api-foundation.test.mjs` 和 `node scripts/verify-api-live.mjs`，再执行 `npm run verify:module -- M00-05`。503 只输出 `dependency_unavailable`、调整提示和 request_id/trace_id。
+`/api/v1/health/live` 只确认 API 进程；`/api/v1/health/ready` 要求 MySQL、Redis 与受监督子进程可用；`/api/v1/health/available` 进一步确认 Worker 统一调度器心跳新鲜且能够处理后台业务任务。API 存活或同步依赖就绪不能替代业务可用结论。先运行 `npm run build`、`node --test tests/m00-05/api-foundation.test.mjs tests/unit/worker-scheduler.test.mjs` 和 `node scripts/verify-api-live.mjs`，再执行 `npm run verify:module -- M00-05`。503 只输出分类状态、调整提示和 request_id/trace_id，不返回连接信息、任务载荷或凭证。
 
 生产 Node API 只能作为宝塔 Node 项目管理。DB/Redis/构建配置在进程启动时读取，修改后必须在宝塔重启 API。宝塔网站反向代理可用 readiness 做发布检查，但不得把密码、连接 URL 或内部错误写入响应/探针配置。
 

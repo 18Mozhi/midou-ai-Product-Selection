@@ -31,8 +31,22 @@ interface TopologyData {
   stale_node_count: number;
   nodes: RuntimeNode[];
   processes: Array<{ name: string; status: string; pid: number | null; restart_count: number; circuit_open_until: string | null }>;
+  worker_scheduler?: {
+    status: "running" | "stopping" | "stopped";
+    max_concurrency: number;
+    active_runs: number;
+    due_queue_count: number;
+    backpressure: boolean;
+    max_queue_delay_ms: number;
+    completed_last_minute: number;
+    failed_last_minute: number;
+    failure_rate_percent: number;
+    queues: Array<{ name: string; priority: number; running: boolean; queue_delay_ms: number; failed_total: number; deferred_total: number }>;
+    observed_at: string;
+  } | null;
   supervisor_pid: number | null;
   blockers: Array<{ code: string; actionHint: string }>;
+  alerts?: Array<{ code: string; severity: "warning" | "critical"; actionHint: string }>;
   load_balancing_enabled: false;
   backup_server_used: false;
   multi_node_claim: false;
@@ -80,6 +94,45 @@ const verdict = computed(
     )[state.value],
 );
 const short = (value?: string) => (value ? value.slice(0, 10) : "—");
+const blockerLabels: Record<string, string> = {
+  backend_supervisor_degraded: "后端进程异常",
+  runtime_node_missing: "运行节点缺失",
+  runtime_node_stale: "运行心跳过期",
+  runtime_node_stopped: "运行节点已停止",
+  runtime_host_mismatch: "运行主机不一致",
+};
+const alertLabels: Record<string, string> = {
+  worker_scheduler_heartbeat_stale: "任务调度心跳过期",
+  worker_scheduler_backpressure: "任务调度发生背压",
+  worker_scheduler_recent_failures: "最近一分钟存在失败",
+  backend_restart_loop: "后端连续重启",
+};
+const queueLabels: Record<string, string> = {
+  collection_tasks: "采集任务",
+  auth_delivery: "账号通知",
+  business_task_projection: "业务任务投影",
+  approval_escalation: "审批升级",
+  notification_outbox: "站内通知",
+  webhook_deliveries: "Webhook 投递",
+  opportunity_refresh: "机会刷新",
+  opportunity_scoring: "机会评分",
+  opportunity_profit: "利润计算",
+  competitor_monitor: "竞品监控",
+  sourcing_projection: "供应链投影",
+  trend_projection: "趋势投影",
+  ai_analysis: "AI 分析",
+  report_exports: "报表导出",
+  automation_rules: "自动化规则",
+  core_collection_projection: "采集事实投影",
+  automatic_hotspot_sources: "自动趋势来源",
+};
+const visibleQueues = computed(() => {
+  const queues = data.value?.worker_scheduler?.queues ?? [];
+  const exceptional = queues.filter(
+    (queue) => queue.running || queue.queue_delay_ms > 0 || queue.failed_total > 0,
+  );
+  return (exceptional.length ? exceptional : queues).slice(0, 6);
+});
 const time = (value?: string) =>
   value
     ? new Date(value).toLocaleString("zh-CN", { hour12: false })
@@ -247,6 +300,25 @@ onMounted(load);
               <p v-if="process.circuit_open_until">熔断至 {{ time(process.circuit_open_until) }}</p>
             </article>
           </section>
+          <section v-if="data.worker_scheduler" class="topology-scheduler">
+            <header>
+              <div><p>统一调度</p><h3>队列优先级与背压</h3></div>
+              <span :data-node-state="data.worker_scheduler.status">{{ data.worker_scheduler.status === 'running' ? '运行中' : '未运行' }}</span>
+            </header>
+            <dl class="topology-scheduler-metrics">
+              <div><dt>活动任务</dt><dd>{{ data.worker_scheduler.active_runs }} / {{ data.worker_scheduler.max_concurrency }}</dd></div>
+              <div><dt>等待调度</dt><dd>{{ data.worker_scheduler.due_queue_count }}</dd></div>
+              <div><dt>最长延迟</dt><dd>{{ data.worker_scheduler.max_queue_delay_ms }} ms</dd></div>
+              <div><dt>一分钟失败率</dt><dd>{{ data.worker_scheduler.failure_rate_percent }}%</dd></div>
+            </dl>
+            <div class="topology-queue-list">
+              <article v-for="queue in visibleQueues" :key="queue.name">
+                <span><b>{{ queueLabels[queue.name] ?? '后台任务' }}</b><small>优先级 {{ queue.priority }}</small></span>
+                <span><b>{{ queue.running ? '处理中' : queue.queue_delay_ms > 0 ? '等待中' : '空闲' }}</b><small>延迟 {{ queue.queue_delay_ms }} ms</small></span>
+              </article>
+            </div>
+            <small>观测 {{ time(data.worker_scheduler.observed_at) }}</small>
+          </section>
         </section>
 
         <aside class="topology-panel topology-evidence">
@@ -285,6 +357,15 @@ onMounted(load);
         </aside>
       </div>
 
+      <section v-if="data.alerts?.length" class="topology-panel topology-alerts">
+        <header><div><p>需要处理</p><h3>运行告警</h3></div><span>{{ data.alerts.length }} 项</span></header>
+        <article v-for="item in data.alerts" :key="item.code" :data-severity="item.severity">
+          <strong>{{ alertLabels[item.code] ?? '运行状态异常' }}</strong>
+          <p>{{ item.actionHint }}</p>
+          <details><summary>技术详情</summary><code>{{ item.code }}</code></details>
+        </article>
+      </section>
+
       <section class="topology-panel topology-blockers">
         <header>
           <div>
@@ -296,8 +377,9 @@ onMounted(load);
         <div v-if="data.blockers.length">
           <article v-for="(item, index) in data.blockers" :key="item.code">
             <span>{{ String(index + 1).padStart(2, "0") }}</span
-            ><code>{{ item.code }}</code>
+            ><strong>{{ blockerLabels[item.code] ?? "运行条件未满足" }}</strong>
             <p>{{ item.actionHint }}</p>
+            <details><summary>技术详情</summary><code>{{ item.code }}</code></details>
           </article>
         </div>
         <div v-else class="topology-clear">

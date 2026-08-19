@@ -74,7 +74,9 @@ const required = [
   'scripts/verify-baota-deployment.mjs', 'verification/baota-production-evidence.schema.json',
   'verification/modules/M07-03.json', 'docs/architecture/m07-03-baota-deployment.md',
   'docs/runbooks/m07-03-baota-deployment.md',
-  'docs/runbooks/m06-04-security-operations.md'
+  'docs/runbooks/m06-04-security-operations.md',
+  'apps/worker/src/queue-scheduler.ts',
+  'apps/worker/src/worker-scheduler-state.ts'
 ];
 
 for (const file of required) await access(resolve(process.cwd(), file));
@@ -91,6 +93,20 @@ const [readme, blueprint, deployment] = await Promise.all([
   readFile(resolve(process.cwd(), 'infra/baota/README.md'), 'utf8'),
 ]);
 const deploymentTruth = `${readme}\n${blueprint}\n${deployment}`;
+const [envExample, configSchema] = await Promise.all([
+  readFile(resolve(process.cwd(), 'config/env.example'), 'utf8'),
+  readFile(resolve(process.cwd(), 'config/schema.json'), 'utf8'),
+]);
+const runtimeTruth = `${openapi}\n${JSON.stringify(featureMap)}\n${deploymentTruth}\n${envExample}\n${configSchema}`;
+for (const token of [
+  '/api/v1/health/available',
+  'WORKER_MAX_CONCURRENCY',
+  'WORKER_SCHEDULER_STATE_FILE',
+  'WORKER_SCHEDULER_STALE_AFTER_SECONDS',
+]) {
+  if (!runtimeTruth.includes(token))
+    throw new Error(`Worker runtime contract is missing from canonical docs: ${token}`);
+}
 for (const path of ['/www/wwwroot/ai选品/frontend', '/www/wwwroot/ai选品/backend', '/www/wwwroot/ai选品/python']) {
   if (!deploymentTruth.includes(path)) throw new Error(`Fixed BaoTa path is missing from canonical docs: ${path}`);
 }

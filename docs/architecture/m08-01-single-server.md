@@ -2,7 +2,7 @@
 
 ## 范围
 
-ScoutOps 长期只运行在当前惠州单台服务器上，所有生产对象继续由宝塔管理。M08-01 提供当前 Node API 的稳定身份、心跳、失败关闭健康接口、受 `platform:operate` 保护的审计运维视图，以及宝塔单上游 Nginx 的生产证据门。
+ScoutOps 长期只运行在当前惠州单台服务器上，所有生产对象继续由宝塔管理。M08-01 提供当前 Node API 的稳定身份、API 与 Worker 分层健康、统一 Worker 队列调度、受 `platform:operate` 保护的审计运维视图，以及宝塔单上游 Nginx 的生产证据门。
 
 本模块不启用负载均衡、不创建备用服务器、不把同机候选发布槽当成第二节点，也不声明多节点、高可用或 10,000 用户能力。`capacity_claim` 固定为 `unverified`。
 
@@ -14,6 +14,9 @@ ScoutOps 长期只运行在当前惠州单台服务器上，所有生产对象�
 4. 公开健康接口只返回状态和计数，不返回节点、主机、构建或内部端口。
 5. `GET /api/v1/platform/operations/topology` 要求 `platform:operate`，读取同步写入 `runtime_topology_views` 和平台审计。
 6. API、Worker、Crawler、MySQL、Redis 与文件目录保持本机私有；公网只通过宝塔网站 Nginx 进入。
+7. `/health/live`、`/health/ready`、`/health/available` 分别表示进程存活、同步依赖就绪、后台业务可处理；三者不得相互替代。
+8. Worker 的所有处理器注册到同一个优先级调度器。调度器执行全局并发配额，积压超过可用槽位时形成背压，并将等待数、最长延迟、一分钟失败率和队列摘要原子写入受限运行目录。
+9. Worker 调度心跳过期或停止时业务可用性失败关闭；连续重启、背压和最近失败进入运维告警，但不会把任务载荷、Cookie、Token 或原始错误对象写入状态文件。
 
 ## 数据与兼容
 
@@ -22,6 +25,8 @@ ScoutOps 长期只运行在当前惠州单台服务器上，所有生产对象�
 ## 失败和回滚
 
 - Node API 心跳停止：健康门变为 stale/503，在宝塔检查项目和日志后恢复。
+- Worker 调度心跳过期：`/health/available` 返回 503；在宝塔检查统一 Node 后端和 `/www/wwwroot/ai选品/runtime/worker-scheduler.json`，不得另起 Worker 绕过并发门。
+- 队列背压：先按优先级下钻失败队列和依赖；只有确认 CPU、内存、磁盘及站点配额允许后才调整 `WORKER_MAX_CONCURRENCY`。
 - 主机身份错误：健康门变为 blocked，修复宝塔受限环境中的稳定 ID 后重启 Node API。
 - Nginx/TLS 失败：生产证据不得签发；只通过宝塔修复网站配置。
 - 应用回滚：在宝塔切回已验证版本并保留心跳、审计和证据记录；数据库 down 迁移仅在确认没有下游依赖且完成备份后执行。

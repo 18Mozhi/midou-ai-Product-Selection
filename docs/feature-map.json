@@ -1895,17 +1895,20 @@
         "../apps/api/src/runtime-topology-service.ts",
         "../apps/api/src/mysql-runtime-topology-repository.ts",
         "../apps/api/src/runtime-topology-routes.ts",
+        "../apps/worker/src/queue-scheduler.ts",
+        "../apps/worker/src/worker-scheduler-state.ts",
         "../apps/web/src/components/RuntimeTopologyCenter.vue",
         "../infra/baota/single-server-manifest.json",
         "../scripts/verify-single-server-production.mjs"
       ],
       "routes": [
         "/platform-admin/topology",
+        "/api/v1/health/available",
         "/api/v1/health/nodes",
         "/api/v1/platform/operations/topology"
       ],
-      "scope": "M08-01 configured single-host API heartbeat, BaoTa single-upstream Nginx evidence, sanitized health and audited operations view",
-      "truthBoundary": "ready requires one fresh ready heartbeat from the configured API node on the configured current BaoTa host plus current TLS and single-upstream evidence; no load-balancing, backup-server, multi-node or capacity claim is permitted",
+      "scope": "M08-01 configured single-host API heartbeat, unified priority Worker scheduler with bounded concurrency and backpressure, BaoTa single-upstream Nginx evidence, sanitized health and audited operations view",
+      "truthBoundary": "live proves only the API process, ready proves synchronous dependencies, available additionally requires a fresh running Worker scheduler; runtime status exposes queue delay, recent failure rate, backpressure, heartbeat expiry and restart-loop alerts without task payloads or secrets",
       "permission": "public health returns sanitized counts; the operations view requires platform:operate and records request_id trace_id read audit",
       "configuration": [
         "RUNTIME_TOPOLOGY_MODE",
@@ -1915,6 +1918,10 @@
         "RUNTIME_NODE_ZONE",
         "RUNTIME_NODE_HEARTBEAT_MS",
         "RUNTIME_NODE_STALE_AFTER_SECONDS",
+        "WORKER_MAX_CONCURRENCY",
+        "WORKER_SCHEDULER_TICK_MS",
+        "WORKER_SCHEDULER_STATE_FILE",
+        "WORKER_SCHEDULER_STALE_AFTER_SECONDS",
         "SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE"
       ],
       "runtimeBoundary": "the current Huizhou BaoTa host is the permanent S0 production topology; all backend ports remain private and no load balancer, backup server, panel-external service, multi-node or 10000-user claim is allowed",

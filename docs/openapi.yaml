@@ -58,6 +58,7 @@ x-scoutops-baota-s0:
   productionEvidence: .artifacts/verification/baota-production-evidence.json
   livenessPath: /api/v1/health/live
   readinessPath: /api/v1/health/ready
+  businessAvailabilityPath: /api/v1/health/available
   asyncRuntimeStatus: structured Worker heartbeat inside the unified BaoTa Node backend
   completionGate: build, startup, health, permissions and real browser functionality; excludes disk and capacity
 x-scoutops-backup-recovery:
@@ -140,6 +141,22 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+  /health/available:
+    get:
+      summary: Business processing availability
+      description: Separates process liveness and synchronous dependency readiness from the ability of the supervised Worker scheduler to accept and process background business tasks.
+      security: []
+      responses:
+        "200":
+          description: Business processing is available or degraded with explicit service categories
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/HealthBusinessEnvelope" }
+        "503":
+          description: Runtime topology or the Worker scheduler heartbeat is unavailable
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/HealthBusinessEnvelope" }
   /health/version:
     get:
       summary: Sanitized build and configuration identity
@@ -6207,7 +6224,11 @@ components:
               single_host,
               stale_node_count,
               nodes,
+              processes,
+              worker_scheduler,
+              supervisor_pid,
               blockers,
+              alerts,
               load_balancing_enabled,
               backup_server_used,
               multi_node_claim,
@@ -6251,6 +6272,22 @@ components:
                   build_sha: { type: string }
                   version: { type: string }
                   last_heartbeat_at: { type: string, format: date-time }
+            processes:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: [name, status, pid, restart_count, circuit_open_until]
+                properties:
+                  name: { type: string, enum: [api, worker] }
+                  status: { type: string }
+                  pid: { type: integer, nullable: true }
+                  restart_count: { type: integer, minimum: 0 }
+                  circuit_open_until: { type: string, format: date-time, nullable: true }
+            worker_scheduler:
+              nullable: true
+              allOf: [{ $ref: "#/components/schemas/WorkerSchedulerSnapshot" }]
+            supervisor_pid: { type: integer, nullable: true }
             blockers:
               type: array
               items:
@@ -6259,6 +6296,16 @@ components:
                 required: [code, actionHint]
                 properties:
                   code: { type: string }
+                  actionHint: { type: string }
+            alerts:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: [code, severity, actionHint]
+                properties:
+                  code: { type: string }
+                  severity: { type: string, enum: [warning, critical] }
                   actionHint: { type: string }
             load_balancing_enabled: { type: boolean, enum: [false] }
             backup_server_used: { type: boolean, enum: [false] }
@@ -9392,6 +9439,44 @@ components:
             observed_at: { type: string, format: date-time }
         request_id: { type: string }
         trace_id: { type: string }
+    HealthBusinessEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          additionalProperties: false
+          required: [status, services, observed_at]
+          properties:
+            status: { type: string, enum: [available, degraded, unavailable] }
+            services:
+              type: object
+              additionalProperties: false
+              required: [api, worker]
+              properties:
+                api: { type: string, enum: [available, unavailable] }
+                worker: { type: string, enum: [available, unavailable, not_observed] }
+            observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
+    WorkerSchedulerSnapshot:
+      type: object
+      additionalProperties: true
+      required:
+        [status, max_concurrency, active_runs, due_queue_count, backpressure, max_queue_delay_ms, completed_last_minute, failed_last_minute, failure_rate_percent, queues, observed_at]
+      properties:
+        status: { type: string, enum: [running, stopping, stopped] }
+        max_concurrency: { type: integer, minimum: 1 }
+        active_runs: { type: integer, minimum: 0 }
+        due_queue_count: { type: integer, minimum: 0 }
+        backpressure: { type: boolean }
+        max_queue_delay_ms: { type: integer, minimum: 0 }
+        completed_last_minute: { type: integer, minimum: 0 }
+        failed_last_minute: { type: integer, minimum: 0 }
+        failure_rate_percent: { type: number, minimum: 0, maximum: 100 }
+        queues: { type: array, items: { type: object } }
+        observed_at: { type: string, format: date-time }
     VerificationRun:
       type: object
       required: [run_id, trace_id, scope, scope_id, status, started_at]

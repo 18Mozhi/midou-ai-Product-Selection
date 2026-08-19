@@ -155,6 +155,16 @@ const runtimeTopologyService = new RuntimeTopologyService(
     expectedNodeId: config.runtimeTopology.nodeId,
     expectedHostId: config.runtimeTopology.hostId,
     staleAfterMs: config.runtimeTopology.staleAfterMs,
+    restartAlertThreshold: config.runtimeTopology.restartAlertThreshold,
+    workerSchedulerStaleAfterMs: config.runtime.workerSchedulerStaleAfterMs,
+    ...(config.runtime.workerSchedulerStateFile
+      ? {
+          workerSchedulerSnapshot: async () =>
+            JSON.parse(
+              await readFile(config.runtime.workerSchedulerStateFile, "utf8"),
+            ),
+        }
+      : {}),
     ...(config.runtimeTopology.supervisorStateFile
       ? {
           supervisorSnapshot: async () =>

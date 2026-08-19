@@ -37,6 +37,8 @@ import { ReportExportWorker } from "./report-export-worker.js";
 import { WebhookDeliveryWorker } from "./webhook-delivery-worker.js";
 import { MySqlAutomaticSourceScheduler } from "./automatic-source-scheduler.js";
 import { CoreCollectionProjectionWorker } from "./core-collection-projection-worker.js";
+import { QueueScheduler } from "./queue-scheduler.js";
+import { WorkerSchedulerStateWriter } from "./worker-scheduler-state.js";
 
 const config = loadRuntimeConfig(process.env, "worker");
 const pool = createDatabasePool(config);
@@ -158,8 +160,27 @@ let stopping = false,
   webhookPolling = false,
   automaticSourcePolling = false;
 let coreProjectionPolling = false;
+let scheduler: QueueScheduler | null = null;
+const schedulerStateWriter = new WorkerSchedulerStateWriter(
+  config.runtime.workerSchedulerStateFile,
+);
 
-const heartbeat = () =>
+const persistSchedulerState = async () => {
+  if (!scheduler) return;
+  try {
+    await schedulerStateWriter.write(scheduler.snapshot());
+  } catch {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        status: "scheduler_state_write_failed",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+  }
+};
+
+const heartbeat = () => {
   console.log(
     JSON.stringify({
       service: "product-scout-worker",
@@ -179,10 +200,13 @@ const heartbeat = () =>
       report_exports: "registered",
       core_collection_projection: "registered",
       webhook_deliveries: "registered",
+      scheduler: scheduler?.snapshot() ?? null,
       config_fingerprint: config.configFingerprint,
       observed_at: new Date().toISOString(),
     }),
   );
+  void persistSchedulerState();
+};
 const pollAuth = async () => {
   if (stopping || authPolling || !config.security.credentialsMasterKey) return;
   authPolling = true;
@@ -202,7 +226,7 @@ const pollAuth = async () => {
           observed_at: new Date().toISOString(),
         }),
       );
-  } catch {
+  } catch (error) {
     console.error(
       JSON.stringify({
         service: "product-scout-worker",
@@ -211,6 +235,7 @@ const pollAuth = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     authPolling = false;
   }
@@ -247,6 +272,7 @@ const pollCollection = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     collectionPolling = false;
   }
@@ -275,6 +301,7 @@ const pollTrends = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     trendPolling = false;
   }
@@ -303,6 +330,7 @@ const pollOpportunities = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     opportunityPolling = false;
   }
@@ -331,6 +359,7 @@ const pollScoring = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     scoringPolling = false;
   }
@@ -359,6 +388,7 @@ const pollProfit = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     profitPolling = false;
   }
@@ -387,6 +417,7 @@ const pollCompetitors = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     competitorPolling = false;
   }
@@ -415,6 +446,7 @@ const pollSourcing = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     sourcingPolling = false;
   }
@@ -433,7 +465,7 @@ const pollAi = async () => {
           observed_at: new Date().toISOString(),
         }),
       );
-  } catch {
+  } catch (error) {
     console.error(
       JSON.stringify({
         service: "product-scout-worker",
@@ -442,6 +474,7 @@ const pollAi = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     aiPolling = false;
   }
@@ -474,6 +507,7 @@ const pollBusinessTasks = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     businessTaskPolling = false;
   }
@@ -502,6 +536,7 @@ const pollApprovals = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     approvalPolling = false;
   }
@@ -530,6 +565,7 @@ const pollNotifications = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     notificationPolling = false;
   }
@@ -558,6 +594,7 @@ const pollAutomations = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     automationPolling = false;
   }
@@ -586,105 +623,123 @@ const pollReports = async () => {
         observed_at: new Date().toISOString(),
       }),
     );
+    throw error;
   } finally {
     reportPolling = false;
   }
 };
-const pollWebhooks=async()=>{if(stopping||webhookPolling||!config.security.credentialsMasterKey)return;webhookPolling=true;try{await webhookDeliveries.runOnce();}catch(error){console.error(JSON.stringify({service:"product-scout-worker",queue:"webhook_deliveries",status:"dependency_failed",error:error instanceof Error?error.message:"unknown",observed_at:new Date().toISOString()}));}finally{webhookPolling=false;}};
-const pollAutomaticSources=async()=>{if(stopping||automaticSourcePolling)return;automaticSourcePolling=true;try{const result=await automaticSourceScheduler.processOnce();if(result.status!=='idle')console.log(JSON.stringify({service:'product-scout-worker',queue:'automatic_hotspot_sources',...result,observed_at:new Date().toISOString()}));}catch(error){console.error(JSON.stringify({service:'product-scout-worker',queue:'automatic_hotspot_sources',status:'dependency_failed',error:error instanceof Error?error.message:'unknown',observed_at:new Date().toISOString()}));}finally{automaticSourcePolling=false;}};
-const pollCoreProjection=async()=>{if(stopping||coreProjectionPolling)return;coreProjectionPolling=true;try{const result=await coreCollectionProjection.processOnce();if(result.status!=='idle')console.log(JSON.stringify({service:'product-scout-worker',queue:'core_collection_projection',...result,observed_at:new Date().toISOString()}));}catch(error){console.error(JSON.stringify({service:'product-scout-worker',queue:'core_collection_projection',status:'dependency_failed',error:error instanceof Error?error.message:'unknown',observed_at:new Date().toISOString()}));}finally{coreProjectionPolling=false;}};
+const pollWebhooks = async () => {
+  if (stopping || webhookPolling || !config.security.credentialsMasterKey) return;
+  webhookPolling = true;
+  try {
+    await webhookDeliveries.runOnce();
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "webhook_deliveries",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+    throw error;
+  } finally {
+    webhookPolling = false;
+  }
+};
+const pollAutomaticSources = async () => {
+  if (stopping || automaticSourcePolling) return;
+  automaticSourcePolling = true;
+  try {
+    const result = await automaticSourceScheduler.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "automatic_hotspot_sources",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "automatic_hotspot_sources",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+    throw error;
+  } finally {
+    automaticSourcePolling = false;
+  }
+};
+const pollCoreProjection = async () => {
+  if (stopping || coreProjectionPolling) return;
+  coreProjectionPolling = true;
+  try {
+    const result = await coreCollectionProjection.processOnce();
+    if (result.status !== "idle")
+      console.log(
+        JSON.stringify({
+          service: "product-scout-worker",
+          queue: "core_collection_projection",
+          ...result,
+          observed_at: new Date().toISOString(),
+        }),
+      );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        service: "product-scout-worker",
+        queue: "core_collection_projection",
+        status: "dependency_failed",
+        error: error instanceof Error ? error.message : "unknown",
+        observed_at: new Date().toISOString(),
+      }),
+    );
+    throw error;
+  } finally {
+    coreProjectionPolling = false;
+  }
+};
 
+// One scheduler owns priority, global concurrency and backpressure for every queue.
+scheduler = new QueueScheduler({
+  maxConcurrency: config.runtime.workerMaxConcurrency,
+  tickMs: config.runtime.workerSchedulerTickMs,
+})
+  .register({ name: "collection_tasks", priority: 100, intervalMs: config.collectionTasks.pollMs, run: pollCollection })
+  .register({ name: "auth_delivery", priority: 95, intervalMs: config.auth.outboxPollMs, run: pollAuth })
+  .register({ name: "business_task_projection", priority: 90, intervalMs: config.businessTasks.pollMs, run: pollBusinessTasks })
+  .register({ name: "approval_escalation", priority: 85, intervalMs: config.approvals.escalationPollMs, run: pollApprovals })
+  .register({ name: "notification_outbox", priority: 80, intervalMs: config.notifications.outboxPollMs, run: pollNotifications })
+  .register({ name: "webhook_deliveries", priority: 80, intervalMs: config.openPlatform.webhookPollMs, run: pollWebhooks })
+  .register({ name: "opportunity_refresh", priority: 70, intervalMs: config.opportunities.refreshPollMs, run: pollOpportunities })
+  .register({ name: "opportunity_scoring", priority: 65, intervalMs: config.scoring.pollMs, run: pollScoring })
+  .register({ name: "opportunity_profit", priority: 65, intervalMs: config.profit.pollMs, run: pollProfit })
+  .register({ name: "competitor_monitor", priority: 60, intervalMs: config.competitorMonitor.pollMs, run: pollCompetitors })
+  .register({ name: "sourcing_projection", priority: 60, intervalMs: config.sourcing.pollMs, run: pollSourcing })
+  .register({ name: "trend_projection", priority: 55, intervalMs: config.trends.projectionPollMs, run: pollTrends })
+  .register({ name: "ai_analysis", priority: 50, intervalMs: config.ai.pollMs, run: pollAi })
+  .register({ name: "report_exports", priority: 45, intervalMs: config.reports.pollMs, run: pollReports })
+  .register({ name: "automation_rules", priority: 40, intervalMs: config.automations.pollMs, run: pollAutomations })
+  .register({ name: "core_collection_projection", priority: 35, intervalMs: 2000, run: pollCoreProjection })
+  .register({ name: "automatic_hotspot_sources", priority: 30, intervalMs: config.automaticSources.pollMs, run: pollAutomaticSources });
+
+scheduler.start();
 heartbeat();
 const heartbeatTimer = setInterval(heartbeat, config.runtime.workerHeartbeatMs);
-const authTimer = setInterval(() => void pollAuth(), config.auth.outboxPollMs);
-const collectionTimer = setInterval(
-  () => void pollCollection(),
-  config.collectionTasks.pollMs,
-);
-const trendTimer = setInterval(
-  () => void pollTrends(),
-  config.trends.projectionPollMs,
-);
-const opportunityTimer = setInterval(
-  () => void pollOpportunities(),
-  config.opportunities.refreshPollMs,
-);
-const scoringTimer = setInterval(
-  () => void pollScoring(),
-  config.scoring.pollMs,
-);
-const profitTimer = setInterval(() => void pollProfit(), config.profit.pollMs);
-const competitorTimer = setInterval(
-  () => void pollCompetitors(),
-  config.competitorMonitor.pollMs,
-);
-const sourcingTimer = setInterval(
-  () => void pollSourcing(),
-  config.sourcing.pollMs,
-);
-const aiTimer = setInterval(() => void pollAi(), config.ai.pollMs);
-const businessTaskTimer = setInterval(
-  () => void pollBusinessTasks(),
-  config.businessTasks.pollMs,
-);
-const approvalTimer = setInterval(
-  () => void pollApprovals(),
-  config.approvals.escalationPollMs,
-);
-const notificationTimer = setInterval(
-  () => void pollNotifications(),
-  config.notifications.outboxPollMs,
-);
-const automationTimer = setInterval(
-  () => void pollAutomations(),
-  config.automations.pollMs,
-);
-const reportTimer = setInterval(
-  () => void pollReports(),
-  config.reports.pollMs,
-);
-const webhookTimer=setInterval(()=>void pollWebhooks(),config.openPlatform.webhookPollMs);
-const automaticSourceTimer=setInterval(()=>void pollAutomaticSources(),config.automaticSources.pollMs);
-const coreProjectionTimer=setInterval(()=>void pollCoreProjection(),2000);
-void pollAuth();
-void pollCollection();
-void pollTrends();
-void pollOpportunities();
-void pollScoring();
-void pollProfit();
-void pollCompetitors();
-void pollSourcing();
-void pollAi();
-void pollBusinessTasks();
-void pollApprovals();
-void pollNotifications();
-void pollAutomations();
-void pollReports();
-void pollWebhooks();
-void pollAutomaticSources();
-void pollCoreProjection();
 
 const stop = async (signal: string) => {
   if (stopping) return;
   stopping = true;
   clearInterval(heartbeatTimer);
-  clearInterval(authTimer);
-  clearInterval(collectionTimer);
-  clearInterval(trendTimer);
-  clearInterval(opportunityTimer);
-  clearInterval(scoringTimer);
-  clearInterval(profitTimer);
-  clearInterval(competitorTimer);
-  clearInterval(sourcingTimer);
-  clearInterval(aiTimer);
-  clearInterval(businessTaskTimer);
-  clearInterval(approvalTimer);
-  clearInterval(notificationTimer);
-  clearInterval(automationTimer);
-  clearInterval(reportTimer);
-  clearInterval(webhookTimer);
-  clearInterval(automaticSourceTimer);
-  clearInterval(coreProjectionTimer);
+  await scheduler?.stop();
+  await persistSchedulerState();
   while (
     authPolling ||
     collectionPolling ||
