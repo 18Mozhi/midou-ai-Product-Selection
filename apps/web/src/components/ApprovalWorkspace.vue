@@ -228,10 +228,10 @@ onMounted(load);
   <section class="approval-workspace">
     <header>
       <div>
-        <p>WORK MANAGEMENT</p>
+        <p>工作管理</p>
         <h2>审批中心</h2>
         <span
-          >模板版本、节点时限、人工原因与升级记录均来自当前工作区 API。</span
+          >模板版本、节点时限、人工原因与升级记录均来自当前工作区后端。</span
         >
       </div>
       <div>
@@ -329,7 +329,14 @@ onMounted(load);
       </button>
     </div>
     <aside v-if="selected" class="approval-detail">
-      <button class="close" aria-label="关闭审批详情" title="关闭审批详情" @click="selected = null">×</button>
+      <button
+        class="close"
+        aria-label="关闭审批详情"
+        title="关闭审批详情"
+        @click="selected = null"
+      >
+        ×
+      </button>
       <p>{{ selected.template_name }} / v{{ selected.version }}</p>
       <h3>{{ selected.title }}</h3>
       <small>{{ selected.resource_type }} · {{ selected.resource_id }}</small>
@@ -394,18 +401,18 @@ onMounted(load);
             required
             maxlength="120" /></label
         ><label
-          >审批人 UUID<input
+          >审批人账号编号<input
             v-model="templateForm.approver_id"
             required /></label
         ><label
-          >SLA（分钟）<input
+          >处理时限（分钟）<input
             v-model.number="templateForm.sla_minutes"
             type="number"
             min="1"
             max="43200"
             required /></label
         ><label
-          >超时接收人 UUID<input
+          >超时接收人账号编号<input
             v-model="templateForm.escalation_assignee_id"
             required
         /></label>
@@ -444,7 +451,7 @@ onMounted(load);
             <option value="opportunity_decision">机会决策</option>
           </select></label
         ><label
-          >资源 UUID<input v-model="requestForm.resource_id" required /></label
+          >资源编号<input v-model="requestForm.resource_id" required /></label
         ><label
           >审批标题<input v-model="requestForm.title" required maxlength="200"
         /></label>

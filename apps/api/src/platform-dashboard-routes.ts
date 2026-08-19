@@ -144,4 +144,70 @@ export function registerPlatformDashboardRoutes(
       return `\ufeff${csv}`;
     },
   );
+  app.post(
+    "/api/v1/platform/management/messages",
+    async (r: FastifyRequest, reply) => {
+      if (r.headers.origin !== o.webOrigin)
+        throw new ApiError(
+          403,
+          "origin_forbidden",
+          "请求来源不允许。",
+          "从 ai选品 页面重试。",
+        );
+      const c = await context(r);
+      reply.code(201);
+      return {
+        data: await o.service.createMessage(r.body, {
+          ...c,
+          idempotencyKey: requireIdempotencyKey(r),
+        }),
+        request_id: c.requestId,
+        trace_id: c.traceId,
+      };
+    },
+  );
+  app.patch(
+    "/api/v1/platform/management/messages/:messageId",
+    async (r: FastifyRequest) => {
+      if (r.headers.origin !== o.webOrigin)
+        throw new ApiError(
+          403,
+          "origin_forbidden",
+          "请求来源不允许。",
+          "从 ai选品 页面重试。",
+        );
+      const c = await context(r);
+      return {
+        data: await o.service.updateMessage(
+          (r.params as any).messageId,
+          r.body,
+          { ...c, idempotencyKey: requireIdempotencyKey(r) },
+        ),
+        request_id: c.requestId,
+        trace_id: c.traceId,
+      };
+    },
+  );
+  app.post(
+    "/api/v1/platform/management/messages/:messageId/actions",
+    async (r: FastifyRequest) => {
+      if (r.headers.origin !== o.webOrigin)
+        throw new ApiError(
+          403,
+          "origin_forbidden",
+          "请求来源不允许。",
+          "从 ai选品 页面重试。",
+        );
+      const c = await context(r);
+      return {
+        data: await o.service.messageAction(
+          (r.params as any).messageId,
+          r.body,
+          { ...c, idempotencyKey: requireIdempotencyKey(r) },
+        ),
+        request_id: c.requestId,
+        trace_id: c.traceId,
+      };
+    },
+  );
 }

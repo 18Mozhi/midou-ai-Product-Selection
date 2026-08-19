@@ -105,6 +105,7 @@ export function validateAutomationRule(v: any, defaultRateLimit = 20) {
 export interface AutomationRepository {
   list(i: any): Promise<any>;
   create(i: any): Promise<any>;
+  update(i: any): Promise<any>;
   detail(i: any): Promise<any>;
   changeStatus(i: any): Promise<any>;
 }
@@ -125,6 +126,23 @@ export class AutomationService {
       id: randomUUID(),
       value: validateAutomationRule(i.value, this.defaultRateLimit),
       route: "POST:/api/v1/automations",
+    });
+  }
+  update(i: any) {
+    return this.repo.update({
+      ...i,
+      ruleId: uuid(i.ruleId, "rule_id"),
+      value: {
+        ...validateAutomationRule(i.value, this.defaultRateLimit),
+        expected_version: integer(
+          i.value?.expected_version,
+          "expected_version",
+          1,
+          2147483647,
+        ),
+        reason: text(i.value?.reason, "reason", 1000),
+      },
+      route: "PATCH:/api/v1/automations/:id",
     });
   }
   changeStatus(i: any) {

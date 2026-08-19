@@ -161,7 +161,8 @@ async function addComment() {
   } catch {}
 }
 onMounted(() => {
-  showCreate.value = new URLSearchParams(window.location.search).get("create") === "1";
+  showCreate.value =
+    new URLSearchParams(window.location.search).get("create") === "1";
   void load();
 });
 </script>
@@ -169,9 +170,9 @@ onMounted(() => {
   <section class="task-workspace">
     <div class="task-title">
       <div>
-        <p>WORK MANAGEMENT</p>
+        <p>工作管理</p>
         <h2>{{ mode === "today" ? "今日工作" : "任务中心" }}</h2>
-        <span>任务事实、负责人、期限、评论与转交均来自当前工作区 API。</span>
+        <span>任务事实、负责人、期限、评论与转交均来自当前工作区后端。</span>
       </div>
       <button @click="showCreate = true">＋ 新建任务</button>
     </div>
@@ -287,7 +288,7 @@ onMounted(() => {
           <dd>{{ label(selected.status) }}</dd>
         </div>
         <div>
-          <dt>SLA</dt>
+          <dt>处理时限</dt>
           <dd>
             {{ label(selected.sla_status) }} · {{ time(selected.due_at) }}
           </dd>

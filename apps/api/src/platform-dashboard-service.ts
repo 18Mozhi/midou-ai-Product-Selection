@@ -54,6 +54,9 @@ export interface PlatformDashboardRepository {
     traceId: string;
     now: Date;
   }): Promise<unknown>;
+  createMessage(input: any): Promise<unknown>;
+  updateMessage(input: any): Promise<unknown>;
+  messageAction(input: any): Promise<unknown>;
 }
 export class PlatformDashboardError extends Error {
   constructor(
@@ -286,6 +289,172 @@ export class PlatformDashboardService {
       reason,
       route: `/platform/management/email/${source}/${deliveryId}/actions`,
       ...context,
+      now: this.now(),
+    });
+  }
+  private messageValue(value: any) {
+    const kind = String(value?.kind ?? "") as "notification" | "email";
+    const title = String(value?.title ?? "").trim();
+    const body = String(value?.body ?? "").trim();
+    const category = String(value?.category ?? "system");
+    const severity = String(value?.severity ?? "info");
+    const audienceType = String(value?.audience_type ?? "all_users");
+    const organizationId = value?.organization_id
+      ? String(value.organization_id)
+      : null;
+    const userId = value?.user_id ? String(value.user_id) : null;
+    const inAppEnabled = Boolean(value?.in_app_enabled);
+    const emailEnabled = Boolean(value?.email_enabled);
+    if (!["notification", "email"].includes(kind))
+      throw new PlatformDashboardError(
+        "platform_message_kind_invalid",
+        400,
+        "选择站内通知或邮件。",
+      );
+    if (title.length < 2 || title.length > 200)
+      throw new PlatformDashboardError(
+        "platform_message_title_invalid",
+        400,
+        "标题需为 2–200 个字。",
+      );
+    if (body.length < 2 || body.length > 2000)
+      throw new PlatformDashboardError(
+        "platform_message_body_invalid",
+        400,
+        "正文需为 2–2000 个字。",
+      );
+    if (!["task", "approval", "competitor", "system"].includes(category))
+      throw new PlatformDashboardError(
+        "platform_message_category_invalid",
+        400,
+        "选择有效的通知类型。",
+      );
+    if (!["info", "warning", "critical"].includes(severity))
+      throw new PlatformDashboardError(
+        "platform_message_severity_invalid",
+        400,
+        "选择普通、重要或严重级别。",
+      );
+    if (!["all_users", "organization", "user"].includes(audienceType))
+      throw new PlatformDashboardError(
+        "platform_message_audience_invalid",
+        400,
+        "选择全部用户、指定组织或指定用户。",
+      );
+    if (
+      audienceType === "organization" &&
+      !/^[0-9a-f-]{36}$/i.test(organizationId ?? "")
+    )
+      throw new PlatformDashboardError(
+        "platform_message_organization_invalid",
+        400,
+        "选择有效组织。",
+      );
+    if (audienceType === "user" && !/^[0-9a-f-]{36}$/i.test(userId ?? ""))
+      throw new PlatformDashboardError(
+        "platform_message_user_invalid",
+        400,
+        "选择有效用户。",
+      );
+    if (!inAppEnabled && !emailEnabled)
+      throw new PlatformDashboardError(
+        "platform_message_channel_invalid",
+        400,
+        "至少选择站内通知或邮件一种发送方式。",
+      );
+    if (kind === "email" && !emailEnabled)
+      throw new PlatformDashboardError(
+        "platform_message_email_channel_required",
+        400,
+        "邮件草稿必须启用邮件发送。",
+      );
+    return {
+      kind,
+      title,
+      body,
+      category,
+      severity,
+      audience_type: audienceType,
+      organization_id: audienceType === "organization" ? organizationId : null,
+      user_id: audienceType === "user" ? userId : null,
+      in_app_enabled: inAppEnabled,
+      email_enabled: emailEnabled,
+    };
+  }
+  createMessage(value: any, context: any) {
+    return this.repository.createMessage({
+      ...context,
+      value: this.messageValue(value),
+      route: "/platform/management/messages",
+      now: this.now(),
+    });
+  }
+  updateMessage(messageId: string, value: any, context: any) {
+    if (!/^[0-9a-f-]{36}$/i.test(messageId))
+      throw new PlatformDashboardError(
+        "platform_message_id_invalid",
+        400,
+        "刷新草稿列表后重试。",
+      );
+    const expectedVersion = Number(value?.expected_version);
+    const reason = String(value?.reason ?? "").trim();
+    if (!Number.isInteger(expectedVersion) || expectedVersion < 1)
+      throw new PlatformDashboardError(
+        "platform_message_version_invalid",
+        400,
+        "刷新草稿版本后重试。",
+      );
+    if (reason.length < 2 || reason.length > 300)
+      throw new PlatformDashboardError(
+        "reason_invalid",
+        400,
+        "填写 2–300 字的修改原因。",
+      );
+    return this.repository.updateMessage({
+      ...context,
+      messageId,
+      expectedVersion,
+      reason,
+      value: this.messageValue(value),
+      route: `/platform/management/messages/${messageId}`,
+      now: this.now(),
+    });
+  }
+  messageAction(messageId: string, value: any, context: any) {
+    if (!/^[0-9a-f-]{36}$/i.test(messageId))
+      throw new PlatformDashboardError(
+        "platform_message_id_invalid",
+        400,
+        "刷新草稿列表后重试。",
+      );
+    const action = String(value?.action ?? "");
+    const expectedVersion = Number(value?.expected_version);
+    const reason = String(value?.reason ?? "").trim();
+    if (!["publish", "cancel"].includes(action))
+      throw new PlatformDashboardError(
+        "platform_message_action_invalid",
+        400,
+        "选择发布或取消草稿。",
+      );
+    if (!Number.isInteger(expectedVersion) || expectedVersion < 1)
+      throw new PlatformDashboardError(
+        "platform_message_version_invalid",
+        400,
+        "刷新草稿版本后重试。",
+      );
+    if (reason.length < 2 || reason.length > 300)
+      throw new PlatformDashboardError(
+        "reason_invalid",
+        400,
+        "填写 2–300 字的操作原因。",
+      );
+    return this.repository.messageAction({
+      ...context,
+      messageId,
+      action,
+      expectedVersion,
+      reason,
+      route: `/platform/management/messages/${messageId}/actions`,
       now: this.now(),
     });
   }

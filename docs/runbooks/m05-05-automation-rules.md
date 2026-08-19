@@ -6,7 +6,7 @@
 
 ## 观测与故障处理
 
-Worker 日志队列名为 `automation_rules`，应观察 `succeeded`、`rate_limited`、`retry_scheduled`、`dead_letter` 和 `dependency_failed`。规则异常时先在 `/automations` 人工暂停，再按 `request_id/trace_id` 查询 `automation_executions`、`audit_logs` 与 `outbox_events`。租约到期会自动重领；dead letter 不会自动改业务事实。
+任务处理器日志队列名为 `automation_rules`，应观察成功、限流、计划重试、死信和依赖失败。规则可在 `/automations` 查看完整详情并编辑；编辑要求当前版本和原因，会保留版本历史。规则异常时先人工暂停，再按关联编号和链路编号查询执行、审计与事务消息。租约到期会自动重领；死信不会自动改业务事实。
 
 ## 回滚
 

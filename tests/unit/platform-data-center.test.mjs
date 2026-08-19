@@ -50,7 +50,7 @@ test("platform data center exposes all required facts quality and audited CSV ex
       "docs/feature-map.json",
     ].map((path) => readFile(path, "utf8")),
   );
-  for (const label of ["热点", "机会", "竞品", "供应商", "证据与质量", "受控导出 CSV"])
+  for (const label of ["热点", "机会", "竞品", "供应商", "证据与质量", "导出表格文件"])
     assert.match(web, new RegExp(label));
   assert.match(route, /management\/data\/exports/);
   assert.match(repository, /platform\.data\.export/);

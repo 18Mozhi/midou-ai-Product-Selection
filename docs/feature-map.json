@@ -547,7 +547,7 @@
         "/api/v1/platform/credential-assets/{assetId}/revoke",
         "/api/v1/platform/crawler-profiles"
       ],
-      "scope": "platform-global credential and crawler profile assets; organizations receive later use grants only",
+      "scope": "platform-global encrypted credential and crawler profile assets, including a novice Chinese browser-login archive wizard that creates the credential and runnable profile without an official provider API",
       "encryption": "AES-256-GCM with random nonce, authentication tag, asset/type/key-version AAD and Baota-only master key",
       "responseBoundary": "masked fingerprint and metadata only; no decrypt, export, ciphertext, nonce or auth-tag API",
       "permission": "authenticated platform key_rotation:manage; same-origin and Idempotency-Key for writes",
@@ -1233,9 +1233,10 @@
       "routes": [
         "/automations",
         "/api/v1/automations",
+        "/api/v1/automations/{automationRuleId}",
         "/api/v1/automations/{automationRuleId}/actions"
       ],
-      "scope": "organization and workspace scoped versioned rules notification-derived executions safe actions and idempotent operations",
+      "scope": "organization and workspace scoped versioned rules with detail, audited full editing, notification-derived executions, safe actions and idempotent operations",
       "truthBoundary": "rules only consume persisted notification facts; actions notify an owner or create a human task and never approve or change opportunity facts",
       "permission": "team:manage for reads and writes with active current context",
       "configuration": [
@@ -1355,99 +1356,232 @@
       "permission": "platform:superadmin plus same-origin Origin, Idempotency-Key and audited reason for writes",
       "persistence": "platform_account_operations idempotency plus existing organizations, workspaces, memberships, fixed role assignments, membership_data_scopes and platform_audit_events",
       "navigationBoundary": "platform, organization-admin and member shells have distinct primary menus; infrastructure pages are removed from the novice platform primary navigation but protected historical routes remain",
-      "imageEvidence": ["high resolution 09 organization administration dashboard", "high resolution 10 platform operations cockpit", "concept 62 collection source management"],
+      "imageEvidence": [
+        "high resolution 09 organization administration dashboard",
+        "high resolution 10 platform operations cockpit",
+        "concept 62 collection source management"
+      ],
       "status": "implemented_pending_live_verification"
     },
     "platformDashboard": {
       "module": "M06-02",
-      "entrypoints": ["../apps/api/src/platform-dashboard-service.ts", "../apps/api/src/mysql-platform-dashboard-repository.ts", "../apps/api/src/platform-dashboard-routes.ts", "../apps/web/src/components/PlatformDashboard.vue", "../apps/web/src/components/PlatformManagementCenter.vue", "../apps/web/src/components/PlatformDataCenter.vue", "../apps/web/src/components/PlatformGovernanceCenter.vue"],
-      "routes": ["/platform-admin", "/platform-admin/data", "/platform-admin/governance", "/platform-admin/content", "/platform-admin/notifications", "/platform-admin/email", "/platform-admin/status", "/api/v1/platform/dashboard", "/api/v1/platform/management", "/api/v1/platform/management/data/exports", "/api/v1/platform/management/content/{topicId}", "/api/v1/platform/management/email/{source}/{deliveryId}/actions"],
-      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, notification delivery, email queue and unified API MySQL Redis file Worker Crawler runtime status management with dedicated operations links",
+      "entrypoints": [
+        "../apps/api/src/platform-dashboard-service.ts",
+        "../apps/api/src/mysql-platform-dashboard-repository.ts",
+        "../apps/api/src/platform-dashboard-routes.ts",
+        "../apps/web/src/components/PlatformDashboard.vue",
+        "../apps/web/src/components/PlatformManagementCenter.vue",
+        "../apps/web/src/components/PlatformDataCenter.vue",
+        "../apps/web/src/components/PlatformGovernanceCenter.vue",
+        "../database/migrations/0040_platform_messages.up.sql"
+      ],
+      "routes": [
+        "/platform-admin",
+        "/platform-admin/data",
+        "/platform-admin/governance",
+        "/platform-admin/content",
+        "/platform-admin/notifications",
+        "/platform-admin/email",
+        "/platform-admin/status",
+        "/api/v1/platform/dashboard",
+        "/api/v1/platform/management",
+        "/api/v1/platform/management/data/exports",
+        "/api/v1/platform/management/content/{topicId}",
+        "/api/v1/platform/management/messages",
+        "/api/v1/platform/management/messages/{messageId}",
+        "/api/v1/platform/management/messages/{messageId}/actions",
+        "/api/v1/platform/management/email/{source}/{deliveryId}/actions"
+      ],
+      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, notification and email draft creation editing publishing cancellation and delivery management, plus unified backend database cache file task-processing and crawler status management with dedicated operations links",
       "truthBoundary": "no sample remains unknown or null; no credentials, payloads, internal file paths or invented uptime and capacity claims",
       "permission": "platform:operate on the API; platform role navigation guard on the page; dashboard reads and platform data exports write correlated platform audit events",
-      "configuration": ["PLATFORM_DASHBOARD_DEFAULT_WINDOW", "PLATFORM_DASHBOARD_QUEUE_WARNING", "PLATFORM_DASHBOARD_ERROR_LIMIT"],
+      "configuration": [
+        "PLATFORM_DASHBOARD_DEFAULT_WINDOW",
+        "PLATFORM_DASHBOARD_QUEUE_WARNING",
+        "PLATFORM_DASHBOARD_ERROR_LIMIT"
+      ],
       "runtimeBoundary": "synchronous MySQL 5.7 read model under Baota Node API; persisted topology and resilience observations are reused, observations older than five minutes are explicitly stale, and no dashboard daemon or server-side service is created",
-      "imageEvidence": ["concept 61 platform operations overview", "high resolution 10 platform operations cockpit"],
+      "imageEvidence": [
+        "concept 61 platform operations overview",
+        "high resolution 10 platform operations cockpit"
+      ],
       "verificationRunId": "d424c7a8-eb72-4ddd-b9aa-3ce93ffbbe96",
       "status": "implemented_pending_full_verification"
     },
     "collectionOperationsConsole": {
       "module": "M06-03",
-      "entrypoints": ["../apps/api/src/collection-console-service.ts", "../apps/api/src/mysql-collection-console-repository.ts", "../apps/web/src/components/CollectionOperationsConsole.vue"],
-      "routes": ["/platform-admin/collection/overview", "/api/v1/platform/collection/console"],
+      "entrypoints": [
+        "../apps/api/src/collection-console-service.ts",
+        "../apps/api/src/mysql-collection-console-repository.ts",
+        "../apps/web/src/components/CollectionOperationsConsole.vue"
+      ],
+      "routes": [
+        "/platform-admin/collection/overview",
+        "/api/v1/platform/collection/console"
+      ],
       "scope": "platform source definitions and health plus optionally organization and workspace scoped tasks attempts dead letters and quality summaries",
       "truthBoundary": "no credentials cookies payloads or file paths; controlled replay and source writes remain on existing idempotent versioned M03 endpoints",
       "permission": "platform:operate read guard and collection:replay or provider:configure on existing write routes; correlated global read audit",
       "configuration": ["COLLECTION_CONSOLE_RECENT_LIMIT"],
       "runtimeBoundary": "observes collection Worker leases retries rate limits and dead letters inside the unified BaoTa backend; creates no new daemon",
-      "imageEvidence": ["concept 62 source management", "concept 63 collection task monitoring", "concept 64 system monitoring"],
+      "imageEvidence": [
+        "concept 62 source management",
+        "concept 63 collection task monitoring",
+        "concept 64 system monitoring"
+      ],
       "verificationRunId": "808ea175-55fc-483f-a1c2-eec161fcf9bd",
       "status": "module_verified"
     },
     "securityOperations": {
       "module": "M06-04",
-      "entrypoints": ["../apps/api/src/security-operations-service.ts", "../apps/api/src/mysql-security-operations-repository.ts", "../apps/web/src/components/SecurityOperationsCenter.vue"],
-      "routes": ["/platform-admin/security", "/api/v1/platform/security/operations"],
+      "entrypoints": [
+        "../apps/api/src/security-operations-service.ts",
+        "../apps/api/src/mysql-security-operations-repository.ts",
+        "../apps/web/src/components/SecurityOperationsCenter.vue"
+      ],
+      "routes": [
+        "/platform-admin/security",
+        "/api/v1/platform/security/operations"
+      ],
       "scope": "platform login outcomes risk events session metadata organization token metadata credential lifecycle and platform audit",
       "truthBoundary": "never selects or returns session token hashes credential ciphertext nonce auth tag token hashes cookies or raw IP and user agent values",
       "permission": "platform:secure read guard; credential rotation and token/session mutations remain on existing key rotation session and token capabilities",
-      "configuration": ["SECURITY_OPERATIONS_DEFAULT_WINDOW", "SECURITY_OPERATIONS_RECENT_LIMIT"],
+      "configuration": [
+        "SECURITY_OPERATIONS_DEFAULT_WINDOW",
+        "SECURITY_OPERATIONS_RECENT_LIMIT"
+      ],
       "runtimeBoundary": "synchronous audited MySQL read under Baota Node API; no external SIEM or key service is invented",
-      "imageEvidence": ["concept 65 logs", "concept 66 security audit", "concept 67 token management", "concept 68 key rotation"],
+      "imageEvidence": [
+        "concept 65 logs",
+        "concept 66 security audit",
+        "concept 67 token management",
+        "concept 68 key rotation"
+      ],
       "verificationRunId": "b13e605b-9566-4d84-bd8f-71af496bce32",
       "status": "module_verified"
     },
     "openPlatform": {
       "module": "M06-05",
-      "entrypoints": ["../apps/api/src/open-platform-service.ts", "../apps/api/src/mysql-open-platform-repository.ts", "../apps/api/src/open-platform-routes.ts", "../apps/worker/src/webhook-delivery-worker.ts", "../apps/web/src/components/OpenPlatformCenter.vue"],
-      "routes": ["/platform-admin/open-platform", "/api/v1/platform/open", "/api/v1/platform/open/clients", "/api/v1/platform/open/webhooks", "/api/v1/platform/open/deliveries/{deliveryId}/replay", "/open/v1/status"],
+      "entrypoints": [
+        "../apps/api/src/open-platform-service.ts",
+        "../apps/api/src/mysql-open-platform-repository.ts",
+        "../apps/api/src/open-platform-routes.ts",
+        "../apps/worker/src/webhook-delivery-worker.ts",
+        "../apps/web/src/components/OpenPlatformCenter.vue"
+      ],
+      "routes": [
+        "/platform-admin/open-platform",
+        "/api/v1/platform/open",
+        "/api/v1/platform/open/clients",
+        "/api/v1/platform/open/webhooks",
+        "/api/v1/platform/open/deliveries/{deliveryId}/replay",
+        "/open/v1/status"
+      ],
       "scope": "organization-owned API Clients, scopes, per-minute quotas, Webhook endpoints, signed delivery attempts and immutable delivery events",
       "truthBoundary": "API and Webhook secrets are returned once; only Client hash or AES-256-GCM Webhook ciphertext is persisted; overview never selects secret material",
       "permission": "platform_token:manage plus same-origin and idempotency for management; independent Bearer timestamp nonce scope quota middleware for /open/v1",
-      "configuration": ["OPEN_API_CLIENT_TTL_DAYS", "OPEN_API_DEFAULT_QUOTA_PER_MINUTE", "OPEN_API_MAX_QUOTA_PER_MINUTE", "OPEN_API_TIMESTAMP_TOLERANCE_SECONDS", "OPEN_API_NONCE_TTL_SECONDS", "WEBHOOK_DELIVERY_POLL_MS", "WEBHOOK_DELIVERY_LEASE_SECONDS", "WEBHOOK_DELIVERY_TIMEOUT_MS"],
+      "configuration": [
+        "OPEN_API_CLIENT_TTL_DAYS",
+        "OPEN_API_DEFAULT_QUOTA_PER_MINUTE",
+        "OPEN_API_MAX_QUOTA_PER_MINUTE",
+        "OPEN_API_TIMESTAMP_TOLERANCE_SECONDS",
+        "OPEN_API_NONCE_TTL_SECONDS",
+        "WEBHOOK_DELIVERY_POLL_MS",
+        "WEBHOOK_DELIVERY_LEASE_SECONDS",
+        "WEBHOOK_DELIVERY_TIMEOUT_MS"
+      ],
       "runtimeBoundary": "Baota S0 Node API and Node Worker; HTTPS-only per-attempt DNS and private-range rejection; 60/300/900 retry and fourth-attempt dead letter; no multi-node claim",
-      "imageEvidence": ["concept 67 token management", "concept 68 key rotation"],
+      "imageEvidence": [
+        "concept 67 token management",
+        "concept 68 key rotation"
+      ],
       "verificationRunId": "5fdcf027-016b-47d2-938a-4f268a339fb4",
       "status": "module_verified"
     },
     "commercialOperations": {
       "module": "M06-06",
-      "entrypoints": ["../apps/api/src/commercial-service.ts", "../apps/api/src/mysql-commercial-repository.ts", "../apps/api/src/commercial-routes.ts", "../apps/web/src/components/CommercialOperationsCenter.vue"],
-      "routes": ["/platform-admin/commercial", "/api/v1/platform/commercial", "/api/v1/platform/commercial/plans", "/api/v1/platform/commercial/assignments", "/api/v1/platform/commercial/adjustments"],
+      "entrypoints": [
+        "../apps/api/src/commercial-service.ts",
+        "../apps/api/src/mysql-commercial-repository.ts",
+        "../apps/api/src/commercial-routes.ts",
+        "../apps/web/src/components/CommercialOperationsCenter.vue"
+      ],
+      "routes": [
+        "/platform-admin/commercial",
+        "/api/v1/platform/commercial",
+        "/api/v1/platform/commercial/plans",
+        "/api/v1/platform/commercial/assignments",
+        "/api/v1/platform/commercial/adjustments"
+      ],
       "scope": "quota-only plan create/edit/status, organization member assignment/renewal/change/end, persisted-period usage and reasoned manual adjustments; no payment deduction",
       "truthBoundary": "usage reads collection_tasks, open_api_usage and report_exports by organization and explicit period; no price currency invoice tax or payment provider is defined",
       "permission": "platform:operate read guard; same-origin Idempotency-Key reason and version guard for writes",
       "configuration": ["COMMERCIAL_RECENT_LIMIT"],
       "runtimeBoundary": "synchronous Baota Node API reads plus existing organization outbox; no new Worker Crawler daemon or multi-node claim",
-      "imageEvidence": ["concept 70 billing plans", "concept 71 plan comparison"],
+      "imageEvidence": [
+        "concept 70 billing plans",
+        "concept 71 plan comparison"
+      ],
       "verificationRunId": "934c8c7b-0e66-4856-9c47-8b40a331bb3a",
       "status": "module_verified"
     },
     "releaseTestMatrix": {
       "module": "M07-01",
-      "entrypoints": ["../verification/release-matrix.json", "../scripts/verify-release-matrix.mjs", "../scripts/lib/typescript-test-loader.mjs"],
+      "entrypoints": [
+        "../verification/release-matrix.json",
+        "../scripts/verify-release-matrix.mjs",
+        "../scripts/lib/typescript-test-loader.mjs"
+      ],
       "scope": "P00-P06 role source collection task quality desktop mobile performance and security regression matrix",
       "runtimeBoundary": "local CI or Baota-controlled release task only; no production API table page permission daemon or multi-node claim",
       "browserGroups": ["p00", "p01", "p02", "p03", "p04", "p05", "p06"],
-      "performanceTargets": { "lcpMs": 2500, "inpMs": 200, "cls": 0.1, "coreReadP95Ms": 300, "coreWriteP95Ms": 600 },
-      "imageEvidence": ["P07 core images 01 04 05 06 07 08 09 10", "concept 53 mobile home", "concept 54 mobile opportunity", "concept 72 not found"],
+      "performanceTargets": {
+        "lcpMs": 2500,
+        "inpMs": 200,
+        "cls": 0.1,
+        "coreReadP95Ms": 300,
+        "coreWriteP95Ms": 600
+      },
+      "imageEvidence": [
+        "P07 core images 01 04 05 06 07 08 09 10",
+        "concept 53 mobile home",
+        "concept 54 mobile opportunity",
+        "concept 72 not found"
+      ],
       "verificationRunId": "f12a7160-90ba-437c-9e6f-fc23149b9077",
       "status": "module_verified"
     },
     "securityGate": {
       "module": "M07-02",
-      "entrypoints": ["../verification/security-gate.json", "../scripts/verify-security-gate.mjs"],
+      "entrypoints": [
+        "../verification/security-gate.json",
+        "../scripts/verify-security-gate.mjs"
+      ],
       "scope": "dependency secrets SQL XSS CSRF SSRF upload authorization logging and Baota edge release gate",
       "runtimeBoundary": "local CI or Baota-controlled finite release task only; no production API table page permission daemon or multi-node claim",
-      "securityHeaders": ["Content-Security-Policy", "X-Content-Type-Options", "Referrer-Policy", "Permissions-Policy", "X-Frame-Options"],
+      "securityHeaders": [
+        "Content-Security-Policy",
+        "X-Content-Type-Options",
+        "Referrer-Policy",
+        "Permissions-Policy",
+        "X-Frame-Options"
+      ],
       "configuration": ["VERIFY_COMMAND_TIMEOUT_MS", "VERIFY_REPORT_DIR"],
       "verificationRunId": "3bd453d5-0016-418e-8c33-e42132341def",
       "status": "module_verified"
     },
     "baotaProductionDeployment": {
       "module": "M07-03",
-      "entrypoints": ["../infra/baota/service-manifest.json", "../scripts/verify-baota-deployment.mjs", "../apps/web/src/components/DeploymentFoundation.vue"],
-      "routes": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
+      "entrypoints": [
+        "../infra/baota/service-manifest.json",
+        "../scripts/verify-baota-deployment.mjs",
+        "../apps/web/src/components/DeploymentFoundation.vue"
+      ],
+      "routes": [
+        "/api/v1/health/live",
+        "/api/v1/health/ready",
+        "/api/v1/health/version"
+      ],
       "scope": "惠州 S0 单主机、宝塔管理的 Web API Worker Crawler MySQL Redis release backup and log objects",
       "truthBoundary": "same-commit production evidence, local-only private services and sanitized health; no P08 capacity claim",
       "configuration": ["APP_VERSION", "BUILD_SHA", "WEB_ORIGIN"],
@@ -1456,70 +1590,328 @@
     },
     "backupRecovery": {
       "module": "M07-04",
-      "entrypoints": ["../scripts/backup-recovery.mjs", "../apps/api/src/backup-recovery-service.ts", "../apps/api/src/mysql-backup-recovery-repository.ts", "../apps/api/src/backup-recovery-routes.ts", "../apps/web/src/components/BackupRecoveryCenter.vue"],
-      "routes": ["/platform-admin/operations", "/api/v1/platform/operations/backup-recovery"],
+      "entrypoints": [
+        "../scripts/backup-recovery.mjs",
+        "../apps/api/src/backup-recovery-service.ts",
+        "../apps/api/src/mysql-backup-recovery-repository.ts",
+        "../apps/api/src/backup-recovery-routes.ts",
+        "../apps/web/src/components/BackupRecoveryCenter.vue"
+      ],
+      "routes": [
+        "/platform-admin/operations",
+        "/api/v1/platform/operations/backup-recovery"
+      ],
       "scope": "MySQL evidence export and non-secret config encrypted backups on the current Huizhou host with a separate encrypted recovery root",
       "truthBoundary": "verified only after same-host encrypted-copy integrity and a logically isolated restore check business data audit chain evidence hashes and permission boundaries within 90 days; host disk and site failure are not protected",
       "permission": "platform:operate read only; backup and restore execute only in Baota scheduled tasks",
-      "configuration": ["BACKUP_PRIMARY_REGION", "BACKUP_RECOVERY_REGION", "BACKUP_RPO_MINUTES", "BACKUP_RTO_MINUTES", "BACKUP_MAX_DRILL_AGE_DAYS", "BACKUP_RETENTION_DAYS", "BACKUP_PRIMARY_ROOT", "BACKUP_LOCAL_COPY_ROOT", "BACKUP_DRILL_ROOT", "BACKUP_ENCRYPTION_KEY", "BACKUP_MYSQL_CLIENT", "BACKUP_MYSQLDUMP_CLIENT", "BACKUP_MYSQLBINLOG_CLIENT", "BACKUP_MYSQL_SOCKET", "BACKUP_MYSQL_ADMIN_PASSWORD_FILE", "BACKUP_RELEASE_ROOT"],
+      "configuration": [
+        "BACKUP_PRIMARY_REGION",
+        "BACKUP_RECOVERY_REGION",
+        "BACKUP_RPO_MINUTES",
+        "BACKUP_RTO_MINUTES",
+        "BACKUP_MAX_DRILL_AGE_DAYS",
+        "BACKUP_RETENTION_DAYS",
+        "BACKUP_PRIMARY_ROOT",
+        "BACKUP_LOCAL_COPY_ROOT",
+        "BACKUP_DRILL_ROOT",
+        "BACKUP_ENCRYPTION_KEY",
+        "BACKUP_MYSQL_CLIENT",
+        "BACKUP_MYSQLDUMP_CLIENT",
+        "BACKUP_MYSQLBINLOG_CLIENT",
+        "BACKUP_MYSQL_SOCKET",
+        "BACKUP_MYSQL_ADMIN_PASSWORD_FILE",
+        "BACKUP_RELEASE_ROOT"
+      ],
       "runtimeBoundary": "S0 finite Baota tasks with AES-256-GCM on one host; no new daemon, offsite recovery, host-failure protection or multi-node claim",
-      "imageEvidence": ["concept 61 platform operations overview", "core 10 platform cockpit", "desktop and 390 recovery states"],
+      "imageEvidence": [
+        "concept 61 platform operations overview",
+        "core 10 platform cockpit",
+        "desktop and 390 recovery states"
+      ],
       "verificationRunId": "d1ede17d-0f7b-4f42-b80c-2d5dac118651",
       "status": "module_verified"
     },
     "releaseRollout": {
       "module": "M07-05",
-      "entrypoints": ["../infra/baota/release-rollout-manifest.json", "../database/migrations/0032a_compact_release_write_probe_m08_03.up.sql", "../scripts/run-baota-release-rollout.mjs", "../scripts/release-rollout-async-lag.mjs", "../scripts/verify-playwright-host.mjs", "../apps/api/src/release-rollout-service.ts", "../apps/api/src/mysql-release-rollout-repository.ts", "../apps/api/src/release-rollout-routes.ts", "../apps/web/src/components/ReleaseRolloutCenter.vue"],
-      "routes": ["/platform-admin/releases", "/api/v1/platform/operations/releases", "/api/v1/platform/operations/releases/write-probe"],
+      "entrypoints": [
+        "../infra/baota/release-rollout-manifest.json",
+        "../database/migrations/0032a_compact_release_write_probe_m08_03.up.sql",
+        "../scripts/run-baota-release-rollout.mjs",
+        "../scripts/release-rollout-async-lag.mjs",
+        "../scripts/verify-playwright-host.mjs",
+        "../apps/api/src/release-rollout-service.ts",
+        "../apps/api/src/mysql-release-rollout-repository.ts",
+        "../apps/api/src/release-rollout-routes.ts",
+        "../apps/web/src/components/ReleaseRolloutCenter.vue"
+      ],
+      "routes": [
+        "/platform-admin/releases",
+        "/api/v1/platform/operations/releases",
+        "/api/v1/platform/operations/releases/write-probe"
+      ],
       "scope": "惠州当前单机内宝塔 stable API 与 candidate API 的 5 25 100 渐进发布",
       "truthBoundary": "verified only from a manually triggered single rollout instance holding the MySQL session named lock, a distinct immutable release attempt, current release gates with at least 30 minutes per stage, real Baota Nginx candidate samples reached through 127.0.0.1 while preserving the production TLS/SNI/Host and certificate validation so public-IP hairpin availability cannot pollute the result, proxy-safe HMAC candidate writes returning 202 with exact candidate-build persistence parity, current build identity, and due or expired work from the explicit Baota Worker-consumed MySQL queue list; a second instance fails closed as release_rollout_lock_busy before migration, gate or Nginx mutation; queue DATETIME(3) due and lag comparisons use the same MySQL session NOW(3) clock as the Worker so a non-UTC MySQL system timezone cannot create fixed-offset false backlog; domain audit or future-delivery outboxes without a runtime consumer are preserved but are not executable queue lag, while the 60-second stop threshold remains unchanged; live MySQL verification uses UTC_TIMESTAMP(3) only for its execution-time unique release probe so process timezone or an existing newer production release cannot shadow it, then cleans all probe rows; Linux visual verification also fails closed unless the configured Chromium is executable and fontconfig reports a Chinese font, so tofu screenshots cannot become baselines; no backup server or P08 capacity claim",
-      "concurrencyPolicy": {"description": "宝塔任务仅手工触发；禁止自动日调度；MySQL 会话级命名锁忙时以 release_rollout_lock_busy 失败关闭", "taskTrigger": "manual_only", "concurrentRuns": 1, "lock": "mysql_session_named_lock", "lockName": "scoutops:m07-05:release-rollout", "lockTimeoutSeconds": 0, "attemptHistoryPreserved": true, "migration": "0027a_release_rollout_attempts_m07_05.up.sql"},
-      "mysqlDurability": {"innodbFlushLogAtTrxCommit": 2, "syncBinlog": 1, "binlogFormat": "ROW", "productScoutBinlogExcluded": false, "osCrashDataLossWindowSeconds": 1, "verificationAccount": "product_scout@127.0.0.1 with global REPLICATION CLIENT", "rollbackManager": "baota", "supersededBy": "M08-03"},
-      "mysqlResourceProfile": {"hostMemoryGiB": 16, "innodbBufferPoolSize": "4096M", "innodbBufferPoolInstances": 4, "innodbIoCapacity": 1000, "innodbIoCapacityMax": 4000, "innodbFlushNeighbors": 0, "innodbFlushMethod": "O_DIRECT", "manager": "baota finite task", "rollbackEvidence": "/www/server/panel/data/scoutops-m0705-mysql-resource-before-*.cnf"},
+      "concurrencyPolicy": {
+        "description": "宝塔任务仅手工触发；禁止自动日调度；MySQL 会话级命名锁忙时以 release_rollout_lock_busy 失败关闭",
+        "taskTrigger": "manual_only",
+        "concurrentRuns": 1,
+        "lock": "mysql_session_named_lock",
+        "lockName": "scoutops:m07-05:release-rollout",
+        "lockTimeoutSeconds": 0,
+        "attemptHistoryPreserved": true,
+        "migration": "0027a_release_rollout_attempts_m07_05.up.sql"
+      },
+      "mysqlDurability": {
+        "innodbFlushLogAtTrxCommit": 2,
+        "syncBinlog": 1,
+        "binlogFormat": "ROW",
+        "productScoutBinlogExcluded": false,
+        "osCrashDataLossWindowSeconds": 1,
+        "verificationAccount": "product_scout@127.0.0.1 with global REPLICATION CLIENT",
+        "rollbackManager": "baota",
+        "supersededBy": "M08-03"
+      },
+      "mysqlResourceProfile": {
+        "hostMemoryGiB": 16,
+        "innodbBufferPoolSize": "4096M",
+        "innodbBufferPoolInstances": 4,
+        "innodbIoCapacity": 1000,
+        "innodbIoCapacityMax": 4000,
+        "innodbFlushNeighbors": 0,
+        "innodbFlushMethod": "O_DIRECT",
+        "manager": "baota finite task",
+        "rollbackEvidence": "/www/server/panel/data/scoutops-m0705-mysql-resource-before-*.cnf"
+      },
       "samplingPolicy": "1 秒采样提高低流量 S0 的候选 P95 样本分辨率；5/25/100、每阶段 1800 秒和全部停止阈值保持不变",
       "publicProbeTransportPolicy": "RELEASE_PUBLIC_CONNECT_ADDRESS 固定为 127.0.0.1，经本机宝塔 Nginx 探测并完整保留正式域名 TLS/SNI/Host 与证书校验，避免公网回环；禁止直连 API 槽或关闭 TLS 验证",
       "writeProbeTransportPolicy": "仅 Nginx 499 且 upstream_status 为空的到达上游前中断使用同一 sample_id 重试一次并留证；不得重试候选非 202 响应，重试耗尽、候选拒绝或已到达上游写样本与持久化不一致均失败关闭；0032a 起新样本写入自增 BIGINT 与 BINARY 键的紧凑 MySQL57 表，0027 历史宽表只读保留",
-      "writeProbeStorage": {"currentTable": "deployment_release_write_samples", "migration": "0032a_compact_release_write_probe_m08_03.up.sql", "primaryKey": "BIGINT UNSIGNED AUTO_INCREMENT", "binaryKeys": ["sample_id", "build_sha", "nonce_hash"], "historicalTable": "deployment_release_write_probes", "historicalRowsMutated": false},
+      "writeProbeStorage": {
+        "currentTable": "deployment_release_write_samples",
+        "migration": "0032a_compact_release_write_probe_m08_03.up.sql",
+        "primaryKey": "BIGINT UNSIGNED AUTO_INCREMENT",
+        "binaryKeys": ["sample_id", "build_sha", "nonce_hash"],
+        "historicalTable": "deployment_release_write_probes",
+        "historicalRowsMutated": false
+      },
       "permission": "platform:operate protects the browser read API; the write probe requires a short-lived HMAC request from the Baota rollout task and is not a user-session API; release, automatic stop and rollback execute only in the Baota scheduled task; the existing local product_scout MySQL account has global REPLICATION CLIENT solely so the task can verify SHOW MASTER STATUS",
-      "configuration": ["PLAYWRIGHT_API_PORT", "PLAYWRIGHT_WEB_PORT", "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH", "RELEASE_CANARY_OBSERVE_SECONDS", "RELEASE_SAMPLE_INTERVAL_SECONDS", "RELEASE_MINIMUM_CANDIDATE_SAMPLES", "RELEASE_EVIDENCE_MAX_AGE_MINUTES", "RELEASE_5XX_STOP_BASIS_POINTS", "RELEASE_READ_P95_STOP_MS", "RELEASE_WRITE_P95_STOP_MS", "RELEASE_ASYNC_LAG_STOP_SECONDS", "RELEASE_PROBE_SIGNING_KEY", "RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS", "RELEASE_ROLLOUT_LOCK_NAME", "RELEASE_ROOT", "RELEASE_PRODUCTION_EVIDENCE_FILE", "RELEASE_STABLE_API_PORT", "RELEASE_CANDIDATE_API_PORT", "RELEASE_CANDIDATE_BASE_URL", "RELEASE_PUBLIC_BASE_URL", "RELEASE_PUBLIC_CONNECT_ADDRESS", "RELEASE_NGINX_BIN", "RELEASE_NGINX_SITE_CONFIG", "RELEASE_NGINX_SPLIT_CONFIG", "RELEASE_NGINX_TIMING_LOG"],
-      "browserHostPrerequisite": {"chromium": "/usr/bin/chromium", "package": "fonts-noto-cjk", "version": "1:20201206-cjk+repack1-1", "authorization": "explicit user approval on 2026-08-10", "manager": "baota finite task", "evidence": "/www/server/panel/data/scoutops-m0705-font-install-before-*.json mode 0600", "rollback": "Baota finite task removes fonts-noto-cjk and refreshes font cache", "e2eStartupTimeoutMs": 300000},
+      "configuration": [
+        "PLAYWRIGHT_API_PORT",
+        "PLAYWRIGHT_WEB_PORT",
+        "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
+        "RELEASE_CANARY_OBSERVE_SECONDS",
+        "RELEASE_SAMPLE_INTERVAL_SECONDS",
+        "RELEASE_MINIMUM_CANDIDATE_SAMPLES",
+        "RELEASE_EVIDENCE_MAX_AGE_MINUTES",
+        "RELEASE_5XX_STOP_BASIS_POINTS",
+        "RELEASE_READ_P95_STOP_MS",
+        "RELEASE_WRITE_P95_STOP_MS",
+        "RELEASE_ASYNC_LAG_STOP_SECONDS",
+        "RELEASE_PROBE_SIGNING_KEY",
+        "RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS",
+        "RELEASE_ROLLOUT_LOCK_NAME",
+        "RELEASE_ROOT",
+        "RELEASE_PRODUCTION_EVIDENCE_FILE",
+        "RELEASE_STABLE_API_PORT",
+        "RELEASE_CANDIDATE_API_PORT",
+        "RELEASE_CANDIDATE_BASE_URL",
+        "RELEASE_PUBLIC_BASE_URL",
+        "RELEASE_PUBLIC_CONNECT_ADDRESS",
+        "RELEASE_NGINX_BIN",
+        "RELEASE_NGINX_SITE_CONFIG",
+        "RELEASE_NGINX_SPLIT_CONFIG",
+        "RELEASE_NGINX_TIMING_LOG"
+      ],
+      "browserHostPrerequisite": {
+        "chromium": "/usr/bin/chromium",
+        "package": "fonts-noto-cjk",
+        "version": "1:20201206-cjk+repack1-1",
+        "authorization": "explicit user approval on 2026-08-10",
+        "manager": "baota finite task",
+        "evidence": "/www/server/panel/data/scoutops-m0705-font-install-before-*.json mode 0600",
+        "rollback": "Baota finite task removes fonts-noto-cjk and refreshes font cache",
+        "e2eStartupTimeoutMs": 300000
+      },
       "runtimeBoundary": "historical rollout code remains for rollback archaeology, but current production runs one BaoTa project named ai选品 on port 4101 and no persistent candidate project; no external daemon, backup server, multi-node or 10000-user claim",
-      "imageEvidence": ["core 10 platform cockpit", "concept 61 platform operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 release states", "four reviewed Linux Chromium visual baselines with Chinese glyphs"],
-      "supersededProductionEvidence": {"releaseId": "8b6114fe-fafa-4c6c-8a5d-ebd52ffe65ae", "buildSha": "e22968896ab087647ad171f00a6f107c6824acf9", "capturedAt": "2026-08-11T19:22:54.886Z", "sha256": "649a4b18ddec6d5f4967dce0ce2f992c4c5aa5ce45a4cb272ce0c31597376d1d", "reason": "schema v3 lacked manual-only task and cross-process lock evidence"},
-      "lastFailedProductionAttempt": {"releaseId": "cbd75718-216b-4d0e-b744-df76d334b7d2", "buildSha": "0c6748b55f99438c521142b0789164b54db188aa", "failureCode": "write_p95_threshold_exceeded", "failedStage": 100, "observeSeconds": 1800, "writeP95Ms": 634, "thresholdMs": 600, "rollback": "stable cb81e04 on port 4101 via BaoTa rollout task", "evidenceAccepted": false, "cause": "historical wide random-index probe table accumulated about 192k rows and amplified periodic fsync tail latency; compact-table repair pending re-verification"},
-      "latestVerifiedProductionEvidence": {"releaseId": "ef868169-253b-41ec-97a2-d3a8a822ed9c", "buildSha": "162cb10664e6029284cf36594fba0d21a2e41f21", "capturedAt": "2026-08-14T00:40:00.439Z", "sha256": "7e3acbf0619f0370e025303ef0792b2697b6829d1d79d3eeb85e66fc4da88398", "schemaVersion": 5, "observationSeconds": [1800, 1800, 1800], "sampleCounts": [211, 883, 3578], "errorRates": [0, 0, 0], "readP95Ms": [2, 2, 2], "writeP95Ms": [5, 5, 4], "asyncLagSeconds": [0, 0, 0], "durableWriteSamples": [105, 446, 1771]},
+      "imageEvidence": [
+        "core 10 platform cockpit",
+        "concept 61 platform operations",
+        "concept 64 monitoring",
+        "concept 69 alerts",
+        "desktop and 390 release states",
+        "four reviewed Linux Chromium visual baselines with Chinese glyphs"
+      ],
+      "supersededProductionEvidence": {
+        "releaseId": "8b6114fe-fafa-4c6c-8a5d-ebd52ffe65ae",
+        "buildSha": "e22968896ab087647ad171f00a6f107c6824acf9",
+        "capturedAt": "2026-08-11T19:22:54.886Z",
+        "sha256": "649a4b18ddec6d5f4967dce0ce2f992c4c5aa5ce45a4cb272ce0c31597376d1d",
+        "reason": "schema v3 lacked manual-only task and cross-process lock evidence"
+      },
+      "lastFailedProductionAttempt": {
+        "releaseId": "cbd75718-216b-4d0e-b744-df76d334b7d2",
+        "buildSha": "0c6748b55f99438c521142b0789164b54db188aa",
+        "failureCode": "write_p95_threshold_exceeded",
+        "failedStage": 100,
+        "observeSeconds": 1800,
+        "writeP95Ms": 634,
+        "thresholdMs": 600,
+        "rollback": "stable cb81e04 on port 4101 via BaoTa rollout task",
+        "evidenceAccepted": false,
+        "cause": "historical wide random-index probe table accumulated about 192k rows and amplified periodic fsync tail latency; compact-table repair pending re-verification"
+      },
+      "latestVerifiedProductionEvidence": {
+        "releaseId": "ef868169-253b-41ec-97a2-d3a8a822ed9c",
+        "buildSha": "162cb10664e6029284cf36594fba0d21a2e41f21",
+        "capturedAt": "2026-08-14T00:40:00.439Z",
+        "sha256": "7e3acbf0619f0370e025303ef0792b2697b6829d1d79d3eeb85e66fc4da88398",
+        "schemaVersion": 5,
+        "observationSeconds": [1800, 1800, 1800],
+        "sampleCounts": [211, 883, 3578],
+        "errorRates": [0, 0, 0],
+        "readP95Ms": [2, 2, 2],
+        "writeP95Ms": [5, 5, 4],
+        "asyncLagSeconds": [0, 0, 0],
+        "durableWriteSamples": [105, 446, 1771]
+      },
       "verificationRunId": "0784e022-93e4-421d-9524-ef818ecfcda1",
       "status": "module_verified"
     },
     "selectionAcceptance": {
       "module": "M07-06",
-      "entrypoints": ["../apps/api/src/selection-journey-service.ts", "../apps/api/src/mysql-selection-journey-repository.ts", "../apps/api/src/selection-journey-routes.ts", "../apps/worker/src/evidence-persistence.ts", "../apps/web/src/components/SelectionJourney.vue", "../scripts/run-baota-selection-acceptance.mjs"],
-      "routes": ["/opportunities/start", "/api/v1/selection-journeys", "/api/v1/selection-journeys/{id}", "/api/v1/selection-journeys/{id}/decisions"],
+      "entrypoints": [
+        "../apps/api/src/selection-journey-service.ts",
+        "../apps/api/src/mysql-selection-journey-repository.ts",
+        "../apps/api/src/selection-journey-routes.ts",
+        "../apps/worker/src/evidence-persistence.ts",
+        "../apps/web/src/components/SelectionJourney.vue",
+        "../scripts/run-baota-selection-acceptance.mjs"
+      ],
+      "routes": [
+        "/opportunities/start",
+        "/api/v1/selection-journeys",
+        "/api/v1/selection-journeys/{id}",
+        "/api/v1/selection-journeys/{id}/decisions"
+      ],
       "scope": "ordinary member real keyword ASIN or product URL journey through enabled google_news_search collection task first verifiable result or succeeded_empty or explicit block then audited decision and evidence view",
-      "thresholds": {"createApiMs": 3000, "acceptedVisibleMs": 15000, "terminalMs": 180000, "relaxationAllowed": false},
-      "permission": {"create": "task:create", "read": "opportunity:read", "decide": "opportunity:decide", "forbiddenMemberCapabilities": ["provider:configure", "collection:replay", "platform:operate", "platform:superadmin"]},
+      "thresholds": {
+        "createApiMs": 3000,
+        "acceptedVisibleMs": 15000,
+        "terminalMs": 180000,
+        "relaxationAllowed": false
+      },
+      "permission": {
+        "create": "task:create",
+        "read": "opportunity:read",
+        "decide": "opportunity:decide",
+        "forbiddenMemberCapabilities": [
+          "provider:configure",
+          "collection:replay",
+          "platform:operate",
+          "platform:superadmin"
+        ]
+      },
       "sessionContext": "the dedicated account must have exactly one active acceptance organization; every new login selects its active default workspace through POST /api/v1/auth/context before navigation and capability guards",
-      "configuration": ["SELECTION_ACCEPTANCE_DEADLINE_MS", "SELECTION_ACCEPTANCE_BASE_URL", "SELECTION_ACCEPTANCE_EMAIL", "SELECTION_ACCEPTANCE_PASSWORD", "SELECTION_ACCEPTANCE_INPUT_KIND", "SELECTION_ACCEPTANCE_INPUT_VALUE", "SELECTION_ACCEPTANCE_EVIDENCE_FILE", "PROVIDER_PROXY_URL", "PROVIDER_PROXY_USERNAME", "PROVIDER_PROXY_PASSWORD", "PROVIDER_PROXY_CONNECT_TIMEOUT_MS"],
-      "data": ["selection_journeys", "selection_journey_decisions", "selection_journey_events", "selection_journey_outbox", "selection_journey_operations", "collection_task_evidence_links"],
+      "configuration": [
+        "SELECTION_ACCEPTANCE_DEADLINE_MS",
+        "SELECTION_ACCEPTANCE_BASE_URL",
+        "SELECTION_ACCEPTANCE_EMAIL",
+        "SELECTION_ACCEPTANCE_PASSWORD",
+        "SELECTION_ACCEPTANCE_INPUT_KIND",
+        "SELECTION_ACCEPTANCE_INPUT_VALUE",
+        "SELECTION_ACCEPTANCE_EVIDENCE_FILE",
+        "PROVIDER_PROXY_URL",
+        "PROVIDER_PROXY_USERNAME",
+        "PROVIDER_PROXY_PASSWORD",
+        "PROVIDER_PROXY_CONNECT_TIMEOUT_MS"
+      ],
+      "data": [
+        "selection_journeys",
+        "selection_journey_decisions",
+        "selection_journey_events",
+        "selection_journey_outbox",
+        "selection_journey_operations",
+        "collection_task_evidence_links"
+      ],
       "evidenceAssociation": "every captured or deduplicated evidence result is linked to the current collection task only after organization workspace subquery and provider scope validation; an RSS wrapper-only hash change may reuse immutable evidence only when canonical URL parser adapter schema and normalized payload are identical, and evidence.linked audits content_changed plus both hashes; a normalized fact conflict fails closed per record without overwriting evidence or retrying the whole source, while independent records continue and yield completed_with_warnings when any remain available",
       "runtimeBoundary": "finite Baota task on the current Huizhou single host; no daemon backup server multi-node or 10000-user claim",
-      "imageEvidence": ["core 01 and 04-10", "concept 53 mobile home", "concept 54 mobile opportunity detail", "concept 72 not found", "desktop and 390 real journey states"],
-      "latestVerifiedProductionEvidence": {"buildSha": "162cb10664e6029284cf36594fba0d21a2e41f21", "capturedAt": "2026-08-14T01:04:29.115Z", "sha256": "bff46ad304128bf14240517c538a3091aeff5d67ecc49c0518c6e9c4a63643c5", "journeyId": "414b07cc-af3f-4e56-925e-8a7a13a9a0ca", "terminalMs": 4081, "terminalState": "result_ready", "decisionAction": "observe", "decisionRecorded": true, "evidenceViewed": true},
+      "imageEvidence": [
+        "core 01 and 04-10",
+        "concept 53 mobile home",
+        "concept 54 mobile opportunity detail",
+        "concept 72 not found",
+        "desktop and 390 real journey states"
+      ],
+      "latestVerifiedProductionEvidence": {
+        "buildSha": "162cb10664e6029284cf36594fba0d21a2e41f21",
+        "capturedAt": "2026-08-14T01:04:29.115Z",
+        "sha256": "bff46ad304128bf14240517c538a3091aeff5d67ecc49c0518c6e9c4a63643c5",
+        "journeyId": "414b07cc-af3f-4e56-925e-8a7a13a9a0ca",
+        "terminalMs": 4081,
+        "terminalState": "result_ready",
+        "decisionAction": "observe",
+        "decisionRecorded": true,
+        "evidenceViewed": true
+      },
       "verificationRunId": "78001216-8e65-44fb-81cf-9570f9f9534b",
       "status": "module_verified"
     },
     "runtimeTopology": {
       "module": "M08-01",
-      "entrypoints": ["../packages/runtime-topology/src/index.ts", "../apps/api/src/runtime-topology-service.ts", "../apps/api/src/mysql-runtime-topology-repository.ts", "../apps/api/src/runtime-topology-routes.ts", "../apps/web/src/components/RuntimeTopologyCenter.vue", "../infra/baota/single-server-manifest.json", "../scripts/verify-single-server-production.mjs"],
-      "routes": ["/platform-admin/topology", "/api/v1/health/nodes", "/api/v1/platform/operations/topology"],
+      "entrypoints": [
+        "../packages/runtime-topology/src/index.ts",
+        "../apps/api/src/runtime-topology-service.ts",
+        "../apps/api/src/mysql-runtime-topology-repository.ts",
+        "../apps/api/src/runtime-topology-routes.ts",
+        "../apps/web/src/components/RuntimeTopologyCenter.vue",
+        "../infra/baota/single-server-manifest.json",
+        "../scripts/verify-single-server-production.mjs"
+      ],
+      "routes": [
+        "/platform-admin/topology",
+        "/api/v1/health/nodes",
+        "/api/v1/platform/operations/topology"
+      ],
       "scope": "M08-01 configured single-host API heartbeat, BaoTa single-upstream Nginx evidence, sanitized health and audited operations view",
       "truthBoundary": "ready requires one fresh ready heartbeat from the configured API node on the configured current BaoTa host plus current TLS and single-upstream evidence; no load-balancing, backup-server, multi-node or capacity claim is permitted",
       "permission": "public health returns sanitized counts; the operations view requires platform:operate and records request_id trace_id read audit",
-      "configuration": ["RUNTIME_TOPOLOGY_MODE", "RUNTIME_NODE_ID", "RUNTIME_HOST_ID", "RUNTIME_NODE_REGION", "RUNTIME_NODE_ZONE", "RUNTIME_NODE_HEARTBEAT_MS", "RUNTIME_NODE_STALE_AFTER_SECONDS", "SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE"],
+      "configuration": [
+        "RUNTIME_TOPOLOGY_MODE",
+        "RUNTIME_NODE_ID",
+        "RUNTIME_HOST_ID",
+        "RUNTIME_NODE_REGION",
+        "RUNTIME_NODE_ZONE",
+        "RUNTIME_NODE_HEARTBEAT_MS",
+        "RUNTIME_NODE_STALE_AFTER_SECONDS",
+        "SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE"
+      ],
       "runtimeBoundary": "the current Huizhou BaoTa host is the permanent S0 production topology; all backend ports remain private and no load balancer, backup server, panel-external service, multi-node or 10000-user claim is allowed",
-      "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 64 monitoring", "concept 69 alerts", "four reviewed Linux Chromium desktop and 390 single-server runtime baselines"],
-      "latestMysqlLiveEvidence": {"status": "mysql_live_passed", "manager": "baota_finite_task", "baseReleaseBuildSha": "a4c2695d3a0071201ad066b22caca5631271eac1", "migration": "0030_load_balancing_m08_01.up.sql", "migrationChecksum": "48a6259d9fbcb6a035d1ae1dfcf535a98f948d4325f908a07d11d6f47510ce28", "mysqlVersion": "5.7.44-log", "heartbeatAppendCount": 2, "probeCleanup": "passed", "capturedAt": "2026-08-14T03:50:32.133Z", "sha256": "57b71ffd1eb836c8bcb9f39f70243d5bf3393b16af6149f9d8bd88016d15a088"},
-      "latestProductionEvidence": {"buildSha": "b55f7f814d7153e6a4a7958eb41a9bf6ff1e60e8", "capturedAt": "2026-08-14T09:00:58.420Z", "sha256": "0c7cd53311f9c778407e699747bc8d9b9d27b1fad18635fee1c05ff54a74e13c", "activeApiInstances": 1, "singleUpstreamPort": 4101, "candidateStopped": true},
+      "imageEvidence": [
+        "core 10 platform cockpit",
+        "concept 61 operations",
+        "concept 64 monitoring",
+        "concept 69 alerts",
+        "four reviewed Linux Chromium desktop and 390 single-server runtime baselines"
+      ],
+      "latestMysqlLiveEvidence": {
+        "status": "mysql_live_passed",
+        "manager": "baota_finite_task",
+        "baseReleaseBuildSha": "a4c2695d3a0071201ad066b22caca5631271eac1",
+        "migration": "0030_load_balancing_m08_01.up.sql",
+        "migrationChecksum": "48a6259d9fbcb6a035d1ae1dfcf535a98f948d4325f908a07d11d6f47510ce28",
+        "mysqlVersion": "5.7.44-log",
+        "heartbeatAppendCount": 2,
+        "probeCleanup": "passed",
+        "capturedAt": "2026-08-14T03:50:32.133Z",
+        "sha256": "57b71ffd1eb836c8bcb9f39f70243d5bf3393b16af6149f9d8bd88016d15a088"
+      },
+      "latestProductionEvidence": {
+        "buildSha": "b55f7f814d7153e6a4a7958eb41a9bf6ff1e60e8",
+        "capturedAt": "2026-08-14T09:00:58.420Z",
+        "sha256": "0c7cd53311f9c778407e699747bc8d9b9d27b1fad18635fee1c05ff54a74e13c",
+        "activeApiInstances": 1,
+        "singleUpstreamPort": 4101,
+        "candidateStopped": true
+      },
       "verificationRunId": "fa76e44f-53d7-49da-8884-bac921aad580",
       "capacityClaim": "unverified",
       "loadBalancingEnabled": false,
@@ -1529,16 +1921,52 @@
     },
     "redisResilience": {
       "module": "M08-02",
-      "entrypoints": ["../packages/redis/src/index.ts", "../apps/api/src/redis-resilience-service.ts", "../apps/api/src/mysql-redis-resilience-repository.ts", "../apps/api/src/redis-resilience-routes.ts", "../apps/web/src/components/RedisResilienceCenter.vue", "../infra/baota/redis-single-instance-manifest.json", "../scripts/verify-redis-resilience-production.mjs"],
+      "entrypoints": [
+        "../packages/redis/src/index.ts",
+        "../apps/api/src/redis-resilience-service.ts",
+        "../apps/api/src/mysql-redis-resilience-repository.ts",
+        "../apps/api/src/redis-resilience-routes.ts",
+        "../apps/web/src/components/RedisResilienceCenter.vue",
+        "../infra/baota/redis-single-instance-manifest.json",
+        "../scripts/verify-redis-resilience-production.mjs"
+      ],
       "routes": ["/platform-admin/redis", "/api/v1/platform/operations/redis"],
       "scope": "M08-02 current Huizhou BaoTa Redis single-instance persistence resource limits fail-closed alerts restart and recovery evidence",
       "truthBoundary": "ready requires loopback protected-mode AOF everysec RDB save rules nonzero maxmemory noeviction bounded maxclients zero rejected connections zero evicted keys and a current BaoTa recovery drill",
       "permission": "the operations view requires platform:operate and transactionally appends a platform audit with request_id and trace_id; no connection URL password raw key or payload is returned",
-      "configuration": ["REDIS_MEMORY_WARNING_PERCENT", "REDIS_MEMORY_STOP_PERCENT", "REDIS_CONNECTION_WARNING_PERCENT", "REDIS_CONNECTION_STOP_PERCENT", "REDIS_RESILIENCE_PRODUCTION_EVIDENCE_FILE", "REDIS_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES"],
+      "configuration": [
+        "REDIS_MEMORY_WARNING_PERCENT",
+        "REDIS_MEMORY_STOP_PERCENT",
+        "REDIS_CONNECTION_WARNING_PERCENT",
+        "REDIS_CONNECTION_STOP_PERCENT",
+        "REDIS_RESILIENCE_PRODUCTION_EVIDENCE_FILE",
+        "REDIS_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES"
+      ],
       "runtimeBoundary": "one BaoTa Redis and one current API on the current Huizhou host with no load balancer Sentinel cluster replica backup server or capacity claim",
-      "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 Redis resilience baselines"],
-      "limits": {"maxmemoryBytes": 536870912, "maxmemoryPolicy": "noeviction", "maxclients": 512, "memoryWarningPercent": 75, "memoryStopPercent": 90, "connectionWarningPercent": 75, "connectionStopPercent": 90},
-      "latestProductionEvidence": {"buildSha": "cb81e04381c8424057c481853bceac749592cc6c", "capturedAt": "2026-08-14T12:37:03.140653Z", "sha256": "7baf6a349f410431c7c655cf8e5fdda8eda7a5b335e62ee1ecef052dcb56482a", "activeApiInstances": 1, "singleUpstreamPort": 4101, "candidateStopped": true},
+      "imageEvidence": [
+        "core 10 platform cockpit",
+        "concept 61 operations",
+        "concept 64 monitoring",
+        "concept 69 alerts",
+        "desktop and 390 Redis resilience baselines"
+      ],
+      "limits": {
+        "maxmemoryBytes": 536870912,
+        "maxmemoryPolicy": "noeviction",
+        "maxclients": 512,
+        "memoryWarningPercent": 75,
+        "memoryStopPercent": 90,
+        "connectionWarningPercent": 75,
+        "connectionStopPercent": 90
+      },
+      "latestProductionEvidence": {
+        "buildSha": "cb81e04381c8424057c481853bceac749592cc6c",
+        "capturedAt": "2026-08-14T12:37:03.140653Z",
+        "sha256": "7baf6a349f410431c7c655cf8e5fdda8eda7a5b335e62ee1ecef052dcb56482a",
+        "activeApiInstances": 1,
+        "singleUpstreamPort": 4101,
+        "candidateStopped": true
+      },
       "verificationRunId": "d0f8b44f-bbaf-4aa8-a618-6c0e01796676",
       "capacityClaim": "unverified",
       "loadBalancingEnabled": false,
@@ -1547,16 +1975,66 @@
     },
     "mysqlResilience": {
       "module": "M08-03",
-      "entrypoints": ["../packages/database/src/index.ts", "../database/migrations/0032a_compact_release_write_probe_m08_03.up.sql", "../apps/api/src/mysql-resilience-probe.ts", "../apps/api/src/mysql-resilience-service.ts", "../apps/api/src/mysql-resilience-repository.ts", "../apps/api/src/mysql-resilience-routes.ts", "../apps/web/src/components/MySqlResilienceCenter.vue", "../infra/baota/mysql-single-primary-manifest.json", "../scripts/verify-mysql-resilience-production.mjs"],
+      "entrypoints": [
+        "../packages/database/src/index.ts",
+        "../database/migrations/0032a_compact_release_write_probe_m08_03.up.sql",
+        "../apps/api/src/mysql-resilience-probe.ts",
+        "../apps/api/src/mysql-resilience-service.ts",
+        "../apps/api/src/mysql-resilience-repository.ts",
+        "../apps/api/src/mysql-resilience-routes.ts",
+        "../apps/web/src/components/MySqlResilienceCenter.vue",
+        "../infra/baota/mysql-single-primary-manifest.json",
+        "../scripts/verify-mysql-resilience-production.mjs"
+      ],
       "routes": ["/platform-admin/mysql", "/api/v1/platform/operations/mysql"],
       "scope": "M08-03 current Huizhou BaoTa MySQL 5.7 single-primary durability I/O slow-query capacity and recovery evidence",
       "truthBoundary": "ready requires MySQL 5.7 writable single primary, ROW binlog that includes product_scout, the reviewed durability contract, readable master status, no replica, resource watermarks and current encrypted same-host isolated recovery evidence; release durability samples use the compact 0032a table without deleting historical probe evidence",
       "permission": "the operations view requires platform:operate and transactionally appends observation view and platform audit with request_id trace_id; no host port account password path binlog name or SQL is returned",
-      "configuration": ["MYSQL_CONNECTION_WARNING_PERCENT", "MYSQL_CONNECTION_STOP_PERCENT", "MYSQL_DATA_WARNING_PERCENT", "MYSQL_DATA_STOP_PERCENT", "MYSQL_SLOW_QUERY_WARNING_PER_MINUTE", "MYSQL_SLOW_QUERY_STOP_PER_MINUTE", "MYSQL_BUFFER_POOL_HIT_WARNING_PERCENT", "MYSQL_MAX_RECOVERY_DRILL_AGE_DAYS", "MYSQL_MAX_RPO_MINUTES", "MYSQL_MAX_RTO_MINUTES", "MYSQL_RESILIENCE_PRODUCTION_EVIDENCE_FILE", "MYSQL_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES"],
+      "configuration": [
+        "MYSQL_CONNECTION_WARNING_PERCENT",
+        "MYSQL_CONNECTION_STOP_PERCENT",
+        "MYSQL_DATA_WARNING_PERCENT",
+        "MYSQL_DATA_STOP_PERCENT",
+        "MYSQL_SLOW_QUERY_WARNING_PER_MINUTE",
+        "MYSQL_SLOW_QUERY_STOP_PER_MINUTE",
+        "MYSQL_BUFFER_POOL_HIT_WARNING_PERCENT",
+        "MYSQL_MAX_RECOVERY_DRILL_AGE_DAYS",
+        "MYSQL_MAX_RPO_MINUTES",
+        "MYSQL_MAX_RTO_MINUTES",
+        "MYSQL_RESILIENCE_PRODUCTION_EVIDENCE_FILE",
+        "MYSQL_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES"
+      ],
       "runtimeBoundary": "one BaoTa MySQL 5.7 primary and one current API on the current Huizhou host with no read replica load balancer backup server or capacity claim",
-      "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 MySQL resilience baselines"],
-      "lastFailedProductionAttempt": {"releaseId": "cbd75718-216b-4d0e-b744-df76d334b7d2", "buildSha": "0c6748b55f99438c521142b0789164b54db188aa", "failedStage": 100, "writeP95Ms": 634, "thresholdMs": 600, "automaticRollbackVerified": true, "stablePort": 4101, "candidatePort": 4103},
-      "latestProductionEvidence": {"releaseId": "c9a74285-07ef-40fa-bd1d-8de76022dbab", "buildSha": "93abf7e56209b7e87bbcbb0d98a8e7ebd506669c", "sha256": "1dec9d197e67b97055f06fbe949ba2d51a343e718e5e38523760658856e23df7", "observationSeconds": [1800, 1800, 1800], "sampleCounts": [147, 822, 3343], "writeP95Ms": [562, 152, 416], "binlogGroupCommitSyncDelayUs": 5000, "binlogGroupCommitSyncNoDelayCount": 10, "activeApiInstances": 1, "singleUpstreamPort": 4101, "candidateStopped": true},
+      "imageEvidence": [
+        "core 10 platform cockpit",
+        "concept 61 operations",
+        "concept 64 monitoring",
+        "concept 69 alerts",
+        "desktop and 390 MySQL resilience baselines"
+      ],
+      "lastFailedProductionAttempt": {
+        "releaseId": "cbd75718-216b-4d0e-b744-df76d334b7d2",
+        "buildSha": "0c6748b55f99438c521142b0789164b54db188aa",
+        "failedStage": 100,
+        "writeP95Ms": 634,
+        "thresholdMs": 600,
+        "automaticRollbackVerified": true,
+        "stablePort": 4101,
+        "candidatePort": 4103
+      },
+      "latestProductionEvidence": {
+        "releaseId": "c9a74285-07ef-40fa-bd1d-8de76022dbab",
+        "buildSha": "93abf7e56209b7e87bbcbb0d98a8e7ebd506669c",
+        "sha256": "1dec9d197e67b97055f06fbe949ba2d51a343e718e5e38523760658856e23df7",
+        "observationSeconds": [1800, 1800, 1800],
+        "sampleCounts": [147, 822, 3343],
+        "writeP95Ms": [562, 152, 416],
+        "binlogGroupCommitSyncDelayUs": 5000,
+        "binlogGroupCommitSyncNoDelayCount": 10,
+        "activeApiInstances": 1,
+        "singleUpstreamPort": 4101,
+        "candidateStopped": true
+      },
       "verificationRunId": "e10ac4cc-c9b2-4ed8-aa80-c201d59911a5",
       "status": "module_verified",
       "capacityClaim": "unverified",
@@ -1566,15 +2044,51 @@
     },
     "fileResilience": {
       "module": "M08-04",
-      "entrypoints": ["../packages/storage/src/index.ts", "../database/migrations/0033_file_resilience_m08_04.up.sql", "../apps/api/src/file-resilience-probe.ts", "../apps/api/src/file-resilience-service.ts", "../apps/api/src/file-resilience-repository.ts", "../apps/api/src/file-resilience-routes.ts", "../apps/web/src/components/FileResilienceCenter.vue", "../infra/baota/local-file-storage-manifest.json", "../scripts/verify-file-resilience-production.mjs"],
+      "entrypoints": [
+        "../packages/storage/src/index.ts",
+        "../database/migrations/0033_file_resilience_m08_04.up.sql",
+        "../apps/api/src/file-resilience-probe.ts",
+        "../apps/api/src/file-resilience-service.ts",
+        "../apps/api/src/file-resilience-repository.ts",
+        "../apps/api/src/file-resilience-routes.ts",
+        "../apps/web/src/components/FileResilienceCenter.vue",
+        "../infra/baota/local-file-storage-manifest.json",
+        "../scripts/verify-file-resilience-production.mjs"
+      ],
       "routes": ["/platform-admin/files", "/api/v1/platform/operations/files"],
       "scope": "M08-04 current Huizhou BaoTa local evidence and export directory resilience with scoped paths checksums watermarks and same-host recovery evidence",
       "truthBoundary": "ready requires two distinct readable writable organization-and-workspace-scoped local managed roots outside the public site, bounded checksum samples with no mismatch or missing files, plus current evidence/export encrypted same-host copies and isolated recovery verification",
       "permission": "the operations view requires platform:operate and transactionally appends observation view and platform audit with request_id trace_id; no host path filename hash organization workspace account or credential is returned",
-      "configuration": ["FILE_STORAGE_WARNING_PERCENT", "FILE_STORAGE_STOP_PERCENT", "FILE_STORAGE_CHECKSUM_SAMPLE_LIMIT", "FILE_STORAGE_RECOVERY_DRILL_MAX_AGE_DAYS", "FILE_STORAGE_PRODUCTION_EVIDENCE_FILE", "FILE_STORAGE_EVIDENCE_MAX_AGE_MINUTES"],
+      "configuration": [
+        "FILE_STORAGE_WARNING_PERCENT",
+        "FILE_STORAGE_STOP_PERCENT",
+        "FILE_STORAGE_CHECKSUM_SAMPLE_LIMIT",
+        "FILE_STORAGE_RECOVERY_DRILL_MAX_AGE_DAYS",
+        "FILE_STORAGE_PRODUCTION_EVIDENCE_FILE",
+        "FILE_STORAGE_EVIDENCE_MAX_AGE_MINUTES"
+      ],
       "runtimeBoundary": "two BaoTa-managed local directories and one current API on the current Huizhou host with no shared storage load balancer backup server or capacity claim",
-      "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 local-file resilience baselines"],
-      "latestProductionEvidence": {"releaseId":"061ac550-6b31-4788-97da-93fba4ba7444","buildSha":"a8024c1589b99b27a02e8eb58a561c3f0263add6","sha256":"80a2927dfae3ca9dd2a95d6850d527dac682b6058c2cdd5fd4c3ce6c49447365","observationSeconds":[1800,1800,1801],"sampleCounts":[167,862,3370],"writeP95Ms":[47,321,332],"checksumSampledFiles":20,"checksumVerifiedFiles":20,"recoveryDrillAgeDays":3.02,"activeApiInstances":1,"singleUpstreamPort":4101,"candidateStopped":true},
+      "imageEvidence": [
+        "core 10 platform cockpit",
+        "concept 61 operations",
+        "concept 64 monitoring",
+        "concept 69 alerts",
+        "desktop and 390 local-file resilience baselines"
+      ],
+      "latestProductionEvidence": {
+        "releaseId": "061ac550-6b31-4788-97da-93fba4ba7444",
+        "buildSha": "a8024c1589b99b27a02e8eb58a561c3f0263add6",
+        "sha256": "80a2927dfae3ca9dd2a95d6850d527dac682b6058c2cdd5fd4c3ce6c49447365",
+        "observationSeconds": [1800, 1800, 1801],
+        "sampleCounts": [167, 862, 3370],
+        "writeP95Ms": [47, 321, 332],
+        "checksumSampledFiles": 20,
+        "checksumVerifiedFiles": 20,
+        "recoveryDrillAgeDays": 3.02,
+        "activeApiInstances": 1,
+        "singleUpstreamPort": 4101,
+        "candidateStopped": true
+      },
       "verificationRunId": "db0d5d96-d5c7-43e9-8190-a7cff7775129",
       "status": "module_verified",
       "capacityClaim": "unverified",
@@ -1584,15 +2098,59 @@
     },
     "crawlerSingleHostScheduler": {
       "module": "M08-05",
-      "entrypoints": ["../database/migrations/0034_crawler_scheduler_m08_05.up.sql", "../apps/api/src/crawler-scheduler-service.ts", "../apps/api/src/crawler-scheduler-repository.ts", "../apps/api/src/crawler-scheduler-probe.ts", "../apps/api/src/crawler-scheduler-routes.ts", "../apps/worker/src/single-host-resource-probe.ts", "../apps/worker/src/collection-task-worker.ts", "../apps/api/src/mysql-crawler-runtime-repository.ts", "../apps/web/src/components/CrawlerSchedulerCenter.vue", "../infra/baota/crawler-single-host-scheduler-manifest.json", "../scripts/verify-crawler-scheduler-production.mjs"],
-      "routes": ["/platform-admin/crawler-scheduler", "/api/v1/platform/operations/crawler-scheduler", "/api/v1/platform/operations/crawler-scheduler/recover-expired"],
+      "entrypoints": [
+        "../database/migrations/0034_crawler_scheduler_m08_05.up.sql",
+        "../apps/api/src/crawler-scheduler-service.ts",
+        "../apps/api/src/crawler-scheduler-repository.ts",
+        "../apps/api/src/crawler-scheduler-probe.ts",
+        "../apps/api/src/crawler-scheduler-routes.ts",
+        "../apps/worker/src/single-host-resource-probe.ts",
+        "../apps/worker/src/collection-task-worker.ts",
+        "../apps/api/src/mysql-crawler-runtime-repository.ts",
+        "../apps/web/src/components/CrawlerSchedulerCenter.vue",
+        "../infra/baota/crawler-single-host-scheduler-manifest.json",
+        "../scripts/verify-crawler-scheduler-production.mjs"
+      ],
+      "routes": [
+        "/platform-admin/crawler-scheduler",
+        "/api/v1/platform/operations/crawler-scheduler",
+        "/api/v1/platform/operations/crawler-scheduler/recover-expired"
+      ],
       "scope": "M08-05 current Huizhou BaoTa single-host Crawler and Worker scheduling with one global slot each, provider effective concurrency one, exclusive browser profiles, MySQL lease truth and host resource stop gates",
       "truthBoundary": "ready requires exactly one supervised Worker and its collection execution lane inside the unified BaoTa backend, no global provider or profile lease overflow, a current resource observation below the fixed stop gates and MySQL 5.7 as lease truth",
       "permission": "platform operations read and idempotent expired-slot recovery require platform:operate; responses exclude task payloads scope identifiers lease tokens hashes credentials cookies and paths while observation recovery and failure retain request_id trace_id and audit",
-      "configuration": ["CRAWLER_SCHEDULER_MAX_LOAD_PERCENT", "CRAWLER_SCHEDULER_MIN_AVAILABLE_MEMORY_MB", "CRAWLER_SCHEDULER_MIN_FREE_DISK_MB", "CRAWLER_SCHEDULER_STALE_AFTER_SECONDS", "CRAWLER_SCHEDULER_PRODUCTION_EVIDENCE_FILE", "CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES"],
+      "configuration": [
+        "CRAWLER_SCHEDULER_MAX_LOAD_PERCENT",
+        "CRAWLER_SCHEDULER_MIN_AVAILABLE_MEMORY_MB",
+        "CRAWLER_SCHEDULER_MIN_FREE_DISK_MB",
+        "CRAWLER_SCHEDULER_STALE_AFTER_SECONDS",
+        "CRAWLER_SCHEDULER_PRODUCTION_EVIDENCE_FILE",
+        "CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES"
+      ],
       "runtimeBoundary": "one supervised Worker with one collection execution lane inside the single BaoTa ai选品 backend on the current Huizhou host; Redis remains scoped queue coordination and MySQL 5.7 remains lease truth; no load balancer backup server multi-node or capacity claim",
-      "imageEvidence": ["core 10 platform cockpit", "concept 61 operations", "concept 62 source management", "concept 63 task monitor", "concept 64 monitoring", "concept 69 alerts", "desktop and 390 scheduler baselines"],
-      "latestProductionEvidence": {"releaseId":"a21e286f-836e-4c0c-ac76-3fc5fcf298c8","buildSha":"efdb35081bdc5002eea1729e0af4583be3ae7523","rolloutSha256":"7739d5b5ee727f373e5a63267dedd5c4a25547f1214642025baa31a47947e3f4","schedulerEvidenceSha256":"50806f678946c2b1acffec8ed21271f62c0bd61ade4cdc737778216b2850a247","observationSeconds":[1800,1800,1800],"sampleCounts":[169,792,3388],"writeP95Ms":[456,350,290],"workerInstances":1,"crawlerInstances":1,"maximumProviderConcurrency":1,"singleUpstreamPort":4101,"candidateStopped":true},
+      "imageEvidence": [
+        "core 10 platform cockpit",
+        "concept 61 operations",
+        "concept 62 source management",
+        "concept 63 task monitor",
+        "concept 64 monitoring",
+        "concept 69 alerts",
+        "desktop and 390 scheduler baselines"
+      ],
+      "latestProductionEvidence": {
+        "releaseId": "a21e286f-836e-4c0c-ac76-3fc5fcf298c8",
+        "buildSha": "efdb35081bdc5002eea1729e0af4583be3ae7523",
+        "rolloutSha256": "7739d5b5ee727f373e5a63267dedd5c4a25547f1214642025baa31a47947e3f4",
+        "schedulerEvidenceSha256": "50806f678946c2b1acffec8ed21271f62c0bd61ade4cdc737778216b2850a247",
+        "observationSeconds": [1800, 1800, 1800],
+        "sampleCounts": [169, 792, 3388],
+        "writeP95Ms": [456, 350, 290],
+        "workerInstances": 1,
+        "crawlerInstances": 1,
+        "maximumProviderConcurrency": 1,
+        "singleUpstreamPort": 4101,
+        "candidateStopped": true
+      },
       "verificationRunId": "a6e9e5d7-dffd-4732-8706-29cd9cdc6ecb",
       "status": "module_verified",
       "capacityClaim": "unverified",
@@ -1605,15 +2163,65 @@
     },
     "capacityBoundary": {
       "module": "M08-06",
-      "entrypoints": ["../database/migrations/0035_capacity_boundary_m08_06.up.sql", "../apps/api/src/capacity-boundary-service.ts", "../apps/api/src/capacity-boundary-repository.ts", "../apps/api/src/capacity-boundary-routes.ts", "../apps/web/src/components/CapacityBoundaryCenter.vue", "../infra/baota/capacity-boundary-manifest.json", "../scripts/capture-capacity-boundary-production.mjs", "../scripts/verify-capacity-boundary-production.mjs"],
-      "routes": ["/platform-admin/capacity", "/api/v1/platform/operations/capacity", "/api/v1/platform/operations/capacity/drills"],
+      "entrypoints": [
+        "../database/migrations/0035_capacity_boundary_m08_06.up.sql",
+        "../apps/api/src/capacity-boundary-service.ts",
+        "../apps/api/src/capacity-boundary-repository.ts",
+        "../apps/api/src/capacity-boundary-routes.ts",
+        "../apps/web/src/components/CapacityBoundaryCenter.vue",
+        "../infra/baota/capacity-boundary-manifest.json",
+        "../scripts/capture-capacity-boundary-production.mjs",
+        "../scripts/verify-capacity-boundary-production.mjs"
+      ],
+      "routes": [
+        "/platform-admin/capacity",
+        "/api/v1/platform/operations/capacity",
+        "/api/v1/platform/operations/capacity/drills"
+      ],
       "scope": "M08-06 software completion and honest capacity state for the current single-host product; server devices production resource evidence and capacity load tests are optional operations rather than software completion gates",
       "truthBoundary": "software completion keeps capacityClaim unverified when optional same-commit production measurements are absent or blocked; planned users and concurrency are never promoted to measured claims, while any separately executed measurement must still preserve ordered stages fixed thresholds failure evidence and canonical UTC timestamps",
       "permission": "platform operations read and idempotent archive_recovery attestation require platform:operate; responses exclude customer payloads paths filenames hashes credentials cookies and SQL while view drill and failure retain request_id trace_id and audit",
-      "configuration": ["CAPACITY_BOUNDARY_READ_P95_MS", "CAPACITY_BOUNDARY_WRITE_P95_MS", "CAPACITY_BOUNDARY_ERROR_RATE_PERCENT", "CAPACITY_BOUNDARY_ASYNC_LAG_SECONDS", "CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE", "CAPACITY_BOUNDARY_EVIDENCE_MAX_AGE_MINUTES", "CAPACITY_BOUNDARY_STAGE_SECONDS"],
+      "configuration": [
+        "CAPACITY_BOUNDARY_READ_P95_MS",
+        "CAPACITY_BOUNDARY_WRITE_P95_MS",
+        "CAPACITY_BOUNDARY_ERROR_RATE_PERCENT",
+        "CAPACITY_BOUNDARY_ASYNC_LAG_SECONDS",
+        "CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE",
+        "CAPACITY_BOUNDARY_EVIDENCE_MAX_AGE_MINUTES",
+        "CAPACITY_BOUNDARY_STAGE_SECONDS"
+      ],
       "runtimeBoundary": "one BaoTa ai选品 unified Node backend supervising API Worker and on-demand collection execution, plus MySQL Redis Nginx and finite tasks on the Huizhou host; no separate backend projects, persistent candidate, load balancer, backup server, multi-node or 10000-user claim",
-      "failureEvidence": {"schemaVersion":1,"status":"blocked","requiredFields":["failure.code","failure.failedStage","completedStages","thresholds"],"limitedBoundaryRequiredFields":["measuredConcurrentUsers","stages","boundaryStop.reason","boundaryStop.failureCode","boundaryStop.failedStage"],"lastPassingStageOnly":true,"failedNextStagePreserved":true,"capacityClaim":"unverified_until_concurrency_5_passes","atomicWrite":true},
-      "imageEvidence": ["concept 61 operations", "concept 63 task monitor", "concept 64 monitoring", "concept 65 logs", "concept 66 security audit", "concept 69 alerts", "core 10 platform cockpit", "desktop and 390 capacity baselines"],
+      "failureEvidence": {
+        "schemaVersion": 1,
+        "status": "blocked",
+        "requiredFields": [
+          "failure.code",
+          "failure.failedStage",
+          "completedStages",
+          "thresholds"
+        ],
+        "limitedBoundaryRequiredFields": [
+          "measuredConcurrentUsers",
+          "stages",
+          "boundaryStop.reason",
+          "boundaryStop.failureCode",
+          "boundaryStop.failedStage"
+        ],
+        "lastPassingStageOnly": true,
+        "failedNextStagePreserved": true,
+        "capacityClaim": "unverified_until_concurrency_5_passes",
+        "atomicWrite": true
+      },
+      "imageEvidence": [
+        "concept 61 operations",
+        "concept 63 task monitor",
+        "concept 64 monitoring",
+        "concept 65 logs",
+        "concept 66 security audit",
+        "concept 69 alerts",
+        "core 10 platform cockpit",
+        "desktop and 390 capacity baselines"
+      ],
       "verificationRunId": "29af24e4-2ff4-467a-9676-b49cae9b8b14",
       "status": "software_complete_capacity_out_of_scope",
       "capacityClaim": "unverified",
@@ -1723,7 +2331,10 @@
   },
   "technology": {
     "frontend": ["Vue 3", "TypeScript"],
-    "backend": ["Node.js unified production backend", "Python on-demand collection subprocess only"],
+    "backend": [
+      "Node.js unified production backend",
+      "Python on-demand collection subprocess only"
+    ],
     "database": "MySQL 5.7",
     "cacheQueue": "Redis",
     "deployment": "Baota panel managed services on self-hosted servers"
@@ -2003,24 +2614,76 @@
       "domain": "decision-analysis",
       "status": "implemented_as_opportunity_ai_analyses_contract"
     },
-    { "prefix": "/api/v1/reports", "domain": "reports-exports", "status": "M05-06_module_verified" },
-    { "prefix": "/api/v1/report-exports", "domain": "reports-exports", "status": "M05-06_module_verified" },
-    { "prefix": "/api/v1/org/admin", "domain": "organization-admin", "status": "M06-01_module_verified" },
+    {
+      "prefix": "/api/v1/reports",
+      "domain": "reports-exports",
+      "status": "M05-06_module_verified"
+    },
+    {
+      "prefix": "/api/v1/report-exports",
+      "domain": "reports-exports",
+      "status": "M05-06_module_verified"
+    },
+    {
+      "prefix": "/api/v1/org/admin",
+      "domain": "organization-admin",
+      "status": "M06-01_module_verified"
+    },
     {
       "prefix": "/api/v1/platform",
       "domain": "platform",
       "status": "platform_accounts_audit_dashboard_sources_collection_quality_security_open_platform_and_commercial_implemented"
     },
-    { "prefix": "/api/v1/platform/accounts", "domain": "platform-accounts", "status": "implemented_pending_live_verification" },
-    { "prefix": "/api/v1/provider-sources/refresh", "domain": "automatic-hotspot-sources", "status": "implemented_pending_live_verification" },
-    { "prefix": "/api/v1/platform/operations/topology", "domain": "runtime-topology", "status": "M08-01_single_server_module_verified" },
-    { "prefix": "/api/v1/platform/operations/redis", "domain": "redis-resilience", "status": "M08-02_module_verified" },
-    { "prefix": "/api/v1/platform/operations/mysql", "domain": "mysql-resilience", "status": "M08-03_module_verified" },
-    { "prefix": "/api/v1/platform/operations/files", "domain": "file-resilience", "status": "M08-04_module_verified" },
-    { "prefix": "/api/v1/platform/operations/crawler-scheduler", "domain": "crawler-single-host-scheduler", "status": "M08-05_module_verified" },
-    { "prefix": "/api/v1/platform/operations/capacity", "domain": "capacity-boundary", "status": "M08-06_software_complete_capacity_out_of_scope" },
-    { "prefix": "/api/v1/platform/commercial", "domain": "commercial-operations", "status": "M06-06_module_verified" },
-    { "prefix": "/open/v1", "domain": "open-platform", "status": "M06-05_status_endpoint_verified" }
+    {
+      "prefix": "/api/v1/platform/accounts",
+      "domain": "platform-accounts",
+      "status": "implemented_pending_live_verification"
+    },
+    {
+      "prefix": "/api/v1/provider-sources/refresh",
+      "domain": "automatic-hotspot-sources",
+      "status": "implemented_pending_live_verification"
+    },
+    {
+      "prefix": "/api/v1/platform/operations/topology",
+      "domain": "runtime-topology",
+      "status": "M08-01_single_server_module_verified"
+    },
+    {
+      "prefix": "/api/v1/platform/operations/redis",
+      "domain": "redis-resilience",
+      "status": "M08-02_module_verified"
+    },
+    {
+      "prefix": "/api/v1/platform/operations/mysql",
+      "domain": "mysql-resilience",
+      "status": "M08-03_module_verified"
+    },
+    {
+      "prefix": "/api/v1/platform/operations/files",
+      "domain": "file-resilience",
+      "status": "M08-04_module_verified"
+    },
+    {
+      "prefix": "/api/v1/platform/operations/crawler-scheduler",
+      "domain": "crawler-single-host-scheduler",
+      "status": "M08-05_module_verified"
+    },
+    {
+      "prefix": "/api/v1/platform/operations/capacity",
+      "domain": "capacity-boundary",
+      "status": "M08-06_software_complete_capacity_out_of_scope"
+    },
+    {
+      "prefix": "/api/v1/platform/commercial",
+      "domain": "commercial-operations",
+      "status": "M06-06_module_verified"
+    },
+    {
+      "prefix": "/open/v1",
+      "domain": "open-platform",
+      "status": "M06-05_status_endpoint_verified"
+    }
   ],
   "runtime": [
     {

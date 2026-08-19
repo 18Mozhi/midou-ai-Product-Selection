@@ -10,11 +10,49 @@ test("platform notification operations expose templates channels subscriptions d
       "apps/worker/src/notification-outbox-worker.ts",
     ].map((path) => readFile(path, "utf8")),
   );
-  for (const label of ["系统模板", "渠道状态", "用户订阅", "告警路由", "通知与投递记录", "新增或编辑自动化路由"])
+  for (const label of [
+    "系统模板",
+    "渠道状态",
+    "用户订阅",
+    "告警路由",
+    "通知与投递记录",
+    "新增或编辑自动化路由",
+  ])
     assert.match(web, new RegExp(label));
-  for (const fact of ["notification_preferences", "notification_deliveries", "automation_rules", "competitor_monitor_rules", "pending_provider_selection"])
+  for (const fact of [
+    "notification_preferences",
+    "notification_deliveries",
+    "automation_rules",
+    "competitor_monitor_rules",
+    "pending_provider_selection",
+  ])
     assert.match(repository, new RegExp(fact));
   assert.match(worker, /任务状态更新/);
   assert.match(worker, /审批状态更新/);
   assert.match(worker, /竞品监控更新/);
+});
+
+test("platform notification and email drafts support create edit publish and cancel", async () => {
+  const [web, service, routes, migration, openapi, featureMap] =
+    await Promise.all(
+      [
+        "apps/web/src/components/PlatformManagementCenter.vue",
+        "apps/api/src/platform-dashboard-service.ts",
+        "apps/api/src/platform-dashboard-routes.ts",
+        "database/migrations/0040_platform_messages.up.sql",
+        "docs/openapi.yaml",
+        "docs/feature-map.json",
+      ].map((path) => readFile(path, "utf8")),
+    );
+  for (const label of ["发布通知", "发送邮件", "编辑草稿", "取消草稿"])
+    assert.match(web, new RegExp(label));
+  for (const operation of ["createMessage", "updateMessage", "messageAction"])
+    assert.match(service, new RegExp(operation));
+  assert.match(routes, /management\/messages\/:messageId\/actions/);
+  assert.match(migration, /CREATE TABLE `platform_messages`/);
+  assert.match(
+    openapi,
+    /platform\/management\/messages\/\{messageId\}\/actions/,
+  );
+  assert.match(featureMap, /0040_platform_messages\.up\.sql/);
 });

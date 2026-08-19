@@ -243,7 +243,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           [filter, filter, filter, status],
         ),
         this.pool.query<RowDataPacket[]>(
-          "SELECT a.id,a.name,a.trigger_event_type,a.action_type,a.status,a.version,a.updated_at,o.name organization_name,w.name workspace_name FROM automation_rules a JOIN organizations o ON o.id=a.organization_id JOIN workspaces w ON w.id=a.workspace_id WHERE (a.name LIKE ? OR a.trigger_event_type LIKE ? OR o.name LIKE ?) AND a.status LIKE ? ORDER BY a.updated_at DESC LIMIT 40",
+          "SELECT a.id,a.name,a.trigger_event_type,a.condition_severity,a.action_type,a.owner_id,a.action_assignee_id,a.action_title,a.rate_limit_count,a.rate_limit_window_minutes,a.status,a.version,a.updated_at,o.name organization_name,w.name workspace_name FROM automation_rules a JOIN organizations o ON o.id=a.organization_id JOIN workspaces w ON w.id=a.workspace_id WHERE (a.name LIKE ? OR a.trigger_event_type LIKE ? OR o.name LIKE ?) AND a.status LIKE ? ORDER BY a.updated_at DESC LIMIT 40",
           [filter, filter, filter, status],
         ),
         this.pool.query<RowDataPacket[]>(
@@ -319,6 +319,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           "SELECT r.id,CONCAT('竞品 ',r.metric,' ',r.direction) name,CONCAT('competitor.',r.metric,'.',r.direction) event_type,'notify_owner' action_type,r.status,r.revision version,o.name organization_name,w.name workspace_name,r.updated_at FROM competitor_monitor_rules r JOIN organizations o ON o.id=r.organization_id JOIN workspaces w ON w.id=r.workspace_id ORDER BY r.updated_at DESC LIMIT 30",
         ),
       ]);
+      const messageManagement = await this.messageManagement("notification");
       return {
         domain: i.domain,
         summary: {
@@ -391,6 +392,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           )
           .slice(0, 50)
           .map((row: any) => ({ ...row, updated_at: iso(row.updated_at) })),
+        ...messageManagement,
         observed_at: this.now().toISOString(),
       };
     }
@@ -422,6 +424,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
             new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
         )
         .slice(0, 100);
+      const messageManagement = await this.messageManagement("email");
       return {
         domain: i.domain,
         summary: {
@@ -438,6 +441,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           created_at: iso(r.created_at),
           updated_at: iso(r.updated_at),
         })),
+        ...messageManagement,
         observed_at: this.now().toISOString(),
       };
     }
@@ -451,42 +455,41 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       [mysqlObservations],
       [fileObservations],
       [schedulerObservations],
-    ] = await Promise.all(
-      [
-        this.pool.query<RowDataPacket[]>(
-          "SELECT COUNT(*) recent_views FROM platform_dashboard_views WHERE observed_at>=DATE_SUB(UTC_TIMESTAMP(3),INTERVAL 15 MINUTE)",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT status,COUNT(*) total FROM collection_tasks GROUP BY status ORDER BY total DESC",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT status,COUNT(*) total FROM providers GROUP BY status",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT (SELECT COUNT(*) FROM organizations WHERE status='active') active_organizations,(SELECT COUNT(*) FROM users WHERE status='active') active_users",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT node_id,role,status,build_sha,app_version,last_heartbeat_at FROM runtime_nodes WHERE role='api' ORDER BY last_heartbeat_at DESC LIMIT 1",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT state,observed_at FROM redis_resilience_observations ORDER BY observed_at DESC LIMIT 1",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT state,observed_at FROM mysql_resilience_observations ORDER BY observed_at DESC LIMIT 1",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT state,observed_at FROM file_resilience_observations ORDER BY observed_at DESC LIMIT 1",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT state,worker_instances,crawler_instances,active_worker_leases,active_crawler_leases,observed_at FROM crawler_scheduler_observations ORDER BY observed_at DESC LIMIT 1",
-        ),
-      ],
-    );
+    ] = await Promise.all([
+      this.pool.query<RowDataPacket[]>(
+        "SELECT COUNT(*) recent_views FROM platform_dashboard_views WHERE observed_at>=DATE_SUB(UTC_TIMESTAMP(3),INTERVAL 15 MINUTE)",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT status,COUNT(*) total FROM collection_tasks GROUP BY status ORDER BY total DESC",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT status,COUNT(*) total FROM providers GROUP BY status",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT (SELECT COUNT(*) FROM organizations WHERE status='active') active_organizations,(SELECT COUNT(*) FROM users WHERE status='active') active_users",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT node_id,role,status,build_sha,app_version,last_heartbeat_at FROM runtime_nodes WHERE role='api' ORDER BY last_heartbeat_at DESC LIMIT 1",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT state,observed_at FROM redis_resilience_observations ORDER BY observed_at DESC LIMIT 1",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT state,observed_at FROM mysql_resilience_observations ORDER BY observed_at DESC LIMIT 1",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT state,observed_at FROM file_resilience_observations ORDER BY observed_at DESC LIMIT 1",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT state,worker_instances,crawler_instances,active_worker_leases,active_crawler_leases,observed_at FROM crawler_scheduler_observations ORDER BY observed_at DESC LIMIT 1",
+      ),
+    ]);
     const staleAfterMs = 5 * 60 * 1000,
       serviceState = (row: any, fallback = "unknown") =>
         !row
           ? fallback
-          : this.now().getTime() - new Date(row.observed_at ?? row.last_heartbeat_at).getTime() >
+          : this.now().getTime() -
+                new Date(row.observed_at ?? row.last_heartbeat_at).getTime() >
               staleAfterMs
             ? "stale"
             : String(row.state ?? row.status ?? fallback),
@@ -507,7 +510,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       services: [
         {
           code: "api",
-          name: "Node API",
+          name: "后端接口",
           status: serviceState(runtime),
           detail: runtime
             ? `${runtime.app_version} · ${String(runtime.build_sha).slice(0, 12)}`
@@ -517,7 +520,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         },
         {
           code: "mysql",
-          name: "MySQL",
+          name: "数据库",
           status: serviceState(mysql, "healthy"),
           detail: mysql ? "最近一次韧性检查" : "本次管理查询成功",
           observed_at: iso(mysql?.observed_at) ?? this.now().toISOString(),
@@ -525,7 +528,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         },
         {
           code: "redis",
-          name: "Redis",
+          name: "缓存与任务队列",
           status: serviceState(redis),
           detail: redis ? "最近一次韧性检查" : "尚未执行韧性检查",
           observed_at: iso(redis?.observed_at),
@@ -541,7 +544,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         },
         {
           code: "worker",
-          name: "Node Worker",
+          name: "任务处理服务",
           status: serviceState(scheduler),
           detail: scheduler
             ? `${n(scheduler.worker_instances)} 个实例 · ${n(scheduler.active_worker_leases)} 个活动任务`
@@ -551,7 +554,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         },
         {
           code: "crawler",
-          name: "Python Crawler",
+          name: "网页采集服务",
           status: serviceState(scheduler),
           detail: scheduler
             ? `${n(scheduler.crawler_instances)} 个实例 · ${n(scheduler.active_crawler_leases)} 个活动运行`
@@ -570,6 +573,397 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       })),
       observed_at: this.now().toISOString(),
     };
+  }
+  private async messageManagement(kind: "notification" | "email") {
+    const [[messages], [organizations], [users]] = await Promise.all([
+      this.pool.query<RowDataPacket[]>(
+        "SELECT m.*,o.name organization_name,u.email user_email,creator.email created_by_email FROM platform_messages m LEFT JOIN organizations o ON o.id=m.organization_id LEFT JOIN users u ON u.id=m.user_id JOIN users creator ON creator.id=m.created_by WHERE m.kind=? ORDER BY m.updated_at DESC LIMIT 100",
+        [kind],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT id,name FROM organizations WHERE status='active' ORDER BY name LIMIT 200",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT id,email FROM users WHERE status='active' ORDER BY email LIMIT 500",
+      ),
+    ]);
+    return {
+      messages: messages.map((row: any) => ({
+        ...row,
+        in_app_enabled: Boolean(row.in_app_enabled),
+        email_enabled: Boolean(row.email_enabled),
+        version: n(row.version),
+        published_at: iso(row.published_at),
+        created_at: iso(row.created_at),
+        updated_at: iso(row.updated_at),
+      })),
+      audience_options: {
+        organizations: organizations.map((row: any) => ({
+          id: row.id,
+          name: row.name,
+        })),
+        users: users.map((row: any) => ({ id: row.id, email: row.email })),
+      },
+    };
+  }
+  private async replayOperation(c: any, i: any) {
+    const [rows] = await c.query<RowDataPacket[]>(
+      "SELECT result_json FROM platform_management_operations WHERE actor_id=? AND route=? AND idempotency_key=? FOR UPDATE",
+      [i.actorId, i.route, i.idempotencyKey],
+    );
+    const value = rows[0]?.result_json;
+    return value
+      ? typeof value === "string"
+        ? JSON.parse(value)
+        : value
+      : null;
+  }
+  private async saveOperation(c: any, i: any, resourceId: string, result: any) {
+    await c.query(
+      "INSERT INTO platform_management_operations(id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES(?,?,?,?,?,?,?)",
+      [
+        randomUUID(),
+        i.actorId,
+        i.route,
+        i.idempotencyKey,
+        resourceId,
+        JSON.stringify(result),
+        i.now,
+      ],
+    );
+  }
+  private async auditMessage(
+    c: any,
+    i: any,
+    action: string,
+    resourceId: string,
+    metadata: any,
+  ) {
+    await c.query(
+      "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,? ,?,'platform_message',?,'succeeded',?,?,?,?,1)",
+      [
+        randomUUID(),
+        i.actorId,
+        action,
+        resourceId,
+        i.requestId,
+        i.traceId,
+        JSON.stringify(metadata),
+        i.now,
+      ],
+    );
+  }
+  async createMessage(i: any) {
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      const replay = await this.replayOperation(c, i);
+      if (replay) {
+        await c.commit();
+        return replay;
+      }
+      const id = randomUUID(),
+        v = i.value;
+      await c.query(
+        "INSERT INTO platform_messages(id,kind,title,body,category,severity,audience_type,organization_id,user_id,in_app_enabled,email_enabled,status,version,created_by,updated_by,published_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,'draft',1,?,?,NULL,?,?)",
+        [
+          id,
+          v.kind,
+          v.title,
+          v.body,
+          v.category,
+          v.severity,
+          v.audience_type,
+          v.organization_id,
+          v.user_id,
+          v.in_app_enabled,
+          v.email_enabled,
+          i.actorId,
+          i.actorId,
+          i.now,
+          i.now,
+        ],
+      );
+      const result = { id, status: "draft", version: 1 };
+      await this.auditMessage(c, i, "platform.message.created", id, {
+        kind: v.kind,
+        audience_type: v.audience_type,
+      });
+      await this.saveOperation(c, i, id, result);
+      await c.commit();
+      return result;
+    } catch (error: any) {
+      await c.rollback();
+      if (error?.code === "ER_NO_REFERENCED_ROW_2")
+        throw new PlatformDashboardError(
+          "platform_message_target_not_found",
+          404,
+          "选择仍然有效的组织或用户。",
+        );
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  async updateMessage(i: any) {
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      const replay = await this.replayOperation(c, i);
+      if (replay) {
+        await c.commit();
+        return replay;
+      }
+      const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT status,version FROM platform_messages WHERE id=? FOR UPDATE",
+        [i.messageId],
+      );
+      if (!rows[0])
+        throw new PlatformDashboardError(
+          "platform_message_not_found",
+          404,
+          "刷新草稿列表。",
+        );
+      if (rows[0].status !== "draft")
+        throw new PlatformDashboardError(
+          "platform_message_not_editable",
+          409,
+          "已发布或已取消的内容不能修改，可新建草稿。",
+        );
+      if (n(rows[0].version) !== i.expectedVersion)
+        throw new PlatformDashboardError(
+          "platform_message_version_conflict",
+          409,
+          "草稿已被其他管理员修改，刷新后重试。",
+        );
+      const v = i.value,
+        version = i.expectedVersion + 1;
+      await c.query(
+        "UPDATE platform_messages SET kind=?,title=?,body=?,category=?,severity=?,audience_type=?,organization_id=?,user_id=?,in_app_enabled=?,email_enabled=?,version=?,updated_by=?,updated_at=? WHERE id=?",
+        [
+          v.kind,
+          v.title,
+          v.body,
+          v.category,
+          v.severity,
+          v.audience_type,
+          v.organization_id,
+          v.user_id,
+          v.in_app_enabled,
+          v.email_enabled,
+          version,
+          i.actorId,
+          i.now,
+          i.messageId,
+        ],
+      );
+      const result = { id: i.messageId, status: "draft", version };
+      await this.auditMessage(c, i, "platform.message.updated", i.messageId, {
+        reason: i.reason,
+        version,
+      });
+      await this.saveOperation(c, i, i.messageId, result);
+      await c.commit();
+      return result;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  async messageAction(i: any) {
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      const replay = await this.replayOperation(c, i);
+      if (replay) {
+        await c.commit();
+        return replay;
+      }
+      const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT * FROM platform_messages WHERE id=? FOR UPDATE",
+        [i.messageId],
+      );
+      const message = rows[0];
+      if (!message)
+        throw new PlatformDashboardError(
+          "platform_message_not_found",
+          404,
+          "刷新草稿列表。",
+        );
+      if (message.status !== "draft")
+        throw new PlatformDashboardError(
+          "platform_message_action_conflict",
+          409,
+          "该草稿已经发布或取消。",
+        );
+      if (n(message.version) !== i.expectedVersion)
+        throw new PlatformDashboardError(
+          "platform_message_version_conflict",
+          409,
+          "草稿已被其他管理员修改，刷新后重试。",
+        );
+      const next = i.expectedVersion + 1;
+      if (i.action === "cancel") {
+        await c.query(
+          "UPDATE platform_messages SET status='cancelled',version=?,updated_by=?,updated_at=? WHERE id=?",
+          [next, i.actorId, i.now, i.messageId],
+        );
+        const result = {
+          id: i.messageId,
+          status: "cancelled",
+          version: next,
+          recipient_count: 0,
+        };
+        await this.auditMessage(
+          c,
+          i,
+          "platform.message.cancelled",
+          i.messageId,
+          { reason: i.reason },
+        );
+        await this.saveOperation(c, i, i.messageId, result);
+        await c.commit();
+        return result;
+      }
+      const args: any[] = [];
+      let target = "";
+      let earlierScope = "";
+      if (message.audience_type === "organization") {
+        target = "AND m.organization_id=?";
+        earlierScope = "AND earlier.organization_id=m.organization_id";
+        args.push(message.organization_id);
+      }
+      if (message.audience_type === "user") {
+        target = "AND u.id=?";
+        args.push(message.user_id);
+      }
+      const [recipients] = await c.query<RowDataPacket[]>(
+        `SELECT u.id user_id,m.organization_id,o.default_workspace_id workspace_id FROM users u JOIN memberships m ON m.user_id=u.id AND m.status='active' JOIN organizations o ON o.id=m.organization_id AND o.status='active' AND o.default_workspace_id IS NOT NULL WHERE u.status='active' ${target} AND NOT EXISTS(SELECT 1 FROM memberships earlier JOIN organizations earlier_o ON earlier_o.id=earlier.organization_id AND earlier_o.status='active' AND earlier_o.default_workspace_id IS NOT NULL WHERE earlier.user_id=u.id AND earlier.status='active' ${earlierScope} AND (earlier.created_at<m.created_at OR (earlier.created_at=m.created_at AND earlier.id<m.id))) ORDER BY u.email`,
+        args,
+      );
+      if (!recipients.length)
+        throw new PlatformDashboardError(
+          "platform_message_audience_empty",
+          409,
+          "目标范围没有可接收消息的活动用户。",
+        );
+      let inAppCount = 0,
+        emailCount = 0;
+      for (const recipient of recipients) {
+        const eventId = randomUUID(),
+          notificationId = randomUUID();
+        const payload = {
+          resource_type: "platform_message",
+          resource_id: i.messageId,
+          title: message.title,
+        };
+        await c.query(
+          "INSERT INTO outbox_events(id,organization_id,workspace_id,event_type,schema_version,payload_json,status,attempt_count,available_at,published_at,request_id,trace_id,created_at,updated_at,version) VALUES(?,?,?,'platform.message.published',1,?,'published',0,?,?,?,?,?,?,1)",
+          [
+            eventId,
+            recipient.organization_id,
+            recipient.workspace_id,
+            JSON.stringify(payload),
+            i.now,
+            i.now,
+            i.requestId,
+            i.traceId,
+            i.now,
+            i.now,
+          ],
+        );
+        await c.query(
+          "INSERT INTO notifications(id,organization_id,workspace_id,recipient_id,source_event_id,category,severity,title,body,resource_type,resource_id,read_at,version,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,'platform_message',?,NULL,1,?,?)",
+          [
+            notificationId,
+            recipient.organization_id,
+            recipient.workspace_id,
+            recipient.user_id,
+            eventId,
+            message.category,
+            message.severity,
+            message.title,
+            message.body,
+            i.messageId,
+            i.now,
+            i.now,
+          ],
+        );
+        if (message.in_app_enabled) {
+          await c.query(
+            "INSERT INTO notification_deliveries(id,organization_id,workspace_id,notification_id,recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES(?,?,?,?,?,'in_app','delivered',1,?,?)",
+            [
+              randomUUID(),
+              recipient.organization_id,
+              recipient.workspace_id,
+              notificationId,
+              recipient.user_id,
+              i.now,
+              i.now,
+            ],
+          );
+          await c.query(
+            "INSERT INTO realtime_events(organization_id,workspace_id,recipient_id,notification_id,event_type,payload_json,created_at) VALUES(?,?,?,?, 'notification.created',?,?)",
+            [
+              recipient.organization_id,
+              recipient.workspace_id,
+              recipient.user_id,
+              notificationId,
+              JSON.stringify({
+                id: notificationId,
+                category: message.category,
+                severity: message.severity,
+                title: message.title,
+                created_at: i.now.toISOString(),
+              }),
+              i.now,
+            ],
+          );
+          inAppCount += 1;
+        }
+        if (message.email_enabled) {
+          await c.query(
+            "INSERT INTO notification_deliveries(id,organization_id,workspace_id,notification_id,recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES(?,?,?,?,?,'email','pending_placeholder',0,?,?)",
+            [
+              randomUUID(),
+              recipient.organization_id,
+              recipient.workspace_id,
+              notificationId,
+              recipient.user_id,
+              i.now,
+              i.now,
+            ],
+          );
+          emailCount += 1;
+        }
+      }
+      await c.query(
+        "UPDATE platform_messages SET status='published',published_at=?,version=?,updated_by=?,updated_at=? WHERE id=?",
+        [i.now, next, i.actorId, i.now, i.messageId],
+      );
+      const result = {
+        id: i.messageId,
+        status: "published",
+        version: next,
+        recipient_count: recipients.length,
+        in_app_count: inAppCount,
+        email_count: emailCount,
+      };
+      await this.auditMessage(c, i, "platform.message.published", i.messageId, {
+        ...result,
+        reason: i.reason,
+      });
+      await this.saveOperation(c, i, i.messageId, result);
+      await c.commit();
+      return result;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
   }
   async moderateTrend(i: any) {
     const c = await this.pool.getConnection();

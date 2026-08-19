@@ -369,7 +369,7 @@ onMounted(() => {
   <section class="opportunity-workspace">
     <header class="opportunity-hero">
       <div>
-        <p>DECISION WORKSPACE</p>
+        <p>决策工作台</p>
         <h2>{{ opportunityId ? "机会详情" : "选品机会" }}</h2>
         <span
           >评分、利润、风险和证据均展示真实状态；缺少下游输入时明确标记数据不足。</span
@@ -417,7 +417,7 @@ onMounted(() => {
       <section v-else class="opportunity-list">
         <header>
           <div>
-            <p>OPPORTUNITY PIPELINE</p>
+            <p>机会流程</p>
             <h3>机会列表</h3>
           </div>
           <span>共 {{ total }} 个机会 · 按更新时间排序</span>
@@ -519,7 +519,7 @@ onMounted(() => {
         </nav>
         <section v-if="tab === 'overview'" class="opportunity-overview">
           <article class="opportunity-score">
-            <p>SCORE EXPLANATION</p>
+            <p>评分解释</p>
             <h4>机会评分解读</h4>
             <strong>{{ detail.overall_score ?? "数据不足" }}</strong
             ><span v-if="detail.latest_score_run"
@@ -554,7 +554,7 @@ onMounted(() => {
             </footer>
           </article>
           <article>
-            <p>EVIDENCE COVERAGE</p>
+            <p>证据覆盖</p>
             <h4>证据覆盖</h4>
             <strong
               >{{ detail.evidence_count }} 条 /
@@ -566,7 +566,7 @@ onMounted(() => {
             >
           </article>
           <article>
-            <p>PROFIT</p>
+            <p>利润</p>
             <h4>利润与成本</h4>
             <strong>{{
               profit?.latest_run?.status === "calculated"
@@ -578,18 +578,18 @@ onMounted(() => {
               {{ profit.latest_run.currency }} · 规则
               {{ profit.latest_run.rule_version_code }}</span
             ><span v-else
-              >数据不足时不生成数值 ROI；缺失项在利润页逐项展示。</span
+              >数据不足时不生成投资回报率；缺失项在利润页逐项展示。</span
             >
           </article>
           <article>
-            <p>RISK</p>
+            <p>风险</p>
             <h4>风险</h4>
             <strong>{{ detail.risk_level }}</strong
             ><span>尚无适用风险输入，不以“低风险”代替未知。</span>
           </article>
         </section>
         <section v-else-if="tab === 'market'" class="opportunity-section">
-          <p>MARKET EVIDENCE</p>
+          <p>市场证据</p>
           <h4>市场证据</h4>
           <strong>{{ detail.section_status.market }}</strong
           ><span
@@ -598,7 +598,7 @@ onMounted(() => {
           >
         </section>
         <section v-else-if="tab === 'competition'" class="opportunity-section">
-          <p>COMPETITION</p>
+          <p>竞争情况</p>
           <h4>竞争对比</h4>
           <strong>数据不足</strong
           ><span>尚未关联竞品快照；不显示示例价格、评价或排名。</span>
@@ -606,7 +606,7 @@ onMounted(() => {
         <section v-else-if="tab === 'profit'" class="opportunity-profit">
           <header>
             <div>
-              <p>PROFIT & COST</p>
+              <p>利润与成本</p>
               <h4>利润与成本</h4>
               <span
                 >净利润 = 含税售价 − 采购 − 物流 − 平台费 − 支付手续费 − 税费 −
@@ -740,7 +740,7 @@ onMounted(() => {
           </form>
         </section>
         <section v-else-if="tab === 'risk'" class="opportunity-section">
-          <p>RISK</p>
+          <p>风险</p>
           <h4>风险分析</h4>
           <strong>数据不足</strong
           ><span>合规、侵权、供应、趋势、利润和数据质量风险尚未全部评估。</span>
@@ -748,7 +748,7 @@ onMounted(() => {
         <section v-else-if="tab === 'ai'" class="opportunity-ai">
           <header>
             <div>
-              <p>AI ASSIST</p>
+              <p>智能辅助</p>
               <h4>AI 辅助分析</h4>
               <span
                 >仅摘要、分类和缺失提示；输出不能替代事实、评分、利润或人工决策。</span
@@ -833,7 +833,7 @@ onMounted(() => {
         <section v-else-if="tab === 'evidence'" class="opportunity-evidence">
           <header>
             <div>
-              <p>TRACEABLE EVIDENCE</p>
+              <p>可追溯证据</p>
               <h4>证据管理</h4>
             </div>
             <span>{{ detail.evidence.length }} 条</span>
@@ -858,7 +858,7 @@ onMounted(() => {
         <section v-else class="opportunity-decisions">
           <header>
             <div>
-              <p>DECISION HISTORY</p>
+              <p>决策历史</p>
               <h4>决策历史</h4>
             </div>
             <span>{{ detail.decisions.length }} 条</span>
@@ -891,7 +891,7 @@ onMounted(() => {
       <form @submit.prevent="create">
         <header>
           <div>
-            <p>NEW CANDIDATE</p>
+            <p>新候选项</p>
             <h3 id="opportunity-create-title">创建机会候选</h3>
           </div>
           <button type="button" aria-label="关闭" @click="showCreate = false">
@@ -935,7 +935,7 @@ onMounted(() => {
       <form @submit.prevent="decide">
         <header>
           <div>
-            <p>AUDITED DECISION</p>
+            <p>留痕决策</p>
             <h3 id="opportunity-decision-title">
               记录{{
                 decisionAction === "adopt"

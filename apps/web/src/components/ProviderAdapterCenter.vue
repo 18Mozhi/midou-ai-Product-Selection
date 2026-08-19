@@ -107,7 +107,7 @@ onMounted(load);
   <section class="adapter-center">
     <header class="adapter-heading">
       <div>
-        <p>PROVIDER ADAPTER RUNTIME</p>
+        <p>来源适配器运行状态</p>
         <h2>适配器运行时</h2>
         <span
           >统一 collect · normalize · healthCheck 合同；真实实现按 Provider code
@@ -125,15 +125,15 @@ onMounted(load);
     <section v-else>
       <div class="adapter-metrics">
         <article>
-          <small>PROVIDERS</small><strong>{{ items.length }}</strong
+          <small>来源总数</small><strong>{{ items.length }}</strong
           ><span>平台全局技术合同</span>
         </article>
         <article>
-          <small>REGISTERED</small><strong>{{ registered }}</strong
+          <small>已注册</small><strong>{{ registered }}</strong
           ><span>未注册即失败关闭</span>
         </article>
         <article>
-          <small>HEALTHY</small
+          <small>健康</small
           ><strong>{{
             items.filter((x) => x.health_status === "ready").length
           }}</strong
@@ -171,7 +171,7 @@ onMounted(load);
       </div>
       <section v-if="state === 'empty'" class="adapter-empty">
         <h3>还没有来源可绑定适配器</h3>
-        <p>先在来源注册中心登记技术合同；不会创建模拟 Provider。</p>
+        <p>先在来源注册中心登记技术合同；不会创建模拟来源。</p>
         <a href="/platform-admin/providers">登记来源</a>
       </section>
       <section v-else-if="!filtered.length" class="adapter-empty">
@@ -191,7 +191,7 @@ onMounted(load);
         <table>
           <thead>
             <tr>
-              <th>Provider</th>
+              <th>来源</th>
               <th>运行合同</th>
               <th>实现</th>
               <th>健康</th>

@@ -1,49 +1,630 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
-import UiStatePanel from './UiStatePanel.vue';
-import ConfirmDialog from './ConfirmDialog.vue';
-import '../trends.css';
+import { computed, onMounted, reactive, ref } from "vue";
+import UiStatePanel from "./UiStatePanel.vue";
+import ConfirmDialog from "./ConfirmDialog.vue";
+import "../trends.css";
 
-type State = 'loading' | 'ready' | 'empty' | 'error' | 'expired' | 'forbidden' | 'blocked';
-interface Topic { id:string;title:string;category:string|null;market:string;language:string;status:'active'|'irrelevant'|'stale';signal_count:number;source_count:number;heat:{value:number;unit:'signals'};momentum_percent:number|null;confidence:{score:number|null;status:'measured'|'insufficient_data'};first_seen_at:string;last_seen_at:string;source_fresh_at:string;followed:boolean;version:number }
-interface Detail extends Topic { keywords:Array<{keyword:string;type:string;language:string;market:string}>;timeline:Array<{at:string;signal_count:number;source_count:number}>;evidence:Array<{id:string;title:string;publisher:string;canonical_url:string;published_at:string;observed_at:string}>;data_quality:{coverage_status:string;evidence_count:number;source_count:number;stale:boolean} }
-interface Rule { id:string;name:string;include_keywords:string[];negative_keywords:string[];market:string;language:string;category:string|null;notification_channel:'in_app';status:'enabled'|'paused';last_evaluated_at:string|null;version:number;updated_at:string }
-const props=defineProps<{apiBaseUrl:string;organizationId:string;workspaceId:string}>(),state=ref<State>('loading'),topics=ref<Topic[]>([]),selected=ref<Detail|null>(null),rules=ref<Rule[]>([]),requestId=ref(''),message=ref(''),busy=ref(''),tab=ref<'topics'|'rules'>('topics'),showRule=ref(false),irrelevant=ref(false),total=ref(0),filters=reactive({q:'',market:'',category:'',status:'active'}),form=reactive({name:'',include_keywords:'',negative_keywords:'',market:'US',language:'en-US',category:''});
-const freshness=(value:string)=>new Intl.DateTimeFormat('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(value));
-const stateFrom=(status:number):State=>status===401?'expired':status===403?'forbidden':[408,425,429,502,503,504].includes(status)?'blocked':'error';
-const maxSignal=computed(()=>Math.max(1,...(selected.value?.timeline.map(item=>item.signal_count)??[1])));
-async function read(path:string){const response=await fetch(`${props.apiBaseUrl}${path}`,{credentials:'include',headers:{accept:'application/json'}}),body=await response.json().catch(()=>null);requestId.value=body?.request_id??'';if(!response.ok){state.value=stateFrom(response.status);throw new Error('read_failed');}return body;}
-async function load(){state.value='loading';message.value='';try{const params=new URLSearchParams({page:'1',page_size:'20'});for(const[key,value]of Object.entries(filters))if(value)params.set(key==='q'?'q':key,value);const [list,ruleList]=await Promise.all([read(`/trends?${params}`),read('/trends/monitoring-rules')]);topics.value=list.data;rules.value=ruleList.data;total.value=list.meta.total;if(!topics.value.length){selected.value=null;state.value='empty';return;}const current=topics.value.find(item=>item.id===selected.value?.id)??topics.value[0];selected.value=(await read(`/trends/${current.id}`)).data;state.value='ready';}catch(error){if((error as Error).message!=='read_failed')state.value='blocked';}}
-async function selectTopic(topic:Topic){busy.value='detail';try{selected.value=(await read(`/trends/${topic.id}`)).data;}finally{busy.value='';}}
-async function write(path:string,method:string,body?:unknown){busy.value=path;message.value='';try{const response=await fetch(`${props.apiBaseUrl}${path}`,{method,credentials:'include',headers:{accept:'application/json','content-type':'application/json','idempotency-key':crypto.randomUUID()},...(body?{body:JSON.stringify(body)}:{})}),result=await response.json().catch(()=>null);requestId.value=result?.request_id??'';if(!response.ok){message.value=result?.error?.action_hint??'操作未完成。';return null;}return result.data;}catch{message.value='依赖暂不可用，未写入任何状态。';return null;}finally{busy.value='';}}
-async function follow(){if(!selected.value)return;const result=await write(`/trends/${selected.value.id}/follow`,selected.value.followed?'DELETE':'PUT');if(result){selected.value.followed=result.followed;const item=topics.value.find(topic=>topic.id===selected.value?.id);if(item)item.followed=result.followed;message.value=result.followed?'已关注该主题。':'已取消关注。';}}
-async function markIrrelevant(){if(!selected.value)return;const result=await write(`/trends/${selected.value.id}/relevance`,'POST',{status:'irrelevant',reason:'用户在趋势详情中标记无关',expected_version:selected.value.version});irrelevant.value=false;if(result){message.value='已标记无关；原始证据保留。';await load();}}
-async function createRule(){const result=await write('/trends/monitoring-rules','POST',{name:form.name,include_keywords:form.include_keywords.split(',').map(x=>x.trim()).filter(Boolean),negative_keywords:form.negative_keywords.split(',').map(x=>x.trim()).filter(Boolean),market:form.market,language:form.language,category:form.category||null,notification_channel:'in_app'});if(result){showRule.value=false;Object.assign(form,{name:'',include_keywords:'',negative_keywords:'',market:'US',language:'en-US',category:''});await load();message.value='监控规则已启用；当前仅发送站内通知。';tab.value='rules';}}
-async function toggleRule(item:Rule){const result=await write(`/trends/monitoring-rules/${item.id}`,'PATCH',{status:item.status==='enabled'?'paused':'enabled',expected_version:item.version});if(result){Object.assign(item,result);message.value=item.status==='enabled'?'规则已启用。':'规则已暂停。';}}
-async function refreshHotspots(){const result=await write('/provider-sources/refresh','POST',{organization_id:props.organizationId,workspace_id:props.workspaceId});if(result)message.value=`已开始从 ${result.source_count} 个实时频道获取热点，通常几分钟内出现在列表中。`;}
+type State =
+  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+interface Topic {
+  id: string;
+  title: string;
+  category: string | null;
+  market: string;
+  language: string;
+  status: "active" | "irrelevant" | "stale";
+  signal_count: number;
+  source_count: number;
+  heat: { value: number; unit: "signals" };
+  momentum_percent: number | null;
+  confidence: {
+    score: number | null;
+    status: "measured" | "insufficient_data";
+  };
+  first_seen_at: string;
+  last_seen_at: string;
+  source_fresh_at: string;
+  followed: boolean;
+  version: number;
+}
+interface Detail extends Topic {
+  keywords: Array<{
+    keyword: string;
+    type: string;
+    language: string;
+    market: string;
+  }>;
+  timeline: Array<{ at: string; signal_count: number; source_count: number }>;
+  evidence: Array<{
+    id: string;
+    title: string;
+    publisher: string;
+    canonical_url: string;
+    published_at: string;
+    observed_at: string;
+  }>;
+  data_quality: {
+    coverage_status: string;
+    evidence_count: number;
+    source_count: number;
+    stale: boolean;
+  };
+}
+interface Rule {
+  id: string;
+  name: string;
+  include_keywords: string[];
+  negative_keywords: string[];
+  market: string;
+  language: string;
+  category: string | null;
+  notification_channel: "in_app";
+  status: "enabled" | "paused";
+  last_evaluated_at: string | null;
+  version: number;
+  updated_at: string;
+}
+const props = defineProps<{
+    apiBaseUrl: string;
+    organizationId: string;
+    workspaceId: string;
+  }>(),
+  state = ref<State>("loading"),
+  topics = ref<Topic[]>([]),
+  selected = ref<Detail | null>(null),
+  rules = ref<Rule[]>([]),
+  requestId = ref(""),
+  message = ref(""),
+  busy = ref(""),
+  tab = ref<"topics" | "rules">("topics"),
+  showRule = ref(false),
+  irrelevant = ref(false),
+  total = ref(0),
+  filters = reactive({ q: "", market: "", category: "", status: "active" }),
+  form = reactive({
+    name: "",
+    include_keywords: "",
+    negative_keywords: "",
+    market: "US",
+    language: "en-US",
+    category: "",
+  });
+const freshness = (value: string) =>
+  new Intl.DateTimeFormat("zh-CN", {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(new Date(value));
+const stateFrom = (status: number): State =>
+  status === 401
+    ? "expired"
+    : status === 403
+      ? "forbidden"
+      : [408, 425, 429, 502, 503, 504].includes(status)
+        ? "blocked"
+        : "error";
+const maxSignal = computed(() =>
+  Math.max(
+    1,
+    ...(selected.value?.timeline.map((item) => item.signal_count) ?? [1]),
+  ),
+);
+async function read(path: string) {
+  const response = await fetch(`${props.apiBaseUrl}${path}`, {
+      credentials: "include",
+      headers: { accept: "application/json" },
+    }),
+    body = await response.json().catch(() => null);
+  requestId.value = body?.request_id ?? "";
+  if (!response.ok) {
+    state.value = stateFrom(response.status);
+    throw new Error("read_failed");
+  }
+  return body;
+}
+async function load() {
+  state.value = "loading";
+  message.value = "";
+  try {
+    const params = new URLSearchParams({ page: "1", page_size: "20" });
+    for (const [key, value] of Object.entries(filters))
+      if (value) params.set(key === "q" ? "q" : key, value);
+    const [list, ruleList] = await Promise.all([
+      read(`/trends?${params}`),
+      read("/trends/monitoring-rules"),
+    ]);
+    topics.value = list.data;
+    rules.value = ruleList.data;
+    total.value = list.meta.total;
+    if (!topics.value.length) {
+      selected.value = null;
+      state.value = "empty";
+      return;
+    }
+    const current =
+      topics.value.find((item) => item.id === selected.value?.id) ??
+      topics.value[0];
+    selected.value = (await read(`/trends/${current.id}`)).data;
+    state.value = "ready";
+  } catch (error) {
+    if ((error as Error).message !== "read_failed") state.value = "blocked";
+  }
+}
+async function selectTopic(topic: Topic) {
+  busy.value = "detail";
+  try {
+    selected.value = (await read(`/trends/${topic.id}`)).data;
+  } finally {
+    busy.value = "";
+  }
+}
+async function write(path: string, method: string, body?: unknown) {
+  busy.value = path;
+  message.value = "";
+  try {
+    const response = await fetch(`${props.apiBaseUrl}${path}`, {
+        method,
+        credentials: "include",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+          "idempotency-key": crypto.randomUUID(),
+        },
+        ...(body ? { body: JSON.stringify(body) } : {}),
+      }),
+      result = await response.json().catch(() => null);
+    requestId.value = result?.request_id ?? "";
+    if (!response.ok) {
+      message.value = result?.error?.action_hint ?? "操作未完成。";
+      return null;
+    }
+    return result.data;
+  } catch {
+    message.value = "依赖暂不可用，未写入任何状态。";
+    return null;
+  } finally {
+    busy.value = "";
+  }
+}
+async function follow() {
+  if (!selected.value) return;
+  const result = await write(
+    `/trends/${selected.value.id}/follow`,
+    selected.value.followed ? "DELETE" : "PUT",
+  );
+  if (result) {
+    selected.value.followed = result.followed;
+    const item = topics.value.find((topic) => topic.id === selected.value?.id);
+    if (item) item.followed = result.followed;
+    message.value = result.followed ? "已关注该主题。" : "已取消关注。";
+  }
+}
+async function markIrrelevant() {
+  if (!selected.value) return;
+  const result = await write(`/trends/${selected.value.id}/relevance`, "POST", {
+    status: "irrelevant",
+    reason: "用户在趋势详情中标记无关",
+    expected_version: selected.value.version,
+  });
+  irrelevant.value = false;
+  if (result) {
+    message.value = "已标记无关；原始证据保留。";
+    await load();
+  }
+}
+async function createRule() {
+  const result = await write("/trends/monitoring-rules", "POST", {
+    name: form.name,
+    include_keywords: form.include_keywords
+      .split(",")
+      .map((x) => x.trim())
+      .filter(Boolean),
+    negative_keywords: form.negative_keywords
+      .split(",")
+      .map((x) => x.trim())
+      .filter(Boolean),
+    market: form.market,
+    language: form.language,
+    category: form.category || null,
+    notification_channel: "in_app",
+  });
+  if (result) {
+    showRule.value = false;
+    Object.assign(form, {
+      name: "",
+      include_keywords: "",
+      negative_keywords: "",
+      market: "US",
+      language: "en-US",
+      category: "",
+    });
+    await load();
+    message.value = "监控规则已启用；当前仅发送站内通知。";
+    tab.value = "rules";
+  }
+}
+async function toggleRule(item: Rule) {
+  const result = await write(`/trends/monitoring-rules/${item.id}`, "PATCH", {
+    status: item.status === "enabled" ? "paused" : "enabled",
+    expected_version: item.version,
+  });
+  if (result) {
+    Object.assign(item, result);
+    message.value = item.status === "enabled" ? "规则已启用。" : "规则已暂停。";
+  }
+}
+async function refreshHotspots() {
+  const result = await write("/provider-sources/refresh", "POST", {
+    organization_id: props.organizationId,
+    workspace_id: props.workspaceId,
+  });
+  if (result)
+    message.value = `已开始从 ${result.source_count} 个实时频道获取热点，通常几分钟内出现在列表中。`;
+}
 onMounted(load);
 </script>
 
 <template>
   <section class="trend-dashboard">
-    <header class="trend-hero"><div><p>全网热点雷达</p><h2>系统自动找热点，你也可以马上刷新</h2><span>新闻、电商、数据与社区频道每 15 分钟自动采集；所有结论都能打开原文核对。</span></div><div><button type="button" :disabled="Boolean(busy)" @click="refreshHotspots">↻ 立即获取热点</button><button type="button" @click="showRule=true">＋ 创建监控</button><button class="secondary" type="button" @click="tab='rules'">订阅管理</button></div></header>
-    <nav class="trend-tabs" aria-label="热点趋势视图"><button :aria-current="tab==='topics'?'page':undefined" @click="tab='topics'">趋势主题</button><button :aria-current="tab==='rules'?'page':undefined" @click="tab='rules'">监控规则 <b>{{rules.length}}</b></button></nav>
-    <p v-if="message" class="trend-message" role="status">{{message}} <code v-if="requestId">{{requestId}}</code></p>
-    <template v-if="tab==='topics'">
-      <form class="trend-filters" @submit.prevent="load"><label>市场<select v-model="filters.market"><option value="">全部市场</option><option value="US">US</option></select></label><label>分类<input v-model="filters.category" maxlength="80" placeholder="全部分类"></label><label>状态<select v-model="filters.status"><option value="active">活跃</option><option value="irrelevant">已标记无关</option><option value="stale">已过期</option><option value="">全部状态</option></select></label><label class="search">关键词<input v-model="filters.q" maxlength="200" placeholder="搜索主题或关键词"></label><button type="submit">筛选</button></form>
-      <UiStatePanel v-if="state!=='ready'" :kind="state" :request-id="requestId" @primary="load" />
+    <header class="trend-hero">
+      <div>
+        <p>全网热点雷达</p>
+        <h2>系统自动找热点，你也可以马上刷新</h2>
+        <span
+          >新闻、电商、数据与社区频道每 15
+          分钟自动采集；所有结论都能打开原文核对。</span
+        >
+      </div>
+      <div>
+        <button
+          type="button"
+          :disabled="Boolean(busy)"
+          @click="refreshHotspots"
+        >
+          ↻ 立即获取热点</button
+        ><button type="button" @click="showRule = true">＋ 创建监控</button
+        ><button class="secondary" type="button" @click="tab = 'rules'">
+          订阅管理
+        </button>
+      </div>
+    </header>
+    <nav class="trend-tabs" aria-label="热点趋势视图">
+      <button
+        :aria-current="tab === 'topics' ? 'page' : undefined"
+        @click="tab = 'topics'"
+      >
+        趋势主题</button
+      ><button
+        :aria-current="tab === 'rules' ? 'page' : undefined"
+        @click="tab = 'rules'"
+      >
+        监控规则 <b>{{ rules.length }}</b>
+      </button>
+    </nav>
+    <p v-if="message" class="trend-message" role="status">
+      {{ message }} <code v-if="requestId">{{ requestId }}</code>
+    </p>
+    <template v-if="tab === 'topics'">
+      <form class="trend-filters" @submit.prevent="load">
+        <label
+          >市场<select v-model="filters.market">
+            <option value="">全部市场</option>
+            <option value="US">US</option>
+          </select></label
+        ><label
+          >分类<input
+            v-model="filters.category"
+            maxlength="80"
+            placeholder="全部分类" /></label
+        ><label
+          >状态<select v-model="filters.status">
+            <option value="active">活跃</option>
+            <option value="irrelevant">已标记无关</option>
+            <option value="stale">已过期</option>
+            <option value="">全部状态</option>
+          </select></label
+        ><label class="search"
+          >关键词<input
+            v-model="filters.q"
+            maxlength="200"
+            placeholder="搜索主题或关键词" /></label
+        ><button type="submit">筛选</button>
+      </form>
+      <UiStatePanel
+        v-if="state !== 'ready'"
+        :kind="state"
+        :request-id="requestId"
+        @primary="load"
+      />
       <div v-else class="trend-workbench">
-        <section class="trend-list"><header><div><strong>趋势列表</strong><span>共 {{total}} 个主题</span></div><small>按最后信号时间排序</small></header><button v-for="topic in topics" :key="topic.id" type="button" :aria-pressed="selected?.id===topic.id" @click="selectTopic(topic)"><span class="topic-mark">{{topic.followed?'★':'↗'}}</span><span><strong>{{topic.title}}</strong><small>{{topic.market}} · {{topic.category||'未分类'}} · {{freshness(topic.last_seen_at)}}</small></span><span class="topic-heat"><b>{{topic.heat.value}}</b><small>热度 / signals</small></span><span><b>{{topic.source_count}}</b><small>来源</small></span><em :data-status="topic.status">{{topic.status}}</em></button></section>
-        <article v-if="selected" class="trend-detail" :aria-busy="busy==='detail'"><header><div><a href="#trend-list">← 返回趋势列表</a><p>{{selected.status}} · {{selected.market}} · {{selected.language}}</p><h3>{{selected.title}}</h3><span>首次 {{freshness(selected.first_seen_at)}} · 最近来源 {{freshness(selected.source_fresh_at)}}</span></div><div class="heat-summary"><b>{{selected.heat.value}}</b><small>实际信号数</small></div></header>
-          <div class="trend-actions"><button type="button" @click="follow">{{selected.followed?'★ 已关注':'☆ 关注'}}</button><button type="button" @click="showRule=true">创建监控</button><a :href="`/opportunities?source_topic_id=${encodeURIComponent(selected.id)}&name=${encodeURIComponent(selected.title)}&market=${encodeURIComponent(selected.market)}&category=${encodeURIComponent(selected.category||'')}`">转为机会</a><button class="quiet" type="button" @click="irrelevant=true">标记无关</button></div>
-          <section class="trend-conclusion"><div><p>可验证结论</p><strong>该主题包含 {{selected.signal_count}} 条信号，来自 {{selected.source_count}} 个来源。</strong><span v-if="selected.confidence.status==='insufficient_data'">置信度：数据不足；不会用默认分数代替。</span><span v-else>置信度 {{selected.confidence.score}} / 100</span></div><dl><div><dt>证据覆盖</dt><dd>{{selected.data_quality.evidence_count}} 条</dd></div><div><dt>数据状态</dt><dd>{{selected.data_quality.coverage_status}}</dd></div><div><dt>环比</dt><dd>{{selected.momentum_percent==null?'数据不足':`${selected.momentum_percent}%`}}</dd></div></dl></section>
-          <section class="trend-evidence"><header><div><p>PRIMARY EVIDENCE</p><h4>主要证据</h4></div><span>来源 {{selected.source_count}} · 最新 {{freshness(selected.source_fresh_at)}}</span></header><a v-for="item in selected.evidence" :key="item.id" :href="item.canonical_url" target="_blank" rel="noopener noreferrer"><span><strong>{{item.title}}</strong><small>{{item.publisher}} · 发布 {{freshness(item.published_at)}} · 采集 {{freshness(item.observed_at)}}</small></span><b>查看原文 ↗</b></a></section>
-          <div class="trend-lower"><section><header><p>SIGNAL TIMELINE</p><h4>信号时间线</h4></header><div class="timeline-bars" role="img" :aria-label="`信号时间线，共 ${selected.timeline.length} 个时间点`"><span v-for="point in selected.timeline" :key="point.at"><i :style="{height:`${Math.max(12,point.signal_count/maxSignal*100)}%`}"></i><b>{{point.signal_count}}</b><small>{{freshness(point.at)}}</small></span></div></section><section><header><p>KEYWORDS</p><h4>关键词</h4></header><div class="keyword-cloud"><span v-for="item in selected.keywords" :key="`${item.type}-${item.keyword}`" :data-type="item.type">{{item.keyword}}<small>{{item.type}} · {{item.market}}</small></span></div></section></div>
+        <section class="trend-list">
+          <header>
+            <div>
+              <strong>趋势列表</strong><span>共 {{ total }} 个主题</span>
+            </div>
+            <small>按最后信号时间排序</small>
+          </header>
+          <button
+            v-for="topic in topics"
+            :key="topic.id"
+            type="button"
+            :aria-pressed="selected?.id === topic.id"
+            @click="selectTopic(topic)"
+          >
+            <span class="topic-mark">{{ topic.followed ? "★" : "↗" }}</span
+            ><span
+              ><strong>{{ topic.title }}</strong
+              ><small
+                >{{ topic.market }} · {{ topic.category || "未分类" }} ·
+                {{ freshness(topic.last_seen_at) }}</small
+              ></span
+            ><span class="topic-heat"
+              ><b>{{ topic.heat.value }}</b
+              ><small>热度 / signals</small></span
+            ><span
+              ><b>{{ topic.source_count }}</b
+              ><small>来源</small></span
+            ><em :data-status="topic.status">{{ topic.status }}</em>
+          </button>
+        </section>
+        <article
+          v-if="selected"
+          class="trend-detail"
+          :aria-busy="busy === 'detail'"
+        >
+          <header>
+            <div>
+              <a href="#trend-list">← 返回趋势列表</a>
+              <p>
+                {{ selected.status }} · {{ selected.market }} ·
+                {{ selected.language }}
+              </p>
+              <h3>{{ selected.title }}</h3>
+              <span
+                >首次 {{ freshness(selected.first_seen_at) }} · 最近来源
+                {{ freshness(selected.source_fresh_at) }}</span
+              >
+            </div>
+            <div class="heat-summary">
+              <b>{{ selected.heat.value }}</b
+              ><small>实际信号数</small>
+            </div>
+          </header>
+          <div class="trend-actions">
+            <button type="button" @click="follow">
+              {{ selected.followed ? "★ 已关注" : "☆ 关注" }}</button
+            ><button type="button" @click="showRule = true">创建监控</button
+            ><a
+              :href="`/opportunities?source_topic_id=${encodeURIComponent(selected.id)}&name=${encodeURIComponent(selected.title)}&market=${encodeURIComponent(selected.market)}&category=${encodeURIComponent(selected.category || '')}`"
+              >转为机会</a
+            ><button class="quiet" type="button" @click="irrelevant = true">
+              标记无关
+            </button>
+          </div>
+          <section class="trend-conclusion">
+            <div>
+              <p>可验证结论</p>
+              <strong
+                >该主题包含 {{ selected.signal_count }} 条信号，来自
+                {{ selected.source_count }} 个来源。</strong
+              ><span v-if="selected.confidence.status === 'insufficient_data'"
+                >置信度：数据不足；不会用默认分数代替。</span
+              ><span v-else>置信度 {{ selected.confidence.score }} / 100</span>
+            </div>
+            <dl>
+              <div>
+                <dt>证据覆盖</dt>
+                <dd>{{ selected.data_quality.evidence_count }} 条</dd>
+              </div>
+              <div>
+                <dt>数据状态</dt>
+                <dd>{{ selected.data_quality.coverage_status }}</dd>
+              </div>
+              <div>
+                <dt>环比</dt>
+                <dd>
+                  {{
+                    selected.momentum_percent == null
+                      ? "数据不足"
+                      : `${selected.momentum_percent}%`
+                  }}
+                </dd>
+              </div>
+            </dl>
+          </section>
+          <section class="trend-evidence">
+            <header>
+              <div>
+                <p>主要证据</p>
+                <h4>主要证据</h4>
+              </div>
+              <span
+                >来源 {{ selected.source_count }} · 最新
+                {{ freshness(selected.source_fresh_at) }}</span
+              >
+            </header>
+            <a
+              v-for="item in selected.evidence"
+              :key="item.id"
+              :href="item.canonical_url"
+              target="_blank"
+              rel="noopener noreferrer"
+              ><span
+                ><strong>{{ item.title }}</strong
+                ><small
+                  >{{ item.publisher }} · 发布
+                  {{ freshness(item.published_at) }} · 采集
+                  {{ freshness(item.observed_at) }}</small
+                ></span
+              ><b>查看原文 ↗</b></a
+            >
+          </section>
+          <div class="trend-lower">
+            <section>
+              <header>
+                <p>信号时间线</p>
+                <h4>信号时间线</h4>
+              </header>
+              <div
+                class="timeline-bars"
+                role="img"
+                :aria-label="`信号时间线，共 ${selected.timeline.length} 个时间点`"
+              >
+                <span v-for="point in selected.timeline" :key="point.at"
+                  ><i
+                    :style="{
+                      height: `${Math.max(12, (point.signal_count / maxSignal) * 100)}%`,
+                    }"
+                  ></i
+                  ><b>{{ point.signal_count }}</b
+                  ><small>{{ freshness(point.at) }}</small></span
+                >
+              </div>
+            </section>
+            <section>
+              <header>
+                <p>关键词</p>
+                <h4>关键词</h4>
+              </header>
+              <div class="keyword-cloud">
+                <span
+                  v-for="item in selected.keywords"
+                  :key="`${item.type}-${item.keyword}`"
+                  :data-type="item.type"
+                  >{{ item.keyword
+                  }}<small>{{ item.type }} · {{ item.market }}</small></span
+                >
+              </div>
+            </section>
+          </div>
         </article>
       </div>
     </template>
-    <section v-else class="trend-rules"><header><div><p>SUBSCRIPTION RULES</p><h3>趋势监控规则</h3><span>当前仅提供站内通知；邮件 Provider 未确认，不显示为已接通。</span></div><button type="button" @click="showRule=true">＋ 创建规则</button></header><UiStatePanel v-if="state==='loading'||['error','expired','forbidden','blocked'].includes(state)" :kind="state" :request-id="requestId" @primary="load"/><div v-else-if="!rules.length" class="trend-rule-empty"><strong>还没有监控规则</strong><span>按关键词、市场和语言建立第一条规则。</span><button type="button" @click="showRule=true">创建监控规则</button></div><article v-for="item in rules" :key="item.id"><div><b :data-status="item.status">{{item.status}}</b><h4>{{item.name}}</h4><span>{{item.market}} · {{item.language}} · {{item.category||'全部分类'}}</span></div><p><strong>包含</strong>{{item.include_keywords.join(' · ')}}<small v-if="item.negative_keywords.length">排除：{{item.negative_keywords.join(' · ')}}</small></p><dl><div><dt>通知</dt><dd>站内</dd></div><div><dt>最后评估</dt><dd>{{item.last_evaluated_at?freshness(item.last_evaluated_at):'尚未评估'}}</dd></div><div><dt>版本</dt><dd>v{{item.version}}</dd></div></dl><button type="button" @click="toggleRule(item)">{{item.status==='enabled'?'暂停':'启用'}}</button></article></section>
-    <div v-if="showRule" class="trend-modal" role="dialog" aria-modal="true" aria-labelledby="trend-rule-title"><form @submit.prevent="createRule"><header><div><p>MONITORING RULE</p><h3 id="trend-rule-title">创建趋势监控</h3></div><button type="button" aria-label="关闭" @click="showRule=false">×</button></header><label>规则名称<input v-model="form.name" required maxlength="120"></label><label>包含关键词（逗号分隔）<input v-model="form.include_keywords" required maxlength="500"></label><label>排除关键词（可选）<input v-model="form.negative_keywords" maxlength="500"></label><div><label>市场<input v-model="form.market" required maxlength="40"></label><label>语言<input v-model="form.language" required maxlength="40"></label></div><label>分类（可选）<input v-model="form.category" maxlength="80"></label><aside><strong>通知渠道</strong><span>站内通知。邮件 Provider 尚未确认，不能选择。</span></aside><footer><button type="button" @click="showRule=false">取消</button><button type="submit" :disabled="Boolean(busy)">{{busy?'保存中…':'创建并启用'}}</button></footer></form></div>
-    <ConfirmDialog :open="irrelevant" title="将主题标记为无关？" description="主题会从默认活跃列表移出。" impact="原始证据、时间线和审计不会删除；可通过状态筛选查看并恢复。" confirm-label="标记无关" confirmation-text="确认标记" @cancel="irrelevant=false" @confirm="markIrrelevant" />
+    <section v-else class="trend-rules">
+      <header>
+        <div>
+          <p>订阅规则</p>
+          <h3>趋势监控规则</h3>
+          <span>当前仅提供站内通知；邮件服务未确认，不显示为已接通。</span>
+        </div>
+        <button type="button" @click="showRule = true">＋ 创建规则</button>
+      </header>
+      <UiStatePanel
+        v-if="
+          state === 'loading' ||
+          ['error', 'expired', 'forbidden', 'blocked'].includes(state)
+        "
+        :kind="state"
+        :request-id="requestId"
+        @primary="load"
+      />
+      <div v-else-if="!rules.length" class="trend-rule-empty">
+        <strong>还没有监控规则</strong
+        ><span>按关键词、市场和语言建立第一条规则。</span
+        ><button type="button" @click="showRule = true">创建监控规则</button>
+      </div>
+      <article v-for="item in rules" :key="item.id">
+        <div>
+          <b :data-status="item.status">{{ item.status }}</b>
+          <h4>{{ item.name }}</h4>
+          <span
+            >{{ item.market }} · {{ item.language }} ·
+            {{ item.category || "全部分类" }}</span
+          >
+        </div>
+        <p>
+          <strong>包含</strong>{{ item.include_keywords.join(" · ")
+          }}<small v-if="item.negative_keywords.length"
+            >排除：{{ item.negative_keywords.join(" · ") }}</small
+          >
+        </p>
+        <dl>
+          <div>
+            <dt>通知</dt>
+            <dd>站内</dd>
+          </div>
+          <div>
+            <dt>最后评估</dt>
+            <dd>
+              {{
+                item.last_evaluated_at
+                  ? freshness(item.last_evaluated_at)
+                  : "尚未评估"
+              }}
+            </dd>
+          </div>
+          <div>
+            <dt>版本</dt>
+            <dd>v{{ item.version }}</dd>
+          </div>
+        </dl>
+        <button type="button" @click="toggleRule(item)">
+          {{ item.status === "enabled" ? "暂停" : "启用" }}
+        </button>
+      </article>
+    </section>
+    <div
+      v-if="showRule"
+      class="trend-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="trend-rule-title"
+    >
+      <form @submit.prevent="createRule">
+        <header>
+          <div>
+            <p>监控规则</p>
+            <h3 id="trend-rule-title">创建趋势监控</h3>
+          </div>
+          <button type="button" aria-label="关闭" @click="showRule = false">
+            ×
+          </button>
+        </header>
+        <label
+          >规则名称<input v-model="form.name" required maxlength="120" /></label
+        ><label
+          >包含关键词（逗号分隔）<input
+            v-model="form.include_keywords"
+            required
+            maxlength="500" /></label
+        ><label
+          >排除关键词（可选）<input
+            v-model="form.negative_keywords"
+            maxlength="500"
+        /></label>
+        <div>
+          <label
+            >市场<input v-model="form.market" required maxlength="40" /></label
+          ><label
+            >语言<input v-model="form.language" required maxlength="40"
+          /></label>
+        </div>
+        <label
+          >分类（可选）<input v-model="form.category" maxlength="80"
+        /></label>
+        <aside>
+          <strong>通知渠道</strong
+          ><span>站内通知。邮件服务尚未确认，不能选择。</span>
+        </aside>
+        <footer>
+          <button type="button" @click="showRule = false">取消</button
+          ><button type="submit" :disabled="Boolean(busy)">
+            {{ busy ? "保存中…" : "创建并启用" }}
+          </button>
+        </footer>
+      </form>
+    </div>
+    <ConfirmDialog
+      :open="irrelevant"
+      title="将主题标记为无关？"
+      description="主题会从默认活跃列表移出。"
+      impact="原始证据、时间线和审计不会删除；可通过状态筛选查看并恢复。"
+      confirm-label="标记无关"
+      confirmation-text="确认标记"
+      @cancel="irrelevant = false"
+      @confirm="markIrrelevant"
+    />
   </section>
 </template>

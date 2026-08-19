@@ -178,7 +178,7 @@ onMounted(load);
   <section class="provider-registry">
     <header>
       <div>
-        <p>PROVIDER REGISTRY / PLATFORM ASSET</p>
+        <p>来源登记与平台资产</p>
         <h2>来源注册中心</h2>
         <span>技术合同版本化；未启用不进入生产默认调度。</span>
       </div>
@@ -206,7 +206,7 @@ onMounted(load);
             <th>模式 / 市场</th>
             <th>频率 / 并发</th>
             <th>超时 / 重试</th>
-            <th>Parser</th>
+            <th>解析器</th>
             <th>状态</th>
             <th></th>
           </tr>
@@ -325,7 +325,7 @@ onMounted(load);
             min="1"
             max="3650" /></label
         ><label>去重键<input v-model="form.dedupe_key" /></label
-        ><label>Parser 版本<input v-model="form.parser_version" /></label
+        ><label>解析器版本<input v-model="form.parser_version" /></label
         ><label class="wide"
           >失败规则<input v-model="form.failure_rules" /></label
         ><label>负责人<input v-model="form.owner_label" /></label

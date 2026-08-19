@@ -6,7 +6,7 @@
 2. 在 API、Worker 与 Crawler 项目的宝塔受限环境中配置同一真实 `CREDENTIALS_MASTER_KEY`，长度至少 32 字符；设置同一非秘密 `CREDENTIALS_MASTER_KEY_VERSION`（初始建议 `v1`）和各自主机的 `CREDENTIAL_TEMP_ROOT`。
 3. 不把主密钥写入 `.env`、数据库、Git、镜像、文档、命令参数、日志或截图。生产临时目录应位于宝塔受控的本地路径，不得指向站点公开目录。
 4. 由宝塔重启 Node API、Node Worker 和 Python Crawler。静态站点发布 Web 构建产物；不得创建 systemd、独立 PM2、宿主机 crontab或面板外容器。
-5. 以具备 `key_rotation:manage` 的平台安全管理员访问 `/platform-admin/credentials`。秘密只写入一次，保存后只能看到指纹和版本。
+5. 以具备 `key_rotation:manage` 的平台安全管理员访问 `/platform-admin/credentials`。普通密钥只写入一次，保存后只能看到指纹和版本。需要网页登录的来源可从来源页进入“配置网页登录”，上传已登录专用浏览器的 `.tar.gz` 压缩档案（压缩后不超过 6 兆字节）；系统加密保存并创建可运行采集档案，不要求官方接口。
 
 修改 `CREDENTIALS_MASTER_KEY`、`CREDENTIALS_MASTER_KEY_VERSION` 或 `CREDENTIAL_TEMP_ROOT` 后必须在宝塔重启 API、Worker 和 Crawler；这些值不是动态读取。
 

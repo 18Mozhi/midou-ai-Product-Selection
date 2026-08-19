@@ -226,7 +226,7 @@ onMounted(() => {
   <section class="competitor-monitor" aria-labelledby="competitor-title">
     <header class="competitor-head">
       <div>
-        <p>COMPETITIVE INTELLIGENCE</p>
+        <p>竞品情报</p>
         <h2 id="competitor-title">竞品监控</h2>
         <span>每个数字都来自可追溯快照；变化与阈值告警不会覆盖历史。</span>
       </div>
@@ -329,13 +329,20 @@ onMounted(() => {
       <form @submit.prevent="create">
         <header>
           <div>
-            <p>PROVENANCE REQUIRED</p>
+            <p>必须提供来源依据</p>
             <h3 id="new-competitor">添加竞品与基线快照</h3>
           </div>
-          <button type="button" aria-label="关闭新建竞品" title="关闭新建竞品" @click="showCreate = false">×</button>
+          <button
+            type="button"
+            aria-label="关闭新建竞品"
+            title="关闭新建竞品"
+            @click="showCreate = false"
+          >
+            ×
+          </button>
         </header>
         <div class="form-grid">
-          <label>Provider ID<input v-model="form.provider_id" required /></label
+          <label>来源编号<input v-model="form.provider_id" required /></label
           ><label>市场<input v-model="form.market" required /></label
           ><label>来源站点<input v-model="form.source_site" required /></label
           ><label
@@ -391,9 +398,7 @@ onMounted(() => {
               type="datetime-local"
               required /></label
           ><label>来源引用<input v-model="form.source_ref_id" required /></label
-          ><label
-            >Evidence ID<input v-model="form.evidence_id" required
-          /></label>
+          ><label>证据编号<input v-model="form.evidence_id" required /></label>
         </fieldset>
         <footer>
           <button type="button" class="ghost" @click="showCreate = false">
@@ -414,10 +419,17 @@ onMounted(() => {
       <form class="rule-form" @submit.prevent="createRule">
         <header>
           <div>
-            <p>EXPLICIT THRESHOLD</p>
+            <p>明确阈值</p>
             <h3 id="new-rule">新建监控规则</h3>
           </div>
-          <button type="button" aria-label="关闭告警规则" title="关闭告警规则" @click="showRule = false">×</button>
+          <button
+            type="button"
+            aria-label="关闭告警规则"
+            title="关闭告警规则"
+            @click="showRule = false"
+          >
+            ×
+          </button>
         </header>
         <label
           >竞品（留空为工作区全局）<select v-model="rule.competitor_id">

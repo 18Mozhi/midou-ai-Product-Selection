@@ -339,7 +339,7 @@ onMounted(load);
           ><small>实时汇总</small>
         </article>
         <article>
-          <span>有效 Token</span><b>{{ summary?.active_tokens ?? 0 }}</b
+          <span>有效令牌</span><b>{{ summary?.active_tokens ?? 0 }}</b
           ><small>不展示明文</small>
         </article>
         <article>

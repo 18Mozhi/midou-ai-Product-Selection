@@ -127,6 +127,7 @@ def build_package(repo: Path, build_sha: str, skip_build: bool, temp_root: Path)
     script_target = backend / "scripts"
     script_target.mkdir()
     shutil.copy2(repo / "scripts/run-playwright-crawler.mjs", script_target)
+    shutil.copy2(repo / "scripts/apply-deployment-migrations.mjs", script_target)
 
     migrations = repo / "database/migrations"
     if migrations.is_dir():
@@ -454,6 +455,12 @@ def main() -> None:
                 f"'{NPM_BIN}' ci --omit=dev"
             )
             ssh_exec(client, extract, timeout=600)
+            migrate = (
+                f"cd '{remote_stage}/backend' && "
+                f"'{NODE_BIN}' --env-file='{PROJECT_ROOT}/config/product_scout.env' "
+                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql"
+            )
+            ssh_exec(client, migrate, timeout=120)
             remote_python(client, panel_deploy_source(build_sha, args.initialize_layout), timeout=300)
             client.close()
             verify_public(build_sha)

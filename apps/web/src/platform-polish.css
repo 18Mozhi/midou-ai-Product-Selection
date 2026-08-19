@@ -1,0 +1,9 @@
+.open-explain { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.open-explain article { display: grid; gap: 6px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: color-mix(in srgb, var(--primary) 5%, var(--surface)); }
+.open-explain span { color: var(--text-muted); font-size: 12px; line-height: 1.65; }
+@media (max-width: 800px) { .open-explain { grid-template-columns: 1fr; } }
+.commercial-guide { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.commercial-guide article { display: grid; gap: 6px; padding: 14px; border: 1px solid #28475b; border-radius: 12px; background: #0e2234; }
+.commercial-guide span { color: #91a8b9; font-size: 12px; }
+.commercial .create .wide { grid-column: span 2; }
+@media (max-width: 800px) { .commercial-guide { grid-template-columns: 1fr; } .commercial .create .wide { grid-column: 1 / -1; } }

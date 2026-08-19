@@ -22,12 +22,45 @@ const entities: Array<{
   { value: "trends", label: "热点", primary: "信号", secondary: "来源" },
   { value: "opportunities", label: "机会", primary: "证据", secondary: "来源" },
   { value: "competitors", label: "竞品", primary: "版本", secondary: "变更" },
-  { value: "suppliers", label: "供应商", primary: "MOQ", secondary: "报价" },
+  {
+    value: "suppliers",
+    label: "供应商",
+    primary: "最小起订量",
+    secondary: "报价",
+  },
 ];
 const current = computed(() =>
   entities.find((item) => item.value === entity.value)!,
 );
 const summary = computed(() => Object.entries(data.value?.summary ?? {}));
+const statusName = (value: unknown) =>
+  (
+    ({
+      active: "展示中",
+      irrelevant: "无关",
+      stale: "已过期",
+      draft: "草稿",
+      reviewing: "审核中",
+      approved: "已通过",
+      rejected: "已拒绝",
+      accepted: "已采纳",
+      archived: "已归档",
+      watching: "监控中",
+      disabled: "已停用",
+    }) as Record<string, string>
+  )[String(value)] ?? "其他状态";
+const summaryName = (key: string) =>
+  (
+    ({
+      total: "当前记录",
+      active: "展示中",
+      irrelevant: "无关",
+      stale: "已过期",
+      draft: "草稿",
+      approved: "已通过",
+      rejected: "已拒绝",
+    }) as Record<string, string>
+  )[key] ?? statusName(key);
 
 async function load() {
   state.value = "loading";
@@ -92,7 +125,7 @@ async function exportCsv() {
     link.download = `platform-${entity.value}-${new Date().toISOString().slice(0, 10)}.csv`;
     link.click();
     URL.revokeObjectURL(url);
-    message.value = "受控 CSV 已生成，导出原因和记录数已写入平台审计。";
+    message.value = "受控表格文件已生成，导出原因和记录数已写入平台审计。";
   } catch (error) {
     message.value = error instanceof Error ? error.message : "受控导出未完成";
   } finally {
@@ -111,7 +144,7 @@ onMounted(load);
   <section class="platform-data">
     <header class="platform-data-hero">
       <div>
-        <p>PLATFORM DATA</p>
+        <p>平台全量数据中心</p>
         <h2>全量业务数据</h2>
         <span
           >跨组织查看热点、机会、竞品与供应商事实；导出会记录操作人、原因和范围。</span
@@ -154,7 +187,7 @@ onMounted(load);
         <input v-model="status" placeholder="精确状态（可选）" maxlength="40" />
         <button>筛选</button>
         <button type="button" :disabled="exporting" @click="exportCsv">
-          {{ exporting ? "正在导出…" : "受控导出 CSV" }}
+          {{ exporting ? "正在导出…" : "导出表格文件" }}
         </button>
       </form>
       <p v-if="message" class="platform-data-notice">{{ message }}</p>
@@ -174,7 +207,7 @@ onMounted(load);
       <template v-else>
         <div class="platform-data-summary">
           <article v-for="[key, value] in summary" :key="key">
-            <small>{{ key === "total" ? "当前记录" : key }}</small
+            <small>{{ summaryName(String(key)) }}</small
             ><strong>{{ value }}</strong>
           </article>
         </div>
@@ -205,7 +238,7 @@ onMounted(load);
                   }}<small>{{ item.market || "—" }}</small>
                 </td>
                 <td>
-                  <b :data-state="item.status">{{ item.status }}</b>
+                  <b :data-state="item.status">{{ statusName(item.status) }}</b>
                 </td>
                 <td>{{ item.metric_primary }} / {{ item.metric_secondary }}</td>
                 <td>{{ new Date(item.updated_at).toLocaleString("zh-CN") }}</td>
@@ -214,7 +247,9 @@ onMounted(load);
           </table>
         </div>
         <footer>
-          最多显示当前筛选最近 100 条 · request_id {{ requestId }}
+          最多显示当前筛选最近 100 条<span v-if="requestId">
+            · 关联编号 {{ requestId }}</span
+          >
         </footer>
       </template>
     </template>

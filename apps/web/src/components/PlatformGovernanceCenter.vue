@@ -13,7 +13,8 @@ const section = ref<Section>("score_rules"),
   query = ref(""),
   status = ref(""),
   message = ref(""),
-  requestId = ref("");
+  requestId = ref(""),
+  selected = ref<any>(null);
 const sections: Array<{
   value: Section;
   label: string;
@@ -55,6 +56,51 @@ const current = computed(() =>
   sections.find((item) => item.value === section.value)!,
 );
 const rows = computed<any[]>(() => data.value?.[section.value] ?? []);
+const summaryName = (key: string) =>
+  (
+    ({
+      score_rules: "评分规则",
+      cost_rules: "费用规则",
+      approval_templates: "审批工作流",
+      automation_rules: "自动化规则",
+      releases: "发布版本",
+      provider_versions: "来源配置版本",
+    }) as Record<string, string>
+  )[key] ?? key;
+const statusName = (value: unknown) =>
+  (
+    ({
+      active: "启用",
+      paused: "暂停",
+      draft: "草稿",
+      published: "已发布",
+      approved: "已批准",
+      retired: "已退役",
+      succeeded: "成功",
+      failed: "失败",
+      running: "进行中",
+    }) as Record<string, string>
+  )[String(value)] ?? String(value ?? "—");
+const typeName = (value: unknown) =>
+  (
+    ({
+      "approval.overdue": "审批节点超时",
+      "approval.node.rejected": "审批被驳回",
+      "competitor.alert.queued": "竞品告警入队",
+      "task.created": "任务创建",
+      notify_owner: "通知负责人",
+      create_task: "创建人工任务",
+      score_rules: "评分规则",
+      cost_rules: "费用规则",
+      approval_templates: "审批工作流",
+      automation_rules: "自动化规则",
+      releases: "发布版本",
+    }) as Record<string, string>
+  )[String(value)] ?? String(value ?? "—");
+const editHref = (item: any) =>
+  section.value === "automation_rules"
+    ? `/automations?rule=${item.id}&action=edit`
+    : current.value.href;
 async function load() {
   state.value = "loading";
   message.value = "";
@@ -89,7 +135,7 @@ onMounted(load);
   <section class="platform-governance">
     <header>
       <div>
-        <p>RULES & GOVERNANCE</p>
+        <p>平台规则中心</p>
         <h2>规则、工作流与自动化</h2>
         <span
           >统一核对跨组织规则版本、审批、自动化和发布回滚；写操作进入对应受权限保护的工作台。</span
@@ -124,7 +170,7 @@ onMounted(load);
     <template v-else>
       <div class="governance-summary">
         <article v-for="(value, key) in data.summary" :key="key">
-          <small>{{ key }}</small
+          <small>{{ summaryName(String(key)) }}</small
           ><strong>{{ value }}</strong>
         </article>
       </div>
@@ -148,6 +194,7 @@ onMounted(load);
               <th>状态</th>
               <th>版本</th>
               <th>更新时间</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -162,14 +209,16 @@ onMounted(load);
               </td>
               <td>
                 {{
-                  item.trigger_event_type ||
-                  item.resource_type ||
-                  item.platform ||
-                  section
+                  typeName(
+                    item.trigger_event_type ||
+                      item.resource_type ||
+                      item.platform ||
+                      section,
+                  )
                 }}
               </td>
               <td>
-                <b>{{ item.status }}</b>
+                <b>{{ statusName(item.status) }}</b>
               </td>
               <td>
                 v{{
@@ -183,6 +232,12 @@ onMounted(load);
                     : "—"
                 }}
               </td>
+              <td>
+                <button type="button" @click="selected = item">查看详情</button
+                ><a :href="editHref(item)">{{
+                  section === "releases" ? "进入管理" : "编辑"
+                }}</a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -191,7 +246,7 @@ onMounted(load);
       <aside>
         <strong>配置版本</strong
         ><span
-          >Provider 历史版本 {{ data.summary.provider_versions }} 个；最近变更
+          >来源配置历史版本 {{ data.summary.provider_versions }} 个；最近变更
           {{
             data.provider_versions_latest_at
               ? new Date(data.provider_versions_latest_at).toLocaleString(
@@ -202,10 +257,90 @@ onMounted(load);
         ><a href="/platform-admin/providers">进入来源版本管理</a>
       </aside>
       <footer>
-        平台页用于跨组织核对；创建、审批、启停、灰度和回滚继续由原业务权限、版本锁与审计接口执行。request_id
-        {{ requestId }}
+        跨组织查看不会绕过业务权限；编辑、启停和发布仍使用版本锁并写入审计记录。<span
+          v-if="requestId"
+          >关联编号 {{ requestId }}</span
+        >
       </footer>
     </template>
+    <dialog :open="Boolean(selected)" class="governance-detail">
+      <section v-if="selected">
+        <header>
+          <div>
+            <small>{{ current.label }}详情</small>
+            <h3>{{ selected.name }}</h3>
+          </div>
+          <button aria-label="关闭" @click="selected = null">×</button>
+        </header>
+        <dl>
+          <div>
+            <dt>所属组织</dt>
+            <dd>{{ selected.organization_name || "平台全局" }}</dd>
+          </div>
+          <div>
+            <dt>工作区或阶段</dt>
+            <dd>{{ selected.workspace_name || selected.stage || "—" }}</dd>
+          </div>
+          <div>
+            <dt>当前状态</dt>
+            <dd>{{ statusName(selected.status) }}</dd>
+          </div>
+          <div>
+            <dt>版本</dt>
+            <dd>
+              第
+              {{
+                selected.revision ||
+                selected.version ||
+                selected.current_version ||
+                "—"
+              }}
+              版
+            </dd>
+          </div>
+          <div v-if="selected.trigger_event_type">
+            <dt>触发条件</dt>
+            <dd>
+              {{ typeName(selected.trigger_event_type) }}，严重程度
+              {{
+                selected.condition_severity === "any"
+                  ? "不限"
+                  : statusName(selected.condition_severity)
+              }}
+            </dd>
+          </div>
+          <div v-if="selected.action_type">
+            <dt>执行动作</dt>
+            <dd>
+              {{ typeName(selected.action_type) }}：{{ selected.action_title }}
+            </dd>
+          </div>
+          <div v-if="selected.rate_limit_count">
+            <dt>执行频率上限</dt>
+            <dd>
+              {{ selected.rate_limit_count }} 次 /
+              {{ selected.rate_limit_window_minutes }} 分钟
+            </dd>
+          </div>
+          <div>
+            <dt>更新时间</dt>
+            <dd>
+              {{
+                selected.updated_at
+                  ? new Date(selected.updated_at).toLocaleString("zh-CN")
+                  : "—"
+              }}
+            </dd>
+          </div>
+        </dl>
+        <footer>
+          <button @click="selected = null">关闭</button
+          ><a :href="editHref(selected)">{{
+            section === "releases" ? "进入管理页面" : "进入编辑页面"
+          }}</a>
+        </footer>
+      </section>
+    </dialog>
   </section>
 </template>
 
@@ -330,6 +465,63 @@ onMounted(load);
 .platform-governance footer {
   text-align: right;
   font-size: 11px;
+}
+.governance-detail {
+  position: fixed;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: min(620px, calc(100% - 28px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  padding: 0;
+  border: 1px solid var(--so-border);
+  border-radius: 16px;
+  background: var(--so-bg-elevated);
+  color: var(--so-text);
+  z-index: 100;
+}
+.governance-detail section {
+  padding: 22px;
+}
+.governance-detail header,
+.governance-detail footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.governance-detail header h3 {
+  margin: 5px 0 0;
+}
+.governance-detail header button {
+  border: 0;
+  background: transparent;
+  font-size: 24px;
+}
+.governance-detail dl {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0;
+}
+.governance-detail dl div {
+  display: grid;
+  grid-template-columns: 145px 1fr;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--so-border);
+}
+.governance-detail dt {
+  color: var(--so-text-muted);
+}
+.governance-detail dd {
+  margin: 0;
+}
+.governance-detail footer {
+  justify-content: flex-end;
+}
+.governance-detail footer a {
+  background: var(--so-primary-strong);
+  color: #fff;
 }
 @media (max-width: 760px) {
   .platform-governance > header,

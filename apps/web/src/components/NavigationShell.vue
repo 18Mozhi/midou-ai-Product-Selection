@@ -269,6 +269,14 @@ const shellTitle = computed(() =>
       ? "组织管理后台"
       : "平台管理后台",
 );
+const guardReasonName = (value?: string) =>
+  (
+    ({
+      navigation_member_allowed: "成员访问已授权",
+      navigation_organization_admin_allowed: "组织管理访问已授权",
+      navigation_platform_admin_allowed: "平台管理访问已授权",
+    }) as Record<string, string>
+  )[value ?? ""] ?? "访问已授权";
 const pageTitle = computed(() =>
   routePath === "/" || routePath === "/home"
     ? "今日行动"
@@ -433,7 +441,7 @@ const pageSummary = computed(() =>
                               ? "机会、证据覆盖和人工决策由当前组织与工作区的真实 API 驱动。"
                               : isTrends.value
                                 ? "趋势主题、证据、关注和监控规则均由当前组织与工作区的真实 API 驱动。"
-                                : "当前功能由真实 API、最小权限和审计记录驱动。",
+                                : "",
 );
 const short = (value: string | null) =>
   value ? `${value.slice(0, 8)}…` : "不适用";
@@ -521,7 +529,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
               ? '/org-admin'
               : '/platform-admin'
         "
-        ><span>S</span><b>ai选品</b
+        ><span>选</span><b>智能选品</b
         ><em>{{
           shell === "platform_admin"
             ? "管理员"
@@ -553,7 +561,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           type="button"
           @click="discoveryMode = 'search'"
         >
-          ⌕ <span>搜索</span><kbd>⌘K</kbd>
+          ⌕ <span>搜索</span><kbd>快捷键</kbd>
         </button>
         <a
           v-if="shell === 'platform_admin'"
@@ -639,11 +647,11 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <span class="role-state-mark" aria-hidden="true">{{
           state === "loading" ? "···" : state === "forbidden" ? "×" : "!"
         }}</span>
-        <p>ROUTE GUARD</p>
+        <p>访问保护</p>
         <h1>{{ stateCopy[0] }}</h1>
         <p>{{ stateCopy[1] }}</p>
         <small v-if="actionHint">{{ actionHint }}</small
-        ><code v-if="requestId">request_id: {{ requestId }}</code>
+        ><code v-if="requestId">关联编号：{{ requestId }}</code>
         <a v-if="state === 'expired'" href="/login">重新登录</a
         ><a v-else-if="state === 'context_required'" href="/select-context"
           >选择组织与工作区</a
@@ -657,9 +665,9 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           <div>
             <p>{{ shellTitle }}</p>
             <h1>{{ pageTitle }}</h1>
-            <span>{{ pageSummary }}</span>
+            <span v-if="pageSummary">{{ pageSummary }}</span>
           </div>
-          <b>{{ guard?.guard_reason }}</b>
+          <b>{{ guardReasonName(guard?.guard_reason) }}</b>
         </header>
         <HomeDashboard v-if="isHome" :api-base-url="apiBaseUrl" />
         <TaskWorkspace
@@ -889,7 +897,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         />
         <section v-else class="role-gate-state" aria-live="polite">
           <span class="role-state-mark" aria-hidden="true">?</span>
-          <p>PAGE NOT FOUND</p>
+          <p>页面不存在</p>
           <h2>页面不存在</h2>
           <p>该地址没有可用功能，请从左侧真实功能菜单重新进入。</p>
           <a :href="items[0]?.path || '/'">返回工作台</a>

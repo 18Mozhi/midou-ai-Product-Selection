@@ -1,5 +1,330 @@
-﻿import{randomUUID}from'node:crypto';import{sealCredential,type CredentialCipherRecord}from'@scoutops/credentials';import type{CrawlerProfileInput,CrawlerProfileSummary,CredentialAssetCreateInput,CredentialAssetSummary,CredentialSecretInput}from'@scoutops/contracts';
-export class CredentialAssetError extends Error{constructor(readonly code:string,readonly statusCode:number,readonly actionHint:string){super(code);this.name='CredentialAssetError';}}
-interface Context{actorId:string;idempotencyKey:string;requestId:string;traceId:string}interface Sealed{ciphertext:Buffer;nonce:Buffer;authTag:Buffer;fingerprint:string}export interface CredentialAssetRepository{listAssets():Promise<CredentialAssetSummary[]>;listProviderOptions():Promise<{id:string;code:string;name:string}[]>;getCipherRecord(id:string):Promise<CredentialCipherRecord&{summary:CredentialAssetSummary}>;createAsset(input:{id:string;value:Omit<CredentialAssetCreateInput,'secret_payload'>;sealed:Sealed;keyVersion:string;actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date}):Promise<CredentialAssetSummary>;rotateAsset(input:{id:string;expectedVersion:number;sealed:Sealed;keyVersion:string;actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date}):Promise<CredentialAssetSummary>;revokeAsset(input:{id:string;expectedVersion:number;reason:string;actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date}):Promise<CredentialAssetSummary>;listProfiles():Promise<CrawlerProfileSummary[]>;createProfile(input:{id:string;value:CrawlerProfileInput;actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date}):Promise<CrawlerProfileSummary>;}
-const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,kinds=['api_key','account_secret','cookie_bundle','private_key','browser_profile'];function secret(value:CredentialSecretInput){if(!value||!['utf8','base64'].includes(value.encoding)||typeof value.value!=='string'||value.value.length<1||value.value.length>1_000_000)throw new CredentialAssetError('credential_payload_invalid',400,'秘密载荷需要 1–1000000 字符，并声明 utf8 或 base64。');if(value.encoding==='base64'&&!/^[A-Za-z0-9+/]*={0,2}$/.test(value.value))throw new CredentialAssetError('credential_payload_invalid',400,'base64 载荷格式无效。');return value;}function createInput(value:CredentialAssetCreateInput,now:Date){if(!value||!uuid.test(value.provider_id))throw new CredentialAssetError('credential_provider_invalid',400,'provider_id 必须是已登记来源 UUID。');if(typeof value.name!=='string'||value.name.trim().length<2||value.name.length>160)throw new CredentialAssetError('credential_name_invalid',400,'名称需要 2–160 字符。');if(!kinds.includes(value.kind))throw new CredentialAssetError('credential_kind_invalid',400,'凭证类型无效。');let expires_at:string|null=null;if(value.expires_at!==null){const date=new Date(value.expires_at);if(!Number.isFinite(date.getTime())||date<=now)throw new CredentialAssetError('credential_expiry_invalid',400,'到期时间必须晚于当前时间。');expires_at=date.toISOString();}return{provider_id:value.provider_id,name:value.name.trim(),kind:value.kind,expires_at,secret_payload:secret(value.secret_payload)};}function expected(value:number){if(!Number.isInteger(value)||value<1)throw new CredentialAssetError('credential_version_invalid',400,'expected_version 必须为正整数。');return value;}function profile(value:CrawlerProfileInput){if(!value||!uuid.test(value.provider_id)||!uuid.test(value.credential_asset_id))throw new CredentialAssetError('crawler_profile_reference_invalid',400,'来源与凭证引用必须是 UUID。');if(!/^[a-z0-9_]{2,80}$/.test(value.code))throw new CredentialAssetError('crawler_profile_code_invalid',400,'code 仅允许小写字母、数字和下划线。');if(typeof value.name!=='string'||value.name.trim().length<2||value.name.length>160||value.browser_family!=='chromium'||!['active','disabled'].includes(value.status))throw new CredentialAssetError('crawler_profile_input_invalid',400,'浏览器档案字段无效。');if(!/^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})?$/.test(value.locale)||typeof value.timezone!=='string'||value.timezone.length<1||value.timezone.length>80)throw new CredentialAssetError('crawler_profile_locale_invalid',400,'locale 或 timezone 无效。');return{...value,name:value.name.trim()};}
-export class CredentialAssetService{constructor(private readonly repository:CredentialAssetRepository,private readonly masterKey:string,private readonly keyVersion:string,private readonly now:()=>Date=()=>new Date()){}listAssets(){return this.repository.listAssets();}listProviderOptions(){return this.repository.listProviderOptions();}listProfiles(){return this.repository.listProfiles();}async createAsset(value:CredentialAssetCreateInput,context:Context){if(this.masterKey.length<32)throw new CredentialAssetError('credential_master_key_unavailable',503,'在宝塔受限环境配置 CREDENTIALS_MASTER_KEY 后重启 Node API。');const now=this.now(),clean=createInput(value,now),id=randomUUID(),sealed=sealCredential(clean.secret_payload,this.masterKey,{assetId:id,assetVersion:1,kind:clean.kind,keyVersion:this.keyVersion}),{secret_payload,...metadata}=clean;return this.repository.createAsset({id,value:metadata,sealed,keyVersion:this.keyVersion,...context,now});}async rotateAsset(id:string,value:{secret_payload:CredentialSecretInput;expected_version:number},context:Context){if(!uuid.test(id))throw new CredentialAssetError('credential_id_invalid',400,'凭证 ID 无效。');if(this.masterKey.length<32)throw new CredentialAssetError('credential_master_key_unavailable',503,'在宝塔受限环境配置 CREDENTIALS_MASTER_KEY 后重启 Node API。');const record=await this.repository.getCipherRecord(id);if(record.summary.status==='revoked')throw new CredentialAssetError('credential_revoked',409,'已撤销凭证不能轮换。');const next=expected(value.expected_version)+1,sealed=sealCredential(secret(value.secret_payload),this.masterKey,{assetId:id,assetVersion:next,kind:record.summary.kind,keyVersion:this.keyVersion});return this.repository.rotateAsset({id,expectedVersion:value.expected_version,sealed,keyVersion:this.keyVersion,...context,now:this.now()});}revokeAsset(id:string,value:{expected_version:number;reason:string},context:Context){if(!uuid.test(id))throw new CredentialAssetError('credential_id_invalid',400,'凭证 ID 无效。');expected(value.expected_version);if(typeof value.reason!=='string'||value.reason.trim().length<2||value.reason.length>500)throw new CredentialAssetError('credential_revocation_reason_invalid',400,'撤销原因需要 2–500 字符。');return this.repository.revokeAsset({id,expectedVersion:value.expected_version,reason:value.reason.trim(),...context,now:this.now()});}createProfile(value:CrawlerProfileInput,context:Context){return this.repository.createProfile({id:randomUUID(),value:profile(value),...context,now:this.now()});}}
+﻿import { randomUUID } from "node:crypto";
+import {
+  sealCredential,
+  type CredentialCipherRecord,
+} from "@scoutops/credentials";
+import type {
+  CrawlerProfileInput,
+  CrawlerProfileSummary,
+  CredentialAssetCreateInput,
+  CredentialAssetSummary,
+  CredentialSecretInput,
+} from "@scoutops/contracts";
+export class CredentialAssetError extends Error {
+  constructor(
+    readonly code: string,
+    readonly statusCode: number,
+    readonly actionHint: string,
+  ) {
+    super(code);
+    this.name = "CredentialAssetError";
+  }
+}
+interface Context {
+  actorId: string;
+  idempotencyKey: string;
+  requestId: string;
+  traceId: string;
+}
+interface Sealed {
+  ciphertext: Buffer;
+  nonce: Buffer;
+  authTag: Buffer;
+  fingerprint: string;
+}
+export interface CredentialAssetRepository {
+  listAssets(): Promise<CredentialAssetSummary[]>;
+  listProviderOptions(): Promise<{ id: string; code: string; name: string }[]>;
+  getCipherRecord(
+    id: string,
+  ): Promise<CredentialCipherRecord & { summary: CredentialAssetSummary }>;
+  createAsset(input: {
+    id: string;
+    value: Omit<CredentialAssetCreateInput, "secret_payload">;
+    sealed: Sealed;
+    keyVersion: string;
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<CredentialAssetSummary>;
+  rotateAsset(input: {
+    id: string;
+    expectedVersion: number;
+    sealed: Sealed;
+    keyVersion: string;
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<CredentialAssetSummary>;
+  revokeAsset(input: {
+    id: string;
+    expectedVersion: number;
+    reason: string;
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<CredentialAssetSummary>;
+  listProfiles(): Promise<CrawlerProfileSummary[]>;
+  createProfile(input: {
+    id: string;
+    value: CrawlerProfileInput;
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<CrawlerProfileSummary>;
+}
+const uuid =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+  kinds = [
+    "api_key",
+    "account_secret",
+    "cookie_bundle",
+    "private_key",
+    "browser_profile",
+  ];
+function secret(value: CredentialSecretInput) {
+  if (
+    !value ||
+    !["utf8", "base64"].includes(value.encoding) ||
+    typeof value.value !== "string" ||
+    value.value.length < 1 ||
+    value.value.length > 8_000_000
+  )
+    throw new CredentialAssetError(
+      "credential_payload_invalid",
+      400,
+      "凭证内容不能为空；网页登录档案压缩后不超过 6 兆字节。",
+    );
+  if (
+    value.encoding === "base64" &&
+    !/^[A-Za-z0-9+/]*={0,2}$/.test(value.value)
+  )
+    throw new CredentialAssetError(
+      "credential_payload_invalid",
+      400,
+      "base64 载荷格式无效。",
+    );
+  return value;
+}
+function createInput(value: CredentialAssetCreateInput, now: Date) {
+  if (!value || !uuid.test(value.provider_id))
+    throw new CredentialAssetError(
+      "credential_provider_invalid",
+      400,
+      "provider_id 必须是已登记来源 UUID。",
+    );
+  if (
+    typeof value.name !== "string" ||
+    value.name.trim().length < 2 ||
+    value.name.length > 160
+  )
+    throw new CredentialAssetError(
+      "credential_name_invalid",
+      400,
+      "名称需要 2–160 字符。",
+    );
+  if (!kinds.includes(value.kind))
+    throw new CredentialAssetError(
+      "credential_kind_invalid",
+      400,
+      "凭证类型无效。",
+    );
+  let expires_at: string | null = null;
+  if (value.expires_at !== null) {
+    const date = new Date(value.expires_at);
+    if (!Number.isFinite(date.getTime()) || date <= now)
+      throw new CredentialAssetError(
+        "credential_expiry_invalid",
+        400,
+        "到期时间必须晚于当前时间。",
+      );
+    expires_at = date.toISOString();
+  }
+  return {
+    provider_id: value.provider_id,
+    name: value.name.trim(),
+    kind: value.kind,
+    expires_at,
+    secret_payload: secret(value.secret_payload),
+  };
+}
+function expected(value: number) {
+  if (!Number.isInteger(value) || value < 1)
+    throw new CredentialAssetError(
+      "credential_version_invalid",
+      400,
+      "expected_version 必须为正整数。",
+    );
+  return value;
+}
+function profile(value: CrawlerProfileInput) {
+  if (
+    !value ||
+    !uuid.test(value.provider_id) ||
+    !uuid.test(value.credential_asset_id)
+  )
+    throw new CredentialAssetError(
+      "crawler_profile_reference_invalid",
+      400,
+      "来源与凭证引用必须是 UUID。",
+    );
+  if (!/^[a-z0-9_]{2,80}$/.test(value.code))
+    throw new CredentialAssetError(
+      "crawler_profile_code_invalid",
+      400,
+      "code 仅允许小写字母、数字和下划线。",
+    );
+  if (
+    typeof value.name !== "string" ||
+    value.name.trim().length < 2 ||
+    value.name.length > 160 ||
+    value.browser_family !== "chromium" ||
+    !["active", "disabled"].includes(value.status)
+  )
+    throw new CredentialAssetError(
+      "crawler_profile_input_invalid",
+      400,
+      "浏览器档案字段无效。",
+    );
+  if (
+    !/^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})?$/.test(value.locale) ||
+    typeof value.timezone !== "string" ||
+    value.timezone.length < 1 ||
+    value.timezone.length > 80
+  )
+    throw new CredentialAssetError(
+      "crawler_profile_locale_invalid",
+      400,
+      "locale 或 timezone 无效。",
+    );
+  return { ...value, name: value.name.trim() };
+}
+export class CredentialAssetService {
+  constructor(
+    private readonly repository: CredentialAssetRepository,
+    private readonly masterKey: string,
+    private readonly keyVersion: string,
+    private readonly now: () => Date = () => new Date(),
+  ) {}
+  listAssets() {
+    return this.repository.listAssets();
+  }
+  listProviderOptions() {
+    return this.repository.listProviderOptions();
+  }
+  listProfiles() {
+    return this.repository.listProfiles();
+  }
+  async createAsset(value: CredentialAssetCreateInput, context: Context) {
+    if (this.masterKey.length < 32)
+      throw new CredentialAssetError(
+        "credential_master_key_unavailable",
+        503,
+        "在宝塔受限环境配置 CREDENTIALS_MASTER_KEY 后重启 Node API。",
+      );
+    const now = this.now(),
+      clean = createInput(value, now),
+      id = randomUUID(),
+      sealed = sealCredential(clean.secret_payload, this.masterKey, {
+        assetId: id,
+        assetVersion: 1,
+        kind: clean.kind,
+        keyVersion: this.keyVersion,
+      }),
+      { secret_payload, ...metadata } = clean;
+    return this.repository.createAsset({
+      id,
+      value: metadata,
+      sealed,
+      keyVersion: this.keyVersion,
+      ...context,
+      now,
+    });
+  }
+  async rotateAsset(
+    id: string,
+    value: { secret_payload: CredentialSecretInput; expected_version: number },
+    context: Context,
+  ) {
+    if (!uuid.test(id))
+      throw new CredentialAssetError(
+        "credential_id_invalid",
+        400,
+        "凭证 ID 无效。",
+      );
+    if (this.masterKey.length < 32)
+      throw new CredentialAssetError(
+        "credential_master_key_unavailable",
+        503,
+        "在宝塔受限环境配置 CREDENTIALS_MASTER_KEY 后重启 Node API。",
+      );
+    const record = await this.repository.getCipherRecord(id);
+    if (record.summary.status === "revoked")
+      throw new CredentialAssetError(
+        "credential_revoked",
+        409,
+        "已撤销凭证不能轮换。",
+      );
+    const next = expected(value.expected_version) + 1,
+      sealed = sealCredential(secret(value.secret_payload), this.masterKey, {
+        assetId: id,
+        assetVersion: next,
+        kind: record.summary.kind,
+        keyVersion: this.keyVersion,
+      });
+    return this.repository.rotateAsset({
+      id,
+      expectedVersion: value.expected_version,
+      sealed,
+      keyVersion: this.keyVersion,
+      ...context,
+      now: this.now(),
+    });
+  }
+  revokeAsset(
+    id: string,
+    value: { expected_version: number; reason: string },
+    context: Context,
+  ) {
+    if (!uuid.test(id))
+      throw new CredentialAssetError(
+        "credential_id_invalid",
+        400,
+        "凭证 ID 无效。",
+      );
+    expected(value.expected_version);
+    if (
+      typeof value.reason !== "string" ||
+      value.reason.trim().length < 2 ||
+      value.reason.length > 500
+    )
+      throw new CredentialAssetError(
+        "credential_revocation_reason_invalid",
+        400,
+        "撤销原因需要 2–500 字符。",
+      );
+    return this.repository.revokeAsset({
+      id,
+      expectedVersion: value.expected_version,
+      reason: value.reason.trim(),
+      ...context,
+      now: this.now(),
+    });
+  }
+  createProfile(value: CrawlerProfileInput, context: Context) {
+    return this.repository.createProfile({
+      id: randomUUID(),
+      value: profile(value),
+      ...context,
+      now: this.now(),
+    });
+  }
+}

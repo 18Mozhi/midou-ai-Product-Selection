@@ -63,6 +63,16 @@ export function registerAutomationRoutes(
     reply.code(201);
     return env(x, r);
   });
+  app.patch("/api/v1/automations/:id", async (r) =>
+    env(
+      await o.service.update({
+        ...(await write(r)),
+        ruleId: (r.params as any).id,
+        value: r.body,
+      }),
+      r,
+    ),
+  );
   app.get("/api/v1/automations/:id", async (r) =>
     env(
       await o.service.detail({

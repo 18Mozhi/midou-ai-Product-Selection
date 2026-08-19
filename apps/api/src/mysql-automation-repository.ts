@@ -124,6 +124,73 @@ export class MySqlAutomationRepository implements AutomationRepository {
       c.release();
     }
   }
+  async update(i: any) {
+    const old = await this.operation(i);
+    if (old) return old;
+    await this.member(i.organizationId, i.workspaceId, i.value.owner_id);
+    if (i.value.action_assignee_id)
+      await this.member(
+        i.organizationId,
+        i.workspaceId,
+        i.value.action_assignee_id,
+      );
+    const c = await this.pool.getConnection(),
+      now = this.now();
+    try {
+      await c.beginTransaction();
+      const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT version FROM automation_rules WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
+        [i.ruleId, i.organizationId, i.workspaceId],
+      );
+      if (!rows[0])
+        throw new AutomationServiceError(
+          "automation_rule_not_found",
+          404,
+          "刷新规则列表。",
+        );
+      if (Number(rows[0].version) !== i.value.expected_version)
+        throw new AutomationServiceError(
+          "automation_version_conflict",
+          409,
+          "规则已被其他人修改，刷新后重试。",
+        );
+      const next = i.value.expected_version + 1;
+      await c.query(
+        "UPDATE automation_rules SET name=?,trigger_event_type=?,condition_severity=?,action_type=?,owner_id=?,action_assignee_id=?,action_title=?,rate_limit_count=?,rate_limit_window_minutes=?,version=?,updated_at=? WHERE id=?",
+        [
+          i.value.name,
+          i.value.trigger_event_type,
+          i.value.condition_severity,
+          i.value.action_type,
+          i.value.owner_id,
+          i.value.action_assignee_id,
+          i.value.action_title,
+          i.value.rate_limit_count,
+          i.value.rate_limit_window_minutes,
+          next,
+          now,
+          i.ruleId,
+        ],
+      );
+      const result = { id: i.ruleId, version: next };
+      await this.record(
+        c,
+        i,
+        "automation.rule.updated",
+        i.ruleId,
+        { ...result, reason: i.value.reason },
+        now,
+      );
+      await this.save(c, i, i.ruleId, result, now);
+      await c.commit();
+      return result;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
   async changeStatus(i: any) {
     const old = await this.operation(i);
     if (old) return old;

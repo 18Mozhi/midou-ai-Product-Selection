@@ -19,6 +19,22 @@ const data = ref<any>(null),
 const reviewItem = ref<any>(null),
   reviewStatus = ref<"active" | "irrelevant" | "stale">("active"),
   reviewReason = ref("");
+const messageEditor = ref<any>(null),
+  messageSaving = ref(false),
+  messageForm = ref({
+    kind: "notification" as "notification" | "email",
+    title: "",
+    body: "",
+    category: "system",
+    severity: "info",
+    audience_type: "all_users",
+    organization_id: "",
+    user_id: "",
+    in_app_enabled: true,
+    email_enabled: false,
+    reason: "编辑平台消息",
+    expected_version: 1,
+  });
 const titles: Record<Domain, [string, string]> = {
   content: ["内容管理", "审核跨组织热点内容，处理无关和过期主题。"],
   notifications: [
@@ -44,7 +60,7 @@ const summaryName = (key: string) =>
       critical: "严重",
       succeeded: "已送达",
       blocked: "受阻",
-      api: "API",
+      api: "后端接口",
       database: "数据库",
       dashboard_reads: "15 分钟访问",
       active_organizations: "活动组织",
@@ -75,6 +91,19 @@ const stateName = (value: unknown) =>
       disabled: "停用",
       read: "已读",
       unread: "未读",
+      draft: "草稿",
+      published: "已发布",
+      cancelled: "已取消",
+      system_fixed: "系统内置",
+      pending_provider_selection: "邮件服务待配置",
+      in_app: "站内通知",
+      email: "邮件",
+      task: "任务",
+      approval: "审批",
+      competitor: "竞品",
+      system: "系统",
+      info: "普通",
+      critical: "严重",
     }) as Record<string, string>
   )[String(value)] ?? String(value ?? "—");
 const when = (value: unknown) =>
@@ -99,7 +128,9 @@ async function load() {
       domain.value === "status"
         ? (body.data?.collections?.length ?? 0) +
           (body.data?.sources?.length ?? 0)
-        : (body.data?.items?.length ?? 0);
+        : ["notifications", "email"].includes(domain.value)
+          ? (body.data?.items?.length ?? 0) + (body.data?.messages?.length ?? 0)
+          : (body.data?.items?.length ?? 0);
     state.value = count || domain.value === "status" ? "ready" : "empty";
   } catch (error) {
     message.value = error instanceof Error ? error.message : "管理数据暂不可用";
@@ -187,10 +218,119 @@ async function manageEmail(item: any, action: "retry" | "suppress") {
     busy.value = "";
   }
 }
+function openMessage(item?: any) {
+  const kind = domain.value === "email" ? "email" : "notification";
+  messageEditor.value = item ?? { id: "" };
+  messageForm.value = item
+    ? {
+        kind: item.kind,
+        title: item.title,
+        body: item.body,
+        category: item.category,
+        severity: item.severity,
+        audience_type: item.audience_type,
+        organization_id: item.organization_id ?? "",
+        user_id: item.user_id ?? "",
+        in_app_enabled: Boolean(item.in_app_enabled),
+        email_enabled: Boolean(item.email_enabled),
+        reason: "编辑平台消息",
+        expected_version: item.version,
+      }
+    : {
+        kind,
+        title: "",
+        body: "",
+        category: "system",
+        severity: "info",
+        audience_type: "all_users",
+        organization_id: "",
+        user_id: "",
+        in_app_enabled: kind === "notification",
+        email_enabled: kind === "email",
+        reason: "创建平台消息草稿",
+        expected_version: 1,
+      };
+}
+async function saveMessage() {
+  if (!messageEditor.value) return;
+  messageSaving.value = true;
+  try {
+    const editing = Boolean(messageEditor.value.id),
+      response = await fetch(
+        `${props.apiBaseUrl}/platform/management/messages${editing ? `/${messageEditor.value.id}` : ""}`,
+        {
+          method: editing ? "PATCH" : "POST",
+          credentials: "include",
+          headers: {
+            "content-type": "application/json",
+            "idempotency-key": crypto.randomUUID(),
+          },
+          body: JSON.stringify(messageForm.value),
+        },
+      ),
+      body = await response.json().catch(() => null);
+    requestId.value = body?.request_id ?? requestId.value;
+    if (!response.ok) throw new Error(body?.error?.action_hint ?? "草稿未保存");
+    messageEditor.value = null;
+    await load();
+    message.value = editing ? "草稿已更新。" : "草稿已创建，可继续编辑或发布。";
+  } catch (error) {
+    message.value = error instanceof Error ? error.message : "草稿未保存";
+  } finally {
+    messageSaving.value = false;
+  }
+}
+async function messageAction(item: any, action: "publish" | "cancel") {
+  const actionName =
+    action === "publish" ? (item.kind === "email" ? "发送" : "发布") : "取消";
+  const reason = window.prompt(
+    `请输入${actionName}原因（2–300 字）`,
+    `${actionName}平台消息`,
+  );
+  if (reason === null) return;
+  if (reason.trim().length < 2) {
+    message.value = "操作原因至少需要 2 个字。";
+    return;
+  }
+  busy.value = item.id;
+  try {
+    const response = await fetch(
+        `${props.apiBaseUrl}/platform/management/messages/${item.id}/actions`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "content-type": "application/json",
+            "idempotency-key": crypto.randomUUID(),
+          },
+          body: JSON.stringify({
+            action,
+            expected_version: item.version,
+            reason: reason.trim(),
+          }),
+        },
+      ),
+      body = await response.json().catch(() => null);
+    requestId.value = body?.request_id ?? requestId.value;
+    if (!response.ok)
+      throw new Error(body?.error?.action_hint ?? `${actionName}未完成`);
+    await load();
+    message.value =
+      action === "publish"
+        ? `${actionName}完成：覆盖 ${body.data.recipient_count} 人，站内 ${body.data.in_app_count} 条，邮件队列 ${body.data.email_count} 条。`
+        : "草稿已取消。";
+  } catch (error) {
+    message.value =
+      error instanceof Error ? error.message : `${actionName}未完成`;
+  } finally {
+    busy.value = "";
+  }
+}
 watch(domain, () => {
   query.value = "";
   status.value = "";
   reviewItem.value = null;
+  messageEditor.value = null;
   load();
 });
 onMounted(load);
@@ -200,11 +340,23 @@ onMounted(load);
   <section class="platform-management" aria-live="polite">
     <header class="platform-management-hero">
       <div>
-        <p>PLATFORM OPERATIONS</p>
+        <p>平台运营中心</p>
         <h2>{{ titles[domain][0] }}</h2>
         <span>{{ titles[domain][1] }}</span>
       </div>
-      <button type="button" @click="load">刷新数据</button>
+      <div class="hero-actions">
+        <button
+          v-if="domain === 'notifications'"
+          type="button"
+          @click="openMessage()"
+        >
+          发布通知
+        </button>
+        <button v-if="domain === 'email'" type="button" @click="openMessage()">
+          发送邮件
+        </button>
+        <button type="button" @click="load">刷新数据</button>
+      </div>
     </header>
     <form
       v-if="domain !== 'status'"
@@ -256,6 +408,85 @@ onMounted(load);
           ><strong :data-state="value">{{ stateName(value) }}</strong>
         </article>
       </div>
+      <section
+        v-if="['notifications', 'email'].includes(domain)"
+        class="message-workbench"
+      >
+        <header>
+          <div>
+            <h3>
+              {{
+                domain === "email" ? "邮件草稿与发送记录" : "通知草稿与发布记录"
+              }}
+            </h3>
+            <span
+              >先保存草稿，确认接收范围和发送方式后再发布；已发布内容不可直接篡改。</span
+            >
+          </div>
+          <button type="button" @click="openMessage()">
+            ＋ {{ domain === "email" ? "新建邮件草稿" : "新建通知草稿" }}
+          </button>
+        </header>
+        <div class="message-list">
+          <article
+            v-for="item in data.messages"
+            :key="item.id"
+            :data-status="item.status"
+          >
+            <header>
+              <div>
+                <small
+                  >{{ stateName(item.kind) }} · {{ stateName(item.category) }} ·
+                  {{ stateName(item.severity) }}</small
+                >
+                <h4>{{ item.title }}</h4>
+              </div>
+              <b>{{ stateName(item.status) }}</b>
+            </header>
+            <p>{{ item.body }}</p>
+            <dl>
+              <div>
+                <dt>接收范围</dt>
+                <dd>
+                  {{
+                    item.audience_type === "all_users"
+                      ? "全部活动用户"
+                      : item.audience_type === "organization"
+                        ? item.organization_name
+                        : item.user_email
+                  }}
+                </dd>
+              </div>
+              <div>
+                <dt>发送方式</dt>
+                <dd>
+                  {{
+                    [
+                      item.in_app_enabled ? "站内通知" : "",
+                      item.email_enabled ? "邮件" : "",
+                    ]
+                      .filter(Boolean)
+                      .join("、")
+                  }}
+                </dd>
+              </div>
+              <div>
+                <dt>更新时间</dt>
+                <dd>{{ when(item.updated_at) }}</dd>
+              </div>
+            </dl>
+            <footer v-if="item.status === 'draft'">
+              <button @click="openMessage(item)">编辑</button
+              ><button @click="messageAction(item, 'publish')">
+                {{ item.kind === "email" ? "发送" : "发布" }}</button
+              ><button @click="messageAction(item, 'cancel')">取消草稿</button>
+            </footer>
+          </article>
+          <p v-if="!data.messages.length" class="message-empty">
+            还没有草稿。点击右上角即可创建。
+          </p>
+        </div>
+      </section>
       <div v-if="domain === 'content'" class="platform-management-table">
         <table>
           <thead>
@@ -309,12 +540,12 @@ onMounted(load);
           <article>
             <header>
               <h3>系统模板</h3>
-              <span>Worker 固定合同，不在页面任意改文案</span>
+              <span>由系统事件触发的内置通知模板</span>
             </header>
             <ul>
               <li v-for="item in data.templates" :key="item.category">
                 <strong>{{ item.title }}</strong
-                ><small>{{ item.event_pattern }} · {{ item.status }}</small>
+                ><small>{{ stateName(item.status) }}</small>
               </li>
             </ul>
           </article>
@@ -355,8 +586,12 @@ onMounted(load);
               <li v-for="item in data.alert_routes.slice(0, 6)" :key="item.id">
                 <strong>{{ item.name }}</strong
                 ><small
-                  >{{ item.event_type }} → {{ item.action_type }} ·
-                  {{ item.status }}</small
+                  >触发后{{
+                    item.action_type === "notify_owner"
+                      ? "通知负责人"
+                      : "创建人工任务"
+                  }}
+                  · {{ stateName(item.status) }}</small
                 >
               </li>
             </ul>
@@ -484,10 +719,19 @@ onMounted(load);
       </div>
       <div v-else class="platform-status-grid">
         <section class="platform-service-status">
-          <header><h3>服务运行状态</h3><span>5 分钟内观测为实时</span></header>
+          <header>
+            <h3>服务运行状态</h3>
+            <span>5 分钟内观测为实时</span>
+          </header>
           <a v-for="item in data.services" :key="item.code" :href="item.href">
-            <span><b>{{ item.name }}</b><small>{{ item.detail }}</small></span>
-            <span><i :data-state="item.status">{{ stateName(item.status) }}</i><small>{{ when(item.observed_at) }}</small></span>
+            <span
+              ><b>{{ item.name }}</b
+              ><small>{{ item.detail }}</small></span
+            >
+            <span
+              ><i :data-state="item.status">{{ stateName(item.status) }}</i
+              ><small>{{ when(item.observed_at) }}</small></span
+            >
           </a>
         </section>
         <section>
@@ -508,7 +752,8 @@ onMounted(load);
         </section>
       </div>
       <footer>
-        观测时间 {{ when(data.observed_at) }} · request_id {{ requestId }}
+        数据更新时间 {{ when(data.observed_at)
+        }}<span v-if="requestId"> · 关联编号 {{ requestId }}</span>
       </footer></template
     >
     <dialog :open="Boolean(reviewItem)">
@@ -535,6 +780,118 @@ onMounted(load);
           <button type="button" @click="reviewItem = null">取消</button
           ><button :disabled="reviewReason.trim().length < 2 || Boolean(busy)">
             确认更新
+          </button>
+        </footer>
+      </form>
+    </dialog>
+    <dialog :open="Boolean(messageEditor)" class="message-dialog">
+      <form @submit.prevent="saveMessage">
+        <header>
+          <div>
+            <small>{{ messageEditor?.id ? "编辑草稿" : "新建草稿" }}</small>
+            <h3>
+              {{ messageForm.kind === "email" ? "平台邮件" : "平台通知" }}
+            </h3>
+          </div>
+          <button type="button" aria-label="关闭" @click="messageEditor = null">
+            ×
+          </button>
+        </header>
+        <label
+          >标题<input
+            v-model="messageForm.title"
+            required
+            minlength="2"
+            maxlength="200"
+            placeholder="接收人看到的标题"
+        /></label>
+        <label
+          >正文<textarea
+            v-model="messageForm.body"
+            required
+            minlength="2"
+            maxlength="2000"
+            rows="7"
+            placeholder="写清楚事项、影响和需要采取的行动"
+          ></textarea>
+        </label>
+        <div class="message-form-grid">
+          <label
+            >消息类型<select v-model="messageForm.category">
+              <option value="system">系统通知</option>
+              <option value="task">任务通知</option>
+              <option value="approval">审批通知</option>
+              <option value="competitor">竞品通知</option>
+            </select></label
+          ><label
+            >重要程度<select v-model="messageForm.severity">
+              <option value="info">普通</option>
+              <option value="warning">重要</option>
+              <option value="critical">严重</option>
+            </select></label
+          >
+        </div>
+        <label
+          >接收范围<select v-model="messageForm.audience_type">
+            <option value="all_users">全部活动用户</option>
+            <option value="organization">指定组织</option>
+            <option value="user">指定用户</option>
+          </select></label
+        >
+        <label v-if="messageForm.audience_type === 'organization'"
+          >选择组织<select v-model="messageForm.organization_id" required>
+            <option value="">请选择</option>
+            <option
+              v-for="item in data?.audience_options?.organizations || []"
+              :key="item.id"
+              :value="item.id"
+            >
+              {{ item.name }}
+            </option>
+          </select></label
+        >
+        <label v-if="messageForm.audience_type === 'user'"
+          >选择用户<select v-model="messageForm.user_id" required>
+            <option value="">请选择</option>
+            <option
+              v-for="item in data?.audience_options?.users || []"
+              :key="item.id"
+              :value="item.id"
+            >
+              {{ item.email }}
+            </option>
+          </select></label
+        >
+        <fieldset>
+          <legend>发送方式</legend>
+          <label
+            ><input
+              v-model="messageForm.in_app_enabled"
+              type="checkbox"
+              :disabled="messageForm.kind === 'email'"
+            />站内通知</label
+          ><label
+            ><input
+              v-model="messageForm.email_enabled"
+              type="checkbox"
+              :disabled="messageForm.kind === 'email'"
+            />邮件</label
+          >
+        </fieldset>
+        <label v-if="messageEditor?.id"
+          >修改原因<input
+            v-model="messageForm.reason"
+            required
+            minlength="2"
+            maxlength="300"
+        /></label>
+        <p class="dialog-help">
+          邮件会先进入投递队列；如果邮件服务尚未在宝塔配置，记录会明确显示“待配置”，不会伪装成已送达。
+        </p>
+        <footer>
+          <button type="button" @click="messageEditor = null">取消</button
+          ><button :disabled="messageSaving">
+            {{ messageSaving ? "保存中…" : "保存草稿" }}
           </button>
         </footer>
       </form>
@@ -570,6 +927,124 @@ onMounted(load);
 }
 .platform-management-hero span {
   color: #91a8b9;
+}
+.hero-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.hero-actions button:first-child {
+  border-color: #31d6c4;
+  background: #31d6c4;
+  color: #08231d;
+  font-weight: 800;
+}
+.message-workbench {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid #28475b;
+  border-radius: 14px;
+  background: #0d1d29;
+}
+.message-workbench > header,
+.message-list article > header,
+.message-list article > footer,
+.message-dialog header {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+}
+.message-workbench h3,
+.message-list h4 {
+  margin: 0 0 5px;
+}
+.message-workbench header span,
+.message-list small,
+.message-list dt,
+.dialog-help {
+  color: #8198aa;
+}
+.message-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.message-list article {
+  padding: 15px;
+  border: 1px solid #244256;
+  border-left: 4px solid #8198aa;
+  border-radius: 11px;
+  background: #0a1925;
+}
+.message-list article[data-status="draft"] {
+  border-left-color: #d5a646;
+}
+.message-list article[data-status="published"] {
+  border-left-color: #35d4a1;
+}
+.message-list article p {
+  min-height: 42px;
+  color: #b8c8d5;
+  white-space: pre-wrap;
+}
+.message-list dl {
+  display: grid;
+  gap: 7px;
+  margin: 12px 0;
+}
+.message-list dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.message-list dd {
+  margin: 0;
+  text-align: right;
+}
+.message-empty {
+  grid-column: 1 / -1;
+  padding: 22px;
+  text-align: center;
+  color: #8198aa;
+}
+.message-dialog {
+  width: min(620px, calc(100% - 28px));
+}
+.message-dialog form {
+  display: grid;
+  gap: 12px;
+}
+.message-dialog label {
+  display: grid;
+  gap: 6px;
+}
+.message-dialog header button {
+  border: 0;
+  background: transparent;
+  font-size: 24px;
+  color: #dce8f3;
+}
+.message-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.message-dialog fieldset {
+  display: flex;
+  gap: 18px;
+  padding: 10px 12px;
+  border: 1px solid #31536a;
+  border-radius: 9px;
+}
+.message-dialog fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.message-dialog fieldset input {
+  width: auto;
 }
 .platform-management button,
 .platform-management select,
@@ -850,6 +1325,10 @@ dialog footer {
   margin-bottom: 12px;
 }
 @media (max-width: 700px) {
+  .message-list,
+  .message-form-grid {
+    grid-template-columns: 1fr;
+  }
   .platform-management-hero {
     align-items: flex-start;
     flex-direction: column;

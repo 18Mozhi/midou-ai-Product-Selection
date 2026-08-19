@@ -184,7 +184,7 @@ onMounted(load);
           API。</span
         >
       </div>
-      <a href="/platform-admin/providers">新建或编辑完整技术合同 →</a>
+      <a href="/platform-admin/providers">管理来源规则</a>
     </header>
     <div class="source-metrics">
       <article>
@@ -196,8 +196,8 @@ onMounted(load);
         ><span>已进入调度</span>
       </article>
       <article>
-        <small>非 Google 自动源</small><strong>{{ counts.nonGoogle }}</strong
-        ><span>电商 / 论坛 / RSS</span>
+        <small>非谷歌自动源</small><strong>{{ counts.nonGoogle }}</strong
+        ><span>电商 / 论坛 / 信息订阅</span>
       </article>
       <article>
         <small>市场覆盖</small><strong>{{ counts.markets }}</strong
@@ -207,7 +207,7 @@ onMounted(load);
     <aside class="source-help">
       <strong>已经替你配置好的部分</strong>
       <ol>
-        <li>公开 RSS/Atom 和论坛频道会自动采集，不需要 Key。</li>
+        <li>公开信息订阅和论坛频道会自动采集，不需要密钥。</li>
         <li>频率、超时、重试、启停可直接在本页修改。</li>
         <li>网页登录型平台只在登录失效时由管理员维护浏览器档案。</li>
       </ol>
@@ -226,7 +226,7 @@ onMounted(load);
       ><select v-model="availability">
         <option value="">全部状态</option>
         <option value="automatic">自动采集</option>
-        <option value="setup_required">网页登录待就绪</option>
+        <option value="setup_required">需要配置网页登录</option>
         <option value="manual">手动来源</option>
       </select>
     </form>
@@ -268,7 +268,9 @@ onMounted(load);
               ? "已启用"
               : item.availability === "automatic"
                 ? "等待同步"
-                : "未启用"
+                : item.availability === "setup_required"
+                  ? "需要登录"
+                  : "手动维护"
           }}</b>
         </header>
         <p>{{ item.policy_note }}</p>
@@ -280,9 +282,7 @@ onMounted(load);
           <div>
             <dt>频率</dt>
             <dd>
-              {{
-                item.provisioned?.schedule_minutes ?? item.schedule_minutes
-              }}
+              {{ item.provisioned?.schedule_minutes ?? item.schedule_minutes }}
               分钟
             </dd>
           </div>
@@ -295,14 +295,20 @@ onMounted(load);
           </div>
         </dl>
         <footer>
-          <code>{{ item.code }}</code
+          <span
+            >{{ item.languages.join(" / ") }} ·
+            {{ item.fields.length }} 类数据字段</span
           ><button
             v-if="item.provisioned"
             type="button"
             @click="beginEdit(item)"
           >
-            编辑采集配置</button
-          ><span v-else>统一后端重启后自动同步</span>
+            编辑采集设置</button
+          ><a
+            v-else-if="item.availability === 'setup_required'"
+            :href="`/platform-admin/credentials?provider_code=${encodeURIComponent(item.code)}&mode=login`"
+            >配置网页登录</a
+          ><span v-else>等待系统登记</span>
         </footer>
       </article>
       <p v-if="!filtered.length" class="source-state">
@@ -319,7 +325,7 @@ onMounted(load);
       <form @submit.prevent="save">
         <header>
           <div>
-            <p>EDIT SOURCE</p>
+            <p>编辑采集来源</p>
             <h3 id="source-edit-title">{{ editing.name }}</h3>
           </div>
           <button
@@ -464,11 +470,18 @@ onMounted(load);
 }
 .source-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 12px;
 }
 .source-list article {
-  padding: 17px;
+  display: grid;
+  grid-template-columns: minmax(220px, 1.4fr) minmax(200px, 1fr) minmax(
+      320px,
+      1.5fr
+    ) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
   border: 1px solid var(--so-border);
   border-left: 5px solid var(--so-success);
   border-radius: 13px;
@@ -486,6 +499,12 @@ onMounted(load);
   display: flex;
   justify-content: space-between;
   gap: 12px;
+}
+.source-list article > header {
+  min-width: 0;
+}
+.source-list article > p {
+  margin: 0;
 }
 .source-list h3 {
   margin: 4px 0;
@@ -518,11 +537,17 @@ onMounted(load);
 }
 .source-list footer {
   align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 }
-.source-list footer button {
+.source-list footer button,
+.source-list footer a {
+  padding: 8px 10px;
+  border-radius: 8px;
   color: var(--so-text);
   border: 1px solid var(--so-border);
   background: var(--so-panel-soft);
+  text-decoration: none;
 }
 .source-message {
   padding: 12px 14px;
@@ -596,6 +621,9 @@ onMounted(load);
     flex-direction: column;
   }
   .source-list {
+    grid-template-columns: 1fr;
+  }
+  .source-list article {
     grid-template-columns: 1fr;
   }
   .source-list dl {

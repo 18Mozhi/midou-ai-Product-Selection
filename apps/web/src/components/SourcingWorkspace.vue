@@ -218,7 +218,7 @@ onMounted(() => {
     </nav>
     <header class="sourcing-head">
       <div>
-        <p>SUPPLIER DISCOVERY</p>
+        <p>供应商发现</p>
         <h2>供应链找货</h2>
         <span
           >采集事实先投影为候选；缺失规格、交期、地点、可信度与风险时禁止进入可靠对比。</span
@@ -284,7 +284,7 @@ onMounted(() => {
             <h4>{{ item.product_title }}</h4>
             <dl>
               <div>
-                <dt>报价 / MOQ</dt>
+                <dt>报价 / 最小起订量</dt>
                 <dd>
                   {{ item.currency }} {{ item.quoted_price }} / {{ item.moq }}
                 </dd>
@@ -352,7 +352,7 @@ onMounted(() => {
           </button>
         </header>
         <label
-          >采集任务 ID<input
+          >采集任务编号<input
             v-model="form.collection_task_id"
             required /></label
         ><label
@@ -429,7 +429,7 @@ onMounted(() => {
           /></label>
         </div>
         <label
-          >确认依据 Evidence ID<input v-model="quote.evidence_id" required
+          >确认依据证据编号<input v-model="quote.evidence_id" required
         /></label>
         <footer>
           <button type="button" class="ghost" @click="quoteCandidate = null">

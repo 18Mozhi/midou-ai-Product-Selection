@@ -64,7 +64,7 @@ const newPassword = ref("");
 const title = computed(
   () =>
     ({
-      login: "欢迎回到 ai选品",
+      login: "欢迎回到智能选品",
       register: "创建本地账号",
       forgot: "找回密码",
       verify: "验证邮箱",
@@ -125,7 +125,7 @@ async function request(
   } catch {
     requestState.value = "blocked";
     message.value = "无法连接身份服务。";
-    actionHint.value = "检查网络后重试；运维人员可在宝塔查看 Node API 状态。";
+    actionHint.value = "检查网络后重试；运维人员可在宝塔查看后端状态。";
     return null;
   }
 }
@@ -269,12 +269,12 @@ onMounted(() => {
 <template>
   <main class="identity-page" :data-mode="mode" :data-state="requestState">
     <header class="identity-header">
-      <a class="identity-brand" href="/"><span>S</span>ai选品</a>
+      <a class="identity-brand" href="/"><span>选</span>智能选品</a>
       <p>账号登录与安全验证</p>
     </header>
     <section class="identity-shell">
-      <aside class="identity-story" aria-label="ai选品 产品说明">
-        <p class="identity-kicker">FROM SIGNAL TO ACTION</p>
+      <aside class="identity-story" aria-label="智能选品产品说明">
+        <p class="identity-kicker">从信号到行动</p>
         <h1>让增长，<em>更有确定性</em></h1>
         <p>
           账号、密码和会话只在受控后端处理。浏览器不保存认证
@@ -286,7 +286,7 @@ onMounted(() => {
         <ul>
           <li><strong>Argon2id</strong><small>密码单向哈希</small></li>
           <li><strong>单次令牌</strong><small>验证与重置可追踪</small></li>
-          <li><strong>TOTP MFA</strong><small>30 秒短时验证码</small></li>
+          <li><strong>动态双重验证</strong><small>30 秒短时验证码</small></li>
         </ul>
       </aside>
 
@@ -309,10 +309,10 @@ onMounted(() => {
             >认证器密钥加密保存，恢复码仅显示一次</span
           >
           <span v-else-if="mode === 'mfa-challenge'"
-            >短时挑战保存在 HttpOnly Cookie 中</span
+            >短时挑战保存在浏览器安全凭证中</span
           >
           <span v-else-if="mode === 'security-setup'"
-            >完成全部步骤前，业务 API 保持拒绝</span
+            >完成全部步骤前，业务后端保持拒绝</span
           >
         </div>
 
@@ -448,7 +448,7 @@ onMounted(() => {
             {{
               params.get("token")
                 ? "验证链接只使用一次；失败时按上方提示重新申请。"
-                : "邮件 Provider 未确认时，生产投递会明确显示受阻，不会假报已发送。"
+                : "邮件服务未确认时，生产投递会明确显示受阻，不会假报已发送。"
             }}
           </p>
           <button type="button" @click="switchMode('login')">返回登录</button>

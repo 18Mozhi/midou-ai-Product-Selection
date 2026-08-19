@@ -161,7 +161,7 @@ const when = (value: unknown) =>
   <section class="personal-center" aria-live="polite">
     <header>
       <div>
-        <p>PERSONAL CENTER</p>
+        <p>个人中心</p>
         <h2>{{ profile?.display_name || "个人中心" }}</h2>
         <span
           >资料、权限、安全、通知和本人资产使用真实账号与当前组织数据。</span
@@ -257,7 +257,7 @@ const when = (value: unknown) =>
             >
           </div>
           <a v-if="canManageOrganizationToken" href="/org-admin/tokens"
-            >管理组织 Token</a
+            >管理组织令牌</a
           >
         </article>
       </section>

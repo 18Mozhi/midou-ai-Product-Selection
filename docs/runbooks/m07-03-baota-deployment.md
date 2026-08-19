@@ -5,7 +5,7 @@
 1. 运行 `npm run verify:module -- M07-02` 和 `node scripts/verify-baota-deployment.mjs --preflight`。
 2. 在宝塔确认网站、Node 项目“ai选品”和 Python 项目“ai选品-python”均由面板创建和管理；不得保留独立 API、Worker、Canary 或面板外常驻项目，也不要用 systemd、独立 PM2、宿主 crontab或屏外 Docker Compose代替。
 3. Node/Python 只读取 `/www/wwwroot/ai选品/config/product_scout.env` 受限环境；秘密只填宝塔受限配置，检查页面、项目环境、日志和任务输出均无秘密。
-4. 本地使用锁文件完整安装依赖并构建同一 commit，然后运行 `python scripts/deploy-baota.py` 上传运行包；不得在服务器执行 Git 或源码构建。数据库升序迁移后，由宝塔重启“ai选品”和“ai选品-python”。
+4. 本地使用锁文件完整安装依赖并构建同一提交，然后运行 `python scripts/deploy-baota.py` 上传运行包；不得在服务器执行 Git 或源码构建。脚本只允许执行内置白名单中的升序迁移，校验迁移校验值后切换固定目录，并通过宝塔接口更新或重启“ai选品”和“ai选品-python”；不会创建面板外服务。
 5. 合并 Nginx 模板并在宝塔执行配置检查；确认 `/api/`、`/open/`、SSE 和 SPA 回退。TLS 由宝塔网站签发，DNS/NAT 未完成时不得宣称公网可用。
 
 ## 生产验收

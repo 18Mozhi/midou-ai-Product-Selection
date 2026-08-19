@@ -23,6 +23,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   notice = ref(""),
   requestId = ref(""),
   showCreate = ref(false),
+  editing = ref<Rule | null>(null),
+  deepLinkHandled = ref(false),
   busy = ref(false),
   form = ref({
     name: "",
@@ -71,6 +73,13 @@ async function load() {
   try {
     rules.value = await api("/automations");
     state.value = rules.value.length ? "ready" : "empty";
+    if (!deepLinkHandled.value) {
+      deepLinkHandled.value = true;
+      const params = new URLSearchParams(location.search),
+        target = rules.value.find((item) => item.id === params.get("rule"));
+      if (target)
+        params.get("action") === "edit" ? edit(target) : await open(target);
+    }
   } catch {}
 }
 async function open(rule: Rule) {
@@ -81,23 +90,54 @@ async function open(rule: Rule) {
 async function create() {
   busy.value = true;
   try {
-    await api("/automations", {
-      method: "POST",
-      body: JSON.stringify({
-        ...form.value,
-        action_assignee_id:
-          form.value.action_type === "create_task"
-            ? form.value.action_assignee_id
-            : null,
-      }),
-    });
+    await api(
+      editing.value ? `/automations/${editing.value.id}` : "/automations",
+      {
+        method: editing.value ? "PATCH" : "POST",
+        body: JSON.stringify({
+          ...form.value,
+          ...(editing.value
+            ? {
+                expected_version: editing.value.version,
+                reason: "编辑自动化规则",
+              }
+            : {}),
+          action_assignee_id:
+            form.value.action_type === "create_task"
+              ? form.value.action_assignee_id
+              : null,
+        }),
+      },
+    );
     showCreate.value = false;
-    notice.value = "自动化规则已启用；动作仍需人工处理。";
+    notice.value = editing.value
+      ? "自动化规则已更新并保留审计记录。"
+      : "自动化规则已启用；动作仍需人工处理。";
+    editing.value = null;
     await load();
   } catch {
   } finally {
     busy.value = false;
   }
+}
+function edit(rule: Rule) {
+  editing.value = rule;
+  form.value = {
+    name: rule.name,
+    trigger_event_type: rule.trigger_event_type,
+    condition_severity: rule.condition_severity,
+    action_type: rule.action_type,
+    owner_id: rule.owner_id,
+    action_assignee_id: rule.action_assignee_id ?? "",
+    action_title: rule.action_title,
+    rate_limit_count: rule.rate_limit_count,
+    rate_limit_window_minutes: rule.rate_limit_window_minutes,
+  };
+  showCreate.value = true;
+}
+function closeEditor() {
+  showCreate.value = false;
+  editing.value = null;
 }
 async function status(rule: Rule) {
   busy.value = true;
@@ -132,14 +172,30 @@ const trigger = (v: string) =>
       }) as any
     )[v] ?? v,
   action = (v: string) =>
-    v === "notify_owner" ? "通知负责人" : "创建人工任务";
+    v === "notify_owner" ? "通知负责人" : "创建人工任务",
+  severity = (v: string) =>
+    (
+      ({
+        any: "任意",
+        info: "普通",
+        warning: "重要",
+        critical: "严重",
+      }) as Record<string, string>
+    )[v] ?? "未知",
+  executionStatus = (v: string) =>
+    (
+      ({ succeeded: "已完成", failed: "失败", dead_letter: "死信" }) as Record<
+        string,
+        string
+      >
+    )[v] ?? "处理中";
 onMounted(load);
 </script>
 <template>
   <section class="automation-center">
     <header>
       <div>
-        <p>COLLABORATION</p>
+        <p>团队自动化</p>
         <h2>自动化规则</h2>
         <span
           >以已落库事务事件触发安全动作；不会自动审批、推荐或变更业务事实。</span
@@ -199,7 +255,7 @@ onMounted(load);
         <dl>
           <div>
             <dt>条件</dt>
-            <dd>{{ rule.condition_severity }}</dd>
+            <dd>{{ severity(rule.condition_severity) }}</dd>
           </div>
           <div>
             <dt>限流</dt>
@@ -210,7 +266,8 @@ onMounted(load);
           </div>
         </dl>
         <footer>
-          <button class="secondary" @click="open(rule)">执行记录</button
+          <button class="secondary" @click="open(rule)">查看详情</button
+          ><button class="secondary" @click="edit(rule)">编辑</button
           ><button :disabled="busy" @click="status(rule)">
             {{ rule.status === "active" ? "暂停" : "恢复" }}
           </button>
@@ -219,11 +276,11 @@ onMounted(load);
     </div>
     <aside v-if="selected" class="automation-detail">
       <button aria-label="关闭执行记录" @click="selected = null">×</button>
-      <p>AUTOMATION HISTORY</p>
+      <p>规则详情与执行记录</p>
       <h3>{{ selected.name }}</h3>
       <ul v-if="selected.executions?.length">
         <li v-for="x in selected.executions" :key="x.id">
-          <b>{{ x.status }}</b
+          <b>{{ executionStatus(x.status) }}</b
           ><span
             >规则 v{{ x.rule_version }} · 尝试 {{ x.attempt_count }} 次</span
           ><small
@@ -236,7 +293,7 @@ onMounted(load);
     </aside>
     <dialog :open="showCreate">
       <form @submit.prevent="create">
-        <h3>创建自动化规则</h3>
+        <h3>{{ editing ? "编辑自动化规则" : "创建自动化规则" }}</h3>
         <label
           >规则名称<input v-model="form.name" required maxlength="200" /></label
         ><label
@@ -249,9 +306,9 @@ onMounted(load);
         ><label
           >严重程度<select v-model="form.condition_severity">
             <option value="any">任意</option>
-            <option value="info">info</option>
-            <option value="warning">warning</option>
-            <option value="critical">critical</option>
+            <option value="info">普通</option>
+            <option value="warning">重要</option>
+            <option value="critical">严重</option>
           </select></label
         ><label
           >动作<select v-model="form.action_type">
@@ -264,12 +321,12 @@ onMounted(load);
             </option>
           </select></label
         ><label
-          >规则负责人 UUID<input
+          >规则负责人账号编号<input
             v-model="form.owner_id"
             required
             pattern="[0-9a-fA-F-]{36}" /></label
         ><label v-if="form.action_type === 'create_task'"
-          >任务负责人 UUID<input
+          >任务负责人账号编号<input
             v-model="form.action_assignee_id"
             required
             pattern="[0-9a-fA-F-]{36}" /></label
@@ -295,9 +352,11 @@ onMounted(load);
           规则只消费真实通知投影；任务动作会标记 automation 来源并留存审计。
         </p>
         <footer>
-          <button type="button" class="secondary" @click="showCreate = false">
+          <button type="button" class="secondary" @click="closeEditor">
             取消</button
-          ><button :disabled="busy">创建并启用</button>
+          ><button :disabled="busy">
+            {{ editing ? "保存修改" : "创建并启用" }}
+          </button>
         </footer>
       </form>
     </dialog>

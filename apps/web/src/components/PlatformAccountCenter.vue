@@ -39,8 +39,18 @@ const props = withDefaults(
     new URLSearchParams(window.location.search).get("create") === "1",
   ),
   form = reactive({ name: "", slug: "", initial_admin_user_id: "" }),
-  organizationForm = reactive({ name: "", timezone: "Asia/Shanghai", data_retention_days: 365 }),
-  userForm = reactive({ email: "", temporary_password: "", platform_role_code: "", organization_id: "", organization_role_code: "member" }),
+  organizationForm = reactive({
+    name: "",
+    timezone: "Asia/Shanghai",
+    data_retention_days: 365,
+  }),
+  userForm = reactive({
+    email: "",
+    temporary_password: "",
+    platform_role_code: "",
+    organization_id: "",
+    organization_role_code: "member",
+  }),
   passwordForm = reactive({ temporary_password: "" });
 const rows = computed(() =>
     tab.value === "organizations"
@@ -118,7 +128,13 @@ async function write(path: string, body: unknown, method = "POST") {
   }
 }
 async function createOrganization() {
-  const body = { name: form.name, slug: form.slug, ...(form.initial_admin_user_id ? { initial_admin_user_id: form.initial_admin_user_id } : {}) };
+  const body = {
+    name: form.name,
+    slug: form.slug,
+    ...(form.initial_admin_user_id
+      ? { initial_admin_user_id: form.initial_admin_user_id }
+      : {}),
+  };
   if (await write("/platform/accounts/organizations", body)) {
     form.name = "";
     form.slug = "";
@@ -143,27 +159,130 @@ async function submitReason() {
 }
 async function toggleOrganization(item: any) {
   askReason(item.status === "active" ? "停用组织" : "恢复组织", async (why) => {
-    await write(`/platform/accounts/organizations/${item.id}/status`, { status: item.status === "active" ? "archived" : "active", reason: why });
+    await write(`/platform/accounts/organizations/${item.id}/status`, {
+      status: item.status === "active" ? "archived" : "active",
+      reason: why,
+    });
   });
 }
 async function toggleUser(item: any) {
-  askReason(item.status === "active" ? "停用用户并撤销会话" : "恢复用户", async (why) => {
-    await write(`/platform/accounts/users/${item.id}/status`, { status: item.status === "active" ? "disabled" : "active", reason: why });
-  });
+  askReason(
+    item.status === "active" ? "停用用户并撤销会话" : "恢复用户",
+    async (why) => {
+      await write(`/platform/accounts/users/${item.id}/status`, {
+        status: item.status === "active" ? "disabled" : "active",
+        reason: why,
+      });
+    },
+  );
 }
 async function role(userId: string, roleCode: string, enabled: boolean) {
-  askReason(`${enabled ? "授予" : "撤销"}${roleText(roleCode)}`, async (why) => {
-    await write(`/platform/accounts/users/${userId}/platform-role`, { role_code: roleCode, enabled, reason: why });
+  askReason(
+    `${enabled ? "授予" : "撤销"}${roleText(roleCode)}`,
+    async (why) => {
+      await write(`/platform/accounts/users/${userId}/platform-role`, {
+        role_code: roleCode,
+        enabled,
+        reason: why,
+      });
+    },
+  );
+}
+function openOrganization(item: any) {
+  selected.value = item;
+  organizationForm.name = item.name;
+  organizationForm.timezone = item.timezone || "Asia/Shanghai";
+  organizationForm.data_retention_days = Number(
+    item.data_retention_days || 365,
+  );
+  editOrganizationOpen.value = true;
+}
+async function updateOrganization() {
+  if (!selected.value) return;
+  askReason("保存组织资料", async (why) => {
+    if (
+      await write(
+        `/platform/accounts/organizations/${selected.value.id}`,
+        { ...organizationForm, reason: why },
+        "PATCH",
+      )
+    ) {
+      editOrganizationOpen.value = false;
+      message.value = "组织资料已更新。";
+    }
   });
 }
-function openOrganization(item: any) { selected.value = item; organizationForm.name = item.name; organizationForm.timezone = item.timezone || "Asia/Shanghai"; organizationForm.data_retention_days = Number(item.data_retention_days || 365); editOrganizationOpen.value = true; }
-async function updateOrganization() { if(!selected.value)return; askReason("保存组织资料", async(why)=>{if(await write(`/platform/accounts/organizations/${selected.value.id}`,{...organizationForm,reason:why},"PATCH")){editOrganizationOpen.value=false;message.value="组织资料已更新。";}}); }
-function openCreateUser(asAdmin=false){userForm.email="";userForm.temporary_password="";userForm.platform_role_code=asAdmin?"platform_operations_admin":"";userForm.organization_id="";userForm.organization_role_code="member";createUserOpen.value=true;}
-async function createUser(){if(await write("/platform/accounts/users",{...userForm,organization_id:userForm.organization_id||null,platform_role_code:userForm.platform_role_code||null})){createUserOpen.value=false;message.value="账号已创建；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。";}}
-async function openUserDetail(item:any){selected.value=item;detail.value=null;detailOpen.value=true;try{const r=await fetch(`${props.apiBaseUrl}/platform/accounts/users/${item.id}`,{credentials:"include"}),b=await r.json().catch(()=>null);if(!r.ok)throw new Error(b?.error?.action_hint??"读取详情失败");detail.value=b.data;}catch(e){message.value=e instanceof Error?e.message:"读取详情失败";detailOpen.value=false;}}
-function openPassword(item:any){selected.value=item;passwordForm.temporary_password="";passwordOpen.value=true;}
-async function resetPassword(){if(!selected.value)return;askReason("强制重置密码并撤销全部会话",async(why)=>{if(await write(`/platform/accounts/users/${selected.value.id}/password`,{temporary_password:passwordForm.temporary_password,reason:why})){passwordOpen.value=false;detailOpen.value=false;message.value="临时密码已更新，全部活动会话已撤销。";}});}
-function revokeSessions(item:any,sessionId:string|null=null){askReason(sessionId?"撤销该会话":"撤销全部活动会话",async(why)=>{if(await write(`/platform/accounts/users/${item.id}/sessions/revoke`,{session_id:sessionId,reason:why})){message.value="会话已撤销。";if(detailOpen.value)await openUserDetail(item);}});}
+function openCreateUser(asAdmin = false) {
+  userForm.email = "";
+  userForm.temporary_password = "";
+  userForm.platform_role_code = asAdmin ? "platform_operations_admin" : "";
+  userForm.organization_id = "";
+  userForm.organization_role_code = "member";
+  createUserOpen.value = true;
+}
+async function createUser() {
+  if (
+    await write("/platform/accounts/users", {
+      ...userForm,
+      organization_id: userForm.organization_id || null,
+      platform_role_code: userForm.platform_role_code || null,
+    })
+  ) {
+    createUserOpen.value = false;
+    message.value =
+      "账号已创建；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。";
+  }
+}
+async function openUserDetail(item: any) {
+  selected.value = item;
+  detail.value = null;
+  detailOpen.value = true;
+  try {
+    const r = await fetch(
+        `${props.apiBaseUrl}/platform/accounts/users/${item.id}`,
+        { credentials: "include" },
+      ),
+      b = await r.json().catch(() => null);
+    if (!r.ok) throw new Error(b?.error?.action_hint ?? "读取详情失败");
+    detail.value = b.data;
+  } catch (e) {
+    message.value = e instanceof Error ? e.message : "读取详情失败";
+    detailOpen.value = false;
+  }
+}
+function openPassword(item: any) {
+  selected.value = item;
+  passwordForm.temporary_password = "";
+  passwordOpen.value = true;
+}
+async function resetPassword() {
+  if (!selected.value) return;
+  askReason("强制重置密码并撤销全部会话", async (why) => {
+    if (
+      await write(`/platform/accounts/users/${selected.value.id}/password`, {
+        temporary_password: passwordForm.temporary_password,
+        reason: why,
+      })
+    ) {
+      passwordOpen.value = false;
+      detailOpen.value = false;
+      message.value = "临时密码已更新，全部活动会话已撤销。";
+    }
+  });
+}
+function revokeSessions(item: any, sessionId: string | null = null) {
+  askReason(sessionId ? "撤销该会话" : "撤销全部活动会话", async (why) => {
+    if (
+      await write(`/platform/accounts/users/${item.id}/sessions/revoke`, {
+        session_id: sessionId,
+        reason: why,
+      })
+    ) {
+      message.value = "会话已撤销。";
+      if (detailOpen.value) await openUserDetail(item);
+    }
+  });
+}
 onMounted(load);
 </script>
 <template>
@@ -171,12 +290,17 @@ onMounted(load);
     <header class="account-hero">
       <div>
         <p>组织与用户</p>
-        <h2>谁在使用 ai选品，一眼看懂</h2>
+        <h2>谁在使用智能选品，一眼看懂</h2>
         <span
           >创建组织、启停账号、分配平台管理员。所有操作都会留审计记录。</span
         >
       </div>
-      <div class="hero-actions"><button @click="createOpen = true">＋ 新建组织</button><button @click="openCreateUser(tab === 'admins')">＋ {{ tab === "admins" ? "新建管理员" : "新建用户" }}</button></div>
+      <div class="hero-actions">
+        <button @click="createOpen = true">＋ 新建组织</button
+        ><button @click="openCreateUser(tab === 'admins')">
+          ＋ {{ tab === "admins" ? "新建管理员" : "新建用户" }}
+        </button>
+      </div>
     </header>
     <div v-if="data" class="account-metrics">
       <article>
@@ -250,7 +374,9 @@ onMounted(load);
               <b :data-status="item.status">{{ statusText(item.status) }}</b>
             </td>
             <td data-label="操作">
-              <button :disabled="Boolean(busy)" @click="openOrganization(item)">编辑</button>
+              <button :disabled="Boolean(busy)" @click="openOrganization(item)">
+                编辑
+              </button>
               <button
                 :disabled="Boolean(busy)"
                 @click="toggleOrganization(item)"
@@ -290,9 +416,18 @@ onMounted(load);
               <b :data-status="item.status">{{ statusText(item.status) }}</b>
             </td>
             <td data-label="操作">
-              <button :disabled="Boolean(busy)" @click="openUserDetail(item)">详情</button>
-              <button :disabled="Boolean(busy)" @click="openPassword(item)">强制改密</button>
-              <button :disabled="Boolean(busy) || !item.active_session_count" @click="revokeSessions(item)">撤销会话（{{ item.active_session_count || 0 }}）</button>
+              <button :disabled="Boolean(busy)" @click="openUserDetail(item)">
+                详情
+              </button>
+              <button :disabled="Boolean(busy)" @click="openPassword(item)">
+                强制改密
+              </button>
+              <button
+                :disabled="Boolean(busy) || !item.active_session_count"
+                @click="revokeSessions(item)"
+              >
+                撤销会话（{{ item.active_session_count || 0 }}）
+              </button>
               <button :disabled="Boolean(busy)" @click="toggleUser(item)">
                 {{ item.status === "active" ? "停用登录" : "恢复登录" }}
               </button>
@@ -318,7 +453,9 @@ onMounted(load);
               {{ item.roles.map(roleText).join("、") || "尚未授予平台角色" }}
             </td>
             <td data-label="角色管理">
-              <button :disabled="Boolean(busy)" @click="openUserDetail(item)">账号详情</button>
+              <button :disabled="Boolean(busy)" @click="openUserDetail(item)">
+                账号详情
+              </button>
               <button
                 v-for="code in [
                   'platform_operations_admin',
@@ -356,7 +493,19 @@ onMounted(load);
             pattern="[a-z0-9][a-z0-9-]{1,62}"
             placeholder="例如：midou-team"
         /></label>
-        <label>首位组织管理员<select v-model="form.initial_admin_user_id"><option value="">当前超级管理员</option><option v-for="item in data?.users || []" :key="item.id" :value="item.id" :disabled="item.status !== 'active'">{{ item.email }}</option></select></label>
+        <label
+          >首位组织管理员<select v-model="form.initial_admin_user_id">
+            <option value="">当前超级管理员</option>
+            <option
+              v-for="item in data?.users || []"
+              :key="item.id"
+              :value="item.id"
+              :disabled="item.status !== 'active'"
+            >
+              {{ item.email }}
+            </option>
+          </select></label
+        >
         <footer>
           <button type="button" @click="createOpen = false">取消</button
           ><button :disabled="Boolean(busy)">确认创建</button>
@@ -365,34 +514,196 @@ onMounted(load);
     </dialog>
     <dialog :open="createUserOpen">
       <form @submit.prevent="createUser">
-        <h3>新建用户或平台管理员</h3><p>账号立即可用；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。</p>
-        <label>邮箱<input v-model="userForm.email" type="email" required maxlength="254" /></label>
-        <label>临时密码<input v-model="userForm.temporary_password" type="password" required minlength="12" autocomplete="new-password" /></label>
-        <label>平台角色<select v-model="userForm.platform_role_code"><option value="">普通用户</option><option value="platform_operations_admin">运营管理员</option><option value="platform_security_admin">安全管理员</option><option value="platform_super_admin">超级管理员</option></select></label>
-        <label>加入组织<select v-model="userForm.organization_id"><option value="">暂不加入组织</option><option v-for="item in data?.organizations || []" :key="item.id" :value="item.id" :disabled="item.status !== 'active'">{{ item.name }}</option></select></label>
-        <label v-if="userForm.organization_id">组织角色<select v-model="userForm.organization_role_code"><option value="member">普通成员</option><option value="organization_admin">组织管理员</option></select></label>
-        <footer><button type="button" @click="createUserOpen = false">取消</button><button :disabled="Boolean(busy)">确认创建</button></footer>
+        <h3>新建用户或平台管理员</h3>
+        <p>
+          账号立即可用；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。
+        </p>
+        <label
+          >邮箱<input
+            v-model="userForm.email"
+            type="email"
+            required
+            maxlength="254"
+        /></label>
+        <label
+          >临时密码<input
+            v-model="userForm.temporary_password"
+            type="password"
+            required
+            minlength="12"
+            autocomplete="new-password"
+        /></label>
+        <label
+          >平台角色<select v-model="userForm.platform_role_code">
+            <option value="">普通用户</option>
+            <option value="platform_operations_admin">运营管理员</option>
+            <option value="platform_security_admin">安全管理员</option>
+            <option value="platform_super_admin">超级管理员</option>
+          </select></label
+        >
+        <label
+          >加入组织<select v-model="userForm.organization_id">
+            <option value="">暂不加入组织</option>
+            <option
+              v-for="item in data?.organizations || []"
+              :key="item.id"
+              :value="item.id"
+              :disabled="item.status !== 'active'"
+            >
+              {{ item.name }}
+            </option>
+          </select></label
+        >
+        <label v-if="userForm.organization_id"
+          >组织角色<select v-model="userForm.organization_role_code">
+            <option value="member">普通成员</option>
+            <option value="organization_admin">组织管理员</option>
+          </select></label
+        >
+        <footer>
+          <button type="button" @click="createUserOpen = false">取消</button
+          ><button :disabled="Boolean(busy)">确认创建</button>
+        </footer>
       </form>
     </dialog>
     <dialog :open="editOrganizationOpen">
       <form @submit.prevent="updateOrganization">
         <h3>编辑组织资料</h3>
-        <label>组织名称<input v-model="organizationForm.name" required minlength="2" maxlength="120" /></label>
-        <label>时区<input v-model="organizationForm.timezone" required maxlength="64" /></label>
-        <label>数据保留天数<input v-model.number="organizationForm.data_retention_days" type="number" min="30" max="3650" required /></label>
-        <footer><button type="button" @click="editOrganizationOpen = false">取消</button><button :disabled="Boolean(busy)">保存</button></footer>
+        <label
+          >组织名称<input
+            v-model="organizationForm.name"
+            required
+            minlength="2"
+            maxlength="120"
+        /></label>
+        <label
+          >时区<input
+            v-model="organizationForm.timezone"
+            required
+            maxlength="64"
+        /></label>
+        <label
+          >数据保留天数<input
+            v-model.number="organizationForm.data_retention_days"
+            type="number"
+            min="30"
+            max="3650"
+            required
+        /></label>
+        <footer>
+          <button type="button" @click="editOrganizationOpen = false">
+            取消</button
+          ><button :disabled="Boolean(busy)">保存</button>
+        </footer>
       </form>
     </dialog>
     <dialog :open="detailOpen" class="detail-dialog">
-      <section v-if="detail"><header><div><small>账号详情</small><h3>{{ detail.user.email }}</h3></div><button aria-label="关闭账号详情" title="关闭账号详情" @click="detailOpen = false">×</button></header>
-        <div class="detail-grid"><article><small>账号状态</small><strong>{{ statusText(detail.user.status) }}</strong></article><article><small>首次安全设置</small><strong>{{ detail.user.must_change_password || detail.user.must_enroll_mfa ? "待完成" : "已完成" }}</strong></article><article><small>组织关系</small><strong>{{ detail.memberships.length }}</strong></article><article><small>活动会话</small><strong>{{ detail.sessions.filter((x:any)=>x.status==='active').length }}</strong></article></div>
-        <h4>组织与角色</h4><p v-if="!detail.memberships.length">尚未加入组织。</p><ul><li v-for="item in detail.memberships" :key="item.id"><span>{{ item.organization_name }}</span><b>{{ item.roles.map(roleText).join("、") }}</b><small>{{ statusText(item.status) }}</small></li></ul>
-        <h4>登录会话</h4><p v-if="!detail.sessions.length">暂无会话。</p><ul><li v-for="session in detail.sessions" :key="session.id"><span>{{ session.device_label }}</span><b>{{ statusText(session.status) }}</b><small>{{ new Date(session.last_seen_at).toLocaleString() }}</small><button v-if="session.status === 'active'" @click="revokeSessions(selected, session.id)">撤销</button></li></ul>
-        <footer><button @click="openPassword(selected)">强制改密</button><button @click="revokeSessions(selected)">撤销全部会话</button><button @click="detailOpen = false">关闭</button></footer>
-      </section><section v-else class="account-state">正在读取账号详情…</section>
+      <section v-if="detail">
+        <header>
+          <div>
+            <small>账号详情</small>
+            <h3>{{ detail.user.email }}</h3>
+          </div>
+          <button
+            aria-label="关闭账号详情"
+            title="关闭账号详情"
+            @click="detailOpen = false"
+          >
+            ×
+          </button>
+        </header>
+        <div class="detail-grid">
+          <article>
+            <small>账号状态</small
+            ><strong>{{ statusText(detail.user.status) }}</strong>
+          </article>
+          <article>
+            <small>首次安全设置</small
+            ><strong>{{
+              detail.user.must_change_password || detail.user.must_enroll_mfa
+                ? "待完成"
+                : "已完成"
+            }}</strong>
+          </article>
+          <article>
+            <small>组织关系</small
+            ><strong>{{ detail.memberships.length }}</strong>
+          </article>
+          <article>
+            <small>活动会话</small
+            ><strong>{{
+              detail.sessions.filter((x: any) => x.status === "active").length
+            }}</strong>
+          </article>
+        </div>
+        <h4>组织与角色</h4>
+        <p v-if="!detail.memberships.length">尚未加入组织。</p>
+        <ul>
+          <li v-for="item in detail.memberships" :key="item.id">
+            <span>{{ item.organization_name }}</span
+            ><b>{{ item.roles.map(roleText).join("、") }}</b
+            ><small>{{ statusText(item.status) }}</small>
+          </li>
+        </ul>
+        <h4>登录会话</h4>
+        <p v-if="!detail.sessions.length">暂无会话。</p>
+        <ul>
+          <li v-for="session in detail.sessions" :key="session.id">
+            <span>{{ session.device_label }}</span
+            ><b>{{ statusText(session.status) }}</b
+            ><small>{{ new Date(session.last_seen_at).toLocaleString() }}</small
+            ><button
+              v-if="session.status === 'active'"
+              @click="revokeSessions(selected, session.id)"
+            >
+              撤销
+            </button>
+          </li>
+        </ul>
+        <footer>
+          <button @click="openPassword(selected)">强制改密</button
+          ><button @click="revokeSessions(selected)">撤销全部会话</button
+          ><button @click="detailOpen = false">关闭</button>
+        </footer>
+      </section>
+      <section v-else class="account-state">正在读取账号详情…</section>
     </dialog>
-    <dialog :open="passwordOpen"><form @submit.prevent="resetPassword"><h3>强制重置密码</h3><p>保存后会撤销该用户全部活动会话，并要求首次登录修改密码。</p><label>新临时密码<input v-model="passwordForm.temporary_password" type="password" required minlength="12" autocomplete="new-password" /></label><footer><button type="button" @click="passwordOpen = false">取消</button><button :disabled="Boolean(busy)">确认重置</button></footer></form></dialog>
-    <dialog :open="reasonOpen"><form @submit.prevent="submitReason"><h3>{{ reasonTitle }}</h3><p>原因会写入平台审计记录。</p><label>操作原因<textarea v-model="reasonText" required minlength="2" maxlength="300"></textarea></label><footer><button type="button" @click="reasonOpen = false">取消</button><button :disabled="Boolean(busy)">确认执行</button></footer></form></dialog>
+    <dialog :open="passwordOpen">
+      <form @submit.prevent="resetPassword">
+        <h3>强制重置密码</h3>
+        <p>保存后会撤销该用户全部活动会话，并要求首次登录修改密码。</p>
+        <label
+          >新临时密码<input
+            v-model="passwordForm.temporary_password"
+            type="password"
+            required
+            minlength="12"
+            autocomplete="new-password"
+        /></label>
+        <footer>
+          <button type="button" @click="passwordOpen = false">取消</button
+          ><button :disabled="Boolean(busy)">确认重置</button>
+        </footer>
+      </form>
+    </dialog>
+    <dialog :open="reasonOpen">
+      <form @submit.prevent="submitReason">
+        <h3>{{ reasonTitle }}</h3>
+        <p>原因会写入平台审计记录。</p>
+        <label
+          >操作原因<textarea
+            v-model="reasonText"
+            required
+            minlength="2"
+            maxlength="300"
+          ></textarea>
+        </label>
+        <footer>
+          <button type="button" @click="reasonOpen = false">取消</button
+          ><button :disabled="Boolean(busy)">确认执行</button>
+        </footer>
+      </form>
+    </dialog>
   </section>
 </template>
 <style scoped>
@@ -432,8 +743,16 @@ onMounted(load);
   color: #08231d;
   font-weight: 800;
 }
-.hero-actions { display:flex; gap:10px; flex-wrap:wrap; }
-.hero-actions button:last-child { background:#162f48; color:#dffbf4; border:1px solid #3b6a76; }
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.hero-actions button:last-child {
+  background: #162f48;
+  color: #dffbf4;
+  border: 1px solid #3b6a76;
+}
 .account-metrics {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -564,28 +883,74 @@ dialog label {
   display: grid;
   gap: 6px;
 }
-dialog input, dialog select, dialog textarea {
+dialog input,
+dialog select,
+dialog textarea {
   padding: 10px;
   color: #eef5ff;
   background: #0b1d2e;
   border: 1px solid #31506b;
   border-radius: 8px;
 }
-dialog textarea { min-height:90px; resize:vertical; }
+dialog textarea {
+  min-height: 90px;
+  resize: vertical;
+}
 dialog footer {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
 }
-.detail-dialog { width:min(760px,calc(100% - 28px)); max-height:84vh; overflow:auto; }
-.detail-dialog>section>header { display:flex; justify-content:space-between; align-items:start; }
-.detail-dialog>section>header button { border:0; background:transparent; color:#eef5ff; font-size:26px; }
-.detail-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:16px 0; }
-.detail-grid article { padding:12px; border:1px solid #29465f; border-radius:10px; background:#0b1d2e; }
-.detail-grid small,.detail-grid strong { display:block; }
-.detail-dialog ul { list-style:none; padding:0; display:grid; gap:8px; }
-.detail-dialog li { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) auto; gap:10px; align-items:center; padding:10px; border:1px solid #29465f; border-radius:9px; }
-.detail-dialog li small { color:#9aadc1; }
+.detail-dialog {
+  width: min(760px, calc(100% - 28px));
+  max-height: 84vh;
+  overflow: auto;
+}
+.detail-dialog > section > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+.detail-dialog > section > header button {
+  border: 0;
+  background: transparent;
+  color: #eef5ff;
+  font-size: 26px;
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+}
+.detail-grid article {
+  padding: 12px;
+  border: 1px solid #29465f;
+  border-radius: 10px;
+  background: #0b1d2e;
+}
+.detail-grid small,
+.detail-grid strong {
+  display: block;
+}
+.detail-dialog ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.detail-dialog li {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #29465f;
+  border-radius: 9px;
+}
+.detail-dialog li small {
+  color: #9aadc1;
+}
 @media (max-width: 700px) {
   .account-center {
     padding-bottom: 76px;
@@ -652,7 +1017,11 @@ dialog footer {
   dialog form {
     min-width: 0;
   }
-  .detail-grid { grid-template-columns:1fr 1fr; }
-  .detail-dialog li { grid-template-columns:1fr; }
+  .detail-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .detail-dialog li {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

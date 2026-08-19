@@ -95,7 +95,7 @@ onMounted(load);
     /><template v-else
       ><section class="home-hero">
         <div>
-          <p>TODAY / VERIFIED SCOPE</p>
+          <p>今日已核验范围</p>
           <h2>今天最值得做什么？</h2>
           <span>只汇总当前组织、工作区和本人可见的真实投影。</span>
         </div>
@@ -118,7 +118,7 @@ onMounted(load);
       </section>
       <section v-if="state === 'empty'" class="home-empty">
         <div>
-          <p>NO VERIFIED SIGNALS</p>
+          <p>暂无已核验信号</p>
           <h2>当前范围还没有首页数据</h2>
           <span
             >真实任务、趋势、机会和来源状态写入后会自动出现；现在不展示模拟指标。</span
@@ -138,7 +138,7 @@ onMounted(load);
         <section class="home-actions">
           <header>
             <div>
-              <p>01 / PRIORITY</p>
+              <p>01 / 优先事项</p>
               <h3>今日行动</h3>
             </div>
             <span>最多 5 项</span>
@@ -169,7 +169,7 @@ onMounted(load);
         <section class="home-radar">
           <header>
             <div>
-              <p>02 / SIGNAL</p>
+              <p>02 / 信号</p>
               <h3>变化雷达</h3>
             </div>
             <a href="/trends">全部变化 →</a>
@@ -190,7 +190,7 @@ onMounted(load);
         <section class="home-follows">
           <header>
             <div>
-              <p>03 / FOLLOWING</p>
+              <p>03 / 关注中</p>
               <h3>我的关注</h3>
             </div>
           </header>
@@ -206,7 +206,7 @@ onMounted(load);
         <section class="home-health">
           <header>
             <div>
-              <p>04 / TRUST</p>
+              <p>04 / 可信度</p>
               <h3>数据健康提示</h3>
             </div>
             <span>仅影响本人</span>

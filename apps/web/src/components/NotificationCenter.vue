@@ -188,7 +188,7 @@ onUnmounted(() => stream?.close());
   <section class="notification-center">
     <header>
       <div>
-        <p>COLLABORATION</p>
+        <p>协作中心</p>
         <h2>通知中心</h2>
         <span>只显示当前组织、工作区和当前用户的事务事件投影。</span>
       </div>
@@ -275,7 +275,7 @@ onUnmounted(() => stream?.close());
     </section>
     <section v-else-if="!visible.length" class="notification-state">
       <h3>当前没有通知</h3>
-      <p>Outbox 尚未投影出面向你的真实事件，系统不会填充示例消息。</p>
+      <p>事务消息尚未投影出面向你的真实事件，系统不会填充示例消息。</p>
     </section>
     <div v-else class="notification-list">
       <button
@@ -314,7 +314,7 @@ onUnmounted(() => stream?.close());
         </div>
       </dl>
       <small
-        >站内消息来自事务 Outbox；页面不显示队列、Cookie 或邮件地址。</small
+        >站内消息来自事务消息；页面不显示队列、浏览器凭证或邮件地址。</small
       >
     </aside>
     <dialog :open="showPreferences">

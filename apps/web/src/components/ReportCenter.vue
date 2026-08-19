@@ -147,7 +147,7 @@ onUnmounted(() => clearInterval(timer));
   <section class="report-center">
     <header>
       <div>
-        <p>COLLABORATION</p>
+        <p>协作中心</p>
         <h2>报表与导出</h2>
         <span
           >所有指标都来自当前组织和工作区已落库事实；缺失值保持“数据不足”。</span
@@ -241,7 +241,7 @@ onUnmounted(() => clearInterval(timer));
     <section class="report-exports">
       <header>
         <div>
-          <p>EXPORT LIFECYCLE</p>
+          <p>导出生命周期</p>
           <h3>导出记录</h3>
         </div>
         <small>文件到期后由 Worker 清理</small>
