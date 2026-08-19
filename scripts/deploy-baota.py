@@ -237,6 +237,13 @@ try:
     if not Path(v["python_bin"]).is_file():
         raise RuntimeError("BaoTa Python 3.12.13 is unavailable")
 
+    permitted_entries = allowed | {{stage.name, rollback.name}}
+    if v["initialize"]:
+        permitted_entries.add("shared")
+    unsupported_entries = {{child.name for child in root.iterdir()}} - permitted_entries
+    if unsupported_entries:
+        raise RuntimeError("project root contains unsupported entries: " + ",".join(sorted(unsupported_entries)))
+
     site = public.M("sites").where("id=?", (v["site_id"],)).find()
     if not site or site.get("name") != v["site_name"] or site.get("project_type") not in ("PHP", "HTML"):
         raise RuntimeError("website identity mismatch")
@@ -378,7 +385,7 @@ from pathlib import Path
 v=json.loads({values!r}); root=Path(v["root"])
 if str(root)!="/www/wwwroot/ai选品" or not root.is_dir(): raise SystemExit("unexpected root")
 targets=[root/(".deploy-rollback-"+v["sha"])]
-if v["initialize"]: targets += [root/"current", root/"releases", root/"shared"]
+if v["initialize"]: targets.append(root/"shared")
 for target in targets:
     resolved=target.resolve(strict=False)
     if resolved==root or root not in resolved.parents: raise SystemExit("unsafe cleanup target")
@@ -416,7 +423,7 @@ def verify_public(build_sha: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Deploy this repository to its fixed BaoTa layout")
-    parser.add_argument("--initialize-layout", action="store_true", help="initialize the fixed layout and delete bounded legacy directories")
+    parser.add_argument("--initialize-layout", action="store_true", help="initialize the fixed layout and migrate the bounded shared directory")
     parser.add_argument("--skip-build", action="store_true", help="reuse existing local dist outputs")
     args = parser.parse_args()
 

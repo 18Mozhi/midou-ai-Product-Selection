@@ -17,7 +17,7 @@ Node 项目由统一后端监督 API 与 Worker。Worker 内所有队列由一�
 
 ## 创建、更新、启动和重启
 
-首次初始化固定目录并清理旧目录：
+首次初始化固定目录并迁移受控的旧 `shared` 内容：
 
 ```powershell
 python scripts/deploy-baota.py --initialize-layout
@@ -29,7 +29,7 @@ python scripts/deploy-baota.py --initialize-layout
 python scripts/deploy-baota.py
 ```
 
-脚本要求 Git 工作树干净，从 Windows 凭据管理器读取 `ssh@192.168.1.220:22/root`，在本地完成构建，只上传 `frontend/backend/python` 运行包，并通过宝塔模型修改或创建本项目对象。临时上传包和 staging 在成功后删除。`tests`、截图、文档、计划、Git 元数据和本地缓存不会上传。
+脚本要求 Git 工作树干净，从 Windows 凭据管理器读取 `ssh@192.168.1.220:22/root`，在本地完成构建，只上传 `frontend/backend/python` 运行包，并通过宝塔模型修改或创建本项目对象。临时上传包和 staging 在成功后删除。`tests`、截图、文档、计划、Git 元数据和本地缓存不会上传。部署器不再识别、迁移或删除 `current`、`releases`；固定根目录出现任何非白名单条目都会在停止服务前失败关闭，应先人工确认归属并移出该根目录。
 
 启动、停止优先在宝塔面板的网站、Node 项目和 Python 项目页面操作。命令行重启也必须调用宝塔脚本：
 
@@ -44,6 +44,6 @@ python scripts/deploy-baota.py
 
 发布成功必须依次检查公网 `/api/v1/health/live`、`/api/v1/health/ready`、`/api/v1/health/available`、`/api/v1/health/version` 的 Git SHA、宝塔 Node 状态、Python 任务领取/结果回写日志、Worker 调度心跳和网站首页。目录或对象身份不匹配时部署脚本失败关闭，不得搜索或修改其他项目。
 
-代码回滚使用本地目标 Git 提交重新运行同一部署命令；数据库迁移回滚仍需先备份并按对应 runbook 判断数据影响。`config`、`runtime`、`backups` 不随代码覆盖。首次整理只有在新 Node/Python 和公网健康通过后，才删除本项目旧 `current`、`releases`、`shared`；不得把这些名称重新引入生产结构。
+代码回滚使用本地目标 Git 提交重新运行同一部署命令；数据库迁移回滚仍需先备份并按对应 runbook 判断数据影响。`config`、`runtime`、`backups` 不随代码覆盖。首次整理只允许脚本迁移受控 `shared` 内容；其他旧目录必须先人工确认归属并移出项目根目录，部署器不会替用户删除。不得把旧发布目录重新引入生产结构。
 
 宝塔官方依据：命令行工具 <https://docs.bt.cn/getting-started/bt-command-line-tool>；资源管理工具 <https://docs.bt.cn/getting-started/btcli-interactive-tool>；API 总览 <https://docs.bt.cn/api/>。

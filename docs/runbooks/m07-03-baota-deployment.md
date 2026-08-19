@@ -2,6 +2,8 @@
 
 ## 发布前
 
+确认 `/www/wwwroot/ai选品` 只包含 `frontend/backend/python/config/runtime/backups`。初始化允许迁移受控 `shared`，但部署器不再识别或删除旧发布目录；发现任何其他根目录条目会在停止服务前失败关闭，必须先人工确认归属并移出，禁止为通过门禁直接递归删除未知目录。
+
 1. 运行 `npm run verify:module -- M07-02` 和 `node scripts/verify-baota-deployment.mjs --preflight`。
 2. 在宝塔确认网站、Node 项目“ai选品”和 Python 项目“ai选品-python”均由面板创建和管理；不得保留独立 API、Worker、Canary 或面板外常驻项目，也不要用 systemd、独立 PM2、宿主 crontab或屏外 Docker Compose代替。
 3. Node/Python 只读取 `/www/wwwroot/ai选品/config/product_scout.env` 受限环境；秘密只填宝塔受限配置，检查页面、项目环境、日志和任务输出均无秘密。

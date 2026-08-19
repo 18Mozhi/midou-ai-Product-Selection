@@ -1680,6 +1680,7 @@
       "module": "M07-03",
       "entrypoints": [
         "../infra/baota/service-manifest.json",
+        "../scripts/deploy-baota.py",
         "../scripts/verify-baota-deployment.mjs",
         "../apps/web/src/components/DeploymentFoundation.vue"
       ],
@@ -1689,7 +1690,7 @@
         "/api/v1/health/version"
       ],
       "scope": "惠州 S0 单主机、宝塔管理的 Web API Worker Crawler MySQL Redis release backup and log objects",
-      "truthBoundary": "same-commit production evidence, local-only private services and sanitized health; no P08 capacity claim",
+      "truthBoundary": "same-commit production evidence, local-only private services and sanitized health; the fixed-layout deployer has no current or releases migration or deletion branch and fails closed on unsupported root entries before stopping Node; no P08 capacity claim",
       "configuration": ["APP_VERSION", "BUILD_SHA", "WEB_ORIGIN"],
       "verificationRunId": "950732f7-9b5a-4d4a-b271-d5ec0cf975d9",
       "status": "module_verified"

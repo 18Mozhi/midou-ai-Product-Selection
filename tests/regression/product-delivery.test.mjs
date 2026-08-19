@@ -162,6 +162,8 @@ test("BaoTa deployment uploads a bounded fixed-layout runtime package", async ()
   assert.match(deployer, /TemporaryDirectory/);
   assert.match(deployer, /BUILD_SHA=/);
   assert.doesNotMatch(deployer, /git (pull|clone|checkout)/);
+  assert.doesNotMatch(deployer, /root\s*\/\s*["'](?:current|releases)["']/);
+  assert.match(deployer, /project root contains unsupported entries/);
   const node = manifest.objects.find((item) => item.kind === "baota-node-project");
   assert.equal(node?.workingDirectory, "/www/wwwroot/ai选品/backend");
   assert.match(node?.startCommand ?? "", /^node --env-file=/);
