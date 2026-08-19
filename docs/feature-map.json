@@ -794,6 +794,7 @@
       "module": "M03-07",
       "entrypoints": [
         "../packages/provider-sources/src/index.ts",
+        "../packages/provider-sources/src/1688-browser-contract.ts",
         "../packages/provider-sources/src/proxy-fetch.ts",
         "../apps/api/src/provider-source-service.ts",
         "../apps/api/src/mysql-provider-source-repository.ts",
@@ -822,11 +823,12 @@
         "manual_product_supply_csv explicit import",
         "amazon_product public search and product-page crawler",
         "made_in_china_search public supplier product crawler",
-        "ec21_supplier_search independent public supplier fallback crawler"
+        "ec21_supplier_search independent public supplier fallback crawler",
+        "1688_search versioned browser-output contracts for search offers, offer details and suppliers; source remains setup-required and disabled"
       ],
-      "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; official_api is removed from the runtime contract and migrated to public_page; no source fabricates platform data",
+      "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; 1688 has fail-closed browser-output schemas but no registered production adapter or completed task-claim chain, so it remains setup_required and disabled; official_api is removed from the runtime contract and migrated to public_page; no source fabricates platform data",
       "outboundBoundary": "Every automatic URL and proxy host is derived from the code-owned source catalog; the optional Baota-restricted project HTTP CONNECT proxy accepts only those exact HTTPS hosts without setting global HTTP_PROXY or HTTPS_PROXY; Google News rejects redirects, CSV uses inline content, and callers cannot supply an outbound URL or proxy",
-      "limits": "Google RSS 2MB and 20 persisted records per task; Amazon Made-in-China and EC21 public pages 5MB and 20 product records per source task; CSV 1MB exact 8-column header 100 parsed rows and 20 persisted records per task",
+      "limits": "Google RSS 2MB and 20 persisted records per task; Amazon Made-in-China and EC21 public pages 5MB and 20 product records per source task; CSV 1MB exact 8-column header 100 parsed rows and 20 persisted records per task; 1688 browser snapshots accept at most 100 search items and 250KB of bounded DOM evidence per record, with exact HTTPS 1688 host and field-path validation",
       "permission": "provider:configure for catalog/provision; collection:replay for scoped replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
       "persistence": "MySQL 5.7 automatic_source_schedules, per-rule collection interval/cursor/last-task state and provider_refresh_operations plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
       "liveVerificationCleanup": "random m03-07 example.test scope only; delete M07-06 collection_task_evidence_links before evidence/task/provider principals and fail closed unless provider, workspace, organization and user are all absent",
@@ -844,7 +846,7 @@
         "EVIDENCE_ROOT",
         "EVIDENCE_MAX_RAW_BYTES"
       ],
-      "runtimeBoundary": "production Worker runs only as a Baota Node project; fixed source adapters are registered in API and Worker; no panel-external service is created",
+      "runtimeBoundary": "production Worker runs only as a Baota Node project; fixed executable source adapters are registered in API and Worker; the 1688 parser contract is code-owned but is not a registered executable adapter and cannot run until the authenticated browser task-claim and result-writeback chain is accepted; no panel-external service is created",
       "imageEvidence": [
         "concept 62 collection source management catalog, status and actions"
       ],
@@ -1594,7 +1596,7 @@
         "../verification/security-gate.json",
         "../scripts/verify-security-gate.mjs"
       ],
-      "scope": "dependency secrets SQL XSS CSRF SSRF upload authorization logging and Baota edge release gate",
+      "scope": "dependency secrets SQL XSS CSRF SSRF upload authorization logging and Baota edge release gate; browser storage blocks all localStorage except the exact validated non-sensitive theme ID preference contract",
       "runtimeBoundary": "local CI or Baota-controlled finite release task only; no production API table page permission daemon or multi-node claim",
       "securityHeaders": [
         "Content-Security-Policy",

@@ -46,7 +46,20 @@ record('browser-dangerous-sinks', before);
 
 before = findings.length;
 for (const [file, content] of webFiles) {
-  if (/localStorage\./.test(content)) add('browser-sensitive-storage', file, 1, 'local_storage_forbidden');
+  const localStorageCount = [...content.matchAll(/localStorage\./g)].length;
+  const localStorageUses = [...content.matchAll(/(?:window\.)?localStorage\.(getItem|setItem)\(([^)\n]*)\)/g)];
+  const themePreferenceOnly = file === 'apps/web/src/design/theme.ts'
+    && localStorageCount === 2
+    && localStorageUses.length === 2
+    && localStorageUses.some((match) => match[1] === 'getItem')
+    && localStorageUses.some((match) => match[1] === 'setItem')
+    && localStorageUses.every((match) => {
+      const argumentsText = match[2].replace(/\s/g, '');
+      return match[1] === 'getItem'
+        ? argumentsText === 'themeStorageKey'
+        : argumentsText === 'themeStorageKey,theme';
+    });
+  if (localStorageCount > 0 && !themePreferenceOnly) add('browser-sensitive-storage', file, 1, 'local_storage_forbidden');
   const sessionUses = [...content.matchAll(/sessionStorage\.(?:getItem|setItem)\(([^\n]*)/g)];
   if (sessionUses.some((match) => file !== 'apps/web/src/components/NotificationCenter.vue' || !match[1].includes('scoutops:last-event-id'))) add('browser-sensitive-storage', file, 1, 'session_storage_not_allowlisted');
 }

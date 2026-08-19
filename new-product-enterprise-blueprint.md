@@ -680,12 +680,18 @@ MySQL 5.7 保存组织/工作区范围化的原始证据元数据、规范记录
 
 目录项默认 `disabled`。Google RSS 的端点可访问不等于生产授权，所有者必须复核当前条款、频率、展示字段和保存期限后显式启用。目录/登记要求 `provider:configure`，回放要求 `collection:replay`、同源 Origin、Idempotency-Key、启用 Provider 以及活动组织/工作区。API 在事务中写 M03-07 replay run 与 M03-05 task/subquery/event/outbox；宝塔 Node Worker 使用 Redis 租约执行真实适配器，将原始内容先交给 M03-06 证据持久化，再保存规范化字段与逐字段 provenance。生产服务仍全部由宝塔管理；本模块不创建面板外服务。
 
+#### 1688 浏览器输出合同纠偏基线（2026-08-19）
+
+`1688_search` 的浏览器提取结果必须按版本化合同进入来源规范化层：搜索、商品详情、供应商分别使用 `1688.search.v1`、`1688.offer-detail.v1`、`1688.supplier.v1`，解析器版本为 `1688-browser-contract-v1`。合同只接受 HTTPS 的 1688 域名，搜索入口限定 `s.1688.com`，商品详情路径中的数字商品 ID 必须与记录一致。搜索合同覆盖标题、供应商、报价、币种、MOQ、地点和规范链接；详情合同补规格与交期；供应商合同独立保存供应商名称、地点和规范链接。每条输出必须保留观测时间、最多 250 KB 的 DOM 证据片段及必需字段路径，缺失事实写入 `missing_fields_json`，不得补零或猜值。
+
+该合同不是生产接通声明。平台真实登录档案与域名绑定、Python Crawler 领取业务采集任务、Playwright 生产执行和结果回写尚未共同验收前，`1688_search` 继续保持 `setup_required / disabled`，不注册成可执行自动适配器。页面结构、字段路径或 schema 漂移时以 `source_changed` 失败关闭，跨站或身份不一致以 `source_configuration_invalid` 拒绝。
+
 当惠州出口不能直连 Google News 时，只允许在 ScoutOps 的宝塔 Node API、Node Worker 和有限来源任务中注入 `PROVIDER_PROXY_*` 项目配置。代码仅对固定 `news.google.com` HTTPS 请求建立带 Basic 认证的 HTTP CONNECT，其他 Provider、AI、API 请求和系统进程继续直连；禁止设置全局 `HTTP_PROXY`/`HTTPS_PROXY`，禁止将代理地址或凭证下发浏览器、写入 Provider DTO、日志或 Git。代理不能放宽 10 秒健康门、2 MB 响应和每任务 20 条限制。
 
 #### 全网热点与 100+ 来源纠偏基线（2026-08-18）
 
 - 代码目录至少登记 100 个可独立调度与审计的来源频道，明确区分自动公开频道、待配置平台和手动来源；频道数量不能冒充独立平台数量。
-- 当前目录共 177 项，自动层共 138 个频道：96 个固定 Google News RSS、40 个非 Google RSS/Atom 新闻/电商/社区/趋势频道，以及 Amazon、eBay 2 个固定公开榜单页面爬虫，覆盖 24 个独立主机；Walmart 公开端点当前返回人工验证页，因此只保留为受控页面来源，不冒充自动采集成功。Worker 为每个活动组织默认工作区循环自动调度，热点页也提供 `trend:read` 保护的立即刷新。
+- 当前目录共 180 项，自动层共 138 个频道：96 个固定 Google News RSS、40 个非 Google RSS/Atom 新闻/电商/社区/趋势频道，以及 Amazon、eBay 2 个固定公开榜单页面爬虫，覆盖 24 个独立主机；其余 37 个待配置来源和 5 个手动来源不会冒充自动采集成功。Walmart 公开端点当前返回人工验证页，因此只保留为受控页面来源。Worker 为每个活动组织默认工作区循环自动调度，热点页也提供 `trend:read` 保护的立即刷新。
 - 公开频道和固定公开榜单不依赖官方 API。需要账户登录的平台使用平台管理员维护的受控浏览器档案；没有真实登录态、页面合同或可验证公开页面时保持禁用，不得把聚合新闻伪装成平台官方销量、价格或趋势。
 - 自动调度、手动刷新、证据、任务、权限、审计和回滚均复用现有 MySQL 5.7/Redis/宝塔统一后端；不得因此新增独立生产服务。
 

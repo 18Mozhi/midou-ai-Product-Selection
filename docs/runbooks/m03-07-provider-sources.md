@@ -15,6 +15,7 @@
 - 自动目录包含 96 个 Google News RSS、40 个非 Google RSS/Atom 或公开页频道与 2 个 Amazon/eBay 固定公开榜单页面爬虫；其中 Shopify 资讯和 eBay 公告已切换到当前公开 HTML 页面。普通用户不需要配置官方 API Key。Walmart 当前返回人工验证页，保留为受控页面来源并明确显示受阻，不会伪造商品数据。
 - 跨境自动来源只复用本项目受限代理，并仅允许代码目录中自动来源的固定主机；不设置服务器全局代理，也不会代理用户输入的网址。新增自动来源主机时必须同步目录测试、Feature Map 与本运维说明，然后通过宝塔重启“ai选品”。
 - 登录型来源只使用平台管理员维护的受控浏览器档案。没有真实登录态或页面解析合同的来源保持禁用，不伪造结果，也不要求普通用户填写密钥。
+- 1688 已有 `1688-browser-contract-v1` 搜索、商品详情和供应商输出合同，但尚无已验收的生产任务领取与 Playwright 回写链，因此仍显示“待配置”且保持禁用。不得仅因合同测试通过就手工启用。
 - 调节自动调度器检查周期时修改 `AUTOMATIC_SOURCE_SCHEDULER_POLL_MS`（5000–300000），然后通过宝塔重启统一后端“ai选品”。
 
 ## 故障处理
@@ -23,6 +24,8 @@
 - `adapter_not_registered`：来源仍处于待配置状态或部署版本不一致；不要伪造成功。
 - `rate_limited`：保留任务和证据，等待状态机退避；不要提高并发绕过限制。
 - `source_changed` / `parse_failed`：停用对应频道，保留 trace_id，更新解析器和合同测试后再恢复。
+- 1688 的 `source_changed`：对照失败快照的 `schema_version`、DOM 片段与 `source_paths`，更新受控浏览器提取器和固定样本回放；不得放宽到任意 1688 URL、吞掉缺失字段或用空记录冒充成功。
+- 1688 的 `source_configuration_invalid`：检查是否为 HTTPS 1688 域名、搜索入口是否为 `s.1688.com`，以及详情 URL 中商品 ID 是否与记录一致。该错误不是登录续期信号，不能通过重放绕过。
 - 固定公开榜单页面无结果：先核对页面是否调整结构或返回地区/验证页面；解析器会以 `source_changed` 失败，不会把空白或错误页当成商品数据。
 - `invalid_payload`：核对响应类型与编码；项目代理会在 2 MB 解压上限内处理 gzip/deflate/br，频道解析器支持 RSS、Atom 与 RDF，超限或未知编码继续失败关闭。
 - 自动任务不生成：核对 `automatic_source_schedules.next_scheduled_at`、组织/默认工作区状态和统一后端 Worker 日志。
@@ -38,7 +41,7 @@
 
 ## 本次发布重启要求
 
-来源适配器、自动调度筛选和 API 路由都在进程启动时加载。发布后必须通过宝塔重启统一 Node API 与 Node Worker；不需要重启 MySQL、Redis 或创建新服务。
+来源目录和 1688 解析合同都在 Node 进程启动时加载。发布后必须通过宝塔重启统一 Node API 与 Node Worker；本次没有环境变量、数据库迁移或 Python 代码变更，不需要重启 Python Crawler、MySQL、Redis，也不创建新服务。
 
 ## 网页登录与匿名测试
 

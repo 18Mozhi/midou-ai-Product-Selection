@@ -5,7 +5,7 @@
   "dependencies":["M03-03","M03-04","M03-05","M03-06"],
   "atomicTasks":[
     {"id":"M03-07.A01","evidence":"100+ truthful automatic setup-required and manual source-channel scope"},
-    {"id":"M03-07.A02","evidence":"catalog availability schedule refresh replay raw normalized and execution contracts"},
+    {"id":"M03-07.A02","evidence":"catalog availability schedule refresh replay raw normalized execution and versioned 1688 browser-output contracts"},
     {"id":"M03-07.A03","evidence":"MySQL57 replay automatic schedule refresh idempotency indexes scope and rollback"},
     {"id":"M03-07.A04","evidence":"startup catalog synchronization and manual refresh service idempotency"},
     {"id":"M03-07.A05","evidence":"Worker automatic scheduler collection executor evidence persistence retry dead-letter"},
@@ -15,12 +15,12 @@
     {"id":"M03-07.A09","evidence":"provider configure collection replay trend read scope and fixed outbound URL guards"},
     {"id":"M03-07.A10","evidence":"automatic scheduler env schema Baota unified-backend policy and startup validation"},
     {"id":"M03-07.A11","evidence":"scheduled tasks events request trace metrics and truthful policy state"},
-    {"id":"M03-07.A12","evidence":"catalog uniqueness adapter coverage RSS CSV normalization bounds and invalid-input tests"},
+    {"id":"M03-07.A12","evidence":"catalog uniqueness adapter coverage RSS CSV and 1688 search detail supplier normalization bounds and invalid-input tests"},
     {"id":"M03-07.A13","evidence":"Provider adapter OpenAPI refresh event and client contract tests"},
     {"id":"M03-07.A14","evidence":"MySQL57 Redis file task evidence refresh and organization isolation"},
     {"id":"M03-07.A15","evidence":"Playwright novice source catalog and hotspot refresh user journeys"},
-    {"id":"M03-07.A16","evidence":"timeout rate limit parser change dependency setup-required and rollback drills"},
-    {"id":"M03-07.A17","evidence":"blueprint plan Feature Map source inventory runbook and rollback"}
+    {"id":"M03-07.A16","evidence":"timeout rate limit parser schema field-path and identity change dependency setup-required and rollback drills"},
+    {"id":"M03-07.A17","evidence":"blueprint plan Feature Map 1688 disabled-until-runtime boundary source inventory runbook and rollback"}
   ],
-  "commands":["npm run build","node --test tests/m03-07/provider-sources.test.mjs","node scripts/verify-provider-sources-live.mjs","node scripts/verify-automatic-hotspots-live.mjs","npx playwright test tests/e2e/m03-07-provider-sources.spec.ts","npm run verify:docs"]
+  "commands":["npm run build","node --test tests/m03-07/provider-sources.test.mjs tests/unit/1688-browser-contract.test.mjs","node scripts/verify-provider-sources-live.mjs","node scripts/verify-automatic-hotspots-live.mjs","npx playwright test tests/e2e/m03-07-provider-sources.spec.ts","npm run verify:docs"]
 }

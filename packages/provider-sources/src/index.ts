@@ -10,6 +10,7 @@ import {
   type ProviderNormalizedRecord,
   type ProviderRawRecord,
 } from "@scoutops/provider-adapters";
+import { ALIBABA_1688_BROWSER_PARSER_VERSION } from "./1688-browser-contract.js";
 export {
   createProviderSourceFetch,
   decodeProviderProxyResponseBody,
@@ -18,6 +19,7 @@ export type {
   ProviderSourceFetchDependencies,
   ProviderSourceProxyConfig,
 } from "./proxy-fetch.js";
+export * from "./1688-browser-contract.js";
 
 export type SourceCategory =
   "news" | "ecommerce" | "data" | "community" | "product_supply";
@@ -697,7 +699,21 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
   target_url: setupTargetUrls[String(code)]!,
   markets: ["GLOBAL"],
   languages: ["und"],
-  fields: ["title", "observed_at", "source_url"],
+  fields:
+    code === "1688_search"
+      ? [
+          "title",
+          "supplier_name",
+          "quoted_price",
+          "currency",
+          "moq",
+          "specification",
+          "lead_time_days",
+          "location",
+          "canonical_url",
+          "observed_at",
+        ]
+      : ["title", "observed_at", "source_url"],
   schedule_minutes: 30,
   concurrency_limit: 1,
   timeout_ms: 20000,
@@ -711,7 +727,10 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
     "rate_limited",
     "source_changed",
   ],
-  parser_version: "setup-required-v1",
+  parser_version:
+    code === "1688_search"
+      ? ALIBABA_1688_BROWSER_PARSER_VERSION
+      : "setup-required-v1",
   healthcheck_url: null,
   owner_label: "平台来源中心",
   status: "disabled",
@@ -719,7 +738,9 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
   availability: "setup_required",
   production_policy: "setup_required",
   policy_note:
-    access === "authenticated_browser"
+    code === "1688_search"
+      ? "搜索、商品详情与供应商浏览器输出合同已版本化；仍需真实登录档案和任务领取链验收后才能启用。"
+      : access === "authenticated_browser"
       ? "已配置平台真实登录入口；上传 Cookie 或读取当前浏览器 Cookie 后，还需完成该平台页面解析合同才会进入自动采集，不要求官方 API Key。"
       : "已配置平台真实公开入口；页面字段解析合同验收通过后即可启用匿名爬虫，不要求登录或官方 API Key。",
 }));

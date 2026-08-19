@@ -29,3 +29,13 @@ test('M07-02.A14-A17 contracts include Baota edge hardening, operational rollbac
   assert.match(runbook, /宝塔/);
   assert.match(openapi, /securityGate: npm run verify:security-gate/);
 });
+
+test('M07-02 browser storage gate allows only the validated non-sensitive theme preference', async () => {
+  const gate = await readFile(resolve(root, 'scripts/verify-security-gate.mjs'), 'utf8');
+  const theme = await readFile(resolve(root, 'apps/web/src/design/theme.ts'), 'utf8');
+  assert.match(gate, /file === 'apps\/web\/src\/design\/theme\.ts'/);
+  assert.match(gate, /localStorageCount === 2/);
+  assert.match(gate, /argumentsText === 'themeStorageKey'/);
+  assert.match(gate, /argumentsText === 'themeStorageKey,theme'/);
+  assert.doesNotMatch(theme, /token|secret|session|credential/i);
+});

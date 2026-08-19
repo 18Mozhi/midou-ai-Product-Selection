@@ -18,6 +18,17 @@
 4. Worker 继续复用 M03-05 状态机、Redis 范围租约和 M03-06 不可变证据链；每条结果带 Provider、Adapter、Parser 和字段路径溯源。
 5. 待配置来源没有适配器且默认禁用，因此不能进入自动任务；系统宁可显示“需要配置”也不把聚合新闻当成该平台官方销量或价格。
 
+## 1688 浏览器输出合同
+
+`1688_search` 现在使用 `1688-browser-contract-v1` 管理浏览器提取器与 Provider 规范化层之间的输出，三类快照必须分别声明 `1688.search.v1`、`1688.offer-detail.v1` 或 `1688.supplier.v1`：
+
+- 搜索结果保存标题、供应商、报价、币种、MOQ、地点和商品规范链接；详情补充规格与交期；供应商快照独立保存供应商名称、地点和规范链接。
+- 每条记录都必须携带观测时间、受限 DOM 片段和每个必需字段的来源路径。原始 DOM 单条最多 250 KB，搜索快照最多 100 条；商品 ID 必须与 `detail.1688.com/offer/{id}.html` 路径一致。
+- 报价缺失时币种必须同时为空；存在报价时只接受 `CNY`。缺少报价、MOQ、地点、规格或交期时写入明确的 `missing_fields_json`，不得补零或猜值。
+- Schema、字段路径或页面身份变化统一以 `source_changed` 失败关闭；非 HTTPS、跨站地址或搜索/详情身份不一致以 `source_configuration_invalid` 拒绝。
+
+该合同只锁定受控浏览器提取后的数据边界，并不等于生产采集已经接通。真实登录档案、站点绑定、Python Crawler 领取业务任务、Playwright 执行与结果回写链尚未完成验收前，`1688_search` 必须保持 `setup_required / disabled`，不得进入自动调度。
+
 ## 安全、权限与限制
 
 - 来源目录：`provider:configure`；人工回放：`collection:replay`；热点页立即刷新：`trend:read`。
@@ -31,4 +42,4 @@
 
 `AUTOMATIC_SOURCE_SCHEDULER_POLL_MS` 控制 Worker 检查到期组织的周期，默认 30000 毫秒；修改后需要通过宝塔重启统一后端“ai选品”。通用采集仍复用 `COLLECTION_TASK_*`、`PROVIDER_ADAPTER_*`、`PROVIDER_PROXY_*` 和 `EVIDENCE_*`。
 
-生产由宝塔管理 Node 后端项目“ai选品”和 Python 3.12 采集项目“ai选品-python”。API/Worker 由 Node 统一后端拉起，Python 项目提供采集心跳与桥接运行时；不新增独立 Worker、候选后端、面板外服务、负载均衡或多节点能力。
+生产由宝塔管理 Node 后端项目“ai选品”和 Python 3.12 采集项目“ai选品-python”。API/Worker 由 Node 统一后端拉起，Python 项目提供采集心跳与桥接运行时；当前 1688 合同仍没有改变二者职责，也没有让 Python Crawler 获得真实 1688 任务。不新增独立 Worker、候选后端、面板外服务、负载均衡或多节点能力。
