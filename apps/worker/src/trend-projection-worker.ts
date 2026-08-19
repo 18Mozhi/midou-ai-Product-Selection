@@ -151,6 +151,42 @@ export function normalizeProjectedTrendTitle(value: unknown) {
     .replace(/\s+/g, " ");
 }
 
+const supplierKeywordRules: Array<[RegExp, string]> = [
+  [/\btoner\s+pads?\b/i, "facial toner pads"],
+  [/\bcotton\s+swabs?\b/i, "cotton swabs"],
+  [/\bcotton\s+rounds?\b/i, "cotton rounds"],
+  [/\b(?:acne|pimple|hydrocolloid)\b.*\bpatch(?:es)?\b/i, "hydrocolloid acne patches"],
+  [/\bglycolic\s+acid\b.*\btoner\b/i, "glycolic acid toner"],
+  [/\bbody\s+lotion\b/i, "body lotion"],
+  [/\bpaper\s+towels?\b/i, "paper towels"],
+  [/\btoilet\s+(?:paper|tissue)\b/i, "toilet paper"],
+  [/\balkaline\s+batter(?:y|ies)\b/i, "alkaline batteries"],
+  [/\bwireless\s+earbuds?\b/i, "wireless earbuds"],
+  [/\b(?:wired\s+ear\s*buds?|earpods?)\b/i, "wired earbuds"],
+  [/\b(?:airtag|key\s+finder|item\s+tracker)\b/i, "bluetooth item tracker"],
+  [/\b(?:surge\s+protector|power\s+strip)\b/i, "surge protector power strip"],
+  [/\bboxer\s+briefs?\b/i, "mens boxer briefs"],
+  [/\bmens?\s+underwear\b/i, "mens underwear"],
+  [/\bundershirts?\b/i, "cotton undershirts"],
+];
+const supplierStopWords = new Set([
+  "amazon", "basics", "with", "for", "and", "the", "pack", "packs",
+  "count", "white", "black", "new", "more", "from", "your", "this",
+]);
+
+export function buildSupplierSearchQuery(title: string) {
+  const normalized = title.normalize("NFKC").replace(/\s+/g, " ").trim();
+  for (const [pattern, query] of supplierKeywordRules)
+    if (pattern.test(normalized)) return query;
+  const words = normalized
+    .split(/[|,;:()[\]{}\-–—]+/, 1)[0]!
+    .match(/[\p{L}\p{N}]+/gu)
+    ?.filter((word) => !supplierStopWords.has(word.toLocaleLowerCase("en-US")))
+    .filter((word) => !/^\d+(?:\.\d+)?$/.test(word))
+    .slice(0, 6);
+  return (words?.join(" ") || normalized).slice(0, 120);
+}
+
 export class TrendProjectionError extends Error {
   constructor(
     readonly code: string,
@@ -270,6 +306,7 @@ export class MySqlTrendProjectionWorker {
                     WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
                       AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id'))=CONVERT(se.resource_id USING utf8mb4) COLLATE utf8mb4_bin
                       AND CHAR_LENGTH(JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query'))) BETWEEN 1 AND 300
+                      AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query_contract'))='supplier-keywords-v1'
                   )) sourcing_task_missing
            FROM opportunities o
            JOIN competitors c
@@ -297,6 +334,7 @@ export class MySqlTrendProjectionWorker {
                  WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
                    AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id'))=CONVERT(se.resource_id USING utf8mb4) COLLATE utf8mb4_bin
                    AND CHAR_LENGTH(JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query'))) BETWEEN 1 AND 300
+                   AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query_contract'))='supplier-keywords-v1'
                ))
              )
            ORDER BY o.created_at,o.id
@@ -355,7 +393,8 @@ export class MySqlTrendProjectionWorker {
               providerId,
               required: false,
               target: {
-                query: String(row.name).slice(0, 300),
+                query: buildSupplierSearchQuery(String(row.name)),
+                query_contract: "supplier-keywords-v1",
                 projection_type: "sourcing_search",
                 search_id: searchId,
               },
@@ -929,7 +968,8 @@ export class MySqlTrendProjectionWorker {
           providerId,
           required: false,
           target: {
-            query: title.slice(0, 300),
+            query: buildSupplierSearchQuery(title),
+            query_contract: "supplier-keywords-v1",
             projection_type: "sourcing_search",
             search_id: searchId,
           },

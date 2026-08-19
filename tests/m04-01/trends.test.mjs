@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { normalizeTrendTitle, TrendService, TrendServiceError, validateMonitoringRuleInput } from '../../apps/api/dist/trend-service.js';
-import { isAutomaticProductDiscoveryProvider, normalizeProjectedTrendTitle, projectedTrendProviderContext, TrendProjectionError } from '../../apps/worker/dist/trend-projection-worker.js';
+import { buildSupplierSearchQuery, isAutomaticProductDiscoveryProvider, normalizeProjectedTrendTitle, projectedTrendProviderContext, TrendProjectionError } from '../../apps/worker/dist/trend-projection-worker.js';
 import { buildApp } from '../../apps/api/dist/app.js';
 
 const ids={org:'00000000-0000-4000-8000-000000000401',ws:'00000000-0000-4000-8000-000000000402',actor:'00000000-0000-4000-8000-000000000403',topic:'00000000-0000-4000-8000-000000000404',rule:'00000000-0000-4000-8000-000000000405'};
@@ -35,6 +35,13 @@ test('M04-01 automatic hotspot channels project real markets and only product ch
   assert.equal(isAutomaticProductDiscoveryProvider('gnews_us_consumer_trends'),false);
   assert.equal(isAutomaticProductDiscoveryProvider('gnews_us_retail_data'),false);
   assert.equal(isAutomaticProductDiscoveryProvider('google_news_search'),false);
+});
+
+test('M04-01 supplier discovery derives auditable generic product keywords',()=>{
+  assert.equal(buildSupplierSearchQuery('Amazon Basics 2-Ply Soft Toilet Paper, 30 Rolls'),'toilet paper');
+  assert.equal(buildSupplierSearchQuery('Apple AirPods Pro 3 Wireless Earbuds with Active Noise Cancellation'),'wireless earbuds');
+  assert.equal(buildSupplierSearchQuery('Mighty Patch Original Hydrocolloid Acne Patches, 36 Ct'),'hydrocolloid acne patches');
+  assert.equal(buildSupplierSearchQuery('Generic Foldable Storage Organizer, Large Blue'),'Generic Foldable Storage Organizer');
 });
 
 test('M04-01.A04/A06/A09 service validates pagination versions and scoped writes',async()=>{
@@ -77,9 +84,10 @@ test('M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module',a
   assert.match(worker,/CONVERT\(o\.id USING utf8mb4\) COLLATE utf8mb4_bin/);
   assert.match(worker,/CONVERT\(c\.id USING utf8mb4\) COLLATE utf8mb4_bin/);
   assert.match(worker,/scheduleCoreCollection[\s\S]*UPDATE sourcing_searches SET collection_task_id/);
-  assert.match(worker,/page_url: String\(row\.product_url\)[\s\S]*query: String\(row\.name\)\.slice\(0, 300\)/);
-  assert.match(worker,/page_url: canonicalUrl[\s\S]*query: title\.slice\(0, 300\)/);
+  assert.match(worker,/page_url: String\(row\.product_url\)[\s\S]*query: buildSupplierSearchQuery\(String\(row\.name\)\)/);
+  assert.match(worker,/page_url: canonicalUrl[\s\S]*query: buildSupplierSearchQuery\(title\)/);
   assert.match(worker,/CHAR_LENGTH\(JSON_UNQUOTE\(JSON_EXTRACT\(q\.target_json,'\$\.query'\)\)\) BETWEEN 1 AND 300/);
+  assert.match(worker,/query_contract[\s\S]*supplier-keywords-v1/);
   assert.match(worker,/input_ref,status[\s\S]*'opportunity'[\s\S]*'queued'/);
   assert.match(worker,/evaluateMonitoringRules[\s\S]*trend\.monitoring_rule\.matched[\s\S]*last_evaluated_at/);
   assert.match(openapi,/商品型自动热点频道[\s\S]*待评估选品/);

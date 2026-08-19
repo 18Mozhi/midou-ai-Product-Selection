@@ -124,17 +124,26 @@ const uuid = (value: string) =>
 export function classifyProviderAdapterFailure(
   error: unknown,
 ): ClassifiedAdapterFailure {
-  if (error instanceof ProviderAdapterFailure) {
+  const structured =
+    error instanceof ProviderAdapterFailure
+      ? error
+      : error instanceof Error &&
+          error.name === "ProviderAdapterFailure" &&
+          typeof (error as Error & { code?: unknown }).code === "string" &&
+          typeof (error as Error & { retryable?: unknown }).retryable === "boolean"
+        ? (error as Error & { code: string; retryable: boolean })
+        : null;
+  if (structured) {
     const blocked = [
       "adapter_not_registered",
       "adapter_mode_mismatch",
       "login_expired",
       "invalid_payload",
       "response_too_large",
-    ].includes(error.code);
+    ].includes(structured.code);
     return {
-      code: error.code,
-      retryable: error.retryable,
+      code: structured.code,
+      retryable: structured.retryable,
       status: blocked ? "blocked" : "degraded",
     };
   }

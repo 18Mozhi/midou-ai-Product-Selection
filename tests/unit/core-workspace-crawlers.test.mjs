@@ -78,8 +78,15 @@ test("automatic downstream tasks use crawler contracts and recover malformed his
   assert.match(worker, /page_url: canonicalUrl/);
   assert.match(worker, /JSON_EXTRACT\(q\.target_json,'\$\.page_url'\).*IS NOT NULL/s);
   assert.match(worker, /CHAR_LENGTH\(JSON_UNQUOTE\(JSON_EXTRACT\(q\.target_json,'\$\.query'\)\)\) BETWEEN 1 AND 300/);
-  assert.match(worker, /query: String\(row\.name\)\.slice\(0, 300\)/);
-  assert.match(worker, /query: title\.slice\(0, 300\)/);
+  assert.match(worker, /query: buildSupplierSearchQuery\(String\(row\.name\)\)/);
+  assert.match(worker, /query: buildSupplierSearchQuery\(title\)/);
+  assert.match(worker, /query_contract: "supplier-keywords-v1"/);
+});
+
+test("adapter failures keep their source error across duplicated package instances", async () => {
+  const { classifyProviderAdapterFailure } = await import("../../packages/provider-adapters/dist/index.js");
+  const failure = Object.assign(new Error("source_changed"), { name: "ProviderAdapterFailure", code: "source_changed", retryable: false });
+  assert.deepEqual(classifyProviderAdapterFailure(failure), { code: "source_changed", retryable: false, status: "degraded" });
 });
 
 test("optional supplier failure keeps the second public crawler running", async () => {
