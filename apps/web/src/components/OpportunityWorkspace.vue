@@ -447,6 +447,13 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
 }
 onMounted(() => {
   const query = new URLSearchParams(window.location.search);
+  const requestedTab = query.get("tab");
+  if (
+    props.opportunityId &&
+    tabs.some(([value]) => value === requestedTab)
+  ) {
+    tab.value = requestedTab as Tab;
+  }
   if (
     !props.opportunityId &&
     (query.get("create") === "1" || query.get("source_topic_id"))

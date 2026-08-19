@@ -15,6 +15,9 @@ const allowed = new Set([
   "0044d_nullable_competitor_metrics.up.sql",
   "0044e_core_collection_projection.up.sql",
   "0044f_enable_amazon_public_crawler.up.sql",
+  "0045_operational_task_links.up.sql",
+  "0046_notification_workflow_root_cause.up.sql",
+  "0047_approval_decision_context_snapshot.up.sql",
 ]);
 const requested = process.argv.slice(2);
 

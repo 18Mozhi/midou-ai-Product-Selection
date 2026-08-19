@@ -3127,7 +3127,7 @@ paths:
         "200": { $ref: "#/components/responses/PaginatedSuccess" }
         "403": { $ref: "#/components/responses/Error" }
     post:
-      summary: Create an approval request from a published template version
+      summary: Create an approval request and lock its template evidence rule and decision context snapshot
       x-required-capability: task:assign
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       requestBody:
@@ -3164,7 +3164,7 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /tasks/approvals/{approvalRequestId}:
     get:
-      summary: Get scoped approval detail with immutable node and action history
+      summary: Get scoped approval detail with evidence completeness rule versions decision basis and immutable history
       x-required-capability: task:read
       parameters:
         [

@@ -1174,7 +1174,8 @@
         "../apps/api/src/mysql-approval-repository.ts",
         "../apps/api/src/approval-routes.ts",
         "../apps/worker/src/approval-escalation-worker.ts",
-        "../apps/web/src/components/ApprovalWorkspace.vue"
+        "../apps/web/src/components/ApprovalWorkspace.vue",
+        "../database/migrations/0047_approval_decision_context_snapshot.up.sql"
       ],
       "routes": [
         "/tasks/approvals",
@@ -1182,14 +1183,14 @@
         "/api/v1/tasks/approvals",
         "/api/v1/tasks/approvals/{approvalRequestId}/actions"
       ],
-      "scope": "organization and workspace scoped immutable published templates approval requests node runs actions idempotent operations audit and outbox",
-      "truthBoundary": "requests lock the published template version; approve and reject require reasons; overdue Worker only escalates the active approver and never decides",
+      "scope": "organization and workspace scoped immutable published templates approval requests evidence and rule snapshots node runs actions idempotent operations audit and outbox",
+      "truthBoundary": "requests lock the published template version; opportunity decision requests resolve the decision id to its opportunity and snapshot evidence completeness scoring profit risk rule versions and decision basis; pre-0047 requests are labeled live fallback and task approvals are evidence-not-applicable; approve and reject require reasons; overdue Worker only escalates the active approver and never decides",
       "permission": "task:read for reads and task:assign for template request and decision writes",
       "configuration": [
         "APPROVAL_ESCALATION_POLL_MS",
         "APPROVAL_ESCALATION_LEASE_SECONDS"
       ],
-      "runtimeBoundary": "overdue node escalation runs only in the Baota-managed Node Worker; M05-03 notifications and M05-04 SSE are not implemented here",
+      "runtimeBoundary": "decision context snapshots are captured synchronously by the Baota-managed Node API; overdue node escalation runs only in the unified Baota-managed Node Worker",
       "imageEvidence": ["concept 27 task approval", "concept 60 approval flow"],
       "verificationRunId": "02651953-6607-45cc-ac45-887c9be17b60",
       "status": "module_verified"

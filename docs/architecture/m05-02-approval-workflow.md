@@ -2,8 +2,10 @@
 
 审批流程以 `approval_templates` 和不可变 `approval_template_versions`/`approval_template_nodes` 定义。模板先保存草稿，再以 revision 乐观锁显式发布；审批请求只绑定已发布的准确版本，后续模板变化不会改写历史实例。请求必须引用当前组织、当前工作区内存在的任务或机会决策。
 
+机会决策请求的 `resource_id` 是 `opportunity_decisions.id`，仓储必须先沿该记录解析 `opportunity_id`，不能把决策编号当作机会编号。发起请求时将市场证据数量与来源数、最新评分/利润运行、风险等级、评分/利润规则版本、申请动作与原因写入 `approval_requests.decision_context_json`；这份 JSON 是审批前判断依据的不可变快照。证据完整度只统计已有真实事实：市场证据、成功评分、成功利润计算和已识别风险共四类。任务审批没有独立证据合同，明确返回“不适用”，不伪造 `1/1`。0047 之前的审批没有快照，详情会实时重建并标记 `live_fallback`，不得宣称为历史事实。
+
 实例化时复制节点名称、审批人、SLA 和超时接收人到 `approval_node_runs`。任一时刻只有一个 pending 节点，批准后按序启用下一节点，最终批准或任一驳回结束请求。批准与驳回都必须填写原因并追加 `approval_actions`；请求 version 防止并发覆盖。读取使用 `task:read`，模板、发起和决策使用管理职责已有的 `task:assign`，API 和仓储同时执行组织/工作区约束。
 
 宝塔 Node Worker 以租约消费 `approval_escalation_jobs`。节点超时只把 active approver 切换到显式配置的 escalation assignee，追加 escalated 动作、审计和 `approval.overdue` Outbox；绝不自动批准或驳回。M05-03 负责消费 Outbox 生成通知，M05-04 负责 SSE，本模块不越界发送通知或建立实时连接。
 
-视觉依据为 `images-html/01_72_page_concepts/27_任务审批.jpg` 与 `60_审批流程.jpg`；实现保留审批收件箱、节点时间线、状态、原因和模板层级，图片中的示例数量不作为生产数据。
+视觉依据为 `images-html/01_72_page_concepts/27_任务审批.jpg` 与 `60_审批流程.jpg`；实现保留审批收件箱、节点时间线、状态、原因和模板层级，并在动作区之前展示证据完整度、缺失项、规则版本、申请决策和事实依据。普通界面使用成员展示名称与中文状态，审批、资源、节点及成员 UUID 只在折叠技术详情中展示；图片中的示例数量不作为生产数据。

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../approval-workspace.css";
 type ViewState =
   | "loading"
@@ -32,9 +33,63 @@ type Approval = {
   due_at: string | null;
   escalated_at: string | null;
   version: number;
-  nodes?: any[];
-  actions?: any[];
+  approval_template_version?: number;
+  nodes?: Array<{
+    id: string;
+    ordinal: number;
+    name: string;
+    status: string;
+    active_approver_id: string;
+    active_approver_name: string;
+    due_at: string | null;
+    decision_reason: string | null;
+    decided_by_name: string | null;
+  }>;
+  actions?: Array<{
+    id: string;
+    action: string;
+    reason: string;
+    actor_name: string;
+    created_at: string;
+  }>;
   decision_context?: {
+    snapshot_status: "captured" | "live_fallback";
+    captured_at: string | null;
+    observed_at: string;
+    resource: {
+      type: "task" | "opportunity";
+      id: string;
+      label: string;
+      route: string;
+    };
+    evidence: {
+      applicable: boolean;
+      complete: number;
+      total: number;
+      percent: number | null;
+      is_complete: boolean | null;
+      missing_items: string[];
+      note: string | null;
+      requirements: Array<{
+        code: string;
+        label: string;
+        complete: boolean;
+        detail: string;
+        route: string;
+      }>;
+    };
+    rule_versions: {
+      approval_template: string;
+      scoring: string | null;
+      profit: string | null;
+    };
+    decision: {
+      action: string;
+      reason: string;
+      opportunity_version: number;
+      created_at: string;
+    } | null;
+    basis_items: Array<{ code: string; label: string; value: string | null }>;
     evidence_complete: number;
     evidence_total: number;
     missing_items: string[];
@@ -43,6 +98,7 @@ type Approval = {
   };
 };
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<ViewState>("loading"),
   approvals = ref<Approval[]>([]),
   templates = ref<Template[]>([]),
@@ -94,49 +150,63 @@ const statusText = (x: string) =>
         escalated: "已升级",
         draft: "草稿",
         published: "已发布",
+        todo: "待处理",
+        in_progress: "进行中",
+        completed: "已完成",
+        cancelled: "已取消",
+        low: "低",
+        normal: "普通",
+        high: "高",
+        critical: "紧急",
+        adopt: "采纳",
+        observe: "观察",
+        reject: "驳回",
+        recommend: "推荐",
+        not_recommend: "不推荐",
+        insufficient_data: "数据不足",
+        calculated: "已计算",
+        not_calculated: "尚未计算",
+        unknown: "待识别",
+        medium: "中",
       }) as Record<string, string>
-    )[x] ?? x,
+    )[x] ?? "未知状态",
+  resourceText = (x: string) =>
+    ({ task: "任务", opportunity_decision: "机会决策" })[x] ?? "业务记录",
+  basisValue = (value: string | null) =>
+    value == null || value === "" ? "未提供" : statusText(value) !== "未知状态" ? statusText(value) : value,
   time = (v: string | null) =>
     v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "—";
-async function api(path: string, init?: RequestInit) {
-  const r = await fetch(`${props.apiBaseUrl}${path}`, {
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        ...(init?.method && init.method !== "GET"
-          ? { "idempotency-key": crypto.randomUUID() }
-          : {}),
-        ...(init?.headers ?? {}),
-      },
-      ...init,
-    }),
-    b = await r.json().catch(() => null);
-  requestId.value = b?.request_id ?? "";
-  if (!r.ok) {
-    state.value =
-      r.status === 401
-        ? "expired"
-        : r.status === 403
-          ? "forbidden"
-          : r.status === 429
-            ? "rate_limited"
-            : r.status === 409
-              ? "version_conflict"
-              : "error";
-    notice.value = b?.error?.action_hint ?? "稍后重试。";
-    throw new Error("request_failed");
+async function api<T>(
+  path: string,
+  options: { method?: string; body?: unknown } = {},
+  affectPageState = true,
+) {
+  try {
+    const response = await request<T>(path, options);
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    if (affectPageState)
+      state.value =
+        failure?.kind === "conflict"
+          ? "version_conflict"
+          : failure?.kind === "blocked"
+            ? "error"
+            : (failure?.kind ?? "error");
+    notice.value = failure?.actionHint ?? "稍后重试。";
+    throw error;
   }
-  return b.data;
 }
 async function load() {
   state.value = "loading";
   try {
     const [list, tpl] = await Promise.all([
-      api(
+      api<Approval[]>(
         `/tasks/approvals?page=1&page_size=100${filter.value ? `&status=${filter.value}` : ""}`,
       ),
-      api("/tasks/approval-templates"),
+      api<Template[]>("/tasks/approval-templates"),
     ]);
     approvals.value = list;
     templates.value = tpl;
@@ -145,7 +215,7 @@ async function load() {
 }
 async function open(item: Approval) {
   try {
-    selected.value = await api(`/tasks/approvals/${item.id}`);
+    selected.value = await api<Approval>(`/tasks/approvals/${item.id}`);
     reason.value = "";
     state.value = "ready";
   } catch {}
@@ -154,14 +224,18 @@ async function decide(action: "approve" | "reject") {
   if (!selected.value || !reason.value.trim()) return;
   busy.value = true;
   try {
-    await api(`/tasks/approvals/${selected.value.id}/actions`, {
-      method: "POST",
-      body: JSON.stringify({
-        action,
-        reason: reason.value,
-        expected_version: selected.value.version,
-      }),
-    });
+    await api(
+      `/tasks/approvals/${selected.value.id}/actions`,
+      {
+        method: "POST",
+        body: {
+          action,
+          reason: reason.value,
+          expected_version: selected.value.version,
+        },
+      },
+      false,
+    );
     notice.value =
       action === "approve"
         ? "本节点已批准，审批历史不可变。"
@@ -176,21 +250,25 @@ async function decide(action: "approve" | "reject") {
 async function createTemplate() {
   busy.value = true;
   try {
-    await api("/tasks/approval-templates", {
-      method: "POST",
-      body: JSON.stringify({
-        name: templateForm.value.name,
-        resource_type: templateForm.value.resource_type,
-        nodes: [
-          {
-            name: templateForm.value.node_name,
-            approver_id: templateForm.value.approver_id,
-            sla_minutes: Number(templateForm.value.sla_minutes),
-            escalation_assignee_id: templateForm.value.escalation_assignee_id,
-          },
-        ],
-      }),
-    });
+    await api(
+      "/tasks/approval-templates",
+      {
+        method: "POST",
+        body: {
+          name: templateForm.value.name,
+          resource_type: templateForm.value.resource_type,
+          nodes: [
+            {
+              name: templateForm.value.node_name,
+              approver_id: templateForm.value.approver_id,
+              sla_minutes: Number(templateForm.value.sla_minutes),
+              escalation_assignee_id: templateForm.value.escalation_assignee_id,
+            },
+          ],
+        },
+      },
+      false,
+    );
     showTemplate.value = false;
     notice.value = "审批模板草稿已创建；发布前不会用于新审批。";
     await load();
@@ -203,13 +281,14 @@ async function publish(t: Template) {
   const reasonValue = window.prompt("请输入发布原因")?.trim();
   if (!reasonValue) return;
   try {
-    await api(`/tasks/approval-templates/${t.id}/actions`, {
-      method: "POST",
-      body: JSON.stringify({
-        expected_revision: t.revision,
-        reason: reasonValue,
-      }),
-    });
+    await api(
+      `/tasks/approval-templates/${t.id}/actions`,
+      {
+        method: "POST",
+        body: { expected_revision: t.revision, reason: reasonValue },
+      },
+      false,
+    );
     notice.value = "模板版本已发布并锁定。";
     await load();
   } catch {}
@@ -217,10 +296,11 @@ async function publish(t: Template) {
 async function createRequest() {
   busy.value = true;
   try {
-    await api("/tasks/approvals", {
-      method: "POST",
-      body: JSON.stringify(requestForm.value),
-    });
+    await api(
+      "/tasks/approvals",
+      { method: "POST", body: requestForm.value },
+      false,
+    );
     showRequest.value = false;
     notice.value = "审批已发起；第一节点 SLA 已开始计时。";
     await load();
@@ -246,8 +326,12 @@ onMounted(load);
         ><button @click="showRequest = true">＋ 发起审批</button>
       </div>
     </header>
-    <div v-if="notice" class="approval-notice">
-      {{ notice }} <code v-if="requestId">{{ requestId }}</code>
+    <div v-if="notice" class="approval-notice" aria-live="polite">
+      {{ notice }}
+      <details v-if="requestId">
+        <summary>技术详情</summary>
+        <code>{{ requestId }}</code>
+      </details>
     </div>
     <section class="approval-metrics">
       <article>
@@ -322,7 +406,7 @@ onMounted(load);
         ><span
           ><strong>{{ item.title }}</strong
           ><small
-            >{{ item.template_name }} · {{ item.resource_type }}</small
+            >{{ item.template_name }} · {{ resourceText(item.resource_type) }}</small
           ></span
         ><span
           ><em :data-status="item.status">{{ statusText(item.status) }}</em
@@ -344,13 +428,117 @@ onMounted(load);
       >
         ×
       </button>
-      <p>{{ selected.template_name }} / v{{ selected.version }}</p>
+      <p>
+        {{ selected.template_name }} / 模板 v{{
+          selected.approval_template_version ?? "—"
+        }}
+      </p>
       <h3>{{ selected.title }}</h3>
-      <small>{{ selected.resource_type }} · {{ selected.resource_id }}</small>
-      <section v-if="selected.decision_context" class="approval-decision-context">
-        <header><div><small>证据完整度</small><strong>{{ selected.decision_context.evidence_complete }} / {{ selected.decision_context.evidence_total }}</strong></div><div><small>规则版本</small><strong>{{ selected.decision_context.rule_version }}</strong></div></header>
-        <p v-if="selected.decision_context.missing_items.length">缺失：{{ selected.decision_context.missing_items.join('、') }}</p>
-        <ul><li v-for="basis in selected.decision_context.basis" :key="basis">{{ basis }}</li></ul>
+      <a
+        v-if="selected.decision_context?.resource"
+        class="approval-resource-link"
+        :href="selected.decision_context.resource.route"
+        >查看{{ selected.decision_context.resource.label }} →</a
+      >
+      <section
+        v-if="selected.decision_context"
+        class="approval-decision-context"
+      >
+        <header>
+          <div>
+            <small>证据完整度</small>
+            <strong v-if="selected.decision_context.evidence.applicable"
+              >{{ selected.decision_context.evidence.percent }}%</strong
+            >
+            <strong v-else>不适用</strong>
+          </div>
+          <div>
+            <small>审批模板版本</small>
+            <strong>{{ selected.decision_context.rule_versions.approval_template }}</strong>
+          </div>
+        </header>
+        <p
+          class="approval-context-origin"
+          :data-fallback="
+            selected.decision_context.snapshot_status === 'live_fallback'
+          "
+        >
+          {{
+            selected.decision_context.snapshot_status === "captured"
+              ? `发起审批时已锁定 · ${time(selected.decision_context.captured_at)}`
+              : `历史审批未保存快照，以下为当前事实 · ${time(selected.decision_context.observed_at)}`
+          }}
+        </p>
+        <template v-if="selected.decision_context.evidence.applicable">
+          <progress
+            :value="selected.decision_context.evidence.complete"
+            :max="selected.decision_context.evidence.total"
+          ></progress>
+          <p v-if="selected.decision_context.evidence.missing_items.length">
+            缺失：{{
+              selected.decision_context.evidence.missing_items.join("、")
+            }}
+          </p>
+          <div class="approval-requirements">
+            <a
+              v-for="requirement in selected.decision_context.evidence
+                .requirements"
+              :key="requirement.code"
+              :href="requirement.route"
+              :data-complete="requirement.complete"
+            >
+              <span>
+                <b>{{ requirement.label }}</b>
+                <em>{{ requirement.complete ? "已具备" : "待补齐" }}</em>
+              </span>
+              <small>{{ requirement.detail }}</small>
+            </a>
+          </div>
+        </template>
+        <p v-else class="approval-context-note">
+          {{ selected.decision_context.evidence.note }}
+        </p>
+        <section class="approval-rule-versions">
+          <h4>规则版本</h4>
+          <dl>
+            <div>
+              <dt>审批模板</dt>
+              <dd>{{ selected.decision_context.rule_versions.approval_template }}</dd>
+            </div>
+            <div>
+              <dt>评分规则</dt>
+              <dd>{{ selected.decision_context.rule_versions.scoring ?? "未生成" }}</dd>
+            </div>
+            <div>
+              <dt>利润规则</dt>
+              <dd>{{ selected.decision_context.rule_versions.profit ?? "未生成" }}</dd>
+            </div>
+          </dl>
+        </section>
+        <section
+          v-if="selected.decision_context.decision"
+          class="approval-requested-decision"
+        >
+          <h4>申请决策</h4>
+          <strong>{{ statusText(selected.decision_context.decision.action) }}</strong>
+          <p>{{ selected.decision_context.decision.reason }}</p>
+          <small
+            >基于机会第
+            {{ selected.decision_context.decision.opportunity_version }} 版</small
+          >
+        </section>
+        <section class="approval-decision-basis">
+          <h4>决策依据</h4>
+          <dl>
+            <div
+              v-for="basis in selected.decision_context.basis_items"
+              :key="basis.code"
+            >
+              <dt>{{ basis.label }}</dt>
+              <dd>{{ basisValue(basis.value) }}</dd>
+            </div>
+          </dl>
+        </section>
       </section>
       <div class="approval-timeline">
         <article
@@ -362,12 +550,21 @@ onMounted(load);
           <div>
             <b>{{ node.ordinal }}. {{ node.name }}</b
             ><span>{{ statusText(node.status) }} · {{ time(node.due_at) }}</span
-            ><small>审批人 {{ node.active_approver_id }}</small>
+            ><small>审批人 {{ node.active_approver_name }}</small>
             <p v-if="node.decision_reason">{{ node.decision_reason }}</p>
           </div>
         </article>
       </div>
       <section v-if="selected.can_decide">
+        <p
+          v-if="
+            selected.decision_context?.evidence.applicable &&
+            !selected.decision_context.evidence.is_complete
+          "
+          class="approval-evidence-warning"
+        >
+          证据仍有缺失；若继续审批，请在原因中明确说明判断依据。
+        </p>
         <label
           >审批原因（批准与驳回均必填）<textarea
             v-model="reason"
@@ -393,6 +590,21 @@ onMounted(load);
       <section v-else class="readonly">
         当前节点不是由你审批，或审批已结束。
       </section>
+      <details class="approval-technical">
+        <summary>技术详情</summary>
+        <dl>
+          <div><dt>审批编号</dt><dd>{{ selected.id }}</dd></div>
+          <div><dt>资源类型</dt><dd>{{ selected.resource_type }}</dd></div>
+          <div><dt>资源编号</dt><dd>{{ selected.resource_id }}</dd></div>
+          <div
+            v-for="node in selected.nodes"
+            :key="`technical-${node.id}`"
+          >
+            <dt>节点 {{ node.ordinal }}</dt>
+            <dd>{{ node.id }} / {{ node.active_approver_id }}</dd>
+          </div>
+        </dl>
+      </details>
     </aside>
     <dialog :open="showTemplate">
       <form @submit.prevent="createTemplate">
@@ -413,21 +625,24 @@ onMounted(load);
             required
             maxlength="120" /></label
         ><label
-          >审批人账号编号<input
-            v-model="templateForm.approver_id"
-            required /></label
-        ><label
           >处理时限（分钟）<input
             v-model.number="templateForm.sla_minutes"
             type="number"
             min="1"
             max="43200"
-            required /></label
-        ><label
-          >超时接收人账号编号<input
-            v-model="templateForm.escalation_assignee_id"
-            required
-        /></label>
+            required /></label>
+        <details class="approval-form-technical">
+          <summary>技术配置：审批人与超时接收人</summary>
+          <label
+            >审批人账号编号<input
+              v-model="templateForm.approver_id"
+              required /></label
+          ><label
+            >超时接收人账号编号<input
+              v-model="templateForm.escalation_assignee_id"
+              required
+          /></label>
+        </details>
         <p>草稿必须显式发布；超时只升级审批人，不会自动批准或驳回。</p>
         <div>
           <button type="button" class="secondary" @click="showTemplate = false">
@@ -462,9 +677,13 @@ onMounted(load);
             <option value="task">任务</option>
             <option value="opportunity_decision">机会决策</option>
           </select></label
-        ><label
-          >资源编号<input v-model="requestForm.resource_id" required /></label
-        ><label
+        ><details class="approval-form-technical">
+          <summary>技术配置：关联资源编号</summary>
+          <label
+            >资源编号<input v-model="requestForm.resource_id" required
+          /></label>
+        </details>
+        <label
           >审批标题<input v-model="requestForm.title" required maxlength="200"
         /></label>
         <div>

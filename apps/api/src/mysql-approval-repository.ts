@@ -229,24 +229,50 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         "刷新审批列表。",
       );
     const [nodes] = await this.pool.query<RowDataPacket[]>(
-        "SELECT * FROM approval_node_runs WHERE approval_request_id=? AND organization_id=? AND workspace_id=? ORDER BY ordinal",
+        `SELECT n.*,
+                approver_profile.display_name active_approver_name,
+                decided_profile.display_name decided_by_name
+         FROM approval_node_runs n
+         LEFT JOIN user_profiles approver_profile
+           ON approver_profile.user_id=n.active_approver_id
+         LEFT JOIN user_profiles decided_profile
+           ON decided_profile.user_id=n.decided_by
+         WHERE n.approval_request_id=?
+           AND n.organization_id=?
+           AND n.workspace_id=?
+         ORDER BY n.ordinal`,
         [i.requestIdValue, i.organizationId, i.workspaceId],
       ),
       [actions] = await this.pool.query<RowDataPacket[]>(
-        "SELECT id,node_run_id,action,reason,actor_id,created_at FROM approval_actions WHERE approval_request_id=? AND organization_id=? AND workspace_id=? ORDER BY created_at,id",
+        `SELECT a.id,a.node_run_id,a.action,a.reason,a.actor_id,a.created_at,
+                actor_profile.display_name actor_name
+         FROM approval_actions a
+         LEFT JOIN user_profiles actor_profile
+           ON actor_profile.user_id=a.actor_id
+         WHERE a.approval_request_id=?
+           AND a.organization_id=?
+           AND a.workspace_id=?
+         ORDER BY a.created_at,a.id`,
         [i.requestIdValue, i.organizationId, i.workspaceId],
       );
-    let decisionContext:{evidence_complete:number;evidence_total:number;missing_items:string[];rule_version:string;basis:string[]};
-    if(rows[0].resource_type==="opportunity_decision"){
-      const[facts]=await this.pool.query<RowDataPacket[]>("SELECT evidence_count,source_count,coverage_status,score_rule_version,recommendation_status,profit_status,risk_level FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=? LIMIT 1",[rows[0].resource_id,i.organizationId,i.workspaceId]),fact=facts[0];
-      const missing:string[]=[];
-      if(!fact||Number(fact.evidence_count)===0)missing.push("原始证据");
-      if(!fact||fact.coverage_status==="insufficient")missing.push("来源覆盖");
-      if(!fact||fact.profit_status==="insufficient_data")missing.push("利润成本");
-      decisionContext={evidence_complete:Math.max(0,3-missing.length),evidence_total:3,missing_items:missing,rule_version:String(fact?.score_rule_version??`approval-v${rows[0].rule_version}`),basis:[`建议：${fact?.recommendation_status??"数据不足"}`,`来源：${Number(fact?.source_count??0)} 个`,`风险：${fact?.risk_level??"待识别"}`]};
-    }else decisionContext={evidence_complete:1,evidence_total:1,missing_items:[],rule_version:`approval-v${rows[0].rule_version}`,basis:["任务当前状态、负责人、时限与审批节点"]};
+    const approvalTemplateVersion = Number(rows[0].rule_version),
+      decisionContext = rows[0].decision_context_json
+        ? parse(rows[0].decision_context_json)
+        : await this.loadDecisionContext(
+            this.pool,
+            {
+              organizationId: i.organizationId,
+              workspaceId: i.workspaceId,
+              resourceType: String(rows[0].resource_type),
+              resourceId: String(rows[0].resource_id),
+              approvalTemplateVersion,
+            },
+            this.now(),
+            "live_fallback",
+          );
     return {
       ...this.request(rows[0], i.actorId),
+      approval_template_version: approvalTemplateVersion,
       decision_context: decisionContext,
       nodes: nodes.map((r) => ({
         id: String(r.id),
@@ -254,11 +280,17 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         name: String(r.name),
         approver_id: String(r.approver_id),
         active_approver_id: String(r.active_approver_id),
+        active_approver_name: r.active_approver_name
+          ? String(r.active_approver_name)
+          : "未设置展示名称",
         escalation_assignee_id: String(r.escalation_assignee_id),
         status: String(r.status),
         due_at: iso(r.due_at),
         escalated_at: iso(r.escalated_at),
         decided_by: r.decided_by ? String(r.decided_by) : null,
+        decided_by_name: r.decided_by_name
+          ? String(r.decided_by_name)
+          : null,
         decision_reason: r.decision_reason ? String(r.decision_reason) : null,
         decided_at: iso(r.decided_at),
         version: Number(r.version),
@@ -269,6 +301,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         action: String(r.action),
         reason: String(r.reason),
         actor_id: String(r.actor_id),
+        actor_name: r.actor_name ? String(r.actor_name) : "未设置展示名称",
         created_at: iso(r.created_at),
       })),
     };
@@ -304,6 +337,18 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         i.value.resource_type,
         i.value.resource_id,
       );
+      const decisionContext = await this.loadDecisionContext(
+        connection,
+        {
+          organizationId: i.organizationId,
+          workspaceId: i.workspaceId,
+          resourceType: i.value.resource_type,
+          resourceId: i.value.resource_id,
+          approvalTemplateVersion: Number(template.current_version),
+        },
+        now,
+        "captured",
+      );
       const [nodes] = await connection.query<RowDataPacket[]>(
         "SELECT * FROM approval_template_nodes WHERE template_version_id=? ORDER BY ordinal",
         [template.version_id],
@@ -315,7 +360,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
           "模板没有审批节点。",
         );
       await connection.query(
-        "INSERT INTO approval_requests (id,organization_id,workspace_id,template_id,template_version_id,resource_type,resource_id,title,status,current_node_ordinal,requested_by,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,'pending',1,?,1,?,?)",
+        "INSERT INTO approval_requests (id,organization_id,workspace_id,template_id,template_version_id,resource_type,resource_id,title,decision_context_json,status,current_node_ordinal,requested_by,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,'pending',1,?,1,?,?)",
         [
           i.id,
           i.organizationId,
@@ -325,6 +370,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
           i.value.resource_type,
           i.value.resource_id,
           i.value.title,
+          JSON.stringify(decisionContext),
           i.actorId,
           now,
           now,
@@ -374,6 +420,9 @@ export class MySqlApprovalRepository implements ApprovalRepository {
           ...result,
           resource_type: i.value.resource_type,
           resource_id: i.value.resource_id,
+          evidence_complete: decisionContext.evidence.is_complete,
+          missing_items: decisionContext.evidence.missing_items,
+          rule_versions: decisionContext.rule_versions,
         },
         now,
       );
@@ -555,6 +604,266 @@ export class MySqlApprovalRepository implements ApprovalRepository {
       version: Number(r.version),
       created_at: iso(r.created_at),
       updated_at: iso(r.updated_at),
+    };
+  }
+  private async loadDecisionContext(
+    queryable: any,
+    input: {
+      organizationId: string;
+      workspaceId: string;
+      resourceType: string;
+      resourceId: string;
+      approvalTemplateVersion: number;
+    },
+    now: Date,
+    snapshotStatus: "captured" | "live_fallback",
+  ) {
+    if (input.resourceType === "task") {
+      const [rows] = await queryable.query(
+          `SELECT t.title,t.status,t.priority,t.progress_percent,t.due_at,
+                  profile.display_name assignee_name
+           FROM tasks t
+           LEFT JOIN user_profiles profile ON profile.user_id=t.assignee_id
+           WHERE t.id=? AND t.organization_id=? AND t.workspace_id=?
+           LIMIT 1`,
+          [input.resourceId, input.organizationId, input.workspaceId],
+        ),
+        task = rows[0];
+      return {
+        schema_version: 1,
+        snapshot_status: snapshotStatus,
+        captured_at: snapshotStatus === "captured" ? iso(now) : null,
+        observed_at: iso(now),
+        resource: {
+          type: "task",
+          id: input.resourceId,
+          label: task?.title ? String(task.title) : "关联任务",
+          route: `/tasks?task=${input.resourceId}`,
+        },
+        evidence: {
+          applicable: false,
+          complete: 0,
+          total: 0,
+          percent: null,
+          is_complete: null,
+          missing_items: [],
+          note: "任务审批未配置独立证据完整度规则。",
+          requirements: [],
+        },
+        rule_versions: {
+          approval_template: `v${input.approvalTemplateVersion}`,
+          scoring: null,
+          profit: null,
+        },
+        decision: null,
+        basis_items: task
+          ? [
+              { code: "task_status", label: "任务状态", value: task.status },
+              { code: "task_priority", label: "任务优先级", value: task.priority },
+              {
+                code: "task_progress",
+                label: "任务进度",
+                value: `${Number(task.progress_percent)}%`,
+              },
+              {
+                code: "task_assignee",
+                label: "任务负责人",
+                value: task.assignee_name
+                  ? String(task.assignee_name)
+                  : "未设置展示名称",
+              },
+              {
+                code: "task_due_at",
+                label: "任务期限",
+                value: iso(task.due_at),
+              },
+            ]
+          : [],
+        evidence_complete: 0,
+        evidence_total: 0,
+        missing_items: [],
+        rule_version: `approval-v${input.approvalTemplateVersion}`,
+        basis: ["任务状态、优先级、进度、负责人和期限"],
+      };
+    }
+    const [decisionRows] = await queryable.query(
+        `SELECT d.action,d.reason,d.opportunity_version,d.created_at decision_created_at,
+                o.id opportunity_id,o.name opportunity_name,o.recommendation_status,
+                o.risk_level,o.score_rule_version
+         FROM opportunity_decisions d
+         JOIN opportunities o
+           ON o.id=d.opportunity_id
+          AND o.organization_id=d.organization_id
+          AND o.workspace_id=d.workspace_id
+         WHERE d.id=? AND d.organization_id=? AND d.workspace_id=?
+         LIMIT 1`,
+        [input.resourceId, input.organizationId, input.workspaceId],
+      ),
+      decision = decisionRows[0];
+    if (!decision)
+      throw new ApprovalServiceError(
+        "approval_resource_not_found",
+        404,
+        "关联机会决策不存在，请刷新审批列表。",
+      );
+    const [scoreRows] = await queryable.query(
+        `SELECT status,coverage_percent,recommendation_status,
+                rule_version_code,missing_fields_json,scored_at
+         FROM opportunity_score_runs
+         WHERE opportunity_id=? AND organization_id=? AND workspace_id=?
+         ORDER BY scored_at DESC,id DESC
+         LIMIT 1`,
+        [decision.opportunity_id, input.organizationId, input.workspaceId],
+      ),
+      [profitRows] = await queryable.query(
+        `SELECT status,rule_version_code,missing_fields_json,calculated_at
+         FROM opportunity_profit_runs
+         WHERE opportunity_id=? AND organization_id=? AND workspace_id=?
+         ORDER BY calculated_at DESC,id DESC
+         LIMIT 1`,
+        [decision.opportunity_id, input.organizationId, input.workspaceId],
+      ),
+      [evidenceRows] = await queryable.query(
+        `SELECT COUNT(*) evidence_count,COUNT(DISTINCT provider_id) source_count
+         FROM opportunity_evidence_links
+         WHERE opportunity_id=? AND organization_id=? AND workspace_id=?`,
+        [decision.opportunity_id, input.organizationId, input.workspaceId],
+      ),
+      score = scoreRows[0],
+      profit = profitRows[0],
+      evidenceCount = Number(evidenceRows[0]?.evidence_count ?? 0),
+      sourceCount = Number(evidenceRows[0]?.source_count ?? 0),
+      scoreMissing = score ? parse<string[]>(score.missing_fields_json) : [],
+      profitMissing = profit
+        ? parse<string[]>(profit.missing_fields_json)
+        : [],
+      requirements = [
+        {
+          code: "market_evidence",
+          label: "市场证据",
+          complete: evidenceCount > 0,
+          detail: `${evidenceCount} 条证据，来自 ${sourceCount} 个来源`,
+          route: `/opportunities/${decision.opportunity_id}?tab=evidence`,
+        },
+        {
+          code: "scoring",
+          label: "评分依据",
+          complete: score?.status === "calculated",
+          detail: score
+            ? `覆盖 ${Number(score.coverage_percent)}%，缺失 ${scoreMissing.length} 项`
+            : "尚无评分运行",
+          route: `/opportunities/${decision.opportunity_id}?tab=overview`,
+        },
+        {
+          code: "profit",
+          label: "利润依据",
+          complete: profit?.status === "calculated",
+          detail: profit
+            ? profit.status === "calculated"
+              ? "利润输入与规则已完成计算"
+              : `缺失 ${profitMissing.length} 项利润输入`
+            : "尚无利润运行",
+          route: `/opportunities/${decision.opportunity_id}?tab=profit`,
+        },
+        {
+          code: "risk",
+          label: "风险识别",
+          complete: decision.risk_level !== "unknown",
+          detail:
+            decision.risk_level === "unknown"
+              ? "尚未形成风险等级"
+              : `风险等级 ${decision.risk_level}`,
+          route: `/opportunities/${decision.opportunity_id}?tab=risk`,
+        },
+      ],
+      complete = requirements.filter((item) => item.complete).length,
+      missingItems = requirements
+        .filter((item) => !item.complete)
+        .map((item) => item.label),
+      scoreVersion = score?.rule_version_code
+        ? String(score.rule_version_code)
+        : decision.score_rule_version
+          ? String(decision.score_rule_version)
+          : null,
+      profitVersion = profit?.rule_version_code
+        ? String(profit.rule_version_code)
+        : null;
+    return {
+      schema_version: 1,
+      snapshot_status: snapshotStatus,
+      captured_at: snapshotStatus === "captured" ? iso(now) : null,
+      observed_at: iso(now),
+      resource: {
+        type: "opportunity",
+        id: String(decision.opportunity_id),
+        label: String(decision.opportunity_name),
+        route: `/opportunities/${decision.opportunity_id}`,
+      },
+      evidence: {
+        applicable: true,
+        complete,
+        total: requirements.length,
+        percent: Math.round((complete / requirements.length) * 100),
+        is_complete: complete === requirements.length,
+        missing_items: missingItems,
+        note: null,
+        requirements,
+      },
+      rule_versions: {
+        approval_template: `v${input.approvalTemplateVersion}`,
+        scoring: scoreVersion,
+        profit: profitVersion,
+      },
+      decision: {
+        action: String(decision.action),
+        reason: String(decision.reason),
+        opportunity_version: Number(decision.opportunity_version),
+        created_at: iso(decision.decision_created_at),
+      },
+      basis_items: [
+        {
+          code: "requested_decision",
+          label: "申请决策",
+          value: String(decision.action),
+        },
+        {
+          code: "system_recommendation",
+          label: "系统建议",
+          value: String(
+            score?.recommendation_status ?? decision.recommendation_status,
+          ),
+        },
+        {
+          code: "score_coverage",
+          label: "评分覆盖",
+          value: score ? `${Number(score.coverage_percent)}%` : "尚未评分",
+        },
+        {
+          code: "profit_status",
+          label: "利润状态",
+          value: profit ? String(profit.status) : "not_calculated",
+        },
+        {
+          code: "risk_level",
+          label: "风险等级",
+          value: String(decision.risk_level),
+        },
+        {
+          code: "evidence_sources",
+          label: "来源证据",
+          value: `${evidenceCount} 条 / ${sourceCount} 个来源`,
+        },
+      ],
+      evidence_complete: complete,
+      evidence_total: requirements.length,
+      missing_items: missingItems,
+      rule_version: scoreVersion ?? `approval-v${input.approvalTemplateVersion}`,
+      basis: [
+        `申请决策：${String(decision.action)}`,
+        `系统建议：${String(score?.recommendation_status ?? decision.recommendation_status)}`,
+        `来源证据：${evidenceCount} 条 / ${sourceCount} 个来源`,
+        `风险等级：${String(decision.risk_level)}`,
+      ],
     };
   }
   private async ensureMember(org: string, workspace: string, user: string) {
