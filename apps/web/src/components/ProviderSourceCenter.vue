@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
 
-type ViewState =
-  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type ViewState = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface ProvisionedSource {
   id: string;
   code: string;
@@ -29,6 +28,25 @@ interface SourceItem {
   policy_note: string;
   provisioned: ProvisionedSource | null;
 }
+interface ParserSample {
+  id: string;
+  name: string;
+  baseline_parser_version: string;
+  last_replay_status: "never" | "passed" | "changed" | "failed";
+  last_replay_at: string | null;
+  created_at: string;
+}
+interface ParserSampleCandidate {
+  browser_job_id: string;
+  captured_at: string;
+  item_count: number;
+  parser_version: string;
+}
+interface ParserSampleReplay {
+  status: "passed" | "changed" | "failed";
+  diff: Array<{ path: string; before: unknown; after: unknown }>;
+  error_code: string | null;
+}
 
 const props = defineProps<{ apiBaseUrl: string }>();
 const state = ref<ViewState>("loading");
@@ -41,6 +59,15 @@ const requestId = ref("");
 const editing = ref<SourceItem | null>(null);
 const saving = ref(false);
 const testing = ref<string | null>(null);
+const sampleSource = ref<SourceItem | null>(null);
+const sampleLoading = ref(false);
+const sampleSaving = ref<string | null>(null);
+const sampleReplaying = ref<string | null>(null);
+const sampleOverview = reactive<{
+  samples: ParserSample[];
+  candidates: ParserSampleCandidate[];
+}>({ samples: [], candidates: [] });
+const latestReplay = ref<ParserSampleReplay | null>(null);
 const form = reactive({
   schedule_minutes: 15,
   timeout_ms: 20000,
@@ -64,12 +91,9 @@ const filtered = computed(() =>
 );
 const counts = computed(() => ({
   all: items.value.length,
-  automatic: items.value.filter((item) => item.availability === "automatic")
-    .length,
+  automatic: items.value.filter((item) => item.availability === "automatic").length,
   nonGoogle: items.value.filter(
-    (item) =>
-      item.availability === "automatic" &&
-      !item.target_url.includes("news.google.com"),
+    (item) => item.availability === "automatic" && !item.target_url.includes("news.google.com"),
   ).length,
   markets: new Set(items.value.flatMap((item) => item.markets)).size,
 }));
@@ -97,9 +121,7 @@ const statusText = (item: SourceItem) => {
         ? "已停用"
         : "等待同步";
   if (item.availability === "setup_required")
-    return item.access_mode === "authenticated_browser"
-      ? "需登录并验收解析"
-      : "等待解析验收";
+    return item.access_mode === "authenticated_browser" ? "需登录并验收解析" : "等待解析验收";
   return "手动维护";
 };
 const modeText = (value: string) =>
@@ -112,15 +134,20 @@ const modeText = (value: string) =>
       manual: "人工录入",
     }) as Record<string, string>
   )[value] ?? value;
+const replayText = (value: ParserSample["last_replay_status"] | ParserSampleReplay["status"]) =>
+  ({ never: "尚未回放", passed: "一致通过", changed: "发现差异", failed: "解析失败" })[value];
+const displayValue = (value: unknown) => {
+  const text = typeof value === "string" ? value : JSON.stringify(value);
+  return text == null ? "未提供" : text.length > 240 ? `${text.slice(0, 240)}…` : text;
+};
 
 async function load() {
   state.value = "loading";
   message.value = "";
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/provider-sources`,
-      { credentials: "include" },
-    );
+    const response = await fetch(`${props.apiBaseUrl}/platform/provider-sources`, {
+      credentials: "include",
+    });
     const body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? "";
     if (!response.ok) {
@@ -175,10 +202,9 @@ async function save() {
     }
     editing.value = null;
     await load();
-    message.value =
-      isAutomatic
-        ? "来源配置已保存；频率、超时、重试和启停状态不会再被启动同步覆盖。"
-        : "来源设置已保存；该来源完成解析合同验收前不会进入自动采集。";
+    message.value = isAutomatic
+      ? "来源配置已保存；频率、超时、重试和启停状态不会再被启动同步覆盖。"
+      : "来源设置已保存；该来源完成解析合同验收前不会进入自动采集。";
   } catch {
     message.value = "来源配置服务暂不可用，本次没有保存。";
   } finally {
@@ -217,6 +243,94 @@ async function testSource(item: SourceItem) {
     testing.value = null;
   }
 }
+async function loadParserSamples(item: SourceItem) {
+  if (!item.provisioned) return;
+  sampleSource.value = item;
+  sampleLoading.value = true;
+  latestReplay.value = null;
+  try {
+    const response = await fetch(
+      `${props.apiBaseUrl}/platform/provider-sources/${item.provisioned.id}/parser-samples`,
+      { credentials: "include" },
+    );
+    const body = await response.json().catch(() => null);
+    requestId.value = body?.request_id ?? requestId.value;
+    if (!response.ok) {
+      message.value = body?.error?.action_hint ?? "固定样本读取失败";
+      sampleSource.value = null;
+      return;
+    }
+    sampleOverview.samples = body.data?.samples ?? [];
+    sampleOverview.candidates = body.data?.candidates ?? [];
+  } catch {
+    message.value = "固定样本服务暂不可用。";
+    sampleSource.value = null;
+  } finally {
+    sampleLoading.value = false;
+  }
+}
+async function createParserSample(candidate: ParserSampleCandidate) {
+  if (!sampleSource.value?.provisioned) return;
+  sampleSaving.value = candidate.browser_job_id;
+  try {
+    const response = await fetch(
+      `${props.apiBaseUrl}/platform/provider-sources/${sampleSource.value.provisioned.id}/parser-samples`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: { "content-type": "application/json", "idempotency-key": crypto.randomUUID() },
+        body: JSON.stringify({
+          browser_job_id: candidate.browser_job_id,
+          name: `真实登录样本 ${new Date(candidate.captured_at).toLocaleString("zh-CN")}`,
+        }),
+      },
+    );
+    const body = await response.json().catch(() => null);
+    requestId.value = body?.request_id ?? requestId.value;
+    if (!response.ok) {
+      message.value = body?.error?.action_hint ?? "固定样本未保存";
+      return;
+    }
+    await loadParserSamples(sampleSource.value);
+    message.value = "已从真实登录作业固定样本；请执行差异回放后再启用来源。";
+  } catch {
+    message.value = "固定样本服务暂不可用。";
+  } finally {
+    sampleSaving.value = null;
+  }
+}
+async function replayParserSample(sample: ParserSample) {
+  if (!sampleSource.value?.provisioned) return;
+  sampleReplaying.value = sample.id;
+  latestReplay.value = null;
+  try {
+    const response = await fetch(
+      `${props.apiBaseUrl}/platform/provider-sources/${sampleSource.value.provisioned.id}/parser-samples/${sample.id}/replays`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: { "content-type": "application/json", "idempotency-key": crypto.randomUUID() },
+      },
+    );
+    const body = await response.json().catch(() => null);
+    requestId.value = body?.request_id ?? requestId.value;
+    if (!response.ok) {
+      message.value = body?.error?.action_hint ?? "固定样本回放失败";
+      return;
+    }
+    latestReplay.value = body.data;
+    await loadParserSamples(sampleSource.value);
+    latestReplay.value = body.data;
+    message.value =
+      body.data.status === "passed"
+        ? "固定样本与当前解析结果一致。"
+        : "回放已留存差异，来源继续保持停用。";
+  } catch {
+    message.value = "固定样本回放服务暂不可用。";
+  } finally {
+    sampleReplaying.value = null;
+  }
+}
 
 onMounted(load);
 </script>
@@ -228,7 +342,9 @@ onMounted(load);
         <p>热点来源</p>
         <h2>多平台、多国家来源已自动登记</h2>
         <span
-          >公开 RSS、论坛与电商内容直接由爬虫采集；需要登录的平台可保存浏览器档案，完成解析验收后才会进入自动采集，不需要配置官方 API。</span
+          >公开
+          RSS、论坛与电商内容直接由爬虫采集；需要登录的平台可保存浏览器档案，完成解析验收后才会进入自动采集，不需要配置官方
+          API。</span
         >
       </div>
       <a href="/platform-admin/providers">管理来源规则</a>
@@ -260,10 +376,9 @@ onMounted(load);
       </ol>
     </aside>
     <form class="source-filter" @submit.prevent>
-      <input
-        v-model="query"
-        placeholder="搜索 Amazon、eBay、Reddit、国家或来源网址"
-      /><select v-model="category">
+      <input v-model="query" placeholder="搜索 Amazon、eBay、Reddit、国家或来源网址" /><select
+        v-model="category"
+      >
         <option value="">全部类型</option>
         <option value="news">新闻</option>
         <option value="ecommerce">电商平台</option>
@@ -292,22 +407,13 @@ onMounted(load);
               : "来源服务暂不可用"
       }}</strong>
       <p>{{ message }}</p>
-      <button v-if="!['expired', 'forbidden'].includes(state)" @click="load">
-        重新加载
-      </button>
+      <button v-if="!['expired', 'forbidden'].includes(state)" @click="load">重新加载</button>
     </div>
     <section v-else class="source-list">
-      <article
-        v-for="item in filtered"
-        :key="item.code"
-        :data-availability="item.availability"
-      >
+      <article v-for="item in filtered" :key="item.code" :data-availability="item.availability">
         <header>
           <div>
-            <small
-              >{{ categoryText(item.category) }} ·
-              {{ item.markets.join(" / ") }}</small
-            >
+            <small>{{ categoryText(item.category) }} · {{ item.markets.join(" / ") }}</small>
             <h3>{{ item.name }}</h3>
           </div>
           <b>{{ statusText(item) }}</b>
@@ -344,9 +450,7 @@ onMounted(load);
           </div>
         </dl>
         <footer>
-          <span
-            >{{ item.languages.join(" / ") }} ·
-            {{ item.fields.length }} 类数据字段</span
+          <span>{{ item.languages.join(" / ") }} · {{ item.fields.length }} 类数据字段</span
           ><button
             v-if="
               item.provisioned &&
@@ -358,28 +462,24 @@ onMounted(load);
             @click="testSource(item)"
           >
             {{ testing === item.provisioned.id ? "测试中…" : "匿名测试" }}</button
-          ><button
-            v-if="item.provisioned"
-            type="button"
-            @click="beginEdit(item)"
-          >
+          ><button v-if="item.provisioned" type="button" @click="beginEdit(item)">
             编辑采集设置</button
           ><a
             v-if="item.access_mode === 'authenticated_browser'"
             :href="`/platform-admin/credentials?provider_code=${encodeURIComponent(item.code)}&mode=login`"
             >配置网页登录</a
-          ><span
-            v-if="
-              !item.provisioned &&
-              item.access_mode !== 'authenticated_browser'
-            "
+          ><button
+            v-if="item.code === '1688_search' && item.provisioned"
+            type="button"
+            @click="loadParserSamples(item)"
+          >
+            固定样本回放</button
+          ><span v-if="!item.provisioned && item.access_mode !== 'authenticated_browser'"
             >等待系统登记</span
           >
         </footer>
       </article>
-      <p v-if="!filtered.length" class="source-state">
-        没有符合筛选条件的来源。
-      </p>
+      <p v-if="!filtered.length" class="source-state">没有符合筛选条件的来源。</p>
     </section>
     <div
       v-if="editing"
@@ -394,13 +494,7 @@ onMounted(load);
             <p>编辑采集来源</p>
             <h3 id="source-edit-title">{{ editing.name }}</h3>
           </div>
-          <button
-            type="button"
-            aria-label="关闭来源编辑"
-            @click="editing = null"
-          >
-            ×
-          </button>
+          <button type="button" aria-label="关闭来源编辑" @click="editing = null">×</button>
         </header>
         <label
           >采集频率（分钟）<input
@@ -447,6 +541,82 @@ onMounted(load);
           </button>
         </footer>
       </form>
+    </div>
+    <div
+      v-if="sampleSource"
+      class="source-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="parser-sample-title"
+    >
+      <section class="parser-sample-panel">
+        <header>
+          <div>
+            <p>真实登录采集验收</p>
+            <h3 id="parser-sample-title">固定样本回放 · {{ sampleSource.name }}</h3>
+          </div>
+          <button type="button" aria-label="关闭固定样本回放" @click="sampleSource = null">
+            ×
+          </button>
+        </header>
+        <p>只能从同时保存截图、DOM 和结构化快照的真实浏览器作业固化；回放一致才允许启用来源。</p>
+        <div v-if="sampleLoading" class="source-state">正在读取固定样本…</div>
+        <template v-else>
+          <section>
+            <h4>可固定的真实作业</h4>
+            <article v-for="candidate in sampleOverview.candidates" :key="candidate.browser_job_id">
+              <div>
+                <strong>{{ new Date(candidate.captured_at).toLocaleString("zh-CN") }}</strong>
+                <span>{{ candidate.item_count }} 条结果</span>
+              </div>
+              <button
+                type="button"
+                :disabled="sampleSaving === candidate.browser_job_id"
+                @click="createParserSample(candidate)"
+              >
+                {{ sampleSaving === candidate.browser_job_id ? "保存中…" : "固定为样本" }}
+              </button>
+              <details>
+                <summary>技术详情</summary>
+                <code>{{ candidate.parser_version }}</code>
+              </details>
+            </article>
+            <p v-if="!sampleOverview.candidates.length">暂无合格候选；先完成一条真实登录采集。</p>
+          </section>
+          <section>
+            <h4>已固定样本</h4>
+            <article v-for="sample in sampleOverview.samples" :key="sample.id">
+              <div>
+                <strong>{{ sample.name }}</strong>
+                <span>{{ replayText(sample.last_replay_status) }}</span>
+              </div>
+              <button
+                type="button"
+                :disabled="sampleReplaying === sample.id"
+                @click="replayParserSample(sample)"
+              >
+                {{ sampleReplaying === sample.id ? "回放中…" : "运行差异回放" }}
+              </button>
+              <details>
+                <summary>技术详情</summary>
+                <code>{{ sample.baseline_parser_version }}</code>
+              </details>
+            </article>
+            <p v-if="!sampleOverview.samples.length">还没有固定样本。</p>
+          </section>
+          <section v-if="latestReplay" class="parser-diff" :data-status="latestReplay.status">
+            <h4>本次回放：{{ replayText(latestReplay.status) }}</h4>
+            <p v-if="latestReplay.error_code">解析器未能读取固定样本，来源继续停用。</p>
+            <ol v-else-if="latestReplay.diff.length">
+              <li v-for="item in latestReplay.diff" :key="item.path">
+                <code>{{ item.path }}</code>
+                <span>{{ displayValue(item.before) }} → {{ displayValue(item.after) }}</span>
+              </li>
+            </ol>
+            <p v-else>字段、路径与结果顺序均与基线一致。</p>
+          </section>
+        </template>
+      </section>
     </div>
   </section>
 </template>
@@ -545,10 +715,9 @@ onMounted(load);
 }
 .source-list article {
   display: grid;
-  grid-template-columns: minmax(220px, 1.4fr) minmax(200px, 1fr) minmax(
-      320px,
-      1.5fr
-    ) auto;
+  grid-template-columns:
+    minmax(220px, 1.4fr) minmax(200px, 1fr) minmax(320px, 1.5fr)
+    auto;
   align-items: center;
   gap: 16px;
   padding: 16px 18px;
@@ -655,6 +824,54 @@ onMounted(load);
   border-radius: 18px;
   background: var(--so-bg-elevated);
   box-shadow: var(--so-shadow);
+}
+.parser-sample-panel {
+  width: min(820px, 100%);
+  max-height: min(760px, 90vh);
+  overflow: auto;
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid var(--so-border);
+  border-radius: 18px;
+  background: var(--so-bg-elevated);
+  color: var(--so-text);
+}
+.parser-sample-panel > header,
+.parser-sample-panel article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.parser-sample-panel article {
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+}
+.parser-sample-panel article div,
+.parser-diff li {
+  display: grid;
+  gap: 4px;
+}
+.parser-sample-panel span,
+.parser-sample-panel > p {
+  color: var(--so-text-muted);
+}
+.parser-diff {
+  padding: 14px;
+  border-left: 4px solid var(--so-success);
+  background: var(--so-panel-soft);
+}
+.parser-diff[data-status="changed"],
+.parser-diff[data-status="failed"] {
+  border-left-color: var(--so-warning);
+}
+.parser-diff ol {
+  display: grid;
+  gap: 10px;
+  padding-left: 24px;
 }
 .source-modal header,
 .source-modal footer {

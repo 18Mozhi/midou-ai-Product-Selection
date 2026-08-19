@@ -8,6 +8,7 @@ import { join } from "node:path";
 import { buildApp } from "../../apps/api/dist/app.js";
 import { MySqlProviderSourceRepository } from "../../apps/api/dist/mysql-provider-source-repository.js";
 import { ProviderSourceServiceError } from "../../apps/api/dist/provider-source-service.js";
+import { ProviderSourceService } from "../../apps/api/dist/provider-source-service.js";
 import { MySqlAuthenticatedBrowserJobClient } from "../../apps/worker/dist/authenticated-browser-job-client.js";
 import { MySqlEvidencePersistence } from "../../apps/worker/dist/evidence-persistence.js";
 import {
@@ -268,12 +269,14 @@ test("internal browser job API returns encrypted assignment only to the crawler 
 
 test("1688 cannot be enabled before real logged-in fixed-sample replay is accepted", async () => {
   let queryIndex = 0;
+  const sqlStatements = [];
   const connection = {
     beginTransaction: async () => {},
     commit: async () => {},
     rollback: async () => {},
     release: () => {},
-    query: async () => {
+    query: async (sql) => {
+      sqlStatements.push(sql);
       queryIndex += 1;
       if (queryIndex === 1) return [[]];
       return [
@@ -316,5 +319,132 @@ test("1688 cannot be enabled before real logged-in fixed-sample replay is accept
       error instanceof ProviderSourceServiceError &&
       error.code === "provider_source_setup_required" &&
       error.statusCode === 409,
+  );
+  const acceptanceSql = sqlStatements.find((sql) => sql.includes("last_replay_status"));
+  assert.match(acceptanceSql, /last_replay_status='passed'/);
+  assert.match(acceptanceSql, /r\.created_at=s\.last_replay_at/);
+});
+
+test("real browser snapshots can be fixed and replayed against the current 1688 parser", async () => {
+  let stored = null;
+  const repository = {
+      parserSampleByOperation: async () => null,
+      parserReplayByOperation: async () => null,
+      parserSampleCandidate: async () => ({
+        browser_job_id: ids.job,
+        organization_id: ids.org,
+        workspace_id: ids.workspace,
+        captured_at: "2026-08-20T01:00:00.000Z",
+        item_count: 1,
+        parser_version: ALIBABA_1688_BROWSER_PARSER_VERSION,
+        snapshots: { search: searchSnapshot },
+      }),
+      createParserSample: async (input) => {
+        stored = input;
+        return {
+          id: input.sampleId,
+          provider_id: input.providerId,
+          browser_job_id: input.browserJobId,
+          name: input.name,
+          baseline_parser_version: input.parserVersion,
+          last_replay_status: "never",
+          last_replay_at: null,
+          created_at: input.now.toISOString(),
+        };
+      },
+      loadParserSample: async () => ({
+        sample: { id: stored.sampleId },
+        snapshots: stored.snapshots,
+        baselineOutput: stored.baselineOutput,
+        providerCode: "1688_search",
+        parserVersion: ALIBABA_1688_BROWSER_PARSER_VERSION,
+      }),
+      recordParserReplay: async (input) => input,
+    },
+    service = new ProviderSourceService(repository, () => new Date("2026-08-20T02:00:00.000Z")),
+    context = {
+      actorId: ids.actor,
+      idempotencyKey: "parser-sample-key",
+      requestId: "parser-sample-request",
+      traceId: "parser-sample-trace",
+    },
+    sample = await service.createParserSample(
+      ids.provider,
+      { browser_job_id: ids.job, name: "真实登录样本" },
+      context,
+    );
+  assert.equal(sample.baseline_parser_version, ALIBABA_1688_BROWSER_PARSER_VERSION);
+  assert.equal(stored.baselineOutput[0].fields.title, "桌面灯");
+  repository.parserSampleByOperation = async () => sample;
+  repository.parserSampleCandidate = async () => {
+    throw new Error("idempotent retry must not reload the consumed candidate");
+  };
+  assert.equal(
+    await service.createParserSample(
+      ids.provider,
+      { browser_job_id: ids.job, name: "真实登录样本" },
+      context,
+    ),
+    sample,
+  );
+  const replay = await service.replayParserSample(ids.provider, sample.id, {
+    ...context,
+    idempotencyKey: "parser-replay-key",
+  });
+  assert.equal(replay.status, "passed");
+  assert.deepEqual(replay.diff, []);
+  repository.parserReplayByOperation = async () => replay;
+  const loadParserSample = repository.loadParserSample;
+  repository.loadParserSample = async () => {
+    throw new Error("idempotent retry must not reload the parser sample");
+  };
+  assert.equal(
+    await service.replayParserSample(ids.provider, sample.id, {
+      ...context,
+      idempotencyKey: "parser-replay-key",
+    }),
+    replay,
+  );
+  repository.parserReplayByOperation = async () => null;
+  repository.loadParserSample = loadParserSample;
+  stored.baselineOutput[0].fields.title = "旧标题";
+  const changed = await service.replayParserSample(ids.provider, sample.id, {
+    ...context,
+    idempotencyKey: "parser-replay-changed-key",
+  });
+  assert.equal(changed.status, "changed");
+  assert.deepEqual(changed.diff, [
+    { path: "$[0].fields.title", before: "旧标题", after: "桌面灯" },
+  ]);
+});
+
+test("parser sample creation rejects evidence produced by a different parser version", async () => {
+  const service = new ProviderSourceService({
+    parserSampleByOperation: async () => null,
+    parserSampleCandidate: async () => ({
+      browser_job_id: ids.job,
+      organization_id: ids.org,
+      workspace_id: ids.workspace,
+      captured_at: "2026-08-20T01:00:00.000Z",
+      item_count: 1,
+      parser_version: "stale-parser-v0",
+      snapshots: { search: searchSnapshot },
+    }),
+  });
+  await assert.rejects(
+    () =>
+      service.createParserSample(
+        ids.provider,
+        { browser_job_id: ids.job, name: "旧版真实样本" },
+        {
+          actorId: ids.actor,
+          idempotencyKey: "stale-parser-key",
+          requestId: "stale-parser-request",
+          traceId: "stale-parser-trace",
+        },
+      ),
+    (error) =>
+      error instanceof ProviderSourceServiceError &&
+      error.code === "parser_sample_parser_unavailable",
   );
 });

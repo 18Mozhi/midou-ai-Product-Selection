@@ -1,6 +1,8 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type {
+  ParserSample,
+  ParserSampleReplay,
   ProviderSourceReplay,
   ProviderSourceRepository,
   ProvisionedSource,
@@ -30,6 +32,29 @@ const replay = (row: RowDataPacket): ProviderSourceReplay => ({
   created_at: iso(row.created_at),
   updated_at: iso(row.updated_at),
 });
+const parserSample = (row: RowDataPacket): ParserSample => ({
+  id: String(row.id),
+  provider_id: String(row.provider_id),
+  browser_job_id: String(row.browser_job_id),
+  name: String(row.name),
+  baseline_parser_version: String(row.baseline_parser_version),
+  last_replay_status: row.last_replay_status,
+  last_replay_at: row.last_replay_at == null ? null : iso(row.last_replay_at),
+  created_at: iso(row.created_at),
+});
+const parserReplay = (row: RowDataPacket): ParserSampleReplay => ({
+  id: String(row.id),
+  sample_id: String(row.sample_id),
+  provider_id: String(row.provider_id),
+  parser_version: String(row.parser_version),
+  status: row.status,
+  diff: typeof row.diff_json === "string" ? JSON.parse(row.diff_json) : row.diff_json,
+  error_code: row.error_code == null ? null : String(row.error_code),
+  request_id: String(row.request_id),
+  trace_id: String(row.trace_id),
+  created_at: iso(row.created_at),
+});
+const json = (value: unknown) => (typeof value === "string" ? JSON.parse(value) : value);
 export class MySqlProviderSourceRepository implements ProviderSourceRepository {
   constructor(private readonly pool: Pool) {}
   async listProvisioned(codes: string[]) {
@@ -39,6 +64,299 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
       codes,
     );
     return rows.map(provisioned);
+  }
+  async parserSampleOverview(providerId: string) {
+    const [samples] = await this.pool.query<RowDataPacket[]>(
+        [
+          "SELECT id,provider_id,browser_job_id,name,baseline_parser_version,last_replay_status,last_replay_at,",
+          "created_at FROM provider_parser_samples WHERE provider_id=? AND status='active' ORDER BY created_at DESC",
+        ].join(""),
+        [providerId],
+      ),
+      [candidates] = await this.pool.query<RowDataPacket[]>(
+        [
+          "SELECT j.id browser_job_id,j.organization_id,j.workspace_id,MIN(a.captured_at) captured_at,",
+          "r.item_count,MIN(a.parser_version) parser_version FROM browser_collection_jobs j JOIN ",
+          "crawler_browser_runs r ON r.id=j.crawler_run_id JOIN browser_evidence_artifacts a ON ",
+          "a.browser_job_id=j.id AND a.status='active' LEFT JOIN provider_parser_samples s ON ",
+          "s.browser_job_id=j.id WHERE j.provider_id=? AND j.status='succeeded' AND s.id IS NULL AND ",
+          "JSON_EXTRACT(j.result_json,'$.snapshots') IS NOT NULL GROUP BY j.id,j.organization_id,j.workspace_id,",
+          "r.item_count HAVING COUNT(DISTINCT a.kind)=2 AND COUNT(DISTINCT a.parser_version)=1 ",
+          "ORDER BY captured_at DESC LIMIT 20",
+        ].join(""),
+        [providerId],
+      );
+    return {
+      samples: samples.map(parserSample),
+      candidates: candidates.map((row) => ({
+        browser_job_id: String(row.browser_job_id),
+        organization_id: String(row.organization_id),
+        workspace_id: String(row.workspace_id),
+        captured_at: iso(row.captured_at),
+        item_count: Number(row.item_count),
+        parser_version: String(row.parser_version),
+      })),
+    };
+  }
+  async parserSampleByOperation(actorId: string, route: string, idempotencyKey: string) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      [
+        "SELECT s.* FROM provider_parser_sample_operations o JOIN provider_parser_samples s ON ",
+        "s.id=o.sample_id WHERE o.actor_id=? AND o.route=? AND o.idempotency_key=? LIMIT 1",
+      ].join(""),
+      [actorId, route, idempotencyKey],
+    );
+    return rows[0] ? parserSample(rows[0]) : null;
+  }
+  async parserReplayByOperation(actorId: string, route: string, idempotencyKey: string) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      [
+        "SELECT r.* FROM provider_parser_sample_operations o JOIN provider_parser_sample_replay_runs r ON ",
+        "r.id=o.replay_run_id WHERE o.actor_id=? AND o.route=? AND o.idempotency_key=? LIMIT 1",
+      ].join(""),
+      [actorId, route, idempotencyKey],
+    );
+    return rows[0] ? parserReplay(rows[0]) : null;
+  }
+  async parserSampleCandidate(providerId: string, browserJobId: string) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      [
+        "SELECT j.id browser_job_id,j.organization_id,j.workspace_id,j.result_json,MIN(a.captured_at) captured_at,",
+        "r.item_count,MIN(a.parser_version) parser_version FROM browser_collection_jobs j JOIN ",
+        "crawler_browser_runs r ON r.id=j.crawler_run_id JOIN browser_evidence_artifacts a ON ",
+        "a.browser_job_id=j.id AND a.status='active' LEFT JOIN provider_parser_samples s ON ",
+        "s.browser_job_id=j.id WHERE j.provider_id=? AND j.id=? AND j.status='succeeded' AND s.id IS NULL AND ",
+        "JSON_EXTRACT(j.result_json,'$.snapshots') IS NOT NULL GROUP BY j.id,j.organization_id,j.workspace_id,",
+        "j.result_json,r.item_count HAVING COUNT(DISTINCT a.kind)=2 AND ",
+        "COUNT(DISTINCT a.parser_version)=1 LIMIT 1",
+      ].join(""),
+      [providerId, browserJobId],
+    );
+    const row = rows[0];
+    if (!row) return null;
+    const result = json(row.result_json) as Record<string, unknown>;
+    return {
+      browser_job_id: String(row.browser_job_id),
+      organization_id: String(row.organization_id),
+      workspace_id: String(row.workspace_id),
+      captured_at: iso(row.captured_at),
+      item_count: Number(row.item_count),
+      parser_version: String(row.parser_version),
+      snapshots: result.snapshots,
+    };
+  }
+  async createParserSample(input: Parameters<ProviderSourceRepository["createParserSample"]>[0]) {
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      const [operations] = await c.query<RowDataPacket[]>(
+        [
+          "SELECT s.* FROM provider_parser_sample_operations o JOIN provider_parser_samples s ON s.id=o.sample_id ",
+          "WHERE o.actor_id=? AND o.route=? AND o.idempotency_key=? LIMIT 1",
+        ].join(""),
+        [input.actorId, input.route, input.idempotencyKey],
+      );
+      if (operations[0]) {
+        await c.commit();
+        return parserSample(operations[0]);
+      }
+      const [jobs] = await c.query<RowDataPacket[]>(
+        [
+          "SELECT j.id FROM browser_collection_jobs j WHERE j.id=? AND j.provider_id=? AND ",
+          "j.organization_id=? AND j.workspace_id=? AND j.status='succeeded' AND ",
+          "JSON_EXTRACT(j.result_json,'$.snapshots') IS NOT NULL AND ",
+          "(SELECT COUNT(DISTINCT a.kind) FROM browser_evidence_artifacts a WHERE ",
+          "a.browser_job_id=j.id AND a.status='active')=2 AND ",
+          "(SELECT COUNT(DISTINCT a.parser_version) FROM browser_evidence_artifacts a WHERE ",
+          "a.browser_job_id=j.id AND a.status='active')=1 AND ",
+          "(SELECT MIN(a.parser_version) FROM browser_evidence_artifacts a WHERE ",
+          "a.browser_job_id=j.id AND a.status='active')=? FOR UPDATE",
+        ].join(""),
+        [
+          input.browserJobId,
+          input.providerId,
+          input.organizationId,
+          input.workspaceId,
+          input.parserVersion,
+        ],
+      );
+      if (!jobs[0])
+        throw new ProviderSourceServiceError(
+          "parser_sample_candidate_changed",
+          409,
+          "候选采集已变化，刷新后重新选择。",
+        );
+      await c.query(
+        [
+          "INSERT INTO provider_parser_samples (id,organization_id,workspace_id,provider_id,browser_job_id,name,",
+          "input_sha256,snapshots_json,baseline_output_json,baseline_output_sha256,baseline_parser_version,",
+          "last_replay_status,last_replay_at,status,created_by,created_at,updated_at) VALUES ",
+          "(?,?,?,?,?,?,?,?,?,?,?,'never',NULL,'active',?,?,?)",
+        ].join(""),
+        [
+          input.sampleId,
+          input.organizationId,
+          input.workspaceId,
+          input.providerId,
+          input.browserJobId,
+          input.name,
+          input.inputSha256,
+          JSON.stringify(input.snapshots),
+          JSON.stringify(input.baselineOutput),
+          input.baselineOutputSha256,
+          input.parserVersion,
+          input.actorId,
+          input.now,
+          input.now,
+        ],
+      );
+      await c.query(
+        "INSERT INTO provider_parser_sample_operations (id,actor_id,route,idempotency_key,sample_id,replay_run_id,created_at) VALUES (?,?,?,?,?,NULL,?)",
+        [randomUUID(), input.actorId, input.route, input.idempotencyKey, input.sampleId, input.now],
+      );
+      await this.parserSampleAudit(c, input, "provider.parser_sample.created", input.sampleId, {
+        browser_job_id: input.browserJobId,
+        parser_version: input.parserVersion,
+      });
+      await c.commit();
+      return parserSample({
+        id: input.sampleId,
+        provider_id: input.providerId,
+        browser_job_id: input.browserJobId,
+        name: input.name,
+        baseline_parser_version: input.parserVersion,
+        last_replay_status: "never",
+        last_replay_at: null,
+        created_at: input.now,
+      } as RowDataPacket);
+    } catch (error) {
+      await c.rollback();
+      if (error instanceof ProviderSourceServiceError) throw error;
+      if ((error as { code?: string }).code === "ER_DUP_ENTRY")
+        throw new ProviderSourceServiceError(
+          "parser_sample_duplicate",
+          409,
+          "该真实采集已固定为样本，刷新列表后查看。",
+        );
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  async loadParserSample(providerId: string, sampleId: string) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      [
+        "SELECT s.*,p.code provider_code,p.parser_version current_parser_version FROM provider_parser_samples s ",
+        "JOIN providers p ON p.id=s.provider_id WHERE s.id=? AND s.provider_id=? AND s.status='active' LIMIT 1",
+      ].join(""),
+      [sampleId, providerId],
+    );
+    const row = rows[0];
+    return row
+      ? {
+          sample: parserSample(row),
+          snapshots: json(row.snapshots_json),
+          baselineOutput: json(row.baseline_output_json),
+          providerCode: String(row.provider_code),
+          parserVersion: String(row.current_parser_version),
+        }
+      : null;
+  }
+  async recordParserReplay(input: Parameters<ProviderSourceRepository["recordParserReplay"]>[0]) {
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      const [operations] = await c.query<RowDataPacket[]>(
+        [
+          "SELECT r.* FROM provider_parser_sample_operations o JOIN provider_parser_sample_replay_runs r ON ",
+          "r.id=o.replay_run_id WHERE o.actor_id=? AND o.route=? AND o.idempotency_key=? LIMIT 1",
+        ].join(""),
+        [input.actorId, input.route, input.idempotencyKey],
+      );
+      if (operations[0]) {
+        await c.commit();
+        return parserReplay(operations[0]);
+      }
+      const [samples] = await c.query<RowDataPacket[]>(
+        "SELECT id FROM provider_parser_samples WHERE id=? AND provider_id=? AND status='active' FOR UPDATE",
+        [input.sampleId, input.providerId],
+      );
+      if (!samples[0])
+        throw new ProviderSourceServiceError(
+          "parser_sample_not_found",
+          404,
+          "刷新固定样本后重试。",
+        );
+      await c.query(
+        [
+          "INSERT INTO provider_parser_sample_replay_runs (id,sample_id,provider_id,parser_version,status,",
+          "output_sha256,diff_json,error_code,request_id,trace_id,created_by,created_at) ",
+          "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+        ].join(""),
+        [
+          input.runId,
+          input.sampleId,
+          input.providerId,
+          input.parserVersion,
+          input.status,
+          input.outputSha256,
+          JSON.stringify(input.diff),
+          input.errorCode,
+          input.requestId,
+          input.traceId,
+          input.actorId,
+          input.now,
+        ],
+      );
+      await c.query(
+        "UPDATE provider_parser_samples SET last_replay_status=?,last_replay_at=?,updated_at=? WHERE id=?",
+        [input.status, input.now, input.now, input.sampleId],
+      );
+      await c.query(
+        "INSERT INTO provider_parser_sample_operations (id,actor_id,route,idempotency_key,sample_id,replay_run_id,created_at) VALUES (?,?,?,?,?,?,?)",
+        [
+          randomUUID(),
+          input.actorId,
+          input.route,
+          input.idempotencyKey,
+          input.sampleId,
+          input.runId,
+          input.now,
+        ],
+      );
+      await this.parserSampleAudit(c, input, "provider.parser_sample.replayed", input.sampleId, {
+        replay_run_id: input.runId,
+        parser_version: input.parserVersion,
+        status: input.status,
+        difference_count: input.diff.length,
+        error_code: input.errorCode,
+      });
+      await c.commit();
+      return parserReplay({
+        id: input.runId,
+        sample_id: input.sampleId,
+        provider_id: input.providerId,
+        parser_version: input.parserVersion,
+        status: input.status,
+        diff_json: input.diff,
+        error_code: input.errorCode,
+        request_id: input.requestId,
+        trace_id: input.traceId,
+        created_at: input.now,
+      } as RowDataPacket);
+    } catch (error) {
+      await c.rollback();
+      if (error instanceof ProviderSourceServiceError) throw error;
+      if ((error as { code?: string }).code === "ER_DUP_ENTRY")
+        throw new ProviderSourceServiceError(
+          "parser_sample_replay_conflict",
+          409,
+          "使用原 Idempotency-Key 读取结果，或刷新后重试。",
+        );
+      throw error;
+    } finally {
+      c.release();
+    }
   }
   async syncCatalog(input: Parameters<ProviderSourceRepository["syncCatalog"]>[0]) {
     const c = await this.pool.getConnection();
@@ -651,12 +969,23 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
         current = rows[0];
       if (!current)
         throw new ProviderSourceServiceError("provider_not_found", 404, "刷新来源目录后重试。");
-      if (String(current.code) === "1688_search" && input.status === "enabled")
-        throw new ProviderSourceServiceError(
-          "provider_source_setup_required",
-          409,
-          "先用真实登录档案完成 1688 固定样本字段回放验收；当前来源只能保持停用。",
+      if (String(current.code) === "1688_search" && input.status === "enabled") {
+        const [acceptance] = await c.query<RowDataPacket[]>(
+          [
+            "SELECT COUNT(*) count FROM provider_parser_samples s WHERE s.provider_id=? AND ",
+            "s.status='active' AND s.last_replay_status='passed' AND EXISTS (SELECT 1 FROM ",
+            "provider_parser_sample_replay_runs r WHERE r.sample_id=s.id AND r.parser_version=? AND ",
+            "r.status='passed' AND r.created_at=s.last_replay_at)",
+          ].join(""),
+          [input.providerId, current.parser_version],
         );
+        if (Number(acceptance[0]?.count ?? 0) < 1)
+          throw new ProviderSourceServiceError(
+            "provider_source_setup_required",
+            409,
+            "先用真实登录档案完成 1688 固定样本字段回放验收；当前来源只能保持停用。",
+          );
+      }
       if (Number(current.version) !== input.expectedVersion)
         throw new ProviderSourceServiceError(
           "provider_version_conflict",
@@ -790,5 +1119,36 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
       [actorId, route, key],
     );
     return rows[0] ? replay(rows[0]) : null;
+  }
+  private parserSampleAudit(
+    c: PoolConnection,
+    input: {
+      actorId: string;
+      providerId: string;
+      requestId: string;
+      traceId: string;
+      now: Date;
+    },
+    action: string,
+    resourceId: string,
+    metadata: Record<string, unknown>,
+  ) {
+    return c.query(
+      [
+        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,",
+        "resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) ",
+        "VALUES(?,NULL,NULL,?,?,'provider_parser_sample',?,'succeeded',?,?,?,?,1)",
+      ].join(""),
+      [
+        randomUUID(),
+        input.actorId,
+        action,
+        resourceId,
+        input.requestId,
+        input.traceId,
+        JSON.stringify({ provider_id: input.providerId, ...metadata }),
+        input.now,
+      ],
+    );
   }
 }

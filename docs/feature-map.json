@@ -837,12 +837,17 @@
         "../apps/worker/src/automatic-source-scheduler.ts",
         "../apps/web/src/components/ProviderSourceCenter.vue",
         "../database/migrations/0038_remove_official_api_provider_mode.up.sql",
-        "../database/migrations/0043_trend_rule_collection_schedule.up.sql"
+        "../database/migrations/0043_trend_rule_collection_schedule.up.sql",
+        "../database/migrations/0051a_provider_parser_samples.up.sql",
+        "../database/migrations/0051b_provider_parser_sample_replay_runs.up.sql",
+        "../database/migrations/0051c_provider_parser_sample_operations.up.sql"
       ],
       "routes": [
         "/platform-admin/providers/sources",
         "/api/v1/platform/provider-sources",
         "/api/v1/platform/provider-sources/{providerId}/configuration",
+        "/api/v1/platform/provider-sources/{providerId}/parser-samples",
+        "/api/v1/platform/provider-sources/{providerId}/parser-samples/{sampleId}/replays",
         "/api/v1/platform/provider-sources/{code}/provision",
         "/api/v1/platform/provider-sources/{providerId}/replays",
         "/api/v1/provider-sources/refresh"
@@ -863,8 +868,8 @@
       "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; 1688 now has a business-linked Worker to Python job claim/heartbeat/complete chain plus fail-closed browser-output schemas, but its live logged-in field extractor has not passed fixed-sample replay, so it remains setup_required and disabled; official_api is removed from the runtime contract and migrated to public_page; no source fabricates platform data",
       "outboundBoundary": "Every automatic URL and proxy host is derived from the code-owned source catalog; the optional Baota-restricted project HTTP CONNECT proxy accepts only those exact HTTPS hosts without setting global HTTP_PROXY or HTTPS_PROXY; Google News rejects redirects, CSV uses inline content, and callers cannot supply an outbound URL or proxy",
       "limits": "Google RSS 2MB and 20 persisted records per task; Amazon Made-in-China and EC21 public pages 5MB and 20 product records per source task; CSV 1MB exact 8-column header 100 parsed rows and 20 persisted records per task; 1688 browser snapshots accept at most 100 search items and 250KB of bounded DOM evidence per record, with exact HTTPS 1688 host and field-path validation",
-      "permission": "provider:configure for catalog/provision; collection:replay for scoped replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
-      "persistence": "MySQL 5.7 automatic_source_schedules, per-rule collection interval/cursor/last-task state and provider_refresh_operations plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
+      "permission": "provider:configure for catalog, provision and fixing eligible real parser samples; collection:replay for scoped source and fixed-sample replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
+      "persistence": "MySQL 5.7 automatic_source_schedules, provider_refresh_operations, immutable real-job parser samples and replay differences plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
       "parserDriftBoundary": "source_changed transactionally disables the enabled Provider before the required collection source fails; provider version and platform audit preserve parser version, source code and correlation, and only an operator may restore the source after parser and replay verification",
       "liveVerificationCleanup": "random m03-07 example.test scope only; delete M07-06 collection_task_evidence_links before evidence/task/provider principals and fail closed unless provider, workspace, organization and user are all absent",
       "configuration": [

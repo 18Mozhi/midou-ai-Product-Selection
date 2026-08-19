@@ -696,6 +696,8 @@ MySQL 5.7 保存组织/工作区范围化的原始证据元数据、规范记录
 
 浏览器作业的证据计划必须由代码携带解析版本。真实 Playwright 运行在首个列表页保存受限 DOM 片段与 JPEG 截图，完成结果携带 SHA-256 后由 Worker 再校验并写入中国境内 `EVIDENCE_ROOT`；`browser_evidence_artifacts` 把制品关联回浏览器作业、业务任务、子查询和 Provider。该证据链不等于字段解析验收，固定样本差异回放未通过前仍不得启用 1688 自动来源。
 
+固定样本必须来自同时具备结构化快照、截图、DOM 片段与一致解析版本的成功真实浏览器作业，客户端不能提交任意样本 JSON。平台保存不可变快照、基线、哈希和逐次回放差异；1688 只在至少一个活动样本对当前解析版本的最近一次回放为通过时允许启用。当前真实 Playwright 尚未生成结构化快照，因此回放基础设施已交付但没有合格生产候选，来源继续停用。
+
 当惠州出口不能直连 Google News 时，只允许在 ScoutOps 的宝塔 Node API、Node Worker 和有限来源任务中注入 `PROVIDER_PROXY_*` 项目配置。代码仅对固定 `news.google.com` HTTPS 请求建立带 Basic 认证的 HTTP CONNECT，其他 Provider、AI、API 请求和系统进程继续直连；禁止设置全局 `HTTP_PROXY`/`HTTPS_PROXY`，禁止将代理地址或凭证下发浏览器、写入 Provider DTO、日志或 Git。代理不能放宽 10 秒健康门、2 MB 响应和每任务 20 条限制。
 
 #### 全网热点与 100+ 来源纠偏基线（2026-08-18）

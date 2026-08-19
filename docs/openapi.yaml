@@ -3930,6 +3930,61 @@ paths:
         "404": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
         "503": { $ref: "#/components/responses/Error" }
+  /platform/provider-sources/{providerId}/parser-samples:
+    get:
+      summary: List fixed parser samples and eligible real browser jobs
+      description: Requires provider:configure. Candidates exist only for succeeded browser jobs that contain structured snapshots plus active screenshot and DOM evidence from one parser version.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
+    post:
+      summary: Fix a real logged-in browser result as a parser sample
+      description: Requires provider:configure, same-origin Origin and Idempotency-Key. The server derives snapshots and baseline output from the selected completed browser job; arbitrary client JSON cannot become a production sample.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [browser_job_id, name]
+              properties:
+                browser_job_id: { type: string, format: uuid }
+                name: { type: string, minLength: 2, maxLength: 120 }
+      responses:
+        "201": { $ref: "#/components/responses/Success" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
+  /platform/provider-sources/{providerId}/parser-samples/{sampleId}/replays:
+    post:
+      summary: Replay one fixed sample and persist bounded field differences
+      description: Requires collection:replay, same-origin Origin and Idempotency-Key. Enabling 1688 accepts only a sample whose latest replay passed on the current parser version.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: sampleId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      responses:
+        "201": { $ref: "#/components/responses/Success" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /platform/provider-sources/{code}/provision:
     post:
       summary: Provision one fixed built-in source as disabled

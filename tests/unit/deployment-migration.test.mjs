@@ -17,6 +17,9 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /0048_browser_collection_jobs\.up\.sql/);
   assert.match(deploy, /0049_credential_renewal_auto_replay\.up\.sql/);
   assert.match(deploy, /0050_browser_evidence_artifacts\.up\.sql/);
+  assert.match(deploy, /0051a_provider_parser_samples\.up\.sql/);
+  assert.match(deploy, /0051b_provider_parser_sample_replay_runs\.up\.sql/);
+  assert.match(deploy, /0051c_provider_parser_sample_operations\.up\.sql/);
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
   assert.match(deploy, /remote_python\(client, panel_deploy_source/);
   assert.ok(
@@ -36,6 +39,9 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     "0048_browser_collection_jobs.up.sql",
     "0049_credential_renewal_auto_replay.up.sql",
     "0050_browser_evidence_artifacts.up.sql",
+    "0051a_provider_parser_samples.up.sql",
+    "0051b_provider_parser_sample_replay_runs.up.sql",
+    "0051c_provider_parser_sample_operations.up.sql",
   ];
   let previousIndex = -1;
   for (const migration of orderedMigrations) {
@@ -65,6 +71,9 @@ test("allowlisted deployment migrations remain single-statement for the locked M
     "0048_browser_collection_jobs.up.sql",
     "0049_credential_renewal_auto_replay.up.sql",
     "0050_browser_evidence_artifacts.up.sql",
+    "0051a_provider_parser_samples.up.sql",
+    "0051b_provider_parser_sample_replay_runs.up.sql",
+    "0051c_provider_parser_sample_operations.up.sql",
   ]) {
     const sql = await readFile(`database/migrations/${name}`, "utf8");
     const statements = sql

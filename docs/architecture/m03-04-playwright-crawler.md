@@ -32,4 +32,4 @@ Python Crawler 不读取静态执行请求文件。它使用服务 Token 调用 
 
 ## 回滚
 
-先在宝塔停止 Python Crawler，再停止统一 Node 后端，确认没有 `browser_collection_jobs.status='leased'`，依次执行 `0050_browser_evidence_artifacts.down.sql`、`0049_credential_renewal_auto_replay.down.sql`、`0048_browser_collection_jobs.down.sql`，再按既有流程回退 `0016d_playwright_crawler_m03_04.down.sql`。0050 down 只删除制品索引，不删除 `EVIDENCE_ROOT` 中的文件，回滚时必须依据清单精确处理。回滚会删除业务作业关联、低层浏览器运行与租约审计表，执行前必须备份；不得在仍有活动租约时回滚。
+先在宝塔停止 Python Crawler，再停止统一 Node 后端，确认没有 `browser_collection_jobs.status='leased'`。若 0051 固定样本表已应用，必须在取得删除样本与回放记录授权后依次执行 0051c、0051b、0051a down；然后执行 `0050_browser_evidence_artifacts.down.sql`、`0049_credential_renewal_auto_replay.down.sql`、`0048_browser_collection_jobs.down.sql`，再按既有流程回退 `0016d_playwright_crawler_m03_04.down.sql`。0050 down 只删除制品索引，不删除 `EVIDENCE_ROOT` 中的文件，回滚时必须依据清单精确处理。回滚会删除业务作业关联、固定样本、低层浏览器运行与租约审计表，执行前必须备份；不得在仍有活动租约时回滚。

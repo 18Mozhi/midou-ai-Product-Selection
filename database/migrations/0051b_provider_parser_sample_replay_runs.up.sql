@@ -1,0 +1,20 @@
+CREATE TABLE `provider_parser_sample_replay_runs` (
+  `id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `sample_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `provider_id` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `parser_version` VARCHAR(120) CHARACTER SET ascii NOT NULL,
+  `status` ENUM('passed','changed','failed') NOT NULL,
+  `output_sha256` CHAR(64) CHARACTER SET ascii NULL,
+  `diff_json` JSON NOT NULL,
+  `error_code` VARCHAR(80) CHARACTER SET ascii NULL,
+  `request_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `trace_id` VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  `created_by` CHAR(36) CHARACTER SET ascii NOT NULL,
+  `created_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_provider_parser_replay_sample` (`sample_id`,`created_at`),
+  KEY `idx_provider_parser_replay_provider` (`provider_id`,`parser_version`,`status`,`created_at`),
+  CONSTRAINT `fk_provider_parser_replay_sample` FOREIGN KEY (`sample_id`) REFERENCES `provider_parser_samples` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_provider_parser_replay_provider` FOREIGN KEY (`provider_id`) REFERENCES `providers` (`id`),
+  CONSTRAINT `fk_provider_parser_replay_creator` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

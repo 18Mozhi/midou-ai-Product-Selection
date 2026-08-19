@@ -21,6 +21,9 @@ const allowed = new Set([
   "0048_browser_collection_jobs.up.sql",
   "0049_credential_renewal_auto_replay.up.sql",
   "0050_browser_evidence_artifacts.up.sql",
+  "0051a_provider_parser_samples.up.sql",
+  "0051b_provider_parser_sample_replay_runs.up.sql",
+  "0051c_provider_parser_sample_operations.up.sql",
 ]);
 const requested = process.argv.slice(2);
 

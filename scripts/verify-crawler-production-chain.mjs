@@ -16,6 +16,9 @@ const files = Object.fromEntries(
       "database/migrations/0048_browser_collection_jobs.up.sql",
       "database/migrations/0049_credential_renewal_auto_replay.up.sql",
       "database/migrations/0050_browser_evidence_artifacts.up.sql",
+      "database/migrations/0051a_provider_parser_samples.up.sql",
+      "database/migrations/0051b_provider_parser_sample_replay_runs.up.sql",
+      "database/migrations/0051c_provider_parser_sample_operations.up.sql",
     ].map(async (path) => [path, await readFile(path, "utf8")]),
   ),
 );
@@ -37,6 +40,9 @@ for (const token of [
   "dom_fragment",
   "screenshot",
   "parser_version",
+  "provider_parser_samples",
+  "provider_parser_sample_replay_runs",
+  "idempotency_key",
 ]) {
   if (!all.includes(token)) throw new Error(`crawler_chain_missing:${token}`);
 }
