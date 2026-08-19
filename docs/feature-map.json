@@ -645,6 +645,8 @@
         "../apps/api/src/crawler-runtime-service.ts",
         "../apps/api/src/mysql-crawler-runtime-repository.ts",
         "../apps/api/src/crawler-runtime-routes.ts",
+        "../apps/worker/src/authenticated-browser-job-client.ts",
+        "../database/migrations/0048_browser_collection_jobs.up.sql",
         "../apps/web/src/components/CollectionRuntimeCenter.vue"
       ],
       "routes": [
@@ -653,9 +655,12 @@
         "/api/v1/platform/crawler-runtime/recover-expired",
         "/api/v1/internal/crawler-runtime/acquire",
         "/api/v1/internal/crawler-runtime/{runId}/heartbeat",
-        "/api/v1/internal/crawler-runtime/{runId}/complete"
+        "/api/v1/internal/crawler-runtime/{runId}/complete",
+        "/api/v1/internal/crawler-runtime/jobs/acquire",
+        "/api/v1/internal/crawler-runtime/jobs/{jobId}/heartbeat",
+        "/api/v1/internal/crawler-runtime/jobs/{jobId}/complete"
       ],
-      "scope": "platform-global encrypted browser profiles and exclusive leases; every browser run is bound to one organization and workspace; expired credentials and login-blocked runs create an assigned collection follow-up task",
+      "scope": "Node Worker owns the business collection task and enqueues one browser_collection_job per authenticated-browser subquery; the BaoTa Python Crawler claims that job, renews the job/profile/single-host leases together, calls the fixed Node Playwright runner and writes the bounded result back to the same task and subquery; expired credentials and login-blocked runs create an assigned collection follow-up task",
       "actions": [
         "bounded search",
         "pagination",
@@ -672,7 +677,7 @@
         "dependency_failed"
       ],
       "permission": "authenticated platform collection:replay; same-origin and Idempotency-Key for expired lease recovery",
-      "responseBoundary": "profile metadata, lease owner and timing, scoped run counts and correlation only; no credential, ciphertext, lease token, raw plan or temporary path",
+      "responseBoundary": "platform monitoring returns profile metadata, lease owner and timing, scoped run counts and correlation only; the service-token-only job claim returns the code-owned plan, encrypted credential record and one-time lease token to the Python Crawler, never plaintext credentials or temporary paths",
       "apiClientBoundary": "browser-profile and run reads plus idempotent expired-lease recovery use the shared frontend JSON client while credential and lease-token response boundaries remain unchanged",
       "profileArchive": "M03-02 encrypted base64 tar.gz with traversal-safe bounded temporary extraction, or normalized encrypted cookie_bundle materialized as a bounded JSON file; both are unconditionally cleaned up",
       "configuration": [
@@ -690,9 +695,9 @@
         "PLAYWRIGHT_RUN_TIMEOUT_SECONDS"
       ],
       "downstream": {
-        "M03-05": "collection task queue retry dead letter",
+        "M03-05": "business collection task queue owns authenticated browser job creation and terminal coverage",
         "M03-06": "evidence and normalized persistence",
-        "M03-07": "real provider URLs selectors and adapters"
+        "M03-07": "1688 browser job routing and snapshot parser are registered; production field extraction remains disabled until a real logged-in fixed sample passes replay"
       },
       "imageEvidence": [
         "concept 63 collection task monitoring table and status layout"
@@ -846,9 +851,9 @@
         "amazon_product public search and product-page crawler",
         "made_in_china_search public supplier product crawler",
         "ec21_supplier_search independent public supplier fallback crawler",
-        "1688_search versioned browser-output contracts for search offers, offer details and suppliers; source remains setup-required and disabled"
+        "1688_search registered authenticated-browser job routing and versioned output contracts for search offers, offer details and suppliers; source remains setup-required and disabled until a real logged-in fixed sample proves field extraction"
       ],
-      "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; 1688 has fail-closed browser-output schemas but no registered production adapter or completed task-claim chain, so it remains setup_required and disabled; official_api is removed from the runtime contract and migrated to public_page; no source fabricates platform data",
+      "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; 1688 now has a business-linked Worker to Python job claim/heartbeat/complete chain plus fail-closed browser-output schemas, but its live logged-in field extractor has not passed fixed-sample replay, so it remains setup_required and disabled; official_api is removed from the runtime contract and migrated to public_page; no source fabricates platform data",
       "outboundBoundary": "Every automatic URL and proxy host is derived from the code-owned source catalog; the optional Baota-restricted project HTTP CONNECT proxy accepts only those exact HTTPS hosts without setting global HTTP_PROXY or HTTPS_PROXY; Google News rejects redirects, CSV uses inline content, and callers cannot supply an outbound URL or proxy",
       "limits": "Google RSS 2MB and 20 persisted records per task; Amazon Made-in-China and EC21 public pages 5MB and 20 product records per source task; CSV 1MB exact 8-column header 100 parsed rows and 20 persisted records per task; 1688 browser snapshots accept at most 100 search items and 250KB of bounded DOM evidence per record, with exact HTTPS 1688 host and field-path validation",
       "permission": "provider:configure for catalog/provision; collection:replay for scoped replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
@@ -868,7 +873,7 @@
         "EVIDENCE_ROOT",
         "EVIDENCE_MAX_RAW_BYTES"
       ],
-      "runtimeBoundary": "production Worker runs only as a Baota Node project; fixed executable source adapters are registered in API and Worker; the 1688 parser contract is code-owned but is not a registered executable adapter and cannot run until the authenticated browser task-claim and result-writeback chain is accepted; no panel-external service is created",
+      "runtimeBoundary": "production Worker runs only inside the single Baota Node project and queues business-linked authenticated browser jobs; the Baota Python project claims, heartbeats, executes and writes those jobs back through fixed internal APIs; 1688 normalization is registered but its configuration API rejects enabled status with provider_source_setup_required until real logged-in fixed-sample field replay is accepted; no panel-external service is created",
       "imageEvidence": [
         "concept 62 collection source management catalog, status and actions"
       ],

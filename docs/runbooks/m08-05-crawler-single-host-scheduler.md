@@ -9,7 +9,7 @@
 
 ## 日常核验
 
-- 宝塔必须恰好有一个“ai选品”Node 项目和一个“ai选品-python”Python 项目。Node 项目只监听 4101 并托管 API/Worker；Python 项目不监听公网端口，只负责 Crawler 心跳和 Playwright 桥接。不得创建额外 Worker、Crawler 或常驻 4103 候选。
+- 宝塔必须恰好有一个“ai选品”Node 项目和一个“ai选品-python”Python 项目。Node 项目只监听 4101 并托管 API/Worker；Python 项目不监听公网端口，只领取 `browser_collection_jobs` 并在执行期间维持 Crawler 心跳和 Playwright 桥接，空闲时不得上报伪运行心跳。不得创建额外 Worker、Crawler 或常驻 4103 候选。
 - `crawler_scheduler_leases` 的 Worker/Crawler 活动槽位分别不超过 1；每来源活动槽位不超过有效并发 1；每个浏览器档案只允许一个租约。
 - 资源停止线默认：归一化负载 85%、可用内存 1024 MB、证据盘可用空间 4096 MB。触线时任务保持排队，不得通过放宽阈值绕过。
 - 页面和日志只用 request_id/trace_id 关联，不复制租约令牌、哈希、Cookie、凭证或任务输入。
@@ -35,3 +35,7 @@
 ## 本次探针与页面纠偏发布
 
 本次只修改 Node API 的 Linux 进程探针和 Web 展示，不修改 Python Crawler 代码、环境变量、数据库或端口。发布后通过宝塔重启 `ai选品` Node 项目并发布 Web 静态文件；`ai选品-python` 必须保持一个健康实例，但无需因本次变更重启。
+
+## 浏览器业务作业链发布
+
+应用 `0048_browser_collection_jobs.up.sql` 后，通过宝塔同时重启 `ai选品` 与 `ai选品-python`。删除受限配置中已经弃用的 `CRAWLER_ORGANIZATION_ID`、`CRAWLER_WORKSPACE_ID`、`CRAWLER_PROFILE_ID` 和 `CRAWLER_EXECUTION_REQUEST_FILE`；保留服务 Token、API Base URL、租约、心跳、Playwright runner 与凭证主密钥。发布后运行 `npm run verify:crawler-chain`，确认无任务返回 204、任务心跳同步更新三类租约、完成回写同一业务子查询。

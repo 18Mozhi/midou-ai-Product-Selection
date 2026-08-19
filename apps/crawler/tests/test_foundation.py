@@ -77,6 +77,37 @@ class FoundationTaskTest(unittest.TestCase):
         client = CrawlerRuntimeClient(load_config())
         self.assertIsNone(client.acquire())
 
+    def test_runtime_client_claims_business_browser_job_without_static_request_file(self) -> None:
+        config = load_config({"CRAWLER_SERVICE_TOKEN": "service-token"})
+        client = CrawlerRuntimeClient(config)
+        assignment = {
+            "data": {
+                "job": {
+                    "id": "job-1",
+                    "execution_request": {"plan": {"start_url": "https://s.1688.com/"}},
+                },
+                "run": {"id": "run-1", "request_id": "request-1", "trace_id": "trace-1"},
+                "profile": {"id": "profile-1", "locale": "zh-CN", "timezone": "Asia/Shanghai"},
+                "credential": {"asset_id": "asset-1", "kind": "cookie_bundle"},
+                "lease_token": "x" * 64,
+            }
+        }
+        with patch.object(client, "_post", return_value=assignment) as post:
+            lease = client.acquire()
+        self.assertIsNotNone(lease)
+        self.assertEqual(lease.job_id, "job-1")
+        self.assertEqual(lease.execution_request["plan"]["start_url"], "https://s.1688.com/")
+        self.assertEqual(post.call_args.args[0], "/api/v1/internal/crawler-runtime/jobs/acquire")
+
+    def test_production_crawler_no_longer_requires_static_scope_or_request_file(self) -> None:
+        config = load_config({
+            "NODE_ENV": "production",
+            "CREDENTIALS_MASTER_KEY": "m" * 32,
+            "CRAWLER_SERVICE_TOKEN": "s" * 32,
+        })
+        self.assertEqual(config.lease_seconds, 120)
+        self.assertFalse(hasattr(config, "execution_request_file"))
+
 
 if __name__ == "__main__":
     unittest.main()

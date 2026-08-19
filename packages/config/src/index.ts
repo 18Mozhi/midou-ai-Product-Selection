@@ -60,32 +60,32 @@ export interface RuntimeConfig {
     maximumEvidenceAgeMinutes: number;
   };
   fileResilience: {
-    usageWarningBasisPoints:number;
-    usageStopBasisPoints:number;
-    checksumSampleLimit:number;
-    maximumRecoveryDrillAgeDays:number;
-    productionEvidenceFile:string;
-    maximumEvidenceAgeMinutes:number;
+    usageWarningBasisPoints: number;
+    usageStopBasisPoints: number;
+    checksumSampleLimit: number;
+    maximumRecoveryDrillAgeDays: number;
+    productionEvidenceFile: string;
+    maximumEvidenceAgeMinutes: number;
   };
-  crawlerScheduler:{
-    maximumWorkers:1;
-    maximumCrawlers:1;
-    maximumProviderConcurrency:1;
-    maximumLoadBasisPoints:number;
-    minimumAvailableMemoryMb:number;
-    minimumFreeDiskMb:number;
-    staleAfterSeconds:number;
-    productionEvidenceFile:string;
-    maximumEvidenceAgeMinutes:number;
+  crawlerScheduler: {
+    maximumWorkers: 1;
+    maximumCrawlers: 1;
+    maximumProviderConcurrency: 1;
+    maximumLoadBasisPoints: number;
+    minimumAvailableMemoryMb: number;
+    minimumFreeDiskMb: number;
+    staleAfterSeconds: number;
+    productionEvidenceFile: string;
+    maximumEvidenceAgeMinutes: number;
   };
-  capacityBoundary:{
-    readP95StopMs:number;
-    writeP95StopMs:number;
-    errorRateStopBasisPoints:number;
-    asyncLagStopSeconds:number;
-    productionEvidenceFile:string;
-    maximumEvidenceAgeMinutes:number;
-    stageSeconds:number;
+  capacityBoundary: {
+    readP95StopMs: number;
+    writeP95StopMs: number;
+    errorRateStopBasisPoints: number;
+    asyncLagStopSeconds: number;
+    productionEvidenceFile: string;
+    maximumEvidenceAgeMinutes: number;
+    stageSeconds: number;
   };
   ai: {
     baseUrl: string;
@@ -125,6 +125,7 @@ export interface RuntimeConfig {
     headless: boolean;
     navigationTimeoutMs: number;
     actionTimeoutMs: number;
+    runTimeoutSeconds: number;
     maxPages: number;
     maxScrolls: number;
     maxDetails: number;
@@ -197,17 +198,61 @@ export interface RuntimeConfig {
     maxConnectionSeconds: number;
     maxConnections: number;
   };
-  automations: { pollMs: number; leaseSeconds: number; retryLimit: number; defaultRateLimit: number };
-  reports: { pollMs: number; leaseSeconds: number; retryLimit: number; exportTtlHours: number; maxRows: number; exportRoot: string };
-  organizationAdmin: { invitationTtlHours: number; tokenDefaultTtlDays: number; tokenMaxActive: number };
-  platformDashboard: { defaultWindow: "15m"|"24h"|"7d"|"30d"; queueWarning: number; errorLimit: number };
+  automations: {
+    pollMs: number;
+    leaseSeconds: number;
+    retryLimit: number;
+    defaultRateLimit: number;
+  };
+  reports: {
+    pollMs: number;
+    leaseSeconds: number;
+    retryLimit: number;
+    exportTtlHours: number;
+    maxRows: number;
+    exportRoot: string;
+  };
+  organizationAdmin: {
+    invitationTtlHours: number;
+    tokenDefaultTtlDays: number;
+    tokenMaxActive: number;
+  };
+  platformDashboard: {
+    defaultWindow: "15m" | "24h" | "7d" | "30d";
+    queueWarning: number;
+    errorLimit: number;
+  };
   collectionConsole: { recentLimit: number };
-  securityOperations: { defaultWindow: "24h"|"7d"|"30d"; recentLimit: number };
-  openPlatform: { clientTtlDays:number; defaultQuotaPerMinute:number; maxQuotaPerMinute:number; timestampToleranceSeconds:number; nonceTtlSeconds:number; webhookPollMs:number; webhookLeaseSeconds:number; webhookTimeoutMs:number };
-  commercial: { recentLimit:number };
-  backupRecovery: { primaryRegion:string; recoveryRegion:string; rpoMinutes:number; rtoMinutes:number; maximumDrillAgeDays:number };
-  releaseRollout: { minimumObservationSeconds:number; maximumEvidenceAgeMinutes:number; errorRateStopPercent:number; readP95StopMs:number; writeP95StopMs:number; asyncLagStopSeconds:number; probeTimestampToleranceSeconds:number; lockName:string };
-  selectionAcceptance:{deadlineMs:number};
+  securityOperations: { defaultWindow: "24h" | "7d" | "30d"; recentLimit: number };
+  openPlatform: {
+    clientTtlDays: number;
+    defaultQuotaPerMinute: number;
+    maxQuotaPerMinute: number;
+    timestampToleranceSeconds: number;
+    nonceTtlSeconds: number;
+    webhookPollMs: number;
+    webhookLeaseSeconds: number;
+    webhookTimeoutMs: number;
+  };
+  commercial: { recentLimit: number };
+  backupRecovery: {
+    primaryRegion: string;
+    recoveryRegion: string;
+    rpoMinutes: number;
+    rtoMinutes: number;
+    maximumDrillAgeDays: number;
+  };
+  releaseRollout: {
+    minimumObservationSeconds: number;
+    maximumEvidenceAgeMinutes: number;
+    errorRateStopPercent: number;
+    readP95StopMs: number;
+    writeP95StopMs: number;
+    asyncLagStopSeconds: number;
+    probeTimestampToleranceSeconds: number;
+    lockName: string;
+  };
+  selectionAcceptance: { deadlineMs: number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
   configFingerprint: string;
 }
@@ -215,15 +260,8 @@ export interface PlatformSeedConfig {
   email: string;
   password: string;
 }
-const text = (env: NodeJS.ProcessEnv, key: string, fallback = "") =>
-  env[key]?.trim() || fallback;
-function integer(
-  env: NodeJS.ProcessEnv,
-  key: string,
-  fallback: number,
-  min: number,
-  max: number,
-) {
+const text = (env: NodeJS.ProcessEnv, key: string, fallback = "") => env[key]?.trim() || fallback;
+function integer(env: NodeJS.ProcessEnv, key: string, fallback: number, min: number, max: number) {
   const value = Number(text(env, key, String(fallback)));
   if (!Number.isSafeInteger(value) || value < min || value > max)
     throw new ConfigError(key, `must be an integer from ${min} to ${max}`);
@@ -242,13 +280,7 @@ function providerProxy(env: NodeJS.ProcessEnv) {
   const rawUrl = text(env, "PROVIDER_PROXY_URL"),
     username = text(env, "PROVIDER_PROXY_USERNAME"),
     password = env.PROVIDER_PROXY_PASSWORD ?? "",
-    connectTimeoutMs = integer(
-      env,
-      "PROVIDER_PROXY_CONNECT_TIMEOUT_MS",
-      5000,
-      100,
-      10000,
-    );
+    connectTimeoutMs = integer(env, "PROVIDER_PROXY_CONNECT_TIMEOUT_MS", 5000, 100, 10000);
   if (!rawUrl) {
     if (username || password)
       throw new ConfigError(
@@ -276,29 +308,15 @@ function providerProxy(env: NodeJS.ProcessEnv) {
       "must be an HTTP origin without credentials, path, query or fragment",
     );
   if (!username)
-    throw new ConfigError(
-      "PROVIDER_PROXY_USERNAME",
-      "is required when Provider proxy is enabled",
-    );
+    throw new ConfigError("PROVIDER_PROXY_USERNAME", "is required when Provider proxy is enabled");
   if (!password)
-    throw new ConfigError(
-      "PROVIDER_PROXY_PASSWORD",
-      "is required when Provider proxy is enabled",
-    );
+    throw new ConfigError("PROVIDER_PROXY_PASSWORD", "is required when Provider proxy is enabled");
   return { url: url.toString(), username, password, connectTimeoutMs };
 }
-function secret(
-  env: NodeJS.ProcessEnv,
-  key: string,
-  production: boolean,
-  minimum: number,
-) {
+function secret(env: NodeJS.ProcessEnv, key: string, production: boolean, minimum: number) {
   const value = text(env, key);
   if (production && value.length < minimum)
-    throw new ConfigError(
-      key,
-      `must contain at least ${minimum} characters in production`,
-    );
+    throw new ConfigError(key, `must contain at least ${minimum} characters in production`);
   return value;
 }
 export function loadRuntimeConfig(
@@ -308,20 +326,11 @@ export function loadRuntimeConfig(
 ): RuntimeConfig {
   const rawNodeEnv = text(env, "NODE_ENV", "development");
   if (!["development", "test", "production"].includes(rawNodeEnv))
-    throw new ConfigError(
-      "NODE_ENV",
-      "must be development, test or production",
-    );
+    throw new ConfigError("NODE_ENV", "must be development, test or production");
   const nodeEnv = rawNodeEnv as RuntimeConfig["nodeEnv"];
   const production = nodeEnv === "production";
-  const evidenceRoot = resolve(
-    cwd,
-    text(env, "EVIDENCE_ROOT", "./runtime/evidence"),
-  );
-  const exportRoot = resolve(
-    cwd,
-    text(env, "EXPORT_ROOT", "./runtime/exports"),
-  );
+  const evidenceRoot = resolve(cwd, text(env, "EVIDENCE_ROOT", "./runtime/evidence"));
+  const exportRoot = resolve(cwd, text(env, "EXPORT_ROOT", "./runtime/exports"));
   const credentialTempRoot = resolve(
     cwd,
     text(env, "CREDENTIAL_TEMP_ROOT", "./runtime/credential-tmp"),
@@ -345,74 +354,139 @@ export function loadRuntimeConfig(
       name: text(env, "DB_NAME", "product_scout"),
       user: text(env, "DB_USER", "product_scout"),
       password: secret(env, "DB_PASSWORD", production, 12),
-      ...(text(env, "DB_WRITE_HOST")
-        ? { writeHost: text(env, "DB_WRITE_HOST") }
-        : {}),
-      ...(text(env, "DB_READ_HOST")
-        ? { readHost: text(env, "DB_READ_HOST") }
-        : {}),
+      ...(text(env, "DB_WRITE_HOST") ? { writeHost: text(env, "DB_WRITE_HOST") } : {}),
+      ...(text(env, "DB_READ_HOST") ? { readHost: text(env, "DB_READ_HOST") } : {}),
     },
     redis: {
       host: text(env, "REDIS_HOST", "127.0.0.1"),
       port: integer(env, "REDIS_PORT", 6379, 1, 65535),
       password: text(env, "REDIS_PASSWORD"),
-      connectTimeoutMs: integer(
-        env,
-        "REDIS_CONNECT_TIMEOUT_MS",
-        3000,
-        100,
-        30000,
-      ),
+      connectTimeoutMs: integer(env, "REDIS_CONNECT_TIMEOUT_MS", 3000, 100, 30000),
     },
     redisResilience: {
       memoryWarningBasisPoints: integer(env, "REDIS_MEMORY_WARNING_PERCENT", 75, 1, 99) * 100,
       memoryStopBasisPoints: integer(env, "REDIS_MEMORY_STOP_PERCENT", 90, 2, 100) * 100,
-      connectionWarningBasisPoints: integer(env, "REDIS_CONNECTION_WARNING_PERCENT", 75, 1, 99) * 100,
+      connectionWarningBasisPoints:
+        integer(env, "REDIS_CONNECTION_WARNING_PERCENT", 75, 1, 99) * 100,
       connectionStopBasisPoints: integer(env, "REDIS_CONNECTION_STOP_PERCENT", 90, 2, 100) * 100,
-      productionEvidenceFile: resolve(cwd, text(env, "REDIS_RESILIENCE_PRODUCTION_EVIDENCE_FILE", "./.artifacts/verification/m08-02-redis-resilience-production-evidence.json")),
-      maximumEvidenceAgeMinutes: integer(env, "REDIS_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES", 60, 1, 1440),
+      productionEvidenceFile: resolve(
+        cwd,
+        text(
+          env,
+          "REDIS_RESILIENCE_PRODUCTION_EVIDENCE_FILE",
+          "./.artifacts/verification/m08-02-redis-resilience-production-evidence.json",
+        ),
+      ),
+      maximumEvidenceAgeMinutes: integer(
+        env,
+        "REDIS_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES",
+        60,
+        1,
+        1440,
+      ),
     },
     mysqlResilience: {
-      connectionWarningBasisPoints: integer(env,"MYSQL_CONNECTION_WARNING_PERCENT",75,1,99)*100,
-      connectionStopBasisPoints: integer(env,"MYSQL_CONNECTION_STOP_PERCENT",90,2,100)*100,
-      dataWarningBasisPoints: integer(env,"MYSQL_DATA_WARNING_PERCENT",75,1,99)*100,
-      dataStopBasisPoints: integer(env,"MYSQL_DATA_STOP_PERCENT",90,2,100)*100,
-      slowQueryWarningPerMinute: integer(env,"MYSQL_SLOW_QUERY_WARNING_PER_MINUTE",5,0,100000),
-      slowQueryStopPerMinute: integer(env,"MYSQL_SLOW_QUERY_STOP_PER_MINUTE",20,1,100000),
-      bufferPoolHitWarningBasisPoints: integer(env,"MYSQL_BUFFER_POOL_HIT_WARNING_PERCENT",99,1,100)*100,
-      maximumRecoveryDrillAgeDays: integer(env,"MYSQL_RECOVERY_DRILL_MAX_AGE_DAYS",90,1,365),
-      maximumRpoMinutes: integer(env,"MYSQL_RECOVERY_RPO_MAX_MINUTES",15,1,1440),
-      maximumRtoMinutes: integer(env,"MYSQL_RECOVERY_RTO_MAX_MINUTES",240,1,10080),
-      productionEvidenceFile: resolve(cwd,text(env,"MYSQL_RESILIENCE_PRODUCTION_EVIDENCE_FILE","./.artifacts/verification/m08-03-mysql-resilience-production-evidence.json")),
-      maximumEvidenceAgeMinutes: integer(env,"MYSQL_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES",60,1,1440),
+      connectionWarningBasisPoints:
+        integer(env, "MYSQL_CONNECTION_WARNING_PERCENT", 75, 1, 99) * 100,
+      connectionStopBasisPoints: integer(env, "MYSQL_CONNECTION_STOP_PERCENT", 90, 2, 100) * 100,
+      dataWarningBasisPoints: integer(env, "MYSQL_DATA_WARNING_PERCENT", 75, 1, 99) * 100,
+      dataStopBasisPoints: integer(env, "MYSQL_DATA_STOP_PERCENT", 90, 2, 100) * 100,
+      slowQueryWarningPerMinute: integer(env, "MYSQL_SLOW_QUERY_WARNING_PER_MINUTE", 5, 0, 100000),
+      slowQueryStopPerMinute: integer(env, "MYSQL_SLOW_QUERY_STOP_PER_MINUTE", 20, 1, 100000),
+      bufferPoolHitWarningBasisPoints:
+        integer(env, "MYSQL_BUFFER_POOL_HIT_WARNING_PERCENT", 99, 1, 100) * 100,
+      maximumRecoveryDrillAgeDays: integer(env, "MYSQL_RECOVERY_DRILL_MAX_AGE_DAYS", 90, 1, 365),
+      maximumRpoMinutes: integer(env, "MYSQL_RECOVERY_RPO_MAX_MINUTES", 15, 1, 1440),
+      maximumRtoMinutes: integer(env, "MYSQL_RECOVERY_RTO_MAX_MINUTES", 240, 1, 10080),
+      productionEvidenceFile: resolve(
+        cwd,
+        text(
+          env,
+          "MYSQL_RESILIENCE_PRODUCTION_EVIDENCE_FILE",
+          "./.artifacts/verification/m08-03-mysql-resilience-production-evidence.json",
+        ),
+      ),
+      maximumEvidenceAgeMinutes: integer(
+        env,
+        "MYSQL_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES",
+        60,
+        1,
+        1440,
+      ),
     },
     fileResilience: {
-      usageWarningBasisPoints:integer(env,"FILE_STORAGE_WARNING_PERCENT",75,1,99)*100,
-      usageStopBasisPoints:integer(env,"FILE_STORAGE_STOP_PERCENT",90,2,100)*100,
-      checksumSampleLimit:integer(env,"FILE_STORAGE_CHECKSUM_SAMPLE_LIMIT",20,1,100),
-      maximumRecoveryDrillAgeDays:integer(env,"FILE_STORAGE_RECOVERY_DRILL_MAX_AGE_DAYS",90,1,365),
-      productionEvidenceFile:resolve(cwd,text(env,"FILE_STORAGE_PRODUCTION_EVIDENCE_FILE","./.artifacts/verification/m08-04-file-resilience-production-evidence.json")),
-      maximumEvidenceAgeMinutes:integer(env,"FILE_STORAGE_EVIDENCE_MAX_AGE_MINUTES",60,1,1440),
+      usageWarningBasisPoints: integer(env, "FILE_STORAGE_WARNING_PERCENT", 75, 1, 99) * 100,
+      usageStopBasisPoints: integer(env, "FILE_STORAGE_STOP_PERCENT", 90, 2, 100) * 100,
+      checksumSampleLimit: integer(env, "FILE_STORAGE_CHECKSUM_SAMPLE_LIMIT", 20, 1, 100),
+      maximumRecoveryDrillAgeDays: integer(
+        env,
+        "FILE_STORAGE_RECOVERY_DRILL_MAX_AGE_DAYS",
+        90,
+        1,
+        365,
+      ),
+      productionEvidenceFile: resolve(
+        cwd,
+        text(
+          env,
+          "FILE_STORAGE_PRODUCTION_EVIDENCE_FILE",
+          "./.artifacts/verification/m08-04-file-resilience-production-evidence.json",
+        ),
+      ),
+      maximumEvidenceAgeMinutes: integer(env, "FILE_STORAGE_EVIDENCE_MAX_AGE_MINUTES", 60, 1, 1440),
     },
-    crawlerScheduler:{
-      maximumWorkers:1 as const,
-      maximumCrawlers:1 as const,
-      maximumProviderConcurrency:1 as const,
-      maximumLoadBasisPoints:integer(env,"CRAWLER_SCHEDULER_MAX_LOAD_PERCENT",85,1,100)*100,
-      minimumAvailableMemoryMb:integer(env,"CRAWLER_SCHEDULER_MIN_AVAILABLE_MEMORY_MB",1024,128,1048576),
-      minimumFreeDiskMb:integer(env,"CRAWLER_SCHEDULER_MIN_FREE_DISK_MB",4096,128,1073741824),
-      staleAfterSeconds:integer(env,"CRAWLER_SCHEDULER_STALE_AFTER_SECONDS",90,30,600),
-      productionEvidenceFile:resolve(cwd,text(env,"CRAWLER_SCHEDULER_PRODUCTION_EVIDENCE_FILE","./.artifacts/verification/m08-05-crawler-scheduler-production-evidence.json")),
-      maximumEvidenceAgeMinutes:integer(env,"CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES",60,1,1440),
+    crawlerScheduler: {
+      maximumWorkers: 1 as const,
+      maximumCrawlers: 1 as const,
+      maximumProviderConcurrency: 1 as const,
+      maximumLoadBasisPoints: integer(env, "CRAWLER_SCHEDULER_MAX_LOAD_PERCENT", 85, 1, 100) * 100,
+      minimumAvailableMemoryMb: integer(
+        env,
+        "CRAWLER_SCHEDULER_MIN_AVAILABLE_MEMORY_MB",
+        1024,
+        128,
+        1048576,
+      ),
+      minimumFreeDiskMb: integer(env, "CRAWLER_SCHEDULER_MIN_FREE_DISK_MB", 4096, 128, 1073741824),
+      staleAfterSeconds: integer(env, "CRAWLER_SCHEDULER_STALE_AFTER_SECONDS", 90, 30, 600),
+      productionEvidenceFile: resolve(
+        cwd,
+        text(
+          env,
+          "CRAWLER_SCHEDULER_PRODUCTION_EVIDENCE_FILE",
+          "./.artifacts/verification/m08-05-crawler-scheduler-production-evidence.json",
+        ),
+      ),
+      maximumEvidenceAgeMinutes: integer(
+        env,
+        "CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES",
+        60,
+        1,
+        1440,
+      ),
     },
-    capacityBoundary:{
-      readP95StopMs:integer(env,"CAPACITY_BOUNDARY_READ_P95_MS",300,1,60000),
-      writeP95StopMs:integer(env,"CAPACITY_BOUNDARY_WRITE_P95_MS",600,1,60000),
-      errorRateStopBasisPoints:integer(env,"CAPACITY_BOUNDARY_ERROR_RATE_PERCENT",1,1,100)*100,
-      asyncLagStopSeconds:integer(env,"CAPACITY_BOUNDARY_ASYNC_LAG_SECONDS",60,1,86400),
-      productionEvidenceFile:resolve(cwd,text(env,"CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE","./.artifacts/verification/m08-06-capacity-boundary-production-evidence.json")),
-      maximumEvidenceAgeMinutes:integer(env,"CAPACITY_BOUNDARY_EVIDENCE_MAX_AGE_MINUTES",60,1,1440),
-      stageSeconds:integer(env,"CAPACITY_BOUNDARY_STAGE_SECONDS",60,60,3600),
+    capacityBoundary: {
+      readP95StopMs: integer(env, "CAPACITY_BOUNDARY_READ_P95_MS", 300, 1, 60000),
+      writeP95StopMs: integer(env, "CAPACITY_BOUNDARY_WRITE_P95_MS", 600, 1, 60000),
+      errorRateStopBasisPoints:
+        integer(env, "CAPACITY_BOUNDARY_ERROR_RATE_PERCENT", 1, 1, 100) * 100,
+      asyncLagStopSeconds: integer(env, "CAPACITY_BOUNDARY_ASYNC_LAG_SECONDS", 60, 1, 86400),
+      productionEvidenceFile: resolve(
+        cwd,
+        text(
+          env,
+          "CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE",
+          "./.artifacts/verification/m08-06-capacity-boundary-production-evidence.json",
+        ),
+      ),
+      maximumEvidenceAgeMinutes: integer(
+        env,
+        "CAPACITY_BOUNDARY_EVIDENCE_MAX_AGE_MINUTES",
+        60,
+        1,
+        1440,
+      ),
+      stageSeconds: integer(env, "CAPACITY_BOUNDARY_STAGE_SECONDS", 60, 60, 3600),
     },
     ai: {
       baseUrl: httpUrl(env, "AI_BASE_URL", "http://192.168.1.203:8588/v1"),
@@ -426,44 +500,19 @@ export function loadRuntimeConfig(
     storage: { evidenceRoot, exportRoot, credentialTempRoot },
     security: {
       sessionSecret: secret(env, "SESSION_SECRET", production, 32),
-      credentialsMasterKey: secret(
-        env,
-        "CREDENTIALS_MASTER_KEY",
-        production,
-        32,
-      ),
-      credentialsMasterKeyVersion: text(
-        env,
-        "CREDENTIALS_MASTER_KEY_VERSION",
-        "v1",
-      ),
-      evidenceDownloadSigningKey: secret(
-        env,
-        "EVIDENCE_DOWNLOAD_SIGNING_KEY",
-        production,
-        32,
-      ),
+      credentialsMasterKey: secret(env, "CREDENTIALS_MASTER_KEY", production, 32),
+      credentialsMasterKeyVersion: text(env, "CREDENTIALS_MASTER_KEY_VERSION", "v1"),
+      evidenceDownloadSigningKey: secret(env, "EVIDENCE_DOWNLOAD_SIGNING_KEY", production, 32),
       releaseProbeSigningKey: secret(
         env,
         "RELEASE_PROBE_SIGNING_KEY",
         production && target === "api",
         32,
       ),
-      crawlerServiceToken: secret(
-        env,
-        "CRAWLER_SERVICE_TOKEN",
-        production && target === "api",
-        32,
-      ),
+      crawlerServiceToken: secret(env, "CRAWLER_SERVICE_TOKEN", production && target === "api", 32),
     },
     providerAdapters: {
-      healthTimeoutMs: integer(
-        env,
-        "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS",
-        10000,
-        100,
-        120000,
-      ),
+      healthTimeoutMs: integer(env, "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS", 10000, 100, 120000),
       maxResponseBytes: integer(
         env,
         "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES",
@@ -471,32 +520,15 @@ export function loadRuntimeConfig(
         1024,
         100000000,
       ),
-      maxItemsPerBatch: integer(
-        env,
-        "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH",
-        500,
-        1,
-        5000,
-      ),
+      maxItemsPerBatch: integer(env, "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH", 500, 1, 5000),
       ...(configuredProviderProxy ? { proxy: configuredProviderProxy } : {}),
     },
     playwright: {
       browser: "chromium" as const,
       headless: text(env, "PLAYWRIGHT_HEADLESS", "true") === "true",
-      navigationTimeoutMs: integer(
-        env,
-        "PLAYWRIGHT_NAVIGATION_TIMEOUT_MS",
-        30000,
-        1000,
-        120000,
-      ),
-      actionTimeoutMs: integer(
-        env,
-        "PLAYWRIGHT_ACTION_TIMEOUT_MS",
-        10000,
-        500,
-        60000,
-      ),
+      navigationTimeoutMs: integer(env, "PLAYWRIGHT_NAVIGATION_TIMEOUT_MS", 30000, 1000, 120000),
+      actionTimeoutMs: integer(env, "PLAYWRIGHT_ACTION_TIMEOUT_MS", 10000, 500, 60000),
+      runTimeoutSeconds: integer(env, "PLAYWRIGHT_RUN_TIMEOUT_SECONDS", 180, 10, 600),
       maxPages: integer(env, "PLAYWRIGHT_MAX_PAGES", 10, 1, 100),
       maxScrolls: integer(env, "PLAYWRIGHT_MAX_SCROLLS", 20, 0, 100),
       maxDetails: integer(env, "PLAYWRIGHT_MAX_DETAILS", 20, 0, 100),
@@ -514,46 +546,16 @@ export function loadRuntimeConfig(
         1024,
         2147483647,
       ),
-      maxArchiveFiles: integer(
-        env,
-        "PLAYWRIGHT_PROFILE_MAX_FILES",
-        5000,
-        1,
-        50000,
-      ),
+      maxArchiveFiles: integer(env, "PLAYWRIGHT_PROFILE_MAX_FILES", 5000, 1, 50000),
     },
     auth: {
-      argon2MemoryKib: integer(
-        env,
-        "AUTH_ARGON2_MEMORY_KIB",
-        19456,
-        19456,
-        1048576,
-      ),
+      argon2MemoryKib: integer(env, "AUTH_ARGON2_MEMORY_KIB", 19456, 19456, 1048576),
       argon2TimeCost: integer(env, "AUTH_ARGON2_TIME_COST", 2, 2, 20),
       argon2Parallelism: integer(env, "AUTH_ARGON2_PARALLELISM", 1, 1, 16),
       passwordMinLength: integer(env, "AUTH_PASSWORD_MIN_LENGTH", 12, 8, 128),
-      passwordMaxLength: integer(
-        env,
-        "AUTH_PASSWORD_MAX_LENGTH",
-        128,
-        12,
-        1024,
-      ),
-      sessionTtlMinutes: integer(
-        env,
-        "AUTH_SESSION_TTL_MINUTES",
-        43200,
-        5,
-        43200,
-      ),
-      actionTokenTtlMinutes: integer(
-        env,
-        "AUTH_ACTION_TOKEN_TTL_MINUTES",
-        15,
-        5,
-        1440,
-      ),
+      passwordMaxLength: integer(env, "AUTH_PASSWORD_MAX_LENGTH", 128, 12, 1024),
+      sessionTtlMinutes: integer(env, "AUTH_SESSION_TTL_MINUTES", 43200, 5, 43200),
+      actionTokenTtlMinutes: integer(env, "AUTH_ACTION_TOKEN_TTL_MINUTES", 15, 5, 1440),
       maxFailedAttempts: integer(env, "AUTH_MAX_FAILED_ATTEMPTS", 5, 2, 20),
       lockMinutes: integer(env, "AUTH_LOCK_MINUTES", 15, 1, 1440),
       outboxPollMs: integer(env, "AUTH_OUTBOX_POLL_MS", 5000, 1000, 60000),
@@ -573,32 +575,13 @@ export function loadRuntimeConfig(
       crawlerActorId: text(env, "CRAWLER_ACTOR_ID"),
     },
     runtime: {
-      workerHeartbeatMs: integer(
-        env,
-        "WORKER_HEARTBEAT_MS",
-        30000,
-        5000,
-        60000,
-      ),
-      crawlerHeartbeatSeconds: integer(
-        env,
-        "CRAWLER_HEARTBEAT_SECONDS",
-        30,
-        5,
-        60,
-      ),
+      workerHeartbeatMs: integer(env, "WORKER_HEARTBEAT_MS", 30000, 5000, 60000),
+      crawlerHeartbeatSeconds: integer(env, "CRAWLER_HEARTBEAT_SECONDS", 30, 5, 60),
       workerMaxConcurrency: integer(env, "WORKER_MAX_CONCURRENCY", 4, 1, 32),
-      workerSchedulerTickMs: integer(
-        env,
-        "WORKER_SCHEDULER_TICK_MS",
-        250,
-        100,
-        5000,
-      ),
+      workerSchedulerTickMs: integer(env, "WORKER_SCHEDULER_TICK_MS", 250, 100, 5000),
       workerSchedulerStateFile: text(env, "WORKER_SCHEDULER_STATE_FILE"),
       workerSchedulerStaleAfterMs:
-        integer(env, "WORKER_SCHEDULER_STALE_AFTER_SECONDS", 90, 15, 600) *
-        1000,
+        integer(env, "WORKER_SCHEDULER_STALE_AFTER_SECONDS", 90, 15, 600) * 1000,
     },
     runtimeTopology: {
       mode: text(env, "RUNTIME_TOPOLOGY_MODE", "single_host") as "single_host",
@@ -608,148 +591,56 @@ export function loadRuntimeConfig(
       zone: text(env, "RUNTIME_NODE_ZONE", "primary"),
       heartbeatMs: integer(env, "RUNTIME_NODE_HEARTBEAT_MS", 30000, 5000, 60000),
       staleAfterMs: integer(env, "RUNTIME_NODE_STALE_AFTER_SECONDS", 90, 30, 600) * 1000,
-      restartAlertThreshold: integer(
-        env,
-        "BACKEND_RESTART_CIRCUIT_THRESHOLD",
-        5,
-        2,
-        50,
-      ),
+      restartAlertThreshold: integer(env, "BACKEND_RESTART_CIRCUIT_THRESHOLD", 5, 2, 50),
       supervisorStateFile: text(env, "BACKEND_SUPERVISOR_STATE_FILE"),
-      productionEvidenceFile: text(env, "SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE", "./.artifacts/verification/m08-01-single-server-production-evidence.json"),
+      productionEvidenceFile: text(
+        env,
+        "SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE",
+        "./.artifacts/verification/m08-01-single-server-production-evidence.json",
+      ),
     },
     collectionTasks: {
       pollMs: integer(env, "COLLECTION_TASK_POLL_MS", 2000, 250, 60000),
-      leaseSeconds: integer(
-        env,
-        "COLLECTION_TASK_LEASE_SECONDS",
-        120,
-        30,
-        3600,
-      ),
+      leaseSeconds: integer(env, "COLLECTION_TASK_LEASE_SECONDS", 120, 30, 3600),
     },
     automaticSources: {
       pollMs: integer(env, "AUTOMATIC_SOURCE_SCHEDULER_POLL_MS", 30000, 5000, 300000),
     },
     trends: {
-      projectionPollMs: integer(
-        env,
-        "TREND_PROJECTION_POLL_MS",
-        2000,
-        250,
-        60000,
-      ),
-      projectionLeaseSeconds: integer(
-        env,
-        "TREND_PROJECTION_LEASE_SECONDS",
-        120,
-        30,
-        3600,
-      ),
+      projectionPollMs: integer(env, "TREND_PROJECTION_POLL_MS", 2000, 250, 60000),
+      projectionLeaseSeconds: integer(env, "TREND_PROJECTION_LEASE_SECONDS", 120, 30, 3600),
     },
     opportunities: {
-      refreshPollMs: integer(
-        env,
-        "OPPORTUNITY_REFRESH_POLL_MS",
-        2000,
-        250,
-        60000,
-      ),
-      refreshLeaseSeconds: integer(
-        env,
-        "OPPORTUNITY_REFRESH_LEASE_SECONDS",
-        120,
-        30,
-        3600,
-      ),
+      refreshPollMs: integer(env, "OPPORTUNITY_REFRESH_POLL_MS", 2000, 250, 60000),
+      refreshLeaseSeconds: integer(env, "OPPORTUNITY_REFRESH_LEASE_SECONDS", 120, 30, 3600),
     },
     scoring: {
       pollMs: integer(env, "OPPORTUNITY_SCORING_POLL_MS", 2000, 250, 60000),
-      leaseSeconds: integer(
-        env,
-        "OPPORTUNITY_SCORING_LEASE_SECONDS",
-        120,
-        30,
-        3600,
-      ),
+      leaseSeconds: integer(env, "OPPORTUNITY_SCORING_LEASE_SECONDS", 120, 30, 3600),
     },
     profit: {
       pollMs: integer(env, "PROFIT_CALCULATION_POLL_MS", 2000, 250, 60000),
-      leaseSeconds: integer(
-        env,
-        "PROFIT_CALCULATION_LEASE_SECONDS",
-        120,
-        30,
-        3600,
-      ),
+      leaseSeconds: integer(env, "PROFIT_CALCULATION_LEASE_SECONDS", 120, 30, 3600),
     },
     competitorMonitor: {
       pollMs: integer(env, "COMPETITOR_MONITOR_POLL_MS", 2000, 250, 60000),
-      leaseSeconds: integer(
-        env,
-        "COMPETITOR_MONITOR_LEASE_SECONDS",
-        120,
-        30,
-        3600,
-      ),
+      leaseSeconds: integer(env, "COMPETITOR_MONITOR_LEASE_SECONDS", 120, 30, 3600),
     },
     sourcing: {
       pollMs: integer(env, "SOURCING_PROJECTION_POLL_MS", 2000, 250, 60000),
-      leaseSeconds: integer(
-        env,
-        "SOURCING_PROJECTION_LEASE_SECONDS",
-        120,
-        30,
-        3600,
-      ),
+      leaseSeconds: integer(env, "SOURCING_PROJECTION_LEASE_SECONDS", 120, 30, 3600),
     },
     businessTasks: {
-      pollMs: integer(
-        env,
-        "BUSINESS_TASK_PROJECTION_POLL_MS",
-        2000,
-        250,
-        60000,
-      ),
-      leaseSeconds: integer(
-        env,
-        "BUSINESS_TASK_PROJECTION_LEASE_SECONDS",
-        120,
-        30,
-        3600,
-      ),
+      pollMs: integer(env, "BUSINESS_TASK_PROJECTION_POLL_MS", 2000, 250, 60000),
+      leaseSeconds: integer(env, "BUSINESS_TASK_PROJECTION_LEASE_SECONDS", 120, 30, 3600),
     },
     approvals: {
-      escalationPollMs: integer(
-        env,
-        "APPROVAL_ESCALATION_POLL_MS",
-        2000,
-        250,
-        60000,
-      ),
-      escalationLeaseSeconds: integer(
-        env,
-        "APPROVAL_ESCALATION_LEASE_SECONDS",
-        120,
-        30,
-        3600,
-      ),
+      escalationPollMs: integer(env, "APPROVAL_ESCALATION_POLL_MS", 2000, 250, 60000),
+      escalationLeaseSeconds: integer(env, "APPROVAL_ESCALATION_LEASE_SECONDS", 120, 30, 3600),
     },
     notifications: {
-      outboxPollMs: integer(
-        env,
-        "NOTIFICATION_OUTBOX_POLL_MS",
-        2000,
-        250,
-        60000,
-      ),
-      outboxLeaseSeconds: integer(
-        env,
-        "NOTIFICATION_OUTBOX_LEASE_SECONDS",
-        120,
-        30,
-        3600,
-      ),
+      outboxPollMs: integer(env, "NOTIFICATION_OUTBOX_POLL_MS", 2000, 250, 60000),
+      outboxLeaseSeconds: integer(env, "NOTIFICATION_OUTBOX_LEASE_SECONDS", 120, 30, 3600),
       retryLimit: integer(env, "NOTIFICATION_OUTBOX_RETRY_LIMIT", 3, 1, 10),
       emailDeliveryMode: "placeholder" as const,
     },
@@ -757,13 +648,7 @@ export function loadRuntimeConfig(
       pollMs: integer(env, "REALTIME_POLL_MS", 1000, 250, 10000),
       heartbeatMs: integer(env, "REALTIME_HEARTBEAT_MS", 15000, 5000, 60000),
       replayLimit: integer(env, "REALTIME_REPLAY_LIMIT", 100, 1, 1000),
-      maxConnectionSeconds: integer(
-        env,
-        "REALTIME_MAX_CONNECTION_SECONDS",
-        55,
-        10,
-        300,
-      ),
+      maxConnectionSeconds: integer(env, "REALTIME_MAX_CONNECTION_SECONDS", 55, 10, 300),
       maxConnections: integer(env, "REALTIME_MAX_CONNECTIONS", 200, 1, 2000),
     },
     automations: {
@@ -786,56 +671,58 @@ export function loadRuntimeConfig(
       tokenMaxActive: integer(env, "ORG_TOKEN_MAX_ACTIVE", 20, 1, 200),
     },
     platformDashboard: {
-      defaultWindow: text(env, "PLATFORM_DASHBOARD_DEFAULT_WINDOW", "24h") as "15m"|"24h"|"7d"|"30d",
+      defaultWindow: text(env, "PLATFORM_DASHBOARD_DEFAULT_WINDOW", "24h") as
+        "15m" | "24h" | "7d" | "30d",
       queueWarning: integer(env, "PLATFORM_DASHBOARD_QUEUE_WARNING", 1000, 1, 1000000),
       errorLimit: integer(env, "PLATFORM_DASHBOARD_ERROR_LIMIT", 20, 1, 100),
     },
-    collectionConsole: { recentLimit: integer(env, "COLLECTION_CONSOLE_RECENT_LIMIT", 50, 10, 200) },
-    securityOperations: { defaultWindow: text(env,"SECURITY_OPERATIONS_DEFAULT_WINDOW","24h") as "24h"|"7d"|"30d", recentLimit: integer(env,"SECURITY_OPERATIONS_RECENT_LIMIT",50,10,200) },
-    openPlatform: {
-      clientTtlDays: integer(env,"OPEN_API_CLIENT_TTL_DAYS",90,1,365),
-      defaultQuotaPerMinute: integer(env,"OPEN_API_DEFAULT_QUOTA_PER_MINUTE",60,1,10000),
-      maxQuotaPerMinute: integer(env,"OPEN_API_MAX_QUOTA_PER_MINUTE",1000,1,10000),
-      timestampToleranceSeconds: integer(env,"OPEN_API_TIMESTAMP_TOLERANCE_SECONDS",300,30,900),
-      nonceTtlSeconds: integer(env,"OPEN_API_NONCE_TTL_SECONDS",600,60,3600),
-      webhookPollMs: integer(env,"WEBHOOK_DELIVERY_POLL_MS",2000,250,60000),
-      webhookLeaseSeconds: integer(env,"WEBHOOK_DELIVERY_LEASE_SECONDS",60,30,3600),
-      webhookTimeoutMs: integer(env,"WEBHOOK_DELIVERY_TIMEOUT_MS",10000,1000,30000),
+    collectionConsole: {
+      recentLimit: integer(env, "COLLECTION_CONSOLE_RECENT_LIMIT", 50, 10, 200),
     },
-    commercial: { recentLimit: integer(env,"COMMERCIAL_RECENT_LIMIT",100,10,500) },
+    securityOperations: {
+      defaultWindow: text(env, "SECURITY_OPERATIONS_DEFAULT_WINDOW", "24h") as "24h" | "7d" | "30d",
+      recentLimit: integer(env, "SECURITY_OPERATIONS_RECENT_LIMIT", 50, 10, 200),
+    },
+    openPlatform: {
+      clientTtlDays: integer(env, "OPEN_API_CLIENT_TTL_DAYS", 90, 1, 365),
+      defaultQuotaPerMinute: integer(env, "OPEN_API_DEFAULT_QUOTA_PER_MINUTE", 60, 1, 10000),
+      maxQuotaPerMinute: integer(env, "OPEN_API_MAX_QUOTA_PER_MINUTE", 1000, 1, 10000),
+      timestampToleranceSeconds: integer(env, "OPEN_API_TIMESTAMP_TOLERANCE_SECONDS", 300, 30, 900),
+      nonceTtlSeconds: integer(env, "OPEN_API_NONCE_TTL_SECONDS", 600, 60, 3600),
+      webhookPollMs: integer(env, "WEBHOOK_DELIVERY_POLL_MS", 2000, 250, 60000),
+      webhookLeaseSeconds: integer(env, "WEBHOOK_DELIVERY_LEASE_SECONDS", 60, 30, 3600),
+      webhookTimeoutMs: integer(env, "WEBHOOK_DELIVERY_TIMEOUT_MS", 10000, 1000, 30000),
+    },
+    commercial: { recentLimit: integer(env, "COMMERCIAL_RECENT_LIMIT", 100, 10, 500) },
     backupRecovery: {
-      primaryRegion: text(env,"BACKUP_PRIMARY_REGION","惠州"),
-      recoveryRegion: text(env,"BACKUP_RECOVERY_REGION","惠州"),
-      rpoMinutes: integer(env,"BACKUP_RPO_MINUTES",15,1,1440),
-      rtoMinutes: integer(env,"BACKUP_RTO_MINUTES",240,1,10080),
-      maximumDrillAgeDays: integer(env,"BACKUP_MAX_DRILL_AGE_DAYS",90,1,365),
+      primaryRegion: text(env, "BACKUP_PRIMARY_REGION", "惠州"),
+      recoveryRegion: text(env, "BACKUP_RECOVERY_REGION", "惠州"),
+      rpoMinutes: integer(env, "BACKUP_RPO_MINUTES", 15, 1, 1440),
+      rtoMinutes: integer(env, "BACKUP_RTO_MINUTES", 240, 1, 10080),
+      maximumDrillAgeDays: integer(env, "BACKUP_MAX_DRILL_AGE_DAYS", 90, 1, 365),
     },
     releaseRollout: {
-      minimumObservationSeconds: integer(env,"RELEASE_CANARY_OBSERVE_SECONDS",1800,1,86400),
-      maximumEvidenceAgeMinutes: integer(env,"RELEASE_EVIDENCE_MAX_AGE_MINUTES",30,1,1440),
-      errorRateStopPercent: integer(env,"RELEASE_5XX_STOP_BASIS_POINTS",100,1,10000) / 100,
-      readP95StopMs: integer(env,"RELEASE_READ_P95_STOP_MS",300,1,60000),
-      writeP95StopMs: integer(env,"RELEASE_WRITE_P95_STOP_MS",600,1,60000),
-      asyncLagStopSeconds: integer(env,"RELEASE_ASYNC_LAG_STOP_SECONDS",60,1,3600),
-      probeTimestampToleranceSeconds: integer(env,"RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS",60,10,300),
-      lockName: text(env,"RELEASE_ROLLOUT_LOCK_NAME","scoutops:m07-05:release-rollout"),
-    },
-    selectionAcceptance:{deadlineMs:integer(env,"SELECTION_ACCEPTANCE_DEADLINE_MS",180000,180000,180000)},
-    evidence: {
-      maxRawBytes: integer(
+      minimumObservationSeconds: integer(env, "RELEASE_CANARY_OBSERVE_SECONDS", 1800, 1, 86400),
+      maximumEvidenceAgeMinutes: integer(env, "RELEASE_EVIDENCE_MAX_AGE_MINUTES", 30, 1, 1440),
+      errorRateStopPercent: integer(env, "RELEASE_5XX_STOP_BASIS_POINTS", 100, 1, 10000) / 100,
+      readP95StopMs: integer(env, "RELEASE_READ_P95_STOP_MS", 300, 1, 60000),
+      writeP95StopMs: integer(env, "RELEASE_WRITE_P95_STOP_MS", 600, 1, 60000),
+      asyncLagStopSeconds: integer(env, "RELEASE_ASYNC_LAG_STOP_SECONDS", 60, 1, 3600),
+      probeTimestampToleranceSeconds: integer(
         env,
-        "EVIDENCE_MAX_RAW_BYTES",
-        10485760,
-        1024,
-        104857600,
-      ),
-      downloadGrantSeconds: integer(
-        env,
-        "EVIDENCE_DOWNLOAD_GRANT_SECONDS",
-        120,
-        1,
+        "RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS",
+        60,
+        10,
         300,
       ),
+      lockName: text(env, "RELEASE_ROLLOUT_LOCK_NAME", "scoutops:m07-05:release-rollout"),
+    },
+    selectionAcceptance: {
+      deadlineMs: integer(env, "SELECTION_ACCEPTANCE_DEADLINE_MS", 180000, 180000, 180000),
+    },
+    evidence: {
+      maxRawBytes: integer(env, "EVIDENCE_MAX_RAW_BYTES", 10485760, 1024, 104857600),
+      downloadGrantSeconds: integer(env, "EVIDENCE_DOWNLOAD_GRANT_SECONDS", 120, 1, 300),
     },
   };
   if (base.auth.passwordMaxLength < base.auth.passwordMinLength)
@@ -843,22 +730,75 @@ export function loadRuntimeConfig(
       "AUTH_PASSWORD_MAX_LENGTH",
       "must be greater than or equal to AUTH_PASSWORD_MIN_LENGTH",
     );
-  if (!["15m","24h","7d","30d"].includes(base.platformDashboard.defaultWindow))
+  if (!["15m", "24h", "7d", "30d"].includes(base.platformDashboard.defaultWindow))
     throw new ConfigError("PLATFORM_DASHBOARD_DEFAULT_WINDOW", "must be 15m, 24h, 7d or 30d");
-  if(!["24h","7d","30d"].includes(base.securityOperations.defaultWindow))throw new ConfigError("SECURITY_OPERATIONS_DEFAULT_WINDOW","must be 24h, 7d or 30d");
-  if(base.openPlatform.defaultQuotaPerMinute>base.openPlatform.maxQuotaPerMinute)throw new ConfigError("OPEN_API_DEFAULT_QUOTA_PER_MINUTE","must not exceed OPEN_API_MAX_QUOTA_PER_MINUTE");
-  if(base.runtimeTopology.mode!=="single_host")throw new ConfigError("RUNTIME_TOPOLOGY_MODE","must be single_host");
-  if(base.redisResilience.memoryWarningBasisPoints>=base.redisResilience.memoryStopBasisPoints)throw new ConfigError("REDIS_MEMORY_WARNING_PERCENT","must be less than REDIS_MEMORY_STOP_PERCENT");
-  if(base.redisResilience.connectionWarningBasisPoints>=base.redisResilience.connectionStopBasisPoints)throw new ConfigError("REDIS_CONNECTION_WARNING_PERCENT","must be less than REDIS_CONNECTION_STOP_PERCENT");
-  if(base.mysqlResilience.connectionWarningBasisPoints>=base.mysqlResilience.connectionStopBasisPoints)throw new ConfigError("MYSQL_CONNECTION_WARNING_PERCENT","must be less than MYSQL_CONNECTION_STOP_PERCENT");
-  if(base.mysqlResilience.dataWarningBasisPoints>=base.mysqlResilience.dataStopBasisPoints)throw new ConfigError("MYSQL_DATA_WARNING_PERCENT","must be less than MYSQL_DATA_STOP_PERCENT");
-  if(base.mysqlResilience.slowQueryWarningPerMinute>=base.mysqlResilience.slowQueryStopPerMinute)throw new ConfigError("MYSQL_SLOW_QUERY_WARNING_PER_MINUTE","must be less than MYSQL_SLOW_QUERY_STOP_PER_MINUTE");
-  if(base.fileResilience.usageWarningBasisPoints>=base.fileResilience.usageStopBasisPoints)throw new ConfigError("FILE_STORAGE_WARNING_PERCENT","must be less than FILE_STORAGE_STOP_PERCENT");
-  if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.nodeId))throw new ConfigError("RUNTIME_NODE_ID","must be a stable 2-80 character identifier");
-  if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.hostId))throw new ConfigError("RUNTIME_HOST_ID","must be a stable 2-80 character identifier");
-  if(!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.zone))throw new ConfigError("RUNTIME_NODE_ZONE","must be a stable 2-80 character identifier");
-  if(production&&(!env.RUNTIME_NODE_ID?.trim()||!env.RUNTIME_HOST_ID?.trim()))throw new ConfigError("RUNTIME_NODE_ID","and RUNTIME_HOST_ID are required in single-host production");
-  if(production&&target==="api"&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(base.identity.crawlerActorId))throw new ConfigError("CRAWLER_ACTOR_ID","must be the UUID of the dedicated crawler service user in production");
+  if (!["24h", "7d", "30d"].includes(base.securityOperations.defaultWindow))
+    throw new ConfigError("SECURITY_OPERATIONS_DEFAULT_WINDOW", "must be 24h, 7d or 30d");
+  if (base.openPlatform.defaultQuotaPerMinute > base.openPlatform.maxQuotaPerMinute)
+    throw new ConfigError(
+      "OPEN_API_DEFAULT_QUOTA_PER_MINUTE",
+      "must not exceed OPEN_API_MAX_QUOTA_PER_MINUTE",
+    );
+  if (base.runtimeTopology.mode !== "single_host")
+    throw new ConfigError("RUNTIME_TOPOLOGY_MODE", "must be single_host");
+  if (base.redisResilience.memoryWarningBasisPoints >= base.redisResilience.memoryStopBasisPoints)
+    throw new ConfigError(
+      "REDIS_MEMORY_WARNING_PERCENT",
+      "must be less than REDIS_MEMORY_STOP_PERCENT",
+    );
+  if (
+    base.redisResilience.connectionWarningBasisPoints >=
+    base.redisResilience.connectionStopBasisPoints
+  )
+    throw new ConfigError(
+      "REDIS_CONNECTION_WARNING_PERCENT",
+      "must be less than REDIS_CONNECTION_STOP_PERCENT",
+    );
+  if (
+    base.mysqlResilience.connectionWarningBasisPoints >=
+    base.mysqlResilience.connectionStopBasisPoints
+  )
+    throw new ConfigError(
+      "MYSQL_CONNECTION_WARNING_PERCENT",
+      "must be less than MYSQL_CONNECTION_STOP_PERCENT",
+    );
+  if (base.mysqlResilience.dataWarningBasisPoints >= base.mysqlResilience.dataStopBasisPoints)
+    throw new ConfigError(
+      "MYSQL_DATA_WARNING_PERCENT",
+      "must be less than MYSQL_DATA_STOP_PERCENT",
+    );
+  if (base.mysqlResilience.slowQueryWarningPerMinute >= base.mysqlResilience.slowQueryStopPerMinute)
+    throw new ConfigError(
+      "MYSQL_SLOW_QUERY_WARNING_PER_MINUTE",
+      "must be less than MYSQL_SLOW_QUERY_STOP_PER_MINUTE",
+    );
+  if (base.fileResilience.usageWarningBasisPoints >= base.fileResilience.usageStopBasisPoints)
+    throw new ConfigError(
+      "FILE_STORAGE_WARNING_PERCENT",
+      "must be less than FILE_STORAGE_STOP_PERCENT",
+    );
+  if (!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.nodeId))
+    throw new ConfigError("RUNTIME_NODE_ID", "must be a stable 2-80 character identifier");
+  if (!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.hostId))
+    throw new ConfigError("RUNTIME_HOST_ID", "must be a stable 2-80 character identifier");
+  if (!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(base.runtimeTopology.zone))
+    throw new ConfigError("RUNTIME_NODE_ZONE", "must be a stable 2-80 character identifier");
+  if (production && (!env.RUNTIME_NODE_ID?.trim() || !env.RUNTIME_HOST_ID?.trim()))
+    throw new ConfigError(
+      "RUNTIME_NODE_ID",
+      "and RUNTIME_HOST_ID are required in single-host production",
+    );
+  if (
+    production &&
+    target === "api" &&
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      base.identity.crawlerActorId,
+    )
+  )
+    throw new ConfigError(
+      "CRAWLER_ACTOR_ID",
+      "must be the UUID of the dedicated crawler service user in production",
+    );
   if (!/^[A-Za-z0-9._-]{1,80}$/.test(base.security.credentialsMasterKeyVersion))
     throw new ConfigError(
       "CREDENTIALS_MASTER_KEY_VERSION",
@@ -866,10 +806,7 @@ export function loadRuntimeConfig(
     );
   if (!["true", "false"].includes(text(env, "PLAYWRIGHT_HEADLESS", "true")))
     throw new ConfigError("PLAYWRIGHT_HEADLESS", "must be true or false");
-  if (
-    text(env, "NOTIFICATION_EMAIL_DELIVERY_MODE", "placeholder") !==
-    "placeholder"
-  )
+  if (text(env, "NOTIFICATION_EMAIL_DELIVERY_MODE", "placeholder") !== "placeholder")
     throw new ConfigError(
       "NOTIFICATION_EMAIL_DELIVERY_MODE",
       "must be placeholder until a real provider contract is configured",
@@ -883,9 +820,7 @@ export function loadRuntimeConfig(
       sessionSecret: Boolean(base.security.sessionSecret),
       credentialsMasterKey: Boolean(base.security.credentialsMasterKey),
       credentialsMasterKeyVersion: base.security.credentialsMasterKeyVersion,
-      evidenceDownloadSigningKey: Boolean(
-        base.security.evidenceDownloadSigningKey,
-      ),
+      evidenceDownloadSigningKey: Boolean(base.security.evidenceDownloadSigningKey),
       releaseProbeSigningKey: Boolean(base.security.releaseProbeSigningKey),
       crawlerServiceToken: Boolean(base.security.crawlerServiceToken),
     },
@@ -904,23 +839,16 @@ export function loadRuntimeConfig(
   };
   return {
     ...base,
-    configFingerprint: createHash("sha256")
-      .update(JSON.stringify(safe))
-      .digest("hex"),
+    configFingerprint: createHash("sha256").update(JSON.stringify(safe)).digest("hex"),
   };
 }
 
-export function loadPlatformSeedConfig(
-  env: NodeJS.ProcessEnv = process.env,
-): PlatformSeedConfig {
+export function loadPlatformSeedConfig(env: NodeJS.ProcessEnv = process.env): PlatformSeedConfig {
   const email = text(env, "PLATFORM_ADMIN_SEED_EMAIL").toLowerCase(),
     password = env.PLATFORM_ADMIN_SEED_PASSWORD ?? "";
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     throw new ConfigError("PLATFORM_ADMIN_SEED_EMAIL", "must be a valid email");
   if (password.length < 12 || password.length > 1024)
-    throw new ConfigError(
-      "PLATFORM_ADMIN_SEED_PASSWORD",
-      "must contain 12 to 1024 characters",
-    );
+    throw new ConfigError("PLATFORM_ADMIN_SEED_PASSWORD", "must contain 12 to 1024 characters");
   return { email, password };
 }

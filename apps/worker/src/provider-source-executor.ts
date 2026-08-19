@@ -1,15 +1,227 @@
-import { createHash } from 'node:crypto';
-import type { Pool, RowDataPacket } from 'mysql2/promise';
-import { classifyProviderAdapterFailure, type ProviderAdapterRegistry, type ProviderRuntimeDefinition } from '@scoutops/provider-adapters';
-import { sourceEvidencePayload } from '@scoutops/provider-sources';
-import type { CollectionErrorCode, SubqueryOutcome } from '@scoutops/collection-tasks';
-import { CollectionExecutionError, type ClaimedCollectionTask, type CollectionTaskExecutor } from './collection-task-worker.js';
-import { EvidencePersistenceError, MySqlEvidencePersistence } from './evidence-persistence.js';
-const sha=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
-const codes=new Set<CollectionErrorCode>(['network_error','timeout','dns_error','login_required','session_expired','captcha','rate_limited','robots_disallowed','source_changed','parse_failed','validation_failed','empty_result','permission_denied']);
-const code=(value:string):CollectionErrorCode=>codes.has(value as CollectionErrorCode)?value as CollectionErrorCode:value.includes('parse')||value.includes('payload')?'parse_failed':'validation_failed';
-export class ProviderSourceExecutor implements CollectionTaskExecutor{
-  constructor(private readonly pool:Pool,private readonly registry:ProviderAdapterRegistry,private readonly evidence:MySqlEvidencePersistence,private readonly workerId:string){}
-  async execute(task:ClaimedCollectionTask,heartbeat:()=>Promise<void>){await this.pool.query("UPDATE provider_source_replay_runs SET status='running',updated_at=NOW(3) WHERE task_id=? AND status='scheduled'",[task.id]);const outcomes:Array<SubqueryOutcome&{id:string}>=[];for(const query of task.subqueries){await heartbeat();const outcome=await this.collect(task,query);outcomes.push(outcome);}const available=outcomes.reduce((sum,item)=>sum+item.availableResultCount,0),failed=outcomes.find(item=>item.status==='failed'||item.status==='blocked'),status=failed?(available?'completed_with_warnings':failed.status==='blocked'?'blocked':'failed'):available?'succeeded':'succeeded_empty';await this.pool.query('UPDATE provider_source_replay_runs SET status=?,item_count=?,error_code=?,updated_at=NOW(3) WHERE task_id=?',[status,available,failed?.errorCode??null,task.id]);return outcomes;}
-  private async collect(task:ClaimedCollectionTask,query:ClaimedCollectionTask['subqueries'][number]):Promise<SubqueryOutcome&{id:string}>{const[rows]=await this.pool.query<RowDataPacket[]>('SELECT p.id,p.code,p.access_mode,p.target_url,p.parser_version,p.timeout_ms,p.fields_json,p.status,t.created_by FROM providers p JOIN collection_tasks t ON t.id=? WHERE p.id=? LIMIT 1',[task.id,query.providerId]),row=rows[0];if(!row||row.status!=='enabled')return{id:query.id,required:query.required,status:'blocked',availableResultCount:0,missingFields:[],errorCode:'permission_denied'};const provider:ProviderRuntimeDefinition={id:String(row.id),code:String(row.code),accessMode:row.access_mode,targetUrl:String(row.target_url),parserVersion:String(row.parser_version),timeoutMs:Number(row.timeout_ms),fields:typeof row.fields_json==='string'?JSON.parse(row.fields_json):row.fields_json};try{const context={requestId:task.requestId,traceId:task.traceId,organizationId:task.organizationId,workspaceId:task.workspaceId,provider},batch=await this.registry.collect({...context,target:query.target,limit:20});let available=0,hasDedupeConflict=false;for(const raw of batch.records){const normalized=this.registry.normalize(provider.code,raw,context),source=sourceEvidencePayload(raw),provenance=Object.entries(source.source_paths).map(([fieldPath,sourcePath])=>({fieldPath,sourcePath,transformVersion:provider.parserVersion,sourceValueHash:sha(source.fields[fieldPath]??null)}));try{await this.evidence.persist({organizationId:task.organizationId,workspaceId:task.workspaceId,taskId:task.id,subqueryId:query.id,providerId:provider.id,sourceUrl:source.canonical_url,canonicalUrl:normalized.canonical_url??source.canonical_url,dedupeKey:normalized.external_id,contentType:source.content_type,content:Buffer.from(source.raw_content),capturedAt:new Date(normalized.observed_at),parserVersion:provider.parserVersion,adapterVersion:normalized.provenance.adapter_version,recordKey:normalized.external_id,recordSchemaVersion:'provider-source-v1',normalizedPayload:{...normalized.fields,canonical_url:normalized.canonical_url,observed_at:normalized.observed_at,evidence_ref:normalized.evidence_ref,worker_id:this.workerId},provenance,requestId:task.requestId,traceId:task.traceId,actorId:String(row.created_by)});available+=1;}catch(error){if(error instanceof EvidencePersistenceError&&error.code==='evidence_dedupe_conflict'){hasDedupeConflict=true;continue;}throw error;}}if(hasDedupeConflict&&query.required)return{id:query.id,required:true,status:'failed',availableResultCount:available,missingFields:[],errorCode:'validation_failed'};return{id:query.id,required:query.required,status:available?'succeeded':'succeeded_empty',availableResultCount:available,missingFields:[],errorCode:null};}catch(error){const failure=classifyProviderAdapterFailure(error),mapped=code(failure.code),blocked=['login_required','session_expired','captcha','robots_disallowed','permission_denied'].includes(mapped);if(failure.retryable&&query.required){if(mapped==='rate_limited')throw new CollectionExecutionError(mapped,new Date(Date.now()+300000));throw new CollectionExecutionError(mapped);}return{id:query.id,required:query.required,status:blocked?'blocked':'failed',availableResultCount:0,missingFields:provider.fields,errorCode:mapped};}}
+import { createHash } from "node:crypto";
+import type { Pool, RowDataPacket } from "mysql2/promise";
+import {
+  classifyProviderAdapterFailure,
+  type ProviderAdapterRegistry,
+  type ProviderRuntimeDefinition,
+} from "@scoutops/provider-adapters";
+import { sourceEvidencePayload } from "@scoutops/provider-sources";
+import type { CollectionErrorCode, SubqueryOutcome } from "@scoutops/collection-tasks";
+import {
+  CollectionExecutionError,
+  type ClaimedCollectionTask,
+  type CollectionTaskExecutor,
+} from "./collection-task-worker.js";
+import { EvidencePersistenceError, MySqlEvidencePersistence } from "./evidence-persistence.js";
+import type { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
+const sha = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
+const codes = new Set<CollectionErrorCode>([
+  "network_error",
+  "timeout",
+  "dns_error",
+  "login_required",
+  "session_expired",
+  "captcha",
+  "rate_limited",
+  "robots_disallowed",
+  "source_changed",
+  "parse_failed",
+  "validation_failed",
+  "empty_result",
+  "permission_denied",
+]);
+const code = (value: string): CollectionErrorCode =>
+  codes.has(value as CollectionErrorCode)
+    ? (value as CollectionErrorCode)
+    : value.includes("parse") || value.includes("payload")
+      ? "parse_failed"
+      : "validation_failed";
+export class ProviderSourceExecutor implements CollectionTaskExecutor {
+  constructor(
+    private readonly pool: Pool,
+    private readonly registry: ProviderAdapterRegistry,
+    private readonly evidence: MySqlEvidencePersistence,
+    private readonly workerId: string,
+    private readonly browserJobs?: MySqlAuthenticatedBrowserJobClient,
+  ) {}
+  async execute(task: ClaimedCollectionTask, heartbeat: () => Promise<void>) {
+    await this.pool.query(
+      "UPDATE provider_source_replay_runs SET status='running',updated_at=NOW(3) WHERE task_id=? AND status='scheduled'",
+      [task.id],
+    );
+    const outcomes: Array<SubqueryOutcome & { id: string }> = [];
+    for (const query of task.subqueries) {
+      await heartbeat();
+      const outcome = await this.collect(task, query, heartbeat);
+      outcomes.push(outcome);
+    }
+    const available = outcomes.reduce((sum, item) => sum + item.availableResultCount, 0),
+      failed = outcomes.find((item) => item.status === "failed" || item.status === "blocked"),
+      status = failed
+        ? available
+          ? "completed_with_warnings"
+          : failed.status === "blocked"
+            ? "blocked"
+            : "failed"
+        : available
+          ? "succeeded"
+          : "succeeded_empty";
+    await this.pool.query(
+      "UPDATE provider_source_replay_runs SET status=?,item_count=?,error_code=?,updated_at=NOW(3) WHERE task_id=?",
+      [status, available, failed?.errorCode ?? null, task.id],
+    );
+    return outcomes;
+  }
+  private async collect(
+    task: ClaimedCollectionTask,
+    query: ClaimedCollectionTask["subqueries"][number],
+    heartbeat: () => Promise<void>,
+  ): Promise<SubqueryOutcome & { id: string }> {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+        [
+          "SELECT p.id,p.code,p.access_mode,p.target_url,p.parser_version,p.timeout_ms,p.fields_json,p.status,t",
+          ".created_by FROM providers p JOIN collection_tasks t ON t.id=? WHERE p.id=? LIMIT 1",
+        ].join(""),
+        [task.id, query.providerId],
+      ),
+      row = rows[0];
+    if (!row || row.status !== "enabled")
+      return {
+        id: query.id,
+        required: query.required,
+        status: "blocked",
+        availableResultCount: 0,
+        missingFields: [],
+        errorCode: "permission_denied",
+      };
+    const provider: ProviderRuntimeDefinition = {
+      id: String(row.id),
+      code: String(row.code),
+      accessMode: row.access_mode,
+      targetUrl: String(row.target_url),
+      parserVersion: String(row.parser_version),
+      timeoutMs: Number(row.timeout_ms),
+      fields: typeof row.fields_json === "string" ? JSON.parse(row.fields_json) : row.fields_json,
+    };
+    try {
+      const context = {
+          requestId: task.requestId,
+          traceId: task.traceId,
+          organizationId: task.organizationId,
+          workspaceId: task.workspaceId,
+          provider,
+        },
+        batch =
+          provider.accessMode === "authenticated_browser"
+            ? {
+                records: await this.browserJobs!.collect(
+                  {
+                    organizationId: task.organizationId,
+                    workspaceId: task.workspaceId,
+                    taskId: task.id,
+                    subqueryId: query.id,
+                    provider,
+                    target: query.target,
+                    requestId: task.requestId,
+                    traceId: task.traceId,
+                  },
+                  heartbeat,
+                ),
+                nextCursor: null,
+              }
+            : await this.registry.collect({ ...context, target: query.target, limit: 20 });
+      let available = 0,
+        hasDedupeConflict = false;
+      for (const raw of batch.records) {
+        const normalized = this.registry.normalize(provider.code, raw, context),
+          source = sourceEvidencePayload(raw),
+          provenance = Object.entries(source.source_paths).map(([fieldPath, sourcePath]) => ({
+            fieldPath,
+            sourcePath,
+            transformVersion: provider.parserVersion,
+            sourceValueHash: sha(source.fields[fieldPath] ?? null),
+          }));
+        try {
+          await this.evidence.persist({
+            organizationId: task.organizationId,
+            workspaceId: task.workspaceId,
+            taskId: task.id,
+            subqueryId: query.id,
+            providerId: provider.id,
+            sourceUrl: source.canonical_url,
+            canonicalUrl: normalized.canonical_url ?? source.canonical_url,
+            dedupeKey: normalized.external_id,
+            contentType: source.content_type,
+            content: Buffer.from(source.raw_content),
+            capturedAt: new Date(normalized.observed_at),
+            parserVersion: provider.parserVersion,
+            adapterVersion: normalized.provenance.adapter_version,
+            recordKey: normalized.external_id,
+            recordSchemaVersion: "provider-source-v1",
+            normalizedPayload: {
+              ...normalized.fields,
+              canonical_url: normalized.canonical_url,
+              observed_at: normalized.observed_at,
+              evidence_ref: normalized.evidence_ref,
+              worker_id: this.workerId,
+            },
+            provenance,
+            requestId: task.requestId,
+            traceId: task.traceId,
+            actorId: String(row.created_by),
+          });
+          available += 1;
+        } catch (error) {
+          if (
+            error instanceof EvidencePersistenceError &&
+            error.code === "evidence_dedupe_conflict"
+          ) {
+            hasDedupeConflict = true;
+            continue;
+          }
+          throw error;
+        }
+      }
+      if (hasDedupeConflict && query.required)
+        return {
+          id: query.id,
+          required: true,
+          status: "failed",
+          availableResultCount: available,
+          missingFields: [],
+          errorCode: "validation_failed",
+        };
+      return {
+        id: query.id,
+        required: query.required,
+        status: available ? "succeeded" : "succeeded_empty",
+        availableResultCount: available,
+        missingFields: [],
+        errorCode: null,
+      };
+    } catch (error) {
+      const failure = classifyProviderAdapterFailure(error),
+        mapped = code(failure.code),
+        blocked = [
+          "login_required",
+          "session_expired",
+          "captcha",
+          "robots_disallowed",
+          "permission_denied",
+        ].includes(mapped);
+      if (failure.retryable && query.required) {
+        if (mapped === "rate_limited")
+          throw new CollectionExecutionError(mapped, new Date(Date.now() + 300000));
+        throw new CollectionExecutionError(mapped);
+      }
+      return {
+        id: query.id,
+        required: query.required,
+        status: blocked ? "blocked" : "failed",
+        availableResultCount: 0,
+        missingFields: provider.fields,
+        errorCode: mapped,
+      };
+    }
+  }
 }

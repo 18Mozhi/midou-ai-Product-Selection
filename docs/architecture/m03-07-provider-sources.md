@@ -27,7 +27,7 @@
 - 报价缺失时币种必须同时为空；存在报价时只接受 `CNY`。缺少报价、MOQ、地点、规格或交期时写入明确的 `missing_fields_json`，不得补零或猜值。
 - Schema、字段路径或页面身份变化统一以 `source_changed` 失败关闭；非 HTTPS、跨站地址或搜索/详情身份不一致以 `source_configuration_invalid` 拒绝。
 
-该合同只锁定受控浏览器提取后的数据边界，并不等于生产采集已经接通。真实登录档案、站点绑定、Python Crawler 领取业务任务、Playwright 执行与结果回写链尚未完成验收前，`1688_search` 必须保持 `setup_required / disabled`，不得进入自动调度。
+该合同只锁定受控浏览器提取后的数据边界，并不等于生产字段采集已经接通。Worker 到 Python 的业务作业领取、心跳、Playwright 执行与结果回写链已登记；真实登录档案、站点绑定和固定样本字段提取尚未共同验收前，`1688_search` 必须保持 `setup_required / disabled`，不得进入自动调度。
 
 ## 安全、权限与限制
 
@@ -42,4 +42,4 @@
 
 `AUTOMATIC_SOURCE_SCHEDULER_POLL_MS` 控制 Worker 检查到期组织的周期，默认 30000 毫秒；修改后需要通过宝塔重启统一后端“ai选品”。通用采集仍复用 `COLLECTION_TASK_*`、`PROVIDER_ADAPTER_*`、`PROVIDER_PROXY_*` 和 `EVIDENCE_*`。
 
-生产由宝塔管理 Node 后端项目“ai选品”和 Python 3.12 采集项目“ai选品-python”。API/Worker 由 Node 统一后端拉起，Python 项目提供采集心跳与桥接运行时；当前 1688 合同仍没有改变二者职责，也没有让 Python Crawler 获得真实 1688 任务。不新增独立 Worker、候选后端、面板外服务、负载均衡或多节点能力。
+生产由宝塔管理 Node 后端项目“ai选品”和 Python 3.12 采集项目“ai选品-python”。API/Worker 由 Node 统一后端拉起，Worker 领取业务任务并排队登录型作业；Python 项目领取浏览器作业、维持作业/档案/全局 Crawler 租约并桥接 Playwright，结果仍由 Worker 解析和持久化。当前 1688 字段提取未验收，来源保持停用。不新增独立 Worker、候选后端、面板外服务、负载均衡或多节点能力。

@@ -4339,6 +4339,48 @@ paths:
         "200": { $ref: "#/components/responses/Success" }
         "401": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+  /internal/crawler-runtime/jobs/acquire:
+    post:
+      summary: Claim the next authenticated-browser business subquery
+      description: The BaoTa Python Crawler receives one business-linked browser job, the scoped execution plan, profile locale/timezone, encrypted credential record and a one-time lease token. A 204 response means there is no runnable job; it is not an idle heartbeat. Plaintext credentials are never returned.
+      security: [{ CrawlerServiceBearer: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [lease_owner, lease_seconds]
+              properties:
+                lease_owner: { type: string, minLength: 2, maxLength: 160 }
+                lease_seconds: { type: integer, minimum: 30, maximum: 600 }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "204": { description: No runnable authenticated-browser job }
+        "401": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+  /internal/crawler-runtime/jobs/{jobId}/heartbeat:
+    post:
+      summary: Renew the business job, browser profile and single-host crawler leases together
+      security: [{ CrawlerServiceBearer: [] }]
+      parameters:
+        - { name: jobId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "401": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+  /internal/crawler-runtime/jobs/{jobId}/complete:
+    post:
+      summary: Write a bounded Playwright result back to its business subquery job
+      description: Correlates job, browser run, profile and lease token, stores at most 2 MB of structured result JSON, releases all crawler leases and creates a credential-renewal task for login expiry.
+      security: [{ CrawlerServiceBearer: [] }]
+      parameters:
+        - { name: jobId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
   /internal/crawler-runtime/{runId}/heartbeat:
     post:
       summary: Renew a live Python crawler lease

@@ -11,28 +11,16 @@ import {
   type ProviderRawRecord,
 } from "@scoutops/provider-adapters";
 import { ALIBABA_1688_BROWSER_PARSER_VERSION } from "./1688-browser-contract.js";
-export {
-  createProviderSourceFetch,
-  decodeProviderProxyResponseBody,
-} from "./proxy-fetch.js";
-export type {
-  ProviderSourceFetchDependencies,
-  ProviderSourceProxyConfig,
-} from "./proxy-fetch.js";
+export { createProviderSourceFetch, decodeProviderProxyResponseBody } from "./proxy-fetch.js";
+export type { ProviderSourceFetchDependencies, ProviderSourceProxyConfig } from "./proxy-fetch.js";
 export * from "./1688-browser-contract.js";
 
-export type SourceCategory =
-  "news" | "ecommerce" | "data" | "community" | "product_supply";
+export type SourceCategory = "news" | "ecommerce" | "data" | "community" | "product_supply";
 export type SourceAvailability = "automatic" | "setup_required" | "manual";
 export interface BuiltinSourceDefinition {
   code: string;
   name: string;
-  access_mode:
-    | "public_rss"
-    | "authenticated_browser"
-    | "public_page"
-    | "import"
-    | "manual";
+  access_mode: "public_rss" | "authenticated_browser" | "public_page" | "import" | "manual";
   target_url: string;
   markets: string[];
   languages: string[];
@@ -51,8 +39,7 @@ export interface BuiltinSourceDefinition {
   status: "disabled" | "enabled";
   category: SourceCategory;
   availability: SourceAvailability;
-  production_policy:
-    "automatic_public_feed" | "setup_required" | "ready_for_owner_enablement";
+  production_policy: "automatic_public_feed" | "setup_required" | "ready_for_owner_enablement";
   policy_note: string;
 }
 const GOOGLE_TEMPLATE =
@@ -451,16 +438,14 @@ const syndicationFeeds = [
     market: "JP",
     language: "ja-JP",
   },
-  ...["US", "GB", "DE", "FR", "JP", "KR", "SG", "AU", "CA", "BR"].map(
-    (market) => ({
-      code: `google_trends_${market.toLowerCase()}`,
-      name: `Google Trends · ${market}`,
-      url: `https://trends.google.com/trending/rss?geo=${market}`,
-      category: "data" as const,
-      market,
-      language: "multi",
-    }),
-  ),
+  ...["US", "GB", "DE", "FR", "JP", "KR", "SG", "AU", "CA", "BR"].map((market) => ({
+    code: `google_trends_${market.toLowerCase()}`,
+    name: `Google Trends · ${market}`,
+    url: `https://trends.google.com/trending/rss?geo=${market}`,
+    category: "data" as const,
+    market,
+    language: "multi",
+  })),
 ] as const satisfies readonly {
   code: string;
   name: string;
@@ -485,9 +470,7 @@ const publicCatalogPages = [
     language: "en-US",
   },
 ] as const;
-const syndicationChannel = (
-  feed: (typeof syndicationFeeds)[number],
-): BuiltinSourceDefinition => {
+const syndicationChannel = (feed: (typeof syndicationFeeds)[number]): BuiltinSourceDefinition => {
   const pageOverride =
     feed.code === "shopify_blog"
       ? { url: "https://www.shopify.com/blog", owner: "平台电商来源中心" }
@@ -498,42 +481,40 @@ const syndicationChannel = (
           }
         : null;
   return {
-  code: `feed_${feed.code}`,
-  name: feed.name,
-  access_mode: pageOverride ? "public_page" : "public_rss",
-  target_url: pageOverride?.url ?? feed.url,
-  markets: [feed.market],
-  languages: [feed.language],
-  fields: pageOverride
-    ? ["title", "position", "source_url", "publisher", "observed_at"]
-    : ["title", "summary", "published_at", "source_url", "publisher"],
-  schedule_minutes: 15,
-  concurrency_limit: 1,
-  timeout_ms: 20000,
-  retry_limit: 3,
-  circuit_failure_threshold: 5,
-  dedupe_key: "guid_or_link",
-  retention_days: 90,
-  failure_rules: [
-    "network_error",
-    "timeout",
-    "rate_limited",
-    "source_changed",
-    "parse_failed",
-    "empty_result",
-  ],
-  parser_version: pageOverride
-    ? "structured-public-page-v1"
-    : "syndication-feed-v1",
-  healthcheck_url: pageOverride?.url ?? feed.url,
-  owner_label: pageOverride?.owner ?? "平台热点中心",
-  status: "enabled",
-  category: feed.category,
-  availability: "automatic",
-  production_policy: "automatic_public_feed",
-  policy_note: pageOverride
-    ? "固定抓取平台公开内容列表页面，不需要官方 API Key；页面结构变化会明确标记为解析失败。"
-    : "公开 RSS/Atom 频道；系统按 15 分钟周期自动采集并保留原文证据，也可在热点页手动刷新。",
+    code: `feed_${feed.code}`,
+    name: feed.name,
+    access_mode: pageOverride ? "public_page" : "public_rss",
+    target_url: pageOverride?.url ?? feed.url,
+    markets: [feed.market],
+    languages: [feed.language],
+    fields: pageOverride
+      ? ["title", "position", "source_url", "publisher", "observed_at"]
+      : ["title", "summary", "published_at", "source_url", "publisher"],
+    schedule_minutes: 15,
+    concurrency_limit: 1,
+    timeout_ms: 20000,
+    retry_limit: 3,
+    circuit_failure_threshold: 5,
+    dedupe_key: "guid_or_link",
+    retention_days: 90,
+    failure_rules: [
+      "network_error",
+      "timeout",
+      "rate_limited",
+      "source_changed",
+      "parse_failed",
+      "empty_result",
+    ],
+    parser_version: pageOverride ? "structured-public-page-v1" : "syndication-feed-v1",
+    healthcheck_url: pageOverride?.url ?? feed.url,
+    owner_label: pageOverride?.owner ?? "平台热点中心",
+    status: "enabled",
+    category: feed.category,
+    availability: "automatic",
+    production_policy: "automatic_public_feed",
+    policy_note: pageOverride
+      ? "固定抓取平台公开内容列表页面，不需要官方 API Key；页面结构变化会明确标记为解析失败。"
+      : "公开 RSS/Atom 频道；系统按 15 分钟周期自动采集并保留原文证据，也可在热点页手动刷新。",
   };
 };
 const publicCatalogChannel = (
@@ -545,15 +526,7 @@ const publicCatalogChannel = (
   target_url: page.url,
   markets: [page.market],
   languages: [page.language],
-  fields: [
-    "title",
-    "price",
-    "currency",
-    "position",
-    "source_url",
-    "publisher",
-    "observed_at",
-  ],
+  fields: ["title", "price", "currency", "position", "source_url", "publisher", "observed_at"],
   schedule_minutes: 60,
   concurrency_limit: 1,
   timeout_ms: 30000,
@@ -612,8 +585,7 @@ const googleChannel = (
   category: topic.category,
   availability: "automatic",
   production_policy: "automatic_public_feed",
-  policy_note:
-    "公开 RSS 热点频道；系统每 15 分钟自动采集，也可在热点页手动刷新。",
+  policy_note: "公开 RSS 热点频道；系统每 15 分钟自动采集，也可在热点页手动刷新。",
 });
 const setupTargetUrls: Readonly<Record<string, string>> = {
   amazon_product: "https://www.amazon.com/",
@@ -721,16 +693,9 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
   circuit_failure_threshold: 5,
   dedupe_key: "external_id",
   retention_days: 90,
-  failure_rules: [
-    "permission_denied",
-    "login_required",
-    "rate_limited",
-    "source_changed",
-  ],
+  failure_rules: ["permission_denied", "login_required", "rate_limited", "source_changed"],
   parser_version:
-    code === "1688_search"
-      ? ALIBABA_1688_BROWSER_PARSER_VERSION
-      : "setup-required-v1",
+    code === "1688_search" ? ALIBABA_1688_BROWSER_PARSER_VERSION : "setup-required-v1",
   healthcheck_url: null,
   owner_label: "平台来源中心",
   status: "disabled",
@@ -741,8 +706,8 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
     code === "1688_search"
       ? "搜索、商品详情与供应商浏览器输出合同已版本化；仍需真实登录档案和任务领取链验收后才能启用。"
       : access === "authenticated_browser"
-      ? "已配置平台真实登录入口；上传 Cookie 或读取当前浏览器 Cookie 后，还需完成该平台页面解析合同才会进入自动采集，不要求官方 API Key。"
-      : "已配置平台真实公开入口；页面字段解析合同验收通过后即可启用匿名爬虫，不要求登录或官方 API Key。",
+        ? "已配置平台真实登录入口；上传 Cookie 或读取当前浏览器 Cookie 后，还需完成该平台页面解析合同才会进入自动采集，不要求官方 API Key。"
+        : "已配置平台真实公开入口；页面字段解析合同验收通过后即可启用匿名爬虫，不要求登录或官方 API Key。",
 }));
 export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
   {
@@ -777,9 +742,7 @@ export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
     production_policy: "ready_for_owner_enablement",
     policy_note: "用于用户输入关键词后立即采集；不会在浏览器暴露密钥。",
   },
-  ...locales.flatMap((locale) =>
-    topics.map((topic) => googleChannel(locale, topic)),
-  ),
+  ...locales.flatMap((locale) => topics.map((topic) => googleChannel(locale, topic))),
   ...syndicationFeeds.map(syndicationChannel),
   ...publicCatalogPages.map(publicCatalogChannel),
   ...setupSources,
@@ -861,7 +824,16 @@ export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
     target_url: "https://www.ec21.com/",
     markets: ["GLOBAL"],
     languages: ["en-US"],
-    fields: ["title", "supplier_name", "price", "currency", "moq", "image_url", "source_url", "observed_at"],
+    fields: [
+      "title",
+      "supplier_name",
+      "price",
+      "currency",
+      "moq",
+      "image_url",
+      "source_url",
+      "observed_at",
+    ],
     schedule_minutes: 1440,
     concurrency_limit: 1,
     timeout_ms: 30000,
@@ -877,7 +849,8 @@ export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
     category: "product_supply",
     availability: "manual",
     production_policy: "ready_for_owner_enablement",
-    policy_note: "用户发起找货时抓取 EC21 公开供应商商品列表；与中国制造网并行执行，单一来源受限时不会伪造结果。",
+    policy_note:
+      "用户发起找货时抓取 EC21 公开供应商商品列表；与中国制造网并行执行，单一来源受限时不会伪造结果。",
   },
   {
     code: "manual_product_supply_csv",
@@ -911,8 +884,7 @@ export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
     category: "product_supply",
     availability: "manual",
     production_policy: "ready_for_owner_enablement",
-    policy_note:
-      "处理用户明确上传的商品与供应链 CSV，不连接或伪造外部平台数据。",
+    policy_note: "处理用户明确上传的商品与供应链 CSV，不连接或伪造外部平台数据。",
   },
 ];
 
@@ -947,18 +919,13 @@ const entity = (value: string) =>
     .replace(/&apos;/g, "'")
     .replace(/&amp;/g, "&")
     .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
-    .replace(/&#x([a-f0-9]+);/gi, (_, n) =>
-      String.fromCodePoint(Number.parseInt(n, 16)),
-    )
+    .replace(/&#x([a-f0-9]+);/gi, (_, n) => String.fromCodePoint(Number.parseInt(n, 16)))
     .trim();
 const tag = (xml: string, name: string) => {
-  const match = xml.match(
-    new RegExp(`<${name}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${name}>`, "i"),
-  );
+  const match = xml.match(new RegExp(`<${name}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${name}>`, "i"));
   return match?.[1] ? entity(match[1]) : "";
 };
-const stripHtml = (value: string) =>
-  entity(value.replace(/<[^>]+>/g, " ").replace(/\s+/g, " "));
+const stripHtml = (value: string) => entity(value.replace(/<[^>]+>/g, " ").replace(/\s+/g, " "));
 const httpUrl = (value: string) => {
   let url: URL;
   try {
@@ -966,21 +933,13 @@ const httpUrl = (value: string) => {
   } catch {
     throw new ProviderAdapterFailure("source_url_invalid", false);
   }
-  if (
-    !["http:", "https:"].includes(url.protocol) ||
-    url.username ||
-    url.password ||
-    url.hash
-  )
+  if (!["http:", "https:"].includes(url.protocol) || url.username || url.password || url.hash)
     throw new ProviderAdapterFailure("source_url_invalid", false);
   return url.toString();
 };
 const sha = (value: string) => createHash("sha256").update(value).digest("hex");
 
-export function parseGoogleNewsRss(
-  xml: string,
-  limit = 20,
-): ProviderRawRecord[] {
+export function parseGoogleNewsRss(xml: string, limit = 20): ProviderRawRecord[] {
   if (
     typeof xml !== "string" ||
     Buffer.byteLength(xml) > 2_000_000 ||
@@ -988,9 +947,10 @@ export function parseGoogleNewsRss(
     !/<channel\b/i.test(xml)
   )
     throw new ProviderAdapterFailure("invalid_payload", false);
-  const blocks = [
-    ...xml.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi),
-  ].slice(0, Math.min(100, limit));
+  const blocks = [...xml.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)].slice(
+    0,
+    Math.min(100, limit),
+  );
   return blocks.map((match) => {
     const raw = match[0],
       guid = text(tag(raw, "guid"), "rss_guid", 2048),
@@ -1059,9 +1019,7 @@ export function parseSyndicationFeed(
       [...raw.matchAll(/<link\b[^>]*>/gi)]
         .map((value) => attribute(value[0], "href"))
         .find(Boolean) ?? "";
-    const link = httpUrl(
-      text(atom ? atomLink : tag(raw, "link"), "feed_link", 2048),
-    );
+    const link = httpUrl(text(atom ? atomLink : tag(raw, "link"), "feed_link", 2048));
     const identity = tag(raw, atom ? "id" : "guid") || link;
     const published =
       tag(raw, atom ? "published" : "pubDate") ||
@@ -1075,9 +1033,10 @@ export function parseSyndicationFeed(
       tag(raw, atom ? "summary" : "description") || tag(raw, "content"),
     ).slice(0, 2000);
     const publisher =
-      stripHtml(
-        tag(tag(raw, "author"), "name") || tag(raw, "source") || sourceName,
-      ).slice(0, 300) || sourceName;
+      stripHtml(tag(tag(raw, "author"), "name") || tag(raw, "source") || sourceName).slice(
+        0,
+        300,
+      ) || sourceName;
     const payload: SourceEvidencePayload = {
       raw_content: raw,
       content_type: atom
@@ -1094,31 +1053,15 @@ export function parseSyndicationFeed(
         publisher,
       },
       source_paths: {
-        title: atom
-          ? "atom.entry.title"
-          : rdf
-            ? "rdf.item.title"
-            : "rss.item.title",
+        title: atom ? "atom.entry.title" : rdf ? "rdf.item.title" : "rss.item.title",
         summary: atom
           ? "atom.entry.summary"
           : rdf
             ? "rdf.item.description"
             : "rss.item.description",
-        published_at: atom
-          ? "atom.entry.published"
-          : rdf
-            ? "rdf.item.dc:date"
-            : "rss.item.pubDate",
-        source_url: atom
-          ? "atom.entry.link@href"
-          : rdf
-            ? "rdf.item.link"
-            : "rss.item.link",
-        publisher: atom
-          ? "atom.entry.author.name"
-          : rdf
-            ? "crawler.source"
-            : "rss.item.source",
+        published_at: atom ? "atom.entry.published" : rdf ? "rdf.item.dc:date" : "rss.item.pubDate",
+        source_url: atom ? "atom.entry.link@href" : rdf ? "rdf.item.link" : "rss.item.link",
+        publisher: atom ? "atom.entry.author.name" : rdf ? "crawler.source" : "rss.item.source",
       },
     };
     return {
@@ -1131,17 +1074,10 @@ export function parseSyndicationFeed(
 }
 
 const jsonLdBlocks = (html: string) =>
-  [
-    ...html.matchAll(
-      /<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi,
-    ),
-  ]
+  [...html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)]
     .map((match) => match[1]?.trim())
     .filter((value): value is string => Boolean(value));
-const walkJson = (
-  value: unknown,
-  visit: (item: Record<string, unknown>) => void,
-) => {
+const walkJson = (value: unknown, visit: (item: Record<string, unknown>) => void) => {
   if (Array.isArray(value)) {
     for (const item of value) walkJson(item, visit);
     return;
@@ -1165,11 +1101,7 @@ export function parseStructuredCatalogPage(
   sourceName: string,
   limit = 20,
 ): ProviderRawRecord[] {
-  if (
-    typeof html !== "string" ||
-    Buffer.byteLength(html) > 5_000_000 ||
-    !/<html\b/i.test(html)
-  )
+  if (typeof html !== "string" || Buffer.byteLength(html) > 5_000_000 || !/<html\b/i.test(html))
     throw new ProviderAdapterFailure("invalid_payload", false);
   const observedAt = new Date().toISOString(),
     candidates: Array<{
@@ -1190,36 +1122,33 @@ export function parseStructuredCatalogPage(
       continue;
     }
     walkJson(parsed, (item) => {
-      const types = Array.isArray(item["@type"])
-          ? item["@type"]
-          : [item["@type"]],
-        isProduct = types.some((type) =>
-          ["Product", "ListItem"].includes(String(type)),
-        );
+      const types = Array.isArray(item["@type"]) ? item["@type"] : [item["@type"]],
+        isProduct = types.some((type) => ["Product", "ListItem"].includes(String(type)));
       if (!isProduct) return;
-      const nested = (
-          item.item && typeof item.item === "object" ? item.item : item
-        ) as Record<string, unknown>,
+      const nested = (item.item && typeof item.item === "object" ? item.item : item) as Record<
+          string,
+          unknown
+        >,
         title = String(nested.name ?? item.name ?? "").trim(),
         url = absoluteUrl(nested.url ?? item.url, pageUrl),
         offers = (
-          nested.offers && typeof nested.offers === "object"
-            ? nested.offers
-            : {}
+          nested.offers && typeof nested.offers === "object" ? nested.offers : {}
         ) as Record<string, unknown>,
         priceValue = Number(offers.price ?? offers.lowPrice),
-        price =
-          Number.isFinite(priceValue) && priceValue >= 0 ? priceValue : null,
-        currency = offers.priceCurrency
-          ? String(offers.priceCurrency).toUpperCase()
-          : null,
+        price = Number.isFinite(priceValue) && priceValue >= 0 ? priceValue : null,
+        currency = offers.priceCurrency ? String(offers.priceCurrency).toUpperCase() : null,
         positionValue = Number(item.position),
-        position =
-          Number.isSafeInteger(positionValue) && positionValue > 0
-            ? positionValue
-            : null,
+        position = Number.isSafeInteger(positionValue) && positionValue > 0 ? positionValue : null,
         imageValue = Array.isArray(nested.image) ? nested.image[0] : nested.image,
-        imageUrl = absoluteUrl(typeof imageValue === "object" && imageValue ? ((imageValue as Record<string,unknown>).url ?? (imageValue as Record<string,unknown>).contentUrl ?? (imageValue as Record<string,unknown>).thumbnailUrl) : imageValue, pageUrl) || null;
+        imageUrl =
+          absoluteUrl(
+            typeof imageValue === "object" && imageValue
+              ? ((imageValue as Record<string, unknown>).url ??
+                  (imageValue as Record<string, unknown>).contentUrl ??
+                  (imageValue as Record<string, unknown>).thumbnailUrl)
+              : imageValue,
+            pageUrl,
+          ) || null;
       if (title.length >= 2 && url)
         candidates.push({
           title: title.slice(0, 1000),
@@ -1243,13 +1172,11 @@ export function parseStructuredCatalogPage(
             ? /^\/forum\/announcements-\d+\/topic\//i
             : host === "www.shopify.com"
               ? /^\/blog\/(?!topics(?:\/|$)|authors(?:\/|$)|latest\/?$)[^/]+\/?$/i
-          : host.includes("walmart.")
-            ? /\/ip\//i
-            : null;
+              : host.includes("walmart.")
+                ? /\/ip\//i
+                : null;
     if (pattern) {
-      for (const match of html.matchAll(
-        /<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi,
-      )) {
+      for (const match of html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)) {
         const url = absoluteUrl(match[1], pageUrl),
           title = stripHtml(match[2] ?? "").trim();
         if (url && pattern.test(new URL(url).pathname) && title.length >= 3)
@@ -1259,7 +1186,11 @@ export function parseStructuredCatalogPage(
             price: null,
             currency: null,
             position: candidates.length + 1,
-            imageUrl: absoluteUrl(match[0].match(/<img\b[^>]*(?:src|data-src)=["']([^"']+)["']/i)?.[1], pageUrl) || null,
+            imageUrl:
+              absoluteUrl(
+                match[0].match(/<img\b[^>]*(?:src|data-src)=["']([^"']+)["']/i)?.[1],
+                pageUrl,
+              ) || null,
             raw: match[0],
             sourceKind: "html_anchor",
           });
@@ -1267,9 +1198,10 @@ export function parseStructuredCatalogPage(
       }
     }
   }
-  const unique = [
-    ...new Map(candidates.map((item) => [item.url, item])).values(),
-  ].slice(0, Math.min(100, limit));
+  const unique = [...new Map(candidates.map((item) => [item.url, item])).values()].slice(
+    0,
+    Math.min(100, limit),
+  );
   if (!unique.length) throw new ProviderAdapterFailure("source_changed", false);
   return unique.map((item, index) => {
     const fields = {
@@ -1291,9 +1223,7 @@ export function parseStructuredCatalogPage(
         source_paths: {
           title: isJsonLd ? "jsonld.name" : "html.anchor.text",
           price: isJsonLd ? "jsonld.offers.price" : "not_available",
-          currency: isJsonLd
-            ? "jsonld.offers.priceCurrency"
-            : "not_available",
+          currency: isJsonLd ? "jsonld.offers.priceCurrency" : "not_available",
           position: isJsonLd ? "jsonld.position" : "html.anchor.order",
           source_url: isJsonLd ? "jsonld.url" : "html.anchor.href",
           publisher: "crawler.source",
@@ -1353,10 +1283,7 @@ const CSV_HEADERS = [
   "canonical_url",
   "observed_at",
 ] as const;
-export function parseProductSupplyCsv(
-  csv: string,
-  limit = 20,
-): ProviderRawRecord[] {
+export function parseProductSupplyCsv(csv: string, limit = 20): ProviderRawRecord[] {
   const rows = parseCsvRows(csv),
     header = rows[0];
   if (
@@ -1367,58 +1294,56 @@ export function parseProductSupplyCsv(
     header.some((value, index) => value.trim() !== CSV_HEADERS[index])
   )
     throw new ProviderAdapterFailure("csv_header_invalid", false);
-  return rows
-    .slice(1, Math.min(rows.length, limit + 1))
-    .map((values, index) => {
-      if (values.length !== CSV_HEADERS.length)
-        throw new ProviderAdapterFailure("csv_column_count_invalid", false);
-      const row = Object.fromEntries(
-          CSV_HEADERS.map((name, i) => [name, (values[i] ?? "").trim()]),
-        ) as Record<(typeof CSV_HEADERS)[number], string>,
-        externalId = text(row.external_id, "external_id", 200),
-        title = text(row.title, "title", 1000),
-        price = Number(row.price),
-        currency = text(row.currency, "currency", 3).toUpperCase(),
-        supplier = text(row.supplier_name, "supplier_name", 500),
-        moq = Number(row.moq),
-        canonical = httpUrl(text(row.canonical_url, "canonical_url", 2048)),
-        observed = new Date(text(row.observed_at, "observed_at", 120));
-      if (
-        !Number.isFinite(price) ||
-        price < 0 ||
-        !Number.isSafeInteger(moq) ||
-        moq < 1 ||
-        !/^[A-Z]{3}$/.test(currency) ||
-        !Number.isFinite(observed.getTime())
-      )
-        throw new ProviderAdapterFailure("csv_value_invalid", false);
-      const fields = {
-          external_id: externalId,
-          title,
-          price,
-          currency,
-          supplier_name: supplier,
-          moq,
-          canonical_url: canonical,
-          observed_at: observed.toISOString(),
-        },
-        sourcePaths = Object.fromEntries(
-          CSV_HEADERS.map((name) => [name, `csv.row[${index + 2}].${name}`]),
-        ),
-        payload: SourceEvidencePayload = {
-          raw_content: JSON.stringify(row),
-          content_type: "application/json",
-          canonical_url: canonical,
-          fields,
-          source_paths: sourcePaths,
-        };
-      return {
-        externalId,
-        observedAt: observed.toISOString(),
-        evidenceRef: `manual-product-supply:${sha(`${externalId}\0${canonical}`)}`,
-        payload,
+  return rows.slice(1, Math.min(rows.length, limit + 1)).map((values, index) => {
+    if (values.length !== CSV_HEADERS.length)
+      throw new ProviderAdapterFailure("csv_column_count_invalid", false);
+    const row = Object.fromEntries(
+        CSV_HEADERS.map((name, i) => [name, (values[i] ?? "").trim()]),
+      ) as Record<(typeof CSV_HEADERS)[number], string>,
+      externalId = text(row.external_id, "external_id", 200),
+      title = text(row.title, "title", 1000),
+      price = Number(row.price),
+      currency = text(row.currency, "currency", 3).toUpperCase(),
+      supplier = text(row.supplier_name, "supplier_name", 500),
+      moq = Number(row.moq),
+      canonical = httpUrl(text(row.canonical_url, "canonical_url", 2048)),
+      observed = new Date(text(row.observed_at, "observed_at", 120));
+    if (
+      !Number.isFinite(price) ||
+      price < 0 ||
+      !Number.isSafeInteger(moq) ||
+      moq < 1 ||
+      !/^[A-Z]{3}$/.test(currency) ||
+      !Number.isFinite(observed.getTime())
+    )
+      throw new ProviderAdapterFailure("csv_value_invalid", false);
+    const fields = {
+        external_id: externalId,
+        title,
+        price,
+        currency,
+        supplier_name: supplier,
+        moq,
+        canonical_url: canonical,
+        observed_at: observed.toISOString(),
+      },
+      sourcePaths = Object.fromEntries(
+        CSV_HEADERS.map((name) => [name, `csv.row[${index + 2}].${name}`]),
+      ),
+      payload: SourceEvidencePayload = {
+        raw_content: JSON.stringify(row),
+        content_type: "application/json",
+        canonical_url: canonical,
+        fields,
+        source_paths: sourcePaths,
       };
-    });
+    return {
+      externalId,
+      observedAt: observed.toISOString(),
+      evidenceRef: `manual-product-supply:${sha(`${externalId}\0${canonical}`)}`,
+      payload,
+    };
+  });
 }
 
 function payload(record: ProviderRawRecord) {
@@ -1436,7 +1361,7 @@ function payload(record: ProviderRawRecord) {
 }
 abstract class SourceAdapter implements ProviderAdapter {
   abstract readonly key: string;
-  abstract readonly accessMode: "public_rss" | "public_page" | "import";
+  abstract readonly accessMode: "public_rss" | "public_page" | "authenticated_browser" | "import";
   abstract readonly version: string;
   abstract collect(
     request: ProviderCollectRequest,
@@ -1467,6 +1392,23 @@ abstract class SourceAdapter implements ProviderAdapter {
   }
 }
 
+export class Alibaba1688BrowserAdapter extends SourceAdapter {
+  readonly key = "1688_search";
+  readonly accessMode = "authenticated_browser" as const;
+  readonly version = "1688-browser-adapter-v1";
+  async collect(): Promise<ProviderCollectBatch> {
+    throw new ProviderAdapterFailure("browser_runtime_required", false);
+  }
+  async healthCheck(): Promise<AdapterHealthSignal> {
+    return {
+      status: "blocked",
+      latencyMs: 0,
+      errorCode: "browser_profile_verification_required",
+      message: "需由 Python Crawler 使用有效浏览器档案执行并回写固定样本结果。",
+    };
+  }
+}
+
 export class GoogleNewsRssAdapter extends SourceAdapter {
   readonly key = "google_news_search";
   readonly accessMode = "public_rss" as const;
@@ -1476,19 +1418,14 @@ export class GoogleNewsRssAdapter extends SourceAdapter {
   }
   private url(target: string, query: string) {
     if (
-      target !==
-      "https://news.google.com/rss/search?q={urlEncodedQuery}&hl=en-US&gl=US&ceid=US:en"
+      target !== "https://news.google.com/rss/search?q={urlEncodedQuery}&hl=en-US&gl=US&ceid=US:en"
     )
       throw new ProviderAdapterFailure("source_configuration_invalid", false);
-    return target.replace(
-      "{urlEncodedQuery}",
-      encodeURIComponent(text(query, "query", 200)),
-    );
+    return target.replace("{urlEncodedQuery}", encodeURIComponent(text(query, "query", 200)));
   }
   async collect(request: ProviderCollectRequest, signal: AbortSignal) {
-    const query = (
-        request as ProviderCollectRequest & { target?: Record<string, unknown> }
-      ).target?.query,
+    const query = (request as ProviderCollectRequest & { target?: Record<string, unknown> }).target
+        ?.query,
       url = this.url(request.provider.targetUrl, query as string),
       response = await this.fetcher(url, {
         signal,
@@ -1498,15 +1435,11 @@ export class GoogleNewsRssAdapter extends SourceAdapter {
           "user-agent": "ScoutOps/0.1 source-admission",
         },
       });
-    if (response.status === 429)
-      throw new ProviderAdapterFailure("rate_limited", true);
-    if (response.status >= 500)
-      throw new ProviderAdapterFailure("network_error", true);
-    if (!response.ok)
-      throw new ProviderAdapterFailure("permission_denied", false);
+    if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
+    if (response.status >= 500) throw new ProviderAdapterFailure("network_error", true);
+    if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
     const type = response.headers.get("content-type") ?? "";
-    if (!/(xml|rss)/i.test(type))
-      throw new ProviderAdapterFailure("source_changed", false);
+    if (!/(xml|rss)/i.test(type)) throw new ProviderAdapterFailure("source_changed", false);
     const xml = await response.text(),
       records = parseGoogleNewsRss(xml, Math.min(request.limit, 20));
     return { records, nextCursor: null };
@@ -1587,20 +1520,13 @@ export class FixedGoogleNewsRssAdapter extends SourceAdapter {
         "user-agent": "ScoutOps/1.0 automatic-hotspot-collector",
       },
     });
-    if (response.status === 429)
-      throw new ProviderAdapterFailure("rate_limited", true);
-    if (response.status >= 500)
-      throw new ProviderAdapterFailure("network_error", true);
-    if (!response.ok)
-      throw new ProviderAdapterFailure("permission_denied", false);
+    if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
+    if (response.status >= 500) throw new ProviderAdapterFailure("network_error", true);
+    if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
     const type = response.headers.get("content-type") ?? "";
-    if (!/(xml|rss)/i.test(type))
-      throw new ProviderAdapterFailure("source_changed", false);
+    if (!/(xml|rss)/i.test(type)) throw new ProviderAdapterFailure("source_changed", false);
     return {
-      records: parseGoogleNewsRss(
-        await response.text(),
-        Math.min(request.limit, 20),
-      ),
+      records: parseGoogleNewsRss(await response.text(), Math.min(request.limit, 20)),
       nextCursor: null,
     };
   }
@@ -1610,17 +1536,14 @@ export class FixedGoogleNewsRssAdapter extends SourceAdapter {
   ): Promise<AdapterHealthSignal> {
     const started = Date.now();
     try {
-      const response = await this.fetcher(
-        this.url(context.provider.targetUrl),
-        {
-          signal,
-          redirect: "error",
-          headers: {
-            accept: "application/rss+xml, application/xml;q=0.9",
-            "user-agent": "ScoutOps/1.0 source-health",
-          },
+      const response = await this.fetcher(this.url(context.provider.targetUrl), {
+        signal,
+        redirect: "error",
+        headers: {
+          accept: "application/rss+xml, application/xml;q=0.9",
+          "user-agent": "ScoutOps/1.0 source-health",
         },
-      );
+      });
       if (!response.ok)
         return {
           status: "degraded",
@@ -1665,17 +1588,13 @@ export class FixedSyndicationFeedAdapter extends SourceAdapter {
       signal,
       redirect: "error",
       headers: {
-        accept:
-          "application/rss+xml, application/atom+xml, application/xml;q=0.9",
+        accept: "application/rss+xml, application/atom+xml, application/xml;q=0.9",
         "user-agent": "ScoutOps/1.0 automatic-hotspot-collector",
       },
     });
-    if (response.status === 429)
-      throw new ProviderAdapterFailure("rate_limited", true);
-    if (response.status >= 500)
-      throw new ProviderAdapterFailure("network_error", true);
-    if (!response.ok)
-      throw new ProviderAdapterFailure("permission_denied", false);
+    if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
+    if (response.status >= 500) throw new ProviderAdapterFailure("network_error", true);
+    if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
     return response;
   }
   async collect(request: ProviderCollectRequest, signal: AbortSignal) {
@@ -1737,15 +1656,11 @@ export class FixedStructuredPublicPageAdapter extends SourceAdapter {
         "user-agent": "Mozilla/5.0 (compatible; ScoutOpsCatalogCrawler/1.0)",
       },
     });
-    if (response.status === 429)
-      throw new ProviderAdapterFailure("rate_limited", true);
-    if (response.status >= 500)
-      throw new ProviderAdapterFailure("network_error", true);
-    if (!response.ok)
-      throw new ProviderAdapterFailure("permission_denied", false);
+    if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
+    if (response.status >= 500) throw new ProviderAdapterFailure("network_error", true);
+    if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
     const type = response.headers.get("content-type") ?? "";
-    if (!/html/i.test(type))
-      throw new ProviderAdapterFailure("source_changed", false);
+    if (!/html/i.test(type)) throw new ProviderAdapterFailure("source_changed", false);
     return response;
   }
   async collect(request: ProviderCollectRequest, signal: AbortSignal) {
@@ -1767,12 +1682,7 @@ export class FixedStructuredPublicPageAdapter extends SourceAdapter {
     const started = Date.now();
     try {
       const response = await this.response(context.provider.targetUrl, signal);
-      parseStructuredCatalogPage(
-        await response.text(),
-        this.configuredUrl,
-        this.sourceName,
-        1,
-      );
+      parseStructuredCatalogPage(await response.text(), this.configuredUrl, this.sourceName, 1);
       return {
         status: "ready",
         latencyMs: Date.now() - started,
@@ -1818,21 +1728,19 @@ export function parseAmazonProductPage(
   pageUrl: string,
   limit = 20,
 ): ProviderRawRecord[] {
-  if (
-    typeof html !== "string" ||
-    Buffer.byteLength(html) > 5_000_000 ||
-    !/<html\b/i.test(html)
-  )
+  if (typeof html !== "string" || Buffer.byteLength(html) > 5_000_000 || !/<html\b/i.test(html))
     throw new ProviderAdapterFailure("invalid_payload", false);
   const observedAt = new Date().toISOString(),
-    blocks = [
-      ...html.matchAll(
-        /<div\b(?=[^>]*data-component-type=["']s-search-result["'])(?=[^>]*data-asin=["']([A-Z0-9]{10})["'])[^>]*>([\s\S]*?)(?=<div\b(?=[^>]*data-component-type=["']s-search-result["'])|<\/body>)/gi,
-      ),
-    ],
-    directAsin = /\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:[/?]|$)/i.exec(
-      pageUrl,
-    )?.[1]?.toUpperCase(),
+    resultBlockPattern = new RegExp(
+      "<div\\b(?=[^>]*data-component-type=[\"']s-search-result[\"'])" +
+        "(?=[^>]*data-asin=[\"']([A-Z0-9]{10})[\"'])[^>]*>" +
+        "([\\s\\S]*?)(?=<div\\b(?=[^>]*data-component-type=[\"']s-search-result[\"'])|<\\/body>)",
+      "gi",
+    ),
+    blocks = [...html.matchAll(resultBlockPattern)],
+    directAsin = /\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:[/?]|$)/i
+      .exec(pageUrl)?.[1]
+      ?.toUpperCase(),
     sourceBlocks = blocks.length
       ? blocks.map((match) => ({ asin: match[1]!, html: match[2]! }))
       : directAsin
@@ -1841,9 +1749,7 @@ export function parseAmazonProductPage(
   const records: ProviderRawRecord[] = [];
   for (const [index, item] of sourceBlocks.entries()) {
     const title = stripHtml(
-        item.html.match(
-          /<(?:h1|h2)\b[^>]*>[\s\S]*?<span\b[^>]*>([\s\S]*?)<\/span>/i,
-        )?.[1] ??
+        item.html.match(/<(?:h1|h2)\b[^>]*>[\s\S]*?<span\b[^>]*>([\s\S]*?)<\/span>/i)?.[1] ??
           item.html.match(/id=["']productTitle["'][^>]*>([\s\S]*?)<\//i)?.[1] ??
           "",
       ),
@@ -1861,11 +1767,16 @@ export function parseAmazonProductPage(
       reviewText =
         item.html.match(/aria-label=["']([0-9,.]+)\s+(?:ratings|reviews)["']/i)?.[1] ??
         item.html.match(/class=["'][^"']*s-underline-text[^"']*["'][^>]*>([0-9,.]+)</i)?.[1],
-      imageUrl = absoluteUrl(
-        item.html.match(/<img\b[^>]*class=["'][^"']*s-image[^"']*["'][^>]*(?:src|data-src)=["']([^"']+)/i)?.[1] ??
-          item.html.match(/id=["']landingImage["'][^>]*(?:src|data-old-hires)=["']([^"']+)/i)?.[1],
-        pageUrl,
-      ) || null,
+      imageUrl =
+        absoluteUrl(
+          item.html.match(
+            /<img\b[^>]*class=["'][^"']*s-image[^"']*["'][^>]*(?:src|data-src)=["']([^"']+)/i,
+          )?.[1] ??
+            item.html.match(
+              /id=["']landingImage["'][^>]*(?:src|data-old-hires)=["']([^"']+)/i,
+            )?.[1],
+          pageUrl,
+        ) || null,
       price = money(priceText),
       rating = ratingText ? Number(ratingText) : null,
       reviews = countValue(reviewText);
@@ -1878,9 +1789,7 @@ export function parseAmazonProductPage(
         position: blocks.length ? index + 1 : null,
         review_count: reviews,
         rating_value:
-          rating != null && Number.isFinite(rating) && rating >= 0 && rating <= 5
-            ? rating
-            : null,
+          rating != null && Number.isFinite(rating) && rating >= 0 && rating <= 5 ? rating : null,
         availability: "unknown",
         image_url: imageUrl,
         source_url: sourceUrl,
@@ -1904,8 +1813,7 @@ export function parseAmazonProductPage(
     });
     if (records.length >= Math.min(20, limit)) break;
   }
-  if (!records.length)
-    throw new ProviderAdapterFailure("source_changed", false);
+  if (!records.length) throw new ProviderAdapterFailure("source_changed", false);
   return records;
 }
 
@@ -1938,23 +1846,16 @@ export class AmazonProductSearchAdapter extends SourceAdapter {
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36",
       },
     });
-    if (response.status === 429)
-      throw new ProviderAdapterFailure("rate_limited", true);
-    if (response.status >= 500)
-      throw new ProviderAdapterFailure("network_error", true);
-    if (!response.ok)
-      throw new ProviderAdapterFailure("permission_denied", false);
+    if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
+    if (response.status >= 500) throw new ProviderAdapterFailure("network_error", true);
+    if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
     return response;
   }
   async collect(request: ProviderCollectRequest, signal: AbortSignal) {
     const url = this.url(request.target),
       response = await this.response(url, signal);
     return {
-      records: parseAmazonProductPage(
-        await response.text(),
-        url,
-        Math.min(request.limit, 20),
-      ),
+      records: parseAmazonProductPage(await response.text(), url, Math.min(request.limit, 20)),
       nextCursor: null,
     };
   }
@@ -1974,8 +1875,7 @@ export class AmazonProductSearchAdapter extends SourceAdapter {
       return {
         status: "degraded" as const,
         latencyMs: Date.now() - started,
-        errorCode:
-          error instanceof ProviderAdapterFailure ? error.code : "network_error",
+        errorCode: error instanceof ProviderAdapterFailure ? error.code : "network_error",
         message: "Amazon 公开商品页当前不可解析。",
       };
     }
@@ -1987,11 +1887,7 @@ export function parseMadeInChinaSearchPage(
   pageUrl: string,
   limit = 20,
 ): ProviderRawRecord[] {
-  if (
-    typeof html !== "string" ||
-    Buffer.byteLength(html) > 5_000_000 ||
-    !/<html\b/i.test(html)
-  )
+  if (typeof html !== "string" || Buffer.byteLength(html) > 5_000_000 || !/<html\b/i.test(html))
     throw new ProviderAdapterFailure("invalid_payload", false);
   const observedAt = new Date().toISOString(),
     links = [
@@ -2005,9 +1901,7 @@ export function parseMadeInChinaSearchPage(
   for (const block of jsonLdBlocks(html)) {
     try {
       walkJson(JSON.parse(entity(block)), (item) => {
-        const types = Array.isArray(item["@type"])
-          ? item["@type"]
-          : [item["@type"]];
+        const types = Array.isArray(item["@type"]) ? item["@type"] : [item["@type"]];
         if (types.some((type) => String(type) === "Product")) products.push(item);
       });
     } catch {}
@@ -2027,9 +1921,7 @@ export function parseMadeInChinaSearchPage(
       sourceUrl = links[index] ?? links.find((url) => url.includes("/product/")) ?? "",
       priceValue = Number(offers.lowPrice ?? offers.price),
       price = Number.isFinite(priceValue) && priceValue >= 0 ? priceValue : null,
-      currency = offers.priceCurrency
-        ? String(offers.priceCurrency).toUpperCase()
-        : null,
+      currency = offers.priceCurrency ? String(offers.priceCurrency).toUpperCase() : null,
       imageUrl = absoluteUrl(item.image, pageUrl) || null;
     if (!title || !supplier || !sourceUrl || price == null || !currency) continue;
     const fields = {
@@ -2060,8 +1952,7 @@ export function parseMadeInChinaSearchPage(
     });
     if (records.length >= Math.min(20, limit)) break;
   }
-  if (!records.length)
-    throw new ProviderAdapterFailure("source_changed", false);
+  if (!records.length) throw new ProviderAdapterFailure("source_changed", false);
   return records;
 }
 
@@ -2079,8 +1970,7 @@ export class MadeInChinaSearchAdapter extends SourceAdapter {
         .replace(/[^A-Za-z0-9]+/g, "_")
         .replace(/^_+|_+$/g, "")
         .slice(0, 120);
-    if (!slug)
-      throw new ProviderAdapterFailure("query_invalid", false);
+    if (!slug) throw new ProviderAdapterFailure("query_invalid", false);
     return `https://www.made-in-china.com/products-search/hot-china-products/${slug}.html`;
   }
   private async response(url: string, signal: AbortSignal) {
@@ -2096,23 +1986,16 @@ export class MadeInChinaSearchAdapter extends SourceAdapter {
     });
     if (!/(^|\.)made-in-china\.com$/i.test(new URL(response.url || url).hostname))
       throw new ProviderAdapterFailure("permission_denied", false);
-    if (response.status === 429)
-      throw new ProviderAdapterFailure("rate_limited", true);
-    if (response.status >= 500)
-      throw new ProviderAdapterFailure("network_error", true);
-    if (!response.ok)
-      throw new ProviderAdapterFailure("permission_denied", false);
+    if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
+    if (response.status >= 500) throw new ProviderAdapterFailure("network_error", true);
+    if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
     return response;
   }
   async collect(request: ProviderCollectRequest, signal: AbortSignal) {
     const url = this.url(request.target),
       response = await this.response(url, signal);
     return {
-      records: parseMadeInChinaSearchPage(
-        await response.text(),
-        url,
-        Math.min(request.limit, 20),
-      ),
+      records: parseMadeInChinaSearchPage(await response.text(), url, Math.min(request.limit, 20)),
       nextCursor: null,
     };
   }
@@ -2132,36 +2015,93 @@ export class MadeInChinaSearchAdapter extends SourceAdapter {
       return {
         status: "degraded" as const,
         latencyMs: Date.now() - started,
-        errorCode:
-          error instanceof ProviderAdapterFailure ? error.code : "network_error",
+        errorCode: error instanceof ProviderAdapterFailure ? error.code : "network_error",
         message: "供应商公开页面当前不可解析。",
       };
     }
   }
 }
 
-export function parseEc21SupplierSearchPage(html: string, pageUrl: string, limit = 20): ProviderRawRecord[] {
+export function parseEc21SupplierSearchPage(
+  html: string,
+  pageUrl: string,
+  limit = 20,
+): ProviderRawRecord[] {
   if (typeof html !== "string" || Buffer.byteLength(html) > 5_000_000 || !/<html\b/i.test(html))
     throw new ProviderAdapterFailure("invalid_payload", false);
-  const starts = [...html.matchAll(/<li\b[^>]*class=["'][^"']*galleryLs[^"']*["'][^>]*>/gi)].map((match) => match.index ?? 0),
+  const starts = [...html.matchAll(/<li\b[^>]*class=["'][^"']*galleryLs[^"']*["'][^>]*>/gi)].map(
+      (match) => match.index ?? 0,
+    ),
     observedAt = new Date().toISOString(),
     records: ProviderRawRecord[] = [];
   for (let index = 0; index < starts.length; index++) {
-    const block = html.slice(starts[index]!, starts[index + 1] ?? Math.min(html.length, starts[index]! + 20000)),
-      link = block.match(/<h2\b[^>]*class=["'][^"']*pdtName[^"']*["'][^>]*>\s*<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/i),
+    const block = html.slice(
+        starts[index]!,
+        starts[index + 1] ?? Math.min(html.length, starts[index]! + 20000),
+      ),
+      link = block.match(
+        /<h2\b[^>]*class=["'][^"']*pdtName[^"']*["'][^>]*>\s*<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/i,
+      ),
       sourceUrl = link?.[1] ? cleanUrl(link[1], pageUrl) : "",
       title = link?.[2] ? stripHtml(link[2]).trim() : "",
-      currency = block.match(/itemprop=["']priceCurrency["'][^>]*content=["']([A-Za-z]{3})["']/i)?.[1]?.toUpperCase() ?? null,
+      currency =
+        block
+          .match(/itemprop=["']priceCurrency["'][^>]*content=["']([A-Za-z]{3})["']/i)?.[1]
+          ?.toUpperCase() ?? null,
       priceText = block.match(/itemprop=["']price["'][^>]*>([^<]+)/i)?.[1],
       price = money(priceText),
-      moqText = block.match(/<span\b[^>]*class=["'][^"']*pr5[^"']*["'][^>]*>([0-9,.]+)<\/span>\s*<span\b[^>]*class=["'][^"']*pr5[^"']*["'][^>]*>[^<]*<\/span>\s*\(Min\. Order\)/i)?.[1],
+      moqText = block.match(
+        /<span\b[^>]*class=["'][^"']*pr5[^"']*["'][^>]*>([0-9,.]+)<\/span>\s*<span\b[^>]*class=["'][^"']*pr5[^"']*["'][^>]*>[^<]*<\/span>\s*\(Min\. Order\)/i,
+      )?.[1],
       moq = countValue(moqText),
-      supplier = block.match(/class=["'][^"']*pdtCompany[^"']*["'][\s\S]{0,1000}?<a\b[^>]*title=["']([^"']+)["']/i)?.[1]?.trim() ?? "",
-      imageUrl = absoluteUrl(block.match(/<img\b[^>]*(?:src|data-src)=["']([^"']+)["'][^>]*itemprop=["']image["']/i)?.[1], pageUrl) || null;
-    if (!sourceUrl || !/^https:\/\/www\.ec21\.com\/product-/i.test(sourceUrl) || !title || !supplier || price == null || !currency) continue;
-    const fields = { title:title.slice(0,1000), supplier_name:supplier.slice(0,500), price, currency, moq, image_url:imageUrl, source_url:sourceUrl, publisher:"EC21", observed_at:observedAt },
-      payload: SourceEvidencePayload = { raw_content:block.slice(0,20000), content_type:"text/html", canonical_url:sourceUrl, fields, source_paths:Object.fromEntries(Object.keys(fields).map((key)=>[key,`ec21.html.${key}`])) };
-    records.push({ externalId:sha(sourceUrl), observedAt, evidenceRef:`ec21-product:${sha(sourceUrl)}`, payload });
+      supplier =
+        block
+          .match(
+            /class=["'][^"']*pdtCompany[^"']*["'][\s\S]{0,1000}?<a\b[^>]*title=["']([^"']+)["']/i,
+          )?.[1]
+          ?.trim() ?? "",
+      imageUrl =
+        absoluteUrl(
+          block.match(
+            /<img\b[^>]*(?:src|data-src)=["']([^"']+)["'][^>]*itemprop=["']image["']/i,
+          )?.[1],
+          pageUrl,
+        ) || null;
+    if (
+      !sourceUrl ||
+      !/^https:\/\/www\.ec21\.com\/product-/i.test(sourceUrl) ||
+      !title ||
+      !supplier ||
+      price == null ||
+      !currency
+    )
+      continue;
+    const fields = {
+        title: title.slice(0, 1000),
+        supplier_name: supplier.slice(0, 500),
+        price,
+        currency,
+        moq,
+        image_url: imageUrl,
+        source_url: sourceUrl,
+        publisher: "EC21",
+        observed_at: observedAt,
+      },
+      payload: SourceEvidencePayload = {
+        raw_content: block.slice(0, 20000),
+        content_type: "text/html",
+        canonical_url: sourceUrl,
+        fields,
+        source_paths: Object.fromEntries(
+          Object.keys(fields).map((key) => [key, `ec21.html.${key}`]),
+        ),
+      };
+    records.push({
+      externalId: sha(sourceUrl),
+      observedAt,
+      evidenceRef: `ec21-product:${sha(sourceUrl)}`,
+      payload,
+    });
     if (records.length >= Math.min(20, limit)) break;
   }
   if (!records.length) throw new ProviderAdapterFailure("source_changed", false);
@@ -2169,14 +2109,70 @@ export function parseEc21SupplierSearchPage(html: string, pageUrl: string, limit
 }
 
 export class Ec21SupplierSearchAdapter extends SourceAdapter {
-  readonly key="ec21_supplier_search";
-  readonly accessMode="public_page" as const;
-  readonly version="ec21-supplier-search-adapter-v1";
-  constructor(private readonly fetcher:typeof fetch=fetch){super();}
-  private url(target:Record<string,unknown>|undefined){const query=text(target?.query,"query",300),slug=query.normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu,"-").replace(/^-+|-+$/g,"").slice(0,120);if(!slug)throw new ProviderAdapterFailure("query_invalid",false);return `https://www.ec21.com/ec-market/${encodeURIComponent(slug)}.html`;}
-  private async response(url:string,signal:AbortSignal){const response=await this.fetcher(url,{signal,redirect:"follow",headers:{accept:"text/html,application/xhtml+xml","accept-language":"en-US,en;q=0.9","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36"}});if(new URL(response.url||url).hostname!=="www.ec21.com")throw new ProviderAdapterFailure("permission_denied",false);if(response.status===429)throw new ProviderAdapterFailure("rate_limited",true);if(response.status>=500)throw new ProviderAdapterFailure("network_error",true);if(!response.ok)throw new ProviderAdapterFailure("permission_denied",false);return response;}
-  async collect(request:ProviderCollectRequest,signal:AbortSignal){const url=this.url(request.target),response=await this.response(url,signal);return{records:parseEc21SupplierSearchPage(await response.text(),url,Math.min(request.limit,20)),nextCursor:null};}
-  async healthCheck(_:AdapterHealthContext,signal:AbortSignal){const started=Date.now(),url=this.url({query:"storage box"});try{const response=await this.response(url,signal);parseEc21SupplierSearchPage(await response.text(),url,1);return{status:"ready" as const,latencyMs:Date.now()-started,errorCode:null,message:"EC21 公开供应商列表可抓取。"};}catch(error){return{status:"degraded" as const,latencyMs:Date.now()-started,errorCode:error instanceof ProviderAdapterFailure?error.code:"network_error",message:"EC21 公开供应商列表当前不可解析。"};}}
+  readonly key = "ec21_supplier_search";
+  readonly accessMode = "public_page" as const;
+  readonly version = "ec21-supplier-search-adapter-v1";
+  constructor(private readonly fetcher: typeof fetch = fetch) {
+    super();
+  }
+  private url(target: Record<string, unknown> | undefined) {
+    const query = text(target?.query, "query", 300),
+      slug = query
+        .normalize("NFKC")
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}]+/gu, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 120);
+    if (!slug) throw new ProviderAdapterFailure("query_invalid", false);
+    return `https://www.ec21.com/ec-market/${encodeURIComponent(slug)}.html`;
+  }
+  private async response(url: string, signal: AbortSignal) {
+    const response = await this.fetcher(url, {
+      signal,
+      redirect: "follow",
+      headers: {
+        accept: "text/html,application/xhtml+xml",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36",
+      },
+    });
+    if (new URL(response.url || url).hostname !== "www.ec21.com")
+      throw new ProviderAdapterFailure("permission_denied", false);
+    if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
+    if (response.status >= 500) throw new ProviderAdapterFailure("network_error", true);
+    if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
+    return response;
+  }
+  async collect(request: ProviderCollectRequest, signal: AbortSignal) {
+    const url = this.url(request.target),
+      response = await this.response(url, signal);
+    return {
+      records: parseEc21SupplierSearchPage(await response.text(), url, Math.min(request.limit, 20)),
+      nextCursor: null,
+    };
+  }
+  async healthCheck(_: AdapterHealthContext, signal: AbortSignal) {
+    const started = Date.now(),
+      url = this.url({ query: "storage box" });
+    try {
+      const response = await this.response(url, signal);
+      parseEc21SupplierSearchPage(await response.text(), url, 1);
+      return {
+        status: "ready" as const,
+        latencyMs: Date.now() - started,
+        errorCode: null,
+        message: "EC21 公开供应商列表可抓取。",
+      };
+    } catch (error) {
+      return {
+        status: "degraded" as const,
+        latencyMs: Date.now() - started,
+        errorCode: error instanceof ProviderAdapterFailure ? error.code : "network_error",
+        message: "EC21 公开供应商列表当前不可解析。",
+      };
+    }
+  }
 }
 export class ManualProductSupplyCsvAdapter extends SourceAdapter {
   readonly key = "manual_product_supply_csv";
@@ -2185,14 +2181,10 @@ export class ManualProductSupplyCsvAdapter extends SourceAdapter {
   async collect(request: ProviderCollectRequest) {
     if (request.provider.targetUrl !== "inline://product-supply-csv-v1")
       throw new ProviderAdapterFailure("source_configuration_invalid", false);
-    const csv = (
-      request as ProviderCollectRequest & { target?: Record<string, unknown> }
-    ).target?.csv_text;
+    const csv = (request as ProviderCollectRequest & { target?: Record<string, unknown> }).target
+      ?.csv_text;
     return {
-      records: parseProductSupplyCsv(
-        csv as string,
-        Math.min(request.limit, 20),
-      ),
+      records: parseProductSupplyCsv(csv as string, Math.min(request.limit, 20)),
       nextCursor: null,
     };
   }
@@ -2211,16 +2203,9 @@ const normalizeUnquotedHrefFetcher =
     const response = await fetcher(input, init);
     if (!response.ok) return response;
     const url =
-      typeof input === "string"
-        ? input
-        : input instanceof URL
-          ? input.toString()
-          : input.url;
+      typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
     if (new URL(url).hostname !== "www.ebay.com") return response;
-    const html = (await response.text()).replace(
-      /\shref=([^\s"'=<>`]+)/gi,
-      ' href="$1"',
-    );
+    const html = (await response.text()).replace(/\shref=([^\s"'=<>`]+)/gi, ' href="$1"');
     return new Response(html, {
       status: response.status,
       statusText: response.statusText,
@@ -2230,24 +2215,15 @@ const normalizeUnquotedHrefFetcher =
 export function createBuiltinSourceAdapters(fetcher: typeof fetch = fetch) {
   return [
     new GoogleNewsRssAdapter(fetcher),
-    ...BUILTIN_PROVIDER_SOURCES.filter(
-      (item) => item.availability === "automatic",
-    ).map((item) =>
+    ...BUILTIN_PROVIDER_SOURCES.filter((item) => item.availability === "automatic").map((item) =>
       item.parser_version === "syndication-feed-v1"
-        ? new FixedSyndicationFeedAdapter(
-            item.code,
-            item.target_url,
-            item.name,
-            fetcher,
-          )
+        ? new FixedSyndicationFeedAdapter(item.code, item.target_url, item.name, fetcher)
         : item.parser_version === "structured-public-page-v1"
           ? new FixedStructuredPublicPageAdapter(
               item.code,
               item.target_url,
               item.name,
-              item.code === "page_ebay_deals_us"
-                ? normalizeUnquotedHrefFetcher(fetcher)
-                : fetcher,
+              item.code === "page_ebay_deals_us" ? normalizeUnquotedHrefFetcher(fetcher) : fetcher,
             )
           : new FixedGoogleNewsRssAdapter(item.code, item.target_url, fetcher),
     ),
@@ -2255,6 +2231,7 @@ export function createBuiltinSourceAdapters(fetcher: typeof fetch = fetch) {
     new MadeInChinaSearchAdapter(fetcher),
     new Ec21SupplierSearchAdapter(fetcher),
     new ManualProductSupplyCsvAdapter(),
+    new Alibaba1688BrowserAdapter(),
   ];
 }
 export function sourceEvidencePayload(record: ProviderRawRecord) {

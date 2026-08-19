@@ -664,9 +664,9 @@ Resource Grant 只补充 RBAC/Data Scope 无法覆盖的指定资源例外：目
 
 #### 8.3.10 M03-04 Playwright Crawler 执行基线
 
-`authenticated_browser` 使用项目依法持有的账号和 M03-02 加密浏览器档案，由 Python Crawler 通过无 shell 插值的 stdin/stdout 桥接调用 Node Playwright Chromium。执行计划仅接受 HTTP(S)、明确 origin 白名单和有上限的搜索、分页、滚动及详情动作；登录、验证码、robots、429、超时、Parser 变化和依赖失败必须如实受阻或失败，禁止绕过登录、验证码、付费墙和站点限制。档案以受限 `tar.gz` 临时解包，拒绝路径穿越、链接和资源超限，并在全部结果路径关闭 context、清空 Buffer 和删除准确临时目录。
+`authenticated_browser` 使用项目依法持有的账号和 M03-02 加密浏览器档案。Node Worker 是业务 `collection_tasks` 的唯一领取者，并为登录型子查询写入与任务、子查询关联的 `browser_collection_jobs`；Python Crawler 从内部服务接口领取浏览器作业，通过无 shell 插值的 stdin/stdout 桥接调用 Node Playwright Chromium，再把有界结果回写到原业务子查询。无待处理作业时返回 204，不发送空闲心跳，也不读取静态执行请求文件。执行计划仅接受 HTTP(S)、明确 origin 白名单和有上限的搜索、分页、滚动及详情动作；登录、验证码、robots、429、超时、Parser 变化和依赖失败必须如实受阻或失败，禁止绕过登录、验证码、付费墙和站点限制。档案以受限 `tar.gz` 临时解包，拒绝路径穿越、链接和资源超限，并在全部结果路径关闭 context、清空 Buffer 和删除准确临时目录。
 
-浏览器档案是平台全局安全资产，但每次低层运行必须带 `organization_id`/`workspace_id`。MySQL 5.7 以档案主键独占租约、令牌摘要、心跳、到期时间和 `SELECT ... FOR UPDATE` 防止并发复用；首次 acquire 才向内部 Crawler 返回令牌，幂等重放和监控 API 均不返回令牌。运行、租约事件和过期回收都保留 request_id/trace_id。平台监控和显式过期回收只允许 `collection:replay`，写入还校验 Origin 与 Idempotency-Key。M03-04 不创建 M03-05 的采集任务状态机/队列/重试/死信，不保存 M03-06 证据，也不提前编造 M03-07 来源选择器。
+浏览器档案是平台全局安全资产，但每个浏览器作业与低层运行都必须从原业务任务继承 `organization_id`/`workspace_id`、request_id 和 trace_id。MySQL 5.7 以业务子查询唯一作业、档案主键独占租约、全局 Crawler 槽位、令牌摘要、心跳、到期时间和 `SELECT ... FOR UPDATE` 防止重复领取与档案并发复用；内部首次 job acquire 才向 Python Crawler 返回密文记录和一次性令牌，平台监控 API 永不返回密文、计划或令牌。Worker 负责 M03-05 任务重试/死信和 M03-06 证据持久化，Python 只执行已领取的浏览器作业。平台监控和显式过期回收只允许 `collection:replay`，写入还校验 Origin 与 Idempotency-Key；内部 job acquire/heartbeat/complete 只接受 Crawler 服务 Token。
 
 #### 8.3.11 M03-05 采集任务状态机实现基线
 
@@ -690,7 +690,7 @@ MySQL 5.7 保存组织/工作区范围化的原始证据元数据、规范记录
 
 `1688_search` 的浏览器提取结果必须按版本化合同进入来源规范化层：搜索、商品详情、供应商分别使用 `1688.search.v1`、`1688.offer-detail.v1`、`1688.supplier.v1`，解析器版本为 `1688-browser-contract-v1`。合同只接受 HTTPS 的 1688 域名，搜索入口限定 `s.1688.com`，商品详情路径中的数字商品 ID 必须与记录一致。搜索合同覆盖标题、供应商、报价、币种、MOQ、地点和规范链接；详情合同补规格与交期；供应商合同独立保存供应商名称、地点和规范链接。每条输出必须保留观测时间、最多 250 KB 的 DOM 证据片段及必需字段路径，缺失事实写入 `missing_fields_json`，不得补零或猜值。
 
-该合同不是生产接通声明。平台真实登录档案与域名绑定、Python Crawler 领取业务采集任务、Playwright 生产执行和结果回写尚未共同验收前，`1688_search` 继续保持 `setup_required / disabled`，不注册成可执行自动适配器。页面结构、字段路径或 schema 漂移时以 `source_changed` 失败关闭，跨站或身份不一致以 `source_configuration_invalid` 拒绝。
+该合同不是生产接通声明。当前已注册 1688 的登录型作业路由、Worker 到 Python 的业务任务领取/心跳/结果回写链和规范化适配器；但真实登录页面的字段提取尚未用平台档案与固定样本共同验收，因此 `1688_search` 继续保持 `setup_required / disabled`，不得宣称自动采集可用。页面结构、字段路径或 schema 漂移时以 `source_changed` 失败关闭，跨站或身份不一致以 `source_configuration_invalid` 拒绝。
 
 当惠州出口不能直连 Google News 时，只允许在 ScoutOps 的宝塔 Node API、Node Worker 和有限来源任务中注入 `PROVIDER_PROXY_*` 项目配置。代码仅对固定 `news.google.com` HTTPS 请求建立带 Basic 认证的 HTTP CONNECT，其他 Provider、AI、API 请求和系统进程继续直连；禁止设置全局 `HTTP_PROXY`/`HTTPS_PROXY`，禁止将代理地址或凭证下发浏览器、写入 Provider DTO、日志或 Git。代理不能放宽 10 秒健康门、2 MB 响应和每任务 20 条限制。
 
@@ -1004,7 +1004,7 @@ M08-03 将同一台惠州服务器上的宝塔 MySQL 5.7 固定为 S0 单主韧�
 
 M08-04 已把证据与导出固定在惠州当前单机的两个宝塔受控目录：组织/工作区范围路径、原子写入、导出 SHA-256、活动索引有界抽样、容量水位、M07-04 evidence/export 同机加密副本和隔离恢复事实均进入失败关闭门禁。`/api/v1/platform/operations/files` 与桌面/390px 运维页要求 `platform:operate`，观测、查看和审计在同一事务写入，且不返回路径、文件名、哈希、组织/工作区标识或凭证。构建 `a8024c1589b99b27a02e8eb58a561c3f0263add6` 已完成 5%/25%/100% 的 1,800/1,800/1,801 秒观察并晋级为单一 4101；20/20 个活动文件样本校验通过，同机加密副本和隔离恢复有效。生产证据 SHA-256 为 `80a2927dfae3ca9dd2a95d6850d527dac682b6058c2cdd5fd4c3ce6c49447365`，模块 run_id/trace_id 为 `db0d5d96-d5c7-43e9-8190-a7cff7775129`。该结果不建设共享存储、负载均衡或备用服务器，也不宣称容量、多节点或 10,000 用户能力。
 
-M08-05 的实现合同固定为惠州单机一个名为“ai选品”的宝塔统一 Node 后端；API、Worker 和按需采集执行通道均由该项目监督，每来源有效并发 1、每浏览器档案独占 1。M03-05 任务领取与全局 Worker/来源槽位在同一 MySQL 5.7 事务中完成，心跳和所有终态同步释放；M03-04 浏览器档案租约再叠加一个全局采集槽位，二者必须同时成功。Worker 在领取前检查运行合同，触线时保持任务排队；Redis 仍只做组织/工作区范围的队列协调。`/api/v1/platform/operations/crawler-scheduler` 及桌面/390px 页面只向 `platform:operate` 返回脱敏聚合事实，过期回收同源、幂等并审计。独立 Node Worker、Python Crawler 和候选常驻项目均已取消；历史发布证据仅作追溯，不作为当前生产拓扑。当前验收只证明惠州单机调度合同，不建设或声明负载均衡、备用服务器、多节点、容量或 10,000 用户能力。
+M08-05 的实现合同固定为惠州单机一个名为“ai选品”的宝塔统一 Node 后端和一个名为“ai选品-python”的宝塔 Python Crawler：Node 后端内监督 API 与 Worker，Worker 唯一领取 M03-05 业务任务；Python Crawler 只领取 Worker 创建的登录型浏览器作业并调用固定 Node Playwright runner，不领取普通公开来源任务。每来源有效并发 1、每浏览器档案独占 1。M03-05 任务领取与全局 Worker/来源槽位在同一 MySQL 5.7 事务中完成，浏览器作业再叠加档案租约与全局 Crawler 槽位，心跳和所有终态同步释放。Worker 在领取前检查运行合同，触线时保持任务排队；Redis 仍只做组织/工作区范围的队列协调。`/api/v1/platform/operations/crawler-scheduler` 及桌面/390px 页面只向 `platform:operate` 返回脱敏聚合事实，过期回收同源、幂等并审计。独立 Node Worker、候选后端和其他常驻采集项目均已取消；Python Crawler 保留为宝塔直接管理的唯一浏览器作业消费者。历史发布证据仅作追溯，不作为当前生产拓扑。当前验收只证明惠州单机调度合同，不建设或声明负载均衡、备用服务器、多节点、容量或 10,000 用户能力。
 
 ### 13.2 数据质量量化门槛
 

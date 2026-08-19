@@ -17,11 +17,16 @@ class RuntimeClientError(RuntimeError):
 
 @dataclass(frozen=True)
 class CrawlerLease:
+    job_id: str
     run_id: str
     profile_id: str
     lease_token: str
     request_id: str
     trace_id: str
+    execution_request: dict[str, Any]
+    credential: dict[str, Any]
+    locale: str
+    timezone: str
 
 
 class CrawlerRuntimeClient:
@@ -29,43 +34,43 @@ class CrawlerRuntimeClient:
         self.config = config
 
     def acquire(self) -> CrawlerLease | None:
-        if not all((self.config.service_token, self.config.organization_id, self.config.workspace_id, self.config.profile_id)):
+        if not self.config.service_token:
             return None
         request_id = f"crawler-acquire-{uuid.uuid4()}"
         data = self._post(
-            "/api/v1/internal/crawler-runtime/acquire",
+            "/api/v1/internal/crawler-runtime/jobs/acquire",
             {
-                "organization_id": self.config.organization_id,
-                "workspace_id": self.config.workspace_id,
-                "profile_id": self.config.profile_id,
                 "lease_owner": self.config.crawler_id,
                 "lease_seconds": self.config.lease_seconds,
             },
             request_id,
             request_id,
-            idempotency_key=str(uuid.uuid4()),
-            conflict_is_empty=True,
+            empty_is_none=True,
         )
         if data is None:
             return None
-        run = data["data"]["run"]
-        token = data["data"].get("lease_token")
+        assignment = data["data"]
+        run = assignment["run"]
+        job = assignment["job"]
+        profile = assignment["profile"]
+        token = assignment.get("lease_token")
         if not token:
             return None
-        return CrawlerLease(str(run["id"]), self.config.profile_id, str(token), str(run["request_id"]), str(run["trace_id"]))
+        return CrawlerLease(str(job["id"]), str(run["id"]), str(profile["id"]), str(token), str(run["request_id"]), str(run["trace_id"]), dict(job["execution_request"]), dict(assignment["credential"]), str(profile["locale"]), str(profile["timezone"]))
 
     def heartbeat(self, lease: CrawlerLease) -> None:
         self._post(
-            f"/api/v1/internal/crawler-runtime/{lease.run_id}/heartbeat",
-            {"profile_id": lease.profile_id, "lease_token": lease.lease_token, "lease_seconds": self.config.lease_seconds},
+            f"/api/v1/internal/crawler-runtime/jobs/{lease.job_id}/heartbeat",
+            {"run_id": lease.run_id, "profile_id": lease.profile_id, "lease_token": lease.lease_token, "lease_seconds": self.config.lease_seconds},
             lease.request_id,
             lease.trace_id,
         )
 
     def complete(self, lease: CrawlerLease, result: dict[str, Any]) -> None:
         self._post(
-            f"/api/v1/internal/crawler-runtime/{lease.run_id}/complete",
+            f"/api/v1/internal/crawler-runtime/jobs/{lease.job_id}/complete",
             {
+                "run_id": lease.run_id,
                 "profile_id": lease.profile_id,
                 "lease_token": lease.lease_token,
                 "status": self._terminal_status(str(result.get("status", "dependency_failed"))),
@@ -74,6 +79,7 @@ class CrawlerRuntimeClient:
                 "detail_count": int(result.get("detail_count", 0)),
                 "duration_ms": int(result.get("duration_ms", 0)),
                 "error_code": result.get("error_code"),
+                "result": result,
             },
             lease.request_id,
             lease.trace_id,
@@ -93,7 +99,7 @@ class CrawlerRuntimeClient:
             "dependency_failed": "failed",
         }.get(status, "failed")
 
-    def _post(self, path: str, body: dict[str, Any], request_id: str, trace_id: str, idempotency_key: str | None = None, conflict_is_empty: bool = False) -> dict[str, Any] | None:
+    def _post(self, path: str, body: dict[str, Any], request_id: str, trace_id: str, idempotency_key: str | None = None, empty_is_none: bool = False) -> dict[str, Any] | None:
         headers = {
             "authorization": f"Bearer {self.config.service_token}",
             "content-type": "application/json",
@@ -110,10 +116,10 @@ class CrawlerRuntimeClient:
         )
         try:
             with urllib.request.urlopen(request, timeout=15) as response:
+                if empty_is_none and response.status == 204:
+                    return None
                 return json.load(response)
         except urllib.error.HTTPError as error:
-            if conflict_is_empty and error.code == 409:
-                return None
             try:
                 payload = json.load(error)
                 code = str(payload.get("code") or payload.get("error", {}).get("code") or f"crawler_api_http_{error.code}")

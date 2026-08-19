@@ -1,8 +1,291 @@
-import test from 'node:test';import assert from'node:assert/strict';import{gzipSync}from'node:zlib';import{readFile}from'node:fs/promises';import{GoogleNewsRssAdapter,ManualProductSupplyCsvAdapter,BUILTIN_PROVIDER_SOURCES,createBuiltinSourceAdapters,createProviderSourceFetch,decodeProviderProxyResponseBody,parseGoogleNewsRss,parseProductSupplyCsv,parseSyndicationFeed,sourceEvidencePayload}from'../../packages/provider-sources/dist/index.js';import{ProviderAdapterRegistry}from'../../packages/provider-adapters/dist/index.js';
-const ids={provider:'00000000-0000-4000-8000-000000000b71',org:'00000000-0000-4000-8000-000000000b72',ws:'00000000-0000-4000-8000-000000000b73'},rss=`<?xml version="1.0"?><rss version="2.0"><channel><item><title><![CDATA[Foldable desk lamp - Example News]]></title><link>https://news.google.com/rss/articles/desk-lamp</link><guid isPermaLink="false">desk-lamp-guid</guid><pubDate>Fri, 07 Aug 2026 12:00:00 GMT</pubDate><description><![CDATA[<a href="https://example.test">Compact lamp demand rises</a>]]></description><source url="https://example.test">Example News</source></item></channel></rss>`,csv=`external_id,title,price,currency,supplier_name,moq,canonical_url,observed_at\nSKU-100,Foldable Desk Lamp,12.50,USD,Example Supplier,100,https://example.test/products/sku-100,2026-08-07T12:00:00Z\n`;
-test('M03-07.A01/A02/A12 catalog contains 100+ truthful channels and parsers preserve provenance',()=>{assert.ok(BUILTIN_PROVIDER_SOURCES.length>=100);assert.equal(new Set(BUILTIN_PROVIDER_SOURCES.map(item=>item.code)).size,BUILTIN_PROVIDER_SOURCES.length);assert.ok(['news','ecommerce','data','community','product_supply'].every(category=>BUILTIN_PROVIDER_SOURCES.some(item=>item.category===category)));assert.ok(BUILTIN_PROVIDER_SOURCES.filter(item=>item.availability==='automatic').length>=80);assert.ok(BUILTIN_PROVIDER_SOURCES.some(item=>item.availability==='setup_required'));assert.ok(BUILTIN_PROVIDER_SOURCES.some(item=>item.availability==='manual'));const news=parseGoogleNewsRss(rss,20),products=parseProductSupplyCsv(csv,20);assert.equal(news.length,1);assert.equal(products.length,1);assert.equal(sourceEvidencePayload(news[0]).source_paths.publisher,'rss.item.source');assert.equal(sourceEvidencePayload(products[0]).fields.moq,100);assert.throws(()=>parseProductSupplyCsv(csv.replace('currency','money'),20),/csv_header_invalid/);assert.throws(()=>parseGoogleNewsRss('<html></html>',20),/invalid_payload/);});
-test('M03-07.A09/A10/A12 project proxy is scoped to the fixed automatic-source allowlist and never becomes a global proxy',async()=>{const calls=[],before={http:process.env.HTTP_PROXY,https:process.env.HTTPS_PROXY};const direct=async(input)=>{calls.push({transport:'direct',url:String(input)});return new Response('direct')};const tunnel=async(url,_init,proxy)=>{calls.push({transport:'proxy',url:url.toString(),proxyUrl:proxy.url,username:proxy.username,password:proxy.password});return new Response(rss,{status:200,headers:{'content-type':'application/xml'}})};const fetcher=createProviderSourceFetch({url:'http://192.0.2.10:7893/',username:'project-user',password:'project-secret',connectTimeoutMs:5000},{directFetch:direct,tunnelFetch:tunnel},['news.google.com','www.reddit.com']);await fetcher('https://news.google.com/rss/search?q=product');await fetcher('https://www.reddit.com/r/france/.rss');await fetcher('https://example.test/not-a-provider');assert.deepEqual(calls.map(call=>call.transport),['proxy','proxy','direct']);assert.equal(calls[0].proxyUrl,'http://192.0.2.10:7893/');assert.equal(process.env.HTTP_PROXY,before.http);assert.equal(process.env.HTTPS_PROXY,before.https);});
-test('M03-07 proxy transport decodes bounded gzip and syndication parser accepts RDF feeds',()=>{const html=Buffer.from('<html><body>Amazon</body></html>'),compressed=gzipSync(html);assert.deepEqual(decodeProviderProxyResponseBody(compressed,'gzip'),html);assert.throws(()=>decodeProviderProxyResponseBody(Buffer.alloc(2_000_001),null),/exceeds 2 MB/);const rdf='<?xml version="1.0"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><item><title>Hatena trend</title><link>https://b.hatena.ne.jp/entry/example</link><description>Trending topic</description><dc:date>2026-08-18T10:00:00Z</dc:date></item></rdf:RDF>',records=parseSyndicationFeed(rdf,'Hatena',5);assert.equal(records.length,1);assert.equal(records[0].payload.content_type,'application/rdf+xml');assert.equal(records[0].payload.fields.published_at,'2026-08-18T10:00:00.000Z');});
-test('M03-07.A04/A05/A12 adapters cover every automatic channel and keep exact configured endpoints',async()=>{const fetcher=async()=>new Response(rss,{status:200,headers:{'content-type':'application/xml'}}),registry=new ProviderAdapterRegistry({healthTimeoutMs:1000,maxResponseBytes:2_000_000,maxItemsPerBatch:100});for(const adapter of createBuiltinSourceAdapters(fetcher))registry.register(adapter);const automatic=BUILTIN_PROVIDER_SOURCES.filter(item=>item.availability==='automatic');assert.ok(automatic.every(item=>registry.describe().some(adapter=>adapter.key===item.code)));const base={id:ids.provider,parserVersion:'v1',timeoutMs:1000,fields:['title']},context={requestId:'request-1',traceId:'trace-1',organizationId:ids.org,workspaceId:ids.ws},google=BUILTIN_PROVIDER_SOURCES.find(item=>item.code==='google_news_search');let batch=await registry.collect({...context,provider:{...base,code:'google_news_search',accessMode:'public_rss',targetUrl:google.target_url},target:{query:'desk lamp'},limit:20});assert.equal(batch.records.length,1);assert.equal(registry.normalize('google_news_search',batch.records[0],{...context,provider:{...base,code:'google_news_search',accessMode:'public_rss',targetUrl:google.target_url}}).fields.publisher,'Example News');const manual=BUILTIN_PROVIDER_SOURCES.find(item=>item.code==='manual_product_supply_csv');batch=await registry.collect({...context,provider:{...base,code:'manual_product_supply_csv',accessMode:'import',targetUrl:manual.target_url},target:{csv_text:csv},limit:20});assert.equal(registry.normalize('manual_product_supply_csv',batch.records[0],{...context,provider:{...base,code:'manual_product_supply_csv',accessMode:'import',targetUrl:manual.target_url}}).fields.price,12.5);await assert.rejects(()=>registry.collect({...context,provider:{...base,code:'google_news_search',accessMode:'public_rss',targetUrl:'https://evil.test/rss'},target:{query:'desk lamp'},limit:20}),/source_configuration_invalid/);});
-test('M03-07.A03/A06-A11/A13-A17 delivery evidence is complete',async()=>{const paths=['database/migrations/0016g_provider_sources_m03_07.up.sql','database/migrations/0016g_provider_sources_m03_07.down.sql','database/migrations/0036_automatic_hotspot_sources.up.sql','database/migrations/0036_automatic_hotspot_sources.down.sql','apps/worker/src/provider-source-executor.ts','apps/worker/src/automatic-source-scheduler.ts','apps/api/src/provider-source-service.ts','apps/api/src/provider-source-routes.ts','apps/web/src/components/ProviderSourceCenter.vue','packages/provider-sources/src/proxy-fetch.ts','config/env.example','config/schema.json','docs/openapi.yaml','docs/feature-map.json','docs/architecture/m03-07-provider-sources.md','docs/runbooks/m03-07-provider-sources.md','tests/e2e/m03-07-provider-sources.spec.ts','scripts/verify-provider-sources-live.mjs','scripts/verify-automatic-hotspots-live.mjs','new-product-enterprise-blueprint.md'];const values=await Promise.all(paths.map(path=>readFile(path,'utf8'))),[up,down,automaticUp,automaticDown,executor,scheduler,service,routes,web,proxy,env,schema,openapi,feature,architecture,runbook,e2e,live,automaticLive,blueprint]=values;assert.match(up,/provider_source_replay_runs/);assert.match(down,/DROP TABLE IF EXISTS `provider_source_replay_runs`/);assert.match(automaticUp,/automatic_source_schedules[\s\S]*provider_refresh_operations/);assert.match(automaticDown,/DROP TABLE IF EXISTS `automatic_source_schedules`/);assert.match(executor,/MySqlEvidencePersistence/);assert.match(scheduler,/batchSize\s*=\s*16/);assert.match(scheduler,/provider_offset/);assert.match(service,/syncCatalog[\s\S]*refresh/);assert.match(routes,/collection:replay[\s\S]*trend:read/);assert.match(web,/loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);assert.match(proxy,/news\.google\.com/);assert.match(proxy,/Proxy-Authorization/);assert.match(env,/AUTOMATIC_SOURCE_SCHEDULER_POLL_MS/);assert.match(schema,/automaticSources/);assert.match(openapi,/\/provider-sources\/refresh:/);assert.match(feature,/100\+ code-owned hotspot/);assert.match(architecture,/100 个以上[\s\S]*自动采集/);assert.match(runbook,/宝塔.*统一后端“ai选品”/s);assert.doesNotMatch(runbook,/`product-scout-api` Node 项目|`product-scout-worker` Node 项目/);assert.match(e2e,/toHaveScreenshot/);assert.match(live,/news\.google\.com/);assert.match(live,/DELETE FROM collection_task_evidence_links WHERE organization_id=\?/);assert.match(live,/provider_sources_live_cleanup_failed/);assert.match(automaticLive,/catalog\.length < 100/);assert.match(automaticLive,/automatic\.length < 80/);assert.match(automaticLive,/MySqlAutomaticSourceScheduler/);assert.match(automaticLive,/manual_refresh_idempotency/);assert.match(automaticLive,/assertCleanup/);assert.match(blueprint,/100\+ 来源纠偏基线/);});
-test('M03-07 fixed source adapters reject redirects or validate the final host',async()=>{const source=await readFile('packages/provider-sources/src/index.ts','utf8');assert.match(source,/redirect: "error"/);assert.match(source,/response\.url \|\| url/);assert.match(source,/response\.url\|\|url/);});
+import test from "node:test";
+import assert from "node:assert/strict";
+import { gzipSync } from "node:zlib";
+import { readFile } from "node:fs/promises";
+import {
+  GoogleNewsRssAdapter,
+  ManualProductSupplyCsvAdapter,
+  BUILTIN_PROVIDER_SOURCES,
+  createBuiltinSourceAdapters,
+  createProviderSourceFetch,
+  decodeProviderProxyResponseBody,
+  parseGoogleNewsRss,
+  parseProductSupplyCsv,
+  parseSyndicationFeed,
+  sourceEvidencePayload,
+} from "../../packages/provider-sources/dist/index.js";
+import { ProviderAdapterRegistry } from "../../packages/provider-adapters/dist/index.js";
+const ids = {
+    provider: "00000000-0000-4000-8000-000000000b71",
+    org: "00000000-0000-4000-8000-000000000b72",
+    ws: "00000000-0000-4000-8000-000000000b73",
+  },
+  rss = [
+    '<?xml version="1.0"?><rss version="2.0"><channel><item>',
+    "<title><![CDATA[Foldable desk lamp - Example News]]></title>",
+    "<link>https://news.google.com/rss/articles/desk-lamp</link>",
+    '<guid isPermaLink="false">desk-lamp-guid</guid>',
+    "<pubDate>Fri, 07 Aug 2026 12:00:00 GMT</pubDate>",
+    '<description><![CDATA[<a href="https://example.test">Compact lamp demand rises</a>]]></description>',
+    '<source url="https://example.test">Example News</source></item></channel></rss>',
+  ].join(""),
+  csv = [
+    "external_id,title,price,currency,supplier_name,moq,canonical_url,observed_at",
+    [
+      "SKU-100,Foldable Desk Lamp,12.50,USD,Example Supplier,100,",
+      "https://example.test/products/sku-100,2026-08-07T12:00:00Z",
+    ].join(""),
+    "",
+  ].join("\n");
+test("M03-07.A01/A02/A12 catalog contains 100+ truthful channels and parsers preserve provenance", () => {
+  assert.ok(BUILTIN_PROVIDER_SOURCES.length >= 100);
+  assert.equal(
+    new Set(BUILTIN_PROVIDER_SOURCES.map((item) => item.code)).size,
+    BUILTIN_PROVIDER_SOURCES.length,
+  );
+  assert.ok(
+    ["news", "ecommerce", "data", "community", "product_supply"].every((category) =>
+      BUILTIN_PROVIDER_SOURCES.some((item) => item.category === category),
+    ),
+  );
+  assert.ok(
+    BUILTIN_PROVIDER_SOURCES.filter((item) => item.availability === "automatic").length >= 80,
+  );
+  assert.ok(BUILTIN_PROVIDER_SOURCES.some((item) => item.availability === "setup_required"));
+  assert.ok(BUILTIN_PROVIDER_SOURCES.some((item) => item.availability === "manual"));
+  const news = parseGoogleNewsRss(rss, 20),
+    products = parseProductSupplyCsv(csv, 20);
+  assert.equal(news.length, 1);
+  assert.equal(products.length, 1);
+  assert.equal(sourceEvidencePayload(news[0]).source_paths.publisher, "rss.item.source");
+  assert.equal(sourceEvidencePayload(products[0]).fields.moq, 100);
+  assert.throws(
+    () => parseProductSupplyCsv(csv.replace("currency", "money"), 20),
+    /csv_header_invalid/,
+  );
+  assert.throws(() => parseGoogleNewsRss("<html></html>", 20), /invalid_payload/);
+});
+test("M03-07.A09/A10/A12 project proxy is scoped to the fixed automatic-source allowlist and never becomes a global proxy", async () => {
+  const calls = [],
+    before = { http: process.env.HTTP_PROXY, https: process.env.HTTPS_PROXY };
+  const direct = async (input) => {
+    calls.push({ transport: "direct", url: String(input) });
+    return new Response("direct");
+  };
+  const tunnel = async (url, _init, proxy) => {
+    calls.push({
+      transport: "proxy",
+      url: url.toString(),
+      proxyUrl: proxy.url,
+      username: proxy.username,
+      password: proxy.password,
+    });
+    return new Response(rss, { status: 200, headers: { "content-type": "application/xml" } });
+  };
+  const fetcher = createProviderSourceFetch(
+    {
+      url: "http://192.0.2.10:7893/",
+      username: "project-user",
+      password: "project-secret",
+      connectTimeoutMs: 5000,
+    },
+    { directFetch: direct, tunnelFetch: tunnel },
+    ["news.google.com", "www.reddit.com"],
+  );
+  await fetcher("https://news.google.com/rss/search?q=product");
+  await fetcher("https://www.reddit.com/r/france/.rss");
+  await fetcher("https://example.test/not-a-provider");
+  assert.deepEqual(
+    calls.map((call) => call.transport),
+    ["proxy", "proxy", "direct"],
+  );
+  assert.equal(calls[0].proxyUrl, "http://192.0.2.10:7893/");
+  assert.equal(process.env.HTTP_PROXY, before.http);
+  assert.equal(process.env.HTTPS_PROXY, before.https);
+});
+test("M03-07 proxy transport decodes bounded gzip and syndication parser accepts RDF feeds", () => {
+  const html = Buffer.from("<html><body>Amazon</body></html>"),
+    compressed = gzipSync(html);
+  assert.deepEqual(decodeProviderProxyResponseBody(compressed, "gzip"), html);
+  assert.throws(
+    () => decodeProviderProxyResponseBody(Buffer.alloc(2_000_001), null),
+    /exceeds 2 MB/,
+  );
+  const rdf = [
+      '<?xml version="1.0"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" ',
+      'xmlns:dc="http://purl.org/dc/elements/1.1/"><item><title>Hatena trend</title>',
+      "<link>https://b.hatena.ne.jp/entry/example</link><description>Trending topic</description>",
+      "<dc:date>2026-08-18T10:00:00Z</dc:date></item></rdf:RDF>",
+    ].join(""),
+    records = parseSyndicationFeed(rdf, "Hatena", 5);
+  assert.equal(records.length, 1);
+  assert.equal(records[0].payload.content_type, "application/rdf+xml");
+  assert.equal(records[0].payload.fields.published_at, "2026-08-18T10:00:00.000Z");
+});
+test("M03-07.A04/A05/A12 adapters cover every automatic channel and keep exact configured endpoints", async () => {
+  const fetcher = async () =>
+      new Response(rss, { status: 200, headers: { "content-type": "application/xml" } }),
+    registry = new ProviderAdapterRegistry({
+      healthTimeoutMs: 1000,
+      maxResponseBytes: 2_000_000,
+      maxItemsPerBatch: 100,
+    });
+  for (const adapter of createBuiltinSourceAdapters(fetcher)) registry.register(adapter);
+  const automatic = BUILTIN_PROVIDER_SOURCES.filter((item) => item.availability === "automatic");
+  assert.ok(
+    automatic.every((item) => registry.describe().some((adapter) => adapter.key === item.code)),
+  );
+  const base = { id: ids.provider, parserVersion: "v1", timeoutMs: 1000, fields: ["title"] },
+    context = {
+      requestId: "request-1",
+      traceId: "trace-1",
+      organizationId: ids.org,
+      workspaceId: ids.ws,
+    },
+    google = BUILTIN_PROVIDER_SOURCES.find((item) => item.code === "google_news_search");
+  let batch = await registry.collect({
+    ...context,
+    provider: {
+      ...base,
+      code: "google_news_search",
+      accessMode: "public_rss",
+      targetUrl: google.target_url,
+    },
+    target: { query: "desk lamp" },
+    limit: 20,
+  });
+  assert.equal(batch.records.length, 1);
+  assert.equal(
+    registry.normalize("google_news_search", batch.records[0], {
+      ...context,
+      provider: {
+        ...base,
+        code: "google_news_search",
+        accessMode: "public_rss",
+        targetUrl: google.target_url,
+      },
+    }).fields.publisher,
+    "Example News",
+  );
+  const manual = BUILTIN_PROVIDER_SOURCES.find((item) => item.code === "manual_product_supply_csv");
+  batch = await registry.collect({
+    ...context,
+    provider: {
+      ...base,
+      code: "manual_product_supply_csv",
+      accessMode: "import",
+      targetUrl: manual.target_url,
+    },
+    target: { csv_text: csv },
+    limit: 20,
+  });
+  assert.equal(
+    registry.normalize("manual_product_supply_csv", batch.records[0], {
+      ...context,
+      provider: {
+        ...base,
+        code: "manual_product_supply_csv",
+        accessMode: "import",
+        targetUrl: manual.target_url,
+      },
+    }).fields.price,
+    12.5,
+  );
+  await assert.rejects(
+    () =>
+      registry.collect({
+        ...context,
+        provider: {
+          ...base,
+          code: "google_news_search",
+          accessMode: "public_rss",
+          targetUrl: "https://evil.test/rss",
+        },
+        target: { query: "desk lamp" },
+        limit: 20,
+      }),
+    /source_configuration_invalid/,
+  );
+});
+test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
+  const paths = [
+    "database/migrations/0016g_provider_sources_m03_07.up.sql",
+    "database/migrations/0016g_provider_sources_m03_07.down.sql",
+    "database/migrations/0036_automatic_hotspot_sources.up.sql",
+    "database/migrations/0036_automatic_hotspot_sources.down.sql",
+    "apps/worker/src/provider-source-executor.ts",
+    "apps/worker/src/automatic-source-scheduler.ts",
+    "apps/api/src/provider-source-service.ts",
+    "apps/api/src/provider-source-routes.ts",
+    "apps/web/src/components/ProviderSourceCenter.vue",
+    "packages/provider-sources/src/proxy-fetch.ts",
+    "config/env.example",
+    "config/schema.json",
+    "docs/openapi.yaml",
+    "docs/feature-map.json",
+    "docs/architecture/m03-07-provider-sources.md",
+    "docs/runbooks/m03-07-provider-sources.md",
+    "tests/e2e/m03-07-provider-sources.spec.ts",
+    "scripts/verify-provider-sources-live.mjs",
+    "scripts/verify-automatic-hotspots-live.mjs",
+    "new-product-enterprise-blueprint.md",
+  ];
+  const values = await Promise.all(paths.map((path) => readFile(path, "utf8"))),
+    [
+      up,
+      down,
+      automaticUp,
+      automaticDown,
+      executor,
+      scheduler,
+      service,
+      routes,
+      web,
+      proxy,
+      env,
+      schema,
+      openapi,
+      feature,
+      architecture,
+      runbook,
+      e2e,
+      live,
+      automaticLive,
+      blueprint,
+    ] = values;
+  assert.match(up, /provider_source_replay_runs/);
+  assert.match(down, /DROP TABLE IF EXISTS `provider_source_replay_runs`/);
+  assert.match(automaticUp, /automatic_source_schedules[\s\S]*provider_refresh_operations/);
+  assert.match(automaticDown, /DROP TABLE IF EXISTS `automatic_source_schedules`/);
+  assert.match(executor, /MySqlEvidencePersistence/);
+  assert.match(scheduler, /batchSize\s*=\s*16/);
+  assert.match(scheduler, /provider_offset/);
+  assert.match(service, /syncCatalog[\s\S]*refresh/);
+  assert.match(routes, /collection:replay[\s\S]*trend:read/);
+  assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
+  assert.match(proxy, /news\.google\.com/);
+  assert.match(proxy, /Proxy-Authorization/);
+  assert.match(env, /AUTOMATIC_SOURCE_SCHEDULER_POLL_MS/);
+  assert.match(schema, /automaticSources/);
+  assert.match(openapi, /\/provider-sources\/refresh:/);
+  assert.match(feature, /100\+ code-owned hotspot/);
+  assert.match(architecture, /100 个以上[\s\S]*自动采集/);
+  assert.match(runbook, /宝塔.*统一后端“ai选品”/s);
+  assert.doesNotMatch(runbook, /`product-scout-api` Node 项目|`product-scout-worker` Node 项目/);
+  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(live, /news\.google\.com/);
+  assert.match(live, /DELETE FROM collection_task_evidence_links WHERE organization_id=\?/);
+  assert.match(live, /provider_sources_live_cleanup_failed/);
+  assert.match(automaticLive, /catalog\.length < 100/);
+  assert.match(automaticLive, /automatic\.length < 80/);
+  assert.match(automaticLive, /MySqlAutomaticSourceScheduler/);
+  assert.match(automaticLive, /manual_refresh_idempotency/);
+  assert.match(automaticLive, /assertCleanup/);
+  assert.match(blueprint, /100\+ 来源纠偏基线/);
+});
+test("M03-07 fixed source adapters reject redirects or validate the final host", async () => {
+  const source = await readFile("packages/provider-sources/src/index.ts", "utf8");
+  assert.match(source, /redirect: "error"/);
+  assert.match(source, /response\.url \|\| url/);
+  assert.match(source, /response\.url\s*\|\|\s*url/);
+});

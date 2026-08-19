@@ -15,13 +15,14 @@
 - 自动目录包含 96 个 Google News RSS、40 个非 Google RSS/Atom 或公开页频道与 2 个 Amazon/eBay 固定公开榜单页面爬虫；其中 Shopify 资讯和 eBay 公告已切换到当前公开 HTML 页面。普通用户不需要配置官方 API Key。Walmart 当前返回人工验证页，保留为受控页面来源并明确显示受阻，不会伪造商品数据。
 - 跨境自动来源只复用本项目受限代理，并仅允许代码目录中自动来源的固定主机；不设置服务器全局代理，也不会代理用户输入的网址。新增自动来源主机时必须同步目录测试、Feature Map 与本运维说明，然后通过宝塔重启“ai选品”。
 - 登录型来源只使用平台管理员维护的受控浏览器档案。没有真实登录态或页面解析合同的来源保持禁用，不伪造结果，也不要求普通用户填写密钥。
-- 1688 已有 `1688-browser-contract-v1` 搜索、商品详情和供应商输出合同，但尚无已验收的生产任务领取与 Playwright 回写链，因此仍显示“待配置”且保持禁用。不得仅因合同测试通过就手工启用。
+- 1688 已有 `1688-browser-contract-v1` 搜索、商品详情和供应商输出合同，Worker 到 Python 的领取、心跳、Playwright 执行和结果回写链也已接通；但真实登录固定样本字段提取尚未验收，因此仍显示“待配置”且保持禁用。配置接口会以 `provider_source_setup_required` 阻止手工启用，不能只因合同测试通过绕过门禁。
 - 调节自动调度器检查周期时修改 `AUTOMATIC_SOURCE_SCHEDULER_POLL_MS`（5000–300000），然后通过宝塔重启统一后端“ai选品”。
 
 ## 故障处理
 
 - `waiting_for_platform_admin`：尚无活动平台超级管理员，目录不会写入；先按既有种子流程完成管理员激活。
 - `adapter_not_registered`：来源仍处于待配置状态或部署版本不一致；不要伪造成功。
+- `provider_source_setup_required`：1688 真实登录固定样本尚未通过字段回放；保持来源停用，完成样本验收和解析器版本更新后再发布解除门禁的代码版本。
 - `rate_limited`：保留任务和证据，等待状态机退避；不要提高并发绕过限制。
 - `source_changed` / `parse_failed`：停用对应频道，保留 trace_id，更新解析器和合同测试后再恢复。
 - 1688 的 `source_changed`：对照失败快照的 `schema_version`、DOM 片段与 `source_paths`，更新受控浏览器提取器和固定样本回放；不得放宽到任意 1688 URL、吞掉缺失字段或用空记录冒充成功。
@@ -41,7 +42,7 @@
 
 ## 本次发布重启要求
 
-来源目录和 1688 解析合同都在 Node 进程启动时加载。发布后必须通过宝塔重启统一 Node API 与 Node Worker；本次没有环境变量、数据库迁移或 Python 代码变更，不需要重启 Python Crawler、MySQL、Redis，也不创建新服务。
+来源目录、1688 解析合同和浏览器作业客户端都在 Node 进程启动时加载；Python Crawler 的领取合同也已改变。发布时应用 `0048_browser_collection_jobs.up.sql`，通过宝塔重启统一 Node 后端与 `ai选品-python`；MySQL 与 Redis 不需要重启，也不创建新服务。`1688_search` 在真实登录固定样本字段提取验收前继续保持停用。
 
 ## 网页登录与匿名测试
 

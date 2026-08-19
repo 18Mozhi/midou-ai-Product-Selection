@@ -6,13 +6,56 @@ import {
   type ProviderRawRecord,
 } from "@scoutops/provider-adapters";
 
-export const ALIBABA_1688_BROWSER_PARSER_VERSION =
-  "1688-browser-contract-v1";
+export const ALIBABA_1688_BROWSER_PARSER_VERSION = "1688-browser-contract-v1";
 export const ALIBABA_1688_SNAPSHOT_SCHEMAS = {
   search: "1688.search.v1",
   offerDetail: "1688.offer-detail.v1",
   supplier: "1688.supplier.v1",
 } as const;
+
+export function create1688BrowserExecutionRequest(target: Record<string, unknown>) {
+  const query = typeof target.query === "string" ? target.query.trim() : "";
+  if (!query || query.length > 200) throw new ProviderAdapterFailure("query_invalid", false);
+  const url = new URL("https://s.1688.com/selloffer/offer_search.htm");
+  url.searchParams.set("keywords", query);
+  return {
+    plan: {
+      start_url: url.toString(),
+      allowed_origins: ["https://s.1688.com", "https://detail.1688.com"],
+      item_selector: 'a[href*="detail.1688.com/offer/"]',
+      detail_link_selector: 'a[href*="detail.1688.com/offer/"]',
+      max_pages: 1,
+      max_scrolls: 3,
+      max_details: 10,
+      block_signals: {
+        login: 'input[type="password"]',
+        captcha: 'iframe[src*="captcha"], [class*="captcha"]',
+      },
+    },
+  };
+}
+
+export function parse1688BrowserRunResult(input: {
+  status: string;
+  error_code: string | null;
+  snapshots?: unknown;
+}): ProviderRawRecord[] {
+  if (input.status !== "succeeded" && input.status !== "succeeded_empty")
+    throw new ProviderAdapterFailure(
+      input.error_code ?? "dependency_unavailable",
+      ["rate_limited", "timeout", "dependency_unavailable"].includes(input.error_code ?? ""),
+    );
+  const snapshots = object(input.snapshots),
+    records: ProviderRawRecord[] = [];
+  if (snapshots.search !== undefined)
+    records.push(...parse1688SearchSnapshot(snapshots.search, 100));
+  if (Array.isArray(snapshots.offer_details))
+    for (const item of snapshots.offer_details) records.push(parse1688OfferDetailSnapshot(item));
+  if (Array.isArray(snapshots.suppliers))
+    for (const item of snapshots.suppliers) records.push(parse1688SupplierSnapshot(item));
+  if (input.status === "succeeded" && !records.length) failure();
+  return records;
+}
 
 type SnapshotKind = keyof typeof ALIBABA_1688_SNAPSHOT_SCHEMAS;
 type ContractObject = Record<string, unknown>;
@@ -55,8 +98,7 @@ const positiveInteger = (value: unknown): number | null => {
 
 const nonNegativeNumber = (value: unknown): number | null => {
   if (value == null) return null;
-  if (typeof value !== "number" || !Number.isFinite(value) || value < 0)
-    return failure();
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) return failure();
   return value;
 };
 
@@ -83,12 +125,7 @@ const https1688Url = (value: unknown): URL => {
 const offerUrl = (value: unknown, offerId: string): string => {
   const url = https1688Url(value),
     match = OFFER_PATH.exec(url.pathname);
-  if (
-    url.hostname !== "detail.1688.com" ||
-    !match ||
-    match[1] !== offerId
-  )
-    return failure();
+  if (url.hostname !== "detail.1688.com" || !match || match[1] !== offerId) return failure();
   return url.toString();
 };
 
@@ -102,14 +139,10 @@ const domFragment = (value: unknown): string => {
   return value;
 };
 
-const sourcePaths = (
-  value: unknown,
-  required: readonly string[],
-): ContractPaths => {
+const sourcePaths = (value: unknown, required: readonly string[]): ContractPaths => {
   const input = object(value),
     paths: ContractPaths = {};
-  for (const field of required)
-    paths[field] = requiredText(input[field], 500);
+  for (const field of required) paths[field] = requiredText(input[field], 500);
   return paths;
 };
 
@@ -118,8 +151,7 @@ const snapshot = (
   kind: SnapshotKind,
 ): { value: ContractObject; sourceUrl: string; observedAt: string } => {
   const value = object(input);
-  if (value.schema_version !== ALIBABA_1688_SNAPSHOT_SCHEMAS[kind])
-    return failure();
+  if (value.schema_version !== ALIBABA_1688_SNAPSHOT_SCHEMAS[kind]) return failure();
   const sourceUrl = https1688Url(value.source_url);
   if (kind === "search" && sourceUrl.hostname !== "s.1688.com")
     return failure("source_configuration_invalid");
@@ -178,9 +210,7 @@ const productFields = (
     return failure();
   const moq = positiveInteger(item.moq),
     location = optionalText(item.location, 255),
-    specification = options.detail
-      ? optionalText(item.specification, 1000)
-      : null,
+    specification = options.detail ? optionalText(item.specification, 1000) : null,
     leadTimeDays = options.detail ? positiveInteger(item.lead_time_days) : null,
     missingFields = [
       ...(price == null ? ["quoted_price"] : []),
@@ -209,10 +239,7 @@ const productFields = (
   };
 };
 
-export function parse1688SearchSnapshot(
-  input: unknown,
-  limit = 20,
-): ProviderRawRecord[] {
+export function parse1688SearchSnapshot(input: unknown, limit = 20): ProviderRawRecord[] {
   const current = snapshot(input, "search"),
     items = current.value.items;
   if (
@@ -289,11 +316,7 @@ export function parse1688SupplierSnapshot(input: unknown): ProviderRawRecord {
   if (!/^[A-Za-z0-9._-]{1,120}$/.test(supplierId)) failure();
   const canonicalUrl = https1688Url(item.canonical_url).toString(),
     location = optionalText(item.location, 255),
-    paths = sourcePaths(item.source_paths, [
-      "supplier_name",
-      "location",
-      "canonical_url",
-    ]);
+    paths = sourcePaths(item.source_paths, ["supplier_name", "location", "canonical_url"]);
   if (https1688Url(current.sourceUrl).toString() !== canonicalUrl)
     failure("source_configuration_invalid");
   return record({

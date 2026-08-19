@@ -7,10 +7,7 @@ import {
   createBuiltinSourceAdapters,
   createProviderSourceFetch,
 } from "@scoutops/provider-sources";
-import {
-  PendingMailProvider,
-  processAuthDeliveryOnce,
-} from "./auth-delivery-worker.js";
+import { PendingMailProvider, processAuthDeliveryOnce } from "./auth-delivery-worker.js";
 import {
   MySqlCollectionTaskWorkerRepository,
   ScopedRedisCollectionCoordinator,
@@ -18,6 +15,7 @@ import {
 } from "./collection-task-worker.js";
 import { MySqlEvidencePersistence } from "./evidence-persistence.js";
 import { ProviderSourceExecutor } from "./provider-source-executor.js";
+import { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
 import { SingleHostResourceProbe } from "./single-host-resource-probe.js";
 import { MySqlTrendProjectionWorker } from "./trend-projection-worker.js";
 import { MySqlOpportunityRefreshWorker } from "./opportunity-refresh-worker.js";
@@ -25,10 +23,7 @@ import { MySqlOpportunityScoringWorker } from "./opportunity-scoring-worker.js";
 import { MySqlOpportunityProfitWorker } from "./opportunity-profit-worker.js";
 import { MySqlCompetitorMonitorWorker } from "./competitor-monitor-worker.js";
 import { MySqlSourcingProjectionWorker } from "./sourcing-projection-worker.js";
-import {
-  MySqlAiAnalysisWorker,
-  OpenAiCompatibleAnalysisAdapter,
-} from "./ai-analysis-worker.js";
+import { MySqlAiAnalysisWorker, OpenAiCompatibleAnalysisAdapter } from "./ai-analysis-worker.js";
 import { projectBusinessTaskOnce } from "./business-task-projection-worker.js";
 import { ApprovalEscalationWorker } from "./approval-escalation-worker.js";
 import { NotificationOutboxWorker } from "./notification-outbox-worker.js";
@@ -50,25 +45,26 @@ const registry = new ProviderAdapterRegistry({
   maxItemsPerBatch: config.providerAdapters.maxItemsPerBatch,
 });
 for (const adapter of createBuiltinSourceAdapters(
-  createProviderSourceFetch(
-    config.providerAdapters.proxy,
-    {},
-    AUTOMATIC_PROVIDER_SOURCE_HOSTS,
-  ),
+  createProviderSourceFetch(config.providerAdapters.proxy, {}, AUTOMATIC_PROVIDER_SOURCE_HOSTS),
 ))
   registry.register(adapter);
 const collectionRepository = new MySqlCollectionTaskWorkerRepository(pool);
-const collectionResourceProbe=new SingleHostResourceProbe(config.storage.evidenceRoot,config.crawlerScheduler);
+const collectionResourceProbe = new SingleHostResourceProbe(
+  config.storage.evidenceRoot,
+  config.crawlerScheduler,
+);
 const coordinator = new ScopedRedisCollectionCoordinator(redisStore);
 const executor = new ProviderSourceExecutor(
   pool,
   registry,
-  new MySqlEvidencePersistence(
-    pool,
-    config.storage.evidenceRoot,
-    config.evidence.maxRawBytes,
-  ),
+  new MySqlEvidencePersistence(pool, config.storage.evidenceRoot, config.evidence.maxRawBytes),
   config.identity.workerId,
+  new MySqlAuthenticatedBrowserJobClient(
+    pool,
+    500,
+    undefined,
+    config.playwright.runTimeoutSeconds * 1000,
+  ),
 );
 const trendProjection = new MySqlTrendProjectionWorker(
   pool,
@@ -136,12 +132,15 @@ const reportExports = new ReportExportWorker(
   config.reports.retryLimit,
   config.reports.maxRows,
 );
-const webhookDeliveries = new WebhookDeliveryWorker(pool,{workerId:config.identity.workerId,masterKey:config.security.credentialsMasterKey,leaseSeconds:config.openPlatform.webhookLeaseSeconds,timeoutMs:config.openPlatform.webhookTimeoutMs,retrySeconds:[60,300,900]});
+const webhookDeliveries = new WebhookDeliveryWorker(pool, {
+  workerId: config.identity.workerId,
+  masterKey: config.security.credentialsMasterKey,
+  leaseSeconds: config.openPlatform.webhookLeaseSeconds,
+  timeoutMs: config.openPlatform.webhookTimeoutMs,
+  retrySeconds: [60, 300, 900],
+});
 const automaticSourceScheduler = new MySqlAutomaticSourceScheduler(pool);
-const coreCollectionProjection = new CoreCollectionProjectionWorker(
-  pool,
-  config.identity.workerId,
-);
+const coreCollectionProjection = new CoreCollectionProjectionWorker(pool, config.identity.workerId);
 let stopping = false,
   authPolling = false,
   collectionPolling = false,
@@ -251,7 +250,7 @@ const pollCollection = async () => {
       executor,
       workerId: config.identity.workerId,
       leaseSeconds: config.collectionTasks.leaseSeconds,
-      resourceProbe:collectionResourceProbe,
+      resourceProbe: collectionResourceProbe,
     });
     if (result.status !== "idle")
       console.log(
@@ -712,23 +711,103 @@ scheduler = new QueueScheduler({
   maxConcurrency: config.runtime.workerMaxConcurrency,
   tickMs: config.runtime.workerSchedulerTickMs,
 })
-  .register({ name: "collection_tasks", priority: 100, intervalMs: config.collectionTasks.pollMs, run: pollCollection })
-  .register({ name: "auth_delivery", priority: 95, intervalMs: config.auth.outboxPollMs, run: pollAuth })
-  .register({ name: "business_task_projection", priority: 90, intervalMs: config.businessTasks.pollMs, run: pollBusinessTasks })
-  .register({ name: "approval_escalation", priority: 85, intervalMs: config.approvals.escalationPollMs, run: pollApprovals })
-  .register({ name: "notification_outbox", priority: 80, intervalMs: config.notifications.outboxPollMs, run: pollNotifications })
-  .register({ name: "webhook_deliveries", priority: 80, intervalMs: config.openPlatform.webhookPollMs, run: pollWebhooks })
-  .register({ name: "opportunity_refresh", priority: 70, intervalMs: config.opportunities.refreshPollMs, run: pollOpportunities })
-  .register({ name: "opportunity_scoring", priority: 65, intervalMs: config.scoring.pollMs, run: pollScoring })
-  .register({ name: "opportunity_profit", priority: 65, intervalMs: config.profit.pollMs, run: pollProfit })
-  .register({ name: "competitor_monitor", priority: 60, intervalMs: config.competitorMonitor.pollMs, run: pollCompetitors })
-  .register({ name: "sourcing_projection", priority: 60, intervalMs: config.sourcing.pollMs, run: pollSourcing })
-  .register({ name: "trend_projection", priority: 55, intervalMs: config.trends.projectionPollMs, run: pollTrends })
+  .register({
+    name: "collection_tasks",
+    priority: 100,
+    intervalMs: config.collectionTasks.pollMs,
+    run: pollCollection,
+  })
+  .register({
+    name: "auth_delivery",
+    priority: 95,
+    intervalMs: config.auth.outboxPollMs,
+    run: pollAuth,
+  })
+  .register({
+    name: "business_task_projection",
+    priority: 90,
+    intervalMs: config.businessTasks.pollMs,
+    run: pollBusinessTasks,
+  })
+  .register({
+    name: "approval_escalation",
+    priority: 85,
+    intervalMs: config.approvals.escalationPollMs,
+    run: pollApprovals,
+  })
+  .register({
+    name: "notification_outbox",
+    priority: 80,
+    intervalMs: config.notifications.outboxPollMs,
+    run: pollNotifications,
+  })
+  .register({
+    name: "webhook_deliveries",
+    priority: 80,
+    intervalMs: config.openPlatform.webhookPollMs,
+    run: pollWebhooks,
+  })
+  .register({
+    name: "opportunity_refresh",
+    priority: 70,
+    intervalMs: config.opportunities.refreshPollMs,
+    run: pollOpportunities,
+  })
+  .register({
+    name: "opportunity_scoring",
+    priority: 65,
+    intervalMs: config.scoring.pollMs,
+    run: pollScoring,
+  })
+  .register({
+    name: "opportunity_profit",
+    priority: 65,
+    intervalMs: config.profit.pollMs,
+    run: pollProfit,
+  })
+  .register({
+    name: "competitor_monitor",
+    priority: 60,
+    intervalMs: config.competitorMonitor.pollMs,
+    run: pollCompetitors,
+  })
+  .register({
+    name: "sourcing_projection",
+    priority: 60,
+    intervalMs: config.sourcing.pollMs,
+    run: pollSourcing,
+  })
+  .register({
+    name: "trend_projection",
+    priority: 55,
+    intervalMs: config.trends.projectionPollMs,
+    run: pollTrends,
+  })
   .register({ name: "ai_analysis", priority: 50, intervalMs: config.ai.pollMs, run: pollAi })
-  .register({ name: "report_exports", priority: 45, intervalMs: config.reports.pollMs, run: pollReports })
-  .register({ name: "automation_rules", priority: 40, intervalMs: config.automations.pollMs, run: pollAutomations })
-  .register({ name: "core_collection_projection", priority: 35, intervalMs: 2000, run: pollCoreProjection })
-  .register({ name: "automatic_hotspot_sources", priority: 30, intervalMs: config.automaticSources.pollMs, run: pollAutomaticSources });
+  .register({
+    name: "report_exports",
+    priority: 45,
+    intervalMs: config.reports.pollMs,
+    run: pollReports,
+  })
+  .register({
+    name: "automation_rules",
+    priority: 40,
+    intervalMs: config.automations.pollMs,
+    run: pollAutomations,
+  })
+  .register({
+    name: "core_collection_projection",
+    priority: 35,
+    intervalMs: 2000,
+    run: pollCoreProjection,
+  })
+  .register({
+    name: "automatic_hotspot_sources",
+    priority: 30,
+    intervalMs: config.automaticSources.pollMs,
+    run: pollAutomaticSources,
+  });
 
 scheduler.start();
 heartbeat();
@@ -756,8 +835,8 @@ const stop = async (signal: string) => {
     automationPolling ||
     reportPolling ||
     webhookPolling ||
-    automaticSourcePolling
-    || coreProjectionPolling
+    automaticSourcePolling ||
+    coreProjectionPolling
   )
     await new Promise((resolve) => setTimeout(resolve, 25));
   await redisStore.close();

@@ -18,13 +18,11 @@ const allowed = new Set([
   "0045_operational_task_links.up.sql",
   "0046_notification_workflow_root_cause.up.sql",
   "0047_approval_decision_context_snapshot.up.sql",
+  "0048_browser_collection_jobs.up.sql",
 ]);
 const requested = process.argv.slice(2);
 
-if (
-  !requested.length ||
-  requested.some((name) => !allowed.has(basename(name)))
-) {
+if (!requested.length || requested.some((name) => !allowed.has(basename(name)))) {
   throw new Error("deployment_migration_not_allowed");
 }
 
@@ -55,16 +53,10 @@ try {
   for (const relativeName of requested) {
     const name = basename(relativeName);
     const sql = await readFile(resolve("database/migrations", name), "utf8");
-    const checksum = createHash("sha256")
-      .update(sql.replaceAll("\r\n", "\n"))
-      .digest("hex");
-    const [rows] = await pool.query(
-      "SELECT checksum FROM schema_migrations WHERE name=?",
-      [name],
-    );
+    const checksum = createHash("sha256").update(sql.replaceAll("\r\n", "\n")).digest("hex");
+    const [rows] = await pool.query("SELECT checksum FROM schema_migrations WHERE name=?", [name]);
     if (rows[0]) {
-      if (rows[0].checksum !== checksum)
-        throw new Error(`migration_checksum_drift:${name}`);
+      if (rows[0].checksum !== checksum) throw new Error(`migration_checksum_drift:${name}`);
       results.push({ name, status: "already_applied" });
       continue;
     }
@@ -75,9 +67,7 @@ try {
     );
     results.push({ name, status: "applied" });
   }
-  process.stdout.write(
-    `${JSON.stringify({ status: "ok", migrations: results })}\n`,
-  );
+  process.stdout.write(`${JSON.stringify({ status: "ok", migrations: results })}\n`);
 } finally {
   await pool.end();
 }

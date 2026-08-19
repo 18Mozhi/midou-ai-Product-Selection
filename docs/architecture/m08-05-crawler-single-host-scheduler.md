@@ -6,11 +6,11 @@ M08-05 只在当前惠州单台宝塔服务器上收口 S0 Crawler/Worker 调度
 
 ## 真实链路
 
-Node Worker 继续调用 `processCollectionTaskOnce` 并拥有业务采集任务状态机；独立的宝塔 Python 项目 `ai选品-python` 提供 Crawler 运行心跳和 Python-to-Playwright 桥接，不承载 API 或 Node 队列处理器。领取任务前，本机资源探针读取按 CPU 核数归一化的一分钟负载、可用内存和证据盘可用空间；触及停止线时只记录观测并保持任务排队。领取任务与 `crawler_scheduler_leases` 的全局 Worker 槽位及来源槽位在同一 MySQL 5.7 事务中完成，任务心跳同步延长槽位，成功、失败、协调冲突和过期恢复均释放槽位。Redis 仍只承担组织/工作区范围的队列协调，不成为租约或权限真相。
+Node Worker 继续调用 `processCollectionTaskOnce` 并唯一拥有业务采集任务状态机；遇到 `authenticated_browser` 子查询时，Worker 写入 `browser_collection_jobs` 并等待结果。独立的宝塔 Python 项目 `ai选品-python` 只领取这些业务关联作业、维持作业/档案/全局 Crawler 租约并提供 Python-to-Playwright 桥接，不承载 API、普通公开来源或 Node 队列处理器，空闲时不发送心跳。领取业务任务前，本机资源探针读取按 CPU 核数归一化的一分钟负载、可用内存和证据盘可用空间；触及停止线时只记录观测并保持任务排队。领取任务与 `crawler_scheduler_leases` 的全局 Worker 槽位及来源槽位在同一 MySQL 5.7 事务中完成，任务心跳同步延长槽位，成功、失败、协调冲突和过期恢复均释放槽位。Redis 仍只承担组织/工作区范围的队列协调，不成为租约或权限真相。
 
 Linux 主机探针分别读取 `/proc/*/cmdline`：Node Worker 只匹配 Worker 启动命令，Python Crawler 只匹配 `python -m scoutops_crawler`，不得再用 Worker 数量代替 Crawler 数量。任一进程不是恰好一个时调度状态失败关闭。本机非 Linux 开发环境只提供测试占位计数，不作为生产证据。
 
-浏览器运行继续使用 M03-04 的 `crawler_profile_leases`。M08-05 在同一事务增加全局 Crawler 槽位；只有全局槽位与档案独占租约同时成功才允许运行，心跳、完成和恢复同步处理两个租约。来源原有 `providers.concurrency_limit` 保留为配置事实，但 S0 有效值固定 `min(configured, 1)`。
+浏览器运行继续使用 M03-04 的 `crawler_profile_leases`，并通过 `browser_collection_jobs.collection_task_id/collection_subquery_id` 关联 Worker 已领取的业务任务。只有全局 Crawler 槽位、档案独占租约和浏览器作业租约同时成功才允许运行，心跳、完成和恢复同步处理三个租约。来源原有 `providers.concurrency_limit` 保留为配置事实，但 S0 有效值固定 `min(configured, 1)`。
 
 平台运维接口 `/api/v1/platform/operations/crawler-scheduler` 只向 `platform:operate` 返回分别观测的 Node Worker/Python Crawler 进程计数、聚合租约、来源有效并发、档案聚合和资源水位；不返回组织/工作区标识、任务目标、租约令牌、哈希、凭证、Cookie、文件路径或队列载荷。读取写入观测和平台审计，过期回收要求同源和 Idempotency-Key。
 

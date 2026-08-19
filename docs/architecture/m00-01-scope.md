@@ -2,7 +2,7 @@
 
 ## 目标
 
-建立后续模块可复用、可构建的四个逻辑边界：Vue Web、Node API、Node Worker、采集执行器，以及唯一共享 DTO 包。逻辑边界用于代码隔离和本地测试，不对应四个生产项目；生产只运行宝塔中的一个“ai选品”统一 Node 后端，由它监督 API、Worker 和按需采集执行通道。
+建立后续模块可复用、可构建的四个逻辑边界：Vue Web、Node API、Node Worker、采集执行器，以及唯一共享 DTO 包。逻辑边界用于代码隔离和本地测试，不对应四个生产项目；生产由宝塔中的“ai选品”统一 Node 后端监督 API 与 Worker，由独立的“ai选品-python”项目消费 Worker 创建的登录型浏览器作业并调用固定 Node Playwright runner。
 
 ## 非目标
 

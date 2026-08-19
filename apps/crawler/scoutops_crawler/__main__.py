@@ -1,5 +1,4 @@
 import argparse
-import hashlib
 import json
 import os
 import re
@@ -58,9 +57,13 @@ def run_once(config, stopped: threading.Event) -> bool:
     thread = threading.Thread(target=maintain_lease, name="crawler-lease-heartbeat", daemon=True)
     thread.start()
     try:
-        request = json.loads(Path(config.execution_request_file).read_text(encoding="utf-8"))
+        request = dict(lease.execution_request)
         request["request_id"] = lease.request_id
         request["trace_id"] = lease.trace_id
+        request["credential"] = lease.credential
+        request["master_key"] = config.credentials_master_key
+        request["locale"] = lease.locale
+        request["timezone"] = lease.timezone
         result = PlaywrightBridge(config).run(request)
     except (OSError, json.JSONDecodeError, PlaywrightBridgeError) as error:
         code = getattr(error, "code", "crawler_execution_request_invalid")
@@ -77,14 +80,9 @@ def main() -> None:
     stopped=threading.Event()
     def stop(_signum,_frame):stopped.set()
     signal.signal(signal.SIGTERM,stop);signal.signal(signal.SIGINT,stop)
-    last_request_digest = ""
     while not stopped.is_set():
         try:
-            request_path = Path(config.execution_request_file) if config.execution_request_file else None
-            request_digest = hashlib.sha256(request_path.read_bytes()).hexdigest() if request_path and request_path.is_file() else ""
-            processed = bool(request_digest and request_digest != last_request_digest) and run_once(config, stopped)
-            if processed:
-                last_request_digest = request_digest
+            processed = run_once(config, stopped)
         except RuntimeClientError as error:
             event(config, "api_error", error_code=error.code)
             processed = False

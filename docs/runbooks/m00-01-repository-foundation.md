@@ -21,7 +21,7 @@ Web 默认 `127.0.0.1:5173`，Node API 默认 `127.0.0.1:4101`。配置变化需
 
 ## 宝塔运行边界
 
-生产只在宝塔面板中建立网站、统一 Node 后端 `ai选品` 和 Python 采集项目 `ai选品-python`。统一后端监督 API、Worker 和采集任务领取，Python 3.12 项目提供采集心跳与 Python-to-Playwright 桥接；不能再建立独立 Node Worker、候选后端或面板外常驻项目。网站反向代理 `/api/` 到本机 4101；后端、Python、MySQL 和 Redis均不得直接暴露公网。
+生产只在宝塔面板中建立网站、统一 Node 后端 `ai选品` 和 Python 采集项目 `ai选品-python`。统一后端监督 API 与 Worker，Worker 唯一领取业务采集任务；Python 3.12 项目只领取关联业务子查询的登录型浏览器作业并提供 Python-to-Playwright 桥接，不能再建立独立 Node Worker、候选后端或面板外常驻项目。网站反向代理 `/api/` 到本机 4101；后端、Python、MySQL 和 Redis均不得直接暴露公网。
 
 ## 故障与恢复
 

@@ -1,10 +1,8 @@
-import { access } from "node:fs/promises";
-import { resolve, sep } from "node:path";
+import { resolve } from "node:path";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import {
   PlaywrightCrawlerEngine,
-  withCookieProfileFile,
-  withExtractedProfileArchive,
+  runWithEncryptedProfile,
 } from "../packages/playwright-crawler/dist/index.js";
 
 const chunks = [];
@@ -33,19 +31,15 @@ try {
   if (
     !ids.requestId ||
     !ids.traceId ||
-    typeof input.archive_path !== "string" ||
-    typeof input.temp_root !== "string"
+    typeof input.temp_root !== "string" ||
+    typeof input.master_key !== "string" ||
+    !input.credential ||
+    typeof input.credential !== "object"
   )
     throw new Error("crawler_runner_input_invalid");
   const tempRoot = resolve(config.storage.credentialTempRoot),
-    requestedRoot = resolve(input.temp_root),
-    archivePath = resolve(input.archive_path);
-  if (
-    requestedRoot !== tempRoot ||
-    !archivePath.startsWith(`${tempRoot}${sep}`)
-  )
-    throw new Error("crawler_runner_temp_scope_invalid");
-  await access(archivePath);
+    requestedRoot = resolve(input.temp_root);
+  if (requestedRoot !== tempRoot) throw new Error("crawler_runner_temp_scope_invalid");
   const limits = {
     navigationTimeoutMs: config.playwright.navigationTimeoutMs,
     actionTimeoutMs: config.playwright.actionTimeoutMs,
@@ -58,32 +52,39 @@ try {
     headless: config.playwright.headless,
   };
   const engine = new PlaywrightCrawlerEngine(limits);
-  const run = (directory, cookies) =>
-    engine.run(input.plan, directory, ids, {
-      locale: input.locale,
-      timezoneId: input.timezone,
-      ...(cookies ? { cookies } : {}),
-    });
-  const result =
-    input.credential_kind === "cookie_bundle"
-      ? await withCookieProfileFile(archivePath, tempRoot, run)
-      : await withExtractedProfileArchive(
-          archivePath,
-          tempRoot,
-          {
-            maxArchiveBytes: limits.maxArchiveBytes,
-            maxExtractedBytes: limits.maxExtractedBytes,
-            maxFiles: limits.maxArchiveFiles,
-          },
-          (directory) => run(directory),
-        );
+  const credential = input.credential;
+  if (!["browser_profile", "cookie_bundle"].includes(credential.kind))
+    throw new Error("crawler_runner_credential_invalid");
+  const record = {
+    assetId: String(credential.asset_id ?? ""),
+    assetVersion: Number(credential.asset_version ?? 0),
+    kind: String(credential.kind),
+    keyVersion: String(credential.key_version ?? ""),
+    ciphertext: Buffer.from(String(credential.ciphertext_base64 ?? ""), "base64"),
+    nonce: Buffer.from(String(credential.nonce_base64 ?? ""), "base64"),
+    authTag: Buffer.from(String(credential.auth_tag_base64 ?? ""), "base64"),
+    fingerprint: "",
+  };
+  const result = await runWithEncryptedProfile(
+    engine,
+    record,
+    input.master_key,
+    tempRoot,
+    {
+      maxArchiveBytes: limits.maxArchiveBytes,
+      maxExtractedBytes: limits.maxExtractedBytes,
+      maxFiles: limits.maxArchiveFiles,
+    },
+    input.plan,
+    ids,
+    { locale: input.locale, timezoneId: input.timezone },
+  );
   console.log(JSON.stringify(result));
 } catch (error) {
   const candidate =
     typeof error?.code === "string"
       ? error.code
-      : typeof error?.message === "string" &&
-          /^crawler_[a-z0-9_]+$/.test(error.message)
+      : typeof error?.message === "string" && /^crawler_[a-z0-9_]+$/.test(error.message)
         ? error.message
         : "crawler_runner_failed";
   console.log(

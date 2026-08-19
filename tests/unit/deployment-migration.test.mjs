@@ -14,16 +14,31 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /0044f_enable_amazon_public_crawler\.up\.sql/);
   assert.match(deploy, /0041_member_workspace_tasks\.up\.sql/);
   assert.match(deploy, /0047_approval_decision_context_snapshot\.up\.sql/);
+  assert.match(deploy, /0048_browser_collection_jobs\.up\.sql/);
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
   assert.match(deploy, /remote_python\(client, panel_deploy_source/);
   assert.ok(
     deploy.indexOf("ssh_exec(client, migrate") <
       deploy.indexOf("remote_python(client, panel_deploy_source"),
   );
-  assert.match(
-    runner,
-    /"0040_platform_messages\.up\.sql"[\s\S]*"0041_member_workspace_tasks\.up\.sql"[\s\S]*"0042_erp_product_import\.up\.sql"[\s\S]*"0043_trend_rule_collection_schedule\.up\.sql"[\s\S]*"0044a_competitor_soft_delete\.up\.sql"[\s\S]*"0044f_enable_amazon_public_crawler\.up\.sql"[\s\S]*"0045_operational_task_links\.up\.sql"[\s\S]*"0046_notification_workflow_root_cause\.up\.sql"[\s\S]*"0047_approval_decision_context_snapshot\.up\.sql"/,
-  );
+  const orderedMigrations = [
+    "0040_platform_messages.up.sql",
+    "0041_member_workspace_tasks.up.sql",
+    "0042_erp_product_import.up.sql",
+    "0043_trend_rule_collection_schedule.up.sql",
+    "0044a_competitor_soft_delete.up.sql",
+    "0044f_enable_amazon_public_crawler.up.sql",
+    "0045_operational_task_links.up.sql",
+    "0046_notification_workflow_root_cause.up.sql",
+    "0047_approval_decision_context_snapshot.up.sql",
+    "0048_browser_collection_jobs.up.sql",
+  ];
+  let previousIndex = -1;
+  for (const migration of orderedMigrations) {
+    const index = runner.indexOf(`"${migration}"`);
+    assert.ok(index > previousIndex, `${migration} must remain allowlisted in deployment order`);
+    previousIndex = index;
+  }
   assert.match(runner, /migration_checksum_drift/);
   assert.doesNotMatch(runner, /readdir|glob/);
 });
@@ -43,6 +58,7 @@ test("allowlisted deployment migrations remain single-statement for the locked M
     "0045_operational_task_links.up.sql",
     "0046_notification_workflow_root_cause.up.sql",
     "0047_approval_decision_context_snapshot.up.sql",
+    "0048_browser_collection_jobs.up.sql",
   ]) {
     const sql = await readFile(`database/migrations/${name}`, "utf8");
     const statements = sql
