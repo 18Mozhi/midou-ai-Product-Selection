@@ -20,7 +20,7 @@
 | `platform:operate`、`platform:secure`、`platform:superadmin` | 对应平台角色 | 平台 | 后续平台后台 |
 | 本人有效授权摘要 | 任一活动成员 | 当前会话组织/工作区 | `GET /api/v1/me/authorization` |
 
-角色目录只读接口先要求会话选择的 organization_id 与路径一致，再使用 `role:read` 和组织范围 Guard。本人授权摘要由服务端根据 session_id 查 `user_session_contexts`，不接受浏览器指定范围。
+组织角色目录只读接口先要求会话选择的 organization_id 与路径一致，再使用 `role:read` 和组织范围 Guard。平台角色目录 `GET /api/v1/platform/roles` 要求 `platform:superadmin` 与平台范围，返回同一 `roles`、`role_capabilities` 权威映射供平台角色差异对比。本人授权摘要由服务端根据 session_id 查 `user_session_contexts`，不接受浏览器指定范围。
 
 ## 六类执行面与审计
 

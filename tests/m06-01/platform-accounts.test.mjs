@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { PlatformAccountService } from "../../apps/api/dist/platform-account-service.js";
+import { CAPABILITIES } from "../../packages/authorization/dist/index.js";
 const actor = "00000000-0000-4000-8000-000000000601",
   other = "00000000-0000-4000-8000-000000000602",
   context = {
@@ -121,6 +122,12 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(web, /下一步：选择管理员/);
   assert.match(web, /同时创建默认工作区和组织级数据范围/);
   assert.match(web, /createForm\.value\?\.reportValidity\(\)/);
+  assert.match(web, /\/platform\/roles/);
+  assert.match(web, /角色权限差异/);
+  assert.match(web, /compareDifferencesOnly/);
+  assert.match(web, /不以页面按钮推测权限/);
+  for (const capability of CAPABILITIES)
+    assert.match(web, new RegExp(capability.replace(":", "\\:")));
   assert.match(navigation, /账号与组织/);
   assert.doesNotMatch(
     navigation,

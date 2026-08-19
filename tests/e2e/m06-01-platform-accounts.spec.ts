@@ -53,6 +53,37 @@ const overview = {
     },
   ],
 };
+const platformRoles = [
+  {
+    code: "platform_operations_admin",
+    name: "平台运营管理员",
+    category: "platform",
+    description: "管理平台运营，不可读取密钥明文。",
+    capabilities: ["platform:operate", "collection:replay", "report:read"],
+  },
+  {
+    code: "platform_security_admin",
+    name: "平台安全管理员",
+    category: "platform",
+    description: "安全治理，对业务数据只读。",
+    capabilities: ["platform:secure", "audit:read", "session:manage"],
+  },
+  {
+    code: "platform_super_admin",
+    name: "平台超级管理员",
+    category: "platform",
+    description: "初始化、授权和紧急处置，全部操作审计。",
+    capabilities: [
+      "platform:operate",
+      "platform:secure",
+      "platform:superadmin",
+      "collection:replay",
+      "report:read",
+      "audit:read",
+      "session:manage",
+    ],
+  },
+];
 
 async function setup(page: any) {
   await page.route("**/api/v1/me/navigation?**", (route: any) =>
@@ -71,6 +102,9 @@ async function setup(page: any) {
   );
   await page.route("**/api/v1/platform/accounts?**", (route: any) =>
     route.fulfill({ json: env(overview) }),
+  );
+  await page.route("**/api/v1/platform/roles", (route: any) =>
+    route.fulfill({ json: env(platformRoles) }),
   );
 }
 
@@ -96,6 +130,15 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
   await expect(
     page.getByRole("cell", { name: /admin@example.test/ }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "角色权限差异" }),
+  ).toBeVisible();
+  await expect(page.getByText("仅平台运营管理员").first()).toBeVisible();
+  await page.getByLabel("右侧角色").selectOption("platform_super_admin");
+  await expect(page.getByText("管理平台角色与账号")).toBeVisible();
+  await expect(
+    page.getByText(/platform:operate|platform:superadmin/),
+  ).toHaveCount(0);
   await expect(page.getByText("admin@example.test", { exact: true })).toHaveCSS(
     "color",
     "rgb(238, 245, 255)",

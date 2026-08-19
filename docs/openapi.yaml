@@ -974,6 +974,28 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+  /platform/roles:
+    get:
+      summary: List the fixed platform role and capability matrix
+      description: Requires platform:superadmin. Returns the authoritative active platform role catalog used by the role comparison UI.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        "200":
+          {
+            description: Read-only platform role catalog,
+            content:
+              {
+                application/json:
+                  {
+                    schema:
+                      {
+                        $ref: "#/components/schemas/RoleCapabilityListEnvelope",
+                      },
+                  },
+              },
+          }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
   /me/resource-grants:
     get:
       summary: List exact-resource grants for the authenticated membership in the selected organization
