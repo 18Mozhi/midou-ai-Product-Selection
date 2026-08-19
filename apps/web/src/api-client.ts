@@ -1,10 +1,5 @@
 export type ApiFailureKind =
-  | "expired"
-  | "forbidden"
-  | "conflict"
-  | "rate_limited"
-  | "blocked"
-  | "error";
+  "expired" | "forbidden" | "conflict" | "rate_limited" | "blocked" | "error";
 
 export interface ApiEnvelope<T> {
   data: T;
@@ -18,11 +13,12 @@ export class ApiClientError extends Error {
     readonly status: number,
     readonly code: string,
     readonly kind: ApiFailureKind,
+    readonly userMessage: string,
     readonly actionHint: string,
     readonly requestId: string,
     readonly traceId: string,
   ) {
-    super(code);
+    super(userMessage);
     this.name = "ApiClientError";
   }
 }
@@ -65,10 +61,7 @@ export function createApiClient(baseUrl: string) {
       body = JSON.stringify(options.body);
     }
     if (!["GET", "HEAD"].includes(method)) {
-      headers.set(
-        "idempotency-key",
-        options.idempotencyKey ?? crypto.randomUUID(),
-      );
+      headers.set("idempotency-key", options.idempotencyKey ?? crypto.randomUUID());
     }
     const response = await fetch(`${baseUrl}${path}`, {
       ...options,
@@ -83,15 +76,16 @@ export function createApiClient(baseUrl: string) {
         response.status,
         payload?.error?.code ?? `http_${response.status}`,
         failureKind(response.status),
+        payload?.error?.message ?? "请求暂时失败。",
         payload?.error?.action_hint ?? "请求未完成，请稍后重试。",
         payload?.request_id ?? requestId,
-        payload?.trace_id ?? traceId,
+        payload?.trace_id ?? payload?.request_id ?? traceId,
       );
     }
     return {
       data: payload?.data as T,
       request_id: payload?.request_id ?? requestId,
-      trace_id: payload?.trace_id ?? traceId,
+      trace_id: payload?.trace_id ?? payload?.request_id ?? traceId,
       ...(payload?.meta === undefined ? {} : { meta: payload.meta }),
     };
   };

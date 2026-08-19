@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient, type ApiEnvelope } from "../api-client";
 import { publicConfig } from "../config";
 
 type IdentityMode =
@@ -13,14 +14,9 @@ type IdentityMode =
   | "mfa-challenge"
   | "security-setup";
 type RequestState =
-  | "idle"
-  | "loading"
-  | "success"
-  | "error"
-  | "expired"
-  | "rate_limited"
-  | "blocked";
+  "idle" | "loading" | "success" | "error" | "expired" | "rate_limited" | "blocked";
 const params = new URLSearchParams(window.location.search);
+const apiRequest = createApiClient(publicConfig.apiBaseUrl);
 const pathModes: Record<string, IdentityMode> = {
   "/login": "login",
   "/register": "register",
@@ -30,13 +26,9 @@ const pathModes: Record<string, IdentityMode> = {
   "/security/mfa": "mfa",
 };
 const mode = ref<IdentityMode>(
-  (params.get("mode") as IdentityMode) ||
-    pathModes[window.location.pathname] ||
-    "login",
+  (params.get("mode") as IdentityMode) || pathModes[window.location.pathname] || "login",
 );
-const requestState = ref<RequestState>(
-  params.get("state") === "expired" ? "expired" : "idle",
-);
+const requestState = ref<RequestState>(params.get("state") === "expired" ? "expired" : "idle");
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
@@ -48,6 +40,7 @@ const mfaEnabled = ref(false);
 const message = ref("");
 const actionHint = ref("");
 const requestId = ref("");
+const traceId = ref("");
 const sessions = ref<
   Array<{
     id: string;
@@ -85,44 +78,36 @@ function switchMode(next: IdentityMode) {
   if (next === "sessions") void loadSessions();
   if (next === "mfa") void loadMfa();
 }
-const idempotency = () => crypto.randomUUID();
-async function request(
+async function request<T = unknown>(
   path: string,
   body?: Record<string, string>,
   method = "POST",
-) {
+): Promise<ApiEnvelope<T> | null> {
   requestState.value = "loading";
   message.value = "";
   try {
-    const response = await fetch(`${publicConfig.apiBaseUrl}${path}`, {
+    const response = await apiRequest<T>(path, {
       method,
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        ...(body ? { "content-type": "application/json" } : {}),
-        ...(["POST", "DELETE"].includes(method)
-          ? { "idempotency-key": idempotency() }
-          : {}),
-      },
-      ...(body ? { body: JSON.stringify(body) } : {}),
+      ...(body ? { body } : {}),
     });
-    const payload = response.status === 204 ? null : await response.json();
-    if (!response.ok) {
-      message.value = payload?.error?.message || "请求暂时失败";
-      actionHint.value =
-        payload?.error?.action_hint || "稍后重试；如仍失败，请联系管理员。";
-      requestId.value = payload?.request_id || "";
+    requestId.value = response.request_id;
+    traceId.value = response.trace_id;
+    requestState.value = "success";
+    return response.data === undefined ? null : response;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      message.value = error.userMessage;
+      actionHint.value = error.actionHint;
+      requestId.value = error.requestId;
+      traceId.value = error.traceId;
       requestState.value =
-        response.status === 429
+        error.kind === "rate_limited"
           ? "rate_limited"
-          : response.status === 503
+          : error.kind === "blocked"
             ? "blocked"
             : "error";
       return null;
     }
-    requestState.value = "success";
-    return payload;
-  } catch {
     requestState.value = "blocked";
     message.value = "无法连接身份服务。";
     actionHint.value = "检查网络后重试；运维人员可在宝塔查看后端状态。";
@@ -256,8 +241,7 @@ async function changeSeedPassword() {
     currentPassword.value = "";
     newPassword.value = "";
     mode.value = "login";
-    message.value =
-      "密码已修改且旧会话已撤销。请用新密码重新登录并继续绑定 MFA。";
+    message.value = "密码已修改且旧会话已撤销。请用新密码重新登录并继续绑定 MFA。";
   }
 }
 onMounted(() => {
@@ -276,13 +260,8 @@ onMounted(() => {
       <aside class="identity-story" aria-label="智能选品产品说明">
         <p class="identity-kicker">从信号到行动</p>
         <h1>让增长，<em>更有确定性</em></h1>
-        <p>
-          账号、密码和会话只在受控后端处理。浏览器不保存认证
-          Token，也不接触数据库或密钥。
-        </p>
-        <div class="identity-orbit" aria-hidden="true">
-          <span>S</span><i></i><i></i><i></i>
-        </div>
+        <p>账号、密码和会话只在受控后端处理。浏览器不保存认证 Token，也不接触数据库或密钥。</p>
+        <div class="identity-orbit" aria-hidden="true"><span>S</span><i></i><i></i><i></i></div>
         <ul>
           <li><strong>安全密码</strong><small>密码不可反向读取</small></li>
           <li><strong>单次令牌</strong><small>验证与重置可追踪</small></li>
@@ -293,27 +272,15 @@ onMounted(() => {
       <section class="identity-card" aria-live="polite">
         <div class="identity-card__head">
           <p>
-            {{
-              mode === "sessions" ? "SECURITY CENTER" : "AI SELECTION ACCOUNT"
-            }}
+            {{ mode === "sessions" ? "SECURITY CENTER" : "AI SELECTION ACCOUNT" }}
           </p>
           <h2>{{ title }}</h2>
           <span v-if="mode === 'login'">使用已验证的邮箱和本地密码登录</span>
-          <span v-else-if="mode === 'register'"
-            >先创建账号，再完成邮箱验证</span
-          >
-          <span v-else-if="mode === 'forgot'"
-            >无论账号是否存在，页面提示保持一致</span
-          >
-          <span v-else-if="mode === 'mfa'"
-            >认证器密钥加密保存，恢复码仅显示一次</span
-          >
-          <span v-else-if="mode === 'mfa-challenge'"
-            >短时挑战保存在浏览器安全凭证中</span
-          >
-          <span v-else-if="mode === 'security-setup'"
-            >完成全部步骤前，业务后端保持拒绝</span
-          >
+          <span v-else-if="mode === 'register'">先创建账号，再完成邮箱验证</span>
+          <span v-else-if="mode === 'forgot'">无论账号是否存在，页面提示保持一致</span>
+          <span v-else-if="mode === 'mfa'">认证器密钥加密保存，恢复码仅显示一次</span>
+          <span v-else-if="mode === 'mfa-challenge'">短时挑战保存在浏览器安全凭证中</span>
+          <span v-else-if="mode === 'security-setup'">完成全部步骤前，业务后端保持拒绝</span>
         </div>
 
         <div
@@ -338,7 +305,8 @@ onMounted(() => {
           }}</strong>
           <p>{{ message }}</p>
           <small v-if="actionHint">{{ actionHint }}</small
-          ><small v-if="requestId">请求标识：{{ requestId }}</small>
+          ><small v-if="requestId">请求标识：{{ requestId }}</small
+          ><small v-if="traceId && traceId !== requestId">链路标识：{{ traceId }}</small>
         </div>
         <div
           v-if="requestState === 'success' && message"
@@ -349,11 +317,7 @@ onMounted(() => {
         </div>
 
         <form
-          v-if="
-            ['login', 'register', 'forgot', 'reset', 'mfa-challenge'].includes(
-              mode,
-            )
-          "
+          v-if="['login', 'register', 'forgot', 'reset', 'mfa-challenge'].includes(mode)"
           @submit.prevent="submit"
         >
           <label v-if="mode === 'mfa-challenge'"
@@ -380,9 +344,7 @@ onMounted(() => {
             }}<input
               v-model="password"
               type="password"
-              :autocomplete="
-                mode === 'login' ? 'current-password' : 'new-password'
-              "
+              :autocomplete="mode === 'login' ? 'current-password' : 'new-password'"
               required
               minlength="12"
               maxlength="128"
@@ -400,19 +362,11 @@ onMounted(() => {
           /></label>
           <div v-if="mode === 'login'" class="identity-form-row">
             <span>登录状态最长保留 30 天，可在安全中心主动退出</span
-            ><button
-              type="button"
-              class="text-button"
-              @click="switchMode('forgot')"
-            >
+            ><button type="button" class="text-button" @click="switchMode('forgot')">
               忘记密码？
             </button>
           </div>
-          <button
-            class="identity-primary"
-            type="submit"
-            :disabled="requestState === 'loading'"
-          >
+          <button class="identity-primary" type="submit" :disabled="requestState === 'loading'">
             {{
               requestState === "loading"
                 ? "正在安全处理…"
@@ -429,11 +383,7 @@ onMounted(() => {
           </button>
         </form>
 
-        <div
-          v-else-if="mode === 'verify'"
-          class="identity-centered"
-          data-testid="verify"
-        >
+        <div v-else-if="mode === 'verify'" class="identity-centered" data-testid="verify">
           <span class="mail-icon" aria-hidden="true">✉</span>
           <h3>
             {{
@@ -481,11 +431,7 @@ onMounted(() => {
                 autocomplete="new-password"
                 minlength="12"
                 maxlength="128" /></label
-            ><button
-              class="identity-primary"
-              type="button"
-              @click="changeSeedPassword"
-            >
+            ><button class="identity-primary" type="button" @click="changeSeedPassword">
               修改密码并撤销当前会话
             </button></template
           >
@@ -497,12 +443,7 @@ onMounted(() => {
                 autocomplete="current-password"
                 minlength="12"
                 maxlength="128" /></label
-            ><button
-              v-if="!mfaSecret"
-              class="identity-primary"
-              type="button"
-              @click="startMfa"
-            >
+            ><button v-if="!mfaSecret" class="identity-primary" type="button" @click="startMfa">
               开始绑定认证器
             </button>
             <div v-else class="mfa-setup">
@@ -514,11 +455,7 @@ onMounted(() => {
                   inputmode="numeric"
                   autocomplete="one-time-code"
                   maxlength="8" /></label
-              ><button
-                class="identity-primary"
-                type="button"
-                @click="confirmMfa"
-              >
+              ><button class="identity-primary" type="button" @click="confirmMfa">
                 确认并完成安全设置
               </button>
             </div></template
@@ -527,11 +464,7 @@ onMounted(() => {
             <strong>安全设置已完成</strong>
             <p>恢复码仅显示本次，请离线保存后重新登录。</p>
             <code v-for="code in recoveryCodes" :key="code">{{ code }}</code
-            ><button
-              class="identity-primary"
-              type="button"
-              @click="switchMode('login')"
-            >
+            ><button class="identity-primary" type="button" @click="switchMode('login')">
               返回登录
             </button>
           </div>
@@ -543,9 +476,7 @@ onMounted(() => {
             }}</span>
             <div>
               <strong>认证器 TOTP</strong>
-              <p>
-                遵循 RFC 6238；验证码 30 秒更新，允许受控时钟偏差并拒绝重放。
-              </p>
+              <p>遵循 RFC 6238；验证码 30 秒更新，允许受控时钟偏差并拒绝重放。</p>
             </div>
           </div>
           <template v-if="!mfaEnabled">
@@ -558,12 +489,7 @@ onMounted(() => {
                 maxlength="128"
                 placeholder="验证当前密码"
             /></label>
-            <button
-              v-if="!mfaSecret"
-              class="identity-primary"
-              type="button"
-              @click="startMfa"
-            >
+            <button v-if="!mfaSecret" class="identity-primary" type="button" @click="startMfa">
               开始绑定认证器
             </button>
             <div v-else class="mfa-setup">
@@ -576,11 +502,7 @@ onMounted(() => {
                   autocomplete="one-time-code"
                   maxlength="8"
                   placeholder="6 位验证码" /></label
-              ><button
-                class="identity-primary"
-                type="button"
-                @click="confirmMfa"
-              >
+              ><button class="identity-primary" type="button" @click="confirmMfa">
                 确认并启用
               </button>
             </div>
@@ -603,17 +525,13 @@ onMounted(() => {
                   v-model="mfaCode"
                   autocomplete="one-time-code"
                   maxlength="32" /></label
-              ><button type="button" @click="disableMfa">
-                停用并撤销全部会话
-              </button>
+              ><button type="button" @click="disableMfa">停用并撤销全部会话</button>
             </div>
           </template>
         </section>
 
         <div v-else class="session-list" data-testid="sessions">
-          <div v-if="requestState === 'loading'" class="identity-loading">
-            正在读取本人会话…
-          </div>
+          <div v-if="requestState === 'loading'" class="identity-loading">正在读取本人会话…</div>
           <p v-else-if="sessions.length === 0" class="identity-empty">
             暂无可显示的活动会话；登录失效时请重新登录。
           </p>
@@ -643,16 +561,10 @@ onMounted(() => {
           >
             返回登录
           </button>
-          <button
-            type="button"
-            class="text-button"
-            @click="switchMode('sessions')"
-          >
+          <button type="button" class="text-button" @click="switchMode('sessions')">
             查看安全会话
           </button>
-          <button type="button" class="text-button" @click="switchMode('mfa')">
-            管理 MFA
-          </button>
+          <button type="button" class="text-button" @click="switchMode('mfa')">管理 MFA</button>
           <a
             v-if="mode === 'login' && requestState === 'success'"
             class="text-button"

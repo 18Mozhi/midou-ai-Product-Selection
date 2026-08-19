@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { applyTheme, isThemeId, themes, type ThemeId } from "../design/theme";
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 type State =
   | "loading"
   | "ready"
@@ -24,49 +26,38 @@ const state = ref<State>("loading"),
   selected = ref<ThemeId>("deep-ocean"),
   saved = ref<Preference | null>(null),
   requestId = ref("");
-const dirty = computed(
-  () => selected.value !== (saved.value?.theme ?? "deep-ocean"),
-);
-const selectedName = computed(
-  () => themes.find((item) => item.id === selected.value)!.name,
-);
+const dirty = computed(() => selected.value !== (saved.value?.theme ?? "deep-ocean"));
+const selectedName = computed(() => themes.find((item) => item.id === selected.value)!.name);
 function choose(theme: ThemeId) {
   if (state.value === "saving") return;
   selected.value = theme;
   applyTheme(theme);
   if (state.value === "saved") state.value = "ready";
 }
-function mapError(status: number, code?: string): State {
-  if (status === 401) return "expired";
-  if (status === 403) return "forbidden";
-  if (status === 409 && code === "preference_version_conflict")
-    return "conflict";
-  if (status === 409) return "blocked";
+function mapError(kind: ApiFailureKind, code?: string): State {
+  if (kind === "expired") return "expired";
+  if (kind === "forbidden") return "forbidden";
+  if (kind === "conflict" && code === "preference_version_conflict") return "conflict";
+  if (kind === "conflict" || kind === "blocked" || kind === "rate_limited") return "blocked";
   return "error";
 }
 async function load() {
   state.value = "loading";
   requestId.value = "";
   try {
-    const response = await fetch(`${props.apiBaseUrl}/me/ui-preferences`, {
-        credentials: "include",
-        headers: {
-          accept: "application/json",
-          "x-request-id": crypto.randomUUID(),
-        },
-      }),
-      body = await response.json();
-    if (!response.ok) {
-      requestId.value = body.request_id ?? "";
-      state.value = mapError(response.status, body.error?.code);
-      return;
-    }
-    if (!isThemeId(body.data?.theme)) throw new Error("invalid_theme_contract");
-    saved.value = body.data;
-    selected.value = body.data.theme;
+    const response = await request<Preference>("/me/ui-preferences");
+    requestId.value = response.request_id;
+    if (!isThemeId(response.data?.theme)) throw new Error("invalid_theme_contract");
+    saved.value = response.data;
+    selected.value = response.data.theme;
     applyTheme(selected.value);
     state.value = "ready";
-  } catch {
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      state.value = mapError(error.kind, error.code);
+      return;
+    }
     state.value = "error";
   }
 }
@@ -75,29 +66,23 @@ async function save() {
   state.value = "saving";
   const clientRequestId = crypto.randomUUID();
   try {
-    const response = await fetch(`${props.apiBaseUrl}/me/ui-preferences`, {
-        method: "PUT",
-        credentials: "include",
-        headers: {
-          accept: "application/json",
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-          "x-request-id": clientRequestId,
-        },
-        body: JSON.stringify({
-          theme: selected.value,
-          expected_version: saved.value?.version ?? 0,
-        }),
-      }),
-      body = await response.json();
-    if (!response.ok) {
-      requestId.value = body.request_id ?? clientRequestId;
-      state.value = mapError(response.status, body.error?.code);
+    const response = await request<Preference>("/me/ui-preferences", {
+      method: "PUT",
+      requestId: clientRequestId,
+      body: {
+        theme: selected.value,
+        expected_version: saved.value?.version ?? 0,
+      },
+    });
+    requestId.value = response.request_id;
+    saved.value = response.data;
+    state.value = "saved";
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      state.value = mapError(error.kind, error.code);
       return;
     }
-    saved.value = body.data;
-    state.value = "saved";
-  } catch {
     requestId.value = clientRequestId;
     state.value = "error";
   }
@@ -126,32 +111,19 @@ onMounted(load);
         <div>
           <p>个人外观</p>
           <h1>主题与视觉语义</h1>
-          <span
-            >选择适合工作环境的界面。所有状态同时保留图标、文字与数值。</span
-          >
+          <span>选择适合工作环境的界面。所有状态同时保留图标、文字与数值。</span>
         </div>
         <div class="theme-context">
           <span>当前主题</span><strong>{{ selectedName }}</strong
-          ><small v-if="saved"
-            >工作区 · {{ saved.workspace_id.slice(0, 8) }}</small
-          >
+          ><small v-if="saved">工作区 · {{ saved.workspace_id.slice(0, 8) }}</small>
         </div>
       </header>
-      <section
-        v-if="state === 'loading'"
-        class="theme-state"
-        aria-live="polite"
-      >
-        <span class="theme-spinner"></span
-        ><strong>正在读取你的工作区偏好</strong>
+      <section v-if="state === 'loading'" class="theme-state" aria-live="polite">
+        <span class="theme-spinner"></span><strong>正在读取你的工作区偏好</strong>
         <p>默认显示深海蓝；服务器确认前不会覆盖已保存选择。</p>
       </section>
       <section
-        v-else-if="
-          ['error', 'forbidden', 'expired', 'blocked', 'conflict'].includes(
-            state,
-          )
-        "
+        v-else-if="['error', 'forbidden', 'expired', 'blocked', 'conflict'].includes(state)"
         class="theme-state theme-state--error"
         aria-live="assertive"
       >
@@ -198,11 +170,7 @@ onMounted(load);
                 <h2>三种外观，同一套判断</h2>
               </div>
               <span>{{
-                state === "saved"
-                  ? "✓ 已保存"
-                  : dirty
-                    ? "● 有未保存更改"
-                    : "✓ 已同步"
+                state === "saved" ? "✓ 已保存" : dirty ? "● 有未保存更改" : "✓ 已同步"
               }}</span>
             </div>
             <div class="theme-options" role="radiogroup" aria-label="界面主题">
@@ -215,21 +183,15 @@ onMounted(load);
                 :aria-checked="selected === theme.id"
                 @click="choose(theme.id)"
               >
-                <i :data-swatch="theme.id"
-                  ><span></span><span></span><span></span></i
+                <i :data-swatch="theme.id"><span></span><span></span><span></span></i
                 ><b>{{ theme.name }}</b
                 ><small>{{ theme.mode }} · {{ theme.caption }}</small
                 ><em>{{ selected === theme.id ? "当前预览" : "选择预览" }}</em>
               </button>
             </div>
             <div class="theme-actions">
-              <button class="secondary" :disabled="!dirty" @click="restore">
-                撤销预览</button
-              ><button
-                class="primary"
-                :disabled="!dirty || state === 'saving'"
-                @click="save"
-              >
+              <button class="secondary" :disabled="!dirty" @click="restore">撤销预览</button
+              ><button class="primary" :disabled="!dirty || state === 'saving'" @click="save">
                 {{ state === "saving" ? "正在保存…" : "保存主题" }}
               </button>
             </div>
@@ -240,12 +202,10 @@ onMounted(load);
             </div>
             <div class="preview-metrics">
               <article>
-                <span>机会评分</span><strong>87</strong
-                ><small>高潜力 · 文字结论</small>
+                <span>机会评分</span><strong>87</strong><small>高潜力 · 文字结论</small>
               </article>
               <article>
-                <span>证据新鲜度</span><strong>2 小时</strong
-                ><small>最新 · 2026-08-07</small>
+                <span>证据新鲜度</span><strong>2 小时</strong><small>最新 · 2026-08-07</small>
               </article>
             </div>
             <div class="preview-chart">
@@ -271,9 +231,7 @@ onMounted(load);
             <ul class="semantic-status">
               <li>
                 <i data-kind="success">✓</i
-                ><span
-                  ><b>数据可用</b><small>完整度 96% · 刚刚检查</small></span
-                >
+                ><span><b>数据可用</b><small>完整度 96% · 刚刚检查</small></span>
               </li>
               <li>
                 <i data-kind="warning">!</i

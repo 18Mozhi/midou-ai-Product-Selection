@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 type State = "loading" | "ready" | "error";
 const state = ref<State>("loading");
 const requestId = ref("");
@@ -16,14 +18,14 @@ async function check() {
   const id = crypto.randomUUID();
   requestId.value = id;
   try {
-    const response = await fetch(`${props.apiBaseUrl}/health/ready`, {
-      headers: { accept: "application/json", "x-request-id": id },
+    const response = await request<{ status: string }>("/health/ready", {
+      requestId: id,
     });
-    const body = await response.json();
-    if (!response.ok || body.data?.status !== "ready")
-      throw new Error("not_ready");
+    requestId.value = response.request_id;
+    if (response.data?.status !== "ready") throw new Error("not_ready");
     state.value = "ready";
-  } catch {
+  } catch (error) {
+    if (error instanceof ApiClientError) requestId.value = error.requestId;
     state.value = "error";
   }
 }
@@ -45,24 +47,12 @@ onMounted(check);
         <h2>{{ copy[1] }}</h2>
       </div>
     </div>
-    <div
-      v-if="state === 'loading'"
-      class="state-panel"
-      data-testid="api-loading"
-    >
+    <div v-if="state === 'loading'" class="state-panel" data-testid="api-loading">
       <span class="spinner" aria-hidden="true"></span>
-      <p>
-        检查必需配置、数据库与缓存服务；不检查任务处理器、采集执行器或第三方来源。
-      </p>
+      <p>检查必需配置、数据库与缓存服务；不检查任务处理器、采集执行器或第三方来源。</p>
     </div>
-    <div
-      v-else-if="state === 'ready'"
-      class="state-panel"
-      data-testid="api-ready"
-    >
-      <p>
-        数据库与缓存服务均可用。响应只返回依赖类别，不暴露地址、账号、密码、库表或键。
-      </p>
+    <div v-else-if="state === 'ready'" class="state-panel" data-testid="api-ready">
+      <p>数据库与缓存服务均可用。响应只返回依赖类别，不暴露地址、账号、密码、库表或键。</p>
     </div>
     <div v-else class="state-panel state-panel--error" data-testid="api-error">
       <div>

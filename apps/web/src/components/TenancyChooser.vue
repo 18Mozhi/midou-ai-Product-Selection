@@ -6,22 +6,12 @@ import type {
   TeamSummary,
   WorkspaceSummary,
 } from "@scoutops/contracts";
+import { ApiClientError, createApiClient, type ApiRequestOptions } from "../api-client";
 
 const props = defineProps<{ apiBaseUrl: string }>();
+const apiRequest = createApiClient(props.apiBaseUrl);
 type State =
-  | "loading"
-  | "ready"
-  | "empty"
-  | "error"
-  | "forbidden"
-  | "expired"
-  | "selecting"
-  | "selected";
-interface Envelope<T> {
-  data: T;
-  request_id: string;
-  trace_id: string;
-}
+  "loading" | "ready" | "empty" | "error" | "forbidden" | "expired" | "selecting" | "selected";
 const state = ref<State>("loading");
 const organizations = ref<OrganizationMembershipSummary[]>([]);
 const workspaces = ref<WorkspaceSummary[]>([]);
@@ -30,34 +20,26 @@ const selectedOrganization = ref<OrganizationMembershipSummary | null>(null);
 const selectedWorkspace = ref<WorkspaceSummary | null>(null);
 const selectedContext = ref<SelectedTenancyContext | null>(null);
 const requestId = ref("");
-const title = computed(() =>
-  selectedOrganization.value ? "选择工作区" : "选择组织",
-);
+const title = computed(() => (selectedOrganization.value ? "选择工作区" : "选择组织"));
 const copy = computed(() =>
   selectedOrganization.value
     ? `进入 ${selectedOrganization.value.name} 前，选择本次会话使用的工作区。`
     : "只显示当前账号仍为活动成员的组织。",
 );
-async function request<T>(path: string, init?: RequestInit) {
-  const response = await fetch(`${props.apiBaseUrl}${path}`, {
-    credentials: "include",
-    headers: { accept: "application/json", ...init?.headers },
-    ...init,
-  });
-  const body = (await response.json().catch(() => null)) as
-    Envelope<T> | { error?: { code?: string }; request_id?: string } | null;
-  if (!response.ok) {
-    requestId.value = body?.request_id ?? "";
-    if (response.status === 401) throw new Error("session_expired");
-    if (response.status === 403) throw new Error("forbidden");
-    throw new Error("request_failed");
+async function request<T>(path: string, options?: ApiRequestOptions) {
+  try {
+    const response = await apiRequest<T>(path, options);
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    if (error instanceof ApiClientError) requestId.value = error.requestId;
+    throw error;
   }
-  return (body as Envelope<T>).data;
 }
 const failureState = (error: unknown): State =>
-  error instanceof Error && error.message === "forbidden"
+  error instanceof ApiClientError && error.kind === "forbidden"
     ? "forbidden"
-    : error instanceof Error && error.message === "session_expired"
+    : error instanceof ApiClientError && error.kind === "expired"
       ? "expired"
       : "error";
 async function loadOrganizations() {
@@ -92,20 +74,13 @@ async function chooseWorkspace(workspace: WorkspaceSummary) {
   selectedWorkspace.value = workspace;
   state.value = "selecting";
   try {
-    selectedContext.value = await request<SelectedTenancyContext>(
-      "/auth/context",
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-        body: JSON.stringify({
-          organization_id: workspace.organization_id,
-          workspace_id: workspace.id,
-        }),
+    selectedContext.value = await request<SelectedTenancyContext>("/auth/context", {
+      method: "POST",
+      body: {
+        organization_id: workspace.organization_id,
+        workspace_id: workspace.id,
       },
-    );
+    });
     state.value = "selected";
   } catch (error) {
     state.value = failureState(error);
@@ -117,14 +92,10 @@ onMounted(loadOrganizations);
 <template>
   <main class="tenancy-page" data-testid="tenancy">
     <header class="tenancy-header">
-      <a href="/" class="identity-brand"
-        ><span>选</span><span>智能选品</span></a
-      >
+      <a href="/" class="identity-brand"><span>选</span><span>智能选品</span></a>
       <div>
         <span class="tenancy-step">01</span><i></i
-        ><span
-          class="tenancy-step"
-          :class="{ 'tenancy-step--active': selectedOrganization }"
+        ><span class="tenancy-step" :class="{ 'tenancy-step--active': selectedOrganization }"
           >02</span
         ><i></i><span class="tenancy-step">03</span>
       </div>
@@ -141,15 +112,11 @@ onMounted(loadOrganizations);
         <p>组织和工作区会从当前登录会话加载。</p>
       </div>
       <div
-        v-else-if="
-          state === 'error' || state === 'forbidden' || state === 'expired'
-        "
+        v-else-if="state === 'error' || state === 'forbidden' || state === 'expired'"
         class="tenancy-state tenancy-state--error"
         aria-live="assertive"
       >
-        <b>{{
-          state === "forbidden" ? "403" : state === "expired" ? "401" : "!"
-        }}</b
+        <b>{{ state === "forbidden" ? "403" : state === "expired" ? "401" : "!" }}</b
         ><strong>{{
           state === "forbidden"
             ? "无权访问该组织"
@@ -168,15 +135,10 @@ onMounted(loadOrganizations);
         </p>
         <small v-if="requestId">请求标识：{{ requestId }}</small
         ><a v-if="state === 'expired'" href="/login">重新登录</a
-        ><button v-else type="button" @click="loadOrganizations">
-          返回组织列表
-        </button>
+        ><button v-else type="button" @click="loadOrganizations">返回组织列表</button>
       </div>
       <div v-else-if="state === 'empty'" class="tenancy-state">
-        <b>○</b
-        ><strong>{{
-          selectedOrganization ? "暂无可用工作区" : "暂无可用组织"
-        }}</strong>
+        <b>○</b><strong>{{ selectedOrganization ? "暂无可用工作区" : "暂无可用组织" }}</strong>
         <p>
           {{
             selectedOrganization
@@ -184,11 +146,7 @@ onMounted(loadOrganizations);
               : "请联系平台管理员加入组织。"
           }}
         </p>
-        <button
-          v-if="selectedOrganization"
-          type="button"
-          @click="loadOrganizations"
-        >
+        <button v-if="selectedOrganization" type="button" @click="loadOrganizations">
           返回组织列表
         </button>
       </div>
@@ -213,11 +171,7 @@ onMounted(loadOrganizations);
         >
           ← 返回组织
         </button>
-        <div
-          v-if="!selectedOrganization"
-          class="tenancy-grid"
-          aria-label="可用组织"
-        >
+        <div v-if="!selectedOrganization" class="tenancy-grid" aria-label="可用组织">
           <button
             v-for="organization in organizations"
             :key="organization.id"
@@ -225,14 +179,10 @@ onMounted(loadOrganizations);
             class="tenancy-card"
             @click="chooseOrganization(organization)"
           >
-            <span class="tenancy-avatar">{{
-              organization.name.slice(0, 1)
-            }}</span
+            <span class="tenancy-avatar">{{ organization.name.slice(0, 1) }}</span
             ><span
               ><strong>{{ organization.name }}</strong
-              ><small
-                >{{ organization.slug }} · {{ organization.timezone }}</small
-              ></span
+              ><small>{{ organization.slug }} · {{ organization.timezone }}</small></span
             ><em>选择 →</em>
           </button>
         </div>
@@ -247,9 +197,7 @@ onMounted(loadOrganizations);
               @click="chooseWorkspace(workspace)"
             >
               <span>⌁</span><strong>{{ workspace.name }}</strong
-              ><small>{{
-                workspace.status === "active" ? "可进入" : "已归档"
-              }}</small
+              ><small>{{ workspace.status === "active" ? "可进入" : "已归档" }}</small
               ><em>{{
                 state === "selecting" && selectedWorkspace?.id === workspace.id
                   ? "正在选择…"
@@ -260,9 +208,7 @@ onMounted(loadOrganizations);
           <aside class="team-summary">
             <p>组织团队</p>
             <strong>{{ teams.length }}</strong
-            ><span>{{
-              teams.length ? "当前组织的团队数量" : "当前组织尚未建立团队"
-            }}</span
+            ><span>{{ teams.length ? "当前组织的团队数量" : "当前组织尚未建立团队" }}</span
             ><small>团队成员与角色配置将在权限模块提供。</small>
           </aside>
         </div>

@@ -94,6 +94,7 @@
       "codeStyleVerifier": "../scripts/verify-code-style.mjs",
       "repositorySqlPolicy": "new or modified Repository SQL lines must not exceed 160 characters; violations fail as repository_sql_max_line_length_failed while untouched historical debt follows touch-to-govern cleanup",
       "workerHandlerBoundary": "apps/worker/src/index.ts owns dependency assembly, non-reentrant polling, logs and priority scheduling only; every business queue handler remains in its independent worker or scheduler module and domain SQL is forbidden in the entrypoint",
+      "frontendApiClientBoundary": "the shared frontend JSON client owns credentials, request_id, trace_id, write idempotency, JSON envelopes and standardized server message/action error mapping; navigation, discovery, home, local identity, tenancy selection, landing resolution, personal center, theme settings and API readiness surfaces do not call fetch directly",
       "productionProductCommand": "npm run verify:production-product",
       "userGuide": "../docs/user-guide-ai-selection.md",
       "functionalScope": "P00-P08 incremental code style gate, software build, functional Node/Python tests, desktop/390 E2E, docs, plans, release matrix and security gate; excludes same-commit deployment evidence, disk diagnostics, production load tests and capacity claims",
@@ -200,6 +201,7 @@
       "configuration": ["AUTH_SESSION_TTL_MINUTES=43200"],
       "delivery": "AES-256-GCM MySQL outbox; provider selection pending and explicitly blocked",
       "scope": "local email account and own sessions only; MFA and enterprise identity capabilities are tracked separately by M01-02",
+      "apiClientBoundary": "local identity and own-session requests use the shared frontend API client; server error message, action hint and request/trace correlation remain visible without exposing tokens",
       "status": "module_verified"
     },
     "mfaIdentityAdapters": {
@@ -240,6 +242,7 @@
         "/api/v1/auth/context"
       ],
       "dataScope": "active organization membership first; workspace must belong to selected organization; session context and audit are synchronous and transactional",
+      "apiClientBoundary": "membership, workspace, team and context-selection requests use the shared frontend API client; context writes inherit automatic idempotency and correlation",
       "nonGoals": "ordinary-user organization creation, RBAC roles/data scopes, team membership and asynchronous tenancy propagation are deferred to their owning modules",
       "verificationRunId": "e529cce4-28c3-4e6c-947e-38dae71a1d6f",
       "status": "module_verified"
@@ -349,6 +352,7 @@
       "scope": "signed-in user plus server-resolved active organization and workspace",
       "truth": "versioned synchronous MySQL preference, transactionally paired with audit and idempotency record",
       "bootstrap": "cached theme is applied before Vue mounts, then reconciled with the signed-in server preference; failed writes restore the previous theme",
+      "apiClientBoundary": "standalone theme settings and shell theme controls share the same frontend API client and preserve version conflict, scope, correlation and rollback behavior",
       "legacyCompatibility": "all member workspace modules consume semantic theme tokens in deep-ocean, aurora-purple and cloud-white; approval, notification and real-selection journey cards, dialogs, filters, inputs and action states are explicitly covered",
       "accessibility": "status icon plus text; charts include value, period, source and freshness; keyboard radiogroup and visible focus",
       "async": "not applicable; preference reads and writes are synchronous and create no Worker, Crawler, queue, file, export, SSE or provider work",

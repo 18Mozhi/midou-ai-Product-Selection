@@ -11,20 +11,27 @@ test("the shared frontend API client owns correlation, credentials, idempotency 
     'headers.set("x-request-id", requestId)',
     'headers.set("x-trace-id", traceId)',
     'headers.set("content-type", "application/json")',
-    'headers.set(\n        "idempotency-key"',
+    'headers.set("idempotency-key"',
     'credentials: "include"',
     "throw new ApiClientError(",
+    "payload?.error?.message",
     "payload?.error?.action_hint",
   ]) {
     assert.match(source, new RegExp(contract.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
 });
 
-test("core shell requests use the shared API client instead of direct fetch", async () => {
+test("migrated frontend surfaces use the shared API client instead of direct fetch", async () => {
   const paths = [
     "apps/web/src/components/NavigationShell.vue",
     "apps/web/src/components/DiscoveryOverlay.vue",
     "apps/web/src/components/HomeDashboard.vue",
+    "apps/web/src/components/LocalIdentity.vue",
+    "apps/web/src/components/TenancyChooser.vue",
+    "apps/web/src/components/LandingRedirect.vue",
+    "apps/web/src/components/PersonalCenter.vue",
+    "apps/web/src/components/ThemeStudio.vue",
+    "apps/web/src/components/ApiFoundation.vue",
   ];
 
   for (const path of paths) {

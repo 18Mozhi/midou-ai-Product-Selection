@@ -1,27 +1,31 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import UiStatePanel from './UiStatePanel.vue';
+import { onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
+import UiStatePanel from "./UiStatePanel.vue";
 
-type State = 'loading' | 'blocked';
+type State = "loading" | "blocked";
 const props = defineProps<{ apiBaseUrl: string }>();
-const state = ref<State>('loading');
-const requestId = ref('');
+const request = createApiClient(props.apiBaseUrl);
+const state = ref<State>("loading");
+const requestId = ref("");
 
 async function resolveLanding() {
-  state.value = 'loading';
-  requestId.value = '';
+  state.value = "loading";
+  requestId.value = "";
   try {
-    const response = await fetch(`${props.apiBaseUrl}/me/landing`, { credentials: 'include', headers: { accept: 'application/json' } });
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? '';
-    if (response.status === 401) return window.location.replace('/login');
-    if (!response.ok || !body?.data?.route) {
-      state.value = 'blocked';
+    const response = await request<{ route: string }>("/me/landing");
+    requestId.value = response.request_id;
+    if (!response.data?.route) {
+      state.value = "blocked";
       return;
     }
-    window.location.replace(body.data.route);
-  } catch {
-    state.value = 'blocked';
+    window.location.replace(response.data.route);
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      if (error.kind === "expired") return window.location.replace("/login");
+    }
+    state.value = "blocked";
   }
 }
 

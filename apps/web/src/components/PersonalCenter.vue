@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { ApiClientError, createApiClient, type ApiRequestOptions } from "../api-client";
 
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const state = ref<"loading" | "ready" | "error">("loading");
-const tab = ref<
-  "profile" | "permissions" | "security" | "notifications" | "assets"
->("profile");
+const tab = ref<"profile" | "permissions" | "security" | "notifications" | "assets">("profile");
 const notice = ref("");
 const requestId = ref("");
 const profile = ref<any>(null);
@@ -36,26 +36,22 @@ const passwordForm = reactive({
   confirm_password: "",
 });
 
-async function call(path: string, init?: RequestInit) {
+async function call<T = any>(path: string, options?: ApiRequestOptions): Promise<T | null> {
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), 12000);
   try {
-    const response = await fetch(`${props.apiBaseUrl}${path}`, {
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        ...(init?.method ? { "idempotency-key": crypto.randomUUID() } : {}),
-      },
+    const response = await request<T>(path, {
+      ...options,
       signal: controller.signal,
-      ...init,
     });
-    const body =
-      response.status === 204 ? null : await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok)
-      throw new Error(body?.error?.action_hint ?? "个人中心暂不可用");
-    return body?.data ?? null;
+    requestId.value = response.request_id;
+    return response.data ?? null;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      throw new Error(error.actionHint);
+    }
+    throw error;
   } finally {
     window.clearTimeout(timeout);
   }
@@ -83,11 +79,12 @@ async function load() {
   } catch (error) {
     if (sequence !== loadSequence) return;
     sectionsLoading.value = false;
-    notice.value = error instanceof DOMException && error.name === "AbortError"
-      ? "个人资料读取超时，请检查网络后重试。"
-      : error instanceof Error
-        ? error.message
-        : "个人中心暂不可用";
+    notice.value =
+      error instanceof DOMException && error.name === "AbortError"
+        ? "个人资料读取超时，请检查网络后重试。"
+        : error instanceof Error
+          ? error.message
+          : "个人中心暂不可用";
     state.value = "error";
   }
 }
@@ -102,10 +99,26 @@ async function loadSections(sequence: number) {
     ]);
     if (sequence !== loadSequence) return;
     const [authorizationResult, sessionsResult, preferencesResult, assetsResult] = results;
-    authorization.value = authorizationResult.status === "fulfilled" ? authorizationResult.value : { roles: [], capabilities: [], data_scopes: [] };
+    authorization.value =
+      authorizationResult.status === "fulfilled"
+        ? authorizationResult.value
+        : { roles: [], capabilities: [], data_scopes: [] };
     sessions.value = sessionsResult.status === "fulfilled" ? sessionsResult.value : [];
-    preferences.value = preferencesResult.status === "fulfilled" ? preferencesResult.value : { version: 0, in_app_enabled: true, email_enabled: false, task_enabled: true, approval_enabled: true, competitor_enabled: true };
-    assets.value = assetsResult.status === "fulfilled" ? assetsResult.value : { followed_trends: [], decisions: [], tasks: [] };
+    preferences.value =
+      preferencesResult.status === "fulfilled"
+        ? preferencesResult.value
+        : {
+            version: 0,
+            in_app_enabled: true,
+            email_enabled: false,
+            task_enabled: true,
+            approval_enabled: true,
+            competitor_enabled: true,
+          };
+    assets.value =
+      assetsResult.status === "fulfilled"
+        ? assetsResult.value
+        : { followed_trends: [], decisions: [], tasks: [] };
     const failed = results.filter((item) => item.status === "rejected").length;
     if (failed) notice.value = `个人资料已读取，另有 ${failed} 个分区暂不可用，可稍后刷新。`;
   } finally {
@@ -117,10 +130,10 @@ async function saveProfile() {
   try {
     const result = await call("/me/profile", {
       method: "PATCH",
-      body: JSON.stringify({
+      body: {
         ...form,
         expected_version: profile.value.version,
-      }),
+      },
     });
     profile.value = { ...profile.value, ...result };
     notice.value = "个人资料已保存；手机号变化后保持未验证状态。";
@@ -133,14 +146,14 @@ async function savePreferences() {
   try {
     preferences.value = await call("/me/notification-preferences", {
       method: "PUT",
-      body: JSON.stringify({
+      body: {
         expected_version: preferences.value.version,
         in_app_enabled: preferences.value.in_app_enabled,
         email_enabled: preferences.value.email_enabled,
         task_enabled: preferences.value.task_enabled,
         approval_enabled: preferences.value.approval_enabled,
         competitor_enabled: preferences.value.competitor_enabled,
-      }),
+      },
     });
     notice.value = preferences.value.email_enabled
       ? "偏好已保存；邮件服务商未配置前只记录待投递状态。"
@@ -167,10 +180,10 @@ async function changePassword() {
   try {
     await call("/me/password", {
       method: "POST",
-      body: JSON.stringify({
+      body: {
         current_password: passwordForm.current_password,
         new_password: passwordForm.new_password,
-      }),
+      },
     });
     window.location.assign("/login");
   } catch (error) {
@@ -180,22 +193,67 @@ async function changePassword() {
 
 const assetCount = computed(
   () =>
-    assets.value.followed_trends.length +
-    assets.value.decisions.length +
-    assets.value.tasks.length,
+    assets.value.followed_trends.length + assets.value.decisions.length + assets.value.tasks.length,
 );
 const canManageOrganizationToken = computed(() =>
   authorization.value?.capabilities?.includes("organization_token:manage"),
 );
 const when = (value: unknown) =>
-  value
-    ? new Date(String(value)).toLocaleString("zh-CN", { hour12: false })
-    : "未设置";
-const roleName = (value: string) => ({ member: "成员", selection_manager: "选品负责人", procurement_member: "采购成员", organization_admin: "组织管理员" } as Record<string,string>)[value] ?? "自定义角色";
-const scopeName = (value: string) => ({ organization: "整个组织", workspace: "当前工作区", team: "指定团队", self: "仅本人" } as Record<string,string>)[value] ?? "指定范围";
-const capabilityName = (value: string) => ({ "task:read": "查看任务", "task:create": "创建任务", "task:update": "更新任务", "task:assign": "分配任务", "trend:read": "查看热点", "trend:follow": "关注热点", "opportunity:read": "查看机会", "opportunity:decide": "处理机会", "competitor:read": "查看竞品", "sourcing:read": "查看供应链", "report:read": "查看报表", "team:manage": "管理团队与规则" } as Record<string,string>)[value] ?? "其他已授权操作";
-const statusName = (value: string) => ({ active: "使用中", revoked: "已撤销", expired: "已过期", todo: "待处理", in_progress: "进行中", completed: "已完成", cancelled: "已取消", low: "低", normal: "普通", high: "高", critical: "紧急" } as Record<string,string>)[value] ?? value;
-const decisionName = (value:string) => ({ adopt:"采纳", observe:"继续观察", reject:"驳回" } as Record<string,string>)[value] ?? "已处理";
+  value ? new Date(String(value)).toLocaleString("zh-CN", { hour12: false }) : "未设置";
+const roleName = (value: string) =>
+  (
+    ({
+      member: "成员",
+      selection_manager: "选品负责人",
+      procurement_member: "采购成员",
+      organization_admin: "组织管理员",
+    }) as Record<string, string>
+  )[value] ?? "自定义角色";
+const scopeName = (value: string) =>
+  (
+    ({
+      organization: "整个组织",
+      workspace: "当前工作区",
+      team: "指定团队",
+      self: "仅本人",
+    }) as Record<string, string>
+  )[value] ?? "指定范围";
+const capabilityName = (value: string) =>
+  (
+    ({
+      "task:read": "查看任务",
+      "task:create": "创建任务",
+      "task:update": "更新任务",
+      "task:assign": "分配任务",
+      "trend:read": "查看热点",
+      "trend:follow": "关注热点",
+      "opportunity:read": "查看机会",
+      "opportunity:decide": "处理机会",
+      "competitor:read": "查看竞品",
+      "sourcing:read": "查看供应链",
+      "report:read": "查看报表",
+      "team:manage": "管理团队与规则",
+    }) as Record<string, string>
+  )[value] ?? "其他已授权操作";
+const statusName = (value: string) =>
+  (
+    ({
+      active: "使用中",
+      revoked: "已撤销",
+      expired: "已过期",
+      todo: "待处理",
+      in_progress: "进行中",
+      completed: "已完成",
+      cancelled: "已取消",
+      low: "低",
+      normal: "普通",
+      high: "高",
+      critical: "紧急",
+    }) as Record<string, string>
+  )[value] ?? value;
+const decisionName = (value: string) =>
+  (({ adopt: "采纳", observe: "继续观察", reject: "驳回" }) as Record<string, string>)[value] ??
+  "已处理";
 onMounted(() => void load());
 </script>
 
@@ -205,9 +263,7 @@ onMounted(() => void load());
       <div>
         <p>个人中心</p>
         <h2>{{ profile?.display_name || "个人中心" }}</h2>
-        <span
-          >资料、权限、安全、通知和本人资产使用真实账号与当前组织数据。</span
-        >
+        <span>资料、权限、安全、通知和本人资产使用真实账号与当前组织数据。</span>
       </div>
       <button type="button" @click="load">刷新</button>
     </header>
@@ -250,59 +306,40 @@ onMounted(() => void load());
           >邮箱<input :value="profile.email" disabled /><small>{{
             profile.email_verified_at ? "已验证" : "尚未验证"
           }}</small></label
-        ><label
-          >显示名称<input
-            v-model="form.display_name"
-            required
-            maxlength="120" /></label
-        ><label
-          >头像 HTTPS 地址<input v-model="form.avatar_url" type="url" /></label
+        ><label>显示名称<input v-model="form.display_name" required maxlength="120" /></label
+        ><label>头像 HTTPS 地址<input v-model="form.avatar_url" type="url" /></label
         ><label
           >手机号<input v-model="form.phone" inputmode="tel" /><small>{{
-            profile.phone_verified_at
-              ? "已验证"
-              : "未验证；系统不会伪造短信验证结果"
+            profile.phone_verified_at ? "已验证" : "未验证；系统不会伪造短信验证结果"
           }}</small></label
         ><label
           >语言<select v-model="form.locale">
             <option value="zh-CN">简体中文</option>
           </select></label
         ><label>时区<input v-model="form.timezone" required /></label
-        ><label
-          >修改原因<textarea
-            v-model="form.reason"
-            required
-            maxlength="300"
-          ></textarea></label
+        ><label>修改原因<textarea v-model="form.reason" required maxlength="300"></textarea></label
         ><button>保存资料</button>
       </form>
       <section v-else-if="tab === 'permissions'" class="personal-grid">
         <article class="personal-card">
           <h3>角色</h3>
-          <span v-for="role in authorization.roles" :key="role">{{
-            roleName(role)
-          }}</span>
+          <span v-for="role in authorization.roles" :key="role">{{ roleName(role) }}</span>
         </article>
         <article class="personal-card">
           <h3>数据范围</h3>
-          <span
-            v-for="scope in authorization.data_scopes"
-            :key="scope.scope + scope.scope_key"
-            >{{ scopeName(scope.scope) }}<template v-if="scope.scope_key"> · 指定范围</template></span
+          <span v-for="scope in authorization.data_scopes" :key="scope.scope + scope.scope_key"
+            >{{ scopeName(scope.scope)
+            }}<template v-if="scope.scope_key"> · 指定范围</template></span
           >
         </article>
         <article class="personal-card personal-wide">
           <h3>可执行动作</h3>
           <div class="personal-chips">
-            <code
-              v-for="capability in authorization.capabilities"
-              :key="capability"
-              >{{ capabilityName(capability) }}</code
-            >
+            <code v-for="capability in authorization.capabilities" :key="capability">{{
+              capabilityName(capability)
+            }}</code>
           </div>
-          <a v-if="canManageOrganizationToken" href="/org-admin/tokens"
-            >管理组织令牌</a
-          >
+          <a v-if="canManageOrganizationToken" href="/org-admin/tokens">管理组织令牌</a>
         </article>
       </section>
       <section v-else-if="tab === 'security'" class="personal-grid">
@@ -338,16 +375,10 @@ onMounted(() => void load());
         </form>
         <article class="personal-card personal-wide">
           <h3>设备会话</h3>
-          <div
-            v-for="session in sessions"
-            :key="session.id"
-            class="personal-line"
-          >
+          <div v-for="session in sessions" :key="session.id" class="personal-line">
             <div>
               <b>{{ session.device_label }}</b
-              ><small
-                >{{ statusName(session.status) }} · {{ when(session.last_seen_at) }}</small
-              >
+              ><small>{{ statusName(session.status) }} · {{ when(session.last_seen_at) }}</small>
             </div>
             <button @click="revokeSession(session.id)">撤销会话</button>
           </div>
@@ -360,41 +391,17 @@ onMounted(() => void load());
         @submit.prevent="savePreferences"
       >
         <h3>通知偏好</h3>
-        <label
-          ><input
-            v-model="preferences.in_app_enabled"
-            type="checkbox"
-          />站内通知</label
-        ><label
-          ><input
-            v-model="preferences.email_enabled"
-            type="checkbox"
-          />邮件通知</label
-        ><label
-          ><input
-            v-model="preferences.task_enabled"
-            type="checkbox"
-          />任务通知</label
-        ><label
-          ><input
-            v-model="preferences.approval_enabled"
-            type="checkbox"
-          />审批通知</label
-        ><label
-          ><input
-            v-model="preferences.competitor_enabled"
-            type="checkbox"
-          />竞品通知</label
+        <label><input v-model="preferences.in_app_enabled" type="checkbox" />站内通知</label
+        ><label><input v-model="preferences.email_enabled" type="checkbox" />邮件通知</label
+        ><label><input v-model="preferences.task_enabled" type="checkbox" />任务通知</label
+        ><label><input v-model="preferences.approval_enabled" type="checkbox" />审批通知</label
+        ><label><input v-model="preferences.competitor_enabled" type="checkbox" />竞品通知</label
         ><button>保存偏好</button>
       </form>
       <section v-else class="personal-grid">
         <article class="personal-card">
           <h3>关注热点</h3>
-          <div
-            v-for="item in assets.followed_trends"
-            :key="item.id"
-            class="personal-line"
-          >
+          <div v-for="item in assets.followed_trends" :key="item.id" class="personal-line">
             <a :href="`/trends?topic=${item.id}`">{{ item.title }}</a
             ><small>{{ item.market }} · {{ when(item.created_at) }}</small>
           </div>
@@ -402,25 +409,15 @@ onMounted(() => void load());
         </article>
         <article class="personal-card">
           <h3>我的决策</h3>
-          <div
-            v-for="item in assets.decisions"
-            :key="item.id"
-            class="personal-line"
-          >
-            <a :href="`/opportunities/${item.opportunity_id}`">{{
-              item.opportunity_name
-            }}</a
+          <div v-for="item in assets.decisions" :key="item.id" class="personal-line">
+            <a :href="`/opportunities/${item.opportunity_id}`">{{ item.opportunity_name }}</a
             ><small>{{ decisionName(item.action) }} · {{ when(item.created_at) }}</small>
           </div>
           <p v-if="!assets.decisions.length">暂无人工决策。</p>
         </article>
         <article class="personal-card personal-wide">
           <h3>我的任务</h3>
-          <div
-            v-for="item in assets.tasks"
-            :key="item.id"
-            class="personal-line"
-          >
+          <div v-for="item in assets.tasks" :key="item.id" class="personal-line">
             <a href="/tasks">{{ item.title }}</a
             ><small
               >{{ statusName(item.status) }} · {{ statusName(item.priority) }} ·
