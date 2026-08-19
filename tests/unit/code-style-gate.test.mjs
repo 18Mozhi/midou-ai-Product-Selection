@@ -22,6 +22,7 @@ test("code style gate formats changed code and enforces the maximum line length"
   assert.match(featureMap, /"codeStyleCommand": "npm run verify:code-style"/);
 
   const fixture = `tests/code-style-gate-${process.pid}.fixture.ts`;
+  const repositoryFixture = `apps/api/src/code-style-gate-${process.pid}-repository.ts`;
   try {
     await writeFile(fixture, "export   const value=1;\n", "utf8");
     const unformatted = runGate();
@@ -32,8 +33,22 @@ test("code style gate formats changed code and enforces the maximum line length"
     const tooLong = runGate("--write");
     assert.notEqual(tooLong.status, 0);
     assert.match(`${tooLong.stdout}\n${tooLong.stderr}`, /code_style_max_line_length_failed/);
+
+    await unlink(fixture);
+    await writeFile(
+      repositoryFixture,
+      `export const sql = "SELECT ${"column_name, ".repeat(15)}id FROM example_table";\n`,
+      "utf8",
+    );
+    const repositorySql = runGate("--write");
+    assert.notEqual(repositorySql.status, 0);
+    assert.match(
+      `${repositorySql.stdout}\n${repositorySql.stderr}`,
+      /repository_sql_max_line_length_failed/,
+    );
   } finally {
     await unlink(fixture).catch(() => undefined);
+    await unlink(repositoryFixture).catch(() => undefined);
   }
 
   const passing = runGate();

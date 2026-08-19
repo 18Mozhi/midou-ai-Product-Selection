@@ -940,6 +940,8 @@ API 启动文件只负责共享依赖和生命周期，业务路由装配必须�
 
 代码格式与最大行长采用“触碰即治理”的增量门禁：新增或修改的 `apps`、`packages`、`scripts`、`tests` 代码文件必须通过仓库锁定版本的 Prettier，并且每行不超过 160 字符；未触碰的历史文件不在单次改动中批量重排。CI 或发布任务通过 `CODE_STYLE_BASE_REF` 指定比较基线，本地工作树有改动时检查当前改动，干净工作树默认复核最近提交。
 
+Repository SQL 沿用同一“触碰即治理”边界：新增或修改的 Repository 只要仍包含超过 160 字符的 SQL 行，门禁就以 `repository_sql_max_line_length_failed` 明确失败；未触碰的历史 Repository 不在无关任务中批量重排。Worker 的业务队列处理器分别保留在独立 `*-worker.ts` 或调度器模块中，`apps/worker/src/index.ts` 只负责依赖装配、串行防重入、日志和统一优先级调度，不得承载领域 SQL 或 Repository/Worker 实现。
+
 ---
 
 ## 13. 测试与最终验收矩阵

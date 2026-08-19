@@ -15,6 +15,8 @@ const rootCodeFiles = new Set([
 const supportedExtensions = new Set([".css", ".js", ".json", ".mjs", ".ts", ".vue"]);
 const excludedFiles = new Set(["package-lock.json", "verification/state.json"]);
 const lineLengthExcludedFiles = new Set([".prettierrc.json", "package.json"]);
+const repositoryPathPattern = /^(?:apps|packages)\/.+\/src\/.+repository\.[cm]?[jt]s$/u;
+const sqlStatementPattern = /\b(?:SELECT|INSERT|UPDATE|DELETE|WITH)\b/iu;
 
 function git(args) {
   return execFileSync("git", args, {
@@ -78,16 +80,25 @@ if (prettierResult.stderr) process.stderr.write(prettierResult.stderr);
 if (prettierResult.status !== 0) process.exit(prettierResult.status ?? 1);
 
 const violations = [];
+const repositorySqlViolations = [];
 for (const path of files) {
   if (lineLengthExcludedFiles.has(path)) continue;
   const source = readFileSync(resolve(root, path), "utf8");
   source.split(/\r?\n/u).forEach((line, index) => {
     if (line.length > maximumLineLength) {
-      violations.push(`${path}:${index + 1} ${line.length} > ${maximumLineLength}`);
+      const violation = `${path}:${index + 1} ${line.length} > ${maximumLineLength}`;
+      violations.push(violation);
+      if (repositoryPathPattern.test(path) && sqlStatementPattern.test(line)) {
+        repositorySqlViolations.push(violation);
+      }
     }
   });
 }
 if (violations.length) {
+  if (repositorySqlViolations.length) {
+    console.error("repository_sql_max_line_length_failed");
+    for (const violation of repositorySqlViolations) console.error(violation);
+  }
   console.error("code_style_max_line_length_failed");
   for (const violation of violations) console.error(violation);
   process.exit(1);

@@ -92,6 +92,8 @@
       "functionalCommand": "npm run verify:functional",
       "codeStyleCommand": "npm run verify:code-style",
       "codeStyleVerifier": "../scripts/verify-code-style.mjs",
+      "repositorySqlPolicy": "new or modified Repository SQL lines must not exceed 160 characters; violations fail as repository_sql_max_line_length_failed while untouched historical debt follows touch-to-govern cleanup",
+      "workerHandlerBoundary": "apps/worker/src/index.ts owns dependency assembly, non-reentrant polling, logs and priority scheduling only; every business queue handler remains in its independent worker or scheduler module and domain SQL is forbidden in the entrypoint",
       "productionProductCommand": "npm run verify:production-product",
       "userGuide": "../docs/user-guide-ai-selection.md",
       "functionalScope": "P00-P08 incremental code style gate, software build, functional Node/Python tests, desktop/390 E2E, docs, plans, release matrix and security gate; excludes same-commit deployment evidence, disk diagnostics, production load tests and capacity claims",
