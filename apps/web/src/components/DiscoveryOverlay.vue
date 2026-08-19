@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from "vue";
+import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 type Mode = "search" | "create";
 type Shell = "member" | "organization_admin" | "platform_admin";
-type State =
-  | "idle"
-  | "loading"
-  | "ready"
-  | "empty"
-  | "error"
-  | "expired"
-  | "forbidden"
-  | "blocked";
+type State = "idle" | "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Result {
   id: string;
   resource_type: string;
@@ -34,12 +27,15 @@ const props = defineProps<{
     shell: Shell;
     apiBaseUrl: string;
   }>(),
-  emit = defineEmits<{ close: [] }>();
+  emit = defineEmits<{ close: [] }>(),
+  request = createApiClient(props.apiBaseUrl);
 const query = ref(""),
   state = ref<State>("idle"),
   results = ref<Result[]>([]),
   actions = ref<Action[]>([]),
   requestId = ref(""),
+  traceId = ref(""),
+  actionHint = ref(""),
   input = ref<HTMLInputElement | null>(null);
 watch(
   () => [props.open, props.mode] as const,
@@ -47,6 +43,8 @@ watch(
     if (!open) return;
     state.value = "idle";
     requestId.value = "";
+    traceId.value = "";
+    actionHint.value = "";
     results.value = [];
     actions.value = [];
     await nextTick();
@@ -55,29 +53,31 @@ watch(
   },
   { immediate: true },
 );
-const failure = (status: number) =>
-  status === 401
+const failure = (kind: ApiFailureKind): State =>
+  kind === "expired"
     ? "expired"
-    : status === 403
+    : kind === "forbidden"
       ? "forbidden"
-      : [408, 429, 502, 503, 504].includes(status)
+      : kind === "blocked" || kind === "rate_limited"
         ? "blocked"
         : "error";
-async function get(path: string) {
+async function get<T>(path: string): Promise<T | null> {
   state.value = "loading";
+  actionHint.value = "";
   try {
-    const response = await fetch(`${props.apiBaseUrl}${path}`, {
-        credentials: "include",
-        headers: { accept: "application/json" },
-      }),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) {
-      state.value = failure(response.status);
+    const response = await request<T>(path);
+    requestId.value = response.request_id;
+    traceId.value = response.trace_id;
+    return response.data;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      traceId.value = error.traceId;
+      actionHint.value = error.actionHint;
+      state.value = failure(error.kind);
       return null;
     }
-    return body.data;
-  } catch {
+    actionHint.value = "网络连接异常，请稍后重试。";
     state.value = "blocked";
     return null;
   }
@@ -88,9 +88,7 @@ async function search() {
     state.value = "error";
     return;
   }
-  const data = await get(
-    `/me/global-search?q=${encodeURIComponent(value)}&limit=10`,
-  );
+  const data = await get(`/me/global-search?q=${encodeURIComponent(value)}&limit=10`);
   if (!data) return;
   results.value = data.items;
   state.value = results.value.length ? "ready" : "empty";
@@ -104,11 +102,7 @@ async function loadActions() {
 </script>
 <template>
   <Teleport to="body"
-    ><div
-      v-if="open"
-      class="discovery-backdrop"
-      @mousedown.self="emit('close')"
-    >
+    ><div v-if="open" class="discovery-backdrop" @mousedown.self="emit('close')">
       <section
         class="discovery-dialog"
         role="dialog"
@@ -123,9 +117,7 @@ async function loadActions() {
               {{ mode === "search" ? "搜索当前工作区" : "选择已授权入口" }}
             </h2>
           </div>
-          <button type="button" aria-label="关闭" @click="emit('close')">
-            ×
-          </button>
+          <button type="button" aria-label="关闭" @click="emit('close')">×</button>
         </header>
         <form v-if="mode === 'search'" @submit.prevent="search">
           <label
@@ -146,14 +138,7 @@ async function loadActions() {
         </div>
         <UiStatePanel
           v-else-if="
-            [
-              'loading',
-              'empty',
-              'error',
-              'expired',
-              'forbidden',
-              'blocked',
-            ].includes(state)
+            ['loading', 'empty', 'error', 'expired', 'forbidden', 'blocked'].includes(state)
           "
           compact
           :kind="
@@ -170,6 +155,8 @@ async function loadActions() {
                       : 'error'
           "
           :request-id="requestId"
+          :trace-id="traceId"
+          :action-hint="actionHint"
           primary-label="重新加载"
           @primary="mode === 'search' ? search() : loadActions()"
         />
@@ -187,17 +174,13 @@ async function loadActions() {
             ><i>＋</i
             ><span
               ><strong>{{ item.label }}</strong
-              ><small
-                >{{ item.description }} · {{ item.required_capability }}</small
-              ></span
+              ><small>{{ item.description }} · {{ item.required_capability }}</small></span
             ><b>→</b></a
           >
         </div>
         <footer>
           <span>{{
-            mode === "search"
-              ? "搜索不跨组织或工作区"
-              : "这里只提供入口，不提前创建业务对象"
+            mode === "search" ? "搜索不跨组织或工作区" : "这里只提供入口，不提前创建业务对象"
           }}</span
           ><a v-if="shell === 'member'" href="/notifications">打开通知中心</a>
         </footer>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import { ApiClientError, createApiClient } from "../api-client";
 import { applyTheme, isThemeId, themes, type ThemeId } from "../design/theme";
 import "../member-workspace-polish.css";
 
@@ -71,12 +72,18 @@ interface MenuItem {
   icon: string;
   capabilities?: string[];
 }
+interface ThemePreference {
+  theme: ThemeId;
+  version: number;
+}
 const props = defineProps<{ shell: Shell; apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const route = useRoute();
 const routePath = computed(() => route.path.replace(/\/$/, "") || "/");
 const state = ref<State>("loading"),
   guard = ref<GuardSummary | null>(null),
   requestId = ref(""),
+  traceId = ref(""),
   actionHint = ref(""),
   menuOpen = ref(false),
   themeOpen = ref(false),
@@ -412,16 +419,11 @@ const contextName = (value: string | null | undefined, fallback: string) =>
 async function loadThemePreference(showFailure = false) {
   const sequence = ++themePreferenceSequence;
   try {
-    const response = await fetch(`${props.apiBaseUrl}/me/ui-preferences`, {
-      credentials: "include",
-      headers: { accept: "application/json" },
-    });
-    const body = await response.json().catch(() => null);
-    if (!response.ok || !isThemeId(body?.data?.theme))
-      throw new Error(body?.error?.action_hint ?? "主题偏好读取失败");
+    const response = await request<ThemePreference>("/me/ui-preferences");
+    if (!isThemeId(response.data?.theme)) throw new Error("主题偏好读取失败");
     if (sequence !== themePreferenceSequence) return false;
-    activeTheme.value = body.data.theme;
-    themeVersion.value = Number(body.data.version ?? 0);
+    activeTheme.value = response.data.theme;
+    themeVersion.value = Number(response.data.version ?? 0);
     applyTheme(activeTheme.value);
     return true;
   } catch {
@@ -438,21 +440,13 @@ async function chooseTheme(theme: ThemeId) {
   themeOpen.value = false;
   themeNotice.value = "正在保存主题…";
   try {
-    const response = await fetch(`${props.apiBaseUrl}/me/ui-preferences`, {
+    const response = await request<ThemePreference>("/me/ui-preferences", {
       method: "PUT",
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        "idempotency-key": crypto.randomUUID(),
-      },
-      body: JSON.stringify({ theme, expected_version: themeVersion.value ?? 0 }),
+      body: { theme, expected_version: themeVersion.value ?? 0 },
     });
-    const body = await response.json().catch(() => null);
-    if (!response.ok || !isThemeId(body?.data?.theme))
-      throw new Error(body?.error?.action_hint ?? "主题保存失败");
-    activeTheme.value = body.data.theme;
-    themeVersion.value = Number(body.data.version);
+    if (!isThemeId(response.data?.theme)) throw new Error("主题保存失败");
+    activeTheme.value = response.data.theme;
+    themeVersion.value = Number(response.data.version);
     applyTheme(activeTheme.value);
     themeNotice.value = "主题已应用到全部模块。";
   } catch {
@@ -479,31 +473,32 @@ async function load() {
   state.value = "loading";
   guard.value = null;
   requestId.value = "";
+  traceId.value = "";
   actionHint.value = "";
   try {
-    const response = await fetch(`${props.apiBaseUrl}/me/navigation?shell=${props.shell}`, {
-      credentials: "include",
-      headers: { accept: "application/json" },
-    });
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    actionHint.value = body?.error?.action_hint ?? "";
-    if (!response.ok) {
+    const response = await request<GuardSummary>(`/me/navigation?shell=${props.shell}`);
+    requestId.value = response.request_id;
+    traceId.value = response.trace_id;
+    guard.value = response.data;
+    state.value = "ready";
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      traceId.value = error.traceId;
+      actionHint.value = error.actionHint;
       state.value =
-        response.status === 401
+        error.kind === "expired"
           ? "expired"
-          : response.status === 403
+          : error.kind === "forbidden"
             ? "forbidden"
-            : response.status === 409
+            : error.kind === "conflict"
               ? "context_required"
-              : response.status === 429
+              : error.kind === "rate_limited"
                 ? "rate_limited"
                 : "blocked";
       return;
     }
-    guard.value = body.data;
-    state.value = "ready";
-  } catch {
+    actionHint.value = "网络连接异常，请稍后重试。";
     state.value = "blocked";
   }
 }
@@ -653,7 +648,8 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <h1>{{ stateCopy[0] }}</h1>
         <p>{{ stateCopy[1] }}</p>
         <small v-if="actionHint">{{ actionHint }}</small
-        ><code v-if="requestId">关联编号：{{ requestId }}</code>
+        ><code v-if="requestId">关联编号：{{ requestId }}</code
+        ><code v-if="traceId && traceId !== requestId">链路编号：{{ traceId }}</code>
         <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
         ><RouterLink v-else-if="state === 'context_required'" to="/select-context"
           >选择组织与工作区</RouterLink
