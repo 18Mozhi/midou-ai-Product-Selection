@@ -1018,6 +1018,7 @@ export function parseStructuredCatalogPage(
       price: number | null;
       currency: string | null;
       position: number | null;
+      imageUrl: string | null;
       raw: string;
       sourceKind: "jsonld" | "html_anchor";
     }> = [];
@@ -1056,7 +1057,9 @@ export function parseStructuredCatalogPage(
         position =
           Number.isSafeInteger(positionValue) && positionValue > 0
             ? positionValue
-            : null;
+            : null,
+        imageValue = Array.isArray(nested.image) ? nested.image[0] : nested.image,
+        imageUrl = absoluteUrl(typeof imageValue === "object" && imageValue ? ((imageValue as Record<string,unknown>).url ?? (imageValue as Record<string,unknown>).contentUrl ?? (imageValue as Record<string,unknown>).thumbnailUrl) : imageValue, pageUrl) || null;
       if (title.length >= 2 && url)
         candidates.push({
           title: title.slice(0, 1000),
@@ -1064,6 +1067,7 @@ export function parseStructuredCatalogPage(
           price,
           currency,
           position,
+          imageUrl,
           raw: JSON.stringify(item),
           sourceKind: "jsonld",
         });
@@ -1095,6 +1099,7 @@ export function parseStructuredCatalogPage(
             price: null,
             currency: null,
             position: candidates.length + 1,
+            imageUrl: absoluteUrl(match[0].match(/<img\b[^>]*(?:src|data-src)=["']([^"']+)["']/i)?.[1], pageUrl) || null,
             raw: match[0],
             sourceKind: "html_anchor",
           });
@@ -1115,6 +1120,7 @@ export function parseStructuredCatalogPage(
         source_url: item.url,
         publisher: sourceName,
         observed_at: observedAt,
+        image_url: item.imageUrl,
       },
       isJsonLd = item.sourceKind === "jsonld",
       payload: SourceEvidencePayload = {
@@ -1132,6 +1138,7 @@ export function parseStructuredCatalogPage(
           source_url: isJsonLd ? "jsonld.url" : "html.anchor.href",
           publisher: "crawler.source",
           observed_at: "crawler.observed_at",
+          image_url: isJsonLd ? "jsonld.image" : "html.anchor.img",
         },
       };
     return {

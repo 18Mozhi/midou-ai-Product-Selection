@@ -16,7 +16,7 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
     private readonly now = () => new Date(),
   ) {}
   async list(i: any) {
-    const where = ["organization_id=?", "workspace_id=?"],
+    const where = ["organization_id=?", "workspace_id=?", "deleted_at IS NULL"],
       args: any[] = [i.organizationId, i.workspaceId];
     if (i.status) {
       where.push("status=?");
@@ -43,7 +43,7 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
   }
   async summary(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT status,COUNT(*) count,SUM(due_at IS NOT NULL AND due_at<NOW(3) AND status NOT IN ('completed','cancelled')) overdue FROM tasks WHERE organization_id=? AND workspace_id=? AND assignee_id=? GROUP BY status",
+      "SELECT status,COUNT(*) count,SUM(due_at IS NOT NULL AND due_at<NOW(3) AND status NOT IN ('completed','cancelled')) overdue FROM tasks WHERE organization_id=? AND workspace_id=? AND assignee_id=? AND deleted_at IS NULL GROUP BY status",
       [i.organizationId, i.workspaceId, i.actorId],
     );
     const summary = {
@@ -61,7 +61,7 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
   }
   async detail(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM tasks WHERE id=? AND organization_id=? AND workspace_id=?",
+      "SELECT * FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL",
       [i.taskId, i.organizationId, i.workspaceId],
     );
     if (!rows[0])
@@ -152,7 +152,7 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT * FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
+        "SELECT * FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",
         [i.taskId, i.organizationId, i.workspaceId],
       );
       const r = rows[0];
@@ -206,16 +206,19 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
         due = i.value.due_at;
       }
       if (i.value.action === "transfer") assignee = i.value.assignee_id;
+      const progress = i.value.action === "complete" ? 100 : i.value.action === "progress" ? i.value.progress_percent : Number(r.progress_percent ?? 0);
+      if(i.value.action==="progress"&&(!Number.isInteger(progress)||progress<0||progress>100))throw new BusinessTaskError("task_progress_invalid",400,"进度必须是 0–100 的整数。");
       const version = Number(r.version) + 1;
       await c.query(
-        "UPDATE tasks SET status=?,assignee_id=?,due_at=?,completed_at=?,version=?,updated_at=? WHERE id=?",
-        [status, assignee, due, completed, version, now, i.taskId],
+        "UPDATE tasks SET status=?,assignee_id=?,due_at=?,completed_at=?,progress_percent=?,progress_note=IF(? IS NULL,progress_note,?),version=?,updated_at=? WHERE id=?",
+        [status, assignee, due, completed, progress, i.value.progress_note, i.value.progress_note, version, now, i.taskId],
       );
       const result = {
         id: i.taskId,
         status,
         assignee_id: assignee,
         due_at: iso(due),
+        progress_percent: progress,
         version,
       };
       await this.record(
@@ -244,7 +247,7 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
+        "SELECT id FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",
         [i.taskId, i.organizationId, i.workspaceId],
       );
       if (!rows[0])
@@ -286,6 +289,17 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
       c.release();
     }
   }
+  async update(i:any){
+    const old=await this.operation(i);if(old)return old;
+    await this.ensureAssignee(i.organizationId,i.workspaceId,i.value.assignee_id);
+    const c=await this.pool.getConnection(),now=this.now();
+    try{await c.beginTransaction();const[rows]=await c.query<RowDataPacket[]>("SELECT version FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",[i.taskId,i.organizationId,i.workspaceId]);const r=rows[0];if(!r)throw new BusinessTaskError("task_not_found",404,"刷新任务列表。");if(Number(r.version)!==i.value.expected_version)throw new BusinessTaskError("task_version_conflict",409,"刷新任务后重试。");const version=Number(r.version)+1;await c.query("UPDATE tasks SET title=?,description=?,priority=?,assignee_id=?,due_at=?,version=?,updated_at=? WHERE id=?",[i.value.title,i.value.description,i.value.priority,i.value.assignee_id,i.value.due_at,version,now,i.taskId]);const result={id:i.taskId,version};await this.record(c,i,"task.updated",i.taskId,{...result,reason:i.value.reason},now);await this.save(c,i,i.taskId,result,now);await c.commit();return result;}catch(e){await c.rollback();throw e;}finally{c.release();}
+  }
+  async remove(i:any){
+    const old=await this.operation(i);if(old)return old;
+    const c=await this.pool.getConnection(),now=this.now();
+    try{await c.beginTransaction();const[rows]=await c.query<RowDataPacket[]>("SELECT version FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",[i.taskId,i.organizationId,i.workspaceId]);const r=rows[0];if(!r)throw new BusinessTaskError("task_not_found",404,"刷新任务列表。");if(Number(r.version)!==i.value.expected_version)throw new BusinessTaskError("task_version_conflict",409,"刷新任务后重试。");const version=Number(r.version)+1;await c.query("UPDATE tasks SET deleted_at=?,deleted_by=?,version=?,updated_at=? WHERE id=?",[now,i.actorId,version,now,i.taskId]);const result={id:i.taskId,deleted:true,version};await this.record(c,i,"task.deleted",i.taskId,{...result,reason:i.value.reason},now);await this.save(c,i,i.taskId,result,now);await c.commit();return result;}catch(e){await c.rollback();throw e;}finally{c.release();}
+  }
   private task(r: RowDataPacket) {
     const due = iso(r.due_at),
       status = String(r.status),
@@ -314,6 +328,8 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
       source_ref_id: r.source_ref_id ? String(r.source_ref_id) : null,
       due_at: due,
       completed_at: iso(r.completed_at),
+      progress_percent: Number(r.progress_percent ?? (status === "completed" ? 100 : 0)),
+      progress_note: r.progress_note ? String(r.progress_note) : null,
       sla_status: sla,
       version: Number(r.version),
       created_by: String(r.created_by),

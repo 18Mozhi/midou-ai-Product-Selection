@@ -19,6 +19,8 @@ type Task = {
   due_at: string | null;
   sla_status: string;
   source_type: string;
+  progress_percent: number;
+  progress_note: string | null;
   version: number;
   comments?: any[];
   events?: any[];
@@ -38,6 +40,7 @@ const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all" }>(),
   notice = ref(""),
   requestId = ref(""),
   showCreate = ref(false),
+  editing = ref<Task | null>(null),
   form = ref({ title: "", description: "", priority: "normal", due_at: "" }),
   comment = ref("");
 const visible = computed(() =>
@@ -108,21 +111,27 @@ async function open(x: Task) {
 }
 async function create() {
   try {
-    await api("/tasks", {
-      method: "POST",
+    const wasEditing = Boolean(editing.value);
+    await api(editing.value ? `/tasks/${editing.value.id}` : "/tasks", {
+      method: editing.value ? "PATCH" : "POST",
       body: JSON.stringify({
         ...form.value,
+        ...(editing.value ? { assignee_id: editing.value.assignee_id, expected_version: editing.value.version, reason: "更新任务内容" } : {}),
         due_at: form.value.due_at
           ? new Date(form.value.due_at).toISOString()
           : null,
       }),
     });
     showCreate.value = false;
+    editing.value = null;
     form.value = { title: "", description: "", priority: "normal", due_at: "" };
-    notice.value = "任务已创建并写入审计与事件队列。";
+    notice.value = wasEditing ? "任务已更新。" : "任务已创建，可以立即开始并持续更新进度。";
     await load();
   } catch {}
 }
+function editTask(){if(!selected.value)return;editing.value=selected.value;form.value={title:selected.value.title,description:selected.value.description,priority:selected.value.priority,due_at:selected.value.due_at?new Date(selected.value.due_at).toISOString().slice(0,16):""};showCreate.value=true;}
+async function updateProgress(){if(!selected.value)return;const raw=window.prompt("请输入完成进度（0-100）",String(selected.value.progress_percent??0));if(raw===null)return;const progress=Number(raw);const note=window.prompt("本次进展说明")?.trim();if(!note)return;try{await api(`/tasks/${selected.value.id}/actions`,{method:"POST",body:JSON.stringify({action:"progress",expected_version:selected.value.version,progress_percent:progress,progress_note:note})});notice.value="任务进度已更新。";await open(selected.value);await load();}catch{}}
+async function removeTask(){if(!selected.value)return;const reason=window.prompt("删除原因（任务会保留审计记录）")?.trim();if(!reason)return;try{await api(`/tasks/${selected.value.id}`,{method:"DELETE",body:JSON.stringify({expected_version:selected.value.version,reason})});notice.value="任务已删除，历史审计记录仍然保留。";selected.value=null;await load();}catch{}}
 async function action(name: string) {
   if (!selected.value) return;
   const body: any = { action: name, expected_version: selected.value.version };
@@ -136,7 +145,7 @@ async function action(name: string) {
     body.due_at = d;
   }
   if (name === "transfer") {
-    body.assignee_id = window.prompt("接收成员 UUID")?.trim();
+    body.assignee_id = window.prompt("请输入接收成员的账号编号")?.trim();
     if (!body.assignee_id) return;
   }
   try {
@@ -172,7 +181,7 @@ onMounted(() => {
       <div>
         <p>工作管理</p>
         <h2>{{ mode === "today" ? "今日工作" : "任务中心" }}</h2>
-        <span>任务事实、负责人、期限、评论与转交均来自当前工作区后端。</span>
+        <span>把选品调查、竞品复核、找货和利润确认拆成可运行任务；开始后可更新进度、编辑、删除和查看全过程。</span>
       </div>
       <button @click="showCreate = true">＋ 新建任务</button>
     </div>
@@ -243,6 +252,7 @@ onMounted(() => {
             ><strong>{{ x.title }}</strong
             ><small>{{ x.description || "无补充说明" }}</small></span
           ><em>{{ label(x.status) }}</em
+          ><span class="task-progress"><b>{{ x.progress_percent || 0 }}%</b><i><u :style="{width:`${x.progress_percent || 0}%`}"></u></i></span
           ><span
             ><strong>{{ label(x.sla_status) }}</strong
             ><small>{{ time(x.due_at) }}</small></span
@@ -252,7 +262,8 @@ onMounted(() => {
     >
     <dialog :open="showCreate">
       <form @submit.prevent="create">
-        <h3>新建任务</h3>
+        <h3>{{ editing ? "编辑任务" : "新建任务" }}</h3>
+        <div class="task-kind-guide"><b>这是什么任务？</b><span>可以创建“复核热点”“分析亚马逊竞品”“查找货源”“确认利润”等具体工作。创建后点击任务详情，再点击开始运行。</span></div>
         <label
           >标题<input v-model="form.title" required maxlength="200" /></label
         ><label
@@ -272,14 +283,14 @@ onMounted(() => {
         /></label>
         <p>未指定负责人时分配给当前用户；期限为空时明确显示“未设置”。</p>
         <div>
-          <button type="button" @click="showCreate = false">取消</button
-          ><button>创建</button>
+          <button type="button" @click="showCreate = false; editing = null">取消</button
+          ><button>{{ editing ? "保存修改" : "创建任务" }}</button>
         </div>
       </form>
     </dialog>
     <aside v-if="selected" class="task-detail">
       <button aria-label="关闭任务详情" @click="selected = null">×</button>
-      <p>{{ selected.source_type }} · v{{ selected.version }}</p>
+      <p>{{ selected.source_type === 'manual' ? '手动创建' : '系统生成' }} · 第 {{ selected.version }} 版</p>
       <h3>{{ selected.title }}</h3>
       <span>{{ selected.description || "无补充说明" }}</span>
       <dl>
@@ -287,6 +298,7 @@ onMounted(() => {
           <dt>状态</dt>
           <dd>{{ label(selected.status) }}</dd>
         </div>
+        <div><dt>运行进度</dt><dd>{{ selected.progress_percent || 0 }}% · {{ selected.progress_note || "尚未记录进展" }}</dd></div>
         <div>
           <dt>处理时限</dt>
           <dd>
@@ -312,7 +324,9 @@ onMounted(() => {
         >
           延期</button
         ><button @click="action('transfer')">转交</button>
+        <button @click="updateProgress">更新进度</button><button @click="editTask">编辑</button><button class="danger" @click="removeTask">删除</button>
       </div>
+      <section><h4>运行记录</h4><article v-for="x in selected.events" :key="x.id"><b>{{ label(x.event_type.replace('task.','')) }}</b><p>{{ x.payload?.progress_note || x.payload?.reason || "任务状态已更新" }}</p><small>{{ time(x.created_at) }}</small></article><p v-if="!selected.events?.length">暂无运行记录。</p></section>
       <section>
         <h4>评论</h4>
         <article v-for="x in selected.comments" :key="x.id">

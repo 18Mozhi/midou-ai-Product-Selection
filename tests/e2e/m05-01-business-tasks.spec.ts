@@ -15,6 +15,8 @@ const task = {
   assignee_id: actor,
   source_type: "sourcing_purchase",
   source_ref_id: "00000000-0000-4000-8000-000000000803",
+  progress_percent: 35,
+  progress_note: "已完成亚马逊竞品初筛",
   due_at: "2026-08-09T10:00:00.000Z",
   completed_at: null,
   sla_status: "due_soon",
@@ -30,6 +32,8 @@ async function setup(page: Page) {
         shell: "member",
         organization_id: "00000000-0000-4000-8000-000000000804",
         workspace_id: "00000000-0000-4000-8000-000000000805",
+        organization_name: "米豆智能选品",
+        workspace_name: "跨境新品工作区",
         roles: ["selection_manager"],
         capabilities: [
           "task:read",
@@ -43,6 +47,7 @@ async function setup(page: Page) {
       }),
     }),
   );
+  await page.route("**/api/v1/me/ui-preferences", (r) => r.fulfill({ json: env({ theme: "deep-ocean", source: "saved", organization_id: "00000000-0000-4000-8000-000000000804", workspace_id: "00000000-0000-4000-8000-000000000805", version: 1, updated_at: "2026-08-19T00:00:00.000Z" }) }));
   await page.route("**/api/v1/tasks/summary", (r) =>
     r.fulfill({
       json: env({
@@ -114,4 +119,20 @@ test("M05-01 quick create route opens the task form", async ({ page }) => {
   await page.goto("/tasks?create=1");
   await expect(page.getByRole("dialog")).toBeVisible();
   await expect(page.getByRole("heading", { name: "新建任务" })).toBeVisible();
+});
+
+test("member workspace shows Chinese context theme switch and task progress without internal guard copy", async ({page})=>{
+  await setup(page);
+  await page.goto("/work");
+  await expect(page.getByText("米豆智能选品")).toHaveCount(1);
+  await expect(page.getByText("跨境新品工作区")).toHaveCount(1);
+  await expect(page.getByText(/navigation_member_allowed|权限由服务端裁决|前端菜单不是安全边界/)).toHaveCount(0);
+  await page.getByRole("button",{name:"切换界面主题"}).click();
+  await page.getByRole("button",{name:/极光紫/}).click();
+  await expect.poll(()=>page.locator("html").getAttribute("data-theme")).toBe("aurora-purple");
+  await page.getByRole("button",{name:/核验便携净水杯供应商报价/}).click();
+  await expect(page.getByText("35% · 已完成亚马逊竞品初筛")).toBeVisible();
+  await expect(page.getByRole("button",{name:"更新进度"})).toBeVisible();
+  await expect(page.getByRole("button",{name:"编辑"})).toBeVisible();
+  await expect(page.getByRole("button",{name:"删除"})).toBeVisible();
 });

@@ -19,6 +19,7 @@ type Tab =
 interface Opportunity {
   id: string;
   name: string;
+  image_url: string | null;
   market: string;
   category: string | null;
   source_type: "manual" | "trend_topic";
@@ -82,6 +83,7 @@ interface Detail extends Opportunity {
     execution: string;
   };
 }
+const opportunityStatus = (value:string) => ({ pending:"待判断", adopted:"已采纳", observing:"观察中", rejected:"已驳回", insufficient_data:"待补充数据", calculated:"已计算", unknown:"待识别", low:"低", medium:"中", high:"高", manual:"手动创建", trend_topic:"热点自动发现" } as Record<string,string>)[value] ?? value;
 interface ProfitAnalysis {
   latest_run: null | {
     id: string;
@@ -426,7 +428,7 @@ onMounted(() => {
           v-for="item in items"
           :key="item.id"
           :href="`/opportunities/${item.id}`"
-          ><span class="opportunity-mark">◇</span
+          ><span class="opportunity-picture"><img v-if="item.image_url" :src="item.image_url" :alt="`${item.name} 商品图`" loading="lazy" referrerpolicy="no-referrer" /><i v-else>主图<br />待采集</i></span
           ><span
             ><strong>{{ item.name }}</strong
             ><small
@@ -449,15 +451,15 @@ onMounted(() => {
             </div>
             <div>
               <dt>利润</dt>
-              <dd>{{ item.profit_status }}</dd>
+              <dd>{{ opportunityStatus(item.profit_status) }}</dd>
             </div>
             <div>
               <dt>风险</dt>
-              <dd>{{ item.risk_level }}</dd>
+              <dd>{{ opportunityStatus(item.risk_level) }}</dd>
             </div>
           </dl>
           <b :data-status="item.decision_status">{{
-            item.decision_status
+            opportunityStatus(item.decision_status)
           }}</b></a
         >
       </section></template
@@ -470,6 +472,7 @@ onMounted(() => {
         @primary="load"
       />
       <article v-else class="opportunity-detail">
+        <section v-if="detail.recommendation_status === 'insufficient_data'" class="opportunity-next-steps"><div><b>为什么还不能给出结论？</b><span>系统只在证据足够时评分。按下面顺序补齐真实数据后，评分、利润和风险会自动更新。</span></div><a :href="`/competitors?create=1&opportunity_id=${detail.id}`">① 匹配亚马逊竞品</a><a :href="`/sourcing?create=1&opportunity_id=${detail.id}`">② 查找货源与报价</a><a href="/opportunities/scoring-rules">③ 检查评分规则</a></section>
         <header>
           <div>
             <p>
@@ -775,7 +778,7 @@ onMounted(() => {
                 >
               </div>
               <em v-if="item.result"
-                >AI GENERATED · {{ item.result.review_status }}</em
+                >智能分析 · {{ item.result.review_status === 'pending' ? '待复核' : '已复核' }}</em
               >
             </header>
             <template v-if="item.result"

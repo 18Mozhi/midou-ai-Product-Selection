@@ -116,6 +116,11 @@ onMounted(load);
           </div>
         </dl>
       </section>
+      <section class="home-overview" aria-label="选品流程数据总览">
+        <header><div><p>全链路总览</p><h3>从全网信号到可执行选品</h3></div><a href="/automations">设置持续采集规则 →</a></header>
+        <div><article><i>↗</i><span>热点变化</span><b>{{ data?.changes.length ?? 0 }}</b><small>全网信号进入趋势池</small></article><article><i>◇</i><span>待办分析</span><b>{{ data?.actions.length ?? 0 }}</b><small>需要继续验证的机会</small></article><article><i>◎</i><span>持续关注</span><b>{{ data?.follows.length ?? 0 }}</b><small>竞品与机会动态</small></article><article><i>▣</i><span>数据提醒</span><b>{{ data?.health.length ?? 0 }}</b><small>证据、采集与完整度</small></article></div>
+        <ol><li><b>1</b><span>按规则定时抓取</span></li><li><b>2</b><span>识别商品与热点</span></li><li><b>3</b><span>匹配竞品和货源</span></li><li><b>4</b><span>计算利润与风险</span></li><li><b>5</b><span>保留证据再决策</span></li></ol>
+      </section>
       <section v-if="state === 'empty'" class="home-empty">
         <div>
           <p>暂无已核验信号</p>

@@ -193,12 +193,13 @@ onMounted(load);
 </script>
 <template>
   <section class="automation-center">
+    <section class="selection-pipeline"><div><p>持续选品</p><h3>设定规则后，系统会按周期自动推进</h3><span>采集程序从已启用的电商、论坛、新闻和社媒来源抓取公开页面；所有结果保留网址、抓取时间和原始证据。</span></div><ol><li><b>01</b><span>按来源计划定时采集</span></li><li><b>02</b><span>识别热点与商品</span></li><li><b>03</b><span>生成选品机会</span></li><li><b>04</b><span>匹配竞品与货源</span></li><li><b>05</b><span>利润、风险与证据复核</span></li></ol><nav><a href="/trends">管理热点监控规则</a><a href="/opportunities/start">立即运行一次选品</a><a href="/tasks">查看执行任务</a></nav></section>
     <header>
       <div>
         <p>团队自动化</p>
         <h2>自动化规则</h2>
         <span
-          >以已落库事务事件触发安全动作；不会自动审批、推荐或变更业务事实。</span
+          >配置“发生什么情况、通知谁或创建什么任务”，并查看每次执行结果。</span
         >
       </div>
       <button @click="showCreate = true">创建规则</button>
@@ -239,7 +240,7 @@ onMounted(load);
     </section>
     <section v-else-if="!rules.length" class="automation-state">
       <h3>尚未创建规则</h3>
-      <p>系统不会预置会改变业务结果的自动动作。</p>
+      <p>先创建一条规则，系统会在匹配到竞品变化、审批超时或任务事件时自动通知或创建任务。</p>
     </section>
     <div v-else class="automation-grid">
       <article v-for="rule in rules" :key="rule.id" :data-status="rule.status">

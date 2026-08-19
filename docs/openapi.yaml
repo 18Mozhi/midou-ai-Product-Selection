@@ -2790,6 +2790,37 @@ paths:
       responses:
         "200": { $ref: "#/components/responses/Success" }
         "404": { $ref: "#/components/responses/Error" }
+    patch:
+      summary: Edit a versioned task and preserve an immutable audit event
+      parameters:
+        - { name: taskId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/BusinessTaskUpdateInput" }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "409": { $ref: "#/components/responses/Error" }
+    delete:
+      summary: Soft-delete a versioned task while retaining audit history
+      parameters:
+        - { name: taskId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [expected_version, reason]
+              properties:
+                expected_version: { type: integer, minimum: 1 }
+                reason: { type: string, minLength: 1, maxLength: 500 }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "409": { $ref: "#/components/responses/Error" }
   /tasks/{taskId}/comments:
     post:
       summary: Add immutable task comment
@@ -2827,7 +2858,7 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /tasks/{taskId}/actions:
     post:
-      summary: Start complete cancel delay or transfer a versioned task
+      summary: Start complete cancel delay transfer or update progress on a versioned task
       parameters:
         [
           {
@@ -7190,6 +7221,8 @@ components:
           { type: string, enum: [member, organization_admin, platform_admin] }
         organization_id: { type: string, format: uuid, nullable: true }
         workspace_id: { type: string, format: uuid, nullable: true }
+        organization_name: { type: string, nullable: true }
+        workspace_name: { type: string, nullable: true }
         roles: { type: array, items: { type: string } }
         capabilities:
           { type: array, items: { type: string, pattern: "^[a-z_]+:[a-z_]+" } }
@@ -8507,6 +8540,8 @@ components:
           assignee_id,
           source_type,
           due_at,
+          progress_percent,
+          progress_note,
           sla_status,
           version,
           created_by,
@@ -8524,6 +8559,8 @@ components:
         source_ref_id: { type: string, format: uuid, nullable: true }
         due_at: { type: string, format: date-time, nullable: true }
         completed_at: { type: string, format: date-time, nullable: true }
+        progress_percent: { type: integer, minimum: 0, maximum: 100 }
+        progress_note: { type: string, maxLength: 500, nullable: true }
         sla_status:
           {
             type: string,
@@ -8552,7 +8589,7 @@ components:
       required: [action, expected_version]
       properties:
         action:
-          { type: string, enum: [start, complete, cancel, delay, transfer] }
+          { type: string, enum: [start, complete, cancel, delay, transfer, progress] }
         expected_version: { type: integer, minimum: 1 }
         reason:
           {
@@ -8565,6 +8602,19 @@ components:
           { type: string, format: date-time, description: Required for delay }
         assignee_id:
           { type: string, format: uuid, description: Required for transfer }
+        progress_percent:
+          { type: integer, minimum: 0, maximum: 100, description: Required for progress }
+        progress_note:
+          { type: string, minLength: 1, maxLength: 500, description: Required for progress }
+    BusinessTaskUpdateInput:
+      allOf:
+        - { $ref: "#/components/schemas/BusinessTaskCreateInput" }
+        - type: object
+          required: [assignee_id, expected_version, reason]
+          properties:
+            assignee_id: { type: string, format: uuid }
+            expected_version: { type: integer, minimum: 1 }
+            reason: { type: string, minLength: 1, maxLength: 500 }
     BusinessTaskListEnvelope:
       type: object
       required: [data, meta, request_id, trace_id]

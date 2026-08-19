@@ -39,6 +39,8 @@ import CapacityBoundaryCenter from "./CapacityBoundaryCenter.vue";
 import PlatformAccountCenter from "./PlatformAccountCenter.vue";
 import PlatformManagementCenter from "./PlatformManagementCenter.vue";
 import PersonalCenter from "./PersonalCenter.vue";
+import { applyTheme, themes, type ThemeId } from "../design/theme";
+import "../member-workspace-polish.css";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -53,6 +55,8 @@ interface GuardSummary {
   shell: Shell;
   organization_id: string | null;
   workspace_id: string | null;
+  organization_name: string | null;
+  workspace_name: string | null;
   roles: string[];
   capabilities: string[];
   platform_roles: string[];
@@ -71,6 +75,7 @@ const state = ref<State>("loading"),
   requestId = ref(""),
   actionHint = ref(""),
   menuOpen = ref(false),
+  themeOpen = ref(false),
   discoveryMode = ref<"search" | "create" | null>(null);
 const memberMenu: MenuItem[] = [
   { label: "今日行动", path: "/home", icon: "⌂", capabilities: ["task:read"] },
@@ -269,14 +274,6 @@ const shellTitle = computed(() =>
       ? "组织管理后台"
       : "平台管理后台",
 );
-const guardReasonName = (value?: string) =>
-  (
-    ({
-      navigation_member_allowed: "成员访问已授权",
-      navigation_organization_admin_allowed: "组织管理访问已授权",
-      navigation_platform_admin_allowed: "平台管理访问已授权",
-    }) as Record<string, string>
-  )[value ?? ""] ?? "访问已授权";
 const pageTitle = computed(() =>
   routePath === "/" || routePath === "/home"
     ? "今日行动"
@@ -430,21 +427,27 @@ const pageSummary = computed(() =>
                     : isTasks.value ||
                         isApprovals.value ||
                         isNotifications.value
-                      ? "任务状态、负责人、期限、评论、转交和 SLA 均由当前工作区真实 API 驱动。"
+                      ? "把选品工作拆成具体任务，查看负责人、期限、运行进度和处理记录。"
                       : isSourcing.value
                         ? "供应链候选、版本化报价、最多五家对比和采购任务均保留来源与缺失项。"
                         : isCompetitors.value
-                          ? "竞品身份、来源快照、变化记录和阈值告警由真实 API 与 Worker 驱动。"
+                          ? "持续记录竞品价格、评分、页面变化和告警，点击记录可查看详情。"
                           : isCostRules.value
-                            ? "版本化费用、双审批、汇率来源与利润计算由真实 API 和 Worker 驱动。"
+                            ? "维护费用和汇率规则，计算商品利润并明确展示缺失成本。"
                             : isOpportunities.value
-                              ? "机会、证据覆盖和人工决策由当前组织与工作区的真实 API 驱动。"
+                              ? "汇总商品图片、趋势、竞争、利润、风险和原始证据，辅助判断是否值得做。"
                               : isTrends.value
-                                ? "趋势主题、证据、关注和监控规则均由当前组织与工作区的真实 API 驱动。"
+                                ? "用热度、增速、来源和证据判断市场变化，并可转为选品机会。"
                                 : "",
 );
-const short = (value: string | null) =>
-  value ? `${value.slice(0, 8)}…` : "不适用";
+const contextName = (value: string | null | undefined, fallback: string) =>
+  value?.trim() || fallback;
+async function chooseTheme(theme: ThemeId) {
+  applyTheme(theme);
+  themeOpen.value = false;
+  const current = await fetch(`${props.apiBaseUrl}/me/ui-preferences`, { credentials: "include", headers: { accept: "application/json" } }).then((r) => r.json()).catch(() => null);
+  await fetch(`${props.apiBaseUrl}/me/ui-preferences`, { method: "PUT", credentials: "include", headers: { accept: "application/json", "content-type": "application/json", "idempotency-key": crypto.randomUUID() }, body: JSON.stringify({ theme, expected_version: current?.data?.version ?? 0 }) }).catch(() => null);
+}
 const stateCopy = computed(
   () =>
     (
@@ -550,12 +553,15 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
       </button>
       <div class="role-context" v-if="state === 'ready'">
         <span v-if="shell !== 'platform_admin'"
-          ><small>组织</small>{{ short(guard?.organization_id ?? null) }}</span
+          ><small>组织</small>{{ contextName(guard?.organization_name, "未命名组织") }}</span
         ><span v-if="shell !== 'platform_admin'"
-          ><small>工作区</small>{{ short(guard?.workspace_id ?? null) }}</span
+          ><small>工作区</small>{{ contextName(guard?.workspace_name, "默认工作区") }}</span
         ><span v-else><small>范围</small>平台全局</span>
       </div>
       <div class="role-top-actions">
+        <div v-if="shell === 'member'" class="role-theme-switcher">
+          <button type="button" aria-label="切换界面主题" @click="themeOpen = !themeOpen">◐ <span>主题</span></button>
+        </div>
         <button
           v-if="shell === 'member'"
           type="button"
@@ -631,12 +637,6 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           ><span>{{ item.label }}</span></a
         >
       </nav>
-      <div class="role-sidebar-foot">
-        <span aria-hidden="true">●</span>
-        <p>
-          <strong>权限由服务端裁决</strong><small>前端菜单不是安全边界</small>
-        </p>
-      </div>
     </aside>
     <section class="role-content">
       <section
@@ -667,7 +667,6 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
             <h1>{{ pageTitle }}</h1>
             <span v-if="pageSummary">{{ pageSummary }}</span>
           </div>
-          <b>{{ guardReasonName(guard?.guard_reason) }}</b>
         </header>
         <HomeDashboard v-if="isHome" :api-base-url="apiBaseUrl" />
         <TaskWorkspace
@@ -922,6 +921,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         @click="discoveryMode = 'search'"
       >
         <i>⌕</i><span>搜索</span></button
+      ><button v-if="shell === 'member'" type="button" aria-label="切换界面主题" @click="themeOpen = !themeOpen"><i>◐</i><span>主题</span></button
       ><a
         v-if="shell === 'platform_admin'"
         href="/platform-admin/accounts?create=1"
@@ -932,6 +932,10 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         <i>＋</i><span>创建选品</span>
       </button>
     </nav>
+    <div v-if="shell === 'member' && themeOpen" class="role-theme-menu">
+      <button v-for="theme in themes" :key="theme.id" type="button" @click="chooseTheme(theme.id)"><i :data-theme-dot="theme.id"></i><span><b>{{ theme.name }}</b><small>{{ theme.caption }}</small></span></button>
+      <a href="/settings/theme">更多外观设置</a>
+    </div>
     <DiscoveryOverlay
       :open="Boolean(discoveryMode)"
       :mode="discoveryMode || 'search'"

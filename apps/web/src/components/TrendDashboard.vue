@@ -268,6 +268,7 @@ onMounted(load);
 
 <template>
   <section class="trend-dashboard">
+    <section class="trend-explainer"><div><p>热点趋势怎么看</p><h3>不是热搜榜，而是可追溯的选品信号</h3><span>系统定时抓取新闻、电商、论坛和社媒公开页面，把同一话题合并后展示热度、增长速度、来源数量和证据。点击任一热点即可查看原始来源。</span></div><ol><li><b>热度</b><span>当前收集到的相关信号数</span></li><li><b>增速</b><span>近期相对上一周期的变化</span></li><li><b>来源</b><span>支持结论的独立站点数量</span></li><li><b>可信度</b><span>按证据数量与新鲜度计算</span></li></ol></section>
     <header class="trend-hero">
       <div>
         <p>全网热点雷达</p>
@@ -362,7 +363,7 @@ onMounted(load);
               ></span
             ><span class="topic-heat"
               ><b>{{ topic.heat.value }}</b
-              ><small>热度 / signals</small></span
+              ><small>热度 / 条信号</small></span
             ><span
               ><b>{{ topic.source_count }}</b
               ><small>来源</small></span

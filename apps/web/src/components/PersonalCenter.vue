@@ -28,6 +28,8 @@ const passwordForm = reactive({
 });
 
 async function call(path: string, init?: RequestInit) {
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 12000);
   const response = await fetch(`${props.apiBaseUrl}${path}`, {
     credentials: "include",
     headers: {
@@ -35,8 +37,9 @@ async function call(path: string, init?: RequestInit) {
       "content-type": "application/json",
       ...(init?.method ? { "idempotency-key": crypto.randomUUID() } : {}),
     },
+    signal: controller.signal,
     ...init,
-  });
+  }).finally(() => window.clearTimeout(timeout));
   const body =
     response.status === 204 ? null : await response.json().catch(() => null);
   requestId.value = body?.request_id ?? requestId.value;
@@ -49,19 +52,21 @@ async function load() {
   state.value = "loading";
   notice.value = "";
   try {
-    [
-      profile.value,
-      authorization.value,
-      sessions.value,
-      preferences.value,
-      assets.value,
-    ] = await Promise.all([
+    const results = await Promise.allSettled([
       call("/me/profile"),
       call("/me/authorization"),
       call("/me/sessions"),
       call("/me/notification-preferences"),
       call("/me/assets"),
     ]);
+    const [profileResult, authorizationResult, sessionsResult, preferencesResult, assetsResult] = results;
+    if (profileResult.status === "rejected") throw profileResult.reason;
+    profile.value = profileResult.value;
+    authorization.value = authorizationResult.status === "fulfilled" ? authorizationResult.value : { roles: [], capabilities: [], data_scopes: [] };
+    sessions.value = sessionsResult.status === "fulfilled" ? sessionsResult.value : [];
+    preferences.value = preferencesResult.status === "fulfilled" ? preferencesResult.value : { version: 0, in_app_enabled: true, email_enabled: false, task_enabled: true, approval_enabled: true, competitor_enabled: true };
+    assets.value = assetsResult.status === "fulfilled" ? assetsResult.value : { followed_trends: [], decisions: [], tasks: [] };
+    const failed = results.filter((item) => item.status === "rejected").length;
     Object.assign(form, {
       display_name: profile.value.display_name,
       avatar_url: profile.value.avatar_url ?? "",
@@ -71,6 +76,7 @@ async function load() {
       reason: "更新个人资料",
     });
     state.value = "ready";
+    if (failed) notice.value = `个人资料已读取，另有 ${failed} 个分区暂不可用，可稍后刷新。`;
   } catch (error) {
     notice.value = error instanceof Error ? error.message : "个人中心暂不可用";
     state.value = "error";
@@ -155,6 +161,11 @@ const when = (value: unknown) =>
   value
     ? new Date(String(value)).toLocaleString("zh-CN", { hour12: false })
     : "未设置";
+const roleName = (value: string) => ({ member: "成员", selection_manager: "选品负责人", procurement_member: "采购成员", organization_admin: "组织管理员" } as Record<string,string>)[value] ?? "自定义角色";
+const scopeName = (value: string) => ({ organization: "整个组织", workspace: "当前工作区", team: "指定团队", self: "仅本人" } as Record<string,string>)[value] ?? "指定范围";
+const capabilityName = (value: string) => ({ "task:read": "查看任务", "task:create": "创建任务", "task:update": "更新任务", "task:assign": "分配任务", "trend:read": "查看热点", "trend:follow": "关注热点", "opportunity:read": "查看机会", "opportunity:decide": "处理机会", "competitor:read": "查看竞品", "sourcing:read": "查看供应链", "report:read": "查看报表", "team:manage": "管理团队与规则" } as Record<string,string>)[value] ?? "其他已授权操作";
+const statusName = (value: string) => ({ active: "使用中", revoked: "已撤销", expired: "已过期", todo: "待处理", in_progress: "进行中", completed: "已完成", cancelled: "已取消", low: "低", normal: "普通", high: "高", critical: "紧急" } as Record<string,string>)[value] ?? value;
+const decisionName = (value:string) => ({ adopt:"采纳", observe:"继续观察", reject:"驳回" } as Record<string,string>)[value] ?? "已处理";
 </script>
 
 <template>
@@ -221,7 +232,6 @@ const when = (value: unknown) =>
         ><label
           >语言<select v-model="form.locale">
             <option value="zh-CN">简体中文</option>
-            <option value="en-US">English</option>
           </select></label
         ><label>时区<input v-model="form.timezone" required /></label
         ><label
@@ -236,7 +246,7 @@ const when = (value: unknown) =>
         <article class="personal-card">
           <h3>角色</h3>
           <span v-for="role in authorization.roles" :key="role">{{
-            role
+            roleName(role)
           }}</span>
         </article>
         <article class="personal-card">
@@ -244,7 +254,7 @@ const when = (value: unknown) =>
           <span
             v-for="scope in authorization.data_scopes"
             :key="scope.scope + scope.scope_key"
-            >{{ scope.scope }} · {{ scope.scope_key }}</span
+            >{{ scopeName(scope.scope) }}<template v-if="scope.scope_key"> · 指定范围</template></span
           >
         </article>
         <article class="personal-card personal-wide">
@@ -253,7 +263,7 @@ const when = (value: unknown) =>
             <code
               v-for="capability in authorization.capabilities"
               :key="capability"
-              >{{ capability }}</code
+              >{{ capabilityName(capability) }}</code
             >
           </div>
           <a v-if="canManageOrganizationToken" href="/org-admin/tokens"
@@ -302,7 +312,7 @@ const when = (value: unknown) =>
             <div>
               <b>{{ session.device_label }}</b
               ><small
-                >{{ session.status }} · {{ when(session.last_seen_at) }}</small
+                >{{ statusName(session.status) }} · {{ when(session.last_seen_at) }}</small
               >
             </div>
             <button @click="revokeSession(session.id)">撤销会话</button>
@@ -366,7 +376,7 @@ const when = (value: unknown) =>
             <a :href="`/opportunities/${item.opportunity_id}`">{{
               item.opportunity_name
             }}</a
-            ><small>{{ item.action }} · {{ when(item.created_at) }}</small>
+            ><small>{{ decisionName(item.action) }} · {{ when(item.created_at) }}</small>
           </div>
           <p v-if="!assets.decisions.length">暂无人工决策。</p>
         </article>
@@ -379,7 +389,7 @@ const when = (value: unknown) =>
           >
             <a href="/tasks">{{ item.title }}</a
             ><small
-              >{{ item.status }} · {{ item.priority }} ·
+              >{{ statusName(item.status) }} · {{ statusName(item.priority) }} ·
               {{ when(item.due_at) }}</small
             >
           </div>

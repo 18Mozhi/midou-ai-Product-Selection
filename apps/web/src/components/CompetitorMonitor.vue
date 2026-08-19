@@ -224,6 +224,7 @@ onMounted(() => {
 </script>
 <template>
   <section class="competitor-monitor" aria-labelledby="competitor-title">
+    <section class="member-module-guide"><div><p>竞品监控怎么运行</p><h3>添加亚马逊等平台商品后，持续记录价格、评分和页面变化</h3><span>每次快照都保留来源网址和采集时间。点击“查看详情”可追溯历史变化；没有真实快照时不会显示虚构曲线。</span></div><ol><li>添加商品链接或商品编号</li><li>定时采集公开商品页</li><li>对比新旧快照</li><li>变化超过阈值时提醒</li></ol></section>
     <header class="competitor-head">
       <div>
         <p>竞品情报</p>
@@ -299,7 +300,7 @@ onMounted(() => {
             latest.source_status
           }}</span>
           <p>采集于 {{ latest.captured_at }} · {{ latest.freshness }}</p>
-          <code>evidence {{ latest.evidence_id }}</code>
+          <code>证据 {{ latest.evidence_id }}</code>
         </div>
         <section class="competitor-history">
           <header>
@@ -311,7 +312,7 @@ onMounted(() => {
             ><strong>{{ change.previous }} → {{ change.current }}</strong
             ><time>{{ change.changed_at }}</time>
             <p>{{ change.impact_explanation }}</p>
-            <code>{{ change.evidence_id }}</code>
+            <code>证据 {{ change.evidence_id }}</code>
           </article>
           <p v-if="!selected.changes?.length">
             尚无变化；首个快照只建立基线，不制造变化。

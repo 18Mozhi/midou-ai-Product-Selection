@@ -458,7 +458,7 @@ def main() -> None:
             migrate = (
                 f"cd '{remote_stage}/backend' && "
                 f"'{NODE_BIN}' --env-file='{PROJECT_ROOT}/config/product_scout.env' "
-                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql"
+                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql"
             )
             ssh_exec(client, migrate, timeout=120)
             remote_python(client, panel_deploy_source(build_sha, args.initialize_layout), timeout=300)

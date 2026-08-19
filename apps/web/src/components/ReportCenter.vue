@@ -7,6 +7,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   state = ref("loading"),
   report = ref<any>(null),
   exports = ref<any[]>([]),
+  selectedExport = ref<any>(null),
   notice = ref(""),
   requestId = ref(""),
   busy = ref(false);
@@ -145,9 +146,10 @@ onUnmounted(() => clearInterval(timer));
 </script>
 <template>
   <section class="report-center">
+    <section class="report-guide"><div><p>报表怎么用</p><h3>先看结论，再看分布，最后导出明细</h3><span>机会分析用于判断选品进度，趋势分析用于发现市场变化，团队绩效用于查看任务完成情况。</span></div><ol><li><b>1</b>选择报表</li><li><b>2</b>查看指标和图表</li><li><b>3</b>导出明细留档</li></ol></section>
     <header>
       <div>
-        <p>协作中心</p>
+        <p>分析与导出</p>
         <h2>报表与导出</h2>
         <span
           >所有指标都来自当前组织和工作区已落库事实；缺失值保持“数据不足”。</span
@@ -255,7 +257,7 @@ onUnmounted(() => clearInterval(timer));
               >{{
                 item.row_count == null
                   ? "等待生成"
-                  : `${item.row_count} 行 · ${item.byte_size} bytes`
+                  : `${item.row_count} 行 · ${item.byte_size} 字节`
               }}
               · 到期
               {{
@@ -267,10 +269,11 @@ onUnmounted(() => clearInterval(timer));
           </div>
           <button v-if="item.status === 'succeeded'" @click="download(item)">
             下载</button
-          ><span v-else>{{ item.last_error_code || "处理中" }}</span>
+          ><span v-else>{{ item.last_error_code || "处理中" }}</span><button class="secondary" @click="selectedExport = item">查看详情</button>
         </article>
       </div>
       <div v-else class="report-empty">尚无导出任务。</div>
     </section>
+    <aside v-if="selectedExport" class="report-detail"><button aria-label="关闭导出详情" @click="selectedExport=null">×</button><p>导出详情</p><h3>{{ labels[selectedExport.report_type as ReportType] }}</h3><dl><div><dt>状态</dt><dd>{{ selectedExport.status === 'succeeded' ? '已完成' : selectedExport.status === 'failed' ? '失败' : '处理中' }}</dd></div><div><dt>数据行数</dt><dd>{{ selectedExport.row_count ?? '等待生成' }}</dd></div><div><dt>文件大小</dt><dd>{{ selectedExport.byte_size == null ? '等待生成' : `${selectedExport.byte_size} 字节` }}</dd></div><div><dt>到期时间</dt><dd>{{ new Date(selectedExport.expires_at).toLocaleString('zh-CN',{hour12:false}) }}</dd></div></dl><p v-if="selectedExport.last_error_code">失败原因：{{ selectedExport.last_error_code }}</p></aside>
   </section>
 </template>

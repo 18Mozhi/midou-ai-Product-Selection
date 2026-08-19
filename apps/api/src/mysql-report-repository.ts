@@ -78,7 +78,7 @@ export class MySqlReportRepository implements ReportRepository {
   }
   private async team(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT m.user_id,u.email,COUNT(t.id) total,SUM(t.status='todo') todo,SUM(t.status='in_progress') in_progress,SUM(t.status='completed') completed,SUM(t.status IN ('todo','in_progress') AND t.due_at IS NOT NULL AND t.due_at<?) overdue,MAX(t.updated_at) observed_at FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN tasks t ON t.organization_id=m.organization_id AND t.workspace_id=? AND t.assignee_id=m.user_id WHERE m.organization_id=? AND m.status='active' GROUP BY m.user_id,u.email ORDER BY completed DESC,u.email",
+      "SELECT m.user_id,u.email,COUNT(t.id) total,SUM(t.status='todo') todo,SUM(t.status='in_progress') in_progress,SUM(t.status='completed') completed,SUM(t.status IN ('todo','in_progress') AND t.due_at IS NOT NULL AND t.due_at<?) overdue,MAX(t.updated_at) observed_at FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN tasks t ON t.organization_id=m.organization_id AND t.workspace_id=? AND t.assignee_id=m.user_id AND t.deleted_at IS NULL WHERE m.organization_id=? AND m.status='active' GROUP BY m.user_id,u.email ORDER BY completed DESC,u.email",
       [this.now(), i.workspaceId, i.organizationId],
     );
     const totals = rows.reduce(

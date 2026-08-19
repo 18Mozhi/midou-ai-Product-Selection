@@ -70,7 +70,7 @@ export function validateTask(v: any) {
 }
 export function validateAction(v: any) {
   const action = v?.action;
-  if (!["start", "complete", "cancel", "delay", "transfer"].includes(action))
+  if (!["start", "complete", "cancel", "delay", "transfer", "progress"].includes(action))
     throw new BusinessTaskError(
       "task_action_invalid",
       400,
@@ -93,6 +93,9 @@ export function validateAction(v: any) {
       400,
       "延期必须提交新的截止时间。",
     );
+  const progress = action === "progress" ? Number(v?.progress_percent) : null;
+  if (action === "progress" && (!Number.isInteger(progress) || progress! < 0 || progress! > 100))
+    throw new BusinessTaskError("task_progress_invalid", 400, "进度必须是 0–100 的整数。");
   return {
     action,
     expected_version: expected,
@@ -100,12 +103,18 @@ export function validateAction(v: any) {
     due_at: dueAt,
     assignee_id:
       action === "transfer" ? uuid(v?.assignee_id, "assignee_id") : null,
+    progress_percent: progress,
+    progress_note: action === "progress" ? text(v?.progress_note, "progress_note", 500) : null,
   };
 }
+export function validateUpdate(v:any){const expected=Number(v?.expected_version);if(!Number.isSafeInteger(expected)||expected<1)throw new BusinessTaskError("task_version_invalid",400,"提交当前任务版本。");return{...validateTask(v),expected_version:expected,reason:text(v?.reason,"reason",500)};}
+export function validateDelete(v:any){const expected=Number(v?.expected_version);if(!Number.isSafeInteger(expected)||expected<1)throw new BusinessTaskError("task_version_invalid",400,"提交当前任务版本。");return{expected_version:expected,reason:text(v?.reason,"reason",500)};}
 export interface BusinessTaskRepository {
   list(i: any): Promise<any>;
   detail(i: any): Promise<any>;
   create(i: any): Promise<any>;
+  update(i: any): Promise<any>;
+  remove(i: any): Promise<any>;
   action(i: any): Promise<any>;
   comment(i: any): Promise<any>;
   summary(i: any): Promise<any>;
@@ -141,6 +150,8 @@ export class BusinessTaskService {
       route: "POST:/api/v1/tasks",
     });
   }
+  update(i:TaskContext&{taskId:string;value:any}){return this.repo.update({...i,taskId:uuid(i.taskId,"task_id"),value:validateUpdate({...i.value,assignee_id:i.value?.assignee_id??i.actorId}),route:"PATCH:/api/v1/tasks/:id"});}
+  remove(i:TaskContext&{taskId:string;value:any}){return this.repo.remove({...i,taskId:uuid(i.taskId,"task_id"),value:validateDelete(i.value),route:"DELETE:/api/v1/tasks/:id"});}
   action(i: TaskContext & { taskId: string; value: any }) {
     return this.repo.action({
       ...i,

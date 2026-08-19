@@ -91,6 +91,8 @@ export function registerBusinessTaskRoutes(
     reply.code(201);
     return env(x, r);
   });
+  app.patch("/api/v1/tasks/:id", async (r) => env(await o.service.update({...(await write(r,"task:update")),taskId:(r.params as any).id,value:r.body}),r));
+  app.delete("/api/v1/tasks/:id", async (r) => env(await o.service.remove({...(await write(r,"task:update")),taskId:(r.params as any).id,value:r.body}),r));
   app.post("/api/v1/tasks/:id/comments", async (r, reply) => {
     const x = await o.service.comment({
       ...(await write(r, "task:update")),

@@ -49,7 +49,7 @@ test("automatic source catalog is diversified across real source families and ma
 });
 
 test("fixed marketplace page parser extracts structured product evidence without an API key", () => {
-  const html = `<html><head><script type="application/ld+json">${JSON.stringify({ "@type": "ItemList", itemListElement: [{ "@type": "ListItem", position: 1, item: { "@type": "Product", name: "Portable Desk Lamp", url: "/dp/B0ABCDEFGHI", offers: { price: "29.90", priceCurrency: "USD" } } }] })}</script></head></html>`;
+  const html = `<html><head><script type="application/ld+json">${JSON.stringify({ "@type": "ItemList", itemListElement: [{ "@type": "ListItem", position: 1, item: { "@type": "Product", name: "Portable Desk Lamp", url: "/dp/B0ABCDEFGHI", image: "/images/lamp.jpg", offers: { price: "29.90", priceCurrency: "USD" } } }] })}</script></head></html>`;
   const records = parseStructuredCatalogPage(
     html,
     "https://www.amazon.com/Best-Sellers/zgbs",
@@ -60,6 +60,7 @@ test("fixed marketplace page parser extracts structured product evidence without
   assert.equal(records[0].payload.fields.title, "Portable Desk Lamp");
   assert.equal(records[0].payload.fields.price, 29.9);
   assert.equal(records[0].payload.fields.currency, "USD");
+  assert.equal(records[0].payload.fields.image_url, "https://www.amazon.com/images/lamp.jpg");
   assert.match(records[0].evidenceRef, /^structured-public-page:/);
 });
 

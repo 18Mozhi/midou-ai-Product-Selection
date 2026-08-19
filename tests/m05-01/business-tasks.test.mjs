@@ -24,10 +24,12 @@ test("M05-01.A01/A02/A04/A12 locks truthful task and SLA inputs", () => {
     validateAction({ action: "start", expected_version: 1 }).action,
     "start",
   );
+  assert.deepEqual(validateAction({ action: "progress", expected_version: 2, progress_percent: 45, progress_note: "已完成亚马逊竞品初筛" }), { action: "progress", expected_version: 2, reason: null, due_at: null, assignee_id: null, progress_percent: 45, progress_note: "已完成亚马逊竞品初筛" });
 });
 test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   const files = [
     "database/migrations/0018a_business_tasks_m05_01.up.sql",
+    "database/migrations/0041_member_workspace_tasks.up.sql",
     "apps/api/src/mysql-business-task-repository.ts",
     "apps/api/src/business-task-routes.ts",
     "apps/worker/src/business-task-projection-worker.ts",
@@ -44,12 +46,13 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     values[0],
     /task_comments[\s\S]*task_events[\s\S]*task_operations/,
   );
-  assert.match(values[1], /task_version_conflict[\s\S]*outbox_events/);
+  assert.match(values[1], /progress_percent[\s\S]*deleted_at/);
+  assert.match(values[2], /task_version_conflict[\s\S]*outbox_events/);
   assert.match(
-    values[3],
+    values[4],
     /sourcing\.purchase_task\.queued[\s\S]*lease_expires_at/,
   );
-  assert.match(values[4], /390|未设置期限|登录已失效|无权访问任务/);
+  assert.match(values[5], /更新进度|编辑|删除|运行记录/);
   const registry = JSON.parse(values.at(-1));
   assert.equal(registry.atomicTasks.length, 17);
 });

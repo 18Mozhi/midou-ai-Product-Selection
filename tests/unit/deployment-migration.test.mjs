@@ -9,6 +9,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   ]);
   assert.match(deploy, /apply-deployment-migrations\.mjs/);
   assert.match(deploy, /0040_platform_messages\.up\.sql/);
+  assert.match(deploy, /0041_member_workspace_tasks\.up\.sql/);
   assert.match(deploy, /remote_python\(client, panel_deploy_source/);
   assert.ok(
     deploy.indexOf("ssh_exec(client, migrate") <
@@ -16,7 +17,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   );
   assert.match(
     runner,
-    /allowed = new Set\(\["0040_platform_messages\.up\.sql"\]\)/,
+    /allowed = new Set\(\["0040_platform_messages\.up\.sql", "0041_member_workspace_tasks\.up\.sql"\]\)/,
   );
   assert.match(runner, /migration_checksum_drift/);
   assert.doesNotMatch(runner, /readdir|glob/);

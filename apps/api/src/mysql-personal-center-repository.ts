@@ -156,7 +156,7 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
         [input.userId, input.organizationId, input.workspaceId],
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT id,title,status,priority,due_at,updated_at FROM tasks WHERE assignee_id=? AND organization_id=? AND workspace_id=? ORDER BY updated_at DESC LIMIT 20",
+        "SELECT id,title,status,priority,due_at,updated_at FROM tasks WHERE assignee_id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL ORDER BY updated_at DESC LIMIT 20",
         [input.userId, input.organizationId, input.workspaceId],
       ),
     ]);
