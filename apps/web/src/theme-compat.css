@@ -40,7 +40,49 @@ html:not([data-theme="cloud-white"]) .role-shell {
   background: var(--so-panel) !important;
   color: var(--so-text) !important;
 }
-html:not([data-theme="cloud-white"])
+.role-content :where(.competitor-monitor, .sourcing-workspace, .automation-center, .report-center) {
+  color: var(--so-text) !important;
+}
+.role-content .competitor-monitor {
+  --ink: var(--so-text);
+  --blue: var(--so-primary);
+}
+.role-content
+  :where(.competitor-monitor, .sourcing-workspace, .automation-center, .report-center)
+  :where(p, span, small, dt, code) {
+  border-color: var(--so-border) !important;
+}
+.role-content
+  :where(.competitor-head p, .competitor-detail header p, .competitor-modal header p, .sourcing-head p, .sourcing-layout main > header p) {
+  color: var(--so-primary) !important;
+}
+.role-content
+  :where(.competitor-head span, .competitor-list small, .competitor-metrics small, .competitor-history header span, .competitor-history article p, .competitor-history article code, .sourcing-tabs a, .sourcing-head span, .sourcing-layout aside small, .sourcing-layout aside em, .supplier-cards dt, .supplier-cards footer code) {
+  color: var(--so-text-muted) !important;
+}
+.role-content :where(.competitor-source, .sourcing-notice, .missing) {
+  border-color: var(--so-primary) !important;
+  color: var(--so-text) !important;
+  background: color-mix(in srgb, var(--so-primary) 9%, var(--so-panel)) !important;
+}
+.role-content :where(.competitor-source span, .competitor-list em, .supplier-cards article[data-ready="true"]) {
+  color: var(--so-success) !important;
+  border-color: var(--so-success) !important;
+}
+.role-content :where(.sourcing-tabs a[aria-current="page"], .supplier-cards footer a, .competitor-detail a, .competitor-modal legend) {
+  color: var(--so-primary) !important;
+  border-color: var(--so-primary) !important;
+}
+.role-content :where(.automation-grid i, .report-export-list i[data-status="succeeded"]) {
+  color: var(--so-success) !important;
+}
+.role-content :where(.automation-grid article[data-status="paused"] i) {
+  color: var(--so-warning) !important;
+}
+.role-content :where(.report-export-list i[data-status="dead_letter"], .report-export-list i[data-status="expired"]) {
+  color: var(--so-danger) !important;
+}
+html
   .role-content
   :where(
     article,
@@ -78,7 +120,7 @@ html:not([data-theme="cloud-white"])
   background: var(--so-panel-soft) !important;
   color: var(--so-text) !important;
 }
-html:not([data-theme="cloud-white"])
+html
   .role-content
   :where(
     .competitor-monitor,
@@ -107,7 +149,7 @@ html:not([data-theme="cloud-white"])
   border-color: var(--so-border) !important;
   color: var(--so-text) !important;
 }
-html:not([data-theme="cloud-white"])
+html
   .role-content
   :where(
     .competitor-monitor,
@@ -121,7 +163,7 @@ html:not([data-theme="cloud-white"])
   :where(h2, h3, h4, strong, b, td, dd, label, legend) {
   color: var(--so-text) !important;
 }
-html:not([data-theme="cloud-white"])
+html
   .role-content
   :where(
     .competitor-monitor,
@@ -137,7 +179,7 @@ html:not([data-theme="cloud-white"])
   background: var(--so-panel-soft) !important;
   color: var(--so-text) !important;
 }
-html:not([data-theme="cloud-white"])
+html
   .role-content
   :where(
     .competitor-monitor,
@@ -168,8 +210,8 @@ html:not([data-theme="cloud-white"])
     padding: 6px 9px;
     border: 1px solid var(--so-border);
     border-radius: 7px;
-    background: #020817;
-    color: #fff;
+    background: var(--so-bg-elevated);
+    color: var(--so-text);
     font: 12px/1.35 var(--so-font-ui);
     box-shadow: var(--so-shadow);
     opacity: 0;

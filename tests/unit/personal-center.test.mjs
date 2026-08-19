@@ -71,6 +71,13 @@ test("personal center delivery contains real profile assets security preferences
     ]);
   assert.match(component, /基本资料.*我的权限.*安全中心.*通知偏好.*我的资产/s);
   assert.match(component, /changePassword.*revokeSession.*savePreferences/s);
+  assert.match(component, /onMounted\(\(\) => void load\(\)\)/);
+  assert.ok(
+    component.indexOf('await call("/me/profile")') <
+      component.indexOf("Promise.allSettled"),
+    "profile must render before optional personal-center sections finish",
+  );
+  assert.match(component, /finally \{[\s\S]*window\.clearTimeout\(timeout\)/);
   assert.match(routes, /\/api\/v1\/me\/profile/);
   assert.match(routes, /\/api\/v1\/me\/assets/);
   assert.match(repository, /trend_topic_follows/);

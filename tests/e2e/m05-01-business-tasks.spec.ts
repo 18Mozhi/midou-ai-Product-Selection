@@ -26,6 +26,7 @@ const task = {
   updated_at: "2026-08-08T10:00:00.000Z",
 };
 async function setup(page: Page) {
+  let themePreference = { theme: "deep-ocean", source: "saved", organization_id: "00000000-0000-4000-8000-000000000804", workspace_id: "00000000-0000-4000-8000-000000000805", version: 1, updated_at: "2026-08-19T00:00:00.000Z" };
   await page.route("**/api/v1/me/navigation?shell=member", (r) =>
     r.fulfill({
       json: env({
@@ -47,7 +48,18 @@ async function setup(page: Page) {
       }),
     }),
   );
-  await page.route("**/api/v1/me/ui-preferences", (r) => r.fulfill({ json: env({ theme: "deep-ocean", source: "saved", organization_id: "00000000-0000-4000-8000-000000000804", workspace_id: "00000000-0000-4000-8000-000000000805", version: 1, updated_at: "2026-08-19T00:00:00.000Z" }) }));
+  await page.route("**/api/v1/me/ui-preferences", async (route) => {
+    if (route.request().method() === "PUT") {
+      const body = route.request().postDataJSON() as { theme: string };
+      themePreference = { ...themePreference, theme: body.theme, version: themePreference.version + 1, updated_at: "2026-08-19T01:00:00.000Z" };
+    }
+    await route.fulfill({ json: env(themePreference) });
+  });
+  await page.route("**/api/v1/me/profile", (r) => r.fulfill({ json: env({ id: actor, email: "member@scoutops.cn", display_name: "测试成员", avatar_url: null, phone: "13800000000", locale: "zh-CN", timezone: "Asia/Shanghai", status: "active", last_login_at: "2026-08-19T00:00:00.000Z", created_at: "2026-08-08T00:00:00.000Z", updated_at: "2026-08-19T00:00:00.000Z", version: 1 }) }));
+  await page.route("**/api/v1/me/authorization", (r) => r.fulfill({ json: env({ roles: ["选品经理"], capabilities: ["task:read"], data_scopes: ["workspace"] }) }));
+  await page.route("**/api/v1/me/sessions", (r) => r.fulfill({ json: env([]) }));
+  await page.route("**/api/v1/me/notification-preferences", (r) => r.fulfill({ json: env({ version: 1, in_app_enabled: true, email_enabled: false, task_enabled: true, approval_enabled: true, competitor_enabled: true }) }));
+  await page.route("**/api/v1/me/assets", (r) => r.fulfill({ json: env({ followed_trends: [], decisions: [], tasks: [] }) }));
   await page.route("**/api/v1/tasks/summary", (r) =>
     r.fulfill({
       json: env({
@@ -127,12 +139,25 @@ test("member workspace shows Chinese context theme switch and task progress with
   await expect(page.getByText("米豆智能选品")).toHaveCount(1);
   await expect(page.getByText("跨境新品工作区")).toHaveCount(1);
   await expect(page.getByText(/navigation_member_allowed|权限由服务端裁决|前端菜单不是安全边界/)).toHaveCount(0);
+  const beforeTheme = await page.locator(".task-title").evaluate((element) => getComputedStyle(element).backgroundImage);
   await page.getByRole("button",{name:"切换界面主题"}).click();
   await page.getByRole("button",{name:/极光紫/}).click();
   await expect.poll(()=>page.locator("html").getAttribute("data-theme")).toBe("aurora-purple");
+  await expect(page.getByText("主题已应用到全部模块。")).toBeVisible();
+  const afterTheme = await page.locator(".task-title").evaluate((element) => getComputedStyle(element).backgroundImage);
+  expect(afterTheme).not.toBe(beforeTheme);
   await page.getByRole("button",{name:/核验便携净水杯供应商报价/}).click();
   await expect(page.getByText("35% · 已完成亚马逊竞品初筛")).toBeVisible();
   await expect(page.getByRole("button",{name:"更新进度"})).toBeVisible();
   await expect(page.getByRole("button",{name:"编辑"})).toBeVisible();
   await expect(page.getByRole("button",{name:"删除"})).toBeVisible();
+});
+
+test("personal center renders the core profile instead of staying on its loading state", async ({ page }) => {
+  await setup(page);
+  await page.goto("/me");
+  await expect(page.getByRole("heading", { name: "个人中心" })).toBeVisible();
+  await expect(page.getByLabel("显示名称")).toHaveValue("测试成员");
+  await expect(page.getByText("正在读取个人中心")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "保存资料" })).toBeVisible();
 });

@@ -9,10 +9,19 @@ const tab = ref<
 const notice = ref("");
 const requestId = ref("");
 const profile = ref<any>(null);
-const authorization = ref<any>(null);
+const authorization = ref<any>({ roles: [], capabilities: [], data_scopes: [] });
 const sessions = ref<any[]>([]);
-const preferences = ref<any>(null);
+const preferences = ref<any>({
+  version: 0,
+  in_app_enabled: true,
+  email_enabled: false,
+  task_enabled: true,
+  approval_enabled: true,
+  competitor_enabled: true,
+});
 const assets = ref<any>({ followed_trends: [], decisions: [], tasks: [] });
+const sectionsLoading = ref(false);
+let loadSequence = 0;
 const form = reactive({
   display_name: "",
   avatar_url: "",
@@ -30,43 +39,37 @@ const passwordForm = reactive({
 async function call(path: string, init?: RequestInit) {
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), 12000);
-  const response = await fetch(`${props.apiBaseUrl}${path}`, {
-    credentials: "include",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      ...(init?.method ? { "idempotency-key": crypto.randomUUID() } : {}),
-    },
-    signal: controller.signal,
-    ...init,
-  }).finally(() => window.clearTimeout(timeout));
-  const body =
-    response.status === 204 ? null : await response.json().catch(() => null);
-  requestId.value = body?.request_id ?? requestId.value;
-  if (!response.ok)
-    throw new Error(body?.error?.action_hint ?? "个人中心暂不可用");
-  return body?.data ?? null;
+  try {
+    const response = await fetch(`${props.apiBaseUrl}${path}`, {
+      credentials: "include",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        ...(init?.method ? { "idempotency-key": crypto.randomUUID() } : {}),
+      },
+      signal: controller.signal,
+      ...init,
+    });
+    const body =
+      response.status === 204 ? null : await response.json().catch(() => null);
+    requestId.value = body?.request_id ?? requestId.value;
+    if (!response.ok)
+      throw new Error(body?.error?.action_hint ?? "个人中心暂不可用");
+    return body?.data ?? null;
+  } finally {
+    window.clearTimeout(timeout);
+  }
 }
 
 async function load() {
+  const sequence = ++loadSequence;
   state.value = "loading";
   notice.value = "";
+  sectionsLoading.value = true;
   try {
-    const results = await Promise.allSettled([
-      call("/me/profile"),
-      call("/me/authorization"),
-      call("/me/sessions"),
-      call("/me/notification-preferences"),
-      call("/me/assets"),
-    ]);
-    const [profileResult, authorizationResult, sessionsResult, preferencesResult, assetsResult] = results;
-    if (profileResult.status === "rejected") throw profileResult.reason;
-    profile.value = profileResult.value;
-    authorization.value = authorizationResult.status === "fulfilled" ? authorizationResult.value : { roles: [], capabilities: [], data_scopes: [] };
-    sessions.value = sessionsResult.status === "fulfilled" ? sessionsResult.value : [];
-    preferences.value = preferencesResult.status === "fulfilled" ? preferencesResult.value : { version: 0, in_app_enabled: true, email_enabled: false, task_enabled: true, approval_enabled: true, competitor_enabled: true };
-    assets.value = assetsResult.status === "fulfilled" ? assetsResult.value : { followed_trends: [], decisions: [], tasks: [] };
-    const failed = results.filter((item) => item.status === "rejected").length;
+    const loadedProfile = await call("/me/profile");
+    if (sequence !== loadSequence) return;
+    profile.value = loadedProfile;
     Object.assign(form, {
       display_name: profile.value.display_name,
       avatar_url: profile.value.avatar_url ?? "",
@@ -76,10 +79,37 @@ async function load() {
       reason: "更新个人资料",
     });
     state.value = "ready";
-    if (failed) notice.value = `个人资料已读取，另有 ${failed} 个分区暂不可用，可稍后刷新。`;
+    void loadSections(sequence);
   } catch (error) {
-    notice.value = error instanceof Error ? error.message : "个人中心暂不可用";
+    if (sequence !== loadSequence) return;
+    sectionsLoading.value = false;
+    notice.value = error instanceof DOMException && error.name === "AbortError"
+      ? "个人资料读取超时，请检查网络后重试。"
+      : error instanceof Error
+        ? error.message
+        : "个人中心暂不可用";
     state.value = "error";
+  }
+}
+
+async function loadSections(sequence: number) {
+  try {
+    const results = await Promise.allSettled([
+      call("/me/authorization"),
+      call("/me/sessions"),
+      call("/me/notification-preferences"),
+      call("/me/assets"),
+    ]);
+    if (sequence !== loadSequence) return;
+    const [authorizationResult, sessionsResult, preferencesResult, assetsResult] = results;
+    authorization.value = authorizationResult.status === "fulfilled" ? authorizationResult.value : { roles: [], capabilities: [], data_scopes: [] };
+    sessions.value = sessionsResult.status === "fulfilled" ? sessionsResult.value : [];
+    preferences.value = preferencesResult.status === "fulfilled" ? preferencesResult.value : { version: 0, in_app_enabled: true, email_enabled: false, task_enabled: true, approval_enabled: true, competitor_enabled: true };
+    assets.value = assetsResult.status === "fulfilled" ? assetsResult.value : { followed_trends: [], decisions: [], tasks: [] };
+    const failed = results.filter((item) => item.status === "rejected").length;
+    if (failed) notice.value = `个人资料已读取，另有 ${failed} 个分区暂不可用，可稍后刷新。`;
+  } finally {
+    if (sequence === loadSequence) sectionsLoading.value = false;
   }
 }
 
@@ -166,6 +196,7 @@ const scopeName = (value: string) => ({ organization: "整个组织", workspace:
 const capabilityName = (value: string) => ({ "task:read": "查看任务", "task:create": "创建任务", "task:update": "更新任务", "task:assign": "分配任务", "trend:read": "查看热点", "trend:follow": "关注热点", "opportunity:read": "查看机会", "opportunity:decide": "处理机会", "competitor:read": "查看竞品", "sourcing:read": "查看供应链", "report:read": "查看报表", "team:manage": "管理团队与规则" } as Record<string,string>)[value] ?? "其他已授权操作";
 const statusName = (value: string) => ({ active: "使用中", revoked: "已撤销", expired: "已过期", todo: "待处理", in_progress: "进行中", completed: "已完成", cancelled: "已取消", low: "低", normal: "普通", high: "高", critical: "紧急" } as Record<string,string>)[value] ?? value;
 const decisionName = (value:string) => ({ adopt:"采纳", observe:"继续观察", reject:"驳回" } as Record<string,string>)[value] ?? "已处理";
+onMounted(() => void load());
 </script>
 
 <template>
@@ -182,6 +213,9 @@ const decisionName = (value:string) => ({ adopt:"采纳", observe:"继续观察"
     </header>
     <p v-if="notice" class="personal-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
+    </p>
+    <p v-else-if="state === 'ready' && sectionsLoading" class="personal-notice">
+      基本资料已显示，正在后台读取权限、安全、通知和资产信息…
     </p>
     <section v-if="state !== 'ready'" class="personal-state">
       <h3>
@@ -414,11 +448,13 @@ const decisionName = (value:string) => ({ adopt:"采纳", observe:"继续观察"
   padding: 24px;
   border: 1px solid var(--so-border);
   border-radius: 20px;
-  background: linear-gradient(135deg, #0d2342, #123f5b);
+  background:
+    radial-gradient(circle at 82% 20%, var(--so-glow), transparent 36%),
+    linear-gradient(135deg, var(--so-panel), var(--so-bg-elevated));
 }
 .personal-center header p {
   margin: 0;
-  color: #46dec4;
+  color: var(--so-primary);
   font: 800 11px monospace;
   letter-spacing: 0.15em;
 }
@@ -452,8 +488,8 @@ button,
 .personal-center > nav .on,
 .personal-center form > button,
 .personal-center > header button {
-  background: #42d7b5;
-  color: #06251e;
+  background: var(--so-primary);
+  color: var(--so-on-primary);
   font-weight: 800;
 }
 .personal-card,
@@ -465,7 +501,7 @@ button,
   background: var(--so-panel);
 }
 .personal-notice {
-  color: #9fe9dc;
+  color: var(--so-success);
 }
 .personal-form {
   display: grid;
@@ -509,8 +545,8 @@ button,
 .personal-chips code {
   padding: 6px 8px;
   border-radius: 7px;
-  background: #0a233d;
-  color: #8ed9ff;
+  background: color-mix(in srgb, var(--so-primary) 10%, var(--so-panel-soft));
+  color: var(--so-primary);
 }
 .personal-line {
   display: flex;
@@ -525,7 +561,7 @@ button,
   color: var(--so-text-muted);
 }
 .personal-center a {
-  color: #55dfc8;
+  color: var(--so-primary);
 }
 @media (max-width: 700px) {
   .personal-center > header {

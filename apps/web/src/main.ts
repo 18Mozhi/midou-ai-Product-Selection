@@ -3,7 +3,9 @@ import App from "./App.vue";
 import "./styles.css";
 import "./design/tokens.css";
 import "./theme-compat.css";
+import { applyCachedTheme } from "./design/theme";
 
+applyCachedTheme();
 createApp(App).mount("#app");
 
 function syncIconTooltips(root: ParentNode) {

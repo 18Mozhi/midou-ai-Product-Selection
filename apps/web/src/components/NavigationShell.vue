@@ -39,7 +39,7 @@ import CapacityBoundaryCenter from "./CapacityBoundaryCenter.vue";
 import PlatformAccountCenter from "./PlatformAccountCenter.vue";
 import PlatformManagementCenter from "./PlatformManagementCenter.vue";
 import PersonalCenter from "./PersonalCenter.vue";
-import { applyTheme, themes, type ThemeId } from "../design/theme";
+import { applyTheme, isThemeId, themes, type ThemeId } from "../design/theme";
 import "../member-workspace-polish.css";
 
 type Shell = "member" | "organization_admin" | "platform_admin";
@@ -76,7 +76,11 @@ const state = ref<State>("loading"),
   actionHint = ref(""),
   menuOpen = ref(false),
   themeOpen = ref(false),
+  activeTheme = ref<ThemeId>(isThemeId(document.documentElement.dataset.theme) ? document.documentElement.dataset.theme : "deep-ocean"),
+  themeVersion = ref<number | null>(null),
+  themeNotice = ref(""),
   discoveryMode = ref<"search" | "create" | null>(null);
+let themePreferenceSequence = 0;
 const memberMenu: MenuItem[] = [
   { label: "今日行动", path: "/home", icon: "⌂", capabilities: ["task:read"] },
   { label: "今日工作", path: "/work", icon: "✓", capabilities: ["task:read"] },
@@ -442,11 +446,51 @@ const pageSummary = computed(() =>
 );
 const contextName = (value: string | null | undefined, fallback: string) =>
   value?.trim() || fallback;
+async function loadThemePreference(showFailure = false) {
+  const sequence = ++themePreferenceSequence;
+  try {
+    const response = await fetch(`${props.apiBaseUrl}/me/ui-preferences`, {
+      credentials: "include",
+      headers: { accept: "application/json" },
+    });
+    const body = await response.json().catch(() => null);
+    if (!response.ok || !isThemeId(body?.data?.theme)) throw new Error(body?.error?.action_hint ?? "主题偏好读取失败");
+    if (sequence !== themePreferenceSequence) return false;
+    activeTheme.value = body.data.theme;
+    themeVersion.value = Number(body.data.version ?? 0);
+    applyTheme(activeTheme.value);
+    return true;
+  } catch {
+    if (showFailure) themeNotice.value = "主题偏好暂时无法同步，已保留当前界面主题。";
+    return false;
+  }
+}
 async function chooseTheme(theme: ThemeId) {
+  if (themeVersion.value === null) await loadThemePreference(false);
+  ++themePreferenceSequence;
+  const previousTheme = activeTheme.value;
   applyTheme(theme);
+  activeTheme.value = theme;
   themeOpen.value = false;
-  const current = await fetch(`${props.apiBaseUrl}/me/ui-preferences`, { credentials: "include", headers: { accept: "application/json" } }).then((r) => r.json()).catch(() => null);
-  await fetch(`${props.apiBaseUrl}/me/ui-preferences`, { method: "PUT", credentials: "include", headers: { accept: "application/json", "content-type": "application/json", "idempotency-key": crypto.randomUUID() }, body: JSON.stringify({ theme, expected_version: current?.data?.version ?? 0 }) }).catch(() => null);
+  themeNotice.value = "正在保存主题…";
+  try {
+    const response = await fetch(`${props.apiBaseUrl}/me/ui-preferences`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { accept: "application/json", "content-type": "application/json", "idempotency-key": crypto.randomUUID() },
+      body: JSON.stringify({ theme, expected_version: themeVersion.value ?? 0 }),
+    });
+    const body = await response.json().catch(() => null);
+    if (!response.ok || !isThemeId(body?.data?.theme)) throw new Error(body?.error?.action_hint ?? "主题保存失败");
+    activeTheme.value = body.data.theme;
+    themeVersion.value = Number(body.data.version);
+    applyTheme(activeTheme.value);
+    themeNotice.value = "主题已应用到全部模块。";
+  } catch {
+    activeTheme.value = previousTheme;
+    applyTheme(previousTheme);
+    themeNotice.value = "主题保存失败，已恢复原主题，请稍后重试。";
+  }
 }
 const stateCopy = computed(
   () =>
@@ -515,6 +559,7 @@ function shortcut(event: KeyboardEvent) {
 }
 onMounted(() => {
   void load();
+  void loadThemePreference(false);
   window.addEventListener("keydown", shortcut);
 });
 onUnmounted(() => window.removeEventListener("keydown", shortcut));
@@ -933,9 +978,10 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
       </button>
     </nav>
     <div v-if="shell === 'member' && themeOpen" class="role-theme-menu">
-      <button v-for="theme in themes" :key="theme.id" type="button" @click="chooseTheme(theme.id)"><i :data-theme-dot="theme.id"></i><span><b>{{ theme.name }}</b><small>{{ theme.caption }}</small></span></button>
+      <button v-for="theme in themes" :key="theme.id" type="button" :aria-pressed="activeTheme === theme.id" @click="chooseTheme(theme.id)"><i :data-theme-dot="theme.id"></i><span><b>{{ theme.name }}</b><small>{{ activeTheme === theme.id ? '当前主题 · ' : '' }}{{ theme.caption }}</small></span></button>
       <a href="/settings/theme">更多外观设置</a>
     </div>
+    <p v-if="shell === 'member' && themeNotice" class="role-theme-notice" role="status">{{ themeNotice }}</p>
     <DiscoveryOverlay
       :open="Boolean(discoveryMode)"
       :mode="discoveryMode || 'search'"

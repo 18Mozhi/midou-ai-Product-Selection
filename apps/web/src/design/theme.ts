@@ -6,4 +6,6 @@ export const themes:ReadonlyArray<{id:ThemeId;name:string;caption:string;mode:st
  {id:'cloud-white',name:'云雾白',caption:'明亮、清晰，适合高照度环境',mode:'浅色'}
 ];
 export function isThemeId(value:unknown):value is ThemeId{return typeof value==='string'&&themeIds.includes(value as ThemeId)}
-export function applyTheme(theme:ThemeId){document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme==='cloud-white'?'light':'dark';}
+const themeStorageKey="scoutops:ui-theme";
+export function applyTheme(theme:ThemeId,cache=true){document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme==='cloud-white'?'light':'dark';if(cache)try{window.localStorage.setItem(themeStorageKey,theme)}catch{}}
+export function applyCachedTheme(){let cached:unknown;try{cached=window.localStorage.getItem(themeStorageKey)}catch{}const theme=isThemeId(cached)?cached:'deep-ocean';applyTheme(theme,false);return theme;}

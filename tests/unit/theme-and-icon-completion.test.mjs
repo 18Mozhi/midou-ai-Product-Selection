@@ -20,6 +20,27 @@ test("dark role shells override every production module that still carries legac
   assert.match(css, /background:\s*var\(--so-panel\)\s*!important/);
 });
 
+test("saved theme is restored before Vue mounts and legacy modules use semantic theme tokens", async () => {
+  const [main, theme, tokens, compat, task, personal] = await Promise.all(
+    [
+      "apps/web/src/main.ts",
+      "apps/web/src/design/theme.ts",
+      "apps/web/src/design/tokens.css",
+      "apps/web/src/theme-compat.css",
+      "apps/web/src/task-workspace.css",
+      "apps/web/src/components/PersonalCenter.vue",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  assert.match(main, /applyCachedTheme\(\);[\s\S]*createApp/);
+  assert.match(theme, /localStorage\.setItem/);
+  assert.match(theme, /localStorage\.getItem/);
+  for (const alias of ["--surface", "--text-primary", "--accent", "--border"])
+    assert.match(tokens, new RegExp(alias));
+  assert.match(compat, /html\s+\.role-content[\s\S]*background:\s*var\(--so-panel\)\s*!important/);
+  assert.doesNotMatch(task, /#(?:0d203a|16284f|0b1c31|ffffff|fff)\b/i);
+  assert.doesNotMatch(personal, /linear-gradient\(135deg,\s*#0d2342/);
+});
+
 test("icon-only production actions expose hover and focus names", async () => {
   const [theme, shell, credentials, registry, sourcing] = await Promise.all(
     [
