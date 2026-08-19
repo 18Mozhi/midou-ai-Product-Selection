@@ -343,17 +343,6 @@ export class MySqlTrendProjectionWorker {
           supplierProviderIds.length
         ) {
           const taskId = randomUUID();
-          await c.query(
-            "UPDATE sourcing_searches SET collection_task_id=?,input_ref=?,status='queued',candidate_count=0,missing_fields_json='[]',updated_at=? WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL",
-            [
-              taskId,
-              row.opportunity_id,
-              now,
-              searchId,
-              context.organizationId,
-              context.workspaceId,
-            ],
-          );
           await this.scheduleCoreCollection(
             c,
             context,
@@ -370,6 +359,17 @@ export class MySqlTrendProjectionWorker {
             "sourcing.collection.auto_scheduled",
             now,
           );
+          await c.query(
+            "UPDATE sourcing_searches SET collection_task_id=?,input_ref=?,status='queued',candidate_count=0,missing_fields_json='[]',updated_at=? WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL",
+            [
+              taskId,
+              row.opportunity_id,
+              now,
+              searchId,
+              context.organizationId,
+              context.workspaceId,
+            ],
+          );
         }
       }
       await c.commit();
@@ -383,7 +383,7 @@ export class MySqlTrendProjectionWorker {
 
   private async downstreamProviders(c: PoolConnection) {
     const [rows] = await c.query<RowDataPacket[]>(
-      "SELECT id,code FROM providers WHERE code IN ('amazon_product','made_in_china_search','ec21_supplier_search') AND status='enabled' AND access_mode='public_page' FOR UPDATE",
+      "SELECT id,code FROM providers WHERE code IN ('amazon_product','made_in_china_search','ec21_supplier_search') AND status='enabled' AND access_mode='public_page'",
     );
     const values = new Map(rows.map((row) => [String(row.code), String(row.id)]));
     return {
@@ -911,10 +911,6 @@ export class MySqlTrendProjectionWorker {
     );
     if (supplierProviderIds.length) {
       const supplierTaskId = randomUUID();
-      await c.query(
-        "UPDATE sourcing_searches SET collection_task_id=? WHERE id=?",
-        [supplierTaskId, searchId],
-      );
       await this.scheduleCoreCollection(
         c,
         {
@@ -936,6 +932,10 @@ export class MySqlTrendProjectionWorker {
         })),
         "sourcing.collection.auto_scheduled",
         now,
+      );
+      await c.query(
+        "UPDATE sourcing_searches SET collection_task_id=? WHERE id=?",
+        [supplierTaskId, searchId],
       );
     } else {
       await c.query(

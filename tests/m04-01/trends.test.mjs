@@ -76,6 +76,7 @@ test('M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module',a
   assert.match(worker,/competitor\.collection\.auto_scheduled[\s\S]*sourcing\.collection\.auto_scheduled/);
   assert.match(worker,/CONVERT\(o\.id USING utf8mb4\) COLLATE utf8mb4_bin/);
   assert.match(worker,/CONVERT\(c\.id USING utf8mb4\) COLLATE utf8mb4_bin/);
+  assert.match(worker,/scheduleCoreCollection[\s\S]*UPDATE sourcing_searches SET collection_task_id/);
   assert.match(worker,/input_ref,status[\s\S]*'opportunity'[\s\S]*'queued'/);
   assert.match(worker,/evaluateMonitoringRules[\s\S]*trend\.monitoring_rule\.matched[\s\S]*last_evaluated_at/);
   assert.match(openapi,/商品型自动热点频道[\s\S]*待评估选品/);
