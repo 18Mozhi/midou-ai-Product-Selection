@@ -31,7 +31,7 @@ const assignment = ref({
   plan_id: "",
   period_start: "",
   period_end: "",
-  reason: "续期或分配套餐",
+  reason: "分配或调整配额方案",
 });
 const adjustment = ref({
   quota_key: "collection_tasks",
@@ -121,7 +121,7 @@ async function createPlan() {
       },
       reason: plan.value.reason,
     });
-    notice.value = "套餐草稿已创建；启用前不影响任何组织。";
+    notice.value = "配额方案草稿已创建；启用前不影响任何组织。";
     await load();
   } catch (error) {
     notice.value = error instanceof Error ? error.message : "创建失败";
@@ -137,7 +137,7 @@ function beginEditPlan(item: any) {
     collection_tasks: Number(item.quotas.collection_tasks ?? 0),
     open_api_requests: Number(item.quotas.open_api_requests ?? 0),
     report_exports: Number(item.quotas.report_exports ?? 0),
-    reason: "编辑套餐配置",
+    reason: "编辑配额方案",
   };
 }
 function prepare(
@@ -153,7 +153,7 @@ function savePlan() {
   const item = editingPlan.value;
   if (!item) return;
   prepare(
-    "保存套餐修改",
+    "保存配额方案修改",
     `/platform/commercial/plans/${item.id}`,
     "PATCH",
     {
@@ -168,19 +168,19 @@ function savePlan() {
       expected_version: item.expected_version,
       reason: item.reason,
     },
-    "套餐版本已更新。",
+    "配额方案版本已更新。",
   );
   editingPlan.value = null;
 }
 function assignOrRenew() {
   prepare(
-    data.value.assignment ? "续期或变更组织套餐" : "分配组织套餐",
+    data.value.assignment ? "调整组织配额方案" : "分配组织配额方案",
     "/platform/commercial/assignments",
     "POST",
     { organization_id: organizationId.value, ...assignment.value },
     data.value.assignment
-      ? "组织套餐已续期并保留审计事件。"
-      : "组织套餐已分配。",
+      ? "组织配额方案已调整并保留审计事件。"
+      : "组织配额方案已分配。",
   );
 }
 async function confirm() {
@@ -202,17 +202,17 @@ onMounted(load);
   <section class="commercial">
     <header class="commercial-hero">
       <div>
-        <p>套餐与续期管理</p>
-        <h2>会员、套餐、续期与用量</h2>
+        <p>配额管理</p>
+        <h2>组织配额与用量</h2>
         <span
-          >创建套餐、设置使用额度、分配给组织并处理续期、暂停和临时额度调整。</span
+          >创建配额方案、设置使用额度、分配给组织并处理有效期、暂停和临时额度调整。当前不包含计费、价格或支付。</span
         >
       </div>
       <form @submit.prevent="load">
         <label
           >组织编号<input
             v-model="organizationId"
-            placeholder="查看会员与续期时填写" /></label
+            placeholder="查看组织配额时填写" /></label
         ><button>读取</button>
       </form>
     </header>
@@ -221,12 +221,12 @@ onMounted(load);
     </p>
     <aside v-if="pending" class="confirm">
       <strong>确认{{ pending.title }}？</strong>
-      <p>该操作会改变套餐版本、会员状态或组织配额，并写入平台审计。</p>
+      <p>该操作会改变配额方案版本、分配状态或组织额度，并写入平台审计。</p>
       <button @click="pending = null">取消</button
       ><button @click="confirm">确认执行</button>
     </aside>
     <section v-if="state === 'loading'" class="state">
-      正在读取真实会员、套餐与用量…
+      正在读取真实配额方案与用量…
     </section>
     <section
       v-else-if="['error', 'rate_limited', 'blocked'].includes(state)"
@@ -236,7 +236,7 @@ onMounted(load);
         state === "rate_limited"
           ? "请求过于频繁"
           : state === "blocked"
-            ? "商业运营依赖受阻"
+            ? "配额管理依赖受阻"
             : "请求字段或组织范围无效"
       }}</strong
       ><button @click="load">重新读取</button>
@@ -244,20 +244,20 @@ onMounted(load);
     <template v-else>
       <aside class="commercial-guide">
         <article>
-          <strong>1. 创建套餐</strong
+          <strong>1. 创建配额方案</strong
           ><span>先保存草稿，填写名称、说明和三项额度。</span>
         </article>
         <article>
-          <strong>2. 启用套餐</strong
+          <strong>2. 启用配额方案</strong
           ><span>确认内容后启用，才能分配给组织。</span>
         </article>
         <article>
-          <strong>3. 分配与续期</strong
-          ><span>输入组织编号，选择套餐和有效期即可完成。</span>
+          <strong>3. 分配与调整</strong
+          ><span>输入组织编号，选择配额方案和有效期即可完成。</span>
         </article>
       </aside>
       <section class="create">
-        <h3>创建套餐草稿</h3>
+        <h3>创建配额方案草稿</h3>
         <label
           >内部标识<input
             v-model="plan.code"
@@ -265,9 +265,9 @@ onMounted(load);
             required
             pattern="[a-z0-9][a-z0-9_-]{0,79}" /></label
         ><label
-          >套餐名称<input v-model="plan.name" required maxlength="120" /></label
+          >方案名称<input v-model="plan.name" required maxlength="120" /></label
         ><label class="wide"
-          >套餐说明<textarea
+          >方案说明<textarea
             v-model="plan.description"
             maxlength="500"
             placeholder="适用对象、包含内容和使用限制"
@@ -295,7 +295,7 @@ onMounted(load);
         ><button @click="createPlan">创建草稿</button>
       </section>
       <p v-if="state === 'empty'" class="state">
-        暂无套餐定义。系统不会自动编造默认价格或配额。
+        暂无配额方案。系统不会自动编造默认额度，也不会展示价格或计费结论。
       </p>
       <section class="plans">
         <article
@@ -328,7 +328,7 @@ onMounted(load);
               v-if="item.status === 'draft'"
               @click="
                 prepare(
-                  '启用套餐',
+                  '启用配额方案',
                   `/platform/commercial/plans/${item.id}`,
                   'PATCH',
                   {
@@ -347,7 +347,7 @@ onMounted(load);
               v-else-if="item.status === 'active'"
               @click="
                 prepare(
-                  '退役套餐',
+                  '退役配额方案',
                   `/platform/commercial/plans/${item.id}`,
                   'PATCH',
                   {
@@ -369,7 +369,7 @@ onMounted(load);
       <section v-if="organizationId" class="membership">
         <header>
           <div>
-            <h3>组织会员与本账期用量</h3>
+            <h3>组织配额与本周期用量</h3>
             <small>{{ organizationId }}</small>
           </div>
           <b :data-status="data.assignment?.status || 'unassigned'">{{
@@ -389,7 +389,7 @@ onMounted(load);
               v-if="data.assignment.status === 'active'"
               @click="
                 prepare(
-                  '暂停组织会员',
+                  '暂停组织配额',
                   `/platform/commercial/assignments/${data.assignment.id}/actions`,
                   'POST',
                   {
@@ -405,7 +405,7 @@ onMounted(load);
               v-if="data.assignment.status === 'suspended'"
               @click="
                 prepare(
-                  '恢复组织会员',
+                  '恢复组织配额',
                   `/platform/commercial/assignments/${data.assignment.id}/actions`,
                   'POST',
                   {
@@ -421,7 +421,7 @@ onMounted(load);
               v-if="data.assignment.status !== 'ended'"
               @click="
                 prepare(
-                  '结束组织会员',
+                  '结束组织配额',
                   `/platform/commercial/assignments/${data.assignment.id}/actions`,
                   'POST',
                   {
@@ -437,10 +437,10 @@ onMounted(load);
           </nav>
         </div>
         <form class="renew" @submit.prevent="assignOrRenew">
-          <h4>{{ data.assignment ? "续期或变更套餐" : "首次分配套餐" }}</h4>
+          <h4>{{ data.assignment ? "调整配额方案" : "首次分配配额方案" }}</h4>
           <label
-            >套餐<select v-model="assignment.plan_id" required>
-              <option value="">选择已启用套餐</option>
+            >配额方案<select v-model="assignment.plan_id" required>
+              <option value="">选择已启用配额方案</option>
               <option
                 v-for="item in data.plans.filter(
                   (x: any) => x.status === 'active',
@@ -466,7 +466,7 @@ onMounted(load);
               v-model="assignment.reason"
               required
               minlength="2" /></label
-          ><button>{{ data.assignment ? "确认续期/变更" : "确认分配" }}</button>
+          ><button>{{ data.assignment ? "确认调整" : "确认分配" }}</button>
         </form>
         <template v-if="data.assignment"
           ><div class="usage">
@@ -543,7 +543,7 @@ onMounted(load);
     <Teleport to="body"
       ><dialog :open="Boolean(editingPlan)">
         <form v-if="editingPlan" @submit.prevent="savePlan">
-          <h3>编辑套餐</h3>
+          <h3>编辑配额方案</h3>
           <label
             >名称<input
               v-model="editingPlan.name"

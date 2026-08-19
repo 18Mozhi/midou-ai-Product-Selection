@@ -1559,8 +1559,9 @@
         "/api/v1/platform/commercial/assignments",
         "/api/v1/platform/commercial/adjustments"
       ],
-      "scope": "quota-only plan create/edit/status, organization member assignment/renewal/change/end, persisted-period usage and reasoned manual adjustments; no payment deduction",
+      "scope": "quota-only plan create/edit/status, organization quota assignment/change/end, persisted-period usage and reasoned manual adjustments; no billing or payment deduction",
       "truthBoundary": "usage reads collection_tasks, open_api_usage and report_exports by organization and explicit period; no price currency invoice tax or payment provider is defined",
+      "presentationBoundary": "until a real billing contract exists, navigation and user-facing copy identify this module as quota management and do not present membership renewal package price or payment conclusions",
       "permission": "platform:operate read guard; same-origin Idempotency-Key reason and version guard for writes",
       "configuration": ["COMMERCIAL_RECENT_LIMIT"],
       "runtimeBoundary": "synchronous Baota Node API reads plus existing organization outbox; no new Worker Crawler daemon or multi-node claim",

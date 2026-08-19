@@ -193,7 +193,7 @@ test("platform navigation exposes complete management domains and role switching
     "规则与自动化",
     "内容管理",
     "通知管理",
-    "套餐与续期",
+    "配额管理",
     "邮箱管理",
     "系统状态",
     "进入用户工作台",

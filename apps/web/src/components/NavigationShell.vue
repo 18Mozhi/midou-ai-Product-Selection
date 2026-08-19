@@ -185,7 +185,7 @@ const platformMenu: MenuItem[] = [
     capabilities: ["platform:superadmin"],
   },
   {
-    label: "套餐与续期",
+    label: "配额管理",
     path: "/platform-admin/commercial",
     icon: "¥",
     capabilities: ["platform:operate", "platform:superadmin"],

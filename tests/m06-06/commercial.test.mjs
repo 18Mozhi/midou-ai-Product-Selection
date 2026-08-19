@@ -22,5 +22,14 @@ test("M06-06.A03/A05/A10/A11/A12/A14/A16 persistence and audit", async () => {
 
 test("M06-06.A06/A07/A08/A13/A15/A17 contracts and docs", async () => {
   const all = (await Promise.all(["docs/openapi.yaml", "docs/feature-map.json", "apps/web/src/components/CommercialOperationsCenter.vue", "apps/web/src/styles.css", "docs/architecture/m06-06-commercial.md", "docs/runbooks/m06-06-commercial.md"].map((path) => readFile(path, "utf8")))).join("\n");
-  for (const marker of ["/platform/commercial", "M06-06", "loading", "empty", "rate_limited", "blocked", "390", "宝塔", "回滚", "不实现支付扣款"]) assert.match(all, new RegExp(marker.replaceAll("/", "\\/")));
+  for (const marker of ["/platform/commercial", "M06-06", "loading", "empty", "rate_limited", "blocked", "390", "宝塔", "回滚", "不实现计费或支付扣款", "presentationBoundary"]) assert.match(all, new RegExp(marker.replaceAll("/", "\\/")));
+});
+
+test("M06-06.A07/A08/A13 presents the quota-only boundary truthfully", async () => {
+  const center = await readFile("apps/web/src/components/CommercialOperationsCenter.vue", "utf8");
+  const navigation = await readFile("apps/web/src/components/NavigationShell.vue", "utf8");
+  assert.match(center, /组织配额与用量/);
+  assert.match(center, /当前不包含计费、价格或支付/);
+  assert.match(navigation, /label: "配额管理"/);
+  assert.doesNotMatch(center, /会员、套餐、续期|确认续期\/变更|套餐与续期管理/);
 });
