@@ -351,7 +351,7 @@ onMounted(load);
             </div>
             <div>
               <dt>运行方式</dt>
-              <dd>智能选品统一后端</dd>
+              <dd>宝塔 Node + Python</dd>
             </div>
           </dl>
         </aside>
@@ -384,7 +384,7 @@ onMounted(load);
         </div>
         <div v-else class="topology-clear">
           <b>当前单机运行门无阻断</b
-          ><span>后端接口、任务处理器与采集执行器均由统一后端管理。</span>
+          ><span>Node 后端负责 API 与 Worker，Python 项目负责采集桥接。</span>
         </div>
       </section>
       <footer class="topology-footer">

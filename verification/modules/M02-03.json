@@ -13,11 +13,11 @@
     {"id":"M02-03.A10","evidence":"existing API base and Baota deployment configuration reused without new secrets"},
     {"id":"M02-03.A11","evidence":"guard decisions preserve request_id trace_id and expose safe recovery identifiers"},
     {"id":"M02-03.A12","evidence":"authorization shell decision unit tests cover allowed and denied branches"},
-    {"id":"M02-03.A13","evidence":"OpenAPI DTO route and frontend consumer contract tests"},
+    {"id":"M02-03.A13","evidence":"OpenAPI DTO frontend consumer Feature Map unique routes single PersonalCenter owner and menu-title contract tests"},
     {"id":"M02-03.A14","evidence":"real MySQL57 authorization isolation gate rerun"},
     {"id":"M02-03.A15","evidence":"Playwright desktop 390 keyboard and visual snapshots for three shells"},
     {"id":"M02-03.A16","evidence":"missing context expired session forbidden role and API unavailable drills"},
     {"id":"M02-03.A17","evidence":"blueprint Feature Map architecture Runbook deployment and rollback synchronized"}
   ],
-  "commands":["npm run build","node --test tests/m02-03/navigation-shell.test.mjs","node --test tests/m01-04/rbac-domain.test.mjs","node scripts/verify-rbac-live.mjs","npx playwright test tests/e2e/m02-03-navigation-shell.spec.ts","npm run verify:docs"]
+  "commands":["npm run build","node --test tests/m02-03/navigation-shell.test.mjs tests/unit/frontend-route-title-consistency.test.mjs","node --test tests/m01-04/rbac-domain.test.mjs","node scripts/verify-rbac-live.mjs","npx playwright test tests/e2e/m02-03-navigation-shell.spec.ts","npm run verify:docs"]
 }

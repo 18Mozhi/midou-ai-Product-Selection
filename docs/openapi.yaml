@@ -252,7 +252,7 @@ paths:
   /platform/operations/crawler-scheduler:
     get:
       summary: Read audited S0 single-host Crawler scheduler facts
-      description: M08-05 reports the sanitized supervised Worker and its collection-execution lane counts, global and provider lease aggregates, browser-profile exclusivity and host resource watermarks. It never returns scope identifiers, task payloads, lease tokens or hashes, credentials, cookies or paths and makes no load-balancing, backup-server, multi-node or capacity claim.
+      description: M08-05 reports separately observed process counts for the supervised Node Worker and the BaoTa-managed Python Crawler, plus global and provider lease aggregates, browser-profile exclusivity and host resource watermarks. It never returns scope identifiers, task payloads, lease tokens or hashes, credentials, cookies or paths and makes no load-balancing, backup-server, multi-node or capacity claim.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: platform:operate
       responses:
@@ -6695,8 +6695,10 @@ components:
               properties:
                 {
                   mode: { type: string, enum: [single_host] },
-                  worker_instances: { type: integer, minimum: 0 },
-                  crawler_instances: { type: integer, minimum: 0 },
+                  worker_instances:
+                    { type: integer, minimum: 0, description: Linux process count for the supervised Node Worker },
+                  crawler_instances:
+                    { type: integer, minimum: 0, description: Linux process count for the BaoTa-managed Python scoutops_crawler runtime },
                   maximum_workers: { type: integer, enum: [1] },
                   maximum_crawlers: { type: integer, enum: [1] },
                 }

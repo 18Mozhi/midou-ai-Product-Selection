@@ -377,6 +377,8 @@
       "entrypoints": [
         "../packages/authorization/src/index.ts",
         "../apps/api/src/authorization-routes.ts",
+        "../apps/web/src/router.ts",
+        "../apps/web/src/App.vue",
         "../apps/web/src/components/LandingRedirect.vue",
         "../apps/web/src/components/NavigationShell.vue"
       ],
@@ -397,6 +399,7 @@
         "high-resolution 10 platform admin"
       ],
       "contextPresentation": "member and organization shells receive persisted organization_name and workspace_name; the UI never exposes UUID fragments as labels",
+      "routeIntegrity": "Vue Router owns browser history; the Feature Map frontend route registry has unique paths, /me has exactly one PersonalCenter owner, lazy business components and KeepAlive preserve bounded page state; the 390px scheduler E2E measures the final handoff against the fixed bottom navigation and requires zero overlap",
       "memberPresentation": "member shell exposes quick theme switching, larger Chinese typography and removes internal guard codes and security implementation slogans from ordinary pages",
       "nonGoals": "no quick-create mutation, new persistence, async service or environment value; platform and organization shells omit member-only search and notification links",
       "verificationRunId": "e0784965-a07b-4eec-84c1-f5e393d7dd27",
@@ -2163,7 +2166,7 @@
         "/api/v1/platform/operations/crawler-scheduler/recover-expired"
       ],
       "scope": "M08-05 current Huizhou BaoTa single-host Crawler and Worker scheduling with one global slot each, provider effective concurrency one, exclusive browser profiles, MySQL lease truth and host resource stop gates",
-      "truthBoundary": "ready requires exactly one supervised Worker and its collection execution lane inside the unified BaoTa backend, no global provider or profile lease overflow, a current resource observation below the fixed stop gates and MySQL 5.7 as lease truth",
+      "truthBoundary": "ready requires exactly one supervised Node Worker and one separately BaoTa-managed Python Crawler process observed from Linux process facts, no global provider or profile lease overflow, a current resource observation below the fixed stop gates and MySQL 5.7 as lease truth",
       "permission": "platform operations read and idempotent expired-slot recovery require platform:operate; responses exclude task payloads scope identifiers lease tokens hashes credentials cookies and paths while observation recovery and failure retain request_id trace_id and audit",
       "configuration": [
         "CRAWLER_SCHEDULER_MAX_LOAD_PERCENT",
@@ -2173,7 +2176,7 @@
         "CRAWLER_SCHEDULER_PRODUCTION_EVIDENCE_FILE",
         "CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES"
       ],
-      "runtimeBoundary": "one supervised Worker with one collection execution lane inside the single BaoTa ai选品 backend on the current Huizhou host; Redis remains scoped queue coordination and MySQL 5.7 remains lease truth; no load balancer backup server multi-node or capacity claim",
+      "runtimeBoundary": "the single BaoTa ai选品 Node backend owns API and Worker while the separate BaoTa ai选品-python project owns Crawler heartbeat and the Python-to-Playwright bridge on the same Huizhou host; Redis remains scoped queue coordination and MySQL 5.7 remains lease truth; no load balancer backup server multi-node or capacity claim",
       "imageEvidence": [
         "core 10 platform cockpit",
         "concept 61 operations",
@@ -2565,6 +2568,7 @@
     {
       "path": "/platform-admin/crawler-scheduler",
       "view": "CrawlerSchedulerCenter",
+      "title": "采集调度",
       "domain": "crawler-single-host-scheduler",
       "status": "M08-05_module_verified"
     },

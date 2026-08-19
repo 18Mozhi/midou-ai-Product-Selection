@@ -70,7 +70,7 @@ const verdict = computed(
         recovering: ["正在回收过期租约", "只处理服务端确认已过期的调度槽位。"],
         ready: [
           "采集调度已就绪",
-          "统一后端内一个 Worker 承载一个采集执行器，来源并发 1。",
+          "Node Worker 与 Python Crawler 均为一个实例，来源并发 1。",
         ],
         warning: ["采集调度需要关注", "继续保持来源并发 1，并按告警项处理。"],
         blocked: ["采集调度已阻断", "保持任务排队，按告警动作通过宝塔恢复。"],
@@ -168,7 +168,7 @@ onMounted(() => {
     <header class="crawler-scheduler__hero">
       <div>
         <p>单机采集调度</p>
-        <h2>采集执行器调度</h2>
+        <h2>运行与配额</h2>
         <span
           >惠州单机由 ai选品 Worker 领取采集任务，宝塔 Python 3.12
           项目提供采集心跳与 Playwright 桥接；来源并发上限 1。</span
@@ -224,7 +224,7 @@ onMounted(() => {
           ><small>全局任务槽位 {{ data.leases.active_worker }}</small>
         </article>
         <article>
-          <span>统一后端内的采集执行器</span
+          <span>Python 采集运行时</span
           ><strong
             >{{ data.topology.crawler_instances }} /
             {{ data.topology.maximum_crawlers }}</strong
@@ -318,7 +318,7 @@ onMounted(() => {
         </div>
         <div v-else class="crawler-scheduler__clear">
           <b>当前无采集调度阻断</b
-          ><span>统一后端的任务处理器与采集执行器均可正常接收任务。</span>
+          ><span>Node Worker 与 Python Crawler 均可正常接收任务。</span>
         </div>
       </section>
       <footer>
