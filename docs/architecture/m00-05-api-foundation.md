@@ -4,6 +4,8 @@
 
 API 基座统一安全 request_id/trace_id、成功/错误信封、Fastify JSON Schema 错误映射、可注入认证 Guard、Idempotency-Key 校验和同步 readiness。`/health/live` 永不访问依赖；`/health/ready` 只检查必需配置、MySQL 与 Redis，不因 Worker、Crawler 或第三方来源暂时不可用而误判 API 副本。
 
+`server.ts` 只负责共享连接、认证授权、运行探针和生命周期；后续路由装配按工作流域、平台管理域、运行运维域分到 `bootstrap/register-*-domain.ts`。每个域注册器只组合既有 Service、Repository 和 Route，不改变 URL、权限、请求体、响应体或事务合同，避免新业务继续堆入单一启动文件。
+
 认证占位不是模拟登录：只有受信 `TokenVerifier` 返回 subject、organization、workspace（适用时）和 scopes 后才放行；缺少 Token、组织范围或 capability 分别返回稳定 401/403。写接口的幂等记录只保存哈希，并按组织/工作区 scope hash、路由、方法与幂等键共同唯一。
 
 ## 数据、状态与非目标

@@ -43,9 +43,6 @@ import { CrawlerRuntimeService } from "./crawler-runtime-service.js";
 import { MySqlCrawlerRuntimeRepository } from "./mysql-crawler-runtime-repository.js";
 import { CollectionTaskService } from "./collection-task-service.js";
 import { MySqlCollectionTaskRepository } from "./mysql-collection-task-repository.js";
-import { DataQualityService } from "./data-quality-service.js";
-import { MySqlDataQualityRepository } from "./mysql-data-quality-repository.js";
-import { registerDataQualityRoutes } from "./data-quality-routes.js";
 import {
   AUTOMATIC_PROVIDER_SOURCE_HOSTS,
   createBuiltinSourceAdapters,
@@ -68,80 +65,26 @@ import { SourcingService } from "./sourcing-service.js";
 import { MySqlSourcingRepository } from "./mysql-sourcing-repository.js";
 import { AiAnalysisService } from "./ai-analysis-service.js";
 import { MySqlAiAnalysisRepository } from "./mysql-ai-analysis-repository.js";
-import { BusinessTaskService } from "./business-task-service.js";
-import { MySqlBusinessTaskRepository } from "./mysql-business-task-repository.js";
-import { registerBusinessTaskRoutes } from "./business-task-routes.js";
-import { ApprovalService } from "./approval-service.js";
-import { MySqlApprovalRepository } from "./mysql-approval-repository.js";
-import { registerApprovalRoutes } from "./approval-routes.js";
-import { NotificationService } from "./notification-service.js";
-import { MySqlNotificationRepository } from "./mysql-notification-repository.js";
-import { registerNotificationRoutes } from "./notification-routes.js";
-import { PersonalCenterService } from "./personal-center-service.js";
-import { MySqlPersonalCenterRepository } from "./mysql-personal-center-repository.js";
-import { registerPersonalCenterRoutes } from "./personal-center-routes.js";
-import { RealtimeService } from "./realtime-service.js";
-import { MySqlRealtimeRepository } from "./mysql-realtime-repository.js";
-import { registerRealtimeRoutes } from "./realtime-routes.js";
-import { AutomationService } from "./automation-service.js";
-import { MySqlAutomationRepository } from "./mysql-automation-repository.js";
-import { registerAutomationRoutes } from "./automation-routes.js";
-import { ReportService } from "./report-service.js";
-import { MySqlReportRepository } from "./mysql-report-repository.js";
-import { registerReportRoutes } from "./report-routes.js";
-import { OrganizationAdminService } from "./organization-admin-service.js";
-import { MySqlOrganizationAdminRepository } from "./mysql-organization-admin-repository.js";
-import { registerOrganizationAdminRoutes } from "./organization-admin-routes.js";
-import { PlatformDashboardService } from "./platform-dashboard-service.js";
-import { MySqlPlatformDashboardRepository } from "./mysql-platform-dashboard-repository.js";
-import { registerPlatformDashboardRoutes } from "./platform-dashboard-routes.js";
-import { PlatformAccountService } from "./platform-account-service.js";
-import { MySqlPlatformAccountRepository } from "./mysql-platform-account-repository.js";
-import { registerPlatformAccountRoutes } from "./platform-account-routes.js";
-import { CollectionConsoleService } from "./collection-console-service.js";
-import { MySqlCollectionConsoleRepository } from "./mysql-collection-console-repository.js";
-import { registerCollectionConsoleRoutes } from "./collection-console-routes.js";
-import { SecurityOperationsService } from "./security-operations-service.js";
-import { MySqlSecurityOperationsRepository } from "./mysql-security-operations-repository.js";
-import { registerSecurityOperationsRoutes } from "./security-operations-routes.js";
-import { OpenPlatformService } from "./open-platform-service.js";
-import { MySqlOpenPlatformRepository } from "./mysql-open-platform-repository.js";
-import { registerOpenPlatformRoutes } from "./open-platform-routes.js";
-import { CommercialService } from "./commercial-service.js";
-import { MySqlCommercialRepository } from "./mysql-commercial-repository.js";
-import { registerCommercialRoutes } from "./commercial-routes.js";
-import { BackupRecoveryService } from "./backup-recovery-service.js";
-import { MySqlBackupRecoveryRepository } from "./mysql-backup-recovery-repository.js";
-import { registerBackupRecoveryRoutes } from "./backup-recovery-routes.js";
-import {
-  ReleaseRolloutService,
-  ReleaseWriteProbeService,
-} from "./release-rollout-service.js";
-import { MySqlReleaseRolloutRepository } from "./mysql-release-rollout-repository.js";
-import { registerReleaseRolloutRoutes } from "./release-rollout-routes.js";
 import { SelectionJourneyService } from "./selection-journey-service.js";
 import { MySqlSelectionJourneyRepository } from "./mysql-selection-journey-repository.js";
 import { RuntimeTopologyService } from "./runtime-topology-service.js";
 import { MySqlRuntimeTopologyRepository } from "./mysql-runtime-topology-repository.js";
-import { registerRuntimeTopologyRoutes } from "./runtime-topology-routes.js";
 import { RedisResilienceService } from "./redis-resilience-service.js";
 import { MySqlRedisResilienceRepository } from "./mysql-redis-resilience-repository.js";
-import { registerRedisResilienceRoutes } from "./redis-resilience-routes.js";
 import { MySqlResilienceProbe } from "./mysql-resilience-probe.js";
 import { MySqlResilienceRepository } from "./mysql-resilience-repository.js";
 import { MySqlResilienceService } from "./mysql-resilience-service.js";
-import { registerMySqlResilienceRoutes } from "./mysql-resilience-routes.js";
 import { FileResilienceProbe } from "./file-resilience-probe.js";
 import { FileResilienceRepository } from "./file-resilience-repository.js";
 import { FileResilienceService } from "./file-resilience-service.js";
-import { registerFileResilienceRoutes } from "./file-resilience-routes.js";
 import { CrawlerSchedulerService } from "./crawler-scheduler-service.js";
 import { CrawlerSchedulerRepository } from "./crawler-scheduler-repository.js";
 import { CrawlerSchedulerHostProbe } from "./crawler-scheduler-probe.js";
-import { registerCrawlerSchedulerRoutes } from "./crawler-scheduler-routes.js";
 import { CapacityBoundaryService } from "./capacity-boundary-service.js";
 import { CapacityBoundaryRepository } from "./capacity-boundary-repository.js";
-import { registerCapacityBoundaryRoutes } from "./capacity-boundary-routes.js";
+import { registerWorkflowDomainRoutes } from "./bootstrap/register-workflow-domain.js";
+import { registerPlatformDomainRoutes } from "./bootstrap/register-platform-domain.js";
+import { registerOperationsDomainRoutes } from "./bootstrap/register-operations-domain.js";
 
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
@@ -512,229 +455,24 @@ const app = buildApp({
     webOrigin: config.app.webOrigin,
   },
 });
-registerBusinessTaskRoutes(app, {
-  service: new BusinessTaskService(new MySqlBusinessTaskRepository(pool)),
+const domainContext = {
+  app,
+  pool,
+  config,
   authorization,
   auth: localAuth,
   secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerApprovalRoutes(app, {
-  service: new ApprovalService(new MySqlApprovalRepository(pool)),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerNotificationRoutes(app, {
-  service: new NotificationService(new MySqlNotificationRepository(pool)),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerPersonalCenterRoutes(app, {
-  service: new PersonalCenterService(new MySqlPersonalCenterRepository(pool)),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerRealtimeRoutes(app, {
-  service: new RealtimeService(
-    new MySqlRealtimeRepository(pool),
-    config.realtime.replayLimit,
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-  pollMs: config.realtime.pollMs,
-  heartbeatMs: config.realtime.heartbeatMs,
-  maxConnectionSeconds: config.realtime.maxConnectionSeconds,
-  maxConnections: config.realtime.maxConnections,
-});
-registerAutomationRoutes(app, {
-  service: new AutomationService(
-    new MySqlAutomationRepository(pool),
-    config.automations.defaultRateLimit,
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerReportRoutes(app, {
-  service: new ReportService(
-    new MySqlReportRepository(pool),
-    config.reports.exportRoot,
-    config.reports.exportTtlHours,
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerOrganizationAdminRoutes(app, {
-  service: new OrganizationAdminService(
-    new MySqlOrganizationAdminRepository(pool),
-    config.organizationAdmin.invitationTtlHours,
-    config.organizationAdmin.tokenDefaultTtlDays,
-    config.organizationAdmin.tokenMaxActive,
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerPlatformDashboardRoutes(app, {
-  service: new PlatformDashboardService(
-    new MySqlPlatformDashboardRepository(
-      pool,
-      config.platformDashboard.queueWarning,
-      config.platformDashboard.errorLimit,
-    ),
-    config.platformDashboard.defaultWindow,
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerPlatformAccountRoutes(app, {
-  service: new PlatformAccountService(
-    new MySqlPlatformAccountRepository(pool),
-    () => new Date(),
-    passwordHasher,
-    config.auth.passwordMinLength,
-    config.auth.passwordMaxLength,
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerCollectionConsoleRoutes(app, {
-  service: new CollectionConsoleService(
-    new MySqlCollectionConsoleRepository(pool),
-    config.collectionConsole.recentLimit,
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-});
-registerSecurityOperationsRoutes(app, {
-  service: new SecurityOperationsService(
-    new MySqlSecurityOperationsRepository(pool),
-    config.securityOperations.defaultWindow,
-    config.securityOperations.recentLimit,
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-});
-registerOpenPlatformRoutes(app, {
-  service: new OpenPlatformService(
-    new MySqlOpenPlatformRepository(pool),
-    config.security.credentialsMasterKey,
-    config.security.credentialsMasterKeyVersion,
-    {
-      clientTtlDays: config.openPlatform.clientTtlDays,
-      defaultQuota: config.openPlatform.defaultQuotaPerMinute,
-      maxQuota: config.openPlatform.maxQuotaPerMinute,
-      timestampToleranceSeconds: config.openPlatform.timestampToleranceSeconds,
-      nonceTtlSeconds: config.openPlatform.nonceTtlSeconds,
-    },
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-  version: config.app.version,
-});
-registerCommercialRoutes(app, {
-  service: new CommercialService(
-    new MySqlCommercialRepository(pool),
-    config.commercial.recentLimit,
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerBackupRecoveryRoutes(app, {
-  service: new BackupRecoveryService(
-    new MySqlBackupRecoveryRepository(pool),
-    config.backupRecovery,
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-});
-const releaseRolloutRepository = new MySqlReleaseRolloutRepository(pool);
-registerReleaseRolloutRoutes(app, {
-  service: new ReleaseRolloutService(releaseRolloutRepository, {
-    percentages: [5, 25, 100],
-    ...config.releaseRollout,
-  }),
-  writeProbeService: new ReleaseWriteProbeService(
-    releaseRolloutRepository,
-    config.security.releaseProbeSigningKey,
-    config.app.buildSha,
-    config.releaseRollout.probeTimestampToleranceSeconds,
-  ),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-});
-registerRuntimeTopologyRoutes(app, {
-  service: runtimeTopologyService,
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-});
-registerRedisResilienceRoutes(app, {
-  service: redisResilienceService,
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-});
-registerMySqlResilienceRoutes(app, {
-  service: mysqlResilienceService,
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-});
-registerFileResilienceRoutes(app, {
-  service: fileResilienceService,
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-});
-registerCrawlerSchedulerRoutes(app, {
-  service: crawlerSchedulerService,
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerCapacityBoundaryRoutes(app, {
-  service: capacityBoundaryService,
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
-});
-registerDataQualityRoutes(app, {
-  service: new DataQualityService(new MySqlDataQualityRepository(pool), {
-    evidenceRoot: config.storage.evidenceRoot,
-    downloadSigningKey: config.security.evidenceDownloadSigningKey,
-    downloadGrantSeconds: config.evidence.downloadGrantSeconds,
-  }),
-  authorization,
-  auth: localAuth,
-  secureCookie: config.nodeEnv === "production",
-  webOrigin: config.app.webOrigin,
+};
+registerWorkflowDomainRoutes(domainContext);
+registerPlatformDomainRoutes({ ...domainContext, passwordHasher });
+registerOperationsDomainRoutes({
+  ...domainContext,
+  runtimeTopologyService,
+  redisResilienceService,
+  mysqlResilienceService,
+  fileResilienceService,
+  crawlerSchedulerService,
+  capacityBoundaryService,
 });
 let runtimeHeartbeatTimer: ReturnType<typeof setInterval> | undefined;
 const publishRuntimeHeartbeat = async (status: "ready" | "stopped") => {

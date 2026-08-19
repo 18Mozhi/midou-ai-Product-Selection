@@ -126,6 +126,12 @@
     },
     "apiFoundation": {
       "entrypoint": "../apps/api/src/app.ts",
+      "bootstrap": "../apps/api/src/server.ts",
+      "registrationDomains": {
+        "workflow": "../apps/api/src/bootstrap/register-workflow-domain.ts",
+        "platform": "../apps/api/src/bootstrap/register-platform-domain.ts",
+        "operations": "../apps/api/src/bootstrap/register-operations-domain.ts"
+      },
       "guard": "../apps/api/src/api-foundation.ts",
       "readinessEndpoint": "/api/v1/health/ready",
       "dependencies": ["configuration", "mysql", "redis"],
