@@ -1398,6 +1398,7 @@
       "truthBoundary": "only MySQL account and non-secret session metadata; no password hashes, session tokens, IP or user-agent hashes or credentials; organization creation grants the selected first administrator an organization data scope; disable and forced-password operations revoke active user_sessions",
       "permission": "platform:superadmin plus same-origin Origin, Idempotency-Key and audited reason for writes",
       "persistence": "platform_account_operations idempotency plus existing organizations, workspaces, memberships, fixed role assignments, membership_data_scopes and platform_audit_events",
+      "organizationWizard": "the platform create-organization dialog separates organization identity from first-administrator selection and impact confirmation; it validates step one before continuing and submits the unchanged atomic name, slug and optional initial_admin_user_id contract only after final confirmation",
       "navigationBoundary": "platform, organization-admin and member shells have distinct primary menus; infrastructure pages are removed from the novice platform primary navigation but protected historical routes remain",
       "imageEvidence": [
         "high resolution 09 organization administration dashboard",

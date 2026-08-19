@@ -111,7 +111,7 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
 
 test("M06-01.A06/A09 creates organization with audited idempotent request", async ({
   page,
-}) => {
+}, testInfo) => {
   await setup(page);
   let request: any = null;
   await page.route(
@@ -138,8 +138,28 @@ test("M06-01.A06/A09 creates organization with audited idempotent request", asyn
   const dialog = page
     .getByRole("dialog")
     .filter({ has: page.getByRole("heading", { name: "新建组织" }) });
+  const progress = dialog.getByRole("list", { name: "创建组织步骤" });
+  await expect(progress.locator('[aria-current="step"]')).toContainText(
+    "组织资料",
+  );
+  await dialog.getByRole("button", { name: "下一步：选择管理员" }).click();
+  await expect(progress.locator('[aria-current="step"]')).toContainText(
+    "组织资料",
+  );
+  expect(request).toBeNull();
   await dialog.getByLabel("组织名称", { exact: true }).fill("新团队");
   await dialog.getByLabel("组织标识").fill("new-team");
+  await dialog.getByRole("button", { name: "下一步：选择管理员" }).click();
+  await expect(progress.locator('[aria-current="step"]')).toContainText(
+    "管理员与确认",
+  );
+  await expect(dialog.getByText("同时创建默认工作区和组织级数据范围")).toBeVisible();
+  expect(request).toBeNull();
+  if (process.platform === "win32" && testInfo.project.name === "mobile-390") {
+    await expect(dialog).toHaveScreenshot(
+      "m06-01-create-organization-wizard.png",
+    );
+  }
   await dialog.getByRole("button", { name: "确认创建" }).click();
   await expect
     .poll(() => request?.body)

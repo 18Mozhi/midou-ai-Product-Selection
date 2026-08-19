@@ -38,6 +38,8 @@ const props = withDefaults(
   createOpen = ref(
     new URLSearchParams(window.location.search).get("create") === "1",
   ),
+  createStep = ref<1 | 2>(1),
+  createForm = ref<HTMLFormElement | null>(null),
   form = reactive({ name: "", slug: "", initial_admin_user_id: "" }),
   organizationForm = reactive({
     name: "",
@@ -139,9 +141,22 @@ async function createOrganization() {
     form.name = "";
     form.slug = "";
     form.initial_admin_user_id = "";
+    createStep.value = 1;
     createOpen.value = false;
     message.value = "组织和默认工作区已创建。";
   }
+}
+function openOrganizationWizard() {
+  createStep.value = 1;
+  createOpen.value = true;
+}
+function closeOrganizationWizard() {
+  createStep.value = 1;
+  createOpen.value = false;
+}
+function continueOrganizationWizard() {
+  if (!createForm.value?.reportValidity()) return;
+  createStep.value = 2;
 }
 function askReason(title: string, action: (value: string) => Promise<void>) {
   reasonTitle.value = title;
@@ -296,7 +311,7 @@ onMounted(load);
         >
       </div>
       <div class="hero-actions">
-        <button @click="createOpen = true">＋ 新建组织</button
+        <button @click="openOrganizationWizard">＋ 新建组织</button
         ><button @click="openCreateUser(tab === 'admins')">
           ＋ {{ tab === "admins" ? "新建管理员" : "新建用户" }}
         </button>
@@ -475,40 +490,75 @@ onMounted(load);
       </table>
       <p v-if="!rows.length" class="account-state">没有符合条件的记录。</p>
     </div>
-    <dialog :open="createOpen">
-      <form @submit.prevent="createOrganization">
+    <dialog :open="createOpen" class="organization-wizard">
+      <form ref="createForm" @submit.prevent="createOrganization">
         <h3>新建组织</h3>
-        <p>系统会同时创建“默认工作区”，你无需再配置技术参数。</p>
-        <label
-          >组织名称<input
-            v-model="form.name"
-            required
-            minlength="2"
-            maxlength="120"
-            placeholder="例如：米豆选品团队" /></label
-        ><label
-          >组织标识<input
-            v-model="form.slug"
-            required
-            pattern="[a-z0-9][a-z0-9-]{1,62}"
-            placeholder="例如：midou-team"
-        /></label>
-        <label
-          >首位组织管理员<select v-model="form.initial_admin_user_id">
-            <option value="">当前超级管理员</option>
-            <option
-              v-for="item in data?.users || []"
-              :key="item.id"
-              :value="item.id"
-              :disabled="item.status !== 'active'"
-            >
-              {{ item.email }}
-            </option>
-          </select></label
-        >
+        <ol class="organization-wizard__progress" aria-label="创建组织步骤">
+          <li :aria-current="createStep === 1 ? 'step' : undefined">
+            <span>1</span>组织资料
+          </li>
+          <li :aria-current="createStep === 2 ? 'step' : undefined">
+            <span>2</span>管理员与确认
+          </li>
+        </ol>
+        <section v-if="createStep === 1" class="organization-wizard__step">
+          <p>先填写团队名称和用于系统识别的英文标识。</p>
+          <label
+            >组织名称<input
+              v-model="form.name"
+              required
+              minlength="2"
+              maxlength="120"
+              placeholder="例如：米豆选品团队" /></label
+          ><label
+            >组织标识<input
+              v-model="form.slug"
+              required
+              pattern="[a-z0-9][a-z0-9-]{1,62}"
+              placeholder="例如：midou-team"
+          /></label>
+        </section>
+        <section v-else class="organization-wizard__step">
+          <p>选择首位组织管理员，并在创建前核对影响范围。</p>
+          <label
+            >首位组织管理员<select v-model="form.initial_admin_user_id">
+              <option value="">当前超级管理员</option>
+              <option
+                v-for="item in data?.users || []"
+                :key="item.id"
+                :value="item.id"
+                :disabled="item.status !== 'active'"
+              >
+                {{ item.email }}
+              </option>
+            </select></label
+          >
+          <dl class="organization-wizard__summary">
+            <div><dt>组织</dt><dd>{{ form.name }}</dd></div>
+            <div><dt>组织标识</dt><dd>{{ form.slug }}</dd></div>
+            <div>
+              <dt>创建后</dt>
+              <dd>同时创建默认工作区和组织级数据范围</dd>
+            </div>
+          </dl>
+        </section>
         <footer>
-          <button type="button" @click="createOpen = false">取消</button
-          ><button :disabled="Boolean(busy)">确认创建</button>
+          <button type="button" @click="closeOrganizationWizard">取消</button>
+          <button
+            v-if="createStep === 2"
+            type="button"
+            @click="createStep = 1"
+          >
+            上一步
+          </button>
+          <button
+            v-if="createStep === 1"
+            type="button"
+            @click="continueOrganizationWizard"
+          >
+            下一步：选择管理员
+          </button>
+          <button v-else :disabled="Boolean(busy)">确认创建</button>
         </footer>
       </form>
     </dialog>
@@ -900,6 +950,78 @@ dialog footer {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+}
+.organization-wizard {
+  width: min(560px, calc(100% - 28px));
+}
+.organization-wizard__progress {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  list-style: none;
+}
+.organization-wizard__progress li {
+  min-height: 44px;
+  padding: 9px 11px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #29465f;
+  border-radius: 10px;
+  color: #9aadc1;
+  background: #0b1d2e;
+}
+.organization-wizard__progress li[aria-current="step"] {
+  border-color: #38d5b0;
+  color: #eef5ff;
+}
+.organization-wizard__progress span {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  color: #08231d;
+  background: #38d5b0;
+  font-weight: 800;
+}
+.organization-wizard__step {
+  display: grid;
+  gap: 14px;
+}
+.organization-wizard__step > p {
+  margin: 0;
+  color: #9aadc1;
+}
+.organization-wizard__summary {
+  margin: 0;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  border: 1px solid #29465f;
+  border-radius: 10px;
+  background: #0b1d2e;
+}
+.organization-wizard__summary div {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr);
+  gap: 10px;
+}
+.organization-wizard__summary dt {
+  color: #9aadc1;
+}
+.organization-wizard__summary dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.organization-wizard footer {
+  flex-wrap: wrap;
+}
+.organization-wizard footer button {
+  min-height: 44px;
 }
 .detail-dialog {
   width: min(760px, calc(100% - 28px));
