@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { statusLabel } from "../ui/status-labels";
 const props = defineProps<{ apiBaseUrl: string }>();
 const state = ref("loading"),
   data = ref<any>(null),
   org = ref(""),
   workspace = ref(""),
+  provider = ref(""),
+  timeWindow = ref("24h"),
+  errorCode = ref(""),
   requestId = ref(""),
   hint = ref("");
 async function load() {
@@ -12,6 +16,9 @@ async function load() {
   const q = new URLSearchParams();
   if (org.value) q.set("organization_id", org.value);
   if (workspace.value) q.set("workspace_id", workspace.value);
+  if (provider.value) q.set("provider_id", provider.value);
+  q.set("window", timeWindow.value);
+  if (errorCode.value) q.set("error_code", errorCode.value);
   try {
     const r = await fetch(
         `${props.apiBaseUrl}/platform/collection/console?${q}`,
@@ -45,7 +52,44 @@ async function load() {
 }
 onMounted(load);
 const when = (v: string | null) =>
-  v ? new Date(v).toLocaleString() : "未检查";
+    v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "未检查",
+  linkLabels: Record<string, string> = {
+    provider_registry: "来源配置",
+    adapter_health: "适配器健康",
+    source_catalog: "来源目录",
+    task_monitor: "采集任务",
+    browser_runtime: "浏览器运行",
+    data_quality: "数据质量",
+  },
+  healthLabel = (value: string) =>
+    ({
+      ready: "正常",
+      healthy: "正常",
+      warning: "需要关注",
+      degraded: "性能下降",
+      critical: "严重异常",
+      unknown: "尚未检查",
+    } as Record<string, string>)[value] ?? "状态待确认",
+  errorLabel = (value: string | null) =>
+    value
+      ? ({
+          network_error: "网络异常",
+          timeout: "请求超时",
+          rate_limited: "来源限速",
+          login_required: "需要登录",
+          session_expired: "登录已失效",
+          captcha: "验证码受阻",
+          robots_disallowed: "站点规则阻止",
+          parser_error: "页面解析失败",
+          parser_failed: "页面解析失败",
+          validation_failed: "数据校验失败",
+          permission_denied: "权限受阻",
+        } as Record<string, string>)[value] ?? "其他采集错误"
+      : "无错误",
+  drillRootCause = async (value: string) => {
+    errorCode.value = errorCode.value === value ? "" : value;
+    await load();
+  };
 </script>
 <template>
   <section class="collection-ops">
@@ -66,7 +110,21 @@ const when = (v: string | null) =>
           v-model="workspace"
           aria-label="工作区 ID 筛选"
           placeholder="工作区 ID（可选）"
-        /><button>应用范围</button>
+        /><select v-model="provider" aria-label="采集来源筛选">
+          <option value="">全部来源</option>
+          <option
+            v-for="source in data?.source_options ?? []"
+            :key="source.id"
+            :value="source.id"
+          >
+            {{ source.name }}
+          </option></select
+        ><select v-model="timeWindow" aria-label="观测时间筛选">
+          <option value="24h">最近 24 小时</option>
+          <option value="7d">最近 7 天</option>
+          <option value="30d">最近 30 天</option>
+          <option value="all">全部时间</option></select
+        ><button>应用范围</button>
       </form>
     </header>
     <section
@@ -101,7 +159,7 @@ const when = (v: string | null) =>
     <template v-else-if="data"
       ><nav class="collection-ops-links">
         <a v-for="(path, label) in data.links" :key="path" :href="path">{{
-          label
+          linkLabels[label] ?? "相关管理页面"
         }}</a>
       </nav>
       <div class="collection-ops-grid">
@@ -123,9 +181,9 @@ const when = (v: string | null) =>
                   <b>{{ s.name }}</b
                   ><small>{{ s.code }} · {{ s.owner_label }}</small>
                 </td>
-                <td>{{ s.status }}</td>
+                <td>{{ statusLabel(s.status) }}</td>
                 <td>
-                  <i :data-health="s.health_status">{{ s.health_status }}</i>
+                  <i :data-health="s.health_status">{{ healthLabel(s.health_status) }}</i>
                 </td>
                 <td>{{ s.consecutive_failures }}</td>
                 <td>{{ when(s.last_checked_at) }}</td>
@@ -138,16 +196,53 @@ const when = (v: string | null) =>
           <div class="collection-state-chips">
             <span v-for="t in data.task_states" :key="t.status"
               ><b>{{ t.total }}</b
-              >{{ t.status }}</span
+              >{{ statusLabel(t.status) }}</span
             >
           </div>
           <h3>质量问题</h3>
           <div class="collection-state-chips">
             <span v-for="q in data.quality" :key="q.status + q.severity"
               ><b>{{ q.total }}</b
-              >{{ q.status }} · {{ q.severity }}</span
+              >{{ statusLabel(q.status) }} · {{ q.severity === "critical" ? "严重" : "警告" }}</span
             >
           </div>
+        </section>
+        <section class="collection-root-causes">
+          <header>
+            <div>
+              <h3>错误根因</h3>
+              <small>按真实任务尝试错误码聚合，选择后下钻尝试与死信。</small>
+            </div>
+            <button
+              v-if="errorCode"
+              type="button"
+              class="collection-clear-root"
+              @click="drillRootCause(errorCode)"
+            >
+              清除根因筛选
+            </button>
+          </header>
+          <div v-if="data.root_causes?.length" class="collection-root-list">
+            <article
+              v-for="root in data.root_causes ?? []"
+              :key="root.error_code"
+              :data-selected="errorCode === root.error_code"
+            >
+              <button
+                type="button"
+                :aria-pressed="errorCode === root.error_code"
+                @click="drillRootCause(root.error_code)"
+              >
+                <b>{{ errorLabel(root.error_code) }}</b>
+                <span>{{ root.total }} 次 · 最近 {{ when(root.latest_at) }}</span>
+              </button>
+              <details>
+                <summary>技术详情</summary>
+                <code>{{ root.error_code }}</code>
+              </details>
+            </article>
+          </div>
+          <p v-else>当前筛选范围没有采集错误。</p>
         </section>
         <section>
           <h3>最近尝试</h3>
@@ -165,8 +260,14 @@ const when = (v: string | null) =>
               <tr v-for="a in data.attempts" :key="a.id">
                 <td>{{ a.task_id.slice(0, 8) }}… #{{ a.attempt_number }}</td>
                 <td>{{ a.worker_id }}</td>
-                <td>{{ a.status }}</td>
-                <td>{{ a.error_code || "—" }}</td>
+                <td>{{ statusLabel(a.status) }}</td>
+                <td>
+                  <span>{{ errorLabel(a.error_code) }}</span>
+                  <details v-if="a.error_code">
+                    <summary>技术详情</summary>
+                    <code>{{ a.error_code }}</code>
+                  </details>
+                </td>
                 <td>
                   <code>{{ a.trace_id.slice(0, 8) }}…</code>
                 </td>
@@ -178,13 +279,13 @@ const when = (v: string | null) =>
           <h3>开放与已重放死信</h3>
           <ul>
             <li v-for="d in data.dead_letters" :key="d.id">
-              <b>{{ d.error_code }}</b
+              <b>{{ errorLabel(d.error_code) }}</b
               ><span
-                >{{ d.status }} · {{ d.organization_id.slice(0, 8) }}… ·
+                >{{ statusLabel(d.status) }} · {{ d.organization_id.slice(0, 8) }}… ·
                 {{ when(d.created_at) }}</span
               ><a :href="`/platform-admin/collection?task=${d.task_id}`"
                 >查看并受控重放</a
-              >
+              ><details><summary>技术详情</summary><code>{{ d.error_code }}</code></details>
             </li>
           </ul>
         </section>

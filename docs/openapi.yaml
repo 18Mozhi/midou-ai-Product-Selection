@@ -5225,7 +5225,7 @@ paths:
   /platform/collection/console:
     get:
       summary: Read the audited source and collection operations console
-      description: Requires platform:operate. Optional organization_id and workspace_id scope all task, attempt, dead-letter and quality rows; source definitions remain platform-global. Write and replay actions use their existing versioned idempotent endpoints.
+      description: Requires platform:operate. Optional organization_id, workspace_id, provider_id, window and exact error_code scope task, attempt, dead-letter and quality rows; source definitions remain platform-global. Write and replay actions use their existing versioned idempotent endpoints.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
@@ -5237,6 +5237,24 @@ paths:
             name: workspace_id,
             in: query,
             schema: { type: string, format: uuid },
+          }
+        - {
+            name: provider_id,
+            in: query,
+            description: Filter task, attempt, dead-letter and quality facts by their real collection source,
+            schema: { type: string, format: uuid },
+          }
+        - {
+            name: window,
+            in: query,
+            description: Limit operational facts by their task update or event observation time,
+            schema: { type: string, enum: [24h, 7d, 30d, all], default: 24h },
+          }
+        - {
+            name: error_code,
+            in: query,
+            description: Drill recent attempts and dead letters by an exact returned error root,
+            schema: { type: string, maxLength: 80 },
           }
       responses:
         "200":
