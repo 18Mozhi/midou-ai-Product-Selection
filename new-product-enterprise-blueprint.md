@@ -591,7 +591,7 @@ flowchart LR
 
 - 内部 API 使用 `/api/v1`；开放 API 使用 `/open/v1`，独立鉴权、中间件、限流和审计。
 - OpenAPI 先行：所有路由、DTO、错误码、分页、权限、审计等级和事件在编码前写入 `docs/openapi.yaml`。
-- 统一响应：`data`、`meta`、`request_id`；错误响应含 `code`、`message`、`action_hint`、`request_id`。前端统一请求客户端负责 Cookie 会话、`request_id`/`trace_id`、JSON 信封、写请求幂等键和业务错误分类；导航权限、壳层与独立主题偏好、首页、全局发现、登录与会话、租户选择、落地解析、个人中心、接口就绪、任务、趋势、评分规则和成本规则入口不得绕过该客户端直接请求。
+- 统一响应：`data`、`meta`、`request_id`；错误响应含 `code`、`message`、`action_hint`、`request_id`。前端统一请求客户端负责 Cookie 会话、`request_id`/`trace_id`、JSON 信封、写请求幂等键和业务错误分类；导航权限、壳层与独立主题偏好、首页、全局发现、登录与会话、租户选择、落地解析、个人中心、接口就绪、任务、趋势、评分规则、成本规则、机会、竞品和供应链入口不得绕过该客户端直接请求。
 - 列表接口必须分页，默认 50、上限 200；导出使用异步任务，禁止一次性查询全部数据。
 - 写操作使用 `Idempotency-Key`；更新使用 `version` 乐观锁；关键操作要求二次确认令牌。
 - API 接受 1–128 字符的安全 `X-Request-ID` / `X-Trace-ID`，非法上游值重新生成；认证中间件只有在受信 Token verifier 返回组织 claims 后才放行，缺少组织或 capability 默认拒绝。`/health/ready` 只返回同步依赖类别与可用性，不暴露主机、账号、库表或 Redis 键。

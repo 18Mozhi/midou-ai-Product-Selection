@@ -94,7 +94,7 @@
       "codeStyleVerifier": "../scripts/verify-code-style.mjs",
       "repositorySqlPolicy": "new or modified Repository SQL lines must not exceed 160 characters; violations fail as repository_sql_max_line_length_failed while untouched historical debt follows touch-to-govern cleanup",
       "workerHandlerBoundary": "apps/worker/src/index.ts owns dependency assembly, non-reentrant polling, logs and priority scheduling only; every business queue handler remains in its independent worker or scheduler module and domain SQL is forbidden in the entrypoint",
-      "frontendApiClientBoundary": "the shared frontend JSON client owns credentials, request_id, trace_id, write idempotency, JSON envelopes and standardized server message/action error mapping; navigation, discovery, home, local identity, tenancy selection, landing resolution, personal center, theme settings, API readiness, business tasks, trends, scoring rules and cost rules do not call fetch directly",
+      "frontendApiClientBoundary": "the shared frontend JSON client owns credentials, request_id, trace_id, write idempotency, JSON envelopes and standardized server message/action error mapping; navigation, discovery, home, local identity, tenancy selection, landing resolution, personal center, theme settings, API readiness, business tasks, trends, scoring rules, cost rules, opportunities, competitors and sourcing do not call fetch directly",
       "productionProductCommand": "npm run verify:production-product",
       "userGuide": "../docs/user-guide-ai-selection.md",
       "functionalScope": "P00-P08 incremental code style gate, software build, functional Node/Python tests, desktop/390 E2E, docs, plans, release matrix and security gate; excludes same-commit deployment evidence, disk diagnostics, production load tests and capacity claims",
@@ -944,6 +944,7 @@
       ],
       "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs; the list filters persisted evidence coverage with coverage_status",
       "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese",
+      "apiClientBoundary": "opportunity lists, details, AI analyses, downstream competitor and sourcing counts, decisions and other writes use the shared frontend JSON client; optional AI and downstream counts still degrade independently without masking the core opportunity state",
       "refresh": "Baota Node Worker leases opportunity refresh jobs and links only persisted trend signals; trend-only evidence remains partial because competition and cost inputs are absent",
       "productImages": "structured marketplace crawlers extract JSON-LD or linked product image URLs; ERP imports map the confirmed product image field; opportunity list resolves the newest scoped evidence image and otherwise shows an explicit pending-capture placeholder",
       "erpImport": "the restricted browser helper reads the existing ERP Authorization token only inside the logged-in ERP tab and imports immutable evidence, opportunities, actual ASIN competitors and evidence-linked ERP historical-cost supplier candidates; missing MOQ specification lead time and location stay explicit rather than being presented as confirmed quotes",
@@ -1063,6 +1064,7 @@
       ],
       "scope": "organization and workspace scoped competitor identities immutable source snapshots comparison jobs changes threshold rules alerts events and outbox",
       "truthBoundary": "Amazon identities can be added by product URL and are collected from the public product page without an official API; nullable price rank reviews rating and availability remain visibly missing when the page does not expose them, no zero or sample value is substituted, and detail views distinguish the oldest baseline, current snapshot, recorded changes and applicable explicit thresholds while price changes use the currency from their evidence-linked snapshot",
+      "apiClientBoundary": "competitor lists, details, collection actions, rules and audited deletes use the shared frontend JSON client; rule-list failure remains an optional degradation and does not hide an otherwise available competitor list",
       "permission": "competitor:read for scoped list and full detail; competitor:manage for create collect thresholds pause resume and audited soft delete; auditors remain read only",
       "audit": "user and Worker writes preserve request_id trace_id evidence source references immutable changes and queued downstream delivery state",
       "configuration": [
@@ -1101,6 +1103,7 @@
       ],
       "scope": "organization and workspace scoped searches projection jobs candidates immutable quote versions comparisons purchase tasks events and outbox",
       "truthBoundary": "a user search queues independent Made-in-China and EC21 public supplier-page crawlers without official API credentials; supplier title price image source URL and observed time are projected with immutable evidence, opportunity searches expose the joined opportunity name as display_name while retaining input_ref only for traceability, unavailable MOQ specification lead location confidence stability and risk stay explicit until evidence-backed human confirmation, and saved comparisons use one consistent supplier specification MOQ price and lead-time field order; no login-renewal link is fabricated while this domain has only public-page executors",
+      "apiClientBoundary": "sourcing searches, details, refreshes, quote and purchase writes, comparisons and audited deletes use the shared frontend JSON client; comparison-history failure remains an optional degradation and does not hide an otherwise available sourcing list",
       "permission": "sourcing:read for scoped lists details and comparison history; supplier_quote:manage for create refresh audited soft delete quote confirmation comparisons and purchase task creation",
       "audit": "writes preserve idempotency request_id trace_id actor immutable evidence references sourcing_events and sourcing_outbox",
       "configuration": [

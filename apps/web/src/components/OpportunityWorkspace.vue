@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import { statusLabel } from "../ui/status-labels";
@@ -7,17 +8,9 @@ import "../opportunities.css";
 import "../opportunity-profit.css";
 import "../opportunity-selection-entry.css";
 import "../opportunity-ai.css";
-type State =
-  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type Tab =
-  | "overview"
-  | "market"
-  | "competition"
-  | "profit"
-  | "risk"
-  | "ai"
-  | "evidence"
-  | "decisions";
+  "overview" | "market" | "competition" | "profit" | "risk" | "ai" | "evidence" | "decisions";
 interface Opportunity {
   id: string;
   name: string;
@@ -87,7 +80,29 @@ interface Detail extends Opportunity {
     execution: string;
   };
 }
-const opportunityStatus = (value:string) => ({ pending:"待判断", adopt:"采纳", adopted:"已采纳", observe:"继续观察", observing:"观察中", reject:"驳回", rejected:"已驳回", insufficient:"不完整", partial:"部分完整", complete:"完整", insufficient_data:"待补充数据", calculated:"已计算", unknown:"待识别", low:"低", medium:"中", high:"高", manual:"手动创建", trend_topic:"热点自动发现" } as Record<string,string>)[value] ?? value;
+const opportunityStatus = (value: string) =>
+  (
+    ({
+      pending: "待判断",
+      adopt: "采纳",
+      adopted: "已采纳",
+      observe: "继续观察",
+      observing: "观察中",
+      reject: "驳回",
+      rejected: "已驳回",
+      insufficient: "不完整",
+      partial: "部分完整",
+      complete: "完整",
+      insufficient_data: "待补充数据",
+      calculated: "已计算",
+      unknown: "待识别",
+      low: "低",
+      medium: "中",
+      high: "高",
+      manual: "手动创建",
+      trend_topic: "热点自动发现",
+    }) as Record<string, string>
+  )[value] ?? value;
 interface ProfitAnalysis {
   latest_run: null | {
     id: string;
@@ -127,6 +142,7 @@ interface ProfitAnalysis {
   }>;
 }
 const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   items = ref<Opportunity[]>([]),
   detail = ref<Detail | null>(null),
@@ -137,7 +153,7 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
   message = ref(""),
   busy = ref(false),
   listScope = ref<"product" | "all">("product"),
-  downstream = ref({ competitors:0, snapshots:0, searches:0, suppliers:0 }),
+  downstream = ref({ competitors: 0, snapshots: 0, searches: 0, suppliers: 0 }),
   tab = ref<Tab>("overview"),
   showCreate = ref(false),
   showErpImport = ref(false),
@@ -172,15 +188,25 @@ const tabs: [Tab, string][] = [
   ["ai", "AI 辅助"],
   ["decisions", "决策历史"],
 ];
-const listSummary=computed(()=>({withImage:items.value.filter((item)=>Boolean(item.image_url)).length,competitors:items.value.reduce((sum,item)=>sum+(item.competitor_count??0),0),suppliers:items.value.reduce((sum,item)=>sum+(item.supplier_candidate_count??0),0)}));
-const stateFrom = (status: number): State =>
-  status === 401
-    ? "expired"
-    : status === 403
-      ? "forbidden"
-      : [408, 425, 429, 502, 503, 504].includes(status)
-        ? "blocked"
-        : "error";
+const listSummary = computed(() => ({
+    withImage: items.value.filter((item) => Boolean(item.image_url)).length,
+    competitors: items.value.reduce((sum, item) => sum + (item.competitor_count ?? 0), 0),
+    suppliers: items.value.reduce((sum, item) => sum + (item.supplier_candidate_count ?? 0), 0),
+  })),
+  evidenceTaskHref = computed(() => {
+    if (!detail.value) return "/tasks";
+    const title = encodeURIComponent(`补齐机会证据 · ${detail.value.name}`),
+      description = encodeURIComponent(
+        `补齐机会 ${detail.value.id} 的缺失证据，并复核来源新鲜度与可信度。`,
+      );
+    return `/tasks?create=1&title=${title}&description=${description}`;
+  });
+const stateFrom = (kind: ApiFailureKind): State =>
+  kind === "expired" || kind === "forbidden"
+    ? kind
+    : kind === "blocked" || kind === "rate_limited"
+      ? "blocked"
+      : "error";
 const freshness = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
     month: "2-digit",
@@ -190,27 +216,23 @@ const freshness = (value: string) =>
     hour12: false,
   }).format(new Date(value));
 async function read(path: string) {
-  const response = await fetch(`${props.apiBaseUrl}${path}`, {
-      credentials: "include",
-      headers: { accept: "application/json" },
-    }),
-    body = await response.json().catch(() => null);
-  requestId.value = body?.request_id ?? "";
-  if (!response.ok) {
-    state.value = stateFrom(response.status);
-    throw new Error("read_failed");
+  try {
+    const response = await request<any>(path);
+    requestId.value = response.request_id;
+    return response;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+      state.value = stateFrom(error.kind);
+    }
+    throw error;
   }
-  return body;
 }
 async function loadAi() {
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/opportunities/${props.opportunityId}/ai-analyses`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
-      body = await response.json().catch(() => null);
-    aiAnalyses.value =
-      response.ok && Array.isArray(body?.data) ? body.data : [];
+    const response = await request<any[]>(`/opportunities/${props.opportunityId}/ai-analyses`);
+    aiAnalyses.value = Array.isArray(response.data) ? response.data : [];
   } catch {
     aiAnalyses.value = [];
   }
@@ -221,50 +243,78 @@ async function load() {
   try {
     if (props.opportunityId) {
       detail.value = (await read(`/opportunities/${props.opportunityId}`)).data;
-      profit.value = (
-        await read(`/opportunities/${props.opportunityId}/profit-analysis`)
-      ).data;
+      profit.value = (await read(`/opportunities/${props.opportunityId}/profit-analysis`)).data;
       await loadAi();
-      try{const [competitorsResponse,sourcingResponse]=await Promise.all([fetch(`${props.apiBaseUrl}/competitors`,{credentials:'include'}),fetch(`${props.apiBaseUrl}/sourcing/searches`,{credentials:'include'})]),[competitorsBody,sourcingBody]=await Promise.all([competitorsResponse.json(),sourcingResponse.json()]);const competitors=competitorsResponse.ok?competitorsBody.data.filter((item:any)=>item.opportunity_id===props.opportunityId):[],searches=sourcingResponse.ok?sourcingBody.data.filter((item:any)=>item.input_type==='opportunity'&&item.input_ref===props.opportunityId):[];downstream.value={competitors:competitors.length,snapshots:competitors.reduce((sum:number,item:any)=>sum+Number(item.snapshot_count??0),0),searches:searches.length,suppliers:searches.reduce((sum:number,item:any)=>sum+Number(item.candidate_count??0),0)};}catch{downstream.value={competitors:0,snapshots:0,searches:0,suppliers:0};}
+      try {
+        const [competitorsResponse, sourcingResponse] = await Promise.all([
+            request<any[]>("/competitors"),
+            request<any[]>("/sourcing/searches"),
+          ]),
+          competitors = competitorsResponse.data.filter(
+            (item: any) => item.opportunity_id === props.opportunityId,
+          ),
+          searches = sourcingResponse.data.filter(
+            (item: any) =>
+              item.input_type === "opportunity" && item.input_ref === props.opportunityId,
+          );
+        downstream.value = {
+          competitors: competitors.length,
+          snapshots: competitors.reduce(
+            (sum: number, item: any) => sum + Number(item.snapshot_count ?? 0),
+            0,
+          ),
+          searches: searches.length,
+          suppliers: searches.reduce(
+            (sum: number, item: any) => sum + Number(item.candidate_count ?? 0),
+            0,
+          ),
+        };
+      } catch {
+        downstream.value = {
+          competitors: 0,
+          snapshots: 0,
+          searches: 0,
+          suppliers: 0,
+        };
+      }
       state.value = "ready";
       return;
     }
-    const params = new URLSearchParams({ page: "1", page_size: "20", scope:listScope.value });
-    for (const [key, value] of Object.entries(filters))
-      if (value) params.set(key, value);
+    const params = new URLSearchParams({ page: "1", page_size: "20", scope: listScope.value });
+    for (const [key, value] of Object.entries(filters)) if (value) params.set(key, value);
     const result = await read(`/opportunities?${params}`);
     items.value = result.data;
     total.value = result.meta.total;
     state.value = items.value.length ? "ready" : "empty";
   } catch (error) {
-    if ((error as Error).message !== "read_failed") state.value = "blocked";
+    if (!(error instanceof ApiClientError)) state.value = "blocked";
   }
 }
-async function discoverCompetitors(){if(!detail.value)return;const result=await write(`/opportunities/${detail.value.id}/competitor-discovery`,{});if(result)message.value=`Amazon 竞品采集已排队，任务编号 ${result.task_id}。`;}
-async function discoverSuppliers(){if(!detail.value)return;const result=await write('/sourcing/searches',{input_type:'opportunity',input_ref:detail.value.id});if(result)message.value=`公开供应商采集已排队，任务编号 ${result.task_id}。`;}
+async function discoverCompetitors() {
+  if (!detail.value) return;
+  const result = await write(`/opportunities/${detail.value.id}/competitor-discovery`, {});
+  if (result) message.value = `Amazon 竞品采集已排队，任务编号 ${result.task_id}。`;
+}
+async function discoverSuppliers() {
+  if (!detail.value) return;
+  const result = await write("/sourcing/searches", {
+    input_type: "opportunity",
+    input_ref: detail.value.id,
+  });
+  if (result) message.value = `公开供应商采集已排队，任务编号 ${result.task_id}。`;
+}
 async function write(path: string, body: unknown) {
   busy.value = true;
   message.value = "";
   try {
-    const response = await fetch(`${props.apiBaseUrl}${path}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          accept: "application/json",
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-        body: JSON.stringify(body),
-      }),
-      result = await response.json().catch(() => null);
-    requestId.value = result?.request_id ?? "";
-    if (!response.ok) {
-      message.value = result?.error?.action_hint ?? "操作未完成。";
-      return null;
-    }
-    return result.data;
-  } catch {
-    message.value = "依赖暂不可用，未写入任何状态。";
+    const response = await request<any>(path, { method: "POST", body });
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+    } else message.value = "依赖暂不可用，未写入任何状态。";
     return null;
   } finally {
     busy.value = false;
@@ -298,8 +348,7 @@ function browserBridge<T>(action: string, payload: Record<string, unknown>) {
         return;
       window.clearTimeout(timeout);
       window.removeEventListener("message", receive);
-      if (!event.data.ok)
-        reject(new Error(String(event.data.error || "browser_helper_failed")));
+      if (!event.data.ok) reject(new Error(String(event.data.error || "browser_helper_failed")));
       else resolve(event.data.data as T);
     }
     window.addEventListener("message", receive);
@@ -324,7 +373,10 @@ async function persistErpProducts(data: {
   if (!result) return;
   showErpImport.value = false;
   await load();
-  message.value = `ERP 已读取 ${result.received_count} 条：新增 ${result.opportunity_count} 个机会、${result.competitor_count} 个亚马逊待采集竞品、${result.sourcing_search_count} 个货源匹配任务；原始记录已保存为证据。`;
+  message.value =
+    `ERP 已读取 ${result.received_count} 条：新增 ${result.opportunity_count} 个机会、` +
+    `${result.competitor_count} 个亚马逊待采集竞品、` +
+    `${result.sourcing_search_count} 个货源匹配任务；原始记录已保存为证据。`;
 }
 async function importFromErpBrowser() {
   busy.value = true;
@@ -389,8 +441,7 @@ async function queueScore() {
   });
   if (result) {
     await load();
-    message.value =
-      "评分任务已进入宝塔 Node Worker 队列；完成后刷新可见新运行记录。";
+    message.value = "评分任务已进入宝塔 Node Worker 队列；完成后刷新可见新运行记录。";
   }
 }
 async function confirmCost() {
@@ -419,8 +470,7 @@ async function queueProfit() {
   });
   if (result) {
     await load();
-    message.value =
-      "利润计算已进入宝塔 Node Worker 队列；刷新后查看不可变运行快照。";
+    message.value = "利润计算已进入宝塔 Node Worker 队列；刷新后查看不可变运行快照。";
   }
 }
 async function queueAi() {
@@ -431,14 +481,11 @@ async function queueAi() {
   if (result) {
     await load();
     tab.value = "ai";
-    message.value =
-      "AI 辅助分析已进入宝塔 Node Worker 队列；不会自动修改评分或决策。";
+    message.value = "AI 辅助分析已进入宝塔 Node Worker 队列；不会自动修改评分或决策。";
   }
 }
 async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
-  const notes = window.prompt(
-    outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因",
-  );
+  const notes = window.prompt(outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因");
   if (!notes) return;
   if (await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes })) {
     await load();
@@ -449,16 +496,10 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
 onMounted(() => {
   const query = new URLSearchParams(window.location.search);
   const requestedTab = query.get("tab");
-  if (
-    props.opportunityId &&
-    tabs.some(([value]) => value === requestedTab)
-  ) {
+  if (props.opportunityId && tabs.some(([value]) => value === requestedTab)) {
     tab.value = requestedTab as Tab;
   }
-  if (
-    !props.opportunityId &&
-    (query.get("create") === "1" || query.get("source_topic_id"))
-  ) {
+  if (!props.opportunityId && (query.get("create") === "1" || query.get("source_topic_id"))) {
     form.source_topic_id = query.get("source_topic_id") ?? "";
     form.name = query.get("name") ?? "";
     form.market = query.get("market") ?? "US";
@@ -474,18 +515,12 @@ onMounted(() => {
       <div>
         <p>决策工作台</p>
         <h2>{{ opportunityId ? "机会详情" : "选品机会" }}</h2>
-        <span
-          >评分、利润、风险和证据均展示真实状态；缺少下游输入时明确标记数据不足。</span
-        >
+        <span>评分、利润、风险和证据均展示真实状态；缺少下游输入时明确标记数据不足。</span>
       </div>
       <div v-if="!opportunityId" class="opportunity-hero-actions">
         <a href="/opportunities/start">开始真实选品</a
-        ><button type="button" class="ghost" @click="showErpImport = true">
-          从 ERP 导入
-        </button
-        ><button type="button" @click="showCreate = true">
-          ＋ 手工创建机会
-        </button>
+        ><button type="button" class="ghost" @click="showErpImport = true">从 ERP 导入</button
+        ><button type="button" @click="showCreate = true">＋ 手工创建机会</button>
       </div>
       <a v-else href="/opportunities">← 返回机会列表</a>
     </header>
@@ -494,11 +529,7 @@ onMounted(() => {
     </p>
     <template v-if="!opportunityId"
       ><form class="opportunity-filters" @submit.prevent="load">
-        <label
-          >市场<input
-            v-model="filters.market"
-            maxlength="40"
-            placeholder="全部市场" /></label
+        <label>市场<input v-model="filters.market" maxlength="40" placeholder="全部市场" /></label
         ><label
           >决策状态<select v-model="filters.decision_status">
             <option value="">全部状态</option>
@@ -514,15 +545,28 @@ onMounted(() => {
             <option value="partial">部分完整</option>
             <option value="complete">完整</option>
           </select></label
+        ><label>机会名称<input v-model="filters.q" maxlength="200" placeholder="搜索机会" /></label
         ><label
-          >机会名称<input
-            v-model="filters.q"
-            maxlength="200"
-            placeholder="搜索机会" /></label
-        ><label>显示范围<select v-model="listScope"><option value="product">可分析商品</option><option value="all">全部线索</option></select></label
+          >显示范围<select v-model="listScope">
+            <option value="product">可分析商品</option>
+            <option value="all">全部线索</option>
+          </select></label
         ><button type="submit">筛选</button>
       </form>
-      <section class="opportunity-list-summary" aria-label="选品机会数据总览"><article><span>当前结果</span><b>{{ total }}</b></article><article><span>已补商品图</span><b>{{ listSummary.withImage }}</b></article><article><span>关联竞品</span><b>{{ listSummary.competitors }}</b></article><article><span>供应商候选</span><b>{{ listSummary.suppliers }}</b></article></section>
+      <section class="opportunity-list-summary" aria-label="选品机会数据总览">
+        <article>
+          <span>当前结果</span><b>{{ total }}</b>
+        </article>
+        <article>
+          <span>已补商品图</span><b>{{ listSummary.withImage }}</b>
+        </article>
+        <article>
+          <span>关联竞品</span><b>{{ listSummary.competitors }}</b>
+        </article>
+        <article>
+          <span>供应商候选</span><b>{{ listSummary.suppliers }}</b>
+        </article>
+      </section>
       <UiStatePanel
         v-if="state !== 'ready'"
         :kind="state"
@@ -537,11 +581,15 @@ onMounted(() => {
           </div>
           <span>共 {{ total }} 个机会 · 按更新时间排序</span>
         </header>
-        <a
-          v-for="item in items"
-          :key="item.id"
-          :href="`/opportunities/${item.id}`"
-          ><span class="opportunity-picture"><img v-if="item.image_url" :src="item.image_url" :alt="`${item.name} 商品图`" loading="lazy" referrerpolicy="no-referrer" /><i v-else>主图<br />待采集</i></span
+        <a v-for="item in items" :key="item.id" :href="`/opportunities/${item.id}`"
+          ><span class="opportunity-picture"
+            ><img
+              v-if="item.image_url"
+              :src="item.image_url"
+              :alt="`${item.name} 商品图`"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+            /><i v-else>主图<br />待采集</i></span
           ><span
             ><strong>{{ item.name }}</strong
             ><small
@@ -571,7 +619,9 @@ onMounted(() => {
               <dd>{{ opportunityStatus(item.risk_level) }}</dd>
             </div>
           </dl>
-          <b :data-status="item.decision_status">{{ opportunityStatus(item.decision_status) }} · 查看详情 →</b></a
+          <b :data-status="item.decision_status"
+            >{{ opportunityStatus(item.decision_status) }} · 查看详情 →</b
+          ></a
         >
       </section></template
     >
@@ -583,7 +633,20 @@ onMounted(() => {
         @primary="load"
       />
       <article v-else class="opportunity-detail">
-        <section v-if="detail.recommendation_status === 'insufficient_data'" class="opportunity-next-steps"><div><b>为什么还不能给出结论？</b><span>系统只在证据足够时评分。可直接启动真实网页采集，不需要填写官方 API。</span></div><button type="button" :disabled="busy" @click="discoverCompetitors">① 采集 Amazon 竞品</button><button type="button" :disabled="busy" @click="discoverSuppliers">② 采集公开供应商</button><a href="/opportunities/scoring-rules">③ 检查评分规则</a></section>
+        <section
+          v-if="detail.recommendation_status === 'insufficient_data'"
+          class="opportunity-next-steps"
+        >
+          <div>
+            <b>为什么还不能给出结论？</b
+            ><span>系统只在证据足够时评分。可直接启动真实网页采集，不需要填写官方 API。</span>
+          </div>
+          <button type="button" :disabled="busy" @click="discoverCompetitors">
+            ① 采集 Amazon 竞品</button
+          ><button type="button" :disabled="busy" @click="discoverSuppliers">
+            ② 采集公开供应商</button
+          ><a href="/opportunities/scoring-rules">③ 检查评分规则</a>
+        </section>
         <header>
           <div>
             <p>
@@ -592,34 +655,50 @@ onMounted(() => {
             </p>
             <h3>{{ detail.name }}</h3>
             <span
-              >更新 {{ freshness(detail.updated_at) }} · v{{ detail.version }} ·
-              来源 {{ opportunityStatus(detail.source_type) }}</span
+              >更新 {{ freshness(detail.updated_at) }} · v{{ detail.version }} · 来源
+              {{ opportunityStatus(detail.source_type) }}</span
             >
           </div>
           <div>
             <strong>{{ detail.overall_score ?? "—" }}</strong
-            ><small
-              >综合评分<br />{{
-                detail.overall_score == null ? "数据不足" : "已计算"
-              }}</small
-            >
+            ><small>综合评分<br />{{ detail.overall_score == null ? "数据不足" : "已计算" }}</small>
           </div>
         </header>
         <section class="opportunity-decision-bar">
           <div>
-            <span>推荐结论</span
-            ><strong>{{ statusLabel(detail.recommendation_status) }}</strong
+            <span>推荐结论</span><strong>{{ statusLabel(detail.recommendation_status) }}</strong
             ><small
-              >规则版本：{{ detail.score_rule_version ?? "尚未计算" }} ·
-              置信度：{{ statusLabel(detail.confidence.status) }}</small
+              >规则版本：{{ detail.score_rule_version ?? "尚未计算" }} · 置信度：{{
+                statusLabel(detail.confidence.status)
+              }}</small
             >
           </div>
-          <button :disabled="detail.recommendation_status === 'insufficient_data' || detail.coverage_status === 'insufficient' || detail.evidence_count === 0" :title="detail.recommendation_status === 'insufficient_data' || detail.coverage_status === 'insufficient' || detail.evidence_count === 0 ? '证据不足，先补齐缺失项' : '采纳当前机会'" @click="startDecision('adopt')">✓ 采纳</button
+          <button
+            :disabled="
+              detail.recommendation_status === 'insufficient_data' ||
+              detail.coverage_status === 'insufficient' ||
+              detail.evidence_count === 0
+            "
+            :title="
+              detail.recommendation_status === 'insufficient_data' ||
+              detail.coverage_status === 'insufficient' ||
+              detail.evidence_count === 0
+                ? '证据不足，先补齐缺失项'
+                : '采纳当前机会'
+            "
+            @click="startDecision('adopt')"
+          >
+            ✓ 采纳</button
           ><button @click="startDecision('observe')">◉ 继续观察</button
-          ><button class="reject" @click="startDecision('reject')">
-            × 驳回
-          </button>
-          <a v-if="detail.recommendation_status === 'insufficient_data' || detail.coverage_status === 'insufficient'" :href="`/tasks?create=1&title=${encodeURIComponent('补齐机会证据 · ' + detail.name)}&description=${encodeURIComponent('补齐机会 ' + detail.id + ' 的缺失证据，并复核来源新鲜度与可信度。')}`">分派证据补齐任务</a>
+          ><button class="reject" @click="startDecision('reject')">× 驳回</button>
+          <a
+            v-if="
+              detail.recommendation_status === 'insufficient_data' ||
+              detail.coverage_status === 'insufficient'
+            "
+            :href="evidenceTaskHref"
+            >分派证据补齐任务</a
+          >
         </section>
         <nav class="opportunity-tabs" aria-label="机会详情分区">
           <button
@@ -633,7 +712,20 @@ onMounted(() => {
           </button>
         </nav>
         <section v-if="tab === 'overview'" class="opportunity-overview">
-          <article class="opportunity-downstream"><p>下游补全</p><h4>竞品与供应链数据</h4><strong>{{ downstream.competitors + downstream.suppliers }} 项</strong><span>{{ downstream.competitors }} 个竞品 · {{ downstream.snapshots }} 个快照 · {{ downstream.suppliers }} 个供应商候选</span><footer><button type="button" :disabled="busy" @click="discoverCompetitors">采集竞品</button><button type="button" :disabled="busy" @click="discoverSuppliers">采集供应商</button><a :href="`/competitors`">查看竞品详情</a><a :href="`/sourcing`">查看供应链详情</a></footer></article>
+          <article class="opportunity-downstream">
+            <p>下游补全</p>
+            <h4>竞品与供应链数据</h4>
+            <strong>{{ downstream.competitors + downstream.suppliers }} 项</strong
+            ><span
+              >{{ downstream.competitors }} 个竞品 · {{ downstream.snapshots }} 个快照 ·
+              {{ downstream.suppliers }} 个供应商候选</span
+            >
+            <footer>
+              <button type="button" :disabled="busy" @click="discoverCompetitors">采集竞品</button
+              ><button type="button" :disabled="busy" @click="discoverSuppliers">采集供应商</button
+              ><a :href="`/competitors`">查看竞品详情</a><a :href="`/sourcing`">查看供应链详情</a>
+            </footer>
+          </article>
           <article class="opportunity-score">
             <p>评分解释</p>
             <h4>机会评分解读</h4>
@@ -644,10 +736,7 @@ onMounted(() => {
               {{ freshness(detail.latest_score_run.scored_at) }}</span
             ><span v-else>尚无评分运行；缺失输入不会用默认值补齐。</span>
             <dl>
-              <div
-                v-for="item in detail.score_components"
-                :key="item.dimension_code"
-              >
+              <div v-for="item in detail.score_components" :key="item.dimension_code">
                 <dt>{{ item.dimension_code }} · {{ item.weight_percent }}%</dt>
                 <dd>
                   {{ item.input_score ?? "缺失" }}
@@ -664,17 +753,13 @@ onMounted(() => {
             </aside>
             <footer>
               <a href="/opportunities/scoring-rules">管理规则版本</a
-              ><button type="button" :disabled="busy" @click="queueScore">
-                重新评分
-              </button>
+              ><button type="button" :disabled="busy" @click="queueScore">重新评分</button>
             </footer>
           </article>
           <article>
             <p>证据覆盖</p>
             <h4>证据覆盖</h4>
-            <strong
-              >{{ detail.evidence_count }} 条 /
-              {{ detail.source_count }} 个来源</strong
+            <strong>{{ detail.evidence_count }} 条 / {{ detail.source_count }} 个来源</strong
             ><span
               >覆盖状态：{{
                 opportunityStatus(detail.coverage_status)
@@ -690,12 +775,9 @@ onMounted(() => {
                 : opportunityStatus(detail.profit_status)
             }}</strong
             ><span v-if="profit?.latest_run?.status === 'calculated'"
-              >净利润 {{ profit.latest_run.net_profit }}
-              {{ profit.latest_run.currency }} · 规则
+              >净利润 {{ profit.latest_run.net_profit }} {{ profit.latest_run.currency }} · 规则
               {{ profit.latest_run.rule_version_code }}</span
-            ><span v-else
-              >数据不足时不生成投资回报率；缺失项在利润页逐项展示。</span
-            >
+            ><span v-else>数据不足时不生成投资回报率；缺失项在利润页逐项展示。</span>
           </article>
           <article>
             <p>风险</p>
@@ -716,7 +798,15 @@ onMounted(() => {
         <section v-else-if="tab === 'competition'" class="opportunity-section">
           <p>竞争情况</p>
           <h4>竞争对比</h4>
-          <strong>{{ downstream.competitors }} 个竞品 · {{ downstream.snapshots }} 个真实快照</strong><span v-if="downstream.snapshots">快照已经保留价格、评分、评论、采集时间和原始证据，可进入竞品工作台查看变化历史。</span><span v-else>尚未关联竞品快照；点击下方按钮即可采集公开 Amazon 商品页。</span><footer><button type="button" :disabled="busy" @click="discoverCompetitors">立即采集竞品</button><a href="/competitors">打开竞品监控详情</a></footer>
+          <strong
+            >{{ downstream.competitors }} 个竞品 · {{ downstream.snapshots }} 个真实快照</strong
+          ><span v-if="downstream.snapshots"
+            >快照已经保留价格、评分、评论、采集时间和原始证据，可进入竞品工作台查看变化历史。</span
+          ><span v-else>尚未关联竞品快照；点击下方按钮即可采集公开 Amazon 商品页。</span>
+          <footer>
+            <button type="button" :disabled="busy" @click="discoverCompetitors">立即采集竞品</button
+            ><a href="/competitors">打开竞品监控详情</a>
+          </footer>
         </section>
         <OpportunityProfitPanel
           v-else-if="tab === 'profit'"
@@ -737,18 +827,11 @@ onMounted(() => {
             <div>
               <p>智能辅助</p>
               <h4>AI 辅助分析</h4>
-              <span
-                >仅摘要、分类和缺失提示；输出不能替代事实、评分、利润或人工决策。</span
-              >
+              <span>仅摘要、分类和缺失提示；输出不能替代事实、评分、利润或人工决策。</span>
             </div>
-            <button type="button" :disabled="busy" @click="queueAi">
-              生成新分析
-            </button>
+            <button type="button" :disabled="busy" @click="queueAi">生成新分析</button>
           </header>
-          <aside>
-            所有内容均标记
-            ai_generated，并保留输入快照哈希、模型名和人工抽检状态。
-          </aside>
+          <aside>所有内容均标记 ai_generated，并保留输入快照哈希、模型名和人工抽检状态。</aside>
           <p v-if="!aiAnalyses.length" class="opportunity-empty-copy">
             尚无 AI 分析；当前机会事实未被修改。
           </p>
@@ -762,7 +845,7 @@ onMounted(() => {
                 >
               </div>
               <em v-if="item.result"
-                >智能分析 · {{ item.result.review_status === 'pending' ? '待复核' : '已复核' }}</em
+                >智能分析 · {{ item.result.review_status === "pending" ? "待复核" : "已复核" }}</em
               >
             </header>
             <template v-if="item.result"
@@ -770,34 +853,23 @@ onMounted(() => {
               <section>
                 <div>
                   <strong>分类观察</strong>
-                  <p
-                    v-for="entry in item.result.content.classifications"
-                    :key="entry.label"
-                  >
+                  <p v-for="entry in item.result.content.classifications" :key="entry.label">
                     <b>{{ entry.label }}</b
-                    >{{ entry.rationale
-                    }}<code>{{ entry.source_refs.join(" · ") }}</code>
+                    >{{ entry.rationale }}<code>{{ entry.source_refs.join(" · ") }}</code>
                   </p>
                 </div>
                 <div>
                   <strong>缺失提示</strong>
-                  <p
-                    v-for="entry in item.result.content.missing_fields"
-                    :key="entry.field"
-                  >
+                  <p v-for="entry in item.result.content.missing_fields" :key="entry.field">
                     <b>{{ entry.field }}</b
-                    >{{ entry.reason
-                    }}<code>{{ entry.source_refs.join(" · ") }}</code>
+                    >{{ entry.reason }}<code>{{ entry.source_refs.join(" · ") }}</code>
                   </p>
                 </div>
               </section>
               <footer>
                 <span>模型 {{ item.result.model_name }} · 原始输出不可改写</span
                 ><template v-if="item.result.review_status === 'pending'"
-                  ><button
-                    type="button"
-                    @click="reviewAi(item.result.id, 'approved')"
-                  >
+                  ><button type="button" @click="reviewAi(item.result.id, 'approved')">
                     抽检通过</button
                   ><button
                     type="button"
@@ -811,9 +883,7 @@ onMounted(() => {
             >
             <p v-else>
               等待 Worker；失败时显示
-              {{
-                item.last_error_code || "无错误码"
-              }}，可重新生成而不覆盖本记录。
+              {{ item.last_error_code || "无错误码" }}，可重新生成而不覆盖本记录。
             </p>
           </article>
         </section>
@@ -836,9 +906,7 @@ onMounted(() => {
             rel="noopener noreferrer"
             ><span
               ><strong>{{ item.title }}</strong
-              ><small
-                >{{ item.publisher }} · {{ freshness(item.observed_at) }}</small
-              ></span
+              ><small>{{ item.publisher }} · {{ freshness(item.observed_at) }}</small></span
             ><b>查看原文 ↗</b></a
           >
         </section>
@@ -850,18 +918,14 @@ onMounted(() => {
             </div>
             <span>{{ detail.decisions.length }} 条</span>
           </header>
-          <p v-if="!detail.decisions.length" class="opportunity-empty-copy">
-            尚无决策记录。
-          </p>
+          <p v-if="!detail.decisions.length" class="opportunity-empty-copy">尚无决策记录。</p>
           <article v-for="item in detail.decisions" :key="item.id">
             <b>{{ opportunityStatus(item.action) }}</b>
             <div>
               <strong>{{ item.reason }}</strong
               ><small
-                >{{ freshness(item.created_at) }} · 版本 v{{
-                  item.opportunity_version
-                }}
-                · 操作者 {{ item.actor_id.slice(0, 8) }}…</small
+                >{{ freshness(item.created_at) }} · 版本 v{{ item.opportunity_version }} · 操作者
+                {{ item.actor_id.slice(0, 8) }}…</small
               >
             </div>
           </article>
@@ -885,14 +949,32 @@ onMounted(() => {
         </header>
         <aside class="erp-import-guide">
           <strong>真实数据流</strong>
-          <span>浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 ai选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。</span>
+          <span
+            >浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给
+            ai选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。</span
+          >
         </aside>
-        <label>本次导入数量<input v-model.number="erpImportLimit" type="number" min="1" max="500" required /></label>
-        <label class="erp-file-fallback">没有安装助手时上传 ERP JSON<input type="file" accept=".json,application/json" @change="importErpFile" /><small>接受接口返回的 list 数组或商品数组。</small></label>
+        <label
+          >本次导入数量<input
+            v-model.number="erpImportLimit"
+            type="number"
+            min="1"
+            max="500"
+            required
+        /></label>
+        <label class="erp-file-fallback"
+          >没有安装助手时上传 ERP JSON<input
+            type="file"
+            accept=".json,application/json"
+            @change="importErpFile"
+          /><small>接受接口返回的 list 数组或商品数组。</small></label
+        >
         <footer>
           <a href="/browser-helper/scoutops-browser-helper.zip">下载浏览器助手</a>
           <button type="button" @click="showErpImport = false">取消</button>
-          <button type="submit" :disabled="busy">{{ busy ? "读取并导入中…" : "从当前浏览器读取" }}</button>
+          <button type="submit" :disabled="busy">
+            {{ busy ? "读取并导入中…" : "从当前浏览器读取" }}
+          </button>
         </footer>
       </form>
     </div>
@@ -909,29 +991,19 @@ onMounted(() => {
             <p>新候选项</p>
             <h3 id="opportunity-create-title">创建机会候选</h3>
           </div>
-          <button type="button" aria-label="关闭" @click="showCreate = false">
-            ×
-          </button>
+          <button type="button" aria-label="关闭" @click="showCreate = false">×</button>
         </header>
-        <label
-          >机会名称<input v-model="form.name" required maxlength="200"
-        /></label>
+        <label>机会名称<input v-model="form.name" required maxlength="200" /></label>
         <div>
-          <label
-            >市场<input v-model="form.market" required maxlength="40" /></label
-          ><label
-            >分类（可选）<input v-model="form.category" maxlength="80"
-          /></label>
+          <label>市场<input v-model="form.market" required maxlength="40" /></label
+          ><label>分类（可选）<input v-model="form.category" maxlength="80" /></label>
         </div>
         <label
           >来源趋势 ID（可选，只接受当前工作区主题）<input
             v-model="form.source_topic_id"
             maxlength="36"
         /></label>
-        <aside>
-          创建后由宝塔 Node Worker
-          刷新真实证据覆盖；评分、利润与风险不会自动填充。
-        </aside>
+        <aside>创建后由宝塔 Node Worker 刷新真实证据覆盖；评分、利润与风险不会自动填充。</aside>
         <footer>
           <button type="button" @click="showCreate = false">取消</button
           ><button type="submit" :disabled="busy">
@@ -961,16 +1033,10 @@ onMounted(() => {
               }}决定
             </h3>
           </div>
-          <button type="button" aria-label="关闭" @click="showDecision = false">
-            ×
-          </button>
+          <button type="button" aria-label="关闭" @click="showDecision = false">×</button>
         </header>
         <label
-          >原因（必填）<textarea
-            v-model="decisionReason"
-            required
-            maxlength="1000"
-          ></textarea>
+          >原因（必填）<textarea v-model="decisionReason" required maxlength="1000"></textarea>
         </label>
         <aside>此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。</aside>
         <footer>
