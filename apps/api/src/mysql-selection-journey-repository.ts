@@ -1,139 +1,781 @@
-import{randomUUID}from"node:crypto";
-import type{Pool,PoolConnection,RowDataPacket}from"mysql2/promise";
-import type{SelectionJourneyRepository,SelectionJourneyResult,SelectionJourneyState}from"./selection-journey-service.js";
-import{SelectionJourneyError}from"./selection-journey-service.js";
+import { randomUUID } from "node:crypto";
+import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import type {
+  SelectionJourneyRepository,
+  SelectionJourneyResult,
+  SelectionJourneyState,
+} from "./selection-journey-service.js";
+import { SelectionJourneyError } from "./selection-journey-service.js";
 
-const iso=(value:unknown)=>value==null?null:new Date(value as string|Date).toISOString();
-const json=(value:unknown)=>typeof value==="string"?JSON.parse(value):value;
-const terminal=new Set(["succeeded","succeeded_empty","completed_with_warnings","failed_terminal","dead_letter","blocked_login","blocked_captcha","blocked_robots","permission_denied"]);
-function state(row:{status:unknown;journey_state?:unknown},hasResult:boolean,hasDecision:boolean):SelectionJourneyState{
- if(hasDecision)return"decided";
- if(row.journey_state==="blocked")return"blocked";
- if(!terminal.has(String(row.status))){
-  if(["leased","running","retry_scheduled","rate_limited"].includes(String(row.status)))return"running";
-  return"accepted";
- }
- if(hasResult)return"result_ready";
- if(row.status==="succeeded_empty")return"succeeded_empty";
- if(String(row.status).startsWith("blocked_")||row.status==="permission_denied")return"blocked";
- if(["failed_terminal","dead_letter"].includes(String(row.status)))return"failed";
- return"accepted";
+const iso = (value: unknown) =>
+  value == null ? null : new Date(value as string | Date).toISOString();
+const json = (value: unknown) => (typeof value === "string" ? JSON.parse(value) : value);
+const terminal = new Set([
+  "succeeded",
+  "succeeded_empty",
+  "completed_with_warnings",
+  "failed_terminal",
+  "dead_letter",
+  "blocked_login",
+  "blocked_captcha",
+  "blocked_robots",
+  "permission_denied",
+]);
+function state(
+  row: { status: unknown; journey_state?: unknown },
+  hasResult: boolean,
+  hasDecision: boolean,
+): SelectionJourneyState {
+  if (hasDecision) return "decided";
+  if (row.journey_state === "blocked") return "blocked";
+  if (!terminal.has(String(row.status))) {
+    if (["leased", "running", "retry_scheduled", "rate_limited"].includes(String(row.status)))
+      return "running";
+    return "accepted";
+  }
+  if (hasResult) return "result_ready";
+  if (row.status === "succeeded_empty") return "succeeded_empty";
+  if (String(row.status).startsWith("blocked_") || row.status === "permission_denied")
+    return "blocked";
+  if (["failed_terminal", "dead_letter"].includes(String(row.status))) return "failed";
+  return "accepted";
 }
 
-export class MySqlSelectionJourneyRepository implements SelectionJourneyRepository{
- constructor(private readonly pool:Pool){}
- async create(i:Parameters<SelectionJourneyRepository["create"]>[0]){
-  const c=await this.pool.getConnection(),route="POST:/api/v1/selection-journeys";
-  try{
-   await c.beginTransaction();
-   const[operations]=await c.query<RowDataPacket[]>("SELECT journey_id FROM selection_journey_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",[i.actorId,route,i.idempotencyKey]);
-   if(operations[0]){await c.commit();return(await this.read(this.pool,String(operations[0].journey_id),i.organizationId,i.workspaceId,i.now))!;}
-   const[scope]=await c.query<RowDataPacket[]>("SELECT w.id FROM workspaces w JOIN organizations o ON o.id=w.organization_id WHERE w.id=? AND w.organization_id=? AND w.status='active' AND o.status='active' FOR UPDATE",[i.workspaceId,i.organizationId]);
-   if(!scope[0])throw new SelectionJourneyError("selection_scope_inactive",409,"选择活动组织与工作区后重试。");
-   const[providers]=await c.query<RowDataPacket[]>("SELECT id,code FROM providers WHERE code=? AND status='enabled' LIMIT 1 FOR UPDATE",[i.providerCode]),provider=providers[0];
-   if(!provider)throw new SelectionJourneyError("selection_source_unavailable",409,"当前真实来源未启用；请联系平台运营人员复核来源状态，成员无需进入 Provider 配置。");
-   const target={query:i.inputValue,input_kind:i.inputKind};
-   await c.query("INSERT INTO collection_tasks (id,organization_id,workspace_id,status,coverage_status,priority,scheduled_at,available_at,leased_at,lease_owner,lease_token_hash,lease_expires_at,started_at,finished_at,attempt_count,successful_subquery_count,failed_subquery_count,blocked_subquery_count,available_result_count,missing_fields_json,last_error_code,rate_limit_reset_at,replay_of_task_id,replay_reason,request_id,trace_id,version,created_by,created_at,updated_at) VALUES (?,?,?,'scheduled',NULL,'normal',?,?,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'[]',NULL,NULL,NULL,NULL,?,?,1,?,?,?)",[i.taskId,i.organizationId,i.workspaceId,i.now,i.now,i.requestId,i.traceId,i.actorId,i.now,i.now]);
-   await c.query("INSERT INTO collection_subqueries (id,task_id,organization_id,workspace_id,provider_id,ordinal,target_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,started_at,finished_at,version,created_at,updated_at) VALUES (?,?,?,?,?,1,?,1,'pending',0,'[]',NULL,0,NULL,NULL,1,?,?)",[i.subqueryId,i.taskId,i.organizationId,i.workspaceId,provider.id,JSON.stringify(target),i.now,i.now]);
-   await c.query("INSERT INTO provider_source_replay_runs (id,organization_id,workspace_id,provider_id,source_code,task_id,input_sha256,status,item_count,error_code,request_id,trace_id,created_by,created_at,updated_at) VALUES (?,?,?,?,?,?,?,'scheduled',0,NULL,?,?,?,?,?)",[randomUUID(),i.organizationId,i.workspaceId,provider.id,provider.code,i.taskId,i.inputSha256,i.requestId,i.traceId,i.actorId,i.now,i.now]);
-   await c.query("INSERT INTO collection_task_events (id,task_id,organization_id,workspace_id,event_type,from_status,to_status,actor_type,actor_id,request_id,trace_id,metadata_json,occurred_at) VALUES (?,?,?,?,?,NULL,'scheduled','user',?,?,?,?,?)",[randomUUID(),i.taskId,i.organizationId,i.workspaceId,"collection.task.scheduled",i.actorId,i.requestId,i.traceId,JSON.stringify({source_code:provider.code,selection_journey_id:i.journeyId,input_kind:i.inputKind}),i.now]);
-   await c.query("INSERT INTO collection_task_outbox (id,task_id,organization_id,workspace_id,event_type,payload_json,status,attempt_count,available_at,lease_owner,lease_expires_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,'queued',0,?,NULL,NULL,?,?,?,?)",[randomUUID(),i.taskId,i.organizationId,i.workspaceId,"collection.task.scheduled",JSON.stringify({task_id:i.taskId,source_code:provider.code,selection_journey_id:i.journeyId}),i.now,i.requestId,i.traceId,i.now,i.now]);
-   await c.query("INSERT INTO selection_journeys (id,organization_id,workspace_id,input_kind,input_value,input_sha256,provider_id,provider_code,task_id,state,opportunity_id,deadline_at,decided_at,request_id,trace_id,created_by,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,'accepted',NULL,?,NULL,?,?,?,1,?,?)",[i.journeyId,i.organizationId,i.workspaceId,i.inputKind,i.inputValue,i.inputSha256,provider.id,provider.code,i.taskId,i.deadlineAt,i.requestId,i.traceId,i.actorId,i.now,i.now]);
-   await this.event(c,i,"selection.journey.accepted",{task_id:i.taskId,input_kind:i.inputKind,deadline_ms:180000},i.now);
-   await c.query("INSERT INTO selection_journey_operations (id,actor_id,route,idempotency_key,journey_id,created_at) VALUES (?,?,?,?,?,?)",[randomUUID(),i.actorId,route,i.idempotencyKey,i.journeyId,i.now]);
-   await c.commit();return(await this.read(this.pool,i.journeyId,i.organizationId,i.workspaceId,i.now))!;
-  }catch(error){await c.rollback();if(error instanceof SelectionJourneyError)throw error;if((error as{code?:string}).code==="ER_DUP_ENTRY")throw new SelectionJourneyError("selection_journey_conflict",409,"使用原 Idempotency-Key 重试或刷新页面。");throw error;}finally{c.release();}
- }
- async get(i:Parameters<SelectionJourneyRepository["get"]>[0]){
-  const c=await this.pool.getConnection();
-  try{
-   await c.beginTransaction();
-   const[rows]=await c.query<RowDataPacket[]>(
-    "SELECT j.*,t.status task_status FROM selection_journeys j JOIN collection_tasks t ON t.id=j.task_id WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? LIMIT 1 FOR UPDATE",
-    [i.journeyId,i.organizationId,i.workspaceId]
-   );
-   const row=rows[0];
-   if(row&&["accepted","running"].includes(String(row.state))&&new Date(row.deadline_at).getTime()<=i.now.getTime()&&!terminal.has(String(row.task_status))){
-    const eventId=randomUUID(),payload=JSON.stringify({reason:"selection_deadline_exceeded",deadline_ms:180000,task_status:row.task_status});
-    await c.query("UPDATE selection_journeys SET state='blocked',version=version+1,updated_at=? WHERE id=?",[i.now,i.journeyId]);
+export class MySqlSelectionJourneyRepository implements SelectionJourneyRepository {
+  constructor(private readonly pool: Pool) {}
+  async create(i: Parameters<SelectionJourneyRepository["create"]>[0]) {
+    const c = await this.pool.getConnection(),
+      route = "POST:/api/v1/selection-journeys";
+    try {
+      await c.beginTransaction();
+      const [operations] = await c.query<RowDataPacket[]>(
+        "SELECT journey_id FROM selection_journey_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",
+        [i.actorId, route, i.idempotencyKey],
+      );
+      if (operations[0]) {
+        await c.commit();
+        return (await this.read(
+          this.pool,
+          String(operations[0].journey_id),
+          i.organizationId,
+          i.workspaceId,
+          i.now,
+        ))!;
+      }
+      const [scope] = await c.query<RowDataPacket[]>(
+        "SELECT w.id FROM workspaces w JOIN organizations o ON o.id=w.organization_id WHERE w.id=? " +
+          "AND w.organization_id=? AND w.status='active' AND o.status='active' FOR UPDATE",
+        [i.workspaceId, i.organizationId],
+      );
+      if (!scope[0])
+        throw new SelectionJourneyError(
+          "selection_scope_inactive",
+          409,
+          "选择活动组织与工作区后重试。",
+        );
+      const [providers] = await c.query<RowDataPacket[]>(
+          "SELECT id,code FROM providers WHERE code=? AND status='enabled' LIMIT 1 FOR UPDATE",
+          [i.providerCode],
+        ),
+        provider = providers[0];
+      if (!provider)
+        throw new SelectionJourneyError(
+          "selection_source_unavailable",
+          409,
+          "当前真实来源未启用；请联系平台运营人员复核来源状态，成员无需进入 Provider 配置。",
+        );
+      const target = { query: i.inputValue, input_kind: i.inputKind };
+      await c.query(
+        "INSERT INTO collection_tasks (id,organization_id,workspace_id,status,coverage_status," +
+          "priority,scheduled_at,available_at,leased_at,lease_owner,lease_token_hash," +
+          "lease_expires_at,started_at,finished_at,attempt_count,successful_subquery_count," +
+          "failed_subquery_count,blocked_subquery_count,available_result_count,missing_fields_json," +
+          "last_error_code,rate_limit_reset_at,replay_of_task_id,replay_reason,request_id," +
+          "trace_id,version,created_by,created_at,updated_at) VALUES (?,?,?,'scheduled'," +
+          "NULL,'normal',?,?,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'[]',NULL,NULL," +
+          "NULL,NULL,?,?,1,?,?,?)",
+        [
+          i.taskId,
+          i.organizationId,
+          i.workspaceId,
+          i.now,
+          i.now,
+          i.requestId,
+          i.traceId,
+          i.actorId,
+          i.now,
+          i.now,
+        ],
+      );
+      await c.query(
+        "INSERT INTO collection_subqueries (id,task_id,organization_id,workspace_id," +
+          "provider_id,ordinal,target_json,is_required,status,available_result_count," +
+          "missing_fields_json,error_code,retryable,started_at,finished_at,version," +
+          "created_at,updated_at) VALUES (?,?,?,?,?,1,?,1,'pending',0,'[]',NULL,0,NULL," +
+          "NULL,1,?,?)",
+        [
+          i.subqueryId,
+          i.taskId,
+          i.organizationId,
+          i.workspaceId,
+          provider.id,
+          JSON.stringify(target),
+          i.now,
+          i.now,
+        ],
+      );
+      await c.query(
+        "INSERT INTO provider_source_replay_runs (id,organization_id,workspace_id," +
+          "provider_id,source_code,task_id,input_sha256,status,item_count,error_code," +
+          "request_id,trace_id,created_by,created_at,updated_at) VALUES (?,?,?,?,?," +
+          "?,?,'scheduled',0,NULL,?,?,?,?,?)",
+        [
+          randomUUID(),
+          i.organizationId,
+          i.workspaceId,
+          provider.id,
+          provider.code,
+          i.taskId,
+          i.inputSha256,
+          i.requestId,
+          i.traceId,
+          i.actorId,
+          i.now,
+          i.now,
+        ],
+      );
+      await c.query(
+        "INSERT INTO collection_task_events (id,task_id,organization_id,workspace_id," +
+          "event_type,from_status,to_status,actor_type,actor_id,request_id,trace_id," +
+          "metadata_json,occurred_at) VALUES (?,?,?,?,?,NULL,'scheduled','user',?,?," +
+          "?,?,?)",
+        [
+          randomUUID(),
+          i.taskId,
+          i.organizationId,
+          i.workspaceId,
+          "collection.task.scheduled",
+          i.actorId,
+          i.requestId,
+          i.traceId,
+          JSON.stringify({
+            source_code: provider.code,
+            selection_journey_id: i.journeyId,
+            input_kind: i.inputKind,
+          }),
+          i.now,
+        ],
+      );
+      await c.query(
+        "INSERT INTO collection_task_outbox (id,task_id,organization_id,workspace_id," +
+          "event_type,payload_json,status,attempt_count,available_at,lease_owner,lease_expires_at," +
+          "request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,'queued'," +
+          "0,?,NULL,NULL,?,?,?,?)",
+        [
+          randomUUID(),
+          i.taskId,
+          i.organizationId,
+          i.workspaceId,
+          "collection.task.scheduled",
+          JSON.stringify({
+            task_id: i.taskId,
+            source_code: provider.code,
+            selection_journey_id: i.journeyId,
+          }),
+          i.now,
+          i.requestId,
+          i.traceId,
+          i.now,
+          i.now,
+        ],
+      );
+      await c.query(
+        "INSERT INTO selection_journeys (id,organization_id,workspace_id,input_kind," +
+          "input_value,input_sha256,provider_id,provider_code,task_id,state,opportunity_id," +
+          "deadline_at,decided_at,request_id,trace_id,created_by,version,created_at," +
+          "updated_at) VALUES (?,?,?,?,?,?,?,?,?,'accepted',NULL,?,NULL,?,?,?,1,?,?)",
+        [
+          i.journeyId,
+          i.organizationId,
+          i.workspaceId,
+          i.inputKind,
+          i.inputValue,
+          i.inputSha256,
+          provider.id,
+          provider.code,
+          i.taskId,
+          i.deadlineAt,
+          i.requestId,
+          i.traceId,
+          i.actorId,
+          i.now,
+          i.now,
+        ],
+      );
+      await this.event(
+        c,
+        i,
+        "selection.journey.accepted",
+        { task_id: i.taskId, input_kind: i.inputKind, deadline_ms: 180000 },
+        i.now,
+      );
+      await c.query(
+        "INSERT INTO selection_journey_operations (id,actor_id,route,idempotency_key,journey_id,created_at) VALUES (?,?,?,?,?,?)",
+        [randomUUID(), i.actorId, route, i.idempotencyKey, i.journeyId, i.now],
+      );
+      await c.commit();
+      return (await this.read(this.pool, i.journeyId, i.organizationId, i.workspaceId, i.now))!;
+    } catch (error) {
+      await c.rollback();
+      if (error instanceof SelectionJourneyError) throw error;
+      if ((error as { code?: string }).code === "ER_DUP_ENTRY")
+        throw new SelectionJourneyError(
+          "selection_journey_conflict",
+          409,
+          "使用原 Idempotency-Key 重试或刷新页面。",
+        );
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  async get(i: Parameters<SelectionJourneyRepository["get"]>[0]) {
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT j.*,t.status task_status FROM selection_journeys j JOIN collection_tasks t ON " +
+          "t.id=j.task_id WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? LIMIT 1 FOR " +
+          "UPDATE",
+        [i.journeyId, i.organizationId, i.workspaceId],
+      );
+      const row = rows[0];
+      if (
+        row &&
+        ["accepted", "running"].includes(String(row.state)) &&
+        new Date(row.deadline_at).getTime() <= i.now.getTime() &&
+        !terminal.has(String(row.task_status))
+      ) {
+        const eventId = randomUUID(),
+          payload = JSON.stringify({
+            reason: "selection_deadline_exceeded",
+            deadline_ms: 180000,
+            task_status: row.task_status,
+          });
+        await c.query(
+          "UPDATE selection_journeys SET state='blocked',version=version+1,updated_at=? WHERE id=?",
+          [i.now, i.journeyId],
+        );
+        await c.query(
+          "INSERT INTO selection_journey_events (id,journey_id,organization_id,workspace_id," +
+            "event_type,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES " +
+            "(?,?,?,?,?,'system','selection-timeout-monitor',?,?,?,?,?)",
+          [
+            eventId,
+            i.journeyId,
+            i.organizationId,
+            i.workspaceId,
+            "selection.journey.blocked",
+            row.request_id,
+            row.trace_id,
+            payload,
+            i.now,
+          ],
+        );
+        await c.query(
+          "INSERT INTO selection_journey_outbox (id,journey_id,organization_id,workspace_id," +
+            "event_type,payload_json,status,attempt_count,available_at,request_id,trace_id," +
+            "created_at,updated_at) VALUES (?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
+          [
+            eventId,
+            i.journeyId,
+            i.organizationId,
+            i.workspaceId,
+            "selection.journey.blocked",
+            payload,
+            i.now,
+            row.request_id,
+            row.trace_id,
+            i.now,
+            i.now,
+          ],
+        );
+      }
+      await c.commit();
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+    return this.read(this.pool, i.journeyId, i.organizationId, i.workspaceId, i.now);
+  }
+  async decide(i: Parameters<SelectionJourneyRepository["decide"]>[0]) {
+    const c = await this.pool.getConnection(),
+      route = `POST:/api/v1/selection-journeys/${i.journeyId}/decisions`;
+    try {
+      await c.beginTransaction();
+      const [operations] = await c.query<RowDataPacket[]>(
+        "SELECT journey_id FROM selection_journey_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",
+        [i.actorId, route, i.idempotencyKey],
+      );
+      if (operations[0]) {
+        await c.commit();
+        return (await this.read(this.pool, i.journeyId, i.organizationId, i.workspaceId, i.now))!;
+      }
+      const [rows] = await c.query<RowDataPacket[]>(
+          "SELECT j.*,t.status task_status,t.available_result_count,t.last_error_code FROM selection_journeys " +
+            "j JOIN collection_tasks t ON t.id=j.task_id AND t.organization_id=j.organization_id " +
+            "AND t.workspace_id=j.workspace_id WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? " +
+            "LIMIT 1 FOR UPDATE",
+          [i.journeyId, i.organizationId, i.workspaceId],
+        ),
+        journey = rows[0];
+      if (!journey)
+        throw new SelectionJourneyError(
+          "selection_journey_not_found",
+          404,
+          "返回真实选品入口重新创建任务。",
+        );
+      if (journey.state === "decided")
+        throw new SelectionJourneyError(
+          "selection_decision_exists",
+          409,
+          "该真实选品旅程已经完成决策。",
+        );
+      if (!terminal.has(String(journey.task_status)))
+        throw new SelectionJourneyError(
+          "selection_result_pending",
+          409,
+          "真实任务仍在处理；保持页面打开并等待结果、空结果或明确受阻状态。",
+        );
+      const hasResult = Number(journey.available_result_count) > 0;
+      if (!hasResult && i.action === "adopt")
+        throw new SelectionJourneyError(
+          "selection_adopt_without_evidence",
+          409,
+          "没有可验证结果时不能采纳；请选择继续观察或驳回。",
+        );
+      const [signals] = await c.query<RowDataPacket[]>(
+          "SELECT s.id,s.topic_id,s.title,s.provider_id,s.raw_evidence_id,s.observed_at," +
+            "t.market FROM collection_task_evidence_links l JOIN raw_evidence e ON e.id=l.raw_evidence_id " +
+            "JOIN normalized_records n ON n.id=l.normalized_record_id LEFT JOIN trend_signals s ON " +
+            "s.normalized_record_id=n.id LEFT JOIN trend_topics t ON t.id=s.topic_id WHERE l.collection_task_id=? " +
+            "AND l.organization_id=? AND l.workspace_id=? ORDER BY l.created_at,e.captured_at," +
+            "s.observed_at LIMIT 1",
+          [journey.task_id, i.organizationId, i.workspaceId],
+        ),
+        signal = signals[0];
+      let opportunityId: string | null = null;
+      if (hasResult && signal?.topic_id) {
+        const [existing] = await c.query<RowDataPacket[]>(
+          "SELECT id,decision_status,version FROM opportunities WHERE organization_id=? AND workspace_id=? " +
+            "AND source_type='trend_topic' AND source_ref_id=? LIMIT 1 FOR UPDATE",
+          [i.organizationId, i.workspaceId, signal.topic_id],
+        );
+        let opportunity: undefined | { id: string; decision_status: string; version: number } =
+          existing[0]
+            ? {
+                id: String(existing[0].id),
+                decision_status: String(existing[0].decision_status),
+                version: Number(existing[0].version),
+              }
+            : undefined;
+        if (!opportunity) {
+          opportunityId = randomUUID();
+          await c.query(
+            "INSERT INTO opportunities (id,organization_id,workspace_id,name,market,category," +
+              "source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status," +
+              "overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status," +
+              "confidence_score,evidence_count,source_count,coverage_status,score_rule_version," +
+              "scored_at,decision_status,version,created_by,created_at,updated_at) VALUES (?," +
+              "?,?,?,?,NULL,'trend_topic',?,?,'candidate','insufficient_data',NULL,NULL," +
+              "NULL,'insufficient_data','unknown','insufficient_data',NULL,0,0,'insufficient'," +
+              "NULL,NULL,'pending',1,?,?,?)",
+            [
+              opportunityId,
+              i.organizationId,
+              i.workspaceId,
+              String(signal.title).slice(0, 200),
+              signal.market ?? "US",
+              signal.topic_id,
+              i.actorId,
+              i.actorId,
+              i.now,
+              i.now,
+            ],
+          );
+          opportunity = { id: opportunityId, decision_status: "pending", version: 1 };
+        }
+        if (!opportunity)
+          throw new SelectionJourneyError(
+            "selection_opportunity_projection_failed",
+            500,
+            "刷新旅程状态后重试。",
+          );
+        opportunityId = String(opportunity.id);
+        const decisionId = randomUUID(),
+          status =
+            i.action === "adopt" ? "adopted" : i.action === "observe" ? "observing" : "rejected",
+          version = Number(opportunity.version) + 1;
+        await c.query(
+          "INSERT IGNORE INTO opportunity_evidence_links (id,organization_id,workspace_id," +
+            "opportunity_id,evidence_type,evidence_id,provider_id,raw_evidence_id,observed_at," +
+            "created_at) SELECT UUID(),s.organization_id,s.workspace_id,?,'trend_signal'," +
+            "s.id,s.provider_id,s.raw_evidence_id,s.observed_at,? FROM collection_task_evidence_links " +
+            "l JOIN normalized_records n ON n.id=l.normalized_record_id JOIN trend_signals s ON s.normalized_record_id=n.id " +
+            "WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=?",
+          [opportunityId, i.now, journey.task_id, i.organizationId, i.workspaceId],
+        );
+        await c.query(
+          "INSERT INTO opportunity_decisions (id,organization_id,workspace_id,opportunity_id," +
+            "action,reason,previous_status,resulting_status,opportunity_version,actor_id," +
+            "request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+          [
+            decisionId,
+            i.organizationId,
+            i.workspaceId,
+            opportunityId,
+            i.action,
+            i.reason,
+            opportunity.decision_status,
+            status,
+            version,
+            i.actorId,
+            i.requestId,
+            i.traceId,
+            i.now,
+          ],
+        );
+        await c.query(
+          "UPDATE opportunities SET decision_status=?,lifecycle_status=?,version=?," +
+            "evidence_count=(SELECT COUNT(*) FROM opportunity_evidence_links WHERE opportunity_id=?)," +
+            "source_count=(SELECT COUNT(DISTINCT provider_id) FROM opportunity_evidence_links WHERE " +
+            "opportunity_id=?),coverage_status='partial',updated_at=? WHERE id=?",
+          [status, status, version, opportunityId, opportunityId, i.now, opportunityId],
+        );
+        await c.query(
+          "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type," +
+            "resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json," +
+            "occurred_at) VALUES (?,?,?,?,? ,?,'user',?,?,?,?,?)",
+          [
+            randomUUID(),
+            i.organizationId,
+            i.workspaceId,
+            "opportunity.decision.changed",
+            "opportunity",
+            opportunityId,
+            i.actorId,
+            i.requestId,
+            i.traceId,
+            JSON.stringify({ action: i.action, selection_journey_id: i.journeyId }),
+            i.now,
+          ],
+        );
+      }
+      const decisionId = randomUUID();
+      await c.query(
+        "INSERT INTO selection_journey_decisions (id,journey_id,organization_id,workspace_id," +
+          "opportunity_id,action,reason,actor_id,request_id,trace_id,created_at) VALUES (?," +
+          "?,?,?,?,?,?,?,?,?,?)",
+        [
+          decisionId,
+          i.journeyId,
+          i.organizationId,
+          i.workspaceId,
+          opportunityId,
+          i.action,
+          i.reason,
+          i.actorId,
+          i.requestId,
+          i.traceId,
+          i.now,
+        ],
+      );
+      const verificationTaskId = randomUUID(),
+        verificationDueAt = new Date(i.now.getTime() + 48 * 60 * 60 * 1000);
+      const [createdVerification] = await c.query<any>(
+        "INSERT IGNORE INTO tasks (id,organization_id,workspace_id,title,description," +
+          "status,priority,assignee_id,source_type,source_ref_id,collection_task_id," +
+          "due_at,completed_at,created_by,version,created_at,updated_at) VALUES (?," +
+          "?,?,?,?,'todo','high',?,'selection_verification',?,?,?,NULL,?,1,?,?)",
+        [
+          verificationTaskId,
+          i.organizationId,
+          i.workspaceId,
+          `验证选品决策 · ${i.action}`,
+          `复核选品旅程 ${i.journeyId} 的证据、利润与风险；原决策原因：${i.reason}`.slice(0, 5000),
+          i.actorId,
+          i.journeyId,
+          journey.task_id,
+          verificationDueAt,
+          i.actorId,
+          i.now,
+          i.now,
+        ],
+      );
+      if (createdVerification.affectedRows === 1)
+        await c.query(
+          "INSERT INTO task_events (id,organization_id,workspace_id,task_id,event_type," +
+            "actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?," +
+            "?,?,?,?,?)",
+          [
+            randomUUID(),
+            i.organizationId,
+            i.workspaceId,
+            verificationTaskId,
+            "task.created",
+            i.actorId,
+            JSON.stringify({
+              source_type: "selection_verification",
+              selection_journey_id: i.journeyId,
+              opportunity_id: opportunityId,
+              collection_task_id: journey.task_id,
+            }),
+            i.requestId,
+            i.traceId,
+            i.now,
+          ],
+        );
+      await c.query(
+        "UPDATE selection_journeys SET state='decided',opportunity_id=?,decided_at=?,version=version+1,updated_at=? WHERE id=?",
+        [opportunityId, i.now, i.now, i.journeyId],
+      );
+      await this.event(
+        c,
+        { ...i, journeyId: i.journeyId },
+        "selection.journey.decided",
+        { action: i.action, opportunity_id: opportunityId, has_result: hasResult },
+        i.now,
+      );
+      await c.query(
+        "INSERT INTO selection_journey_operations (id,actor_id,route,idempotency_key,journey_id,created_at) VALUES (?,?,?,?,?,?)",
+        [randomUUID(), i.actorId, route, i.idempotencyKey, i.journeyId, i.now],
+      );
+      await c.commit();
+      return (await this.read(this.pool, i.journeyId, i.organizationId, i.workspaceId, i.now))!;
+    } catch (error) {
+      await c.rollback();
+      if (error instanceof SelectionJourneyError) throw error;
+      if ((error as { code?: string }).code === "ER_DUP_ENTRY")
+        throw new SelectionJourneyError("selection_decision_conflict", 409, "刷新旅程状态后重试。");
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  private async read(
+    db: Pool | PoolConnection,
+    id: string,
+    organizationId: string,
+    workspaceId: string,
+    now: Date,
+  ): Promise<SelectionJourneyResult | null> {
+    const [journeys, results, decisions, events, verificationTasks] = await Promise.all([
+      db.query<RowDataPacket[]>(
+        "SELECT j.*,p.owner_label,t.status task_status,t.coverage_status,t.available_result_count," +
+          "t.last_error_code,t.finished_at FROM selection_journeys j JOIN providers p ON p.id=j.provider_id " +
+          "JOIN collection_tasks t ON t.id=j.task_id AND t.organization_id=j.organization_id AND " +
+          "t.workspace_id=j.workspace_id WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? " +
+          "LIMIT 1",
+        [id, organizationId, workspaceId],
+      ),
+      db.query<RowDataPacket[]>(
+        "SELECT e.id raw_evidence_id,e.canonical_url,e.captured_at,n.payload_json," +
+          "s.title,s.publisher,s.canonical_url signal_url,s.observed_at,s.topic_id FROM selection_journeys " +
+          "j JOIN collection_task_evidence_links l ON l.collection_task_id=j.task_id AND l.organization_id=j.organization_id " +
+          "AND l.workspace_id=j.workspace_id JOIN raw_evidence e ON e.id=l.raw_evidence_id JOIN " +
+          "normalized_records n ON n.id=l.normalized_record_id LEFT JOIN trend_signals s ON s.normalized_record_id=n.id " +
+          "WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? ORDER BY l.created_at," +
+          "e.captured_at LIMIT 1",
+        [id, organizationId, workspaceId],
+      ),
+      db.query<RowDataPacket[]>(
+        "SELECT action,reason,actor_id,created_at FROM selection_journey_decisions WHERE journey_id=? " +
+          "AND organization_id=? AND workspace_id=? LIMIT 1",
+        [id, organizationId, workspaceId],
+      ),
+      db.query<RowDataPacket[]>(
+        "SELECT event_type,to_status,occurred_at FROM selection_journeys j JOIN collection_task_events " +
+          "e ON e.task_id=j.task_id WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? ORDER " +
+          "BY e.occurred_at,e.id",
+        [id, organizationId, workspaceId],
+      ),
+      db.query<RowDataPacket[]>(
+        "SELECT id FROM tasks WHERE organization_id=? AND workspace_id=? AND source_type='selection_verification' " +
+          "AND source_ref_id=? AND deleted_at IS NULL LIMIT 1",
+        [organizationId, workspaceId, id],
+      ),
+    ]);
+    const row = journeys[0][0];
+    if (!row) return null;
+    const evidence = results[0][0],
+      decision = decisions[0][0],
+      payload = evidence ? (json(evidence.payload_json) ?? {}) : {},
+      derived = state(
+        { status: row.task_status, journey_state: row.state },
+        Boolean(evidence),
+        Boolean(decision),
+      ),
+      terminalAt = row.finished_at ?? evidence?.captured_at ?? null,
+      end = decision?.created_at ?? terminalAt ?? now,
+      elapsed = Math.max(0, new Date(end).getTime() - new Date(row.created_at).getTime());
+    const taskEvents = events[0],
+      first = (statuses: string[]) =>
+        taskEvents.find((event) => statuses.includes(String(event.to_status)))?.occurred_at ?? null;
+    const queuedAt = iso(row.created_at),
+      collectingAt = iso(first(["leased", "running"])),
+      parsingAt = iso(first(["parsing", "validating", "persisted"])),
+      decisionAt = iso(decision?.created_at ?? terminalAt);
+    const blockedReason =
+      derived === "blocked" || derived === "failed"
+        ? (row.last_error_code ??
+          (row.state === "blocked" ? "selection_deadline_exceeded" : String(row.task_status)))
+        : null;
+    const nextStep =
+      blockedReason === "blocked_login"
+        ? "打开浏览器档案续期任务，续期成功后自动重放。"
+        : blockedReason === "blocked_captcha"
+          ? "由采集运营处理验证码并安全重放。"
+          : blockedReason === "blocked_robots"
+            ? "由合规负责人复核 robots 与平台条款，未获准前保持暂停。"
+            : blockedReason === "selection_deadline_exceeded"
+              ? "由采集负责人检查队列、租约和来源状态，再决定重放或取消。"
+              : blockedReason
+                ? "由来源负责人查看失败根因并选择安全重放。"
+                : null;
+    return {
+      id: String(row.id),
+      organization_id: String(row.organization_id),
+      workspace_id: String(row.workspace_id),
+      input_kind: row.input_kind,
+      input_value: String(row.input_value),
+      provider_code: String(row.provider_code),
+      task_id: String(row.task_id),
+      task_status: String(row.task_status),
+      state: derived,
+      coverage_status: row.coverage_status ?? null,
+      available_result_count: Number(row.available_result_count),
+      first_result: evidence
+        ? {
+            raw_evidence_id: String(evidence.raw_evidence_id),
+            title: evidence.title ?? payload.title ?? null,
+            publisher: evidence.publisher ?? payload.publisher ?? null,
+            canonical_url: String(evidence.signal_url ?? evidence.canonical_url),
+            observed_at: iso(evidence.observed_at ?? evidence.captured_at)!,
+            topic_id: evidence.topic_id == null ? null : String(evidence.topic_id),
+          }
+        : null,
+      blocked_reason: blockedReason,
+      blocked_owner: blockedReason ? String(row.owner_label) : null,
+      blocked_next_step: nextStep,
+      timeline: [
+        { stage: "queued", status: "completed", occurred_at: queuedAt },
+        {
+          stage: "collecting",
+          status:
+            derived === "blocked" && !collectingAt
+              ? "blocked"
+              : collectingAt
+                ? "completed"
+                : derived === "accepted"
+                  ? "waiting"
+                  : "active",
+          occurred_at: collectingAt,
+        },
+        {
+          stage: "parsing",
+          status:
+            derived === "blocked" && Boolean(collectingAt) && !parsingAt
+              ? "blocked"
+              : parsingAt
+                ? "completed"
+                : collectingAt
+                  ? "active"
+                  : "waiting",
+          occurred_at: parsingAt,
+        },
+        {
+          stage: "decision",
+          status: decision
+            ? "completed"
+            : derived === "blocked" || derived === "failed"
+              ? "blocked"
+              : terminalAt
+                ? "active"
+                : "waiting",
+          occurred_at: decisionAt,
+        },
+      ],
+      decision: decision
+        ? {
+            action: decision.action,
+            reason: String(decision.reason),
+            actor_id: String(decision.actor_id),
+            created_at: iso(decision.created_at)!,
+          }
+        : null,
+      opportunity_id: row.opportunity_id == null ? null : String(row.opportunity_id),
+      verification_task_id: verificationTasks[0][0]?.id ? String(verificationTasks[0][0].id) : null,
+      accepted_at: queuedAt!,
+      terminal_at: iso(terminalAt),
+      decided_at: iso(decision?.created_at ?? row.decided_at),
+      elapsed_ms: elapsed,
+      deadline_ms: 180000,
+      within_deadline: new Date(end).getTime() <= new Date(row.deadline_at).getTime(),
+      request_id: String(row.request_id),
+      trace_id: String(row.trace_id),
+    };
+  }
+  private async event(
+    c: PoolConnection,
+    i: {
+      journeyId: string;
+      organizationId: string;
+      workspaceId: string;
+      actorId: string;
+      requestId: string;
+      traceId: string;
+    },
+    eventType: string,
+    payload: unknown,
+    now: Date,
+  ) {
+    const id = randomUUID();
     await c.query(
-     "INSERT INTO selection_journey_events (id,journey_id,organization_id,workspace_id,event_type,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES (?,?,?,?,?,'system','selection-timeout-monitor',?,?,?,?,?)",
-     [eventId,i.journeyId,i.organizationId,i.workspaceId,"selection.journey.blocked",row.request_id,row.trace_id,payload,i.now]
+      "INSERT INTO selection_journey_events (id,journey_id,organization_id,workspace_id," +
+        "event_type,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES " +
+        "(?,?,?,?,?,'user',?,?,?,?,?)",
+      [
+        id,
+        i.journeyId,
+        i.organizationId,
+        i.workspaceId,
+        eventType,
+        i.actorId,
+        i.requestId,
+        i.traceId,
+        JSON.stringify(payload),
+        now,
+      ],
     );
     await c.query(
-     "INSERT INTO selection_journey_outbox (id,journey_id,organization_id,workspace_id,event_type,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
-     [eventId,i.journeyId,i.organizationId,i.workspaceId,"selection.journey.blocked",payload,i.now,row.request_id,row.trace_id,i.now,i.now]
+      "INSERT INTO selection_journey_outbox (id,journey_id,organization_id,workspace_id," +
+        "event_type,payload_json,status,attempt_count,available_at,request_id,trace_id," +
+        "created_at,updated_at) VALUES (?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
+      [
+        id,
+        i.journeyId,
+        i.organizationId,
+        i.workspaceId,
+        eventType,
+        JSON.stringify(payload),
+        now,
+        i.requestId,
+        i.traceId,
+        now,
+        now,
+      ],
     );
-   }
-   await c.commit();
-  }catch(error){await c.rollback();throw error;}finally{c.release();}
-  return this.read(this.pool,i.journeyId,i.organizationId,i.workspaceId,i.now);
- }
- async decide(i:Parameters<SelectionJourneyRepository["decide"]>[0]){
-  const c=await this.pool.getConnection(),route=`POST:/api/v1/selection-journeys/${i.journeyId}/decisions`;
-  try{
-   await c.beginTransaction();
-   const[operations]=await c.query<RowDataPacket[]>("SELECT journey_id FROM selection_journey_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",[i.actorId,route,i.idempotencyKey]);
-   if(operations[0]){await c.commit();return(await this.read(this.pool,i.journeyId,i.organizationId,i.workspaceId,i.now))!;}
-   const[rows]=await c.query<RowDataPacket[]>("SELECT j.*,t.status task_status,t.available_result_count,t.last_error_code FROM selection_journeys j JOIN collection_tasks t ON t.id=j.task_id AND t.organization_id=j.organization_id AND t.workspace_id=j.workspace_id WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? LIMIT 1 FOR UPDATE",[i.journeyId,i.organizationId,i.workspaceId]),journey=rows[0];
-   if(!journey)throw new SelectionJourneyError("selection_journey_not_found",404,"返回真实选品入口重新创建任务。");
-   if(journey.state==="decided")throw new SelectionJourneyError("selection_decision_exists",409,"该真实选品旅程已经完成决策。");
-   if(!terminal.has(String(journey.task_status)))throw new SelectionJourneyError("selection_result_pending",409,"真实任务仍在处理；保持页面打开并等待结果、空结果或明确受阻状态。");
-   const hasResult=Number(journey.available_result_count)>0;
-   if(!hasResult&&i.action==="adopt")throw new SelectionJourneyError("selection_adopt_without_evidence",409,"没有可验证结果时不能采纳；请选择继续观察或驳回。");
-   const[signals]=await c.query<RowDataPacket[]>("SELECT s.id,s.topic_id,s.title,s.provider_id,s.raw_evidence_id,s.observed_at,t.market FROM collection_task_evidence_links l JOIN raw_evidence e ON e.id=l.raw_evidence_id JOIN normalized_records n ON n.id=l.normalized_record_id LEFT JOIN trend_signals s ON s.normalized_record_id=n.id LEFT JOIN trend_topics t ON t.id=s.topic_id WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=? ORDER BY l.created_at,e.captured_at,s.observed_at LIMIT 1",[journey.task_id,i.organizationId,i.workspaceId]),signal=signals[0];
-   let opportunityId:string|null=null;
-   if(hasResult&&signal?.topic_id){
-    const[existing]=await c.query<RowDataPacket[]>("SELECT id,decision_status,version FROM opportunities WHERE organization_id=? AND workspace_id=? AND source_type='trend_topic' AND source_ref_id=? LIMIT 1 FOR UPDATE",[i.organizationId,i.workspaceId,signal.topic_id]);let opportunity:undefined|{id:string;decision_status:string;version:number}=existing[0]?{id:String(existing[0].id),decision_status:String(existing[0].decision_status),version:Number(existing[0].version)}:undefined;
-    if(!opportunity){opportunityId=randomUUID();await c.query("INSERT INTO opportunities (id,organization_id,workspace_id,name,market,category,source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status,overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status,confidence_score,evidence_count,source_count,coverage_status,score_rule_version,scored_at,decision_status,version,created_by,created_at,updated_at) VALUES (?,?,?,?,?,NULL,'trend_topic',?,?,'candidate','insufficient_data',NULL,NULL,NULL,'insufficient_data','unknown','insufficient_data',NULL,0,0,'insufficient',NULL,NULL,'pending',1,?,?,?)",[opportunityId,i.organizationId,i.workspaceId,String(signal.title).slice(0,200),signal.market??"US",signal.topic_id,i.actorId,i.actorId,i.now,i.now]);opportunity={id:opportunityId,decision_status:"pending",version:1};}
-    if(!opportunity)throw new SelectionJourneyError("selection_opportunity_projection_failed",500,"刷新旅程状态后重试。");opportunityId=String(opportunity.id);const decisionId=randomUUID(),status=i.action==="adopt"?"adopted":i.action==="observe"?"observing":"rejected",version=Number(opportunity.version)+1;
-    await c.query("INSERT IGNORE INTO opportunity_evidence_links (id,organization_id,workspace_id,opportunity_id,evidence_type,evidence_id,provider_id,raw_evidence_id,observed_at,created_at) SELECT UUID(),s.organization_id,s.workspace_id,?,'trend_signal',s.id,s.provider_id,s.raw_evidence_id,s.observed_at,? FROM collection_task_evidence_links l JOIN normalized_records n ON n.id=l.normalized_record_id JOIN trend_signals s ON s.normalized_record_id=n.id WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=?",[opportunityId,i.now,journey.task_id,i.organizationId,i.workspaceId]);
-    await c.query("INSERT INTO opportunity_decisions (id,organization_id,workspace_id,opportunity_id,action,reason,previous_status,resulting_status,opportunity_version,actor_id,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",[decisionId,i.organizationId,i.workspaceId,opportunityId,i.action,i.reason,opportunity.decision_status,status,version,i.actorId,i.requestId,i.traceId,i.now]);
-    await c.query("UPDATE opportunities SET decision_status=?,lifecycle_status=?,version=?,evidence_count=(SELECT COUNT(*) FROM opportunity_evidence_links WHERE opportunity_id=?),source_count=(SELECT COUNT(DISTINCT provider_id) FROM opportunity_evidence_links WHERE opportunity_id=?),coverage_status='partial',updated_at=? WHERE id=?",[status,status,version,opportunityId,opportunityId,i.now,opportunityId]);
-    await c.query("INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES (?,?,?,?,? ,?,'user',?,?,?,?,?)",[randomUUID(),i.organizationId,i.workspaceId,"opportunity.decision.changed","opportunity",opportunityId,i.actorId,i.requestId,i.traceId,JSON.stringify({action:i.action,selection_journey_id:i.journeyId}),i.now]);
-   }
-   const decisionId=randomUUID();await c.query("INSERT INTO selection_journey_decisions (id,journey_id,organization_id,workspace_id,opportunity_id,action,reason,actor_id,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",[decisionId,i.journeyId,i.organizationId,i.workspaceId,opportunityId,i.action,i.reason,i.actorId,i.requestId,i.traceId,i.now]);
-   const verificationTaskId=randomUUID(),verificationDueAt=new Date(i.now.getTime()+48*60*60*1000);
-   const[createdVerification]=await c.query<any>(
-    "INSERT IGNORE INTO tasks (id,organization_id,workspace_id,title,description,status,priority,assignee_id,source_type,source_ref_id,collection_task_id,due_at,completed_at,created_by,version,created_at,updated_at) VALUES (?,?,?,?,?,'todo','high',?,'selection_verification',?,?,?,NULL,?,1,?,?)",
-    [verificationTaskId,i.organizationId,i.workspaceId,`验证选品决策 · ${i.action}`,`复核选品旅程 ${i.journeyId} 的证据、利润与风险；原决策原因：${i.reason}`.slice(0,5000),i.actorId,i.journeyId,journey.task_id,verificationDueAt,i.actorId,i.now,i.now]
-   );
-   if(createdVerification.affectedRows===1)await c.query(
-    "INSERT INTO task_events (id,organization_id,workspace_id,task_id,event_type,actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
-    [randomUUID(),i.organizationId,i.workspaceId,verificationTaskId,"task.created",i.actorId,JSON.stringify({source_type:"selection_verification",selection_journey_id:i.journeyId,opportunity_id:opportunityId,collection_task_id:journey.task_id}),i.requestId,i.traceId,i.now]
-   );
-   await c.query("UPDATE selection_journeys SET state='decided',opportunity_id=?,decided_at=?,version=version+1,updated_at=? WHERE id=?",[opportunityId,i.now,i.now,i.journeyId]);
-   await this.event(c,{...i,journeyId:i.journeyId},"selection.journey.decided",{action:i.action,opportunity_id:opportunityId,has_result:hasResult},i.now);
-   await c.query("INSERT INTO selection_journey_operations (id,actor_id,route,idempotency_key,journey_id,created_at) VALUES (?,?,?,?,?,?)",[randomUUID(),i.actorId,route,i.idempotencyKey,i.journeyId,i.now]);
-   await c.commit();return(await this.read(this.pool,i.journeyId,i.organizationId,i.workspaceId,i.now))!;
-  }catch(error){await c.rollback();if(error instanceof SelectionJourneyError)throw error;if((error as{code?:string}).code==="ER_DUP_ENTRY")throw new SelectionJourneyError("selection_decision_conflict",409,"刷新旅程状态后重试。");throw error;}finally{c.release();}
- }
- private async read(db:Pool|PoolConnection,id:string,organizationId:string,workspaceId:string,now:Date):Promise<SelectionJourneyResult|null>{
-  const[journeys,results,decisions,events,verificationTasks]=await Promise.all([
-   db.query<RowDataPacket[]>("SELECT j.*,p.owner_label,t.status task_status,t.coverage_status,t.available_result_count,t.last_error_code,t.finished_at FROM selection_journeys j JOIN providers p ON p.id=j.provider_id JOIN collection_tasks t ON t.id=j.task_id AND t.organization_id=j.organization_id AND t.workspace_id=j.workspace_id WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? LIMIT 1",[id,organizationId,workspaceId]),
-   db.query<RowDataPacket[]>("SELECT e.id raw_evidence_id,e.canonical_url,e.captured_at,n.payload_json,s.title,s.publisher,s.canonical_url signal_url,s.observed_at,s.topic_id FROM selection_journeys j JOIN collection_task_evidence_links l ON l.collection_task_id=j.task_id AND l.organization_id=j.organization_id AND l.workspace_id=j.workspace_id JOIN raw_evidence e ON e.id=l.raw_evidence_id JOIN normalized_records n ON n.id=l.normalized_record_id LEFT JOIN trend_signals s ON s.normalized_record_id=n.id WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? ORDER BY l.created_at,e.captured_at LIMIT 1",[id,organizationId,workspaceId]),
-   db.query<RowDataPacket[]>("SELECT action,reason,actor_id,created_at FROM selection_journey_decisions WHERE journey_id=? AND organization_id=? AND workspace_id=? LIMIT 1",[id,organizationId,workspaceId]),
-   db.query<RowDataPacket[]>("SELECT event_type,to_status,occurred_at FROM selection_journeys j JOIN collection_task_events e ON e.task_id=j.task_id WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? ORDER BY e.occurred_at,e.id",[id,organizationId,workspaceId]),
-   db.query<RowDataPacket[]>("SELECT id FROM tasks WHERE organization_id=? AND workspace_id=? AND source_type='selection_verification' AND source_ref_id=? AND deleted_at IS NULL LIMIT 1",[organizationId,workspaceId,id])
-  ]);
-  const row=journeys[0][0];if(!row)return null;
-  const evidence=results[0][0],decision=decisions[0][0],payload=evidence?json(evidence.payload_json)??{}:{},derived=state({status:row.task_status,journey_state:row.state},Boolean(evidence),Boolean(decision)),terminalAt=row.finished_at??evidence?.captured_at??null,end=decision?.created_at??terminalAt??now,elapsed=Math.max(0,new Date(end).getTime()-new Date(row.created_at).getTime());
-  const taskEvents=events[0],first=(statuses:string[])=>taskEvents.find(event=>statuses.includes(String(event.to_status)))?.occurred_at??null;
-  const queuedAt=iso(row.created_at),collectingAt=iso(first(["leased","running"])),parsingAt=iso(first(["parsing","validating","persisted"])),decisionAt=iso(decision?.created_at??terminalAt);
-  const blockedReason=derived==="blocked"||derived==="failed"?row.last_error_code??(row.state==="blocked"?"selection_deadline_exceeded":String(row.task_status)):null;
-  const nextStep=blockedReason==="blocked_login"?"打开浏览器档案续期任务，续期成功后自动重放。":blockedReason==="blocked_captcha"?"由采集运营处理验证码并安全重放。":blockedReason==="blocked_robots"?"由合规负责人复核 robots 与平台条款，未获准前保持暂停。":blockedReason==="selection_deadline_exceeded"?"由采集负责人检查队列、租约和来源状态，再决定重放或取消。":blockedReason?"由来源负责人查看失败根因并选择安全重放。":null;
-  return{
-   id:String(row.id),organization_id:String(row.organization_id),workspace_id:String(row.workspace_id),input_kind:row.input_kind,input_value:String(row.input_value),provider_code:String(row.provider_code),task_id:String(row.task_id),task_status:String(row.task_status),state:derived,coverage_status:row.coverage_status??null,available_result_count:Number(row.available_result_count),
-   first_result:evidence?{raw_evidence_id:String(evidence.raw_evidence_id),title:evidence.title??payload.title??null,publisher:evidence.publisher??payload.publisher??null,canonical_url:String(evidence.signal_url??evidence.canonical_url),observed_at:iso(evidence.observed_at??evidence.captured_at)!,topic_id:evidence.topic_id==null?null:String(evidence.topic_id)}:null,
-   blocked_reason:blockedReason,blocked_owner:blockedReason?String(row.owner_label):null,blocked_next_step:nextStep,
-   timeline:[
-    {stage:"queued",status:"completed",occurred_at:queuedAt},
-    {stage:"collecting",status:derived==="blocked"&&!collectingAt?"blocked":collectingAt?"completed":derived==="accepted"?"waiting":"active",occurred_at:collectingAt},
-    {stage:"parsing",status:derived==="blocked"&&Boolean(collectingAt)&&!parsingAt?"blocked":parsingAt?"completed":collectingAt?"active":"waiting",occurred_at:parsingAt},
-    {stage:"decision",status:decision?"completed":derived==="blocked"||derived==="failed"?"blocked":terminalAt?"active":"waiting",occurred_at:decisionAt}
-   ],
-   decision:decision?{action:decision.action,reason:String(decision.reason),actor_id:String(decision.actor_id),created_at:iso(decision.created_at)!}:null,opportunity_id:row.opportunity_id==null?null:String(row.opportunity_id),verification_task_id:verificationTasks[0][0]?.id?String(verificationTasks[0][0].id):null,accepted_at:queuedAt!,terminal_at:iso(terminalAt),decided_at:iso(decision?.created_at??row.decided_at),elapsed_ms:elapsed,deadline_ms:180000,within_deadline:new Date(end).getTime()<=new Date(row.deadline_at).getTime(),request_id:String(row.request_id),trace_id:String(row.trace_id)
-  };
- }
- private async event(c:PoolConnection,i:{journeyId:string;organizationId:string;workspaceId:string;actorId:string;requestId:string;traceId:string},eventType:string,payload:unknown,now:Date){const id=randomUUID();await c.query("INSERT INTO selection_journey_events (id,journey_id,organization_id,workspace_id,event_type,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES (?,?,?,?,?,'user',?,?,?,?,?)",[id,i.journeyId,i.organizationId,i.workspaceId,eventType,i.actorId,i.requestId,i.traceId,JSON.stringify(payload),now]);await c.query("INSERT INTO selection_journey_outbox (id,journey_id,organization_id,workspace_id,event_type,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,'queued',0,?,?,?,?,?)",[id,i.journeyId,i.organizationId,i.workspaceId,eventType,JSON.stringify(payload),now,i.requestId,i.traceId,now,now]);}
+  }
 }

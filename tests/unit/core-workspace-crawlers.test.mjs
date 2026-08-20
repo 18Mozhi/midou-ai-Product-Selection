@@ -211,7 +211,10 @@ test("sourcing lists show opportunity names while retaining internal trace ids",
     readFile("apps/api/src/mysql-sourcing-repository.ts", "utf8"),
     readFile("apps/web/src/components/SourcingWorkspace.vue", "utf8"),
   ]);
-  assert.match(repository, /COALESCE\(o\.name,s\.input_ref\) ELSE s\.input_ref END display_name/);
+  assert.match(
+    repository,
+    /COALESCE\(o\.name,s\.input_ref\) ELSE (?:(?:["'`]\s*\+\s*["'`])?)s\.input_ref END display_name/,
+  );
   assert.match(repository, /CONVERT\(o\.id USING utf8mb4\) COLLATE utf8mb4_unicode_ci/);
   assert.match(workspace, /searchName\(item\)[\s\S]*机会编号 \{\{ selected\.input_ref \}\}/);
   assert.match(workspace, /opportunity: "选品机会"[\s\S]*succeeded_empty: "未找到可用候选"/);

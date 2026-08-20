@@ -1,16 +1,11 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
-import {
-  ApprovalServiceError,
-  type ApprovalRepository,
-} from "./approval-service.js";
+import { ApprovalServiceError, type ApprovalRepository } from "./approval-service.js";
 
 const parse = <T>(value: unknown): T =>
   typeof value === "string" ? JSON.parse(value) : (value as T);
 const iso = (value: unknown) =>
-  value == null
-    ? null
-    : (value instanceof Date ? value : new Date(String(value))).toISOString();
+  value == null ? null : (value instanceof Date ? value : new Date(String(value))).toISOString();
 
 export class MySqlApprovalRepository implements ApprovalRepository {
   constructor(
@@ -20,7 +15,10 @@ export class MySqlApprovalRepository implements ApprovalRepository {
 
   async listTemplates(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT t.*,COUNT(n.id) node_count FROM approval_templates t LEFT JOIN approval_template_versions v ON v.template_id=t.id AND v.version_number=t.current_version LEFT JOIN approval_template_nodes n ON n.template_version_id=v.id WHERE t.organization_id=? AND t.workspace_id=? GROUP BY t.id ORDER BY t.updated_at DESC",
+      "SELECT t.*,COUNT(n.id) node_count FROM approval_templates t LEFT JOIN approval_template_versions " +
+        "v ON v.template_id=t.id AND v.version_number=t.current_version LEFT JOIN approval_template_nodes " +
+        "n ON n.template_version_id=v.id WHERE t.organization_id=? AND t.workspace_id=? GROUP " +
+        "BY t.id ORDER BY t.updated_at DESC",
       [i.organizationId, i.workspaceId],
     );
     return rows.map((row) => ({
@@ -40,23 +38,17 @@ export class MySqlApprovalRepository implements ApprovalRepository {
     const previous = await this.operation(i);
     if (previous) return previous;
     for (const node of i.value.nodes) {
-      await this.ensureMember(
-        i.organizationId,
-        i.workspaceId,
-        node.approver_id,
-      );
-      await this.ensureMember(
-        i.organizationId,
-        i.workspaceId,
-        node.escalation_assignee_id,
-      );
+      await this.ensureMember(i.organizationId, i.workspaceId, node.approver_id);
+      await this.ensureMember(i.organizationId, i.workspaceId, node.escalation_assignee_id);
     }
     const connection = await this.pool.getConnection(),
       now = this.now();
     try {
       await connection.beginTransaction();
       await connection.query(
-        "INSERT INTO approval_templates (id,organization_id,workspace_id,name,resource_type,status,current_version,revision,created_by,created_at,updated_at) VALUES (?,?,?,?,?,'draft',1,1,?,?,?)",
+        "INSERT INTO approval_templates (id,organization_id,workspace_id,name,resource_type," +
+          "status,current_version,revision,created_by,created_at,updated_at) VALUES (?," +
+          "?,?,?,?,'draft',1,1,?,?,?)",
         [
           i.id,
           i.organizationId,
@@ -69,12 +61,16 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         ],
       );
       await connection.query(
-        "INSERT INTO approval_template_versions (id,template_id,organization_id,workspace_id,version_number,status,created_by,created_at) VALUES (?,?,?,?,1,'draft',?,?)",
+        "INSERT INTO approval_template_versions (id,template_id,organization_id,workspace_id," +
+          "version_number,status,created_by,created_at) VALUES (?,?,?,?,1,'draft',?," +
+          "?)",
         [i.versionId, i.id, i.organizationId, i.workspaceId, i.actorId, now],
       );
       for (const node of i.value.nodes)
         await connection.query(
-          "INSERT INTO approval_template_nodes (id,template_version_id,organization_id,workspace_id,ordinal,name,approver_id,sla_minutes,escalation_assignee_id) VALUES (?,?,?,?,?,?,?,?,?)",
+          "INSERT INTO approval_template_nodes (id,template_version_id,organization_id," +
+            "workspace_id,ordinal,name,approver_id,sla_minutes,escalation_assignee_id) VALUES (?," +
+            "?,?,?,?,?,?,?,?)",
           [
             randomUUID(),
             i.versionId,
@@ -126,17 +122,9 @@ export class MySqlApprovalRepository implements ApprovalRepository {
       );
       const row = rows[0];
       if (!row)
-        throw new ApprovalServiceError(
-          "approval_template_not_found",
-          404,
-          "刷新模板列表。",
-        );
+        throw new ApprovalServiceError("approval_template_not_found", 404, "刷新模板列表。");
       if (Number(row.revision) !== i.expectedRevision)
-        throw new ApprovalServiceError(
-          "approval_version_conflict",
-          409,
-          "刷新模板后重试。",
-        );
+        throw new ApprovalServiceError("approval_version_conflict", 409, "刷新模板后重试。");
       if (row.status !== "draft")
         throw new ApprovalServiceError(
           "approval_template_state_invalid",
@@ -197,7 +185,9 @@ export class MySqlApprovalRepository implements ApprovalRepository {
     }
     if (i.mine) {
       where.push(
-        "(r.requested_by=? OR EXISTS(SELECT 1 FROM approval_node_runs nr WHERE nr.approval_request_id=r.id AND nr.active_approver_id=? AND nr.status='pending'))",
+        "(r.requested_by=? OR EXISTS(SELECT 1 FROM approval_node_runs nr " +
+          "WHERE nr.approval_request_id=r.id AND nr.active_approver_id=? " +
+          "AND nr.status='pending'))",
       );
       args.push(i.actorId, i.actorId);
     }
@@ -206,7 +196,14 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         args,
       ),
       [rows] = await this.pool.query<RowDataPacket[]>(
-        `SELECT r.*,t.name template_name,n.name current_node_name,n.active_approver_id,n.due_at,n.escalated_at FROM approval_requests r JOIN approval_templates t ON t.id=r.template_id LEFT JOIN approval_node_runs n ON n.approval_request_id=r.id AND n.ordinal=r.current_node_ordinal WHERE ${where.join(" AND ")} ORDER BY (r.status='pending') DESC,r.updated_at DESC LIMIT ? OFFSET ?`,
+        `SELECT r.*,t.name template_name,n.name current_node_name,
+          n.active_approver_id,n.due_at,n.escalated_at
+         FROM approval_requests r
+         JOIN approval_templates t ON t.id=r.template_id
+         LEFT JOIN approval_node_runs n ON n.approval_request_id=r.id
+          AND n.ordinal=r.current_node_ordinal
+         WHERE ${where.join(" AND ")}
+         ORDER BY (r.status='pending') DESC,r.updated_at DESC LIMIT ? OFFSET ?`,
         [...args, i.pageSize, (i.page - 1) * i.pageSize],
       );
     return {
@@ -219,40 +216,30 @@ export class MySqlApprovalRepository implements ApprovalRepository {
 
   async detail(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT r.*,t.name template_name,v.version_number rule_version,n.name current_node_name,n.active_approver_id,n.due_at,n.escalated_at FROM approval_requests r JOIN approval_templates t ON t.id=r.template_id JOIN approval_template_versions v ON v.id=r.template_version_id LEFT JOIN approval_node_runs n ON n.approval_request_id=r.id AND n.ordinal=r.current_node_ordinal WHERE r.id=? AND r.organization_id=? AND r.workspace_id=?",
+      "SELECT r.*,t.name template_name,v.version_number rule_version,n.name current_node_name," +
+        "n.active_approver_id,n.due_at,n.escalated_at FROM approval_requests r JOIN approval_templates " +
+        "t ON t.id=r.template_id JOIN approval_template_versions v ON v.id=r.template_version_id " +
+        "LEFT JOIN approval_node_runs n ON n.approval_request_id=r.id AND n.ordinal=r.current_node_ordinal " +
+        "WHERE r.id=? AND r.organization_id=? AND r.workspace_id=?",
       [i.requestIdValue, i.organizationId, i.workspaceId],
     );
     if (!rows[0])
-      throw new ApprovalServiceError(
-        "approval_request_not_found",
-        404,
-        "刷新审批列表。",
-      );
+      throw new ApprovalServiceError("approval_request_not_found", 404, "刷新审批列表。");
     const [nodes] = await this.pool.query<RowDataPacket[]>(
-        `SELECT n.*,
-                approver_profile.display_name active_approver_name,
-                decided_profile.display_name decided_by_name
-         FROM approval_node_runs n
-         LEFT JOIN user_profiles approver_profile
-           ON approver_profile.user_id=n.active_approver_id
-         LEFT JOIN user_profiles decided_profile
-           ON decided_profile.user_id=n.decided_by
-         WHERE n.approval_request_id=?
-           AND n.organization_id=?
-           AND n.workspace_id=?
-         ORDER BY n.ordinal`,
+        "SELECT n.*,\n                approver_profile.display_name active_approver_name," +
+          "\n                decided_profile.display_name decided_by_name\n         FROM approval_node_runs " +
+          "n\n         LEFT JOIN user_profiles approver_profile\n           ON approver_profile.user_id=n.active_approver_id\n" +
+          "         LEFT JOIN user_profiles decided_profile\n           ON decided_profile.user_id=n.decided_by\n" +
+          "         WHERE n.approval_request_id=?\n           AND n.organization_id=?\n          " +
+          " AND n.workspace_id=?\n         ORDER BY n.ordinal",
         [i.requestIdValue, i.organizationId, i.workspaceId],
       ),
       [actions] = await this.pool.query<RowDataPacket[]>(
-        `SELECT a.id,a.node_run_id,a.action,a.reason,a.actor_id,a.created_at,
-                actor_profile.display_name actor_name
-         FROM approval_actions a
-         LEFT JOIN user_profiles actor_profile
-           ON actor_profile.user_id=a.actor_id
-         WHERE a.approval_request_id=?
-           AND a.organization_id=?
-           AND a.workspace_id=?
-         ORDER BY a.created_at,a.id`,
+        "SELECT a.id,a.node_run_id,a.action,a.reason,a.actor_id,a.created_at,\n               " +
+          " actor_profile.display_name actor_name\n         FROM approval_actions a\n         LEFT " +
+          "JOIN user_profiles actor_profile\n           ON actor_profile.user_id=a.actor_id\n    " +
+          "     WHERE a.approval_request_id=?\n           AND a.organization_id=?\n           AND " +
+          "a.workspace_id=?\n         ORDER BY a.created_at,a.id",
         [i.requestIdValue, i.organizationId, i.workspaceId],
       );
     const approvalTemplateVersion = Number(rows[0].rule_version),
@@ -288,9 +275,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         due_at: iso(r.due_at),
         escalated_at: iso(r.escalated_at),
         decided_by: r.decided_by ? String(r.decided_by) : null,
-        decided_by_name: r.decided_by_name
-          ? String(r.decided_by_name)
-          : null,
+        decided_by_name: r.decided_by_name ? String(r.decided_by_name) : null,
         decision_reason: r.decision_reason ? String(r.decision_reason) : null,
         decided_at: iso(r.decided_at),
         version: Number(r.version),
@@ -315,28 +300,22 @@ export class MySqlApprovalRepository implements ApprovalRepository {
     try {
       await connection.beginTransaction();
       const [templates] = await connection.query<RowDataPacket[]>(
-        "SELECT t.*,v.id version_id FROM approval_templates t JOIN approval_template_versions v ON v.template_id=t.id AND v.version_number=t.current_version AND v.status='published' WHERE t.id=? AND t.organization_id=? AND t.workspace_id=? AND t.status='published' FOR UPDATE",
+        "SELECT t.*,v.id version_id FROM approval_templates t JOIN approval_template_versions " +
+          "v ON v.template_id=t.id AND v.version_number=t.current_version AND v.status='published' " +
+          "WHERE t.id=? AND t.organization_id=? AND t.workspace_id=? AND t.status='published' FOR " +
+          "UPDATE",
         [i.value.template_id, i.organizationId, i.workspaceId],
       );
       const template = templates[0];
       if (!template)
-        throw new ApprovalServiceError(
-          "approval_template_not_published",
-          409,
-          "选择已发布模板。",
-        );
+        throw new ApprovalServiceError("approval_template_not_published", 409, "选择已发布模板。");
       if (template.resource_type !== i.value.resource_type)
         throw new ApprovalServiceError(
           "approval_resource_type_mismatch",
           409,
           "选择与资源类型一致的模板。",
         );
-      await this.ensureResource(
-        connection,
-        i,
-        i.value.resource_type,
-        i.value.resource_id,
-      );
+      await this.ensureResource(connection, i, i.value.resource_type, i.value.resource_id);
       const decisionContext = await this.loadDecisionContext(
         connection,
         {
@@ -354,13 +333,12 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         [template.version_id],
       );
       if (!nodes.length)
-        throw new ApprovalServiceError(
-          "approval_nodes_invalid",
-          409,
-          "模板没有审批节点。",
-        );
+        throw new ApprovalServiceError("approval_nodes_invalid", 409, "模板没有审批节点。");
       await connection.query(
-        "INSERT INTO approval_requests (id,organization_id,workspace_id,template_id,template_version_id,resource_type,resource_id,title,decision_context_json,status,current_node_ordinal,requested_by,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,'pending',1,?,1,?,?)",
+        "INSERT INTO approval_requests (id,organization_id,workspace_id,template_id," +
+          "template_version_id,resource_type,resource_id,title,decision_context_json," +
+          "status,current_node_ordinal,requested_by,version,created_at,updated_at) VALUES (?," +
+          "?,?,?,?,?,?,?,?,'pending',1,?,1,?,?)",
         [
           i.id,
           i.organizationId,
@@ -379,11 +357,12 @@ export class MySqlApprovalRepository implements ApprovalRepository {
       for (const node of nodes) {
         const runId = randomUUID(),
           pending = Number(node.ordinal) === 1,
-          due = pending
-            ? new Date(now.valueOf() + Number(node.sla_minutes) * 60000)
-            : null;
+          due = pending ? new Date(now.valueOf() + Number(node.sla_minutes) * 60000) : null;
         await connection.query(
-          "INSERT INTO approval_node_runs (id,approval_request_id,organization_id,workspace_id,template_node_id,ordinal,name,approver_id,active_approver_id,escalation_assignee_id,status,due_at,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?, ?,1,?,?)",
+          "INSERT INTO approval_node_runs (id,approval_request_id,organization_id,workspace_id," +
+            "template_node_id,ordinal,name,approver_id,active_approver_id,escalation_assignee_id," +
+            "status,due_at,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?," +
+            "?, ?,1,?,?)",
           [
             runId,
             i.id,
@@ -401,8 +380,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
             now,
           ],
         );
-        if (pending)
-          await this.insertJob(connection, i, i.id, runId, due!, now);
+        if (pending) await this.insertJob(connection, i, i.id, runId, due!, now);
       }
       const result = {
         id: i.id,
@@ -450,60 +428,32 @@ export class MySqlApprovalRepository implements ApprovalRepository {
       );
       const request = requests[0];
       if (!request)
-        throw new ApprovalServiceError(
-          "approval_request_not_found",
-          404,
-          "刷新审批列表。",
-        );
+        throw new ApprovalServiceError("approval_request_not_found", 404, "刷新审批列表。");
       if (request.status !== "pending")
-        throw new ApprovalServiceError(
-          "approval_request_state_invalid",
-          409,
-          "审批单已结束。",
-        );
+        throw new ApprovalServiceError("approval_request_state_invalid", 409, "审批单已结束。");
       if (Number(request.version) !== i.value.expected_version)
-        throw new ApprovalServiceError(
-          "approval_version_conflict",
-          409,
-          "刷新审批单后重试。",
-        );
+        throw new ApprovalServiceError("approval_version_conflict", 409, "刷新审批单后重试。");
       const [runs] = await connection.query<RowDataPacket[]>(
-        "SELECT * FROM approval_node_runs WHERE approval_request_id=? AND ordinal=? AND organization_id=? AND workspace_id=? FOR UPDATE",
-        [
-          i.requestIdValue,
-          request.current_node_ordinal,
-          i.organizationId,
-          i.workspaceId,
-        ],
+        "SELECT * FROM approval_node_runs WHERE approval_request_id=? AND ordinal=? AND organization_id=? " +
+          "AND workspace_id=? FOR UPDATE",
+        [i.requestIdValue, request.current_node_ordinal, i.organizationId, i.workspaceId],
       );
       const run = runs[0];
       if (!run || run.status !== "pending")
-        throw new ApprovalServiceError(
-          "approval_node_state_invalid",
-          409,
-          "当前节点不可审批。",
-        );
+        throw new ApprovalServiceError("approval_node_state_invalid", 409, "当前节点不可审批。");
       if (String(run.active_approver_id) !== i.actorId)
-        throw new ApprovalServiceError(
-          "approval_actor_forbidden",
-          403,
-          "由当前节点审批人处理。",
-        );
+        throw new ApprovalServiceError("approval_actor_forbidden", 403, "由当前节点审批人处理。");
       const approved = i.value.action === "approve",
         version = Number(request.version) + 1;
       await connection.query(
-        "UPDATE approval_node_runs SET status=?,decided_by=?,decision_reason=?,decided_at=?,version=version+1,updated_at=? WHERE id=?",
-        [
-          approved ? "approved" : "rejected",
-          i.actorId,
-          i.value.reason,
-          now,
-          now,
-          run.id,
-        ],
+        "UPDATE approval_node_runs SET status=?,decided_by=?,decision_reason=?,decided_at=?," +
+          "version=version+1,updated_at=? WHERE id=?",
+        [approved ? "approved" : "rejected", i.actorId, i.value.reason, now, now, run.id],
       );
       await connection.query(
-        "INSERT INTO approval_actions (id,organization_id,workspace_id,approval_request_id,node_run_id,action,reason,actor_id,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO approval_actions (id,organization_id,workspace_id,approval_request_id," +
+          "node_run_id,action,reason,actor_id,request_id,trace_id,created_at) VALUES (?," +
+          "?,?,?,?,?,?,?,?,?,?)",
         [
           randomUUID(),
           i.organizationId,
@@ -523,7 +473,8 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         completed: any = now;
       if (approved) {
         const [nextRows] = await connection.query<RowDataPacket[]>(
-          "SELECT r.*,n.sla_minutes FROM approval_node_runs r JOIN approval_template_nodes n ON n.id=r.template_node_id WHERE r.approval_request_id=? AND r.ordinal=? FOR UPDATE",
+          "SELECT r.*,n.sla_minutes FROM approval_node_runs r JOIN approval_template_nodes n ON " +
+            "n.id=r.template_node_id WHERE r.approval_request_id=? AND r.ordinal=? FOR UPDATE",
           [i.requestIdValue, ordinal + 1],
         );
         const next = nextRows[0];
@@ -531,21 +482,12 @@ export class MySqlApprovalRepository implements ApprovalRepository {
           status = "pending";
           ordinal++;
           completed = null;
-          const due = new Date(
-            now.valueOf() + Number(next.sla_minutes) * 60000,
-          );
+          const due = new Date(now.valueOf() + Number(next.sla_minutes) * 60000);
           await connection.query(
             "UPDATE approval_node_runs SET status='pending',due_at=?,updated_at=? WHERE id=?",
             [due, now, next.id],
           );
-          await this.insertJob(
-            connection,
-            i,
-            i.requestIdValue,
-            String(next.id),
-            due,
-            now,
-          );
+          await this.insertJob(connection, i, i.requestIdValue, String(next.id), due, now);
         } else status = "approved";
       }
       await connection.query(
@@ -588,15 +530,9 @@ export class MySqlApprovalRepository implements ApprovalRepository {
       title: String(r.title),
       status: String(r.status),
       current_node_ordinal: Number(r.current_node_ordinal),
-      current_node_name: r.current_node_name
-        ? String(r.current_node_name)
-        : null,
-      active_approver_id: r.active_approver_id
-        ? String(r.active_approver_id)
-        : null,
-      can_decide:
-        r.status === "pending" &&
-        String(r.active_approver_id ?? "") === actorId,
+      current_node_name: r.current_node_name ? String(r.current_node_name) : null,
+      active_approver_id: r.active_approver_id ? String(r.active_approver_id) : null,
+      can_decide: r.status === "pending" && String(r.active_approver_id ?? "") === actorId,
       due_at: iso(r.due_at),
       escalated_at: iso(r.escalated_at),
       requested_by: String(r.requested_by),
@@ -620,12 +556,10 @@ export class MySqlApprovalRepository implements ApprovalRepository {
   ) {
     if (input.resourceType === "task") {
       const [rows] = await queryable.query(
-          `SELECT t.title,t.status,t.priority,t.progress_percent,t.due_at,
-                  profile.display_name assignee_name
-           FROM tasks t
-           LEFT JOIN user_profiles profile ON profile.user_id=t.assignee_id
-           WHERE t.id=? AND t.organization_id=? AND t.workspace_id=?
-           LIMIT 1`,
+          "SELECT t.title,t.status,t.priority,t.progress_percent,t.due_at,\n                  profile.display_name " +
+            "assignee_name\n           FROM tasks t\n           LEFT JOIN user_profiles profile ON " +
+            "profile.user_id=t.assignee_id\n           WHERE t.id=? AND t.organization_id=? AND t.workspace_id=?\n" +
+            "           LIMIT 1",
           [input.resourceId, input.organizationId, input.workspaceId],
         ),
         task = rows[0];
@@ -668,9 +602,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
               {
                 code: "task_assignee",
                 label: "任务负责人",
-                value: task.assignee_name
-                  ? String(task.assignee_name)
-                  : "未设置展示名称",
+                value: task.assignee_name ? String(task.assignee_name) : "未设置展示名称",
               },
               {
                 code: "task_due_at",
@@ -687,16 +619,12 @@ export class MySqlApprovalRepository implements ApprovalRepository {
       };
     }
     const [decisionRows] = await queryable.query(
-        `SELECT d.action,d.reason,d.opportunity_version,d.created_at decision_created_at,
-                o.id opportunity_id,o.name opportunity_name,o.recommendation_status,
-                o.risk_level,o.score_rule_version
-         FROM opportunity_decisions d
-         JOIN opportunities o
-           ON o.id=d.opportunity_id
-          AND o.organization_id=d.organization_id
-          AND o.workspace_id=d.workspace_id
-         WHERE d.id=? AND d.organization_id=? AND d.workspace_id=?
-         LIMIT 1`,
+        "SELECT d.action,d.reason,d.opportunity_version,d.created_at decision_created_at," +
+          "\n                o.id opportunity_id,o.name opportunity_name,o.recommendation_status," +
+          "\n                o.risk_level,o.score_rule_version\n         FROM opportunity_decisions " +
+          "d\n         JOIN opportunities o\n           ON o.id=d.opportunity_id\n          AND o.organization_id=d.organization_id\n" +
+          "          AND o.workspace_id=d.workspace_id\n         WHERE d.id=? AND d.organization_id=? " +
+          "AND d.workspace_id=?\n         LIMIT 1",
         [input.resourceId, input.organizationId, input.workspaceId],
       ),
       decision = decisionRows[0];
@@ -707,26 +635,22 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         "关联机会决策不存在，请刷新审批列表。",
       );
     const [scoreRows] = await queryable.query(
-        `SELECT status,coverage_percent,recommendation_status,
-                rule_version_code,missing_fields_json,scored_at
-         FROM opportunity_score_runs
-         WHERE opportunity_id=? AND organization_id=? AND workspace_id=?
-         ORDER BY scored_at DESC,id DESC
-         LIMIT 1`,
+        "SELECT status,coverage_percent,recommendation_status,\n                rule_version_code," +
+          "missing_fields_json,scored_at\n         FROM opportunity_score_runs\n         WHERE opportunity_id=? " +
+          "AND organization_id=? AND workspace_id=?\n         ORDER BY scored_at DESC," +
+          "id DESC\n         LIMIT 1",
         [decision.opportunity_id, input.organizationId, input.workspaceId],
       ),
       [profitRows] = await queryable.query(
-        `SELECT status,rule_version_code,missing_fields_json,calculated_at
-         FROM opportunity_profit_runs
-         WHERE opportunity_id=? AND organization_id=? AND workspace_id=?
-         ORDER BY calculated_at DESC,id DESC
-         LIMIT 1`,
+        "SELECT status,rule_version_code,missing_fields_json,calculated_at\n         FROM opportunity_profit_runs\n" +
+          "         WHERE opportunity_id=? AND organization_id=? AND workspace_id=?\n         ORDER " +
+          "BY calculated_at DESC,id DESC\n         LIMIT 1",
         [decision.opportunity_id, input.organizationId, input.workspaceId],
       ),
       [evidenceRows] = await queryable.query(
-        `SELECT COUNT(*) evidence_count,COUNT(DISTINCT provider_id) source_count
-         FROM opportunity_evidence_links
-         WHERE opportunity_id=? AND organization_id=? AND workspace_id=?`,
+        "SELECT COUNT(*) evidence_count,COUNT(DISTINCT provider_id) source_count\n         FROM " +
+          "opportunity_evidence_links\n         WHERE opportunity_id=? AND organization_id=? AND " +
+          "workspace_id=?",
         [decision.opportunity_id, input.organizationId, input.workspaceId],
       ),
       score = scoreRows[0],
@@ -734,9 +658,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
       evidenceCount = Number(evidenceRows[0]?.evidence_count ?? 0),
       sourceCount = Number(evidenceRows[0]?.source_count ?? 0),
       scoreMissing = score ? parse<string[]>(score.missing_fields_json) : [],
-      profitMissing = profit
-        ? parse<string[]>(profit.missing_fields_json)
-        : [],
+      profitMissing = profit ? parse<string[]>(profit.missing_fields_json) : [],
       requirements = [
         {
           code: "market_evidence",
@@ -777,17 +699,13 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         },
       ],
       complete = requirements.filter((item) => item.complete).length,
-      missingItems = requirements
-        .filter((item) => !item.complete)
-        .map((item) => item.label),
+      missingItems = requirements.filter((item) => !item.complete).map((item) => item.label),
       scoreVersion = score?.rule_version_code
         ? String(score.rule_version_code)
         : decision.score_rule_version
           ? String(decision.score_rule_version)
           : null,
-      profitVersion = profit?.rule_version_code
-        ? String(profit.rule_version_code)
-        : null;
+      profitVersion = profit?.rule_version_code ? String(profit.rule_version_code) : null;
     return {
       schema_version: 1,
       snapshot_status: snapshotStatus,
@@ -829,9 +747,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         {
           code: "system_recommendation",
           label: "系统建议",
-          value: String(
-            score?.recommendation_status ?? decision.recommendation_status,
-          ),
+          value: String(score?.recommendation_status ?? decision.recommendation_status),
         },
         {
           code: "score_coverage",
@@ -868,7 +784,9 @@ export class MySqlApprovalRepository implements ApprovalRepository {
   }
   private async ensureMember(org: string, workspace: string, user: string) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT m.id FROM memberships m LEFT JOIN membership_data_scopes s ON s.membership_id=m.id WHERE m.organization_id=? AND m.user_id=? AND m.status='active' AND (s.scope_type='organization' OR (s.scope_type='workspace' AND s.workspace_id=?)) LIMIT 1",
+      "SELECT m.id FROM memberships m LEFT JOIN membership_data_scopes s ON s.membership_id=m.id " +
+        "WHERE m.organization_id=? AND m.user_id=? AND m.status='active' AND (s.scope_type='organization' " +
+        "OR (s.scope_type='workspace' AND s.workspace_id=?)) LIMIT 1",
       [org, user, workspace],
     );
     if (!rows[0])
@@ -878,12 +796,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         "选择可访问当前工作区的活动成员。",
       );
   }
-  private async ensureResource(
-    c: PoolConnection,
-    i: any,
-    type: string,
-    id: string,
-  ) {
+  private async ensureResource(c: PoolConnection, i: any, type: string, id: string) {
     const table = type === "task" ? "tasks" : "opportunity_decisions";
     const [rows] = await c.query<RowDataPacket[]>(
       `SELECT id FROM ${table} WHERE id=? AND organization_id=? AND workspace_id=?`,
@@ -903,24 +816,11 @@ export class MySqlApprovalRepository implements ApprovalRepository {
     );
     return rows[0] ? parse(rows[0].result_json) : null;
   }
-  private save(
-    c: PoolConnection,
-    i: any,
-    id: string,
-    result: unknown,
-    now: Date,
-  ) {
+  private save(c: PoolConnection, i: any, id: string, result: unknown, now: Date) {
     return c.query(
-      "INSERT INTO approval_operations (id,actor_id,route_key,idempotency_key,resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
-      [
-        randomUUID(),
-        i.actorId,
-        i.route,
-        i.idempotencyKey,
-        id,
-        JSON.stringify(result),
-        now,
-      ],
+      "INSERT INTO approval_operations (id,actor_id,route_key,idempotency_key,resource_id," +
+        "result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+      [randomUUID(), i.actorId, i.route, i.idempotencyKey, id, JSON.stringify(result), now],
     );
   }
   private insertJob(
@@ -932,7 +832,9 @@ export class MySqlApprovalRepository implements ApprovalRepository {
     now: Date,
   ) {
     return c.query(
-      "INSERT INTO approval_escalation_jobs (id,organization_id,workspace_id,approval_request_id,node_run_id,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
+      "INSERT INTO approval_escalation_jobs (id,organization_id,workspace_id,approval_request_id," +
+        "node_run_id,status,attempt_count,available_at,request_id,trace_id,created_at," +
+        "updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
       [
         randomUUID(),
         i.organizationId,
@@ -957,7 +859,9 @@ export class MySqlApprovalRepository implements ApprovalRepository {
     now: Date,
   ) {
     await c.query(
-      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,?,?,?,?,?,?,?,1)",
+      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action," +
+        "resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at," +
+        "schema_version) VALUES (?,?,?,?,?,?,?,?,?,?,?,1)",
       [
         randomUUID(),
         i.organizationId,
@@ -973,7 +877,9 @@ export class MySqlApprovalRepository implements ApprovalRepository {
       ],
     );
     await c.query(
-      "INSERT INTO outbox_events (id,organization_id,workspace_id,event_type,schema_version,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at,version) VALUES (?,?,?,?,1,?,'pending',0,?,?,?,?,?,1)",
+      "INSERT INTO outbox_events (id,organization_id,workspace_id,event_type,schema_version," +
+        "payload_json,status,attempt_count,available_at,request_id,trace_id,created_at," +
+        "updated_at,version) VALUES (?,?,?,?,1,?,'pending',0,?,?,?,?,?,1)",
       [
         randomUUID(),
         i.organizationId,

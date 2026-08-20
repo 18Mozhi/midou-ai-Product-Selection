@@ -6,7 +6,8 @@ export class MySqlRealtimeRepository implements RealtimeRepository {
   constructor(private readonly pool: Pool) {}
   async replay(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT id,event_type,notification_id,payload_json,created_at FROM realtime_events WHERE organization_id=? AND workspace_id=? AND recipient_id=? AND id>? ORDER BY id LIMIT ?",
+      "SELECT id,event_type,notification_id,payload_json,created_at FROM realtime_events WHERE " +
+        "organization_id=? AND workspace_id=? AND recipient_id=? AND id>? ORDER BY id LIMIT ?",
       [i.organizationId, i.workspaceId, i.actorId, i.afterId, i.limit],
     );
     return rows.map((r) => ({
@@ -22,7 +23,10 @@ export class MySqlRealtimeRepository implements RealtimeRepository {
   }
   async auditConnect(i: any) {
     await this.pool.query(
-      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?, 'realtime.connected','realtime_stream',?,?,?,?,?,1)",
+      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action," +
+        "resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at," +
+        "schema_version) VALUES (?,?,?,?, 'realtime.connected','realtime_stream'," +
+        "?,?,?,?,?,1)",
       [
         randomUUID(),
         i.organizationId,

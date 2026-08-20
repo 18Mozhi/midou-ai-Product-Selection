@@ -1,15 +1,9 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
-import {
-  NotificationServiceError,
-  type NotificationRepository,
-} from "./notification-service.js";
-const parse = <T>(v: unknown): T =>
-    typeof v === "string" ? JSON.parse(v) : (v as T),
+import { NotificationServiceError, type NotificationRepository } from "./notification-service.js";
+const parse = <T>(v: unknown): T => (typeof v === "string" ? JSON.parse(v) : (v as T)),
   iso = (v: unknown) =>
-    v == null
-      ? null
-      : (v instanceof Date ? v : new Date(String(v))).toISOString(),
+    v == null ? null : (v instanceof Date ? v : new Date(String(v))).toISOString(),
   notificationGroupKeySql = [
     "COALESCE(root_cause_key,",
     "CONCAT(category, ':', COALESCE(resource_type, 'none'), ':',",
@@ -83,9 +77,7 @@ export class MySqlNotificationRepository implements NotificationRepository {
     return {
       items: groups.flatMap((group) => {
         const item = representatives.get(String(group.group_key));
-        return item
-          ? [{ ...item, group_count: Number(group.group_count) }]
-          : [];
+        return item ? [{ ...item, group_count: Number(group.group_count) }] : [];
       }),
       page: i.page,
       page_size: i.pageSize,
@@ -94,23 +86,13 @@ export class MySqlNotificationRepository implements NotificationRepository {
   }
   async summary(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      `SELECT category,
-              COUNT(*) total,
-              SUM(read_at IS NULL) unread,
-              SUM(workflow_status='open') open_count,
-              SUM(workflow_status='in_progress') in_progress_count,
-              SUM(workflow_status='closed') closed_count
-       FROM notifications
-       WHERE organization_id=?
-         AND workspace_id=?
-         AND recipient_id=?
-         AND EXISTS(
-           SELECT 1 FROM notification_deliveries d
-           WHERE d.notification_id=notifications.id
-             AND d.channel='in_app'
-             AND d.status='delivered'
-         )
-       GROUP BY category`,
+      "SELECT category,\n              COUNT(*) total,\n              SUM(read_at IS NULL) unread," +
+        "\n              SUM(workflow_status='open') open_count,\n              SUM(workflow_status='in_progress') " +
+        "in_progress_count,\n              SUM(workflow_status='closed') closed_count\n       FROM " +
+        "notifications\n       WHERE organization_id=?\n         AND workspace_id=?\n         AND " +
+        "recipient_id=?\n         AND EXISTS(\n           SELECT 1 FROM notification_deliveries " +
+        "d\n           WHERE d.notification_id=notifications.id\n             AND d.channel='in_app'\n" +
+        "             AND d.status='delivered'\n         )\n       GROUP BY category",
       [i.organizationId, i.workspaceId, i.actorId],
     );
     const result = {
@@ -136,15 +118,13 @@ export class MySqlNotificationRepository implements NotificationRepository {
   }
   async detail(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM notifications WHERE id=? AND organization_id=? AND workspace_id=? AND recipient_id=? AND EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id AND d.channel='in_app' AND d.status='delivered')",
+      "SELECT * FROM notifications WHERE id=? AND organization_id=? AND workspace_id=? AND " +
+        "recipient_id=? AND EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id " +
+        "AND d.channel='in_app' AND d.status='delivered')",
       [i.notificationId, i.organizationId, i.workspaceId, i.actorId],
     );
     if (!rows[0])
-      throw new NotificationServiceError(
-        "notification_not_found",
-        404,
-        "刷新通知列表。",
-      );
+      throw new NotificationServiceError("notification_not_found", 404, "刷新通知列表。");
     const item = this.dto(rows[0]),
       [counts] = await this.pool.query<RowDataPacket[]>(
         `SELECT COUNT(*) group_count
@@ -159,12 +139,7 @@ export class MySqlNotificationRepository implements NotificationRepository {
                AND d.channel='in_app'
                AND d.status='delivered'
            )`,
-        [
-          i.organizationId,
-          i.workspaceId,
-          i.actorId,
-          notificationGroupKey(rows[0]),
-        ],
+        [i.organizationId, i.workspaceId, i.actorId, notificationGroupKey(rows[0])],
       );
     return { ...item, group_count: Number(counts[0]?.group_count ?? 1) };
   }
@@ -176,16 +151,13 @@ export class MySqlNotificationRepository implements NotificationRepository {
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-          "SELECT * FROM notifications WHERE id=? AND organization_id=? AND workspace_id=? AND recipient_id=? AND EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id AND d.channel='in_app' AND d.status='delivered') FOR UPDATE",
+          "SELECT * FROM notifications WHERE id=? AND organization_id=? AND workspace_id=? AND " +
+            "recipient_id=? AND EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id " +
+            "AND d.channel='in_app' AND d.status='delivered') FOR UPDATE",
           [i.notificationId, i.organizationId, i.workspaceId, i.actorId],
         ),
         row = rows[0];
-      if (!row)
-        throw new NotificationServiceError(
-          "notification_not_found",
-          404,
-          "刷新通知列表。",
-        );
+      if (!row) throw new NotificationServiceError("notification_not_found", 404, "刷新通知列表。");
       if (Number(row.version) !== i.value.expected_version)
         throw new NotificationServiceError(
           "notification_version_conflict",
@@ -194,7 +166,14 @@ export class MySqlNotificationRepository implements NotificationRepository {
         );
       const next = Number(row.version) + 1,
         readAt = i.value.action === "read" ? now : i.value.action === "unread" ? null : row.read_at,
-        workflowStatus = i.value.action === "start" ? "in_progress" : i.value.action === "close" ? "closed" : i.value.action === "reopen" ? "open" : row.workflow_status;
+        workflowStatus =
+          i.value.action === "start"
+            ? "in_progress"
+            : i.value.action === "close"
+              ? "closed"
+              : i.value.action === "reopen"
+                ? "open"
+                : row.workflow_status;
       await c.query(
         "UPDATE notifications SET read_at=?,workflow_status=?,version=?,updated_at=? WHERE id=?",
         [readAt, workflowStatus, next, now, i.notificationId],
@@ -205,14 +184,7 @@ export class MySqlNotificationRepository implements NotificationRepository {
         workflow_status: workflowStatus,
         version: next,
       };
-      await this.audit(
-        c,
-        i,
-        `notification.${i.value.action}`,
-        i.notificationId,
-        result,
-        now,
-      );
+      await this.audit(c, i, `notification.${i.value.action}`, i.notificationId, result, now);
       await this.save(c, i, i.notificationId, result, now);
       await c.commit();
       return result;
@@ -231,7 +203,9 @@ export class MySqlNotificationRepository implements NotificationRepository {
     try {
       await c.beginTransaction();
       const [result]: any = await c.query(
-        "UPDATE notifications SET read_at=?,version=version+1,updated_at=? WHERE organization_id=? AND workspace_id=? AND recipient_id=? AND read_at IS NULL AND EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id AND d.channel='in_app' AND d.status='delivered')",
+        "UPDATE notifications SET read_at=?,version=version+1,updated_at=? WHERE organization_id=? " +
+          "AND workspace_id=? AND recipient_id=? AND read_at IS NULL AND EXISTS(SELECT 1 FROM notification_deliveries " +
+          "d WHERE d.notification_id=notifications.id AND d.channel='in_app' AND d.status='delivered')",
         [now, now, i.organizationId, i.workspaceId, i.actorId],
       );
       const value = {
@@ -292,7 +266,8 @@ export class MySqlNotificationRepository implements NotificationRepository {
       const next = row ? Number(row.version) + 1 : 2;
       if (row)
         await c.query(
-          "UPDATE notification_preferences SET in_app_enabled=?,email_enabled=?,task_enabled=?,approval_enabled=?,competitor_enabled=?,version=?,updated_at=? WHERE id=?",
+          "UPDATE notification_preferences SET in_app_enabled=?,email_enabled=?,task_enabled=?," +
+            "approval_enabled=?,competitor_enabled=?,version=?,updated_at=? WHERE id=?",
           [
             i.value.in_app_enabled,
             i.value.email_enabled,
@@ -306,7 +281,9 @@ export class MySqlNotificationRepository implements NotificationRepository {
         );
       else
         await c.query(
-          "INSERT INTO notification_preferences (id,organization_id,workspace_id,user_id,in_app_enabled,email_enabled,task_enabled,approval_enabled,competitor_enabled,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+          "INSERT INTO notification_preferences (id,organization_id,workspace_id,user_id," +
+            "in_app_enabled,email_enabled,task_enabled,approval_enabled,competitor_enabled," +
+            "version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
           [
             randomUUID(),
             i.organizationId,
@@ -324,14 +301,7 @@ export class MySqlNotificationRepository implements NotificationRepository {
         );
       const result = { ...i.value, version: next };
       delete result.expected_version;
-      await this.audit(
-        c,
-        i,
-        "notification.preferences.updated",
-        i.actorId,
-        result,
-        now,
-      );
+      await this.audit(c, i, "notification.preferences.updated", i.actorId, result, now);
       await this.save(c, i, i.actorId, result, now);
       await c.commit();
       return result;
@@ -389,24 +359,11 @@ export class MySqlNotificationRepository implements NotificationRepository {
     );
     return rows[0] ? parse(rows[0].result_json) : null;
   }
-  private save(
-    c: PoolConnection,
-    i: any,
-    id: string,
-    result: unknown,
-    now: Date,
-  ) {
+  private save(c: PoolConnection, i: any, id: string, result: unknown, now: Date) {
     return c.query(
-      "INSERT INTO notification_operations (id,actor_id,route_key,idempotency_key,resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
-      [
-        randomUUID(),
-        i.actorId,
-        i.route,
-        i.idempotencyKey,
-        id,
-        JSON.stringify(result),
-        now,
-      ],
+      "INSERT INTO notification_operations (id,actor_id,route_key,idempotency_key," +
+        "resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+      [randomUUID(), i.actorId, i.route, i.idempotencyKey, id, JSON.stringify(result), now],
     );
   }
   private audit(
@@ -418,7 +375,9 @@ export class MySqlNotificationRepository implements NotificationRepository {
     now: Date,
   ) {
     return c.query(
-      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,?,'notification',?,?,?,?,?,1)",
+      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action," +
+        "resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at," +
+        "schema_version) VALUES (?,?,?,?,?,'notification',?,?,?,?,?,1)",
       [
         randomUUID(),
         i.organizationId,

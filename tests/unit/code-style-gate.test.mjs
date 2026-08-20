@@ -16,8 +16,9 @@ test("code style gate formats changed code and enforces the maximum line length"
   assert.match(packageJson, /"verify:code-style": "npm run format:check"/);
   assert.match(verifier, /maximumLineLength = 160/);
   assert.match(verifier, /CODE_STYLE_BASE_REF/);
+  assert.match(verifier, /git\(\["ls-files", "apps", "packages", "--"\]\)/);
   assert.match(functionalGate, /verify-code-style/);
-  assert.match(blueprint, /触碰即治理/);
+  assert.match(blueprint, /全部已跟踪 Repository 源文件/);
   assert.match(readme, /npm run verify:code-style/);
   assert.match(featureMap, /"codeStyleCommand": "npm run verify:code-style"/);
 

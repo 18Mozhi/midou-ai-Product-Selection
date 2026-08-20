@@ -1,14 +1,9 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
-import {
-  AutomationServiceError,
-  type AutomationRepository,
-} from "./automation-service.js";
+import { AutomationServiceError, type AutomationRepository } from "./automation-service.js";
 const parse = (v: unknown) => (typeof v === "string" ? JSON.parse(v) : v),
   iso = (v: unknown) =>
-    v == null
-      ? null
-      : (v instanceof Date ? v : new Date(String(v))).toISOString();
+    v == null ? null : (v instanceof Date ? v : new Date(String(v))).toISOString();
 export class MySqlAutomationRepository implements AutomationRepository {
   constructor(
     private readonly pool: Pool,
@@ -22,9 +17,7 @@ export class MySqlAutomationRepository implements AutomationRepository {
       condition_severity: String(r.condition_severity),
       action_type: String(r.action_type),
       owner_id: String(r.owner_id),
-      action_assignee_id: r.action_assignee_id
-        ? String(r.action_assignee_id)
-        : null,
+      action_assignee_id: r.action_assignee_id ? String(r.action_assignee_id) : null,
       action_title: String(r.action_title),
       rate_limit_count: Number(r.rate_limit_count),
       rate_limit_window_minutes: Number(r.rate_limit_window_minutes),
@@ -47,13 +40,12 @@ export class MySqlAutomationRepository implements AutomationRepository {
       [i.ruleId, i.organizationId, i.workspaceId],
     );
     if (!rows[0])
-      throw new AutomationServiceError(
-        "automation_rule_not_found",
-        404,
-        "刷新规则列表。",
-      );
+      throw new AutomationServiceError("automation_rule_not_found", 404, "刷新规则列表。");
     const [executions] = await this.pool.query<RowDataPacket[]>(
-      "SELECT id,rule_version,notification_id,status,attempt_count,action_resource_type,action_resource_id,last_error_code,created_at,updated_at FROM automation_executions WHERE rule_id=? AND organization_id=? AND workspace_id=? ORDER BY created_at DESC LIMIT 100",
+      "SELECT id,rule_version,notification_id,status,attempt_count,action_resource_type," +
+        "action_resource_id,last_error_code,created_at,updated_at FROM automation_executions " +
+        "WHERE rule_id=? AND organization_id=? AND workspace_id=? ORDER BY created_at DESC LIMIT " +
+        "100",
       [i.ruleId, i.organizationId, i.workspaceId],
     );
     return {
@@ -72,17 +64,16 @@ export class MySqlAutomationRepository implements AutomationRepository {
     if (old) return old;
     await this.member(i.organizationId, i.workspaceId, i.value.owner_id);
     if (i.value.action_assignee_id)
-      await this.member(
-        i.organizationId,
-        i.workspaceId,
-        i.value.action_assignee_id,
-      );
+      await this.member(i.organizationId, i.workspaceId, i.value.action_assignee_id);
     const c = await this.pool.getConnection(),
       now = this.now();
     try {
       await c.beginTransaction();
       await c.query(
-        "INSERT INTO automation_rules (id,organization_id,workspace_id,name,trigger_event_type,condition_severity,action_type,owner_id,action_assignee_id,action_title,rate_limit_count,rate_limit_window_minutes,status,version,created_by,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'active',1,?,?,?)",
+        "INSERT INTO automation_rules (id,organization_id,workspace_id,name,trigger_event_type," +
+          "condition_severity,action_type,owner_id,action_assignee_id,action_title," +
+          "rate_limit_count,rate_limit_window_minutes,status,version,created_by,created_at," +
+          "updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'active',1,?,?,?)",
         [
           i.id,
           i.organizationId,
@@ -129,11 +120,7 @@ export class MySqlAutomationRepository implements AutomationRepository {
     if (old) return old;
     await this.member(i.organizationId, i.workspaceId, i.value.owner_id);
     if (i.value.action_assignee_id)
-      await this.member(
-        i.organizationId,
-        i.workspaceId,
-        i.value.action_assignee_id,
-      );
+      await this.member(i.organizationId, i.workspaceId, i.value.action_assignee_id);
     const c = await this.pool.getConnection(),
       now = this.now();
     try {
@@ -143,11 +130,7 @@ export class MySqlAutomationRepository implements AutomationRepository {
         [i.ruleId, i.organizationId, i.workspaceId],
       );
       if (!rows[0])
-        throw new AutomationServiceError(
-          "automation_rule_not_found",
-          404,
-          "刷新规则列表。",
-        );
+        throw new AutomationServiceError("automation_rule_not_found", 404, "刷新规则列表。");
       if (Number(rows[0].version) !== i.value.expected_version)
         throw new AutomationServiceError(
           "automation_version_conflict",
@@ -156,7 +139,9 @@ export class MySqlAutomationRepository implements AutomationRepository {
         );
       const next = i.value.expected_version + 1;
       await c.query(
-        "UPDATE automation_rules SET name=?,trigger_event_type=?,condition_severity=?,action_type=?,owner_id=?,action_assignee_id=?,action_title=?,rate_limit_count=?,rate_limit_window_minutes=?,version=?,updated_at=? WHERE id=?",
+        "UPDATE automation_rules SET name=?,trigger_event_type=?,condition_severity=?," +
+          "action_type=?,owner_id=?,action_assignee_id=?,action_title=?,rate_limit_count=?," +
+          "rate_limit_window_minutes=?,version=?,updated_at=? WHERE id=?",
         [
           i.value.name,
           i.value.trigger_event_type,
@@ -203,18 +188,9 @@ export class MySqlAutomationRepository implements AutomationRepository {
         [i.ruleId, i.organizationId, i.workspaceId],
       );
       const r = rows[0];
-      if (!r)
-        throw new AutomationServiceError(
-          "automation_rule_not_found",
-          404,
-          "刷新规则列表。",
-        );
+      if (!r) throw new AutomationServiceError("automation_rule_not_found", 404, "刷新规则列表。");
       if (Number(r.version) !== i.value.expected_version)
-        throw new AutomationServiceError(
-          "automation_version_conflict",
-          409,
-          "刷新规则后重试。",
-        );
+        throw new AutomationServiceError("automation_version_conflict", 409, "刷新规则后重试。");
       const target = i.value.action === "pause" ? "paused" : "active";
       if (r.status === target)
         throw new AutomationServiceError(
@@ -223,17 +199,17 @@ export class MySqlAutomationRepository implements AutomationRepository {
           `规则已经${target === "paused" ? "暂停" : "启用"}。`,
         );
       const version = Number(r.version) + 1;
-      await c.query(
-        "UPDATE automation_rules SET status=?,version=?,updated_at=? WHERE id=?",
-        [target, version, now, i.ruleId],
-      );
+      await c.query("UPDATE automation_rules SET status=?,version=?,updated_at=? WHERE id=?", [
+        target,
+        version,
+        now,
+        i.ruleId,
+      ]);
       const result = { id: i.ruleId, status: target, version };
       await this.record(
         c,
         i,
-        target === "paused"
-          ? "automation.rule.paused"
-          : "automation.rule.resumed",
+        target === "paused" ? "automation.rule.paused" : "automation.rule.resumed",
         i.ruleId,
         { ...result, reason: i.value.reason },
         now,
@@ -250,7 +226,9 @@ export class MySqlAutomationRepository implements AutomationRepository {
   }
   private async member(org: string, ws: string, user: string) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT m.id FROM memberships m LEFT JOIN membership_data_scopes s ON s.membership_id=m.id WHERE m.organization_id=? AND m.user_id=? AND m.status='active' AND (s.scope_type='organization' OR (s.scope_type='workspace' AND s.workspace_id=?)) LIMIT 1",
+      "SELECT m.id FROM memberships m LEFT JOIN membership_data_scopes s ON s.membership_id=m.id " +
+        "WHERE m.organization_id=? AND m.user_id=? AND m.status='active' AND (s.scope_type='organization' " +
+        "OR (s.scope_type='workspace' AND s.workspace_id=?)) LIMIT 1",
       [org, user, ws],
     );
     if (!rows[0])
@@ -269,16 +247,9 @@ export class MySqlAutomationRepository implements AutomationRepository {
   }
   private save(c: PoolConnection, i: any, id: string, result: any, now: Date) {
     return c.query(
-      "INSERT INTO automation_operations (id,actor_id,route_key,idempotency_key,rule_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
-      [
-        randomUUID(),
-        i.actorId,
-        i.route,
-        i.idempotencyKey,
-        id,
-        JSON.stringify(result),
-        now,
-      ],
+      "INSERT INTO automation_operations (id,actor_id,route_key,idempotency_key," +
+        "rule_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+      [randomUUID(), i.actorId, i.route, i.idempotencyKey, id, JSON.stringify(result), now],
     );
   }
   private async record(
@@ -290,7 +261,9 @@ export class MySqlAutomationRepository implements AutomationRepository {
     now: Date,
   ) {
     await c.query(
-      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,?,'automation_rule',?,?,?,?,?,1)",
+      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action," +
+        "resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at," +
+        "schema_version) VALUES (?,?,?,?,?,'automation_rule',?,?,?,?,?,1)",
       [
         randomUUID(),
         i.organizationId,
@@ -305,7 +278,9 @@ export class MySqlAutomationRepository implements AutomationRepository {
       ],
     );
     await c.query(
-      "INSERT INTO outbox_events (id,organization_id,workspace_id,event_type,schema_version,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at,version) VALUES (?,?,?,?,1,?,'pending',0,?,?,?,?,?,1)",
+      "INSERT INTO outbox_events (id,organization_id,workspace_id,event_type,schema_version," +
+        "payload_json,status,attempt_count,available_at,request_id,trace_id,created_at," +
+        "updated_at,version) VALUES (?,?,?,?,1,?,'pending',0,?,?,?,?,?,1)",
       [
         randomUUID(),
         i.organizationId,

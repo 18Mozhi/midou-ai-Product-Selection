@@ -388,7 +388,8 @@ export class MySqlCredentialAssetRepository implements CredentialAssetRepository
         ],
       );
       await c.query(
-        "INSERT INTO credential_asset_operations (id,actor_id,route,idempotency_key,credential_asset_id,result_version,created_at) VALUES (?,?,?,?,?,1,?)",
+        "INSERT INTO credential_asset_operations (id,actor_id,route,idempotency_key," +
+          "credential_asset_id,result_version,created_at) VALUES (?,?,?,?,?,1,?)",
         [randomUUID(), input.actorId, route, input.idempotencyKey, input.id, input.now],
       );
       await c.commit();
@@ -482,7 +483,8 @@ export class MySqlCredentialAssetRepository implements CredentialAssetRepository
         ],
       );
       await c.query(
-        "INSERT INTO credential_asset_operations (id,actor_id,route,idempotency_key,credential_asset_id,result_version,created_at) VALUES (?,?,?,?,?,?,?)",
+        "INSERT INTO credential_asset_operations (id,actor_id,route,idempotency_key," +
+          "credential_asset_id,result_version,created_at) VALUES (?,?,?,?,?,?,?)",
         [randomUUID(), input.actorId, route, input.idempotencyKey, input.id, next, input.now],
       );
       await this.replayRenewedProfiles(c, input);
@@ -532,7 +534,8 @@ export class MySqlCredentialAssetRepository implements CredentialAssetRepository
       const next = input.expectedVersion + 1,
         r = rows[0];
       await c.query(
-        "UPDATE credential_assets SET status='revoked',revoked_at=?,revoked_by=?,revocation_reason=?,version=?,updated_by=?,updated_at=? WHERE id=?",
+        "UPDATE credential_assets SET status='revoked',revoked_at=?,revoked_by=?," +
+          "revocation_reason=?,version=?,updated_by=?,updated_at=? WHERE id=?",
         [input.now, input.actorId, input.reason, next, input.actorId, input.now, input.id],
       );
       await c.query(
@@ -557,7 +560,8 @@ export class MySqlCredentialAssetRepository implements CredentialAssetRepository
         ],
       );
       await c.query(
-        "INSERT INTO credential_asset_operations (id,actor_id,route,idempotency_key,credential_asset_id,result_version,created_at) VALUES (?,?,?,?,?,?,?)",
+        "INSERT INTO credential_asset_operations (id,actor_id,route,idempotency_key," +
+          "credential_asset_id,result_version,created_at) VALUES (?,?,?,?,?,?,?)",
         [randomUUID(), input.actorId, route, input.idempotencyKey, input.id, next, input.now],
       );
       await c.commit();
@@ -604,7 +608,8 @@ export class MySqlCredentialAssetRepository implements CredentialAssetRepository
         return replay;
       }
       const [assets] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM credential_assets WHERE id=? AND provider_id=? AND kind IN ('browser_profile','cookie_bundle') AND status='active'",
+        "SELECT id FROM credential_assets WHERE id=? AND provider_id=? AND kind IN ('browser_profile'," +
+          "'cookie_bundle') AND status='active'",
         [input.value.credential_asset_id, input.value.provider_id],
       );
       if (!assets[0])
@@ -657,7 +662,8 @@ export class MySqlCredentialAssetRepository implements CredentialAssetRepository
         ],
       );
       await c.query(
-        "INSERT INTO crawler_profile_operations (id,actor_id,route,idempotency_key,crawler_profile_id,result_version,created_at) VALUES (?,?,?,?,?,1,?)",
+        "INSERT INTO crawler_profile_operations (id,actor_id,route,idempotency_key," +
+          "crawler_profile_id,result_version,created_at) VALUES (?,?,?,?,?,1,?)",
         [randomUUID(), input.actorId, route, input.idempotencyKey, input.id, input.now],
       );
       await c.commit();

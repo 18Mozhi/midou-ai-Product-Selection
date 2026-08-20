@@ -92,7 +92,7 @@
       "functionalCommand": "npm run verify:functional",
       "codeStyleCommand": "npm run verify:code-style",
       "codeStyleVerifier": "../scripts/verify-code-style.mjs",
-      "repositorySqlPolicy": "new or modified Repository SQL lines must not exceed 160 characters; violations fail as repository_sql_max_line_length_failed while untouched historical debt follows touch-to-govern cleanup",
+      "repositorySqlPolicy": "all tracked Repository source lines are scanned on every run and must not exceed 160 characters; violations fail as repository_sql_max_line_length_failed even when the Repository was not changed in the current worktree",
       "workerHandlerBoundary": "apps/worker/src/index.ts owns dependency assembly, non-reentrant polling, logs and priority scheduling only; every business queue handler remains in its independent worker or scheduler module and domain SQL is forbidden in the entrypoint",
       "frontendApiClientBoundary": "the shared frontend JSON client owns credentials, request_id, trace_id, write idempotency, JSON envelopes and standardized server message/action error mapping; navigation, discovery, home, local identity, tenancy selection, landing resolution, personal center, theme settings, API readiness, business tasks, trends, scoring rules, cost rules, opportunities, competitors, sourcing, browser collection runtime, crawler scheduling, runtime topology and capacity boundary do not call fetch directly",
       "productionProductCommand": "npm run verify:production-product",

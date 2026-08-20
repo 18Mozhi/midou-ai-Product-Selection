@@ -9,21 +9,17 @@ import {
   type ProfitRepository,
   type ProfitWriteContext,
 } from "./profit-service.js";
-const parse = <T>(v: unknown): T =>
-    typeof v === "string" ? (JSON.parse(v) as T) : (v as T),
+const parse = <T>(v: unknown): T => (typeof v === "string" ? (JSON.parse(v) as T) : (v as T)),
   iso = (v: unknown) =>
-    v == null
-      ? null
-      : v instanceof Date
-        ? v.toISOString()
-        : new Date(String(v)).toISOString(),
-  day = (v: unknown) =>
-    v instanceof Date ? v.toISOString().slice(0, 10) : String(v).slice(0, 10);
+    v == null ? null : v instanceof Date ? v.toISOString() : new Date(String(v)).toISOString(),
+  day = (v: unknown) => (v instanceof Date ? v.toISOString().slice(0, 10) : String(v).slice(0, 10));
 export class MySqlProfitRepository implements ProfitRepository {
   constructor(private readonly pool: Pool) {}
   async listRules(input: { organizationId: string; workspaceId: string }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT r.*,GROUP_CONCAT(CASE WHEN a.decision='approved' THEN a.approval_role END) approvals FROM cost_rules r LEFT JOIN cost_rule_approvals a ON a.cost_rule_id=r.id WHERE r.organization_id=? AND r.workspace_id=? GROUP BY r.id ORDER BY r.updated_at DESC,r.id DESC",
+      "SELECT r.*,GROUP_CONCAT(CASE WHEN a.decision='approved' THEN a.approval_role END) approvals " +
+        "FROM cost_rules r LEFT JOIN cost_rule_approvals a ON a.cost_rule_id=r.id WHERE r.organization_id=? " +
+        "AND r.workspace_id=? GROUP BY r.id ORDER BY r.updated_at DESC,r.id DESC",
       [input.organizationId, input.workspaceId],
     );
     return rows.map((row) => this.dto(row));
@@ -38,28 +34,31 @@ export class MySqlProfitRepository implements ProfitRepository {
       [input.opportunityId, input.organizationId, input.workspaceId],
     );
     if (!opportunities[0])
-      throw new ProfitServiceError(
-        "opportunity_not_found",
-        404,
-        "刷新机会列表。",
-      );
+      throw new ProfitServiceError("opportunity_not_found", 404, "刷新机会列表。");
     const [inputs] = await this.pool.query<RowDataPacket[]>(
-      "SELECT input_type,amount_value,currency,source_type,source_ref_id,evidence_id,observed_at,input_version,platform FROM opportunity_cost_inputs WHERE opportunity_id=? AND organization_id=? AND workspace_id=? AND is_current=1 ORDER BY platform,input_type",
+      "SELECT input_type,amount_value,currency,source_type,source_ref_id,evidence_id," +
+        "observed_at,input_version,platform FROM opportunity_cost_inputs WHERE opportunity_id=? " +
+        "AND organization_id=? AND workspace_id=? AND is_current=1 ORDER BY platform," +
+        "input_type",
       [input.opportunityId, input.organizationId, input.workspaceId],
     );
     const [runs] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM opportunity_profit_runs WHERE opportunity_id=? AND organization_id=? AND workspace_id=? ORDER BY calculated_at DESC,id DESC LIMIT 1",
+      "SELECT * FROM opportunity_profit_runs WHERE opportunity_id=? AND organization_id=? AND " +
+        "workspace_id=? ORDER BY calculated_at DESC,id DESC LIMIT 1",
       [input.opportunityId, input.organizationId, input.workspaceId],
     );
     const run = runs[0];
     let components: RowDataPacket[] = [];
     if (run) {
       [components] = await this.pool.query<RowDataPacket[]>(
-        "SELECT component_type,source_amount,source_currency,converted_amount,target_currency,source_ref_id,evidence_id,exchange_quote_id,missing_reason FROM opportunity_profit_components WHERE profit_run_id=? ORDER BY FIELD(component_type,'sale_price','purchase_price','logistics','platform_fee','payment_fee','tax','fulfillment')",
+        "SELECT component_type,source_amount,source_currency,converted_amount,target_currency," +
+          "source_ref_id,evidence_id,exchange_quote_id,missing_reason FROM opportunity_profit_components " +
+          "WHERE profit_run_id=? ORDER BY FIELD(component_type,'sale_price','purchase_price'," +
+          "'logistics','platform_fee','payment_fee','tax','fulfillment')",
         [run.id],
       );
     }
-    const numeric = (value: unknown) => value == null ? null : Number(value);
+    const numeric = (value: unknown) => (value == null ? null : Number(value));
     return {
       latest_run: run
         ? {
@@ -83,7 +82,8 @@ export class MySqlProfitRepository implements ProfitRepository {
               target_currency: item.target_currency == null ? null : String(item.target_currency),
               source_ref_id: item.source_ref_id == null ? null : String(item.source_ref_id),
               evidence_id: item.evidence_id == null ? null : String(item.evidence_id),
-              exchange_quote_id: item.exchange_quote_id == null ? null : String(item.exchange_quote_id),
+              exchange_quote_id:
+                item.exchange_quote_id == null ? null : String(item.exchange_quote_id),
               missing_reason: item.missing_reason == null ? null : String(item.missing_reason),
             })),
           }
@@ -101,9 +101,7 @@ export class MySqlProfitRepository implements ProfitRepository {
       })),
     };
   }
-  async createRule(
-    input: ProfitWriteContext & { id: string; value: any; route: string },
-  ) {
+  async createRule(input: ProfitWriteContext & { id: string; value: any; route: string }) {
     const previous = await this.operation<CostRule>(input);
     if (previous) return previous;
     const c = await this.pool.getConnection(),
@@ -111,7 +109,9 @@ export class MySqlProfitRepository implements ProfitRepository {
     try {
       await c.beginTransaction();
       await c.query(
-        "INSERT INTO cost_rules (id,organization_id,workspace_id,market,platform,version_code,name,status,fee_lines_json,effective_from,revision,created_by,created_at,updated_at) VALUES (?,?,?,?,?,?,?,'draft',?,?,1,?,?,?)",
+        "INSERT INTO cost_rules (id,organization_id,workspace_id,market,platform," +
+          "version_code,name,status,fee_lines_json,effective_from,revision,created_by," +
+          "created_at,updated_at) VALUES (?,?,?,?,?,?,?,'draft',?,?,1,?,?,?)",
         [
           input.id,
           input.organizationId,
@@ -127,12 +127,7 @@ export class MySqlProfitRepository implements ProfitRepository {
           now,
         ],
       );
-      const result = (await this.get(
-        c,
-        input.id,
-        input.organizationId,
-        input.workspaceId,
-      ))!;
+      const result = (await this.get(c, input.id, input.organizationId, input.workspaceId))!;
       await this.record(
         c,
         input,
@@ -183,12 +178,7 @@ export class MySqlProfitRepository implements ProfitRepository {
         [input.ruleId, input.organizationId, input.workspaceId],
       );
       const row = rows[0];
-      if (!row)
-        throw new ProfitServiceError(
-          "cost_rule_not_found",
-          404,
-          "刷新费用规则。",
-        );
+      if (!row) throw new ProfitServiceError("cost_rule_not_found", 404, "刷新费用规则。");
       if (Number(row.revision) !== input.expectedRevision)
         throw new ProfitServiceError(
           "cost_rule_revision_conflict",
@@ -198,24 +188,19 @@ export class MySqlProfitRepository implements ProfitRepository {
       let resultId = input.ruleId;
       if (input.action === "submit") {
         if (row.status !== "draft")
-          throw new ProfitServiceError(
-            "cost_rule_transition_invalid",
-            409,
-            "只有草稿可以提交。",
-          );
+          throw new ProfitServiceError("cost_rule_transition_invalid", 409, "只有草稿可以提交。");
         await c.query(
-          "UPDATE cost_rules SET status='pending_approval',submitted_by=?,submitted_at=?,revision=revision+1,updated_at=? WHERE id=?",
+          "UPDATE cost_rules SET status='pending_approval',submitted_by=?,submitted_at=?," +
+            "revision=revision+1,updated_at=? WHERE id=?",
           [input.actorId, now, now, input.ruleId],
         );
       } else if (input.action === "approve") {
         if (row.status !== "pending_approval" || !input.approvalRole)
-          throw new ProfitServiceError(
-            "cost_rule_transition_invalid",
-            409,
-            "当前规则不能审批。",
-          );
+          throw new ProfitServiceError("cost_rule_transition_invalid", 409, "当前规则不能审批。");
         await c.query(
-          "INSERT INTO cost_rule_approvals (id,organization_id,workspace_id,cost_rule_id,approval_role,decision,reason,actor_id,request_id,trace_id,created_at) VALUES (?,?,?,?,?,'approved',?,?,?,?,?)",
+          "INSERT INTO cost_rule_approvals (id,organization_id,workspace_id,cost_rule_id," +
+            "approval_role,decision,reason,actor_id,request_id,trace_id,created_at) VALUES (?," +
+            "?,?,?,?,'approved',?,?,?,?,?)",
           [
             randomUUID(),
             input.organizationId,
@@ -235,11 +220,7 @@ export class MySqlProfitRepository implements ProfitRepository {
         );
         await c.query(
           "UPDATE cost_rules SET status=?,revision=revision+1,updated_at=? WHERE id=?",
-          [
-            Number(count[0]?.count) === 2 ? "approved" : "pending_approval",
-            now,
-            input.ruleId,
-          ],
+          [Number(count[0]?.count) === 2 ? "approved" : "pending_approval", now, input.ruleId],
         );
       } else if (input.action === "reject") {
         if (row.status !== "pending_approval" || !input.approvalRole)
@@ -249,7 +230,9 @@ export class MySqlProfitRepository implements ProfitRepository {
             "拒绝必须指定真实审批角色。",
           );
         await c.query(
-          "INSERT INTO cost_rule_approvals (id,organization_id,workspace_id,cost_rule_id,approval_role,decision,reason,actor_id,request_id,trace_id,created_at) VALUES (?,?,?,?,?,'rejected',?,?,?,?,?)",
+          "INSERT INTO cost_rule_approvals (id,organization_id,workspace_id,cost_rule_id," +
+            "approval_role,decision,reason,actor_id,request_id,trace_id,created_at) VALUES (?," +
+            "?,?,?,?,'rejected',?,?,?,?,?)",
           [
             randomUUID(),
             input.organizationId,
@@ -275,27 +258,15 @@ export class MySqlProfitRepository implements ProfitRepository {
             "必须完成两类审批后才能发布。",
           );
         await c.query(
-          "UPDATE cost_rules SET status='retired',revision=revision+1,updated_at=? WHERE organization_id=? AND workspace_id=? AND market=? AND platform=? AND status='active'",
-          [
-            now,
-            input.organizationId,
-            input.workspaceId,
-            row.market,
-            row.platform,
-          ],
+          "UPDATE cost_rules SET status='retired',revision=revision+1,updated_at=? WHERE organization_id=? " +
+            "AND workspace_id=? AND market=? AND platform=? AND status='active'",
+          [now, input.organizationId, input.workspaceId, row.market, row.platform],
         );
         await c.query(
           "UPDATE cost_rules SET status='active',published_by=?,published_at=?,revision=revision+1,updated_at=? WHERE id=?",
           [input.actorId, now, now, input.ruleId],
         );
-        await this.queueAll(
-          c,
-          input,
-          input.ruleId,
-          row.market,
-          row.platform,
-          now,
-        );
+        await this.queueAll(c, input, input.ruleId, row.market, row.platform, now);
       } else {
         if (row.status !== "active" || !input.targetRuleId)
           throw new ProfitServiceError(
@@ -304,14 +275,9 @@ export class MySqlProfitRepository implements ProfitRepository {
             "只有活动规则可以回滚。",
           );
         const [target] = await c.query<RowDataPacket[]>(
-          "SELECT id FROM cost_rules WHERE id=? AND organization_id=? AND workspace_id=? AND market=? AND platform=? AND status IN ('approved','retired') FOR UPDATE",
-          [
-            input.targetRuleId,
-            input.organizationId,
-            input.workspaceId,
-            row.market,
-            row.platform,
-          ],
+          "SELECT id FROM cost_rules WHERE id=? AND organization_id=? AND workspace_id=? AND market=? " +
+            "AND platform=? AND status IN ('approved','retired') FOR UPDATE",
+          [input.targetRuleId, input.organizationId, input.workspaceId, row.market, row.platform],
         );
         if (!target[0])
           throw new ProfitServiceError(
@@ -320,29 +286,18 @@ export class MySqlProfitRepository implements ProfitRepository {
             "目标必须是同市场同平台的已批准或停用版本。",
           );
         await c.query(
-          "UPDATE cost_rules SET status='rolled_back',rollback_target_id=?,rolled_back_at=?,revision=revision+1,updated_at=? WHERE id=?",
+          "UPDATE cost_rules SET status='rolled_back',rollback_target_id=?,rolled_back_at=?," +
+            "revision=revision+1,updated_at=? WHERE id=?",
           [input.targetRuleId, now, now, input.ruleId],
         );
         await c.query(
           "UPDATE cost_rules SET status='active',published_by=?,published_at=?,revision=revision+1,updated_at=? WHERE id=?",
           [input.actorId, now, now, input.targetRuleId],
         );
-        await this.queueAll(
-          c,
-          input,
-          input.targetRuleId,
-          row.market,
-          row.platform,
-          now,
-        );
+        await this.queueAll(c, input, input.targetRuleId, row.market, row.platform, now);
         resultId = input.targetRuleId;
       }
-      const result = (await this.get(
-        c,
-        resultId,
-        input.organizationId,
-        input.workspaceId,
-      ))!;
+      const result = (await this.get(c, resultId, input.organizationId, input.workspaceId))!;
       await this.record(
         c,
         input,
@@ -372,9 +327,7 @@ export class MySqlProfitRepository implements ProfitRepository {
       c.release();
     }
   }
-  async recordRate(
-    input: ProfitWriteContext & { id: string; value: any; route: string },
-  ) {
+  async recordRate(input: ProfitWriteContext & { id: string; value: any; route: string }) {
     const previous = await this.operation<any>(input);
     if (previous) return previous;
     const c = await this.pool.getConnection(),
@@ -392,7 +345,10 @@ export class MySqlProfitRepository implements ProfitRepository {
           "选择已启用且声明 exchange_rate 字段的 Provider。",
         );
       await c.query(
-        "INSERT INTO exchange_rate_quotes (id,organization_id,workspace_id,provider_id,base_currency,quote_currency,rate_value,quote_date,observed_at,source_ref_id,evidence_id,created_by,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO exchange_rate_quotes (id,organization_id,workspace_id,provider_id," +
+          "base_currency,quote_currency,rate_value,quote_date,observed_at,source_ref_id," +
+          "evidence_id,created_by,request_id,trace_id,created_at) VALUES (?,?,?,?,?," +
+          "?,?,?,?,?,?,?,?,?,?)",
         [
           input.id,
           input.organizationId,
@@ -417,14 +373,7 @@ export class MySqlProfitRepository implements ProfitRepository {
         pair: `${input.value.base_currency}/${input.value.quote_currency}`,
         quote_date: input.value.quote_date,
       };
-      await this.record(
-        c,
-        input,
-        "exchange_rate.recorded",
-        input.id,
-        result,
-        now,
-      );
+      await this.record(c, input, "exchange_rate.recorded", input.id, result, now);
       await this.save(c, input, input.id, result, now);
       await c.commit();
       return result;
@@ -454,12 +403,7 @@ export class MySqlProfitRepository implements ProfitRepository {
         [input.opportunityId, input.organizationId, input.workspaceId],
       );
       const op = ops[0];
-      if (!op)
-        throw new ProfitServiceError(
-          "opportunity_not_found",
-          404,
-          "刷新机会列表。",
-        );
+      if (!op) throw new ProfitServiceError("opportunity_not_found", 404, "刷新机会列表。");
       if (Number(op.version) !== input.value.expected_version)
         throw new ProfitServiceError(
           "opportunity_version_conflict",
@@ -467,7 +411,8 @@ export class MySqlProfitRepository implements ProfitRepository {
           "刷新机会并使用最新 version。",
         );
       const [versions] = await c.query<RowDataPacket[]>(
-          "SELECT COALESCE(MAX(input_version),0)+1 next_version FROM opportunity_cost_inputs WHERE opportunity_id=? AND platform=? AND input_type=?",
+          "SELECT COALESCE(MAX(input_version),0)+1 next_version FROM opportunity_cost_inputs WHERE " +
+            "opportunity_id=? AND platform=? AND input_type=?",
           [input.opportunityId, input.value.platform, input.value.input_type],
         ),
         inputVersion = Number(versions[0]?.next_version ?? 1);
@@ -476,7 +421,10 @@ export class MySqlProfitRepository implements ProfitRepository {
         [input.opportunityId, input.value.platform, input.value.input_type],
       );
       await c.query(
-        "INSERT INTO opportunity_cost_inputs (id,organization_id,workspace_id,opportunity_id,platform,input_type,amount_value,currency,source_type,source_ref_id,evidence_id,observed_at,input_version,is_current,confirmed_by,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)",
+        "INSERT INTO opportunity_cost_inputs (id,organization_id,workspace_id,opportunity_id," +
+          "platform,input_type,amount_value,currency,source_type,source_ref_id,evidence_id," +
+          "observed_at,input_version,is_current,confirmed_by,request_id,trace_id,created_at) VALUES " +
+          "(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)",
         [
           input.id,
           input.organizationId,
@@ -498,31 +446,22 @@ export class MySqlProfitRepository implements ProfitRepository {
         ],
       );
       const [rules] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM cost_rules WHERE organization_id=? AND workspace_id=? AND market=? AND platform=? AND status='active' AND effective_from<=? ORDER BY effective_from DESC LIMIT 1",
-        [
-          input.organizationId,
-          input.workspaceId,
-          op.market,
-          input.value.platform,
-          now,
-        ],
+        "SELECT id FROM cost_rules WHERE organization_id=? AND workspace_id=? AND market=? AND " +
+          "platform=? AND status='active' AND effective_from<=? ORDER BY effective_from DESC LIMIT " +
+          "1",
+        [input.organizationId, input.workspaceId, op.market, input.value.platform, now],
       );
       let jobStatus = "waiting_for_active_rule";
       if (rules[0]) {
-        await this.queueOne(
-          c,
-          input,
-          input.opportunityId,
-          String(rules[0].id),
-          now,
-        );
+        await this.queueOne(c, input, input.opportunityId, String(rules[0].id), now);
         jobStatus = "queued";
       }
       const version = Number(op.version) + 1;
-      await c.query(
-        "UPDATE opportunities SET version=?,updated_at=? WHERE id=?",
-        [version, now, input.opportunityId],
-      );
+      await c.query("UPDATE opportunities SET version=?,updated_at=? WHERE id=?", [
+        version,
+        now,
+        input.opportunityId,
+      ]);
       const result = {
         input_id: input.id,
         opportunity_id: input.opportunityId,
@@ -570,12 +509,7 @@ export class MySqlProfitRepository implements ProfitRepository {
         "SELECT market,version FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
         [input.opportunityId, input.organizationId, input.workspaceId],
       );
-      if (!ops[0])
-        throw new ProfitServiceError(
-          "opportunity_not_found",
-          404,
-          "刷新机会列表。",
-        );
+      if (!ops[0]) throw new ProfitServiceError("opportunity_not_found", 404, "刷新机会列表。");
       if (Number(ops[0].version) !== input.expectedVersion)
         throw new ProfitServiceError(
           "opportunity_version_conflict",
@@ -583,14 +517,10 @@ export class MySqlProfitRepository implements ProfitRepository {
           "刷新机会并使用最新 version。",
         );
       const [rules] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM cost_rules WHERE organization_id=? AND workspace_id=? AND market=? AND platform=? AND status='active' AND effective_from<=? ORDER BY effective_from DESC LIMIT 1",
-        [
-          input.organizationId,
-          input.workspaceId,
-          ops[0].market,
-          input.platform,
-          now,
-        ],
+        "SELECT id FROM cost_rules WHERE organization_id=? AND workspace_id=? AND market=? AND " +
+          "platform=? AND status='active' AND effective_from<=? ORDER BY effective_from DESC LIMIT " +
+          "1",
+        [input.organizationId, input.workspaceId, ops[0].market, input.platform, now],
       );
       if (!rules[0])
         throw new ProfitServiceError(
@@ -598,18 +528,13 @@ export class MySqlProfitRepository implements ProfitRepository {
           409,
           "先完成费用规则双审批并发布。",
         );
-      const id = await this.queueOne(
-          c,
-          input,
-          input.opportunityId,
-          String(rules[0].id),
-          now,
-        ),
+      const id = await this.queueOne(c, input, input.opportunityId, String(rules[0].id), now),
         version = Number(ops[0].version) + 1;
-      await c.query(
-        "UPDATE opportunities SET version=?,updated_at=? WHERE id=?",
-        [version, now, input.opportunityId],
-      );
+      await c.query("UPDATE opportunities SET version=?,updated_at=? WHERE id=?", [
+        version,
+        now,
+        input.opportunityId,
+      ]);
       const result = {
         job_id: id,
         opportunity_id: input.opportunityId,
@@ -648,16 +573,16 @@ export class MySqlProfitRepository implements ProfitRepository {
       fee_lines: parse(row.fee_lines_json),
       effective_from: day(row.effective_from),
       revision: Number(row.revision),
-      approvals: row.approvals
-        ? (String(row.approvals).split(",") as ApprovalRole[])
-        : [],
+      approvals: row.approvals ? (String(row.approvals).split(",") as ApprovalRole[]) : [],
       published_at: iso(row.published_at),
       updated_at: iso(row.updated_at)!,
     };
   }
   private async get(c: PoolConnection, id: string, org: string, ws: string) {
     const [rows] = await c.query<RowDataPacket[]>(
-      "SELECT r.*,GROUP_CONCAT(CASE WHEN a.decision='approved' THEN a.approval_role END) approvals FROM cost_rules r LEFT JOIN cost_rule_approvals a ON a.cost_rule_id=r.id WHERE r.id=? AND r.organization_id=? AND r.workspace_id=? GROUP BY r.id",
+      "SELECT r.*,GROUP_CONCAT(CASE WHEN a.decision='approved' THEN a.approval_role END) approvals " +
+        "FROM cost_rules r LEFT JOIN cost_rule_approvals a ON a.cost_rule_id=r.id WHERE r.id=? " +
+        "AND r.organization_id=? AND r.workspace_id=? GROUP BY r.id",
       [id, org, ws],
     );
     return rows[0] ? this.dto(rows[0]) : null;
@@ -676,7 +601,9 @@ export class MySqlProfitRepository implements ProfitRepository {
   ) {
     const id = randomUUID();
     await c.query(
-      "INSERT INTO opportunity_profit_jobs (id,organization_id,workspace_id,opportunity_id,cost_rule_id,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
+      "INSERT INTO opportunity_profit_jobs (id,organization_id,workspace_id,opportunity_id," +
+        "cost_rule_id,status,attempt_count,available_at,request_id,trace_id,created_at," +
+        "updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
       [
         id,
         input.organizationId,
@@ -701,11 +628,12 @@ export class MySqlProfitRepository implements ProfitRepository {
     now: Date,
   ) {
     const [rows] = await c.query<RowDataPacket[]>(
-      "SELECT DISTINCT o.id FROM opportunities o JOIN opportunity_cost_inputs i ON i.opportunity_id=o.id AND i.platform=? AND i.is_current=1 WHERE o.organization_id=? AND o.workspace_id=? AND o.market=?",
+      "SELECT DISTINCT o.id FROM opportunities o JOIN opportunity_cost_inputs i ON i.opportunity_id=o.id " +
+        "AND i.platform=? AND i.is_current=1 WHERE o.organization_id=? AND o.workspace_id=? AND " +
+        "o.market=?",
       [platform, input.organizationId, input.workspaceId, market],
     );
-    for (const row of rows)
-      await this.queueOne(c, input, String(row.id), ruleId, now);
+    for (const row of rows) await this.queueOne(c, input, String(row.id), ruleId, now);
   }
   private async operation<T>(input: ProfitWriteContext & { route: string }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
@@ -722,7 +650,8 @@ export class MySqlProfitRepository implements ProfitRepository {
     now: Date,
   ) {
     await c.query(
-      "INSERT INTO cost_operations (id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+      "INSERT INTO cost_operations (id,actor_id,route,idempotency_key,resource_id," +
+        "result_json,created_at) VALUES (?,?,?,?,?,?,?)",
       [
         randomUUID(),
         input.actorId,
@@ -749,7 +678,9 @@ export class MySqlProfitRepository implements ProfitRepository {
           ? "exchange_rate"
           : "opportunity";
     await c.query(
-      "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES (?,?,?,?,?,?,'user',?,?,?,?,?)",
+      "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type," +
+        "resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json," +
+        "occurred_at) VALUES (?,?,?,?,?,?,'user',?,?,?,?,?)",
       [
         id,
         input.organizationId,
@@ -765,7 +696,10 @@ export class MySqlProfitRepository implements ProfitRepository {
       ],
     );
     await c.query(
-      "INSERT INTO opportunity_outbox (id,organization_id,workspace_id,event_type,resource_type,resource_id,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
+      "INSERT INTO opportunity_outbox (id,organization_id,workspace_id,event_type," +
+        "resource_type,resource_id,payload_json,status,attempt_count,available_at," +
+        "request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,?,'queued'," +
+        "0,?,?,?,?,?)",
       [
         id,
         input.organizationId,

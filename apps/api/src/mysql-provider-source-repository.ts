@@ -105,7 +105,8 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
         providerId,
       ]),
       this.pool.query<RowDataPacket[]>(
-        "SELECT version,snapshot_json,action,created_at FROM provider_versions WHERE provider_id=? ORDER BY version DESC LIMIT 101",
+        "SELECT version,snapshot_json,action,created_at FROM provider_versions WHERE provider_id=? " +
+          "ORDER BY version DESC LIMIT 101",
         [providerId],
       ),
     ]);
@@ -279,7 +280,8 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
         ],
       );
       await c.query(
-        "INSERT INTO provider_parser_sample_operations (id,actor_id,route,idempotency_key,sample_id,replay_run_id,created_at) VALUES (?,?,?,?,?,NULL,?)",
+        "INSERT INTO provider_parser_sample_operations (id,actor_id,route,idempotency_key," +
+          "sample_id,replay_run_id,created_at) VALUES (?,?,?,?,?,NULL,?)",
         [randomUUID(), input.actorId, input.route, input.idempotencyKey, input.sampleId, input.now],
       );
       await this.parserSampleAudit(c, input, "provider.parser_sample.created", input.sampleId, {
@@ -381,7 +383,8 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
         [input.status, input.now, input.now, input.sampleId],
       );
       await c.query(
-        "INSERT INTO provider_parser_sample_operations (id,actor_id,route,idempotency_key,sample_id,replay_run_id,created_at) VALUES (?,?,?,?,?,?,?)",
+        "INSERT INTO provider_parser_sample_operations (id,actor_id,route,idempotency_key," +
+          "sample_id,replay_run_id,created_at) VALUES (?,?,?,?,?,?,?)",
         [
           randomUUID(),
           input.actorId,

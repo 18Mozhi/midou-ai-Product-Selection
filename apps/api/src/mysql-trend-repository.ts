@@ -1,10 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type {
-  Pool,
-  PoolConnection,
-  RowDataPacket,
-  ResultSetHeader,
-} from "mysql2/promise";
+import type { Pool, PoolConnection, RowDataPacket, ResultSetHeader } from "mysql2/promise";
 import {
   TrendServiceError,
   type TrendMonitoringRule,
@@ -14,9 +9,7 @@ import {
 } from "./trend-service.js";
 
 const iso = (value: unknown) =>
-  value instanceof Date
-    ? value.toISOString()
-    : new Date(String(value)).toISOString();
+  value instanceof Date ? value.toISOString() : new Date(String(value)).toISOString();
 const json = <T>(value: unknown): T =>
   typeof value === "string" ? (JSON.parse(value) as T) : (value as T);
 const topic = (row: RowDataPacket): TrendTopicSummary => ({
@@ -29,8 +22,7 @@ const topic = (row: RowDataPacket): TrendTopicSummary => ({
   signal_count: Number(row.signal_count),
   source_count: Number(row.source_count),
   heat: { value: Number(row.heat_value), unit: "signals" },
-  momentum_percent:
-    row.momentum_percent == null ? null : Number(row.momentum_percent),
+  momentum_percent: row.momentum_percent == null ? null : Number(row.momentum_percent),
   confidence: {
     score: row.confidence_score == null ? null : Number(row.confidence_score),
     status: row.confidence_status,
@@ -52,16 +44,11 @@ const rule = (row: RowDataPacket): TrendMonitoringRule => ({
   notification_channel: "in_app",
   collection_interval_minutes: Number(row.collection_interval_minutes),
   status: row.status,
-  last_evaluated_at:
-    row.last_evaluated_at == null ? null : iso(row.last_evaluated_at),
-  last_collection_at:
-    row.last_collection_at == null ? null : iso(row.last_collection_at),
-  next_collection_at:
-    row.next_collection_at == null ? null : iso(row.next_collection_at),
+  last_evaluated_at: row.last_evaluated_at == null ? null : iso(row.last_evaluated_at),
+  last_collection_at: row.last_collection_at == null ? null : iso(row.last_collection_at),
+  next_collection_at: row.next_collection_at == null ? null : iso(row.next_collection_at),
   last_collection_task_id:
-    row.last_collection_task_id == null
-      ? null
-      : String(row.last_collection_task_id),
+    row.last_collection_task_id == null ? null : String(row.last_collection_task_id),
   version: Number(row.version),
   created_at: iso(row.created_at),
   updated_at: iso(row.updated_at),
@@ -107,7 +94,12 @@ export class MySqlTrendRepository implements TrendRepository {
         params,
       ),
       this.pool.query<RowDataPacket[]>(
-        `SELECT t.*,EXISTS(SELECT 1 FROM trend_topic_follows f WHERE f.topic_id=t.id AND f.user_id=?) followed FROM trend_topics t WHERE ${where} ORDER BY t.last_seen_at DESC,t.id ASC LIMIT ? OFFSET ?`,
+        `SELECT t.*,EXISTS(
+          SELECT 1 FROM trend_topic_follows f
+          WHERE f.topic_id=t.id AND f.user_id=?
+         ) followed
+         FROM trend_topics t WHERE ${where}
+         ORDER BY t.last_seen_at DESC,t.id ASC LIMIT ? OFFSET ?`,
         [input.actorId, ...params, input.pageSize, offset],
       ),
     ]);
@@ -116,43 +108,42 @@ export class MySqlTrendRepository implements TrendRepository {
 
   async get(input: Parameters<TrendRepository["get"]>[0]) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT t.*,EXISTS(SELECT 1 FROM trend_topic_follows f WHERE f.topic_id=t.id AND f.user_id=?) followed FROM trend_topics t WHERE t.id=? AND t.organization_id=? AND t.workspace_id=? LIMIT 1",
+      "SELECT t.*,EXISTS(SELECT 1 FROM trend_topic_follows f WHERE f.topic_id=t.id AND f.user_id=?) " +
+        "followed FROM trend_topics t WHERE t.id=? AND t.organization_id=? AND t.workspace_id=? " +
+        "LIMIT 1",
       [input.actorId, input.topicId, input.organizationId, input.workspaceId],
     );
     if (!rows[0]) return null;
-    const [[keywordRows], [signalRows], [timelineRows], [timelineSourceRows]] =
-      await Promise.all([
-        this.pool.query<RowDataPacket[]>(
-          "SELECT keyword,keyword_type,language,market FROM trend_topic_keywords WHERE topic_id=? AND organization_id=? AND workspace_id=? ORDER BY FIELD(keyword_type,'primary','related','negative'),keyword",
-          [input.topicId, input.organizationId, input.workspaceId],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT id,title,publisher,canonical_url,published_at,observed_at,provider_id,raw_evidence_id FROM trend_signals WHERE topic_id=? AND organization_id=? AND workspace_id=? ORDER BY published_at DESC LIMIT 100",
-          [input.topicId, input.organizationId, input.workspaceId],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          `SELECT DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') at,
-                  COUNT(*) signal_count,
-                  COUNT(DISTINCT provider_id) source_count
-             FROM trend_signals
-            WHERE topic_id=? AND organization_id=? AND workspace_id=?
-            GROUP BY DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z')
-            ORDER BY MIN(published_at)`,
-          [input.topicId, input.organizationId, input.workspaceId],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          `SELECT provider_id,
-                  MAX(publisher) source_label,
-                  DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') at,
-                  COUNT(*) signal_count
-             FROM trend_signals
-            WHERE topic_id=? AND organization_id=? AND workspace_id=?
-            GROUP BY provider_id,
-                     DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z')
-            ORDER BY provider_id,MIN(published_at)`,
-          [input.topicId, input.organizationId, input.workspaceId],
-        ),
-      ]);
+    const [[keywordRows], [signalRows], [timelineRows], [timelineSourceRows]] = await Promise.all([
+      this.pool.query<RowDataPacket[]>(
+        "SELECT keyword,keyword_type,language,market FROM trend_topic_keywords WHERE topic_id=? " +
+          "AND organization_id=? AND workspace_id=? ORDER BY FIELD(keyword_type,'primary'," +
+          "'related','negative'),keyword",
+        [input.topicId, input.organizationId, input.workspaceId],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT id,title,publisher,canonical_url,published_at,observed_at,provider_id," +
+          "raw_evidence_id FROM trend_signals WHERE topic_id=? AND organization_id=? AND workspace_id=? " +
+          "ORDER BY published_at DESC LIMIT 100",
+        [input.topicId, input.organizationId, input.workspaceId],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') at,\n                  COUNT(*) " +
+          "signal_count,\n                  COUNT(DISTINCT provider_id) source_count\n           " +
+          "  FROM trend_signals\n            WHERE topic_id=? AND organization_id=? AND workspace_id=?\n" +
+          "            GROUP BY DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z')\n            " +
+          "ORDER BY MIN(published_at)",
+        [input.topicId, input.organizationId, input.workspaceId],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT provider_id,\n                  MAX(publisher) source_label,\n                 " +
+          " DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') at,\n                  COUNT(*) signal_count\n" +
+          "             FROM trend_signals\n            WHERE topic_id=? AND organization_id=? AND " +
+          "workspace_id=?\n            GROUP BY provider_id,\n                     DATE_FORMAT(published_at," +
+          "'%Y-%m-%dT%H:00:00.000Z')\n            ORDER BY provider_id,MIN(published_at)",
+        [input.topicId, input.organizationId, input.workspaceId],
+      ),
+    ]);
     const summary = topic(rows[0]),
       evidence = signalRows.map((row) => ({
         id: String(row.id),
@@ -164,10 +155,7 @@ export class MySqlTrendRepository implements TrendRepository {
         provider_id: String(row.provider_id),
         raw_evidence_id: String(row.raw_evidence_id),
       }));
-    const timelineSources = new Map<
-      string,
-      TrendTopicDetail["timeline_sources"][number]
-    >();
+    const timelineSources = new Map<string, TrendTopicDetail["timeline_sources"][number]>();
     for (const row of timelineSourceRows) {
       const sourceId = String(row.provider_id),
         current = timelineSources.get(sourceId) ?? {
@@ -198,9 +186,7 @@ export class MySqlTrendRepository implements TrendRepository {
       evidence,
       data_quality: {
         coverage_status:
-          evidence.length > 0
-            ? ("covered" as const)
-            : ("insufficient_data" as const),
+          evidence.length > 0 ? ("covered" as const) : ("insufficient_data" as const),
         evidence_count: evidence.length,
         source_count: summary.source_count,
         stale: summary.status === "stale",
@@ -218,15 +204,11 @@ export class MySqlTrendRepository implements TrendRepository {
 
   async setFollow(input: Parameters<TrendRepository["setFollow"]>[0]) {
     return this.write(input, input.topicId, async (c) => {
-      await this.requireTopic(
-        c,
-        input.topicId,
-        input.organizationId,
-        input.workspaceId,
-      );
+      await this.requireTopic(c, input.topicId, input.organizationId, input.workspaceId);
       if (input.followed)
         await c.query(
-          "INSERT IGNORE INTO trend_topic_follows (id,organization_id,workspace_id,topic_id,user_id,created_at) VALUES (?,?,?,?,?,?)",
+          "INSERT IGNORE INTO trend_topic_follows (id,organization_id,workspace_id," +
+            "topic_id,user_id,created_at) VALUES (?,?,?,?,?,?)",
           [
             randomUUID(),
             input.organizationId,
@@ -239,12 +221,7 @@ export class MySqlTrendRepository implements TrendRepository {
       else
         await c.query(
           "DELETE FROM trend_topic_follows WHERE organization_id=? AND workspace_id=? AND topic_id=? AND user_id=?",
-          [
-            input.organizationId,
-            input.workspaceId,
-            input.topicId,
-            input.actorId,
-          ],
+          [input.organizationId, input.workspaceId, input.topicId, input.actorId],
         );
       const result = { topic_id: input.topicId, followed: input.followed };
       await this.event(
@@ -262,14 +239,10 @@ export class MySqlTrendRepository implements TrendRepository {
 
   async setRelevance(input: Parameters<TrendRepository["setRelevance"]>[0]) {
     return this.write(input, input.topicId, async (c) => {
-      await this.requireTopic(
-        c,
-        input.topicId,
-        input.organizationId,
-        input.workspaceId,
-      );
+      await this.requireTopic(c, input.topicId, input.organizationId, input.workspaceId);
       const [update] = await c.query<ResultSetHeader>(
-        "UPDATE trend_topics SET status=?,version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=? AND version=?",
+        "UPDATE trend_topics SET status=?,version=version+1,updated_at=? WHERE id=? AND organization_id=? " +
+          "AND workspace_id=? AND version=?",
         [
           input.status,
           this.now(),
@@ -280,11 +253,7 @@ export class MySqlTrendRepository implements TrendRepository {
         ],
       );
       if (update.affectedRows !== 1)
-        throw new TrendServiceError(
-          "trend_version_conflict",
-          409,
-          "刷新主题详情后重新提交。",
-        );
+        throw new TrendServiceError("trend_version_conflict", 409, "刷新主题详情后重新提交。");
       const result = {
         topic_id: input.topicId,
         status: input.status,
@@ -309,7 +278,11 @@ export class MySqlTrendRepository implements TrendRepository {
         value = input.rule;
       try {
         await c.query(
-          "INSERT INTO trend_monitoring_rules (id,organization_id,workspace_id,name,include_keywords_json,negative_keywords_json,market,language,category,notification_channel,collection_interval_minutes,status,last_evaluated_at,next_collection_at,version,created_by,updated_by,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,'in_app',?,'enabled',NULL,?,1,?,?,?,?)",
+          "INSERT INTO trend_monitoring_rules (id,organization_id,workspace_id,name," +
+            "include_keywords_json,negative_keywords_json,market,language,category,notification_channel," +
+            "collection_interval_minutes,status,last_evaluated_at,next_collection_at," +
+            "version,created_by,updated_by,created_at,updated_at) VALUES (?,?,?,?,?,?," +
+            "?,?,?,'in_app',?,'enabled',NULL,?,1,?,?,?,?)",
           [
             input.ruleId,
             input.organizationId,
@@ -341,12 +314,7 @@ export class MySqlTrendRepository implements TrendRepository {
         "SELECT * FROM trend_monitoring_rules WHERE id=?",
         [input.ruleId],
       );
-      if (!rows[0])
-        throw new TrendServiceError(
-          "trend_rule_not_found",
-          404,
-          "刷新监控规则列表。",
-        );
+      if (!rows[0]) throw new TrendServiceError("trend_rule_not_found", 404, "刷新监控规则列表。");
       const result = rule(rows[0]);
       await this.event(
         c,
@@ -364,7 +332,9 @@ export class MySqlTrendRepository implements TrendRepository {
   async updateRule(input: Parameters<TrendRepository["updateRule"]>[0]) {
     return this.write(input, input.ruleId, async (c) => {
       const [update] = await c.query<ResultSetHeader>(
-        "UPDATE trend_monitoring_rules SET status=?,collection_interval_minutes=?,next_collection_at=IF(?='enabled',?,NULL),updated_by=?,version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=? AND version=?",
+        "UPDATE trend_monitoring_rules SET status=?,collection_interval_minutes=?," +
+          "next_collection_at=IF(?='enabled',?,NULL),updated_by=?,version=version+1," +
+          "updated_at=? WHERE id=? AND organization_id=? AND workspace_id=? AND version=?",
         [
           input.status,
           input.collectionIntervalMinutes,
@@ -379,21 +349,12 @@ export class MySqlTrendRepository implements TrendRepository {
         ],
       );
       if (update.affectedRows !== 1)
-        throw new TrendServiceError(
-          "trend_rule_version_conflict",
-          409,
-          "刷新监控规则后重新提交。",
-        );
+        throw new TrendServiceError("trend_rule_version_conflict", 409, "刷新监控规则后重新提交。");
       const [rows] = await c.query<RowDataPacket[]>(
         "SELECT * FROM trend_monitoring_rules WHERE id=? AND organization_id=? AND workspace_id=?",
         [input.ruleId, input.organizationId, input.workspaceId],
       );
-      if (!rows[0])
-        throw new TrendServiceError(
-          "trend_rule_not_found",
-          404,
-          "刷新监控规则列表。",
-        );
+      if (!rows[0]) throw new TrendServiceError("trend_rule_not_found", 404, "刷新监控规则列表。");
       const result = rule(rows[0]);
       await this.event(
         c,
@@ -434,7 +395,8 @@ export class MySqlTrendRepository implements TrendRepository {
       }
       const result = await action(c);
       await c.query(
-        "INSERT INTO trend_operations (id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+        "INSERT INTO trend_operations (id,actor_id,route,idempotency_key,resource_id," +
+          "result_json,created_at) VALUES (?,?,?,?,?,?,?)",
         [
           randomUUID(),
           input.actorId,
@@ -491,7 +453,9 @@ export class MySqlTrendRepository implements TrendRepository {
     const now = this.now(),
       eventId = randomUUID();
     await c.query(
-      "INSERT INTO trend_events (id,organization_id,workspace_id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+      "INSERT INTO trend_events (id,organization_id,workspace_id,event_type,resource_type," +
+        "resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES " +
+        "(?,?,?,?,?,?,?,?,?,?,?,?)",
       [
         eventId,
         input.organizationId,
@@ -508,7 +472,9 @@ export class MySqlTrendRepository implements TrendRepository {
       ],
     );
     await c.query(
-      "INSERT INTO trend_outbox (id,organization_id,workspace_id,event_type,resource_type,resource_id,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
+      "INSERT INTO trend_outbox (id,organization_id,workspace_id,event_type,resource_type," +
+        "resource_id,payload_json,status,attempt_count,available_at,request_id,trace_id," +
+        "created_at,updated_at) VALUES (?,?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
       [
         eventId,
         input.organizationId,

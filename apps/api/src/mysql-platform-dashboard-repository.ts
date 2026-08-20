@@ -33,36 +33,54 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       this.pool.query<RowDataPacket[]>(
         "SELECT COUNT(*) total FROM organizations WHERE status='active'",
       ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT COUNT(*) total FROM users WHERE status='active'",
-      ),
+      this.pool.query<RowDataPacket[]>("SELECT COUNT(*) total FROM users WHERE status='active'"),
       this.pool.query<RowDataPacket[]>(
         "SELECT COUNT(*) total FROM providers WHERE status='enabled'",
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT SUM(status IN ('succeeded','succeeded_empty','completed_with_warnings')) success_count,SUM(status IN ('failed_terminal','dead_letter')) failed_count,SUM(status IN ('queued','leased','running','parsing','validating','retry_scheduled')) queue_backlog,SUM(lease_expires_at IS NOT NULL AND lease_expires_at<? AND status IN ('leased','running')) expired_leases FROM collection_tasks WHERE updated_at>=?",
+        "SELECT SUM(status IN ('succeeded','succeeded_empty','completed_with_warnings')) success_count," +
+          "SUM(status IN ('failed_terminal','dead_letter')) failed_count,SUM(status IN ('queued'," +
+          "'leased','running','parsing','validating','retry_scheduled')) queue_backlog," +
+          "SUM(lease_expires_at IS NOT NULL AND lease_expires_at<? AND status IN ('leased'," +
+          "'running')) expired_leases FROM collection_tasks WHERE updated_at>=?",
         [now, since],
       ),
       this.pool.query<RowDataPacket[]>(
         "SELECT SUM(status='open') open_count,SUM(status='open' AND severity='critical') critical_count FROM data_quality_issues",
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT COALESCE(SUM(CASE WHEN status='active' THEN size_bytes ELSE 0 END),0) total_bytes,COALESCE(SUM(CASE WHEN status='active' AND created_at>=? THEN size_bytes ELSE 0 END),0) growth_bytes FROM file_assets",
+        "SELECT COALESCE(SUM(CASE WHEN status='active' THEN size_bytes ELSE 0 END)," +
+          "0) total_bytes,COALESCE(SUM(CASE WHEN status='active' AND created_at>=? THEN size_bytes " +
+          "ELSE 0 END),0) growth_bytes FROM file_assets",
         [since],
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT status,COUNT(*) total FROM collection_tasks WHERE status IN ('queued','leased','running','parsing','validating','retry_scheduled','failed_terminal','dead_letter') GROUP BY status ORDER BY status",
+        "SELECT status,COUNT(*) total FROM collection_tasks WHERE status IN ('queued'," +
+          "'leased','running','parsing','validating','retry_scheduled','failed_terminal'," +
+          "'dead_letter') GROUP BY status ORDER BY status",
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT p.id,p.code,p.name,COUNT(s.id) observed_count,SUM(s.status IN ('succeeded','succeeded_empty')) success_count,SUM(s.status IN ('failed','blocked')) failed_count,MAX(s.updated_at) last_observed_at FROM providers p LEFT JOIN collection_subqueries s ON s.provider_id=p.id AND s.updated_at>=? WHERE p.status='enabled' GROUP BY p.id,p.code,p.name ORDER BY p.name",
+        "SELECT p.id,p.code,p.name,COUNT(s.id) observed_count,SUM(s.status IN ('succeeded'," +
+          "'succeeded_empty')) success_count,SUM(s.status IN ('failed','blocked')) failed_count," +
+          "MAX(s.updated_at) last_observed_at FROM providers p LEFT JOIN collection_subqueries " +
+          "s ON s.provider_id=p.id AND s.updated_at>=? WHERE p.status='enabled' GROUP BY p.id," +
+          "p.code,p.name ORDER BY p.name",
         [since],
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT DATE_FORMAT(updated_at,IF(?<=1440,'%Y-%m-%d %H:00:00','%Y-%m-%d 00:00:00')) bucket,SUM(status IN ('succeeded','succeeded_empty','completed_with_warnings')) succeeded,SUM(status IN ('failed_terminal','dead_letter')) failed FROM collection_tasks WHERE updated_at>=? GROUP BY bucket ORDER BY bucket",
+        "SELECT DATE_FORMAT(updated_at,IF(?<=1440,'%Y-%m-%d %H:00:00','%Y-%m-%d 00:00:00')) bucket," +
+          "SUM(status IN ('succeeded','succeeded_empty','completed_with_warnings')) succeeded," +
+          "SUM(status IN ('failed_terminal','dead_letter')) failed FROM collection_tasks WHERE " +
+          "updated_at>=? GROUP BY bucket ORDER BY bucket",
         [i.windowMinutes, since],
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT id,organization_id,workspace_id,'quality' kind,severity,metric_code code,updated_at observed_at FROM data_quality_issues WHERE status='open' UNION ALL SELECT id,organization_id,workspace_id,'task' kind,IF(status='dead_letter','critical','warning') severity,COALESCE(last_error_code,status) code,updated_at observed_at FROM collection_tasks WHERE status IN ('failed_terminal','dead_letter') ORDER BY observed_at DESC LIMIT ?",
+        "SELECT id,organization_id,workspace_id,'quality' kind,severity,metric_code code," +
+          "updated_at observed_at FROM data_quality_issues WHERE status='open' UNION ALL SELECT " +
+          "id,organization_id,workspace_id,'task' kind,IF(status='dead_letter','critical'," +
+          "'warning') severity,COALESCE(last_error_code,status) code,updated_at observed_at FROM " +
+          "collection_tasks WHERE status IN ('failed_terminal','dead_letter') ORDER BY observed_at " +
+          "DESC LIMIT ?",
         [this.errorLimit],
       ),
       this.pool.query<RowDataPacket[]>(
@@ -86,9 +104,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         };
       });
     const openAlerts =
-      n(quality[0]?.open_count) +
-      n(tasks[0]?.failed_count) +
-      n(tasks[0]?.expired_leases);
+      n(quality[0]?.open_count) + n(tasks[0]?.failed_count) + n(tasks[0]?.expired_leases);
     const result = {
       window: i.window,
       summary: {
@@ -114,10 +130,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         { code: "mysql", status: "healthy", value: "query_succeeded" },
         {
           code: "queue",
-          status:
-            n(tasks[0]?.queue_backlog) >= this.queueWarning
-              ? "warning"
-              : "healthy",
+          status: n(tasks[0]?.queue_backlog) >= this.queueWarning ? "warning" : "healthy",
           value: n(tasks[0]?.queue_backlog),
         },
         {
@@ -154,7 +167,10 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         [randomUUID(), i.actorId, i.window, i.requestId, i.traceId, now],
       );
       await c.query(
-        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,?,'platform.dashboard.read','platform_dashboard',NULL,'succeeded',?,?,?, ?,1)",
+        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+          "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
+          "schema_version) VALUES(?,NULL,NULL,?,'platform.dashboard.read','platform_dashboard'," +
+          "NULL,'succeeded',?,?,?, ?,1)",
         [
           randomUUID(),
           i.actorId,
@@ -185,22 +201,41 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       let rows: RowDataPacket[] = [];
       if (i.entity === "trends") {
         [rows] = await this.pool.query<RowDataPacket[]>(
-          "SELECT t.id,t.title,t.category,t.market,t.status,t.signal_count metric_primary,t.source_count metric_secondary,t.last_seen_at updated_at,o.name organization_name,w.name workspace_name FROM trend_topics t JOIN organizations o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id WHERE (t.title LIKE ? OR o.name LIKE ? OR w.name LIKE ?) AND t.status LIKE ? ORDER BY t.last_seen_at DESC LIMIT 100",
+          "SELECT t.id,t.title,t.category,t.market,t.status,t.signal_count metric_primary," +
+            "t.source_count metric_secondary,t.last_seen_at updated_at,o.name organization_name," +
+            "w.name workspace_name FROM trend_topics t JOIN organizations o ON o.id=t.organization_id " +
+            "JOIN workspaces w ON w.id=t.workspace_id WHERE (t.title LIKE ? OR o.name LIKE ? OR w.name " +
+            "LIKE ?) AND t.status LIKE ? ORDER BY t.last_seen_at DESC LIMIT 100",
           [filter, filter, filter, status],
         );
       } else if (i.entity === "opportunities") {
         [rows] = await this.pool.query<RowDataPacket[]>(
-          "SELECT p.id,p.name title,p.category,p.market,p.decision_status status,p.evidence_count metric_primary,p.source_count metric_secondary,p.updated_at,o.name organization_name,w.name workspace_name FROM opportunities p JOIN organizations o ON o.id=p.organization_id JOIN workspaces w ON w.id=p.workspace_id WHERE (p.name LIKE ? OR o.name LIKE ? OR w.name LIKE ?) AND p.decision_status LIKE ? ORDER BY p.updated_at DESC LIMIT 100",
+          "SELECT p.id,p.name title,p.category,p.market,p.decision_status status,p.evidence_count " +
+            "metric_primary,p.source_count metric_secondary,p.updated_at,o.name organization_name," +
+            "w.name workspace_name FROM opportunities p JOIN organizations o ON o.id=p.organization_id " +
+            "JOIN workspaces w ON w.id=p.workspace_id WHERE (p.name LIKE ? OR o.name LIKE ? OR w.name " +
+            "LIKE ?) AND p.decision_status LIKE ? ORDER BY p.updated_at DESC LIMIT 100",
           [filter, filter, filter, status],
         );
       } else if (i.entity === "competitors") {
         [rows] = await this.pool.query<RowDataPacket[]>(
-          "SELECT c.id,c.title,c.source_site category,c.market,c.status,c.revision metric_primary,COUNT(ch.id) metric_secondary,c.updated_at,o.name organization_name,w.name workspace_name FROM competitors c JOIN organizations o ON o.id=c.organization_id JOIN workspaces w ON w.id=c.workspace_id LEFT JOIN competitor_changes ch ON ch.competitor_id=c.id WHERE (c.title LIKE ? OR o.name LIKE ? OR w.name LIKE ?) AND c.status LIKE ? GROUP BY c.id,c.title,c.source_site,c.market,c.status,c.revision,c.updated_at,o.name,w.name ORDER BY c.updated_at DESC LIMIT 100",
+          "SELECT c.id,c.title,c.source_site category,c.market,c.status,c.revision metric_primary," +
+            "COUNT(ch.id) metric_secondary,c.updated_at,o.name organization_name,w.name workspace_name " +
+            "FROM competitors c JOIN organizations o ON o.id=c.organization_id JOIN workspaces w " +
+            "ON w.id=c.workspace_id LEFT JOIN competitor_changes ch ON ch.competitor_id=c.id WHERE " +
+            "(c.title LIKE ? OR o.name LIKE ? OR w.name LIKE ?) AND c.status LIKE ? GROUP BY c.id," +
+            "c.title,c.source_site,c.market,c.status,c.revision,c.updated_at,o.name,w.name ORDER " +
+            "BY c.updated_at DESC LIMIT 100",
           [filter, filter, filter, status],
         );
       } else {
         [rows] = await this.pool.query<RowDataPacket[]>(
-          "SELECT s.id,s.product_title title,s.supplier_name category,s.location market,s.status,s.moq metric_primary,s.quoted_price metric_secondary,s.observed_at updated_at,o.name organization_name,w.name workspace_name FROM sourcing_candidates s JOIN organizations o ON o.id=s.organization_id JOIN workspaces w ON w.id=s.workspace_id WHERE (s.product_title LIKE ? OR s.supplier_name LIKE ? OR o.name LIKE ?) AND s.status LIKE ? ORDER BY s.observed_at DESC LIMIT 100",
+          "SELECT s.id,s.product_title title,s.supplier_name category,s.location market," +
+            "s.status,s.moq metric_primary,s.quoted_price metric_secondary,s.observed_at updated_at," +
+            "o.name organization_name,w.name workspace_name FROM sourcing_candidates s JOIN organizations " +
+            "o ON o.id=s.organization_id JOIN workspaces w ON w.id=s.workspace_id WHERE (s.product_title " +
+            "LIKE ? OR s.supplier_name LIKE ? OR o.name LIKE ?) AND s.status LIKE ? ORDER BY s.observed_at " +
+            "DESC LIMIT 100",
           [filter, filter, filter, status],
         );
       }
@@ -222,38 +257,50 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       };
     }
     if (i.domain === "governance") {
-      const [
-        [scoreRules],
-        [costRules],
-        [approvals],
-        [automations],
-        [releases],
-        [versions],
-      ] = await Promise.all([
-        this.pool.query<RowDataPacket[]>(
-          "SELECT r.id,r.name,r.version_code,r.status,r.revision,r.updated_at,o.name organization_name,w.name workspace_name FROM score_rules r JOIN organizations o ON o.id=r.organization_id JOIN workspaces w ON w.id=r.workspace_id WHERE (r.name LIKE ? OR r.version_code LIKE ? OR o.name LIKE ?) AND r.status LIKE ? ORDER BY r.updated_at DESC LIMIT 40",
-          [filter, filter, filter, status],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT r.id,r.name,r.version_code,r.market,r.platform,r.status,r.revision,r.updated_at,o.name organization_name,w.name workspace_name FROM cost_rules r JOIN organizations o ON o.id=r.organization_id JOIN workspaces w ON w.id=r.workspace_id WHERE (r.name LIKE ? OR r.version_code LIKE ? OR o.name LIKE ?) AND r.status LIKE ? ORDER BY r.updated_at DESC LIMIT 40",
-          [filter, filter, filter, status],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT t.id,t.name,t.resource_type,t.status,t.current_version,t.revision,t.updated_at,o.name organization_name,w.name workspace_name FROM approval_templates t JOIN organizations o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id WHERE (t.name LIKE ? OR o.name LIKE ? OR w.name LIKE ?) AND t.status LIKE ? ORDER BY t.updated_at DESC LIMIT 40",
-          [filter, filter, filter, status],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT a.id,a.name,a.trigger_event_type,a.condition_severity,a.action_type,a.owner_id,a.action_assignee_id,a.action_title,a.rate_limit_count,a.rate_limit_window_minutes,a.status,a.version,a.updated_at,o.name organization_name,w.name workspace_name FROM automation_rules a JOIN organizations o ON o.id=a.organization_id JOIN workspaces w ON w.id=a.workspace_id WHERE (a.name LIKE ? OR a.trigger_event_type LIKE ? OR o.name LIKE ?) AND a.status LIKE ? ORDER BY a.updated_at DESC LIMIT 40",
-          [filter, filter, filter, status],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT id,app_version name,build_sha version_code,stage,status,updated_at FROM deployment_releases WHERE (app_version LIKE ? OR build_sha LIKE ?) AND status LIKE ? ORDER BY updated_at DESC LIMIT 30",
-          [filter, filter, status],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT COUNT(*) total,MAX(created_at) latest_at FROM provider_versions",
-        ),
-      ]);
+      const [[scoreRules], [costRules], [approvals], [automations], [releases], [versions]] =
+        await Promise.all([
+          this.pool.query<RowDataPacket[]>(
+            "SELECT r.id,r.name,r.version_code,r.status,r.revision,r.updated_at,o.name organization_name," +
+              "w.name workspace_name FROM score_rules r JOIN organizations o ON o.id=r.organization_id " +
+              "JOIN workspaces w ON w.id=r.workspace_id WHERE (r.name LIKE ? OR r.version_code LIKE " +
+              "? OR o.name LIKE ?) AND r.status LIKE ? ORDER BY r.updated_at DESC LIMIT 40",
+            [filter, filter, filter, status],
+          ),
+          this.pool.query<RowDataPacket[]>(
+            "SELECT r.id,r.name,r.version_code,r.market,r.platform,r.status,r.revision," +
+              "r.updated_at,o.name organization_name,w.name workspace_name FROM cost_rules r JOIN organizations " +
+              "o ON o.id=r.organization_id JOIN workspaces w ON w.id=r.workspace_id WHERE (r.name LIKE " +
+              "? OR r.version_code LIKE ? OR o.name LIKE ?) AND r.status LIKE ? ORDER BY r.updated_at " +
+              "DESC LIMIT 40",
+            [filter, filter, filter, status],
+          ),
+          this.pool.query<RowDataPacket[]>(
+            "SELECT t.id,t.name,t.resource_type,t.status,t.current_version,t.revision," +
+              "t.updated_at,o.name organization_name,w.name workspace_name FROM approval_templates " +
+              "t JOIN organizations o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id " +
+              "WHERE (t.name LIKE ? OR o.name LIKE ? OR w.name LIKE ?) AND t.status LIKE ? ORDER BY " +
+              "t.updated_at DESC LIMIT 40",
+            [filter, filter, filter, status],
+          ),
+          this.pool.query<RowDataPacket[]>(
+            "SELECT a.id,a.name,a.trigger_event_type,a.condition_severity,a.action_type," +
+              "a.owner_id,a.action_assignee_id,a.action_title,a.rate_limit_count,a.rate_limit_window_minutes," +
+              "a.status,a.version,a.updated_at,o.name organization_name,w.name workspace_name FROM " +
+              "automation_rules a JOIN organizations o ON o.id=a.organization_id JOIN workspaces w " +
+              "ON w.id=a.workspace_id WHERE (a.name LIKE ? OR a.trigger_event_type LIKE ? OR o.name " +
+              "LIKE ?) AND a.status LIKE ? ORDER BY a.updated_at DESC LIMIT 40",
+            [filter, filter, filter, status],
+          ),
+          this.pool.query<RowDataPacket[]>(
+            "SELECT id,app_version name,build_sha version_code,stage,status,updated_at FROM deployment_releases " +
+              "WHERE (app_version LIKE ? OR build_sha LIKE ?) AND status LIKE ? ORDER BY updated_at " +
+              "DESC LIMIT 30",
+            [filter, filter, status],
+          ),
+          this.pool.query<RowDataPacket[]>(
+            "SELECT COUNT(*) total,MAX(created_at) latest_at FROM provider_versions",
+          ),
+        ]);
       const normalize = (rows: RowDataPacket[]) =>
         rows.map((row: any) => ({ ...row, updated_at: iso(row.updated_at) }));
       return {
@@ -277,7 +324,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     }
     if (i.domain === "content") {
       const [rows] = await this.pool.query<RowDataPacket[]>(
-        "SELECT t.id,t.title,t.category,t.market,t.language,t.status,t.signal_count,t.source_count,t.heat_value,t.confidence_status,t.version,t.last_seen_at,o.name organization_name,w.name workspace_name FROM trend_topics t JOIN organizations o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id WHERE (t.title LIKE ? OR t.category LIKE ? OR t.market LIKE ?) AND t.status LIKE ? ORDER BY t.last_seen_at DESC LIMIT 100",
+        "SELECT t.id,t.title,t.category,t.market,t.language,t.status,t.signal_count," +
+          "t.source_count,t.heat_value,t.confidence_status,t.version,t.last_seen_at," +
+          "o.name organization_name,w.name workspace_name FROM trend_topics t JOIN organizations " +
+          "o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id WHERE (t.title " +
+          "LIKE ? OR t.category LIKE ? OR t.market LIKE ?) AND t.status LIKE ? ORDER BY t.last_seen_at " +
+          "DESC LIMIT 100",
         [filter, filter, filter, status],
       );
       return {
@@ -295,30 +347,40 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       };
     }
     if (i.domain === "notifications") {
-      const [
-        [rows],
-        [subscriptions],
-        [deliveries],
-        [automationRoutes],
-        [competitorRoutes],
-      ] = await Promise.all([
-        this.pool.query<RowDataPacket[]>(
-          "SELECT n.id,n.title,n.category,n.severity,n.read_at,n.created_at,u.email recipient_email,o.name organization_name,GROUP_CONCAT(CONCAT(d.channel,':',d.status) ORDER BY d.channel SEPARATOR ',') delivery_status FROM notifications n JOIN users u ON u.id=n.recipient_id JOIN organizations o ON o.id=n.organization_id LEFT JOIN notification_deliveries d ON d.notification_id=n.id WHERE (n.title LIKE ? OR u.email LIKE ? OR o.name LIKE ?) AND n.category LIKE ? GROUP BY n.id,n.title,n.category,n.severity,n.read_at,n.created_at,u.email,o.name ORDER BY n.created_at DESC LIMIT 100",
-          [filter, filter, filter, status],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT COUNT(*) total,SUM(in_app_enabled=1) in_app_enabled,SUM(email_enabled=1) email_enabled,SUM(task_enabled=1) task_enabled,SUM(approval_enabled=1) approval_enabled,SUM(competitor_enabled=1) competitor_enabled FROM notification_preferences",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT channel,status,COUNT(*) total FROM notification_deliveries GROUP BY channel,status ORDER BY channel,status",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT a.id,a.name,a.trigger_event_type event_type,a.action_type action_type,a.status,a.version,o.name organization_name,w.name workspace_name,a.updated_at FROM automation_rules a JOIN organizations o ON o.id=a.organization_id JOIN workspaces w ON w.id=a.workspace_id ORDER BY a.updated_at DESC LIMIT 30",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT r.id,CONCAT('竞品 ',r.metric,' ',r.direction) name,CONCAT('competitor.',r.metric,'.',r.direction) event_type,'notify_owner' action_type,r.status,r.revision version,o.name organization_name,w.name workspace_name,r.updated_at FROM competitor_monitor_rules r JOIN organizations o ON o.id=r.organization_id JOIN workspaces w ON w.id=r.workspace_id ORDER BY r.updated_at DESC LIMIT 30",
-        ),
-      ]);
+      const [[rows], [subscriptions], [deliveries], [automationRoutes], [competitorRoutes]] =
+        await Promise.all([
+          this.pool.query<RowDataPacket[]>(
+            "SELECT n.id,n.title,n.category,n.severity,n.read_at,n.created_at,u.email recipient_email," +
+              "o.name organization_name,GROUP_CONCAT(CONCAT(d.channel,':',d.status) ORDER BY d.channel " +
+              "SEPARATOR ',') delivery_status FROM notifications n JOIN users u ON u.id=n.recipient_id " +
+              "JOIN organizations o ON o.id=n.organization_id LEFT JOIN notification_deliveries d ON " +
+              "d.notification_id=n.id WHERE (n.title LIKE ? OR u.email LIKE ? OR o.name LIKE ?) AND " +
+              "n.category LIKE ? GROUP BY n.id,n.title,n.category,n.severity,n.read_at," +
+              "n.created_at,u.email,o.name ORDER BY n.created_at DESC LIMIT 100",
+            [filter, filter, filter, status],
+          ),
+          this.pool.query<RowDataPacket[]>(
+            "SELECT COUNT(*) total,SUM(in_app_enabled=1) in_app_enabled,SUM(email_enabled=1) email_enabled," +
+              "SUM(task_enabled=1) task_enabled,SUM(approval_enabled=1) approval_enabled," +
+              "SUM(competitor_enabled=1) competitor_enabled FROM notification_preferences",
+          ),
+          this.pool.query<RowDataPacket[]>(
+            "SELECT channel,status,COUNT(*) total FROM notification_deliveries GROUP BY channel,status ORDER BY channel,status",
+          ),
+          this.pool.query<RowDataPacket[]>(
+            "SELECT a.id,a.name,a.trigger_event_type event_type,a.action_type action_type," +
+              "a.status,a.version,o.name organization_name,w.name workspace_name,a.updated_at FROM " +
+              "automation_rules a JOIN organizations o ON o.id=a.organization_id JOIN workspaces w " +
+              "ON w.id=a.workspace_id ORDER BY a.updated_at DESC LIMIT 30",
+          ),
+          this.pool.query<RowDataPacket[]>(
+            "SELECT r.id,CONCAT('竞品 ',r.metric,' ',r.direction) name,CONCAT('competitor.'," +
+              "r.metric,'.',r.direction) event_type,'notify_owner' action_type,r.status," +
+              "r.revision version,o.name organization_name,w.name workspace_name,r.updated_at FROM " +
+              "competitor_monitor_rules r JOIN organizations o ON o.id=r.organization_id JOIN workspaces " +
+              "w ON w.id=r.workspace_id ORDER BY r.updated_at DESC LIMIT 30",
+          ),
+        ]);
       const messageManagement = await this.messageManagement("notification");
       return {
         domain: i.domain,
@@ -386,9 +448,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         },
         alert_routes: [...automationRoutes, ...competitorRoutes]
           .sort(
-            (a: any, b: any) =>
-              new Date(b.updated_at).getTime() -
-              new Date(a.updated_at).getTime(),
+            (a: any, b: any) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
           )
           .slice(0, 50)
           .map((row: any) => ({ ...row, updated_at: iso(row.updated_at) })),
@@ -399,11 +459,17 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     if (i.domain === "email") {
       const [auth, delivery] = await Promise.all([
         this.pool.query<RowDataPacket[]>(
-          "SELECT a.id,a.kind,a.status,a.attempt_count,a.last_error_code,a.created_at,a.updated_at,u.email FROM auth_delivery_outbox a JOIN users u ON u.id=a.user_id WHERE (u.email LIKE ? OR a.kind LIKE ?) AND a.status LIKE ? ORDER BY a.updated_at DESC LIMIT 70",
+          "SELECT a.id,a.kind,a.status,a.attempt_count,a.last_error_code,a.created_at," +
+            "a.updated_at,u.email FROM auth_delivery_outbox a JOIN users u ON u.id=a.user_id WHERE " +
+            "(u.email LIKE ? OR a.kind LIKE ?) AND a.status LIKE ? ORDER BY a.updated_at DESC LIMIT " +
+            "70",
           [filter, filter, status],
         ),
         this.pool.query<RowDataPacket[]>(
-          "SELECT d.id,d.status,d.attempt_count,d.last_error_code,d.updated_at,u.email,n.title FROM notification_deliveries d JOIN notifications n ON n.id=d.notification_id JOIN users u ON u.id=d.recipient_id WHERE d.channel='email' AND (u.email LIKE ? OR n.title LIKE ?) AND d.status LIKE ? ORDER BY d.updated_at DESC LIMIT 30",
+          "SELECT d.id,d.status,d.attempt_count,d.last_error_code,d.updated_at,u.email," +
+            "n.title FROM notification_deliveries d JOIN notifications n ON n.id=d.notification_id " +
+            "JOIN users u ON u.id=d.recipient_id WHERE d.channel='email' AND (u.email LIKE ? OR n.title " +
+            "LIKE ?) AND d.status LIKE ? ORDER BY d.updated_at DESC LIMIT 30",
           [filter, filter, status],
         ),
       ]);
@@ -420,8 +486,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         })),
       ]
         .sort(
-          (a: any, b: any) =>
-            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+          (a: any, b: any) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
         )
         .slice(0, 100);
       const messageManagement = await this.messageManagement("email");
@@ -429,9 +494,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         domain: i.domain,
         summary: {
           total: rows.length,
-          succeeded: rows.filter((r: any) =>
-            ["succeeded", "delivered"].includes(r.status),
-          ).length,
+          succeeded: rows.filter((r: any) => ["succeeded", "delivered"].includes(r.status)).length,
           blocked: rows.filter((r: any) =>
             ["blocked_provider", "dead_letter", "failed"].includes(r.status),
           ).length,
@@ -457,7 +520,8 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       [schedulerObservations],
     ] = await Promise.all([
       this.pool.query<RowDataPacket[]>(
-        "SELECT COUNT(*) recent_views FROM platform_dashboard_views WHERE observed_at>=DATE_SUB(UTC_TIMESTAMP(3),INTERVAL 15 MINUTE)",
+        "SELECT COUNT(*) recent_views FROM platform_dashboard_views WHERE observed_at>=DATE_SUB(UTC_TIMESTAMP(3)," +
+          "INTERVAL 15 MINUTE)",
       ),
       this.pool.query<RowDataPacket[]>(
         "SELECT status,COUNT(*) total FROM collection_tasks GROUP BY status ORDER BY total DESC",
@@ -466,10 +530,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         "SELECT status,COUNT(*) total FROM providers GROUP BY status",
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT (SELECT COUNT(*) FROM organizations WHERE status='active') active_organizations,(SELECT COUNT(*) FROM users WHERE status='active') active_users",
+        "SELECT (SELECT COUNT(*) FROM organizations WHERE status='active') active_organizations," +
+          "(SELECT COUNT(*) FROM users WHERE status='active') active_users",
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT node_id,role,status,build_sha,app_version,last_heartbeat_at FROM runtime_nodes WHERE role='api' ORDER BY last_heartbeat_at DESC LIMIT 1",
+        "SELECT node_id,role,status,build_sha,app_version,last_heartbeat_at FROM runtime_nodes " +
+          "WHERE role='api' ORDER BY last_heartbeat_at DESC LIMIT 1",
       ),
       this.pool.query<RowDataPacket[]>(
         "SELECT state,observed_at FROM redis_resilience_observations ORDER BY observed_at DESC LIMIT 1",
@@ -481,15 +547,15 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         "SELECT state,observed_at FROM file_resilience_observations ORDER BY observed_at DESC LIMIT 1",
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT state,worker_instances,crawler_instances,active_worker_leases,active_crawler_leases,observed_at FROM crawler_scheduler_observations ORDER BY observed_at DESC LIMIT 1",
+        "SELECT state,worker_instances,crawler_instances,active_worker_leases,active_crawler_leases," +
+          "observed_at FROM crawler_scheduler_observations ORDER BY observed_at DESC LIMIT 1",
       ),
     ]);
     const staleAfterMs = 5 * 60 * 1000,
       serviceState = (row: any, fallback = "unknown") =>
         !row
           ? fallback
-          : this.now().getTime() -
-                new Date(row.observed_at ?? row.last_heartbeat_at).getTime() >
+          : this.now().getTime() - new Date(row.observed_at ?? row.last_heartbeat_at).getTime() >
               staleAfterMs
             ? "stale"
             : String(row.state ?? row.status ?? fallback),
@@ -577,7 +643,10 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
   private async messageManagement(kind: "notification" | "email") {
     const [[messages], [organizations], [users]] = await Promise.all([
       this.pool.query<RowDataPacket[]>(
-        "SELECT m.*,o.name organization_name,u.email user_email,creator.email created_by_email FROM platform_messages m LEFT JOIN organizations o ON o.id=m.organization_id LEFT JOIN users u ON u.id=m.user_id JOIN users creator ON creator.id=m.created_by WHERE m.kind=? ORDER BY m.updated_at DESC LIMIT 100",
+        "SELECT m.*,o.name organization_name,u.email user_email,creator.email created_by_email " +
+          "FROM platform_messages m LEFT JOIN organizations o ON o.id=m.organization_id LEFT JOIN " +
+          "users u ON u.id=m.user_id JOIN users creator ON creator.id=m.created_by WHERE m.kind=? " +
+          "ORDER BY m.updated_at DESC LIMIT 100",
         [kind],
       ),
       this.pool.query<RowDataPacket[]>(
@@ -612,15 +681,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       [i.actorId, i.route, i.idempotencyKey],
     );
     const value = rows[0]?.result_json;
-    return value
-      ? typeof value === "string"
-        ? JSON.parse(value)
-        : value
-      : null;
+    return value ? (typeof value === "string" ? JSON.parse(value) : value) : null;
   }
   private async saveOperation(c: any, i: any, resourceId: string, result: any) {
     await c.query(
-      "INSERT INTO platform_management_operations(id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES(?,?,?,?,?,?,?)",
+      "INSERT INTO platform_management_operations(id,actor_id,route,idempotency_key," +
+        "resource_id,result_json,created_at) VALUES(?,?,?,?,?,?,?)",
       [
         randomUUID(),
         i.actorId,
@@ -632,15 +698,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       ],
     );
   }
-  private async auditMessage(
-    c: any,
-    i: any,
-    action: string,
-    resourceId: string,
-    metadata: any,
-  ) {
+  private async auditMessage(c: any, i: any, action: string, resourceId: string, metadata: any) {
     await c.query(
-      "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,? ,?,'platform_message',?,'succeeded',?,?,?,?,1)",
+      "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+        "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
+        "schema_version) VALUES(?,NULL,NULL,? ,?,'platform_message',?,'succeeded'," +
+        "?,?,?,?,1)",
       [
         randomUUID(),
         i.actorId,
@@ -665,7 +728,10 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       const id = randomUUID(),
         v = i.value;
       await c.query(
-        "INSERT INTO platform_messages(id,kind,title,body,category,severity,audience_type,organization_id,user_id,in_app_enabled,email_enabled,status,version,created_by,updated_by,published_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,'draft',1,?,?,NULL,?,?)",
+        "INSERT INTO platform_messages(id,kind,title,body,category,severity,audience_type," +
+          "organization_id,user_id,in_app_enabled,email_enabled,status,version,created_by," +
+          "updated_by,published_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?," +
+          "?,?,'draft',1,?,?,NULL,?,?)",
         [
           id,
           v.kind,
@@ -719,11 +785,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         [i.messageId],
       );
       if (!rows[0])
-        throw new PlatformDashboardError(
-          "platform_message_not_found",
-          404,
-          "刷新草稿列表。",
-        );
+        throw new PlatformDashboardError("platform_message_not_found", 404, "刷新草稿列表。");
       if (rows[0].status !== "draft")
         throw new PlatformDashboardError(
           "platform_message_not_editable",
@@ -739,7 +801,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       const v = i.value,
         version = i.expectedVersion + 1;
       await c.query(
-        "UPDATE platform_messages SET kind=?,title=?,body=?,category=?,severity=?,audience_type=?,organization_id=?,user_id=?,in_app_enabled=?,email_enabled=?,version=?,updated_by=?,updated_at=? WHERE id=?",
+        "UPDATE platform_messages SET kind=?,title=?,body=?,category=?,severity=?," +
+          "audience_type=?,organization_id=?,user_id=?,in_app_enabled=?,email_enabled=?," +
+          "version=?,updated_by=?,updated_at=? WHERE id=?",
         [
           v.kind,
           v.title,
@@ -787,11 +851,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       );
       const message = rows[0];
       if (!message)
-        throw new PlatformDashboardError(
-          "platform_message_not_found",
-          404,
-          "刷新草稿列表。",
-        );
+        throw new PlatformDashboardError("platform_message_not_found", 404, "刷新草稿列表。");
       if (message.status !== "draft")
         throw new PlatformDashboardError(
           "platform_message_action_conflict",
@@ -822,13 +882,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           version: next,
           recipient_count: 0,
         };
-        await this.auditMessage(
-          c,
-          i,
-          "platform.message.cancelled",
-          i.messageId,
-          { reason: i.reason },
-        );
+        await this.auditMessage(c, i, "platform.message.cancelled", i.messageId, {
+          reason: i.reason,
+        });
         await this.saveOperation(c, i, i.messageId, result);
         await c.commit();
         return result;
@@ -846,7 +902,21 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         args.push(message.user_id);
       }
       const [recipients] = await c.query<RowDataPacket[]>(
-        `SELECT u.id user_id,m.organization_id,o.default_workspace_id workspace_id FROM users u JOIN memberships m ON m.user_id=u.id AND m.status='active' JOIN organizations o ON o.id=m.organization_id AND o.status='active' AND o.default_workspace_id IS NOT NULL WHERE u.status='active' ${target} AND NOT EXISTS(SELECT 1 FROM memberships earlier JOIN organizations earlier_o ON earlier_o.id=earlier.organization_id AND earlier_o.status='active' AND earlier_o.default_workspace_id IS NOT NULL WHERE earlier.user_id=u.id AND earlier.status='active' ${earlierScope} AND (earlier.created_at<m.created_at OR (earlier.created_at=m.created_at AND earlier.id<m.id))) ORDER BY u.email`,
+        `SELECT u.id user_id,m.organization_id,o.default_workspace_id workspace_id
+         FROM users u
+         JOIN memberships m ON m.user_id=u.id AND m.status='active'
+         JOIN organizations o ON o.id=m.organization_id AND o.status='active'
+          AND o.default_workspace_id IS NOT NULL
+         WHERE u.status='active' ${target}
+          AND NOT EXISTS(
+            SELECT 1 FROM memberships earlier
+            JOIN organizations earlier_o ON earlier_o.id=earlier.organization_id
+             AND earlier_o.status='active' AND earlier_o.default_workspace_id IS NOT NULL
+            WHERE earlier.user_id=u.id AND earlier.status='active' ${earlierScope}
+             AND (earlier.created_at<m.created_at
+              OR (earlier.created_at=m.created_at AND earlier.id<m.id))
+          )
+         ORDER BY u.email`,
         args,
       );
       if (!recipients.length)
@@ -866,7 +936,10 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           title: message.title,
         };
         await c.query(
-          "INSERT INTO outbox_events(id,organization_id,workspace_id,event_type,schema_version,payload_json,status,attempt_count,available_at,published_at,request_id,trace_id,created_at,updated_at,version) VALUES(?,?,?,'platform.message.published',1,?,'published',0,?,?,?,?,?,?,1)",
+          "INSERT INTO outbox_events(id,organization_id,workspace_id,event_type,schema_version," +
+            "payload_json,status,attempt_count,available_at,published_at,request_id,trace_id," +
+            "created_at,updated_at,version) VALUES(?,?,?,'platform.message.published'," +
+            "1,?,'published',0,?,?,?,?,?,?,1)",
           [
             eventId,
             recipient.organization_id,
@@ -881,7 +954,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           ],
         );
         await c.query(
-          "INSERT INTO notifications(id,organization_id,workspace_id,recipient_id,source_event_id,category,severity,title,body,resource_type,resource_id,read_at,version,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,'platform_message',?,NULL,1,?,?)",
+          "INSERT INTO notifications(id,organization_id,workspace_id,recipient_id,source_event_id," +
+            "category,severity,title,body,resource_type,resource_id,read_at,version,created_at," +
+            "updated_at) VALUES(?,?,?,?,?,?,?,?,?,'platform_message',?,NULL,1,?,?)",
           [
             notificationId,
             recipient.organization_id,
@@ -899,7 +974,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         );
         if (message.in_app_enabled) {
           await c.query(
-            "INSERT INTO notification_deliveries(id,organization_id,workspace_id,notification_id,recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES(?,?,?,?,?,'in_app','delivered',1,?,?)",
+            "INSERT INTO notification_deliveries(id,organization_id,workspace_id,notification_id," +
+              "recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES(?," +
+              "?,?,?,?,'in_app','delivered',1,?,?)",
             [
               randomUUID(),
               recipient.organization_id,
@@ -911,7 +988,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
             ],
           );
           await c.query(
-            "INSERT INTO realtime_events(organization_id,workspace_id,recipient_id,notification_id,event_type,payload_json,created_at) VALUES(?,?,?,?, 'notification.created',?,?)",
+            "INSERT INTO realtime_events(organization_id,workspace_id,recipient_id,notification_id," +
+              "event_type,payload_json,created_at) VALUES(?,?,?,?, 'notification.created'," +
+              "?,?)",
             [
               recipient.organization_id,
               recipient.workspace_id,
@@ -931,7 +1010,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         }
         if (message.email_enabled) {
           await c.query(
-            "INSERT INTO notification_deliveries(id,organization_id,workspace_id,notification_id,recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES(?,?,?,?,?,'email','pending_placeholder',0,?,?)",
+            "INSERT INTO notification_deliveries(id,organization_id,workspace_id,notification_id," +
+              "recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES(?," +
+              "?,?,?,?,'email','pending_placeholder',0,?,?)",
             [
               randomUUID(),
               recipient.organization_id,
@@ -990,11 +1071,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         ),
         row = rows[0];
       if (!row)
-        throw new PlatformDashboardError(
-          "trend_topic_not_found",
-          404,
-          "刷新内容列表后重试。",
-        );
+        throw new PlatformDashboardError("trend_topic_not_found", 404, "刷新内容列表后重试。");
       if (Number(row.version) !== i.expectedVersion)
         throw new PlatformDashboardError(
           "trend_topic_version_conflict",
@@ -1002,12 +1079,16 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           "内容已被其他管理员修改，刷新后重试。",
         );
       const version = Number(row.version) + 1;
+      await c.query("UPDATE trend_topics SET status=?,version=?,updated_at=? WHERE id=?", [
+        i.status,
+        version,
+        i.now,
+        i.topicId,
+      ]);
       await c.query(
-        "UPDATE trend_topics SET status=?,version=?,updated_at=? WHERE id=?",
-        [i.status, version, i.now, i.topicId],
-      );
-      await c.query(
-        "INSERT INTO trend_events(id,organization_id,workspace_id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES(?,?,?,?,? ,?,'user',?,?,?,?,?)",
+        "INSERT INTO trend_events(id,organization_id,workspace_id,event_type,resource_type," +
+          "resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES(?," +
+          "?,?,?,? ,?,'user',?,?,?,?,?)",
         [
           randomUUID(),
           row.organization_id,
@@ -1029,7 +1110,8 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       );
       const result = { id: i.topicId, status: i.status, version };
       await c.query(
-        "INSERT INTO platform_management_operations(id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES(?,?,?,?,?,?,?)",
+        "INSERT INTO platform_management_operations(id,actor_id,route,idempotency_key," +
+          "resource_id,result_json,created_at) VALUES(?,?,?,?,?,?,?)",
         [
           randomUUID(),
           i.actorId,
@@ -1041,7 +1123,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         ],
       );
       await c.query(
-        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,?,?,?,?,'trend_topic',?,'succeeded',?,?,?,?,1)",
+        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+          "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
+          "schema_version) VALUES(?,?,?,?,?,'trend_topic',?,'succeeded',?,?,?,?,1)",
         [
           randomUUID(),
           row.organization_id,
@@ -1094,16 +1178,8 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         );
         row = rows[0];
         if (!row)
-          throw new PlatformDashboardError(
-            "email_delivery_not_found",
-            404,
-            "刷新邮件列表后重试。",
-          );
-        if (
-          !["blocked_provider", "dead_letter", "retry_scheduled"].includes(
-            row.status,
-          )
-        )
+          throw new PlatformDashboardError("email_delivery_not_found", 404, "刷新邮件列表后重试。");
+        if (!["blocked_provider", "dead_letter", "retry_scheduled"].includes(row.status))
           throw new PlatformDashboardError(
             "email_delivery_state_conflict",
             409,
@@ -1112,7 +1188,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         nextStatus = "queued";
         resourceType = "auth_delivery";
         await c.query(
-          "UPDATE auth_delivery_outbox SET status='queued',attempt_count=0,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,request_id=?,trace_id=?,updated_at=? WHERE id=?",
+          "UPDATE auth_delivery_outbox SET status='queued',attempt_count=0,available_at=?," +
+            "lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,request_id=?," +
+            "trace_id=?,updated_at=? WHERE id=?",
           [i.now, i.requestId, i.traceId, i.now, i.deliveryId],
         );
       } else {
@@ -1122,11 +1200,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         );
         row = rows[0];
         if (!row)
-          throw new PlatformDashboardError(
-            "email_delivery_not_found",
-            404,
-            "刷新邮件列表后重试。",
-          );
+          throw new PlatformDashboardError("email_delivery_not_found", 404, "刷新邮件列表后重试。");
         organizationId = row.organization_id;
         workspaceId = row.workspace_id;
         resourceType = "notification_delivery";
@@ -1139,7 +1213,8 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
             );
           nextStatus = "pending_placeholder";
           await c.query(
-            "UPDATE notification_deliveries SET status='pending_placeholder',attempt_count=0,provider_ref=NULL,last_error_code=NULL,updated_at=? WHERE id=?",
+            "UPDATE notification_deliveries SET status='pending_placeholder',attempt_count=0," +
+              "provider_ref=NULL,last_error_code=NULL,updated_at=? WHERE id=?",
             [i.now, i.deliveryId],
           );
         } else {
@@ -1165,7 +1240,8 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         status: nextStatus,
       };
       await c.query(
-        "INSERT INTO platform_management_operations(id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES(?,?,?,?,?,?,?)",
+        "INSERT INTO platform_management_operations(id,actor_id,route,idempotency_key," +
+          "resource_id,result_json,created_at) VALUES(?,?,?,?,?,?,?)",
         [
           randomUUID(),
           i.actorId,
@@ -1177,7 +1253,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         ],
       );
       await c.query(
-        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,?,?,?,?,?,?,'succeeded',?,?,?,?,1)",
+        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+          "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
+          "schema_version) VALUES(?,?,?,?,?,?,?,'succeeded',?,?,?,?,1)",
         [
           randomUUID(),
           organizationId,
@@ -1209,7 +1287,10 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
   async exportData(i: any) {
     const data: any = await this.readManagement({ ...i, domain: "data" });
     await this.pool.query(
-      "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,?,'platform.data.export','platform_data',NULL,'succeeded',?,?,?,?,1)",
+      "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+        "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
+        "schema_version) VALUES(?,NULL,NULL,?,'platform.data.export','platform_data'," +
+        "NULL,'succeeded',?,?,?,?,1)",
       [
         randomUUID(),
         i.actorId,

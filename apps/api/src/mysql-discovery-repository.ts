@@ -1,2 +1,47 @@
-import type{Pool,RowDataPacket}from'mysql2/promise';import type{DiscoveryRepository}from'./discovery-service.js';
-export class MySqlDiscoveryRepository implements DiscoveryRepository{constructor(private readonly pool:Pool){}async search(input:Parameters<DiscoveryRepository['search']>[0]){if(!input.capabilities.length)return{items:[],nextCursor:null};const clauses=['organization_id=?','workspace_id=?','required_capability IN (?)',"route LIKE '/%'","route NOT LIKE '//%'",'(title LIKE ? ESCAPE \'!\' OR subtitle LIKE ? ESCAPE \'!\')'],params:unknown[]=[input.organizationId,input.workspaceId,input.capabilities];const escaped=input.query.replace(/[!%_]/g,value=>`!${value}`),pattern=`%${escaped}%`;params.push(pattern,pattern);if(input.cursor){const[rows]=await this.pool.query<RowDataPacket[]>('SELECT updated_at,id FROM search_documents WHERE id=? AND organization_id=? AND workspace_id=? LIMIT 1',[input.cursor,input.organizationId,input.workspaceId]);if(!rows[0])return{items:[],nextCursor:null};clauses.push('(updated_at<? OR (updated_at=? AND id<?))');params.push(rows[0].updated_at,rows[0].updated_at,input.cursor);}const[rows]=await this.pool.query<RowDataPacket[]>(`SELECT id,resource_type,resource_id,title,subtitle,route,updated_at FROM search_documents WHERE ${clauses.join(' AND ')} ORDER BY updated_at DESC,id DESC LIMIT ?`,[...params,input.limit+1]);const mapped=rows.map(row=>({id:String(row.id),resource_type:String(row.resource_type),resource_id:String(row.resource_id),title:String(row.title),subtitle:row.subtitle===null?null:String(row.subtitle),route:String(row.route),updated_at:new Date(row.updated_at).toISOString()}));const items=mapped.slice(0,input.limit);return{items,nextCursor:mapped.length>input.limit?items.at(-1)?.id??null:null};}}
+import type { Pool, RowDataPacket } from "mysql2/promise";
+import type { DiscoveryRepository } from "./discovery-service.js";
+export class MySqlDiscoveryRepository implements DiscoveryRepository {
+  constructor(private readonly pool: Pool) {}
+  async search(input: Parameters<DiscoveryRepository["search"]>[0]) {
+    if (!input.capabilities.length) return { items: [], nextCursor: null };
+    const clauses = [
+        "organization_id=?",
+        "workspace_id=?",
+        "required_capability IN (?)",
+        "route LIKE '/%'",
+        "route NOT LIKE '//%'",
+        "(title LIKE ? ESCAPE '!' OR subtitle LIKE ? ESCAPE '!')",
+      ],
+      params: unknown[] = [input.organizationId, input.workspaceId, input.capabilities];
+    const escaped = input.query.replace(/[!%_]/g, (value) => `!${value}`),
+      pattern = `%${escaped}%`;
+    params.push(pattern, pattern);
+    if (input.cursor) {
+      const [rows] = await this.pool.query<RowDataPacket[]>(
+        "SELECT updated_at,id FROM search_documents WHERE id=? AND organization_id=? AND workspace_id=? LIMIT 1",
+        [input.cursor, input.organizationId, input.workspaceId],
+      );
+      if (!rows[0]) return { items: [], nextCursor: null };
+      clauses.push("(updated_at<? OR (updated_at=? AND id<?))");
+      params.push(rows[0].updated_at, rows[0].updated_at, input.cursor);
+    }
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      `SELECT id,resource_type,resource_id,title,subtitle,route,updated_at
+       FROM search_documents
+       WHERE ${clauses.join(" AND ")}
+       ORDER BY updated_at DESC,id DESC LIMIT ?`,
+      [...params, input.limit + 1],
+    );
+    const mapped = rows.map((row) => ({
+      id: String(row.id),
+      resource_type: String(row.resource_type),
+      resource_id: String(row.resource_id),
+      title: String(row.title),
+      subtitle: row.subtitle === null ? null : String(row.subtitle),
+      route: String(row.route),
+      updated_at: new Date(row.updated_at).toISOString(),
+    }));
+    const items = mapped.slice(0, input.limit);
+    return { items, nextCursor: mapped.length > input.limit ? (items.at(-1)?.id ?? null) : null };
+  }
+}

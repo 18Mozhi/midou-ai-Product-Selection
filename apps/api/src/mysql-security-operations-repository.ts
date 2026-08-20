@@ -1,3 +1,117 @@
 // @ts-nocheck -- security aggregate rows are normalized and secrets are never selected.
-import{randomUUID}from"node:crypto";import type{Pool,RowDataPacket}from"mysql2/promise";import type{SecurityOperationsRepository}from"./security-operations-service.js";const n=(v:any)=>Number(v??0),iso=(v:any)=>v?new Date(v).toISOString():null;
-export class MySqlSecurityOperationsRepository implements SecurityOperationsRepository{constructor(private readonly pool:Pool,private readonly now=()=>new Date()){}async read(i:any){const since=new Date(this.now().getTime()-i.windowHours*3600000);const[[summary],[events],[sessions],[assets],[tokens],[audits]]=await Promise.all([this.pool.query<RowDataPacket[]>("SELECT (SELECT COUNT(*) FROM auth_security_events WHERE occurred_at>=?) security_events,(SELECT COUNT(*) FROM auth_security_events WHERE occurred_at>=? AND outcome IN ('failed','blocked')) risk_events,(SELECT COUNT(*) FROM user_sessions WHERE status='active' AND expires_at>?) active_sessions,(SELECT COUNT(*) FROM credential_assets WHERE status='active') active_credentials,(SELECT COUNT(*) FROM credential_assets WHERE status='active' AND expires_at IS NOT NULL AND expires_at<=DATE_ADD(?,INTERVAL 7 DAY)) credentials_expiring,(SELECT COUNT(*) FROM organization_api_tokens WHERE status='active' AND expires_at>?) active_org_tokens",[since,since,this.now(),this.now(),this.now()]),this.pool.query<RowDataPacket[]>("SELECT id,user_id,event_type,outcome,request_id,trace_id,occurred_at FROM auth_security_events WHERE occurred_at>=? ORDER BY occurred_at DESC LIMIT ?",[since,i.limit]),this.pool.query<RowDataPacket[]>("SELECT s.id,s.user_id,u.email,s.status,s.device_label,s.expires_at,s.last_seen_at,s.created_at FROM user_sessions s JOIN users u ON u.id=s.user_id ORDER BY s.last_seen_at DESC LIMIT ?",[i.limit]),this.pool.query<RowDataPacket[]>("SELECT a.id,a.provider_id,p.name provider_name,a.name,a.kind,a.key_version,a.fingerprint,a.status,a.expires_at,a.rotated_at,a.version,a.updated_at FROM credential_assets a JOIN providers p ON p.id=a.provider_id ORDER BY a.updated_at DESC LIMIT ?",[i.limit]),this.pool.query<RowDataPacket[]>("SELECT id,organization_id,name,token_prefix,scopes_json,status,expires_at,last_used_at,version,updated_at FROM organization_api_tokens ORDER BY updated_at DESC LIMIT ?",[i.limit]),this.pool.query<RowDataPacket[]>("SELECT id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,occurred_at FROM platform_audit_events WHERE occurred_at>=? ORDER BY occurred_at DESC LIMIT ?",[since,i.limit])]);const result={window:i.window,summary:Object.fromEntries(Object.entries(summary[0]??{}).map(([k,v])=>[k,n(v)])),security_events:events.map((r:any)=>({...r,occurred_at:iso(r.occurred_at)})),sessions:sessions.map((r:any)=>({...r,expires_at:iso(r.expires_at),last_seen_at:iso(r.last_seen_at),created_at:iso(r.created_at)})),credential_assets:assets.map((r:any)=>({...r,expires_at:iso(r.expires_at),rotated_at:iso(r.rotated_at),updated_at:iso(r.updated_at)})),organization_tokens:tokens.map((r:any)=>({...r,scopes:typeof r.scopes_json==='string'?JSON.parse(r.scopes_json):r.scopes_json,scopes_json:undefined,expires_at:iso(r.expires_at),last_used_at:iso(r.last_used_at),updated_at:iso(r.updated_at)})),audit_events:audits.map((r:any)=>({...r,occurred_at:iso(r.occurred_at)})),links:{credential_assets:"/platform-admin/credentials",audit_search:"/?view=audit-security"},observed_at:this.now().toISOString()};const c=await this.pool.getConnection();try{await c.beginTransaction();await c.query("INSERT INTO security_operations_views(id,actor_id,request_id,trace_id,observed_at) VALUES(?,?,?,?,?)",[randomUUID(),i.actorId,i.requestId,i.traceId,this.now()]);await c.query("INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,?,'platform.security.operations.read','security_operations',NULL,'succeeded',?,?,?, ?,1)",[randomUUID(),i.actorId,i.requestId,i.traceId,JSON.stringify({window:i.window}),this.now()]);await c.commit();}catch(e){await c.rollback();throw e;}finally{c.release();}return result;}}
+import { randomUUID } from "node:crypto";
+import type { Pool, RowDataPacket } from "mysql2/promise";
+import type { SecurityOperationsRepository } from "./security-operations-service.js";
+const n = (v: any) => Number(v ?? 0),
+  iso = (v: any) => (v ? new Date(v).toISOString() : null);
+export class MySqlSecurityOperationsRepository implements SecurityOperationsRepository {
+  constructor(
+    private readonly pool: Pool,
+    private readonly now = () => new Date(),
+  ) {}
+  async read(i: any) {
+    const since = new Date(this.now().getTime() - i.windowHours * 3600000);
+    const [[summary], [events], [sessions], [assets], [tokens], [audits]] = await Promise.all([
+      this.pool.query<RowDataPacket[]>(
+        "SELECT (SELECT COUNT(*) FROM auth_security_events WHERE occurred_at>=?) security_events," +
+          "(SELECT COUNT(*) FROM auth_security_events WHERE occurred_at>=? AND outcome IN ('failed'," +
+          "'blocked')) risk_events,(SELECT COUNT(*) FROM user_sessions WHERE status='active' AND " +
+          "expires_at>?) active_sessions,(SELECT COUNT(*) FROM credential_assets WHERE status='active') " +
+          "active_credentials,(SELECT COUNT(*) FROM credential_assets WHERE status='active' AND " +
+          "expires_at IS NOT NULL AND expires_at<=DATE_ADD(?,INTERVAL 7 DAY)) credentials_expiring," +
+          "(SELECT COUNT(*) FROM organization_api_tokens WHERE status='active' AND expires_at>?) " +
+          "active_org_tokens",
+        [since, since, this.now(), this.now(), this.now()],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT id,user_id,event_type,outcome,request_id,trace_id,occurred_at FROM auth_security_events " +
+          "WHERE occurred_at>=? ORDER BY occurred_at DESC LIMIT ?",
+        [since, i.limit],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT s.id,s.user_id,u.email,s.status,s.device_label,s.expires_at,s.last_seen_at," +
+          "s.created_at FROM user_sessions s JOIN users u ON u.id=s.user_id ORDER BY s.last_seen_at " +
+          "DESC LIMIT ?",
+        [i.limit],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT a.id,a.provider_id,p.name provider_name,a.name,a.kind,a.key_version," +
+          "a.fingerprint,a.status,a.expires_at,a.rotated_at,a.version,a.updated_at FROM credential_assets " +
+          "a JOIN providers p ON p.id=a.provider_id ORDER BY a.updated_at DESC LIMIT ?",
+        [i.limit],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT id,organization_id,name,token_prefix,scopes_json,status,expires_at," +
+          "last_used_at,version,updated_at FROM organization_api_tokens ORDER BY updated_at DESC " +
+          "LIMIT ?",
+        [i.limit],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id," +
+          "occurred_at FROM platform_audit_events WHERE occurred_at>=? ORDER BY occurred_at DESC " +
+          "LIMIT ?",
+        [since, i.limit],
+      ),
+    ]);
+    const result = {
+      window: i.window,
+      summary: Object.fromEntries(Object.entries(summary[0] ?? {}).map(([k, v]) => [k, n(v)])),
+      security_events: events.map((r: any) => ({ ...r, occurred_at: iso(r.occurred_at) })),
+      sessions: sessions.map((r: any) => ({
+        ...r,
+        expires_at: iso(r.expires_at),
+        last_seen_at: iso(r.last_seen_at),
+        created_at: iso(r.created_at),
+      })),
+      credential_assets: assets.map((r: any) => ({
+        ...r,
+        expires_at: iso(r.expires_at),
+        rotated_at: iso(r.rotated_at),
+        updated_at: iso(r.updated_at),
+      })),
+      organization_tokens: tokens.map((r: any) => ({
+        ...r,
+        scopes: typeof r.scopes_json === "string" ? JSON.parse(r.scopes_json) : r.scopes_json,
+        scopes_json: undefined,
+        expires_at: iso(r.expires_at),
+        last_used_at: iso(r.last_used_at),
+        updated_at: iso(r.updated_at),
+      })),
+      audit_events: audits.map((r: any) => ({ ...r, occurred_at: iso(r.occurred_at) })),
+      links: {
+        credential_assets: "/platform-admin/credentials",
+        audit_search: "/?view=audit-security",
+      },
+      observed_at: this.now().toISOString(),
+    };
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      await c.query(
+        "INSERT INTO security_operations_views(id,actor_id,request_id,trace_id,observed_at) VALUES(?,?,?,?,?)",
+        [randomUUID(), i.actorId, i.requestId, i.traceId, this.now()],
+      );
+      await c.query(
+        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+          "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
+          "schema_version) VALUES(?,NULL,NULL,?,'platform.security.operations.read'," +
+          "'security_operations',NULL,'succeeded',?,?,?, ?,1)",
+        [
+          randomUUID(),
+          i.actorId,
+          i.requestId,
+          i.traceId,
+          JSON.stringify({ window: i.window }),
+          this.now(),
+        ],
+      );
+      await c.commit();
+    } catch (e) {
+      await c.rollback();
+      throw e;
+    } finally {
+      c.release();
+    }
+    return result;
+  }
+}

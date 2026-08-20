@@ -112,7 +112,8 @@ export class MySqlProviderRegistryRepository implements ProviderRegistryReposito
       );
       const result = { id: input.id, ...v, version: 1, updated_at: input.now.toISOString() };
       await c.query(
-        "INSERT INTO provider_versions (id,provider_id,version,snapshot_json,actor_id,action,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO provider_versions (id,provider_id,version,snapshot_json,actor_id," +
+          "action,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?)",
         [
           randomUUID(),
           input.id,
@@ -126,7 +127,8 @@ export class MySqlProviderRegistryRepository implements ProviderRegistryReposito
         ],
       );
       await c.query(
-        "INSERT INTO provider_operations (id,actor_id,idempotency_key,route,provider_id,result_version,created_at) VALUES (?,?,?,?,?,?,?)",
+        "INSERT INTO provider_operations (id,actor_id,idempotency_key,route,provider_id," +
+          "result_version,created_at) VALUES (?,?,?,?,?,?,?)",
         [randomUUID(), input.actorId, input.idempotencyKey, route, input.id, 1, input.now],
       );
       await c.commit();
@@ -207,7 +209,8 @@ export class MySqlProviderRegistryRepository implements ProviderRegistryReposito
       );
       const result = { id: input.id, ...v, version: next, updated_at: input.now.toISOString() };
       await c.query(
-        "INSERT INTO provider_versions (id,provider_id,version,snapshot_json,actor_id,action,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO provider_versions (id,provider_id,version,snapshot_json,actor_id," +
+          "action,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?)",
         [
           randomUUID(),
           input.id,
@@ -221,7 +224,8 @@ export class MySqlProviderRegistryRepository implements ProviderRegistryReposito
         ],
       );
       await c.query(
-        "INSERT INTO provider_operations (id,actor_id,idempotency_key,route,provider_id,result_version,created_at) VALUES (?,?,?,?,?,?,?)",
+        "INSERT INTO provider_operations (id,actor_id,idempotency_key,route,provider_id," +
+          "result_version,created_at) VALUES (?,?,?,?,?,?,?)",
         [randomUUID(), input.actorId, input.idempotencyKey, route, input.id, next, input.now],
       );
       await c.commit();

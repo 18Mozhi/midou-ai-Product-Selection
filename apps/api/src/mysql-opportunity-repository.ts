@@ -176,7 +176,8 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       components: RowDataPacket[] = [];
     try {
       const [scoreRuns] = await this.pool.query<RowDataPacket[]>(
-        "SELECT * FROM opportunity_score_runs WHERE opportunity_id=? AND organization_id=? AND workspace_id=? ORDER BY scored_at DESC,id DESC LIMIT 1",
+        "SELECT * FROM opportunity_score_runs WHERE opportunity_id=? AND organization_id=? AND " +
+          "workspace_id=? ORDER BY scored_at DESC,id DESC LIMIT 1",
         [input.opportunityId, input.organizationId, input.workspaceId],
       );
       scoreRun = scoreRuns[0];
@@ -332,7 +333,8 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         now,
       );
       await connection.query(
-        "INSERT INTO opportunity_operations (id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+        "INSERT INTO opportunity_operations (id,actor_id,route,idempotency_key,resource_id," +
+          "result_json,created_at) VALUES (?,?,?,?,?,?,?)",
         [
           randomUUID(),
           input.actorId,
@@ -443,7 +445,8 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         ],
       );
       await connection.query(
-        "UPDATE opportunities SET decision_status=?,lifecycle_status=?,version=?,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+        "UPDATE opportunities SET decision_status=?,lifecycle_status=?,version=?," +
+          "updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
         [
           status,
           status,
@@ -527,7 +530,8 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         now,
       );
       await connection.query(
-        "INSERT INTO opportunity_operations (id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+        "INSERT INTO opportunity_operations (id,actor_id,route,idempotency_key,resource_id," +
+          "result_json,created_at) VALUES (?,?,?,?,?,?,?)",
         [
           randomUUID(),
           input.actorId,

@@ -35,13 +35,11 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
     const [[sourceRows], [taskRows], [deadRows], [qualityRows], [attemptRows], [rootRows]] =
       await Promise.all([
         this.pool.query<RowDataPacket[]>(
-          `SELECT p.id, p.code, p.name, p.status, p.owner_label,
-                  p.schedule_minutes, p.concurrency_limit, p.parser_version,
-                  h.health_status, h.last_checked_at, h.last_latency_ms,
-                  h.last_error_code, h.consecutive_failures
-             FROM providers p
-        LEFT JOIN provider_adapter_health h ON h.provider_id = p.id
-         ORDER BY p.status = 'enabled' DESC, p.name`,
+          "SELECT p.id, p.code, p.name, p.status, p.owner_label,\n                  p.schedule_minutes," +
+            " p.concurrency_limit, p.parser_version,\n                  h.health_status," +
+            " h.last_checked_at, h.last_latency_ms,\n                  h.last_error_code," +
+            " h.consecutive_failures\n             FROM providers p\n        LEFT JOIN provider_adapter_health " +
+            "h ON h.provider_id = p.id\n         ORDER BY p.status = 'enabled' DESC, p.name",
         ),
         this.pool.query<RowDataPacket[]>(
           `SELECT t.status, COUNT(*) total
@@ -291,10 +289,9 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
     try {
       await connection.beginTransaction();
       await connection.query(
-        `INSERT INTO collection_console_views
-          (id, actor_id, organization_filter_id, workspace_filter_id,
-           request_id, trace_id, observed_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        "INSERT INTO collection_console_views\n          (id, actor_id, organization_filter_id," +
+          " workspace_filter_id,\n           request_id, trace_id, observed_at)\n         VALUES " +
+          "(?, ?, ?, ?, ?, ?, ?)",
         [
           randomUUID(),
           input.actorId,
@@ -306,12 +303,11 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
         ],
       );
       await connection.query(
-        `INSERT INTO platform_audit_events
-          (id, organization_id, workspace_id, actor_id, action, resource_type,
-           resource_id, outcome, request_id, trace_id, metadata, occurred_at,
-           schema_version)
-         VALUES (?, ?, ?, ?, ?, 'collection_console', NULL, 'succeeded',
-                 ?, ?, ?, ?, 1)`,
+        "INSERT INTO platform_audit_events\n          (id, organization_id, workspace_id," +
+          " actor_id, action, resource_type,\n           resource_id, outcome, request_id," +
+          " trace_id, metadata, occurred_at,\n           schema_version)\n         VALUES (?," +
+          " ?, ?, ?, ?, 'collection_console', NULL, 'succeeded',\n                 ?," +
+          " ?, ?, ?, 1)",
         [
           randomUUID(),
           input.organizationId,

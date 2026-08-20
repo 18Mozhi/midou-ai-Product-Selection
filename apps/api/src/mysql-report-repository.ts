@@ -3,9 +3,7 @@ import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { ReportServiceError, type ReportRepository } from "./report-service.js";
 const parse = (v: unknown) => (typeof v === "string" ? JSON.parse(v) : v),
   iso = (v: unknown) =>
-    v == null
-      ? null
-      : (v instanceof Date ? v : new Date(String(v))).toISOString();
+    v == null ? null : (v instanceof Date ? v : new Date(String(v))).toISOString();
 export class MySqlReportRepository implements ReportRepository {
   constructor(
     private readonly pool: Pool,
@@ -18,11 +16,15 @@ export class MySqlReportRepository implements ReportRepository {
   }
   private async opportunities(i: any) {
     const [summary] = await this.pool.query<RowDataPacket[]>(
-        "SELECT COUNT(*) total,SUM(decision_status='adopted') adopted,SUM(decision_status='observing') observing,SUM(decision_status='rejected') rejected,SUM(coverage_status='complete') complete_coverage,ROUND(AVG(overall_score),2) average_score,MAX(updated_at) observed_at FROM opportunities WHERE organization_id=? AND workspace_id=?",
+        "SELECT COUNT(*) total,SUM(decision_status='adopted') adopted,SUM(decision_status='observing') " +
+          "observing,SUM(decision_status='rejected') rejected,SUM(coverage_status='complete') complete_coverage," +
+          "ROUND(AVG(overall_score),2) average_score,MAX(updated_at) observed_at FROM opportunities " +
+          "WHERE organization_id=? AND workspace_id=?",
         [i.organizationId, i.workspaceId],
       ),
       [groups] = await this.pool.query<RowDataPacket[]>(
-        "SELECT recommendation_status label,COUNT(*) value FROM opportunities WHERE organization_id=? AND workspace_id=? GROUP BY recommendation_status ORDER BY label",
+        "SELECT recommendation_status label,COUNT(*) value FROM opportunities WHERE organization_id=? " +
+          "AND workspace_id=? GROUP BY recommendation_status ORDER BY label",
         [i.organizationId, i.workspaceId],
       );
     return {
@@ -33,10 +35,7 @@ export class MySqlReportRepository implements ReportRepository {
         observing: Number(summary[0]?.observing ?? 0),
         rejected: Number(summary[0]?.rejected ?? 0),
         complete_coverage: Number(summary[0]?.complete_coverage ?? 0),
-        average_score:
-          summary[0]?.average_score == null
-            ? null
-            : Number(summary[0].average_score),
+        average_score: summary[0]?.average_score == null ? null : Number(summary[0].average_score),
       },
       series: groups.map((r) => ({
         label: String(r.label),
@@ -47,11 +46,15 @@ export class MySqlReportRepository implements ReportRepository {
   }
   private async trends(i: any) {
     const [summary] = await this.pool.query<RowDataPacket[]>(
-        "SELECT COUNT(*) total,COALESCE(SUM(signal_count),0) signals,COALESCE(SUM(source_count),0) sources,ROUND(AVG(momentum_percent),2) average_momentum,ROUND(AVG(confidence_score),2) average_confidence,MAX(last_seen_at) observed_at FROM trend_topics WHERE organization_id=? AND workspace_id=?",
+        "SELECT COUNT(*) total,COALESCE(SUM(signal_count),0) signals,COALESCE(SUM(source_count)," +
+          "0) sources,ROUND(AVG(momentum_percent),2) average_momentum,ROUND(AVG(confidence_score)," +
+          "2) average_confidence,MAX(last_seen_at) observed_at FROM trend_topics WHERE organization_id=? " +
+          "AND workspace_id=?",
         [i.organizationId, i.workspaceId],
       ),
       [groups] = await this.pool.query<RowDataPacket[]>(
-        "SELECT status label,COUNT(*) value FROM trend_topics WHERE organization_id=? AND workspace_id=? GROUP BY status ORDER BY label",
+        "SELECT status label,COUNT(*) value FROM trend_topics WHERE organization_id=? AND workspace_id=? " +
+          "GROUP BY status ORDER BY label",
         [i.organizationId, i.workspaceId],
       );
     return {
@@ -61,13 +64,9 @@ export class MySqlReportRepository implements ReportRepository {
         signals: Number(summary[0]?.signals ?? 0),
         sources: Number(summary[0]?.sources ?? 0),
         average_momentum:
-          summary[0]?.average_momentum == null
-            ? null
-            : Number(summary[0].average_momentum),
+          summary[0]?.average_momentum == null ? null : Number(summary[0].average_momentum),
         average_confidence:
-          summary[0]?.average_confidence == null
-            ? null
-            : Number(summary[0].average_confidence),
+          summary[0]?.average_confidence == null ? null : Number(summary[0].average_confidence),
       },
       series: groups.map((r) => ({
         label: String(r.label),
@@ -78,7 +77,13 @@ export class MySqlReportRepository implements ReportRepository {
   }
   private async team(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT m.user_id,u.email,COUNT(t.id) total,SUM(t.status='todo') todo,SUM(t.status='in_progress') in_progress,SUM(t.status='completed') completed,SUM(t.status IN ('todo','in_progress') AND t.due_at IS NOT NULL AND t.due_at<?) overdue,MAX(t.updated_at) observed_at FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN tasks t ON t.organization_id=m.organization_id AND t.workspace_id=? AND t.assignee_id=m.user_id AND t.deleted_at IS NULL WHERE m.organization_id=? AND m.status='active' GROUP BY m.user_id,u.email ORDER BY completed DESC,u.email",
+      "SELECT m.user_id,u.email,COUNT(t.id) total,SUM(t.status='todo') todo,SUM(t.status='in_progress') " +
+        "in_progress,SUM(t.status='completed') completed,SUM(t.status IN ('todo'," +
+        "'in_progress') AND t.due_at IS NOT NULL AND t.due_at<?) overdue,MAX(t.updated_at) observed_at " +
+        "FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN tasks t ON t.organization_id=m.organization_id " +
+        "AND t.workspace_id=? AND t.assignee_id=m.user_id AND t.deleted_at IS NULL WHERE m.organization_id=? " +
+        "AND m.status='active' GROUP BY m.user_id,u.email ORDER BY completed DESC," +
+        "u.email",
       [this.now(), i.workspaceId, i.organizationId],
     );
     const totals = rows.reduce(
@@ -104,8 +109,7 @@ export class MySqlReportRepository implements ReportRepository {
       })),
       observed_at: iso(
         rows.reduce(
-          (v, r) =>
-            !v || new Date(r.observed_at) > new Date(v) ? r.observed_at : v,
+          (v, r) => (!v || new Date(r.observed_at) > new Date(v) ? r.observed_at : v),
           null,
         ),
       ),
@@ -123,12 +127,7 @@ export class MySqlReportRepository implements ReportRepository {
       "SELECT * FROM report_exports WHERE id=? AND organization_id=? AND workspace_id=?",
       [i.exportId, i.organizationId, i.workspaceId],
     );
-    if (!rows[0])
-      throw new ReportServiceError(
-        "report_export_not_found",
-        404,
-        "刷新导出列表。",
-      );
+    if (!rows[0]) throw new ReportServiceError("report_export_not_found", 404, "刷新导出列表。");
     return this.view(rows[0]);
   }
   async createExport(i: any) {
@@ -139,7 +138,10 @@ export class MySqlReportRepository implements ReportRepository {
     try {
       await c.beginTransaction();
       await c.query(
-        "INSERT INTO report_exports (id,organization_id,workspace_id,report_type,format,status,attempt_count,available_at,filename,expires_at,created_by,request_id,trace_id,version,created_at,updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?,?,1,?,?)",
+        "INSERT INTO report_exports (id,organization_id,workspace_id,report_type," +
+          "format,status,attempt_count,available_at,filename,expires_at,created_by," +
+          "request_id,trace_id,version,created_at,updated_at) VALUES (?,?,?,?,?,'queued'," +
+          "0,?,?,?,?,?,?,1,?,?)",
         [
           i.id,
           i.organizationId,
@@ -170,24 +172,15 @@ export class MySqlReportRepository implements ReportRepository {
       await this.record(
         c,
         i,
-        i.regeneratedFromExportId
-          ? "report.export.regenerated"
-          : "report.export.queued",
+        i.regeneratedFromExportId ? "report.export.regenerated" : "report.export.queued",
         i.id,
         result,
         now,
       );
       await c.query(
-        "INSERT INTO report_export_operations (id,actor_id,route_key,idempotency_key,export_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
-        [
-          randomUUID(),
-          i.actorId,
-          i.route,
-          i.idempotencyKey,
-          i.id,
-          JSON.stringify(result),
-          now,
-        ],
+        "INSERT INTO report_export_operations (id,actor_id,route_key,idempotency_key," +
+          "export_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+        [randomUUID(), i.actorId, i.route, i.idempotencyKey, i.id, JSON.stringify(result), now],
       );
       await c.commit();
       return result;
@@ -231,7 +224,9 @@ export class MySqlReportRepository implements ReportRepository {
     now: Date,
   ) {
     await c.query(
-      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,?,'report_export',?,?,?,?,?,1)",
+      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action," +
+        "resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at," +
+        "schema_version) VALUES (?,?,?,?,?,'report_export',?,?,?,?,?,1)",
       [
         randomUUID(),
         i.organizationId,
@@ -246,7 +241,9 @@ export class MySqlReportRepository implements ReportRepository {
       ],
     );
     await c.query(
-      "INSERT INTO outbox_events (id,organization_id,workspace_id,event_type,schema_version,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at,version) VALUES (?,?,?,?,1,?,'pending',0,?,?,?,?,?,1)",
+      "INSERT INTO outbox_events (id,organization_id,workspace_id,event_type,schema_version," +
+        "payload_json,status,attempt_count,available_at,request_id,trace_id,created_at," +
+        "updated_at,version) VALUES (?,?,?,?,1,?,'pending',0,?,?,?,?,?,1)",
       [
         randomUUID(),
         i.organizationId,

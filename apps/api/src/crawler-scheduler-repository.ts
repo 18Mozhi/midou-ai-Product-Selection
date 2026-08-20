@@ -15,62 +15,41 @@ export class CrawlerSchedulerRepository implements Contract {
         [now],
       ),
       this.pool.query<RowDataPacket[]>(
-        `SELECT p.id,p.code,p.concurrency_limit configured_concurrency,
-          LEAST(p.concurrency_limit,1) effective_concurrency,
-          COALESCE(l.active_leases,0) active_leases,
-          COALESCE(w.queued_tasks,0) queued_tasks,
-          COALESCE(w.longest_queue_wait_seconds,0) longest_queue_wait_seconds
-         FROM providers p
-         LEFT JOIN (
-           SELECT slot_key provider_id,COUNT(*) active_leases
-           FROM crawler_scheduler_leases
-           WHERE slot_type='provider' AND expires_at>?
-           GROUP BY slot_key
-         ) l ON l.provider_id=p.id
-         LEFT JOIN (
-           SELECT q.provider_id,COUNT(DISTINCT t.id) queued_tasks,
-             MAX(TIMESTAMPDIFF(SECOND,t.available_at,?)) longest_queue_wait_seconds
-           FROM collection_subqueries q
-           JOIN collection_tasks t ON t.id=q.task_id
-           WHERE t.status IN ('scheduled','queued','retry_scheduled','rate_limited')
-             AND t.available_at<=?
-           GROUP BY q.provider_id
-         ) w ON w.provider_id=p.id
-         WHERE p.status='enabled'
-         ORDER BY p.code`,
+        "SELECT p.id,p.code,p.concurrency_limit configured_concurrency,\n          LEAST(p.concurrency_limit," +
+          "1) effective_concurrency,\n          COALESCE(l.active_leases,0) active_leases," +
+          "\n          COALESCE(w.queued_tasks,0) queued_tasks,\n          COALESCE(w.longest_queue_wait_seconds," +
+          "0) longest_queue_wait_seconds\n         FROM providers p\n         LEFT JOIN (\n       " +
+          "    SELECT slot_key provider_id,COUNT(*) active_leases\n           FROM crawler_scheduler_leases\n" +
+          "           WHERE slot_type='provider' AND expires_at>?\n           GROUP BY slot_key\n" +
+          "         ) l ON l.provider_id=p.id\n         LEFT JOIN (\n           SELECT q.provider_id," +
+          "COUNT(DISTINCT t.id) queued_tasks,\n             MAX(TIMESTAMPDIFF(SECOND," +
+          "t.available_at,?)) longest_queue_wait_seconds\n           FROM collection_subqueries " +
+          "q\n           JOIN collection_tasks t ON t.id=q.task_id\n           WHERE t.status IN " +
+          "('scheduled','queued','retry_scheduled','rate_limited')\n             AND t.available_at<=?\n" +
+          "           GROUP BY q.provider_id\n         ) w ON w.provider_id=p.id\n         WHERE " +
+          "p.status='enabled'\n         ORDER BY p.code",
         [now, now, now],
       ),
       this.pool.query<RowDataPacket[]>(
-        `SELECT p.id,COUNT(l.crawler_profile_id) active_leases
-         FROM crawler_profiles p
-         LEFT JOIN crawler_profile_leases l
-           ON l.crawler_profile_id=p.id AND l.expires_at>?
-         WHERE p.status='active'
-         GROUP BY p.id
-         ORDER BY p.id`,
+        "SELECT p.id,COUNT(l.crawler_profile_id) active_leases\n         FROM crawler_profiles " +
+          "p\n         LEFT JOIN crawler_profile_leases l\n           ON l.crawler_profile_id=p.id " +
+          "AND l.expires_at>?\n         WHERE p.status='active'\n         GROUP BY p.id\n         " +
+          "ORDER BY p.id",
         [now],
       ),
       this.pool.query<RowDataPacket[]>(
-        `SELECT COUNT(*) total
-         FROM (
-           SELECT slot_type,slot_key,COUNT(*) c
-           FROM crawler_scheduler_leases
-           WHERE expires_at>?
-           GROUP BY slot_type,slot_key
-           HAVING c>1
-         ) duplicated`,
+        "SELECT COUNT(*) total\n         FROM (\n           SELECT slot_type,slot_key," +
+          "COUNT(*) c\n           FROM crawler_scheduler_leases\n           WHERE expires_at>?\n  " +
+          "         GROUP BY slot_type,slot_key\n           HAVING c>1\n         ) duplicated",
         [now],
       ),
       this.pool.query<RowDataPacket[]>(
-        `SELECT l.slot_type,l.task_id,l.run_id,l.lease_owner,l.heartbeat_at,l.expires_at,
-          t.status task_status,p.name provider_name
-         FROM crawler_scheduler_leases l
-         LEFT JOIN collection_tasks t ON t.id=l.task_id
-         LEFT JOIN providers p
-           ON p.id=CASE WHEN l.slot_type='provider' THEN l.slot_key ELSE NULL END
-         WHERE l.expires_at>?
-         ORDER BY FIELD(l.slot_type,'worker','provider','crawler'),l.leased_at,l.slot_key
-         LIMIT 100`,
+        "SELECT l.slot_type,l.task_id,l.run_id,l.lease_owner,l.heartbeat_at,l.expires_at," +
+          "\n          t.status task_status,p.name provider_name\n         FROM crawler_scheduler_leases " +
+          "l\n         LEFT JOIN collection_tasks t ON t.id=l.task_id\n         LEFT JOIN providers " +
+          "p\n           ON p.id=CASE WHEN l.slot_type='provider' THEN l.slot_key ELSE NULL END\n" +
+          "         WHERE l.expires_at>?\n         ORDER BY FIELD(l.slot_type,'worker'," +
+          "'provider','crawler'),l.leased_at,l.slot_key\n         LIMIT 100",
         [now],
       ),
     ]);
@@ -112,11 +91,11 @@ export class CrawlerSchedulerRepository implements Contract {
     try {
       await c.beginTransaction();
       await c.query(
-        `INSERT INTO crawler_scheduler_observations(
-          id,source,state,worker_instances,crawler_instances,active_worker_leases,
-          active_crawler_leases,duplicate_lease_count,load_basis_points,available_memory_mb,
-          free_disk_mb,provider_count,profile_count,finding_codes_json,request_id,trace_id,observed_at
-        ) VALUES(?,'api_full',?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+        "INSERT INTO crawler_scheduler_observations(\n          id,source,state,worker_instances," +
+          "crawler_instances,active_worker_leases,\n          active_crawler_leases," +
+          "duplicate_lease_count,load_basis_points,available_memory_mb,\n          free_disk_mb," +
+          "provider_count,profile_count,finding_codes_json,request_id,trace_id,observed_at\n    " +
+          "    ) VALUES(?,'api_full',?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [
           id,
           input.evaluation.state,
@@ -137,10 +116,11 @@ export class CrawlerSchedulerRepository implements Contract {
         ],
       );
       await c.query(
-        `INSERT INTO platform_audit_events(
-          id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,
-          outcome,request_id,trace_id,metadata,occurred_at,schema_version
-        ) VALUES(?,NULL,NULL,?,'platform.crawler_scheduler.read','crawler_scheduler',?,'succeeded',?,?,?,?,1)`,
+        "INSERT INTO platform_audit_events(\n          id,organization_id,workspace_id," +
+          "actor_id,action,resource_type,resource_id,\n          outcome,request_id," +
+          "trace_id,metadata,occurred_at,schema_version\n        ) VALUES(?,NULL,NULL," +
+          "?,'platform.crawler_scheduler.read','crawler_scheduler',?,'succeeded',?," +
+          "?,?,?,1)",
         [
           randomUUID(),
           input.actorId,
@@ -191,9 +171,9 @@ export class CrawlerSchedulerRepository implements Contract {
         await c.query("DELETE FROM crawler_scheduler_leases WHERE expires_at<=?", [input.now]);
       const result = { recovered: rows.length };
       await c.query(
-        `INSERT INTO crawler_scheduler_operations(
-          id,actor_id,route,idempotency_key,result_json,request_id,trace_id,created_at
-        ) VALUES(?,?,?,?,?,?,?,?)`,
+        "INSERT INTO crawler_scheduler_operations(\n          id,actor_id,route,idempotency_key," +
+          "result_json,request_id,trace_id,created_at\n        ) VALUES(?,?,?,?,?,?," +
+          "?,?)",
         [
           randomUUID(),
           input.actorId,
@@ -206,13 +186,11 @@ export class CrawlerSchedulerRepository implements Contract {
         ],
       );
       await c.query(
-        `INSERT INTO platform_audit_events(
-          id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,
-          outcome,request_id,trace_id,metadata,occurred_at,schema_version
-        ) VALUES(
-          ?,NULL,NULL,?,'platform.crawler_scheduler.recover_expired',
-          'crawler_scheduler',NULL,'succeeded',?,?,?,?,1
-        )`,
+        "INSERT INTO platform_audit_events(\n          id,organization_id,workspace_id," +
+          "actor_id,action,resource_type,resource_id,\n          outcome,request_id," +
+          "trace_id,metadata,occurred_at,schema_version\n        ) VALUES(\n          ?," +
+          "NULL,NULL,?,'platform.crawler_scheduler.recover_expired',\n          'crawler_scheduler'," +
+          "NULL,'succeeded',?,?,?,?,1\n        )",
         [
           randomUUID(),
           input.actorId,
