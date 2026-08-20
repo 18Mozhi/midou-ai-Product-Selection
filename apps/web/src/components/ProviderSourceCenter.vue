@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
+import ProviderParserSampleDialog from "./ProviderParserSampleDialog.vue";
 
 type ViewState = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface ProvisionedSource {
@@ -69,6 +71,7 @@ interface ConfigurationVersion {
 }
 
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const state = ref<ViewState>("loading");
 const items = ref<SourceItem[]>([]);
 const query = ref("");
@@ -159,8 +162,6 @@ const modeText = (value: string) =>
       manual: "人工录入",
     }) as Record<string, string>
   )[value] ?? value;
-const replayText = (value: ParserSample["last_replay_status"] | ParserSampleReplay["status"]) =>
-  ({ never: "尚未回放", passed: "一致通过", changed: "发现差异", failed: "解析失败" })[value];
 const displayValue = (value: unknown) => {
   const text = typeof value === "string" ? value : JSON.stringify(value);
   return text == null ? "未提供" : text.length > 240 ? `${text.slice(0, 240)}…` : text;
@@ -192,25 +193,27 @@ const slaText = (item: SourceItem) =>
     ? `≤ ${item.provisioned?.schedule_minutes ?? item.schedule_minutes} 分钟（沿用采集计划）`
     : "未设自动 SLA";
 
+async function api<T>(path: string, options: RequestInit = {}) {
+  try {
+    const response = await request<T>(path, options);
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? requestId.value;
+    message.value = failure?.actionHint ?? "来源服务暂不可用";
+    throw error;
+  }
+}
+
 async function load() {
   state.value = "loading";
   message.value = "";
   try {
-    const response = await fetch(`${props.apiBaseUrl}/platform/provider-sources`, {
-      credentials: "include",
-    });
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) {
-      message.value = body?.error?.action_hint ?? "读取来源失败";
-      state.value = failure(response.status);
-      return;
-    }
-    items.value = body.data ?? [];
+    items.value = (await api<SourceItem[]>("/platform/provider-sources")) ?? [];
     state.value = items.value.length ? "ready" : "empty";
   } catch (error) {
-    message.value = error instanceof Error ? error.message : "来源服务暂不可用";
-    state.value = "blocked";
+    state.value = error instanceof ApiClientError ? failure(error.status) : "blocked";
   }
 }
 
@@ -233,31 +236,17 @@ async function save() {
   try {
     const isAutomatic = editing.value.availability === "automatic";
     const source = editing.value.provisioned;
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/provider-sources/${source.id}/configuration`,
-      {
-        method: "PUT",
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-        body: JSON.stringify({ ...form, expected_version: source.version }),
-      },
-    );
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      message.value = body?.error?.action_hint ?? "来源配置未保存";
-      return;
-    }
+    await api(`/platform/provider-sources/${source.id}/configuration`, {
+      method: "PUT",
+      body: JSON.stringify({ ...form, expected_version: source.version }),
+    });
     editing.value = null;
     await load();
     message.value = isAutomatic
       ? "来源配置已保存；频率、超时、重试和启停状态不会再被启动同步覆盖。"
       : "来源设置已保存；该来源完成解析合同验收前不会进入自动采集。";
   } catch {
-    message.value = "来源配置服务暂不可用，本次没有保存。";
+    if (!message.value) message.value = "来源配置服务暂不可用，本次没有保存。";
   } finally {
     saving.value = false;
   }
@@ -270,27 +259,19 @@ async function loadConfigurationVersions(item: SourceItem) {
   versionCurrentVersion.value = null;
   rollbackReason.value = "恢复已验证的来源采集设置";
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/provider-sources/${item.provisioned.id}/configuration/versions`,
-        { credentials: "include" },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      message.value = body?.error?.action_hint ?? "配置版本读取失败";
-      versionSource.value = null;
-      return;
-    }
-    const currentVersion = Number(body.data?.current_version);
+    const result = await api<any>(
+      `/platform/provider-sources/${item.provisioned.id}/configuration/versions`,
+    );
+    const currentVersion = Number(result?.current_version);
     if (!Number.isInteger(currentVersion) || currentVersion < 1) {
       message.value = "配置版本响应缺少有效的当前版本。";
       versionSource.value = null;
       return;
     }
     versionCurrentVersion.value = currentVersion;
-    versionHistory.value = body.data?.versions ?? [];
+    versionHistory.value = result?.versions ?? [];
   } catch {
-    message.value = "配置版本服务暂不可用。";
+    if (!message.value) message.value = "配置版本服务暂不可用。";
     versionSource.value = null;
   } finally {
     versionLoading.value = false;
@@ -301,32 +282,21 @@ async function rollbackConfiguration(version: ConfigurationVersion) {
   if (!source || versionCurrentVersion.value === null || !version.rollback_available) return;
   rollingBack.value = version.version;
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/provider-sources/${source.id}/configuration/rollbacks`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "content-type": "application/json", "idempotency-key": crypto.randomUUID() },
-          body: JSON.stringify({
-            target_version: version.version,
-            expected_version: versionCurrentVersion.value,
-            reason: rollbackReason.value,
-          }),
-        },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      message.value = body?.error?.action_hint ?? "配置未能回滚";
-      return;
-    }
+    await api(`/platform/provider-sources/${source.id}/configuration/rollbacks`, {
+      method: "POST",
+      body: JSON.stringify({
+        target_version: version.version,
+        expected_version: versionCurrentVersion.value,
+        reason: rollbackReason.value,
+      }),
+    });
     const code = versionSource.value?.code;
     await load();
     const refreshed = items.value.find((item) => item.code === code);
     if (refreshed) await loadConfigurationVersions(refreshed);
     message.value = `已从第 ${version.version} 版生成新的当前版本；历史记录保持不变。`;
   } catch {
-    message.value = "配置回滚服务暂不可用，本次没有修改。";
+    if (!message.value) message.value = "配置回滚服务暂不可用，本次没有修改。";
   } finally {
     rollingBack.value = null;
   }
@@ -336,29 +306,16 @@ async function testSource(item: SourceItem) {
   testing.value = item.provisioned.id;
   message.value = "";
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/provider-adapters/${item.provisioned.id}/health-check`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-      },
+    const result = await api<any>(
+      `/platform/provider-adapters/${item.provisioned.id}/health-check`,
+      { method: "POST" },
     );
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      message.value = body?.error?.action_hint ?? "来源测试未完成";
-      return;
-    }
     message.value =
-      body.data?.health_status === "ready"
+      result?.health_status === "ready"
         ? `${item.name} 匿名采集测试通过，未使用登录凭证。`
-        : `${item.name} 已完成测试：${body.data?.last_error_code ?? "来源暂不可用"}。`;
+        : `${item.name} 已完成测试：${result?.last_error_code ?? "来源暂不可用"}。`;
   } catch {
-    message.value = "来源测试服务暂不可用，本次没有修改配置。";
+    if (!message.value) message.value = "来源测试服务暂不可用，本次没有修改配置。";
   } finally {
     testing.value = null;
   }
@@ -369,21 +326,13 @@ async function loadParserSamples(item: SourceItem) {
   sampleLoading.value = true;
   latestReplay.value = null;
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/provider-sources/${item.provisioned.id}/parser-samples`,
-      { credentials: "include" },
+    const result = await api<any>(
+      `/platform/provider-sources/${item.provisioned.id}/parser-samples`,
     );
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      message.value = body?.error?.action_hint ?? "固定样本读取失败";
-      sampleSource.value = null;
-      return;
-    }
-    sampleOverview.samples = body.data?.samples ?? [];
-    sampleOverview.candidates = body.data?.candidates ?? [];
+    sampleOverview.samples = result?.samples ?? [];
+    sampleOverview.candidates = result?.candidates ?? [];
   } catch {
-    message.value = "固定样本服务暂不可用。";
+    if (!message.value) message.value = "固定样本服务暂不可用。";
     sampleSource.value = null;
   } finally {
     sampleLoading.value = false;
@@ -393,28 +342,17 @@ async function createParserSample(candidate: ParserSampleCandidate) {
   if (!sampleSource.value?.provisioned) return;
   sampleSaving.value = candidate.browser_job_id;
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/provider-sources/${sampleSource.value.provisioned.id}/parser-samples`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: { "content-type": "application/json", "idempotency-key": crypto.randomUUID() },
-        body: JSON.stringify({
-          browser_job_id: candidate.browser_job_id,
-          name: `真实登录样本 ${new Date(candidate.captured_at).toLocaleString("zh-CN")}`,
-        }),
-      },
-    );
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      message.value = body?.error?.action_hint ?? "固定样本未保存";
-      return;
-    }
+    await api(`/platform/provider-sources/${sampleSource.value.provisioned.id}/parser-samples`, {
+      method: "POST",
+      body: JSON.stringify({
+        browser_job_id: candidate.browser_job_id,
+        name: `真实登录样本 ${new Date(candidate.captured_at).toLocaleString("zh-CN")}`,
+      }),
+    });
     await loadParserSamples(sampleSource.value);
     message.value = "已从真实登录作业固定样本；请执行差异回放后再启用来源。";
   } catch {
-    message.value = "固定样本服务暂不可用。";
+    if (!message.value) message.value = "固定样本服务暂不可用。";
   } finally {
     sampleSaving.value = null;
   }
@@ -424,29 +362,19 @@ async function replayParserSample(sample: ParserSample) {
   sampleReplaying.value = sample.id;
   latestReplay.value = null;
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/provider-sources/${sampleSource.value.provisioned.id}/parser-samples/${sample.id}/replays`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: { "content-type": "application/json", "idempotency-key": crypto.randomUUID() },
-      },
+    const result = await api<ParserSampleReplay>(
+      `/platform/provider-sources/${sampleSource.value.provisioned.id}/parser-samples/${sample.id}/replays`,
+      { method: "POST" },
     );
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      message.value = body?.error?.action_hint ?? "固定样本回放失败";
-      return;
-    }
-    latestReplay.value = body.data;
+    latestReplay.value = result;
     await loadParserSamples(sampleSource.value);
-    latestReplay.value = body.data;
+    latestReplay.value = result;
     message.value =
-      body.data.status === "passed"
+      result.status === "passed"
         ? "固定样本与当前解析结果一致。"
         : "回放已留存差异，来源继续保持停用。";
   } catch {
-    message.value = "固定样本回放服务暂不可用。";
+    if (!message.value) message.value = "固定样本回放服务暂不可用。";
   } finally {
     sampleReplaying.value = null;
   }
@@ -740,82 +668,19 @@ onMounted(load);
         <p v-if="!versionLoading && !versionHistory.length">还没有可用配置版本。</p>
       </section>
     </div>
-    <div
+    <ProviderParserSampleDialog
       v-if="sampleSource"
-      class="source-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="parser-sample-title"
-    >
-      <section class="parser-sample-panel">
-        <header>
-          <div>
-            <p>真实登录采集验收</p>
-            <h3 id="parser-sample-title">固定样本回放 · {{ sampleSource.name }}</h3>
-          </div>
-          <button type="button" aria-label="关闭固定样本回放" @click="sampleSource = null">
-            ×
-          </button>
-        </header>
-        <p>只能从同时保存截图、DOM 和结构化快照的真实浏览器作业固化；回放一致才允许启用来源。</p>
-        <div v-if="sampleLoading" class="source-state">正在读取固定样本…</div>
-        <template v-else>
-          <section>
-            <h4>可固定的真实作业</h4>
-            <article v-for="candidate in sampleOverview.candidates" :key="candidate.browser_job_id">
-              <div>
-                <strong>{{ new Date(candidate.captured_at).toLocaleString("zh-CN") }}</strong>
-                <span>{{ candidate.item_count }} 条结果</span>
-              </div>
-              <button
-                type="button"
-                :disabled="sampleSaving === candidate.browser_job_id"
-                @click="createParserSample(candidate)"
-              >
-                {{ sampleSaving === candidate.browser_job_id ? "保存中…" : "固定为样本" }}
-              </button>
-              <details>
-                <summary>技术详情</summary>
-                <code>{{ candidate.parser_version }}</code>
-              </details>
-            </article>
-            <p v-if="!sampleOverview.candidates.length">暂无合格候选；先完成一条真实登录采集。</p>
-          </section>
-          <section>
-            <h4>已固定样本</h4>
-            <article v-for="sample in sampleOverview.samples" :key="sample.id">
-              <div>
-                <strong>{{ sample.name }}</strong>
-                <span>{{ replayText(sample.last_replay_status) }}</span>
-              </div>
-              <button
-                type="button"
-                :disabled="sampleReplaying === sample.id"
-                @click="replayParserSample(sample)"
-              >
-                {{ sampleReplaying === sample.id ? "回放中…" : "运行差异回放" }}
-              </button>
-              <details>
-                <summary>技术详情</summary>
-                <code>{{ sample.baseline_parser_version }}</code>
-              </details>
-            </article>
-            <p v-if="!sampleOverview.samples.length">还没有固定样本。</p>
-          </section>
-          <section v-if="latestReplay" class="parser-diff" :data-status="latestReplay.status">
-            <h4>本次回放：{{ replayText(latestReplay.status) }}</h4>
-            <p v-if="latestReplay.error_code">解析器未能读取固定样本，来源继续停用。</p>
-            <ol v-else-if="latestReplay.diff.length">
-              <li v-for="item in latestReplay.diff" :key="item.path">
-                <code>{{ item.path }}</code>
-                <span>{{ displayValue(item.before) }} → {{ displayValue(item.after) }}</span>
-              </li>
-            </ol>
-            <p v-else>字段、路径与结果顺序均与基线一致。</p>
-          </section>
-        </template>
-      </section>
-    </div>
+      :source-name="sampleSource.name"
+      :loading="sampleLoading"
+      :samples="sampleOverview.samples"
+      :candidates="sampleOverview.candidates"
+      :latest-replay="latestReplay"
+      :saving-candidate-id="sampleSaving"
+      :replaying-sample-id="sampleReplaying"
+      @close="sampleSource = null"
+      @create="createParserSample"
+      @replay="replayParserSample"
+    />
   </section>
 </template>
 
@@ -1023,18 +888,6 @@ onMounted(load);
   background: var(--so-bg-elevated);
   box-shadow: var(--so-shadow);
 }
-.parser-sample-panel {
-  width: min(820px, 100%);
-  max-height: min(760px, 90vh);
-  overflow: auto;
-  display: grid;
-  gap: 16px;
-  padding: 24px;
-  border: 1px solid var(--so-border);
-  border-radius: 18px;
-  background: var(--so-bg-elevated);
-  color: var(--so-text);
-}
 .configuration-version-panel {
   display: grid;
   gap: 14px;
@@ -1080,42 +933,6 @@ onMounted(load);
   display: flex;
   justify-content: space-between;
   gap: 12px;
-}
-.parser-sample-panel > header,
-.parser-sample-panel article {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-.parser-sample-panel article {
-  margin-top: 8px;
-  padding: 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 10px;
-}
-.parser-sample-panel article div,
-.parser-diff li {
-  display: grid;
-  gap: 4px;
-}
-.parser-sample-panel span,
-.parser-sample-panel > p {
-  color: var(--so-text-muted);
-}
-.parser-diff {
-  padding: 14px;
-  border-left: 4px solid var(--so-success);
-  background: var(--so-panel-soft);
-}
-.parser-diff[data-status="changed"],
-.parser-diff[data-status="failed"] {
-  border-left-color: var(--so-warning);
-}
-.parser-diff ol {
-  display: grid;
-  gap: 10px;
-  padding-left: 24px;
 }
 .source-modal header,
 .source-modal footer {

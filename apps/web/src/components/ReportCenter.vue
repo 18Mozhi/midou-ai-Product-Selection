@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { ApiClientError, createApiClient } from "../api-client";
+import { ApiClientError, createApiClient, createApiResponseClient } from "../api-client";
 import "../report-center.css";
 type ReportType = "opportunity" | "trend" | "team";
 const props = defineProps<{ apiBaseUrl: string }>(),
   request = createApiClient(props.apiBaseUrl),
+  requestResponse = createApiResponseClient(props.apiBaseUrl),
   type = ref<ReportType>("opportunity"),
   state = ref("loading"),
   report = ref<any>(null),
@@ -28,8 +29,7 @@ async function api<T>(
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? "";
     if (affectPageState)
-      state.value =
-        failure?.kind === "conflict" ? "blocked" : (failure?.kind ?? "error");
+      state.value = failure?.kind === "conflict" ? "blocked" : (failure?.kind ?? "error");
     notice.value = failure?.actionHint ?? "稍后重试。";
     throw error;
   }
@@ -38,13 +38,10 @@ async function load() {
   state.value = "loading";
   try {
     [report.value, exports.value] = await Promise.all([
-      api(`/reports/${type.value}`),
-      api("/report-exports"),
+      api<any>(`/reports/${type.value}`),
+      api<any[]>("/report-exports"),
     ]);
-    state.value =
-      report.value.summary.total || report.value.summary.members
-        ? "ready"
-        : "empty";
+    state.value = report.value.summary.total || report.value.summary.members ? "ready" : "empty";
   } catch {}
 }
 async function choose(v: ReportType) {
@@ -54,10 +51,14 @@ async function choose(v: ReportType) {
 async function createExport() {
   busy.value = true;
   try {
-    await api("/report-exports", {
-      method: "POST",
-      body: { report_type: type.value, format: "csv" },
-    }, false);
+    await api(
+      "/report-exports",
+      {
+        method: "POST",
+        body: { report_type: type.value, format: "csv" },
+      },
+      false,
+    );
     notice.value = "导出任务已提交，由宝塔 Node Worker 异步生成。";
     await load();
   } catch {
@@ -87,30 +88,21 @@ async function download(item: any) {
   try {
     const correlationId = crypto.randomUUID();
     requestId.value = correlationId;
-    const r = await fetch(
-      `${props.apiBaseUrl}/report-exports/${item.id}/download`,
-      {
-        credentials: "include",
-        headers: {
-          "x-request-id": correlationId,
-          "x-trace-id": correlationId,
-        },
-      },
-    );
-    if (!r.ok) {
-      const b = await r.json().catch(() => null);
-      requestId.value = b?.request_id ?? correlationId;
-      notice.value = b?.error?.action_hint ?? "下载暂不可用。";
-      return;
-    }
+    const r = await requestResponse(`/report-exports/${item.id}/download`, {
+      requestId: correlationId,
+      traceId: correlationId,
+      headers: { accept: "application/octet-stream" },
+    });
     const url = URL.createObjectURL(await r.blob()),
       a = document.createElement("a");
     a.href = url;
     a.download = item.filename;
     a.click();
     URL.revokeObjectURL(url);
-  } catch {
-    notice.value = "下载连接失败，请稍后重试。";
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? requestId.value;
+    notice.value = failure?.actionHint ?? "下载连接失败，请稍后重试。";
   }
 }
 const labels: Record<ReportType, string> = {
@@ -120,36 +112,31 @@ const labels: Record<ReportType, string> = {
   },
   metrics = computed(() => Object.entries(report.value?.summary ?? {})),
   max = computed(() =>
-    Math.max(
-      1,
-      ...(report.value?.series ?? []).map((x: any) => Number(x.value) || 0),
-    ),
+    Math.max(1, ...(report.value?.series ?? []).map((x: any) => Number(x.value) || 0)),
   ),
   format = (v: any) =>
-    v == null
-      ? "数据不足"
-      : typeof v === "number"
-        ? v.toLocaleString("zh-CN")
-        : String(v),
+    v == null ? "数据不足" : typeof v === "number" ? v.toLocaleString("zh-CN") : String(v),
   metricLabel = (v: string) => {
     if (v === "total" && type.value === "team") return "任务总数";
     return (
-      ({
-        total: "总量",
-        adopted: "已采纳",
-        observing: "观察中",
-        rejected: "已驳回",
-        complete_coverage: "证据完整",
-        average_score: "平均评分",
-        signals: "信号数",
-        sources: "来源数",
-        average_momentum: "平均动量",
-        average_confidence: "平均置信度",
-        members: "成员数",
-        completed: "已完成任务",
-        overdue: "逾期任务",
-      }) as any
-    )[v] ?? v;
+      (
+        {
+          total: "总量",
+          adopted: "已采纳",
+          observing: "观察中",
+          rejected: "已驳回",
+          complete_coverage: "证据完整",
+          average_score: "平均评分",
+          signals: "信号数",
+          sources: "来源数",
+          average_momentum: "平均动量",
+          average_confidence: "平均置信度",
+          members: "成员数",
+          completed: "已完成任务",
+          overdue: "逾期任务",
+        } as any
+      )[v] ?? v
+    );
   },
   seriesLabels: Record<string, string> = {
     recommend: "推荐",
@@ -161,9 +148,7 @@ const labels: Record<ReportType, string> = {
     irrelevant: "无关",
   },
   seriesLabel = (value: unknown) =>
-    type.value === "team"
-      ? String(value)
-      : (seriesLabels[String(value)] ?? "其他"),
+    type.value === "team" ? String(value) : (seriesLabels[String(value)] ?? "其他"),
   statusLabels: Record<string, string> = {
     queued: "排队中",
     leased: "生成中",
@@ -172,31 +157,22 @@ const labels: Record<ReportType, string> = {
     dead_letter: "生成失败",
     expired: "已过期",
   },
-  statusLabel = (value: unknown) =>
-    statusLabels[String(value)] ?? "状态待确认",
+  statusLabel = (value: unknown) => statusLabels[String(value)] ?? "状态待确认",
   statusHint = (item: any) => {
     if (isExpired(item)) return "文件已过期，可重新生成";
     if (item.status === "queued") return "正在等待 Worker 领取";
     if (item.status === "leased") return "Worker 正在生成文件";
     if (item.status === "retry_scheduled") return "系统将在退避后自动重试";
     if (item.status === "dead_letter") return "自动重试已结束，可重新生成";
-    return item.row_count == null
-      ? "等待生成"
-      : `${item.row_count} 行 · ${item.byte_size} 字节`;
+    return item.row_count == null ? "等待生成" : `${item.row_count} 行 · ${item.byte_size} 字节`;
   },
   isExpired = (item: any) =>
-    item.status === "expired" ||
-    new Date(item.expires_at).valueOf() <= Date.now(),
-  canRegenerate = (item: any) =>
-    isExpired(item) || item.status === "dead_letter";
+    item.status === "expired" || new Date(item.expires_at).valueOf() <= Date.now(),
+  canRegenerate = (item: any) => isExpired(item) || item.status === "dead_letter";
 onMounted(() => {
   void load();
   timer = window.setInterval(() => {
-    if (
-      exports.value.some((x) =>
-        ["queued", "leased", "retry_scheduled"].includes(x.status),
-      )
-    )
+    if (exports.value.some((x) => ["queued", "leased", "retry_scheduled"].includes(x.status)))
       void load();
   }, 5000);
 });
@@ -204,14 +180,25 @@ onUnmounted(() => clearInterval(timer));
 </script>
 <template>
   <section class="report-center">
-    <section class="report-guide"><div><p>报表怎么用</p><h3>先看结论，再看分布，最后导出明细</h3><span>机会分析用于判断选品进度，趋势分析用于发现市场变化，团队绩效用于查看任务完成情况。</span></div><ol><li><b>1</b>选择报表</li><li><b>2</b>查看指标和图表</li><li><b>3</b>导出明细留档</li></ol></section>
+    <section class="report-guide">
+      <div>
+        <p>报表怎么用</p>
+        <h3>先看结论，再看分布，最后导出明细</h3>
+        <span
+          >机会分析用于判断选品进度，趋势分析用于发现市场变化，团队绩效用于查看任务完成情况。</span
+        >
+      </div>
+      <ol>
+        <li><b>1</b>选择报表</li>
+        <li><b>2</b>查看指标和图表</li>
+        <li><b>3</b>导出明细留档</li>
+      </ol>
+    </section>
     <header>
       <div>
         <p>分析与导出</p>
         <h2>报表与导出</h2>
-        <span
-          >所有指标都来自当前组织和工作区已落库事实；缺失值保持“数据不足”。</span
-        >
+        <span>所有指标都来自当前组织和工作区已落库事实；缺失值保持“数据不足”。</span>
       </div>
       <button :disabled="busy" @click="createExport">导出当前报表 CSV</button>
     </header>
@@ -232,15 +219,9 @@ onUnmounted(() => clearInterval(timer));
         <code>{{ requestId }}</code>
       </details>
     </div>
-    <section v-if="state === 'loading'" class="report-state">
-      正在聚合当前工作区事实…
-    </section>
+    <section v-if="state === 'loading'" class="report-state">正在聚合当前工作区事实…</section>
     <section
-      v-else-if="
-        ['error', 'expired', 'forbidden', 'rate_limited', 'blocked'].includes(
-          state,
-        )
-      "
+      v-else-if="['error', 'expired', 'forbidden', 'rate_limited', 'blocked'].includes(state)"
       class="report-state"
     >
       <h3>
@@ -327,10 +308,7 @@ onUnmounted(() => clearInterval(timer));
               }}</small
             >
           </div>
-          <button
-            v-if="item.status === 'succeeded' && !isExpired(item)"
-            @click="download(item)"
-          >
+          <button v-if="item.status === 'succeeded' && !isExpired(item)" @click="download(item)">
             下载</button
           ><button
             v-else-if="canRegenerate(item)"
@@ -340,9 +318,7 @@ onUnmounted(() => clearInterval(timer));
             {{ regeneratingId === item.id ? "正在提交…" : "重新生成" }}
           </button>
           <span v-else>{{ statusLabel(item.status) }}</span
-          ><button class="secondary" @click="selectedExport = item">
-            查看详情
-          </button>
+          ><button class="secondary" @click="selectedExport = item">查看详情</button>
         </article>
       </div>
       <div v-else class="report-empty">尚无导出任务。</div>
@@ -355,11 +331,7 @@ onUnmounted(() => clearInterval(timer));
         <div>
           <dt>状态</dt>
           <dd>
-            {{
-              isExpired(selectedExport)
-                ? "已过期"
-                : statusLabel(selectedExport.status)
-            }}
+            {{ isExpired(selectedExport) ? "已过期" : statusLabel(selectedExport.status) }}
           </dd>
         </div>
         <div>
@@ -369,11 +341,7 @@ onUnmounted(() => clearInterval(timer));
         <div>
           <dt>文件大小</dt>
           <dd>
-            {{
-              selectedExport.byte_size == null
-                ? "等待生成"
-                : `${selectedExport.byte_size} 字节`
-            }}
+            {{ selectedExport.byte_size == null ? "等待生成" : `${selectedExport.byte_size} 字节` }}
           </dd>
         </div>
         <div>
@@ -392,9 +360,7 @@ onUnmounted(() => clearInterval(timer));
         :disabled="regeneratingId === selectedExport.id"
         @click="regenerate(selectedExport)"
       >
-        {{
-          regeneratingId === selectedExport.id ? "正在提交…" : "重新生成"
-        }}
+        {{ regeneratingId === selectedExport.id ? "正在提交…" : "重新生成" }}
       </button>
       <details v-if="selectedExport.last_error_code">
         <summary>技术详情</summary>

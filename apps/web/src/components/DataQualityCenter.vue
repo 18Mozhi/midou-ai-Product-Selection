@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
@@ -53,6 +54,7 @@ interface Run {
   window_ended_at: string;
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   evidence = ref<Evidence[]>([]),
   issues = ref<Issue[]>([]),
@@ -161,69 +163,47 @@ async function load() {
   state.value = "loading";
   notice.value = "";
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/data-quality?page=1&page_size=50&status=all`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) {
-      state.value = failure(response.status);
-      return;
-    }
-    evidence.value = body.data.evidence ?? [];
-    issues.value = body.data.issues ?? [];
-    runs.value = body.data.reconciliationRuns ?? [];
-    totalEvidence.value = body.data.totalEvidence ?? 0;
-    totalIssues.value = body.data.totalIssues ?? 0;
+    const response = await request<any>("/platform/data-quality?page=1&page_size=50&status=all");
+    requestId.value = response.request_id;
+    evidence.value = response.data.evidence ?? [];
+    issues.value = response.data.issues ?? [];
+    runs.value = response.data.reconciliationRuns ?? [];
+    totalEvidence.value = response.data.totalEvidence ?? 0;
+    totalIssues.value = response.data.totalIssues ?? 0;
     state.value =
       evidence.value.length || issues.value.length || runs.value.length ? "ready" : "empty";
-  } catch {
-    state.value = "blocked";
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? "";
+    state.value = apiError ? failure(apiError.status) : "blocked";
   }
 }
 async function openEvidence(id: string) {
   try {
-    const response = await fetch(`${props.apiBaseUrl}/platform/data/evidence/${id}`, {
-        credentials: "include",
-      }),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      notice.value = body?.error?.action_hint ?? "证据详情暂不可用";
-      return;
-    }
-    detail.value = body.data;
-  } catch {
-    notice.value = "证据详情依赖暂不可用";
+    const response = await request<any>(`/platform/data/evidence/${id}`);
+    requestId.value = response.request_id;
+    detail.value = response.data;
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? requestId.value;
+    notice.value = apiError?.actionHint ?? "证据详情依赖暂不可用";
   }
 }
 async function grantDownload(item: Evidence) {
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/data/evidence/${item.id}/download-grant`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-            "idempotency-key": crypto.randomUUID(),
-          },
-          body: "{}",
-        },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      notice.value = body?.error?.action_hint ?? "下载授权未签发";
-      return;
-    }
-    notice.value = `短时下载授权已签发，${time(body.data.expires_at)} 前有效。`;
+    const response = await request<any>(`/platform/data/evidence/${item.id}/download-grant`, {
+      method: "POST",
+      body: {},
+    });
+    requestId.value = response.request_id;
+    notice.value = `短时下载授权已签发，${time(response.data.expires_at)} 前有效。`;
     window.location.assign(
-      `${props.apiBaseUrl}/platform/data/evidence/${item.id}/download?grant=${encodeURIComponent(body.data.grant)}`,
+      `${props.apiBaseUrl}/platform/data/evidence/${item.id}/download?grant=${encodeURIComponent(response.data.grant)}`,
     );
-  } catch {
-    notice.value = "下载依赖暂不可用";
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? requestId.value;
+    notice.value = apiError?.actionHint ?? "下载依赖暂不可用";
   }
 }
 function beginResolve(item: Issue) {
@@ -234,33 +214,25 @@ async function resolveIssue() {
   if (!resolving.value) return;
   saving.value = true;
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/data-quality/issues/${resolving.value.id}/resolve`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-            "idempotency-key": crypto.randomUUID(),
-          },
-          body: JSON.stringify({
-            reason: reason.value.trim(),
-            expected_version: resolving.value.version,
-          }),
+    const response = await request<any>(
+      `/platform/data-quality/issues/${resolving.value.id}/resolve`,
+      {
+        method: "POST",
+        body: {
+          reason: reason.value.trim(),
+          expected_version: resolving.value.version,
         },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      notice.value = body?.error?.action_hint ?? "问题未解决";
-      return;
-    }
+      },
+    );
+    requestId.value = response.request_id;
     await load();
-    notice.value = `质量问题 ${body.data.id.slice(0, 8)}… 已记录解决原因。`;
+    notice.value = `质量问题 ${response.data.id.slice(0, 8)}… 已记录解决原因。`;
     resolving.value = null;
     reason.value = "";
-  } catch {
-    notice.value = "依赖不可用，未更新质量问题";
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? requestId.value;
+    notice.value = apiError?.actionHint ?? "依赖不可用，未更新质量问题";
   } finally {
     saving.value = false;
     confirming.value = false;

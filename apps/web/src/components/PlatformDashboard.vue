@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 type State = "loading" | "ready" | "empty" | "expired" | "forbidden" | "rate_limited" | "blocked";
 const state = ref<State>("loading"),
   data = ref<any>(null),
@@ -87,32 +89,24 @@ async function load() {
   state.value = "loading";
   requestId.value = "";
   try {
-    const r = await fetch(`${props.apiBaseUrl}/platform/dashboard?window=${windowCode.value}`, {
-        credentials: "include",
-        headers: { accept: "application/json" },
-      }),
-      b = await r.json().catch(() => null);
-    requestId.value = b?.request_id ?? "";
-    hint.value = b?.error?.action_hint ?? "";
-    if (!r.ok) {
-      state.value =
-        r.status === 401
-          ? "expired"
-          : r.status === 403
-            ? "forbidden"
-            : r.status === 429
-              ? "rate_limited"
-              : "blocked";
-      return;
-    }
-    data.value = b.data;
+    const response = await request<any>(`/platform/dashboard?window=${windowCode.value}`);
+    requestId.value = response.request_id;
+    data.value = response.data;
     const operational =
-      b.data.queues.length +
-      b.data.provider_health.reduce((n: number, p: any) => n + p.observed_count, 0) +
-      b.data.alerts.length;
+      response.data.queues.length +
+      response.data.provider_health.reduce((n: number, p: any) => n + p.observed_count, 0) +
+      response.data.alerts.length;
     state.value = operational === 0 ? "empty" : "ready";
-  } catch {
-    state.value = "blocked";
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    hint.value = failure?.actionHint ?? "";
+    state.value =
+      failure?.kind === "expired" ||
+      failure?.kind === "forbidden" ||
+      failure?.kind === "rate_limited"
+        ? failure.kind
+        : "blocked";
   }
 }
 onMounted(load);

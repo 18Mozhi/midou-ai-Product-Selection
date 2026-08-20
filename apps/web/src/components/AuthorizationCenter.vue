@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import type {
-  CurrentAuthorizationSummary,
-  RoleCapabilitySummary,
-} from "@scoutops/contracts";
+import { ApiClientError, createApiClient } from "../api-client";
+import type { CurrentAuthorizationSummary, RoleCapabilitySummary } from "@scoutops/contracts";
 const props = defineProps<{ apiBaseUrl: string }>();
+const apiRequest = createApiClient(props.apiBaseUrl);
 type State = "loading" | "ready" | "empty" | "error" | "forbidden" | "expired";
 const state = ref<State>("loading"),
   current = ref<CurrentAuthorizationSummary | null>(null),
@@ -22,28 +21,22 @@ const filtered = computed(() =>
   ),
 );
 async function request<T>(path: string) {
-  const response = await fetch(`${props.apiBaseUrl}${path}`, {
-    credentials: "include",
-    headers: { accept: "application/json" },
-  });
-  const body = await response.json().catch(() => null);
-  if (!response.ok) {
-    requestId.value = body?.request_id ?? "";
+  try {
+    const response = await apiRequest<T>(path);
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
     throw new Error(
-      response.status === 401
-        ? "expired"
-        : response.status === 403
-          ? "forbidden"
-          : "error",
+      failure?.kind === "expired" || failure?.kind === "forbidden" ? failure.kind : "error",
     );
   }
-  return body.data as T;
 }
 async function load() {
   state.value = "loading";
   try {
-    current.value =
-      await request<CurrentAuthorizationSummary>("/me/authorization");
+    current.value = await request<CurrentAuthorizationSummary>("/me/authorization");
     roles.value = await request<RoleCapabilitySummary[]>(
       `/org/${current.value.organization_id}/roles`,
     );
@@ -66,14 +59,12 @@ onMounted(load);
 <template>
   <main class="authz-page" data-testid="authorization">
     <aside class="authz-sidebar">
-      <a href="/" class="identity-brand"
-        ><span>选</span><span>智能选品</span></a
-      >
+      <a href="/" class="identity-brand"><span>选</span><span>智能选品</span></a>
       <p>组织管理后台</p>
       <nav>
         <a href="/select-context">组织资料</a
-        ><a href="/?view=authorization" class="active">角色与权限</a
-        ><span>成员与邀请</span><span>工作区与团队</span><span>组织审计</span>
+        ><a href="/?view=authorization" class="active">角色与权限</a><span>成员与邀请</span
+        ><span>工作区与团队</span><span>组织审计</span>
       </nav>
       <small>权限来自服务端策略</small>
     </aside>
@@ -91,14 +82,10 @@ onMounted(load);
         <p>页面不会根据菜单或浏览器状态推断权限。</p>
       </div>
       <div
-        v-else-if="
-          state === 'error' || state === 'forbidden' || state === 'expired'
-        "
+        v-else-if="state === 'error' || state === 'forbidden' || state === 'expired'"
         class="authz-state authz-state--error"
       >
-        <b>{{
-          state === "forbidden" ? "403" : state === "expired" ? "401" : "!"
-        }}</b
+        <b>{{ state === "forbidden" ? "403" : state === "expired" ? "401" : "!" }}</b
         ><strong>{{
           state === "forbidden"
             ? "缺少 role:read 权限"
@@ -131,17 +118,13 @@ onMounted(load);
             ><small>{{ current.roles.join(" · ") }}</small>
           </div>
           <div>
-            <span>有效动作</span
-            ><strong>{{ current.capabilities.length }}</strong
+            <span>有效动作</span><strong>{{ current.capabilities.length }}</strong
             ><small>由服务端聚合后返回</small>
           </div>
           <div>
-            <span>数据范围</span
-            ><strong>{{ current.data_scopes.length }}</strong
+            <span>数据范围</span><strong>{{ current.data_scopes.length }}</strong
             ><small>{{
-              current.data_scopes
-                .map((item) => scopeLabel(item.scope))
-                .join(" · ")
+              current.data_scopes.map((item) => scopeLabel(item.scope)).join(" · ")
             }}</small>
           </div>
         </section>
@@ -170,20 +153,16 @@ onMounted(load);
               </div>
               <em>{{ role.capabilities.length }} 项动作</em>
             </button>
-            <p v-if="!filtered.length" class="role-empty">
-              没有匹配的角色或能力。
-            </p>
+            <p v-if="!filtered.length" class="role-empty">没有匹配的角色或能力。</p>
           </div>
           <article v-if="selected" class="role-detail">
             <p>只读权限预览</p>
             <h2>{{ selected.name }}</h2>
             <span>{{ selected.description }}</span>
             <div>
-              <code
-                v-for="capability in selected.capabilities"
-                :key="capability"
-                >{{ capability }}</code
-              >
+              <code v-for="capability in selected.capabilities" :key="capability">{{
+                capability
+              }}</code>
             </div>
             <small
               >前端仅展示；后端接口、任务处理器、导出、文件、事件与实时消息使用同一能力名称再次检查。</small

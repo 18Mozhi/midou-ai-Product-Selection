@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import type {
   CurrentAuthorizationSummary,
   EligibleResourceGrantMember,
@@ -8,8 +9,8 @@ import type {
   ResourceGrantType,
 } from "@scoutops/contracts";
 const props = defineProps<{ apiBaseUrl: string }>();
-type State =
-  "loading" | "ready" | "empty" | "error" | "forbidden" | "expired" | "blocked";
+const apiRequest = createApiClient(props.apiBaseUrl);
+type State = "loading" | "ready" | "empty" | "error" | "forbidden" | "expired" | "blocked";
 const state = ref<State>("loading"),
   current = ref<CurrentAuthorizationSummary | null>(null),
   grants = ref<ResourceGrantSummary[]>([]),
@@ -41,55 +42,35 @@ const form = reactive({
     expires_at: defaultExpiry(),
   }),
   mutation = reactive({ reason: "", expires_at: defaultExpiry() });
-const canRead = computed(() =>
-    current.value?.capabilities.includes("role:read"),
-  ),
-  canManage = computed(() =>
-    current.value?.capabilities.includes("role:manage"),
-  ),
+const canRead = computed(() => current.value?.capabilities.includes("role:read")),
+  canManage = computed(() => current.value?.capabilities.includes("role:manage")),
   filtered = computed(() =>
-    grants.value.filter(
-      (item) =>
-        filter.value === "all" || item.effective_status === filter.value,
-    ),
+    grants.value.filter((item) => filter.value === "all" || item.effective_status === filter.value),
   );
 async function request<T>(path: string, init: RequestInit = {}) {
-  const response = await fetch(`${props.apiBaseUrl}${path}`, {
-    credentials: "include",
-    ...init,
-    headers: {
-      accept: "application/json",
-      ...(init.body ? { "content-type": "application/json" } : {}),
-      ...init.headers,
-    },
-  });
-  const body = await response.json().catch(() => null);
-  if (!response.ok) {
-    requestId.value = body?.request_id ?? "";
-    const code = body?.error?.code;
+  try {
+    const response = await apiRequest<T>(path, init);
+    requestId.value = response.request_id;
+    return response;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
     throw new Error(
-      response.status === 401
-        ? "expired"
-        : response.status === 403
-          ? "forbidden"
-          : [
-                "grant_action_not_allowed",
-                "grant_expiry_invalid",
-                "grant_target_forbidden",
-              ].includes(code)
-            ? "blocked"
-            : "error",
+      failure?.kind === "expired" || failure?.kind === "forbidden"
+        ? failure.kind
+        : ["grant_action_not_allowed", "grant_expiry_invalid", "grant_target_forbidden"].includes(
+              failure?.code ?? "",
+            )
+          ? "blocked"
+          : "error",
     );
   }
-  return body as { data: T; meta?: { total: number } };
 }
 async function load() {
   state.value = "loading";
   notice.value = "";
   try {
-    current.value = (
-      await request<CurrentAuthorizationSummary>("/me/authorization")
-    ).data;
+    current.value = (await request<CurrentAuthorizationSummary>("/me/authorization")).data;
     form.workspace_id = current.value.workspace_id;
     const path = canRead.value
       ? `/org/${current.value.organization_id}/resource-grants?page=1&limit=100`
@@ -192,9 +173,7 @@ async function revoke() {
   }
 }
 function replace(grant: ResourceGrantSummary) {
-  grants.value = grants.value.map((item) =>
-    item.id === grant.id ? grant : item,
-  );
+  grants.value = grants.value.map((item) => (item.id === grant.id ? grant : item));
   selected.value = grant;
 }
 const statusLabel = (status: ResourceGrantStatus) =>
@@ -214,14 +193,12 @@ function setFilter(value: string) {
 <template>
   <main class="grant-page" data-testid="resource-grants">
     <aside class="authz-sidebar">
-      <a href="/" class="identity-brand"
-        ><span>选</span><span>智能选品</span></a
-      >
+      <a href="/" class="identity-brand"><span>选</span><span>智能选品</span></a>
       <p>组织管理后台</p>
       <nav>
         <a href="/?view=authorization">角色与权限</a
-        ><a href="/?view=resource-grants" class="active">资源授权</a
-        ><span>成员与邀请</span><span>组织审计</span>
+        ><a href="/?view=resource-grants" class="active">资源授权</a><span>成员与邀请</span
+        ><span>组织审计</span>
       </nav>
       <small>指定资源 · 最小动作 · 最长 30 天</small>
     </aside>
@@ -230,15 +207,9 @@ function setFilter(value: string) {
         <div>
           <p>资源访问</p>
           <h1>资源临时授权</h1>
-          <span
-            >只向同组织活动成员开放一个指定资源；下载、导出、凭证与重放保持拒绝。</span
-          >
+          <span>只向同组织活动成员开放一个指定资源；下载、导出、凭证与重放保持拒绝。</span>
         </div>
-        <button
-          v-if="canManage"
-          type="button"
-          @click="showCreate = !showCreate"
-        >
+        <button v-if="canManage" type="button" @click="showCreate = !showCreate">
           {{ showCreate ? "取消" : "新建授权" }}
         </button>
       </header>
@@ -281,11 +252,7 @@ function setFilter(value: string) {
       </div>
       <template v-else
         ><p v-if="notice" class="grant-notice" role="status">{{ notice }}</p>
-        <form
-          v-if="showCreate && current"
-          class="grant-form"
-          @submit.prevent="createGrant"
-        >
+        <form v-if="showCreate && current" class="grant-form" @submit.prevent="createGrant">
           <h2>授权指定资源</h2>
           <label>工作区<input v-model="form.workspace_id" readonly /></label
           ><label
@@ -302,11 +269,7 @@ function setFilter(value: string) {
           ><label
             >目标成员<select v-model="form.grantee_membership_id" required>
               <option value="" disabled>选择同组织活动成员</option>
-              <option
-                v-for="member in members"
-                :key="member.id"
-                :value="member.id"
-              >
+              <option v-for="member in members" :key="member.id" :value="member.id">
                 {{ member.email }}
               </option>
             </select></label
@@ -314,24 +277,11 @@ function setFilter(value: string) {
           <fieldset>
             <legend>最小必要动作</legend>
             <label v-for="action in actionMap[form.resource_type]" :key="action"
-              ><input
-                v-model="form.actions"
-                type="checkbox"
-                :value="action"
-              />{{ action }}</label
+              ><input v-model="form.actions" type="checkbox" :value="action" />{{ action }}</label
             >
           </fieldset>
-          <label
-            >业务原因<textarea
-              v-model="form.reason"
-              required
-              maxlength="500"
-            ></textarea></label
-          ><label
-            >到期时间<input
-              v-model="form.expires_at"
-              required
-              type="datetime-local" /></label
+          <label>业务原因<textarea v-model="form.reason" required maxlength="500"></textarea></label
+          ><label>到期时间<input v-model="form.expires_at" required type="datetime-local" /></label
           ><button :disabled="busy || !form.actions.length" type="submit">
             {{ busy ? "正在保存" : "创建并审计" }}</button
           ><small>不得超过 30 天；到期自动失效。</small>
@@ -345,11 +295,7 @@ function setFilter(value: string) {
               :class="{ active: filter === item }"
               @click="setFilter(item)"
             >
-              {{
-                item === "all"
-                  ? "全部"
-                  : statusLabel(item as ResourceGrantStatus)
-              }}
+              {{ item === "all" ? "全部" : statusLabel(item as ResourceGrantStatus) }}
             </button>
           </div>
           <span>{{ filtered.length }} 条授权</span>
@@ -357,9 +303,7 @@ function setFilter(value: string) {
         <div v-if="state === 'empty'" class="authz-state">
           <b>○</b><strong>暂无资源授权</strong>
           <p>RBAC 与数据范围仍然生效；未授权资源默认拒绝。</p>
-          <button v-if="canManage" type="button" @click="showCreate = true">
-            创建首条授权
-          </button>
+          <button v-if="canManage" type="button" @click="showCreate = true">创建首条授权</button>
         </div>
         <div v-else class="grant-layout">
           <section class="grant-list">
@@ -370,17 +314,11 @@ function setFilter(value: string) {
               :class="{ selected: selected?.id === grant.id }"
               @click="selected = grant"
             >
-              <i :data-status="grant.effective_status">{{
-                statusLabel(grant.effective_status)
-              }}</i
+              <i :data-status="grant.effective_status">{{ statusLabel(grant.effective_status) }}</i
               ><strong
-                >{{ typeLabel(grant.resource_type) }} ·
-                {{ grant.resource_id.slice(0, 8) }}</strong
+                >{{ typeLabel(grant.resource_type) }} · {{ grant.resource_id.slice(0, 8) }}</strong
               ><span>{{ grant.actions.join(" · ") }}</span
-              ><small
-                >到期
-                {{ new Date(grant.expires_at).toLocaleString("zh-CN") }}</small
-              >
+              ><small>到期 {{ new Date(grant.expires_at).toLocaleString("zh-CN") }}</small>
             </button>
             <p v-if="!filtered.length">当前筛选没有授权。</p>
           </section>
@@ -410,16 +348,9 @@ function setFilter(value: string) {
               v-if="canManage && selected.effective_status === 'active'"
               @submit.prevent="extend"
             >
-              <label
-                >变更原因<input
-                  v-model="mutation.reason"
-                  required
-                  maxlength="500" /></label
+              <label>变更原因<input v-model="mutation.reason" required maxlength="500" /></label
               ><label
-                >新到期时间<input
-                  v-model="mutation.expires_at"
-                  required
-                  type="datetime-local"
+                >新到期时间<input v-model="mutation.expires_at" required type="datetime-local"
               /></label>
               <div>
                 <button :disabled="busy" type="submit">延长授权</button

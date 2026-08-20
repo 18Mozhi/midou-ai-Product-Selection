@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient, createApiResponseClient } from "../api-client";
 import DataQualityCenter from "./DataQualityCenter.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 
 type Entity = "trends" | "opportunities" | "competitors" | "suppliers";
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
+const requestResponse = createApiResponseClient(props.apiBaseUrl);
 const tab = ref<"records" | "quality">("records"),
   entity = ref<Entity>("trends"),
   query = ref(""),
@@ -79,17 +82,14 @@ async function load() {
   if (query.value.trim()) params.set("query", query.value.trim());
   if (status.value) params.set("status", status.value);
   try {
-    const response = await fetch(`${props.apiBaseUrl}/platform/management?${params}`, {
-        credentials: "include",
-        headers: { accept: "application/json" },
-      }),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) throw new Error(body?.error?.action_hint ?? "全量数据暂不可用");
-    data.value = body.data;
-    state.value = body.data.items.length ? "ready" : "empty";
+    const response = await request<any>(`/platform/management?${params}`);
+    requestId.value = response.request_id;
+    data.value = response.data;
+    state.value = response.data.items.length ? "ready" : "empty";
   } catch (error) {
-    message.value = error instanceof Error ? error.message : "全量数据暂不可用";
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    message.value = failure?.actionHint ?? "全量数据暂不可用";
     state.value = "error";
   }
 }
@@ -102,22 +102,17 @@ async function exportCsv() {
   }
   exporting.value = true;
   try {
-    const response = await fetch(`${props.apiBaseUrl}/platform/management/data/exports`, {
+    const response = await requestResponse("/platform/management/data/exports", {
       method: "POST",
-      credentials: "include",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
+      headers: { accept: "text/csv" },
+      body: {
         entity: entity.value,
         query: query.value.trim(),
         status: status.value,
         reason: reason.trim(),
-      }),
+      },
     });
     requestId.value = response.headers.get("x-request-id") ?? requestId.value;
-    if (!response.ok) {
-      const body = await response.json().catch(() => null);
-      throw new Error(body?.error?.action_hint ?? "受控导出未完成");
-    }
     const blob = await response.blob(),
       url = URL.createObjectURL(blob),
       link = document.createElement("a");
@@ -127,7 +122,9 @@ async function exportCsv() {
     URL.revokeObjectURL(url);
     message.value = "受控表格文件已生成，导出原因和记录数已写入平台审计。";
   } catch (error) {
-    message.value = error instanceof Error ? error.message : "受控导出未完成";
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? requestId.value;
+    message.value = failure?.actionHint ?? "受控导出未完成";
   } finally {
     exporting.value = false;
   }

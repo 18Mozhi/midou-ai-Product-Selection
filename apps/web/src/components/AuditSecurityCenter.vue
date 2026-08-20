@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 const props = defineProps<{ apiBaseUrl: string }>();
+const apiRequest = createApiClient(props.apiBaseUrl);
 type State = "loading" | "ready" | "empty" | "error" | "forbidden" | "expired" | "blocked";
 interface AuditEvent {
   id: string;
@@ -37,24 +39,21 @@ const canPlatform = computed(
   () => auth.value?.platform_capabilities?.includes("audit:read") ?? false,
 );
 async function request<T>(path: string) {
-  const response = await fetch(`${props.apiBaseUrl}${path}`, {
-      credentials: "include",
-      headers: { accept: "application/json" },
-    }),
-    body = await response.json().catch(() => null);
-  if (!response.ok) {
-    requestId.value = body?.request_id ?? "";
+  try {
+    const response = await apiRequest<T>(path);
+    requestId.value = response.request_id;
+    return response;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
     throw new Error(
-      response.status === 401
-        ? "expired"
-        : response.status === 403
-          ? "forbidden"
-          : response.status === 409
-            ? "blocked"
-            : "error",
+      failure?.kind === "expired" || failure?.kind === "forbidden"
+        ? failure.kind
+        : failure?.kind === "conflict"
+          ? "blocked"
+          : "error",
     );
   }
-  return body as { data: T };
 }
 function query(cursor?: string) {
   const q = new URLSearchParams({ limit: "50" });

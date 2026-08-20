@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import "../credential-assets.css";
 import "../credential-login.css";
-type State =
-  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Asset {
   id: string;
   provider_id: string;
@@ -40,6 +40,7 @@ interface Provider {
   access_mode: string;
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   assets = ref<Asset[]>([]),
   profiles = ref<Profile[]>([]),
@@ -83,14 +84,11 @@ const failure = (s: number): State =>
   browserAssets = computed(() =>
     assets.value.filter(
       (item) =>
-        ["browser_profile", "cookie_bundle"].includes(item.kind) &&
-      item.status === "active",
+        ["browser_profile", "cookie_bundle"].includes(item.kind) && item.status === "active",
     ),
   ),
   loginProviders = computed(() =>
-    providers.value.filter(
-      (item) => item.access_mode === "authenticated_browser",
-    ),
+    providers.value.filter((item) => item.access_mode === "authenticated_browser"),
   ),
   loginNeedsAuthentication = computed(
     () => loginProvider.value?.access_mode === "authenticated_browser",
@@ -106,21 +104,12 @@ const kindText = (value: string) =>
     }) as Record<string, string>
   )[value] ?? "其他凭证";
 const statusText = (value: string) =>
-  (
-    ({ active: "可用", revoked: "已撤销", disabled: "已停用" }) as Record<
-      string,
-      string
-    >
-  )[value] ?? value;
+  (({ active: "可用", revoked: "已撤销", disabled: "已停用" }) as Record<string, string>)[value] ??
+  value;
 async function get(path: string) {
-  const r = await fetch(`${props.apiBaseUrl}${path}`, {
-      credentials: "include",
-      headers: { accept: "application/json" },
-    }),
-    b = await r.json().catch(() => null);
-  requestId.value = b?.request_id ?? requestId.value;
-  if (!r.ok) throw { status: r.status };
-  return b.data;
+  const response = await request<any>(path);
+  requestId.value = response.request_id;
+  return response.data;
 }
 async function load() {
   state.value = "loading";
@@ -131,10 +120,11 @@ async function load() {
       get("/platform/crawler-profiles"),
       get("/platform/credential-provider-options"),
     ]);
-    state.value =
-      assets.value.length || profiles.value.length ? "ready" : "empty";
-  } catch (error: any) {
-    state.value = failure(error?.status ?? 503);
+    state.value = assets.value.length || profiles.value.length ? "ready" : "empty";
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? requestId.value;
+    state.value = failure(apiError?.status ?? 503);
   }
 }
 function openAsset() {
@@ -242,8 +232,7 @@ function browserBridge<T>(action: string, payload: Record<string, unknown>) {
         return;
       window.clearTimeout(timeout);
       window.removeEventListener("message", receive);
-      if (!event.data.ok)
-        reject(new Error(String(event.data.error || "browser_helper_failed")));
+      if (!event.data.ok) reject(new Error(String(event.data.error || "browser_helper_failed")));
       else resolve(event.data.data as T);
     }
     window.addEventListener("message", receive);
@@ -285,24 +274,13 @@ async function write(path: string, body: unknown) {
   saving.value = true;
   message.value = "";
   try {
-    const r = await fetch(`${props.apiBaseUrl}${path}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-        body: JSON.stringify(body),
-      }),
-      b = await r.json().catch(() => null);
-    requestId.value = b?.request_id ?? "";
-    if (!r.ok) {
-      message.value = b?.error?.action_hint ?? "操作未完成";
-      return null;
-    }
-    return b.data;
-  } catch {
-    message.value = "依赖不可用，未写入";
+    const response = await request<any>(path, { method: "POST", body });
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? requestId.value;
+    message.value = apiError?.actionHint ?? "依赖不可用，未写入";
     return null;
   } finally {
     saving.value = false;
@@ -318,9 +296,7 @@ async function saveAsset() {
             value: assetForm.value,
           },
           expected_version: selected.value.version,
-          expires_at: assetForm.expires_at
-            ? new Date(assetForm.expires_at).toISOString()
-            : null,
+          expires_at: assetForm.expires_at ? new Date(assetForm.expires_at).toISOString() : null,
         })
       : await write("/platform/credential-assets", {
           provider_id: assetForm.provider_id,
@@ -330,9 +306,7 @@ async function saveAsset() {
             encoding: assetForm.encoding,
             value: assetForm.value,
           },
-          expires_at: assetForm.expires_at
-            ? new Date(assetForm.expires_at).toISOString()
-            : null,
+          expires_at: assetForm.expires_at ? new Date(assetForm.expires_at).toISOString() : null,
         });
   if (ok) {
     editor.value = null;
@@ -404,9 +378,7 @@ onMounted(async () => {
   await load();
   const params = new URLSearchParams(location.search);
   if (params.get("mode") === "login") {
-    openLogin(
-      providers.value.find((item) => item.code === params.get("provider_code")),
-    );
+    openLogin(providers.value.find((item) => item.code === params.get("provider_code")));
   }
 });
 </script>
@@ -425,9 +397,7 @@ onMounted(async () => {
           >下载浏览器助手</a
         ><button type="button" @click="openLogin()">＋ 配置网页登录</button
         ><button type="button" @click="openProfile">＋ 关联运行档案</button
-        ><button type="button" class="primary" @click="openAsset">
-          ＋ 凭证资产
-        </button>
+        ><button type="button" class="primary" @click="openAsset">＋ 凭证资产</button>
       </div>
     </header>
     <UiStatePanel
@@ -440,9 +410,7 @@ onMounted(async () => {
       <div class="credential-metrics">
         <article>
           <small>可用加密资料</small
-          ><strong>{{
-            assets.filter((x) => x.status === "active").length
-          }}</strong
+          ><strong>{{ assets.filter((x) => x.status === "active").length }}</strong
           ><span>高强度加密保存</span>
         </article>
         <article>
@@ -450,8 +418,7 @@ onMounted(async () => {
           ><span>授权任务才可临时解密</span>
         </article>
         <article>
-          <small>明文回显</small><strong>0</strong
-          ><span>页面无法读取原始密码或登录状态</span>
+          <small>明文回显</small><strong>0</strong><span>页面无法读取原始密码或登录状态</span>
         </article>
       </div>
       <section v-if="!assets.length" class="credential-empty">
@@ -462,15 +429,9 @@ onMounted(async () => {
         <button type="button" @click="openAsset">创建第一个凭证</button>
       </section>
       <div v-else class="credential-grid">
-        <article
-          v-for="asset in assets"
-          :key="asset.id"
-          :data-status="asset.status"
-        >
+        <article v-for="asset in assets" :key="asset.id" :data-status="asset.status">
           <header>
-            <span aria-hidden="true">{{
-              asset.kind === "browser_profile" ? "▣" : "⌘"
-            }}</span>
+            <span aria-hidden="true">{{ asset.kind === "browser_profile" ? "▣" : "⌘" }}</span>
             <div>
               <small>{{ kindText(asset.kind) }}</small>
               <h3>{{ asset.name }}</h3>
@@ -495,9 +456,7 @@ onMounted(async () => {
             <div>
               <dt>最近轮换</dt>
               <dd>
-                {{
-                  asset.rotated_at ? asset.rotated_at.slice(0, 10) : "尚未轮换"
-                }}
+                {{ asset.rotated_at ? asset.rotated_at.slice(0, 10) : "尚未轮换" }}
               </dd>
             </div>
             <div>
@@ -516,11 +475,7 @@ onMounted(async () => {
             </div>
           </dl>
           <footer>
-            <button
-              type="button"
-              :disabled="asset.status === 'revoked'"
-              @click="openRotate(asset)"
-            >
+            <button type="button" :disabled="asset.status === 'revoked'" @click="openRotate(asset)">
               更新资料</button
             ><button
               type="button"
@@ -560,9 +515,7 @@ onMounted(async () => {
             {{ editor === "rotate" ? "更新加密资料" : "新建加密资料" }}
           </p>
           <h3>
-            {{
-              editor === "rotate" ? `轮换 ${selected?.name}` : "创建凭证资产"
-            }}
+            {{ editor === "rotate" ? `轮换 ${selected?.name}` : "创建凭证资产" }}
           </h3>
         </div>
         <button
@@ -585,8 +538,7 @@ onMounted(async () => {
               {{ p.name }}
             </option>
           </select></label
-        ><label v-if="editor === 'asset'"
-          >名称<input v-model="assetForm.name" required /></label
+        ><label v-if="editor === 'asset'">名称<input v-model="assetForm.name" required /></label
         ><label v-if="editor === 'asset'"
           >类型<select v-model="assetForm.kind">
             <option
@@ -615,9 +567,7 @@ onMounted(async () => {
             autocomplete="new-password"
           /><small>仅本次写入；保存后立即从页面状态清除。</small></label
         ><label
-          >到期时间（可选）<input
-            v-model="assetForm.expires_at"
-            type="datetime-local"
+          >到期时间（可选）<input v-model="assetForm.expires_at" type="datetime-local"
         /></label>
       </div>
       <p v-if="message" role="status">
@@ -625,21 +575,11 @@ onMounted(async () => {
       </p>
       <footer>
         <button type="submit" :disabled="saving || !assetForm.value">
-          {{
-            saving
-              ? "加密写入中…"
-              : editor === "rotate"
-                ? "确认轮换"
-                : "加密保存"
-          }}
+          {{ saving ? "加密写入中…" : editor === "rotate" ? "确认轮换" : "加密保存" }}
         </button>
       </footer>
     </form>
-    <form
-      v-if="editor === 'profile'"
-      class="credential-editor"
-      @submit.prevent="saveProfile"
-    >
+    <form v-if="editor === 'profile'" class="credential-editor" @submit.prevent="saveProfile">
       <header>
         <div>
           <p>关联网页采集档案</p>
@@ -661,9 +601,8 @@ onMounted(async () => {
             required
             @change="
               profileForm.provider_id =
-                browserAssets.find(
-                  (x) => x.id === profileForm.credential_asset_id,
-                )?.provider_id ?? ''
+                browserAssets.find((x) => x.id === profileForm.credential_asset_id)?.provider_id ??
+                ''
             "
           >
             <option value="" disabled>选择加密档案</option>
@@ -672,10 +611,7 @@ onMounted(async () => {
             </option>
           </select></label
         ><label
-          >内部标识<input
-            v-model="profileForm.code"
-            required
-            pattern="[a-z0-9_]{2,80}" /></label
+          >内部标识<input v-model="profileForm.code" required pattern="[a-z0-9_]{2,80}" /></label
         ><label>名称<input v-model="profileForm.name" required /></label
         ><label>页面语言<input v-model="profileForm.locale" required /></label
         ><label>所在时区<input v-model="profileForm.timezone" required /></label
@@ -688,9 +624,7 @@ onMounted(async () => {
       </div>
       <p v-if="!browserAssets.length">需要先导入一个可用的网页登录档案。</p>
       <footer>
-        <button type="submit" :disabled="saving || !browserAssets.length">
-          保存档案引用
-        </button>
+        <button type="submit" :disabled="saving || !browserAssets.length">保存档案引用</button>
       </footer>
     </form>
     <form
@@ -717,8 +651,8 @@ onMounted(async () => {
       <aside class="login-guide">
         <strong>支持哪些格式？</strong>
         <p>
-          首选 Cookie JSON、Playwright storageState JSON 或 Netscape
-          cookies.txt；也可上传专用 Chromium 的 .tar.gz 档案。公开页面不要求登录，可直接匿名测试。
+          首选 Cookie JSON、Playwright storageState JSON 或 Netscape cookies.txt；也可上传专用
+          Chromium 的 .tar.gz 档案。公开页面不要求登录，可直接匿名测试。
         </p>
         <ol>
           <li>“从当前浏览器读取”只读取当前所选来源域名。</li>
@@ -730,25 +664,25 @@ onMounted(async () => {
         <label
           >需要登录的来源<select v-model="loginProvider" required>
             <option :value="null" disabled>请选择</option>
-            <option
-              v-for="item in loginProviders"
-              :key="item.id"
-              :value="item"
-            >
+            <option v-for="item in loginProviders" :key="item.id" :value="item">
               {{ item.name }}
             </option>
           </select></label
         ><label
           >导入方式<select
             v-model="loginMode"
-            @change="loginPayload = ''; loginFileName = ''"
+            @change="
+              loginPayload = '';
+              loginFileName = '';
+            "
           >
             <option value="cookie_file">上传 Cookie 文件</option>
             <option value="browser">从当前浏览器读取</option>
             <option value="archive">完整浏览器档案</option>
           </select></label
         ><label v-if="loginMode !== 'browser'" class="archive-picker"
-          >{{ loginMode === "archive" ? "浏览器登录档案" : "Cookie 文件" }}<input
+          >{{ loginMode === "archive" ? "浏览器登录档案" : "Cookie 文件"
+          }}<input
             type="file"
             :accept="
               loginMode === 'archive'
@@ -759,9 +693,7 @@ onMounted(async () => {
             @change="chooseLoginArchive"
           /><small>{{
             loginFileName ||
-            (loginMode === "archive"
-              ? "请选择 .tar.gz 文件"
-              : "请选择 Cookie JSON 或 cookies.txt")
+            (loginMode === "archive" ? "请选择 .tar.gz 文件" : "请选择 Cookie JSON 或 cookies.txt")
           }}</small></label
         >
       </div>

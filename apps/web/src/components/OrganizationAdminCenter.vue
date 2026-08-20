@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../organization-admin.css";
 const props = defineProps<{
     apiBaseUrl: string;
     routePath: string;
     organizationId: string;
   }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref("loading"),
   data = ref<any>(null),
   summary = ref<any>(null),
@@ -17,9 +19,7 @@ const props = defineProps<{
   memberRoles = ref<Record<string, string>>({}),
   teamMembers = ref<Record<string, string>>({});
 const view = computed(() =>
-    props.routePath === "/org-admin"
-      ? "summary"
-      : props.routePath.split("/").pop() || "summary",
+    props.routePath === "/org-admin" ? "summary" : props.routePath.split("/").pop() || "summary",
   ),
   title = computed(
     () =>
@@ -37,35 +37,17 @@ const view = computed(() =>
       )[view.value] || "组织资料",
   );
 async function api(path: string, init?: RequestInit) {
-  const r = await fetch(`${props.apiBaseUrl}${path}`, {
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        ...(init?.method && init.method !== "GET"
-          ? { "idempotency-key": crypto.randomUUID() }
-          : {}),
-        ...(init?.headers ?? {}),
-      },
-      ...init,
-    }),
-    b = await r.json().catch(() => null);
-  requestId.value = b?.request_id ?? "";
-  if (!r.ok) {
-    state.value =
-      r.status === 401
-        ? "expired"
-        : r.status === 403
-          ? "forbidden"
-          : r.status === 429
-            ? "rate_limited"
-            : r.status === 409
-              ? "conflict"
-              : "error";
-    notice.value = b?.error?.action_hint ?? "稍后重试。";
-    throw new Error("request_failed");
+  try {
+    const response = await request<any>(path, init ?? {});
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    state.value = failure?.kind === "conflict" ? "conflict" : (failure?.kind ?? "error");
+    notice.value = failure?.actionHint ?? "稍后重试。";
+    throw error;
   }
-  return b.data;
 }
 async function load() {
   state.value = "loading";
@@ -87,11 +69,8 @@ async function load() {
         reason: "",
       };
     } else if (view.value === "audit")
-      data.value = await api(
-        `/organizations/${props.organizationId}/audit-events?limit=50`,
-      );
-    else if (view.value === "data")
-      data.value = { exports: await api("/report-exports") };
+      data.value = await api(`/organizations/${props.organizationId}/audit-events?limit=50`);
+    else if (view.value === "data") data.value = { exports: await api("/report-exports") };
     else if (view.value === "workspaces") {
       const [workspaces, teams, members] = await Promise.all([
         api("/org/admin/workspaces"),
@@ -101,9 +80,7 @@ async function load() {
       data.value = { workspaces, teams, members: members.items ?? [] };
     } else data.value = await api(`/org/admin/${view.value}`);
     state.value = (
-      Array.isArray(data.value)
-        ? data.value.length
-        : Object.keys(data.value ?? {}).length
+      Array.isArray(data.value) ? data.value.length : Object.keys(data.value ?? {}).length
     )
       ? "ready"
       : "empty";
@@ -146,9 +123,7 @@ async function assignRole(item: any) {
 }
 async function workspaceAction(item: any) {
   const action = item.status === "active" ? "archive" : "restore";
-  const reason = auditedReason(
-    action === "archive" ? "归档工作区" : "恢复工作区",
-  );
+  const reason = auditedReason(action === "archive" ? "归档工作区" : "恢复工作区");
   if (!reason) return;
   await submit(`/org/admin/workspaces/${item.id}/actions`, {
     action,
@@ -162,9 +137,7 @@ async function teamMemberAction(item: any, action: "assign" | "remove") {
     notice.value = "请先选择当前组织成员。";
     return;
   }
-  const reason = auditedReason(
-    action === "assign" ? "分配团队成员" : "移除团队成员",
-  );
+  const reason = auditedReason(action === "assign" ? "分配团队成员" : "移除团队成员");
   if (!reason) return;
   await submit(`/org/admin/teams/${item.id}/members`, {
     action,
@@ -173,9 +146,7 @@ async function teamMemberAction(item: any, action: "assign" | "remove") {
   });
 }
 async function tokenAction(item: any, action: "rotate" | "revoke") {
-  const reason = auditedReason(
-    action === "rotate" ? "轮换组织 Token" : "撤销组织 Token",
-  );
+  const reason = auditedReason(action === "rotate" ? "轮换组织 Token" : "撤销组织 Token");
   if (!reason) return;
   await submit(`/org/admin/tokens/${item.id}/actions`, {
     action,
@@ -187,8 +158,7 @@ const activeMembers = computed(() =>
     (data.value?.members ?? []).filter((item: any) => item.status === "active"),
   ),
   workspaceName = (id: string) =>
-    data.value?.workspace_options?.find((item: any) => item.id === id)?.name ??
-    "未找到对应工作区",
+    data.value?.workspace_options?.find((item: any) => item.id === id)?.name ?? "未找到对应工作区",
   rows = computed(() =>
     view.value === "members"
       ? (data.value?.items ?? [])
@@ -246,12 +216,8 @@ const statusText = (v: string) =>
     }) as Record<string, string>
   )[v] ?? "其他状态";
 const scopeText = (v: string) =>
-  (
-    ({ organization: "组织范围", workspace: "工作区范围" }) as Record<
-      string,
-      string
-    >
-  )[v] ?? "指定范围";
+  (({ organization: "组织范围", workspace: "工作区范围" }) as Record<string, string>)[v] ??
+  "指定范围";
 const capabilityText = (v: string) =>
   (
     ({
@@ -305,15 +271,9 @@ onMounted(load);
     <div v-if="notice" class="org-admin-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
     </div>
-    <section v-if="state === 'loading'" class="org-admin-state">
-      正在读取当前组织数据…
-    </section>
+    <section v-if="state === 'loading'" class="org-admin-state">正在读取当前组织数据…</section>
     <section
-      v-else-if="
-        ['error', 'expired', 'forbidden', 'rate_limited', 'conflict'].includes(
-          state,
-        )
-      "
+      v-else-if="['error', 'expired', 'forbidden', 'rate_limited', 'conflict'].includes(state)"
       class="org-admin-state"
     >
       <h3>
@@ -390,11 +350,7 @@ onMounted(load);
         <form
           class="org-admin-card"
           @submit.prevent="
-            submit(
-              '/org/admin/profile',
-              { ...form, expected_version: data.version },
-              'PATCH',
-            )
+            submit('/org/admin/profile', { ...form, expected_version: data.version }, 'PATCH')
           "
         >
           <h3>更新组织资料</h3>
@@ -404,15 +360,9 @@ onMounted(load);
               :placeholder="data?.name"
               required
               maxlength="120" /></label
+          ><label>Logo HTTPS 地址<input v-model="form.logo_url" placeholder="https://…" /></label
           ><label
-            >Logo HTTPS 地址<input
-              v-model="form.logo_url"
-              placeholder="https://…" /></label
-          ><label
-            >时区<input
-              v-model="form.timezone"
-              :placeholder="data?.timezone"
-              required /></label
+            >时区<input v-model="form.timezone" :placeholder="data?.timezone" required /></label
           ><label
             >数据保留天数<input
               v-model.number="form.data_retention_days"
@@ -432,19 +382,12 @@ onMounted(load);
               </option>
             </select></label
           ><label
-            >变更原因<textarea
-              v-model="form.reason"
-              required
-              maxlength="500"
-            ></textarea></label
+            >变更原因<textarea v-model="form.reason" required maxlength="500"></textarea></label
           ><button :disabled="busy">保存并审计</button>
         </form>
       </section>
       <section v-else-if="view === 'members'" class="org-admin-grid">
-        <form
-          class="org-admin-card"
-          @submit.prevent="submit('/org/admin/invitations', form)"
-        >
+        <form class="org-admin-card" @submit.prevent="submit('/org/admin/invitations', form)">
           <h3>邀请成员</h3>
           <label>邮箱<input v-model="form.email" type="email" required /></label
           ><label
@@ -455,26 +398,17 @@ onMounted(load);
               <option value="organization_admin">组织管理员</option>
               <option value="auditor">审计员</option>
             </select></label
-          ><label
-            >原因<textarea v-model="form.reason" required></textarea></label
+          ><label>原因<textarea v-model="form.reason" required></textarea></label
           ><button :disabled="busy">创建邀请</button
-          ><small
-            >邮件服务尚未配置时，邀请会显示“等待邮件服务”，不会假装已经发送。</small
-          >
+          ><small>邮件服务尚未配置时，邀请会显示“等待邮件服务”，不会假装已经发送。</small>
         </form>
         <article class="org-admin-card">
           <h3>待接受邀请</h3>
           <p v-if="!data?.invitations?.length">暂无待处理邀请。</p>
-          <div
-            v-for="x in data?.invitations"
-            :key="x.id"
-            class="org-admin-line"
-          >
+          <div v-for="x in data?.invitations" :key="x.id" class="org-admin-line">
             <div>
               <b>{{ x.email }}</b
-              ><small
-                >{{ roleText(x.role_code) }} · {{ fmt(x.expires_at) }}</small
-              >
+              ><small>{{ roleText(x.role_code) }} · {{ fmt(x.expires_at) }}</small>
             </div>
             <i>{{ statusText(x.status) }}</i>
           </div>
@@ -510,9 +444,7 @@ onMounted(load);
                   {{ roleText(role) }}
                 </option>
               </select>
-              <button type="button" :disabled="busy" @click="assignRole(x)">
-                分配角色
-              </button>
+              <button type="button" :disabled="busy" @click="assignRole(x)">分配角色</button>
               <button type="button" :disabled="busy" @click="memberAction(x)">
                 {{ x.status === "active" ? "禁用成员" : "恢复成员" }}
               </button>
@@ -527,50 +459,30 @@ onMounted(load);
           <h3>{{ x.name }}</h3>
           <p>{{ x.description }}</p>
           <div class="org-admin-chips">
-            <span v-for="c in x.capabilities" :key="c">{{
-              capabilityText(c)
-            }}</span>
+            <span v-for="c in x.capabilities" :key="c">{{ capabilityText(c) }}</span>
           </div>
         </article>
       </section>
       <section v-else-if="view === 'workspaces'" class="org-admin-grid">
-        <form
-          class="org-admin-card"
-          @submit.prevent="submit('/org/admin/workspaces', form)"
-        >
+        <form class="org-admin-card" @submit.prevent="submit('/org/admin/workspaces', form)">
           <h3>创建工作区</h3>
           <label>名称<input v-model="form.name" required /></label
-          ><label
-            >英文标识<input
-              v-model="form.slug"
-              pattern="[a-z0-9-]+"
-              required /></label
-          ><label
-            >创建原因<textarea v-model="form.reason" required></textarea></label
+          ><label>英文标识<input v-model="form.slug" pattern="[a-z0-9-]+" required /></label
+          ><label>创建原因<textarea v-model="form.reason" required></textarea></label
           ><button :disabled="busy">创建工作区</button>
         </form>
-        <form
-          class="org-admin-card"
-          @submit.prevent="submit('/org/admin/teams', form)"
-        >
+        <form class="org-admin-card" @submit.prevent="submit('/org/admin/teams', form)">
           <h3>创建团队</h3>
           <label>名称<input v-model="form.name" required /></label
           ><label
             >负责人（可选）<select v-model="form.lead_membership_id">
               <option value="">暂不设置</option>
-              <option
-                v-for="member in activeMembers"
-                :key="member.id"
-                :value="member.id"
-              >
+              <option v-for="member in activeMembers" :key="member.id" :value="member.id">
                 {{ member.email }}
               </option>
             </select></label
-          ><label
-            >默认工作流程（可选）<input
-              v-model="form.default_workflow_key" /></label
-          ><label
-            >创建原因<textarea v-model="form.reason" required></textarea></label
+          ><label>默认工作流程（可选）<input v-model="form.default_workflow_key" /></label
+          ><label>创建原因<textarea v-model="form.reason" required></textarea></label
           ><button :disabled="busy">创建团队</button>
         </form>
         <article class="org-admin-card">
@@ -578,17 +490,10 @@ onMounted(load);
           <div v-for="x in data?.workspaces" :key="x.id" class="org-admin-line">
             <div>
               <b>{{ x.name }}</b
-              ><small
-                >{{ x.slug }} · {{ x.member_count }} 名成员 · 第
-                {{ x.version }} 版</small
-              >
+              ><small>{{ x.slug }} · {{ x.member_count }} 名成员 · 第 {{ x.version }} 版</small>
             </div>
             <div class="org-admin-actions">
-              <button
-                type="button"
-                :disabled="busy"
-                @click="workspaceAction(x)"
-              >
+              <button type="button" :disabled="busy" @click="workspaceAction(x)">
                 {{ x.status === "active" ? "归档" : "恢复" }}</button
               ><i>{{ statusText(x.status) }}</i>
             </div>
@@ -599,37 +504,19 @@ onMounted(load);
           <div v-for="x in data?.teams" :key="x.id" class="org-admin-line">
             <div>
               <b>{{ x.name }}</b
-              ><small
-                >{{ x.member_count }} 名成员 · 负责人
-                {{ x.lead_email || "未设置" }}</small
-              >
+              ><small>{{ x.member_count }} 名成员 · 负责人 {{ x.lead_email || "未设置" }}</small>
             </div>
             <div class="org-admin-actions">
-              <select
-                v-model="teamMembers[x.id]"
-                aria-label="选择团队成员"
-              >
+              <select v-model="teamMembers[x.id]" aria-label="选择团队成员">
                 <option value="">请选择成员</option>
-                <option
-                  v-for="member in activeMembers"
-                  :key="member.id"
-                  :value="member.id"
-                >
+                <option v-for="member in activeMembers" :key="member.id" :value="member.id">
                   {{ member.email }}
                 </option>
               </select>
-              <button
-                type="button"
-                :disabled="busy"
-                @click="teamMemberAction(x, 'assign')"
-              >
+              <button type="button" :disabled="busy" @click="teamMemberAction(x, 'assign')">
                 分配成员
               </button>
-              <button
-                type="button"
-                :disabled="busy"
-                @click="teamMemberAction(x, 'remove')"
-              >
+              <button type="button" :disabled="busy" @click="teamMemberAction(x, 'remove')">
                 移除成员
               </button>
               <i>{{ statusText(x.status) }}</i>
@@ -684,8 +571,7 @@ onMounted(load);
               min="1"
               max="365"
               value="90" /></label
-          ><label
-            >创建原因<textarea v-model="form.reason" required></textarea></label
+          ><label>创建原因<textarea v-model="form.reason" required></textarea></label
           ><button :disabled="busy">创建令牌</button>
         </form>
         <article class="org-admin-card">
@@ -698,8 +584,7 @@ onMounted(load);
             <div>
               <b>{{ x.name }}</b
               ><small
-                >{{ x.token_prefix }}… ·
-                {{ x.scopes.map(capabilityText).join("、") }} · 到期
+                >{{ x.token_prefix }}… · {{ x.scopes.map(capabilityText).join("、") }} · 到期
                 {{ fmt(x.expires_at) }}</small
               >
             </div>
@@ -731,8 +616,7 @@ onMounted(load);
           <div>
             <b>{{ x.action || x.report_type }}</b
             ><small
-              >{{ x.resource_type || x.status }} ·
-              {{ fmt(x.occurred_at || x.created_at) }}</small
+              >{{ x.resource_type || x.status }} · {{ fmt(x.occurred_at || x.created_at) }}</small
             >
           </div>
           <i>{{ x.outcome || x.status }}</i>

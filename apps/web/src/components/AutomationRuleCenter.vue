@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../automation-rules.css";
 type Rule = {
   id: string;
@@ -17,6 +18,7 @@ type Rule = {
   updated_at: string;
 };
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref("loading"),
   rules = ref<Rule[]>([]),
   selected = ref<any>(null),
@@ -38,35 +40,17 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     rate_limit_window_minutes: 60,
   });
 async function api(path: string, init?: RequestInit) {
-  const r = await fetch(`${props.apiBaseUrl}${path}`, {
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        ...(init?.method && init.method !== "GET"
-          ? { "idempotency-key": crypto.randomUUID() }
-          : {}),
-        ...(init?.headers ?? {}),
-      },
-      ...init,
-    }),
-    b = await r.json().catch(() => null);
-  requestId.value = b?.request_id ?? "";
-  if (!r.ok) {
-    state.value =
-      r.status === 401
-        ? "expired"
-        : r.status === 403
-          ? "forbidden"
-          : r.status === 429
-            ? "rate_limited"
-            : r.status === 409
-              ? "version_conflict"
-              : "error";
-    notice.value = b?.error?.action_hint ?? "稍后重试。";
-    throw new Error("request_failed");
+  try {
+    const response = await request<any>(path, init ?? {});
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    state.value = failure?.kind === "conflict" ? "version_conflict" : (failure?.kind ?? "error");
+    notice.value = failure?.actionHint ?? "稍后重试。";
+    throw error;
   }
-  return b.data;
 }
 async function load() {
   state.value = "loading";
@@ -77,8 +61,7 @@ async function load() {
       deepLinkHandled.value = true;
       const params = new URLSearchParams(location.search),
         target = rules.value.find((item) => item.id === params.get("rule"));
-      if (target)
-        params.get("action") === "edit" ? edit(target) : await open(target);
+      if (target) params.get("action") === "edit" ? edit(target) : await open(target);
     }
   } catch {}
 }
@@ -90,25 +73,20 @@ async function open(rule: Rule) {
 async function create() {
   busy.value = true;
   try {
-    await api(
-      editing.value ? `/automations/${editing.value.id}` : "/automations",
-      {
-        method: editing.value ? "PATCH" : "POST",
-        body: JSON.stringify({
-          ...form.value,
-          ...(editing.value
-            ? {
-                expected_version: editing.value.version,
-                reason: "编辑自动化规则",
-              }
-            : {}),
-          action_assignee_id:
-            form.value.action_type === "create_task"
-              ? form.value.action_assignee_id
-              : null,
-        }),
-      },
-    );
+    await api(editing.value ? `/automations/${editing.value.id}` : "/automations", {
+      method: editing.value ? "PATCH" : "POST",
+      body: JSON.stringify({
+        ...form.value,
+        ...(editing.value
+          ? {
+              expected_version: editing.value.version,
+              reason: "编辑自动化规则",
+            }
+          : {}),
+        action_assignee_id:
+          form.value.action_type === "create_task" ? form.value.action_assignee_id : null,
+      }),
+    });
     showCreate.value = false;
     notice.value = editing.value
       ? "自动化规则已更新并保留审计记录。"
@@ -147,14 +125,10 @@ async function status(rule: Rule) {
       body: JSON.stringify({
         action: rule.status === "active" ? "pause" : "resume",
         expected_version: rule.version,
-        reason:
-          rule.status === "active"
-            ? "由规则管理页人工暂停"
-            : "由规则管理页人工恢复",
+        reason: rule.status === "active" ? "由规则管理页人工暂停" : "由规则管理页人工恢复",
       }),
     });
-    notice.value =
-      rule.status === "active" ? "规则已人工暂停。" : "规则已恢复。";
+    notice.value = rule.status === "active" ? "规则已人工暂停。" : "规则已恢复。";
     selected.value = null;
     await load();
   } catch {
@@ -171,8 +145,7 @@ const trigger = (v: string) =>
         "task.created": "任务创建",
       }) as any
     )[v] ?? v,
-  action = (v: string) =>
-    v === "notify_owner" ? "通知负责人" : "创建人工任务",
+  action = (v: string) => (v === "notify_owner" ? "通知负责人" : "创建人工任务"),
   severity = (v: string) =>
     (
       ({
@@ -183,42 +156,47 @@ const trigger = (v: string) =>
       }) as Record<string, string>
     )[v] ?? "未知",
   executionStatus = (v: string) =>
-    (
-      ({ succeeded: "已完成", failed: "失败", dead_letter: "死信" }) as Record<
-        string,
-        string
-      >
-    )[v] ?? "处理中";
+    (({ succeeded: "已完成", failed: "失败", dead_letter: "死信" }) as Record<string, string>)[v] ??
+    "处理中";
 onMounted(load);
 </script>
 <template>
   <section class="automation-center">
-    <section class="selection-pipeline"><div><p>持续选品</p><h3>设定规则后，系统会按周期自动推进</h3><span>采集程序从已启用的电商、论坛、新闻和社媒来源抓取公开页面；所有结果保留网址、抓取时间和原始证据。</span></div><ol><li><b>01</b><span>按来源计划定时采集</span></li><li><b>02</b><span>识别热点与商品</span></li><li><b>03</b><span>生成选品机会</span></li><li><b>04</b><span>匹配竞品与货源</span></li><li><b>05</b><span>利润、风险与证据复核</span></li></ol><nav><a href="/trends">管理热点监控规则</a><a href="/opportunities/start">立即运行一次选品</a><a href="/tasks">查看执行任务</a></nav></section>
+    <section class="selection-pipeline">
+      <div>
+        <p>持续选品</p>
+        <h3>设定规则后，系统会按周期自动推进</h3>
+        <span
+          >采集程序从已启用的电商、论坛、新闻和社媒来源抓取公开页面；所有结果保留网址、抓取时间和原始证据。</span
+        >
+      </div>
+      <ol>
+        <li><b>01</b><span>按来源计划定时采集</span></li>
+        <li><b>02</b><span>识别热点与商品</span></li>
+        <li><b>03</b><span>生成选品机会</span></li>
+        <li><b>04</b><span>匹配竞品与货源</span></li>
+        <li><b>05</b><span>利润、风险与证据复核</span></li>
+      </ol>
+      <nav>
+        <a href="/trends">管理热点监控规则</a><a href="/opportunities/start">立即运行一次选品</a
+        ><a href="/tasks">查看执行任务</a>
+      </nav>
+    </section>
     <header>
       <div>
         <p>团队自动化</p>
         <h2>自动化规则</h2>
-        <span
-          >配置“发生什么情况、通知谁或创建什么任务”，并查看每次执行结果。</span
-        >
+        <span>配置“发生什么情况、通知谁或创建什么任务”，并查看每次执行结果。</span>
       </div>
       <button @click="showCreate = true">创建规则</button>
     </header>
     <div v-if="notice" class="automation-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
     </div>
-    <section v-if="state === 'loading'" class="automation-state">
-      正在读取规则…
-    </section>
+    <section v-if="state === 'loading'" class="automation-state">正在读取规则…</section>
     <section
       v-else-if="
-        [
-          'error',
-          'expired',
-          'forbidden',
-          'rate_limited',
-          'version_conflict',
-        ].includes(state)
+        ['error', 'expired', 'forbidden', 'rate_limited', 'version_conflict'].includes(state)
       "
       class="automation-state"
     >
@@ -260,10 +238,7 @@ onMounted(load);
           </div>
           <div>
             <dt>限流</dt>
-            <dd>
-              {{ rule.rate_limit_count }} /
-              {{ rule.rate_limit_window_minutes }} 分钟
-            </dd>
+            <dd>{{ rule.rate_limit_count }} / {{ rule.rate_limit_window_minutes }} 分钟</dd>
           </div>
         </dl>
         <footer>
@@ -282,8 +257,7 @@ onMounted(load);
       <ul v-if="selected.executions?.length">
         <li v-for="x in selected.executions" :key="x.id">
           <b>{{ executionStatus(x.status) }}</b
-          ><span
-            >规则 v{{ x.rule_version }} · 尝试 {{ x.attempt_count }} 次</span
+          ><span>规则 v{{ x.rule_version }} · 尝试 {{ x.attempt_count }} 次</span
           ><small
             >{{ x.action_resource_type || "无动作资源" }}
             {{ x.action_resource_id || x.last_error_code || "" }}</small
@@ -295,8 +269,7 @@ onMounted(load);
     <dialog :open="showCreate">
       <form @submit.prevent="create">
         <h3>{{ editing ? "编辑自动化规则" : "创建自动化规则" }}</h3>
-        <label
-          >规则名称<input v-model="form.name" required maxlength="200" /></label
+        <label>规则名称<input v-model="form.name" required maxlength="200" /></label
         ><label
           >触发事件<select v-model="form.trigger_event_type">
             <option value="approval.overdue">审批节点超时</option>
@@ -314,10 +287,7 @@ onMounted(load);
         ><label
           >动作<select v-model="form.action_type">
             <option value="notify_owner">通知负责人</option>
-            <option
-              v-if="!form.trigger_event_type.startsWith('task.')"
-              value="create_task"
-            >
+            <option v-if="!form.trigger_event_type.startsWith('task.')" value="create_task">
               创建人工任务
             </option>
           </select></label
@@ -331,9 +301,7 @@ onMounted(load);
             v-model="form.action_assignee_id"
             required
             pattern="[0-9a-fA-F-]{36}" /></label
-        ><label
-          >动作标题<input v-model="form.action_title" required maxlength="200"
-        /></label>
+        ><label>动作标题<input v-model="form.action_title" required maxlength="200" /></label>
         <div class="automation-pair">
           <label
             >最多执行次数<input
@@ -349,12 +317,9 @@ onMounted(load);
               max="1440"
           /></label>
         </div>
-        <p>
-          规则只消费真实通知投影；任务动作会标记 automation 来源并留存审计。
-        </p>
+        <p>规则只消费真实通知投影；任务动作会标记 automation 来源并留存审计。</p>
         <footer>
-          <button type="button" class="secondary" @click="closeEditor">
-            取消</button
+          <button type="button" class="secondary" @click="closeEditor">取消</button
           ><button :disabled="busy">
             {{ editing ? "保存修改" : "创建并启用" }}
           </button>

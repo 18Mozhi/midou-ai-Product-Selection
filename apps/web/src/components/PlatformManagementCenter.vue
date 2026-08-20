@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import PlatformMessageEditor from "./PlatformMessageEditor.vue";
 import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
 import PlatformManagementRecordList from "./PlatformManagementRecordList.vue";
@@ -8,6 +9,7 @@ import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 
 type Domain = "content" | "notifications" | "email" | "status";
 const props = defineProps<{ apiBaseUrl: string; domain: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const domain = computed<Domain>(
   () =>
     (["content", "notifications", "email", "status"].includes(props.domain)
@@ -110,6 +112,17 @@ const stateName = (value: unknown) =>
     }) as Record<string, string>
   )[String(value)] ?? String(value ?? "—");
 const when = (value: unknown) => (value ? new Date(String(value)).toLocaleString("zh-CN") : "—");
+async function api<T>(path: string, options: RequestInit = {}) {
+  try {
+    const response = await request<T>(path, options);
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? requestId.value;
+    throw new Error(failure?.actionHint ?? "请求未完成");
+  }
+}
 async function load() {
   state.value = "loading";
   message.value = "";
@@ -117,20 +130,13 @@ async function load() {
   if (query.value.trim()) params.set("query", query.value.trim());
   if (status.value) params.set("status", status.value);
   try {
-    const response = await fetch(`${props.apiBaseUrl}/platform/management?${params}`, {
-        credentials: "include",
-        headers: { accept: "application/json" },
-      }),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) throw new Error(body?.error?.action_hint ?? "管理数据暂不可用");
-    data.value = body.data;
+    data.value = await api<any>(`/platform/management?${params}`);
     const count =
       domain.value === "status"
-        ? (body.data?.collections?.length ?? 0) + (body.data?.sources?.length ?? 0)
+        ? (data.value?.collections?.length ?? 0) + (data.value?.sources?.length ?? 0)
         : ["notifications", "email"].includes(domain.value)
-          ? (body.data?.items?.length ?? 0) + (body.data?.messages?.length ?? 0)
-          : (body.data?.items?.length ?? 0);
+          ? (data.value?.items?.length ?? 0) + (data.value?.messages?.length ?? 0)
+          : (data.value?.items?.length ?? 0);
     state.value = count || domain.value === "status" ? "ready" : "empty";
   } catch (error) {
     message.value = error instanceof Error ? error.message : "管理数据暂不可用";
@@ -147,25 +153,14 @@ async function submitReview() {
   busy.value = reviewItem.value.id;
   message.value = "";
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/management/content/${reviewItem.value.id}`,
-        {
-          method: "PATCH",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-            "idempotency-key": crypto.randomUUID(),
-          },
-          body: JSON.stringify({
-            status: reviewStatus.value,
-            expected_version: reviewItem.value.version,
-            reason: reviewReason.value.trim(),
-          }),
-        },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) throw new Error(body?.error?.action_hint ?? "内容审核未完成");
+    await api(`/platform/management/content/${reviewItem.value.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        status: reviewStatus.value,
+        expected_version: reviewItem.value.version,
+        reason: reviewReason.value.trim(),
+      }),
+    });
     reviewItem.value = null;
     await load();
     message.value = "内容状态已更新并写入审计记录。";
@@ -186,21 +181,10 @@ async function manageEmail(item: any, action: "retry" | "suppress") {
   busy.value = item.id;
   message.value = "";
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/management/email/${item.source_type}/${item.id}/actions`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-            "idempotency-key": crypto.randomUUID(),
-          },
-          body: JSON.stringify({ action, reason: reason.trim() }),
-        },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) throw new Error(body?.error?.action_hint ?? `${actionName}未完成`);
+    await api(`/platform/management/email/${item.source_type}/${item.id}/actions`, {
+      method: "POST",
+      body: JSON.stringify({ action, reason: reason.trim() }),
+    });
     await load();
     message.value = `${actionName}已完成并写入审计记录。`;
   } catch (error) {
@@ -246,22 +230,11 @@ async function saveMessage() {
   if (!messageEditor.value) return;
   messageSaving.value = true;
   try {
-    const editing = Boolean(messageEditor.value.id),
-      response = await fetch(
-        `${props.apiBaseUrl}/platform/management/messages${editing ? `/${messageEditor.value.id}` : ""}`,
-        {
-          method: editing ? "PATCH" : "POST",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-            "idempotency-key": crypto.randomUUID(),
-          },
-          body: JSON.stringify(messageForm.value),
-        },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) throw new Error(body?.error?.action_hint ?? "草稿未保存");
+    const editing = Boolean(messageEditor.value.id);
+    await api(`/platform/management/messages${editing ? `/${messageEditor.value.id}` : ""}`, {
+      method: editing ? "PATCH" : "POST",
+      body: JSON.stringify(messageForm.value),
+    });
     messageEditor.value = null;
     await load();
     message.value = editing ? "草稿已更新。" : "草稿已创建，可继续编辑或发布。";
@@ -281,29 +254,18 @@ async function messageAction(item: any, action: "publish" | "cancel") {
   }
   busy.value = item.id;
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/management/messages/${item.id}/actions`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-            "idempotency-key": crypto.randomUUID(),
-          },
-          body: JSON.stringify({
-            action,
-            expected_version: item.version,
-            reason: reason.trim(),
-          }),
-        },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) throw new Error(body?.error?.action_hint ?? `${actionName}未完成`);
+    const result = await api<any>(`/platform/management/messages/${item.id}/actions`, {
+      method: "POST",
+      body: JSON.stringify({
+        action,
+        expected_version: item.version,
+        reason: reason.trim(),
+      }),
+    });
     await load();
     message.value =
       action === "publish"
-        ? `${actionName}完成：覆盖 ${body.data.recipient_count} 人，站内 ${body.data.in_app_count} 条，邮件队列 ${body.data.email_count} 条。`
+        ? `${actionName}完成：覆盖 ${result.recipient_count} 人，站内 ${result.in_app_count} 条，邮件队列 ${result.email_count} 条。`
         : "草稿已取消。";
   } catch (error) {
     message.value = error instanceof Error ? error.message : `${actionName}未完成`;

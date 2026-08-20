@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../provider-adapters.css";
@@ -22,6 +23,7 @@ interface AdapterSummary {
   updated_at: string;
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   items = ref<AdapterSummary[]>([]),
   requestId = ref(""),
@@ -70,50 +72,34 @@ async function load() {
   state.value = "loading";
   message.value = "";
   try {
-    const response = await fetch(`${props.apiBaseUrl}/platform/provider-adapters`, {
-        credentials: "include",
-        headers: { accept: "application/json" },
-      }),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) {
-      state.value = failure(response.status);
-      return;
-    }
-    items.value = body.data;
+    const response = await request<AdapterSummary[]>("/platform/provider-adapters");
+    requestId.value = response.request_id;
+    items.value = response.data;
     state.value = items.value.length ? "ready" : "empty";
-  } catch {
-    state.value = "blocked";
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? "";
+    state.value = apiError ? failure(apiError.status) : "blocked";
   }
 }
 async function probe(item: AdapterSummary) {
   probing.value = item.id;
   message.value = "";
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/provider-adapters/${item.id}/health-check`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-            "idempotency-key": crypto.randomUUID(),
-          },
-        },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) {
-      message.value = body?.error?.action_hint ?? "健康检查未完成";
-      return;
-    }
-    items.value = items.value.map((current) => (current.id === item.id ? body.data : current));
+    const response = await request<AdapterSummary>(
+      `/platform/provider-adapters/${item.id}/health-check`,
+      { method: "POST" },
+    );
+    requestId.value = response.request_id;
+    items.value = items.value.map((current) => (current.id === item.id ? response.data : current));
     message.value =
-      body.data.health_status === "ready"
+      response.data.health_status === "ready"
         ? `${item.name} 健康检查通过`
         : `${item.name} 已记录受阻原因`;
-  } catch {
-    message.value = "依赖不可用，未伪造健康结果";
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? "";
+    message.value = apiError?.actionHint ?? "依赖不可用，未伪造健康结果";
   } finally {
     probing.value = null;
   }

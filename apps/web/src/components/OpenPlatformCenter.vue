@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../platform-polish.css";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 const p = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(p.apiBaseUrl);
 type State = "loading" | "ready" | "empty" | "error" | "rate_limited" | "blocked";
 const state = ref<State>("loading"),
   data = ref<any>({ clients: [], webhooks: [], deliveries: [] }),
@@ -13,25 +15,19 @@ const state = ref<State>("loading"),
   pending = ref<{ title: string; path: string; body: any } | null>(null),
   form = ref({ name: "", target_url: "", reason: "开放平台配置变更" });
 async function call(path: string, method = "GET", body?: any) {
-  const r = await fetch(`${p.apiBaseUrl}${path}`, {
+  try {
+    const response = await request<any>(path, {
       method,
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        origin: location.origin,
-        "idempotency-key": crypto.randomUUID(),
-      },
-      ...(body ? { body: JSON.stringify(body) } : {}),
-    }),
-    j = await r.json();
-  if (!r.ok) {
-    requestId.value = j.request_id ?? "";
-    throw Object.assign(new Error(j.error?.message ?? "request_failed"), {
-      status: r.status,
+      headers: { origin: location.origin },
+      ...(body ? { body } : {}),
     });
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    throw error;
   }
-  return j.data;
 }
 async function load() {
   state.value = "loading";
@@ -45,7 +41,7 @@ async function load() {
         ? "ready"
         : "empty";
   } catch (e) {
-    notice.value = String((e as Error).message);
+    notice.value = e instanceof ApiClientError ? e.actionHint : "读取失败";
     state.value =
       (e as any).status === 429 ? "rate_limited" : (e as any).status >= 500 ? "blocked" : "error";
   }
@@ -63,7 +59,7 @@ async function createClient() {
     await load();
     state.value = "ready";
   } catch (e) {
-    notice.value = String((e as Error).message);
+    notice.value = e instanceof ApiClientError ? e.actionHint : "创建失败";
   }
 }
 async function createWebhook() {
@@ -80,7 +76,7 @@ async function createWebhook() {
     await load();
     state.value = "ready";
   } catch (e) {
-    notice.value = String((e as Error).message);
+    notice.value = e instanceof ApiClientError ? e.actionHint : "创建失败";
   }
 }
 async function action(path: string, body: any) {
@@ -91,7 +87,7 @@ async function action(path: string, body: any) {
     await load();
     state.value = "ready";
   } catch (e) {
-    notice.value = String((e as Error).message);
+    notice.value = e instanceof ApiClientError ? e.actionHint : "操作失败";
   }
 }
 function prepare(title: string, path: string, body: any) {

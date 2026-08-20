@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 type Section =
   "score_rules" | "cost_rules" | "approval_templates" | "automation_rules" | "releases";
 const section = ref<Section>("score_rules"),
@@ -112,17 +114,14 @@ async function load() {
   if (query.value.trim()) params.set("query", query.value.trim());
   if (status.value) params.set("status", status.value);
   try {
-    const response = await fetch(`${props.apiBaseUrl}/platform/management?${params}`, {
-        credentials: "include",
-        headers: { accept: "application/json" },
-      }),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) throw new Error(body?.error?.action_hint ?? "治理数据暂不可用");
-    data.value = body.data;
-    state.value = Object.values(body.data.summary).some(Number) ? "ready" : "empty";
+    const response = await request<any>(`/platform/management?${params}`);
+    requestId.value = response.request_id;
+    data.value = response.data;
+    state.value = Object.values(response.data.summary).some(Number) ? "ready" : "empty";
   } catch (error) {
-    message.value = error instanceof Error ? error.message : "治理数据暂不可用";
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    message.value = failure?.actionHint ?? "治理数据暂不可用";
     state.value = "error";
   }
 }

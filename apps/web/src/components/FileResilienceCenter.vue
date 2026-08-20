@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import type { FileResilienceDto } from "@scoutops/contracts";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../file-resilience.css";
 type ViewState =
   | "loading"
@@ -14,6 +15,7 @@ type ViewState =
   | "unavailable"
   | "recovering";
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<ViewState>("loading"),
   data = ref<FileResilienceDto | null>(null),
   requestId = ref(""),
@@ -22,21 +24,12 @@ const verdict = computed(
   () =>
     (
       ({
-        loading: [
-          "正在核对本机受控目录",
-          "读取容量、索引、校验和与同机恢复事实。",
-        ],
+        loading: ["正在核对本机受控目录", "读取容量、索引、校验和与同机恢复事实。"],
         ready: ["本机文件韧性门已满足", "证据与导出目录符合当前 S0 单机边界。"],
         warning: ["本机文件接近预警线", "当前可用，但需要按告警项处理。"],
-        blocked: [
-          "本机文件韧性门已阻断",
-          "停止新增大文件任务，并通过宝塔核验目录与恢复副本。",
-        ],
+        blocked: ["本机文件韧性门已阻断", "停止新增大文件任务，并通过宝塔核验目录与恢复副本。"],
         empty: ["尚无本机文件观测", "确认宝塔 Node API 与受控目录后重新核验。"],
-        forbidden: [
-          "没有平台运维权限",
-          actionHint.value || "需要 platform:operate 能力。",
-        ],
+        forbidden: ["没有平台运维权限", actionHint.value || "需要 platform:operate 能力。"],
         expired: ["登录已失效", "重新登录后再核验。"],
         rate_limited: ["刷新过于频繁", "稍后重试。"],
         unavailable: [
@@ -54,39 +47,30 @@ const bytes = (value: number) =>
     : value >= 1073741824
       ? `${(value / 1073741824).toFixed(1)} GiB`
       : `${(value / 1048576).toFixed(1)} MiB`;
-const time = (value: string) =>
-  new Date(value).toLocaleString("zh-CN", { hour12: false });
+const time = (value: string) => new Date(value).toLocaleString("zh-CN", { hour12: false });
 async function load() {
   state.value = "loading";
   actionHint.value = "";
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/operations/files`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    actionHint.value = body?.error?.action_hint ?? "";
-    if (!response.ok) {
-      state.value =
-        response.status === 401
-          ? "expired"
-          : response.status === 403
-            ? "forbidden"
-            : response.status === 429
-              ? "rate_limited"
-              : "unavailable";
-      return;
-    }
-    if (!body?.data) {
+    const response = await request<FileResilienceDto | null>("/platform/operations/files");
+    requestId.value = response.request_id;
+    if (!response.data) {
       data.value = null;
       state.value = "empty";
       return;
     }
-    data.value = body.data;
-    state.value = body.data.state;
-  } catch {
-    state.value = "unavailable";
+    data.value = response.data;
+    state.value = response.data.state;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    actionHint.value = failure?.actionHint ?? "";
+    state.value =
+      failure?.kind === "expired" ||
+      failure?.kind === "forbidden" ||
+      failure?.kind === "rate_limited"
+        ? failure.kind
+        : "unavailable";
   }
 }
 onMounted(load);
@@ -97,9 +81,7 @@ onMounted(load);
       <div>
         <p>本机受管存储</p>
         <h2>本机文件韧性</h2>
-        <span
-          >证据与导出只写入惠州当前主机的宝塔受控目录；不使用共享存储或备用服务器。</span
-        >
+        <span>证据与导出只写入惠州当前主机的宝塔受控目录；不使用共享存储或备用服务器。</span>
       </div>
       <button type="button" @click="load">刷新文件事实</button>
     </header>
@@ -115,15 +97,7 @@ onMounted(load);
       </div>
     </section>
     <section
-      v-else-if="
-        [
-          'forbidden',
-          'expired',
-          'rate_limited',
-          'unavailable',
-          'empty',
-        ].includes(state)
-      "
+      v-else-if="['forbidden', 'expired', 'rate_limited', 'unavailable', 'empty'].includes(state)"
       class="file-resilience__state file-resilience__state--danger"
       aria-live="polite"
     >
@@ -155,9 +129,7 @@ onMounted(load);
         </article>
         <article>
           <span>校验和</span
-          ><strong
-            >{{ data.integrity.verified_files }} /
-            {{ data.integrity.sampled_files }}</strong
+          ><strong>{{ data.integrity.verified_files }} / {{ data.integrity.sampled_files }}</strong
           ><small
             >不一致 {{ data.integrity.mismatch_files }} · 缺失
             {{ data.integrity.missing_files }}</small
@@ -165,9 +137,7 @@ onMounted(load);
         </article>
         <article>
           <span>恢复演练</span><strong>{{ data.recovery.status }}</strong
-          ><small
-            >{{ data.recovery.drill_age_days ?? "—" }} 天 · 同机加密副本</small
-          >
+          ><small>{{ data.recovery.drill_age_days ?? "—" }} 天 · 同机加密副本</small>
         </article>
       </section>
       <div class="file-resilience__layout">
@@ -183,9 +153,7 @@ onMounted(load);
             <article v-for="root in data.directories" :key="root.kind">
               <div>
                 <b>{{ root.kind === "evidence" ? "不可变证据" : "限时导出" }}</b
-                ><span>{{
-                  root.available && root.writable ? "可读写" : "不可用"
-                }}</span>
+                ><span>{{ root.available && root.writable ? "可读写" : "不可用" }}</span>
               </div>
               <progress :value="root.usage_basis_points" max="10000"></progress>
               <dl>
@@ -214,17 +182,13 @@ onMounted(load);
             <div>
               <dt>加密恢复副本</dt>
               <dd>
-                {{
-                  data.recovery.encrypted_same_host_copy ? "已核验" : "未核验"
-                }}
+                {{ data.recovery.encrypted_same_host_copy ? "已核验" : "未核验" }}
               </dd>
             </div>
             <div>
               <dt>隔离恢复</dt>
               <dd>
-                {{
-                  data.recovery.isolated_restore_verified ? "已核验" : "未核验"
-                }}
+                {{ data.recovery.isolated_restore_verified ? "已核验" : "未核验" }}
               </dd>
             </div>
             <div>
@@ -258,8 +222,7 @@ onMounted(load);
           </article>
         </div>
         <div v-else class="file-resilience__clear">
-          <b>当前无本机文件韧性阻断</b
-          ><span>证据、导出、校验和与同机恢复功能均可正常使用。</span>
+          <b>当前无本机文件韧性阻断</b><span>证据、导出、校验和与同机恢复功能均可正常使用。</span>
         </div>
       </section>
       <footer class="file-resilience__footer">

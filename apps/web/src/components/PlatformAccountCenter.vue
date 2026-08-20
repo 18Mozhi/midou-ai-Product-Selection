@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
+import { ApiClientError, createApiClient } from "../api-client";
 import OrganizationCreationWizard from "./OrganizationCreationWizard.vue";
+import PlatformAdminRecords from "./PlatformAdminRecords.vue";
 import PlatformRoleComparison from "./PlatformRoleComparison.vue";
 import PlatformUserDetailDialog from "./PlatformUserDetailDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
@@ -23,6 +25,7 @@ interface Data {
 const props = withDefaults(defineProps<{ apiBaseUrl: string; initialTab?: Tab }>(), {
     initialTab: "organizations",
   }),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   tab = ref<Tab>(props.initialTab),
   data = ref<Data | null>(null),
@@ -99,24 +102,14 @@ async function load() {
     if (query.value) p.set("query", query.value);
     if (status.value) p.set("status", status.value);
     const [accountResponse, roleResponse] = await Promise.all([
-        fetch(`${props.apiBaseUrl}/platform/accounts?${p}`, {
-          credentials: "include",
-        }),
-        fetch(`${props.apiBaseUrl}/platform/roles`, {
-          credentials: "include",
-        }),
-      ]),
-      [accountBody, roleBody] = await Promise.all([
-        accountResponse.json().catch(() => null),
-        roleResponse.json().catch(() => null),
-      ]);
-    if (!accountResponse.ok) throw new Error(accountBody?.error?.action_hint ?? "读取失败");
-    if (!roleResponse.ok) throw new Error(roleBody?.error?.action_hint ?? "读取平台角色失败");
-    data.value = accountBody.data;
-    platformRoles.value = roleBody.data;
+      request<Data>(`/platform/accounts?${p}`),
+      request<RoleCapabilitySummary[]>("/platform/roles"),
+    ]);
+    data.value = accountResponse.data;
+    platformRoles.value = roleResponse.data;
     state.value = "ready";
   } catch (e) {
-    message.value = e instanceof Error ? e.message : "读取失败";
+    message.value = e instanceof ApiClientError ? e.actionHint : "读取失败";
     state.value = "error";
   }
 }
@@ -124,21 +117,11 @@ async function write(path: string, body: unknown, method = "POST") {
   busy.value = path;
   message.value = "";
   try {
-    const r = await fetch(`${props.apiBaseUrl}${path}`, {
-        method,
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-        body: JSON.stringify(body),
-      }),
-      b = await r.json().catch(() => null);
-    if (!r.ok) throw new Error(b?.error?.action_hint ?? "操作失败");
+    await request(path, { method, body });
     await load();
     return true;
   } catch (e) {
-    message.value = e instanceof Error ? e.message : "操作失败";
+    message.value = e instanceof ApiClientError ? e.actionHint : "操作失败";
     return false;
   } finally {
     busy.value = "";
@@ -247,14 +230,10 @@ async function openUserDetail(item: any) {
   detail.value = null;
   detailOpen.value = true;
   try {
-    const r = await fetch(`${props.apiBaseUrl}/platform/accounts/users/${item.id}`, {
-        credentials: "include",
-      }),
-      b = await r.json().catch(() => null);
-    if (!r.ok) throw new Error(b?.error?.action_hint ?? "读取详情失败");
-    detail.value = b.data;
+    const response = await request<any>(`/platform/accounts/users/${item.id}`);
+    detail.value = response.data;
   } catch (e) {
-    message.value = e instanceof Error ? e.message : "读取详情失败";
+    message.value = e instanceof ApiClientError ? e.actionHint : "读取详情失败";
     detailOpen.value = false;
   }
 }
@@ -574,107 +553,13 @@ onMounted(load);
           </details>
         </template>
       </ResponsiveDataView>
-      <ResponsiveDataView
+      <PlatformAdminRecords
         v-else
-        class="account-table-wrap"
         :rows="rows"
-        :row-key="(item) => item.id"
-        title="管理员记录"
-        :detail-title="(item) => item.email"
-        empty-message="没有符合条件的管理员。"
-      >
-        <template #desktop
-          ><table>
-            <thead>
-              <tr>
-                <th>可授权用户</th>
-                <th>当前平台角色</th>
-                <th>角色管理</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in rows" :key="item.id">
-                <td>
-                  <strong>{{ item.email }}</strong
-                  ><small>{{ statusText(item.status) }}</small>
-                </td>
-                <td>{{ item.roles.map(roleText).join("、") || "尚未授予平台角色" }}</td>
-                <td>
-                  <button :disabled="Boolean(busy)" @click="openUserDetail(item)">账号详情</button
-                  ><button
-                    v-for="code in [
-                      'platform_operations_admin',
-                      'platform_security_admin',
-                      'platform_super_admin',
-                    ]"
-                    :key="code"
-                    :disabled="item.status !== 'active' || Boolean(busy)"
-                    @click="role(item.id, code, !item.roles.includes(code))"
-                  >
-                    {{ item.roles.includes(code) ? "撤销" : "授予" }}{{ roleText(code) }}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table></template
-        >
-        <template #summary="{ row }"
-          ><span class="responsive-record-summary"
-            ><strong>{{ row.email }}</strong
-            ><small
-              >{{ statusText(row.status) }} ·
-              {{ row.roles.map(roleText).join("、") || "尚未授予平台角色" }}</small
-            ></span
-          ></template
-        >
-        <template #detail="{ row, close }"
-          ><dl>
-            <div>
-              <dt>当前平台角色</dt>
-              <dd>{{ row.roles.map(roleText).join("、") || "尚未授予平台角色" }}</dd>
-            </div>
-            <div>
-              <dt>状态</dt>
-              <dd>{{ statusText(row.status) }}</dd>
-            </div>
-          </dl>
-          <div class="mobile-actions">
-            <button
-              :disabled="Boolean(busy)"
-              @click="
-                openUserDetail(row);
-                close();
-              "
-            >
-              账号详情</button
-            ><button
-              v-for="code in [
-                'platform_operations_admin',
-                'platform_security_admin',
-                'platform_super_admin',
-              ]"
-              :key="code"
-              class="secondary"
-              :disabled="row.status !== 'active' || Boolean(busy)"
-              @click="
-                role(row.id, code, !row.roles.includes(code));
-                close();
-              "
-            >
-              {{ row.roles.includes(code) ? "撤销" : "授予" }}{{ roleText(code) }}
-            </button>
-          </div>
-          <details>
-            <summary>技术详情</summary>
-            <dl>
-              <div>
-                <dt>用户 UUID</dt>
-                <dd>{{ row.id }}</dd>
-              </div>
-            </dl>
-          </details></template
-        >
-      </ResponsiveDataView>
+        :busy="Boolean(busy)"
+        @open-user="openUserDetail"
+        @role="role"
+      />
     </template>
     <OrganizationCreationWizard
       :open="createOpen"

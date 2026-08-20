@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../platform-polish.css";
 
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const state = ref("loading");
 const data = ref<any>({
   plans: [],
@@ -57,25 +59,15 @@ const statusText = (value: string) =>
     }) as Record<string, string>
   )[value] ?? value;
 async function call(path: string, method = "GET", body?: any) {
-  const response = await fetch(`${props.apiBaseUrl}${path}`, {
-    method,
-    credentials: "include",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      "idempotency-key": crypto.randomUUID(),
-    },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-  });
-  const result = await response.json().catch(() => null);
-  if (!response.ok) {
-    requestId.value = result?.request_id ?? "";
-    throw Object.assign(
-      new Error(result?.error?.action_hint ?? result?.error?.message ?? "请求未完成"),
-      { status: response.status },
-    );
+  try {
+    const response = await request<any>(path, { method, ...(body ? { body } : {}) });
+    requestId.value = response.request_id;
+    return response.data;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    throw error;
   }
-  return result.data;
 }
 async function load() {
   state.value = "loading";
@@ -95,7 +87,7 @@ async function load() {
     }
     state.value = data.value.plans.length || data.value.assignment ? "ready" : "empty";
   } catch (error) {
-    notice.value = error instanceof Error ? error.message : "读取失败";
+    notice.value = error instanceof ApiClientError ? error.actionHint : "读取失败";
     const status = (error as any)?.status;
     state.value = status === 429 ? "rate_limited" : status >= 500 ? "blocked" : "error";
   }
@@ -116,7 +108,7 @@ async function createPlan() {
     notice.value = "配额方案草稿已创建；启用前不影响任何组织。";
     await load();
   } catch (error) {
-    notice.value = error instanceof Error ? error.message : "创建失败";
+    notice.value = error instanceof ApiClientError ? error.actionHint : "创建失败";
   }
 }
 function beginEditPlan(item: any) {
@@ -182,7 +174,7 @@ async function confirm() {
     await load();
     notice.value = operation.success;
   } catch (error) {
-    notice.value = error instanceof Error ? error.message : "变更未完成";
+    notice.value = error instanceof ApiClientError ? error.actionHint : "变更未完成";
   }
 }
 onMounted(load);

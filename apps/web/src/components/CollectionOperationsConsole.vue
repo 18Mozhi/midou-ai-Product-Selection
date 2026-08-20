@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import { statusLabel } from "../ui/status-labels";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const state = ref("loading"),
   data = ref<any>(null),
   org = ref(""),
@@ -50,38 +52,27 @@ async function load() {
   q.set("window", timeWindow.value);
   if (errorCode.value) q.set("error_code", errorCode.value);
   try {
-    const r = await fetch(`${props.apiBaseUrl}/platform/collection/console?${q}`, {
-        credentials: "include",
-        headers: { accept: "application/json" },
-      }),
-      b = await r.json().catch(() => null);
-    requestId.value = b?.request_id ?? "";
-    hint.value = b?.error?.action_hint ?? "";
-    if (!r.ok) {
-      state.value =
-        r.status === 401
-          ? "expired"
-          : r.status === 403
-            ? "forbidden"
-            : r.status === 429
-              ? "rate_limited"
-              : "blocked";
-      return;
-    }
-    data.value = b.data;
+    const response = await request<any>(`/platform/collection/console?${q}`);
+    requestId.value = response.request_id;
+    data.value = response.data;
     const openIds = new Set(
-      b.data.dead_letters.filter((item: any) => item.status === "open").map((item: any) => item.id),
+      response.data.dead_letters
+        .filter((item: any) => item.status === "open")
+        .map((item: any) => item.id),
     );
     selectedDeadLetterIds.value = selectedDeadLetterIds.value.filter((id) => openIds.has(id));
     state.value =
-      b.data.sources.length +
-      b.data.task_states.length +
-      b.data.dead_letters.length +
-      b.data.quality.length
+      response.data.sources.length +
+      response.data.task_states.length +
+      response.data.dead_letters.length +
+      response.data.quality.length
         ? "ready"
         : "empty";
-  } catch {
-    state.value = "blocked";
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    hint.value = failure?.actionHint ?? "";
+    state.value = failure?.kind ?? "blocked";
   }
 }
 onMounted(load);
@@ -186,21 +177,12 @@ async function confirmBatchReplay() {
   let failed = 0;
   for (const item of selectedDeadLetters.value) {
     try {
-      const response = await fetch(
-        `${props.apiBaseUrl}/platform/collection/tasks/${item.task_id}/replay`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            accept: "application/json",
-            "content-type": "application/json",
-            "idempotency-key": `dead-batch:${batchId.value}:${item.task_id}`,
-          },
-          body: JSON.stringify({ reason: batchReason.value.trim() }),
-        },
-      );
-      if (response.ok) succeeded.add(item.id);
-      else failed += 1;
+      await request(`/platform/collection/tasks/${item.task_id}/replay`, {
+        method: "POST",
+        idempotencyKey: `dead-batch:${batchId.value}:${item.task_id}`,
+        body: { reason: batchReason.value.trim() },
+      });
+      succeeded.add(item.id);
     } catch {
       failed += 1;
     }

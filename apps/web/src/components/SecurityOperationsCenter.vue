@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const state = ref("loading"),
   data = ref<any>(null),
   windowCode = ref("24h"),
@@ -10,28 +12,15 @@ const state = ref("loading"),
 async function load() {
   state.value = "loading";
   try {
-    const r = await fetch(
-        `${props.apiBaseUrl}/platform/security/operations?window=${windowCode.value}`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
-      b = await r.json().catch(() => null);
-    requestId.value = b?.request_id ?? "";
-    hint.value = b?.error?.action_hint ?? "";
-    if (!r.ok) {
-      state.value =
-        r.status === 401
-          ? "expired"
-          : r.status === 403
-            ? "forbidden"
-            : r.status === 429
-              ? "rate_limited"
-              : "blocked";
-      return;
-    }
-    data.value = b.data;
-    state.value = Object.values(b.data.summary).some(Number) ? "ready" : "empty";
-  } catch {
-    state.value = "blocked";
+    const response = await request<any>(`/platform/security/operations?window=${windowCode.value}`);
+    requestId.value = response.request_id;
+    data.value = response.data;
+    state.value = Object.values(response.data.summary).some(Number) ? "ready" : "empty";
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    hint.value = failure?.actionHint ?? "";
+    state.value = failure?.kind ?? "blocked";
   }
 }
 onMounted(load);

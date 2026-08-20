@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import type { MySqlResilienceDto } from "@scoutops/contracts";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../mysql-resilience.css";
 type ViewState =
   | "loading"
@@ -14,6 +15,7 @@ type ViewState =
   | "unavailable"
   | "recovering";
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const state = ref<ViewState>("loading"),
   data = ref<MySqlResilienceDto | null>(null),
   requestId = ref(""),
@@ -22,18 +24,12 @@ const verdict = computed(
   () =>
     (
       ({
-        loading: [
-          "正在读取 MySQL 单主事实",
-          "核对持久化、I/O、慢查询、容量与恢复证据。",
-        ],
+        loading: ["正在读取 MySQL 单主事实", "核对持久化、I/O、慢查询、容量与恢复证据。"],
         ready: ["MySQL 单主韧性门已满足", "当前事实符合 MySQL 5.7 单主基线。"],
         warning: ["MySQL 指标接近预警线", "当前仍可用，需要按告警项处理。"],
         blocked: ["MySQL 韧性门已阻断", "停止新增高成本任务，并通过宝塔恢复。"],
         empty: ["尚无 MySQL 观测", "确认宝塔 MySQL 与 Node API 后重新核验。"],
-        forbidden: [
-          "没有平台运维权限",
-          actionHint.value || "需要 platform:operate 能力。",
-        ],
+        forbidden: ["没有平台运维权限", actionHint.value || "需要 platform:operate 能力。"],
         expired: ["登录已失效", "重新登录后再核验。"],
         rate_limited: ["刷新过于频繁", "稍后重试。"],
         unavailable: [
@@ -44,8 +40,7 @@ const verdict = computed(
       }) satisfies Record<ViewState, [string, string]>
     )[state.value],
 );
-const percent = (value?: number) =>
-  value === undefined ? "—" : `${(value / 100).toFixed(1)}%`;
+const percent = (value?: number) => (value === undefined ? "—" : `${(value / 100).toFixed(1)}%`);
 const bytes = (value?: number) =>
   value === undefined
     ? "—"
@@ -53,40 +48,30 @@ const bytes = (value?: number) =>
       ? `${(value / 1073741824).toFixed(1)} GiB`
       : `${(value / 1048576).toFixed(1)} MiB`;
 const time = (value?: string) =>
-  value
-    ? new Date(value).toLocaleString("zh-CN", { hour12: false })
-    : "尚无记录";
+  value ? new Date(value).toLocaleString("zh-CN", { hour12: false }) : "尚无记录";
 async function load() {
   state.value = "loading";
   actionHint.value = "";
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/operations/mysql`,
-      { credentials: "include", headers: { accept: "application/json" } },
-    );
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    actionHint.value = body?.error?.action_hint ?? "";
-    if (!response.ok) {
-      state.value =
-        response.status === 401
-          ? "expired"
-          : response.status === 403
-            ? "forbidden"
-            : response.status === 429
-              ? "rate_limited"
-              : "unavailable";
-      return;
-    }
-    if (!body?.data) {
+    const response = await request<MySqlResilienceDto | null>("/platform/operations/mysql");
+    requestId.value = response.request_id;
+    if (!response.data) {
       data.value = null;
       state.value = "empty";
       return;
     }
-    data.value = body.data;
-    state.value = body.data.state;
-  } catch {
-    state.value = "unavailable";
+    data.value = response.data;
+    state.value = response.data.state;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    actionHint.value = failure?.actionHint ?? "";
+    state.value =
+      failure?.kind === "expired" ||
+      failure?.kind === "forbidden" ||
+      failure?.kind === "rate_limited"
+        ? failure.kind
+        : "unavailable";
   }
 }
 onMounted(load);
@@ -97,10 +82,7 @@ onMounted(load);
       <div>
         <p>单主数据库</p>
         <h2>数据库 5.7 单主韧性</h2>
-        <span
-          >惠州单机只运行一个宝塔 MySQL
-          主实例；不启用读副本、负载均衡或备用服务器。</span
-        >
+        <span>惠州单机只运行一个宝塔 MySQL 主实例；不启用读副本、负载均衡或备用服务器。</span>
       </div>
       <button type="button" @click="load">刷新运行事实</button>
     </header>
@@ -116,15 +98,7 @@ onMounted(load);
       </div>
     </section>
     <section
-      v-else-if="
-        [
-          'forbidden',
-          'expired',
-          'rate_limited',
-          'unavailable',
-          'empty',
-        ].includes(state)
-      "
+      v-else-if="['forbidden', 'expired', 'rate_limited', 'unavailable', 'empty'].includes(state)"
       class="mysql-resilience__state mysql-resilience__state--danger"
       aria-live="polite"
     >
@@ -147,35 +121,23 @@ onMounted(load);
       </section>
       <section class="mysql-resilience__metrics">
         <article>
-          <span>连接使用</span
-          ><strong>{{ percent(data.connections.usage_basis_points) }}</strong
-          ><small
-            >{{ data.connections.connected }} /
-            {{ data.connections.maximum }}</small
-          >
+          <span>连接使用</span><strong>{{ percent(data.connections.usage_basis_points) }}</strong
+          ><small>{{ data.connections.connected }} / {{ data.connections.maximum }}</small>
         </article>
         <article>
-          <span>数据盘使用</span
-          ><strong>{{ percent(data.storage.usage_basis_points) }}</strong
+          <span>数据盘使用</span><strong>{{ percent(data.storage.usage_basis_points) }}</strong
           ><small
-            >{{ bytes(data.storage.used_bytes) }} /
-            {{ bytes(data.storage.total_bytes) }}</small
+            >{{ bytes(data.storage.used_bytes) }} / {{ bytes(data.storage.total_bytes) }}</small
           >
         </article>
         <article>
           <span>缓冲池命中</span
-          ><strong>{{
-            percent(data.io.buffer_pool_hit_rate_basis_points)
-          }}</strong
+          ><strong>{{ percent(data.io.buffer_pool_hit_rate_basis_points) }}</strong
           ><small>{{ bytes(data.io.buffer_pool_data_bytes) }} 数据</small>
         </article>
         <article>
-          <span>慢查询速率</span
-          ><strong>{{ data.slow_queries.per_minute.toFixed(2) }}</strong
-          ><small
-            >次/分钟 · 阈值
-            {{ data.slow_queries.long_query_time_seconds }} 秒</small
-          >
+          <span>慢查询速率</span><strong>{{ data.slow_queries.per_minute.toFixed(2) }}</strong
+          ><small>次/分钟 · 阈值 {{ data.slow_queries.long_query_time_seconds }} 秒</small>
         </article>
       </section>
       <div class="mysql-resilience__layout">
@@ -263,8 +225,7 @@ onMounted(load);
           </article>
         </div>
         <div v-else class="mysql-resilience__clear">
-          <b>当前无数据库韧性阻断</b
-          ><span>连接、持久化、慢查询与恢复功能均处于可用状态。</span>
+          <b>当前无数据库韧性阻断</b><span>连接、持久化、慢查询与恢复功能均处于可用状态。</span>
         </div>
       </section>
       <footer class="mysql-resilience__footer">

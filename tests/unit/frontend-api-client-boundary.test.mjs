@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 
 const read = (path) => readFile(path, "utf8");
@@ -10,9 +10,12 @@ test("the shared frontend API client owns correlation, credentials, idempotency 
   for (const contract of [
     'headers.set("x-request-id", requestId)',
     'headers.set("x-trace-id", traceId)',
-    'headers.set("content-type", "application/json")',
+    'headers.set("content-type", headers.get("content-type") ?? "application/json")',
     'headers.set("idempotency-key"',
     'credentials: "include"',
+    "createApiResponseClient",
+    ".clone()",
+    ".json()",
     "throw new ApiClientError(",
     "payload?.error?.message",
     "payload?.error?.action_hint",
@@ -50,6 +53,17 @@ test("migrated frontend surfaces use the shared API client instead of direct fet
     assert.match(source, /createApiClient/);
     assert.match(source, /ApiClientError/);
     assert.doesNotMatch(source, /\bfetch\s*\(/);
+  }
+});
+
+test("all frontend business modules keep direct fetch inside the shared transport", async () => {
+  const paths = (await readdir("apps/web/src", { recursive: true }))
+    .filter((path) => /\.(?:ts|vue)$/u.test(path))
+    .map((path) => `apps/web/src/${path.replaceAll("\\", "/")}`)
+    .filter((path) => path !== "apps/web/src/api-client.ts");
+
+  for (const path of paths) {
+    assert.doesNotMatch(await read(path), /\bfetch\s*\(/u, path);
   }
 });
 

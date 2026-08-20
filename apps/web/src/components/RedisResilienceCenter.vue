@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import type { RedisResilienceDto } from "@scoutops/contracts";
+import { ApiClientError, createApiClient } from "../api-client";
 import "../redis-resilience.css";
 
 type ViewState =
@@ -15,6 +16,7 @@ type ViewState =
   | "unavailable"
   | "recovering";
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const state = ref<ViewState>("loading"),
   data = ref<RedisResilienceDto | null>(null),
   requestId = ref(""),
@@ -23,45 +25,23 @@ const verdict = computed(
   () =>
     (
       ({
-        loading: [
-          "正在读取单 Redis 运行事实",
-          "核对持久化、内存上限、连接上限与最近错误。",
-        ],
-        ready: [
-          "单 Redis 韧性门已满足",
-          "AOF/RDB、资源上限和失败关闭规则均通过。",
-        ],
-        warning: [
-          "Redis 资源接近预警线",
-          "当前仍可用，但需检查增长、积压和连接使用。",
-        ],
-        blocked: [
-          "Redis 韧性门已阻断",
-          "停止依赖 Redis 的新操作，并通过宝塔按阻断项恢复。",
-        ],
-        empty: [
-          "尚无 Redis 观测",
-          "确认宝塔 Redis 与 Node API 已运行后重新核验。",
-        ],
-        forbidden: [
-          "没有平台运维权限",
-          actionHint.value || "需要 platform:operate 能力。",
-        ],
+        loading: ["正在读取单 Redis 运行事实", "核对持久化、内存上限、连接上限与最近错误。"],
+        ready: ["单 Redis 韧性门已满足", "AOF/RDB、资源上限和失败关闭规则均通过。"],
+        warning: ["Redis 资源接近预警线", "当前仍可用，但需检查增长、积压和连接使用。"],
+        blocked: ["Redis 韧性门已阻断", "停止依赖 Redis 的新操作，并通过宝塔按阻断项恢复。"],
+        empty: ["尚无 Redis 观测", "确认宝塔 Redis 与 Node API 已运行后重新核验。"],
+        forbidden: ["没有平台运维权限", actionHint.value || "需要 platform:operate 能力。"],
         expired: ["登录已失效", "重新登录后再核验 Redis 韧性。"],
         rate_limited: ["刷新过于频繁", "稍后重试；现有结论不会因此升级。"],
         unavailable: [
           "Redis 运行事实暂不可用",
           actionHint.value || "在宝塔检查 API、MySQL 与 Redis 日志。",
         ],
-        recovering: [
-          "正在执行恢复核验",
-          "宝塔重启后先验证 PING、持久化、隔离读写与清理。",
-        ],
+        recovering: ["正在执行恢复核验", "宝塔重启后先验证 PING、持久化、隔离读写与清理。"],
       }) satisfies Record<ViewState, [string, string]>
     )[state.value],
 );
-const percent = (basis?: number) =>
-  basis === undefined ? "—" : `${(basis / 100).toFixed(1)}%`;
+const percent = (basis?: number) => (basis === undefined ? "—" : `${(basis / 100).toFixed(1)}%`);
 const bytes = (value?: number) =>
   value === undefined
     ? "—"
@@ -69,41 +49,31 @@ const bytes = (value?: number) =>
       ? `${(value / 1073741824).toFixed(1)} GiB`
       : `${(value / 1048576).toFixed(1)} MiB`;
 const time = (value?: string) =>
-  value
-    ? new Date(value).toLocaleString("zh-CN", { hour12: false })
-    : "尚无记录";
+  value ? new Date(value).toLocaleString("zh-CN", { hour12: false }) : "尚无记录";
 
 async function load() {
   state.value = "loading";
   actionHint.value = "";
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/operations/redis`,
-      { credentials: "include", headers: { accept: "application/json" } },
-    );
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    actionHint.value = body?.error?.action_hint ?? "";
-    if (!response.ok) {
-      state.value =
-        response.status === 401
-          ? "expired"
-          : response.status === 403
-            ? "forbidden"
-            : response.status === 429
-              ? "rate_limited"
-              : "unavailable";
-      return;
-    }
-    if (!body?.data) {
+    const response = await request<RedisResilienceDto | null>("/platform/operations/redis");
+    requestId.value = response.request_id;
+    if (!response.data) {
       data.value = null;
       state.value = "empty";
       return;
     }
-    data.value = body.data;
-    state.value = body.data.state;
-  } catch {
-    state.value = "unavailable";
+    data.value = response.data;
+    state.value = response.data.state;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    actionHint.value = failure?.actionHint ?? "";
+    state.value =
+      failure?.kind === "expired" ||
+      failure?.kind === "forbidden" ||
+      failure?.kind === "rate_limited"
+        ? failure.kind
+        : "unavailable";
   }
 }
 onMounted(load);
@@ -115,10 +85,7 @@ onMounted(load);
       <div>
         <p>单实例缓存服务</p>
         <h2>缓存服务单实例韧性</h2>
-        <span
-          >当前惠州单机只运行一个宝塔 Redis；不启用
-          Sentinel、集群、副本或备用服务器。</span
-        >
+        <span>当前惠州单机只运行一个宝塔 Redis；不启用 Sentinel、集群、副本或备用服务器。</span>
       </div>
       <button type="button" @click="load">刷新运行事实</button>
     </header>
@@ -134,15 +101,7 @@ onMounted(load);
       </div>
     </section>
     <section
-      v-else-if="
-        [
-          'forbidden',
-          'expired',
-          'rate_limited',
-          'unavailable',
-          'empty',
-        ].includes(state)
-      "
+      v-else-if="['forbidden', 'expired', 'rate_limited', 'unavailable', 'empty'].includes(state)"
       class="redis-resilience__state redis-resilience__state--danger"
       aria-live="polite"
     >
@@ -166,20 +125,12 @@ onMounted(load);
       </section>
       <section class="redis-resilience__metrics" aria-label="Redis 资源指标">
         <article>
-          <span>内存使用</span
-          ><strong>{{ percent(data.memory.usage_basis_points) }}</strong
-          ><small
-            >{{ bytes(data.memory.used_bytes) }} /
-            {{ bytes(data.memory.max_bytes) }}</small
-          >
+          <span>内存使用</span><strong>{{ percent(data.memory.usage_basis_points) }}</strong
+          ><small>{{ bytes(data.memory.used_bytes) }} / {{ bytes(data.memory.max_bytes) }}</small>
         </article>
         <article>
-          <span>连接使用</span
-          ><strong>{{ percent(data.connections.usage_basis_points) }}</strong
-          ><small
-            >{{ data.connections.connected }} /
-            {{ data.connections.maximum }}</small
-          >
+          <span>连接使用</span><strong>{{ percent(data.connections.usage_basis_points) }}</strong
+          ><small>{{ data.connections.connected }} / {{ data.connections.maximum }}</small>
         </article>
         <article>
           <span>拒绝连接</span><strong>{{ data.connections.rejected }}</strong
@@ -202,32 +153,22 @@ onMounted(load);
           <div class="redis-resilience__persistence-grid">
             <article
               :data-ok="
-                data.persistence.aof_enabled &&
-                data.persistence.aof_last_write_status === 'ok'
+                data.persistence.aof_enabled && data.persistence.aof_last_write_status === 'ok'
               "
             >
-              <i>追加日志</i
-              ><b>{{ data.persistence.aof_enabled ? "已启用" : "未启用" }}</b
-              ><small
-                >everysec · {{ data.persistence.aof_last_write_status }}</small
-              >
+              <i>追加日志</i><b>{{ data.persistence.aof_enabled ? "已启用" : "未启用" }}</b
+              ><small>everysec · {{ data.persistence.aof_last_write_status }}</small>
             </article>
             <article
               :data-ok="
-                data.persistence.rdb_enabled &&
-                data.persistence.rdb_last_save_status === 'ok'
+                data.persistence.rdb_enabled && data.persistence.rdb_last_save_status === 'ok'
               "
             >
-              <i>快照</i
-              ><b>{{ data.persistence.rdb_enabled ? "已启用" : "未启用" }}</b
-              ><small
-                >定时快照 · {{ data.persistence.rdb_last_save_status }}</small
-              >
+              <i>快照</i><b>{{ data.persistence.rdb_enabled ? "已启用" : "未启用" }}</b
+              ><small>定时快照 · {{ data.persistence.rdb_last_save_status }}</small>
             </article>
           </div>
-          <p>
-            缓存服务只保存缓存、队列、限流与实时消息协调；数据库仍是事实源。
-          </p>
+          <p>缓存服务只保存缓存、队列、限流与实时消息协调；数据库仍是事实源。</p>
         </section>
         <aside class="redis-resilience__panel">
           <header>
@@ -276,8 +217,7 @@ onMounted(load);
           </article>
         </div>
         <div v-else class="redis-resilience__clear">
-          <b>当前无缓存服务韧性阻断</b
-          ><span>持久化、连接、队列与限流功能均处于可用状态。</span>
+          <b>当前无缓存服务韧性阻断</b><span>持久化、连接、队列与限流功能均处于可用状态。</span>
         </div>
       </section>
       <footer class="redis-resilience__footer">

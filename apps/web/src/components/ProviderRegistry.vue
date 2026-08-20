@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../provider-registry.css";
@@ -32,6 +33,7 @@ interface Provider {
   updated_at: string;
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   items = ref<Provider[]>([]),
   requestId = ref(""),
@@ -88,20 +90,14 @@ const accessModeText = (value: string) =>
 async function load() {
   state.value = "loading";
   try {
-    const r = await fetch(`${props.apiBaseUrl}/platform/providers`, {
-        credentials: "include",
-        headers: { accept: "application/json" },
-      }),
-      b = await r.json().catch(() => null);
-    requestId.value = b?.request_id ?? "";
-    if (!r.ok) {
-      state.value = failure(r.status);
-      return;
-    }
-    items.value = b.data;
+    const response = await request<Provider[]>("/platform/providers");
+    requestId.value = response.request_id;
+    items.value = response.data;
     state.value = items.value.length ? "ready" : "empty";
-  } catch {
-    state.value = "blocked";
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? "";
+    state.value = apiError ? failure(apiError.status) : "blocked";
   }
 }
 function edit(item?: Provider) {
@@ -170,25 +166,17 @@ async function save() {
     },
     path = editing.value ? `/platform/providers/${editing.value.id}` : "/platform/providers";
   try {
-    const r = await fetch(`${props.apiBaseUrl}${path}`, {
-        method: editing.value ? "PUT" : "POST",
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-          "idempotency-key": crypto.randomUUID(),
-        },
-        body: JSON.stringify(body),
-      }),
-      b = await r.json().catch(() => null);
-    requestId.value = b?.request_id ?? "";
-    if (!r.ok) {
-      message.value = b?.error?.action_hint ?? "保存失败";
-      return;
-    }
+    const response = await request(path, {
+      method: editing.value ? "PUT" : "POST",
+      body,
+    });
+    requestId.value = response.request_id;
     closeEditor();
     await load();
-  } catch {
-    message.value = "依赖不可用，未保存";
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? "";
+    message.value = apiError?.actionHint ?? "依赖不可用，未保存";
   } finally {
     saving.value = false;
   }

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const state = ref<"loading" | "empty" | "blocked" | "stale" | "verified" | "forbidden" | "expired">(
   "loading",
 );
@@ -33,22 +35,16 @@ const assetText = (value: string) =>
 async function load() {
   state.value = "loading";
   try {
-    const response = await fetch(`${props.apiBaseUrl}/platform/operations/backup-recovery`, {
-      credentials: "include",
-      headers: { accept: "application/json" },
-    });
-    const body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    hint.value = body?.error?.action_hint ?? "";
-    if (!response.ok) {
-      state.value =
-        response.status === 401 ? "expired" : response.status === 403 ? "forbidden" : "blocked";
-      return;
-    }
-    data.value = body.data;
-    state.value = body.data.state;
-  } catch {
-    state.value = "blocked";
+    const response = await request<any>("/platform/operations/backup-recovery");
+    requestId.value = response.request_id;
+    data.value = response.data;
+    state.value = response.data.state;
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    hint.value = failure?.actionHint ?? "";
+    state.value =
+      failure?.kind === "expired" || failure?.kind === "forbidden" ? failure.kind : "blocked";
   }
 }
 onMounted(load);

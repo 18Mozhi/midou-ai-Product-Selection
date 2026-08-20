@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { ApiClientError, createApiClient } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
@@ -41,6 +42,7 @@ interface Detail {
 }
 
 const props = defineProps<{ apiBaseUrl: string }>();
+const request = createApiClient(props.apiBaseUrl);
 const state = ref<ViewState>("loading"),
   tasks = ref<Task[]>([]),
   detail = ref<Detail | null>(null),
@@ -139,39 +141,27 @@ async function load() {
   });
   if (status.value !== "all") params.set("status", status.value);
   try {
-    const response = await fetch(`${props.apiBaseUrl}/platform/collection/tasks?${params}`, {
-        credentials: "include",
-        headers: { accept: "application/json" },
-      }),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? "";
-    if (!response.ok) {
-      state.value = failure(response.status);
-      return;
-    }
-    tasks.value = body.data ?? [];
-    total.value = body.meta?.total ?? tasks.value.length;
+    const response = await request<Task[]>(`/platform/collection/tasks?${params}`);
+    requestId.value = response.request_id;
+    tasks.value = response.data ?? [];
+    total.value = (response.meta as { total?: number } | undefined)?.total ?? tasks.value.length;
     state.value = tasks.value.length ? "ready" : "empty";
-  } catch {
-    state.value = "blocked";
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? "";
+    state.value = apiError ? failure(apiError.status) : "blocked";
   }
 }
 async function openTask(id: string) {
   detailLoading.value = true;
   try {
-    const response = await fetch(`${props.apiBaseUrl}/platform/collection/tasks/${id}`, {
-        credentials: "include",
-        headers: { accept: "application/json" },
-      }),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      notice.value = body?.error?.action_hint ?? "任务详情暂不可用";
-      return;
-    }
-    detail.value = body.data;
-  } catch {
-    notice.value = "任务详情依赖暂不可用";
+    const response = await request<Detail>(`/platform/collection/tasks/${id}`);
+    requestId.value = response.request_id;
+    detail.value = response.data;
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? requestId.value;
+    notice.value = apiError?.actionHint ?? "任务详情依赖暂不可用";
   } finally {
     detailLoading.value = false;
   }
@@ -180,31 +170,20 @@ async function replay() {
   if (!detail.value) return;
   saving.value = true;
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/collection/tasks/${detail.value.task.id}/replay`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-            "idempotency-key": crypto.randomUUID(),
-          },
-          body: JSON.stringify({ reason: replayReason.value.trim() }),
-        },
-      ),
-      body = await response.json().catch(() => null);
-    requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok) {
-      notice.value = body?.error?.action_hint ?? "重放未完成";
-      return;
-    }
-    const successNotice = `已创建重放任务 ${body.data.task.id.slice(0, 8)}…，原任务与全部尝试记录已保留。`;
-    detail.value = body.data;
+    const response = await request<Detail>(
+      `/platform/collection/tasks/${detail.value.task.id}/replay`,
+      { method: "POST", body: { reason: replayReason.value.trim() } },
+    );
+    requestId.value = response.request_id;
+    const successNotice = `已创建重放任务 ${response.data.task.id.slice(0, 8)}…，原任务与全部尝试记录已保留。`;
+    detail.value = response.data;
     replayReason.value = "";
     await load();
     notice.value = successNotice;
-  } catch {
-    notice.value = "依赖不可用，未执行重放";
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? requestId.value;
+    notice.value = apiError?.actionHint ?? "依赖不可用，未执行重放";
   } finally {
     saving.value = false;
     confirming.value = false;
