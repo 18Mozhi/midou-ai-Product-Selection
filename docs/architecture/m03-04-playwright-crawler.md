@@ -26,6 +26,8 @@
 
 Python Crawler 不读取静态执行请求文件。它使用服务 Token 调用 `/internal/crawler-runtime/jobs/acquire`，无任务时得到 204 且不发送空闲心跳；有任务时获得业务关联、代码生成的计划、档案元数据、加密凭证记录和一次性租约。加密凭证与主密钥仅通过 stdin 交给固定 Node runner，runner 在准确临时目录内解密、使用并清理，参数不经 shell 拼接，stdout 只返回带 correlation 的有界结构结果。生产 Python Crawler 与 Node 后端一样只能由宝塔面板管理。
 
+集成门禁在本机随机端口运行真实 Fastify，并从独立 Python 进程调用生产 `run_once`，验证 job acquire、活动租约 heartbeat、complete 及无任务 204 路径；另用 AES-GCM 加密测试 Cookie 启动真实 Chromium，验证登录有效、登录失效、截图/DOM 证据与临时档案清理。该门禁不连接外部平台、不使用真实账号，且不能由 `page.route` 或截图 Mock 替代。
+
 ## 权限与响应
 
 采集运行列表在桌面保留事实表格；390px 使用统一摘要卡片与右侧详情抽屉，不再横向滚动宽表。完整运行、组织、工作区、请求、链路与错误标识只在可展开的“技术详情”中展示。

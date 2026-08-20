@@ -40,7 +40,7 @@
     "dev:web": "vite --config apps/web/vite.config.ts",
     "test:unit": "npm run build:contracts && npm run build:provider-sources && npm run build:api && npm run build:worker && node --test tests/unit/*.test.mjs",
     "test:contract": "npm run build:contracts && npm run build:api && node --test tests/contracts/*.test.mjs",
-    "test:integration": "npm run build:contracts && npm run build:api && npm run build:worker && node --test tests/integration/*.test.mjs",
+    "test:integration": "npm run build:contracts && npm run build:credentials && npm run build:playwright-crawler && npm run build:api && npm run build:worker && node --test tests/integration/*.test.mjs",
     "test:python": "python -m unittest discover -s apps/crawler/tests -p \"test_*.py\"",
     "verify:module": "node scripts/verify-module.mjs",
     "verify:phase": "node scripts/verify-phase.mjs",

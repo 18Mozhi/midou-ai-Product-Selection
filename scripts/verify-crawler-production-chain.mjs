@@ -22,6 +22,9 @@ const files = Object.fromEntries(
       "database/migrations/0051b_provider_parser_sample_replay_runs.up.sql",
       "database/migrations/0051c_provider_parser_sample_operations.up.sql",
       "database/migrations/0052b_provider_public_compliance.up.sql",
+      "tests/integration/crawler-python-consumer.test.mjs",
+      "tests/integration/crawler-python-consumer-probe.py",
+      "tests/integration/authenticated-browser-source.test.mjs",
     ].map(async (path) => [path, await readFile(path, "utf8")]),
   ),
 );
@@ -57,4 +60,22 @@ if (/event\([^\n]+idle[^\n]+heartbeat/i.test(all))
   throw new Error("crawler_idle_heartbeat_forbidden");
 if (/CRAWLER_EXECUTION_REQUEST_FILE|execution_request_file|last_request_digest/.test(all))
   throw new Error("crawler_static_request_forbidden");
+const pythonConsumerTest = files["tests/integration/crawler-python-consumer.test.mjs"];
+const pythonProbe = files["tests/integration/crawler-python-consumer-probe.py"];
+const authenticatedBrowserTest = files["tests/integration/authenticated-browser-source.test.mjs"];
+for (const token of ["CrawlerRuntimeService", "app.listen", '"heartbeat"', '"complete"'])
+  if (!pythonConsumerTest.includes(token))
+    throw new Error(`crawler_python_http_integration_missing:${token}`);
+for (const token of ["run_once", "DeterministicPlaywrightBridge"])
+  if (!pythonProbe.includes(token)) throw new Error(`crawler_python_probe_missing:${token}`);
+for (const token of [
+  "sealCredential",
+  "runWithEncryptedProfile",
+  "PlaywrightCrawlerEngine",
+  "blocked_login",
+  "dom_fragment",
+  "screenshot",
+])
+  if (!authenticatedBrowserTest.includes(token))
+    throw new Error(`authenticated_browser_integration_missing:${token}`);
 console.log("crawler_production_chain_passed");

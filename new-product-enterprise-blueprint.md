@@ -670,6 +670,8 @@ Resource Grant 只补充 RBAC/Data Scope 无法覆盖的指定资源例外：目
 
 `authenticated_browser` 使用项目依法持有的账号和 M03-02 加密浏览器档案。Node Worker 是业务 `collection_tasks` 的唯一领取者，并为登录型子查询写入与任务、子查询关联的 `browser_collection_jobs`；Python Crawler 从内部服务接口领取浏览器作业，通过无 shell 插值的 stdin/stdout 桥接调用 Node Playwright Chromium，再把有界结果回写到原业务子查询。无待处理作业时返回 204，不发送空闲心跳，也不读取静态执行请求文件。执行计划仅接受 HTTP(S)、明确 origin 白名单和有上限的搜索、分页、滚动及详情动作；登录、验证码、robots、429、超时、Parser 变化和依赖失败必须如实受阻或失败，禁止绕过登录、验证码、付费墙和站点限制。档案以受限 `tar.gz` 临时解包，拒绝路径穿越、链接和资源超限，并在全部结果路径关闭 context、清空 Buffer 和删除准确临时目录。
 
+跨运行时验收必须通过 `npm run test:integration`：测试在本机随机端口启动真实 Fastify 内部接口，再由生产 Python `run_once` 完成领取、续租和结果回写，并确认 204 空闲路径不发送心跳；登录来源验收使用真实 Playwright Chromium 解密测试 Cookie 档案访问本机受控页面，同时覆盖成功采集、DOM/截图证据、登录失效受阻和临时档案清理。纯 Mock 页面截图只能验证视觉布局，不能替代上述功能链路。
+
 浏览器档案是平台全局安全资产，但每个浏览器作业与低层运行都必须从原业务任务继承 `organization_id`/`workspace_id`、request_id 和 trace_id。MySQL 5.7 以业务子查询唯一作业、档案主键独占租约、全局 Crawler 槽位、令牌摘要、心跳、到期时间和 `SELECT ... FOR UPDATE` 防止重复领取与档案并发复用；内部首次 job acquire 才向 Python Crawler 返回密文记录和一次性令牌，平台监控 API 永不返回密文、计划或令牌。Worker 负责 M03-05 任务重试/死信和 M03-06 证据持久化，Python 只执行已领取的浏览器作业。平台监控和显式过期回收只允许 `collection:replay`，写入还校验 Origin 与 Idempotency-Key；内部 job acquire/heartbeat/complete 只接受 Crawler 服务 Token。
 
 #### 8.3.11 M03-05 采集任务状态机实现基线
