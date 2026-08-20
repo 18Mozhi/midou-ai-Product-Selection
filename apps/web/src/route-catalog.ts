@@ -175,15 +175,22 @@ export const appRoutes: RouteRecordRaw[] = [
     "成员与邀请",
   ]),
   organization("/org-admin/roles", "organization-roles", "角色与权限", ["组织后台", "角色与权限"]),
-  organization("/org-admin/workspaces", "organization-workspaces", "工作区与团队", [
+  organization("/org-admin/workspaces", "organization-workspaces", "工作区管理", [
     "组织后台",
-    "工作区与团队",
+    "工作区管理",
   ]),
+  organization("/org-admin/teams", "organization-teams", "团队管理", ["组织后台", "团队管理"]),
   organization("/org-admin/approvals", "organization-approvals", "审批模板", [
     "组织后台",
     "审批模板",
   ]),
-  organization("/org-admin/data", "organization-data", "组织数据", ["组织后台", "组织数据"]),
+  organization(
+    "/org-admin/data",
+    "organization-data",
+    "组织数据",
+    ["组织后台", "组织数据"],
+    ["report:read"],
+  ),
   organization("/org-admin/tokens", "organization-tokens", "组织令牌", ["组织后台", "组织令牌"]),
   organization("/org-admin/audit", "organization-audit", "组织审计", ["组织后台", "组织审计"]),
 
@@ -418,7 +425,8 @@ const navigationCatalog: Record<Exclude<AppShell, "account">, NavigationEntry[]>
     { label: "治理概览", path: "/org-admin", icon: "home", group: "概览" },
     { label: "成员与邀请", path: "/org-admin/members", icon: "users", group: "人员与权限" },
     { label: "角色与权限", path: "/org-admin/roles", icon: "shield", group: "人员与权限" },
-    { label: "工作区与团队", path: "/org-admin/workspaces", icon: "building", group: "组织结构" },
+    { label: "工作区管理", path: "/org-admin/workspaces", icon: "building", group: "组织结构" },
+    { label: "团队管理", path: "/org-admin/teams", icon: "users", group: "组织结构" },
     { label: "审批模板", path: "/org-admin/approvals", icon: "check", group: "组织治理" },
     { label: "组织数据", path: "/org-admin/data", icon: "chart", group: "组织治理" },
     { label: "组织令牌", path: "/org-admin/tokens", icon: "key", group: "安全与审计" },

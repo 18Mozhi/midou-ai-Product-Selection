@@ -123,15 +123,18 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT m.id,m.user_id,u.email,m.status,m.joined_at,m.version,GROUP_CONCAT(DISTINCT r.role_code " +
         "ORDER BY r.role_code) roles,GROUP_CONCAT(DISTINCT s.scope_type ORDER BY s.scope_type) " +
-        "scopes FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN membership_role_assignments " +
+        "scopes,GROUP_CONCAT(DISTINCT t.id ORDER BY t.id) team_ids,GROUP_CONCAT(DISTINCT t.name " +
+        "ORDER BY t.name SEPARATOR '||') team_names " +
+        "FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN membership_role_assignments " +
         "r ON r.membership_id=m.id LEFT JOIN membership_data_scopes s ON s.membership_id=m.id " +
+        "LEFT JOIN team_memberships tm ON tm.membership_id=m.id LEFT JOIN teams t ON t.id=tm.team_id " +
         "WHERE m.organization_id=? GROUP BY m.id,m.user_id,u.email,m.status,m.joined_at," +
         "m.version ORDER BY m.status,u.email",
       [i.organizationId],
     );
     const [invites] = await this.pool.query<RowDataPacket[]>(
       "SELECT id,email,role_code,status,expires_at,version,created_at FROM organization_invitations " +
-        "WHERE organization_id=? AND status IN ('pending_delivery','pending_acceptance') ORDER " +
+        "WHERE organization_id=? AND status IN ('pending_delivery','pending_acceptance','expired','revoked') ORDER " +
         "BY created_at DESC",
       [i.organizationId],
     );
@@ -141,6 +144,8 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
         joined_at: iso(r.joined_at),
         roles: r.roles ? String(r.roles).split(",") : [],
         scopes: r.scopes ? String(r.scopes).split(",") : [],
+        team_ids: r.team_ids ? String(r.team_ids).split(",") : [],
+        teams: r.team_names ? String(r.team_names).split("||") : [],
       })),
       invitations: invites.map((r) => ({
         ...r,
@@ -523,18 +528,62 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
       [i.organizationId],
     );
     const [items] = await this.pool.query<RowDataPacket[]>(
-      "SELECT id,workspace_id,workflow_template_id,resource_type,resource_id,status," +
-        "current_node_key,requested_by,requested_at,decided_at,version FROM approval_requests " +
-        "WHERE organization_id=? ORDER BY requested_at DESC LIMIT 100",
+      "SELECT id,workspace_id,template_id,resource_type,resource_id,title,status," +
+        "current_node_ordinal,requested_by,created_at,completed_at,version FROM approval_requests " +
+        "WHERE organization_id=? ORDER BY created_at DESC LIMIT 100",
+      [i.organizationId],
+    );
+    const [templates] = await this.pool.query<RowDataPacket[]>(
+      "SELECT t.id,t.name,t.resource_type,t.status,t.current_version,t.revision,w.name " +
+        "workspace_name,COUNT(n.id) node_count FROM approval_templates t JOIN workspaces w ON " +
+        "w.id=t.workspace_id LEFT JOIN approval_template_versions v ON v.template_id=t.id AND " +
+        "v.version_number=t.current_version LEFT JOIN approval_template_nodes n ON " +
+        "n.template_version_id=v.id WHERE t.organization_id=? GROUP BY t.id,t.name,t.resource_type," +
+        "t.status,t.current_version,t.revision,w.name ORDER BY t.status,t.name",
       [i.organizationId],
     );
     return {
       summary: Object.fromEntries(summary.map((r) => [String(r.status), Number(r.count)])),
+      templates: templates.map((r) => ({ ...r, node_count: Number(r.node_count) })),
       items: items.map((r) => ({
         ...r,
-        requested_at: iso(r.requested_at),
-        decided_at: iso(r.decided_at),
+        current_node_ordinal: Number(r.current_node_ordinal),
+        created_at: iso(r.created_at),
+        completed_at: iso(r.completed_at),
       })),
+    };
+  }
+  async data(i: any) {
+    const [comparisons] = await this.pool.query<RowDataPacket[]>(
+      "SELECT w.id,w.name,w.status," +
+        "(SELECT COUNT(*) FROM trend_topics t WHERE t.organization_id=w.organization_id AND t.workspace_id=w.id) trends," +
+        "(SELECT COUNT(*) FROM opportunities o WHERE o.organization_id=w.organization_id AND o.workspace_id=w.id) opportunities," +
+        "(SELECT COUNT(*) FROM tasks k WHERE k.organization_id=w.organization_id AND k.workspace_id=w.id AND k.deleted_at IS NULL) tasks," +
+        "(SELECT COUNT(*) FROM report_exports e WHERE e.organization_id=w.organization_id AND e.workspace_id=w.id) exports " +
+        "FROM workspaces w WHERE w.organization_id=? ORDER BY w.status,w.name",
+      [i.organizationId],
+    );
+    const [exports] = await this.pool.query<RowDataPacket[]>(
+      "SELECT e.id,e.report_type,e.status,e.row_count,e.created_at,e.updated_at,w.name workspace_name " +
+        "FROM report_exports e JOIN workspaces w ON w.id=e.workspace_id WHERE e.organization_id=? " +
+        "ORDER BY e.created_at DESC LIMIT 100",
+      [i.organizationId],
+    );
+    return {
+      comparisons: comparisons.map((r) => ({
+        ...r,
+        trends: Number(r.trends),
+        opportunities: Number(r.opportunities),
+        tasks: Number(r.tasks),
+        exports: Number(r.exports),
+      })),
+      exports: exports.map((r) => ({
+        ...r,
+        row_count: r.row_count == null ? null : Number(r.row_count),
+        created_at: iso(r.created_at),
+        updated_at: iso(r.updated_at),
+      })),
+      observed_at: this.now().toISOString(),
     };
   }
   async tokens(i: any) {

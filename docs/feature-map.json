@@ -1362,6 +1362,7 @@
         "/org-admin/members",
         "/org-admin/roles",
         "/org-admin/workspaces",
+        "/org-admin/teams",
         "/org-admin/approvals",
         "/org-admin/data",
         "/org-admin/tokens",
@@ -1371,6 +1372,7 @@
       "scope": "current organization profile members invitations fixed roles workspaces teams approvals exports tokens and audit",
       "truthBoundary": "all counters and lists are MySQL facts; invitation delivery stays pending until a provider exists; token secrets are returned once and never stored",
       "presentationBoundary": "organization profile and member management remain separate routes; capability codes are translated to novice Chinese labels; workspace and membership UUIDs are used only as form values and are visible only inside collapsed technical details",
+      "pageFlow": "governance metrics stay on the organization overview; member search plus status role and team filters use real membership facts, invitations separate actionable and expired records, roles expose a capability impact matrix, workspace and team management use independent secondary routes, approval templates are visible in organization context, organization data compares persisted counts across workspaces, token secrets carry a one-time warning, and audit events filter by action outcome and object",
       "permission": "organization admin shell plus per-route organization manage membership role workspace team approval token audit and report capabilities",
       "configuration": [
         "ORG_INVITATION_TTL_HOURS",
@@ -2544,7 +2546,13 @@
     {
       "path": "/org-admin/workspaces",
       "view": "OrganizationAdminCenter",
-      "domain": "organization-workspaces-teams",
+      "domain": "organization-workspaces",
+      "status": "M06-01_module_verified"
+    },
+    {
+      "path": "/org-admin/teams",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-teams",
       "status": "M06-01_module_verified"
     },
     {

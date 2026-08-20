@@ -107,6 +107,40 @@
   margin: 0 0 15px;
   font-size: 18px;
 }
+.org-admin-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.org-admin-section-header nav {
+  display: flex;
+  gap: 6px;
+}
+.org-admin-section-header nav button {
+  min-height: 38px;
+  padding: 7px 10px;
+  border: 1px solid var(--so-border);
+  background: transparent;
+  color: var(--so-text-muted);
+}
+.org-admin-section-header nav button[aria-pressed="true"] {
+  border-color: var(--so-primary-border);
+  background: var(--so-primary-soft);
+  color: var(--so-primary);
+}
+.org-admin-filters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+}
+.org-admin-filters label {
+  margin: 0;
+}
 .org-admin-card p,
 .org-admin-card small {
   color: var(--so-text-muted);
@@ -228,6 +262,79 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
 }
+.org-admin-role-matrix {
+  grid-column: 1 / -1;
+  overflow-x: auto;
+}
+.org-admin-role-matrix > div,
+.org-admin-comparison {
+  display: grid;
+  min-width: 720px;
+}
+.org-admin-role-matrix [role="row"],
+.org-admin-comparison [role="row"] {
+  display: grid;
+  grid-template-columns: minmax(190px, 1.4fr) repeat(5, minmax(110px, 1fr));
+  border-top: 1px solid var(--so-border);
+}
+.org-admin-role-matrix [role="cell"],
+.org-admin-role-matrix [role="columnheader"],
+.org-admin-comparison [role="cell"],
+.org-admin-comparison [role="columnheader"] {
+  padding: 10px;
+  text-align: center;
+}
+.org-admin-role-matrix [role="cell"]:first-child,
+.org-admin-role-matrix [role="columnheader"]:first-child,
+.org-admin-comparison [role="cell"]:first-child,
+.org-admin-comparison [role="columnheader"]:first-child {
+  text-align: left;
+}
+.org-admin-matrix-head {
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
+.org-admin-template-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+.org-admin-template-grid article {
+  display: grid;
+  gap: 7px;
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+}
+.org-admin-template-grid article i {
+  width: fit-content;
+}
+.org-admin-card .org-admin-subheading {
+  margin-top: 24px;
+}
+.org-admin-comparison {
+  overflow-x: auto;
+}
+.org-admin-comparison [role="row"] {
+  grid-template-columns: minmax(220px, 1.5fr) repeat(4, minmax(100px, 1fr));
+}
+.org-admin-comparison span small {
+  display: block;
+}
+.org-admin-secret-warning {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--so-warning);
+  line-height: 1.5;
+}
+.org-admin-audit-filters {
+  grid-template-columns: 1fr 1fr 1fr auto;
+}
+.org-admin-audit-filters button {
+  align-self: end;
+  min-height: 44px;
+}
 .org-admin-chips {
   display: flex;
   flex-wrap: wrap;
@@ -300,6 +407,15 @@
   .org-admin-grid,
   .org-admin-role-grid {
     grid-template-columns: 1fr;
+  }
+  .org-admin-filters,
+  .org-admin-audit-filters,
+  .org-admin-template-grid {
+    grid-template-columns: 1fr;
+  }
+  .org-admin-section-header {
+    align-items: flex-start;
+    flex-direction: column;
   }
   .org-admin-wide {
     grid-column: auto;

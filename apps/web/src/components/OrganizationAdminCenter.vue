@@ -17,7 +17,13 @@ const props = defineProps<{
   secret = ref(""),
   form = ref<any>({ reason: "" }),
   memberRoles = ref<Record<string, string>>({}),
-  teamMembers = ref<Record<string, string>>({});
+  teamMembers = ref<Record<string, string>>({}),
+  memberQuery = ref(""),
+  memberStatus = ref(""),
+  memberRole = ref(""),
+  memberTeam = ref(""),
+  invitationTab = ref<"pending" | "expired">("pending"),
+  auditFilters = ref({ action: "", outcome: "", resource_type: "" });
 const view = computed(() =>
     props.routePath === "/org-admin" ? "summary" : props.routePath.split("/").pop() || "summary",
   ),
@@ -28,8 +34,9 @@ const view = computed(() =>
           summary: "治理概览",
           members: "成员与邀请",
           roles: "角色与权限",
-          workspaces: "工作区与团队",
-          approvals: "任务与审批",
+          workspaces: "工作区管理",
+          teams: "团队管理",
+          approvals: "审批模板",
           data: "组织数据",
           tokens: "组织 Token",
           audit: "组织审计",
@@ -68,16 +75,14 @@ async function load() {
         default_workspace_id: data.value.default_workspace_id,
         reason: "",
       };
-    } else if (view.value === "audit")
-      data.value = await api(`/organizations/${props.organizationId}/audit-events?limit=50`);
-    else if (view.value === "data") data.value = { exports: await api("/report-exports") };
-    else if (view.value === "workspaces") {
-      const [workspaces, teams, members] = await Promise.all([
-        api("/org/admin/workspaces"),
+    } else if (view.value === "audit") data.value = await api(auditPath());
+    else if (view.value === "data") data.value = await api("/org/admin/data");
+    else if (view.value === "teams") {
+      const [teams, members] = await Promise.all([
         api("/org/admin/teams"),
         api("/org/admin/members"),
       ]);
-      data.value = { workspaces, teams, members: members.items ?? [] };
+      data.value = { teams, members: members.items ?? [] };
     } else data.value = await api(`/org/admin/${view.value}`);
     state.value = (
       Array.isArray(data.value) ? data.value.length : Object.keys(data.value ?? {}).length
@@ -85,6 +90,14 @@ async function load() {
       ? "ready"
       : "empty";
   } catch {}
+}
+function auditPath() {
+  const query = new URLSearchParams({ limit: "50" });
+  if (auditFilters.value.action.trim()) query.set("action", auditFilters.value.action.trim());
+  if (auditFilters.value.outcome) query.set("outcome", auditFilters.value.outcome);
+  if (auditFilters.value.resource_type.trim())
+    query.set("resource_type", auditFilters.value.resource_type.trim());
+  return `/organizations/${props.organizationId}/audit-events?${query}`;
 }
 async function submit(path: string, value: any, method = "POST") {
   busy.value = true;
@@ -159,6 +172,43 @@ const activeMembers = computed(() =>
   ),
   workspaceName = (id: string) =>
     data.value?.workspace_options?.find((item: any) => item.id === id)?.name ?? "未找到对应工作区",
+  availableTeams = computed<string[]>(() => [
+    ...new Set<string>(
+      (data.value?.items ?? []).flatMap((item: any) => item.teams ?? []) as string[],
+    ),
+  ]),
+  filteredMembers = computed(() => {
+    const query = memberQuery.value.trim().toLowerCase();
+    return (data.value?.items ?? []).filter(
+      (item: any) =>
+        (!query || String(item.email).toLowerCase().includes(query)) &&
+        (!memberStatus.value || item.status === memberStatus.value) &&
+        (!memberRole.value || item.roles?.includes(memberRole.value)) &&
+        (!memberTeam.value || item.teams?.includes(memberTeam.value)),
+    );
+  }),
+  pendingInvitations = computed(() =>
+    (data.value?.invitations ?? []).filter(
+      (item: any) =>
+        ["pending_delivery", "pending_acceptance"].includes(item.status) &&
+        new Date(item.expires_at).valueOf() > Date.now(),
+    ),
+  ),
+  expiredInvitations = computed(() =>
+    (data.value?.invitations ?? []).filter(
+      (item: any) =>
+        ["expired", "revoked"].includes(item.status) ||
+        new Date(item.expires_at).valueOf() <= Date.now(),
+    ),
+  ),
+  visibleInvitations = computed(() =>
+    invitationTab.value === "pending" ? pendingInvitations.value : expiredInvitations.value,
+  ),
+  roleCapabilities = computed<string[]>(() => [
+    ...new Set<string>(
+      (data.value ?? []).flatMap((item: any) => item.capabilities ?? []) as string[],
+    ),
+  ]),
   rows = computed(() =>
     view.value === "members"
       ? (data.value?.items ?? [])
@@ -166,15 +216,17 @@ const activeMembers = computed(() =>
         ? (data.value ?? [])
         : view.value === "workspaces"
           ? (data.value ?? [])
-          : view.value === "approvals"
-            ? (data.value?.items ?? [])
-            : view.value === "tokens"
-              ? (data.value ?? [])
-              : view.value === "audit"
-                ? (data.value?.items ?? [])
-                : view.value === "data"
-                  ? (data.value?.exports ?? [])
-                  : [],
+          : view.value === "teams"
+            ? (data.value?.teams ?? [])
+            : view.value === "approvals"
+              ? (data.value?.items ?? [])
+              : view.value === "tokens"
+                ? (data.value ?? [])
+                : view.value === "audit"
+                  ? (data.value?.items ?? [])
+                  : view.value === "data"
+                    ? (data.value?.exports ?? [])
+                    : [],
   ),
   fmt = (v: any) =>
     v == null
@@ -293,7 +345,7 @@ onMounted(load);
       <button @click="load">重新加载</button>
     </section>
     <template v-else>
-      <section class="org-admin-metrics">
+      <section v-if="view === 'summary'" class="org-admin-metrics">
         <article>
           <span>活动成员</span><b>{{ summary?.members?.active ?? 0 }}</b
           ><small>共 {{ summary?.members?.total ?? 0 }}</small>
@@ -403,23 +455,84 @@ onMounted(load);
           ><small>邮件服务尚未配置时，邀请会显示“等待邮件服务”，不会假装已经发送。</small>
         </form>
         <article class="org-admin-card">
-          <h3>待接受邀请</h3>
-          <p v-if="!data?.invitations?.length">暂无待处理邀请。</p>
-          <div v-for="x in data?.invitations" :key="x.id" class="org-admin-line">
+          <header class="org-admin-section-header">
+            <h3>邀请记录</h3>
+            <nav aria-label="邀请状态">
+              <button
+                :aria-pressed="invitationTab === 'pending'"
+                @click="invitationTab = 'pending'"
+              >
+                待接受 {{ pendingInvitations.length }}
+              </button>
+              <button
+                :aria-pressed="invitationTab === 'expired'"
+                @click="invitationTab = 'expired'"
+              >
+                已失效 {{ expiredInvitations.length }}
+              </button>
+            </nav>
+          </header>
+          <p v-if="!visibleInvitations.length">
+            {{ invitationTab === "pending" ? "暂无待接受邀请。" : "暂无已失效邀请。" }}
+          </p>
+          <div v-for="x in visibleInvitations" :key="x.id" class="org-admin-line">
             <div>
               <b>{{ x.email }}</b
               ><small>{{ roleText(x.role_code) }} · {{ fmt(x.expires_at) }}</small>
             </div>
-            <i>{{ statusText(x.status) }}</i>
+            <i>{{ invitationTab === "expired" ? "已失效" : statusText(x.status) }}</i>
           </div>
         </article>
         <article class="org-admin-card org-admin-wide">
-          <h3>组织成员</h3>
-          <div v-for="x in data?.items" :key="x.id" class="org-admin-line">
+          <header class="org-admin-section-header">
+            <div>
+              <h3>组织成员</h3>
+              <small>显示 {{ filteredMembers.length }} / {{ data?.items?.length ?? 0 }} 人</small>
+            </div>
+          </header>
+          <div class="org-admin-filters" aria-label="成员筛选">
+            <label
+              >搜索<input v-model="memberQuery" type="search" placeholder="姓名或邮箱"
+            /></label>
+            <label
+              >状态<select v-model="memberStatus">
+                <option value="">全部状态</option>
+                <option value="active">正常使用</option>
+                <option value="disabled">已停用</option>
+                <option value="locked">已锁定</option>
+              </select></label
+            >
+            <label
+              >角色<select v-model="memberRole">
+                <option value="">全部角色</option>
+                <option
+                  v-for="role in [
+                    'member',
+                    'selection_manager',
+                    'procurement_member',
+                    'organization_admin',
+                    'auditor',
+                  ]"
+                  :key="role"
+                  :value="role"
+                >
+                  {{ roleText(role) }}
+                </option>
+              </select></label
+            >
+            <label
+              >团队<select v-model="memberTeam">
+                <option value="">全部团队</option>
+                <option v-for="team in availableTeams" :key="team" :value="team">{{ team }}</option>
+              </select></label
+            >
+          </div>
+          <div v-for="x in filteredMembers" :key="x.id" class="org-admin-line">
             <div>
               <b>{{ x.email }}</b
               ><small
                 >{{ x.roles.map(roleText).join("、") || "尚未分配角色" }} ·
+                {{ x.teams?.join("、") || "未加入团队" }} ·
                 {{ x.scopes.map(scopeText).join("、") || "无数据范围" }} · 第
                 {{ x.version }} 版</small
               >
@@ -451,6 +564,7 @@ onMounted(load);
               <i>{{ statusText(x.status) }}</i>
             </div>
           </div>
+          <p v-if="!filteredMembers.length">没有符合当前筛选条件的成员。</p>
         </article>
       </section>
       <section v-else-if="view === 'roles'" class="org-admin-role-grid">
@@ -460,6 +574,29 @@ onMounted(load);
           <p>{{ x.description }}</p>
           <div class="org-admin-chips">
             <span v-for="c in x.capabilities" :key="c">{{ capabilityText(c) }}</span>
+          </div>
+          <small>影响预览：该角色可执行 {{ x.capabilities.length }} 项业务操作。</small>
+        </article>
+        <article class="org-admin-card org-admin-role-matrix">
+          <header>
+            <div>
+              <p>能力矩阵</p>
+              <h3>角色影响对比</h3>
+            </div>
+          </header>
+          <div role="table" aria-label="角色能力矩阵">
+            <div role="row" class="org-admin-matrix-head">
+              <b role="columnheader">业务能力</b
+              ><b v-for="role in rows" :key="role.code" role="columnheader">{{
+                roleText(role.code)
+              }}</b>
+            </div>
+            <div v-for="capability in roleCapabilities" :key="capability" role="row">
+              <span role="cell">{{ capabilityText(capability) }}</span
+              ><span v-for="role in rows" :key="role.code" role="cell">{{
+                role.capabilities.includes(capability) ? "具备" : "—"
+              }}</span>
+            </div>
           </div>
         </article>
       </section>
@@ -471,6 +608,22 @@ onMounted(load);
           ><label>创建原因<textarea v-model="form.reason" required></textarea></label
           ><button :disabled="busy">创建工作区</button>
         </form>
+        <article class="org-admin-card org-admin-wide">
+          <h3>工作区</h3>
+          <div v-for="x in data?.workspaces" :key="x.id" class="org-admin-line">
+            <div>
+              <b>{{ x.name }}</b
+              ><small>{{ x.slug }} · {{ x.member_count }} 名成员 · 第 {{ x.version }} 版</small>
+            </div>
+            <div class="org-admin-actions">
+              <button type="button" :disabled="busy" @click="workspaceAction(x)">
+                {{ x.status === "active" ? "归档" : "恢复" }}</button
+              ><i>{{ statusText(x.status) }}</i>
+            </div>
+          </div>
+        </article>
+      </section>
+      <section v-else-if="view === 'teams'" class="org-admin-grid">
         <form class="org-admin-card" @submit.prevent="submit('/org/admin/teams', form)">
           <h3>创建团队</h3>
           <label>名称<input v-model="form.name" required /></label
@@ -485,23 +638,9 @@ onMounted(load);
           ><label>创建原因<textarea v-model="form.reason" required></textarea></label
           ><button :disabled="busy">创建团队</button>
         </form>
-        <article class="org-admin-card">
-          <h3>工作区</h3>
-          <div v-for="x in data?.workspaces" :key="x.id" class="org-admin-line">
-            <div>
-              <b>{{ x.name }}</b
-              ><small>{{ x.slug }} · {{ x.member_count }} 名成员 · 第 {{ x.version }} 版</small>
-            </div>
-            <div class="org-admin-actions">
-              <button type="button" :disabled="busy" @click="workspaceAction(x)">
-                {{ x.status === "active" ? "归档" : "恢复" }}</button
-              ><i>{{ statusText(x.status) }}</i>
-            </div>
-          </div>
-        </article>
-        <article class="org-admin-card">
+        <article class="org-admin-card org-admin-wide">
           <h3>团队</h3>
-          <div v-for="x in data?.teams" :key="x.id" class="org-admin-line">
+          <div v-for="x in rows" :key="x.id" class="org-admin-line">
             <div>
               <b>{{ x.name }}</b
               ><small>{{ x.member_count }} 名成员 · 负责人 {{ x.lead_email || "未设置" }}</small>
@@ -525,6 +664,24 @@ onMounted(load);
         </article>
       </section>
       <section v-else-if="view === 'approvals'" class="org-admin-card">
+        <header class="org-admin-section-header">
+          <div>
+            <p>组织治理</p>
+            <h3>审批模板</h3>
+          </div>
+          <small>模板按所属工作区展示；发布与修改继续使用既有审批合同。</small>
+        </header>
+        <div class="org-admin-template-grid">
+          <article v-for="template in data?.templates" :key="template.id">
+            <i>{{ statusText(template.status) }}</i
+            ><b>{{ template.name }}</b
+            ><small
+              >{{ template.workspace_name }} · {{ template.node_count }} 个节点 · 当前第
+              {{ template.current_version }} 版</small
+            >
+          </article>
+        </div>
+        <h3 class="org-admin-subheading">审批记录</h3>
         <div class="org-admin-summary-row">
           <span v-for="(v, k) in data?.summary" :key="k"
             ><b>{{ v }}</b
@@ -533,11 +690,14 @@ onMounted(load);
         </div>
         <div v-for="x in rows" :key="x.id" class="org-admin-line">
           <div>
-            <b>业务申请</b><small>提交于 {{ fmt(x.requested_at) }}</small>
+            <b>{{ x.title }}</b
+            ><small
+              >当前第 {{ x.current_node_ordinal }} 阶段 · 提交于 {{ fmt(x.created_at) }}</small
+            >
             <details class="org-admin-technical">
               <summary>技术详情</summary>
               <code>记录 ID：{{ x.resource_id }}</code>
-              <code>流程节点：{{ x.current_node_key }}</code>
+              <code>模板 ID：{{ x.template_id }}</code>
             </details>
           </div>
           <i>{{ statusText(x.status) }}</i>
@@ -576,6 +736,9 @@ onMounted(load);
         </form>
         <article class="org-admin-card">
           <h3>令牌明文</h3>
+          <strong class="org-admin-secret-warning"
+            >只显示一次：离开本页后无法再次查看，请立即保存到受限位置。</strong
+          >
           <code v-if="secret" class="org-admin-secret">{{ secret }}</code>
           <p v-else>明文只在创建或轮换成功后显示一次。</p>
         </article>
@@ -611,7 +774,58 @@ onMounted(load);
           <p v-if="!rows.length">尚无组织访问令牌。</p>
         </article>
       </section>
+      <section v-else-if="view === 'data'" class="org-admin-card">
+        <header class="org-admin-section-header">
+          <div>
+            <p>跨工作区比较</p>
+            <h3>组织数据概览</h3>
+          </div>
+          <small>截至 {{ fmt(data?.observed_at) }}</small>
+        </header>
+        <div class="org-admin-comparison" role="table" aria-label="跨工作区数据比较">
+          <div role="row" class="org-admin-matrix-head">
+            <b role="columnheader">工作区</b><b role="columnheader">热点</b
+            ><b role="columnheader">机会</b><b role="columnheader">任务</b
+            ><b role="columnheader">导出</b>
+          </div>
+          <div v-for="item in data?.comparisons" :key="item.id" role="row">
+            <span role="cell"
+              ><b>{{ item.name }}</b
+              ><small>{{ statusText(item.status) }}</small></span
+            ><span role="cell">{{ item.trends }}</span
+            ><span role="cell">{{ item.opportunities }}</span
+            ><span role="cell">{{ item.tasks }}</span
+            ><span role="cell">{{ item.exports }}</span>
+          </div>
+        </div>
+        <h3 class="org-admin-subheading">最近导出</h3>
+        <div v-for="x in rows" :key="x.id" class="org-admin-line">
+          <div>
+            <b>{{ x.workspace_name }} · {{ x.report_type }}</b
+            ><small>{{ x.row_count ?? "等待生成" }} 行 · {{ fmt(x.created_at) }}</small>
+          </div>
+          <i>{{ statusText(x.status) }}</i>
+        </div>
+        <p v-if="!rows.length">暂无组织导出记录。</p>
+      </section>
       <section v-else class="org-admin-card">
+        <form class="org-admin-filters org-admin-audit-filters" @submit.prevent="load">
+          <label
+            >操作<input v-model="auditFilters.action" placeholder="例如 organization.member"
+          /></label>
+          <label
+            >结果<select v-model="auditFilters.outcome">
+              <option value="">全部结果</option>
+              <option value="succeeded">成功</option>
+              <option value="failed">失败</option>
+              <option value="blocked">已阻止</option>
+            </select></label
+          >
+          <label
+            >对象<input v-model="auditFilters.resource_type" placeholder="例如 membership"
+          /></label>
+          <button>应用筛选</button>
+        </form>
         <div v-for="x in rows" :key="x.id" class="org-admin-line">
           <div>
             <b>{{ x.action || x.report_type }}</b

@@ -110,6 +110,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       "apps/web/src/components/PlatformRoleComparison.vue",
       "apps/web/src/components/PlatformUserDetailDialog.vue",
       "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/route-catalog.ts",
       "scripts/verify-platform-accounts-live.mjs",
     ],
     values = await Promise.all(paths.map((path) => readFile(path, "utf8"))),
@@ -123,6 +124,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       comparison,
       detailDialog,
       navigation,
+      routeCatalog,
       live,
     ] = values,
     web = [accountShell, wizard, comparison, detailDialog].join("\n");
@@ -154,7 +156,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.ok(accountShell.split(/\r?\n/).length < 1000);
   for (const component of [wizard, comparison, detailDialog])
     assert.ok(component.split(/\r?\n/).length < 300);
-  assert.match(navigation, /账号与组织/);
+  assert.match(routeCatalog, /账号与组织/);
   assert.doesNotMatch(navigation, /label: "Redis 韧性"|label: "MySQL 韧性"|label: "文件韧性"/);
   assert.match(live, /user_sessions/);
   assert.match(live, /organization_admin_scope_failed/);

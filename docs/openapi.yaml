@@ -1282,7 +1282,7 @@ paths:
   /org/admin/members:
     get:
       summary: List current organization members and pending invitations
-      description: Requires membership:read and never returns another organization.
+      description: Requires membership:read, includes member role and team names plus actionable or expired invitation lifecycle records, and never returns another organization.
       security: [{ HttpOnlySession: [] }]
       responses:
         {
@@ -1484,6 +1484,15 @@ paths:
           "200": { description: Approval status summary and latest requests },
           "403": { $ref: "#/components/responses/Error" },
         }
+  /org/admin/data:
+    get:
+      summary: Compare persisted organization facts across workspaces
+      description: Requires report:read and returns workspace names with factual trend, opportunity, business-task and report-export counts plus recent organization export lifecycle records.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        "200": { description: Scoped cross-workspace comparison and exports }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
   /org/admin/tokens:
     get:
       summary: List organization Token metadata without secret or hash

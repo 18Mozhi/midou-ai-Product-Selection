@@ -58,6 +58,7 @@ const members = {
       status: "active",
       roles: ["organization_admin"],
       scopes: ["organization"],
+      teams: ["治理组"],
       version: 2,
       joined_at: "2026-08-01T00:00:00.000Z",
     },
@@ -67,6 +68,7 @@ const members = {
       status: "active",
       roles: ["procurement_member"],
       scopes: ["workspace"],
+      teams: ["采购协作组"],
       version: 1,
       joined_at: "2026-08-02T00:00:00.000Z",
     },
@@ -77,6 +79,13 @@ const members = {
       email: "new@example.test",
       role_code: "member",
       status: "pending_delivery",
+      expires_at: "2026-09-11T00:00:00.000Z",
+    },
+    {
+      id: "00000000-0000-4000-8000-000000000617",
+      email: "expired@example.test",
+      role_code: "member",
+      status: "expired",
       expires_at: "2026-08-11T00:00:00.000Z",
     },
   ],
@@ -101,6 +110,7 @@ async function setup(page: Page) {
           "organization_token:manage",
           "audit:read",
           "opportunity:approve",
+          "report:read",
         ],
         platform_roles: [],
         platform_capabilities: [],
@@ -108,18 +118,10 @@ async function setup(page: Page) {
       }),
     }),
   );
-  await page.route("**/api/v1/org/admin/summary", (r) =>
-    r.fulfill({ json: env(summary) }),
-  );
-  await page.route("**/api/v1/org/admin/profile", (r) =>
-    r.fulfill({ json: env(profile) }),
-  );
-  await page.route("**/api/v1/org/admin/workspaces", (r) =>
-    r.fulfill({ json: env(workspaces) }),
-  );
-  await page.route("**/api/v1/org/admin/members", (r) =>
-    r.fulfill({ json: env(members) }),
-  );
+  await page.route("**/api/v1/org/admin/summary", (r) => r.fulfill({ json: env(summary) }));
+  await page.route("**/api/v1/org/admin/profile", (r) => r.fulfill({ json: env(profile) }));
+  await page.route("**/api/v1/org/admin/workspaces", (r) => r.fulfill({ json: env(workspaces) }));
+  await page.route("**/api/v1/org/admin/members", (r) => r.fulfill({ json: env(members) }));
   await page.route("**/api/v1/org/admin/teams", (r) =>
     r.fulfill({
       json: env([
@@ -137,13 +139,86 @@ async function setup(page: Page) {
     r.fulfill({
       json: env({
         summary: { pending: 1 },
+        templates: [
+          {
+            id: "00000000-0000-4000-8000-000000000618",
+            name: "选品复核模板",
+            workspace_name: "新品决策工作区",
+            status: "published",
+            node_count: 2,
+            current_version: 3,
+          },
+        ],
         items: [
           {
             id: "00000000-0000-4000-8000-000000000616",
+            template_id: "00000000-0000-4000-8000-000000000618",
             resource_id: approvalResource,
-            current_node_key: "manager_review",
+            title: "厨房收纳机会复核",
+            current_node_ordinal: 1,
             status: "pending",
-            requested_at: "2026-08-08T10:00:00.000Z",
+            created_at: "2026-08-08T10:00:00.000Z",
+          },
+        ],
+      }),
+    }),
+  );
+  await page.route("**/api/v1/org/admin/roles", (r) =>
+    r.fulfill({
+      json: env([
+        {
+          code: "organization_admin",
+          name: "组织管理员",
+          description: "管理组织治理设置。",
+          capabilities: ["organization:manage", "membership:manage"],
+        },
+        {
+          code: "auditor",
+          name: "审计员",
+          description: "查看组织审计记录。",
+          capabilities: ["audit:read"],
+        },
+      ]),
+    }),
+  );
+  await page.route("**/api/v1/org/admin/data", (r) =>
+    r.fulfill({
+      json: env({
+        comparisons: [
+          {
+            id: ws,
+            name: "新品决策工作区",
+            status: "active",
+            trends: 38,
+            opportunities: 12,
+            tasks: 7,
+            exports: 3,
+          },
+        ],
+        exports: [
+          {
+            id: "00000000-0000-4000-8000-000000000619",
+            workspace_name: "新品决策工作区",
+            report_type: "opportunity",
+            status: "succeeded",
+            row_count: 12,
+            created_at: "2026-08-08T10:00:00.000Z",
+          },
+        ],
+        observed_at: "2026-08-08T12:00:00.000Z",
+      }),
+    }),
+  );
+  await page.route("**/api/v1/organizations/*/audit-events**", (r) =>
+    r.fulfill({
+      json: env({
+        items: [
+          {
+            id: "00000000-0000-4000-8000-000000000620",
+            action: "organization.member.disabled",
+            resource_type: "membership",
+            outcome: "succeeded",
+            occurred_at: "2026-08-08T11:00:00.000Z",
           },
         ],
       }),
@@ -154,9 +229,7 @@ async function setup(page: Page) {
 test("M06-01.A07/A08/A15 desktop organization dashboard", async ({ page }) => {
   await setup(page);
   await page.goto("/org-admin");
-  await expect(
-    page.getByRole("heading", { name: "组织资料", level: 2 }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "治理概览", level: 2 })).toBeVisible();
   await expect(page.getByText("128")).toBeVisible();
   await expect(page.getByText("1238")).toBeVisible();
   await expect(page.getByText("新品决策工作区").first()).toBeVisible();
@@ -167,18 +240,20 @@ test("M06-01.A07/A08/A15 desktop organization dashboard", async ({ page }) => {
   });
 });
 
-test("M06-01.A07/A08/A15 mobile member and invitation state", async ({
-  page,
-}) => {
+test("M06-01.A07/A08/A15 mobile member and invitation state", async ({ page }) => {
   await setup(page);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/org-admin/members");
-  await expect(
-    page.getByRole("heading", { name: "成员与邀请", level: 2 }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "成员与邀请", level: 2 })).toBeVisible();
   await expect(page.getByText("new@example.test")).toBeVisible();
   await expect(page.getByText("admin@example.test")).toBeVisible();
-  const memberId = page.locator("code").filter({ hasText: memberAdmin });
+  await page.getByRole("button", { name: /已失效/ }).click();
+  await expect(page.getByText("expired@example.test")).toBeVisible();
+  await page.getByRole("button", { name: /待接受/ }).click();
+  await page.getByLabel("团队").selectOption("采购协作组");
+  await expect(page.getByText("buyer@example.test")).toBeVisible();
+  await expect(page.getByText("admin@example.test")).toHaveCount(0);
+  const memberId = page.locator("code").filter({ hasText: memberBuyer });
   await expect(memberId).not.toBeVisible();
   await expect(page).toHaveScreenshot("m06-01-organization-admin-mobile-390.png", {
     fullPage: true,
@@ -191,19 +266,33 @@ test("organization member choices replace raw ids and approval ids stay technica
   page,
 }) => {
   await setup(page);
-  await page.goto("/org-admin/workspaces");
-  await expect(page.getByLabel("负责人（可选）")).toContainText(
-    "admin@example.test",
-  );
-  await expect(page.getByLabel("选择团队成员")).toContainText(
-    "buyer@example.test",
-  );
+  await page.goto("/org-admin/teams");
+  await expect(page.getByLabel("负责人（可选）")).toContainText("admin@example.test");
+  await expect(page.getByLabel("选择团队成员")).toContainText("buyer@example.test");
   await expect(page.getByText(memberBuyer, { exact: true })).toHaveCount(0);
 
   await page.goto("/org-admin/approvals");
-  await expect(page.getByText("业务申请", { exact: true })).toBeVisible();
+  await expect(page.getByText("选品复核模板", { exact: true })).toBeVisible();
+  await expect(page.getByText("厨房收纳机会复核", { exact: true })).toBeVisible();
   const resourceId = page.locator("code").filter({ hasText: approvalResource });
   await expect(resourceId).not.toBeVisible();
   await page.getByText("技术详情", { exact: true }).click();
   await expect(resourceId).toBeVisible();
+});
+
+test("organization governance matrix, data comparison and audit filters", async ({ page }) => {
+  await setup(page);
+  await page.goto("/org-admin/roles");
+  await expect(page.getByRole("table", { name: "角色能力矩阵" })).toBeVisible();
+
+  await page.goto("/org-admin/data");
+  await expect(page.getByRole("table", { name: "跨工作区数据比较" })).toBeVisible();
+  await expect(page.getByText("新品决策工作区").first()).toBeVisible();
+
+  await page.goto("/org-admin/audit");
+  await page.getByLabel("操作").fill("organization.member");
+  await page.getByLabel("结果").selectOption("succeeded");
+  await page.getByLabel("对象").fill("membership");
+  await page.getByRole("button", { name: "应用筛选" }).click();
+  await expect(page.getByText("organization.member.disabled")).toBeVisible();
 });
