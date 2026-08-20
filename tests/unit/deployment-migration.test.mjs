@@ -25,6 +25,14 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
   assert.match(deploy, /verify-release-change-ownership\.mjs/);
   assert.match(deploy, /release-change-ownership\.json/);
+  assert.match(
+    deploy,
+    /upload = root \/ \("\.deploy-upload-" \+ v\["build_sha"\] \+ "\.tar\.gz"\)/,
+  );
+  assert.match(
+    deploy,
+    /permitted_entries = allowed \| \{\{stage\.name, rollback\.name, upload\.name\}\}/,
+  );
   assert.ok(
     deploy.lastIndexOf("verify_release_change_ownership(repo)") <
       deploy.lastIndexOf("read_windows_credential()"),

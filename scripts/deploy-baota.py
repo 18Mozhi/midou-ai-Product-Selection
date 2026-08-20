@@ -233,6 +233,7 @@ root = Path(v["root"])
 allowed = {{"frontend", "backend", "python", "config", "runtime", "backups"}}
 stage = root / (".deploy-stage-" + v["build_sha"])
 rollback = root / (".deploy-rollback-" + v["build_sha"])
+upload = root / (".deploy-upload-" + v["build_sha"] + ".tar.gz")
 
 def result(status, message, **extra):
     print("SCOUTOPS_RESULT=" + json.dumps({{"status": status, "message": message, **extra}}, ensure_ascii=False))
@@ -263,7 +264,7 @@ try:
     if not Path(v["python_bin"]).is_file():
         raise RuntimeError("BaoTa Python 3.12.13 is unavailable")
 
-    permitted_entries = allowed | {{stage.name, rollback.name}}
+    permitted_entries = allowed | {{stage.name, rollback.name, upload.name}}
     if v["initialize"]:
         permitted_entries.add("shared")
     unsupported_entries = {{child.name for child in root.iterdir()}} - permitted_entries
