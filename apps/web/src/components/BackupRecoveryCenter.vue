@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const state = ref<"loading" | "empty" | "blocked" | "stale" | "verified" | "forbidden" | "expired">(
   "loading",
@@ -9,6 +10,26 @@ const data = ref<any>(null),
   hint = ref("");
 const when = (value?: string | null) => (value ? new Date(value).toLocaleString() : "尚无记录");
 const bytes = (value: number) => (value ? `${(value / 1024 / 1024).toFixed(1)} MB` : "0 MB");
+const assetText = (value: string) =>
+    (
+      ({
+        mysql_full: "数据库完整备份",
+        mysql_binlog: "数据库增量日志",
+        evidence: "采集证据",
+        export: "导出文件",
+        config: "非秘密配置",
+      }) as Record<string, string>
+    )[value] ?? "其他备份对象",
+  roleText = (value: string) => (value === "recovery_copy" ? "恢复副本" : "主备份"),
+  blockerText = (value: string) =>
+    (
+      ({
+        backup_objective_unverified: "备份目标尚未核验",
+        recovery_copy_unverified: "恢复副本尚未核验",
+        isolated_restore_unverified: "隔离恢复尚未核验",
+        restore_drill_stale: "恢复演练已过期",
+      }) as Record<string, string>
+    )[value] ?? "恢复条件未满足";
 async function load() {
   state.value = "loading";
   try {
@@ -101,33 +122,106 @@ onMounted(load);
             <span>高强度加密</span>
           </div>
           <div v-if="!data.targets.length" class="empty">没有可展示的备份资产。</div>
-          <table v-else>
-            <thead>
-              <tr>
-                <th>对象</th>
-                <th>角色</th>
-                <th>区域</th>
-                <th>数量</th>
-                <th>体积</th>
-                <th>完整性</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="target in data.targets"
-                :key="`${target.asset_kind}-${target.region}-${target.storage_role}`"
-              >
-                <td>{{ target.asset_kind }}</td>
-                <td>
-                  {{ target.storage_role === "recovery_copy" ? "恢复副本" : "主备份" }}
-                </td>
-                <td>{{ target.region }}</td>
-                <td>{{ target.bundle_count }}</td>
-                <td>{{ bytes(target.size_bytes) }}</td>
-                <td>{{ target.integrity_verified ? "已核验" : "未核验" }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <ResponsiveDataView
+            v-else
+            :rows="data.targets"
+            :row-key="(target) => `${target.asset_kind}-${target.region}-${target.storage_role}`"
+            title="备份资产"
+            :detail-title="(target) => assetText(target.asset_kind)"
+          >
+            <template #desktop>
+              <table>
+                <thead>
+                  <tr>
+                    <th>对象</th>
+                    <th>角色</th>
+                    <th>区域</th>
+                    <th>数量</th>
+                    <th>体积</th>
+                    <th>完整性</th>
+                    <th>技术信息</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="target in data.targets"
+                    :key="`${target.asset_kind}-${target.region}-${target.storage_role}`"
+                  >
+                    <td>{{ assetText(target.asset_kind) }}</td>
+                    <td>{{ roleText(target.storage_role) }}</td>
+                    <td>{{ target.region }}</td>
+                    <td>{{ target.bundle_count }}</td>
+                    <td>{{ bytes(target.size_bytes) }}</td>
+                    <td>{{ target.integrity_verified ? "已核验" : "未核验" }}</td>
+                    <td>
+                      <details>
+                        <summary>技术详情</summary>
+                        <dl>
+                          <div>
+                            <dt>对象代码</dt>
+                            <dd>{{ target.asset_kind }}</dd>
+                          </div>
+                          <div>
+                            <dt>存储角色代码</dt>
+                            <dd>{{ target.storage_role }}</dd>
+                          </div>
+                        </dl>
+                      </details>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+            <template #summary="{ row }"
+              ><span class="responsive-record-summary"
+                ><strong>{{ assetText(row.asset_kind) }} · {{ roleText(row.storage_role) }}</strong
+                ><small
+                  >{{ row.region }} · {{ row.bundle_count }} 份 · {{ bytes(row.size_bytes) }}</small
+                ></span
+              ></template
+            >
+            <template #detail="{ row }">
+              <dl>
+                <div>
+                  <dt>备份角色</dt>
+                  <dd>{{ roleText(row.storage_role) }}</dd>
+                </div>
+                <div>
+                  <dt>区域</dt>
+                  <dd>{{ row.region }}</dd>
+                </div>
+                <div>
+                  <dt>文件数量</dt>
+                  <dd>{{ row.bundle_count }} 份</dd>
+                </div>
+                <div>
+                  <dt>总体积</dt>
+                  <dd>{{ bytes(row.size_bytes) }}</dd>
+                </div>
+                <div>
+                  <dt>加密</dt>
+                  <dd>{{ row.encrypted ? "已加密" : "未核验" }}</dd>
+                </div>
+                <div>
+                  <dt>完整性</dt>
+                  <dd>{{ row.integrity_verified ? "已核验" : "未核验" }}</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <dl>
+                  <div>
+                    <dt>对象代码</dt>
+                    <dd>{{ row.asset_kind }}</dd>
+                  </div>
+                  <div>
+                    <dt>存储角色代码</dt>
+                    <dd>{{ row.storage_role }}</dd>
+                  </div>
+                </dl>
+              </details>
+            </template>
+          </ResponsiveDataView>
         </section>
         <section class="panel">
           <div class="panel-title">
@@ -186,13 +280,20 @@ onMounted(load);
       <section v-if="data.blockers.length" class="blockers">
         <h3>阻断项</h3>
         <article v-for="item in data.blockers" :key="item.code">
-          <code>{{ item.code }}</code>
+          <strong>{{ blockerText(item.code) }}</strong>
           <p>{{ item.action_hint }}</p>
+          <details>
+            <summary>技术详情</summary>
+            <code>{{ item.code }}</code>
+          </details>
         </article>
       </section>
       <footer>
-        观测时间 {{ when(data.observed_at) }} · request_id {{ requestId || "—" }} ·
-        恢复动作仅由宝塔受控任务执行
+        观测时间 {{ when(data.observed_at) }} · 恢复动作仅由宝塔受控任务执行
+        <details>
+          <summary>技术详情</summary>
+          <span>请求 ID {{ requestId || "—" }}</span>
+        </details>
       </footer>
     </template>
   </section>
@@ -370,6 +471,7 @@ dd {
   grid-template-columns: minmax(180px, 0.5fr) 1fr;
   padding: 13px 0;
 }
+.blockers strong,
 .blockers code {
   color: var(--amber);
 }
@@ -391,6 +493,20 @@ footer {
 footer {
   text-align: right;
 }
+.blockers details summary,
+footer details summary {
+  min-height: var(--so-touch-target);
+  display: inline-flex;
+  align-items: center;
+  color: var(--so-primary);
+  cursor: pointer;
+}
+.blockers details {
+  grid-column: 2;
+}
+footer details span {
+  overflow-wrap: anywhere;
+}
 @media (max-width: 760px) {
   .backup-hero,
   .truth-banner {
@@ -409,6 +525,9 @@ footer {
   }
   .blockers article {
     grid-template-columns: 1fr;
+  }
+  .blockers details {
+    grid-column: auto;
   }
   .backup-hero {
     padding: 21px;

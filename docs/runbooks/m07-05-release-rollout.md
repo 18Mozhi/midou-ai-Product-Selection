@@ -19,6 +19,7 @@
 4. 发布后核验公网版本、live、ready、available，确认 Node 内 API/Worker、Python
    Crawler、MySQL 5.7 与 Redis 的当前状态。任一门失败时，以本地目标 Git 提交重新
    构建并执行同一部署命令回滚，不删除发布、审计或业务数据。
+5. 在 `/platform-admin/releases` 验证桌面门禁表格与 390 像素摘要卡片/详情抽屉；确认状态和阻断原因显示中文、页面无横向遮挡，门禁 ID、类型、发布 ID、阻断代码与 request_id 默认隐藏在“技术详情”中且可展开追踪。
 
 ## 历史双槽审计资料（不可执行）
 

@@ -1483,6 +1483,7 @@
       ],
       "routes": ["/platform-admin/security", "/api/v1/platform/security/operations"],
       "scope": "platform login outcomes risk events session metadata organization token metadata credential lifecycle and platform audit",
+      "presentationBoundary": "desktop tables and mobile summary cards share the same records; mobile details use a drawer and raw IDs fingerprints token prefixes request IDs and internal codes remain collapsed under technical details",
       "truthBoundary": "never selects or returns session token hashes credential ciphertext nonce auth tag token hashes cookies or raw IP and user agent values",
       "permission": "platform:secure read guard; credential rotation and token/session mutations remain on existing key rotation session and token capabilities",
       "configuration": ["SECURITY_OPERATIONS_DEFAULT_WINDOW", "SECURITY_OPERATIONS_RECENT_LIMIT"],
@@ -1624,6 +1625,7 @@
       ],
       "routes": ["/platform-admin/operations", "/api/v1/platform/operations/backup-recovery"],
       "scope": "MySQL evidence export and non-secret config encrypted backups on the current Huizhou host with a separate encrypted recovery root",
+      "presentationBoundary": "backup assets use desktop tables and mobile summary cards with a detail drawer; raw asset and storage role codes plus request IDs stay under collapsed technical details while business labels remain Chinese",
       "truthBoundary": "verified only after same-host encrypted-copy integrity and a logically isolated restore check business data audit chain evidence hashes and permission boundaries within 90 days; host disk and site failure are not protected",
       "permission": "platform:operate read only; backup and restore execute only in Baota scheduled tasks",
       "configuration": [
@@ -1675,6 +1677,7 @@
         "/api/v1/platform/operations/releases/write-probe"
       ],
       "scope": "当前发布使用固定目录和单一宝塔 Node 后端；旧双槽渐进发布仅保留为只读审计事实",
+      "presentationBoundary": "历史门禁事实使用桌面表格和移动摘要卡片加详情抽屉；门禁 ID 类型 发布 ID 阻断代码和请求 ID 仅在折叠技术详情中展示，用户状态统一显示中文",
       "executionStatus": "historical_disabled_by_single_node_topology",
       "currentDeploymentEntrypoint": "../scripts/deploy-baota.py",
       "currentRuntimeManifest": "../infra/baota/service-manifest.json",

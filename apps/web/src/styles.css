@@ -4271,7 +4271,7 @@ button {
 }
 .security-ops > header span,
 .security-ops > header label {
-  color: var(--text-muted);
+  color: var(--so-text-muted);
 }
 .security-kpis {
   display: grid;
@@ -4281,13 +4281,13 @@ button {
 .security-kpis article,
 .security-grid > section {
   padding: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--so-border);
   border-radius: 14px;
-  background: var(--surface);
+  background: var(--so-panel);
 }
 .security-kpis span {
   display: block;
-  color: var(--text-muted);
+  color: var(--so-text-muted);
   font-size: 11px;
 }
 .security-kpis strong {
@@ -4304,17 +4304,28 @@ button {
 }
 .security-ops td {
   padding: 9px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--so-border);
   font-size: 12px;
 }
 .security-ops td small {
   display: block;
-  color: var(--text-muted);
+  color: var(--so-text-muted);
 }
 .security-ops footer {
   text-align: right;
-  color: var(--text-muted);
+  color: var(--so-text-muted);
   font-size: 11px;
+}
+.security-ops details summary {
+  min-height: var(--so-touch-target);
+  display: inline-flex;
+  align-items: center;
+  color: var(--so-primary);
+  cursor: pointer;
+}
+.security-ops footer details span,
+.security-ops .platform-dashboard-state details code {
+  overflow-wrap: anywhere;
 }
 @media (max-width: 800px) {
   .security-ops > header {

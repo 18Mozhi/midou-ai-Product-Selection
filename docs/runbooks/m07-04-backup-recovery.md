@@ -21,6 +21,8 @@
 
 最小本地验证：`node scripts/backup-recovery.mjs --self-test`；MySQL 5.7 集成：`node scripts/verify-backup-recovery-live.mjs`；生产门：`node scripts/verify-backup-recovery-production.mjs --production`。MySQL 集成探针先读取现有恢复记录的最大开始时间，再在其后构造两条随机 ID 探针记录并按 ID 清理，防止真实生产演练覆盖 fail-closed 状态断言；不得为验收改写或删除既有生产备份记录。生产证据放在 Git 忽略的 `.artifacts/verification/backup-recovery-production-evidence.json`。
 
+页面验收同时覆盖桌面表格与 390 像素摘要卡片/详情抽屉；确认对象和角色显示中文、页面无横向遮挡，原始对象代码、存储角色代码、阻断代码和 request_id 默认隐藏在“技术详情”中且可按需展开。
+
 ## 故障与回滚
 
 认证标签或哈希不一致时立即停止解密并删除本次明文临时输出；独立恢复目录不可写或空间不足时状态为 `blocked`，不得降低为成功。回滚时在宝塔停用任务、恢复上一版任务脚本和应用 release；迁移回滚遵循架构文档，备份密文按原保留期保存。

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const state = ref("loading"),
   data = ref<any>(null),
@@ -28,9 +29,7 @@ async function load() {
       return;
     }
     data.value = b.data;
-    state.value = Object.values(b.data.summary).some(Number)
-      ? "ready"
-      : "empty";
+    state.value = Object.values(b.data.summary).some(Number) ? "ready" : "empty";
   } catch {
     state.value = "blocked";
   }
@@ -75,14 +74,17 @@ const eventText = (value: string) =>
     ({
       login_succeeded: "登录成功",
       login_failed: "登录失败",
+      "login.succeeded": "登录成功",
+      "login.failed": "登录失败",
       session_revoked: "登录已撤销",
       mfa_failed: "二次验证失败",
       password_changed: "密码已修改",
     }) as Record<string, string>
   )[value] ?? "安全操作";
 const scopeText = (value: string) =>
-  (({ "status:read": "读取系统状态" }) as Record<string, string>)[value] ??
-  "其他权限";
+  (({ "status:read": "读取系统状态", "report:read": "读取报表" }) as Record<string, string>)[
+    value
+  ] ?? "其他权限";
 </script>
 <template>
   <section class="security-ops">
@@ -102,11 +104,7 @@ const scopeText = (value: string) =>
         </select></label
       >
     </header>
-    <section
-      v-if="state !== 'ready'"
-      class="platform-dashboard-state"
-      :data-kind="state"
-    >
+    <section v-if="state !== 'ready'" class="platform-dashboard-state" :data-kind="state">
       <h3>
         {{
           state === "loading"
@@ -123,11 +121,11 @@ const scopeText = (value: string) =>
         }}
       </h3>
       <p>{{ hint || "刷新或由运维在宝塔检查后端与数据库。" }}</p>
-      <code v-if="requestId">关联编号：{{ requestId }}</code
-      ><button
-        v-if="!['loading', 'expired', 'forbidden'].includes(state)"
-        @click="load"
-      >
+      <details v-if="requestId">
+        <summary>技术详情</summary>
+        <code>请求 ID：{{ requestId }}</code>
+      </details>
+      <button v-if="!['loading', 'expired', 'forbidden'].includes(state)" @click="load">
         重新读取
       </button>
     </section>
@@ -141,66 +139,371 @@ const scopeText = (value: string) =>
       <div class="security-grid">
         <section>
           <h3>登录与风险事件</h3>
-          <table>
-            <tr v-for="e in data.security_events" :key="e.id">
-              <td>
-                <b>{{ eventText(e.event_type) }}</b
-                ><small>{{ statusText(e.outcome) }}</small>
-              </td>
-              <td>{{ e.user_id ? e.user_id.slice(0, 8) + "…" : "匿名" }}</td>
-              <td>
-                <code>{{ e.trace_id.slice(0, 8) }}…</code>
-              </td>
-              <td>{{ when(e.occurred_at) }}</td>
-            </tr>
-          </table>
+          <ResponsiveDataView
+            :rows="data.security_events"
+            :row-key="(item) => item.id"
+            title="登录与风险事件"
+            :detail-title="(item) => eventText(item.event_type)"
+          >
+            <template #desktop
+              ><table>
+                <tr v-for="item in data.security_events" :key="item.id">
+                  <td>
+                    <b>{{ eventText(item.event_type) }}</b
+                    ><small>{{ statusText(item.outcome) }}</small>
+                  </td>
+                  <td>{{ item.user_id ? "已关联用户" : "匿名" }}</td>
+                  <td>{{ when(item.occurred_at) }}</td>
+                  <td>
+                    <details>
+                      <summary>技术详情</summary>
+                      <dl>
+                        <div>
+                          <dt>事件 ID</dt>
+                          <dd>{{ item.id }}</dd>
+                        </div>
+                        <div>
+                          <dt>用户 ID</dt>
+                          <dd>{{ item.user_id || "—" }}</dd>
+                        </div>
+                        <div>
+                          <dt>请求 ID</dt>
+                          <dd>{{ item.request_id || "—" }}</dd>
+                        </div>
+                        <div>
+                          <dt>链路 ID</dt>
+                          <dd>{{ item.trace_id || "—" }}</dd>
+                        </div>
+                      </dl>
+                    </details>
+                  </td>
+                </tr>
+              </table></template
+            >
+            <template #summary="{ row }"
+              ><span class="responsive-record-summary"
+                ><strong>{{ eventText(row.event_type) }} · {{ statusText(row.outcome) }}</strong
+                ><small
+                  >{{ row.user_id ? "已关联用户" : "匿名" }} · {{ when(row.occurred_at) }}</small
+                ></span
+              ></template
+            >
+            <template #detail="{ row }"
+              ><dl>
+                <div>
+                  <dt>事件</dt>
+                  <dd>{{ eventText(row.event_type) }}</dd>
+                </div>
+                <div>
+                  <dt>结果</dt>
+                  <dd>{{ statusText(row.outcome) }}</dd>
+                </div>
+                <div>
+                  <dt>用户</dt>
+                  <dd>{{ row.user_id ? "已关联用户" : "匿名" }}</dd>
+                </div>
+                <div>
+                  <dt>发生时间</dt>
+                  <dd>{{ when(row.occurred_at) }}</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <dl>
+                  <div>
+                    <dt>事件 ID</dt>
+                    <dd>{{ row.id }}</dd>
+                  </div>
+                  <div>
+                    <dt>用户 ID</dt>
+                    <dd>{{ row.user_id || "—" }}</dd>
+                  </div>
+                  <div>
+                    <dt>请求 ID</dt>
+                    <dd>{{ row.request_id || "—" }}</dd>
+                  </div>
+                  <div>
+                    <dt>链路 ID</dt>
+                    <dd>{{ row.trace_id || "—" }}</dd>
+                  </div>
+                </dl>
+              </details></template
+            >
+          </ResponsiveDataView>
         </section>
         <section>
           <h3>活动与历史会话</h3>
-          <table>
-            <tr v-for="s in data.sessions" :key="s.id">
-              <td>
-                <b>{{ s.email }}</b
-                ><small>{{ s.device_label }}</small>
-              </td>
-              <td>{{ statusText(s.status) }}</td>
-              <td>{{ when(s.last_seen_at) }}</td>
-            </tr>
-          </table>
+          <ResponsiveDataView
+            :rows="data.sessions"
+            :row-key="(item) => item.id"
+            title="活动与历史会话"
+            :detail-title="(item) => item.email"
+          >
+            <template #desktop
+              ><table>
+                <tr v-for="item in data.sessions" :key="item.id">
+                  <td>
+                    <b>{{ item.email }}</b
+                    ><small>{{ item.device_label }}</small>
+                  </td>
+                  <td>{{ statusText(item.status) }}</td>
+                  <td>{{ when(item.last_seen_at) }}</td>
+                  <td>
+                    <details>
+                      <summary>技术详情</summary>
+                      <dl>
+                        <div>
+                          <dt>会话 ID</dt>
+                          <dd>{{ item.id }}</dd>
+                        </div>
+                        <div>
+                          <dt>用户 ID</dt>
+                          <dd>{{ item.user_id }}</dd>
+                        </div>
+                      </dl>
+                    </details>
+                  </td>
+                </tr>
+              </table></template
+            >
+            <template #summary="{ row }"
+              ><span class="responsive-record-summary"
+                ><strong>{{ row.email }} · {{ statusText(row.status) }}</strong
+                ><small>{{ row.device_label }} · {{ when(row.last_seen_at) }}</small></span
+              ></template
+            >
+            <template #detail="{ row }"
+              ><dl>
+                <div>
+                  <dt>状态</dt>
+                  <dd>{{ statusText(row.status) }}</dd>
+                </div>
+                <div>
+                  <dt>设备</dt>
+                  <dd>{{ row.device_label }}</dd>
+                </div>
+                <div>
+                  <dt>最近活动</dt>
+                  <dd>{{ when(row.last_seen_at) }}</dd>
+                </div>
+                <div>
+                  <dt>到期时间</dt>
+                  <dd>{{ when(row.expires_at) }}</dd>
+                </div>
+                <div>
+                  <dt>创建时间</dt>
+                  <dd>{{ when(row.created_at) }}</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <dl>
+                  <div>
+                    <dt>会话 ID</dt>
+                    <dd>{{ row.id }}</dd>
+                  </div>
+                  <div>
+                    <dt>用户 ID</dt>
+                    <dd>{{ row.user_id }}</dd>
+                  </div>
+                </dl>
+              </details></template
+            >
+          </ResponsiveDataView>
         </section>
         <section>
           <h3>凭证生命周期</h3>
-          <table>
-            <tr v-for="a in data.credential_assets" :key="a.id">
-              <td>
-                <b>{{ a.name }}</b
-                ><small>{{ a.provider_name }} · {{ kindText(a.kind) }}</small>
-              </td>
-              <td>{{ statusText(a.status) }}</td>
-              <td>{{ a.key_version }} · {{ a.fingerprint }}</td>
-              <td>{{ when(a.expires_at) }}</td>
-            </tr>
-          </table>
+          <ResponsiveDataView
+            :rows="data.credential_assets"
+            :row-key="(item) => item.id"
+            title="凭证生命周期"
+            :detail-title="(item) => item.name"
+          >
+            <template #desktop
+              ><table>
+                <tr v-for="item in data.credential_assets" :key="item.id">
+                  <td>
+                    <b>{{ item.name }}</b
+                    ><small>{{ item.provider_name }} · {{ kindText(item.kind) }}</small>
+                  </td>
+                  <td>{{ statusText(item.status) }}</td>
+                  <td>{{ when(item.expires_at) }}</td>
+                  <td>
+                    <details>
+                      <summary>技术详情</summary>
+                      <dl>
+                        <div>
+                          <dt>凭证 ID</dt>
+                          <dd>{{ item.id }}</dd>
+                        </div>
+                        <div>
+                          <dt>来源 ID</dt>
+                          <dd>{{ item.provider_id }}</dd>
+                        </div>
+                        <div>
+                          <dt>密钥版本</dt>
+                          <dd>{{ item.key_version }}</dd>
+                        </div>
+                        <div>
+                          <dt>脱敏指纹</dt>
+                          <dd>{{ item.fingerprint }}</dd>
+                        </div>
+                      </dl>
+                    </details>
+                  </td>
+                </tr>
+              </table></template
+            >
+            <template #summary="{ row }"
+              ><span class="responsive-record-summary"
+                ><strong>{{ row.name }} · {{ statusText(row.status) }}</strong
+                ><small
+                  >{{ row.provider_name }} · {{ kindText(row.kind) }} ·
+                  {{ when(row.expires_at) }}</small
+                ></span
+              ></template
+            >
+            <template #detail="{ row }"
+              ><dl>
+                <div>
+                  <dt>来源</dt>
+                  <dd>{{ row.provider_name }}</dd>
+                </div>
+                <div>
+                  <dt>凭证类型</dt>
+                  <dd>{{ kindText(row.kind) }}</dd>
+                </div>
+                <div>
+                  <dt>状态</dt>
+                  <dd>{{ statusText(row.status) }}</dd>
+                </div>
+                <div>
+                  <dt>到期时间</dt>
+                  <dd>{{ when(row.expires_at) }}</dd>
+                </div>
+                <div>
+                  <dt>最近轮换</dt>
+                  <dd>{{ when(row.rotated_at) }}</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <dl>
+                  <div>
+                    <dt>凭证 ID</dt>
+                    <dd>{{ row.id }}</dd>
+                  </div>
+                  <div>
+                    <dt>来源 ID</dt>
+                    <dd>{{ row.provider_id }}</dd>
+                  </div>
+                  <div>
+                    <dt>密钥版本</dt>
+                    <dd>{{ row.key_version }}</dd>
+                  </div>
+                  <div>
+                    <dt>脱敏指纹</dt>
+                    <dd>{{ row.fingerprint }}</dd>
+                  </div>
+                </dl>
+              </details></template
+            >
+          </ResponsiveDataView>
           <a href="/platform-admin/credentials">进入凭证与档案</a>
         </section>
         <section>
           <h3>组织访问令牌</h3>
-          <table>
-            <tr v-for="t in data.organization_tokens" :key="t.id">
-              <td>
-                <b>{{ t.name }}</b
-                ><small>{{ t.token_prefix }}</small>
-              </td>
-              <td>{{ statusText(t.status) }}</td>
-              <td>{{ t.scopes.map(scopeText).join("、") }}</td>
-              <td>{{ when(t.expires_at) }}</td>
-            </tr>
-          </table>
+          <ResponsiveDataView
+            :rows="data.organization_tokens"
+            :row-key="(item) => item.id"
+            title="组织访问令牌"
+            :detail-title="(item) => item.name"
+          >
+            <template #desktop
+              ><table>
+                <tr v-for="item in data.organization_tokens" :key="item.id">
+                  <td>
+                    <b>{{ item.name }}</b>
+                  </td>
+                  <td>{{ statusText(item.status) }}</td>
+                  <td>{{ item.scopes.map(scopeText).join("、") }}</td>
+                  <td>{{ when(item.expires_at) }}</td>
+                  <td>
+                    <details>
+                      <summary>技术详情</summary>
+                      <dl>
+                        <div>
+                          <dt>令牌 ID</dt>
+                          <dd>{{ item.id }}</dd>
+                        </div>
+                        <div>
+                          <dt>组织 ID</dt>
+                          <dd>{{ item.organization_id }}</dd>
+                        </div>
+                        <div>
+                          <dt>令牌前缀</dt>
+                          <dd>{{ item.token_prefix }}</dd>
+                        </div>
+                      </dl>
+                    </details>
+                  </td>
+                </tr>
+              </table></template
+            >
+            <template #summary="{ row }"
+              ><span class="responsive-record-summary"
+                ><strong>{{ row.name }} · {{ statusText(row.status) }}</strong
+                ><small
+                  >{{ row.scopes.map(scopeText).join("、") }} · {{ when(row.expires_at) }}</small
+                ></span
+              ></template
+            >
+            <template #detail="{ row }"
+              ><dl>
+                <div>
+                  <dt>状态</dt>
+                  <dd>{{ statusText(row.status) }}</dd>
+                </div>
+                <div>
+                  <dt>权限</dt>
+                  <dd>{{ row.scopes.map(scopeText).join("、") }}</dd>
+                </div>
+                <div>
+                  <dt>到期时间</dt>
+                  <dd>{{ when(row.expires_at) }}</dd>
+                </div>
+                <div>
+                  <dt>最近使用</dt>
+                  <dd>{{ when(row.last_used_at) }}</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <dl>
+                  <div>
+                    <dt>令牌 ID</dt>
+                    <dd>{{ row.id }}</dd>
+                  </div>
+                  <div>
+                    <dt>组织 ID</dt>
+                    <dd>{{ row.organization_id }}</dd>
+                  </div>
+                  <div>
+                    <dt>令牌前缀</dt>
+                    <dd>{{ row.token_prefix }}</dd>
+                  </div>
+                </dl>
+              </details></template
+            >
+          </ResponsiveDataView>
         </section>
       </div>
       <footer>
-        数据更新时间 {{ when(data.observed_at)
-        }}<span v-if="requestId"> · 关联编号 {{ requestId }}</span>
+        数据更新时间 {{ when(data.observed_at) }}
+        <details v-if="requestId">
+          <summary>技术详情</summary>
+          <span>请求 ID {{ requestId }}</span>
+        </details>
       </footer></template
     >
   </section>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const state = ref<
   | "loading"
@@ -17,6 +18,24 @@ const data = ref<any>(null),
   hint = ref("");
 const time = (value?: string | null) => (value ? new Date(value).toLocaleString() : "尚无记录");
 const sha = (value?: string) => (value ? value.slice(0, 10) : "—");
+const statusText = (value?: string | null) =>
+    (
+      ({
+        healthy: "健康",
+        pending: "待观察",
+        passed: "已通过",
+        failed: "失败",
+        stopped: "已停止",
+        rolled_back: "已回滚",
+      }) as Record<string, string>
+    )[value ?? ""] ?? "尚无状态",
+  blockerText = (value: string) =>
+    (
+      ({
+        rollout_gates_incomplete: "发布观察门未完成",
+        rollout_evidence_stale: "发布观察证据已过期",
+      }) as Record<string, string>
+    )[value] ?? "发布条件未满足";
 async function load() {
   state.value = "loading";
   try {
@@ -96,7 +115,7 @@ onMounted(load);
           ><small>数据库 5.7</small>
         </article>
         <article>
-          <span>发布状态</span><strong>{{ data.latest_release?.status || "empty" }}</strong
+          <span>发布状态</span><strong>{{ statusText(data.latest_release?.status) }}</strong
           ><small>{{ time(data.latest_release?.finished_at) }}</small>
         </article>
         <article>
@@ -126,7 +145,7 @@ onMounted(load);
               <strong>{{ percent }}%</strong>
             </div>
             <b>{{
-              data.gates.find((g: any) => g.gate_kind === `canary_${percent}`)?.status || "pending"
+              statusText(data.gates.find((g: any) => g.gate_kind === `canary_${percent}`)?.status)
             }}</b
             ><small
               >观察
@@ -145,29 +164,111 @@ onMounted(load);
             <h3>门禁指标</h3>
             <span>超过任一阈值自动停止</span>
           </header>
-          <table>
-            <thead>
-              <tr>
-                <th>阶段</th>
-                <th>服务错误</th>
-                <th>95% 读取耗时</th>
-                <th>95% 写入耗时</th>
-                <th>异步延迟</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="gate in data.gates.filter((g: any) => g.gate_kind.startsWith('canary_'))"
-                :key="gate.id"
-              >
-                <td>{{ gate.traffic_percent }}%</td>
-                <td>{{ gate.error_rate_percent }}%</td>
-                <td>{{ gate.read_p95_ms }} ms</td>
-                <td>{{ gate.write_p95_ms }} ms</td>
-                <td>{{ gate.async_lag_seconds }} s</td>
-              </tr>
-            </tbody>
-          </table>
+          <ResponsiveDataView
+            :rows="data.gates.filter((gate: any) => gate.gate_kind.startsWith('canary_'))"
+            :row-key="(gate) => gate.id"
+            title="发布门禁指标"
+            :detail-title="(gate) => `${gate.traffic_percent}% 观察门`"
+          >
+            <template #desktop
+              ><table>
+                <thead>
+                  <tr>
+                    <th>阶段</th>
+                    <th>服务错误</th>
+                    <th>95% 读取耗时</th>
+                    <th>95% 写入耗时</th>
+                    <th>异步延迟</th>
+                    <th>技术信息</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="gate in data.gates.filter((g: any) => g.gate_kind.startsWith('canary_'))"
+                    :key="gate.id"
+                  >
+                    <td>{{ gate.traffic_percent }}%</td>
+                    <td>{{ gate.error_rate_percent }}%</td>
+                    <td>{{ gate.read_p95_ms }} ms</td>
+                    <td>{{ gate.write_p95_ms }} ms</td>
+                    <td>{{ gate.async_lag_seconds }} s</td>
+                    <td>
+                      <details>
+                        <summary>技术详情</summary>
+                        <dl>
+                          <div>
+                            <dt>门禁 ID</dt>
+                            <dd>{{ gate.id }}</dd>
+                          </div>
+                          <div>
+                            <dt>门禁类型</dt>
+                            <dd>{{ gate.gate_kind }}</dd>
+                          </div>
+                          <div>
+                            <dt>发布 ID</dt>
+                            <dd>{{ gate.release_id }}</dd>
+                          </div>
+                        </dl>
+                      </details>
+                    </td>
+                  </tr>
+                </tbody>
+              </table></template
+            >
+            <template #summary="{ row }"
+              ><span class="responsive-record-summary"
+                ><strong>{{ row.traffic_percent }}% · {{ statusText(row.status) }}</strong
+                ><small
+                  >错误 {{ row.error_rate_percent }}% · 读取 {{ row.read_p95_ms }} ms</small
+                ></span
+              ></template
+            >
+            <template #detail="{ row }"
+              ><dl>
+                <div>
+                  <dt>观察状态</dt>
+                  <dd>{{ statusText(row.status) }}</dd>
+                </div>
+                <div>
+                  <dt>观察时长 / 样本</dt>
+                  <dd>{{ row.observe_seconds }} 秒 / {{ row.sample_count }} 个</dd>
+                </div>
+                <div>
+                  <dt>服务错误率</dt>
+                  <dd>{{ row.error_rate_percent }}%</dd>
+                </div>
+                <div>
+                  <dt>95% 读取耗时</dt>
+                  <dd>{{ row.read_p95_ms }} ms</dd>
+                </div>
+                <div>
+                  <dt>95% 写入耗时</dt>
+                  <dd>{{ row.write_p95_ms }} ms</dd>
+                </div>
+                <div>
+                  <dt>异步延迟</dt>
+                  <dd>{{ row.async_lag_seconds }} 秒</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <dl>
+                  <div>
+                    <dt>门禁 ID</dt>
+                    <dd>{{ row.id }}</dd>
+                  </div>
+                  <div>
+                    <dt>门禁代码</dt>
+                    <dd>{{ row.gate_kind }}</dd>
+                  </div>
+                  <div>
+                    <dt>发布 ID</dt>
+                    <dd>{{ row.release_id }}</dd>
+                  </div>
+                </dl>
+              </details></template
+            >
+          </ResponsiveDataView>
         </section>
         <section class="panel threshold">
           <header>
@@ -197,13 +298,20 @@ onMounted(load);
       <section v-if="data.blockers.length" class="blockers">
         <h3>阻断项</h3>
         <article v-for="item in data.blockers" :key="item.code">
-          <code>{{ item.code }}</code>
+          <strong>{{ blockerText(item.code) }}</strong>
           <p>{{ item.action_hint }}</p>
+          <details>
+            <summary>技术详情</summary>
+            <code>{{ item.code }}</code>
+          </details>
         </article>
       </section>
       <footer>
-        观测 {{ time(data.observed_at) }} · request_id {{ requestId || "—" }} ·
-        发布和回滚只能由宝塔任务执行
+        观测 {{ time(data.observed_at) }} · 发布和回滚只能由宝塔任务执行
+        <details>
+          <summary>技术详情</summary>
+          <span>请求 ID {{ requestId || "—" }}</span>
+        </details>
       </footer>
     </template>
   </section>
@@ -429,6 +537,7 @@ dd {
   grid-template-columns: 210px 1fr;
   padding: 13px 0;
 }
+.blockers strong,
 .blockers code {
   color: var(--amber);
 }
@@ -440,6 +549,20 @@ footer {
   color: var(--muted);
   font-size: 12px;
   text-align: right;
+}
+.blockers details summary,
+footer details summary {
+  min-height: var(--so-touch-target);
+  display: inline-flex;
+  align-items: center;
+  color: var(--so-primary);
+  cursor: pointer;
+}
+.blockers details {
+  grid-column: 2;
+}
+footer details span {
+  overflow-wrap: anywhere;
 }
 @media (max-width: 760px) {
   .hero,
@@ -459,6 +582,9 @@ footer {
   }
   .blockers article {
     grid-template-columns: 1fr;
+  }
+  .blockers details {
+    grid-column: auto;
   }
   .hero {
     padding: 21px;
