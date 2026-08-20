@@ -41,8 +41,7 @@ test("M06-04.A03/A05/A09/A11/A16 sanitized audited read", async () => {
     assert.doesNotMatch(repo, new RegExp(`SELECT[^;]+${secret}`, "i"));
 });
 test("M06-04.A06/A07/A08/A10/A13/A17 contracts", async () => {
-  const all = (
-    await Promise.all(
+  const sources = await Promise.all(
       [
         "docs/openapi.yaml",
         "apps/web/src/components/SecurityOperationsCenter.vue",
@@ -51,9 +50,11 @@ test("M06-04.A06/A07/A08/A10/A13/A17 contracts", async () => {
         "docs/feature-map.json",
         "docs/architecture/m06-04-security-operations.md",
         "docs/runbooks/m06-04-security-operations.md",
+        "apps/web/src/route-catalog.ts",
+        "packages/authorization/src/index.ts",
       ].map((p) => readFile(p, "utf8")),
-    )
-  ).join("\n");
+    ),
+    all = sources.join("\n");
   for (const x of [
     "/platform/security/operations",
     "loading",
@@ -69,4 +70,8 @@ test("M06-04.A06/A07/A08/A10/A13/A17 contracts", async () => {
   ])
     assert.match(all, new RegExp(x.replaceAll("/", "\\/")));
   assert.match(all, /@media\s*\(\s*max-width:\s*800px\s*\)/);
+  for (const copy of ["安全中心二级导航", "访问与凭证", "平台审计", "查看安全运营事实"])
+    assert.match(sources[1], new RegExp(copy));
+  assert.match(sources[7], /platform-overview[\s\S]*platform:operate[\s\S]*platform:superadmin/);
+  assert.match(sources[8], /landing_platform_security/);
 });

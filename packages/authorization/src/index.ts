@@ -1,36 +1,544 @@
-import { randomUUID } from 'node:crypto';
-export type AuthorizationSurface='api'|'worker'|'export'|'file'|'event'|'sse';export type DataScopeType='own'|'team'|'workspace'|'organization'|'platform';export type RoleCategory='organization'|'platform';
-export const CAPABILITIES=['task:read','task:create','task:update','task:assign','trend:read','trend:manage','opportunity:read','opportunity:decide','opportunity:approve','competitor:read','competitor:manage','sourcing:read','supplier_quote:manage','cost:confirm','notification:read','organization:manage','membership:read','membership:manage','workspace:manage','team:manage','role:read','role:manage','organization_token:manage','audit:read','report:read','provider:configure','collection:replay','session:manage','platform_token:manage','key_rotation:manage','platform:operate','platform:secure','platform:superadmin'] as const;
-export type Capability=typeof CAPABILITIES[number];
-export type NavigationShell='member'|'organization_admin'|'platform_admin';
-export interface RoleDefinition{code:string;name:string;category:RoleCategory;description:string;capabilities:Capability[];}
-const member:Capability[]=['task:read','task:create','task:update','trend:read','trend:manage','opportunity:read','opportunity:decide','competitor:read','competitor:manage','sourcing:read','notification:read'];
-export const BUILTIN_ROLES:RoleDefinition[]=[
- {code:'member',name:'普通成员',category:'organization',description:'处理被授权资源、创建任务并作出决策。',capabilities:member},
- {code:'selection_manager',name:'选品经理',category:'organization',description:'分配任务、审核机会并管理团队视图。',capabilities:[...member,'task:assign','opportunity:approve','team:manage','report:read']},
- {code:'procurement_member',name:'采购成员',category:'organization',description:'维护报价、比较供应商并提交成本确认。',capabilities:['task:read','task:update','opportunity:read','sourcing:read','supplier_quote:manage','cost:confirm','notification:read']},
- {code:'organization_admin',name:'组织管理员',category:'organization',description:'管理当前组织，不可访问平台全局数据。',capabilities:[...CAPABILITIES.filter(item=>!item.startsWith('platform:')&&!['session:manage','platform_token:manage','key_rotation:manage','collection:replay'].includes(item))]},
- {code:'platform_operations_admin',name:'平台运营管理员',category:'platform',description:'管理平台运营，不可读取密钥明文。',capabilities:['platform:operate','task:read','trend:read','opportunity:read','competitor:read','sourcing:read','provider:configure','collection:replay','report:read']},
- {code:'platform_security_admin',name:'平台安全管理员',category:'platform',description:'安全治理，对业务数据只读。',capabilities:['platform:secure','task:read','trend:read','opportunity:read','competitor:read','sourcing:read','session:manage','platform_token:manage','audit:read','key_rotation:manage']},
- {code:'platform_super_admin',name:'平台超级管理员',category:'platform',description:'初始化、授权和紧急处置，全部操作审计。',capabilities:[...CAPABILITIES]},
- {code:'auditor',name:'审计员',category:'organization',description:'只读业务、报告与授权审计，不可写入。',capabilities:['task:read','trend:read','opportunity:read','competitor:read','sourcing:read','audit:read','report:read','role:read','membership:read']}
-];
-export interface ScopeGrant{scope:DataScopeType;workspace_id?:string|null;team_id?:string|null;}
-export interface AuthorizationSubject{actor_id:string;membership_id:string|null;membership_active:boolean;role_codes:string[];capabilities:Capability[];scopes:ScopeGrant[];platform_role_codes:string[];platform_capabilities:Capability[];}
-export interface AuthorizationCheck{actorId:string;organizationId?:string;workspaceId?:string;teamId?:string;resourceOwnerId?:string;resourceType?:string;resourceId?:string;capability:Capability;surface:AuthorizationSurface;requestId:string;traceId:string;}
-export interface ResourceGrantAuthorizationInput{actorId:string;membershipId:string;organizationId:string;workspaceId?:string;resourceType:string;resourceId:string;capability:Capability;surface:AuthorizationSurface;requestId:string;traceId:string;}
-export interface ResourceGrantAuthorizer{authorizeResourceGrant(input:ResourceGrantAuthorizationInput):Promise<{allowed:boolean;reason:string;grantId?:string}>;}
-export interface AuthorizationDecision{allowed:boolean;reason:'allowed_platform'|'allowed_scope'|'allowed_resource_grant'|'membership_inactive'|'capability_missing'|'scope_mismatch';subject:AuthorizationSubject;}
-export interface AuthorizationDecisionEvent{id:string;actor_id:string;organization_id:string|null;workspace_id:string|null;team_id:string|null;capability:Capability;surface:AuthorizationSurface;outcome:'allowed'|'denied';reason:string;request_id:string;trace_id:string;occurred_at:Date;schema_version:1;}
-export interface AuthorizationRepository{loadSubject(actorId:string,organizationId?:string):Promise<AuthorizationSubject>;appendDecision(event:AuthorizationDecisionEvent):Promise<void>;listRoles(category?:RoleCategory):Promise<RoleDefinition[]>;findSessionContext(sessionId:string,userId:string):Promise<{organization_id:string;workspace_id:string;organization_name?:string;workspace_name?:string}|null>;}
-export class AuthorizationError extends Error{constructor(readonly code:string,readonly statusCode:number,readonly actionHint:string){super(code);this.name='AuthorizationError';}}
-export class AuthorizationService{constructor(private readonly repository:AuthorizationRepository,private readonly now:()=>Date=()=>new Date(),private readonly resourceGrants?:ResourceGrantAuthorizer){}
- async authorize(check:AuthorizationCheck){const subject=await this.repository.loadSubject(check.actorId,check.organizationId);let reason:AuthorizationDecision['reason']='capability_missing',allowed=false;if(subject.platform_capabilities.includes(check.capability)&&subject.scopes.some(scope=>scope.scope==='platform')){allowed=true;reason='allowed_platform';}else if(!subject.membership_active){reason='membership_inactive';}else if(subject.capabilities.includes(check.capability)&&subject.scopes.some(scope=>this.scopeMatches(scope,check))){allowed=true;reason='allowed_scope';}else{reason=subject.capabilities.includes(check.capability)?'scope_mismatch':'capability_missing';if(this.resourceGrants&&subject.membership_id&&check.organizationId&&check.resourceType&&check.resourceId){const grant=await this.resourceGrants.authorizeResourceGrant({actorId:check.actorId,membershipId:subject.membership_id,organizationId:check.organizationId,...(check.workspaceId?{workspaceId:check.workspaceId}:{}),resourceType:check.resourceType,resourceId:check.resourceId,capability:check.capability,surface:check.surface,requestId:check.requestId,traceId:check.traceId});if(grant.allowed){allowed=true;reason='allowed_resource_grant';}}}await this.repository.appendDecision({id:randomUUID(),actor_id:check.actorId,organization_id:check.organizationId??null,workspace_id:check.workspaceId??null,team_id:check.teamId??null,capability:check.capability,surface:check.surface,outcome:allowed?'allowed':'denied',reason,request_id:check.requestId,trace_id:check.traceId,occurred_at:this.now(),schema_version:1});if(!allowed)throw new AuthorizationError('permission_denied',403,reason==='membership_inactive'?'重新选择仍有成员资格的组织。':'联系组织管理员检查角色、数据范围或指定资源授权。');return{allowed,reason,subject} as AuthorizationDecision;}
- async resolveSession(actorId:string,sessionId:string){const context=await this.repository.findSessionContext(sessionId,actorId);if(!context)throw new AuthorizationError('tenancy_context_required',409,'先选择组织和工作区。');const subject=await this.repository.loadSubject(actorId,context.organization_id);if(!subject.membership_active)throw new AuthorizationError('permission_denied',403,'重新选择仍有成员资格的组织。');return{context,subject};}
- async describeSession(actorId:string,sessionId:string){const{context,subject}=await this.resolveSession(actorId,sessionId);return{organization_id:context.organization_id,workspace_id:context.workspace_id,roles:subject.role_codes,capabilities:subject.capabilities,data_scopes:subject.scopes,platform_roles:subject.platform_role_codes,platform_capabilities:subject.platform_capabilities};}
- async resolveLanding(actorId:string,sessionId:string,ids:{requestId:string;traceId:string}){const context=await this.repository.findSessionContext(sessionId,actorId);const subject=await this.repository.loadSubject(actorId,context?.organization_id);const landing=subject.platform_role_codes.length?{shell:'platform_admin' as const,route:'/platform-admin' as const,reason:'landing_platform_admin',capability:(subject.platform_capabilities.includes('platform:superadmin')?'platform:superadmin':subject.platform_capabilities.includes('platform:secure')?'platform:secure':'platform:operate') as Capability}:context&&subject.membership_active&&subject.role_codes.includes('organization_admin')?{shell:'organization_admin' as const,route:'/org-admin' as const,reason:'landing_organization_admin',capability:'organization:manage' as Capability}:context&&subject.membership_active?{shell:'member' as const,route:'/home' as const,reason:'landing_member',capability:'task:read' as Capability}:{shell:'select_context' as const,route:'/select-context' as const,reason:'landing_context_required',capability:'task:read' as Capability};await this.repository.appendDecision({id:randomUUID(),actor_id:actorId,organization_id:context?.organization_id??null,workspace_id:context?.workspace_id??null,team_id:null,capability:landing.capability,surface:'api',outcome:landing.shell==='select_context'?'denied':'allowed',reason:landing.reason,request_id:ids.requestId,trace_id:ids.traceId,occurred_at:this.now(),schema_version:1});return{shell:landing.shell,route:landing.route,reason:landing.reason};}
- async guardNavigationShell(actorId:string,sessionId:string,shell:NavigationShell,ids:{requestId:string;traceId:string}){const context=await this.repository.findSessionContext(sessionId,actorId);const subject=await this.repository.loadSubject(actorId,context?.organization_id);const capability:Capability=shell==='organization_admin'?'organization:manage':shell==='platform_admin'?(subject.platform_capabilities.includes('platform:superadmin')?'platform:superadmin':subject.platform_capabilities.includes('platform:secure')?'platform:secure':'platform:operate'):'task:read';const allowed=shell==='member'?Boolean(context&&subject.membership_active):shell==='organization_admin'?Boolean(context&&subject.membership_active&&subject.role_codes.includes('organization_admin')):subject.platform_role_codes.length>0;const reason=allowed?`navigation_${shell}_allowed`:!context&&shell!=='platform_admin'?'tenancy_context_required':`navigation_${shell}_denied`;await this.repository.appendDecision({id:randomUUID(),actor_id:actorId,organization_id:context?.organization_id??null,workspace_id:context?.workspace_id??null,team_id:null,capability,surface:'api',outcome:allowed?'allowed':'denied',reason,request_id:ids.requestId,trace_id:ids.traceId,occurred_at:this.now(),schema_version:1});if(!allowed){if(!context&&shell!=='platform_admin')throw new AuthorizationError('tenancy_context_required',409,'先选择组织和工作区。');throw new AuthorizationError('navigation_shell_forbidden',403,'返回有权访问的工作台，或联系管理员检查角色。');}return{shell,organization_id:context?.organization_id??null,workspace_id:context?.workspace_id??null,organization_name:context?.organization_name??null,workspace_name:context?.workspace_name??null,roles:subject.role_codes,capabilities:subject.capabilities,platform_roles:subject.platform_role_codes,platform_capabilities:subject.platform_capabilities,guard_reason:reason};}
- listRoles(category?:RoleCategory){return this.repository.listRoles(category);}
- private scopeMatches(scope:ScopeGrant,check:AuthorizationCheck){if(scope.scope==='organization')return Boolean(check.organizationId);if(scope.scope==='workspace')return Boolean(check.workspaceId&&scope.workspace_id===check.workspaceId);if(scope.scope==='team')return Boolean(check.teamId&&scope.team_id===check.teamId);if(scope.scope==='own')return Boolean(check.resourceOwnerId&&check.resourceOwnerId===check.actorId);return false;}
+import { randomUUID } from "node:crypto";
+export type AuthorizationSurface = "api" | "worker" | "export" | "file" | "event" | "sse";
+export type DataScopeType = "own" | "team" | "workspace" | "organization" | "platform";
+export type RoleCategory = "organization" | "platform";
+export const CAPABILITIES = [
+  "task:read",
+  "task:create",
+  "task:update",
+  "task:assign",
+  "trend:read",
+  "trend:manage",
+  "opportunity:read",
+  "opportunity:decide",
+  "opportunity:approve",
+  "competitor:read",
+  "competitor:manage",
+  "sourcing:read",
+  "supplier_quote:manage",
+  "cost:confirm",
+  "notification:read",
+  "organization:manage",
+  "membership:read",
+  "membership:manage",
+  "workspace:manage",
+  "team:manage",
+  "role:read",
+  "role:manage",
+  "organization_token:manage",
+  "audit:read",
+  "report:read",
+  "provider:configure",
+  "collection:replay",
+  "session:manage",
+  "platform_token:manage",
+  "key_rotation:manage",
+  "platform:operate",
+  "platform:secure",
+  "platform:superadmin",
+] as const;
+export type Capability = (typeof CAPABILITIES)[number];
+export type NavigationShell = "member" | "organization_admin" | "platform_admin";
+export interface RoleDefinition {
+  code: string;
+  name: string;
+  category: RoleCategory;
+  description: string;
+  capabilities: Capability[];
 }
-export class InMemoryAuthorizationRepository implements AuthorizationRepository{subjects=new Map<string,AuthorizationSubject>();contexts=new Map<string,{user_id:string;organization_id:string;workspace_id:string}>();decisions:AuthorizationDecisionEvent[]=[];roles=BUILTIN_ROLES;key(actor:string,org?:string){return`${actor}:${org??'platform'}`;}async loadSubject(actor:string,org?:string){return this.subjects.get(this.key(actor,org))??{actor_id:actor,membership_id:null,membership_active:false,role_codes:[],capabilities:[],scopes:[],platform_role_codes:[],platform_capabilities:[]};}async appendDecision(e:AuthorizationDecisionEvent){this.decisions.push(e);}async listRoles(category?:RoleCategory){return this.roles.filter(r=>!category||r.category===category);}async findSessionContext(session:string,user:string){const value=this.contexts.get(session);return value&&value.user_id===user?value:null;}}
+const member: Capability[] = [
+  "task:read",
+  "task:create",
+  "task:update",
+  "trend:read",
+  "trend:manage",
+  "opportunity:read",
+  "opportunity:decide",
+  "competitor:read",
+  "competitor:manage",
+  "sourcing:read",
+  "notification:read",
+];
+export const BUILTIN_ROLES: RoleDefinition[] = [
+  {
+    code: "member",
+    name: "普通成员",
+    category: "organization",
+    description: "处理被授权资源、创建任务并作出决策。",
+    capabilities: member,
+  },
+  {
+    code: "selection_manager",
+    name: "选品经理",
+    category: "organization",
+    description: "分配任务、审核机会并管理团队视图。",
+    capabilities: [...member, "task:assign", "opportunity:approve", "team:manage", "report:read"],
+  },
+  {
+    code: "procurement_member",
+    name: "采购成员",
+    category: "organization",
+    description: "维护报价、比较供应商并提交成本确认。",
+    capabilities: [
+      "task:read",
+      "task:update",
+      "opportunity:read",
+      "sourcing:read",
+      "supplier_quote:manage",
+      "cost:confirm",
+      "notification:read",
+    ],
+  },
+  {
+    code: "organization_admin",
+    name: "组织管理员",
+    category: "organization",
+    description: "管理当前组织，不可访问平台全局数据。",
+    capabilities: [
+      ...CAPABILITIES.filter(
+        (item) =>
+          !item.startsWith("platform:") &&
+          ![
+            "session:manage",
+            "platform_token:manage",
+            "key_rotation:manage",
+            "collection:replay",
+          ].includes(item),
+      ),
+    ],
+  },
+  {
+    code: "platform_operations_admin",
+    name: "平台运营管理员",
+    category: "platform",
+    description: "管理平台运营，不可读取密钥明文。",
+    capabilities: [
+      "platform:operate",
+      "task:read",
+      "trend:read",
+      "opportunity:read",
+      "competitor:read",
+      "sourcing:read",
+      "provider:configure",
+      "collection:replay",
+      "report:read",
+    ],
+  },
+  {
+    code: "platform_security_admin",
+    name: "平台安全管理员",
+    category: "platform",
+    description: "安全治理，对业务数据只读。",
+    capabilities: [
+      "platform:secure",
+      "task:read",
+      "trend:read",
+      "opportunity:read",
+      "competitor:read",
+      "sourcing:read",
+      "session:manage",
+      "platform_token:manage",
+      "audit:read",
+      "key_rotation:manage",
+    ],
+  },
+  {
+    code: "platform_super_admin",
+    name: "平台超级管理员",
+    category: "platform",
+    description: "初始化、授权和紧急处置，全部操作审计。",
+    capabilities: [...CAPABILITIES],
+  },
+  {
+    code: "auditor",
+    name: "审计员",
+    category: "organization",
+    description: "只读业务、报告与授权审计，不可写入。",
+    capabilities: [
+      "task:read",
+      "trend:read",
+      "opportunity:read",
+      "competitor:read",
+      "sourcing:read",
+      "audit:read",
+      "report:read",
+      "role:read",
+      "membership:read",
+    ],
+  },
+];
+export interface ScopeGrant {
+  scope: DataScopeType;
+  workspace_id?: string | null;
+  team_id?: string | null;
+}
+export interface AuthorizationSubject {
+  actor_id: string;
+  membership_id: string | null;
+  membership_active: boolean;
+  role_codes: string[];
+  capabilities: Capability[];
+  scopes: ScopeGrant[];
+  platform_role_codes: string[];
+  platform_capabilities: Capability[];
+}
+export interface AuthorizationCheck {
+  actorId: string;
+  organizationId?: string;
+  workspaceId?: string;
+  teamId?: string;
+  resourceOwnerId?: string;
+  resourceType?: string;
+  resourceId?: string;
+  capability: Capability;
+  surface: AuthorizationSurface;
+  requestId: string;
+  traceId: string;
+}
+export interface ResourceGrantAuthorizationInput {
+  actorId: string;
+  membershipId: string;
+  organizationId: string;
+  workspaceId?: string;
+  resourceType: string;
+  resourceId: string;
+  capability: Capability;
+  surface: AuthorizationSurface;
+  requestId: string;
+  traceId: string;
+}
+export interface ResourceGrantAuthorizer {
+  authorizeResourceGrant(
+    input: ResourceGrantAuthorizationInput,
+  ): Promise<{ allowed: boolean; reason: string; grantId?: string }>;
+}
+export interface AuthorizationDecision {
+  allowed: boolean;
+  reason:
+    | "allowed_platform"
+    | "allowed_scope"
+    | "allowed_resource_grant"
+    | "membership_inactive"
+    | "capability_missing"
+    | "scope_mismatch";
+  subject: AuthorizationSubject;
+}
+export interface AuthorizationDecisionEvent {
+  id: string;
+  actor_id: string;
+  organization_id: string | null;
+  workspace_id: string | null;
+  team_id: string | null;
+  capability: Capability;
+  surface: AuthorizationSurface;
+  outcome: "allowed" | "denied";
+  reason: string;
+  request_id: string;
+  trace_id: string;
+  occurred_at: Date;
+  schema_version: 1;
+}
+export interface AuthorizationRepository {
+  loadSubject(actorId: string, organizationId?: string): Promise<AuthorizationSubject>;
+  appendDecision(event: AuthorizationDecisionEvent): Promise<void>;
+  listRoles(category?: RoleCategory): Promise<RoleDefinition[]>;
+  findSessionContext(
+    sessionId: string,
+    userId: string,
+  ): Promise<{
+    organization_id: string;
+    workspace_id: string;
+    organization_name?: string;
+    workspace_name?: string;
+  } | null>;
+}
+export class AuthorizationError extends Error {
+  constructor(
+    readonly code: string,
+    readonly statusCode: number,
+    readonly actionHint: string,
+  ) {
+    super(code);
+    this.name = "AuthorizationError";
+  }
+}
+export class AuthorizationService {
+  constructor(
+    private readonly repository: AuthorizationRepository,
+    private readonly now: () => Date = () => new Date(),
+    private readonly resourceGrants?: ResourceGrantAuthorizer,
+  ) {}
+  async authorize(check: AuthorizationCheck) {
+    const subject = await this.repository.loadSubject(check.actorId, check.organizationId);
+    let reason: AuthorizationDecision["reason"] = "capability_missing",
+      allowed = false;
+    if (
+      subject.platform_capabilities.includes(check.capability) &&
+      subject.scopes.some((scope) => scope.scope === "platform")
+    ) {
+      allowed = true;
+      reason = "allowed_platform";
+    } else if (!subject.membership_active) {
+      reason = "membership_inactive";
+    } else if (
+      subject.capabilities.includes(check.capability) &&
+      subject.scopes.some((scope) => this.scopeMatches(scope, check))
+    ) {
+      allowed = true;
+      reason = "allowed_scope";
+    } else {
+      reason = subject.capabilities.includes(check.capability)
+        ? "scope_mismatch"
+        : "capability_missing";
+      if (
+        this.resourceGrants &&
+        subject.membership_id &&
+        check.organizationId &&
+        check.resourceType &&
+        check.resourceId
+      ) {
+        const grant = await this.resourceGrants.authorizeResourceGrant({
+          actorId: check.actorId,
+          membershipId: subject.membership_id,
+          organizationId: check.organizationId,
+          ...(check.workspaceId ? { workspaceId: check.workspaceId } : {}),
+          resourceType: check.resourceType,
+          resourceId: check.resourceId,
+          capability: check.capability,
+          surface: check.surface,
+          requestId: check.requestId,
+          traceId: check.traceId,
+        });
+        if (grant.allowed) {
+          allowed = true;
+          reason = "allowed_resource_grant";
+        }
+      }
+    }
+    await this.repository.appendDecision({
+      id: randomUUID(),
+      actor_id: check.actorId,
+      organization_id: check.organizationId ?? null,
+      workspace_id: check.workspaceId ?? null,
+      team_id: check.teamId ?? null,
+      capability: check.capability,
+      surface: check.surface,
+      outcome: allowed ? "allowed" : "denied",
+      reason,
+      request_id: check.requestId,
+      trace_id: check.traceId,
+      occurred_at: this.now(),
+      schema_version: 1,
+    });
+    if (!allowed)
+      throw new AuthorizationError(
+        "permission_denied",
+        403,
+        reason === "membership_inactive"
+          ? "重新选择仍有成员资格的组织。"
+          : "联系组织管理员检查角色、数据范围或指定资源授权。",
+      );
+    return { allowed, reason, subject } as AuthorizationDecision;
+  }
+  async resolveSession(actorId: string, sessionId: string) {
+    const context = await this.repository.findSessionContext(sessionId, actorId);
+    if (!context)
+      throw new AuthorizationError("tenancy_context_required", 409, "先选择组织和工作区。");
+    const subject = await this.repository.loadSubject(actorId, context.organization_id);
+    if (!subject.membership_active)
+      throw new AuthorizationError("permission_denied", 403, "重新选择仍有成员资格的组织。");
+    return { context, subject };
+  }
+  async describeSession(actorId: string, sessionId: string) {
+    const { context, subject } = await this.resolveSession(actorId, sessionId);
+    return {
+      organization_id: context.organization_id,
+      workspace_id: context.workspace_id,
+      roles: subject.role_codes,
+      capabilities: subject.capabilities,
+      data_scopes: subject.scopes,
+      platform_roles: subject.platform_role_codes,
+      platform_capabilities: subject.platform_capabilities,
+    };
+  }
+  async resolveLanding(
+    actorId: string,
+    sessionId: string,
+    ids: { requestId: string; traceId: string },
+  ) {
+    const context = await this.repository.findSessionContext(sessionId, actorId);
+    const subject = await this.repository.loadSubject(actorId, context?.organization_id),
+      isSuper = subject.platform_capabilities.includes("platform:superadmin"),
+      canOperate = subject.platform_capabilities.includes("platform:operate"),
+      canSecure = subject.platform_capabilities.includes("platform:secure");
+    const landing = subject.platform_role_codes.length
+      ? {
+          shell: "platform_admin" as const,
+          route: (isSuper || canOperate
+            ? "/platform-admin"
+            : canSecure
+              ? "/platform-admin/security"
+              : "/platform-admin") as "/platform-admin" | "/platform-admin/security",
+          reason:
+            canSecure && !isSuper && !canOperate
+              ? "landing_platform_security"
+              : "landing_platform_admin",
+          capability: (isSuper
+            ? "platform:superadmin"
+            : canOperate
+              ? "platform:operate"
+              : "platform:secure") as Capability,
+        }
+      : context && subject.membership_active && subject.role_codes.includes("organization_admin")
+        ? {
+            shell: "organization_admin" as const,
+            route: "/org-admin" as const,
+            reason: "landing_organization_admin",
+            capability: "organization:manage" as Capability,
+          }
+        : context && subject.membership_active
+          ? {
+              shell: "member" as const,
+              route: "/home" as const,
+              reason: "landing_member",
+              capability: "task:read" as Capability,
+            }
+          : {
+              shell: "select_context" as const,
+              route: "/select-context" as const,
+              reason: "landing_context_required",
+              capability: "task:read" as Capability,
+            };
+    await this.repository.appendDecision({
+      id: randomUUID(),
+      actor_id: actorId,
+      organization_id: context?.organization_id ?? null,
+      workspace_id: context?.workspace_id ?? null,
+      team_id: null,
+      capability: landing.capability,
+      surface: "api",
+      outcome: landing.shell === "select_context" ? "denied" : "allowed",
+      reason: landing.reason,
+      request_id: ids.requestId,
+      trace_id: ids.traceId,
+      occurred_at: this.now(),
+      schema_version: 1,
+    });
+    return { shell: landing.shell, route: landing.route, reason: landing.reason };
+  }
+  async guardNavigationShell(
+    actorId: string,
+    sessionId: string,
+    shell: NavigationShell,
+    ids: { requestId: string; traceId: string },
+  ) {
+    const context = await this.repository.findSessionContext(sessionId, actorId);
+    const subject = await this.repository.loadSubject(actorId, context?.organization_id);
+    const capability: Capability =
+      shell === "organization_admin"
+        ? "organization:manage"
+        : shell === "platform_admin"
+          ? subject.platform_capabilities.includes("platform:superadmin")
+            ? "platform:superadmin"
+            : subject.platform_capabilities.includes("platform:secure")
+              ? "platform:secure"
+              : "platform:operate"
+          : "task:read";
+    const allowed =
+      shell === "member"
+        ? Boolean(context && subject.membership_active)
+        : shell === "organization_admin"
+          ? Boolean(
+              context &&
+              subject.membership_active &&
+              subject.role_codes.includes("organization_admin"),
+            )
+          : subject.platform_role_codes.length > 0;
+    const reason = allowed
+      ? `navigation_${shell}_allowed`
+      : !context && shell !== "platform_admin"
+        ? "tenancy_context_required"
+        : `navigation_${shell}_denied`;
+    await this.repository.appendDecision({
+      id: randomUUID(),
+      actor_id: actorId,
+      organization_id: context?.organization_id ?? null,
+      workspace_id: context?.workspace_id ?? null,
+      team_id: null,
+      capability,
+      surface: "api",
+      outcome: allowed ? "allowed" : "denied",
+      reason,
+      request_id: ids.requestId,
+      trace_id: ids.traceId,
+      occurred_at: this.now(),
+      schema_version: 1,
+    });
+    if (!allowed) {
+      if (!context && shell !== "platform_admin")
+        throw new AuthorizationError("tenancy_context_required", 409, "先选择组织和工作区。");
+      throw new AuthorizationError(
+        "navigation_shell_forbidden",
+        403,
+        "返回有权访问的工作台，或联系管理员检查角色。",
+      );
+    }
+    return {
+      shell,
+      organization_id: context?.organization_id ?? null,
+      workspace_id: context?.workspace_id ?? null,
+      organization_name: context?.organization_name ?? null,
+      workspace_name: context?.workspace_name ?? null,
+      roles: subject.role_codes,
+      capabilities: subject.capabilities,
+      platform_roles: subject.platform_role_codes,
+      platform_capabilities: subject.platform_capabilities,
+      guard_reason: reason,
+    };
+  }
+  listRoles(category?: RoleCategory) {
+    return this.repository.listRoles(category);
+  }
+  private scopeMatches(scope: ScopeGrant, check: AuthorizationCheck) {
+    if (scope.scope === "organization") return Boolean(check.organizationId);
+    if (scope.scope === "workspace")
+      return Boolean(check.workspaceId && scope.workspace_id === check.workspaceId);
+    if (scope.scope === "team") return Boolean(check.teamId && scope.team_id === check.teamId);
+    if (scope.scope === "own")
+      return Boolean(check.resourceOwnerId && check.resourceOwnerId === check.actorId);
+    return false;
+  }
+}
+export class InMemoryAuthorizationRepository implements AuthorizationRepository {
+  subjects = new Map<string, AuthorizationSubject>();
+  contexts = new Map<string, { user_id: string; organization_id: string; workspace_id: string }>();
+  decisions: AuthorizationDecisionEvent[] = [];
+  roles = BUILTIN_ROLES;
+  key(actor: string, org?: string) {
+    return `${actor}:${org ?? "platform"}`;
+  }
+  async loadSubject(actor: string, org?: string) {
+    return (
+      this.subjects.get(this.key(actor, org)) ?? {
+        actor_id: actor,
+        membership_id: null,
+        membership_active: false,
+        role_codes: [],
+        capabilities: [],
+        scopes: [],
+        platform_role_codes: [],
+        platform_capabilities: [],
+      }
+    );
+  }
+  async appendDecision(e: AuthorizationDecisionEvent) {
+    this.decisions.push(e);
+  }
+  async listRoles(category?: RoleCategory) {
+    return this.roles.filter((r) => !category || r.category === category);
+  }
+  async findSessionContext(session: string, user: string) {
+    const value = this.contexts.get(session);
+    return value && value.user_id === user ? value : null;
+  }
+}

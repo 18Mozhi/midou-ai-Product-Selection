@@ -64,10 +64,22 @@ const env = (data: any) => ({ data, request_id: "m06-04-e2e", trace_id: "m06-04-
         updated_at: "2026-08-08T00:00:00Z",
       },
     ],
-    audit_events: [],
+    audit_events: [
+      {
+        id: "a1",
+        actor_id: "00000000-0000-4000-8000-000000000642",
+        action: "platform.security.operations.read",
+        resource_type: "security_operations",
+        resource_id: null,
+        outcome: "succeeded",
+        request_id: "audit-request",
+        trace_id: "audit-trace",
+        occurred_at: "2026-08-08T12:05:00Z",
+      },
+    ],
     links: {
       credential_assets: "/platform-admin/credentials",
-      audit_search: "/?view=audit-security",
+      audit_search: "/platform-admin/security?view=audit",
     },
     observed_at: "2026-08-08T12:00:00Z",
   };
@@ -94,7 +106,10 @@ test("M06-04.A07/A08/A15 security operations visual sanitized", async ({ page })
   );
   await page.goto("/platform-admin/security");
   await expect(page.getByRole("heading", { name: "安全与密钥运营", level: 2 })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "安全中心二级导航" })).toBeVisible();
   await expect(page.getByText("0123456789abcdef", { exact: true })).not.toBeVisible();
+  await page.getByRole("link", { name: "访问与凭证" }).click();
+  await expect(page).toHaveURL(/view=credentials/);
   if ((page.viewportSize()?.width ?? 0) <= 760) {
     await page.getByRole("button", { name: /生产读取凭证/ }).click();
     const credentialDialog = page.getByRole("dialog", { name: "生产读取凭证" });
@@ -116,6 +131,15 @@ test("M06-04.A07/A08/A15 security operations visual sanitized", async ({ page })
     await expect(tokenSection.getByText("sco_org_public", { exact: true })).toBeVisible();
     await tokenSection.locator("summary").click();
   }
+  await page.getByRole("link", { name: "平台审计" }).click();
+  await expect(page).toHaveURL(/view=audit/);
+  if ((page.viewportSize()?.width ?? 0) <= 760)
+    await expect(page.getByRole("button", { name: /查看安全运营事实/ })).toBeVisible();
+  else await expect(page.getByText("查看安全运营事实", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("platform.security.operations.read", { exact: true }),
+  ).not.toBeVisible();
+  await page.getByRole("link", { name: "事件", exact: true }).click();
   await expect(page.getByText(/payload_ciphertext|token_hash|cookie-secret/)).toHaveCount(0);
   await expect(page).toHaveScreenshot("m06-04-security-operations-desktop.png", { fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
@@ -142,6 +166,7 @@ test("M06-04.A08/A16 empty forbidden blocked", async ({ page }) => {
             json: env({
               ...data,
               summary: Object.fromEntries(Object.keys(data.summary).map((k) => [k, 0])),
+              audit_events: [],
             }),
           }
         : {

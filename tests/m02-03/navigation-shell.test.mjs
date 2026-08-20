@@ -99,6 +99,27 @@ test("M02-03 regression: preferred landing sends platform and organization admin
     reason: "landing_platform_admin",
   });
 
+  const securityRepo = new InMemoryAuthorizationRepository();
+  securityRepo.subjects.set(securityRepo.key(actor), {
+    ...orgSubject(),
+    membership_id: null,
+    membership_active: false,
+    role_codes: [],
+    capabilities: [],
+    scopes: [{ scope: "platform" }],
+    platform_role_codes: ["platform_security_admin"],
+    platform_capabilities: ["platform:secure"],
+  });
+  const security = await new AuthorizationService(securityRepo).resolveLanding(actor, session, {
+    requestId: "landing-security",
+    traceId: "landing-security",
+  });
+  assert.deepEqual(security, {
+    shell: "platform_admin",
+    route: "/platform-admin/security",
+    reason: "landing_platform_security",
+  });
+
   const organizationRepo = new InMemoryAuthorizationRepository();
   organizationRepo.contexts.set(session, {
     user_id: actor,
@@ -240,13 +261,17 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
 
 test("M02-03 each role shell keeps its role-specific primary action in the top bar", async () => {
   const component = await read("apps/web/src/components/NavigationShell.vue");
-  assert.match(
-    component,
-    /v-if="shell === 'platform_admin'"\s+class="role-create"\s+to="\/platform-admin\/organizations\?create=1"[\s\S]*?新建组织/,
-  );
+  const platformCreatePattern = [
+    `v-if="shell === 'platform_admin' && allCapabilities\\.includes\\('platform:superadmin'\\)"`,
+    `\\s+class="role-create"\\s+to="/platform-admin/organizations\\?create=1"[\\s\\S]*?新建组织`,
+  ].join("");
+  assert.match(component, new RegExp(platformCreatePattern));
   assert.match(
     component,
     /v-else-if="shell === 'organization_admin'"\s+class="role-create"\s+to="\/org-admin\/members"[\s\S]*?邀请成员/,
   );
-  assert.match(component, /v-else\s+type="button"\s+class="role-create"[\s\S]*?创建选品/);
+  assert.match(
+    component,
+    /v-else-if="shell === 'member'"\s+type="button"\s+class="role-create"[\s\S]*?创建选品/,
+  );
 });

@@ -508,7 +508,7 @@ onUnmounted(() => {
           <AppIcon name="search" /> <span>搜索</span><kbd>快捷键</kbd>
         </button>
         <RouterLink
-          v-if="shell === 'platform_admin'"
+          v-if="shell === 'platform_admin' && allCapabilities.includes('platform:superadmin')"
           class="role-create"
           to="/platform-admin/organizations?create=1"
           ><AppIcon name="plus" /> <span>新建组织</span></RouterLink
@@ -519,7 +519,12 @@ onUnmounted(() => {
           to="/org-admin/members"
           ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink
         >
-        <button v-else type="button" class="role-create" @click="discoveryMode = 'create'">
+        <button
+          v-else-if="shell === 'member'"
+          type="button"
+          class="role-create"
+          @click="discoveryMode = 'create'"
+        >
           <AppIcon name="plus" /> <span>创建选品</span>
         </button>
         <RouterLink

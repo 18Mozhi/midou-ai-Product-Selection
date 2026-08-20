@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
+const route = useRoute();
 const state = ref("loading"),
   data = ref<any>(null),
   windowCode = ref("24h"),
@@ -15,7 +17,10 @@ async function load() {
     const response = await request<any>(`/platform/security/operations?window=${windowCode.value}`);
     requestId.value = response.request_id;
     data.value = response.data;
-    state.value = Object.values(response.data.summary).some(Number) ? "ready" : "empty";
+    state.value =
+      Object.values(response.data.summary).some(Number) || response.data.audit_events?.length
+        ? "ready"
+        : "empty";
   } catch (error) {
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? "";
@@ -24,6 +29,13 @@ async function load() {
   }
 }
 onMounted(load);
+const securityViews = ["events", "sessions", "credentials", "audit"] as const;
+const activeView = computed<(typeof securityViews)[number]>(() => {
+  const view = String(route.query.view ?? "events");
+  return securityViews.includes(view as (typeof securityViews)[number])
+    ? (view as (typeof securityViews)[number])
+    : "events";
+});
 const when = (v: string | null) => (v ? new Date(v).toLocaleString() : "—");
 const summaryText = (value: string) =>
   (
@@ -74,6 +86,28 @@ const scopeText = (value: string) =>
   (({ "status:read": "读取系统状态", "report:read": "读取报表" }) as Record<string, string>)[
     value
   ] ?? "其他权限";
+const auditActionText = (value: string) =>
+  (
+    ({
+      "platform.security.operations.read": "查看安全运营事实",
+      "platform.account.organization.created": "创建组织",
+      "platform.account.user.status_changed": "变更用户状态",
+      "platform.account.role.changed": "变更平台管理员角色",
+      "platform.credential.rotated": "轮换来源凭证",
+      "platform.token.revoked": "撤销访问令牌",
+    }) as Record<string, string>
+  )[value] ?? "平台管理操作";
+const resourceText = (value: string) =>
+  (
+    ({
+      security_operations: "安全运营",
+      organization: "组织",
+      user: "用户",
+      platform_role: "平台角色",
+      credential: "来源凭证",
+      organization_token: "组织访问令牌",
+    }) as Record<string, string>
+  )[value] ?? "平台对象";
 </script>
 <template>
   <section class="security-ops">
@@ -125,8 +159,27 @@ const scopeText = (value: string) =>
           ><strong>{{ value }}</strong>
         </article>
       </div>
+      <nav class="security-view-nav" aria-label="安全中心二级导航">
+        <RouterLink
+          :to="{ path: '/platform-admin/security', query: { view: 'events' } }"
+          :aria-current="activeView === 'events' ? 'page' : undefined"
+          >事件</RouterLink
+        ><RouterLink
+          :to="{ path: '/platform-admin/security', query: { view: 'sessions' } }"
+          :aria-current="activeView === 'sessions' ? 'page' : undefined"
+          >会话</RouterLink
+        ><RouterLink
+          :to="{ path: '/platform-admin/security', query: { view: 'credentials' } }"
+          :aria-current="activeView === 'credentials' ? 'page' : undefined"
+          >访问与凭证</RouterLink
+        ><RouterLink
+          :to="{ path: '/platform-admin/security', query: { view: 'audit' } }"
+          :aria-current="activeView === 'audit' ? 'page' : undefined"
+          >平台审计</RouterLink
+        >
+      </nav>
       <div class="security-grid">
-        <section>
+        <section v-if="activeView === 'events'">
           <h3>登录与风险事件</h3>
           <ResponsiveDataView
             :rows="data.security_events"
@@ -220,7 +273,7 @@ const scopeText = (value: string) =>
             >
           </ResponsiveDataView>
         </section>
-        <section>
+        <section v-if="activeView === 'sessions'">
           <h3>活动与历史会话</h3>
           <ResponsiveDataView
             :rows="data.sessions"
@@ -300,7 +353,7 @@ const scopeText = (value: string) =>
             >
           </ResponsiveDataView>
         </section>
-        <section>
+        <section v-if="activeView === 'credentials'">
           <h3>凭证生命周期</h3>
           <ResponsiveDataView
             :rows="data.credential_assets"
@@ -400,7 +453,7 @@ const scopeText = (value: string) =>
           </ResponsiveDataView>
           <RouterLink to="/platform-admin/credentials">进入凭证与档案</RouterLink>
         </section>
-        <section>
+        <section v-if="activeView === 'credentials'">
           <h3>组织访问令牌</h3>
           <ResponsiveDataView
             :rows="data.organization_tokens"
@@ -485,6 +538,117 @@ const scopeText = (value: string) =>
               </details></template
             >
           </ResponsiveDataView>
+        </section>
+        <section v-if="activeView === 'audit'">
+          <h3>平台审计</h3>
+          <ResponsiveDataView
+            :rows="data.audit_events"
+            :row-key="(item) => item.id"
+            title="平台审计"
+            :detail-title="(item) => auditActionText(item.action)"
+          >
+            <template #desktop
+              ><table>
+                <tr v-for="item in data.audit_events" :key="item.id">
+                  <td>
+                    <b>{{ auditActionText(item.action) }}</b
+                    ><small>{{ resourceText(item.resource_type) }}</small>
+                  </td>
+                  <td>{{ statusText(item.outcome) }}</td>
+                  <td>{{ when(item.occurred_at) }}</td>
+                  <td>
+                    <details>
+                      <summary>技术详情</summary>
+                      <dl>
+                        <div>
+                          <dt>操作代码</dt>
+                          <dd>{{ item.action }}</dd>
+                        </div>
+                        <div>
+                          <dt>对象类型</dt>
+                          <dd>{{ item.resource_type }}</dd>
+                        </div>
+                        <div>
+                          <dt>对象 ID</dt>
+                          <dd>{{ item.resource_id || "—" }}</dd>
+                        </div>
+                        <div>
+                          <dt>操作者 ID</dt>
+                          <dd>{{ item.actor_id }}</dd>
+                        </div>
+                        <div>
+                          <dt>请求 ID</dt>
+                          <dd>{{ item.request_id }}</dd>
+                        </div>
+                        <div>
+                          <dt>链路 ID</dt>
+                          <dd>{{ item.trace_id }}</dd>
+                        </div>
+                      </dl>
+                    </details>
+                  </td>
+                </tr>
+              </table></template
+            >
+            <template #summary="{ row }"
+              ><span class="responsive-record-summary"
+                ><strong>{{ auditActionText(row.action) }} · {{ statusText(row.outcome) }}</strong
+                ><small
+                  >{{ resourceText(row.resource_type) }} · {{ when(row.occurred_at) }}</small
+                ></span
+              ></template
+            >
+            <template #detail="{ row }"
+              ><dl>
+                <div>
+                  <dt>操作</dt>
+                  <dd>{{ auditActionText(row.action) }}</dd>
+                </div>
+                <div>
+                  <dt>对象</dt>
+                  <dd>{{ resourceText(row.resource_type) }}</dd>
+                </div>
+                <div>
+                  <dt>结果</dt>
+                  <dd>{{ statusText(row.outcome) }}</dd>
+                </div>
+                <div>
+                  <dt>发生时间</dt>
+                  <dd>{{ when(row.occurred_at) }}</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <dl>
+                  <div>
+                    <dt>操作代码</dt>
+                    <dd>{{ row.action }}</dd>
+                  </div>
+                  <div>
+                    <dt>对象类型</dt>
+                    <dd>{{ row.resource_type }}</dd>
+                  </div>
+                  <div>
+                    <dt>对象 ID</dt>
+                    <dd>{{ row.resource_id || "—" }}</dd>
+                  </div>
+                  <div>
+                    <dt>操作者 ID</dt>
+                    <dd>{{ row.actor_id }}</dd>
+                  </div>
+                  <div>
+                    <dt>请求 ID</dt>
+                    <dd>{{ row.request_id }}</dd>
+                  </div>
+                  <div>
+                    <dt>链路 ID</dt>
+                    <dd>{{ row.trace_id }}</dd>
+                  </div>
+                </dl>
+              </details></template
+            >
+          </ResponsiveDataView>
+          <p v-if="!data.audit_events.length">当前时间窗没有平台审计记录。</p>
         </section>
       </div>
       <footer>

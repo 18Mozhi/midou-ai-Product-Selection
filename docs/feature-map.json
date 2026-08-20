@@ -1516,6 +1516,7 @@
       "routes": ["/platform-admin/security", "/api/v1/platform/security/operations"],
       "scope": "platform login outcomes risk events session metadata organization token metadata credential lifecycle and platform audit",
       "presentationBoundary": "desktop tables and mobile summary cards share the same records; mobile details use a drawer and raw IDs fingerprints token prefixes request IDs and internal codes remain collapsed under technical details",
+      "secondaryViews": "events sessions credentials and platform audit are URL-backed security views; security-only platform administrators land directly on the security center and the platform overview remains limited to operate or superadmin capability",
       "truthBoundary": "never selects or returns session token hashes credential ciphertext nonce auth tag token hashes cookies or raw IP and user agent values",
       "permission": "platform:secure read guard; credential rotation and token/session mutations remain on existing key rotation session and token capabilities",
       "configuration": ["SECURITY_OPERATIONS_DEFAULT_WINDOW", "SECURITY_OPERATIONS_RECENT_LIMIT"],

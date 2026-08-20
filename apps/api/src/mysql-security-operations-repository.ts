@@ -80,7 +80,7 @@ export class MySqlSecurityOperationsRepository implements SecurityOperationsRepo
       audit_events: audits.map((r: any) => ({ ...r, occurred_at: iso(r.occurred_at) })),
       links: {
         credential_assets: "/platform-admin/credentials",
-        audit_search: "/?view=audit-security",
+        audit_search: "/platform-admin/security?view=audit",
       },
       observed_at: this.now().toISOString(),
     };

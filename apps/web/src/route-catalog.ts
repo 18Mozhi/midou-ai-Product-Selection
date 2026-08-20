@@ -194,7 +194,13 @@ export const appRoutes: RouteRecordRaw[] = [
   organization("/org-admin/tokens", "organization-tokens", "组织令牌", ["组织后台", "组织令牌"]),
   organization("/org-admin/audit", "organization-audit", "组织审计", ["组织后台", "组织审计"]),
 
-  platform("/platform-admin", "platform-overview", "平台概览", ["平台后台", "平台概览"]),
+  platform(
+    "/platform-admin",
+    "platform-overview",
+    "平台概览",
+    ["平台后台", "平台概览"],
+    ["platform:operate", "platform:superadmin"],
+  ),
   platform(
     "/platform-admin/accounts",
     "platform-accounts",
