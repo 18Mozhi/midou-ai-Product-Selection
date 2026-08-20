@@ -6,7 +6,6 @@ defineProps<{
   saving: boolean;
   audienceOptions?: { organizations?: any[]; users?: any[] };
 }>();
-
 defineEmits<{ close: []; save: [] }>();
 </script>
 
@@ -146,7 +145,6 @@ input,
 select,
 textarea,
 button {
-  box-sizing: border-box;
   padding: 9px 12px;
   border: 1px solid var(--so-border-strong);
   border-radius: 9px;

@@ -163,10 +163,21 @@
   white-space: nowrap;
 }
 .adapter-message {
+  display: grid;
+  gap: 8px;
   padding: 11px 14px;
   border-radius: 10px;
   background: var(--so-info-soft);
   color: var(--so-info);
+}
+.adapter-message details summary {
+  min-height: var(--so-touch-target);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.adapter-message code {
+  overflow-wrap: anywhere;
 }
 .adapter-center .adapter-boundary,
 .adapter-center .adapter-empty {

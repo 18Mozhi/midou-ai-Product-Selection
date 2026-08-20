@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../provider-registry.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
@@ -69,6 +70,21 @@ const failure = (s: number) =>
       : [408, 429, 502, 503, 504].includes(s)
         ? "blocked"
         : "error";
+const accessModeText = (value: string) =>
+    (
+      ({
+        public_page: "公开页面",
+        public_rss: "公开订阅源",
+        authenticated_browser: "登录浏览器",
+        import: "文件导入",
+        manual: "人工录入",
+      }) as Record<string, string>
+    )[value] ?? "其他方式",
+  providerStatusText = (value: string) =>
+    (({ draft: "草稿", disabled: "未启用", enabled: "已启用" }) as Record<string, string>)[value] ??
+    "未知状态",
+  termsStatusText = (value: Provider["terms_review_status"]) =>
+    value === "approved" ? "已批准" : value === "rejected" ? "已拒绝" : "待复核";
 async function load() {
   state.value = "loading";
   try {
@@ -200,56 +216,128 @@ onMounted(load);
       <p>先登记真实目标 URL、字段、频率、并发、超时、去重与失败规则。</p>
       <button type="button" @click="edit()">登记第一个来源</button>
     </section>
-    <div v-else-if="items.length" class="provider-table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>来源</th>
-            <th>模式 / 市场</th>
-            <th>频率 / 并发</th>
-            <th>超时 / 重试</th>
-            <th>解析器</th>
-            <th>状态</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in items" :key="item.id">
-            <td>
-              <strong>{{ item.name }}</strong
-              ><code>{{ item.code }}</code
-              ><small>{{ item.target_url }}</small>
-            </td>
-            <td>
-              {{ item.access_mode
-              }}<small>{{ item.markets.join(" · ") }} / {{ item.languages.join(" · ") }}</small>
-            </td>
-            <td>{{ item.schedule_minutes }} 分钟 / {{ item.concurrency_limit }}</td>
-            <td>{{ item.timeout_ms }}ms / {{ item.retry_limit }}</td>
-            <td>
-              {{ item.parser_version }}<small>v{{ item.version }}</small>
-            </td>
-            <td>
-              <span :data-status="item.status">{{ item.status }}</span
-              ><small
-                >条款：{{
-                  item.terms_review_status === "approved"
-                    ? "已批准"
-                    : item.terms_review_status === "rejected"
-                      ? "已拒绝"
-                      : "待复核"
-                }}</small
-              >
-            </td>
-            <td><button type="button" @click="edit(item)">编辑</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <ResponsiveDataView
+      v-else-if="items.length"
+      :rows="items"
+      :row-key="(item) => item.id"
+      title="来源定义"
+      :detail-title="(item) => item.name"
+    >
+      <template #desktop>
+        <div class="provider-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>来源</th>
+                <th>模式 / 市场</th>
+                <th>频率 / 并发</th>
+                <th>超时 / 重试</th>
+                <th>解析器</th>
+                <th>状态</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in items" :key="item.id">
+                <td>
+                  <strong>{{ item.name }}</strong
+                  ><small>{{ item.target_url }}</small>
+                </td>
+                <td>
+                  {{ accessModeText(item.access_mode)
+                  }}<small>{{ item.markets.join(" · ") }} / {{ item.languages.join(" · ") }}</small>
+                </td>
+                <td>{{ item.schedule_minutes }} 分钟 / {{ item.concurrency_limit }}</td>
+                <td>{{ item.timeout_ms }}ms / {{ item.retry_limit }}</td>
+                <td>
+                  {{ item.parser_version }}<small>定义版本 {{ item.version }}</small>
+                </td>
+                <td>
+                  <span :data-status="item.status">{{ providerStatusText(item.status) }}</span
+                  ><small>条款：{{ termsStatusText(item.terms_review_status) }}</small>
+                </td>
+                <td><button type="button" @click="edit(item)">编辑</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+      <template #summary="{ row }">
+        <span class="responsive-record-summary">
+          <strong>{{ row.name }} · {{ providerStatusText(row.status) }}</strong>
+          <small
+            >{{ accessModeText(row.access_mode) }} · {{ row.markets.join(" · ") }} · 每
+            {{ row.schedule_minutes }} 分钟</small
+          >
+        </span>
+      </template>
+      <template #detail="{ row, close }">
+        <dl>
+          <div>
+            <dt>接入方式</dt>
+            <dd>{{ accessModeText(row.access_mode) }}</dd>
+          </div>
+          <div>
+            <dt>市场 / 语言</dt>
+            <dd>{{ row.markets.join(" · ") }} / {{ row.languages.join(" · ") }}</dd>
+          </div>
+          <div>
+            <dt>调度</dt>
+            <dd>每 {{ row.schedule_minutes }} 分钟 · 并发 {{ row.concurrency_limit }}</dd>
+          </div>
+          <div>
+            <dt>超时 / 重试</dt>
+            <dd>{{ row.timeout_ms }}ms · {{ row.retry_limit }} 次</dd>
+          </div>
+          <div>
+            <dt>当前状态</dt>
+            <dd>{{ providerStatusText(row.status) }}</dd>
+          </div>
+          <div>
+            <dt>条款复核</dt>
+            <dd>{{ termsStatusText(row.terms_review_status) }}</dd>
+          </div>
+        </dl>
+        <button
+          type="button"
+          @click="
+            close();
+            edit(row);
+          "
+        >
+          编辑来源
+        </button>
+        <details>
+          <summary>技术详情</summary>
+          <dl>
+            <div>
+              <dt>来源 ID</dt>
+              <dd>{{ row.id }}</dd>
+            </div>
+            <div>
+              <dt>来源代码</dt>
+              <dd>{{ row.code }}</dd>
+            </div>
+            <div>
+              <dt>目标地址</dt>
+              <dd>{{ row.target_url }}</dd>
+            </div>
+            <div>
+              <dt>接入模式代码</dt>
+              <dd>{{ row.access_mode }}</dd>
+            </div>
+            <div>
+              <dt>解析器 / 定义版本</dt>
+              <dd>{{ row.parser_version }} / {{ row.version }}</dd>
+            </div>
+          </dl>
+        </details>
+      </template>
+    </ResponsiveDataView>
     <form v-if="editorOpen" class="provider-editor" @submit.prevent="save">
       <header>
         <div>
-          <p>{{ editing ? "EDIT VERSION" : "NEW PROVIDER" }}</p>
+          <p>{{ editing ? "编辑定义版本" : "新建来源定义" }}</p>
           <h3>{{ editing ? "编辑来源" : "登记来源" }}</h3>
         </div>
         <button
@@ -262,7 +350,11 @@ onMounted(load);
         </button>
       </header>
       <div class="provider-fields">
-        <label>Code<input v-model="form.code" required pattern="[a-z0-9_]{2,80}" /></label
+        <label
+          >来源代码（技术标识）<input
+            v-model="form.code"
+            required
+            pattern="[a-z0-9_]{2,80}" /></label
         ><label>名称<input v-model="form.name" required /></label
         ><label class="wide">目标 URL<input v-model="form.target_url" required /></label
         ><label
@@ -276,15 +368,16 @@ onMounted(load);
                 'manual',
               ]"
               :key="v"
+              :value="v"
             >
-              {{ v }}
+              {{ accessModeText(v) }}
             </option>
           </select></label
         ><label
           >状态<select v-model="form.status">
-            <option>draft</option>
-            <option>disabled</option>
-            <option>enabled</option>
+            <option value="draft">草稿</option>
+            <option value="disabled">未启用</option>
+            <option value="enabled">已启用</option>
           </select></label
         ><label>市场<input v-model="form.markets" /></label
         ><label>语言<input v-model="form.languages" /></label
@@ -336,9 +429,13 @@ onMounted(load);
           >条款参考 URL<input v-model="form.terms_reference_url" type="url" placeholder="https://…"
         /></label>
       </div>
-      <p v-if="message" role="status">
-        {{ message }} <code v-if="requestId">{{ requestId }}</code>
-      </p>
+      <div v-if="message" class="provider-editor-message" role="status">
+        <span>{{ message }}</span>
+        <details v-if="requestId">
+          <summary>技术详情</summary>
+          <code>{{ requestId }}</code>
+        </details>
+      </div>
       <footer>
         <button type="submit" :disabled="saving">
           {{ saving ? "保存中…" : "保存版本" }}

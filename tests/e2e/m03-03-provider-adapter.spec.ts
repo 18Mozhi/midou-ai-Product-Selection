@@ -67,7 +67,7 @@ async function nav(page: any) {
 }
 test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visual", async ({
   page,
-}) => {
+}, testInfo) => {
   await nav(page);
   await page.route("**/api/v1/platform/provider-adapters", (route) =>
     route.fulfill({
@@ -98,8 +98,7 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
   );
   await page.goto("/platform-admin/providers/adapters");
   await expect(page.getByRole("heading", { name: "适配器运行时", level: 2 })).toBeVisible();
-  await expect(page.getByText("collect · normalize · healthCheck").first()).toBeVisible();
-  await expect(page.getByText("adapter_not_registered")).toBeVisible();
+  await expect(page.getByText("统一采集、标准化与健康检查合同")).toBeVisible();
   const semanticText = await page.evaluate(() => {
     const probe = document.createElement("span");
     probe.style.color = "var(--so-text)";
@@ -118,14 +117,26 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
     semanticText.expected,
     semanticText.expected,
   ]);
-  await page.getByRole("button", { name: "健康检查" }).last().click();
+  if (testInfo.project.name === "mobile-390") {
+    await page.getByRole("button", { name: "查看详情" }).last().click();
+    const dialog = page.getByRole("dialog", { name: "登录态商品来源" });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByText("尚未登记适配器")).toBeVisible();
+    await dialog.getByText("技术详情").click();
+    await expect(dialog.getByText("adapter_not_registered")).toBeVisible();
+    await dialog.getByRole("button", { name: "执行健康检查" }).click();
+    await dialog.getByRole("button", { name: "关闭详情" }).click();
+  } else {
+    await expect(page.getByText("尚未登记适配器")).toBeVisible();
+    await page.getByRole("button", { name: "健康检查" }).last().click();
+  }
   await expect(page.getByRole("status")).toContainText("已记录受阻原因");
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page).toHaveScreenshot("m03-03-provider-adapters.png", {
     fullPage: true,
   });
 });
-test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }) => {
+test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }, testInfo) => {
   await nav(page);
   await page.route("**/api/v1/platform/provider-adapters", (route) =>
     route.fulfill({
@@ -142,7 +153,12 @@ test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }) =
   await page.getByLabel("接入模式").selectOption("manual");
   await expect(page.getByRole("heading", { name: "没有符合筛选条件的适配器" })).toBeVisible();
   await page.getByRole("button", { name: "清除筛选" }).click();
-  await expect(page.getByText("公开趋势 RSS")).toBeVisible();
+  await expect(
+    page.getByText(
+      testInfo.project.name === "mobile-390" ? "公开趋势 RSS · 健康" : "公开趋势 RSS",
+      { exact: true },
+    ),
+  ).toBeVisible();
 });
 test("M03-03.A08/A09/A16 empty forbidden and dependency states stay actionable", async ({
   page,

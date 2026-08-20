@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../provider-adapters.css";
 import "../provider-adapters-contrast.css";
-type State =
-  "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface AdapterSummary {
   id: string;
   code: string;
@@ -37,6 +37,27 @@ const failure = (status: number): State =>
       : [408, 425, 429, 502, 503, 504].includes(status)
         ? "blocked"
         : "error";
+const accessModeText = (value: string) =>
+    (
+      ({
+        public_page: "公开页面",
+        public_rss: "公开订阅源",
+        authenticated_browser: "登录浏览器",
+        import: "文件导入",
+        manual: "人工录入",
+      }) as Record<string, string>
+    )[value] ?? "其他方式",
+  providerStatusText = (value: string) =>
+    (({ draft: "草稿", disabled: "未启用", enabled: "已启用" }) as Record<string, string>)[value] ??
+    "未知状态",
+  healthText = (value: AdapterSummary["health_status"]) =>
+    ({ unknown: "待检查", ready: "健康", degraded: "降级", blocked: "受阻" })[value],
+  errorText = (value: string | null) =>
+    value === "adapter_not_registered"
+      ? "尚未登记适配器"
+      : value
+        ? "检查失败，详见技术详情"
+        : "无错误";
 const filtered = computed(() =>
     items.value.filter(
       (item) =>
@@ -44,17 +65,15 @@ const filtered = computed(() =>
         (health.value === "all" || item.health_status === health.value),
     ),
   ),
-  registered = computed(
-    () => items.value.filter((item) => item.adapter_registered).length,
-  );
+  registered = computed(() => items.value.filter((item) => item.adapter_registered).length);
 async function load() {
   state.value = "loading";
   message.value = "";
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/provider-adapters`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
+    const response = await fetch(`${props.apiBaseUrl}/platform/provider-adapters`, {
+        credentials: "include",
+        headers: { accept: "application/json" },
+      }),
       body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? "";
     if (!response.ok) {
@@ -88,9 +107,7 @@ async function probe(item: AdapterSummary) {
       message.value = body?.error?.action_hint ?? "健康检查未完成";
       return;
     }
-    items.value = items.value.map((current) =>
-      current.id === item.id ? body.data : current,
-    );
+    items.value = items.value.map((current) => (current.id === item.id ? body.data : current));
     message.value =
       body.data.health_status === "ready"
         ? `${item.name} 健康检查通过`
@@ -109,10 +126,7 @@ onMounted(load);
       <div>
         <p>来源适配器运行状态</p>
         <h2>适配器运行时</h2>
-        <span
-          >统一 collect · normalize · healthCheck 合同；真实实现按 Provider code
-          注册。</span
-        >
+        <span>统一采集、标准化与健康检查合同；真实实现按来源代码注册。</span>
       </div>
       <a href="/platform-admin/providers">返回来源定义</a>
     </header>
@@ -134,9 +148,7 @@ onMounted(load);
         </article>
         <article>
           <small>健康</small
-          ><strong>{{
-            items.filter((x) => x.health_status === "ready").length
-          }}</strong
+          ><strong>{{ items.filter((x) => x.health_status === "ready").length }}</strong
           ><span>仅真实探针可变为 ready</span>
         </article>
       </div>
@@ -153,19 +165,18 @@ onMounted(load);
                 'manual',
               ]"
               :key="value"
+              :value="value"
             >
-              {{ value }}
+              {{ accessModeText(value) }}
             </option>
           </select></label
         ><label
           >健康状态<select v-model="health">
             <option value="all">全部状态</option>
-            <option
-              v-for="value in ['unknown', 'ready', 'degraded', 'blocked']"
-              :key="value"
-            >
-              {{ value }}
-            </option>
+            <option value="unknown">待检查</option>
+            <option value="ready">健康</option>
+            <option value="degraded">降级</option>
+            <option value="blocked">受阻</option>
           </select></label
         ><span>{{ filtered.length }} 个结果</span>
       </div>
@@ -187,67 +198,148 @@ onMounted(load);
           清除筛选
         </button>
       </section>
-      <div v-else class="adapter-table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>来源</th>
-              <th>运行合同</th>
-              <th>实现</th>
-              <th>健康</th>
-              <th>最近检查</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in filtered" :key="item.id">
-              <td>
-                <strong>{{ item.name }}</strong
-                ><code>{{ item.code }}</code
-                ><small>{{ item.provider_status }}</small>
-              </td>
-              <td>
-                <span>{{ item.access_mode }}</span
-                ><small>collect · normalize · healthCheck</small>
-              </td>
-              <td>
-                <b :data-registered="item.adapter_registered">{{
-                  item.adapter_registered ? "registered" : "not registered"
-                }}</b
-                ><small>{{ item.adapter_version ?? "等待真实适配器" }}</small>
-              </td>
-              <td>
-                <b :data-health="item.health_status">{{ item.health_status }}</b
-                ><small v-if="item.last_error_code"
-                  >{{ item.last_error_code }} · 连续
-                  {{ item.consecutive_failures }} 次</small
-                >
-              </td>
-              <td>
+      <ResponsiveDataView
+        v-else
+        :rows="filtered"
+        :row-key="(item) => item.id"
+        title="来源适配器"
+        :detail-title="(item) => item.name"
+      >
+        <template #desktop>
+          <div class="adapter-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>来源</th>
+                  <th>运行方式</th>
+                  <th>实现</th>
+                  <th>健康</th>
+                  <th>最近检查</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in filtered" :key="item.id">
+                  <td>
+                    <strong>{{ item.name }}</strong
+                    ><small>{{ providerStatusText(item.provider_status) }}</small>
+                  </td>
+                  <td>
+                    <span>{{ accessModeText(item.access_mode) }}</span
+                    ><small>采集 · 标准化 · 健康检查</small>
+                  </td>
+                  <td>
+                    <b :data-registered="item.adapter_registered">{{
+                      item.adapter_registered ? "已登记" : "待登记"
+                    }}</b>
+                    <small>{{ item.adapter_version ?? "等待真实适配器" }}</small>
+                  </td>
+                  <td>
+                    <b :data-health="item.health_status">{{ healthText(item.health_status) }}</b>
+                    <small v-if="item.last_error_code"
+                      >{{ errorText(item.last_error_code) }} · 连续
+                      {{ item.consecutive_failures }} 次</small
+                    >
+                  </td>
+                  <td>
+                    {{
+                      item.last_checked_at
+                        ? item.last_checked_at.slice(0, 19).replace("T", " ")
+                        : "尚未检查"
+                    }}
+                    <small v-if="item.last_latency_ms !== null"
+                      >{{ item.last_latency_ms }} ms · 版本 {{ item.version }}</small
+                    >
+                  </td>
+                  <td>
+                    <button type="button" :disabled="probing === item.id" @click="probe(item)">
+                      {{ probing === item.id ? "检查中…" : "健康检查" }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </template>
+        <template #summary="{ row }">
+          <span class="responsive-record-summary">
+            <strong>{{ row.name }} · {{ healthText(row.health_status) }}</strong>
+            <small
+              >{{ accessModeText(row.access_mode) }} ·
+              {{ row.adapter_registered ? "已登记" : "待登记" }}</small
+            >
+          </span>
+        </template>
+        <template #detail="{ row }">
+          <dl>
+            <div>
+              <dt>运行方式</dt>
+              <dd>{{ accessModeText(row.access_mode) }}</dd>
+            </div>
+            <div>
+              <dt>来源状态</dt>
+              <dd>{{ providerStatusText(row.provider_status) }}</dd>
+            </div>
+            <div>
+              <dt>适配器</dt>
+              <dd>{{ row.adapter_registered ? "已登记" : "待登记" }}</dd>
+            </div>
+            <div>
+              <dt>健康状态</dt>
+              <dd>{{ healthText(row.health_status) }}</dd>
+            </div>
+            <div>
+              <dt>最近检查</dt>
+              <dd>
                 {{
-                  item.last_checked_at
-                    ? item.last_checked_at.slice(0, 19).replace("T", " ")
+                  row.last_checked_at
+                    ? row.last_checked_at.slice(0, 19).replace("T", " ")
                     : "尚未检查"
-                }}<small v-if="item.last_latency_ms !== null"
-                  >{{ item.last_latency_ms }} ms · v{{ item.version }}</small
-                >
-              </td>
-              <td>
-                <button
-                  type="button"
-                  :disabled="probing === item.id"
-                  @click="probe(item)"
-                >
-                  {{ probing === item.id ? "检查中…" : "健康检查" }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                }}
+              </dd>
+            </div>
+            <div>
+              <dt>检查结果</dt>
+              <dd>{{ errorText(row.last_error_code) }}</dd>
+            </div>
+          </dl>
+          <button type="button" :disabled="probing === row.id" @click="probe(row)">
+            {{ probing === row.id ? "检查中…" : "执行健康检查" }}
+          </button>
+          <details>
+            <summary>技术详情</summary>
+            <dl>
+              <div>
+                <dt>来源 ID</dt>
+                <dd>{{ row.id }}</dd>
+              </div>
+              <div>
+                <dt>来源代码</dt>
+                <dd>{{ row.code }}</dd>
+              </div>
+              <div>
+                <dt>接入模式代码</dt>
+                <dd>{{ row.access_mode }}</dd>
+              </div>
+              <div>
+                <dt>适配器版本</dt>
+                <dd>{{ row.adapter_version ?? "—" }}</dd>
+              </div>
+              <div>
+                <dt>错误码</dt>
+                <dd>{{ row.last_error_code ?? "—" }}</dd>
+              </div>
+            </dl>
+          </details>
+        </template>
+      </ResponsiveDataView>
+      <div v-if="message" class="adapter-message" role="status">
+        <span>{{ message }}</span>
+        <details v-if="requestId">
+          <summary>技术详情</summary>
+          <code>{{ requestId }}</code>
+        </details>
       </div>
-      <p v-if="message" class="adapter-message" role="status">
-        {{ message }} <code v-if="requestId">{{ requestId }}</code>
-      </p>
       <aside class="adapter-boundary">
         <strong>运行边界</strong>
         <p>

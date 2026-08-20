@@ -127,8 +127,21 @@
   color: var(--so-text);
   background: var(--so-panel-soft);
 }
-.provider-editor > p {
+.provider-editor-message {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
   color: var(--so-warning);
+}
+.provider-editor-message details summary {
+  min-height: var(--so-touch-target);
+  display: flex;
+  align-items: center;
+  color: var(--so-primary);
+  cursor: pointer;
+}
+.provider-editor-message code {
+  overflow-wrap: anywhere;
 }
 .provider-editor footer {
   display: flex;

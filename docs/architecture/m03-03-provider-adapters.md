@@ -12,6 +12,8 @@ M03-03 在 `@scoutops/provider-adapters` 固定 `collect`、`normalize`、`healt
 
 生产启动创建空的适配器注册表，因此在 M03-07 之前健康检查会真实记录 `blocked / adapter_not_registered`，不会用模拟成功掩盖缺失实现。错误分类只保留 timeout、rate_limited、login_expired、adapter_not_registered、invalid_payload 等稳定代码；异常正文和敏感 payload 不进入数据库或 API。
 
+平台适配器页在桌面保留运行事实表格；760px 及以下使用来源健康摘要卡片与详情抽屉，并在抽屉内保留真实健康检查动作。接入模式、来源状态、登记状态、健康状态和已知错误在主界面使用中文，来源 UUID、来源代码、原始接入模式、适配器版本和错误码只在“技术详情”展示；该呈现转换不改变 API 的稳定状态码合同。
+
 ## 回滚
 
 先在宝塔停止触发适配器健康检查的入口并停止 API/Worker，备份 `product_scout` 后执行 `0016c_provider_adapters_m03_03.down.sql`。down 按 operations、health versions、health 顺序删除，保留 M03-01 Provider 定义；随后回滚应用和环境上限，由宝塔重启。删除健康历史会永久失去探针审计，未验证备份前禁止生产执行。

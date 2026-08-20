@@ -507,7 +507,7 @@
         "/api/v1/platform/providers",
         "/api/v1/platform/providers/{providerId}"
       ],
-      "scope": "platform-global technical definitions; organization and workspace columns are intentionally absent",
+      "scope": "platform-global technical definitions; organization and workspace columns are intentionally absent; mobile uses summary cards and a detail drawer while provider UUID code target URL and raw access-mode code stay inside technical details",
       "contract": [
         "target URL or stable identifier",
         "access mode",
@@ -588,7 +588,7 @@
         "/api/v1/platform/provider-adapters",
         "/api/v1/platform/provider-adapters/{providerId}/health-check"
       ],
-      "scope": "platform-global adapter registration and health; collect invocation contract requires organization and workspace scope",
+      "scope": "platform-global adapter registration and health; collect invocation contract requires organization and workspace scope; mobile uses summary cards with a health-action detail drawer and raw identifiers codes versions and errors stay inside technical details",
       "contract": ["collect", "normalize", "healthCheck"],
       "failureBoundary": "provider code must have an explicitly registered matching access-mode adapter; otherwise blocked adapter_not_registered",
       "permission": "authenticated platform provider:configure; same-origin and Idempotency-Key for health writes",
@@ -1414,6 +1414,7 @@
         "../apps/web/src/components/PlatformMessageWorkbench.vue",
         "../apps/web/src/components/PlatformMessageEditor.vue",
         "../apps/web/src/components/PlatformNotificationOperations.vue",
+        "../apps/web/src/platform-notification-operations.css",
         "../apps/web/src/components/PlatformDataCenter.vue",
         "../apps/web/src/components/PlatformGovernanceCenter.vue",
         "../database/migrations/0040_platform_messages.up.sql"
@@ -1434,7 +1435,7 @@
         "/api/v1/platform/management/messages/{messageId}/actions",
         "/api/v1/platform/management/email/{source}/{deliveryId}/actions"
       ],
-      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, plus unified backend database cache file task-processing and crawler status management with dedicated operations links",
+      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, plus unified backend database cache file task-processing and crawler status management with dedicated operations links; dashboard mobile provider health uses summary cards and a detail drawer while provider alert-scope and request identifiers stay inside technical details",
       "truthBoundary": "no sample remains unknown or null; no credentials, payloads, internal file paths or invented uptime and capacity claims; /platform-admin/email and all email enable controls stay closed while Mail provider is pending_provider_selection",
       "permission": "platform:operate on the API; platform role navigation guard on the page; dashboard reads and platform data exports write correlated platform audit events",
       "configuration": [

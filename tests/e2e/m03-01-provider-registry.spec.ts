@@ -67,7 +67,19 @@ test("M03-01.A07/A08/A15 provider list and editor are responsive and visual", as
   );
   await page.goto("/platform-admin/providers");
   await expect(page.getByRole("heading", { name: "来源注册中心", level: 2 })).toBeVisible();
-  await expect(page.getByText("公开趋势 RSS")).toBeVisible();
+  if (testInfo.project.name === "mobile-390") {
+    await expect(page.getByText("公开趋势 RSS · 未启用", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: /公开趋势 RSS · 未启用/ }).click();
+    const dialog = page.getByRole("dialog", { name: "公开趋势 RSS" });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByText("公开订阅源", { exact: true })).toBeVisible();
+    await dialog.getByText("技术详情").click();
+    await expect(dialog.getByText(definition.id)).toBeVisible();
+    await dialog.getByRole("button", { name: "关闭详情" }).click();
+  } else {
+    await expect(page.getByText("公开趋势 RSS", { exact: true })).toBeVisible();
+    await expect(page.getByText("未启用", { exact: true })).toBeVisible();
+  }
   await page.getByRole("button", { name: "新建来源" }).click();
   await expect(page.getByRole("heading", { name: "登记来源" })).toBeVisible();
   await expect(page.getByLabel("状态")).toHaveValue("disabled");

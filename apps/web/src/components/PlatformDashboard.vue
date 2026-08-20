@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 type State = "loading" | "ready" | "empty" | "expired" | "forbidden" | "rate_limited" | "blocked";
 const state = ref<State>("loading"),
@@ -22,12 +23,11 @@ const stateText = computed(
     )[state.value],
 );
 const bytes = (v: number) => {
-    if (v < 1024) return `${v} B`;
-    if (v < 1048576) return `${(v / 1024).toFixed(1)} KB`;
-    if (v < 1073741824) return `${(v / 1048576).toFixed(1)} MB`;
-    return `${(v / 1073741824).toFixed(1)} GB`;
-  },
-  short = (v: string) => (v ? `${v.slice(0, 8)}…` : "—");
+  if (v < 1024) return `${v} B`;
+  if (v < 1048576) return `${(v / 1024).toFixed(1)} KB`;
+  if (v < 1073741824) return `${(v / 1048576).toFixed(1)} MB`;
+  return `${(v / 1073741824).toFixed(1)} GB`;
+};
 const queueText = (v: string) =>
   (
     ({
@@ -214,35 +214,104 @@ onMounted(load);
             <span>{{ data.provider_health.length }} 个启用来源</span>
           </header>
           <div v-if="!data.provider_health.length" class="platform-inline-empty">尚无启用来源</div>
-          <table v-else>
-            <thead>
-              <tr>
-                <th>来源</th>
-                <th>状态</th>
-                <th>成功 / 失败</th>
-                <th>最近观测</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="p in data.provider_health" :key="p.id">
-                <td>
-                  <b>{{ p.name }}</b
-                  ><small>{{ p.code }}</small>
-                </td>
-                <td>
-                  <i :data-health="p.status">{{
-                    p.status === "healthy" ? "健康" : p.status === "degraded" ? "降级" : "未知"
-                  }}</i>
-                </td>
-                <td>{{ p.success_count }} / {{ p.failed_count }}</td>
-                <td>
+          <ResponsiveDataView
+            v-else
+            :rows="data.provider_health"
+            :row-key="(item) => item.id"
+            title="来源健康"
+            :detail-title="(item) => item.name"
+          >
+            <template #desktop>
+              <table>
+                <thead>
+                  <tr>
+                    <th>来源</th>
+                    <th>状态</th>
+                    <th>成功 / 失败</th>
+                    <th>最近观测</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="p in data.provider_health" :key="p.id">
+                    <td>
+                      <b>{{ p.name }}</b>
+                    </td>
+                    <td>
+                      <i :data-health="p.status">{{
+                        p.status === "healthy" ? "健康" : p.status === "degraded" ? "降级" : "未知"
+                      }}</i>
+                    </td>
+                    <td>{{ p.success_count }} / {{ p.failed_count }}</td>
+                    <td>
+                      {{
+                        p.last_observed_at
+                          ? new Date(p.last_observed_at).toLocaleString()
+                          : "无样本"
+                      }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+            <template #summary="{ row }">
+              <span class="responsive-record-summary">
+                <strong
+                  >{{ row.name }} ·
                   {{
-                    p.last_observed_at ? new Date(p.last_observed_at).toLocaleString() : "无样本"
-                  }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    row.status === "healthy" ? "健康" : row.status === "degraded" ? "降级" : "未知"
+                  }}</strong
+                >
+                <small>{{ row.success_count }} 次成功 · {{ row.failed_count }} 次失败</small>
+              </span>
+            </template>
+            <template #detail="{ row }">
+              <dl>
+                <div>
+                  <dt>健康状态</dt>
+                  <dd>
+                    {{
+                      row.status === "healthy"
+                        ? "健康"
+                        : row.status === "degraded"
+                          ? "降级"
+                          : "未知"
+                    }}
+                  </dd>
+                </div>
+                <div>
+                  <dt>成功 / 失败</dt>
+                  <dd>{{ row.success_count }} / {{ row.failed_count }}</dd>
+                </div>
+                <div>
+                  <dt>观测样本</dt>
+                  <dd>{{ row.observed_count }} 条</dd>
+                </div>
+                <div>
+                  <dt>最近观测</dt>
+                  <dd>
+                    {{
+                      row.last_observed_at
+                        ? new Date(row.last_observed_at).toLocaleString()
+                        : "无样本"
+                    }}
+                  </dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <dl>
+                  <div>
+                    <dt>来源 ID</dt>
+                    <dd>{{ row.id }}</dd>
+                  </div>
+                  <div>
+                    <dt>来源代码</dt>
+                    <dd>{{ row.code }}</dd>
+                  </div>
+                </dl>
+              </details>
+            </template>
+          </ResponsiveDataView>
         </section>
         <section>
           <header>
@@ -294,10 +363,11 @@ onMounted(load);
               <i :data-health="a.severity"></i>
               <div>
                 <b>{{ alertText(a.kind, a.code) }}</b
-                ><small
-                  >组织 {{ short(a.organization_id) }} · 工作区 {{ short(a.workspace_id) }} ·
-                  {{ new Date(a.observed_at).toLocaleString() }}</small
-                >
+                ><small>已关联组织与工作区 · {{ new Date(a.observed_at).toLocaleString() }}</small>
+                <details>
+                  <summary>技术详情</summary>
+                  <small>组织 ID {{ a.organization_id }} · 工作区 ID {{ a.workspace_id }}</small>
+                </details>
               </div>
             </li>
             <li v-if="!data.alerts.length">当前没有需要处理的问题</li>
@@ -305,8 +375,11 @@ onMounted(load);
         </section>
       </div>
       <footer class="platform-observed">
-        观测时间 {{ new Date(data.observed_at).toLocaleString() }} · request_id
-        {{ requestId }}
+        观测时间 {{ new Date(data.observed_at).toLocaleString() }}
+        <details>
+          <summary>技术详情</summary>
+          <span>请求 ID {{ requestId }}</span>
+        </details>
       </footer></template
     >
   </section>
@@ -353,5 +426,16 @@ onMounted(load);
   justify-content: space-between;
   color: var(--so-text-muted);
   font-size: 11px;
+}
+.platform-alerts details summary,
+.platform-observed details summary {
+  min-height: var(--so-touch-target);
+  display: inline-flex;
+  align-items: center;
+  color: var(--so-primary);
+  cursor: pointer;
+}
+.platform-observed details span {
+  overflow-wrap: anywhere;
 }
 </style>

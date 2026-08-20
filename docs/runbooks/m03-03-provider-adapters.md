@@ -5,7 +5,7 @@
 1. 在宝塔备份 `product_scout`，用业务账号执行 `0016c_provider_adapters_m03_03.up.sql`。
 2. 在 Node API 与后续调用适配器的 Node Worker 宝塔受限环境配置 `PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS`、`PROVIDER_ADAPTER_MAX_RESPONSE_BYTES`、`PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH`；初始值以 `config/env.example` 为准。
 3. 运行 `npm run build`，由宝塔重启 Node API；M03-03 不新增 systemd、独立 PM2、宿主机 crontab、面板外 Docker 或常驻采集进程。当前 Crawler 不调用该包，无需因本模块重启。
-4. 访问 `/platform-admin/providers/adapters`。未在代码中注册的 Provider 显示 `not registered`，健康检查记录 `blocked` 是预期的真实状态，不得手工改为 ready。
+4. 访问 `/platform-admin/providers/adapters`。未在代码中注册的 Provider 显示“待登记”，健康检查显示“受阻”是预期的真实状态；原始 `adapter_not_registered` 只在“技术详情”展示，不得手工改为健康。
 
 三个上限都在进程启动时读取，修改后必须由宝塔重启 Node API；Worker 在后续模块接入该包后也必须重启。每个 Provider 自身的 `timeout_ms` 继续生效，健康探针采用 Provider timeout 与全局健康 timeout 中较小者。
 
@@ -16,6 +16,8 @@ npm run verify:module -- M03-03
 ```
 
 门禁覆盖运行时 scope/limit/字节/超时、normalize provenance、缺失实现失败关闭、provider:configure/Origin/幂等、MySQL 5.7 当前健康/不可变版本/审计、桌面与 390px 视觉和文档。MySQL 实测只在验证进程注册合成适配器，结束后清理 Provider、用户和健康记录，不会写入生产注册表。
+
+390px 验证时，适配器应显示摘要卡片；详情抽屉必须保留健康检查按钮与完整业务字段，只有展开“技术详情”才显示来源 UUID、来源代码、原始接入模式、适配器版本和错误码。
 
 - `adapter_not_registered`：确认该 Provider 是否属于 M03-07 已准入的真实来源；不要猜请求合同或伪造成功。
 - `adapter_mode_mismatch`：Provider access_mode 与代码注册声明冲突，停止调用并修正版本化定义或适配器实现。

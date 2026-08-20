@@ -18,7 +18,7 @@ M03-01 只交付平台全局的 Provider 技术合同注册中心。`providers` 
 
 ## 页面与运行边界
 
-平台管理员页面 `/platform-admin/providers` 按来源管理参考图实现列表与版本编辑器，并覆盖 loading、empty、error、expired、forbidden、blocked 和恢复状态。桌面和 390px 都保留明确 CTA 与可读字段；不会显示内部队列或凭证内容。
+平台管理员页面 `/platform-admin/providers` 按来源管理参考图实现列表与版本编辑器，并覆盖 loading、empty、error、expired、forbidden、blocked 和恢复状态。桌面保留完整表格；760px 及以下改为来源摘要卡片与具名详情抽屉，编辑入口保持可达，来源 UUID、代码、目标地址和原始接入模式只在“技术详情”展示。状态与接入方式统一显示中文，不会显示内部队列或凭证内容。
 
 M03-01 是同步注册配置，因此异步处理不适用。调度、采集、租约、限流、死信和健康计算由 M03-03 及后续所属模块实现。没有新增环境变量、Redis key、文件、事件、SSE、导出或面板外服务；继续复用 `APP_WEB_ORIGIN`、MySQL 与既有 Baota Node API。
 
