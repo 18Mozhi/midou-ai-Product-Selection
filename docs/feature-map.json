@@ -383,10 +383,12 @@
       "entrypoints": [
         "../packages/authorization/src/index.ts",
         "../apps/api/src/authorization-routes.ts",
+        "../apps/web/src/route-catalog.ts",
         "../apps/web/src/router.ts",
         "../apps/web/src/App.vue",
         "../apps/web/src/components/LandingRedirect.vue",
-        "../apps/web/src/components/NavigationShell.vue"
+        "../apps/web/src/components/NavigationShell.vue",
+        "../apps/web/src/components/AccountShell.vue"
       ],
       "routes": [
         "/",
@@ -396,7 +398,7 @@
         "/api/v1/me/landing",
         "/api/v1/me/navigation"
       ],
-      "shells": ["member", "organization_admin", "platform_admin"],
+      "shells": ["member", "organization_admin", "platform_admin", "account"],
       "guard": "root and successful authentication resolve an audited role-aware landing before the selected shell performs its own server-side role and tenancy guard",
       "imageEvidence": [
         "concepts 11, 15-17, 55-71",
@@ -405,7 +407,7 @@
         "high-resolution 10 platform admin"
       ],
       "contextPresentation": "member and organization shells receive persisted organization_name and workspace_name; the UI never exposes UUID fragments as labels",
-      "routeIntegrity": "Vue Router owns browser history; the Feature Map frontend route registry has unique paths, /me has exactly one PersonalCenter owner, lazy business components and KeepAlive preserve bounded page state; the mobile bottom navigation is limited to four role-priority entries plus More, whose drawer retains member search and selection creation; trend, opportunity and collection overview filters use one state-preserving mobile drawer; the shared 390px occlusion helper checks member opportunity and platform scheduler handoffs against the fixed bottom navigation and requires zero overlap, and shell dialogs render above the bottom bar with bounded viewport height",
+      "routeIntegrity": "route-catalog.ts is the single explicit frontend route registry for title, breadcrumb, shell and capability metadata; Vue Router owns browser history and same-origin internal anchor navigation, unknown routes use the dedicated not-found route without default menu highlighting, /me has exactly one account-level PersonalCenter owner, and lazy business components with KeepAlive preserve bounded page state; the mobile bottom navigation is limited to four role-priority entries plus More, whose drawer retains member search and selection creation; trend, opportunity and collection overview filters use one state-preserving mobile drawer; the shared 390px occlusion helper checks member opportunity and platform scheduler handoffs against the fixed bottom navigation and requires zero overlap, and shell dialogs render above the bottom bar with bounded viewport height",
       "apiClientBoundary": "navigation guard and shell theme preference reads and writes use the shared frontend API client for credentials, correlation, JSON envelopes, idempotency and business error mapping; the UI preserves request_id, trace_id and action_hint on failures",
       "mobileNavigation": "at 840px and below every shell renders up to four authorized primary routes plus one More control in a five-column bottom bar; More opens the complete permission-filtered drawer and quick-create actions do not add a sixth bottom item",
       "memberPresentation": "member shell exposes quick theme switching, larger Chinese typography and removes internal guard codes and security implementation slogans from ordinary pages",
@@ -1153,6 +1155,7 @@
       "routes": [
         "/work",
         "/tasks",
+        "/tasks/{taskId}",
         "/api/v1/tasks",
         "/api/v1/tasks/{taskId}",
         "/api/v1/tasks/{taskId}/comments",
@@ -2471,6 +2474,12 @@
       "view": "TaskWorkspace",
       "domain": "tasks",
       "status": "M05-01_module_verified"
+    },
+    {
+      "path": "/tasks/{taskId}",
+      "view": "TaskWorkspace",
+      "domain": "tasks",
+      "status": "explicit_detail_route_implemented"
     },
     {
       "path": "/tasks/approvals",

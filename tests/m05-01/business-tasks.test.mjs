@@ -16,15 +16,27 @@ test("M05-01.A01/A02/A04/A12 locks truthful task and SLA inputs", () => {
   });
   assert.equal(v.due_at, null);
   assert.throws(
-    () =>
-      validateAction({ action: "delay", expected_version: 1, reason: "延期" }),
+    () => validateAction({ action: "delay", expected_version: 1, reason: "延期" }),
     (e) => e instanceof BusinessTaskError,
   );
-  assert.equal(
-    validateAction({ action: "start", expected_version: 1 }).action,
-    "start",
+  assert.equal(validateAction({ action: "start", expected_version: 1 }).action, "start");
+  assert.deepEqual(
+    validateAction({
+      action: "progress",
+      expected_version: 2,
+      progress_percent: 45,
+      progress_note: "已完成亚马逊竞品初筛",
+    }),
+    {
+      action: "progress",
+      expected_version: 2,
+      reason: null,
+      due_at: null,
+      assignee_id: null,
+      progress_percent: 45,
+      progress_note: "已完成亚马逊竞品初筛",
+    },
   );
-  assert.deepEqual(validateAction({ action: "progress", expected_version: 2, progress_percent: 45, progress_note: "已完成亚马逊竞品初筛" }), { action: "progress", expected_version: 2, reason: null, due_at: null, assignee_id: null, progress_percent: 45, progress_note: "已完成亚马逊竞品初筛" });
 });
 test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   const files = [
@@ -42,17 +54,15 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     "verification/modules/M05-01.json",
   ];
   const values = await Promise.all(files.map((x) => readFile(x, "utf8")));
-  assert.match(
-    values[0],
-    /task_comments[\s\S]*task_events[\s\S]*task_operations/,
-  );
+  assert.match(values[0], /task_comments[\s\S]*task_events[\s\S]*task_operations/);
   assert.match(values[1], /progress_percent[\s\S]*deleted_at/);
   assert.match(values[2], /task_version_conflict[\s\S]*outbox_events/);
-  assert.match(
-    values[4],
-    /sourcing\.purchase_task\.queued[\s\S]*lease_expires_at/,
-  );
+  assert.match(values[4], /sourcing\.purchase_task\.queued[\s\S]*lease_expires_at/);
   assert.match(values[5], /更新进度|编辑|删除|运行记录/);
+  assert.match(values[5], /task-row-actions[\s\S]*删除任务/);
+  assert.doesNotMatch(values[5], /task-row-delete/);
+  assert.match(values[5], /当前阶段[\s\S]*phase\(selected\)/);
+  assert.match(values[9], /\/tasks\/\{taskId\}/);
   const registry = JSON.parse(values.at(-1));
   assert.equal(registry.atomicTasks.length, 17);
 });

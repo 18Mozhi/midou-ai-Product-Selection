@@ -377,7 +377,7 @@ onUnmounted(stop);
         ><a v-if="journey.opportunity_id" :href="`/opportunities/${journey.opportunity_id}`"
           >查看机会、证据与决策历史 ↗</a
         >
-        <a v-if="journey.verification_task_id" :href="`/tasks?task=${journey.verification_task_id}`"
+        <a v-if="journey.verification_task_id" :href="`/tasks/${journey.verification_task_id}`"
           >打开自动生成的验证任务 ↗</a
         >
       </article>

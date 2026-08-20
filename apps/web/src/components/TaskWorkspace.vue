@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { ApiClientError, createApiClient, type ApiRequestOptions } from "../api-client";
 import "../task-workspace.css";
 import "../task-workspace-enhancements.css";
@@ -22,7 +22,7 @@ type Task = {
   comments?: any[];
   events?: any[];
 };
-const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all" }>(),
+const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all"; taskId?: string }>(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   tasks = ref<Task[]>([]),
@@ -77,7 +77,17 @@ const visible = computed(() =>
     ),
   ),
   time = (v: string | null) =>
-    v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "未设置";
+    v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "未设置",
+  phase = (task: Task) =>
+    task.status === "todo"
+      ? "待开始"
+      : task.status === "in_progress"
+        ? "执行中"
+        : task.status === "paused"
+          ? "已暂停"
+          : task.status === "completed"
+            ? "已完成"
+            : "已结束";
 async function api<T = any>(path: string, options?: ApiRequestOptions): Promise<T> {
   try {
     const response = await request<T>(path, options);
@@ -113,13 +123,17 @@ async function load() {
     tasks.value = list;
     summary.value = sum;
     state.value = list.length ? "ready" : "empty";
+    if (props.taskId) await openById(props.taskId);
+  } catch {}
+}
+async function openById(id: string) {
+  try {
+    selected.value = await api(`/tasks/${id}`);
+    state.value = "ready";
   } catch {}
 }
 async function open(x: Task) {
-  try {
-    selected.value = await api(`/tasks/${x.id}`);
-    state.value = "ready";
-  } catch {}
+  await openById(x.id);
 }
 async function create() {
   try {
@@ -280,6 +294,17 @@ onMounted(() => {
   }
   void load();
 });
+
+watch(
+  () => props.taskId,
+  (taskId) => {
+    if (taskId) {
+      void openById(taskId);
+      return;
+    }
+    selected.value = null;
+  },
+);
 </script>
 <template>
   <section class="task-workspace">
@@ -363,29 +388,24 @@ onMounted(() => {
               >选择任务：{{ x.title }}</span
             ></label
           >
-          <button class="task-row-main" @click="open(x)">
+          <RouterLink class="task-row-main" :to="`/tasks/${x.id}`">
             <i :data-priority="x.priority"></i
             ><span
               ><strong>{{ x.title }}</strong
               ><small>{{ x.description || "无补充说明" }}</small></span
             ><em>{{ label(x.status) }}</em
             ><span class="task-progress"
-              ><b>{{ x.progress_percent || 0 }}%</b
+              ><b>{{ phase(x) }}</b
               ><i><u :style="{ width: `${x.progress_percent || 0}%` }"></u></i></span
             ><span
               ><strong>{{ label(x.sla_status) }}</strong
               ><small>{{ time(x.due_at) }}</small></span
             ><b>查看详情 →</b>
-          </button>
-          <button
-            class="task-row-delete"
-            type="button"
-            :aria-label="`删除任务：${x.title}`"
-            :title="`删除任务：${x.title}`"
-            @click="askRemove(x)"
-          >
-            删除
-          </button>
+          </RouterLink>
+          <details class="task-row-actions">
+            <summary :aria-label="`任务操作：${x.title}`">•••</summary>
+            <button type="button" @click="askRemove(x)">删除任务</button>
+          </details>
         </article>
       </div></template
     >
@@ -423,7 +443,7 @@ onMounted(() => {
       </form>
     </dialog>
     <aside v-if="selected" class="task-detail">
-      <button aria-label="关闭任务详情" @click="selected = null">×</button>
+      <RouterLink to="/tasks" aria-label="关闭任务详情">×</RouterLink>
       <p>
         {{ selected.source_type === "manual" ? "手动创建" : "系统生成" }} · 第
         {{ selected.version }} 版
@@ -436,10 +456,8 @@ onMounted(() => {
           <dd>{{ label(selected.status) }}</dd>
         </div>
         <div>
-          <dt>运行进度</dt>
-          <dd>
-            {{ selected.progress_percent || 0 }}% · {{ selected.progress_note || "尚未记录进展" }}
-          </dd>
+          <dt>当前阶段</dt>
+          <dd>{{ phase(selected) }} · {{ selected.progress_note || "尚未记录进展" }}</dd>
         </div>
         <div>
           <dt>处理时限</dt>

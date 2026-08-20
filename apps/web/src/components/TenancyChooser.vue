@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 import type {
   OrganizationMembershipSummary,
   SelectedTenancyContext,
@@ -10,6 +11,7 @@ import { ApiClientError, createApiClient, type ApiRequestOptions } from "../api-
 
 const props = defineProps<{ apiBaseUrl: string }>();
 const apiRequest = createApiClient(props.apiBaseUrl);
+const route = useRoute();
 type State =
   "loading" | "ready" | "empty" | "error" | "forbidden" | "expired" | "selecting" | "selected";
 const state = ref<State>("loading");
@@ -20,6 +22,28 @@ const selectedOrganization = ref<OrganizationMembershipSummary | null>(null);
 const selectedWorkspace = ref<WorkspaceSummary | null>(null);
 const selectedContext = ref<SelectedTenancyContext | null>(null);
 const requestId = ref("");
+const organizationQuery = ref("");
+const recentOrganizationIds = ref<string[]>([]);
+const safeReturnTo = computed(() => {
+  const value = typeof route.query.return_to === "string" ? route.query.return_to : "";
+  return value.startsWith("/") && !value.startsWith("//") ? value : "/onboarding";
+});
+const filteredOrganizations = computed(() => {
+  const keyword = organizationQuery.value.trim().toLocaleLowerCase("zh-CN");
+  return [...organizations.value]
+    .filter(
+      (item) =>
+        !keyword || `${item.name} ${item.slug}`.toLocaleLowerCase("zh-CN").includes(keyword),
+    )
+    .sort((left, right) => {
+      const leftIndex = recentOrganizationIds.value.indexOf(left.id),
+        rightIndex = recentOrganizationIds.value.indexOf(right.id);
+      return (
+        (leftIndex < 0 ? Number.MAX_SAFE_INTEGER : leftIndex) -
+        (rightIndex < 0 ? Number.MAX_SAFE_INTEGER : rightIndex)
+      );
+    });
+});
 const title = computed(() => (selectedOrganization.value ? "选择工作区" : "选择组织"));
 const copy = computed(() =>
   selectedOrganization.value
@@ -57,6 +81,14 @@ async function loadOrganizations() {
 async function chooseOrganization(organization: OrganizationMembershipSummary) {
   state.value = "loading";
   selectedOrganization.value = organization;
+  recentOrganizationIds.value = [
+    organization.id,
+    ...recentOrganizationIds.value.filter((id) => id !== organization.id),
+  ].slice(0, 5);
+  window.localStorage.setItem(
+    "scoutops:recent-organizations",
+    JSON.stringify(recentOrganizationIds.value),
+  );
   try {
     const [workspaceItems, teamItems] = await Promise.all([
       request<WorkspaceSummary[]>(`/org/${organization.id}/workspaces`),
@@ -86,7 +118,18 @@ async function chooseWorkspace(workspace: WorkspaceSummary) {
     state.value = failureState(error);
   }
 }
-onMounted(loadOrganizations);
+onMounted(() => {
+  try {
+    const saved = JSON.parse(window.localStorage.getItem("scoutops:recent-organizations") ?? "[]");
+    if (Array.isArray(saved))
+      recentOrganizationIds.value = saved.filter(
+        (item): item is string => typeof item === "string",
+      );
+  } catch {
+    recentOrganizationIds.value = [];
+  }
+  void loadOrganizations();
+});
 </script>
 
 <template>
@@ -160,7 +203,9 @@ onMounted(loadOrganizations);
           {{ selectedContext.organization.name }} ·
           {{ selectedContext.workspace.name }}
         </p>
-        <a href="/onboarding">继续快速引导</a>
+        <RouterLink :to="safeReturnTo">{{
+          safeReturnTo === "/onboarding" ? "继续快速引导" : "返回原页面"
+        }}</RouterLink>
       </div>
       <template v-else>
         <button
@@ -171,9 +216,18 @@ onMounted(loadOrganizations);
         >
           ← 返回组织
         </button>
+        <label v-if="!selectedOrganization" class="tenancy-search">
+          <span>搜索组织</span>
+          <input
+            v-model="organizationQuery"
+            type="search"
+            placeholder="输入组织名称"
+            autocomplete="off"
+          />
+        </label>
         <div v-if="!selectedOrganization" class="tenancy-grid" aria-label="可用组织">
           <button
-            v-for="organization in organizations"
+            v-for="organization in filteredOrganizations"
             :key="organization.id"
             type="button"
             class="tenancy-card"
@@ -183,8 +237,15 @@ onMounted(loadOrganizations);
             ><span
               ><strong>{{ organization.name }}</strong
               ><small>{{ organization.slug }} · {{ organization.timezone }}</small></span
-            ><em>选择 →</em>
+            ><em
+              >{{ recentOrganizationIds.includes(organization.id) ? "最近使用 · " : "" }}选择 →</em
+            >
           </button>
+        </div>
+        <div v-if="!selectedOrganization && !filteredOrganizations.length" class="tenancy-state">
+          <strong>没有匹配的组织</strong>
+          <p>清除搜索词后查看全部可用组织。</p>
+          <button type="button" @click="organizationQuery = ''">清除搜索</button>
         </div>
         <div v-else class="workspace-layout">
           <div class="workspace-grid" aria-label="可用工作区">

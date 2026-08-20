@@ -25,7 +25,7 @@ const view = computed(() =>
     () =>
       (
         ({
-          summary: "组织资料",
+          summary: "治理概览",
           members: "成员与邀请",
           roles: "角色与权限",
           workspaces: "工作区与团队",
@@ -34,7 +34,7 @@ const view = computed(() =>
           tokens: "组织 Token",
           audit: "组织审计",
         }) as any
-      )[view.value] || "组织资料",
+      )[view.value] || "治理概览",
   );
 async function api(path: string, init?: RequestInit) {
   try {

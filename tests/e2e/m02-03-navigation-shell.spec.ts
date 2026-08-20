@@ -143,17 +143,22 @@ async function allow(page: any, shell: "member" | "organization_admin" | "platfo
 }
 
 for (const item of [
-  { shell: "member" as const, path: "/home", heading: "今日行动", snapshot: "m02-03-member.png" },
+  {
+    shell: "member" as const,
+    path: "/home",
+    heading: "今天最值得做什么？",
+    snapshot: "m02-03-member.png",
+  },
   {
     shell: "organization_admin" as const,
     path: "/org-admin",
-    heading: "组织资料",
+    heading: "治理概览",
     snapshot: "m02-03-org-admin.png",
   },
   {
     shell: "platform_admin" as const,
     path: "/platform-admin",
-    heading: "平台概览",
+    heading: "平台现在怎么样，一眼看懂",
     snapshot: "m02-03-platform-admin.png",
   },
 ])
@@ -162,7 +167,7 @@ for (const item of [
   }) => {
     await allow(page, item.shell);
     await page.goto(item.path);
-    await expect(page.getByRole("heading", { name: item.heading, level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: item.heading, level: 2 })).toBeVisible();
     await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
     await expect(page.locator(".role-sidebar")).toHaveAttribute(
       "aria-label",
@@ -310,11 +315,13 @@ test("M02-03 platform shell exposes management navigation without member-only sh
   await page.goto("/platform-admin");
   await expect(page.getByRole("button", { name: /搜索/ })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "通知中心" })).toHaveCount(0);
+  await page.locator("summary").filter({ hasText: "运营中心" }).click();
   await expect(page.getByRole("link", { name: /通知管理/ })).toHaveAttribute(
     "href",
     "/platform-admin/notifications",
   );
   await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("href", "/me");
+  await page.locator("summary").filter({ hasText: "账号与组织" }).click();
   const accountLinks = page.getByRole("link", { name: "账号与组织" });
   const accountLinkCount = await accountLinks.count();
   expect(accountLinkCount).toBeGreaterThanOrEqual(1);
@@ -332,4 +339,73 @@ test("M02-03 member shell never exposes platform administration navigation", asy
   await expect(page.getByRole("link", { name: "热点来源" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "安全与审计" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: /智能选品 选品工作台/ })).toBeVisible();
+});
+
+test("M02-03 explicit routes keep internal navigation reactive and unknown routes unselected", async ({
+  page,
+}) => {
+  await allow(page, "member");
+  await page.goto("/home");
+  await page.evaluate(() => ((window as any).__scoutopsRouteMarker = "kept"));
+  await page.getByRole("link", { name: "今日工作" }).click();
+  await expect(page).toHaveURL(/\/work$/);
+  expect(await page.evaluate(() => (window as any).__scoutopsRouteMarker)).toBe("kept");
+
+  await page.goto("/route-that-does-not-exist");
+  await expect(page.getByText("没有找到这个页面")).toBeVisible();
+  await expect(page.locator('[aria-current="page"]')).toHaveCount(0);
+});
+
+test("M02-03 platform return requires a target context and preserves the member route", async ({
+  page,
+}) => {
+  await page.addInitScript(() =>
+    window.sessionStorage.setItem("scoutops:last-member-route", "/opportunities?status=watching"),
+  );
+  await allow(page, "platform_admin");
+  await page.goto("/platform-admin");
+  const switchLink = page.getByRole("link", { name: "选择组织与工作区后进入用户工作台" });
+  const href = await switchLink.getAttribute("href");
+  expect(href).toContain("/select-context");
+  expect(href).toContain("return_to=%2Fopportunities%3Fstatus%3Dwatching");
+});
+
+test("M02-03 personal center uses an account shell without the organization navigation guard", async ({
+  page,
+}) => {
+  const envelope = (data: unknown) => ({
+    data,
+    request_id: "account-shell",
+    trace_id: "account-shell",
+  });
+  await page.route("**/api/v1/me/profile", (route) =>
+    route.fulfill({
+      json: envelope({
+        email: "member@example.com",
+        email_verified_at: "2026-08-20T00:00:00.000Z",
+        display_name: "选品成员",
+        avatar_url: null,
+        phone: null,
+        phone_verified_at: null,
+        locale: "zh-CN",
+        timezone: "Asia/Shanghai",
+        version: 1,
+      }),
+    }),
+  );
+  await page.route("**/api/v1/me/authorization", (route) =>
+    route.fulfill({ json: envelope({ roles: [], capabilities: [], data_scopes: [] }) }),
+  );
+  await page.route("**/api/v1/me/sessions", (route) => route.fulfill({ json: envelope([]) }));
+  await page.route("**/api/v1/me/notification-preferences", (route) =>
+    route.fulfill({ json: envelope({ version: 1, in_app_enabled: true }) }),
+  );
+  await page.route("**/api/v1/me/assets", (route) =>
+    route.fulfill({ json: envelope({ followed_trends: [], decisions: [], tasks: [] }) }),
+  );
+  await page.goto("/me");
+  await expect(page.locator(".account-shell")).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "个人中心分区" })).toHaveCount(0);
+  await expect(page.getByRole("complementary", { name: "个人中心分区" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "选品成员" })).toBeVisible();
 });

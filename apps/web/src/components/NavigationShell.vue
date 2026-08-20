@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from "vue";
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
-import { applyTheme, isThemeId, themes, type ThemeId } from "../design/theme";
+import { applyCachedTheme, applyTheme, isThemeId, themes, type ThemeId } from "../design/theme";
+import AppIcon from "./AppIcon.vue";
 import "../member-workspace-polish.css";
 
 const componentModules = import.meta.glob<{ default: object }>("./*.vue");
@@ -70,6 +71,7 @@ interface MenuItem {
   label: string;
   path: string;
   icon: string;
+  group: string;
   capabilities?: string[];
 }
 interface ThemePreference {
@@ -97,158 +99,250 @@ const state = ref<State>("loading"),
   discoveryMode = ref<"search" | "create" | null>(null);
 let themePreferenceSequence = 0;
 const memberMenu: MenuItem[] = [
-  { label: "今日行动", path: "/home", icon: "⌂", capabilities: ["task:read"] },
-  { label: "今日工作", path: "/work", icon: "✓", capabilities: ["task:read"] },
+  { label: "今日行动", path: "/home", icon: "home", group: "工作台", capabilities: ["task:read"] },
+  { label: "今日工作", path: "/work", icon: "check", group: "工作台", capabilities: ["task:read"] },
   {
     label: "热点趋势",
     path: "/trends",
-    icon: "↗",
+    icon: "trend",
+    group: "洞察与选品",
     capabilities: ["trend:read"],
   },
   {
     label: "选品机会",
     path: "/opportunities",
-    icon: "◇",
+    icon: "diamond",
+    group: "洞察与选品",
     capabilities: ["opportunity:read"],
   },
   {
     label: "竞品监控",
     path: "/competitors",
-    icon: "◎",
+    icon: "target",
+    group: "洞察与选品",
     capabilities: ["competitor:read"],
   },
   {
     label: "供应链与利润",
     path: "/sourcing",
-    icon: "▣",
+    icon: "box",
+    group: "洞察与选品",
     capabilities: ["sourcing:read"],
   },
   {
     label: "任务中心",
     path: "/tasks",
-    icon: "☷",
+    icon: "list",
+    group: "工作台",
     capabilities: ["task:read"],
   },
   {
     label: "审批中心",
     path: "/tasks/approvals",
-    icon: "✓",
+    icon: "check",
+    group: "工作台",
     capabilities: ["task:read"],
   },
   {
     label: "通知中心",
     path: "/notifications",
-    icon: "○",
+    icon: "bell",
+    group: "工作台",
     capabilities: ["notification:read"],
   },
   {
     label: "自动化规则",
     path: "/automations",
-    icon: "⚙",
+    icon: "automation",
+    group: "运营工具",
     capabilities: ["team:manage"],
   },
   {
     label: "报表与导出",
     path: "/reports",
-    icon: "▥",
+    icon: "chart",
+    group: "运营工具",
     capabilities: ["report:read"],
   },
-  { label: "个人中心", path: "/me", icon: "◉" },
 ];
 const orgMenu: MenuItem[] = [
-  { label: "组织资料", path: "/org-admin", icon: "▰" },
-  { label: "成员与邀请", path: "/org-admin/members", icon: "♙" },
-  { label: "角色与权限", path: "/org-admin/roles", icon: "◇" },
-  { label: "工作区与团队", path: "/org-admin/workspaces", icon: "▦" },
-  { label: "任务与审批", path: "/org-admin/approvals", icon: "✓" },
-  { label: "组织数据", path: "/org-admin/data", icon: "⌁" },
-  { label: "组织 Token", path: "/org-admin/tokens", icon: "⌘" },
-  { label: "组织审计", path: "/org-admin/audit", icon: "⊙" },
+  { label: "治理概览", path: "/org-admin", icon: "home", group: "概览" },
+  { label: "成员与邀请", path: "/org-admin/members", icon: "users", group: "人员与权限" },
+  { label: "角色与权限", path: "/org-admin/roles", icon: "shield", group: "人员与权限" },
+  { label: "工作区与团队", path: "/org-admin/workspaces", icon: "building", group: "组织结构" },
+  { label: "审批模板", path: "/org-admin/approvals", icon: "check", group: "组织治理" },
+  { label: "组织数据", path: "/org-admin/data", icon: "chart", group: "组织治理" },
+  { label: "组织令牌", path: "/org-admin/tokens", icon: "key", group: "安全与审计" },
+  { label: "组织审计", path: "/org-admin/audit", icon: "shield", group: "安全与审计" },
 ];
 const platformMenu: MenuItem[] = [
-  { label: "平台概览", path: "/platform-admin", icon: "⌂" },
+  { label: "平台概览", path: "/platform-admin", icon: "home", group: "平台概览" },
   {
     label: "账号与组织",
     path: "/platform-admin/accounts",
-    icon: "♙",
+    icon: "building",
+    group: "账号与组织",
     capabilities: ["platform:superadmin"],
   },
   {
     label: "人员与权限",
     path: "/platform-admin/permissions",
-    icon: "◇",
+    icon: "users",
+    group: "账号与组织",
     capabilities: ["platform:superadmin"],
   },
   {
     label: "热点来源",
     path: "/platform-admin/providers/sources",
-    icon: "◎",
+    icon: "trend",
+    group: "热点与采集",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "来源设置",
+    path: "/platform-admin/providers",
+    icon: "settings",
+    group: "热点与采集",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "采集程序",
+    path: "/platform-admin/providers/adapters",
+    icon: "automation",
+    group: "热点与采集",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
     label: "凭证与档案",
     path: "/platform-admin/credentials",
-    icon: "⌘",
+    icon: "key",
+    group: "热点与采集",
     capabilities: ["platform:superadmin"],
   },
   {
     label: "采集任务",
     path: "/platform-admin/collection/overview",
-    icon: "↻",
+    icon: "automation",
+    group: "热点与采集",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "采集运行时",
+    path: "/platform-admin/collection/browser-runtime",
+    icon: "target",
+    group: "热点与采集",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
     label: "全量数据",
     path: "/platform-admin/data",
-    icon: "▦",
+    icon: "database",
+    group: "数据治理",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
     label: "规则与自动化",
     path: "/platform-admin/governance",
-    icon: "⚙",
+    icon: "settings",
+    group: "数据治理",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
     label: "内容管理",
     path: "/platform-admin/content",
-    icon: "▤",
+    icon: "list",
+    group: "运营中心",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
     label: "通知管理",
     path: "/platform-admin/notifications",
-    icon: "○",
+    icon: "bell",
+    group: "运营中心",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
     label: "开放平台",
     path: "/platform-admin/open-platform",
-    icon: "⇄",
+    icon: "key",
+    group: "安全中心",
     capabilities: ["platform:superadmin"],
   },
   {
     label: "配额管理",
     path: "/platform-admin/commercial",
-    icon: "¥",
+    icon: "chart",
+    group: "运营中心",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
     label: "系统状态",
     path: "/platform-admin/status",
-    icon: "●",
+    icon: "target",
+    group: "系统运维",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
   {
     label: "安全与审计",
     path: "/platform-admin/security",
-    icon: "⊙",
+    icon: "shield",
+    group: "安全中心",
     capabilities: ["platform:secure", "platform:superadmin"],
   },
   {
     label: "高级设置",
     path: "/platform-admin/operations",
-    icon: "⌬",
+    icon: "settings",
+    group: "系统运维",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "发布管理",
+    path: "/platform-admin/releases",
+    icon: "trend",
+    group: "系统运维",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "服务拓扑",
+    path: "/platform-admin/topology",
+    icon: "building",
+    group: "系统运维",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "Redis 运行",
+    path: "/platform-admin/redis",
+    icon: "database",
+    group: "系统运维",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "MySQL 运行",
+    path: "/platform-admin/mysql",
+    icon: "database",
+    group: "系统运维",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "文件存储",
+    path: "/platform-admin/files",
+    icon: "box",
+    group: "系统运维",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "采集调度",
+    path: "/platform-admin/crawler-scheduler",
+    icon: "automation",
+    group: "系统运维",
+    capabilities: ["platform:operate", "platform:superadmin"],
+  },
+  {
+    label: "容量边界",
+    path: "/platform-admin/capacity",
+    icon: "chart",
+    group: "系统运维",
     capabilities: ["platform:operate", "platform:superadmin"],
   },
 ];
@@ -272,9 +366,20 @@ const items = computed(() => {
 const activeItem = computed(
   () =>
     items.value.find((item) => item.path === routePath.value) ||
-    items.value.find((item) => item.path !== "/" && routePath.value.startsWith(`${item.path}/`)) ||
-    items.value[0],
+    [...items.value]
+      .filter(
+        (item) =>
+          !["/platform-admin", "/org-admin", "/home"].includes(item.path) &&
+          routePath.value.startsWith(`${item.path}/`),
+      )
+      .sort((left, right) => right.path.length - left.path.length)[0] ||
+    null,
 );
+const menuGroups = computed(() => {
+  const groups = new Map<string, MenuItem[]>();
+  for (const item of items.value) groups.set(item.group, [...(groups.get(item.group) ?? []), item]);
+  return [...groups].map(([label, groupItems]) => ({ label, items: groupItems }));
+});
 const shellTitle = computed(() =>
   props.shell === "member"
     ? "成员工作台"
@@ -283,25 +388,45 @@ const shellTitle = computed(() =>
       : "平台管理后台",
 );
 const pageTitle = computed(() =>
-  routePath.value === "/" || routePath.value === "/home"
-    ? "今日行动"
-    : routePath.value === "/opportunities/start"
-      ? "真实选品"
-      : routePath.value === "/opportunities/scoring-rules"
-        ? "评分规则"
-        : routePath.value === "/sourcing/cost-rules"
-          ? "费用与利润规则"
-          : routePath.value === "/sourcing"
-            ? "供应链与利润"
-            : routePath.value === "/platform-admin/crawler-scheduler"
-              ? "采集调度"
-              : (activeItem.value?.label ?? shellTitle.value),
+  typeof route.meta.title === "string"
+    ? route.meta.title
+    : (activeItem.value?.label ?? shellTitle.value),
+);
+const breadcrumbs = computed(() =>
+  Array.isArray(route.meta.breadcrumb)
+    ? route.meta.breadcrumb.filter((item): item is string => typeof item === "string")
+    : [pageTitle.value],
+);
+const requiredCapabilities = computed(() =>
+  Array.isArray(route.meta.capabilities)
+    ? route.meta.capabilities.filter((item): item is string => typeof item === "string")
+    : [],
+);
+const routeAllowed = computed(
+  () =>
+    requiredCapabilities.value.length === 0 ||
+    requiredCapabilities.value.some((capability) => allCapabilities.value.includes(capability)),
+);
+const roleSummary = computed(() => {
+  const roles = props.shell === "platform_admin" ? guard.value?.platform_roles : guard.value?.roles;
+  return roles?.length ? roles.join(" · ") : "当前角色";
+});
+const memberReturnPath = () => {
+  const stored = window.sessionStorage.getItem("scoutops:last-member-route") ?? "/home";
+  return stored.startsWith("/") && !stored.startsWith("//") ? stored : "/home";
+};
+const contextSwitchTarget = computed(
+  () =>
+    `/select-context?return_to=${encodeURIComponent(memberReturnPath())}&from=${encodeURIComponent(route.fullPath)}`,
 );
 const isHome = computed(
     () => props.shell === "member" && (routePath.value === "/" || routePath.value === "/home"),
   ),
   isTasks = computed(
-    () => props.shell === "member" && ["/work", "/tasks"].includes(routePath.value),
+    () =>
+      props.shell === "member" &&
+      (["/work", "/tasks"].includes(routePath.value) ||
+        /^\/tasks\/[0-9a-f-]{36}$/i.test(routePath.value)),
   ),
   isApprovals = computed(() => props.shell === "member" && routePath.value === "/tasks/approvals"),
   isNotifications = computed(
@@ -379,6 +504,10 @@ const isHome = computed(
   ),
   opportunityId = computed(() => {
     const match = routePath.value.match(/^\/opportunities\/([0-9a-f-]{36})$/i);
+    return match?.[1] ?? "";
+  }),
+  taskId = computed(() => {
+    const match = routePath.value.match(/^\/tasks\/([0-9a-f-]{36})$/i);
     return match?.[1] ?? "";
   });
 const pageSummary = computed(() =>
@@ -514,10 +643,29 @@ function shortcut(event: KeyboardEvent) {
 }
 onMounted(() => {
   void load();
-  void loadThemePreference(false);
+  if (props.shell === "member") void loadThemePreference(false);
+  else applyTheme("cloud-white");
   window.addEventListener("keydown", shortcut);
 });
-onUnmounted(() => window.removeEventListener("keydown", shortcut));
+watch(
+  () => route.fullPath,
+  (fullPath) => {
+    if (props.shell === "member")
+      window.sessionStorage.setItem("scoutops:last-member-route", fullPath);
+  },
+  { immediate: true },
+);
+watch(
+  () => props.shell,
+  (shell) => {
+    if (shell === "member") void loadThemePreference(false);
+    else applyTheme("cloud-white");
+  },
+);
+onUnmounted(() => {
+  window.removeEventListener("keydown", shortcut);
+  if (props.shell !== "member") applyCachedTheme();
+});
 </script>
 
 <template>
@@ -549,7 +697,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         aria-controls="role-navigation"
         @click="menuOpen = !menuOpen"
       >
-        ☰ <span>菜单</span>
+        <AppIcon name="menu" /> <span>菜单</span>
       </button>
       <div class="role-context" v-if="state === 'ready'">
         <span v-if="shell !== 'platform_admin'"
@@ -561,33 +709,33 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
       <div class="role-top-actions">
         <div v-if="shell === 'member'" class="role-theme-switcher">
           <button type="button" aria-label="切换界面主题" @click="themeOpen = !themeOpen">
-            ◐ <span>主题</span>
+            <AppIcon name="theme" /> <span>主题</span>
           </button>
         </div>
         <button v-if="shell === 'member'" type="button" @click="discoveryMode = 'search'">
-          ⌕ <span>搜索</span><kbd>快捷键</kbd>
+          <AppIcon name="search" /> <span>搜索</span><kbd>快捷键</kbd>
         </button>
         <RouterLink
           v-if="shell === 'platform_admin'"
           class="role-create"
           to="/platform-admin/accounts?create=1"
-          >＋ <span>新建组织</span></RouterLink
+          ><AppIcon name="plus" /> <span>新建组织</span></RouterLink
         >
         <RouterLink
           v-else-if="shell === 'organization_admin'"
           class="role-create"
           to="/org-admin/members"
-          >＋ <span>邀请成员</span></RouterLink
+          ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink
         >
         <button v-else type="button" class="role-create" @click="discoveryMode = 'create'">
-          ＋ <span>创建选品</span>
+          <AppIcon name="plus" /> <span>创建选品</span>
         </button>
         <RouterLink
           v-if="shell === 'platform_admin'"
           class="role-switch"
-          to="/home"
-          aria-label="进入用户工作台"
-          ><span class="role-switch-desktop">进入用户工作台</span
+          :to="contextSwitchTarget"
+          aria-label="选择组织与工作区后进入用户工作台"
+          ><AppIcon name="switch" /><span class="role-switch-desktop">选择范围并返回工作台</span
           ><span class="role-switch-mobile">用户面板</span></RouterLink
         >
         <RouterLink
@@ -595,12 +743,12 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           class="role-switch"
           to="/platform-admin"
           aria-label="进入管理后台"
-          ><span class="role-switch-desktop">进入管理后台</span
+          ><AppIcon name="switch" /><span class="role-switch-desktop">进入管理后台</span
           ><span class="role-switch-mobile">管理后台</span></RouterLink
         >
         <RouterLink v-if="shell === 'member'" to="/notifications" aria-label="通知中心"
-          >○</RouterLink
-        ><RouterLink to="/me" aria-label="个人中心">◉</RouterLink>
+          ><AppIcon name="bell" /></RouterLink
+        ><RouterLink to="/me" aria-label="个人中心"><AppIcon name="person" /></RouterLink>
       </div>
     </header>
     <aside
@@ -611,32 +759,44 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
     >
       <div class="role-sidebar-head">
         <strong>{{ shellTitle }}</strong
-        ><small>{{
-          shell === "member"
-            ? "当前组织业务范围"
-            : shell === "organization_admin"
-              ? "仅当前组织"
-              : "平台角色授权范围"
-        }}</small>
+        ><small
+          >{{
+            shell === "member"
+              ? "当前组织业务范围"
+              : shell === "organization_admin"
+                ? "仅当前组织"
+                : "平台角色授权范围"
+          }}
+          · {{ roleSummary }}</small
+        >
       </div>
       <div v-if="shell === 'member'" class="role-sidebar-actions">
         <button type="button" @click="((discoveryMode = 'search'), (menuOpen = false))">
-          ⌕ 搜索
+          <AppIcon name="search" /> 搜索
         </button>
         <button type="button" @click="((discoveryMode = 'create'), (menuOpen = false))">
-          ＋ 创建选品
+          <AppIcon name="plus" /> 创建选品
         </button>
       </div>
-      <nav v-if="state === 'ready'">
-        <RouterLink
-          v-for="item in items"
-          :key="item.path"
-          :to="item.path"
-          :aria-current="activeItem?.path === item.path ? 'page' : undefined"
-          @click="menuOpen = false"
-          ><i>{{ item.icon }}</i
-          ><span>{{ item.label }}</span></RouterLink
+      <nav v-if="state === 'ready'" class="role-nav-groups">
+        <details
+          v-for="group in menuGroups"
+          :key="group.label"
+          :open="group.items.some((item) => activeItem?.path === item.path)"
         >
+          <summary>
+            <span>{{ group.label }}</span
+            ><AppIcon name="chevron" :size="14" />
+          </summary>
+          <RouterLink
+            v-for="item in group.items"
+            :key="item.path"
+            :to="item.path"
+            :aria-current="activeItem?.path === item.path ? 'page' : undefined"
+            @click="menuOpen = false"
+            ><i><AppIcon :name="item.icon" /></i><span>{{ item.label }}</span></RouterLink
+          >
+        </details>
       </nav>
     </aside>
     <section class="role-content">
@@ -656,20 +816,21 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         ><RouterLink v-else-if="state === 'forbidden'" to="/home">返回成员工作台</RouterLink
         ><button v-else-if="state !== 'loading'" type="button" @click="load">重新检查</button>
       </section>
-      <template v-else>
-        <header v-if="!opportunityId" class="role-page-head">
-          <div>
-            <p>{{ shellTitle }}</p>
-            <h1>{{ pageTitle }}</h1>
-            <span v-if="pageSummary">{{ pageSummary }}</span>
-          </div>
-        </header>
+      <template v-else-if="routeAllowed">
+        <nav v-if="!opportunityId" class="role-page-breadcrumb" aria-label="面包屑">
+          <template v-for="(item, index) in breadcrumbs" :key="`${item}-${index}`">
+            <span>{{ item }}</span
+            ><b v-if="index < breadcrumbs.length - 1">/</b>
+          </template>
+        </nav>
+        <h1 v-if="!opportunityId" class="so-visually-hidden">{{ pageTitle }}</h1>
         <KeepAlive :max="12">
           <HomeDashboard v-if="isHome" :api-base-url="apiBaseUrl" />
           <TaskWorkspace
             v-else-if="isTasks"
             :api-base-url="apiBaseUrl"
             :mode="routePath === '/work' ? 'today' : 'all'"
+            :task-id="taskId || undefined"
           />
           <ApprovalWorkspace v-else-if="isApprovals" :api-base-url="apiBaseUrl" />
           <NotificationCenter v-else-if="isNotifications" :api-base-url="apiBaseUrl" />
@@ -729,22 +890,22 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
             class="provider-runtime-surface"
           >
             <nav class="provider-runtime-tabs" aria-label="来源管理视图">
-              <a
-                href="/platform-admin/providers"
+              <RouterLink
+                to="/platform-admin/providers"
                 :aria-current="routePath === '/platform-admin/providers' ? 'page' : undefined"
-                >来源设置（高级）</a
-              ><a
-                href="/platform-admin/providers/adapters"
+                >来源设置（高级）</RouterLink
+              ><RouterLink
+                to="/platform-admin/providers/adapters"
                 :aria-current="
                   routePath === '/platform-admin/providers/adapters' ? 'page' : undefined
                 "
-                >采集程序（高级）</a
-              ><a
-                href="/platform-admin/providers/sources"
+                >采集程序（高级）</RouterLink
+              ><RouterLink
+                to="/platform-admin/providers/sources"
                 :aria-current="
                   routePath === '/platform-admin/providers/sources' ? 'page' : undefined
                 "
-                >来源频道</a
+                >来源频道</RouterLink
               >
             </nav>
             <ProviderSourceCenter
@@ -768,22 +929,22 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
             class="provider-runtime-surface"
           >
             <nav class="provider-runtime-tabs" aria-label="采集控制台视图">
-              <a
-                href="/platform-admin/collection/overview"
+              <RouterLink
+                to="/platform-admin/collection/overview"
                 :aria-current="
                   routePath === '/platform-admin/collection/overview' ? 'page' : undefined
                 "
-                >采集总览</a
-              ><a
-                href="/platform-admin/collection"
+                >采集总览</RouterLink
+              ><RouterLink
+                to="/platform-admin/collection"
                 :aria-current="routePath === '/platform-admin/collection' ? 'page' : undefined"
-                >任务详情</a
-              ><a
-                href="/platform-admin/collection/browser-runtime"
+                >任务详情</RouterLink
+              ><RouterLink
+                to="/platform-admin/collection/browser-runtime"
                 :aria-current="
                   routePath === '/platform-admin/collection/browser-runtime' ? 'page' : undefined
                 "
-                >网页登录采集（高级）</a
+                >网页登录采集（高级）</RouterLink
               >
             </nav>
             <CollectionOperationsConsole
@@ -821,6 +982,13 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           </section>
         </KeepAlive>
       </template>
+      <section v-else class="role-gate-state" aria-live="polite">
+        <span class="role-state-mark" aria-hidden="true">×</span>
+        <p>路由权限</p>
+        <h1>无权打开此页面</h1>
+        <p>当前角色不包含该页面要求的能力，请返回有权访问的模块。</p>
+        <RouterLink :to="items[0]?.path || '/home'">返回工作台</RouterLink>
+      </section>
     </section>
     <nav v-if="state === 'ready'" class="role-mobile-nav" aria-label="移动快捷导航">
       <RouterLink
@@ -828,15 +996,14 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
         :key="item.path"
         :to="item.path"
         :aria-current="activeItem?.path === item.path ? 'page' : undefined"
-        ><i>{{ item.icon }}</i
-        ><span>{{ item.label }}</span></RouterLink
+        ><i><AppIcon :name="item.icon" /></i><span>{{ item.label }}</span></RouterLink
       ><button
         type="button"
         aria-controls="role-navigation"
         :aria-expanded="menuOpen"
         @click="menuOpen = true"
       >
-        <i>☰</i><span>更多</span>
+        <i><AppIcon name="menu" /></i><span>更多</span>
       </button>
     </nav>
     <div v-if="shell === 'member' && themeOpen" class="role-theme-menu">
@@ -855,7 +1022,7 @@ onUnmounted(() => window.removeEventListener("keydown", shortcut));
           ></span
         >
       </button>
-      <a href="/settings/theme">更多外观设置</a>
+      <RouterLink to="/settings/theme">更多外观设置</RouterLink>
     </div>
     <p v-if="shell === 'member' && themeNotice" class="role-theme-notice" role="status">
       {{ themeNotice }}

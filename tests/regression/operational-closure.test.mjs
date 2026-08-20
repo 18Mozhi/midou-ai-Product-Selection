@@ -15,6 +15,7 @@ test("Feature Map routes are unique and Vue Router owns reactive lazy navigation
   assert.equal(new Set(routes.map((route) => route.path)).size, routes.length);
   assert.match(router, /createRouter[\s\S]*createWebHistory/);
   assert.match(app, /defineAsyncComponent[\s\S]*useRoute/);
+  assert.match(router, /appRoutes[\s\S]*document\.title/);
   assert.match(shell, /import\.meta\.glob[\s\S]*KeepAlive/);
   assert.match(shell, /采集调度/);
 });

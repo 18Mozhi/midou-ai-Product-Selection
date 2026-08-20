@@ -43,7 +43,14 @@ async function setup(page: Page) {
         organization_name: "米豆智能选品",
         workspace_name: "跨境新品工作区",
         roles: ["selection_manager"],
-        capabilities: ["task:read", "task:create", "task:update", "task:assign"],
+        capabilities: [
+          "task:read",
+          "task:create",
+          "task:update",
+          "task:assign",
+          "notification:read",
+          "opportunity:decide",
+        ],
         platform_roles: [],
         platform_capabilities: [],
         guard_reason: "navigation_member_allowed",
@@ -202,7 +209,7 @@ test("member workspace shows Chinese context theme switch and task progress with
     .evaluate((element) => getComputedStyle(element).backgroundImage);
   expect(afterTheme).not.toBe(beforeTheme);
   await page.locator(".task-row-main").filter({ hasText: "核验便携净水杯供应商报价" }).click();
-  await expect(page.getByText("35% · 已完成亚马逊竞品初筛")).toBeVisible();
+  await expect(page.getByText("执行中 · 已完成亚马逊竞品初筛")).toBeVisible();
   await expect(page.getByRole("button", { name: "更新进度" })).toBeVisible();
   await expect(page.getByRole("button", { name: "编辑" })).toBeVisible();
   await expect(

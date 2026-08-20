@@ -1,11 +1,24 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { ApiClientError, createApiClient, type ApiRequestOptions } from "../api-client";
 
-const props = defineProps<{ apiBaseUrl: string }>();
+type PersonalSection = "profile" | "permissions" | "security" | "notifications" | "assets";
+const props = withDefaults(
+  defineProps<{ apiBaseUrl: string; initialSection?: string; accountShell?: boolean }>(),
+  { initialSection: "profile", accountShell: false },
+);
 const request = createApiClient(props.apiBaseUrl);
 const state = ref<"loading" | "ready" | "error">("loading");
-const tab = ref<"profile" | "permissions" | "security" | "notifications" | "assets">("profile");
+const validSections: PersonalSection[] = [
+  "profile",
+  "permissions",
+  "security",
+  "notifications",
+  "assets",
+];
+const normalizeSection = (value: string): PersonalSection =>
+  validSections.includes(value as PersonalSection) ? (value as PersonalSection) : "profile";
+const tab = ref<PersonalSection>(normalizeSection(props.initialSection));
 const notice = ref("");
 const requestId = ref("");
 const profile = ref<any>(null);
@@ -255,6 +268,12 @@ const decisionName = (value: string) =>
   (({ adopt: "采纳", observe: "继续观察", reject: "驳回" }) as Record<string, string>)[value] ??
   "已处理";
 onMounted(() => void load());
+watch(
+  () => props.initialSection,
+  (value) => {
+    tab.value = normalizeSection(value);
+  },
+);
 </script>
 
 <template>
@@ -280,7 +299,7 @@ onMounted(() => void load());
       <button v-if="state === 'error'" @click="load">重新加载</button>
     </section>
     <template v-else>
-      <nav aria-label="个人中心分区">
+      <nav v-if="!accountShell" aria-label="个人中心分区">
         <button
           v-for="item in [
             { key: 'profile', name: '基本资料' },
