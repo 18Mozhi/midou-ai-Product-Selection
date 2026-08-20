@@ -1412,6 +1412,7 @@
         "../apps/api/src/platform-dashboard-routes.ts",
         "../apps/web/src/components/PlatformDashboard.vue",
         "../apps/web/src/components/PlatformManagementCenter.vue",
+        "../apps/web/src/components/PlatformManagementRecordList.vue",
         "../apps/web/src/components/PlatformMessageWorkbench.vue",
         "../apps/web/src/components/PlatformMessageEditor.vue",
         "../apps/web/src/components/PlatformNotificationOperations.vue",
@@ -1436,7 +1437,7 @@
         "/api/v1/platform/management/messages/{messageId}/actions",
         "/api/v1/platform/management/email/{source}/{deliveryId}/actions"
       ],
-      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, plus unified backend database cache file task-processing and crawler status management with dedicated operations links; dashboard mobile provider health and platform data or governance records use summary cards with detail drawers, mobile filters use a state-preserving drawer, and provider alert-scope record version request identifiers or raw status values stay inside technical details or API values rather than primary UI copy",
+      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, plus unified backend database cache file task-processing and crawler status management with dedicated operations links; dashboard mobile provider health and platform data governance content notification or retained email records use summary cards with detail drawers, mobile filters use a state-preserving drawer, and provider alert-scope record version request identifiers raw delivery values or error codes stay inside technical details or API values rather than primary UI copy",
       "truthBoundary": "no sample remains unknown or null; no credentials, payloads, internal file paths or invented uptime and capacity claims; /platform-admin/email and all email enable controls stay closed while Mail provider is pending_provider_selection",
       "permission": "platform:operate on the API; platform role navigation guard on the page; dashboard reads and platform data exports write correlated platform audit events",
       "configuration": [

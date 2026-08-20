@@ -229,10 +229,13 @@ test("platform navigation exposes complete management domains and role switching
 });
 
 test("platform management and dashboard expose operational details instead of placeholder cards", async () => {
-  const management = await readFile(
-    new URL("../../apps/web/src/components/PlatformManagementCenter.vue", import.meta.url),
-    "utf8",
-  );
+  const management = (
+    await Promise.all(
+      ["PlatformManagementCenter.vue", "PlatformManagementRecordList.vue"].map((file) =>
+        readFile(new URL(`../../apps/web/src/components/${file}`, import.meta.url), "utf8"),
+      ),
+    )
+  ).join("\n");
   const dashboard = await readFile(
     new URL("../../apps/web/src/components/PlatformDashboard.vue", import.meta.url),
     "utf8",

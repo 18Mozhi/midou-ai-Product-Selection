@@ -98,9 +98,10 @@
     grid-template-columns: 1fr;
   }
   .notification-ops .platform-management-table {
-    padding: 8px;
+    padding: 14px;
+    overflow: visible;
   }
-  .notification-ops table {
-    min-width: 760px;
+  .notification-ops .notification-delivery-head {
+    flex-direction: column;
   }
 }

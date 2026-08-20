@@ -2,7 +2,9 @@
 import { computed, onMounted, ref, watch } from "vue";
 import PlatformMessageEditor from "./PlatformMessageEditor.vue";
 import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
+import PlatformManagementRecordList from "./PlatformManagementRecordList.vue";
 import PlatformNotificationOperations from "./PlatformNotificationOperations.vue";
+import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 
 type Domain = "content" | "notifications" | "email" | "status";
 const props = defineProps<{ apiBaseUrl: string; domain: string }>();
@@ -45,6 +47,9 @@ const titles: Record<Domain, [string, string]> = {
   status: ["系统状态", "查看 API、数据库、账号、来源和采集任务的真实运行状态。"],
 };
 const summaryEntries = computed(() => Object.entries(data.value?.summary ?? {}));
+const activeFilterCount = computed(
+  () => Number(Boolean(query.value.trim())) + Number(Boolean(status.value)),
+);
 const summaryName = (key: string) =>
   (
     ({
@@ -75,6 +80,9 @@ const stateName = (value: unknown) =>
       blocked_provider: "服务商受阻",
       dead_letter: "死信",
       failed: "失败",
+      queued: "排队中",
+      retry_scheduled: "等待重试",
+      suppressed: "已停止投递",
       healthy: "正常",
       ready: "正常",
       warning: "警告",
@@ -329,29 +337,40 @@ onMounted(load);
         <button type="button" @click="load">刷新数据</button>
       </div>
     </header>
-    <form v-if="domain !== 'status'" class="platform-management-filter" @submit.prevent="load">
-      <input
-        v-model="query"
-        :placeholder="domain === 'content' ? '搜索主题、分类或市场' : '搜索标题、邮箱或组织'"
-      /><select v-model="status">
-        <option value="">全部状态</option>
-        <template v-if="domain === 'content'"
-          ><option value="active">展示中</option>
-          <option value="irrelevant">无关</option>
-          <option value="stale">已过期</option></template
-        ><template v-else-if="domain === 'notifications'"
-          ><option value="task">任务</option>
-          <option value="approval">审批</option>
-          <option value="competitor">竞品</option>
-          <option value="system">系统</option></template
-        ><template v-else
-          ><option value="succeeded">已送达</option>
-          <option value="blocked_provider">服务商受阻</option>
-          <option value="dead_letter">死信</option>
-          <option value="failed">失败</option></template
-        ></select
-      ><button>筛选</button>
-    </form>
+    <ResponsiveFilterDrawer
+      v-if="domain !== 'status'"
+      :label="`筛选${titles[domain][0]}`"
+      :active-count="activeFilterCount"
+    >
+      <form class="platform-management-filter" @submit.prevent="load">
+        <input
+          v-model="query"
+          :placeholder="domain === 'content' ? '搜索主题、分类或市场' : '搜索标题、邮箱或组织'"
+        /><select
+          v-model="status"
+          :aria-label="
+            domain === 'content' ? '内容状态' : domain === 'notifications' ? '通知类型' : '邮件状态'
+          "
+        >
+          <option value="">全部状态</option>
+          <template v-if="domain === 'content'"
+            ><option value="active">展示中</option>
+            <option value="irrelevant">无关</option>
+            <option value="stale">已过期</option></template
+          ><template v-else-if="domain === 'notifications'"
+            ><option value="task">任务</option>
+            <option value="approval">审批</option>
+            <option value="competitor">竞品</option>
+            <option value="system">系统</option></template
+          ><template v-else
+            ><option value="succeeded">已送达</option>
+            <option value="blocked_provider">服务商受阻</option>
+            <option value="dead_letter">死信</option>
+            <option value="failed">失败</option></template
+          ></select
+        ><button>筛选</button>
+      </form>
+    </ResponsiveFilterDrawer>
     <p v-if="message" class="platform-management-message">{{ message }}</p>
     <section v-if="state !== 'ready'" class="platform-management-state">
       <h3>
@@ -383,119 +402,32 @@ onMounted(load);
         @edit="openMessage"
         @action="messageAction"
       />
-      <div v-if="domain === 'content'" class="platform-management-table">
-        <table>
-          <thead>
-            <tr>
-              <th>热点主题</th>
-              <th>组织 / 工作区</th>
-              <th>市场</th>
-              <th>信号 / 来源</th>
-              <th>状态</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in data.items" :key="item.id">
-              <td data-label="热点主题">
-                <strong>{{ item.title }}</strong
-                ><small>{{ item.category || "未分类" }} · 热度 {{ item.heat_value }}</small>
-              </td>
-              <td data-label="组织 / 工作区">
-                {{ item.organization_name }}<small>{{ item.workspace_name }}</small>
-              </td>
-              <td data-label="市场">{{ item.market }} · {{ item.language }}</td>
-              <td data-label="信号 / 来源">{{ item.signal_count }} / {{ item.source_count }}</td>
-              <td data-label="状态">
-                <b :data-state="item.status">{{ stateName(item.status) }}</b>
-              </td>
-              <td data-label="操作">
-                <button title="设为展示中" @click="beginReview(item, 'active')">展示</button
-                ><button title="标记为无关" @click="beginReview(item, 'irrelevant')">无关</button
-                ><button title="标记为过期" @click="beginReview(item, 'stale')">过期</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <PlatformManagementRecordList
+        v-if="domain === 'content'"
+        domain="content"
+        :items="data.items"
+        :busy="busy"
+        :state-name="stateName"
+        :when="when"
+        @review="beginReview"
+        @email-action="manageEmail"
+      />
       <PlatformNotificationOperations
         v-else-if="domain === 'notifications'"
         :data="data"
         :state-name="stateName"
         :when="when"
       />
-      <div v-else-if="domain === 'email'" class="platform-management-table">
-        <table>
-          <thead>
-            <tr>
-              <th>邮件</th>
-              <th>接收邮箱</th>
-              <th>类别</th>
-              <th>状态</th>
-              <th>尝试</th>
-              <th>最近错误 / 更新时间</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in data.items" :key="item.id">
-              <td data-label="邮件">
-                <strong>{{ item.title || item.kind }}</strong
-                ><small>{{ item.source }}</small>
-              </td>
-              <td data-label="接收邮箱">{{ item.email }}</td>
-              <td data-label="类别">{{ item.kind || "业务通知" }}</td>
-              <td data-label="状态">
-                <b :data-state="item.status">{{ stateName(item.status) }}</b>
-              </td>
-              <td data-label="尝试">{{ item.attempt_count }}</td>
-              <td data-label="最近错误 / 更新时间">
-                {{ item.last_error_code || "无错误" }}<small>{{ when(item.updated_at) }}</small>
-              </td>
-              <td data-label="操作">
-                <button
-                  v-if="
-                    (item.source_type === 'account' &&
-                      ['blocked_provider', 'dead_letter', 'retry_scheduled'].includes(
-                        item.status,
-                      )) ||
-                    (item.source_type === 'notification' &&
-                      ['failed', 'dead_letter', 'suppressed'].includes(item.status))
-                  "
-                  title="将失败邮件重新放入投递队列"
-                  :disabled="busy === item.id"
-                  @click="manageEmail(item, 'retry')"
-                >
-                  重新投递
-                </button>
-                <button
-                  v-if="
-                    item.source_type === 'notification' &&
-                    !['delivered', 'suppressed'].includes(item.status)
-                  "
-                  title="停止本条业务通知邮件继续投递"
-                  :disabled="busy === item.id"
-                  @click="manageEmail(item, 'suppress')"
-                >
-                  抑制投递
-                </button>
-                <span
-                  v-if="
-                    !(
-                      (item.source_type === 'account' &&
-                        ['blocked_provider', 'dead_letter', 'retry_scheduled'].includes(
-                          item.status,
-                        )) ||
-                      (item.source_type === 'notification' && !['delivered'].includes(item.status))
-                    )
-                  "
-                  >无需处理</span
-                >
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <PlatformManagementRecordList
+        v-else-if="domain === 'email'"
+        domain="email"
+        :items="data.items"
+        :busy="busy"
+        :state-name="stateName"
+        :when="when"
+        @review="beginReview"
+        @email-action="manageEmail"
+      />
       <div v-else class="platform-status-grid">
         <section class="platform-service-status">
           <header>
@@ -531,8 +463,11 @@ onMounted(load);
         </section>
       </div>
       <footer>
-        数据更新时间 {{ when(data.observed_at)
-        }}<span v-if="requestId"> · 关联编号 {{ requestId }}</span>
+        <span>数据更新时间 {{ when(data.observed_at) }}</span>
+        <details v-if="requestId">
+          <summary>技术详情</summary>
+          <span>关联编号 {{ requestId }}</span>
+        </details>
       </footer></template
     >
     <dialog :open="Boolean(reviewItem)">
@@ -649,7 +584,6 @@ dialog footer button:last-child {
   gap: 10px;
 }
 .platform-management-kpis article,
-.platform-management-table,
 .platform-status-grid section {
   padding: 17px;
   border: 1px solid var(--so-border);
@@ -664,43 +598,6 @@ dialog footer button:last-child {
   display: block;
   margin-top: 8px;
   font-size: 23px;
-}
-.platform-management-table {
-  overflow: auto;
-}
-.platform-management table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.platform-management th,
-.platform-management td {
-  padding: 12px 9px;
-  text-align: left;
-  border-bottom: 1px solid var(--so-border);
-  font-size: 13px;
-}
-.platform-management td strong,
-.platform-management td small {
-  display: block;
-}
-.platform-management td small {
-  margin-top: 4px;
-  color: var(--so-text-muted);
-}
-.platform-management td button {
-  margin: 2px;
-  padding: 6px 9px;
-}
-.platform-management b[data-state="active"],
-.platform-management b[data-state="delivered"],
-.platform-management b[data-state="succeeded"] {
-  color: var(--so-success);
-}
-.platform-management b[data-state="irrelevant"],
-.platform-management b[data-state="stale"],
-.platform-management b[data-state="dead_letter"],
-.platform-management b[data-state="failed"] {
-  color: var(--so-danger);
 }
 .platform-management-state,
 .platform-management-message {
@@ -796,6 +693,16 @@ dialog footer button:last-child {
   text-align: right;
   font-size: 11px;
 }
+.platform-management > footer details {
+  margin-top: 6px;
+}
+.platform-management > footer summary {
+  min-height: var(--so-touch-target);
+  display: inline-flex;
+  align-items: center;
+  color: var(--so-primary);
+  cursor: pointer;
+}
 dialog {
   position: fixed;
   inset: 0;
@@ -831,12 +738,6 @@ dialog footer {
   }
   .platform-status-grid {
     grid-template-columns: 1fr;
-  }
-  .platform-management-table {
-    padding: 8px;
-  }
-  .platform-management table {
-    min-width: 760px;
   }
 }
 </style>

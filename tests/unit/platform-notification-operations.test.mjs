@@ -11,6 +11,7 @@ test("platform notification operations expose templates channels subscriptions d
     [
       [
         "apps/web/src/components/PlatformManagementCenter.vue",
+        "apps/web/src/components/PlatformManagementRecordList.vue",
         "apps/web/src/components/PlatformMessageWorkbench.vue",
         "apps/web/src/components/PlatformMessageEditor.vue",
         "apps/web/src/components/PlatformNotificationOperations.vue",
@@ -112,7 +113,8 @@ test("platform management keeps orchestration and message views in bounded compo
     ["apps/web/src/components/PlatformManagementCenter.vue", 1_000],
     ["apps/web/src/components/PlatformMessageWorkbench.vue", 200],
     ["apps/web/src/components/PlatformMessageEditor.vue", 200],
-    ["apps/web/src/components/PlatformNotificationOperations.vue", 200],
+    ["apps/web/src/components/PlatformManagementRecordList.vue", 400],
+    ["apps/web/src/components/PlatformNotificationOperations.vue", 320],
   ]);
   for (const [path, limit] of limits) {
     const source = await readFile(path, "utf8");

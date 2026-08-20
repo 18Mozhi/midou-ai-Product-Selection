@@ -3,13 +3,15 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 test("responsive data view keeps desktop tables and moves mobile details into a named drawer", async () => {
-  const [view, collection, runtime, tasks, quality] = await Promise.all(
+  const [view, collection, runtime, tasks, quality, management, notifications] = await Promise.all(
     [
       "apps/web/src/components/ResponsiveDataView.vue",
       "apps/web/src/components/CollectionOperationsConsole.vue",
       "apps/web/src/components/CollectionRuntimeCenter.vue",
       "apps/web/src/components/CollectionTaskCenter.vue",
       "apps/web/src/components/DataQualityCenter.vue",
+      "apps/web/src/components/PlatformManagementRecordList.vue",
+      "apps/web/src/components/PlatformNotificationOperations.vue",
     ].map((path) => readFile(path, "utf8")),
   );
 
@@ -32,5 +34,11 @@ test("responsive data view keeps desktop tables and moves mobile details into a 
   for (const component of [runtime, tasks, quality]) {
     assert.match(component, /<summary>技术详情<\/summary>/);
     assert.doesNotMatch(component, /organization_id\.slice/);
+  }
+  assert.equal((management.match(/<ResponsiveDataView/g) ?? []).length, 2);
+  assert.equal((notifications.match(/<ResponsiveDataView/g) ?? []).length, 1);
+  for (const component of [management, notifications]) {
+    assert.match(component, /<summary>技术详情<\/summary>/);
+    assert.doesNotMatch(component, /min-width:\s*760px/);
   }
 });

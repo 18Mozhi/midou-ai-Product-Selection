@@ -157,7 +157,7 @@ test("M06-02.A08/A16 empty forbidden and dependency states recover truthfully", 
 
 test("platform completion renders trend and management without overflow or console errors", async ({
   page,
-}) => {
+}, testInfo) => {
   const errors: string[] = [];
   page.on("console", (message) => {
     if (message.type() === "error") errors.push(message.text());
@@ -209,21 +209,53 @@ test("platform completion renders trend and management without overflow or conso
     .toBe(true);
   await page.goto("/platform-admin/content");
   await expect(page.getByRole("heading", { name: "内容管理", level: 2 })).toBeVisible();
-  await expect(page.getByText("便携式照明热度上升")).toBeVisible();
-  await page.getByRole("button", { name: "无关" }).click();
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /便携式照明热度上升.*查看详情/ }).click();
+    await page
+      .getByRole("dialog", { name: "便携式照明热度上升" })
+      .getByRole("button", { name: "标记无关" })
+      .click();
+  } else {
+    await expect(page.getByRole("table").getByText("便携式照明热度上升")).toBeVisible();
+    await page.getByTitle("标记为无关").click();
+  }
   await expect(page.getByRole("heading", { name: "审核热点内容" })).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByRole("heading", { name: "内容管理", level: 2 })).toBeVisible();
+  await page.getByRole("button", { name: "筛选内容管理" }).click();
+  const contentFilters = page.getByRole("dialog", { name: "筛选内容管理" });
+  await contentFilters.getByPlaceholder("搜索主题、分类或市场").fill("照明");
+  await contentFilters.getByLabel("内容状态").selectOption("active");
+  await contentFilters.getByRole("button", { name: "关闭筛选条件" }).click();
+  await page.getByRole("button", { name: /筛选内容管理.*2 项已选/ }).click();
+  await expect(contentFilters.getByPlaceholder("搜索主题、分类或市场")).toHaveValue("照明");
+  await expect(contentFilters.getByLabel("内容状态")).toHaveValue("active");
+  await contentFilters.getByRole("button", { name: "关闭筛选条件" }).click();
+  await page.getByRole("button", { name: /便携式照明热度上升.*查看详情/ }).click();
+  const contentDetail = page.getByRole("dialog", { name: "便携式照明热度上升" });
+  await expect(contentDetail.getByText("00000000-0000-4000-8000-000000000701")).not.toBeVisible();
+  await contentDetail.getByText("技术详情").click();
+  await expect(contentDetail.getByText("00000000-0000-4000-8000-000000000701")).toBeVisible();
+  await contentDetail.getByRole("button", { name: "关闭详情" }).click();
+  await page.getByRole("button", { name: /便携式照明热度上升.*查看详情/ }).click();
+  await page
+    .getByRole("dialog", { name: "便携式照明热度上升" })
+    .getByRole("button", { name: "标记无关" })
+    .click();
+  await expect(page.getByRole("heading", { name: "审核热点内容" })).toBeVisible();
+  await page.getByRole("button", { name: "取消" }).click();
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
+  if (testInfo.project.name === "mobile-390")
+    await expect(page).toHaveScreenshot("m06-02-platform-content-mobile.png", { fullPage: true });
   expect(errors).toEqual([]);
 });
 
 test("platform completion exposes data governance notifications and user-panel switch", async ({
   page,
-}) => {
+}, testInfo) => {
   const errors: string[] = [];
   page.on("console", (message) => {
     if (message.type() === "error") errors.push(message.text());
@@ -329,7 +361,7 @@ test("platform completion exposes data governance notifications and user-panel s
                   category: "task",
                   severity: "info",
                   read_at: null,
-                  delivery_status: "delivered",
+                  delivery_status: "in_app:delivered",
                   created_at: "2026-08-18T12:00:00.000Z",
                 },
               ],
@@ -401,13 +433,41 @@ test("platform completion exposes data governance notifications and user-panel s
   await page.goto("/platform-admin/notifications");
   await expect(page.getByRole("heading", { name: "通知管理", level: 2 })).toBeVisible();
   await expect(page.getByText("任务状态通知")).toBeVisible();
-  await expect(page.getByText("member@example.test")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 1000) <= 760)
+    await expect(page.getByRole("button", { name: /采集任务完成.*查看详情/ })).toBeVisible();
+  else await expect(page.getByRole("table").getByText("member@example.test")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByRole("heading", { name: "通知管理", level: 2 })).toBeVisible();
+  await expect(page.getByText("站内通知 · 启用", { exact: true })).toBeVisible();
+  await expect(page.getByText("启用站内通知", { exact: true })).toBeVisible();
+  await expect(page.getByText("启用邮件", { exact: true })).toBeVisible();
+  await expect(page.getByText("停用全部通知", { exact: true })).toBeVisible();
+  await expect(page.getByText("in_app", { exact: true })).toHaveCount(0);
+  await page.getByRole("button", { name: "筛选通知管理" }).click();
+  const notificationFilters = page.getByRole("dialog", { name: "筛选通知管理" });
+  await notificationFilters.getByPlaceholder("搜索标题、邮箱或组织").fill("采集");
+  await notificationFilters.getByLabel("通知类型").selectOption("task");
+  await notificationFilters.getByRole("button", { name: "关闭筛选条件" }).click();
+  await page.getByRole("button", { name: /筛选通知管理.*2 项已选/ }).click();
+  await expect(notificationFilters.getByPlaceholder("搜索标题、邮箱或组织")).toHaveValue("采集");
+  await expect(notificationFilters.getByLabel("通知类型")).toHaveValue("task");
+  await notificationFilters.getByRole("button", { name: "关闭筛选条件" }).click();
+  await page.getByRole("button", { name: /采集任务完成.*查看详情/ }).click();
+  const notificationDetail = page.getByRole("dialog", { name: "采集任务完成" });
+  await expect(notificationDetail.getByText("站内通知：已送达")).toBeVisible();
+  await expect(notificationDetail.getByText("notice-1", { exact: true })).not.toBeVisible();
+  await notificationDetail.getByText("技术详情").click();
+  await expect(notificationDetail.getByText("notice-1", { exact: true })).toBeVisible();
+  await expect(notificationDetail.getByText("in_app:delivered", { exact: true })).toBeVisible();
+  await notificationDetail.getByRole("button", { name: "关闭详情" }).click();
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
+  if (testInfo.project.name === "mobile-390")
+    await expect(page).toHaveScreenshot("m06-02-platform-notifications-mobile.png", {
+      fullPage: true,
+    });
   expect(errors).toEqual([]);
 });
 
