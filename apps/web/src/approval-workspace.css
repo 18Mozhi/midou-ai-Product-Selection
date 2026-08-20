@@ -1,5 +1,5 @@
 .approval-workspace {
-  color: #eef5f7;
+  color: var(--so-text);
   padding: 4px 0 48px;
 }
 
@@ -13,7 +13,7 @@
 .approval-workspace header p,
 .approval-detail > p {
   font: 700 11px/1.2 ui-monospace;
-  color: #66e0c2;
+  color: var(--so-primary);
   letter-spacing: 0.14em;
 }
 .approval-workspace h2 {
@@ -21,21 +21,21 @@
   margin: 5px 0;
 }
 .approval-workspace header span {
-  color: #91a5ad;
+  color: var(--so-text-muted);
 }
 .approval-workspace button {
   border: 0;
   border-radius: 8px;
-  background: #28c7a2;
-  color: #071916;
+  background: var(--so-primary);
+  color: var(--so-on-primary);
   font-weight: 700;
   padding: 11px 17px;
   cursor: pointer;
   min-height: 44px;
 }
 .approval-workspace button.secondary {
-  background: #17292f;
-  color: #c6d4d8;
+  background: var(--so-panel-strong);
+  color: var(--so-text);
 }
 .approval-workspace header > div:last-child,
 .approval-detail section > div,
@@ -45,11 +45,11 @@ dialog form > div {
 }
 .approval-notice {
   padding: 12px 16px;
-  background: #102c2b;
-  border: 1px solid #216e62;
+  background: var(--so-panel-strong);
+  border: 1px solid var(--so-primary-border);
   border-radius: 10px;
   margin-bottom: 18px;
-  color: #a9ebdc;
+  color: var(--so-primary);
 }
 .approval-notice code {
   display: block;
@@ -58,7 +58,7 @@ dialog form > div {
 }
 .approval-notice details {
   margin-top: 8px;
-  color: #91a5ad;
+  color: var(--so-text-muted);
 }
 .approval-metrics {
   display: grid;
@@ -66,14 +66,14 @@ dialog form > div {
   gap: 12px;
 }
 .approval-metrics article {
-  background: #101c21;
-  border: 1px solid #23363d;
+  background: var(--so-panel-strong);
+  border: 1px solid var(--so-border-strong);
   border-radius: 12px;
   padding: 17px;
 }
 .approval-metrics span {
   display: block;
-  color: #82979e;
+  color: var(--so-text-muted);
   font-size: 12px;
 }
 .approval-metrics b {
@@ -82,7 +82,7 @@ dialog form > div {
   margin-top: 8px;
 }
 .approval-metrics .alert b {
-  color: #ff8b75;
+  color: var(--so-danger);
 }
 .approval-workspace nav {
   display: flex;
@@ -90,21 +90,21 @@ dialog form > div {
   margin: 20px 0;
 }
 .approval-workspace nav button {
-  background: #132329;
-  color: #91a5ad;
+  background: var(--so-panel-strong);
+  color: var(--so-text-muted);
   padding: 8px 14px;
 }
 .approval-workspace nav button[aria-pressed="true"] {
-  background: #dffbf4;
-  color: #0b4a3c;
+  background: var(--so-panel-soft);
+  color: var(--so-primary);
 }
 .approval-state {
-  background: #101c21;
-  border: 1px dashed #34505a;
+  background: var(--so-panel-strong);
+  border: 1px dashed var(--so-border-strong);
   border-radius: 12px;
   padding: 42px;
   text-align: center;
-  color: #91a5ad;
+  color: var(--so-text-muted);
 }
 .approval-list {
   display: grid;
@@ -116,13 +116,13 @@ dialog form > div {
   gap: 14px;
   align-items: center;
   text-align: left;
-  background: #101c21;
-  border: 1px solid #20353d;
-  color: #e7f0f2;
+  background: var(--so-panel-strong);
+  border: 1px solid var(--so-border-strong);
+  color: var(--so-text);
   padding: 15px;
 }
 .approval-list > button:hover {
-  border-color: #37c5a5;
+  border-color: var(--so-primary-border);
   transform: translateY(-1px);
 }
 .approval-list span {
@@ -132,18 +132,18 @@ dialog form > div {
 .approval-list small,
 .approval-detail small,
 .template-list small {
-  color: #81969d;
+  color: var(--so-text-muted);
   font-weight: 500;
 }
 .approval-list em {
   font-style: normal;
-  color: #6fe0c3;
+  color: var(--so-primary);
 }
 .approval-list em[data-status="rejected"] {
-  color: #ff806d;
+  color: var(--so-danger);
 }
 .approval-list em[data-status="approved"] {
-  color: #83d991;
+  color: var(--so-success);
 }
 .approval-list .approval-mark {
   display: grid;
@@ -151,8 +151,8 @@ dialog form > div {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #173b39;
-  color: #78e1c7;
+  background: var(--so-panel-strong);
+  color: var(--so-primary);
 }
 .approval-detail {
   position: fixed;
@@ -162,15 +162,15 @@ dialog form > div {
   width: min(520px, 100%);
   height: 100vh;
   overflow: auto;
-  background: #0b1519;
-  border-left: 1px solid #284149;
+  background: var(--so-bg);
+  border-left: 1px solid var(--so-border-strong);
   padding: 34px;
-  box-shadow: -20px 0 60px #0008;
+  box-shadow: -20px 0 60px var(--so-shadow-color);
 }
 .approval-detail .close {
   float: right;
   background: transparent;
-  color: #91a5ad;
+  color: var(--so-text-muted);
   font-size: 26px;
   padding: 0;
   min-width: 44px;
@@ -183,7 +183,7 @@ dialog form > div {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
-  color: #71e2c5;
+  color: var(--so-primary);
   font-weight: 700;
   text-decoration: none;
 }
@@ -192,9 +192,9 @@ dialog form > div {
   gap: 16px;
   margin: 22px 0;
   padding: 18px;
-  border: 1px solid var(--so-border, #284149);
+  border: 1px solid var(--so-border, var(--so-border-strong));
   border-radius: 14px;
-  background: var(--so-panel, #101c21);
+  background: var(--so-panel, var(--so-panel-strong));
 }
 .approval-decision-context > header {
   display: grid;
@@ -207,7 +207,7 @@ dialog form > div {
   gap: 6px;
   padding: 14px;
   border-radius: 10px;
-  background: var(--so-panel-soft, #14252b);
+  background: var(--so-panel-soft, var(--so-panel-strong));
 }
 .approval-decision-context > header strong {
   font-size: 24px;
@@ -218,18 +218,18 @@ dialog form > div {
   margin: 0;
   padding: 12px 14px;
   border-radius: 9px;
-  background: #12312c;
-  color: #a9ebdc;
+  background: var(--so-panel-strong);
+  color: var(--so-primary);
 }
 .approval-context-origin[data-fallback="true"],
 .approval-evidence-warning {
-  background: #352b17;
-  color: #ffd994;
+  background: var(--so-panel-strong);
+  color: var(--so-warning);
 }
 .approval-decision-context progress {
   width: 100%;
   height: 10px;
-  accent-color: #42d2ae;
+  accent-color: var(--so-primary);
 }
 .approval-detail .approval-requirements {
   display: grid;
@@ -241,14 +241,14 @@ dialog form > div {
   gap: 8px;
   min-height: 72px;
   padding: 13px;
-  border: 1px solid #2b454d;
+  border: 1px solid var(--so-border-strong);
   border-radius: 10px;
-  color: #e7f0f2;
+  color: var(--so-text);
   text-decoration: none;
 }
 .approval-requirements > a[data-complete="false"] {
-  border-color: #826536;
-  background: #2b2519;
+  border-color: var(--so-warning-border);
+  background: var(--so-panel-strong);
 }
 .approval-requirements span {
   display: flex;
@@ -256,18 +256,18 @@ dialog form > div {
   gap: 8px;
 }
 .approval-requirements em {
-  color: #71e2c5;
+  color: var(--so-primary);
   font-style: normal;
   font-size: 13px;
 }
 .approval-requirements a[data-complete="false"] em {
-  color: #ffd994;
+  color: var(--so-warning);
 }
 .approval-rule-versions,
 .approval-requested-decision,
 .approval-decision-basis {
   padding-top: 14px;
-  border-top: 1px solid #294047;
+  border-top: 1px solid var(--so-border-strong);
 }
 .approval-decision-context h4 {
   margin: 0 0 10px;
@@ -289,7 +289,7 @@ dialog form > div {
 .approval-rule-versions dt,
 .approval-decision-basis dt,
 .approval-technical dt {
-  color: #81969d;
+  color: var(--so-text-muted);
 }
 .approval-rule-versions dd,
 .approval-decision-basis dd,
@@ -300,21 +300,21 @@ dialog form > div {
 .approval-requested-decision strong {
   display: inline-block;
   margin-bottom: 8px;
-  color: #71e2c5;
+  color: var(--so-primary);
 }
 .approval-technical,
 .approval-form-technical {
   margin-top: 20px;
   padding-top: 14px;
-  border-top: 1px solid #294047;
-  color: #91a5ad;
+  border-top: 1px solid var(--so-border-strong);
+  color: var(--so-text-muted);
 }
 .approval-form-technical {
   display: grid;
   gap: 12px;
   margin-top: 0;
   padding: 12px;
-  border: 1px solid #294047;
+  border: 1px solid var(--so-border-strong);
   border-radius: 9px;
 }
 .approval-timeline {
@@ -330,7 +330,7 @@ dialog form > div {
 .approval-timeline i {
   width: 11px;
   height: 11px;
-  border: 3px solid #42d2ae;
+  border: 3px solid var(--so-primary-border);
   border-radius: 50%;
   margin-top: 4px;
 }
@@ -340,7 +340,7 @@ dialog form > div {
   left: 6px;
   top: 17px;
   bottom: 0;
-  border-left: 1px solid #315158;
+  border-left: 1px solid var(--so-border-strong);
 }
 .approval-timeline div {
   display: grid;
@@ -353,16 +353,16 @@ dialog form > div {
 dialog label {
   display: grid;
   gap: 7px;
-  color: #a9bbc0;
+  color: var(--so-text-muted);
   font-size: 13px;
 }
 .approval-detail textarea,
 dialog input,
 dialog select,
 dialog textarea {
-  background: #101f24;
-  border: 1px solid #30464e;
-  color: #eef5f7;
+  background: var(--so-panel-strong);
+  border: 1px solid var(--so-border-strong);
+  color: var(--so-text);
   border-radius: 8px;
   padding: 11px;
   min-height: 42px;
@@ -374,13 +374,13 @@ dialog textarea {
   box-sizing: border-box;
 }
 .approval-detail .danger {
-  background: #3b2022;
-  color: #ff9c91;
+  background: var(--so-panel-strong);
+  color: var(--so-danger);
 }
 .readonly {
   padding: 14px;
-  background: #132329;
-  color: #91a5ad;
+  background: var(--so-panel-strong);
+  color: var(--so-text-muted);
   border-radius: 8px;
 }
 dialog[open] {
@@ -391,19 +391,19 @@ dialog[open] {
   width: min(600px, 90vw);
   max-height: 84vh;
   overflow: auto;
-  background: #0d191e;
-  color: #eaf2f4;
-  border: 1px solid #32505a;
+  background: var(--so-panel-strong);
+  color: var(--so-text);
+  border: 1px solid var(--so-border-strong);
   border-radius: 14px;
   padding: 24px;
-  box-shadow: 0 25px 80px #000b;
+  box-shadow: 0 25px 80px var(--so-shadow-color);
 }
 dialog form {
   display: grid;
   gap: 13px;
 }
 .template-list {
-  border-top: 1px solid #273c43;
+  border-top: 1px solid var(--so-border-strong);
   margin-top: 20px;
   padding-top: 10px;
 }

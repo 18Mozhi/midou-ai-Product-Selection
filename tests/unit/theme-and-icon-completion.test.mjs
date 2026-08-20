@@ -58,6 +58,21 @@ test("saved theme is restored before Vue mounts and modules use semantic theme t
   assert.doesNotMatch(personal, /linear-gradient\(135deg,\s*#0d2342/);
 });
 
+test("migrated workflow surfaces use only shared semantic color roles", async () => {
+  const paths = [
+      "apps/web/src/approval-workspace.css",
+      "apps/web/src/notification-center.css",
+      "apps/web/src/data-quality.css",
+      "apps/web/src/selection-journey.css",
+    ],
+    sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
+
+  for (const [index, source] of sources.entries()) {
+    assert.match(source, /var\(--so-(?:bg|panel|text|border|primary)/, paths[index]);
+    assert.doesNotMatch(source, /#(?:[0-9a-f]{3,8})\b/i, paths[index]);
+  }
+});
+
 test("icon-only production actions expose hover and focus names", async () => {
   const [main, shell, credentials, registry, sourcing] = await Promise.all(
     [

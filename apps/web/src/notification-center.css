@@ -1,5 +1,5 @@
 .notification-center {
-  color: #eef4f6;
+  color: var(--so-text);
   padding-bottom: 48px;
 }
 
@@ -12,7 +12,7 @@
 }
 .notification-center header p,
 .notification-detail > p {
-  color: #7d8cff;
+  color: var(--so-info);
   font: 700 11px ui-monospace;
   letter-spacing: 0.14em;
 }
@@ -21,21 +21,21 @@
   margin: 5px 0;
 }
 .notification-center header span {
-  color: #91a5ad;
+  color: var(--so-text-muted);
 }
 .notification-center button {
   border: 0;
   border-radius: 8px;
-  background: #6677f4;
-  color: #fff;
+  background: var(--so-info);
+  color: var(--so-on-primary);
   font-weight: 700;
   padding: 10px 16px;
   cursor: pointer;
   min-height: 44px;
 }
 .notification-center .secondary {
-  background: #18262e;
-  color: #c7d3d7;
+  background: var(--so-panel-strong);
+  color: var(--so-text);
 }
 .notification-center header > div:last-child,
 .notification-center dialog div {
@@ -45,15 +45,15 @@
 }
 .realtime-badge {
   font-size: 11px;
-  color: #7bd9bd;
+  color: var(--so-primary);
   white-space: nowrap;
 }
 .realtime-badge[data-state="reconnecting"] {
-  color: #f4b36d;
+  color: var(--so-warning);
 }
 .notification-notice {
-  background: #1b2340;
-  border: 1px solid #414e91;
+  background: var(--so-panel-strong);
+  border: 1px solid var(--so-info-border);
   border-radius: 9px;
   padding: 12px;
   margin-bottom: 16px;
@@ -65,7 +65,7 @@
   display: block;
   margin-top: 6px;
   overflow-wrap: anywhere;
-  color: #91a5ad;
+  color: var(--so-text-muted);
 }
 .notification-summary {
   display: grid;
@@ -73,13 +73,13 @@
   gap: 12px;
 }
 .notification-summary article {
-  background: #101c22;
-  border: 1px solid #253841;
+  background: var(--so-panel-strong);
+  border: 1px solid var(--so-border-strong);
   border-radius: 12px;
   padding: 17px;
 }
 .notification-summary span {
-  color: #82969e;
+  color: var(--so-text-muted);
   font-size: 12px;
 }
 .notification-summary b {
@@ -94,25 +94,25 @@
   margin: 20px 0;
 }
 .notification-center nav button {
-  background: #14232a;
-  color: #91a5ad;
+  background: var(--so-panel-strong);
+  color: var(--so-text-muted);
   padding: 8px 14px;
 }
 .notification-center nav button[aria-pressed="true"] {
-  background: #e2e5ff;
-  color: #27368c;
+  background: var(--so-panel);
+  color: var(--so-info);
 }
 .notification-center nav label {
   margin-left: auto;
-  color: #a5b4ba;
+  color: var(--so-text-muted);
 }
 .notification-state {
   padding: 42px;
   text-align: center;
-  background: #101c22;
-  border: 1px dashed #344c56;
+  background: var(--so-panel-strong);
+  border: 1px dashed var(--so-border-strong);
   border-radius: 12px;
-  color: #91a5ad;
+  color: var(--so-text-muted);
 }
 .notification-list {
   display: grid;
@@ -123,14 +123,14 @@
   grid-template-columns: 42px minmax(0, 1fr) 180px minmax(120px, auto);
   align-items: center;
   gap: 14px;
-  background: #101c22;
-  border: 1px solid #243841;
+  background: var(--so-panel-strong);
+  border: 1px solid var(--so-border-strong);
   text-align: left;
-  color: #eaf1f3;
+  color: var(--so-text);
 }
 .notification-list > button.unread {
-  background: #151f34;
-  border-color: #3f4d88;
+  background: var(--so-panel-strong);
+  border-color: var(--so-info-border);
 }
 .notification-list i {
   display: grid;
@@ -138,8 +138,8 @@
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: #25325d;
-  color: #aab4ff;
+  background: var(--so-info-soft);
+  color: var(--so-info);
   font-style: normal;
 }
 .notification-list span {
@@ -147,17 +147,17 @@
   gap: 4px;
 }
 .notification-list small {
-  color: #82969e;
+  color: var(--so-text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .notification-list em {
   font-style: normal;
-  color: #81959c;
+  color: var(--so-text-muted);
 }
 .notification-list > b {
-  color: #8794f7;
+  color: var(--so-info);
 }
 .notification-detail {
   position: fixed;
@@ -168,15 +168,15 @@
   height: 100vh;
   box-sizing: border-box;
   overflow: auto;
-  background: #0b151a;
-  border-left: 1px solid #2a3d47;
+  background: var(--so-bg);
+  border-left: 1px solid var(--so-border-strong);
   padding: 34px;
-  box-shadow: -20px 0 60px #0009;
+  box-shadow: -20px 0 60px var(--so-shadow-color);
 }
 .notification-detail > button {
   float: right;
   background: transparent;
-  color: #8c9ca2;
+  color: var(--so-text-muted);
   font-size: 25px;
   padding: 0;
   min-width: 44px;
@@ -188,7 +188,7 @@
 .notification-detail article {
   font-size: 15px;
   line-height: 1.8;
-  color: #bdc9cd;
+  color: var(--so-text);
 }
 .notification-detail dl {
   margin: 28px 0;
@@ -197,17 +197,17 @@
   display: grid;
   grid-template-columns: 100px 1fr;
   padding: 10px 0;
-  border-bottom: 1px solid #203139;
+  border-bottom: 1px solid var(--so-border-strong);
 }
 .notification-detail dt {
-  color: #7d9299;
+  color: var(--so-text-muted);
 }
 .notification-detail dd {
   margin: 0;
   word-break: break-all;
 }
 .notification-detail > small {
-  color: #74878e;
+  color: var(--so-text-muted);
 }
 .notification-workflow-actions {
   display: flex;
@@ -220,14 +220,14 @@
   display: inline-flex;
   align-items: center;
   padding: 0 16px;
-  border: 1px solid #414e91;
+  border: 1px solid var(--so-info-border);
   border-radius: 8px;
-  color: #dce3ff;
+  color: var(--so-text);
   text-decoration: none;
 }
 .notification-technical {
   margin-top: 24px;
-  color: #82969e;
+  color: var(--so-text-muted);
 }
 .notification-technical dl {
   margin-top: 10px;
@@ -238,9 +238,9 @@
   transform: translateX(-50%);
   z-index: 40;
   width: min(470px, 88vw);
-  background: #0f1c22;
-  color: #eef4f6;
-  border: 1px solid #344b56;
+  background: var(--so-panel-strong);
+  color: var(--so-text);
+  border: 1px solid var(--so-border-strong);
   border-radius: 14px;
   padding: 25px;
 }
@@ -250,11 +250,11 @@
 }
 .notification-center dialog label {
   padding: 8px;
-  background: #14242b;
+  background: var(--so-panel-strong);
   border-radius: 7px;
 }
 .notification-center dialog p {
-  color: #8799a0;
+  color: var(--so-text-muted);
   font-size: 12px;
 }
 @media (max-width: 760px) {

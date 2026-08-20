@@ -1,13 +1,273 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-const ids={evidence:'00000000-0000-4000-8000-000000000a61',issue:'00000000-0000-4000-8000-000000000a62',run:'00000000-0000-4000-8000-000000000a63',org:'00000000-0000-4000-8000-000000000a64',ws:'00000000-0000-4000-8000-000000000a65',provider:'00000000-0000-4000-8000-000000000a66'};
-const navigation={shell:'platform_admin',organization_id:null,workspace_id:null,roles:[],capabilities:[],platform_roles:['platform_operations_admin'],platform_capabilities:['platform:operate'],guard_reason:'navigation_platform_admin_allowed'};
-const evidence={id:ids.evidence,organization_id:ids.org,workspace_id:ids.ws,collection_task_id:'00000000-0000-4000-8000-000000000a67',provider_id:ids.provider,provider_name:'Market Evidence',source_url:'https://example.test/raw/desk',canonical_url:'https://example.test/products/desk',content_sha256:'a'.repeat(64),content_type:'application/json',size_bytes:18742,captured_at:'2026-08-07T12:00:00.000Z',parser_version:'parser-v3',adapter_version:'adapter-v2',retention_until:'2026-09-06T12:00:00.000Z',status:'active',request_id:'m03-06-evidence-request',trace_id:'m03-06-evidence-trace'};
-const issue={id:ids.issue,organization_id:ids.org,workspace_id:ids.ws,provider_id:ids.provider,provider_name:'Market Evidence',metric_code:'title_accuracy',field_path:'title',severity:'critical',status:'open',actual_value:.97,threshold_value:.98,resolution_reason:null,version:1,created_at:'2026-08-07T12:05:00.000Z',updated_at:'2026-08-07T12:05:00.000Z'};
-const run={id:ids.run,organization_id:ids.org,workspace_id:ids.ws,provider_id:ids.provider,provider_name:'Market Evidence',parser_version:'parser-v3',market:'US',sample_count:100,metrics:[{code:'title_accuracy',value:.97,threshold:.98,status:'failed'},{code:'source_success_rate',value:.99,threshold:.95,status:'passed'}],status:'failed',window_started_at:'2026-08-07T11:00:00.000Z',window_ended_at:'2026-08-07T12:00:00.000Z',created_at:'2026-08-07T12:05:00.000Z'};
-async function nav(page:any){await page.route('**/api/v1/me/navigation?**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:navigation,request_id:'m03-06-nav',trace_id:'m03-06-nav'})}));}
-async function dashboard(page:any,data={evidence:[evidence],issues:[issue],reconciliationRuns:[run],totalEvidence:1,totalIssues:1}){await page.route('**/api/v1/platform/data-quality?**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data,meta:{page:1,page_size:50,total_evidence:data.totalEvidence,total_issues:data.totalIssues},request_id:'m03-06-list',trace_id:'m03-06-list'})}));}
+const ids = {
+  evidence: "00000000-0000-4000-8000-000000000a61",
+  issue: "00000000-0000-4000-8000-000000000a62",
+  run: "00000000-0000-4000-8000-000000000a63",
+  org: "00000000-0000-4000-8000-000000000a64",
+  ws: "00000000-0000-4000-8000-000000000a65",
+  provider: "00000000-0000-4000-8000-000000000a66",
+};
+const navigation = {
+  shell: "platform_admin",
+  organization_id: null,
+  workspace_id: null,
+  roles: [],
+  capabilities: [],
+  platform_roles: ["platform_operations_admin"],
+  platform_capabilities: ["platform:operate"],
+  guard_reason: "navigation_platform_admin_allowed",
+};
+const evidence = {
+  id: ids.evidence,
+  organization_id: ids.org,
+  workspace_id: ids.ws,
+  collection_task_id: "00000000-0000-4000-8000-000000000a67",
+  provider_id: ids.provider,
+  provider_name: "Market Evidence",
+  source_url: "https://example.test/raw/desk",
+  canonical_url: "https://example.test/products/desk",
+  content_sha256: "a".repeat(64),
+  content_type: "application/json",
+  size_bytes: 18742,
+  captured_at: "2026-08-07T12:00:00.000Z",
+  parser_version: "parser-v3",
+  adapter_version: "adapter-v2",
+  retention_until: "2026-09-06T12:00:00.000Z",
+  status: "active",
+  request_id: "m03-06-evidence-request",
+  trace_id: "m03-06-evidence-trace",
+};
+const issue = {
+  id: ids.issue,
+  organization_id: ids.org,
+  workspace_id: ids.ws,
+  provider_id: ids.provider,
+  provider_name: "Market Evidence",
+  metric_code: "title_accuracy",
+  field_path: "title",
+  severity: "critical",
+  status: "open",
+  actual_value: 0.97,
+  threshold_value: 0.98,
+  resolution_reason: null,
+  version: 1,
+  created_at: "2026-08-07T12:05:00.000Z",
+  updated_at: "2026-08-07T12:05:00.000Z",
+};
+const run = {
+  id: ids.run,
+  organization_id: ids.org,
+  workspace_id: ids.ws,
+  provider_id: ids.provider,
+  provider_name: "Market Evidence",
+  parser_version: "parser-v3",
+  market: "US",
+  sample_count: 100,
+  metrics: [
+    { code: "title_accuracy", value: 0.97, threshold: 0.98, status: "failed" },
+    { code: "source_success_rate", value: 0.99, threshold: 0.95, status: "passed" },
+  ],
+  status: "failed",
+  window_started_at: "2026-08-07T11:00:00.000Z",
+  window_ended_at: "2026-08-07T12:00:00.000Z",
+  created_at: "2026-08-07T12:05:00.000Z",
+};
+async function nav(page: any) {
+  await page.route("**/api/v1/me/navigation?**", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ data: navigation, request_id: "m03-06-nav", trace_id: "m03-06-nav" }),
+    }),
+  );
+}
+async function dashboard(
+  page: any,
+  data = {
+    evidence: [evidence],
+    issues: [issue],
+    reconciliationRuns: [run],
+    totalEvidence: 1,
+    totalIssues: 1,
+  },
+) {
+  await page.route("**/api/v1/platform/data-quality?**", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data,
+        meta: {
+          page: 1,
+          page_size: 50,
+          total_evidence: data.totalEvidence,
+          total_issues: data.totalIssues,
+        },
+        request_id: "m03-06-list",
+        trace_id: "m03-06-list",
+      }),
+    }),
+  );
+}
 
-test('M03-06.A07/A08/A15 evidence quality dashboard is responsive and visual',async({page})=>{await nav(page);await dashboard(page);await page.goto('/platform-admin/data');await page.getByRole('button',{name:'证据与质量'}).click();await expect(page.getByRole('heading',{name:'证据与数据质量',level:2})).toBeVisible();await expect(page.getByText('Market Evidence').first()).toBeVisible();await expect(page.getByText('18.3 KB')).toBeVisible();await expect(page).toHaveScreenshot('m03-06-evidence-data-quality.png',{fullPage:true});});
-test('M03-06.A08/A09/A15 evidence lineage and confirmed issue resolution preserve history',async({page})=>{await nav(page);await dashboard(page);await page.route(`**/api/v1/platform/data/evidence/${ids.evidence}`,route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{evidence,normalized_records:[{id:'record-1',record_key:'desk-1',schema_version:'v1',record_version:1,status:'active'}],field_provenance:[{id:'provenance-1',field_path:'title',source_path:'$.title',transform_version:'copy-v1',source_value_sha256:'b'.repeat(64)}],quality_issues:[issue]},request_id:'m03-06-detail',trace_id:'m03-06-detail'})}));let resolved=false;await page.route(`**/api/v1/platform/data-quality/issues/${ids.issue}/resolve`,async route=>{const body=route.request().postDataJSON();expect(body).toEqual({reason:'已按原文重新核对标题字段',expected_version:1});resolved=true;await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{...issue,status:'resolved',resolution_reason:body.reason,version:2},request_id:'m03-06-resolve',trace_id:'m03-06-resolve'})});});await page.goto('/platform-admin/data');await page.getByRole('button',{name:'证据与质量'}).click();await page.getByRole('button',{name:'详情'}).click();await expect(page.getByText('$.title · copy-v1')).toBeVisible();await page.getByRole('button',{name:'关闭证据详情'}).click();await page.getByRole('button',{name:'质量问题'}).click();await page.getByRole('button',{name:'记录解决'}).click();await page.getByPlaceholder('说明修复方式与验证依据（2–500 字）').fill('已按原文重新核对标题字段');await page.getByRole('button',{name:'确认前检查'}).click();await page.getByPlaceholder('确认解决').fill('确认解决');await page.getByRole('button',{name:'确认解决'}).click();await expect.poll(()=>resolved).toBe(true);});
-test('M03-06.A08/A16 empty forbidden and dependency states are truthful',async({page})=>{await nav(page);let status=200;await page.route('**/api/v1/platform/data-quality?**',route=>route.fulfill(status===200?{status,contentType:'application/json',body:JSON.stringify({data:{evidence:[],issues:[],reconciliationRuns:[],totalEvidence:0,totalIssues:0},request_id:'m03-06-empty',trace_id:'m03-06-empty'})}:{status,contentType:'application/json',body:JSON.stringify({error:{code:status===403?'authorization_denied':'dependency_unavailable',message:'请求失败',action_hint:'按状态恢复'},request_id:`m03-06-${status}`,trace_id:`m03-06-${status}`})}));await page.goto('/platform-admin/data');await page.getByRole('button',{name:'证据与质量'}).click();await expect(page.locator('[data-kind="empty"]')).toBeVisible();status=403;await page.reload();await page.getByRole('button',{name:'证据与质量'}).click();await expect(page.locator('[data-kind="forbidden"]')).toBeVisible();status=503;await page.reload();await page.getByRole('button',{name:'证据与质量'}).click();await expect(page.locator('[data-kind="blocked"]')).toBeVisible();});
+test("M03-06.A07/A08/A15 evidence quality dashboard is responsive and visual", async ({ page }) => {
+  await nav(page);
+  await dashboard(page);
+  await page.goto("/platform-admin/data");
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  await expect(page.getByRole("heading", { name: "证据与数据质量", level: 2 })).toBeVisible();
+  await expect(page.getByText("Market Evidence").first()).toBeVisible();
+  await expect(page.getByText("18.3 KB")).toBeVisible();
+  await expect(page).toHaveScreenshot("m03-06-evidence-data-quality.png", { fullPage: true });
+});
+test("M02-01 semantic roles keep data quality readable in every theme", async ({ page }) => {
+  await nav(page);
+  await dashboard(page);
+  await page.goto("/platform-admin/data");
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  const samples = [];
+  for (const theme of ["deep-ocean", "aurora-purple", "cloud-white"]) {
+    samples.push(
+      await page.evaluate((value) => {
+        document.documentElement.dataset.theme = value;
+        const card = getComputedStyle(document.querySelector(".quality-card")),
+          cell = getComputedStyle(document.querySelector(".quality-card td"));
+        const rgb = (input) =>
+            input
+              .match(/[\d.]+/g)
+              .slice(0, 3)
+              .map(Number),
+          luminance = (input) => {
+            const values = rgb(input).map((part) => {
+              const channel = part / 255;
+              return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+            });
+            return 0.2126 * values[0] + 0.7152 * values[1] + 0.0722 * values[2];
+          },
+          foreground = luminance(cell.color),
+          background = luminance(card.backgroundColor),
+          contrast =
+            (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05);
+        return { theme: value, background: card.backgroundColor, color: cell.color, contrast };
+      }, theme),
+    );
+  }
+  expect(new Set(samples.map((item) => item.background)).size).toBe(3);
+  for (const sample of samples) expect(sample.contrast).toBeGreaterThanOrEqual(4.5);
+});
+test("M03-06.A08/A09/A15 evidence lineage and confirmed issue resolution preserve history", async ({
+  page,
+}) => {
+  await nav(page);
+  await dashboard(page);
+  await page.route(`**/api/v1/platform/data/evidence/${ids.evidence}`, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: {
+          evidence,
+          normalized_records: [
+            {
+              id: "record-1",
+              record_key: "desk-1",
+              schema_version: "v1",
+              record_version: 1,
+              status: "active",
+            },
+          ],
+          field_provenance: [
+            {
+              id: "provenance-1",
+              field_path: "title",
+              source_path: "$.title",
+              transform_version: "copy-v1",
+              source_value_sha256: "b".repeat(64),
+            },
+          ],
+          quality_issues: [issue],
+        },
+        request_id: "m03-06-detail",
+        trace_id: "m03-06-detail",
+      }),
+    }),
+  );
+  let resolved = false;
+  await page.route(`**/api/v1/platform/data-quality/issues/${ids.issue}/resolve`, async (route) => {
+    const body = route.request().postDataJSON();
+    expect(body).toEqual({ reason: "已按原文重新核对标题字段", expected_version: 1 });
+    resolved = true;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: { ...issue, status: "resolved", resolution_reason: body.reason, version: 2 },
+        request_id: "m03-06-resolve",
+        trace_id: "m03-06-resolve",
+      }),
+    });
+  });
+  await page.goto("/platform-admin/data");
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  await page.getByRole("button", { name: "详情" }).click();
+  await expect(page.getByText("$.title · copy-v1")).toBeVisible();
+  await page.getByRole("button", { name: "关闭证据详情" }).click();
+  await page.getByRole("button", { name: "质量问题" }).click();
+  await page.getByRole("button", { name: "记录解决" }).click();
+  await page
+    .getByPlaceholder("说明修复方式与验证依据（2–500 字）")
+    .fill("已按原文重新核对标题字段");
+  await page.getByRole("button", { name: "确认前检查" }).click();
+  await page.getByPlaceholder("确认解决").fill("确认解决");
+  await page.getByRole("button", { name: "确认解决" }).click();
+  await expect.poll(() => resolved).toBe(true);
+});
+test("M03-06.A08/A16 empty forbidden and dependency states are truthful", async ({ page }) => {
+  await nav(page);
+  let status = 200;
+  await page.route("**/api/v1/platform/data-quality?**", (route) =>
+    route.fulfill(
+      status === 200
+        ? {
+            status,
+            contentType: "application/json",
+            body: JSON.stringify({
+              data: {
+                evidence: [],
+                issues: [],
+                reconciliationRuns: [],
+                totalEvidence: 0,
+                totalIssues: 0,
+              },
+              request_id: "m03-06-empty",
+              trace_id: "m03-06-empty",
+            }),
+          }
+        : {
+            status,
+            contentType: "application/json",
+            body: JSON.stringify({
+              error: {
+                code: status === 403 ? "authorization_denied" : "dependency_unavailable",
+                message: "请求失败",
+                action_hint: "按状态恢复",
+              },
+              request_id: `m03-06-${status}`,
+              trace_id: `m03-06-${status}`,
+            }),
+          },
+    ),
+  );
+  await page.goto("/platform-admin/data");
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  await expect(page.locator('[data-kind="empty"]')).toBeVisible();
+  status = 403;
+  await page.reload();
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  await expect(page.locator('[data-kind="forbidden"]')).toBeVisible();
+  status = 503;
+  await page.reload();
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  await expect(page.locator('[data-kind="blocked"]')).toBeVisible();
+});

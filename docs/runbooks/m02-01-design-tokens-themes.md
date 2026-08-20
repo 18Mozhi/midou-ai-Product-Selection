@@ -7,6 +7,8 @@
 3. 登录并选择组织/工作区，打开 `/settings/theme`。验证默认深海蓝、三套预览、保存后刷新保持，以及 390px 键盘操作。
 4. 本模块没有新增环境变量；不要在宝塔增加主题密钥或前端主题配置。
 
+纯语义令牌或组件 CSS 更新只需重新发布 Vue Web 静态资源，不需要重启 Node API、Node Worker 或 Python Crawler。
+
 ## 观测与恢复
 
 - 401：重新登录；403：核对活动成员和当前范围；`preference_scope_required`：先重新选择组织/工作区；`preference_version_conflict`：刷新后再保存。

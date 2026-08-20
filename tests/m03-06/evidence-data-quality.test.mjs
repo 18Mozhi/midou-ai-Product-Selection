@@ -312,7 +312,7 @@ test("M03-06.A03-A05/A07-A11/A14-A17 delivery evidence is complete and Baota bou
   assert.match(repo, /FOR UPDATE/);
   assert.match(routes, /platform:operate/);
   assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
-  assert.match(css, /@media\(max-width:760px\)/);
+  assert.match(css, /@media\s*\(max-width:\s*760px\)/);
   assert.match(openapi, /\/platform\/data-quality:/);
   assert.match(env, /EVIDENCE_DOWNLOAD_SIGNING_KEY/);
   assert.match(schema, /EVIDENCE_MAX_RAW_BYTES/);
