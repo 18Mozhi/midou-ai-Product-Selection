@@ -175,6 +175,7 @@ test("M06-03.A06/A07/A08/A10/A13/A17 delivery contracts", async () => {
       [
         "docs/openapi.yaml",
         "apps/web/src/components/CollectionOperationsConsole.vue",
+        "apps/web/src/components/ResponsiveDataView.vue",
         "apps/web/src/styles.css",
         "config/env.example",
         "docs/feature-map.json",
@@ -207,8 +208,11 @@ test("M06-03.A06/A07/A08/A10/A13/A17 delivery contracts", async () => {
   ])
     assert.match(all, new RegExp(value.replaceAll("/", "\\/")));
   assert.match(all, /linkLabels[\s\S]*来源配置/);
-  assert.match(all, /white-space:nowrap/);
-  assert.match(all, /@media\(max-width:800px\)/);
+  assert.match(all, /white-space:\s*nowrap/);
+  assert.match(all, /@media\s*\(\s*max-width:\s*800px\s*\)/);
+  assert.match(all, /ResponsiveDataView/);
+  assert.match(all, /摘要卡片/);
+  assert.match(all, /(?:详情抽屉|右侧抽屉)/);
   assert.match(
     openapi,
     /\n  \/platform\/collection\/console:[\s\S]*name: provider_id[\s\S]*name: window[\s\S]*name: error_code/,

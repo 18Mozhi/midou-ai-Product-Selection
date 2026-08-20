@@ -4,6 +4,8 @@
 
 错误根因只按 `collection_dead_letters.error_code` 聚合已经进入死信的失败任务，不把仍在自动重试或尚未进入死信的尝试计入死信总数，也不推断或改写错误。选择根因后，最近尝试和死信使用同一精确错误码下钻；原始错误码仅留在“技术详情”，主界面展示中文说明。页面的既有管理链接使用中文用途名，不暴露 `provider_registry` 等内部模块键。
 
+桌面端保留来源和最近尝试表格；760px 及以下改为摘要卡片，点“查看详情”后在具名右侧抽屉展示完整字段。来源代码、任务 UUID、trace_id、错误码以及死信的组织/工作区 UUID 不出现在卡片摘要或主列表，只在技术详情中按需展开；抽屉支持关闭按钮、遮罩关闭、Esc 关闭和焦点返回，不改变查询、下钻或重放合同。
+
 采集告警类别只做用户界面归类，不改写真实根因：`network_error`、`dns_error`、`timeout` 显示为“网络”，`login_required`、`session_expired`、`blocked_login` 显示为“登录”，`captcha`、`blocked_captcha` 显示为“验证码”，`parser_error`、`parser_failed`、`parse_failed`、`source_changed` 显示为“解析”；其余真实错误码显示“其他”。下钻、重放和审计仍使用原始精确错误码，禁止把类别当成服务端筛选或重试规则。
 
 新接口只读并写 `collection_console_views` 与 `platform_audit_events`；平台审计元数据同时保存来源、时间窗口和错误根因筛选。来源配置、健康检查、浏览器运行、任务详情、死信重放和质量处理继续由 M03 的真实 API 完成，不复制写合同。异步租约、重试、限流、Outbox 和死信仍归已有 Worker/Crawler 所有。

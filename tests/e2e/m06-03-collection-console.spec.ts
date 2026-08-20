@@ -107,25 +107,34 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
     consoleUrl = route.request().url();
     return route.fulfill({ json: envelope(data) });
   });
+  const startsMobile = (page.viewportSize()?.width ?? 0) <= 760;
   await page.goto("/platform-admin/collection/overview");
   await expect(page.getByRole("heading", { name: "来源与采集控制台", level: 2 })).toBeVisible();
   await expect(
-    page.locator(".collection-ops table").first().getByText("公开趋势 RSS"),
+    startsMobile
+      ? page.getByRole("button", { name: /公开趋势 RSS/ })
+      : page.locator(".collection-ops table").first().getByText("公开趋势 RSS"),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "来源配置" })).toBeVisible();
   await expect(page.getByText("provider_registry")).toHaveCount(0);
 
-  if ((page.viewportSize()?.width ?? 0) <= 760)
-    await page.getByRole("button", { name: "采集范围与时间" }).click();
+  if (startsMobile) await page.getByRole("button", { name: "采集范围与时间" }).click();
   await page.getByLabel("采集来源筛选").selectOption(providerId);
   await page.getByLabel("观测时间筛选").selectOption("7d");
   await page.getByRole("button", { name: "应用范围" }).click();
   await expect.poll(() => consoleUrl).toContain(`provider_id=${providerId}`);
   expect(consoleUrl).toContain("window=7d");
 
-  await page.getByRole("button", { name: /页面解析失败/ }).click();
+  await page
+    .locator(".collection-root-causes")
+    .getByRole("button", { name: /页面解析失败/ })
+    .click();
   await expect.poll(() => consoleUrl).toContain("error_code=parser_failed");
-  await expect(page.getByText("终止失败")).toBeVisible();
+  await expect(
+    startsMobile
+      ? page.getByRole("button", { name: /第 2 次尝试 · 终止失败/ })
+      : page.getByRole("cell", { name: "终止失败" }),
+  ).toBeVisible();
   await expect(page).toHaveScreenshot("m06-03-collection-console-desktop.png", {
     fullPage: true,
   });
@@ -135,6 +144,18 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
   await expect(page.getByText("最近尝试")).toBeVisible();
   await page.getByRole("button", { name: "采集范围与时间" }).click();
   await expect(page.getByRole("button", { name: "应用范围" })).toHaveCSS("white-space", "nowrap");
+  await page
+    .locator(".responsive-filter-drawer__sheet > header")
+    .getByRole("button", { name: "关闭筛选条件" })
+    .click();
+  const attemptCard = page.getByRole("button", { name: /第 2 次尝试/ });
+  await expect(attemptCard).toBeVisible();
+  await attemptCard.click();
+  const attemptDrawer = page.getByRole("dialog", { name: "第 2 次尝试详情" });
+  await expect(attemptDrawer).toBeVisible();
+  await attemptDrawer.getByText("技术详情", { exact: true }).click();
+  await expect(attemptDrawer.getByText(data.attempts[0].task_id, { exact: false })).toBeVisible();
+  await attemptDrawer.getByRole("button", { name: "关闭详情" }).click();
   await expect(page).toHaveScreenshot("m06-03-collection-console-mobile.png", {
     fullPage: true,
   });

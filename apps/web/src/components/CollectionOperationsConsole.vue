@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 import { statusLabel } from "../ui/status-labels";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const state = ref("loading"),
@@ -145,6 +146,10 @@ const when = (v: string | null) =>
         source_changed: "解析",
       }) as Record<string, string>
     )[value] ?? "其他",
+  sourceRowKey = (item: any) => item.id,
+  sourceDetailTitle = (item: any) => `${item.name}详情`,
+  attemptRowKey = (item: any) => item.id,
+  attemptDetailTitle = (item: any) => `第 ${item.attempt_number} 次尝试详情`,
   drillRootCause = async (value: string) => {
     errorCode.value = errorCode.value === value ? "" : value;
     await load();
@@ -272,31 +277,86 @@ async function confirmBatchReplay() {
       <div class="collection-ops-grid">
         <section>
           <h3>来源与健康</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>来源</th>
-                <th>状态</th>
-                <th>健康</th>
-                <th>连续失败</th>
-                <th>最近检查</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="s in data.sources" :key="s.id">
-                <td>
-                  <b>{{ s.name }}</b
-                  ><small>{{ s.code }} · {{ s.owner_label }}</small>
-                </td>
-                <td>{{ statusLabel(s.status) }}</td>
-                <td>
-                  <i :data-health="s.health_status">{{ healthLabel(s.health_status) }}</i>
-                </td>
-                <td>{{ s.consecutive_failures }}</td>
-                <td>{{ when(s.last_checked_at) }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <ResponsiveDataView
+            title="来源与健康"
+            :rows="data.sources"
+            :row-key="sourceRowKey"
+            :detail-title="sourceDetailTitle"
+          >
+            <template #desktop>
+              <table>
+                <thead>
+                  <tr>
+                    <th>来源</th>
+                    <th>状态</th>
+                    <th>健康</th>
+                    <th>连续失败</th>
+                    <th>最近检查</th>
+                    <th>技术详情</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="s in data.sources" :key="s.id">
+                    <td>
+                      <b>{{ s.name }}</b
+                      ><small>{{ s.owner_label }}</small>
+                    </td>
+                    <td>{{ statusLabel(s.status) }}</td>
+                    <td>
+                      <i :data-health="s.health_status">{{ healthLabel(s.health_status) }}</i>
+                    </td>
+                    <td>{{ s.consecutive_failures }}</td>
+                    <td>{{ when(s.last_checked_at) }}</td>
+                    <td>
+                      <details>
+                        <summary>查看</summary>
+                        <code>{{ s.code }}</code>
+                      </details>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+            <template #summary="{ row: s }">
+              <span class="responsive-record-summary">
+                <strong>{{ s.name }}</strong>
+                <span>{{ statusLabel(s.status) }} · {{ healthLabel(s.health_status) }}</span>
+                <small>{{ s.owner_label }} · 最近检查 {{ when(s.last_checked_at) }}</small>
+              </span>
+            </template>
+            <template #detail="{ row: s }">
+              <dl>
+                <div>
+                  <dt>来源</dt>
+                  <dd>{{ s.name }}</dd>
+                </div>
+                <div>
+                  <dt>负责人</dt>
+                  <dd>{{ s.owner_label }}</dd>
+                </div>
+                <div>
+                  <dt>运行状态</dt>
+                  <dd>{{ statusLabel(s.status) }}</dd>
+                </div>
+                <div>
+                  <dt>健康状态</dt>
+                  <dd>{{ healthLabel(s.health_status) }}</dd>
+                </div>
+                <div>
+                  <dt>连续失败</dt>
+                  <dd>{{ s.consecutive_failures }}</dd>
+                </div>
+                <div>
+                  <dt>最近检查</dt>
+                  <dd>{{ when(s.last_checked_at) }}</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <code>{{ s.code }}</code>
+              </details>
+            </template>
+          </ResponsiveDataView>
         </section>
         <section>
           <h3>任务状态</h3>
@@ -354,34 +414,87 @@ async function confirmBatchReplay() {
         </section>
         <section>
           <h3>最近尝试</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>任务</th>
-                <th>任务处理器</th>
-                <th>状态</th>
-                <th>错误</th>
-                <th>链路编号</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="a in data.attempts" :key="a.id">
-                <td>{{ a.task_id.slice(0, 8) }}… #{{ a.attempt_number }}</td>
-                <td>{{ a.worker_id }}</td>
-                <td>{{ statusLabel(a.status) }}</td>
-                <td>
-                  <span>{{ errorLabel(a.error_code) }}</span>
-                  <details v-if="a.error_code">
-                    <summary>技术详情</summary>
-                    <code>{{ a.error_code }}</code>
-                  </details>
-                </td>
-                <td>
-                  <code>{{ a.trace_id.slice(0, 8) }}…</code>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <ResponsiveDataView
+            title="最近尝试"
+            :rows="data.attempts"
+            :row-key="attemptRowKey"
+            :detail-title="attemptDetailTitle"
+          >
+            <template #desktop>
+              <table>
+                <thead>
+                  <tr>
+                    <th>尝试</th>
+                    <th>任务处理器</th>
+                    <th>状态</th>
+                    <th>错误</th>
+                    <th>技术详情</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="a in data.attempts" :key="a.id">
+                    <td>第 {{ a.attempt_number }} 次</td>
+                    <td>{{ a.worker_id }}</td>
+                    <td>{{ statusLabel(a.status) }}</td>
+                    <td>{{ errorLabel(a.error_code) }}</td>
+                    <td>
+                      <details>
+                        <summary>查看</summary>
+                        <code>任务 {{ a.task_id }}</code
+                        ><br />
+                        <code>链路 {{ a.trace_id }}</code
+                        ><br />
+                        <code v-if="a.error_code">错误 {{ a.error_code }}</code>
+                      </details>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+            <template #summary="{ row: a }">
+              <span class="responsive-record-summary">
+                <strong>第 {{ a.attempt_number }} 次尝试 · {{ statusLabel(a.status) }}</strong>
+                <span>{{ errorLabel(a.error_code) }}</span>
+                <small>{{ a.worker_id }} · {{ when(a.started_at) }}</small>
+              </span>
+            </template>
+            <template #detail="{ row: a }">
+              <dl>
+                <div>
+                  <dt>尝试次数</dt>
+                  <dd>第 {{ a.attempt_number }} 次</dd>
+                </div>
+                <div>
+                  <dt>任务处理器</dt>
+                  <dd>{{ a.worker_id }}</dd>
+                </div>
+                <div>
+                  <dt>状态</dt>
+                  <dd>{{ statusLabel(a.status) }}</dd>
+                </div>
+                <div>
+                  <dt>错误</dt>
+                  <dd>{{ errorLabel(a.error_code) }}</dd>
+                </div>
+                <div>
+                  <dt>开始时间</dt>
+                  <dd>{{ when(a.started_at) }}</dd>
+                </div>
+                <div>
+                  <dt>结束时间</dt>
+                  <dd>{{ when(a.finished_at) }}</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <code>任务 {{ a.task_id }}</code
+                ><br />
+                <code>链路 {{ a.trace_id }}</code
+                ><br />
+                <code v-if="a.error_code">错误 {{ a.error_code }}</code>
+              </details>
+            </template>
+          </ResponsiveDataView>
         </section>
         <section>
           <h3>开放与已重放死信</h3>
@@ -415,13 +528,17 @@ async function confirmBatchReplay() {
           <ul>
             <li v-for="d in data.dead_letters" :key="d.id">
               <b>{{ errorLabel(d.error_code) }}</b
-              ><span
-                >{{ statusLabel(d.status) }} · {{ d.organization_id.slice(0, 8) }}… ·
-                {{ when(d.created_at) }}</span
+              ><span>{{ statusLabel(d.status) }} · {{ when(d.created_at) }}</span
               ><a :href="`/platform-admin/collection?task=${d.task_id}`">查看并受控重放</a>
               <details>
                 <summary>技术详情</summary>
-                <code>{{ d.error_code }}</code>
+                <code>错误 {{ d.error_code }}</code
+                ><br />
+                <code>任务 {{ d.task_id }}</code
+                ><br />
+                <code>组织 {{ d.organization_id }}</code
+                ><br />
+                <code>工作区 {{ d.workspace_id }}</code>
               </details>
             </li>
           </ul>
