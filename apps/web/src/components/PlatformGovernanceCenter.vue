@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
+import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 type Section =
   "score_rules" | "cost_rules" | "approval_templates" | "automation_rules" | "releases";
@@ -50,6 +52,9 @@ const sections: Array<{
 ];
 const current = computed(() => sections.find((item) => item.value === section.value)!);
 const rows = computed<any[]>(() => data.value?.[section.value] ?? []);
+const activeFilterCount = computed(
+  () => Number(Boolean(query.value.trim())) + Number(Boolean(status.value)),
+);
 const summaryName = (key: string) =>
   (
     ({
@@ -65,6 +70,8 @@ const statusName = (value: unknown) =>
   (
     ({
       active: "启用",
+      enabled: "启用",
+      disabled: "停用",
       paused: "暂停",
       draft: "草稿",
       published: "已发布",
@@ -73,6 +80,8 @@ const statusName = (value: unknown) =>
       succeeded: "成功",
       failed: "失败",
       running: "进行中",
+      stopped: "已停止",
+      rolled_back: "已回滚",
     }) as Record<string, string>
   )[String(value)] ?? String(value ?? "—");
 const typeName = (value: unknown) =>
@@ -81,6 +90,7 @@ const typeName = (value: unknown) =>
       "approval.overdue": "审批节点超时",
       "approval.node.rejected": "审批被驳回",
       "competitor.alert.queued": "竞品告警入队",
+      "competitor.changed": "竞品发生变化",
       "task.created": "任务创建",
       notify_owner: "通知负责人",
       create_task: "创建人工任务",
@@ -131,13 +141,37 @@ onMounted(load);
       </div>
       <a :href="current.href">{{ current.action }}</a>
     </header>
-    <form @submit.prevent="load">
-      <input v-model="query" placeholder="搜索规则、版本、组织或工作区" maxlength="120" /><input
-        v-model="status"
-        placeholder="精确状态（可选）"
-        maxlength="40"
-      /><button>筛选</button>
-    </form>
+    <ResponsiveFilterDrawer label="筛选治理记录" :active-count="activeFilterCount">
+      <form @submit.prevent="load">
+        <input v-model="query" placeholder="搜索规则、版本、组织或工作区" maxlength="120" /><select
+          v-model="status"
+          aria-label="治理状态"
+        >
+          <option value="">全部状态</option>
+          <option
+            v-for="value in [
+              'active',
+              'enabled',
+              'paused',
+              'draft',
+              'published',
+              'approved',
+              'retired',
+              'disabled',
+              'succeeded',
+              'failed',
+              'running',
+              'stopped',
+              'rolled_back',
+            ]"
+            :key="value"
+            :value="value"
+          >
+            {{ statusName(value) }}
+          </option></select
+        ><button>筛选</button>
+      </form>
+    </ResponsiveFilterDrawer>
     <p v-if="message" class="governance-notice">{{ message }}</p>
     <section v-if="state !== 'ready'" class="governance-state">
       <h3>
@@ -169,50 +203,126 @@ onMounted(load);
         </button>
       </nav>
       <div class="governance-table">
-        <table>
-          <thead>
-            <tr>
-              <th>名称 / 版本</th>
-              <th>组织 / 工作区</th>
-              <th>类型</th>
-              <th>状态</th>
-              <th>版本</th>
-              <th>更新时间</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in rows" :key="item.id">
-              <td>
-                <strong>{{ item.name }}</strong
-                ><small>{{ item.version_code || item.id }}</small>
-              </td>
-              <td>
-                {{ item.organization_name || "平台全局"
-                }}<small>{{ item.workspace_name || item.stage || "—" }}</small>
-              </td>
-              <td>
-                {{
-                  typeName(
-                    item.trigger_event_type || item.resource_type || item.platform || section,
-                  )
-                }}
-              </td>
-              <td>
-                <b>{{ statusName(item.status) }}</b>
-              </td>
-              <td>v{{ item.revision || item.version || item.current_version || "—" }}</td>
-              <td>
-                {{ item.updated_at ? new Date(item.updated_at).toLocaleString("zh-CN") : "—" }}
-              </td>
-              <td>
-                <button type="button" @click="selected = item">查看详情</button
-                ><a :href="editHref(item)">{{ section === "releases" ? "进入管理" : "编辑" }}</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <p v-if="!rows.length">当前分类没有匹配记录。</p>
+        <ResponsiveDataView
+          :rows="rows"
+          :row-key="(item) => item.id"
+          :title="current.label"
+          :detail-title="(item) => item.name"
+          empty-message="当前分类没有匹配记录。"
+        >
+          <template #desktop
+            ><table>
+              <thead>
+                <tr>
+                  <th>名称 / 版本</th>
+                  <th>组织 / 工作区</th>
+                  <th>类型</th>
+                  <th>状态</th>
+                  <th>版本</th>
+                  <th>更新时间</th>
+                  <th>操作</th>
+                  <th>技术信息</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in rows" :key="item.id">
+                  <td>
+                    <strong>{{ item.name }}</strong>
+                  </td>
+                  <td>
+                    {{ item.organization_name || "平台全局"
+                    }}<small>{{ item.workspace_name || item.stage || "—" }}</small>
+                  </td>
+                  <td>
+                    {{
+                      typeName(
+                        item.trigger_event_type || item.resource_type || item.platform || section,
+                      )
+                    }}
+                  </td>
+                  <td>
+                    <b>{{ statusName(item.status) }}</b>
+                  </td>
+                  <td>v{{ item.revision || item.version || item.current_version || "—" }}</td>
+                  <td>
+                    {{ item.updated_at ? new Date(item.updated_at).toLocaleString("zh-CN") : "—" }}
+                  </td>
+                  <td>
+                    <button type="button" @click="selected = item">查看详情</button
+                    ><a :href="editHref(item)">{{
+                      section === "releases" ? "进入管理" : "编辑"
+                    }}</a>
+                  </td>
+                  <td>
+                    <details>
+                      <summary>技术详情</summary>
+                      <code>{{ item.version_code || item.id }}</code>
+                    </details>
+                  </td>
+                </tr>
+              </tbody>
+            </table></template
+          >
+          <template #summary="{ row }">
+            <span class="responsive-record-summary">
+              <strong>{{ row.name }} · {{ statusName(row.status) }}</strong>
+              <small
+                >{{ row.organization_name || "平台全局" }} · 第
+                {{ row.revision || row.version || row.current_version || "—" }} 版</small
+              >
+            </span>
+          </template>
+          <template #detail="{ row }">
+            <dl>
+              <div>
+                <dt>所属组织</dt>
+                <dd>{{ row.organization_name || "平台全局" }}</dd>
+              </div>
+              <div>
+                <dt>工作区或阶段</dt>
+                <dd>{{ row.workspace_name || row.stage || "—" }}</dd>
+              </div>
+              <div>
+                <dt>类型</dt>
+                <dd>
+                  {{
+                    typeName(row.trigger_event_type || row.resource_type || row.platform || section)
+                  }}
+                </dd>
+              </div>
+              <div>
+                <dt>当前状态</dt>
+                <dd>{{ statusName(row.status) }}</dd>
+              </div>
+              <div>
+                <dt>版本</dt>
+                <dd>第 {{ row.revision || row.version || row.current_version || "—" }} 版</dd>
+              </div>
+              <div>
+                <dt>更新时间</dt>
+                <dd>
+                  {{ row.updated_at ? new Date(row.updated_at).toLocaleString("zh-CN") : "—" }}
+                </dd>
+              </div>
+            </dl>
+            <details>
+              <summary>技术详情</summary>
+              <dl>
+                <div>
+                  <dt>记录 ID</dt>
+                  <dd>{{ row.id }}</dd>
+                </div>
+                <div v-if="row.version_code">
+                  <dt>版本代码</dt>
+                  <dd>{{ row.version_code }}</dd>
+                </div>
+              </dl>
+            </details>
+            <a :href="editHref(row)">{{
+              section === "releases" ? "进入管理页面" : "进入编辑页面"
+            }}</a>
+          </template>
+        </ResponsiveDataView>
       </div>
       <aside>
         <strong>配置版本</strong
@@ -226,10 +336,11 @@ onMounted(load);
         ><a href="/platform-admin/providers">进入来源版本管理</a>
       </aside>
       <footer>
-        跨组织查看不会绕过业务权限；编辑、启停和发布仍使用版本锁并写入审计记录。<span
-          v-if="requestId"
-          >关联编号 {{ requestId }}</span
-        >
+        跨组织查看不会绕过业务权限；编辑、启停和发布仍使用版本锁并写入审计记录。
+        <details v-if="requestId">
+          <summary>技术详情</summary>
+          <span>请求 ID {{ requestId }}</span>
+        </details>
       </footer>
     </template>
     <dialog :open="Boolean(selected)" class="governance-detail">
@@ -292,6 +403,19 @@ onMounted(load);
             </dd>
           </div>
         </dl>
+        <details>
+          <summary>技术详情</summary>
+          <dl>
+            <div>
+              <dt>记录 ID</dt>
+              <dd>{{ selected.id }}</dd>
+            </div>
+            <div v-if="selected.version_code">
+              <dt>版本代码</dt>
+              <dd>{{ selected.version_code }}</dd>
+            </div>
+          </dl>
+        </details>
         <footer>
           <button @click="selected = null">关闭</button
           ><a :href="editHref(selected)">{{
@@ -354,7 +478,8 @@ onMounted(load);
   display: flex;
   gap: 8px;
 }
-.platform-governance input {
+.platform-governance input,
+.platform-governance select {
   padding: 9px 12px;
   border: 1px solid var(--so-border);
   border-radius: 9px;
@@ -411,6 +536,20 @@ onMounted(load);
 }
 .governance-table td small {
   margin-top: 4px;
+}
+.governance-table details summary,
+.platform-governance footer details summary,
+.governance-detail > section > details summary {
+  display: inline-flex;
+  min-height: var(--so-touch-target);
+  align-items: center;
+  color: var(--so-primary);
+  cursor: pointer;
+}
+.governance-table code,
+.platform-governance footer span,
+.governance-detail > section > details dd {
+  overflow-wrap: anywhere;
 }
 .platform-governance aside {
   display: flex;
@@ -489,11 +628,9 @@ onMounted(load);
     flex-direction: column;
   }
   .platform-governance form input,
+  .platform-governance form select,
   .platform-governance form button {
     width: 100%;
-  }
-  .governance-table table {
-    min-width: 760px;
   }
 }
 </style>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import DataQualityCenter from "./DataQualityCenter.vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
+import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 
 type Entity = "trends" | "opportunities" | "competitors" | "suppliers";
 const props = defineProps<{ apiBaseUrl: string }>();
@@ -31,6 +33,16 @@ const entities: Array<{
 ];
 const current = computed(() => entities.find((item) => item.value === entity.value)!);
 const summary = computed(() => Object.entries(data.value?.summary ?? {}));
+const entityStatuses: Record<Entity, string[]> = {
+  trends: ["active", "irrelevant", "stale"],
+  opportunities: ["draft", "reviewing", "approved", "rejected", "accepted", "archived"],
+  competitors: ["watching", "active", "stale"],
+  suppliers: ["active", "disabled"],
+};
+const statusOptions = computed(() => entityStatuses[entity.value]);
+const activeFilterCount = computed(
+  () => Number(Boolean(query.value.trim())) + Number(Boolean(status.value)),
+);
 const statusName = (value: unknown) =>
   (
     ({
@@ -158,14 +170,21 @@ onMounted(load);
           {{ item.label }}
         </button>
       </nav>
-      <form class="platform-data-filter" @submit.prevent="load">
-        <input v-model="query" placeholder="搜索名称、组织或工作区" maxlength="120" />
-        <input v-model="status" placeholder="精确状态（可选）" maxlength="40" />
-        <button>筛选</button>
-        <button type="button" :disabled="exporting" @click="exportCsv">
-          {{ exporting ? "正在导出…" : "导出表格文件" }}
-        </button>
-      </form>
+      <ResponsiveFilterDrawer label="筛选全量数据" :active-count="activeFilterCount">
+        <form class="platform-data-filter" @submit.prevent="load">
+          <input v-model="query" placeholder="搜索名称、组织或工作区" maxlength="120" />
+          <select v-model="status" aria-label="记录状态">
+            <option value="">全部状态</option>
+            <option v-for="value in statusOptions" :key="value" :value="value">
+              {{ statusName(value) }}
+            </option>
+          </select>
+          <button>筛选</button>
+          <button type="button" :disabled="exporting" @click="exportCsv">
+            {{ exporting ? "正在导出…" : "导出表格文件" }}
+          </button>
+        </form>
+      </ResponsiveFilterDrawer>
       <p v-if="message" class="platform-data-notice">{{ message }}</p>
       <section v-if="state !== 'ready'" class="platform-data-state">
         <h3>
@@ -188,40 +207,97 @@ onMounted(load);
           </article>
         </div>
         <div class="platform-data-table">
-          <table>
-            <thead>
-              <tr>
-                <th>{{ current.label }}</th>
-                <th>组织 / 工作区</th>
-                <th>分类 / 市场</th>
-                <th>状态</th>
-                <th>{{ current.primary }} / {{ current.secondary }}</th>
-                <th>更新时间</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in data.items" :key="item.id">
-                <td>
-                  <strong>{{ item.title }}</strong
-                  ><small>{{ item.id }}</small>
-                </td>
-                <td>
-                  {{ item.organization_name }}<small>{{ item.workspace_name }}</small>
-                </td>
-                <td>
-                  {{ item.category || "—" }}<small>{{ item.market || "—" }}</small>
-                </td>
-                <td>
-                  <b :data-state="item.status">{{ statusName(item.status) }}</b>
-                </td>
-                <td>{{ item.metric_primary }} / {{ item.metric_secondary }}</td>
-                <td>{{ new Date(item.updated_at).toLocaleString("zh-CN") }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <ResponsiveDataView
+            :rows="data.items"
+            :row-key="(item) => item.id"
+            :title="`${current.label}记录`"
+            :detail-title="(item) => item.title"
+          >
+            <template #desktop>
+              <table>
+                <thead>
+                  <tr>
+                    <th>{{ current.label }}</th>
+                    <th>组织 / 工作区</th>
+                    <th>分类 / 市场</th>
+                    <th>状态</th>
+                    <th>{{ current.primary }} / {{ current.secondary }}</th>
+                    <th>更新时间</th>
+                    <th>技术信息</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in data.items" :key="item.id">
+                    <td>
+                      <strong>{{ item.title }}</strong>
+                    </td>
+                    <td>
+                      {{ item.organization_name }}<small>{{ item.workspace_name }}</small>
+                    </td>
+                    <td>
+                      {{ item.category || "—" }}<small>{{ item.market || "—" }}</small>
+                    </td>
+                    <td>
+                      <b :data-state="item.status">{{ statusName(item.status) }}</b>
+                    </td>
+                    <td>{{ item.metric_primary }} / {{ item.metric_secondary }}</td>
+                    <td>{{ new Date(item.updated_at).toLocaleString("zh-CN") }}</td>
+                    <td>
+                      <details>
+                        <summary>技术详情</summary>
+                        <code>{{ item.id }}</code>
+                      </details>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+            <template #summary="{ row }">
+              <span class="responsive-record-summary">
+                <strong>{{ row.title }} · {{ statusName(row.status) }}</strong>
+                <small>{{ row.organization_name }} · {{ row.workspace_name }}</small>
+              </span>
+            </template>
+            <template #detail="{ row }">
+              <dl>
+                <div>
+                  <dt>所属组织</dt>
+                  <dd>{{ row.organization_name }}</dd>
+                </div>
+                <div>
+                  <dt>工作区</dt>
+                  <dd>{{ row.workspace_name }}</dd>
+                </div>
+                <div>
+                  <dt>分类 / 市场</dt>
+                  <dd>{{ row.category || "—" }} / {{ row.market || "—" }}</dd>
+                </div>
+                <div>
+                  <dt>当前状态</dt>
+                  <dd>{{ statusName(row.status) }}</dd>
+                </div>
+                <div>
+                  <dt>{{ current.primary }} / {{ current.secondary }}</dt>
+                  <dd>{{ row.metric_primary }} / {{ row.metric_secondary }}</dd>
+                </div>
+                <div>
+                  <dt>更新时间</dt>
+                  <dd>{{ new Date(row.updated_at).toLocaleString("zh-CN") }}</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <code>{{ row.id }}</code>
+              </details>
+            </template>
+          </ResponsiveDataView>
         </div>
         <footer>
-          最多显示当前筛选最近 100 条<span v-if="requestId"> · 关联编号 {{ requestId }}</span>
+          最多显示当前筛选最近 100 条
+          <details v-if="requestId">
+            <summary>技术详情</summary>
+            <span>请求 ID {{ requestId }}</span>
+          </details>
         </footer>
       </template>
     </template>
@@ -264,7 +340,8 @@ onMounted(load);
   gap: 8px;
 }
 .platform-data button,
-.platform-data input {
+.platform-data input,
+.platform-data select {
   padding: 9px 12px;
   border: 1px solid var(--so-border);
   border-radius: 9px;
@@ -331,6 +408,18 @@ onMounted(load);
   text-align: right;
   font-size: 11px;
 }
+.platform-data-table details summary,
+.platform-data footer details summary {
+  display: inline-flex;
+  min-height: var(--so-touch-target);
+  align-items: center;
+  color: var(--so-primary);
+  cursor: pointer;
+}
+.platform-data-table code,
+.platform-data footer span {
+  overflow-wrap: anywhere;
+}
 @media (max-width: 760px) {
   .platform-data-hero,
   .platform-data-filter {
@@ -340,11 +429,9 @@ onMounted(load);
     flex-wrap: wrap;
   }
   .platform-data-filter input,
+  .platform-data-filter select,
   .platform-data-filter button {
     width: 100%;
-  }
-  .platform-data table {
-    min-width: 850px;
   }
 }
 </style>

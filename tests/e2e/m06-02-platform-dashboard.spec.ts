@@ -340,14 +340,63 @@ test("platform completion exposes data governance notifications and user-panel s
 
   await page.goto("/platform-admin/data");
   await expect(page.getByRole("heading", { name: "全量业务数据", level: 2 })).toBeVisible();
-  await expect(page.getByText("便携照明趋势")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 1000) <= 760)
+    await expect(page.getByRole("button", { name: /^便携照明趋势 · 展示中/ })).toBeVisible();
+  else await expect(page.getByText("便携照明趋势", { exact: true })).toBeVisible();
+  await expect(page.getByText("trend-1", { exact: true })).not.toBeVisible();
   await expect(page.getByRole("link", { name: "进入用户工作台" })).toHaveAttribute("href", "/home");
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+    .toBe(true);
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: "筛选全量数据" }).click();
+    const dataFilters = page.getByRole("dialog", { name: "筛选全量数据" });
+    await dataFilters.getByPlaceholder("搜索名称、组织或工作区").fill("便携");
+    await dataFilters.getByLabel("记录状态").selectOption("active");
+    await dataFilters.getByRole("button", { name: "关闭筛选条件" }).click();
+    await page.getByRole("button", { name: /筛选全量数据.*2 项已选/ }).click();
+    await expect(dataFilters.getByPlaceholder("搜索名称、组织或工作区")).toHaveValue("便携");
+    await expect(dataFilters.getByLabel("记录状态")).toHaveValue("active");
+    await dataFilters.getByRole("button", { name: "关闭筛选条件" }).click();
+    await page.getByRole("button", { name: /^便携照明趋势 · 展示中/ }).click();
+    const dataDialog = page.getByRole("dialog", { name: "便携照明趋势" });
+    await dataDialog.getByText("技术详情").click();
+    await expect(dataDialog.getByText("trend-1", { exact: true })).toBeVisible();
+    await dataDialog.getByRole("button", { name: "关闭详情" }).click();
+  }
 
   await page.goto("/platform-admin/governance");
   await expect(page.getByRole("heading", { name: "规则、工作流与自动化", level: 2 })).toBeVisible();
-  await expect(page.getByText("标准评分规则")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 1000) <= 760)
+    await expect(page.getByRole("button", { name: /^标准评分规则 · 启用/ })).toBeVisible();
+  else await expect(page.getByText("标准评分规则", { exact: true })).toBeVisible();
+  await expect(page.getByText("score-v1", { exact: true })).not.toBeVisible();
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+    .toBe(true);
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: "筛选治理记录" }).click();
+    const governanceFilters = page.getByRole("dialog", { name: "筛选治理记录" });
+    await governanceFilters.getByPlaceholder("搜索规则、版本、组织或工作区").fill("标准");
+    await governanceFilters.getByLabel("治理状态").selectOption("active");
+    await governanceFilters.getByRole("button", { name: "关闭筛选条件" }).click();
+    await page.getByRole("button", { name: /筛选治理记录.*2 项已选/ }).click();
+    await expect(governanceFilters.getByPlaceholder("搜索规则、版本、组织或工作区")).toHaveValue(
+      "标准",
+    );
+    await expect(governanceFilters.getByLabel("治理状态")).toHaveValue("active");
+    await governanceFilters.getByRole("button", { name: "关闭筛选条件" }).click();
+    await page.getByRole("button", { name: /^标准评分规则 · 启用/ }).click();
+    const governanceDialog = page.getByRole("dialog", { name: "标准评分规则" });
+    await governanceDialog.getByText("技术详情").click();
+    await expect(governanceDialog.getByText("rule-1", { exact: true })).toBeVisible();
+    await governanceDialog.getByRole("button", { name: "关闭详情" }).click();
+  }
   await page.getByRole("button", { name: "自动化规则" }).click();
-  await expect(page.getByText("竞品降价提醒")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 1000) <= 760)
+    await expect(page.getByRole("button", { name: /^竞品降价提醒 · 启用/ })).toBeVisible();
+  else await expect(page.getByText("竞品降价提醒", { exact: true })).toBeVisible();
+  await expect(page.getByText("enabled", { exact: true })).toHaveCount(0);
 
   await page.goto("/platform-admin/notifications");
   await expect(page.getByRole("heading", { name: "通知管理", level: 2 })).toBeVisible();
