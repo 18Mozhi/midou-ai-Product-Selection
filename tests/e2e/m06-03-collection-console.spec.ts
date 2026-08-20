@@ -115,6 +115,8 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
   await expect(page.getByRole("link", { name: "来源配置" })).toBeVisible();
   await expect(page.getByText("provider_registry")).toHaveCount(0);
 
+  if ((page.viewportSize()?.width ?? 0) <= 760)
+    await page.getByRole("button", { name: "采集范围与时间" }).click();
   await page.getByLabel("采集来源筛选").selectOption(providerId);
   await page.getByLabel("观测时间筛选").selectOption("7d");
   await page.getByRole("button", { name: "应用范围" }).click();
@@ -131,6 +133,7 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByText("最近尝试")).toBeVisible();
+  await page.getByRole("button", { name: "采集范围与时间" }).click();
   await expect(page.getByRole("button", { name: "应用范围" })).toHaveCSS("white-space", "nowrap");
   await expect(page).toHaveScreenshot("m06-03-collection-console-mobile.png", {
     fullPage: true,

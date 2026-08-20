@@ -20,8 +20,8 @@ test("platform notification operations expose templates channels subscriptions d
       "apps/worker/src/notification-outbox-worker.ts",
     ].map((path) =>
       Array.isArray(path)
-        ? Promise.all(path.map((file) => readFile(file, "utf8"))).then(
-            (sources) => sources.join("\n"),
+        ? Promise.all(path.map((file) => readFile(file, "utf8"))).then((sources) =>
+            sources.join("\n"),
           )
         : readFile(path, "utf8"),
     ),
@@ -37,7 +37,7 @@ test("platform notification operations expose templates channels subscriptions d
     assert.match(web, new RegExp(label));
   assert.match(web, /邮件服务未接入，管理入口已关闭/);
   assert.doesNotMatch(web, /href="\/platform-admin\/email"/);
-  assert.match(styles, /\.role-shell dialog\[open\]\{z-index:40/);
+  assert.match(styles, /\.role-shell\s+dialog\[open\]\s*\{\s*z-index:\s*40/);
   for (const fact of [
     "notification_preferences",
     "notification_deliveries",
@@ -52,37 +52,32 @@ test("platform notification operations expose templates channels subscriptions d
 });
 
 test("platform notification drafts remain available while mail drafts fail closed", async () => {
-  const [web, service, routes, migration, openapi, featureMap] =
-    await Promise.all(
+  const [web, service, routes, migration, openapi, featureMap] = await Promise.all(
+    [
       [
-        [
-          "apps/web/src/components/PlatformManagementCenter.vue",
-          "apps/web/src/components/PlatformMessageWorkbench.vue",
-          "apps/web/src/components/PlatformMessageEditor.vue",
-        ],
-        "apps/api/src/platform-dashboard-service.ts",
-        "apps/api/src/platform-dashboard-routes.ts",
-        "database/migrations/0040_platform_messages.up.sql",
-        "docs/openapi.yaml",
-        "docs/feature-map.json",
-      ].map((path) =>
-        Array.isArray(path)
-          ? Promise.all(path.map((file) => readFile(file, "utf8"))).then(
-              (sources) => sources.join("\n"),
-            )
-          : readFile(path, "utf8"),
-      ),
-    );
-  for (const label of ["发布通知", "编辑草稿", "取消草稿"])
-    assert.match(web, new RegExp(label));
+        "apps/web/src/components/PlatformManagementCenter.vue",
+        "apps/web/src/components/PlatformMessageWorkbench.vue",
+        "apps/web/src/components/PlatformMessageEditor.vue",
+      ],
+      "apps/api/src/platform-dashboard-service.ts",
+      "apps/api/src/platform-dashboard-routes.ts",
+      "database/migrations/0040_platform_messages.up.sql",
+      "docs/openapi.yaml",
+      "docs/feature-map.json",
+    ].map((path) =>
+      Array.isArray(path)
+        ? Promise.all(path.map((file) => readFile(file, "utf8"))).then((sources) =>
+            sources.join("\n"),
+          )
+        : readFile(path, "utf8"),
+    ),
+  );
+  for (const label of ["发布通知", "编辑草稿", "取消草稿"]) assert.match(web, new RegExp(label));
   for (const operation of ["createMessage", "updateMessage", "messageAction"])
     assert.match(service, new RegExp(operation));
   assert.match(routes, /management\/messages\/:messageId\/actions/);
   assert.match(migration, /CREATE TABLE `platform_messages`/);
-  assert.match(
-    openapi,
-    /platform\/management\/messages\/\{messageId\}\/actions/,
-  );
+  assert.match(openapi, /platform\/management\/messages\/\{messageId\}\/actions/);
   assert.match(featureMap, /0040_platform_messages\.up\.sql/);
   assert.match(featureMap, /pending_provider_selection/);
   assert.match(service, /mail_provider_pending/);
@@ -108,9 +103,7 @@ test("platform message service rejects mail even when the UI is bypassed", () =>
   ])
     assert.throws(
       () => service.createMessage(value, {}),
-      (error) =>
-        error instanceof PlatformDashboardError &&
-        error.code === "mail_provider_pending",
+      (error) => error instanceof PlatformDashboardError && error.code === "mail_provider_pending",
     );
 });
 
@@ -123,9 +116,6 @@ test("platform management keeps orchestration and message views in bounded compo
   ]);
   for (const [path, limit] of limits) {
     const source = await readFile(path, "utf8");
-    assert.ok(
-      source.split(/\r?\n/u).length < limit,
-      `${path} must remain below ${limit} lines`,
-    );
+    assert.ok(source.split(/\r?\n/u).length < limit, `${path} must remain below ${limit} lines`);
   }
 });

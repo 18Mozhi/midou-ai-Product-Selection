@@ -58,46 +58,17 @@ test("saved theme is restored before Vue mounts and modules use semantic theme t
   assert.doesNotMatch(personal, /linear-gradient\(135deg,\s*#0d2342/);
 });
 
-test("migrated workflow surfaces use only shared semantic color roles", async () => {
-  const paths = [
-      "apps/web/src/approval-workspace.css",
-      "apps/web/src/notification-center.css",
-      "apps/web/src/data-quality.css",
-      "apps/web/src/selection-journey.css",
-      "apps/web/src/crawler-runtime.css",
-      "apps/web/src/runtime-topology.css",
-      "apps/web/src/collection-tasks.css",
-      "apps/web/src/provider-adapters.css",
-      "apps/web/src/provider-adapters-contrast.css",
-      "apps/web/src/sourcing.css",
-      "apps/web/src/redis-resilience.css",
-      "apps/web/src/crawler-scheduler.css",
-      "apps/web/src/file-resilience.css",
-      "apps/web/src/mysql-resilience.css",
-      "apps/web/src/competitor.css",
-      "apps/web/src/capacity-boundary.css",
-      "apps/web/src/provider-sources.css",
-      "apps/web/src/organization-admin.css",
-      "apps/web/src/member-workspace-polish.css",
-      "apps/web/src/trends.css",
-      "apps/web/src/report-center.css",
-      "apps/web/src/automation-rules.css",
-      "apps/web/src/collection-task-detail.css",
-      "apps/web/src/opportunity-ai.css",
-      "apps/web/src/platform-polish.css",
-      "apps/web/src/opportunities.css",
-      "apps/web/src/opportunity-profit.css",
-      "apps/web/src/opportunity-selection-entry.css",
-      "apps/web/src/provider-registry.css",
-      "apps/web/src/credential-assets.css",
-      "apps/web/src/scoring.css",
-    ],
+test("production CSS uses shared semantic color roles instead of raw hex values", async () => {
+  const paths = (await readdir("apps/web/src", { recursive: true }))
+      .filter((path) => path.endsWith(".css"))
+      .map((path) => `apps/web/src/${path.replaceAll("\\", "/")}`)
+      .filter((path) => path !== "apps/web/src/design/tokens.css"),
     sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
 
   for (const [index, source] of sources.entries()) {
-    assert.match(source, /var\(--so-(?:bg|panel|text|border|primary)/, paths[index]);
     assert.doesNotMatch(source, /#(?:[0-9a-f]{3,8})\b/i, paths[index]);
   }
+  assert.match(sources.join("\n"), /var\(--so-(?:bg|panel|text|border|primary)/);
 });
 
 test("icon-only production actions expose hover and focus names", async () => {
