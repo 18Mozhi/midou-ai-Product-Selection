@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiRequestOptions } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import "../task-workspace.css";
 import "../task-workspace-enhancements.css";
 type State = "loading" | "ready" | "empty" | "error" | "forbidden" | "expired" | "rate_limited";
@@ -73,6 +74,26 @@ const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all"; taskId?: 
   showBatchImpact = ref(false),
   form = ref({ title: "", description: "", priority: "normal", due_at: "" }),
   comment = ref("");
+const closeTaskEditor = () => {
+    showCreate.value = false;
+    editing.value = null;
+  },
+  closeDeleteDialog = () => {
+    deleting.value = null;
+    deleteReason.value = "";
+  },
+  { dialogElement: createDialogElement, handleCancel: handleCreateCancel } = useModalDialog(
+    () => showCreate.value,
+    closeTaskEditor,
+  ),
+  { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
+    () => showBatchImpact.value,
+    () => (showBatchImpact.value = false),
+  ),
+  { dialogElement: deleteDialogElement, handleCancel: handleDeleteCancel } = useModalDialog(
+    () => Boolean(deleting.value),
+    closeDeleteDialog,
+  );
 const pageSize = 10,
   visible = computed(() => tasks.value.filter((x) => !status.value || x.status === status.value)),
   label = (v: string) =>
@@ -588,7 +609,11 @@ watch(
       <span>第 {{ page }} / {{ pageCount }} 页 · 共 {{ total }} 项</span>
       <button :disabled="page >= pageCount" @click="setPage(page + 1)">下一页</button>
     </nav>
-    <dialog :open="showCreate">
+    <dialog
+      ref="createDialogElement"
+      :aria-label="editing ? '编辑任务' : '新建任务'"
+      @cancel="handleCreateCancel"
+    >
       <form @submit.prevent="create">
         <h3>{{ editing ? "编辑任务" : "新建任务" }}</h3>
         <div class="task-kind-guide">
@@ -609,14 +634,7 @@ watch(
         ><label>截止时间（可选）<input v-model="form.due_at" type="datetime-local" /></label>
         <p>未指定负责人时分配给当前用户；期限为空时明确显示“未设置”。</p>
         <div>
-          <button
-            type="button"
-            @click="
-              showCreate = false;
-              editing = null;
-            "
-          >
-            取消</button
+          <button type="button" @click="closeTaskEditor">取消</button
           ><button>{{ editing ? "保存修改" : "创建任务" }}</button>
         </div>
       </form>
@@ -718,7 +736,12 @@ watch(
         </form>
       </section>
     </aside>
-    <dialog :open="showBatchImpact" class="task-batch-impact">
+    <dialog
+      ref="batchDialogElement"
+      class="task-batch-impact"
+      aria-label="确认批量任务操作"
+      @cancel="handleBatchCancel"
+    >
       <form @submit.prevent="confirmBatch">
         <h3>
           确认批量{{
@@ -756,7 +779,12 @@ watch(
         </div>
       </form>
     </dialog>
-    <dialog :open="Boolean(deleting)" class="task-delete-dialog">
+    <dialog
+      ref="deleteDialogElement"
+      class="task-delete-dialog"
+      aria-label="删除任务"
+      @cancel="handleDeleteCancel"
+    >
       <form @submit.prevent="removeTask">
         <h3>删除任务</h3>
         <p>将删除“{{ deleting?.title }}”。任务列表不再显示，但审计记录会保留。</p>
@@ -769,14 +797,7 @@ watch(
           ></textarea>
         </label>
         <div>
-          <button
-            type="button"
-            @click="
-              deleting = null;
-              deleteReason = '';
-            "
-          >
-            取消</button
+          <button type="button" @click="closeDeleteDialog">取消</button
           ><button class="danger" type="submit">确认删除</button>
         </div>
       </form>

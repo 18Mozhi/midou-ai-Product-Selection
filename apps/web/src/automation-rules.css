@@ -184,7 +184,7 @@
   width: min(560px, calc(100% - 32px));
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: var(--surface);
+  background: var(--so-bg-elevated);
   color: var(--text-primary);
   z-index: 40;
   max-height: calc(100dvh - 32px);

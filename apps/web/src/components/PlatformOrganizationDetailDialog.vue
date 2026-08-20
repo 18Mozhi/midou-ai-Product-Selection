@@ -21,7 +21,12 @@ const { dialogElement, handleCancel } = useModalDialog(
 </script>
 
 <template>
-  <dialog ref="dialogElement" class="organization-detail-dialog" @cancel="handleCancel">
+  <dialog
+    ref="dialogElement"
+    class="organization-detail-dialog"
+    :aria-label="organization?.name ?? '组织详情'"
+    @cancel="handleCancel"
+  >
     <form v-if="organization" @submit.prevent="$emit('save')">
       <header>
         <div>

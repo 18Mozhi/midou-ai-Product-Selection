@@ -19,6 +19,7 @@ const acknowledged = ref(false),
   typedText = ref(""),
   dialog = ref<HTMLElement | null>(null),
   cancelButton = ref<HTMLButtonElement | null>(null);
+let returnFocus: HTMLElement | null = null;
 const enabled = computed(() =>
   canConfirm({
     destructive: props.destructive,
@@ -30,12 +31,20 @@ const enabled = computed(() =>
 watch(
   () => props.open,
   async (open) => {
-    if (!open) return;
-    acknowledged.value = false;
-    typedText.value = "";
+    if (open) {
+      const active = document.activeElement;
+      returnFocus = active instanceof HTMLElement ? active : null;
+      acknowledged.value = false;
+      typedText.value = "";
+      await nextTick();
+      cancelButton.value?.focus();
+      return;
+    }
     await nextTick();
-    cancelButton.value?.focus();
+    returnFocus?.focus();
+    returnFocus = null;
   },
+  { immediate: true },
 );
 function cancel() {
   emit("cancel");

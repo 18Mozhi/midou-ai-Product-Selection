@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
@@ -15,6 +16,10 @@ const section = ref<Section>("score_rules"),
   message = ref(""),
   requestId = ref(""),
   selected = ref<any>(null);
+const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
+  () => Boolean(selected.value),
+  () => (selected.value = null),
+);
 const sections: Array<{
   value: Section;
   label: string;
@@ -342,7 +347,12 @@ onMounted(load);
         </details>
       </footer>
     </template>
-    <dialog :open="Boolean(selected)" class="governance-detail">
+    <dialog
+      ref="detailDialogElement"
+      class="governance-detail"
+      :aria-label="selected ? `${selected.name}详情` : '治理详情'"
+      @cancel="handleDetailCancel"
+    >
       <section v-if="selected">
         <header>
           <div>

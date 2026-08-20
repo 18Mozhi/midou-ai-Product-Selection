@@ -8,7 +8,9 @@ withDefaults(defineProps<{ label?: string; activeCount?: number }>(), {
 
 const open = ref(false);
 const mobile = ref(false);
+const triggerButton = ref<HTMLButtonElement | null>(null);
 const closeButton = ref<HTMLButtonElement | null>(null);
+const sheet = ref<HTMLElement | null>(null);
 let mediaQuery: MediaQueryList | null = null;
 
 function syncViewport(event?: MediaQueryListEvent) {
@@ -22,8 +24,37 @@ async function show() {
   closeButton.value?.focus();
 }
 
-function close() {
+async function close() {
+  const shouldRestoreFocus = open.value;
   open.value = false;
+  if (shouldRestoreFocus) {
+    await nextTick();
+    triggerButton.value?.focus();
+  }
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    void close();
+    return;
+  }
+  if (event.key !== "Tab" || !mobile.value || !open.value || !sheet.value) return;
+  const focusable = [
+    ...sheet.value.querySelectorAll<HTMLElement>(
+      'button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])',
+    ),
+  ];
+  const first = focusable[0],
+    last = focusable.at(-1);
+  if (!first || !last) return;
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
 }
 
 onMounted(() => {
@@ -36,8 +67,9 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
 </script>
 
 <template>
-  <div class="responsive-filter-drawer" @keydown.esc="close">
+  <div class="responsive-filter-drawer" @keydown="handleKeydown">
     <button
+      ref="triggerButton"
       type="button"
       class="responsive-filter-drawer__trigger"
       aria-haspopup="dialog"
@@ -60,6 +92,7 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
         @click="close"
       ></button>
       <section
+        ref="sheet"
         class="responsive-filter-drawer__sheet"
         :role="mobile ? 'dialog' : 'group'"
         :aria-modal="mobile && open ? 'true' : undefined"

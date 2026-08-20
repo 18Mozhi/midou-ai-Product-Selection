@@ -119,7 +119,8 @@ test("M02-05.A07/A08/A09/A15 mobile quick create shows authorized entries only",
   );
   await page.goto("/home");
   await page.getByRole("button", { name: "打开导航菜单" }).click();
-  await page.getByRole("button", { name: "创建选品" }).click();
+  const createButton = page.getByRole("button", { name: "创建选品" });
+  await createButton.click();
   const dialog = page.getByRole("dialog", { name: "快捷创建" });
   await expect(dialog.getByRole("link", { name: /创建任务/ })).toBeVisible();
   await expect(dialog.getByRole("link", { name: /发起找货/ })).toBeVisible();
@@ -133,6 +134,9 @@ test("M02-05.A07/A08/A09/A15 mobile quick create shows authorized entries only",
   );
   await expect(dialog.getByText("邀请成员")).toHaveCount(0);
   await expect(page).toHaveScreenshot("m02-05-quick-create.png");
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(createButton).toBeFocused();
 });
 
 test("M02-05.A08/A16 expired and empty states are not reported as success", async ({ page }) => {

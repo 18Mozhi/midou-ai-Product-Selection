@@ -3856,12 +3856,25 @@ button {
   position: fixed;
   z-index: 110;
   inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  border: 0;
   padding: 80px 18px 18px;
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  color: var(--so-text);
   background: color-mix(in srgb, var(--so-bg) 76%, transparent);
   backdrop-filter: blur(14px);
+}
+.discovery-backdrop::backdrop {
+  background: transparent;
+}
+.discovery-backdrop:not([open]) {
+  display: none;
 }
 .discovery-dialog {
   width: min(720px, 100%);

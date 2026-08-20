@@ -1,16 +1,28 @@
 <script setup lang="ts">
-defineProps<{
+import { useModalDialog } from "../use-modal-dialog";
+import "./platform-message-editor.css";
+
+const props = defineProps<{
   open: boolean;
   editor: any | null;
   form: any;
   saving: boolean;
   audienceOptions?: { organizations?: any[]; users?: any[] };
 }>();
-defineEmits<{ close: []; save: [] }>();
+const emit = defineEmits<{ close: []; save: [] }>();
+const { dialogElement, handleCancel } = useModalDialog(
+  () => props.open,
+  () => emit("close"),
+);
 </script>
 
 <template>
-  <dialog :open="open" class="message-dialog">
+  <dialog
+    ref="dialogElement"
+    class="message-dialog"
+    :aria-label="editor?.id ? '编辑平台消息草稿' : '新建平台消息草稿'"
+    @cancel="handleCancel"
+  >
     <form @submit.prevent="$emit('save')">
       <header>
         <div>
@@ -108,91 +120,3 @@ defineEmits<{ close: []; save: [] }>();
     </form>
   </dialog>
 </template>
-
-<style scoped>
-dialog {
-  position: fixed;
-  inset: 0;
-  width: min(620px, calc(100% - 28px));
-  margin: auto;
-  border: 1px solid var(--so-border-strong);
-  border-radius: 16px;
-  color: var(--so-text);
-  background: var(--so-panel);
-  box-shadow: 0 24px 80px color-mix(in srgb, var(--so-shadow-color) 60%, transparent);
-}
-form {
-  min-width: min(430px, 80vw);
-  padding: 10px;
-  display: grid;
-  gap: 12px;
-}
-header,
-footer {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-footer {
-  justify-content: flex-end;
-}
-label {
-  display: grid;
-  gap: 6px;
-}
-input,
-select,
-textarea,
-button {
-  padding: 9px 12px;
-  border: 1px solid var(--so-border-strong);
-  border-radius: 9px;
-  color: var(--so-text);
-  background: var(--so-panel);
-  font: inherit;
-}
-header button {
-  border: 0;
-  background: transparent;
-  font-size: 24px;
-}
-footer button:last-child {
-  border-color: var(--so-primary);
-  color: var(--so-on-primary);
-  background: var(--so-primary);
-  font-weight: 800;
-}
-.message-form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-fieldset {
-  padding: 10px 12px;
-  display: flex;
-  gap: 18px;
-  border: 1px solid var(--so-border-strong);
-  border-radius: 9px;
-}
-fieldset label {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-fieldset input {
-  width: auto;
-}
-.dialog-help {
-  color: var(--so-text-muted);
-  font-size: 11px;
-}
-@media (max-width: 700px) {
-  .message-form-grid {
-    grid-template-columns: 1fr;
-  }
-  form {
-    min-width: 0;
-  }
-}
-</style>

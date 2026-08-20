@@ -41,7 +41,12 @@ function close() {
 </script>
 
 <template>
-  <dialog ref="dialogElement" class="organization-wizard" @cancel="handleCancel">
+  <dialog
+    ref="dialogElement"
+    class="organization-wizard"
+    aria-label="新建组织"
+    @cancel="handleCancel"
+  >
     <form ref="formElement" @submit.prevent="$emit('submit')">
       <h3>新建组织</h3>
       <ol class="organization-wizard__progress" aria-label="创建组织步骤">

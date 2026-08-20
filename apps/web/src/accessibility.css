@@ -54,3 +54,8 @@ textarea {
   outline: 3px solid color-mix(in srgb, var(--so-primary) 72%, var(--so-text));
   outline-offset: 2px;
 }
+
+dialog::backdrop {
+  background: var(--so-scrim);
+  backdrop-filter: blur(4px);
+}

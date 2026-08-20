@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import "../notification-center.css";
 import { statusLabel } from "../ui/status-labels";
 type State =
@@ -73,6 +74,11 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   }),
   busy = ref(false),
   realtimeState = ref<"connecting" | "connected" | "reconnecting">("connecting");
+const { dialogElement: preferencesDialogElement, handleCancel: handlePreferencesCancel } =
+  useModalDialog(
+    () => showPreferences.value,
+    () => (showPreferences.value = false),
+  );
 let stream: EventSource | null = null;
 const pageSize = 20,
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
@@ -507,7 +513,7 @@ watch(
         </dl>
       </details>
     </aside>
-    <dialog :open="showPreferences">
+    <dialog ref="preferencesDialogElement" aria-label="通知偏好" @cancel="handlePreferencesCancel">
       <form @submit.prevent="savePreferences">
         <h3>通知偏好</h3>
         <label><input v-model="preferences.in_app_enabled" type="checkbox" /> 站内通知</label

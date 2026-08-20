@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import "../platform-polish.css";
 
 const props = defineProps<{ apiBaseUrl: string }>();
@@ -18,6 +19,10 @@ const notice = ref("");
 const requestId = ref("");
 const pending = ref<any>(null);
 const editingPlan = ref<any>(null);
+const { dialogElement: planDialogElement, handleCancel: handlePlanCancel } = useModalDialog(
+  () => Boolean(editingPlan.value),
+  () => (editingPlan.value = null),
+);
 const plan = ref({
   code: "",
   name: "",
@@ -455,7 +460,7 @@ onMounted(load);
       </section>
     </template>
     <Teleport to="body"
-      ><dialog :open="Boolean(editingPlan)">
+      ><dialog ref="planDialogElement" aria-label="编辑配额方案" @cancel="handlePlanCancel">
         <form v-if="editingPlan" @submit.prevent="savePlan">
           <h3>编辑配额方案</h3>
           <label>名称<input v-model="editingPlan.name" required maxlength="120" /></label
@@ -667,7 +672,7 @@ dialog {
   width: min(480px, calc(100% - 28px));
   border: 1px solid var(--so-border-strong);
   border-radius: 14px;
-  background: var(--so-panel);
+  background: var(--so-bg-elevated);
   color: var(--so-text);
   z-index: 20;
 }

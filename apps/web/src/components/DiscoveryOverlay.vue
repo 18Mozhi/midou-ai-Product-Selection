@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import UiStatePanel from "./UiStatePanel.vue";
 type Mode = "search" | "create";
 type Shell = "member" | "organization_admin" | "platform_admin";
@@ -37,6 +38,10 @@ const query = ref(""),
   traceId = ref(""),
   actionHint = ref(""),
   input = ref<HTMLInputElement | null>(null);
+const { dialogElement, handleCancel } = useModalDialog(
+  () => props.open,
+  () => emit("close"),
+);
 watch(
   () => [props.open, props.mode] as const,
   async ([open, mode]) => {
@@ -104,14 +109,14 @@ async function loadActions() {
 </script>
 <template>
   <Teleport to="body"
-    ><div v-if="open" class="discovery-backdrop" @mousedown.self="emit('close')">
-      <section
-        class="discovery-dialog"
-        role="dialog"
-        aria-modal="true"
-        :aria-label="mode === 'search' ? '全局搜索' : '快捷创建'"
-        @keydown.esc="emit('close')"
-      >
+    ><dialog
+      ref="dialogElement"
+      class="discovery-backdrop"
+      :aria-label="mode === 'search' ? '全局搜索' : '快捷创建'"
+      @cancel="handleCancel"
+      @mousedown.self="emit('close')"
+    >
+      <section class="discovery-dialog">
         <header>
           <div>
             <p>{{ mode === "search" ? "GLOBAL SEARCH" : "QUICK CREATE" }}</p>
@@ -187,6 +192,6 @@ async function loadActions() {
           ><RouterLink v-if="shell === 'member'" to="/notifications">打开通知中心</RouterLink>
         </footer>
       </section>
-    </div></Teleport
+    </dialog></Teleport
   >
 </template>

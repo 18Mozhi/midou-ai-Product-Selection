@@ -579,7 +579,11 @@ onMounted(load);
       @close="createOpen = false"
       @submit="createOrganization"
     />
-    <dialog ref="createUserDialogElement" @cancel="handleCreateUserCancel">
+    <dialog
+      ref="createUserDialogElement"
+      aria-label="新建用户或平台管理员"
+      @cancel="handleCreateUserCancel"
+    >
       <form @submit.prevent="createUser">
         <h3>新建用户或平台管理员</h3>
         <p>账号立即可用；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。</p>
@@ -647,7 +651,7 @@ onMounted(load);
       @reset-password="openPassword"
       @revoke-sessions="revokeSessions"
     />
-    <dialog ref="passwordDialogElement" @cancel="handlePasswordCancel">
+    <dialog ref="passwordDialogElement" aria-label="强制重置密码" @cancel="handlePasswordCancel">
       <form @submit.prevent="resetPassword">
         <h3>强制重置密码</h3>
         <p>保存后会撤销该用户全部活动会话，并要求首次登录修改密码。</p>
@@ -665,7 +669,7 @@ onMounted(load);
         </footer>
       </form>
     </dialog>
-    <dialog ref="reasonDialogElement" @cancel="handleReasonCancel">
+    <dialog ref="reasonDialogElement" :aria-label="reasonTitle" @cancel="handleReasonCancel">
       <form @submit.prevent="submitReason">
         <h3>{{ reasonTitle }}</h3>
         <p>原因会写入平台审计记录。</p>
@@ -851,7 +855,7 @@ dialog {
   margin: auto;
   border: 0;
   border-radius: 16px;
-  background: var(--so-panel);
+  background: var(--so-bg-elevated);
   color: var(--so-text);
   border: 1px solid var(--so-border-strong);
   box-shadow: 0 24px 80px color-mix(in srgb, var(--so-shadow-color) 40%, transparent);

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import "../automation-rules.css";
 type Rule = {
   id: string;
@@ -46,6 +47,10 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     rate_limit_count: 20,
     rate_limit_window_minutes: 60,
   });
+const { dialogElement: createDialogElement, handleCancel: handleCreateCancel } = useModalDialog(
+  () => showCreate.value,
+  closeEditor,
+);
 const templates: Array<RuleTemplate & { description: string }> = [
   {
     name: "审批超时提醒",
@@ -335,7 +340,11 @@ onMounted(load);
       </ul>
       <p v-else>尚无匹配事件，未执行任何动作。</p>
     </aside>
-    <dialog :open="showCreate">
+    <dialog
+      ref="createDialogElement"
+      :aria-label="editing ? '编辑自动化规则' : '创建自动化规则'"
+      @cancel="handleCreateCancel"
+    >
       <form @submit.prevent="create">
         <h3>{{ editing ? "编辑自动化规则" : "创建自动化规则" }}</h3>
         <section v-if="!editing" class="automation-templates">

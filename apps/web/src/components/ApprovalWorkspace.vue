@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import "../approval-workspace.css";
 type ViewState =
   | "loading"
@@ -135,6 +136,14 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     resource_id: "",
     title: "",
   });
+const { dialogElement: templateDialogElement, handleCancel: handleTemplateCancel } = useModalDialog(
+    () => showTemplate.value,
+    () => (showTemplate.value = false),
+  ),
+  { dialogElement: requestDialogElement, handleCancel: handleRequestCancel } = useModalDialog(
+    () => showRequest.value,
+    () => (showRequest.value = false),
+  );
 const pendingCount = computed(() => approvals.value.filter((x) => x.status === "pending").length),
   mineCount = computed(() => approvals.value.filter((x) => x.can_decide).length),
   overdueCount = computed(
@@ -644,7 +653,11 @@ watch(
         </dl>
       </details>
     </aside>
-    <dialog :open="showTemplate">
+    <dialog
+      ref="templateDialogElement"
+      aria-label="新建审批模板草稿"
+      @cancel="handleTemplateCancel"
+    >
       <form @submit.prevent="createTemplate">
         <h3>新建审批模板草稿</h3>
         <label>模板名称<input v-model="templateForm.name" required maxlength="200" /></label
@@ -685,7 +698,7 @@ watch(
         </article>
       </section>
     </dialog>
-    <dialog :open="showRequest">
+    <dialog ref="requestDialogElement" aria-label="发起审批" @cancel="handleRequestCancel">
       <form @submit.prevent="createRequest">
         <h3>发起审批</h3>
         <label

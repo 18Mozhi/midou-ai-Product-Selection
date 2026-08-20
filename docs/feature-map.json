@@ -334,6 +334,9 @@
         "../apps/web/src/design/theme.ts",
         "../apps/web/src/design/tokens.css",
         "../apps/web/src/accessibility.css",
+        "../apps/web/src/use-modal-dialog.ts",
+        "../apps/web/src/components/ConfirmDialog.vue",
+        "../apps/web/src/components/DiscoveryOverlay.vue",
         "../apps/web/src/components/ThemeStudio.vue",
         "../apps/web/src/components/NavigationShell.vue",
         "../apps/web/src/components/ResponsiveFilterDrawer.vue"
@@ -349,6 +352,7 @@
       "densityRuntime": "standard and compact are session-only presentation modes with no API, database or additional browser storage contract; organization and platform shells default to compact, member shell restores the in-memory member choice",
       "styleBoundary": "all production CSS and Vue scoped styles consume semantic theme tokens directly or component-local semantic aliases; the obsolete unimported global theme-compat patch is removed and the unit gate rejects raw component hex, rgb, rgba, hsl and hsla colors plus every !important override",
       "accessibility": "status icon plus text; charts include value, period, source and freshness; keyboard radiogroups and visible focus; body copy and form controls have a computed 16px floor and auxiliary small copy has a 12px floor; compact desktop controls use 36px while coarse-pointer and mobile targets retain a computed 44px by 44px floor without !important",
+      "modalAccessibility": "all native business dialogs use one showModal top-layer controller with Escape handling and invoking-control focus return; custom confirmation and responsive filter surfaces explicitly trap focus and restore it when closed",
       "async": "not applicable; preference reads and writes are synchronous and create no Worker, Crawler, queue, file, export, SSE or provider work",
       "verificationRunId": "3c8eef1b-fedd-48fe-9478-b6f38272dccf",
       "status": "module_verified"

@@ -1,0 +1,99 @@
+.message-dialog {
+  position: fixed;
+  inset: 0;
+  width: min(620px, calc(100% - 28px));
+  margin: auto;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 16px;
+  color: var(--so-text);
+  background: var(--so-bg-elevated);
+  box-shadow: 0 24px 80px color-mix(in srgb, var(--so-shadow-color) 60%, transparent);
+}
+
+.message-dialog form {
+  min-width: min(430px, 80vw);
+  padding: 10px;
+  display: grid;
+  gap: 12px;
+}
+
+.message-dialog header,
+.message-dialog footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.message-dialog footer {
+  justify-content: flex-end;
+}
+
+.message-dialog label {
+  display: grid;
+  gap: 6px;
+}
+
+.message-dialog input,
+.message-dialog select,
+.message-dialog textarea,
+.message-dialog button {
+  padding: 9px 12px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-panel);
+  font: inherit;
+}
+
+.message-dialog header button {
+  border: 0;
+  background: transparent;
+  font-size: 24px;
+}
+
+.message-dialog footer button:last-child {
+  border-color: var(--so-primary);
+  color: var(--so-on-primary);
+  background: var(--so-primary);
+  font-weight: 800;
+}
+
+.message-dialog .message-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.message-dialog fieldset {
+  padding: 10px 12px;
+  display: flex;
+  gap: 18px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 9px;
+}
+
+.message-dialog fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.message-dialog fieldset input {
+  width: auto;
+}
+
+.message-dialog .dialog-help {
+  color: var(--so-text-muted);
+  font-size: 11px;
+}
+
+@media (max-width: 700px) {
+  .message-dialog .message-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .message-dialog form {
+    min-width: 0;
+  }
+}

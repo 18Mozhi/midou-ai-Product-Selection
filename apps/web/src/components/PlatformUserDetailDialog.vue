@@ -26,7 +26,12 @@ const currentRoles = () => props.selected?.roles ?? props.selected?.platform_rol
 </script>
 
 <template>
-  <dialog ref="dialogElement" class="detail-dialog" @cancel="handleCancel">
+  <dialog
+    ref="dialogElement"
+    class="detail-dialog"
+    :aria-label="detail?.user?.email ?? selected?.email ?? '账号详情'"
+    @cancel="handleCancel"
+  >
     <section v-if="detail">
       <header>
         <div>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import PlatformMessageEditor from "./PlatformMessageEditor.vue";
 import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
 import PlatformManagementRecordList from "./PlatformManagementRecordList.vue";
@@ -26,6 +27,10 @@ const data = ref<any>(null),
 const reviewItem = ref<any>(null),
   reviewStatus = ref<"active" | "irrelevant" | "stale">("active"),
   reviewReason = ref("");
+const { dialogElement: reviewDialogElement, handleCancel: handleReviewCancel } = useModalDialog(
+  () => Boolean(reviewItem.value),
+  () => (reviewItem.value = null),
+);
 const messageEditor = ref<any>(null),
   messageSaving = ref(false),
   messageForm = ref({
@@ -432,7 +437,7 @@ onMounted(load);
         </details>
       </footer></template
     >
-    <dialog :open="Boolean(reviewItem)">
+    <dialog ref="reviewDialogElement" aria-label="审核热点内容" @cancel="handleReviewCancel">
       <form @submit.prevent="submitReview">
         <h3>审核热点内容</h3>
         <p>{{ reviewItem?.title }}</p>
@@ -671,7 +676,7 @@ dialog {
   margin: auto;
   border: 1px solid var(--so-border-strong);
   border-radius: 16px;
-  background: var(--so-panel);
+  background: var(--so-bg-elevated);
   color: var(--so-text);
   box-shadow: 0 24px 80px color-mix(in srgb, var(--so-shadow-color) 60%, transparent);
 }

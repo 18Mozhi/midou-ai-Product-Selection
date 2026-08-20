@@ -252,7 +252,7 @@
   transform: translateX(-50%);
   z-index: 40;
   width: min(470px, 88vw);
-  background: var(--so-panel-strong);
+  background: var(--so-bg-elevated);
   color: var(--so-text);
   border: 1px solid var(--so-border-strong);
   border-radius: 14px;

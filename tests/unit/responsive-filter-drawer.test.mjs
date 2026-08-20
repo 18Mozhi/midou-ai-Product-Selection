@@ -13,7 +13,9 @@ test("member and platform primary filters share one state-preserving mobile draw
   );
 
   assert.match(drawer, /aria-haspopup="dialog"/);
-  assert.match(drawer, /@keydown\.esc="close"/);
+  assert.match(drawer, /@keydown="handleKeydown"/);
+  assert.match(drawer, /triggerButton\.value\?\.focus\(\)/);
+  assert.match(drawer, /event\.key !== "Tab"/);
   assert.match(drawer, /@submit\.capture="close"/);
   assert.match(drawer, /max-width: 760px/);
   assert.match(drawer, /var\(--so-touch-target\)/);

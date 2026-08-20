@@ -432,7 +432,7 @@ dialog[open] {
   width: min(600px, 90vw);
   max-height: 84vh;
   overflow: auto;
-  background: var(--so-panel-strong);
+  background: var(--so-bg-elevated);
   color: var(--so-text);
   border: 1px solid var(--so-border-strong);
   border-radius: 14px;
