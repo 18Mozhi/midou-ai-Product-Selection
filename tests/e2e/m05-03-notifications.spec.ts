@@ -15,8 +15,7 @@ const id = "00000000-0000-4000-8000-000000000931",
     resource_id: "00000000-0000-4000-8000-000000000932",
     root_cause_key: "approval.overdue:approval_request:00000000-0000-4000-8000-000000000932",
     workflow_status: "open",
-    action_route:
-      "/tasks/approvals?approval=00000000-0000-4000-8000-000000000932",
+    action_route: "/tasks/approvals?approval=00000000-0000-4000-8000-000000000932",
     group_count: 3,
     read_at: "2026-08-08T10:01:00.000Z",
     version: 1,
@@ -70,14 +69,12 @@ async function setup(page: Page) {
   await page.route(`**/api/v1/notifications/${id}`, (r) =>
     r.fulfill({ json: env({ ...item, workflow_status: workflowStatus, version }) }),
   );
-  await page.route("**/api/v1/notifications?*", (r) =>
-    {
-      listRequests.push(r.request().url());
-      return r.fulfill({
+  await page.route("**/api/v1/notifications?*", (r) => {
+    listRequests.push(r.request().url());
+    return r.fulfill({
       json: { ...env([item]), meta: { page: 1, page_size: 100, total: 1 } },
-      });
-    },
-  );
+    });
+  });
   await page.route(`**/api/v1/notifications/${id}/actions`, async (r) => {
     expect(r.request().headers()["idempotency-key"]).toBeTruthy();
     expect(r.request().headers()["x-request-id"]).toBeTruthy();
@@ -108,22 +105,23 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
 }) => {
   const { listRequests } = await setup(page);
   await page.goto("/notifications");
-  await expect(
-    page.getByRole("heading", { name: "通知中心", level: 2 }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "通知中心", level: 2 })).toBeVisible();
   await expect(page.getByText("审批状态更新")).toBeVisible();
-  await expect(page.getByText("同根因 3 条")).toBeVisible();
+  await expect(page.getByText(/已合并 3 条同根因通知/)).toBeVisible();
   await page.getByRole("button", { name: /审批状态更新/ }).click();
   await expect(page.getByText(/站内消息来自事务消息/)).toBeVisible();
   await expect(page.getByText("同一根因的 3 条通知已自动合并展示。")).toBeVisible();
   await expect(page.getByText("需关注", { exact: true })).toBeVisible();
-  await expect(
-    page.locator(".notification-detail article"),
-  ).toHaveText("审批状态已变化，请查看关联记录。");
+  await expect(page.locator(".notification-detail article")).toHaveText(
+    "审批状态已变化，请查看关联记录。",
+  );
   await expect(page.getByText("approval.overdue", { exact: false })).not.toBeVisible();
-  await expect(
-    page.getByRole("link", { name: "定位异常记录" }),
-  ).toHaveAttribute("href", item.action_route);
+  await expect(page.getByRole("link", { name: "返回来源：审批" })).toHaveAttribute(
+    "href",
+    new RegExp(`approval=.*&from=`),
+  );
+  await expect(page.getByText("已读", { exact: true }).last()).toBeVisible();
+  await expect(page.getByText("未处理", { exact: true }).last()).toBeVisible();
   await expect(page.getByText(item.resource_id, { exact: true })).not.toBeVisible();
   await expect(page).toHaveScreenshot("m05-03-notifications.png", {
     fullPage: true,
@@ -134,14 +132,27 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
   await expect(page.getByText("通知已关闭。")).toBeVisible();
   await page.getByRole("button", { name: "关闭消息详情" }).click();
   await page.getByRole("button", { name: "处理中", exact: true }).click();
+  await expect(page).toHaveURL(/status=in_progress/);
   await expect
     .poll(() => listRequests.some((url) => url.includes("workflow_status=in_progress")))
     .toBe(true);
 });
 
-test("M05-03 mail preference stays disabled until the provider is connected", async ({
-  page,
-}) => {
+test("notification filters and detail restore from the URL", async ({ page }) => {
+  await setup(page);
+  await page.goto(`/notifications?category=approval&status=open&notification=${id}`);
+  await expect(page.getByRole("button", { name: "审批", exact: true })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.getByRole("button", { name: "未处理", exact: true })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.getByRole("heading", { name: "审批状态更新" })).toBeVisible();
+});
+
+test("M05-03 mail preference stays disabled until the provider is connected", async ({ page }) => {
   await setup(page);
   await page.goto("/notifications");
   await page.getByRole("button", { name: "通知偏好" }).click();

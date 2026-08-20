@@ -21,10 +21,7 @@ const ids = (r: FastifyRequest) => ({
     request_id: ids(r).requestId,
     trace_id: ids(r).traceId,
   });
-export function registerApprovalRoutes(
-  app: FastifyInstance,
-  o: ApprovalRouteOptions,
-) {
+export function registerApprovalRoutes(app: FastifyInstance, o: ApprovalRouteOptions) {
   const scope = async (r: FastifyRequest, capability: Capability) => {
       const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
         x = await o.authorization.resolveSession(a.user.id, a.session.id);
@@ -44,12 +41,7 @@ export function registerApprovalRoutes(
     },
     write = async (r: FastifyRequest) => {
       if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ScoutOps 页面重试。",
-        );
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
       return {
         ...(await scope(r, "task:assign")),
         ...ids(r),
@@ -85,6 +77,7 @@ export function registerApprovalRoutes(
         pageSize: q.page_size,
         status: q.status,
         mine: q.mine,
+        involvement: q.involvement,
       });
     return env(x.items, r, {
       page: x.page,

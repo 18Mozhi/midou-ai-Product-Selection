@@ -1175,6 +1175,7 @@
       ],
       "scope": "organization and workspace scoped business tasks with create edit auditable soft-delete start complete cancel delay transfer progress immutable comments events idempotent operations audit and outbox",
       "truthBoundary": "SLA is derived only from persisted due_at; missing upstream deadlines remain not_set and M05-02 approvals M05-03 notifications M05-04 SSE are not fabricated",
+      "pageFlow": "today and all-task lists preserve status and pagination in the URL; independent detail routes carry a validated source return path, expose SLA level deadline and next step, group delete under named secondary actions, and merge persisted events and comments into a time-ordered activity stream while keeping progress stage-first",
       "apiClientBoundary": "task list, detail, create, edit, comments, progress, soft-delete and single or batch lifecycle actions use the shared frontend API client; each write retains its independent idempotency key",
       "permission": "task:read for reads, task:create for creation, task:update for content progress soft-delete status due and comments, task:assign for transfer",
       "configuration": [
@@ -1211,6 +1212,7 @@
       ],
       "scope": "organization and workspace scoped immutable published templates approval requests evidence and rule snapshots node runs actions idempotent operations audit and outbox",
       "truthBoundary": "requests lock the published template version; opportunity decision requests resolve the decision id to its opportunity and snapshot evidence completeness scoring profit risk rule versions and decision basis; pre-0047 requests are labeled live fallback and task approvals are evidence-not-applicable; approve and reject require reasons; overdue Worker only escalates the active approver and never decides",
+      "pageFlow": "involvement=decidable or requested splits the inbox before pagination while preserving legacy mine semantics; URL-backed status page and approval detail state support notification deep links, and the detail keeps impact scope current node and evidence basis visible before decisions with a validated notification return path",
       "permission": "task:read for reads and task:assign for template request and decision writes",
       "configuration": ["APPROVAL_ESCALATION_POLL_MS", "APPROVAL_ESCALATION_LEASE_SECONDS"],
       "runtimeBoundary": "decision context snapshots are captured synchronously by the Baota-managed Node API; overdue node escalation runs only in the unified Baota-managed Node Worker",
@@ -1236,6 +1238,7 @@
       ],
       "scope": "organization workspace and current recipient scoped notification facts root-cause groups workflow states preferences deliveries idempotent operations and audit",
       "truthBoundary": "source Outbox and recipient are preserved; open in_progress and closed filters execute before root-cause grouping and pagination, the newest notification represents each group without rewriting older facts; self-service email preference is fixed off while the mail provider is pending, and historical placeholder facts are preserved",
+      "pageFlow": "category workflow unread pagination and current detail are URL-backed; grouped rows expose read and workflow state plus the persisted root-cause group count, and internal action routes carry a validated return path so supported task and approval details return to the originating notification state",
       "permission": "notification:read for current-recipient reads actions and self preferences",
       "configuration": [
         "NOTIFICATION_OUTBOX_POLL_MS",

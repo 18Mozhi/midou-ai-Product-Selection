@@ -183,7 +183,16 @@ export class MySqlApprovalRepository implements ApprovalRepository {
       where.push("r.status=?");
       args.push(i.status);
     }
-    if (i.mine) {
+    if (i.involvement === "requested") {
+      where.push("r.requested_by=?");
+      args.push(i.actorId);
+    } else if (i.involvement === "decidable") {
+      where.push(
+        "EXISTS(SELECT 1 FROM approval_node_runs nr WHERE nr.approval_request_id=r.id " +
+          "AND nr.active_approver_id=? AND nr.status='pending')",
+      );
+      args.push(i.actorId);
+    } else if (i.mine) {
       where.push(
         "(r.requested_by=? OR EXISTS(SELECT 1 FROM approval_node_runs nr " +
           "WHERE nr.approval_request_id=r.id AND nr.active_approver_id=? " +

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiRequestOptions } from "../api-client";
 import "../task-workspace.css";
 import "../task-workspace-enhancements.css";
@@ -23,6 +24,8 @@ type Task = {
   events?: any[];
 };
 const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all"; taskId?: string }>(),
+  route = useRoute(),
+  router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   tasks = ref<Task[]>([]),
@@ -35,7 +38,13 @@ const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all"; taskId?: 
     overdue: 0,
   }),
   selected = ref<Task | null>(null),
-  status = ref(""),
+  status = ref(
+    ["todo", "in_progress", "paused", "completed", ""].includes(String(route.query.status ?? ""))
+      ? String(route.query.status ?? "")
+      : "",
+  ),
+  page = ref(Math.max(1, Number(route.query.page) || 1)),
+  total = ref(0),
   notice = ref(""),
   requestId = ref(""),
   busy = ref(false),
@@ -49,9 +58,8 @@ const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all"; taskId?: 
   showBatchImpact = ref(false),
   form = ref({ title: "", description: "", priority: "normal", due_at: "" }),
   comment = ref("");
-const visible = computed(() =>
-    tasks.value.filter((x) => !status.value || x.status === status.value),
-  ),
+const pageSize = 10,
+  visible = computed(() => tasks.value.filter((x) => !status.value || x.status === status.value)),
   label = (v: string) =>
     (
       ({
@@ -76,6 +84,17 @@ const visible = computed(() =>
           : !["completed", "cancelled"].includes(task.status),
     ),
   ),
+  pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
+  returnPath = computed(() => {
+    const value = typeof route.query.from === "string" ? route.query.from : "";
+    return value === "/work" ||
+      value.startsWith("/work?") ||
+      value === "/tasks" ||
+      value.startsWith("/tasks?") ||
+      value.startsWith("/tasks/")
+      ? value
+      : "/tasks";
+  }),
   time = (v: string | null) =>
     v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "未设置",
   phase = (task: Task) =>
@@ -87,11 +106,41 @@ const visible = computed(() =>
           ? "已暂停"
           : task.status === "completed"
             ? "已完成"
-            : "已结束";
-async function api<T = any>(path: string, options?: ApiRequestOptions): Promise<T> {
+            : "已结束",
+  slaNext = (task: Task) =>
+    task.sla_status === "overdue"
+      ? "下一步：立即处理或调整期限"
+      : task.sla_status === "due_soon"
+        ? "下一步：在期限前完成当前阶段"
+        : task.sla_status === "not_set"
+          ? "下一步：按需要补充期限"
+          : "下一步：继续当前阶段",
+  activity = computed(() => {
+    if (!selected.value) return [];
+    return [
+      ...(selected.value.events ?? []).map((item) => ({
+        ...item,
+        kind: "event" as const,
+        body: item.payload?.progress_note || item.payload?.reason || "任务状态已更新",
+        title: label(String(item.event_type).replace("task.", "")),
+      })),
+      ...(selected.value.comments ?? []).map((item) => ({
+        ...item,
+        kind: "comment" as const,
+        body: item.body,
+        title: "评论",
+      })),
+    ].sort((a, b) => new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf());
+  });
+async function api<T = any>(
+  path: string,
+  options?: ApiRequestOptions,
+  captureMeta?: (meta: unknown) => void,
+): Promise<T> {
   try {
     const response = await request<T>(path, options);
     requestId.value = response.request_id;
+    captureMeta?.(response.meta);
     return response.data;
   } catch (error) {
     if (error instanceof ApiClientError) {
@@ -117,7 +166,13 @@ async function load() {
   try {
     const mine = props.mode === "today" ? "&mine=true" : "",
       [list, sum] = await Promise.all([
-        api(`/tasks?page=1&page_size=50${mine}`),
+        api(
+          `/tasks?page=${page.value}&page_size=${pageSize}${mine}${status.value ? `&status=${status.value}` : ""}`,
+          undefined,
+          (meta) => {
+            total.value = Number((meta as { total?: number } | undefined)?.total ?? 0);
+          },
+        ),
         api("/tasks/summary"),
       ]);
     tasks.value = list;
@@ -134,6 +189,19 @@ async function openById(id: string) {
 }
 async function open(x: Task) {
   await openById(x.id);
+}
+async function setStatus(value: string) {
+  await router.replace({
+    query: { ...route.query, status: value || undefined, page: undefined },
+  });
+}
+async function setPage(value: number) {
+  await router.replace({
+    query: {
+      ...route.query,
+      page: value > 1 ? String(Math.min(pageCount.value, Math.max(1, value))) : undefined,
+    },
+  });
 }
 async function create() {
   try {
@@ -305,9 +373,23 @@ watch(
     selected.value = null;
   },
 );
+watch(
+  () => [route.query.status, route.query.page],
+  ([nextStatus, nextPage], previous) => {
+    const parsedStatus = ["todo", "in_progress", "paused", "completed"].includes(
+      String(nextStatus ?? ""),
+    )
+      ? String(nextStatus)
+      : "";
+    const parsedPage = Math.max(1, Number(nextPage) || 1);
+    status.value = parsedStatus;
+    page.value = parsedPage;
+    if (previous) void load();
+  },
+);
 </script>
 <template>
-  <section class="task-workspace">
+  <section class="task-workspace" :class="{ 'task-detail-route': Boolean(taskId) }">
     <div class="task-title">
       <div>
         <p>工作管理</p>
@@ -366,7 +448,7 @@ watch(
           ]"
           :key="x.v"
           :aria-pressed="status === x.v"
-          @click="status = x.v"
+          @click="setStatus(x.v)"
         >
           {{ x.t }}
         </button>
@@ -388,7 +470,10 @@ watch(
               >选择任务：{{ x.title }}</span
             ></label
           >
-          <RouterLink class="task-row-main" :to="`/tasks/${x.id}`">
+          <RouterLink
+            class="task-row-main"
+            :to="{ path: `/tasks/${x.id}`, query: { from: route.fullPath } }"
+          >
             <i :data-priority="x.priority"></i
             ><span
               ><strong>{{ x.title }}</strong
@@ -409,6 +494,11 @@ watch(
         </article>
       </div></template
     >
+    <nav v-if="total > pageSize" class="task-pagination" aria-label="任务分页">
+      <button :disabled="page <= 1" @click="setPage(page - 1)">上一页</button>
+      <span>第 {{ page }} / {{ pageCount }} 页 · 共 {{ total }} 项</span>
+      <button :disabled="page >= pageCount" @click="setPage(page + 1)">下一页</button>
+    </nav>
     <dialog :open="showCreate">
       <form @submit.prevent="create">
         <h3>{{ editing ? "编辑任务" : "新建任务" }}</h3>
@@ -443,7 +533,7 @@ watch(
       </form>
     </dialog>
     <aside v-if="selected" class="task-detail">
-      <RouterLink to="/tasks" aria-label="关闭任务详情">×</RouterLink>
+      <RouterLink :to="returnPath" aria-label="关闭任务详情">×</RouterLink>
       <p>
         {{ selected.source_type === "manual" ? "手动创建" : "系统生成" }} · 第
         {{ selected.version }} 版
@@ -461,11 +551,14 @@ watch(
         </div>
         <div>
           <dt>处理时限</dt>
-          <dd>{{ label(selected.sla_status) }} · {{ time(selected.due_at) }}</dd>
+          <dd>
+            {{ label(selected.sla_status) }} · {{ time(selected.due_at) }}<br />
+            <small>{{ slaNext(selected) }}</small>
+          </dd>
         </div>
         <div>
           <dt>负责人</dt>
-          <dd>{{ selected.assignee_id }}</dd>
+          <dd>已分配负责人</dd>
         </div>
         <div>
           <dt>底层采集任务</dt>
@@ -477,6 +570,19 @@ watch(
           <dd v-else>当前业务任务未关联采集任务</dd>
         </div>
       </dl>
+      <details class="task-technical">
+        <summary>技术详情</summary>
+        <dl>
+          <div>
+            <dt>负责人账号编号</dt>
+            <dd>{{ selected.assignee_id }}</dd>
+          </div>
+          <div>
+            <dt>任务编号</dt>
+            <dd>{{ selected.id }}</dd>
+          </div>
+        </dl>
+      </details>
       <div class="task-actions">
         <button v-if="selected.status === 'todo'" @click="action('start')">开始</button
         ><button v-if="selected.status === 'in_progress'" @click="action('pause')">暂停</button
@@ -498,25 +604,20 @@ watch(
         >
           取消任务</button
         ><button @click="action('transfer')">转交</button>
-        <button @click="updateProgress">更新进度</button><button @click="editTask">编辑</button
-        ><button class="danger" @click="askRemove(selected)">删除</button>
+        <button @click="updateProgress">更新进度</button><button @click="editTask">编辑</button>
+        <details class="task-detail-more">
+          <summary>更多任务操作</summary>
+          <button class="danger" type="button" @click="askRemove(selected)">删除任务</button>
+        </details>
       </div>
-      <section>
-        <h4>运行记录</h4>
-        <article v-for="x in selected.events" :key="x.id">
-          <b>{{ label(x.event_type.replace("task.", "")) }}</b>
-          <p>{{ x.payload?.progress_note || x.payload?.reason || "任务状态已更新" }}</p>
-          <small>{{ time(x.created_at) }}</small>
-        </article>
-        <p v-if="!selected.events?.length">暂无运行记录。</p>
-      </section>
-      <section>
-        <h4>评论</h4>
-        <article v-for="x in selected.comments" :key="x.id">
-          <b>{{ x.created_by }}</b>
+      <section class="task-activity">
+        <h4>任务活动</h4>
+        <article v-for="x in activity" :key="`${x.kind}-${x.id}`" :data-kind="x.kind">
+          <b>{{ x.title }}</b>
           <p>{{ x.body }}</p>
           <small>{{ time(x.created_at) }}</small>
         </article>
+        <p v-if="!activity.length">暂无任务活动。</p>
         <form @submit.prevent="addComment">
           <textarea
             v-model="comment"

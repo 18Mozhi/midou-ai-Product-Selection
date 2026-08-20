@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import "../notification-center.css";
 import { statusLabel } from "../ui/status-labels";
@@ -29,6 +30,8 @@ type Item = {
   created_at: string;
 };
 const props = defineProps<{ apiBaseUrl: string }>(),
+  route = useRoute(),
+  router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   items = ref<Item[]>([]),
@@ -44,9 +47,19 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     closed: 0,
   }),
   selected = ref<Item | null>(null),
-  category = ref(""),
-  workflowStatus = ref(""),
-  unread = ref(false),
+  category = ref(
+    ["task", "approval", "competitor", ""].includes(String(route.query.category ?? ""))
+      ? String(route.query.category ?? "")
+      : "",
+  ),
+  workflowStatus = ref(
+    ["open", "in_progress", "closed", ""].includes(String(route.query.status ?? ""))
+      ? String(route.query.status ?? "")
+      : "",
+  ),
+  unread = ref(route.query.unread === "1"),
+  page = ref(Math.max(1, Number(route.query.page) || 1)),
+  total = ref(0),
   notice = ref(""),
   requestId = ref(""),
   showPreferences = ref(false),
@@ -61,7 +74,15 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   busy = ref(false),
   realtimeState = ref<"connecting" | "connected" | "reconnecting">("connecting");
 let stream: EventSource | null = null;
-const label = (v: string) =>
+const pageSize = 20,
+  pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
+  sourceRoute = computed(() => {
+    const target = selected.value?.action_route ?? "";
+    if (!target.startsWith("/") || target.startsWith("//")) return "/notifications";
+    const separator = target.includes("?") ? "&" : "?";
+    return `${target}${separator}from=${encodeURIComponent(route.fullPath)}`;
+  }),
+  label = (v: string) =>
     (
       ({
         task: "任务",
@@ -98,10 +119,12 @@ async function api<T>(
   path: string,
   options: { method?: string; body?: unknown } = {},
   affectPageState = true,
+  captureMeta?: (meta: unknown) => void,
 ) {
   try {
     const response = await request<T>(path, options);
     requestId.value = response.request_id;
+    captureMeta?.(response.meta);
     return response.data;
   } catch (error) {
     const failure = error instanceof ApiClientError ? error : null;
@@ -120,12 +143,14 @@ async function api<T>(
 async function load() {
   state.value = "loading";
   try {
-    const q = new URLSearchParams({ page: "1", page_size: "100" });
+    const q = new URLSearchParams({ page: String(page.value), page_size: String(pageSize) });
     if (category.value) q.set("category", category.value);
     if (unread.value) q.set("unread", "true");
     if (workflowStatus.value) q.set("workflow_status", workflowStatus.value);
     const [list, sum, pref] = await Promise.all([
-      api<Item[]>(`/notifications?${q}`),
+      api<Item[]>(`/notifications?${q}`, {}, true, (meta) => {
+        total.value = Number((meta as { total?: number } | undefined)?.total ?? 0);
+      }),
       api<any>("/notifications/summary"),
       api<any>("/me/notification-preferences"),
     ]);
@@ -133,15 +158,20 @@ async function load() {
     summary.value = sum;
     preferences.value = { ...pref, email_enabled: false };
     state.value = list.length ? "ready" : "empty";
+    const notificationId =
+      typeof route.query.notification === "string" ? route.query.notification : "";
+    if (notificationId && notificationId !== selected.value?.id)
+      await openById(notificationId, false);
   } catch {}
 }
-async function open(item: Item) {
+async function openById(id: string, syncUrl = true) {
   try {
-    const detail = await api<Item>(`/notifications/${item.id}`, {}, false);
+    const detail = await api<Item>(`/notifications/${id}`, {}, false);
     selected.value = detail;
+    if (syncUrl) await router.replace({ query: { ...route.query, notification: detail.id } });
     if (!detail.read_at) {
       const result = await api<Partial<Item>>(
-        `/notifications/${item.id}/actions`,
+        `/notifications/${detail.id}/actions`,
         {
           method: "POST",
           body: {
@@ -155,9 +185,38 @@ async function open(item: Item) {
         ...detail,
         ...result,
       };
-      await load();
+      items.value = items.value.map((item) =>
+        item.id === detail.id ? { ...item, ...result } : item,
+      );
+      summary.value.unread = Math.max(0, Number(summary.value.unread ?? 0) - 1);
     }
   } catch {}
+}
+async function open(item: Item) {
+  await openById(item.id);
+}
+async function closeDetail() {
+  selected.value = null;
+  await router.replace({ query: { ...route.query, notification: undefined } });
+}
+async function setFilters(
+  values: Partial<{ category: string; status: string; unread: boolean; page: number }>,
+) {
+  await router.replace({
+    query: {
+      ...route.query,
+      category: values.category === undefined ? route.query.category : values.category || undefined,
+      status: values.status === undefined ? route.query.status : values.status || undefined,
+      unread: values.unread === undefined ? route.query.unread : values.unread ? "1" : undefined,
+      page:
+        values.page === undefined
+          ? undefined
+          : values.page > 1
+            ? String(Math.min(pageCount.value, Math.max(1, values.page)))
+            : undefined,
+      notification: undefined,
+    },
+  });
 }
 async function markAll() {
   try {
@@ -232,6 +291,27 @@ onMounted(() => {
   connectRealtime();
 });
 onUnmounted(() => stream?.close());
+watch(
+  () => [route.query.category, route.query.status, route.query.unread, route.query.page],
+  ([nextCategory, nextStatus, nextUnread, nextPage], previous) => {
+    category.value = ["task", "approval", "competitor"].includes(String(nextCategory ?? ""))
+      ? String(nextCategory)
+      : "";
+    workflowStatus.value = ["open", "in_progress", "closed"].includes(String(nextStatus ?? ""))
+      ? String(nextStatus)
+      : "";
+    unread.value = nextUnread === "1";
+    page.value = Math.max(1, Number(nextPage) || 1);
+    if (previous) void load();
+  },
+);
+watch(
+  () => route.query.notification,
+  (value) => {
+    if (typeof value === "string" && value !== selected.value?.id) void openById(value, false);
+    else if (!value) selected.value = null;
+  },
+);
 </script>
 <template>
   <section class="notification-center">
@@ -284,13 +364,12 @@ onUnmounted(() => stream?.close());
         ]"
         :key="x.v"
         :aria-pressed="category === x.v"
-        @click="
-          category = x.v;
-          load();
-        "
+        @click="setFilters({ category: x.v })"
       >
         {{ x.t }}</button
-      ><label><input v-model="unread" type="checkbox" @change="load" /> 仅未读</label>
+      ><label
+        ><input v-model="unread" type="checkbox" @change="setFilters({ unread })" /> 仅未读</label
+      >
     </nav>
     <nav aria-label="处理状态筛选">
       <button
@@ -302,10 +381,7 @@ onUnmounted(() => stream?.close());
         ]"
         :key="item.v"
         :aria-pressed="workflowStatus === item.v"
-        @click="
-          workflowStatus = item.v;
-          load();
-        "
+        @click="setFilters({ status: item.v })"
       >
         {{ item.t }}
       </button>
@@ -349,14 +425,22 @@ onUnmounted(() => stream?.close());
           ><strong>{{ item.title }}</strong
           ><small>{{ displayBody(item) }}</small></span
         ><em>{{ time(item.created_at) }}</em
-        ><b
-          >{{ statusLabel(item.workflow_status)
-          }}<small v-if="item.group_count > 1"> · 同根因 {{ item.group_count }} 条</small></b
+        ><b>
+          <small>{{ item.read_at ? "已读" : "未读" }} · </small
+          >{{ statusLabel(item.workflow_status) }}
+          <small v-if="item.group_count > 1">
+            · 已合并 {{ item.group_count }} 条同根因通知</small
+          ></b
         >
       </button>
     </div>
+    <nav v-if="total > pageSize" class="notification-pagination" aria-label="通知分页">
+      <button :disabled="page <= 1" @click="setFilters({ page: page - 1 })">上一页</button>
+      <span>第 {{ page }} / {{ pageCount }} 页 · 共 {{ total }} 组</span>
+      <button :disabled="page >= pageCount" @click="setFilters({ page: page + 1 })">下一页</button>
+    </nav>
     <aside v-if="selected" class="notification-detail">
-      <button @click="selected = null" aria-label="关闭消息详情">×</button>
+      <button @click="closeDetail" aria-label="关闭消息详情">×</button>
       <p>{{ label(selected.category) }} · {{ time(selected.created_at) }}</p>
       <h3>{{ selected.title }}</h3>
       <article>{{ displayBody(selected) }}</article>
@@ -372,10 +456,20 @@ onUnmounted(() => stream?.close());
           <dt>严重程度</dt>
           <dd>{{ severityLabel(selected.severity) }}</dd>
         </div>
+        <div>
+          <dt>阅读状态</dt>
+          <dd>{{ selected.read_at ? "已读" : "未读" }}</dd>
+        </div>
+        <div>
+          <dt>处理状态</dt>
+          <dd>{{ statusLabel(selected.workflow_status) }}</dd>
+        </div>
       </dl>
       <small>站内消息来自事务消息；页面不显示队列、浏览器凭证或邮件地址。</small>
       <footer class="notification-workflow-actions">
-        <RouterLink :to="selected.action_route">定位异常记录</RouterLink>
+        <RouterLink :to="sourceRoute"
+          >返回来源：{{ resourceLabel(selected.resource_type) }}</RouterLink
+        >
         <button
           v-if="selected.workflow_status === 'open'"
           type="button"

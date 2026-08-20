@@ -159,6 +159,20 @@
 .notification-list > b {
   color: var(--so-info);
 }
+.notification-list > button > b small {
+  display: inline;
+  color: var(--so-text-muted);
+  font-weight: 500;
+}
+.notification-pagination {
+  align-items: center;
+  justify-content: center;
+  color: var(--so-text-muted);
+}
+.notification-pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
 .notification-detail {
   position: fixed;
   right: 0;

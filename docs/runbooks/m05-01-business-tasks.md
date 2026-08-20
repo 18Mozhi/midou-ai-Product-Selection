@@ -6,7 +6,7 @@
 
 观察 Node Worker 日志中的 `business_task_projection`，并检查 `/api/v1/tasks`。`not_set` 表示上游未提供期限，不是故障。租约过期会被下一次轮询接管；来源唯一键避免重复任务。
 
-任务详情前端路由为 `/tasks/{taskId}`。本次详情深链、行尾操作菜单和阶段文案只需发布新版 `frontend` 静态资源，不新增迁移、环境变量或 API，Node、Python、MySQL 与 Redis 均无需重启。
+任务详情前端路由为 `/tasks/{taskId}`；列表状态与分页位于 URL，详情应返回原 `/work` 或 `/tasks` 筛选。任务活动按时间合并事件与评论，SLA 同时显示等级、期限和下一步。本次变化只需发布新版 `frontend` 静态资源，不新增迁移、环境变量或 API，Node、Python、MySQL 与 Redis 均无需重启。
 
 ## 故障与回滚
 

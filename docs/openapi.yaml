@@ -3160,6 +3160,12 @@ paths:
               { type: string, enum: [pending, approved, rejected, cancelled] },
           },
           { name: mine, in: query, schema: { type: boolean, default: false } },
+          {
+            name: involvement,
+            in: query,
+            description: Restrict to requests the current user can decide or initiated.
+            schema: { type: string, enum: [decidable, requested] },
+          },
         ]
       responses:
         "200": { $ref: "#/components/responses/PaginatedSuccess" }

@@ -9,3 +9,5 @@
 宝塔 Node Worker 以租约消费 `approval_escalation_jobs`。节点超时只把 active approver 切换到显式配置的 escalation assignee，追加 escalated 动作、审计和 `approval.overdue` Outbox；绝不自动批准或驳回。M05-03 负责消费 Outbox 生成通知，M05-04 负责 SSE，本模块不越界发送通知或建立实时连接。
 
 视觉依据为 `images-html/01_72_page_concepts/27_任务审批.jpg` 与 `60_审批流程.jpg`；实现保留审批收件箱、节点时间线、状态、原因和模板层级，并在动作区之前展示证据完整度、缺失项、规则版本、申请决策和事实依据。普通界面使用成员展示名称与中文状态，审批、资源、节点及成员 UUID 只在折叠技术详情中展示；图片中的示例数量不作为生产数据。
+
+审批列表通过 `involvement=decidable|requested` 在 MySQL 分页前准确拆分“待我处理”和“我发起的”，并将范围、状态、分页与当前 `approval` 深链同步到 URL；旧 `mine=true` 合同继续兼容。通知来源可直接打开指定审批，详情顶部固定展示影响对象、当前节点和证据依据，并保留返回通知中心的来源链。当前审批状态机只有批准和驳回，未定义“退回上一节点”的节点重开、SLA 重算和审计语义，因此页面不伪造退回动作。

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import "../approval-workspace.css";
 type ViewState =
@@ -52,6 +53,7 @@ type Approval = {
     actor_name: string;
     created_at: string;
   }>;
+  requested_by?: string;
   decision_context?: {
     snapshot_status: "captured" | "live_fallback";
     captured_at: string | null;
@@ -98,12 +100,21 @@ type Approval = {
   };
 };
 const props = defineProps<{ apiBaseUrl: string }>(),
+  route = useRoute(),
+  router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<ViewState>("loading"),
   approvals = ref<Approval[]>([]),
   templates = ref<Template[]>([]),
   selected = ref<Approval | null>(null),
-  filter = ref("pending"),
+  queue = ref(route.query.view === "requested" ? "requested" : "decidable"),
+  filter = ref(
+    ["pending", "approved", "rejected", "cancelled", ""].includes(String(route.query.status ?? ""))
+      ? String(route.query.status ?? "pending")
+      : "pending",
+  ),
+  page = ref(Math.max(1, Number(route.query.page) || 1)),
+  total = ref(0),
   notice = ref(""),
   requestId = ref(""),
   reason = ref(""),
@@ -132,7 +143,13 @@ const pendingCount = computed(() => approvals.value.filter((x) => x.status === "
         (x) => x.status === "pending" && x.due_at && new Date(x.due_at) < new Date(),
       ).length,
   ),
-  published = computed(() => templates.value.filter((x) => x.status === "published"));
+  published = computed(() => templates.value.filter((x) => x.status === "published")),
+  pageSize = 20,
+  pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
+  notificationReturn = computed(() => {
+    const value = typeof route.query.from === "string" ? route.query.from : "";
+    return value === "/notifications" || value.startsWith("/notifications?") ? value : "";
+  });
 const statusText = (x: string) =>
     (
       ({
@@ -176,10 +193,12 @@ async function api<T>(
   path: string,
   options: { method?: string; body?: unknown } = {},
   affectPageState = true,
+  captureMeta?: (meta: unknown) => void,
 ) {
   try {
     const response = await request<T>(path, options);
     requestId.value = response.request_id;
+    captureMeta?.(response.meta);
     return response.data;
   } catch (error) {
     const failure = error instanceof ApiClientError ? error : null;
@@ -200,21 +219,66 @@ async function load() {
   try {
     const [list, tpl] = await Promise.all([
       api<Approval[]>(
-        `/tasks/approvals?page=1&page_size=100${filter.value ? `&status=${filter.value}` : ""}`,
+        `/tasks/approvals?page=${page.value}&page_size=${pageSize}&involvement=${queue.value}${filter.value ? `&status=${filter.value}` : ""}`,
+        {},
+        true,
+        (meta) => {
+          total.value = Number((meta as { total?: number } | undefined)?.total ?? 0);
+        },
       ),
       api<Template[]>("/tasks/approval-templates"),
     ]);
     approvals.value = list;
     templates.value = tpl;
     state.value = list.length ? "ready" : "empty";
+    const approvalId = typeof route.query.approval === "string" ? route.query.approval : "";
+    if (approvalId) await openById(approvalId, false);
+  } catch {}
+}
+async function openById(id: string, syncUrl = true) {
+  try {
+    selected.value = await api<Approval>(`/tasks/approvals/${id}`);
+    reason.value = "";
+    state.value = "ready";
+    if (syncUrl) await router.replace({ query: { ...route.query, approval: selected.value.id } });
   } catch {}
 }
 async function open(item: Approval) {
-  try {
-    selected.value = await api<Approval>(`/tasks/approvals/${item.id}`);
-    reason.value = "";
-    state.value = "ready";
-  } catch {}
+  await openById(item.id);
+}
+async function closeDetail() {
+  selected.value = null;
+  await router.replace({ query: { ...route.query, approval: undefined } });
+}
+async function setQueue(value: "decidable" | "requested") {
+  queue.value = value;
+  page.value = 1;
+  selected.value = null;
+  await router.replace({
+    query: {
+      ...route.query,
+      view: value === "requested" ? "requested" : undefined,
+      page: undefined,
+      approval: undefined,
+    },
+  });
+  await load();
+}
+async function setFilter(value: string) {
+  filter.value = value;
+  page.value = 1;
+  await router.replace({
+    query: { ...route.query, status: value || undefined, page: undefined, approval: undefined },
+  });
+  selected.value = null;
+  await load();
+}
+async function setPage(value: number) {
+  page.value = Math.min(pageCount.value, Math.max(1, value));
+  await router.replace({
+    query: { ...route.query, page: page.value > 1 ? String(page.value) : undefined },
+  });
+  await load();
 }
 async function decide(action: "approve" | "reject") {
   if (!selected.value || !reason.value.trim()) return;
@@ -234,7 +298,7 @@ async function decide(action: "approve" | "reject") {
     );
     notice.value =
       action === "approve" ? "本节点已批准，审批历史不可变。" : "本节点已驳回，审批历史不可变。";
-    selected.value = null;
+    await closeDetail();
     await load();
   } catch {
   } finally {
@@ -300,6 +364,13 @@ async function createRequest() {
   }
 }
 onMounted(load);
+watch(
+  () => route.query.approval,
+  (value) => {
+    if (typeof value === "string" && value !== selected.value?.id) void openById(value, false);
+    else if (!value) selected.value = null;
+  },
+);
 </script>
 <template>
   <section class="approval-workspace">
@@ -335,7 +406,11 @@ onMounted(load);
         <span>已发布模板</span><b>{{ published.length }}</b>
       </article>
     </section>
-    <nav>
+    <nav class="approval-inbox-tabs" aria-label="审批范围">
+      <button :aria-pressed="queue === 'decidable'" @click="setQueue('decidable')">待我处理</button>
+      <button :aria-pressed="queue === 'requested'" @click="setQueue('requested')">我发起的</button>
+    </nav>
+    <nav aria-label="审批状态">
       <button
         v-for="x in [
           { v: 'pending', t: '审批中' },
@@ -345,10 +420,7 @@ onMounted(load);
         ]"
         :key="x.v"
         :aria-pressed="filter === x.v"
-        @click="
-          filter = x.v;
-          load();
-        "
+        @click="setFilter(x.v)"
       >
         {{ x.t }}
       </button>
@@ -395,8 +467,13 @@ onMounted(load);
         ><b>查看 →</b>
       </button>
     </div>
+    <nav v-if="total > pageSize" class="approval-pagination" aria-label="审批分页">
+      <button :disabled="page <= 1" @click="setPage(page - 1)">上一页</button>
+      <span>第 {{ page }} / {{ pageCount }} 页 · 共 {{ total }} 项</span>
+      <button :disabled="page >= pageCount" @click="setPage(page + 1)">下一页</button>
+    </nav>
     <aside v-if="selected" class="approval-detail">
-      <button class="close" aria-label="关闭审批详情" title="关闭审批详情" @click="selected = null">
+      <button class="close" aria-label="关闭审批详情" title="关闭审批详情" @click="closeDetail">
         ×
       </button>
       <p>{{ selected.template_name }} / 模板 v{{ selected.approval_template_version ?? "—" }}</p>
@@ -407,6 +484,26 @@ onMounted(load);
         :to="selected.decision_context.resource.route"
         >查看{{ selected.decision_context.resource.label }} →</RouterLink
       >
+      <RouterLink v-if="notificationReturn" class="approval-resource-link" :to="notificationReturn"
+        >返回通知中心</RouterLink
+      >
+      <section class="approval-impact-summary" aria-label="审批依据与影响范围">
+        <div>
+          <small>影响范围</small>
+          <strong>{{ resourceText(selected.resource_type) }} · {{ selected.title }}</strong>
+        </div>
+        <div>
+          <small>当前节点</small>
+          <strong>{{ selected.current_node_name || "流程已结束" }}</strong>
+        </div>
+        <div>
+          <small>判断依据</small>
+          <strong v-if="selected.decision_context?.evidence.applicable"
+            >证据完整度 {{ selected.decision_context.evidence.percent }}%</strong
+          >
+          <strong v-else>{{ selected.decision_context?.evidence.note || "按任务事实审批" }}</strong>
+        </div>
+      </section>
       <section v-if="selected.decision_context" class="approval-decision-context">
         <header>
           <div>

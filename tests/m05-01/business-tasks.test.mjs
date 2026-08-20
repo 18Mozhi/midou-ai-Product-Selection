@@ -58,8 +58,10 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(values[1], /progress_percent[\s\S]*deleted_at/);
   assert.match(values[2], /task_version_conflict[\s\S]*outbox_events/);
   assert.match(values[4], /sourcing\.purchase_task\.queued[\s\S]*lease_expires_at/);
-  assert.match(values[5], /更新进度|编辑|删除|运行记录/);
+  assert.match(values[5], /更新进度|编辑|删除任务|任务活动/);
   assert.match(values[5], /task-row-actions[\s\S]*删除任务/);
+  assert.match(values[5], /status:[\s\S]*page:[\s\S]*from:[\s\S]*slaNext/);
+  assert.match(values[5], /events[\s\S]*comments[\s\S]*sort/);
   assert.doesNotMatch(values[5], /task-row-delete/);
   assert.match(values[5], /当前阶段[\s\S]*phase\(selected\)/);
   assert.match(values[9], /\/tasks\/\{taskId\}/);

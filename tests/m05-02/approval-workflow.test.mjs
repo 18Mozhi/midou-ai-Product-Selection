@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import {
+  ApprovalService,
   validateTemplate,
   validateRequest,
   validateDecision,
@@ -156,6 +157,34 @@ test("M05-02 does not fabricate evidence completeness for task approvals", async
   assert.equal(context.evidence.is_complete, null);
   assert.equal(context.snapshot_status, "live_fallback");
   assert.match(context.evidence.note, /未配置独立证据完整度规则/);
+});
+test("M05-02 splits actionable and requested approvals before repository pagination", async () => {
+  const calls = [],
+    service = new ApprovalService({
+      listRequests: async (input) => {
+        calls.push(input);
+        return { items: [], page: input.page, page_size: input.pageSize, total: 0 };
+      },
+    });
+  await service.listRequests({ involvement: "decidable" });
+  await service.listRequests({ involvement: "requested" });
+  await service.listRequests({ involvement: "unknown" });
+  assert.equal(calls[0].involvement, "decidable");
+  assert.equal(calls[1].involvement, "requested");
+  assert.equal(calls[2].involvement, null);
+  const [repository, routes, ui, openapi] = await Promise.all(
+    [
+      "apps/api/src/mysql-approval-repository.ts",
+      "apps/api/src/approval-routes.ts",
+      "apps/web/src/components/ApprovalWorkspace.vue",
+      "docs/openapi.yaml",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  assert.match(repository, /involvement === "requested"[\s\S]*requested_by=\?/);
+  assert.match(repository, /involvement === "decidable"[\s\S]*active_approver_id=\?/);
+  assert.match(routes, /involvement: q\.involvement/);
+  assert.match(ui, /待我处理[\s\S]*我发起的[\s\S]*审批依据与影响范围/);
+  assert.match(openapi, /name: involvement[\s\S]*decidable, requested/);
 });
 test("M05-02.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   const files = [

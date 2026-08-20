@@ -201,26 +201,26 @@ test("M05-02.A07/A08/A09/A15 renders approval inbox timeline and mandatory reaso
 }) => {
   await setup(page);
   await page.goto("/tasks/approvals");
-  await expect(
-    page.getByRole("heading", { name: "审批中心", level: 2 }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "审批中心", level: 2 })).toBeVisible();
+  await expect(page.getByRole("button", { name: "待我处理" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
   await expect(page.getByText("便携净水杯采纳决策复核")).toBeVisible();
   await page.getByRole("button", { name: /便携净水杯采纳决策复核/ }).click();
+  await expect(page).toHaveURL(new RegExp(`approval=${approvalId}`));
+  await expect(page.getByLabel("审批依据与影响范围")).toContainText("机会决策");
   await expect(page.getByText("75%", { exact: true })).toBeVisible();
   await expect(page.getByText(/发起审批时已锁定/)).toBeVisible();
   await expect(page.getByText("SCORE-2026-08", { exact: true })).toBeVisible();
-  await expect(
-    page.getByText("PROFIT-US-AMZ-2026-08", { exact: true }),
-  ).toBeVisible();
+  await expect(page.getByText("PROFIT-US-AMZ-2026-08", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "决策依据" })).toBeVisible();
   await expect(page.getByText("市场和利润证据支持进入验证阶段")).toBeVisible();
   await expect(page.getByRole("link", { name: /利润依据/ })).toHaveAttribute(
     "href",
     `/opportunities/${opportunityId}?tab=profit`,
   );
-  await expect(
-    page.getByText(decisionId, { exact: true }).first(),
-  ).not.toBeVisible();
+  await expect(page.getByText(decisionId, { exact: true }).first()).not.toBeVisible();
   await expect(page.getByText(actor, { exact: false }).first()).not.toBeVisible();
   await expect(page.getByText("选品经理复核").last()).toBeVisible();
   await expect(page.getByText("批准与驳回均必填")).toBeVisible();
@@ -228,4 +228,18 @@ test("M05-02.A07/A08/A09/A15 renders approval inbox timeline and mandatory reaso
   await expect(page).toHaveScreenshot("m05-02-approval-workflow.png", {
     fullPage: true,
   });
+});
+
+test("approval inbox splits actionable and requested views and restores detail deep links", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto(`/tasks/approvals?view=requested&approval=${approvalId}`);
+  await expect(page.getByRole("button", { name: "我发起的" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.getByRole("heading", { name: "便携净水杯采纳决策复核" })).toBeVisible();
+  await page.getByRole("button", { name: "关闭审批详情" }).click();
+  await expect(page).not.toHaveURL(/approval=/);
 });

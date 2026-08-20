@@ -173,7 +173,11 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
   await expect(page.getByText("24 小时内到期")).toBeVisible();
   await expect(page.getByText("未设置期限")).toBeVisible();
   await page.locator(".task-row-main").filter({ hasText: "核验便携净水杯供应商报价" }).click();
+  await expect(page).toHaveURL(new RegExp(`/tasks/${taskId}\\?from=`));
+  await expect(page.getByRole("link", { name: "关闭任务详情" })).toHaveAttribute("href", /\/work/);
+  await expect(page.getByRole("heading", { name: "任务活动" })).toBeVisible();
   await expect(page.getByText("报价证据已核验，等待确认交期。")).toBeVisible();
+  await expect(page.getByText("下一步：在期限前完成当前阶段")).toBeVisible();
   await expect(page.getByRole("button", { name: "转交" })).toBeVisible();
   await expect(page).toHaveScreenshot("m05-01-business-tasks.png", {
     fullPage: true,
@@ -212,9 +216,20 @@ test("member workspace shows Chinese context theme switch and task progress with
   await expect(page.getByText("执行中 · 已完成亚马逊竞品初筛")).toBeVisible();
   await expect(page.getByRole("button", { name: "更新进度" })).toBeVisible();
   await expect(page.getByRole("button", { name: "编辑" })).toBeVisible();
+  await page.getByText("更多任务操作", { exact: true }).click();
   await expect(
-    page.locator(".task-detail").getByRole("button", { name: "删除", exact: true }),
+    page.locator(".task-detail").getByRole("button", { name: "删除任务" }),
   ).toBeVisible();
+});
+
+test("task status and pagination restore from the URL", async ({ page }) => {
+  await setup(page);
+  await page.goto("/tasks?status=in_progress&page=2");
+  await expect(page.getByRole("button", { name: "进行中" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect.poll(() => new URL(page.url()).searchParams.get("page")).toBe("2");
 });
 
 test("personal center renders the core profile instead of staying on its loading state", async ({
@@ -223,7 +238,7 @@ test("personal center renders the core profile instead of staying on its loading
   await setup(page);
   await page.goto("/me");
   await expect(
-    page.getByRole("heading", { name: "个人中心", level: 1, exact: true }),
+    page.locator(".personal-center").getByRole("heading", { name: "测试成员", level: 2 }),
   ).toBeVisible();
   await expect(page.getByLabel("显示名称")).toHaveValue("测试成员");
   await expect(page.getByText("正在读取个人中心")).toHaveCount(0);

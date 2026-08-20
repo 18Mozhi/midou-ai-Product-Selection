@@ -98,6 +98,22 @@ dialog form > div {
   background: var(--so-panel-soft);
   color: var(--so-primary);
 }
+.approval-workspace .approval-inbox-tabs {
+  border-bottom: 1px solid var(--so-border-strong);
+  margin-bottom: 8px;
+}
+.approval-workspace .approval-inbox-tabs button {
+  border-radius: 8px 8px 0 0;
+}
+.approval-pagination {
+  align-items: center;
+  justify-content: center;
+  color: var(--so-text-muted);
+}
+.approval-pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
 .approval-state {
   background: var(--so-panel-strong);
   border: 1px dashed var(--so-border-strong);
@@ -186,6 +202,31 @@ dialog form > div {
   color: var(--so-primary);
   font-weight: 700;
   text-decoration: none;
+}
+.approval-impact-summary {
+  position: sticky;
+  top: -34px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px -10px 18px;
+  padding: 10px;
+  border: 1px solid var(--so-primary-border);
+  border-radius: 10px;
+  background: var(--so-bg);
+  box-shadow: 0 10px 24px var(--so-shadow-color);
+}
+.approval-detail .approval-impact-summary > div {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  padding: 10px;
+  background: var(--so-panel-strong);
+}
+.approval-impact-summary small,
+.approval-impact-summary strong {
+  overflow-wrap: anywhere;
 }
 .approval-decision-context {
   display: grid;
@@ -440,8 +481,12 @@ dialog form {
     padding: 14px;
   }
   .approval-decision-context > header,
-  .approval-detail .approval-requirements {
+  .approval-detail .approval-requirements,
+  .approval-impact-summary {
     grid-template-columns: 1fr;
+  }
+  .approval-impact-summary {
+    top: -24px;
   }
   .approval-workspace header > div:last-child {
     width: 100%;

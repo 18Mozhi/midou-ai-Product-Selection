@@ -12,18 +12,13 @@ import { registerNotificationRoutes } from "../../apps/api/dist/notification-rou
 import { notificationBody } from "../../apps/worker/dist/notification-outbox-worker.js";
 import Fastify from "fastify";
 test("M05-03.A01/A02/A04/A12 locks self notification actions and preferences", () => {
+  assert.equal(validateNotificationAction({ action: "read", expected_version: 1 }).action, "read");
   assert.equal(
-    validateNotificationAction({ action: "read", expected_version: 1 }).action,
-    "read",
-  );
-  assert.equal(
-    validateNotificationAction({ action: "start", expected_version: 2 })
-      .action,
+    validateNotificationAction({ action: "start", expected_version: 2 }).action,
     "start",
   );
   assert.equal(
-    validateNotificationAction({ action: "close", expected_version: 3 })
-      .action,
+    validateNotificationAction({ action: "close", expected_version: 3 }).action,
     "close",
   );
   assert.throws(
@@ -41,8 +36,7 @@ test("M05-03.A01/A02/A04/A12 locks self notification actions and preferences", (
   assert.equal(p.competitor_enabled, false);
   assert.throws(
     () => validatePreferences({ ...p, email_enabled: true }),
-    (e) =>
-      e instanceof NotificationServiceError && e.code === "mail_provider_pending",
+    (e) => e instanceof NotificationServiceError && e.code === "mail_provider_pending",
   );
 });
 test("M05-03 validates and forwards workflow status filters", async () => {
@@ -126,8 +120,7 @@ test("M05-03 groups root causes before pagination and keeps the newest represent
     pool = {
       query: async (sql, args) => {
         seen.push({ sql, args });
-        if (sql.includes("SELECT COUNT(*) total FROM ("))
-          return [[{ total: 2 }]];
+        if (sql.includes("SELECT COUNT(*) total FROM (")) return [[{ total: 2 }]];
         if (sql.includes("GROUP BY group_key"))
           return [
             [
@@ -195,10 +188,7 @@ test("M05-03.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     values[0],
     /notification_preferences[\s\S]*notifications[\s\S]*notification_deliveries/,
   );
-  assert.match(
-    values[1],
-    /workflow_status[\s\S]*root_cause_key/,
-  );
+  assert.match(values[1], /workflow_status[\s\S]*root_cause_key/);
   assert.match(
     values[2],
     /workflow_status=\?[\s\S]*GROUP BY group_key[\s\S]*notification_version_conflict/,
@@ -208,7 +198,9 @@ test("M05-03.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(values[4], /dead_letter/);
   assert.match(
     values[5],
-    /已产生新的可审计事件[\s\S]*未处理[\s\S]*处理中[\s\S]*已关闭[\s\S]*同根因/,
+    /已产生新的可审计事件[\s\S]*未处理[\s\S]*处理中[\s\S]*已关闭[\s\S]*已读[\s\S]*同根因/,
   );
+  assert.match(values[5], /category:[\s\S]*status:[\s\S]*unread:[\s\S]*notification:/);
+  assert.match(values[5], /sourceRoute[\s\S]*返回来源/);
   assert.equal(JSON.parse(values.at(-1)).atomicTasks.length, 17);
 });
