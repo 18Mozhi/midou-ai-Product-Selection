@@ -19,6 +19,8 @@ Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-py
 
 ## 发布与验证
 
+在 390px 打开最近运行卡片，确认状态、采集量、原因与时间无需横向滚动即可读取；展开“技术详情”后再核对完整运行 ID、范围 ID、错误码和关联编号，关闭抽屉后焦点应返回原卡片。
+
 1. 备份 MySQL，并确认没有本模块 running 租约。
 2. 执行 `0016d_playwright_crawler_m03_04.up.sql`、`0048_browser_collection_jobs.up.sql`、`0049_credential_renewal_auto_replay.up.sql` 与 `0050_browser_evidence_artifacts.up.sql`，必须使用 `product_scout` 业务账号且确认 MySQL 5.7/utf8mb4；已应用的迁移不可重复手工执行。
 3. 本地运行 `python -m unittest discover -s apps/crawler/tests -p "test_*.py"` 与 `node --test tests/unit/credential-cookie-security-boundary.test.mjs`，确认日志脱敏、Cookie 入库密文和 `no-store` 响应边界。

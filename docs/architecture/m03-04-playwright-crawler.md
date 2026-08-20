@@ -28,6 +28,8 @@ Python Crawler 不读取静态执行请求文件。它使用服务 Token 调用 
 
 ## 权限与响应
 
+采集运行列表在桌面保留事实表格；390px 使用统一摘要卡片与右侧详情抽屉，不再横向滚动宽表。完整运行、组织、工作区、请求、链路与错误标识只在可展开的“技术详情”中展示。
+
 平台监控 `GET /api/v1/platform/crawler-runtime` 与过期回收 `POST /api/v1/platform/crawler-runtime/recover-expired` 要求已登录且具备 `collection:replay`。写操作校验同源 Origin 和 Idempotency-Key。平台响应只含档案元数据、租约时间/实例、范围化运行统计和 correlation，不含凭证明文、密文、临时路径、执行计划或租约令牌。只有 Crawler 服务 Token 可以访问 job acquire/heartbeat/complete；内部 acquire 返回密文而非明文，完成结果限制为 2 MB 并同时核对 job、run、profile 和租约摘要。DOM 与截图必须成对出现、类型与解析版本符合来源合同且哈希一致，否则按解析漂移失败关闭，不能落入证据目录。
 
 ## 回滚

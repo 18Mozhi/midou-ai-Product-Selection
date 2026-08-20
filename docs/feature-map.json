@@ -255,10 +255,7 @@
         "../apps/api/src/authorization-routes.ts",
         "../apps/web/src/components/AuthorizationCenter.vue"
       ],
-      "routes": [
-        "/api/v1/me/authorization",
-        "/api/v1/org/{organizationId}/roles"
-      ],
+      "routes": ["/api/v1/me/authorization", "/api/v1/org/{organizationId}/roles"],
       "roles": [
         "member",
         "selection_manager",
@@ -300,14 +297,7 @@
         "credential reference",
         "collection replay"
       ],
-      "audit": [
-        "created",
-        "extended",
-        "revoked",
-        "expired",
-        "accessed",
-        "access_denied"
-      ],
+      "audit": ["created", "extended", "revoked", "expired", "accessed", "access_denied"],
       "async": "not applicable; expiry and access authorization are synchronous MySQL truth",
       "verificationRunId": "3f6d3cb1-a805-4d17-b3f2-84780ebba303",
       "status": "module_verified"
@@ -443,10 +433,7 @@
         "confirmation"
       ],
       "contracts": "semantic text and symbol, safe request/trace identifiers, explicit recovery, fail-closed high-impact confirmation",
-      "imageEvidence": [
-        "concept 72 not-found",
-        "P02 contact sheets and M02-01 design tokens"
-      ],
+      "imageEvidence": ["concept 72 not-found", "P02 contact sheets and M02-01 design tokens"],
       "nonGoals": "no API request, business mutation, permission inference, persistence, async service or environment value",
       "verificationRunId": "fa7a1180-6dad-4c70-a621-10708aca95a9",
       "status": "module_verified"
@@ -459,11 +446,7 @@
         "../apps/api/src/discovery-routes.ts",
         "../apps/web/src/components/DiscoveryOverlay.vue"
       ],
-      "routes": [
-        "/api/v1/me/global-search",
-        "/api/v1/me/quick-actions",
-        "/notifications"
-      ],
+      "routes": ["/api/v1/me/global-search", "/api/v1/me/quick-actions", "/notifications"],
       "scope": "global search uses the server-resolved organization/workspace; quick actions use the explicitly guarded member, organization_admin or platform_admin shell",
       "searchProjection": "MySQL 5.7 synchronous read model with stable cursor, literal wildcard escaping and internal routes only",
       "quickCreate": "authorized navigation entries open the owning page's real create state via create=1; the discovery endpoint performs no business mutation or optimistic success",
@@ -485,11 +468,7 @@
         "../apps/web/src/components/HomeDashboard.vue",
         "../apps/web/src/components/OpportunityMobileShell.vue"
       ],
-      "routes": [
-        "/home",
-        "/api/v1/me/home-dashboard",
-        "/opportunities/{opportunityId}"
-      ],
+      "routes": ["/home", "/api/v1/me/home-dashboard", "/opportunities/{opportunityId}"],
       "sections": [
         "first fold today actions",
         "first fold current-user anomalies and data health",
@@ -498,13 +477,7 @@
         "actionable empty state"
       ],
       "presentationBoundary": "the first fold prioritizes today actions and current-user anomalies only; full-chain teaching stays in first-time onboarding; every change keeps an explicit action to its stored internal route",
-      "actionOrder": [
-        "overdue",
-        "blocking",
-        "high_risk",
-        "high_value",
-        "normal"
-      ],
+      "actionOrder": ["overdue", "blocking", "high_risk", "high_value", "normal"],
       "scope": "exact organization and workspace; required capability; health exact authenticated audience user",
       "truth": "synchronous MySQL 5.7 projection read; empty until P03-P05 owning modules write real data",
       "apiClientBoundary": "the home projection uses the shared frontend API client and preserves standardized expired, forbidden, blocked and error states plus request_id, trace_id and action_hint",
@@ -596,9 +569,7 @@
         "CREDENTIAL_TEMP_ROOT",
         "one-time rotation variables"
       ],
-      "imageEvidence": [
-        "concept 68 key rotation and platform security navigation shell"
-      ],
+      "imageEvidence": ["concept 68 key rotation and platform security navigation shell"],
       "verificationRunId": "6b01b631-ae6a-4add-a06a-016f989d7411",
       "status": "module_verified"
     },
@@ -636,9 +607,7 @@
         "M03-06": "raw evidence and normalized persistence",
         "M03-07": "first real adapter registration"
       },
-      "imageEvidence": [
-        "concept 62 collection source management table and status layout"
-      ],
+      "imageEvidence": ["concept 62 collection source management table and status layout"],
       "verificationRunId": "c6b206e3-bf39-4d3b-8b00-f7f195eaa999",
       "status": "module_verified"
     },
@@ -669,12 +638,7 @@
         "/api/v1/internal/crawler-runtime/jobs/{jobId}/complete"
       ],
       "scope": "Node Worker owns the business collection task and enqueues one browser_collection_job per authenticated-browser subquery; the BaoTa Python Crawler claims that job, renews the job/profile/single-host leases together, calls the fixed Node Playwright runner and writes the bounded result back to the same task and subquery; evidence-enabled plans return a bounded JPEG screenshot and item DOM fragment with SHA-256 and parser version, which the Worker persists under EVIDENCE_ROOT and links to the browser job, business task and subquery; expired credentials and login-blocked runs create an assigned collection follow-up task linked to the collection task, and a validated credential rotation completes the follow-up then requeues or clones the blocked work for login verification",
-      "actions": [
-        "bounded search",
-        "pagination",
-        "scroll",
-        "same-allowlist detail pages"
-      ],
+      "actions": ["bounded search", "pagination", "scroll", "same-allowlist detail pages"],
       "blockedStates": [
         "blocked_login",
         "blocked_captcha",
@@ -687,6 +651,7 @@
       "permission": "authenticated platform collection:replay; same-origin and Idempotency-Key for expired lease recovery",
       "responseBoundary": "platform monitoring returns profile metadata, lease owner and timing, scoped run counts and correlation only; the service-token-only job claim returns the code-owned plan, encrypted credential record and one-time lease token to the Python Crawler, never plaintext credentials or temporary paths",
       "apiClientBoundary": "browser-profile and run reads plus idempotent expired-lease recovery use the shared frontend JSON client while credential and lease-token response boundaries remain unchanged",
+      "mobilePresentationBoundary": "at 390px recent runs render as readable summary cards with a right-side detail drawer; complete run, organization, workspace, request, trace and error identifiers appear only in expandable technical details",
       "profileArchive": "M03-02 encrypted base64 tar.gz with traversal-safe bounded temporary extraction, or normalized encrypted cookie_bundle materialized as a bounded JSON file; both are unconditionally cleaned up",
       "configuration": [
         "PLAYWRIGHT_HEADLESS",
@@ -707,9 +672,7 @@
         "M03-06": "evidence and normalized persistence",
         "M03-07": "1688 browser job routing and snapshot parser are registered; production field extraction remains disabled until a real logged-in fixed sample passes replay"
       },
-      "imageEvidence": [
-        "concept 63 collection task monitoring table and status layout"
-      ],
+      "imageEvidence": ["concept 63 collection task monitoring table and status layout"],
       "verificationRunId": "c574a8a1-d7ca-4639-9c36-69067c7c4149",
       "status": "module_verified"
     },
@@ -759,10 +722,8 @@
       "queueRecovery": "queued rows with attempt_count at or above 4 are transactionally quarantined to dead_letter with collection_attempt_overflow event, outbox and dead-letter audit; normal claims require attempt_count below 4 so an exhausted head row cannot block fresh crawls",
       "permission": "authenticated platform collection:replay; same-origin Origin, Idempotency-Key and reason for dead-letter replay",
       "responseBoundary": "task status, coverage, scoped counts, subqueries, attempts, events, dead-letter and correlation; no target_json, lease token or credential",
-      "configuration": [
-        "COLLECTION_TASK_POLL_MS",
-        "COLLECTION_TASK_LEASE_SECONDS"
-      ],
+      "mobilePresentationBoundary": "at 390px collection tasks render as status and evidence summary cards; the detail drawer preserves coverage and missing-field facts, links to the full task detail, and confines complete task, organization, workspace, request and error identifiers to technical details",
+      "configuration": ["COLLECTION_TASK_POLL_MS", "COLLECTION_TASK_LEASE_SECONDS"],
       "runtimeBoundary": "engine and synthetic live verification only; real Provider executor starts at M03-07 and evidence persistence starts at M03-06",
       "liveVerificationClock": "execution-time current clock; historical fixed timestamps are forbidden because the production Worker must not recover a newly-created verification lease as expired",
       "downstream": {
@@ -809,6 +770,7 @@
         "source_success_rate"
       ],
       "presentationBoundary": "the quality page surfaces the latest persisted title price currency external-id and canonical-url accuracy metrics plus duplicate ratio and source freshness individually; it preserves threshold sample count and insufficient-sample truth, shows no-data explicitly, and never invents a composite accuracy score",
+      "mobilePresentationBoundary": "at 390px evidence and issue tables become summary cards with detail drawers; download, lineage and resolution actions remain reachable, while complete evidence, organization, workspace, hash and correlation identifiers stay inside technical details",
       "permission": "authenticated platform platform:operate; same-origin Origin, Idempotency-Key and optimistic version for issue resolution; controlled download grants and accesses are audited",
       "responseBoundary": "metadata, normalized versions, provenance and issues only; no raw content, storage path, credential or cookie outside the integrity-checked download endpoint",
       "configuration": [
@@ -897,9 +859,7 @@
         "EVIDENCE_MAX_RAW_BYTES"
       ],
       "runtimeBoundary": "production Worker runs only inside the single Baota Node project and queues business-linked authenticated browser jobs; the Baota Python project claims, heartbeats, executes and writes those jobs back through fixed internal APIs; 1688 normalization is registered but its configuration API rejects enabled status with provider_source_setup_required until real logged-in fixed-sample field replay is accepted; no panel-external service is created",
-      "imageEvidence": [
-        "concept 62 collection source management catalog, status and actions"
-      ],
+      "imageEvidence": ["concept 62 collection source management catalog, status and actions"],
       "verificationRunId": "9477e2a6-533a-430a-a372-48a69f1878e2",
       "status": "module_verified"
     },
@@ -933,10 +893,7 @@
       "heatBoundary": "heat is the observed signal count with unit signals; momentum and confidence remain insufficient_data until a measured contract exists",
       "permission": "trend:read for scoped reads; trend:manage for follow relevance and monitoring writes; same-origin Origin and Idempotency-Key required",
       "audit": "user and Worker writes persist trend_events and trend_outbox with request_id and trace_id; original evidence is never deleted by relevance actions",
-      "configuration": [
-        "TREND_PROJECTION_POLL_MS",
-        "TREND_PROJECTION_LEASE_SECONDS"
-      ],
+      "configuration": ["TREND_PROJECTION_POLL_MS", "TREND_PROJECTION_LEASE_SECONDS"],
       "runtimeBoundary": "projection runs inside the Baota-managed Node Worker; no panel-external production service",
       "imageEvidence": [
         "concept 28 trend list",
@@ -980,10 +937,7 @@
       "erpImport": "the restricted browser helper reads the existing ERP Authorization token only inside the logged-in ERP tab and imports immutable evidence, opportunities, actual ASIN competitors and evidence-linked ERP historical-cost supplier candidates; missing MOQ specification lead time and location stay explicit rather than being presented as confirmed quotes",
       "permission": "opportunity:read for scoped reads; existing opportunity:decide for candidate creation and required-reason decisions; same-origin Origin and Idempotency-Key required",
       "audit": "manual creation, automatic opportunity.candidate.discovered, evidence refresh and decision changes persist correlated opportunity_events and opportunity_outbox; decisions do not rewrite scores or evidence",
-      "configuration": [
-        "OPPORTUNITY_REFRESH_POLL_MS",
-        "OPPORTUNITY_REFRESH_LEASE_SECONDS"
-      ],
+      "configuration": ["OPPORTUNITY_REFRESH_POLL_MS", "OPPORTUNITY_REFRESH_LEASE_SECONDS"],
       "runtimeBoundary": "refresh runs inside the Baota-managed Node Worker; no panel-external production service",
       "imageEvidence": [
         "concept 33 opportunity list",
@@ -1022,10 +976,7 @@
       "apiClientBoundary": "score-rule reads and lifecycle writes use the shared frontend API client without changing rule versions, evidence thresholds or approval transitions",
       "permission": "opportunity:read for rule and explanation reads; opportunity:decide for draft submit input and rerun; opportunity:approve for approve reject activate and rollback",
       "audit": "rule transitions input writes and scoring runs persist correlated opportunity_events and opportunity_outbox while historical runs remain immutable",
-      "configuration": [
-        "OPPORTUNITY_SCORING_POLL_MS",
-        "OPPORTUNITY_SCORING_LEASE_SECONDS"
-      ],
+      "configuration": ["OPPORTUNITY_SCORING_POLL_MS", "OPPORTUNITY_SCORING_LEASE_SECONDS"],
       "runtimeBoundary": "scoring runs inside the Baota-managed Node Worker; MySQL is the rule and score truth and Redis is coordination only",
       "imageEvidence": [
         "concept 34 opportunity overview",
@@ -1060,10 +1011,7 @@
       "apiClientBoundary": "cost-rule reads and lifecycle writes use the shared frontend API client without browser-side ROI calculation or inferred fee values",
       "permission": "opportunity:read for rules and profit analysis; cost:confirm for rates inputs and reruns; opportunity:approve for rule creation approval publish reject and rollback",
       "audit": "rule transitions rates inputs and profit runs persist correlated opportunity_events and opportunity_outbox while historical inputs and runs remain immutable",
-      "configuration": [
-        "PROFIT_CALCULATION_POLL_MS",
-        "PROFIT_CALCULATION_LEASE_SECONDS"
-      ],
+      "configuration": ["PROFIT_CALCULATION_POLL_MS", "PROFIT_CALCULATION_LEASE_SECONDS"],
       "runtimeBoundary": "profit calculation runs inside the Baota-managed Node Worker; MySQL 5.7 is the truth source and the browser never recalculates ROI",
       "imageEvidence": [
         "concept 37 opportunity profit",
@@ -1097,10 +1045,7 @@
       "apiClientBoundary": "competitor lists, details, collection actions, rules and audited deletes use the shared frontend JSON client; rule-list failure remains an optional degradation and does not hide an otherwise available competitor list",
       "permission": "competitor:read for scoped list and full detail; competitor:manage for create collect thresholds pause resume and audited soft delete; auditors remain read only",
       "audit": "user and Worker writes preserve request_id trace_id evidence source references immutable changes and queued downstream delivery state",
-      "configuration": [
-        "COMPETITOR_MONITOR_POLL_MS",
-        "COMPETITOR_MONITOR_LEASE_SECONDS"
-      ],
+      "configuration": ["COMPETITOR_MONITOR_POLL_MS", "COMPETITOR_MONITOR_LEASE_SECONDS"],
       "runtimeBoundary": "comparison runs inside the Baota-managed Node Worker; P05 consumes queued notification and task outbox contracts",
       "imageEvidence": [
         "concept 41 competitor list",
@@ -1136,10 +1081,7 @@
       "apiClientBoundary": "sourcing searches, details, refreshes, quote and purchase writes, comparisons and audited deletes use the shared frontend JSON client; comparison-history failure remains an optional degradation and does not hide an otherwise available sourcing list",
       "permission": "sourcing:read for scoped lists details and comparison history; supplier_quote:manage for create refresh audited soft delete quote confirmation comparisons and purchase task creation",
       "audit": "writes preserve idempotency request_id trace_id actor immutable evidence references sourcing_events and sourcing_outbox",
-      "configuration": [
-        "SOURCING_PROJECTION_POLL_MS",
-        "SOURCING_PROJECTION_LEASE_SECONDS"
-      ],
+      "configuration": ["SOURCING_PROJECTION_POLL_MS", "SOURCING_PROJECTION_LEASE_SECONDS"],
       "runtimeBoundary": "projection runs inside the Baota-managed Node Worker; P05 consumes queued purchase task outbox records and M04-04 remains the cost and exchange-rate truth",
       "liveVerificationIsolation": "the M04-06 probe persists collection_task_evidence_links introduced by M07-06, lets the Baota-managed production Worker project the queue item, and polls only its exact job_id plus organization/workspace scope, so it cannot consume or report an unrelated production queue item",
       "imageEvidence": [
@@ -1249,10 +1191,7 @@
       "scope": "organization and workspace scoped immutable published templates approval requests evidence and rule snapshots node runs actions idempotent operations audit and outbox",
       "truthBoundary": "requests lock the published template version; opportunity decision requests resolve the decision id to its opportunity and snapshot evidence completeness scoring profit risk rule versions and decision basis; pre-0047 requests are labeled live fallback and task approvals are evidence-not-applicable; approve and reject require reasons; overdue Worker only escalates the active approver and never decides",
       "permission": "task:read for reads and task:assign for template request and decision writes",
-      "configuration": [
-        "APPROVAL_ESCALATION_POLL_MS",
-        "APPROVAL_ESCALATION_LEASE_SECONDS"
-      ],
+      "configuration": ["APPROVAL_ESCALATION_POLL_MS", "APPROVAL_ESCALATION_LEASE_SECONDS"],
       "runtimeBoundary": "decision context snapshots are captured synchronously by the Baota-managed Node API; overdue node escalation runs only in the unified Baota-managed Node Worker",
       "imageEvidence": ["concept 27 task approval", "concept 60 approval flow"],
       "verificationRunId": "02651953-6607-45cc-ac45-887c9be17b60",
@@ -1284,10 +1223,7 @@
         "NOTIFICATION_EMAIL_DELIVERY_MODE"
       ],
       "runtimeBoundary": "global Outbox projection runs only in the Baota-managed Node Worker; email creates pending_placeholder and no external request",
-      "imageEvidence": [
-        "concept 17 notification center",
-        "concept 18 message detail"
-      ],
+      "imageEvidence": ["concept 17 notification center", "concept 18 message detail"],
       "verificationRunId": "72378171-fd60-4a38-99ed-ae5fba560eb6",
       "status": "module_verified"
     },
@@ -1312,10 +1248,7 @@
         "REALTIME_MAX_CONNECTIONS"
       ],
       "runtimeBoundary": "Baota S0 single-host MySQL polling and process-local connection accounting; no P08 multi-node or 10000-user claim",
-      "imageEvidence": [
-        "concept 17 notification center",
-        "concept 18 message detail"
-      ],
+      "imageEvidence": ["concept 17 notification center", "concept 18 message detail"],
       "verificationRunId": "3bfab847-b04c-41f1-9817-e1b5fe7c64cb",
       "status": "module_verified"
     },
@@ -1524,10 +1457,7 @@
         "../apps/api/src/mysql-collection-console-repository.ts",
         "../apps/web/src/components/CollectionOperationsConsole.vue"
       ],
-      "routes": [
-        "/platform-admin/collection/overview",
-        "/api/v1/platform/collection/console"
-      ],
+      "routes": ["/platform-admin/collection/overview", "/api/v1/platform/collection/console"],
       "scope": "platform source definitions and health plus task attempt dead-letter and quality summaries filtered by real provider association optional organization and workspace exact error root and 24h 7d 30d or all time window; at 390px source and attempt tables become summary cards with a named detail drawer, and source codes task UUIDs trace IDs and organization or workspace IDs stay inside technical details",
       "truthBoundary": "dead-letter roots aggregate exact collection_dead_letters.error_code values and count only failed tasks already in dead letter, while the same exact root drills attempts and dead letters without inferred mappings; internal link keys stay out of user-facing copy; no credentials cookies payloads or file paths; controlled replay and source writes remain on existing idempotent versioned M03 endpoints",
       "alertCategoryBoundary": "the UI labels exact network_error dns_error timeout roots as network, login_required session_expired blocked_login as login, captcha blocked_captcha as captcha, and parser_error parser_failed parse_failed source_changed as parsing; unknown codes stay other and all drill replay retry and audit behavior continues to use the exact raw error code",
@@ -1550,17 +1480,11 @@
         "../apps/api/src/mysql-security-operations-repository.ts",
         "../apps/web/src/components/SecurityOperationsCenter.vue"
       ],
-      "routes": [
-        "/platform-admin/security",
-        "/api/v1/platform/security/operations"
-      ],
+      "routes": ["/platform-admin/security", "/api/v1/platform/security/operations"],
       "scope": "platform login outcomes risk events session metadata organization token metadata credential lifecycle and platform audit",
       "truthBoundary": "never selects or returns session token hashes credential ciphertext nonce auth tag token hashes cookies or raw IP and user agent values",
       "permission": "platform:secure read guard; credential rotation and token/session mutations remain on existing key rotation session and token capabilities",
-      "configuration": [
-        "SECURITY_OPERATIONS_DEFAULT_WINDOW",
-        "SECURITY_OPERATIONS_RECENT_LIMIT"
-      ],
+      "configuration": ["SECURITY_OPERATIONS_DEFAULT_WINDOW", "SECURITY_OPERATIONS_RECENT_LIMIT"],
       "runtimeBoundary": "synchronous audited MySQL read under Baota Node API; no external SIEM or key service is invented",
       "imageEvidence": [
         "concept 65 logs",
@@ -1602,10 +1526,7 @@
         "WEBHOOK_DELIVERY_TIMEOUT_MS"
       ],
       "runtimeBoundary": "Baota S0 Node API and Node Worker; HTTPS-only per-attempt DNS and private-range rejection; 60/300/900 retry and fourth-attempt dead letter; no multi-node claim",
-      "imageEvidence": [
-        "concept 67 token management",
-        "concept 68 key rotation"
-      ],
+      "imageEvidence": ["concept 67 token management", "concept 68 key rotation"],
       "verificationRunId": "5fdcf027-016b-47d2-938a-4f268a339fb4",
       "status": "module_verified"
     },
@@ -1630,10 +1551,7 @@
       "permission": "platform:operate read guard; same-origin Idempotency-Key reason and version guard for writes",
       "configuration": ["COMMERCIAL_RECENT_LIMIT"],
       "runtimeBoundary": "synchronous Baota Node API reads plus existing organization outbox; no new Worker Crawler daemon or multi-node claim",
-      "imageEvidence": [
-        "concept 70 billing plans",
-        "concept 71 plan comparison"
-      ],
+      "imageEvidence": ["concept 70 billing plans", "concept 71 plan comparison"],
       "verificationRunId": "934c8c7b-0e66-4856-9c47-8b40a331bb3a",
       "status": "module_verified"
     },
@@ -1665,10 +1583,7 @@
     },
     "securityGate": {
       "module": "M07-02",
-      "entrypoints": [
-        "../verification/security-gate.json",
-        "../scripts/verify-security-gate.mjs"
-      ],
+      "entrypoints": ["../verification/security-gate.json", "../scripts/verify-security-gate.mjs"],
       "scope": "dependency secrets SQL XSS CSRF SSRF upload authorization logging and Baota edge release gate; browser storage blocks all localStorage except the exact validated non-sensitive theme ID preference contract",
       "runtimeBoundary": "local CI or Baota-controlled finite release task only; no production API table page permission daemon or multi-node claim",
       "securityHeaders": [
@@ -1690,11 +1605,7 @@
         "../scripts/verify-baota-deployment.mjs",
         "../apps/web/src/components/DeploymentFoundation.vue"
       ],
-      "routes": [
-        "/api/v1/health/live",
-        "/api/v1/health/ready",
-        "/api/v1/health/version"
-      ],
+      "routes": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
       "scope": "惠州 S0 单主机、宝塔管理的 Web API Worker Crawler MySQL Redis release backup and log objects",
       "truthBoundary": "same-commit production evidence, local-only private services and sanitized health; the fixed-layout deployer has no current or releases migration or deletion branch and fails closed on unsupported root entries before stopping Node; no P08 capacity claim",
       "configuration": ["APP_VERSION", "BUILD_SHA", "WEB_ORIGIN"],
@@ -1710,10 +1621,7 @@
         "../apps/api/src/backup-recovery-routes.ts",
         "../apps/web/src/components/BackupRecoveryCenter.vue"
       ],
-      "routes": [
-        "/platform-admin/operations",
-        "/api/v1/platform/operations/backup-recovery"
-      ],
+      "routes": ["/platform-admin/operations", "/api/v1/platform/operations/backup-recovery"],
       "scope": "MySQL evidence export and non-secret config encrypted backups on the current Huizhou host with a separate encrypted recovery root",
       "truthBoundary": "verified only after same-host encrypted-copy integrity and a logically isolated restore check business data audit chain evidence hashes and permission boundaries within 90 days; host disk and site failure are not protected",
       "permission": "platform:operate read only; backup and restore execute only in Baota scheduled tasks",
@@ -2335,12 +2243,7 @@
       "failureEvidence": {
         "schemaVersion": 1,
         "status": "blocked",
-        "requiredFields": [
-          "failure.code",
-          "failure.failedStage",
-          "completedStages",
-          "thresholds"
-        ],
+        "requiredFields": ["failure.code", "failure.failedStage", "completedStages", "thresholds"],
         "limitedBoundaryRequiredFields": [
           "measuredConcurrentUsers",
           "stages",
@@ -2387,28 +2290,12 @@
     "P03": {
       "runId": "01b8e9ff-d2c4-4a5a-80b3-673ee96dbea7",
       "status": "phase_verified",
-      "modules": [
-        "M03-01",
-        "M03-02",
-        "M03-03",
-        "M03-04",
-        "M03-05",
-        "M03-06",
-        "M03-07"
-      ]
+      "modules": ["M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07"]
     },
     "P04": {
       "runId": "9bd7c0f3-2430-4262-aac0-1f06bc014fc9",
       "status": "phase_verified",
-      "modules": [
-        "M04-01",
-        "M04-02",
-        "M04-03",
-        "M04-04",
-        "M04-05",
-        "M04-06",
-        "M04-07"
-      ]
+      "modules": ["M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06", "M04-07"]
     },
     "P05": {
       "runId": "71c1ae8e-c2b0-4e3e-aecb-398bac55fefa",
@@ -2471,7 +2358,11 @@
     }
   },
   "technology": {
-    "frontend": ["Vue 3", "TypeScript", "Vue Router 4 with lazy business routes and state preservation"],
+    "frontend": [
+      "Vue 3",
+      "TypeScript",
+      "Vue Router 4 with lazy business routes and state preservation"
+    ],
     "backend": [
       "Node.js unified production backend",
       "Python 3.12 crawler consumer managed by BaoTa",

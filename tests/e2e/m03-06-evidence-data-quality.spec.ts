@@ -118,7 +118,13 @@ test("M03-06.A07/A08/A15 evidence quality dashboard is responsive and visual", a
   await page.getByRole("button", { name: "证据与质量" }).click();
   await expect(page.getByRole("heading", { name: "证据与数据质量", level: 2 })).toBeVisible();
   await expect(page.getByText("Market Evidence").first()).toBeVisible();
-  await expect(page.getByText("18.3 KB")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await expect(page.getByRole("button", { name: /Market Evidence · 18.3 KB/ })).toBeVisible();
+    await page.getByRole("button", { name: /Market Evidence · 18.3 KB/ }).click();
+    await page.getByText("技术详情").click();
+    await expect(page.getByText(ids.evidence, { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "关闭详情" }).last().click();
+  } else await expect(page.getByText("18.3 KB", { exact: true })).toBeVisible();
   await expect(page).toHaveScreenshot("m03-06-evidence-data-quality.png", { fullPage: true });
 });
 test("M02-01 semantic roles keep data quality readable in every theme", async ({ page }) => {
@@ -210,11 +216,17 @@ test("M03-06.A08/A09/A15 evidence lineage and confirmed issue resolution preserv
   });
   await page.goto("/platform-admin/data");
   await page.getByRole("button", { name: "证据与质量" }).click();
-  await page.getByRole("button", { name: "详情" }).click();
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /Market Evidence · 18.3 KB/ }).click();
+    await page.getByRole("button", { name: "读取完整溯源" }).click();
+  } else await page.getByRole("button", { name: "详情" }).click();
   await expect(page.getByText("$.title · copy-v1")).toBeVisible();
   await page.getByRole("button", { name: "关闭证据详情" }).click();
   await page.getByRole("button", { name: "质量问题" }).click();
-  await page.getByRole("button", { name: "记录解决" }).click();
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /标题准确率 · 待处理/ }).click();
+    await page.getByRole("button", { name: "记录解决" }).click();
+  } else await page.getByRole("button", { name: "记录解决" }).click();
   await page
     .getByPlaceholder("说明修复方式与验证依据（2–500 字）")
     .fill("已按原文重新核对标题字段");

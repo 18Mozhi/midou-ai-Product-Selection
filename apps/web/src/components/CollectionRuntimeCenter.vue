@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 import "../crawler-runtime.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type RunStatus = "running" | "succeeded" | "blocked" | "failed" | "timed_out" | "cancelled";
@@ -245,47 +246,112 @@ onMounted(load);
             </select>
           </div>
         </header>
-        <div class="crawler-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>运行</th>
-                <th>范围</th>
-                <th>状态</th>
-                <th>采集量</th>
-                <th>耗时</th>
-                <th>开始时间</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in filtered" :key="item.id">
-                <td>
-                  <strong>{{ item.id.slice(0, 8) }}</strong
-                  ><small>{{ errorText(item.error_code) }}</small>
-                </td>
-                <td>
-                  <span>{{ item.organization_id.slice(0, 8) }}</span
-                  ><small>{{ item.workspace_id.slice(0, 8) }}</small>
-                </td>
-                <td>
-                  <b :data-status="item.status">{{ statusText(item.status) }}</b>
-                </td>
-                <td>
-                  {{ item.item_count }} 条<small
-                    >{{ item.page_count }} 页 · {{ item.detail_count }} 详情</small
-                  >
-                </td>
-                <td>
-                  {{ item.duration_ms === null ? "—" : `${item.duration_ms} 毫秒` }}
-                </td>
-                <td>{{ time(item.started_at) }}</td>
-              </tr>
-              <tr v-if="!filtered.length">
-                <td colspan="6">当前筛选没有运行记录。</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ResponsiveDataView
+          :rows="filtered"
+          :row-key="(item) => item.id"
+          title="最近采集运行"
+          :detail-title="(item) => `${statusText(item.status)} · ${time(item.started_at)}`"
+        >
+          <template #desktop>
+            <table>
+              <thead>
+                <tr>
+                  <th>运行</th>
+                  <th>范围</th>
+                  <th>状态</th>
+                  <th>采集量</th>
+                  <th>耗时</th>
+                  <th>开始时间</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in filtered" :key="item.id">
+                  <td>
+                    <strong>{{ time(item.started_at) }}</strong
+                    ><small>{{ errorText(item.error_code) }}</small>
+                  </td>
+                  <td><span>已绑定组织与工作区</span></td>
+                  <td>
+                    <b :data-status="item.status">{{ statusText(item.status) }}</b>
+                  </td>
+                  <td>
+                    {{ item.item_count }} 条<small
+                      >{{ item.page_count }} 页 · {{ item.detail_count }} 详情</small
+                    >
+                  </td>
+                  <td>
+                    {{ item.duration_ms === null ? "—" : `${item.duration_ms} 毫秒` }}
+                  </td>
+                  <td>{{ time(item.started_at) }}</td>
+                </tr>
+                <tr v-if="!filtered.length">
+                  <td colspan="6">当前筛选没有运行记录。</td>
+                </tr>
+              </tbody>
+            </table>
+          </template>
+          <template #summary="{ row }">
+            <span class="responsive-record-summary">
+              <strong>{{ statusText(row.status) }} · {{ row.item_count }} 条</strong>
+              <small>{{ errorText(row.error_code) }} · {{ time(row.started_at) }}</small>
+            </span>
+          </template>
+          <template #detail="{ row }">
+            <dl>
+              <div>
+                <dt>状态</dt>
+                <dd>{{ statusText(row.status) }}</dd>
+              </div>
+              <div>
+                <dt>采集量</dt>
+                <dd>
+                  {{ row.item_count }} 条 · {{ row.page_count }} 页 · {{ row.detail_count }} 个详情
+                </dd>
+              </div>
+              <div>
+                <dt>耗时</dt>
+                <dd>{{ row.duration_ms === null ? "—" : `${row.duration_ms} 毫秒` }}</dd>
+              </div>
+              <div>
+                <dt>开始时间</dt>
+                <dd>{{ time(row.started_at) }}</dd>
+              </div>
+              <div>
+                <dt>结束时间</dt>
+                <dd>{{ time(row.finished_at) }}</dd>
+              </div>
+            </dl>
+            <details>
+              <summary>技术详情</summary>
+              <dl>
+                <div>
+                  <dt>运行 ID</dt>
+                  <dd>{{ row.id }}</dd>
+                </div>
+                <div>
+                  <dt>组织 ID</dt>
+                  <dd>{{ row.organization_id }}</dd>
+                </div>
+                <div>
+                  <dt>工作区 ID</dt>
+                  <dd>{{ row.workspace_id }}</dd>
+                </div>
+                <div>
+                  <dt>错误码</dt>
+                  <dd>{{ row.error_code || "—" }}</dd>
+                </div>
+                <div>
+                  <dt>请求 ID</dt>
+                  <dd>{{ row.request_id }}</dd>
+                </div>
+                <div>
+                  <dt>链路 ID</dt>
+                  <dd>{{ row.trace_id }}</dd>
+                </div>
+              </dl>
+            </details>
+          </template>
+        </ResponsiveDataView>
       </section></template
     ><ConfirmDialog
       :open="confirming"

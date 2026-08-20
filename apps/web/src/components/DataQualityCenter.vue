@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 import "../data-quality.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Evidence {
@@ -354,90 +355,245 @@ onMounted(load);
             />
           </div>
         </header>
-        <div v-if="tab === 'evidence'" class="quality-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>证据</th>
-                <th>来源</th>
-                <th>范围</th>
-                <th>格式 / 大小</th>
-                <th>捕获 / 保留</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in filteredEvidence" :key="item.id">
-                <td>
-                  <strong>{{ item.id.slice(0, 8) }}…</strong
-                  ><small>{{ item.content_sha256.slice(0, 14) }}…</small>
-                </td>
-                <td>
-                  <span>{{ item.provider_name }}</span
-                  ><small>{{ item.canonical_url }}</small>
-                </td>
-                <td>
-                  {{ item.organization_id.slice(0, 8) }}…<small
-                    >{{ item.workspace_id.slice(0, 8) }}…</small
-                  >
-                </td>
-                <td>
-                  {{ item.content_type }}<small>{{ size(item.size_bytes) }}</small>
-                </td>
-                <td>
-                  {{ time(item.captured_at) }}<small>至 {{ time(item.retention_until) }}</small>
-                </td>
-                <td>
-                  <button @click="openEvidence(item.id)">详情</button
-                  ><button class="secondary" @click="grantDownload(item)">下载</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div v-else-if="tab === 'issues'" class="quality-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>问题</th>
-                <th>来源</th>
-                <th>状态</th>
-                <th>实际 / 门槛</th>
-                <th>更新时间</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in filteredIssues" :key="item.id">
-                <td>
-                  <strong>{{ metricLabel(item.metric_code) }}</strong
-                  ><small>{{ item.field_path || "来源级指标" }}</small>
-                </td>
-                <td>{{ item.provider_name }}</td>
-                <td>
-                  <b :data-severity="item.severity"
-                    >{{ item.severity === "critical" ? "严重" : "警告" }} ·
-                    {{ item.status === "open" ? "待处理" : "已解决" }}</b
-                  >
-                </td>
-                <td>
-                  {{ item.actual_value === null ? "—" : `${(item.actual_value * 100).toFixed(1)}%`
-                  }}<small>{{
-                    item.threshold_value === null
+        <ResponsiveDataView
+          v-if="tab === 'evidence'"
+          :rows="filteredEvidence"
+          :row-key="(item) => item.id"
+          title="采集证据"
+          :detail-title="(item) => `${item.provider_name} · ${time(item.captured_at)}`"
+        >
+          <template #desktop>
+            <table>
+              <thead>
+                <tr>
+                  <th>证据</th>
+                  <th>来源</th>
+                  <th>范围</th>
+                  <th>格式 / 大小</th>
+                  <th>捕获 / 保留</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in filteredEvidence" :key="item.id">
+                  <td><strong>采集证据</strong><small>哈希已校验</small></td>
+                  <td>
+                    <span>{{ item.provider_name }}</span
+                    ><small>{{ item.canonical_url }}</small>
+                  </td>
+                  <td>已绑定组织与工作区</td>
+                  <td>
+                    {{ item.content_type }}<small>{{ size(item.size_bytes) }}</small>
+                  </td>
+                  <td>
+                    {{ time(item.captured_at) }}<small>至 {{ time(item.retention_until) }}</small>
+                  </td>
+                  <td>
+                    <button @click="openEvidence(item.id)">详情</button
+                    ><button class="secondary" @click="grantDownload(item)">下载</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </template>
+          <template #summary="{ row }">
+            <span class="responsive-record-summary">
+              <strong>{{ row.provider_name }} · {{ size(row.size_bytes) }}</strong>
+              <small>{{ row.content_type }} · {{ time(row.captured_at) }}</small>
+            </span>
+          </template>
+          <template #detail="{ row, close }">
+            <dl>
+              <div>
+                <dt>来源</dt>
+                <dd>{{ row.provider_name }}</dd>
+              </div>
+              <div>
+                <dt>规范 URL</dt>
+                <dd>{{ row.canonical_url }}</dd>
+              </div>
+              <div>
+                <dt>格式 / 大小</dt>
+                <dd>{{ row.content_type }} · {{ size(row.size_bytes) }}</dd>
+              </div>
+              <div>
+                <dt>捕获时间</dt>
+                <dd>{{ time(row.captured_at) }}</dd>
+              </div>
+              <div>
+                <dt>保留期限</dt>
+                <dd>{{ time(row.retention_until) }}</dd>
+              </div>
+            </dl>
+            <div class="quality-mobile-actions">
+              <button
+                type="button"
+                @click="
+                  close();
+                  openEvidence(row.id);
+                "
+              >
+                读取完整溯源
+              </button>
+              <button type="button" class="secondary" @click="grantDownload(row)">下载证据</button>
+            </div>
+            <details>
+              <summary>技术详情</summary>
+              <dl>
+                <div>
+                  <dt>证据 ID</dt>
+                  <dd>{{ row.id }}</dd>
+                </div>
+                <div>
+                  <dt>组织 ID</dt>
+                  <dd>{{ row.organization_id }}</dd>
+                </div>
+                <div>
+                  <dt>工作区 ID</dt>
+                  <dd>{{ row.workspace_id }}</dd>
+                </div>
+                <div>
+                  <dt>内容哈希</dt>
+                  <dd>{{ row.content_sha256 }}</dd>
+                </div>
+                <div>
+                  <dt>解析版本</dt>
+                  <dd>{{ row.parser_version }}</dd>
+                </div>
+                <div>
+                  <dt>请求 ID</dt>
+                  <dd>{{ row.request_id }}</dd>
+                </div>
+                <div>
+                  <dt>链路 ID</dt>
+                  <dd>{{ row.trace_id }}</dd>
+                </div>
+              </dl>
+            </details>
+          </template>
+        </ResponsiveDataView>
+        <ResponsiveDataView
+          v-else-if="tab === 'issues'"
+          :rows="filteredIssues"
+          :row-key="(item) => item.id"
+          title="数据质量问题"
+          :detail-title="(item) => metricLabel(item.metric_code)"
+        >
+          <template #desktop>
+            <table>
+              <thead>
+                <tr>
+                  <th>问题</th>
+                  <th>来源</th>
+                  <th>状态</th>
+                  <th>实际 / 门槛</th>
+                  <th>更新时间</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in filteredIssues" :key="item.id">
+                  <td>
+                    <strong>{{ metricLabel(item.metric_code) }}</strong
+                    ><small>{{ item.field_path || "来源级指标" }}</small>
+                  </td>
+                  <td>{{ item.provider_name }}</td>
+                  <td>
+                    <b :data-severity="item.severity"
+                      >{{ item.severity === "critical" ? "严重" : "警告" }} ·
+                      {{ item.status === "open" ? "待处理" : "已解决" }}</b
+                    >
+                  </td>
+                  <td>
+                    {{
+                      item.actual_value === null ? "—" : `${(item.actual_value * 100).toFixed(1)}%`
+                    }}<small>{{
+                      item.threshold_value === null
+                        ? "—"
+                        : `${(item.threshold_value * 100).toFixed(1)}%`
+                    }}</small>
+                  </td>
+                  <td>{{ time(item.updated_at) }}</td>
+                  <td>
+                    <button v-if="item.status === 'open'" @click="beginResolve(item)">
+                      记录解决
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </template>
+          <template #summary="{ row }">
+            <span class="responsive-record-summary">
+              <strong
+                >{{ metricLabel(row.metric_code) }} ·
+                {{ row.status === "open" ? "待处理" : "已解决" }}</strong
+              >
+              <small
+                >{{ row.provider_name }} ·
+                {{ row.severity === "critical" ? "严重" : "警告" }}</small
+              >
+            </span>
+          </template>
+          <template #detail="{ row, close }">
+            <dl>
+              <div>
+                <dt>来源</dt>
+                <dd>{{ row.provider_name }}</dd>
+              </div>
+              <div>
+                <dt>字段</dt>
+                <dd>{{ row.field_path || "来源级指标" }}</dd>
+              </div>
+              <div>
+                <dt>状态</dt>
+                <dd>
+                  {{ row.severity === "critical" ? "严重" : "警告" }} ·
+                  {{ row.status === "open" ? "待处理" : "已解决" }}
+                </dd>
+              </div>
+              <div>
+                <dt>实际 / 门槛</dt>
+                <dd>
+                  {{ row.actual_value === null ? "—" : `${(row.actual_value * 100).toFixed(1)}%` }}
+                  /
+                  {{
+                    row.threshold_value === null
                       ? "—"
-                      : `${(item.threshold_value * 100).toFixed(1)}%`
-                  }}</small>
-                </td>
-                <td>{{ time(item.updated_at) }}</td>
-                <td>
-                  <button v-if="item.status === 'open'" @click="beginResolve(item)">
-                    记录解决
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                      : `${(row.threshold_value * 100).toFixed(1)}%`
+                  }}
+                </dd>
+              </div>
+              <div>
+                <dt>更新时间</dt>
+                <dd>{{ time(row.updated_at) }}</dd>
+              </div>
+              <div v-if="row.resolution_reason">
+                <dt>解决原因</dt>
+                <dd>{{ row.resolution_reason }}</dd>
+              </div>
+            </dl>
+            <button
+              v-if="row.status === 'open'"
+              type="button"
+              @click="
+                close();
+                beginResolve(row);
+              "
+            >
+              记录解决
+            </button>
+            <details>
+              <summary>技术详情</summary>
+              <dl>
+                <div>
+                  <dt>问题 ID</dt>
+                  <dd>{{ row.id }}</dd>
+                </div>
+              </dl>
+            </details>
+          </template>
+        </ResponsiveDataView>
         <div v-else class="quality-run-grid">
           <article v-for="run in runs" :key="run.id">
             <header>

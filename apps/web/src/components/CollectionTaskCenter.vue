@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 import "../collection-tasks.css";
 import "../collection-task-detail.css";
 
@@ -263,57 +264,132 @@ onMounted(load);
             </select>
           </div>
         </header>
-        <div class="collection-task-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>任务</th>
-                <th>范围</th>
-                <th>状态 / 覆盖</th>
-                <th>子查询</th>
-                <th>证据</th>
-                <th>更新时间</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in filtered" :key="item.id">
-                <td>
-                  <strong>{{ item.id.slice(0, 8) }}…</strong
-                  ><small>{{ item.priority }} · 第 {{ item.attempt_count }} 次</small>
-                </td>
-                <td>
-                  <span>{{ item.organization_id.slice(0, 8) }}…</span
-                  ><small>{{ item.workspace_id.slice(0, 8) }}…</small>
-                </td>
-                <td>
-                  <b :data-status="item.status">{{ label(item.status) }}</b
-                  ><small>{{ label(item.coverage_status) }}</small>
-                </td>
-                <td>
-                  {{ item.successful_subquery_count }} 成功<small
-                    >{{ item.failed_subquery_count }} 失败 ·
-                    {{ item.blocked_subquery_count }} 受阻</small
-                  >
-                </td>
-                <td>
-                  {{ item.available_result_count }} 条<small>{{
-                    item.missing_fields.length ? `缺 ${item.missing_fields.join("、")}` : "字段完整"
-                  }}</small>
-                </td>
-                <td>
-                  {{ time(item.updated_at) }}<small>{{ item.last_error_code || "无错误" }}</small>
-                </td>
-                <td>
-                  <button type="button" @click="openTask(item.id)">查看</button>
-                </td>
-              </tr>
-              <tr v-if="!filtered.length">
-                <td colspan="7">当前筛选没有任务记录。</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ResponsiveDataView
+          :rows="filtered"
+          :row-key="(item) => item.id"
+          title="采集任务队列"
+          :detail-title="(item) => `${label(item.status)} · ${time(item.updated_at)}`"
+        >
+          <template #desktop>
+            <table>
+              <thead>
+                <tr>
+                  <th>任务</th>
+                  <th>范围</th>
+                  <th>状态 / 覆盖</th>
+                  <th>子查询</th>
+                  <th>证据</th>
+                  <th>更新时间</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in filtered" :key="item.id">
+                  <td>
+                    <strong>采集任务</strong
+                    ><small>{{ item.priority }} · 第 {{ item.attempt_count }} 次</small>
+                  </td>
+                  <td><span>已绑定组织与工作区</span></td>
+                  <td>
+                    <b :data-status="item.status">{{ label(item.status) }}</b
+                    ><small>{{ label(item.coverage_status) }}</small>
+                  </td>
+                  <td>
+                    {{ item.successful_subquery_count }} 成功<small
+                      >{{ item.failed_subquery_count }} 失败 ·
+                      {{ item.blocked_subquery_count }} 受阻</small
+                    >
+                  </td>
+                  <td>
+                    {{ item.available_result_count }} 条<small>{{
+                      item.missing_fields.length
+                        ? `缺 ${item.missing_fields.join("、")}`
+                        : "字段完整"
+                    }}</small>
+                  </td>
+                  <td>
+                    {{ time(item.updated_at) }}<small>{{ item.last_error_code || "无错误" }}</small>
+                  </td>
+                  <td>
+                    <button type="button" @click="openTask(item.id)">查看</button>
+                  </td>
+                </tr>
+                <tr v-if="!filtered.length">
+                  <td colspan="7">当前筛选没有任务记录。</td>
+                </tr>
+              </tbody>
+            </table>
+          </template>
+          <template #summary="{ row }">
+            <span class="responsive-record-summary">
+              <strong>{{ label(row.status) }} · {{ row.available_result_count }} 条证据</strong>
+              <small>{{ label(row.coverage_status) }} · {{ time(row.updated_at) }}</small>
+            </span>
+          </template>
+          <template #detail="{ row, close }">
+            <dl>
+              <div>
+                <dt>状态 / 覆盖</dt>
+                <dd>{{ label(row.status) }} · {{ label(row.coverage_status) }}</dd>
+              </div>
+              <div>
+                <dt>子查询</dt>
+                <dd>
+                  {{ row.successful_subquery_count }} 成功 · {{ row.failed_subquery_count }} 失败 ·
+                  {{ row.blocked_subquery_count }} 受阻
+                </dd>
+              </div>
+              <div>
+                <dt>可用证据</dt>
+                <dd>{{ row.available_result_count }} 条</dd>
+              </div>
+              <div>
+                <dt>缺失字段</dt>
+                <dd>
+                  {{ row.missing_fields.length ? row.missing_fields.join("、") : "字段完整" }}
+                </dd>
+              </div>
+              <div>
+                <dt>更新时间</dt>
+                <dd>{{ time(row.updated_at) }}</dd>
+              </div>
+            </dl>
+            <button
+              type="button"
+              @click="
+                close();
+                openTask(row.id);
+              "
+            >
+              打开完整任务详情
+            </button>
+            <details>
+              <summary>技术详情</summary>
+              <dl>
+                <div>
+                  <dt>任务 ID</dt>
+                  <dd>{{ row.id }}</dd>
+                </div>
+                <div>
+                  <dt>组织 ID</dt>
+                  <dd>{{ row.organization_id }}</dd>
+                </div>
+                <div>
+                  <dt>工作区 ID</dt>
+                  <dd>{{ row.workspace_id }}</dd>
+                </div>
+                <div>
+                  <dt>错误码</dt>
+                  <dd>{{ row.last_error_code || "—" }}</dd>
+                </div>
+                <div>
+                  <dt>请求 ID</dt>
+                  <dd>{{ row.request_id }}</dd>
+                </div>
+              </dl>
+            </details>
+          </template>
+        </ResponsiveDataView>
       </section>
       <aside v-if="detail || detailLoading" class="collection-task-detail" aria-live="polite">
         <p v-if="detailLoading">正在读取任务详情…</p>

@@ -8,6 +8,7 @@ const props = defineProps<{
   rowKey: (row: DataRow) => string;
   title: string;
   detailTitle: (row: DataRow) => string;
+  emptyMessage?: string;
 }>();
 
 const selected = ref<DataRow | null>(null),
@@ -32,6 +33,9 @@ async function close() {
   <div class="responsive-data-view">
     <div class="responsive-data-view__desktop"><slot name="desktop" /></div>
     <div class="responsive-data-view__mobile" :aria-label="title">
+      <p v-if="!rows.length" class="responsive-data-view__empty">
+        {{ emptyMessage || "暂无记录" }}
+      </p>
       <article v-for="row in rows" :key="props.rowKey(row)">
         <button type="button" aria-haspopup="dialog" @click="show(row, $event)">
           <span class="responsive-data-view__summary"><slot name="summary" :row="row" /></span>
@@ -60,7 +64,9 @@ async function close() {
             </div>
             <button ref="closeButton" type="button" aria-label="关闭详情" @click="close">×</button>
           </header>
-          <div class="responsive-data-view__details"><slot name="detail" :row="selected" /></div>
+          <div class="responsive-data-view__details">
+            <slot name="detail" :row="selected" :close="close" />
+          </div>
         </section>
       </div>
     </Teleport>
@@ -120,6 +126,35 @@ async function close() {
   color: var(--so-text-muted);
 }
 
+.responsive-data-view__details :deep(button) {
+  min-height: var(--so-touch-target);
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 10px;
+  color: var(--so-on-primary);
+  background: var(--so-primary-strong);
+  font: inherit;
+  font-weight: 750;
+}
+
+.responsive-data-view__details :deep(button.secondary) {
+  border: 1px solid var(--so-border);
+  color: var(--so-primary);
+  background: var(--so-panel-soft);
+}
+
+.responsive-data-view__details :deep(details) {
+  padding-top: 4px;
+}
+
+.responsive-data-view__details :deep(summary) {
+  min-height: var(--so-touch-target);
+  display: flex;
+  align-items: center;
+  color: var(--so-primary);
+  cursor: pointer;
+}
+
 .responsive-data-view__drawer > header button {
   min-width: var(--so-touch-target);
   min-height: var(--so-touch-target);
@@ -152,6 +187,14 @@ async function close() {
   .responsive-data-view__mobile {
     display: grid;
     gap: 10px;
+  }
+
+  .responsive-data-view__empty {
+    margin: 0;
+    padding: 14px;
+    border: 1px dashed var(--so-border);
+    border-radius: 12px;
+    color: var(--so-text-muted);
   }
 
   .responsive-data-view__mobile article {
