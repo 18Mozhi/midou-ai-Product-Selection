@@ -80,32 +80,44 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
       }),
     }),
   );
-  await page.route(
-    "**/api/v1/platform/provider-adapters/*/health-check",
-    (route) =>
-      route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          data: {
-            ...items[1],
-            last_checked_at: "2026-08-07T19:31:00.000Z",
-            last_latency_ms: 0,
-            version: 2,
-          },
-          request_id: "m03-03-probe",
-          trace_id: "m03-03-probe",
-        }),
+  await page.route("**/api/v1/platform/provider-adapters/*/health-check", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: {
+          ...items[1],
+          last_checked_at: "2026-08-07T19:31:00.000Z",
+          last_latency_ms: 0,
+          version: 2,
+        },
+        request_id: "m03-03-probe",
+        trace_id: "m03-03-probe",
       }),
+    }),
   );
   await page.goto("/platform-admin/providers/adapters");
-  await expect(
-    page.getByRole("heading", { name: "适配器运行时", level: 2 }),
-  ).toBeVisible();
-  await expect(
-    page.getByText("collect · normalize · healthCheck").first(),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "适配器运行时", level: 2 })).toBeVisible();
+  await expect(page.getByText("collect · normalize · healthCheck").first()).toBeVisible();
   await expect(page.getByText("adapter_not_registered")).toBeVisible();
+  const semanticText = await page.evaluate(() => {
+    const probe = document.createElement("span");
+    probe.style.color = "var(--so-text)";
+    document.body.append(probe);
+    const expected = getComputedStyle(probe).color,
+      actual = [
+        document.querySelector(".adapter-heading h2"),
+        document.querySelector(".adapter-metrics strong"),
+        document.querySelector(".adapter-table-wrap td"),
+      ].map((element) => (element ? getComputedStyle(element).color : null));
+    probe.remove();
+    return { expected, actual };
+  });
+  expect(semanticText.actual).toEqual([
+    semanticText.expected,
+    semanticText.expected,
+    semanticText.expected,
+  ]);
   await page.getByRole("button", { name: "健康检查" }).last().click();
   await expect(page.getByRole("status")).toContainText("已记录受阻原因");
   await page.evaluate(() => window.scrollTo(0, 0));
@@ -113,9 +125,7 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
     fullPage: true,
   });
 });
-test("M03-03.A08/A16 filters and empty results are explicit", async ({
-  page,
-}) => {
+test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }) => {
   await nav(page);
   await page.route("**/api/v1/platform/provider-adapters", (route) =>
     route.fulfill({
@@ -130,9 +140,7 @@ test("M03-03.A08/A16 filters and empty results are explicit", async ({
   );
   await page.goto("/platform-admin/providers/adapters");
   await page.getByLabel("接入模式").selectOption("manual");
-  await expect(
-    page.getByRole("heading", { name: "没有符合筛选条件的适配器" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "没有符合筛选条件的适配器" })).toBeVisible();
   await page.getByRole("button", { name: "清除筛选" }).click();
   await expect(page.getByText("公开趋势 RSS")).toBeVisible();
 });
@@ -158,10 +166,7 @@ test("M03-03.A08/A09/A16 empty forbidden and dependency states stay actionable",
             contentType: "application/json",
             body: JSON.stringify({
               error: {
-                code:
-                  status === 403
-                    ? "authorization_denied"
-                    : "dependency_unavailable",
+                code: status === 403 ? "authorization_denied" : "dependency_unavailable",
                 message: "请求失败",
                 action_hint: "按状态恢复",
               },
@@ -172,17 +177,11 @@ test("M03-03.A08/A09/A16 empty forbidden and dependency states stay actionable",
     ),
   );
   await page.goto("/platform-admin/providers/adapters");
-  await expect(
-    page.getByRole("heading", { name: "还没有来源可绑定适配器" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "还没有来源可绑定适配器" })).toBeVisible();
   status = 403;
   await page.reload();
-  await expect(
-    page.getByRole("heading", { name: "你没有此项权限" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "你没有此项权限" })).toBeVisible();
   status = 503;
   await page.reload();
-  await expect(
-    page.getByRole("heading", { name: "依赖暂时受阻" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "依赖暂时受阻" })).toBeVisible();
 });

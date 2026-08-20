@@ -64,6 +64,11 @@ test("migrated workflow surfaces use only shared semantic color roles", async ()
       "apps/web/src/notification-center.css",
       "apps/web/src/data-quality.css",
       "apps/web/src/selection-journey.css",
+      "apps/web/src/crawler-runtime.css",
+      "apps/web/src/runtime-topology.css",
+      "apps/web/src/collection-tasks.css",
+      "apps/web/src/provider-adapters.css",
+      "apps/web/src/provider-adapters-contrast.css",
     ],
     sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
 
