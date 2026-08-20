@@ -12,7 +12,7 @@
 - 使用 request_id/trace_id 关联 `opportunity_events`、`opportunity_outbox` 和 `opportunity_refresh_jobs`。
 - `retry_scheduled` 会按 1/5/15 分钟退避；`failed_terminal` 表示来源已失效等不可重试输入，`dead_letter` 表示依赖错误耗尽四次。
 - 页面显示 `insufficient_data` 或 `unknown` 是事实状态，不应通过手工 SQL 填入分数、ROI 或低风险。
-- 机会列表可按“不完整 / 部分完整 / 完整”筛选；它对应现有 `coverage_status`，无需配置或重启 Worker。应用发布后需由宝塔重启 Node API 并更新网站静态文件。
+- 机会列表可按“不完整 / 部分完整 / 完整”筛选，也可按“缺少可采纳证据 / 尚无可靠推荐结论”筛选；后者只对应采纳接口已有的持久化阻断条件。两类筛选都无需配置或重启 Worker。应用发布后需由宝塔重启 Node API 并更新网站静态文件。
 
 ## 回滚
 

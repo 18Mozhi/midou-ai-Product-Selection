@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import OpportunityListPanel from "./OpportunityListPanel.vue";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import { statusLabel } from "../ui/status-labels";
@@ -33,6 +34,7 @@ interface Opportunity {
   competitor_count: number;
   supplier_candidate_count: number;
   coverage_status: string;
+  blocking_reasons: Array<"evidence_insufficient" | "recommendation_insufficient">;
   decision_status: string;
   version: number;
   updated_at: string;
@@ -101,6 +103,8 @@ const opportunityStatus = (value: string) =>
       high: "高",
       manual: "手动创建",
       trend_topic: "热点自动发现",
+      evidence_insufficient: "缺少可采纳证据",
+      recommendation_insufficient: "尚无可靠推荐结论",
     }) as Record<string, string>
   )[value] ?? value;
 interface ProfitAnalysis {
@@ -161,7 +165,13 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
   showDecision = ref(false),
   decisionAction = ref<"adopt" | "observe" | "reject">("observe"),
   decisionReason = ref(""),
-  filters = reactive({ q: "", market: "", decision_status: "", coverage_status: "" }),
+  filters = reactive({
+    q: "",
+    market: "",
+    decision_status: "",
+    coverage_status: "",
+    blocking_reason: "",
+  }),
   form = reactive({
     name: "",
     market: "US",
@@ -188,19 +198,14 @@ const tabs: [Tab, string][] = [
   ["ai", "AI 辅助"],
   ["decisions", "决策历史"],
 ];
-const listSummary = computed(() => ({
-    withImage: items.value.filter((item) => Boolean(item.image_url)).length,
-    competitors: items.value.reduce((sum, item) => sum + (item.competitor_count ?? 0), 0),
-    suppliers: items.value.reduce((sum, item) => sum + (item.supplier_candidate_count ?? 0), 0),
-  })),
-  evidenceTaskHref = computed(() => {
-    if (!detail.value) return "/tasks";
-    const title = encodeURIComponent(`补齐机会证据 · ${detail.value.name}`),
-      description = encodeURIComponent(
-        `补齐机会 ${detail.value.id} 的缺失证据，并复核来源新鲜度与可信度。`,
-      );
-    return `/tasks?create=1&title=${title}&description=${description}`;
-  });
+const evidenceTaskHref = computed(() => {
+  if (!detail.value) return "/tasks";
+  const title = encodeURIComponent(`补齐机会证据 · ${detail.value.name}`),
+    description = encodeURIComponent(
+      `补齐机会 ${detail.value.id} 的缺失证据，并复核来源新鲜度与可信度。`,
+    );
+  return `/tasks?create=1&title=${title}&description=${description}`;
+});
 const stateFrom = (kind: ApiFailureKind): State =>
   kind === "expired" || kind === "forbidden"
     ? kind
@@ -527,104 +532,16 @@ onMounted(() => {
     <p v-if="message" class="opportunity-message" role="status">
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
     </p>
-    <template v-if="!opportunityId"
-      ><form class="opportunity-filters" @submit.prevent="load">
-        <label>市场<input v-model="filters.market" maxlength="40" placeholder="全部市场" /></label
-        ><label
-          >决策状态<select v-model="filters.decision_status">
-            <option value="">全部状态</option>
-            <option value="pending">待决策</option>
-            <option value="adopted">已采纳</option>
-            <option value="observing">继续观察</option>
-            <option value="rejected">已驳回</option>
-          </select></label
-        ><label
-          >证据完整度<select v-model="filters.coverage_status">
-            <option value="">全部完整度</option>
-            <option value="insufficient">不完整</option>
-            <option value="partial">部分完整</option>
-            <option value="complete">完整</option>
-          </select></label
-        ><label>机会名称<input v-model="filters.q" maxlength="200" placeholder="搜索机会" /></label
-        ><label
-          >显示范围<select v-model="listScope">
-            <option value="product">可分析商品</option>
-            <option value="all">全部线索</option>
-          </select></label
-        ><button type="submit">筛选</button>
-      </form>
-      <section class="opportunity-list-summary" aria-label="选品机会数据总览">
-        <article>
-          <span>当前结果</span><b>{{ total }}</b>
-        </article>
-        <article>
-          <span>已补商品图</span><b>{{ listSummary.withImage }}</b>
-        </article>
-        <article>
-          <span>关联竞品</span><b>{{ listSummary.competitors }}</b>
-        </article>
-        <article>
-          <span>供应商候选</span><b>{{ listSummary.suppliers }}</b>
-        </article>
-      </section>
-      <UiStatePanel
-        v-if="state !== 'ready'"
-        :kind="state"
-        :request-id="requestId"
-        @primary="load"
-      />
-      <section v-else class="opportunity-list">
-        <header>
-          <div>
-            <p>机会流程</p>
-            <h3>机会列表</h3>
-          </div>
-          <span>共 {{ total }} 个机会 · 按更新时间排序</span>
-        </header>
-        <a v-for="item in items" :key="item.id" :href="`/opportunities/${item.id}`"
-          ><span class="opportunity-picture"
-            ><img
-              v-if="item.image_url"
-              :src="item.image_url"
-              :alt="`${item.name} 商品图`"
-              loading="lazy"
-              referrerpolicy="no-referrer"
-            /><i v-else>主图<br />待采集</i></span
-          ><span
-            ><strong>{{ item.name }}</strong
-            ><small
-              >{{ item.market }} · {{ item.category || "未分类" }} ·
-              {{ freshness(item.updated_at) }}</small
-            ></span
-          >
-          <dl>
-            <div>
-              <dt>证据 / 来源</dt>
-              <dd>{{ item.evidence_count }} / {{ item.source_count }}</dd>
-            </div>
-            <div>
-              <dt>关联竞品</dt>
-              <dd>{{ item.competitor_count }}</dd>
-            </div>
-            <div>
-              <dt>供应商候选</dt>
-              <dd>{{ item.supplier_candidate_count }}</dd>
-            </div>
-            <div>
-              <dt>利润</dt>
-              <dd>{{ opportunityStatus(item.profit_status) }}</dd>
-            </div>
-            <div>
-              <dt>风险</dt>
-              <dd>{{ opportunityStatus(item.risk_level) }}</dd>
-            </div>
-          </dl>
-          <b :data-status="item.decision_status"
-            >{{ opportunityStatus(item.decision_status) }} · 查看详情 →</b
-          ></a
-        >
-      </section></template
-    >
+    <OpportunityListPanel
+      v-if="!opportunityId"
+      v-model:list-scope="listScope"
+      :items="items"
+      :total="total"
+      :state="state"
+      :request-id="requestId"
+      :filters="filters"
+      @apply="load"
+    />
     <template v-else
       ><UiStatePanel
         v-if="state !== 'ready' || !detail"

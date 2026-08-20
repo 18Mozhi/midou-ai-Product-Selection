@@ -8,6 +8,12 @@ M04-02 的事实边界是：趋势证据可使市场分区变为 covered，但�
 
 机会列表的证据完整度筛选直接匹配持久化 `coverage_status`（`insufficient`、`partial`、`complete`），与组织、工作区和其他列表条件共同下推到 MySQL。该筛选不推断推荐质量、利润状态或风险结论。
 
+机会列表的阻断原因筛选只复用采纳接口已经执行的事实条件：`evidence_insufficient` 对应证据数为零或覆盖状态为 `insufficient`，`recommendation_insufficient` 对应推荐状态为 `insufficient_data`。列表响应返回同一组 `blocking_reasons` 并在界面翻译为中文；不把利润不足或风险未知擅自升级为采纳阻断。
+
 机会详情按结论、证据、利润、风险优先展示，并在用户界面把来源、覆盖、利润、风险和决策状态转换为中文；原始状态码仅保留在 API 与技术诊断数据中。
+
+趋势、机会和平台采集总览的筛选在桌面端保持内联，在 760px 及以下进入同一个可访问抽屉。抽屉只改变呈现方式，不重建表单，因此关闭后仍保留已选条件。
+
+`OpportunityListPanel.vue` 独立承载机会筛选、摘要与列表，详情决策链继续由 `OpportunityWorkspace.vue` 负责，避免单个页面组件重新超过千行门禁。
 
 所有业务写入、Worker 写入和失败均携带 request_id/trace_id。四次总尝试与 1/5/15 分钟退避在代码中锁定；不可重试错误进入 `failed_terminal`，依赖错误耗尽后进入 `dead_letter`。

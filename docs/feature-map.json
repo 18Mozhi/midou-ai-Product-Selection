@@ -344,7 +344,8 @@
         "../apps/web/src/design/tokens.css",
         "../apps/web/src/accessibility.css",
         "../apps/web/src/components/ThemeStudio.vue",
-        "../apps/web/src/components/NavigationShell.vue"
+        "../apps/web/src/components/NavigationShell.vue",
+        "../apps/web/src/components/ResponsiveFilterDrawer.vue"
       ],
       "route": "/settings/theme",
       "api": ["GET /api/v1/me/ui-preferences", "PUT /api/v1/me/ui-preferences"],
@@ -413,7 +414,7 @@
         "high-resolution 10 platform admin"
       ],
       "contextPresentation": "member and organization shells receive persisted organization_name and workspace_name; the UI never exposes UUID fragments as labels",
-      "routeIntegrity": "Vue Router owns browser history; the Feature Map frontend route registry has unique paths, /me has exactly one PersonalCenter owner, lazy business components and KeepAlive preserve bounded page state; the mobile bottom navigation is limited to four role-priority entries plus More, whose drawer retains member search and selection creation; the 390px scheduler E2E measures the final handoff against the fixed bottom navigation and requires zero overlap, and shell dialogs render above the bottom bar with bounded viewport height",
+      "routeIntegrity": "Vue Router owns browser history; the Feature Map frontend route registry has unique paths, /me has exactly one PersonalCenter owner, lazy business components and KeepAlive preserve bounded page state; the mobile bottom navigation is limited to four role-priority entries plus More, whose drawer retains member search and selection creation; trend, opportunity and collection overview filters use one state-preserving mobile drawer; the 390px scheduler E2E measures the final handoff against the fixed bottom navigation and requires zero overlap, and shell dialogs render above the bottom bar with bounded viewport height",
       "apiClientBoundary": "navigation guard and shell theme preference reads and writes use the shared frontend API client for credentials, correlation, JSON envelopes, idempotency and business error mapping; the UI preserves request_id, trace_id and action_hint on failures",
       "mobileNavigation": "at 840px and below every shell renders up to four authorized primary routes plus one More control in a five-column bottom bar; More opens the complete permission-filtered drawer and quick-create actions do not add a sixth bottom item",
       "memberPresentation": "member shell exposes quick theme switching, larger Chinese typography and removes internal guard codes and security implementation slogans from ordinary pages",
@@ -959,6 +960,7 @@
         "../apps/api/src/erp-product-import-routes.ts",
         "../apps/worker/src/core-collection-projection-worker.ts",
         "../apps/web/src/components/OpportunityWorkspace.vue",
+        "../apps/web/src/components/OpportunityListPanel.vue",
         "../database/migrations/0042_erp_product_import.up.sql"
       ],
       "routes": [
@@ -970,8 +972,8 @@
         "/api/v1/opportunities/{opportunityId}/competitor-discovery",
         "/api/v1/imports/erp-products"
       ],
-      "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs; the list filters persisted evidence coverage with coverage_status",
-      "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese",
+      "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs; the list filters persisted evidence coverage with coverage_status and adoption blockers with blocking_reason",
+      "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; blocking reasons are derived only from the same persisted evidence and recommendation fields that enforce adoption, scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese",
       "apiClientBoundary": "opportunity lists, details, AI analyses, downstream competitor and sourcing counts, decisions and other writes use the shared frontend JSON client; optional AI and downstream counts still degrade independently without masking the core opportunity state",
       "refresh": "Baota Node Worker leases opportunity refresh jobs and links only persisted trend signals; trend-only evidence remains partial because competition and cost inputs are absent",
       "productImages": "structured marketplace crawlers extract JSON-LD or linked product image URLs; ERP imports map the confirmed product image field; opportunity list resolves the newest scoped evidence image and otherwise shows an explicit pending-capture placeholder",

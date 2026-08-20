@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 import { statusLabel } from "../ui/status-labels";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const state = ref("loading"),
   data = ref<any>(null),
@@ -33,7 +34,12 @@ const selectedDeadLetters = computed(() =>
       organizationCount = new Set(items.map((item: any) => item.organization_id)).size,
       workspaceCount = new Set(items.map((item: any) => item.workspace_id)).size;
     return `${items.length} 条开放死信；${organizationCount} 个组织；${workspaceCount} 个工作区；根因：${rootSummary || "无"}。`;
-  });
+  }),
+  scopeFilterCount = computed(
+    () =>
+      [org.value, workspace.value, provider.value, errorCode.value].filter(Boolean).length +
+      (timeWindow.value === "24h" ? 0 : 1),
+  );
 async function load() {
   state.value = "loading";
   const q = new URLSearchParams();
@@ -211,23 +217,29 @@ async function confirmBatchReplay() {
           >来源配置、健康、任务尝试、死信和质量问题使用同一事实视图；敏感操作仍进入对应受控页面。</span
         >
       </div>
-      <form @submit.prevent="load">
-        <input v-model="org" aria-label="组织 ID 筛选" placeholder="组织 ID（可选）" /><input
-          v-model="workspace"
-          aria-label="工作区 ID 筛选"
-          placeholder="工作区 ID（可选）"
-        /><select v-model="provider" aria-label="采集来源筛选">
-          <option value="">全部来源</option>
-          <option v-for="source in data?.source_options ?? []" :key="source.id" :value="source.id">
-            {{ source.name }}
-          </option></select
-        ><select v-model="timeWindow" aria-label="观测时间筛选">
-          <option value="24h">最近 24 小时</option>
-          <option value="7d">最近 7 天</option>
-          <option value="30d">最近 30 天</option>
-          <option value="all">全部时间</option></select
-        ><button>应用范围</button>
-      </form>
+      <ResponsiveFilterDrawer label="采集范围与时间" :active-count="scopeFilterCount">
+        <form @submit.prevent="load">
+          <input v-model="org" aria-label="组织 ID 筛选" placeholder="组织 ID（可选）" /><input
+            v-model="workspace"
+            aria-label="工作区 ID 筛选"
+            placeholder="工作区 ID（可选）"
+          /><select v-model="provider" aria-label="采集来源筛选">
+            <option value="">全部来源</option>
+            <option
+              v-for="source in data?.source_options ?? []"
+              :key="source.id"
+              :value="source.id"
+            >
+              {{ source.name }}
+            </option></select
+          ><select v-model="timeWindow" aria-label="观测时间筛选">
+            <option value="24h">最近 24 小时</option>
+            <option value="7d">最近 7 天</option>
+            <option value="30d">最近 30 天</option>
+            <option value="all">全部时间</option></select
+          ><button>应用范围</button>
+        </form>
+      </ResponsiveFilterDrawer>
     </header>
     <section v-if="state !== 'ready'" class="platform-dashboard-state" :data-kind="state">
       <h3>

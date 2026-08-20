@@ -3,6 +3,7 @@ import { computed, onMounted, reactive, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import { statusLabel } from "../ui/status-labels";
 import "../trends.css";
 import "../trends-quality.css";
@@ -131,6 +132,7 @@ const timelinePoints = computed(() => {
         ?.points.map((point) => ({ ...point, source_count: 1 })) ?? []
     );
   }),
+  activeFilterCount = computed(() => Object.values(filters).filter(Boolean).length),
   timelineSourceLabel = computed(
     () =>
       selected.value?.timeline_sources.find((source) => source.source_id === timelineSource.value)
@@ -329,25 +331,30 @@ onMounted(load);
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
     </p>
     <template v-if="tab === 'topics'">
-      <form class="trend-filters" @submit.prevent="load">
-        <label
-          >市场<select v-model="filters.market">
-            <option value="">全部市场</option>
-            <option value="US">US</option>
-          </select></label
-        ><label
-          >分类<input v-model="filters.category" maxlength="80" placeholder="全部分类" /></label
-        ><label
-          >状态<select v-model="filters.status">
-            <option value="active">活跃</option>
-            <option value="irrelevant">已标记无关</option>
-            <option value="stale">已过期</option>
-            <option value="">全部状态</option>
-          </select></label
-        ><label class="search"
-          >关键词<input v-model="filters.q" maxlength="200" placeholder="搜索主题或关键词" /></label
-        ><button type="submit">筛选</button>
-      </form>
+      <ResponsiveFilterDrawer label="筛选趋势" :active-count="activeFilterCount">
+        <form class="trend-filters" @submit.prevent="load">
+          <label
+            >市场<select v-model="filters.market">
+              <option value="">全部市场</option>
+              <option value="US">US</option>
+            </select></label
+          ><label
+            >分类<input v-model="filters.category" maxlength="80" placeholder="全部分类" /></label
+          ><label
+            >状态<select v-model="filters.status">
+              <option value="active">活跃</option>
+              <option value="irrelevant">已标记无关</option>
+              <option value="stale">已过期</option>
+              <option value="">全部状态</option>
+            </select></label
+          ><label class="search"
+            >关键词<input
+              v-model="filters.q"
+              maxlength="200"
+              placeholder="搜索主题或关键词" /></label
+          ><button type="submit">筛选</button>
+        </form>
+      </ResponsiveFilterDrawer>
       <UiStatePanel
         v-if="state !== 'ready'"
         :kind="state"

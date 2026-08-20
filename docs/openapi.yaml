@@ -1909,6 +1909,16 @@ paths:
             description: Filter by persisted evidence coverage; this does not infer recommendation quality.
             schema: { type: string, enum: [insufficient, partial, complete] },
           }
+        - {
+            name: blocking_reason,
+            in: query,
+            description: Filter by an adoption blocker derived only from persisted evidence coverage/count or recommendation status.
+            schema:
+              {
+                type: string,
+                enum: [evidence_insufficient, recommendation_insufficient],
+              },
+          }
       responses:
         "200":
           {
@@ -10524,6 +10534,7 @@ components:
           competitor_count,
           supplier_candidate_count,
           coverage_status,
+          blocking_reasons,
           decision_status,
           version,
           updated_at,
@@ -10568,6 +10579,13 @@ components:
         source_count: { type: integer, minimum: 0 }
         coverage_status:
           { type: string, enum: [insufficient, partial, complete] }
+        blocking_reasons:
+          type: array
+          items:
+            {
+              type: string,
+              enum: [evidence_insufficient, recommendation_insufficient],
+            }
         decision_status:
           { type: string, enum: [pending, adopted, observing, rejected] }
         version: { type: integer, minimum: 1 }
