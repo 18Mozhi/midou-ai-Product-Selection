@@ -185,6 +185,13 @@
   justify-content: flex-end;
   gap: 8px;
 }
+.competitor-desktop-actions {
+  display: flex;
+  gap: 8px;
+}
+.competitor-mobile-actions {
+  display: none;
+}
 .competitor-metrics {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -286,11 +293,39 @@
   font-size: 11px;
 }
 .competitor-history > article {
+  position: relative;
   display: grid;
   grid-template-columns: 120px 1fr auto;
   gap: 8px 16px;
   padding: 15px 0;
   border-bottom: 1px solid var(--so-border);
+}
+.snapshot-history > article {
+  padding-left: 22px;
+}
+.snapshot-history > article::before {
+  position: absolute;
+  top: 20px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border: 3px solid var(--so-panel);
+  border-radius: 50%;
+  background: var(--so-primary);
+  box-shadow: 0 0 0 1px var(--so-primary-border);
+  content: "";
+}
+.snapshot-history > article::after {
+  position: absolute;
+  top: 33px;
+  bottom: -8px;
+  left: 8px;
+  width: 1px;
+  background: var(--so-border);
+  content: "";
+}
+.snapshot-history > article:last-of-type::after {
+  display: none;
 }
 .competitor-history article p {
   grid-column: 1/3;
@@ -382,6 +417,48 @@
   background: var(--so-panel-soft);
   color: var(--so-text-muted);
 }
+.competitor-create-steps {
+  margin: 18px 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  list-style: none;
+}
+.competitor-create-steps li {
+  padding: 10px;
+  border: 1px solid var(--so-border);
+  border-radius: var(--so-control-radius);
+  color: var(--so-text-muted);
+  text-align: center;
+  background: var(--so-panel-soft);
+}
+.competitor-create-steps li[aria-current="step"] {
+  border-color: var(--so-primary-border);
+  color: var(--so-text);
+  background: color-mix(in srgb, var(--so-primary) 12%, var(--so-panel));
+}
+.competitor-create-review dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.competitor-create-review dl div {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: var(--so-control-radius);
+  background: var(--so-panel-soft);
+}
+.competitor-create-review dt {
+  color: var(--so-text-muted);
+}
+.competitor-create-review dd {
+  margin: 5px 0 0;
+  overflow-wrap: anywhere;
+  color: var(--so-text);
+  font-weight: 700;
+}
 .competitor-modal footer {
   justify-content: flex-end;
 }
@@ -414,6 +491,9 @@
   }
 }
 @media (max-width: 520px) {
+  .competitor-monitor > .member-module-guide {
+    display: none;
+  }
   .competitor-list {
     grid-template-columns: 1fr;
   }
@@ -422,6 +502,36 @@
   }
   .competitor-detail > header {
     display: grid;
+  }
+  .competitor-actions {
+    justify-content: stretch;
+  }
+  .competitor-actions > button {
+    flex: 1;
+  }
+  .competitor-desktop-actions {
+    display: none;
+  }
+  .competitor-mobile-actions {
+    position: relative;
+    display: block;
+  }
+  .competitor-mobile-actions summary {
+    min-height: var(--so-touch-target);
+    padding: 10px 14px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--so-border);
+    border-radius: var(--so-control-radius);
+    color: var(--so-text);
+    background: var(--so-panel);
+    cursor: pointer;
+    list-style: none;
+  }
+  .competitor-mobile-actions[open] {
+    display: grid;
+    gap: 8px;
+    width: 100%;
   }
   .competitor-comparison {
     grid-template-columns: 1fr;
@@ -436,5 +546,11 @@
   .competitor-head > div:last-child {
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+  .competitor-create-steps {
+    grid-template-columns: 1fr;
+  }
+  .competitor-create-review dl {
+    grid-template-columns: 1fr;
   }
 }

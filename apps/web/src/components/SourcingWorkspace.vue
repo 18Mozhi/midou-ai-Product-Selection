@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../sourcing.css";
@@ -66,6 +67,8 @@ type ComparisonQuote = {
   evidence_id: string;
 };
 const props = defineProps<{ apiBaseUrl: string }>(),
+  route = useRoute(),
+  router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   items = ref<Search[]>([]),
@@ -126,6 +129,11 @@ const missingLabels: Record<string, string> = {
   missingText = computed(() =>
     (selected.value?.missing_fields ?? []).map((x) => missingLabels[x] ?? x).join("、"),
   ),
+  journeyStage = computed(() => {
+    if (!selected.value || !candidates.value.length) return 1;
+    if (!candidates.value.some((item) => item.quote)) return 2;
+    return 3;
+  }),
   erpCosts = computed(() => {
     const reference = selected.value?.erp_reference;
     if (!reference) return [];
@@ -138,6 +146,17 @@ const missingLabels: Record<string, string> = {
     ({ keyword: "关键词", image: "图片", opportunity: "选品机会", product_url: "商品链接" })[
       value
     ] ?? "其他输入",
+  candidateMissingText = (candidate: Candidate) =>
+    candidate.missing_fields.map((field) => missingLabels[field] ?? field),
+  timeText = (value: string) =>
+    new Intl.DateTimeFormat("zh-CN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(new Date(value)),
   statusText = (value: string) =>
     ({
       queued: "等待采集",
@@ -179,9 +198,18 @@ async function load() {
     } catch {
       comparisons.value = [];
     }
-    selected.value = items.value.find((x) => x.id === selected.value?.id) ?? items.value[0] ?? null;
+    const requestedRecord = typeof route.query.record === "string" ? route.query.record : "";
+    selected.value =
+      items.value.find((x) => x.id === requestedRecord) ??
+      items.value.find((x) => x.id === selected.value?.id) ??
+      items.value[0] ??
+      null;
     state.value = items.value.length ? "ready" : "empty";
-    if (selected.value) await detail(selected.value);
+    if (selected.value) {
+      await detail(selected.value, false);
+      if (route.query.record !== selected.value.id)
+        await router.replace({ query: { ...route.query, record: selected.value.id } });
+    }
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
@@ -190,12 +218,14 @@ async function load() {
     } else state.value = "blocked";
   }
 }
-async function detail(item: Search) {
+async function detail(item: Search, syncRoute = true) {
   selected.value = item;
   try {
     const response = await request<Search>(`/sourcing/searches/${item.id}`);
     requestId.value = response.request_id;
     selected.value = response.data;
+    if (syncRoute)
+      await router.replace({ query: { ...route.query, record: item.id, create: undefined } });
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
@@ -222,10 +252,18 @@ async function post(path: string, body: unknown) {
 }
 async function create() {
   if (await post("/sourcing/searches", form)) {
-    showSearch.value = false;
+    closeSearch();
     await load();
     notice.value = "公开供应商网页采集已排队，候选与原始证据会自动回填。";
   }
+}
+function openSearch() {
+  showSearch.value = true;
+  void router.replace({ query: { ...route.query, create: "1" } });
+}
+function closeSearch() {
+  showSearch.value = false;
+  void router.replace({ query: { ...route.query, create: undefined } });
 }
 async function confirm() {
   if (!quoteCandidate.value) return;
@@ -310,14 +348,18 @@ async function removeSearch() {
   }
 }
 onMounted(() => {
-  const params = new URLSearchParams(window.location.search);
-  showSearch.value = params.get("create") === "1";
-  const opportunityId = params.get("opportunity_id");
+  showSearch.value = route.query.create === "1";
+  query.value = typeof route.query.q === "string" ? route.query.q : "";
+  const opportunityId =
+    typeof route.query.opportunity_id === "string" ? route.query.opportunity_id : "";
   if (opportunityId) {
     form.input_type = "opportunity";
     form.input_ref = opportunityId;
   }
   void load();
+});
+watch(query, (value) => {
+  void router.replace({ query: { ...route.query, q: value || undefined, create: undefined } });
 });
 </script>
 <template>
@@ -341,13 +383,19 @@ onMounted(() => {
       <RouterLink to="/sourcing" aria-current="page">供应商找货</RouterLink
       ><RouterLink to="/sourcing/cost-rules">费用与利润规则</RouterLink>
     </nav>
+    <ol class="sourcing-journey" aria-label="找货流程">
+      <li :aria-current="journeyStage === 1 ? 'step' : undefined">1 搜索货源</li>
+      <li :aria-current="journeyStage === 2 ? 'step' : undefined">2 确认报价</li>
+      <li :aria-current="journeyStage === 3 ? 'step' : undefined">3 对比供应商</li>
+      <li>4 创建采购任务</li>
+    </ol>
     <header class="sourcing-head">
       <div>
         <p>供应商发现</p>
         <h2>供应链找货</h2>
         <span>采集事实先投影为候选；缺失规格、交期、地点、可信度与风险时禁止进入可靠对比。</span>
       </div>
-      <button type="button" @click="showSearch = true">＋ 新建找货</button>
+      <button type="button" @click="openSearch">发起供应商找货</button>
     </header>
     <p v-if="notice" class="sourcing-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
@@ -399,9 +447,13 @@ onMounted(() => {
           </div>
           <div class="sourcing-actions">
             <button type="button" :disabled="busy" @click="refreshSearch">重新采集</button
-            ><button v-if="selectedQuotes.length >= 2" type="button" @click="compare">
-              对比 {{ selectedQuotes.length }} 家</button
-            ><button type="button" class="danger ghost" @click="deleting = selected">删除</button>
+            ><RouterLink
+              class="sourcing-cost-link"
+              :to="{ path: '/sourcing/cost-rules', query: { from: route.fullPath } }"
+              >费用与利润规则</RouterLink
+            ><button type="button" class="danger ghost" @click="deleting = selected">
+              删除找货记录
+            </button>
           </div>
         </header>
         <p v-if="selected.missing_fields.length" class="missing">
@@ -449,20 +501,29 @@ onMounted(() => {
             </header>
             <h4>{{ item.product_title }}</h4>
             <dl>
-              <div>
-                <dt>报价 / 最小起订量</dt>
-                <dd>{{ item.currency }} {{ item.quoted_price }} / {{ item.moq ?? "待确认" }}</dd>
+              <div data-priority="primary">
+                <dt>报价</dt>
+                <dd>{{ item.currency }} {{ item.quoted_price }}</dd>
+              </div>
+              <div data-priority="primary">
+                <dt>最小起订量（MOQ）</dt>
+                <dd>{{ item.moq ?? "待确认" }}</dd>
+              </div>
+              <div data-priority="primary">
+                <dt>到岸价</dt>
+                <dd>待费用规则计算</dd>
+              </div>
+              <div data-priority="primary">
+                <dt>交期</dt>
+                <dd>{{ item.lead_time_days == null ? "待确认" : `${item.lead_time_days} 天` }}</dd>
               </div>
               <div>
                 <dt>规格</dt>
                 <dd>{{ item.specification ?? "缺失" }}</dd>
               </div>
               <div>
-                <dt>交期 / 地点</dt>
-                <dd>
-                  {{ item.lead_time_days == null ? "缺失" : `${item.lead_time_days} 天` }}
-                  / {{ item.location ?? "缺失" }}
-                </dd>
+                <dt>所在地</dt>
+                <dd>{{ item.location ?? "缺失" }}</dd>
               </div>
               <div>
                 <dt>稳定性 / 风险</dt>
@@ -472,8 +533,15 @@ onMounted(() => {
                 </dd>
               </div>
             </dl>
+            <ul v-if="item.missing_fields.length" class="supplier-missing-actions">
+              <li v-for="field in candidateMissingText(item)" :key="field">
+                {{ field }}：确认报价时补齐
+              </li>
+            </ul>
             <footer>
-              <a :href="item.original_url" target="_blank" rel="noopener noreferrer">原始页面 ↗</a
+              <a :href="item.original_url" target="_blank" rel="noopener noreferrer"
+                >打开外部原始商品页（新窗口）</a
+              ><time>采集于 {{ timeText(item.observed_at) }}</time
               ><code>证据 {{ item.evidence_id }}</code
               ><button v-if="!item.quote" type="button" @click="quoteCandidate = item">
                 确认报价</button
@@ -528,15 +596,22 @@ onMounted(() => {
         </section>
       </main>
     </div>
+    <aside v-if="selectedQuotes.length" class="sourcing-compare-tray" aria-live="polite">
+      <strong>已选 {{ selectedQuotes.length }} / 5 家供应商</strong>
+      <span>{{ selectedQuotes.length < 2 ? "至少再选一家才能对比" : "可以保存本次报价对比" }}</span>
+      <button type="button" :disabled="selectedQuotes.length < 2 || busy" @click="compare">
+        保存报价对比
+      </button>
+    </aside>
     <div v-if="showSearch" class="sourcing-modal" role="dialog" aria-modal="true">
       <form @submit.prevent="create">
         <header>
-          <h3>采集公开供应商商品</h3>
+          <h3>发起供应商找货</h3>
           <button
             type="button"
             aria-label="关闭供应商搜索"
             title="关闭供应商搜索"
-            @click="showSearch = false"
+            @click="closeSearch"
           >
             ×
           </button>
@@ -562,8 +637,8 @@ onMounted(() => {
           MOQ、规格和交期会明确标为待确认。
         </aside>
         <footer>
-          <button type="button" class="ghost" @click="showSearch = false">取消</button
-          ><button type="submit" :disabled="busy">开始采集</button>
+          <button type="button" class="ghost" @click="closeSearch">取消</button
+          ><button type="submit" :disabled="busy">开始公开网页采集</button>
         </footer>
       </form>
     </div>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../profit.css";
@@ -26,7 +27,8 @@ interface Rule {
   updated_at: string;
 }
 const props = defineProps<{ apiBaseUrl: string; roles: string[] }>();
-const request = createApiClient(props.apiBaseUrl),
+const route = useRoute(),
+  request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   rules = ref<Rule[]>([]),
   selected = ref<Rule | null>(null),
@@ -47,7 +49,11 @@ const form = reactive({
   currency: "USD",
 });
 const canSelection = computed(() => props.roles.includes("selection_manager")),
-  canAdmin = computed(() => props.roles.includes("organization_admin"));
+  canAdmin = computed(() => props.roles.includes("organization_admin")),
+  returnPath = computed(() => {
+    const value = typeof route.query.from === "string" ? route.query.from : "/sourcing";
+    return value.startsWith("/sourcing") && !value.startsWith("//") ? value : "/sourcing";
+  });
 const stateFrom = (kind: ApiFailureKind): State =>
   kind === "expired"
     ? "expired"
@@ -161,7 +167,10 @@ onMounted(load);
         <h2 id="cost-rule-title">费用与利润规则</h2>
         <span>所有费率必须显式填写；规则经选品经理与组织管理员双审批后才可发布。</span>
       </div>
-      <button type="button" @click="showCreate = true">＋ 新建规则</button>
+      <div class="cost-head-actions">
+        <RouterLink :to="returnPath">返回当前找货记录</RouterLink>
+        <button type="button" @click="showCreate = true">新建规则</button>
+      </div>
     </header>
     <p v-if="notice" class="cost-notice" role="status">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>

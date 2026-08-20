@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../competitor.css";
@@ -54,6 +55,8 @@ interface Rule {
   status: string;
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
+  route = useRoute(),
+  router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   items = ref<Competitor[]>([]),
@@ -63,6 +66,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   notice = ref(""),
   busy = ref(false),
   showCreate = ref(false),
+  createStep = ref(1),
   showRule = ref(false),
   query = ref(""),
   deleting = ref<Competitor | null>(null),
@@ -107,7 +111,14 @@ const latest = computed(() => selected.value?.latest_snapshot ?? null),
       : kind === "blocked" || kind === "rate_limited"
         ? "blocked"
         : "error";
-const statusText = (value: string) => ({ active: "监控中", paused: "已暂停" })[value] ?? value,
+const statusText = (value: string) =>
+    ({
+      active: "监控中",
+      paused: "已暂停",
+      queued: "首次采集排队中",
+      running: "首次采集中",
+      failed: "首次采集失败",
+    })[value] ?? value,
   availabilityText = (value: string) =>
     ({ in_stock: "有货", out_of_stock: "缺货", unknown: "未知" })[value] ?? value,
   sourceStatusText = (value: string) =>
@@ -177,8 +188,15 @@ async function load() {
     } catch {
       rules.value = [];
     }
-    selected.value = items.value.find((v) => v.id === selected.value?.id) ?? items.value[0] ?? null;
+    const requestedCompetitor =
+      typeof route.query.competitor === "string" ? route.query.competitor : "";
+    selected.value =
+      items.value.find((item) => item.id === requestedCompetitor) ??
+      items.value.find((item) => item.id === selected.value?.id) ??
+      items.value[0] ??
+      null;
     state.value = items.value.length ? "ready" : "empty";
+    if (requestedCompetitor && selected.value) await detail(selected.value, false);
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
@@ -187,12 +205,14 @@ async function load() {
     } else state.value = "blocked";
   }
 }
-async function detail(item: Competitor) {
+async function detail(item: Competitor, syncRoute = true) {
   selected.value = item;
   try {
     const response = await request<Competitor>(`/competitors/${item.id}`);
     requestId.value = response.request_id;
     selected.value = response.data;
+    if (syncRoute)
+      await router.replace({ query: { ...route.query, competitor: item.id, create: undefined } });
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
@@ -225,10 +245,28 @@ async function create() {
     ...(form.opportunity_id ? { opportunity_id: form.opportunity_id } : {}),
   });
   if (result) {
-    showCreate.value = false;
+    closeCreate();
     await load();
     notice.value = "竞品已建立，商品页公开数据采集已排队。";
   }
+}
+function openCreate() {
+  createStep.value = 1;
+  showCreate.value = true;
+  void router.replace({ query: { ...route.query, create: "1" } });
+}
+function closeCreate() {
+  createStep.value = 1;
+  showCreate.value = false;
+  void router.replace({ query: { ...route.query, create: undefined } });
+}
+async function submitCreateStep() {
+  if (createStep.value < 3) createStep.value += 1;
+  else await create();
+}
+function openRule(item?: Competitor) {
+  rule.competitor_id = item?.id ?? "";
+  showRule.value = true;
 }
 async function collect() {
   if (!selected.value) return;
@@ -287,8 +325,12 @@ async function toggle() {
   }
 }
 onMounted(() => {
-  showCreate.value = new URLSearchParams(window.location.search).get("create") === "1";
+  showCreate.value = route.query.create === "1";
+  query.value = typeof route.query.q === "string" ? route.query.q : "";
   void load();
+});
+watch(query, (value) => {
+  void router.replace({ query: { ...route.query, q: value || undefined, create: undefined } });
 });
 </script>
 <template>
@@ -315,8 +357,8 @@ onMounted(() => {
         <span>每个数字都来自可追溯快照；变化与阈值告警不会覆盖历史。</span>
       </div>
       <div>
-        <button type="button" class="ghost" @click="showRule = true">监控规则</button
-        ><button type="button" @click="showCreate = true">＋ 添加竞品</button>
+        <button type="button" class="ghost" @click="openRule()">监控规则</button
+        ><button type="button" @click="openCreate">添加竞品监控</button>
       </div>
     </header>
     <p v-if="notice" class="competitor-notice" role="status">
@@ -369,21 +411,38 @@ onMounted(() => {
             <p>{{ selected.source_site }} / {{ selected.external_id }}</p>
             <h3>{{ selected.title }}</h3>
             <a :href="selected.product_url" target="_blank" rel="noopener noreferrer"
-              >查看来源商品 ↗</a
+              >打开外部来源商品（新窗口）</a
             >
           </div>
           <div class="competitor-actions">
-            <button type="button" :disabled="busy" @click="collect">立即采集</button
-            ><button class="ghost" type="button" :disabled="busy" @click="toggle">
-              {{ selected.status === "active" ? "暂停监控" : "恢复监控" }}</button
-            ><button
-              class="danger ghost"
-              type="button"
-              :disabled="busy"
-              @click="deleting = selected"
-            >
-              删除
-            </button>
+            <button type="button" :disabled="busy" @click="collect">
+              {{ latest ? "立即采集" : "重新尝试首次采集" }}</button
+            ><button class="ghost" type="button" @click="openRule(selected)">当前竞品规则</button>
+            <div class="competitor-desktop-actions">
+              <button class="ghost" type="button" :disabled="busy" @click="toggle">
+                {{ selected.status === "active" ? "暂停监控" : "恢复监控" }}</button
+              ><button
+                class="danger ghost"
+                type="button"
+                :disabled="busy"
+                @click="deleting = selected"
+              >
+                删除竞品监控
+              </button>
+            </div>
+            <details class="competitor-mobile-actions">
+              <summary>更多操作</summary>
+              <button class="ghost" type="button" :disabled="busy" @click="toggle">
+                {{ selected.status === "active" ? "暂停监控" : "恢复监控" }}</button
+              ><button
+                class="danger ghost"
+                type="button"
+                :disabled="busy"
+                @click="deleting = selected"
+              >
+                删除竞品监控
+              </button>
+            </details>
           </div>
         </header>
         <section v-if="latest" class="competitor-metrics">
@@ -417,7 +476,7 @@ onMounted(() => {
             建立。价格、排名、评论、评分和库存尚未从商品页采集到，因此这里不会用 0 或演示数据代替。
           </p>
           <a :href="selected.product_url" target="_blank" rel="noopener noreferrer"
-            >先查看 Amazon 商品页 ↗</a
+            >打开外部 Amazon 商品页（新窗口）</a
           >
         </section>
         <section v-if="latest" class="competitor-comparison" aria-label="基线、变动与阈值">
@@ -466,15 +525,16 @@ onMounted(() => {
           </article>
           <p v-if="!selected.changes?.length">尚无变化；首个快照只建立基线，不制造变化。</p>
         </section>
-        <section class="competitor-history snapshot-history">
+        <section class="competitor-history snapshot-history" aria-label="价格与库存时间轴">
           <header>
             <h4>采集快照</h4>
-            <span>价格 · 评分 · 评论 · 采集时间 · 证据</span>
+            <span>价格 · 库存 · 评分 · 评论 · 采集时间 · 证据</span>
           </header>
           <article v-for="snapshot in selected.snapshots ?? []" :key="snapshot.id">
             <b>{{ snapshotPrice(snapshot) }}</b
             ><strong
-              >评分 {{ snapshot.rating_value ?? "未采到" }} · 评论
+              >{{ availabilityText(snapshot.availability) }} · 评分
+              {{ snapshot.rating_value ?? "未采到" }} · 评论
               {{ snapshot.review_count ?? "未采到" }}</strong
             ><time>{{ timeText(snapshot.captured_at) }}</time
             ><code>证据 {{ snapshot.evidence_id }}</code>
@@ -490,39 +550,61 @@ onMounted(() => {
       aria-modal="true"
       aria-labelledby="new-competitor"
     >
-      <form @submit.prevent="create">
+      <form @submit.prevent="submitCreateStep">
         <header>
           <div>
-            <p>公开网页爬虫</p>
-            <h3 id="new-competitor">添加 Amazon 竞品</h3>
+            <p>链接 · 市场 · 确认</p>
+            <h3 id="new-competitor">添加竞品监控</h3>
           </div>
-          <button
-            type="button"
-            aria-label="关闭新建竞品"
-            title="关闭新建竞品"
-            @click="showCreate = false"
-          >
+          <button type="button" aria-label="关闭新建竞品" title="关闭新建竞品" @click="closeCreate">
             ×
           </button>
         </header>
-        <div class="form-grid">
-          <label>市场<input v-model="form.market" required /></label
-          ><label>关联机会编号（可选）<input v-model="form.opportunity_id" /></label>
-        </div>
-        <label>商品网址<input v-model="form.product_url" required type="url" /></label
-        ><label
-          >内部备注标题<input
-            v-model="form.title"
-            required
-            placeholder="例如：Amazon 收纳箱头部竞品"
-        /></label>
-        <aside>
-          提交后直接读取公开 Amazon 商品页并建立首个证据快照，不需要填写官方 API 或手工填写价格。
-        </aside>
+        <ol class="competitor-create-steps" aria-label="添加竞品步骤">
+          <li :aria-current="createStep === 1 ? 'step' : undefined">1 商品链接</li>
+          <li :aria-current="createStep === 2 ? 'step' : undefined">2 市场信息</li>
+          <li :aria-current="createStep === 3 ? 'step' : undefined">3 确认采集</li>
+        </ol>
+        <template v-if="createStep === 1">
+          <label>商品网址<input v-model="form.product_url" required type="url" /></label>
+          <aside>填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。</aside>
+        </template>
+        <template v-else-if="createStep === 2">
+          <div class="form-grid">
+            <label>市场<input v-model="form.market" required /></label
+            ><label>关联机会编号（可选）<input v-model="form.opportunity_id" /></label>
+          </div>
+          <label
+            >监控名称<input v-model="form.title" required placeholder="例如：Amazon 收纳箱头部竞品"
+          /></label>
+        </template>
+        <section v-else class="competitor-create-review">
+          <dl>
+            <div>
+              <dt>商品链接</dt>
+              <dd>{{ form.product_url }}</dd>
+            </div>
+            <div>
+              <dt>市场</dt>
+              <dd>{{ form.market }}</dd>
+            </div>
+            <div>
+              <dt>监控名称</dt>
+              <dd>{{ form.title }}</dd>
+            </div>
+            <div>
+              <dt>关联机会</dt>
+              <dd>{{ form.opportunity_id || "未关联" }}</dd>
+            </div>
+          </dl>
+          <aside>确认后读取公开商品页并建立首个证据快照；页面未披露的数据继续显示为未采到。</aside>
+        </section>
         <footer>
-          <button type="button" class="ghost" @click="showCreate = false">取消</button
+          <button v-if="createStep === 1" type="button" class="ghost" @click="closeCreate">
+            取消</button
+          ><button v-else type="button" class="ghost" @click="createStep -= 1">上一步</button
           ><button type="submit" :disabled="busy">
-            {{ busy ? "保存中…" : "建立监控" }}
+            {{ busy ? "保存中…" : createStep === 3 ? "确认并开始采集" : "下一步" }}
           </button>
         </footer>
       </form>

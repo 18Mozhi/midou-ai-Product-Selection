@@ -41,11 +41,27 @@
   cursor: pointer;
 }
 
-.cost-console > header > button,
+.cost-head-actions button,
 .cost-rule-detail footer button:last-child {
   border-color: var(--so-primary);
   color: var(--so-on-primary);
   background: var(--so-primary);
+}
+.cost-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cost-head-actions a {
+  min-height: var(--so-control-height);
+  padding: 10px 15px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--so-border);
+  border-radius: var(--so-control-radius);
+  color: var(--so-text);
+  text-decoration: none;
+  background: var(--so-panel-soft);
 }
 
 .cost-notice {
@@ -269,6 +285,16 @@
   .cost-console > header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .cost-head-actions {
+    width: 100%;
+  }
+
+  .cost-head-actions > * {
+    flex: 1;
+    justify-content: center;
+    white-space: nowrap;
   }
 
   .cost-modal form > div,
