@@ -113,40 +113,54 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
 }) => {
   await setup(page);
   await page.goto("/platform-admin/accounts");
-  await expect(
-    page.getByRole("heading", { name: "谁在使用智能选品，一眼看懂" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "谁在使用智能选品，一眼看懂" })).toBeVisible();
   await expect(page.getByRole("button", { name: "组织管理" })).toBeVisible();
   await expect(page.getByRole("button", { name: "用户管理" })).toBeVisible();
   await expect(page.getByRole("button", { name: "管理员管理" })).toBeVisible();
-  await expect(
-    page.getByRole("cell", { name: "米豆选品团队 midou-team" }),
-  ).toBeVisible();
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  if (mobile) {
+    await page.getByRole("button", { name: "账号筛选" }).click();
+    const filters = page.getByRole("dialog", { name: "账号筛选" });
+    await filters.getByPlaceholder("搜索组织名称或用户邮箱").fill("米豆");
+    await filters.getByRole("button", { name: "关闭筛选条件" }).click();
+    await page.getByRole("button", { name: /账号筛选.*1 项已选/ }).click();
+    await expect(filters.getByPlaceholder("搜索组织名称或用户邮箱")).toHaveValue("米豆");
+    await filters.getByRole("button", { name: "关闭筛选条件" }).click();
+    await page.getByRole("button", { name: /米豆选品团队.*查看详情/ }).click();
+    const organizationDetail = page.getByRole("dialog", { name: "米豆选品团队" });
+    await expect(organizationDetail.getByText(org, { exact: true })).not.toBeVisible();
+    await organizationDetail.getByText("技术详情").click();
+    await expect(organizationDetail.getByText(org, { exact: true })).toBeVisible();
+    await organizationDetail.getByRole("button", { name: "关闭详情" }).click();
+  } else {
+    await expect(page.getByRole("cell", { name: "米豆选品团队 midou-team" })).toBeVisible();
+  }
   await page.getByRole("button", { name: "用户管理" }).click();
   await expect(
-    page.getByRole("cell", { name: /buyer@example.test/ }),
+    mobile
+      ? page.getByRole("button", { name: /buyer@example.test.*查看详情/ })
+      : page.getByRole("cell", { name: /buyer@example.test/ }),
   ).toBeVisible();
   await page.getByRole("button", { name: "管理员管理" }).click();
   await expect(
-    page.getByRole("cell", { name: /admin@example.test/ }),
+    mobile
+      ? page.getByRole("button", { name: /admin@example.test.*查看详情/ })
+      : page.getByRole("cell", { name: /admin@example.test/ }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: "角色权限差异" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "角色权限差异" })).toBeVisible();
   await expect(page.getByText("仅平台运营管理员").first()).toBeVisible();
   await page.getByLabel("右侧角色").selectOption("platform_super_admin");
   await expect(page.getByText("管理平台角色与账号")).toBeVisible();
+  await expect(page.getByText(/platform:operate|platform:superadmin/)).toHaveCount(0);
   await expect(
-    page.getByText(/platform:operate|platform:superadmin/),
-  ).toHaveCount(0);
-  await expect(page.getByText("admin@example.test", { exact: true })).toHaveCSS(
-    "color",
-    "rgb(238, 245, 255)",
-  );
-  await expect(page.locator(".account-table-wrap")).toHaveCSS(
-    "color",
-    "rgb(238, 245, 255)",
-  );
+    mobile
+      ? page.getByLabel("管理员记录").getByText("admin@example.test", { exact: true })
+      : page.getByRole("table").getByText("admin@example.test", { exact: true }),
+  ).toHaveCSS("color", "rgb(238, 245, 255)");
+  await expect(page.locator(".account-table-wrap")).toHaveCSS("color", "rgb(238, 245, 255)");
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+    .toBe(true);
   await expect(page).toHaveScreenshot("m06-01-platform-accounts.png", {
     fullPage: true,
   });
@@ -157,56 +171,43 @@ test("M06-01.A06/A09 creates organization with audited idempotent request", asyn
 }, testInfo) => {
   await setup(page);
   let request: any = null;
-  await page.route(
-    "**/api/v1/platform/accounts/organizations",
-    async (route: any) => {
-      request = {
-        body: route.request().postDataJSON(),
-        headers: route.request().headers(),
-      };
-      await route.fulfill({
-        status: 201,
-        json: env({
-          id: org,
-          name: "新团队",
-          slug: "new-team",
-          status: "active",
-          default_workspace_id: ws,
-        }),
-      });
-    },
-  );
+  await page.route("**/api/v1/platform/accounts/organizations", async (route: any) => {
+    request = {
+      body: route.request().postDataJSON(),
+      headers: route.request().headers(),
+    };
+    await route.fulfill({
+      status: 201,
+      json: env({
+        id: org,
+        name: "新团队",
+        slug: "new-team",
+        status: "active",
+        default_workspace_id: ws,
+      }),
+    });
+  });
   await page.goto("/platform-admin/accounts");
   await page.getByRole("button", { name: "新建组织" }).click();
   const dialog = page
     .getByRole("dialog")
     .filter({ has: page.getByRole("heading", { name: "新建组织" }) });
   const progress = dialog.getByRole("list", { name: "创建组织步骤" });
-  await expect(progress.locator('[aria-current="step"]')).toContainText(
-    "组织资料",
-  );
+  await expect(progress.locator('[aria-current="step"]')).toContainText("组织资料");
   await dialog.getByRole("button", { name: "下一步：选择管理员" }).click();
-  await expect(progress.locator('[aria-current="step"]')).toContainText(
-    "组织资料",
-  );
+  await expect(progress.locator('[aria-current="step"]')).toContainText("组织资料");
   expect(request).toBeNull();
   await dialog.getByLabel("组织名称", { exact: true }).fill("新团队");
   await dialog.getByLabel("组织标识").fill("new-team");
   await dialog.getByRole("button", { name: "下一步：选择管理员" }).click();
-  await expect(progress.locator('[aria-current="step"]')).toContainText(
-    "管理员与确认",
-  );
+  await expect(progress.locator('[aria-current="step"]')).toContainText("管理员与确认");
   await expect(dialog.getByText("同时创建默认工作区和组织级数据范围")).toBeVisible();
   expect(request).toBeNull();
   if (process.platform === "win32" && testInfo.project.name === "mobile-390") {
-    await expect(dialog).toHaveScreenshot(
-      "m06-01-create-organization-wizard.png",
-    );
+    await expect(dialog).toHaveScreenshot("m06-01-create-organization-wizard.png");
   }
   await dialog.getByRole("button", { name: "确认创建" }).click();
-  await expect
-    .poll(() => request?.body)
-    .toEqual({ name: "新团队", slug: "new-team" });
+  await expect.poll(() => request?.body).toEqual({ name: "新团队", slug: "new-team" });
   expect(request.headers["idempotency-key"]).toBeTruthy();
 });
 
@@ -252,25 +253,14 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
     }),
   );
   await page.goto("/platform-admin/accounts");
-  await expect(
-    page.getByRole("link", { name: "进入用户工作台" }),
-  ).toHaveAttribute("href", "/home");
-  await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute(
-    "title",
-    "个人中心",
-  );
+  await expect(page.getByRole("link", { name: "进入用户工作台" })).toHaveAttribute("href", "/home");
+  await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("title", "个人中心");
   await page.getByRole("button", { name: "新建用户" }).click();
-  const createDialog = page
-    .getByRole("dialog")
-    .filter({
-      has: page.getByRole("heading", { name: "新建用户或平台管理员" }),
-    });
-  await createDialog
-    .getByLabel("邮箱", { exact: true })
-    .fill("new@example.test");
-  await createDialog
-    .getByLabel("临时密码", { exact: true })
-    .fill("temporary-password");
+  const createDialog = page.getByRole("dialog").filter({
+    has: page.getByRole("heading", { name: "新建用户或平台管理员" }),
+  });
+  await createDialog.getByLabel("邮箱", { exact: true }).fill("new@example.test");
+  await createDialog.getByLabel("临时密码", { exact: true }).fill("temporary-password");
   await createDialog.getByRole("button", { name: "确认创建" }).click();
   await expect
     .poll(() => createRequest)
@@ -281,9 +271,13 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
       organization_id: null,
     });
   await page.getByRole("button", { name: "用户管理" }).click();
-  await page.getByRole("button", { name: "详情" }).click();
-  await expect(
-    page.getByRole("heading", { name: "buyer@example.test" }),
-  ).toBeVisible();
+  if ((page.viewportSize()?.width ?? 0) <= 760) {
+    await page.getByRole("button", { name: /buyer@example.test.*查看详情/ }).click();
+    const responsiveDetail = page.getByRole("dialog", { name: "buyer@example.test" });
+    await responsiveDetail.getByRole("button", { name: "账号详情" }).click();
+  } else {
+    await page.getByRole("button", { name: "详情" }).click();
+  }
+  await expect(page.getByRole("heading", { name: "buyer@example.test" })).toBeVisible();
   await expect(page.getByText("Chrome", { exact: true })).toBeVisible();
 });
