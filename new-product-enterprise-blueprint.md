@@ -955,6 +955,8 @@ API 启动文件只负责共享依赖和生命周期，业务路由装配必须�
 
 代码格式与最大行长采用“触碰即治理”的增量门禁：新增或修改的 `apps`、`packages`、`scripts`、`tests` 代码文件必须通过仓库锁定版本的 Prettier，并且每行不超过 160 字符；未触碰的历史文件不在单次改动中批量重排。CI 或发布任务通过 `CODE_STYLE_BASE_REF` 指定比较基线，本地工作树有改动时检查当前改动，干净工作树默认复核最近提交。
 
+前端构建必须先执行严格 `vue-tsc` 再进入 Vite 打包，类型错误直接阻断 `build:web`；`apps/web/tsconfig.json` 启用 `incremental` 与 `noEmit`，只保存被 Git 忽略的 `.web.tsbuildinfo` 编译状态，不生成第二份浏览器产物。
+
 Repository 使用更严格的全量边界：每次运行格式门禁都扫描全部已跟踪 Repository 源文件，任何超过 160 字符的行都会以 `repository_sql_max_line_length_failed` 明确失败，不再允许历史单行 SQL 绕过当前检查。SQL 只能在空白或字段分隔处换行，不得改变占位符、参数顺序、事务与查询条件。Worker 的业务队列处理器分别保留在独立 `*-worker.ts` 或调度器模块中，`apps/worker/src/index.ts` 只负责依赖装配、串行防重入、日志和统一优先级调度，不得承载领域 SQL 或 Repository/Worker 实现。
 
 ---

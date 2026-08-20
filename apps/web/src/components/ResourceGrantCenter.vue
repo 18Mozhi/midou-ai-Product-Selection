@@ -21,7 +21,7 @@ const state = ref<State>("loading"),
   notice = ref(""),
   showCreate = ref(false),
   busy = ref(false);
-const actionMap: Record<ResourceGrantType, string[]> = {
+const actionMap: Record<ResourceGrantType, readonly [string, ...string[]]> = {
   task: ["task:read", "task:update"],
   opportunity: ["opportunity:read", "opportunity:decide"],
   competitor: ["competitor:read"],
@@ -71,7 +71,7 @@ async function load() {
   notice.value = "";
   try {
     current.value = (await request<CurrentAuthorizationSummary>("/me/authorization")).data;
-    form.workspace_id = current.value.workspace_id;
+    form.workspace_id = current.value.workspace_id ?? "";
     const path = canRead.value
       ? `/org/${current.value.organization_id}/resource-grants?page=1&limit=100`
       : "/me/resource-grants";

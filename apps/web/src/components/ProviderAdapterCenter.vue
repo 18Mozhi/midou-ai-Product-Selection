@@ -117,7 +117,7 @@ onMounted(load);
       <a href="/platform-admin/providers">返回来源定义</a>
     </header>
     <UiStatePanel
-      v-if="!['ready', 'empty'].includes(state)"
+      v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
       :request-id="requestId"
       @primary="load"

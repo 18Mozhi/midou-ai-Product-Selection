@@ -88,13 +88,15 @@ async function search() {
     state.value = "error";
     return;
   }
-  const data = await get(`/me/global-search?q=${encodeURIComponent(value)}&limit=10`);
+  const data = await get<{ items: Result[] }>(
+    `/me/global-search?q=${encodeURIComponent(value)}&limit=10`,
+  );
   if (!data) return;
   results.value = data.items;
   state.value = results.value.length ? "ready" : "empty";
 }
 async function loadActions() {
-  const data = await get(`/me/quick-actions?shell=${props.shell}`);
+  const data = await get<Action[]>(`/me/quick-actions?shell=${props.shell}`);
   if (!data) return;
   actions.value = data;
   state.value = actions.value.length ? "ready" : "empty";

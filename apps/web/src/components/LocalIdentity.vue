@@ -49,6 +49,15 @@ const sessions = ref<
     last_seen_at: string;
   }>
 >([]);
+type Session = (typeof sessions.value)[number];
+interface LoginResult {
+  mfa_required?: boolean;
+  security_setup?: {
+    required: boolean;
+    must_change_password: boolean;
+    must_enroll_mfa: boolean;
+  };
+}
 const securitySetup = ref({
   must_change_password: false,
   must_enroll_mfa: false,
@@ -115,7 +124,7 @@ async function request<T = unknown>(
   }
 }
 async function enterApplication() {
-  const result = await request("/me/landing", undefined, "GET");
+  const result = await request<{ route: string }>("/me/landing", undefined, "GET");
   if (result?.data?.route) window.location.assign(result.data.route);
 }
 async function confirmEmail() {
@@ -133,7 +142,7 @@ async function submit() {
     return;
   }
   if (mode.value === "login") {
-    const result = await request("/auth/login", {
+    const result = await request<LoginResult>("/auth/login", {
       email: email.value,
       password: password.value,
     });
@@ -187,7 +196,7 @@ async function submit() {
   }
 }
 async function loadSessions() {
-  const result = await request("/me/sessions", undefined, "GET");
+  const result = await request<Session[]>("/me/sessions", undefined, "GET");
   sessions.value = result?.data || [];
 }
 async function revoke(id: string) {
@@ -195,11 +204,11 @@ async function revoke(id: string) {
   if (result === null && requestState.value === "success") await loadSessions();
 }
 async function loadMfa() {
-  const result = await request("/me/mfa", undefined, "GET");
+  const result = await request<{ totp_enabled: boolean }>("/me/mfa", undefined, "GET");
   if (result) mfaEnabled.value = Boolean(result.data?.totp_enabled);
 }
 async function startMfa() {
-  const result = await request("/me/mfa/totp/enrollment", {
+  const result = await request<{ secret: string }>("/me/mfa/totp/enrollment", {
     current_password: currentPassword.value,
   });
   if (result) {
@@ -208,7 +217,9 @@ async function startMfa() {
   }
 }
 async function confirmMfa() {
-  const result = await request("/me/mfa/totp/confirm", { code: mfaCode.value });
+  const result = await request<{ recovery_codes: string[] }>("/me/mfa/totp/confirm", {
+    code: mfaCode.value,
+  });
   if (result) {
     mfaEnabled.value = true;
     securitySetup.value.must_enroll_mfa = false;

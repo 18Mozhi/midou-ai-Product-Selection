@@ -194,7 +194,7 @@ onMounted(load);
       <button type="button" @click="edit()">＋ 新建来源</button>
     </header>
     <UiStatePanel
-      v-if="!['ready', 'empty'].includes(state)"
+      v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
       :request-id="requestId"
       @primary="load"

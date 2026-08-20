@@ -401,7 +401,7 @@ onMounted(async () => {
       </div>
     </header>
     <UiStatePanel
-      v-if="!['ready', 'empty'].includes(state)"
+      v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
       :request-id="requestId"
       @primary="load"

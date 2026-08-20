@@ -1,7 +1,5 @@
-<script setup lang="ts">
-import { nextTick, ref } from "vue";
-
-type DataRow = Record<string, any>;
+<script setup lang="ts" generic="DataRow extends Record<string, any>">
+import { nextTick, shallowRef } from "vue";
 
 const props = defineProps<{
   rows: DataRow[];
@@ -11,8 +9,8 @@ const props = defineProps<{
   emptyMessage?: string;
 }>();
 
-const selected = ref<DataRow | null>(null),
-  closeButton = ref<HTMLButtonElement | null>(null);
+const selected = shallowRef<DataRow | null>(null),
+  closeButton = shallowRef<HTMLButtonElement | null>(null);
 let trigger: HTMLButtonElement | null = null;
 
 async function show(row: DataRow, event: MouseEvent) {

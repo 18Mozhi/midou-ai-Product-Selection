@@ -289,7 +289,7 @@ async function load() {
     for (const [key, value] of Object.entries(filters)) if (value) params.set(key, value);
     const result = await read(`/opportunities?${params}`);
     items.value = result.data;
-    total.value = result.meta.total;
+    total.value = (result.meta as { total: number }).total;
     state.value = items.value.length ? "ready" : "empty";
   } catch (error) {
     if (!(error instanceof ApiClientError)) state.value = "blocked";
@@ -545,7 +545,7 @@ onMounted(() => {
     <template v-else
       ><UiStatePanel
         v-if="state !== 'ready' || !detail"
-        :kind="state"
+        :kind="state === 'ready' ? 'empty' : state"
         :request-id="requestId"
         @primary="load"
       />

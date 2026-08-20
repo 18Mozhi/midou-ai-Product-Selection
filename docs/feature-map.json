@@ -95,6 +95,7 @@
       "repositorySqlPolicy": "all tracked Repository source lines are scanned on every run and must not exceed 160 characters; violations fail as repository_sql_max_line_length_failed even when the Repository was not changed in the current worktree",
       "workerHandlerBoundary": "apps/worker/src/index.ts owns dependency assembly, non-reentrant polling, logs and priority scheduling only; every business queue handler remains in its independent worker or scheduler module and domain SQL is forbidden in the entrypoint",
       "frontendApiClientBoundary": "the shared frontend transport owns credentials, request_id, trace_id, write idempotency and standardized server error mapping for both JSON envelopes and raw file responses; every frontend business module is forbidden from calling fetch directly and the boundary test scans all TypeScript and Vue source files",
+      "frontendTypecheckBoundary": "build:web must run strict vue-tsc before Vite bundling; the web tsconfig targets ES2022, emits no duplicate output and persists its ignored .web.tsbuildinfo cache so unchanged follow-up checks can reuse compiler state",
       "productionProductCommand": "npm run verify:production-product",
       "userGuide": "../docs/user-guide-ai-selection.md",
       "functionalScope": "P00-P08 incremental code style gate, software build, functional Node/Python tests, desktop/390 E2E, docs, plans, release matrix and security gate; excludes same-commit deployment evidence, disk diagnostics, production load tests and capacity claims",

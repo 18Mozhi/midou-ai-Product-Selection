@@ -82,7 +82,7 @@ const form = reactive({
 const latest = computed(() => selected.value?.latest_snapshot ?? null),
   baseline = computed(() => {
     const snapshots = selected.value?.snapshots ?? [];
-    return snapshots.length ? snapshots[snapshots.length - 1] : latest.value;
+    return snapshots.length ? (snapshots[snapshots.length - 1] ?? null) : latest.value;
   }),
   applicableRules = computed(() =>
     rules.value.filter((item) => !item.competitor_id || item.competitor_id === selected.value?.id),

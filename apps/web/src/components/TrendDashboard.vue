@@ -179,13 +179,17 @@ async function load() {
     ]);
     topics.value = list.data;
     rules.value = ruleList.data;
-    total.value = list.meta.total;
+    total.value = (list.meta as { total: number }).total;
     if (!topics.value.length) {
       selected.value = null;
       state.value = "empty";
       return;
     }
     const current = topics.value.find((item) => item.id === selected.value?.id) ?? topics.value[0];
+    if (!current) {
+      state.value = "empty";
+      return;
+    }
     selected.value = (await read(`/trends/${current.id}`)).data;
     timelineSource.value = "";
     state.value = "ready";
@@ -553,7 +557,7 @@ onMounted(load);
         <button type="button" @click="showRule = true">＋ 创建规则</button>
       </header>
       <UiStatePanel
-        v-if="state === 'loading' || ['error', 'expired', 'forbidden', 'blocked'].includes(state)"
+        v-if="state !== 'ready' && state !== 'empty'"
         :kind="state"
         :request-id="requestId"
         @primary="load"
