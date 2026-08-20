@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import "../platform-polish.css";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 const p = defineProps<{ apiBaseUrl: string }>();
-type State =
-  "loading" | "ready" | "empty" | "error" | "rate_limited" | "blocked";
+type State = "loading" | "ready" | "empty" | "error" | "rate_limited" | "blocked";
 const state = ref<State>("loading"),
   data = ref<any>({ clients: [], webhooks: [], deliveries: [] }),
   requestId = ref(""),
@@ -41,19 +41,13 @@ async function load() {
       `/platform/open${organizationId.value ? `?organization_id=${encodeURIComponent(organizationId.value)}` : ""}`,
     );
     state.value =
-      data.value.clients.length ||
-      data.value.webhooks.length ||
-      data.value.deliveries.length
+      data.value.clients.length || data.value.webhooks.length || data.value.deliveries.length
         ? "ready"
         : "empty";
   } catch (e) {
     notice.value = String((e as Error).message);
     state.value =
-      (e as any).status === 429
-        ? "rate_limited"
-        : (e as any).status >= 500
-          ? "blocked"
-          : "error";
+      (e as any).status === 429 ? "rate_limited" : (e as any).status >= 500 ? "blocked" : "error";
   }
 }
 async function createClient() {
@@ -125,11 +119,9 @@ const statusText = (value: string) =>
     }) as Record<string, string>
   )[value] ?? "其他状态";
 const scopeText = (value: string) =>
-  (({ "status:read": "读取系统状态" }) as Record<string, string>)[value] ??
-  "其他权限";
+  (({ "status:read": "读取系统状态" }) as Record<string, string>)[value] ?? "其他权限";
 const eventText = (value: string) =>
-  (({ "scoutops.test": "测试事件" }) as Record<string, string>)[value] ??
-  "业务事件";
+  (({ "scoutops.test": "测试事件" }) as Record<string, string>)[value] ?? "业务事件";
 </script>
 <template>
   <section class="open-platform">
@@ -142,10 +134,7 @@ const eventText = (value: string) =>
         >
       </div>
       <form @submit.prevent="load">
-        <label
-          >组织编号<input
-            v-model="organizationId"
-            placeholder="精确筛选或创建时必填" /></label
+        <label>组织编号<input v-model="organizationId" placeholder="精确筛选或创建时必填" /></label
         ><button>读取</button>
       </form>
     </header>
@@ -160,11 +149,13 @@ const eventText = (value: string) =>
       ><button class="danger" @click="confirm">确认执行</button>
     </aside>
     <p v-if="notice" class="open-notice">
-      {{ notice }} <code v-if="requestId">关联编号：{{ requestId }}</code>
+      {{ notice }}
+      <details v-if="requestId">
+        <summary>技术详情</summary>
+        <code>请求 ID：{{ requestId }}</code>
+      </details>
     </p>
-    <section v-if="state === 'loading'" class="open-state">
-      正在读取真实开放平台配置…
-    </section>
+    <section v-if="state === 'loading'" class="open-state">正在读取真实开放平台配置…</section>
     <section v-else-if="state === 'error'" class="open-state">
       <strong>读取失败</strong>
       <p>检查组织编号或请求内容后重试。</p>
@@ -188,9 +179,7 @@ const eventText = (value: string) =>
         </article>
         <article>
           <strong>事件回调地址</strong
-          ><span
-            >业务事件发生后主动通知指定网址，可测试、重放并查看每次投递结果。</span
-          >
+          ><span>业务事件发生后主动通知指定网址，可测试、重放并查看每次投递结果。</span>
         </article>
         <article>
           <strong>投递记录</strong
@@ -216,114 +205,264 @@ const eventText = (value: string) =>
             <h3>接口访问账号</h3>
             <small>独立密钥、时间校验和防重复请求</small>
           </header>
-          <table>
-            <thead>
-              <tr>
-                <th>名称</th>
-                <th>权限 / 每分钟限额</th>
-                <th>状态</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="x in data.clients" :key="x.id">
-                <td data-label="名称">
-                  {{ x.name }}<small>{{ x.client_prefix }}</small>
-                </td>
-                <td data-label="权限 / 每分钟限额">
-                  {{ x.scopes.map(scopeText).join("、")
-                  }}<small>每分钟 {{ x.quota_per_minute }} 次</small>
-                </td>
-                <td data-label="状态">
-                  {{ statusText(x.status) }} · 第 {{ x.version }} 版
-                </td>
-                <td data-label="操作">
-                  <button
-                    @click="
-                      prepare(
-                        '轮换接口访问密钥',
-                        `/platform/open/clients/${x.id}/actions`,
-                        {
-                          action: 'rotate',
-                          expected_version: x.version,
-                          reason: form.reason,
-                        },
-                      )
-                    "
-                  >
-                    轮换</button
-                  ><button
-                    class="danger"
-                    @click="
-                      prepare(
-                        '撤销接口访问账号',
-                        `/platform/open/clients/${x.id}/actions`,
-                        {
-                          action: 'revoke',
-                          expected_version: x.version,
-                          reason: form.reason,
-                        },
-                      )
-                    "
-                  >
-                    撤销
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <ResponsiveDataView
+            :rows="data.clients"
+            :row-key="(item) => item.id"
+            title="接口访问账号"
+            :detail-title="(item) => item.name"
+          >
+            <template #desktop
+              ><table>
+                <thead>
+                  <tr>
+                    <th>名称</th>
+                    <th>权限 / 每分钟限额</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                    <th>技术信息</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="x in data.clients" :key="x.id">
+                    <td data-label="名称">
+                      {{ x.name }}
+                    </td>
+                    <td data-label="权限 / 每分钟限额">
+                      {{ x.scopes.map(scopeText).join("、")
+                      }}<small>每分钟 {{ x.quota_per_minute }} 次</small>
+                    </td>
+                    <td data-label="状态">{{ statusText(x.status) }} · 第 {{ x.version }} 版</td>
+                    <td data-label="操作">
+                      <button
+                        @click="
+                          prepare('轮换接口访问密钥', `/platform/open/clients/${x.id}/actions`, {
+                            action: 'rotate',
+                            expected_version: x.version,
+                            reason: form.reason,
+                          })
+                        "
+                      >
+                        轮换</button
+                      ><button
+                        class="danger"
+                        @click="
+                          prepare('撤销接口访问账号', `/platform/open/clients/${x.id}/actions`, {
+                            action: 'revoke',
+                            expected_version: x.version,
+                            reason: form.reason,
+                          })
+                        "
+                      >
+                        撤销
+                      </button>
+                    </td>
+                    <td>
+                      <details>
+                        <summary>技术详情</summary>
+                        <code>{{ x.client_prefix }}</code>
+                      </details>
+                    </td>
+                  </tr>
+                </tbody>
+              </table></template
+            >
+            <template #summary="{ row }"
+              ><span class="responsive-record-summary"
+                ><strong>{{ row.name }} · {{ statusText(row.status) }}</strong
+                ><small
+                  >{{ row.scopes.map(scopeText).join("、") }} · 每分钟
+                  {{ row.quota_per_minute }} 次</small
+                ></span
+              ></template
+            >
+            <template #detail="{ row }">
+              <dl>
+                <div>
+                  <dt>授权范围</dt>
+                  <dd>{{ row.scopes.map(scopeText).join("、") }}</dd>
+                </div>
+                <div>
+                  <dt>每分钟限额</dt>
+                  <dd>{{ row.quota_per_minute }} 次</dd>
+                </div>
+                <div>
+                  <dt>当前状态</dt>
+                  <dd>{{ statusText(row.status) }}</dd>
+                </div>
+                <div>
+                  <dt>版本</dt>
+                  <dd>第 {{ row.version }} 版</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <dl>
+                  <div>
+                    <dt>账号 ID</dt>
+                    <dd>{{ row.id }}</dd>
+                  </div>
+                  <div>
+                    <dt>账号前缀</dt>
+                    <dd>{{ row.client_prefix }}</dd>
+                  </div>
+                  <div>
+                    <dt>组织 ID</dt>
+                    <dd>{{ row.organization_id }}</dd>
+                  </div>
+                </dl>
+              </details>
+              <button
+                @click="
+                  prepare('轮换接口访问密钥', `/platform/open/clients/${row.id}/actions`, {
+                    action: 'rotate',
+                    expected_version: row.version,
+                    reason: form.reason,
+                  })
+                "
+              >
+                轮换密钥
+              </button>
+              <button
+                class="danger"
+                @click="
+                  prepare('撤销接口访问账号', `/platform/open/clients/${row.id}/actions`, {
+                    action: 'revoke',
+                    expected_version: row.version,
+                    reason: form.reason,
+                  })
+                "
+              >
+                撤销账号
+              </button>
+            </template>
+          </ResponsiveDataView>
         </section>
         <section>
           <header>
             <h3>事件回调地址</h3>
             <small>签名校验 · 只允许安全网址</small>
           </header>
-          <table>
-            <thead>
-              <tr>
-                <th>名称</th>
-                <th>事件</th>
-                <th>状态</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="x in data.webhooks" :key="x.id">
-                <td data-label="名称">
-                  {{ x.name }}<small>{{ x.target_url }}</small>
-                </td>
-                <td data-label="事件">
-                  {{ x.events.map(eventText).join("、") }}
-                </td>
-                <td data-label="状态">
-                  {{ statusText(x.status) }} · 第 {{ x.version }} 版
-                </td>
-                <td data-label="操作">
-                  <button
-                    @click="
-                      prepare(
-                        '发送测试回调',
-                        `/platform/open/webhooks/${x.id}/test`,
-                        { reason: form.reason },
-                      )
-                    "
-                  >
-                    测试</button
-                  ><button
-                    @click="
-                      prepare(
-                        '轮换回调签名密钥',
-                        `/platform/open/webhooks/${x.id}/rotate`,
-                        { expected_version: x.version, reason: form.reason },
-                      )
-                    "
-                  >
-                    轮换密钥
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <ResponsiveDataView
+            :rows="data.webhooks"
+            :row-key="(item) => item.id"
+            title="事件回调地址"
+            :detail-title="(item) => item.name"
+          >
+            <template #desktop
+              ><table>
+                <thead>
+                  <tr>
+                    <th>名称</th>
+                    <th>事件</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                    <th>技术信息</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="x in data.webhooks" :key="x.id">
+                    <td data-label="名称">
+                      {{ x.name }}<small>{{ x.target_url }}</small>
+                    </td>
+                    <td data-label="事件">
+                      {{ x.events.map(eventText).join("、") }}
+                    </td>
+                    <td data-label="状态">{{ statusText(x.status) }} · 第 {{ x.version }} 版</td>
+                    <td data-label="操作">
+                      <button
+                        @click="
+                          prepare('发送测试回调', `/platform/open/webhooks/${x.id}/test`, {
+                            reason: form.reason,
+                          })
+                        "
+                      >
+                        测试</button
+                      ><button
+                        @click="
+                          prepare('轮换回调签名密钥', `/platform/open/webhooks/${x.id}/rotate`, {
+                            expected_version: x.version,
+                            reason: form.reason,
+                          })
+                        "
+                      >
+                        轮换密钥
+                      </button>
+                    </td>
+                    <td>
+                      <details>
+                        <summary>技术详情</summary>
+                        <code>{{ x.id }}</code>
+                      </details>
+                    </td>
+                  </tr>
+                </tbody>
+              </table></template
+            >
+            <template #summary="{ row }"
+              ><span class="responsive-record-summary"
+                ><strong>{{ row.name }} · {{ statusText(row.status) }}</strong
+                ><small
+                  >{{ row.events.map(eventText).join("、") }} · 第 {{ row.version }} 版</small
+                ></span
+              ></template
+            >
+            <template #detail="{ row }">
+              <dl>
+                <div>
+                  <dt>安全网址</dt>
+                  <dd>{{ row.target_url }}</dd>
+                </div>
+                <div>
+                  <dt>订阅事件</dt>
+                  <dd>{{ row.events.map(eventText).join("、") }}</dd>
+                </div>
+                <div>
+                  <dt>当前状态</dt>
+                  <dd>{{ statusText(row.status) }}</dd>
+                </div>
+                <div>
+                  <dt>版本</dt>
+                  <dd>第 {{ row.version }} 版</dd>
+                </div>
+              </dl>
+              <details>
+                <summary>技术详情</summary>
+                <dl>
+                  <div>
+                    <dt>回调 ID</dt>
+                    <dd>{{ row.id }}</dd>
+                  </div>
+                  <div>
+                    <dt>组织 ID</dt>
+                    <dd>{{ row.organization_id }}</dd>
+                  </div>
+                  <div v-if="row.fingerprint">
+                    <dt>签名指纹</dt>
+                    <dd>{{ row.fingerprint }}</dd>
+                  </div>
+                </dl>
+              </details>
+              <button
+                @click="
+                  prepare('发送测试回调', `/platform/open/webhooks/${row.id}/test`, {
+                    reason: form.reason,
+                  })
+                "
+              >
+                发送测试
+              </button>
+              <button
+                @click="
+                  prepare('轮换回调签名密钥', `/platform/open/webhooks/${row.id}/rotate`, {
+                    expected_version: row.version,
+                    reason: form.reason,
+                  })
+                "
+              >
+                轮换密钥
+              </button>
+            </template>
+          </ResponsiveDataView>
         </section>
       </div>
       <section class="open-deliveries">
@@ -331,45 +470,122 @@ const eventText = (value: string) =>
           <h3>投递记录</h3>
           <small>1 分钟、5 分钟、15 分钟后重试；第四次失败转为多次失败</small>
         </header>
-        <table>
-          <thead>
-            <tr>
-              <th>端点</th>
-              <th>事件</th>
-              <th>状态</th>
-              <th>响应</th>
-              <th>更新时间</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="x in data.deliveries" :key="x.id">
-              <td data-label="端点">{{ x.endpoint_name }}</td>
-              <td data-label="事件">{{ x.event_type }}</td>
-              <td data-label="状态">
-                {{ statusText(x.status) }} · {{ x.attempt_count }} 次
-              </td>
-              <td data-label="响应">
-                {{ x.response_status ?? x.last_error_code ?? "—" }}
-              </td>
-              <td data-label="更新时间">{{ x.updated_at }}</td>
-              <td data-label="操作">
-                <button
-                  v-if="['dead_letter', 'succeeded'].includes(x.status)"
-                  @click="
-                    prepare(
-                      '重新投递回调',
-                      `/platform/open/deliveries/${x.id}/replay`,
-                      { reason: form.reason },
-                    )
-                  "
-                >
-                  重放
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <ResponsiveDataView
+          :rows="data.deliveries"
+          :row-key="(item) => item.id"
+          title="投递记录"
+          :detail-title="(item) => item.endpoint_name"
+        >
+          <template #desktop
+            ><table>
+              <thead>
+                <tr>
+                  <th>端点</th>
+                  <th>事件</th>
+                  <th>状态</th>
+                  <th>响应</th>
+                  <th>更新时间</th>
+                  <th>操作</th>
+                  <th>技术信息</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="x in data.deliveries" :key="x.id">
+                  <td data-label="端点">{{ x.endpoint_name }}</td>
+                  <td data-label="事件">{{ eventText(x.event_type) }}</td>
+                  <td data-label="状态">{{ statusText(x.status) }} · {{ x.attempt_count }} 次</td>
+                  <td data-label="响应">
+                    {{ x.response_status ?? (x.last_error_code ? "投递失败" : "—") }}
+                  </td>
+                  <td data-label="更新时间">
+                    {{ new Date(x.updated_at).toLocaleString("zh-CN") }}
+                  </td>
+                  <td data-label="操作">
+                    <button
+                      v-if="['dead_letter', 'succeeded'].includes(x.status)"
+                      @click="
+                        prepare('重新投递回调', `/platform/open/deliveries/${x.id}/replay`, {
+                          reason: form.reason,
+                        })
+                      "
+                    >
+                      重放
+                    </button>
+                  </td>
+                  <td>
+                    <details>
+                      <summary>技术详情</summary>
+                      <code>{{ x.last_error_code || x.id }}</code>
+                    </details>
+                  </td>
+                </tr>
+              </tbody>
+            </table></template
+          >
+          <template #summary="{ row }"
+            ><span class="responsive-record-summary"
+              ><strong>{{ row.endpoint_name }} · {{ statusText(row.status) }}</strong
+              ><small
+                >{{ eventText(row.event_type) }} · 已尝试 {{ row.attempt_count }} 次</small
+              ></span
+            ></template
+          >
+          <template #detail="{ row }">
+            <dl>
+              <div>
+                <dt>事件</dt>
+                <dd>{{ eventText(row.event_type) }}</dd>
+              </div>
+              <div>
+                <dt>当前状态</dt>
+                <dd>{{ statusText(row.status) }}</dd>
+              </div>
+              <div>
+                <dt>尝试次数</dt>
+                <dd>{{ row.attempt_count }} 次</dd>
+              </div>
+              <div>
+                <dt>响应状态</dt>
+                <dd>{{ row.response_status ?? (row.last_error_code ? "投递失败" : "—") }}</dd>
+              </div>
+              <div>
+                <dt>更新时间</dt>
+                <dd>{{ new Date(row.updated_at).toLocaleString("zh-CN") }}</dd>
+              </div>
+            </dl>
+            <details>
+              <summary>技术详情</summary>
+              <dl>
+                <div>
+                  <dt>投递 ID</dt>
+                  <dd>{{ row.id }}</dd>
+                </div>
+                <div>
+                  <dt>回调 ID</dt>
+                  <dd>{{ row.endpoint_id }}</dd>
+                </div>
+                <div>
+                  <dt>组织 ID</dt>
+                  <dd>{{ row.organization_id }}</dd>
+                </div>
+                <div v-if="row.last_error_code">
+                  <dt>错误代码</dt>
+                  <dd>{{ row.last_error_code }}</dd>
+                </div>
+              </dl>
+            </details>
+            <button
+              v-if="['dead_letter', 'succeeded'].includes(row.status)"
+              @click="
+                prepare('重新投递回调', `/platform/open/deliveries/${row.id}/replay`, {
+                  reason: form.reason,
+                })
+              "
+            >
+              重放
+            </button>
+          </template>
+        </ResponsiveDataView>
       </section></template
     >
   </section>

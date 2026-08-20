@@ -4463,6 +4463,17 @@ button {
   max-width: 300px;
   overflow-wrap: anywhere;
 }
+.open-platform details summary {
+  display: inline-flex;
+  min-height: var(--so-touch-target);
+  align-items: center;
+  color: var(--so-primary);
+  cursor: pointer;
+}
+.open-platform details code,
+.open-platform details dd {
+  overflow-wrap: anywhere;
+}
 @media (max-width: 800px) {
   .open-platform > header,
   .open-platform form,
@@ -4487,38 +4498,6 @@ button {
   .open-platform section > header {
     align-items: flex-start;
     flex-direction: column;
-  }
-  .open-platform table,
-  .open-platform tbody,
-  .open-platform tr,
-  .open-platform td {
-    display: block;
-    width: 100%;
-  }
-  .open-platform thead {
-    display: none;
-  }
-  .open-platform tr {
-    margin-top: 12px;
-    padding: 10px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-  }
-  .open-platform td {
-    padding: 8px 0;
-    display: grid;
-    grid-template-columns: 90px minmax(0, 1fr);
-    gap: 8px;
-    border: 0;
-    overflow-wrap: anywhere;
-  }
-  .open-platform td:before {
-    content: attr(data-label);
-    color: var(--text-muted);
-    font-size: 10px;
-  }
-  .open-platform td button {
-    width: auto;
   }
   .open-deliveries {
     padding: 14px;

@@ -1515,6 +1515,7 @@
         "/open/v1/status"
       ],
       "scope": "organization-owned API Clients, scopes, per-minute quotas, Webhook endpoints, signed delivery attempts and immutable delivery events",
+      "presentationBoundary": "desktop tables and mobile summary cards with detail drawers share the same client webhook and delivery records; client webhook delivery organization identifiers public prefixes fingerprints raw error codes and request IDs remain collapsed under technical details while statuses and events use Chinese business labels",
       "truthBoundary": "API and Webhook secrets are returned once; only Client hash or AES-256-GCM Webhook ciphertext is persisted; overview never selects secret material",
       "permission": "platform_token:manage plus same-origin and idempotency for management; independent Bearer timestamp nonce scope quota middleware for /open/v1",
       "configuration": [

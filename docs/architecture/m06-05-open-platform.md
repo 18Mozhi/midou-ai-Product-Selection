@@ -7,3 +7,5 @@ Client 密钥仅创建或轮换响应显示一次，MySQL 仅保存 SHA-256 哈�
 Webhook 签名密钥使用凭证主密钥 AES-256-GCM 加密。Node Worker 按 MySQL lease 投递，签名串为 `timestamp.delivery_id.body`，头为 `X-ScoutOps-Id`、`X-ScoutOps-Timestamp`、`X-ScoutOps-Signature: v1=<hex>`。每次尝试都重新解析 DNS，拒绝私网、环回、链路本地、多播和非 HTTPS 443 地址，并把 TLS 请求固定到已校验地址，避免 DNS 重绑定。失败按 60/300/900 秒重试，第四次失败进入死信；人工重放创建新 delivery 并保留来源证据。
 
 所有管理写入同步写平台审计与事务 outbox；每次投递状态变化写 `webhook_delivery_events`。本模块沿用 S0 单机宝塔 API/Worker，不作多节点或 10,000 用户能力声明。
+
+管理页在桌面端用表格展示 Client、Webhook 和投递记录，760px 及以下改用摘要卡片与详情抽屉。状态和事件显示中文业务名称；Client/Webhook/delivery/organization 标识、Client 前缀、Webhook 指纹、原始错误代码与 request_id 只在折叠的“技术详情”中展示。一次性明文密钥仍按原合同显式展示一次，不会被移入可重复打开的详情。

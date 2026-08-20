@@ -7,6 +7,8 @@
 5. 调用 `/open/v1/status` 时发送 `Authorization: Bearer <secret>`、当前 Unix 秒 `X-ScoutOps-Timestamp` 和每请求唯一 nonce。收到 409 时不得复用 nonce；429 按分钟窗口退避。
 6. 在宝塔 Worker 日志按 request_id/trace_id 排查投递；死信只能从页面携带原因重放。目标 DNS 解析到任何私网地址都会被阻止。
 
+390px 页面验收时，Client、Webhook 和投递记录应显示摘要卡片且没有横向宽表；详情抽屉保留测试、轮换、撤销和重放动作。Client 前缀、Webhook 指纹、原始错误代码、各类 ID 与 request_id 默认不出现在主界面，展开“技术详情”后可用于日志关联。
+
 调节：默认 Client 有效期 90 天、配额 60/min（最大 1000/min）、时间容差 300 秒、nonce 保留 600 秒、投递轮询 2000ms、lease 60 秒、超时 10000ms。修改后必须重启对应宝塔 Node 项目。
 
 回滚：先停止开放入口和 Worker 投递，回退 Web/API/Worker；确认无需保留 Client、Webhook、usage 与投递审计后，执行 `0023_open_platform_m06_05.down.sql`。该 down 会删除 M06-05 表，属于数据删除操作，必须先导出审计与死信证据。若需保留历史，只回退代码并停用端点，不执行 down。
