@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, createApiResponseClient } from "../api-client";
 import "../report-center.css";
 type ReportType = "opportunity" | "trend" | "team";
 const props = defineProps<{ apiBaseUrl: string }>(),
+  route = useRoute(),
+  router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   requestResponse = createApiResponseClient(props.apiBaseUrl),
-  type = ref<ReportType>("opportunity"),
+  type = ref<ReportType>(
+    ["opportunity", "trend", "team"].includes(String(route.query.report))
+      ? (route.query.report as ReportType)
+      : "opportunity",
+  ),
   state = ref("loading"),
   report = ref<any>(null),
   exports = ref<any[]>([]),
@@ -45,8 +52,8 @@ async function load() {
   } catch {}
 }
 async function choose(v: ReportType) {
-  type.value = v;
-  await load();
+  if (type.value === v) return;
+  await router.push({ query: { ...route.query, report: v === "opportunity" ? undefined : v } });
 }
 async function createExport() {
   busy.value = true;
@@ -111,6 +118,15 @@ const labels: Record<ReportType, string> = {
     team: "团队绩效",
   },
   metrics = computed(() => Object.entries(report.value?.summary ?? {})),
+  conclusion = computed(() => {
+    const summary = report.value?.summary;
+    if (!summary) return "正在形成结论…";
+    if (type.value === "opportunity")
+      return `共 ${format(summary.total)} 个机会，已采纳 ${format(summary.adopted)} 个，证据完整 ${format(summary.complete_coverage)} 个。`;
+    if (type.value === "trend")
+      return `共 ${format(summary.total)} 个趋势主题，累计 ${format(summary.signals)} 条信号，平均置信度 ${format(summary.average_confidence)}。`;
+    return `共 ${format(summary.members)} 名成员、${format(summary.total)} 项任务，已完成 ${format(summary.completed)} 项，逾期 ${format(summary.overdue)} 项。`;
+  }),
   max = computed(() =>
     Math.max(1, ...(report.value?.series ?? []).map((x: any) => Number(x.value) || 0)),
   ),
@@ -177,23 +193,20 @@ onMounted(() => {
   }, 5000);
 });
 onUnmounted(() => clearInterval(timer));
+watch(
+  () => route.query.report,
+  (value) => {
+    const next = ["opportunity", "trend", "team"].includes(String(value))
+      ? (value as ReportType)
+      : "opportunity";
+    if (next === type.value) return;
+    type.value = next;
+    void load();
+  },
+);
 </script>
 <template>
   <section class="report-center">
-    <section class="report-guide">
-      <div>
-        <p>报表怎么用</p>
-        <h3>先看结论，再看分布，最后导出明细</h3>
-        <span
-          >机会分析用于判断选品进度，趋势分析用于发现市场变化，团队绩效用于查看任务完成情况。</span
-        >
-      </div>
-      <ol>
-        <li><b>1</b>选择报表</li>
-        <li><b>2</b>查看指标和图表</li>
-        <li><b>3</b>导出明细留档</li>
-      </ol>
-    </section>
     <header>
       <div>
         <p>分析与导出</p>
@@ -241,7 +254,23 @@ onUnmounted(() => clearInterval(timer));
       <button @click="load">重新加载</button>
     </section>
     <template v-else
-      ><section class="report-metrics">
+      ><section class="report-conclusion" aria-live="polite">
+        <span>{{ labels[type] }}结论摘要</span>
+        <strong>{{ conclusion }}</strong>
+      </section>
+      <section class="report-scope" aria-label="报表统计口径">
+        <div><span>统计范围</span><b>当前工作区全部已落库记录</b></div>
+        <div>
+          <span>数据截至</span
+          ><b>{{
+            report?.observed_at
+              ? new Date(report.observed_at).toLocaleString("zh-CN", { hour12: false })
+              : "数据不足"
+          }}</b>
+        </div>
+        <div><span>缺失值</span><b>保持“数据不足”，不推测补齐</b></div>
+      </section>
+      <section class="report-metrics">
         <article v-for="[key, value] in metrics" :key="key">
           <span>{{ metricLabel(key) }}</span
           ><b>{{ format(value) }}</b>
@@ -289,7 +318,10 @@ onUnmounted(() => clearInterval(timer));
           <p>导出生命周期</p>
           <h3>导出记录</h3>
         </div>
-        <small>文件到期后由 Worker 清理</small>
+        <div class="report-export-links">
+          <small>文件到期后由 Worker 清理</small>
+          <RouterLink to="/tasks?view=exports">在任务中心查看</RouterLink>
+        </div>
       </header>
       <div v-if="exports.length" class="report-export-list">
         <article v-for="item in exports" :key="item.id">

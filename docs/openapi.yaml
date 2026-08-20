@@ -3482,6 +3482,7 @@ paths:
   /automations:
     get:
       summary: List automation rules in the active organization and workspace
+      description: Each rule includes the latest scoped execution status, update time and sanitized failure code when an execution exists.
       x-required-capability: team:manage
       responses:
         "200": { $ref: "#/components/responses/Success" }
@@ -3618,6 +3619,7 @@ paths:
   /reports/{reportType}:
     get:
       summary: Aggregate current scoped opportunity trend or team facts
+      description: Aggregates all persisted records in the active workspace and returns the latest factual observed_at; no selectable time window or inferred value is applied.
       x-required-capability: report:read
       parameters:
         [

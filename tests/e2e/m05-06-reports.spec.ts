@@ -152,21 +152,16 @@ async function setup(page: Page) {
           format: "csv",
           status: "queued",
           expires_at: "2026-09-19T12:00:00.000Z",
-          regenerated_from_export_id:
-            "00000000-0000-4000-8000-000000000565",
+          regenerated_from_export_id: "00000000-0000-4000-8000-000000000565",
         }),
       });
     },
   );
 }
-test("M05-06.A07/A08/A15 desktop factual report and export lifecycle", async ({
-  page,
-}) => {
+test("M05-06.A07/A08/A15 desktop factual report and export lifecycle", async ({ page }) => {
   await setup(page);
   await page.goto("/reports");
-  await expect(
-    page.getByRole("heading", { name: "报表与导出", level: 2 }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "报表与导出", level: 2 })).toBeVisible();
   await expect(page.getByText("28").first()).toBeVisible();
   await expect(page.getByText("文件到期后由 Worker 清理")).toBeVisible();
   await expect(page.locator('i[data-status="queued"]')).toHaveText("排队中");
@@ -175,13 +170,21 @@ test("M05-06.A07/A08/A15 desktop factual report and export lifecycle", async ({
   await expect(page.getByText("expired", { exact: true })).toHaveCount(0);
   await expect(page.getByText("继续观察", { exact: true })).toBeVisible();
   await expect(page.getByText("observe", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("当前工作区全部已落库记录")).toBeVisible();
+  await expect(page.getByText("共 28 个机会，已采纳 8 个，证据完整 17 个。")).toBeVisible();
+  await expect(page.getByText("报表怎么用")).toHaveCount(0);
   await expect(page).toHaveScreenshot("m05-06-reports-desktop.png", {
     fullPage: true,
   });
   await page.getByRole("button", { name: "趋势分析" }).click();
-  await expect(page.getByText("128")).toBeVisible();
+  await expect(page).toHaveURL(/report=trend/);
+  await expect(page.getByText("128", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "重新生成" }).first().click();
   await expect(page.getByText("新的团队绩效导出已进入队列。")).toBeVisible();
+  await page.getByRole("link", { name: "在任务中心查看" }).click();
+  await expect(page).toHaveURL(/\/tasks\?view=exports/);
+  await expect(page.getByRole("heading", { name: "导出任务" })).toBeVisible();
+  await expect(page.getByText("前往报表页下载文件")).toBeVisible();
 });
 test("M05-06.A07/A08/A15 mobile team report layout", async ({ page }) => {
   await setup(page);
@@ -189,6 +192,7 @@ test("M05-06.A07/A08/A15 mobile team report layout", async ({ page }) => {
   await page.goto("/reports");
   await page.getByRole("button", { name: "团队绩效" }).click();
   await expect(page.getByText("成员数")).toBeVisible();
+  await expect(page.getByText(/共 6 名成员、42 项任务/)).toBeVisible();
   await expect(page.getByText("数据不足", { exact: false }).first())
     .toBeVisible({ timeout: 5000 })
     .catch(() => {});

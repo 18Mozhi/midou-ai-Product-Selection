@@ -2,15 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import Fastify from "fastify";
-import {
-  ReportService,
-  ReportServiceError,
-} from "../../apps/api/dist/report-service.js";
+import { ReportService, ReportServiceError } from "../../apps/api/dist/report-service.js";
 import { registerReportRoutes } from "../../apps/api/dist/report-routes.js";
-import {
-  csvCell,
-  csvBuffer,
-} from "../../apps/worker/dist/report-export-worker.js";
+import { csvCell, csvBuffer } from "../../apps/worker/dist/report-export-worker.js";
 test("M05-06.A01/A02/A04/A12 locks report and CSV truth boundaries", async () => {
   const repo = {
       report: async (i) => i,
@@ -24,16 +18,11 @@ test("M05-06.A01/A02/A04/A12 locks report and CSV truth boundaries", async () =>
     (e) => e instanceof ReportServiceError && e.code === "report_type_invalid",
   );
   assert.throws(
-    () =>
-      service.createExport({ value: { report_type: "trend", format: "xlsx" } }),
-    (e) =>
-      e instanceof ReportServiceError && e.code === "report_format_invalid",
+    () => service.createExport({ value: { report_type: "trend", format: "xlsx" } }),
+    (e) => e instanceof ReportServiceError && e.code === "report_format_invalid",
   );
   assert.equal(csvCell("=SUM(A1:A2)"), '"\'=SUM(A1:A2)"');
-  assert.match(
-    csvBuffer([{ name: 'a"b', missing: null }]).toString("utf8"),
-    /"a""b",""/,
-  );
+  assert.match(csvBuffer([{ name: 'a"b', missing: null }]).toString("utf8"), /"a""b",""/);
 });
 test("M05-06 regenerates only expired or final-failure exports as a new audited job", async () => {
   const sourceId = "00000000-0000-4000-8000-000000000568",
@@ -69,10 +58,7 @@ test("M05-06 regenerates only expired or final-failure exports as a new audited 
   assert.equal(result.value.report_type, "trend");
   assert.equal(result.value.format, "csv");
   assert.equal(result.value.expires_at.toISOString(), "2026-08-20T10:00:00.000Z");
-  assert.equal(
-    result.route,
-    `POST:/api/v1/report-exports/${sourceId}/regenerate`,
-  );
+  assert.equal(result.route, `POST:/api/v1/report-exports/${sourceId}/regenerate`);
 
   repo.detail = async ({ exportId }) => ({
     id: exportId,
@@ -84,8 +70,7 @@ test("M05-06 regenerates only expired or final-failure exports as a new audited 
   await assert.rejects(
     () => service.regenerate({ exportId: sourceId }),
     (error) =>
-      error instanceof ReportServiceError &&
-      error.code === "report_export_still_available",
+      error instanceof ReportServiceError && error.code === "report_export_still_available",
   );
   assert.equal(created.length, 1);
 });
@@ -167,5 +152,7 @@ test("M05-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(v[2], /report:read[\s\S]*regenerate[\s\S]*text\/csv/);
   assert.match(v[3], /row_limit_exceeded[\s\S]*expired/);
   assert.match(v[4], /数据不足[\s\S]*重新生成|到期后由 Worker 清理/);
+  assert.match(v[5], /全部已落库记录[\s\S]*observed_at/);
+  assert.match(v[4], /结论摘要[\s\S]*在任务中心查看/);
   assert.equal(JSON.parse(v.at(-1)).atomicTasks.length, 17);
 });

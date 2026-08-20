@@ -16,7 +16,14 @@ type Rule = {
   status: string;
   version: number;
   updated_at: string;
+  latest_execution_status: string | null;
+  latest_execution_at: string | null;
+  latest_error_code: string | null;
 };
+type RuleTemplate = Pick<
+  Rule,
+  "name" | "trigger_event_type" | "condition_severity" | "action_type" | "action_title"
+>;
 const props = defineProps<{ apiBaseUrl: string }>(),
   request = createApiClient(props.apiBaseUrl),
   state = ref("loading"),
@@ -39,6 +46,32 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     rate_limit_count: 20,
     rate_limit_window_minutes: 60,
   });
+const templates: Array<RuleTemplate & { description: string }> = [
+  {
+    name: "审批超时提醒",
+    description: "审批节点超时后提醒规则负责人跟进。",
+    trigger_event_type: "approval.overdue",
+    condition_severity: "warning",
+    action_type: "notify_owner",
+    action_title: "审批超时，请人工处理",
+  },
+  {
+    name: "竞品告警复核",
+    description: "重要竞品告警进入队列后创建人工复核任务。",
+    trigger_event_type: "competitor.alert.queued",
+    condition_severity: "warning",
+    action_type: "create_task",
+    action_title: "复核竞品变化与来源证据",
+  },
+  {
+    name: "审批驳回跟进",
+    description: "审批被驳回后通知负责人修正材料。",
+    trigger_event_type: "approval.node.rejected",
+    condition_severity: "any",
+    action_type: "notify_owner",
+    action_title: "审批被驳回，请补充依据",
+  },
+];
 async function api(path: string, init?: RequestInit) {
   try {
     const response = await request<any>(path, init ?? {});
@@ -117,6 +150,12 @@ function closeEditor() {
   showCreate.value = false;
   editing.value = null;
 }
+function applyTemplate(template: RuleTemplate) {
+  form.value = {
+    ...form.value,
+    ...template,
+  };
+}
 async function status(rule: Rule) {
   busy.value = true;
   try {
@@ -156,33 +195,31 @@ const trigger = (v: string) =>
       }) as Record<string, string>
     )[v] ?? "未知",
   executionStatus = (v: string) =>
-    (({ succeeded: "已完成", failed: "失败", dead_letter: "死信" }) as Record<string, string>)[v] ??
-    "处理中";
+    (
+      ({
+        queued: "排队中",
+        leased: "执行中",
+        retry_scheduled: "等待重试",
+        succeeded: "已完成",
+        rate_limited: "已限流",
+        failed: "失败",
+        dead_letter: "最终失败",
+      }) as Record<string, string>
+    )[v] ?? "状态待确认",
+  failureReason = (v: string | null) =>
+    (
+      ({
+        action_failed: "动作执行失败，系统将按策略重试",
+        rate_limit_exceeded: "已达到规则时间窗内的执行上限",
+        rule_paused_before_execution: "执行前规则已暂停，本次未产生动作",
+      }) as Record<string, string>
+    )[v ?? ""] ?? (v ? "执行未完成，请查看技术详情" : "无失败原因"),
+  time = (v: string | null) =>
+    v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "尚未执行";
 onMounted(load);
 </script>
 <template>
   <section class="automation-center">
-    <section class="selection-pipeline">
-      <div>
-        <p>持续选品</p>
-        <h3>设定规则后，系统会按周期自动推进</h3>
-        <span
-          >采集程序从已启用的电商、论坛、新闻和社媒来源抓取公开页面；所有结果保留网址、抓取时间和原始证据。</span
-        >
-      </div>
-      <ol>
-        <li><b>01</b><span>按来源计划定时采集</span></li>
-        <li><b>02</b><span>识别热点与商品</span></li>
-        <li><b>03</b><span>生成选品机会</span></li>
-        <li><b>04</b><span>匹配竞品与货源</span></li>
-        <li><b>05</b><span>利润、风险与证据复核</span></li>
-      </ol>
-      <nav>
-        <RouterLink to="/trends">管理热点监控规则</RouterLink
-        ><RouterLink to="/opportunities/start">立即运行一次选品</RouterLink
-        ><RouterLink to="/tasks">查看执行任务</RouterLink>
-      </nav>
-    </section>
     <header>
       <div>
         <p>团队自动化</p>
@@ -232,6 +269,17 @@ onMounted(load);
           {{ trigger(rule.trigger_event_type) }} →
           {{ action(rule.action_type) }}
         </p>
+        <ol class="automation-flow" aria-label="规则执行顺序">
+          <li>
+            <small>当</small><b>{{ trigger(rule.trigger_event_type) }}</b>
+          </li>
+          <li>
+            <small>且</small><b>严重程度为{{ severity(rule.condition_severity) }}</b>
+          </li>
+          <li>
+            <small>则</small><b>{{ action(rule.action_type) }}</b>
+          </li>
+        </ol>
         <dl>
           <div>
             <dt>条件</dt>
@@ -242,6 +290,12 @@ onMounted(load);
             <dd>{{ rule.rate_limit_count }} / {{ rule.rate_limit_window_minutes }} 分钟</dd>
           </div>
         </dl>
+        <div class="automation-last-run">
+          <span>最近执行</span>
+          <b>{{ executionStatus(rule.latest_execution_status || "") }}</b>
+          <small>{{ time(rule.latest_execution_at) }}</small>
+          <em v-if="rule.latest_error_code">{{ failureReason(rule.latest_error_code) }}</em>
+        </div>
         <footer>
           <button class="secondary" @click="open(rule)">查看详情</button
           ><button class="secondary" @click="edit(rule)">编辑</button
@@ -259,10 +313,24 @@ onMounted(load);
         <li v-for="x in selected.executions" :key="x.id">
           <b>{{ executionStatus(x.status) }}</b
           ><span>规则 v{{ x.rule_version }} · 尝试 {{ x.attempt_count }} 次</span
-          ><small
-            >{{ x.action_resource_type || "无动作资源" }}
-            {{ x.action_resource_id || x.last_error_code || "" }}</small
+          ><small>{{ time(x.updated_at) }}</small>
+          <em v-if="x.last_error_code">{{ failureReason(x.last_error_code) }}</em>
+          <RouterLink
+            v-if="x.action_resource_type === 'task' && x.action_resource_id"
+            :to="{ path: `/tasks/${x.action_resource_id}`, query: { from: '/automations' } }"
+            >查看关联人工任务</RouterLink
+          ><RouterLink
+            v-if="x.notification_id"
+            :to="{
+              path: '/notifications',
+              query: { notification: x.notification_id, from: '/automations' },
+            }"
+            >查看触发通知与来源</RouterLink
           >
+          <details v-if="x.last_error_code || x.action_resource_id">
+            <summary>技术详情</summary>
+            <code>{{ x.last_error_code || x.action_resource_id }}</code>
+          </details>
         </li>
       </ul>
       <p v-else>尚无匹配事件，未执行任何动作。</p>
@@ -270,28 +338,51 @@ onMounted(load);
     <dialog :open="showCreate">
       <form @submit.prevent="create">
         <h3>{{ editing ? "编辑自动化规则" : "创建自动化规则" }}</h3>
-        <label>规则名称<input v-model="form.name" required maxlength="200" /></label
-        ><label
-          >触发事件<select v-model="form.trigger_event_type">
-            <option value="approval.overdue">审批节点超时</option>
-            <option value="approval.node.rejected">审批被驳回</option>
-            <option value="competitor.alert.queued">竞品告警入队</option>
-            <option value="task.created">任务创建</option>
-          </select></label
-        ><label
-          >严重程度<select v-model="form.condition_severity">
-            <option value="any">任意</option>
-            <option value="info">普通</option>
-            <option value="warning">重要</option>
-            <option value="critical">严重</option>
-          </select></label
-        ><label
-          >动作<select v-model="form.action_type">
-            <option value="notify_owner">通知负责人</option>
-            <option v-if="!form.trigger_event_type.startsWith('task.')" value="create_task">
-              创建人工任务
-            </option>
-          </select></label
+        <section v-if="!editing" class="automation-templates">
+          <header><b>从业务模板开始</b><span>选择后仍可逐项调整</span></header>
+          <div>
+            <button
+              v-for="template in templates"
+              :key="template.name"
+              type="button"
+              class="secondary"
+              @click="applyTemplate(template)"
+            >
+              <b>{{ template.name }}</b
+              ><small>{{ template.description }}</small>
+            </button>
+          </div>
+        </section>
+        <label>规则名称<input v-model="form.name" required maxlength="200" /></label>
+        <section class="automation-builder" aria-label="触发器、条件和动作">
+          <label
+            ><b>当</b><span>触发器</span
+            ><select v-model="form.trigger_event_type">
+              <option value="approval.overdue">审批节点超时</option>
+              <option value="approval.node.rejected">审批被驳回</option>
+              <option value="competitor.alert.queued">竞品告警入队</option>
+              <option value="task.created">任务创建</option>
+            </select></label
+          >
+          <label
+            ><b>且</b><span>条件</span
+            ><select v-model="form.condition_severity">
+              <option value="any">任意</option>
+              <option value="info">普通</option>
+              <option value="warning">重要</option>
+              <option value="critical">严重</option>
+            </select></label
+          >
+          <label
+            ><b>则</b><span>动作</span
+            ><select v-model="form.action_type">
+              <option value="notify_owner">通知负责人</option>
+              <option v-if="!form.trigger_event_type.startsWith('task.')" value="create_task">
+                创建人工任务
+              </option>
+            </select></label
+          >
+        </section>
         ><label
           >规则负责人账号编号<input
             v-model="form.owner_id"

@@ -23,12 +23,27 @@ type Task = {
   comments?: any[];
   events?: any[];
 };
+type ExportTask = {
+  id: string;
+  report_type: "opportunity" | "trend" | "team";
+  status: string;
+  attempt_count: number;
+  row_count: number | null;
+  last_error_code: string | null;
+  created_at: string;
+  updated_at: string;
+  expires_at: string;
+};
 const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all"; taskId?: string }>(),
   route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   tasks = ref<Task[]>([]),
+  exportTasks = ref<ExportTask[]>([]),
+  activeView = ref<"business" | "exports">(
+    props.mode === "all" && route.query.view === "exports" ? "exports" : "business",
+  ),
   summary = ref<any>({
     todo: 0,
     in_progress: 0,
@@ -132,6 +147,25 @@ const pageSize = 10,
       })),
     ].sort((a, b) => new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf());
   });
+const exportStatusLabel = (value: string) =>
+    (
+      ({
+        queued: "排队中",
+        leased: "生成中",
+        retry_scheduled: "等待重试",
+        succeeded: "已完成",
+        dead_letter: "生成失败",
+        expired: "已过期",
+      }) as Record<string, string>
+    )[value] ?? "状态待确认",
+  exportTypeLabel = (value: ExportTask["report_type"]) =>
+    ({ opportunity: "机会分析", trend: "趋势分析", team: "团队绩效" })[value],
+  exportNextStep = (item: ExportTask) =>
+    item.status === "succeeded"
+      ? "前往报表页下载文件"
+      : ["dead_letter", "expired"].includes(item.status)
+        ? "前往报表页重新生成"
+        : "系统正在异步处理，无需停留等待";
 async function api<T = any>(
   path: string,
   options?: ApiRequestOptions,
@@ -164,6 +198,11 @@ async function api<T = any>(
 async function load() {
   state.value = "loading";
   try {
+    if (activeView.value === "exports") {
+      exportTasks.value = await api<ExportTask[]>("/report-exports");
+      state.value = exportTasks.value.length ? "ready" : "empty";
+      return;
+    }
     const mine = props.mode === "today" ? "&mine=true" : "",
       [list, sum] = await Promise.all([
         api(
@@ -180,6 +219,16 @@ async function load() {
     state.value = list.length ? "ready" : "empty";
     if (props.taskId) await openById(props.taskId);
   } catch {}
+}
+async function setView(value: "business" | "exports") {
+  await router.replace({
+    query: {
+      ...route.query,
+      view: value === "exports" ? "exports" : undefined,
+      status: undefined,
+      page: undefined,
+    },
+  });
 }
 async function openById(id: string) {
   try {
@@ -374,8 +423,8 @@ watch(
   },
 );
 watch(
-  () => [route.query.status, route.query.page],
-  ([nextStatus, nextPage], previous) => {
+  () => [route.query.status, route.query.page, route.query.view],
+  ([nextStatus, nextPage, nextView], previous) => {
     const parsedStatus = ["todo", "in_progress", "paused", "completed"].includes(
       String(nextStatus ?? ""),
     )
@@ -384,6 +433,7 @@ watch(
     const parsedPage = Math.max(1, Number(nextPage) || 1);
     status.value = parsedStatus;
     page.value = parsedPage;
+    activeView.value = props.mode === "all" && nextView === "exports" ? "exports" : "business";
     if (previous) void load();
   },
 );
@@ -403,6 +453,12 @@ watch(
     <div v-if="notice" class="task-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
     </div>
+    <nav v-if="mode === 'all'" class="task-view-tabs" aria-label="任务类型">
+      <button :aria-pressed="activeView === 'business'" @click="setView('business')">
+        业务任务
+      </button>
+      <button :aria-pressed="activeView === 'exports'" @click="setView('exports')">导出任务</button>
+    </nav>
     <section v-if="state === 'loading'" class="task-state">正在读取任务…</section>
     <section
       v-else-if="['error', 'forbidden', 'expired', 'rate_limited'].includes(state)"
@@ -422,7 +478,7 @@ watch(
       <p>{{ notice }}</p>
       <button @click="load">重新加载</button>
     </section>
-    <template v-else
+    <template v-else-if="activeView === 'business'"
       ><div class="task-metrics">
         <article>
           <span>待处理</span><b>{{ summary.todo }}</b>
@@ -494,7 +550,40 @@ watch(
         </article>
       </div></template
     >
-    <nav v-if="total > pageSize" class="task-pagination" aria-label="任务分页">
+    <section v-else class="task-export-jobs">
+      <header>
+        <div>
+          <span>异步工作</span>
+          <h3>导出任务</h3>
+        </div>
+        <RouterLink to="/reports">创建或管理导出</RouterLink>
+      </header>
+      <div v-if="exportTasks.length">
+        <article v-for="item in exportTasks" :key="item.id">
+          <i :data-status="item.status">{{ exportStatusLabel(item.status) }}</i>
+          <span
+            ><strong>{{ exportTypeLabel(item.report_type) }} · CSV</strong
+            ><small>{{ exportNextStep(item) }}</small></span
+          >
+          <span
+            ><strong>{{ time(item.updated_at) }}</strong
+            ><small>最近更新</small></span
+          >
+          <RouterLink :to="{ path: '/reports', query: { report: item.report_type } }"
+            >查看任务</RouterLink
+          >
+        </article>
+      </div>
+      <div v-else class="task-state">
+        <h3>尚无导出任务</h3>
+        <p>从报表页提交 CSV 导出后，会在这里统一显示处理状态。</p>
+      </div>
+    </section>
+    <nav
+      v-if="activeView === 'business' && total > pageSize"
+      class="task-pagination"
+      aria-label="任务分页"
+    >
       <button :disabled="page <= 1" @click="setPage(page - 1)">上一页</button>
       <span>第 {{ page }} / {{ pageCount }} 页 · 共 {{ total }} 项</span>
       <button :disabled="page >= pageCount" @click="setPage(page + 1)">下一页</button>

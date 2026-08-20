@@ -22,6 +22,9 @@ const org = "00000000-0000-4000-8000-000000000551",
     rate_limit_window_minutes: 60,
     status: "active",
     version: 1,
+    latest_execution_status: "dead_letter",
+    latest_execution_at: "2026-08-08T12:01:01.000Z",
+    latest_error_code: "action_failed",
     created_at: "2026-08-08T12:00:00.000Z",
     updated_at: "2026-08-08T12:00:00.000Z",
   };
@@ -40,9 +43,7 @@ async function setup(page: Page) {
       }),
     }),
   );
-  await page.route("**/api/v1/automations", (r) =>
-    r.fulfill({ json: envelope([rule]) }),
-  );
+  await page.route("**/api/v1/automations", (r) => r.fulfill({ json: envelope([rule]) }));
   await page.route(`**/api/v1/automations/${ruleId}`, (r) =>
     r.fulfill({
       json: envelope({
@@ -65,33 +66,28 @@ async function setup(page: Page) {
     }),
   );
 }
-test("M05-05.A07/A08/A15 desktop rules and execution drawer", async ({
-  page,
-}) => {
+test("M05-05.A07/A08/A15 desktop rules and execution drawer", async ({ page }) => {
   await setup(page);
   await page.goto("/automations");
-  await expect(
-    page.getByRole("heading", { name: "自动化规则", level: 2 }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "自动化规则", level: 2 })).toBeVisible();
   await expect(page.getByText("审批超时人工跟进")).toBeVisible();
   await expect(page.getByText(/成员访问已授权|navigation_member_allowed/)).toHaveCount(0);
   await expect(page.getByRole("article").getByText("重要", { exact: true })).toBeVisible();
+  await expect(page.getByRole("article").getByText("最终失败", { exact: true })).toBeVisible();
+  await expect(page.getByText("动作执行失败，系统将按策略重试")).toBeVisible();
   await expect(page).toHaveScreenshot("m05-05-automation-rules-desktop.png", {
     fullPage: true,
   });
   await page.getByRole("button", { name: "查看详情" }).click();
   await expect(page.getByText("规则详情与执行记录")).toBeVisible();
   await expect(page.getByText("规则 v1 · 尝试 1 次")).toBeVisible();
+  await expect(page.getByRole("link", { name: "查看触发通知与来源" })).toBeVisible();
 });
-test("automation rule can enter edit mode with existing values", async ({
-  page,
-}) => {
+test("automation rule can enter edit mode with existing values", async ({ page }) => {
   await setup(page);
   await page.goto("/automations");
   await page.getByRole("button", { name: "编辑", exact: true }).click();
-  await expect(
-    page.getByRole("heading", { name: "编辑自动化规则" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "编辑自动化规则" })).toBeVisible();
   await expect(page.getByLabel("规则名称")).toHaveValue("审批超时人工跟进");
   await expect(page.getByRole("button", { name: "保存修改" })).toBeVisible();
 });
@@ -100,12 +96,9 @@ test("M05-05.A07/A08/A15 mobile create rule layout", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/automations");
   await page.getByRole("button", { name: "创建规则" }).click();
-  await expect(
-    page.getByRole("heading", { name: "创建自动化规则" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "创建自动化规则" })).toBeVisible();
   await expect(page.getByText("规则只消费真实通知投影")).toBeVisible();
-  await expect(page).toHaveScreenshot(
-    "m05-05-automation-rules-mobile-390.png",
-    { fullPage: true },
-  );
+  await page.getByRole("button", { name: /竞品告警复核/ }).click();
+  await expect(page.getByLabel("规则名称")).toHaveValue("竞品告警复核");
+  await expect(page).toHaveScreenshot("m05-05-automation-rules-mobile-390.png", { fullPage: true });
 });

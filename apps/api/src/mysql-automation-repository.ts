@@ -23,13 +23,21 @@ export class MySqlAutomationRepository implements AutomationRepository {
       rate_limit_window_minutes: Number(r.rate_limit_window_minutes),
       status: String(r.status),
       version: Number(r.version),
+      latest_execution_status: r.latest_execution_status ? String(r.latest_execution_status) : null,
+      latest_execution_at: iso(r.latest_execution_at),
+      latest_error_code: r.latest_error_code ? String(r.latest_error_code) : null,
       created_at: iso(r.created_at),
       updated_at: iso(r.updated_at),
     };
   }
   async list(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM automation_rules WHERE organization_id=? AND workspace_id=? ORDER BY updated_at DESC,id",
+      "SELECT r.*,e.status latest_execution_status,e.updated_at latest_execution_at," +
+        "e.last_error_code latest_error_code FROM automation_rules r LEFT JOIN automation_executions e " +
+        "ON e.id=(SELECT e2.id FROM automation_executions e2 WHERE e2.rule_id=r.id AND " +
+        "e2.organization_id=r.organization_id AND e2.workspace_id=r.workspace_id ORDER BY " +
+        "e2.created_at DESC,e2.id DESC LIMIT 1) WHERE r.organization_id=? AND r.workspace_id=? " +
+        "ORDER BY r.updated_at DESC,r.id",
       [i.organizationId, i.workspaceId],
     );
     return rows.map((r) => this.view(r));

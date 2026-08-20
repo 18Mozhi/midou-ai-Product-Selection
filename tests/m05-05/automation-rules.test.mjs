@@ -26,16 +26,11 @@ test("M05-05.A01/A02/A04/A12 validates safe versioned rule boundaries", () => {
         action_type: "create_task",
         action_assignee_id: id,
       }),
-    (e) =>
-      e instanceof AutomationServiceError &&
-      e.code === "automation_cycle_forbidden",
+    (e) => e instanceof AutomationServiceError && e.code === "automation_cycle_forbidden",
   );
   assert.throws(
-    () =>
-      validateAutomationRule({ ...rule, trigger_event_type: "unknown.event" }),
-    (e) =>
-      e instanceof AutomationServiceError &&
-      e.code === "automation_trigger_invalid",
+    () => validateAutomationRule({ ...rule, trigger_event_type: "unknown.event" }),
+    (e) => e instanceof AutomationServiceError && e.code === "automation_trigger_invalid",
   );
   assert.throws(
     () => validateAutomationRule({ ...rule, rate_limit_count: 0 }),
@@ -57,25 +52,20 @@ test("M05-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
       "verification/modules/M05-05.json",
     ],
     v = await Promise.all(files.map((x) => readFile(x, "utf8")));
-  assert.match(
-    v[0],
-    /automation_rules[\s\S]*automation_executions[\s\S]*automation_operations/,
-  );
+  assert.match(v[0], /automation_rules[\s\S]*automation_executions[\s\S]*automation_operations/);
   assert.match(v[2], /team:manage/);
   assert.match(v[3], /rate_limited[\s\S]*dead_letter/);
   assert.match(v[4], /不会自动审批|人工暂停|创建人工任务/);
+  assert.match(v[1], /latest_execution_status[\s\S]*latest_error_code/);
+  assert.match(v[4], /触发通知[\s\S]*人工任务/);
   assert.match(v[6], /宝塔[\s\S]*回滚/);
   assert.equal(JSON.parse(v.at(-1)).atomicTasks.length, 17);
 });
 test("automation detail can enter an audited full edit flow", async () => {
-  const { AutomationService } =
-    await import("../../apps/api/dist/automation-service.js");
+  const { AutomationService } = await import("../../apps/api/dist/automation-service.js");
   let input;
   const service = new AutomationService({
-    update: async (value) => (
-      (input = value),
-      { id: value.ruleId, version: 2 }
-    ),
+    update: async (value) => ((input = value), { id: value.ruleId, version: 2 }),
   });
   const result = await service.update({
     ruleId: id,
@@ -104,5 +94,6 @@ test("automation detail can enter an audited full edit flow", async () => {
   );
   assert.match(route, /app\.patch/);
   assert.match(web, /编辑自动化规则/);
+  assert.match(web, /从业务模板开始[\s\S]*触发器、条件和动作/);
   assert.match(openapi, /Edit a scoped automation rule/);
 });

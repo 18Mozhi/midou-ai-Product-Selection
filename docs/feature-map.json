@@ -1176,6 +1176,7 @@
       "scope": "organization and workspace scoped business tasks with create edit auditable soft-delete start complete cancel delay transfer progress immutable comments events idempotent operations audit and outbox",
       "truthBoundary": "SLA is derived only from persisted due_at; missing upstream deadlines remain not_set and M05-02 approvals M05-03 notifications M05-04 SSE are not fabricated",
       "pageFlow": "today and all-task lists preserve status and pagination in the URL; independent detail routes carry a validated source return path, expose SLA level deadline and next step, group delete under named secondary actions, and merge persisted events and comments into a time-ordered activity stream while keeping progress stage-first",
+      "secondaryWorkView": "the all-task route can switch to an URL-backed export-task view that reads the existing report export lifecycle; it does not merge report jobs into or fabricate rows in the business tasks table",
       "apiClientBoundary": "task list, detail, create, edit, comments, progress, soft-delete and single or batch lifecycle actions use the shared frontend API client; each write retains its independent idempotency key",
       "permission": "task:read for reads, task:create for creation, task:update for content progress soft-delete status due and comments, task:assign for transfer",
       "configuration": [
@@ -1293,6 +1294,7 @@
       ],
       "scope": "organization and workspace scoped versioned rules with detail, audited full editing, notification-derived executions, safe actions and idempotent operations",
       "truthBoundary": "rules only consume persisted notification facts; actions notify an owner or create a human task and never approve or change opportunity facts",
+      "pageFlow": "rule cards use an explicit trigger condition action sequence and show the latest execution status time and translated failure reason; creation offers editable business templates, while execution history links real created tasks and the persisted triggering notification source chain without routing platform alerts into the member automation surface",
       "permission": "team:manage for reads and writes with active current context",
       "configuration": [
         "AUTOMATION_POLL_MS",
@@ -1328,6 +1330,7 @@
       ],
       "scope": "current organization and workspace factual opportunity trend and team aggregates plus asynchronous CSV exports and idempotent regeneration",
       "truthBoundary": "aggregates only persisted facts and preserves missing values; CSV row overflow fails instead of truncating; regeneration creates a new queued export only from an expired or final-failure record and preserves the source export",
+      "pageFlow": "fixed report-type secondary navigation is URL-backed; all report types declare the current-workspace all-persisted-records scope and observed_at cutoff, lead with a factual conclusion summary on mobile, and expose the same asynchronous export lifecycle in the global task center without fabricating business tasks",
       "permission": "report:read on API list create detail regeneration and file download with current context",
       "configuration": [
         "REPORT_EXPORT_POLL_MS",

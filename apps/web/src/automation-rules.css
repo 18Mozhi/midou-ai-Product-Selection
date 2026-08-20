@@ -79,6 +79,26 @@
 .automation-grid p {
   color: var(--text-muted);
 }
+.automation-flow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.automation-flow li {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--surface-subtle);
+}
+.automation-flow small,
+.automation-last-run > span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
 .automation-grid dl {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -93,6 +113,25 @@
 .automation-grid dd {
   margin: 5px 0;
   font-weight: 700;
+}
+.automation-last-run {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 6px 10px;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.automation-last-run > small {
+  color: var(--text-muted);
+  text-align: right;
+}
+.automation-last-run > em {
+  grid-column: 1 / -1;
+  color: var(--so-danger);
+  font-style: normal;
+  font-size: 12px;
 }
 .automation-detail {
   position: fixed;
@@ -122,6 +161,18 @@
   border-radius: 10px;
   padding: 12px;
 }
+.automation-detail li em {
+  color: var(--so-danger);
+  font-style: normal;
+  font-size: 12px;
+}
+.automation-detail li a {
+  color: var(--accent);
+  font-weight: 700;
+}
+.automation-detail code {
+  overflow-wrap: anywhere;
+}
 .automation-detail small {
   color: var(--text-muted);
   overflow-wrap: anywhere;
@@ -136,6 +187,8 @@
   background: var(--surface);
   color: var(--text-primary);
   z-index: 40;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
 }
 .automation-center dialog::backdrop {
   background: var(--so-scrim);
@@ -168,6 +221,58 @@
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  position: sticky;
+  bottom: -10px;
+  padding: 12px 0 10px;
+  background: var(--surface);
+}
+.automation-grid article > div.automation-last-run {
+  display: grid;
+}
+.automation-templates {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  background: var(--surface-subtle);
+  border-radius: 10px;
+}
+.automation-templates > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.automation-templates > header span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.automation-templates > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.automation-templates button {
+  display: grid;
+  gap: 5px;
+  padding: 10px;
+  text-align: left;
+}
+.automation-templates button small {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.automation-builder {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.automation-builder label {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.automation-builder label > b {
+  color: var(--accent);
+  font-size: 16px;
 }
 @media (max-width: 700px) {
   .automation-center > header {
@@ -182,5 +287,17 @@
   }
   .automation-pair {
     grid-template-columns: 1fr;
+  }
+  .automation-flow,
+  .automation-builder,
+  .automation-templates > div {
+    grid-template-columns: 1fr;
+  }
+  .automation-last-run {
+    grid-template-columns: auto 1fr;
+  }
+  .automation-last-run > small {
+    grid-column: 1 / -1;
+    text-align: left;
   }
 }
