@@ -2,7 +2,15 @@
 import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
-import { applyCachedTheme, applyTheme, isThemeId, themes, type ThemeId } from "../design/theme";
+import {
+  applyCachedTheme,
+  applyShellDensity,
+  applyTheme,
+  isThemeId,
+  themes,
+  type ThemeId,
+} from "../design/theme";
+import { getLastMemberRoute, rememberMemberRoute } from "../navigation-memory";
 import { navigationItemsFor, type ShellNavigationItem } from "../route-catalog";
 import AppIcon from "./AppIcon.vue";
 import "../member-workspace-polish.css";
@@ -182,8 +190,7 @@ const roleSummary = computed(() => {
   return roles?.length ? roles.join(" · ") : "当前角色";
 });
 const memberReturnPath = () => {
-  const stored = window.sessionStorage.getItem("scoutops:last-member-route") ?? "/home";
-  return stored.startsWith("/") && !stored.startsWith("//") ? stored : "/home";
+  return getLastMemberRoute();
 };
 const contextSwitchTarget = computed(
   () =>
@@ -424,6 +431,7 @@ function shortcut(event: KeyboardEvent) {
 }
 onMounted(() => {
   void load();
+  applyShellDensity(props.shell !== "member");
   if (props.shell === "member") void loadThemePreference(false);
   else applyTheme("cloud-white");
   window.addEventListener("keydown", shortcut);
@@ -431,21 +439,24 @@ onMounted(() => {
 watch(
   () => route.fullPath,
   (fullPath) => {
-    if (props.shell === "member")
-      window.sessionStorage.setItem("scoutops:last-member-route", fullPath);
+    if (props.shell === "member") rememberMemberRoute(fullPath);
   },
   { immediate: true },
 );
 watch(
   () => props.shell,
   (shell) => {
+    applyShellDensity(shell !== "member");
     if (shell === "member") void loadThemePreference(false);
     else applyTheme("cloud-white");
   },
 );
 onUnmounted(() => {
   window.removeEventListener("keydown", shortcut);
-  if (props.shell !== "member") applyCachedTheme();
+  if (props.shell !== "member") {
+    applyCachedTheme();
+    applyShellDensity(false);
+  }
 });
 </script>
 

@@ -533,7 +533,7 @@
   padding: 18px;
   display: grid;
   place-items: center;
-  background: rgba(0, 5, 15, 0.78);
+  background: var(--so-overlay);
   backdrop-filter: blur(14px);
 }
 .trend-modal form {
@@ -545,7 +545,7 @@
   border: 1px solid var(--so-border);
   border-radius: 22px;
   background: var(--so-bg-elevated);
-  box-shadow: 0 35px 110px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--so-shadow-dialog);
   overflow: auto;
 }
 .trend-modal header {

@@ -8,6 +8,7 @@ import type {
   WorkspaceSummary,
 } from "@scoutops/contracts";
 import { ApiClientError, createApiClient, type ApiRequestOptions } from "../api-client";
+import { getRecentOrganizationIds, rememberOrganization } from "../navigation-memory";
 
 const props = defineProps<{ apiBaseUrl: string }>();
 const apiRequest = createApiClient(props.apiBaseUrl);
@@ -81,14 +82,7 @@ async function loadOrganizations() {
 async function chooseOrganization(organization: OrganizationMembershipSummary) {
   state.value = "loading";
   selectedOrganization.value = organization;
-  recentOrganizationIds.value = [
-    organization.id,
-    ...recentOrganizationIds.value.filter((id) => id !== organization.id),
-  ].slice(0, 5);
-  window.localStorage.setItem(
-    "scoutops:recent-organizations",
-    JSON.stringify(recentOrganizationIds.value),
-  );
+  recentOrganizationIds.value = rememberOrganization(organization.id);
   try {
     const [workspaceItems, teamItems] = await Promise.all([
       request<WorkspaceSummary[]>(`/org/${organization.id}/workspaces`),
@@ -119,15 +113,7 @@ async function chooseWorkspace(workspace: WorkspaceSummary) {
   }
 }
 onMounted(() => {
-  try {
-    const saved = JSON.parse(window.localStorage.getItem("scoutops:recent-organizations") ?? "[]");
-    if (Array.isArray(saved))
-      recentOrganizationIds.value = saved.filter(
-        (item): item is string => typeof item === "string",
-      );
-  } catch {
-    recentOrganizationIds.value = [];
-  }
+  recentOrganizationIds.value = getRecentOrganizationIds();
   void loadOrganizations();
 });
 </script>

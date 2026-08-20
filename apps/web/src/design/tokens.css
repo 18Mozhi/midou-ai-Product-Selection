@@ -79,6 +79,14 @@
   --so-radius-sm: 10px;
   --so-radius-md: 16px;
   --so-radius-lg: 24px;
+  --so-control-height: 44px;
+  --so-control-radius: 8px;
+  --so-card-radius: 12px;
+  --so-content-max: 1440px;
+  --so-readable-max: 1120px;
+  --so-density-gap: 16px;
+  --so-density-padding: 20px;
+  --so-disabled-opacity: 0.48;
   --so-font-ui: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
   --so-transition: 160ms ease;
   --so-bg-soft: color-mix(in srgb, var(--so-bg) 82%, var(--so-panel));
@@ -96,7 +104,10 @@
   --so-info-soft: color-mix(in srgb, var(--so-info) 14%, var(--so-panel));
   --so-info-border: color-mix(in srgb, var(--so-info) 42%, var(--so-border));
   --so-scrim: color-mix(in srgb, var(--so-bg) 72%, transparent);
+  --so-overlay: color-mix(in srgb, var(--so-bg) 82%, transparent);
   --so-shadow-color: color-mix(in srgb, var(--so-bg) 44%, transparent);
+  --so-shadow-card: 0 16px 44px color-mix(in srgb, var(--so-bg) 22%, transparent);
+  --so-shadow-dialog: 0 28px 90px color-mix(in srgb, var(--so-bg) 52%, transparent);
   --bg: var(--so-bg);
   --surface: var(--so-panel);
   --surface-subtle: var(--so-panel-soft);
@@ -111,6 +122,11 @@
   --danger: var(--so-danger);
   --info: var(--so-info);
   --shadow-sm: 0 12px 34px color-mix(in srgb, var(--so-bg) 28%, transparent);
+}
+[data-density="compact"] {
+  --so-control-height: 36px;
+  --so-density-gap: 10px;
+  --so-density-padding: 14px;
 }
 .theme-page *:focus-visible {
   outline: 3px solid var(--so-focus);

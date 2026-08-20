@@ -14,7 +14,7 @@
 .topology-hero {
   align-items: flex-end;
   background:
-    radial-gradient(circle at 80% -30%, rgba(23, 104, 178, 0.46), transparent 45%),
+    radial-gradient(circle at 80% -30%, var(--so-primary-soft), transparent 45%),
     linear-gradient(135deg, var(--so-bg), var(--so-bg-elevated));
   border: 1px solid var(--topology-line);
   border-radius: 18px;
@@ -96,14 +96,14 @@
 .topology-pulse {
   background: var(--topology-cyan);
   border-radius: 50%;
-  box-shadow: 0 0 0 0 rgba(57, 215, 255, 0.5);
+  box-shadow: 0 0 0 0 var(--so-primary-border);
   height: 13px;
   animation: topology-pulse 1.5s infinite;
   width: 13px;
 }
 @keyframes topology-pulse {
   70% {
-    box-shadow: 0 0 0 13px rgba(57, 215, 255, 0);
+    box-shadow: 0 0 0 13px transparent;
   }
 }
 .topology-verdict {

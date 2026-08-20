@@ -3,10 +3,11 @@ import { RouterView } from "vue-router";
 import "./styles.css";
 import "./design/tokens.css";
 import "./accessibility.css";
-import { applyCachedTheme } from "./design/theme";
+import { applyCachedTheme, applyShellDensity } from "./design/theme";
 import { router } from "./router";
 
 applyCachedTheme();
+applyShellDensity(false);
 createApp({ render: () => h(RouterView) })
   .use(router)
   .mount("#app");

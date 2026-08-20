@@ -3,8 +3,8 @@
   background: var(--so-bg);
   font-family: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
   font-synthesis: none;
-  --panel: rgba(13, 30, 51, 0.82);
-  --line: rgba(132, 168, 215, 0.16);
+  --panel: var(--so-panel);
+  --line: var(--so-border);
   --muted: var(--so-text-muted);
   --cyan: var(--so-primary);
   --violet: var(--so-primary-strong);
@@ -28,7 +28,11 @@ a {
   display: grid;
   grid-template-columns: 236px minmax(0, 1fr);
   background:
-    radial-gradient(circle at 80% 10%, rgba(78, 111, 255, 0.16), transparent 34%),
+    radial-gradient(
+      circle at 80% 10%,
+      color-mix(in srgb, var(--so-primary) 16%, transparent),
+      transparent 34%
+    ),
     linear-gradient(
       145deg,
       var(--so-bg-elevated) 0%,
@@ -40,7 +44,7 @@ a {
 .sidebar {
   padding: 28px 20px;
   border-right: 1px solid var(--line);
-  background: rgba(4, 12, 24, 0.72);
+  background: color-mix(in srgb, var(--so-bg) 72%, transparent);
   display: flex;
   flex-direction: column;
 }
@@ -75,8 +79,12 @@ nav {
   border-radius: 10px;
 }
 .nav-link--active {
-  color: white;
-  background: linear-gradient(90deg, rgba(87, 212, 255, 0.16), rgba(143, 124, 255, 0.12));
+  color: var(--so-text);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--so-primary-strong) 16%, transparent),
+    color-mix(in srgb, var(--so-primary-strong) 12%, transparent)
+  );
   border: 1px solid var(--line);
 }
 .phase-label {
@@ -121,7 +129,7 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 24px;
   background: var(--panel);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 24px 80px color-mix(in srgb, var(--so-bg) 22%, transparent);
 }
 .status-heading {
   display: flex;
@@ -137,15 +145,15 @@ h1 {
   height: 13px;
   border-radius: 50%;
   background: var(--so-warning);
-  box-shadow: 0 0 0 7px rgba(240, 182, 92, 0.1);
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--so-warning) 10%, transparent);
 }
 .status-card[data-state="ready"] .status-dot {
   background: var(--so-success);
-  box-shadow: 0 0 0 7px rgba(78, 227, 170, 0.1);
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--so-success) 10%, transparent);
 }
 .status-card[data-state="error"] .status-dot {
   background: var(--so-danger);
-  box-shadow: 0 0 0 7px rgba(255, 116, 116, 0.1);
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--so-danger) 10%, transparent);
 }
 
 .metric-grid {
@@ -159,7 +167,7 @@ h1 {
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: rgba(4, 13, 26, 0.45);
+  background: color-mix(in srgb, var(--so-bg) 45%, transparent);
 }
 dt {
   color: var(--muted);
@@ -196,7 +204,7 @@ dd {
   height: 20px;
   flex: 0 0 auto;
   border-radius: 50%;
-  border: 2px solid rgba(87, 212, 255, 0.25);
+  border: 2px solid color-mix(in srgb, var(--so-primary-strong) 25%, transparent);
   border-top-color: var(--cyan);
   animation: spin 0.8s linear infinite;
 }
@@ -240,7 +248,7 @@ button {
   padding: 13px 15px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: rgba(2, 10, 20, 0.55);
+  background: color-mix(in srgb, var(--so-bg) 55%, transparent);
   color: var(--so-text);
   overflow-wrap: anywhere;
 }
@@ -254,7 +262,7 @@ button {
   padding: 22px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: rgba(4, 13, 26, 0.45);
+  background: color-mix(in srgb, var(--so-bg) 45%, transparent);
 }
 .verification-grid h3 {
   margin: 18px 0 8px;
@@ -301,7 +309,7 @@ button {
   gap: 8px;
 }
 .state-actions button {
-  background: rgba(87, 212, 255, 0.1);
+  background: color-mix(in srgb, var(--so-primary-strong) 10%, transparent);
   border: 1px solid var(--line);
   color: var(--so-text);
 }
@@ -392,8 +400,16 @@ button {
   min-height: 100vh;
   padding: 22px clamp(18px, 3vw, 42px);
   background:
-    radial-gradient(circle at 28% 48%, rgba(36, 109, 255, 0.18), transparent 32%),
-    radial-gradient(circle at 72% 16%, rgba(137, 73, 255, 0.13), transparent 28%),
+    radial-gradient(
+      circle at 28% 48%,
+      color-mix(in srgb, var(--so-primary) 18%, transparent),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 72% 16%,
+      color-mix(in srgb, var(--so-primary-strong) 13%, transparent),
+      transparent 28%
+    ),
     var(--so-bg-elevated);
   color: var(--so-text);
 }
@@ -435,10 +451,10 @@ button {
   gap: clamp(24px, 5vw, 74px);
   align-items: center;
   padding: clamp(24px, 5vw, 72px);
-  border: 1px solid rgba(100, 145, 224, 0.2);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 20%, transparent);
   border-radius: 28px;
-  background: linear-gradient(135deg, rgba(8, 25, 55, 0.78), rgba(5, 15, 34, 0.9));
-  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.32);
+  background: linear-gradient(135deg, var(--so-panel), var(--so-bg-elevated));
+  box-shadow: 0 30px 100px color-mix(in srgb, var(--so-bg) 32%, transparent);
   overflow: hidden;
 }
 .identity-story {
@@ -474,16 +490,16 @@ button {
   margin: 20px auto 4px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(78, 151, 255, 0.22);
+  border: 1px solid color-mix(in srgb, var(--so-primary) 22%, transparent);
   border-radius: 50%;
-  box-shadow: inset 0 0 80px rgba(39, 109, 255, 0.12);
+  box-shadow: inset 0 0 80px color-mix(in srgb, var(--so-primary) 12%, transparent);
 }
 .identity-orbit:before,
 .identity-orbit:after {
   content: "";
   position: absolute;
   inset: 13%;
-  border: 1px solid rgba(102, 86, 255, 0.24);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 24%, transparent);
   border-radius: 50%;
   transform: rotate(28deg);
 }
@@ -502,7 +518,7 @@ button {
   font-size: 62px;
   font-weight: 850;
   color: var(--so-text);
-  box-shadow: 0 0 50px rgba(34, 116, 255, 0.55);
+  box-shadow: 0 0 50px color-mix(in srgb, var(--so-primary) 55%, transparent);
 }
 .identity-orbit i {
   position: absolute;
@@ -536,9 +552,9 @@ button {
 }
 .identity-story li {
   padding: 15px;
-  border: 1px solid rgba(113, 153, 217, 0.18);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 18%, transparent);
   border-radius: 14px;
-  background: rgba(4, 15, 34, 0.62);
+  background: color-mix(in srgb, var(--so-bg) 62%, transparent);
 }
 .identity-story li strong,
 .identity-story li small {
@@ -551,10 +567,10 @@ button {
 .identity-card {
   order: -1;
   padding: clamp(26px, 4vw, 48px);
-  border: 1px solid rgba(119, 160, 229, 0.22);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 22%, transparent);
   border-radius: 24px;
-  background: rgba(8, 23, 49, 0.88);
-  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.34);
+  background: var(--so-panel);
+  box-shadow: 0 22px 70px color-mix(in srgb, var(--so-bg) 34%, transparent);
 }
 .identity-card__head p {
   margin: 0 0 8px;
@@ -588,15 +604,15 @@ button {
 .identity-card input {
   width: 100%;
   padding: 15px 16px;
-  border: 1px solid rgba(120, 157, 219, 0.28);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 28%, transparent);
   border-radius: 12px;
   outline: 0;
-  background: rgba(2, 11, 26, 0.55);
+  background: color-mix(in srgb, var(--so-bg) 55%, transparent);
   color: var(--so-text);
 }
 .identity-card input:focus {
   border-color: var(--so-primary-border);
-  box-shadow: 0 0 0 3px rgba(87, 212, 255, 0.1);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--so-primary-strong) 10%, transparent);
 }
 .identity-primary {
   width: 100%;
@@ -629,7 +645,7 @@ button {
 .identity-card__foot {
   margin-top: 24px;
   padding-top: 20px;
-  border-top: 1px solid rgba(113, 153, 217, 0.14);
+  border-top: 1px solid color-mix(in srgb, var(--so-primary-strong) 14%, transparent);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -639,16 +655,16 @@ button {
   margin-top: 20px;
   padding: 14px 16px;
   border-radius: 12px;
-  border: 1px solid rgba(240, 186, 89, 0.25);
-  background: rgba(240, 186, 89, 0.08);
+  border: 1px solid color-mix(in srgb, var(--so-warning) 25%, transparent);
+  background: color-mix(in srgb, var(--so-warning) 8%, transparent);
 }
 .identity-notice--error {
-  border-color: rgba(255, 116, 116, 0.3);
-  background: rgba(255, 116, 116, 0.08);
+  border-color: var(--so-danger-border);
+  background: var(--so-danger-soft);
 }
 .identity-notice--success {
-  border-color: rgba(78, 227, 170, 0.3);
-  background: rgba(78, 227, 170, 0.08);
+  border-color: color-mix(in srgb, var(--so-success) 30%, transparent);
+  background: color-mix(in srgb, var(--so-success) 8%, transparent);
 }
 .identity-notice p {
   margin: 5px 0 0;
@@ -681,7 +697,7 @@ button {
   align-items: center;
   gap: 16px;
   padding: 15px;
-  border: 1px solid rgba(113, 153, 217, 0.18);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 18%, transparent);
   border-radius: 12px;
 }
 .session-list small {
@@ -690,8 +706,8 @@ button {
   color: var(--so-text-muted);
 }
 .session-list button {
-  background: rgba(255, 116, 116, 0.08);
-  border: 1px solid rgba(255, 116, 116, 0.25);
+  background: var(--so-danger-soft);
+  border: 1px solid var(--so-danger-border);
   color: var(--so-danger);
 }
 .identity-loading {
@@ -712,9 +728,9 @@ button {
   gap: 14px;
   align-items: flex-start;
   padding: 16px;
-  border: 1px solid rgba(92, 111, 255, 0.28);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 28%, transparent);
   border-radius: 16px;
-  background: rgba(20, 28, 58, 0.66);
+  background: var(--so-panel-soft);
 }
 .mfa-status > span {
   font-size: 12px;
@@ -725,11 +741,11 @@ button {
 }
 .mfa-status .is-enabled {
   color: var(--so-success);
-  background: rgba(22, 101, 52, 0.34);
+  background: color-mix(in srgb, var(--so-success) 34%, transparent);
 }
 .mfa-status .is-pending {
   color: var(--so-warning);
-  background: rgba(146, 64, 14, 0.32);
+  background: color-mix(in srgb, var(--so-danger) 32%, transparent);
 }
 .mfa-status p,
 .mfa-setup p,
@@ -746,8 +762,8 @@ button {
   gap: 12px;
   padding: 16px;
   border-radius: 16px;
-  background: rgba(8, 13, 30, 0.68);
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: color-mix(in srgb, var(--so-bg) 68%, transparent);
+  border: 1px solid color-mix(in srgb, var(--so-primary) 18%, transparent);
 }
 .mfa-setup code {
   overflow-wrap: anywhere;
@@ -771,11 +787,11 @@ button {
   background: var(--so-bg-elevated);
 }
 .mfa-disable button {
-  border: 1px solid rgba(248, 113, 113, 0.45);
+  border: 1px solid var(--so-danger-border);
   border-radius: 11px;
   padding: 11px;
   color: var(--so-danger);
-  background: rgba(127, 29, 29, 0.18);
+  background: color-mix(in srgb, var(--so-danger) 18%, transparent);
 }
 @media (max-width: 820px) {
   .identity-page {
@@ -831,8 +847,16 @@ button {
   min-height: 100vh;
   padding: 24px clamp(18px, 4vw, 58px);
   background:
-    radial-gradient(circle at 14% 22%, rgba(24, 183, 255, 0.13), transparent 26%),
-    radial-gradient(circle at 86% 76%, rgba(104, 70, 255, 0.16), transparent 30%),
+    radial-gradient(
+      circle at 14% 22%,
+      color-mix(in srgb, var(--so-primary) 13%, transparent),
+      transparent 26%
+    ),
+    radial-gradient(
+      circle at 86% 76%,
+      color-mix(in srgb, var(--so-primary-strong) 16%, transparent),
+      transparent 30%
+    ),
     var(--so-bg-elevated);
   color: var(--so-text);
 }
@@ -853,14 +877,14 @@ button {
 .tenancy-header i {
   width: 38px;
   height: 1px;
-  background: rgba(122, 156, 211, 0.28);
+  background: color-mix(in srgb, var(--so-primary-strong) 28%, transparent);
 }
 .tenancy-step {
   display: grid;
   place-items: center;
   width: 28px;
   height: 28px;
-  border: 1px solid rgba(122, 156, 211, 0.28);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 28%, transparent);
   border-radius: 50%;
   color: var(--so-text-muted);
   font-size: 11px;
@@ -874,18 +898,18 @@ button {
 }
 .tenancy-account {
   color: var(--so-text-muted);
-  background: rgba(12, 27, 53, 0.8);
-  border: 1px solid rgba(122, 156, 211, 0.2);
+  background: var(--so-panel);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 20%, transparent);
 }
 .tenancy-shell {
   max-width: 1180px;
   min-height: 680px;
   margin: 40px auto;
   padding: clamp(28px, 5vw, 68px);
-  border: 1px solid rgba(108, 148, 216, 0.18);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 18%, transparent);
   border-radius: 30px;
-  background: linear-gradient(150deg, rgba(9, 27, 58, 0.84), rgba(5, 15, 33, 0.94));
-  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(150deg, var(--so-panel), var(--so-bg));
+  box-shadow: 0 30px 100px color-mix(in srgb, var(--so-bg) 35%, transparent);
 }
 .tenancy-intro {
   text-align: center;
@@ -937,8 +961,8 @@ button {
   gap: 18px;
   text-align: left;
   color: var(--so-text);
-  background: rgba(7, 21, 46, 0.85);
-  border: 1px solid rgba(112, 153, 220, 0.2);
+  background: var(--so-panel);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 20%, transparent);
   transition:
     0.18s transform,
     0.18s border-color;
@@ -998,8 +1022,8 @@ button {
   flex-direction: column;
   text-align: left;
   color: var(--so-text);
-  background: rgba(5, 18, 40, 0.88);
-  border: 1px solid rgba(112, 153, 220, 0.2);
+  background: color-mix(in srgb, var(--so-bg) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 20%, transparent);
 }
 .workspace-card:hover:not(:disabled),
 .workspace-card:focus-visible {
@@ -1030,9 +1054,9 @@ button {
 }
 .team-summary {
   padding: 24px;
-  border: 1px solid rgba(112, 153, 220, 0.18);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 18%, transparent);
   border-radius: 16px;
-  background: rgba(5, 16, 35, 0.72);
+  background: color-mix(in srgb, var(--so-bg) 72%, transparent);
 }
 .team-summary p {
   margin: 0;
@@ -1053,7 +1077,7 @@ button {
 }
 .team-summary small {
   padding-top: 14px;
-  border-top: 1px solid rgba(112, 153, 220, 0.15);
+  border-top: 1px solid color-mix(in srgb, var(--so-primary-strong) 15%, transparent);
   color: var(--so-text-muted);
 }
 .tenancy-state {
@@ -1073,7 +1097,7 @@ button {
   width: 68px;
   height: 68px;
   border-radius: 20px;
-  background: rgba(87, 212, 255, 0.1);
+  background: color-mix(in srgb, var(--so-primary-strong) 10%, transparent);
   color: var(--so-primary);
   font-size: 30px;
 }
@@ -1098,11 +1122,11 @@ button {
 }
 .tenancy-state--error > b {
   color: var(--so-danger);
-  background: rgba(255, 116, 116, 0.1);
+  background: var(--so-danger-soft);
 }
 .tenancy-state--selected > b {
   color: var(--so-success);
-  background: rgba(78, 227, 170, 0.1);
+  background: color-mix(in srgb, var(--so-success) 10%, transparent);
 }
 .tenancy-footer {
   padding: 0 10px;
@@ -1175,14 +1199,18 @@ button {
   display: grid;
   grid-template-columns: 230px minmax(0, 1fr);
   background:
-    radial-gradient(circle at 75% 5%, rgba(50, 90, 255, 0.14), transparent 28%),
+    radial-gradient(
+      circle at 75% 5%,
+      color-mix(in srgb, var(--so-primary) 14%, transparent),
+      transparent 28%
+    ),
     var(--so-bg-elevated);
   color: var(--so-text);
 }
 .authz-sidebar {
   padding: 26px 18px;
-  border-right: 1px solid rgba(107, 147, 213, 0.18);
-  background: rgba(3, 12, 27, 0.86);
+  border-right: 1px solid color-mix(in srgb, var(--so-primary-strong) 18%, transparent);
+  background: color-mix(in srgb, var(--so-bg) 86%, transparent);
   display: flex;
   flex-direction: column;
 }
@@ -1206,8 +1234,12 @@ button {
 }
 .authz-sidebar nav .active {
   color: var(--so-on-primary);
-  background: linear-gradient(90deg, rgba(56, 142, 255, 0.2), rgba(101, 78, 255, 0.12));
-  border: 1px solid rgba(93, 147, 232, 0.18);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--so-primary) 20%, transparent),
+    color-mix(in srgb, var(--so-primary-strong) 12%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 18%, transparent);
 }
 .authz-sidebar > small {
   margin-top: auto;
@@ -1241,7 +1273,7 @@ button {
   padding: 10px 14px;
   color: var(--so-text);
   text-decoration: none;
-  border: 1px solid rgba(105, 150, 218, 0.22);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 22%, transparent);
   border-radius: 10px;
 }
 .authz-summary {
@@ -1252,9 +1284,9 @@ button {
 }
 .authz-summary > div {
   padding: 20px;
-  border: 1px solid rgba(101, 147, 218, 0.18);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 18%, transparent);
   border-radius: 16px;
-  background: rgba(8, 25, 53, 0.76);
+  background: var(--so-panel);
 }
 .authz-summary span,
 .authz-summary small {
@@ -1274,9 +1306,9 @@ button {
   align-items: end;
   justify-content: space-between;
   gap: 20px;
-  border: 1px solid rgba(101, 147, 218, 0.16);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 16%, transparent);
   border-radius: 14px;
-  background: rgba(7, 20, 43, 0.7);
+  background: var(--so-panel-soft);
 }
 .authz-toolbar label {
   display: grid;
@@ -1289,9 +1321,9 @@ button {
   padding: 12px 14px;
   color: var(--so-text);
   outline: 0;
-  border: 1px solid rgba(111, 157, 225, 0.2);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 20%, transparent);
   border-radius: 10px;
-  background: rgba(2, 10, 23, 0.72);
+  background: color-mix(in srgb, var(--so-bg) 72%, transparent);
 }
 .authz-toolbar input:focus {
   border-color: var(--so-primary-border);
@@ -1319,14 +1351,14 @@ button {
   align-items: start;
   text-align: left;
   color: var(--so-text);
-  border: 1px solid rgba(106, 149, 216, 0.17);
-  background: rgba(7, 21, 46, 0.72);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 17%, transparent);
+  background: var(--so-panel-soft);
 }
 .role-list > button.selected,
 .role-list > button:focus-visible {
   outline: 0;
   border-color: var(--so-primary-border);
-  background: rgba(17, 43, 80, 0.84);
+  background: var(--so-panel);
 }
 .role-list > button > span {
   display: grid;
@@ -1361,9 +1393,9 @@ button {
   top: 20px;
   align-self: start;
   padding: 24px;
-  border: 1px solid rgba(106, 149, 216, 0.2);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 20%, transparent);
   border-radius: 18px;
-  background: rgba(7, 22, 48, 0.9);
+  background: var(--so-panel);
 }
 .role-detail > p {
   margin: 0;
@@ -1387,7 +1419,7 @@ button {
 }
 .role-detail code {
   padding: 7px 9px;
-  border: 1px solid rgba(91, 144, 221, 0.2);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 20%, transparent);
   border-radius: 8px;
   color: var(--so-primary);
   background: var(--so-bg-elevated);
@@ -1407,7 +1439,7 @@ button {
   width: 66px;
   height: 66px;
   border-radius: 18px;
-  background: rgba(87, 212, 255, 0.1);
+  background: color-mix(in srgb, var(--so-primary-strong) 10%, transparent);
   color: var(--so-primary);
   font-size: 26px;
 }
@@ -1443,7 +1475,7 @@ button {
     padding: 14px;
     display: block;
     border-right: 0;
-    border-bottom: 1px solid rgba(107, 147, 213, 0.18);
+    border-bottom: 1px solid color-mix(in srgb, var(--so-primary-strong) 18%, transparent);
   }
   .authz-sidebar > p,
   .authz-sidebar > small {
@@ -1502,7 +1534,11 @@ button {
   display: grid;
   grid-template-columns: 230px minmax(0, 1fr);
   background:
-    radial-gradient(circle at 78% 8%, rgba(62, 79, 255, 0.16), transparent 28%),
+    radial-gradient(
+      circle at 78% 8%,
+      color-mix(in srgb, var(--so-primary) 16%, transparent),
+      transparent 28%
+    ),
     var(--so-bg-elevated);
   color: var(--so-text);
 }
@@ -1539,10 +1575,10 @@ button {
 .grant-notice {
   margin: 22px 0 0;
   padding: 13px 16px;
-  border: 1px solid rgba(78, 227, 170, 0.24);
+  border: 1px solid color-mix(in srgb, var(--so-success) 24%, transparent);
   border-radius: 12px;
   color: var(--so-success);
-  background: rgba(30, 125, 91, 0.1);
+  background: color-mix(in srgb, var(--so-success) 10%, transparent);
 }
 .grant-form {
   margin-top: 22px;
@@ -1550,9 +1586,9 @@ button {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
-  border: 1px solid rgba(95, 148, 228, 0.22);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 22%, transparent);
   border-radius: 18px;
-  background: rgba(7, 23, 49, 0.84);
+  background: var(--so-panel);
 }
 .grant-form h2,
 .grant-form fieldset,
@@ -1576,7 +1612,7 @@ button {
 .grant-detail input {
   width: 100%;
   padding: 11px 12px;
-  border: 1px solid rgba(108, 154, 224, 0.25);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 25%, transparent);
   border-radius: 10px;
   color: var(--so-text);
   background: var(--so-bg-elevated);
@@ -1589,7 +1625,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  border: 1px solid rgba(108, 154, 224, 0.18);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 18%, transparent);
   border-radius: 12px;
 }
 .grant-form fieldset label {
@@ -1609,9 +1645,9 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid rgba(101, 147, 218, 0.16);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 16%, transparent);
   border-radius: 13px;
-  background: rgba(7, 20, 43, 0.7);
+  background: var(--so-panel-soft);
 }
 .grant-toolbar > div {
   display: flex;
@@ -1624,7 +1660,7 @@ button {
 }
 .grant-toolbar button.active {
   color: var(--so-text);
-  background: rgba(87, 212, 255, 0.12);
+  background: color-mix(in srgb, var(--so-primary-strong) 12%, transparent);
 }
 .grant-toolbar > span {
   color: var(--so-text-muted);
@@ -1648,8 +1684,8 @@ button {
   text-align: left;
   gap: 7px 14px;
   color: var(--so-text);
-  border: 1px solid rgba(104, 150, 219, 0.18);
-  background: rgba(7, 22, 48, 0.76);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 18%, transparent);
+  background: var(--so-panel-soft);
 }
 .grant-list > button.selected,
 .grant-list > button:focus-visible {
@@ -1662,17 +1698,17 @@ button {
   padding: 6px 8px;
   border-radius: 999px;
   color: var(--so-success);
-  background: rgba(30, 125, 91, 0.16);
+  background: color-mix(in srgb, var(--so-success) 16%, transparent);
   font-size: 10px;
   font-style: normal;
 }
 .grant-list i[data-status="expired"] {
   color: var(--so-warning);
-  background: rgba(153, 93, 19, 0.18);
+  background: color-mix(in srgb, var(--so-danger) 18%, transparent);
 }
 .grant-list i[data-status="revoked"] {
   color: var(--so-danger);
-  background: rgba(142, 40, 40, 0.18);
+  background: color-mix(in srgb, var(--so-danger) 18%, transparent);
 }
 .grant-list span,
 .grant-list small {
@@ -1688,9 +1724,9 @@ button {
   top: 18px;
   align-self: start;
   padding: 24px;
-  border: 1px solid rgba(103, 151, 222, 0.2);
+  border: 1px solid color-mix(in srgb, var(--so-primary-strong) 20%, transparent);
   border-radius: 18px;
-  background: rgba(7, 22, 48, 0.92);
+  background: var(--so-panel);
 }
 .grant-detail h2 {
   margin: 10px 0;
@@ -1710,7 +1746,7 @@ button {
 }
 .grant-detail dl div {
   padding: 10px;
-  border-bottom: 1px solid rgba(103, 151, 222, 0.12);
+  border-bottom: 1px solid color-mix(in srgb, var(--so-primary-strong) 12%, transparent);
 }
 .grant-detail dd {
   font-size: 13px;
@@ -1719,7 +1755,7 @@ button {
   display: grid;
   gap: 12px;
   padding-top: 16px;
-  border-top: 1px solid rgba(103, 151, 222, 0.16);
+  border-top: 1px solid color-mix(in srgb, var(--so-primary-strong) 16%, transparent);
 }
 .grant-detail form > div {
   display: flex;
@@ -1727,8 +1763,8 @@ button {
 }
 .grant-detail .danger {
   color: var(--so-danger);
-  border: 1px solid rgba(255, 113, 113, 0.3);
-  background: rgba(127, 29, 29, 0.16);
+  border: 1px solid var(--so-danger-border);
+  background: color-mix(in srgb, var(--so-danger) 16%, transparent);
 }
 .grant-detail > small {
   display: block;
@@ -1811,6 +1847,7 @@ button {
   flex-direction: column;
 }
 .theme-brand {
+  min-height: var(--so-touch-target);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1841,7 +1878,10 @@ button {
   gap: 6px;
 }
 .theme-nav nav a {
+  min-height: var(--so-touch-target);
   padding: 12px;
+  display: flex;
+  align-items: center;
   color: var(--so-text-muted);
   border: 1px solid transparent;
   border-radius: var(--so-radius-sm);
@@ -2086,6 +2126,58 @@ button {
   color: var(--so-primary);
   font-size: 11px;
   font-style: normal;
+}
+.density-setting {
+  margin-top: 24px;
+  padding-top: 22px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  border-top: 1px solid var(--so-border);
+}
+.density-setting p,
+.density-setting h3,
+.density-setting span {
+  margin: 0;
+}
+.density-setting p {
+  color: var(--so-primary);
+  font-size: 12px;
+  font-weight: 800;
+}
+.density-setting h3 {
+  margin-top: 5px;
+  font-size: 18px;
+}
+.density-setting span {
+  display: block;
+  margin-top: 6px;
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.density-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.density-options button {
+  min-height: 68px;
+  padding: 10px 12px;
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  border: 1px solid var(--so-border);
+  border-radius: var(--so-control-radius);
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+.density-options button.selected {
+  border-color: var(--so-primary);
+  box-shadow: inset 3px 0 var(--so-primary);
+}
+.density-options small {
+  color: var(--so-text-muted);
 }
 .theme-actions {
   margin-top: 26px;
@@ -2856,7 +2948,30 @@ button {
 }
 .role-content {
   min-width: 0;
+  width: 100%;
+  max-width: calc(var(--so-content-max) + 116px);
+  margin-inline: auto;
   padding: 36px clamp(22px, 4vw, 58px) 56px;
+}
+[data-density="compact"] .role-shell {
+  grid-template-rows: 64px minmax(0, 1fr);
+}
+[data-density="compact"] .role-topbar {
+  padding-inline: 16px;
+}
+[data-density="compact"] .role-sidebar {
+  top: 64px;
+  height: calc(100vh - 64px);
+  padding-block: 14px;
+}
+[data-density="compact"] .role-sidebar nav a,
+[data-density="compact"] .role-top-actions button,
+[data-density="compact"] .role-top-actions a,
+[data-density="compact"] .role-menu-toggle {
+  min-height: var(--so-control-height);
+}
+[data-density="compact"] .role-content {
+  padding: 24px clamp(18px, 3vw, 42px) 42px;
 }
 .role-shell[data-shell="organization_admin"] .role-content,
 .role-shell[data-shell="platform_admin"] .role-content {
@@ -3434,7 +3549,7 @@ button {
   border: 1px solid var(--so-border);
   border-radius: 24px;
   background: color-mix(in srgb, var(--so-bg-elevated) 92%, transparent);
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 28px 80px color-mix(in srgb, var(--so-bg) 28%, transparent);
 }
 .ui-state-symbol {
   display: grid;
@@ -3558,7 +3673,7 @@ button {
   padding: 18px;
   display: grid;
   place-items: center;
-  background: rgba(0, 5, 15, 0.76);
+  background: color-mix(in srgb, var(--so-bg) 76%, transparent);
   backdrop-filter: blur(12px);
 }
 .confirm-dialog {
@@ -3568,7 +3683,7 @@ button {
   border-radius: 22px;
   color: var(--so-text);
   background: var(--so-bg-elevated);
-  box-shadow: 0 35px 110px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 35px 110px color-mix(in srgb, var(--so-bg) 55%, transparent);
 }
 .confirm-dialog > span {
   display: grid;
@@ -3744,7 +3859,7 @@ button {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  background: rgba(0, 5, 15, 0.76);
+  background: color-mix(in srgb, var(--so-bg) 76%, transparent);
   backdrop-filter: blur(14px);
 }
 .discovery-dialog {
@@ -3756,7 +3871,7 @@ button {
   border-radius: 22px;
   color: var(--so-text);
   background: var(--so-bg-elevated);
-  box-shadow: 0 35px 110px rgba(0, 0, 0, 0.58);
+  box-shadow: 0 35px 110px color-mix(in srgb, var(--so-bg) 58%, transparent);
   overflow: hidden;
 }
 .discovery-dialog > header {
@@ -4672,13 +4787,13 @@ button {
 }
 .commercial-plans article[data-status="active"] {
   border-color: var(--so-primary-border);
-  box-shadow: 0 16px 45px rgba(86, 70, 255, 0.12);
+  box-shadow: 0 16px 45px color-mix(in srgb, var(--so-primary-strong) 12%, transparent);
 }
 .commercial-plans header span {
   float: right;
   padding: 4px 7px;
   border-radius: 999px;
-  background: rgba(109, 92, 255, 0.12);
+  background: color-mix(in srgb, var(--so-primary-strong) 12%, transparent);
   color: var(--so-primary-strong);
   font-size: 10px;
 }
@@ -4798,13 +4913,13 @@ button {
 .commercial-org {
   border-color: color-mix(in srgb, var(--border) 72%, var(--so-primary-border) 28%);
   background: color-mix(in srgb, var(--surface) 94%, var(--so-primary-strong) 6%);
-  box-shadow: 0 12px 34px rgba(4, 13, 29, 0.18);
+  box-shadow: 0 12px 34px color-mix(in srgb, var(--so-bg) 18%, transparent);
 }
 .commercial input,
 .commercial select {
   border-color: color-mix(in srgb, var(--border) 62%, var(--so-primary-border) 38%);
   background: color-mix(in srgb, var(--bg) 88%, var(--so-primary-strong) 12%);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--so-text) 2.5%, transparent);
 }
 .platform-get-started {
   padding: 20px;

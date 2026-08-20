@@ -14,7 +14,7 @@
 .redis-resilience__hero {
   align-items: flex-end;
   background:
-    radial-gradient(circle at 78% -10%, rgba(25, 116, 196, 0.42), transparent 44%),
+    radial-gradient(circle at 78% -10%, var(--so-primary-soft), transparent 44%),
     linear-gradient(135deg, var(--so-bg), var(--so-bg-elevated));
   border: 1px solid var(--rr-line);
   border-radius: 18px;
@@ -45,7 +45,7 @@
   background: var(--so-primary-strong);
   border: 1px solid var(--so-primary-border);
   border-radius: 9px;
-  color: white;
+  color: var(--so-on-primary);
   cursor: pointer;
   font: inherit;
   padding: 10px 15px;
@@ -85,7 +85,7 @@
 }
 @keyframes rr-pulse {
   70% {
-    box-shadow: 0 0 0 13px rgba(53, 214, 255, 0);
+    box-shadow: 0 0 0 13px transparent;
   }
 }
 .redis-resilience__state--danger {

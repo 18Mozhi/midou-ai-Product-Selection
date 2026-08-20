@@ -2,12 +2,13 @@
 
 ## 发布
 
-运行 `node --test tests/unit/theme-and-icon-completion.test.mjs`，确认独立 CSS 与 Vue scoped style 均只引用语义颜色令牌；再在深海蓝、极光紫和云雾白三个主题抽查平台账号、安全审计、来源中心、商业运营、备份恢复与发布灰度页面。
+运行 `node --test tests/unit/theme-and-icon-completion.test.mjs`，确认独立 CSS 与 Vue scoped style 均只引用语义颜色令牌，并确认标准/紧凑密度与移动触控下限合同；再在深海蓝、极光紫和云雾白三个主题抽查平台账号、安全审计、来源中心、商业运营、备份恢复与发布灰度页面。
 
 1. 在宝塔执行 MySQL 备份，依次执行 `0014a`、`0014b`、`0014c` 的 up 迁移；必须使用 `product_scout` 业务账号和 MySQL 5.7。
 2. 构建当前提交，在宝塔重启 Node API 以加载偏好路由，再发布 Vue Web 静态资源。Worker 与 Python Crawler 不涉及本模块，无需重启。
-3. 登录并选择组织/工作区，打开 `/settings/theme`。验证默认深海蓝、三套预览、保存后刷新保持，以及 390px 键盘操作。
-4. 本模块没有新增环境变量；不要在宝塔增加主题密钥或前端主题配置。
+3. 登录并选择组织/工作区，打开 `/settings/theme`。验证默认深海蓝、三套预览、主题保存后刷新保持，以及标准/紧凑密度切换。密度仅在当前单页会话生效，不写浏览器存储或服务端。
+4. 进入组织或平台后台，确认自动使用浅色紧凑布局；回到成员后台后恢复成员会话密度。桌面紧凑控件为 36px，触屏或 720px 以下仍至少为 44px。
+5. 本模块没有新增环境变量；不要在宝塔增加主题密钥或前端主题配置。
 
 纯语义令牌或组件 CSS 更新只需重新发布 Vue Web 静态资源，不需要重启 Node API、Node Worker 或 Python Crawler。
 

@@ -364,11 +364,19 @@ test("M02-03 explicit routes keep internal navigation reactive and unknown route
 test("M02-03 platform return requires a target context and preserves the member route", async ({
   page,
 }) => {
-  await page.addInitScript(() =>
-    window.sessionStorage.setItem("scoutops:last-member-route", "/opportunities?status=watching"),
-  );
-  await allow(page, "platform_admin");
-  await page.goto("/platform-admin");
+  await allow(page, "member");
+  await page.route("**/api/v1/me/navigation?**", (route) => {
+    const shell = new URL(route.request().url()).searchParams.get("shell") as
+      "member" | "platform_admin";
+    const data = summary(shell);
+    if (shell === "member") data.platform_roles = ["platform_super_admin"];
+    return route.fulfill({
+      json: { data, request_id: "route-memory", trace_id: "route-memory" },
+    });
+  });
+  await page.goto("/opportunities?status=watching");
+  await page.getByRole("link", { name: "进入管理后台" }).click();
+  await expect(page).toHaveURL(/\/platform-admin$/);
   const switchLink = page.getByRole("link", { name: "选择组织与工作区后进入用户工作台" });
   const href = await switchLink.getAttribute("href");
   expect(href).toContain("/select-context");

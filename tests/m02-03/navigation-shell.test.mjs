@@ -159,6 +159,7 @@ test("M02-03.A06/A13 authenticated API validates shell and preserves error contr
 test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay explicit", async () => {
   const [
     component,
+    navigationMemory,
     routeCatalog,
     main,
     apiClient,
@@ -174,6 +175,7 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   ] = await Promise.all(
     [
       "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/navigation-memory.ts",
       "apps/web/src/route-catalog.ts",
       "apps/web/src/main.ts",
       "apps/web/src/api-client.ts",
@@ -220,6 +222,10 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(routeCatalog, /\/platform-admin\/users/);
   assert.match(routeCatalog, /\/platform-admin\/admins/);
   assert.doesNotMatch(main, /addEventListener\(["']click["']/);
+  assert.match(component, /rememberMemberRoute/);
+  assert.match(navigationMemory, /getLastMemberRoute/);
+  assert.match(navigationMemory, /getRecentOrganizationIds/);
+  assert.doesNotMatch(component + navigationMemory, /(?:local|session)Storage/);
   assert.match(component, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   assert.match(landingRedirect, /\/me\/landing/);

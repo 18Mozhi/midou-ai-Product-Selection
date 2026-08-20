@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
-import { applyTheme, isThemeId, themes, type ThemeId } from "../design/theme";
+import {
+  applyDensity,
+  applyTheme,
+  densities,
+  isDensityId,
+  isThemeId,
+  themes,
+  type DensityId,
+  type ThemeId,
+} from "../design/theme";
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 type State =
@@ -24,15 +33,26 @@ interface Preference {
 }
 const state = ref<State>("loading"),
   selected = ref<ThemeId>("deep-ocean"),
+  selectedDensity = ref<DensityId>(
+    isDensityId(document.documentElement.dataset.density)
+      ? document.documentElement.dataset.density
+      : "standard",
+  ),
   saved = ref<Preference | null>(null),
   requestId = ref("");
-const dirty = computed(() => selected.value !== (saved.value?.theme ?? "deep-ocean"));
+const themeDirty = computed(() => selected.value !== (saved.value?.theme ?? "deep-ocean"));
+const dirty = themeDirty;
 const selectedName = computed(() => themes.find((item) => item.id === selected.value)!.name);
 function choose(theme: ThemeId) {
   if (state.value === "saving") return;
   selected.value = theme;
   applyTheme(theme);
   if (state.value === "saved") state.value = "ready";
+}
+function chooseDensity(density: DensityId) {
+  if (state.value === "saving") return;
+  selectedDensity.value = density;
+  applyDensity(density);
 }
 function mapError(kind: ApiFailureKind, code?: string): State {
   if (kind === "expired") return "expired";
@@ -66,16 +86,18 @@ async function save() {
   state.value = "saving";
   const clientRequestId = crypto.randomUUID();
   try {
-    const response = await request<Preference>("/me/ui-preferences", {
-      method: "PUT",
-      requestId: clientRequestId,
-      body: {
-        theme: selected.value,
-        expected_version: saved.value?.version ?? 0,
-      },
-    });
-    requestId.value = response.request_id;
-    saved.value = response.data;
+    if (themeDirty.value) {
+      const response = await request<Preference>("/me/ui-preferences", {
+        method: "PUT",
+        requestId: clientRequestId,
+        body: {
+          theme: selected.value,
+          expected_version: saved.value?.version ?? 0,
+        },
+      });
+      requestId.value = response.request_id;
+      saved.value = response.data;
+    }
     state.value = "saved";
   } catch (error) {
     if (error instanceof ApiClientError) {
@@ -189,6 +211,27 @@ onMounted(load);
                 ><small>{{ theme.mode }} · {{ theme.caption }}</small
                 ><em>{{ selected === theme.id ? "当前预览" : "选择预览" }}</em>
               </button>
+            </div>
+            <div class="density-setting">
+              <div>
+                <p>页面密度</p>
+                <h3>选择标准或紧凑布局</h3>
+                <span>切换在当前会话立即生效；移动端仍保留 44 像素触控区域。</span>
+              </div>
+              <div class="density-options" role="radiogroup" aria-label="页面密度">
+                <button
+                  v-for="density in densities"
+                  :key="density.id"
+                  type="button"
+                  role="radio"
+                  :aria-checked="selectedDensity === density.id"
+                  :class="{ selected: selectedDensity === density.id }"
+                  @click="chooseDensity(density.id)"
+                >
+                  <b>{{ density.name }}</b
+                  ><small>{{ density.caption }}</small>
+                </button>
+              </div>
             </div>
             <div class="theme-actions">
               <button class="secondary" :disabled="!dirty" @click="restore">撤销预览</button
