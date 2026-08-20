@@ -58,9 +58,9 @@ test("saved theme is restored before Vue mounts and modules use semantic theme t
   assert.doesNotMatch(personal, /linear-gradient\(135deg,\s*#0d2342/);
 });
 
-test("production CSS uses shared semantic color roles instead of raw hex values", async () => {
+test("production CSS and Vue scoped styles use shared semantic color roles", async () => {
   const paths = (await readdir("apps/web/src", { recursive: true }))
-      .filter((path) => path.endsWith(".css"))
+      .filter((path) => path.endsWith(".css") || path.endsWith(".vue"))
       .map((path) => `apps/web/src/${path.replaceAll("\\", "/")}`)
       .filter((path) => path !== "apps/web/src/design/tokens.css"),
     sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));

@@ -2,6 +2,8 @@
 
 ## 发布
 
+运行 `node --test tests/unit/theme-and-icon-completion.test.mjs`，确认独立 CSS 与 Vue scoped style 均只引用语义颜色令牌；再在深海蓝、极光紫和云雾白三个主题抽查平台账号、安全审计、来源中心、商业运营、备份恢复与发布灰度页面。
+
 1. 在宝塔执行 MySQL 备份，依次执行 `0014a`、`0014b`、`0014c` 的 up 迁移；必须使用 `product_scout` 业务账号和 MySQL 5.7。
 2. 构建当前提交，在宝塔重启 Node API 以加载偏好路由，再发布 Vue Web 静态资源。Worker 与 Python Crawler 不涉及本模块，无需重启。
 3. 登录并选择组织/工作区，打开 `/settings/theme`。验证默认深海蓝、三套预览、保存后刷新保持，以及 390px 键盘操作。

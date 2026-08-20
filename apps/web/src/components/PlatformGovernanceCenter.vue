@@ -2,11 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 type Section =
-  | "score_rules"
-  | "cost_rules"
-  | "approval_templates"
-  | "automation_rules"
-  | "releases";
+  "score_rules" | "cost_rules" | "approval_templates" | "automation_rules" | "releases";
 const section = ref<Section>("score_rules"),
   state = ref<"loading" | "ready" | "empty" | "error">("loading"),
   data = ref<any>(null),
@@ -52,9 +48,7 @@ const sections: Array<{
     href: "/platform-admin/releases",
   },
 ];
-const current = computed(() =>
-  sections.find((item) => item.value === section.value)!,
-);
+const current = computed(() => sections.find((item) => item.value === section.value)!);
 const rows = computed<any[]>(() => data.value?.[section.value] ?? []);
 const summaryName = (key: string) =>
   (
@@ -108,21 +102,15 @@ async function load() {
   if (query.value.trim()) params.set("query", query.value.trim());
   if (status.value) params.set("status", status.value);
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/management?${params}`,
-        {
-          credentials: "include",
-          headers: { accept: "application/json" },
-        },
-      ),
+    const response = await fetch(`${props.apiBaseUrl}/platform/management?${params}`, {
+        credentials: "include",
+        headers: { accept: "application/json" },
+      }),
       body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? "";
-    if (!response.ok)
-      throw new Error(body?.error?.action_hint ?? "治理数据暂不可用");
+    if (!response.ok) throw new Error(body?.error?.action_hint ?? "治理数据暂不可用");
     data.value = body.data;
-    state.value = Object.values(body.data.summary).some(Number)
-      ? "ready"
-      : "empty";
+    state.value = Object.values(body.data.summary).some(Number) ? "ready" : "empty";
   } catch (error) {
     message.value = error instanceof Error ? error.message : "治理数据暂不可用";
     state.value = "error";
@@ -144,11 +132,7 @@ onMounted(load);
       <a :href="current.href">{{ current.action }}</a>
     </header>
     <form @submit.prevent="load">
-      <input
-        v-model="query"
-        placeholder="搜索规则、版本、组织或工作区"
-        maxlength="120"
-      /><input
+      <input v-model="query" placeholder="搜索规则、版本、组织或工作区" maxlength="120" /><input
         v-model="status"
         placeholder="精确状态（可选）"
         maxlength="40"
@@ -210,33 +194,20 @@ onMounted(load);
               <td>
                 {{
                   typeName(
-                    item.trigger_event_type ||
-                      item.resource_type ||
-                      item.platform ||
-                      section,
+                    item.trigger_event_type || item.resource_type || item.platform || section,
                   )
                 }}
               </td>
               <td>
                 <b>{{ statusName(item.status) }}</b>
               </td>
+              <td>v{{ item.revision || item.version || item.current_version || "—" }}</td>
               <td>
-                v{{
-                  item.revision || item.version || item.current_version || "—"
-                }}
-              </td>
-              <td>
-                {{
-                  item.updated_at
-                    ? new Date(item.updated_at).toLocaleString("zh-CN")
-                    : "—"
-                }}
+                {{ item.updated_at ? new Date(item.updated_at).toLocaleString("zh-CN") : "—" }}
               </td>
               <td>
                 <button type="button" @click="selected = item">查看详情</button
-                ><a :href="editHref(item)">{{
-                  section === "releases" ? "进入管理" : "编辑"
-                }}</a>
+                ><a :href="editHref(item)">{{ section === "releases" ? "进入管理" : "编辑" }}</a>
               </td>
             </tr>
           </tbody>
@@ -249,9 +220,7 @@ onMounted(load);
           >来源配置历史版本 {{ data.summary.provider_versions }} 个；最近变更
           {{
             data.provider_versions_latest_at
-              ? new Date(data.provider_versions_latest_at).toLocaleString(
-                  "zh-CN",
-                )
+              ? new Date(data.provider_versions_latest_at).toLocaleString("zh-CN")
               : "暂无"
           }}。</span
         ><a href="/platform-admin/providers">进入来源版本管理</a>
@@ -289,12 +258,7 @@ onMounted(load);
             <dt>版本</dt>
             <dd>
               第
-              {{
-                selected.revision ||
-                selected.version ||
-                selected.current_version ||
-                "—"
-              }}
+              {{ selected.revision || selected.version || selected.current_version || "—" }}
               版
             </dd>
           </div>
@@ -311,24 +275,19 @@ onMounted(load);
           </div>
           <div v-if="selected.action_type">
             <dt>执行动作</dt>
-            <dd>
-              {{ typeName(selected.action_type) }}：{{ selected.action_title }}
-            </dd>
+            <dd>{{ typeName(selected.action_type) }}：{{ selected.action_title }}</dd>
           </div>
           <div v-if="selected.rate_limit_count">
             <dt>执行频率上限</dt>
             <dd>
-              {{ selected.rate_limit_count }} 次 /
-              {{ selected.rate_limit_window_minutes }} 分钟
+              {{ selected.rate_limit_count }} 次 / {{ selected.rate_limit_window_minutes }} 分钟
             </dd>
           </div>
           <div>
             <dt>更新时间</dt>
             <dd>
               {{
-                selected.updated_at
-                  ? new Date(selected.updated_at).toLocaleString("zh-CN")
-                  : "—"
+                selected.updated_at ? new Date(selected.updated_at).toLocaleString("zh-CN") : "—"
               }}
             </dd>
           </div>
@@ -388,7 +347,7 @@ onMounted(load);
 .platform-governance header > a {
   align-self: flex-start;
   background: var(--so-primary-strong);
-  color: #fff;
+  color: var(--so-on-primary);
 }
 .platform-governance form,
 .platform-governance nav {
@@ -410,7 +369,7 @@ onMounted(load);
 }
 .platform-governance nav button[aria-current="page"] {
   background: var(--so-primary-strong);
-  color: #fff;
+  color: var(--so-on-primary);
 }
 .governance-summary {
   display: grid;
@@ -521,7 +480,7 @@ onMounted(load);
 }
 .governance-detail footer a {
   background: var(--so-primary-strong);
-  color: #fff;
+  color: var(--so-on-primary);
 }
 @media (max-width: 760px) {
   .platform-governance > header,

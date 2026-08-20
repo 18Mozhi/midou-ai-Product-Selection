@@ -1,14 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 const props = defineProps<{ apiBaseUrl: string }>();
-type State =
-  | "loading"
-  | "ready"
-  | "empty"
-  | "expired"
-  | "forbidden"
-  | "rate_limited"
-  | "blocked";
+type State = "loading" | "ready" | "empty" | "expired" | "forbidden" | "rate_limited" | "blocked";
 const state = ref<State>("loading"),
   data = ref<any>(null),
   windowCode = ref("24h"),
@@ -18,27 +11,12 @@ const stateText = computed(
   () =>
     (
       ({
-        loading: [
-          "正在准备管理首页",
-          "正在核对组织、用户、热点来源和采集进度。",
-        ],
-        empty: [
-          "这段时间还没有采集记录",
-          "系统仍会继续自动获取热点；也可以选择更长时间查看。",
-        ],
+        loading: ["正在准备管理首页", "正在核对组织、用户、热点来源和采集进度。"],
+        empty: ["这段时间还没有采集记录", "系统仍会继续自动获取热点；也可以选择更长时间查看。"],
         expired: ["登录已失效", "重新登录后会回到管理首页。"],
-        forbidden: [
-          "当前账号不能进入平台管理后台",
-          "请联系超级管理员分配平台管理权限。",
-        ],
-        rate_limited: [
-          "刷新太频繁了",
-          "稍等片刻再刷新，不会影响后台自动采集。",
-        ],
-        blocked: [
-          "管理首页暂时无法读取数据",
-          "请稍后重试；仍失败时联系技术人员检查统一后端。",
-        ],
+        forbidden: ["当前账号不能进入平台管理后台", "请联系超级管理员分配平台管理权限。"],
+        rate_limited: ["刷新太频繁了", "稍等片刻再刷新，不会影响后台自动采集。"],
+        blocked: ["管理首页暂时无法读取数据", "请稍后重试；仍失败时联系技术人员检查统一后端。"],
         ready: ["", ""],
       }) as Record<State, string[]>
     )[state.value],
@@ -96,10 +74,7 @@ const trendPoints = (key: "succeeded" | "failed") => {
   const rows = data.value?.task_trend ?? [],
     max = Math.max(
       1,
-      ...rows.flatMap((item: any) => [
-        Number(item.succeeded) || 0,
-        Number(item.failed) || 0,
-      ]),
+      ...rows.flatMap((item: any) => [Number(item.succeeded) || 0, Number(item.failed) || 0]),
     );
   return rows
     .map(
@@ -112,10 +87,10 @@ async function load() {
   state.value = "loading";
   requestId.value = "";
   try {
-    const r = await fetch(
-        `${props.apiBaseUrl}/platform/dashboard?window=${windowCode.value}`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
+    const r = await fetch(`${props.apiBaseUrl}/platform/dashboard?window=${windowCode.value}`, {
+        credentials: "include",
+        headers: { accept: "application/json" },
+      }),
       b = await r.json().catch(() => null);
     requestId.value = b?.request_id ?? "";
     hint.value = b?.error?.action_hint ?? "";
@@ -133,10 +108,7 @@ async function load() {
     data.value = b.data;
     const operational =
       b.data.queues.length +
-      b.data.provider_health.reduce(
-        (n: number, p: any) => n + p.observed_count,
-        0,
-      ) +
+      b.data.provider_health.reduce((n: number, p: any) => n + p.observed_count, 0) +
       b.data.alerts.length;
     state.value = operational === 0 ? "empty" : "ready";
   } catch {
@@ -164,11 +136,7 @@ onMounted(load);
         </select></label
       ><button type="button" @click="load">刷新</button>
     </div>
-    <section
-      v-if="state !== 'ready'"
-      class="platform-dashboard-state"
-      :data-kind="state"
-    >
+    <section v-if="state !== 'ready'" class="platform-dashboard-state" :data-kind="state">
       <span>{{ state === "loading" ? "···" : "!" }}</span>
       <h3>{{ stateText[0] }}</h3>
       <p>{{ stateText[1] }}</p>
@@ -192,20 +160,20 @@ onMounted(load);
           <a href="/platform-admin/accounts"
             ><b>管理组织和用户</b><span>新建组织、停用账号、分配管理员</span></a
           ><a href="/platform-admin/providers/sources"
-            ><b>查看热点来源</b
-            ><span>确认自动来源、待配置来源和手动来源</span></a
+            ><b>查看热点来源</b><span>确认自动来源、待配置来源和手动来源</span></a
           ><a href="/platform-admin/collection/overview"
-            ><b>查看采集进度</b
-            ><span>看看自动获取是否完成、哪里需要处理</span></a
+            ><b>查看采集进度</b><span>看看自动获取是否完成、哪里需要处理</span></a
           >
         </div>
       </section>
       <div class="platform-action-summary">
         <a href="/platform-admin/collection/tasks">
-          <span>等待处理</span><strong>{{ data.summary.queue_backlog }}</strong><small>查看排队、运行或受阻的采集任务 →</small>
+          <span>等待处理</span><strong>{{ data.summary.queue_backlog }}</strong
+          ><small>查看排队、运行或受阻的采集任务 →</small>
         </a>
         <a href="/platform-admin/collection/overview?root_cause=1">
-          <span>需要关注</span><strong>{{ data.summary.open_alerts }}</strong><small>按错误根因查看异常 →</small>
+          <span>需要关注</span><strong>{{ data.summary.open_alerts }}</strong
+          ><small>按错误根因查看异常 →</small>
         </a>
       </div>
       <div class="platform-dashboard-grid">
@@ -213,13 +181,14 @@ onMounted(load);
           <header>
             <h3>采集任务趋势</h3>
             <span
-              ><i data-series="success"></i>成功
-              <i data-series="failed"></i>失败 ·
+              ><i data-series="success"></i>成功 <i data-series="failed"></i>失败 ·
               {{ data.task_trend.length }} 个时间点</span
             >
           </header>
           <div v-if="!data.task_trend.length" class="platform-inline-empty">
-            当前时间范围还没有趋势数据。<a href="/platform-admin/providers/sources">检查来源是否启用</a>，或<a href="/platform-admin/collection/overview">查看采集队列</a>。
+            当前时间范围还没有趋势数据。<a href="/platform-admin/providers/sources"
+              >检查来源是否启用</a
+            >，或<a href="/platform-admin/collection/overview">查看采集队列</a>。
           </div>
           <svg
             v-else
@@ -228,28 +197,14 @@ onMounted(load);
             aria-label="采集任务成功和失败趋势折线图"
             preserveAspectRatio="none"
           >
-            <line
-              v-for="y in [20, 70, 120, 170]"
-              :key="y"
-              x1="0"
-              :y1="y"
-              x2="600"
-              :y2="y"
-            />
-            <polyline
-              data-series="success"
-              :points="trendPoints('succeeded')"
-            />
+            <line v-for="y in [20, 70, 120, 170]" :key="y" x1="0" :y1="y" x2="600" :y2="y" />
+            <polyline data-series="success" :points="trendPoints('succeeded')" />
             <polyline data-series="failed" :points="trendPoints('failed')" />
           </svg>
           <footer v-if="data.task_trend.length">
-            <span>{{
-              new Date(data.task_trend[0].bucket).toLocaleString()
-            }}</span
+            <span>{{ new Date(data.task_trend[0].bucket).toLocaleString() }}</span
             ><span>{{
-              new Date(
-                data.task_trend[data.task_trend.length - 1].bucket,
-              ).toLocaleString()
+              new Date(data.task_trend[data.task_trend.length - 1].bucket).toLocaleString()
             }}</span>
           </footer>
         </section>
@@ -258,12 +213,7 @@ onMounted(load);
             <h3>来源健康</h3>
             <span>{{ data.provider_health.length }} 个启用来源</span>
           </header>
-          <div
-            v-if="!data.provider_health.length"
-            class="platform-inline-empty"
-          >
-            尚无启用来源
-          </div>
+          <div v-if="!data.provider_health.length" class="platform-inline-empty">尚无启用来源</div>
           <table v-else>
             <thead>
               <tr>
@@ -281,19 +231,13 @@ onMounted(load);
                 </td>
                 <td>
                   <i :data-health="p.status">{{
-                    p.status === "healthy"
-                      ? "健康"
-                      : p.status === "degraded"
-                        ? "降级"
-                        : "未知"
+                    p.status === "healthy" ? "健康" : p.status === "degraded" ? "降级" : "未知"
                   }}</i>
                 </td>
                 <td>{{ p.success_count }} / {{ p.failed_count }}</td>
                 <td>
                   {{
-                    p.last_observed_at
-                      ? new Date(p.last_observed_at).toLocaleString()
-                      : "无样本"
+                    p.last_observed_at ? new Date(p.last_observed_at).toLocaleString() : "无样本"
                   }}
                 </td>
               </tr>
@@ -307,8 +251,7 @@ onMounted(load);
           </header>
           <ul class="platform-signals">
             <li v-for="s in data.health_signals" :key="s.code">
-              <i :data-health="s.status"></i
-              ><span>{{ signalText(s.code) }}</span
+              <i :data-health="s.status"></i><span>{{ signalText(s.code) }}</span
               ><strong>{{ signalValue(s.value) }}</strong>
             </li>
           </ul>
@@ -352,8 +295,7 @@ onMounted(load);
               <div>
                 <b>{{ alertText(a.kind, a.code) }}</b
                 ><small
-                  >组织 {{ short(a.organization_id) }} · 工作区
-                  {{ short(a.workspace_id) }} ·
+                  >组织 {{ short(a.organization_id) }} · 工作区 {{ short(a.workspace_id) }} ·
                   {{ new Date(a.observed_at).toLocaleString() }}</small
                 >
               </div>
@@ -379,7 +321,7 @@ onMounted(load);
   height: 190px;
 }
 .platform-trend-chart svg line {
-  stroke: #20384b;
+  stroke: var(--so-border);
   stroke-width: 1;
 }
 .platform-trend-chart svg polyline {
@@ -388,10 +330,10 @@ onMounted(load);
   vector-effect: non-scaling-stroke;
 }
 .platform-trend-chart svg polyline[data-series="success"] {
-  stroke: #31d6c4;
+  stroke: var(--so-primary);
 }
 .platform-trend-chart svg polyline[data-series="failed"] {
-  stroke: #ff6878;
+  stroke: var(--so-danger);
 }
 .platform-trend-chart header i {
   display: inline-block;
@@ -401,15 +343,15 @@ onMounted(load);
   border-radius: 50%;
 }
 .platform-trend-chart header i[data-series="success"] {
-  background: #31d6c4;
+  background: var(--so-primary);
 }
 .platform-trend-chart header i[data-series="failed"] {
-  background: #ff6878;
+  background: var(--so-danger);
 }
 .platform-trend-chart footer {
   display: flex;
   justify-content: space-between;
-  color: #7892a5;
+  color: var(--so-text-muted);
   font-size: 11px;
 }
 </style>

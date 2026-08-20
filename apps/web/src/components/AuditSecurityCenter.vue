@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 const props = defineProps<{ apiBaseUrl: string }>();
-type State =
-  "loading" | "ready" | "empty" | "error" | "forbidden" | "expired" | "blocked";
+type State = "loading" | "ready" | "empty" | "error" | "forbidden" | "expired" | "blocked";
 interface AuditEvent {
   id: string;
   organization_id: string | null;
@@ -68,16 +67,12 @@ function query(cursor?: string) {
 async function load(cursor?: string) {
   state.value = "loading";
   try {
-    if (!auth.value)
-      auth.value = (await request<Authorization>("/me/authorization")).data;
-    if (scope.value === "platform" && !canPlatform.value)
-      scope.value = "organization";
+    if (!auth.value) auth.value = (await request<Authorization>("/me/authorization")).data;
+    if (scope.value === "platform" && !canPlatform.value) scope.value = "organization";
     const path = isPlatform.value
       ? `/platform/audit-events?${query(cursor)}`
       : `/organizations/${auth.value.organization_id}/audit-events?${query(cursor)}`;
-    const result = (
-      await request<{ items: AuditEvent[]; nextCursor: string | null }>(path)
-    ).data;
+    const result = (await request<{ items: AuditEvent[]; nextCursor: string | null }>(path)).data;
     events.value = cursor ? [...events.value, ...result.items] : result.items;
     nextCursor.value = result.nextCursor;
     selected.value = events.value[0] ?? null;
@@ -102,8 +97,7 @@ onMounted(() => load());
       <p>安全与治理</p>
       <nav>
         <a class="active" href="/?view=audit-security">审计日志</a
-        ><a href="/security/mfa">安全设置</a><span>平台管理员</span
-        ><span>密钥轮换</span>
+        ><a href="/security/mfa">安全设置</a><span>平台管理员</span><span>密钥轮换</span>
       </nav>
       <small>只读视图 · 关联编号 / 链路编号</small>
     </aside>
@@ -112,33 +106,19 @@ onMounted(() => load());
         <div>
           <p>审计与安全</p>
           <h1>审计与种子管理员</h1>
-          <span
-            >首次超级管理员只允许由宝塔受限任务创建；浏览器不接触种子密码。</span
-          >
+          <span>首次超级管理员只允许由宝塔受限任务创建；浏览器不接触种子密码。</span>
         </div>
-        <div class="seed-badge">
-          <i></i><span>单次种子</span><strong>仅限命令行</strong>
-        </div>
+        <div class="seed-badge"><i></i><span>单次种子</span><strong>仅限命令行</strong></div>
       </header>
       <section class="scope-tabs">
-        <button
-          v-if="canPlatform"
-          :class="{ active: isPlatform }"
-          @click="switchScope('platform')"
-        >
+        <button v-if="canPlatform" :class="{ active: isPlatform }" @click="switchScope('platform')">
           平台审计</button
-        ><button
-          :class="{ active: !isPlatform }"
-          @click="switchScope('organization')"
-        >
+        ><button :class="{ active: !isPlatform }" @click="switchScope('organization')">
           组织审计</button
         ><em>审计员仅可读取，不能重放任务或管理凭证</em>
       </section>
       <form class="filters" @submit.prevent="load()">
-        <label
-          >动作<input
-            v-model="action"
-            placeholder="platform_admin.seeded" /></label
+        <label>动作<input v-model="action" placeholder="platform_admin.seeded" /></label
         ><label
           >结果<select v-model="outcome">
             <option value="">全部</option>
@@ -146,8 +126,7 @@ onMounted(() => load());
             <option value="failed">失败</option>
             <option value="blocked">已阻止</option>
           </select></label
-        ><label
-          >资源类型<input v-model="resourceType" placeholder="user" /></label
+        ><label>资源类型<input v-model="resourceType" placeholder="user" /></label
         ><button type="submit">筛选</button>
       </form>
       <div v-if="state === 'loading'" class="state">
@@ -195,8 +174,7 @@ onMounted(() => load());
       <div v-else class="layout">
         <section class="table">
           <div class="thead">
-            <span>时间 / 结果</span><span>动作</span><span>资源</span
-            ><span>关联标识</span>
+            <span>时间 / 结果</span><span>动作</span><span>资源</span><span>关联标识</span>
           </div>
           <button
             v-for="event in events"
@@ -205,22 +183,14 @@ onMounted(() => load());
             @click="selected = event"
           >
             <span
-              ><i :data-outcome="event.outcome">{{
-                outcomeLabel(event.outcome)
-              }}</i
-              ><small>{{
-                new Date(event.occurred_at).toLocaleString("zh-CN")
-              }}</small></span
+              ><i :data-outcome="event.outcome">{{ outcomeLabel(event.outcome) }}</i
+              ><small>{{ new Date(event.occurred_at).toLocaleString("zh-CN") }}</small></span
             ><strong>{{ event.action }}</strong
             ><span
               >{{ event.resource_type
-              }}<small>{{
-                event.resource_id?.slice(0, 12) || "全局"
-              }}</small></span
+              }}<small>{{ event.resource_id?.slice(0, 12) || "全局" }}</small></span
             ><code>{{ event.request_id.slice(0, 12) }}</code></button
-          ><button v-if="nextCursor" class="more" @click="load(nextCursor)">
-            加载更多
-          </button>
+          ><button v-if="nextCursor" class="more" @click="load(nextCursor)">加载更多</button>
         </section>
         <article v-if="selected" class="detail">
           <p>只读审计详情</p>
@@ -261,15 +231,15 @@ onMounted(() => load());
 <style scoped>
 .audit-page {
   min-height: 100vh;
-  background: #f4f6f8;
-  color: #172033;
+  background: var(--so-panel);
+  color: var(--so-text);
   display: grid;
   grid-template-columns: 232px 1fr;
   font-family: Inter, "Microsoft YaHei", sans-serif;
 }
 .audit-page > aside {
-  background: #101927;
-  color: #b6c0cf;
+  background: var(--so-panel);
+  color: var(--so-text);
   padding: 28px 20px;
   display: flex;
   flex-direction: column;
@@ -279,7 +249,7 @@ onMounted(() => load());
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #fff;
+  color: var(--so-text);
   text-decoration: none;
   font-weight: 800;
   font-size: 20px;
@@ -290,13 +260,13 @@ onMounted(() => load());
   width: 32px;
   height: 32px;
   border-radius: 9px;
-  background: #ef6c32;
+  background: var(--so-primary);
 }
 .audit-page aside p,
 .main header p {
   font-size: 11px;
   letter-spacing: 0.14em;
-  color: #7f8ca0;
+  color: var(--so-text-muted);
 }
 .audit-page nav {
   display: grid;
@@ -305,13 +275,13 @@ onMounted(() => load());
 .audit-page nav > * {
   padding: 11px 12px;
   border-radius: 8px;
-  color: #99a7b9;
+  color: var(--so-text-muted);
   text-decoration: none;
 }
 .audit-page nav .active {
-  background: #203047;
-  color: #fff;
-  border-left: 3px solid #ef6c32;
+  background: var(--so-panel-soft);
+  color: var(--so-text);
+  border-left: 3px solid var(--so-primary);
 }
 .audit-page aside small {
   margin-top: auto;
@@ -331,14 +301,14 @@ onMounted(() => load());
   margin: 6px 0;
 }
 .main header span {
-  color: #667085;
+  color: var(--so-text-muted);
 }
 .seed-badge {
   display: flex;
   gap: 8px;
   align-items: center;
-  background: #fff;
-  border: 1px solid #e2e7ed;
+  background: var(--so-panel);
+  border: 1px solid var(--so-border);
   padding: 10px 14px;
   border-radius: 10px;
   height: max-content;
@@ -346,12 +316,12 @@ onMounted(() => load());
 .seed-badge i {
   width: 8px;
   height: 8px;
-  background: #32a071;
+  background: var(--so-success);
   border-radius: 50%;
 }
 .seed-badge strong {
   font-size: 10px;
-  color: #ef6c32;
+  color: var(--so-primary);
 }
 .scope-tabs {
   display: flex;
@@ -363,34 +333,34 @@ onMounted(() => load());
 .filters button,
 .state button,
 .state a {
-  border: 1px solid #d7dde5;
-  background: #fff;
+  border: 1px solid var(--so-border);
+  background: var(--so-panel);
   padding: 10px 15px;
   border-radius: 7px;
-  color: #324155;
+  color: var(--so-text);
   text-decoration: none;
 }
 .scope-tabs button.active {
-  background: #17263b;
-  color: #fff;
+  background: var(--so-panel-muted);
+  color: var(--so-text);
 }
 .scope-tabs em {
   margin-left: auto;
-  color: #7b8798;
+  color: var(--so-text-muted);
   font-size: 12px;
 }
 .filters {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr auto;
   gap: 12px;
-  background: #fff;
+  background: var(--so-panel);
   padding: 14px;
-  border: 1px solid #e1e6ec;
+  border: 1px solid var(--so-border);
   border-radius: 10px;
 }
 .filters label {
   font-size: 11px;
-  color: #687588;
+  color: var(--so-text-muted);
 }
 .filters input,
 .filters select {
@@ -399,20 +369,20 @@ onMounted(() => load());
   box-sizing: border-box;
   margin-top: 5px;
   padding: 9px;
-  border: 1px solid #d9e0e7;
+  border: 1px solid var(--so-border);
   border-radius: 6px;
 }
 .filters button {
   align-self: end;
-  background: #ef6c32;
-  color: #fff;
-  border-color: #ef6c32;
+  background: var(--so-primary);
+  color: var(--so-on-primary);
+  border-color: var(--so-primary);
 }
 .state {
   margin-top: 16px;
   min-height: 310px;
-  background: #fff;
-  border: 1px solid #e2e7ed;
+  background: var(--so-panel);
+  border: 1px solid var(--so-border);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -425,13 +395,13 @@ onMounted(() => load());
   font-size: 30px;
 }
 .state.error > b {
-  color: #c84444;
+  color: var(--so-danger);
 }
 .spinner {
   width: 22px;
   height: 22px;
-  border: 3px solid #e5e9ee;
-  border-top-color: #ef6c32;
+  border: 3px solid var(--so-border);
+  border-top-color: var(--so-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -448,8 +418,8 @@ onMounted(() => load());
 }
 .table,
 .detail {
-  background: #fff;
-  border: 1px solid #e0e5eb;
+  background: var(--so-panel);
+  border: 1px solid var(--so-border);
   border-radius: 10px;
   overflow: hidden;
 }
@@ -463,36 +433,36 @@ onMounted(() => load());
 }
 .thead {
   font-size: 11px;
-  color: #7a8798;
-  background: #f8f9fb;
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
 }
 .table > button {
   width: 100%;
   border: 0;
-  border-top: 1px solid #edf0f3;
-  background: #fff;
+  border-top: 1px solid var(--so-border);
+  background: var(--so-panel);
   text-align: left;
   color: inherit;
 }
 .table > button.selected {
-  background: #fff7f2;
-  box-shadow: inset 3px 0 #ef6c32;
+  background: var(--so-warning-soft);
+  box-shadow: inset 3px 0 var(--so-primary);
 }
 .table button span {
   display: grid;
   gap: 4px;
 }
 .table small {
-  color: #7d8998;
+  color: var(--so-text-muted);
 }
 .table i {
   font-style: normal;
   font-size: 11px;
-  color: #23805c;
+  color: var(--so-success);
 }
 .table i[data-outcome="blocked"],
 .table i[data-outcome="failed"] {
-  color: #c34d4d;
+  color: var(--so-danger);
 }
 .table code {
   font-size: 11px;
@@ -500,14 +470,14 @@ onMounted(() => load());
 .table .more {
   display: block;
   text-align: center;
-  color: #ef6c32;
+  color: var(--so-primary);
 }
 .detail {
   padding: 22px;
 }
 .detail > p {
   font-size: 11px;
-  color: #ef6c32;
+  color: var(--so-primary);
   letter-spacing: 0.1em;
 }
 .detail h2 {
@@ -519,27 +489,27 @@ onMounted(() => load());
   gap: 12px;
 }
 .detail dl div {
-  border-bottom: 1px solid #edf0f2;
+  border-bottom: 1px solid var(--so-border);
   padding-bottom: 8px;
 }
 .detail dt {
   font-size: 11px;
-  color: #7c899a;
+  color: var(--so-text-muted);
 }
 .detail dd {
   margin: 4px 0;
   word-break: break-all;
 }
 .detail pre {
-  background: #111b2a;
-  color: #d5dfeb;
+  background: var(--so-panel);
+  color: var(--so-text);
   padding: 12px;
   border-radius: 7px;
   overflow: auto;
   font-size: 11px;
 }
 .detail > small {
-  color: #7d8998;
+  color: var(--so-text-muted);
 }
 @media (max-width: 700px) {
   .audit-page {

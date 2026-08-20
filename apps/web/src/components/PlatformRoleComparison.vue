@@ -130,7 +130,10 @@ const comparison = computed(() => {
             <dt>{{ comparedRoles.right?.name }}</dt>
             <dd :data-enabled="item.right">{{ item.right ? "拥有" : "无" }}</dd>
           </div>
-          <div><dt>差异</dt><dd>{{ item.difference }}</dd></div>
+          <div>
+            <dt>差异</dt>
+            <dd>{{ item.difference }}</dd>
+          </div>
         </dl>
       </article>
     </div>
@@ -138,38 +141,127 @@ const comparison = computed(() => {
 </template>
 
 <style scoped>
-.role-comparison { padding:20px; display:grid; gap:16px; border:1px solid #263f58; border-radius:14px; background:#10243a; }
-.role-comparison > header { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; }
-.role-comparison > header p,.role-comparison > header h3 { margin:0; }
-.role-comparison > header p { color:#79e5d1; font-size:12px; font-weight:800; }
-.role-comparison > header h3 { margin-top:5px; font-size:22px; }
-.role-comparison > header span,.role-comparison__summaries span,.role-comparison__summaries small { display:block; margin-top:6px; color:#9aadc1; }
-.role-comparison__toggle { min-height:44px; display:flex; align-items:center; gap:8px; white-space:nowrap; }
-.role-comparison__toggle input { width:18px; height:18px; }
-.role-comparison__selectors,.role-comparison__summaries { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.role-comparison__selectors label { display:grid; gap:6px; color:#9aadc1; }
-.role-comparison__selectors select { min-height:44px; padding:9px 11px; border:1px solid #31506b; border-radius:9px; color:#eef5ff; background:#0d2033; }
-.role-comparison__summaries article { min-width:0; padding:14px; border:1px solid #29465f; border-radius:10px; background:#0b1d2e; }
-.role-comparison__matrix { display:grid; gap:8px; }
-.role-comparison__matrix > p { margin:0; padding:16px; color:#9aadc1; text-align:center; }
-.role-comparison__matrix article {
-  padding:12px 14px;
-  display:grid;
-  grid-template-columns:minmax(170px,.8fr) minmax(0,1.6fr);
-  gap:16px;
-  align-items:center;
-  border:1px solid #29465f;
-  border-radius:10px;
-  background:#0b1d2e;
+.role-comparison {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 14px;
+  background: var(--so-panel);
 }
-.role-comparison__matrix h4 { margin:0; }
-.role-comparison__matrix dl { margin:0; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-.role-comparison__matrix dt { color:#9aadc1; font-size:11px; }
-.role-comparison__matrix dd { margin:4px 0 0; }
-.role-comparison__matrix dd[data-enabled="true"] { color:#79e5d1; }
-@media(max-width:700px) {
-  .role-comparison > header { display:grid; }
-  .role-comparison__selectors,.role-comparison__summaries { grid-template-columns:1fr; }
-  .role-comparison__matrix article,.role-comparison__matrix dl { grid-template-columns:1fr; }
+.role-comparison > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+.role-comparison > header p,
+.role-comparison > header h3 {
+  margin: 0;
+}
+.role-comparison > header p {
+  color: var(--so-primary);
+  font-size: 12px;
+  font-weight: 800;
+}
+.role-comparison > header h3 {
+  margin-top: 5px;
+  font-size: 22px;
+}
+.role-comparison > header span,
+.role-comparison__summaries span,
+.role-comparison__summaries small {
+  display: block;
+  margin-top: 6px;
+  color: var(--so-text-muted);
+}
+.role-comparison__toggle {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.role-comparison__toggle input {
+  width: 18px;
+  height: 18px;
+}
+.role-comparison__selectors,
+.role-comparison__summaries {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.role-comparison__selectors label {
+  display: grid;
+  gap: 6px;
+  color: var(--so-text-muted);
+}
+.role-comparison__selectors select {
+  min-height: 44px;
+  padding: 9px 11px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-panel);
+}
+.role-comparison__summaries article {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+}
+.role-comparison__matrix {
+  display: grid;
+  gap: 8px;
+}
+.role-comparison__matrix > p {
+  margin: 0;
+  padding: 16px;
+  color: var(--so-text-muted);
+  text-align: center;
+}
+.role-comparison__matrix article {
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: minmax(170px, 0.8fr) minmax(0, 1.6fr);
+  gap: 16px;
+  align-items: center;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+}
+.role-comparison__matrix h4 {
+  margin: 0;
+}
+.role-comparison__matrix dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.role-comparison__matrix dt {
+  color: var(--so-text-muted);
+  font-size: 11px;
+}
+.role-comparison__matrix dd {
+  margin: 4px 0 0;
+}
+.role-comparison__matrix dd[data-enabled="true"] {
+  color: var(--so-primary);
+}
+@media (max-width: 700px) {
+  .role-comparison > header {
+    display: grid;
+  }
+  .role-comparison__selectors,
+  .role-comparison__summaries {
+    grid-template-columns: 1fr;
+  }
+  .role-comparison__matrix article,
+  .role-comparison__matrix dl {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

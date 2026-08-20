@@ -830,11 +830,11 @@ onMounted(load);
   align-items: center;
   padding: 24px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #092f37, #12515e);
-  color: #fff;
+  background: linear-gradient(135deg, var(--so-panel-soft), var(--so-bg-elevated));
+  color: var(--so-text);
 }
 .source-guide p {
-  color: #60e1c1;
+  color: var(--so-primary);
   font-weight: 800;
   margin: 0;
 }
@@ -847,8 +847,8 @@ onMounted(load);
 }
 .source-guide a {
   white-space: nowrap;
-  color: #092f37;
-  background: #60e1c1;
+  color: var(--so-on-primary);
+  background: var(--so-primary);
   padding: 11px 16px;
   border-radius: 10px;
   font-weight: 800;
@@ -1011,7 +1011,7 @@ onMounted(load);
   padding: 20px;
   display: grid;
   place-items: center;
-  background: #020817cc;
+  background: color-mix(in srgb, var(--so-bg) 80%, transparent);
 }
 .source-modal form {
   width: min(520px, 100%);

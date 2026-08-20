@@ -1,39 +1,27 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 const props = defineProps<{ apiBaseUrl: string }>();
-const state = ref<
-  | "loading"
-  | "empty"
-  | "blocked"
-  | "stale"
-  | "verified"
-  | "forbidden"
-  | "expired"
->("loading");
+const state = ref<"loading" | "empty" | "blocked" | "stale" | "verified" | "forbidden" | "expired">(
+  "loading",
+);
 const data = ref<any>(null),
   requestId = ref(""),
   hint = ref("");
-const when = (value?: string | null) =>
-  value ? new Date(value).toLocaleString() : "尚无记录";
-const bytes = (value: number) =>
-  value ? `${(value / 1024 / 1024).toFixed(1)} MB` : "0 MB";
+const when = (value?: string | null) => (value ? new Date(value).toLocaleString() : "尚无记录");
+const bytes = (value: number) => (value ? `${(value / 1024 / 1024).toFixed(1)} MB` : "0 MB");
 async function load() {
   state.value = "loading";
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/operations/backup-recovery`,
-      { credentials: "include", headers: { accept: "application/json" } },
-    );
+    const response = await fetch(`${props.apiBaseUrl}/platform/operations/backup-recovery`, {
+      credentials: "include",
+      headers: { accept: "application/json" },
+    });
     const body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? "";
     hint.value = body?.error?.action_hint ?? "";
     if (!response.ok) {
       state.value =
-        response.status === 401
-          ? "expired"
-          : response.status === 403
-            ? "forbidden"
-            : "blocked";
+        response.status === 401 ? "expired" : response.status === 403 ? "forbidden" : "blocked";
       return;
     }
     data.value = body.data;
@@ -95,18 +83,14 @@ onMounted(load);
         </article>
         <article>
           <span>恢复目标</span><strong>{{ data.policy.recovery_region }}</strong
-          ><small>{{
-            data.recovery_copy_verified ? "同机副本已核验" : "同机副本未核验"
-          }}</small>
+          ><small>{{ data.recovery_copy_verified ? "同机副本已核验" : "同机副本未核验" }}</small>
         </article>
         <article>
-          <span>数据库最多可丢失时间</span
-          ><strong>{{ data.policy.rpo_minutes }} min</strong
+          <span>数据库最多可丢失时间</span><strong>{{ data.policy.rpo_minutes }} min</strong
           ><small>目标上限</small>
         </article>
         <article>
-          <span>数据库恢复耗时</span
-          ><strong>{{ data.policy.rto_minutes }} min</strong
+          <span>数据库恢复耗时</span><strong>{{ data.policy.rto_minutes }} min</strong
           ><small>目标上限</small>
         </article>
       </div>
@@ -116,9 +100,7 @@ onMounted(load);
             <h3>备份资产</h3>
             <span>高强度加密</span>
           </div>
-          <div v-if="!data.targets.length" class="empty">
-            没有可展示的备份资产。
-          </div>
+          <div v-if="!data.targets.length" class="empty">没有可展示的备份资产。</div>
           <table v-else>
             <thead>
               <tr>
@@ -137,11 +119,7 @@ onMounted(load);
               >
                 <td>{{ target.asset_kind }}</td>
                 <td>
-                  {{
-                    target.storage_role === "recovery_copy"
-                      ? "恢复副本"
-                      : "主备份"
-                  }}
+                  {{ target.storage_role === "recovery_copy" ? "恢复副本" : "主备份" }}
                 </td>
                 <td>{{ target.region }}</td>
                 <td>{{ target.bundle_count }}</td>
@@ -188,11 +166,7 @@ onMounted(load);
             <div>
               <dt>权限边界</dt>
               <dd>
-                {{
-                  data.latest_drill?.permission_boundary_verified
-                    ? "已核验"
-                    : "未核验"
-                }}
+                {{ data.latest_drill?.permission_boundary_verified ? "已核验" : "未核验" }}
               </dd>
             </div>
             <div>
@@ -217,8 +191,8 @@ onMounted(load);
         </article>
       </section>
       <footer>
-        观测时间 {{ when(data.observed_at) }} · request_id
-        {{ requestId || "—" }} · 恢复动作仅由宝塔受控任务执行
+        观测时间 {{ when(data.observed_at) }} · request_id {{ requestId || "—" }} ·
+        恢复动作仅由宝塔受控任务执行
       </footer>
     </template>
   </section>
@@ -226,13 +200,13 @@ onMounted(load);
 
 <style scoped>
 .backup-center {
-  --ink: #e9f2ff;
-  --muted: #8298b8;
-  --line: #173052;
-  --blue: #2388ff;
-  --cyan: #27d9ff;
-  --green: #35d49a;
-  --amber: #ffae42;
+  --ink: var(--so-text);
+  --muted: var(--so-text-muted);
+  --line: var(--so-border);
+  --blue: var(--so-primary);
+  --cyan: var(--so-primary);
+  --green: var(--so-success);
+  --amber: var(--so-warning);
   color: var(--ink);
   display: grid;
   gap: 18px;
@@ -240,8 +214,12 @@ onMounted(load);
 .backup-hero {
   align-items: end;
   background:
-    radial-gradient(circle at 78% 0, #0c3b7a66, transparent 42%),
-    linear-gradient(135deg, #071329, #081a35);
+    radial-gradient(
+      circle at 78% 0,
+      color-mix(in srgb, var(--so-info) 40%, transparent),
+      transparent 42%
+    ),
+    linear-gradient(135deg, var(--so-bg-elevated), var(--so-bg-elevated));
   border: 1px solid var(--line);
   border-radius: 18px;
   display: flex;
@@ -266,16 +244,16 @@ onMounted(load);
   color: var(--muted);
 }
 button {
-  background: #0d3264;
-  border: 1px solid #2e76c6;
+  background: var(--so-primary-strong);
+  border: 1px solid var(--so-border-strong);
   border-radius: 9px;
-  color: #fff;
+  color: var(--so-on-primary);
   cursor: pointer;
   padding: 10px 16px;
 }
 .truth-banner {
   align-items: center;
-  background: #0a182d;
+  background: var(--so-panel);
   border: 1px solid var(--line);
   border-left: 4px solid var(--amber);
   border-radius: 12px;
@@ -298,7 +276,7 @@ button {
   margin-top: 4px;
 }
 .truth-banner p {
-  color: #afc0d7;
+  color: var(--so-text);
   margin: 0;
   max-width: 610px;
 }
@@ -311,7 +289,7 @@ button {
 .panel,
 .blockers,
 .state-card {
-  background: linear-gradient(160deg, #0a192f, #081426);
+  background: linear-gradient(160deg, var(--so-panel-soft), var(--so-panel-soft));
   border: 1px solid var(--line);
   border-radius: 13px;
 }
@@ -352,7 +330,7 @@ table {
 }
 th,
 td {
-  border-bottom: 1px solid #142b49;
+  border-bottom: 1px solid var(--so-border);
   padding: 12px 8px;
   text-align: left;
 }
@@ -370,7 +348,7 @@ dl {
   margin: 0;
 }
 dl div {
-  border-bottom: 1px solid #142b49;
+  border-bottom: 1px solid var(--so-border);
   padding: 11px 0;
 }
 dt {
@@ -386,7 +364,7 @@ dd {
 }
 .blockers article {
   align-items: start;
-  border-top: 1px solid #142b49;
+  border-top: 1px solid var(--so-border);
   display: grid;
   gap: 13px;
   grid-template-columns: minmax(180px, 0.5fr) 1fr;
@@ -396,7 +374,7 @@ dd {
   color: var(--amber);
 }
 .blockers p {
-  color: #afc0d7;
+  color: var(--so-text);
   margin: 0;
 }
 .state-card {

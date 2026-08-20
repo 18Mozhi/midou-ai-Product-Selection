@@ -29,9 +29,7 @@ const entities: Array<{
     secondary: "报价",
   },
 ];
-const current = computed(() =>
-  entities.find((item) => item.value === entity.value)!,
-);
+const current = computed(() => entities.find((item) => item.value === entity.value)!);
 const summary = computed(() => Object.entries(data.value?.summary ?? {}));
 const statusName = (value: unknown) =>
   (
@@ -69,17 +67,13 @@ async function load() {
   if (query.value.trim()) params.set("query", query.value.trim());
   if (status.value) params.set("status", status.value);
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/management?${params}`,
-        {
-          credentials: "include",
-          headers: { accept: "application/json" },
-        },
-      ),
+    const response = await fetch(`${props.apiBaseUrl}/platform/management?${params}`, {
+        credentials: "include",
+        headers: { accept: "application/json" },
+      }),
       body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? "";
-    if (!response.ok)
-      throw new Error(body?.error?.action_hint ?? "全量数据暂不可用");
+    if (!response.ok) throw new Error(body?.error?.action_hint ?? "全量数据暂不可用");
     data.value = body.data;
     state.value = body.data.items.length ? "ready" : "empty";
   } catch (error) {
@@ -88,10 +82,7 @@ async function load() {
   }
 }
 async function exportCsv() {
-  const reason = window.prompt(
-    "请输入受控导出原因（2–300 字）",
-    "平台运营数据核对",
-  );
+  const reason = window.prompt("请输入受控导出原因（2–300 字）", "平台运营数据核对");
   if (reason === null) return;
   if (reason.trim().length < 2) {
     message.value = "导出原因至少需要 2 个字。";
@@ -99,20 +90,17 @@ async function exportCsv() {
   }
   exporting.value = true;
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/management/data/exports`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          entity: entity.value,
-          query: query.value.trim(),
-          status: status.value,
-          reason: reason.trim(),
-        }),
-      },
-    );
+    const response = await fetch(`${props.apiBaseUrl}/platform/management/data/exports`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        entity: entity.value,
+        query: query.value.trim(),
+        status: status.value,
+        reason: reason.trim(),
+      }),
+    });
     requestId.value = response.headers.get("x-request-id") ?? requestId.value;
     if (!response.ok) {
       const body = await response.json().catch(() => null);
@@ -146,21 +134,13 @@ onMounted(load);
       <div>
         <p>平台全量数据中心</p>
         <h2>全量业务数据</h2>
-        <span
-          >跨组织查看热点、机会、竞品与供应商事实；导出会记录操作人、原因和范围。</span
-        >
+        <span>跨组织查看热点、机会、竞品与供应商事实；导出会记录操作人、原因和范围。</span>
       </div>
       <nav aria-label="平台数据视图">
-        <button
-          :aria-current="tab === 'records' ? 'page' : undefined"
-          @click="tab = 'records'"
-        >
+        <button :aria-current="tab === 'records' ? 'page' : undefined" @click="tab = 'records'">
           全量记录
         </button>
-        <button
-          :aria-current="tab === 'quality' ? 'page' : undefined"
-          @click="tab = 'quality'"
-        >
+        <button :aria-current="tab === 'quality' ? 'page' : undefined" @click="tab = 'quality'">
           证据与质量
         </button>
       </nav>
@@ -179,11 +159,7 @@ onMounted(load);
         </button>
       </nav>
       <form class="platform-data-filter" @submit.prevent="load">
-        <input
-          v-model="query"
-          placeholder="搜索名称、组织或工作区"
-          maxlength="120"
-        />
+        <input v-model="query" placeholder="搜索名称、组织或工作区" maxlength="120" />
         <input v-model="status" placeholder="精确状态（可选）" maxlength="40" />
         <button>筛选</button>
         <button type="button" :disabled="exporting" @click="exportCsv">
@@ -230,12 +206,10 @@ onMounted(load);
                   ><small>{{ item.id }}</small>
                 </td>
                 <td>
-                  {{ item.organization_name
-                  }}<small>{{ item.workspace_name }}</small>
+                  {{ item.organization_name }}<small>{{ item.workspace_name }}</small>
                 </td>
                 <td>
-                  {{ item.category || "—"
-                  }}<small>{{ item.market || "—" }}</small>
+                  {{ item.category || "—" }}<small>{{ item.market || "—" }}</small>
                 </td>
                 <td>
                   <b :data-state="item.status">{{ statusName(item.status) }}</b>
@@ -247,9 +221,7 @@ onMounted(load);
           </table>
         </div>
         <footer>
-          最多显示当前筛选最近 100 条<span v-if="requestId">
-            · 关联编号 {{ requestId }}</span
-          >
+          最多显示当前筛选最近 100 条<span v-if="requestId"> · 关联编号 {{ requestId }}</span>
         </footer>
       </template>
     </template>
@@ -302,7 +274,7 @@ onMounted(load);
 .platform-data button[aria-current="page"],
 .platform-data-filter button:first-of-type {
   background: var(--so-primary-strong);
-  color: #fff;
+  color: var(--so-on-primary);
 }
 .platform-data-filter input:first-child {
   flex: 1;

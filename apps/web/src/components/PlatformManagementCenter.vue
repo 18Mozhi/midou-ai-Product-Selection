@@ -40,19 +40,11 @@ const messageEditor = ref<any>(null),
   });
 const titles: Record<Domain, [string, string]> = {
   content: ["内容管理", "审核跨组织热点内容，处理无关和过期主题。"],
-  notifications: [
-    "通知管理",
-    "查看站内通知、接收人、已读状态和各渠道投递结果。",
-  ],
+  notifications: ["通知管理", "查看站内通知、接收人、已读状态和各渠道投递结果。"],
   email: ["邮件管理", "统一查看账号邮件与业务通知邮件的队列、失败和死信状态。"],
-  status: [
-    "系统状态",
-    "查看 API、数据库、账号、来源和采集任务的真实运行状态。",
-  ],
+  status: ["系统状态", "查看 API、数据库、账号、来源和采集任务的真实运行状态。"],
 };
-const summaryEntries = computed(() =>
-  Object.entries(data.value?.summary ?? {}),
-);
+const summaryEntries = computed(() => Object.entries(data.value?.summary ?? {}));
 const summaryName = (key: string) =>
   (
     ({
@@ -109,8 +101,7 @@ const stateName = (value: unknown) =>
       critical: "严重",
     }) as Record<string, string>
   )[String(value)] ?? String(value ?? "—");
-const when = (value: unknown) =>
-  value ? new Date(String(value)).toLocaleString("zh-CN") : "—";
+const when = (value: unknown) => (value ? new Date(String(value)).toLocaleString("zh-CN") : "—");
 async function load() {
   state.value = "loading";
   message.value = "";
@@ -118,19 +109,17 @@ async function load() {
   if (query.value.trim()) params.set("query", query.value.trim());
   if (status.value) params.set("status", status.value);
   try {
-    const response = await fetch(
-        `${props.apiBaseUrl}/platform/management?${params}`,
-        { credentials: "include", headers: { accept: "application/json" } },
-      ),
+    const response = await fetch(`${props.apiBaseUrl}/platform/management?${params}`, {
+        credentials: "include",
+        headers: { accept: "application/json" },
+      }),
       body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? "";
-    if (!response.ok)
-      throw new Error(body?.error?.action_hint ?? "管理数据暂不可用");
+    if (!response.ok) throw new Error(body?.error?.action_hint ?? "管理数据暂不可用");
     data.value = body.data;
     const count =
       domain.value === "status"
-        ? (body.data?.collections?.length ?? 0) +
-          (body.data?.sources?.length ?? 0)
+        ? (body.data?.collections?.length ?? 0) + (body.data?.sources?.length ?? 0)
         : ["notifications", "email"].includes(domain.value)
           ? (body.data?.items?.length ?? 0) + (body.data?.messages?.length ?? 0)
           : (body.data?.items?.length ?? 0);
@@ -140,10 +129,7 @@ async function load() {
     state.value = "error";
   }
 }
-function beginReview(
-  item: any,
-  statusValue: "active" | "irrelevant" | "stale",
-) {
+function beginReview(item: any, statusValue: "active" | "irrelevant" | "stale") {
   reviewItem.value = item;
   reviewStatus.value = statusValue;
   reviewReason.value = "";
@@ -171,8 +157,7 @@ async function submitReview() {
       ),
       body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok)
-      throw new Error(body?.error?.action_hint ?? "内容审核未完成");
+    if (!response.ok) throw new Error(body?.error?.action_hint ?? "内容审核未完成");
     reviewItem.value = null;
     await load();
     message.value = "内容状态已更新并写入审计记录。";
@@ -184,10 +169,7 @@ async function submitReview() {
 }
 async function manageEmail(item: any, action: "retry" | "suppress") {
   const actionName = action === "retry" ? "重新投递" : "抑制投递";
-  const reason = window.prompt(
-    `请输入${actionName}原因（2–300 字）`,
-    "人工处理邮件队列",
-  );
+  const reason = window.prompt(`请输入${actionName}原因（2–300 字）`, "人工处理邮件队列");
   if (reason === null) return;
   if (reason.trim().length < 2) {
     message.value = "操作原因至少需要 2 个字。";
@@ -210,13 +192,11 @@ async function manageEmail(item: any, action: "retry" | "suppress") {
       ),
       body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok)
-      throw new Error(body?.error?.action_hint ?? `${actionName}未完成`);
+    if (!response.ok) throw new Error(body?.error?.action_hint ?? `${actionName}未完成`);
     await load();
     message.value = `${actionName}已完成并写入审计记录。`;
   } catch (error) {
-    message.value =
-      error instanceof Error ? error.message : `${actionName}未完成`;
+    message.value = error instanceof Error ? error.message : `${actionName}未完成`;
   } finally {
     busy.value = "";
   }
@@ -284,12 +264,8 @@ async function saveMessage() {
   }
 }
 async function messageAction(item: any, action: "publish" | "cancel") {
-  const actionName =
-    action === "publish" ? (item.kind === "email" ? "发送" : "发布") : "取消";
-  const reason = window.prompt(
-    `请输入${actionName}原因（2–300 字）`,
-    `${actionName}平台消息`,
-  );
+  const actionName = action === "publish" ? (item.kind === "email" ? "发送" : "发布") : "取消";
+  const reason = window.prompt(`请输入${actionName}原因（2–300 字）`, `${actionName}平台消息`);
   if (reason === null) return;
   if (reason.trim().length < 2) {
     message.value = "操作原因至少需要 2 个字。";
@@ -315,16 +291,14 @@ async function messageAction(item: any, action: "publish" | "cancel") {
       ),
       body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? requestId.value;
-    if (!response.ok)
-      throw new Error(body?.error?.action_hint ?? `${actionName}未完成`);
+    if (!response.ok) throw new Error(body?.error?.action_hint ?? `${actionName}未完成`);
     await load();
     message.value =
       action === "publish"
         ? `${actionName}完成：覆盖 ${body.data.recipient_count} 人，站内 ${body.data.in_app_count} 条，邮件队列 ${body.data.email_count} 条。`
         : "草稿已取消。";
   } catch (error) {
-    message.value =
-      error instanceof Error ? error.message : `${actionName}未完成`;
+    message.value = error instanceof Error ? error.message : `${actionName}未完成`;
   } finally {
     busy.value = "";
   }
@@ -348,29 +322,17 @@ onMounted(load);
         <span>{{ titles[domain][1] }}</span>
       </div>
       <div class="hero-actions">
-        <button
-          v-if="domain === 'notifications'"
-          type="button"
-          @click="openMessage()"
-        >
+        <button v-if="domain === 'notifications'" type="button" @click="openMessage()">
           发布通知
         </button>
-        <button v-if="domain === 'email'" type="button" @click="openMessage()">
-          发送邮件
-        </button>
+        <button v-if="domain === 'email'" type="button" @click="openMessage()">发送邮件</button>
         <button type="button" @click="load">刷新数据</button>
       </div>
     </header>
-    <form
-      v-if="domain !== 'status'"
-      class="platform-management-filter"
-      @submit.prevent="load"
-    >
+    <form v-if="domain !== 'status'" class="platform-management-filter" @submit.prevent="load">
       <input
         v-model="query"
-        :placeholder="
-          domain === 'content' ? '搜索主题、分类或市场' : '搜索标题、邮箱或组织'
-        "
+        :placeholder="domain === 'content' ? '搜索主题、分类或市场' : '搜索标题、邮箱或组织'"
       /><select v-model="status">
         <option value="">全部状态</option>
         <template v-if="domain === 'content'"
@@ -437,33 +399,20 @@ onMounted(load);
             <tr v-for="item in data.items" :key="item.id">
               <td data-label="热点主题">
                 <strong>{{ item.title }}</strong
-                ><small
-                  >{{ item.category || "未分类" }} · 热度
-                  {{ item.heat_value }}</small
-                >
+                ><small>{{ item.category || "未分类" }} · 热度 {{ item.heat_value }}</small>
               </td>
               <td data-label="组织 / 工作区">
-                {{ item.organization_name
-                }}<small>{{ item.workspace_name }}</small>
+                {{ item.organization_name }}<small>{{ item.workspace_name }}</small>
               </td>
               <td data-label="市场">{{ item.market }} · {{ item.language }}</td>
-              <td data-label="信号 / 来源">
-                {{ item.signal_count }} / {{ item.source_count }}
-              </td>
+              <td data-label="信号 / 来源">{{ item.signal_count }} / {{ item.source_count }}</td>
               <td data-label="状态">
                 <b :data-state="item.status">{{ stateName(item.status) }}</b>
               </td>
               <td data-label="操作">
-                <button title="设为展示中" @click="beginReview(item, 'active')">
-                  展示</button
-                ><button
-                  title="标记为无关"
-                  @click="beginReview(item, 'irrelevant')"
-                >
-                  无关</button
-                ><button title="标记为过期" @click="beginReview(item, 'stale')">
-                  过期
-                </button>
+                <button title="设为展示中" @click="beginReview(item, 'active')">展示</button
+                ><button title="标记为无关" @click="beginReview(item, 'irrelevant')">无关</button
+                ><button title="标记为过期" @click="beginReview(item, 'stale')">过期</button>
               </td>
             </tr>
           </tbody>
@@ -501,22 +450,17 @@ onMounted(load);
               </td>
               <td data-label="尝试">{{ item.attempt_count }}</td>
               <td data-label="最近错误 / 更新时间">
-                {{ item.last_error_code || "无错误"
-                }}<small>{{ when(item.updated_at) }}</small>
+                {{ item.last_error_code || "无错误" }}<small>{{ when(item.updated_at) }}</small>
               </td>
               <td data-label="操作">
                 <button
                   v-if="
                     (item.source_type === 'account' &&
-                      [
-                        'blocked_provider',
-                        'dead_letter',
-                        'retry_scheduled',
-                      ].includes(item.status)) ||
-                    (item.source_type === 'notification' &&
-                      ['failed', 'dead_letter', 'suppressed'].includes(
+                      ['blocked_provider', 'dead_letter', 'retry_scheduled'].includes(
                         item.status,
-                      ))
+                      )) ||
+                    (item.source_type === 'notification' &&
+                      ['failed', 'dead_letter', 'suppressed'].includes(item.status))
                   "
                   title="将失败邮件重新放入投递队列"
                   :disabled="busy === item.id"
@@ -539,13 +483,10 @@ onMounted(load);
                   v-if="
                     !(
                       (item.source_type === 'account' &&
-                        [
-                          'blocked_provider',
-                          'dead_letter',
-                          'retry_scheduled',
-                        ].includes(item.status)) ||
-                      (item.source_type === 'notification' &&
-                        !['delivered'].includes(item.status))
+                        ['blocked_provider', 'dead_letter', 'retry_scheduled'].includes(
+                          item.status,
+                        )) ||
+                      (item.source_type === 'notification' && !['delivered'].includes(item.status))
                     )
                   "
                   >无需处理</span
@@ -616,9 +557,7 @@ onMounted(load);
         </label>
         <footer>
           <button type="button" @click="reviewItem = null">取消</button
-          ><button :disabled="reviewReason.trim().length < 2 || Boolean(busy)">
-            确认更新
-          </button>
+          ><button :disabled="reviewReason.trim().length < 2 || Boolean(busy)">确认更新</button>
         </footer>
       </form>
     </dialog>
@@ -638,7 +577,7 @@ onMounted(load);
 .platform-management {
   display: grid;
   gap: 18px;
-  color: #dce8f3;
+  color: var(--so-text);
 }
 .platform-management-hero {
   display: flex;
@@ -646,13 +585,13 @@ onMounted(load);
   justify-content: space-between;
   gap: 20px;
   padding: 24px;
-  border: 1px solid #28475b;
+  border: 1px solid var(--so-border);
   border-radius: 17px;
-  background: linear-gradient(135deg, #0a1824, #123246);
+  background: linear-gradient(135deg, var(--so-panel-soft), var(--so-bg-elevated));
 }
 .platform-management-hero p {
   margin: 0;
-  color: #31d6c4;
+  color: var(--so-primary);
   font: 700 11px monospace;
   letter-spacing: 0.14em;
 }
@@ -661,7 +600,7 @@ onMounted(load);
   font-size: 28px;
 }
 .platform-management-hero span {
-  color: #91a8b9;
+  color: var(--so-text-muted);
 }
 .hero-actions {
   display: flex;
@@ -669,9 +608,9 @@ onMounted(load);
   flex-wrap: wrap;
 }
 .hero-actions button:first-child {
-  border-color: #31d6c4;
-  background: #31d6c4;
-  color: #08231d;
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-on-primary);
   font-weight: 800;
 }
 .platform-management button,
@@ -679,10 +618,10 @@ onMounted(load);
 .platform-management input,
 .platform-management textarea {
   box-sizing: border-box;
-  border: 1px solid #31536a;
+  border: 1px solid var(--so-border-strong);
   border-radius: 9px;
-  background: #0b1d29;
-  color: #dce8f3;
+  background: var(--so-panel);
+  color: var(--so-text);
   padding: 9px 12px;
   font: inherit;
 }
@@ -692,9 +631,9 @@ onMounted(load);
 .platform-management-hero button,
 .platform-management-filter button,
 dialog footer button:last-child {
-  border-color: #31d6c4;
-  background: #31d6c4;
-  color: #08231d;
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-on-primary);
   font-weight: 800;
 }
 .platform-management-filter {
@@ -713,13 +652,13 @@ dialog footer button:last-child {
 .platform-management-table,
 .platform-status-grid section {
   padding: 17px;
-  border: 1px solid #20384b;
+  border: 1px solid var(--so-border);
   border-radius: 14px;
-  background: #0d1d29;
+  background: var(--so-panel);
 }
 .platform-management-kpis small {
   display: block;
-  color: #8198aa;
+  color: var(--so-text-muted);
 }
 .platform-management-kpis strong {
   display: block;
@@ -737,7 +676,7 @@ dialog footer button:last-child {
 .platform-management td {
   padding: 12px 9px;
   text-align: left;
-  border-bottom: 1px solid #1d3547;
+  border-bottom: 1px solid var(--so-border);
   font-size: 13px;
 }
 .platform-management td strong,
@@ -746,7 +685,7 @@ dialog footer button:last-child {
 }
 .platform-management td small {
   margin-top: 4px;
-  color: #7892a5;
+  color: var(--so-text-muted);
 }
 .platform-management td button {
   margin: 2px;
@@ -755,26 +694,26 @@ dialog footer button:last-child {
 .platform-management b[data-state="active"],
 .platform-management b[data-state="delivered"],
 .platform-management b[data-state="succeeded"] {
-  color: #35d4a1;
+  color: var(--so-success);
 }
 .platform-management b[data-state="irrelevant"],
 .platform-management b[data-state="stale"],
 .platform-management b[data-state="dead_letter"],
 .platform-management b[data-state="failed"] {
-  color: #ff8b94;
+  color: var(--so-danger);
 }
 .platform-management-state,
 .platform-management-message {
   padding: 24px;
   text-align: center;
-  border: 1px dashed #31536a;
+  border: 1px dashed var(--so-border-strong);
   border-radius: 14px;
-  background: #0d1d29;
+  background: var(--so-panel);
 }
 .platform-management-message {
   padding: 12px;
   border-style: solid;
-  color: #b9f4e7;
+  color: var(--so-text);
 }
 .platform-status-grid {
   display: grid;
@@ -797,12 +736,12 @@ dialog footer button:last-child {
 }
 .platform-service-status header span,
 .platform-service-status small {
-  color: #7892a5;
+  color: var(--so-text-muted);
   font-size: 11px;
 }
 .platform-service-status a {
   padding: 11px 10px;
-  border-bottom: 1px solid #1d3547;
+  border-bottom: 1px solid var(--so-border);
   text-decoration: none;
 }
 .platform-service-status a > span {
@@ -816,26 +755,26 @@ dialog footer button:last-child {
 .platform-service-status i {
   border-radius: 999px;
   padding: 3px 8px;
-  background: #173248;
-  color: #a9c8dc;
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
   font-style: normal;
   font-size: 11px;
 }
 .platform-service-status i[data-state="healthy"],
 .platform-service-status i[data-state="ready"] {
-  background: #123c35;
-  color: #79f0cb;
+  background: var(--so-success-soft);
+  color: var(--so-success);
 }
 .platform-service-status i[data-state="warning"],
 .platform-service-status i[data-state="degraded"],
 .platform-service-status i[data-state="stale"] {
-  background: #473516;
-  color: #ffd27d;
+  background: var(--so-warning-soft);
+  color: var(--so-warning);
 }
 .platform-service-status i[data-state="blocked"],
 .platform-service-status i[data-state="stopped"] {
-  background: #4a2027;
-  color: #ff9da9;
+  background: var(--so-danger-soft);
+  color: var(--so-danger);
 }
 .platform-status-grid h3 {
   margin-top: 0;
@@ -844,16 +783,16 @@ dialog footer button:last-child {
   display: flex;
   justify-content: space-between;
   padding: 10px;
-  border-bottom: 1px solid #1d3547;
+  border-bottom: 1px solid var(--so-border);
 }
 .platform-status-grid a {
   display: inline-block;
   margin-top: 14px;
-  color: #4fe3cf;
+  color: var(--so-primary);
 }
 .platform-management > template + footer,
 .platform-management > footer {
-  color: #7892a5;
+  color: var(--so-text-muted);
   text-align: right;
   font-size: 11px;
 }
@@ -861,11 +800,11 @@ dialog {
   position: fixed;
   inset: 0;
   margin: auto;
-  border: 1px solid #31536a;
+  border: 1px solid var(--so-border-strong);
   border-radius: 16px;
-  background: #0d1d29;
-  color: #dce8f3;
-  box-shadow: 0 24px 80px #0009;
+  background: var(--so-panel);
+  color: var(--so-text);
+  box-shadow: 0 24px 80px color-mix(in srgb, var(--so-shadow-color) 60%, transparent);
 }
 dialog form {
   display: grid;

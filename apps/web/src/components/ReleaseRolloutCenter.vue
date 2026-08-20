@@ -15,26 +15,21 @@ const state = ref<
 const data = ref<any>(null),
   requestId = ref(""),
   hint = ref("");
-const time = (value?: string | null) =>
-  value ? new Date(value).toLocaleString() : "尚无记录";
+const time = (value?: string | null) => (value ? new Date(value).toLocaleString() : "尚无记录");
 const sha = (value?: string) => (value ? value.slice(0, 10) : "—");
 async function load() {
   state.value = "loading";
   try {
-    const response = await fetch(
-      `${props.apiBaseUrl}/platform/operations/releases`,
-      { credentials: "include", headers: { accept: "application/json" } },
-    );
+    const response = await fetch(`${props.apiBaseUrl}/platform/operations/releases`, {
+      credentials: "include",
+      headers: { accept: "application/json" },
+    });
     const body = await response.json().catch(() => null);
     requestId.value = body?.request_id ?? "";
     hint.value = body?.error?.action_hint ?? "";
     if (!response.ok) {
       state.value =
-        response.status === 401
-          ? "expired"
-          : response.status === 403
-            ? "forbidden"
-            : "blocked";
+        response.status === 401 ? "expired" : response.status === 403 ? "forbidden" : "blocked";
       return;
     }
     data.value = body.data;
@@ -57,13 +52,9 @@ onMounted(load);
       <button type="button" @click="load">刷新发布事实</button>
     </header>
     <section v-if="state === 'loading'" class="state">
-      <b>正在核验当前发布</b
-      ><span>读取构建身份、迁移、备份前置和 5% / 25% / 100% 观察门。</span>
+      <b>正在核验当前发布</b><span>读取构建身份、迁移、备份前置和 5% / 25% / 100% 观察门。</span>
     </section>
-    <section
-      v-else-if="state === 'forbidden' || state === 'expired'"
-      class="state danger"
-    >
+    <section v-else-if="state === 'forbidden' || state === 'expired'" class="state danger">
       <b>{{ state === "expired" ? "登录已失效" : "你没有平台运维权限" }}</b
       ><span>{{ hint || "请重新登录或联系平台管理员。" }}</span>
     </section>
@@ -97,25 +88,20 @@ onMounted(load);
       </section>
       <div class="identity-grid">
         <article>
-          <span>构建</span
-          ><strong>{{ sha(data.latest_release?.build_sha) }}</strong
+          <span>构建</span><strong>{{ sha(data.latest_release?.build_sha) }}</strong
           ><small>{{ data.latest_release?.app_version || "未签发" }}</small>
         </article>
         <article>
-          <span>迁移</span
-          ><strong>{{ data.latest_release?.migration_version || "—" }}</strong
+          <span>迁移</span><strong>{{ data.latest_release?.migration_version || "—" }}</strong
           ><small>数据库 5.7</small>
         </article>
         <article>
-          <span>发布状态</span
-          ><strong>{{ data.latest_release?.status || "empty" }}</strong
+          <span>发布状态</span><strong>{{ data.latest_release?.status || "empty" }}</strong
           ><small>{{ time(data.latest_release?.finished_at) }}</small>
         </article>
         <article>
           <span>自动停止</span
-          ><strong>{{
-            data.automatic_stop_verified ? "已触发验证" : "待命"
-          }}</strong
+          ><strong>{{ data.automatic_stop_verified ? "已触发验证" : "待命" }}</strong
           ><small>服务错误 / 请求耗时 / 异步积压</small>
         </article>
       </div>
@@ -123,10 +109,7 @@ onMounted(load);
         <header>
           <div>
             <h3>渐进观察门</h3>
-            <span
-              >每阶段生产至少
-              {{ data.policy.minimum_observation_seconds / 60 }} 分钟</span
-            >
+            <span>每阶段生产至少 {{ data.policy.minimum_observation_seconds / 60 }} 分钟</span>
           </div>
           <code>5% → 25% → 100%</code>
         </header>
@@ -136,23 +119,20 @@ onMounted(load);
               class="ring"
               :data-pass="
                 data.gates.some(
-                  (g: any) =>
-                    g.gate_kind === `canary_${percent}` &&
-                    g.status === 'passed',
+                  (g: any) => g.gate_kind === `canary_${percent}` && g.status === 'passed',
                 )
               "
             >
               <strong>{{ percent }}%</strong>
             </div>
             <b>{{
-              data.gates.find((g: any) => g.gate_kind === `canary_${percent}`)
-                ?.status || "pending"
+              data.gates.find((g: any) => g.gate_kind === `canary_${percent}`)?.status || "pending"
             }}</b
             ><small
               >观察
               {{
-                data.gates.find((g: any) => g.gate_kind === `canary_${percent}`)
-                  ?.observe_seconds || 0
+                data.gates.find((g: any) => g.gate_kind === `canary_${percent}`)?.observe_seconds ||
+                0
               }}
               秒</small
             >
@@ -177,9 +157,7 @@ onMounted(load);
             </thead>
             <tbody>
               <tr
-                v-for="gate in data.gates.filter((g: any) =>
-                  g.gate_kind.startsWith('canary_'),
-                )"
+                v-for="gate in data.gates.filter((g: any) => g.gate_kind.startsWith('canary_'))"
                 :key="gate.id"
               >
                 <td>{{ gate.traffic_percent }}%</td>
@@ -233,20 +211,24 @@ onMounted(load);
 
 <style scoped>
 .release-center {
-  --line: #193452;
-  --muted: #8399b7;
-  --cyan: #35d8ff;
-  --green: #35d69b;
-  --amber: #ffb24b;
-  color: #eaf3ff;
+  --line: var(--so-border);
+  --muted: var(--so-text-muted);
+  --cyan: var(--so-primary);
+  --green: var(--so-success);
+  --amber: var(--so-warning);
+  color: var(--so-text);
   display: grid;
   gap: 17px;
 }
 .hero {
   align-items: end;
   background:
-    radial-gradient(circle at 78% -20%, #154c9366, transparent 47%),
-    linear-gradient(140deg, #061225, #091b35);
+    radial-gradient(
+      circle at 78% -20%,
+      color-mix(in srgb, var(--so-info) 40%, transparent),
+      transparent 47%
+    ),
+    linear-gradient(140deg, var(--so-bg-elevated), var(--so-bg-elevated));
   border: 1px solid var(--line);
   border-radius: 18px;
   display: flex;
@@ -270,17 +252,17 @@ onMounted(load);
   color: var(--muted);
 }
 button {
-  background: #0c376c;
-  border: 1px solid #2b7dce;
+  background: var(--so-primary-strong);
+  border: 1px solid var(--so-border-strong);
   border-radius: 9px;
-  color: #fff;
+  color: var(--so-on-primary);
   padding: 10px 15px;
 }
 .state,
 .panel,
 .blockers,
 .identity-grid article {
-  background: linear-gradient(155deg, #0a192f, #071326);
+  background: linear-gradient(155deg, var(--so-panel-soft), var(--so-panel-soft));
   border: 1px solid var(--line);
   border-radius: 13px;
 }
@@ -291,7 +273,7 @@ button {
 }
 .verdict {
   align-items: center;
-  background: #09182c;
+  background: var(--so-panel);
   border: 1px solid var(--line);
   border-left: 4px solid var(--amber);
   border-radius: 12px;
@@ -303,7 +285,7 @@ button {
   border-left-color: var(--green);
 }
 .verdict[data-state="stopped"] {
-  border-left-color: #ff5d67;
+  border-left-color: var(--so-danger);
 }
 .verdict small,
 .identity-grid span,
@@ -317,7 +299,7 @@ button {
   margin-top: 5px;
 }
 .verdict p {
-  color: #afc1d9;
+  color: var(--so-text-muted);
   margin: 0;
   max-width: 660px;
 }
@@ -363,7 +345,7 @@ button {
 }
 .gate-grid article {
   align-items: center;
-  border-right: 1px solid #17304e;
+  border-right: 1px solid var(--so-border);
   display: grid;
   justify-items: center;
   gap: 8px;
@@ -373,7 +355,7 @@ button {
 }
 .ring {
   align-items: center;
-  background: conic-gradient(#34506d 0 100%);
+  background: conic-gradient(var(--so-border-strong) 0 100%);
   border-radius: 50%;
   display: flex;
   height: 88px;
@@ -382,7 +364,7 @@ button {
   width: 88px;
 }
 .ring:after {
-  background: #09172a;
+  background: var(--so-panel);
   border-radius: 50%;
   content: "";
   inset: 8px;
@@ -410,7 +392,7 @@ table {
 }
 th,
 td {
-  border-bottom: 1px solid #142c49;
+  border-bottom: 1px solid var(--so-border);
   padding: 11px 7px;
   text-align: left;
 }
@@ -425,7 +407,7 @@ dl {
   margin: 12px 0 0;
 }
 dl div {
-  border-bottom: 1px solid #142c49;
+  border-bottom: 1px solid var(--so-border);
   display: flex;
   justify-content: space-between;
   padding: 11px 0;
@@ -441,7 +423,7 @@ dd {
   padding: 19px;
 }
 .blockers article {
-  border-top: 1px solid #142c49;
+  border-top: 1px solid var(--so-border);
   display: grid;
   gap: 14px;
   grid-template-columns: 210px 1fr;
@@ -451,7 +433,7 @@ dd {
   color: var(--amber);
 }
 .blockers p {
-  color: #afc1d9;
+  color: var(--so-text-muted);
   margin: 0;
 }
 footer {

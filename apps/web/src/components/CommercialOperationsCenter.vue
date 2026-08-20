@@ -11,9 +11,7 @@ const data = ref<any>({
   usage: {},
   effective_quotas: {},
 });
-const organizationId = ref(
-  new URLSearchParams(location.search).get("organization_id") ?? "",
-);
+const organizationId = ref(new URLSearchParams(location.search).get("organization_id") ?? "");
 const notice = ref("");
 const requestId = ref("");
 const pending = ref<any>(null);
@@ -73,9 +71,7 @@ async function call(path: string, method = "GET", body?: any) {
   if (!response.ok) {
     requestId.value = result?.request_id ?? "";
     throw Object.assign(
-      new Error(
-        result?.error?.action_hint ?? result?.error?.message ?? "请求未完成",
-      ),
+      new Error(result?.error?.action_hint ?? result?.error?.message ?? "请求未完成"),
       { status: response.status },
     );
   }
@@ -90,22 +86,18 @@ async function load() {
     );
     if (data.value.assignment) {
       assignment.value.plan_id = data.value.assignment.plan_id;
-      assignment.value.period_start = localDate(
-        data.value.assignment.period_start,
-      );
+      assignment.value.period_start = localDate(data.value.assignment.period_start);
       assignment.value.period_end = localDate(data.value.assignment.period_end);
     } else {
       assignment.value.plan_id = "";
       assignment.value.period_start = "";
       assignment.value.period_end = "";
     }
-    state.value =
-      data.value.plans.length || data.value.assignment ? "ready" : "empty";
+    state.value = data.value.plans.length || data.value.assignment ? "ready" : "empty";
   } catch (error) {
     notice.value = error instanceof Error ? error.message : "读取失败";
     const status = (error as any)?.status;
-    state.value =
-      status === 429 ? "rate_limited" : status >= 500 ? "blocked" : "error";
+    state.value = status === 429 ? "rate_limited" : status >= 500 ? "blocked" : "error";
   }
 }
 async function createPlan() {
@@ -178,9 +170,7 @@ function assignOrRenew() {
     "/platform/commercial/assignments",
     "POST",
     { organization_id: organizationId.value, ...assignment.value },
-    data.value.assignment
-      ? "组织配额方案已调整并保留审计事件。"
-      : "组织配额方案已分配。",
+    data.value.assignment ? "组织配额方案已调整并保留审计事件。" : "组织配额方案已分配。",
   );
 }
 async function confirm() {
@@ -209,10 +199,7 @@ onMounted(load);
         >
       </div>
       <form @submit.prevent="load">
-        <label
-          >组织编号<input
-            v-model="organizationId"
-            placeholder="查看组织配额时填写" /></label
+        <label>组织编号<input v-model="organizationId" placeholder="查看组织配额时填写" /></label
         ><button>读取</button>
       </form>
     </header>
@@ -222,16 +209,10 @@ onMounted(load);
     <aside v-if="pending" class="confirm">
       <strong>确认{{ pending.title }}？</strong>
       <p>该操作会改变配额方案版本、分配状态或组织额度，并写入平台审计。</p>
-      <button @click="pending = null">取消</button
-      ><button @click="confirm">确认执行</button>
+      <button @click="pending = null">取消</button><button @click="confirm">确认执行</button>
     </aside>
-    <section v-if="state === 'loading'" class="state">
-      正在读取真实配额方案与用量…
-    </section>
-    <section
-      v-else-if="['error', 'rate_limited', 'blocked'].includes(state)"
-      class="state"
-    >
+    <section v-if="state === 'loading'" class="state">正在读取真实配额方案与用量…</section>
+    <section v-else-if="['error', 'rate_limited', 'blocked'].includes(state)" class="state">
       <strong>{{
         state === "rate_limited"
           ? "请求过于频繁"
@@ -244,16 +225,13 @@ onMounted(load);
     <template v-else>
       <aside class="commercial-guide">
         <article>
-          <strong>1. 创建配额方案</strong
-          ><span>先保存草稿，填写名称、说明和三项额度。</span>
+          <strong>1. 创建配额方案</strong><span>先保存草稿，填写名称、说明和三项额度。</span>
         </article>
         <article>
-          <strong>2. 启用配额方案</strong
-          ><span>确认内容后启用，才能分配给组织。</span>
+          <strong>2. 启用配额方案</strong><span>确认内容后启用，才能分配给组织。</span>
         </article>
         <article>
-          <strong>3. 分配与调整</strong
-          ><span>输入组织编号，选择配额方案和有效期即可完成。</span>
+          <strong>3. 分配与调整</strong><span>输入组织编号，选择配额方案和有效期即可完成。</span>
         </article>
       </aside>
       <section class="create">
@@ -264,8 +242,7 @@ onMounted(load);
             placeholder="例如 basic_2026"
             required
             pattern="[a-z0-9][a-z0-9_-]{0,79}" /></label
-        ><label
-          >方案名称<input v-model="plan.name" required maxlength="120" /></label
+        ><label>方案名称<input v-model="plan.name" required maxlength="120" /></label
         ><label class="wide"
           >方案说明<textarea
             v-model="plan.description"
@@ -273,36 +250,21 @@ onMounted(load);
             placeholder="适用对象、包含内容和使用限制"
           ></textarea></label
         ><label
-          >采集任务<input
-            v-model.number="plan.collection_tasks"
-            type="number"
-            min="0" /></label
+          >采集任务<input v-model.number="plan.collection_tasks" type="number" min="0" /></label
         ><label
           >外部接口请求<input
             v-model.number="plan.open_api_requests"
             type="number"
             min="0" /></label
-        ><label
-          >报表导出<input
-            v-model.number="plan.report_exports"
-            type="number"
-            min="0" /></label
-        ><label class="wide"
-          >创建原因<input
-            v-model="plan.reason"
-            required
-            maxlength="500" /></label
+        ><label>报表导出<input v-model.number="plan.report_exports" type="number" min="0" /></label
+        ><label class="wide">创建原因<input v-model="plan.reason" required maxlength="500" /></label
         ><button @click="createPlan">创建草稿</button>
       </section>
       <p v-if="state === 'empty'" class="state">
         暂无配额方案。系统不会自动编造默认额度，也不会展示价格或计费结论。
       </p>
       <section class="plans">
-        <article
-          v-for="item in data.plans"
-          :key="item.id"
-          :data-status="item.status"
-        >
+        <article v-for="item in data.plans" :key="item.id" :data-status="item.status">
           <header>
             <span>{{ statusText(item.status) }}</span>
             <h3>{{ item.name }}</h3>
@@ -317,9 +279,7 @@ onMounted(load);
           </dl>
           <small
             >最近更新：{{
-              item.updated_at
-                ? new Date(item.updated_at).toLocaleString("zh-CN")
-                : "暂无时间"
+              item.updated_at ? new Date(item.updated_at).toLocaleString("zh-CN") : "暂无时间"
             }}</small
           >
           <footer>
@@ -327,38 +287,28 @@ onMounted(load);
             ><button
               v-if="item.status === 'draft'"
               @click="
-                prepare(
-                  '启用配额方案',
-                  `/platform/commercial/plans/${item.id}`,
-                  'PATCH',
-                  {
-                    name: item.name,
-                    description: item.description,
-                    quotas: item.quotas,
-                    status: 'active',
-                    expected_version: item.version,
-                    reason: plan.reason,
-                  },
-                )
+                prepare('启用配额方案', `/platform/commercial/plans/${item.id}`, 'PATCH', {
+                  name: item.name,
+                  description: item.description,
+                  quotas: item.quotas,
+                  status: 'active',
+                  expected_version: item.version,
+                  reason: plan.reason,
+                })
               "
             >
               启用</button
             ><button
               v-else-if="item.status === 'active'"
               @click="
-                prepare(
-                  '退役配额方案',
-                  `/platform/commercial/plans/${item.id}`,
-                  'PATCH',
-                  {
-                    name: item.name,
-                    description: item.description,
-                    quotas: item.quotas,
-                    status: 'retired',
-                    expected_version: item.version,
-                    reason: plan.reason,
-                  },
-                )
+                prepare('退役配额方案', `/platform/commercial/plans/${item.id}`, 'PATCH', {
+                  name: item.name,
+                  description: item.description,
+                  quotas: item.quotas,
+                  status: 'retired',
+                  expected_version: item.version,
+                  reason: plan.reason,
+                })
               "
             >
               退役
@@ -379,10 +329,7 @@ onMounted(load);
         <div v-if="data.assignment" class="assignment">
           <div>
             <strong>{{ data.assignment.plan_name }}</strong
-            ><small
-              >{{ data.assignment.period_start }} —
-              {{ data.assignment.period_end }}</small
-            >
+            ><small>{{ data.assignment.period_start }} — {{ data.assignment.period_end }}</small>
           </div>
           <nav>
             <button
@@ -442,9 +389,7 @@ onMounted(load);
             >配额方案<select v-model="assignment.plan_id" required>
               <option value="">选择已启用配额方案</option>
               <option
-                v-for="item in data.plans.filter(
-                  (x: any) => x.status === 'active',
-                )"
+                v-for="item in data.plans.filter((x: any) => x.status === 'active')"
                 :key="item.id"
                 :value="item.id"
               >
@@ -452,20 +397,10 @@ onMounted(load);
               </option>
             </select></label
           ><label
-            >开始<input
-              v-model="assignment.period_start"
-              type="datetime-local"
-              required /></label
+            >开始<input v-model="assignment.period_start" type="datetime-local" required /></label
           ><label
-            >结束<input
-              v-model="assignment.period_end"
-              type="datetime-local"
-              required /></label
-          ><label
-            >原因<input
-              v-model="assignment.reason"
-              required
-              minlength="2" /></label
+            >结束<input v-model="assignment.period_end" type="datetime-local" required /></label
+          ><label>原因<input v-model="assignment.reason" required minlength="2" /></label
           ><button>{{ data.assignment ? "确认调整" : "确认分配" }}</button>
         </form>
         <template v-if="data.assignment"
@@ -485,41 +420,28 @@ onMounted(load);
           <form
             class="adjust"
             @submit.prevent="
-              prepare(
-                '人工调整配额',
-                '/platform/commercial/adjustments',
-                'POST',
-                {
-                  organization_id: organizationId,
-                  assignment_id: data.assignment.id,
-                  ...adjustment,
-                },
-              )
+              prepare('人工调整配额', '/platform/commercial/adjustments', 'POST', {
+                organization_id: organizationId,
+                assignment_id: data.assignment.id,
+                ...adjustment,
+              })
             "
           >
             <label
               >计量项<select v-model="adjustment.quota_key">
-                <option
-                  v-for="(_, key) in data.effective_quotas"
-                  :key="key"
-                  :value="key"
-                >
+                <option v-for="(_, key) in data.effective_quotas" :key="key" :value="key">
                   {{ quotaNames[String(key)] || key }}
                 </option>
               </select></label
             ><label
-              >调整量<input
-                v-model.number="adjustment.delta_value"
-                type="number"
-                required /></label
+              >调整量<input v-model.number="adjustment.delta_value" type="number" required /></label
             ><label>原因<input v-model="adjustment.reason" required /></label
             ><button>提交调整</button>
           </form>
           <ul>
             <li v-for="item in data.adjustments" :key="item.id">
               <span
-                >{{ quotaNames[item.quota_key] }}
-                {{ item.delta_value > 0 ? "+" : ""
+                >{{ quotaNames[item.quota_key] }} {{ item.delta_value > 0 ? "+" : ""
                 }}{{ item.delta_value }}</span
               ><small>{{ item.reason }} · {{ statusText(item.status) }}</small
               ><button
@@ -544,16 +466,8 @@ onMounted(load);
       ><dialog :open="Boolean(editingPlan)">
         <form v-if="editingPlan" @submit.prevent="savePlan">
           <h3>编辑配额方案</h3>
-          <label
-            >名称<input
-              v-model="editingPlan.name"
-              required
-              maxlength="120" /></label
-          ><label
-            >说明<textarea
-              v-model="editingPlan.description"
-              maxlength="500"
-            ></textarea></label
+          <label>名称<input v-model="editingPlan.name" required maxlength="120" /></label
+          ><label>说明<textarea v-model="editingPlan.description" maxlength="500"></textarea></label
           ><label
             >采集任务<input
               v-model.number="editingPlan.collection_tasks"
@@ -579,11 +493,7 @@ onMounted(load);
               <option value="retired">退役</option>
             </select></label
           ><label
-            >原因<input
-              v-model="editingPlan.reason"
-              required
-              minlength="2"
-              maxlength="500"
+            >原因<input v-model="editingPlan.reason" required minlength="2" maxlength="500"
           /></label>
           <footer>
             <button type="button" @click="editingPlan = null">取消</button
@@ -599,20 +509,20 @@ onMounted(load);
 .commercial {
   display: grid;
   gap: 18px;
-  color: #dce8f3;
+  color: var(--so-text);
 }
 .commercial-hero {
   display: flex;
   justify-content: space-between;
   gap: 20px;
   padding: 24px;
-  border: 1px solid #28475b;
+  border: 1px solid var(--so-border);
   border-radius: 17px;
-  background: linear-gradient(135deg, #0a1824, #123246);
+  background: linear-gradient(135deg, var(--so-panel-soft), var(--so-bg-elevated));
 }
 .commercial-hero p {
   margin: 0;
-  color: #31d6c4;
+  color: var(--so-primary);
   font: 700 11px monospace;
 }
 .commercial-hero h2 {
@@ -620,7 +530,7 @@ onMounted(load);
 }
 .commercial-hero span,
 small {
-  color: #91a8b9;
+  color: var(--so-text-muted);
 }
 .commercial form {
   display: grid;
@@ -636,10 +546,10 @@ small {
 .commercial select,
 .commercial textarea {
   box-sizing: border-box;
-  border: 1px solid #31536a;
+  border: 1px solid var(--so-border-strong);
   border-radius: 9px;
-  background: #0b1d29;
-  color: #dce8f3;
+  background: var(--so-panel);
+  color: var(--so-text);
   padding: 9px 12px;
 }
 .commercial button {
@@ -653,12 +563,12 @@ small {
 .membership,
 .plans article {
   padding: 16px;
-  border: 1px solid #28475b;
+  border: 1px solid var(--so-border);
   border-radius: 13px;
-  background: #0e2234;
+  background: var(--so-panel);
 }
 .confirm {
-  border-color: #9c7533;
+  border-color: var(--so-border-strong);
 }
 .create {
   display: grid;
@@ -677,7 +587,7 @@ small {
 }
 .plans article header span,
 .membership > b {
-  color: #42d8ba;
+  color: var(--so-primary);
 }
 .plans article dl {
   display: grid;
@@ -726,19 +636,19 @@ dialog footer {
   display: grid;
   gap: 8px;
   padding: 12px;
-  background: #091a28;
+  background: var(--so-panel);
   border-radius: 10px;
 }
 .usage article > b {
   height: 6px;
-  background: #243b50;
+  background: var(--so-panel-muted);
   border-radius: 5px;
   overflow: hidden;
 }
 .usage i {
   display: block;
   height: 100%;
-  background: #31d6c4;
+  background: var(--so-primary);
 }
 .adjust {
   grid-template-columns: repeat(4, 1fr);
@@ -756,17 +666,17 @@ dialog footer {
   gap: 10px;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #28475b;
+  border-bottom: 1px solid var(--so-border);
 }
 dialog {
   position: fixed;
   inset: 0;
   margin: auto;
   width: min(480px, calc(100% - 28px));
-  border: 1px solid #31536a;
+  border: 1px solid var(--so-border-strong);
   border-radius: 14px;
-  background: #0e2234;
-  color: #dce8f3;
+  background: var(--so-panel);
+  color: var(--so-text);
   z-index: 20;
 }
 dialog form {

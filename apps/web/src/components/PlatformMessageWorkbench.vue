@@ -28,7 +28,10 @@ defineEmits<{
       <article v-for="item in messages" :key="item.id" :data-status="item.status">
         <header>
           <div>
-            <small>{{ stateName(item.kind) }} · {{ stateName(item.category) }} · {{ stateName(item.severity) }}</small>
+            <small
+              >{{ stateName(item.kind) }} · {{ stateName(item.category) }} ·
+              {{ stateName(item.severity) }}</small
+            >
             <h4>{{ item.title }}</h4>
           </div>
           <b>{{ stateName(item.status) }}</b>
@@ -49,13 +52,24 @@ defineEmits<{
           </div>
           <div>
             <dt>发送方式</dt>
-            <dd>{{ [item.in_app_enabled ? "站内通知" : "", item.email_enabled ? "邮件" : ""].filter(Boolean).join("、") }}</dd>
+            <dd>
+              {{
+                [item.in_app_enabled ? "站内通知" : "", item.email_enabled ? "邮件" : ""]
+                  .filter(Boolean)
+                  .join("、")
+              }}
+            </dd>
           </div>
-          <div><dt>更新时间</dt><dd>{{ when(item.updated_at) }}</dd></div>
+          <div>
+            <dt>更新时间</dt>
+            <dd>{{ when(item.updated_at) }}</dd>
+          </div>
         </dl>
         <footer v-if="item.status === 'draft'">
           <button @click="$emit('edit', item)">编辑</button>
-          <button @click="$emit('action', item, 'publish')">{{ item.kind === "email" ? "发送" : "发布" }}</button>
+          <button @click="$emit('action', item, 'publish')">
+            {{ item.kind === "email" ? "发送" : "发布" }}
+          </button>
           <button @click="$emit('action', item, 'cancel')">取消草稿</button>
         </footer>
       </article>
@@ -69,9 +83,9 @@ defineEmits<{
   padding: 18px;
   display: grid;
   gap: 14px;
-  border: 1px solid #28475b;
+  border: 1px solid var(--so-border);
   border-radius: 14px;
-  background: #0d1d29;
+  background: var(--so-panel);
 }
 .message-workbench > header,
 .message-list article > header,
@@ -81,34 +95,71 @@ defineEmits<{
   justify-content: space-between;
   gap: 14px;
 }
-.message-workbench h3,.message-list h4 { margin:0 0 5px; }
-.message-workbench header span,.message-list small,.message-list dt { color:#8198aa; }
-.message-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.message-workbench h3,
+.message-list h4 {
+  margin: 0 0 5px;
+}
+.message-workbench header span,
+.message-list small,
+.message-list dt {
+  color: var(--so-text-muted);
+}
+.message-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
 .message-list article {
   padding: 15px;
-  border: 1px solid #244256;
-  border-left: 4px solid #8198aa;
+  border: 1px solid var(--so-border);
+  border-left: 4px solid var(--so-text-muted);
   border-radius: 11px;
-  background: #0a1925;
+  background: var(--so-panel-soft);
 }
-.message-list article[data-status="draft"] { border-left-color:#d5a646; }
-.message-list article[data-status="published"] { border-left-color:#35d4a1; }
-.message-list article p { min-height:42px; color:#b8c8d5; white-space:pre-wrap; }
-.message-list dl { margin:12px 0; display:grid; gap:7px; }
-.message-list dl div { display:flex; justify-content:space-between; gap:12px; }
-.message-list dd { margin:0; text-align:right; }
-.message-empty { grid-column:1/-1; padding:22px; color:#8198aa; text-align:center; }
+.message-list article[data-status="draft"] {
+  border-left-color: var(--so-warning);
+}
+.message-list article[data-status="published"] {
+  border-left-color: var(--so-success);
+}
+.message-list article p {
+  min-height: 42px;
+  color: var(--so-text);
+  white-space: pre-wrap;
+}
+.message-list dl {
+  margin: 12px 0;
+  display: grid;
+  gap: 7px;
+}
+.message-list dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.message-list dd {
+  margin: 0;
+  text-align: right;
+}
+.message-empty {
+  grid-column: 1/-1;
+  padding: 22px;
+  color: var(--so-text-muted);
+  text-align: center;
+}
 button {
   box-sizing: border-box;
   padding: 9px 12px;
-  border: 1px solid #31536a;
+  border: 1px solid var(--so-border-strong);
   border-radius: 9px;
-  color: #dce8f3;
-  background: #0b1d29;
+  color: var(--so-text);
+  background: var(--so-panel);
   cursor: pointer;
   font: inherit;
 }
 @media (max-width: 700px) {
-  .message-list { grid-template-columns: 1fr; }
+  .message-list {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
