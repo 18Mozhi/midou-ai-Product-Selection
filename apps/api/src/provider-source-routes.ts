@@ -60,6 +60,28 @@ export function registerProviderSourceRoutes(app: FastifyInstance, o: ProviderSo
       r,
     );
   });
+  app.get(
+    "/api/v1/platform/provider-sources/:providerId/configuration/versions",
+    async (r, reply) => {
+      await actor(r, "provider:configure");
+      reply.header("cache-control", "private, no-store");
+      return envelope(
+        await o.service.configurationVersions((r.params as { providerId: string }).providerId),
+        r,
+      );
+    },
+  );
+  app.post("/api/v1/platform/provider-sources/:providerId/configuration/rollbacks", async (r) => {
+    const actorId = await write(r, "provider:configure");
+    return envelope(
+      await o.service.rollbackConfiguration(
+        (r.params as { providerId: string }).providerId,
+        r.body as never,
+        { actorId, idempotencyKey: requireIdempotencyKey(r), ...ids(r) },
+      ),
+      r,
+    );
+  });
   app.post("/api/v1/platform/provider-sources/:code/provision", async (r, reply) => {
     const actorId = await write(r, "provider:configure"),
       result = await o.service.provision((r.params as { code: string }).code, {

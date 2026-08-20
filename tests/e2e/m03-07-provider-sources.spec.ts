@@ -20,9 +20,7 @@ const automatic = Array.from({ length: 138 }, (_, index) => ({
   name: `全球爬虫频道 ${index + 1}`,
   access_mode: index >= 136 ? "public_page" : "public_rss",
   target_url:
-    index < 96
-      ? "https://news.google.com/rss"
-      : `https://source-${index}.example.test/feed`,
+    index < 96 ? "https://news.google.com/rss" : `https://source-${index}.example.test/feed`,
   category: ["news", "ecommerce", "data", "community"][index % 4],
   availability: "automatic",
   policy_note: "公开 RSS/Atom 或固定页面爬虫，系统会自动采集并保留原文证据。",
@@ -134,20 +132,12 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
   await nav(page, "platform_admin");
   await catalog(page);
   await page.goto("/platform-admin/providers/sources");
-  await expect(
-    page.getByRole("heading", { name: "多平台、多国家来源已自动登记" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "多平台、多国家来源已自动登记" })).toBeVisible();
   await expect(page.getByText("138", { exact: true }).first()).toBeVisible();
   await expect(page.getByText("已经替你配置好的部分")).toBeVisible();
-  await page
-    .getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址")
-    .fill("Amazon");
-  await expect(
-    page.getByRole("heading", { name: "Amazon 登录页" }),
-  ).toBeVisible();
-  await expect(
-    page.getByText("需登录并验收解析", { exact: true }).last(),
-  ).toBeVisible();
+  await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
+  await expect(page.getByRole("heading", { name: "Amazon 登录页" })).toBeVisible();
+  await expect(page.getByText("需登录并验收解析", { exact: true }).last()).toBeVisible();
   await page.getByRole("button", { name: "编辑采集设置" }).click();
   await expect(page.getByLabel("采集频率（分钟）")).toHaveValue("30");
   await expect(page.getByLabel("来源设置状态（解析验收前不会自动采集）")).toHaveValue("disabled");
@@ -158,30 +148,105 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
   });
 });
 
-test("platform administrator can save source schedule, retry and enablement", async ({page}) => {
+test("platform administrator can save source schedule, retry and enablement", async ({ page }) => {
   await nav(page, "platform_admin");
   await catalog(page);
   let updateBody: any = null;
-  await page.route("**/api/v1/platform/provider-sources/**/configuration", async route => {
+  await page.route("**/api/v1/platform/provider-sources/**/configuration", async (route) => {
     updateBody = route.request().postDataJSON();
     expect(route.request().method()).toBe("PUT");
     expect(route.request().headers()["idempotency-key"]).toBeTruthy();
-    await route.fulfill({json: envelope({...setup[0].provisioned,status:updateBody.status,schedule_minutes:updateBody.schedule_minutes,timeout_ms:updateBody.timeout_ms,retry_limit:updateBody.retry_limit,version:2})});
+    await route.fulfill({
+      json: envelope({
+        ...setup[0].provisioned,
+        status: updateBody.status,
+        schedule_minutes: updateBody.schedule_minutes,
+        timeout_ms: updateBody.timeout_ms,
+        retry_limit: updateBody.retry_limit,
+        version: 2,
+      }),
+    });
   });
   await page.goto("/platform-admin/providers/sources");
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
-  await page.getByRole("button", {name:"编辑采集设置"}).click();
+  await page.getByRole("button", { name: "编辑采集设置" }).click();
   await page.getByLabel("采集频率（分钟）").fill("45");
   await page.getByLabel("来源设置状态（解析验收前不会自动采集）").selectOption("enabled");
   await page.getByLabel("变更原因").fill("调整 Amazon 公开来源采集频率");
-  await page.getByRole("button", {name:"保存配置"}).click();
-  await expect.poll(() => updateBody).toMatchObject({schedule_minutes:45,status:"enabled",expected_version:1,reason:"调整 Amazon 公开来源采集频率"});
+  await page.getByRole("button", { name: "保存配置" }).click();
+  await expect
+    .poll(() => updateBody)
+    .toMatchObject({
+      schedule_minutes: 45,
+      status: "enabled",
+      expected_version: 1,
+      reason: "调整 Amazon 公开来源采集频率",
+    });
   await expect(page.getByRole("status")).toContainText("来源设置已保存");
 });
 
-test("M03-07.A08/A09 member can manually schedule immediate hotspot refresh", async ({
+test("platform administrator can compare source configuration versions and restore one as a new version", async ({
   page,
 }) => {
+  await nav(page, "platform_admin");
+  await catalog(page);
+  let rollbackBody: any = null;
+  await page.route("**/api/v1/platform/provider-sources/**/configuration/versions", (route) =>
+    route.fulfill({
+      json: envelope({
+        provider_id: setup[0].provisioned.id,
+        current_version: 3,
+        versions: [
+          {
+            version: 3,
+            action: "configuration_updated",
+            created_at: "2026-08-20T03:00:00.000Z",
+            current: true,
+            rollback_available: false,
+            changes: [{ field: "schedule_minutes", before: 30, after: 45 }],
+          },
+          {
+            version: 1,
+            action: "created",
+            created_at: "2026-08-18T00:00:00.000Z",
+            current: false,
+            rollback_available: true,
+            changes: [
+              { field: "schedule_minutes", before: null, after: 30 },
+              { field: "status", before: null, after: "disabled" },
+            ],
+          },
+        ],
+      }),
+    }),
+  );
+  await page.route(
+    "**/api/v1/platform/provider-sources/**/configuration/rollbacks",
+    async (route) => {
+      rollbackBody = route.request().postDataJSON();
+      expect(route.request().method()).toBe("POST");
+      expect(route.request().headers()["idempotency-key"]).toBeTruthy();
+      await route.fulfill({ json: envelope({ ...setup[0].provisioned, version: 4 }) });
+    },
+  );
+  await page.goto("/platform-admin/providers/sources");
+  await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
+  await page.getByRole("button", { name: "版本与回滚" }).click();
+  await expect(page.getByRole("heading", { name: /版本、差异与回滚/ })).toBeVisible();
+  await expect(page.getByText("采集频率").first()).toBeVisible();
+  await page.getByLabel("回滚原因").fill("恢复稳定采集设置");
+  await page.getByRole("button", { name: "恢复此版本" }).click();
+  await expect
+    .poll(() => rollbackBody)
+    .toEqual({
+      target_version: 1,
+      expected_version: 3,
+      reason: "恢复稳定采集设置",
+    });
+  await expect(page.getByRole("status")).toContainText("生成新的当前版本");
+});
+
+test("M03-07.A08/A09 member can manually schedule immediate hotspot refresh", async ({ page }) => {
   await nav(page, "member");
   await page.route("**/api/v1/trends?**", (route) =>
     route.fulfill({
@@ -206,15 +271,11 @@ test("M03-07.A08/A09 member can manually schedule immediate hotspot refresh", as
   });
   await page.goto("/trends");
   await page.getByRole("button", { name: /立即获取热点/ }).click();
-  await expect
-    .poll(() => body)
-    .toEqual({ organization_id: org, workspace_id: ws });
+  await expect.poll(() => body).toEqual({ organization_id: org, workspace_id: ws });
   await expect(page.getByText(/已开始从 138 个实时频道获取热点/)).toBeVisible();
 });
 
-test("M03-07.A08/A16 forbidden and dependency states are truthful", async ({
-  page,
-}) => {
+test("M03-07.A08/A16 forbidden and dependency states are truthful", async ({ page }) => {
   await nav(page, "platform_admin");
   let status = 403;
   await page.route("**/api/v1/platform/provider-sources", (route) =>
@@ -223,8 +284,7 @@ test("M03-07.A08/A16 forbidden and dependency states are truthful", async ({
       contentType: "application/json",
       body: JSON.stringify({
         error: {
-          code:
-            status === 403 ? "authorization_denied" : "dependency_unavailable",
+          code: status === 403 ? "authorization_denied" : "dependency_unavailable",
           message: "请求失败",
           action_hint: "按状态恢复",
         },

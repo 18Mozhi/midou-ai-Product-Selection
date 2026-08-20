@@ -54,6 +54,19 @@ interface ParserSampleReplay {
   diff: Array<{ path: string; before: unknown; after: unknown }>;
   error_code: string | null;
 }
+interface ConfigurationChange {
+  field: "schedule_minutes" | "timeout_ms" | "retry_limit" | "status";
+  before: number | string | null;
+  after: number | string;
+}
+interface ConfigurationVersion {
+  version: number;
+  action: string;
+  created_at: string;
+  current: boolean;
+  rollback_available: boolean;
+  changes: ConfigurationChange[];
+}
 
 const props = defineProps<{ apiBaseUrl: string }>();
 const state = ref<ViewState>("loading");
@@ -75,6 +88,12 @@ const sampleOverview = reactive<{
   candidates: ParserSampleCandidate[];
 }>({ samples: [], candidates: [] });
 const latestReplay = ref<ParserSampleReplay | null>(null);
+const versionSource = ref<SourceItem | null>(null);
+const versionLoading = ref(false);
+const versionHistory = ref<ConfigurationVersion[]>([]);
+const versionCurrentVersion = ref<number | null>(null);
+const rollingBack = ref<number | null>(null);
+const rollbackReason = ref("恢复已验证的来源采集设置");
 const form = reactive({
   schedule_minutes: 15,
   timeout_ms: 20000,
@@ -146,6 +165,20 @@ const displayValue = (value: unknown) => {
   const text = typeof value === "string" ? value : JSON.stringify(value);
   return text == null ? "未提供" : text.length > 240 ? `${text.slice(0, 240)}…` : text;
 };
+const configurationFieldText = (field: ConfigurationChange["field"]) =>
+  ({
+    schedule_minutes: "采集频率",
+    timeout_ms: "单次超时",
+    retry_limit: "失败重试",
+    status: "运行状态",
+  })[field];
+const configurationActionText = (action: string) =>
+  ({
+    created: "创建配置",
+    updated: "更新配置",
+    configuration_updated: "更新采集设置",
+    configuration_rolled_back: "从历史版本恢复",
+  })[action] ?? "配置变更";
 const successText = (item: SourceItem) => {
   const success = item.provisioned?.last_success;
   if (!success) return "尚无成功任务";
@@ -227,6 +260,75 @@ async function save() {
     message.value = "来源配置服务暂不可用，本次没有保存。";
   } finally {
     saving.value = false;
+  }
+}
+async function loadConfigurationVersions(item: SourceItem) {
+  if (!item.provisioned) return;
+  versionSource.value = item;
+  versionLoading.value = true;
+  versionHistory.value = [];
+  versionCurrentVersion.value = null;
+  rollbackReason.value = "恢复已验证的来源采集设置";
+  try {
+    const response = await fetch(
+        `${props.apiBaseUrl}/platform/provider-sources/${item.provisioned.id}/configuration/versions`,
+        { credentials: "include" },
+      ),
+      body = await response.json().catch(() => null);
+    requestId.value = body?.request_id ?? requestId.value;
+    if (!response.ok) {
+      message.value = body?.error?.action_hint ?? "配置版本读取失败";
+      versionSource.value = null;
+      return;
+    }
+    const currentVersion = Number(body.data?.current_version);
+    if (!Number.isInteger(currentVersion) || currentVersion < 1) {
+      message.value = "配置版本响应缺少有效的当前版本。";
+      versionSource.value = null;
+      return;
+    }
+    versionCurrentVersion.value = currentVersion;
+    versionHistory.value = body.data?.versions ?? [];
+  } catch {
+    message.value = "配置版本服务暂不可用。";
+    versionSource.value = null;
+  } finally {
+    versionLoading.value = false;
+  }
+}
+async function rollbackConfiguration(version: ConfigurationVersion) {
+  const source = versionSource.value?.provisioned;
+  if (!source || versionCurrentVersion.value === null || !version.rollback_available) return;
+  rollingBack.value = version.version;
+  try {
+    const response = await fetch(
+        `${props.apiBaseUrl}/platform/provider-sources/${source.id}/configuration/rollbacks`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "content-type": "application/json", "idempotency-key": crypto.randomUUID() },
+          body: JSON.stringify({
+            target_version: version.version,
+            expected_version: versionCurrentVersion.value,
+            reason: rollbackReason.value,
+          }),
+        },
+      ),
+      body = await response.json().catch(() => null);
+    requestId.value = body?.request_id ?? requestId.value;
+    if (!response.ok) {
+      message.value = body?.error?.action_hint ?? "配置未能回滚";
+      return;
+    }
+    const code = versionSource.value?.code;
+    await load();
+    const refreshed = items.value.find((item) => item.code === code);
+    if (refreshed) await loadConfigurationVersions(refreshed);
+    message.value = `已从第 ${version.version} 版生成新的当前版本；历史记录保持不变。`;
+  } catch {
+    message.value = "配置回滚服务暂不可用，本次没有修改。";
+  } finally {
+    rollingBack.value = null;
   }
 }
 async function testSource(item: SourceItem) {
@@ -501,6 +603,8 @@ onMounted(load);
             {{ testing === item.provisioned.id ? "测试中…" : "匿名测试" }}</button
           ><button v-if="item.provisioned" type="button" @click="beginEdit(item)">
             编辑采集设置</button
+          ><button v-if="item.provisioned" type="button" @click="loadConfigurationVersions(item)">
+            版本与回滚</button
           ><a
             v-if="item.access_mode === 'authenticated_browser'"
             :href="`/platform-admin/credentials?provider_code=${encodeURIComponent(item.code)}&mode=login`"
@@ -578,6 +682,63 @@ onMounted(load);
           </button>
         </footer>
       </form>
+    </div>
+    <div
+      v-if="versionSource"
+      class="source-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="configuration-version-title"
+    >
+      <section class="configuration-version-panel">
+        <header>
+          <div>
+            <p>配置版本</p>
+            <h3 id="configuration-version-title">版本、差异与回滚 · {{ versionSource.name }}</h3>
+          </div>
+          <button type="button" aria-label="关闭配置版本" @click="versionSource = null">×</button>
+        </header>
+        <p>只展示采集频率、超时、重试和启停状态；凭证、Cookie 与受限环境值不会进入版本详情。</p>
+        <label
+          >回滚原因<textarea
+            v-model="rollbackReason"
+            minlength="2"
+            maxlength="500"
+            required
+          ></textarea>
+        </label>
+        <div v-if="versionLoading" class="source-state">正在读取配置版本…</div>
+        <ol v-else class="configuration-version-list">
+          <li v-for="version in versionHistory" :key="version.version">
+            <header>
+              <div>
+                <strong>第 {{ version.version }} 版</strong>
+                <span
+                  >{{ configurationActionText(version.action) }} ·
+                  {{ new Date(version.created_at).toLocaleString("zh-CN") }}</span
+                >
+              </div>
+              <b v-if="version.current">当前版本</b>
+              <button
+                v-else-if="version.rollback_available"
+                type="button"
+                :disabled="rollingBack === version.version || rollbackReason.trim().length < 2"
+                @click="rollbackConfiguration(version)"
+              >
+                {{ rollingBack === version.version ? "恢复中…" : "恢复此版本" }}
+              </button>
+            </header>
+            <ul v-if="version.changes.length">
+              <li v-for="change in version.changes" :key="change.field">
+                <span>{{ configurationFieldText(change.field) }}</span>
+                <code>{{ displayValue(change.before) }} → {{ displayValue(change.after) }}</code>
+              </li>
+            </ul>
+            <p v-else>与上一版本的可见采集设置一致。</p>
+          </li>
+        </ol>
+        <p v-if="!versionLoading && !versionHistory.length">还没有可用配置版本。</p>
+      </section>
     </div>
     <div
       v-if="sampleSource"
@@ -873,6 +1034,52 @@ onMounted(load);
   border-radius: 18px;
   background: var(--so-bg-elevated);
   color: var(--so-text);
+}
+.configuration-version-panel {
+  display: grid;
+  gap: 14px;
+}
+.configuration-version-panel > header,
+.configuration-version-list > li > header,
+.configuration-version-list > li > header > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.configuration-version-panel > header,
+.configuration-version-list > li > header {
+  align-items: center;
+}
+.configuration-version-panel label,
+.configuration-version-list > li > header > div {
+  flex-direction: column;
+}
+.configuration-version-panel textarea {
+  width: 100%;
+  min-height: 72px;
+}
+.configuration-version-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.configuration-version-list > li {
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.configuration-version-list ul {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+}
+.configuration-version-list ul li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
 }
 .parser-sample-panel > header,
 .parser-sample-panel article {

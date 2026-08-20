@@ -52,6 +52,24 @@ export interface ProviderSourceReplay {
   created_at: string;
   updated_at: string;
 }
+export interface ProviderConfigurationChange {
+  field: "schedule_minutes" | "timeout_ms" | "retry_limit" | "status";
+  before: number | string | null;
+  after: number | string;
+}
+export interface ProviderConfigurationVersion {
+  version: number;
+  action: string;
+  created_at: string;
+  current: boolean;
+  rollback_available: boolean;
+  changes: ProviderConfigurationChange[];
+}
+export interface ProviderConfigurationHistory {
+  provider_id: string;
+  current_version: number;
+  versions: ProviderConfigurationVersion[];
+}
 export interface ParserSampleCandidate {
   browser_job_id: string;
   organization_id: string;
@@ -134,6 +152,19 @@ export interface ProviderSourceRepository {
     timeoutMs: number;
     retryLimit: number;
     status: "disabled" | "enabled";
+    expectedVersion: number;
+    reason: string;
+    actorId: string;
+    route: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<ProvisionedSource>;
+  configurationVersions(providerId: string): Promise<ProviderConfigurationHistory>;
+  rollbackConfiguration(input: {
+    providerId: string;
+    targetVersion: number;
     expectedVersion: number;
     reason: string;
     actorId: string;
@@ -347,6 +378,51 @@ export class ProviderSourceService {
       expectedVersion,
       reason,
       route: `/platform/provider-sources/${providerId}/configuration`,
+      ...context,
+      now: this.now(),
+    });
+  }
+  configurationVersions(providerId: string) {
+    if (!uuid.test(providerId))
+      throw new ProviderSourceServiceError("provider_id_invalid", 400, "刷新来源目录后重试。");
+    return this.repository.configurationVersions(providerId);
+  }
+  rollbackConfiguration(
+    providerId: string,
+    value: { target_version?: unknown; expected_version?: unknown; reason?: unknown },
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    if (!uuid.test(providerId))
+      throw new ProviderSourceServiceError("provider_id_invalid", 400, "刷新来源目录后重试。");
+    const targetVersion = Number(value?.target_version),
+      expectedVersion = Number(value?.expected_version),
+      reason = String(value?.reason ?? "").trim();
+    if (!Number.isInteger(targetVersion) || targetVersion < 1)
+      throw new ProviderSourceServiceError(
+        "provider_target_version_invalid",
+        400,
+        "选择有效的历史版本。",
+      );
+    if (!Number.isInteger(expectedVersion) || expectedVersion < 1)
+      throw new ProviderSourceServiceError("provider_version_invalid", 400, "刷新来源版本后重试。");
+    if (targetVersion >= expectedVersion)
+      throw new ProviderSourceServiceError(
+        "provider_rollback_target_invalid",
+        400,
+        "只能回滚到早于当前版本的配置。",
+      );
+    if (reason.length < 2 || reason.length > 500)
+      throw new ProviderSourceServiceError(
+        "provider_reason_invalid",
+        400,
+        "填写 2–500 字的回滚原因。",
+      );
+    return this.repository.rollbackConfiguration({
+      providerId,
+      targetVersion,
+      expectedVersion,
+      reason,
+      route: `/platform/provider-sources/${providerId}/configuration/rollbacks`,
       ...context,
       now: this.now(),
     });
