@@ -338,8 +338,8 @@ onMounted(() => {
       </ol>
     </section>
     <nav class="sourcing-tabs">
-      <a href="/sourcing" aria-current="page">供应商找货</a
-      ><a href="/sourcing/cost-rules">费用与利润规则</a>
+      <RouterLink to="/sourcing" aria-current="page">供应商找货</RouterLink
+      ><RouterLink to="/sourcing/cost-rules">费用与利润规则</RouterLink>
     </nav>
     <header class="sourcing-head">
       <div>

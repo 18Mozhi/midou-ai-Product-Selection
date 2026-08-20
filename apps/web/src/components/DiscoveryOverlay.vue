@@ -163,7 +163,7 @@ async function loadActions() {
           @primary="mode === 'search' ? search() : loadActions()"
         />
         <div v-else class="discovery-results">
-          <a v-for="item in results" :key="item.id" :href="item.route"
+          <RouterLink v-for="item in results" :key="item.id" :to="item.route"
             ><i>⌕</i
             ><span
               ><strong>{{ item.title }}</strong
@@ -171,20 +171,20 @@ async function loadActions() {
                 >{{ item.subtitle || item.resource_type }} ·
                 {{ new Date(item.updated_at).toLocaleString("zh-CN") }}</small
               ></span
-            ><b>↗</b></a
-          ><a v-for="item in actions" :key="item.id" :href="item.route"
+            ><b>↗</b></RouterLink
+          ><RouterLink v-for="item in actions" :key="item.id" :to="item.route"
             ><i>＋</i
             ><span
               ><strong>{{ item.label }}</strong
               ><small>{{ item.description }} · {{ item.required_capability }}</small></span
-            ><b>→</b></a
+            ><b>→</b></RouterLink
           >
         </div>
         <footer>
           <span>{{
             mode === "search" ? "搜索不跨组织或工作区" : "这里只提供入口，不提前创建业务对象"
           }}</span
-          ><a v-if="shell === 'member'" href="/notifications">打开通知中心</a>
+          ><RouterLink v-if="shell === 'member'" to="/notifications">打开通知中心</RouterLink>
         </footer>
       </section>
     </div></Teleport

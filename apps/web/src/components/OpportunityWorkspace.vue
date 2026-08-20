@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import OpportunityListPanel from "./OpportunityListPanel.vue";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
@@ -10,6 +11,7 @@ import "../opportunity-profit.css";
 import "../opportunity-selection-entry.css";
 import "../opportunity-ai.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+const router = useRouter();
 type Tab =
   "overview" | "market" | "competition" | "profit" | "risk" | "ai" | "evidence" | "decisions";
 interface Opportunity {
@@ -334,7 +336,7 @@ async function create() {
   });
   if (result) {
     showCreate.value = false;
-    window.location.href = `/opportunities/${result.id}`;
+    await router.push(`/opportunities/${result.id}`);
   }
 }
 function browserBridge<T>(action: string, payload: Record<string, unknown>) {
@@ -523,11 +525,11 @@ onMounted(() => {
         <span>评分、利润、风险和证据均展示真实状态；缺少下游输入时明确标记数据不足。</span>
       </div>
       <div v-if="!opportunityId" class="opportunity-hero-actions">
-        <a href="/opportunities/start">开始真实选品</a
+        <RouterLink to="/opportunities/start">开始真实选品</RouterLink
         ><button type="button" class="ghost" @click="showErpImport = true">从 ERP 导入</button
         ><button type="button" @click="showCreate = true">＋ 手工创建机会</button>
       </div>
-      <a v-else href="/opportunities">← 返回机会列表</a>
+      <RouterLink v-else to="/opportunities">← 返回机会列表</RouterLink>
     </header>
     <p v-if="message" class="opportunity-message" role="status">
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
@@ -562,7 +564,7 @@ onMounted(() => {
             ① 采集 Amazon 竞品</button
           ><button type="button" :disabled="busy" @click="discoverSuppliers">
             ② 采集公开供应商</button
-          ><a href="/opportunities/scoring-rules">③ 检查评分规则</a>
+          ><RouterLink to="/opportunities/scoring-rules">③ 检查评分规则</RouterLink>
         </section>
         <header>
           <div>
@@ -608,13 +610,13 @@ onMounted(() => {
             ✓ 采纳</button
           ><button @click="startDecision('observe')">◉ 继续观察</button
           ><button class="reject" @click="startDecision('reject')">× 驳回</button>
-          <a
+          <RouterLink
             v-if="
               detail.recommendation_status === 'insufficient_data' ||
               detail.coverage_status === 'insufficient'
             "
-            :href="evidenceTaskHref"
-            >分派证据补齐任务</a
+            :to="evidenceTaskHref"
+            >分派证据补齐任务</RouterLink
           >
         </section>
         <nav class="opportunity-tabs" aria-label="机会详情分区">
@@ -640,7 +642,8 @@ onMounted(() => {
             <footer>
               <button type="button" :disabled="busy" @click="discoverCompetitors">采集竞品</button
               ><button type="button" :disabled="busy" @click="discoverSuppliers">采集供应商</button
-              ><a :href="`/competitors`">查看竞品详情</a><a :href="`/sourcing`">查看供应链详情</a>
+              ><RouterLink to="/competitors">查看竞品详情</RouterLink
+              ><RouterLink to="/sourcing">查看供应链详情</RouterLink>
             </footer>
           </article>
           <article class="opportunity-score">
@@ -669,7 +672,7 @@ onMounted(() => {
               缺失：{{ detail.latest_score_run.missing_fields.join("、") }}
             </aside>
             <footer>
-              <a href="/opportunities/scoring-rules">管理规则版本</a
+              <RouterLink to="/opportunities/scoring-rules">管理规则版本</RouterLink
               ><button type="button" :disabled="busy" @click="queueScore">重新评分</button>
             </footer>
           </article>
@@ -722,7 +725,7 @@ onMounted(() => {
           ><span v-else>尚未关联竞品快照；点击下方按钮即可采集公开 Amazon 商品页。</span>
           <footer>
             <button type="button" :disabled="busy" @click="discoverCompetitors">立即采集竞品</button
-            ><a href="/competitors">打开竞品监控详情</a>
+            ><RouterLink to="/competitors">打开竞品监控详情</RouterLink>
           </footer>
         </section>
         <OpportunityProfitPanel

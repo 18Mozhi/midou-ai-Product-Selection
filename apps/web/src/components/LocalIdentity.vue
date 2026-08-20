@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiEnvelope } from "../api-client";
 import { publicConfig } from "../config";
 
@@ -16,6 +17,7 @@ type IdentityMode =
 type RequestState =
   "idle" | "loading" | "success" | "error" | "expired" | "rate_limited" | "blocked";
 const params = new URLSearchParams(window.location.search);
+const router = useRouter();
 const apiRequest = createApiClient(publicConfig.apiBaseUrl);
 const pathModes: Record<string, IdentityMode> = {
   "/login": "login",
@@ -125,7 +127,7 @@ async function request<T = unknown>(
 }
 async function enterApplication() {
   const result = await request<{ route: string }>("/me/landing", undefined, "GET");
-  if (result?.data?.route) window.location.assign(result.data.route);
+  if (result?.data?.route) await router.replace(result.data.route);
 }
 async function confirmEmail() {
   const token = params.get("token") || "";
@@ -264,7 +266,7 @@ onMounted(() => {
 <template>
   <main class="identity-page" :data-mode="mode" :data-state="requestState">
     <header class="identity-header">
-      <a class="identity-brand" href="/"><span>选</span>智能选品</a>
+      <RouterLink class="identity-brand" to="/"><span>选</span>智能选品</RouterLink>
       <p>账号登录与安全验证</p>
     </header>
     <section class="identity-shell">
@@ -576,11 +578,11 @@ onMounted(() => {
             查看安全会话
           </button>
           <button type="button" class="text-button" @click="switchMode('mfa')">管理 MFA</button>
-          <a
+          <RouterLink
             v-if="mode === 'login' && requestState === 'success'"
             class="text-button"
-            href="/select-context"
-            >继续选择组织</a
+            to="/select-context"
+            >继续选择组织</RouterLink
           >
         </footer>
       </section>

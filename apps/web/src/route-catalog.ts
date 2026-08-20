@@ -11,6 +11,14 @@ export interface AppRouteMeta {
   notFound?: boolean;
 }
 
+export interface ShellNavigationItem {
+  label: string;
+  path: string;
+  icon: string;
+  group: string;
+  capabilities: string[];
+}
+
 const ApplicationSurface = () => import("./App.vue");
 
 const route = (path: string, name: string, meta: AppRouteMeta): RouteRecordRaw => ({
@@ -185,6 +193,27 @@ export const appRoutes: RouteRecordRaw[] = [
     "platform-accounts",
     "账号与组织",
     ["平台后台", "账号与组织"],
+    ["platform:superadmin"],
+  ),
+  platform(
+    "/platform-admin/organizations",
+    "platform-organizations",
+    "组织管理",
+    ["平台后台", "账号与组织", "组织管理"],
+    ["platform:superadmin"],
+  ),
+  platform(
+    "/platform-admin/users",
+    "platform-users",
+    "用户管理",
+    ["平台后台", "账号与组织", "用户管理"],
+    ["platform:superadmin"],
+  ),
+  platform(
+    "/platform-admin/admins",
+    "platform-admins",
+    "管理员管理",
+    ["平台后台", "账号与组织", "管理员管理"],
     ["platform:superadmin"],
   ),
   platform(
@@ -368,3 +397,79 @@ export const appRoutes: RouteRecordRaw[] = [
     notFound: true,
   }),
 ];
+
+type NavigationEntry = Omit<ShellNavigationItem, "capabilities">;
+
+const navigationCatalog: Record<Exclude<AppShell, "account">, NavigationEntry[]> = {
+  member: [
+    { label: "今日行动", path: "/home", icon: "home", group: "工作台" },
+    { label: "今日工作", path: "/work", icon: "check", group: "工作台" },
+    { label: "热点趋势", path: "/trends", icon: "trend", group: "洞察与选品" },
+    { label: "选品机会", path: "/opportunities", icon: "diamond", group: "洞察与选品" },
+    { label: "竞品监控", path: "/competitors", icon: "target", group: "洞察与选品" },
+    { label: "供应链与利润", path: "/sourcing", icon: "box", group: "洞察与选品" },
+    { label: "任务中心", path: "/tasks", icon: "list", group: "工作台" },
+    { label: "审批中心", path: "/tasks/approvals", icon: "check", group: "工作台" },
+    { label: "通知中心", path: "/notifications", icon: "bell", group: "工作台" },
+    { label: "自动化规则", path: "/automations", icon: "automation", group: "运营工具" },
+    { label: "报表与导出", path: "/reports", icon: "chart", group: "运营工具" },
+  ],
+  organization_admin: [
+    { label: "治理概览", path: "/org-admin", icon: "home", group: "概览" },
+    { label: "成员与邀请", path: "/org-admin/members", icon: "users", group: "人员与权限" },
+    { label: "角色与权限", path: "/org-admin/roles", icon: "shield", group: "人员与权限" },
+    { label: "工作区与团队", path: "/org-admin/workspaces", icon: "building", group: "组织结构" },
+    { label: "审批模板", path: "/org-admin/approvals", icon: "check", group: "组织治理" },
+    { label: "组织数据", path: "/org-admin/data", icon: "chart", group: "组织治理" },
+    { label: "组织令牌", path: "/org-admin/tokens", icon: "key", group: "安全与审计" },
+    { label: "组织审计", path: "/org-admin/audit", icon: "shield", group: "安全与审计" },
+  ],
+  platform_admin: [
+    { label: "平台概览", path: "/platform-admin", icon: "home", group: "平台概览" },
+    {
+      label: "组织管理",
+      path: "/platform-admin/organizations",
+      icon: "building",
+      group: "账号与组织",
+    },
+    { label: "用户管理", path: "/platform-admin/users", icon: "person", group: "账号与组织" },
+    { label: "管理员管理", path: "/platform-admin/admins", icon: "shield", group: "账号与组织" },
+    {
+      label: "热点来源",
+      path: "/platform-admin/providers/sources",
+      icon: "trend",
+      group: "热点与采集",
+    },
+    { label: "来源设置", path: "/platform-admin/providers", icon: "settings", group: "热点与采集" },
+    {
+      label: "采集管理",
+      path: "/platform-admin/collection/overview",
+      icon: "automation",
+      group: "热点与采集",
+    },
+    { label: "数据中心", path: "/platform-admin/data", icon: "database", group: "数据治理" },
+    {
+      label: "质量与规则",
+      path: "/platform-admin/governance",
+      icon: "settings",
+      group: "数据治理",
+    },
+    { label: "内容运营", path: "/platform-admin/content", icon: "list", group: "运营中心" },
+    { label: "通知运营", path: "/platform-admin/notifications", icon: "bell", group: "运营中心" },
+    { label: "配额管理", path: "/platform-admin/commercial", icon: "chart", group: "运营中心" },
+    { label: "安全与审计", path: "/platform-admin/security", icon: "shield", group: "安全中心" },
+    { label: "开放平台", path: "/platform-admin/open-platform", icon: "key", group: "安全中心" },
+    { label: "系统运维", path: "/platform-admin/status", icon: "target", group: "系统运维" },
+  ],
+};
+
+const routeMetaByPath = new Map(
+  appRoutes.map((record) => [record.path, record.meta as unknown as AppRouteMeta]),
+);
+
+export function navigationItemsFor(shell: Exclude<AppShell, "account">): ShellNavigationItem[] {
+  return navigationCatalog[shell].map((item) => ({
+    ...item,
+    capabilities: [...(routeMetaByPath.get(item.path)?.capabilities ?? [])],
+  }));
+}

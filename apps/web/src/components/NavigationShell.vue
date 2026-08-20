@@ -3,6 +3,7 @@ import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, watch } fr
 import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import { applyCachedTheme, applyTheme, isThemeId, themes, type ThemeId } from "../design/theme";
+import { navigationItemsFor, type ShellNavigationItem } from "../route-catalog";
 import AppIcon from "./AppIcon.vue";
 import "../member-workspace-polish.css";
 
@@ -67,13 +68,6 @@ interface GuardSummary {
   platform_capabilities: string[];
   guard_reason: string;
 }
-interface MenuItem {
-  label: string;
-  path: string;
-  icon: string;
-  group: string;
-  capabilities?: string[];
-}
 interface ThemePreference {
   theme: ThemeId;
   version: number;
@@ -98,253 +92,16 @@ const state = ref<State>("loading"),
   themeNotice = ref(""),
   discoveryMode = ref<"search" | "create" | null>(null);
 let themePreferenceSequence = 0;
-const memberMenu: MenuItem[] = [
-  { label: "今日行动", path: "/home", icon: "home", group: "工作台", capabilities: ["task:read"] },
-  { label: "今日工作", path: "/work", icon: "check", group: "工作台", capabilities: ["task:read"] },
-  {
-    label: "热点趋势",
-    path: "/trends",
-    icon: "trend",
-    group: "洞察与选品",
-    capabilities: ["trend:read"],
-  },
-  {
-    label: "选品机会",
-    path: "/opportunities",
-    icon: "diamond",
-    group: "洞察与选品",
-    capabilities: ["opportunity:read"],
-  },
-  {
-    label: "竞品监控",
-    path: "/competitors",
-    icon: "target",
-    group: "洞察与选品",
-    capabilities: ["competitor:read"],
-  },
-  {
-    label: "供应链与利润",
-    path: "/sourcing",
-    icon: "box",
-    group: "洞察与选品",
-    capabilities: ["sourcing:read"],
-  },
-  {
-    label: "任务中心",
-    path: "/tasks",
-    icon: "list",
-    group: "工作台",
-    capabilities: ["task:read"],
-  },
-  {
-    label: "审批中心",
-    path: "/tasks/approvals",
-    icon: "check",
-    group: "工作台",
-    capabilities: ["task:read"],
-  },
-  {
-    label: "通知中心",
-    path: "/notifications",
-    icon: "bell",
-    group: "工作台",
-    capabilities: ["notification:read"],
-  },
-  {
-    label: "自动化规则",
-    path: "/automations",
-    icon: "automation",
-    group: "运营工具",
-    capabilities: ["team:manage"],
-  },
-  {
-    label: "报表与导出",
-    path: "/reports",
-    icon: "chart",
-    group: "运营工具",
-    capabilities: ["report:read"],
-  },
-];
-const orgMenu: MenuItem[] = [
-  { label: "治理概览", path: "/org-admin", icon: "home", group: "概览" },
-  { label: "成员与邀请", path: "/org-admin/members", icon: "users", group: "人员与权限" },
-  { label: "角色与权限", path: "/org-admin/roles", icon: "shield", group: "人员与权限" },
-  { label: "工作区与团队", path: "/org-admin/workspaces", icon: "building", group: "组织结构" },
-  { label: "审批模板", path: "/org-admin/approvals", icon: "check", group: "组织治理" },
-  { label: "组织数据", path: "/org-admin/data", icon: "chart", group: "组织治理" },
-  { label: "组织令牌", path: "/org-admin/tokens", icon: "key", group: "安全与审计" },
-  { label: "组织审计", path: "/org-admin/audit", icon: "shield", group: "安全与审计" },
-];
-const platformMenu: MenuItem[] = [
-  { label: "平台概览", path: "/platform-admin", icon: "home", group: "平台概览" },
-  {
-    label: "账号与组织",
-    path: "/platform-admin/accounts",
-    icon: "building",
-    group: "账号与组织",
-    capabilities: ["platform:superadmin"],
-  },
-  {
-    label: "人员与权限",
-    path: "/platform-admin/permissions",
-    icon: "users",
-    group: "账号与组织",
-    capabilities: ["platform:superadmin"],
-  },
-  {
-    label: "热点来源",
-    path: "/platform-admin/providers/sources",
-    icon: "trend",
-    group: "热点与采集",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "来源设置",
-    path: "/platform-admin/providers",
-    icon: "settings",
-    group: "热点与采集",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "采集程序",
-    path: "/platform-admin/providers/adapters",
-    icon: "automation",
-    group: "热点与采集",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "凭证与档案",
-    path: "/platform-admin/credentials",
-    icon: "key",
-    group: "热点与采集",
-    capabilities: ["platform:superadmin"],
-  },
-  {
-    label: "采集任务",
-    path: "/platform-admin/collection/overview",
-    icon: "automation",
-    group: "热点与采集",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "采集运行时",
-    path: "/platform-admin/collection/browser-runtime",
-    icon: "target",
-    group: "热点与采集",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "全量数据",
-    path: "/platform-admin/data",
-    icon: "database",
-    group: "数据治理",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "规则与自动化",
-    path: "/platform-admin/governance",
-    icon: "settings",
-    group: "数据治理",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "内容管理",
-    path: "/platform-admin/content",
-    icon: "list",
-    group: "运营中心",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "通知管理",
-    path: "/platform-admin/notifications",
-    icon: "bell",
-    group: "运营中心",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "开放平台",
-    path: "/platform-admin/open-platform",
-    icon: "key",
-    group: "安全中心",
-    capabilities: ["platform:superadmin"],
-  },
-  {
-    label: "配额管理",
-    path: "/platform-admin/commercial",
-    icon: "chart",
-    group: "运营中心",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "系统状态",
-    path: "/platform-admin/status",
-    icon: "target",
-    group: "系统运维",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "安全与审计",
-    path: "/platform-admin/security",
-    icon: "shield",
-    group: "安全中心",
-    capabilities: ["platform:secure", "platform:superadmin"],
-  },
-  {
-    label: "高级设置",
-    path: "/platform-admin/operations",
-    icon: "settings",
-    group: "系统运维",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "发布管理",
-    path: "/platform-admin/releases",
-    icon: "trend",
-    group: "系统运维",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "服务拓扑",
-    path: "/platform-admin/topology",
-    icon: "building",
-    group: "系统运维",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "Redis 运行",
-    path: "/platform-admin/redis",
-    icon: "database",
-    group: "系统运维",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "MySQL 运行",
-    path: "/platform-admin/mysql",
-    icon: "database",
-    group: "系统运维",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "文件存储",
-    path: "/platform-admin/files",
-    icon: "box",
-    group: "系统运维",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "采集调度",
-    path: "/platform-admin/crawler-scheduler",
-    icon: "automation",
-    group: "系统运维",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
-  {
-    label: "容量边界",
-    path: "/platform-admin/capacity",
-    icon: "chart",
-    group: "系统运维",
-    capabilities: ["platform:operate", "platform:superadmin"],
-  },
+const platformOperationsNavigation = [
+  { label: "系统状态", path: "/platform-admin/status" },
+  { label: "服务拓扑", path: "/platform-admin/topology" },
+  { label: "采集调度", path: "/platform-admin/crawler-scheduler" },
+  { label: "Redis", path: "/platform-admin/redis" },
+  { label: "MySQL", path: "/platform-admin/mysql" },
+  { label: "文件存储", path: "/platform-admin/files" },
+  { label: "备份恢复", path: "/platform-admin/operations" },
+  { label: "发布管理", path: "/platform-admin/releases" },
+  { label: "容量边界", path: "/platform-admin/capacity" },
 ];
 const allCapabilities = computed(() =>
   props.shell === "platform_admin"
@@ -352,20 +109,33 @@ const allCapabilities = computed(() =>
     : (guard.value?.capabilities ?? []),
 );
 const items = computed(() => {
-  const source =
-    props.shell === "member"
-      ? memberMenu
-      : props.shell === "organization_admin"
-        ? orgMenu
-        : platformMenu;
+  const source = navigationItemsFor(props.shell);
   return source.filter(
     (item) =>
-      !item.capabilities || item.capabilities.some((cap) => allCapabilities.value.includes(cap)),
+      item.capabilities.length === 0 ||
+      item.capabilities.some((cap) => allCapabilities.value.includes(cap)),
   );
+});
+const navigationParentPath = computed(() => {
+  if (["/platform-admin/accounts", "/platform-admin/organizations"].includes(routePath.value))
+    return "/platform-admin/organizations";
+  if (routePath.value === "/platform-admin/users") return "/platform-admin/users";
+  if (["/platform-admin/permissions", "/platform-admin/admins"].includes(routePath.value))
+    return "/platform-admin/admins";
+  if (
+    routePath.value.startsWith("/platform-admin/providers") ||
+    routePath.value === "/platform-admin/credentials"
+  )
+    return "/platform-admin/providers/sources";
+  if (routePath.value.startsWith("/platform-admin/collection"))
+    return "/platform-admin/collection/overview";
+  if (platformOperationsNavigation.some((item) => item.path === routePath.value))
+    return "/platform-admin/status";
+  return routePath.value;
 });
 const activeItem = computed(
   () =>
-    items.value.find((item) => item.path === routePath.value) ||
+    items.value.find((item) => item.path === navigationParentPath.value) ||
     [...items.value]
       .filter(
         (item) =>
@@ -376,7 +146,7 @@ const activeItem = computed(
     null,
 );
 const menuGroups = computed(() => {
-  const groups = new Map<string, MenuItem[]>();
+  const groups = new Map<string, ShellNavigationItem[]>();
   for (const item of items.value) groups.set(item.group, [...(groups.get(item.group) ?? []), item]);
   return [...groups].map(([label, groupItems]) => ({ label, items: groupItems }));
 });
@@ -444,7 +214,13 @@ const isHome = computed(
   isPlatformAccounts = computed(
     () =>
       props.shell === "platform_admin" &&
-      ["/platform-admin/accounts", "/platform-admin/permissions"].includes(routePath.value),
+      [
+        "/platform-admin/accounts",
+        "/platform-admin/permissions",
+        "/platform-admin/organizations",
+        "/platform-admin/users",
+        "/platform-admin/admins",
+      ].includes(routePath.value),
   ),
   isPlatformManagement = computed(
     () =>
@@ -482,6 +258,11 @@ const isHome = computed(
   ),
   isCapacityBoundary = computed(
     () => props.shell === "platform_admin" && routePath.value === "/platform-admin/capacity",
+  ),
+  isPlatformOperationsRoute = computed(
+    () =>
+      props.shell === "platform_admin" &&
+      platformOperationsNavigation.some((item) => item.path === routePath.value),
   ),
   isTrends = computed(() => props.shell === "member" && routePath.value === "/trends"),
   isScoringRules = computed(
@@ -718,7 +499,7 @@ onUnmounted(() => {
         <RouterLink
           v-if="shell === 'platform_admin'"
           class="role-create"
-          to="/platform-admin/accounts?create=1"
+          to="/platform-admin/organizations?create=1"
           ><AppIcon name="plus" /> <span>新建组织</span></RouterLink
         >
         <RouterLink
@@ -824,6 +605,19 @@ onUnmounted(() => {
           </template>
         </nav>
         <h1 v-if="!opportunityId" class="so-visually-hidden">{{ pageTitle }}</h1>
+        <nav
+          v-if="isPlatformOperationsRoute"
+          class="platform-secondary-nav"
+          aria-label="系统运维二级导航"
+        >
+          <RouterLink
+            v-for="item in platformOperationsNavigation"
+            :key="item.path"
+            :to="item.path"
+            :aria-current="routePath === item.path ? 'page' : undefined"
+            >{{ item.label }}</RouterLink
+          >
+        </nav>
         <KeepAlive :max="12">
           <HomeDashboard v-if="isHome" :api-base-url="apiBaseUrl" />
           <TaskWorkspace
@@ -847,7 +641,13 @@ onUnmounted(() => {
           <PlatformAccountCenter
             v-else-if="isPlatformAccounts"
             :api-base-url="apiBaseUrl"
-            :initial-tab="routePath === '/platform-admin/permissions' ? 'admins' : 'organizations'"
+            :initial-tab="
+              routePath === '/platform-admin/admins' || routePath === '/platform-admin/permissions'
+                ? 'admins'
+                : routePath === '/platform-admin/users'
+                  ? 'users'
+                  : 'organizations'
+            "
           />
           <PlatformManagementCenter
             v-else-if="isPlatformManagement"
@@ -885,7 +685,9 @@ onUnmounted(() => {
           />
           <section
             v-else-if="
-              shell === 'platform_admin' && routePath.startsWith('/platform-admin/providers')
+              shell === 'platform_admin' &&
+              (routePath.startsWith('/platform-admin/providers') ||
+                routePath === '/platform-admin/credentials')
             "
             class="provider-runtime-surface"
           >
@@ -906,10 +708,19 @@ onUnmounted(() => {
                   routePath === '/platform-admin/providers/sources' ? 'page' : undefined
                 "
                 >来源频道</RouterLink
+              ><RouterLink
+                v-if="allCapabilities.includes('platform:superadmin')"
+                to="/platform-admin/credentials"
+                :aria-current="routePath === '/platform-admin/credentials' ? 'page' : undefined"
+                >网页登录凭证</RouterLink
               >
             </nav>
+            <CredentialAssetCenter
+              v-if="routePath === '/platform-admin/credentials'"
+              :api-base-url="apiBaseUrl"
+            />
             <ProviderSourceCenter
-              v-if="routePath === '/platform-admin/providers/sources'"
+              v-else-if="routePath === '/platform-admin/providers/sources'"
               :api-base-url="apiBaseUrl"
             />
             <ProviderAdapterCenter
@@ -918,10 +729,6 @@ onUnmounted(() => {
             />
             <ProviderRegistry v-else :api-base-url="apiBaseUrl" />
           </section>
-          <CredentialAssetCenter
-            v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/credentials'"
-            :api-base-url="apiBaseUrl"
-          />
           <section
             v-else-if="
               shell === 'platform_admin' && routePath.startsWith('/platform-admin/collection')
@@ -1038,11 +845,58 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.platform-secondary-nav {
+  position: sticky;
+  top: 68px;
+  z-index: 8;
+  display: flex;
+  gap: 4px;
+  margin: -4px 0 18px;
+  padding: 6px;
+  overflow-x: auto;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--so-bg-elevated) 94%, transparent);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--so-shadow-color) 24%, transparent);
+}
+
+.platform-secondary-nav a {
+  flex: 0 0 auto;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 13px;
+  border-radius: 7px;
+  color: var(--so-text-muted);
+  text-decoration: none;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.platform-secondary-nav a:hover,
+.platform-secondary-nav a[aria-current="page"] {
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+
+.platform-secondary-nav a[aria-current="page"] {
+  box-shadow: inset 0 -2px var(--so-primary);
+}
+
 .role-sidebar-actions {
   display: none;
 }
 
 @media (max-width: 840px) {
+  .platform-secondary-nav {
+    top: 64px;
+    margin-inline: -4px;
+  }
+
+  .platform-secondary-nav a {
+    min-height: 44px;
+  }
+
   .role-sidebar-actions {
     margin-bottom: 14px;
     display: grid;

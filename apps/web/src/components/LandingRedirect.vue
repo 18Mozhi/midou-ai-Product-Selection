@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 
 type State = "loading" | "blocked";
 const props = defineProps<{ apiBaseUrl: string }>();
+const router = useRouter();
 const request = createApiClient(props.apiBaseUrl);
 const state = ref<State>("loading");
 const requestId = ref("");
@@ -19,11 +21,11 @@ async function resolveLanding() {
       state.value = "blocked";
       return;
     }
-    window.location.replace(response.data.route);
+    await router.replace(response.data.route);
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
-      if (error.kind === "expired") return window.location.replace("/login");
+      if (error.kind === "expired") return router.replace("/login");
     }
     state.value = "blocked";
   }

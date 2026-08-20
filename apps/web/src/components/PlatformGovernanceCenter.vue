@@ -138,7 +138,7 @@ onMounted(load);
           >统一核对跨组织规则版本、审批、自动化和发布回滚；写操作进入对应受权限保护的工作台。</span
         >
       </div>
-      <a :href="current.href">{{ current.action }}</a>
+      <RouterLink :to="current.href">{{ current.action }}</RouterLink>
     </header>
     <ResponsiveFilterDrawer label="筛选治理记录" :active-count="activeFilterCount">
       <form @submit.prevent="load">
@@ -248,9 +248,9 @@ onMounted(load);
                   </td>
                   <td>
                     <button type="button" @click="selected = item">查看详情</button
-                    ><a :href="editHref(item)">{{
+                    ><RouterLink :to="editHref(item)">{{
                       section === "releases" ? "进入管理" : "编辑"
-                    }}</a>
+                    }}</RouterLink>
                   </td>
                   <td>
                     <details>
@@ -317,9 +317,9 @@ onMounted(load);
                 </div>
               </dl>
             </details>
-            <a :href="editHref(row)">{{
+            <RouterLink :to="editHref(row)">{{
               section === "releases" ? "进入管理页面" : "进入编辑页面"
-            }}</a>
+            }}</RouterLink>
           </template>
         </ResponsiveDataView>
       </div>
@@ -332,7 +332,7 @@ onMounted(load);
               ? new Date(data.provider_versions_latest_at).toLocaleString("zh-CN")
               : "暂无"
           }}。</span
-        ><a href="/platform-admin/providers">进入来源版本管理</a>
+        ><RouterLink to="/platform-admin/providers">进入来源版本管理</RouterLink>
       </aside>
       <footer>
         跨组织查看不会绕过业务权限；编辑、启停和发布仍使用版本锁并写入审计记录。
@@ -417,9 +417,9 @@ onMounted(load);
         </details>
         <footer>
           <button @click="selected = null">关闭</button
-          ><a :href="editHref(selected)">{{
+          ><RouterLink :to="editHref(selected)">{{
             section === "releases" ? "进入管理页面" : "进入编辑页面"
-          }}</a>
+          }}</RouterLink>
         </footer>
       </section>
     </dialog>

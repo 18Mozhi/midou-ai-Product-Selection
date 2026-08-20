@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiRequestOptions } from "../api-client";
 
 type PersonalSection = "profile" | "permissions" | "security" | "notifications" | "assets";
@@ -8,6 +9,7 @@ const props = withDefaults(
   { initialSection: "profile", accountShell: false },
 );
 const request = createApiClient(props.apiBaseUrl);
+const router = useRouter();
 const state = ref<"loading" | "ready" | "error">("loading");
 const validSections: PersonalSection[] = [
   "profile",
@@ -198,7 +200,7 @@ async function changePassword() {
         new_password: passwordForm.new_password,
       },
     });
-    window.location.assign("/login");
+    await router.replace("/login");
   } catch (error) {
     notice.value = error instanceof Error ? error.message : "密码修改失败";
   }
@@ -358,14 +360,16 @@ watch(
               capabilityName(capability)
             }}</code>
           </div>
-          <a v-if="canManageOrganizationToken" href="/org-admin/tokens">管理组织令牌</a>
+          <RouterLink v-if="canManageOrganizationToken" to="/org-admin/tokens"
+            >管理组织令牌</RouterLink
+          >
         </article>
       </section>
       <section v-else-if="tab === 'security'" class="personal-grid">
         <article class="personal-card">
           <h3>多因素认证</h3>
           <p>认证器绑定、恢复码和停用由独立安全页面处理。</p>
-          <a href="/security/mfa">管理 MFA</a>
+          <RouterLink to="/security/mfa">管理 MFA</RouterLink>
         </article>
         <form class="personal-card" @submit.prevent="changePassword">
           <h3>修改密码</h3>
@@ -421,7 +425,7 @@ watch(
         <article class="personal-card">
           <h3>关注热点</h3>
           <div v-for="item in assets.followed_trends" :key="item.id" class="personal-line">
-            <a :href="`/trends?topic=${item.id}`">{{ item.title }}</a
+            <RouterLink :to="`/trends?topic=${item.id}`">{{ item.title }}</RouterLink
             ><small>{{ item.market }} · {{ when(item.created_at) }}</small>
           </div>
           <p v-if="!assets.followed_trends.length">暂无关注热点。</p>
@@ -429,7 +433,9 @@ watch(
         <article class="personal-card">
           <h3>我的决策</h3>
           <div v-for="item in assets.decisions" :key="item.id" class="personal-line">
-            <a :href="`/opportunities/${item.opportunity_id}`">{{ item.opportunity_name }}</a
+            <RouterLink :to="`/opportunities/${item.opportunity_id}`">{{
+              item.opportunity_name
+            }}</RouterLink
             ><small>{{ decisionName(item.action) }} · {{ when(item.created_at) }}</small>
           </div>
           <p v-if="!assets.decisions.length">暂无人工决策。</p>
@@ -437,7 +443,7 @@ watch(
         <article class="personal-card personal-wide">
           <h3>我的任务</h3>
           <div v-for="item in assets.tasks" :key="item.id" class="personal-line">
-            <a href="/tasks">{{ item.title }}</a
+            <RouterLink to="/tasks">{{ item.title }}</RouterLink
             ><small
               >{{ statusName(item.status) }} · {{ statusName(item.priority) }} ·
               {{ when(item.due_at) }}</small

@@ -178,8 +178,9 @@ onMounted(load);
         <li><b>05</b><span>利润、风险与证据复核</span></li>
       </ol>
       <nav>
-        <a href="/trends">管理热点监控规则</a><a href="/opportunities/start">立即运行一次选品</a
-        ><a href="/tasks">查看执行任务</a>
+        <RouterLink to="/trends">管理热点监控规则</RouterLink
+        ><RouterLink to="/opportunities/start">立即运行一次选品</RouterLink
+        ><RouterLink to="/tasks">查看执行任务</RouterLink>
       </nav>
     </section>
     <header>

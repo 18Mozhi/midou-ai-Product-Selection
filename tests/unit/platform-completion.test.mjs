@@ -207,25 +207,28 @@ test("source catalog exposes the latest persisted successful task without invent
 });
 
 test("platform navigation exposes complete management domains and role switching", async () => {
-  const shell = await readFile(
-    new URL("../../apps/web/src/components/NavigationShell.vue", import.meta.url),
-    "utf8",
-  );
+  const [shell, catalog] = await Promise.all([
+    readFile(new URL("../../apps/web/src/components/NavigationShell.vue", import.meta.url), "utf8"),
+    readFile(new URL("../../apps/web/src/route-catalog.ts", import.meta.url), "utf8"),
+  ]);
+  const navigation = `${catalog}\n${shell}`;
   for (const label of [
     "账号与组织",
-    "人员与权限",
-    "全量数据",
-    "规则与自动化",
-    "内容管理",
-    "通知管理",
+    "组织管理",
+    "用户管理",
+    "管理员管理",
+    "数据中心",
+    "质量与规则",
+    "内容运营",
+    "通知运营",
     "配额管理",
-    "系统状态",
+    "系统运维",
     "进入用户工作台",
   ]) {
-    assert.match(shell, new RegExp(label));
+    assert.match(navigation, new RegExp(label));
   }
-  assert.doesNotMatch(shell, /label: "邮箱管理"/);
-  assert.doesNotMatch(shell, /path: "\/platform-admin\/email"/);
+  assert.doesNotMatch(navigation, /label: "邮箱管理"/);
+  assert.doesNotMatch(navigation, /path: "\/platform-admin\/email"/);
 });
 
 test("platform management and dashboard expose operational details instead of placeholder cards", async () => {

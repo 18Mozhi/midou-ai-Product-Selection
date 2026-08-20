@@ -98,11 +98,12 @@ onMounted(load);
 <template>
   <main class="theme-page" data-testid="theme-studio">
     <aside class="theme-nav">
-      <a class="theme-brand" href="/"><b>选</b><span>智能选品</span></a>
+      <RouterLink class="theme-brand" to="/"><b>选</b><span>智能选品</span></RouterLink>
       <p>个人中心</p>
       <nav>
-        <a href="/login">个人资料</a><a href="/security/mfa">安全设置</a
-        ><a class="active" href="/settings/theme">主题设置</a>
+        <RouterLink to="/me">个人资料</RouterLink
+        ><RouterLink to="/security/mfa">安全设置</RouterLink
+        ><RouterLink class="active" to="/settings/theme">主题设置</RouterLink>
       </nav>
       <small>主题不改变权限、数据范围或业务结论</small>
     </aside>
@@ -157,8 +158,8 @@ onMounted(load);
           }}
         </p>
         <small v-if="requestId">请求标识：{{ requestId }}</small
-        ><a v-if="state === 'expired'" href="/login">重新登录</a
-        ><a v-else-if="state === 'blocked'" href="/select-context">选择工作区</a
+        ><RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
+        ><RouterLink v-else-if="state === 'blocked'" to="/select-context">选择工作区</RouterLink
         ><button v-else @click="load">刷新偏好</button>
       </section>
       <template v-else>

@@ -59,9 +59,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     version: 1,
   }),
   busy = ref(false),
-  realtimeState = ref<"connecting" | "connected" | "reconnecting">(
-    "connecting",
-  );
+  realtimeState = ref<"connecting" | "connected" | "reconnecting">("connecting");
 let stream: EventSource | null = null;
 const label = (v: string) =>
     (
@@ -84,12 +82,8 @@ const label = (v: string) =>
       }) as Record<string, string>
     )[v ?? ""] ?? "系统记录",
   severityLabel = (v: string) =>
-    (
-      ({ info: "一般", warning: "需关注", critical: "紧急" }) as Record<
-        string,
-        string
-      >
-    )[v] ?? "待确认",
+    (({ info: "一般", warning: "需关注", critical: "紧急" }) as Record<string, string>)[v] ??
+    "待确认",
   displayBody = (item: Item) =>
     /^[a-z][a-z0-9_.-]* 已产生新的可审计事件。$/i.test(item.body)
       ? ({
@@ -99,8 +93,7 @@ const label = (v: string) =>
           task: "任务状态已变化，请查看关联记录。",
         }[item.category] ?? "业务状态已变化，请查看关联记录。")
       : item.body,
-  time = (v: string) =>
-    new Date(v).toLocaleString("zh-CN", { hour12: false });
+  time = (v: string) => new Date(v).toLocaleString("zh-CN", { hour12: false });
 async function api<T>(
   path: string,
   options: { method?: string; body?: unknown } = {},
@@ -130,8 +123,7 @@ async function load() {
     const q = new URLSearchParams({ page: "1", page_size: "100" });
     if (category.value) q.set("category", category.value);
     if (unread.value) q.set("unread", "true");
-    if (workflowStatus.value)
-      q.set("workflow_status", workflowStatus.value);
+    if (workflowStatus.value) q.set("workflow_status", workflowStatus.value);
     const [list, sum, pref] = await Promise.all([
       api<Item[]>(`/notifications?${q}`),
       api<any>("/notifications/summary"),
@@ -220,10 +212,9 @@ async function savePreferences() {
 }
 function connectRealtime() {
   const cursor = sessionStorage.getItem("scoutops:last-event-id") ?? "0";
-  stream = new EventSource(
-    `${props.apiBaseUrl}/realtime/events?last_event_id=${cursor}`,
-    { withCredentials: true },
-  );
+  stream = new EventSource(`${props.apiBaseUrl}/realtime/events?last_event_id=${cursor}`, {
+    withCredentials: true,
+  });
   stream.onopen = () => {
     realtimeState.value = "connected";
   };
@@ -232,8 +223,7 @@ function connectRealtime() {
   };
   stream.addEventListener("notification.changed", (event) => {
     const message = event as MessageEvent;
-    if (message.lastEventId)
-      sessionStorage.setItem("scoutops:last-event-id", message.lastEventId);
+    if (message.lastEventId) sessionStorage.setItem("scoutops:last-event-id", message.lastEventId);
     void load();
   });
 }
@@ -259,8 +249,7 @@ onUnmounted(() => stream?.close());
               ? "实时连接中"
               : "实时重连中"
         }}</span>
-        <button class="secondary" @click="showPreferences = true">
-          通知偏好</button
+        <button class="secondary" @click="showPreferences = true">通知偏好</button
         ><button @click="markAll">全部已读</button>
       </div>
     </header>
@@ -301,9 +290,7 @@ onUnmounted(() => stream?.close());
         "
       >
         {{ x.t }}</button
-      ><label
-        ><input v-model="unread" type="checkbox" @change="load" /> 仅未读</label
-      >
+      ><label><input v-model="unread" type="checkbox" @change="load" /> 仅未读</label>
     </nav>
     <nav aria-label="处理状态筛选">
       <button
@@ -319,21 +306,14 @@ onUnmounted(() => stream?.close());
           workflowStatus = item.v;
           load();
         "
-        >{{ item.t }}</button
       >
+        {{ item.t }}
+      </button>
     </nav>
-    <section v-if="state === 'loading'" class="notification-state">
-      正在读取通知…
-    </section>
+    <section v-if="state === 'loading'" class="notification-state">正在读取通知…</section>
     <section
       v-else-if="
-        [
-          'error',
-          'forbidden',
-          'expired',
-          'rate_limited',
-          'version_conflict',
-        ].includes(state)
+        ['error', 'forbidden', 'expired', 'rate_limited', 'version_conflict'].includes(state)
       "
       class="notification-state"
     >
@@ -364,18 +344,14 @@ onUnmounted(() => stream?.close());
         :class="{ unread: !item.read_at }"
         @click="open(item)"
       >
-        <i :data-category="item.category">{{
-          label(item.category).slice(0, 1)
-        }}</i
+        <i :data-category="item.category">{{ label(item.category).slice(0, 1) }}</i
         ><span
           ><strong>{{ item.title }}</strong
           ><small>{{ displayBody(item) }}</small></span
         ><em>{{ time(item.created_at) }}</em
         ><b
           >{{ statusLabel(item.workflow_status)
-          }}<small v-if="item.group_count > 1">
-            · 同根因 {{ item.group_count }} 条</small
-          ></b
+          }}<small v-if="item.group_count > 1"> · 同根因 {{ item.group_count }} 条</small></b
         >
       </button>
     </div>
@@ -397,33 +373,27 @@ onUnmounted(() => stream?.close());
           <dd>{{ severityLabel(selected.severity) }}</dd>
         </div>
       </dl>
-      <small
-        >站内消息来自事务消息；页面不显示队列、浏览器凭证或邮件地址。</small
-      >
+      <small>站内消息来自事务消息；页面不显示队列、浏览器凭证或邮件地址。</small>
       <footer class="notification-workflow-actions">
-        <a :href="selected.action_route">定位异常记录</a>
+        <RouterLink :to="selected.action_route">定位异常记录</RouterLink>
         <button
           v-if="selected.workflow_status === 'open'"
           type="button"
           @click="updateWorkflow('start')"
-          >开始处理</button
         >
+          开始处理
+        </button>
         <button
           v-if="selected.workflow_status !== 'closed'"
           type="button"
           @click="updateWorkflow('close')"
-          >关闭</button
         >
-        <button v-else type="button" @click="updateWorkflow('reopen')"
-          >重新打开</button
-        >
+          关闭
+        </button>
+        <button v-else type="button" @click="updateWorkflow('reopen')">重新打开</button>
       </footer>
       <details
-        v-if="
-          selected.resource_id ||
-          selected.resource_type ||
-          selected.root_cause_key
-        "
+        v-if="selected.resource_id || selected.resource_type || selected.root_cause_key"
         class="notification-technical"
       >
         <summary>技术详情</summary>
@@ -446,37 +416,16 @@ onUnmounted(() => stream?.close());
     <dialog :open="showPreferences">
       <form @submit.prevent="savePreferences">
         <h3>通知偏好</h3>
-        <label
-          ><input v-model="preferences.in_app_enabled" type="checkbox" />
-          站内通知</label
+        <label><input v-model="preferences.in_app_enabled" type="checkbox" /> 站内通知</label
         ><label
-          ><input
-            v-model="preferences.email_enabled"
-            type="checkbox"
-            disabled
-          />
+          ><input v-model="preferences.email_enabled" type="checkbox" disabled />
           邮件通知（服务未接入，暂不可用）</label
-        ><label
-          ><input v-model="preferences.task_enabled" type="checkbox" />
-          任务事件</label
-        ><label
-          ><input v-model="preferences.approval_enabled" type="checkbox" />
-          审批事件</label
-        ><label
-          ><input v-model="preferences.competitor_enabled" type="checkbox" />
-          竞品事件</label
-        >
-        <p>
-          启用邮件只产生 pending_placeholder 记录，接入真实 Provider
-          前不会向外部发送。
-        </p>
+        ><label><input v-model="preferences.task_enabled" type="checkbox" /> 任务事件</label
+        ><label><input v-model="preferences.approval_enabled" type="checkbox" /> 审批事件</label
+        ><label><input v-model="preferences.competitor_enabled" type="checkbox" /> 竞品事件</label>
+        <p>启用邮件只产生 pending_placeholder 记录，接入真实 Provider 前不会向外部发送。</p>
         <div>
-          <button
-            type="button"
-            class="secondary"
-            @click="showPreferences = false"
-          >
-            取消</button
+          <button type="button" class="secondary" @click="showPreferences = false">取消</button
           ><button :disabled="busy">保存</button>
         </div>
       </form>

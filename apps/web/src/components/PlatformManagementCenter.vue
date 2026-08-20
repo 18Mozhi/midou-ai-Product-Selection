@@ -396,7 +396,7 @@ onMounted(load);
             <h3>服务运行状态</h3>
             <span>5 分钟内观测为实时</span>
           </header>
-          <a v-for="item in data.services" :key="item.code" :href="item.href">
+          <RouterLink v-for="item in data.services" :key="item.code" :to="item.href">
             <span
               ><b>{{ item.name }}</b
               ><small>{{ item.detail }}</small></span
@@ -405,7 +405,7 @@ onMounted(load);
               ><i :data-state="item.status">{{ stateName(item.status) }}</i
               ><small>{{ when(item.observed_at) }}</small></span
             >
-          </a>
+          </RouterLink>
         </section>
         <section>
           <h3>采集任务状态</h3>
@@ -413,7 +413,7 @@ onMounted(load);
             <span>{{ stateName(item.status) }}</span
             ><strong>{{ item.total }}</strong>
           </div>
-          <a href="/platform-admin/collection/overview">查看任务详情</a>
+          <RouterLink to="/platform-admin/collection/overview">查看任务详情</RouterLink>
         </section>
         <section>
           <h3>来源状态</h3>
@@ -421,7 +421,7 @@ onMounted(load);
             <span>{{ stateName(item.status) }}</span
             ><strong>{{ item.total }}</strong>
           </div>
-          <a href="/platform-admin/providers/sources">管理来源配置</a>
+          <RouterLink to="/platform-admin/providers/sources">管理来源配置</RouterLink>
         </section>
       </div>
       <footer>

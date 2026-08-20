@@ -395,7 +395,7 @@ onMounted(load);
           API。</span
         >
       </div>
-      <a href="/platform-admin/providers">管理来源规则</a>
+      <RouterLink to="/platform-admin/providers">管理来源规则</RouterLink>
     </header>
     <div class="source-metrics">
       <article>
@@ -533,10 +533,10 @@ onMounted(load);
             编辑采集设置</button
           ><button v-if="item.provisioned" type="button" @click="loadConfigurationVersions(item)">
             版本与回滚</button
-          ><a
+          ><RouterLink
             v-if="item.access_mode === 'authenticated_browser'"
-            :href="`/platform-admin/credentials?provider_code=${encodeURIComponent(item.code)}&mode=login`"
-            >配置网页登录</a
+            :to="`/platform-admin/credentials?provider_code=${encodeURIComponent(item.code)}&mode=login`"
+            >配置网页登录</RouterLink
           ><button
             v-if="item.code === '1688_search' && item.provisioned"
             type="button"

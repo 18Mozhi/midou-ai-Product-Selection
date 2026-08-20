@@ -80,7 +80,7 @@ const deliverySummary = (value: unknown) =>
       <article>
         <header>
           <div><h3>用户订阅</h3></div>
-          <a href="/me">个人偏好入口</a>
+          <RouterLink to="/me">个人偏好入口</RouterLink>
         </header>
         <dl>
           <div v-for="(value, key) in data.subscriptions" :key="key">
@@ -92,7 +92,7 @@ const deliverySummary = (value: unknown) =>
       <article>
         <header>
           <div><h3>告警路由</h3></div>
-          <a href="/platform-admin/governance">规则总览</a>
+          <RouterLink to="/platform-admin/governance">规则总览</RouterLink>
         </header>
         <ul>
           <li v-for="item in data.alert_routes.slice(0, 6)" :key="item.id">
@@ -109,7 +109,7 @@ const deliverySummary = (value: unknown) =>
           <h3>通知与投递记录</h3>
           <span>按接收人、组织、类型和渠道查看</span>
         </div>
-        <a href="/automations">新增或编辑自动化路由</a>
+        <RouterLink to="/platform-admin/governance">在平台规则总览配置</RouterLink>
       </header>
       <ResponsiveDataView
         :rows="data.items"

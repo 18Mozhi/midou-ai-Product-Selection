@@ -92,11 +92,12 @@ onMounted(() => load());
 <template>
   <main class="audit-page" data-testid="audit-security">
     <aside>
-      <a href="/" class="brand"><b>选</b>智能选品</a>
+      <RouterLink to="/" class="brand"><b>选</b>智能选品</RouterLink>
       <p>安全与治理</p>
       <nav>
-        <a class="active" href="/?view=audit-security">审计日志</a
-        ><a href="/security/mfa">安全设置</a><span>平台管理员</span><span>密钥轮换</span>
+        <RouterLink class="active" to="/?view=audit-security">审计日志</RouterLink
+        ><RouterLink to="/security/mfa">安全设置</RouterLink><span>平台管理员</span
+        ><span>密钥轮换</span>
       </nav>
       <small>只读视图 · 关联编号 / 链路编号</small>
     </aside>
@@ -162,7 +163,7 @@ onMounted(() => load());
           }}
         </p>
         <small v-if="requestId">请求标识：{{ requestId }}</small
-        ><a v-if="state === 'expired'" href="/login">重新登录</a
+        ><RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
         ><button v-else @click="load()">重新加载</button>
       </div>
       <div v-else-if="state === 'empty'" class="state">

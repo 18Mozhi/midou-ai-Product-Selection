@@ -33,11 +33,12 @@ test("platform notification operations expose templates channels subscriptions d
     "用户订阅",
     "告警路由",
     "通知与投递记录",
-    "新增或编辑自动化路由",
+    "在平台规则总览配置",
   ])
     assert.match(web, new RegExp(label));
   assert.match(web, /邮件服务未接入，管理入口已关闭/);
   assert.doesNotMatch(web, /href="\/platform-admin\/email"/);
+  assert.doesNotMatch(web, /to="\/automations"/);
   assert.match(styles, /\.role-shell\s+dialog\[open\]\s*\{\s*z-index:\s*40/);
   for (const fact of [
     "notification_preferences",

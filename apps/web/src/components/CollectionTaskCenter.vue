@@ -200,7 +200,7 @@ onMounted(load);
         <h2 id="collection-task-title">采集任务监控</h2>
         <span>集中查看任务进度、来源覆盖、失败原因和重试记录；每个任务都可以展开详情。</span>
       </div>
-      <a href="/platform-admin/collection/browser-runtime">浏览器运行时</a>
+      <RouterLink to="/platform-admin/collection/browser-runtime">浏览器运行时</RouterLink>
     </header>
     <UiStatePanel v-if="state !== 'ready'" :kind="state" :request-id="requestId" @primary="load" />
     <template v-else>

@@ -124,22 +124,15 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     resource_id: "",
     title: "",
   });
-const pendingCount = computed(
-    () => approvals.value.filter((x) => x.status === "pending").length,
-  ),
-  mineCount = computed(
-    () => approvals.value.filter((x) => x.can_decide).length,
-  ),
+const pendingCount = computed(() => approvals.value.filter((x) => x.status === "pending").length),
+  mineCount = computed(() => approvals.value.filter((x) => x.can_decide).length),
   overdueCount = computed(
     () =>
       approvals.value.filter(
-        (x) =>
-          x.status === "pending" && x.due_at && new Date(x.due_at) < new Date(),
+        (x) => x.status === "pending" && x.due_at && new Date(x.due_at) < new Date(),
       ).length,
   ),
-  published = computed(() =>
-    templates.value.filter((x) => x.status === "published"),
-  );
+  published = computed(() => templates.value.filter((x) => x.status === "published"));
 const statusText = (x: string) =>
     (
       ({
@@ -173,9 +166,12 @@ const statusText = (x: string) =>
   resourceText = (x: string) =>
     ({ task: "任务", opportunity_decision: "机会决策" })[x] ?? "业务记录",
   basisValue = (value: string | null) =>
-    value == null || value === "" ? "未提供" : statusText(value) !== "未知状态" ? statusText(value) : value,
-  time = (v: string | null) =>
-    v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "—";
+    value == null || value === ""
+      ? "未提供"
+      : statusText(value) !== "未知状态"
+        ? statusText(value)
+        : value,
+  time = (v: string | null) => (v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "—");
 async function api<T>(
   path: string,
   options: { method?: string; body?: unknown } = {},
@@ -237,9 +233,7 @@ async function decide(action: "approve" | "reject") {
       false,
     );
     notice.value =
-      action === "approve"
-        ? "本节点已批准，审批历史不可变。"
-        : "本节点已驳回，审批历史不可变。";
+      action === "approve" ? "本节点已批准，审批历史不可变。" : "本节点已驳回，审批历史不可变。";
     selected.value = null;
     await load();
   } catch {
@@ -296,11 +290,7 @@ async function publish(t: Template) {
 async function createRequest() {
   busy.value = true;
   try {
-    await api(
-      "/tasks/approvals",
-      { method: "POST", body: requestForm.value },
-      false,
-    );
+    await api("/tasks/approvals", { method: "POST", body: requestForm.value }, false);
     showRequest.value = false;
     notice.value = "审批已发起；第一节点 SLA 已开始计时。";
     await load();
@@ -317,9 +307,7 @@ onMounted(load);
       <div>
         <p>工作管理</p>
         <h2>审批中心</h2>
-        <span
-          >模板版本、节点时限、人工原因与升级记录均来自当前工作区后端。</span
-        >
+        <span>模板版本、节点时限、人工原因与升级记录均来自当前工作区后端。</span>
       </div>
       <div>
         <button class="secondary" @click="showTemplate = true">配置模板</button
@@ -365,18 +353,10 @@ onMounted(load);
         {{ x.t }}
       </button>
     </nav>
-    <section v-if="state === 'loading'" class="approval-state">
-      正在读取审批事实…
-    </section>
+    <section v-if="state === 'loading'" class="approval-state">正在读取审批事实…</section>
     <section
       v-else-if="
-        [
-          'error',
-          'forbidden',
-          'expired',
-          'rate_limited',
-          'version_conflict',
-        ].includes(state)
+        ['error', 'forbidden', 'expired', 'rate_limited', 'version_conflict'].includes(state)
       "
       class="approval-state"
     >
@@ -405,45 +385,29 @@ onMounted(load);
         <span class="approval-mark">{{ item.current_node_ordinal }}</span
         ><span
           ><strong>{{ item.title }}</strong
-          ><small
-            >{{ item.template_name }} · {{ resourceText(item.resource_type) }}</small
-          ></span
+          ><small>{{ item.template_name }} · {{ resourceText(item.resource_type) }}</small></span
         ><span
           ><em :data-status="item.status">{{ statusText(item.status) }}</em
           ><small>{{ item.current_node_name || "流程已结束" }}</small></span
         ><span
-          ><strong>{{
-            item.escalated_at ? "已升级" : time(item.due_at)
-          }}</strong
+          ><strong>{{ item.escalated_at ? "已升级" : time(item.due_at) }}</strong
           ><small>{{ item.can_decide ? "需要你处理" : "只读" }}</small></span
         ><b>查看 →</b>
       </button>
     </div>
     <aside v-if="selected" class="approval-detail">
-      <button
-        class="close"
-        aria-label="关闭审批详情"
-        title="关闭审批详情"
-        @click="selected = null"
-      >
+      <button class="close" aria-label="关闭审批详情" title="关闭审批详情" @click="selected = null">
         ×
       </button>
-      <p>
-        {{ selected.template_name }} / 模板 v{{
-          selected.approval_template_version ?? "—"
-        }}
-      </p>
+      <p>{{ selected.template_name }} / 模板 v{{ selected.approval_template_version ?? "—" }}</p>
       <h3>{{ selected.title }}</h3>
-      <a
+      <RouterLink
         v-if="selected.decision_context?.resource"
         class="approval-resource-link"
-        :href="selected.decision_context.resource.route"
-        >查看{{ selected.decision_context.resource.label }} →</a
+        :to="selected.decision_context.resource.route"
+        >查看{{ selected.decision_context.resource.label }} →</RouterLink
       >
-      <section
-        v-if="selected.decision_context"
-        class="approval-decision-context"
-      >
+      <section v-if="selected.decision_context" class="approval-decision-context">
         <header>
           <div>
             <small>证据完整度</small>
@@ -459,9 +423,7 @@ onMounted(load);
         </header>
         <p
           class="approval-context-origin"
-          :data-fallback="
-            selected.decision_context.snapshot_status === 'live_fallback'
-          "
+          :data-fallback="selected.decision_context.snapshot_status === 'live_fallback'"
         >
           {{
             selected.decision_context.snapshot_status === "captured"
@@ -475,16 +437,13 @@ onMounted(load);
             :max="selected.decision_context.evidence.total"
           ></progress>
           <p v-if="selected.decision_context.evidence.missing_items.length">
-            缺失：{{
-              selected.decision_context.evidence.missing_items.join("、")
-            }}
+            缺失：{{ selected.decision_context.evidence.missing_items.join("、") }}
           </p>
           <div class="approval-requirements">
-            <a
-              v-for="requirement in selected.decision_context.evidence
-                .requirements"
+            <RouterLink
+              v-for="requirement in selected.decision_context.evidence.requirements"
               :key="requirement.code"
-              :href="requirement.route"
+              :to="requirement.route"
               :data-complete="requirement.complete"
             >
               <span>
@@ -492,7 +451,7 @@ onMounted(load);
                 <em>{{ requirement.complete ? "已具备" : "待补齐" }}</em>
               </span>
               <small>{{ requirement.detail }}</small>
-            </a>
+            </RouterLink>
           </div>
         </template>
         <p v-else class="approval-context-note">
@@ -515,25 +474,16 @@ onMounted(load);
             </div>
           </dl>
         </section>
-        <section
-          v-if="selected.decision_context.decision"
-          class="approval-requested-decision"
-        >
+        <section v-if="selected.decision_context.decision" class="approval-requested-decision">
           <h4>申请决策</h4>
           <strong>{{ statusText(selected.decision_context.decision.action) }}</strong>
           <p>{{ selected.decision_context.decision.reason }}</p>
-          <small
-            >基于机会第
-            {{ selected.decision_context.decision.opportunity_version }} 版</small
-          >
+          <small>基于机会第 {{ selected.decision_context.decision.opportunity_version }} 版</small>
         </section>
         <section class="approval-decision-basis">
           <h4>决策依据</h4>
           <dl>
-            <div
-              v-for="basis in selected.decision_context.basis_items"
-              :key="basis.code"
-            >
+            <div v-for="basis in selected.decision_context.basis_items" :key="basis.code">
               <dt>{{ basis.label }}</dt>
               <dd>{{ basisValue(basis.value) }}</dd>
             </div>
@@ -541,11 +491,7 @@ onMounted(load);
         </section>
       </section>
       <div class="approval-timeline">
-        <article
-          v-for="node in selected.nodes"
-          :key="node.id"
-          :data-status="node.status"
-        >
+        <article v-for="node in selected.nodes" :key="node.id" :data-status="node.status">
           <i></i>
           <div>
             <b>{{ node.ordinal }}. {{ node.name }}</b
@@ -573,33 +519,28 @@ onMounted(load);
           ></textarea>
         </label>
         <div>
-          <button
-            :disabled="busy || !reason.trim()"
-            @click="decide('reject')"
-            class="danger"
-          >
+          <button :disabled="busy || !reason.trim()" @click="decide('reject')" class="danger">
             驳回</button
-          ><button
-            :disabled="busy || !reason.trim()"
-            @click="decide('approve')"
-          >
-            批准并流转
-          </button>
+          ><button :disabled="busy || !reason.trim()" @click="decide('approve')">批准并流转</button>
         </div>
       </section>
-      <section v-else class="readonly">
-        当前节点不是由你审批，或审批已结束。
-      </section>
+      <section v-else class="readonly">当前节点不是由你审批，或审批已结束。</section>
       <details class="approval-technical">
         <summary>技术详情</summary>
         <dl>
-          <div><dt>审批编号</dt><dd>{{ selected.id }}</dd></div>
-          <div><dt>资源类型</dt><dd>{{ selected.resource_type }}</dd></div>
-          <div><dt>资源编号</dt><dd>{{ selected.resource_id }}</dd></div>
-          <div
-            v-for="node in selected.nodes"
-            :key="`technical-${node.id}`"
-          >
+          <div>
+            <dt>审批编号</dt>
+            <dd>{{ selected.id }}</dd>
+          </div>
+          <div>
+            <dt>资源类型</dt>
+            <dd>{{ selected.resource_type }}</dd>
+          </div>
+          <div>
+            <dt>资源编号</dt>
+            <dd>{{ selected.resource_id }}</dd>
+          </div>
+          <div v-for="node in selected.nodes" :key="`technical-${node.id}`">
             <dt>节点 {{ node.ordinal }}</dt>
             <dd>{{ node.id }} / {{ node.active_approver_id }}</dd>
           </div>
@@ -609,44 +550,31 @@ onMounted(load);
     <dialog :open="showTemplate">
       <form @submit.prevent="createTemplate">
         <h3>新建审批模板草稿</h3>
-        <label
-          >模板名称<input
-            v-model="templateForm.name"
-            required
-            maxlength="200" /></label
+        <label>模板名称<input v-model="templateForm.name" required maxlength="200" /></label
         ><label
           >资源类型<select v-model="templateForm.resource_type">
             <option value="task">任务</option>
             <option value="opportunity_decision">机会决策</option>
           </select></label
-        ><label
-          >节点名称<input
-            v-model="templateForm.node_name"
-            required
-            maxlength="120" /></label
+        ><label>节点名称<input v-model="templateForm.node_name" required maxlength="120" /></label
         ><label
           >处理时限（分钟）<input
             v-model.number="templateForm.sla_minutes"
             type="number"
             min="1"
             max="43200"
-            required /></label>
+            required
+        /></label>
         <details class="approval-form-technical">
           <summary>技术配置：审批人与超时接收人</summary>
-          <label
-            >审批人账号编号<input
-              v-model="templateForm.approver_id"
-              required /></label
+          <label>审批人账号编号<input v-model="templateForm.approver_id" required /></label
           ><label
-            >超时接收人账号编号<input
-              v-model="templateForm.escalation_assignee_id"
-              required
+            >超时接收人账号编号<input v-model="templateForm.escalation_assignee_id" required
           /></label>
         </details>
         <p>草稿必须显式发布；超时只升级审批人，不会自动批准或驳回。</p>
         <div>
-          <button type="button" class="secondary" @click="showTemplate = false">
-            取消</button
+          <button type="button" class="secondary" @click="showTemplate = false">取消</button
           ><button :disabled="busy">保存草稿</button>
         </div>
       </form>
@@ -655,9 +583,7 @@ onMounted(load);
         <article v-for="t in templates" :key="t.id">
           <span
             ><b>{{ t.name }}</b
-            ><small
-              >{{ statusText(t.status) }} · {{ t.node_count }} 节点</small
-            ></span
+            ><small>{{ statusText(t.status) }} · {{ t.node_count }} 节点</small></span
           ><button v-if="t.status === 'draft'" @click="publish(t)">发布</button>
         </article>
       </section>
@@ -677,18 +603,14 @@ onMounted(load);
             <option value="task">任务</option>
             <option value="opportunity_decision">机会决策</option>
           </select></label
-        ><details class="approval-form-technical">
+        >
+        <details class="approval-form-technical">
           <summary>技术配置：关联资源编号</summary>
-          <label
-            >资源编号<input v-model="requestForm.resource_id" required
-          /></label>
+          <label>资源编号<input v-model="requestForm.resource_id" required /></label>
         </details>
-        <label
-          >审批标题<input v-model="requestForm.title" required maxlength="200"
-        /></label>
+        <label>审批标题<input v-model="requestForm.title" required maxlength="200" /></label>
         <div>
-          <button type="button" class="secondary" @click="showRequest = false">
-            取消</button
+          <button type="button" class="secondary" @click="showRequest = false">取消</button
           ><button :disabled="busy">发起</button>
         </div>
       </form>

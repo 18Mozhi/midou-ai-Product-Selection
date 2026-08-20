@@ -398,7 +398,7 @@ const scopeText = (value: string) =>
               </details></template
             >
           </ResponsiveDataView>
-          <a href="/platform-admin/credentials">进入凭证与档案</a>
+          <RouterLink to="/platform-admin/credentials">进入凭证与档案</RouterLink>
         </section>
         <section>
           <h3>组织访问令牌</h3>

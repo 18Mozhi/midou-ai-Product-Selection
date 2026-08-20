@@ -216,10 +216,10 @@ onMounted(load);
               }}
               · 绑定站点：{{ profile.target_domain }}
             </p>
-            <a
+            <RouterLink
               v-if="profile.login_status === 'expired'"
-              href="/platform-admin/tasks?source_type=collection_followup"
-              >处理续期任务</a
+              to="/platform-admin/collection?status=blocked_login"
+              >处理续期任务</RouterLink
             >
           </article>
         </div>

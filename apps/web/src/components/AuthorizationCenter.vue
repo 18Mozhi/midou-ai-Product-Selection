@@ -59,12 +59,12 @@ onMounted(load);
 <template>
   <main class="authz-page" data-testid="authorization">
     <aside class="authz-sidebar">
-      <a href="/" class="identity-brand"><span>选</span><span>智能选品</span></a>
+      <RouterLink to="/" class="identity-brand"><span>选</span><span>智能选品</span></RouterLink>
       <p>组织管理后台</p>
       <nav>
-        <a href="/select-context">组织资料</a
-        ><a href="/?view=authorization" class="active">角色与权限</a><span>成员与邀请</span
-        ><span>工作区与团队</span><span>组织审计</span>
+        <RouterLink to="/select-context">组织资料</RouterLink
+        ><RouterLink to="/?view=authorization" class="active">角色与权限</RouterLink
+        ><span>成员与邀请</span><span>工作区与团队</span><span>组织审计</span>
       </nav>
       <small>权限来自服务端策略</small>
     </aside>
@@ -75,7 +75,7 @@ onMounted(load);
           <h1>角色与权限</h1>
           <span>动作决定能做什么，数据范围决定能看到哪些记录。</span>
         </div>
-        <a href="/select-context">切换组织</a>
+        <RouterLink to="/select-context">切换组织</RouterLink>
       </header>
       <div v-if="state === 'loading'" class="authz-state">
         <span class="spinner"></span><strong>正在读取服务端授权</strong>
@@ -103,7 +103,7 @@ onMounted(load);
           }}
         </p>
         <small v-if="requestId">请求标识：{{ requestId }}</small
-        ><a v-if="state === 'expired'" href="/login">重新登录</a
+        ><RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
         ><button v-else type="button" @click="load">重新加载</button>
       </div>
       <div v-else-if="state === 'empty'" class="authz-state">

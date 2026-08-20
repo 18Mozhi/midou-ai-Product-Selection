@@ -23,11 +23,7 @@ const pages = [
     title: "先看事实，再做可解释的决定",
     copy: "AI 只负责摘要、解释和缺失提示；价格、利润、资质与最终决策始终由事实和人员负责。",
     mark: "◇",
-    points: [
-      "缺失证据明确受阻",
-      "风险不用颜色代替文字",
-      "所有结论可以回到来源",
-    ],
+    points: ["缺失证据明确受阻", "风险不用颜色代替文字", "所有结论可以回到来源"],
   },
 ];
 const page = computed(() => pages[step.value - 1]!);
@@ -41,8 +37,8 @@ function previous() {
 <template>
   <main class="onboarding-page" data-testid="onboarding">
     <header>
-      <a href="/" class="identity-brand"><span>选</span>智能选品</a
-      ><a href="/">跳过引导</a>
+      <RouterLink to="/" class="identity-brand"><span>选</span>智能选品</RouterLink
+      ><RouterLink to="/">跳过引导</RouterLink>
     </header>
     <section class="onboarding-shell">
       <div class="onboarding-copy">
@@ -73,11 +69,9 @@ function previous() {
         </button>
       </div>
       <div>
-        <button v-if="step > 1" class="onboarding-back" @click="previous">
-          上一步</button
-        ><button v-if="step < 3" class="onboarding-next" @click="next">
-          下一步</button
-        ><a v-else class="onboarding-next" href="/">进入智能选品</a>
+        <button v-if="step > 1" class="onboarding-back" @click="previous">上一步</button
+        ><button v-if="step < 3" class="onboarding-next" @click="next">下一步</button
+        ><RouterLink v-else class="onboarding-next" to="/">进入智能选品</RouterLink>
       </div>
     </footer>
     <small>第 {{ step }} / 3 步 · 可使用键盘完成</small>

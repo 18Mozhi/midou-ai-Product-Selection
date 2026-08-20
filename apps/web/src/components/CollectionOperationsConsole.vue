@@ -252,9 +252,9 @@ async function confirmBatchReplay() {
     </section>
     <template v-else-if="data"
       ><nav class="collection-ops-links">
-        <a v-for="(path, label) in data.links" :key="path" :href="path">{{
+        <RouterLink v-for="(path, label) in data.links" :key="path" :to="path">{{
           linkLabels[label] ?? "相关管理页面"
-        }}</a>
+        }}</RouterLink>
       </nav>
       <div class="collection-ops-grid">
         <section>
@@ -511,7 +511,9 @@ async function confirmBatchReplay() {
             <li v-for="d in data.dead_letters" :key="d.id">
               <b>{{ errorLabel(d.error_code) }}</b
               ><span>{{ statusLabel(d.status) }} · {{ when(d.created_at) }}</span
-              ><a :href="`/platform-admin/collection?task=${d.task_id}`">查看并受控重放</a>
+              ><RouterLink :to="`/platform-admin/collection?task=${d.task_id}`"
+                >查看并受控重放</RouterLink
+              >
               <details>
                 <summary>技术详情</summary>
                 <code>错误 {{ d.error_code }}</code

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
 import OrganizationCreationWizard from "./OrganizationCreationWizard.vue";
@@ -59,6 +59,12 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; initialTab?: Tab }>
     organization_role_code: "member",
   }),
   passwordForm = reactive({ temporary_password: "" });
+watch(
+  () => props.initialTab,
+  (value) => {
+    tab.value = value;
+  },
+);
 const rows = computed(() =>
     tab.value === "organizations"
       ? (data.value?.organizations ?? [])
@@ -303,11 +309,23 @@ onMounted(load);
         ><span>拥有平台后台权限</span>
       </article>
     </div>
-    <nav class="account-tabs">
-      <button :class="{ on: tab === 'organizations' }" @click="tab = 'organizations'">
-        组织管理</button
-      ><button :class="{ on: tab === 'users' }" @click="tab = 'users'">用户管理</button
-      ><button :class="{ on: tab === 'admins' }" @click="tab = 'admins'">管理员管理</button>
+    <nav class="account-tabs" aria-label="账号与组织二级导航">
+      <RouterLink
+        to="/platform-admin/organizations"
+        :class="{ on: tab === 'organizations' }"
+        :aria-current="tab === 'organizations' ? 'page' : undefined"
+        >组织管理</RouterLink
+      ><RouterLink
+        to="/platform-admin/users"
+        :class="{ on: tab === 'users' }"
+        :aria-current="tab === 'users' ? 'page' : undefined"
+        >用户管理</RouterLink
+      ><RouterLink
+        to="/platform-admin/admins"
+        :class="{ on: tab === 'admins' }"
+        :aria-current="tab === 'admins' ? 'page' : undefined"
+        >管理员管理</RouterLink
+      >
     </nav>
     <ResponsiveFilterDrawer label="账号筛选" :active-count="activeFilterCount">
       <form class="account-filter" @submit.prevent="load">
@@ -753,14 +771,15 @@ onMounted(load);
   display: flex;
   gap: 8px;
 }
-.account-tabs button {
+.account-tabs a {
+  text-decoration: none;
   border: 1px solid var(--so-border-strong);
   border-radius: 999px;
   padding: 9px 15px;
   background: var(--so-panel);
   color: var(--so-text);
 }
-.account-tabs .on {
+.account-tabs a.on {
   background: var(--so-panel-muted);
   color: white;
 }

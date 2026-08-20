@@ -159,6 +159,8 @@ test("M02-03.A06/A13 authenticated API validates shell and preserves error contr
 test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay explicit", async () => {
   const [
     component,
+    routeCatalog,
+    main,
     apiClient,
     app,
     landingRedirect,
@@ -172,6 +174,8 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   ] = await Promise.all(
     [
       "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/route-catalog.ts",
+      "apps/web/src/main.ts",
       "apps/web/src/api-client.ts",
       "apps/web/src/App.vue",
       "apps/web/src/components/LandingRedirect.vue",
@@ -209,6 +213,13 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>邀请成员<\/span>/);
   assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>创建选品<\/span>/);
   assert.match(component, /aria-current/);
+  assert.match(component, /navigationItemsFor/);
+  assert.doesNotMatch(component, /const\s+(memberMenu|orgMenu|platformMenu)/);
+  assert.match(routeCatalog, /navigationCatalog/);
+  assert.match(routeCatalog, /\/platform-admin\/organizations/);
+  assert.match(routeCatalog, /\/platform-admin\/users/);
+  assert.match(routeCatalog, /\/platform-admin\/admins/);
+  assert.doesNotMatch(main, /addEventListener\(["']click["']/);
   assert.match(component, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   assert.match(landingRedirect, /\/me\/landing/);
@@ -225,7 +236,7 @@ test("M02-03 each role shell keeps its role-specific primary action in the top b
   const component = await read("apps/web/src/components/NavigationShell.vue");
   assert.match(
     component,
-    /v-if="shell === 'platform_admin'"\s+class="role-create"\s+to="\/platform-admin\/accounts\?create=1"[\s\S]*?新建组织/,
+    /v-if="shell === 'platform_admin'"\s+class="role-create"\s+to="\/platform-admin\/organizations\?create=1"[\s\S]*?新建组织/,
   );
   assert.match(
     component,

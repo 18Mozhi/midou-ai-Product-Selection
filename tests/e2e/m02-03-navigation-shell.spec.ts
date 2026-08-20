@@ -316,19 +316,24 @@ test("M02-03 platform shell exposes management navigation without member-only sh
   await expect(page.getByRole("button", { name: /搜索/ })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "通知中心" })).toHaveCount(0);
   await page.locator("summary").filter({ hasText: "运营中心" }).click();
-  await expect(page.getByRole("link", { name: /通知管理/ })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: /通知运营/ })).toHaveAttribute(
     "href",
     "/platform-admin/notifications",
   );
   await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("href", "/me");
   await page.locator("summary").filter({ hasText: "账号与组织" }).click();
-  const accountLinks = page.getByRole("link", { name: "账号与组织" });
-  const accountLinkCount = await accountLinks.count();
-  expect(accountLinkCount).toBeGreaterThanOrEqual(1);
-  for (let index = 0; index < accountLinkCount; index += 1) {
-    await expect(accountLinks.nth(index)).toBeVisible();
-    await expect(accountLinks.nth(index)).toHaveAttribute("href", "/platform-admin/accounts");
-  }
+  await expect(page.getByRole("link", { name: "组织管理" })).toHaveAttribute(
+    "href",
+    "/platform-admin/organizations",
+  );
+  await expect(page.getByRole("link", { name: "用户管理" })).toHaveAttribute(
+    "href",
+    "/platform-admin/users",
+  );
+  await expect(page.getByRole("link", { name: "管理员管理" })).toHaveAttribute(
+    "href",
+    "/platform-admin/admins",
+  );
   await expect(page.getByRole("link", { name: /Redis|MySQL|文件韧性|容量边界/ })).toHaveCount(0);
 });
 

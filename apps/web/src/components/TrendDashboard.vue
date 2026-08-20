@@ -419,7 +419,7 @@ onMounted(load);
             <button type="button" @click="follow">
               {{ selected.followed ? "★ 已关注" : "☆ 关注" }}</button
             ><button type="button" @click="showRule = true">创建监控</button
-            ><a :href="opportunityRoute">转为机会</a
+            ><RouterLink :to="opportunityRoute">转为机会</RouterLink
             ><button class="quiet" type="button" @click="irrelevant = true">标记无关</button>
           </div>
           <section class="trend-conclusion">

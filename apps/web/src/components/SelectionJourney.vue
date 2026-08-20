@@ -168,7 +168,7 @@ onUnmounted(stop);
         <h2>开始一次真实选品</h2>
         <span>成员直接输入，系统选择已启用真实来源；不需要进入来源 配置。</span>
       </div>
-      <a href="/opportunities">返回机会列表</a>
+      <RouterLink to="/opportunities">返回机会列表</RouterLink>
     </header>
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'loading'"
@@ -374,11 +374,13 @@ onUnmounted(stop);
         <span
           >{{ new Date(journey.decision.created_at).toLocaleString() }} ·
           {{ journey.within_deadline ? "在 180 秒阈值内" : "超过 180 秒阈值" }}</span
-        ><a v-if="journey.opportunity_id" :href="`/opportunities/${journey.opportunity_id}`"
-          >查看机会、证据与决策历史 ↗</a
+        ><RouterLink v-if="journey.opportunity_id" :to="`/opportunities/${journey.opportunity_id}`"
+          >查看机会、证据与决策历史 ↗</RouterLink
         >
-        <a v-if="journey.verification_task_id" :href="`/tasks/${journey.verification_task_id}`"
-          >打开自动生成的验证任务 ↗</a
+        <RouterLink
+          v-if="journey.verification_task_id"
+          :to="`/tasks/${journey.verification_task_id}`"
+          >打开自动生成的验证任务 ↗</RouterLink
         >
       </article>
       <footer class="selection-footer">

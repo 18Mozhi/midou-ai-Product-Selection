@@ -114,7 +114,7 @@ onMounted(load);
         <h2>适配器运行时</h2>
         <span>统一采集、标准化与健康检查合同；真实实现按来源代码注册。</span>
       </div>
-      <a href="/platform-admin/providers">返回来源定义</a>
+      <RouterLink to="/platform-admin/providers">返回来源定义</RouterLink>
     </header>
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
@@ -169,7 +169,7 @@ onMounted(load);
       <section v-if="state === 'empty'" class="adapter-empty">
         <h3>还没有来源可绑定适配器</h3>
         <p>先在来源注册中心登记技术合同；不会创建模拟来源。</p>
-        <a href="/platform-admin/providers">登记来源</a>
+        <RouterLink to="/platform-admin/providers">登记来源</RouterLink>
       </section>
       <section v-else-if="!filtered.length" class="adapter-empty">
         <h3>没有符合筛选条件的适配器</h3>

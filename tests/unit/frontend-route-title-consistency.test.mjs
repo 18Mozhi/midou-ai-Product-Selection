@@ -77,9 +77,10 @@ test("formal routes centralize titles, permissions and breadcrumbs without fallb
     assert.match(catalog, new RegExp(key));
   assert.doesNotMatch(shell, /items\.value\[0\]/);
   assert.match(shell, /routeAllowed/);
-  assert.match(main, /closest<HTMLAnchorElement>\("a\[href\]"\)[\s\S]*router\.push/);
+  assert.doesNotMatch(main, /addEventListener\(["']click["']/);
+  assert.match(shell, /navigationItemsFor/);
   assert.equal(
-    new Set([...shell.matchAll(/group: "([^"]+)"/g)].map((match) => match[1])).has("系统运维"),
+    new Set([...catalog.matchAll(/group: "([^"]+)"/g)].map((match) => match[1])).has("系统运维"),
     true,
   );
 });

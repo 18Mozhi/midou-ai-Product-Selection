@@ -4,12 +4,9 @@ import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import { UI_STATE_KINDS, type UiStateKind } from "../ui/state-contract";
 const props = defineProps<{ initialState?: UiStateKind }>();
-const query = new URLSearchParams(window.location.search).get(
-  "state",
-) as UiStateKind | null;
+const query = new URLSearchParams(window.location.search).get("state") as UiStateKind | null;
 const current = ref<UiStateKind>(
-    props.initialState ??
-      (UI_STATE_KINDS.includes(query as UiStateKind) ? query! : "empty"),
+    props.initialState ?? (UI_STATE_KINDS.includes(query as UiStateKind) ? query! : "empty"),
   ),
   dialogOpen = ref(false),
   confirmed = ref(false);
@@ -35,15 +32,13 @@ function primary() {
 <template>
   <main class="state-showcase" :data-kind="current">
     <header>
-      <a href="/home"><b>选</b>智能选品</a><span>通用状态</span>
+      <RouterLink to="/home"><b>选</b>智能选品</RouterLink><span>通用状态</span>
     </header>
     <section class="state-stage">
       <aside>
         <p>状态组件库</p>
         <h1>把失败说清楚，<br /><em>把下一步留下</em></h1>
-        <span
-          >所有状态都提供文字语义、影响范围和可执行下一步；不以颜色代替结论。</span
-        >
+        <span>所有状态都提供文字语义、影响范围和可执行下一步；不以颜色代替结论。</span>
         <nav aria-label="状态示例">
           <button
             v-for="kind in UI_STATE_KINDS"
@@ -74,8 +69,7 @@ function primary() {
       </div>
     </section>
     <footer>
-      <span>桌面 / 390px / 键盘</span
-      ><span>关联编号与链路编号仅接受安全字符</span
+      <span>桌面 / 390px / 键盘</span><span>关联编号与链路编号仅接受安全字符</span
       ><span>无新增后端接口、数据库或异步服务</span>
     </footer>
     <ConfirmDialog

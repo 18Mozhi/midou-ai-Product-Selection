@@ -143,7 +143,7 @@ function changeScope(event: Event) {
       </div>
       <span>共 {{ total }} 个机会 · 按更新时间排序</span>
     </header>
-    <a v-for="item in items" :key="item.id" :href="`/opportunities/${item.id}`"
+    <RouterLink v-for="item in items" :key="item.id" :to="`/opportunities/${item.id}`"
       ><span class="opportunity-picture"
         ><img
           v-if="item.image_url"
@@ -193,7 +193,7 @@ function changeScope(event: Event) {
       </dl>
       <b :data-status="item.decision_status"
         >{{ opportunityStatus(item.decision_status) }} · 查看详情 →</b
-      ></a
+      ></RouterLink
     >
   </section>
 </template>

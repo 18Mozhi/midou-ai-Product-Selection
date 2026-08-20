@@ -135,7 +135,7 @@ onMounted(() => {
 <template>
   <main class="tenancy-page" data-testid="tenancy">
     <header class="tenancy-header">
-      <a href="/" class="identity-brand"><span>选</span><span>智能选品</span></a>
+      <RouterLink to="/" class="identity-brand"><span>选</span><span>智能选品</span></RouterLink>
       <div>
         <span class="tenancy-step">01</span><i></i
         ><span class="tenancy-step" :class="{ 'tenancy-step--active': selectedOrganization }"
@@ -177,7 +177,7 @@ onMounted(() => {
           }}
         </p>
         <small v-if="requestId">请求标识：{{ requestId }}</small
-        ><a v-if="state === 'expired'" href="/login">重新登录</a
+        ><RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
         ><button v-else type="button" @click="loadOrganizations">返回组织列表</button>
       </div>
       <div v-else-if="state === 'empty'" class="tenancy-state">

@@ -142,7 +142,7 @@ onMounted(load);
         @click="load"
       >
         重新读取</button
-      ><a v-if="state === 'expired'" href="/login">重新登录</a>
+      ><RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink>
     </section>
     <template v-else-if="data"
       ><section class="platform-get-started">
@@ -151,24 +151,24 @@ onMounted(load);
           <span>按需要进入，不懂技术参数也能管理</span>
         </header>
         <div>
-          <a href="/platform-admin/accounts"
-            ><b>管理组织和用户</b><span>新建组织、停用账号、分配管理员</span></a
-          ><a href="/platform-admin/providers/sources"
-            ><b>查看热点来源</b><span>确认自动来源、待配置来源和手动来源</span></a
-          ><a href="/platform-admin/collection/overview"
-            ><b>查看采集进度</b><span>看看自动获取是否完成、哪里需要处理</span></a
+          <RouterLink to="/platform-admin/organizations"
+            ><b>管理组织和用户</b><span>新建组织、停用账号、分配管理员</span></RouterLink
+          ><RouterLink to="/platform-admin/providers/sources"
+            ><b>查看热点来源</b><span>确认自动来源、待配置来源和手动来源</span></RouterLink
+          ><RouterLink to="/platform-admin/collection/overview"
+            ><b>查看采集进度</b><span>看看自动获取是否完成、哪里需要处理</span></RouterLink
           >
         </div>
       </section>
       <div class="platform-action-summary">
-        <a href="/platform-admin/collection/tasks">
+        <RouterLink to="/platform-admin/collection">
           <span>等待处理</span><strong>{{ data.summary.queue_backlog }}</strong
           ><small>查看排队、运行或受阻的采集任务 →</small>
-        </a>
-        <a href="/platform-admin/collection/overview?root_cause=1">
+        </RouterLink>
+        <RouterLink to="/platform-admin/collection/overview?root_cause=1">
           <span>需要关注</span><strong>{{ data.summary.open_alerts }}</strong
           ><small>按错误根因查看异常 →</small>
-        </a>
+        </RouterLink>
       </div>
       <div class="platform-dashboard-grid">
         <section class="platform-trend-chart">
@@ -180,9 +180,9 @@ onMounted(load);
             >
           </header>
           <div v-if="!data.task_trend.length" class="platform-inline-empty">
-            当前时间范围还没有趋势数据。<a href="/platform-admin/providers/sources"
-              >检查来源是否启用</a
-            >，或<a href="/platform-admin/collection/overview">查看采集队列</a>。
+            当前时间范围还没有趋势数据。<RouterLink to="/platform-admin/providers/sources"
+              >检查来源是否启用</RouterLink
+            >，或<RouterLink to="/platform-admin/collection/overview">查看采集队列</RouterLink>。
           </div>
           <svg
             v-else

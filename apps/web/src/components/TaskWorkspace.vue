@@ -470,8 +470,8 @@ watch(
         <div>
           <dt>底层采集任务</dt>
           <dd v-if="selected.collection_task_id">
-            <a :href="`/platform-admin/collection?task=${selected.collection_task_id}`"
-              >查看关联采集任务</a
+            <RouterLink :to="`/platform-admin/collection?task=${selected.collection_task_id}`"
+              >查看关联采集任务</RouterLink
             >
           </dd>
           <dd v-else>当前业务任务未关联采集任务</dd>

@@ -111,7 +111,7 @@ onMounted(load);
         <p>{{ verdict[1] }}</p>
         <code v-if="requestId">request_id {{ requestId }}</code>
       </div>
-      <a v-if="state === 'expired'" href="/login">重新登录</a
+      <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
       ><button v-else type="button" @click="load">重新核验</button>
     </section>
     <template v-else-if="data">

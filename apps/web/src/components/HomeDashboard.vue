@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import AppIcon from "./AppIcon.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../home-dashboard.css";
 import "../home-dashboard-priority.css";
@@ -125,9 +126,14 @@ onMounted(load);
           <span>真实任务、趋势、机会和来源状态写入后会自动出现；现在不展示模拟指标。</span>
         </div>
         <nav>
-          <a href="/opportunities?create=1">◇<b>开始一次选品</b><small>进入机会创建入口</small></a
-          ><a href="/competitors?create=1">◎<b>添加竞品</b><small>进入竞品入口</small></a
-          ><a href="/sourcing?create=1">▣<b>从 1688 找货</b><small>进入供应链搜索</small></a>
+          <RouterLink to="/opportunities?create=1"
+            ><AppIcon name="diamond" /><b>开始一次选品</b
+            ><small>进入机会创建入口</small></RouterLink
+          ><RouterLink to="/competitors?create=1"
+            ><AppIcon name="target" /><b>添加竞品</b><small>进入竞品入口</small></RouterLink
+          ><RouterLink to="/sourcing?create=1"
+            ><AppIcon name="box" /><b>从 1688 找货</b><small>进入供应链搜索</small></RouterLink
+          >
         </nav>
       </section>
       <template v-else>
@@ -140,10 +146,10 @@ onMounted(load);
               </div>
               <span>最多 5 项</span>
             </header>
-            <a
+            <RouterLink
               v-for="item in data?.actions"
               :key="item.id"
-              :href="item.route"
+              :to="item.route"
               :data-priority="item.priority"
               ><i>{{ item.priority === "overdue" ? "!" : "→" }}</i>
               <div>
@@ -160,7 +166,7 @@ onMounted(load);
                   <dt>截止</dt>
                   <dd>{{ date(item.due_at) }}</dd>
                 </div>
-              </dl></a
+              </dl></RouterLink
             >
           </section>
           <section class="home-health">
@@ -171,17 +177,17 @@ onMounted(load);
               </div>
               <span>仅影响本人</span>
             </header>
-            <a
+            <RouterLink
               v-for="item in data?.health"
               :key="item.id"
-              :href="item.route"
+              :to="item.route"
               :data-severity="item.severity"
               ><i>{{ item.severity === "critical" ? "!" : "i" }}</i>
               <div>
                 <strong>{{ item.title }}</strong
                 ><small>{{ item.reason }}</small>
               </div>
-              <b>去处理 →</b></a
+              <b>去处理 →</b></RouterLink
             >
           </section>
         </div>
@@ -200,9 +206,9 @@ onMounted(load);
                   <p>03 / 信号</p>
                   <h3>变化雷达</h3>
                 </div>
-                <a href="/trends">全部变化 →</a>
+                <RouterLink to="/trends">全部变化 →</RouterLink>
               </header>
-              <a v-for="item in data?.changes" :key="item.id" :href="item.route"
+              <RouterLink v-for="item in data?.changes" :key="item.id" :to="item.route"
                 ><i>⌁</i>
                 <div>
                   <strong>{{ item.title }}</strong
@@ -211,7 +217,7 @@ onMounted(load);
                 <span
                   >{{ item.source_count ?? 0 }} 来源<br />{{ date(item.observed_at)
                   }}<b>去处理 →</b></span
-                ></a
+                ></RouterLink
               >
             </section>
             <section class="home-follows">
@@ -221,13 +227,13 @@ onMounted(load);
                   <h3>我的关注</h3>
                 </div>
               </header>
-              <a v-for="item in data?.follows" :key="item.id" :href="item.route"
+              <RouterLink v-for="item in data?.follows" :key="item.id" :to="item.route"
                 ><i>◎</i>
                 <div>
                   <strong>{{ item.title }}</strong
                   ><small>{{ item.reason }}</small>
                 </div>
-                <span>{{ date(item.observed_at) }}</span></a
+                <span>{{ date(item.observed_at) }}</span></RouterLink
               >
             </section>
           </div>
