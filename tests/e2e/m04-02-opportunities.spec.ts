@@ -161,6 +161,8 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await dialog.getByRole("button", { name: "关闭" }).click();
+  if ((page.viewportSize()?.width ?? 0) <= 760)
+    await page.getByRole("button", { name: "筛选机会" }).click();
   await page.getByLabel("证据完整度").selectOption("partial");
   const filtered = page.waitForRequest(
     (request) =>

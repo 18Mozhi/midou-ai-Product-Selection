@@ -137,7 +137,7 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
   await expect(page.getByText("已经替你配置好的部分")).toBeVisible();
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
   await expect(page.getByRole("heading", { name: "Amazon 登录页" })).toBeVisible();
-  await expect(page.getByText("需登录并验收解析", { exact: true }).last()).toBeVisible();
+  await expect(page.getByText("待实施", { exact: true }).last()).toBeVisible();
   await page.getByRole("button", { name: "编辑采集设置" }).click();
   await expect(page.getByLabel("采集频率（分钟）")).toHaveValue("30");
   await expect(page.getByLabel("来源设置状态（解析验收前不会自动采集）")).toHaveValue("disabled");

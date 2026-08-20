@@ -70,14 +70,14 @@
   height: 14px;
   margin-top: 5px;
   border-radius: 50%;
-  background: #17c8ff;
+  background: var(--so-chart-1);
 }
 .role-theme-menu i[data-theme-dot="aurora-purple"] {
-  background: #9a6cff;
+  background: var(--so-chart-2);
 }
 .role-theme-menu i[data-theme-dot="cloud-white"] {
-  background: #e9eef8;
-  border: 1px solid #7f91a8;
+  background: var(--so-panel-muted);
+  border: 1px solid var(--so-border-strong);
 }
 .role-theme-menu > a {
   padding: 8px;
@@ -303,7 +303,7 @@
 .task-progress u {
   height: 100%;
   display: block;
-  background: linear-gradient(90deg, var(--so-primary), #7c68ff);
+  background: linear-gradient(90deg, var(--so-primary), var(--so-primary-strong));
 }
 .task-kind-guide {
   padding: 12px;
@@ -319,7 +319,7 @@
   color: var(--so-text-muted);
 }
 .task-actions .danger {
-  color: #ff8c98;
+  color: var(--so-danger);
   border-color: rgba(255, 100, 120, 0.35);
 }
 @media (max-width: 900px) {

@@ -57,7 +57,7 @@
   padding: 11px 17px;
   border: 0;
   border-radius: 10px;
-  color: #fff;
+  color: var(--so-on-primary);
   background: linear-gradient(120deg, var(--so-primary-strong), var(--so-primary));
   font-weight: 750;
   text-decoration: none;
@@ -104,7 +104,7 @@
   padding: 0 16px;
   border: 0;
   border-radius: 9px;
-  color: #fff;
+  color: var(--so-on-primary);
   background: var(--so-primary-strong);
 }
 .opportunity-list-summary {
@@ -290,7 +290,7 @@
   background: var(--so-panel);
 }
 .opportunity-decision-bar button:first-of-type {
-  color: #fff;
+  color: var(--so-on-primary);
   background: linear-gradient(120deg, var(--so-primary-strong), var(--so-primary));
 }
 .opportunity-decision-bar .reject {

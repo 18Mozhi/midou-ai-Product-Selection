@@ -1,6 +1,7 @@
 .report-center {
   display: grid;
   gap: 20px;
+  color: var(--so-text);
 }
 .report-center > header,
 .report-chart > header,
@@ -29,7 +30,7 @@
   border-radius: 8px;
   padding: 10px 15px;
   background: var(--accent);
-  color: #fff;
+  color: var(--so-on-primary);
   font-weight: 700;
   min-height: 44px;
 }
@@ -133,7 +134,7 @@
   display: block;
   width: min(62px, 72%);
   border-radius: 8px 8px 2px 2px;
-  background: linear-gradient(180deg, #64d8de, var(--accent));
+  background: linear-gradient(180deg, var(--so-chart-1), var(--accent));
 }
 .report-bars small {
   overflow: hidden;
@@ -163,11 +164,11 @@
   text-transform: uppercase;
 }
 .report-export-list i[data-status="succeeded"] {
-  color: #247a53;
+  color: var(--so-success);
 }
 .report-export-list i[data-status="dead_letter"],
 .report-export-list i[data-status="expired"] {
-  color: #b23b3b;
+  color: var(--so-danger);
 }
 .report-export-list div {
   display: grid;

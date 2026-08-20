@@ -1,8 +1,143 @@
-.opportunity-profit{padding:18px;border:1px solid var(--so-border);border-radius:14px;background:var(--so-panel-soft)}
-.opportunity-profit>header{display:flex;justify-content:space-between;gap:18px}.opportunity-profit>header span{color:var(--so-text-muted)}.opportunity-profit>header a{height:max-content;padding:9px 12px;border-radius:8px;color:#fff;background:var(--so-primary);text-decoration:none}
-.profit-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.profit-summary article{padding:14px;border:1px solid var(--so-border);border-radius:10px;background:var(--so-panel)}.profit-summary small,.profit-summary span{display:block;color:var(--so-text-muted)}.profit-summary strong{display:block;margin:8px 0;font-size:18px}.profit-summary[data-status=insufficient_data]{border-left:3px solid var(--so-warning)}
-.profit-missing{display:grid;gap:6px;padding:14px;border-left:3px solid var(--so-warning);border-radius:8px;background:color-mix(in srgb,var(--so-warning) 9%,transparent)}
-.profit-components{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:16px}.profit-components article{padding:12px;border:1px solid var(--so-border);border-radius:9px;background:var(--so-panel)}.profit-components article[data-missing=true]{border-color:color-mix(in srgb,var(--so-warning) 50%,var(--so-border))}.profit-components header{display:flex;justify-content:space-between}.profit-components span,.profit-components small,.profit-components em{display:block;margin-top:5px;color:var(--so-text-muted);font-size:9px}.profit-components em{color:var(--so-warning)}
-.profit-input{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid var(--so-border)}.profit-input h5,.profit-input footer{grid-column:1/-1}.profit-input label{display:grid;gap:5px;color:var(--so-text-muted);font-size:9px}.profit-input input,.profit-input select{min-width:0;padding:9px;border:1px solid var(--so-border);border-radius:7px;color:var(--so-text);background:var(--so-panel)}.profit-input footer{display:flex;justify-content:flex-end;gap:8px}.profit-input button{padding:10px 14px;border:0;border-radius:8px;color:#fff;background:var(--so-primary)}.profit-input button:last-child{background:var(--so-text)}
-@media(max-width:1100px){.profit-summary,.profit-input{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:640px){.opportunity-profit>header{display:grid}.profit-summary,.profit-components,.profit-input{grid-template-columns:1fr}}
+.opportunity-profit {
+  padding: 18px;
+  border: 1px solid var(--so-border);
+  border-radius: 14px;
+  background: var(--so-panel-soft);
+}
+.opportunity-profit > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+.opportunity-profit > header span {
+  color: var(--so-text-muted);
+}
+.opportunity-profit > header a {
+  height: max-content;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--so-on-primary);
+  background: var(--so-primary);
+  text-decoration: none;
+}
+.profit-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 18px 0;
+}
+.profit-summary article {
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel);
+}
+.profit-summary small,
+.profit-summary span {
+  display: block;
+  color: var(--so-text-muted);
+}
+.profit-summary strong {
+  display: block;
+  margin: 8px 0;
+  font-size: 18px;
+}
+.profit-summary[data-status="insufficient_data"] {
+  border-left: 3px solid var(--so-warning);
+}
+.profit-missing {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border-left: 3px solid var(--so-warning);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--so-warning) 9%, transparent);
+}
+.profit-components {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+  margin-top: 16px;
+}
+.profit-components article {
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  background: var(--so-panel);
+}
+.profit-components article[data-missing="true"] {
+  border-color: color-mix(in srgb, var(--so-warning) 50%, var(--so-border));
+}
+.profit-components header {
+  display: flex;
+  justify-content: space-between;
+}
+.profit-components span,
+.profit-components small,
+.profit-components em {
+  display: block;
+  margin-top: 5px;
+  color: var(--so-text-muted);
+  font-size: 9px;
+}
+.profit-components em {
+  color: var(--so-warning);
+}
+.profit-input {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--so-border);
+}
+.profit-input h5,
+.profit-input footer {
+  grid-column: 1/-1;
+}
+.profit-input label {
+  display: grid;
+  gap: 5px;
+  color: var(--so-text-muted);
+  font-size: 9px;
+}
+.profit-input input,
+.profit-input select {
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid var(--so-border);
+  border-radius: 7px;
+  color: var(--so-text);
+  background: var(--so-panel);
+}
+.profit-input footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.profit-input button {
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--so-on-primary);
+  background: var(--so-primary);
+}
+.profit-input button:last-child {
+  background: var(--so-text);
+}
+@media (max-width: 1100px) {
+  .profit-summary,
+  .profit-input {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .opportunity-profit > header {
+    display: grid;
+  }
+  .profit-summary,
+  .profit-components,
+  .profit-input {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,1 +1,29 @@
-.opportunity-hero-actions{display:flex;gap:10px}.opportunity-hero-actions a,.opportunity-hero-actions button{padding:11px 17px;border:0;border-radius:10px;color:#fff;background:linear-gradient(120deg,var(--so-primary-strong),var(--so-primary));font-weight:750;text-decoration:none}.opportunity-hero-actions button{background:var(--so-panel-soft);border:1px solid var(--so-border)}@media(max-width:640px){.opportunity-hero-actions{display:grid;width:100%}.opportunity-hero-actions a,.opportunity-hero-actions button{width:100%;text-align:center}}
+.opportunity-hero-actions {
+  display: flex;
+  gap: 10px;
+}
+.opportunity-hero-actions a,
+.opportunity-hero-actions button {
+  padding: 11px 17px;
+  border: 0;
+  border-radius: 10px;
+  color: var(--so-on-primary);
+  background: linear-gradient(120deg, var(--so-primary-strong), var(--so-primary));
+  font-weight: 750;
+  text-decoration: none;
+}
+.opportunity-hero-actions button {
+  background: var(--so-panel-soft);
+  border: 1px solid var(--so-border);
+}
+@media (max-width: 640px) {
+  .opportunity-hero-actions {
+    display: grid;
+    width: 100%;
+  }
+  .opportunity-hero-actions a,
+  .opportunity-hero-actions button {
+    width: 100%;
+    text-align: center;
+  }
+}

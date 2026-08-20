@@ -16,7 +16,7 @@
 .competitor-detail header p,
 .competitor-modal header p {
   margin: 0 0 6px;
-  color: #1768e5;
+  color: var(--so-primary);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -50,21 +50,68 @@
   color: var(--so-text);
   border: 1px solid var(--so-border);
 }
-.competitor-monitor button.danger { color: var(--so-danger); border-color: color-mix(in srgb,var(--so-danger) 35%,var(--so-border)); }
+.competitor-monitor button.danger {
+  color: var(--so-danger);
+  border-color: color-mix(in srgb, var(--so-danger) 35%, var(--so-border));
+}
 .competitor-notice {
   margin: 0;
   padding: 12px 15px;
-  border-left: 3px solid #2b77e8;
-  background: color-mix(in srgb,var(--so-primary) 10%,var(--so-panel));
+  border-left: 3px solid var(--so-primary);
+  background: color-mix(in srgb, var(--so-primary) 10%, var(--so-panel));
   color: var(--so-text);
 }
-.competitor-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
-.competitor-summary article { padding:16px 18px; border:1px solid var(--so-border); border-radius:14px; background:var(--so-panel); box-shadow:var(--so-shadow-soft); }
-.competitor-summary span,.competitor-toolbar span { display:block; color:var(--so-text-muted); font-size:12px; }
-.competitor-summary b { display:block; margin-top:8px; color:var(--so-text); font-size:25px; }
-.competitor-toolbar { display:flex; align-items:end; justify-content:space-between; gap:16px; padding:14px 16px; border:1px solid var(--so-border); border-radius:12px; background:var(--so-panel); }
-.competitor-toolbar label { display:grid; gap:6px; width:min(420px,100%); color:var(--so-text-muted); font-size:12px; font-weight:700; }
-.competitor-toolbar input,.competitor-modal textarea { padding:10px 12px; border:1px solid var(--so-border); border-radius:8px; color:var(--so-text); background:var(--so-panel-soft); font:inherit; }
+.competitor-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.competitor-summary article {
+  padding: 16px 18px;
+  border: 1px solid var(--so-border);
+  border-radius: 14px;
+  background: var(--so-panel);
+  box-shadow: var(--so-shadow-soft);
+}
+.competitor-summary span,
+.competitor-toolbar span {
+  display: block;
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.competitor-summary b {
+  display: block;
+  margin-top: 8px;
+  color: var(--so-text);
+  font-size: 25px;
+}
+.competitor-toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel);
+}
+.competitor-toolbar label {
+  display: grid;
+  gap: 6px;
+  width: min(420px, 100%);
+  color: var(--so-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.competitor-toolbar input,
+.competitor-modal textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+  font: inherit;
+}
 .competitor-grid {
   display: grid;
   grid-template-columns: minmax(240px, 320px) 1fr;
@@ -82,25 +129,25 @@
   text-align: left;
   background: var(--so-panel);
   color: var(--ink);
-  border: 1px solid #dae3ed;
+  border: 1px solid var(--so-border);
   padding: 15px;
 }
 .competitor-list button.selected {
-  border-color: #4f8fe8;
-  box-shadow: 0 8px 24px #1768e51a;
+  border-color: var(--so-primary-border);
+  box-shadow: 0 8px 24px var(--so-glow);
 }
 .competitor-list span {
   display: grid;
   gap: 5px;
 }
 .competitor-list small {
-  color: #718096;
+  color: var(--so-text-muted);
 }
 .competitor-list strong {
   font-size: 14px;
 }
 .competitor-list .competitor-pending {
-  color: var(--so-warning, #b46b14);
+  color: var(--so-warning);
   font-size: 11px;
 }
 .competitor-list em {
@@ -108,15 +155,20 @@
   font-size: 10px;
   font-style: normal;
   text-transform: uppercase;
-  color: #16835f;
+  color: var(--so-success);
 }
-.competitor-list .competitor-detail-entry { grid-column:1; margin-top:8px; color:var(--so-primary); font-weight:700; }
+.competitor-list .competitor-detail-entry {
+  grid-column: 1;
+  margin-top: 8px;
+  color: var(--so-primary);
+  font-weight: 700;
+}
 .competitor-detail {
   background: var(--so-panel);
-  border: 1px solid #dce5ee;
+  border: 1px solid var(--so-border);
   border-radius: 14px;
   padding: 24px;
-  box-shadow: 0 18px 50px #18324d0a;
+  box-shadow: var(--shadow-sm);
 }
 .competitor-detail h3 {
   margin: 0 0 8px;
@@ -124,10 +176,15 @@
   font-size: 24px;
 }
 .competitor-detail a {
-  color: #1768e5;
+  color: var(--so-primary);
   font-size: 13px;
 }
-.competitor-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; }
+.competitor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
 .competitor-metrics {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -138,7 +195,7 @@
   padding: 17px;
   border-radius: 10px;
   background: var(--so-panel-soft);
-  border: 1px solid #e4ebf2;
+  border: 1px solid var(--so-border);
 }
 .competitor-metrics small {
   display: block;
@@ -154,12 +211,12 @@
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
-  background: var(--so-inverse-bg,#0f2947);
-  color: var(--so-inverse-text,#dbeafe);
+  background: var(--so-bg-elevated);
+  color: var(--so-text);
   border-radius: 10px;
 }
 .competitor-source span {
-  color: #7ee2b8;
+  color: var(--so-success);
   font-weight: 800;
 }
 .competitor-source p {
@@ -172,9 +229,9 @@
 .competitor-baseline-pending {
   margin: 16px 0;
   padding: 18px;
-  border: 1px dashed var(--so-border, #dce5ee);
+  border: 1px dashed var(--so-border);
   border-radius: 12px;
-  background: var(--so-panel-soft, #f6f9fc);
+  background: var(--so-panel-soft);
 }
 .competitor-baseline-pending strong,
 .competitor-baseline-pending p,
@@ -182,7 +239,7 @@
   display: block;
 }
 .competitor-baseline-pending p {
-  color: var(--so-text-muted, #65768b);
+  color: var(--so-text-muted);
   line-height: 1.7;
 }
 .competitor-comparison {
@@ -225,7 +282,7 @@
   color: var(--ink);
 }
 .competitor-history > header span {
-  color: #8794a4;
+  color: var(--so-text-muted);
   font-size: 11px;
 }
 .competitor-history > article {
@@ -233,21 +290,21 @@
   grid-template-columns: 120px 1fr auto;
   gap: 8px 16px;
   padding: 15px 0;
-  border-bottom: 1px solid #edf1f5;
+  border-bottom: 1px solid var(--so-border);
 }
 .competitor-history article p {
   grid-column: 1/3;
   margin: 0;
-  color: #53657a;
+  color: var(--so-text-muted);
 }
 .competitor-history article code {
-  color: #718096;
+  color: var(--so-text-muted);
   font-size: 11px;
 }
 .competitor-history > p {
   padding: 30px;
   text-align: center;
-  color: #718096;
+  color: var(--so-text-muted);
   background: var(--so-panel-soft);
 }
 .competitor-modal {
@@ -257,7 +314,7 @@
   display: grid;
   place-items: center;
   padding: 20px;
-  background: #0f2138b8;
+  background: var(--so-scrim);
 }
 .competitor-modal form {
   width: min(740px, 100%);
@@ -266,7 +323,7 @@
   background: var(--so-bg-elevated);
   border-radius: 14px;
   padding: 24px;
-  box-shadow: 0 25px 80px #0004;
+  box-shadow: var(--so-shadow);
 }
 .competitor-modal form.rule-form {
   width: min(480px, 100%);
@@ -284,20 +341,20 @@
 }
 .competitor-modal header > button {
   background: transparent;
-  color: #5d7188;
+  color: var(--so-text-muted);
   font-size: 22px;
 }
 .competitor-modal label {
   display: grid;
   gap: 6px;
   margin-top: 13px;
-  color: #40556d;
+  color: var(--so-text);
   font-size: 13px;
   font-weight: 700;
 }
 .competitor-modal input,
 .competitor-modal select {
-  border: 1px solid #cdd8e5;
+  border: 1px solid var(--so-border-strong);
   border-radius: 8px;
   padding: 10px;
   font: inherit;
@@ -312,11 +369,11 @@
 }
 .competitor-modal fieldset {
   margin: 18px 0;
-  border: 1px solid #dce5ee;
+  border: 1px solid var(--so-border);
   border-radius: 10px;
 }
 .competitor-modal legend {
-  color: #1768e5;
+  color: var(--so-primary);
   font-weight: 800;
 }
 .competitor-modal aside {
@@ -344,7 +401,9 @@
   .competitor-comparison {
     grid-template-columns: 1fr 1fr;
   }
-  .competitor-summary { grid-template-columns:1fr 1fr; }
+  .competitor-summary {
+    grid-template-columns: 1fr 1fr;
+  }
   .competitor-source {
     align-items: flex-start;
     flex-direction: column;
