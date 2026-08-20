@@ -29,9 +29,7 @@ test("M06-02.A01/A02/A04/A12 validates factual dashboard windows", async () => {
         requestId: "req",
         traceId: "trace",
       }),
-    (e) =>
-      e instanceof PlatformDashboardError &&
-      e.code === "platform_dashboard_window_invalid",
+    (e) => e instanceof PlatformDashboardError && e.code === "platform_dashboard_window_invalid",
   );
 });
 test("M06-02.A03/A05/A09/A11/A16 migration read audit and async ownership are explicit", async () => {
@@ -56,30 +54,22 @@ test("M06-02.A03/A05/A09/A11/A16 migration read audit and async ownership are ex
   assert.doesNotMatch(repo, /eventDataColumn|\$\{eventDataColumn\}/);
 });
 test("M06-02.A06/A07/A08/A10/A13/A17 contracts frontend config and handoff stay synchronized", async () => {
-  const [openapi, web, styles, env, schema, architecture, runbook, feature] =
-    await Promise.all(
-      [
-        "docs/openapi.yaml",
-        "apps/web/src/components/PlatformDashboard.vue",
-        "apps/web/src/styles.css",
-        "config/env.example",
-        "config/schema.json",
-        "docs/architecture/m06-02-platform-dashboard.md",
-        "docs/runbooks/m06-02-platform-dashboard.md",
-        "docs/feature-map.json",
-      ].map((p) => readFile(p, "utf8")),
-    );
+  const [openapi, web, styles, env, schema, architecture, runbook, feature] = await Promise.all(
+    [
+      "docs/openapi.yaml",
+      "apps/web/src/components/PlatformDashboard.vue",
+      "apps/web/src/styles.css",
+      "config/env.example",
+      "config/schema.json",
+      "docs/architecture/m06-02-platform-dashboard.md",
+      "docs/runbooks/m06-02-platform-dashboard.md",
+      "docs/feature-map.json",
+    ].map((p) => readFile(p, "utf8")),
+  );
   assert.match(openapi, /\/platform\/dashboard:/);
-  for (const state of [
-    "loading",
-    "empty",
-    "expired",
-    "forbidden",
-    "rate_limited",
-    "blocked",
-  ])
+  for (const state of ["loading", "empty", "expired", "forbidden", "rate_limited", "blocked"])
     assert.match(web, new RegExp(state));
-  assert.match(styles, /@media\(max-width:700px\)/);
+  assert.match(styles, /@media\s*\(\s*max-width:\s*700px\s*\)/);
   assert.match(env, /PLATFORM_DASHBOARD_QUEUE_WARNING=1000/);
   assert.ok(
     JSON.parse(schema).backendGroups.platformDashboard.includes(
@@ -88,16 +78,10 @@ test("M06-02.A06/A07/A08/A10/A13/A17 contracts frontend config and handoff stay 
   );
   assert.match(architecture, /不代表多节点或 10,000/);
   assert.match(runbook, /宝塔重启 Node API/);
-  assert.equal(
-    JSON.parse(feature).implementation.platformDashboard.module,
-    "M06-02",
-  );
+  assert.equal(JSON.parse(feature).implementation.platformDashboard.module, "M06-02");
 });
 test("M06-02 platform overview gives novice administrators clear next actions", async () => {
-  const web = await readFile(
-    "apps/web/src/components/PlatformDashboard.vue",
-    "utf8",
-  );
+  const web = await readFile("apps/web/src/components/PlatformDashboard.vue", "utf8");
   for (const copy of [
     "今天先做什么",
     "系统会自动获取热点",

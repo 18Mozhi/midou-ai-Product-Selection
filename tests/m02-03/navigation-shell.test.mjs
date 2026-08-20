@@ -198,8 +198,11 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   ])
     assert.match(component, new RegExp(state));
   assert.match(styles, /\.role-mobile-nav/);
-  assert.match(styles, /@media\(max-width:840px\)/);
-  assert.match(styles, /role-mobile-nav\{[^}]*grid-template-columns:repeat\(5,minmax\(0,1fr\)\)/);
+  assert.match(styles, /@media\s*\(\s*max-width:\s*840px\s*\)/);
+  assert.match(
+    styles,
+    /role-mobile-nav\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/,
+  );
   assert.match(component, /v-for="item in items\.slice\(0, 4\)"/);
   assert.match(component, /aria-controls="role-navigation"[\s\S]*?<span>更多<\/span>/);
   assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>新建组织<\/span>/);

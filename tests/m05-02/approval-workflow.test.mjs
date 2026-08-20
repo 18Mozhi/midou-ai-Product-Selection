@@ -34,8 +34,7 @@ test("M05-02.A01/A02/A04/A12 locks versioned nodes and mandatory reasons", () =>
     "task",
   );
   assert.throws(
-    () =>
-      validateDecision({ action: "approve", expected_version: 1, reason: "" }),
+    () => validateDecision({ action: "approve", expected_version: 1, reason: "" }),
     (e) => e instanceof ApprovalServiceError,
   );
   assert.throws(
@@ -180,17 +179,11 @@ test("M05-02.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     /approval_template_versions[\s\S]*approval_node_runs[\s\S]*approval_actions[\s\S]*approval_escalation_jobs/,
   );
   assert.match(values[1], /decision_context_json/);
-  assert.match(values[2], /FROM opportunity_decisions d[\s\S]*JOIN opportunities o/);
+  assert.match(values[2], /FROM opportunity_decisions ["' +\n\r]*d[\s\S]*JOIN opportunities o/);
   assert.match(values[2], /decision_context_json/);
   assert.match(values[2], /approval_version_conflict[\s\S]*outbox_events/);
   assert.match(values[4], /node_sla_overdue[\s\S]*approval\.overdue/);
-  assert.match(
-    values[5],
-    /证据完整度[\s\S]*规则版本[\s\S]*决策依据[\s\S]*批准与驳回均必填/,
-  );
+  assert.match(values[5], /证据完整度[\s\S]*规则版本[\s\S]*决策依据[\s\S]*批准与驳回均必填/);
   assert.equal(JSON.parse(values.at(-2)).atomicTasks.length, 17);
-  assert.match(
-    values.at(-1),
-    /0047_approval_decision_context_snapshot\.up\.sql/,
-  );
+  assert.match(values.at(-1), /0047_approval_decision_context_snapshot\.up\.sql/);
 });

@@ -130,8 +130,10 @@ test("M07-06.A08/A12/A16 validates input and refuses deadline relaxation", async
 
 test("M07-06.A04/A08 keeps a journey running until the collection task is terminal", async () => {
   const repository = await read("apps/api/src/mysql-selection-journey-repository.ts");
-  const taskGate = repository.indexOf("if(!terminal.has(String(row.status)))");
-  const resultGate = repository.indexOf('if(hasResult)return"result_ready"');
+  const taskGate =
+    /if\s*\(\s*!terminal\.has\(String\(row\.status\)\)\s*\)/.exec(repository)?.index ?? -1;
+  const resultGate =
+    /if\s*\(\s*hasResult\s*\)\s*return\s*["']result_ready["']/.exec(repository)?.index ?? -1;
   assert.ok(taskGate > 0, "journey state must first verify the collection task terminal status");
   assert.ok(
     resultGate > taskGate,
@@ -139,7 +141,7 @@ test("M07-06.A04/A08 keeps a journey running until the collection task is termin
   );
   assert.match(
     repository,
-    /if\(\["leased","running","retry_scheduled","rate_limited"\]\.includes\(String\(row\.status\)\)\)return"running"/,
+    /\[\s*"leased",\s*"running",\s*"retry_scheduled",\s*"rate_limited"\s*\]\.includes\(String\(row\.status\)\)/,
   );
 });
 

@@ -1,4 +1,59 @@
-import test from'node:test';import assert from'node:assert/strict';import{readFile}from'node:fs/promises';
-const read=path=>readFile(path,'utf8');
-test('M02-01.A03/A06/A10/A13/A17 contracts include migrations API maps and no new environment secret',async()=>{const[openapi,feature,env,upA,downA,upB,downB,upC,downC,architecture,runbook]=await Promise.all(['docs/openapi.yaml','docs/feature-map.json','config/env.example','database/migrations/0014a_user_ui_preferences_m02_01.up.sql','database/migrations/0014a_user_ui_preferences_m02_01.down.sql','database/migrations/0014b_user_ui_preference_audit_m02_01.up.sql','database/migrations/0014b_user_ui_preference_audit_m02_01.down.sql','database/migrations/0014c_user_ui_preference_operations_m02_01.up.sql','database/migrations/0014c_user_ui_preference_operations_m02_01.down.sql','docs/architecture/m02-01-design-tokens-themes.md','docs/runbooks/m02-01-design-tokens-themes.md'].map(read));for(const value of ['/me/ui-preferences:','UiPreferenceEnvelope','deep-ocean, aurora-purple, cloud-white','IdempotencyKey'])assert.match(openapi,new RegExp(value.replace('/','\\/')));assert.match(feature,/designTokensThemes/);assert.match(upA,/uq_ui_preference_scope/);assert.match(upB,/request_id/);assert.match(upC,/key_hash/);for(const down of[downA,downB,downC])assert.match(down,/DROP TABLE/);assert.doesNotMatch(env,/THEME_|UI_THEME|PREFERENCE_SECRET/);assert.match(architecture,/同步用户操作，不创建 Worker/);assert.match(runbook,/Worker 与 Python Crawler.*无需重启/);});
-test('M02-01.A07/A08/A15 token and UI contracts keep semantic accessibility and responsive support',async()=>{const[tokens,theme,ui,styles,e2e]=await Promise.all(['apps/web/src/design/tokens.css','apps/web/src/design/theme.ts','apps/web/src/components/ThemeStudio.vue','apps/web/src/styles.css','tests/e2e/m02-01-theme-studio.spec.ts'].map(read));for(const id of['deep-ocean','aurora-purple','cloud-white']){assert.match(tokens,new RegExp(id));assert.match(theme,new RegExp(id));}for(const semantic of['--so-success','--so-warning','--so-danger','--so-focus'])assert.match(tokens,new RegExp(semantic));assert.match(ui,/role="radiogroup"/);assert.match(ui,/数值、时间范围、来源/);assert.match(styles,/@media\(max-width:900px\)/);assert.match(e2e,/toHaveScreenshot/);assert.match(e2e,/keyboard\.press/);});
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+const read = (path) => readFile(path, "utf8");
+test("M02-01.A03/A06/A10/A13/A17 contracts include migrations API maps and no new environment secret", async () => {
+  const [openapi, feature, env, upA, downA, upB, downB, upC, downC, architecture, runbook] =
+    await Promise.all(
+      [
+        "docs/openapi.yaml",
+        "docs/feature-map.json",
+        "config/env.example",
+        "database/migrations/0014a_user_ui_preferences_m02_01.up.sql",
+        "database/migrations/0014a_user_ui_preferences_m02_01.down.sql",
+        "database/migrations/0014b_user_ui_preference_audit_m02_01.up.sql",
+        "database/migrations/0014b_user_ui_preference_audit_m02_01.down.sql",
+        "database/migrations/0014c_user_ui_preference_operations_m02_01.up.sql",
+        "database/migrations/0014c_user_ui_preference_operations_m02_01.down.sql",
+        "docs/architecture/m02-01-design-tokens-themes.md",
+        "docs/runbooks/m02-01-design-tokens-themes.md",
+      ].map(read),
+    );
+  for (const value of [
+    "/me/ui-preferences:",
+    "UiPreferenceEnvelope",
+    "deep-ocean, aurora-purple, cloud-white",
+    "IdempotencyKey",
+  ])
+    assert.match(openapi, new RegExp(value.replace("/", "\\/")));
+  assert.match(feature, /designTokensThemes/);
+  assert.match(upA, /uq_ui_preference_scope/);
+  assert.match(upB, /request_id/);
+  assert.match(upC, /key_hash/);
+  for (const down of [downA, downB, downC]) assert.match(down, /DROP TABLE/);
+  assert.doesNotMatch(env, /THEME_|UI_THEME|PREFERENCE_SECRET/);
+  assert.match(architecture, /同步用户操作，不创建 Worker/);
+  assert.match(runbook, /Worker 与 Python Crawler.*无需重启/);
+});
+test("M02-01.A07/A08/A15 token and UI contracts keep semantic accessibility and responsive support", async () => {
+  const [tokens, theme, ui, styles, e2e] = await Promise.all(
+    [
+      "apps/web/src/design/tokens.css",
+      "apps/web/src/design/theme.ts",
+      "apps/web/src/components/ThemeStudio.vue",
+      "apps/web/src/styles.css",
+      "tests/e2e/m02-01-theme-studio.spec.ts",
+    ].map(read),
+  );
+  for (const id of ["deep-ocean", "aurora-purple", "cloud-white"]) {
+    assert.match(tokens, new RegExp(id));
+    assert.match(theme, new RegExp(id));
+  }
+  for (const semantic of ["--so-success", "--so-warning", "--so-danger", "--so-focus"])
+    assert.match(tokens, new RegExp(semantic));
+  assert.match(ui, /role="radiogroup"/);
+  assert.match(ui, /数值、时间范围、来源/);
+  assert.match(styles, /@media\s*\(\s*max-width:\s*900px\s*\)/);
+  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /keyboard\.press/);
+});

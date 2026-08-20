@@ -1,72 +1,196 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
-import { readFile, readdir } from 'node:fs/promises';
-import { DiscoveryService } from '../../apps/api/dist/discovery-service.js';
-import { buildApp } from '../../apps/api/dist/app.js';
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFile, readdir } from "node:fs/promises";
+import { DiscoveryService } from "../../apps/api/dist/discovery-service.js";
+import { buildApp } from "../../apps/api/dist/app.js";
 
-const org = '00000000-0000-4000-8000-000000000501';
-const workspace = '00000000-0000-4000-8000-000000000502';
-const actor = '00000000-0000-4000-8000-000000000503';
-const session = '00000000-0000-4000-8000-000000000504';
-const read = (path) => readFile(path, 'utf8');
+const org = "00000000-0000-4000-8000-000000000501";
+const workspace = "00000000-0000-4000-8000-000000000502";
+const actor = "00000000-0000-4000-8000-000000000503";
+const session = "00000000-0000-4000-8000-000000000504";
+const read = (path) => readFile(path, "utf8");
 
-test('M02-05.A01/A02/A04/A12 trims and validates scoped search inputs', async () => {
+test("M02-05.A01/A02/A04/A12 trims and validates scoped search inputs", async () => {
   let captured;
-  const service = new DiscoveryService({ search: async (input) => { captured = input; return { items: [], nextCursor: null }; } });
-  const result = await service.search({ organizationId: org, workspaceId: workspace, query: '  机会  ', capabilities: ['task:read'], limit: 20 });
-  assert.equal(captured.query, '机会');
+  const service = new DiscoveryService({
+    search: async (input) => {
+      captured = input;
+      return { items: [], nextCursor: null };
+    },
+  });
+  const result = await service.search({
+    organizationId: org,
+    workspaceId: workspace,
+    query: "  机会  ",
+    capabilities: ["task:read"],
+    limit: 20,
+  });
+  assert.equal(captured.query, "机会");
   assert.equal(captured.organizationId, org);
   assert.equal(captured.workspaceId, workspace);
   assert.deepEqual(result.scope, { organization_id: org, workspace_id: workspace });
-  await assert.rejects(() => service.search({ organizationId: org, workspaceId: workspace, query: 'x', capabilities: [] }), (error) => error.code === 'search_query_invalid' && error.statusCode === 400);
-  await assert.rejects(() => service.search({ organizationId: org, workspaceId: workspace, query: '机会', capabilities: [], limit: 21 }), (error) => error.code === 'search_limit_invalid');
+  await assert.rejects(
+    () =>
+      service.search({ organizationId: org, workspaceId: workspace, query: "x", capabilities: [] }),
+    (error) => error.code === "search_query_invalid" && error.statusCode === 400,
+  );
+  await assert.rejects(
+    () =>
+      service.search({
+        organizationId: org,
+        workspaceId: workspace,
+        query: "机会",
+        capabilities: [],
+        limit: 21,
+      }),
+    (error) => error.code === "search_limit_invalid",
+  );
 });
 
-test('M02-05.A04/A08/A09/A12 quick entries expose routes only after capability filtering', () => {
+test("M02-05.A04/A08/A09/A12 quick entries expose routes only after capability filtering", () => {
   const service = new DiscoveryService({ search: async () => ({ items: [], nextCursor: null }) });
-  assert.deepEqual(service.quickActions(['task:create']).map((item) => item.id), ['task']);
-  assert.equal(service.quickActions(['task:create'])[0].route, '/tasks?create=1');
-  assert.deepEqual(service.quickActions(['membership:manage', 'workspace:manage']).map((item) => item.id), ['member', 'workspace']);
+  assert.deepEqual(
+    service.quickActions(["task:create"]).map((item) => item.id),
+    ["task"],
+  );
+  assert.equal(service.quickActions(["task:create"])[0].route, "/tasks?create=1");
+  assert.deepEqual(
+    service.quickActions(["membership:manage", "workspace:manage"]).map((item) => item.id),
+    ["member", "workspace"],
+  );
   assert.equal(service.quickActions([]).length, 0);
-  assert.ok(service.quickActions(['task:create']).every((item) => item.route.startsWith('/') && !('method' in item) && !('payload' in item)));
+  assert.ok(
+    service
+      .quickActions(["task:create"])
+      .every((item) => item.route.startsWith("/") && !("method" in item) && !("payload" in item)),
+  );
 });
 
-test('M02-05.A06/A09/A11/A13 API preserves authenticated scope and correlation envelope', async () => {
+test("M02-05.A06/A09/A11/A13 API preserves authenticated scope and correlation envelope", async () => {
   const calls = [];
-  const service = { search: async (input) => { calls.push(input); return { items: [], next_cursor: null, scope: { organization_id: org, workspace_id: workspace } }; }, quickActions: () => [] };
-  const authorization = { resolveSession: async () => ({ context: { organization_id: org, workspace_id: workspace }, subject: { capabilities: ['task:read'], platform_capabilities: [] } }), authorize: async (input) => calls.push(input) };
+  const service = {
+    search: async (input) => {
+      calls.push(input);
+      return {
+        items: [],
+        next_cursor: null,
+        scope: { organization_id: org, workspace_id: workspace },
+      };
+    },
+    quickActions: () => [],
+  };
+  const authorization = {
+    resolveSession: async () => ({
+      context: { organization_id: org, workspace_id: workspace },
+      subject: { capabilities: ["task:read"], platform_capabilities: [] },
+    }),
+    authorize: async (input) => calls.push(input),
+  };
   const auth = { authenticate: async () => ({ user: { id: actor }, session: { id: session } }) };
   const app = buildApp({ discovery: { service, authorization, auth, secureCookie: false } });
-  const response = await app.inject({ method: 'GET', url: '/api/v1/me/global-search?q=%E6%9C%BA%E4%BC%9A', headers: { cookie: 'scoutops_session=test', 'x-request-id': 'm02-05-request', 'x-trace-id': 'm02-05-trace' } });
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/me/global-search?q=%E6%9C%BA%E4%BC%9A",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "m02-05-request",
+      "x-trace-id": "m02-05-trace",
+    },
+  });
   assert.equal(response.statusCode, 200);
-  assert.equal(response.json().request_id, 'm02-05-request');
-  assert.equal(calls[0].capability, 'task:read');
+  assert.equal(response.json().request_id, "m02-05-request");
+  assert.equal(calls[0].capability, "task:read");
   assert.equal(calls[1].organizationId, org);
   assert.equal(calls[1].workspaceId, workspace);
-  const invalid = await app.inject({ method: 'GET', url: '/api/v1/me/global-search?q=x', headers: { cookie: 'scoutops_session=test' } });
+  const invalid = await app.inject({
+    method: "GET",
+    url: "/api/v1/me/global-search?q=x",
+    headers: { cookie: "scoutops_session=test" },
+  });
   assert.equal(invalid.statusCode, 400);
   await app.close();
 });
 
-test('M02-05 regression: platform quick create does not require organization context', async () => {
+test("M02-05 regression: platform quick create does not require organization context", async () => {
   const calls = [];
-  const service = { search: async () => ({ items: [], next_cursor: null }), quickActions: (capabilities) => { calls.push(capabilities); return [{ id: 'provider', label: '配置来源', description: '进入平台来源注册中心', route: '/platform-admin/providers?create=1', required_capability: 'provider:configure' }]; } };
+  const service = {
+    search: async () => ({ items: [], next_cursor: null }),
+    quickActions: (capabilities) => {
+      calls.push(capabilities);
+      return [
+        {
+          id: "provider",
+          label: "配置来源",
+          description: "进入平台来源注册中心",
+          route: "/platform-admin/providers?create=1",
+          required_capability: "provider:configure",
+        },
+      ];
+    },
+  };
   const authorization = {
-    resolveSession: async () => { throw new Error('platform quick actions must not resolve organization context'); },
+    resolveSession: async () => {
+      throw new Error("platform quick actions must not resolve organization context");
+    },
     authorize: async () => {},
-    guardNavigationShell: async (_actorId, _sessionId, shell) => ({ shell, organization_id: null, workspace_id: null, roles: [], capabilities: [], platform_roles: ['platform_super_admin'], platform_capabilities: ['provider:configure', 'platform:superadmin'], guard_reason: 'navigation_platform_admin_allowed' }),
+    guardNavigationShell: async (_actorId, _sessionId, shell) => ({
+      shell,
+      organization_id: null,
+      workspace_id: null,
+      roles: [],
+      capabilities: [],
+      platform_roles: ["platform_super_admin"],
+      platform_capabilities: ["provider:configure", "platform:superadmin"],
+      guard_reason: "navigation_platform_admin_allowed",
+    }),
   };
   const auth = { authenticate: async () => ({ user: { id: actor }, session: { id: session } }) };
   const app = buildApp({ discovery: { service, authorization, auth, secureCookie: false } });
-  const response = await app.inject({ method: 'GET', url: '/api/v1/me/quick-actions?shell=platform_admin', headers: { cookie: 'scoutops_session=test', 'x-request-id': 'platform-actions', 'x-trace-id': 'platform-actions' } });
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/me/quick-actions?shell=platform_admin",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "platform-actions",
+      "x-trace-id": "platform-actions",
+    },
+  });
   assert.equal(response.statusCode, 200);
-  assert.deepEqual(calls[0], ['provider:configure', 'platform:superadmin']);
-  assert.equal(response.json().data[0].route, '/platform-admin/providers?create=1');
+  assert.deepEqual(calls[0], ["provider:configure", "platform:superadmin"]);
+  assert.equal(response.json().data[0].route, "/platform-admin/providers?create=1");
   await app.close();
 });
 
-test('M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit', async () => {
-  const [up, down, repo, overlay, shell, openapi, env, architecture, runbook, feature, e2e] = await Promise.all(['database/migrations/0015a_search_documents_m02_05.up.sql', 'database/migrations/0015a_search_documents_m02_05.down.sql', 'apps/api/src/mysql-discovery-repository.ts', 'apps/web/src/components/DiscoveryOverlay.vue', 'apps/web/src/components/NavigationShell.vue', 'docs/openapi.yaml', 'config/env.example', 'docs/architecture/m02-05-discovery.md', 'docs/runbooks/m02-05-discovery.md', 'docs/feature-map.json', 'tests/e2e/m02-05-discovery.spec.ts'].map(read));
+test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit", async () => {
+  const [
+    up,
+    down,
+    repo,
+    overlay,
+    shell,
+    apiClient,
+    openapi,
+    env,
+    architecture,
+    runbook,
+    feature,
+    e2e,
+  ] = await Promise.all(
+    [
+      "database/migrations/0015a_search_documents_m02_05.up.sql",
+      "database/migrations/0015a_search_documents_m02_05.down.sql",
+      "apps/api/src/mysql-discovery-repository.ts",
+      "apps/web/src/components/DiscoveryOverlay.vue",
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/api-client.ts",
+      "docs/openapi.yaml",
+      "config/env.example",
+      "docs/architecture/m02-05-discovery.md",
+      "docs/runbooks/m02-05-discovery.md",
+      "docs/feature-map.json",
+      "tests/e2e/m02-05-discovery.spec.ts",
+    ].map(read),
+  );
   assert.match(up, /organization_id.*workspace_id/);
   assert.match(up, /CHAR\(36\) CHARACTER SET ascii/);
   assert.match(up, /utf8mb4/);
@@ -76,8 +200,10 @@ test('M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(openapi, /\/me\/global-search:/);
   assert.match(openapi, /\/me\/quick-actions:/);
   assert.match(openapi, /name: shell[\s\S]*required: true/);
-  assert.match(overlay, /credentials\s*:\s*["']include["']/);
-  for (const state of ['loading', 'empty', 'expired', 'forbidden', 'blocked']) assert.match(overlay, new RegExp(state));
+  assert.match(overlay, /createApiClient/);
+  assert.match(apiClient, /credentials\s*:\s*["']include["']/);
+  for (const state of ["loading", "empty", "expired", "forbidden", "blocked"])
+    assert.match(overlay, new RegExp(state));
   assert.match(shell, /event\.metaKey\s*\|\|\s*event\.ctrlKey/);
   assert.match(shell, /role-mobile-nav/);
   assert.match(e2e, /toHaveScreenshot/);
@@ -86,6 +212,6 @@ test('M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(architecture, /同步|synchronous/i);
   assert.match(runbook, /宝塔.*ai选品/s);
   assert.match(feature, /globalDiscovery/);
-  const migrations = await readdir('database/migrations');
-  assert.ok(migrations.includes('0015a_search_documents_m02_05.up.sql'));
+  const migrations = await readdir("database/migrations");
+  assert.ok(migrations.includes("0015a_search_documents_m02_05.up.sql"));
 });
