@@ -12,8 +12,8 @@
 }
 .trend-hero,
 .trend-rules > header {
-  min-height: 148px;
-  padding: 28px 30px;
+  min-height: 112px;
+  padding: 20px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -42,7 +42,7 @@
   letter-spacing: 0.16em;
 }
 .trend-hero h2 {
-  font-size: 34px;
+  font-size: clamp(24px, 3vw, 30px);
 }
 .trend-hero span,
 .trend-rules > header span {
@@ -113,7 +113,7 @@
   margin-bottom: 14px;
   padding: 15px;
   display: grid;
-  grid-template-columns: 145px 165px 145px minmax(220px, 1fr) auto;
+  grid-template-columns: 120px 150px 130px minmax(220px, 1fr) 150px auto;
   align-items: end;
   gap: 10px;
   border: 1px solid var(--so-border);
@@ -146,9 +146,14 @@
   color: var(--so-on-primary);
   background: var(--so-primary-strong);
 }
+.trend-filters button.secondary {
+  border: 1px solid var(--so-border);
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
 .trend-workbench {
   display: grid;
-  grid-template-columns: minmax(310px, 0.72fr) minmax(520px, 1.28fr);
+  grid-template-columns: minmax(310px, var(--trend-master-width, 38%)) minmax(520px, 1fr);
   gap: 14px;
 }
 .trend-list,
@@ -169,6 +174,16 @@
   padding: 5px 4px 14px;
   display: flex;
   justify-content: space-between;
+}
+.trend-width-control {
+  display: grid;
+  gap: 4px;
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.trend-width-control input {
+  width: 104px;
+  min-height: auto;
 }
 .trend-list > header strong,
 .trend-list > header span {
@@ -210,6 +225,18 @@
   color: var(--so-primary);
   background: color-mix(in srgb, var(--so-primary) 12%, transparent);
 }
+.topic-mark::after {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--so-primary);
+  content: "";
+  transform: rotate(45deg);
+}
+.topic-mark[data-followed="true"]::after {
+  background: var(--so-warning);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--so-warning) 18%, transparent);
+}
 .trend-list button strong,
 .trend-list button small {
   display: block;
@@ -236,6 +263,23 @@
 .trend-list em[data-status="stale"] {
   color: var(--so-warning);
   background: color-mix(in srgb, var(--so-warning) 10%, transparent);
+}
+.trend-pagination {
+  margin-top: 12px;
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid var(--so-border);
+  color: var(--so-text-muted);
+}
+.trend-pagination button {
+  padding: 8px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: var(--so-control-radius);
+  color: var(--so-text);
+  background: var(--so-panel-soft);
 }
 .trend-detail {
   padding: 22px;
@@ -272,10 +316,19 @@
   color: var(--so-text-muted);
 }
 .trend-actions {
+  position: sticky;
+  z-index: 6;
+  top: 82px;
   margin: 20px 0;
+  padding: 10px;
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  border: 1px solid var(--so-border);
+  border-radius: var(--so-card-radius);
+  background: color-mix(in srgb, var(--so-panel) 94%, transparent);
+  box-shadow: var(--so-shadow-card);
+  backdrop-filter: blur(12px);
 }
 .trend-actions button {
   padding: 10px 13px;
@@ -596,6 +649,9 @@
   .trend-list {
     max-height: 520px;
   }
+  .trend-width-control {
+    display: none;
+  }
   .trend-filters {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -615,9 +671,19 @@
   }
   .trend-hero,
   .trend-rules > header {
-    padding: 20px 16px;
+    min-height: auto;
+    padding: 14px 16px;
     align-items: flex-start;
     flex-direction: column;
+    gap: 12px;
+    border-radius: var(--so-card-radius);
+  }
+  .trend-hero p,
+  .trend-hero > div:first-child > span {
+    display: none;
+  }
+  .trend-hero h2 {
+    font-size: 20px;
   }
   .trend-hero > div:last-child,
   .trend-hero button,
@@ -625,7 +691,11 @@
     width: 100%;
   }
   .trend-hero > div:last-child {
-    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .trend-hero > div:last-child button:last-child {
+    grid-column: 1/-1;
   }
   .trend-filters {
     grid-template-columns: 1fr 1fr;

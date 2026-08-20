@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useRoute } from "vue-router";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 
@@ -36,11 +37,15 @@ const props = defineProps<{
     requestId: string;
     filters: OpportunityFilters;
     listScope: Scope;
+    page: number;
   }>(),
   emit = defineEmits<{
     apply: [];
+    page: [value: number];
     "update:listScope": [value: Scope];
   }>(),
+  route = useRoute(),
+  pageCount = computed(() => Math.max(1, Math.ceil(props.total / 20))),
   summary = computed(() => ({
     withImage: props.items.filter((item) => Boolean(item.image_url)).length,
     competitors: props.items.reduce((sum, item) => sum + (item.competitor_count ?? 0), 0),
@@ -143,7 +148,10 @@ function changeScope(event: Event) {
       </div>
       <span>共 {{ total }} 个机会 · 按更新时间排序</span>
     </header>
-    <RouterLink v-for="item in items" :key="item.id" :to="`/opportunities/${item.id}`"
+    <RouterLink
+      v-for="item in items"
+      :key="item.id"
+      :to="{ path: `/opportunities/${item.id}`, query: { from: route.fullPath } }"
       ><span class="opportunity-picture"
         ><img
           v-if="item.image_url"
@@ -195,5 +203,12 @@ function changeScope(event: Event) {
         >{{ opportunityStatus(item.decision_status) }} · 查看详情 →</b
       ></RouterLink
     >
+    <footer class="opportunity-pagination" aria-label="机会分页">
+      <button type="button" :disabled="page <= 1" @click="emit('page', page - 1)">上一页</button>
+      <span>第 {{ page }} / {{ pageCount }} 页</span>
+      <button type="button" :disabled="page >= pageCount" @click="emit('page', page + 1)">
+        下一页
+      </button>
+    </footer>
   </section>
 </template>

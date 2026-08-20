@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, onMounted, reactive, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import OpportunityListPanel from "./OpportunityListPanel.vue";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
@@ -11,6 +11,7 @@ import "../opportunity-profit.css";
 import "../opportunity-selection-entry.css";
 import "../opportunity-ai.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+const route = useRoute();
 const router = useRouter();
 type Tab =
   "overview" | "market" | "competition" | "profit" | "risk" | "ai" | "evidence" | "decisions";
@@ -155,6 +156,7 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
   profit = ref<ProfitAnalysis | null>(null),
   aiAnalyses = ref<any[]>([]),
   total = ref(0),
+  page = ref(1),
   requestId = ref(""),
   message = ref(""),
   busy = ref(false),
@@ -200,6 +202,11 @@ const tabs: [Tab, string][] = [
   ["ai", "AI 辅助"],
   ["decisions", "决策历史"],
 ];
+const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
+const returnPath = computed(() => {
+  const value = typeof route.query.from === "string" ? route.query.from : "/opportunities";
+  return value.startsWith("/") && !value.startsWith("//") ? value : "/opportunities";
+});
 const evidenceTaskHref = computed(() => {
   if (!detail.value) return "/tasks";
   const title = encodeURIComponent(`补齐机会证据 · ${detail.value.name}`),
@@ -287,7 +294,11 @@ async function load() {
       state.value = "ready";
       return;
     }
-    const params = new URLSearchParams({ page: "1", page_size: "20", scope: listScope.value });
+    const params = new URLSearchParams({
+      page: String(page.value),
+      page_size: "20",
+      scope: listScope.value,
+    });
     for (const [key, value] of Object.entries(filters)) if (value) params.set(key, value);
     const result = await read(`/opportunities?${params}`);
     items.value = result.data;
@@ -487,7 +498,7 @@ async function queueAi() {
   });
   if (result) {
     await load();
-    tab.value = "ai";
+    await setTab("ai");
     message.value = "AI 辅助分析已进入宝塔 Node Worker 队列；不会自动修改评分或决策。";
   }
 }
@@ -496,41 +507,120 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
   if (!notes) return;
   if (await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes })) {
     await load();
-    tab.value = "ai";
+    await setTab("ai");
     message.value = "人工抽检已记录，AI 原始输出未被改写。";
   }
 }
+function syncListRoute() {
+  filters.q = typeof route.query.q === "string" ? route.query.q : "";
+  filters.market = typeof route.query.market === "string" ? route.query.market : "";
+  filters.decision_status =
+    typeof route.query.decision_status === "string" ? route.query.decision_status : "";
+  filters.coverage_status =
+    typeof route.query.coverage_status === "string" ? route.query.coverage_status : "";
+  filters.blocking_reason =
+    typeof route.query.blocking_reason === "string" ? route.query.blocking_reason : "";
+  listScope.value = route.query.scope === "all" ? "all" : "product";
+  const requestedPage = Number(route.query.page ?? 1);
+  page.value = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+}
+async function applyListFilters() {
+  const previousPath = route.fullPath;
+  await router.push({
+    query: {
+      q: filters.q || undefined,
+      market: filters.market || undefined,
+      decision_status: filters.decision_status || undefined,
+      coverage_status: filters.coverage_status || undefined,
+      blocking_reason: filters.blocking_reason || undefined,
+      scope: listScope.value === "all" ? "all" : undefined,
+    },
+  });
+  if (route.fullPath === previousPath) await load();
+}
+async function goListPage(nextPage: number) {
+  if (nextPage < 1 || nextPage > pageCount.value) return;
+  await router.push({ query: { ...route.query, page: nextPage === 1 ? undefined : nextPage } });
+}
+async function setTab(nextTab: Tab) {
+  tab.value = nextTab;
+  await router.replace({
+    query: { ...route.query, tab: nextTab === "overview" ? undefined : nextTab },
+  });
+}
+function syncTabFromRoute() {
+  const requestedTab = typeof route.query.tab === "string" ? route.query.tab : "overview";
+  tab.value = tabs.some(([value]) => value === requestedTab) ? (requestedTab as Tab) : "overview";
+}
+let loadQueued = false;
+function queueLoad() {
+  if (loadQueued) return;
+  loadQueued = true;
+  queueMicrotask(() => {
+    loadQueued = false;
+    void load();
+  });
+}
 onMounted(() => {
-  const query = new URLSearchParams(window.location.search);
-  const requestedTab = query.get("tab");
-  if (props.opportunityId && tabs.some(([value]) => value === requestedTab)) {
-    tab.value = requestedTab as Tab;
-  }
-  if (!props.opportunityId && (query.get("create") === "1" || query.get("source_topic_id"))) {
-    form.source_topic_id = query.get("source_topic_id") ?? "";
-    form.name = query.get("name") ?? "";
-    form.market = query.get("market") ?? "US";
-    form.category = query.get("category") ?? "";
+  syncTabFromRoute();
+  syncListRoute();
+  if (!props.opportunityId && (route.query.create === "1" || route.query.source_topic_id)) {
+    form.source_topic_id =
+      typeof route.query.source_topic_id === "string" ? route.query.source_topic_id : "";
+    form.name = typeof route.query.name === "string" ? route.query.name : "";
+    form.market = typeof route.query.market === "string" ? route.query.market : "US";
+    form.category = typeof route.query.category === "string" ? route.query.category : "";
     showCreate.value = true;
   }
   void load();
 });
+watch(
+  () => props.opportunityId,
+  () => {
+    detail.value = null;
+    syncTabFromRoute();
+    queueLoad();
+  },
+);
+watch(
+  () => route.query.tab,
+  () => syncTabFromRoute(),
+);
+watch(
+  () => [
+    route.query.q,
+    route.query.market,
+    route.query.decision_status,
+    route.query.coverage_status,
+    route.query.blocking_reason,
+    route.query.scope,
+    route.query.page,
+  ],
+  () => {
+    if (props.opportunityId) return;
+    syncListRoute();
+    queueLoad();
+  },
+);
 </script>
 <template>
   <section class="opportunity-workspace">
-    <header class="opportunity-hero">
+    <header v-if="!opportunityId" class="opportunity-hero">
       <div>
         <p>决策工作台</p>
         <h2>{{ opportunityId ? "机会详情" : "选品机会" }}</h2>
         <span>评分、利润、风险和证据均展示真实状态；缺少下游输入时明确标记数据不足。</span>
       </div>
-      <div v-if="!opportunityId" class="opportunity-hero-actions">
+      <div class="opportunity-hero-actions">
         <RouterLink to="/opportunities/start">开始真实选品</RouterLink
         ><button type="button" class="ghost" @click="showErpImport = true">从 ERP 导入</button
         ><button type="button" @click="showCreate = true">＋ 手工创建机会</button>
       </div>
-      <RouterLink v-else to="/opportunities">← 返回机会列表</RouterLink>
     </header>
+    <nav v-else class="opportunity-detail-return" aria-label="机会详情返回路径">
+      <RouterLink :to="returnPath">← 返回来源列表</RouterLink>
+      <span>机会详情</span>
+    </nav>
     <p v-if="message" class="opportunity-message" role="status">
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
     </p>
@@ -542,7 +632,9 @@ onMounted(() => {
       :state="state"
       :request-id="requestId"
       :filters="filters"
-      @apply="load"
+      :page="page"
+      @apply="applyListFilters"
+      @page="goListPage"
     />
     <template v-else
       ><UiStatePanel
@@ -552,20 +644,6 @@ onMounted(() => {
         @primary="load"
       />
       <article v-else class="opportunity-detail">
-        <section
-          v-if="detail.recommendation_status === 'insufficient_data'"
-          class="opportunity-next-steps"
-        >
-          <div>
-            <b>为什么还不能给出结论？</b
-            ><span>系统只在证据足够时评分。可直接启动真实网页采集，不需要填写官方 API。</span>
-          </div>
-          <button type="button" :disabled="busy" @click="discoverCompetitors">
-            ① 采集 Amazon 竞品</button
-          ><button type="button" :disabled="busy" @click="discoverSuppliers">
-            ② 采集公开供应商</button
-          ><RouterLink to="/opportunities/scoring-rules">③ 检查评分规则</RouterLink>
-        </section>
         <header>
           <div>
             <p>
@@ -580,10 +658,10 @@ onMounted(() => {
           </div>
           <div>
             <strong>{{ detail.overall_score ?? "—" }}</strong
-            ><small>综合评分<br />{{ detail.overall_score == null ? "数据不足" : "已计算" }}</small>
+            ><small>综合评分 · {{ detail.overall_score == null ? "数据不足" : "已计算" }}</small>
           </div>
         </header>
-        <section class="opportunity-decision-bar">
+        <section class="opportunity-recommendation">
           <div>
             <span>推荐结论</span><strong>{{ statusLabel(detail.recommendation_status) }}</strong
             ><small
@@ -592,6 +670,8 @@ onMounted(() => {
               }}</small
             >
           </div>
+        </section>
+        <nav class="opportunity-decision-bar" aria-label="机会决策操作">
           <button
             :disabled="
               detail.recommendation_status === 'insufficient_data' ||
@@ -607,9 +687,9 @@ onMounted(() => {
             "
             @click="startDecision('adopt')"
           >
-            ✓ 采纳</button
-          ><button @click="startDecision('observe')">◉ 继续观察</button
-          ><button class="reject" @click="startDecision('reject')">× 驳回</button>
+            采纳</button
+          ><button @click="startDecision('observe')">继续观察</button
+          ><button class="reject" @click="startDecision('reject')">驳回</button>
           <RouterLink
             v-if="
               detail.recommendation_status === 'insufficient_data' ||
@@ -618,6 +698,20 @@ onMounted(() => {
             :to="evidenceTaskHref"
             >分派证据补齐任务</RouterLink
           >
+        </nav>
+        <section
+          v-if="detail.recommendation_status === 'insufficient_data'"
+          class="opportunity-next-steps"
+        >
+          <div>
+            <b>为什么还不能给出结论？</b
+            ><span>系统只在证据足够时评分。可直接启动真实网页采集，不需要填写官方 API。</span>
+          </div>
+          <button type="button" :disabled="busy" @click="discoverCompetitors">
+            ① 采集 Amazon 竞品</button
+          ><button type="button" :disabled="busy" @click="discoverSuppliers">
+            ② 采集公开供应商</button
+          ><RouterLink to="/opportunities/scoring-rules">③ 检查评分规则</RouterLink>
         </section>
         <nav class="opportunity-tabs" aria-label="机会详情分区">
           <button
@@ -625,7 +719,7 @@ onMounted(() => {
             :key="item[0]"
             type="button"
             :aria-current="tab === item[0] ? 'page' : undefined"
-            @click="tab = item[0]"
+            @click="setTab(item[0])"
           >
             {{ item[1] }}
           </button>

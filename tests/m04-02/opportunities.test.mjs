@@ -274,6 +274,8 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(webContract, new RegExp(state));
   assert.match(webContract, /证据完整度[\s\S]*阻断原因[\s\S]*缺少可采纳证据/);
+  assert.match(webContract, /route\.query\.from[\s\S]*route\.query\.tab[\s\S]*applyListFilters/);
+  assert.match(css, /position:\s*fixed[\s\S]*safe-area-inset-bottom/);
   assert.match(css, /@media\s*\(\s*max-width:\s*640px\s*\)/);
   assert.match(schema, /OPPORTUNITY_REFRESH_POLL_MS/);
   assert.match(env, /OPPORTUNITY_REFRESH_LEASE_SECONDS/);
@@ -282,8 +284,11 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     /name: coverage_status[\s\S]*name: blocking_reason[\s\S]*evidence_insufficient/,
   );
   assert.match(feature, /blocking_reason/);
+  assert.match(feature, /navigationState[\s\S]*decisionLayout/);
   assert.match(architecture, /blocking_reasons/);
+  assert.match(architecture, /from[\s\S]*tab[\s\S]*底部决策栏/);
   assert.match(runbook, /宝塔[\s\S]*回滚/);
+  assert.match(runbook, /返回来源列表[\s\S]*tab=evidence/);
   assert.match(e2e, /toHaveScreenshot/);
   assert.match(live, /MySqlOpportunityRefreshWorker/);
   assert.match(blueprint, /M04-02 实现合同/);

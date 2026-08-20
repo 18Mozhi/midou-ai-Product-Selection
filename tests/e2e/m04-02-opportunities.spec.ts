@@ -185,7 +185,7 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await ready(page);
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: "AI 驱动的个性化护肤机会" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "机会详情", level: 2 })).toHaveCount(1);
+  await expect(page.getByText("机会详情", { exact: true })).toHaveCount(1);
   await expect(page.getByText("来源 热点自动发现")).toBeVisible();
   await expect(page.locator("body")).not.toContainText(
     /trend_topic|insufficient_data|\bpartial\b|\bunknown\b/,
@@ -205,7 +205,7 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page.getByText("数据不足，不能生成可靠 ROI")).toBeVisible();
   await page.getByRole("button", { name: "证据", exact: true }).click();
   await expect(page.getByText("Example News")).toBeVisible();
-  await page.getByRole("button", { name: "◉ 继续观察" }).click();
+  await page.getByRole("button", { name: "继续观察", exact: true }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await dialog.getByLabel("原因（必填）").fill("补齐成本与竞品后再判断");
@@ -213,7 +213,9 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page.getByText("决策已记录；原始评分与证据未被改写。")).toBeVisible();
   await page.getByRole("button", { name: "决策历史" }).click();
   await expect(page.getByText("补齐成本与竞品后再判断")).toBeVisible();
-  await expect(page.getByText("继续观察", { exact: true })).toBeVisible();
+  await expect(
+    page.locator(".opportunity-decisions").getByText("继续观察", { exact: true }),
+  ).toBeVisible();
   await expect(page.locator("body")).not.toContainText(
     /\bobserve\b|trend_topic|insufficient_data|\bpartial\b|\bunknown\b/,
   );
@@ -240,4 +242,29 @@ test("mobile opportunity filters preserve selected adoption blocker inside the d
   await filtered;
   const resultCard = page.locator("a").filter({ hasText: base.name });
   await expect(resultCard.getByText("尚无可靠推荐结论", { exact: true })).toBeVisible();
+});
+
+test("opportunity URL state and source return path survive list-detail navigation", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.goto("/opportunities?q=AI&coverage_status=partial");
+  await expect(page.getByLabel("机会名称")).toHaveValue("AI");
+  await expect(page.getByLabel("证据完整度")).toHaveValue("partial");
+  const result = page.locator("a").filter({ hasText: base.name });
+  await result.click();
+  await expect(page).toHaveURL(new RegExp(`/opportunities/${opportunityId}\\?from=`));
+  await page.getByRole("link", { name: "← 返回来源列表" }).click();
+  await expect(page).toHaveURL(/\/opportunities\?q=AI&coverage_status=partial$/);
+  await expect(page.getByLabel("机会名称")).toHaveValue("AI");
+});
+
+test("opportunity detail tab supports a direct URL", async ({ page }) => {
+  await ready(page);
+  await page.goto(`/opportunities/${opportunityId}?tab=evidence`);
+  await expect(page.getByRole("button", { name: "证据", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(page.getByText("Example News")).toBeVisible();
 });

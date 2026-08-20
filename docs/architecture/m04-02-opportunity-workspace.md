@@ -16,4 +16,6 @@ M04-02 的事实边界是：趋势证据可使市场分区变为 covered，但�
 
 `OpportunityListPanel.vue` 独立承载机会筛选、摘要与列表，详情决策链继续由 `OpportunityWorkspace.vue` 负责，避免单个页面组件重新超过千行门禁。
 
+列表和详情使用独立 `/opportunities`、`/opportunities/{opportunityId}` 路由。列表筛选、范围和页码同步到 URL；进入详情时以同源 `from` 查询参数保存完整来源路径，返回后恢复原筛选与页码。详情分区使用 `tab` 查询参数支持直接定位。详情移除重复页面大标题卡，将推荐结论放在内容首屏，并把采纳、观察、驳回和证据补齐入口放入固定底部决策栏；390px 下标签横向滚动，决策栏避让系统安全区与成员底部导航。
+
 所有业务写入、Worker 写入和失败均携带 request_id/trace_id。四次总尝试与 1/5/15 分钟退避在代码中锁定；不可重试错误进入 `failed_terminal`，依赖错误耗尽后进入 `dead_letter`。

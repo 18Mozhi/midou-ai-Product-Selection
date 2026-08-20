@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
@@ -81,6 +82,8 @@ const props = defineProps<{
     organizationId: string;
     workspaceId: string;
   }>(),
+  route = useRoute(),
+  router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   topics = ref<Topic[]>([]),
@@ -94,6 +97,9 @@ const props = defineProps<{
   irrelevant = ref(false),
   total = ref(0),
   timelineSource = ref(""),
+  page = ref(1),
+  sort = ref<"impact" | "latest" | "momentum" | "followed">("impact"),
+  masterWidth = ref(38),
   filters = reactive({ q: "", market: "", category: "", status: "active" }),
   form = reactive({
     name: "",
@@ -133,6 +139,27 @@ const timelinePoints = computed(() => {
     );
   }),
   activeFilterCount = computed(() => Object.values(filters).filter(Boolean).length),
+  pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20))),
+  sortedTopics = computed(() => {
+    const items = [...topics.value];
+    if (sort.value === "latest")
+      return items.sort(
+        (left, right) => Date.parse(right.last_seen_at) - Date.parse(left.last_seen_at),
+      );
+    if (sort.value === "momentum")
+      return items.sort(
+        (left, right) =>
+          (right.momentum_percent ?? -Infinity) - (left.momentum_percent ?? -Infinity),
+      );
+    if (sort.value === "followed")
+      return items.sort(
+        (left, right) =>
+          Number(right.followed) - Number(left.followed) || right.heat.value - left.heat.value,
+      );
+    return items.sort(
+      (left, right) => right.heat.value - left.heat.value || right.source_count - left.source_count,
+    );
+  }),
   timelineSourceLabel = computed(
     () =>
       selected.value?.timeline_sources.find((source) => source.source_id === timelineSource.value)
@@ -170,7 +197,7 @@ async function load() {
   state.value = "loading";
   message.value = "";
   try {
-    const params = new URLSearchParams({ page: "1", page_size: "20" });
+    const params = new URLSearchParams({ page: String(page.value), page_size: "20" });
     for (const [key, value] of Object.entries(filters))
       if (value) params.set(key === "q" ? "q" : key, value);
     const [list, ruleList] = await Promise.all([
@@ -180,31 +207,87 @@ async function load() {
     topics.value = list.data;
     rules.value = ruleList.data;
     total.value = (list.meta as { total: number }).total;
-    if (!topics.value.length) {
-      selected.value = null;
+    const requestedTopic = typeof route.query.topic === "string" ? route.query.topic : "";
+    const currentId =
+      requestedTopic ||
+      topics.value.find((item) => item.id === selected.value?.id)?.id ||
+      topics.value[0]?.id;
+    if (!currentId) {
       state.value = "empty";
       return;
     }
-    const current = topics.value.find((item) => item.id === selected.value?.id) ?? topics.value[0];
-    if (!current) {
-      state.value = "empty";
-      return;
-    }
-    selected.value = (await read(`/trends/${current.id}`)).data;
+    selected.value = (await read(`/trends/${currentId}`)).data;
     timelineSource.value = "";
     state.value = "ready";
+    if (requestedTopic !== currentId)
+      await router.replace({ query: { ...route.query, topic: currentId } });
   } catch (error) {
     if (!(error instanceof ApiClientError)) state.value = "blocked";
   }
 }
 async function selectTopic(topic: Topic) {
-  busy.value = "detail";
+  await router.push({ query: { ...route.query, topic: topic.id, section: undefined } });
+}
+function syncFromRoute() {
+  filters.q = typeof route.query.q === "string" ? route.query.q : "";
+  filters.market = typeof route.query.market === "string" ? route.query.market : "";
+  filters.category = typeof route.query.category === "string" ? route.query.category : "";
+  filters.status = typeof route.query.status === "string" ? route.query.status : "active";
+  const requestedPage = Number(route.query.page ?? 1);
+  page.value = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+  sort.value = ["impact", "latest", "momentum", "followed"].includes(String(route.query.sort))
+    ? (route.query.sort as typeof sort.value)
+    : "impact";
+  tab.value = route.query.section === "rules" ? "rules" : "topics";
+}
+async function applyFilters() {
+  const previousPath = route.fullPath;
+  await router.push({
+    query: {
+      ...route.query,
+      q: filters.q || undefined,
+      market: filters.market || undefined,
+      category: filters.category || undefined,
+      status: filters.status === "active" ? undefined : filters.status || undefined,
+      sort: sort.value === "impact" ? undefined : sort.value,
+      page: undefined,
+      topic: undefined,
+      section: undefined,
+    },
+  });
+  if (route.fullPath === previousPath) await load();
+}
+async function clearFilters() {
+  Object.assign(filters, { q: "", market: "", category: "", status: "active" });
+  sort.value = "impact";
+  await applyFilters();
+}
+async function recoverTopics() {
+  if (state.value === "empty") await clearFilters();
+  else await load();
+}
+async function goPage(nextPage: number) {
+  if (nextPage < 1 || nextPage > pageCount.value) return;
+  await router.push({
+    query: { ...route.query, page: nextPage === 1 ? undefined : nextPage, topic: undefined },
+  });
+}
+async function setTab(nextTab: "topics" | "rules") {
+  await router.push({
+    query: { ...route.query, section: nextTab === "rules" ? "rules" : undefined },
+  });
+}
+async function saveViewLink() {
   try {
-    selected.value = (await read(`/trends/${topic.id}`)).data;
-    timelineSource.value = "";
-  } finally {
-    busy.value = "";
+    await navigator.clipboard.writeText(window.location.href);
+    message.value = "当前排序、筛选和页码链接已复制，可作为此视图入口。";
+  } catch {
+    message.value = "当前视图已同步到地址栏，可复制地址保存。";
   }
+}
+async function viewRuleTopics(item: Rule) {
+  filters.q = item.include_keywords[0] ?? "";
+  await applyFilters();
 }
 async function write(path: string, method: string, body?: unknown) {
   busy.value = path;
@@ -284,7 +367,7 @@ async function createRule() {
     });
     await load();
     message.value = "监控规则已启用；当前仅发送站内通知。";
-    tab.value = "rules";
+    await setTab("rules");
   }
 }
 async function toggleRule(item: Rule) {
@@ -306,7 +389,40 @@ async function refreshHotspots() {
   if (result)
     message.value = `已开始从 ${result.source_count} 个实时频道获取热点，通常几分钟内出现在列表中。`;
 }
-onMounted(load);
+watch(
+  () => [
+    route.query.q,
+    route.query.market,
+    route.query.category,
+    route.query.status,
+    route.query.page,
+  ],
+  () => {
+    syncFromRoute();
+    void load();
+  },
+);
+watch(
+  () => route.query.topic,
+  async (topicId) => {
+    if (typeof topicId !== "string" || selected.value?.id === topicId) return;
+    busy.value = "detail";
+    try {
+      selected.value = (await read(`/trends/${topicId}`)).data;
+      timelineSource.value = "";
+    } finally {
+      busy.value = "";
+    }
+  },
+);
+watch(
+  () => [route.query.section, route.query.sort],
+  () => syncFromRoute(),
+);
+onMounted(() => {
+  syncFromRoute();
+  void load();
+});
 </script>
 
 <template>
@@ -319,15 +435,17 @@ onMounted(load);
       </div>
       <div>
         <button type="button" :disabled="Boolean(busy)" @click="refreshHotspots">
-          ↻ 立即获取热点</button
+          {{
+            busy === "/provider-sources/refresh" ? "正在启动，预计 1–3 分钟" : "立即获取热点"
+          }}</button
         ><button type="button" @click="showRule = true">＋ 创建监控</button
-        ><button class="secondary" type="button" @click="tab = 'rules'">订阅管理</button>
+        ><button class="secondary" type="button" @click="setTab('rules')">订阅管理</button>
       </div>
     </header>
     <nav class="trend-tabs" aria-label="热点趋势视图">
-      <button :aria-current="tab === 'topics' ? 'page' : undefined" @click="tab = 'topics'">
+      <button :aria-current="tab === 'topics' ? 'page' : undefined" @click="setTab('topics')">
         趋势主题</button
-      ><button :aria-current="tab === 'rules' ? 'page' : undefined" @click="tab = 'rules'">
+      ><button :aria-current="tab === 'rules' ? 'page' : undefined" @click="setTab('rules')">
         监控规则 <b>{{ rules.length }}</b>
       </button>
     </nav>
@@ -336,7 +454,7 @@ onMounted(load);
     </p>
     <template v-if="tab === 'topics'">
       <ResponsiveFilterDrawer label="筛选趋势" :active-count="activeFilterCount">
-        <form class="trend-filters" @submit.prevent="load">
+        <form class="trend-filters" @submit.prevent="applyFilters">
           <label
             >市场<select v-model="filters.market">
               <option value="">全部市场</option>
@@ -356,31 +474,49 @@ onMounted(load);
               v-model="filters.q"
               maxlength="200"
               placeholder="搜索主题或关键词" /></label
-          ><button type="submit">筛选</button>
+          ><label
+            >排序<select v-model="sort">
+              <option value="impact">影响程度</option>
+              <option value="latest">最新信号</option>
+              <option value="momentum">增长速度</option>
+              <option value="followed">我的关注优先</option>
+            </select></label
+          ><button type="submit">筛选</button
+          ><button type="button" class="secondary" @click="clearFilters">清除</button
+          ><button type="button" class="secondary" @click="saveViewLink">保存视图链接</button>
         </form>
       </ResponsiveFilterDrawer>
       <UiStatePanel
         v-if="state !== 'ready'"
         :kind="state"
         :request-id="requestId"
-        @primary="load"
+        :primary-label="state === 'empty' ? '清除筛选并恢复' : '重新加载'"
+        @primary="recoverTopics"
       />
-      <div v-else class="trend-workbench">
-        <section class="trend-list">
+      <div v-else class="trend-workbench" :style="{ '--trend-master-width': `${masterWidth}%` }">
+        <section id="trend-list" class="trend-list">
           <header>
             <div>
               <strong>趋势列表</strong><span>共 {{ total }} 个主题</span>
             </div>
-            <small>按最后信号时间排序</small>
+            <label class="trend-width-control"
+              >列表宽度<input
+                v-model.number="masterWidth"
+                type="range"
+                min="32"
+                max="48"
+                step="2"
+                aria-label="调整趋势列表宽度" /></label
+            ><small>{{ sort === "impact" ? "按影响程度排序" : "按所选视图排序" }}</small>
           </header>
           <button
-            v-for="topic in topics"
+            v-for="topic in sortedTopics"
             :key="topic.id"
             type="button"
             :aria-pressed="selected?.id === topic.id"
             @click="selectTopic(topic)"
           >
-            <span class="topic-mark">{{ topic.followed ? "★" : "↗" }}</span
+            <span class="topic-mark" :data-followed="topic.followed" aria-hidden="true"></span
             ><span
               ><strong>{{ topic.title }}</strong
               ><small
@@ -389,12 +525,22 @@ onMounted(load);
               ><small
                 >{{ topic.source_count }} 个来源 · 新鲜度
                 {{ freshness(topic.source_fresh_at) }}</small
-              ><small>{{ confidenceLabel(topic) }}</small></span
+              ><small
+                >{{ confidenceLabel(topic)
+                }}<template v-if="topic.followed"> · 已关注</template></small
+              ></span
             ><span class="topic-heat"
               ><b>{{ topic.heat.value }}</b
               ><small>热度 / 条信号</small></span
             ><em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
           </button>
+          <footer class="trend-pagination" aria-label="趋势分页">
+            <button type="button" :disabled="page <= 1" @click="goPage(page - 1)">上一页</button>
+            <span>第 {{ page }} / {{ pageCount }} 页</span>
+            <button type="button" :disabled="page >= pageCount" @click="goPage(page + 1)">
+              下一页
+            </button>
+          </footer>
         </section>
         <article v-if="selected" class="trend-detail" :aria-busy="busy === 'detail'">
           <header>
@@ -417,7 +563,7 @@ onMounted(load);
           </header>
           <div class="trend-actions">
             <button type="button" @click="follow">
-              {{ selected.followed ? "★ 已关注" : "☆ 关注" }}</button
+              {{ selected.followed ? "已关注" : "关注" }}</button
             ><button type="button" @click="showRule = true">创建监控</button
             ><RouterLink :to="opportunityRoute">转为机会</RouterLink
             ><button class="quiet" type="button" @click="irrelevant = true">标记无关</button>
@@ -472,7 +618,7 @@ onMounted(load);
                 ><strong>{{ item.title }}</strong
                 ><small
                   >{{ item.publisher }} · 发布 {{ freshness(item.published_at) }} · 采集
-                  {{ freshness(item.observed_at) }}</small
+                  {{ freshness(item.observed_at) }} · 原始来源可核对</small
                 ></span
               ><b>查看原文 ↗</b></a
             >
@@ -601,6 +747,7 @@ onMounted(load);
         <button type="button" @click="toggleRule(item)">
           {{ item.status === "enabled" ? "暂停" : "启用" }}
         </button>
+        <button type="button" class="secondary" @click="viewRuleTopics(item)">查看趋势结果</button>
       </article>
     </section>
     <div
