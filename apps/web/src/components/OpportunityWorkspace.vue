@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import OpportunityListPanel from "./OpportunityListPanel.vue";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
+import OpportunityWorkspaceDialogs from "./OpportunityWorkspaceDialogs.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import { statusLabel } from "../ui/status-labels";
 import "../opportunities.css";
@@ -946,120 +947,20 @@ watch(
         </section>
       </article></template
     >
-    <div
-      v-if="showErpImport"
-      class="opportunity-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="erp-import-title"
-    >
-      <form @submit.prevent="importFromErpBrowser">
-        <header>
-          <div>
-            <p>使用已有商品数据补齐系统</p>
-            <h3 id="erp-import-title">从米豆 ERP 商品列表导入</h3>
-          </div>
-          <button type="button" aria-label="关闭 ERP 导入" @click="showErpImport = false">×</button>
-        </header>
-        <aside class="erp-import-guide">
-          <strong>真实数据流</strong>
-          <span
-            >浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给
-            ai选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。</span
-          >
-        </aside>
-        <label
-          >本次导入数量<input
-            v-model.number="erpImportLimit"
-            type="number"
-            min="1"
-            max="500"
-            required
-        /></label>
-        <label class="erp-file-fallback"
-          >没有安装助手时上传 ERP JSON<input
-            type="file"
-            accept=".json,application/json"
-            @change="importErpFile"
-          /><small>接受接口返回的 list 数组或商品数组。</small></label
-        >
-        <footer>
-          <a href="/browser-helper/scoutops-browser-helper.zip">下载浏览器助手</a>
-          <button type="button" @click="showErpImport = false">取消</button>
-          <button type="submit" :disabled="busy">
-            {{ busy ? "读取并导入中…" : "从当前浏览器读取" }}
-          </button>
-        </footer>
-      </form>
-    </div>
-    <div
-      v-if="showCreate"
-      class="opportunity-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="opportunity-create-title"
-    >
-      <form @submit.prevent="create">
-        <header>
-          <div>
-            <p>新候选项</p>
-            <h3 id="opportunity-create-title">创建机会候选</h3>
-          </div>
-          <button type="button" aria-label="关闭" @click="showCreate = false">×</button>
-        </header>
-        <label>机会名称<input v-model="form.name" required maxlength="200" /></label>
-        <div>
-          <label>市场<input v-model="form.market" required maxlength="40" /></label
-          ><label>分类（可选）<input v-model="form.category" maxlength="80" /></label>
-        </div>
-        <label
-          >来源趋势 ID（可选，只接受当前工作区主题）<input
-            v-model="form.source_topic_id"
-            maxlength="36"
-        /></label>
-        <aside>创建后由宝塔 Node Worker 刷新真实证据覆盖；评分、利润与风险不会自动填充。</aside>
-        <footer>
-          <button type="button" @click="showCreate = false">取消</button
-          ><button type="submit" :disabled="busy">
-            {{ busy ? "创建中…" : "创建机会" }}
-          </button>
-        </footer>
-      </form>
-    </div>
-    <div
-      v-if="showDecision && detail"
-      class="opportunity-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="opportunity-decision-title"
-    >
-      <form @submit.prevent="decide">
-        <header>
-          <div>
-            <p>留痕决策</p>
-            <h3 id="opportunity-decision-title">
-              记录{{
-                decisionAction === "adopt"
-                  ? "采纳"
-                  : decisionAction === "observe"
-                    ? "继续观察"
-                    : "驳回"
-              }}决定
-            </h3>
-          </div>
-          <button type="button" aria-label="关闭" @click="showDecision = false">×</button>
-        </header>
-        <label
-          >原因（必填）<textarea v-model="decisionReason" required maxlength="1000"></textarea>
-        </label>
-        <aside>此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。</aside>
-        <footer>
-          <button type="button" @click="showDecision = false">取消</button
-          ><button type="submit" :disabled="busy">
-            {{ busy ? "保存中…" : "确认记录" }}
-          </button>
-        </footer>
-      </form>
-    </div>
+    <OpportunityWorkspaceDialogs
+      v-model:erp-import-open="showErpImport"
+      v-model:create-open="showCreate"
+      v-model:decision-open="showDecision"
+      v-model:erp-import-limit="erpImportLimit"
+      v-model:decision-reason="decisionReason"
+      :busy="busy"
+      :form="form"
+      :decision-action="decisionAction"
+      :has-detail="Boolean(detail)"
+      @create="create"
+      @decide="decide"
+      @import-browser="importFromErpBrowser"
+      @import-file="importErpFile"
+    />
   </section>
 </template>

@@ -937,6 +937,7 @@
         "../apps/api/src/erp-product-import-routes.ts",
         "../apps/worker/src/core-collection-projection-worker.ts",
         "../apps/web/src/components/OpportunityWorkspace.vue",
+        "../apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "../apps/web/src/components/OpportunityListPanel.vue",
         "../database/migrations/0042_erp_product_import.up.sql"
       ],
@@ -953,6 +954,7 @@
       "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; blocking reasons are derived only from the same persisted evidence and recommendation fields that enforce adoption, scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese",
       "navigationState": "list filters scope and page are URL-backed; detail tabs use the tab query and every list-to-detail link carries a validated same-origin from path so returning restores the source view",
       "decisionLayout": "detail removes the duplicate large page hero, presents the truthful recommendation first and keeps adopt observe reject plus evidence recovery in a fixed safe-area-aware bottom decision bar",
+      "modalAccessibility": "ERP import opportunity creation and decision forms use native modal top-layer dialogs with Escape handling focus trapping and invoking-control focus return",
       "apiClientBoundary": "opportunity lists, details, AI analyses, downstream competitor and sourcing counts, decisions and other writes use the shared frontend JSON client; optional AI and downstream counts still degrade independently without masking the core opportunity state",
       "refresh": "Baota Node Worker leases opportunity refresh jobs and links only persisted trend signals; trend-only evidence remains partial because competition and cost inputs are absent",
       "productImages": "structured marketplace crawlers extract JSON-LD or linked product image URLs; ERP imports map the confirmed product image field; opportunity list resolves the newest scoped evidence image and otherwise shows an explicit pending-capture placeholder",

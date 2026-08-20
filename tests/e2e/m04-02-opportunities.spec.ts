@@ -172,7 +172,13 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await page.getByRole("button", { name: "筛选", exact: true }).click();
   await filtered;
   await expect(page).toHaveScreenshot("m04-02-opportunity-list.png", { fullPage: true });
-  await page.getByRole("button", { name: "＋ 手工创建机会", exact: true }).click();
+  const createButton = page.getByRole("button", { name: "＋ 手工创建机会", exact: true });
+  await createButton.click();
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(createButton).toBeFocused();
+  await createButton.click();
   await expect(dialog).toBeVisible();
   await dialog.getByLabel("机会名称").fill("手工验证机会");
   await dialog.getByRole("button", { name: "创建机会", exact: true }).click();

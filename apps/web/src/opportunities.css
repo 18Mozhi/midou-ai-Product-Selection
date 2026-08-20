@@ -493,9 +493,22 @@
   position: fixed;
   z-index: 130;
   inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
   padding: 18px;
   display: grid;
   place-items: center;
+  border: 0;
+  color: var(--so-text);
+  background: transparent;
+}
+.opportunity-modal:not([open]) {
+  display: none;
+}
+.opportunity-modal::backdrop {
   background: var(--so-overlay);
   backdrop-filter: blur(14px);
 }

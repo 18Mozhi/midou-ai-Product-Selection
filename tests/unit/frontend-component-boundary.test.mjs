@@ -10,6 +10,8 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
     [`${components}/PlatformAdminRecords.vue`, 240],
     [`${components}/ProviderSourceCenter.vue`, 1_000],
     [`${components}/ProviderParserSampleDialog.vue`, 240],
+    [`${components}/OpportunityWorkspace.vue`, 1_000],
+    [`${components}/OpportunityWorkspaceDialogs.vue`, 240],
   ]);
 
   for (const [path, limit] of limits) {
@@ -17,12 +19,15 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
     assert.ok(source.split(/\r?\n/u).length < limit, `${path} must remain below ${limit} lines`);
   }
 
-  const [accounts, sources] = await Promise.all([
+  const [accounts, sources, opportunities] = await Promise.all([
     readFile(`${components}/PlatformAccountCenter.vue`, "utf8"),
     readFile(`${components}/ProviderSourceCenter.vue`, "utf8"),
+    readFile(`${components}/OpportunityWorkspace.vue`, "utf8"),
   ]);
   assert.match(accounts, /import PlatformAdminRecords/);
   assert.match(accounts, /<PlatformAdminRecords/);
   assert.match(sources, /import ProviderParserSampleDialog/);
   assert.match(sources, /<ProviderParserSampleDialog/);
+  assert.match(opportunities, /import OpportunityWorkspaceDialogs/);
+  assert.match(opportunities, /<OpportunityWorkspaceDialogs/);
 });
