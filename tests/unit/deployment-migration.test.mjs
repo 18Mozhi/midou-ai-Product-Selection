@@ -23,6 +23,12 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /0052a_amazon_structured_parser\.up\.sql/);
   assert.match(deploy, /0052b_provider_public_compliance\.up\.sql/);
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
+  assert.match(deploy, /verify-release-change-ownership\.mjs/);
+  assert.match(deploy, /release-change-ownership\.json/);
+  assert.ok(
+    deploy.lastIndexOf("verify_release_change_ownership(repo)") <
+      deploy.lastIndexOf("read_windows_credential()"),
+  );
   assert.match(deploy, /remote_python\(client, panel_deploy_source/);
   assert.ok(
     deploy.indexOf("ssh_exec(client, migrate") <

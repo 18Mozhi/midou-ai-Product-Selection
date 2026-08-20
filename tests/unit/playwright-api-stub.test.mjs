@@ -8,7 +8,7 @@ test("Playwright uses the real Fastify app with in-memory readiness dependencies
   const [config, server, e2e] = await Promise.all([
     read("playwright.config.ts"),
     read("scripts/run-playwright-api-test-server.mjs"),
-    read("tests/e2e/m00-05-api.spec.ts"),
+    read("tests/e2e/m00-09-real-api-acceptance.spec.ts"),
   ]);
 
   assert.match(config, /npm run start:e2e-api/);
@@ -17,5 +17,7 @@ test("Playwright uses the real Fastify app with in-memory readiness dependencies
   assert.match(server, /available\("mysql"\)/);
   assert.match(server, /available\("redis"\)/);
   assert.doesNotMatch(server, /createServer|playwright_route_not_mocked/);
-  assert.match(e2e, /browser reaches the real Fastify health route without interception/);
+  assert.match(e2e, /\[real-api\] readiness renders from Fastify without interception/);
+  assert.match(e2e, /page\.screenshot/);
+  assert.doesNotMatch(e2e, /page\.route/);
 });

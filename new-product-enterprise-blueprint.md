@@ -969,6 +969,7 @@ Repository 使用更严格的全量边界：每次运行格式门禁都扫描全
 
 - 统一入口：模块使用 `npm run verify:module -- <module-id>`，阶段使用 `npm run verify:phase -- <phase-id>`，P00–P08 全量使用 `npm run verify:all`；三者是软件完成门，成功后原子持久化完成状态并由下游复用，任一前置缺失、命令失败或超时必须返回非零且输出脱敏 `run_id`/`trace_id` 报告。
 - 软件功能入口：`npm run verify:functional` 一次执行 P00–P08 的新鲜生产构建、软件功能 Node/Python 测试、桌面/390px E2E、文档、计划、发布矩阵和安全门。所有软件完成入口都不运行同提交生产部署证据、磁盘诊断、生产负载或容量证据，也不得提升容量声明。
+- 生产上传前必须由 `npm run verify:release-ownership` 校验 Git 忽略的发布归属清单：上次发布祖先 commit 到当前 HEAD 的每个 commit 和变更路径只能归入一个明确负责人工作包；漏项、重复、区间外、跨包同路径冲突或身份漂移一律在读取凭据前阻断，禁止把未知并行变更混入发布。
 - 单元：领域规则、权限、评分、利润、错误映射、状态机、去重。
 - 契约：OpenAPI、SSE 事件、Provider 输入输出、前后端 DTO。
 - E2E API 基线必须至少保留一条不使用浏览器路由拦截的真实链路，由浏览器经 Vite 代理访问实际 Fastify `buildApp()` 并生成有效 PNG；测试只可注入内存依赖检查，不得用手写 HTTP 假响应替代 API 路由栈，也不得连接生产数据库。带 `page.route` 的文件中截图调用占全部截图调用的比例不得超过 84%，且这些 Mock 截图只能作为视觉回归；成员与平台移动壳层必须复用零重叠遮挡检查。

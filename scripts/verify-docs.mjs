@@ -130,6 +130,8 @@ const required = [
   "docs/architecture/m07-02-security-gate.md",
   "docs/runbooks/m07-02-security-gate.md",
   "scripts/verify-baota-deployment.mjs",
+  "scripts/verify-release-change-ownership.mjs",
+  "verification/release-change-ownership.example.json",
   "verification/baota-production-evidence.schema.json",
   "verification/modules/M07-03.json",
   "docs/architecture/m07-03-baota-deployment.md",

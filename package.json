@@ -48,6 +48,7 @@
     "verify:functional": "node scripts/verify-functional.mjs",
     "verify:production-product": "node scripts/verify-production-product.mjs",
     "verify:release-matrix": "node scripts/verify-release-matrix.mjs --validate",
+    "verify:release-ownership": "node scripts/verify-release-change-ownership.mjs --manifest .artifacts/release-change-ownership.json",
     "verify:runtime-docs": "node scripts/verify-runtime-doc-consistency.mjs",
     "verify:security-gate": "node scripts/verify-security-gate.mjs",
     "verify:docs": "node scripts/verify-docs.mjs",

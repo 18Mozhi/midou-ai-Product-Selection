@@ -29,7 +29,7 @@ python scripts/deploy-baota.py --initialize-layout
 python scripts/deploy-baota.py
 ```
 
-脚本要求 Git 工作树干净，从 Windows 凭据管理器读取 `ssh@192.168.1.220:22/root`，在本地完成构建，只上传 `frontend/backend/python` 运行包，并通过宝塔模型修改或创建本项目对象。临时上传包和 staging 在成功后删除。`tests`、截图、文档、计划、Git 元数据和本地缓存不会上传。部署器不再识别、迁移或删除 `current`、`releases`；固定根目录出现任何非白名单条目都会在停止服务前失败关闭，应先人工确认归属并移出该根目录。
+脚本要求 Git 工作树干净，并在读取 Windows 凭据前校验 `.artifacts/release-change-ownership.json`：从上次发布基线到当前 HEAD 的每个 commit 与变更路径都必须精确归入一个有负责人的工作包，未知、重复、额外或跨包冲突变更会阻断上传。清单格式参考 `verification/release-change-ownership.example.json`。通过后脚本才从 Windows 凭据管理器读取 `ssh@192.168.1.220:22/root`，在本地完成构建，只上传 `frontend/backend/python` 运行包，并通过宝塔模型修改或创建本项目对象。临时上传包和 staging 在成功后删除。`tests`、截图、文档、计划、Git 元数据和本地缓存不会上传。部署器不再识别、迁移或删除 `current`、`releases`；固定根目录出现任何非白名单条目都会在停止服务前失败关闭，应先人工确认归属并移出该根目录。
 
 启动、停止优先在宝塔面板的网站、Node 项目和 Python 项目页面操作。命令行重启也必须调用宝塔脚本：
 

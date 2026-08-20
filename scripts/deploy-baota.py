@@ -107,6 +107,32 @@ def local_npm_executable() -> str:
     return executable
 
 
+def local_node_executable() -> str:
+    command = "node.exe" if os.name == "nt" else "node"
+    executable = shutil.which(command)
+    if not executable:
+        raise RuntimeError(f"local release gate command is unavailable: {command}")
+    return executable
+
+
+def verify_release_change_ownership(repo: Path) -> None:
+    manifest = repo / ".artifacts" / "release-change-ownership.json"
+    if not manifest.is_file():
+        raise RuntimeError(
+            "release ownership manifest is missing: .artifacts/release-change-ownership.json"
+        )
+    subprocess.run(
+        [
+            local_node_executable(),
+            "scripts/verify-release-change-ownership.mjs",
+            "--manifest",
+            str(manifest),
+        ],
+        cwd=repo,
+        check=True,
+    )
+
+
 def build_package(repo: Path, build_sha: str, skip_build: bool, temp_root: Path) -> Path:
     if not skip_build:
         subprocess.run([local_npm_executable(), "run", "build"], cwd=repo, check=True)
@@ -433,6 +459,7 @@ def main() -> None:
     build_sha = run(["git", "rev-parse", "HEAD"], repo)
     if len(build_sha) != 40:
         raise RuntimeError("full Git build identity is unavailable")
+    verify_release_change_ownership(repo)
 
     with tempfile.TemporaryDirectory(prefix="scoutops-deploy-") as temp:
         archive = build_package(repo, build_sha, args.skip_build, Path(temp))

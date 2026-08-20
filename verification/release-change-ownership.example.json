@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "release-work-package-example",
+  "baseSha": "0000000000000000000000000000000000000000",
+  "headSha": "1111111111111111111111111111111111111111",
+  "workPackages": [
+    {
+      "id": "selection-journey",
+      "owner": "选品旅程负责人",
+      "commits": ["1111111111111111111111111111111111111111"],
+      "paths": ["apps/web/src/components/SelectionJourney.vue"]
+    }
+  ]
+}
