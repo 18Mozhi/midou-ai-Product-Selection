@@ -107,8 +107,11 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       "apps/api/src/platform-account-routes.ts",
       "apps/web/src/components/PlatformAccountCenter.vue",
       "apps/web/src/components/OrganizationCreationWizard.vue",
+      "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+      "apps/web/src/components/PlatformAdminRecords.vue",
       "apps/web/src/components/PlatformRoleComparison.vue",
       "apps/web/src/components/PlatformUserDetailDialog.vue",
+      "apps/web/src/use-modal-dialog.ts",
       "apps/web/src/components/NavigationShell.vue",
       "apps/web/src/route-catalog.ts",
       "scripts/verify-platform-accounts-live.mjs",
@@ -121,13 +124,18 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       routes,
       accountShell,
       wizard,
+      organizationDetail,
+      adminRecords,
       comparison,
       detailDialog,
+      modalDialog,
       navigation,
       routeCatalog,
       live,
     ] = values,
-    web = [accountShell, wizard, comparison, detailDialog].join("\n");
+    web = [accountShell, wizard, organizationDetail, adminRecords, comparison, detailDialog].join(
+      "\n",
+    );
   assert.match(migration, /platform_account_operations/);
   assert.match(service, /cannot_disable_self/);
   assert.match(repository, /platform_audit_events/);
@@ -146,7 +154,15 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(web, /创建组织步骤/);
   assert.match(web, /下一步：选择管理员/);
   assert.match(web, /同时创建默认工作区和组织级数据范围/);
+  assert.match(accountShell, /已进入组织详情/);
+  assert.match(organizationDetail, /组织详情[\s\S]*停用组织[\s\S]*保存组织资料/);
+  assert.doesNotMatch(accountShell, /@click="toggleOrganization\(item\)"/);
+  assert.doesNotMatch(accountShell, /@click="toggleUser\(item\)"/);
+  assert.doesNotMatch(adminRecords, /emit\('role'/);
   assert.match(wizard, /formElement\.value\?\.reportValidity\(\)/);
+  assert.match(modalDialog, /showModal\(\)/);
+  assert.match(modalDialog, /handleCancel/);
+  assert.match(modalDialog, /returnFocus\?\.focus\(\)/);
   assert.match(web, /\/platform\/roles/);
   assert.match(web, /角色权限差异/);
   assert.match(comparison, /differencesOnly/);
@@ -154,7 +170,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   for (const capability of CAPABILITIES)
     assert.match(web, new RegExp(capability.replace(":", "\\:")));
   assert.ok(accountShell.split(/\r?\n/).length < 1000);
-  for (const component of [wizard, comparison, detailDialog])
+  for (const component of [wizard, organizationDetail, adminRecords, comparison, detailDialog])
     assert.ok(component.split(/\r?\n/).length < 300);
   assert.match(routeCatalog, /账号与组织/);
   assert.doesNotMatch(navigation, /label: "Redis 韧性"|label: "MySQL 韧性"|label: "文件韧性"/);

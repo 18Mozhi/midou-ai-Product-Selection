@@ -1,5 +1,7 @@
 <script setup lang="ts">
-defineProps<{
+import { useModalDialog } from "../use-modal-dialog";
+
+const props = defineProps<{
   open: boolean;
   detail: any | null;
   selected: any | null;
@@ -7,22 +9,31 @@ defineProps<{
   roleText: (value: string) => string;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   close: [];
+  toggleStatus: [user: any];
+  role: [userId: string, roleCode: string, enabled: boolean];
   resetPassword: [user: any];
   revokeSessions: [user: any, sessionId: string | null];
 }>();
+const { dialogElement, handleCancel } = useModalDialog(
+  () => props.open,
+  () => emit("close"),
+);
+
+const roleCodes = ["platform_operations_admin", "platform_security_admin", "platform_super_admin"];
+const currentRoles = () => props.selected?.roles ?? props.selected?.platform_roles ?? [];
 </script>
 
 <template>
-  <dialog :open="open" class="detail-dialog">
+  <dialog ref="dialogElement" class="detail-dialog" @cancel="handleCancel">
     <section v-if="detail">
       <header>
         <div>
           <small>账号详情</small>
           <h3>{{ detail.user.email }}</h3>
         </div>
-        <button aria-label="关闭账号详情" title="关闭账号详情" @click="$emit('close')">×</button>
+        <button aria-label="关闭账号详情" title="关闭账号详情" @click="$emit('close')">关闭</button>
       </header>
       <div class="detail-grid">
         <article>
@@ -68,7 +79,22 @@ defineEmits<{
           </button>
         </li>
       </ul>
+      <h4>平台角色</h4>
+      <p>{{ currentRoles().map(roleText).join("、") || "普通用户，没有平台后台权限。" }}</p>
+      <div class="role-actions">
+        <button
+          v-for="code in roleCodes"
+          :key="code"
+          :disabled="selected?.status !== 'active'"
+          @click="$emit('role', selected.id, code, !currentRoles().includes(code))"
+        >
+          {{ currentRoles().includes(code) ? "撤销" : "授予" }}{{ roleText(code) }}
+        </button>
+      </div>
       <footer>
+        <button @click="$emit('toggleStatus', selected)">
+          {{ selected?.status === "active" ? "停用登录" : "恢复登录" }}
+        </button>
         <button @click="$emit('resetPassword', selected)">强制改密</button>
         <button @click="$emit('revokeSessions', selected, null)">撤销全部会话</button>
         <button @click="$emit('close')">关闭</button>
@@ -90,8 +116,12 @@ dialog {
   border: 1px solid var(--so-border-strong);
   border-radius: 16px;
   color: var(--so-text);
-  background: var(--so-panel);
+  background: var(--so-bg-elevated);
   box-shadow: 0 24px 80px color-mix(in srgb, var(--so-shadow-color) 40%, transparent);
+}
+dialog::backdrop {
+  background: color-mix(in srgb, var(--so-bg) 70%, transparent);
+  backdrop-filter: blur(4px);
 }
 .detail-dialog > section > header {
   display: flex;
@@ -137,6 +167,11 @@ dialog {
 }
 .detail-dialog li small {
   color: var(--so-text-muted);
+}
+.role-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 footer {
   display: flex;

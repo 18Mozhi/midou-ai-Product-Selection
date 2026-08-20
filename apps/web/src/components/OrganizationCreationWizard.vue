@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import { useModalDialog } from "../use-modal-dialog";
 
 interface OrganizationForm {
   name: string;
@@ -16,6 +17,10 @@ const props = defineProps<{
 const emit = defineEmits<{ close: []; submit: [] }>();
 const step = ref<1 | 2>(1);
 const formElement = ref<HTMLFormElement | null>(null);
+const { dialogElement, handleCancel } = useModalDialog(
+  () => props.open,
+  () => emit("close"),
+);
 
 watch(
   () => props.open,
@@ -36,7 +41,7 @@ function close() {
 </script>
 
 <template>
-  <dialog :open="open" class="organization-wizard">
+  <dialog ref="dialogElement" class="organization-wizard" @cancel="handleCancel">
     <form ref="formElement" @submit.prevent="$emit('submit')">
       <h3>新建组织</h3>
       <ol class="organization-wizard__progress" aria-label="创建组织步骤">
@@ -114,12 +119,18 @@ dialog {
   inset: 0;
   z-index: 10;
   width: min(560px, calc(100% - 28px));
+  max-height: calc(100dvh - 28px);
+  overflow: auto;
   margin: auto;
   border: 1px solid var(--so-border-strong);
   border-radius: 16px;
   color: var(--so-text);
-  background: var(--so-panel);
+  background: var(--so-bg-elevated);
   box-shadow: 0 24px 80px color-mix(in srgb, var(--so-shadow-color) 40%, transparent);
+}
+dialog::backdrop {
+  background: color-mix(in srgb, var(--so-bg) 70%, transparent);
+  backdrop-filter: blur(4px);
 }
 form {
   display: grid;

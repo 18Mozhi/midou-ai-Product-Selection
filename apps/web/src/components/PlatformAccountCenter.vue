@@ -2,8 +2,11 @@
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
+import AppIcon from "./AppIcon.vue";
 import OrganizationCreationWizard from "./OrganizationCreationWizard.vue";
 import PlatformAdminRecords from "./PlatformAdminRecords.vue";
+import PlatformOrganizationDetailDialog from "./PlatformOrganizationDetailDialog.vue";
 import PlatformRoleComparison from "./PlatformRoleComparison.vue";
 import PlatformUserDetailDialog from "./PlatformUserDetailDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
@@ -35,7 +38,7 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; initialTab?: Tab }>
   message = ref(""),
   busy = ref(""),
   createUserOpen = ref(false),
-  editOrganizationOpen = ref(false),
+  organizationDetailOpen = ref(false),
   detailOpen = ref(false),
   passwordOpen = ref(false),
   reasonOpen = ref(false),
@@ -59,6 +62,19 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; initialTab?: Tab }>
     organization_role_code: "member",
   }),
   passwordForm = reactive({ temporary_password: "" });
+const { dialogElement: createUserDialogElement, handleCancel: handleCreateUserCancel } =
+    useModalDialog(
+      () => createUserOpen.value,
+      () => (createUserOpen.value = false),
+    ),
+  { dialogElement: passwordDialogElement, handleCancel: handlePasswordCancel } = useModalDialog(
+    () => passwordOpen.value,
+    () => (passwordOpen.value = false),
+  ),
+  { dialogElement: reasonDialogElement, handleCancel: handleReasonCancel } = useModalDialog(
+    () => reasonOpen.value,
+    () => cancelReason(),
+  );
 watch(
   () => props.initialTab,
   (value) => {
@@ -119,16 +135,16 @@ async function load() {
     state.value = "error";
   }
 }
-async function write(path: string, body: unknown, method = "POST") {
+async function write<T = unknown>(path: string, body: unknown, method = "POST") {
   busy.value = path;
   message.value = "";
   try {
-    await request(path, { method, body });
+    const response = await request<T>(path, { method, body });
     await load();
-    return true;
+    return response.data;
   } catch (e) {
     message.value = e instanceof ApiClientError ? e.actionHint : "操作失败";
-    return false;
+    return null;
   } finally {
     busy.value = "";
   }
@@ -139,12 +155,14 @@ async function createOrganization() {
     slug: form.slug,
     ...(form.initial_admin_user_id ? { initial_admin_user_id: form.initial_admin_user_id } : {}),
   };
-  if (await write("/platform/accounts/organizations", body)) {
+  const created = await write<any>("/platform/accounts/organizations", body);
+  if (created) {
     form.name = "";
     form.slug = "";
     form.initial_admin_user_id = "";
     createOpen.value = false;
-    message.value = "组织和默认工作区已创建。";
+    openOrganization(data.value?.organizations.find((item) => item.id === created.id) ?? created);
+    message.value = "组织和默认工作区已创建，已进入组织详情。";
   }
 }
 function openOrganizationWizard() {
@@ -164,29 +182,52 @@ async function submitReason() {
   pendingReasonAction.value = null;
   await action(value);
 }
+function cancelReason() {
+  reasonOpen.value = false;
+  pendingReasonAction.value = null;
+}
 async function toggleOrganization(item: any) {
   askReason(item.status === "active" ? "停用组织" : "恢复组织", async (why) => {
-    await write(`/platform/accounts/organizations/${item.id}/status`, {
-      status: item.status === "active" ? "archived" : "active",
-      reason: why,
-    });
+    if (
+      await write(`/platform/accounts/organizations/${item.id}/status`, {
+        status: item.status === "active" ? "archived" : "active",
+        reason: why,
+      })
+    ) {
+      const updated = data.value?.organizations.find((row) => row.id === item.id);
+      if (updated) openOrganization(updated);
+    }
   });
 }
 async function toggleUser(item: any) {
   askReason(item.status === "active" ? "停用用户并撤销会话" : "恢复用户", async (why) => {
-    await write(`/platform/accounts/users/${item.id}/status`, {
-      status: item.status === "active" ? "disabled" : "active",
-      reason: why,
-    });
+    if (
+      await write(`/platform/accounts/users/${item.id}/status`, {
+        status: item.status === "active" ? "disabled" : "active",
+        reason: why,
+      })
+    ) {
+      const updated = [...(data.value?.users ?? []), ...(data.value?.admins ?? [])].find(
+        (row) => row.id === item.id,
+      );
+      if (updated && detailOpen.value) await openUserDetail(updated);
+    }
   });
 }
 async function role(userId: string, roleCode: string, enabled: boolean) {
   askReason(`${enabled ? "授予" : "撤销"}${roleText(roleCode)}`, async (why) => {
-    await write(`/platform/accounts/users/${userId}/platform-role`, {
-      role_code: roleCode,
-      enabled,
-      reason: why,
-    });
+    if (
+      await write(`/platform/accounts/users/${userId}/platform-role`, {
+        role_code: roleCode,
+        enabled,
+        reason: why,
+      })
+    ) {
+      const updated = [...(data.value?.users ?? []), ...(data.value?.admins ?? [])].find(
+        (row) => row.id === userId,
+      );
+      if (updated && detailOpen.value) await openUserDetail(updated);
+    }
   });
 }
 function openOrganization(item: any) {
@@ -194,7 +235,7 @@ function openOrganization(item: any) {
   organizationForm.name = item.name;
   organizationForm.timezone = item.timezone || "Asia/Shanghai";
   organizationForm.data_retention_days = Number(item.data_retention_days || 365);
-  editOrganizationOpen.value = true;
+  organizationDetailOpen.value = true;
 }
 async function updateOrganization() {
   if (!selected.value) return;
@@ -206,7 +247,8 @@ async function updateOrganization() {
         "PATCH",
       )
     ) {
-      editOrganizationOpen.value = false;
+      const updated = data.value?.organizations.find((item) => item.id === selected.value.id);
+      if (updated) openOrganization(updated);
       message.value = "组织资料已更新。";
     }
   });
@@ -287,9 +329,9 @@ onMounted(load);
         <span>创建组织、启停账号、分配平台管理员。所有操作都会留审计记录。</span>
       </div>
       <div class="hero-actions">
-        <button @click="openOrganizationWizard">＋ 新建组织</button
+        <button @click="openOrganizationWizard"><AppIcon name="plus" /> 新建组织</button
         ><button @click="openCreateUser(tab === 'admins')">
-          ＋ {{ tab === "admins" ? "新建管理员" : "新建用户" }}
+          <AppIcon name="plus" /> {{ tab === "admins" ? "新建管理员" : "新建用户" }}
         </button>
       </div>
     </header>
@@ -379,9 +421,8 @@ onMounted(load);
                   <b :data-status="item.status">{{ statusText(item.status) }}</b>
                 </td>
                 <td>
-                  <button :disabled="Boolean(busy)" @click="openOrganization(item)">编辑</button
-                  ><button :disabled="Boolean(busy)" @click="toggleOrganization(item)">
-                    {{ item.status === "active" ? "停用" : "恢复" }}
+                  <button :disabled="Boolean(busy)" @click="openOrganization(item)">
+                    查看详情
                   </button>
                 </td>
               </tr>
@@ -424,16 +465,7 @@ onMounted(load);
                 close();
               "
             >
-              编辑组织</button
-            ><button
-              class="secondary"
-              :disabled="Boolean(busy)"
-              @click="
-                toggleOrganization(row);
-                close();
-              "
-            >
-              {{ row.status === "active" ? "停用组织" : "恢复组织" }}
+              打开组织详情
             </button>
           </div>
           <details>
@@ -479,16 +511,7 @@ onMounted(load);
                   <b :data-status="item.status">{{ statusText(item.status) }}</b>
                 </td>
                 <td>
-                  <button :disabled="Boolean(busy)" @click="openUserDetail(item)">详情</button
-                  ><button :disabled="Boolean(busy)" @click="openPassword(item)">强制改密</button
-                  ><button
-                    :disabled="Boolean(busy) || !item.active_session_count"
-                    @click="revokeSessions(item)"
-                  >
-                    撤销会话（{{ item.active_session_count || 0 }}）</button
-                  ><button :disabled="Boolean(busy)" @click="toggleUser(item)">
-                    {{ item.status === "active" ? "停用登录" : "恢复登录" }}
-                  </button>
+                  <button :disabled="Boolean(busy)" @click="openUserDetail(item)">账号详情</button>
                 </td>
               </tr>
             </tbody>
@@ -532,32 +555,7 @@ onMounted(load);
                 close();
               "
             >
-              账号详情</button
-            ><button
-              class="secondary"
-              @click="
-                openPassword(row);
-                close();
-              "
-            >
-              强制改密</button
-            ><button
-              class="secondary"
-              :disabled="!row.active_session_count"
-              @click="
-                revokeSessions(row);
-                close();
-              "
-            >
-              撤销会话</button
-            ><button
-              class="secondary"
-              @click="
-                toggleUser(row);
-                close();
-              "
-            >
-              {{ row.status === "active" ? "停用登录" : "恢复登录" }}
+              打开账号详情
             </button>
           </div>
           <details>
@@ -571,13 +569,7 @@ onMounted(load);
           </details>
         </template>
       </ResponsiveDataView>
-      <PlatformAdminRecords
-        v-else
-        :rows="rows"
-        :busy="Boolean(busy)"
-        @open-user="openUserDetail"
-        @role="role"
-      />
+      <PlatformAdminRecords v-else :rows="rows" @open-user="openUserDetail" />
     </template>
     <OrganizationCreationWizard
       :open="createOpen"
@@ -587,7 +579,7 @@ onMounted(load);
       @close="createOpen = false"
       @submit="createOrganization"
     />
-    <dialog :open="createUserOpen">
+    <dialog ref="createUserDialogElement" @cancel="handleCreateUserCancel">
       <form @submit.prevent="createUser">
         <h3>新建用户或平台管理员</h3>
         <p>账号立即可用；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。</p>
@@ -633,27 +625,16 @@ onMounted(load);
         </footer>
       </form>
     </dialog>
-    <dialog :open="editOrganizationOpen">
-      <form @submit.prevent="updateOrganization">
-        <h3>编辑组织资料</h3>
-        <label
-          >组织名称<input v-model="organizationForm.name" required minlength="2" maxlength="120"
-        /></label>
-        <label>时区<input v-model="organizationForm.timezone" required maxlength="64" /></label>
-        <label
-          >数据保留天数<input
-            v-model.number="organizationForm.data_retention_days"
-            type="number"
-            min="30"
-            max="3650"
-            required
-        /></label>
-        <footer>
-          <button type="button" @click="editOrganizationOpen = false">取消</button
-          ><button :disabled="Boolean(busy)">保存</button>
-        </footer>
-      </form>
-    </dialog>
+    <PlatformOrganizationDetailDialog
+      :open="organizationDetailOpen"
+      :organization="selected"
+      :form="organizationForm"
+      :busy="Boolean(busy)"
+      :status-text="statusText"
+      @close="organizationDetailOpen = false"
+      @save="updateOrganization"
+      @toggle-status="toggleOrganization"
+    />
     <PlatformUserDetailDialog
       :open="detailOpen"
       :detail="detail"
@@ -661,10 +642,12 @@ onMounted(load);
       :status-text="statusText"
       :role-text="roleText"
       @close="detailOpen = false"
+      @toggle-status="toggleUser"
+      @role="role"
       @reset-password="openPassword"
       @revoke-sessions="revokeSessions"
     />
-    <dialog :open="passwordOpen">
+    <dialog ref="passwordDialogElement" @cancel="handlePasswordCancel">
       <form @submit.prevent="resetPassword">
         <h3>强制重置密码</h3>
         <p>保存后会撤销该用户全部活动会话，并要求首次登录修改密码。</p>
@@ -682,7 +665,7 @@ onMounted(load);
         </footer>
       </form>
     </dialog>
-    <dialog :open="reasonOpen">
+    <dialog ref="reasonDialogElement" @cancel="handleReasonCancel">
       <form @submit.prevent="submitReason">
         <h3>{{ reasonTitle }}</h3>
         <p>原因会写入平台审计记录。</p>
@@ -711,7 +694,7 @@ onMounted(load);
   padding: 24px;
   border-radius: 18px;
   background: linear-gradient(135deg, var(--so-panel-soft), var(--so-bg-elevated));
-  color: white;
+  color: var(--so-text);
 }
 .account-hero p {
   margin: 0;
@@ -723,7 +706,7 @@ onMounted(load);
   font-size: 28px;
 }
 .account-hero span {
-  opacity: 0.78;
+  color: var(--so-text-muted);
 }
 .account-hero button,
 .account-filter button {
@@ -743,6 +726,11 @@ onMounted(load);
   background: var(--so-panel-soft);
   color: var(--so-text);
   border: 1px solid var(--so-border-strong);
+}
+.hero-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 .account-metrics {
   display: grid;
@@ -780,8 +768,9 @@ onMounted(load);
   color: var(--so-text);
 }
 .account-tabs a.on {
-  background: var(--so-panel-muted);
-  color: white;
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-on-primary);
 }
 .account-filter {
   display: flex;
@@ -794,7 +783,7 @@ onMounted(load);
   border: 1px solid var(--so-border-strong);
   border-radius: 9px;
   color: var(--so-text);
-  background: var(--so-panel);
+  background: var(--so-bg-elevated);
 }
 .account-table-wrap {
   background: var(--so-panel);
@@ -867,6 +856,10 @@ dialog {
   border: 1px solid var(--so-border-strong);
   box-shadow: 0 24px 80px color-mix(in srgb, var(--so-shadow-color) 40%, transparent);
   z-index: 10;
+}
+dialog::backdrop {
+  background: color-mix(in srgb, var(--so-bg) 70%, transparent);
+  backdrop-filter: blur(4px);
 }
 dialog form {
   display: grid;

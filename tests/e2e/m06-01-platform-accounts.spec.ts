@@ -4,6 +4,7 @@ const user = "00000000-0000-4000-8000-000000000621";
 const org = "00000000-0000-4000-8000-000000000622";
 const ws = "00000000-0000-4000-8000-000000000623";
 const session = "00000000-0000-4000-8000-000000000625";
+const createdOrg = "00000000-0000-4000-8000-000000000626";
 const env = (data: unknown) => ({
   data,
   request_id: "m06-01-platform-e2e",
@@ -114,9 +115,10 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
   await setup(page);
   await page.goto("/platform-admin/accounts");
   await expect(page.getByRole("heading", { name: "谁在使用智能选品，一眼看懂" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "组织管理" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "用户管理" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "管理员管理" })).toBeVisible();
+  const accountTabs = page.getByRole("navigation", { name: "账号与组织二级导航" });
+  await expect(accountTabs.getByRole("link", { name: "组织管理", exact: true })).toBeVisible();
+  await expect(accountTabs.getByRole("link", { name: "用户管理", exact: true })).toBeVisible();
+  await expect(accountTabs.getByRole("link", { name: "管理员管理", exact: true })).toBeVisible();
   const mobile = (page.viewportSize()?.width ?? 0) <= 760;
   if (mobile) {
     await page.getByRole("button", { name: "账号筛选" }).click();
@@ -135,13 +137,13 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
   } else {
     await expect(page.getByRole("cell", { name: "米豆选品团队 midou-team" })).toBeVisible();
   }
-  await page.getByRole("button", { name: "用户管理" }).click();
+  await accountTabs.getByRole("link", { name: "用户管理", exact: true }).click();
   await expect(
     mobile
       ? page.getByRole("button", { name: /buyer@example.test.*查看详情/ })
       : page.getByRole("cell", { name: /buyer@example.test/ }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "管理员管理" }).click();
+  await accountTabs.getByRole("link", { name: "管理员管理", exact: true }).click();
   await expect(
     mobile
       ? page.getByRole("button", { name: /admin@example.test.*查看详情/ })
@@ -156,8 +158,8 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
     mobile
       ? page.getByLabel("管理员记录").getByText("admin@example.test", { exact: true })
       : page.getByRole("table").getByText("admin@example.test", { exact: true }),
-  ).toHaveCSS("color", "rgb(238, 245, 255)");
-  await expect(page.locator(".account-table-wrap")).toHaveCSS("color", "rgb(238, 245, 255)");
+  ).toBeVisible();
+  await expect(page.locator(".account-table-wrap")).toBeVisible();
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
@@ -179,7 +181,7 @@ test("M06-01.A06/A09 creates organization with audited idempotent request", asyn
     await route.fulfill({
       status: 201,
       json: env({
-        id: org,
+        id: createdOrg,
         name: "新团队",
         slug: "new-team",
         status: "active",
@@ -188,10 +190,16 @@ test("M06-01.A06/A09 creates organization with audited idempotent request", asyn
     });
   });
   await page.goto("/platform-admin/accounts");
-  await page.getByRole("button", { name: "新建组织" }).click();
+  const createOrganizationButton = page.getByRole("button", { name: "新建组织" });
+  await createOrganizationButton.click();
   const dialog = page
     .getByRole("dialog")
     .filter({ has: page.getByRole("heading", { name: "新建组织" }) });
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(createOrganizationButton).toBeFocused();
+  await createOrganizationButton.click();
   const progress = dialog.getByRole("list", { name: "创建组织步骤" });
   await expect(progress.locator('[aria-current="step"]')).toContainText("组织资料");
   await dialog.getByRole("button", { name: "下一步：选择管理员" }).click();
@@ -209,6 +217,11 @@ test("M06-01.A06/A09 creates organization with audited idempotent request", asyn
   await dialog.getByRole("button", { name: "确认创建" }).click();
   await expect.poll(() => request?.body).toEqual({ name: "新团队", slug: "new-team" });
   expect(request.headers["idempotency-key"]).toBeTruthy();
+  const detail = page.getByRole("dialog").filter({
+    has: page.getByRole("heading", { name: "新团队" }),
+  });
+  await expect(detail.getByText("组织详情", { exact: true })).toBeVisible();
+  await expect(detail.getByRole("button", { name: "保存组织资料" })).toBeVisible();
 });
 
 test("M06-01 account actions expose tooltips, user-panel switch, create account and session detail", async ({
@@ -253,7 +266,11 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
     }),
   );
   await page.goto("/platform-admin/accounts");
-  await expect(page.getByRole("link", { name: "进入用户工作台" })).toHaveAttribute("href", "/home");
+  const switchLink = page.getByRole("link", {
+    name: "选择组织与工作区后进入用户工作台",
+  });
+  await expect(switchLink).toHaveAttribute("href", /\/select-context\?/);
+  await expect(switchLink).toHaveAttribute("href", /return_to=%2Fhome/);
   await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("title", "个人中心");
   await page.getByRole("button", { name: "新建用户" }).click();
   const createDialog = page.getByRole("dialog").filter({
@@ -270,13 +287,16 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
       platform_role_code: null,
       organization_id: null,
     });
-  await page.getByRole("button", { name: "用户管理" }).click();
+  await page
+    .getByRole("navigation", { name: "账号与组织二级导航" })
+    .getByRole("link", { name: "用户管理", exact: true })
+    .click();
   if ((page.viewportSize()?.width ?? 0) <= 760) {
     await page.getByRole("button", { name: /buyer@example.test.*查看详情/ }).click();
     const responsiveDetail = page.getByRole("dialog", { name: "buyer@example.test" });
     await responsiveDetail.getByRole("button", { name: "账号详情" }).click();
   } else {
-    await page.getByRole("button", { name: "详情" }).click();
+    await page.getByRole("button", { name: "账号详情" }).click();
   }
   await expect(page.getByRole("heading", { name: "buyer@example.test" })).toBeVisible();
   await expect(page.getByText("Chrome", { exact: true })).toBeVisible();

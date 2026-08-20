@@ -1401,8 +1401,10 @@
         "../apps/web/src/components/PlatformAccountCenter.vue",
         "../apps/web/src/components/PlatformAdminRecords.vue",
         "../apps/web/src/components/OrganizationCreationWizard.vue",
+        "../apps/web/src/components/PlatformOrganizationDetailDialog.vue",
         "../apps/web/src/components/PlatformRoleComparison.vue",
         "../apps/web/src/components/PlatformUserDetailDialog.vue",
+        "../apps/web/src/use-modal-dialog.ts",
         "../apps/web/src/components/NavigationShell.vue"
       ],
       "routes": [
@@ -1423,9 +1425,10 @@
       "truthBoundary": "only MySQL account and non-secret session metadata; no password hashes, session tokens, IP or user-agent hashes or credentials; organization creation grants the selected first administrator an organization data scope; disable and forced-password operations revoke active user_sessions",
       "permission": "platform:superadmin plus same-origin Origin, Idempotency-Key and audited reason for writes",
       "persistence": "platform_account_operations idempotency plus existing organizations, workspaces, memberships, fixed role assignments, membership_data_scopes and platform_audit_events",
-      "organizationWizard": "the platform create-organization dialog separates organization identity from first-administrator selection and impact confirmation; it validates step one before continuing and submits the unchanged atomic name, slug and optional initial_admin_user_id contract only after final confirmation",
+      "organizationWizard": "the platform create-organization dialog separates organization identity from first-administrator selection and impact confirmation; it validates step one before continuing, submits the unchanged atomic name, slug and optional initial_admin_user_id contract only after final confirmation, then opens the created organization detail",
       "roleComparison": "platform super administrators compare any two active platform roles from the server-owned roles and role_capabilities catalog; the UI defaults to differences only, uses Chinese capability labels, and never infers authorization from visible buttons",
-      "responsiveAccountView": "desktop account lists use tables while narrow screens use summary cards, record detail drawers and a state-preserving filter drawer; existing account actions stay available in record detail and raw organization or user UUIDs appear only inside technical details",
+      "responsiveAccountView": "desktop account lists use tables while narrow screens use summary cards, record detail drawers and a state-preserving filter drawer; organization, user and administrator list actions all enter their detail view, account status, session, password and platform-role operations stay inside the relevant detail, and raw organization or user UUIDs appear only inside technical details",
+      "modalAccessibility": "account-management dialogs use the native modal top layer, trap focus, close with Escape and restore focus to the invoking control; opaque dialog surfaces and backdrops prevent underlying content from bleeding through",
       "navigationBoundary": "platform, organization-admin and member shells have distinct primary menus; infrastructure pages are removed from the novice platform primary navigation but protected historical routes remain",
       "imageEvidence": [
         "high resolution 09 organization administration dashboard",

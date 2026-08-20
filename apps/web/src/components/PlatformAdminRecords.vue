@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 
-defineProps<{ rows: any[]; busy: boolean }>();
+defineProps<{ rows: any[] }>();
 const emit = defineEmits<{
   openUser: [item: any];
-  role: [userId: string, roleCode: string, enabled: boolean];
 }>();
 
 const statusText = (value: string) =>
@@ -17,7 +16,6 @@ const roleText = (value: string) =>
       platform_super_admin: "超级管理员",
     }) as Record<string, string>
   )[value] ?? value;
-const roleCodes = ["platform_operations_admin", "platform_security_admin", "platform_super_admin"];
 </script>
 
 <template>
@@ -35,7 +33,7 @@ const roleCodes = ["platform_operations_admin", "platform_security_admin", "plat
           <tr>
             <th>可授权用户</th>
             <th>当前平台角色</th>
-            <th>角色管理</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
@@ -46,15 +44,7 @@ const roleCodes = ["platform_operations_admin", "platform_security_admin", "plat
             </td>
             <td>{{ item.roles.map(roleText).join("、") || "尚未授予平台角色" }}</td>
             <td>
-              <button :disabled="busy" @click="emit('openUser', item)">账号详情</button
-              ><button
-                v-for="code in roleCodes"
-                :key="code"
-                :disabled="item.status !== 'active' || busy"
-                @click="emit('role', item.id, code, !item.roles.includes(code))"
-              >
-                {{ item.roles.includes(code) ? "撤销" : "授予" }}{{ roleText(code) }}
-              </button>
+              <button @click="emit('openUser', item)">账号详情</button>
             </td>
           </tr>
         </tbody>
@@ -82,24 +72,12 @@ const roleCodes = ["platform_operations_admin", "platform_security_admin", "plat
       </dl>
       <div class="mobile-actions">
         <button
-          :disabled="busy"
           @click="
             emit('openUser', row);
             close();
           "
         >
-          账号详情</button
-        ><button
-          v-for="code in roleCodes"
-          :key="code"
-          class="secondary"
-          :disabled="row.status !== 'active' || busy"
-          @click="
-            emit('role', row.id, code, !row.roles.includes(code));
-            close();
-          "
-        >
-          {{ row.roles.includes(code) ? "撤销" : "授予" }}{{ roleText(code) }}
+          打开账号详情
         </button>
       </div>
       <details>
