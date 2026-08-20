@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { expectAboveMobileNavigation, markOcclusionProbe } from "./helpers/mobile-occlusion";
 const envelope = (data: unknown) => ({ data, request_id: "m08-05-e2e", trace_id: "m08-05-e2e" }),
   base = {
     state: "ready",
@@ -176,16 +177,6 @@ test("M08-05 mobile bottom navigation does not cover the scheduler handoff", asy
   );
   await page.goto("/platform-admin/crawler-scheduler");
   const handoff = page.locator(".crawler-scheduler footer");
-  await handoff.scrollIntoViewIfNeeded();
-  const overlap = await page.evaluate(() => {
-    const footer = document.querySelector(".crawler-scheduler footer");
-    const navigation = document.querySelector(".role-mobile-nav");
-    if (!(footer instanceof HTMLElement) || !(navigation instanceof HTMLElement))
-      return Number.POSITIVE_INFINITY;
-    return Math.max(
-      0,
-      footer.getBoundingClientRect().bottom - navigation.getBoundingClientRect().top,
-    );
-  });
-  expect(overlap).toBe(0);
+  await markOcclusionProbe(handoff);
+  await expectAboveMobileNavigation(page, handoff);
 });

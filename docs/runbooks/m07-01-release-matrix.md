@@ -2,7 +2,7 @@
 
 ## 使用与宝塔边界
 
-先运行 `npm run verify:release-matrix` 校验清单，再运行 Node、live 和 `node scripts/verify-release-matrix.mjs --browser all`；排障时也可把 `all` 换成 `p00` 至 `p06`。模块正式入口仍为 `npm run verify:module -- M07-01`。完整矩阵耗时可能超过默认单命令上限，宝塔受限发布任务可临时设置 `VERIFY_COMMAND_TIMEOUT_MS=900000`；报告继续写到 `VERIFY_REPORT_DIR`。这两个变量均已在 `config/env.example` 和配置 schema 中登记，无新增配置。
+先运行 `npm run verify:release-matrix` 校验清单和 E2E 真实性比例，再运行 Node、live 和 `node scripts/verify-release-matrix.mjs --browser all`；排障时也可把 `all` 换成 `p00` 至 `p06`。`npm run verify:e2e-realism` 可单独输出截图总数、位于 Mock 文件的截图数和比例；该比例不得超过 84%，并必须保留至少一个无路由拦截的真实 Fastify 截图用例。移动端还必须复用遮挡 helper 检查成员与平台壳层末端内容不被固定底栏覆盖。模块正式入口仍为 `npm run verify:module -- M07-01`。完整矩阵耗时可能超过默认单命令上限，宝塔受限发布任务可临时设置 `VERIFY_COMMAND_TIMEOUT_MS=900000`；报告继续写到 `VERIFY_REPORT_DIR`。这两个变量均已在 `config/env.example` 和配置 schema 中登记，无新增配置。
 
 该执行器只用于本地、CI 或宝塔面板创建的受限发布任务，不暴露 HTTP API，不启动常驻服务，不在面板外创建生产任务。运行前确认宝塔 MySQL 为 5.7、业务账号和库名为 `product_scout`，Redis 可用，且预发布数据允许隔离创建与清理。浏览器分组固定使用 4 worker，会短暂启动本地 API/Web 服务，Playwright 结束后自动关闭；不得把测试 worker 数解释为生产容量。
 

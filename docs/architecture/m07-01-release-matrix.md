@@ -10,7 +10,7 @@ M07-01 把 P00–P06 的现有自动化组织为可执行发布矩阵，覆盖�
 - A04/A05 仅编排既有 Node API、Worker、Crawler、Outbox、Redis 和真实数据库验收；不创建新的生产服务或 daemon。
 - A04 在 Node 原生支持时启用 `--experimental-strip-types`；Node 20 等不支持该参数的运行时改用项目内 TypeScript 依赖提供的只读测试加载器，保证同一矩阵可执行且不新增依赖或生产进程。
 - A06 只在 OpenAPI 顶层扩展声明发布矩阵不是运行时 API；不新增 HTTP 路由、DTO 或错误码。
-- A07/A08/A15 重跑 47 个既有页面场景，并在 desktop-chromium 与 mobile-390 两个项目上执行；M07-01 没有单独业务页面。
+- A07/A08/A15 重跑 48 个页面场景，并在 desktop-chromium 与 mobile-390 两个项目上执行；其中真实 API 截图用浏览器经 Vite 访问实际 Fastify，不允许路由拦截。纯 Mock 截图调用占比不得超过 84%，只能承担视觉回归，不能独立证明功能链路。成员与平台壳层复用移动遮挡 helper，末端内容与固定底栏重叠必须为 0；M07-01 没有单独业务页面。
 - A09/A11 通过既有组织权限、审计、request_id/trace_id 和安全运营链路取证。执行器自身只接受清单内固定分组与命令，不接受任意 shell 命令。
 
 ## 门槛与后续边界

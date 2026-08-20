@@ -79,11 +79,23 @@ test("M07-01.A07/A08/A15 every prior browser contract is assigned exactly once",
   const actual = (await readdir(resolve(root, "tests/e2e"))).filter((name) =>
     /^m0[0-6]-.*\.spec\.ts$/.test(name),
   );
-  assert.equal(assigned.length, 47);
+  assert.equal(assigned.length, 48);
   assert.equal(new Set(assigned).size, assigned.length);
   assert.deepEqual([...assigned].sort(), actual.sort());
   assert.ok(assigned.some((name) => name.includes("ui-states")));
   assert.ok(assigned.some((name) => name.includes("home-mobile")));
+  assert.ok(assigned.some((name) => name.includes("real-api-acceptance")));
+});
+
+test("M07-01 keeps mocked screenshots below the frozen ratio and reuses mobile occlusion checks", async () => {
+  const verifier = await readFile(resolve(root, "scripts/verify-release-matrix.mjs"), "utf8");
+  const realism = await readFile(resolve(root, "scripts/verify-e2e-realism.mjs"), "utf8");
+  const helper = await readFile(resolve(root, "tests/e2e/helpers/mobile-occlusion.ts"), "utf8");
+  assert.match(verifier, /verify-e2e-realism\.mjs/);
+  assert.match(realism, /mockedRatio > 0\.84/);
+  assert.match(realism, /e2e_real_api_screenshot_missing/);
+  assert.match(helper, /overlap/);
+  assert.match(helper, /role-mobile-nav/);
 });
 
 test("M07-01.A17 blueprint performance budgets are immutable matrix values", () => {

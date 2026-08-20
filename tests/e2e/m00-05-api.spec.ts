@@ -40,19 +40,3 @@ test("M00-05.A08/A16 dependency error and retry are explicit at 390px", async ({
   if (page.viewportSize()?.width === 390)
     await expect(page).toHaveScreenshot("m00-05-api-390.png", { fullPage: true });
 });
-
-test("browser reaches the real Fastify health route without interception", async ({ page }) => {
-  const responsePromise = page.waitForResponse((response) =>
-    response.url().endsWith("/api/v1/health/ready"),
-  );
-  await page.goto("/?view=api");
-  const response = await responsePromise;
-  expect(response.status()).toBe(200);
-  expect(response.headers()["x-request-id"]).toBeTruthy();
-  const body = await response.json();
-  expect(body.data).toEqual({
-    status: "ready",
-    dependencies: { mysql: "available", redis: "available" },
-  });
-  await expect(page.getByTestId("api-ready")).toBeVisible();
-});

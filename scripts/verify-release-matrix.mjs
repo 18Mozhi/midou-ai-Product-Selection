@@ -96,6 +96,7 @@ function run(program, args, id) {
 }
 
 await validate();
+run("node", ["scripts/verify-e2e-realism.mjs"], "e2e-realism");
 const mode = process.argv[2] ?? "--validate";
 if (mode === "--node") {
   const tests = await filesUnder(resolve(root, "tests"), ".test.mjs");

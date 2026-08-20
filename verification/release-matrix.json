@@ -19,7 +19,7 @@
     "sourceCollection": ["verify-provider-sources-live", "verify-collection-task-live", "m03-07-provider-sources.spec.ts"],
     "taskQueue": ["verify-business-tasks-live", "verify-approval-workflow-live", "m05-01-business-tasks.spec.ts"],
     "dataQuality": ["verify-evidence-data-quality-live", "verify-opportunities-live", "verify-sourcing-live"],
-    "mobileVisual": ["all browser groups run desktop-chromium and mobile-390", "m07-01-performance.spec.ts"],
+    "mobileVisual": ["all browser groups run desktop-chromium and mobile-390", "shared mobile occlusion helper covers member and platform shells", "m07-01-performance.spec.ts"],
     "performance": ["blueprint budgets", "m07-01-performance.spec.ts", "M07-05 production observation"],
     "securityFailClosed": ["verify-security-operations-live", "m06-04-security-operations.spec.ts", "M07-02 dedicated security gate"]
   },
@@ -35,7 +35,7 @@
     { "id": "verify-security-operations-live", "program": "node", "args": ["scripts/verify-security-operations-live.mjs"] }
   ],
   "browserGroups": {
-    "p00": ["m00-01-runtime.spec.ts", "m00-02-config.spec.ts", "m00-03-mysql.spec.ts", "m00-04-redis.spec.ts", "m00-05-api.spec.ts", "m00-06-file-audit.spec.ts", "m00-07-verification.spec.ts", "m00-08-deployment.spec.ts"],
+    "p00": ["m00-01-runtime.spec.ts", "m00-02-config.spec.ts", "m00-03-mysql.spec.ts", "m00-04-redis.spec.ts", "m00-05-api.spec.ts", "m00-06-file-audit.spec.ts", "m00-07-verification.spec.ts", "m00-08-deployment.spec.ts", "m00-09-real-api-acceptance.spec.ts"],
     "p01": ["m01-01-local-identity.spec.ts", "m01-02-mfa.spec.ts", "m01-03-tenancy.spec.ts", "m01-04-rbac.spec.ts", "m01-05-resource-grants.spec.ts", "m01-06-audit-seed.spec.ts"],
     "p02": ["m02-01-theme-studio.spec.ts", "m02-02-auth-onboarding.spec.ts", "m02-03-navigation-shell.spec.ts", "m02-04-ui-states.spec.ts", "m02-05-discovery.spec.ts", "m02-06-home-mobile.spec.ts"],
     "p03": ["m03-01-provider-registry.spec.ts", "m03-02-credential-assets.spec.ts", "m03-03-provider-adapter.spec.ts", "m03-04-playwright-crawler.spec.ts", "m03-05-collection-tasks.spec.ts", "m03-06-evidence-data-quality.spec.ts", "m03-07-provider-sources.spec.ts"],
@@ -50,5 +50,6 @@
     "docs/architecture/m07-01-release-matrix.md",
     "docs/runbooks/m07-01-release-matrix.md",
     "verification/modules/M07-01.json"
+    ,"scripts/verify-e2e-realism.mjs"
   ]
 }
