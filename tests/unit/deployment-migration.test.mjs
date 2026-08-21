@@ -42,6 +42,10 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     assert.match(deploy, new RegExp(name));
   assert.match(deploy, /\/api\/v1\/health\/available/);
   assert.match(deploy, /available_status == "available"/);
+  assert.match(deploy, /shutil\.chown\(runtime, user="root", group="www"\)/);
+  assert.match(deploy, /os\.chmod\(runtime, 0o2770\)/);
+  assert.match(deploy, /shutil\.chown\(destination, user="root", group="www"\)/);
+  assert.match(deploy, /os\.chmod\(destination, 0o2770\)/);
   assert.match(
     deploy,
     /upload = root \/ \("\.deploy-upload-" \+ v\["build_sha"\] \+ "\.tar\.gz"\)/,

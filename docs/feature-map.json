@@ -2052,6 +2052,7 @@
       ],
       "scope": "M08-01 configured single-host API heartbeat, declarative Worker queues with independent concurrency timeout retry circuit aging and stuck thresholds plus bounded global concurrency and backpressure, BaoTa single-upstream Nginx evidence, sanitized health and audited operations view",
       "truthBoundary": "live proves only the API process, ready proves synchronous dependencies, available additionally requires a fresh running Worker scheduler; runtime status exposes queue delay, active runtime, suspected stuck runs, queue circuits, retries, timeout counts, snapshot publication failures, recent failure rate, backpressure, heartbeat expiry and restart-loop alerts without task payloads or secrets; snapshot publication failure never changes a business run result",
+      "runtimeStatePermissionBoundary": "production fixes Worker and supervisor snapshots under /www/wwwroot/ai选品/runtime; the BaoTa deployer enforces root:www and 2770 on runtime plus the five fixed writable subdirectories so www-managed API Worker and Python processes can write without opening access to other host users",
       "apiClientBoundary": "the platform runtime topology read uses the shared frontend JSON client and preserves distinct expired forbidden rate-limited and unavailable states with correlated action hints",
       "permission": "public health returns sanitized counts; the operations view requires platform:operate and records request_id trace_id read audit",
       "configuration": [
@@ -2068,6 +2069,7 @@
         "WORKER_SCHEDULER_STALE_AFTER_SECONDS",
         "BACKEND_CHILD_READINESS_TIMEOUT_SECONDS",
         "BACKEND_CHILD_READINESS_POLL_MS",
+        "BACKEND_SUPERVISOR_STATE_FILE",
         "SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE"
       ],
       "runtimeBoundary": "the current Huizhou BaoTa host is the permanent S0 production topology; all backend ports remain private and no load balancer, backup server, panel-external service, multi-node or 10000-user claim is allowed",

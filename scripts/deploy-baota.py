@@ -403,14 +403,18 @@ try:
     if legacy_launcher.exists():
         legacy_launcher.unlink()
 
-    runtime.mkdir(mode=0o750, exist_ok=True)
+    runtime.mkdir(mode=0o2770, exist_ok=True)
+    shutil.chown(runtime, user="root", group="www")
+    os.chmod(runtime, 0o2770)
     backups.mkdir(mode=0o750, exist_ok=True)
     for name in ("evidence", "exports", "credential-tmp", "tmp", "verification"):
         destination = runtime / name
         source = shared / name
         if not destination.exists() and source.is_dir():
             source.rename(destination)
-        destination.mkdir(mode=0o750, exist_ok=True)
+        destination.mkdir(mode=0o2770, exist_ok=True)
+        shutil.chown(destination, user="root", group="www")
+        os.chmod(destination, 0o2770)
     source_backups = shared / "backups"
     if source_backups.is_dir():
         for child in source_backups.iterdir():
