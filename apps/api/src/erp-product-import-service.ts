@@ -56,17 +56,14 @@ interface PersistInput {
   now: Date;
 }
 
-const asArray = (value: unknown): unknown[] =>
-  Array.isArray(value) ? value : [];
+const asArray = (value: unknown): unknown[] => (Array.isArray(value) ? value : []);
 const object = (value: unknown): Record<string, unknown> => {
   if (value && typeof value === "object" && !Array.isArray(value))
     return value as Record<string, unknown>;
   if (typeof value === "string") {
     try {
       const parsed = JSON.parse(value);
-      return parsed && typeof parsed === "object" && !Array.isArray(parsed)
-        ? parsed
-        : {};
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
     } catch {
       return {};
     }
@@ -90,9 +87,7 @@ const http = (value: unknown) => {
 const firstObject = (value: unknown) => object(asArray(value)[0]);
 const price = (sku: Record<string, unknown>, currency: string) => {
   const list = asArray(sku.costInfoList ?? sku.cost_info_list).map(object);
-  const match = list.find(
-    (item) => text(item.currency, 10).toUpperCase() === currency,
-  );
+  const match = list.find((item) => text(item.currency, 10).toUpperCase() === currency);
   return number(match?.costPrice ?? match?.cost_price);
 };
 const asinValues = (value: unknown) => {
@@ -126,10 +121,7 @@ export function normalizeErpProductRow(
     product = object(raw.product),
     firstSkc = firstObject(product.skcInfoList),
     firstSku = firstObject(firstSkc.skuInfoList),
-    title = text(
-      firstObject(product.productMultiNameList).productName ?? product.title,
-      1000,
-    ),
+    title = text(firstObject(product.productMultiNameList).productName ?? product.title, 1000),
     spu = text(raw.spu ?? product.spu, 200),
     id = text(raw.id, 200),
     supplierCode = text(firstSkc.supplierCode ?? product.supplierCode, 255),
@@ -195,15 +187,9 @@ export class ErpProductImportService {
       throw new Error("erp_product_source_invalid");
     const capturedAt = new Date(String(value?.captured_at ?? this.now()));
     const items = Array.isArray(value?.items) ? value.items : [];
-    if (
-      !Number.isFinite(capturedAt.getTime()) ||
-      !items.length ||
-      items.length > 500
-    )
+    if (!Number.isFinite(capturedAt.getTime()) || !items.length || items.length > 500)
       throw new Error("erp_product_import_invalid");
-    const normalizedRows = items.map((item) =>
-      normalizeErpProductRow(item, sourceUrl, capturedAt),
-    );
+    const normalizedRows = items.map((item) => normalizeErpProductRow(item, sourceUrl, capturedAt));
     const connection = await this.pool.getConnection();
     const writtenFiles: string[] = [];
     try {
@@ -277,12 +263,7 @@ export class ErpProductImportService {
           status,
           now,
           normalizedRows.length,
-          JSON.stringify([
-            "amazon_price",
-            "amazon_rank",
-            "amazon_reviews",
-            "supplier_quote",
-          ]),
+          JSON.stringify(["amazon_price", "amazon_rank", "amazon_reviews", "supplier_quote"]),
           now,
           taskId,
         ],
@@ -398,28 +379,15 @@ export class ErpProductImportService {
     );
   }
 
-  private async persistEvidence(
-    c: PoolConnection,
-    input: PersistInput,
-    writtenFiles: string[],
-  ) {
-    const contentHash = createHash("sha256")
-        .update(input.rawContent)
-        .digest("hex"),
-      recordKey = `erp:${createHash("sha256")
-        .update(input.value.external_id)
-        .digest("hex")}`,
+  private async persistEvidence(c: PoolConnection, input: PersistInput, writtenFiles: string[]) {
+    const contentHash = createHash("sha256").update(input.rawContent).digest("hex"),
+      recordKey = `erp:${createHash("sha256").update(input.value.external_id).digest("hex")}`,
       dedupeKey = `erp:${createHash("sha256")
         .update(`${input.value.external_id}\0${contentHash}`)
         .digest("hex")}`;
     const [existing] = await c.query<RowDataPacket[]>(
       "SELECT e.id evidence_id FROM raw_evidence e WHERE e.organization_id=? AND e.workspace_id=? AND e.provider_id=? AND e.dedupe_key=? LIMIT 1 FOR UPDATE",
-      [
-        input.context.organizationId,
-        input.context.workspaceId,
-        input.providerId,
-        dedupeKey,
-      ],
+      [input.context.organizationId, input.context.workspaceId, input.providerId, dedupeKey],
     );
     if (existing[0]) {
       const normalized = await this.createNormalizedVersion(
@@ -453,9 +421,7 @@ export class ErpProductImportService {
       target = buildScopedFilePath(this.evidenceRoot, fileInput);
     await writeScopedFile(this.evidenceRoot, fileInput, input.rawContent);
     writtenFiles.push(target);
-    const relativePath = relative(resolve(this.evidenceRoot), target)
-      .split(sep)
-      .join("/");
+    const relativePath = relative(resolve(this.evidenceRoot), target).split(sep).join("/");
     await c.query(
       "INSERT INTO file_assets (id,organization_id,workspace_id,category,relative_path,content_sha256,size_bytes,status,created_by,created_at,updated_at) VALUES (?,?,?,'evidence',?,?,?,'active',?,?,?)",
       [
@@ -488,22 +454,14 @@ export class ErpProductImportService {
         input.rawContent.byteLength,
         new Date(input.value.observed_at),
         "erp-product-catalog-v1",
-        new Date(
-          new Date(input.value.observed_at).getTime() +
-            input.retentionDays * 86_400_000,
-        ),
+        new Date(new Date(input.value.observed_at).getTime() + input.retentionDays * 86_400_000),
         input.context.requestId,
         input.context.traceId,
         input.context.actorId,
         input.now,
       ],
     );
-    const normalized = await this.createNormalizedVersion(
-      c,
-      input,
-      evidenceId,
-      recordKey,
-    );
+    const normalized = await this.createNormalizedVersion(c, input, evidenceId, recordKey);
     await this.linkTask(c, input, evidenceId, normalized.recordId, "captured");
     return { evidenceId, recordId: normalized.recordId, deduplicated: false };
   }
@@ -516,25 +474,13 @@ export class ErpProductImportService {
   ) {
     const [previousRecords] = await c.query<RowDataPacket[]>(
       "SELECT id,raw_evidence_id,record_version FROM normalized_records WHERE organization_id=? AND workspace_id=? AND provider_id=? AND record_key=? AND status='active' ORDER BY record_version DESC LIMIT 1 FOR UPDATE",
-      [
-        input.context.organizationId,
-        input.context.workspaceId,
-        input.providerId,
-        recordKey,
-      ],
+      [input.context.organizationId, input.context.workspaceId, input.providerId, recordKey],
     );
-    if (
-      previousRecords[0] &&
-      String(previousRecords[0].raw_evidence_id) === evidenceId
-    ) {
+    if (previousRecords[0] && String(previousRecords[0].raw_evidence_id) === evidenceId) {
       return { recordId: String(previousRecords[0].id), created: false };
     }
-    const previousRecordId = previousRecords[0]
-        ? String(previousRecords[0].id)
-        : null,
-      recordVersion = previousRecords[0]
-        ? Number(previousRecords[0].record_version) + 1
-        : 1;
+    const previousRecordId = previousRecords[0] ? String(previousRecords[0].id) : null,
+      recordVersion = previousRecords[0] ? Number(previousRecords[0].record_version) + 1 : 1;
     const recordId = randomUUID();
     if (previousRecordId) {
       await c.query(
@@ -568,9 +514,7 @@ export class ErpProductImportService {
       "cost_cny",
       "cost_usd",
     ]) {
-      const source = JSON.stringify(
-        input.value[field as keyof NormalizedErpProduct],
-      );
+      const source = JSON.stringify(input.value[field as keyof NormalizedErpProduct]);
       await c.query(
         "INSERT INTO field_provenance (id,organization_id,workspace_id,normalized_record_id,raw_evidence_id,field_path,source_path,transform_version,source_value_sha256,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
         [
@@ -636,9 +580,7 @@ export class ErpProductImportService {
     },
   ) {
     const market = input.value.asin_list.length ? "US" : "GLOBAL",
-      topicKey = createHash("sha256")
-        .update(`erp\0${input.value.external_id}`)
-        .digest("hex"),
+      topicKey = createHash("sha256").update(`erp\0${input.value.external_id}`).digest("hex"),
       [topics] = await c.query<RowDataPacket[]>(
         "SELECT id FROM trend_topics WHERE organization_id=? AND workspace_id=? AND topic_key=? LIMIT 1 FOR UPDATE",
         [input.context.organizationId, input.context.workspaceId, topicKey],
@@ -685,20 +627,13 @@ export class ErpProductImportService {
     );
     await c.query(
       "UPDATE trend_topics t SET signal_count=(SELECT COUNT(*) FROM trend_signals s WHERE s.topic_id=t.id),source_count=(SELECT COUNT(DISTINCT provider_id) FROM trend_signals s WHERE s.topic_id=t.id),heat_value=(SELECT COUNT(*) FROM trend_signals s WHERE s.topic_id=t.id),last_seen_at=GREATEST(last_seen_at,?),source_fresh_at=GREATEST(source_fresh_at,?),version=version+1,updated_at=? WHERE id=?",
-      [
-        new Date(input.value.observed_at),
-        new Date(input.value.observed_at),
-        input.now,
-        topicId,
-      ],
+      [new Date(input.value.observed_at), new Date(input.value.observed_at), input.now, topicId],
     );
     const [existingOpportunity] = await c.query<RowDataPacket[]>(
       "SELECT id FROM opportunities WHERE organization_id=? AND workspace_id=? AND source_type='trend_topic' AND source_ref_id=? LIMIT 1 FOR UPDATE",
       [input.context.organizationId, input.context.workspaceId, topicId],
     );
-    const opportunityId = existingOpportunity[0]
-      ? String(existingOpportunity[0].id)
-      : randomUUID();
+    const opportunityId = existingOpportunity[0] ? String(existingOpportunity[0].id) : randomUUID();
     if (!existingOpportunity[0])
       await c.query(
         "INSERT INTO opportunities (id,organization_id,workspace_id,name,market,category,source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status,overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status,confidence_score,evidence_count,source_count,coverage_status,score_rule_version,scored_at,decision_status,version,created_by,created_at,updated_at) VALUES (?,?,?,?,?,'ERP商品库','trend_topic',?,?,'ready','insufficient_data',NULL,NULL,NULL,'insufficient_data','unknown','insufficient_data',NULL,0,0,'partial',NULL,NULL,'pending',1,?,?,?)",
@@ -808,7 +743,15 @@ export class ErpProductImportService {
           input.value.cost_cny != null ? "CNY" : "USD",
           input.value.source_url,
           new Date(input.value.observed_at),
-          JSON.stringify(["moq", "specification", "lead_time_days", "location", "confidence_value", "stability_status", "risk_level"]),
+          JSON.stringify([
+            "moq",
+            "specification",
+            "lead_time_days",
+            "location",
+            "confidence_value",
+            "stability_status",
+            "risk_level",
+          ]),
           input.now,
         ],
       );
@@ -816,7 +759,15 @@ export class ErpProductImportService {
         "UPDATE sourcing_searches SET status='completed_with_warnings',candidate_count=(SELECT COUNT(*) FROM sourcing_candidates WHERE search_id=?),missing_fields_json=?,updated_at=? WHERE id=?",
         [
           searchId,
-          JSON.stringify(["moq", "specification", "lead_time_days", "location", "confidence_value", "stability_status", "risk_level"]),
+          JSON.stringify([
+            "moq",
+            "specification",
+            "lead_time_days",
+            "location",
+            "confidence_value",
+            "stability_status",
+            "risk_level",
+          ]),
           input.now,
           searchId,
         ],

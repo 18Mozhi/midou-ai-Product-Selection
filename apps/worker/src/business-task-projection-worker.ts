@@ -1,10 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
-export async function projectBusinessTaskOnce(
-  pool: Pool,
-  workerId: string,
-  leaseSeconds: number,
-) {
+export async function projectBusinessTaskOnce(pool: Pool, workerId: string, leaseSeconds: number) {
   const c = await pool.getConnection(),
     now = new Date(),
     lease = new Date(now.valueOf() + leaseSeconds * 1000);
@@ -32,9 +28,7 @@ export async function projectBusinessTaskOnce(
     c.release();
   }
   const payload =
-      typeof event.payload_json === "string"
-        ? JSON.parse(event.payload_json)
-        : event.payload_json,
+      typeof event.payload_json === "string" ? JSON.parse(event.payload_json) : event.payload_json,
     taskId = randomUUID();
   try {
     await pool.query(

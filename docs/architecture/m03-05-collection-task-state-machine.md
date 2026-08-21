@@ -11,9 +11,9 @@ M03-05 交付组织/工作区范围化的任务、子查询、执行尝试、租
 - 主路径：`draft → scheduled → queued → leased → running → parsing → validating → persisted → succeeded | succeeded_empty | completed_with_warnings`。
 - 可重试网络、超时、DNS、解析和校验故障最多总尝试 4 次，按 1/5/15 分钟加最多 20% 抖动进入 `retry_scheduled`，第四次进入 `dead_letter`。
 - `rate_limited` 严格使用来源给出的未来 reset 时间；登录、会话、验证码、robots 与权限问题不自动重试或绕过。
-- 多来源结果逐项保留。无任何可用结果为 `succeeded_empty / insufficient`；有可用结果但必需来源、字段、失败或受阻不完整时为 `completed_with_warnings`；必需覆盖全部满足才为 `succeeded / complete`。
+- 多来源结果逐项保留。每个子查询完成后立即在独立事务更新 `collection_subqueries` 并写 `collection.subquery.completed` 事件；单一来源返回失败或受阻时继续执行其余来源。全部来源执行后才应用任务级策略：来源均正常但确实无结果为 `succeeded_empty / insufficient`；存在需要任务级重试或登录阻断的必需来源时保留已落库的各来源事实，再进入原有重试/受阻终态；有可用结果且无需任务级重试但覆盖不完整时为 `completed_with_warnings`；必需覆盖全部满足才为 `succeeded / complete`。
 - `insufficient` 是下游硬边界，不得形成自动“推荐”。
-- 必需来源的登录、验证码、robots、权限或解析漂移错误不能降级成普通空成功：执行器抛出统一业务错误，由状态机落到对应受阻或终止状态；仅非必需来源允许保留单项失败并继续其他来源。来源正常返回零条记录时仍按事实记录 `succeeded_empty`。
+- 必需来源的登录、验证码、robots、权限或解析漂移错误不能降级成普通空成功：执行器先把该子查询错误落库并继续其余来源，全部结束后再抛出统一业务错误，由状态机落到对应受阻或终止状态。来源正常返回零条记录时仍按事实记录 `succeeded_empty`。
 
 ## 并发、幂等与审计
 
@@ -27,7 +27,7 @@ M03-05 交付组织/工作区范围化的任务、子查询、执行尝试、租
 
 ## 页面与权限
 
-采集任务桌面端保留队列表格；390px 改为状态、覆盖与证据摘要卡片，详情抽屉保留子查询计数、缺失字段和进入完整任务详情的操作。完整任务、组织、工作区、错误与请求标识仅归入“技术详情”。
+采集任务桌面端保留队列表格；390px 改为状态、覆盖与证据摘要卡片，详情抽屉保留子查询计数、缺失字段和进入完整任务详情的操作。任务详情为每个子查询明确展示是否允许自动重试；进入 `retry_scheduled` 或 `rate_limited` 后，所有可重试子查询展示任务事实源中的共同 `available_at`，并标明这是任务级调度时间，不伪造来源独立退避。完整任务、组织、工作区、错误与请求标识仅归入“技术详情”。
 
 `/platform-admin/collection` 展示任务状态、覆盖、子查询、尝试和事件，`/platform-admin/collection/browser-runtime` 保留 M03-04 底层运行视图。列表、详情和人工重放均由服务端校验 `collection:replay`；前端菜单和按钮不是权限边界。页面覆盖加载、空、错误、过期、无权、依赖受阻、恢复、桌面与 390px。
 

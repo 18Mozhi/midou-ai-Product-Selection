@@ -252,7 +252,7 @@ paths:
   /platform/operations/crawler-scheduler:
     get:
       summary: Read audited S0 single-host Crawler scheduler facts
-      description: M08-05 reports separately observed process counts for the supervised Node Worker and the BaoTa-managed Python Crawler, plus global and provider lease aggregates, provider-level due queue counts and longest waits, browser-profile exclusivity and host resource watermarks. Queue facts count distinct provider tasks only after available_at is due, so future retry or rate-limit backoff is not reported as current waiting. It never returns scope identifiers, task payloads, lease tokens or hashes, credentials, cookies or paths and makes no load-balancing, backup-server, multi-node or capacity claim.
+      description: M08-05 reports separately observed process counts for the supervised Node Worker and the BaoTa-managed Python Crawler, plus global and provider lease aggregates, provider-level due queue counts, wait percentiles, 24-hour success/P95 samples, isolated runtime circuit state, hourly throughput/failure trend, browser-profile exclusivity and host resource watermarks. Queue facts count distinct provider tasks only after available_at is due, so future retry or rate-limit backoff is not reported as current waiting. It never returns scope identifiers, task payloads, lease tokens or hashes, credentials, cookies or paths and makes no load-balancing, backup-server, multi-node or capacity claim.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: platform:operate
       responses:
@@ -288,6 +288,22 @@ paths:
         "400": { $ref: "#/components/responses/Error" }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+  /platform/operations/crawler-scheduler/providers/{providerId}/recover:
+    post:
+      summary: Idempotently recover one isolated provider runtime circuit
+      description: Recovery is rejected unless the provider is enabled and has a ready adapter-health observation newer than the circuit opened_at time. It resets only that provider circuit and records platform audit evidence.
+      security: [{ HttpOnlySession: [] }]
+      x-required-capability: platform:operate
+      parameters:
+        - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      responses:
+        "200": { description: One provider circuit recovered, no-op result, or earlier idempotent result replayed }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
   /platform/operations/capacity:
     get:
@@ -1928,6 +1944,16 @@ paths:
                 enum: [evidence_insufficient, recommendation_insufficient],
               },
           }
+        - {
+            name: lifecycle_status,
+            in: query,
+            schema:
+              {
+                type: string,
+                enum: [candidate, validating, ready, adopted, observing, rejected, archived],
+              },
+          }
+        - { name: owner_id, in: query, schema: { type: string, format: uuid } }
       responses:
         "200":
           {
@@ -1977,6 +2003,28 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+  /opportunities/member-options:
+    get:
+      summary: List active members eligible to own opportunities in the current workspace
+      x-required-capability: opportunity:read
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "403": { $ref: "#/components/responses/Error" }
+  /opportunities/batch:
+    post:
+      summary: Atomically assign archive or create review tasks for selected opportunities
+      x-required-capability: opportunity:decide
+      parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/OpportunityBatchInput" }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "400": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
   /opportunities/{opportunityId}:
     get:
@@ -2045,6 +2093,29 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+  /opportunities/{opportunityId}/evidence-completion-tasks:
+    post:
+      summary: Create or reuse an evidence completion task for an insufficient opportunity
+      description: Completing the resulting evidence_completion task automatically queues a new score job when an active score rule exists.
+      x-required-capability: opportunity:decide
+      parameters:
+        - { name: opportunityId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [expected_version]
+              properties:
+                expected_version: { type: integer, minimum: 1 }
+      responses:
+        "200": { $ref: "#/components/responses/Success" }
+        "201": { $ref: "#/components/responses/Success" }
+        "403": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
   /opportunity-score-rules:
     get:
@@ -2944,6 +3015,24 @@ paths:
       summary: Get current assignee task and truthful SLA counts
       responses:
         "200": { $ref: "#/components/responses/Success" }
+  /tasks/member-options:
+    get:
+      summary: List active organization members eligible for the current workspace
+      x-required-capability: task:read
+      responses:
+        "200":
+          description: Eligible task assignees
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: "#/components/schemas/SuccessEnvelope" }
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: "#/components/schemas/BusinessTaskMemberOption" }
+        "403": { $ref: "#/components/responses/Error" }
   /tasks/{taskId}:
     get:
       summary: Get scoped task detail comments and immutable events
@@ -3517,6 +3606,30 @@ paths:
         "400": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+  /automations/preview:
+    post:
+      summary: Dry-run a safe automation rule and preview its read-only impact
+      description: Validates the complete rule and reads matching notification facts from the last 30 days. It never creates an execution, notification, task, audit record or outbox event.
+      x-required-capability: team:manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AutomationRuleCreate" }
+      responses:
+        "200":
+          description: Read-only match and projected impact preview
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: "#/components/schemas/SuccessEnvelope" }
+                  - type: object
+                    properties:
+                      data: { $ref: "#/components/schemas/AutomationRulePreview" }
+        "400": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
   /automations/{automationRuleId}:
     get:
       summary: Get a scoped rule and its latest execution history
@@ -3913,6 +4026,60 @@ paths:
           }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
+  /platform/provider-sources/1688-acceptance:
+    get:
+      summary: Read 1688 login captcha and parser acceptance facts
+      description: Requires provider:configure. Returns only the configured owner, source status, current login/captcha/parser gate results, evidence times, latest sanitized browser-run status and explicit pending reasons. A successful login-state run proves the current run was not captcha-blocked; credentials, cookies, profile identifiers, payloads and lease data are excluded.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        "200":
+          description: Current 1688 acceptance facts
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [data, request_id, trace_id]
+                properties:
+                  data:
+                    type: object
+                    additionalProperties: false
+                    required: [provider_id, source_status, owner_label, overall, gates, latest_run, pending_reasons]
+                    properties:
+                      provider_id: { type: string, format: uuid }
+                      source_status: { type: string, enum: [draft, disabled, enabled] }
+                      owner_label: { type: string }
+                      overall: { type: string, enum: [setup_required, ready_for_enable, production_ready] }
+                      gates:
+                        type: array
+                        minItems: 3
+                        maxItems: 3
+                        items:
+                          type: object
+                          additionalProperties: false
+                          required: [key, state, evidence_at, reason]
+                          properties:
+                            key: { type: string, enum: [login, captcha, parser] }
+                            state: { type: string, enum: [passed, blocked, pending] }
+                            evidence_at: { type: string, format: date-time, nullable: true }
+                            reason: { type: string }
+                      latest_run:
+                        type: object
+                        nullable: true
+                        additionalProperties: false
+                        required: [status, error_code, started_at, finished_at]
+                        properties:
+                          status: { type: string }
+                          error_code: { type: string, nullable: true }
+                          started_at: { type: string, format: date-time }
+                          finished_at: { type: string, format: date-time, nullable: true }
+                      pending_reasons: { type: array, items: { type: string } }
+                  request_id: { type: string }
+                  trace_id: { type: string }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
         "503": { $ref: "#/components/responses/Error" }
   /platform/provider-sources/{providerId}/configuration:
     put:
@@ -4749,6 +4916,54 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+  /platform/data-quality/issues/batch:
+    post:
+      summary: Attribute, assign or close 1-50 versioned quality issues atomically
+      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Assignment accepts one active membership shared by every selected issue organization; any stale version fails the whole batch.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [items, action, reason]
+              properties:
+                items:
+                  type: array
+                  minItems: 1
+                  maxItems: 50
+                  uniqueItems: true
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required: [id, expected_version]
+                    properties:
+                      id: { type: string, format: uuid }
+                      expected_version: { type: integer, minimum: 1 }
+                action: { type: string, enum: [attribute, assign, close] }
+                reason: { type: string, minLength: 2, maxLength: 500 }
+                assignee_membership_id: { type: string, format: uuid, nullable: true }
+      responses:
+        "200":
+          description: Updated quality issues in the same transaction
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: "#/components/schemas/QualityIssue" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
   /platform/data-quality/issues/{issueId}/resolve:
     post:
       summary: Resolve a versioned quality issue while retaining evidence and history
@@ -4980,8 +5195,8 @@ paths:
         "503": { $ref: "#/components/responses/Error" }
   /platform/management:
     get:
-      summary: Read platform data, governance, content, notification, email or system-status management facts
-      description: Requires platform:operate. Returns at most 100 cross-organization operational rows for the selected domain without credentials, message secrets or raw crawler payloads. The status domain also summarizes the latest persisted BaoTa API topology, Redis, MySQL, file-storage and Worker/Crawler scheduler observations, marking observations older than five minutes as stale and linking to the dedicated operations views.
+      summary: Read platform data, governance, content, notification, email, system-status or operational-log facts
+      description: Requires platform:operate. Returns bounded cross-organization operational facts without credentials, message secrets or raw crawler payloads. The logs domain correlates up to 200 API audit, Worker task and crawler run events by request_id and trace_id; it only returns normalized status and error codes, not raw event metadata. The status domain also summarizes the latest persisted BaoTa API topology, Redis, MySQL, file-storage and Worker/Crawler scheduler observations, marking observations older than five minutes as stale and linking to the dedicated operations views.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
@@ -4991,7 +5206,7 @@ paths:
             schema:
               {
                 type: string,
-                enum: [content, notifications, email, status, data, governance],
+                enum: [content, notifications, email, status, logs, data, governance],
               },
           }
         - {
@@ -5287,6 +5502,8 @@ paths:
                         state,
                         policy,
                         latest_release,
+                        latest_historical_release,
+                        versions,
                         gates,
                         automatic_stop_verified,
                         rollback_verified,
@@ -5342,6 +5559,38 @@ paths:
                           nullable: true,
                           additionalProperties: true,
                         }
+                      latest_historical_release:
+                        {
+                          type: object,
+                          nullable: true,
+                          additionalProperties: true,
+                        }
+                      versions:
+                        type: object
+                        additionalProperties: false
+                        required: [local, remote, production]
+                        properties:
+                          local:
+                            type: object
+                            required: [build_sha]
+                            properties:
+                              build_sha: { type: string }
+                          remote:
+                            type: object
+                            required: [build_sha, branch, repository]
+                            properties:
+                              build_sha: { type: string }
+                              branch: { type: string, nullable: true }
+                              repository: { type: string, nullable: true }
+                          production:
+                            type: object
+                            required:
+                              [build_sha, app_version, config_fingerprint, migration_version]
+                            properties:
+                              build_sha: { type: string }
+                              app_version: { type: string, nullable: true }
+                              config_fingerprint: { type: string, nullable: true }
+                              migration_version: { type: string, nullable: true }
                       gates:
                         {
                           type: array,
@@ -6538,13 +6787,16 @@ components:
               items:
                 type: object
                 additionalProperties: false
-                required: [name, status, pid, restart_count, circuit_open_until]
+                required:
+                  [name, status, pid, restart_count, ready_at, circuit_open_until, last_failure]
                 properties:
                   name: { type: string, enum: [api, worker] }
                   status: { type: string }
                   pid: { type: integer, nullable: true }
                   restart_count: { type: integer, minimum: 0 }
+                  ready_at: { type: string, format: date-time, nullable: true }
                   circuit_open_until: { type: string, format: date-time, nullable: true }
+                  last_failure: { type: string, nullable: true }
             worker_scheduler:
               nullable: true
               allOf: [{ $ref: "#/components/schemas/WorkerSchedulerSnapshot" }]
@@ -6912,6 +7164,7 @@ components:
               active_leases,
               providers,
               profiles,
+              trend,
               resource,
               findings,
               observed_at,
@@ -6993,6 +7246,15 @@ components:
                     active_leases,
                     queued_tasks,
                     longest_queue_wait_seconds,
+                    queue_wait_p50_seconds,
+                    queue_wait_p95_seconds,
+                    sample_count_24h,
+                    success_rate_basis_points_24h,
+                    duration_p95_ms_24h,
+                    circuit_state,
+                    circuit_failure_threshold,
+                    consecutive_failures,
+                    last_error_code,
                   ]
                 properties:
                   {
@@ -7004,6 +7266,15 @@ components:
                     queued_tasks: { type: integer, minimum: 0 },
                     longest_queue_wait_seconds:
                       { type: integer, minimum: 0 },
+                    queue_wait_p50_seconds: { type: integer, minimum: 0 },
+                    queue_wait_p95_seconds: { type: integer, minimum: 0 },
+                    sample_count_24h: { type: integer, minimum: 0 },
+                    success_rate_basis_points_24h: { type: integer, minimum: 0, maximum: 10000, nullable: true },
+                    duration_p95_ms_24h: { type: number, minimum: 0, nullable: true },
+                    circuit_state: { type: string, enum: [closed, open] },
+                    circuit_failure_threshold: { type: integer, minimum: 1 },
+                    consecutive_failures: { type: integer, minimum: 0 },
+                    last_error_code: { type: string, nullable: true },
                   }
             profiles:
               type: array
@@ -7016,6 +7287,19 @@ components:
                     id: { type: string, format: uuid },
                     active_leases: { type: integer, minimum: 0, maximum: 1 },
                   }
+            trend:
+              type: array
+              maxItems: 24
+              items:
+                type: object
+                additionalProperties: false
+                required: [bucket_at, total, succeeded, failed, failure_rate_basis_points]
+                properties:
+                  bucket_at: { type: string, format: date-time }
+                  total: { type: integer, minimum: 0 }
+                  succeeded: { type: integer, minimum: 0 }
+                  failed: { type: integer, minimum: 0 }
+                  failure_rate_basis_points: { type: integer, minimum: 0, maximum: 10000 }
             resource:
               type: object
               additionalProperties: false
@@ -7365,6 +7649,41 @@ components:
           { type: integer, minimum: 1, maximum: 1000, default: 20 }
         rate_limit_window_minutes:
           { type: integer, minimum: 1, maximum: 1440, default: 60 }
+    AutomationRulePreview:
+      type: object
+      required:
+        [
+          mode,
+          matched_30d,
+          matched_in_rate_window,
+          projected_action_count,
+          projected_task_count,
+          projected_notification_count,
+          rate_limit_count,
+          rate_limit_window_minutes,
+          samples,
+        ]
+      properties:
+        mode: { type: string, enum: [read_only] }
+        matched_30d: { type: integer, minimum: 0 }
+        matched_in_rate_window: { type: integer, minimum: 0 }
+        projected_action_count: { type: integer, minimum: 0 }
+        projected_task_count: { type: integer, minimum: 0 }
+        projected_notification_count: { type: integer, minimum: 0 }
+        rate_limit_count: { type: integer, minimum: 1 }
+        rate_limit_window_minutes: { type: integer, minimum: 1 }
+        samples:
+          type: array
+          maxItems: 5
+          items:
+            type: object
+            required: [notification_id, title, severity, event_type, created_at]
+            properties:
+              notification_id: { type: string, format: uuid }
+              title: { type: string }
+              severity: { type: string, enum: [info, warning, critical] }
+              event_type: { type: string }
+              created_at: { type: string, format: date-time }
     PlatformMessageInput:
       type: object
       additionalProperties: false
@@ -8533,6 +8852,8 @@ components:
           owner_label,
           terms_review_status,
           terms_reference_url,
+          terms_version,
+          terms_expires_at,
           status,
         ]
       properties:
@@ -8593,6 +8914,9 @@ components:
           { type: string, enum: [pending, approved, rejected], default: pending }
         terms_reference_url:
           { type: string, format: uri, maxLength: 1000, nullable: true }
+        terms_version:
+          { type: string, pattern: "^[A-Za-z0-9._:-]{1,80}$", nullable: true }
+        terms_expires_at: { type: string, format: date-time, nullable: true }
         status:
           { type: string, enum: [draft, disabled, enabled], default: disabled }
     ProviderDefinitionUpdate:
@@ -8655,6 +8979,14 @@ components:
           last_latency_ms,
           last_error_code,
           consecutive_failures,
+          latest_runtime_category,
+          runtime_sample_count_24h,
+          runtime_success_rate_basis_points_24h,
+          runtime_duration_p95_ms_24h,
+          runtime_network_failure_count_24h,
+          runtime_parser_failure_count_24h,
+          runtime_login_failure_count_24h,
+          runtime_empty_success_count_24h,
           version,
           updated_at,
         ]
@@ -8682,6 +9014,20 @@ components:
             description: Sanitized stable error code only,
           }
         consecutive_failures: { type: integer, minimum: 0 }
+        latest_runtime_category:
+          {
+            type: string,
+            enum: [unknown, healthy, network, parser, login, empty, other],
+          }
+        runtime_sample_count_24h: { type: integer, minimum: 0 }
+        runtime_success_rate_basis_points_24h:
+          { type: integer, minimum: 0, maximum: 10000, nullable: true }
+        runtime_duration_p95_ms_24h:
+          { type: number, minimum: 0, nullable: true }
+        runtime_network_failure_count_24h: { type: integer, minimum: 0 }
+        runtime_parser_failure_count_24h: { type: integer, minimum: 0 }
+        runtime_login_failure_count_24h: { type: integer, minimum: 0 }
+        runtime_empty_success_count_24h: { type: integer, minimum: 0 }
         version: { type: integer, minimum: 0 }
         updated_at: { type: string, format: date-time }
     ProviderAdapterEnvelope:
@@ -8977,7 +9323,7 @@ components:
         status:
           {
             type: string,
-            enum: [running, succeeded, blocked, failed, timed_out, cancelled],
+            enum: [running, succeeded, succeeded_empty, blocked, failed, timed_out, cancelled],
           }
         page_count: { type: integer, minimum: 0 }
         item_count: { type: integer, minimum: 0 }
@@ -9109,6 +9455,12 @@ components:
             description: Defaults to the authenticated actor when omitted,
           }
         due_at: { type: string, format: date-time, nullable: true }
+    BusinessTaskMemberOption:
+      type: object
+      required: [id, label]
+      properties:
+        id: { type: string, format: uuid }
+        label: { type: string, format: email }
     BusinessTaskActionInput:
       type: object
       required: [action, expected_version]
@@ -9317,6 +9669,9 @@ components:
           workspace_id,
           provider_id,
           provider_name,
+          reconciliation_run_id,
+          raw_evidence_id,
+          parser_version,
           metric_code,
           severity,
           status,
@@ -9330,12 +9685,18 @@ components:
         workspace_id: { type: string, format: uuid }
         provider_id: { type: string, format: uuid }
         provider_name: { type: string }
+        reconciliation_run_id: { type: string, format: uuid, nullable: true }
+        raw_evidence_id: { type: string, format: uuid, nullable: true }
+        parser_version: { type: string, nullable: true }
         metric_code: { type: string }
         field_path: { type: string, nullable: true }
         severity: { type: string, enum: [warning, critical] }
         status: { type: string, enum: [open, resolved] }
         actual_value: { type: number, nullable: true }
         threshold_value: { type: number, nullable: true }
+        assigned_membership_id: { type: string, format: uuid, nullable: true }
+        assigned_member_label: { type: string, nullable: true }
+        attribution_reason: { type: string, nullable: true }
         resolution_reason: { type: string, nullable: true }
         version: { type: integer, minimum: 1 }
         created_at: { type: string, format: date-time }
@@ -9352,6 +9713,7 @@ components:
                   evidence,
                   issues,
                   reconciliationRuns,
+                  memberOptions,
                   totalEvidence,
                   totalIssues,
                 ]
@@ -9367,6 +9729,15 @@ components:
                     items: { $ref: "#/components/schemas/QualityIssue" },
                   }
                 reconciliationRuns: { type: array, items: { type: object } }
+                memberOptions:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, organization_id, label]
+                    properties:
+                      id: { type: string, format: uuid }
+                      organization_id: { type: string, format: uuid }
+                      label: { type: string }
                 totalEvidence: { type: integer, minimum: 0 }
                 totalIssues: { type: integer, minimum: 0 }
     EvidenceDetailEnvelope:
@@ -9787,9 +10158,9 @@ components:
         trace_id: { type: string }
     WorkerSchedulerSnapshot:
       type: object
-      additionalProperties: true
+      additionalProperties: false
       required:
-        [status, max_concurrency, active_runs, due_queue_count, backpressure, max_queue_delay_ms, completed_last_minute, failed_last_minute, failure_rate_percent, queues, observed_at]
+        [status, max_concurrency, active_runs, due_queue_count, backpressure, max_queue_delay_ms, suspected_stuck_runs, started_total, completed_total, failed_total, timed_out_total, cancelled_total, retry_total, deferred_total, snapshot_publish_failed_total, last_snapshot_error, completed_last_minute, failed_last_minute, failure_rate_percent, queues, observed_at]
       properties:
         status: { type: string, enum: [running, stopping, stopped] }
         max_concurrency: { type: integer, minimum: 1 }
@@ -9797,10 +10168,53 @@ components:
         due_queue_count: { type: integer, minimum: 0 }
         backpressure: { type: boolean }
         max_queue_delay_ms: { type: integer, minimum: 0 }
+        suspected_stuck_runs: { type: integer, minimum: 0 }
+        started_total: { type: integer, minimum: 0 }
+        completed_total: { type: integer, minimum: 0 }
+        failed_total: { type: integer, minimum: 0 }
+        timed_out_total: { type: integer, minimum: 0 }
+        cancelled_total: { type: integer, minimum: 0 }
+        retry_total: { type: integer, minimum: 0 }
+        deferred_total: { type: integer, minimum: 0 }
+        snapshot_publish_failed_total: { type: integer, minimum: 0 }
+        last_snapshot_error: { type: string, nullable: true }
         completed_last_minute: { type: integer, minimum: 0 }
         failed_last_minute: { type: integer, minimum: 0 }
         failure_rate_percent: { type: number, minimum: 0, maximum: 100 }
-        queues: { type: array, items: { type: object } }
+        queues:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              [name, priority, effective_priority, interval_ms, max_concurrency, timeout_ms, max_retries, active_runs, running, queue_delay_ms, longest_running_ms, suspected_stuck, circuit_state, circuit_open_until, consecutive_failures, started_total, completed_total, failed_total, timed_out_total, cancelled_total, retry_total, deferred_total, last_started_at, last_completed_at, last_failed_at, last_error]
+            properties:
+              name: { type: string }
+              priority: { type: integer }
+              effective_priority: { type: integer }
+              interval_ms: { type: integer, minimum: 1 }
+              max_concurrency: { type: integer, minimum: 1 }
+              timeout_ms: { type: integer, minimum: 1 }
+              max_retries: { type: integer, minimum: 0 }
+              active_runs: { type: integer, minimum: 0 }
+              running: { type: boolean }
+              queue_delay_ms: { type: integer, minimum: 0 }
+              longest_running_ms: { type: integer, minimum: 0 }
+              suspected_stuck: { type: boolean }
+              circuit_state: { type: string, enum: [closed, open] }
+              circuit_open_until: { type: string, format: date-time, nullable: true }
+              consecutive_failures: { type: integer, minimum: 0 }
+              started_total: { type: integer, minimum: 0 }
+              completed_total: { type: integer, minimum: 0 }
+              failed_total: { type: integer, minimum: 0 }
+              timed_out_total: { type: integer, minimum: 0 }
+              cancelled_total: { type: integer, minimum: 0 }
+              retry_total: { type: integer, minimum: 0 }
+              deferred_total: { type: integer, minimum: 0 }
+              last_started_at: { type: string, format: date-time, nullable: true }
+              last_completed_at: { type: string, format: date-time, nullable: true }
+              last_failed_at: { type: string, format: date-time, nullable: true }
+              last_error: { type: string, nullable: true }
         observed_at: { type: string, format: date-time }
     VerificationRun:
       type: object
@@ -9986,7 +10400,7 @@ components:
           allOf:
             - { $ref: "#/components/schemas/TrendTopicSummary" }
             - type: object
-              required: [keywords, timeline, timeline_sources, evidence, data_quality]
+              required: [keywords, timeline, timeline_sources, evidence, data_quality, relevance_history]
               properties:
                 keywords:
                   {
@@ -10083,6 +10497,17 @@ components:
                         stale: { type: boolean },
                       },
                   }
+                relevance_history:
+                  type: array
+                  items:
+                    type: object
+                    required: [status, reason, actor_id, version, occurred_at]
+                    properties:
+                      status: { type: string, enum: [active, irrelevant] }
+                      reason: { type: string }
+                      actor_id: { type: string }
+                      version: { type: integer, minimum: 1 }
+                      occurred_at: { type: string, format: date-time }
         request_id: { type: string }
         trace_id: { type: string }
     TrendMonitoringRuleInput:
@@ -10127,7 +10552,7 @@ components:
         - { $ref: "#/components/schemas/TrendMonitoringRuleInput" }
         - type: object
           required:
-            [id, status, last_evaluated_at, last_collection_at, next_collection_at, last_collection_task_id, version, created_at, updated_at]
+            [id, status, last_evaluated_at, last_collection_at, next_collection_at, last_collection_task_id, last_failed_sources, version, created_at, updated_at]
           properties:
             id: { type: string, format: uuid }
             status: { type: string, enum: [enabled, paused] }
@@ -10139,6 +10564,9 @@ components:
               { type: string, format: date-time, nullable: true }
             last_collection_task_id:
               { type: string, format: uuid, nullable: true }
+            last_failed_sources:
+              type: array
+              items: { type: string }
             version: { type: integer, minimum: 1 }
             created_at: { type: string, format: date-time }
             updated_at: { type: string, format: date-time }
@@ -10219,6 +10647,27 @@ components:
         action: { type: string, enum: [adopt, observe, reject] }
         reason: { type: string, minLength: 1, maxLength: 1000 }
         expected_version: { type: integer, minimum: 1 }
+    OpportunityBatchInput:
+      type: object
+      additionalProperties: false
+      required: [action, items, reason]
+      properties:
+        action: { type: string, enum: [assign, archive, review] }
+        items:
+          type: array
+          minItems: 1
+          maxItems: 50
+          uniqueItems: true
+          items:
+            type: object
+            additionalProperties: false
+            required: [id, expected_version]
+            properties:
+              id: { type: string, format: uuid }
+              expected_version: { type: integer, minimum: 1 }
+        assignee_id:
+          { type: string, format: uuid, description: Required for assign }
+        reason: { type: string, minLength: 1, maxLength: 1000 }
     ScoreDimensionRule:
       type: object
       additionalProperties: false
@@ -10567,7 +11016,7 @@ components:
         lifecycle_status:
           {
             type: string,
-            enum: [candidate, validating, ready, adopted, observing, rejected],
+            enum: [candidate, validating, ready, adopted, observing, rejected, archived],
           }
         recommendation_status:
           {

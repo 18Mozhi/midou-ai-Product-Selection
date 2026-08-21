@@ -12,6 +12,8 @@ interface OpportunityFilters {
   decision_status: string;
   coverage_status: string;
   blocking_reason: string;
+  lifecycle_status: string;
+  owner_id: string;
 }
 interface Opportunity {
   id: string;
@@ -27,6 +29,9 @@ interface Opportunity {
   competitor_count: number;
   supplier_candidate_count: number;
   blocking_reasons: Array<"evidence_insufficient" | "recommendation_insufficient">;
+  owner_id: string | null;
+  lifecycle_status: string;
+  version: number;
   updated_at: string;
 }
 
@@ -37,12 +42,16 @@ const props = defineProps<{
     requestId: string;
     filters: OpportunityFilters;
     listScope: Scope;
+    memberOptions: Array<{ id: string; label: string }>;
+    selectedIds: string[];
     page: number;
   }>(),
   emit = defineEmits<{
     apply: [];
     page: [value: number];
     "update:listScope": [value: Scope];
+    "update:selectedIds": [value: string[]];
+    batch: [value: "assign" | "archive" | "review"];
   }>(),
   route = useRoute(),
   pageCount = computed(() => Math.max(1, Math.ceil(props.total / 20))),
@@ -70,6 +79,10 @@ const opportunityStatus = (value: string) =>
         high: "高",
         evidence_insufficient: "缺少可采纳证据",
         recommendation_insufficient: "尚无可靠推荐结论",
+        candidate: "候选",
+        validating: "验证中",
+        ready: "可决策",
+        archived: "已归档",
       }) as Record<string, string>
     )[value] ?? value,
   freshness = (value: string) =>
@@ -79,7 +92,9 @@ const opportunityStatus = (value: string) =>
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
-    }).format(new Date(value));
+    }).format(new Date(value)),
+  ownerLabel = (ownerId: string | null) =>
+    props.memberOptions.find((member) => member.id === ownerId)?.label ?? "未指派";
 
 function changeScope(event: Event) {
   emit("update:listScope", (event.target as HTMLSelectElement).value as Scope);
@@ -110,6 +125,24 @@ function changeScope(event: Event) {
           <option value="">全部原因</option>
           <option value="evidence_insufficient">缺少可采纳证据</option>
           <option value="recommendation_insufficient">尚无可靠推荐结论</option>
+        </select></label
+      ><label
+        >阶段<select v-model="filters.lifecycle_status">
+          <option value="">全部阶段</option>
+          <option value="candidate">候选</option>
+          <option value="validating">验证中</option>
+          <option value="ready">可决策</option>
+          <option value="adopted">已采纳</option>
+          <option value="observing">观察中</option>
+          <option value="rejected">已驳回</option>
+          <option value="archived">已归档</option>
+        </select></label
+      ><label
+        >负责人<select v-model="filters.owner_id">
+          <option value="">全部负责人</option>
+          <option v-for="member in memberOptions" :key="member.id" :value="member.id">
+            {{ member.label }}
+          </option>
         </select></label
       ><label>机会名称<input v-model="filters.q" maxlength="200" placeholder="搜索机会" /></label
       ><label
@@ -148,61 +181,87 @@ function changeScope(event: Event) {
       </div>
       <span>共 {{ total }} 个机会 · 按更新时间排序</span>
     </header>
-    <RouterLink
-      v-for="item in items"
-      :key="item.id"
-      :to="{ path: `/opportunities/${item.id}`, query: { from: route.fullPath } }"
-      ><span class="opportunity-picture"
-        ><img
-          v-if="item.image_url"
-          :src="item.image_url"
-          :alt="`${item.name} 商品图`"
-          loading="lazy"
-          referrerpolicy="no-referrer"
-        /><i v-else>主图<br />待采集</i></span
-      ><span
-        ><strong>{{ item.name }}</strong
-        ><small
-          >{{ item.market }} · {{ item.category || "未分类" }} ·
-          {{ freshness(item.updated_at) }}</small
-        ></span
+    <nav v-if="selectedIds.length" class="opportunity-batch-bar" aria-label="机会批量操作">
+      <span>已选 {{ selectedIds.length }} 项</span>
+      <button type="button" @click="emit('batch', 'assign')">批量指派</button>
+      <button type="button" @click="emit('batch', 'review')">批量复核</button>
+      <button type="button" class="danger" @click="emit('batch', 'archive')">批量归档</button>
+    </nav>
+    <article v-for="item in items" :key="item.id" class="opportunity-list-row">
+      <label class="opportunity-row-select">
+        <input
+          type="checkbox"
+          :checked="selectedIds.includes(item.id)"
+          :aria-label="`选择机会：${item.name}`"
+          @change="
+            emit(
+              'update:selectedIds',
+              selectedIds.includes(item.id)
+                ? selectedIds.filter((id) => id !== item.id)
+                : [...selectedIds, item.id],
+            )
+          "
+        />
+      </label>
+      <RouterLink :to="{ path: `/opportunities/${item.id}`, query: { from: route.fullPath } }"
+        ><span class="opportunity-picture"
+          ><img
+            v-if="item.image_url"
+            :src="item.image_url"
+            :alt="`${item.name} 商品图`"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+          /><i v-else>主图<br />待采集</i></span
+        ><span
+          ><strong>{{ item.name }}</strong
+          ><small
+            >{{ item.market }} · {{ item.category || "未分类" }} ·
+            {{ freshness(item.updated_at) }}</small
+          ></span
+        >
+        <dl>
+          <div>
+            <dt>证据 / 来源</dt>
+            <dd>{{ item.evidence_count }} / {{ item.source_count }}</dd>
+          </div>
+          <div>
+            <dt>关联竞品</dt>
+            <dd>{{ item.competitor_count }}</dd>
+          </div>
+          <div>
+            <dt>供应商候选</dt>
+            <dd>{{ item.supplier_candidate_count }}</dd>
+          </div>
+          <div>
+            <dt>利润</dt>
+            <dd>{{ opportunityStatus(item.profit_status) }}</dd>
+          </div>
+          <div>
+            <dt>风险</dt>
+            <dd>{{ opportunityStatus(item.risk_level) }}</dd>
+          </div>
+          <div>
+            <dt>阻断原因</dt>
+            <dd>
+              {{
+                (item.blocking_reasons ?? []).length
+                  ? item.blocking_reasons.map(opportunityStatus).join("、")
+                  : "无采纳阻断"
+              }}
+            </dd>
+          </div>
+          <div>
+            <dt>阶段 / 负责人</dt>
+            <dd>
+              {{ opportunityStatus(item.lifecycle_status) }} · {{ ownerLabel(item.owner_id) }}
+            </dd>
+          </div>
+        </dl>
+        <b :data-status="item.decision_status"
+          >{{ opportunityStatus(item.decision_status) }} · 查看详情 →</b
+        ></RouterLink
       >
-      <dl>
-        <div>
-          <dt>证据 / 来源</dt>
-          <dd>{{ item.evidence_count }} / {{ item.source_count }}</dd>
-        </div>
-        <div>
-          <dt>关联竞品</dt>
-          <dd>{{ item.competitor_count }}</dd>
-        </div>
-        <div>
-          <dt>供应商候选</dt>
-          <dd>{{ item.supplier_candidate_count }}</dd>
-        </div>
-        <div>
-          <dt>利润</dt>
-          <dd>{{ opportunityStatus(item.profit_status) }}</dd>
-        </div>
-        <div>
-          <dt>风险</dt>
-          <dd>{{ opportunityStatus(item.risk_level) }}</dd>
-        </div>
-        <div>
-          <dt>阻断原因</dt>
-          <dd>
-            {{
-              (item.blocking_reasons ?? []).length
-                ? item.blocking_reasons.map(opportunityStatus).join("、")
-                : "无采纳阻断"
-            }}
-          </dd>
-        </div>
-      </dl>
-      <b :data-status="item.decision_status"
-        >{{ opportunityStatus(item.decision_status) }} · 查看详情 →</b
-      ></RouterLink
-    >
+    </article>
     <footer class="opportunity-pagination" aria-label="机会分页">
       <button type="button" :disabled="page <= 1" @click="emit('page', page - 1)">上一页</button>
       <span>第 {{ page }} / {{ pageCount }} 页</span>

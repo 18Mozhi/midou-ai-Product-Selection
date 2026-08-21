@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { ApiClientError, createApiClient } from "../api-client";
+import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
 import "../notification-center.css";
 import { statusLabel } from "../ui/status-labels";
@@ -168,7 +168,9 @@ async function load() {
       typeof route.query.notification === "string" ? route.query.notification : "";
     if (notificationId && notificationId !== selected.value?.id)
       await openById(notificationId, false);
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function openById(id: string, syncUrl = true) {
   try {
@@ -196,7 +198,9 @@ async function openById(id: string, syncUrl = true) {
       );
       summary.value.unread = Math.max(0, Number(summary.value.unread ?? 0) - 1);
     }
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function open(item: Item) {
   await openById(item.id);
@@ -229,7 +233,9 @@ async function markAll() {
     await api("/notifications/actions", { method: "POST" }, false);
     notice.value = "当前工作区通知已全部标记已读。";
     await load();
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function updateWorkflow(action: "start" | "close" | "reopen") {
   if (!selected.value) return;
@@ -250,7 +256,9 @@ async function updateWorkflow(action: "start" | "close" | "reopen") {
           ? "通知已关闭。"
           : "通知已重新打开。";
     await load();
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function savePreferences() {
   busy.value = true;
@@ -270,7 +278,8 @@ async function savePreferences() {
     notice.value = "通知偏好已保存；邮件服务接通前仅使用站内通知。";
     showPreferences.value = false;
     await load();
-  } catch {
+  } catch (error) {
+    rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
   }

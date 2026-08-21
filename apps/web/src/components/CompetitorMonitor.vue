@@ -70,7 +70,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   showRule = ref(false),
   query = ref(""),
   deleting = ref<Competitor | null>(null),
-  deleteReason = ref("");
+  deleteReason = ref(""),
+  validationTasks = ref<Record<string, string>>({});
 const form = reactive({
     market: "US",
     product_url: "",
@@ -272,6 +273,22 @@ async function collect() {
   if (!selected.value) return;
   const result = await post(`/competitors/${selected.value.id}/collect`, {});
   if (result) notice.value = `已开始重新采集，任务编号 ${result.task_id}。`;
+}
+async function createValidationTask(change: NonNullable<Competitor["changes"]>[number]) {
+  if (!selected.value) return;
+  const result = await post("/tasks", {
+    title: `复核竞品变化 · ${fieldText(change.field)} · ${selected.value.title}`.slice(0, 200),
+    description:
+      `核验竞品 ${selected.value.id} 的变化事件 ${change.id}。\n` +
+      `字段：${fieldText(change.field)}\n变化：${changeText(change)}\n` +
+      `证据：${change.evidence_id}\n采集时间：${change.changed_at}\n` +
+      "请核对原始证据后记录结论，不覆盖竞品快照历史。",
+    priority: "high",
+    due_at: null,
+  });
+  if (!result) return;
+  validationTasks.value = { ...validationTasks.value, [change.id]: result.id };
+  notice.value = `验证任务已创建：${result.title}`;
 }
 async function remove() {
   if (!deleting.value || !deleteReason.value.trim()) return;
@@ -522,6 +539,13 @@ watch(query, (value) => {
             ><time>{{ timeText(change.changed_at) }}</time>
             <p>{{ impactText(change.impact_explanation) }}</p>
             <code>证据 {{ change.evidence_id }}</code>
+            <RouterLink
+              v-if="validationTasks[change.id]"
+              :to="`/tasks?task=${validationTasks[change.id]}`"
+              >打开验证任务</RouterLink
+            ><button v-else type="button" :disabled="busy" @click="createValidationTask(change)">
+              生成验证任务
+            </button>
           </article>
           <p v-if="!selected.changes?.length">尚无变化；首个快照只建立基线，不制造变化。</p>
         </section>

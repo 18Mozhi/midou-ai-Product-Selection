@@ -3,6 +3,9 @@ import { randomUUID } from "node:crypto";
 export type OpportunityDecision = "pending" | "adopted" | "observing" | "rejected";
 export type OpportunityCoverageStatus = "insufficient" | "partial" | "complete";
 export type OpportunityBlockingReason = "evidence_insufficient" | "recommendation_insufficient";
+export type OpportunityLifecycle =
+  "candidate" | "validating" | "ready" | "adopted" | "observing" | "rejected" | "archived";
+export type OpportunityBatchAction = "assign" | "archive" | "review";
 export type DecisionAction = "adopt" | "observe" | "reject";
 export interface OpportunityScope {
   organizationId: string;
@@ -171,10 +174,13 @@ export interface OpportunityRepository {
       decisionStatus?: OpportunityDecision;
       coverageStatus?: OpportunityCoverageStatus;
       blockingReason?: OpportunityBlockingReason;
+      lifecycleStatus?: OpportunityLifecycle;
+      ownerId?: string;
       scope?: "product" | "all";
     },
   ): Promise<{ items: OpportunitySummary[]; total: number }>;
   get(input: OpportunityScope & { opportunityId: string }): Promise<OpportunityDetail | null>;
+  memberOptions(input: OpportunityScope): Promise<Array<{ id: string; label: string }>>;
   create(
     input: OpportunityWriteContext & {
       opportunityId: string;
@@ -196,6 +202,14 @@ export interface OpportunityRepository {
     version: number;
     decision_id: string;
   }>;
+  batch(input: OpportunityWriteContext & { value: any; route: string }): Promise<any>;
+  createEvidenceTask(
+    input: OpportunityWriteContext & {
+      opportunityId: string;
+      expectedVersion: number;
+      route: string;
+    },
+  ): Promise<any>;
 }
 export class OpportunityService {
   constructor(private readonly repository: OpportunityRepository) {}
@@ -208,6 +222,8 @@ export class OpportunityService {
       decisionStatus?: OpportunityDecision;
       coverageStatus?: OpportunityCoverageStatus;
       blockingReason?: OpportunityBlockingReason;
+      lifecycleStatus?: OpportunityLifecycle;
+      ownerId?: string;
       scope?: "product" | "all";
     },
   ) {
@@ -252,6 +268,23 @@ export class OpportunityService {
         400,
         "修正 blocking_reason 后重试。",
       );
+    if (
+      input.lifecycleStatus &&
+      ![
+        "candidate",
+        "validating",
+        "ready",
+        "adopted",
+        "observing",
+        "rejected",
+        "archived",
+      ].includes(input.lifecycleStatus)
+    )
+      throw new OpportunityServiceError(
+        "opportunity_filter_invalid",
+        400,
+        "修正 lifecycle_status 后重试。",
+      );
     return this.repository.list({
       ...input,
       page,
@@ -260,7 +293,11 @@ export class OpportunityService {
       ...(input.market
         ? { market: bounded(input.market, "market", 40, /^[A-Za-z0-9._-]+$/).toUpperCase() }
         : {}),
+      ...(input.ownerId ? { ownerId: uuid(input.ownerId, "owner_id") } : {}),
     });
+  }
+  memberOptions(input: OpportunityScope) {
+    return this.repository.memberOptions(input);
   }
   async get(input: OpportunityScope & { opportunityId: string }) {
     const result = await this.repository.get({
@@ -298,6 +335,64 @@ export class OpportunityService {
       reason: value.reason,
       expectedVersion: value.expected_version,
       route: `POST:/api/v1/opportunities/${opportunityId}/decisions`,
+    });
+  }
+  batch(input: OpportunityWriteContext & { value: any }) {
+    const action = input.value?.action as OpportunityBatchAction,
+      items = Array.isArray(input.value?.items) ? input.value.items : [];
+    if (!(["assign", "archive", "review"] as string[]).includes(action))
+      throw new OpportunityServiceError(
+        "opportunity_batch_action_invalid",
+        400,
+        "选择批量指派、归档或复核。",
+      );
+    if (items.length < 1 || items.length > 50)
+      throw new OpportunityServiceError(
+        "opportunity_batch_size_invalid",
+        400,
+        "每次选择 1–50 个机会。",
+      );
+    const normalized: Array<{ id: string; expected_version: number }> = items.map((item: any) => {
+      const expectedVersion = Number(item?.expected_version);
+      if (!Number.isSafeInteger(expectedVersion) || expectedVersion < 1)
+        throw new OpportunityServiceError(
+          "opportunity_version_invalid",
+          400,
+          "提交每个机会的当前 version。",
+        );
+      return { id: uuid(item?.id, "opportunity_id"), expected_version: expectedVersion };
+    });
+    if (new Set(normalized.map((item) => item.id)).size !== normalized.length)
+      throw new OpportunityServiceError(
+        "opportunity_batch_duplicate",
+        400,
+        "批量机会编号不能重复。",
+      );
+    return this.repository.batch({
+      ...input,
+      value: {
+        action,
+        items: normalized,
+        reason: bounded(input.value?.reason, "reason", 1000),
+        assignee_id: action === "assign" ? uuid(input.value?.assignee_id, "assignee_id") : null,
+      },
+      route: "POST:/api/v1/opportunities/batch",
+    });
+  }
+  createEvidenceTask(input: OpportunityWriteContext & { opportunityId: string; value: any }) {
+    const expectedVersion = Number(input.value?.expected_version);
+    if (!Number.isSafeInteger(expectedVersion) || expectedVersion < 1)
+      throw new OpportunityServiceError(
+        "opportunity_version_invalid",
+        400,
+        "提交当前机会 version。",
+      );
+    const opportunityId = uuid(input.opportunityId, "opportunity_id");
+    return this.repository.createEvidenceTask({
+      ...input,
+      opportunityId,
+      expectedVersion,
+      route: `POST:/api/v1/opportunities/${opportunityId}/evidence-completion-tasks`,
     });
   }
 }

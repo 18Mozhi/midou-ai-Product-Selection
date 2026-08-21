@@ -61,9 +61,6 @@ test("each API registration domain owns its complete route family", async () => 
     for (const route of expected[domain]) {
       assert.match(source, new RegExp(`register${route}Routes\\(`));
     }
-    assert.ok(
-      source.split(/\r?\n/).length < 160,
-      `${domain} registration became a new monolith`,
-    );
+    assert.ok(source.split(/\r?\n/).length < 160, `${domain} registration became a new monolith`);
   }
 });

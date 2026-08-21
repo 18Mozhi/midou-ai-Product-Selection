@@ -386,6 +386,8 @@ test("M03-07 automatic feeds skip conflicting already-seen items while M07-06 re
               status: "enabled",
               terms_review_status: "approved",
               terms_reference_url: "https://example.test/terms",
+              terms_version: "2026-08",
+              terms_expires_at: "2099-08-31T00:00:00.000Z",
               created_by: "66666666-6666-4666-8666-666666666666",
             },
           ],
@@ -436,7 +438,21 @@ test("M03-07 automatic feeds skip conflicting already-seen items while M07-06 re
       };
     },
   };
-  const executor = new ProviderSourceExecutor(pool, registry, evidence, "m07-06-test-worker");
+  const executor = new ProviderSourceExecutor(
+    {
+      ...pool,
+      getConnection: async () => ({
+        beginTransaction: async () => {},
+        commit: async () => {},
+        rollback: async () => {},
+        release: () => {},
+        query: pool.query,
+      }),
+    },
+    registry,
+    evidence,
+    "m07-06-test-worker",
+  );
   const outcomes = await executor.execute(
     {
       id: "33333333-3333-4333-8333-333333333333",

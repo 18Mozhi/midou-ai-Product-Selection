@@ -1,9 +1,27 @@
 import { evaluateRuntimeTopology, type RuntimeNodeSnapshot } from "@scoutops/runtime-topology";
 
 export interface RuntimeTopologyRepository {
-  snapshot(): Promise<{nodes: RuntimeNodeSnapshot[]}>;
-  recordView(input: {actorId: string; requestId: string; traceId: string; observedAt: Date; state: string; activeApiInstances: number}): Promise<void>;
-  heartbeat(input: {nodeId: string; hostId: string; region: string; zone: string; buildSha: string; version: string; status: "starting" | "ready" | "degraded" | "draining" | "stopped"; requestId: string; traceId: string; observedAt: Date}): Promise<void>;
+  snapshot(): Promise<{ nodes: RuntimeNodeSnapshot[] }>;
+  recordView(input: {
+    actorId: string;
+    requestId: string;
+    traceId: string;
+    observedAt: Date;
+    state: string;
+    activeApiInstances: number;
+  }): Promise<void>;
+  heartbeat(input: {
+    nodeId: string;
+    hostId: string;
+    region: string;
+    zone: string;
+    buildSha: string;
+    version: string;
+    status: "starting" | "ready" | "degraded" | "draining" | "stopped";
+    requestId: string;
+    traceId: string;
+    observedAt: Date;
+  }): Promise<void>;
 }
 
 export interface RuntimeTopologyPolicy {
@@ -19,15 +37,30 @@ export interface RuntimeTopologyPolicy {
     due_queue_count: number;
     backpressure: boolean;
     max_queue_delay_ms: number;
+    suspected_stuck_runs?: number;
+    snapshot_publish_failed_total?: number;
+    last_snapshot_error?: string | null;
     completed_last_minute: number;
     failed_last_minute: number;
     failure_rate_percent: number;
     queues: Array<{
       name: string;
       priority: number;
+      effective_priority?: number;
+      max_concurrency?: number;
+      timeout_ms?: number;
+      max_retries?: number;
+      active_runs?: number;
       running: boolean;
       queue_delay_ms: number;
+      longest_running_ms?: number;
+      suspected_stuck?: boolean;
+      circuit_state?: "closed" | "open";
+      circuit_open_until?: string | null;
+      consecutive_failures?: number;
       failed_total: number;
+      timed_out_total?: number;
+      retry_total?: number;
       deferred_total: number;
     }>;
     observed_at: string;
@@ -35,19 +68,34 @@ export interface RuntimeTopologyPolicy {
   supervisorSnapshot?: () => Promise<null | {
     supervisor_pid: number;
     status: string;
-    processes: Record<string, { status: string; pid: number | null; restart_count: number; circuit_open_until: string | null }>;
+    processes: Record<
+      string,
+      {
+        status: string;
+        pid: number | null;
+        restart_count: number;
+        ready_at?: string | null;
+        circuit_open_until: string | null;
+        last_failure?: string | null;
+      }
+    >;
     observed_at: string;
   }>;
 }
 
 export class RuntimeTopologyService {
-  constructor(private readonly repository: RuntimeTopologyRepository, private readonly policy: RuntimeTopologyPolicy, private readonly now = () => new Date()) {}
+  constructor(
+    private readonly repository: RuntimeTopologyRepository,
+    private readonly policy: RuntimeTopologyPolicy,
+    private readonly now = () => new Date(),
+  ) {}
 
   private async evaluate() {
     const observedAt = this.now();
     const snapshot = await this.repository.snapshot();
-    const supervisor = await this.policy.supervisorSnapshot?.().catch(() => null) ?? null;
-    const workerScheduler = await this.policy.workerSchedulerSnapshot?.().catch(() => null) ?? null;
+    const supervisor = (await this.policy.supervisorSnapshot?.().catch(() => null)) ?? null;
+    const workerScheduler =
+      (await this.policy.workerSchedulerSnapshot?.().catch(() => null)) ?? null;
     const evaluation = evaluateRuntimeTopology({
       now: observedAt,
       staleAfterMs: this.policy.staleAfterMs,
@@ -63,12 +111,13 @@ export class RuntimeTopologyService {
       !workerSchedulerRequired ||
       Boolean(
         workerScheduler &&
-          workerScheduler.status === "running" &&
-          Number.isFinite(workerSchedulerAgeMs) &&
-          workerSchedulerAgeMs >= 0 &&
-          workerSchedulerAgeMs <= (this.policy.workerSchedulerStaleAfterMs ?? 90_000),
+        workerScheduler.status === "running" &&
+        Number.isFinite(workerSchedulerAgeMs) &&
+        workerSchedulerAgeMs >= 0 &&
+        workerSchedulerAgeMs <= (this.policy.workerSchedulerStaleAfterMs ?? 90_000),
       );
-    const alerts: Array<{code: string; severity: "warning" | "critical"; actionHint: string}> = [];
+    const alerts: Array<{ code: string; severity: "warning" | "critical"; actionHint: string }> =
+      [];
     if (!workerSchedulerFresh)
       alerts.push({
         code: "worker_scheduler_heartbeat_stale",
@@ -87,6 +136,24 @@ export class RuntimeTopologyService {
         severity: "warning",
         actionHint: "按失败队列下钻日志并携带 request_id 处理依赖错误。",
       });
+    if ((workerScheduler?.suspected_stuck_runs ?? 0) > 0)
+      alerts.push({
+        code: "worker_scheduler_suspected_stuck",
+        severity: "critical",
+        actionHint: "按运行时长定位疑似卡死队列；先核对租约和取消信号，再通过宝塔重启 Worker。",
+      });
+    if (workerScheduler?.queues.some((queue) => queue.circuit_state === "open"))
+      alerts.push({
+        code: "worker_scheduler_queue_circuit_open",
+        severity: "critical",
+        actionHint: "按队列查看连续失败和最近错误，修复依赖后等待队列级熔断窗口恢复。",
+      });
+    if ((workerScheduler?.snapshot_publish_failed_total ?? 0) > 0)
+      alerts.push({
+        code: "worker_scheduler_snapshot_publish_failed",
+        severity: "warning",
+        actionHint: "检查调度状态文件目录的权限和磁盘；业务任务结果不受该观测写入失败影响。",
+      });
     if (
       supervisor &&
       Object.values(supervisor.processes).some(
@@ -98,9 +165,8 @@ export class RuntimeTopologyService {
         severity: "critical",
         actionHint: "停止继续重启，在宝塔检查最近一次退出原因和熔断时间。",
       });
-    const state = !workerSchedulerFresh && evaluation.state === "ready"
-      ? "stale"
-      : evaluation.state;
+    const state =
+      !workerSchedulerFresh && evaluation.state === "ready" ? "stale" : evaluation.state;
     return {
       _node_state: evaluation.state,
       state,
@@ -110,11 +176,41 @@ export class RuntimeTopologyService {
       stale_node_count: evaluation.staleNodeIds.length,
       nodes: snapshot.nodes
         .filter((node) => node.nodeId === this.policy.expectedNodeId)
-        .map((node) => ({node_id: node.nodeId, host_id: node.hostId, role: node.role, status: node.status, region: node.region, zone: node.zone, build_sha: node.buildSha, version: node.version, last_heartbeat_at: node.lastHeartbeatAt.toISOString()})),
-      processes: supervisor ? Object.entries(supervisor.processes).map(([name, process]) => ({ name, status: process.status, pid: process.pid, restart_count: process.restart_count, circuit_open_until: process.circuit_open_until })) : [],
+        .map((node) => ({
+          node_id: node.nodeId,
+          host_id: node.hostId,
+          role: node.role,
+          status: node.status,
+          region: node.region,
+          zone: node.zone,
+          build_sha: node.buildSha,
+          version: node.version,
+          last_heartbeat_at: node.lastHeartbeatAt.toISOString(),
+        })),
+      processes: supervisor
+        ? Object.entries(supervisor.processes).map(([name, process]) => ({
+            name,
+            status: process.status,
+            pid: process.pid,
+            restart_count: process.restart_count,
+            ready_at: process.ready_at ?? null,
+            circuit_open_until: process.circuit_open_until,
+            last_failure: process.last_failure ?? null,
+          }))
+        : [],
       worker_scheduler: workerScheduler,
       supervisor_pid: supervisor?.supervisor_pid ?? null,
-      blockers: [...evaluation.blockers, ...(supervisor && supervisor.status !== "ready" ? [{ code: "backend_supervisor_degraded", actionHint: "在宝塔检查 API/Worker 子进程和连续重启记录。" }] : [])],
+      blockers: [
+        ...evaluation.blockers,
+        ...(supervisor && supervisor.status !== "ready"
+          ? [
+              {
+                code: "backend_supervisor_degraded",
+                actionHint: "在宝塔检查 API/Worker 子进程和连续重启记录。",
+              },
+            ]
+          : []),
+      ],
       alerts,
       load_balancing_enabled: false,
       backup_server_used: false,
@@ -124,25 +220,40 @@ export class RuntimeTopologyService {
     };
   }
 
-  async read(input: {actorId: string; requestId: string; traceId: string}) {
+  async read(input: { actorId: string; requestId: string; traceId: string }) {
     const evaluated = await this.evaluate();
-    const {_node_state: _nodeState, ...result} = evaluated;
-    await this.repository.recordView({actorId: input.actorId, requestId: input.requestId, traceId: input.traceId, observedAt: new Date(result.observed_at), state: result.state, activeApiInstances: result.active_api_instances});
+    const { _node_state: _nodeState, ...result } = evaluated;
+    await this.repository.recordView({
+      actorId: input.actorId,
+      requestId: input.requestId,
+      traceId: input.traceId,
+      observedAt: new Date(result.observed_at),
+      state: result.state,
+      activeApiInstances: result.active_api_instances,
+    });
     return result;
   }
 
   async publicHealth() {
     const result = await this.evaluate();
-    return {state: result._node_state, mode: result.mode, active_api_instances: result.active_api_instances, single_host: result.single_host, stale_node_count: result.stale_node_count, observed_at: result.observed_at};
+    return {
+      state: result._node_state,
+      mode: result.mode,
+      active_api_instances: result.active_api_instances,
+      single_host: result.single_host,
+      stale_node_count: result.stale_node_count,
+      observed_at: result.observed_at,
+    };
   }
 
   async businessHealth() {
     const result = await this.evaluate();
-    const status = result.state !== "ready" || result.alerts.some((item) => item.severity === "critical")
-      ? "unavailable"
-      : result.alerts.length
-        ? "degraded"
-        : "available";
+    const status =
+      result.state !== "ready" || result.alerts.some((item) => item.severity === "critical")
+        ? "unavailable"
+        : result.alerts.length
+          ? "degraded"
+          : "available";
     return {
       status,
       services: {

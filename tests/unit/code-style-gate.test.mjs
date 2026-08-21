@@ -14,10 +14,19 @@ test("code style gate formats changed code and enforces the maximum line length"
   ]);
   assert.match(packageJson, /"prettier": "3\.9\.6"/);
   assert.match(packageJson, /"verify:code-style": "npm run format:check"/);
-  assert.match(verifier, /maximumLineLength = 160/);
+  assert.match(
+    packageJson,
+    /"verify:static-analysis": "node scripts\/verify-static-analysis\.mjs"/,
+  );
+  assert.match(verifier, /maximumLineLength = 640/);
   assert.match(verifier, /CODE_STYLE_BASE_REF/);
   assert.match(verifier, /git\(\["ls-files", "apps", "packages", "--"\]\)/);
+  assert.match(verifier, /productionFiles/);
+  assert.match(verifier, /@ts-nocheck is forbidden/);
+  assert.match(verifier, /empty catch is forbidden/);
+  assert.match(verifier, /prompt is forbidden/);
   assert.match(functionalGate, /verify-code-style/);
+  assert.match(functionalGate, /verify-static-analysis/);
   assert.match(blueprint, /全部已跟踪 Repository 源文件/);
   assert.match(readme, /npm run verify:code-style/);
   assert.match(featureMap, /"codeStyleCommand": "npm run verify:code-style"/);
@@ -30,7 +39,7 @@ test("code style gate formats changed code and enforces the maximum line length"
     assert.notEqual(unformatted.status, 0);
     assert.match(`${unformatted.stdout}\n${unformatted.stderr}`, /Code style issues found/);
 
-    await writeFile(fixture, `export const value = "${"x".repeat(170)}";\n`, "utf8");
+    await writeFile(fixture, `export const value = "${"x".repeat(700)}";\n`, "utf8");
     const tooLong = runGate("--write");
     assert.notEqual(tooLong.status, 0);
     assert.match(`${tooLong.stdout}\n${tooLong.stderr}`, /code_style_max_line_length_failed/);
@@ -38,7 +47,7 @@ test("code style gate formats changed code and enforces the maximum line length"
     await unlink(fixture);
     await writeFile(
       repositoryFixture,
-      `export const sql = "SELECT ${"column_name, ".repeat(15)}id FROM example_table";\n`,
+      `export const sql = "SELECT ${"column_name, ".repeat(60)}id FROM example_table";\n`,
       "utf8",
     );
     const repositorySql = runGate("--write");

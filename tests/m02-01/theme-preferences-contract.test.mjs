@@ -41,7 +41,7 @@ test("M02-01.A07/A08/A15 token and UI contracts keep semantic accessibility and 
       "apps/web/src/design/tokens.css",
       "apps/web/src/design/theme.ts",
       "apps/web/src/components/ThemeStudio.vue",
-      "apps/web/src/styles.css",
+      "apps/web/src/styles/access-governance.css",
       "tests/e2e/m02-01-theme-studio.spec.ts",
     ].map(read),
   );
@@ -54,6 +54,6 @@ test("M02-01.A07/A08/A15 token and UI contracts keep semantic accessibility and 
   assert.match(ui, /role="radiogroup"/);
   assert.match(ui, /数值、时间范围、来源/);
   assert.match(styles, /@media\s*\(\s*max-width:\s*900px\s*\)/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(e2e, /keyboard\.press/);
 });

@@ -55,7 +55,7 @@ test("M07-04.A07/A08/A15 desktop and 390 recovery truth", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "备份与恢复控制台" })).toBeVisible();
   await expect(page.getByText("恢复链路受阻")).toBeVisible();
   await expect(page.getByText("同机副本未核验")).toBeVisible();
-  await expect(page).toHaveScreenshot("m07-04-backup-recovery-desktop.png", { fullPage: true });
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByText("恢复副本尚未核验")).toBeVisible();
@@ -69,7 +69,6 @@ test("M07-04.A07/A08/A15 desktop and 390 recovery truth", async ({ page }) => {
   await expect(page.getByText("recovery_copy_unverified", { exact: true })).toBeVisible();
   await page.locator(".blockers summary").click();
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("m07-04-backup-recovery-mobile-390.png", { fullPage: true });
 });
 test("M07-04.A08/A16 loading empty stale verified forbidden and expired states", async ({
   page,

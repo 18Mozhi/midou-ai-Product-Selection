@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import { ApiClientError, createApiClient } from "../api-client";
+import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
+import { useAuditedReason } from "../use-audited-reason";
+import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import "../organization-admin.css";
 const props = defineProps<{
     apiBaseUrl: string;
@@ -24,6 +26,13 @@ const props = defineProps<{
   memberTeam = ref(""),
   invitationTab = ref<"pending" | "expired">("pending"),
   auditFilters = ref({ action: "", outcome: "", resource_type: "" });
+const {
+  request: auditedReasonRequest,
+  open: auditedReasonOpen,
+  ask: askAuditedReason,
+  submit: submitAuditedReason,
+  cancel: cancelAuditedReason,
+} = useAuditedReason();
 const view = computed(() =>
     props.routePath === "/org-admin" ? "summary" : props.routePath.split("/").pop() || "summary",
   ),
@@ -89,7 +98,9 @@ async function load() {
     )
       ? "ready"
       : "empty";
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 function auditPath() {
   const query = new URLSearchParams({ limit: "50" });
@@ -110,17 +121,24 @@ async function submit(path: string, value: any, method = "POST") {
     form.value = { reason: "" };
     await load();
     if (result?.secret) secret.value = result.secret;
-  } catch {
+  } catch (error) {
+    rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
   }
 }
-function auditedReason(action: string) {
-  return window.prompt(`${action}原因（会写入审计记录）`, action) ?? "";
+async function auditedReason(action: string) {
+  return (
+    (await askAuditedReason({
+      title: `${action}原因`,
+      description: "原因会与组织、操作者和目标对象一起写入审计记录。",
+      initialValue: action,
+    })) ?? ""
+  );
 }
 async function memberAction(item: any) {
   const action = item.status === "active" ? "disable" : "restore";
-  const reason = auditedReason(action === "disable" ? "禁用成员" : "恢复成员");
+  const reason = await auditedReason(action === "disable" ? "禁用成员" : "恢复成员");
   if (!reason) return;
   await submit(`/org/admin/members/${item.id}/actions`, {
     action,
@@ -130,13 +148,13 @@ async function memberAction(item: any) {
 }
 async function assignRole(item: any) {
   const role_code = memberRoles.value[item.id] || item.roles[0] || "member";
-  const reason = auditedReason(`分配${roleText(role_code)}`);
+  const reason = await auditedReason(`分配${roleText(role_code)}`);
   if (!reason) return;
   await submit(`/org/admin/members/${item.id}/roles`, { role_code, reason });
 }
 async function workspaceAction(item: any) {
   const action = item.status === "active" ? "archive" : "restore";
-  const reason = auditedReason(action === "archive" ? "归档工作区" : "恢复工作区");
+  const reason = await auditedReason(action === "archive" ? "归档工作区" : "恢复工作区");
   if (!reason) return;
   await submit(`/org/admin/workspaces/${item.id}/actions`, {
     action,
@@ -150,7 +168,7 @@ async function teamMemberAction(item: any, action: "assign" | "remove") {
     notice.value = "请先选择当前组织成员。";
     return;
   }
-  const reason = auditedReason(action === "assign" ? "分配团队成员" : "移除团队成员");
+  const reason = await auditedReason(action === "assign" ? "分配团队成员" : "移除团队成员");
   if (!reason) return;
   await submit(`/org/admin/teams/${item.id}/members`, {
     action,
@@ -159,7 +177,7 @@ async function teamMemberAction(item: any, action: "assign" | "remove") {
   });
 }
 async function tokenAction(item: any, action: "rotate" | "revoke") {
-  const reason = auditedReason(action === "rotate" ? "轮换组织 Token" : "撤销组织 Token");
+  const reason = await auditedReason(action === "rotate" ? "轮换组织 Token" : "撤销组织 Token");
   if (!reason) return;
   await submit(`/org/admin/tokens/${item.id}/actions`, {
     action,
@@ -838,5 +856,14 @@ onMounted(load);
         <p v-if="!rows.length">暂无记录；不会用示例数据补齐。</p>
       </section>
     </template>
+    <AuditedReasonDialog
+      :open="auditedReasonOpen"
+      :title="auditedReasonRequest?.title || '填写审计原因'"
+      :description="auditedReasonRequest?.description || ''"
+      :initial-value="auditedReasonRequest?.initialValue"
+      :minimum-length="auditedReasonRequest?.minimumLength"
+      @submit="submitAuditedReason"
+      @cancel="cancelAuditedReason"
+    />
   </section>
 </template>

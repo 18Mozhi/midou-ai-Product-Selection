@@ -92,6 +92,39 @@ const failure = (s: number): State =>
   ),
   loginNeedsAuthentication = computed(
     () => loginProvider.value?.access_mode === "authenticated_browser",
+  ),
+  compatibilityRows = computed(() =>
+    loginProviders.value.map((provider) => {
+      const providerAssets = assets.value.filter(
+          (asset) =>
+            asset.provider_id === provider.id &&
+            ["browser_profile", "cookie_bundle"].includes(asset.kind) &&
+            asset.status === "active",
+        ),
+        validAssetIds = new Set(
+          providerAssets
+            .filter(
+              (asset) => !asset.expires_at || new Date(asset.expires_at).getTime() > Date.now(),
+            )
+            .map((asset) => asset.id),
+        ),
+        providerProfiles = profiles.value.filter((profile) => profile.provider_id === provider.id),
+        compatibleProfiles = providerProfiles.filter(
+          (profile) =>
+            profile.status === "active" && validAssetIds.has(profile.credential_asset_id),
+        );
+      return {
+        provider,
+        assets: providerAssets,
+        profiles: providerProfiles,
+        status: compatibleProfiles.length
+          ? "可用于登录采集"
+          : providerAssets.length
+            ? "待关联有效运行档案"
+            : "待配置登录资料",
+        ready: compatibleProfiles.length > 0,
+      };
+    }),
   );
 const kindText = (value: string) =>
   (
@@ -502,6 +535,49 @@ onMounted(async () => {
           ><b>{{ statusText(profile.status) }}</b>
         </article>
         <p v-if="!profiles.length">暂无浏览器档案；不会创建模拟档案。</p>
+      </section>
+      <section class="credential-compatibility">
+        <header>
+          <div>
+            <p>登录采集准入</p>
+            <h3>账号与来源兼容矩阵</h3>
+          </div>
+          <span>仅按真实来源绑定、凭证有效期和运行档案状态判定</span>
+        </header>
+        <table v-if="compatibilityRows.length">
+          <thead>
+            <tr>
+              <th>来源</th>
+              <th>已绑定登录资料</th>
+              <th>运行档案</th>
+              <th>兼容状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in compatibilityRows" :key="row.provider.id">
+              <td>
+                <strong>{{ row.provider.name }}</strong
+                ><small>{{ row.provider.code }}</small>
+              </td>
+              <td>
+                {{
+                  row.assets.length ? row.assets.map((asset) => asset.name).join("、") : "未配置"
+                }}
+              </td>
+              <td>
+                {{
+                  row.profiles.length
+                    ? row.profiles.map((profile) => profile.name).join("、")
+                    : "未关联"
+                }}
+              </td>
+              <td>
+                <b :data-ready="row.ready">{{ row.status }}</b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p v-else>当前没有需要网页登录的来源，不创建虚构兼容关系。</p>
       </section>
     </section>
     <form

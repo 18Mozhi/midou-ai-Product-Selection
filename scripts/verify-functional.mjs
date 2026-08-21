@@ -30,6 +30,13 @@ const steps = [
     shell: process.platform === "win32",
   },
   {
+    id: "verify-static-analysis",
+    label: "npm run verify:static-analysis",
+    command: npm,
+    args: ["run", "verify:static-analysis"],
+    shell: process.platform === "win32",
+  },
+  {
     id: "build",
     label: "npm run build",
     command: npm,
@@ -122,6 +129,7 @@ const report = {
   status,
   criteria: [
     "code_style",
+    "accessibility_and_promise_static_analysis",
     "production_build",
     "node_tests",
     "python_tests",

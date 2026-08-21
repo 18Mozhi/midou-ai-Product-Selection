@@ -267,25 +267,25 @@ onMounted(() => {
   <main class="identity-page" :data-mode="mode" :data-state="requestState">
     <header class="identity-header">
       <RouterLink class="identity-brand" to="/"><span>选</span>智能选品</RouterLink>
-      <p>账号登录与安全验证</p>
+      <p>账号登录</p>
     </header>
     <section class="identity-shell">
       <aside class="identity-story" aria-label="智能选品产品说明">
         <p class="identity-kicker">从信号到行动</p>
-        <h1>让增长，<em>更有确定性</em></h1>
-        <p>账号、密码和会话只在受控后端处理。浏览器不保存认证 Token，也不接触数据库或密钥。</p>
+        <h1><span>让增长，</span><em>更有确定性</em></h1>
+        <p>登录后，从真实趋势、机会和供应链证据开始今天的选品工作。</p>
         <div class="identity-orbit" aria-hidden="true"><span>S</span><i></i><i></i><i></i></div>
         <ul>
-          <li><strong>安全密码</strong><small>密码不可反向读取</small></li>
-          <li><strong>单次令牌</strong><small>验证与重置可追踪</small></li>
-          <li><strong>动态双重验证</strong><small>30 秒短时验证码</small></li>
+          <li><strong>账号保护</strong><small>登录信息由后端校验</small></li>
+          <li><strong>找回密码</strong><small>验证链接单次有效</small></li>
+          <li><strong>双重验证</strong><small>可按账号要求启用</small></li>
         </ul>
       </aside>
 
       <section class="identity-card" aria-live="polite">
         <div class="identity-card__head">
           <p>
-            {{ mode === "sessions" ? "SECURITY CENTER" : "AI SELECTION ACCOUNT" }}
+            {{ mode === "sessions" ? "账号中心" : "智能选品账号" }}
           </p>
           <h2>{{ title }}</h2>
           <span v-if="mode === 'login'">使用已验证的邮箱和本地密码登录</span>

@@ -64,7 +64,14 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(values[5], /events[\s\S]*comments[\s\S]*sort/);
   assert.doesNotMatch(values[5], /task-row-delete/);
   assert.match(values[5], /当前阶段[\s\S]*phase\(selected\)/);
+  assert.match(values[5], /member-options[\s\S]*接收成员[\s\S]*datetime-local/);
+  assert.match(values[5], /progress_percent[\s\S]*本次进展说明/);
+  assert.doesNotMatch(values[5], /window\.prompt/);
+  assert.match(values[3], /\/api\/v1\/tasks\/member-options/);
+  assert.match(values[2], /membership_data_scopes[\s\S]*scope_type='workspace'/);
+  assert.match(values[2], /evidence_completion[\s\S]*opportunity_score_jobs/);
   assert.match(values[9], /\/tasks\/\{taskId\}/);
+  assert.match(values[9], /\/tasks\/member-options/);
   const registry = JSON.parse(values.at(-1));
   assert.equal(registry.atomicTasks.length, 17);
 });

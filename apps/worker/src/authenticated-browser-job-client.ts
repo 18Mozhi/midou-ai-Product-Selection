@@ -58,6 +58,7 @@ export class MySqlAuthenticatedBrowserJobClient {
   async collect(
     input: BrowserJobInput,
     heartbeat: () => Promise<void>,
+    signal?: AbortSignal,
   ): Promise<AuthenticatedBrowserCollection> {
     const executionRequest = requestFor(input.provider, input.target),
       jobId = randomUUID(),
@@ -87,6 +88,17 @@ export class MySqlAuthenticatedBrowserJobClient {
       ],
     );
     while (Date.now() <= deadline) {
+      if (signal?.aborted) {
+        await this.pool.query(
+          [
+            "UPDATE browser_collection_jobs SET status='cancelled',",
+            "error_code='worker_shutdown_cancelled',finished_at=NOW(3),updated_at=NOW(3) ",
+            "WHERE collection_subquery_id=? AND status IN ('queued','leased','running')",
+          ].join(""),
+          [input.subqueryId],
+        );
+        throw new ProviderAdapterFailure("dependency_unavailable", true);
+      }
       await heartbeat();
       const [rows] = await this.pool.query<RowDataPacket[]>(
         "SELECT id,status,result_json,error_code FROM browser_collection_jobs WHERE collection_subquery_id=? LIMIT 1",

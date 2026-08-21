@@ -21,10 +21,7 @@ const ids = (r: FastifyRequest) => ({
     request_id: ids(r).requestId,
     trace_id: ids(r).traceId,
   });
-export function registerBusinessTaskRoutes(
-  app: FastifyInstance,
-  o: BusinessTaskRouteOptions,
-) {
+export function registerBusinessTaskRoutes(app: FastifyInstance, o: BusinessTaskRouteOptions) {
   const scope = async (r: FastifyRequest, capability: Capability) => {
       const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
         x = await o.authorization.resolveSession(a.user.id, a.session.id);
@@ -44,12 +41,7 @@ export function registerBusinessTaskRoutes(
     },
     write = async (r: FastifyRequest, cap: Capability) => {
       if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ScoutOps 页面重试。",
-        );
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
       return {
         ...(await scope(r, cap)),
         ...ids(r),
@@ -74,6 +66,9 @@ export function registerBusinessTaskRoutes(
   app.get("/api/v1/tasks/summary", async (r) =>
     env(await o.service.summary(await scope(r, "task:read")), r),
   );
+  app.get("/api/v1/tasks/member-options", async (r) =>
+    env(await o.service.memberOptions(await scope(r, "task:read")), r),
+  );
   app.get("/api/v1/tasks/:id", async (r) =>
     env(
       await o.service.detail({
@@ -91,8 +86,26 @@ export function registerBusinessTaskRoutes(
     reply.code(201);
     return env(x, r);
   });
-  app.patch("/api/v1/tasks/:id", async (r) => env(await o.service.update({...(await write(r,"task:update")),taskId:(r.params as any).id,value:r.body}),r));
-  app.delete("/api/v1/tasks/:id", async (r) => env(await o.service.remove({...(await write(r,"task:update")),taskId:(r.params as any).id,value:r.body}),r));
+  app.patch("/api/v1/tasks/:id", async (r) =>
+    env(
+      await o.service.update({
+        ...(await write(r, "task:update")),
+        taskId: (r.params as any).id,
+        value: r.body,
+      }),
+      r,
+    ),
+  );
+  app.delete("/api/v1/tasks/:id", async (r) =>
+    env(
+      await o.service.remove({
+        ...(await write(r, "task:update")),
+        taskId: (r.params as any).id,
+        value: r.body,
+      }),
+      r,
+    ),
+  );
   app.post("/api/v1/tasks/:id/comments", async (r, reply) => {
     const x = await o.service.comment({
       ...(await write(r, "task:update")),
@@ -103,8 +116,7 @@ export function registerBusinessTaskRoutes(
     return env(x, r);
   });
   app.post("/api/v1/tasks/:id/actions", async (r, reply) => {
-    const cap =
-        (r.body as any)?.action === "transfer" ? "task:assign" : "task:update",
+    const cap = (r.body as any)?.action === "transfer" ? "task:assign" : "task:update",
       x = await o.service.action({
         ...(await write(r, cap)),
         taskId: (r.params as any).id,

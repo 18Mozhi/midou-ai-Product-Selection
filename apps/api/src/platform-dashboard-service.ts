@@ -1,8 +1,7 @@
 export type PlatformDashboardWindow = "15m" | "24h" | "7d" | "30d";
 export type PlatformManagementDomain =
-  "content" | "notifications" | "email" | "status" | "data" | "governance";
-export type PlatformDataEntity =
-  "trends" | "opportunities" | "competitors" | "suppliers";
+  "content" | "notifications" | "email" | "status" | "logs" | "data" | "governance";
+export type PlatformDataEntity = "trends" | "opportunities" | "competitors" | "suppliers";
 export interface PlatformDashboardRepository {
   read(input: {
     actorId: string;
@@ -81,15 +80,8 @@ export class PlatformDashboardService {
     private readonly defaultWindow: PlatformDashboardWindow = "24h",
     private readonly now: () => Date = () => new Date(),
   ) {}
-  read(input: {
-    actorId: string;
-    window?: unknown;
-    requestId: string;
-    traceId: string;
-  }) {
-    const window = String(
-      input.window ?? this.defaultWindow,
-    ) as PlatformDashboardWindow;
+  read(input: { actorId: string; window?: unknown; requestId: string; traceId: string }) {
+    const window = String(input.window ?? this.defaultWindow) as PlatformDashboardWindow;
     if (!(window in windows))
       throw new PlatformDashboardError(
         "platform_dashboard_window_invalid",
@@ -113,14 +105,9 @@ export class PlatformDashboardService {
   }) {
     const domain = String(input.domain ?? "status") as PlatformManagementDomain;
     if (
-      ![
-        "content",
-        "notifications",
-        "email",
-        "status",
-        "data",
-        "governance",
-      ].includes(domain)
+      !["content", "notifications", "email", "status", "logs", "data", "governance"].includes(
+        domain,
+      )
     )
       throw new PlatformDashboardError(
         "platform_management_domain_invalid",
@@ -153,17 +140,12 @@ export class PlatformDashboardService {
       status,
     });
   }
-  exportData(
-    value: any,
-    context: { actorId: string; requestId: string; traceId: string },
-  ) {
+  exportData(value: any, context: { actorId: string; requestId: string; traceId: string }) {
     const entity = String(value?.entity ?? "") as PlatformDataEntity,
       query = String(value?.query ?? "").trim(),
       status = String(value?.status ?? "").trim(),
       reason = String(value?.reason ?? "").trim();
-    if (
-      !["trends", "opportunities", "competitors", "suppliers"].includes(entity)
-    )
+    if (!["trends", "opportunities", "competitors", "suppliers"].includes(entity))
       throw new PlatformDashboardError(
         "platform_data_entity_invalid",
         400,
@@ -176,11 +158,7 @@ export class PlatformDashboardService {
         "缩短筛选条件后重试。",
       );
     if (reason.length < 2 || reason.length > 300)
-      throw new PlatformDashboardError(
-        "reason_invalid",
-        400,
-        "填写 2–300 字的导出原因。",
-      );
+      throw new PlatformDashboardError("reason_invalid", 400, "填写 2–300 字的导出原因。");
     return this.repository.exportData({
       ...context,
       entity,
@@ -201,33 +179,16 @@ export class PlatformDashboardService {
     },
   ) {
     if (!/^[0-9a-f-]{36}$/i.test(topicId))
-      throw new PlatformDashboardError(
-        "trend_topic_id_invalid",
-        400,
-        "刷新内容列表后重试。",
-      );
-    const status = String(value?.status ?? "") as
-        "active" | "irrelevant" | "stale",
+      throw new PlatformDashboardError("trend_topic_id_invalid", 400, "刷新内容列表后重试。");
+    const status = String(value?.status ?? "") as "active" | "irrelevant" | "stale",
       expectedVersion = Number(value?.expected_version),
       reason = String(value?.reason ?? "").trim();
     if (!["active", "irrelevant", "stale"].includes(status))
-      throw new PlatformDashboardError(
-        "trend_topic_status_invalid",
-        400,
-        "选择展示、无关或过期。",
-      );
+      throw new PlatformDashboardError("trend_topic_status_invalid", 400, "选择展示、无关或过期。");
     if (!Number.isInteger(expectedVersion) || expectedVersion < 1)
-      throw new PlatformDashboardError(
-        "trend_topic_version_invalid",
-        400,
-        "刷新内容版本后重试。",
-      );
+      throw new PlatformDashboardError("trend_topic_version_invalid", 400, "刷新内容版本后重试。");
     if (reason.length < 2 || reason.length > 300)
-      throw new PlatformDashboardError(
-        "reason_invalid",
-        400,
-        "填写 2–300 字的审核原因。",
-      );
+      throw new PlatformDashboardError("reason_invalid", 400, "填写 2–300 字的审核原因。");
     return this.repository.moderateTrend({
       topicId,
       status,
@@ -257,11 +218,7 @@ export class PlatformDashboardService {
         "刷新邮件列表后重试。",
       );
     if (!/^[0-9a-f-]{36}$/i.test(deliveryId))
-      throw new PlatformDashboardError(
-        "email_delivery_id_invalid",
-        400,
-        "刷新邮件列表后重试。",
-      );
+      throw new PlatformDashboardError("email_delivery_id_invalid", 400, "刷新邮件列表后重试。");
     const action = String(value?.action ?? "") as "retry" | "suppress";
     const reason = String(value?.reason ?? "").trim();
     if (!["retry", "suppress"].includes(action))
@@ -277,11 +234,7 @@ export class PlatformDashboardService {
         "账号验证和密码找回邮件不可抑制，可在故障恢复后重新投递。",
       );
     if (reason.length < 2 || reason.length > 300)
-      throw new PlatformDashboardError(
-        "reason_invalid",
-        400,
-        "填写 2–300 字的操作原因。",
-      );
+      throw new PlatformDashboardError("reason_invalid", 400, "填写 2–300 字的操作原因。");
     return this.repository.manageEmailDelivery({
       source,
       deliveryId,
@@ -299,9 +252,7 @@ export class PlatformDashboardService {
     const category = String(value?.category ?? "system");
     const severity = String(value?.severity ?? "info");
     const audienceType = String(value?.audience_type ?? "all_users");
-    const organizationId = value?.organization_id
-      ? String(value.organization_id)
-      : null;
+    const organizationId = value?.organization_id ? String(value.organization_id) : null;
     const userId = value?.user_id ? String(value.user_id) : null;
     const inAppEnabled = Boolean(value?.in_app_enabled);
     const emailEnabled = Boolean(value?.email_enabled);
@@ -347,21 +298,14 @@ export class PlatformDashboardService {
         400,
         "选择全部用户、指定组织或指定用户。",
       );
-    if (
-      audienceType === "organization" &&
-      !/^[0-9a-f-]{36}$/i.test(organizationId ?? "")
-    )
+    if (audienceType === "organization" && !/^[0-9a-f-]{36}$/i.test(organizationId ?? ""))
       throw new PlatformDashboardError(
         "platform_message_organization_invalid",
         400,
         "选择有效组织。",
       );
     if (audienceType === "user" && !/^[0-9a-f-]{36}$/i.test(userId ?? ""))
-      throw new PlatformDashboardError(
-        "platform_message_user_invalid",
-        400,
-        "选择有效用户。",
-      );
+      throw new PlatformDashboardError("platform_message_user_invalid", 400, "选择有效用户。");
     if (!inAppEnabled && !emailEnabled)
       throw new PlatformDashboardError(
         "platform_message_channel_invalid",
@@ -391,11 +335,7 @@ export class PlatformDashboardService {
   }
   updateMessage(messageId: string, value: any, context: any) {
     if (!/^[0-9a-f-]{36}$/i.test(messageId))
-      throw new PlatformDashboardError(
-        "platform_message_id_invalid",
-        400,
-        "刷新草稿列表后重试。",
-      );
+      throw new PlatformDashboardError("platform_message_id_invalid", 400, "刷新草稿列表后重试。");
     const expectedVersion = Number(value?.expected_version);
     const reason = String(value?.reason ?? "").trim();
     if (!Number.isInteger(expectedVersion) || expectedVersion < 1)
@@ -405,11 +345,7 @@ export class PlatformDashboardService {
         "刷新草稿版本后重试。",
       );
     if (reason.length < 2 || reason.length > 300)
-      throw new PlatformDashboardError(
-        "reason_invalid",
-        400,
-        "填写 2–300 字的修改原因。",
-      );
+      throw new PlatformDashboardError("reason_invalid", 400, "填写 2–300 字的修改原因。");
     return this.repository.updateMessage({
       ...context,
       messageId,
@@ -422,11 +358,7 @@ export class PlatformDashboardService {
   }
   messageAction(messageId: string, value: any, context: any) {
     if (!/^[0-9a-f-]{36}$/i.test(messageId))
-      throw new PlatformDashboardError(
-        "platform_message_id_invalid",
-        400,
-        "刷新草稿列表后重试。",
-      );
+      throw new PlatformDashboardError("platform_message_id_invalid", 400, "刷新草稿列表后重试。");
     const action = String(value?.action ?? "");
     const expectedVersion = Number(value?.expected_version);
     const reason = String(value?.reason ?? "").trim();
@@ -443,11 +375,7 @@ export class PlatformDashboardService {
         "刷新草稿版本后重试。",
       );
     if (reason.length < 2 || reason.length > 300)
-      throw new PlatformDashboardError(
-        "reason_invalid",
-        400,
-        "填写 2–300 字的操作原因。",
-      );
+      throw new PlatformDashboardError("reason_invalid", 400, "填写 2–300 字的操作原因。");
     return this.repository.messageAction({
       ...context,
       messageId,

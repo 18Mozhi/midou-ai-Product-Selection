@@ -49,6 +49,7 @@ const rule = (row: RowDataPacket): TrendMonitoringRule => ({
   next_collection_at: row.next_collection_at == null ? null : iso(row.next_collection_at),
   last_collection_task_id:
     row.last_collection_task_id == null ? null : String(row.last_collection_task_id),
+  last_failed_sources: [],
   version: Number(row.version),
   created_at: iso(row.created_at),
   updated_at: iso(row.updated_at),
@@ -114,36 +115,43 @@ export class MySqlTrendRepository implements TrendRepository {
       [input.actorId, input.topicId, input.organizationId, input.workspaceId],
     );
     if (!rows[0]) return null;
-    const [[keywordRows], [signalRows], [timelineRows], [timelineSourceRows]] = await Promise.all([
-      this.pool.query<RowDataPacket[]>(
-        "SELECT keyword,keyword_type,language,market FROM trend_topic_keywords WHERE topic_id=? " +
-          "AND organization_id=? AND workspace_id=? ORDER BY FIELD(keyword_type,'primary'," +
-          "'related','negative'),keyword",
-        [input.topicId, input.organizationId, input.workspaceId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT id,title,publisher,canonical_url,published_at,observed_at,provider_id," +
-          "raw_evidence_id FROM trend_signals WHERE topic_id=? AND organization_id=? AND workspace_id=? " +
-          "ORDER BY published_at DESC LIMIT 100",
-        [input.topicId, input.organizationId, input.workspaceId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') at,\n                  COUNT(*) " +
-          "signal_count,\n                  COUNT(DISTINCT provider_id) source_count\n           " +
-          "  FROM trend_signals\n            WHERE topic_id=? AND organization_id=? AND workspace_id=?\n" +
-          "            GROUP BY DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z')\n            " +
-          "ORDER BY MIN(published_at)",
-        [input.topicId, input.organizationId, input.workspaceId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT provider_id,\n                  MAX(publisher) source_label,\n                 " +
-          " DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') at,\n                  COUNT(*) signal_count\n" +
-          "             FROM trend_signals\n            WHERE topic_id=? AND organization_id=? AND " +
-          "workspace_id=?\n            GROUP BY provider_id,\n                     DATE_FORMAT(published_at," +
-          "'%Y-%m-%dT%H:00:00.000Z')\n            ORDER BY provider_id,MIN(published_at)",
-        [input.topicId, input.organizationId, input.workspaceId],
-      ),
-    ]);
+    const [[keywordRows], [signalRows], [timelineRows], [timelineSourceRows], [relevanceRows]] =
+      await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          "SELECT keyword,keyword_type,language,market FROM trend_topic_keywords WHERE topic_id=? " +
+            "AND organization_id=? AND workspace_id=? ORDER BY FIELD(keyword_type,'primary'," +
+            "'related','negative'),keyword",
+          [input.topicId, input.organizationId, input.workspaceId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT id,title,publisher,canonical_url,published_at,observed_at,provider_id," +
+            "raw_evidence_id FROM trend_signals WHERE topic_id=? AND organization_id=? AND workspace_id=? " +
+            "ORDER BY published_at DESC LIMIT 100",
+          [input.topicId, input.organizationId, input.workspaceId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') at,\n                  COUNT(*) " +
+            "signal_count,\n                  COUNT(DISTINCT provider_id) source_count\n           " +
+            "  FROM trend_signals\n            WHERE topic_id=? AND organization_id=? AND workspace_id=?\n" +
+            "            GROUP BY DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z')\n            " +
+            "ORDER BY MIN(published_at)",
+          [input.topicId, input.organizationId, input.workspaceId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT provider_id,\n                  MAX(publisher) source_label,\n                 " +
+            " DATE_FORMAT(published_at,'%Y-%m-%dT%H:00:00.000Z') at,\n                  COUNT(*) signal_count\n" +
+            "             FROM trend_signals\n            WHERE topic_id=? AND organization_id=? AND " +
+            "workspace_id=?\n            GROUP BY provider_id,\n                     DATE_FORMAT(published_at," +
+            "'%Y-%m-%dT%H:00:00.000Z')\n            ORDER BY provider_id,MIN(published_at)",
+          [input.topicId, input.organizationId, input.workspaceId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT actor_id,payload_json,occurred_at FROM trend_events WHERE organization_id=? " +
+            "AND workspace_id=? AND resource_type='trend_topic' AND resource_id=? " +
+            "AND event_type='trend.topic.relevance_changed' ORDER BY occurred_at DESC,id DESC LIMIT 50",
+          [input.organizationId, input.workspaceId, input.topicId],
+        ),
+      ]);
     const summary = topic(rows[0]),
       evidence = signalRows.map((row) => ({
         id: String(row.id),
@@ -191,6 +199,18 @@ export class MySqlTrendRepository implements TrendRepository {
         source_count: summary.source_count,
         stale: summary.status === "stale",
       },
+      relevance_history: relevanceRows.map((row) => {
+        const payload = json<{ status: "active" | "irrelevant"; reason: string; version: number }>(
+          row.payload_json,
+        );
+        return {
+          status: payload.status,
+          reason: payload.reason,
+          version: Number(payload.version),
+          actor_id: String(row.actor_id),
+          occurred_at: iso(row.occurred_at),
+        };
+      }),
     };
   }
 
@@ -199,7 +219,31 @@ export class MySqlTrendRepository implements TrendRepository {
       "SELECT * FROM trend_monitoring_rules WHERE organization_id=? AND workspace_id=? ORDER BY updated_at DESC,id",
       [input.organizationId, input.workspaceId],
     );
-    return rows.map(rule);
+    const items = rows.map(rule),
+      taskIds = items
+        .map((item) => item.last_collection_task_id)
+        .filter((value): value is string => Boolean(value));
+    if (!taskIds.length) return items;
+    const placeholders = taskIds.map(() => "?").join(","),
+      [failureRows] = await this.pool.query<RowDataPacket[]>(
+        `SELECT s.task_id,p.name FROM collection_subqueries s JOIN providers p ON p.id=s.provider_id
+         WHERE s.organization_id=? AND s.workspace_id=? AND s.task_id IN (${placeholders})
+           AND s.status IN ('failed','blocked') ORDER BY s.task_id,s.ordinal`,
+        [input.organizationId, input.workspaceId, ...taskIds],
+      ),
+      failures = new Map<string, string[]>();
+    for (const row of failureRows) {
+      const taskId = String(row.task_id),
+        names = failures.get(taskId) ?? [];
+      names.push(String(row.name));
+      failures.set(taskId, names);
+    }
+    return items.map((item) => ({
+      ...item,
+      last_failed_sources: item.last_collection_task_id
+        ? (failures.get(item.last_collection_task_id) ?? [])
+        : [],
+    }));
   }
 
   async setFollow(input: Parameters<TrendRepository["setFollow"]>[0]) {

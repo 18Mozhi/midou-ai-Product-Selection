@@ -36,6 +36,9 @@ const statusText = (value?: string | null) =>
       ({
         rollout_gates_incomplete: "发布观察门未完成",
         rollout_evidence_stale: "发布观察证据已过期",
+        current_release_evidence_missing: "当前版本缺少发布证据",
+        release_identity_mismatch: "版本、迁移或配置不同源",
+        release_source_mismatch: "本地、远端与生产版本不一致",
       }) as Record<string, string>
     )[value] ?? "发布条件未满足";
 async function load() {
@@ -103,21 +106,40 @@ onMounted(load);
       </section>
       <div class="identity-grid">
         <article>
-          <span>构建</span><strong>{{ sha(data.latest_release?.build_sha) }}</strong
-          ><small>{{ data.latest_release?.app_version || "未签发" }}</small>
+          <span>本地发布提交</span><strong>{{ sha(data.versions?.local?.build_sha) }}</strong
+          ><small>部署器构建输入</small>
         </article>
         <article>
-          <span>迁移</span><strong>{{ data.latest_release?.migration_version || "—" }}</strong
+          <span>远端主分支</span><strong>{{ sha(data.versions?.remote?.build_sha) }}</strong
+          ><small
+            >{{ data.versions?.remote?.repository || "未记录仓库" }} ·
+            {{ data.versions?.remote?.branch || "—" }}</small
+          >
+        </article>
+        <article>
+          <span>生产运行版本</span><strong>{{ sha(data.versions?.production?.build_sha) }}</strong
+          ><small>{{ data.versions?.production?.app_version || "未签发" }}</small>
+        </article>
+        <article>
+          <span>版本同源</span
+          ><strong>{{
+            data.blockers.some(
+              (item: any) =>
+                item.code === "release_source_mismatch" ||
+                item.code === "release_identity_mismatch",
+            )
+              ? "已阻断"
+              : "一致"
+          }}</strong
+          ><small>SHA / 配置指纹 / 迁移</small>
+        </article>
+        <article>
+          <span>迁移</span><strong>{{ data.versions?.production?.migration_version || "—" }}</strong
           ><small>数据库 5.7</small>
         </article>
         <article>
           <span>发布状态</span><strong>{{ statusText(data.latest_release?.status) }}</strong
           ><small>{{ time(data.latest_release?.finished_at) }}</small>
-        </article>
-        <article>
-          <span>自动停止</span
-          ><strong>{{ data.automatic_stop_verified ? "已触发验证" : "待命" }}</strong
-          ><small>服务错误 / 请求耗时 / 异步积压</small>
         </article>
       </div>
       <section class="panel">
@@ -410,7 +432,7 @@ button {
 .identity-grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 .identity-grid article {
   padding: 17px;

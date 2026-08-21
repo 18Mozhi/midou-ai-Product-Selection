@@ -4,9 +4,7 @@ import { computed, ref } from "vue";
 type PreviewState = "available" | "unavailable" | "recovering";
 const requested = new URLSearchParams(window.location.search).get("state");
 const state = ref<PreviewState>(
-  requested === "unavailable" || requested === "recovering"
-    ? requested
-    : "available",
+  requested === "unavailable" || requested === "recovering" ? requested : "available",
 );
 const copy = computed(
   () =>
@@ -40,13 +38,7 @@ const copy = computed(
   </header>
   <section
     class="status-card"
-    :data-state="
-      state === 'available'
-        ? 'ready'
-        : state === 'unavailable'
-          ? 'error'
-          : 'loading'
-    "
+    :data-state="state === 'available' ? 'ready' : state === 'unavailable' ? 'error' : 'loading'"
     aria-live="polite"
   >
     <div class="status-heading">
@@ -65,10 +57,7 @@ const copy = computed(
       </div>
     </div>
   </section>
-  <section
-    class="verification-grid config-grid"
-    aria-label="缓存服务用途和过期策略"
-  >
+  <section class="verification-grid config-grid" aria-label="缓存服务用途和过期策略">
     <article>
       <span class="state-label state-label--passed">缓存 · 300 秒</span>
       <h3>缓存</h3>
@@ -93,8 +82,7 @@ const copy = computed(
   <section class="verification-footnote">
     <strong>隔离键格式</strong>
     <p>
-      <code
-        >scoutops:v1:&lt;purpose&gt;:org:&lt;organization_id&gt;:ws:&lt;workspace_id&gt;:…</code
+      <code>scoutops:v1:&lt;purpose&gt;:org:&lt;organization_id&gt;:ws:&lt;workspace_id&gt;:…</code
       >。页面不会显示实际组织、键值、连接地址或凭证。
     </p>
   </section>

@@ -45,7 +45,8 @@ test("Feature Map frontend routes match the actual navigation dispatch", async (
       path: "/platform-admin/data",
       view: "PlatformDataCenter",
       domain: "platform-data",
-      status: "M06-02_module_verified",
+      status: "verified",
+      statusDetail: "M06-02_module_verified",
     },
   );
 });
@@ -73,14 +74,22 @@ test("formal routes centralize titles, permissions and breadcrumbs without fallb
   );
   assert.match(router, /routes:\s*appRoutes/);
   assert.match(router, /document\.title[\s\S]*智能选品/);
-  for (const key of ["title", "breadcrumb", "capabilities", "notFound"])
+  for (const key of ["title", "breadcrumb", "capabilities", "notFound", "surface", "cachePolicy"])
     assert.match(catalog, new RegExp(key));
   assert.doesNotMatch(shell, /items\.value\[0\]/);
   assert.match(shell, /routeAllowed/);
   assert.doesNotMatch(main, /addEventListener\(["']click["']/);
   assert.match(shell, /navigationItemsFor/);
   assert.equal(
-    new Set([...catalog.matchAll(/group: "([^"]+)"/g)].map((match) => match[1])).has("系统运维"),
+    new Set([...catalog.matchAll(/group: "([^"]+)"/g)].map((match) => match[1])).has("运行"),
     true,
+  );
+});
+
+test("development internal views can exercise the real API without changing production routing", async () => {
+  const app = await readFile("apps/web/src/App.vue", "utf8");
+  assert.match(
+    app,
+    /import\.meta\.env\.DEV[\s\S]*requestedInternalView[\s\S]*\? requestedInternalView\.value[\s\S]*\?\? \(typeof route\.meta\.view/,
   );
 });

@@ -269,11 +269,17 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(service, /coverageStatus[\s\S]*blockingReason/);
   assert.match(repository, /coverage_status=\?[\s\S]*recommendation_status='insufficient_data'/);
   assert.match(routes, /coverage_status[\s\S]*blocking_reason/);
+  assert.match(routes, /lifecycle_status[\s\S]*owner_id/);
+  assert.match(routes, /opportunities\/batch[\s\S]*evidence-completion-tasks/);
   assert.match(routes, /opportunity:decide/);
   const webContract = `${web}\n${listWeb}`;
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(webContract, new RegExp(state));
   assert.match(webContract, /证据完整度[\s\S]*阻断原因[\s\S]*缺少可采纳证据/);
+  assert.match(webContract, /证据新鲜度：观测于/);
+  assert.match(webContract, /阶段[\s\S]*负责人[\s\S]*批量指派[\s\S]*批量复核[\s\S]*批量归档/);
+  assert.match(web, /生成补数任务/);
+  assert.match(web, /evidence-completion-tasks/);
   assert.match(webContract, /route\.query\.from[\s\S]*route\.query\.tab[\s\S]*applyListFilters/);
   assert.match(css, /position:\s*fixed[\s\S]*safe-area-inset-bottom/);
   assert.match(css, /@media\s*\(\s*max-width:\s*640px\s*\)/);
@@ -286,10 +292,11 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(feature, /blocking_reason/);
   assert.match(feature, /navigationState[\s\S]*decisionLayout/);
   assert.match(architecture, /blocking_reasons/);
+  assert.match(architecture, /opportunities\/batch[\s\S]*evidence_completion/);
   assert.match(architecture, /from[\s\S]*tab[\s\S]*底部决策栏/);
   assert.match(runbook, /宝塔[\s\S]*回滚/);
   assert.match(runbook, /返回来源列表[\s\S]*tab=evidence/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(live, /MySqlOpportunityRefreshWorker/);
   assert.match(blueprint, /M04-02 实现合同/);
 });

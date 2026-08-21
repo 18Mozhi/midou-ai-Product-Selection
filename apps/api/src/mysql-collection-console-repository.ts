@@ -1,4 +1,3 @@
-// @ts-nocheck -- aggregate result rows are normalized below.
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import {

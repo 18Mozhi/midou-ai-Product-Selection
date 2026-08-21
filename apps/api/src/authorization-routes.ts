@@ -1,15 +1,128 @@
-import type { FastifyInstance,FastifyRequest } from 'fastify';
-import { AuthError,LocalAuthService } from '@scoutops/auth';
-import { AuthorizationError,AuthorizationService,type NavigationShell } from '@scoutops/authorization';
-export interface AuthorizationRouteOptions{service:AuthorizationService;auth:LocalAuthService;secureCookie:boolean;}
-const cookieName=(secure:boolean)=>secure?'__Host-scoutops_session':'scoutops_session';
-function sessionToken(request:FastifyRequest,secure:boolean){for(const part of(request.headers.cookie??'').split(';')){const[name,...value]=part.trim().split('=');if(name===cookieName(secure))return decodeURIComponent(value.join('='));}throw new AuthError('session_invalid',401,'重新登录后重试。');}
-const envelope=<T>(data:T,request:FastifyRequest)=>({data,request_id:request.headers['x-request-id']!.toString(),trace_id:request.headers['x-trace-id']!.toString()});
-const ids=(request:FastifyRequest)=>({requestId:request.headers['x-request-id']!.toString(),traceId:request.headers['x-trace-id']!.toString()});
-export function registerAuthorizationRoutes(app:FastifyInstance,options:AuthorizationRouteOptions){const current=async(request:FastifyRequest)=>options.auth.authenticate(sessionToken(request,options.secureCookie));
- app.get('/api/v1/me/authorization',async(request,reply)=>{const authenticated=await current(request);reply.header('cache-control','no-store');return envelope(await options.service.describeSession(authenticated.user.id,authenticated.session.id),request);});
- app.get('/api/v1/me/landing',async(request,reply)=>{const authenticated=await current(request);reply.header('cache-control','private, no-store');return envelope(await options.service.resolveLanding(authenticated.user.id,authenticated.session.id,ids(request)),request);});
- app.get('/api/v1/me/navigation',{schema:{querystring:{type:'object',required:['shell'],properties:{shell:{type:'string',enum:['member','organization_admin','platform_admin']}},additionalProperties:false}}},async(request,reply)=>{const authenticated=await current(request),{shell}=request.query as{shell:NavigationShell};reply.header('cache-control','private, no-store');return envelope(await options.service.guardNavigationShell(authenticated.user.id,authenticated.session.id,shell,ids(request)),request);});
- app.get('/api/v1/org/:organizationId/roles',{schema:{params:{type:'object',required:['organizationId'],properties:{organizationId:{type:'string',format:'uuid'}},additionalProperties:false}}},async(request,reply)=>{const authenticated=await current(request),{organizationId}=request.params as{organizationId:string};const context=await options.service.describeSession(authenticated.user.id,authenticated.session.id);if(context.organization_id!==organizationId)throw new AuthorizationError('tenancy_context_mismatch',409,'先切换到目标组织。');await options.service.authorize({actorId:authenticated.user.id,organizationId,capability:'role:read',surface:'api',...ids(request)});reply.header('cache-control','no-store');return envelope(await options.service.listRoles('organization'),request);});
- app.get('/api/v1/platform/roles',async(request,reply)=>{const authenticated=await current(request);await options.service.authorize({actorId:authenticated.user.id,capability:'platform:superadmin',surface:'api',...ids(request)});reply.header('cache-control','no-store');return envelope(await options.service.listRoles('platform'),request);});
+import type { FastifyInstance, FastifyRequest } from "fastify";
+import { AuthError, LocalAuthService } from "@scoutops/auth";
+import {
+  AuthorizationError,
+  AuthorizationService,
+  type NavigationShell,
+} from "@scoutops/authorization";
+export interface AuthorizationRouteOptions {
+  service: AuthorizationService;
+  auth: LocalAuthService;
+  secureCookie: boolean;
+}
+const cookieName = (secure: boolean) => (secure ? "__Host-scoutops_session" : "scoutops_session");
+function sessionToken(request: FastifyRequest, secure: boolean) {
+  for (const part of (request.headers.cookie ?? "").split(";")) {
+    const [name, ...value] = part.trim().split("=");
+    if (name === cookieName(secure)) return decodeURIComponent(value.join("="));
+  }
+  throw new AuthError("session_invalid", 401, "重新登录后重试。");
+}
+const envelope = <T>(data: T, request: FastifyRequest) => ({
+  data,
+  request_id: request.headers["x-request-id"]!.toString(),
+  trace_id: request.headers["x-trace-id"]!.toString(),
+});
+const ids = (request: FastifyRequest) => ({
+  requestId: request.headers["x-request-id"]!.toString(),
+  traceId: request.headers["x-trace-id"]!.toString(),
+});
+export function registerAuthorizationRoutes(
+  app: FastifyInstance,
+  options: AuthorizationRouteOptions,
+) {
+  const current = async (request: FastifyRequest) =>
+    options.auth.authenticate(sessionToken(request, options.secureCookie));
+  app.get("/api/v1/me/authorization", async (request, reply) => {
+    const authenticated = await current(request);
+    reply.header("cache-control", "no-store");
+    return envelope(
+      await options.service.describeSession(authenticated.user.id, authenticated.session.id),
+      request,
+    );
+  });
+  app.get("/api/v1/me/landing", async (request, reply) => {
+    const authenticated = await current(request);
+    reply.header("cache-control", "private, no-store");
+    return envelope(
+      await options.service.resolveLanding(
+        authenticated.user.id,
+        authenticated.session.id,
+        ids(request),
+      ),
+      request,
+    );
+  });
+  app.get(
+    "/api/v1/me/navigation",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          required: ["shell"],
+          properties: {
+            shell: { type: "string", enum: ["member", "organization_admin", "platform_admin"] },
+          },
+          additionalProperties: false,
+        },
+      },
+    },
+    async (request, reply) => {
+      const authenticated = await current(request),
+        { shell } = request.query as { shell: NavigationShell };
+      reply.header("cache-control", "private, no-store");
+      return envelope(
+        await options.service.guardNavigationShell(
+          authenticated.user.id,
+          authenticated.session.id,
+          shell,
+          ids(request),
+        ),
+        request,
+      );
+    },
+  );
+  app.get(
+    "/api/v1/org/:organizationId/roles",
+    {
+      schema: {
+        params: {
+          type: "object",
+          required: ["organizationId"],
+          properties: { organizationId: { type: "string", format: "uuid" } },
+          additionalProperties: false,
+        },
+      },
+    },
+    async (request, reply) => {
+      const authenticated = await current(request),
+        { organizationId } = request.params as { organizationId: string };
+      const context = await options.service.describeSession(
+        authenticated.user.id,
+        authenticated.session.id,
+      );
+      if (context.organization_id !== organizationId)
+        throw new AuthorizationError("tenancy_context_mismatch", 409, "先切换到目标组织。");
+      await options.service.authorize({
+        actorId: authenticated.user.id,
+        organizationId,
+        capability: "role:read",
+        surface: "api",
+        ...ids(request),
+      });
+      reply.header("cache-control", "no-store");
+      return envelope(await options.service.listRoles("organization"), request);
+    },
+  );
+  app.get("/api/v1/platform/roles", async (request, reply) => {
+    const authenticated = await current(request);
+    await options.service.authorize({
+      actorId: authenticated.user.id,
+      capability: "platform:superadmin",
+      surface: "api",
+      ...ids(request),
+    });
+    reply.header("cache-control", "no-store");
+    return envelope(await options.service.listRoles("platform"), request);
+  });
 }

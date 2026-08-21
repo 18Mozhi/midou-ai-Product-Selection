@@ -2,7 +2,7 @@
 
 ## 范围冻结
 
-M08-05 只在当前惠州单台宝塔服务器上收口 S0 Crawler/Worker 调度：一个由统一后端托管的 Node Worker、一个由宝塔 Python 项目托管的 Crawler 桥接进程、每来源有效并发 1、浏览器档案独占、MySQL 租约去重和 CPU/内存/磁盘停止门。它不建设负载均衡、备用服务器、多节点调度或 10,000 用户能力，也不改变 M03-05 的任务状态机、失败分类和重试次数。
+M08-05 只在当前惠州单台宝塔服务器上收口 S0 Crawler/Worker 调度：一个由统一后端托管的 Node Worker、一个由宝塔 Python 项目托管的 Crawler 桥接进程、每来源有效并发 1、浏览器档案独占、来源级运行熔断、MySQL 租约去重和 CPU/内存/磁盘停止门。它不建设负载均衡、备用服务器、多节点调度或 10,000 用户能力；M03-05 原有任务重试次数不变，新增的 `source_circuit_open` 只作为子查询覆盖事实，不触发整任务重试风暴。
 
 ## 真实链路
 
@@ -12,13 +12,16 @@ Linux 主机探针分别读取 `/proc/*/cmdline`：Node Worker 只匹配 Worker 
 
 浏览器运行继续使用 M03-04 的 `crawler_profile_leases`，并通过 `browser_collection_jobs.collection_task_id/collection_subquery_id` 关联 Worker 已领取的业务任务。只有全局 Crawler 槽位、档案独占租约和浏览器作业租约同时成功才允许运行，心跳、完成和恢复同步处理三个租约。来源原有 `providers.concurrency_limit` 保留为配置事实，但 S0 有效值固定 `min(configured, 1)`。
 
-平台运维接口 `/api/v1/platform/operations/crawler-scheduler` 只向 `platform:operate` 返回分别观测的 Node Worker/Python Crawler 进程计数、聚合租约、来源有效并发、来源排队、档案聚合、资源水位，以及最多 100 个活动槽位到逻辑进程角色和采集任务的关联。来源排队直接按 `collection_subqueries.provider_id` 关联业务任务，只统计 `available_at <=` 当前服务端时间且状态为 `scheduled`、`queued`、`retry_scheduled` 或 `rate_limited` 的可领取任务；同一任务同一来源只计一次，最长等待按 `available_at` 计算，尚未到期的退避或限流任务不冒充当前积压。关联直接读取 `crawler_scheduler_leases` 的任务、运行、进程标识、心跳和到期事实；来源槽位联表展示来源名称。任务 UUID、运行 UUID、进程标识和槽位类型只放在可展开技术详情中，不返回组织/工作区标识、任务目标、租约令牌、哈希、凭证、Cookie、文件路径或队列载荷。读取写入观测和平台审计，过期回收要求同源和 Idempotency-Key。
+平台运维接口 `/api/v1/platform/operations/crawler-scheduler` 只向 `platform:operate` 返回分别观测的 Node Worker/Python Crawler 进程计数、聚合租约、来源有效并发、来源排队 P50/P95、24 小时成功率/耗时 P95/样本量、来源运行熔断、浏览器运行小时吞吐与失败率、档案聚合、资源水位，以及最多 100 个活动槽位到逻辑进程角色和采集任务的关联。来源排队直接按 `collection_subqueries.provider_id` 关联业务任务，只统计 `available_at <=` 当前服务端时间且状态为 `scheduled`、`queued`、`retry_scheduled` 或 `rate_limited` 的可领取任务；同一任务同一来源只计一次，最长等待按 `available_at` 计算，尚未到期的退避或限流任务不冒充当前积压。关联直接读取 `crawler_scheduler_leases` 的任务、运行、进程标识、心跳和到期事实；来源槽位联表展示来源名称。任务 UUID、运行 UUID、进程标识和槽位类型只放在可展开技术详情中，不返回组织/工作区标识、任务目标、租约令牌、哈希、凭证、Cookie、文件路径或队列载荷。读取写入观测和平台审计，过期回收与来源恢复均要求同源和 Idempotency-Key。
+
+Worker 在每个来源真实执行结果后独立更新 `provider_runtime_circuits`：成功清零，失败累加，达到该来源 `circuit_failure_threshold` 后只打开该来源熔断。后续多来源任务把该子查询记录为 `blocked/source_circuit_open` 并继续其余来源，不复用来源健康探针的手工检查次数冒充运行失败次数。解除熔断必须调用来源恢复端点，且 `provider_adapter_health` 必须存在一条晚于 `opened_at` 的 `ready` 健康检查；恢复只清零当前来源并写幂等操作和平台审计。
 
 ## 数据与失败关闭
 
 - `crawler_scheduler_leases`：全局 Worker、全局 Crawler 和来源槽位；任务/运行槽位保留组织与工作区外键，平台全局观测可为空。
 - `crawler_scheduler_observations`：进程、租约、来源/档案数量、资源水位、finding code、request_id/trace_id。
 - `crawler_scheduler_operations`：过期回收幂等结果；实际操作另写 `platform_audit_events`。
+- `provider_runtime_circuits`：按来源保存运行连续失败、来源注册阈值、开启与恢复时间；与人工来源健康检查事实分表。
 - 进程数量不是恰好 1、活动槽位超过 1、重复租约、来源超额、档案非独占、资源观测过期或资源触及停止线均为 `blocked`；接近停止线为 `warning`。
 
 ## 页面与图片

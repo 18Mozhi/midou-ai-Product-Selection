@@ -30,6 +30,8 @@ const actor = "00000000-0000-4000-8000-000000000701",
     owner_label: "平台运营",
     terms_review_status: "pending",
     terms_reference_url: null,
+    terms_version: null,
+    terms_expires_at: null,
     status: "disabled",
   };
 test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical contract", async () => {
@@ -74,6 +76,8 @@ test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical co
     { healthcheck_url: "file:///health" },
     { markets: [] },
     { terms_review_status: "invalid" },
+    { terms_version: "包含空格" },
+    { terms_expires_at: "not-a-date" },
   ])
     assert.throws(
       () =>
@@ -108,6 +112,8 @@ test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical co
       status: "enabled",
       terms_review_status: "approved",
       terms_reference_url: "https://example.test/terms",
+      terms_version: "2026-08",
+      terms_expires_at: "2027-08-07T17:00:00.000Z",
     },
     {
       actorId: actor,
@@ -117,6 +123,7 @@ test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical co
     },
   );
   assert.equal(approved.terms_reviewed_at, now.toISOString());
+  assert.equal(approved.terms_version, "2026-08");
 });
 test("M03-01.A04/A06/A09/A11/A13 API enforces platform capability, origin, idempotency and correlation", async () => {
   const calls = [],
@@ -253,7 +260,10 @@ test("M03-01.A03/A06-A10/A13/A15-A17 delivery contracts are complete and platfor
   );
   assert.match(web, /status\s*:\s*["']disabled["']/);
   assert.match(styles, /@media \(max-width: 640px\)/);
-  assert.match(shell, /ProviderRegistry/);
+  assert.match(shell, /provider-runtime-surface/);
+  assert.match(web, /基本信息[\s\S]*范围与字段[\s\S]*执行策略[\s\S]*合规与发布/);
+  assert.match(web, /应用技术模板/);
+  assert.match(web, /items\.length && !editorOpen/);
   assert.match(openapi, /\/platform\/providers\/\{providerId\}:/);
   assert.match(openapi, /ProviderDefinitionInput:/);
   assert.match(complianceUp, /terms_review_status/);
@@ -263,6 +273,6 @@ test("M03-01.A03/A06-A10/A13/A15-A17 delivery contracts are complete and platfor
   assert.match(architecture, /平台全局/);
   assert.match(runbook, /宝塔.*Node API/s);
   assert.match(feature, /providerRegistry/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(blueprint, /M03-01/);
 });

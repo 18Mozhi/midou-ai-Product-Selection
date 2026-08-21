@@ -41,26 +41,56 @@
   border-radius: 50%;
   background: var(--so-border);
 }
-.selection-timeline li[data-status="completed"] i { background: var(--so-success); }
-.selection-timeline li[data-status="active"] i { background: var(--so-primary); }
-.selection-timeline li[data-status="blocked"] i { background: var(--so-danger); }
-.selection-timeline span { display: grid; gap: 3px; }
-.selection-timeline b { color: var(--so-text); font-size: 13px; }
+.selection-timeline li[data-status="completed"] i {
+  background: var(--so-success);
+}
+.selection-timeline li[data-status="active"] i {
+  background: var(--so-primary);
+}
+.selection-timeline li[data-status="blocked"] i {
+  background: var(--so-danger);
+}
+.selection-timeline span {
+  display: grid;
+  gap: 3px;
+}
+.selection-timeline b {
+  color: var(--so-text);
+  font-size: 13px;
+}
 .selection-timeline small,
-.selection-timeline time { font-size: 11px; }
-.selection-timeline time { grid-column: 2; overflow-wrap: anywhere; }
-.selection-block-owner { margin: 16px 0 0; display: grid; gap: 10px; }
+.selection-timeline time {
+  font-size: 11px;
+}
+.selection-timeline time {
+  grid-column: 2;
+  overflow-wrap: anywhere;
+}
+.selection-block-owner {
+  margin: 16px 0 0;
+  display: grid;
+  gap: 10px;
+}
 .selection-block-owner div {
   padding: 12px;
   border: 1px solid var(--so-border);
   border-radius: 10px;
   background: var(--so-panel-soft);
 }
-.selection-block-owner dt { color: var(--so-text-muted); font-size: 12px; }
-.selection-block-owner dd { margin: 4px 0 0; color: var(--so-text); }
+.selection-block-owner dt {
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.selection-block-owner dd {
+  margin: 4px 0 0;
+  color: var(--so-text);
+}
 
 @media (max-width: 760px) {
-  .selection-timeline { grid-template-columns: 1fr; gap: 12px; }
+  .selection-timeline {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
   .selection-timeline li:not(:last-child)::after {
     top: 16px;
     bottom: -12px;
@@ -69,5 +99,7 @@
     width: 2px;
     height: auto;
   }
-  .selection-timeline time { grid-column: 2; }
+  .selection-timeline time {
+    grid-column: 2;
+  }
 }

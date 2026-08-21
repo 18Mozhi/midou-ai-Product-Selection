@@ -101,7 +101,7 @@
 .adapter-table-wrap table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 920px;
+  min-width: 1180px;
 }
 .adapter-table-wrap th,
 .adapter-center .adapter-table-wrap td {
@@ -151,6 +151,21 @@
 .adapter-table-wrap b[data-registered="false"] {
   background: var(--so-danger-soft);
   color: var(--so-danger);
+}
+.adapter-table-wrap b[data-runtime-category="healthy"] {
+  background: var(--so-success-soft);
+  color: var(--so-success);
+}
+.adapter-table-wrap b[data-runtime-category="empty"] {
+  background: var(--so-info-soft);
+  color: var(--so-info);
+}
+.adapter-table-wrap b[data-runtime-category="network"],
+.adapter-table-wrap b[data-runtime-category="parser"],
+.adapter-table-wrap b[data-runtime-category="login"],
+.adapter-table-wrap b[data-runtime-category="other"] {
+  background: var(--so-warning-soft);
+  color: var(--so-warning);
 }
 .adapter-center .adapter-table-wrap button,
 .adapter-center .adapter-empty button {

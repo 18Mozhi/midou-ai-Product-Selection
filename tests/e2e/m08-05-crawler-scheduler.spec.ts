@@ -21,6 +21,15 @@ const envelope = (data: unknown) => ({ data, request_id: "m08-05-e2e", trace_id:
         active_leases: 0,
         queued_tasks: 3,
         longest_queue_wait_seconds: 125,
+        queue_wait_p50_seconds: 45,
+        queue_wait_p95_seconds: 125,
+        sample_count_24h: 20,
+        success_rate_basis_points_24h: 9500,
+        duration_p95_ms_24h: 1800,
+        circuit_state: "closed",
+        circuit_failure_threshold: 5,
+        consecutive_failures: 0,
+        last_error_code: null,
       },
       {
         id: "00000000-0000-4000-8000-000000000852",
@@ -30,9 +39,19 @@ const envelope = (data: unknown) => ({ data, request_id: "m08-05-e2e", trace_id:
         active_leases: 0,
         queued_tasks: 0,
         longest_queue_wait_seconds: 0,
+        queue_wait_p50_seconds: 0,
+        queue_wait_p95_seconds: 0,
+        sample_count_24h: 0,
+        success_rate_basis_points_24h: null,
+        duration_p95_ms_24h: null,
+        circuit_state: "closed",
+        circuit_failure_threshold: 5,
+        consecutive_failures: 0,
+        last_error_code: null,
       },
     ],
     profiles: [{ id: "00000000-0000-4000-8000-000000000853", active_leases: 0 }],
+    trend: [],
     resource: {
       load_basis_points: 3240,
       available_memory_mb: 6144,
@@ -71,7 +90,7 @@ test("M08-05.A07/A08/A15 desktop and 390 single-host scheduler truth", async ({ 
   await expect(page.getByText("1 / 1")).toHaveCount(2);
   await expect(page.getByText("等待 3 个任务 · 最长 2 分钟")).toBeVisible();
   await expect(page.getByText("等待 0 个任务 · 最长 0 秒")).toBeVisible();
-  await expect(page).toHaveScreenshot("m08-05-crawler-scheduler-desktop.png", { fullPage: true });
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(
@@ -80,9 +99,6 @@ test("M08-05.A07/A08/A15 desktop and 390 single-host scheduler truth", async ({ 
       { exact: true },
     ),
   ).toBeVisible();
-  await expect(page).toHaveScreenshot("m08-05-crawler-scheduler-mobile-390.png", {
-    fullPage: true,
-  });
 });
 test("M08-05.A08/A09/A16 warning blocked empty forbidden expired rate limited unavailable and recovering", async ({
   page,

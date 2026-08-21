@@ -1,4 +1,3 @@
-// @ts-nocheck -- security aggregate rows are normalized and secrets are never selected.
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { SecurityOperationsRepository } from "./security-operations-service.js";

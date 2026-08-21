@@ -29,7 +29,7 @@ test("M06-04.A03/A05/A09/A11/A16 sanitized audited read", async () => {
   assert.match(up, /utf8mb4/);
   assert.match(down, /DROP TABLE/);
   assert.match(repo, /platform\.security\.operations\.read/);
-  assert.match(route, /capability:"platform:secure"/);
+  assert.match(route, /capability:\s*["']platform:secure["']/);
   for (const secret of [
     "token_hash",
     "payload_ciphertext",
@@ -45,7 +45,7 @@ test("M06-04.A06/A07/A08/A10/A13/A17 contracts", async () => {
       [
         "docs/openapi.yaml",
         "apps/web/src/components/SecurityOperationsCenter.vue",
-        "apps/web/src/styles.css",
+        "apps/web/src/styles/platform-operations.css",
         "config/env.example",
         "docs/feature-map.json",
         "docs/architecture/m06-04-security-operations.md",

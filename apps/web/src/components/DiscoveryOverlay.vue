@@ -22,6 +22,13 @@ interface Action {
   route: string;
   required_capability: string;
 }
+const resourceLabel = (value: string) =>
+  ({
+    task: "任务",
+    opportunity: "机会",
+    evidence: "证据",
+    collection_task: "采集任务",
+  })[value] ?? value;
 const props = defineProps<{
     open: boolean;
     mode: Mode;
@@ -173,7 +180,7 @@ async function loadActions() {
             ><span
               ><strong>{{ item.title }}</strong
               ><small
-                >{{ item.subtitle || item.resource_type }} ·
+                >{{ resourceLabel(item.resource_type) }} · {{ item.subtitle || "无补充说明" }} ·
                 {{ new Date(item.updated_at).toLocaleString("zh-CN") }}</small
               ></span
             ><b>↗</b></RouterLink

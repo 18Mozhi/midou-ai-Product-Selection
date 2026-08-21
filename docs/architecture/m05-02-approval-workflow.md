@@ -1,6 +1,6 @@
 # M05-02 审批流程架构
 
-审批流程以 `approval_templates` 和不可变 `approval_template_versions`/`approval_template_nodes` 定义。模板先保存草稿，再以 revision 乐观锁显式发布；审批请求只绑定已发布的准确版本，后续模板变化不会改写历史实例。请求必须引用当前组织、当前工作区内存在的任务或机会决策。
+审批流程以 `approval_templates` 和不可变 `approval_template_versions`/`approval_template_nodes` 定义。模板先保存草稿，再通过发布确认弹窗填写可审计原因，并以 revision 乐观锁显式发布；审批请求只绑定已发布的准确版本，后续模板变化不会改写历史实例。发布弹窗同时预览模板名称与版本，原因通过既有模板动作接口写入审计，不使用不可追踪的浏览器输入框。请求必须引用当前组织、当前工作区内存在的任务或机会决策。
 
 机会决策请求的 `resource_id` 是 `opportunity_decisions.id`，仓储必须先沿该记录解析 `opportunity_id`，不能把决策编号当作机会编号。发起请求时将市场证据数量与来源数、最新评分/利润运行、风险等级、评分/利润规则版本、申请动作与原因写入 `approval_requests.decision_context_json`；这份 JSON 是审批前判断依据的不可变快照。证据完整度只统计已有真实事实：市场证据、成功评分、成功利润计算和已识别风险共四类。任务审批没有独立证据合同，明确返回“不适用”，不伪造 `1/1`。0047 之前的审批没有快照，详情会实时重建并标记 `live_fallback`，不得宣称为历史事实。
 

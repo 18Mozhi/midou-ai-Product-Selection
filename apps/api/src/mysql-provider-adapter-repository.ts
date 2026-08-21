@@ -1,6 +1,10 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
-import type { ProviderAdapterRepository, StoredAdapterHealth } from "./provider-adapter-service.js";
+import type {
+  AdapterRuntimeHealthWindow,
+  ProviderAdapterRepository,
+  StoredAdapterHealth,
+} from "./provider-adapter-service.js";
 import { ProviderAdapterServiceError, toRuntimeProvider } from "./provider-adapter-service.js";
 
 const providerColumns =
@@ -31,20 +35,106 @@ const health = (row: RowDataPacket, providerId = String(row.provider_id)): Store
         updatedAt: new Date(row.health_updated_at ?? row.updated_at).toISOString(),
       };
 
+const percentile = (values: number[], ratio: number) =>
+  values.length ? values[Math.ceil(values.length * ratio) - 1]! : null;
+const runtimeCategory = (row: RowDataPacket): AdapterRuntimeHealthWindow["latestCategory"] => {
+  const status = String(row.status ?? ""),
+    code = String(row.error_code ?? "");
+  if (status === "succeeded_empty" || code === "empty_result") return "empty";
+  if (status === "succeeded") return "healthy";
+  if (
+    ["network_error", "timeout", "rate_limited", "dependency_unavailable", "dns_error"].includes(
+      code,
+    )
+  )
+    return "network";
+  if (
+    [
+      "source_changed",
+      "parse_failed",
+      "validation_failed",
+      "invalid_payload",
+      "response_too_large",
+    ].includes(code)
+  )
+    return "parser";
+  if (
+    [
+      "login_required",
+      "session_expired",
+      "credential_expired",
+      "blocked_login",
+      "blocked_captcha",
+      "captcha",
+    ].includes(code)
+  )
+    return "login";
+  return code ? "other" : "unknown";
+};
+const runtimeWindow = (rows: RowDataPacket[]): AdapterRuntimeHealthWindow => {
+  const completed = rows.filter((row) => row.finished_at != null),
+    categories = completed.map(runtimeCategory),
+    durations = completed
+      .map((row) => Number(row.duration_ms))
+      .filter(Number.isFinite)
+      .sort((a, b) => a - b),
+    succeeded = completed.filter((row) =>
+      ["succeeded", "succeeded_empty"].includes(String(row.status)),
+    ).length;
+  return {
+    latestCategory: completed[0] ? runtimeCategory(completed[0]) : "unknown",
+    sampleCount: completed.length,
+    successRateBasisPoints: completed.length
+      ? Math.round((succeeded / completed.length) * 10_000)
+      : null,
+    durationP95Ms: percentile(durations, 0.95),
+    networkFailureCount: categories.filter((value) => value === "network").length,
+    parserFailureCount: categories.filter((value) => value === "parser").length,
+    loginFailureCount: categories.filter((value) => value === "login").length,
+    emptySuccessCount: categories.filter((value) => value === "empty").length,
+  };
+};
+
 export class MySqlProviderAdapterRepository implements ProviderAdapterRepository {
   constructor(private readonly pool: Pool) {}
 
   async list() {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT p.*,h.adapter_version,h.health_status,h.last_checked_at,h.last_latency_ms," +
-        "h.last_error_code,h.consecutive_failures,h.version health_version,h.updated_at health_updated_at " +
-        "FROM providers p LEFT JOIN provider_adapter_health h ON h.provider_id=p.id ORDER BY " +
-        "p.status='enabled' DESC,p.name,p.id",
-    );
+    const [[rows], [samples]] = await Promise.all([
+      this.pool.query<RowDataPacket[]>(
+        "SELECT p.*,h.adapter_version,h.health_status,h.last_checked_at,h.last_latency_ms," +
+          "h.last_error_code,h.consecutive_failures,h.version health_version,h.updated_at health_updated_at " +
+          "FROM providers p LEFT JOIN provider_adapter_health h ON h.provider_id=p.id ORDER BY " +
+          "p.status='enabled' DESC,p.name,p.id",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT provider_id,status,error_code,finished_at," +
+          "TIMESTAMPDIFF(MICROSECOND,started_at,finished_at)/1000 duration_ms " +
+          "FROM collection_subqueries WHERE finished_at>=DATE_SUB(UTC_TIMESTAMP(3),INTERVAL 24 HOUR) " +
+          "ORDER BY provider_id,finished_at DESC LIMIT 5000",
+      ),
+    ]);
+    const byProvider = new Map<string, RowDataPacket[]>();
+    for (const sample of samples) {
+      const key = String(sample.provider_id);
+      byProvider.set(key, [...(byProvider.get(key) ?? []), sample]);
+    }
     return rows.map((row) => ({
       provider: toRuntimeProvider(row),
       health: health(row, String(row.id)),
+      runtime: runtimeWindow(byProvider.get(String(row.id)) ?? []),
     }));
+  }
+
+  async runtimeWindow(providerId: string) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT provider_id,status,error_code,finished_at," +
+        "TIMESTAMPDIFF(MICROSECOND,started_at,finished_at)/1000 duration_ms " +
+        "FROM collection_subqueries WHERE provider_id=? " +
+        "AND finished_at>=DATE_SUB(UTC_TIMESTAMP(3),INTERVAL 24 HOUR) " +
+        "ORDER BY finished_at DESC LIMIT 5000",
+      [providerId],
+    );
+    return runtimeWindow(rows);
   }
 
   async getProvider(id: string) {

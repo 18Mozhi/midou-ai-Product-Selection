@@ -16,7 +16,7 @@ test("platform notification operations expose templates channels subscriptions d
         "apps/web/src/components/PlatformMessageEditor.vue",
         "apps/web/src/components/PlatformNotificationOperations.vue",
       ],
-      "apps/web/src/styles.css",
+      "apps/web/src/styles/platform-operations.css",
       "apps/api/src/mysql-platform-dashboard-repository.ts",
       "apps/worker/src/notification-outbox-worker.ts",
     ].map((path) =>

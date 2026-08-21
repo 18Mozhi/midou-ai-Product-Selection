@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
-const props = defineProps<{ apiBaseUrl: string }>();
+const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>();
 const request = createApiClient(props.apiBaseUrl);
 type State = "loading" | "ready" | "empty" | "expired" | "forbidden" | "rate_limited" | "blocked";
 const state = ref<State>("loading"),
@@ -151,7 +151,9 @@ onMounted(load);
           <span>按需要进入，不懂技术参数也能管理</span>
         </header>
         <div>
-          <RouterLink to="/platform-admin/organizations"
+          <RouterLink
+            v-if="capabilities?.includes('platform:superadmin')"
+            to="/platform-admin/organizations"
             ><b>管理组织和用户</b><span>新建组织、停用账号、分配管理员</span></RouterLink
           ><RouterLink to="/platform-admin/providers/sources"
             ><b>查看热点来源</b><span>确认自动来源、待配置来源和手动来源</span></RouterLink

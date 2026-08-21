@@ -151,6 +151,52 @@ for (const route of featureMap.routes ?? [])
 const duplicateRoutes = [...routeCounts].filter(([, count]) => count > 1).map(([path]) => path);
 if (duplicateRoutes.length)
   throw new Error(`Feature Map contains duplicate routes: ${duplicateRoutes.join(", ")}`);
+const allowedFeatureStatuses = new Set([
+  "planned",
+  "implemented",
+  "verified",
+  "blocked",
+  "deprecated",
+]);
+const invalidFeatureStatuses = [];
+function collectFeatureStatuses(value, path = "featureMap") {
+  if (Array.isArray(value))
+    return value.forEach((item, index) => collectFeatureStatuses(item, `${path}[${index}]`));
+  if (!value || typeof value !== "object") return;
+  for (const [key, item] of Object.entries(value)) {
+    if (key === "status" && !allowedFeatureStatuses.has(String(item)))
+      invalidFeatureStatuses.push(`${path}.${key}=${String(item)}`);
+    collectFeatureStatuses(item, `${path}.${key}`);
+  }
+}
+collectFeatureStatuses(featureMap);
+if (invalidFeatureStatuses.length)
+  throw new Error(
+    `Feature Map status must use the fixed enum: ${invalidFeatureStatuses.join(", ")}`,
+  );
+const completionEvidence = featureMap.implementation?.verification?.completionEvidence;
+for (const field of ["commitSha", "worktreeFingerprint", "completedAt", "evidenceSummary"])
+  if (!completionEvidence?.requiredFields?.includes(field))
+    throw new Error(`Feature Map completion evidence is missing ${field}`);
+const verificationState = JSON.parse(
+  await readFile(resolve(process.cwd(), "verification/state.json"), "utf8"),
+);
+for (const [completedKey, evidenceKey] of [
+  ["completedModules", "moduleEvidence"],
+  ["completedPhases", "phaseEvidence"],
+]) {
+  for (const id of verificationState[completedKey] ?? []) {
+    const evidence = verificationState[evidenceKey]?.[id];
+    if (
+      typeof evidence?.commitSha !== "string" ||
+      typeof evidence?.worktreeFingerprint !== "string" ||
+      typeof evidence?.completedAt !== "string" ||
+      Number.isNaN(Date.parse(evidence.completedAt)) ||
+      evidence?.evidenceSummary?.status !== "passed"
+    )
+      throw new Error(`${completedKey} entry ${id} is missing reusable completion evidence`);
+  }
+}
 const openapi = await readFile(resolve(process.cwd(), "docs/openapi.yaml"), "utf8");
 if (!openapi.startsWith("openapi: 3.0.3"))
   throw new Error("OpenAPI version declaration is missing.");
@@ -164,6 +210,19 @@ const [envExample, configSchema] = await Promise.all([
   readFile(resolve(process.cwd(), "config/env.example"), "utf8"),
   readFile(resolve(process.cwd(), "config/schema.json"), "utf8"),
 ]);
+const [apiApp, topologyRoutes] = await Promise.all([
+  readFile(resolve(process.cwd(), "apps/api/src/app.ts"), "utf8"),
+  readFile(resolve(process.cwd(), "apps/api/src/runtime-topology-routes.ts"), "utf8"),
+]);
+for (const endpoint of ["/health/ready", "/health/available", "/health/version"]) {
+  if (!openapi.includes(`${endpoint}:`))
+    throw new Error(`Production health endpoint is missing from OpenAPI: ${endpoint}`);
+  const implementationPath = `/api/v1${endpoint}`;
+  if (!`${apiApp}\n${topologyRoutes}`.includes(implementationPath))
+    throw new Error(
+      `Documented production health endpoint has no implementation: ${implementationPath}`,
+    );
+}
 const runtimeTruth = `${openapi}\n${JSON.stringify(featureMap)}\n${deploymentTruth}\n${envExample}\n${configSchema}`;
 for (const token of [
   "/api/v1/health/available",

@@ -79,6 +79,7 @@ export async function assertPublicCollectionPolicy(input: {
   fetcher: typeof fetch;
   timeoutMs: number;
   cacheTtlMs?: number;
+  cacheMaxEntries?: number;
   now?: () => number;
 }) {
   let target: URL;
@@ -92,6 +93,10 @@ export async function assertPublicCollectionPolicy(input: {
     now = input.now?.() ?? Date.now(),
     cached = cache.get(robotsUrl);
   let body = cached && cached.expiresAt > now ? cached.body : null;
+  if (body !== null) {
+    cache.delete(robotsUrl);
+    cache.set(robotsUrl, cached!);
+  }
   if (body === null) {
     let response: Response;
     try {
@@ -123,7 +128,16 @@ export async function assertPublicCollectionPolicy(input: {
       body = new TextDecoder().decode(bytes);
     }
     const cacheTtlMs = input.cacheTtlMs ?? 900_000;
-    if (cacheTtlMs > 0) cache.set(robotsUrl, { body, expiresAt: now + cacheTtlMs });
+    const cacheMaxEntries = Math.min(10_000, Math.max(1, input.cacheMaxEntries ?? 256));
+    if (cacheTtlMs > 0) {
+      for (const [key, value] of cache) if (value.expiresAt <= now) cache.delete(key);
+      while (cache.size >= cacheMaxEntries) {
+        const oldest = cache.keys().next().value;
+        if (oldest === undefined) break;
+        cache.delete(oldest);
+      }
+      cache.set(robotsUrl, { body, expiresAt: now + cacheTtlMs });
+    }
   }
   if (!robotsAllows(body, target.toString()))
     throw new ProviderAdapterFailure("robots_disallowed", false);

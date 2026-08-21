@@ -55,6 +55,7 @@
     "format:check": "node scripts/verify-code-style.mjs --check",
     "format:write": "node scripts/verify-code-style.mjs --write",
     "verify:code-style": "npm run format:check",
+    "verify:static-analysis": "node scripts/verify-static-analysis.mjs",
     "verify:frontend-budget": "node scripts/verify-frontend-budget.mjs",
     "verify:e2e-realism": "node scripts/verify-e2e-realism.mjs",
     "verify:crawler-chain": "node scripts/verify-crawler-production-chain.mjs",

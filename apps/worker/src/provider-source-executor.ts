@@ -30,6 +30,7 @@ const codes = new Set<CollectionErrorCode>([
   "validation_failed",
   "empty_result",
   "permission_denied",
+  "source_circuit_open",
 ]);
 const code = (value: string): CollectionErrorCode =>
   codes.has(value as CollectionErrorCode)
@@ -46,16 +47,44 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
     private readonly browserJobs?: MySqlAuthenticatedBrowserJobClient,
     private readonly publicPolicyFetch?: typeof fetch,
   ) {}
-  async execute(task: ClaimedCollectionTask, heartbeat: () => Promise<void>) {
+  async execute(task: ClaimedCollectionTask, heartbeat: () => Promise<void>, signal?: AbortSignal) {
     await this.pool.query(
       "UPDATE provider_source_replay_runs SET status='running',updated_at=NOW(3) WHERE task_id=? AND status='scheduled'",
       [task.id],
     );
     const outcomes: Array<SubqueryOutcome & { id: string }> = [];
+    const taskFailures: CollectionExecutionError[] = [];
     for (const query of task.subqueries) {
+      signal?.throwIfAborted();
       await heartbeat();
-      const outcome = await this.collect(task, query, heartbeat);
+      let outcome: SubqueryOutcome & { id: string };
+      try {
+        outcome = await this.collect(task, query, heartbeat, signal);
+      } catch (error) {
+        const failure =
+          error instanceof CollectionExecutionError
+            ? error
+            : new CollectionExecutionError("network_error");
+        taskFailures.push(failure);
+        outcome = {
+          id: query.id,
+          required: query.required,
+          status: [
+            "login_required",
+            "session_expired",
+            "captcha",
+            "robots_disallowed",
+            "permission_denied",
+          ].includes(failure.code)
+            ? "blocked"
+            : "failed",
+          availableResultCount: 0,
+          missingFields: [],
+          errorCode: failure.code,
+        };
+      }
       outcomes.push(outcome);
+      await this.persistSubqueryOutcome(task, query.providerId, outcome);
     }
     const available = outcomes.reduce((sum, item) => sum + item.availableResultCount, 0),
       failed = outcomes.find((item) => item.status === "failed" || item.status === "blocked"),
@@ -72,18 +101,85 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       "UPDATE provider_source_replay_runs SET status=?,item_count=?,error_code=?,updated_at=NOW(3) WHERE task_id=?",
       [status, available, failed?.errorCode ?? null, task.id],
     );
+    if (taskFailures.length) {
+      const rateLimit = taskFailures.find((failure) => failure.code === "rate_limited");
+      throw rateLimit ?? taskFailures[0]!;
+    }
     return outcomes;
+  }
+
+  private async persistSubqueryOutcome(
+    task: ClaimedCollectionTask,
+    providerId: string,
+    outcome: SubqueryOutcome & { id: string },
+  ) {
+    const connection = await this.pool.getConnection(),
+      now = new Date();
+    try {
+      await connection.beginTransaction();
+      await connection.query(
+        [
+          "UPDATE collection_subqueries SET status=?,available_result_count=?,missing_fields_json=?,",
+          "error_code=?,retryable=0,started_at=COALESCE(started_at,?),finished_at=?,version=version+1,",
+          "updated_at=? WHERE id=? AND task_id=?",
+        ].join(""),
+        [
+          outcome.status,
+          outcome.availableResultCount,
+          JSON.stringify(outcome.missingFields),
+          outcome.errorCode,
+          now,
+          now,
+          now,
+          outcome.id,
+          task.id,
+        ],
+      );
+      await connection.query(
+        [
+          "INSERT INTO collection_task_events(id,task_id,organization_id,workspace_id,event_type,from_status,",
+          "to_status,actor_type,actor_id,request_id,trace_id,metadata_json,occurred_at) VALUES(?,?,?,?,",
+          "'collection.subquery.completed','running',?,'worker',?,?,?,?,?)",
+        ].join(""),
+        [
+          randomUUID(),
+          task.id,
+          task.organizationId,
+          task.workspaceId,
+          outcome.status,
+          this.workerId,
+          task.requestId,
+          task.traceId,
+          JSON.stringify({
+            subquery_id: outcome.id,
+            provider_id: providerId,
+            required: outcome.required,
+            available_result_count: outcome.availableResultCount,
+            error_code: outcome.errorCode,
+          }),
+          now,
+        ],
+      );
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
   }
   private async collect(
     task: ClaimedCollectionTask,
     query: ClaimedCollectionTask["subqueries"][number],
     heartbeat: () => Promise<void>,
+    signal?: AbortSignal,
   ): Promise<SubqueryOutcome & { id: string }> {
     const [rows] = await this.pool.query<RowDataPacket[]>(
         [
           "SELECT p.id,p.code,p.access_mode,p.target_url,p.parser_version,p.timeout_ms,p.fields_json,p.status",
-          ",p.terms_review_status,p.terms_reference_url,t",
-          ".created_by FROM providers p JOIN collection_tasks t ON t.id=? WHERE p.id=? LIMIT 1",
+          ",p.circuit_failure_threshold,c.state runtime_circuit_state",
+          ",p.terms_review_status,p.terms_reference_url,p.terms_version,p.terms_expires_at,t",
+          ".created_by FROM providers p JOIN collection_tasks t ON t.id=? LEFT JOIN provider_runtime_circuits c ON c.provider_id=p.id WHERE p.id=? LIMIT 1",
         ].join(""),
         [task.id, query.providerId],
       ),
@@ -108,9 +204,24 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       timeoutMs: Number(row.timeout_ms),
       fields: typeof row.fields_json === "string" ? JSON.parse(row.fields_json) : row.fields_json,
     };
+    if (row.runtime_circuit_state === "open")
+      return {
+        id: query.id,
+        required: query.required,
+        status: "blocked",
+        availableResultCount: 0,
+        missingFields: provider.fields,
+        errorCode: "source_circuit_open",
+      };
     try {
       if (["public_page", "public_rss"].includes(provider.accessMode)) {
-        if (row.terms_review_status !== "approved" || !row.terms_reference_url)
+        if (
+          row.terms_review_status !== "approved" ||
+          !row.terms_reference_url ||
+          !row.terms_version ||
+          !row.terms_expires_at ||
+          new Date(row.terms_expires_at) <= new Date()
+        )
           throw new ProviderAdapterFailure("permission_denied", false);
         if (this.publicPolicyFetch)
           await assertPublicCollectionPolicy({
@@ -141,6 +252,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
                   traceId: task.traceId,
                 },
                 heartbeat,
+                signal,
               )
             : null,
         batch = browserCollection
@@ -219,7 +331,12 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           throw error;
         }
       }
-      if (hasDedupeConflict && query.required)
+      if (hasDedupeConflict && query.required) {
+        await this.recordProviderRuntimeResult(
+          provider.id,
+          Number(row.circuit_failure_threshold),
+          "validation_failed",
+        );
         return {
           id: query.id,
           required: true,
@@ -228,6 +345,12 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           missingFields: [],
           errorCode: "validation_failed",
         };
+      }
+      await this.recordProviderRuntimeResult(
+        provider.id,
+        Number(row.circuit_failure_threshold),
+        null,
+      );
       return {
         id: query.id,
         required: query.required,
@@ -246,6 +369,11 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           "robots_disallowed",
           "permission_denied",
         ].includes(mapped);
+      await this.recordProviderRuntimeResult(
+        provider.id,
+        Number(row.circuit_failure_threshold),
+        mapped,
+      );
       if (mapped === "source_changed")
         await this.pauseProviderForParserDrift(task, provider, String(row.created_by), failure);
       if (query.required) {
@@ -261,6 +389,45 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         missingFields: provider.fields,
         errorCode: mapped,
       };
+    }
+  }
+
+  private async recordProviderRuntimeResult(
+    providerId: string,
+    failureThreshold: number,
+    errorCode: CollectionErrorCode | null,
+  ) {
+    const connection = await this.pool.getConnection(),
+      now = new Date();
+    try {
+      await connection.beginTransaction();
+      const [rows] = await connection.query<RowDataPacket[]>(
+          "SELECT state,consecutive_failures,opened_at,recovered_at FROM provider_runtime_circuits WHERE provider_id=? FOR UPDATE",
+          [providerId],
+        ),
+        previous = rows[0],
+        failures = errorCode ? Number(previous?.consecutive_failures ?? 0) + 1 : 0,
+        state = errorCode && failures >= failureThreshold ? "open" : "closed",
+        openedAt = state === "open" ? (previous?.opened_at ?? now) : null,
+        recoveredAt =
+          !errorCode && previous?.state === "open" ? now : (previous?.recovered_at ?? null);
+      await connection.query(
+        [
+          "INSERT INTO provider_runtime_circuits(provider_id,state,consecutive_failures,failure_threshold,",
+          "last_error_code,opened_at,recovered_at,updated_at) VALUES(?,?,?,?,?,?,?,?) ",
+          "ON DUPLICATE KEY UPDATE state=VALUES(state),consecutive_failures=VALUES(consecutive_failures),",
+          "failure_threshold=VALUES(failure_threshold),last_error_code=VALUES(last_error_code),",
+          "opened_at=VALUES(opened_at),recovered_at=VALUES(recovered_at),",
+          "updated_at=VALUES(updated_at)",
+        ].join(""),
+        [providerId, state, failures, failureThreshold, errorCode, openedAt, recoveredAt, now],
+      );
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
     }
   }
 

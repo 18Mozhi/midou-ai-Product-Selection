@@ -34,7 +34,9 @@ export function applyTheme(theme: ThemeId, cache = true) {
   if (cache)
     try {
       window.localStorage.setItem(themeStorageKey, theme);
-    } catch {}
+    } catch (error) {
+      void error;
+    }
 }
 
 export function applyDensity(density: DensityId) {
@@ -50,7 +52,9 @@ export function applyCachedTheme() {
   let cached: unknown;
   try {
     cached = window.localStorage.getItem(themeStorageKey);
-  } catch {}
+  } catch (error) {
+    void error;
+  }
   const theme = isThemeId(cached) ? cached : "deep-ocean";
   applyTheme(theme, false);
   return theme;

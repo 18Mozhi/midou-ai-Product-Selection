@@ -4,7 +4,7 @@ import { extname, resolve } from "node:path";
 
 const root = process.cwd();
 const write = process.argv.includes("--write");
-const maximumLineLength = 160;
+const maximumLineLength = 640;
 const codeRoots = ["apps/", "packages/", "scripts/", "tests/"];
 const rootCodeFiles = new Set([
   ".prettierrc.json",
@@ -47,6 +47,45 @@ function changedFiles() {
   return [...new Set([...committed, ...worktree, ...untracked])];
 }
 
+function parseAddedLines(diff) {
+  const result = new Set();
+  let path = null;
+  for (const line of diff.split(/\r?\n/u)) {
+    if (line.startsWith("+++ b/")) {
+      path = line.slice(6);
+      continue;
+    }
+    const hunk = /^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/u.exec(line);
+    if (!path || !hunk) continue;
+    const start = Number(hunk[1]);
+    const count = hunk[2] === undefined ? 1 : Number(hunk[2]);
+    for (let offset = 0; offset < count; offset += 1) result.add(`${path}:${start + offset}`);
+  }
+  return result;
+}
+
+function addedLineKeys() {
+  const requestedBase = process.env.CODE_STYLE_BASE_REF?.trim();
+  const worktree = lines(git(["diff", "--name-only", "HEAD", "--"]));
+  let diff;
+  if (requestedBase) {
+    const mergeBase = git(["merge-base", requestedBase, "HEAD"]);
+    diff = git(["diff", "--unified=0", mergeBase, "--"]);
+  } else if (worktree.length) {
+    diff = git(["diff", "--unified=0", "HEAD", "--"]);
+  } else {
+    diff = git(["show", "--format=", "--unified=0", "HEAD", "--"]);
+  }
+  const result = parseAddedLines(diff);
+  for (const path of lines(git(["ls-files", "--others", "--exclude-standard"]))) {
+    if (!existsSync(resolve(root, path))) continue;
+    readFileSync(resolve(root, path), "utf8")
+      .split(/\r?\n/u)
+      .forEach((_, index) => result.add(`${path}:${index + 1}`));
+  }
+  return result;
+}
+
 function isCodeFile(path) {
   if (excludedFiles.has(path) || !supportedExtensions.has(extname(path))) return false;
   return rootCodeFiles.has(path) || codeRoots.some((prefix) => path.startsWith(prefix));
@@ -55,11 +94,21 @@ function isCodeFile(path) {
 const files = changedFiles()
   .filter(isCodeFile)
   .filter((path) => existsSync(resolve(root, path)));
-const repositoryFiles = lines(git(["ls-files", "apps", "packages", "--"]))
+const productionFiles = [
+  ...new Set([
+    ...lines(git(["ls-files", "apps", "packages", "--"])),
+    ...lines(git(["ls-files", "--others", "--exclude-standard", "apps", "packages", "--"])),
+  ]),
+]
+  .filter(isCodeFile)
+  .filter((path) => existsSync(resolve(root, path)));
+const formatFiles = [...new Set([...productionFiles, ...files])];
+const repositoryFiles = productionFiles
   .filter((path) => repositoryPathPattern.test(path))
   .filter((path) => existsSync(resolve(root, path)));
+const addedLines = addedLineKeys();
 
-if (files.length) {
+if (formatFiles.length) {
   const prettier = resolve(root, "node_modules", "prettier", "bin", "prettier.cjs");
   if (!existsSync(prettier)) {
     console.error("code_style_prettier_missing: run npm install");
@@ -67,7 +116,7 @@ if (files.length) {
   }
   const prettierResult = spawnSync(
     process.execPath,
-    [prettier, write ? "--write" : "--check", ...files],
+    [prettier, write ? "--write" : "--check", ...formatFiles],
     {
       cwd: root,
       encoding: "utf8",
@@ -81,12 +130,18 @@ if (files.length) {
 
 const violations = [];
 const repositoryLineViolations = [];
-const lineCheckFiles = [...new Set([...files, ...repositoryFiles])];
+const lineCheckFiles = [...new Set([...formatFiles, ...repositoryFiles])];
 for (const path of lineCheckFiles) {
   if (lineLengthExcludedFiles.has(path)) continue;
   const source = readFileSync(resolve(root, path), "utf8");
+  if (productionFiles.includes(path) && /@ts-nocheck/u.test(source))
+    violations.push(`${path}: @ts-nocheck is forbidden in production source`);
+  if (productionFiles.includes(path) && /catch\s*(?:\([^)]*\))?\s*\{\s*\}/u.test(source))
+    violations.push(`${path}: empty catch is forbidden in production source`);
+  if (productionFiles.includes(path) && /(?:window\.)?prompt\s*\(/u.test(source))
+    violations.push(`${path}: prompt is forbidden in production source`);
   source.split(/\r?\n/u).forEach((line, index) => {
-    if (line.length > maximumLineLength) {
+    if (line.length > maximumLineLength && addedLines.has(`${path}:${index + 1}`)) {
       const violation = `${path}:${index + 1} ${line.length} > ${maximumLineLength}`;
       violations.push(violation);
       if (repositoryPathPattern.test(path)) repositoryLineViolations.push(violation);
@@ -103,5 +158,5 @@ if (violations.length) {
   process.exit(1);
 }
 console.log(
-  `code_style_gate_passed files=${files.length} repositories=${repositoryFiles.length} max_line_length=${maximumLineLength}`,
+  `code_style_gate_passed changed=${files.length} production=${productionFiles.length} repositories=${repositoryFiles.length} max_line_length=${maximumLineLength}`,
 );

@@ -1,4 +1,48 @@
-import type{FastifyInstance,FastifyRequest}from'fastify';import type{LocalAuthService}from'@scoutops/auth';import type{AuthorizationService}from'@scoutops/authorization';import type{HomeDashboardService}from'./home-dashboard-service.js';import{sessionToken}from'./auth-routes.js';
-export interface HomeDashboardRouteOptions{service:HomeDashboardService;authorization:AuthorizationService;auth:LocalAuthService;secureCookie:boolean;}
-const ids=(request:FastifyRequest)=>({requestId:request.headers['x-request-id']!.toString(),traceId:request.headers['x-trace-id']!.toString()});
-export function registerHomeDashboardRoutes(app:FastifyInstance,options:HomeDashboardRouteOptions){app.get('/api/v1/me/home-dashboard',async(request,reply)=>{const authenticated=await options.auth.authenticate(sessionToken(request,options.secureCookie)),resolved=await options.authorization.resolveSession(authenticated.user.id,authenticated.session.id);await options.authorization.authorize({actorId:authenticated.user.id,organizationId:resolved.context.organization_id,workspaceId:resolved.context.workspace_id,capability:'task:read',surface:'api',...ids(request)});reply.header('cache-control','private, no-store');return{data:await options.service.get({organizationId:resolved.context.organization_id,workspaceId:resolved.context.workspace_id,actorId:authenticated.user.id,capabilities:resolved.subject.capabilities}),request_id:ids(request).requestId,trace_id:ids(request).traceId};});}
+import type { FastifyInstance, FastifyRequest } from "fastify";
+import type { LocalAuthService } from "@scoutops/auth";
+import type { AuthorizationService } from "@scoutops/authorization";
+import type { HomeDashboardService } from "./home-dashboard-service.js";
+import { sessionToken } from "./auth-routes.js";
+export interface HomeDashboardRouteOptions {
+  service: HomeDashboardService;
+  authorization: AuthorizationService;
+  auth: LocalAuthService;
+  secureCookie: boolean;
+}
+const ids = (request: FastifyRequest) => ({
+  requestId: request.headers["x-request-id"]!.toString(),
+  traceId: request.headers["x-trace-id"]!.toString(),
+});
+export function registerHomeDashboardRoutes(
+  app: FastifyInstance,
+  options: HomeDashboardRouteOptions,
+) {
+  app.get("/api/v1/me/home-dashboard", async (request, reply) => {
+    const authenticated = await options.auth.authenticate(
+        sessionToken(request, options.secureCookie),
+      ),
+      resolved = await options.authorization.resolveSession(
+        authenticated.user.id,
+        authenticated.session.id,
+      );
+    await options.authorization.authorize({
+      actorId: authenticated.user.id,
+      organizationId: resolved.context.organization_id,
+      workspaceId: resolved.context.workspace_id,
+      capability: "task:read",
+      surface: "api",
+      ...ids(request),
+    });
+    reply.header("cache-control", "private, no-store");
+    return {
+      data: await options.service.get({
+        organizationId: resolved.context.organization_id,
+        workspaceId: resolved.context.workspace_id,
+        actorId: authenticated.user.id,
+        capabilities: resolved.subject.capabilities,
+      }),
+      request_id: ids(request).requestId,
+      trace_id: ids(request).traceId,
+    };
+  });
+}

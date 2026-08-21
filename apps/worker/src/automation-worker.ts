@@ -20,30 +20,16 @@ export class AutomationWorker {
         ),
         rule = rows[0];
       if (!rule || rule.status !== "active") {
-        await this.finish(
-          job,
-          "succeeded",
-          null,
-          null,
-          "rule_paused_before_execution",
-        );
+        await this.finish(job, "succeeded", null, null, "rule_paused_before_execution");
         return { status: "suppressed" as const, execution_id: String(job.id) };
       }
-      const since = new Date(
-          now.valueOf() - Number(rule.rate_limit_window_minutes) * 60000,
-        ),
+      const since = new Date(now.valueOf() - Number(rule.rate_limit_window_minutes) * 60000),
         [counts] = await this.pool.query<RowDataPacket[]>(
           "SELECT COUNT(*) total FROM automation_executions WHERE rule_id=? AND status='succeeded' AND updated_at>=?",
           [rule.id, since],
         );
       if (Number(counts[0]?.total) >= Number(rule.rate_limit_count)) {
-        await this.finish(
-          job,
-          "rate_limited",
-          null,
-          null,
-          "rate_limit_exceeded",
-        );
+        await this.finish(job, "rate_limited", null, null, "rate_limit_exceeded");
         await this.event(job, rule, "automation.rate_limited", {
           execution_id: String(job.id),
           rule_version: Number(job.rule_version),

@@ -5,9 +5,7 @@ import { BUILTIN_PROVIDER_SOURCES } from "../../packages/provider-sources/dist/i
 import { MySqlProviderSourceRepository } from "../../apps/api/dist/mysql-provider-source-repository.js";
 
 test("every setup source has a real HTTPS page and authenticated sources can open login targets", () => {
-  const setup = BUILTIN_PROVIDER_SOURCES.filter(
-    (item) => item.availability === "setup_required",
-  );
+  const setup = BUILTIN_PROVIDER_SOURCES.filter((item) => item.availability === "setup_required");
   assert.ok(setup.length > 0);
   for (const item of setup) {
     const target = new URL(item.target_url);
@@ -32,14 +30,8 @@ test("every setup source has a real HTTPS page and authenticated sources can ope
 });
 
 test("source UI only offers anonymous tests for executable automatic public adapters", async () => {
-  const ui = await readFile(
-    "apps/web/src/components/ProviderSourceCenter.vue",
-    "utf8",
-  );
-  assert.match(
-    ui,
-    /item\.availability === 'automatic'[\s\S]*\['public_page', 'public_rss'\]/,
-  );
+  const ui = await readFile("apps/web/src/components/ProviderSourceCenter.vue", "utf8");
+  assert.match(ui, /item\.availability === 'automatic'[\s\S]*\['public_page', 'public_rss'\]/);
   assert.match(ui, /配置网页登录/);
 });
 
@@ -55,8 +47,7 @@ test("catalog synchronization honors the declared source status for ERP and manu
         return [[{ user_id: "00000000-0000-4000-8000-000000000001" }], []];
       if (sql === "SELECT id,status,version FROM providers WHERE code=? FOR UPDATE")
         return [[], []];
-      if (sql.startsWith("INSERT INTO providers"))
-        inserted.set(values[1], values[19]);
+      if (sql.startsWith("INSERT INTO providers")) inserted.set(values[1], values[19]);
       return [[], []];
     },
   };

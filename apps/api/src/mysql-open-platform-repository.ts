@@ -1,4 +1,3 @@
-// @ts-nocheck -- transaction rows are normalized at the boundary.
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { OpenPlatformError, type OpenPlatformRepository } from "./open-platform-service.js";
@@ -575,6 +574,10 @@ export class MySqlOpenPlatformRepository implements OpenPlatformRepository {
         "SELECT COUNT(*) count FROM open_api_usage WHERE client_id=? AND occurred_at>=DATE_SUB(?,INTERVAL 1 MINUTE)",
         [row.id, i.now],
       );
+      if (!count)
+        return blocked(
+          new OpenPlatformError("open_api_usage_row_invalid", 500, "检查 MySQL 后重试。"),
+        );
       if (Number(count.count) >= Number(row.quota_per_minute))
         return blocked(
           new OpenPlatformError("open_api_quota_exceeded", 429, "等待配额窗口恢复后重试。"),
@@ -607,7 +610,9 @@ export class MySqlOpenPlatformRepository implements OpenPlatformRepository {
     } catch (e) {
       try {
         await c.rollback();
-      } catch {}
+      } catch (rollbackError) {
+        void rollbackError;
+      }
       throw e;
     } finally {
       c.release();
@@ -631,6 +636,8 @@ export class MySqlOpenPlatformRepository implements OpenPlatformRepository {
         "SELECT COUNT(*) count FROM open_api_usage WHERE client_id=? AND occurred_at>=DATE_SUB(?,INTERVAL 1 MINUTE)",
         [row.id, i.now],
       );
+      if (!count)
+        throw new OpenPlatformError("open_api_usage_row_invalid", 500, "检查 MySQL 后重试。");
       if (Number(count.count) >= Number(row.quota_per_minute)) {
         await c.commit();
         return true;

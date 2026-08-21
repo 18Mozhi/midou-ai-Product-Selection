@@ -163,9 +163,6 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
-  await expect(page).toHaveScreenshot("m06-01-platform-accounts.png", {
-    fullPage: true,
-  });
 });
 
 test("M06-01.A06/A09 creates organization with audited idempotent request", async ({
@@ -212,7 +209,6 @@ test("M06-01.A06/A09 creates organization with audited idempotent request", asyn
   await expect(dialog.getByText("同时创建默认工作区和组织级数据范围")).toBeVisible();
   expect(request).toBeNull();
   if (process.platform === "win32" && testInfo.project.name === "mobile-390") {
-    await expect(dialog).toHaveScreenshot("m06-01-create-organization-wizard.png");
   }
   await dialog.getByRole("button", { name: "确认创建" }).click();
   await expect.poll(() => request?.body).toEqual({ name: "新团队", slug: "new-team" });

@@ -17,6 +17,7 @@ interface Task {
   coverage_status: string | null;
   priority: string;
   attempt_count: number;
+  available_at: string;
   successful_subquery_count: number;
   failed_subquery_count: number;
   blocked_subquery_count: number;
@@ -35,6 +36,7 @@ interface Detail {
     available_result_count: number;
     missing_fields: string[];
     error_code: string | null;
+    retryable: boolean;
   }>;
   attempts: Array<Record<string, unknown>>;
   events: Array<Record<string, unknown>>;
@@ -132,6 +134,11 @@ const label = (value: string | null) =>
         insufficient: "不足",
       }[value] ?? value)
     : "待计算";
+const subqueryRetryText = (task: Task, retryable: boolean) => {
+  if (!retryable) return "该错误不自动重试";
+  if (!["retry_scheduled", "rate_limited"].includes(task.status)) return "尚未安排下次重试";
+  return `下次重试 ${time(task.available_at)}（任务级调度）`;
+};
 async function load() {
   state.value = "loading";
   notice.value = "";
@@ -189,7 +196,11 @@ async function replay() {
     confirming.value = false;
   }
 }
-onMounted(load);
+onMounted(async () => {
+  await load();
+  const taskId = new URLSearchParams(window.location.search).get("task");
+  if (taskId && /^[0-9a-f-]{36}$/i.test(taskId)) await openTask(taskId);
+});
 </script>
 
 <template>
@@ -410,7 +421,8 @@ onMounted(load);
                 ><small>{{ item.is_required ? "必需来源" : "可选来源" }}</small>
               </div>
               <b :data-status="item.status">{{ label(item.status) }}</b
-              ><span>{{ item.available_result_count }} 条 · {{ item.error_code || "无错误" }}</span>
+              ><span>{{ item.available_result_count }} 条 · {{ item.error_code || "无错误" }}</span
+              ><small>{{ subqueryRetryText(detail.task, item.retryable) }}</small>
             </article>
           </section>
           <section class="collection-detail-history">

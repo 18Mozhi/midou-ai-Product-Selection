@@ -28,6 +28,9 @@ const parse = (value: unknown) => (typeof value === "string" ? JSON.parse(value)
     owner_label: String(r.owner_label),
     terms_review_status: r.terms_review_status,
     terms_reference_url: r.terms_reference_url === null ? null : String(r.terms_reference_url),
+    terms_version: r.terms_version === null ? null : String(r.terms_version),
+    terms_expires_at:
+      r.terms_expires_at === null ? null : new Date(r.terms_expires_at).toISOString(),
     terms_reviewed_at:
       r.terms_reviewed_at === null ? null : new Date(r.terms_reviewed_at).toISOString(),
     status: r.status,
@@ -38,7 +41,7 @@ const columns = [
   "id,code,name,target_url,access_mode,markets_json,languages_json,fields_json",
   "schedule_minutes,concurrency_limit,timeout_ms,retry_limit,circuit_failure_threshold",
   "dedupe_key,retention_days,failure_rules_json,parser_version,healthcheck_url,owner_label",
-  "terms_review_status,terms_reference_url,terms_reviewed_at,status,version,updated_at",
+  "terms_review_status,terms_reference_url,terms_version,terms_expires_at,terms_reviewed_at,status,version,updated_at",
 ].join(",");
 export class MySqlProviderRegistryRepository implements ProviderRegistryRepository {
   constructor(private readonly pool: Pool) {}
@@ -76,9 +79,9 @@ export class MySqlProviderRegistryRepository implements ProviderRegistryReposito
           "(id,code,name,target_url,access_mode,markets_json,languages_json,fields_json",
           ",schedule_minutes,concurrency_limit,timeout_ms,retry_limit,circuit_failure_threshold",
           ",dedupe_key,retention_days,failure_rules_json,parser_version,healthcheck_url,owner_label",
-          ",terms_review_status,terms_reference_url,terms_reviewed_at,status,version",
+          ",terms_review_status,terms_reference_url,terms_version,terms_expires_at,terms_reviewed_at,status,version",
           ",created_by,updated_by,created_at,updated_at)",
-          "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)",
+          "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)",
         ].join(""),
         [
           input.id,
@@ -102,6 +105,8 @@ export class MySqlProviderRegistryRepository implements ProviderRegistryReposito
           v.owner_label,
           v.terms_review_status,
           v.terms_reference_url,
+          v.terms_version,
+          v.terms_expires_at ? new Date(v.terms_expires_at) : null,
           v.terms_reviewed_at ? new Date(v.terms_reviewed_at) : null,
           v.status,
           input.actorId,
@@ -175,7 +180,7 @@ export class MySqlProviderRegistryRepository implements ProviderRegistryReposito
           ",languages_json=?,fields_json=?,schedule_minutes=?,concurrency_limit=?,timeout_ms=?",
           ",retry_limit=?,circuit_failure_threshold=?,dedupe_key=?,retention_days=?",
           ",failure_rules_json=?,parser_version=?,healthcheck_url=?,owner_label=?",
-          ",terms_review_status=?,terms_reference_url=?,terms_reviewed_at=?,status=?",
+          ",terms_review_status=?,terms_reference_url=?,terms_version=?,terms_expires_at=?,terms_reviewed_at=?,status=?",
           ",version=?,updated_by=?,updated_at=? WHERE id=?",
         ].join(""),
         [
@@ -199,6 +204,8 @@ export class MySqlProviderRegistryRepository implements ProviderRegistryReposito
           v.owner_label,
           v.terms_review_status,
           v.terms_reference_url,
+          v.terms_version,
+          v.terms_expires_at ? new Date(v.terms_expires_at) : null,
           v.terms_reviewed_at ? new Date(v.terms_reviewed_at) : null,
           v.status,
           next,

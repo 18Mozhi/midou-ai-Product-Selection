@@ -203,7 +203,7 @@ test("source catalog exposes the latest persisted successful task without invent
   assert.match(web, /沿用采集计划/);
   assert.match(web, /最近成功任务/);
   assert.match(web, /影响范围/);
-  assert.match(web, /待实施/);
+  assert.match(web, /待配置/);
 });
 
 test("platform navigation exposes complete management domains and role switching", async () => {
@@ -249,6 +249,29 @@ test("platform management and dashboard expose operational details instead of pl
   assert.match(dashboard, /采集任务成功和失败趋势折线图/);
   assert.match(main, /button\[aria-label\],a\[aria-label\]/);
   assert.match(main, /element\.title = label/);
+});
+
+test("platform operations correlate API Worker and crawler events without raw payloads", async () => {
+  const [service, repository, component, navigation] = await Promise.all([
+    readFile(new URL("../../apps/api/src/platform-dashboard-service.ts", import.meta.url), "utf8"),
+    readFile(
+      new URL("../../apps/api/src/mysql-platform-dashboard-repository.ts", import.meta.url),
+      "utf8",
+    ),
+    readFile(
+      new URL("../../apps/web/src/components/PlatformLogCenter.vue", import.meta.url),
+      "utf8",
+    ),
+    readFile(new URL("../../apps/web/src/components/NavigationShell.vue", import.meta.url), "utf8"),
+  ]);
+  assert.match(service, /"logs"/);
+  for (const table of ["platform_audit_events", "collection_task_events", "crawler_browser_runs"])
+    assert.match(repository, new RegExp(table));
+  assert.match(repository, /request_id LIKE \? OR trace_id LIKE \?/);
+  assert.doesNotMatch(repository, /metadata_json\s+(?:AS\s+)?(?:metadata|details)/i);
+  for (const label of ["链路日志", "API", "Worker", "爬虫", "查看编号"])
+    assert.match(component, new RegExp(label));
+  assert.match(navigation, /\/platform-admin\/logs/);
 });
 
 test("collection task detail renders attempts events and dead-letter facts", async () => {

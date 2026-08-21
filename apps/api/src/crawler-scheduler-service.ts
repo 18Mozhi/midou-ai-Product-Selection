@@ -16,6 +16,15 @@ export interface CrawlerSchedulerProvider {
   active_leases: number;
   queued_tasks: number;
   longest_queue_wait_seconds: number;
+  queue_wait_p50_seconds: number;
+  queue_wait_p95_seconds: number;
+  sample_count_24h: number;
+  success_rate_basis_points_24h: number | null;
+  duration_p95_ms_24h: number | null;
+  circuit_state: "closed" | "open";
+  circuit_failure_threshold: number;
+  consecutive_failures: number;
+  last_error_code: string | null;
 }
 export interface CrawlerSchedulerProfile {
   id: string;
@@ -41,6 +50,13 @@ export interface CrawlerSchedulerSnapshot {
   active_leases: CrawlerSchedulerLeaseAssociation[];
   providers: CrawlerSchedulerProvider[];
   profiles: CrawlerSchedulerProfile[];
+  trend: Array<{
+    bucket_at: string;
+    total: number;
+    succeeded: number;
+    failed: number;
+    failure_rate_basis_points: number;
+  }>;
   resource: {
     load_basis_points: number;
     available_memory_mb: number;
@@ -76,6 +92,14 @@ export interface CrawlerSchedulerRepository {
     idempotencyKey: string;
     now: Date;
   }): Promise<{ recovered: number }>;
+  recoverProvider(input: {
+    actorId: string;
+    providerId: string;
+    requestId: string;
+    traceId: string;
+    idempotencyKey: string;
+    now: Date;
+  }): Promise<{ provider_id: string; recovered: boolean }>;
 }
 export interface CrawlerSchedulerHostProbe {
   snapshot(): Promise<
@@ -131,6 +155,11 @@ export function evaluateCrawlerScheduler(
     )
   )
     blocked("crawler_provider_quota_exceeded", "降低来源并发或等待该来源的活动租约释放。");
+  if (snapshot.providers.some((item) => item.circuit_state === "open"))
+    warning(
+      "crawler_provider_circuit_open",
+      "仅恢复已通过来源健康检查的熔断来源，其他来源继续独立运行。",
+    );
   const age = (now.getTime() - Date.parse(snapshot.resource.observed_at)) / 1000;
   if (!Number.isFinite(age) || age < 0 || age > policy.staleAfterSeconds)
     blocked("crawler_resource_observation_stale", "刷新当前惠州单机资源观测后再调度。");
@@ -189,6 +218,7 @@ export class CrawlerSchedulerService {
       active_leases: snapshot.active_leases,
       providers: snapshot.providers,
       profiles: snapshot.profiles,
+      trend: snapshot.trend,
       resource: snapshot.resource,
       findings: evaluation.findings,
       observed_at: observedAt.toISOString(),
@@ -211,5 +241,30 @@ export class CrawlerSchedulerService {
       ...(await this.repository.recoverExpired({ ...input, now: this.now() })),
       observed_at: this.now().toISOString(),
     };
+  }
+  async recoverProvider(input: {
+    actorId: string;
+    providerId: string;
+    requestId: string;
+    traceId: string;
+    idempotencyKey: string;
+  }) {
+    if (
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+        input.providerId,
+      )
+    )
+      throw new CrawlerSchedulerError(
+        "crawler_provider_id_invalid",
+        400,
+        "刷新调度页面后选择有效来源。",
+      );
+    if (!/^[A-Za-z0-9._:-]{1,128}$/.test(input.idempotencyKey))
+      throw new CrawlerSchedulerError(
+        "crawler_scheduler_idempotency_invalid",
+        400,
+        "使用有效 Idempotency-Key 重试。",
+      );
+    return this.repository.recoverProvider({ ...input, now: this.now() });
   }
 }

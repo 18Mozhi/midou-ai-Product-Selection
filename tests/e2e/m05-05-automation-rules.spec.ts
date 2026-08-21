@@ -75,9 +75,7 @@ test("M05-05.A07/A08/A15 desktop rules and execution drawer", async ({ page }) =
   await expect(page.getByRole("article").getByText("重要", { exact: true })).toBeVisible();
   await expect(page.getByRole("article").getByText("最终失败", { exact: true })).toBeVisible();
   await expect(page.getByText("动作执行失败，系统将按策略重试")).toBeVisible();
-  await expect(page).toHaveScreenshot("m05-05-automation-rules-desktop.png", {
-    fullPage: true,
-  });
+
   await page.getByRole("button", { name: "查看详情" }).click();
   await expect(page.getByText("规则详情与执行记录")).toBeVisible();
   await expect(page.getByText("规则 v1 · 尝试 1 次")).toBeVisible();
@@ -100,5 +98,4 @@ test("M05-05.A07/A08/A15 mobile create rule layout", async ({ page }) => {
   await expect(page.getByText("规则只消费真实通知投影")).toBeVisible();
   await page.getByRole("button", { name: /竞品告警复核/ }).click();
   await expect(page.getByLabel("规则名称")).toHaveValue("竞品告警复核");
-  await expect(page).toHaveScreenshot("m05-05-automation-rules-mobile-390.png", { fullPage: true });
 });

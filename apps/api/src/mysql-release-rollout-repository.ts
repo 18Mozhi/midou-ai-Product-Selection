@@ -1,25 +1,32 @@
-// @ts-nocheck -- MySQL rows are normalized before leaving the repository.
 import { createHash, randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { ReleaseRolloutRepository } from "./release-rollout-service.js";
 const iso = (value: unknown) => (value ? new Date(value as string | Date).toISOString() : null);
+interface ReleaseRow extends RowDataPacket {
+  id: string;
+  started_at: string | Date | null;
+  finished_at: string | Date | null;
+  created_at: string | Date | null;
+  updated_at: string | Date | null;
+}
 
 export class MySqlReleaseRolloutRepository implements ReleaseRolloutRepository {
   constructor(private readonly pool: Pool) {}
   async read(input: { actorId: string; requestId: string; traceId: string; now: Date }) {
     const [[releaseRows], [gateRows]] = await Promise.all([
-      this.pool.query<RowDataPacket[]>(
+      this.pool.query<ReleaseRow[]>(
         "SELECT id,stage,app_version,build_sha,config_fingerprint,migration_version," +
           "status,approved_by,request_id,trace_id,started_at,finished_at,created_at," +
           "updated_at FROM deployment_releases ORDER BY COALESCE(started_at,created_at) DESC LIMIT " +
           "10",
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT id,release_id,gate_kind,status,traffic_percent,observe_seconds,sample_count," +
+        "SELECT g.id,g.release_id,g.gate_kind,g.status,g.traffic_percent,g.observe_seconds,g.sample_count," +
           "error_rate_percent,read_p95_ms,write_p95_ms,async_lag_seconds,failure_code," +
-          "started_at,finished_at,request_id,trace_id,metadata FROM deployment_release_gates WHERE " +
-          "release_id=(SELECT id FROM deployment_releases ORDER BY COALESCE(started_at," +
-          "created_at) DESC LIMIT 1) ORDER BY started_at,gate_kind",
+          "g.started_at,g.finished_at,g.request_id,g.trace_id,g.metadata FROM " +
+          "deployment_release_gates g JOIN (SELECT id FROM deployment_releases ORDER BY " +
+          "COALESCE(started_at,created_at) DESC LIMIT 10) recent ON recent.id=g.release_id " +
+          "ORDER BY g.started_at,g.gate_kind",
       ),
     ]);
     const releases = releaseRows.map((row) => ({

@@ -1,11 +1,240 @@
-import test from 'node:test';import assert from 'node:assert/strict';
-import {AuthorizationService,InMemoryAuthorizationRepository} from '../../packages/authorization/dist/index.js';
-import {InMemoryResourceGrantRepository,RESOURCE_GRANT_ACTIONS,ResourceGrantError,ResourceGrantService} from '../../packages/resource-grants/dist/index.js';
-const actor='00000000-0000-4000-8000-000000000501',grantee='00000000-0000-4000-8000-000000000502',membership='00000000-0000-4000-8000-000000000503',org='00000000-0000-4000-8000-000000000504',otherOrg='00000000-0000-4000-8000-000000000505',workspace='00000000-0000-4000-8000-000000000506',resource='00000000-0000-4000-8000-000000000507';
-const baseTime=new Date('2026-08-07T10:00:00.000Z');
-function fixture(){let now=new Date(baseTime);const repository=new InMemoryResourceGrantRepository();repository.memberships.set(membership,{id:membership,organization_id:org,status:'active'});repository.workspaces.set(workspace,{id:workspace,organization_id:org,status:'active'});const service=new ResourceGrantService(repository,()=>now);const context=(key='key-1')=>({actorId:actor,organizationId:org,requestId:'grant-request',traceId:'grant-trace',idempotencyKey:key});const input=(overrides={})=>({workspace_id:workspace,resource_type:'opportunity',resource_id:resource,grantee_membership_id:membership,actions:['opportunity:read'],reason:'采购协作核价',expires_at:new Date(now.getTime()+7*86400000),...overrides});return{repository,service,context,input,setNow:value=>{now=value;}};}
-test('M01-05.A02/A04/A12 creates an exact same-organization grant and replays one idempotent request',async()=>{const f=fixture(),first=await f.service.create(f.input(),f.context()),replay=await f.service.create(f.input(),f.context());assert.equal(first.id,replay.id);assert.deepEqual(first.actions,['opportunity:read']);assert.equal(f.repository.grants.size,1);assert.equal(f.repository.audits.filter(item=>item.event_type==='created').length,1);await assert.rejects(()=>f.service.create(f.input({reason:'另一个请求'}),f.context()),error=>error instanceof ResourceGrantError&&error.code==='idempotency_conflict');});
-test('M01-05.A04/A12 concurrent idempotent commit returns the winning transaction result',async()=>{const f=fixture(),original=f.repository.commitCreate.bind(f.repository);f.repository.commitCreate=async(...args)=>{await original(...args);throw new Error('duplicate operation race');};const grant=await f.service.create(f.input(),f.context('race'));assert.equal(f.repository.grants.size,1);assert.equal(grant.id,[...f.repository.grants.keys()][0]);});
-test('M01-05.A01/A09/A12 rejects foreign members, over-30-day expiry and excluded or mismatched actions',async()=>{const f=fixture();f.repository.memberships.set(membership,{id:membership,organization_id:otherOrg,status:'active'});await assert.rejects(()=>f.service.create(f.input(),f.context()),error=>error.code==='grant_target_forbidden');f.repository.memberships.set(membership,{id:membership,organization_id:org,status:'active'});await assert.rejects(()=>f.service.create(f.input({expires_at:new Date(baseTime.getTime()+30*86400000+1)}),f.context('long')),error=>error.code==='grant_expiry_invalid');for(const actions of [['collection:replay'],['opportunity:read','supplier_quote:manage'],['evidence:download'],['export:create'],['credential:read']])await assert.rejects(()=>f.service.create(f.input({actions}),f.context(actions[0])),error=>error.code==='grant_action_not_allowed');assert.deepEqual(Object.keys(RESOURCE_GRANT_ACTIONS),['task','opportunity','competitor','sourcing']);});
-test('M01-05.A04/A11/A16 extend and revoke require current version and audit every lifecycle transition',async()=>{const f=fixture(),created=await f.service.create(f.input(),f.context());const extended=await f.service.extend({grant_id:created.id,expected_version:1,reason:'采购周期延长',expires_at:new Date(baseTime.getTime()+14*86400000)},f.context('extend'));assert.equal(extended.version,2);await assert.rejects(()=>f.service.extend({grant_id:created.id,expected_version:1,reason:'冲突',expires_at:new Date(baseTime.getTime()+20*86400000)},f.context('conflict')),error=>error.code==='grant_version_conflict');const revoked=await f.service.revoke({grant_id:created.id,expected_version:2,reason:'协作已经结束'},f.context('revoke'));assert.equal(revoked.status,'revoked');assert.deepEqual(f.repository.audits.map(item=>item.event_type),['created','extended','revoked']);await assert.rejects(()=>f.service.extend({grant_id:created.id,expected_version:3,reason:'不可恢复',expires_at:new Date(baseTime.getTime()+20*86400000)},f.context('after-revoke')),error=>error.code==='grant_not_active');});
-test('M01-05.A05/A09/A11 exact resource fallback is shared by six surfaces and expiry is immediately invalid',async()=>{const f=fixture();await f.service.create(f.input(),f.context());const authRepo=new InMemoryAuthorizationRepository();authRepo.subjects.set(authRepo.key(grantee,org),{actor_id:grantee,membership_id:membership,membership_active:true,role_codes:['procurement_member'],capabilities:[],scopes:[],platform_role_codes:[],platform_capabilities:[]});const authorization=new AuthorizationService(authRepo,()=>baseTime,f.service);for(const surface of ['api','worker','export','file','event','sse'])assert.equal((await authorization.authorize({actorId:grantee,organizationId:org,workspaceId:workspace,resourceType:'opportunity',resourceId:resource,capability:'opportunity:read',surface,requestId:'access-request',traceId:'access-trace'})).reason,'allowed_resource_grant');await assert.rejects(()=>authorization.authorize({actorId:grantee,organizationId:org,workspaceId:workspace,resourceType:'opportunity',resourceId:'00000000-0000-4000-8000-000000000599',capability:'opportunity:read',surface:'api',requestId:'other',traceId:'other'}),error=>error.code==='permission_denied');f.setNow(new Date(baseTime.getTime()+8*86400000));await assert.rejects(()=>authorization.authorize({actorId:grantee,organizationId:org,workspaceId:workspace,resourceType:'opportunity',resourceId:resource,capability:'opportunity:read',surface:'api',requestId:'expired',traceId:'expired'}),error=>error.code==='permission_denied');assert.ok(f.repository.audits.some(item=>item.event_type==='expired'&&item.outcome==='denied'));assert.equal(f.repository.audits.filter(item=>item.event_type==='accessed').length,6);});
+import test from "node:test";
+import assert from "node:assert/strict";
+import {
+  AuthorizationService,
+  InMemoryAuthorizationRepository,
+} from "../../packages/authorization/dist/index.js";
+import {
+  InMemoryResourceGrantRepository,
+  RESOURCE_GRANT_ACTIONS,
+  ResourceGrantError,
+  ResourceGrantService,
+} from "../../packages/resource-grants/dist/index.js";
+const actor = "00000000-0000-4000-8000-000000000501",
+  grantee = "00000000-0000-4000-8000-000000000502",
+  membership = "00000000-0000-4000-8000-000000000503",
+  org = "00000000-0000-4000-8000-000000000504",
+  otherOrg = "00000000-0000-4000-8000-000000000505",
+  workspace = "00000000-0000-4000-8000-000000000506",
+  resource = "00000000-0000-4000-8000-000000000507";
+const baseTime = new Date("2026-08-07T10:00:00.000Z");
+function fixture() {
+  let now = new Date(baseTime);
+  const repository = new InMemoryResourceGrantRepository();
+  repository.memberships.set(membership, {
+    id: membership,
+    organization_id: org,
+    status: "active",
+  });
+  repository.workspaces.set(workspace, { id: workspace, organization_id: org, status: "active" });
+  const service = new ResourceGrantService(repository, () => now);
+  const context = (key = "key-1") => ({
+    actorId: actor,
+    organizationId: org,
+    requestId: "grant-request",
+    traceId: "grant-trace",
+    idempotencyKey: key,
+  });
+  const input = (overrides = {}) => ({
+    workspace_id: workspace,
+    resource_type: "opportunity",
+    resource_id: resource,
+    grantee_membership_id: membership,
+    actions: ["opportunity:read"],
+    reason: "采购协作核价",
+    expires_at: new Date(now.getTime() + 7 * 86400000),
+    ...overrides,
+  });
+  return {
+    repository,
+    service,
+    context,
+    input,
+    setNow: (value) => {
+      now = value;
+    },
+  };
+}
+test("M01-05.A02/A04/A12 creates an exact same-organization grant and replays one idempotent request", async () => {
+  const f = fixture(),
+    first = await f.service.create(f.input(), f.context()),
+    replay = await f.service.create(f.input(), f.context());
+  assert.equal(first.id, replay.id);
+  assert.deepEqual(first.actions, ["opportunity:read"]);
+  assert.equal(f.repository.grants.size, 1);
+  assert.equal(f.repository.audits.filter((item) => item.event_type === "created").length, 1);
+  await assert.rejects(
+    () => f.service.create(f.input({ reason: "另一个请求" }), f.context()),
+    (error) => error instanceof ResourceGrantError && error.code === "idempotency_conflict",
+  );
+});
+test("M01-05.A04/A12 concurrent idempotent commit returns the winning transaction result", async () => {
+  const f = fixture(),
+    original = f.repository.commitCreate.bind(f.repository);
+  f.repository.commitCreate = async (...args) => {
+    await original(...args);
+    throw new Error("duplicate operation race");
+  };
+  const grant = await f.service.create(f.input(), f.context("race"));
+  assert.equal(f.repository.grants.size, 1);
+  assert.equal(grant.id, [...f.repository.grants.keys()][0]);
+});
+test("M01-05.A01/A09/A12 rejects foreign members, over-30-day expiry and excluded or mismatched actions", async () => {
+  const f = fixture();
+  f.repository.memberships.set(membership, {
+    id: membership,
+    organization_id: otherOrg,
+    status: "active",
+  });
+  await assert.rejects(
+    () => f.service.create(f.input(), f.context()),
+    (error) => error.code === "grant_target_forbidden",
+  );
+  f.repository.memberships.set(membership, {
+    id: membership,
+    organization_id: org,
+    status: "active",
+  });
+  await assert.rejects(
+    () =>
+      f.service.create(
+        f.input({ expires_at: new Date(baseTime.getTime() + 30 * 86400000 + 1) }),
+        f.context("long"),
+      ),
+    (error) => error.code === "grant_expiry_invalid",
+  );
+  for (const actions of [
+    ["collection:replay"],
+    ["opportunity:read", "supplier_quote:manage"],
+    ["evidence:download"],
+    ["export:create"],
+    ["credential:read"],
+  ])
+    await assert.rejects(
+      () => f.service.create(f.input({ actions }), f.context(actions[0])),
+      (error) => error.code === "grant_action_not_allowed",
+    );
+  assert.deepEqual(Object.keys(RESOURCE_GRANT_ACTIONS), [
+    "task",
+    "opportunity",
+    "competitor",
+    "sourcing",
+  ]);
+});
+test("M01-05.A04/A11/A16 extend and revoke require current version and audit every lifecycle transition", async () => {
+  const f = fixture(),
+    created = await f.service.create(f.input(), f.context());
+  const extended = await f.service.extend(
+    {
+      grant_id: created.id,
+      expected_version: 1,
+      reason: "采购周期延长",
+      expires_at: new Date(baseTime.getTime() + 14 * 86400000),
+    },
+    f.context("extend"),
+  );
+  assert.equal(extended.version, 2);
+  await assert.rejects(
+    () =>
+      f.service.extend(
+        {
+          grant_id: created.id,
+          expected_version: 1,
+          reason: "冲突",
+          expires_at: new Date(baseTime.getTime() + 20 * 86400000),
+        },
+        f.context("conflict"),
+      ),
+    (error) => error.code === "grant_version_conflict",
+  );
+  const revoked = await f.service.revoke(
+    { grant_id: created.id, expected_version: 2, reason: "协作已经结束" },
+    f.context("revoke"),
+  );
+  assert.equal(revoked.status, "revoked");
+  assert.deepEqual(
+    f.repository.audits.map((item) => item.event_type),
+    ["created", "extended", "revoked"],
+  );
+  await assert.rejects(
+    () =>
+      f.service.extend(
+        {
+          grant_id: created.id,
+          expected_version: 3,
+          reason: "不可恢复",
+          expires_at: new Date(baseTime.getTime() + 20 * 86400000),
+        },
+        f.context("after-revoke"),
+      ),
+    (error) => error.code === "grant_not_active",
+  );
+});
+test("M01-05.A05/A09/A11 exact resource fallback is shared by six surfaces and expiry is immediately invalid", async () => {
+  const f = fixture();
+  await f.service.create(f.input(), f.context());
+  const authRepo = new InMemoryAuthorizationRepository();
+  authRepo.subjects.set(authRepo.key(grantee, org), {
+    actor_id: grantee,
+    membership_id: membership,
+    membership_active: true,
+    role_codes: ["procurement_member"],
+    capabilities: [],
+    scopes: [],
+    platform_role_codes: [],
+    platform_capabilities: [],
+  });
+  const authorization = new AuthorizationService(authRepo, () => baseTime, f.service);
+  for (const surface of ["api", "worker", "export", "file", "event", "sse"])
+    assert.equal(
+      (
+        await authorization.authorize({
+          actorId: grantee,
+          organizationId: org,
+          workspaceId: workspace,
+          resourceType: "opportunity",
+          resourceId: resource,
+          capability: "opportunity:read",
+          surface,
+          requestId: "access-request",
+          traceId: "access-trace",
+        })
+      ).reason,
+      "allowed_resource_grant",
+    );
+  await assert.rejects(
+    () =>
+      authorization.authorize({
+        actorId: grantee,
+        organizationId: org,
+        workspaceId: workspace,
+        resourceType: "opportunity",
+        resourceId: "00000000-0000-4000-8000-000000000599",
+        capability: "opportunity:read",
+        surface: "api",
+        requestId: "other",
+        traceId: "other",
+      }),
+    (error) => error.code === "permission_denied",
+  );
+  f.setNow(new Date(baseTime.getTime() + 8 * 86400000));
+  await assert.rejects(
+    () =>
+      authorization.authorize({
+        actorId: grantee,
+        organizationId: org,
+        workspaceId: workspace,
+        resourceType: "opportunity",
+        resourceId: resource,
+        capability: "opportunity:read",
+        surface: "api",
+        requestId: "expired",
+        traceId: "expired",
+      }),
+    (error) => error.code === "permission_denied",
+  );
+  assert.ok(
+    f.repository.audits.some((item) => item.event_type === "expired" && item.outcome === "denied"),
+  );
+  assert.equal(f.repository.audits.filter((item) => item.event_type === "accessed").length, 6);
+});

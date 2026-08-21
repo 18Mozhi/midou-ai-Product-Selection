@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "project": "ScoutOps / 实时选品运营平台",
-  "status": "P00_P08_product_functionally_verified_single_server",
+  "status": "verified",
   "sourceOfTruth": "../new-product-enterprise-blueprint.md",
   "locateCommand": "node scripts/locate_flow_v4.mjs \"<keyword>\"",
   "deliveryPlan": "../plans/README.md",
@@ -91,20 +91,26 @@
       "allCommand": "npm run verify:all",
       "functionalCommand": "npm run verify:functional",
       "codeStyleCommand": "npm run verify:code-style",
+      "staticAnalysisCommand": "npm run verify:static-analysis",
       "codeStyleVerifier": "../scripts/verify-code-style.mjs",
       "repositorySqlPolicy": "all tracked Repository source lines are scanned on every run and must not exceed 160 characters; violations fail as repository_sql_max_line_length_failed even when the Repository was not changed in the current worktree",
-      "workerHandlerBoundary": "apps/worker/src/index.ts owns dependency assembly, non-reentrant polling, logs and priority scheduling only; every business queue handler remains in its independent worker or scheduler module and domain SQL is forbidden in the entrypoint",
+      "workerHandlerBoundary": "apps/worker/src/index.ts owns dependency assembly and structured logs only; apps/worker/src/worker-queue-registry.ts declaratively owns every queue's independent concurrency timeout retry circuit aging and stuck thresholds, queue-scheduler.ts owns cancellation and snapshot-isolated accounting, and every business handler remains in its independent worker or scheduler module with domain SQL forbidden in the entrypoint",
       "frontendApiClientBoundary": "the shared frontend transport owns credentials, request_id, trace_id, write idempotency and standardized server error mapping for both JSON envelopes and raw file responses; every frontend business module is forbidden from calling fetch directly and the boundary test scans all TypeScript and Vue source files",
       "frontendTypecheckBoundary": "build:web must run strict vue-tsc before Vite bundling; the web tsconfig targets ES2022, emits no duplicate output and persists its ignored .web.tsbuildinfo cache so unchanged follow-up checks can reuse compiler state",
       "productionProductCommand": "npm run verify:production-product",
       "userGuide": "../docs/user-guide-ai-selection.md",
-      "functionalScope": "P00-P08 incremental code style gate, software build, functional Node/Python tests, desktop/390 E2E, docs, plans, release matrix and security gate; excludes same-commit deployment evidence, disk diagnostics, production load tests and capacity claims",
+      "functionalScope": "P00-P08 production code style and accessibility/Promise static gates, software build, functional Node/Python tests, desktop/390 E2E, docs, plans, release matrix and security gate; excludes same-commit deployment evidence, disk diagnostics, production load tests and capacity claims",
       "completionProfile": "software",
       "operationalEvidenceRequired": false,
-      "statePersistence": "successful module and phase runs atomically update state; downstream runs reuse completed entries",
+      "statePersistence": "successful module and phase runs atomically update state; downstream runs reuse only entries bound to the same commit and worktree fingerprint",
       "state": "../verification/state.json",
       "reportDirectory": "../.artifacts/verification",
-      "runtimeApiExposed": false
+      "runtimeApiExposed": false,
+      "completionEvidence": {
+        "state": "../verification/state.json",
+        "requiredFields": ["commitSha", "worktreeFingerprint", "completedAt", "evidenceSummary"],
+        "dirtyWorktreeMustBeExplicit": true
+      }
     },
     "configuration": {
       "schema": "../config/schema.json",
@@ -119,16 +125,23 @@
       "requiredVersion": "5.7",
       "requiredCharset": "utf8mb4",
       "runtimeEndpoint": "deferred_to_M00-05",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "redis": {
       "package": "../packages/redis/src/index.ts",
       "liveGate": "../scripts/verify-redis-live.mjs",
       "purposes": ["cache", "queue", "rate", "sse"],
       "keyScope": "scoutops:v1:<purpose>:org:<organization_id>:ws:<workspace_id>:...",
-      "ttlPolicy": { "cache": 300, "queue": 86400, "rate": 60, "sse": 86400 },
+      "ttlPolicy": {
+        "cache": 300,
+        "queue": 86400,
+        "rate": 60,
+        "sse": 86400
+      },
       "runtimeEndpoint": "/api/v1/platform/operations/redis",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "apiFoundation": {
       "entrypoint": "../apps/api/src/app.ts",
@@ -148,7 +161,8 @@
         "trace_id",
         "observed_at"
       ],
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "fileAuditFoundation": {
       "package": "../packages/storage/src/index.ts",
@@ -168,7 +182,8 @@
         "schema_version"
       ],
       "runtimeApi": "deferred_to_identity_authorization_modules",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "baotaS0": {
       "manifest": "../infra/baota/service-manifest.json",
@@ -179,7 +194,8 @@
       "target": "192.168.1.220 /www/wwwroot/ai选品 (domain: midouai.mozhiz.cn)",
       "productionVerifier": "../scripts/verify-baota-deployment.mjs --production",
       "runtimeScope": "one Huizhou host with fixed frontend backend python config runtime backups directories and BaoTa-managed ai选品 Node plus ai选品-python Python 3.12 projects; disk and capacity are not product completion gates",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "localIdentity": {
       "module": "M01-01",
@@ -203,7 +219,8 @@
       "delivery": "AES-256-GCM MySQL outbox; provider selection pending and explicitly blocked",
       "scope": "local email account and own sessions only; MFA and enterprise identity capabilities are tracked separately by M01-02",
       "apiClientBoundary": "local identity and own-session requests use the shared frontend API client; server error message, action hint and request/trace correlation remain visible without exposing tokens",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "mfaIdentityAdapters": {
       "module": "M01-02",
@@ -226,7 +243,8 @@
         "saml2": "reserved_disabled",
         "scim2": "reserved_disabled"
       },
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "tenancyContext": {
       "module": "M01-03",
@@ -246,7 +264,8 @@
       "apiClientBoundary": "membership, workspace, team and context-selection requests use the shared frontend API client; context writes inherit automatic idempotency and correlation",
       "nonGoals": "ordinary-user organization creation, RBAC roles/data scopes, team membership and asynchronous tenancy propagation are deferred to their owning modules",
       "verificationRunId": "e529cce4-28c3-4e6c-947e-38dae71a1d6f",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "authorization": {
       "module": "M01-04",
@@ -272,7 +291,8 @@
       "decisionTruth": "synchronous MySQL allow and deny audit; default deny; frontend display is not authorization",
       "nonGoals": "resource grants are M01-05; custom roles and assignment UI are not exposed in M01-04",
       "verificationRunId": "6547bcfd-4415-4679-8a4f-27b83c07bcb9",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "resourceGrants": {
       "module": "M01-05",
@@ -301,7 +321,8 @@
       "audit": ["created", "extended", "revoked", "expired", "accessed", "access_denied"],
       "async": "not applicable; expiry and access authorization are synchronous MySQL truth",
       "verificationRunId": "3f6d3cb1-a805-4d17-b3f2-84780ebba303",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "auditSecurity": {
       "module": "M01-06",
@@ -323,7 +344,8 @@
       "audit": "synchronous MySQL platform-global or exact-organization events with sanitized metadata and request_id/trace_id",
       "async": "not applicable; seed, security posture and audit authorization are synchronous security truth",
       "verificationRunId": "d33fc9ba-8b96-4042-8252-68d0d3b7f9ee",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "designTokensThemes": {
       "module": "M02-01",
@@ -355,7 +377,8 @@
       "modalAccessibility": "all native business dialogs use one showModal top-layer controller with Escape handling and invoking-control focus return; custom confirmation and responsive filter surfaces explicitly trap focus and restore it when closed",
       "async": "not applicable; preference reads and writes are synchronous and create no Worker, Crawler, queue, file, export, SSE or provider work",
       "verificationRunId": "3c8eef1b-fedd-48fe-9478-b6f38272dccf",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "authOnboardingPages": {
       "module": "M02-02",
@@ -382,7 +405,8 @@
       ],
       "nonGoals": "no phone login, Google, Microsoft or SSO activation; no onboarding persistence; no new API, migration, environment value or production service",
       "verificationRunId": "facffd5e-7749-4831-ac73-9db677b608a8",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "navigationShells": {
       "module": "M02-03",
@@ -423,7 +447,8 @@
       "memberPresentation": "member shell exposes quick theme switching, larger Chinese typography and removes internal guard codes and security implementation slogans from ordinary pages",
       "nonGoals": "no quick-create mutation, new persistence, async service or environment value; platform and organization shells omit member-only search and notification links",
       "verificationRunId": "e0784965-a07b-4eec-84c1-f5e393d7dd27",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "commonUiStates": {
       "module": "M02-04",
@@ -449,7 +474,8 @@
       "imageEvidence": ["concept 72 not-found", "P02 contact sheets and M02-01 design tokens"],
       "nonGoals": "no API request, business mutation, permission inference, persistence, async service or environment value",
       "verificationRunId": "fa7a1180-6dad-4c70-a621-10708aca95a9",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "globalDiscovery": {
       "module": "M02-05",
@@ -461,16 +487,17 @@
       ],
       "routes": ["/api/v1/me/global-search", "/api/v1/me/quick-actions", "/notifications"],
       "scope": "global search uses the server-resolved organization/workspace; quick actions use the explicitly guarded member, organization_admin or platform_admin shell",
-      "searchProjection": "MySQL 5.7 synchronous read model with stable cursor, literal wildcard escaping and internal routes only",
+      "searchProjection": "MySQL 5.7 synchronous read model combines compatible search_documents with live scoped task opportunity evidence and collection-task facts, deduplicates by resource type and id, retains stable cursor and literal wildcard escaping, and emits internal detail routes only",
       "quickCreate": "authorized navigation entries open the owning page's real create state via create=1; the discovery endpoint performs no business mutation or optimistic success",
       "apiClientBoundary": "global search and quick actions use the shared frontend API client and surface the server request_id, trace_id and action_hint without changing the endpoint contract",
-      "async": "not applicable in M02-05; future resource modules synchronously maintain their own search projections",
+      "async": "not applicable; core task opportunity evidence and collection results are read directly so no missing index writer can make them undiscoverable",
       "configuration": "no new environment values; existing VITE_API_BASE_URL only",
       "imageEvidence": [
         "concepts 15 global search, 16 quick create, 17 notification center, 18 message detail"
       ],
       "verificationRunId": "79adb1f9-74ba-42b9-87fb-52b7d32e10a2",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "homeAndMobileShell": {
       "module": "M02-06",
@@ -503,7 +530,8 @@
         "concepts 53-54 mobile"
       ],
       "verificationRunId": "a8ce8e93-5264-441d-983b-fa47cb184a7e",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "providerRegistry": {
       "module": "M03-01",
@@ -512,6 +540,7 @@
         "../apps/api/src/mysql-provider-registry-repository.ts",
         "../apps/api/src/provider-registry-routes.ts",
         "../apps/web/src/components/ProviderRegistry.vue",
+        "../database/migrations/0056_provider_terms_version_expiry.up.sql",
         "../packages/provider-sources/src/public-collection-policy.ts",
         "../apps/worker/src/provider-source-executor.ts"
       ],
@@ -520,7 +549,7 @@
         "/api/v1/platform/providers",
         "/api/v1/platform/providers/{providerId}"
       ],
-      "scope": "platform-global technical definitions; organization and workspace columns are intentionally absent; mobile uses summary cards and a detail drawer while provider UUID code target URL and raw access-mode code stay inside technical details",
+      "scope": "platform-global technical definitions; organization and workspace columns are intentionally absent; create and edit use a four-step basic scope execution compliance drawer with explicit technical templates and API-aligned instant validation so the table and giant form are never shown together; mobile uses summary cards and a detail drawer while provider UUID code target URL and raw access-mode code stay inside technical details",
       "contract": [
         "target URL or stable identifier",
         "access mode",
@@ -538,16 +567,17 @@
         "parser version",
         "healthcheck",
         "owner",
-        "platform terms review status, HTTPS reference and server review time",
+        "platform terms review status, HTTPS reference, version, expiry and server review time",
         "status"
       ],
       "truth": "MySQL 5.7 current definition plus immutable correlated versions and idempotent operations",
       "permission": "authenticated platform provider:configure; same-origin and Idempotency-Key for writes",
-      "async": "public_page and public_rss execution requires approved terms metadata and a same-origin robots.txt preflight before adapter collection; blocked robots remain blocked_robots",
+      "async": "public_page and public_rss execution requires approved terms metadata with a non-empty version and future expiry plus a same-origin robots.txt preflight before adapter collection; missing or expired terms fail closed and blocked robots remain blocked_robots",
       "configuration": "no new environment values or secrets; existing APP_WEB_ORIGIN and MySQL configuration only",
       "imageEvidence": ["concept 62 provider management"],
       "verificationRunId": "fb4fe378-9280-48a6-a0de-d90b0513d33f",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "credentialAssets": {
       "module": "M03-02",
@@ -569,7 +599,7 @@
         "/api/v1/platform/credential-assets/{assetId}/revoke",
         "/api/v1/platform/crawler-profiles"
       ],
-      "scope": "platform-global encrypted credential and crawler profile assets, including Playwright storageState JSON, browser cookie JSON, Netscape cookies.txt, tar.gz browser profiles, direct login-page jump and a restricted ai选品 browser helper that reads the user-selected site's current-browser cookies; cookie domains are validated against the provider target domain; credential rotation completes active renewal work and transactionally requeues a live login-blocked browser job or clones a terminal login-blocked collection task for automatic replay",
+      "scope": "platform-global encrypted credential and crawler profile assets, including Playwright storageState JSON, browser cookie JSON, Netscape cookies.txt, tar.gz browser profiles, direct login-page jump and a restricted ai选品 browser helper that reads the user-selected site's current-browser cookies; cookie domains are validated against the provider target domain; the account-source compatibility matrix derives readiness only from exact provider binding, active unexpired credential metadata and active crawler-profile state without exposing secrets; credential rotation completes active renewal work and transactionally requeues a live login-blocked browser job or clones a terminal login-blocked collection task for automatic replay",
       "encryption": "AES-256-GCM with random nonce, authentication tag, asset/type/key-version AAD and Baota-only master key",
       "loggingBoundary": "credential mutation responses are no-store; API repositories receive only sealed payloads; BaoTa Python crawler events recursively redact cookie credential token authorization secret and master-key fields",
       "responseBoundary": "masked fingerprint and metadata only; no decrypt, export, ciphertext, nonce or auth-tag API",
@@ -584,7 +614,8 @@
       ],
       "imageEvidence": ["concept 68 key rotation and platform security navigation shell"],
       "verificationRunId": "6b01b631-ae6a-4add-a06a-016f989d7411",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "providerAdapters": {
       "module": "M03-03",
@@ -601,7 +632,7 @@
         "/api/v1/platform/provider-adapters",
         "/api/v1/platform/provider-adapters/{providerId}/health-check"
       ],
-      "scope": "platform-global adapter registration and health; collect invocation contract requires organization and workspace scope; mobile uses summary cards with a health-action detail drawer and raw identifiers codes versions and errors stay inside technical details",
+      "scope": "platform-global adapter registration and health; collect invocation contract requires organization and workspace scope; the source health page separates network parser login and succeeded-empty runtime outcomes and shows the truthful 24-hour success rate P95 duration and sample count from completed subqueries; mobile uses summary cards with a health-action detail drawer and raw identifiers codes versions and errors stay inside technical details",
       "contract": ["collect", "normalize", "healthCheck"],
       "failureBoundary": "provider code must have an explicitly registered matching access-mode adapter; otherwise blocked adapter_not_registered",
       "permission": "authenticated platform provider:configure; same-origin and Idempotency-Key for health writes",
@@ -622,7 +653,8 @@
       },
       "imageEvidence": ["concept 62 collection source management table and status layout"],
       "verificationRunId": "c6b206e3-bf39-4d3b-8b00-f7f195eaa999",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "playwrightCrawler": {
       "module": "M03-04",
@@ -640,6 +672,7 @@
         "../database/migrations/0048_browser_collection_jobs.up.sql",
         "../database/migrations/0049_credential_renewal_auto_replay.up.sql",
         "../database/migrations/0050_browser_evidence_artifacts.up.sql",
+        "../database/migrations/0054_crawler_succeeded_empty.up.sql",
         "../apps/web/src/components/CollectionRuntimeCenter.vue"
       ],
       "routes": [
@@ -653,7 +686,7 @@
         "/api/v1/internal/crawler-runtime/jobs/{jobId}/heartbeat",
         "/api/v1/internal/crawler-runtime/jobs/{jobId}/complete"
       ],
-      "scope": "Node Worker owns the business collection task and enqueues one browser_collection_job per authenticated-browser subquery; the BaoTa Python Crawler claims that job, renews the job/profile/single-host leases together, calls the fixed Node Playwright runner and writes the bounded result back to the same task and subquery; evidence-enabled plans return a bounded JPEG screenshot and item DOM fragment with SHA-256 and parser version, which the Worker persists under EVIDENCE_ROOT and links to the browser job, business task and subquery; expired credentials and login-blocked runs create an assigned collection follow-up task linked to the collection task, and a validated credential rotation completes the follow-up then requeues or clones the blocked work for login verification",
+      "scope": "Node Worker owns the business collection task and enqueues one browser_collection_job per authenticated-browser subquery; the BaoTa Python Crawler claims that job, renews the job/profile/single-host leases together, aborts the Playwright child immediately when heartbeat fails, calls the fixed Node Playwright runner and writes the bounded result back to the same task and subquery; failed completion callbacks are retained in a permission-restricted local spool and retried with stable correlation, API faults use bounded exponential backoff with jitter, succeeded_empty remains distinct from succeeded, and sanitized bounded stderr diagnostics are retained in result_json; evidence-enabled plans return a bounded JPEG screenshot and item DOM fragment with SHA-256 and parser version, which the Worker persists under EVIDENCE_ROOT and links to the browser job, business task and subquery; expired credentials and login-blocked runs create an assigned collection follow-up task linked to the collection task, and a validated credential rotation completes the follow-up then requeues or clones the blocked work for login verification",
       "actions": ["bounded search", "pagination", "scroll", "same-allowlist detail pages"],
       "blockedStates": [
         "blocked_login",
@@ -665,7 +698,7 @@
         "dependency_failed"
       ],
       "permission": "authenticated platform collection:replay; same-origin and Idempotency-Key for expired lease recovery",
-      "responseBoundary": "platform monitoring returns profile metadata, lease owner and timing, scoped run counts and correlation only; the service-token-only job claim returns the code-owned plan, encrypted credential record and one-time lease token to the Python Crawler, never plaintext credentials or temporary paths",
+      "responseBoundary": "platform monitoring returns profile metadata, lease owner and timing, latest failure, duplicate-execution risk derived only from lease_expired, scoped run counts and correlation only; the service-token-only job claim returns the code-owned plan, encrypted credential record and one-time lease token to the Python Crawler, never plaintext credentials or temporary paths",
       "integrationBoundary": "test:integration starts a real local Fastify listener and runs the production Python run_once consumer through acquire heartbeat and complete; a separate real Chromium test decrypts a cookie_bundle against a local authenticated source and verifies successful evidence plus blocked_login without external accounts or network",
       "apiClientBoundary": "browser-profile and run reads plus idempotent expired-lease recovery use the shared frontend JSON client while credential and lease-token response boundaries remain unchanged",
       "mobilePresentationBoundary": "at 390px recent runs render as readable summary cards with a right-side detail drawer; complete run, organization, workspace, request, trace and error identifiers appear only in expandable technical details",
@@ -682,7 +715,8 @@
         "PLAYWRIGHT_PROFILE_MAX_FILES",
         "PLAYWRIGHT_NODE_BINARY",
         "PLAYWRIGHT_RUNNER_PATH",
-        "PLAYWRIGHT_RUN_TIMEOUT_SECONDS"
+        "PLAYWRIGHT_RUN_TIMEOUT_SECONDS",
+        "CRAWLER_COMPLETION_SPOOL_ROOT"
       ],
       "downstream": {
         "M03-05": "business collection task queue owns authenticated browser job creation and terminal coverage",
@@ -691,7 +725,8 @@
       },
       "imageEvidence": ["concept 63 collection task monitoring table and status layout"],
       "verificationRunId": "c574a8a1-d7ca-4639-9c36-69067c7c4149",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "collectionTaskStateMachine": {
       "module": "M03-05",
@@ -710,7 +745,7 @@
         "/api/v1/platform/collection/tasks/{taskId}",
         "/api/v1/platform/collection/tasks/{taskId}/replay"
       ],
-      "scope": "organization and workspace scoped task, subquery, attempt, event, outbox and dead-letter truth in MySQL 5.7",
+      "scope": "organization and workspace scoped task, subquery, attempt, event, outbox and dead-letter truth in MySQL 5.7; each Provider subquery is isolated, its result or error is committed with a collection.subquery.completed event immediately, all sibling sources execute, and only then does the Worker apply the existing task-level retry, blocked or terminal policy; task detail shows every subquery retryability and, while retry-scheduled or rate-limited, the shared task available_at explicitly labeled as task-level scheduling rather than fabricating provider-specific backoff",
       "states": [
         "draft",
         "scheduled",
@@ -741,7 +776,7 @@
       "responseBoundary": "task status, coverage, scoped counts, subqueries, attempts, events, dead-letter and correlation; no target_json, lease token or credential",
       "mobilePresentationBoundary": "at 390px collection tasks render as status and evidence summary cards; the detail drawer preserves coverage and missing-field facts, links to the full task detail, and confines complete task, organization, workspace, request and error identifiers to technical details",
       "configuration": ["COLLECTION_TASK_POLL_MS", "COLLECTION_TASK_LEASE_SECONDS"],
-      "runtimeBoundary": "engine and synthetic live verification only; real Provider executor starts at M03-07 and evidence persistence starts at M03-06",
+      "runtimeBoundary": "the state machine owns task leases, task-level retries and terminal coverage while the M03-07 Provider executor persists each subquery outcome independently before returning or raising the aggregate task failure; a single source cannot prevent sibling execution, but MySQL persistence failure still fails closed",
       "liveVerificationClock": "execution-time current clock; historical fixed timestamps are forbidden because the production Worker must not recover a newly-created verification lease as expired",
       "downstream": {
         "M03-06": "raw evidence normalized records and field provenance",
@@ -751,7 +786,8 @@
         "concept 63 collection task monitoring table, filters, coverage and status layout"
       ],
       "verificationRunId": "54e50b9c-b851-461d-ab0a-fc2e12d5fc3c",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "evidenceDataQuality": {
       "module": "M03-06",
@@ -759,6 +795,7 @@
         "../packages/data-quality/src/index.ts",
         "../apps/worker/src/evidence-persistence.ts",
         "../database/migrations/0050_browser_evidence_artifacts.up.sql",
+        "../database/migrations/0057_data_quality_issue_workflow.up.sql",
         "../apps/api/src/data-quality-service.ts",
         "../apps/api/src/mysql-data-quality-repository.ts",
         "../apps/api/src/data-quality-routes.ts",
@@ -768,11 +805,12 @@
         "/platform-admin/data",
         "/api/v1/platform/data-quality",
         "/api/v1/platform/data/evidence/{evidenceId}",
+        "/api/v1/platform/data-quality/issues/batch",
         "/api/v1/platform/data-quality/issues/{issueId}/resolve",
         "/api/v1/platform/data/evidence/{evidenceId}/download-grant",
         "/api/v1/platform/data/evidence/{evidenceId}/download"
       ],
-      "scope": "organization and workspace scoped immutable raw evidence, browser screenshots and DOM fragments linked to task/subquery/job/parser version, versioned normalized records, field provenance, reconciliation, quality issues, events and outbox in MySQL 5.7 plus Baota-controlled evidence files",
+      "scope": "organization and workspace scoped immutable raw evidence, browser screenshots and DOM fragments linked to task/subquery/job/parser version, versioned normalized records, field provenance, reconciliation, quality issues with direct evidence and parser links plus atomic batch attribution active-member assignment and close operations, events and outbox in MySQL 5.7 plus Baota-controlled evidence files",
       "dedupeBoundary": "provider-supplied key scoped by organization workspace and provider; identical content replays, different content conflicts",
       "qualityMetrics": [
         "title_accuracy",
@@ -788,7 +826,7 @@
       ],
       "presentationBoundary": "the quality page surfaces the latest persisted title price currency external-id and canonical-url accuracy metrics plus duplicate ratio and source freshness individually; it preserves threshold sample count and insufficient-sample truth, shows no-data explicitly, and never invents a composite accuracy score",
       "mobilePresentationBoundary": "at 390px evidence and issue tables become summary cards with detail drawers; download, lineage and resolution actions remain reachable, while complete evidence, organization, workspace, hash and correlation identifiers stay inside technical details",
-      "permission": "authenticated platform platform:operate; same-origin Origin, Idempotency-Key and optimistic version for issue resolution; controlled download grants and accesses are audited",
+      "permission": "authenticated platform platform:operate; same-origin Origin, Idempotency-Key and optimistic version for individual or 1-50 atomic batch issue attribution assignment and close operations; assignment requires one active membership valid for every selected issue organization; controlled download grants and accesses are audited",
       "responseBoundary": "metadata, normalized versions, provenance and issues only; no raw content, storage path, credential or cookie outside the integrity-checked download endpoint",
       "configuration": [
         "EVIDENCE_ROOT",
@@ -807,12 +845,16 @@
         "concept 64 system monitoring metrics and status hierarchy"
       ],
       "verificationRunId": "3251d741-ce7e-4737-a4d1-8a3a62ddaaca",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "providerSources": {
       "module": "M03-07",
       "entrypoints": [
         "../packages/provider-sources/src/index.ts",
+        "../packages/provider-sources/src/catalog/index.ts",
+        "../packages/provider-sources/src/parsers/index.ts",
+        "../packages/provider-sources/src/adapters/index.ts",
         "../packages/provider-sources/src/1688-browser-contract.ts",
         "../packages/provider-sources/src/proxy-fetch.ts",
         "../apps/api/src/provider-source-service.ts",
@@ -821,17 +863,21 @@
         "../apps/worker/src/provider-source-executor.ts",
         "../apps/worker/src/automatic-source-scheduler.ts",
         "../apps/web/src/components/ProviderSourceCenter.vue",
+        "../apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
         "../apps/web/src/components/ProviderParserSampleDialog.vue",
         "../database/migrations/0038_remove_official_api_provider_mode.up.sql",
         "../database/migrations/0043_trend_rule_collection_schedule.up.sql",
         "../database/migrations/0051a_provider_parser_samples.up.sql",
         "../database/migrations/0051b_provider_parser_sample_replay_runs.up.sql",
         "../database/migrations/0051c_provider_parser_sample_operations.up.sql",
-        "../database/migrations/0053_provider_configuration_versions.up.sql"
+        "../database/migrations/0053_provider_configuration_versions.up.sql",
+        "../database/migrations/0056_provider_terms_version_expiry.up.sql"
       ],
       "routes": [
         "/platform-admin/providers/sources",
+        "/platform-admin/providers/sources/1688-acceptance",
         "/api/v1/platform/provider-sources",
+        "/api/v1/platform/provider-sources/1688-acceptance",
         "/api/v1/platform/provider-sources/{providerId}/configuration",
         "/api/v1/platform/provider-sources/{providerId}/configuration/versions",
         "/api/v1/platform/provider-sources/{providerId}/configuration/rollbacks",
@@ -854,7 +900,7 @@
         "ec21_supplier_search independent public supplier fallback crawler",
         "1688_search registered authenticated-browser job routing and versioned output contracts for search offers, offer details and suppliers; source remains setup-required and disabled until a real logged-in fixed sample proves field extraction"
       ],
-      "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; 1688 now has a business-linked Worker to Python job claim/heartbeat/complete chain plus fail-closed browser-output schemas, but its live logged-in field extractor has not passed fixed-sample replay, so it remains setup_required and disabled; official_api is removed from the runtime contract and migrated to public_page; no source fabricates platform data",
+      "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; 1688 has a dedicated acceptance page that reports the configured owner and exact pending reasons, and enabling requires an active non-expired browser profile, a successful login-state run that was not captcha-blocked, and a passed fixed-sample replay for the current parser version; official_api is removed from the runtime contract and migrated to public_page; no source fabricates platform data",
       "outboundBoundary": "Every automatic URL and proxy host is derived from the code-owned source catalog; the optional Baota-restricted project HTTP CONNECT proxy accepts only those exact HTTPS hosts without setting global HTTP_PROXY or HTTPS_PROXY; Google News rejects redirects, CSV uses inline content, and callers cannot supply an outbound URL or proxy",
       "limits": "Google RSS 2MB and 20 persisted records per task; Amazon Made-in-China and EC21 public pages 5MB and 20 product records per source task; CSV 1MB exact 8-column header 100 parsed rows and 20 persisted records per task; 1688 browser snapshots accept at most 100 search items and 250KB of bounded DOM evidence per record, with exact HTTPS 1688 host and field-path validation",
       "permission": "provider:configure for catalog, provision and fixing eligible real parser samples; collection:replay for scoped source and fixed-sample replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
@@ -873,13 +919,19 @@
         "COLLECTION_TASK_POLL_MS",
         "COLLECTION_TASK_LEASE_SECONDS",
         "AUTOMATIC_SOURCE_SCHEDULER_POLL_MS",
+        "AUTOMATIC_SOURCE_BATCH_SIZE",
+        "AUTOMATIC_SOURCE_TENANT_ACTIVE_TASK_BUDGET",
+        "AUTOMATIC_SOURCE_QUEUE_BACKLOG_LIMIT",
+        "AUTOMATIC_SOURCE_SYSTEM_ACTOR_ID",
         "EVIDENCE_ROOT",
         "EVIDENCE_MAX_RAW_BYTES"
       ],
-      "runtimeBoundary": "production Worker runs only inside the single Baota Node project and queues business-linked authenticated browser jobs; the Baota Python project claims, heartbeats, executes and writes those jobs back through fixed internal APIs; 1688 normalization is registered but its configuration API rejects enabled status with provider_source_setup_required until real logged-in fixed-sample field replay is accepted; no panel-external service is created",
+      "automaticSchedulingBoundary": "rule-driven and full catalog collection run as separate declarative queues with independent scheduler quotas; due work rotates by next and last schedule plus organization id, a dedicated configured active system user owns created tasks and system audit events, and per-organization active task budgets plus the global collection backlog stop new automatic work before persistence",
+      "runtimeBoundary": "production Worker runs only inside the single Baota Node project and queues business-linked authenticated browser jobs; the Baota Python project claims, heartbeats, executes and writes those jobs back through fixed internal APIs; 1688 normalization is registered but its configuration API rejects enabled status with provider_source_setup_required until login, captcha and current-parser fixed-sample acceptance all pass; no panel-external service is created",
       "imageEvidence": ["concept 62 collection source management catalog, status and actions"],
       "verificationRunId": "9477e2a6-533a-430a-a372-48a69f1878e2",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "trendDomain": {
       "module": "M04-01",
@@ -902,7 +954,7 @@
         "/api/v1/trends/monitoring-rules/{ruleId}"
       ],
       "scope": "organization and workspace scoped manual and automatic trend topics signals timelines keywords follows and monitoring rules",
-      "presentationBoundary": "the trend list precedes the collapsed help panel and exposes source count, source freshness and measured-or-insufficient confidence on every item; follow, monitoring and opportunity conversion remain distinct actions",
+      "presentationBoundary": "the trend list precedes the collapsed help panel and exposes source count, source freshness and measured-or-insufficient confidence on every item; follow, monitoring and opportunity conversion remain distinct actions; relevance changes require an operator reason and the detail returns append-only mark and restore history, while monitoring rules expose the next collection time and failed or blocked sources from the last factual collection task",
       "navigationState": "q market category status sort page topic and section are URL-backed; copied view links restore the same client view without claiming server-side saved-view persistence, and direct topic links load scoped details even outside the current list page",
       "layoutBoundary": "desktop uses an adjustable 32 to 48 percent master list with sticky detail actions; narrow screens use one column and empty filters expose an explicit recovery action",
       "timelineFilter": "trend detail returns aggregate timeline plus source-scoped points grouped by the real provider_id and publisher label so the browser can filter without inventing client-side attribution",
@@ -924,7 +976,8 @@
         "high-resolution core page 05 trend dashboard"
       ],
       "verificationRunId": "e08c99d0-884c-4598-9281-44ac7af5a939",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "opportunityDomain": {
       "module": "M04-02",
@@ -945,12 +998,15 @@
         "/opportunities",
         "/opportunities/{opportunityId}",
         "/api/v1/opportunities",
+        "/api/v1/opportunities/member-options",
+        "/api/v1/opportunities/batch",
         "/api/v1/opportunities/{opportunityId}",
+        "/api/v1/opportunities/{opportunityId}/evidence-completion-tasks",
         "/api/v1/opportunities/{opportunityId}/decisions",
         "/api/v1/opportunities/{opportunityId}/competitor-discovery",
         "/api/v1/imports/erp-products"
       ],
-      "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs; the list filters persisted evidence coverage with coverage_status and adoption blockers with blocking_reason",
+      "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs; the list filters persisted evidence coverage with coverage_status, adoption blockers with blocking_reason, stage with lifecycle_status and eligible owner with owner_id, and supports atomic batch assignment archive and review-task creation",
       "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; blocking reasons are derived only from the same persisted evidence and recommendation fields that enforce adoption, scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese",
       "navigationState": "list filters scope and page are URL-backed; detail tabs use the tab query and every list-to-detail link carries a validated same-origin from path so returning restores the source view",
       "decisionLayout": "detail removes the duplicate large page hero, presents the truthful recommendation first and keeps adopt observe reject plus evidence recovery in a fixed safe-area-aware bottom decision bar",
@@ -960,7 +1016,7 @@
       "productImages": "structured marketplace crawlers extract JSON-LD or linked product image URLs; ERP imports map the confirmed product image field; opportunity list resolves the newest scoped evidence image and otherwise shows an explicit pending-capture placeholder",
       "erpImport": "the restricted browser helper reads the existing ERP Authorization token only inside the logged-in ERP tab and imports immutable evidence, opportunities, actual ASIN competitors and evidence-linked ERP historical-cost supplier candidates; missing MOQ specification lead time and location stay explicit rather than being presented as confirmed quotes",
       "permission": "opportunity:read for scoped reads; existing opportunity:decide for candidate creation and required-reason decisions; same-origin Origin and Idempotency-Key required",
-      "audit": "manual creation, automatic opportunity.candidate.discovered, evidence refresh and decision changes persist correlated opportunity_events and opportunity_outbox; decisions do not rewrite scores or evidence",
+      "audit": "manual creation, automatic opportunity.candidate.discovered, evidence refresh, atomic batch actions, linked evidence-completion tasks and decision changes persist correlated opportunity_events and opportunity_outbox; completing a linked evidence task queues scoring only when an active rule exists, and decisions do not rewrite scores or evidence",
       "configuration": ["OPPORTUNITY_REFRESH_POLL_MS", "OPPORTUNITY_REFRESH_LEASE_SECONDS"],
       "runtimeBoundary": "refresh runs inside the Baota-managed Node Worker; no panel-external production service",
       "imageEvidence": [
@@ -976,7 +1032,8 @@
         "high-resolution core page 06 opportunity dashboard"
       ],
       "verificationRunId": "2b9658d2-eede-49e0-9920-1cd4e26a3fe9",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "scoringEngine": {
       "module": "M04-03",
@@ -1008,7 +1065,8 @@
         "high-resolution core page 06 opportunity dashboard"
       ],
       "verificationRunId": "cc645200-751b-48bf-9da3-ebc8bfa75dec",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "profitCost": {
       "module": "M04-04",
@@ -1043,7 +1101,8 @@
         "high-resolution core page 08 supply and profit decision center"
       ],
       "verificationRunId": "7dcd936b-fb04-438c-96ff-b35241b3d0c2",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "competitorMonitoring": {
       "module": "M04-05",
@@ -1066,7 +1125,7 @@
       ],
       "scope": "organization and workspace scoped competitor identities immutable source snapshots comparison jobs changes threshold rules alerts events and outbox",
       "truthBoundary": "Amazon identities can be added by product URL and are collected from the public product page without an official API; nullable price rank reviews rating and availability remain visibly missing when the page does not expose them, no zero or sample value is substituted, and detail views distinguish the oldest baseline, current snapshot, recorded changes and applicable explicit thresholds while price changes use the currency from their evidence-linked snapshot",
-      "pageFlow": "competitor creation uses link market and confirmation steps over the existing API fields; detail exposes a price and availability timeline, contextual rules, explicit first-collection recovery and external-link warnings, while mobile secondary actions live under a named menu",
+      "pageFlow": "competitor creation uses link market and confirmation steps over the existing API fields; detail exposes a price and availability timeline, contextual rules, explicit first-collection recovery and external-link warnings, and every persisted change can create a high-priority validation task whose description locks the competitor change evidence and observed time before linking to task detail; mobile secondary actions live under a named menu",
       "apiClientBoundary": "competitor lists, details, collection actions, rules and audited deletes use the shared frontend JSON client; rule-list failure remains an optional degradation and does not hide an otherwise available competitor list",
       "permission": "competitor:read for scoped list and full detail; competitor:manage for create collect thresholds pause resume and audited soft delete; auditors remain read only",
       "audit": "user and Worker writes preserve request_id trace_id evidence source references immutable changes and queued downstream delivery state",
@@ -1080,7 +1139,8 @@
         "high-resolution core page 07 competitor dashboard"
       ],
       "verificationRunId": "2e64e54e-620b-4396-848b-223329b916f3",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "sourcingDiscovery": {
       "module": "M04-06",
@@ -1102,8 +1162,8 @@
         "/api/v1/sourcing/purchase-tasks"
       ],
       "scope": "organization and workspace scoped searches projection jobs candidates immutable quote versions comparisons purchase tasks events and outbox",
-      "truthBoundary": "a user search queues independent Made-in-China and EC21 public supplier-page crawlers without official API credentials; supplier title price image source URL and observed time are projected with immutable evidence, opportunity searches expose the joined opportunity name as display_name while retaining input_ref only for traceability, unavailable MOQ specification lead location confidence stability and risk stay explicit until evidence-backed human confirmation, and saved comparisons use one consistent supplier specification MOQ price and lead-time field order; no login-renewal link is fabricated while this domain has only public-page executors",
-      "pageFlow": "the URL-backed master-detail workspace presents search quote comparison and purchase stages; quote cards prioritize price MOQ lead time and an explicitly uncalculated landed cost, missing fields point to quote confirmation, a fixed tray enforces the existing two-to-five quote comparison boundary, and cost rules preserve a validated return path to the current sourcing record",
+      "truthBoundary": "a user search queues independent Made-in-China and EC21 public supplier-page crawlers without official API credentials; supplier title price image source URL and observed time are projected with immutable evidence, opportunity searches expose the joined opportunity name as display_name while retaining input_ref only for traceability, unavailable MOQ specification lead location confidence stability and risk stay explicit until evidence-backed human confirmation, confirmed cards use the immutable current quote MOQ price currency observed time and evidence rather than stale candidate values, and saved comparisons use one consistent supplier specification MOQ price and lead-time field order; no login-renewal link is fabricated while this domain has only public-page executors",
+      "pageFlow": "the URL-backed master-detail workspace presents search quote comparison and purchase stages; detail shows factual collection-task subquery progress and links to the task, quote cards prioritize price MOQ quote freshness lead time and an explicitly uncalculated landed cost, missing fields point to quote confirmation with a scoped searchable evidence selector, a fixed tray enforces the existing two-to-five quote comparison boundary, structured purchase creation locks the quote version MOQ and evidence, and cost rules preserve a validated return path to the current sourcing record",
       "apiClientBoundary": "sourcing searches, details, refreshes, quote and purchase writes, comparisons and audited deletes use the shared frontend JSON client; comparison-history failure remains an optional degradation and does not hide an otherwise available sourcing list",
       "permission": "sourcing:read for scoped lists details and comparison history; supplier_quote:manage for create refresh audited soft delete quote confirmation comparisons and purchase task creation",
       "audit": "writes preserve idempotency request_id trace_id actor immutable evidence references sourcing_events and sourcing_outbox",
@@ -1119,7 +1179,8 @@
         "high-resolution core page 08 supply and profit decision center"
       ],
       "verificationRunId": "eeef7338-db72-4aef-b74c-99bf2d3513b4",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "aiAssistedAnalysis": {
       "module": "M04-07",
@@ -1159,7 +1220,8 @@
         "high-resolution core page 06 opportunity dashboard"
       ],
       "verificationRunId": "1b290819-ac45-4e21-99f0-7d84d844d25e",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "businessTaskCenter": {
       "module": "M05-01",
@@ -1175,13 +1237,14 @@
         "/tasks",
         "/tasks/{taskId}",
         "/api/v1/tasks",
+        "/api/v1/tasks/member-options",
         "/api/v1/tasks/{taskId}",
         "/api/v1/tasks/{taskId}/comments",
         "/api/v1/tasks/{taskId}/actions"
       ],
       "scope": "organization and workspace scoped business tasks with create edit auditable soft-delete start complete cancel delay transfer progress immutable comments events idempotent operations audit and outbox",
       "truthBoundary": "SLA is derived only from persisted due_at; missing upstream deadlines remain not_set and M05-02 approvals M05-03 notifications M05-04 SSE are not fabricated",
-      "pageFlow": "today and all-task lists preserve status and pagination in the URL; independent detail routes carry a validated source return path, expose SLA level deadline and next step, group delete under named secondary actions, and merge persisted events and comments into a time-ordered activity stream while keeping progress stage-first",
+      "pageFlow": "today and all-task lists preserve status and pagination in the URL; independent detail routes carry a validated source return path, expose SLA level deadline and next step, group delete under named secondary actions, and merge persisted events and comments into a time-ordered activity stream while keeping progress stage-first; transfer uses an eligible organization-member selector, delay uses a date-time control, and progress uses a structured audited form",
       "secondaryWorkView": "the all-task route can switch to an URL-backed export-task view that reads the existing report export lifecycle; it does not merge report jobs into or fabricate rows in the business tasks table",
       "apiClientBoundary": "task list, detail, create, edit, comments, progress, soft-delete and single or batch lifecycle actions use the shared frontend API client; each write retains its independent idempotency key",
       "permission": "task:read for reads, task:create for creation, task:update for content progress soft-delete status due and comments, task:assign for transfer",
@@ -1199,7 +1262,8 @@
         "high-resolution core pages 01 and 04"
       ],
       "verificationRunId": "7fad07fb-3b22-4136-8e4a-2d274f0a7cdb",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "approvalWorkflow": {
       "module": "M05-02",
@@ -1219,13 +1283,14 @@
       ],
       "scope": "organization and workspace scoped immutable published templates approval requests evidence and rule snapshots node runs actions idempotent operations audit and outbox",
       "truthBoundary": "requests lock the published template version; opportunity decision requests resolve the decision id to its opportunity and snapshot evidence completeness scoring profit risk rule versions and decision basis; pre-0047 requests are labeled live fallback and task approvals are evidence-not-applicable; approve and reject require reasons; overdue Worker only escalates the active approver and never decides",
-      "pageFlow": "involvement=decidable or requested splits the inbox before pagination while preserving legacy mine semantics; URL-backed status page and approval detail state support notification deep links, and the detail keeps impact scope current node and evidence basis visible before decisions with a validated notification return path",
+      "pageFlow": "involvement=decidable or requested splits the inbox before pagination while preserving legacy mine semantics; URL-backed status page and approval detail state support notification deep links, and the detail keeps impact scope current node and evidence basis visible before decisions with a validated notification return path; publishing a template requires an auditable reason in a version-preview confirmation dialog",
       "permission": "task:read for reads and task:assign for template request and decision writes",
       "configuration": ["APPROVAL_ESCALATION_POLL_MS", "APPROVAL_ESCALATION_LEASE_SECONDS"],
       "runtimeBoundary": "decision context snapshots are captured synchronously by the Baota-managed Node API; overdue node escalation runs only in the unified Baota-managed Node Worker",
       "imageEvidence": ["concept 27 task approval", "concept 60 approval flow"],
       "verificationRunId": "02651953-6607-45cc-ac45-887c9be17b60",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "notifications": {
       "module": "M05-03",
@@ -1256,7 +1321,8 @@
       "runtimeBoundary": "global Outbox projection runs only in the Baota-managed Node Worker; email creates pending_placeholder and no external request",
       "imageEvidence": ["concept 17 notification center", "concept 18 message detail"],
       "verificationRunId": "72378171-fd60-4a38-99ed-ae5fba560eb6",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "realtimeSse": {
       "module": "M05-04",
@@ -1281,7 +1347,8 @@
       "runtimeBoundary": "Baota S0 single-host MySQL polling and process-local connection accounting; no P08 multi-node or 10000-user claim",
       "imageEvidence": ["concept 17 notification center", "concept 18 message detail"],
       "verificationRunId": "3bfab847-b04c-41f1-9817-e1b5fe7c64cb",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "automationRules": {
       "module": "M05-05",
@@ -1295,12 +1362,13 @@
       "routes": [
         "/automations",
         "/api/v1/automations",
+        "/api/v1/automations/preview",
         "/api/v1/automations/{automationRuleId}",
         "/api/v1/automations/{automationRuleId}/actions"
       ],
       "scope": "organization and workspace scoped versioned rules with detail, audited full editing, notification-derived executions, safe actions and idempotent operations",
       "truthBoundary": "rules only consume persisted notification facts; actions notify an owner or create a human task and never approve or change opportunity facts",
-      "pageFlow": "rule cards use an explicit trigger condition action sequence and show the latest execution status time and translated failure reason; creation offers editable business templates, while execution history links real created tasks and the persisted triggering notification source chain without routing platform alerts into the member automation surface",
+      "pageFlow": "rule cards use an explicit trigger condition action sequence and show the latest execution status time and translated failure reason; creation offers editable business templates and a read-only dry run with 30-day matches rate-window impact and real notification samples, while execution history links real created tasks and the persisted triggering notification source chain without routing platform alerts into the member automation surface",
       "permission": "team:manage for reads and writes with active current context",
       "configuration": [
         "AUTOMATION_POLL_MS",
@@ -1315,7 +1383,8 @@
         "concept 44 competitor monitoring rules"
       ],
       "verificationRunId": "d64fe7a4-2994-4ca5-9ad0-76de628bf058",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "reportsExports": {
       "module": "M05-06",
@@ -1353,7 +1422,8 @@
         "concept 52 team report"
       ],
       "verificationRunId": "90080589-18ad-4777-b46f-fb1941dfd2ad",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "organizationAdmin": {
       "module": "M06-01",
@@ -1396,7 +1466,8 @@
         "high resolution 09 organization administration dashboard"
       ],
       "verificationRunId": "1216cb8f-3a77-43d8-ac72-70c36ef4a9d5",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "platformAccountManagement": {
       "module": "M06-01/M06-02 corrective completion",
@@ -1441,7 +1512,8 @@
         "high resolution 10 platform operations cockpit",
         "concept 62 collection source management"
       ],
-      "status": "implemented_pending_live_verification"
+      "status": "implemented",
+      "statusDetail": "implemented_pending_live_verification"
     },
     "platformDashboard": {
       "module": "M06-02",
@@ -1451,6 +1523,7 @@
         "../apps/api/src/platform-dashboard-routes.ts",
         "../apps/web/src/components/PlatformDashboard.vue",
         "../apps/web/src/components/PlatformManagementCenter.vue",
+        "../apps/web/src/components/PlatformLogCenter.vue",
         "../apps/web/src/components/PlatformManagementRecordList.vue",
         "../apps/web/src/components/PlatformMessageWorkbench.vue",
         "../apps/web/src/components/PlatformMessageEditor.vue",
@@ -1467,6 +1540,7 @@
         "/platform-admin/content",
         "/platform-admin/notifications",
         "/platform-admin/status",
+        "/platform-admin/logs",
         "/api/v1/platform/dashboard",
         "/api/v1/platform/management",
         "/api/v1/platform/management/data/exports",
@@ -1476,7 +1550,7 @@
         "/api/v1/platform/management/messages/{messageId}/actions",
         "/api/v1/platform/management/email/{source}/{deliveryId}/actions"
       ],
-      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, plus unified backend database cache file task-processing and crawler status management with dedicated operations links; dashboard mobile provider health and platform data governance content notification or retained email records use summary cards with detail drawers, mobile filters use a state-preserving drawer, and provider alert-scope record version request identifiers raw delivery values or error codes stay inside technical details or API values rather than primary UI copy",
+      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, unified backend database cache file task-processing and crawler status management with dedicated operations links, plus a bounded cross-runtime chain-log search across API audit, Worker task and crawler run events; dashboard mobile provider health and platform data governance content notification or retained email records use summary cards with detail drawers, mobile filters use a state-preserving drawer, and provider alert-scope record version request identifiers raw delivery values or error codes stay inside technical details or API values rather than primary UI copy",
       "truthBoundary": "no sample remains unknown or null; no credentials, payloads, internal file paths or invented uptime and capacity claims; /platform-admin/email and all email enable controls stay closed while Mail provider is pending_provider_selection",
       "permission": "platform:operate on the API; platform role navigation guard on the page; dashboard reads and platform data exports write correlated platform audit events",
       "configuration": [
@@ -1484,13 +1558,14 @@
         "PLATFORM_DASHBOARD_QUEUE_WARNING",
         "PLATFORM_DASHBOARD_ERROR_LIMIT"
       ],
-      "runtimeBoundary": "synchronous MySQL 5.7 read model under Baota Node API; persisted topology and resilience observations are reused, observations older than five minutes are explicitly stale, and no dashboard daemon or server-side service is created",
+      "runtimeBoundary": "synchronous MySQL 5.7 read model under Baota Node API; chain-log search reuses the indexed request_id and trace_id columns in platform_audit_events, collection_task_events and crawler_browser_runs, returns at most 200 normalized rows without raw metadata, payloads or credentials; persisted topology and resilience observations are reused, observations older than five minutes are explicitly stale, and no dashboard daemon or server-side service is created",
       "imageEvidence": [
         "concept 61 platform operations overview",
         "high resolution 10 platform operations cockpit"
       ],
       "verificationRunId": "d424c7a8-eb72-4ddd-b9aa-3ce93ffbbe96",
-      "status": "implemented_pending_full_verification"
+      "status": "implemented",
+      "statusDetail": "implemented_pending_full_verification"
     },
     "collectionOperationsConsole": {
       "module": "M06-03",
@@ -1513,7 +1588,8 @@
         "concept 64 system monitoring"
       ],
       "verificationRunId": "808ea175-55fc-483f-a1c2-eec161fcf9bd",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "securityOperations": {
       "module": "M06-04",
@@ -1537,7 +1613,8 @@
         "concept 68 key rotation"
       ],
       "verificationRunId": "b13e605b-9566-4d84-bd8f-71af496bce32",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "openPlatform": {
       "module": "M06-05",
@@ -1573,7 +1650,8 @@
       "runtimeBoundary": "Baota S0 Node API and Node Worker; HTTPS-only per-attempt DNS and private-range rejection; 60/300/900 retry and fourth-attempt dead letter; no multi-node claim",
       "imageEvidence": ["concept 67 token management", "concept 68 key rotation"],
       "verificationRunId": "5fdcf027-016b-47d2-938a-4f268a339fb4",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "commercialOperations": {
       "module": "M06-06",
@@ -1598,7 +1676,8 @@
       "runtimeBoundary": "synchronous Baota Node API reads plus existing organization outbox; no new Worker Crawler daemon or multi-node claim",
       "imageEvidence": ["concept 70 billing plans", "concept 71 plan comparison"],
       "verificationRunId": "934c8c7b-0e66-4856-9c47-8b40a331bb3a",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "releaseTestMatrix": {
       "module": "M07-01",
@@ -1613,7 +1692,7 @@
       "scope": "P00-P06 role source collection task quality desktop mobile performance and security regression matrix",
       "runtimeBoundary": "local CI or Baota-controlled release task only; no production API table page permission daemon or multi-node claim",
       "browserGroups": ["p00", "p01", "p02", "p03", "p04", "p05", "p06"],
-      "e2eTruthBoundary": "a real API screenshot case reaches Fastify without page.route; screenshot calls in files with route interception are capped at 84 percent and remain visual-only; member and platform mobile shells share a zero-overlap bottom-navigation probe",
+      "e2eTruthBoundary": "at least two real API screenshot cases reach Fastify without page.route and cover readiness plus release identity; screenshot calls in files with route interception stay below 50 percent and remain visual-only; member and platform mobile shells share a zero-overlap bottom-navigation probe",
       "performanceTargets": {
         "lcpMs": 2500,
         "inpMs": 200,
@@ -1628,7 +1707,8 @@
         "concept 72 not found"
       ],
       "verificationRunId": "f12a7160-90ba-437c-9e6f-fc23149b9077",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "securityGate": {
       "module": "M07-02",
@@ -1644,7 +1724,8 @@
       ],
       "configuration": ["VERIFY_COMMAND_TIMEOUT_MS", "VERIFY_REPORT_DIR"],
       "verificationRunId": "3bd453d5-0016-418e-8c33-e42132341def",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "baotaProductionDeployment": {
       "module": "M07-03",
@@ -1661,7 +1742,8 @@
       "truthBoundary": "same-commit production evidence, local-only private services and sanitized health; before reading Windows credentials or uploading, the fixed-layout deployer requires an ignored ownership manifest that exactly assigns every commit and changed path from an ancestor release base to current HEAD, rejecting missing duplicate extra cross-package or drifted assignments; it has no current or releases migration or deletion branch and fails closed on unsupported root entries before stopping Node; no P08 capacity claim",
       "configuration": ["APP_VERSION", "BUILD_SHA", "WEB_ORIGIN"],
       "verificationRunId": "950732f7-9b5a-4d4a-b271-d5ec0cf975d9",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "backupRecovery": {
       "module": "M07-04",
@@ -1702,7 +1784,8 @@
         "desktop and 390 recovery states"
       ],
       "verificationRunId": "d1ede17d-0f7b-4f42-b80c-2d5dac118651",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "releaseRollout": {
       "module": "M07-05",
@@ -1725,7 +1808,7 @@
         "/api/v1/platform/operations/releases",
         "/api/v1/platform/operations/releases/write-probe"
       ],
-      "scope": "当前发布使用固定目录和单一宝塔 Node 后端；旧双槽渐进发布仅保留为只读审计事实",
+      "scope": "当前发布使用固定目录和单一宝塔 Node 后端；部署器要求 main 工作树干净、本地 HEAD 与批准的 origin/main 完全一致，并拒绝不属于当前批准仓库祖先历史的生产 BUILD_SHA；旧双槽渐进发布仅保留为只读审计事实",
       "presentationBoundary": "历史门禁事实使用桌面表格和移动摘要卡片加详情抽屉；门禁 ID 类型 发布 ID 阻断代码和请求 ID 仅在折叠技术详情中展示，用户状态统一显示中文",
       "executionStatus": "historical_disabled_by_single_node_topology",
       "currentDeploymentEntrypoint": "../scripts/deploy-baota.py",
@@ -1739,7 +1822,34 @@
         "pythonProjectName": "ai选品-python",
         "persistentCandidateProjects": 0
       },
-      "truthBoundary": "verified only from a manually triggered single rollout instance holding the MySQL session named lock, a distinct immutable release attempt, current release gates with at least 30 minutes per stage, real Baota Nginx candidate samples reached through 127.0.0.1 while preserving the production TLS/SNI/Host and certificate validation so public-IP hairpin availability cannot pollute the result, proxy-safe HMAC candidate writes returning 202 with exact candidate-build persistence parity, current build identity, and due or expired work from the explicit Baota Worker-consumed MySQL queue list; a second instance fails closed as release_rollout_lock_busy before migration, gate or Nginx mutation; queue DATETIME(3) due and lag comparisons use the same MySQL session NOW(3) clock as the Worker so a non-UTC MySQL system timezone cannot create fixed-offset false backlog; domain audit or future-delivery outboxes without a runtime consumer are preserved but are not executable queue lag, while the 60-second stop threshold remains unchanged; live MySQL verification uses UTC_TIMESTAMP(3) only for its execution-time unique release probe so process timezone or an existing newer production release cannot shadow it, then cleans all probe rows; Linux visual verification also fails closed unless the configured Chromium is executable and fontconfig reports a Chinese font, so tofu screenshots cannot become baselines; no backup server or P08 capacity claim",
+      "truthBoundary": "the current page reports the deployment-captured local SHA, approved remote main SHA and running production SHA together; only release evidence whose build SHA, app version and config fingerprint match the current runtime can verify it, so an older historical SHA never proves the current version. The fixed-layout deployer also requires /health/ready, /health/available and /health/version after restart. Historical rollout evidence was verified only from a manually triggered single rollout instance holding the MySQL session named lock, a distinct immutable release attempt, current release gates with at least 30 minutes per stage, real BaoTa Nginx candidate samples, proxy-safe HMAC writes and current build identity; no backup server or P08 capacity claim.",
+      "configuration": [
+        "PLAYWRIGHT_API_PORT",
+        "PLAYWRIGHT_WEB_PORT",
+        "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
+        "RELEASE_CANARY_OBSERVE_SECONDS",
+        "RELEASE_SAMPLE_INTERVAL_SECONDS",
+        "RELEASE_MINIMUM_CANDIDATE_SAMPLES",
+        "RELEASE_EVIDENCE_MAX_AGE_MINUTES",
+        "RELEASE_5XX_STOP_BASIS_POINTS",
+        "RELEASE_READ_P95_STOP_MS",
+        "RELEASE_WRITE_P95_STOP_MS",
+        "RELEASE_ASYNC_LAG_STOP_SECONDS",
+        "RELEASE_PROBE_SIGNING_KEY",
+        "RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS",
+        "RELEASE_ROLLOUT_LOCK_NAME",
+        "RELEASE_ROOT",
+        "RELEASE_PRODUCTION_EVIDENCE_FILE",
+        "RELEASE_STABLE_API_PORT",
+        "RELEASE_CANDIDATE_API_PORT",
+        "RELEASE_CANDIDATE_BASE_URL",
+        "RELEASE_PUBLIC_BASE_URL",
+        "RELEASE_PUBLIC_CONNECT_ADDRESS",
+        "RELEASE_NGINX_BIN",
+        "RELEASE_NGINX_SITE_CONFIG",
+        "RELEASE_NGINX_SPLIT_CONFIG",
+        "RELEASE_NGINX_TIMING_LOG"
+      ],
       "concurrencyPolicy": {
         "description": "宝塔任务仅手工触发；禁止自动日调度；MySQL 会话级命名锁忙时以 release_rollout_lock_busy 失败关闭",
         "taskTrigger": "manual_only",
@@ -1783,33 +1893,6 @@
         "historicalRowsMutated": false
       },
       "permission": "platform:operate protects the browser read API; the write probe requires a short-lived HMAC request from the Baota rollout task and is not a user-session API; release, automatic stop and rollback execute only in the Baota scheduled task; the existing local product_scout MySQL account has global REPLICATION CLIENT solely so the task can verify SHOW MASTER STATUS",
-      "configuration": [
-        "PLAYWRIGHT_API_PORT",
-        "PLAYWRIGHT_WEB_PORT",
-        "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
-        "RELEASE_CANARY_OBSERVE_SECONDS",
-        "RELEASE_SAMPLE_INTERVAL_SECONDS",
-        "RELEASE_MINIMUM_CANDIDATE_SAMPLES",
-        "RELEASE_EVIDENCE_MAX_AGE_MINUTES",
-        "RELEASE_5XX_STOP_BASIS_POINTS",
-        "RELEASE_READ_P95_STOP_MS",
-        "RELEASE_WRITE_P95_STOP_MS",
-        "RELEASE_ASYNC_LAG_STOP_SECONDS",
-        "RELEASE_PROBE_SIGNING_KEY",
-        "RELEASE_PROBE_TIMESTAMP_TOLERANCE_SECONDS",
-        "RELEASE_ROLLOUT_LOCK_NAME",
-        "RELEASE_ROOT",
-        "RELEASE_PRODUCTION_EVIDENCE_FILE",
-        "RELEASE_STABLE_API_PORT",
-        "RELEASE_CANDIDATE_API_PORT",
-        "RELEASE_CANDIDATE_BASE_URL",
-        "RELEASE_PUBLIC_BASE_URL",
-        "RELEASE_PUBLIC_CONNECT_ADDRESS",
-        "RELEASE_NGINX_BIN",
-        "RELEASE_NGINX_SITE_CONFIG",
-        "RELEASE_NGINX_SPLIT_CONFIG",
-        "RELEASE_NGINX_TIMING_LOG"
-      ],
       "configurationStatus": "historical rollout settings retained for audit and rollback archaeology; not current production deployment inputs",
       "browserHostPrerequisite": {
         "chromium": "/usr/bin/chromium",
@@ -1864,7 +1947,8 @@
         "durableWriteSamples": [105, 446, 1771]
       },
       "verificationRunId": "0784e022-93e4-421d-9524-ef818ecfcda1",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "selectionAcceptance": {
       "module": "M07-06",
@@ -1943,7 +2027,8 @@
         "evidenceViewed": true
       },
       "verificationRunId": "78001216-8e65-44fb-81cf-9570f9f9534b",
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "runtimeTopology": {
       "module": "M08-01",
@@ -1953,6 +2038,7 @@
         "../apps/api/src/mysql-runtime-topology-repository.ts",
         "../apps/api/src/runtime-topology-routes.ts",
         "../apps/worker/src/queue-scheduler.ts",
+        "../apps/worker/src/worker-queue-registry.ts",
         "../apps/worker/src/worker-scheduler-state.ts",
         "../apps/web/src/components/RuntimeTopologyCenter.vue",
         "../infra/baota/single-server-manifest.json",
@@ -1964,8 +2050,8 @@
         "/api/v1/health/nodes",
         "/api/v1/platform/operations/topology"
       ],
-      "scope": "M08-01 configured single-host API heartbeat, unified priority Worker scheduler with bounded concurrency and backpressure, BaoTa single-upstream Nginx evidence, sanitized health and audited operations view",
-      "truthBoundary": "live proves only the API process, ready proves synchronous dependencies, available additionally requires a fresh running Worker scheduler; runtime status exposes queue delay, recent failure rate, backpressure, heartbeat expiry and restart-loop alerts without task payloads or secrets",
+      "scope": "M08-01 configured single-host API heartbeat, declarative Worker queues with independent concurrency timeout retry circuit aging and stuck thresholds plus bounded global concurrency and backpressure, BaoTa single-upstream Nginx evidence, sanitized health and audited operations view",
+      "truthBoundary": "live proves only the API process, ready proves synchronous dependencies, available additionally requires a fresh running Worker scheduler; runtime status exposes queue delay, active runtime, suspected stuck runs, queue circuits, retries, timeout counts, snapshot publication failures, recent failure rate, backpressure, heartbeat expiry and restart-loop alerts without task payloads or secrets; snapshot publication failure never changes a business run result",
       "apiClientBoundary": "the platform runtime topology read uses the shared frontend JSON client and preserves distinct expired forbidden rate-limited and unavailable states with correlated action hints",
       "permission": "public health returns sanitized counts; the operations view requires platform:operate and records request_id trace_id read audit",
       "configuration": [
@@ -1980,6 +2066,8 @@
         "WORKER_SCHEDULER_TICK_MS",
         "WORKER_SCHEDULER_STATE_FILE",
         "WORKER_SCHEDULER_STALE_AFTER_SECONDS",
+        "BACKEND_CHILD_READINESS_TIMEOUT_SECONDS",
+        "BACKEND_CHILD_READINESS_POLL_MS",
         "SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE"
       ],
       "runtimeBoundary": "the current Huizhou BaoTa host is the permanent S0 production topology; all backend ports remain private and no load balancer, backup server, panel-external service, multi-node or 10000-user claim is allowed",
@@ -1991,7 +2079,7 @@
         "four reviewed Linux Chromium desktop and 390 single-server runtime baselines"
       ],
       "latestMysqlLiveEvidence": {
-        "status": "mysql_live_passed",
+        "status": "verified",
         "manager": "baota_finite_task",
         "baseReleaseBuildSha": "a4c2695d3a0071201ad066b22caca5631271eac1",
         "migration": "0030_load_balancing_m08_01.up.sql",
@@ -2000,7 +2088,8 @@
         "heartbeatAppendCount": 2,
         "probeCleanup": "passed",
         "capturedAt": "2026-08-14T03:50:32.133Z",
-        "sha256": "57b71ffd1eb836c8bcb9f39f70243d5bf3393b16af6149f9d8bd88016d15a088"
+        "sha256": "57b71ffd1eb836c8bcb9f39f70243d5bf3393b16af6149f9d8bd88016d15a088",
+        "statusDetail": "mysql_live_passed"
       },
       "latestProductionEvidence": {
         "buildSha": "b55f7f814d7153e6a4a7958eb41a9bf6ff1e60e8",
@@ -2015,7 +2104,8 @@
       "loadBalancingEnabled": false,
       "backupServerUsed": false,
       "multiNodeClaim": false,
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "redisResilience": {
       "module": "M08-02",
@@ -2069,7 +2159,8 @@
       "capacityClaim": "unverified",
       "loadBalancingEnabled": false,
       "backupServerUsed": false,
-      "status": "module_verified"
+      "status": "verified",
+      "statusDetail": "module_verified"
     },
     "mysqlResilience": {
       "module": "M08-03",
@@ -2134,11 +2225,12 @@
         "candidateStopped": true
       },
       "verificationRunId": "e10ac4cc-c9b2-4ed8-aa80-c201d59911a5",
-      "status": "module_verified",
+      "status": "verified",
       "capacityClaim": "unverified",
       "loadBalancingEnabled": false,
       "replicaEnabled": false,
-      "backupServerUsed": false
+      "backupServerUsed": false,
+      "statusDetail": "module_verified"
     },
     "fileResilience": {
       "module": "M08-04",
@@ -2188,22 +2280,25 @@
         "candidateStopped": true
       },
       "verificationRunId": "db0d5d96-d5c7-43e9-8190-a7cff7775129",
-      "status": "module_verified",
+      "status": "verified",
       "capacityClaim": "unverified",
       "sharedStorageEnabled": false,
       "loadBalancingEnabled": false,
-      "backupServerUsed": false
+      "backupServerUsed": false,
+      "statusDetail": "module_verified"
     },
     "crawlerSingleHostScheduler": {
       "module": "M08-05",
       "entrypoints": [
         "../database/migrations/0034_crawler_scheduler_m08_05.up.sql",
+        "../database/migrations/0055_provider_runtime_circuits.up.sql",
         "../apps/api/src/crawler-scheduler-service.ts",
         "../apps/api/src/crawler-scheduler-repository.ts",
         "../apps/api/src/crawler-scheduler-probe.ts",
         "../apps/api/src/crawler-scheduler-routes.ts",
         "../apps/worker/src/single-host-resource-probe.ts",
         "../apps/worker/src/collection-task-worker.ts",
+        "../apps/worker/src/provider-source-executor.ts",
         "../apps/api/src/mysql-crawler-runtime-repository.ts",
         "../apps/web/src/components/CrawlerSchedulerCenter.vue",
         "../infra/baota/crawler-single-host-scheduler-manifest.json",
@@ -2212,9 +2307,10 @@
       "routes": [
         "/platform-admin/crawler-scheduler",
         "/api/v1/platform/operations/crawler-scheduler",
-        "/api/v1/platform/operations/crawler-scheduler/recover-expired"
+        "/api/v1/platform/operations/crawler-scheduler/recover-expired",
+        "/api/v1/platform/operations/crawler-scheduler/providers/:providerId/recover"
       ],
-      "scope": "M08-05 current Huizhou BaoTa single-host Crawler and Worker scheduling with one global slot each, provider effective concurrency one, exclusive browser profiles, MySQL lease truth and host resource stop gates",
+      "scope": "M08-05 current Huizhou BaoTa single-host Crawler and Worker scheduling with one global slot each, provider effective concurrency one, exclusive browser profiles, source-isolated runtime circuits and recovery evidence, queue wait percentiles, 24-hour throughput/failure trend, MySQL lease truth and host resource stop gates",
       "truthBoundary": "ready requires exactly one supervised Node Worker and one separately BaoTa-managed Python Crawler process observed from Linux process facts, no global provider or profile lease overflow, a current resource observation below the fixed stop gates and MySQL 5.7 as lease truth",
       "leaseAssociationBoundary": "the operations API reads up to 100 active crawler_scheduler_leases and links each slot to its logical Node Worker or Python Crawler role, collection task status, provider name, heartbeat and expiry; task run process and slot identifiers stay inside technical details, while scope IDs targets tokens hashes credentials and payloads remain excluded",
       "queueCapacityBoundary": "each enabled provider reports active versus effective concurrency plus distinct collection tasks whose available_at is already due in scheduled queued retry_scheduled or rate_limited state and the longest due wait in seconds; future backoff tasks are excluded and no capacity claim is inferred",
@@ -2253,14 +2349,15 @@
         "candidateStopped": true
       },
       "verificationRunId": "a6e9e5d7-dffd-4732-8706-29cd9cdc6ecb",
-      "status": "module_verified",
+      "status": "verified",
       "capacityClaim": "unverified",
       "maximumWorkers": 1,
       "maximumCrawlers": 1,
       "maximumProviderConcurrency": 1,
       "loadBalancingEnabled": false,
       "backupServerUsed": false,
-      "multiNode": false
+      "multiNode": false,
+      "statusDetail": "module_verified"
     },
     "capacityBoundary": {
       "module": "M08-06",
@@ -2320,59 +2417,68 @@
         "desktop and 390 capacity baselines"
       ],
       "verificationRunId": "29af24e4-2ff4-467a-9676-b49cae9b8b14",
-      "status": "software_complete_capacity_out_of_scope",
+      "status": "verified",
       "capacityClaim": "unverified",
       "planningUsers": 100,
       "planningConcurrentUsers": [5, 20],
       "loadBalancingEnabled": false,
       "backupServerUsed": false,
-      "multiNode": false
+      "multiNode": false,
+      "statusDetail": "software_complete_capacity_out_of_scope"
     }
   },
   "phaseVerification": {
     "P01": {
       "runId": "5e4da53f-25ab-4e60-9850-516590896fe0",
-      "status": "phase_verified",
-      "modules": ["M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06"]
+      "status": "verified",
+      "modules": ["M01-01", "M01-02", "M01-03", "M01-04", "M01-05", "M01-06"],
+      "statusDetail": "phase_verified"
     },
     "P02": {
       "runId": "f7b41287-a3cd-442a-a212-7a1dd4edf828",
-      "status": "phase_verified",
-      "modules": ["M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06"]
+      "status": "verified",
+      "modules": ["M02-01", "M02-02", "M02-03", "M02-04", "M02-05", "M02-06"],
+      "statusDetail": "phase_verified"
     },
     "P03": {
       "runId": "01b8e9ff-d2c4-4a5a-80b3-673ee96dbea7",
-      "status": "phase_verified",
-      "modules": ["M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07"]
+      "status": "verified",
+      "modules": ["M03-01", "M03-02", "M03-03", "M03-04", "M03-05", "M03-06", "M03-07"],
+      "statusDetail": "phase_verified"
     },
     "P04": {
       "runId": "9bd7c0f3-2430-4262-aac0-1f06bc014fc9",
-      "status": "phase_verified",
-      "modules": ["M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06", "M04-07"]
+      "status": "verified",
+      "modules": ["M04-01", "M04-02", "M04-03", "M04-04", "M04-05", "M04-06", "M04-07"],
+      "statusDetail": "phase_verified"
     },
     "P05": {
       "runId": "71c1ae8e-c2b0-4e3e-aecb-398bac55fefa",
-      "status": "phase_verified",
-      "modules": ["M05-01", "M05-02", "M05-03", "M05-04", "M05-05", "M05-06"]
+      "status": "verified",
+      "modules": ["M05-01", "M05-02", "M05-03", "M05-04", "M05-05", "M05-06"],
+      "statusDetail": "phase_verified"
     },
     "P06": {
       "runId": "e1ab135d-20f6-450a-90c0-de9746ef6575",
-      "status": "phase_verified",
-      "modules": ["M06-01", "M06-02", "M06-03", "M06-04", "M06-05", "M06-06"]
+      "status": "verified",
+      "modules": ["M06-01", "M06-02", "M06-03", "M06-04", "M06-05", "M06-06"],
+      "statusDetail": "phase_verified"
     },
     "P07": {
       "runId": "7b806598-f47a-4448-b09e-4e70fecc6113",
-      "status": "phase_verified",
+      "status": "verified",
       "buildSha": "a4c2695d3a0071201ad066b22caca5631271eac1",
       "reportSha256": "b53ad84fb7a84a90aa477753d9588da153a17d700dc97883fa0a766400ce1786",
       "closureSha256": "bfbd6debf9bd0b6734533e8afe7b24062ad0918d36ca4b65b4f90b819f122a7b",
-      "modules": ["M07-01", "M07-02", "M07-03", "M07-04", "M07-05", "M07-06"]
+      "modules": ["M07-01", "M07-02", "M07-03", "M07-04", "M07-05", "M07-06"],
+      "statusDetail": "phase_verified"
     },
     "P08": {
       "runId": "ed48aa0b-d6fc-493e-9842-c95a473e18a2",
       "allRunId": "39a427ac-a8ff-41f0-816b-e5052a4d5b64",
-      "status": "phase_verified_software_complete_capacity_out_of_scope",
-      "modules": ["M08-01", "M08-02", "M08-03", "M08-04", "M08-05", "M08-06"]
+      "status": "verified",
+      "modules": ["M08-01", "M08-02", "M08-03", "M08-04", "M08-05", "M08-06"],
+      "statusDetail": "phase_verified_software_complete_capacity_out_of_scope"
     }
   },
   "uiReference": {
@@ -2443,169 +2549,197 @@
       "path": "/settings/theme",
       "view": "ThemeStudio",
       "domain": "personal-preferences",
-      "status": "M02-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M02-01_module_verified"
     },
     {
       "path": "/work",
       "view": "TaskWorkspace",
       "domain": "tasks",
-      "status": "M05-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M05-01_module_verified"
     },
     {
       "path": "/trends",
       "view": "TrendDashboard",
       "domain": "trends",
-      "status": "M04-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M04-01_module_verified"
     },
     {
       "path": "/opportunities",
       "view": "OpportunityWorkspace",
       "domain": "opportunities",
-      "status": "M04-02_module_verified"
+      "status": "verified",
+      "statusDetail": "M04-02_module_verified"
     },
     {
       "path": "/opportunities/start",
       "view": "SelectionJourney",
       "domain": "selection_acceptance",
-      "status": "M07-06_module_verified"
+      "status": "verified",
+      "statusDetail": "M07-06_module_verified"
     },
     {
       "path": "/opportunities/{opportunityId}",
       "view": "OpportunityWorkspace",
       "domain": "opportunities",
-      "status": "M04-04_profit_analysis_verified"
+      "status": "verified",
+      "statusDetail": "M04-04_profit_analysis_verified"
     },
     {
       "path": "/opportunities/scoring-rules",
       "view": "ScoreRuleConsole",
       "domain": "opportunities",
-      "status": "M04-03_module_verified"
+      "status": "verified",
+      "statusDetail": "M04-03_module_verified"
     },
     {
       "path": "/competitors",
       "view": "CompetitorMonitor",
       "domain": "competitors",
-      "status": "M04-05_module_verified"
+      "status": "verified",
+      "statusDetail": "M04-05_module_verified"
     },
     {
       "path": "/sourcing",
       "view": "SourcingWorkspace",
       "domain": "sourcing",
-      "status": "M04-06_module_verified"
+      "status": "verified",
+      "statusDetail": "M04-06_module_verified"
     },
     {
       "path": "/sourcing/cost-rules",
       "view": "CostRuleConsole",
       "domain": "sourcing",
-      "status": "M04-04_module_verified"
+      "status": "verified",
+      "statusDetail": "M04-04_module_verified"
     },
     {
       "path": "/tasks",
       "view": "TaskWorkspace",
       "domain": "tasks",
-      "status": "M05-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M05-01_module_verified"
     },
     {
       "path": "/tasks/{taskId}",
       "view": "TaskWorkspace",
       "domain": "tasks",
-      "status": "explicit_detail_route_implemented"
+      "status": "implemented",
+      "statusDetail": "explicit_detail_route_implemented"
     },
     {
       "path": "/tasks/approvals",
       "view": "ApprovalWorkspace",
       "domain": "approvals",
-      "status": "M05-02_module_verified"
+      "status": "verified",
+      "statusDetail": "M05-02_module_verified"
     },
     {
       "path": "/notifications",
       "view": "NotificationCenter",
       "domain": "notifications",
-      "status": "M05-03_module_verified"
+      "status": "verified",
+      "statusDetail": "M05-03_module_verified"
     },
     {
       "path": "/automations",
       "view": "AutomationRuleCenter",
       "domain": "automation-rules",
-      "status": "M05-05_module_verified"
+      "status": "verified",
+      "statusDetail": "M05-05_module_verified"
     },
     {
       "path": "/reports",
       "view": "ReportCenter",
       "domain": "reports-exports",
-      "status": "M05-06_module_verified"
+      "status": "verified",
+      "statusDetail": "M05-06_module_verified"
     },
     {
       "path": "/org-admin",
       "view": "OrganizationAdminCenter",
       "domain": "organization",
-      "status": "M06-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
     },
     {
       "path": "/org-admin/members",
       "view": "OrganizationAdminCenter",
       "domain": "organization-members",
-      "status": "M06-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
     },
     {
       "path": "/org-admin/roles",
       "view": "OrganizationAdminCenter",
       "domain": "organization-roles",
-      "status": "M06-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
     },
     {
       "path": "/org-admin/workspaces",
       "view": "OrganizationAdminCenter",
       "domain": "organization-workspaces",
-      "status": "M06-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
     },
     {
       "path": "/org-admin/teams",
       "view": "OrganizationAdminCenter",
       "domain": "organization-teams",
-      "status": "M06-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
     },
     {
       "path": "/org-admin/approvals",
       "view": "OrganizationAdminCenter",
       "domain": "organization-approvals",
-      "status": "M06-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
     },
     {
       "path": "/org-admin/data",
       "view": "OrganizationAdminCenter",
       "domain": "organization-data",
-      "status": "M06-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
     },
     {
       "path": "/org-admin/tokens",
       "view": "OrganizationAdminCenter",
       "domain": "organization-tokens",
-      "status": "M06-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
     },
     {
       "path": "/org-admin/audit",
       "view": "OrganizationAdminCenter",
       "domain": "organization-audit",
-      "status": "M06-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
     },
     {
       "path": "/platform-admin",
       "view": "PlatformDashboard",
       "domain": "platform",
-      "status": "novice_dashboard_accounts_sources_collection_quality_security_and_advanced_navigation_implemented"
+      "status": "implemented",
+      "statusDetail": "novice_dashboard_accounts_sources_collection_quality_security_and_advanced_navigation_implemented"
     },
     {
       "path": "/platform-admin/accounts",
       "view": "PlatformAccountCenter",
       "domain": "platform-accounts",
-      "status": "implemented_pending_live_verification"
+      "status": "implemented",
+      "statusDetail": "implemented_pending_live_verification"
     },
     {
       "path": "/platform-admin/permissions",
       "view": "PlatformAccountCenter",
       "domain": "platform-accounts-permissions",
-      "status": "implemented_pending_live_verification"
+      "status": "implemented",
+      "statusDetail": "implemented_pending_live_verification"
     },
     {
       "path": "/platform-admin/organizations",
@@ -2629,292 +2763,352 @@
       "path": "/platform-admin/providers",
       "view": "ProviderRegistry",
       "domain": "platform",
-      "status": "M03-01_implemented"
+      "status": "implemented",
+      "statusDetail": "M03-01_implemented"
     },
     {
       "path": "/platform-admin/providers/adapters",
       "view": "ProviderAdapterCenter",
       "domain": "provider-adapters",
-      "status": "M03-03_module_verified"
+      "status": "verified",
+      "statusDetail": "M03-03_module_verified"
     },
     {
       "path": "/platform-admin/providers/sources",
       "view": "ProviderSourceCenter",
       "domain": "platform",
-      "status": "M03-07_module_verified"
+      "status": "verified",
+      "statusDetail": "M03-07_module_verified"
     },
     {
       "path": "/platform-admin/credentials",
       "view": "CredentialAssetCenter",
       "domain": "credential-assets",
-      "status": "M03-02_module_verified"
+      "status": "verified",
+      "statusDetail": "M03-02_module_verified"
     },
     {
       "path": "/platform-admin/collection",
       "view": "CollectionTaskCenter",
       "domain": "collection-tasks",
-      "status": "M03-05_module_verified"
+      "status": "verified",
+      "statusDetail": "M03-05_module_verified"
     },
     {
       "path": "/platform-admin/collection/overview",
       "view": "CollectionOperationsConsole",
       "domain": "collection-operations",
-      "status": "M06-03_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-03_module_verified"
     },
     {
       "path": "/platform-admin/collection/browser-runtime",
       "view": "CollectionRuntimeCenter",
       "domain": "playwright-crawler-runtime",
-      "status": "M03-04_module_verified"
+      "status": "verified",
+      "statusDetail": "M03-04_module_verified"
     },
     {
       "path": "/platform-admin/data",
       "view": "PlatformDataCenter",
       "domain": "platform-data",
-      "status": "M06-02_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-02_module_verified"
     },
     {
       "path": "/platform-admin/governance",
       "view": "PlatformGovernanceCenter",
       "domain": "platform-governance",
-      "status": "M06-02_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-02_module_verified"
     },
     {
       "path": "/platform-admin/content",
       "view": "PlatformManagementCenter",
       "domain": "platform-content",
-      "status": "M06-02_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-02_module_verified"
     },
     {
       "path": "/platform-admin/notifications",
       "view": "PlatformManagementCenter",
       "domain": "platform-notifications",
-      "status": "M06-02_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-02_module_verified"
     },
     {
       "path": "/platform-admin/status",
       "view": "PlatformManagementCenter",
       "domain": "platform-system-status",
-      "status": "M06-02_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-02_module_verified"
+    },
+    {
+      "path": "/platform-admin/logs",
+      "view": "PlatformLogCenter",
+      "domain": "platform-operational-logs",
+      "status": "implemented",
+      "statusDetail": "implemented_pending_full_verification"
     },
     {
       "path": "/platform-admin/security",
       "view": "SecurityOperationsCenter",
       "domain": "security-operations",
-      "status": "M06-04_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-04_module_verified"
     },
     {
       "path": "/platform-admin/open-platform",
       "view": "OpenPlatformCenter",
       "domain": "open-platform",
-      "status": "M06-05_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-05_module_verified"
     },
     {
       "path": "/platform-admin/commercial",
       "view": "CommercialOperationsCenter",
       "domain": "commercial-operations",
-      "status": "M06-06_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-06_module_verified"
     },
     {
       "path": "/platform-admin/operations",
       "view": "BackupRecoveryCenter",
       "domain": "backup-recovery",
-      "status": "M07-04_module_verified"
+      "status": "verified",
+      "statusDetail": "M07-04_module_verified"
     },
     {
       "path": "/platform-admin/releases",
       "view": "ReleaseRolloutCenter",
       "domain": "release-operations",
-      "status": "M07-05_module_verified"
+      "status": "verified",
+      "statusDetail": "M07-05_module_verified"
     },
     {
       "path": "/platform-admin/topology",
       "view": "RuntimeTopologyCenter",
       "domain": "runtime-topology",
-      "status": "M08-01_single_server_module_verified"
+      "status": "verified",
+      "statusDetail": "M08-01_single_server_module_verified"
     },
     {
       "path": "/platform-admin/redis",
       "view": "RedisResilienceCenter",
       "domain": "redis-resilience",
-      "status": "M08-02_module_verified"
+      "status": "verified",
+      "statusDetail": "M08-02_module_verified"
     },
     {
       "path": "/platform-admin/mysql",
       "view": "MySqlResilienceCenter",
       "domain": "mysql-resilience",
-      "status": "M08-03_module_verified"
+      "status": "verified",
+      "statusDetail": "M08-03_module_verified"
     },
     {
       "path": "/platform-admin/files",
       "view": "FileResilienceCenter",
       "domain": "file-resilience",
-      "status": "M08-04_module_verified"
+      "status": "verified",
+      "statusDetail": "M08-04_module_verified"
     },
     {
       "path": "/platform-admin/crawler-scheduler",
       "view": "CrawlerSchedulerCenter",
       "title": "采集调度",
       "domain": "crawler-single-host-scheduler",
-      "status": "M08-05_module_verified"
+      "status": "verified",
+      "statusDetail": "M08-05_module_verified"
     },
     {
       "path": "/platform-admin/capacity",
       "view": "CapacityBoundaryCenter",
       "domain": "capacity-boundary",
-      "status": "M08-06_software_complete_capacity_out_of_scope"
+      "status": "verified",
+      "statusDetail": "M08-06_software_complete_capacity_out_of_scope"
     }
   ],
   "apiGroups": [
     {
       "prefix": "/api/v1/health",
       "domain": "platform-runtime",
-      "status": "foundation_implemented_M08-01_single_server_runtime_verified"
+      "status": "verified",
+      "statusDetail": "foundation_implemented_M08-01_single_server_runtime_verified"
     },
     {
       "prefix": "/api/v1/auth",
       "domain": "identity",
-      "status": "M01-01_local_account_M01-02_TOTP_and_M01-03_context_selection_implemented_enterprise_provider_activation_planned"
+      "status": "implemented",
+      "statusDetail": "M01-01_local_account_M01-02_TOTP_and_M01-03_context_selection_implemented_enterprise_provider_activation_planned"
     },
     {
       "prefix": "/api/v1/me",
       "domain": "identity-and-personal-center",
-      "status": "profile_permissions_password_sessions_TOTP_MFA_notification_preferences_assets_and_conditional_organization_tokens_implemented"
+      "status": "implemented",
+      "statusDetail": "profile_permissions_password_sessions_TOTP_MFA_notification_preferences_assets_and_conditional_organization_tokens_implemented"
     },
     {
       "prefix": "/api/v1/org",
       "domain": "organization",
-      "status": "tenancy_roles_resource_grants_and_M06-01_full_organization_management_implemented"
+      "status": "implemented",
+      "statusDetail": "tenancy_roles_resource_grants_and_M06-01_full_organization_management_implemented"
     },
     {
       "prefix": "/api/v1/trends",
       "domain": "trends",
-      "status": "M04-01_topics_signals_evidence_follows_relevance_and_monitoring_rules_verified"
+      "status": "verified",
+      "statusDetail": "M04-01_topics_signals_evidence_follows_relevance_and_monitoring_rules_verified"
     },
     {
       "prefix": "/api/v1/opportunities",
       "domain": "opportunities",
-      "status": "M04-02_list_create_detail_decisions_and_evidence_refresh_verified"
+      "status": "verified",
+      "statusDetail": "M04-02_list_create_detail_decisions_and_evidence_refresh_verified"
     },
     {
       "prefix": "/api/v1/ai-analyses",
       "domain": "opportunities",
-      "status": "M04-07_facts_only_ai_results_and_human_reviews_verified"
+      "status": "verified",
+      "statusDetail": "M04-07_facts_only_ai_results_and_human_reviews_verified"
     },
     {
       "prefix": "/api/v1/competitors",
       "domain": "competitors",
-      "status": "M04-05_identity_snapshots_changes_thresholds_and_alert_queue_implemented"
+      "status": "implemented",
+      "statusDetail": "M04-05_identity_snapshots_changes_thresholds_and_alert_queue_implemented"
     },
     {
       "prefix": "/api/v1/sourcing",
       "domain": "sourcing",
-      "status": "M04-06_search_projection_quote_comparison_and_purchase_task_verified"
+      "status": "verified",
+      "statusDetail": "M04-06_search_projection_quote_comparison_and_purchase_task_verified"
     },
     {
       "prefix": "/api/v1/tasks",
       "domain": "tasks-and-approvals",
-      "status": "M05-01_tasks_and_M05-02_approval_workflow_verified"
+      "status": "verified",
+      "statusDetail": "M05-01_tasks_and_M05-02_approval_workflow_verified"
     },
     {
       "prefix": "/api/v1/notifications",
       "domain": "notifications",
-      "status": "M05-03_module_verified"
+      "status": "verified",
+      "statusDetail": "M05-03_module_verified"
     },
     {
       "prefix": "/api/v1/realtime",
       "domain": "realtime",
-      "status": "M05-04_module_verified"
+      "status": "verified",
+      "statusDetail": "M05-04_module_verified"
     },
     {
       "prefix": "/api/v1/automations",
       "domain": "automation-rules",
-      "status": "M05-05_module_verified"
+      "status": "verified",
+      "statusDetail": "M05-05_module_verified"
     },
     {
       "prefix": "/api/v1/subscriptions",
       "domain": "monitoring",
-      "status": "implemented_as_competitor_monitoring_contract"
+      "status": "implemented",
+      "statusDetail": "implemented_as_competitor_monitoring_contract"
     },
     {
       "prefix": "/api/v1/reviews",
       "domain": "review-analysis",
-      "status": "implemented_as_ai_analysis_reviews_contract"
+      "status": "implemented",
+      "statusDetail": "implemented_as_ai_analysis_reviews_contract"
     },
     {
       "prefix": "/api/v1/analysis",
       "domain": "decision-analysis",
-      "status": "implemented_as_opportunity_ai_analyses_contract"
+      "status": "implemented",
+      "statusDetail": "implemented_as_opportunity_ai_analyses_contract"
     },
     {
       "prefix": "/api/v1/reports",
       "domain": "reports-exports",
-      "status": "M05-06_module_verified"
+      "status": "verified",
+      "statusDetail": "M05-06_module_verified"
     },
     {
       "prefix": "/api/v1/report-exports",
       "domain": "reports-exports",
-      "status": "M05-06_module_verified"
+      "status": "verified",
+      "statusDetail": "M05-06_module_verified"
     },
     {
       "prefix": "/api/v1/org/admin",
       "domain": "organization-admin",
-      "status": "M06-01_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
     },
     {
       "prefix": "/api/v1/platform",
       "domain": "platform",
-      "status": "platform_accounts_audit_dashboard_sources_collection_quality_security_open_platform_and_commercial_implemented"
+      "status": "implemented",
+      "statusDetail": "platform_accounts_audit_dashboard_sources_collection_quality_security_open_platform_and_commercial_implemented"
     },
     {
       "prefix": "/api/v1/platform/accounts",
       "domain": "platform-accounts",
-      "status": "implemented_pending_live_verification"
+      "status": "implemented",
+      "statusDetail": "implemented_pending_live_verification"
     },
     {
       "prefix": "/api/v1/provider-sources/refresh",
       "domain": "automatic-hotspot-sources",
-      "status": "implemented_pending_live_verification"
+      "status": "implemented",
+      "statusDetail": "implemented_pending_live_verification"
     },
     {
       "prefix": "/api/v1/platform/operations/topology",
       "domain": "runtime-topology",
-      "status": "M08-01_single_server_module_verified"
+      "status": "verified",
+      "statusDetail": "M08-01_single_server_module_verified"
     },
     {
       "prefix": "/api/v1/platform/operations/redis",
       "domain": "redis-resilience",
-      "status": "M08-02_module_verified"
+      "status": "verified",
+      "statusDetail": "M08-02_module_verified"
     },
     {
       "prefix": "/api/v1/platform/operations/mysql",
       "domain": "mysql-resilience",
-      "status": "M08-03_module_verified"
+      "status": "verified",
+      "statusDetail": "M08-03_module_verified"
     },
     {
       "prefix": "/api/v1/platform/operations/files",
       "domain": "file-resilience",
-      "status": "M08-04_module_verified"
+      "status": "verified",
+      "statusDetail": "M08-04_module_verified"
     },
     {
       "prefix": "/api/v1/platform/operations/crawler-scheduler",
       "domain": "crawler-single-host-scheduler",
-      "status": "M08-05_module_verified"
+      "status": "verified",
+      "statusDetail": "M08-05_module_verified"
     },
     {
       "prefix": "/api/v1/platform/operations/capacity",
       "domain": "capacity-boundary",
-      "status": "M08-06_software_complete_capacity_out_of_scope"
+      "status": "verified",
+      "statusDetail": "M08-06_software_complete_capacity_out_of_scope"
     },
     {
       "prefix": "/api/v1/platform/commercial",
       "domain": "commercial-operations",
-      "status": "M06-06_module_verified"
+      "status": "verified",
+      "statusDetail": "M06-06_module_verified"
     },
     {
       "prefix": "/open/v1",
       "domain": "open-platform",
-      "status": "M06-05_status_endpoint_verified"
+      "status": "verified",
+      "statusDetail": "M06-05_status_endpoint_verified"
     }
   ],
   "runtime": [
@@ -2923,7 +3117,8 @@
       "kind": "baota-site",
       "responsibility": "Vue static assets and reverse proxy",
       "workingDirectory": "/www/wwwroot/ai选品/frontend",
-      "status": "production_managed"
+      "status": "implemented",
+      "statusDetail": "production_managed"
     },
     {
       "name": "ai选品",
@@ -2931,7 +3126,8 @@
       "responsibility": "single foreground backend supervising HTTP API, async Worker and collection task execution",
       "workingDirectory": "/www/wwwroot/ai选品/backend",
       "startCommand": "node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js",
-      "status": "production_managed"
+      "status": "implemented",
+      "statusDetail": "production_managed"
     },
     {
       "name": "ai选品-python",
@@ -2939,19 +3135,22 @@
       "responsibility": "Python 3.12 crawler heartbeat and Python-to-Playwright bridge runtime",
       "workingDirectory": "/www/wwwroot/ai选品/python",
       "startCommand": "python -m scoutops_crawler --env-file=/www/wwwroot/ai选品/config/product_scout.env",
-      "status": "production_managed"
+      "status": "implemented",
+      "statusDetail": "production_managed"
     },
     {
       "name": "ai选品数据库",
       "kind": "baota-mysql-service",
       "responsibility": "product_scout data",
-      "status": "production_managed"
+      "status": "implemented",
+      "statusDetail": "production_managed"
     },
     {
       "name": "ai选品缓存",
       "kind": "baota-redis-service",
       "responsibility": "cache, queue, rate limiting and SSE coordination",
-      "status": "production_managed"
+      "status": "implemented",
+      "statusDetail": "production_managed"
     }
   ],
   "externalDependencies": [
@@ -2964,18 +3163,22 @@
     {
       "name": "Mail provider",
       "contract": "must support delivery, bounce, complaint, delay, failure and suppression callbacks",
-      "status": "pending_provider_selection",
-      "uiEntry": "closed"
+      "status": "planned",
+      "uiEntry": "closed",
+      "statusDetail": "pending_provider_selection"
     },
     {
       "name": "GitHub public repository",
       "contract": "source control only; no production runtime",
-      "status": "provided"
+      "status": "implemented",
+      "statusDetail": "provided"
     }
   ],
   "securityBoundaries": [
     "All organization-visible data is filtered by organization_id and applicable workspace_id.",
     "Secrets are held only in Baota restricted configuration or runtime environment; never in this map or Git.",
     "No production service may run outside Baota panel management."
-  ]
+  ],
+  "statusDetail": "P00_P08_product_functionally_verified_single_server",
+  "statusEnum": ["planned", "implemented", "verified", "blocked", "deprecated"]
 }

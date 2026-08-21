@@ -135,6 +135,7 @@ test("M08-05 scheduler evaluates resource freshness after the host probe complet
       active_leases: [],
       providers: [],
       profiles: [],
+      trend: [],
     }),
     record: async (input) => {
       recorded = input;
@@ -253,6 +254,10 @@ test("M08-05.A04/A06/A09 operations route is platform-only and never returns lea
       calls.push(["recover", input]),
       { recovered: 0, observed_at: dto.observed_at }
     ),
+    recoverProvider: async (input) => (
+      calls.push(["recover-provider", input]),
+      { provider_id: input.providerId, recovered: true }
+    ),
   };
   const authorization = { authorize: async (input) => calls.push(["authorize", input]) },
     auth = { authenticate: async () => ({ user: { id: "00000000-0000-4000-8000-000000000805" } }) };
@@ -285,6 +290,18 @@ test("M08-05.A04/A06/A09 operations route is platform-only and never returns lea
   });
   assert.equal(response.statusCode, 200);
   assert.equal(calls.at(-1)[1].idempotencyKey, "recover-1");
+  response = await app.inject({
+    method: "POST",
+    url: "/api/v1/platform/operations/crawler-scheduler/providers/00000000-0000-4000-8000-000000000855/recover",
+    headers: {
+      cookie: "scoutops_session=test",
+      origin: "http://127.0.0.1:5173",
+      "idempotency-key": "recover-provider-1",
+    },
+  });
+  assert.equal(response.statusCode, 200);
+  assert.equal(calls.at(-1)[0], "recover-provider");
+  assert.equal(calls.at(-1)[1].providerId, "00000000-0000-4000-8000-000000000855");
   assert.equal(
     (
       await app.inject({
@@ -519,6 +536,10 @@ test("M08-05 links leases and due provider queues without returning secrets", as
                 active_leases: 1,
                 queued_tasks: 4,
                 longest_queue_wait_seconds: 125,
+                circuit_failure_threshold: 3,
+                consecutive_failures: 3,
+                last_error_code: "timeout",
+                runtime_circuit_state: "open",
               },
             ],
           ];
@@ -540,6 +561,25 @@ test("M08-05 links leases and due provider queues without returning secrets", as
               },
             ],
           ];
+        if (sql.startsWith("SELECT q.provider_id,q.status"))
+          return [
+            [
+              {
+                provider_id: "provider",
+                status: "succeeded",
+                duration_ms: 800,
+                queue_wait_seconds: 15,
+              },
+              {
+                provider_id: "provider",
+                status: "failed",
+                duration_ms: 1200,
+                queue_wait_seconds: 45,
+              },
+            ],
+          ];
+        if (sql.startsWith("SELECT FROM_UNIXTIME"))
+          return [[{ bucket_at: now, total: 2, succeeded: 1, failed: 1 }]];
         throw new Error(`unexpected query ${sql}`);
       },
     },
@@ -556,7 +596,25 @@ test("M08-05 links leases and due provider queues without returning secrets", as
     active_leases: 1,
     queued_tasks: 4,
     longest_queue_wait_seconds: 125,
+    queue_wait_p50_seconds: 15,
+    queue_wait_p95_seconds: 45,
+    sample_count_24h: 2,
+    success_rate_basis_points_24h: 5000,
+    duration_p95_ms_24h: 1200,
+    circuit_state: "open",
+    circuit_failure_threshold: 3,
+    consecutive_failures: 3,
+    last_error_code: "timeout",
   });
+  assert.deepEqual(result.trend, [
+    {
+      bucket_at: "2026-08-15T08:00:00.000Z",
+      total: 2,
+      succeeded: 1,
+      failed: 1,
+      failure_rate_basis_points: 5000,
+    },
+  ]);
   assert.deepEqual(result.active_leases, [
     {
       slot_type: "provider",
@@ -571,4 +629,49 @@ test("M08-05 links leases and due provider queues without returning secrets", as
     },
   ]);
   assert.doesNotMatch(JSON.stringify(result), /lease_token|token_hash|credential|cookie/i);
+});
+
+test("M08-05 recovers only one provider after a newer ready health check", async () => {
+  const { CrawlerSchedulerRepository } =
+      await import("../../apps/api/dist/crawler-scheduler-repository.js"),
+    now = new Date("2026-08-15T08:00:00.000Z"),
+    calls = [];
+  const connection = {
+    beginTransaction: async () => calls.push("begin"),
+    commit: async () => calls.push("commit"),
+    rollback: async () => calls.push("rollback"),
+    release: () => calls.push("release"),
+    query: async (sql, values) => {
+      calls.push({ sql, values });
+      if (sql.startsWith("SELECT result_json")) return [[]];
+      if (sql.startsWith("SELECT id,status FROM providers"))
+        return [[{ id: "00000000-0000-4000-8000-000000000855", status: "enabled" }]];
+      if (sql.startsWith("SELECT state,opened_at"))
+        return [[{ state: "open", opened_at: new Date("2026-08-15T07:00:00.000Z") }]];
+      if (sql.startsWith("SELECT health_status"))
+        return [
+          [{ health_status: "ready", last_checked_at: new Date("2026-08-15T07:30:00.000Z") }],
+        ];
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const repository = new CrawlerSchedulerRepository({ getConnection: async () => connection }),
+    result = await repository.recoverProvider({
+      actorId: "00000000-0000-4000-8000-000000000805",
+      providerId: "00000000-0000-4000-8000-000000000855",
+      requestId: "request-recover-provider",
+      traceId: "trace-recover-provider",
+      idempotencyKey: "recover-provider-once",
+      now,
+    });
+  assert.deepEqual(result, {
+    provider_id: "00000000-0000-4000-8000-000000000855",
+    recovered: true,
+  });
+  const update = calls.find(
+    (item) => typeof item === "object" && item.sql.startsWith("UPDATE provider_runtime_circuits"),
+  );
+  assert.ok(update);
+  assert.deepEqual(update.values, [now, now, "00000000-0000-4000-8000-000000000855"]);
+  assert.equal(calls.filter((item) => item === "commit").length, 1);
 });

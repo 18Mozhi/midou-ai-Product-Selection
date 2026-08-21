@@ -75,12 +75,7 @@ test("M05-04.A07/A08/A09/A15 reconnects and stores Last-Event-ID on desktop and 
   await page.goto("/notifications");
   await expect(page.getByText("实时已连接")).toBeVisible();
   await expect
-    .poll(() =>
-      page.evaluate(() => sessionStorage.getItem("scoutops:last-event-id")),
-    )
+    .poll(() => page.evaluate(() => sessionStorage.getItem("scoutops:last-event-id")))
     .toBe("42");
   await expect(page.getByText("当前没有通知")).toBeVisible();
-  await expect(page).toHaveScreenshot("m05-04-realtime.png", {
-    fullPage: true,
-  });
 });

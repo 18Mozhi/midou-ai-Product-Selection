@@ -9,6 +9,8 @@ export interface AppRouteMeta {
   view?: string;
   capabilities?: string[];
   notFound?: boolean;
+  surface?: string;
+  cachePolicy?: "none" | "preserve" | "reset_on_scope";
 }
 
 export interface ShellNavigationItem {
@@ -21,11 +23,80 @@ export interface ShellNavigationItem {
 
 const ApplicationSurface = () => import("./App.vue");
 
+const surfaceAliases: Record<string, string> = {
+  home: "home-dashboard",
+  "today-work": "task-workspace",
+  tasks: "task-workspace",
+  "task-detail": "task-workspace",
+  trends: "trend-dashboard",
+  opportunities: "opportunity-workspace",
+  "opportunity-detail": "opportunity-workspace",
+  "opportunity-start": "selection-journey",
+  "opportunity-scoring": "score-rule-console",
+  competitors: "competitor-monitor",
+  sourcing: "sourcing-workspace",
+  "sourcing-cost-rules": "cost-rule-console",
+  approvals: "approval-workspace",
+  notifications: "notification-center",
+  automations: "automation-rule-center",
+  reports: "report-center",
+  "organization-overview": "organization-admin-center",
+  "organization-members": "organization-admin-center",
+  "organization-roles": "organization-admin-center",
+  "organization-workspaces": "organization-admin-center",
+  "organization-teams": "organization-admin-center",
+  "organization-approvals": "organization-admin-center",
+  "organization-data": "organization-admin-center",
+  "organization-tokens": "organization-admin-center",
+  "organization-audit": "organization-admin-center",
+  "platform-overview": "platform-dashboard",
+  "platform-accounts": "platform-account-center",
+  "platform-organizations": "platform-account-center",
+  "platform-users": "platform-account-center",
+  "platform-admins": "platform-account-center",
+  "platform-permissions": "platform-account-center",
+  "platform-providers": "provider-runtime-surface",
+  "platform-provider-adapters": "provider-runtime-surface",
+  "platform-provider-sources": "provider-runtime-surface",
+  "platform-provider-1688-acceptance": "provider-runtime-surface",
+  "platform-credentials": "provider-runtime-surface",
+  "platform-collection-tasks": "collection-runtime-surface",
+  "platform-collection-overview": "collection-runtime-surface",
+  "platform-browser-runtime": "collection-runtime-surface",
+  "platform-data": "platform-data-center",
+  "platform-governance": "platform-governance-center",
+  "platform-content": "platform-management-center",
+  "platform-notifications": "platform-management-center",
+  "platform-status": "platform-management-center",
+  "platform-logs": "platform-log-center",
+  "platform-commercial": "commercial-operations-center",
+  "platform-security": "security-operations-center",
+  "platform-open": "open-platform-center",
+  "platform-operations": "backup-recovery-center",
+  "platform-releases": "release-rollout-center",
+  "platform-topology": "runtime-topology-center",
+  "platform-redis": "redis-resilience-center",
+  "platform-mysql": "mysql-resilience-center",
+  "platform-files": "file-resilience-center",
+  "platform-crawler-scheduler": "crawler-scheduler-center",
+  "platform-capacity": "capacity-boundary-center",
+};
+
 const route = (path: string, name: string, meta: AppRouteMeta): RouteRecordRaw => ({
   path,
   name,
   component: ApplicationSurface,
-  meta: { ...meta },
+  meta: {
+    ...meta,
+    surface: meta.surface ?? surfaceAliases[name] ?? name,
+    cachePolicy:
+      meta.cachePolicy ??
+      (meta.shell === "platform_admin"
+        ? "preserve"
+        : meta.shell === "member" || meta.shell === "organization_admin"
+          ? "reset_on_scope"
+          : "none"),
+  },
 });
 
 const member = (
@@ -258,6 +329,13 @@ export const appRoutes: RouteRecordRaw[] = [
     ["platform:operate", "platform:superadmin"],
   ),
   platform(
+    "/platform-admin/providers/sources/1688-acceptance",
+    "platform-provider-1688-acceptance",
+    "1688 验收",
+    ["平台后台", "热点与采集", "1688 验收"],
+    ["platform:operate", "platform:superadmin"],
+  ),
+  platform(
     "/platform-admin/credentials",
     "platform-credentials",
     "凭证与档案",
@@ -339,6 +417,13 @@ export const appRoutes: RouteRecordRaw[] = [
     "platform-status",
     "系统状态",
     ["平台后台", "系统运维", "系统状态"],
+    ["platform:operate", "platform:superadmin"],
+  ),
+  platform(
+    "/platform-admin/logs",
+    "platform-logs",
+    "链路日志",
+    ["平台后台", "系统运维", "链路日志"],
     ["platform:operate", "platform:superadmin"],
   ),
   platform(
@@ -439,41 +524,41 @@ const navigationCatalog: Record<Exclude<AppShell, "account">, NavigationEntry[]>
     { label: "组织审计", path: "/org-admin/audit", icon: "shield", group: "安全与审计" },
   ],
   platform_admin: [
-    { label: "平台概览", path: "/platform-admin", icon: "home", group: "平台概览" },
+    { label: "平台概览", path: "/platform-admin", icon: "home", group: "业务" },
     {
       label: "组织管理",
       path: "/platform-admin/organizations",
       icon: "building",
-      group: "账号与组织",
+      group: "业务",
     },
-    { label: "用户管理", path: "/platform-admin/users", icon: "person", group: "账号与组织" },
-    { label: "管理员管理", path: "/platform-admin/admins", icon: "shield", group: "账号与组织" },
+    { label: "用户管理", path: "/platform-admin/users", icon: "person", group: "业务" },
+    { label: "管理员管理", path: "/platform-admin/admins", icon: "shield", group: "业务" },
     {
       label: "热点来源",
       path: "/platform-admin/providers/sources",
       icon: "trend",
-      group: "热点与采集",
+      group: "采集",
     },
-    { label: "来源设置", path: "/platform-admin/providers", icon: "settings", group: "热点与采集" },
+    { label: "来源设置", path: "/platform-admin/providers", icon: "settings", group: "采集" },
     {
       label: "采集管理",
       path: "/platform-admin/collection/overview",
       icon: "automation",
-      group: "热点与采集",
+      group: "采集",
     },
-    { label: "数据中心", path: "/platform-admin/data", icon: "database", group: "数据治理" },
+    { label: "数据中心", path: "/platform-admin/data", icon: "database", group: "治理" },
     {
       label: "质量与规则",
       path: "/platform-admin/governance",
       icon: "settings",
-      group: "数据治理",
+      group: "治理",
     },
-    { label: "内容运营", path: "/platform-admin/content", icon: "list", group: "运营中心" },
-    { label: "通知运营", path: "/platform-admin/notifications", icon: "bell", group: "运营中心" },
-    { label: "配额管理", path: "/platform-admin/commercial", icon: "chart", group: "运营中心" },
-    { label: "安全与审计", path: "/platform-admin/security", icon: "shield", group: "安全中心" },
-    { label: "开放平台", path: "/platform-admin/open-platform", icon: "key", group: "安全中心" },
-    { label: "系统运维", path: "/platform-admin/status", icon: "target", group: "系统运维" },
+    { label: "内容运营", path: "/platform-admin/content", icon: "list", group: "业务" },
+    { label: "通知运营", path: "/platform-admin/notifications", icon: "bell", group: "业务" },
+    { label: "配额管理", path: "/platform-admin/commercial", icon: "chart", group: "业务" },
+    { label: "安全与审计", path: "/platform-admin/security", icon: "shield", group: "治理" },
+    { label: "开放平台", path: "/platform-admin/open-platform", icon: "key", group: "治理" },
+    { label: "系统运维", path: "/platform-admin/status", icon: "target", group: "运行" },
   ],
 };
 

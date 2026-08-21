@@ -4,6 +4,7 @@ import type {
   ParserSample,
   ParserSampleReplay,
   ProviderConfigurationHistory,
+  Provider1688Acceptance,
   ProviderSourceReplay,
   ProviderSourceRepository,
   ProvisionedSource,
@@ -98,6 +99,100 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
       codes,
     );
     return rows.map(provisioned);
+  }
+  async read1688Acceptance(now: Date): Promise<Provider1688Acceptance> {
+    const [providers] = await this.pool.query<RowDataPacket[]>(
+        "SELECT id,status,owner_label,parser_version FROM providers WHERE code='1688_search' LIMIT 1",
+      ),
+      provider = providers[0];
+    if (!provider)
+      throw new ProviderSourceServiceError(
+        "provider_source_not_provisioned",
+        409,
+        "先在来源目录登记 1688 来源，并明确负责人。",
+      );
+    const [[[profile]], [[latestRun]], [[parser]]] = await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          "SELECT COUNT(*) active_count,MAX(cp.updated_at) evidence_at FROM crawler_profiles cp JOIN credential_assets ca ON ca.id=cp.credential_asset_id AND ca.provider_id=cp.provider_id WHERE cp.provider_id=? AND cp.status='active' AND ca.status='active' AND (ca.expires_at IS NULL OR ca.expires_at>?)",
+          [provider.id, now],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT status,error_code,started_at,finished_at FROM crawler_browser_runs WHERE provider_id=? ORDER BY started_at DESC,id DESC LIMIT 1",
+          [provider.id],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT last_replay_status,last_replay_at,baseline_parser_version FROM provider_parser_samples WHERE provider_id=? AND status='active' ORDER BY last_replay_at IS NULL,last_replay_at DESC,created_at DESC LIMIT 1",
+          [provider.id],
+        ),
+      ]),
+      runSucceeded = ["succeeded", "succeeded_empty"].includes(String(latestRun?.status)),
+      loginBlocked = ["login_required", "session_expired"].includes(String(latestRun?.error_code)),
+      captchaBlocked = ["captcha", "blocked_captcha"].includes(String(latestRun?.error_code)),
+      profileReady = Number(profile?.active_count ?? 0) > 0,
+      parserPassed =
+        parser?.last_replay_status === "passed" &&
+        String(parser.baseline_parser_version) === String(provider.parser_version),
+      gates: Provider1688Acceptance["gates"] = [
+        {
+          key: "login",
+          state: profileReady && runSucceeded ? "passed" : loginBlocked ? "blocked" : "pending",
+          evidence_at: latestRun?.finished_at
+            ? iso(latestRun.finished_at)
+            : profile?.evidence_at
+              ? iso(profile.evidence_at)
+              : null,
+          reason:
+            profileReady && runSucceeded
+              ? "当前有效浏览器档案已完成一次登录态运行。"
+              : loginBlocked
+                ? "最近运行返回登录失效，需要续期档案后重试。"
+                : "需要有效浏览器档案并完成一次登录态运行。",
+        },
+        {
+          key: "captcha",
+          state: runSucceeded ? "passed" : captchaBlocked ? "blocked" : "pending",
+          evidence_at: latestRun?.finished_at ? iso(latestRun.finished_at) : null,
+          reason: runSucceeded
+            ? "最近登录态运行未被验证码阻断。"
+            : captchaBlocked
+              ? "最近运行被验证码阻断，需要人工完成验证后重试。"
+              : "尚无可证明验证码未阻断的成功登录态运行。",
+        },
+        {
+          key: "parser",
+          state: parserPassed
+            ? "passed"
+            : ["changed", "failed"].includes(String(parser?.last_replay_status))
+              ? "blocked"
+              : "pending",
+          evidence_at: parser?.last_replay_at ? iso(parser.last_replay_at) : null,
+          reason: parserPassed
+            ? "当前解析器版本的固定样本回放已通过。"
+            : "需要用真实登录样本完成当前解析器版本回放。",
+        },
+      ],
+      pendingReasons = gates.filter((gate) => gate.state !== "passed").map((gate) => gate.reason),
+      allPassed = pendingReasons.length === 0;
+    return {
+      provider_id: String(provider.id),
+      source_status: provider.status,
+      owner_label: String(provider.owner_label),
+      overall: allPassed
+        ? provider.status === "enabled"
+          ? "production_ready"
+          : "ready_for_enable"
+        : "setup_required",
+      gates,
+      latest_run: latestRun
+        ? {
+            status: String(latestRun.status),
+            error_code: latestRun.error_code == null ? null : String(latestRun.error_code),
+            started_at: iso(latestRun.started_at),
+            finished_at: latestRun.finished_at == null ? null : iso(latestRun.finished_at),
+          }
+        : null,
+      pending_reasons: pendingReasons,
+    };
   }
   async configurationVersions(providerId: string): Promise<ProviderConfigurationHistory> {
     const [[provider], [versions]] = await Promise.all([
@@ -704,7 +799,11 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
         );
       if (
         ["public_page", "public_rss"].includes(String(provider.access_mode)) &&
-        (provider.terms_review_status !== "approved" || !provider.terms_reference_url)
+        (provider.terms_review_status !== "approved" ||
+          !provider.terms_reference_url ||
+          !provider.terms_version ||
+          !provider.terms_expires_at ||
+          new Date(provider.terms_expires_at) <= input.now)
       )
         throw new ProviderSourceServiceError(
           "provider_source_compliance_required",
@@ -907,7 +1006,7 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
       const [providers] = await c.query<RowDataPacket[]>(
         [
           "SELECT id,code FROM providers WHERE status='enabled' AND terms_review_status='approved' ",
-          "AND terms_reference_url IS NOT NULL AND parser_version IN ",
+          "AND terms_reference_url IS NOT NULL AND terms_version IS NOT NULL AND terms_expires_at>NOW(3) AND parser_version IN ",
           "('google-news-fixed-rss-v1','syndication-feed-v1','structured-public-page-v1') ORDER BY updated_at ",
           "DESC,code LIMIT 100 FOR UPDATE",
         ].join(""),
@@ -1057,7 +1156,12 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
             "SELECT COUNT(*) count FROM provider_parser_samples s WHERE s.provider_id=? AND ",
             "s.status='active' AND s.last_replay_status='passed' AND EXISTS (SELECT 1 FROM ",
             "provider_parser_sample_replay_runs r WHERE r.sample_id=s.id AND r.parser_version=? AND ",
-            "r.status='passed' AND r.created_at=s.last_replay_at)",
+            "r.status='passed' AND r.created_at=s.last_replay_at) AND EXISTS (SELECT 1 FROM crawler_profiles cp ",
+            "JOIN credential_assets ca ON ca.id=cp.credential_asset_id AND ca.provider_id=cp.provider_id ",
+            "JOIN crawler_browser_runs br ON br.crawler_profile_id=cp.id AND br.provider_id=cp.provider_id ",
+            "WHERE cp.provider_id=s.provider_id AND cp.status='active' AND ca.status='active' AND ",
+            "(ca.expires_at IS NULL OR ca.expires_at>NOW(3)) AND br.status IN ('succeeded','succeeded_empty') AND ",
+            "br.finished_at>=GREATEST(cp.updated_at,ca.updated_at))",
           ].join(""),
           [input.providerId, current.parser_version],
         );
@@ -1065,18 +1169,22 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
           throw new ProviderSourceServiceError(
             "provider_source_setup_required",
             409,
-            "先用真实登录档案完成 1688 固定样本字段回放验收；当前来源只能保持停用。",
+            "先在 1688 验收页通过登录态、验证码与当前解析器固定样本验收；当前来源只能保持停用。",
           );
       }
       if (
         input.status === "enabled" &&
         ["public_page", "public_rss"].includes(String(current.access_mode)) &&
-        (current.terms_review_status !== "approved" || !current.terms_reference_url)
+        (current.terms_review_status !== "approved" ||
+          !current.terms_reference_url ||
+          !current.terms_version ||
+          !current.terms_expires_at ||
+          new Date(current.terms_expires_at) <= input.now)
       )
         throw new ProviderSourceServiceError(
           "provider_source_compliance_required",
           409,
-          "先在来源定义页批准平台条款并登记 HTTPS 参考地址。",
+          "先在来源定义页批准平台条款，并登记 HTTPS 参考地址、版本和未来到期时间。",
         );
       if (Number(current.version) !== input.expectedVersion)
         throw new ProviderSourceServiceError(
@@ -1255,7 +1363,12 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
             "SELECT COUNT(*) count FROM provider_parser_samples s WHERE s.provider_id=? AND ",
             "s.status='active' AND s.last_replay_status='passed' AND EXISTS (SELECT 1 FROM ",
             "provider_parser_sample_replay_runs r WHERE r.sample_id=s.id AND r.parser_version=? AND ",
-            "r.status='passed' AND r.created_at=s.last_replay_at)",
+            "r.status='passed' AND r.created_at=s.last_replay_at) AND EXISTS (SELECT 1 FROM crawler_profiles cp ",
+            "JOIN credential_assets ca ON ca.id=cp.credential_asset_id AND ca.provider_id=cp.provider_id ",
+            "JOIN crawler_browser_runs br ON br.crawler_profile_id=cp.id AND br.provider_id=cp.provider_id ",
+            "WHERE cp.provider_id=s.provider_id AND cp.status='active' AND ca.status='active' AND ",
+            "(ca.expires_at IS NULL OR ca.expires_at>NOW(3)) AND br.status IN ('succeeded','succeeded_empty') AND ",
+            "br.finished_at>=GREATEST(cp.updated_at,ca.updated_at))",
           ].join(""),
           [input.providerId, current.parser_version],
         );
@@ -1263,18 +1376,22 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
           throw new ProviderSourceServiceError(
             "provider_source_setup_required",
             409,
-            "历史版本要求启用 1688，但当前解析验收未通过，不能回滚。",
+            "历史版本要求启用 1688，但当前登录态、验证码或解析验收未通过，不能回滚。",
           );
       }
       if (
         target.status === "enabled" &&
         ["public_page", "public_rss"].includes(String(current.access_mode)) &&
-        (current.terms_review_status !== "approved" || !current.terms_reference_url)
+        (current.terms_review_status !== "approved" ||
+          !current.terms_reference_url ||
+          !current.terms_version ||
+          !current.terms_expires_at ||
+          new Date(current.terms_expires_at) <= input.now)
       )
         throw new ProviderSourceServiceError(
           "provider_source_compliance_required",
           409,
-          "历史版本要求启用公开来源，但当前条款审查未通过，不能回滚。",
+          "历史版本要求启用公开来源，但当前条款版本缺失、已到期或审查未通过，不能回滚。",
         );
       const nextVersion = Number(current.version) + 1;
       await c.query(

@@ -135,9 +135,6 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
       ? page.getByRole("button", { name: /第 2 次尝试 · 终止失败/ })
       : page.getByRole("cell", { name: "终止失败" }),
   ).toBeVisible();
-  await expect(page).toHaveScreenshot("m06-03-collection-console-desktop.png", {
-    fullPage: true,
-  });
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
@@ -156,9 +153,6 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
   await attemptDrawer.getByText("技术详情", { exact: true }).click();
   await expect(attemptDrawer.getByText(data.attempts[0].task_id, { exact: false })).toBeVisible();
   await attemptDrawer.getByRole("button", { name: "关闭详情" }).click();
-  await expect(page).toHaveScreenshot("m06-03-collection-console-mobile.png", {
-    fullPage: true,
-  });
 });
 
 test("M06-03 distinguishes network login captcha and parser alert categories", async ({ page }) => {

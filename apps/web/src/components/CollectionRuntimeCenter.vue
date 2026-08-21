@@ -6,7 +6,8 @@ import ConfirmDialog from "./ConfirmDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import "../crawler-runtime.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
-type RunStatus = "running" | "succeeded" | "blocked" | "failed" | "timed_out" | "cancelled";
+type RunStatus =
+  "running" | "succeeded" | "succeeded_empty" | "blocked" | "failed" | "timed_out" | "cancelled";
 interface Lease {
   run_id: string;
   lease_owner: string;
@@ -24,6 +25,7 @@ interface Profile {
   target_domain: string;
   credential_expires_at: string | null;
   login_status: "valid" | "expired" | "unknown";
+  last_failure: null | { status: string; error_code: string | null; occurred_at: string };
   lease: Lease | null;
 }
 interface Run {
@@ -55,6 +57,9 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   confirming = ref(false),
   saving = ref(false);
 const activeLeases = computed(() => profiles.value.filter((item) => item.lease)),
+  duplicateRiskRuns = computed(() =>
+    runs.value.filter((item) => item.error_code === "lease_expired"),
+  ),
   blockedRuns = computed(() =>
     runs.value.filter((item) => ["blocked", "failed", "timed_out"].includes(item.status)),
   ),
@@ -128,6 +133,7 @@ const statusText = (value: string) =>
     ({
       running: "运行中",
       succeeded: "成功",
+      succeeded_empty: "成功但无结果",
       blocked: "已拦截",
       failed: "失败",
       timed_out: "已超时",
@@ -174,7 +180,7 @@ onMounted(load);
         </article>
         <article>
           <small>异常运行</small><strong>{{ blockedRuns.length }}</strong
-          ><span>不会自动绕过限制</span>
+          ><span>重复执行风险 {{ duplicateRiskRuns.length }} 条</span>
         </article>
       </div>
       <section class="crawler-leases">
@@ -216,6 +222,10 @@ onMounted(load);
               }}
               · 绑定站点：{{ profile.target_domain }}
             </p>
+            <p v-if="profile.last_failure">
+              最近失败：{{ errorText(profile.last_failure.error_code) }} ·
+              {{ time(profile.last_failure.occurred_at) }}
+            </p>
             <RouterLink
               v-if="profile.login_status === 'expired'"
               to="/platform-admin/collection?status=blocked_login"
@@ -239,6 +249,7 @@ onMounted(load);
               <option value="all">全部状态</option>
               <option value="running">运行中</option>
               <option value="succeeded">成功</option>
+              <option value="succeeded_empty">成功但无结果</option>
               <option value="blocked">已拦截</option>
               <option value="failed">失败</option>
               <option value="timed_out">已超时</option>
@@ -319,6 +330,16 @@ onMounted(load);
               <div>
                 <dt>结束时间</dt>
                 <dd>{{ time(row.finished_at) }}</dd>
+              </div>
+              <div>
+                <dt>重复执行风险</dt>
+                <dd>
+                  {{
+                    row.error_code === "lease_expired"
+                      ? "租约过期前可能已在目标站执行；重放前核对证据"
+                      : "未发现租约过期信号"
+                  }}
+                </dd>
               </div>
             </dl>
             <details>

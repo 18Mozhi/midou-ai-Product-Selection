@@ -1,16 +1,8 @@
-import {
-  Agent as HttpsAgent,
-  request as httpsRequest,
-  type RequestOptions,
-} from "node:https";
+import { Agent as HttpsAgent, request as httpsRequest, type RequestOptions } from "node:https";
 import { connect as netConnect, type Socket } from "node:net";
 import { connect as tlsConnect } from "node:tls";
 import type { Duplex } from "node:stream";
-import {
-  brotliDecompressSync,
-  gunzipSync,
-  inflateSync,
-} from "node:zlib";
+import { brotliDecompressSync, gunzipSync, inflateSync } from "node:zlib";
 
 export interface ProviderSourceProxyConfig {
   url: string;
@@ -76,19 +68,14 @@ class HttpConnectProxyAgent extends HttpsAgent {
     });
     const onData = (chunk: Buffer) => {
       headers = Buffer.concat([headers, chunk]);
-      if (headers.length > 16384)
-        return fail("Provider proxy CONNECT response is too large");
+      if (headers.length > 16384) return fail("Provider proxy CONNECT response is too large");
       const end = headers.indexOf("\r\n\r\n");
       if (end < 0) return;
       socket.off("data", onData);
-      const statusLine = headers
-          .subarray(0, headers.indexOf("\r\n"))
-          .toString("ascii"),
+      const statusLine = headers.subarray(0, headers.indexOf("\r\n")).toString("ascii"),
         status = /^HTTP\/1\.[01]\s+(\d{3})/.exec(statusLine)?.[1];
       if (status !== "200")
-        return fail(
-          `Provider proxy CONNECT returned HTTP ${status ?? "invalid"}`,
-        );
+        return fail(`Provider proxy CONNECT returned HTTP ${status ?? "invalid"}`);
       const remainder = headers.subarray(end + 4);
       if (remainder.length) socket.unshift(remainder);
       const tlsSocket = tlsConnect({
@@ -105,13 +92,10 @@ class HttpConnectProxyAgent extends HttpsAgent {
   }
 }
 
-const responseHeaders = (
-  headers: Record<string, string | string[] | undefined>,
-) => {
+const responseHeaders = (headers: Record<string, string | string[] | undefined>) => {
   const result = new Headers();
   for (const [name, value] of Object.entries(headers)) {
-    if (Array.isArray(value))
-      for (const item of value) result.append(name, item);
+    if (Array.isArray(value)) for (const item of value) result.append(name, item);
     else if (value !== undefined) result.set(name, value);
   }
   return result;
@@ -136,14 +120,12 @@ export function decodeProviderProxyResponseBody(
             : encoding === "br"
               ? brotliDecompressSync(body, options)
               : null;
-    if (!decoded)
-      throw new Error(`Provider proxy response encoding is unsupported: ${encoding}`);
+    if (!decoded) throw new Error(`Provider proxy response encoding is unsupported: ${encoding}`);
     if (decoded.length > MAX_PROXY_RESPONSE_BYTES)
       throw new Error("Provider proxy response exceeds 2 MB");
     return decoded;
   } catch (error) {
-    if (error instanceof Error && error.message.startsWith("Provider proxy"))
-      throw error;
+    if (error instanceof Error && error.message.startsWith("Provider proxy")) throw error;
     throw new Error("Provider proxy response decompression failed");
   }
 }
@@ -167,8 +149,7 @@ const httpConnectFetch: TunnelFetch = async (url, init, proxy) => {
         let bytes = 0;
         response.on("data", (chunk: Buffer) => {
           bytes += chunk.length;
-          if (bytes > 2_000_000)
-            request.destroy(new Error("Provider proxy response exceeds 2 MB"));
+          if (bytes > 2_000_000) request.destroy(new Error("Provider proxy response exceeds 2 MB"));
           else chunks.push(chunk);
         });
         response.once("error", (error) => {
@@ -180,21 +161,16 @@ const httpConnectFetch: TunnelFetch = async (url, init, proxy) => {
           try {
             const headers = responseHeaders(response.headers),
               contentEncoding = headers.get("content-encoding"),
-              body = decodeProviderProxyResponseBody(
-                Buffer.concat(chunks),
-                contentEncoding,
-              );
+              body = decodeProviderProxyResponseBody(Buffer.concat(chunks), contentEncoding);
             if (contentEncoding) {
               headers.delete("content-encoding");
               headers.delete("content-length");
             }
             const result = new Response(new Uint8Array(body), {
-                status: response.statusCode ?? 502,
-                headers,
-                ...(response.statusMessage
-                  ? { statusText: response.statusMessage }
-                  : {}),
-              });
+              status: response.statusCode ?? 502,
+              headers,
+              ...(response.statusMessage ? { statusText: response.statusMessage } : {}),
+            });
             Object.defineProperty(result, "url", {
               configurable: true,
               value: url.toString(),
@@ -227,10 +203,7 @@ export function createProviderSourceFetch(
   if (!proxy) return directFetch;
   return (async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = new URL(input instanceof Request ? input.url : String(input));
-    if (
-      url.protocol === "https:" &&
-      allowedProxyHosts.has(url.hostname.toLowerCase())
-    )
+    if (url.protocol === "https:" && allowedProxyHosts.has(url.hostname.toLowerCase()))
       return tunnelFetch(url, init, proxy);
     return directFetch(input, init);
   }) as typeof fetch;

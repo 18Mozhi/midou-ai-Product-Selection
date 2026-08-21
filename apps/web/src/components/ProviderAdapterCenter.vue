@@ -19,6 +19,15 @@ interface AdapterSummary {
   last_latency_ms: number | null;
   last_error_code: string | null;
   consecutive_failures: number;
+  latest_runtime_category:
+    "unknown" | "healthy" | "network" | "parser" | "login" | "empty" | "other";
+  runtime_sample_count_24h: number;
+  runtime_success_rate_basis_points_24h: number | null;
+  runtime_duration_p95_ms_24h: number | null;
+  runtime_network_failure_count_24h: number;
+  runtime_parser_failure_count_24h: number;
+  runtime_login_failure_count_24h: number;
+  runtime_empty_success_count_24h: number;
   version: number;
   updated_at: string;
 }
@@ -59,7 +68,19 @@ const accessModeText = (value: string) =>
       ? "尚未登记适配器"
       : value
         ? "检查失败，详见技术详情"
-        : "无错误";
+        : "无错误",
+  runtimeCategoryText = (value: AdapterSummary["latest_runtime_category"]) =>
+    ({
+      unknown: "暂无运行样本",
+      healthy: "运行正常",
+      network: "网络异常",
+      parser: "解析异常",
+      login: "登录异常",
+      empty: "成功但无结果",
+      other: "其他异常",
+    })[value],
+  percentText = (value: number | null) =>
+    value === null ? "暂无样本" : `${(value / 100).toFixed(1)}%`;
 const filtered = computed(() =>
     items.value.filter(
       (item) =>
@@ -200,6 +221,7 @@ onMounted(load);
                   <th>运行方式</th>
                   <th>实现</th>
                   <th>健康</th>
+                  <th>24 小时运行</th>
                   <th>最近检查</th>
                   <th></th>
                 </tr>
@@ -225,6 +247,22 @@ onMounted(load);
                     <small v-if="item.last_error_code"
                       >{{ errorText(item.last_error_code) }} · 连续
                       {{ item.consecutive_failures }} 次</small
+                    >
+                  </td>
+                  <td>
+                    <b :data-runtime-category="item.latest_runtime_category">{{
+                      runtimeCategoryText(item.latest_runtime_category)
+                    }}</b>
+                    <small
+                      >成功率 {{ percentText(item.runtime_success_rate_basis_points_24h) }} · P95
+                      {{ item.runtime_duration_p95_ms_24h ?? "—" }} ms ·
+                      {{ item.runtime_sample_count_24h }} 个样本</small
+                    >
+                    <small
+                      >网络 {{ item.runtime_network_failure_count_24h }} · 解析
+                      {{ item.runtime_parser_failure_count_24h }} · 登录
+                      {{ item.runtime_login_failure_count_24h }} · 空结果
+                      {{ item.runtime_empty_success_count_24h }}</small
                     >
                   </td>
                   <td>
@@ -273,6 +311,32 @@ onMounted(load);
             <div>
               <dt>健康状态</dt>
               <dd>{{ healthText(row.health_status) }}</dd>
+            </div>
+            <div>
+              <dt>最近运行类别</dt>
+              <dd>{{ runtimeCategoryText(row.latest_runtime_category) }}</dd>
+            </div>
+            <div>
+              <dt>24 小时成功率</dt>
+              <dd>
+                {{ percentText(row.runtime_success_rate_basis_points_24h) }}（{{
+                  row.runtime_sample_count_24h
+                }}
+                个样本）
+              </dd>
+            </div>
+            <div>
+              <dt>24 小时 P95</dt>
+              <dd>{{ row.runtime_duration_p95_ms_24h ?? "—" }} ms</dd>
+            </div>
+            <div>
+              <dt>运行问题分布</dt>
+              <dd>
+                网络 {{ row.runtime_network_failure_count_24h }} · 解析
+                {{ row.runtime_parser_failure_count_24h }} · 登录
+                {{ row.runtime_login_failure_count_24h }} · 空结果
+                {{ row.runtime_empty_success_count_24h }}
+              </dd>
             </div>
             <div>
               <dt>最近检查</dt>

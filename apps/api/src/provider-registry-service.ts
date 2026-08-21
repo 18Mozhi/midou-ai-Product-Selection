@@ -79,7 +79,7 @@ function optionalHttpsUrl(value: string | null) {
     );
   }
 }
-function validate(value: ProviderDefinitionInput): ProviderDefinitionInput {
+function validate(value: ProviderDefinitionInput, now: Date): ProviderDefinitionInput {
   if (!value || typeof value !== "object")
     throw new ProviderRegistryError("provider_input_invalid", 400, "来源技术合同不能为空。");
   if (typeof value.code !== "string" || !/^[a-z0-9_]{2,80}$/.test(value.code))
@@ -144,16 +144,30 @@ function validate(value: ProviderDefinitionInput): ProviderDefinitionInput {
     value.owner_label.length > 120
   )
     throw new ProviderRegistryError("owner_label_invalid", 400, "负责人需要 2–120 字符。");
-  const termsReferenceUrl = optionalHttpsUrl(value.terms_reference_url);
+  const termsReferenceUrl = optionalHttpsUrl(value.terms_reference_url),
+    termsVersion = value.terms_version == null ? null : String(value.terms_version).trim(),
+    termsExpiry = value.terms_expires_at == null ? null : new Date(value.terms_expires_at);
+  if (termsVersion !== null && !/^[A-Za-z0-9._:-]{1,80}$/.test(termsVersion))
+    throw new ProviderRegistryError(
+      "terms_version_invalid",
+      400,
+      "条款版本仅允许 1–80 位字母、数字、点、下划线、冒号或短横线。",
+    );
+  if (termsExpiry !== null && !Number.isFinite(termsExpiry.getTime()))
+    throw new ProviderRegistryError("terms_expiry_invalid", 400, "填写有效的条款到期时间。");
   if (
     ["public_page", "public_rss"].includes(value.access_mode) &&
     value.status === "enabled" &&
-    (value.terms_review_status !== "approved" || !termsReferenceUrl)
+    (value.terms_review_status !== "approved" ||
+      !termsReferenceUrl ||
+      !termsVersion ||
+      !termsExpiry ||
+      termsExpiry <= now)
   )
     throw new ProviderRegistryError(
       "public_source_compliance_required",
       409,
-      "公开来源启用前必须批准平台条款并登记 HTTPS 参考地址。",
+      "公开来源启用前必须批准平台条款，并登记 HTTPS 参考地址、版本和未来到期时间。",
     );
   return {
     ...value,
@@ -166,6 +180,8 @@ function validate(value: ProviderDefinitionInput): ProviderDefinitionInput {
     healthcheck_url: optionalHttpUrl(value.healthcheck_url),
     owner_label: value.owner_label.trim(),
     terms_reference_url: termsReferenceUrl,
+    terms_version: termsVersion,
+    terms_expires_at: termsExpiry?.toISOString() ?? null,
   };
 }
 export class ProviderRegistryService {
@@ -186,7 +202,7 @@ export class ProviderRegistryService {
     },
   ) {
     const now = this.now(),
-      validated = validate(value);
+      validated = validate(value, now);
     return this.repository.create({
       ...context,
       value: {
@@ -215,7 +231,7 @@ export class ProviderRegistryService {
         "expected_version 必须为正整数。",
       );
     const now = this.now(),
-      validated = validate(value);
+      validated = validate(value, now);
     return this.repository.update({
       id,
       value: {

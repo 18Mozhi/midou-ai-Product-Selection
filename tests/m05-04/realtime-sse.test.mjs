@@ -22,9 +22,7 @@ test("M05-04.A01/A02/A04/A12 validates monotonic cursors and replay window", asy
   );
   await assert.rejects(
     () => service.replay({ afterId: 0 }),
-    (e) =>
-      e instanceof RealtimeServiceError &&
-      e.code === "realtime_replay_window_exceeded",
+    (e) => e instanceof RealtimeServiceError && e.code === "realtime_replay_window_exceeded",
   );
 });
 test("M05-04.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
@@ -44,10 +42,7 @@ test("M05-04.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     v = await Promise.all(files.map((x) => readFile(x, "utf8")));
   assert.match(v[0], /AUTO_INCREMENT[\s\S]*idx_realtime_replay/);
   assert.match(v[1], /recipient_id=\?[\s\S]*id>\?/);
-  assert.match(
-    v[2],
-    /Last-Event-ID|last-event-id[\s\S]*text\/event-stream[\s\S]*heartbeat/,
-  );
+  assert.match(v[2], /Last-Event-ID|last-event-id[\s\S]*text\/event-stream[\s\S]*heartbeat/);
   assert.match(v[4], /EventSource[\s\S]*last-event-id|last_event_id/);
   assert.equal(JSON.parse(v.at(-1)).atomicTasks.length, 17);
 });

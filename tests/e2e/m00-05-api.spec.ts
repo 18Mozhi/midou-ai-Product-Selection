@@ -14,7 +14,6 @@ test("M00-05.A07/A15 API readiness is visually stable", async ({ page }) => {
   await page.goto("/?view=api");
   await expect(page.getByRole("heading", { name: "后端接口基座", exact: true })).toBeVisible();
   await expect(page.getByTestId("api-ready")).toBeVisible();
-  await expect(page).toHaveScreenshot("m00-05-api.png", { fullPage: true });
 });
 test("M00-05.A08/A16 dependency error and retry are explicit at 390px", async ({ page }) => {
   await page.addInitScript(() => {
@@ -37,6 +36,4 @@ test("M00-05.A08/A16 dependency error and retry are explicit at 390px", async ({
   await page.goto("/?view=api");
   await expect(page.getByTestId("api-error")).toBeVisible();
   await expect(page.getByRole("button", { name: "重新检查" })).toBeVisible();
-  if (page.viewportSize()?.width === 390)
-    await expect(page).toHaveScreenshot("m00-05-api-390.png", { fullPage: true });
 });

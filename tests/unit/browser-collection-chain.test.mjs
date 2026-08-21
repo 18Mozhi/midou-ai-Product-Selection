@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { buildApp } from "../../apps/api/dist/app.js";
+import { MySqlCrawlerRuntimeRepository } from "../../apps/api/dist/mysql-crawler-runtime-repository.js";
 import { MySqlProviderSourceRepository } from "../../apps/api/dist/mysql-provider-source-repository.js";
 import { ProviderSourceServiceError } from "../../apps/api/dist/provider-source-service.js";
 import { ProviderSourceService } from "../../apps/api/dist/provider-source-service.js";
@@ -132,6 +133,49 @@ test("authenticated browser job client links a business subquery and parses the 
   );
 });
 
+test("worker shutdown cancellation is persisted to the active browser job", async () => {
+  const statements = [];
+  const pool = {
+    query: async (sql, values) => {
+      statements.push({ sql, values });
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const controller = new AbortController();
+  controller.abort(new Error("scheduler_stopping"));
+  await assert.rejects(
+    () =>
+      new MySqlAuthenticatedBrowserJobClient(pool, 1, async () => {}).collect(
+        {
+          organizationId: ids.org,
+          workspaceId: ids.workspace,
+          taskId: ids.task,
+          subqueryId: ids.subquery,
+          provider: {
+            id: ids.provider,
+            code: "1688_search",
+            accessMode: "authenticated_browser",
+            targetUrl: "https://s.1688.com/selloffer/offer_search.htm",
+            parserVersion: ALIBABA_1688_BROWSER_PARSER_VERSION,
+            timeoutMs: 1000,
+            fields: ["title"],
+          },
+          target: { query: "桌面灯" },
+          requestId: "browser-job-cancel-request",
+          traceId: "browser-job-cancel-trace",
+        },
+        async () => {},
+        controller.signal,
+      ),
+    (error) => error?.code === "dependency_unavailable",
+  );
+  const cancellation = statements.find((item) =>
+    item.sql.includes("error_code='worker_shutdown_cancelled'"),
+  );
+  assert.ok(cancellation);
+  assert.equal(cancellation.values[0], ids.subquery);
+});
+
 test("browser screenshot and DOM fragment are persisted with task, job and parser version", async () => {
   const root = await mkdtemp(join(tmpdir(), "scoutops-browser-evidence-")),
     statements = [],
@@ -253,7 +297,7 @@ test("internal browser job API returns encrypted assignment only to the crawler 
       run_id: ids.run,
       profile_id: ids.profile,
       lease_token: "x".repeat(64),
-      status: "succeeded",
+      status: "succeeded_empty",
       page_count: 1,
       item_count: 1,
       detail_count: 0,
@@ -264,7 +308,55 @@ test("internal browser job API returns encrypted assignment only to the crawler 
   });
   assert.equal(completed.statusCode, 200);
   assert.equal(calls.at(-1)[0], "complete");
+  assert.equal(calls.at(-1)[1].status, "succeeded_empty");
   await app.close();
+});
+
+test("crawler completion replay with the original lease digest is idempotent", async () => {
+  const calls = [];
+  const connection = {
+    beginTransaction: async () => calls.push("begin"),
+    commit: async () => calls.push("commit"),
+    rollback: async () => calls.push("rollback"),
+    release: () => calls.push("release"),
+    query: async (sql) => {
+      calls.push(sql);
+      return [
+        [
+          {
+            organization_id: ids.org,
+            workspace_id: ids.workspace,
+            collection_task_id: ids.task,
+            status: "succeeded_empty",
+            updated_by: ids.actor,
+          },
+        ],
+      ];
+    },
+  };
+  const repository = new MySqlCrawlerRuntimeRepository({ getConnection: async () => connection });
+  await repository.finishJob({
+    jobId: ids.job,
+    runId: ids.run,
+    profileId: ids.profile,
+    leaseTokenHash: "a".repeat(64),
+    actorId: ids.actor,
+    requestId: "request-replay",
+    traceId: "trace-replay",
+    now: new Date("2026-08-21T00:00:00.000Z"),
+    status: "succeeded_empty",
+    pageCount: 1,
+    itemCount: 0,
+    detailCount: 0,
+    durationMs: 20,
+    errorCode: null,
+    result: { status: "succeeded_empty" },
+  });
+  assert.deepEqual(
+    calls.filter((item) => typeof item === "string" && item.startsWith("UPDATE")),
+    [],
+  );
+  assert.deepEqual(calls.slice(-2), ["commit", "release"]);
 });
 
 test("1688 cannot be enabled before real logged-in fixed-sample replay is accepted", async () => {

@@ -1,9 +1,105 @@
-import type { FastifyInstance, FastifyRequest } from 'fastify';
-import type { LocalAuthService } from '@scoutops/auth';
-import type { AuthorizationService } from '@scoutops/authorization';
-import type { DataQualityService } from './data-quality-service.js';
-import { sessionToken } from './auth-routes.js';
-import { ApiError, requireIdempotencyKey } from './api-foundation.js';
-export interface DataQualityRouteOptions{service:DataQualityService;authorization:AuthorizationService;auth:LocalAuthService;secureCookie:boolean;webOrigin:string;}
-const ids=(r:FastifyRequest)=>({requestId:r.headers['x-request-id']!.toString(),traceId:r.headers['x-trace-id']!.toString()}),envelope=(data:unknown,r:FastifyRequest,meta?:unknown)=>({data,...(meta?{meta}:{}),request_id:ids(r).requestId,trace_id:ids(r).traceId});
-export function registerDataQualityRoutes(app:FastifyInstance,o:DataQualityRouteOptions){const actor=async(r:FastifyRequest)=>{const a=await o.auth.authenticate(sessionToken(r,o.secureCookie));await o.authorization.authorize({actorId:a.user.id,capability:'platform:operate',surface:'api',...ids(r)});return a.user.id;};const origin=(r:FastifyRequest)=>{if(r.headers.origin!==o.webOrigin)throw new ApiError(403,'origin_forbidden','请求来源不允许。','从 ScoutOps 页面重试。');};app.get('/api/v1/platform/data-quality',async(r,reply)=>{await actor(r);const value=await o.service.dashboard(r.query as any);reply.header('cache-control','private, no-store');return envelope(value,r,{page:Number((r.query as any).page??1),page_size:Number((r.query as any).page_size??20),total_evidence:value.totalEvidence,total_issues:value.totalIssues});});app.get('/api/v1/platform/data/evidence/:evidenceId',async(r,reply)=>{await actor(r);reply.header('cache-control','private, no-store');return envelope(await o.service.detail((r.params as any).evidenceId),r);});app.post('/api/v1/platform/data-quality/issues/:issueId/resolve',async r=>{origin(r);const actorId=await actor(r);return envelope(await o.service.resolveIssue((r.params as any).issueId,r.body as any,{actorId,idempotencyKey:requireIdempotencyKey(r),...ids(r)}),r);});app.post('/api/v1/platform/data/evidence/:evidenceId/download-grant',async r=>{origin(r);const actorId=await actor(r);return envelope(await o.service.issueDownload((r.params as any).evidenceId,{actorId,idempotencyKey:requireIdempotencyKey(r),...ids(r)}),r);});app.get('/api/v1/platform/data/evidence/:evidenceId/download',async(r,reply)=>{const actorId=await actor(r);const result=await o.service.download((r.params as any).evidenceId,String((r.query as any).grant??''),{actorId,...ids(r)});reply.header('content-type',result.contentType).header('content-disposition',`attachment; filename="${(r.params as any).evidenceId}.bin"`).header('x-content-sha256',result.sha256).header('cache-control','private, no-store');return reply.send(result.content);});}
+import type { FastifyInstance, FastifyRequest } from "fastify";
+import type { LocalAuthService } from "@scoutops/auth";
+import type { AuthorizationService } from "@scoutops/authorization";
+import type { DataQualityService } from "./data-quality-service.js";
+import { sessionToken } from "./auth-routes.js";
+import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
+export interface DataQualityRouteOptions {
+  service: DataQualityService;
+  authorization: AuthorizationService;
+  auth: LocalAuthService;
+  secureCookie: boolean;
+  webOrigin: string;
+}
+const ids = (r: FastifyRequest) => ({
+    requestId: r.headers["x-request-id"]!.toString(),
+    traceId: r.headers["x-trace-id"]!.toString(),
+  }),
+  envelope = (data: unknown, r: FastifyRequest, meta?: unknown) => ({
+    data,
+    ...(meta ? { meta } : {}),
+    request_id: ids(r).requestId,
+    trace_id: ids(r).traceId,
+  });
+export function registerDataQualityRoutes(app: FastifyInstance, o: DataQualityRouteOptions) {
+  const actor = async (r: FastifyRequest) => {
+    const a = await o.auth.authenticate(sessionToken(r, o.secureCookie));
+    await o.authorization.authorize({
+      actorId: a.user.id,
+      capability: "platform:operate",
+      surface: "api",
+      ...ids(r),
+    });
+    return a.user.id;
+  };
+  const origin = (r: FastifyRequest) => {
+    if (r.headers.origin !== o.webOrigin)
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
+  };
+  app.get("/api/v1/platform/data-quality", async (r, reply) => {
+    await actor(r);
+    const value = await o.service.dashboard(r.query as any);
+    reply.header("cache-control", "private, no-store");
+    return envelope(value, r, {
+      page: Number((r.query as any).page ?? 1),
+      page_size: Number((r.query as any).page_size ?? 20),
+      total_evidence: value.totalEvidence,
+      total_issues: value.totalIssues,
+    });
+  });
+  app.get("/api/v1/platform/data/evidence/:evidenceId", async (r, reply) => {
+    await actor(r);
+    reply.header("cache-control", "private, no-store");
+    return envelope(await o.service.detail((r.params as any).evidenceId), r);
+  });
+  app.post("/api/v1/platform/data-quality/issues/batch", async (r) => {
+    origin(r);
+    const actorId = await actor(r);
+    return envelope(
+      await o.service.batchIssues(r.body as any, {
+        actorId,
+        idempotencyKey: requireIdempotencyKey(r),
+        ...ids(r),
+      }),
+      r,
+    );
+  });
+  app.post("/api/v1/platform/data-quality/issues/:issueId/resolve", async (r) => {
+    origin(r);
+    const actorId = await actor(r);
+    return envelope(
+      await o.service.resolveIssue((r.params as any).issueId, r.body as any, {
+        actorId,
+        idempotencyKey: requireIdempotencyKey(r),
+        ...ids(r),
+      }),
+      r,
+    );
+  });
+  app.post("/api/v1/platform/data/evidence/:evidenceId/download-grant", async (r) => {
+    origin(r);
+    const actorId = await actor(r);
+    return envelope(
+      await o.service.issueDownload((r.params as any).evidenceId, {
+        actorId,
+        idempotencyKey: requireIdempotencyKey(r),
+        ...ids(r),
+      }),
+      r,
+    );
+  });
+  app.get("/api/v1/platform/data/evidence/:evidenceId/download", async (r, reply) => {
+    const actorId = await actor(r);
+    const result = await o.service.download(
+      (r.params as any).evidenceId,
+      String((r.query as any).grant ?? ""),
+      { actorId, ...ids(r) },
+    );
+    reply
+      .header("content-type", result.contentType)
+      .header("content-disposition", `attachment; filename="${(r.params as any).evidenceId}.bin"`)
+      .header("x-content-sha256", result.sha256)
+      .header("cache-control", "private, no-store");
+    return reply.send(result.content);
+  });
+}

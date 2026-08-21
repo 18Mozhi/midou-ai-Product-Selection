@@ -197,16 +197,20 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(down, /DROP TABLE/);
   assert.match(repo, /organization_id=\?/);
   assert.match(repo, /required_capability IN/);
+  for (const table of ["tasks", "opportunities", "raw_evidence", "collection_tasks"])
+    assert.match(repo, new RegExp(`FROM ${table}|JOIN ${table}`));
+  assert.match(repo, /\/tasks\/[\s\S]*\/opportunities\/[\s\S]*evidence=[\s\S]*task=/);
   assert.match(openapi, /\/me\/global-search:/);
   assert.match(openapi, /\/me\/quick-actions:/);
   assert.match(openapi, /name: shell[\s\S]*required: true/);
   assert.match(overlay, /createApiClient/);
+  assert.match(overlay, /任务[\s\S]*机会[\s\S]*证据[\s\S]*采集任务/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   for (const state of ["loading", "empty", "expired", "forbidden", "blocked"])
     assert.match(overlay, new RegExp(state));
   assert.match(shell, /event\.metaKey\s*\|\|\s*event\.ctrlKey/);
   assert.match(shell, /role-mobile-nav/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(e2e, /Control\+K/);
   assert.doesNotMatch(env, /SEARCH_INDEX_|QUICK_CREATE_/);
   assert.match(architecture, /同步|synchronous/i);

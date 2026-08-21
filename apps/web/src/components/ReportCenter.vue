@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { ApiClientError, createApiClient, createApiResponseClient } from "../api-client";
+import {
+  ApiClientError,
+  createApiClient,
+  createApiResponseClient,
+  rethrowUnexpectedError,
+} from "../api-client";
 import "../report-center.css";
 type ReportType = "opportunity" | "trend" | "team";
 const props = defineProps<{ apiBaseUrl: string }>(),
@@ -49,7 +54,9 @@ async function load() {
       api<any[]>("/report-exports"),
     ]);
     state.value = report.value.summary.total || report.value.summary.members ? "ready" : "empty";
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function choose(v: ReportType) {
   if (type.value === v) return;
@@ -68,7 +75,8 @@ async function createExport() {
     );
     notice.value = "导出任务已提交，由宝塔 Node Worker 异步生成。";
     await load();
-  } catch {
+  } catch (error) {
+    rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
   }
@@ -86,7 +94,8 @@ async function regenerate(item: any) {
     await load();
     const created = exports.value.find((entry) => entry.id === replacement.id);
     if (created) selectedExport.value = created;
-  } catch {
+  } catch (error) {
+    rethrowUnexpectedError(error);
   } finally {
     regeneratingId.value = "";
   }

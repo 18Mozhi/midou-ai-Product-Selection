@@ -1,9 +1,115 @@
-import test from'node:test';import assert from'node:assert/strict';import{readFile}from'node:fs/promises';
-test('M00-08 manifest declares fixed BaoTa-managed Web Node and Python projects without external managers',async()=>{const manifest=JSON.parse(await readFile('infra/baota/service-manifest.json','utf8'));assert.equal(manifest.schemaVersion,4);assert.equal(manifest.stage,'production');assert.equal(typeof manifest.productionDeployed,'boolean');if(manifest.productionDeployed)assert.equal(manifest.deploymentStatus,'healthy');const commands=manifest.objects.flatMap(item=>[item.startCommand,item.command]).filter(Boolean).join('\n');assert.doesNotMatch(commands,/systemctl|\bpm2\b|crontab|docker[ -]compose|nohup/i);const nodeProjects=manifest.objects.filter(item=>item.kind==='baota-node-project');assert.equal(nodeProjects.length,1);assert.equal(nodeProjects[0].name,'ai选品');assert.equal(nodeProjects[0].workingDirectory,'/www/wwwroot/ai选品/backend');assert.match(nodeProjects[0].startCommand,/^node --env-file=/);const pythonProjects=manifest.objects.filter(item=>item.kind==='baota-python-project');assert.equal(pythonProjects.length,1);assert.equal(pythonProjects[0].name,'ai选品-python');assert.equal(pythonProjects[0].workingDirectory,'/www/wwwroot/ai选品/python');assert.equal(pythonProjects[0].pythonVersion,'3.12.13');for(const name of ['ai选品网站','ai选品','ai选品-python','ai选品数据库','ai选品缓存','ai选品备份'])assert.ok(manifest.objects.some(item=>item.name===name));});
-test('M00-08 nginx template keeps API local and SSE unbuffered',async()=>{const nginx=await readFile('infra/baota/nginx/scoutops.conf.template','utf8');assert.match(nginx,/127\.0\.0\.1:4101/);assert.match(nginx,/proxy_buffering off/);assert.match(nginx,/X-Request-ID/);assert.match(nginx,/try_files/);});
-test('M00-08 unified runtime supervises API and worker with graceful stop',async()=>{const [supervisor,server,worker,env]=await Promise.all(['apps/backend/src/supervisor.ts','apps/backend/src/server.ts','apps/worker/src/index.ts','config/env.example'].map(path=>readFile(path,'utf8')));const backend=`${supervisor}\n${server}`;assert.match(backend,/apps\/api\/dist\/server\.js/);assert.match(backend,/apps\/worker\/dist\/index\.js/);assert.match(backend,/SIGTERM/);assert.match(backend,/SIGINT/);assert.match(worker,/workerHeartbeatMs/);assert.match(env,/WORKER_HEARTBEAT_MS=30000/);});
-test('M00-08 executable preflight enforces the fixed production topology',async()=>{const preflight=await readFile('scripts/verify-baota-s0.mjs','utf8');assert.match(preflight,/schemaVersion\s*!==\s*4/);assert.match(preflight,/apps\/backend\/dist\/server\.js/);assert.match(preflight,/nodeProjects\.length\s*!==\s*1/);assert.match(preflight,/pythonProjects\.length\s*!==\s*1/);assert.match(preflight,/\/www\/wwwroot\/ai选品\/backend/);assert.doesNotMatch(preflight,/product-scout-api-canary|product-scout-worker|spawnSync/);});
-test('M00-08 deployment uploader excludes local tests and binds every mutation to this project',async()=>{const deploy=await readFile('scripts/deploy-baota.py','utf8');assert.match(deploy,/PROJECT_ROOT = "\/www\/wwwroot\/ai选品"/);assert.match(deploy,/SITE_ID = 29/);assert.match(deploy,/Git worktree must be clean/);assert.match(deploy,/TemporaryDirectory/);assert.doesNotMatch(deploy,/git (pull|clone|checkout)/);assert.doesNotMatch(deploy,/copy_tree\(repo \/ "tests"/);});
-test('M00-08 crawler config fingerprint includes heartbeat behavior',async()=>{const config=await readFile('apps/crawler/scoutops_crawler/config.py','utf8');assert.match(config,/"heartbeat_seconds": heartbeat_seconds/);});
-test('M00-08 deployment migration is MySQL57 and reversible',async()=>{const up=await readFile('database/migrations/0007_m00_08_deployment_releases.up.sql','utf8');const down=await readFile('database/migrations/0007_m00_08_deployment_releases.down.sql','utf8');assert.match(up,/request_id/);assert.match(up,/trace_id/);assert.match(up,/utf8mb4/);assert.doesNotMatch(up,/CHECK\s*\(|utf8mb4_0900/i);assert.match(down,/DROP TABLE/);});
-test('M00-08 OpenAPI, Feature Map, UI, docs and atomic evidence are synchronized',async()=>{const [api,map,ui,architecture,runbook,registry]=await Promise.all(['docs/openapi.yaml','docs/feature-map.json','apps/web/src/components/DeploymentFoundation.vue','docs/architecture/m00-08-baota-s0-foundation.md','docs/runbooks/m00-08-baota-s0-foundation.md','verification/modules/M00-08.json'].map(path=>readFile(path,'utf8')));assert.match(api,/x-scoutops-baota-s0/);assert.match(map,/baotaS0/);for(const state of ['checking','healthy','rollback'])assert.match(ui,new RegExp(state));assert.match(architecture,/64_系统监控\.jpg/);assert.match(runbook,/## 回滚/);const parsed=JSON.parse(registry);assert.equal(parsed.atomicTasks.length,17);assert.deepEqual(parsed.atomicTasks.map(item=>item.id),Array.from({length:17},(_,i)=>`M00-08.A${String(i+1).padStart(2,'0')}`));});
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+test("M00-08 manifest declares fixed BaoTa-managed Web Node and Python projects without external managers", async () => {
+  const manifest = JSON.parse(await readFile("infra/baota/service-manifest.json", "utf8"));
+  assert.equal(manifest.schemaVersion, 4);
+  assert.equal(manifest.stage, "production");
+  assert.equal(typeof manifest.productionDeployed, "boolean");
+  if (manifest.productionDeployed) assert.equal(manifest.deploymentStatus, "healthy");
+  const commands = manifest.objects
+    .flatMap((item) => [item.startCommand, item.command])
+    .filter(Boolean)
+    .join("\n");
+  assert.doesNotMatch(commands, /systemctl|\bpm2\b|crontab|docker[ -]compose|nohup/i);
+  const nodeProjects = manifest.objects.filter((item) => item.kind === "baota-node-project");
+  assert.equal(nodeProjects.length, 1);
+  assert.equal(nodeProjects[0].name, "ai选品");
+  assert.equal(nodeProjects[0].workingDirectory, "/www/wwwroot/ai选品/backend");
+  assert.match(nodeProjects[0].startCommand, /^node --env-file=/);
+  const pythonProjects = manifest.objects.filter((item) => item.kind === "baota-python-project");
+  assert.equal(pythonProjects.length, 1);
+  assert.equal(pythonProjects[0].name, "ai选品-python");
+  assert.equal(pythonProjects[0].workingDirectory, "/www/wwwroot/ai选品/python");
+  assert.equal(pythonProjects[0].pythonVersion, "3.12.13");
+  for (const name of [
+    "ai选品网站",
+    "ai选品",
+    "ai选品-python",
+    "ai选品数据库",
+    "ai选品缓存",
+    "ai选品备份",
+  ])
+    assert.ok(manifest.objects.some((item) => item.name === name));
+});
+test("M00-08 nginx template keeps API local and SSE unbuffered", async () => {
+  const nginx = await readFile("infra/baota/nginx/scoutops.conf.template", "utf8");
+  assert.match(nginx, /127\.0\.0\.1:4101/);
+  assert.match(nginx, /proxy_buffering off/);
+  assert.match(nginx, /X-Request-ID/);
+  assert.match(nginx, /try_files/);
+});
+test("M00-08 unified runtime supervises API and worker with graceful stop", async () => {
+  const [supervisor, server, worker, env] = await Promise.all(
+    [
+      "apps/backend/src/supervisor.ts",
+      "apps/backend/src/server.ts",
+      "apps/worker/src/index.ts",
+      "config/env.example",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  const backend = `${supervisor}\n${server}`;
+  assert.match(backend, /apps\/api\/dist\/server\.js/);
+  assert.match(backend, /apps\/worker\/dist\/index\.js/);
+  assert.match(backend, /SIGTERM/);
+  assert.match(backend, /SIGINT/);
+  assert.match(worker, /workerHeartbeatMs/);
+  assert.match(env, /WORKER_HEARTBEAT_MS=30000/);
+});
+test("M00-08 executable preflight enforces the fixed production topology", async () => {
+  const preflight = await readFile("scripts/verify-baota-s0.mjs", "utf8");
+  assert.match(preflight, /schemaVersion\s*!==\s*4/);
+  assert.match(preflight, /apps\/backend\/dist\/server\.js/);
+  assert.match(preflight, /nodeProjects\.length\s*!==\s*1/);
+  assert.match(preflight, /pythonProjects\.length\s*!==\s*1/);
+  assert.match(preflight, /\/www\/wwwroot\/ai选品\/backend/);
+  assert.doesNotMatch(preflight, /product-scout-api-canary|product-scout-worker|spawnSync/);
+});
+test("M00-08 deployment uploader excludes local tests and binds every mutation to this project", async () => {
+  const deploy = await readFile("scripts/deploy-baota.py", "utf8");
+  assert.match(deploy, /PROJECT_ROOT = "\/www\/wwwroot\/ai选品"/);
+  assert.match(deploy, /SITE_ID = 29/);
+  assert.match(deploy, /Git worktree must be clean/);
+  assert.match(deploy, /TemporaryDirectory/);
+  assert.doesNotMatch(deploy, /git (pull|clone|checkout)/);
+  assert.doesNotMatch(deploy, /copy_tree\(repo \/ "tests"/);
+});
+test("M00-08 crawler config fingerprint includes heartbeat behavior", async () => {
+  const config = await readFile("apps/crawler/scoutops_crawler/config.py", "utf8");
+  assert.match(config, /"heartbeat_seconds": heartbeat_seconds/);
+});
+test("M00-08 deployment migration is MySQL57 and reversible", async () => {
+  const up = await readFile("database/migrations/0007_m00_08_deployment_releases.up.sql", "utf8");
+  const down = await readFile(
+    "database/migrations/0007_m00_08_deployment_releases.down.sql",
+    "utf8",
+  );
+  assert.match(up, /request_id/);
+  assert.match(up, /trace_id/);
+  assert.match(up, /utf8mb4/);
+  assert.doesNotMatch(up, /CHECK\s*\(|utf8mb4_0900/i);
+  assert.match(down, /DROP TABLE/);
+});
+test("M00-08 OpenAPI, Feature Map, UI, docs and atomic evidence are synchronized", async () => {
+  const [api, map, ui, architecture, runbook, registry] = await Promise.all(
+    [
+      "docs/openapi.yaml",
+      "docs/feature-map.json",
+      "apps/web/src/components/DeploymentFoundation.vue",
+      "docs/architecture/m00-08-baota-s0-foundation.md",
+      "docs/runbooks/m00-08-baota-s0-foundation.md",
+      "verification/modules/M00-08.json",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  assert.match(api, /x-scoutops-baota-s0/);
+  assert.match(map, /baotaS0/);
+  for (const state of ["checking", "healthy", "rollback"]) assert.match(ui, new RegExp(state));
+  assert.match(architecture, /64_系统监控\.jpg/);
+  assert.match(runbook, /## 回滚/);
+  const parsed = JSON.parse(registry);
+  assert.equal(parsed.atomicTasks.length, 17);
+  assert.deepEqual(
+    parsed.atomicTasks.map((item) => item.id),
+    Array.from({ length: 17 }, (_, i) => `M00-08.A${String(i + 1).padStart(2, "0")}`),
+  );
+});

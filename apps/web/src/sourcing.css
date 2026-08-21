@@ -420,6 +420,58 @@
   padding-top: 18px;
   border-top: 1px solid var(--so-border);
 }
+.sourcing-progress {
+  margin: 14px 0;
+  padding: 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.sourcing-progress > header,
+.sourcing-progress dl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.sourcing-progress h4 {
+  margin: 4px 0 0;
+}
+.sourcing-progress progress {
+  width: 100%;
+  margin: 12px 0;
+}
+.sourcing-progress dl {
+  flex-wrap: wrap;
+}
+.sourcing-progress dl div {
+  min-width: 90px;
+}
+.sourcing-progress dt {
+  color: var(--so-text-muted);
+  font-size: 11px;
+}
+.sourcing-progress dd {
+  margin: 3px 0 0;
+  font-weight: 800;
+}
+.sourcing-modal > form > dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.sourcing-modal > form > dl div {
+  padding: 10px;
+  background: var(--so-panel-soft);
+}
+.sourcing-modal > form > dl dt {
+  color: var(--so-text-muted);
+  font-size: 11px;
+}
+.sourcing-modal > form > dl dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
 .sourcing-comparisons > header,
 .sourcing-comparisons article > header {
   display: flex;
@@ -551,5 +603,12 @@
   .sourcing-compare-tray button {
     grid-column: 2;
     grid-row: 1/3;
+  }
+  .sourcing-progress > header,
+  .sourcing-progress dl {
+    align-items: flex-start;
+  }
+  .sourcing-modal > form > dl {
+    grid-template-columns: 1fr;
   }
 }

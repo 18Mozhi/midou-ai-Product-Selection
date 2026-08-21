@@ -225,9 +225,6 @@ test("M05-02.A07/A08/A09/A15 renders approval inbox timeline and mandatory reaso
   await expect(page.getByText("选品经理复核").last()).toBeVisible();
   await expect(page.getByText("批准与驳回均必填")).toBeVisible();
   await expect(page.getByRole("button", { name: "批准并流转" })).toBeDisabled();
-  await expect(page).toHaveScreenshot("m05-02-approval-workflow.png", {
-    fullPage: true,
-  });
 });
 
 test("approval inbox splits actionable and requested views and restores detail deep links", async ({

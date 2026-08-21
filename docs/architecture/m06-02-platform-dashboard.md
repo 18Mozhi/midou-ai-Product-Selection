@@ -13,3 +13,5 @@
 生产邮件 Provider 当前为 `pending_provider_selection`。平台导航不提供 `/platform-admin/email` 入口，直接访问也不装载邮件管理页面；通知偏好和平台通知草稿的邮件开关固定关闭。Node API 同时拒绝启用邮件偏好、创建邮件草稿、为通知启用邮件或发布历史邮件草稿，防止绕过前端。历史邮件投递、草稿、审计和安全处置 API 不删除，待 Provider 合同、回调与合规验收完成后再单独开放。
 
 平台管理页由 `PlatformManagementCenter.vue` 统一持有读取、写入、审核和加载状态；热点内容与邮件记录列表、消息列表、消息编辑器与通知运营事实分别下沉到 `PlatformManagementRecordList.vue`、`PlatformMessageWorkbench.vue`、`PlatformMessageEditor.vue` 和 `PlatformNotificationOperations.vue`。通知运营样式由页面专属 `platform-notification-operations.css` 持有并以 `.notification-ops` 限定作用域。子组件只通过属性和事件协作，不直接访问 API，也不改变既有权限、审计或消息状态合同。
+
+系统运维的 `/platform-admin/logs` 由独立 `PlatformLogCenter.vue` 承载。它复用 `GET /api/v1/platform/management?domain=logs`，按同一个查询词检索 `platform_audit_events`、`collection_task_events` 与 `crawler_browser_runs` 中已有索引的 request_id、trace_id、事件、资源和错误码，最多返回最新 200 条。响应只包含归一化状态与错误码，不返回审计 metadata、任务 payload、浏览器结果、凭证或 stderr；完整技术编号默认折叠。该只读模型不创建日志副本、搜索服务或新常驻进程。

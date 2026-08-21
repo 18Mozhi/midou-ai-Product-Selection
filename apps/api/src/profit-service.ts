@@ -2,15 +2,8 @@ import { randomUUID } from "node:crypto";
 export type FeeType = "platform_fee" | "payment_fee" | "tax" | "fulfillment";
 export type FeeMode = "percentage_of_sale" | "fixed_amount";
 export type CostRuleStatus =
-  | "draft"
-  | "pending_approval"
-  | "approved"
-  | "active"
-  | "retired"
-  | "rejected"
-  | "rolled_back";
-export type CostRuleAction =
-  "submit" | "approve" | "reject" | "publish" | "rollback";
+  "draft" | "pending_approval" | "approved" | "active" | "retired" | "rejected" | "rolled_back";
+export type CostRuleAction = "submit" | "approve" | "reject" | "publish" | "rollback";
 export type ApprovalRole = "selection_manager" | "organization_admin";
 export type CostInputType = "sale_price" | "purchase_price" | "logistics";
 export interface FeeLine {
@@ -91,25 +84,12 @@ export class ProfitServiceError extends Error {
     this.name = "ProfitServiceError";
   }
 }
-const bounded = (
-    value: unknown,
-    field: string,
-    max: number,
-    pattern?: RegExp,
-  ) => {
+const bounded = (value: unknown, field: string, max: number, pattern?: RegExp) => {
     if (typeof value !== "string")
-      throw new ProfitServiceError(
-        "profit_input_invalid",
-        400,
-        `修正 ${field} 后重试。`,
-      );
+      throw new ProfitServiceError("profit_input_invalid", 400, `修正 ${field} 后重试。`);
     const result = value.trim();
     if (!result || result.length > max || (pattern && !pattern.test(result)))
-      throw new ProfitServiceError(
-        "profit_input_invalid",
-        400,
-        `修正 ${field} 后重试。`,
-      );
+      throw new ProfitServiceError("profit_input_invalid", 400, `修正 ${field} 后重试。`);
     return result;
   },
   uuid = (value: unknown, field: string) =>
@@ -119,8 +99,7 @@ const bounded = (
       36,
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
     ),
-  currency = (value: unknown) =>
-    bounded(value, "currency", 3, /^[A-Za-z]{3}$/).toUpperCase(),
+  currency = (value: unknown) => bounded(value, "currency", 3, /^[A-Za-z]{3}$/).toUpperCase(),
   amount = (value: unknown, field: string, allowZero = true) => {
     if (
       typeof value !== "number" ||
@@ -129,25 +108,14 @@ const bounded = (
       (!allowZero && value === 0) ||
       value > 999999999999
     )
-      throw new ProfitServiceError(
-        "profit_amount_invalid",
-        400,
-        `${field} 必须为有效非负金额。`,
-      );
+      throw new ProfitServiceError("profit_amount_invalid", 400, `${field} 必须为有效非负金额。`);
     return Math.round(value * 1e6) / 1e6;
   },
   dateOnly = (value: unknown, field: string) => {
     const text = bounded(value, field, 10, /^\d{4}-\d{2}-\d{2}$/),
       date = new Date(`${text}T00:00:00.000Z`);
-    if (
-      Number.isNaN(date.valueOf()) ||
-      date.toISOString().slice(0, 10) !== text
-    )
-      throw new ProfitServiceError(
-        "profit_date_invalid",
-        400,
-        `修正 ${field}。`,
-      );
+    if (Number.isNaN(date.valueOf()) || date.toISOString().slice(0, 10) !== text)
+      throw new ProfitServiceError("profit_date_invalid", 400, `修正 ${field}。`);
     return text;
   };
 export function validateCostRule(value: {
@@ -164,12 +132,7 @@ export function validateCostRule(value: {
       400,
       "必须明确提供平台费、支付手续费、税费和履约成本四项规则。",
     );
-  const expected: FeeType[] = [
-      "platform_fee",
-      "payment_fee",
-      "tax",
-      "fulfillment",
-    ],
+  const expected: FeeType[] = ["platform_fee", "payment_fee", "tax", "fulfillment"],
     seen = new Set<string>(),
     fee_lines = value.fee_lines.map((line) => {
       if (
@@ -198,30 +161,11 @@ export function validateCostRule(value: {
       return result;
     });
   if (expected.some((type) => !seen.has(type)))
-    throw new ProfitServiceError(
-      "cost_rule_fee_lines_invalid",
-      400,
-      "费用类型不完整。",
-    );
+    throw new ProfitServiceError("cost_rule_fee_lines_invalid", 400, "费用类型不完整。");
   return {
-    market: bounded(
-      value.market,
-      "market",
-      40,
-      /^[A-Za-z0-9._-]+$/,
-    ).toUpperCase(),
-    platform: bounded(
-      value.platform,
-      "platform",
-      80,
-      /^[A-Za-z0-9._-]+$/,
-    ).toLowerCase(),
-    version_code: bounded(
-      value.version_code,
-      "version_code",
-      64,
-      /^[A-Za-z0-9._-]+$/,
-    ),
+    market: bounded(value.market, "market", 40, /^[A-Za-z0-9._-]+$/).toUpperCase(),
+    platform: bounded(value.platform, "platform", 80, /^[A-Za-z0-9._-]+$/).toLowerCase(),
+    version_code: bounded(value.version_code, "version_code", 64, /^[A-Za-z0-9._-]+$/),
     name: bounded(value.name, "name", 160),
     fee_lines,
     effective_from: dateOnly(value.effective_from, "effective_from"),
@@ -240,24 +184,13 @@ export function validateExchangeQuote(value: {
   const base = currency(value.base_currency),
     quote = currency(value.quote_currency);
   if (base === quote)
-    throw new ProfitServiceError(
-      "exchange_pair_invalid",
-      400,
-      "汇率币种对必须不同。",
-    );
+    throw new ProfitServiceError("exchange_pair_invalid", 400, "汇率币种对必须不同。");
   const rate = amount(value.rate_value, "rate_value", false);
   const quoteDate = dateOnly(value.quote_date, "quote_date");
   if (quoteDate > new Date().toISOString().slice(0, 10))
-    throw new ProfitServiceError(
-      "exchange_quote_future",
-      400,
-      "不能记录未来汇率。",
-    );
+    throw new ProfitServiceError("exchange_quote_future", 400, "不能记录未来汇率。");
   const observed = new Date(value.observed_at);
-  if (
-    Number.isNaN(observed.valueOf()) ||
-    observed.valueOf() > Date.now() + 300000
-  )
+  if (Number.isNaN(observed.valueOf()) || observed.valueOf() > Date.now() + 300000)
     throw new ProfitServiceError(
       "exchange_observed_at_invalid",
       400,
@@ -286,9 +219,7 @@ export function validateCostInput(value: {
   expected_version: number;
 }) {
   if (
-    !["sale_price", "purchase_price", "logistics"].includes(
-      value?.input_type,
-    ) ||
+    !["sale_price", "purchase_price", "logistics"].includes(value?.input_type) ||
     !Number.isSafeInteger(value.expected_version) ||
     value.expected_version < 1
   )
@@ -298,35 +229,18 @@ export function validateCostInput(value: {
       "提交有效成本类型和当前 opportunity version。",
     );
   const observed = new Date(value.observed_at);
-  if (
-    Number.isNaN(observed.valueOf()) ||
-    observed.valueOf() > Date.now() + 300000
-  )
+  if (Number.isNaN(observed.valueOf()) || observed.valueOf() > Date.now() + 300000)
     throw new ProfitServiceError(
       "cost_input_time_invalid",
       400,
       "observed_at 必须是有效历史时间。",
     );
   return {
-    platform: bounded(
-      value.platform,
-      "platform",
-      80,
-      /^[A-Za-z0-9._-]+$/,
-    ).toLowerCase(),
+    platform: bounded(value.platform, "platform", 80, /^[A-Za-z0-9._-]+$/).toLowerCase(),
     input_type: value.input_type,
-    amount_value: amount(
-      value.amount_value,
-      "amount_value",
-      value.input_type !== "sale_price",
-    ),
+    amount_value: amount(value.amount_value, "amount_value", value.input_type !== "sale_price"),
     currency: currency(value.currency),
-    source_type: bounded(
-      value.source_type,
-      "source_type",
-      80,
-      /^[A-Za-z0-9._-]+$/,
-    ),
+    source_type: bounded(value.source_type, "source_type", 80, /^[A-Za-z0-9._-]+$/),
     source_ref_id: bounded(value.source_ref_id, "source_ref_id", 255),
     evidence_id: uuid(value.evidence_id, "evidence_id"),
     observed_at: observed,
@@ -334,10 +248,7 @@ export function validateCostInput(value: {
   };
 }
 export interface ProfitRepository {
-  listRules(input: {
-    organizationId: string;
-    workspaceId: string;
-  }): Promise<CostRule[]>;
+  listRules(input: { organizationId: string; workspaceId: string }): Promise<CostRule[]>;
   getAnalysis(input: {
     organizationId: string;
     workspaceId: string;
@@ -400,11 +311,7 @@ export class ProfitService {
   listRules(input: { organizationId: string; workspaceId: string }) {
     return this.repository.listRules(input);
   }
-  getAnalysis(input: {
-    organizationId: string;
-    workspaceId: string;
-    opportunityId: string;
-  }) {
+  getAnalysis(input: { organizationId: string; workspaceId: string; opportunityId: string }) {
     return this.repository.getAnalysis({
       ...input,
       opportunityId: uuid(input.opportunityId, "opportunity_id"),
@@ -436,9 +343,7 @@ export class ProfitService {
   ) {
     const action = input.value?.action;
     if (
-      !["submit", "approve", "reject", "publish", "rollback"].includes(
-        action,
-      ) ||
+      !["submit", "approve", "reject", "publish", "rollback"].includes(action) ||
       !Number.isSafeInteger(input.value.expected_revision) ||
       input.value.expected_revision < 1
     )
@@ -512,10 +417,7 @@ export class ProfitService {
     },
   ) {
     const opportunityId = uuid(input.opportunityId, "opportunity_id");
-    if (
-      !Number.isSafeInteger(input.value?.expected_version) ||
-      input.value.expected_version < 1
-    )
+    if (!Number.isSafeInteger(input.value?.expected_version) || input.value.expected_version < 1)
       throw new ProfitServiceError(
         "profit_run_invalid",
         400,
@@ -524,12 +426,7 @@ export class ProfitService {
     return this.repository.queue({
       ...input,
       opportunityId,
-      platform: bounded(
-        input.value.platform,
-        "platform",
-        80,
-        /^[A-Za-z0-9._-]+$/,
-      ).toLowerCase(),
+      platform: bounded(input.value.platform, "platform", 80, /^[A-Za-z0-9._-]+$/).toLowerCase(),
       expectedVersion: input.value.expected_version,
       route: `POST:/api/v1/opportunities/${opportunityId}/profit-runs`,
     });

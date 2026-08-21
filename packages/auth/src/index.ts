@@ -1,9 +1,9 @@
-import { createCipheriv, createDecipheriv, createHash, randomBytes, randomUUID } from 'node:crypto';
-import argon2 from 'argon2';
+import { createCipheriv, createDecipheriv, createHash, randomBytes, randomUUID } from "node:crypto";
+import argon2 from "argon2";
 
-export type UserStatus = 'pending_verification' | 'active' | 'locked' | 'disabled';
-export type SessionStatus = 'active' | 'revoked' | 'expired';
-export type ActionTokenPurpose = 'email_verification' | 'password_reset';
+export type UserStatus = "pending_verification" | "active" | "locked" | "disabled";
+export type SessionStatus = "active" | "revoked" | "expired";
+export type ActionTokenPurpose = "email_verification" | "password_reset";
 
 export interface AuthPolicy {
   passwordMinLength: number;
@@ -67,7 +67,7 @@ export interface AuthSecurityEvent {
   id: string;
   user_id: string | null;
   event_type: string;
-  outcome: 'succeeded' | 'failed' | 'blocked';
+  outcome: "succeeded" | "failed" | "blocked";
   request_id: string;
   trace_id: string;
   ip_hash: string | null;
@@ -83,7 +83,11 @@ export interface AuthRepository {
   discardPendingRegistration(userId: string): Promise<void>;
   saveUser(user: UserRecord): Promise<void>;
   createActionToken(token: ActionTokenRecord): Promise<void>;
-  consumeActionToken(tokenHash: string, purpose: ActionTokenPurpose, now: Date): Promise<ActionTokenRecord | null>;
+  consumeActionToken(
+    tokenHash: string,
+    purpose: ActionTokenPurpose,
+    now: Date,
+  ): Promise<ActionTokenRecord | null>;
   createSession(session: SessionRecord): Promise<void>;
   findSessionByTokenHash(tokenHash: string, now: Date): Promise<SessionRecord | null>;
   listSessions(userId: string, now: Date): Promise<SessionRecord[]>;
@@ -98,10 +102,10 @@ export interface PasswordHasher {
 }
 
 export interface AuthSecondFactorGate {
-  begin(user: UserRecord, context: AuthContext): Promise<
-    | { required: false }
-    | { required: true; challengeToken: string; expiresAt: Date }
-  >;
+  begin(
+    user: UserRecord,
+    context: AuthContext,
+  ): Promise<{ required: false } | { required: true; challengeToken: string; expiresAt: Date }>;
 }
 
 export interface AuthDeliveryMessage {
@@ -131,7 +135,9 @@ export interface AuthOutboxRecord {
   createdAt: Date;
 }
 
-export interface AuthOutboxStore { enqueue(record: AuthOutboxRecord): Promise<void>; }
+export interface AuthOutboxStore {
+  enqueue(record: AuthOutboxRecord): Promise<void>;
+}
 
 export class AuthError extends Error {
   constructor(
@@ -140,30 +146,57 @@ export class AuthError extends Error {
     readonly actionHint: string,
   ) {
     super(code);
-    this.name = 'AuthError';
+    this.name = "AuthError";
   }
 }
 
 export function authErrorMessage(code: string): string {
-  return ({
-    invalid_email: '邮箱格式不正确。', password_policy_failed: '密码不符合安全策略。', email_already_registered: '该邮箱已注册。',
-    invalid_or_expired_token: '链接无效或已过期。', invalid_credentials: '邮箱或密码不正确。', account_locked: '账号暂时锁定。',
-    account_disabled: '账号已停用。', email_verification_required: '邮箱尚未验证。', session_invalid: '登录已失效。',
-    session_not_found: '会话不存在或已结束。', current_password_invalid: '当前密码不正确。', mail_provider_pending: '邮件服务尚未启用。',
-    auth_delivery_key_missing: '认证投递配置不可用。', auth_delivery_payload_invalid: '认证投递数据无效。', idempotency_in_progress: '相同请求正在处理中。',
-    mfa_key_missing: 'MFA 密钥配置不可用。', mfa_secret_invalid: 'MFA 因子数据无效。', mfa_enrollment_not_found: '没有待确认的 MFA 绑定。',
-    mfa_code_invalid: '验证码或恢复码无效。', mfa_challenge_invalid: 'MFA 登录挑战无效或已过期。', mfa_challenge_locked: 'MFA 登录挑战已锁定。',
-    mfa_factor_not_found: '未找到已启用的 MFA 因子。', identity_provider_not_configured: '企业身份 Provider 尚未配置。',
-    sensitive_response_replay_unavailable: '一次性敏感响应不能重放。', security_setup_required: '首次安全设置尚未完成。',
-  } as Record<string,string>)[code] ?? '认证请求无法完成。';
+  return (
+    (
+      {
+        invalid_email: "邮箱格式不正确。",
+        password_policy_failed: "密码不符合安全策略。",
+        email_already_registered: "该邮箱已注册。",
+        invalid_or_expired_token: "链接无效或已过期。",
+        invalid_credentials: "邮箱或密码不正确。",
+        account_locked: "账号暂时锁定。",
+        account_disabled: "账号已停用。",
+        email_verification_required: "邮箱尚未验证。",
+        session_invalid: "登录已失效。",
+        session_not_found: "会话不存在或已结束。",
+        current_password_invalid: "当前密码不正确。",
+        mail_provider_pending: "邮件服务尚未启用。",
+        auth_delivery_key_missing: "认证投递配置不可用。",
+        auth_delivery_payload_invalid: "认证投递数据无效。",
+        idempotency_in_progress: "相同请求正在处理中。",
+        mfa_key_missing: "MFA 密钥配置不可用。",
+        mfa_secret_invalid: "MFA 因子数据无效。",
+        mfa_enrollment_not_found: "没有待确认的 MFA 绑定。",
+        mfa_code_invalid: "验证码或恢复码无效。",
+        mfa_challenge_invalid: "MFA 登录挑战无效或已过期。",
+        mfa_challenge_locked: "MFA 登录挑战已锁定。",
+        mfa_factor_not_found: "未找到已启用的 MFA 因子。",
+        identity_provider_not_configured: "企业身份 Provider 尚未配置。",
+        sensitive_response_replay_unavailable: "一次性敏感响应不能重放。",
+        security_setup_required: "首次安全设置尚未完成。",
+      } as Record<string, string>
+    )[code] ?? "认证请求无法完成。"
+  );
 }
 
-export function createArgon2PasswordHasher(options: { memoryCost: number; timeCost: number; parallelism: number }): PasswordHasher {
+export function createArgon2PasswordHasher(options: {
+  memoryCost: number;
+  timeCost: number;
+  parallelism: number;
+}): PasswordHasher {
   return {
     hash: (password) => argon2.hash(password, { type: argon2.argon2id, ...options }),
     verify: async (hash, password) => {
-      try { return await argon2.verify(hash, password); }
-      catch { return false; }
+      try {
+        return await argon2.verify(hash, password);
+      } catch {
+        return false;
+      }
     },
   };
 }
@@ -171,63 +204,112 @@ export function createArgon2PasswordHasher(options: { memoryCost: number; timeCo
 export function normalizeEmail(email: string): string {
   const normalized = email.trim().toLowerCase();
   if (normalized.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
-    throw new AuthError('invalid_email', 400, '输入有效邮箱地址后重试。');
+    throw new AuthError("invalid_email", 400, "输入有效邮箱地址后重试。");
   }
   return normalized;
 }
 
-export const digestOpaqueToken = (token: string) => createHash('sha256').update(token).digest('hex');
-const hashMetadata = (value?: string) => value ? createHash('sha256').update(value).digest('hex') : null;
+export const digestOpaqueToken = (token: string) =>
+  createHash("sha256").update(token).digest("hex");
+const hashMetadata = (value?: string) =>
+  value ? createHash("sha256").update(value).digest("hex") : null;
 const addMinutes = (value: Date, minutes: number) => new Date(value.getTime() + minutes * 60_000);
 
 function validatePolicy(policy: AuthPolicy) {
-  if (policy.passwordMinLength < 8 || policy.passwordMaxLength < policy.passwordMinLength || policy.passwordMaxLength > 1024) throw new Error('invalid_password_policy');
-  for (const [key, value] of Object.entries(policy)) if (!Number.isSafeInteger(value) || value < 1) throw new Error(`invalid_auth_policy:${key}`);
+  if (
+    policy.passwordMinLength < 8 ||
+    policy.passwordMaxLength < policy.passwordMinLength ||
+    policy.passwordMaxLength > 1024
+  )
+    throw new Error("invalid_password_policy");
+  for (const [key, value] of Object.entries(policy))
+    if (!Number.isSafeInteger(value) || value < 1) throw new Error(`invalid_auth_policy:${key}`);
 }
 
 function validatePassword(password: string, policy: AuthPolicy) {
   if (password.length < policy.passwordMinLength || password.length > policy.passwordMaxLength) {
-    throw new AuthError('password_policy_failed', 400, `密码长度必须为 ${policy.passwordMinLength}–${policy.passwordMaxLength} 个字符。`);
+    throw new AuthError(
+      "password_policy_failed",
+      400,
+      `密码长度必须为 ${policy.passwordMinLength}–${policy.passwordMaxLength} 个字符。`,
+    );
   }
 }
 
 export class CaptureAuthDelivery implements AuthDelivery {
   readonly messages: AuthDeliveryMessage[] = [];
-  async deliver(message: AuthDeliveryMessage) { this.messages.push(structuredClone(message)); }
+  async deliver(message: AuthDeliveryMessage) {
+    this.messages.push(structuredClone(message));
+  }
 }
 
 export class PendingAuthDelivery implements AuthDelivery {
-  assertAvailable(): void { throw new AuthError('mail_provider_pending', 503, '生产邮件 Provider 确认并在宝塔配置后重试。'); }
+  assertAvailable(): void {
+    throw new AuthError("mail_provider_pending", 503, "生产邮件 Provider 确认并在宝塔配置后重试。");
+  }
   async deliver(): Promise<void> {
-    throw new AuthError('mail_provider_pending', 503, '生产邮件 Provider 确认并在宝塔配置后重试。');
+    throw new AuthError("mail_provider_pending", 503, "生产邮件 Provider 确认并在宝塔配置后重试。");
   }
 }
 
 function deliveryKey(masterKey: string) {
-  if (masterKey.length < 32) throw new AuthError('auth_delivery_key_missing', 503, '在宝塔受限环境配置主密钥后重试。');
-  return createHash('sha256').update('scoutops:auth-delivery:v1').update(masterKey).digest();
+  if (masterKey.length < 32)
+    throw new AuthError("auth_delivery_key_missing", 503, "在宝塔受限环境配置主密钥后重试。");
+  return createHash("sha256").update("scoutops:auth-delivery:v1").update(masterKey).digest();
 }
 
 export function sealAuthDelivery(message: AuthDeliveryMessage, masterKey: string) {
-  const nonce = randomBytes(12); const cipher = createCipheriv('aes-256-gcm', deliveryKey(masterKey), nonce);
-  const ciphertext = Buffer.concat([cipher.update(JSON.stringify(message), 'utf8'), cipher.final()]);
+  const nonce = randomBytes(12);
+  const cipher = createCipheriv("aes-256-gcm", deliveryKey(masterKey), nonce);
+  const ciphertext = Buffer.concat([
+    cipher.update(JSON.stringify(message), "utf8"),
+    cipher.final(),
+  ]);
   return { ciphertext, nonce, authTag: cipher.getAuthTag() };
 }
 
-export function openAuthDelivery(record: Pick<AuthOutboxRecord, 'ciphertext' | 'nonce' | 'authTag'>, masterKey: string): AuthDeliveryMessage {
+export function openAuthDelivery(
+  record: Pick<AuthOutboxRecord, "ciphertext" | "nonce" | "authTag">,
+  masterKey: string,
+): AuthDeliveryMessage {
   try {
-    const decipher = createDecipheriv('aes-256-gcm', deliveryKey(masterKey), record.nonce); decipher.setAuthTag(record.authTag);
-    const parsed = JSON.parse(Buffer.concat([decipher.update(record.ciphertext), decipher.final()]).toString('utf8')) as Omit<AuthDeliveryMessage, 'expiresAt'> & { expiresAt: string };
+    const decipher = createDecipheriv("aes-256-gcm", deliveryKey(masterKey), record.nonce);
+    decipher.setAuthTag(record.authTag);
+    const parsed = JSON.parse(
+      Buffer.concat([decipher.update(record.ciphertext), decipher.final()]).toString("utf8"),
+    ) as Omit<AuthDeliveryMessage, "expiresAt"> & { expiresAt: string };
     return { ...parsed, expiresAt: new Date(parsed.expiresAt) };
-  } catch { throw new AuthError('auth_delivery_payload_invalid', 500, '隔离该投递并携带 trace_id 联系管理员。'); }
+  } catch {
+    throw new AuthError(
+      "auth_delivery_payload_invalid",
+      500,
+      "隔离该投递并携带 trace_id 联系管理员。",
+    );
+  }
 }
 
 export class EncryptedOutboxAuthDelivery implements AuthDelivery {
-  constructor(private readonly store: AuthOutboxStore, private readonly masterKey: string, private readonly now: () => Date = () => new Date()) { deliveryKey(masterKey); }
-  assertAvailable(): void { deliveryKey(this.masterKey); }
+  constructor(
+    private readonly store: AuthOutboxStore,
+    private readonly masterKey: string,
+    private readonly now: () => Date = () => new Date(),
+  ) {
+    deliveryKey(masterKey);
+  }
+  assertAvailable(): void {
+    deliveryKey(this.masterKey);
+  }
   async deliver(message: AuthDeliveryMessage) {
     const sealed = sealAuthDelivery(message, this.masterKey);
-    await this.store.enqueue({ id: randomUUID(), userId: message.userId, kind: message.kind, ...sealed, requestId: message.requestId, traceId: message.traceId, createdAt: this.now() });
+    await this.store.enqueue({
+      id: randomUUID(),
+      userId: message.userId,
+      kind: message.kind,
+      ...sealed,
+      requestId: message.requestId,
+      traceId: message.traceId,
+      createdAt: this.now(),
+    });
   }
 }
 
@@ -236,51 +318,89 @@ export class InMemoryAuthRepository implements AuthRepository {
   readonly sessions: SessionRecord[] = [];
   readonly actionTokens: ActionTokenRecord[] = [];
   readonly securityEvents: AuthSecurityEvent[] = [];
-  async findUserByEmail(email: string) { return this.users.find((item) => item.email_normalized === email) ?? null; }
-  async findUserById(id: string) { return this.users.find((item) => item.id === id) ?? null; }
+  async findUserByEmail(email: string) {
+    return this.users.find((item) => item.email_normalized === email) ?? null;
+  }
+  async findUserById(id: string) {
+    return this.users.find((item) => item.id === id) ?? null;
+  }
   async createUser(user: UserRecord) {
-    if (await this.findUserByEmail(user.email_normalized)) throw new AuthError('email_already_registered', 409, '登录或使用密码重置找回账号。');
+    if (await this.findUserByEmail(user.email_normalized))
+      throw new AuthError("email_already_registered", 409, "登录或使用密码重置找回账号。");
     this.users.push(user);
   }
   async discardPendingRegistration(userId: string) {
-    const userIndex = this.users.findIndex((item) => item.id === userId && item.status === 'pending_verification');
+    const userIndex = this.users.findIndex(
+      (item) => item.id === userId && item.status === "pending_verification",
+    );
     if (userIndex < 0) return;
-    this.actionTokens.splice(0, this.actionTokens.length, ...this.actionTokens.filter((item) => item.user_id !== userId));
+    this.actionTokens.splice(
+      0,
+      this.actionTokens.length,
+      ...this.actionTokens.filter((item) => item.user_id !== userId),
+    );
     this.users.splice(userIndex, 1);
   }
   async saveUser(user: UserRecord) {
     const index = this.users.findIndex((item) => item.id === user.id);
-    if (index < 0) throw new Error('user_not_found');
+    if (index < 0) throw new Error("user_not_found");
     this.users[index] = user;
   }
-  async createActionToken(token: ActionTokenRecord) { this.actionTokens.push(token); }
+  async createActionToken(token: ActionTokenRecord) {
+    this.actionTokens.push(token);
+  }
   async consumeActionToken(hash: string, purpose: ActionTokenPurpose, now: Date) {
-    const token = this.actionTokens.find((item) => item.token_hash === hash && item.purpose === purpose && !item.consumed_at && item.expires_at > now);
+    const token = this.actionTokens.find(
+      (item) =>
+        item.token_hash === hash &&
+        item.purpose === purpose &&
+        !item.consumed_at &&
+        item.expires_at > now,
+    );
     if (!token) return null;
     token.consumed_at = now;
     return token;
   }
-  async createSession(session: SessionRecord) { this.sessions.push(session); }
+  async createSession(session: SessionRecord) {
+    this.sessions.push(session);
+  }
   async findSessionByTokenHash(hash: string, now: Date) {
     const session = this.sessions.find((item) => item.token_hash === hash);
-    if (!session || session.status !== 'active') return null;
-    if (session.expires_at <= now) { session.status = 'expired'; return null; }
+    if (!session || session.status !== "active") return null;
+    if (session.expires_at <= now) {
+      session.status = "expired";
+      return null;
+    }
     session.last_seen_at = now;
     return session;
   }
   async listSessions(userId: string, now: Date) {
-    for (const item of this.sessions) if (item.user_id === userId && item.status === 'active' && item.expires_at <= now) item.status = 'expired';
-    return this.sessions.filter((item) => item.user_id === userId).sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+    for (const item of this.sessions)
+      if (item.user_id === userId && item.status === "active" && item.expires_at <= now)
+        item.status = "expired";
+    return this.sessions
+      .filter((item) => item.user_id === userId)
+      .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
   }
   async revokeSession(userId: string, sessionId: string, now: Date) {
-    const session = this.sessions.find((item) => item.user_id === userId && item.id === sessionId && item.status === 'active');
+    const session = this.sessions.find(
+      (item) => item.user_id === userId && item.id === sessionId && item.status === "active",
+    );
     if (!session) return false;
-    session.status = 'revoked'; session.revoked_at = now; return true;
+    session.status = "revoked";
+    session.revoked_at = now;
+    return true;
   }
   async revokeAllSessions(userId: string, now: Date) {
-    for (const item of this.sessions) if (item.user_id === userId && item.status === 'active') { item.status = 'revoked'; item.revoked_at = now; }
+    for (const item of this.sessions)
+      if (item.user_id === userId && item.status === "active") {
+        item.status = "revoked";
+        item.revoked_at = now;
+      }
   }
-  async appendSecurityEvent(event: AuthSecurityEvent) { this.securityEvents.push(event); }
+  async appendSecurityEvent(event: AuthSecurityEvent) {
+    this.securityEvents.push(event);
+  }
 }
 
 export class LocalAuthService {
@@ -308,147 +428,331 @@ export class LocalAuthService {
     this.passwordHasher = input.passwordHasher;
     this.policy = input.policy;
     this.now = input.now ?? (() => new Date());
-    this.tokenFactory = input.tokenFactory ?? (() => randomBytes(32).toString('base64url'));
+    this.tokenFactory = input.tokenFactory ?? (() => randomBytes(32).toString("base64url"));
     this.secondFactorGate = input.secondFactorGate;
   }
 
-  private async event(userId: string | null, type: string, outcome: AuthSecurityEvent['outcome'], context: AuthContext) {
-    await this.repository.appendSecurityEvent({ id: randomUUID(), user_id: userId, event_type: type, outcome, request_id: context.requestId, trace_id: context.traceId, ip_hash: hashMetadata(context.ipAddress), user_agent_hash: hashMetadata(context.userAgent), occurred_at: this.now(), schema_version: 1 });
+  private async event(
+    userId: string | null,
+    type: string,
+    outcome: AuthSecurityEvent["outcome"],
+    context: AuthContext,
+  ) {
+    await this.repository.appendSecurityEvent({
+      id: randomUUID(),
+      user_id: userId,
+      event_type: type,
+      outcome,
+      request_id: context.requestId,
+      trace_id: context.traceId,
+      ip_hash: hashMetadata(context.ipAddress),
+      user_agent_hash: hashMetadata(context.userAgent),
+      occurred_at: this.now(),
+      schema_version: 1,
+    });
   }
 
-  private async issueActionToken(user: UserRecord, purpose: ActionTokenPurpose, context: AuthContext) {
-    const raw = this.tokenFactory(); const now = this.now(); const expiresAt = addMinutes(now, this.policy.actionTokenTtlMinutes);
-    await this.repository.createActionToken({ id: randomUUID(), user_id: user.id, purpose, token_hash: digestOpaqueToken(raw), expires_at: expiresAt, consumed_at: null, created_at: now });
-    await this.delivery.deliver({ userId: user.id, kind: purpose, email: user.email, token: raw, expiresAt, requestId: context.requestId, traceId: context.traceId });
+  private async issueActionToken(
+    user: UserRecord,
+    purpose: ActionTokenPurpose,
+    context: AuthContext,
+  ) {
+    const raw = this.tokenFactory();
+    const now = this.now();
+    const expiresAt = addMinutes(now, this.policy.actionTokenTtlMinutes);
+    await this.repository.createActionToken({
+      id: randomUUID(),
+      user_id: user.id,
+      purpose,
+      token_hash: digestOpaqueToken(raw),
+      expires_at: expiresAt,
+      consumed_at: null,
+      created_at: now,
+    });
+    await this.delivery.deliver({
+      userId: user.id,
+      kind: purpose,
+      email: user.email,
+      token: raw,
+      expiresAt,
+      requestId: context.requestId,
+      traceId: context.traceId,
+    });
   }
 
   async register(input: { email: string; password: string }, context: AuthContext) {
-    const email = normalizeEmail(input.email); validatePassword(input.password, this.policy);
+    const email = normalizeEmail(input.email);
+    validatePassword(input.password, this.policy);
     this.delivery.assertAvailable?.();
-    if (await this.repository.findUserByEmail(email)) throw new AuthError('email_already_registered', 409, '登录或使用密码重置找回账号。');
+    if (await this.repository.findUserByEmail(email))
+      throw new AuthError("email_already_registered", 409, "登录或使用密码重置找回账号。");
     const now = this.now();
-    const user: UserRecord = { id: randomUUID(), email, email_normalized: email, password_hash: await this.passwordHasher.hash(input.password), status: 'pending_verification', email_verified_at: null, failed_login_count: 0, locked_until: null, password_changed_at: now, must_change_password: false, must_enroll_mfa: false, security_setup_completed_at: null, version: 1, created_at: now, updated_at: now };
+    const user: UserRecord = {
+      id: randomUUID(),
+      email,
+      email_normalized: email,
+      password_hash: await this.passwordHasher.hash(input.password),
+      status: "pending_verification",
+      email_verified_at: null,
+      failed_login_count: 0,
+      locked_until: null,
+      password_changed_at: now,
+      must_change_password: false,
+      must_enroll_mfa: false,
+      security_setup_completed_at: null,
+      version: 1,
+      created_at: now,
+      updated_at: now,
+    };
     await this.repository.createUser(user);
-    try { await this.issueActionToken(user, 'email_verification', context); }
-    catch (error) {
+    try {
+      await this.issueActionToken(user, "email_verification", context);
+    } catch (error) {
       await this.repository.discardPendingRegistration(user.id);
-      await this.event(null, 'registration.delivery_blocked', 'blocked', context);
+      await this.event(null, "registration.delivery_blocked", "blocked", context);
       throw error;
     }
-    await this.event(user.id, 'registration.created', 'succeeded', context);
+    await this.event(user.id, "registration.created", "succeeded", context);
     return { id: user.id, email: user.email, status: user.status };
   }
 
-  async verifyEmail(token: string, context: AuthContext): Promise<'verified'> {
-    const record = await this.repository.consumeActionToken(digestOpaqueToken(token), 'email_verification', this.now());
-    if (!record) throw new AuthError('invalid_or_expired_token', 400, '重新申请验证邮件后重试。');
+  async verifyEmail(token: string, context: AuthContext): Promise<"verified"> {
+    const record = await this.repository.consumeActionToken(
+      digestOpaqueToken(token),
+      "email_verification",
+      this.now(),
+    );
+    if (!record) throw new AuthError("invalid_or_expired_token", 400, "重新申请验证邮件后重试。");
     const user = await this.repository.findUserById(record.user_id);
-    if (!user) throw new AuthError('invalid_or_expired_token', 400, '重新申请验证邮件后重试。');
-    const now = this.now(); user.status = 'active'; user.email_verified_at = now; user.updated_at = now; user.version += 1;
-    await this.repository.saveUser(user); await this.event(user.id, 'email.verified', 'succeeded', context); return 'verified';
+    if (!user) throw new AuthError("invalid_or_expired_token", 400, "重新申请验证邮件后重试。");
+    const now = this.now();
+    user.status = "active";
+    user.email_verified_at = now;
+    user.updated_at = now;
+    user.version += 1;
+    await this.repository.saveUser(user);
+    await this.event(user.id, "email.verified", "succeeded", context);
+    return "verified";
   }
 
   async login(input: { email: string; password: string }, context: AuthContext) {
-    const email = normalizeEmail(input.email); const user = await this.repository.findUserByEmail(email); const now = this.now();
+    const email = normalizeEmail(input.email);
+    const user = await this.repository.findUserByEmail(email);
+    const now = this.now();
     if (!user) {
-      this.dummyPasswordHash ??= this.passwordHasher.hash('ScoutOps-dummy-password-not-a-user');
+      this.dummyPasswordHash ??= this.passwordHasher.hash("ScoutOps-dummy-password-not-a-user");
       await this.passwordHasher.verify(await this.dummyPasswordHash, input.password);
-      await this.event(null, 'login.failed', 'failed', context);
-      throw new AuthError('invalid_credentials', 401, '检查邮箱和密码后重试。');
+      await this.event(null, "login.failed", "failed", context);
+      throw new AuthError("invalid_credentials", 401, "检查邮箱和密码后重试。");
     }
-    if (user.status === 'disabled') throw new AuthError('account_disabled', 403, '联系平台安全管理员。');
-    if (user.locked_until && user.locked_until > now) throw new AuthError('account_locked', 423, '锁定期结束后重试或使用密码重置。');
+    if (user.status === "disabled")
+      throw new AuthError("account_disabled", 403, "联系平台安全管理员。");
+    if (user.locked_until && user.locked_until > now)
+      throw new AuthError("account_locked", 423, "锁定期结束后重试或使用密码重置。");
     if (!(await this.passwordHasher.verify(user.password_hash, input.password))) {
-      user.failed_login_count += 1; user.updated_at = now;
-      if (user.failed_login_count >= this.policy.maxFailedAttempts) { user.locked_until = addMinutes(now, this.policy.lockMinutes); user.status = 'locked'; }
-      await this.repository.saveUser(user); await this.event(user.id, 'login.failed', user.locked_until ? 'blocked' : 'failed', context);
-      throw new AuthError(user.locked_until ? 'account_locked' : 'invalid_credentials', user.locked_until ? 423 : 401, user.locked_until ? '锁定期结束后重试或使用密码重置。' : '检查邮箱和密码后重试。');
+      user.failed_login_count += 1;
+      user.updated_at = now;
+      if (user.failed_login_count >= this.policy.maxFailedAttempts) {
+        user.locked_until = addMinutes(now, this.policy.lockMinutes);
+        user.status = "locked";
+      }
+      await this.repository.saveUser(user);
+      await this.event(user.id, "login.failed", user.locked_until ? "blocked" : "failed", context);
+      throw new AuthError(
+        user.locked_until ? "account_locked" : "invalid_credentials",
+        user.locked_until ? 423 : 401,
+        user.locked_until ? "锁定期结束后重试或使用密码重置。" : "检查邮箱和密码后重试。",
+      );
     }
-    if (!user.email_verified_at) throw new AuthError('email_verification_required', 403, '完成邮箱验证后登录。');
-    user.failed_login_count = 0; user.locked_until = null; user.status = 'active'; user.updated_at = now; await this.repository.saveUser(user);
+    if (!user.email_verified_at)
+      throw new AuthError("email_verification_required", 403, "完成邮箱验证后登录。");
+    user.failed_login_count = 0;
+    user.locked_until = null;
+    user.status = "active";
+    user.updated_at = now;
+    await this.repository.saveUser(user);
     if (user.must_change_password || user.must_enroll_mfa) return this.issueSession(user, context);
     const secondFactor = await this.secondFactorGate?.begin(user, context);
     if (secondFactor?.required) {
-      await this.event(user.id, 'login.mfa_required', 'succeeded', context);
-      return { mfa_required: true as const, challenge_token: secondFactor.challengeToken, expires_at: secondFactor.expiresAt.toISOString() };
+      await this.event(user.id, "login.mfa_required", "succeeded", context);
+      return {
+        mfa_required: true as const,
+        challenge_token: secondFactor.challengeToken,
+        expires_at: secondFactor.expiresAt.toISOString(),
+      };
     }
     return this.issueSession(user, context);
   }
 
   async completeSecondFactorLogin(userId: string, context: AuthContext) {
     const user = await this.repository.findUserById(userId);
-    if (!user || user.status !== 'active') throw new AuthError('account_disabled', 403, '联系平台安全管理员。');
+    if (!user || user.status !== "active")
+      throw new AuthError("account_disabled", 403, "联系平台安全管理员。");
     return this.issueSession(user, context);
   }
 
   private async issueSession(user: UserRecord, context: AuthContext) {
-    const now = this.now(); const token = this.tokenFactory();
-    const session: SessionRecord = { id: randomUUID(), user_id: user.id, token_hash: digestOpaqueToken(token), status: 'active', device_label: context.userAgent?.slice(0, 120) || '未知设备', user_agent_hash: hashMetadata(context.userAgent), ip_hash: hashMetadata(context.ipAddress), expires_at: addMinutes(now, this.policy.sessionTtlMinutes), last_seen_at: now, revoked_at: null, created_at: now };
-    await this.repository.createSession(session); await this.event(user.id, 'login.succeeded', 'succeeded', context);
-    return { token, user: { id: user.id, email: user.email, status: user.status }, session: this.sessionSummary(session), security_setup: { required: user.must_change_password || user.must_enroll_mfa, must_change_password: user.must_change_password, must_enroll_mfa: user.must_enroll_mfa } };
+    const now = this.now();
+    const token = this.tokenFactory();
+    const session: SessionRecord = {
+      id: randomUUID(),
+      user_id: user.id,
+      token_hash: digestOpaqueToken(token),
+      status: "active",
+      device_label: context.userAgent?.slice(0, 120) || "未知设备",
+      user_agent_hash: hashMetadata(context.userAgent),
+      ip_hash: hashMetadata(context.ipAddress),
+      expires_at: addMinutes(now, this.policy.sessionTtlMinutes),
+      last_seen_at: now,
+      revoked_at: null,
+      created_at: now,
+    };
+    await this.repository.createSession(session);
+    await this.event(user.id, "login.succeeded", "succeeded", context);
+    return {
+      token,
+      user: { id: user.id, email: user.email, status: user.status },
+      session: this.sessionSummary(session),
+      security_setup: {
+        required: user.must_change_password || user.must_enroll_mfa,
+        must_change_password: user.must_change_password,
+        must_enroll_mfa: user.must_enroll_mfa,
+      },
+    };
   }
 
   async authenticate(token: string, options: { allowSecuritySetup?: boolean } = {}) {
-    const session = await this.repository.findSessionByTokenHash(digestOpaqueToken(token), this.now());
-    if (!session) throw new AuthError('session_invalid', 401, '重新登录后重试。');
+    const session = await this.repository.findSessionByTokenHash(
+      digestOpaqueToken(token),
+      this.now(),
+    );
+    if (!session) throw new AuthError("session_invalid", 401, "重新登录后重试。");
     const user = await this.repository.findUserById(session.user_id);
-    if (!user || user.status !== 'active') throw new AuthError('session_invalid', 401, '重新登录后重试。');
-    if (!options.allowSecuritySetup && (user.must_change_password || user.must_enroll_mfa)) throw new AuthError('security_setup_required', 403, '先完成密码修改和 MFA 绑定。');
+    if (!user || user.status !== "active")
+      throw new AuthError("session_invalid", 401, "重新登录后重试。");
+    if (!options.allowSecuritySetup && (user.must_change_password || user.must_enroll_mfa))
+      throw new AuthError("security_setup_required", 403, "先完成密码修改和 MFA 绑定。");
     return { user, session };
   }
 
   async logout(token: string, context: AuthContext) {
     const authenticated = await this.authenticate(token, { allowSecuritySetup: true });
-    await this.repository.revokeSession(authenticated.user.id, authenticated.session.id, this.now());
-    await this.event(authenticated.user.id, 'logout.succeeded', 'succeeded', context);
+    await this.repository.revokeSession(
+      authenticated.user.id,
+      authenticated.session.id,
+      this.now(),
+    );
+    await this.event(authenticated.user.id, "logout.succeeded", "succeeded", context);
   }
 
   async listSessions(token: string) {
     const authenticated = await this.authenticate(token);
-    return (await this.repository.listSessions(authenticated.user.id, this.now())).map((item) => this.sessionSummary(item));
+    return (await this.repository.listSessions(authenticated.user.id, this.now())).map((item) =>
+      this.sessionSummary(item),
+    );
   }
 
   async revokeSession(token: string, sessionId: string, context: AuthContext) {
     const authenticated = await this.authenticate(token);
-    if (!(await this.repository.revokeSession(authenticated.user.id, sessionId, this.now()))) throw new AuthError('session_not_found', 404, '刷新会话列表后重试。');
-    await this.event(authenticated.user.id, 'session.revoked', 'succeeded', context);
+    if (!(await this.repository.revokeSession(authenticated.user.id, sessionId, this.now())))
+      throw new AuthError("session_not_found", 404, "刷新会话列表后重试。");
+    await this.event(authenticated.user.id, "session.revoked", "succeeded", context);
   }
 
-  async changePassword(token: string, currentPassword: string, newPassword: string, context: AuthContext) {
-    validatePassword(newPassword, this.policy); const authenticated = await this.authenticate(token, { allowSecuritySetup: true });
-    if (!(await this.passwordHasher.verify(authenticated.user.password_hash, currentPassword))) throw new AuthError('current_password_invalid', 401, '检查当前密码后重试。');
-    const now = this.now(); authenticated.user.password_hash = await this.passwordHasher.hash(newPassword); authenticated.user.password_changed_at = now; authenticated.user.must_change_password = false; authenticated.user.updated_at = now; authenticated.user.version += 1;
-    await this.repository.saveUser(authenticated.user); await this.repository.revokeAllSessions(authenticated.user.id, now); await this.event(authenticated.user.id, 'password.changed', 'succeeded', context);
+  async changePassword(
+    token: string,
+    currentPassword: string,
+    newPassword: string,
+    context: AuthContext,
+  ) {
+    validatePassword(newPassword, this.policy);
+    const authenticated = await this.authenticate(token, { allowSecuritySetup: true });
+    if (!(await this.passwordHasher.verify(authenticated.user.password_hash, currentPassword)))
+      throw new AuthError("current_password_invalid", 401, "检查当前密码后重试。");
+    const now = this.now();
+    authenticated.user.password_hash = await this.passwordHasher.hash(newPassword);
+    authenticated.user.password_changed_at = now;
+    authenticated.user.must_change_password = false;
+    authenticated.user.updated_at = now;
+    authenticated.user.version += 1;
+    await this.repository.saveUser(authenticated.user);
+    await this.repository.revokeAllSessions(authenticated.user.id, now);
+    await this.event(authenticated.user.id, "password.changed", "succeeded", context);
   }
 
   async completeMfaEnrollment(userId: string) {
-    const user = await this.repository.findUserById(userId); if (!user) throw new AuthError('session_invalid', 401, '重新登录后重试。');
-    const now = this.now(); user.must_enroll_mfa = false; if (!user.must_change_password) user.security_setup_completed_at = now; user.updated_at = now; user.version += 1; await this.repository.saveUser(user);
+    const user = await this.repository.findUserById(userId);
+    if (!user) throw new AuthError("session_invalid", 401, "重新登录后重试。");
+    const now = this.now();
+    user.must_enroll_mfa = false;
+    if (!user.must_change_password) user.security_setup_completed_at = now;
+    user.updated_at = now;
+    user.version += 1;
+    await this.repository.saveUser(user);
   }
 
   async securitySetupStatus(token: string) {
     const { user } = await this.authenticate(token, { allowSecuritySetup: true });
-    return { required: user.must_change_password || user.must_enroll_mfa, must_change_password: user.must_change_password, must_enroll_mfa: user.must_enroll_mfa, completed_at: user.security_setup_completed_at?.toISOString() ?? null };
+    return {
+      required: user.must_change_password || user.must_enroll_mfa,
+      must_change_password: user.must_change_password,
+      must_enroll_mfa: user.must_enroll_mfa,
+      completed_at: user.security_setup_completed_at?.toISOString() ?? null,
+    };
   }
 
-  async requestPasswordReset(emailInput: string, context: AuthContext): Promise<{ accepted: true }> {
-    const email = normalizeEmail(emailInput); this.delivery.assertAvailable?.(); const user = await this.repository.findUserByEmail(email);
-    if (user) { await this.issueActionToken(user, 'password_reset', context); await this.event(user.id, 'password_reset.requested', 'succeeded', context); }
-    else { this.dummyPasswordHash ??= this.passwordHasher.hash('ScoutOps-dummy-password-not-a-user'); await this.dummyPasswordHash; await this.event(null, 'password_reset.requested', 'succeeded', context); }
+  async requestPasswordReset(
+    emailInput: string,
+    context: AuthContext,
+  ): Promise<{ accepted: true }> {
+    const email = normalizeEmail(emailInput);
+    this.delivery.assertAvailable?.();
+    const user = await this.repository.findUserByEmail(email);
+    if (user) {
+      await this.issueActionToken(user, "password_reset", context);
+      await this.event(user.id, "password_reset.requested", "succeeded", context);
+    } else {
+      this.dummyPasswordHash ??= this.passwordHasher.hash("ScoutOps-dummy-password-not-a-user");
+      await this.dummyPasswordHash;
+      await this.event(null, "password_reset.requested", "succeeded", context);
+    }
     return { accepted: true };
   }
 
   async resetPassword(token: string, newPassword: string, context: AuthContext) {
-    validatePassword(newPassword, this.policy); const record = await this.repository.consumeActionToken(digestOpaqueToken(token), 'password_reset', this.now());
-    if (!record) throw new AuthError('invalid_or_expired_token', 400, '重新申请密码重置邮件后重试。');
-    const user = await this.repository.findUserById(record.user_id); if (!user) throw new AuthError('invalid_or_expired_token', 400, '重新申请密码重置邮件后重试。');
-    const now = this.now(); user.password_hash = await this.passwordHasher.hash(newPassword); user.password_changed_at = now; user.failed_login_count = 0; user.locked_until = null; user.status = user.email_verified_at ? 'active' : 'pending_verification'; user.updated_at = now; user.version += 1;
-    await this.repository.saveUser(user); await this.repository.revokeAllSessions(user.id, now); await this.event(user.id, 'password.reset', 'succeeded', context);
+    validatePassword(newPassword, this.policy);
+    const record = await this.repository.consumeActionToken(
+      digestOpaqueToken(token),
+      "password_reset",
+      this.now(),
+    );
+    if (!record)
+      throw new AuthError("invalid_or_expired_token", 400, "重新申请密码重置邮件后重试。");
+    const user = await this.repository.findUserById(record.user_id);
+    if (!user) throw new AuthError("invalid_or_expired_token", 400, "重新申请密码重置邮件后重试。");
+    const now = this.now();
+    user.password_hash = await this.passwordHasher.hash(newPassword);
+    user.password_changed_at = now;
+    user.failed_login_count = 0;
+    user.locked_until = null;
+    user.status = user.email_verified_at ? "active" : "pending_verification";
+    user.updated_at = now;
+    user.version += 1;
+    await this.repository.saveUser(user);
+    await this.repository.revokeAllSessions(user.id, now);
+    await this.event(user.id, "password.reset", "succeeded", context);
   }
 
   private sessionSummary(session: SessionRecord) {
-    return { id: session.id, status: session.status, device_label: session.device_label, expires_at: session.expires_at.toISOString(), last_seen_at: session.last_seen_at.toISOString(), created_at: session.created_at.toISOString() };
+    return {
+      id: session.id,
+      status: session.status,
+      device_label: session.device_label,
+      expires_at: session.expires_at.toISOString(),
+      last_seen_at: session.last_seen_at.toISOString(),
+      created_at: session.created_at.toISOString(),
+    };
   }
 }
 
-export * from './mfa.js';
+export * from "./mfa.js";

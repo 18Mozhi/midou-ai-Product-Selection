@@ -12,11 +12,7 @@ export class NotificationServiceError extends Error {
 const version = (v: unknown) => {
   const n = Number(v);
   if (!Number.isSafeInteger(n) || n < 1)
-    throw new NotificationServiceError(
-      "notification_version_invalid",
-      400,
-      "刷新后提交当前版本。",
-    );
+    throw new NotificationServiceError("notification_version_invalid", 400, "刷新后提交当前版本。");
   return n;
 };
 export function validateNotificationAction(v: any) {
@@ -39,11 +35,7 @@ export function validatePreferences(v: any) {
     result: any = { expected_version: version(v?.expected_version) };
   for (const key of keys) {
     if (typeof v?.[key] !== "boolean")
-      throw new NotificationServiceError(
-        "notification_preference_invalid",
-        400,
-        `修正 ${key}。`,
-      );
+      throw new NotificationServiceError("notification_preference_invalid", 400, `修正 ${key}。`);
     result[key] = v[key];
   }
   if (result.email_enabled)
@@ -68,9 +60,7 @@ export class NotificationService {
   list(i: any) {
     const page = Math.max(1, Number(i.page) || 1),
       pageSize = Math.min(200, Math.max(1, Number(i.pageSize) || 50)),
-      workflowStatus = ["open", "in_progress", "closed"].includes(
-        i.workflowStatus,
-      )
+      workflowStatus = ["open", "in_progress", "closed"].includes(i.workflowStatus)
         ? i.workflowStatus
         : null;
     return this.repo.list({
@@ -79,9 +69,7 @@ export class NotificationService {
       pageSize,
       unread: i.unread === "true",
       workflowStatus,
-      category: ["task", "approval", "competitor", "system"].includes(
-        i.category,
-      )
+      category: ["task", "approval", "competitor", "system"].includes(i.category)
         ? i.category
         : null,
     });

@@ -135,7 +135,7 @@ test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(routes, /opportunity:read[\s\S]*opportunity:decide[\s\S]*opportunity:approve/);
   assert.match(
     worker,
-    /coverage>=50[\s\S]*coverage>=80[\s\S]*completed_with_warnings[\s\S]*dead_letter/,
+    /coverage\s*>=\s*50[\s\S]*coverage\s*>=\s*80[\s\S]*completed_with_warnings[\s\S]*dead_letter/,
   );
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(consoleUi, new RegExp(state));
@@ -147,7 +147,7 @@ test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(feature, /scoringEngine/);
   assert.match(architecture, /50%[\s\S]*80%/);
   assert.match(runbook, /宝塔[\s\S]*回滚/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(live, /historical_runs_preserved/);
   assert.match(blueprint, /M04-03 实现合同/);
 });

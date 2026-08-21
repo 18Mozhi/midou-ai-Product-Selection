@@ -56,6 +56,13 @@ export interface TrendTopicDetail extends TrendTopicSummary {
     source_count: number;
     stale: boolean;
   };
+  relevance_history: Array<{
+    status: "active" | "irrelevant";
+    reason: string;
+    actor_id: string;
+    version: number;
+    occurred_at: string;
+  }>;
 }
 
 export interface TrendMonitoringRule {
@@ -73,6 +80,7 @@ export interface TrendMonitoringRule {
   last_collection_at: string | null;
   next_collection_at: string | null;
   last_collection_task_id: string | null;
+  last_failed_sources: string[];
   version: number;
   created_at: string;
   updated_at: string;
@@ -111,25 +119,12 @@ export class TrendServiceError extends Error {
   }
 }
 
-const boundedText = (
-  value: unknown,
-  field: string,
-  maximum: number,
-  pattern?: RegExp,
-) => {
+const boundedText = (value: unknown, field: string, maximum: number, pattern?: RegExp) => {
   if (typeof value !== "string")
-    throw new TrendServiceError(
-      "trend_input_invalid",
-      400,
-      `修正 ${field} 后重试。`,
-    );
+    throw new TrendServiceError("trend_input_invalid", 400, `修正 ${field} 后重试。`);
   const result = value.trim();
   if (!result || result.length > maximum || (pattern && !pattern.test(result)))
-    throw new TrendServiceError(
-      "trend_input_invalid",
-      400,
-      `修正 ${field} 后重试。`,
-    );
+    throw new TrendServiceError("trend_input_invalid", 400, `修正 ${field} 后重试。`);
   return result;
 };
 
@@ -141,21 +136,10 @@ export function normalizeTrendTitle(value: string) {
 }
 
 const keywords = (value: unknown, field: string, allowEmpty: boolean) => {
-  if (
-    !Array.isArray(value) ||
-    value.length > 20 ||
-    (!allowEmpty && value.length === 0)
-  )
-    throw new TrendServiceError(
-      "trend_rule_keywords_invalid",
-      400,
-      `修正 ${field} 后重试。`,
-    );
+  if (!Array.isArray(value) || value.length > 20 || (!allowEmpty && value.length === 0))
+    throw new TrendServiceError("trend_rule_keywords_invalid", 400, `修正 ${field} 后重试。`);
   const normalized = value.map((item) =>
-    boundedText(item, field, 100)
-      .normalize("NFKC")
-      .toLocaleLowerCase("en-US")
-      .replace(/\s+/g, " "),
+    boundedText(item, field, 100).normalize("NFKC").toLocaleLowerCase("en-US").replace(/\s+/g, " "),
   );
   if (new Set(normalized).size !== normalized.length)
     throw new TrendServiceError(
@@ -166,15 +150,9 @@ const keywords = (value: unknown, field: string, allowEmpty: boolean) => {
   return normalized;
 };
 
-export function validateMonitoringRuleInput(
-  value: MonitoringRuleInput,
-): MonitoringRuleInput {
+export function validateMonitoringRuleInput(value: MonitoringRuleInput): MonitoringRuleInput {
   if (!value || typeof value !== "object")
-    throw new TrendServiceError(
-      "trend_rule_input_invalid",
-      400,
-      "按 OpenAPI 提交监控规则。",
-    );
+    throw new TrendServiceError("trend_rule_input_invalid", 400, "按 OpenAPI 提交监控规则。");
   const collectionInterval = Number(value.collection_interval_minutes ?? 60);
   if (
     !Number.isSafeInteger(collectionInterval) ||
@@ -188,22 +166,9 @@ export function validateMonitoringRuleInput(
     );
   return {
     name: boundedText(value.name, "name", 120),
-    include_keywords: keywords(
-      value.include_keywords,
-      "include_keywords",
-      false,
-    ),
-    negative_keywords: keywords(
-      value.negative_keywords ?? [],
-      "negative_keywords",
-      true,
-    ),
-    market: boundedText(
-      value.market,
-      "market",
-      40,
-      /^[A-Za-z0-9._-]+$/,
-    ).toUpperCase(),
+    include_keywords: keywords(value.include_keywords, "include_keywords", false),
+    negative_keywords: keywords(value.negative_keywords ?? [], "negative_keywords", true),
+    market: boundedText(value.market, "market", 40, /^[A-Za-z0-9._-]+$/).toUpperCase(),
     language: boundedText(value.language, "language", 40, /^[A-Za-z0-9._-]+$/),
     category:
       value.category == null || value.category === ""
@@ -235,9 +200,7 @@ export interface TrendRepository {
       followed?: boolean;
     },
   ): Promise<{ items: TrendTopicSummary[]; total: number }>;
-  get(
-    input: TrendScope & { topicId: string },
-  ): Promise<TrendTopicDetail | null>;
+  get(input: TrendScope & { topicId: string }): Promise<TrendTopicDetail | null>;
   listRules(input: TrendScope): Promise<TrendMonitoringRule[]>;
   setFollow(
     input: TrendWriteContext & {
@@ -392,9 +355,7 @@ export class TrendService {
     },
   ) {
     const ruleId = uuid(input.ruleId, "rule_id"),
-      collectionIntervalMinutes = Number(
-        input.collectionIntervalMinutes ?? 60,
-      );
+      collectionIntervalMinutes = Number(input.collectionIntervalMinutes ?? 60);
     if (
       !["enabled", "paused"].includes(input.status) ||
       !Number.isSafeInteger(input.expectedVersion) ||

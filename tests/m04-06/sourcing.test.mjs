@@ -101,7 +101,7 @@ test("M04-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(feature, /sourcingDiscovery/);
   assert.match(architecture, /最多五家[\s\S]*MySQL 5\.7/);
   assert.match(runbook, /宝塔[\s\S]*回滚/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(live, /comparison_max_five/);
   assert.match(
     live,
@@ -132,6 +132,11 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
     ui,
     /到岸价[\s\S]*待费用规则计算[\s\S]*已选 \{\{ selectedQuotes\.length \}\} \/ 5 家供应商/,
   );
+  assert.match(ui, /完整采集进度[\s\S]*查看采集任务明细/);
+  assert.match(ui, /报价新鲜度/);
+  assert.match(ui, /确认依据证据（可搜索）[\s\S]*sourcing-evidence-options/);
+  assert.match(ui, /结构化采购创建[\s\S]*锁定报价版本[\s\S]*采购数量/);
+  assert.doesNotMatch(ui, /window\.prompt/);
   assert.match(costRuleUi, /route\.query\.from[\s\S]*返回当前找货记录/);
   assert.match(css, /sourcing-comparison-grid[\s\S]*sourcing-compare-tray/);
   assert.match(architecture, /blocked_login[\s\S]*不伪造登录续期入口/);

@@ -1,7 +1,112 @@
-import{createCipheriv,createDecipheriv,createHash,randomBytes}from'node:crypto';import{mkdir,mkdtemp,rm,writeFile}from'node:fs/promises';import{join,resolve,sep}from'node:path';
-export interface CredentialSecretPayload{encoding:'utf8'|'base64';value:string}export interface SealedCredential{ciphertext:Buffer;nonce:Buffer;authTag:Buffer;fingerprint:string}export interface CredentialCipherRecord extends SealedCredential{assetId:string;assetVersion:number;kind:string;keyVersion:string}
-export class CredentialCryptoError extends Error{constructor(readonly code:'master_key_invalid'|'payload_invalid'|'ciphertext_invalid'|'temp_scope_invalid'){super(code);this.name='CredentialCryptoError';}}
-const key=(master:string)=>{if(typeof master!=='string'||master.length<32)throw new CredentialCryptoError('master_key_invalid');return createHash('sha256').update('scoutops:credential:v1\0').update(master).digest();},aad=(assetId:string,_assetVersion:number,kind:string,keyVersion:string)=>Buffer.from(`${assetId}:${kind}:${keyVersion}`,'utf8');
-export function sealCredential(payload:CredentialSecretPayload,master:string,context:{assetId:string;assetVersion:number;kind:string;keyVersion:string}):SealedCredential{if(!payload||!['utf8','base64'].includes(payload.encoding)||typeof payload.value!=='string'||payload.value.length<1)throw new CredentialCryptoError('payload_invalid');const plaintext=Buffer.from(JSON.stringify(payload),'utf8'),nonce=randomBytes(12),cipher=createCipheriv('aes-256-gcm',key(master),nonce);cipher.setAAD(aad(context.assetId,context.assetVersion,context.kind,context.keyVersion));const ciphertext=Buffer.concat([cipher.update(plaintext),cipher.final()]),fingerprint=createHash('sha256').update(payload.encoding==='base64'?Buffer.from(payload.value,'base64'):Buffer.from(payload.value,'utf8')).digest('hex').slice(0,16);plaintext.fill(0);return{ciphertext,nonce,authTag:cipher.getAuthTag(),fingerprint};}
-export function openCredential(record:CredentialCipherRecord,master:string):CredentialSecretPayload{try{const decipher=createDecipheriv('aes-256-gcm',key(master),record.nonce);decipher.setAAD(aad(record.assetId,record.assetVersion,record.kind,record.keyVersion));decipher.setAuthTag(record.authTag);const plaintext=Buffer.concat([decipher.update(record.ciphertext),decipher.final()]);try{const value=JSON.parse(plaintext.toString('utf8'))as CredentialSecretPayload;if(!value||!['utf8','base64'].includes(value.encoding)||typeof value.value!=='string')throw new Error();return value;}finally{plaintext.fill(0);}}catch(error){if(error instanceof CredentialCryptoError)throw error;throw new CredentialCryptoError('ciphertext_invalid');}}
-export async function withMaterializedCredential<T>(record:CredentialCipherRecord,master:string,tempRoot:string,use:(path:string)=>Promise<T>):Promise<T>{const root=resolve(tempRoot);if(root===resolve(sep))throw new CredentialCryptoError('temp_scope_invalid');await mkdir(root,{recursive:true,mode:0o700});const directory=await mkdtemp(join(root,`credential-${record.assetId.slice(0,8)}-`));if(!resolve(directory).startsWith(`${root}${sep}`))throw new CredentialCryptoError('temp_scope_invalid');const payload=openCredential(record,master),bytes=payload.encoding==='base64'?Buffer.from(payload.value,'base64'):Buffer.from(payload.value,'utf8'),path=join(directory,'payload.bin');try{await writeFile(path,bytes,{mode:0o600,flag:'wx'});return await use(path);}finally{bytes.fill(0);payload.value='';await rm(directory,{recursive:true,force:true});}}
+import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { join, resolve, sep } from "node:path";
+export interface CredentialSecretPayload {
+  encoding: "utf8" | "base64";
+  value: string;
+}
+export interface SealedCredential {
+  ciphertext: Buffer;
+  nonce: Buffer;
+  authTag: Buffer;
+  fingerprint: string;
+}
+export interface CredentialCipherRecord extends SealedCredential {
+  assetId: string;
+  assetVersion: number;
+  kind: string;
+  keyVersion: string;
+}
+export class CredentialCryptoError extends Error {
+  constructor(
+    readonly code:
+      "master_key_invalid" | "payload_invalid" | "ciphertext_invalid" | "temp_scope_invalid",
+  ) {
+    super(code);
+    this.name = "CredentialCryptoError";
+  }
+}
+const key = (master: string) => {
+    if (typeof master !== "string" || master.length < 32)
+      throw new CredentialCryptoError("master_key_invalid");
+    return createHash("sha256").update("scoutops:credential:v1\0").update(master).digest();
+  },
+  aad = (assetId: string, _assetVersion: number, kind: string, keyVersion: string) =>
+    Buffer.from(`${assetId}:${kind}:${keyVersion}`, "utf8");
+export function sealCredential(
+  payload: CredentialSecretPayload,
+  master: string,
+  context: { assetId: string; assetVersion: number; kind: string; keyVersion: string },
+): SealedCredential {
+  if (
+    !payload ||
+    !["utf8", "base64"].includes(payload.encoding) ||
+    typeof payload.value !== "string" ||
+    payload.value.length < 1
+  )
+    throw new CredentialCryptoError("payload_invalid");
+  const plaintext = Buffer.from(JSON.stringify(payload), "utf8"),
+    nonce = randomBytes(12),
+    cipher = createCipheriv("aes-256-gcm", key(master), nonce);
+  cipher.setAAD(aad(context.assetId, context.assetVersion, context.kind, context.keyVersion));
+  const ciphertext = Buffer.concat([cipher.update(plaintext), cipher.final()]),
+    fingerprint = createHash("sha256")
+      .update(
+        payload.encoding === "base64"
+          ? Buffer.from(payload.value, "base64")
+          : Buffer.from(payload.value, "utf8"),
+      )
+      .digest("hex")
+      .slice(0, 16);
+  plaintext.fill(0);
+  return { ciphertext, nonce, authTag: cipher.getAuthTag(), fingerprint };
+}
+export function openCredential(
+  record: CredentialCipherRecord,
+  master: string,
+): CredentialSecretPayload {
+  try {
+    const decipher = createDecipheriv("aes-256-gcm", key(master), record.nonce);
+    decipher.setAAD(aad(record.assetId, record.assetVersion, record.kind, record.keyVersion));
+    decipher.setAuthTag(record.authTag);
+    const plaintext = Buffer.concat([decipher.update(record.ciphertext), decipher.final()]);
+    try {
+      const value = JSON.parse(plaintext.toString("utf8")) as CredentialSecretPayload;
+      if (!value || !["utf8", "base64"].includes(value.encoding) || typeof value.value !== "string")
+        throw new Error();
+      return value;
+    } finally {
+      plaintext.fill(0);
+    }
+  } catch (error) {
+    if (error instanceof CredentialCryptoError) throw error;
+    throw new CredentialCryptoError("ciphertext_invalid");
+  }
+}
+export async function withMaterializedCredential<T>(
+  record: CredentialCipherRecord,
+  master: string,
+  tempRoot: string,
+  use: (path: string) => Promise<T>,
+): Promise<T> {
+  const root = resolve(tempRoot);
+  if (root === resolve(sep)) throw new CredentialCryptoError("temp_scope_invalid");
+  await mkdir(root, { recursive: true, mode: 0o700 });
+  const directory = await mkdtemp(join(root, `credential-${record.assetId.slice(0, 8)}-`));
+  if (!resolve(directory).startsWith(`${root}${sep}`))
+    throw new CredentialCryptoError("temp_scope_invalid");
+  const payload = openCredential(record, master),
+    bytes =
+      payload.encoding === "base64"
+        ? Buffer.from(payload.value, "base64")
+        : Buffer.from(payload.value, "utf8"),
+    path = join(directory, "payload.bin");
+  try {
+    await writeFile(path, bytes, { mode: 0o600, flag: "wx" });
+    return await use(path);
+  } finally {
+    bytes.fill(0);
+    payload.value = "";
+    await rm(directory, { recursive: true, force: true });
+  }
+}

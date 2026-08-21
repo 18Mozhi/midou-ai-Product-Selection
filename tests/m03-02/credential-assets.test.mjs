@@ -1,6 +1,256 @@
-import test from'node:test';import assert from'node:assert/strict';import{mkdtemp,readFile,readdir,rm}from'node:fs/promises';import{tmpdir}from'node:os';import{join}from'node:path';import{openCredential,sealCredential,withMaterializedCredential,CredentialCryptoError}from'../../packages/credentials/dist/index.js';import{CredentialAssetError,CredentialAssetService}from'../../apps/api/dist/credential-asset-service.js';import{buildApp}from'../../apps/api/dist/app.js';
-const master='m03-02-test-master-key-32-characters-minimum',actor='00000000-0000-4000-8000-000000000801',provider='00000000-0000-4000-8000-000000000802',assetId='00000000-0000-4000-8000-000000000803',now=new Date('2026-08-07T18:00:00.000Z'),summary={id:assetId,provider_id:provider,name:'浏览器档案 A',kind:'browser_profile',status:'active',key_version:'v1',fingerprint:'0123456789abcdef',expires_at:null,rotated_at:null,version:1,updated_at:now.toISOString()},context={actorId:actor,idempotencyKey:'m03-create',requestId:'m03-request',traceId:'m03-trace'},read=path=>readFile(path,'utf8');
-test('M03-02.A02/A05/A10/A12/A16 AES-256-GCM rejects tamper and finally removes plaintext',async()=>{const sealed=sealCredential({encoding:'utf8',value:'secret-never-log'},master,{assetId,assetVersion:1,kind:'browser_profile',keyVersion:'v1'}),record={...sealed,assetId,assetVersion:1,kind:'browser_profile',keyVersion:'v1'};assert.equal(openCredential(record,master).value,'secret-never-log');assert.throws(()=>openCredential({...record,ciphertext:Buffer.from(record.ciphertext).fill(1)},master),CredentialCryptoError);const root=await mkdtemp(join(tmpdir(),'scoutops-m03-02-'));try{await assert.rejects(()=>withMaterializedCredential(record,master,root,async path=>{assert.equal(await readFile(path,'utf8'),'secret-never-log');throw new Error('injected task failure');}),/injected task failure/);assert.deepEqual(await readdir(root),[]);}finally{await rm(root,{recursive:true,force:true});}});
-test('M03-02.A01/A04/A12 missing master key blocks writes and masked reads contain no secret',async()=>{const repository={listAssets:async()=>[summary],listProviderOptions:async()=>[{id:provider,code:'source',name:'来源'}],listProfiles:async()=>[],getCipherRecord:async()=>{throw new Error('unused')},createAsset:async()=>summary,rotateAsset:async()=>summary,revokeAsset:async()=>summary,createProfile:async()=>{throw new Error('unused')}};const blocked=new CredentialAssetService(repository,'','v1',()=>now);await assert.rejects(()=>blocked.createAsset({provider_id:provider,name:'测试凭证',kind:'api_key',secret_payload:{encoding:'utf8',value:'never'},expires_at:null},context),error=>error instanceof CredentialAssetError&&error.code==='credential_master_key_unavailable');assert.doesNotMatch(JSON.stringify(await blocked.listAssets()),/secret|ciphertext|nonce|auth_tag/i);});
-test('M03-02.A06/A09/A11/A13 API requires key_rotation manage, same origin and never returns payload',async()=>{const calls=[],service={listAssets:async()=>[summary],listProviderOptions:async()=>[],listProfiles:async()=>[],createAsset:async(value,ctx)=>(calls.push({value,ctx}),summary),rotateAsset:async()=>summary,revokeAsset:async()=>summary,createProfile:async()=>({})},authorization={authorize:async input=>calls.push(input)},auth={authenticate:async()=>({user:{id:actor},session:{id:'session'}})},app=buildApp({credentialAssets:{service,authorization,auth,secureCookie:false,webOrigin:'http://127.0.0.1:5173'}});let response=await app.inject({method:'GET',url:'/api/v1/platform/credential-assets',headers:{cookie:'scoutops_session=test','x-request-id':'m03-read','x-trace-id':'m03-trace'}});assert.equal(response.statusCode,200);assert.equal(calls[0].capability,'key_rotation:manage');assert.doesNotMatch(response.body,/secret|ciphertext|nonce|auth_tag/i);response=await app.inject({method:'POST',url:'/api/v1/platform/credential-assets',headers:{cookie:'scoutops_session=test',origin:'http://127.0.0.1:5173','idempotency-key':'api-create','content-type':'application/json'},payload:{provider_id:provider,name:'API 凭证',kind:'api_key',secret_payload:{encoding:'utf8',value:'not-returned'},expires_at:null}});assert.equal(response.statusCode,201);assert.doesNotMatch(response.body,/not-returned/);const forbidden=await app.inject({method:'POST',url:'/api/v1/platform/credential-assets',headers:{cookie:'scoutops_session=test',origin:'https://evil.test','idempotency-key':'blocked','content-type':'application/json'},payload:{}});assert.equal(forbidden.statusCode,403);await app.close();});
-test('M03-02.A03/A06-A10/A13/A15-A17 delivery evidence covers encrypted assets and profiles',async()=>{const[up,down,repo,routes,service,crypto,web,css,shell,openapi,env,schema,architecture,runbook,feature,e2e,blueprint]=await Promise.all(['database/migrations/0016b_credential_assets_m03_02.up.sql','database/migrations/0016b_credential_assets_m03_02.down.sql','apps/api/src/mysql-credential-asset-repository.ts','apps/api/src/credential-asset-routes.ts','apps/api/src/credential-asset-service.ts','packages/credentials/src/index.ts','apps/web/src/components/CredentialAssetCenter.vue','apps/web/src/credential-assets.css','apps/web/src/components/NavigationShell.vue','docs/openapi.yaml','config/env.example','config/schema.json','docs/architecture/m03-02-credential-assets.md','docs/runbooks/m03-02-credential-assets.md','docs/feature-map.json','tests/e2e/m03-02-credential-assets.spec.ts','new-product-enterprise-blueprint.md'].map(read));for(const table of['credential_assets','credential_asset_versions','credential_asset_operations','crawler_profiles','crawler_profile_versions','crawler_profile_operations'])assert.ok(up.includes(`CREATE TABLE \`${table}\``));assert.doesNotMatch(up,/organization_id|workspace_id/);assert.match(up,/MEDIUMBLOB/);assert.match(down,/DROP TABLE IF EXISTS `credential_assets`/);assert.match(repo,/FOR UPDATE/);assert.match(routes,/key_rotation:manage/);assert.match(service,/credential_master_key_unavailable/);assert.match(crypto,/aes-256-gcm/);assert.match(crypto,/finally/);assert.match(web,/type="password"/);assert.doesNotMatch(web,/payload_ciphertext|payload_nonce|payload_auth_tag/);assert.match(css,/@media \(max-width: 640px\)/);assert.match(shell,/CredentialAssetCenter/);assert.match(openapi,/\/platform\/credential-assets:/);assert.match(env,/CREDENTIAL_TEMP_ROOT/);assert.match(env,/CREDENTIALS_MASTER_KEY_VERSION/);assert.match(schema,/CREDENTIAL_TEMP_ROOT/);assert.match(architecture,/平台全局/);assert.match(runbook,/宝塔.*Node API/s);assert.match(feature,/credentialAssets/);assert.match(e2e,/toHaveScreenshot/);assert.match(blueprint,/M03-02/);});
+import test from "node:test";
+import assert from "node:assert/strict";
+import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import {
+  openCredential,
+  sealCredential,
+  withMaterializedCredential,
+  CredentialCryptoError,
+} from "../../packages/credentials/dist/index.js";
+import {
+  CredentialAssetError,
+  CredentialAssetService,
+} from "../../apps/api/dist/credential-asset-service.js";
+import { buildApp } from "../../apps/api/dist/app.js";
+const master = "m03-02-test-master-key-32-characters-minimum",
+  actor = "00000000-0000-4000-8000-000000000801",
+  provider = "00000000-0000-4000-8000-000000000802",
+  assetId = "00000000-0000-4000-8000-000000000803",
+  now = new Date("2026-08-07T18:00:00.000Z"),
+  summary = {
+    id: assetId,
+    provider_id: provider,
+    name: "浏览器档案 A",
+    kind: "browser_profile",
+    status: "active",
+    key_version: "v1",
+    fingerprint: "0123456789abcdef",
+    expires_at: null,
+    rotated_at: null,
+    version: 1,
+    updated_at: now.toISOString(),
+  },
+  context = {
+    actorId: actor,
+    idempotencyKey: "m03-create",
+    requestId: "m03-request",
+    traceId: "m03-trace",
+  },
+  read = (path) => readFile(path, "utf8");
+test("M03-02.A02/A05/A10/A12/A16 AES-256-GCM rejects tamper and finally removes plaintext", async () => {
+  const sealed = sealCredential({ encoding: "utf8", value: "secret-never-log" }, master, {
+      assetId,
+      assetVersion: 1,
+      kind: "browser_profile",
+      keyVersion: "v1",
+    }),
+    record = { ...sealed, assetId, assetVersion: 1, kind: "browser_profile", keyVersion: "v1" };
+  assert.equal(openCredential(record, master).value, "secret-never-log");
+  assert.throws(
+    () => openCredential({ ...record, ciphertext: Buffer.from(record.ciphertext).fill(1) }, master),
+    CredentialCryptoError,
+  );
+  const root = await mkdtemp(join(tmpdir(), "scoutops-m03-02-"));
+  try {
+    await assert.rejects(
+      () =>
+        withMaterializedCredential(record, master, root, async (path) => {
+          assert.equal(await readFile(path, "utf8"), "secret-never-log");
+          throw new Error("injected task failure");
+        }),
+      /injected task failure/,
+    );
+    assert.deepEqual(await readdir(root), []);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+test("M03-02.A01/A04/A12 missing master key blocks writes and masked reads contain no secret", async () => {
+  const repository = {
+    listAssets: async () => [summary],
+    listProviderOptions: async () => [{ id: provider, code: "source", name: "来源" }],
+    listProfiles: async () => [],
+    getCipherRecord: async () => {
+      throw new Error("unused");
+    },
+    createAsset: async () => summary,
+    rotateAsset: async () => summary,
+    revokeAsset: async () => summary,
+    createProfile: async () => {
+      throw new Error("unused");
+    },
+  };
+  const blocked = new CredentialAssetService(repository, "", "v1", () => now);
+  await assert.rejects(
+    () =>
+      blocked.createAsset(
+        {
+          provider_id: provider,
+          name: "测试凭证",
+          kind: "api_key",
+          secret_payload: { encoding: "utf8", value: "never" },
+          expires_at: null,
+        },
+        context,
+      ),
+    (error) =>
+      error instanceof CredentialAssetError && error.code === "credential_master_key_unavailable",
+  );
+  assert.doesNotMatch(
+    JSON.stringify(await blocked.listAssets()),
+    /secret|ciphertext|nonce|auth_tag/i,
+  );
+});
+test("M03-02.A06/A09/A11/A13 API requires key_rotation manage, same origin and never returns payload", async () => {
+  const calls = [],
+    service = {
+      listAssets: async () => [summary],
+      listProviderOptions: async () => [],
+      listProfiles: async () => [],
+      createAsset: async (value, ctx) => (calls.push({ value, ctx }), summary),
+      rotateAsset: async () => summary,
+      revokeAsset: async () => summary,
+      createProfile: async () => ({}),
+    },
+    authorization = { authorize: async (input) => calls.push(input) },
+    auth = { authenticate: async () => ({ user: { id: actor }, session: { id: "session" } }) },
+    app = buildApp({
+      credentialAssets: {
+        service,
+        authorization,
+        auth,
+        secureCookie: false,
+        webOrigin: "http://127.0.0.1:5173",
+      },
+    });
+  let response = await app.inject({
+    method: "GET",
+    url: "/api/v1/platform/credential-assets",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "m03-read",
+      "x-trace-id": "m03-trace",
+    },
+  });
+  assert.equal(response.statusCode, 200);
+  assert.equal(calls[0].capability, "key_rotation:manage");
+  assert.doesNotMatch(response.body, /secret|ciphertext|nonce|auth_tag/i);
+  response = await app.inject({
+    method: "POST",
+    url: "/api/v1/platform/credential-assets",
+    headers: {
+      cookie: "scoutops_session=test",
+      origin: "http://127.0.0.1:5173",
+      "idempotency-key": "api-create",
+      "content-type": "application/json",
+    },
+    payload: {
+      provider_id: provider,
+      name: "API 凭证",
+      kind: "api_key",
+      secret_payload: { encoding: "utf8", value: "not-returned" },
+      expires_at: null,
+    },
+  });
+  assert.equal(response.statusCode, 201);
+  assert.doesNotMatch(response.body, /not-returned/);
+  const forbidden = await app.inject({
+    method: "POST",
+    url: "/api/v1/platform/credential-assets",
+    headers: {
+      cookie: "scoutops_session=test",
+      origin: "https://evil.test",
+      "idempotency-key": "blocked",
+      "content-type": "application/json",
+    },
+    payload: {},
+  });
+  assert.equal(forbidden.statusCode, 403);
+  await app.close();
+});
+test("M03-02.A03/A06-A10/A13/A15-A17 delivery evidence covers encrypted assets and profiles", async () => {
+  const [
+    up,
+    down,
+    repo,
+    routes,
+    service,
+    crypto,
+    web,
+    css,
+    shell,
+    openapi,
+    env,
+    schema,
+    architecture,
+    runbook,
+    feature,
+    e2e,
+    blueprint,
+  ] = await Promise.all(
+    [
+      "database/migrations/0016b_credential_assets_m03_02.up.sql",
+      "database/migrations/0016b_credential_assets_m03_02.down.sql",
+      "apps/api/src/mysql-credential-asset-repository.ts",
+      "apps/api/src/credential-asset-routes.ts",
+      "apps/api/src/credential-asset-service.ts",
+      "packages/credentials/src/index.ts",
+      "apps/web/src/components/CredentialAssetCenter.vue",
+      "apps/web/src/credential-assets.css",
+      "apps/web/src/components/NavigationShell.vue",
+      "docs/openapi.yaml",
+      "config/env.example",
+      "config/schema.json",
+      "docs/architecture/m03-02-credential-assets.md",
+      "docs/runbooks/m03-02-credential-assets.md",
+      "docs/feature-map.json",
+      "tests/e2e/m03-02-credential-assets.spec.ts",
+      "new-product-enterprise-blueprint.md",
+    ].map(read),
+  );
+  for (const table of [
+    "credential_assets",
+    "credential_asset_versions",
+    "credential_asset_operations",
+    "crawler_profiles",
+    "crawler_profile_versions",
+    "crawler_profile_operations",
+  ])
+    assert.ok(up.includes(`CREATE TABLE \`${table}\``));
+  assert.doesNotMatch(up, /organization_id|workspace_id/);
+  assert.match(up, /MEDIUMBLOB/);
+  assert.match(down, /DROP TABLE IF EXISTS `credential_assets`/);
+  assert.match(repo, /FOR UPDATE/);
+  assert.match(routes, /key_rotation:manage/);
+  assert.match(service, /credential_master_key_unavailable/);
+  assert.match(crypto, /aes-256-gcm/);
+  assert.match(crypto, /finally/);
+  assert.match(web, /type="password"/);
+  assert.doesNotMatch(web, /payload_ciphertext|payload_nonce|payload_auth_tag/);
+  assert.match(css, /@media \(max-width: 640px\)/);
+  assert.match(shell, /provider-runtime-surface/);
+  assert.match(openapi, /\/platform\/credential-assets:/);
+  assert.match(env, /CREDENTIAL_TEMP_ROOT/);
+  assert.match(env, /CREDENTIALS_MASTER_KEY_VERSION/);
+  assert.match(schema, /CREDENTIAL_TEMP_ROOT/);
+  assert.match(architecture, /平台全局/);
+  assert.match(runbook, /宝塔.*Node API/s);
+  assert.match(feature, /credentialAssets/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
+  assert.match(blueprint, /M03-02/);
+});
+
+test("凭证页面按真实绑定展示账号与来源兼容矩阵", async () => {
+  const [web, architecture, feature] = await Promise.all([
+    read("apps/web/src/components/CredentialAssetCenter.vue"),
+    read("docs/architecture/m03-02-credential-assets.md"),
+    read("docs/feature-map.json"),
+  ]);
+  assert.match(web, /账号与来源兼容矩阵/);
+  assert.match(web, /profile\.provider_id === provider\.id/);
+  assert.match(web, /validAssetIds\.has\(profile\.credential_asset_id\)/);
+  assert.match(architecture, /不跨来源推断账号兼容性/);
+  assert.match(feature, /account-source compatibility matrix/);
+});

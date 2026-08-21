@@ -25,6 +25,10 @@ interface Evidence {
 }
 interface Issue {
   id: string;
+  organization_id: string;
+  reconciliation_run_id: string | null;
+  raw_evidence_id: string | null;
+  parser_version: string | null;
   provider_name: string;
   metric_code: string;
   field_path: string | null;
@@ -32,6 +36,9 @@ interface Issue {
   status: "open" | "resolved";
   actual_value: number | null;
   threshold_value: number | null;
+  assigned_membership_id: string | null;
+  assigned_member_label: string | null;
+  attribution_reason: string | null;
   resolution_reason: string | null;
   version: number;
   updated_at: string;
@@ -70,6 +77,12 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   reason = ref(""),
   confirming = ref(false),
   saving = ref(false);
+const memberOptions = ref<Array<{ id: string; organization_id: string; label: string }>>([]),
+  selectedIssueIds = ref<string[]>([]),
+  batchAction = ref<"attribute" | "assign" | "close">("attribute"),
+  batchReason = ref(""),
+  batchAssignee = ref(""),
+  batchConfirming = ref(false);
 const filteredEvidence = computed(() =>
     evidence.value.filter(
       (item) =>
@@ -122,6 +135,21 @@ const filteredEvidence = computed(() =>
             sample_count: run.sample_count,
           });
     return qualityHighlightCodes.map((code) => ({ code, metric: latest.get(code) ?? null }));
+  }),
+  selectedIssues = computed(() =>
+    issues.value.filter(
+      (item) => selectedIssueIds.value.includes(item.id) && item.status === "open",
+    ),
+  ),
+  batchMembers = computed(() => {
+    const organizations = new Set(selectedIssues.value.map((item) => item.organization_id));
+    if (organizations.size !== 1) return [];
+    const organizationId = selectedIssues.value[0]?.organization_id;
+    return memberOptions.value.filter((item) => item.organization_id === organizationId);
+  }),
+  batchImpact = computed(() => {
+    const providers = [...new Set(selectedIssues.value.map((item) => item.provider_name))];
+    return `将处理 ${selectedIssues.value.length} 个开放问题，涉及 ${providers.length} 个来源：${providers.join("、") || "无"}。历史证据与核对运行不会被删除。`;
   });
 const failure = (code: number): State =>
     code === 401
@@ -168,6 +196,8 @@ async function load() {
     evidence.value = response.data.evidence ?? [];
     issues.value = response.data.issues ?? [];
     runs.value = response.data.reconciliationRuns ?? [];
+    memberOptions.value = response.data.memberOptions ?? [];
+    selectedIssueIds.value = [];
     totalEvidence.value = response.data.totalEvidence ?? 0;
     totalIssues.value = response.data.totalIssues ?? 0;
     state.value =
@@ -238,7 +268,63 @@ async function resolveIssue() {
     confirming.value = false;
   }
 }
-onMounted(load);
+function toggleIssue(id: string, checked: boolean) {
+  selectedIssueIds.value = checked
+    ? [...selectedIssueIds.value, id]
+    : selectedIssueIds.value.filter((value) => value !== id);
+}
+function previewBatch() {
+  if (!selectedIssues.value.length) {
+    notice.value = "先选择 1–50 个开放问题。";
+    return;
+  }
+  if (batchReason.value.trim().length < 2) {
+    notice.value = "填写至少 2 个字符的处理原因。";
+    return;
+  }
+  if (batchAction.value === "assign" && !batchAssignee.value) {
+    notice.value = batchMembers.value.length
+      ? "选择所选问题所属组织的活动成员。"
+      : "批量指派只能选择同一组织的问题。";
+    return;
+  }
+  batchConfirming.value = true;
+}
+async function executeBatch() {
+  saving.value = true;
+  try {
+    const response = await request<Issue[]>("/platform/data-quality/issues/batch", {
+      method: "POST",
+      body: {
+        items: selectedIssues.value.map((item) => ({
+          id: item.id,
+          expected_version: item.version,
+        })),
+        action: batchAction.value,
+        reason: batchReason.value.trim(),
+        assignee_membership_id: batchAction.value === "assign" ? batchAssignee.value : null,
+      },
+    });
+    requestId.value = response.request_id;
+    const count = response.data.length;
+    await load();
+    notice.value = `已批量处理 ${count} 个质量问题；每个问题均已增加独立事件和审计事实。`;
+    batchReason.value = "";
+    batchAssignee.value = "";
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    requestId.value = apiError?.requestId ?? requestId.value;
+    notice.value = apiError?.actionHint ?? "依赖不可用，批量处理未生效";
+  } finally {
+    saving.value = false;
+    batchConfirming.value = false;
+  }
+}
+onMounted(async () => {
+  await load();
+  const evidenceId = new URLSearchParams(window.location.search).get("evidence");
+  if (evidenceId && /^[0-9a-f-]{36}$/i.test(evidenceId)) await openEvidence(evidenceId);
+});
 </script>
 <template>
   <section class="quality-center" aria-labelledby="quality-title">
@@ -444,8 +530,42 @@ onMounted(load);
             </details>
           </template>
         </ResponsiveDataView>
+        <section
+          v-if="tab === 'issues'"
+          class="quality-batch-toolbar"
+          aria-label="质量问题批量处理"
+        >
+          <div>
+            <strong>批量处理开放问题</strong>
+            <span>已选择 {{ selectedIssues.length }} 个；批量指派仅允许同一组织的活动成员。</span>
+          </div>
+          <label
+            >操作<select v-model="batchAction">
+              <option value="attribute">记录归因</option>
+              <option value="assign">指派成员</option>
+              <option value="close">关闭问题</option>
+            </select></label
+          >
+          <label v-if="batchAction === 'assign'"
+            >接收成员<select v-model="batchAssignee">
+              <option value="">请选择</option>
+              <option v-for="member in batchMembers" :key="member.id" :value="member.id">
+                {{ member.label }}
+              </option>
+            </select></label
+          >
+          <label class="wide"
+            >处理原因<input
+              v-model="batchReason"
+              maxlength="500"
+              placeholder="说明归因、指派或关闭依据"
+          /></label>
+          <button type="button" :disabled="saving || !selectedIssues.length" @click="previewBatch">
+            预览影响范围
+          </button>
+        </section>
         <ResponsiveDataView
-          v-else-if="tab === 'issues'"
+          v-if="tab === 'issues'"
           :rows="filteredIssues"
           :row-key="(item) => item.id"
           title="数据质量问题"
@@ -455,6 +575,7 @@ onMounted(load);
             <table>
               <thead>
                 <tr>
+                  <th>选择</th>
                   <th>问题</th>
                   <th>来源</th>
                   <th>状态</th>
@@ -466,8 +587,20 @@ onMounted(load);
               <tbody>
                 <tr v-for="item in filteredIssues" :key="item.id">
                   <td>
+                    <input
+                      type="checkbox"
+                      :aria-label="`选择 ${metricLabel(item.metric_code)}`"
+                      :checked="selectedIssueIds.includes(item.id)"
+                      :disabled="item.status !== 'open'"
+                      @change="toggleIssue(item.id, ($event.target as HTMLInputElement).checked)"
+                    />
+                  </td>
+                  <td>
                     <strong>{{ metricLabel(item.metric_code) }}</strong
-                    ><small>{{ item.field_path || "来源级指标" }}</small>
+                    ><small
+                      >{{ item.field_path || "来源级指标" }} · 解析
+                      {{ item.parser_version || "未关联" }}</small
+                    >
                   </td>
                   <td>{{ item.provider_name }}</td>
                   <td>
@@ -487,6 +620,13 @@ onMounted(load);
                   </td>
                   <td>{{ time(item.updated_at) }}</td>
                   <td>
+                    <button
+                      v-if="item.raw_evidence_id"
+                      class="secondary"
+                      @click="openEvidence(item.raw_evidence_id)"
+                    >
+                      查看证据
+                    </button>
                     <button v-if="item.status === 'open'" @click="beginResolve(item)">
                       记录解决
                     </button>
@@ -518,6 +658,18 @@ onMounted(load);
                 <dd>{{ row.field_path || "来源级指标" }}</dd>
               </div>
               <div>
+                <dt>解析版本</dt>
+                <dd>{{ row.parser_version || "未关联" }}</dd>
+              </div>
+              <div>
+                <dt>负责人</dt>
+                <dd>{{ row.assigned_member_label || "未指派" }}</dd>
+              </div>
+              <div v-if="row.attribution_reason">
+                <dt>归因</dt>
+                <dd>{{ row.attribution_reason }}</dd>
+              </div>
+              <div>
                 <dt>状态</dt>
                 <dd>
                   {{ row.severity === "critical" ? "严重" : "警告" }} ·
@@ -545,6 +697,17 @@ onMounted(load);
                 <dd>{{ row.resolution_reason }}</dd>
               </div>
             </dl>
+            <button
+              v-if="row.raw_evidence_id"
+              type="button"
+              class="secondary"
+              @click="
+                close();
+                openEvidence(row.raw_evidence_id);
+              "
+            >
+              查看关联证据
+            </button>
             <button
               v-if="row.status === 'open'"
               type="button"
@@ -659,6 +822,16 @@ onMounted(load);
       confirmation-text="确认解决"
       @cancel="confirming = false"
       @confirm="resolveIssue"
+    />
+    <ConfirmDialog
+      :open="batchConfirming"
+      title="确认批量处理质量问题？"
+      description="系统会逐条校验当前版本和开放状态；任一问题已变化时整批失败，不会部分覆盖。"
+      :impact="batchImpact"
+      confirm-label="确认批量处理"
+      confirmation-text="确认处理"
+      @cancel="batchConfirming = false"
+      @confirm="executeBatch"
     />
   </section>
 </template>

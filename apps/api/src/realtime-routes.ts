@@ -21,19 +21,11 @@ const ids = (r: FastifyRequest) => ({
   }),
   encode = (item: any) =>
     `id: ${item.id}\nevent: ${item.event_type}\ndata: ${JSON.stringify(item)}\n\n`;
-export function registerRealtimeRoutes(
-  app: FastifyInstance,
-  o: RealtimeRouteOptions,
-) {
+export function registerRealtimeRoutes(app: FastifyInstance, o: RealtimeRouteOptions) {
   let active = 0;
   app.get("/api/v1/realtime/events", async (r, reply) => {
     if (r.headers.origin && r.headers.origin !== o.webOrigin)
-      throw new ApiError(
-        403,
-        "origin_forbidden",
-        "请求来源不允许。",
-        "从 ScoutOps 页面重连。",
-      );
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重连。");
     if (active >= o.maxConnections)
       throw new ApiError(
         503,
@@ -51,9 +43,7 @@ export function registerRealtimeRoutes(
       surface: "api",
       ...ids(r),
     });
-    let cursor = parseLastEventId(
-      r.headers["last-event-id"] ?? (r.query as any)?.last_event_id,
-    );
+    let cursor = parseLastEventId(r.headers["last-event-id"] ?? (r.query as any)?.last_event_id);
     const context = {
       organizationId: x.context.organization_id,
       workspaceId: x.context.workspace_id,
@@ -77,37 +67,37 @@ export function registerRealtimeRoutes(
     active++;
     let polling = false,
       closed = false;
+    let poll: ReturnType<typeof setInterval>;
     const close = () => {
-        if (closed) return;
-        closed = true;
-        active--;
-        clearInterval(poll);
-        clearInterval(heartbeat);
-        clearTimeout(expiry);
-        if (!reply.raw.destroyed) reply.raw.end();
-      },
-      poll = setInterval(async () => {
-        if (closed || polling) return;
-        polling = true;
-        try {
-          const items = await o.service.replay({ ...context, afterId: cursor });
-          for (const item of items) {
-            reply.raw.write(encode(item));
-            cursor = item.id;
-          }
-        } catch {
-          reply.raw.write(
-            'event: stream_error\ndata: {"action_hint":"refresh_and_reconnect"}\n\n',
-          );
-          close();
-        } finally {
-          polling = false;
+      if (closed) return;
+      closed = true;
+      active--;
+      clearInterval(poll);
+      clearInterval(heartbeat);
+      clearTimeout(expiry);
+      if (!reply.raw.destroyed) reply.raw.end();
+    };
+    const pollOnce = async () => {
+      if (closed || polling) return;
+      polling = true;
+      try {
+        const items = await o.service.replay({ ...context, afterId: cursor });
+        for (const item of items) {
+          reply.raw.write(encode(item));
+          cursor = item.id;
         }
-      }, o.pollMs),
-      heartbeat = setInterval(() => {
-        if (!closed) reply.raw.write(`: heartbeat ${Date.now()}\n\n`);
-      }, o.heartbeatMs),
-      expiry = setTimeout(close, o.maxConnectionSeconds * 1000);
+      } catch {
+        reply.raw.write('event: stream_error\ndata: {"action_hint":"refresh_and_reconnect"}\n\n');
+        close();
+      } finally {
+        polling = false;
+      }
+    };
+    poll = setInterval(() => void pollOnce(), o.pollMs);
+    const heartbeat = setInterval(() => {
+      if (!closed) reply.raw.write(`: heartbeat ${Date.now()}\n\n`);
+    }, o.heartbeatMs);
+    const expiry = setTimeout(close, o.maxConnectionSeconds * 1000);
     r.raw.once("close", close);
     return reply;
   });

@@ -34,12 +34,21 @@ const issue = (row: RowDataPacket): QualityIssueSummary => ({
   workspace_id: String(row.workspace_id),
   provider_id: String(row.provider_id),
   provider_name: String(row.provider_name),
+  reconciliation_run_id:
+    row.reconciliation_run_id == null ? null : String(row.reconciliation_run_id),
+  raw_evidence_id: row.raw_evidence_id == null ? null : String(row.raw_evidence_id),
+  parser_version: row.parser_version == null ? null : String(row.parser_version),
   metric_code: String(row.metric_code),
   field_path: row.field_path == null ? null : String(row.field_path),
   severity: row.severity,
   status: row.status,
   actual_value: row.actual_value == null ? null : Number(row.actual_value),
   threshold_value: row.threshold_value == null ? null : Number(row.threshold_value),
+  assigned_membership_id:
+    row.assigned_membership_id == null ? null : String(row.assigned_membership_id),
+  assigned_member_label:
+    row.assigned_member_label == null ? null : String(row.assigned_member_label),
+  attribution_reason: row.attribution_reason == null ? null : String(row.attribution_reason),
   resolution_reason: row.resolution_reason == null ? null : String(row.resolution_reason),
   version: Number(row.version),
   created_at: iso(row.created_at),
@@ -66,40 +75,52 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
     const issueValues = input.status ? [...values, input.status] : values;
     const issueClause = issueWhere.length ? `WHERE ${issueWhere.join(" AND ")}` : "";
     const offset = (input.page - 1) * input.pageSize;
-    const [[evRows], [issueRows], [runRows], [evCount], [issueCount]] = await Promise.all([
-      this.pool.query<RowDataPacket[]>(
-        `SELECT e.*,p.name provider_name
+    const [[evRows], [issueRows], [runRows], [memberRows], [evCount], [issueCount]] =
+      await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          `SELECT e.*,p.name provider_name
          FROM raw_evidence e JOIN providers p ON p.id=e.provider_id
          ${clause}
          ORDER BY e.captured_at DESC,e.id DESC LIMIT ? OFFSET ?`,
-        [...values, input.pageSize, offset],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        `SELECT i.*,p.name provider_name
+          [...values, input.pageSize, offset],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT i.*,p.name provider_name,r.parser_version,u.email assigned_member_label
          FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id
+         LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id
+         LEFT JOIN memberships am ON am.id=i.assigned_membership_id
+         LEFT JOIN users u ON u.id=am.user_id
          ${issueClause}
          ORDER BY FIELD(i.severity,'critical','warning'),i.updated_at DESC,i.id DESC
          LIMIT ? OFFSET ?`,
-        [...issueValues, input.pageSize, offset],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        `SELECT r.id,r.organization_id,r.workspace_id,r.provider_id,p.name provider_name,
+          [...issueValues, input.pageSize, offset],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT r.id,r.organization_id,r.workspace_id,r.provider_id,p.name provider_name,
           r.parser_version,r.market,r.window_started_at,r.window_ended_at,r.sample_count,
           r.metrics_json,r.status,r.request_id,r.trace_id,r.created_at
          FROM reconciliation_runs r JOIN providers p ON p.id=r.provider_id
          ${clause.replaceAll("e.", "r.")}
          ORDER BY r.created_at DESC,r.id DESC LIMIT 20`,
-        values,
-      ),
-      this.pool.query<RowDataPacket[]>(
-        `SELECT COUNT(*) total FROM raw_evidence e ${clause}`,
-        values,
-      ),
-      this.pool.query<RowDataPacket[]>(
-        `SELECT COUNT(*) total FROM data_quality_issues i ${issueClause}`,
-        issueValues,
-      ),
-    ]);
+          values,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT m.id,m.organization_id,u.email label FROM memberships m
+         JOIN users u ON u.id=m.user_id
+         WHERE m.status='active' AND u.status='active'
+         ${input.organizationId ? "AND m.organization_id=?" : ""}
+         ORDER BY u.email,m.id LIMIT 1000`,
+          input.organizationId ? [input.organizationId] : [],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT COUNT(*) total FROM raw_evidence e ${clause}`,
+          values,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT COUNT(*) total FROM data_quality_issues i ${issueClause}`,
+          issueValues,
+        ),
+      ]);
     return {
       evidence: evRows.map(evidence),
       issues: issueRows.map(issue),
@@ -110,6 +131,11 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         window_started_at: iso(row.window_started_at),
         window_ended_at: iso(row.window_ended_at),
         created_at: iso(row.created_at),
+      })),
+      memberOptions: memberRows.map((row) => ({
+        id: String(row.id),
+        organization_id: String(row.organization_id),
+        label: String(row.label),
       })),
       totalEvidence: Number(evCount[0]?.total ?? 0),
       totalIssues: Number(issueCount[0]?.total ?? 0),
@@ -134,7 +160,10 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         [id],
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT i.*,p.name provider_name FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id " +
+        "SELECT i.*,p.name provider_name,r.parser_version,u.email assigned_member_label " +
+          "FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id " +
+          "LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id " +
+          "LEFT JOIN memberships am ON am.id=i.assigned_membership_id LEFT JOIN users u ON u.id=am.user_id " +
           "WHERE i.raw_evidence_id=? ORDER BY i.created_at DESC",
         [id],
       ),
@@ -151,6 +180,149 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
       quality_issues: issues.map(issue),
     };
   }
+  async batchIssues(input: Parameters<DataQualityRepository["batchIssues"]>[0]) {
+    const c = await this.pool.getConnection(),
+      route = "/platform/data-quality/issues/batch",
+      ids = [...input.items].sort((a, b) => a.id.localeCompare(b.id));
+    try {
+      await c.beginTransaction();
+      const [ops] = await c.query<RowDataPacket[]>(
+        "SELECT result_json FROM evidence_data_operations WHERE actor_id=? AND route=? AND idempotency_key=? FOR UPDATE",
+        [input.actorId, route, input.idempotencyKey],
+      );
+      if (ops[0]) {
+        await c.commit();
+        return json(ops[0].result_json) as QualityIssueSummary[];
+      }
+      const placeholders = ids.map(() => "?").join(","),
+        [rows] = await c.query<RowDataPacket[]>(
+          `SELECT i.*,p.name provider_name,r.parser_version,u.email assigned_member_label
+           FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id
+           LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id
+           LEFT JOIN memberships am ON am.id=i.assigned_membership_id
+           LEFT JOIN users u ON u.id=am.user_id
+           WHERE i.id IN (${placeholders}) ORDER BY i.id FOR UPDATE`,
+          ids.map((item) => item.id),
+        );
+      if (rows.length !== ids.length)
+        throw new DataQualityServiceError("quality_issue_not_found", 404, "刷新质量问题列表。 ");
+      const versions = new Map(ids.map((item) => [item.id, item.expectedVersion]));
+      if (
+        rows.some(
+          (row) => row.status !== "open" || Number(row.version) !== versions.get(String(row.id)),
+        )
+      )
+        throw new DataQualityServiceError(
+          "quality_issue_version_conflict",
+          409,
+          "所选问题已变化，刷新后重新确认批量范围。",
+        );
+      let assigneeLabel: string | null = null;
+      if (input.action === "assign") {
+        const [members] = await c.query<RowDataPacket[]>(
+          "SELECT m.id,m.organization_id,u.email FROM memberships m JOIN users u ON u.id=m.user_id WHERE m.id=? AND m.status='active' AND u.status='active' LIMIT 1",
+          [input.assigneeMembershipId],
+        );
+        const member = members[0];
+        if (
+          !member ||
+          rows.some((row) => String(row.organization_id) !== String(member.organization_id))
+        )
+          throw new DataQualityServiceError(
+            "quality_issue_assignee_invalid",
+            409,
+            "指派成员必须在全部所选问题所属组织中保持活动成员资格。",
+          );
+        assigneeLabel = String(member.email);
+      }
+      const results: QualityIssueSummary[] = [];
+      for (const row of rows) {
+        if (input.action === "attribute") {
+          await c.query(
+            "UPDATE data_quality_issues SET attribution_reason=?,attributed_by=?,attributed_at=?,request_id=?,trace_id=?,version=version+1,updated_at=? WHERE id=?",
+            [
+              input.reason,
+              input.actorId,
+              input.now,
+              input.requestId,
+              input.traceId,
+              input.now,
+              row.id,
+            ],
+          );
+          row.attribution_reason = input.reason;
+        } else if (input.action === "assign") {
+          await c.query(
+            "UPDATE data_quality_issues SET assigned_membership_id=?,request_id=?,trace_id=?,version=version+1,updated_at=? WHERE id=?",
+            [input.assigneeMembershipId, input.requestId, input.traceId, input.now, row.id],
+          );
+          row.assigned_membership_id = input.assigneeMembershipId;
+          row.assigned_member_label = assigneeLabel;
+        } else {
+          await c.query(
+            "UPDATE data_quality_issues SET status='resolved',resolved_by=?,resolution_reason=?,resolved_at=?,request_id=?,trace_id=?,version=version+1,updated_at=? WHERE id=?",
+            [
+              input.actorId,
+              input.reason,
+              input.now,
+              input.requestId,
+              input.traceId,
+              input.now,
+              row.id,
+            ],
+          );
+          row.status = "resolved";
+          row.resolution_reason = input.reason;
+        }
+        row.version = Number(row.version) + 1;
+        row.updated_at = input.now;
+        const eventType = `data_quality.issue.${input.action === "close" ? "resolved" : input.action === "assign" ? "assigned" : "attributed"}`;
+        await this.event(
+          c,
+          row,
+          eventType,
+          "data_quality_issue",
+          String(row.id),
+          input.actorId,
+          input.requestId,
+          input.traceId,
+          { reason: input.reason, assignee_membership_id: input.assigneeMembershipId },
+          input.now,
+        );
+        await this.outbox(
+          c,
+          row,
+          eventType,
+          "data_quality_issue",
+          String(row.id),
+          { issue_id: String(row.id) },
+          input.requestId,
+          input.traceId,
+          input.now,
+        );
+        results.push(issue(row));
+      }
+      await c.query(
+        "INSERT INTO evidence_data_operations (id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+        [
+          randomUUID(),
+          input.actorId,
+          route,
+          input.idempotencyKey,
+          ids[0]!.id,
+          JSON.stringify(results),
+          input.now,
+        ],
+      );
+      await c.commit();
+      return results;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
   async resolveIssue(input: Parameters<DataQualityRepository["resolveIssue"]>[0]) {
     const c = await this.pool.getConnection(),
       route = `/platform/data-quality/issues/${input.id}/resolve`;
@@ -165,7 +337,10 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         return json(ops[0].result_json) as QualityIssueSummary;
       }
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT i.*,p.name provider_name FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id " +
+        "SELECT i.*,p.name provider_name,r.parser_version,u.email assigned_member_label " +
+          "FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id " +
+          "LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id " +
+          "LEFT JOIN memberships am ON am.id=i.assigned_membership_id LEFT JOIN users u ON u.id=am.user_id " +
           "WHERE i.id=? FOR UPDATE",
         [input.id],
       );

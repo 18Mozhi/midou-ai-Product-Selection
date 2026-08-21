@@ -3,7 +3,7 @@
 1. 在宝塔备份数据库。固定目录部署脚本会在切换代码前校验并幂等执行 `0040_platform_messages.up.sql`；已执行环境只校验迁移文件校验值。迁移兼容 MySQL 5.7 与 utf8mb4，不创建常驻服务。
 2. 在 Node API 受限环境设置 `PLATFORM_DASHBOARD_DEFAULT_WINDOW=24h`、`PLATFORM_DASHBOARD_QUEUE_WARNING=1000`、`PLATFORM_DASHBOARD_ERROR_LIMIT=20`。调整后必须由宝塔重启 Node API；不需要重启 Worker/Crawler。
 3. 以平台运营管理员访问 `/platform-admin`，确认折线图展示成功/失败任务趋势；再检查内容、通知、系统状态、账号与组织、人员与权限等导航。邮件 Provider 为 `pending_provider_selection` 时不得出现“邮箱管理”菜单，直接访问 `/platform-admin/email` 应显示页面不存在，通知偏好和平台通知草稿的邮件选项应禁用；直接 API 提交 `email_enabled=true` 或邮件草稿必须返回 `mail_provider_pending`。历史邮件事实仍保留，不执行删除。所有允许的修改必须填写原因，并用关联编号在 `platform_audit_events` 定位记录。
-4. 告警异常时先在宝塔核对 Node API、MySQL、Worker/Crawler 日志及既有采集控制台；驾驶舱不会重放任务或修改队列。
+4. 告警异常时先进入 `/platform-admin/logs`，使用 request_id、trace_id、任务 ID、事件名或错误码跨 API、Worker、爬虫检索归一化链路；需要进程原始日志时再到宝塔核对 Node API、Worker/Crawler 日志及既有采集控制台。链路日志页和驾驶舱都不会重放任务或修改队列。
 
 390px 验证时，来源健康、全量数据、规则治理、热点内容、通知投递和历史邮件记录应显示摘要卡片且没有横向宽表；点“查看详情”后可查看完整事实并执行原有审核或投递处置动作。移动筛选应从抽屉打开，关闭后重开仍保留已选条件，状态选项显示中文。来源 UUID 和代码、业务记录 ID、版本代码、原始投递状态与错误码只在“技术详情”出现；告警主列表不应直接暴露组织/工作区 UUID，请求标识也只在页尾“技术详情”中展示。
 

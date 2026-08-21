@@ -70,18 +70,9 @@ export interface ProviderAdapter {
   readonly key: string;
   readonly accessMode: ProviderAccessMode;
   readonly version: string;
-  collect(
-    request: ProviderCollectRequest,
-    signal: AbortSignal,
-  ): Promise<ProviderCollectBatch>;
-  normalize(
-    record: ProviderRawRecord,
-    context: AdapterInvocationContext,
-  ): ProviderNormalizedRecord;
-  healthCheck(
-    context: AdapterHealthContext,
-    signal: AbortSignal,
-  ): Promise<AdapterHealthSignal>;
+  collect(request: ProviderCollectRequest, signal: AbortSignal): Promise<ProviderCollectBatch>;
+  normalize(record: ProviderRawRecord, context: AdapterInvocationContext): ProviderNormalizedRecord;
+  healthCheck(context: AdapterHealthContext, signal: AbortSignal): Promise<AdapterHealthSignal>;
 }
 
 export interface ProviderAdapterLimits {
@@ -117,13 +108,9 @@ const accessModes: ProviderAccessMode[] = [
 const iso = (value: string) => Number.isFinite(Date.parse(value));
 const identifier = (value: string) => /^[A-Za-z0-9._:-]{1,255}$/.test(value);
 const uuid = (value: string) =>
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-    value,
-  );
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
 
-export function classifyProviderAdapterFailure(
-  error: unknown,
-): ClassifiedAdapterFailure {
+export function classifyProviderAdapterFailure(error: unknown): ClassifiedAdapterFailure {
   const structured =
     error instanceof ProviderAdapterFailure
       ? error
@@ -195,9 +182,7 @@ export class ProviderAdapterRegistry {
 
   has(key: string, accessMode?: ProviderAccessMode): boolean {
     const adapter = this.adapters.get(key);
-    return Boolean(
-      adapter && (!accessMode || adapter.accessMode === accessMode),
-    );
+    return Boolean(adapter && (!accessMode || adapter.accessMode === accessMode));
   }
 
   describe(): Array<{
@@ -216,16 +201,13 @@ export class ProviderAdapterRegistry {
 
   private resolve(provider: ProviderRuntimeDefinition): ProviderAdapter {
     const adapter = this.adapters.get(provider.code);
-    if (!adapter)
-      throw new ProviderAdapterFailure("adapter_not_registered", false);
+    if (!adapter) throw new ProviderAdapterFailure("adapter_not_registered", false);
     if (adapter.accessMode !== provider.accessMode)
       throw new ProviderAdapterFailure("adapter_mode_mismatch", false);
     return adapter;
   }
 
-  async collect(
-    request: ProviderCollectRequest,
-  ): Promise<ProviderCollectBatch> {
+  async collect(request: ProviderCollectRequest): Promise<ProviderCollectBatch> {
     if (
       !uuid(request.organizationId) ||
       !uuid(request.workspaceId) ||
@@ -280,9 +262,7 @@ export class ProviderAdapterRegistry {
       !normalized.fields ||
       typeof normalized.fields !== "object" ||
       Object.values(normalized.fields).some(
-        (value) =>
-          value !== null &&
-          !["string", "number", "boolean"].includes(typeof value),
+        (value) => value !== null && !["string", "number", "boolean"].includes(typeof value),
       )
     )
       throw new ProviderAdapterFailure("normalized_record_invalid", false);
@@ -346,10 +326,7 @@ export class ProviderAdapterRegistry {
         new Promise<T>((_, reject) =>
           controller.signal.addEventListener(
             "abort",
-            () =>
-              reject(
-                new DOMException("Adapter invocation timed out", "AbortError"),
-              ),
+            () => reject(new DOMException("Adapter invocation timed out", "AbortError")),
             { once: true },
           ),
         ),

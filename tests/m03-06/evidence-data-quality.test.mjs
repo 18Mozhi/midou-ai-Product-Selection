@@ -111,6 +111,7 @@ test("M03-06.A06/A09/A13 platform API enforces capability, origin, idempotency a
       dashboard: (...v) => repository.dashboard(...v),
       detail: (...v) => repository.evidenceDetail(...v),
       resolveIssue: async (...v) => (calls.push(v), { id: ids.issue }),
+      batchIssues: async (...v) => (calls.push(v), [{ id: ids.issue }]),
       issueDownload: async () => ({ grant: "signed", expires_at: "2026-08-07T00:02:00Z" }),
       download: async () => ({
         content: Buffer.from("ok"),
@@ -168,6 +169,21 @@ test("M03-06.A06/A09/A13 platform API enforces capability, origin, idempotency a
     ).statusCode,
     403,
   );
+  response = await app.inject({
+    method: "POST",
+    url: "/api/v1/platform/data-quality/issues/batch",
+    headers: {
+      cookie: "scoutops_session=x",
+      origin: "http://127.0.0.1:5173",
+      "idempotency-key": "batch-1",
+    },
+    payload: {
+      items: [{ id: ids.issue, expected_version: 1 }],
+      action: "attribute",
+      reason: "解析字段漂移",
+    },
+  });
+  assert.equal(response.statusCode, 200);
   assert.equal(
     (
       await app.inject({
@@ -261,6 +277,7 @@ test("M03-06.A03-A05/A07-A11/A14-A17 delivery evidence is complete and Baota bou
   const paths = [
     "database/migrations/0016f_evidence_quality_m03_06.up.sql",
     "database/migrations/0016f_evidence_quality_m03_06.down.sql",
+    "database/migrations/0057_data_quality_issue_workflow.up.sql",
     "packages/data-quality/src/index.ts",
     "apps/worker/src/evidence-persistence.ts",
     "apps/api/src/mysql-data-quality-repository.ts",
@@ -280,6 +297,7 @@ test("M03-06.A03-A05/A07-A11/A14-A17 delivery evidence is complete and Baota bou
     [
       up,
       down,
+      workflow,
       domain,
       worker,
       repo,
@@ -307,11 +325,14 @@ test("M03-06.A03-A05/A07-A11/A14-A17 delivery evidence is complete and Baota bou
   ])
     assert.ok(up.includes(`CREATE TABLE \`${table}\``));
   assert.match(down, /DROP TABLE IF EXISTS `raw_evidence`/);
+  assert.match(workflow, /assigned_membership_id/);
   assert.match(domain, /QUALITY_THRESHOLDS/);
   assert.match(worker, /writeScopedFile/);
   assert.match(repo, /FOR UPDATE/);
   assert.match(routes, /platform:operate/);
   assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
+  assert.match(web, /批量处理开放问题/);
+  assert.match(web, /查看关联证据/);
   assert.match(css, /@media\s*\(max-width:\s*760px\)/);
   assert.match(openapi, /\/platform\/data-quality:/);
   assert.match(env, /EVIDENCE_DOWNLOAD_SIGNING_KEY/);
@@ -319,7 +340,7 @@ test("M03-06.A03-A05/A07-A11/A14-A17 delivery evidence is complete and Baota bou
   assert.match(architecture, /M03-07/);
   assert.match(runbook, /宝塔.*Node Worker/s);
   assert.match(feature, /evidenceDataQuality/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(blueprint, /M03-06/);
 });
 test("采集质量分别展示准确率、重复率和新鲜度且不伪造总分", async () => {

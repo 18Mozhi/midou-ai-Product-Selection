@@ -36,7 +36,9 @@ interface TopologyData {
     status: string;
     pid: number | null;
     restart_count: number;
+    ready_at: string | null;
     circuit_open_until: string | null;
+    last_failure: string | null;
   }>;
   worker_scheduler?: {
     status: "running" | "stopping" | "stopped";
@@ -45,15 +47,30 @@ interface TopologyData {
     due_queue_count: number;
     backpressure: boolean;
     max_queue_delay_ms: number;
+    suspected_stuck_runs: number;
+    snapshot_publish_failed_total: number;
+    last_snapshot_error: string | null;
     completed_last_minute: number;
     failed_last_minute: number;
     failure_rate_percent: number;
     queues: Array<{
       name: string;
       priority: number;
+      effective_priority: number;
+      max_concurrency: number;
+      timeout_ms: number;
+      max_retries: number;
+      active_runs: number;
       running: boolean;
       queue_delay_ms: number;
+      longest_running_ms: number;
+      suspected_stuck: boolean;
+      circuit_state: "closed" | "open";
+      circuit_open_until: string | null;
+      consecutive_failures: number;
       failed_total: number;
+      timed_out_total: number;
+      retry_total: number;
       deferred_total: number;
     }>;
     observed_at: string;
@@ -102,6 +119,9 @@ const alertLabels: Record<string, string> = {
   worker_scheduler_heartbeat_stale: "任务调度心跳过期",
   worker_scheduler_backpressure: "任务调度发生背压",
   worker_scheduler_recent_failures: "最近一分钟存在失败",
+  worker_scheduler_suspected_stuck: "存在疑似卡死任务",
+  worker_scheduler_queue_circuit_open: "队列连续失败已熔断",
+  worker_scheduler_snapshot_publish_failed: "调度状态写入失败",
   backend_restart_loop: "后端连续重启",
 };
 const queueLabels: Record<string, string> = {
@@ -121,12 +141,18 @@ const queueLabels: Record<string, string> = {
   report_exports: "报表导出",
   automation_rules: "自动化规则",
   core_collection_projection: "采集事实投影",
-  automatic_hotspot_sources: "自动趋势来源",
+  automatic_rule_sources: "规则采集",
+  automatic_full_sources: "全量采集",
 };
 const visibleQueues = computed(() => {
   const queues = data.value?.worker_scheduler?.queues ?? [];
   const exceptional = queues.filter(
-    (queue) => queue.running || queue.queue_delay_ms > 0 || queue.failed_total > 0,
+    (queue) =>
+      queue.running ||
+      queue.queue_delay_ms > 0 ||
+      queue.failed_total > 0 ||
+      queue.suspected_stuck ||
+      queue.circuit_state === "open",
   );
   return (exceptional.length ? exceptional : queues).slice(0, 6);
 });
@@ -291,8 +317,16 @@ onMounted(load);
                   <dt>重启次数</dt>
                   <dd>{{ process.restart_count }}</dd>
                 </div>
+                <div>
+                  <dt>真实就绪</dt>
+                  <dd>{{ process.ready_at ? time(process.ready_at) : "尚未就绪" }}</dd>
+                </div>
               </dl>
               <p v-if="process.circuit_open_until">熔断至 {{ time(process.circuit_open_until) }}</p>
+              <details v-if="process.last_failure">
+                <summary>最近失败</summary>
+                <code>{{ process.last_failure }}</code>
+              </details>
             </article>
           </section>
           <section v-if="data.worker_scheduler" class="topology-scheduler">
@@ -325,21 +359,52 @@ onMounted(load);
                 <dt>一分钟失败率</dt>
                 <dd>{{ data.worker_scheduler.failure_rate_percent }}%</dd>
               </div>
+              <div>
+                <dt>疑似卡死</dt>
+                <dd>{{ data.worker_scheduler.suspected_stuck_runs }}</dd>
+              </div>
             </dl>
             <div class="topology-queue-list">
-              <article v-for="queue in visibleQueues" :key="queue.name">
+              <article
+                v-for="queue in visibleQueues"
+                :key="queue.name"
+                :data-queue-alert="queue.suspected_stuck || queue.circuit_state === 'open'"
+              >
                 <span
                   ><b>{{ queueLabels[queue.name] ?? "后台任务" }}</b
-                  ><small>优先级 {{ queue.priority }}</small></span
+                  ><small>优先级 {{ queue.priority }} → {{ queue.effective_priority }}</small></span
                 >
                 <span
                   ><b>{{
-                    queue.running ? "处理中" : queue.queue_delay_ms > 0 ? "等待中" : "空闲"
+                    queue.circuit_state === "open"
+                      ? "已熔断"
+                      : queue.suspected_stuck
+                        ? "疑似卡死"
+                        : queue.running
+                          ? "处理中"
+                          : queue.queue_delay_ms > 0
+                            ? "等待中"
+                            : "空闲"
                   }}</b
-                  ><small>延迟 {{ queue.queue_delay_ms }} ms</small></span
+                  ><small v-if="queue.running">运行 {{ queue.longest_running_ms }} ms</small
+                  ><small v-else>延迟 {{ queue.queue_delay_ms }} ms</small></span
                 >
+                <details>
+                  <summary>调度策略</summary>
+                  <small
+                    >并发 {{ queue.active_runs }}/{{ queue.max_concurrency }} · 超时
+                    {{ queue.timeout_ms }} ms · 重试 {{ queue.retry_total }}/{{
+                      queue.max_retries
+                    }}
+                    · 连续失败 {{ queue.consecutive_failures }}</small
+                  >
+                </details>
               </article>
             </div>
+            <details v-if="data.worker_scheduler.snapshot_publish_failed_total">
+              <summary>状态文件异常</summary>
+              <code>{{ data.worker_scheduler.last_snapshot_error || "写入失败" }}</code>
+            </details>
             <small>观测 {{ time(data.worker_scheduler.observed_at) }}</small>
           </section>
         </section>

@@ -124,7 +124,7 @@
   --shadow-sm: 0 12px 34px color-mix(in srgb, var(--so-bg) 28%, transparent);
 }
 [data-density="compact"] {
-  --so-control-height: 36px;
+  --so-control-height: 44px;
   --so-density-gap: 10px;
   --so-density-padding: 14px;
 }

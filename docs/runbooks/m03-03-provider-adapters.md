@@ -6,6 +6,7 @@
 2. 在 Node API 与后续调用适配器的 Node Worker 宝塔受限环境配置 `PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS`、`PROVIDER_ADAPTER_MAX_RESPONSE_BYTES`、`PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH`；初始值以 `config/env.example` 为准。
 3. 运行 `npm run build`，由宝塔重启 Node API；M03-03 不新增 systemd、独立 PM2、宿主机 crontab、面板外 Docker 或常驻采集进程。当前 Crawler 不调用该包，无需因本模块重启。
 4. 访问 `/platform-admin/providers/adapters`。未在代码中注册的 Provider 显示“待登记”，健康检查显示“受阻”是预期的真实状态；原始 `adapter_not_registered` 只在“技术详情”展示，不得手工改为健康。
+5. 核对来源健康的 24 小时窗口：成功率、P95 和样本量来自已完成子查询；网络、解析、登录和成功空结果必须分开显示。样本量为 0 时页面应显示“暂无样本”，不得用探针延迟填充运行 P95。
 
 三个上限都在进程启动时读取，修改后必须由宝塔重启 Node API；Worker 在后续模块接入该包后也必须重启。每个 Provider 自身的 `timeout_ms` 继续生效，健康探针采用 Provider timeout 与全局健康 timeout 中较小者。
 

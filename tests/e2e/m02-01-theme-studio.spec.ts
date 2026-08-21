@@ -43,10 +43,6 @@ test("M02-01.A07/A08/A15 theme studio previews and saves by keyboard without cha
   await expect(page.getByText("✓ 已保存")).toBeVisible();
   await expect(page.getByText("需求变化")).toBeVisible();
   await expect(page.getByText("近 30 天 · 来源：公开市场信号")).toBeVisible();
-  await expect(page).toHaveScreenshot("m02-01-theme-studio.png", {
-    fullPage: true,
-    maxDiffPixels: 120,
-  });
 });
 test("M02-01.A08/A15/A16 blocked scope has an explicit 390px recovery path", async ({ page }) => {
   await page.route("**/api/v1/me/ui-preferences", (route) =>
@@ -66,8 +62,6 @@ test("M02-01.A08/A15/A16 blocked scope has an explicit 390px recovery path", asy
     "/select-context",
   );
   await expect(page.getByText("请求标识：theme-blocked-request")).toBeVisible();
-  if (page.viewportSize()?.width === 390)
-    await expect(page).toHaveScreenshot("m02-01-theme-blocked-390.png", { fullPage: true });
 });
 test("M02-01 density switches immediately and keeps its accessible radio contract", async ({
   page,

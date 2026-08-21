@@ -53,111 +53,28 @@ export function registerPlatformDashboardRoutes(
       trace_id: c.traceId,
     };
   });
-  app.patch(
-    "/api/v1/platform/management/content/:topicId",
-    async (r: FastifyRequest) => {
-      if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ai选品 页面重试。",
-        );
-      const c = await context(r);
-      return {
-        data: await o.service.moderateTrend((r.params as any).topicId, r.body, {
-          ...c,
-          idempotencyKey: requireIdempotencyKey(r),
-        }),
-        request_id: c.requestId,
-        trace_id: c.traceId,
-      };
-    },
-  );
+  app.patch("/api/v1/platform/management/content/:topicId", async (r: FastifyRequest) => {
+    if (r.headers.origin !== o.webOrigin)
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
+    const c = await context(r);
+    return {
+      data: await o.service.moderateTrend((r.params as any).topicId, r.body, {
+        ...c,
+        idempotencyKey: requireIdempotencyKey(r),
+      }),
+      request_id: c.requestId,
+      trace_id: c.traceId,
+    };
+  });
   app.post(
     "/api/v1/platform/management/email/:source/:deliveryId/actions",
     async (r: FastifyRequest) => {
       if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ai选品 页面重试。",
-        );
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
       const c = await context(r),
         params = r.params as any;
       return {
-        data: await o.service.manageEmailDelivery(
-          params.source,
-          params.deliveryId,
-          r.body,
-          { ...c, idempotencyKey: requireIdempotencyKey(r) },
-        ),
-        request_id: c.requestId,
-        trace_id: c.traceId,
-      };
-    },
-  );
-  app.post(
-    "/api/v1/platform/management/data/exports",
-    async (r: FastifyRequest, reply) => {
-      if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ai选品 页面重试。",
-        );
-      const c = await context(r),
-        data: any = await o.service.exportData(r.body, c),
-        columns = [
-          "id",
-          "title",
-          "organization_name",
-          "workspace_name",
-          "category",
-          "market",
-          "status",
-          "metric_primary",
-          "metric_secondary",
-          "updated_at",
-        ],
-        csv = [
-          columns.join(","),
-          ...data.items.map((item: any) =>
-            columns
-              .map(
-                (column) =>
-                  `"${String(item[column] ?? "").replaceAll('"', '""')}"`,
-              )
-              .join(","),
-          ),
-        ].join("\r\n");
-      reply
-        .header("content-type", "text/csv; charset=utf-8")
-        .header(
-          "content-disposition",
-          `attachment; filename="platform-${data.entity}-${Date.now()}.csv"`,
-        )
-        .header("x-request-id", c.requestId)
-        .header("x-trace-id", c.traceId);
-      return `\ufeff${csv}`;
-    },
-  );
-  app.post(
-    "/api/v1/platform/management/messages",
-    async (r: FastifyRequest, reply) => {
-      if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ai选品 页面重试。",
-        );
-      const c = await context(r);
-      reply.code(201);
-      return {
-        data: await o.service.createMessage(r.body, {
+        data: await o.service.manageEmailDelivery(params.source, params.deliveryId, r.body, {
           ...c,
           idempotencyKey: requireIdempotencyKey(r),
         }),
@@ -166,48 +83,79 @@ export function registerPlatformDashboardRoutes(
       };
     },
   );
-  app.patch(
-    "/api/v1/platform/management/messages/:messageId",
-    async (r: FastifyRequest) => {
-      if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ai选品 页面重试。",
-        );
-      const c = await context(r);
-      return {
-        data: await o.service.updateMessage(
-          (r.params as any).messageId,
-          r.body,
-          { ...c, idempotencyKey: requireIdempotencyKey(r) },
+  app.post("/api/v1/platform/management/data/exports", async (r: FastifyRequest, reply) => {
+    if (r.headers.origin !== o.webOrigin)
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
+    const c = await context(r),
+      data: any = await o.service.exportData(r.body, c),
+      columns = [
+        "id",
+        "title",
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+      ],
+      csv = [
+        columns.join(","),
+        ...data.items.map((item: any) =>
+          columns
+            .map((column) => `"${String(item[column] ?? "").replaceAll('"', '""')}"`)
+            .join(","),
         ),
-        request_id: c.requestId,
-        trace_id: c.traceId,
-      };
-    },
-  );
-  app.post(
-    "/api/v1/platform/management/messages/:messageId/actions",
-    async (r: FastifyRequest) => {
-      if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ai选品 页面重试。",
-        );
-      const c = await context(r);
-      return {
-        data: await o.service.messageAction(
-          (r.params as any).messageId,
-          r.body,
-          { ...c, idempotencyKey: requireIdempotencyKey(r) },
-        ),
-        request_id: c.requestId,
-        trace_id: c.traceId,
-      };
-    },
-  );
+      ].join("\r\n");
+    reply
+      .header("content-type", "text/csv; charset=utf-8")
+      .header(
+        "content-disposition",
+        `attachment; filename="platform-${data.entity}-${Date.now()}.csv"`,
+      )
+      .header("x-request-id", c.requestId)
+      .header("x-trace-id", c.traceId);
+    return `\ufeff${csv}`;
+  });
+  app.post("/api/v1/platform/management/messages", async (r: FastifyRequest, reply) => {
+    if (r.headers.origin !== o.webOrigin)
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
+    const c = await context(r);
+    reply.code(201);
+    return {
+      data: await o.service.createMessage(r.body, {
+        ...c,
+        idempotencyKey: requireIdempotencyKey(r),
+      }),
+      request_id: c.requestId,
+      trace_id: c.traceId,
+    };
+  });
+  app.patch("/api/v1/platform/management/messages/:messageId", async (r: FastifyRequest) => {
+    if (r.headers.origin !== o.webOrigin)
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
+    const c = await context(r);
+    return {
+      data: await o.service.updateMessage((r.params as any).messageId, r.body, {
+        ...c,
+        idempotencyKey: requireIdempotencyKey(r),
+      }),
+      request_id: c.requestId,
+      trace_id: c.traceId,
+    };
+  });
+  app.post("/api/v1/platform/management/messages/:messageId/actions", async (r: FastifyRequest) => {
+    if (r.headers.origin !== o.webOrigin)
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
+    const c = await context(r);
+    return {
+      data: await o.service.messageAction((r.params as any).messageId, r.body, {
+        ...c,
+        idempotencyKey: requireIdempotencyKey(r),
+      }),
+      request_id: c.requestId,
+      trace_id: c.traceId,
+    };
+  });
 }

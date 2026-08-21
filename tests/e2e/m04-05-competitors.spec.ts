@@ -134,7 +134,6 @@ test("M04-05.A07/A08/A09/A15 renders source-backed baseline changes thresholds a
   await expect(page.getByLabel("竞品（留空为工作区全局）")).toHaveValue(id);
   await page.getByRole("button", { name: "关闭告警规则" }).click();
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("m04-05-competitors.png", { fullPage: true });
 });
 
 test("competitor creation uses link, market and confirmation steps", async ({ page }) => {

@@ -176,7 +176,13 @@ export interface RuntimeConfig {
     productionEvidenceFile: string;
   };
   collectionTasks: { pollMs: number; leaseSeconds: number };
-  automaticSources: { pollMs: number };
+  automaticSources: {
+    pollMs: number;
+    batchSize: number;
+    tenantActiveTaskBudget: number;
+    queueBacklogLimit: number;
+    systemActorId: string;
+  };
   trends: { projectionPollMs: number; projectionLeaseSeconds: number };
   opportunities: { refreshPollMs: number; refreshLeaseSeconds: number };
   scoring: { pollMs: number; leaseSeconds: number };
@@ -251,6 +257,11 @@ export interface RuntimeConfig {
     asyncLagStopSeconds: number;
     probeTimestampToleranceSeconds: number;
     lockName: string;
+    sourceLocalSha: string;
+    sourceRemoteSha: string;
+    sourceRemoteBranch: string;
+    sourceRepository: string;
+    sourceMigrationVersion: string;
   };
   selectionAcceptance: { deadlineMs: number };
   evidence: { maxRawBytes: number; downloadGrantSeconds: number };
@@ -579,7 +590,11 @@ export function loadRuntimeConfig(
       crawlerHeartbeatSeconds: integer(env, "CRAWLER_HEARTBEAT_SECONDS", 30, 5, 60),
       workerMaxConcurrency: integer(env, "WORKER_MAX_CONCURRENCY", 4, 1, 32),
       workerSchedulerTickMs: integer(env, "WORKER_SCHEDULER_TICK_MS", 250, 100, 5000),
-      workerSchedulerStateFile: text(env, "WORKER_SCHEDULER_STATE_FILE"),
+      workerSchedulerStateFile: text(
+        env,
+        "WORKER_SCHEDULER_STATE_FILE",
+        "./runtime/worker-scheduler.json",
+      ),
       workerSchedulerStaleAfterMs:
         integer(env, "WORKER_SCHEDULER_STALE_AFTER_SECONDS", 90, 15, 600) * 1000,
     },
@@ -605,6 +620,10 @@ export function loadRuntimeConfig(
     },
     automaticSources: {
       pollMs: integer(env, "AUTOMATIC_SOURCE_SCHEDULER_POLL_MS", 30000, 5000, 300000),
+      batchSize: integer(env, "AUTOMATIC_SOURCE_BATCH_SIZE", 16, 1, 100),
+      tenantActiveTaskBudget: integer(env, "AUTOMATIC_SOURCE_TENANT_ACTIVE_TASK_BUDGET", 2, 1, 100),
+      queueBacklogLimit: integer(env, "AUTOMATIC_SOURCE_QUEUE_BACKLOG_LIMIT", 1000, 1, 100000),
+      systemActorId: text(env, "AUTOMATIC_SOURCE_SYSTEM_ACTOR_ID"),
     },
     trends: {
       projectionPollMs: integer(env, "TREND_PROJECTION_POLL_MS", 2000, 250, 60000),
@@ -716,6 +735,19 @@ export function loadRuntimeConfig(
         300,
       ),
       lockName: text(env, "RELEASE_ROLLOUT_LOCK_NAME", "scoutops:m07-05:release-rollout"),
+      sourceLocalSha: text(env, "RELEASE_SOURCE_LOCAL_SHA", text(env, "BUILD_SHA", "development")),
+      sourceRemoteSha: text(
+        env,
+        "RELEASE_SOURCE_REMOTE_SHA",
+        text(env, "BUILD_SHA", "development"),
+      ),
+      sourceRemoteBranch: text(env, "RELEASE_SOURCE_REMOTE_BRANCH", "main"),
+      sourceRepository: text(
+        env,
+        "RELEASE_SOURCE_REPOSITORY",
+        "18Mozhi/midou-ai-Product-Selection",
+      ),
+      sourceMigrationVersion: text(env, "RELEASE_SOURCE_MIGRATION_VERSION"),
     },
     selectionAcceptance: {
       deadlineMs: integer(env, "SELECTION_ACCEPTANCE_DEADLINE_MS", 180000, 180000, 180000),

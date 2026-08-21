@@ -21,10 +21,7 @@ const ids = (r: FastifyRequest) => ({
     request_id: ids(r).requestId,
     trace_id: ids(r).traceId,
   });
-export function registerNotificationRoutes(
-  app: FastifyInstance,
-  o: NotificationRouteOptions,
-) {
+export function registerNotificationRoutes(app: FastifyInstance, o: NotificationRouteOptions) {
   const scope = async (r: FastifyRequest) => {
       const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
         x = await o.authorization.resolveSession(a.user.id, a.session.id);
@@ -44,12 +41,7 @@ export function registerNotificationRoutes(
     },
     write = async (r: FastifyRequest) => {
       if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ScoutOps 页面重试。",
-        );
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
       return {
         ...(await scope(r)),
         ...ids(r),

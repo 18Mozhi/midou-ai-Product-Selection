@@ -66,14 +66,18 @@ test("ERP A-B-A import reuses immutable evidence and creates a new active normal
   const connection = {
     async query(sql, values = []) {
       queries.push({ sql, values });
-      if (sql.startsWith("SELECT e.id evidence_id"))
-        return [[{ evidence_id: "evidence-a" }], []];
+      if (sql.startsWith("SELECT e.id evidence_id")) return [[{ evidence_id: "evidence-a" }], []];
       if (sql.startsWith("SELECT id,raw_evidence_id,record_version"))
-        return [[{
-          id: "record-b",
-          raw_evidence_id: "evidence-b",
-          record_version: 2,
-        }], []];
+        return [
+          [
+            {
+              id: "record-b",
+              raw_evidence_id: "evidence-b",
+              record_version: 2,
+            },
+          ],
+          [],
+        ];
       return [{ affectedRows: 1 }, []];
     },
   };
@@ -120,9 +124,7 @@ test("ERP A-B-A import reuses immutable evidence and creates a new active normal
       item.sql.startsWith("UPDATE normalized_records SET status='superseded'"),
     ),
   );
-  const insert = queries.find((item) =>
-    item.sql.startsWith("INSERT INTO normalized_records"),
-  );
+  const insert = queries.find((item) => item.sql.startsWith("INSERT INTO normalized_records"));
   assert.equal(insert.values[4], "evidence-a");
   assert.equal(insert.values[6], 3);
   assert.equal(insert.values[8], "record-b");

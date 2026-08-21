@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { ApiClientError, createApiClient } from "../api-client";
+import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
 import "../automation-rules.css";
 type Rule = {
@@ -25,6 +25,23 @@ type RuleTemplate = Pick<
   Rule,
   "name" | "trigger_event_type" | "condition_severity" | "action_type" | "action_title"
 >;
+type AutomationPreview = {
+  mode: "read_only";
+  matched_30d: number;
+  matched_in_rate_window: number;
+  projected_action_count: number;
+  projected_task_count: number;
+  projected_notification_count: number;
+  rate_limit_count: number;
+  rate_limit_window_minutes: number;
+  samples: Array<{
+    notification_id: string;
+    title: string;
+    severity: string;
+    event_type: string;
+    created_at: string;
+  }>;
+};
 const props = defineProps<{ apiBaseUrl: string }>(),
   request = createApiClient(props.apiBaseUrl),
   state = ref("loading"),
@@ -36,6 +53,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   editing = ref<Rule | null>(null),
   deepLinkHandled = ref(false),
   busy = ref(false),
+  previewing = ref(false),
+  preview = ref<AutomationPreview | null>(null),
   form = ref({
     name: "",
     trigger_event_type: "approval.overdue",
@@ -101,12 +120,16 @@ async function load() {
         target = rules.value.find((item) => item.id === params.get("rule"));
       if (target) params.get("action") === "edit" ? edit(target) : await open(target);
     }
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function open(rule: Rule) {
   try {
     selected.value = await api(`/automations/${rule.id}`);
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function create() {
   busy.value = true;
@@ -131,7 +154,8 @@ async function create() {
       : "自动化规则已启用；动作仍需人工处理。";
     editing.value = null;
     await load();
-  } catch {
+  } catch (error) {
+    rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
   }
@@ -149,17 +173,38 @@ function edit(rule: Rule) {
     rate_limit_count: rule.rate_limit_count,
     rate_limit_window_minutes: rule.rate_limit_window_minutes,
   };
+  preview.value = null;
   showCreate.value = true;
 }
 function closeEditor() {
   showCreate.value = false;
   editing.value = null;
+  preview.value = null;
 }
 function applyTemplate(template: RuleTemplate) {
   form.value = {
     ...form.value,
     ...template,
   };
+  preview.value = null;
+}
+async function runPreview() {
+  previewing.value = true;
+  try {
+    preview.value = await api("/automations/preview", {
+      method: "POST",
+      body: JSON.stringify({
+        ...form.value,
+        action_assignee_id:
+          form.value.action_type === "create_task" ? form.value.action_assignee_id : null,
+      }),
+    });
+    notice.value = "试运行完成；本次只读取历史匹配事实，没有执行动作。";
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  } finally {
+    previewing.value = false;
+  }
 }
 async function status(rule: Rule) {
   busy.value = true;
@@ -175,7 +220,8 @@ async function status(rule: Rule) {
     notice.value = rule.status === "active" ? "规则已人工暂停。" : "规则已恢复。";
     selected.value = null;
     await load();
-  } catch {
+  } catch (error) {
+    rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
   }
@@ -419,8 +465,52 @@ onMounted(load);
           /></label>
         </div>
         <p>规则只消费真实通知投影；任务动作会标记 automation 来源并留存审计。</p>
+        <section v-if="preview" class="automation-impact-preview" aria-live="polite">
+          <header>
+            <div><b>试运行影响预览</b><small>只读，不会创建通知或任务</small></div>
+            <i>最近 30 天匹配 {{ preview.matched_30d }} 条</i>
+          </header>
+          <dl>
+            <div>
+              <dt>当前限流窗口匹配</dt>
+              <dd>{{ preview.matched_in_rate_window }} 条</dd>
+            </div>
+            <div>
+              <dt>最多可能执行</dt>
+              <dd>{{ preview.projected_action_count }} 次</dd>
+            </div>
+            <div>
+              <dt>将创建人工任务</dt>
+              <dd>{{ preview.projected_task_count }} 项</dd>
+            </div>
+            <div>
+              <dt>将发送负责人通知</dt>
+              <dd>{{ preview.projected_notification_count }} 条</dd>
+            </div>
+          </dl>
+          <ul v-if="preview.samples.length">
+            <li v-for="sample in preview.samples" :key="sample.notification_id">
+              <span
+                ><b>{{ sample.title }}</b
+                ><small
+                  >{{ severity(sample.severity) }} · {{ time(sample.created_at) }}</small
+                ></span
+              >
+              <RouterLink
+                :to="{
+                  path: '/notifications',
+                  query: { notification: sample.notification_id, from: '/automations' },
+                }"
+                >查看样本</RouterLink
+              >
+            </li>
+          </ul>
+          <p v-else>当前条件没有历史匹配样本；保存后仍只会处理未来真实事件。</p>
+        </section>
         <footer>
-          <button type="button" class="secondary" @click="closeEditor">取消</button
+          <button type="button" class="secondary" @click="closeEditor">取消</button>
+          <button type="button" class="secondary" :disabled="previewing" @click="runPreview">
+            {{ previewing ? "正在试运行…" : "试运行并预览影响" }}</button
           ><button :disabled="busy">
             {{ editing ? "保存修改" : "创建并启用" }}
           </button>

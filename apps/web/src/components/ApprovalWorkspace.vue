@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { ApiClientError, createApiClient } from "../api-client";
+import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
 import "../approval-workspace.css";
 type ViewState =
@@ -122,6 +122,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   busy = ref(false),
   showTemplate = ref(false),
   showRequest = ref(false),
+  publishTarget = ref<Template | null>(null),
+  publishReason = ref(""),
   templateForm = ref({
     name: "",
     resource_type: "task",
@@ -143,6 +145,13 @@ const { dialogElement: templateDialogElement, handleCancel: handleTemplateCancel
   { dialogElement: requestDialogElement, handleCancel: handleRequestCancel } = useModalDialog(
     () => showRequest.value,
     () => (showRequest.value = false),
+  ),
+  { dialogElement: publishDialogElement, handleCancel: handlePublishCancel } = useModalDialog(
+    () => Boolean(publishTarget.value),
+    () => {
+      publishTarget.value = null;
+      publishReason.value = "";
+    },
   );
 const pendingCount = computed(() => approvals.value.filter((x) => x.status === "pending").length),
   mineCount = computed(() => approvals.value.filter((x) => x.can_decide).length),
@@ -242,7 +251,9 @@ async function load() {
     state.value = list.length ? "ready" : "empty";
     const approvalId = typeof route.query.approval === "string" ? route.query.approval : "";
     if (approvalId) await openById(approvalId, false);
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function openById(id: string, syncUrl = true) {
   try {
@@ -250,7 +261,9 @@ async function openById(id: string, syncUrl = true) {
     reason.value = "";
     state.value = "ready";
     if (syncUrl) await router.replace({ query: { ...route.query, approval: selected.value.id } });
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function open(item: Approval) {
   await openById(item.id);
@@ -309,7 +322,8 @@ async function decide(action: "approve" | "reject") {
       action === "approve" ? "本节点已批准，审批历史不可变。" : "本节点已驳回，审批历史不可变。";
     await closeDetail();
     await load();
-  } catch {
+  } catch (error) {
+    rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
   }
@@ -339,26 +353,35 @@ async function createTemplate() {
     showTemplate.value = false;
     notice.value = "审批模板草稿已创建；发布前不会用于新审批。";
     await load();
-  } catch {
+  } catch (error) {
+    rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
   }
 }
-async function publish(t: Template) {
-  const reasonValue = window.prompt("请输入发布原因")?.trim();
-  if (!reasonValue) return;
+function openPublish(t: Template) {
+  publishTarget.value = t;
+  publishReason.value = "";
+}
+async function publish() {
+  if (!publishTarget.value || !publishReason.value.trim()) return;
+  const target = publishTarget.value;
   try {
     await api(
-      `/tasks/approval-templates/${t.id}/actions`,
+      `/tasks/approval-templates/${target.id}/actions`,
       {
         method: "POST",
-        body: { expected_revision: t.revision, reason: reasonValue },
+        body: { expected_revision: target.revision, reason: publishReason.value.trim() },
       },
       false,
     );
     notice.value = "模板版本已发布并锁定。";
+    publishTarget.value = null;
+    publishReason.value = "";
     await load();
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function createRequest() {
   busy.value = true;
@@ -367,7 +390,8 @@ async function createRequest() {
     showRequest.value = false;
     notice.value = "审批已发起；第一节点 SLA 已开始计时。";
     await load();
-  } catch {
+  } catch (error) {
+    rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
   }
@@ -694,9 +718,31 @@ watch(
           <span
             ><b>{{ t.name }}</b
             ><small>{{ statusText(t.status) }} · {{ t.node_count }} 节点</small></span
-          ><button v-if="t.status === 'draft'" @click="publish(t)">发布</button>
+          ><button v-if="t.status === 'draft'" @click="openPublish(t)">发布</button>
         </article>
       </section>
+    </dialog>
+    <dialog ref="publishDialogElement" aria-label="发布审批模板" @cancel="handlePublishCancel">
+      <form @submit.prevent="publish">
+        <h3>发布审批模板</h3>
+        <p>
+          将发布“{{ publishTarget?.name }}”第
+          {{ publishTarget?.current_version }} 版。新审批会锁定该版本，历史审批不会被改写。
+        </p>
+        <label>
+          发布原因
+          <textarea
+            v-model="publishReason"
+            required
+            maxlength="500"
+            placeholder="说明本次发布的依据、适用范围或变更原因"
+          ></textarea>
+        </label>
+        <div>
+          <button type="button" class="secondary" @click="publishTarget = null">返回</button>
+          <button type="submit" :disabled="busy">确认发布</button>
+        </div>
+      </form>
     </dialog>
     <dialog ref="requestDialogElement" aria-label="发起审批" @cancel="handleRequestCancel">
       <form @submit.prevent="createRequest">

@@ -8,18 +8,18 @@
 当前生产只允许一个宝塔 Node 后端 `ai选品`。不得创建第二后端、分流后端或常驻灰度
 任务。当前操作步骤如下：
 
-1. 在本地确认目标提交已经完成 `npm run verify:release-matrix`、
+1. 在本地 `main` 确认目标提交已经推送到批准的公开仓库 `18Mozhi/midou-ai-Product-Selection`，并完成 `npm run verify:release-matrix`、
    `npm run verify:runtime-docs`、`npm run verify:docs` 和风险匹配的构建/测试，且工作树
-   干净。
+   干净。部署器会重新 fetch `origin/main` 并要求本地、远端 SHA 完全一致；还会拒绝不在该提交祖先历史中的现有生产 SHA，不能用另一个仓库或旧证据覆盖这道门。
 2. 首次整理固定目录时运行 `python scripts/deploy-baota.py --initialize-layout`；后续发布
    运行 `python scripts/deploy-baota.py`。脚本只读取既定 Windows 凭据管理器条目，只能
    更新当前项目的固定目录和宝塔对象。
 3. 脚本更新网站、统一 Node 后端与 Python Crawler 后，通过宝塔管理的既有项目完成
    重启。禁止在服务器执行 Git、构建、systemd、独立 PM2、宿主 crontab 或屏外服务。
-4. 发布后核验公网版本、live、ready、available，确认 Node 内 API/Worker、Python
+4. 发布后核验公网 version、ready、available，确认 Node 内 API/Worker、Python
    Crawler、MySQL 5.7 与 Redis 的当前状态。任一门失败时，以本地目标 Git 提交重新
    构建并执行同一部署命令回滚，不删除发布、审计或业务数据。
-5. 在 `/platform-admin/releases` 验证桌面门禁表格与 390 像素摘要卡片/详情抽屉；确认状态和阻断原因显示中文、页面无横向遮挡，门禁 ID、类型、发布 ID、阻断代码与 request_id 默认隐藏在“技术详情”中且可展开追踪。
+5. 在 `/platform-admin/releases` 核对本地发布提交、远端 `main` 和生产运行 SHA 三列相同，版本、配置指纹与迁移同源；旧 SHA 的历史证据必须显示为当前版本阻断而不是“已通过”。再验证桌面门禁表格与 390 像素摘要卡片/详情抽屉；确认状态和阻断原因显示中文、页面无横向遮挡，门禁 ID、类型、发布 ID、阻断代码与 request_id 默认隐藏在“技术详情”中且可展开追踪。
 
 ## 历史双槽审计资料（不可执行）
 

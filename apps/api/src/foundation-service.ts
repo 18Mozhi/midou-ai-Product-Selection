@@ -1,10 +1,7 @@
-import {
-  assertOrganizationScope,
-  type RequestContext,
-} from '@scoutops/contracts';
+import { assertOrganizationScope, type RequestContext } from "@scoutops/contracts";
 
 export interface AuditRecord {
-  action: 'foundation.delivery.recorded';
+  action: "foundation.delivery.recorded";
   organization_id: string;
   workspace_id?: string;
   actor_id: string;
@@ -16,7 +13,7 @@ export interface AuditRecord {
 export interface FoundationDelivery {
   id: string;
   idempotency_key: string;
-  status: 'accepted';
+  status: "accepted";
   version: 1;
 }
 
@@ -36,12 +33,12 @@ export class FoundationDeliveryService {
     const delivery: FoundationDelivery = {
       id: input.id,
       idempotency_key: input.idempotency_key,
-      status: 'accepted',
+      status: "accepted",
       version: 1,
     };
     this.#deliveries.set(scopedKey, delivery);
     this.#audit.push({
-      action: 'foundation.delivery.recorded',
+      action: "foundation.delivery.recorded",
       organization_id: context.organization_id,
       ...(context.workspace_id ? { workspace_id: context.workspace_id } : {}),
       actor_id: context.actor_id,

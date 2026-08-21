@@ -6,86 +6,23 @@ import OpportunityListPanel from "./OpportunityListPanel.vue";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
 import OpportunityWorkspaceDialogs from "./OpportunityWorkspaceDialogs.vue";
 import UiStatePanel from "./UiStatePanel.vue";
+import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import { statusLabel } from "../ui/status-labels";
+import { useAuditedReason } from "../use-audited-reason";
+import { useModalDialog } from "../use-modal-dialog";
+import type {
+  OpportunityDetail as Detail,
+  OpportunityProfitAnalysis as ProfitAnalysis,
+  OpportunitySummary as Opportunity,
+  OpportunityTab as Tab,
+  OpportunityWorkspaceState as State,
+} from "./opportunity-workspace-types";
 import "../opportunities.css";
 import "../opportunity-profit.css";
 import "../opportunity-selection-entry.css";
 import "../opportunity-ai.css";
-type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 const route = useRoute();
 const router = useRouter();
-type Tab =
-  "overview" | "market" | "competition" | "profit" | "risk" | "ai" | "evidence" | "decisions";
-interface Opportunity {
-  id: string;
-  name: string;
-  image_url: string | null;
-  market: string;
-  category: string | null;
-  source_type: "manual" | "trend_topic";
-  source_ref_id: string | null;
-  owner_id: string | null;
-  lifecycle_status: string;
-  recommendation_status: string;
-  overall_score: number | null;
-  trend_score: number | null;
-  competition_score: number | null;
-  profit_status: string;
-  risk_level: string;
-  confidence: { status: string; score: number | null };
-  evidence_count: number;
-  source_count: number;
-  competitor_count: number;
-  supplier_candidate_count: number;
-  coverage_status: string;
-  blocking_reasons: Array<"evidence_insufficient" | "recommendation_insufficient">;
-  decision_status: string;
-  version: number;
-  updated_at: string;
-}
-interface Detail extends Opportunity {
-  score_rule_version: string | null;
-  scored_at: string | null;
-  latest_score_run: null | {
-    id: string;
-    status: string;
-    coverage_percent: number;
-    confidence_score: number | null;
-    recommendation_status: string;
-    missing_fields: string[];
-    scored_at: string;
-  };
-  score_components: Array<{
-    dimension_code: string;
-    weight_percent: number;
-    input_score: number | null;
-    weighted_score: number | null;
-    evidence_ids: string[];
-    missing_fields: string[];
-  }>;
-  evidence: Array<{
-    id: string;
-    title: string;
-    publisher: string;
-    canonical_url: string;
-    observed_at: string;
-  }>;
-  decisions: Array<{
-    id: string;
-    action: string;
-    reason: string;
-    actor_id: string;
-    created_at: string;
-    opportunity_version: number;
-  }>;
-  section_status: {
-    market: string;
-    competition: string;
-    profit: string;
-    risk: string;
-    execution: string;
-  };
-}
 const opportunityStatus = (value: string) =>
   (
     ({
@@ -111,48 +48,12 @@ const opportunityStatus = (value: string) =>
       recommendation_insufficient: "尚无可靠推荐结论",
     }) as Record<string, string>
   )[value] ?? value;
-interface ProfitAnalysis {
-  latest_run: null | {
-    id: string;
-    status: "calculated" | "insufficient_data";
-    rule_version_code: string;
-    platform: string;
-    market: string;
-    currency: string | null;
-    sale_price: number | null;
-    total_cost: number | null;
-    net_profit: number | null;
-    net_margin_percent: number | null;
-    missing_fields: string[];
-    calculated_at: string;
-    components: Array<{
-      component_type: string;
-      source_amount: number | null;
-      source_currency: string | null;
-      converted_amount: number | null;
-      target_currency: string | null;
-      source_ref_id: string | null;
-      evidence_id: string | null;
-      exchange_quote_id: string | null;
-      missing_reason: string | null;
-    }>;
-  };
-  current_inputs: Array<{
-    input_type: "sale_price" | "purchase_price" | "logistics";
-    amount_value: number;
-    currency: string;
-    source_type: string;
-    source_ref_id: string;
-    evidence_id: string;
-    observed_at: string;
-    input_version: number;
-    platform: string;
-  }>;
-}
 const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   items = ref<Opportunity[]>([]),
+  memberOptions = ref<Array<{ id: string; label: string }>>([]),
+  selectedOpportunityIds = ref<string[]>([]),
   detail = ref<Detail | null>(null),
   profit = ref<ProfitAnalysis | null>(null),
   aiAnalyses = ref<any[]>([]),
@@ -168,6 +69,10 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
   showErpImport = ref(false),
   erpImportLimit = ref(200),
   showDecision = ref(false),
+  showBatch = ref(false),
+  batchAction = ref<"assign" | "archive" | "review">("assign"),
+  batchReason = ref(""),
+  batchAssigneeId = ref(""),
   decisionAction = ref<"adopt" | "observe" | "reject">("observe"),
   decisionReason = ref(""),
   filters = reactive({
@@ -176,6 +81,8 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
     decision_status: "",
     coverage_status: "",
     blocking_reason: "",
+    lifecycle_status: "",
+    owner_id: "",
   }),
   form = reactive({
     name: "",
@@ -193,6 +100,17 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
     evidence_id: "",
     observed_at: new Date().toISOString().slice(0, 16),
   });
+const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
+  () => showBatch.value,
+  () => (showBatch.value = false),
+);
+const {
+  request: aiReviewReasonRequest,
+  open: aiReviewReasonOpen,
+  ask: askAiReviewReason,
+  submit: submitAiReviewReason,
+  cancel: cancelAiReviewReason,
+} = useAuditedReason();
 const tabs: [Tab, string][] = [
   ["overview", "结论"],
   ["evidence", "证据"],
@@ -207,14 +125,6 @@ const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
 const returnPath = computed(() => {
   const value = typeof route.query.from === "string" ? route.query.from : "/opportunities";
   return value.startsWith("/") && !value.startsWith("//") ? value : "/opportunities";
-});
-const evidenceTaskHref = computed(() => {
-  if (!detail.value) return "/tasks";
-  const title = encodeURIComponent(`补齐机会证据 · ${detail.value.name}`),
-    description = encodeURIComponent(
-      `补齐机会 ${detail.value.id} 的缺失证据，并复核来源新鲜度与可信度。`,
-    );
-  return `/tasks?create=1&title=${title}&description=${description}`;
 });
 const stateFrom = (kind: ApiFailureKind): State =>
   kind === "expired" || kind === "forbidden"
@@ -303,6 +213,14 @@ async function load() {
     for (const [key, value] of Object.entries(filters)) if (value) params.set(key, value);
     const result = await read(`/opportunities?${params}`);
     items.value = result.data;
+    try {
+      memberOptions.value = (await request<any[]>("/opportunities/member-options")).data;
+    } catch (error) {
+      if (!(error instanceof ApiClientError)) throw error;
+      memberOptions.value = [];
+      requestId.value = error.requestId;
+      message.value = "机会已加载；组织成员选项暂不可用，批量指派需稍后重试。";
+    }
     total.value = (result.meta as { total: number }).total;
     state.value = items.value.length ? "ready" : "empty";
   } catch (error) {
@@ -463,6 +381,42 @@ async function queueScore() {
     message.value = "评分任务已进入宝塔 Node Worker 队列；完成后刷新可见新运行记录。";
   }
 }
+async function createEvidenceTask() {
+  if (!detail.value) return;
+  const result = await write(`/opportunities/${detail.value.id}/evidence-completion-tasks`, {
+    expected_version: detail.value.version,
+  });
+  if (result) {
+    message.value = result.created
+      ? "补数任务已创建；完成任务后系统会自动重新评分。"
+      : "该机会已有补数任务，已保留原任务与审计链。";
+    await router.push({ path: `/tasks/${result.task_id}`, query: { from: route.fullPath } });
+  }
+}
+function openBatch(action: "assign" | "archive" | "review") {
+  batchAction.value = action;
+  batchReason.value = "";
+  batchAssigneeId.value = "";
+  showBatch.value = true;
+}
+async function confirmBatch() {
+  const selectedItems = items.value.filter((item) =>
+    selectedOpportunityIds.value.includes(item.id),
+  );
+  if (!selectedItems.length || !batchReason.value.trim()) return;
+  const result = await write("/opportunities/batch", {
+    action: batchAction.value,
+    items: selectedItems.map((item) => ({ id: item.id, expected_version: item.version })),
+    reason: batchReason.value.trim(),
+    assignee_id: batchAction.value === "assign" ? batchAssigneeId.value : null,
+  });
+  if (result) {
+    showBatch.value = false;
+    selectedOpportunityIds.value = [];
+    await load();
+    message.value = `批量操作已完成 ${result.affected_count} 项，每个机会均保留独立事件。`;
+  }
+}
 async function confirmCost() {
   if (!detail.value) return;
   const result = await write(`/opportunities/${detail.value.id}/cost-inputs`, {
@@ -504,7 +458,10 @@ async function queueAi() {
   }
 }
 async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
-  const notes = window.prompt(outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因");
+  const notes = await askAiReviewReason({
+    title: outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因",
+    description: "说明会写入 AI 分析人工复核记录，原始输出不会被改写。",
+  });
   if (!notes) return;
   if (await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes })) {
     await load();
@@ -521,6 +478,9 @@ function syncListRoute() {
     typeof route.query.coverage_status === "string" ? route.query.coverage_status : "";
   filters.blocking_reason =
     typeof route.query.blocking_reason === "string" ? route.query.blocking_reason : "";
+  filters.lifecycle_status =
+    typeof route.query.lifecycle_status === "string" ? route.query.lifecycle_status : "";
+  filters.owner_id = typeof route.query.owner_id === "string" ? route.query.owner_id : "";
   listScope.value = route.query.scope === "all" ? "all" : "product";
   const requestedPage = Number(route.query.page ?? 1);
   page.value = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
@@ -534,6 +494,8 @@ async function applyListFilters() {
       decision_status: filters.decision_status || undefined,
       coverage_status: filters.coverage_status || undefined,
       blocking_reason: filters.blocking_reason || undefined,
+      lifecycle_status: filters.lifecycle_status || undefined,
+      owner_id: filters.owner_id || undefined,
       scope: listScope.value === "all" ? "all" : undefined,
     },
   });
@@ -594,6 +556,8 @@ watch(
     route.query.decision_status,
     route.query.coverage_status,
     route.query.blocking_reason,
+    route.query.lifecycle_status,
+    route.query.owner_id,
     route.query.scope,
     route.query.page,
   ],
@@ -633,9 +597,13 @@ watch(
       :state="state"
       :request-id="requestId"
       :filters="filters"
+      :member-options="memberOptions"
+      :selected-ids="selectedOpportunityIds"
       :page="page"
       @apply="applyListFilters"
+      @batch="openBatch"
       @page="goListPage"
+      @update:selected-ids="selectedOpportunityIds = $event"
     />
     <template v-else
       ><UiStatePanel
@@ -691,14 +659,17 @@ watch(
             采纳</button
           ><button @click="startDecision('observe')">继续观察</button
           ><button class="reject" @click="startDecision('reject')">驳回</button>
-          <RouterLink
+          <button
             v-if="
               detail.recommendation_status === 'insufficient_data' ||
               detail.coverage_status === 'insufficient'
             "
-            :to="evidenceTaskHref"
-            >分派证据补齐任务</RouterLink
+            type="button"
+            :disabled="busy"
+            @click="createEvidenceTask"
           >
+            生成补数任务
+          </button>
         </nav>
         <section
           v-if="detail.recommendation_status === 'insufficient_data'"
@@ -921,7 +892,9 @@ watch(
             rel="noopener noreferrer"
             ><span
               ><strong>{{ item.title }}</strong
-              ><small>{{ item.publisher }} · {{ freshness(item.observed_at) }}</small></span
+              ><small
+                >{{ item.publisher }} · 证据新鲜度：观测于 {{ freshness(item.observed_at) }}</small
+              ></span
             ><b>查看原文 ↗</b></a
           >
         </section>
@@ -961,6 +934,58 @@ watch(
       @decide="decide"
       @import-browser="importFromErpBrowser"
       @import-file="importErpFile"
+    />
+    <dialog
+      ref="batchDialogElement"
+      class="opportunity-modal opportunity-batch-dialog"
+      aria-label="机会批量操作影响预览"
+      @cancel="handleBatchCancel"
+    >
+      <form @submit.prevent="confirmBatch">
+        <header>
+          <p>影响预览</p>
+          <h3>
+            批量{{
+              batchAction === "assign" ? "指派" : batchAction === "archive" ? "归档" : "复核"
+            }}
+          </h3>
+        </header>
+        <p>
+          将处理当前已选的 {{ selectedOpportunityIds.length }} 个机会；任一版本变化都会整批回滚。
+        </p>
+        <label v-if="batchAction === 'assign'">
+          负责人
+          <select v-model="batchAssigneeId" required>
+            <option value="" disabled>请选择可访问当前工作区的成员</option>
+            <option v-for="member in memberOptions" :key="member.id" :value="member.id">
+              {{ member.label }}
+            </option>
+          </select>
+        </label>
+        <aside v-if="batchAction === 'review'">
+          每个机会会进入“验证中”阶段，并创建或复用一条人工复核任务；不会自动改变决策结论。
+        </aside>
+        <aside v-else-if="batchAction === 'archive'">
+          已归档机会默认不在列表显示，可通过“阶段：已归档”筛选恢复查看。
+        </aside>
+        <label>
+          操作原因
+          <textarea v-model="batchReason" required maxlength="1000"></textarea>
+        </label>
+        <footer>
+          <button type="button" @click="showBatch = false">返回</button>
+          <button type="submit" :disabled="busy">确认执行</button>
+        </footer>
+      </form>
+    </dialog>
+    <AuditedReasonDialog
+      :open="aiReviewReasonOpen"
+      :title="aiReviewReasonRequest?.title || '填写复核说明'"
+      :description="aiReviewReasonRequest?.description || ''"
+      :initial-value="aiReviewReasonRequest?.initialValue"
+      :minimum-length="aiReviewReasonRequest?.minimumLength"
+      @submit="submitAiReviewReason"
+      @cancel="cancelAiReviewReason"
     />
   </section>
 </template>

@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import {
-  DEFAULT_STATE_COPY,
-  sanitizeCorrelationId,
-  type UiStateKind,
-} from "../ui/state-contract";
+import { DEFAULT_STATE_COPY, sanitizeCorrelationId, type UiStateKind } from "../ui/state-contract";
 const props = withDefaults(
   defineProps<{
     kind: UiStateKind;
@@ -74,11 +70,7 @@ const symbol = computed(
     <footer v-if="kind !== 'loading'">
       <button class="primary" type="button" @click="emit('primary')">
         {{ primaryLabel || copy.primary }}</button
-      ><button
-        v-if="secondaryLabel || copy.secondary"
-        type="button"
-        @click="emit('secondary')"
-      >
+      ><button v-if="secondaryLabel || copy.secondary" type="button" @click="emit('secondary')">
         {{ secondaryLabel || copy.secondary }}
       </button>
     </footer>

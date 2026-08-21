@@ -1,1 +1,11 @@
-{"extends":"../../tsconfig.base.json","compilerOptions":{"outDir":"dist","rootDir":"src","composite":true,"tsBuildInfoFile":"tsconfig.tsbuildinfo"},"include":["src/**/*.ts"],"references":[{"path":"../provider-adapters"}]}
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "composite": true,
+    "tsBuildInfoFile": "tsconfig.tsbuildinfo"
+  },
+  "include": ["src/**/*.ts"],
+  "references": [{ "path": "../provider-adapters" }]
+}

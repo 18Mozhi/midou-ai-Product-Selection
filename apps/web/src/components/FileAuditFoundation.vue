@@ -36,9 +36,7 @@ const copy = computed(
   </header>
   <section
     class="status-card"
-    :data-state="
-      state === 'protected' ? 'ready' : state === 'denied' ? 'error' : 'loading'
-    "
+    :data-state="state === 'protected' ? 'ready' : state === 'denied' ? 'error' : 'loading'"
     aria-live="polite"
   >
     <div class="status-heading">

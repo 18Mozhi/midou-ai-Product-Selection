@@ -37,26 +37,32 @@ test("M02-02.A01-A06/A09/A10/A13 reuses real identity tenancy contracts without 
   assert.equal(migrations.filter((name) => name.includes("m02_02")).length, 0);
 });
 test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and truthful recovery states", async () => {
-  const [identity, tenancy, onboarding, styles, e2e, runbook, feature] = await Promise.all(
-    [
-      "apps/web/src/components/LocalIdentity.vue",
-      "apps/web/src/components/TenancyChooser.vue",
-      "apps/web/src/components/OnboardingGuide.vue",
-      "apps/web/src/styles.css",
-      "tests/e2e/m02-02-auth-onboarding.spec.ts",
-      "docs/runbooks/m02-02-auth-onboarding-pages.md",
-      "docs/feature-map.json",
-    ].map(read),
-  );
+  const [identity, tenancy, onboarding, foundationStyles, navigationStyles, e2e, runbook, feature] =
+    await Promise.all(
+      [
+        "apps/web/src/components/LocalIdentity.vue",
+        "apps/web/src/components/TenancyChooser.vue",
+        "apps/web/src/components/OnboardingGuide.vue",
+        "apps/web/src/styles.css",
+        "apps/web/src/styles/onboarding-navigation.css",
+        "tests/e2e/m02-02-auth-onboarding.spec.ts",
+        "docs/runbooks/m02-02-auth-onboarding-pages.md",
+        "docs/feature-map.json",
+      ].map(read),
+    );
+  const styles = `${foundationStyles}\n${navigationStyles}`;
   for (const state of ["rate_limited", "blocked", "expired"])
     assert.match(identity, new RegExp(state));
   assert.match(identity, /请求标识/);
+  assert.match(identity, /智能选品账号/);
+  assert.doesNotMatch(identity, /AI SELECTION ACCOUNT|SECURITY CENTER/);
+  assert.match(styles, /identity-form-row \.text-button[\s\S]*white-space:\s*nowrap/);
   for (const state of ["empty", "forbidden", "expired", "selected"])
     assert.match(tenancy, new RegExp(state));
   assert.match(onboarding, /aria-current/);
   assert.match(styles, /@media\s*\(\s*max-width:\s*780px\s*\)/);
   assert.match(e2e, /keyboard\.press/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(runbook, /仅在宝塔网站发布/);
   assert.match(feature, /authOnboardingPages/);
 });

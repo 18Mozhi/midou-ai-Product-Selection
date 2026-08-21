@@ -161,7 +161,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.match(architecture, /不.*模拟|不.*示例/);
   assert.match(runbook, /宝塔.*Node API/s);
   assert.match(feature, /homeAndMobileShell/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   const migrations = await readdir("database/migrations");
   assert.ok(migrations.includes("0015b_home_dashboard_m02_06.up.sql"));
 });

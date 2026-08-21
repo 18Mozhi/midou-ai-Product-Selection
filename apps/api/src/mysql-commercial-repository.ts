@@ -1,6 +1,5 @@
-// @ts-nocheck -- commercial aggregate rows are normalized at the boundary.
 import { randomUUID } from "node:crypto";
-import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { CommercialError, type CommercialRepository } from "./commercial-service.js";
 const json = (v: any) => (typeof v === "string" ? JSON.parse(v) : v),
   iso = (v: any) => (v ? new Date(v).toISOString() : null);
@@ -23,19 +22,19 @@ export class MySqlCommercialRepository implements CommercialRepository {
       c.release();
     }
   }
-  async op(c: any, i: any, id: string, result: any) {
-    const [rows] = await c.query(
+  async op(c: PoolConnection, i: any, id: string, result: any) {
+    const [rows] = await c.query<RowDataPacket[]>(
       "SELECT result_json FROM commercial_operations WHERE actor_id=? AND route_key=? AND idempotency_key=? FOR UPDATE",
       [i.actorId, i.route, i.idempotencyKey],
     );
     if (rows[0]) return { ...json(rows[0].result_json), idempotent_replay: true };
-    const [insert] = await c.query(
+    const [insert] = await c.query<ResultSetHeader>(
       "INSERT IGNORE INTO commercial_operations(id,actor_id,route_key,idempotency_key," +
         "resource_id,result_json,created_at) VALUES(?,?,?,?,?,?,?)",
       [randomUUID(), i.actorId, i.route, i.idempotencyKey, id, JSON.stringify(result), this.now()],
     );
     if (insert.affectedRows === 1) return null;
-    const [replayed] = await c.query(
+    const [replayed] = await c.query<RowDataPacket[]>(
       "SELECT result_json FROM commercial_operations WHERE actor_id=? AND route_key=? AND idempotency_key=?",
       [i.actorId, i.route, i.idempotencyKey],
     );
@@ -47,7 +46,15 @@ export class MySqlCommercialRepository implements CommercialRepository {
       );
     return { ...json(replayed[0].result_json), idempotent_replay: true };
   }
-  async audit(c: any, i: any, org: any, action: string, type: string, id: string, meta: any) {
+  async audit(
+    c: PoolConnection,
+    i: any,
+    org: any,
+    action: string,
+    type: string,
+    id: string,
+    meta: any,
+  ) {
     const payload = { resource_type: type, resource_id: id, ...meta };
     await c.query(
       "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
@@ -149,6 +156,12 @@ export class MySqlCommercialRepository implements CommercialRepository {
             assignment.period_end,
           ],
         );
+        if (!u)
+          throw new CommercialError(
+            "commercial_usage_row_invalid",
+            500,
+            "用量聚合结果缺失，请检查 MySQL 后重试。",
+          );
         usage = Object.fromEntries(Object.entries(u).map(([k, v]) => [k, Number(v)])) as any;
         effective = { ...json(assignment.quotas_json) };
         for (const x of adjustments)
@@ -231,9 +244,10 @@ export class MySqlCommercialRepository implements CommercialRepository {
   }
   async updatePlan(i: any) {
     return this.tx(async (c) => {
-      const [r] = await c.query("SELECT version FROM commercial_plans WHERE id=? FOR UPDATE", [
-        i.planId,
-      ]);
+      const [r] = await c.query<RowDataPacket[]>(
+        "SELECT version FROM commercial_plans WHERE id=? FOR UPDATE",
+        [i.planId],
+      );
       if (!r[0]) throw new CommercialError("plan_not_found", 404, "刷新后重试。");
       const replay = await this.op(c, i, i.planId, { id: i.planId, version: r[0].version });
       if (replay) return replay;
@@ -266,12 +280,12 @@ export class MySqlCommercialRepository implements CommercialRepository {
   }
   async assign(i: any) {
     return this.tx(async (c) => {
-      const [p] = await c.query("SELECT status FROM commercial_plans WHERE id=?", [
+      const [p] = await c.query<RowDataPacket[]>("SELECT status FROM commercial_plans WHERE id=?", [
         i.value.plan_id,
       ]);
       if (!p[0] || p[0].status !== "active")
         throw new CommercialError("active_plan_required", 409, "先启用套餐。");
-      const [existing] = await c.query(
+      const [existing] = await c.query<RowDataPacket[]>(
         "SELECT id,version FROM organization_plan_assignments WHERE organization_id=? FOR UPDATE",
         [i.value.organization_id],
       );
@@ -326,7 +340,7 @@ export class MySqlCommercialRepository implements CommercialRepository {
   }
   async assignmentAction(i: any) {
     return this.tx(async (c) => {
-      const [r] = await c.query(
+      const [r] = await c.query<RowDataPacket[]>(
         "SELECT organization_id,status,version FROM organization_plan_assignments WHERE id=? FOR UPDATE",
         [i.assignmentId],
       );
@@ -363,7 +377,7 @@ export class MySqlCommercialRepository implements CommercialRepository {
   }
   async adjust(i: any) {
     return this.tx(async (c) => {
-      const [a] = await c.query(
+      const [a] = await c.query<RowDataPacket[]>(
         "SELECT organization_id,status FROM organization_plan_assignments WHERE id=?",
         [i.value.assignment_id],
       );
@@ -407,7 +421,7 @@ export class MySqlCommercialRepository implements CommercialRepository {
   }
   async revokeAdjustment(i: any) {
     return this.tx(async (c) => {
-      const [r] = await c.query(
+      const [r] = await c.query<RowDataPacket[]>(
         "SELECT organization_id,status,version FROM commercial_quota_adjustments WHERE id=? FOR UPDATE",
         [i.adjustmentId],
       );

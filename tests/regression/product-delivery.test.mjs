@@ -15,7 +15,7 @@ test("production root resolves the authenticated role landing instead of the fou
 
   assert.match(html, /<title>智能选品<\/title>/);
   assert.doesNotMatch(html, /ScoutOps|FOUNDATION|M00-01/);
-  assert.match(app, /<LandingRedirect\s+v-if="routePath === '\/' && !selectedView"/);
+  assert.match(app, /<LandingRedirect\s+v-if="selectedView === 'landing'"/);
   assert.doesNotMatch(app, /FOUNDATION\s*\/\s*M00-01/);
   assert.doesNotMatch(app, />自动验收</);
   assert.match(
@@ -81,10 +81,11 @@ test("unified backend build and lifecycle contracts are registered", async () =>
 // Regression: ISSUE-005 — visible navigation linked to phase placeholders rather than features
 // Found by route-to-component audit on 2026-08-17.
 test("every visible production navigation entry resolves to a real feature surface", async () => {
-  const [shell, identity, app] = await Promise.all([
+  const [shell, identity, app, catalog] = await Promise.all([
     read("apps/web/src/components/NavigationShell.vue"),
     read("apps/web/src/components/LocalIdentity.vue"),
     read("apps/web/src/App.vue"),
+    read("apps/web/src/route-catalog.ts"),
   ]);
 
   for (const placeholder of [
@@ -96,12 +97,12 @@ test("every visible production navigation entry resolves to a real feature surfa
     assert.doesNotMatch(shell, new RegExp(placeholder));
   }
 
-  for (const speculativeRoute of ["/platform-admin/organizations", "/platform-admin/admins"]) {
-    assert.doesNotMatch(shell, new RegExp(speculativeRoute.replaceAll("/", "\\/")));
+  for (const accountRoute of ["/platform-admin/organizations", "/platform-admin/admins"]) {
+    assert.match(catalog, new RegExp(accountRoute.replaceAll("/", "\\/")));
   }
 
-  assert.doesNotMatch(app, /['"]\/me['"]\s*:\s*['"]local-identity['"]/);
-  assert.match(app, /['"]\/me['"]/);
+  assert.doesNotMatch(catalog, /['"]\/me['"]\s*,[^\n]*view:\s*['"]local-identity['"]/);
+  assert.match(catalog, /route\(["']\/me["']/);
   assert.doesNotMatch(shell, /isAccountCenter|import LocalIdentity/);
   assert.doesNotMatch(identity, /['"]\/me['"]\s*:\s*['"]sessions['"]/);
   assert.match(identity, /pathModes\[window\.location\.pathname\]/);
@@ -111,16 +112,17 @@ test("every visible production navigation entry resolves to a real feature surfa
 // Regression: ISSUE-006 — production authentication depended on internal ?view= harnesses
 // Found by public-route audit on 2026-08-17.
 test("production identity and onboarding use real routes while harness views stay development-only", async () => {
-  const [app, shell, identity] = await Promise.all([
+  const [app, shell, identity, catalog] = await Promise.all([
     read("apps/web/src/App.vue"),
     read("apps/web/src/components/NavigationShell.vue"),
     read("apps/web/src/components/LocalIdentity.vue"),
+    read("apps/web/src/route-catalog.ts"),
   ]);
 
   assert.match(app, /import\.meta\.env\.DEV/);
-  assert.match(app, /routePath === '\/' && !selectedView/);
-  assert.match(app, /['"]\/login['"]\s*:\s*['"]local-identity['"]/);
-  assert.match(app, /['"]\/select-context['"]\s*:\s*['"]tenancy['"]/);
+  assert.match(app, /selectedView === 'landing'/);
+  assert.match(catalog, /route\(["']\/login["'][\s\S]*?view:\s*["']local-identity["']/);
+  assert.match(catalog, /route\(["']\/select-context["'][\s\S]*?view:\s*["']tenancy["']/);
   assert.match(identity, /['"]\/register['"]\s*:\s*['"]register['"]/);
   assert.doesNotMatch(`${shell}\n${identity}`, /\?view=local-identity|\?view=tenancy/);
 });

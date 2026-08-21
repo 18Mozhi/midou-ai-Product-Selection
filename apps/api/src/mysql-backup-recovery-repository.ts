@@ -1,4 +1,3 @@
-// @ts-nocheck -- MySQL rows are normalized before leaving the repository.
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { BackupRecoveryRepository } from "./backup-recovery-service.js";

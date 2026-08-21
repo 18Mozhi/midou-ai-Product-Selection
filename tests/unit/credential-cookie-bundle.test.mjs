@@ -67,10 +67,7 @@ test("Cookie bundle treats Chrome expirationDate -1 as a session cookie", () => 
 
 test("Cookie bundle rejects malformed domains", () => {
   assert.throws(
-    () =>
-      normalizeCookieBundle(
-        JSON.stringify([{ name: "x", value: "y", domain: "bad..host" }]),
-      ),
+    () => normalizeCookieBundle(JSON.stringify([{ name: "x", value: "y", domain: "bad..host" }])),
     (error) => error?.code === "credential_cookie_invalid",
   );
 });

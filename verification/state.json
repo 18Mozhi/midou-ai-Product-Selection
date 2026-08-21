@@ -1,73 +1,34 @@
 {
   "completedModules": [
     "M00-01",
-    "M00-07",
-    "M00-02",
-    "M00-04",
-    "M00-03",
-    "M00-05",
-    "M00-06",
-    "M00-08",
-    "M01-01",
-    "M01-02",
-    "M01-03",
-    "M01-04",
-    "M01-05",
-    "M01-06",
-    "M02-01",
-    "M02-02",
-    "M02-03",
-    "M02-04",
-    "M02-05",
-    "M02-06",
-    "M03-01",
-    "M03-02",
-    "M03-03",
-    "M03-04",
-    "M03-05",
-    "M03-06",
-    "M03-07",
-    "M04-01",
-    "M04-02",
-    "M04-03",
-    "M04-04",
-    "M04-05",
-    "M04-06",
-    "M04-07",
-    "M05-01",
-    "M05-02",
-    "M05-03",
-    "M05-04",
-    "M05-05",
-    "M05-06",
-    "M06-01",
-    "M06-02",
-    "M06-03",
-    "M06-04",
-    "M06-05",
-    "M06-06",
-    "M07-01",
-    "M07-02",
-    "M07-03",
-    "M07-04",
-    "M07-05",
-    "M07-06",
-    "M08-01",
-    "M08-02",
-    "M08-03",
-    "M08-04",
-    "M08-05",
-    "M08-06"
+    "M00-02"
   ],
-  "completedPhases": [
-    "P00",
-    "P01",
-    "P02",
-    "P03",
-    "P04",
-    "P05",
-    "P06",
-    "P07",
-    "P08"
-  ]
+  "completedPhases": [],
+  "moduleEvidence": {
+    "M00-01": {
+      "commitSha": "00e18614021846358ca293bc902bc969d8c50a63",
+      "worktreeDirty": true,
+      "worktreeFingerprint": "74965b91675062e7bea01d619ebaa1fcf9de587f836dc8a7da03d29a4ca864b6",
+      "completedAt": "2026-08-20T21:44:41.278Z",
+      "evidenceSummary": {
+        "runId": "303dd5dc-1bfb-418e-8ab5-a1291fee17a2",
+        "status": "passed",
+        "passedCommands": 6,
+        "atomicTaskCount": 17
+      }
+    },
+    "M00-02": {
+      "commitSha": "00e18614021846358ca293bc902bc969d8c50a63",
+      "worktreeDirty": true,
+      "worktreeFingerprint": "74965b91675062e7bea01d619ebaa1fcf9de587f836dc8a7da03d29a4ca864b6",
+      "completedAt": "2026-08-20T21:47:02.657Z",
+      "evidenceSummary": {
+        "runId": "505ca408-2eb7-4c88-9d7e-dbb94439ccea",
+        "status": "passed",
+        "passedCommands": 4,
+        "atomicTaskCount": 17
+      }
+    }
+  },
+  "phaseEvidence": {}
 }

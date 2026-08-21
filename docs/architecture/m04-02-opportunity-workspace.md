@@ -10,7 +10,11 @@ M04-02 的事实边界是：趋势证据可使市场分区变为 covered，但�
 
 机会列表的阻断原因筛选只复用采纳接口已经执行的事实条件：`evidence_insufficient` 对应证据数为零或覆盖状态为 `insufficient`，`recommendation_insufficient` 对应推荐状态为 `insufficient_data`。列表响应返回同一组 `blocking_reasons` 并在界面翻译为中文；不把利润不足或风险未知擅自升级为采纳阻断。
 
-机会详情按结论、证据、利润、风险优先展示，并在用户界面把来源、覆盖、利润、风险和决策状态转换为中文；原始状态码仅保留在 API 与技术诊断数据中。
+机会列表同时将持久化 `lifecycle_status`、`owner_id` 下推到 MySQL 筛选；未显式筛选阶段时默认排除 `archived`。`POST /opportunities/batch` 在单个事务内锁定 1–50 个机会并逐项校验 version，支持把负责人改为当前组织且可访问当前工作区的活动成员、进入归档阶段，或进入验证阶段并创建/复用 `selection_verification` 人工任务。任一机会不存在、越权或版本冲突都会整批回滚，每个成功机会写独立事件与 Outbox。
+
+数据不足的详情可通过 `POST /opportunities/{id}/evidence-completion-tasks` 创建或复用唯一 `evidence_completion` 补数任务，不再跳转到未关联机会的通用任务表单。任务完成事务会检查当前工作区活动评分规则：存在时写入 `opportunity_score_jobs` 并把未归档机会切到验证中；不存在时明确返回 `waiting_for_active_rule`，不伪造已重新评分。评分仍由宝塔 Node Worker 基于已持久化输入重新计算。
+
+机会详情按结论、证据、利润、风险优先展示，并在用户界面把来源、覆盖、利润、风险和决策状态转换为中文；每条证据统一显式标注“证据新鲜度：观测于”及真实观测时间，不在没有来源时效规则的情况下猜测新鲜、临期或过期阈值。原始状态码仅保留在 API 与技术诊断数据中。
 
 趋势、机会和平台采集总览的筛选在桌面端保持内联，在 760px 及以下进入同一个可访问抽屉。抽屉只改变呈现方式，不重建表单，因此关闭后仍保留已选条件。
 

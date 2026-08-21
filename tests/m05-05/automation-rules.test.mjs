@@ -58,6 +58,12 @@ test("M05-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(v[4], /不会自动审批|人工暂停|创建人工任务/);
   assert.match(v[1], /latest_execution_status[\s\S]*latest_error_code/);
   assert.match(v[4], /触发通知[\s\S]*人工任务/);
+  assert.match(v[2], /\/api\/v1\/automations\/preview/);
+  assert.match(v[1], /matched_30d[\s\S]*projected_action_count/);
+  assert.match(v[1], /notifications n JOIN outbox_events e[\s\S]*LIMIT 5/);
+  assert.match(v[4], /试运行并预览影响/);
+  assert.match(v[4], /只读，不会创建通知或任务/);
+  assert.match(v[7], /\/automations\/preview[\s\S]*AutomationRulePreview/);
   assert.match(v[6], /宝塔[\s\S]*回滚/);
   assert.equal(JSON.parse(v.at(-1)).atomicTasks.length, 17);
 });

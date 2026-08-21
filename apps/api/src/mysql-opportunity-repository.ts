@@ -88,6 +88,9 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     decisionStatus?: "pending" | "adopted" | "observing" | "rejected";
     coverageStatus?: "insufficient" | "partial" | "complete";
     blockingReason?: "evidence_insufficient" | "recommendation_insufficient";
+    lifecycleStatus?:
+      "candidate" | "validating" | "ready" | "adopted" | "observing" | "rejected" | "archived";
+    ownerId?: string;
     scope?: "product" | "all";
   }) {
     const where = ["o.organization_id=?", "o.workspace_id=?"],
@@ -122,6 +125,14 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       where.push("(o.evidence_count=0 OR o.coverage_status='insufficient')");
     if (input.blockingReason === "recommendation_insufficient")
       where.push("o.recommendation_status='insufficient_data'");
+    if (input.lifecycleStatus) {
+      where.push("o.lifecycle_status=?");
+      values.push(input.lifecycleStatus);
+    } else where.push("o.lifecycle_status<>'archived'");
+    if (input.ownerId) {
+      where.push("o.owner_id=?");
+      values.push(input.ownerId);
+    }
     const sql = where.join(" AND "),
       [count] = await this.pool.query<RowDataPacket[]>(
         `SELECT COUNT(*) total FROM opportunities o WHERE ${sql}`,
@@ -136,6 +147,17 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         [...values, input.pageSize, (input.page - 1) * input.pageSize],
       );
     return { items: rows.map(summary), total: Number(count[0]?.total ?? 0) };
+  }
+  async memberOptions(input: { organizationId: string; workspaceId: string }) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT DISTINCT m.user_id id,u.email label FROM memberships m " +
+        "JOIN users u ON u.id=m.user_id JOIN membership_data_scopes s ON s.membership_id=m.id " +
+        "WHERE m.organization_id=? AND m.status='active' AND u.status='active' " +
+        "AND (s.scope_type='organization' OR (s.scope_type='workspace' AND s.workspace_id=?)) " +
+        "ORDER BY u.email,m.user_id",
+      [input.organizationId, input.workspaceId],
+    );
+    return rows.map((row) => ({ id: String(row.id), label: String(row.label) }));
   }
   async get(input: {
     organizationId: string;
@@ -550,6 +572,246 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     } finally {
       connection.release();
     }
+  }
+  async batch(input: OpportunityWriteContext & { value: any; route: string }) {
+    const previous = await this.operation<any>(input);
+    if (previous) return previous;
+    if (input.value.action === "assign")
+      await this.ensureMember(input.organizationId, input.workspaceId, input.value.assignee_id);
+    const connection = await this.pool.getConnection(),
+      now = new Date(),
+      results: Array<{ id: string; version: number; task_id?: string }> = [];
+    try {
+      await connection.beginTransaction();
+      for (const item of input.value.items) {
+        const [rows] = await connection.query<RowDataPacket[]>(
+            "SELECT id,name,version,lifecycle_status FROM opportunities WHERE id=? AND organization_id=? " +
+              "AND workspace_id=? FOR UPDATE",
+            [item.id, input.organizationId, input.workspaceId],
+          ),
+          row = rows[0];
+        if (!row)
+          throw new OpportunityServiceError(
+            "opportunity_not_found",
+            404,
+            "刷新机会列表后重试批量操作。",
+          );
+        if (Number(row.version) !== item.expected_version)
+          throw new OpportunityServiceError(
+            "opportunity_version_conflict",
+            409,
+            "部分机会版本已变化，刷新影响范围后重试。",
+          );
+        const version = Number(row.version) + 1,
+          lifecycle =
+            input.value.action === "archive"
+              ? "archived"
+              : input.value.action === "review"
+                ? "validating"
+                : String(row.lifecycle_status);
+        await connection.query(
+          "UPDATE opportunities SET owner_id=IF(?='assign',?,owner_id),lifecycle_status=?," +
+            "version=?,updated_at=? WHERE id=?",
+          [input.value.action, input.value.assignee_id, lifecycle, version, now, item.id],
+        );
+        let taskId: string | undefined;
+        if (input.value.action === "review") {
+          taskId = randomUUID();
+          const dueAt = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+          await connection.query(
+            "INSERT IGNORE INTO tasks (id,organization_id,workspace_id,title,description,status," +
+              "priority,assignee_id,source_type,source_ref_id,collection_task_id,due_at,completed_at," +
+              "created_by,version,created_at,updated_at) VALUES (?,?,?,?,?,'todo','high',?," +
+              "'selection_verification',?,NULL,?,NULL,?,1,?,?)",
+            [
+              taskId,
+              input.organizationId,
+              input.workspaceId,
+              `复核机会 · ${String(row.name).slice(0, 170)}`,
+              `批量复核机会 ${item.id}；原因：${input.value.reason}`.slice(0, 5000),
+              input.actorId,
+              item.id,
+              dueAt,
+              input.actorId,
+              now,
+              now,
+            ],
+          );
+          const [tasks] = await connection.query<RowDataPacket[]>(
+            "SELECT id FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
+              "source_type='selection_verification' AND source_ref_id=? LIMIT 1",
+            [input.organizationId, input.workspaceId, item.id],
+          );
+          if (!tasks[0]) throw new Error("opportunity_review_task_not_created");
+          taskId = String(tasks[0].id);
+        }
+        await this.record(
+          connection,
+          input,
+          `opportunity.batch.${input.value.action}`,
+          item.id,
+          {
+            reason: input.value.reason,
+            previous_lifecycle_status: row.lifecycle_status,
+            lifecycle_status: lifecycle,
+            owner_id: input.value.action === "assign" ? input.value.assignee_id : null,
+            task_id: taskId ?? null,
+            version,
+          },
+          now,
+        );
+        results.push({ id: item.id, version, ...(taskId ? { task_id: taskId } : {}) });
+      }
+      const result = { action: input.value.action, affected_count: results.length, items: results };
+      await connection.query(
+        "INSERT INTO opportunity_operations (id,actor_id,route,idempotency_key,resource_id," +
+          "result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+        [
+          randomUUID(),
+          input.actorId,
+          input.route,
+          input.idempotencyKey,
+          input.value.items[0].id,
+          JSON.stringify(result),
+          now,
+        ],
+      );
+      await connection.commit();
+      return result;
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+  }
+  async createEvidenceTask(
+    input: OpportunityWriteContext & {
+      opportunityId: string;
+      expectedVersion: number;
+      route: string;
+    },
+  ) {
+    const previous = await this.operation<any>(input);
+    if (previous) return previous;
+    const connection = await this.pool.getConnection(),
+      now = new Date();
+    try {
+      await connection.beginTransaction();
+      const [rows] = await connection.query<RowDataPacket[]>(
+          "SELECT id,name,version,recommendation_status,coverage_status FROM opportunities " +
+            "WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
+          [input.opportunityId, input.organizationId, input.workspaceId],
+        ),
+        row = rows[0];
+      if (!row) throw new OpportunityServiceError("opportunity_not_found", 404, "刷新机会列表。");
+      if (Number(row.version) !== input.expectedVersion)
+        throw new OpportunityServiceError(
+          "opportunity_version_conflict",
+          409,
+          "刷新机会详情后重试。",
+        );
+      if (
+        row.recommendation_status !== "insufficient_data" &&
+        row.coverage_status !== "insufficient"
+      )
+        throw new OpportunityServiceError(
+          "opportunity_evidence_task_not_required",
+          409,
+          "当前机会数据已满足基础要求，无需创建补数任务。",
+        );
+      const [existing] = await connection.query<RowDataPacket[]>(
+        "SELECT id,status FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
+          "source_type='evidence_completion' AND source_ref_id=? AND deleted_at IS NULL LIMIT 1",
+        [input.organizationId, input.workspaceId, input.opportunityId],
+      );
+      const taskId = existing[0] ? String(existing[0].id) : randomUUID(),
+        created = !existing[0];
+      if (created) {
+        await connection.query(
+          "INSERT INTO tasks (id,organization_id,workspace_id,title,description,status,priority," +
+            "assignee_id,source_type,source_ref_id,collection_task_id,due_at,completed_at,created_by," +
+            "version,created_at,updated_at) VALUES (?,?,?,?,?,'todo','high',?,'evidence_completion'," +
+            "?,NULL,NULL,NULL,?,1,?,?)",
+          [
+            taskId,
+            input.organizationId,
+            input.workspaceId,
+            `补齐机会数据 · ${String(row.name).slice(0, 170)}`,
+            `补齐机会 ${input.opportunityId} 的评分缺失项、来源证据与新鲜度；完成后系统自动重新评分。`,
+            input.actorId,
+            input.opportunityId,
+            input.actorId,
+            now,
+            now,
+          ],
+        );
+        await connection.query(
+          "INSERT INTO task_events (id,organization_id,workspace_id,task_id,event_type,actor_id," +
+            "payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+          [
+            randomUUID(),
+            input.organizationId,
+            input.workspaceId,
+            taskId,
+            "task.created",
+            input.actorId,
+            JSON.stringify({
+              source_type: "evidence_completion",
+              opportunity_id: input.opportunityId,
+              auto_score_on_complete: true,
+            }),
+            input.requestId,
+            input.traceId,
+            now,
+          ],
+        );
+        await this.record(
+          connection,
+          input,
+          "opportunity.evidence_completion_task.created",
+          input.opportunityId,
+          { task_id: taskId, auto_score_on_complete: true },
+          now,
+        );
+      }
+      const result = { task_id: taskId, created, status: existing[0]?.status ?? "todo" };
+      await connection.query(
+        "INSERT INTO opportunity_operations (id,actor_id,route,idempotency_key,resource_id," +
+          "result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+        [
+          randomUUID(),
+          input.actorId,
+          input.route,
+          input.idempotencyKey,
+          input.opportunityId,
+          JSON.stringify(result),
+          now,
+        ],
+      );
+      await connection.commit();
+      return result;
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+  }
+  private async ensureMember(organizationId: string, workspaceId: string, userId: string) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT m.id FROM memberships m JOIN users u ON u.id=m.user_id " +
+        "LEFT JOIN membership_data_scopes s ON s.membership_id=m.id WHERE m.organization_id=? " +
+        "AND m.user_id=? AND m.status='active' AND u.status='active' AND " +
+        "(s.scope_type='organization' OR (s.scope_type='workspace' AND s.workspace_id=?)) LIMIT 1",
+      [organizationId, userId, workspaceId],
+    );
+    if (!rows[0])
+      throw new OpportunityServiceError(
+        "opportunity_owner_scope_invalid",
+        409,
+        "选择可访问当前工作区的活动成员。",
+      );
   }
   private async operation<T>(input: OpportunityWriteContext & { route: string }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(

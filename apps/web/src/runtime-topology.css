@@ -152,7 +152,7 @@
 .topology-metrics {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
 }
 .topology-metrics article,
 .topology-panel {
@@ -529,6 +529,16 @@
   display: flex;
   justify-content: space-between;
   padding: 9px 0;
+}
+.topology-queue-list article[data-queue-alert="true"] {
+  border-left: 3px solid var(--topology-amber);
+  padding-left: 9px;
+}
+.topology-queue-list article > details {
+  flex-basis: 100%;
+}
+.topology-queue-list article:has(> details) {
+  flex-wrap: wrap;
 }
 .topology-queue-list article > span {
   display: grid;

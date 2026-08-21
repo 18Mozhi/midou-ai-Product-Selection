@@ -1,0 +1,39 @@
+:root {
+  --so-page-gutter: 24px;
+  --so-mobile-action-clearance: 88px;
+}
+
+@media (max-width: 390px) {
+  :root {
+    --so-page-gutter: 12px;
+  }
+  .role-content {
+    padding-right: var(--so-page-gutter);
+    padding-bottom: calc(var(--so-mobile-action-clearance) + env(safe-area-inset-bottom));
+    padding-left: var(--so-page-gutter);
+  }
+  .role-content :where(dialog, [role="dialog"]) {
+    max-width: calc(100vw - 24px);
+  }
+}
+
+@media (min-width: 391px) and (max-width: 768px) {
+  :root {
+    --so-page-gutter: 16px;
+  }
+  .role-content {
+    padding-right: var(--so-page-gutter);
+    padding-bottom: calc(var(--so-mobile-action-clearance) + env(safe-area-inset-bottom));
+    padding-left: var(--so-page-gutter);
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --so-page-gutter: 28px;
+  }
+  .role-content {
+    padding-right: var(--so-page-gutter);
+    padding-left: var(--so-page-gutter);
+  }
+}

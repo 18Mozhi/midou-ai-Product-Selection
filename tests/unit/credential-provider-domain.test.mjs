@@ -55,12 +55,7 @@ const cookie = (domain) => ({
 });
 
 test("Cookie 域必须绑定来源目标站点", async () => {
-  const service = new CredentialAssetService(
-    repository(),
-    "a".repeat(32),
-    "v1",
-    () => now,
-  );
+  const service = new CredentialAssetService(repository(), "a".repeat(32), "v1", () => now);
   await assert.rejects(
     () =>
       service.createAsset(
@@ -74,18 +69,12 @@ test("Cookie 域必须绑定来源目标站点", async () => {
         context,
       ),
     (error) =>
-      error instanceof CredentialAssetError &&
-      error.code === "credential_cookie_domain_mismatch",
+      error instanceof CredentialAssetError && error.code === "credential_cookie_domain_mismatch",
   );
 });
 
 test("Cookie 父域可绑定来源子域", async () => {
-  const service = new CredentialAssetService(
-    repository(),
-    "a".repeat(32),
-    "v1",
-    () => now,
-  );
+  const service = new CredentialAssetService(repository(), "a".repeat(32), "v1", () => now);
   const result = await service.createAsset(
     {
       provider_id: providerId,

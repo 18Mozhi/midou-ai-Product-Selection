@@ -33,14 +33,25 @@ export class MySqlSourcingRepository implements SourcingRepository {
     );
     if (!searches[0])
       throw new SourcingServiceError("sourcing_search_not_found", 404, "刷新找货列表。");
-    const [candidates] = await this.pool.query<RowDataPacket[]>(
-        "SELECT c.*,q.id quote_id,q.quote_version,q.specification quote_specification," +
-          "q.lead_time_days quote_lead_time_days,q.location quote_location,q.confidence_value quote_confidence," +
-          "q.stability_status,q.risk_level FROM sourcing_candidates c LEFT JOIN supplier_quotes " +
-          "q ON q.candidate_id=c.id AND q.is_current=1 WHERE c.search_id=? ORDER BY c.created_at," +
-          "c.id",
-        [i.searchId],
-      ),
+    const [[candidates], [progressRows]] = await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          "SELECT c.*,q.id quote_id,q.quote_version,q.specification quote_specification," +
+            "q.moq quote_moq,q.quoted_price quote_price,q.currency quote_currency," +
+            "q.lead_time_days quote_lead_time_days,q.location quote_location,q.confidence_value quote_confidence," +
+            "q.observed_at quote_observed_at,q.evidence_id quote_evidence_id,q.stability_status,q.risk_level " +
+            "FROM sourcing_candidates c LEFT JOIN supplier_quotes " +
+            "q ON q.candidate_id=c.id AND q.is_current=1 WHERE c.search_id=? ORDER BY c.created_at," +
+            "c.id",
+          [i.searchId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT t.status,t.available_at,t.successful_subquery_count,t.failed_subquery_count," +
+            "t.blocked_subquery_count,(SELECT COUNT(*) FROM collection_subqueries s WHERE s.task_id=t.id) total_subqueries," +
+            "(SELECT COUNT(*) FROM collection_subqueries s WHERE s.task_id=t.id AND s.status IN ('pending','running')) active_subqueries " +
+            "FROM collection_tasks t WHERE t.id=? AND t.organization_id=? AND t.workspace_id=? LIMIT 1",
+          [String(searches[0].collection_task_id), i.organizationId, i.workspaceId],
+        ),
+      ]),
       erpReference =
         searches[0].input_type === "opportunity"
           ? await loadErpSourcingReference(this.pool, {
@@ -52,6 +63,17 @@ export class MySqlSourcingRepository implements SourcingRepository {
     return {
       ...this.search(searches[0]),
       collection_task_id: String(searches[0].collection_task_id),
+      collection_progress: progressRows[0]
+        ? {
+            status: String(progressRows[0].status),
+            total_subqueries: Number(progressRows[0].total_subqueries),
+            successful_subqueries: Number(progressRows[0].successful_subquery_count),
+            failed_subqueries: Number(progressRows[0].failed_subquery_count),
+            blocked_subqueries: Number(progressRows[0].blocked_subquery_count),
+            active_subqueries: Number(progressRows[0].active_subqueries),
+            available_at: iso(progressRows[0].available_at),
+          }
+        : null,
       candidates: candidates.map((r) => this.candidate(r)),
       erp_reference: erpReference,
     };
@@ -525,9 +547,9 @@ export class MySqlSourcingRepository implements SourcingRepository {
       supplier_name: String(r.supplier_name),
       product_title: String(r.product_title),
       specification: r.quote_specification ?? r.specification,
-      moq: r.moq == null ? null : Number(r.moq),
-      quoted_price: Number(r.quoted_price),
-      currency: String(r.currency),
+      moq: r.quote_moq == null ? (r.moq == null ? null : Number(r.moq)) : Number(r.quote_moq),
+      quoted_price: Number(r.quote_price ?? r.quoted_price),
+      currency: String(r.quote_currency ?? r.currency),
       lead_time_days: r.quote_lead_time_days == null ? null : Number(r.quote_lead_time_days),
       location: r.quote_location ?? r.location,
       original_url: String(r.original_url),
@@ -542,6 +564,8 @@ export class MySqlSourcingRepository implements SourcingRepository {
             version: Number(r.quote_version),
             stability_status: r.stability_status,
             risk_level: r.risk_level,
+            observed_at: iso(r.quote_observed_at),
+            evidence_id: String(r.quote_evidence_id),
           }
         : null,
     };

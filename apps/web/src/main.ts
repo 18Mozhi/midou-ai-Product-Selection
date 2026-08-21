@@ -1,8 +1,12 @@
 import { createApp, h } from "vue";
 import { RouterView } from "vue-router";
 import "./styles.css";
+import "./styles/access-governance.css";
+import "./styles/onboarding-navigation.css";
+import "./styles/platform-operations.css";
 import "./design/tokens.css";
 import "./accessibility.css";
+import "./responsive-baselines.css";
 import { applyCachedTheme, applyShellDensity } from "./design/theme";
 import { router } from "./router";
 

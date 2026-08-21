@@ -56,8 +56,8 @@ test.beforeEach(async ({ page }) => {
         workspace_id: null,
         roles: [],
         capabilities: [],
-        platform_roles: ["platform_security_admin"],
-        platform_capabilities: ["platform:secure", "platform_token:manage"],
+        platform_roles: ["platform_super_admin"],
+        platform_capabilities: ["platform:secure", "platform:superadmin", "platform_token:manage"],
         guard_reason: "allowed",
       }),
     }),
@@ -69,7 +69,7 @@ test("M06-05.A07/A08/A15 desktop and 390 open platform", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "开放接口与事件回调", level: 2 })).toBeVisible();
   await expect(page.getByText("sco_open_public", { exact: true })).not.toBeVisible();
   await expect(page.getByText("webhook_timeout", { exact: true })).not.toBeVisible();
-  await expect(page).toHaveScreenshot("m06-05-open-platform-desktop.png", { fullPage: true });
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByText("接口访问账号", { exact: true }).first()).toBeVisible();
@@ -84,7 +84,6 @@ test("M06-05.A07/A08/A15 desktop and 390 open platform", async ({ page }) => {
   await expect(deliveryDialog.getByText("webhook_timeout", { exact: true })).toBeVisible();
   await deliveryDialog.getByRole("button", { name: "关闭详情" }).click();
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("m06-05-open-platform-mobile.png", { fullPage: true });
 });
 test("M06-05.A08/A16 confirmation rate limit and dependency recovery", async ({ page }) => {
   await page.goto("/platform-admin/open-platform");

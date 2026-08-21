@@ -176,7 +176,7 @@ test("M06-03.A06/A07/A08/A10/A13/A17 delivery contracts", async () => {
         "docs/openapi.yaml",
         "apps/web/src/components/CollectionOperationsConsole.vue",
         "apps/web/src/components/ResponsiveDataView.vue",
-        "apps/web/src/styles.css",
+        "apps/web/src/styles/platform-operations.css",
         "config/env.example",
         "docs/feature-map.json",
         "docs/architecture/m06-03-collection-console.md",

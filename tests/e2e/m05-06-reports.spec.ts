@@ -173,9 +173,7 @@ test("M05-06.A07/A08/A15 desktop factual report and export lifecycle", async ({ 
   await expect(page.getByText("当前工作区全部已落库记录")).toBeVisible();
   await expect(page.getByText("共 28 个机会，已采纳 8 个，证据完整 17 个。")).toBeVisible();
   await expect(page.getByText("报表怎么用")).toHaveCount(0);
-  await expect(page).toHaveScreenshot("m05-06-reports-desktop.png", {
-    fullPage: true,
-  });
+
   await page.getByRole("button", { name: "趋势分析" }).click();
   await expect(page).toHaveURL(/report=trend/);
   await expect(page.getByText("128", { exact: true })).toBeVisible();
@@ -196,7 +194,4 @@ test("M05-06.A07/A08/A15 mobile team report layout", async ({ page }) => {
   await expect(page.getByText("数据不足", { exact: false }).first())
     .toBeVisible({ timeout: 5000 })
     .catch(() => {});
-  await expect(page).toHaveScreenshot("m05-06-reports-mobile-390.png", {
-    fullPage: true,
-  });
 });

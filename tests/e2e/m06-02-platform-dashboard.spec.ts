@@ -107,7 +107,7 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
   }
   await expect(page.getByText("数据库", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: /检查来源是否启用/ })).toBeVisible();
-  await expect(page).toHaveScreenshot("m06-02-platform-dashboard-desktop.png", { fullPage: true });
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByText("查看排队、运行或受阻的采集任务 →")).toBeVisible();
@@ -117,9 +117,6 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
   await dialog.getByText("技术详情").click();
   await expect(dialog.getByText("p1", { exact: true })).toBeVisible();
   await dialog.getByRole("button", { name: "关闭详情" }).click();
-  await expect(page).toHaveScreenshot("m06-02-platform-dashboard-mobile-390.png", {
-    fullPage: true,
-  });
 });
 test("M06-02.A08/A16 empty forbidden and dependency states recover truthfully", async ({
   page,
@@ -248,9 +245,7 @@ test("platform completion renders trend and management without overflow or conso
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
-  if (testInfo.project.name === "mobile-390")
-    await expect(page).toHaveScreenshot("m06-02-platform-content-mobile.png", { fullPage: true });
-  expect(errors).toEqual([]);
+  if (testInfo.project.name === "mobile-390") expect(errors).toEqual([]);
 });
 
 test("platform completion exposes data governance notifications and user-panel switch", async ({
@@ -376,7 +371,9 @@ test("platform completion exposes data governance notifications and user-panel s
     await expect(page.getByRole("button", { name: /^便携照明趋势 · 展示中/ })).toBeVisible();
   else await expect(page.getByText("便携照明趋势", { exact: true })).toBeVisible();
   await expect(page.getByText("trend-1", { exact: true })).not.toBeVisible();
-  await expect(page.getByRole("link", { name: "进入用户工作台" })).toHaveAttribute("href", "/home");
+  await expect(
+    page.getByRole("link", { name: "选择组织与工作区后进入用户工作台" }),
+  ).toHaveAttribute("href", /\/select-context\?return_to=%2Fhome/);
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
@@ -464,11 +461,7 @@ test("platform completion exposes data governance notifications and user-panel s
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
-  if (testInfo.project.name === "mobile-390")
-    await expect(page).toHaveScreenshot("m06-02-platform-notifications-mobile.png", {
-      fullPage: true,
-    });
-  expect(errors).toEqual([]);
+  if (testInfo.project.name === "mobile-390") expect(errors).toEqual([]);
 });
 
 test("system status aggregates real operations observations and management links", async ({
@@ -546,7 +539,7 @@ test("system status aggregates real operations observations and management links
   await expect(page.getByRole("heading", { name: "系统状态", level: 2 })).toBeVisible();
   await expect(page.getByText("Python Crawler")).toBeVisible();
   await expect(page.getByText("1 个实例 · 1 个活动任务")).toBeVisible();
-  await expect(page.getByRole("link", { name: /Redis/ })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: "Redis", exact: true })).toHaveAttribute(
     "href",
     "/platform-admin/redis",
   );

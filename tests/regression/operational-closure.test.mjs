@@ -58,11 +58,12 @@ test("business operations expose blocking context, safe batch preview and verifi
   assert.match(journey, /blocked_owner[\s\S]*blocked_next_step[\s\S]*timeline/);
   for (const token of ["previewBatch", "collection_task_id", "pause", "resume"])
     assert.match(task, new RegExp(token));
-  assert.match(opportunity, /证据不足，先补齐缺失项[\s\S]*分派证据补齐任务/);
+  assert.match(opportunity, /证据不足，先补齐缺失项[\s\S]*生成补数任务/);
   assert.match(opportunityRepository, /selection_verification[\s\S]*verification_task_id/);
   for (const token of ["evidence_complete", "evidence_total", "rule_version", "basis"])
     assert.match(approval, new RegExp(token));
-  assert.match(notification, /group_count[\s\S]*workflow_status[\s\S]*定位异常记录/);
+  assert.match(notification, /group_count[\s\S]*workflow_status/);
+  assert.match(notification, /sourceRoute[\s\S]*返回来源/);
   assert.match(migrations, /paused[\s\S]*collection_task_id[\s\S]*root_cause_key/);
 });
 

@@ -3,7 +3,6 @@ import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
-import ConfirmDialog from "./ConfirmDialog.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import { statusLabel } from "../ui/status-labels";
 import "../trends.css";
@@ -58,6 +57,13 @@ interface Detail extends Topic {
     source_count: number;
     stale: boolean;
   };
+  relevance_history: Array<{
+    status: "active" | "irrelevant";
+    reason: string;
+    actor_id: string;
+    version: number;
+    occurred_at: string;
+  }>;
 }
 interface Rule {
   id: string;
@@ -74,6 +80,7 @@ interface Rule {
   last_collection_at: string | null;
   next_collection_at: string | null;
   last_collection_task_id: string | null;
+  last_failed_sources: string[];
   version: number;
   updated_at: string;
 }
@@ -94,7 +101,8 @@ const props = defineProps<{
   busy = ref(""),
   tab = ref<"topics" | "rules">("topics"),
   showRule = ref(false),
-  irrelevant = ref(false),
+  relevanceDialog = ref<"active" | "irrelevant" | null>(null),
+  relevanceReason = ref(""),
   total = ref(0),
   timelineSource = ref(""),
   page = ref(1),
@@ -205,7 +213,10 @@ async function load() {
       read("/trends/monitoring-rules"),
     ]);
     topics.value = list.data;
-    rules.value = ruleList.data;
+    rules.value = ruleList.data.map((item: Rule) => ({
+      ...item,
+      last_failed_sources: item.last_failed_sources ?? [],
+    }));
     total.value = (list.meta as { total: number }).total;
     const requestedTopic = typeof route.query.topic === "string" ? route.query.topic : "";
     const currentId =
@@ -216,7 +227,11 @@ async function load() {
       state.value = "empty";
       return;
     }
-    selected.value = (await read(`/trends/${currentId}`)).data;
+    const topicDetail = (await read(`/trends/${currentId}`)).data as Detail;
+    selected.value = {
+      ...topicDetail,
+      relevance_history: topicDetail.relevance_history ?? [],
+    };
     timelineSource.value = "";
     state.value = "ready";
     if (requestedTopic !== currentId)
@@ -325,17 +340,26 @@ async function follow() {
   }
 }
 async function markIrrelevant() {
-  if (!selected.value) return;
+  if (!selected.value || !relevanceDialog.value) return;
+  const targetStatus = relevanceDialog.value;
   const result = await write(`/trends/${selected.value.id}/relevance`, "POST", {
-    status: "irrelevant",
-    reason: "用户在趋势详情中标记无关",
+    status: targetStatus,
+    reason: relevanceReason.value.trim(),
     expected_version: selected.value.version,
   });
-  irrelevant.value = false;
+  relevanceDialog.value = null;
+  relevanceReason.value = "";
   if (result) {
-    message.value = "已标记无关；原始证据保留。";
+    message.value =
+      targetStatus === "active"
+        ? "已恢复为相关主题；历史原因完整保留。"
+        : "已标记无关；原始证据与原因保留。";
     await load();
   }
+}
+function openRelevance(status: "active" | "irrelevant") {
+  relevanceReason.value = "";
+  relevanceDialog.value = status;
 }
 async function createRule() {
   const result = await write("/trends/monitoring-rules", "POST", {
@@ -408,7 +432,11 @@ watch(
     if (typeof topicId !== "string" || selected.value?.id === topicId) return;
     busy.value = "detail";
     try {
-      selected.value = (await read(`/trends/${topicId}`)).data;
+      const topicDetail = (await read(`/trends/${topicId}`)).data as Detail;
+      selected.value = {
+        ...topicDetail,
+        relevance_history: topicDetail.relevance_history ?? [],
+      };
       timelineSource.value = "";
     } finally {
       busy.value = "";
@@ -566,7 +594,16 @@ onMounted(() => {
               {{ selected.followed ? "已关注" : "关注" }}</button
             ><button type="button" @click="showRule = true">创建监控</button
             ><RouterLink :to="opportunityRoute">转为机会</RouterLink
-            ><button class="quiet" type="button" @click="irrelevant = true">标记无关</button>
+            ><button
+              v-if="selected.status !== 'irrelevant'"
+              class="quiet"
+              type="button"
+              @click="openRelevance('irrelevant')"
+            >
+              标记无关</button
+            ><button v-else class="quiet" type="button" @click="openRelevance('active')">
+              恢复为相关
+            </button>
           </div>
           <section class="trend-conclusion">
             <div>
@@ -622,6 +659,30 @@ onMounted(() => {
                 ></span
               ><b>查看原文 ↗</b></a
             >
+          </section>
+          <section class="trend-evidence">
+            <header>
+              <div>
+                <p>相关性回溯</p>
+                <h4>标记原因与恢复记录</h4>
+              </div>
+              <span>{{ selected.relevance_history.length }} 次变更</span>
+            </header>
+            <p v-if="!selected.relevance_history.length">尚无相关性变更记录。</p>
+            <article
+              v-for="item in selected.relevance_history"
+              :key="`${item.version}-${item.occurred_at}`"
+            >
+              <span
+                ><strong>{{ item.status === "irrelevant" ? "标记无关" : "恢复相关" }}</strong
+                ><small>{{ freshness(item.occurred_at) }} · 主题 v{{ item.version }}</small></span
+              >
+              <p>{{ item.reason }}</p>
+              <details>
+                <summary>技术详情</summary>
+                <code>操作者 {{ item.actor_id }}</code>
+              </details>
+            </article>
           </section>
           <div class="trend-lower">
             <section>
@@ -740,6 +801,16 @@ onMounted(() => {
             </dd>
           </div>
           <div>
+            <dt>下次采集</dt>
+            <dd>{{ item.next_collection_at ? freshness(item.next_collection_at) : "已暂停" }}</dd>
+          </div>
+          <div>
+            <dt>上次失败来源</dt>
+            <dd>
+              {{ item.last_failed_sources.length ? item.last_failed_sources.join("、") : "无" }}
+            </dd>
+          </div>
+          <div>
             <dt>版本</dt>
             <dd>v{{ item.version }}</dd>
           </div>
@@ -797,15 +868,43 @@ onMounted(() => {
         </footer>
       </form>
     </div>
-    <ConfirmDialog
-      :open="irrelevant"
-      title="将主题标记为无关？"
-      description="主题会从默认活跃列表移出。"
-      impact="原始证据、时间线和审计不会删除；可通过状态筛选查看并恢复。"
-      confirm-label="标记无关"
-      confirmation-text="确认标记"
-      @cancel="irrelevant = false"
-      @confirm="markIrrelevant"
-    />
+    <div
+      v-if="relevanceDialog"
+      class="trend-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="trend-relevance-title"
+    >
+      <form @submit.prevent="markIrrelevant">
+        <header>
+          <div>
+            <p>相关性治理</p>
+            <h3 id="trend-relevance-title">
+              {{ relevanceDialog === "irrelevant" ? "标记为无关" : "恢复为相关" }}
+            </h3>
+          </div>
+          <button type="button" aria-label="关闭相关性变更" @click="relevanceDialog = null">
+            ×
+          </button>
+        </header>
+        <p>原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。</p>
+        <label
+          >变更原因<textarea
+            v-model="relevanceReason"
+            required
+            minlength="2"
+            maxlength="500"
+            rows="4"
+            placeholder="说明判定依据，便于后续复核"
+          ></textarea>
+        </label>
+        <footer>
+          <button type="button" @click="relevanceDialog = null">取消</button
+          ><button type="submit" :disabled="relevanceReason.trim().length < 2 || Boolean(busy)">
+            确认并记录
+          </button>
+        </footer>
+      </form>
+    </div>
   </section>
 </template>

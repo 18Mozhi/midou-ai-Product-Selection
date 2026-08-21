@@ -26,8 +26,7 @@ const payload = (value: unknown): Record<string, unknown> => {
     return {};
   }
 };
-const text = (value: unknown) =>
-  typeof value === "string" && value.trim() ? value.trim() : null;
+const text = (value: unknown) => (typeof value === "string" && value.trim() ? value.trim() : null);
 const amount = (value: unknown) => {
   if (value == null || value === "") return null;
   const parsed = Number(value);

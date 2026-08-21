@@ -10,6 +10,8 @@ M03-03 在 `@scoutops/provider-adapters` 固定 `collect`、`normalize`、`healt
 
 `provider_adapter_health` 保存每个 Provider 的当前健康结果，`provider_adapter_health_versions` 保存不可变快照，`provider_adapter_operations` 保存操作人、幂等键和 request_id/trace_id。探针仅允许 `provider:configure`，写入要求同源 Origin 与 Idempotency-Key；响应只返回注册状态、版本、稳定错误码、连续失败次数和延迟，不返回凭证、Cookie、原始 payload 或其他组织数据。
 
+来源健康页另外从最近 24 小时已完成的 `collection_subqueries` 读取真实运行样本，按来源展示成功率、P95 耗时和样本量。运行问题按稳定错误码明确归入网络、解析、登录；`succeeded_empty` 单独显示为“成功但无结果”，既不伪装成普通成功，也不误记为失败。窗口没有样本时返回 null/0，不用健康探针推断运行成功率。
+
 生产启动创建空的适配器注册表，因此在 M03-07 之前健康检查会真实记录 `blocked / adapter_not_registered`，不会用模拟成功掩盖缺失实现。错误分类只保留 timeout、rate_limited、login_expired、adapter_not_registered、invalid_payload 等稳定代码；异常正文和敏感 payload 不进入数据库或 API。
 
 平台适配器页在桌面保留运行事实表格；760px 及以下使用来源健康摘要卡片与详情抽屉，并在抽屉内保留真实健康检查动作。接入模式、来源状态、登记状态、健康状态和已知错误在主界面使用中文，来源 UUID、来源代码、原始接入模式、适配器版本和错误码只在“技术详情”展示；该呈现转换不改变 API 的稳定状态码合同。

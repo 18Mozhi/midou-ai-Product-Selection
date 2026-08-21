@@ -36,6 +36,7 @@ export const COLLECTION_ERROR_CODES = [
   "validation_failed",
   "empty_result",
   "permission_denied",
+  "source_circuit_open",
 ] as const;
 export type CollectionErrorCode = (typeof COLLECTION_ERROR_CODES)[number];
 export type SubqueryStatus =

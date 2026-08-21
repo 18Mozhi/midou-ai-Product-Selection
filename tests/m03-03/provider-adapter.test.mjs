@@ -206,6 +206,9 @@ test("M03-03.A04/A11/A12 missing implementation is persisted as truthful blocked
   assert.equal(result.adapter_registered, false);
   assert.equal(result.health_status, "blocked");
   assert.equal(result.last_error_code, "adapter_not_registered");
+  assert.equal(result.latest_runtime_category, "unknown");
+  assert.equal(result.runtime_sample_count_24h, 0);
+  assert.equal(result.runtime_success_rate_basis_points_24h, null);
   assert.equal(recorded.requestId, "request-1");
   assert.equal(recorded.traceId, "trace-1");
   assert.doesNotMatch(JSON.stringify(result), /cookie|secret|payload/i);
@@ -226,6 +229,14 @@ test("M03-03.A06/A09/A11/A13 API enforces provider configure, origin, idempotenc
       last_latency_ms: null,
       last_error_code: null,
       consecutive_failures: 0,
+      latest_runtime_category: "unknown",
+      runtime_sample_count_24h: 0,
+      runtime_success_rate_basis_points_24h: null,
+      runtime_duration_p95_ms_24h: null,
+      runtime_network_failure_count_24h: 0,
+      runtime_parser_failure_count_24h: 0,
+      runtime_login_failure_count_24h: 0,
+      runtime_empty_success_count_24h: 0,
       version: 0,
       updated_at: new Date(0).toISOString(),
     },
@@ -340,17 +351,21 @@ test("M03-03.A03/A06-A10/A13/A15-A17 delivery evidence covers adapters without i
   for (const method of ["collect", "normalize", "healthCheck"])
     assert.match(pkg, new RegExp(method));
   assert.match(repo, /FOR UPDATE/);
+  assert.match(repo, /collection_subqueries/);
+  assert.match(repo, /runtimeCategory/);
   assert.match(routes, /provider:configure/);
   assert.match(service, /adapter_not_registered/);
   assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
+  assert.match(web, /成功率[\s\S]*P95[\s\S]*样本/);
+  assert.match(web, /网络[\s\S]*解析[\s\S]*登录[\s\S]*空结果/);
   assert.match(css, /@media\s*\(max-width:\s*640px\)/);
-  assert.match(shell, /ProviderAdapterCenter/);
+  assert.match(shell, /provider-runtime-surface/);
   assert.match(openapi, /\/platform\/provider-adapters\/\{providerId\}\/health-check:/);
   assert.match(env, /PROVIDER_ADAPTER_MAX_RESPONSE_BYTES/);
   assert.match(schema, /providerAdapters/);
   assert.match(architecture, /M03-07/);
   assert.match(runbook, /宝塔.*Node API/s);
   assert.match(feature, /providerAdapters/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(blueprint, /M03-03/);
 });

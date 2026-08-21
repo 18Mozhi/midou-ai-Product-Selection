@@ -24,10 +24,11 @@ npm run verify:production-product
 npm run locate:flow -- "trends"
 npm run verify:docs
 npm run verify:code-style
+npm run verify:static-analysis
 npm run test:e2e
 ```
 
-`npm run format:write` 只格式化当前新增或修改的代码文件，`npm run verify:code-style` 同时检查 Prettier 格式和 160 字符最大行长。CI 或发布任务应先设置 `$env:CODE_STYLE_BASE_REF = "origin/main"`，让门禁覆盖该基线以来的全部代码改动；不设置时，本地有改动就检查工作树，工作树干净则复核最近提交。
+`npm run format:write` 格式化全部生产源码及当前改动的脚本和测试，`npm run verify:code-style` 同时检查全量生产源码 Prettier、空 `catch`、`prompt` 与 `@ts-nocheck`，并对本次新增行执行 640 字符上限，用于阻断压缩式单行处理器而不强拆 SQL 字符串。`npm run verify:static-analysis` 检查无名称按钮以及会产生未观测 Promise 的异步回调。CI 或发布任务应先设置 `$env:CODE_STYLE_BASE_REF = "origin/main"`，让门禁覆盖该基线以来的全部代码改动；不设置时，本地有改动就检查工作树，工作树干净则复核最近提交。
 
 生产根目录固定为 `/www/wwwroot/ai选品`：前端、Node 后端、Python 采集器分别部署到 `frontend`、`backend`、`python`，受限配置、运行数据和本机备份分别保存在 `config`、`runtime`、`backups`。Node 启动命令为 `node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js`；不得创建 `current`、`releases`、独立 API、Worker 或 Canary 常驻项目。完整部署与回滚见 `infra/baota/README.md`。
 

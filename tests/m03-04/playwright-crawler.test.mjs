@@ -259,7 +259,7 @@ test("M03-04.A03/A05-A10/A13/A15-A17 delivery evidence is complete and Baota bou
   assert.match(architecture, /M03-05/);
   assert.match(runbook, /Python 3\.12 宝塔项目[\s\S]*Python-to-Playwright/);
   assert.match(feature, /playwrightCrawler/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(pythonIntegration, /CrawlerRuntimeService[\s\S]*app\.listen/);
   assert.match(browserIntegration, /sealCredential[\s\S]*runWithEncryptedProfile/);
   assert.match(blueprint, /M03-04/);

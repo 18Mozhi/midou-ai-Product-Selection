@@ -17,10 +17,7 @@ import { PlatformDashboardService } from "../platform-dashboard-service.js";
 import { registerPlatformDashboardRoutes } from "../platform-dashboard-routes.js";
 import { SecurityOperationsService } from "../security-operations-service.js";
 import { registerSecurityOperationsRoutes } from "../security-operations-routes.js";
-import {
-  commonDomainOptions,
-  type ApiDomainContext,
-} from "./domain-context.js";
+import { commonDomainOptions, type ApiDomainContext } from "./domain-context.js";
 
 interface PlatformDomainContext extends ApiDomainContext {
   passwordHasher: PasswordHasher;
@@ -77,8 +74,7 @@ export function registerPlatformDomainRoutes(context: PlatformDomainContext) {
         clientTtlDays: context.config.openPlatform.clientTtlDays,
         defaultQuota: context.config.openPlatform.defaultQuotaPerMinute,
         maxQuota: context.config.openPlatform.maxQuotaPerMinute,
-        timestampToleranceSeconds:
-          context.config.openPlatform.timestampToleranceSeconds,
+        timestampToleranceSeconds: context.config.openPlatform.timestampToleranceSeconds,
         nonceTtlSeconds: context.config.openPlatform.nonceTtlSeconds,
       },
     ),

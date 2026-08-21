@@ -1,8 +1,150 @@
-import test from 'node:test';import assert from 'node:assert/strict';import { AuthorizationError,AuthorizationService,BUILTIN_ROLES,CAPABILITIES,InMemoryAuthorizationRepository } from '../../packages/authorization/dist/index.js';
-const actor='00000000-0000-4000-8000-000000000401',org='00000000-0000-4000-8000-000000000402',workspace='00000000-0000-4000-8000-000000000403',team='00000000-0000-4000-8000-000000000404';
-const subject=(overrides={})=>({actor_id:actor,membership_id:'00000000-0000-4000-8000-000000000405',membership_active:true,role_codes:['member'],capabilities:['task:read'],scopes:[{scope:'own'}],platform_role_codes:[],platform_capabilities:[],...overrides});const check=(overrides={})=>({actorId:actor,organizationId:org,capability:'task:read',surface:'api',requestId:'rbac-request',traceId:'rbac-trace',...overrides});
-test('M01-04.A02/A12 built-in matrix is exact and separates organization from platform roles',()=>{assert.equal(BUILTIN_ROLES.length,8);assert.equal(new Set(BUILTIN_ROLES.map(role=>role.code)).size,8);const organizationAdmin=BUILTIN_ROLES.find(role=>role.code==='organization_admin');assert.ok(organizationAdmin.capabilities.includes('role:manage'));assert.ok(!organizationAdmin.capabilities.includes('platform:superadmin'));assert.ok(!organizationAdmin.capabilities.includes('collection:replay'));assert.ok(BUILTIN_ROLES.find(role=>role.code==='platform_operations_admin').capabilities.includes('collection:replay'));assert.deepEqual(BUILTIN_ROLES.find(role=>role.code==='auditor').capabilities.filter(code=>code.endsWith(':manage')),[]);assert.equal(new Set(CAPABILITIES).size,CAPABILITIES.length);});
-test('M01-04.A04/A09/A12 own team workspace and organization scopes require matching resource facts',async()=>{const repository=new InMemoryAuthorizationRepository(),service=new AuthorizationService(repository);for(const [scope,input] of [['own',{resourceOwnerId:actor}],['team',{teamId:team}],['workspace',{workspaceId:workspace}],['organization',{}]]){repository.subjects.set(repository.key(actor,org),subject({scopes:[{scope,team_id:scope==='team'?team:null,workspace_id:scope==='workspace'?workspace:null}]}));assert.equal((await service.authorize(check(input))).allowed,true);}repository.subjects.set(repository.key(actor,org),subject({scopes:[{scope:'workspace',workspace_id:workspace}]}));await assert.rejects(()=>service.authorize(check({workspaceId:'00000000-0000-4000-8000-000000000499'})),error=>error instanceof AuthorizationError&&error.code==='permission_denied');assert.equal(repository.decisions.at(-1).reason,'scope_mismatch');});
-test('M01-04.A05/A09 shared guard denies missing capability on every protected surface',async()=>{const repository=new InMemoryAuthorizationRepository(),service=new AuthorizationService(repository);repository.subjects.set(repository.key(actor,org),subject({capabilities:[],scopes:[{scope:'organization'}]}));for(const surface of ['api','worker','export','file','event','sse'])await assert.rejects(()=>service.authorize(check({surface})),error=>error.code==='permission_denied');assert.deepEqual(repository.decisions.map(item=>item.surface),['api','worker','export','file','event','sse']);assert.ok(repository.decisions.every(item=>item.outcome==='denied'&&item.request_id==='rbac-request'));});
-test('M01-04.A09/A12 platform scope never leaks into an unassigned platform capability',async()=>{const repository=new InMemoryAuthorizationRepository(),service=new AuthorizationService(repository);repository.subjects.set(repository.key(actor,org),subject({membership_active:false,scopes:[{scope:'platform'}],platform_role_codes:['platform_operations_admin'],platform_capabilities:['platform:operate']}));assert.equal((await service.authorize(check({capability:'platform:operate'}))).reason,'allowed_platform');await assert.rejects(()=>service.authorize(check({capability:'platform:secure'})),error=>error.code==='permission_denied');});
-test('M01-04.A08/A16 session authorization requires selected context and active membership',async()=>{const repository=new InMemoryAuthorizationRepository(),service=new AuthorizationService(repository);await assert.rejects(()=>service.describeSession(actor,'missing'),error=>error.code==='tenancy_context_required');repository.contexts.set('session',{user_id:actor,organization_id:org,workspace_id:workspace});repository.subjects.set(repository.key(actor,org),subject());const result=await service.describeSession(actor,'session');assert.equal(result.workspace_id,workspace);repository.subjects.set(repository.key(actor,org),subject({membership_active:false}));await assert.rejects(()=>service.describeSession(actor,'session'),error=>error.code==='permission_denied');});
+import test from "node:test";
+import assert from "node:assert/strict";
+import {
+  AuthorizationError,
+  AuthorizationService,
+  BUILTIN_ROLES,
+  CAPABILITIES,
+  InMemoryAuthorizationRepository,
+} from "../../packages/authorization/dist/index.js";
+const actor = "00000000-0000-4000-8000-000000000401",
+  org = "00000000-0000-4000-8000-000000000402",
+  workspace = "00000000-0000-4000-8000-000000000403",
+  team = "00000000-0000-4000-8000-000000000404";
+const subject = (overrides = {}) => ({
+  actor_id: actor,
+  membership_id: "00000000-0000-4000-8000-000000000405",
+  membership_active: true,
+  role_codes: ["member"],
+  capabilities: ["task:read"],
+  scopes: [{ scope: "own" }],
+  platform_role_codes: [],
+  platform_capabilities: [],
+  ...overrides,
+});
+const check = (overrides = {}) => ({
+  actorId: actor,
+  organizationId: org,
+  capability: "task:read",
+  surface: "api",
+  requestId: "rbac-request",
+  traceId: "rbac-trace",
+  ...overrides,
+});
+test("M01-04.A02/A12 built-in matrix is exact and separates organization from platform roles", () => {
+  assert.equal(BUILTIN_ROLES.length, 8);
+  assert.equal(new Set(BUILTIN_ROLES.map((role) => role.code)).size, 8);
+  const organizationAdmin = BUILTIN_ROLES.find((role) => role.code === "organization_admin");
+  assert.ok(organizationAdmin.capabilities.includes("role:manage"));
+  assert.ok(!organizationAdmin.capabilities.includes("platform:superadmin"));
+  assert.ok(!organizationAdmin.capabilities.includes("collection:replay"));
+  assert.ok(
+    BUILTIN_ROLES.find((role) => role.code === "platform_operations_admin").capabilities.includes(
+      "collection:replay",
+    ),
+  );
+  assert.deepEqual(
+    BUILTIN_ROLES.find((role) => role.code === "auditor").capabilities.filter((code) =>
+      code.endsWith(":manage"),
+    ),
+    [],
+  );
+  assert.equal(new Set(CAPABILITIES).size, CAPABILITIES.length);
+});
+test("M01-04.A04/A09/A12 own team workspace and organization scopes require matching resource facts", async () => {
+  const repository = new InMemoryAuthorizationRepository(),
+    service = new AuthorizationService(repository);
+  for (const [scope, input] of [
+    ["own", { resourceOwnerId: actor }],
+    ["team", { teamId: team }],
+    ["workspace", { workspaceId: workspace }],
+    ["organization", {}],
+  ]) {
+    repository.subjects.set(
+      repository.key(actor, org),
+      subject({
+        scopes: [
+          {
+            scope,
+            team_id: scope === "team" ? team : null,
+            workspace_id: scope === "workspace" ? workspace : null,
+          },
+        ],
+      }),
+    );
+    assert.equal((await service.authorize(check(input))).allowed, true);
+  }
+  repository.subjects.set(
+    repository.key(actor, org),
+    subject({ scopes: [{ scope: "workspace", workspace_id: workspace }] }),
+  );
+  await assert.rejects(
+    () => service.authorize(check({ workspaceId: "00000000-0000-4000-8000-000000000499" })),
+    (error) => error instanceof AuthorizationError && error.code === "permission_denied",
+  );
+  assert.equal(repository.decisions.at(-1).reason, "scope_mismatch");
+});
+test("M01-04.A05/A09 shared guard denies missing capability on every protected surface", async () => {
+  const repository = new InMemoryAuthorizationRepository(),
+    service = new AuthorizationService(repository);
+  repository.subjects.set(
+    repository.key(actor, org),
+    subject({ capabilities: [], scopes: [{ scope: "organization" }] }),
+  );
+  for (const surface of ["api", "worker", "export", "file", "event", "sse"])
+    await assert.rejects(
+      () => service.authorize(check({ surface })),
+      (error) => error.code === "permission_denied",
+    );
+  assert.deepEqual(
+    repository.decisions.map((item) => item.surface),
+    ["api", "worker", "export", "file", "event", "sse"],
+  );
+  assert.ok(
+    repository.decisions.every(
+      (item) => item.outcome === "denied" && item.request_id === "rbac-request",
+    ),
+  );
+});
+test("M01-04.A09/A12 platform scope never leaks into an unassigned platform capability", async () => {
+  const repository = new InMemoryAuthorizationRepository(),
+    service = new AuthorizationService(repository);
+  repository.subjects.set(
+    repository.key(actor, org),
+    subject({
+      membership_active: false,
+      scopes: [{ scope: "platform" }],
+      platform_role_codes: ["platform_operations_admin"],
+      platform_capabilities: ["platform:operate"],
+    }),
+  );
+  assert.equal(
+    (await service.authorize(check({ capability: "platform:operate" }))).reason,
+    "allowed_platform",
+  );
+  await assert.rejects(
+    () => service.authorize(check({ capability: "platform:secure" })),
+    (error) => error.code === "permission_denied",
+  );
+});
+test("M01-04.A08/A16 session authorization requires selected context and active membership", async () => {
+  const repository = new InMemoryAuthorizationRepository(),
+    service = new AuthorizationService(repository);
+  await assert.rejects(
+    () => service.describeSession(actor, "missing"),
+    (error) => error.code === "tenancy_context_required",
+  );
+  repository.contexts.set("session", {
+    user_id: actor,
+    organization_id: org,
+    workspace_id: workspace,
+  });
+  repository.subjects.set(repository.key(actor, org), subject());
+  const result = await service.describeSession(actor, "session");
+  assert.equal(result.workspace_id, workspace);
+  repository.subjects.set(repository.key(actor, org), subject({ membership_active: false }));
+  await assert.rejects(
+    () => service.describeSession(actor, "session"),
+    (error) => error.code === "permission_denied",
+  );
+});

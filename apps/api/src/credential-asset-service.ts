@@ -1,8 +1,5 @@
 ﻿import { randomUUID } from "node:crypto";
-import {
-  sealCredential,
-  type CredentialCipherRecord,
-} from "@scoutops/credentials";
+import { sealCredential, type CredentialCipherRecord } from "@scoutops/credentials";
 import type {
   CrawlerProfileInput,
   CrawlerProfileSummary,
@@ -90,15 +87,8 @@ export interface CredentialAssetRepository {
     now: Date;
   }): Promise<CrawlerProfileSummary>;
 }
-const uuid =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
-  kinds = [
-    "api_key",
-    "account_secret",
-    "cookie_bundle",
-    "private_key",
-    "browser_profile",
-  ];
+const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+  kinds = ["api_key", "account_secret", "cookie_bundle", "private_key", "browser_profile"];
 type CookieSameSite = "Strict" | "Lax" | "None";
 interface NormalizedCookie {
   name: string;
@@ -112,11 +102,7 @@ interface NormalizedCookie {
 }
 const cookieText = (value: unknown, field: string, maximum: number) => {
   if (typeof value !== "string" || !value.trim() || value.length > maximum)
-    throw new CredentialAssetError(
-      "credential_cookie_invalid",
-      400,
-      `Cookie ${field} 格式无效。`,
-    );
+    throw new CredentialAssetError("credential_cookie_invalid", 400, `Cookie ${field} 格式无效。`);
   return value.trim();
 };
 const normalizeSameSite = (value: unknown): CookieSameSite | undefined => {
@@ -134,26 +120,12 @@ const normalizeSameSite = (value: unknown): CookieSameSite | undefined => {
 };
 const normalizeCookie = (input: Record<string, unknown>): NormalizedCookie => {
   const domain = cookieText(input.domain, "domain", 255).toLowerCase();
-  if (
-    !/^\.?[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/i.test(domain) ||
-    domain.includes("..")
-  )
-    throw new CredentialAssetError(
-      "credential_cookie_invalid",
-      400,
-      "Cookie domain 格式无效。",
-    );
+  if (!/^\.?[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/i.test(domain) || domain.includes(".."))
+    throw new CredentialAssetError("credential_cookie_invalid", 400, "Cookie domain 格式无效。");
   const rawExpires = input.expires ?? input.expirationDate;
   const expires = rawExpires == null ? undefined : Number(rawExpires);
-  if (
-    expires !== undefined &&
-    (!Number.isFinite(expires) || (expires < 0 && expires !== -1))
-  )
-    throw new CredentialAssetError(
-      "credential_cookie_invalid",
-      400,
-      "Cookie expires 格式无效。",
-    );
+  if (expires !== undefined && (!Number.isFinite(expires) || (expires < 0 && expires !== -1)))
+    throw new CredentialAssetError("credential_cookie_invalid", 400, "Cookie expires 格式无效。");
   const sameSite = normalizeSameSite(input.sameSite);
   return {
     name: cookieText(input.name, "name", 256),
@@ -173,11 +145,7 @@ const parseNetscapeCookies = (raw: string) => {
   const cookies: NormalizedCookie[] = [];
   for (const line of raw.split(/\r?\n/)) {
     const trimmed = line.trim();
-    if (
-      !trimmed ||
-      (trimmed.startsWith("#") && !trimmed.startsWith("#HttpOnly_"))
-    )
-      continue;
+    if (!trimmed || (trimmed.startsWith("#") && !trimmed.startsWith("#HttpOnly_"))) continue;
     const values = trimmed.split("\t");
     if (values.length !== 7)
       throw new CredentialAssetError(
@@ -210,9 +178,7 @@ export function normalizeCookieBundle(raw: string): CredentialSecretInput {
     );
   let cookies: NormalizedCookie[];
   try {
-    const parsed = JSON.parse(raw) as
-      | Record<string, unknown>
-      | Array<Record<string, unknown>>;
+    const parsed = JSON.parse(raw) as Record<string, unknown> | Array<Record<string, unknown>>;
     const values = Array.isArray(parsed)
       ? parsed
       : Array.isArray(parsed.cookies)
@@ -254,15 +220,8 @@ function secret(value: CredentialSecretInput, kind?: string) {
       400,
       "凭证内容不能为空；网页登录档案压缩后不超过 6 兆字节。",
     );
-  if (
-    value.encoding === "base64" &&
-    !/^[A-Za-z0-9+/]*={0,2}$/.test(value.value)
-  )
-    throw new CredentialAssetError(
-      "credential_payload_invalid",
-      400,
-      "base64 载荷格式无效。",
-    );
+  if (value.encoding === "base64" && !/^[A-Za-z0-9+/]*={0,2}$/.test(value.value))
+    throw new CredentialAssetError("credential_payload_invalid", 400, "base64 载荷格式无效。");
   if (kind === "cookie_bundle") {
     if (value.encoding !== "utf8")
       throw new CredentialAssetError(
@@ -281,22 +240,10 @@ function createInput(value: CredentialAssetCreateInput, now: Date) {
       400,
       "provider_id 必须是已登记来源 UUID。",
     );
-  if (
-    typeof value.name !== "string" ||
-    value.name.trim().length < 2 ||
-    value.name.length > 160
-  )
-    throw new CredentialAssetError(
-      "credential_name_invalid",
-      400,
-      "名称需要 2–160 字符。",
-    );
+  if (typeof value.name !== "string" || value.name.trim().length < 2 || value.name.length > 160)
+    throw new CredentialAssetError("credential_name_invalid", 400, "名称需要 2–160 字符。");
   if (!kinds.includes(value.kind))
-    throw new CredentialAssetError(
-      "credential_kind_invalid",
-      400,
-      "凭证类型无效。",
-    );
+    throw new CredentialAssetError("credential_kind_invalid", 400, "凭证类型无效。");
   let expires_at: string | null = null;
   if (value.expires_at !== null) {
     const date = new Date(value.expires_at);
@@ -320,11 +267,7 @@ function expiry(value: unknown, now: Date) {
   if (value == null || value === "") return null;
   const date = new Date(String(value));
   if (!Number.isFinite(date.getTime()) || date <= now)
-    throw new CredentialAssetError(
-      "credential_expiry_invalid",
-      400,
-      "到期时间必须晚于当前时间。",
-    );
+    throw new CredentialAssetError("credential_expiry_invalid", 400, "到期时间必须晚于当前时间。");
   return date.toISOString();
 }
 function cookieDomains(payload: CredentialSecretInput) {
@@ -339,9 +282,7 @@ async function validateProviderDomains(
   providerId: string,
   payload: CredentialSecretInput,
 ) {
-  const provider = (await repository.listProviderOptions()).find(
-    (item) => item.id === providerId,
-  );
+  const provider = (await repository.listProviderOptions()).find((item) => item.id === providerId);
   if (!provider)
     throw new CredentialAssetError(
       "credential_provider_invalid",
@@ -379,11 +320,7 @@ function expected(value: number) {
   return value;
 }
 function profile(value: CrawlerProfileInput) {
-  if (
-    !value ||
-    !uuid.test(value.provider_id) ||
-    !uuid.test(value.credential_asset_id)
-  )
+  if (!value || !uuid.test(value.provider_id) || !uuid.test(value.credential_asset_id))
     throw new CredentialAssetError(
       "crawler_profile_reference_invalid",
       400,
@@ -402,11 +339,7 @@ function profile(value: CrawlerProfileInput) {
     value.browser_family !== "chromium" ||
     !["active", "disabled"].includes(value.status)
   )
-    throw new CredentialAssetError(
-      "crawler_profile_input_invalid",
-      400,
-      "浏览器档案字段无效。",
-    );
+    throw new CredentialAssetError("crawler_profile_input_invalid", 400, "浏览器档案字段无效。");
   if (
     !/^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})?$/.test(value.locale) ||
     typeof value.timezone !== "string" ||
@@ -454,11 +387,7 @@ export class CredentialAssetService {
       }),
       { secret_payload, ...metadata } = clean;
     if (clean.kind === "cookie_bundle")
-      await validateProviderDomains(
-        this.repository,
-        clean.provider_id,
-        clean.secret_payload,
-      );
+      await validateProviderDomains(this.repository, clean.provider_id, clean.secret_payload);
     return this.repository.createAsset({
       id,
       value: metadata,
@@ -478,11 +407,7 @@ export class CredentialAssetService {
     context: Context,
   ) {
     if (!uuid.test(id))
-      throw new CredentialAssetError(
-        "credential_id_invalid",
-        400,
-        "凭证 ID 无效。",
-      );
+      throw new CredentialAssetError("credential_id_invalid", 400, "凭证 ID 无效。");
     if (this.masterKey.length < 32)
       throw new CredentialAssetError(
         "credential_master_key_unavailable",
@@ -491,31 +416,19 @@ export class CredentialAssetService {
       );
     const record = await this.repository.getCipherRecord(id);
     if (record.summary.status === "revoked")
-      throw new CredentialAssetError(
-        "credential_revoked",
-        409,
-        "已撤销凭证不能轮换。",
-      );
+      throw new CredentialAssetError("credential_revoked", 409, "已撤销凭证不能轮换。");
     const now = this.now(),
       normalizedSecret = secret(value.secret_payload, record.summary.kind),
       expiresAt = expiry(value.expires_at ?? record.summary.expires_at, now);
     if (record.summary.kind === "cookie_bundle")
-      await validateProviderDomains(
-        this.repository,
-        record.summary.provider_id,
-        normalizedSecret,
-      );
+      await validateProviderDomains(this.repository, record.summary.provider_id, normalizedSecret);
     const next = expected(value.expected_version) + 1,
-      sealed = sealCredential(
-        normalizedSecret,
-        this.masterKey,
-        {
-          assetId: id,
-          assetVersion: next,
-          kind: record.summary.kind,
-          keyVersion: this.keyVersion,
-        },
-      );
+      sealed = sealCredential(normalizedSecret, this.masterKey, {
+        assetId: id,
+        assetVersion: next,
+        kind: record.summary.kind,
+        keyVersion: this.keyVersion,
+      });
     return this.repository.rotateAsset({
       id,
       expectedVersion: value.expected_version,
@@ -526,17 +439,9 @@ export class CredentialAssetService {
       now,
     });
   }
-  revokeAsset(
-    id: string,
-    value: { expected_version: number; reason: string },
-    context: Context,
-  ) {
+  revokeAsset(id: string, value: { expected_version: number; reason: string }, context: Context) {
     if (!uuid.test(id))
-      throw new CredentialAssetError(
-        "credential_id_invalid",
-        400,
-        "凭证 ID 无效。",
-      );
+      throw new CredentialAssetError("credential_id_invalid", 400, "凭证 ID 无效。");
     expected(value.expected_version);
     if (
       typeof value.reason !== "string" ||

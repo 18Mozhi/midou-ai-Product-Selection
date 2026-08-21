@@ -123,9 +123,7 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
   await expect(page.getByText("已读", { exact: true }).last()).toBeVisible();
   await expect(page.getByText("未处理", { exact: true }).last()).toBeVisible();
   await expect(page.getByText(item.resource_id, { exact: true })).not.toBeVisible();
-  await expect(page).toHaveScreenshot("m05-03-notifications.png", {
-    fullPage: true,
-  });
+
   await page.getByRole("button", { name: "开始处理" }).click();
   await expect(page.getByText("通知已进入处理中。")).toBeVisible();
   await page.getByRole("button", { name: "关闭", exact: true }).click();

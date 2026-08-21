@@ -22,17 +22,12 @@ import { RealtimeService } from "../realtime-service.js";
 import { registerRealtimeRoutes } from "../realtime-routes.js";
 import { ReportService } from "../report-service.js";
 import { registerReportRoutes } from "../report-routes.js";
-import {
-  commonDomainOptions,
-  type ApiDomainContext,
-} from "./domain-context.js";
+import { commonDomainOptions, type ApiDomainContext } from "./domain-context.js";
 
 export function registerWorkflowDomainRoutes(context: ApiDomainContext) {
   const common = commonDomainOptions(context);
   registerBusinessTaskRoutes(context.app, {
-    service: new BusinessTaskService(
-      new MySqlBusinessTaskRepository(context.pool),
-    ),
+    service: new BusinessTaskService(new MySqlBusinessTaskRepository(context.pool)),
     ...common,
   });
   registerApprovalRoutes(context.app, {
@@ -40,15 +35,11 @@ export function registerWorkflowDomainRoutes(context: ApiDomainContext) {
     ...common,
   });
   registerNotificationRoutes(context.app, {
-    service: new NotificationService(
-      new MySqlNotificationRepository(context.pool),
-    ),
+    service: new NotificationService(new MySqlNotificationRepository(context.pool)),
     ...common,
   });
   registerPersonalCenterRoutes(context.app, {
-    service: new PersonalCenterService(
-      new MySqlPersonalCenterRepository(context.pool),
-    ),
+    service: new PersonalCenterService(new MySqlPersonalCenterRepository(context.pool)),
     ...common,
   });
   registerRealtimeRoutes(context.app, {

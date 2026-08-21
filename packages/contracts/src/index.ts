@@ -221,6 +221,8 @@ export interface ProviderDefinition {
   owner_label: string;
   terms_review_status: "pending" | "approved" | "rejected";
   terms_reference_url: string | null;
+  terms_version: string | null;
+  terms_expires_at: string | null;
   terms_reviewed_at: string | null;
   status: "draft" | "disabled" | "enabled";
   version: number;
@@ -243,6 +245,15 @@ export interface ProviderAdapterSummary {
   last_latency_ms: number | null;
   last_error_code: string | null;
   consecutive_failures: number;
+  latest_runtime_category:
+    "unknown" | "healthy" | "network" | "parser" | "login" | "empty" | "other";
+  runtime_sample_count_24h: number;
+  runtime_success_rate_basis_points_24h: number | null;
+  runtime_duration_p95_ms_24h: number | null;
+  runtime_network_failure_count_24h: number;
+  runtime_parser_failure_count_24h: number;
+  runtime_login_failure_count_24h: number;
+  runtime_empty_success_count_24h: number;
   version: number;
   updated_at: string;
 }

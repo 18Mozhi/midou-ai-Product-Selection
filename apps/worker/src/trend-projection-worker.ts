@@ -1,21 +1,11 @@
 import { createHash, randomUUID } from "node:crypto";
-import type {
-  Pool,
-  PoolConnection,
-  ResultSetHeader,
-  RowDataPacket,
-} from "mysql2/promise";
+import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { BUILTIN_PROVIDER_SOURCES } from "@scoutops/provider-sources";
 
 export type TrendProjectionResult =
   | { status: "idle" }
   | {
-      status:
-        | "succeeded"
-        | "succeeded_empty"
-        | "failed_terminal"
-        | "scheduled"
-        | "dead_letter";
+      status: "succeeded" | "succeeded_empty" | "failed_terminal" | "scheduled" | "dead_letter";
       job_id: string;
       topic_id?: string;
       error_code?: string;
@@ -71,19 +61,14 @@ const automaticProductTopics = new Set([
 ]);
 const automaticSources = new Map(
   BUILTIN_PROVIDER_SOURCES.filter(
-    (source) =>
-      source.availability === "automatic" &&
-      source.category !== "product_supply",
+    (source) => source.availability === "automatic" && source.category !== "product_supply",
   ).map((source) => [source.code, source]),
 );
 
 export type ProjectedTrendProviderContext =
-  | { accepted: false }
-  | { accepted: true; automatic: boolean; market: string; language: string };
+  { accepted: false } | { accepted: true; automatic: boolean; market: string; language: string };
 
-export function projectedTrendProviderContext(
-  providerCode: string,
-): ProjectedTrendProviderContext {
+export function projectedTrendProviderContext(providerCode: string): ProjectedTrendProviderContext {
   if (providerCode === "google_news_search")
     return {
       accepted: true,
@@ -94,20 +79,13 @@ export function projectedTrendProviderContext(
   const source = automaticSources.get(providerCode);
   if (source) {
     const market =
-        source.markets.find((value) => value !== "GLOBAL") ??
-        source.markets[0] ??
-        "GLOBAL",
+        source.markets.find((value) => value !== "GLOBAL") ?? source.markets[0] ?? "GLOBAL",
       language = source.languages[0] ?? "multi";
     return { accepted: true, automatic: true, market, language };
   }
   const match = /^gnews_([a-z]{2})_(.+)$/.exec(providerCode),
-    locale = match
-      ? automaticTrendLocales[
-          match[1] as keyof typeof automaticTrendLocales
-        ]
-      : null;
-  if (!match || !locale || !automaticTrendTopics.has(match[2]!))
-    return { accepted: false };
+    locale = match ? automaticTrendLocales[match[1] as keyof typeof automaticTrendLocales] : null;
+  if (!match || !locale || !automaticTrendTopics.has(match[2]!)) return { accepted: false };
   return { accepted: true, automatic: true, ...locale };
 }
 
@@ -118,15 +96,11 @@ export function isAutomaticProductDiscoveryProvider(providerCode: string) {
   return (
     context.accepted &&
     context.automatic &&
-    (source?.category === "ecommerce" ||
-      Boolean(match && automaticProductTopics.has(match[1]!)))
+    (source?.category === "ecommerce" || Boolean(match && automaticProductTopics.has(match[1]!)))
   );
 }
 
-export function isConcreteProductEvidence(
-  payload: Record<string, unknown>,
-  canonicalUrl: string,
-) {
+export function isConcreteProductEvidence(payload: Record<string, unknown>, canonicalUrl: string) {
   const urlLooksLikeProduct = [
     /\/(?:dp|gp\/product)\/[A-Z0-9]{10}(?:[/?]|$)/i,
     /\/itm\//i,
@@ -144,11 +118,7 @@ export function isConcreteProductEvidence(
 export function normalizeProjectedTrendTitle(value: unknown) {
   if (typeof value !== "string" || !value.trim() || value.length > 1000)
     throw new TrendProjectionError("trend_title_invalid", false);
-  return value
-    .trim()
-    .normalize("NFKC")
-    .toLocaleLowerCase("en-US")
-    .replace(/\s+/g, " ");
+  return value.trim().normalize("NFKC").toLocaleLowerCase("en-US").replace(/\s+/g, " ");
 }
 
 const supplierKeywordRules: Array<[RegExp, string]> = [
@@ -170,14 +140,27 @@ const supplierKeywordRules: Array<[RegExp, string]> = [
   [/\bundershirts?\b/i, "cotton undershirts"],
 ];
 const supplierStopWords = new Set([
-  "amazon", "basics", "with", "for", "and", "the", "pack", "packs",
-  "count", "white", "black", "new", "more", "from", "your", "this",
+  "amazon",
+  "basics",
+  "with",
+  "for",
+  "and",
+  "the",
+  "pack",
+  "packs",
+  "count",
+  "white",
+  "black",
+  "new",
+  "more",
+  "from",
+  "your",
+  "this",
 ]);
 
 export function buildSupplierSearchQuery(title: string) {
   const normalized = title.normalize("NFKC").replace(/\s+/g, " ").trim();
-  for (const [pattern, query] of supplierKeywordRules)
-    if (pattern.test(normalized)) return query;
+  for (const [pattern, query] of supplierKeywordRules) if (pattern.test(normalized)) return query;
   const words = normalized
     .split(/[|,;:()[\]{}\-–—]+/, 1)[0]!
     .match(/[\p{L}\p{N}]+/gu)
@@ -204,8 +187,7 @@ const text = (value: unknown, code: string, maximum: number) => {
 };
 const date = (value: unknown, code: string) => {
   const result = new Date(text(value, code, 120));
-  if (!Number.isFinite(result.getTime()))
-    throw new TrendProjectionError(code, false);
+  if (!Number.isFinite(result.getTime())) throw new TrendProjectionError(code, false);
   return result;
 };
 const http = (value: unknown) => {
@@ -268,10 +250,7 @@ export class MySqlTrendProjectionWorker {
         ...(process.env.NODE_ENV === "production"
           ? {}
           : {
-              diagnostic:
-                error instanceof Error
-                  ? error.message.slice(0, 300)
-                  : "unknown",
+              diagnostic: error instanceof Error ? error.message.slice(0, 300) : "unknown",
             }),
       };
     }
@@ -379,11 +358,7 @@ export class MySqlTrendProjectionWorker {
           supplierProviderIds = [providers.madeInChina, providers.ec21].filter(
             (value): value is string => Boolean(value),
           );
-        if (
-          searchId &&
-          Boolean(row.sourcing_task_missing) &&
-          supplierProviderIds.length
-        ) {
+        if (searchId && Boolean(row.sourcing_task_missing) && supplierProviderIds.length) {
           const taskId = randomUUID();
           await this.scheduleCoreCollection(
             c,
@@ -532,11 +507,7 @@ export class MySqlTrendProjectionWorker {
         "SELECT n.organization_id,n.workspace_id,n.provider_id,n.raw_evidence_id,n.payload_json,n.created_by,n.request_id,n.trace_id,p.code provider_code,e.collection_task_id FROM normalized_records n JOIN providers p ON p.id=n.provider_id JOIN raw_evidence e ON e.id=n.raw_evidence_id WHERE n.id=? AND n.organization_id=? AND n.workspace_id=? LIMIT 1",
         [row.normalized_record_id, row.organization_id, row.workspace_id],
       );
-      if (!records[0])
-        throw new TrendProjectionError(
-          "trend_projection_record_missing",
-          false,
-        );
+      if (!records[0]) throw new TrendProjectionError("trend_projection_record_missing", false);
       const record = records[0];
       await c.commit();
       return {
@@ -579,9 +550,7 @@ export class MySqlTrendProjectionWorker {
     if (!providerContext.accepted)
       throw new TrendProjectionError("trend_provider_unsupported", false);
     const topicKey = createHash("sha256")
-        .update(
-          `${providerContext.market}\0${providerContext.language}\0${normalizedTitle}`,
-        )
+        .update(`${providerContext.market}\0${providerContext.language}\0${normalizedTitle}`)
         .digest("hex"),
       now = this.now(),
       c = await this.pool.getConnection();
@@ -668,20 +637,13 @@ export class MySqlTrendProjectionWorker {
           now,
         );
         stage = "event_insert";
-        await this.event(
-          c,
-          job,
-          "trend.topic.projected",
-          "trend_topic",
-          topicId,
-          {
-            normalized_record_id: job.normalizedRecordId,
-            provider_code: job.providerCode,
-            market: providerContext.market,
-            language: providerContext.language,
-            heat_unit: "signals",
-          },
-        );
+        await this.event(c, job, "trend.topic.projected", "trend_topic", topicId, {
+          normalized_record_id: job.normalizedRecordId,
+          provider_code: job.providerCode,
+          market: providerContext.market,
+          language: providerContext.language,
+          heat_unit: "signals",
+        });
         if (
           (isAutomaticProductDiscoveryProvider(job.providerCode) &&
             isConcreteProductEvidence(job.payload, canonicalUrl)) ||
@@ -783,14 +745,7 @@ export class MySqlTrendProjectionWorker {
         },
         now,
       );
-      await this.createDownstreamDiscovery(
-        c,
-        job,
-        persistedOpportunityId,
-        title,
-        market,
-        now,
-      );
+      await this.createDownstreamDiscovery(c, job, persistedOpportunityId, title, market, now);
     }
   }
 
@@ -820,14 +775,10 @@ export class MySqlTrendProjectionWorker {
       const matched =
         Array.isArray(include) &&
         include.some((keyword: unknown) =>
-          title.includes(
-            String(keyword).normalize("NFKC").toLocaleLowerCase("en-US"),
-          ),
+          title.includes(String(keyword).normalize("NFKC").toLocaleLowerCase("en-US")),
         ) &&
         !(Array.isArray(negative) ? negative : []).some((keyword: unknown) =>
-          title.includes(
-            String(keyword).normalize("NFKC").toLocaleLowerCase("en-US"),
-          ),
+          title.includes(String(keyword).normalize("NFKC").toLocaleLowerCase("en-US")),
         ) &&
         (!row.market || String(row.market).toUpperCase() === market) &&
         (!row.language || String(row.language) === language) &&
@@ -836,23 +787,13 @@ export class MySqlTrendProjectionWorker {
         matchedAny = true;
         await c.query(
           "INSERT IGNORE INTO trend_topic_follows (id,organization_id,workspace_id,topic_id,user_id,created_at) VALUES (?,?,?,?,?,?)",
-          [
-            randomUUID(),
-            job.organizationId,
-            job.workspaceId,
-            topicId,
-            row.created_by,
-            now,
-          ],
+          [randomUUID(), job.organizationId, job.workspaceId, topicId, row.created_by, now],
         );
-        await this.event(
-          c,
-          job,
-          "trend.monitoring_rule.matched",
-          "trend_topic",
-          topicId,
-          { rule_id: String(row.id), market, language },
-        );
+        await this.event(c, job, "trend.monitoring_rule.matched", "trend_topic", topicId, {
+          rule_id: String(row.id),
+          market,
+          language,
+        });
       }
     }
     if (rows.length)
@@ -871,14 +812,10 @@ export class MySqlTrendProjectionWorker {
     market: string,
     now: Date,
   ) {
-    const canonicalUrl = text(
-        job.payload.canonical_url,
-        "trend_url_invalid",
-        2048,
-      ),
-      asin = /\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:[/?]|$)/i.exec(
-        canonicalUrl,
-      )?.[1]?.toUpperCase();
+    const canonicalUrl = text(job.payload.canonical_url, "trend_url_invalid", 2048),
+      asin = /\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:[/?]|$)/i
+        .exec(canonicalUrl)?.[1]
+        ?.toUpperCase();
     let competitorId: string | null = null;
     if (asin) {
       const proposedCompetitorId = randomUUID();
@@ -977,10 +914,10 @@ export class MySqlTrendProjectionWorker {
         "sourcing.collection.auto_scheduled",
         now,
       );
-      await c.query(
-        "UPDATE sourcing_searches SET collection_task_id=? WHERE id=?",
-        [supplierTaskId, searchId],
-      );
+      await c.query("UPDATE sourcing_searches SET collection_task_id=? WHERE id=?", [
+        supplierTaskId,
+        searchId,
+      ]);
     } else {
       await c.query(
         "UPDATE sourcing_searches SET status='succeeded_empty',missing_fields_json=?,updated_at=? WHERE id=?",
@@ -1049,9 +986,7 @@ export class MySqlTrendProjectionWorker {
       retryDelays = [60_000, 300_000, 900_000] as const,
       available =
         status === "scheduled"
-          ? new Date(
-              now.getTime() + retryDelays[Math.min(job.attemptCount - 1, 2)]!,
-            )
+          ? new Date(now.getTime() + retryDelays[Math.min(job.attemptCount - 1, 2)]!)
           : now;
     await this.pool.query(
       "UPDATE trend_projection_jobs SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=?,updated_at=? WHERE id=? AND lease_owner=?",

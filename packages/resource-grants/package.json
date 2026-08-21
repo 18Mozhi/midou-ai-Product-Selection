@@ -1,1 +1,17 @@
-{"name":"@scoutops/resource-grants","private":true,"version":"0.1.0","type":"module","main":"dist/index.js","types":"dist/index.d.ts","exports":{".":{"types":"./dist/index.d.ts","import":"./dist/index.js"}},"dependencies":{"@scoutops/authorization":"0.1.0"}}
+{
+  "name": "@scoutops/resource-grants",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@scoutops/authorization": "0.1.0"
+  }
+}

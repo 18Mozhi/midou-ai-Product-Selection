@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
+import { mkdtemp, readdir, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import test from "node:test";
 
@@ -19,7 +21,11 @@ const ids = {
   profile: "00000000-0000-4000-8000-000000000708",
 };
 
-const runPythonConsumer = async (apiBaseUrl, serviceToken) => {
+const runPythonConsumer = async (
+  apiBaseUrl,
+  serviceToken,
+  { completionSpoolRoot, expectedCode = 0 } = {},
+) => {
   const child = spawn("python", ["tests/integration/crawler-python-consumer-probe.py"], {
     cwd: root,
     shell: false,
@@ -32,6 +38,7 @@ const runPythonConsumer = async (apiBaseUrl, serviceToken) => {
       CRAWLER_ID: "crawler-integration",
       CRAWLER_HEARTBEAT_SECONDS: "5",
       CRAWLER_LEASE_SECONDS: "30",
+      ...(completionSpoolRoot ? { CRAWLER_COMPLETION_SPOOL_ROOT: completionSpoolRoot } : {}),
       NO_PROXY: "127.0.0.1,localhost",
       no_proxy: "127.0.0.1,localhost",
     },
@@ -46,18 +53,21 @@ const runPythonConsumer = async (apiBaseUrl, serviceToken) => {
     stderr += chunk;
   });
   const [code] = await once(child, "exit");
-  assert.equal(code, 0, stderr || stdout);
-  return stdout;
+  assert.equal(code, expectedCode, stderr || stdout);
+  return { stdout, stderr };
 };
 
-const startRuntimeApi = async ({ assignmentAvailable }) => {
+const startRuntimeApi = async ({ assignmentAvailable, completionFailures = 0 }) => {
   const calls = [];
+  let assignmentsRemaining = assignmentAvailable ? 1 : 0;
+  let finishFailuresRemaining = completionFailures;
   const repository = {
     list: async () => ({ profiles: [], runs: [] }),
     recoverExpired: async () => ({ recovered: 0 }),
     acquireJob: async (input) => {
       calls.push(["acquire", input]);
-      if (!assignmentAvailable) return null;
+      if (assignmentsRemaining <= 0) return null;
+      assignmentsRemaining -= 1;
       return {
         job: {
           id: ids.job,
@@ -101,6 +111,10 @@ const startRuntimeApi = async ({ assignmentAvailable }) => {
     },
     finishJob: async (input) => {
       calls.push(["complete", input]);
+      if (finishFailuresRemaining > 0) {
+        finishFailuresRemaining -= 1;
+        throw new Error("completion_transport_failed");
+      }
     },
   };
   const serviceToken = "crawler-integration-service-token";
@@ -124,7 +138,7 @@ const startRuntimeApi = async ({ assignmentAvailable }) => {
 test("Python crawler consumes, renews and completes a real Fastify job over HTTP", async () => {
   const runtime = await startRuntimeApi({ assignmentAvailable: true });
   try {
-    const stdout = await runPythonConsumer(runtime.apiBaseUrl, runtime.serviceToken);
+    const { stdout } = await runPythonConsumer(runtime.apiBaseUrl, runtime.serviceToken);
     assert.match(stdout, /consumer_processed=true/);
     assert.deepEqual(
       runtime.calls.map(([name]) => name),
@@ -148,7 +162,7 @@ test("Python crawler consumes, renews and completes a real Fastify job over HTTP
 test("Python crawler does not emit an idle heartbeat when Fastify has no job", async () => {
   const runtime = await startRuntimeApi({ assignmentAvailable: false });
   try {
-    const stdout = await runPythonConsumer(runtime.apiBaseUrl, runtime.serviceToken);
+    const { stdout } = await runPythonConsumer(runtime.apiBaseUrl, runtime.serviceToken);
     assert.match(stdout, /consumer_processed=false/);
     assert.deepEqual(
       runtime.calls.map(([name]) => name),
@@ -156,5 +170,30 @@ test("Python crawler does not emit an idle heartbeat when Fastify has no job", a
     );
   } finally {
     await runtime.app.close();
+  }
+});
+
+test("Python crawler preserves a failed completion and replays it over the real HTTP boundary", async () => {
+  const spoolRoot = await mkdtemp(resolve(tmpdir(), "scoutops-crawler-completion-"));
+  const runtime = await startRuntimeApi({
+    assignmentAvailable: true,
+    completionFailures: 4,
+  });
+  try {
+    await runPythonConsumer(runtime.apiBaseUrl, runtime.serviceToken, {
+      completionSpoolRoot: spoolRoot,
+      expectedCode: 1,
+    });
+    assert.equal((await readdir(spoolRoot)).filter((name) => name.endsWith(".json")).length, 1);
+
+    const { stdout } = await runPythonConsumer(runtime.apiBaseUrl, runtime.serviceToken, {
+      completionSpoolRoot: spoolRoot,
+    });
+    assert.match(stdout, /consumer_processed=false/);
+    assert.equal((await readdir(spoolRoot)).filter((name) => name.endsWith(".json")).length, 0);
+    assert.equal(runtime.calls.filter(([name]) => name === "complete").length, 5);
+  } finally {
+    await runtime.app.close();
+    await rm(spoolRoot, { recursive: true, force: true });
   }
 });

@@ -49,8 +49,24 @@ interface Dto {
     active_leases: number;
     queued_tasks: number;
     longest_queue_wait_seconds: number;
+    queue_wait_p50_seconds: number;
+    queue_wait_p95_seconds: number;
+    sample_count_24h: number;
+    success_rate_basis_points_24h: number | null;
+    duration_p95_ms_24h: number | null;
+    circuit_state: "closed" | "open";
+    circuit_failure_threshold: number;
+    consecutive_failures: number;
+    last_error_code: string | null;
   }>;
   profiles: Array<{ id: string; active_leases: number }>;
+  trend: Array<{
+    bucket_at: string;
+    total: number;
+    succeeded: number;
+    failed: number;
+    failure_rate_basis_points: number;
+  }>;
   resource: {
     load_basis_points: number;
     available_memory_mb: number;
@@ -75,6 +91,8 @@ const data = ref<Dto | null>(null),
   requestId = ref(""),
   message = ref(""),
   confirming = ref(false),
+  circuitConfirm = ref<Dto["providers"][number] | null>(null),
+  providerRecovering = ref(""),
   saving = ref(false);
 const verdict = computed(
   () =>
@@ -109,6 +127,14 @@ const duration = (seconds: number) => {
   if (seconds < 86400) return `${Math.floor(seconds / 3600)} 小时`;
   return `${Math.floor(seconds / 86400)} 天`;
 };
+const rate = (basisPoints: number | null) =>
+  basisPoints == null ? "样本不足" : `${(basisPoints / 100).toFixed(1)}%`;
+const milliseconds = (value: number | null) =>
+  value == null
+    ? "样本不足"
+    : value < 1000
+      ? `${Math.round(value)} ms`
+      : `${(value / 1000).toFixed(1)} 秒`;
 const status = (kind: ApiFailureKind): State =>
   kind === "expired" || kind === "forbidden" || kind === "rate_limited" ? kind : "unavailable";
 
@@ -149,6 +175,33 @@ async function recover() {
   } finally {
     saving.value = false;
     confirming.value = false;
+  }
+}
+
+async function recoverProvider() {
+  const provider = circuitConfirm.value;
+  if (!provider) return;
+  providerRecovering.value = provider.id;
+  message.value = "";
+  try {
+    const response = await request<{ provider_id: string; recovered: boolean }>(
+      `/platform/operations/crawler-scheduler/providers/${provider.id}/recover`,
+      { method: "POST", body: {} },
+    );
+    requestId.value = response.request_id;
+    const resultMessage = response.data.recovered
+      ? `已解除 ${provider.code} 的来源级熔断`
+      : `${provider.code} 当前无需恢复`;
+    circuitConfirm.value = null;
+    await load();
+    message.value = resultMessage;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+    } else message.value = "来源恢复失败，请核对来源健康检查后重试。";
+  } finally {
+    providerRecovering.value = "";
   }
 }
 
@@ -232,10 +285,21 @@ onMounted(() => {
             <span>配置值会被单机上限收紧到 1</span>
           </header>
           <div class="crawler-scheduler__sources">
-            <article v-for="item in data.providers" :key="item.id">
+            <p v-if="message" class="crawler-scheduler__operation-message" aria-live="polite">
+              {{ message }}
+            </p>
+            <article
+              v-for="item in data.providers"
+              :key="item.id"
+              :data-circuit="item.circuit_state"
+            >
               <div>
                 <b>{{ item.code }}</b
-                ><span>{{ item.active_leases }} / {{ item.effective_concurrency }}</span>
+                ><span>{{
+                  item.circuit_state === "open"
+                    ? "来源已熔断"
+                    : `${item.active_leases} / ${item.effective_concurrency}`
+                }}</span>
               </div>
               <progress
                 :value="item.active_leases"
@@ -249,6 +313,33 @@ onMounted(() => {
                 >等待 {{ item.queued_tasks }} 个任务 · 最长
                 {{ duration(item.longest_queue_wait_seconds) }}</small
               >
+              <small
+                >等待分位 P50 {{ duration(item.queue_wait_p50_seconds) }} · P95
+                {{ duration(item.queue_wait_p95_seconds) }}</small
+              >
+              <small
+                >24 小时成功率 {{ rate(item.success_rate_basis_points_24h) }} · 耗时 P95
+                {{ milliseconds(item.duration_p95_ms_24h) }} · 样本
+                {{ item.sample_count_24h }}</small
+              >
+              <small v-if="item.circuit_state === 'open'" class="crawler-scheduler__circuit">
+                连续失败 {{ item.consecutive_failures }} /
+                {{ item.circuit_failure_threshold }}，仅该来源暂停；健康检查恢复后再解除。
+                <RouterLink :to="`/platform-admin/provider-adapters?provider_id=${item.id}`"
+                  >前往来源健康</RouterLink
+                >
+                <button
+                  type="button"
+                  :disabled="providerRecovering === item.id"
+                  @click="circuitConfirm = item"
+                >
+                  解除熔断
+                </button>
+              </small>
+              <details v-if="item.last_error_code">
+                <summary>最近失败</summary>
+                <code>{{ item.last_error_code }}</code>
+              </details>
             </article>
             <p v-if="!data.providers.length">当前没有启用来源。</p>
           </div>
@@ -281,6 +372,25 @@ onMounted(() => {
           </dl>
         </aside>
       </div>
+      <section class="crawler-scheduler__panel crawler-scheduler__trend">
+        <header>
+          <div>
+            <p>最近 24 小时</p>
+            <h3>吞吐与失败率趋势</h3>
+          </div>
+          <span>{{ data.trend.reduce((sum, item) => sum + item.total, 0) }} 次浏览器运行</span>
+        </header>
+        <div v-if="data.trend.length">
+          <article v-for="item in data.trend" :key="item.bucket_at">
+            <time :datetime="item.bucket_at">{{ time(item.bucket_at) }}</time>
+            <span>吞吐 {{ item.total }}</span
+            ><span>成功 {{ item.succeeded }}</span
+            ><span>失败 {{ item.failed }}</span>
+            <strong>{{ rate(item.failure_rate_basis_points) }}</strong>
+          </article>
+        </div>
+        <p v-else class="crawler-scheduler__empty">最近 24 小时暂无浏览器运行样本。</p>
+      </section>
       <section
         v-if="data.active_leases.length"
         class="crawler-scheduler__panel crawler-scheduler__associations"
@@ -353,6 +463,16 @@ onMounted(() => {
       confirmation-text="确认回收"
       @cancel="confirming = false"
       @confirm="recover"
+    />
+    <ConfirmDialog
+      :open="Boolean(circuitConfirm)"
+      title="解除该来源的运行熔断？"
+      description="仅当来源启用，且熔断后已完成一次结果正常的来源健康检查时才会恢复。"
+      impact="只恢复当前来源；其他来源、任务结果和历史证据不会被修改。"
+      confirm-label="确认解除"
+      confirmation-text="确认解除"
+      @cancel="circuitConfirm = null"
+      @confirm="recoverProvider"
     />
   </section>
 </template>

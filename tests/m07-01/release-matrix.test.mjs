@@ -79,7 +79,7 @@ test("M07-01.A07/A08/A15 every prior browser contract is assigned exactly once",
   const actual = (await readdir(resolve(root, "tests/e2e"))).filter((name) =>
     /^m0[0-6]-.*\.spec\.ts$/.test(name),
   );
-  assert.equal(assigned.length, 48);
+  assert.equal(assigned.length, 49);
   assert.equal(new Set(assigned).size, assigned.length);
   assert.deepEqual([...assigned].sort(), actual.sort());
   assert.ok(assigned.some((name) => name.includes("ui-states")));
@@ -92,8 +92,8 @@ test("M07-01 keeps mocked screenshots below the frozen ratio and reuses mobile o
   const realism = await readFile(resolve(root, "scripts/verify-e2e-realism.mjs"), "utf8");
   const helper = await readFile(resolve(root, "tests/e2e/helpers/mobile-occlusion.ts"), "utf8");
   assert.match(verifier, /verify-e2e-realism\.mjs/);
-  assert.match(realism, /mockedRatio > 0\.84/);
-  assert.match(realism, /e2e_real_api_screenshot_missing/);
+  assert.match(realism, /mockedRatio >= 0\.5/);
+  assert.match(realism, /e2e_real_api_screenshot_coverage_insufficient/);
   assert.match(helper, /overlap/);
   assert.match(helper, /role-mobile-nav/);
 });

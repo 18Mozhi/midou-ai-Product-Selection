@@ -1,7 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
-const parse = (v: unknown) =>
-  typeof v === "string" ? JSON.parse(v) : (v as any);
+const parse = (v: unknown) => (typeof v === "string" ? JSON.parse(v) : (v as any));
 export const notificationBody = (category: string) =>
   ({
     approval: "审批状态已变化，请查看关联记录。",
@@ -95,22 +94,14 @@ export class NotificationOutboxWorker {
         );
         return [
           ...new Set(
-            rows
-              .map((r) => String(r.requested_by ?? r.active_approver_id))
-              .filter(Boolean),
+            rows.map((r) => String(r.requested_by ?? r.active_approver_id)).filter(Boolean),
           ),
         ];
       }
     }
     return [];
   }
-  private async create(
-    event: any,
-    p: any,
-    category: string,
-    recipient: string,
-    now: Date,
-  ) {
+  private async create(event: any, p: any, category: string, recipient: string, now: Date) {
     const [prefs] = await this.pool.query<RowDataPacket[]>(
         "SELECT * FROM notification_preferences WHERE organization_id=? AND workspace_id=? AND user_id=?",
         [event.organization_id, event.workspace_id, recipient],
@@ -124,10 +115,10 @@ export class NotificationOutboxWorker {
         category === "system" && p.title
           ? String(p.title)
           : category === "approval"
-          ? "审批状态更新"
-          : category === "competitor"
-            ? "竞品监控更新"
-            : "任务状态更新",
+            ? "审批状态更新"
+            : category === "competitor"
+              ? "竞品监控更新"
+              : "任务状态更新",
       body = notificationBody(category),
       resourceType = p.resource_type ?? category,
       resourceId = p.resource_id ?? p.task_id ?? p.approval_request_id ?? null,
@@ -146,7 +137,7 @@ export class NotificationOutboxWorker {
         body,
         resourceType,
         resourceId,
-        `${String(event.event_type).slice(0,100)}:${String(resourceType).slice(0,80)}:${String(resourceId ?? "none").slice(0,36)}`,
+        `${String(event.event_type).slice(0, 100)}:${String(resourceType).slice(0, 80)}:${String(resourceId ?? "none").slice(0, 36)}`,
         now,
         now,
       ],
@@ -167,8 +158,7 @@ export class NotificationOutboxWorker {
           JSON.stringify({
             notification_id: id,
             category,
-            severity:
-              event.event_type === "approval.overdue" ? "warning" : "info",
+            severity: event.event_type === "approval.overdue" ? "warning" : "info",
           }),
           now,
         ],

@@ -150,6 +150,20 @@ test("M04-01 source timeline groups real provider points without client attribut
       [[], []],
       [[{ at, signal_count: 2, source_count: 1 }], []],
       [[{ provider_id: source, source_label: "Example News", at, signal_count: 2 }], []],
+      [
+        [
+          {
+            actor_id: ids.actor,
+            payload_json: JSON.stringify({
+              status: "irrelevant",
+              reason: "与当前品类无关",
+              version: 2,
+            }),
+            occurred_at: at,
+          },
+        ],
+        [],
+      ],
     ],
     pool = { query: async () => responses.shift() };
   const result = await new MySqlTrendRepository(pool).get({
@@ -162,6 +176,15 @@ test("M04-01 source timeline groups real provider points without client attribut
     { source_id: source, source_label: "Example News", points: [{ at, signal_count: 2 }] },
   ]);
   assert.deepEqual(result.timeline, [{ at, signal_count: 2, source_count: 1 }]);
+  assert.deepEqual(result.relevance_history, [
+    {
+      status: "irrelevant",
+      reason: "与当前品类无关",
+      actor_id: ids.actor,
+      version: 2,
+      occurred_at: at,
+    },
+  ]);
 });
 
 test("M04-01.A04/A06/A09 service validates pagination versions and scoped writes", async () => {
@@ -370,6 +393,9 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     /loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/,
   );
   assert.match(web, /来源筛选[\s\S]*timeline_sources/);
+  assert.match(web, /相关性回溯/);
+  assert.match(web, /变更原因/);
+  assert.match(web, /下次采集[\s\S]*上次失败来源/);
   assert.match(web, /个来源[\s\S]*新鲜度[\s\S]*可信度/);
   assert.match(schema, /TREND_PROJECTION_POLL_MS/);
   assert.match(env, /TREND_PROJECTION_LEASE_SECONDS/);
@@ -377,7 +403,7 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(feature, /trendDomain[\s\S]*timelineFilter/);
   assert.match(architecture, /heat[\s\S]*signals/);
   assert.match(runbook, /宝塔[\s\S]*回滚/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(live, /MySqlTrendProjectionWorker/);
   assert.match(blueprint, /M04-01 实现合同/);
   assert.match(

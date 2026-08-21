@@ -7,6 +7,7 @@ import type {
   DecisionAction,
   OpportunityBlockingReason,
   OpportunityCoverageStatus,
+  OpportunityLifecycle,
   OpportunityCreateInput,
   OpportunityDecision,
   OpportunityService,
@@ -84,6 +85,10 @@ export function registerOpportunityRoutes(app: FastifyInstance, options: Opportu
       ...(query.blocking_reason
         ? { blockingReason: query.blocking_reason as OpportunityBlockingReason }
         : {}),
+      ...(query.lifecycle_status
+        ? { lifecycleStatus: query.lifecycle_status as OpportunityLifecycle }
+        : {}),
+      ...(query.owner_id ? { ownerId: query.owner_id } : {}),
     });
     return envelope(result.items, request, { page, page_size: pageSize, total: result.total });
   });
@@ -95,6 +100,18 @@ export function registerOpportunityRoutes(app: FastifyInstance, options: Opportu
     reply.code(201);
     return envelope(result, request);
   });
+  app.get("/api/v1/opportunities/member-options", async (request) =>
+    envelope(
+      await options.service.memberOptions(await scope(request, "opportunity:read")),
+      request,
+    ),
+  );
+  app.post("/api/v1/opportunities/batch", async (request) =>
+    envelope(
+      await options.service.batch({ ...(await write(request)), value: request.body }),
+      request,
+    ),
+  );
   app.get("/api/v1/opportunities/:id", async (request) =>
     envelope(
       await options.service.get({
@@ -118,5 +135,14 @@ export function registerOpportunityRoutes(app: FastifyInstance, options: Opportu
       }),
       request,
     );
+  });
+  app.post("/api/v1/opportunities/:id/evidence-completion-tasks", async (request, reply) => {
+    const result = await options.service.createEvidenceTask({
+      ...(await write(request)),
+      opportunityId: (request.params as { id: string }).id,
+      value: request.body,
+    });
+    reply.code(result.created ? 201 : 200);
+    return envelope(result, request);
   });
 }

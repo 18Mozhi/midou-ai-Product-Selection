@@ -14,13 +14,17 @@
 
 ## 自动与手动数据流
 
+`@scoutops/provider-sources` 入口只作为兼容导出面；代码内置来源目录位于 `src/catalog/`，纯解析与证据映射位于 `src/parsers/`，网络/浏览器/导入适配器及注册工厂位于 `src/adapters/`。解析器不领取任务、不持有凭证，适配器不重新定义来源目录，调用方继续从包根入口导入以保持现有合同。
+
 1. Node API 启动时以代码目录同步 `providers`。已存在来源只更新合同字段并保留人工状态；新自动频道登记为 `enabled`，待配置与手动来源登记为 `disabled`。
-2. Node Worker 的 `MySqlAutomaticSourceScheduler` 为每个活动组织默认工作区建立 `automatic_source_schedules`。每次按偏移量轮转 16 个自动频道，避免一个任务一次抓取全部频道；完整轮转后等待 15 分钟。
+2. Node Worker 把规则采集与全量目录采集注册为两个独立队列。`MySqlAutomaticSourceScheduler` 为每个活动组织默认工作区建立 `automatic_source_schedules`，按下次时间、上次时间和组织 ID 公平轮转；每次按可配置批量轮转自动频道，完整轮转后等待 15 分钟。创建任务与系统审计只使用受限环境中配置的活动专用系统用户，不再借用任意平台管理员。
 3. 普通成员在热点页点击“立即获取热点”时，`POST /api/v1/provider-sources/refresh` 用当前组织、工作区和幂等键创建一次包含最多 100 个已启用自动频道的任务。
 4. Worker 继续复用 M03-05 状态机、Redis 范围租约和 M03-06 不可变证据链；每条结果带 Provider、Adapter、Parser 和字段路径溯源。
 5. 待配置来源没有适配器且默认禁用，因此不能进入自动任务；系统宁可显示“需要配置”也不把聚合新闻当成该平台官方销量或价格。
 
 ## 1688 浏览器输出合同
+
+`/platform-admin/providers/sources/1688-acceptance` 是 1688 专用验收页，只聚合真实数据库事实：有效且未过期的浏览器档案、最近一次登录态浏览器运行是否成功/是否被验证码阻断、当前解析器版本固定样本回放，以及代码中已登记的负责人和逐项待配置原因。页面与 API 不返回 Cookie、凭证密文、档案 UUID、租约或浏览器输入。1688 从停用切为启用时必须同时满足三项门，旧的解析回放或仅存在档案均不能单独放行。
 
 `1688_search` 现在使用 `1688-browser-contract-v1` 管理浏览器提取器与 Provider 规范化层之间的输出，三类快照必须分别声明 `1688.search.v1`、`1688.offer-detail.v1` 或 `1688.supplier.v1`：
 
@@ -49,6 +53,6 @@
 
 ## 配置与运行边界
 
-`AUTOMATIC_SOURCE_SCHEDULER_POLL_MS` 控制 Worker 检查到期组织的周期，默认 30000 毫秒；修改后需要通过宝塔重启统一后端“ai选品”。通用采集仍复用 `COLLECTION_TASK_*`、`PROVIDER_ADAPTER_*`、`PROVIDER_PROXY_*` 和 `EVIDENCE_*`。
+`AUTOMATIC_SOURCE_SCHEDULER_POLL_MS` 控制 Worker 检查到期组织的周期，`AUTOMATIC_SOURCE_BATCH_SIZE` 控制单批来源数，`AUTOMATIC_SOURCE_TENANT_ACTIVE_TASK_BUDGET` 限制单组织活动自动任务，`AUTOMATIC_SOURCE_QUEUE_BACKLOG_LIMIT` 在全局积压达到门限时停止新增自动任务，`AUTOMATIC_SOURCE_SYSTEM_ACTOR_ID` 必须指向已创建并激活的专用系统用户。任一值修改后都需要通过宝塔重启统一后端“ai选品”。通用采集仍复用 `COLLECTION_TASK_*`、`PROVIDER_ADAPTER_*`、`PROVIDER_PROXY_*` 和 `EVIDENCE_*`。
 
 生产由宝塔管理 Node 后端项目“ai选品”和 Python 3.12 采集项目“ai选品-python”。API/Worker 由 Node 统一后端拉起，Worker 领取业务任务并排队登录型作业；Python 项目领取浏览器作业、维持作业/档案/全局 Crawler 租约并桥接 Playwright，结果仍由 Worker 解析和持久化。当前 1688 字段提取未验收，来源保持停用。不新增独立 Worker、候选后端、面板外服务、负载均衡或多节点能力。

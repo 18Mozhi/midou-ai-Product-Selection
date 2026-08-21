@@ -25,6 +25,23 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
   assert.match(deploy, /verify-release-change-ownership\.mjs/);
   assert.match(deploy, /release-change-ownership\.json/);
+  assert.match(deploy, /EXPECTED_GITHUB_REPOSITORY = "18Mozhi\/midou-ai-Product-Selection"/);
+  assert.match(deploy, /git", "fetch", "--quiet", "--no-tags", "origin", "main"/);
+  assert.match(deploy, /local main and origin\/main must be the same commit/);
+  assert.match(deploy, /merge-base", "--is-ancestor", production_sha, target_sha/);
+  assert.match(
+    deploy,
+    /production BUILD_SHA is not an ancestor in the current approved repository history/,
+  );
+  for (const name of [
+    "RELEASE_SOURCE_LOCAL_SHA",
+    "RELEASE_SOURCE_REMOTE_SHA",
+    "RELEASE_SOURCE_REMOTE_BRANCH",
+    "RELEASE_SOURCE_REPOSITORY",
+  ])
+    assert.match(deploy, new RegExp(name));
+  assert.match(deploy, /\/api\/v1\/health\/available/);
+  assert.match(deploy, /available_status == "available"/);
   assert.match(
     deploy,
     /upload = root \/ \("\.deploy-upload-" \+ v\["build_sha"\] \+ "\.tar\.gz"\)/,
@@ -60,6 +77,12 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     "0051c_provider_parser_sample_operations.up.sql",
     "0052a_amazon_structured_parser.up.sql",
     "0052b_provider_public_compliance.up.sql",
+    "0053_provider_configuration_versions.up.sql",
+    "0054_crawler_succeeded_empty.up.sql",
+    "0055_provider_runtime_circuits.up.sql",
+    "0056_provider_terms_version_expiry.up.sql",
+    "0057_data_quality_issue_workflow.up.sql",
+    "0058_opportunity_archive_stage.up.sql",
   ];
   let previousIndex = -1;
   for (const migration of orderedMigrations) {
@@ -71,7 +94,8 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.doesNotMatch(runner, /readdir|glob/);
 });
 
-test("allowlisted deployment migrations remain single-statement for the locked MySQL runner", async () => {
+test("allowlisted deployment migrations use the locked statement splitter", async () => {
+  const { splitSqlStatements } = await import("../../scripts/apply-deployment-migrations.mjs");
   for (const name of [
     "0040_platform_messages.up.sql",
     "0041_member_workspace_tasks.up.sql",
@@ -94,12 +118,21 @@ test("allowlisted deployment migrations remain single-statement for the locked M
     "0051c_provider_parser_sample_operations.up.sql",
     "0052a_amazon_structured_parser.up.sql",
     "0052b_provider_public_compliance.up.sql",
+    "0053_provider_configuration_versions.up.sql",
+    "0054_crawler_succeeded_empty.up.sql",
+    "0055_provider_runtime_circuits.up.sql",
+    "0056_provider_terms_version_expiry.up.sql",
+    "0057_data_quality_issue_workflow.up.sql",
+    "0058_opportunity_archive_stage.up.sql",
   ]) {
     const sql = await readFile(`database/migrations/${name}`, "utf8");
-    const statements = sql
-      .split(";")
-      .map((value) => value.trim())
-      .filter(Boolean);
-    assert.equal(statements.length, 1, `${name} must remain single-statement`);
+    const statements = splitSqlStatements(sql);
+    assert.ok(statements.length >= 1, `${name} must contain executable SQL`);
+    assert.ok(statements.every((statement) => !statement.includes(";")));
+    assert.equal(
+      statements.length,
+      name === "0054_crawler_succeeded_empty.up.sql" ? 2 : 1,
+      `${name} statement count changed unexpectedly`,
+    );
   }
 });

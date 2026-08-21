@@ -17,10 +17,15 @@ export class ApiClientError extends Error {
     readonly actionHint: string,
     readonly requestId: string,
     readonly traceId: string,
+    options?: ErrorOptions,
   ) {
-    super(userMessage);
+    super(userMessage, options);
     this.name = "ApiClientError";
   }
+}
+
+export function rethrowUnexpectedError(error: unknown) {
+  if (!(error instanceof ApiClientError)) throw error;
 }
 
 const failureKind = (status: number): ApiFailureKind =>
@@ -43,6 +48,12 @@ export interface ApiRequestOptions extends Omit<RequestInit, "body"> {
   traceId?: string;
 }
 
+const SAFE_RETRY_STATUSES = new Set([408, 425, 429, 502, 503, 504]);
+const SAFE_RETRY_DELAYS_MS = [0, 150, 400] as const;
+
+const waitForRetry = (milliseconds: number) =>
+  new Promise<void>((resolve) => window.setTimeout(resolve, milliseconds));
+
 async function requestResponse(
   baseUrl: string,
   path: string,
@@ -63,13 +74,43 @@ async function requestResponse(
   if (!["GET", "HEAD"].includes(method)) {
     headers.set("idempotency-key", options.idempotencyKey ?? crypto.randomUUID());
   }
-  const response = await fetch(`${baseUrl}${path}`, {
-    ...options,
-    method,
-    body,
-    headers,
-    credentials: "include",
-  });
+  const retryableMethod = ["GET", "HEAD"].includes(method);
+  let response: Response | undefined;
+  let networkFailure: unknown;
+  for (let attempt = 0; attempt < SAFE_RETRY_DELAYS_MS.length; attempt += 1) {
+    if (attempt > 0) await waitForRetry(SAFE_RETRY_DELAYS_MS[attempt] ?? 0);
+    try {
+      response = await fetch(`${baseUrl}${path}`, {
+        ...options,
+        method,
+        body,
+        headers,
+        credentials: "include",
+      });
+      networkFailure = undefined;
+    } catch (error) {
+      if (options.signal?.aborted) throw error;
+      networkFailure = error;
+      response = undefined;
+    }
+    const shouldRetry =
+      retryableMethod &&
+      attempt + 1 < SAFE_RETRY_DELAYS_MS.length &&
+      (!response || SAFE_RETRY_STATUSES.has(response.status));
+    if (!shouldRetry) break;
+  }
+  if (!response) {
+    throw new ApiClientError(
+      0,
+      "network_unavailable",
+      "blocked",
+      "网络连接暂不可用。",
+      "请检查网络后重试；系统已完成安全的读取重试。",
+      requestId,
+      traceId,
+      { cause: networkFailure },
+    );
+  }
   if (!response.ok) {
     const payload = await response
       .clone()

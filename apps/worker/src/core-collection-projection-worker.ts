@@ -1,10 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 
-type ProjectionType =
-  | "opportunity_competitors"
-  | "competitor_snapshot"
-  | "sourcing_search";
+type ProjectionType = "opportunity_competitors" | "competitor_snapshot" | "sourcing_search";
 type Job = {
   runId: string;
   taskId: string;
@@ -27,9 +24,7 @@ type RecordRow = RowDataPacket & {
 const parse = <T>(value: unknown): T =>
   (typeof value === "string" ? JSON.parse(value) : value) as T;
 const optionalText = (value: unknown, max = 2048) =>
-  typeof value === "string" && value.trim()
-    ? value.trim().slice(0, max)
-    : null;
+  typeof value === "string" && value.trim() ? value.trim().slice(0, max) : null;
 const optionalNumber = (value: unknown) => {
   if (value == null || value === "") return null;
   const parsed = Number(value);
@@ -112,15 +107,7 @@ export class CoreCollectionProjectionWorker {
       if (!/^[0-9a-f-]{36}$/i.test(resourceId)) throw new Error("projection_target_invalid");
       await c.query(
         "INSERT INTO core_collection_projection_runs(id,organization_id,workspace_id,collection_task_id,projection_type,resource_id,status,item_count,error_code,started_at,finished_at) VALUES(?,?,?,?,?,?,'processing',0,NULL,?,NULL)",
-        [
-          runId,
-          row.organization_id,
-          row.workspace_id,
-          row.id,
-          projectionType,
-          resourceId,
-          now,
-        ],
+        [runId, row.organization_id, row.workspace_id, row.id, projectionType, resourceId, now],
       );
       await c.commit();
       return {
@@ -215,16 +202,10 @@ export class CoreCollectionProjectionWorker {
       );
       const [competitors] = await c.query<RowDataPacket[]>(
         "SELECT id FROM competitors WHERE organization_id=? AND workspace_id=? AND market=? AND source_site='Amazon' AND external_id=? AND deleted_at IS NULL LIMIT 1",
-        [
-          job.organizationId,
-          job.workspaceId,
-          String(opportunities[0].market),
-          asin,
-        ],
+        [job.organizationId, job.workspaceId, String(opportunities[0].market), asin],
       );
       const persistedId = String(competitors[0]?.id ?? competitorId);
-      if (await this.insertSnapshot(c, job, persistedId, record, fields, now, false))
-        count += 1;
+      if (await this.insertSnapshot(c, job, persistedId, record, fields, now, false)) count += 1;
       else if (Number(insert.affectedRows ?? 0)) count += 1;
     }
     await c.query(
@@ -247,18 +228,7 @@ export class CoreCollectionProjectionWorker {
     if (!competitors[0]) throw new Error("competitor_not_found");
     for (const record of records) {
       const fields = parse<Record<string, unknown>>(record.payload_json);
-      if (
-        await this.insertSnapshot(
-          c,
-          job,
-          job.resourceId,
-          record,
-          fields,
-          now,
-          true,
-        )
-      )
-        return 1;
+      if (await this.insertSnapshot(c, job, job.resourceId, record, fields, now, true)) return 1;
     }
     return 0;
   }
@@ -318,20 +288,16 @@ export class CoreCollectionProjectionWorker {
         ],
       );
     } else {
-      await c.query(
-        "UPDATE competitors SET latest_snapshot_id=?,updated_at=? WHERE id=?",
-        [snapshotId, now, competitorId],
-      );
+      await c.query("UPDATE competitors SET latest_snapshot_id=?,updated_at=? WHERE id=?", [
+        snapshotId,
+        now,
+        competitorId,
+      ]);
     }
     return true;
   }
 
-  private async projectSourcing(
-    c: PoolConnection,
-    job: Job,
-    records: RecordRow[],
-    now: Date,
-  ) {
+  private async projectSourcing(c: PoolConnection, job: Job, records: RecordRow[], now: Date) {
     const [searches] = await c.query<RowDataPacket[]>(
       "SELECT id FROM sourcing_searches WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",
       [job.resourceId, job.organizationId, job.workspaceId],

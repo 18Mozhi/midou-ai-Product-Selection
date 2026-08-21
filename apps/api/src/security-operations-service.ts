@@ -1,3 +1,32 @@
-export class SecurityOperationsError extends Error{constructor(readonly code:string,readonly statusCode:number,readonly actionHint:string,message=code){super(message);this.name="SecurityOperationsError";}}
-export interface SecurityOperationsRepository{read(i:any):Promise<any>}
-const windows:any={"24h":24,"7d":168,"30d":720};export class SecurityOperationsService{constructor(private readonly repo:SecurityOperationsRepository,private readonly defaultWindow="24h",private readonly limit=50){}read(i:any){const window=String(i.window??this.defaultWindow);if(!windows[window])throw new SecurityOperationsError("security_operations_window_invalid",400,"选择 24h、7d 或 30d。");return this.repo.read({...i,window,windowHours:windows[window],limit:this.limit});}}
+export class SecurityOperationsError extends Error {
+  constructor(
+    readonly code: string,
+    readonly statusCode: number,
+    readonly actionHint: string,
+    message = code,
+  ) {
+    super(message);
+    this.name = "SecurityOperationsError";
+  }
+}
+export interface SecurityOperationsRepository {
+  read(i: any): Promise<any>;
+}
+const windows: any = { "24h": 24, "7d": 168, "30d": 720 };
+export class SecurityOperationsService {
+  constructor(
+    private readonly repo: SecurityOperationsRepository,
+    private readonly defaultWindow = "24h",
+    private readonly limit = 50,
+  ) {}
+  read(i: any) {
+    const window = String(i.window ?? this.defaultWindow);
+    if (!windows[window])
+      throw new SecurityOperationsError(
+        "security_operations_window_invalid",
+        400,
+        "选择 24h、7d 或 30d。",
+      );
+    return this.repo.read({ ...i, window, windowHours: windows[window], limit: this.limit });
+  }
+}

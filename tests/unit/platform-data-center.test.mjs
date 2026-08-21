@@ -35,8 +35,7 @@ test("platform data service validates entity filters and audited export reasons"
         { actorId: "actor", requestId: "request", traceId: "trace" },
       ),
     (error) =>
-      error instanceof PlatformDashboardError &&
-      error.code === "platform_data_entity_invalid",
+      error instanceof PlatformDashboardError && error.code === "platform_data_entity_invalid",
   );
 });
 
@@ -55,5 +54,7 @@ test("platform data center exposes all required facts quality and audited CSV ex
   assert.match(route, /management\/data\/exports/);
   assert.match(repository, /platform\.data\.export/);
   assert.match(openapi, /platform\/management\/data\/exports/);
-  assert.ok(JSON.parse(feature).implementation.platformDashboard.routes.includes("/platform-admin/data"));
+  assert.ok(
+    JSON.parse(feature).implementation.platformDashboard.routes.includes("/platform-admin/data"),
+  );
 });

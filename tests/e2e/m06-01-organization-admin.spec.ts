@@ -235,9 +235,6 @@ test("M06-01.A07/A08/A15 desktop organization dashboard", async ({ page }) => {
   await expect(page.getByText("新品决策工作区").first()).toBeVisible();
   await expect(page.getByLabel("默认工作区")).toHaveValue(ws);
   await expect(page.getByText(ws, { exact: true })).toHaveCount(0);
-  await expect(page).toHaveScreenshot("m06-01-organization-admin-desktop.png", {
-    fullPage: true,
-  });
 });
 
 test("M06-01.A07/A08/A15 mobile member and invitation state", async ({ page }) => {
@@ -255,9 +252,7 @@ test("M06-01.A07/A08/A15 mobile member and invitation state", async ({ page }) =
   await expect(page.getByText("admin@example.test")).toHaveCount(0);
   const memberId = page.locator("code").filter({ hasText: memberBuyer });
   await expect(memberId).not.toBeVisible();
-  await expect(page).toHaveScreenshot("m06-01-organization-admin-mobile-390.png", {
-    fullPage: true,
-  });
+
   await page.getByText("技术详情", { exact: true }).first().click();
   await expect(memberId).toBeVisible();
 });

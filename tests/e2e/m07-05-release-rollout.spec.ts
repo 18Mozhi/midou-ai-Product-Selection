@@ -32,6 +32,24 @@ const base = {
     status: "healthy",
     finished_at: "2026-08-08T14:55:00Z",
   },
+  latest_historical_release: {
+    id: "release-1",
+    build_sha: "a".repeat(40),
+  },
+  versions: {
+    local: { build_sha: "a".repeat(40) },
+    remote: {
+      build_sha: "a".repeat(40),
+      branch: "main",
+      repository: "18Mozhi/midou-ai-Product-Selection",
+    },
+    production: {
+      build_sha: "a".repeat(40),
+      app_version: "0.1.0",
+      config_fingerprint: "f".repeat(64),
+      migration_version: "0026_release_rollout_m07_05.up.sql",
+    },
+  },
   gates,
   automatic_stop_verified: false,
   rollback_verified: false,

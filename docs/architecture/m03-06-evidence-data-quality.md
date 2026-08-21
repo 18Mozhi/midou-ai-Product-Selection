@@ -16,6 +16,8 @@ Node Worker 先在组织/工作区隔离目录写临时目标，再在事务中�
 
 采集质量页把最近一次已持久化核对中的标题、价格、币种、外部 ID、规范 URL 准确率，以及重复率和来源新鲜度分别展示。页面沿用 `metrics_json` 的真实值、阈值、样本量与 `passed / failed / insufficient_sample`，只将状态中文化；缺少某项核对时显示“暂无核对数据”，不合成没有版本化合同的总准确率。
 
+质量问题列表返回关联证据和核对运行的解析版本，页面可直接进入证据溯源。`0057_data_quality_issue_workflow` 增加活动成员指派与归因事实；批处理一次只接受 1–50 个明确问题和各自 `expected_version`，按固定 ID 顺序加锁，在同一事务完成归因、同组织活动成员指派或关闭。任一对象缺失、已关闭、版本变化或成员不属于全部所选问题的组织时整批失败；每个问题仍追加独立事件与 Outbox，原始证据和核对运行不改写。
+
 ## API、权限与下载
 
 `/platform-admin/data` 及 `/api/v1/platform/data*` 只允许已认证且具备 `platform:operate` 的平台角色。列表可按组织和工作区筛选；服务端仍是权限边界。质量问题解决要求同源 Origin、Idempotency-Key、原因和 `expected_version`。

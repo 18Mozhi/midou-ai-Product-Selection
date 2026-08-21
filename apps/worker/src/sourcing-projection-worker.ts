@@ -1,9 +1,218 @@
-import{randomUUID}from'node:crypto';import type{Pool,RowDataPacket}from'mysql2/promise';
-type Job={id:string;org:string;ws:string;search:string;request:string;trace:string;attempt:number};
-export class SourcingProjectionError extends Error{constructor(readonly code:string,readonly retryable:boolean){super(code);}}
-export class MySqlSourcingProjectionWorker{constructor(private readonly pool:Pool,private readonly workerId:string,private readonly leaseSeconds:number,private readonly now=()=>new Date()){}
- async processOnce(){const job=await this.claim();if(!job)return{status:'idle' as const};try{return{status:'succeeded' as const,job_id:job.id,...await this.project(job)};}catch(e){const x=e instanceof SourcingProjectionError?e:new SourcingProjectionError('sourcing_projection_internal_error',true),status=!x.retryable?'failed_terminal':job.attempt>=4?'dead_letter':'scheduled';await this.finish(job,status,x.code);return{status,job_id:job.id,error_code:x.code};}}
- private async claim():Promise<Job|null>{const c=await this.pool.getConnection(),now=this.now(),expires=new Date(now.getTime()+this.leaseSeconds*1000);try{await c.beginTransaction();const[rows]=await c.query<RowDataPacket[]>("SELECT * FROM sourcing_projection_jobs WHERE status IN ('queued','retry_scheduled','leased') AND available_at<=? AND (lease_expires_at IS NULL OR lease_expires_at<=?) ORDER BY created_at,id LIMIT 1 FOR UPDATE",[now,now]);const r=rows[0];if(!r){await c.commit();return null;}await c.query("UPDATE sourcing_projection_jobs SET status='leased',attempt_count=attempt_count+1,lease_owner=?,lease_expires_at=?,updated_at=? WHERE id=?",[this.workerId,expires,now,r.id]);await c.commit();return{id:String(r.id),org:String(r.organization_id),ws:String(r.workspace_id),search:String(r.search_id),request:String(r.request_id),trace:String(r.trace_id),attempt:Number(r.attempt_count)+1};}catch(e){await c.rollback();throw e;}finally{c.release();}}
- private async project(j:Job){const c=await this.pool.getConnection(),now=this.now();try{await c.beginTransaction();const[s]=await c.query<RowDataPacket[]>('SELECT collection_task_id FROM sourcing_searches WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE',[j.search,j.org,j.ws]);if(!s[0])throw new SourcingProjectionError('sourcing_search_missing',false);const[records]=await c.query<RowDataPacket[]>("SELECT n.*,e.canonical_url,e.captured_at FROM collection_task_evidence_links l JOIN normalized_records n ON n.id=l.normalized_record_id JOIN raw_evidence e ON e.id=l.raw_evidence_id WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=? AND n.status='active' AND n.schema_version='product-supply-csv-v1'",[s[0].collection_task_id,j.org,j.ws]);let count=0;for(const r of records){const payload=typeof r.payload_json==='string'?JSON.parse(r.payload_json):r.payload_json,fields=payload.fields??payload;if(!fields.external_id||!fields.title||!fields.supplier_name||fields.price==null||!fields.currency||!fields.moq||!fields.canonical_url||!fields.observed_at)continue;await c.query("INSERT IGNORE INTO sourcing_candidates (id,organization_id,workspace_id,search_id,provider_id,normalized_record_id,raw_evidence_id,external_id,supplier_name,product_title,specification,moq,quoted_price,currency,lead_time_days,location,original_url,observed_at,confidence_value,status,missing_fields_json,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,NULL,?,?,?,NULL,NULL,?,?,NULL,'incomplete',?,?)",[randomUUID(),j.org,j.ws,j.search,r.provider_id,r.id,r.raw_evidence_id,fields.external_id,fields.supplier_name,fields.title,fields.moq,fields.price,fields.currency,fields.canonical_url,fields.observed_at,JSON.stringify(['specification','lead_time_days','location','confidence_value','stability_status','risk_level']),now]);count++;}const state=count?'completed_with_warnings':'succeeded_empty',missing=count?['specification','lead_time_days','location','confidence_value','stability_status','risk_level']:[];await c.query('UPDATE sourcing_searches SET status=?,candidate_count=?,missing_fields_json=?,updated_at=? WHERE id=?',[state,count,JSON.stringify(missing),now,j.search]);await c.query("UPDATE sourcing_projection_jobs SET status=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? WHERE id=? AND lease_owner=?",[state,now,j.id,this.workerId]);const payload={search_id:j.search,candidate_count:count,status:state,missing_fields:missing},event=randomUUID();await c.query('INSERT INTO sourcing_events (id,organization_id,workspace_id,event_type,resource_id,actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)',[event,j.org,j.ws,'sourcing.search.projected',j.search,this.workerId,JSON.stringify(payload),j.request,j.trace,now]);await c.query("INSERT INTO sourcing_outbox (id,organization_id,workspace_id,event_type,resource_id,payload_json,status,available_at,created_at) VALUES (?,?,?,?,?,?,'queued',?,?)",[event,j.org,j.ws,'sourcing.search.projected',j.search,JSON.stringify(payload),now,now]);await c.commit();return{candidate_count:count,projection_status:state};}catch(e){await c.rollback();throw e;}finally{c.release();}}
- private async finish(j:Job,status:'failed_terminal'|'dead_letter'|'scheduled',code:string){const now=this.now(),stored=status==='scheduled'?'retry_scheduled':status,available=status==='scheduled'?new Date(now.getTime()+[60000,300000,900000][Math.min(j.attempt-1,2)]!):now;await this.pool.query('UPDATE sourcing_projection_jobs SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=?,updated_at=? WHERE id=? AND lease_owner=?',[stored,available,code,now,j.id,this.workerId]);}
+import { randomUUID } from "node:crypto";
+import type { Pool, RowDataPacket } from "mysql2/promise";
+type Job = {
+  id: string;
+  org: string;
+  ws: string;
+  search: string;
+  request: string;
+  trace: string;
+  attempt: number;
+};
+export class SourcingProjectionError extends Error {
+  constructor(
+    readonly code: string,
+    readonly retryable: boolean,
+  ) {
+    super(code);
+  }
+}
+export class MySqlSourcingProjectionWorker {
+  constructor(
+    private readonly pool: Pool,
+    private readonly workerId: string,
+    private readonly leaseSeconds: number,
+    private readonly now = () => new Date(),
+  ) {}
+  async processOnce() {
+    const job = await this.claim();
+    if (!job) return { status: "idle" as const };
+    try {
+      return { status: "succeeded" as const, job_id: job.id, ...(await this.project(job)) };
+    } catch (e) {
+      const x =
+          e instanceof SourcingProjectionError
+            ? e
+            : new SourcingProjectionError("sourcing_projection_internal_error", true),
+        status = !x.retryable ? "failed_terminal" : job.attempt >= 4 ? "dead_letter" : "scheduled";
+      await this.finish(job, status, x.code);
+      return { status, job_id: job.id, error_code: x.code };
+    }
+  }
+  private async claim(): Promise<Job | null> {
+    const c = await this.pool.getConnection(),
+      now = this.now(),
+      expires = new Date(now.getTime() + this.leaseSeconds * 1000);
+    try {
+      await c.beginTransaction();
+      const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT * FROM sourcing_projection_jobs WHERE status IN ('queued','retry_scheduled','leased') AND available_at<=? AND (lease_expires_at IS NULL OR lease_expires_at<=?) ORDER BY created_at,id LIMIT 1 FOR UPDATE",
+        [now, now],
+      );
+      const r = rows[0];
+      if (!r) {
+        await c.commit();
+        return null;
+      }
+      await c.query(
+        "UPDATE sourcing_projection_jobs SET status='leased',attempt_count=attempt_count+1,lease_owner=?,lease_expires_at=?,updated_at=? WHERE id=?",
+        [this.workerId, expires, now, r.id],
+      );
+      await c.commit();
+      return {
+        id: String(r.id),
+        org: String(r.organization_id),
+        ws: String(r.workspace_id),
+        search: String(r.search_id),
+        request: String(r.request_id),
+        trace: String(r.trace_id),
+        attempt: Number(r.attempt_count) + 1,
+      };
+    } catch (e) {
+      await c.rollback();
+      throw e;
+    } finally {
+      c.release();
+    }
+  }
+  private async project(j: Job) {
+    const c = await this.pool.getConnection(),
+      now = this.now();
+    try {
+      await c.beginTransaction();
+      const [s] = await c.query<RowDataPacket[]>(
+        "SELECT collection_task_id FROM sourcing_searches WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
+        [j.search, j.org, j.ws],
+      );
+      if (!s[0]) throw new SourcingProjectionError("sourcing_search_missing", false);
+      const [records] = await c.query<RowDataPacket[]>(
+        "SELECT n.*,e.canonical_url,e.captured_at FROM collection_task_evidence_links l JOIN normalized_records n ON n.id=l.normalized_record_id JOIN raw_evidence e ON e.id=l.raw_evidence_id WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=? AND n.status='active' AND n.schema_version='product-supply-csv-v1'",
+        [s[0].collection_task_id, j.org, j.ws],
+      );
+      let count = 0;
+      for (const r of records) {
+        const payload =
+            typeof r.payload_json === "string" ? JSON.parse(r.payload_json) : r.payload_json,
+          fields = payload.fields ?? payload;
+        if (
+          !fields.external_id ||
+          !fields.title ||
+          !fields.supplier_name ||
+          fields.price == null ||
+          !fields.currency ||
+          !fields.moq ||
+          !fields.canonical_url ||
+          !fields.observed_at
+        )
+          continue;
+        await c.query(
+          "INSERT IGNORE INTO sourcing_candidates (id,organization_id,workspace_id,search_id,provider_id,normalized_record_id,raw_evidence_id,external_id,supplier_name,product_title,specification,moq,quoted_price,currency,lead_time_days,location,original_url,observed_at,confidence_value,status,missing_fields_json,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,NULL,?,?,?,NULL,NULL,?,?,NULL,'incomplete',?,?)",
+          [
+            randomUUID(),
+            j.org,
+            j.ws,
+            j.search,
+            r.provider_id,
+            r.id,
+            r.raw_evidence_id,
+            fields.external_id,
+            fields.supplier_name,
+            fields.title,
+            fields.moq,
+            fields.price,
+            fields.currency,
+            fields.canonical_url,
+            fields.observed_at,
+            JSON.stringify([
+              "specification",
+              "lead_time_days",
+              "location",
+              "confidence_value",
+              "stability_status",
+              "risk_level",
+            ]),
+            now,
+          ],
+        );
+        count++;
+      }
+      const state = count ? "completed_with_warnings" : "succeeded_empty",
+        missing = count
+          ? [
+              "specification",
+              "lead_time_days",
+              "location",
+              "confidence_value",
+              "stability_status",
+              "risk_level",
+            ]
+          : [];
+      await c.query(
+        "UPDATE sourcing_searches SET status=?,candidate_count=?,missing_fields_json=?,updated_at=? WHERE id=?",
+        [state, count, JSON.stringify(missing), now, j.search],
+      );
+      await c.query(
+        "UPDATE sourcing_projection_jobs SET status=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? WHERE id=? AND lease_owner=?",
+        [state, now, j.id, this.workerId],
+      );
+      const payload = {
+          search_id: j.search,
+          candidate_count: count,
+          status: state,
+          missing_fields: missing,
+        },
+        event = randomUUID();
+      await c.query(
+        "INSERT INTO sourcing_events (id,organization_id,workspace_id,event_type,resource_id,actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+        [
+          event,
+          j.org,
+          j.ws,
+          "sourcing.search.projected",
+          j.search,
+          this.workerId,
+          JSON.stringify(payload),
+          j.request,
+          j.trace,
+          now,
+        ],
+      );
+      await c.query(
+        "INSERT INTO sourcing_outbox (id,organization_id,workspace_id,event_type,resource_id,payload_json,status,available_at,created_at) VALUES (?,?,?,?,?,?,'queued',?,?)",
+        [
+          event,
+          j.org,
+          j.ws,
+          "sourcing.search.projected",
+          j.search,
+          JSON.stringify(payload),
+          now,
+          now,
+        ],
+      );
+      await c.commit();
+      return { candidate_count: count, projection_status: state };
+    } catch (e) {
+      await c.rollback();
+      throw e;
+    } finally {
+      c.release();
+    }
+  }
+  private async finish(
+    j: Job,
+    status: "failed_terminal" | "dead_letter" | "scheduled",
+    code: string,
+  ) {
+    const now = this.now(),
+      stored = status === "scheduled" ? "retry_scheduled" : status,
+      available =
+        status === "scheduled"
+          ? new Date(now.getTime() + [60000, 300000, 900000][Math.min(j.attempt - 1, 2)]!)
+          : now;
+    await this.pool.query(
+      "UPDATE sourcing_projection_jobs SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=?,updated_at=? WHERE id=? AND lease_owner=?",
+      [stored, available, code, now, j.id, this.workerId],
+    );
+  }
 }

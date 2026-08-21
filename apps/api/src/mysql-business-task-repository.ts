@@ -59,6 +59,18 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
     }
     return summary;
   }
+  async memberOptions(i: any) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT DISTINCT m.user_id id,u.email label FROM memberships m " +
+        "JOIN users u ON u.id=m.user_id " +
+        "JOIN membership_data_scopes s ON s.membership_id=m.id " +
+        "WHERE m.organization_id=? AND m.status='active' AND u.status='active' " +
+        "AND (s.scope_type='organization' OR (s.scope_type='workspace' AND s.workspace_id=?)) " +
+        "ORDER BY u.email,m.user_id",
+      [i.organizationId, i.workspaceId],
+    );
+    return rows.map((row) => ({ id: String(row.id), label: String(row.label) }));
+  }
   async detail(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT * FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL",
@@ -219,6 +231,46 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
           i.taskId,
         ],
       );
+      let autoScoreJobId: string | null = null,
+        autoScoreStatus: "queued" | "waiting_for_active_rule" | null = null;
+      if (
+        i.value.action === "complete" &&
+        String(r.source_type) === "evidence_completion" &&
+        r.source_ref_id
+      ) {
+        const [rules] = await c.query<RowDataPacket[]>(
+          "SELECT id FROM score_rules WHERE organization_id=? AND workspace_id=? " +
+            "AND status='active' LIMIT 1",
+          [i.organizationId, i.workspaceId],
+        );
+        autoScoreStatus = rules[0] ? "queued" : "waiting_for_active_rule";
+        if (rules[0]) {
+          autoScoreJobId = randomUUID();
+          await c.query(
+            "INSERT INTO opportunity_score_jobs (id,organization_id,workspace_id,opportunity_id," +
+              "score_rule_id,status,attempt_count,available_at,request_id,trace_id,created_at," +
+              "updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
+            [
+              autoScoreJobId,
+              i.organizationId,
+              i.workspaceId,
+              String(r.source_ref_id),
+              String(rules[0].id),
+              now,
+              i.requestId,
+              i.traceId,
+              now,
+              now,
+            ],
+          );
+          await c.query(
+            "UPDATE opportunities SET lifecycle_status=IF(lifecycle_status='archived'," +
+              "lifecycle_status,'validating'),version=version+1,updated_at=? WHERE id=? " +
+              "AND organization_id=? AND workspace_id=?",
+            [now, String(r.source_ref_id), i.organizationId, i.workspaceId],
+          );
+        }
+      }
       const result = {
         id: i.taskId,
         status,
@@ -226,6 +278,8 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
         due_at: iso(due),
         progress_percent: progress,
         version,
+        auto_score_status: autoScoreStatus,
+        auto_score_job_id: autoScoreJobId,
       };
       await this.record(
         c,

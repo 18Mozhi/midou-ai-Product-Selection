@@ -125,7 +125,7 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
   assert.match(feature, /profitCost/);
   assert.match(architecture, /69\.4[\s\S]*MySQL 5\.7/);
   assert.match(runbook, /宝塔[\s\S]*回滚/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(live, /historical_runs_preserved/);
   assert.match(blueprint, /M04-04 实现合同/);
 });

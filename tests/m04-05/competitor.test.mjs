@@ -106,6 +106,9 @@ test("M04-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(ui, /添加竞品步骤[\s\S]*商品链接[\s\S]*市场信息[\s\S]*确认采集/);
   assert.match(ui, /价格与库存时间轴/);
   assert.match(ui, /当前竞品规则[\s\S]*删除竞品监控/);
+  assert.match(ui, /createValidationTask/);
+  assert.match(ui, /生成验证任务/);
+  assert.match(ui, /打开验证任务/);
   assert.match(css, /competitor-comparison[\s\S]*@media\s*\(\s*max-width:\s*820px\s*\)/);
   assert.match(schema, /COMPETITOR_MONITOR_POLL_MS/);
   assert.match(env, /COMPETITOR_MONITOR_LEASE_SECONDS/);
@@ -113,7 +116,7 @@ test("M04-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(feature, /competitorMonitoring[\s\S]*pageFlow/);
   assert.match(architecture, /不可变快照[\s\S]*MySQL 5\.7/);
   assert.match(runbook, /宝塔[\s\S]*回滚/);
-  assert.match(e2e, /基线、变动与阈值[\s\S]*toHaveScreenshot/);
+  assert.match(e2e, /基线、变动与阈值[\s\S]*toBeVisible/);
   assert.match(live, /threshold_alert/);
   assert.match(blueprint, /M04-05 实现合同/);
 });

@@ -2,73 +2,15 @@
 import { computed, onMounted, reactive, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import ProviderParserSampleDialog from "./ProviderParserSampleDialog.vue";
-
-type ViewState = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
-interface ProvisionedSource {
-  id: string;
-  code: string;
-  status: "draft" | "disabled" | "enabled";
-  version: number;
-  schedule_minutes: number;
-  timeout_ms: number;
-  retry_limit: number;
-  updated_at: string;
-  last_success: {
-    task_id: string;
-    status: "succeeded" | "succeeded_empty";
-    available_result_count: number;
-    finished_at: string;
-  } | null;
-}
-interface SourceItem {
-  code: string;
-  name: string;
-  access_mode: string;
-  target_url: string;
-  markets: string[];
-  languages: string[];
-  fields: string[];
-  schedule_minutes: number;
-  timeout_ms: number;
-  retry_limit: number;
-  owner_label: string;
-  category: "news" | "ecommerce" | "data" | "community" | "product_supply";
-  availability: "automatic" | "setup_required" | "manual";
-  policy_note: string;
-  provisioned: ProvisionedSource | null;
-}
-interface ParserSample {
-  id: string;
-  name: string;
-  baseline_parser_version: string;
-  last_replay_status: "never" | "passed" | "changed" | "failed";
-  last_replay_at: string | null;
-  created_at: string;
-}
-interface ParserSampleCandidate {
-  browser_job_id: string;
-  captured_at: string;
-  item_count: number;
-  parser_version: string;
-}
-interface ParserSampleReplay {
-  status: "passed" | "changed" | "failed";
-  diff: Array<{ path: string; before: unknown; after: unknown }>;
-  error_code: string | null;
-}
-interface ConfigurationChange {
-  field: "schedule_minutes" | "timeout_ms" | "retry_limit" | "status";
-  before: number | string | null;
-  after: number | string;
-}
-interface ConfigurationVersion {
-  version: number;
-  action: string;
-  created_at: string;
-  current: boolean;
-  rollback_available: boolean;
-  changes: ConfigurationChange[];
-}
+import type {
+  ConfigurationChange,
+  ConfigurationVersion,
+  ParserSample,
+  ParserSampleCandidate,
+  ParserSampleReplay,
+  ProviderSourceItem as SourceItem,
+  ProviderSourceViewState as ViewState,
+} from "./provider-source-types";
 
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
@@ -77,6 +19,9 @@ const items = ref<SourceItem[]>([]);
 const query = ref("");
 const category = ref("");
 const availability = ref("");
+const market = ref("");
+const language = ref("");
+const accessMode = ref("");
 const message = ref("");
 const requestId = ref("");
 const editing = ref<SourceItem | null>(null);
@@ -114,7 +59,10 @@ const filtered = computed(() =>
           .toLowerCase()
           .includes(term)) &&
       (!category.value || item.category === category.value) &&
-      (!availability.value || item.availability === availability.value)
+      (!availability.value || item.availability === availability.value) &&
+      (!market.value || item.markets.includes(market.value)) &&
+      (!language.value || item.languages.includes(language.value)) &&
+      (!accessMode.value || item.access_mode === accessMode.value)
     );
   }),
 );
@@ -126,6 +74,12 @@ const counts = computed(() => ({
   ).length,
   markets: new Set(items.value.flatMap((item) => item.markets)).size,
 }));
+const marketOptions = computed(() =>
+  [...new Set(items.value.flatMap((item) => item.markets))].sort(),
+);
+const languageOptions = computed(() =>
+  [...new Set(items.value.flatMap((item) => item.languages))].sort(),
+);
 const failure = (status: number): ViewState =>
   status === 401
     ? "expired"
@@ -145,12 +99,12 @@ const categoryText = (value: SourceItem["category"]) =>
 const statusText = (item: SourceItem) => {
   if (item.availability === "automatic")
     return item.provisioned?.status === "enabled"
-      ? "已启用"
+      ? "生产可用"
       : item.provisioned
-        ? "已停用"
+        ? "待配置"
         : "等待同步";
-  if (item.availability === "setup_required") return "待实施";
-  return "手动维护";
+  if (item.availability === "setup_required") return "待配置";
+  return "手工来源";
 };
 const modeText = (value: string) =>
   (
@@ -437,7 +391,22 @@ onMounted(load);
         <option value="">全部状态</option>
         <option value="automatic">自动采集</option>
         <option value="setup_required">需要完成配置</option>
-        <option value="manual">手动来源</option>
+        <option value="manual">手动来源</option></select
+      ><select v-model="market">
+        <option value="">全部地区</option>
+        <option v-for="item in marketOptions" :key="item" :value="item">{{ item }}</option></select
+      ><select v-model="language">
+        <option value="">全部语言</option>
+        <option v-for="item in languageOptions" :key="item" :value="item">
+          {{ item }}
+        </option></select
+      ><select v-model="accessMode">
+        <option value="">全部接入模式</option>
+        <option value="public_rss">公开 RSS/Atom</option>
+        <option value="public_page">公开页面</option>
+        <option value="authenticated_browser">网页登录</option>
+        <option value="import">文件导入</option>
+        <option value="manual">人工录入</option>
       </select>
     </form>
     <p v-if="message" class="source-message" role="status">
@@ -543,6 +512,10 @@ onMounted(load);
             @click="loadParserSamples(item)"
           >
             固定样本回放</button
+          ><RouterLink
+            v-if="item.code === '1688_search'"
+            to="/platform-admin/providers/sources/1688-acceptance"
+            >登录与验证码验收</RouterLink
           ><span v-if="!item.provisioned && item.access_mode !== 'authenticated_browser'"
             >等待系统登记</span
           >
@@ -755,6 +728,7 @@ onMounted(load);
 }
 .source-filter {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 .source-filter input,
@@ -770,6 +744,7 @@ onMounted(load);
 }
 .source-filter input {
   flex: 1;
+  min-width: 280px;
 }
 .source-list {
   display: grid;

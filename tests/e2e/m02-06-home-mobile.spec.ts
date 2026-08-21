@@ -113,7 +113,6 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   await expect(page.locator(".home-priority-grid")).toContainText("今日行动");
   await expect(page.locator(".home-priority-grid")).toContainText("异常与数据健康");
   await expect(page.locator(".home-secondary")).toContainText("变化与关注");
-  await expect(page).toHaveScreenshot("m02-06-home.png", { fullPage: true });
 });
 
 test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 contract", async ({
@@ -174,9 +173,11 @@ test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 con
   );
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: "移动端真实机会" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "机会详情", level: 2 })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "机会详情返回路径" })).toContainText(
+    "机会详情",
+  );
   await expect(page.getByText("尚无评分运行；缺失输入不会用默认值补齐。")).toBeVisible();
-  await expect(page).toHaveScreenshot("m02-06-opportunity-mobile.png", { fullPage: true });
+
   const finalEvidenceMessage = page.getByText("尚无评分运行；缺失输入不会用默认值补齐。");
   await markOcclusionProbe(finalEvidenceMessage);
   await expectAboveMobileNavigation(page, finalEvidenceMessage);

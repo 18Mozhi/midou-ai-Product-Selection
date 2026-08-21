@@ -313,24 +313,23 @@ test("M02-03 platform shell exposes management navigation without member-only sh
 }) => {
   await allow(page, "platform_admin");
   await page.goto("/platform-admin");
+  const sidebar = page.locator(".role-sidebar");
   await expect(page.getByRole("button", { name: /搜索/ })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "通知中心" })).toHaveCount(0);
-  await page.locator("summary").filter({ hasText: "运营中心" }).click();
-  await expect(page.getByRole("link", { name: /通知运营/ })).toHaveAttribute(
+  await expect(sidebar.getByRole("link", { name: /通知运营/ })).toHaveAttribute(
     "href",
     "/platform-admin/notifications",
   );
   await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("href", "/me");
-  await page.locator("summary").filter({ hasText: "账号与组织" }).click();
-  await expect(page.getByRole("link", { name: "组织管理" })).toHaveAttribute(
+  await expect(sidebar.getByRole("link", { name: "组织管理" })).toHaveAttribute(
     "href",
     "/platform-admin/organizations",
   );
-  await expect(page.getByRole("link", { name: "用户管理" })).toHaveAttribute(
+  await expect(sidebar.getByRole("link", { name: "用户管理" })).toHaveAttribute(
     "href",
     "/platform-admin/users",
   );
-  await expect(page.getByRole("link", { name: "管理员管理" })).toHaveAttribute(
+  await expect(sidebar.getByRole("link", { name: "管理员管理" })).toHaveAttribute(
     "href",
     "/platform-admin/admins",
   );
@@ -352,7 +351,13 @@ test("M02-03 explicit routes keep internal navigation reactive and unknown route
   await allow(page, "member");
   await page.goto("/home");
   await page.evaluate(() => ((window as any).__scoutopsRouteMarker = "kept"));
-  await page.getByRole("link", { name: "今日工作" }).click();
+  const routeLink =
+    (page.viewportSize()?.width ?? 1000) <= 720
+      ? page
+          .getByRole("navigation", { name: "移动快捷导航" })
+          .getByRole("link", { name: "今日工作" })
+      : page.locator(".role-sidebar").getByRole("link", { name: "今日工作" });
+  await routeLink.click();
   await expect(page).toHaveURL(/\/work$/);
   expect(await page.evaluate(() => (window as any).__scoutopsRouteMarker)).toBe("kept");
 

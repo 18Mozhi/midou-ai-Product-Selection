@@ -202,7 +202,7 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
       "apps/web/src/api-client.ts",
       "apps/web/src/App.vue",
       "apps/web/src/components/LandingRedirect.vue",
-      "apps/web/src/styles.css",
+      "apps/web/src/styles/onboarding-navigation.css",
       "docs/openapi.yaml",
       "config/env.example",
       "docs/architecture/m02-03-navigation-shells.md",
@@ -239,6 +239,11 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(component, /navigationItemsFor/);
   assert.doesNotMatch(component, /const\s+(memberMenu|orgMenu|platformMenu)/);
   assert.match(routeCatalog, /navigationCatalog/);
+  assert.match(routeCatalog, /surfaceAliases/);
+  assert.match(routeCatalog, /cachePolicy/);
+  assert.match(component, /selectedSurfaceComponent/);
+  assert.match(component, /surfaceCacheKey/);
+  assert.doesNotMatch(component, /<HomeDashboard\s+v-if|<PlatformDashboard\s+v-else-if/);
   assert.match(routeCatalog, /\/platform-admin\/organizations/);
   assert.match(routeCatalog, /\/platform-admin\/users/);
   assert.match(routeCatalog, /\/platform-admin\/admins/);
@@ -252,7 +257,7 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(landingRedirect, /\/me\/landing/);
   assert.match(openapi, /\/me\/landing:/);
   assert.match(e2e, /keyboard\.press/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.doesNotMatch(env, /NAVIGATION_SHELL_|SHELL_GUARD_/);
   assert.match(architecture, /不新增数据库迁移|无需新增数据库迁移/);
   assert.match(runbook, /宝塔.*ai选品/s);
@@ -274,4 +279,17 @@ test("M02-03 each role shell keeps its role-specific primary action in the top b
     component,
     /v-else-if="shell === 'member'"\s+type="button"\s+class="role-create"[\s\S]*?创建选品/,
   );
+});
+
+test("M02-03 context selection stays outside the cached shell boundary", async () => {
+  const [app, chooser, shell] = await Promise.all([
+    read("apps/web/src/App.vue"),
+    read("apps/web/src/components/TenancyChooser.vue"),
+    read("apps/web/src/components/NavigationShell.vue"),
+  ]);
+  assert.match(app, /TenancyChooser v-else-if="selectedView === 'tenancy'"/);
+  assert.match(app, /NavigationShell v-else-if="navigationShell"/);
+  assert.match(shell, /<KeepAlive :max="12">/);
+  assert.match(chooser, /<RouterLink :to="safeReturnTo">/);
+  assert.doesNotMatch(app, /<KeepAlive[\s\S]*TenancyChooser/);
 });

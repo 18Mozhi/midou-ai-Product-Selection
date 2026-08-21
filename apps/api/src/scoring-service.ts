@@ -1,20 +1,315 @@
-import { randomUUID } from 'node:crypto';
+import { randomUUID } from "node:crypto";
 
-export const SCORE_DIMENSIONS=['market_demand','competition','profit','fulfillment_efficiency','customer_experience','content_fit','risk','data_quality'] as const;
-export type ScoreDimension=typeof SCORE_DIMENSIONS[number];
-export type EvidenceGroup='market'|'competition'|'cost'|'other';
-export type ScoreRuleStatus='draft'|'pending_approval'|'approved'|'active'|'retired'|'rolled_back'|'rejected';
-export type ScoreRuleAction='submit'|'approve'|'reject'|'activate'|'rollback';
-export interface ScoreDimensionRule{code:ScoreDimension;label:string;weight:number;required:boolean;evidence_group:EvidenceGroup}
-export interface ScoreThresholds{recommend_min:number;observe_min:number}
-export interface ScoreRule{id:string;version_code:string;name:string;status:ScoreRuleStatus;dimensions:ScoreDimensionRule[];thresholds:ScoreThresholds;revision:number;submitted_at:string|null;approved_at:string|null;activated_at:string|null;updated_at:string}
-export interface ScoreWriteContext{organizationId:string;workspaceId:string;actorId:string;requestId:string;traceId:string;idempotencyKey:string}
-export interface ScoreInput{dimension_code:ScoreDimension;evidence_group:EvidenceGroup;score_value:number|null;source_type:string;source_ref_id:string;evidence_ids:string[];missing_fields:string[];observed_at:string;expected_version:number}
-export class ScoringServiceError extends Error{constructor(readonly code:string,readonly statusCode:number,readonly actionHint:string,message=code){super(message);this.name='ScoringServiceError';}}
-const bounded=(value:unknown,field:string,max:number,pattern?:RegExp)=>{if(typeof value!=='string')throw new ScoringServiceError('scoring_input_invalid',400,`修正 ${field} 后重试。`);const result=value.trim();if(!result||result.length>max||(pattern&&!pattern.test(result)))throw new ScoringServiceError('scoring_input_invalid',400,`修正 ${field} 后重试。`);return result;};
-const uuid=(value:unknown,field:string)=>bounded(value,field,36,/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
-const score=(value:unknown,field:string)=>{if(typeof value!=='number'||!Number.isFinite(value)||value<0||value>100)throw new ScoringServiceError('scoring_input_invalid',400,`${field} 必须为 0–100。`);return Math.round(value*100)/100;};
-export function validateScoreRule(value:{version_code:string;name:string;dimensions:ScoreDimensionRule[];thresholds:ScoreThresholds}){if(!value||!Array.isArray(value.dimensions)||value.dimensions.length<2||value.dimensions.length>SCORE_DIMENSIONS.length)throw new ScoringServiceError('score_rule_invalid',400,'至少配置 2 个不重复评分维度。');const seen=new Set<string>();const dimensions=value.dimensions.map(item=>{if(!SCORE_DIMENSIONS.includes(item?.code)||seen.has(item.code)||!['market','competition','cost','other'].includes(item.evidence_group)||typeof item.required!=='boolean')throw new ScoringServiceError('score_rule_invalid',400,'修正维度代码、证据分组和重复项。');seen.add(item.code);return{code:item.code,label:bounded(item.label,'dimension.label',80),weight:score(item.weight,'dimension.weight'),required:item.required,evidence_group:item.evidence_group};});const weight=Math.round(dimensions.reduce((sum,item)=>sum+item.weight,0)*100)/100;if(weight!==100)throw new ScoringServiceError('score_rule_weight_invalid',400,'维度权重合计必须为 100。');if(!dimensions.some(item=>item.required))throw new ScoringServiceError('score_rule_required_dimension_missing',400,'至少一个维度必须标记为 required。');const thresholds={recommend_min:score(value.thresholds?.recommend_min,'recommend_min'),observe_min:score(value.thresholds?.observe_min,'observe_min')};if(thresholds.recommend_min<=thresholds.observe_min)throw new ScoringServiceError('score_rule_threshold_invalid',400,'recommend_min 必须大于 observe_min。');return{version_code:bounded(value.version_code,'version_code',64,/^[A-Za-z0-9._-]+$/),name:bounded(value.name,'name',160),dimensions,thresholds};}
-export function validateScoreInput(value:ScoreInput){if(!SCORE_DIMENSIONS.includes(value?.dimension_code)||!['market','competition','cost','other'].includes(value?.evidence_group)||!Number.isSafeInteger(value?.expected_version)||value.expected_version<1)throw new ScoringServiceError('score_input_invalid',400,'提交有效维度、证据分组和当前 version。');const evidenceIds=Array.isArray(value.evidence_ids)?[...new Set(value.evidence_ids.map(item=>uuid(item,'evidence_ids')))].slice(0,100):[],missingFields=Array.isArray(value.missing_fields)?[...new Set(value.missing_fields.map(item=>bounded(item,'missing_fields',120,/^[A-Za-z0-9._-]+$/)))].slice(0,100):[];const scoreValue=value.score_value==null?null:score(value.score_value,'score_value');if(scoreValue==null&&!missingFields.length)throw new ScoringServiceError('score_input_missing_reason',400,'缺少评分值时必须列出 missing_fields。');if(scoreValue!=null&&!evidenceIds.length)throw new ScoringServiceError('score_input_evidence_required',400,'评分值必须引用至少一条真实证据。');const observed=new Date(value.observed_at);if(Number.isNaN(observed.valueOf())||observed.valueOf()>Date.now()+300000)throw new ScoringServiceError('score_input_time_invalid',400,'observed_at 必须是有效且不晚于当前时间的时间。');return{dimension_code:value.dimension_code,evidence_group:value.evidence_group,score_value:scoreValue,source_type:bounded(value.source_type,'source_type',80,/^[A-Za-z0-9._-]+$/),source_ref_id:bounded(value.source_ref_id,'source_ref_id',160,/^[A-Za-z0-9._:-]+$/),evidence_ids:evidenceIds,missing_fields:missingFields,observed_at:observed,expected_version:value.expected_version};}
-export interface ScoringRepository{list(input:{organizationId:string;workspaceId:string}):Promise<ScoreRule[]>;create(input:ScoreWriteContext&{id:string;value:ReturnType<typeof validateScoreRule>;route:string}):Promise<ScoreRule>;action(input:ScoreWriteContext&{ruleId:string;action:ScoreRuleAction;reason:string;expectedRevision:number;targetRuleId?:string;route:string}):Promise<ScoreRule>;recordInput(input:ScoreWriteContext&{opportunityId:string;value:ReturnType<typeof validateScoreInput>;route:string}):Promise<{input_id:string;opportunity_id:string;version:number;job_status:'queued'|'waiting_for_active_rule'}>;queue(input:ScoreWriteContext&{opportunityId:string;expectedVersion:number;route:string}):Promise<{job_id:string;opportunity_id:string;version:number}>}
-export class ScoringService{constructor(private readonly repository:ScoringRepository){}list(input:{organizationId:string;workspaceId:string}){return this.repository.list(input);}create(input:ScoreWriteContext&{value:Parameters<typeof validateScoreRule>[0]}){return this.repository.create({...input,id:randomUUID(),value:validateScoreRule(input.value),route:'POST:/api/v1/opportunity-score-rules'});}action(input:ScoreWriteContext&{ruleId:string;value:{action:ScoreRuleAction;reason:string;expected_revision:number;target_rule_id?:string}}){const ruleId=uuid(input.ruleId,'score_rule_id'),action=input.value?.action;if(!['submit','approve','reject','activate','rollback'].includes(action)||!Number.isSafeInteger(input.value.expected_revision)||input.value.expected_revision<1)throw new ScoringServiceError('score_rule_action_invalid',400,'提交有效动作和当前 revision。');const targetRuleId=input.value.target_rule_id?uuid(input.value.target_rule_id,'target_rule_id'):undefined;if(action==='rollback'&&!targetRuleId)throw new ScoringServiceError('score_rule_rollback_target_required',400,'回滚必须指定 target_rule_id。');return this.repository.action({...input,ruleId,action,reason:bounded(input.value.reason,'reason',1000),expectedRevision:input.value.expected_revision,...(targetRuleId?{targetRuleId}:{}),route:`POST:/api/v1/opportunity-score-rules/${ruleId}/actions`});}recordInput(input:ScoreWriteContext&{opportunityId:string;value:ScoreInput}){const opportunityId=uuid(input.opportunityId,'opportunity_id');return this.repository.recordInput({...input,opportunityId,value:validateScoreInput(input.value),route:`POST:/api/v1/opportunities/${opportunityId}/score-inputs`});}queue(input:ScoreWriteContext&{opportunityId:string;value:{expected_version:number}}){const opportunityId=uuid(input.opportunityId,'opportunity_id');if(!Number.isSafeInteger(input.value?.expected_version)||input.value.expected_version<1)throw new ScoringServiceError('score_run_invalid',400,'提交当前 opportunity version。');return this.repository.queue({...input,opportunityId,expectedVersion:input.value.expected_version,route:`POST:/api/v1/opportunities/${opportunityId}/score-runs`});}}
+export const SCORE_DIMENSIONS = [
+  "market_demand",
+  "competition",
+  "profit",
+  "fulfillment_efficiency",
+  "customer_experience",
+  "content_fit",
+  "risk",
+  "data_quality",
+] as const;
+export type ScoreDimension = (typeof SCORE_DIMENSIONS)[number];
+export type EvidenceGroup = "market" | "competition" | "cost" | "other";
+export type ScoreRuleStatus =
+  "draft" | "pending_approval" | "approved" | "active" | "retired" | "rolled_back" | "rejected";
+export type ScoreRuleAction = "submit" | "approve" | "reject" | "activate" | "rollback";
+export interface ScoreDimensionRule {
+  code: ScoreDimension;
+  label: string;
+  weight: number;
+  required: boolean;
+  evidence_group: EvidenceGroup;
+}
+export interface ScoreThresholds {
+  recommend_min: number;
+  observe_min: number;
+}
+export interface ScoreRule {
+  id: string;
+  version_code: string;
+  name: string;
+  status: ScoreRuleStatus;
+  dimensions: ScoreDimensionRule[];
+  thresholds: ScoreThresholds;
+  revision: number;
+  submitted_at: string | null;
+  approved_at: string | null;
+  activated_at: string | null;
+  updated_at: string;
+}
+export interface ScoreWriteContext {
+  organizationId: string;
+  workspaceId: string;
+  actorId: string;
+  requestId: string;
+  traceId: string;
+  idempotencyKey: string;
+}
+export interface ScoreInput {
+  dimension_code: ScoreDimension;
+  evidence_group: EvidenceGroup;
+  score_value: number | null;
+  source_type: string;
+  source_ref_id: string;
+  evidence_ids: string[];
+  missing_fields: string[];
+  observed_at: string;
+  expected_version: number;
+}
+export class ScoringServiceError extends Error {
+  constructor(
+    readonly code: string,
+    readonly statusCode: number,
+    readonly actionHint: string,
+    message = code,
+  ) {
+    super(message);
+    this.name = "ScoringServiceError";
+  }
+}
+const bounded = (value: unknown, field: string, max: number, pattern?: RegExp) => {
+  if (typeof value !== "string")
+    throw new ScoringServiceError("scoring_input_invalid", 400, `修正 ${field} 后重试。`);
+  const result = value.trim();
+  if (!result || result.length > max || (pattern && !pattern.test(result)))
+    throw new ScoringServiceError("scoring_input_invalid", 400, `修正 ${field} 后重试。`);
+  return result;
+};
+const uuid = (value: unknown, field: string) =>
+  bounded(
+    value,
+    field,
+    36,
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+  );
+const score = (value: unknown, field: string) => {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 100)
+    throw new ScoringServiceError("scoring_input_invalid", 400, `${field} 必须为 0–100。`);
+  return Math.round(value * 100) / 100;
+};
+export function validateScoreRule(value: {
+  version_code: string;
+  name: string;
+  dimensions: ScoreDimensionRule[];
+  thresholds: ScoreThresholds;
+}) {
+  if (
+    !value ||
+    !Array.isArray(value.dimensions) ||
+    value.dimensions.length < 2 ||
+    value.dimensions.length > SCORE_DIMENSIONS.length
+  )
+    throw new ScoringServiceError("score_rule_invalid", 400, "至少配置 2 个不重复评分维度。");
+  const seen = new Set<string>();
+  const dimensions = value.dimensions.map((item) => {
+    if (
+      !SCORE_DIMENSIONS.includes(item?.code) ||
+      seen.has(item.code) ||
+      !["market", "competition", "cost", "other"].includes(item.evidence_group) ||
+      typeof item.required !== "boolean"
+    )
+      throw new ScoringServiceError("score_rule_invalid", 400, "修正维度代码、证据分组和重复项。");
+    seen.add(item.code);
+    return {
+      code: item.code,
+      label: bounded(item.label, "dimension.label", 80),
+      weight: score(item.weight, "dimension.weight"),
+      required: item.required,
+      evidence_group: item.evidence_group,
+    };
+  });
+  const weight = Math.round(dimensions.reduce((sum, item) => sum + item.weight, 0) * 100) / 100;
+  if (weight !== 100)
+    throw new ScoringServiceError("score_rule_weight_invalid", 400, "维度权重合计必须为 100。");
+  if (!dimensions.some((item) => item.required))
+    throw new ScoringServiceError(
+      "score_rule_required_dimension_missing",
+      400,
+      "至少一个维度必须标记为 required。",
+    );
+  const thresholds = {
+    recommend_min: score(value.thresholds?.recommend_min, "recommend_min"),
+    observe_min: score(value.thresholds?.observe_min, "observe_min"),
+  };
+  if (thresholds.recommend_min <= thresholds.observe_min)
+    throw new ScoringServiceError(
+      "score_rule_threshold_invalid",
+      400,
+      "recommend_min 必须大于 observe_min。",
+    );
+  return {
+    version_code: bounded(value.version_code, "version_code", 64, /^[A-Za-z0-9._-]+$/),
+    name: bounded(value.name, "name", 160),
+    dimensions,
+    thresholds,
+  };
+}
+export function validateScoreInput(value: ScoreInput) {
+  if (
+    !SCORE_DIMENSIONS.includes(value?.dimension_code) ||
+    !["market", "competition", "cost", "other"].includes(value?.evidence_group) ||
+    !Number.isSafeInteger(value?.expected_version) ||
+    value.expected_version < 1
+  )
+    throw new ScoringServiceError(
+      "score_input_invalid",
+      400,
+      "提交有效维度、证据分组和当前 version。",
+    );
+  const evidenceIds = Array.isArray(value.evidence_ids)
+      ? [...new Set(value.evidence_ids.map((item) => uuid(item, "evidence_ids")))].slice(0, 100)
+      : [],
+    missingFields = Array.isArray(value.missing_fields)
+      ? [
+          ...new Set(
+            value.missing_fields.map((item) =>
+              bounded(item, "missing_fields", 120, /^[A-Za-z0-9._-]+$/),
+            ),
+          ),
+        ].slice(0, 100)
+      : [];
+  const scoreValue = value.score_value == null ? null : score(value.score_value, "score_value");
+  if (scoreValue == null && !missingFields.length)
+    throw new ScoringServiceError(
+      "score_input_missing_reason",
+      400,
+      "缺少评分值时必须列出 missing_fields。",
+    );
+  if (scoreValue != null && !evidenceIds.length)
+    throw new ScoringServiceError(
+      "score_input_evidence_required",
+      400,
+      "评分值必须引用至少一条真实证据。",
+    );
+  const observed = new Date(value.observed_at);
+  if (Number.isNaN(observed.valueOf()) || observed.valueOf() > Date.now() + 300000)
+    throw new ScoringServiceError(
+      "score_input_time_invalid",
+      400,
+      "observed_at 必须是有效且不晚于当前时间的时间。",
+    );
+  return {
+    dimension_code: value.dimension_code,
+    evidence_group: value.evidence_group,
+    score_value: scoreValue,
+    source_type: bounded(value.source_type, "source_type", 80, /^[A-Za-z0-9._-]+$/),
+    source_ref_id: bounded(value.source_ref_id, "source_ref_id", 160, /^[A-Za-z0-9._:-]+$/),
+    evidence_ids: evidenceIds,
+    missing_fields: missingFields,
+    observed_at: observed,
+    expected_version: value.expected_version,
+  };
+}
+export interface ScoringRepository {
+  list(input: { organizationId: string; workspaceId: string }): Promise<ScoreRule[]>;
+  create(
+    input: ScoreWriteContext & {
+      id: string;
+      value: ReturnType<typeof validateScoreRule>;
+      route: string;
+    },
+  ): Promise<ScoreRule>;
+  action(
+    input: ScoreWriteContext & {
+      ruleId: string;
+      action: ScoreRuleAction;
+      reason: string;
+      expectedRevision: number;
+      targetRuleId?: string;
+      route: string;
+    },
+  ): Promise<ScoreRule>;
+  recordInput(
+    input: ScoreWriteContext & {
+      opportunityId: string;
+      value: ReturnType<typeof validateScoreInput>;
+      route: string;
+    },
+  ): Promise<{
+    input_id: string;
+    opportunity_id: string;
+    version: number;
+    job_status: "queued" | "waiting_for_active_rule";
+  }>;
+  queue(
+    input: ScoreWriteContext & { opportunityId: string; expectedVersion: number; route: string },
+  ): Promise<{ job_id: string; opportunity_id: string; version: number }>;
+}
+export class ScoringService {
+  constructor(private readonly repository: ScoringRepository) {}
+  list(input: { organizationId: string; workspaceId: string }) {
+    return this.repository.list(input);
+  }
+  create(input: ScoreWriteContext & { value: Parameters<typeof validateScoreRule>[0] }) {
+    return this.repository.create({
+      ...input,
+      id: randomUUID(),
+      value: validateScoreRule(input.value),
+      route: "POST:/api/v1/opportunity-score-rules",
+    });
+  }
+  action(
+    input: ScoreWriteContext & {
+      ruleId: string;
+      value: {
+        action: ScoreRuleAction;
+        reason: string;
+        expected_revision: number;
+        target_rule_id?: string;
+      };
+    },
+  ) {
+    const ruleId = uuid(input.ruleId, "score_rule_id"),
+      action = input.value?.action;
+    if (
+      !["submit", "approve", "reject", "activate", "rollback"].includes(action) ||
+      !Number.isSafeInteger(input.value.expected_revision) ||
+      input.value.expected_revision < 1
+    )
+      throw new ScoringServiceError(
+        "score_rule_action_invalid",
+        400,
+        "提交有效动作和当前 revision。",
+      );
+    const targetRuleId = input.value.target_rule_id
+      ? uuid(input.value.target_rule_id, "target_rule_id")
+      : undefined;
+    if (action === "rollback" && !targetRuleId)
+      throw new ScoringServiceError(
+        "score_rule_rollback_target_required",
+        400,
+        "回滚必须指定 target_rule_id。",
+      );
+    return this.repository.action({
+      ...input,
+      ruleId,
+      action,
+      reason: bounded(input.value.reason, "reason", 1000),
+      expectedRevision: input.value.expected_revision,
+      ...(targetRuleId ? { targetRuleId } : {}),
+      route: `POST:/api/v1/opportunity-score-rules/${ruleId}/actions`,
+    });
+  }
+  recordInput(input: ScoreWriteContext & { opportunityId: string; value: ScoreInput }) {
+    const opportunityId = uuid(input.opportunityId, "opportunity_id");
+    return this.repository.recordInput({
+      ...input,
+      opportunityId,
+      value: validateScoreInput(input.value),
+      route: `POST:/api/v1/opportunities/${opportunityId}/score-inputs`,
+    });
+  }
+  queue(input: ScoreWriteContext & { opportunityId: string; value: { expected_version: number } }) {
+    const opportunityId = uuid(input.opportunityId, "opportunity_id");
+    if (!Number.isSafeInteger(input.value?.expected_version) || input.value.expected_version < 1)
+      throw new ScoringServiceError("score_run_invalid", 400, "提交当前 opportunity version。");
+    return this.repository.queue({
+      ...input,
+      opportunityId,
+      expectedVersion: input.value.expected_version,
+      route: `POST:/api/v1/opportunities/${opportunityId}/score-runs`,
+    });
+  }
+}

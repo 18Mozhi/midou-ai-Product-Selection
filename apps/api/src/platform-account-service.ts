@@ -1,31 +1,356 @@
-import{ApiError}from'./api-foundation.js';
-import type{PasswordHasher}from'@scoutops/auth';
-import{normalizeEmail}from'@scoutops/auth';
-export class PlatformAccountError extends ApiError{constructor(code:string,statusCode:number,actionHint:string){super(statusCode,code,code,actionHint);this.name='PlatformAccountError';}}
-export interface PlatformAccountRepository{
-  overview(input:{query:string;status:string;limit:number}):Promise<unknown>;
-  createOrganization(input:{name:string;slug:string;initialAdminUserId:string;actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date;route:string}):Promise<unknown>;
-  updateOrganization(input:{organizationId:string;name:string;timezone:string;dataRetentionDays:number;reason:string;actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date;route:string}):Promise<unknown>;
-  createUser(input:{userId:string;email:string;passwordHash:string;platformRoleCode:null|'platform_operations_admin'|'platform_security_admin'|'platform_super_admin';organizationId:string|null;organizationRoleCode:'member'|'organization_admin';actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date;route:string}):Promise<unknown>;
-  userDetail(input:{userId:string}):Promise<unknown>;
-  resetUserPassword(input:{userId:string;passwordHash:string;reason:string;actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date;route:string}):Promise<unknown>;
-  revokeUserSessions(input:{userId:string;sessionId:string|null;reason:string;actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date;route:string}):Promise<unknown>;
-  setOrganizationStatus(input:{organizationId:string;status:'active'|'archived';reason:string;actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date}):Promise<unknown>;
-  setUserStatus(input:{userId:string;status:'active'|'disabled';reason:string;actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date}):Promise<unknown>;
-  setPlatformRole(input:{userId:string;roleCode:'platform_operations_admin'|'platform_security_admin'|'platform_super_admin';enabled:boolean;reason:string;actorId:string;idempotencyKey:string;requestId:string;traceId:string;now:Date}):Promise<unknown>;
+import { ApiError } from "./api-foundation.js";
+import type { PasswordHasher } from "@scoutops/auth";
+import { normalizeEmail } from "@scoutops/auth";
+export class PlatformAccountError extends ApiError {
+  constructor(code: string, statusCode: number, actionHint: string) {
+    super(statusCode, code, code, actionHint);
+    this.name = "PlatformAccountError";
+  }
 }
-const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const reason=(value:unknown)=>{if(typeof value!=='string'||value.trim().length<2||value.trim().length>300)throw new PlatformAccountError('reason_invalid',400,'填写 2–300 字的操作原因。');return value.trim();};
-export class PlatformAccountService{
-  constructor(private readonly repository:PlatformAccountRepository,private readonly now:()=>Date=()=>new Date(),private readonly passwordHasher?:PasswordHasher,private readonly passwordMinLength=12,private readonly passwordMaxLength=256){}
-  overview(query:unknown,status:unknown){return this.repository.overview({query:typeof query==='string'?query.trim().slice(0,120):'',status:typeof status==='string'?status.trim().slice(0,30):'',limit:200});}
-  createOrganization(value:any,context:{actorId:string;idempotencyKey:string;requestId:string;traceId:string}){const name=String(value?.name??'').trim(),slug=String(value?.slug??'').trim().toLowerCase(),initialAdminUserId=value?.initial_admin_user_id?String(value.initial_admin_user_id):context.actorId;if(name.length<2||name.length>120)throw new PlatformAccountError('organization_name_invalid',400,'组织名称需 2–120 个字。');if(!/^[a-z0-9][a-z0-9-]{1,62}$/.test(slug))throw new PlatformAccountError('organization_slug_invalid',400,'组织标识使用 2–63 位小写字母、数字或连字符。');if(!uuid.test(initialAdminUserId))throw new PlatformAccountError('initial_admin_user_id_invalid',400,'选择有效的首位组织管理员。');return this.repository.createOrganization({name,slug,initialAdminUserId,...context,route:'/platform/accounts/organizations',now:this.now()});}
-  updateOrganization(id:string,value:any,context:{actorId:string;idempotencyKey:string;requestId:string;traceId:string}){if(!uuid.test(id))throw new PlatformAccountError('organization_id_invalid',400,'刷新组织列表后重试。');const name=String(value?.name??'').trim(),timezone=String(value?.timezone??'').trim(),dataRetentionDays=Number(value?.data_retention_days);if(name.length<2||name.length>120)throw new PlatformAccountError('organization_name_invalid',400,'组织名称需 2–120 个字。');if(!timezone||timezone.length>64)throw new PlatformAccountError('organization_timezone_invalid',400,'填写有效时区。');if(!Number.isInteger(dataRetentionDays)||dataRetentionDays<30||dataRetentionDays>3650)throw new PlatformAccountError('organization_retention_invalid',400,'数据保留天数需为 30–3650。');return this.repository.updateOrganization({organizationId:id,name,timezone,dataRetentionDays,reason:reason(value?.reason),...context,route:'/platform/accounts/organizations/update',now:this.now()});}
-  async createUser(value:any,context:{actorId:string;idempotencyKey:string;requestId:string;traceId:string}){const email=normalizeEmail(String(value?.email??'')),password=String(value?.temporary_password??''),platformRoleCode=value?.platform_role_code?String(value.platform_role_code):null,organizationId=value?.organization_id?String(value.organization_id):null,organizationRoleCode=value?.organization_role_code==='organization_admin'?'organization_admin':'member';if(!this.passwordHasher)throw new PlatformAccountError('password_hasher_unavailable',503,'重启 Node API 后重试。');if(password.length<this.passwordMinLength||password.length>this.passwordMaxLength)throw new PlatformAccountError('temporary_password_invalid',400,`临时密码长度需为 ${this.passwordMinLength}–${this.passwordMaxLength} 个字符。`);if(platformRoleCode!==null&&!['platform_operations_admin','platform_security_admin','platform_super_admin'].includes(platformRoleCode))throw new PlatformAccountError('platform_role_invalid',400,'选择有效的平台角色。');if(organizationId!==null&&!uuid.test(organizationId))throw new PlatformAccountError('organization_id_invalid',400,'选择有效组织。');return this.repository.createUser({userId:crypto.randomUUID(),email,passwordHash:await this.passwordHasher.hash(password),platformRoleCode:platformRoleCode as any,organizationId,organizationRoleCode,...context,route:'/platform/accounts/users',now:this.now()});}
-  userDetail(id:string){if(!uuid.test(id))throw new PlatformAccountError('user_id_invalid',400,'刷新用户列表后重试。');return this.repository.userDetail({userId:id});}
-  async resetUserPassword(id:string,value:any,context:{actorId:string;idempotencyKey:string;requestId:string;traceId:string}){if(!uuid.test(id))throw new PlatformAccountError('user_id_invalid',400,'刷新用户列表后重试。');if(!this.passwordHasher)throw new PlatformAccountError('password_hasher_unavailable',503,'重启 Node API 后重试。');const password=String(value?.temporary_password??'');if(password.length<this.passwordMinLength||password.length>this.passwordMaxLength)throw new PlatformAccountError('temporary_password_invalid',400,`临时密码长度需为 ${this.passwordMinLength}–${this.passwordMaxLength} 个字符。`);return this.repository.resetUserPassword({userId:id,passwordHash:await this.passwordHasher.hash(password),reason:reason(value?.reason),...context,route:'/platform/accounts/users/password',now:this.now()});}
-  revokeUserSessions(id:string,value:any,context:{actorId:string;idempotencyKey:string;requestId:string;traceId:string}){if(!uuid.test(id))throw new PlatformAccountError('user_id_invalid',400,'刷新用户列表后重试。');const sessionId=value?.session_id?String(value.session_id):null;if(sessionId!==null&&!uuid.test(sessionId))throw new PlatformAccountError('session_id_invalid',400,'刷新会话列表后重试。');return this.repository.revokeUserSessions({userId:id,sessionId,reason:reason(value?.reason),...context,route:'/platform/accounts/users/sessions/revoke',now:this.now()});}
-  organizationStatus(id:string,value:any,context:{actorId:string;idempotencyKey:string;requestId:string;traceId:string}){if(!uuid.test(id))throw new PlatformAccountError('organization_id_invalid',400,'刷新组织列表后重试。');const status=value?.status;if(!['active','archived'].includes(status))throw new PlatformAccountError('organization_status_invalid',400,'选择启用或停用。');return this.repository.setOrganizationStatus({organizationId:id,status,reason:reason(value?.reason),...context,now:this.now()});}
-  userStatus(id:string,value:any,context:{actorId:string;idempotencyKey:string;requestId:string;traceId:string}){if(!uuid.test(id))throw new PlatformAccountError('user_id_invalid',400,'刷新用户列表后重试。');const status=value?.status;if(!['active','disabled'].includes(status))throw new PlatformAccountError('user_status_invalid',400,'选择启用或停用。');if(id===context.actorId&&status==='disabled')throw new PlatformAccountError('cannot_disable_self',409,'不能停用当前登录账号，请由另一位超级管理员操作。');return this.repository.setUserStatus({userId:id,status,reason:reason(value?.reason),...context,now:this.now()});}
-  platformRole(id:string,value:any,context:{actorId:string;idempotencyKey:string;requestId:string;traceId:string}){if(!uuid.test(id))throw new PlatformAccountError('user_id_invalid',400,'刷新管理员列表后重试。');const roleCode=value?.role_code;if(!['platform_operations_admin','platform_security_admin','platform_super_admin'].includes(roleCode)||typeof value?.enabled!=='boolean')throw new PlatformAccountError('platform_role_invalid',400,'选择有效的平台角色和授权状态。');if(id===context.actorId&&roleCode==='platform_super_admin'&&!value.enabled)throw new PlatformAccountError('cannot_revoke_self_superadmin',409,'不能撤销自己的超级管理员角色。');return this.repository.setPlatformRole({userId:id,roleCode,enabled:value.enabled,reason:reason(value?.reason),...context,now:this.now()});}
+export interface PlatformAccountRepository {
+  overview(input: { query: string; status: string; limit: number }): Promise<unknown>;
+  createOrganization(input: {
+    name: string;
+    slug: string;
+    initialAdminUserId: string;
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+    route: string;
+  }): Promise<unknown>;
+  updateOrganization(input: {
+    organizationId: string;
+    name: string;
+    timezone: string;
+    dataRetentionDays: number;
+    reason: string;
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+    route: string;
+  }): Promise<unknown>;
+  createUser(input: {
+    userId: string;
+    email: string;
+    passwordHash: string;
+    platformRoleCode:
+      null | "platform_operations_admin" | "platform_security_admin" | "platform_super_admin";
+    organizationId: string | null;
+    organizationRoleCode: "member" | "organization_admin";
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+    route: string;
+  }): Promise<unknown>;
+  userDetail(input: { userId: string }): Promise<unknown>;
+  resetUserPassword(input: {
+    userId: string;
+    passwordHash: string;
+    reason: string;
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+    route: string;
+  }): Promise<unknown>;
+  revokeUserSessions(input: {
+    userId: string;
+    sessionId: string | null;
+    reason: string;
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+    route: string;
+  }): Promise<unknown>;
+  setOrganizationStatus(input: {
+    organizationId: string;
+    status: "active" | "archived";
+    reason: string;
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<unknown>;
+  setUserStatus(input: {
+    userId: string;
+    status: "active" | "disabled";
+    reason: string;
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<unknown>;
+  setPlatformRole(input: {
+    userId: string;
+    roleCode: "platform_operations_admin" | "platform_security_admin" | "platform_super_admin";
+    enabled: boolean;
+    reason: string;
+    actorId: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<unknown>;
+}
+const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const reason = (value: unknown) => {
+  if (typeof value !== "string" || value.trim().length < 2 || value.trim().length > 300)
+    throw new PlatformAccountError("reason_invalid", 400, "填写 2–300 字的操作原因。");
+  return value.trim();
+};
+export class PlatformAccountService {
+  constructor(
+    private readonly repository: PlatformAccountRepository,
+    private readonly now: () => Date = () => new Date(),
+    private readonly passwordHasher?: PasswordHasher,
+    private readonly passwordMinLength = 12,
+    private readonly passwordMaxLength = 256,
+  ) {}
+  overview(query: unknown, status: unknown) {
+    return this.repository.overview({
+      query: typeof query === "string" ? query.trim().slice(0, 120) : "",
+      status: typeof status === "string" ? status.trim().slice(0, 30) : "",
+      limit: 200,
+    });
+  }
+  createOrganization(
+    value: any,
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    const name = String(value?.name ?? "").trim(),
+      slug = String(value?.slug ?? "")
+        .trim()
+        .toLowerCase(),
+      initialAdminUserId = value?.initial_admin_user_id
+        ? String(value.initial_admin_user_id)
+        : context.actorId;
+    if (name.length < 2 || name.length > 120)
+      throw new PlatformAccountError("organization_name_invalid", 400, "组织名称需 2–120 个字。");
+    if (!/^[a-z0-9][a-z0-9-]{1,62}$/.test(slug))
+      throw new PlatformAccountError(
+        "organization_slug_invalid",
+        400,
+        "组织标识使用 2–63 位小写字母、数字或连字符。",
+      );
+    if (!uuid.test(initialAdminUserId))
+      throw new PlatformAccountError(
+        "initial_admin_user_id_invalid",
+        400,
+        "选择有效的首位组织管理员。",
+      );
+    return this.repository.createOrganization({
+      name,
+      slug,
+      initialAdminUserId,
+      ...context,
+      route: "/platform/accounts/organizations",
+      now: this.now(),
+    });
+  }
+  updateOrganization(
+    id: string,
+    value: any,
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    if (!uuid.test(id))
+      throw new PlatformAccountError("organization_id_invalid", 400, "刷新组织列表后重试。");
+    const name = String(value?.name ?? "").trim(),
+      timezone = String(value?.timezone ?? "").trim(),
+      dataRetentionDays = Number(value?.data_retention_days);
+    if (name.length < 2 || name.length > 120)
+      throw new PlatformAccountError("organization_name_invalid", 400, "组织名称需 2–120 个字。");
+    if (!timezone || timezone.length > 64)
+      throw new PlatformAccountError("organization_timezone_invalid", 400, "填写有效时区。");
+    if (!Number.isInteger(dataRetentionDays) || dataRetentionDays < 30 || dataRetentionDays > 3650)
+      throw new PlatformAccountError(
+        "organization_retention_invalid",
+        400,
+        "数据保留天数需为 30–3650。",
+      );
+    return this.repository.updateOrganization({
+      organizationId: id,
+      name,
+      timezone,
+      dataRetentionDays,
+      reason: reason(value?.reason),
+      ...context,
+      route: "/platform/accounts/organizations/update",
+      now: this.now(),
+    });
+  }
+  async createUser(
+    value: any,
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    const email = normalizeEmail(String(value?.email ?? "")),
+      password = String(value?.temporary_password ?? ""),
+      platformRoleCode = value?.platform_role_code ? String(value.platform_role_code) : null,
+      organizationId = value?.organization_id ? String(value.organization_id) : null,
+      organizationRoleCode =
+        value?.organization_role_code === "organization_admin" ? "organization_admin" : "member";
+    if (!this.passwordHasher)
+      throw new PlatformAccountError("password_hasher_unavailable", 503, "重启 Node API 后重试。");
+    if (password.length < this.passwordMinLength || password.length > this.passwordMaxLength)
+      throw new PlatformAccountError(
+        "temporary_password_invalid",
+        400,
+        `临时密码长度需为 ${this.passwordMinLength}–${this.passwordMaxLength} 个字符。`,
+      );
+    if (
+      platformRoleCode !== null &&
+      !["platform_operations_admin", "platform_security_admin", "platform_super_admin"].includes(
+        platformRoleCode,
+      )
+    )
+      throw new PlatformAccountError("platform_role_invalid", 400, "选择有效的平台角色。");
+    if (organizationId !== null && !uuid.test(organizationId))
+      throw new PlatformAccountError("organization_id_invalid", 400, "选择有效组织。");
+    return this.repository.createUser({
+      userId: crypto.randomUUID(),
+      email,
+      passwordHash: await this.passwordHasher.hash(password),
+      platformRoleCode: platformRoleCode as any,
+      organizationId,
+      organizationRoleCode,
+      ...context,
+      route: "/platform/accounts/users",
+      now: this.now(),
+    });
+  }
+  userDetail(id: string) {
+    if (!uuid.test(id))
+      throw new PlatformAccountError("user_id_invalid", 400, "刷新用户列表后重试。");
+    return this.repository.userDetail({ userId: id });
+  }
+  async resetUserPassword(
+    id: string,
+    value: any,
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    if (!uuid.test(id))
+      throw new PlatformAccountError("user_id_invalid", 400, "刷新用户列表后重试。");
+    if (!this.passwordHasher)
+      throw new PlatformAccountError("password_hasher_unavailable", 503, "重启 Node API 后重试。");
+    const password = String(value?.temporary_password ?? "");
+    if (password.length < this.passwordMinLength || password.length > this.passwordMaxLength)
+      throw new PlatformAccountError(
+        "temporary_password_invalid",
+        400,
+        `临时密码长度需为 ${this.passwordMinLength}–${this.passwordMaxLength} 个字符。`,
+      );
+    return this.repository.resetUserPassword({
+      userId: id,
+      passwordHash: await this.passwordHasher.hash(password),
+      reason: reason(value?.reason),
+      ...context,
+      route: "/platform/accounts/users/password",
+      now: this.now(),
+    });
+  }
+  revokeUserSessions(
+    id: string,
+    value: any,
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    if (!uuid.test(id))
+      throw new PlatformAccountError("user_id_invalid", 400, "刷新用户列表后重试。");
+    const sessionId = value?.session_id ? String(value.session_id) : null;
+    if (sessionId !== null && !uuid.test(sessionId))
+      throw new PlatformAccountError("session_id_invalid", 400, "刷新会话列表后重试。");
+    return this.repository.revokeUserSessions({
+      userId: id,
+      sessionId,
+      reason: reason(value?.reason),
+      ...context,
+      route: "/platform/accounts/users/sessions/revoke",
+      now: this.now(),
+    });
+  }
+  organizationStatus(
+    id: string,
+    value: any,
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    if (!uuid.test(id))
+      throw new PlatformAccountError("organization_id_invalid", 400, "刷新组织列表后重试。");
+    const status = value?.status;
+    if (!["active", "archived"].includes(status))
+      throw new PlatformAccountError("organization_status_invalid", 400, "选择启用或停用。");
+    return this.repository.setOrganizationStatus({
+      organizationId: id,
+      status,
+      reason: reason(value?.reason),
+      ...context,
+      now: this.now(),
+    });
+  }
+  userStatus(
+    id: string,
+    value: any,
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    if (!uuid.test(id))
+      throw new PlatformAccountError("user_id_invalid", 400, "刷新用户列表后重试。");
+    const status = value?.status;
+    if (!["active", "disabled"].includes(status))
+      throw new PlatformAccountError("user_status_invalid", 400, "选择启用或停用。");
+    if (id === context.actorId && status === "disabled")
+      throw new PlatformAccountError(
+        "cannot_disable_self",
+        409,
+        "不能停用当前登录账号，请由另一位超级管理员操作。",
+      );
+    return this.repository.setUserStatus({
+      userId: id,
+      status,
+      reason: reason(value?.reason),
+      ...context,
+      now: this.now(),
+    });
+  }
+  platformRole(
+    id: string,
+    value: any,
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    if (!uuid.test(id))
+      throw new PlatformAccountError("user_id_invalid", 400, "刷新管理员列表后重试。");
+    const roleCode = value?.role_code;
+    if (
+      !["platform_operations_admin", "platform_security_admin", "platform_super_admin"].includes(
+        roleCode,
+      ) ||
+      typeof value?.enabled !== "boolean"
+    )
+      throw new PlatformAccountError(
+        "platform_role_invalid",
+        400,
+        "选择有效的平台角色和授权状态。",
+      );
+    if (id === context.actorId && roleCode === "platform_super_admin" && !value.enabled)
+      throw new PlatformAccountError(
+        "cannot_revoke_self_superadmin",
+        409,
+        "不能撤销自己的超级管理员角色。",
+      );
+    return this.repository.setPlatformRole({
+      userId: id,
+      roleCode,
+      enabled: value.enabled,
+      reason: reason(value?.reason),
+      ...context,
+      now: this.now(),
+    });
+  }
 }

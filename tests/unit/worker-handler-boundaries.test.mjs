@@ -34,4 +34,7 @@ test("worker entrypoint only orchestrates independently implemented queue handle
   });
   assert.doesNotMatch(index, /\b(?:SELECT|INSERT|UPDATE|DELETE)\b/iu);
   assert.doesNotMatch(index, /class\s+\w*(?:Worker|Repository)\b/u);
+  assert.ok(index.split(/\r?\n/u).length < 400);
+  assert.match(index, /WorkerPollers/);
+  assert.match(await readFile("apps/worker/src/worker-pollers.ts", "utf8"), /activeQueues/);
 });

@@ -20,10 +20,7 @@ const ids = (r: FastifyRequest) => ({
     request_id: ids(r).requestId,
     trace_id: ids(r).traceId,
   });
-export function registerReportRoutes(
-  app: FastifyInstance,
-  o: ReportRouteOptions,
-) {
+export function registerReportRoutes(app: FastifyInstance, o: ReportRouteOptions) {
   const scope = async (r: FastifyRequest) => {
       const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
         x = await o.authorization.resolveSession(a.user.id, a.session.id);
@@ -43,12 +40,7 @@ export function registerReportRoutes(
     },
     write = async (r: FastifyRequest) => {
       if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ScoutOps 页面重试。",
-        );
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
       return {
         ...(await scope(r)),
         ...ids(r),
@@ -99,10 +91,7 @@ export function registerReportRoutes(
     });
     reply
       .header("content-type", "text/csv; charset=utf-8")
-      .header(
-        "content-disposition",
-        `attachment; filename="${x.item.filename}"`,
-      )
+      .header("content-disposition", `attachment; filename="${x.item.filename}"`)
       .header("cache-control", "private, no-store");
     return reply.send(x.content);
   });

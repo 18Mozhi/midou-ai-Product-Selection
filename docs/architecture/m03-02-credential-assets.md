@@ -13,6 +13,7 @@ M03-02 交付平台全局的 `credential_assets` 与 `crawler_profiles`。账号
 - `credential_assets` 保存当前密文；`credential_asset_versions` 保存 create、rotate、revoke 的不可变密文版本、操作人和 request_id/trace_id。
 - `credential_asset_operations` 与 `crawler_profile_operations` 以操作人、路由和 Idempotency-Key 唯一；所有写入使用 MySQL 5.7 事务和乐观锁。
 - `crawler_profiles` 只能引用同一 Provider 下 active、类型为 `browser_profile` 或 `cookie_bundle` 的凭证资产；版本快照保存于 `crawler_profile_versions`。
+- 凭证页面的“账号与来源兼容矩阵”只按 `provider_id` 的真实绑定、凭证未撤销且未过期、运行档案为 active 三项事实判定登录采集可用；不跨来源推断账号兼容性，也不回显任何登录秘密。
 - 浏览器凭证轮换在同一事务完成活动续期任务并恢复关联登录作业：仍处于执行期的作业原位回到 `queued`；已经因登录问题终态的采集任务保留全部历史、标记为 `automatically_replayed`，再复制子查询创建新的 `scheduled` 任务。轮换只校验凭证格式、域名绑定和显式有效期，新的重放才验证真实登录；登录仍无效时会再次受阻并重新创建续期任务。
 - 撤销不可恢复，历史密文与审计保留；撤销后轮换失败关闭。
 

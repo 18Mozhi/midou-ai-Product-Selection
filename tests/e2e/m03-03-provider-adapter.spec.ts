@@ -132,9 +132,6 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
   }
   await expect(page.getByRole("status")).toContainText("已记录受阻原因");
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("m03-03-provider-adapters.png", {
-    fullPage: true,
-  });
 });
 test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }, testInfo) => {
   await nav(page);

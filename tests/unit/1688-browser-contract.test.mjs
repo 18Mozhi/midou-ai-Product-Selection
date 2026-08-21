@@ -67,10 +67,7 @@ test("1688 search contract reports missing price MOQ and location without invent
   });
 
   assert.equal(records[0].payload.fields.price, null);
-  assert.equal(
-    records[0].payload.fields.missing_fields_json,
-    '["quoted_price","moq","location"]',
-  );
+  assert.equal(records[0].payload.fields.missing_fields_json, '["quoted_price","moq","location"]');
 });
 
 test("1688 offer-detail contract keeps specification and lead-time separate from search", () => {

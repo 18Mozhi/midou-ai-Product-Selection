@@ -213,6 +213,9 @@ test("M05-02.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(values[2], /approval_version_conflict[\s\S]*outbox_events/);
   assert.match(values[4], /node_sla_overdue[\s\S]*approval\.overdue/);
   assert.match(values[5], /证据完整度[\s\S]*规则版本[\s\S]*决策依据[\s\S]*批准与驳回均必填/);
+  assert.match(values[5], /expected_revision/);
+  assert.match(values[5], /发布审批模板[\s\S]*发布原因/);
+  assert.doesNotMatch(values[5], /window\.prompt/);
   assert.equal(JSON.parse(values.at(-2)).atomicTasks.length, 17);
   assert.match(values.at(-1), /0047_approval_decision_context_snapshot\.up\.sql/);
 });

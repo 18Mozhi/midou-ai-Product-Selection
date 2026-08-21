@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { createLeaseToken, hashLeaseToken } from "@scoutops/playwright-crawler";
 
 export type CrawlerRuntimeStatus =
-  "running" | "succeeded" | "blocked" | "failed" | "timed_out" | "cancelled";
+  "running" | "succeeded" | "succeeded_empty" | "blocked" | "failed" | "timed_out" | "cancelled";
 export interface CrawlerRunSummary {
   id: string;
   organization_id: string;
@@ -30,6 +30,7 @@ export interface CrawlerProfileRuntime {
   target_domain: string;
   credential_expires_at: string | null;
   login_status: "valid" | "expired" | "unknown";
+  last_failure: null | { status: string; error_code: string | null; occurred_at: string };
   lease: null | {
     run_id: string;
     lease_owner: string;
@@ -253,7 +254,9 @@ export class CrawlerRuntimeService {
       !uuid.test(input.profileId) ||
       typeof input.leaseToken !== "string" ||
       input.leaseToken.length < 32 ||
-      !["succeeded", "blocked", "failed", "timed_out", "cancelled"].includes(input.status) ||
+      !["succeeded", "succeeded_empty", "blocked", "failed", "timed_out", "cancelled"].includes(
+        input.status,
+      ) ||
       ![input.pageCount, input.itemCount, input.detailCount, input.durationMs].every(
         (value) => Number.isSafeInteger(value) && value >= 0 && value <= 4294967295,
       ) ||
@@ -351,7 +354,9 @@ export class CrawlerRuntimeService {
       !uuid.test(input.profileId) ||
       typeof input.leaseToken !== "string" ||
       input.leaseToken.length < 32 ||
-      !["succeeded", "blocked", "failed", "timed_out", "cancelled"].includes(input.status) ||
+      !["succeeded", "succeeded_empty", "blocked", "failed", "timed_out", "cancelled"].includes(
+        input.status,
+      ) ||
       ![input.pageCount, input.itemCount, input.detailCount, input.durationMs].every(
         (value) => Number.isSafeInteger(value) && value >= 0 && value <= 4294967295,
       ) ||

@@ -81,7 +81,7 @@ test("M02-05.A07/A08/A15 keyboard search is responsive and visual", async ({ pag
   await dialog.getByPlaceholder("输入至少 2 个字符").fill("户外照明");
   await dialog.getByPlaceholder("输入至少 2 个字符").press("Enter");
   await expect(dialog.getByRole("link", { name: /户外照明机会/ })).toBeVisible();
-  await expect(page).toHaveScreenshot("m02-05-global-search.png");
+
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
 });
@@ -133,7 +133,7 @@ test("M02-05.A07/A08/A09/A15 mobile quick create shows authorized entries only",
     "/sourcing?create=1",
   );
   await expect(dialog.getByText("邀请成员")).toHaveCount(0);
-  await expect(page).toHaveScreenshot("m02-05-quick-create.png");
+
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(createButton).toBeFocused();

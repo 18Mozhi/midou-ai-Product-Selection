@@ -13,9 +13,7 @@ test("M01-01.A01/A03 identity migration is MySQL57, indexed, scoped and reversib
   ];
   const up = (
     await Promise.all(
-      suffixes.map((suffix) =>
-        readFile(`database/migrations/0008${suffix}_m01_01.up.sql`, "utf8"),
-      ),
+      suffixes.map((suffix) => readFile(`database/migrations/0008${suffix}_m01_01.up.sql`, "utf8")),
     )
   ).join("\n");
   const down = (
@@ -77,18 +75,17 @@ test("M01-01.A06/A09/A13 OpenAPI freezes local email account and own-session con
 });
 
 test("M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchronized", async () => {
-  const [ui, env, schema, map, architecture, runbook, registry] =
-    await Promise.all(
-      [
-        "apps/web/src/components/LocalIdentity.vue",
-        "config/env.example",
-        "config/schema.json",
-        "docs/feature-map.json",
-        "docs/architecture/m01-01-local-identity.md",
-        "docs/runbooks/m01-01-local-identity.md",
-        "verification/modules/M01-01.json",
-      ].map((path) => readFile(path, "utf8")),
-    );
+  const [ui, env, schema, map, architecture, runbook, registry] = await Promise.all(
+    [
+      "apps/web/src/components/LocalIdentity.vue",
+      "config/env.example",
+      "config/schema.json",
+      "docs/feature-map.json",
+      "docs/architecture/m01-01-local-identity.md",
+      "docs/runbooks/m01-01-local-identity.md",
+      "verification/modules/M01-01.json",
+    ].map((path) => readFile(path, "utf8")),
+  );
   for (const state of [
     "login",
     "register",
@@ -121,22 +118,13 @@ test("M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchron
   assert.equal(parsed.atomicTasks.length, 17);
   assert.deepEqual(
     parsed.atomicTasks.map((item) => item.id),
-    Array.from(
-      { length: 17 },
-      (_, index) => `M01-01.A${String(index + 1).padStart(2, "0")}`,
-    ),
+    Array.from({ length: 17 }, (_, index) => `M01-01.A${String(index + 1).padStart(2, "0")}`),
   );
 });
 
 test("M01-01 login waits for a real MFA code and explains the 30-day session", async () => {
-  const ui = await readFile(
-    "apps/web/src/components/LocalIdentity.vue",
-    "utf8",
-  );
-  assert.match(
-    ui,
-    /mfa_required[\s\S]*?mode\.value\s*=\s*["']mfa-challenge["'][\s\S]*?return;/,
-  );
+  const ui = await readFile("apps/web/src/components/LocalIdentity.vue", "utf8");
+  assert.match(ui, /mfa_required[\s\S]*?mode\.value\s*=\s*["']mfa-challenge["'][\s\S]*?return;/);
   assert.match(
     ui,
     /security_setup\?\.required[\s\S]*?mode\.value\s*=\s*["']security-setup["'][\s\S]*?return;/,

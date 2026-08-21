@@ -45,12 +45,7 @@ export function registerPersonalCenterRoutes(
   });
   app.patch("/api/v1/me/profile", async (request) => {
     if (request.headers.origin !== options.webOrigin)
-      throw new ApiError(
-        403,
-        "origin_forbidden",
-        "请求来源不允许。",
-        "从 ai选品 个人中心重试。 ",
-      );
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 个人中心重试。 ");
     const current = await scope(request);
     return envelope(
       await options.service.update(request.body, {
@@ -65,11 +60,7 @@ export function registerPersonalCenterRoutes(
     const current = await scope(request);
     reply.header("cache-control", "private, no-store");
     return envelope(
-      await options.service.assets(
-        current.userId,
-        current.organizationId,
-        current.workspaceId,
-      ),
+      await options.service.assets(current.userId, current.organizationId, current.workspaceId),
       request,
     );
   });

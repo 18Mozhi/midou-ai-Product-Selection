@@ -26,11 +26,11 @@ for (const spec of specs) {
 
 if (screenshotCalls === 0) throw new Error("e2e_screenshot_coverage_missing");
 const mockedRatio = screenshotCallsInMockedFiles / screenshotCalls;
-if (mockedRatio > 0.84)
+if (mockedRatio >= 0.5)
   throw new Error(
     `e2e_mocked_screenshot_ratio_exceeded:${screenshotCallsInMockedFiles}/${screenshotCalls}`,
   );
-if (realApiScreenshotCases < 1) throw new Error("e2e_real_api_screenshot_missing");
+if (realApiScreenshotCases < 2) throw new Error("e2e_real_api_screenshot_coverage_insufficient");
 
 console.log(
   [

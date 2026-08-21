@@ -39,6 +39,25 @@ export interface ProvisionedSource {
 export interface ProviderSourceCatalogItem extends BuiltinSourceDefinition {
   provisioned: ProvisionedSource | null;
 }
+export interface Provider1688Acceptance {
+  provider_id: string;
+  source_status: "draft" | "disabled" | "enabled";
+  owner_label: string;
+  overall: "setup_required" | "ready_for_enable" | "production_ready";
+  gates: Array<{
+    key: "login" | "captcha" | "parser";
+    state: "passed" | "blocked" | "pending";
+    evidence_at: string | null;
+    reason: string;
+  }>;
+  latest_run: {
+    status: string;
+    error_code: string | null;
+    started_at: string;
+    finished_at: string | null;
+  } | null;
+  pending_reasons: string[];
+}
 export interface ProviderSourceReplay {
   id: string;
   task_id: string;
@@ -103,6 +122,7 @@ export interface ParserSampleReplay {
 }
 export interface ProviderSourceRepository {
   listProvisioned(codes: string[]): Promise<ProvisionedSource[]>;
+  read1688Acceptance(now: Date): Promise<Provider1688Acceptance>;
   syncCatalog(input: { definitions: readonly BuiltinSourceDefinition[]; now: Date }): Promise<{
     inserted: number;
     updated: number;
@@ -317,6 +337,9 @@ export class ProviderSourceService {
       ...item,
       provisioned: provisioned.find((value) => value.code === item.code) ?? null,
     }));
+  }
+  acceptance1688() {
+    return this.repository.read1688Acceptance(this.now());
   }
   ensureCatalog() {
     return this.repository.syncCatalog({ definitions: BUILTIN_PROVIDER_SOURCES, now: this.now() });

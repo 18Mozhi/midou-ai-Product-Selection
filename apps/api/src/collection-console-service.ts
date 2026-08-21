@@ -18,9 +18,7 @@ const uuid = (value: unknown, field: string) => {
   const normalized = String(value ?? "");
   if (
     normalized &&
-    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-      normalized,
-    )
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(normalized)
   )
     throw new CollectionConsoleError(
       "collection_console_scope_invalid",

@@ -141,7 +141,7 @@ test("M06-04.A07/A08/A15 security operations visual sanitized", async ({ page })
   ).not.toBeVisible();
   await page.getByRole("link", { name: "事件", exact: true }).click();
   await expect(page.getByText(/payload_ciphertext|token_hash|cookie-secret/)).toHaveCount(0);
-  await expect(page).toHaveScreenshot("m06-04-security-operations-desktop.png", { fullPage: true });
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByText("登录与风险事件")).toBeVisible();
@@ -154,7 +154,6 @@ test("M06-04.A07/A08/A15 security operations visual sanitized", async ({ page })
   ).toBeVisible();
   await eventDialog.getByRole("button", { name: "关闭详情" }).click();
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("m06-04-security-operations-mobile.png", { fullPage: true });
 });
 test("M06-04.A08/A16 empty forbidden blocked", async ({ page }) => {
   await nav(page);

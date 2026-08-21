@@ -11,7 +11,7 @@ class DeterministicPlaywrightBridge:
     def __init__(self, _config):
         pass
 
-    def run(self, request):
+    def run(self, request, _cancelled=None):
         time.sleep(5.2)
         return {
             "status": "succeeded",

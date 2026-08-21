@@ -1,6 +1,5 @@
-// @ts-nocheck -- aggregate row shapes are normalized before leaving the repository.
 import { randomUUID } from "node:crypto";
-import type { Pool, RowDataPacket } from "mysql2/promise";
+import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
   PlatformDashboardError,
   type PlatformDashboardRepository,
@@ -197,6 +196,67 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     const like = `%${i.query.replace(/[\\%_]/g, "\\$&")}%`,
       filter = i.query ? like : "%",
       status = i.status || "%";
+    if (i.domain === "logs") {
+      const [rows] = await this.pool.query<RowDataPacket[]>(
+        `SELECT * FROM (
+          SELECT 'api' source,id,action event_type,resource_type,resource_id,outcome status,
+            NULL error_code,request_id,trace_id,occurred_at
+          FROM platform_audit_events
+          WHERE (?='%' OR ?='api') AND (action LIKE ? OR resource_type LIKE ? OR
+            COALESCE(resource_id,'') LIKE ? OR request_id LIKE ? OR trace_id LIKE ?)
+          UNION ALL
+          SELECT 'worker' source,id,event_type,'collection_task' resource_type,task_id resource_id,
+            to_status status,JSON_UNQUOTE(JSON_EXTRACT(metadata_json,'$.error_code')) error_code,
+            request_id,trace_id,occurred_at
+          FROM collection_task_events
+          WHERE (?='%' OR ?='worker') AND (event_type LIKE ? OR task_id LIKE ? OR
+            request_id LIKE ? OR trace_id LIKE ? OR
+            COALESCE(JSON_UNQUOTE(JSON_EXTRACT(metadata_json,'$.error_code')),'') LIKE ?)
+          UNION ALL
+          SELECT 'crawler' source,id,CONCAT('crawler.run.',status) event_type,
+            'crawler_run' resource_type,id resource_id,status,error_code,request_id,trace_id,started_at occurred_at
+          FROM crawler_browser_runs
+          WHERE (?='%' OR ?='crawler') AND (id LIKE ? OR status LIKE ? OR
+            COALESCE(error_code,'') LIKE ? OR request_id LIKE ? OR trace_id LIKE ?)
+        ) operational_logs ORDER BY occurred_at DESC,id DESC LIMIT 200`,
+        [
+          status,
+          status,
+          filter,
+          filter,
+          filter,
+          filter,
+          filter,
+          status,
+          status,
+          filter,
+          filter,
+          filter,
+          filter,
+          filter,
+          status,
+          status,
+          filter,
+          filter,
+          filter,
+          filter,
+          filter,
+        ],
+      );
+      const sources = { api: 0, worker: 0, crawler: 0 };
+      const items = rows.map((row: any) => {
+        const source = row.source as keyof typeof sources;
+        if (source in sources) sources[source] += 1;
+        return { ...row, occurred_at: iso(row.occurred_at) };
+      });
+      return {
+        domain: i.domain,
+        summary: { total: items.length, ...sources },
+        items,
+        limit: 200,
+        observed_at: this.now().toISOString(),
+      };
+    }
     if (i.domain === "data") {
       let rows: RowDataPacket[] = [];
       if (i.entity === "trends") {
@@ -675,7 +735,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       },
     };
   }
-  private async replayOperation(c: any, i: any) {
+  private async replayOperation(c: PoolConnection, i: any) {
     const [rows] = await c.query<RowDataPacket[]>(
       "SELECT result_json FROM platform_management_operations WHERE actor_id=? AND route=? AND idempotency_key=? FOR UPDATE",
       [i.actorId, i.route, i.idempotencyKey],
@@ -683,7 +743,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     const value = rows[0]?.result_json;
     return value ? (typeof value === "string" ? JSON.parse(value) : value) : null;
   }
-  private async saveOperation(c: any, i: any, resourceId: string, result: any) {
+  private async saveOperation(c: PoolConnection, i: any, resourceId: string, result: any) {
     await c.query(
       "INSERT INTO platform_management_operations(id,actor_id,route,idempotency_key," +
         "resource_id,result_json,created_at) VALUES(?,?,?,?,?,?,?)",

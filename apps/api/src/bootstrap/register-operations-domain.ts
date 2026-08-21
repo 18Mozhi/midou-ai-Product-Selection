@@ -15,17 +15,11 @@ import { registerMySqlResilienceRoutes } from "../mysql-resilience-routes.js";
 import type { MySqlResilienceService } from "../mysql-resilience-service.js";
 import { registerRedisResilienceRoutes } from "../redis-resilience-routes.js";
 import type { RedisResilienceService } from "../redis-resilience-service.js";
-import {
-  ReleaseRolloutService,
-  ReleaseWriteProbeService,
-} from "../release-rollout-service.js";
+import { ReleaseRolloutService, ReleaseWriteProbeService } from "../release-rollout-service.js";
 import { registerReleaseRolloutRoutes } from "../release-rollout-routes.js";
 import { registerRuntimeTopologyRoutes } from "../runtime-topology-routes.js";
 import type { RuntimeTopologyService } from "../runtime-topology-service.js";
-import {
-  commonDomainOptions,
-  type ApiDomainContext,
-} from "./domain-context.js";
+import { commonDomainOptions, type ApiDomainContext } from "./domain-context.js";
 
 interface OperationsDomainContext extends ApiDomainContext {
   runtimeTopologyService: RuntimeTopologyService;
@@ -36,9 +30,7 @@ interface OperationsDomainContext extends ApiDomainContext {
   capacityBoundaryService: CapacityBoundaryService;
 }
 
-export function registerOperationsDomainRoutes(
-  context: OperationsDomainContext,
-) {
+export function registerOperationsDomainRoutes(context: OperationsDomainContext) {
   const common = commonDomainOptions(context);
   registerBackupRecoveryRoutes(context.app, {
     service: new BackupRecoveryService(
@@ -49,13 +41,14 @@ export function registerOperationsDomainRoutes(
     auth: context.auth,
     secureCookie: context.secureCookie,
   });
-  const releaseRolloutRepository = new MySqlReleaseRolloutRepository(
-    context.pool,
-  );
+  const releaseRolloutRepository = new MySqlReleaseRolloutRepository(context.pool);
   registerReleaseRolloutRoutes(context.app, {
     service: new ReleaseRolloutService(releaseRolloutRepository, {
       percentages: [5, 25, 100],
       ...context.config.releaseRollout,
+      currentBuildSha: context.config.app.buildSha,
+      currentAppVersion: context.config.app.version,
+      currentConfigFingerprint: context.config.configFingerprint,
     }),
     writeProbeService: new ReleaseWriteProbeService(
       releaseRolloutRepository,
@@ -100,15 +93,11 @@ export function registerOperationsDomainRoutes(
     ...common,
   });
   registerDataQualityRoutes(context.app, {
-    service: new DataQualityService(
-      new MySqlDataQualityRepository(context.pool),
-      {
-        evidenceRoot: context.config.storage.evidenceRoot,
-        downloadSigningKey:
-          context.config.security.evidenceDownloadSigningKey,
-        downloadGrantSeconds: context.config.evidence.downloadGrantSeconds,
-      },
-    ),
+    service: new DataQualityService(new MySqlDataQualityRepository(context.pool), {
+      evidenceRoot: context.config.storage.evidenceRoot,
+      downloadSigningKey: context.config.security.evidenceDownloadSigningKey,
+      downloadGrantSeconds: context.config.evidence.downloadGrantSeconds,
+    }),
     ...common,
   });
 }

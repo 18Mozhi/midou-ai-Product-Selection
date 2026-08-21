@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
+import { useAuditedReason } from "../use-audited-reason";
 import { useModalDialog } from "../use-modal-dialog";
+import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import PlatformMessageEditor from "./PlatformMessageEditor.vue";
 import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
 import PlatformManagementRecordList from "./PlatformManagementRecordList.vue";
@@ -31,6 +33,13 @@ const { dialogElement: reviewDialogElement, handleCancel: handleReviewCancel } =
   () => Boolean(reviewItem.value),
   () => (reviewItem.value = null),
 );
+const {
+  request: actionReasonRequest,
+  open: actionReasonOpen,
+  ask: askActionReason,
+  submit: submitActionReason,
+  cancel: cancelActionReason,
+} = useAuditedReason();
 const messageEditor = ref<any>(null),
   messageSaving = ref(false),
   messageForm = ref({
@@ -177,7 +186,11 @@ async function submitReview() {
 }
 async function manageEmail(item: any, action: "retry" | "suppress") {
   const actionName = action === "retry" ? "重新投递" : "抑制投递";
-  const reason = window.prompt(`请输入${actionName}原因（2–300 字）`, "人工处理邮件队列");
+  const reason = await askActionReason({
+    title: `填写${actionName}原因`,
+    description: "原因会与邮件队列记录、操作者和执行结果一起保存。",
+    initialValue: "人工处理邮件队列",
+  });
   if (reason === null) return;
   if (reason.trim().length < 2) {
     message.value = "操作原因至少需要 2 个字。";
@@ -251,7 +264,11 @@ async function saveMessage() {
 }
 async function messageAction(item: any, action: "publish" | "cancel") {
   const actionName = action === "publish" ? (item.kind === "email" ? "发送" : "发布") : "取消";
-  const reason = window.prompt(`请输入${actionName}原因（2–300 字）`, `${actionName}平台消息`);
+  const reason = await askActionReason({
+    title: `填写${actionName}原因`,
+    description: "原因会与消息版本、受众范围、操作者和执行结果一起保存。",
+    initialValue: `${actionName}平台消息`,
+  });
   if (reason === null) return;
   if (reason.trim().length < 2) {
     message.value = "操作原因至少需要 2 个字。";
@@ -471,6 +488,15 @@ onMounted(load);
       :audience-options="data?.audience_options"
       @close="messageEditor = null"
       @save="saveMessage"
+    />
+    <AuditedReasonDialog
+      :open="actionReasonOpen"
+      :title="actionReasonRequest?.title || '填写操作原因'"
+      :description="actionReasonRequest?.description || ''"
+      :initial-value="actionReasonRequest?.initialValue"
+      :minimum-length="actionReasonRequest?.minimumLength"
+      @submit="submitActionReason"
+      @cancel="cancelActionReason"
     />
   </section>
 </template>

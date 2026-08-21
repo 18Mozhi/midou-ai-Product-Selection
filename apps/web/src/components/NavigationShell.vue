@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+  type Component,
+} from "vue";
 import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import {
@@ -23,14 +31,10 @@ const lazy = (name: string) => {
 };
 const DiscoveryOverlay = lazy("DiscoveryOverlay"),
   HomeDashboard = lazy("HomeDashboard"),
-  ProviderRegistry = lazy("ProviderRegistry"),
-  CredentialAssetCenter = lazy("CredentialAssetCenter"),
-  ProviderAdapterCenter = lazy("ProviderAdapterCenter"),
-  CollectionRuntimeCenter = lazy("CollectionRuntimeCenter"),
-  CollectionTaskCenter = lazy("CollectionTaskCenter"),
+  ProviderRuntimeSurface = lazy("ProviderRuntimeSurface"),
+  CollectionRuntimeSurface = lazy("CollectionRuntimeSurface"),
   PlatformDataCenter = lazy("PlatformDataCenter"),
   PlatformGovernanceCenter = lazy("PlatformGovernanceCenter"),
-  ProviderSourceCenter = lazy("ProviderSourceCenter"),
   TrendDashboard = lazy("TrendDashboard"),
   OpportunityWorkspace = lazy("OpportunityWorkspace"),
   SelectionJourney = lazy("SelectionJourney"),
@@ -45,7 +49,6 @@ const DiscoveryOverlay = lazy("DiscoveryOverlay"),
   ReportCenter = lazy("ReportCenter"),
   OrganizationAdminCenter = lazy("OrganizationAdminCenter"),
   PlatformDashboard = lazy("PlatformDashboard"),
-  CollectionOperationsConsole = lazy("CollectionOperationsConsole"),
   SecurityOperationsCenter = lazy("SecurityOperationsCenter"),
   OpenPlatformCenter = lazy("OpenPlatformCenter"),
   CommercialOperationsCenter = lazy("CommercialOperationsCenter"),
@@ -59,7 +62,45 @@ const DiscoveryOverlay = lazy("DiscoveryOverlay"),
   CapacityBoundaryCenter = lazy("CapacityBoundaryCenter"),
   PlatformAccountCenter = lazy("PlatformAccountCenter"),
   PlatformManagementCenter = lazy("PlatformManagementCenter"),
+  PlatformLogCenter = lazy("PlatformLogCenter"),
   PersonalCenter = lazy("PersonalCenter");
+
+const surfaceComponents: Record<string, Component> = {
+  "home-dashboard": HomeDashboard,
+  "task-workspace": TaskWorkspace,
+  "approval-workspace": ApprovalWorkspace,
+  "notification-center": NotificationCenter,
+  "automation-rule-center": AutomationRuleCenter,
+  "report-center": ReportCenter,
+  "personal-center": PersonalCenter,
+  "organization-admin-center": OrganizationAdminCenter,
+  "platform-dashboard": PlatformDashboard,
+  "platform-account-center": PlatformAccountCenter,
+  "platform-management-center": PlatformManagementCenter,
+  "platform-log-center": PlatformLogCenter,
+  "platform-governance-center": PlatformGovernanceCenter,
+  "backup-recovery-center": BackupRecoveryCenter,
+  "release-rollout-center": ReleaseRolloutCenter,
+  "runtime-topology-center": RuntimeTopologyCenter,
+  "redis-resilience-center": RedisResilienceCenter,
+  "mysql-resilience-center": MySqlResilienceCenter,
+  "file-resilience-center": FileResilienceCenter,
+  "crawler-scheduler-center": CrawlerSchedulerCenter,
+  "capacity-boundary-center": CapacityBoundaryCenter,
+  "trend-dashboard": TrendDashboard,
+  "score-rule-console": ScoreRuleConsole,
+  "selection-journey": SelectionJourney,
+  "opportunity-workspace": OpportunityWorkspace,
+  "competitor-monitor": CompetitorMonitor,
+  "sourcing-workspace": SourcingWorkspace,
+  "cost-rule-console": CostRuleConsole,
+  "provider-runtime-surface": ProviderRuntimeSurface,
+  "collection-runtime-surface": CollectionRuntimeSurface,
+  "platform-data-center": PlatformDataCenter,
+  "security-operations-center": SecurityOperationsCenter,
+  "open-platform-center": OpenPlatformCenter,
+  "commercial-operations-center": CommercialOperationsCenter,
+};
 
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State =
@@ -102,6 +143,7 @@ const state = ref<State>("loading"),
 let themePreferenceSequence = 0;
 const platformOperationsNavigation = [
   { label: "系统状态", path: "/platform-admin/status" },
+  { label: "链路日志", path: "/platform-admin/logs" },
   { label: "服务拓扑", path: "/platform-admin/topology" },
   { label: "采集调度", path: "/platform-admin/crawler-scheduler" },
   { label: "Redis", path: "/platform-admin/redis" },
@@ -238,6 +280,9 @@ const isHome = computed(
         "/platform-admin/status",
       ].includes(routePath.value),
   ),
+  isPlatformLogs = computed(
+    () => props.shell === "platform_admin" && routePath.value === "/platform-admin/logs",
+  ),
   isPlatformGovernance = computed(
     () => props.shell === "platform_admin" && routePath.value === "/platform-admin/governance",
   ),
@@ -298,6 +343,62 @@ const isHome = computed(
     const match = routePath.value.match(/^\/tasks\/([0-9a-f-]{36})$/i);
     return match?.[1] ?? "";
   });
+const activeSurface = computed(() => String(route.meta.surface ?? ""));
+const activeCachePolicy = computed(() => String(route.meta.cachePolicy ?? "none"));
+const selectedSurfaceComponent = computed(() => surfaceComponents[activeSurface.value] ?? null);
+const surfaceCacheKey = computed(() => {
+  const routeIdentity = String(route.name ?? routePath.value);
+  if (activeCachePolicy.value !== "reset_on_scope") return routeIdentity;
+  return `${routeIdentity}:${guard.value?.organization_id ?? "none"}:${guard.value?.workspace_id ?? "none"}`;
+});
+const selectedSurfaceProps = computed<Record<string, unknown>>(() => {
+  const common = { apiBaseUrl: props.apiBaseUrl };
+  switch (activeSurface.value) {
+    case "task-workspace":
+      return {
+        ...common,
+        mode: routePath.value === "/work" ? "today" : "all",
+        taskId: taskId.value || undefined,
+      };
+    case "organization-admin-center":
+      return {
+        ...common,
+        routePath: routePath.value,
+        organizationId: guard.value?.organization_id || "",
+      };
+    case "platform-account-center":
+      return {
+        ...common,
+        initialTab:
+          routePath.value === "/platform-admin/admins" ||
+          routePath.value === "/platform-admin/permissions"
+            ? "admins"
+            : routePath.value === "/platform-admin/users"
+              ? "users"
+              : "organizations",
+      };
+    case "platform-dashboard":
+      return { ...common, capabilities: allCapabilities.value };
+    case "platform-management-center":
+      return { ...common, domain: routePath.value.split("/").pop() || "status" };
+    case "trend-dashboard":
+      return {
+        ...common,
+        organizationId: guard.value?.organization_id || "",
+        workspaceId: guard.value?.workspace_id || "",
+      };
+    case "opportunity-workspace":
+      return { ...common, opportunityId: opportunityId.value || undefined };
+    case "cost-rule-console":
+      return { ...common, roles: guard.value?.roles ?? [] };
+    case "provider-runtime-surface":
+      return { ...common, routePath: routePath.value, capabilities: allCapabilities.value };
+    case "collection-runtime-surface":
+      return { ...common, routePath: routePath.value };
+    default:
+      return common;
+  }
+});
 const pageSummary = computed(() =>
   isOrganizationAdmin.value
     ? "组织资料、成员、角色、工作区、团队、审批、Token 与审计均受当前组织权限和审计边界保护。"
@@ -635,166 +736,11 @@ onUnmounted(() => {
           >
         </nav>
         <KeepAlive :max="12">
-          <HomeDashboard v-if="isHome" :api-base-url="apiBaseUrl" />
-          <TaskWorkspace
-            v-else-if="isTasks"
-            :api-base-url="apiBaseUrl"
-            :mode="routePath === '/work' ? 'today' : 'all'"
-            :task-id="taskId || undefined"
-          />
-          <ApprovalWorkspace v-else-if="isApprovals" :api-base-url="apiBaseUrl" />
-          <NotificationCenter v-else-if="isNotifications" :api-base-url="apiBaseUrl" />
-          <AutomationRuleCenter v-else-if="isAutomations" :api-base-url="apiBaseUrl" />
-          <ReportCenter v-else-if="isReports" :api-base-url="apiBaseUrl" />
-          <PersonalCenter v-else-if="isPersonal" :api-base-url="apiBaseUrl" />
-          <OrganizationAdminCenter
-            v-else-if="isOrganizationAdmin"
-            :api-base-url="apiBaseUrl"
-            :route-path="routePath"
-            :organization-id="guard?.organization_id || ''"
-          />
-          <PlatformDashboard v-else-if="isPlatformDashboard" :api-base-url="apiBaseUrl" />
-          <PlatformAccountCenter
-            v-else-if="isPlatformAccounts"
-            :api-base-url="apiBaseUrl"
-            :initial-tab="
-              routePath === '/platform-admin/admins' || routePath === '/platform-admin/permissions'
-                ? 'admins'
-                : routePath === '/platform-admin/users'
-                  ? 'users'
-                  : 'organizations'
-            "
-          />
-          <PlatformManagementCenter
-            v-else-if="isPlatformManagement"
-            :api-base-url="apiBaseUrl"
-            :domain="routePath.split('/').pop() || 'status'"
-          />
-          <PlatformGovernanceCenter v-else-if="isPlatformGovernance" :api-base-url="apiBaseUrl" />
-          <BackupRecoveryCenter v-else-if="isBackupRecovery" :api-base-url="apiBaseUrl" />
-          <ReleaseRolloutCenter v-else-if="isReleaseRollout" :api-base-url="apiBaseUrl" />
-          <RuntimeTopologyCenter v-else-if="isRuntimeTopology" :api-base-url="apiBaseUrl" />
-          <RedisResilienceCenter v-else-if="isRedisResilience" :api-base-url="apiBaseUrl" />
-          <MySqlResilienceCenter v-else-if="isMySqlResilience" :api-base-url="apiBaseUrl" />
-          <FileResilienceCenter v-else-if="isFileResilience" :api-base-url="apiBaseUrl" />
-          <CrawlerSchedulerCenter v-else-if="isCrawlerScheduler" :api-base-url="apiBaseUrl" />
-          <CapacityBoundaryCenter v-else-if="isCapacityBoundary" :api-base-url="apiBaseUrl" />
-          <TrendDashboard
-            v-else-if="isTrends"
-            :api-base-url="apiBaseUrl"
-            :organization-id="guard?.organization_id || ''"
-            :workspace-id="guard?.workspace_id || ''"
-          />
-          <ScoreRuleConsole v-else-if="isScoringRules" :api-base-url="apiBaseUrl" />
-          <SelectionJourney v-else-if="isSelectionJourney" :api-base-url="apiBaseUrl" />
-          <OpportunityWorkspace
-            v-else-if="isOpportunities"
-            :api-base-url="apiBaseUrl"
-            :opportunity-id="opportunityId || undefined"
-          />
-          <CompetitorMonitor v-else-if="isCompetitors" :api-base-url="apiBaseUrl" />
-          <SourcingWorkspace v-else-if="isSourcing" :api-base-url="apiBaseUrl" />
-          <CostRuleConsole
-            v-else-if="isCostRules"
-            :api-base-url="apiBaseUrl"
-            :roles="guard?.roles ?? []"
-          />
-          <section
-            v-else-if="
-              shell === 'platform_admin' &&
-              (routePath.startsWith('/platform-admin/providers') ||
-                routePath === '/platform-admin/credentials')
-            "
-            class="provider-runtime-surface"
-          >
-            <nav class="provider-runtime-tabs" aria-label="来源管理视图">
-              <RouterLink
-                to="/platform-admin/providers"
-                :aria-current="routePath === '/platform-admin/providers' ? 'page' : undefined"
-                >来源设置（高级）</RouterLink
-              ><RouterLink
-                to="/platform-admin/providers/adapters"
-                :aria-current="
-                  routePath === '/platform-admin/providers/adapters' ? 'page' : undefined
-                "
-                >采集程序（高级）</RouterLink
-              ><RouterLink
-                to="/platform-admin/providers/sources"
-                :aria-current="
-                  routePath === '/platform-admin/providers/sources' ? 'page' : undefined
-                "
-                >来源频道</RouterLink
-              ><RouterLink
-                v-if="allCapabilities.includes('platform:superadmin')"
-                to="/platform-admin/credentials"
-                :aria-current="routePath === '/platform-admin/credentials' ? 'page' : undefined"
-                >网页登录凭证</RouterLink
-              >
-            </nav>
-            <CredentialAssetCenter
-              v-if="routePath === '/platform-admin/credentials'"
-              :api-base-url="apiBaseUrl"
-            />
-            <ProviderSourceCenter
-              v-else-if="routePath === '/platform-admin/providers/sources'"
-              :api-base-url="apiBaseUrl"
-            />
-            <ProviderAdapterCenter
-              v-else-if="routePath === '/platform-admin/providers/adapters'"
-              :api-base-url="apiBaseUrl"
-            />
-            <ProviderRegistry v-else :api-base-url="apiBaseUrl" />
-          </section>
-          <section
-            v-else-if="
-              shell === 'platform_admin' && routePath.startsWith('/platform-admin/collection')
-            "
-            class="provider-runtime-surface"
-          >
-            <nav class="provider-runtime-tabs" aria-label="采集控制台视图">
-              <RouterLink
-                to="/platform-admin/collection/overview"
-                :aria-current="
-                  routePath === '/platform-admin/collection/overview' ? 'page' : undefined
-                "
-                >采集总览</RouterLink
-              ><RouterLink
-                to="/platform-admin/collection"
-                :aria-current="routePath === '/platform-admin/collection' ? 'page' : undefined"
-                >任务详情</RouterLink
-              ><RouterLink
-                to="/platform-admin/collection/browser-runtime"
-                :aria-current="
-                  routePath === '/platform-admin/collection/browser-runtime' ? 'page' : undefined
-                "
-                >网页登录采集（高级）</RouterLink
-              >
-            </nav>
-            <CollectionOperationsConsole
-              v-if="routePath === '/platform-admin/collection/overview'"
-              :api-base-url="apiBaseUrl"
-            />
-            <CollectionRuntimeCenter
-              v-else-if="routePath === '/platform-admin/collection/browser-runtime'"
-              :api-base-url="apiBaseUrl"
-            />
-            <CollectionTaskCenter v-else :api-base-url="apiBaseUrl" />
-          </section>
-          <PlatformDataCenter
-            v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/data'"
-            :api-base-url="apiBaseUrl"
-          />
-          <SecurityOperationsCenter
-            v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/security'"
-            :api-base-url="apiBaseUrl"
-          />
-          <OpenPlatformCenter
-            v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/open-platform'"
-            :api-base-url="apiBaseUrl"
-          />
-          <CommercialOperationsCenter
-            v-else-if="shell === 'platform_admin' && routePath === '/platform-admin/commercial'"
-            :api-base-url="apiBaseUrl"
+          <component
+            :is="selectedSurfaceComponent"
+            v-if="selectedSurfaceComponent"
+            :key="surfaceCacheKey"
+            v-bind="selectedSurfaceProps"
           />
           <section v-else class="role-gate-state" aria-live="polite">
             <span class="role-state-mark" aria-hidden="true">?</span>

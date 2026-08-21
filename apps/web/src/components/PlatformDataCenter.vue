@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, createApiResponseClient } from "../api-client";
+import { useAuditedReason } from "../use-audited-reason";
+import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import DataQualityCenter from "./DataQualityCenter.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
@@ -18,6 +20,13 @@ const tab = ref<"records" | "quality">("records"),
   message = ref(""),
   requestId = ref(""),
   exporting = ref(false);
+const {
+  request: exportReasonRequest,
+  open: exportReasonOpen,
+  ask: askExportReason,
+  submit: submitExportReason,
+  cancel: cancelExportReason,
+} = useAuditedReason();
 const entities: Array<{
   value: Entity;
   label: string;
@@ -94,7 +103,11 @@ async function load() {
   }
 }
 async function exportCsv() {
-  const reason = window.prompt("请输入受控导出原因（2–300 字）", "平台运营数据核对");
+  const reason = await askExportReason({
+    title: "填写受控导出原因",
+    description: "导出原因会与筛选范围、操作者和文件审计记录一起保存。",
+    initialValue: "平台运营数据核对",
+  });
   if (reason === null) return;
   if (reason.trim().length < 2) {
     message.value = "导出原因至少需要 2 个字。";
@@ -298,6 +311,15 @@ onMounted(load);
         </footer>
       </template>
     </template>
+    <AuditedReasonDialog
+      :open="exportReasonOpen"
+      :title="exportReasonRequest?.title || '填写导出原因'"
+      :description="exportReasonRequest?.description || ''"
+      :initial-value="exportReasonRequest?.initialValue"
+      :minimum-length="exportReasonRequest?.minimumLength"
+      @submit="submitExportReason"
+      @cancel="cancelExportReason"
+    />
   </section>
 </template>
 

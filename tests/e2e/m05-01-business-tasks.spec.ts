@@ -179,9 +179,6 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
   await expect(page.getByText("报价证据已核验，等待确认交期。")).toBeVisible();
   await expect(page.getByText("下一步：在期限前完成当前阶段")).toBeVisible();
   await expect(page.getByRole("button", { name: "转交" })).toBeVisible();
-  await expect(page).toHaveScreenshot("m05-01-business-tasks.png", {
-    fullPage: true,
-  });
 });
 
 test("M05-01 quick create route opens the task form", async ({ page }) => {

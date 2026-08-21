@@ -10,10 +10,7 @@ test("personal center validates versioned profile changes and preserves selected
     assets: async (input) => input,
     updateProfile: async (input) => (calls.push(input), input),
   };
-  const service = new PersonalCenterService(
-    repository,
-    () => new Date("2026-08-18T12:00:00.000Z"),
-  );
+  const service = new PersonalCenterService(repository, () => new Date("2026-08-18T12:00:00.000Z"));
   await service.update(
     {
       display_name: "选品经理",
@@ -60,21 +57,19 @@ test("personal center validates versioned profile changes and preserves selected
 });
 
 test("personal center delivery contains real profile assets security preferences and route contracts", async () => {
-  const [component, routes, repository, migration, openapi, map] =
-    await Promise.all([
-      readFile("apps/web/src/components/PersonalCenter.vue", "utf8"),
-      readFile("apps/api/src/personal-center-routes.ts", "utf8"),
-      readFile("apps/api/src/mysql-personal-center-repository.ts", "utf8"),
-      readFile("database/migrations/0039_personal_center.up.sql", "utf8"),
-      readFile("docs/openapi.yaml", "utf8"),
-      readFile("docs/feature-map.json", "utf8"),
-    ]);
+  const [component, routes, repository, migration, openapi, map] = await Promise.all([
+    readFile("apps/web/src/components/PersonalCenter.vue", "utf8"),
+    readFile("apps/api/src/personal-center-routes.ts", "utf8"),
+    readFile("apps/api/src/mysql-personal-center-repository.ts", "utf8"),
+    readFile("database/migrations/0039_personal_center.up.sql", "utf8"),
+    readFile("docs/openapi.yaml", "utf8"),
+    readFile("docs/feature-map.json", "utf8"),
+  ]);
   assert.match(component, /基本资料.*我的权限.*安全中心.*通知偏好.*我的资产/s);
   assert.match(component, /changePassword.*revokeSession.*savePreferences/s);
   assert.match(component, /onMounted\(\(\) => void load\(\)\)/);
   assert.ok(
-    component.indexOf('await call("/me/profile")') <
-      component.indexOf("Promise.allSettled"),
+    component.indexOf('await call("/me/profile")') < component.indexOf("Promise.allSettled"),
     "profile must render before optional personal-center sections finish",
   );
   assert.match(component, /finally \{[\s\S]*window\.clearTimeout\(timeout\)/);

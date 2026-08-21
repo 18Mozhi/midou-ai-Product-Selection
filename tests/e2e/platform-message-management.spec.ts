@@ -88,9 +88,17 @@ test("platform administrator can create and publish a Chinese notification", asy
   await expect.poll(() => createBody?.title).toBe("系统维护提醒");
   await expect(page.getByRole("heading", { name: "系统维护提醒" })).toBeVisible();
 
-  page.once("dialog", (prompt) => prompt.accept("发布维护通知"));
   await page.getByRole("button", { name: "发布", exact: true }).click();
-  await expect.poll(() => actionBody).toMatchObject({ action: "publish", expected_version: 1 });
+  const reasonDialog = page.getByRole("dialog", { name: "填写发布原因" });
+  await reasonDialog.getByRole("textbox", { name: "原因（至少 2 个字）" }).fill("发布维护通知");
+  await reasonDialog.getByRole("button", { name: "确认提交" }).click();
+  await expect
+    .poll(() => actionBody)
+    .toMatchObject({
+      action: "publish",
+      expected_version: 1,
+      reason: "发布维护通知",
+    });
   await expect(page.getByText("发布完成：覆盖 3 人，站内 3 条，邮件队列 0 条。")).toBeVisible();
   await expect(page.getByText("已发布", { exact: true })).toBeVisible();
 });

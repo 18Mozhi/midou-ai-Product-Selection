@@ -49,6 +49,11 @@ export function registerProviderSourceRoutes(app: FastifyInstance, o: ProviderSo
     reply.header("cache-control", "private, no-store");
     return envelope(await o.service.list(), r);
   });
+  app.get("/api/v1/platform/provider-sources/1688-acceptance", async (r, reply) => {
+    await actor(r, "provider:configure");
+    reply.header("cache-control", "private, no-store");
+    return envelope(await o.service.acceptance1688(), r);
+  });
   app.put("/api/v1/platform/provider-sources/:providerId/configuration", async (r) => {
     const actorId = await write(r, "provider:configure");
     return envelope(

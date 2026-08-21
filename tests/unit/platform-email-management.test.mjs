@@ -42,8 +42,7 @@ test("platform email management validates source, action and audited reason", as
         },
       ),
     (error) =>
-      error instanceof PlatformDashboardError &&
-      error.code === "account_email_suppress_forbidden",
+      error instanceof PlatformDashboardError && error.code === "account_email_suppress_forbidden",
   );
 });
 
@@ -59,8 +58,8 @@ test("platform email management keeps UI, route, OpenAPI and audit operation ali
       "docs/openapi.yaml",
     ].map((path) =>
       Array.isArray(path)
-        ? Promise.all(path.map((file) => readFile(file, "utf8"))).then(
-            (sources) => sources.join("\n"),
+        ? Promise.all(path.map((file) => readFile(file, "utf8"))).then((sources) =>
+            sources.join("\n"),
           )
         : readFile(path, "utf8"),
     ),

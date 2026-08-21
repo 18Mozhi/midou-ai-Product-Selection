@@ -15,25 +15,13 @@ export class ReportServiceError extends Error {
 }
 const reportType = (v: unknown): ReportType => {
     if (!["opportunity", "trend", "team"].includes(String(v)))
-      throw new ReportServiceError(
-        "report_type_invalid",
-        400,
-        "选择机会、趋势或团队报表。",
-      );
+      throw new ReportServiceError("report_type_invalid", 400, "选择机会、趋势或团队报表。");
     return v as ReportType;
   },
   uuid = (v: unknown) => {
     const x = String(v ?? "");
-    if (
-      !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-        x,
-      )
-    )
-      throw new ReportServiceError(
-        "report_export_id_invalid",
-        400,
-        "提交有效导出标识。",
-      );
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(x))
+      throw new ReportServiceError("report_export_id_invalid", 400, "提交有效导出标识。");
     return x;
   };
 export interface ReportRepository {
@@ -85,11 +73,7 @@ export class ReportService {
   private queueExport(i: any, route: string) {
     const type = reportType(i.value?.report_type);
     if (i.value?.format !== "csv")
-      throw new ReportServiceError(
-        "report_format_invalid",
-        400,
-        "当前只支持 CSV。",
-      );
+      throw new ReportServiceError("report_format_invalid", 400, "当前只支持 CSV。");
     const id = randomUUID();
     return this.repo.createExport({
       ...i,
@@ -101,25 +85,15 @@ export class ReportService {
         expires_at: new Date(this.now().valueOf() + this.ttlHours * 3600000),
       },
       route,
-      ...(i.regeneratedFromExportId
-        ? { regeneratedFromExportId: i.regeneratedFromExportId }
-        : {}),
+      ...(i.regeneratedFromExportId ? { regeneratedFromExportId: i.regeneratedFromExportId } : {}),
     });
   }
   async download(i: any) {
     const item = await this.detail(i);
     if (item.status !== "succeeded")
-      throw new ReportServiceError(
-        "report_export_not_ready",
-        409,
-        "等待导出完成后重试。",
-      );
+      throw new ReportServiceError("report_export_not_ready", 409, "等待导出完成后重试。");
     if (new Date(item.expires_at).valueOf() <= this.now().valueOf())
-      throw new ReportServiceError(
-        "report_export_expired",
-        410,
-        "重新创建导出。",
-      );
+      throw new ReportServiceError("report_export_expired", 410, "重新创建导出。");
     const path = buildScopedFilePath(this.exportRoot, {
       organization_id: i.organizationId,
       workspace_id: i.workspaceId,

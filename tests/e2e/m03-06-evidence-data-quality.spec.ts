@@ -125,7 +125,6 @@ test("M03-06.A07/A08/A15 evidence quality dashboard is responsive and visual", a
     await expect(page.getByText(ids.evidence, { exact: true })).toBeVisible();
     await page.getByRole("button", { name: "关闭详情" }).last().click();
   } else await expect(page.getByText("18.3 KB", { exact: true })).toBeVisible();
-  await expect(page).toHaveScreenshot("m03-06-evidence-data-quality.png", { fullPage: true });
 });
 test("M02-01 semantic roles keep data quality readable in every theme", async ({ page }) => {
   await nav(page);

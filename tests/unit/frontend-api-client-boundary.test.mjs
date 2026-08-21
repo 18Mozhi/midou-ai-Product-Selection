@@ -19,6 +19,9 @@ test("the shared frontend API client owns correlation, credentials, idempotency 
     "throw new ApiClientError(",
     "payload?.error?.message",
     "payload?.error?.action_hint",
+    "SAFE_RETRY_STATUSES",
+    "retryableMethod",
+    '"network_unavailable"',
   ]) {
     assert.match(source, new RegExp(contract.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }

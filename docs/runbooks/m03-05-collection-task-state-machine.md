@@ -27,6 +27,7 @@
 - `retry_scheduled`：核对 `available_at` 和 attempt_count，等待锁定退避；不得手工提前改库。
 - `rate_limited`：遵守来源 reset 时间，不改造成固定快速重试。
 - `blocked_login/blocked_captcha/blocked_robots`：停止自动执行，核对合法账户、来源政策和人工恢复条件；不得绕过。
+- 单一来源失败：先在任务详情核对每条 `collection.subquery.completed` 事件；同一尝试中的其他来源应继续并各自留下结果或错误。若后续来源没有事件，优先按 MySQL 写入故障处理，不能把缺失结果解释为真实空结果。
 - `blocked_login` 且存在续期任务：由安全管理员轮换对应凭证。续期任务会自动完成，旧任务标记“凭证续期后已自动重放”，新任务进入 scheduled；应继续核对新任务是否真实通过登录，禁止把轮换 HTTP 200 当成目标站登录成功。
 - `dead_letter`：修复原因后由具备 `collection:replay` 的人员填写原因并人工重放；新旧任务必须同时可查。
 - 租约过期或 Redis 协调冲突：调度器把 MySQL 租约回收为重试或死信；用 request_id/trace_id 关联 Worker、事件和 Outbox。

@@ -33,7 +33,8 @@ SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE=./.artifacts/verification/m08-01-single-s
 3. 请求 `/api/v1/health/live`、`/api/v1/health/ready` 和 `/api/v1/health/nodes`。
 4. 用具有 `platform:operate` 的账号读取 `/api/v1/platform/operations/topology`，确认审计写入。
 5. 由宝塔有限任务签发 schema v1 的生产证据，文件权限保持 0600，不写入 Git。
-6. 执行 `node scripts/verify-single-server-production.mjs --production` 和 `npm run verify:module -- M08-01`。
+6. 在运行拓扑确认每类队列显示独立并发、超时与重试策略；模拟失败时应出现队列熔断或疑似卡死告警，状态文件写入失败不得增加业务失败计数。
+7. 执行 `node scripts/verify-single-server-production.mjs --production` 和 `npm run verify:module -- M08-01`。
 
 当前生产验收已通过：构建 `b55f7f814d7153e6a4a7958eb41a9bf6ff1e60e8`、证据 SHA-256 `0c7cd53311f9c778407e699747bc8d9b9d27b1fad18635fee1c05ff54a74e13c`、run_id/trace_id `fa76e44f-53d7-49da-8884-bac921aad580`。永久路由为本机 4101 单上游，4103 候选已停止。
 

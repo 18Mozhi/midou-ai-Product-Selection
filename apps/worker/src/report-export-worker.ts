@@ -3,12 +3,7 @@ import { rm } from "node:fs/promises";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import { buildScopedFilePath, writeScopedFile } from "@scoutops/storage";
 export const csvCell = (value: unknown) => {
-  let text =
-    value == null
-      ? ""
-      : value instanceof Date
-        ? value.toISOString()
-        : String(value);
+  let text = value == null ? "" : value instanceof Date ? value.toISOString() : String(value);
   if (/^[=+\-@]/.test(text)) text = `'${text}`;
   return `"${text.replaceAll('"', '""')}"`;
 };
@@ -165,12 +160,7 @@ export class ReportExportWorker {
       );
     }
   }
-  private async record(
-    job: any,
-    event: string,
-    payload: any,
-    queryable: any = this.pool,
-  ) {
+  private async record(job: any, event: string, payload: any, queryable: any = this.pool) {
     const now = this.now();
     await queryable.query(
       "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,?,'report_export',?,?,?,?,?,1)",

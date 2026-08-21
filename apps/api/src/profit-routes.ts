@@ -3,11 +3,7 @@ import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService, Capability } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
-import type {
-  ApprovalRole,
-  CostRuleAction,
-  ProfitService,
-} from "./profit-service.js";
+import type { ApprovalRole, CostRuleAction, ProfitService } from "./profit-service.js";
 export interface ProfitRouteOptions {
   service: ProfitService;
   authorization: AuthorizationService;
@@ -24,16 +20,10 @@ const ids = (r: FastifyRequest) => ({
     request_id: ids(r).requestId,
     trace_id: ids(r).traceId,
   });
-export function registerProfitRoutes(
-  app: FastifyInstance,
-  o: ProfitRouteOptions,
-) {
+export function registerProfitRoutes(app: FastifyInstance, o: ProfitRouteOptions) {
   const scope = async (r: FastifyRequest, capability: Capability) => {
       const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
-        resolved = await o.authorization.resolveSession(
-          a.user.id,
-          a.session.id,
-        );
+        resolved = await o.authorization.resolveSession(a.user.id, a.session.id);
       await o.authorization.authorize({
         actorId: a.user.id,
         organizationId: resolved.context.organization_id,
@@ -51,12 +41,7 @@ export function registerProfitRoutes(
     },
     write = async (r: FastifyRequest, capability: Capability) => {
       if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ScoutOps 页面重试。",
-        );
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
       return {
         ...(await scope(r, capability)),
         ...ids(r),

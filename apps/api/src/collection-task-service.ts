@@ -1,9 +1,184 @@
-import{randomUUID}from'node:crypto';import{COLLECTION_TASK_STATUSES,type CollectionTaskStatus,type CoverageStatus}from'@scoutops/collection-tasks';
-export interface CollectionTaskSummary{id:string;organization_id:string;workspace_id:string;status:CollectionTaskStatus;coverage_status:CoverageStatus|null;priority:'low'|'normal'|'high'|'critical';scheduled_at:string;available_at:string;attempt_count:number;successful_subquery_count:number;failed_subquery_count:number;blocked_subquery_count:number;available_result_count:number;missing_fields:string[];last_error_code:string|null;replay_of_task_id:string|null;replay_reason:string|null;request_id:string;trace_id:string;version:number;created_at:string;updated_at:string;}
-export interface CollectionSubquerySummary{id:string;provider_id:string;provider_name:string;ordinal:number;is_required:boolean;status:string;available_result_count:number;missing_fields:string[];error_code:string|null;retryable:boolean;started_at:string|null;finished_at:string|null;}
-export interface CollectionTaskDetail{task:CollectionTaskSummary;subqueries:CollectionSubquerySummary[];attempts:Array<Record<string,unknown>>;events:Array<Record<string,unknown>>;dead_letter:Record<string,unknown>|null;}
-export interface CollectionTaskRepository{list(input:{organizationId?:string;workspaceId?:string;status?:CollectionTaskStatus;page:number;pageSize:number}):Promise<{items:CollectionTaskSummary[];total:number}>;detail(id:string):Promise<CollectionTaskDetail|null>;replay(input:{taskId:string;newTaskId:string;actorId:string;reason:string;idempotencyKey:string;requestId:string;traceId:string;now:Date}):Promise<CollectionTaskDetail>;}
-export class CollectionTaskServiceError extends Error{constructor(readonly code:string,readonly statusCode:number,readonly actionHint:string){super(code);this.name='CollectionTaskServiceError';}}
-const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const pageNumber=(value:unknown,fallback:number)=>value===undefined?fallback:typeof value==='string'&&/^\d+$/.test(value)?Number(value):value;
-export class CollectionTaskService{constructor(private readonly repository:CollectionTaskRepository,private readonly now:()=>Date=()=>new Date()){}async list(input:{organization_id?:string;workspace_id?:string;status?:string;page?:number|string;page_size?:number|string}){if(input.workspace_id&&!input.organization_id)throw new CollectionTaskServiceError('collection_scope_invalid',400,'选择组织后再筛选工作区。');if(input.organization_id&&!uuid.test(input.organization_id)||input.workspace_id&&!uuid.test(input.workspace_id))throw new CollectionTaskServiceError('collection_scope_invalid',400,'刷新组织与工作区筛选。');if(input.status&&!COLLECTION_TASK_STATUSES.includes(input.status as CollectionTaskStatus))throw new CollectionTaskServiceError('collection_status_invalid',400,'使用 OpenAPI 中的任务状态。');const page=pageNumber(input.page,1),pageSize=pageNumber(input.page_size,20);if(typeof page!=='number'||!Number.isInteger(page)||page<1||page>100000||typeof pageSize!=='number'||!Number.isInteger(pageSize)||pageSize<1||pageSize>100)throw new CollectionTaskServiceError('collection_pagination_invalid',400,'page 应为正整数，page_size 应为 1–100。');const result=await this.repository.list({...(input.organization_id?{organizationId:input.organization_id}:{}),...(input.workspace_id?{workspaceId:input.workspace_id}:{}),...(input.status?{status:input.status as CollectionTaskStatus}:{}),page,pageSize});return{...result,page,page_size:pageSize};}async detail(id:string){if(!uuid.test(id))throw new CollectionTaskServiceError('collection_task_id_invalid',400,'任务 ID 无效。');const result=await this.repository.detail(id);if(!result)throw new CollectionTaskServiceError('collection_task_not_found',404,'刷新采集任务列表。');return result;}async replay(id:string,value:{reason?:unknown},context:{actorId:string;idempotencyKey:string;requestId:string;traceId:string}){if(!uuid.test(id))throw new CollectionTaskServiceError('collection_task_id_invalid',400,'任务 ID 无效。');if(typeof value?.reason!=='string'||value.reason.trim().length<2||value.reason.length>500)throw new CollectionTaskServiceError('collection_replay_reason_invalid',400,'重放原因需要 2–500 字符。');return this.repository.replay({taskId:id,newTaskId:randomUUID(),actorId:context.actorId,reason:value.reason.trim(),idempotencyKey:context.idempotencyKey,requestId:context.requestId,traceId:context.traceId,now:this.now()});}}
+import { randomUUID } from "node:crypto";
+import {
+  COLLECTION_TASK_STATUSES,
+  type CollectionTaskStatus,
+  type CoverageStatus,
+} from "@scoutops/collection-tasks";
+export interface CollectionTaskSummary {
+  id: string;
+  organization_id: string;
+  workspace_id: string;
+  status: CollectionTaskStatus;
+  coverage_status: CoverageStatus | null;
+  priority: "low" | "normal" | "high" | "critical";
+  scheduled_at: string;
+  available_at: string;
+  attempt_count: number;
+  successful_subquery_count: number;
+  failed_subquery_count: number;
+  blocked_subquery_count: number;
+  available_result_count: number;
+  missing_fields: string[];
+  last_error_code: string | null;
+  replay_of_task_id: string | null;
+  replay_reason: string | null;
+  request_id: string;
+  trace_id: string;
+  version: number;
+  created_at: string;
+  updated_at: string;
+}
+export interface CollectionSubquerySummary {
+  id: string;
+  provider_id: string;
+  provider_name: string;
+  ordinal: number;
+  is_required: boolean;
+  status: string;
+  available_result_count: number;
+  missing_fields: string[];
+  error_code: string | null;
+  retryable: boolean;
+  started_at: string | null;
+  finished_at: string | null;
+}
+export interface CollectionTaskDetail {
+  task: CollectionTaskSummary;
+  subqueries: CollectionSubquerySummary[];
+  attempts: Array<Record<string, unknown>>;
+  events: Array<Record<string, unknown>>;
+  dead_letter: Record<string, unknown> | null;
+}
+export interface CollectionTaskRepository {
+  list(input: {
+    organizationId?: string;
+    workspaceId?: string;
+    status?: CollectionTaskStatus;
+    page: number;
+    pageSize: number;
+  }): Promise<{ items: CollectionTaskSummary[]; total: number }>;
+  detail(id: string): Promise<CollectionTaskDetail | null>;
+  replay(input: {
+    taskId: string;
+    newTaskId: string;
+    actorId: string;
+    reason: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<CollectionTaskDetail>;
+}
+export class CollectionTaskServiceError extends Error {
+  constructor(
+    readonly code: string,
+    readonly statusCode: number,
+    readonly actionHint: string,
+  ) {
+    super(code);
+    this.name = "CollectionTaskServiceError";
+  }
+}
+const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const pageNumber = (value: unknown, fallback: number) =>
+  value === undefined
+    ? fallback
+    : typeof value === "string" && /^\d+$/.test(value)
+      ? Number(value)
+      : value;
+export class CollectionTaskService {
+  constructor(
+    private readonly repository: CollectionTaskRepository,
+    private readonly now: () => Date = () => new Date(),
+  ) {}
+  async list(input: {
+    organization_id?: string;
+    workspace_id?: string;
+    status?: string;
+    page?: number | string;
+    page_size?: number | string;
+  }) {
+    if (input.workspace_id && !input.organization_id)
+      throw new CollectionTaskServiceError(
+        "collection_scope_invalid",
+        400,
+        "选择组织后再筛选工作区。",
+      );
+    if (
+      (input.organization_id && !uuid.test(input.organization_id)) ||
+      (input.workspace_id && !uuid.test(input.workspace_id))
+    )
+      throw new CollectionTaskServiceError(
+        "collection_scope_invalid",
+        400,
+        "刷新组织与工作区筛选。",
+      );
+    if (input.status && !COLLECTION_TASK_STATUSES.includes(input.status as CollectionTaskStatus))
+      throw new CollectionTaskServiceError(
+        "collection_status_invalid",
+        400,
+        "使用 OpenAPI 中的任务状态。",
+      );
+    const page = pageNumber(input.page, 1),
+      pageSize = pageNumber(input.page_size, 20);
+    if (
+      typeof page !== "number" ||
+      !Number.isInteger(page) ||
+      page < 1 ||
+      page > 100000 ||
+      typeof pageSize !== "number" ||
+      !Number.isInteger(pageSize) ||
+      pageSize < 1 ||
+      pageSize > 100
+    )
+      throw new CollectionTaskServiceError(
+        "collection_pagination_invalid",
+        400,
+        "page 应为正整数，page_size 应为 1–100。",
+      );
+    const result = await this.repository.list({
+      ...(input.organization_id ? { organizationId: input.organization_id } : {}),
+      ...(input.workspace_id ? { workspaceId: input.workspace_id } : {}),
+      ...(input.status ? { status: input.status as CollectionTaskStatus } : {}),
+      page,
+      pageSize,
+    });
+    return { ...result, page, page_size: pageSize };
+  }
+  async detail(id: string) {
+    if (!uuid.test(id))
+      throw new CollectionTaskServiceError("collection_task_id_invalid", 400, "任务 ID 无效。");
+    const result = await this.repository.detail(id);
+    if (!result)
+      throw new CollectionTaskServiceError("collection_task_not_found", 404, "刷新采集任务列表。");
+    return result;
+  }
+  async replay(
+    id: string,
+    value: { reason?: unknown },
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    if (!uuid.test(id))
+      throw new CollectionTaskServiceError("collection_task_id_invalid", 400, "任务 ID 无效。");
+    if (
+      typeof value?.reason !== "string" ||
+      value.reason.trim().length < 2 ||
+      value.reason.length > 500
+    )
+      throw new CollectionTaskServiceError(
+        "collection_replay_reason_invalid",
+        400,
+        "重放原因需要 2–500 字符。",
+      );
+    return this.repository.replay({
+      taskId: id,
+      newTaskId: randomUUID(),
+      actorId: context.actorId,
+      reason: value.reason.trim(),
+      idempotencyKey: context.idempotencyKey,
+      requestId: context.requestId,
+      traceId: context.traceId,
+      now: this.now(),
+    });
+  }
+}

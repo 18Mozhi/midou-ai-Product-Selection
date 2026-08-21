@@ -71,6 +71,12 @@
 .task-batch-impact textarea {
   min-height: 96px;
 }
+.task-action-dialog form {
+  width: min(520px, calc(100vw - 52px));
+}
+.task-action-dialog textarea {
+  min-height: 108px;
+}
 @media (max-width: 760px) {
   .task-batch-bar {
     flex-wrap: wrap;

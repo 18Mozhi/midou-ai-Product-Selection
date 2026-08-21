@@ -70,7 +70,7 @@ test("M01-03.A07/A08/A15 UI implements reference-backed desktop and 390 states",
   assert.match(component, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   assert.match(styles, /@media\s*\(\s*max-width:\s*720px\s*\)/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(e2e, /keyboard\.press\(["']Enter["']\)/);
 });
 

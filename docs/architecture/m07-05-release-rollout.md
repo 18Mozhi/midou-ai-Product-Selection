@@ -4,11 +4,11 @@
 > `/www/wwwroot/ai选品/backend`，不创建 `current`、`releases`、长期候选槽或第二个
 > Node 项目。下文双槽内容只保留为 2026-08-08 历史签发审计，不能作为当前部署步骤。
 
-当前发布只允许从本地干净工作树执行 `python scripts/deploy-baota.py`，覆盖固定的
+当前发布只允许从本地干净的 `main` 工作树执行 `python scripts/deploy-baota.py`。部署器先拉取批准的公开仓库 `18Mozhi/midou-ai-Product-Selection` 的 `origin/main`，要求本地 HEAD 与远端 SHA 完全一致；连接宝塔后还会只读检查现有 `config/release.env`，现有生产 `BUILD_SHA` 必须是当前批准仓库中目标提交的祖先。未知仓库、游离分支、未推送提交、强推后不相干的生产历史或畸形 SHA 均在上传前失败关闭。部署包把本地、远端、分支和仓库身份写入受限 `release.env`，覆盖固定的
 `frontend`、`backend` 与 `python` 运行包。生产拓扑以
 `infra/baota/service-manifest.json` 为准：宝塔网站 `ai选品网站`、统一 Node 后端
 `ai选品`（本机 4101，监督 API 与 Worker）以及 Python Crawler
-`ai选品-python`。发布后分别核验 live、ready、available 与 version；失败时以本地目标
+`ai选品-python`。发布后分别核验 ready、available 与 version；业务可用性缺失或 Worker 未真实就绪时不得把生产标记健康。发布页同时展示部署任务捕获的本地 SHA、远端 SHA 与当前运行生产 SHA；只有当前运行 SHA 对应的版本、配置指纹、迁移和观察门证据可以签发，旧 SHA 仅保留历史审计。失败时以本地目标
 Git 提交重新构建并部署回滚。`scripts/verify-runtime-doc-consistency.mjs` 同时接入文档门和
 发布矩阵，任何文档再次要求第二 Node 后端都会失败关闭。
 

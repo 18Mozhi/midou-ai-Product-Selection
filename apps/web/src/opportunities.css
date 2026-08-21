@@ -183,8 +183,12 @@
   color: var(--so-text-muted);
   font-size: 10px;
 }
-.opportunity-list > a {
+.opportunity-list-row {
+  position: relative;
   margin-top: 9px;
+  padding-left: 44px;
+}
+.opportunity-list-row > a {
   padding: 14px;
   display: grid;
   grid-template-columns: 42px minmax(180px, 1fr) minmax(440px, 1.5fr) auto;
@@ -234,14 +238,55 @@
   margin: 4px 0 0;
   font-size: 9px;
 }
-.opportunity-list > a > b {
+.opportunity-list-row > a > b {
   padding: 6px 8px;
   border-radius: 999px;
   color: var(--so-warning);
   background: color-mix(in srgb, var(--so-warning) 10%, transparent);
   font-size: 8px;
 }
-.opportunity-list > a > b[data-status="adopted"] {
+.opportunity-row-select {
+  position: absolute;
+  z-index: 2;
+  inset: 0 auto 0 0;
+  width: 44px;
+  display: grid;
+  place-items: center;
+}
+.opportunity-row-select input {
+  width: 20px;
+  height: 20px;
+}
+.opportunity-batch-bar {
+  position: sticky;
+  z-index: 4;
+  top: 8px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--so-primary);
+  border-radius: 10px;
+  background: var(--so-bg-elevated);
+}
+.opportunity-batch-bar span {
+  margin-right: auto;
+  font-weight: 750;
+}
+.opportunity-batch-bar .danger {
+  color: var(--so-danger);
+}
+.opportunity-batch-dialog select {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-bg);
+}
+.opportunity-list-row > a > b[data-status="adopted"] {
   color: var(--so-success);
 }
 .opportunity-detail > header {
@@ -592,7 +637,7 @@
   .opportunity-list-summary {
     grid-template-columns: 1fr 1fr;
   }
-  .opportunity-list > a {
+  .opportunity-list-row > a {
     grid-template-columns: 42px 1fr auto;
   }
   .opportunity-list dl {
@@ -630,14 +675,14 @@
   .opportunity-list {
     padding: 10px;
   }
-  .opportunity-list > a {
+  .opportunity-list-row > a {
     grid-template-columns: 38px 1fr;
   }
   .opportunity-list dl {
     grid-column: 1/-1;
     grid-template-columns: repeat(2, 1fr);
   }
-  .opportunity-list > a > b {
+  .opportunity-list-row > a > b {
     grid-column: 2;
     justify-self: start;
   }

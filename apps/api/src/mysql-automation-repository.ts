@@ -42,6 +42,57 @@ export class MySqlAutomationRepository implements AutomationRepository {
     );
     return rows.map((r) => this.view(r));
   }
+  async preview(i: any) {
+    await this.member(i.organizationId, i.workspaceId, i.value.owner_id);
+    if (i.value.action_assignee_id)
+      await this.member(i.organizationId, i.workspaceId, i.value.action_assignee_id);
+    const previewNow = this.now(),
+      thirtyDaysAgo = new Date(previewNow.valueOf() - 30 * 24 * 60 * 60 * 1000),
+      rateWindowStart = new Date(
+        previewNow.valueOf() - i.value.rate_limit_window_minutes * 60 * 1000,
+      ),
+      severitySql = i.value.condition_severity === "any" ? "" : " AND n.severity=?",
+      args = [
+        i.organizationId,
+        i.workspaceId,
+        i.value.trigger_event_type,
+        ...(severitySql ? [i.value.condition_severity] : []),
+      ],
+      [counts] = await this.pool.query<RowDataPacket[]>(
+        "SELECT SUM(n.created_at>=?) matched_30d,SUM(n.created_at>=?) matched_in_window " +
+          "FROM notifications n JOIN outbox_events e ON e.id=n.source_event_id " +
+          "WHERE n.organization_id=? AND n.workspace_id=? AND e.event_type=?" +
+          severitySql,
+        [thirtyDaysAgo, rateWindowStart, ...args],
+      ),
+      [samples] = await this.pool.query<RowDataPacket[]>(
+        "SELECT n.id notification_id,n.title,n.severity,n.created_at,e.event_type " +
+          "FROM notifications n JOIN outbox_events e ON e.id=n.source_event_id " +
+          "WHERE n.organization_id=? AND n.workspace_id=? AND e.event_type=?" +
+          severitySql +
+          " ORDER BY n.created_at DESC,n.id DESC LIMIT 5",
+        args,
+      ),
+      matchedInWindow = Number(counts[0]?.matched_in_window ?? 0),
+      projected = Math.min(matchedInWindow, i.value.rate_limit_count);
+    return {
+      mode: "read_only",
+      matched_30d: Number(counts[0]?.matched_30d ?? 0),
+      matched_in_rate_window: matchedInWindow,
+      projected_action_count: projected,
+      projected_task_count: i.value.action_type === "create_task" ? projected : 0,
+      projected_notification_count: i.value.action_type === "notify_owner" ? projected : 0,
+      rate_limit_count: i.value.rate_limit_count,
+      rate_limit_window_minutes: i.value.rate_limit_window_minutes,
+      samples: samples.map((row) => ({
+        notification_id: String(row.notification_id),
+        title: String(row.title),
+        severity: String(row.severity),
+        event_type: String(row.event_type),
+        created_at: iso(row.created_at),
+      })),
+    };
+  }
   async detail(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT * FROM automation_rules WHERE id=? AND organization_id=? AND workspace_id=?",

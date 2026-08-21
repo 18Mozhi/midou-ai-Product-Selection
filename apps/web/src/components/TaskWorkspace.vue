@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { ApiClientError, createApiClient, type ApiRequestOptions } from "../api-client";
+import {
+  ApiClientError,
+  createApiClient,
+  rethrowUnexpectedError,
+  type ApiRequestOptions,
+} from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
 import "../task-workspace.css";
 import "../task-workspace-enhancements.css";
@@ -35,12 +40,15 @@ type ExportTask = {
   updated_at: string;
   expires_at: string;
 };
+type MemberOption = { id: string; label: string };
+type TaskActionEditor = "pause" | "cancel" | "delay" | "transfer" | "progress";
 const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all"; taskId?: string }>(),
   route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   tasks = ref<Task[]>([]),
+  memberOptions = ref<MemberOption[]>([]),
   exportTasks = ref<ExportTask[]>([]),
   activeView = ref<"business" | "exports">(
     props.mode === "all" && route.query.view === "exports" ? "exports" : "business",
@@ -74,6 +82,14 @@ const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all"; taskId?: 
   showBatchImpact = ref(false),
   form = ref({ title: "", description: "", priority: "normal", due_at: "" }),
   comment = ref("");
+const taskActionEditor = ref<TaskActionEditor | null>(null),
+  taskActionForm = ref({
+    reason: "",
+    due_at: "",
+    assignee_id: "",
+    progress_percent: 0,
+    progress_note: "",
+  });
 const closeTaskEditor = () => {
     showCreate.value = false;
     editing.value = null;
@@ -93,6 +109,10 @@ const closeTaskEditor = () => {
   { dialogElement: deleteDialogElement, handleCancel: handleDeleteCancel } = useModalDialog(
     () => Boolean(deleting.value),
     closeDeleteDialog,
+  ),
+  { dialogElement: actionDialogElement, handleCancel: handleActionCancel } = useModalDialog(
+    () => Boolean(taskActionEditor.value),
+    () => (taskActionEditor.value = null),
   );
 const pageSize = 10,
   visible = computed(() => tasks.value.filter((x) => !status.value || x.status === status.value)),
@@ -237,9 +257,18 @@ async function load() {
       ]);
     tasks.value = list;
     summary.value = sum;
+    try {
+      memberOptions.value = await api<MemberOption[]>("/tasks/member-options");
+    } catch (error) {
+      if (!(error instanceof ApiClientError)) throw error;
+      memberOptions.value = [];
+      notice.value = "任务已加载；组织成员选项暂不可用，转交与指派需稍后重试。";
+    }
     state.value = list.length ? "ready" : "empty";
     if (props.taskId) await openById(props.taskId);
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function setView(value: "business" | "exports") {
   await router.replace({
@@ -255,7 +284,9 @@ async function openById(id: string) {
   try {
     selected.value = await api(`/tasks/${id}`);
     state.value = "ready";
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function open(x: Task) {
   await openById(x.id);
@@ -295,7 +326,9 @@ async function create() {
     form.value = { title: "", description: "", priority: "normal", due_at: "" };
     notice.value = wasEditing ? "任务已更新。" : "任务已创建，可以立即开始并持续更新进度。";
     await load();
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 function editTask() {
   if (!selected.value) return;
@@ -308,30 +341,16 @@ function editTask() {
   };
   showCreate.value = true;
 }
-async function updateProgress() {
+function openActionEditor(name: TaskActionEditor) {
   if (!selected.value) return;
-  const raw = window.prompt(
-    "请输入完成进度（0-100）",
-    String(selected.value.progress_percent ?? 0),
-  );
-  if (raw === null) return;
-  const progress = Number(raw);
-  const note = window.prompt("本次进展说明")?.trim();
-  if (!note) return;
-  try {
-    await api(`/tasks/${selected.value.id}/actions`, {
-      method: "POST",
-      body: {
-        action: "progress",
-        expected_version: selected.value.version,
-        progress_percent: progress,
-        progress_note: note,
-      },
-    });
-    notice.value = "任务进度已更新。";
-    await open(selected.value);
-    await load();
-  } catch {}
+  taskActionEditor.value = name;
+  taskActionForm.value = {
+    reason: "",
+    due_at: selected.value.due_at ? new Date(selected.value.due_at).toISOString().slice(0, 16) : "",
+    assignee_id: selected.value.assignee_id,
+    progress_percent: selected.value.progress_percent ?? 0,
+    progress_note: selected.value.progress_note ?? "",
+  };
 }
 function askRemove(task: Task) {
   deleting.value = task;
@@ -349,33 +368,57 @@ async function removeTask() {
     deleting.value = null;
     deleteReason.value = "";
     await load();
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 async function action(name: string) {
   if (!selected.value) return;
-  const body: any = { action: name, expected_version: selected.value.version };
-  if (["pause", "cancel", "delay", "transfer"].includes(name)) {
-    body.reason = window.prompt("请输入原因")?.trim();
-    if (!body.reason) return;
-  }
-  if (name === "delay") {
-    const d = window.prompt("新的截止时间（ISO 8601）");
-    if (!d) return;
-    body.due_at = d;
-  }
-  if (name === "transfer") {
-    body.assignee_id = window.prompt("请输入接收成员的账号编号")?.trim();
-    if (!body.assignee_id) return;
+  if (["pause", "cancel", "delay", "transfer", "progress"].includes(name)) {
+    openActionEditor(name as TaskActionEditor);
+    return;
   }
   try {
-    await api(`/tasks/${selected.value.id}/actions`, {
+    const result = await api<any>(`/tasks/${selected.value.id}/actions`, {
       method: "POST",
-      body,
+      body: { action: name, expected_version: selected.value.version },
     });
-    notice.value = "任务动作已记录。";
+    notice.value =
+      name === "complete" && result.auto_score_status === "queued"
+        ? "任务已完成，机会重新评分已自动入队。"
+        : name === "complete" && result.auto_score_status === "waiting_for_active_rule"
+          ? "任务已完成；当前没有活动评分规则，暂未生成评分任务。"
+          : "任务动作已记录。";
     await open(selected.value);
     await load();
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
+}
+async function submitTaskAction() {
+  if (!selected.value || !taskActionEditor.value) return;
+  const actionName = taskActionEditor.value,
+    body: Record<string, unknown> = {
+      action: actionName,
+      expected_version: selected.value.version,
+    };
+  if (["pause", "cancel", "delay", "transfer"].includes(actionName))
+    body.reason = taskActionForm.value.reason.trim();
+  if (actionName === "delay") body.due_at = new Date(taskActionForm.value.due_at).toISOString();
+  if (actionName === "transfer") body.assignee_id = taskActionForm.value.assignee_id;
+  if (actionName === "progress") {
+    body.progress_percent = Number(taskActionForm.value.progress_percent);
+    body.progress_note = taskActionForm.value.progress_note.trim();
+  }
+  try {
+    await api(`/tasks/${selected.value.id}/actions`, { method: "POST", body });
+    notice.value = actionName === "progress" ? "任务进度已更新。" : "任务动作已记录。";
+    taskActionEditor.value = null;
+    await openById(selected.value.id);
+    await load();
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 function previewBatch(action: "pause" | "resume" | "cancel") {
   batchAction.value = action;
@@ -421,7 +464,9 @@ async function addComment() {
     });
     comment.value = "";
     await open(selected.value);
-  } catch {}
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  }
 }
 onMounted(() => {
   const query = new URLSearchParams(window.location.search);
@@ -711,7 +756,7 @@ watch(
         >
           取消任务</button
         ><button @click="action('transfer')">转交</button>
-        <button @click="updateProgress">更新进度</button><button @click="editTask">编辑</button>
+        <button @click="action('progress')">更新进度</button><button @click="editTask">编辑</button>
         <details class="task-detail-more">
           <summary>更多任务操作</summary>
           <button class="danger" type="button" @click="askRemove(selected)">删除任务</button>
@@ -736,6 +781,77 @@ watch(
         </form>
       </section>
     </aside>
+    <dialog
+      ref="actionDialogElement"
+      class="task-action-dialog"
+      aria-label="任务操作表单"
+      @cancel="handleActionCancel"
+    >
+      <form @submit.prevent="submitTaskAction">
+        <h3>
+          {{
+            taskActionEditor === "transfer"
+              ? "转交任务"
+              : taskActionEditor === "delay"
+                ? "调整任务期限"
+                : taskActionEditor === "progress"
+                  ? "更新任务进度"
+                  : taskActionEditor === "pause"
+                    ? "暂停任务"
+                    : "取消任务"
+          }}
+        </h3>
+        <p>提交后会写入任务活动与审计记录，并使用当前任务版本进行冲突校验。</p>
+        <label v-if="taskActionEditor === 'transfer'">
+          接收成员
+          <select v-model="taskActionForm.assignee_id" required>
+            <option value="" disabled>请选择可访问当前工作区的成员</option>
+            <option v-for="member in memberOptions" :key="member.id" :value="member.id">
+              {{ member.label }}
+            </option>
+          </select>
+        </label>
+        <label v-if="taskActionEditor === 'delay'">
+          新截止时间
+          <input v-model="taskActionForm.due_at" type="datetime-local" required />
+        </label>
+        <template v-if="taskActionEditor === 'progress'">
+          <label>
+            完成进度（0–100）
+            <input
+              v-model.number="taskActionForm.progress_percent"
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              required
+            />
+          </label>
+          <label>
+            本次进展说明
+            <textarea
+              v-model="taskActionForm.progress_note"
+              maxlength="500"
+              required
+              placeholder="说明已完成内容、当前阻塞和下一步"
+            ></textarea>
+          </label>
+        </template>
+        <label v-else>
+          操作原因
+          <textarea
+            v-model="taskActionForm.reason"
+            maxlength="500"
+            required
+            placeholder="请填写可审计的操作原因"
+          ></textarea>
+        </label>
+        <div>
+          <button type="button" @click="taskActionEditor = null">返回</button>
+          <button type="submit">确认提交</button>
+        </div>
+      </form>
+    </dialog>
     <dialog
       ref="batchDialogElement"
       class="task-batch-impact"

@@ -38,6 +38,8 @@ NPM_BIN = f"/www/server/nodejs/{NODE_VERSION}/bin/npm"
 PYTHON_BIN = "/www/server/pyporject_evn/versions/3.12.13/bin/python3.12"
 PANEL_PYTHON = "/www/server/panel/pyenv/bin/python"
 PUBLIC_BASE_URL = "https://midouai.mozhiz.cn"
+EXPECTED_GITHUB_REPOSITORY = "18Mozhi/midou-ai-Product-Selection"
+DEPLOYMENT_MIGRATION_VERSION = "0052b_provider_public_compliance.up.sql"
 NODE_START_COMMAND = (
     f"node --env-file={PROJECT_ROOT}/config/product_scout.env "
     f"--env-file={PROJECT_ROOT}/config/release.env apps/backend/dist/server.js"
@@ -74,6 +76,56 @@ class Credential(ctypes.Structure):
 def run(command: list[str], cwd: Path) -> str:
     completed = subprocess.run(command, cwd=cwd, check=True, text=True, capture_output=True)
     return completed.stdout.strip()
+
+
+def normalize_github_repository(remote_url: str) -> str:
+    value = remote_url.strip().removesuffix(".git")
+    for prefix in ("https://github.com/", "http://github.com/", "ssh://git@github.com/", "git@github.com:"):
+        if value.startswith(prefix):
+            return value.removeprefix(prefix)
+    raise RuntimeError("origin must be the approved public GitHub repository")
+
+
+def release_source_identity(repo: Path) -> dict[str, str]:
+    branch = run(["git", "rev-parse", "--abbrev-ref", "HEAD"], repo)
+    if branch != "main":
+        raise RuntimeError("production deployment must run from the main branch")
+    origin = run(["git", "remote", "get-url", "origin"], repo)
+    repository = normalize_github_repository(origin)
+    if repository.lower() != EXPECTED_GITHUB_REPOSITORY.lower():
+        raise RuntimeError("origin does not match the approved ScoutOps repository")
+    run(["git", "fetch", "--quiet", "--no-tags", "origin", "main"], repo)
+    local_sha = run(["git", "rev-parse", "HEAD"], repo)
+    remote_sha = run(["git", "rev-parse", "refs/remotes/origin/main"], repo)
+    if local_sha != remote_sha:
+        raise RuntimeError("local main and origin/main must be the same commit before production deployment")
+    return {
+        "local_sha": local_sha,
+        "remote_sha": remote_sha,
+        "remote_branch": branch,
+        "repository": repository,
+    }
+
+
+def verify_production_sha_history(repo: Path, production_sha: str | None, target_sha: str) -> None:
+    if not production_sha:
+        return
+    if len(production_sha) != 40 or any(character not in "0123456789abcdef" for character in production_sha.lower()):
+        raise RuntimeError("production BUILD_SHA is malformed; refusing to replace untrusted release history")
+    commit = subprocess.run(
+        ["git", "cat-file", "-e", f"{production_sha}^{{commit}}"],
+        cwd=repo,
+        text=True,
+        capture_output=True,
+    )
+    ancestor = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", production_sha, target_sha],
+        cwd=repo,
+        text=True,
+        capture_output=True,
+    )
+    if commit.returncode != 0 or ancestor.returncode != 0:
+        raise RuntimeError("production BUILD_SHA is not an ancestor in the current approved repository history")
 
 
 def read_windows_credential() -> str:
@@ -133,7 +185,8 @@ def verify_release_change_ownership(repo: Path) -> None:
     )
 
 
-def build_package(repo: Path, build_sha: str, skip_build: bool, temp_root: Path) -> Path:
+def build_package(repo: Path, source_identity: dict[str, str], skip_build: bool, temp_root: Path) -> Path:
+    build_sha = source_identity["local_sha"]
     if not skip_build:
         subprocess.run([local_npm_executable(), "run", "build"], cwd=repo, check=True)
 
@@ -172,7 +225,22 @@ def build_package(repo: Path, build_sha: str, skip_build: bool, temp_root: Path)
 
     release = package_root / "release.env"
     version = json.loads((repo / "package.json").read_text(encoding="utf-8"))["version"]
-    release.write_text(f"BUILD_SHA={build_sha}\nAPP_VERSION={version}\n", encoding="utf-8", newline="\n")
+    release.write_text(
+        "\n".join(
+            [
+                f"BUILD_SHA={build_sha}",
+                f"APP_VERSION={version}",
+                f"RELEASE_SOURCE_LOCAL_SHA={source_identity['local_sha']}",
+                f"RELEASE_SOURCE_REMOTE_SHA={source_identity['remote_sha']}",
+                f"RELEASE_SOURCE_REMOTE_BRANCH={source_identity['remote_branch']}",
+                f"RELEASE_SOURCE_REPOSITORY={source_identity['repository']}",
+                f"RELEASE_SOURCE_MIGRATION_VERSION={DEPLOYMENT_MIGRATION_VERSION}",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+        newline="\n",
+    )
 
     archive = temp_root / f"scoutops-{build_sha}.tar.gz"
     with tarfile.open(archive, "w:gz") as tar:
@@ -426,6 +494,21 @@ print("SCOUTOPS_RESULT="+json.dumps({{"status":True,"message":"cleanup complete"
 '''
 
 
+def production_identity_source() -> str:
+    values = json.dumps({"root": PROJECT_ROOT}, ensure_ascii=False)
+    return f'''import json
+from pathlib import Path
+v=json.loads({values!r}); root=Path(v["root"])
+if str(root)!="/www/wwwroot/ai选品" or not root.is_dir(): raise SystemExit("unexpected root")
+release=root/"config"/"release.env"; build_sha=None
+if release.is_file():
+    for line in release.read_text(encoding="utf-8").splitlines():
+        key, separator, value=line.partition("=")
+        if separator and key=="BUILD_SHA": build_sha=value.strip()
+print("SCOUTOPS_RESULT="+json.dumps({{"status":True,"message":"production identity read","build_sha":build_sha}}))
+'''
+
+
 def verify_public(build_sha: str) -> None:
     deadline = time.time() + 90
     last_error: Exception | None = None
@@ -433,14 +516,18 @@ def verify_public(build_sha: str) -> None:
         try:
             with urllib.request.urlopen(f"{PUBLIC_BASE_URL}/api/v1/health/ready", timeout=10) as response:
                 ready = json.load(response)
+            with urllib.request.urlopen(f"{PUBLIC_BASE_URL}/api/v1/health/available", timeout=10) as response:
+                available = json.load(response)
             with urllib.request.urlopen(f"{PUBLIC_BASE_URL}/api/v1/health/version", timeout=10) as response:
                 version = json.load(response)
-            if response.status == 200 and version.get("data", {}).get("build_sha") == build_sha:
-                if ready.get("data", {}).get("status") in ("ready", "healthy"):
-                    return
-                if ready.get("status") in ("ready", "healthy"):
-                    return
-                # A 200 ready response is the authoritative readiness signal.
+            ready_status = ready.get("data", {}).get("status") or ready.get("status")
+            available_status = available.get("data", {}).get("status") or available.get("status")
+            if (
+                response.status == 200
+                and version.get("data", {}).get("build_sha") == build_sha
+                and ready_status in ("ready", "healthy")
+                and available_status == "available"
+            ):
                 return
         except Exception as error:  # noqa: BLE001 - retain latest health failure for handoff
             last_error = error
@@ -457,13 +544,14 @@ def main() -> None:
     repo = Path(__file__).resolve().parents[1]
     if run(["git", "status", "--porcelain"], repo):
         raise RuntimeError("Git worktree must be clean before production deployment")
-    build_sha = run(["git", "rev-parse", "HEAD"], repo)
+    source_identity = release_source_identity(repo)
+    build_sha = source_identity["local_sha"]
     if len(build_sha) != 40:
         raise RuntimeError("full Git build identity is unavailable")
     verify_release_change_ownership(repo)
 
     with tempfile.TemporaryDirectory(prefix="scoutops-deploy-") as temp:
-        archive = build_package(repo, build_sha, args.skip_build, Path(temp))
+        archive = build_package(repo, source_identity, args.skip_build, Path(temp))
         password = read_windows_credential()
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.RejectPolicy())
@@ -476,6 +564,8 @@ def main() -> None:
         remote_archive = f"{PROJECT_ROOT}/.deploy-upload-{build_sha}.tar.gz"
         remote_stage = f"{PROJECT_ROOT}/.deploy-stage-{build_sha}"
         try:
+            production_identity = remote_python(client, production_identity_source(), timeout=30)
+            verify_production_sha_history(repo, production_identity.get("build_sha"), build_sha)
             sftp = client.open_sftp()
             sftp.put(str(archive), remote_archive)
             sftp.close()
@@ -494,7 +584,7 @@ def main() -> None:
             migrate = (
                 f"cd '{remote_stage}/backend' && "
                 f"'{NODE_BIN}' --env-file='{PROJECT_ROOT}/config/product_scout.env' "
-                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql"
+                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql"
             )
             ssh_exec(client, migrate, timeout=120)
             remote_python(client, panel_deploy_source(build_sha, args.initialize_layout), timeout=300)

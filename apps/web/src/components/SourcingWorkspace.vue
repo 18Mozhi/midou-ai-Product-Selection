@@ -26,6 +26,8 @@ type Candidate = {
     version: number;
     stability_status: string;
     risk_level: string;
+    observed_at: string;
+    evidence_id: string;
   } | null;
 };
 type Search = {
@@ -49,6 +51,16 @@ type Search = {
     cost_usd: number | null;
     source_url: string;
     observed_at: string;
+  } | null;
+  collection_task_id?: string;
+  collection_progress?: {
+    status: string;
+    total_subqueries: number;
+    successful_subqueries: number;
+    failed_subqueries: number;
+    blocked_subqueries: number;
+    active_subqueries: number;
+    available_at: string;
   } | null;
 };
 type ComparisonQuote = {
@@ -84,6 +96,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     Array<{ id: string; name: string; quotes: ComparisonQuote[]; created_at: string }>
   >([]),
   quoteCandidate = ref<Candidate | null>(null),
+  purchaseCandidate = ref<Candidate | null>(null),
   selectedQuotes = ref<string[]>([]),
   form = reactive({
     input_type: "keyword",
@@ -99,6 +112,10 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     risk_level: "unknown",
     observed_at: new Date().toISOString().slice(0, 16),
     evidence_id: "",
+  }),
+  purchaseForm = reactive({
+    quantity: 1,
+    reason: "从供应链找货页面创建采购任务",
   });
 const missingLabels: Record<string, string> = {
     moq: "最小起订量",
@@ -129,6 +146,18 @@ const missingLabels: Record<string, string> = {
   missingText = computed(() =>
     (selected.value?.missing_fields ?? []).map((x) => missingLabels[x] ?? x).join("、"),
   ),
+  evidenceOptions = computed(() => {
+    const options = candidates.value.map((candidate) => ({
+      id: candidate.evidence_id,
+      label: `${candidate.supplier_name} · ${candidate.product_title}`,
+    }));
+    if (selected.value?.erp_reference)
+      options.push({
+        id: selected.value.erp_reference.evidence_id,
+        label: `ERP · ${selected.value.erp_reference.title}`,
+      });
+    return [...new Map(options.map((option) => [option.id, option])).values()];
+  }),
   journeyStage = computed(() => {
     if (!selected.value || !candidates.value.length) return 1;
     if (!candidates.value.some((item) => item.quote)) return 2;
@@ -287,6 +316,16 @@ function choose(candidate: Candidate) {
   else if (selectedQuotes.value.length < 5) selectedQuotes.value.push(id);
   else notice.value = "一次最多比较五家供应商。";
 }
+function openQuote(candidate: Candidate) {
+  quoteCandidate.value = candidate;
+  quote.moq = candidate.moq ?? 1;
+  quote.specification = candidate.specification ?? "";
+  quote.lead_time_days = candidate.lead_time_days ?? 7;
+  quote.location = candidate.location ?? "";
+  quote.confidence_value = candidate.confidence_value ?? 80;
+  quote.observed_at = new Date(candidate.observed_at).toISOString().slice(0, 16);
+  quote.evidence_id = candidate.evidence_id;
+}
 async function compare() {
   if (
     await post("/sourcing/comparisons", {
@@ -298,23 +337,25 @@ async function compare() {
     selectedQuotes.value = [];
   }
 }
-async function purchase(candidate: Candidate) {
+function openPurchase(candidate: Candidate) {
   if (!candidate.quote) return;
-  const quantity = Number(
-    window.prompt(
-      `采购数量不得低于 MOQ ${candidate.moq ?? "已确认值"}`,
-      String(candidate.moq ?? 1),
-    ),
-  );
-  if (!Number.isSafeInteger(quantity)) return;
+  purchaseCandidate.value = candidate;
+  purchaseForm.quantity = candidate.moq ?? 1;
+  purchaseForm.reason = "从供应链找货页面创建采购任务";
+}
+async function purchase() {
+  const candidate = purchaseCandidate.value;
+  if (!candidate?.quote) return;
   if (
     await post("/sourcing/purchase-tasks", {
       quote_id: candidate.quote.id,
-      quantity,
-      reason: "从供应链找货页面创建采购任务",
+      quantity: Number(purchaseForm.quantity),
+      reason: purchaseForm.reason.trim(),
     })
-  )
+  ) {
+    purchaseCandidate.value = null;
     notice.value = "采购任务已进入任务中心待消费队列。";
+  }
 }
 async function refreshSearch() {
   if (!selected.value) return;
@@ -459,6 +500,51 @@ watch(query, (value) => {
         <p v-if="selected.missing_fields.length" class="missing">
           当前候选仍缺：{{ missingText }}。必须人工带证据确认。
         </p>
+        <section v-if="selected.collection_progress" class="sourcing-progress">
+          <header>
+            <div>
+              <small>完整采集进度</small>
+              <h4>{{ statusText(selected.collection_progress.status) }}</h4>
+            </div>
+            <strong
+              >{{
+                selected.collection_progress.successful_subqueries +
+                selected.collection_progress.failed_subqueries +
+                selected.collection_progress.blocked_subqueries
+              }}
+              / {{ selected.collection_progress.total_subqueries }} 个来源已结束</strong
+            >
+          </header>
+          <progress
+            :value="
+              selected.collection_progress.successful_subqueries +
+              selected.collection_progress.failed_subqueries +
+              selected.collection_progress.blocked_subqueries
+            "
+            :max="Math.max(1, selected.collection_progress.total_subqueries)"
+          ></progress>
+          <dl>
+            <div>
+              <dt>成功</dt>
+              <dd>{{ selected.collection_progress.successful_subqueries }}</dd>
+            </div>
+            <div>
+              <dt>执行中 / 等待</dt>
+              <dd>{{ selected.collection_progress.active_subqueries }}</dd>
+            </div>
+            <div>
+              <dt>失败</dt>
+              <dd>{{ selected.collection_progress.failed_subqueries }}</dd>
+            </div>
+            <div>
+              <dt>受阻</dt>
+              <dd>{{ selected.collection_progress.blocked_subqueries }}</dd>
+            </div>
+          </dl>
+          <RouterLink :to="`/platform-admin/collection?task=${selected.collection_task_id}`"
+            >查看采集任务明细</RouterLink
+          >
+        </section>
         <section v-if="selected.erp_reference" class="sourcing-erp-reference">
           <img
             v-if="selected.erp_reference.image_url"
@@ -510,6 +596,10 @@ watch(query, (value) => {
                 <dd>{{ item.moq ?? "待确认" }}</dd>
               </div>
               <div data-priority="primary">
+                <dt>报价新鲜度</dt>
+                <dd>{{ timeText(item.quote?.observed_at ?? item.observed_at) }}</dd>
+              </div>
+              <div data-priority="primary">
                 <dt>到岸价</dt>
                 <dd>待费用规则计算</dd>
               </div>
@@ -543,9 +633,8 @@ watch(query, (value) => {
                 >打开外部原始商品页（新窗口）</a
               ><time>采集于 {{ timeText(item.observed_at) }}</time
               ><code>证据 {{ item.evidence_id }}</code
-              ><button v-if="!item.quote" type="button" @click="quoteCandidate = item">
-                确认报价</button
-              ><button v-else type="button" @click="purchase(item)">创建采购任务</button>
+              ><button v-if="!item.quote" type="button" @click="openQuote(item)">确认报价</button
+              ><button v-else type="button" @click="openPurchase(item)">创建采购任务</button>
             </footer>
           </article>
         </section>
@@ -691,10 +780,89 @@ watch(query, (value) => {
             >观测时间<input v-model="quote.observed_at" type="datetime-local" required
           /></label>
         </div>
-        <label>确认依据证据编号<input v-model="quote.evidence_id" required /></label>
+        <label
+          >确认依据证据（可搜索）<input
+            v-model="quote.evidence_id"
+            type="search"
+            list="sourcing-evidence-options"
+            required
+            placeholder="输入证据编号或从候选中选择"
+        /></label>
+        <datalist id="sourcing-evidence-options">
+          <option v-for="option in evidenceOptions" :key="option.id" :value="option.id">
+            {{ option.label }}
+          </option>
+        </datalist>
         <footer>
           <button type="button" class="ghost" @click="quoteCandidate = null">取消</button
           ><button type="submit" :disabled="busy">确认新版本</button>
+        </footer>
+      </form>
+    </div>
+    <div
+      v-if="purchaseCandidate"
+      class="sourcing-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="purchase-task-title"
+    >
+      <form @submit.prevent="purchase">
+        <header>
+          <div>
+            <small>结构化采购创建</small>
+            <h3 id="purchase-task-title">创建采购任务</h3>
+          </div>
+          <button type="button" aria-label="关闭采购任务创建" @click="purchaseCandidate = null">
+            ×
+          </button>
+        </header>
+        <dl>
+          <div>
+            <dt>供应商</dt>
+            <dd>{{ purchaseCandidate.supplier_name }}</dd>
+          </div>
+          <div>
+            <dt>锁定报价版本</dt>
+            <dd>v{{ purchaseCandidate.quote?.version }}</dd>
+          </div>
+          <div>
+            <dt>最小起订量（MOQ）</dt>
+            <dd>{{ purchaseCandidate.moq }}</dd>
+          </div>
+          <div>
+            <dt>报价证据</dt>
+            <dd>{{ purchaseCandidate.quote?.evidence_id }}</dd>
+          </div>
+        </dl>
+        <label
+          >采购数量<input
+            v-model.number="purchaseForm.quantity"
+            type="number"
+            :min="purchaseCandidate.moq ?? 1"
+            step="1"
+            required
+        /></label>
+        <label
+          >创建原因<textarea
+            v-model="purchaseForm.reason"
+            minlength="2"
+            maxlength="1000"
+            rows="3"
+            required
+          ></textarea>
+        </label>
+        <footer>
+          <button type="button" class="ghost" @click="purchaseCandidate = null">取消</button
+          ><button
+            type="submit"
+            :disabled="
+              busy ||
+              purchaseForm.reason.trim().length < 2 ||
+              purchaseForm.quantity < (purchaseCandidate.moq ?? 1)
+            "
+          >
+            确认创建
+          </button>
         </footer>
       </form>
     </div>

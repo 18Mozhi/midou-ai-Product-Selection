@@ -58,12 +58,11 @@ const internalViews = new Set([
 ]);
 const selectedView = computed(
   () =>
-    (typeof route.meta.view === "string" ? route.meta.view : null) ??
     (import.meta.env.DEV &&
     requestedInternalView.value &&
     internalViews.has(requestedInternalView.value)
       ? requestedInternalView.value
-      : null),
+      : null) ?? (typeof route.meta.view === "string" ? route.meta.view : null),
 );
 const navigationShell = computed(() =>
   ["member", "organization_admin", "platform_admin"].includes(String(route.meta.shell))

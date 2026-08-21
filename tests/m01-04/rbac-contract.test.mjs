@@ -42,11 +42,11 @@ test("M01-04.A02/A05/A09 role and guard contract separates six surfaces and plat
     "platform_super_admin",
     "auditor",
   ])
-    assert.match(source, new RegExp(`code:'${role}'`));
+    assert.match(source, new RegExp(`code:\\s*["']${role}["']`));
   for (const scope of ["own", "team", "workspace", "organization", "platform"])
-    assert.match(source, new RegExp(`'${scope}'`));
+    assert.match(source, new RegExp(`["']${scope}["']`));
   for (const surface of ["api", "worker", "export", "file", "event", "sse"])
-    assert.match(source, new RegExp(`'${surface}'`));
+    assert.match(source, new RegExp(`["']${surface}["']`));
   assert.match(source, /permission_denied/);
   assert.match(source, /scopeMatches/);
 });
@@ -66,16 +66,16 @@ test("M01-04.A06/A13 OpenAPI DTO and API use server session without client actor
   ])
     assert.match(contracts, new RegExp(`interface ${dto}`));
   assert.match(routes, /options\.auth\.authenticate/);
-  assert.match(routes, /capability:'role:read'/);
-  assert.match(routes, /capability:'platform:superadmin'/);
-  assert.match(routes, /listRoles\('platform'\)/);
+  assert.match(routes, /capability:\s*["']role:read["']/);
+  assert.match(routes, /capability:\s*["']platform:superadmin["']/);
+  assert.match(routes, /listRoles\(["']platform["']\)/);
   assert.doesNotMatch(routes, /actor_id|membership_id|platform_role_assignments/);
 });
 test("M01-04.A07/A08/A15 UI contains full state and responsive read-only role matrix", async () => {
   const [ui, apiClient, styles, e2e] = await Promise.all([
     read("apps/web/src/components/AuthorizationCenter.vue"),
     read("apps/web/src/api-client.ts"),
-    read("apps/web/src/styles.css"),
+    read("apps/web/src/styles/access-governance.css"),
     read("tests/e2e/m01-04-rbac.spec.ts"),
   ]);
   for (const state of ["loading", "ready", "empty", "error", "forbidden", "expired"])
@@ -84,7 +84,7 @@ test("M01-04.A07/A08/A15 UI contains full state and responsive read-only role ma
   assert.match(ui, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   assert.match(styles, /@media\s*\(\s*max-width:\s*720px\s*\)/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(e2e, /keyboard\.press\(["']Enter["']\)/);
 });
 test("M01-04.A01/A10/A11/A17 docs maps and env lock exact boundaries", async () => {

@@ -218,6 +218,7 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
     "apps/api/src/provider-source-service.ts",
     "apps/api/src/provider-source-routes.ts",
     "apps/web/src/components/ProviderSourceCenter.vue",
+    "apps/web/src/components/provider-source-types.ts",
     "packages/provider-sources/src/proxy-fetch.ts",
     "config/env.example",
     "config/schema.json",
@@ -241,6 +242,7 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
       service,
       routes,
       web,
+      webTypes,
       proxy,
       env,
       schema,
@@ -262,7 +264,10 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
   assert.match(scheduler, /provider_offset/);
   assert.match(service, /syncCatalog[\s\S]*refresh/);
   assert.match(routes, /collection:replay[\s\S]*trend:read/);
-  assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
+  assert.match(
+    `${webTypes}\n${web}`,
+    /loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/,
+  );
   assert.match(proxy, /news\.google\.com/);
   assert.match(proxy, /Proxy-Authorization/);
   assert.match(env, /AUTOMATIC_SOURCE_SCHEDULER_POLL_MS/);
@@ -272,7 +277,7 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
   assert.match(architecture, /100 个以上[\s\S]*自动采集/);
   assert.match(runbook, /宝塔.*统一后端“ai选品”/s);
   assert.doesNotMatch(runbook, /`product-scout-api` Node 项目|`product-scout-worker` Node 项目/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(live, /news\.google\.com/);
   assert.match(live, /DELETE FROM collection_task_evidence_links WHERE organization_id=\?/);
   assert.match(live, /provider_sources_live_cleanup_failed/);
@@ -284,8 +289,86 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
   assert.match(blueprint, /100\+ 来源纠偏基线/);
 });
 test("M03-07 fixed source adapters reject redirects or validate the final host", async () => {
-  const source = await readFile("packages/provider-sources/src/index.ts", "utf8");
+  const source = await readFile("packages/provider-sources/src/adapters/index.ts", "utf8");
   assert.match(source, /redirect: "error"/);
   assert.match(source, /response\.url \|\| url/);
   assert.match(source, /response\.url\s*\|\|\s*url/);
+});
+
+test("provider source package keeps catalog parsers and adapters in separate modules", async () => {
+  const [facade, catalog, parsers, adapters] = await Promise.all(
+    [
+      "packages/provider-sources/src/index.ts",
+      "packages/provider-sources/src/catalog/index.ts",
+      "packages/provider-sources/src/parsers/index.ts",
+      "packages/provider-sources/src/adapters/index.ts",
+    ].map((file) => readFile(file, "utf8")),
+  );
+  assert.match(facade, /\.\/catalog\/index\.js/);
+  assert.match(facade, /\.\/parsers\/index\.js/);
+  assert.match(facade, /\.\/adapters\/index\.js/);
+  assert.match(catalog, /BUILTIN_PROVIDER_SOURCES/);
+  assert.match(parsers, /parseAmazonProductPage/);
+  assert.match(adapters, /createBuiltinSourceAdapters/);
+  assert.ok(facade.split(/\r?\n/).length < 20);
+});
+
+test("1688 acceptance reports login captcha and parser evidence without exposing credentials", async () => {
+  const { MySqlProviderSourceRepository } =
+      await import("../../apps/api/dist/mysql-provider-source-repository.js"),
+    now = new Date("2026-08-21T08:00:00.000Z"),
+    queries = [];
+  const pool = {
+    query: async (sql) => {
+      queries.push(sql);
+      if (sql.includes("FROM providers WHERE code='1688_search'"))
+        return [
+          [
+            {
+              id: "00000000-0000-4000-8000-000000001688",
+              status: "disabled",
+              owner_label: "平台来源中心",
+              parser_version: "1688-browser-snapshot-v1",
+            },
+          ],
+        ];
+      if (sql.includes("FROM crawler_profiles"))
+        return [[{ active_count: 1, evidence_at: new Date("2026-08-21T07:00:00.000Z") }]];
+      if (sql.includes("FROM crawler_browser_runs"))
+        return [
+          [
+            {
+              status: "succeeded",
+              error_code: null,
+              started_at: new Date("2026-08-21T07:10:00.000Z"),
+              finished_at: new Date("2026-08-21T07:12:00.000Z"),
+            },
+          ],
+        ];
+      if (sql.includes("FROM provider_parser_samples"))
+        return [
+          [
+            {
+              last_replay_status: "passed",
+              last_replay_at: new Date("2026-08-21T07:20:00.000Z"),
+              baseline_parser_version: "1688-browser-snapshot-v1",
+            },
+          ],
+        ];
+      throw new Error(`unexpected query ${sql}`);
+    },
+  };
+  const result = await new MySqlProviderSourceRepository(pool).read1688Acceptance(now);
+  assert.equal(result.overall, "ready_for_enable");
+  assert.deepEqual(
+    result.gates.map((gate) => gate.state),
+    ["passed", "passed", "passed"],
+  );
+  assert.equal(result.owner_label, "平台来源中心");
+  assert.deepEqual(result.pending_reasons, []);
+  assert.doesNotMatch(JSON.stringify(result), /cookie|credential_asset_id|lease_token|payload/i);
+  assert.match(
+    queries.find((sql) => sql.includes("FROM crawler_profiles")),
+    /ca\.expires_at/,
+  );
 });

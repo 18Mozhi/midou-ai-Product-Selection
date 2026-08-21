@@ -199,6 +199,30 @@ test("M07-05.A04/A08/A12/A16 release truth fails closed across current-release b
     finished_at: "2026-08-08T12:20:00.000Z",
   }));
   assert.equal((await readState([{ ...current, status: "healthy" }], passed)).state, "verified");
+  const oldEvidence = await new ReleaseRolloutService(
+    { read: async () => ({ releases: [{ ...current, status: "healthy" }], gates: passed }) },
+    { ...policy, currentBuildSha: "b".repeat(40) },
+    () => new Date("2026-08-08T12:30:00.000Z"),
+  ).read({ actorId: "actor", requestId: "request", traceId: "trace" });
+  assert.equal(oldEvidence.state, "blocked");
+  assert.equal(oldEvidence.latest_release, null);
+  assert.equal(oldEvidence.latest_historical_release.build_sha, "a".repeat(40));
+  assert.ok(oldEvidence.blockers.some((item) => item.code === "current_release_evidence_missing"));
+
+  const splitSource = await new ReleaseRolloutService(
+    { read: async () => ({ releases: [{ ...current, status: "healthy" }], gates: passed }) },
+    {
+      ...policy,
+      currentBuildSha: "a".repeat(40),
+      currentAppVersion: "0.1.0",
+      currentConfigFingerprint: "f".repeat(64),
+      sourceLocalSha: "a".repeat(40),
+      sourceRemoteSha: "b".repeat(40),
+    },
+    () => new Date("2026-08-08T12:30:00.000Z"),
+  ).read({ actorId: "actor", requestId: "request", traceId: "trace" });
+  assert.equal(splitSource.state, "blocked");
+  assert.ok(splitSource.blockers.some((item) => item.code === "release_source_mismatch"));
   assert.equal(
     (
       await readState(

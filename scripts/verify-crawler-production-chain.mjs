@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 
 const files = Object.fromEntries(
   await Promise.all(
@@ -36,7 +37,8 @@ for (const token of [
   "browser_collection_jobs",
   "collection_subquery_id",
   "PlaywrightBridge(config).run",
-  "subprocess.run",
+  "subprocess.Popen",
+  "shell=False",
   "run-playwright-crawler.mjs",
   "runWithEncryptedProfile",
   "lease_token",
@@ -78,4 +80,19 @@ for (const token of [
 ])
   if (!authenticatedBrowserTest.includes(token))
     throw new Error(`authenticated_browser_integration_missing:${token}`);
-console.log("crawler_production_chain_passed");
+
+execFileSync(
+  "python",
+  ["-m", "unittest", "discover", "-s", "apps/crawler/tests", "-p", "test_*.py"],
+  { cwd: process.cwd(), stdio: "inherit" },
+);
+execFileSync(
+  process.execPath,
+  [
+    "--test",
+    "tests/integration/crawler-python-consumer.test.mjs",
+    "tests/integration/authenticated-browser-source.test.mjs",
+  ],
+  { cwd: process.cwd(), stdio: "inherit" },
+);
+console.log("crawler_production_chain_behavior_passed");

@@ -1,8 +1,118 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp,readFile,rm,stat} from 'node:fs/promises';import {tmpdir} from 'node:os';import {join,relative} from 'node:path';import {buildScopedFilePath,createAuditEvent,issueDownloadGrant,redactAuditMetadata,verifyDownloadGrant,writeScopedFile} from '../../packages/storage/dist/index.js';
-const scope={organization_id:'org-a',workspace_id:'ws-a',category:'evidence',resource_id:'resource-a',filename:'evidence.json'};
-test('M00-06 path is organization/workspace isolated and rejects traversal',()=>{const path=buildScopedFilePath('C:\\storage',scope);assert.match(path,/organizations[\\/]org-a[\\/]workspaces[\\/]ws-a/);assert.throws(()=>buildScopedFilePath('C:\\storage',{...scope,filename:'../secret'}),/filename/);assert.throws(()=>buildScopedFilePath('C:\\storage',{...scope,organization_id:''}),/organization_id/);});
-test('M00-06 scoped write is atomic and leaves no temporary file',async()=>{const root=await mkdtemp(join(tmpdir(),'scoutops-m00-06-unit-'));try{const path=await writeScopedFile(root,scope,Buffer.from('{"ok":true}'));assert.equal((await stat(path)).size,11);assert.ok(relative(root,path).startsWith('organizations'));}finally{await rm(root,{recursive:true,force:true});}});
-test('M00-06 short grant enforces signature, TTL and scope',()=>{const key=Buffer.alloc(32,7);const token=issueDownloadGrant('C:\\storage',scope,key,60,1000);assert.equal(verifyDownloadGrant(token,key,{organization_id:'org-a',workspace_id:'ws-a'},1059).organization_id,'org-a');assert.throws(()=>verifyDownloadGrant(token,key,{organization_id:'org-b',workspace_id:'ws-a'},1059),/scope/);assert.throws(()=>verifyDownloadGrant(token,key,{organization_id:'org-a',workspace_id:'ws-a'},1061),/expired/);assert.throws(()=>issueDownloadGrant('C:\\storage',scope,key,301,1000),/TTL/);});
-test('M00-06 audit event redacts secrets and retains trace/scope',()=>{const event=createAuditEvent({organization_id:'org-a',workspace_id:'ws-a',actor_id:'actor-a',action:'file.read',resource_type:'file',resource_id:'file-a',request_id:'request-a',trace_id:'trace-a',metadata:{password:'hidden',nested:{api_key:'hidden',safe:'ok'}}},new Date('2026-08-07T00:00:00Z'));assert.equal(event.metadata.password,'[REDACTED]');assert.equal(event.metadata.nested.api_key,'[REDACTED]');assert.equal(event.metadata.nested.safe,'ok');assert.equal(event.trace_id,'trace-a');assert.equal(event.occurred_at,'2026-08-07T00:00:00.000Z');assert.equal(redactAuditMetadata({authorization:'bearer'}).authorization,'[REDACTED]');});
-test('M00-06 migrations are scoped, indexed, MySQL57 and reversible',async()=>{for(const name of ['0006a_m00_06_file_assets','0006b_m00_06_audit_logs']){const up=await readFile(`database/migrations/${name}.up.sql`,'utf8');const down=await readFile(`database/migrations/${name}.down.sql`,'utf8');assert.match(up,/organization_id/);assert.match(up,/workspace_id/);assert.match(up,/request_id|created_by/);assert.match(up,/utf8mb4/);assert.doesNotMatch(up,/CHECK\s*\(|utf8mb4_0900/i);assert.match(down,/DROP TABLE/);}});
-test('M00-06 OpenAPI, Feature Map, UI, docs and atomic evidence are synchronized',async()=>{const [api,map,ui,architecture,runbook,registry]=await Promise.all(['docs/openapi.yaml','docs/feature-map.json','apps/web/src/components/FileAuditFoundation.vue','docs/architecture/m00-06-file-audit-foundation.md','docs/runbooks/m00-06-file-audit-foundation.md','verification/modules/M00-06.json'].map(path=>readFile(path,'utf8')));for(const token of ['x-scoutops-file-audit','FileAsset','AuditEvent'])assert.match(api,new RegExp(token));assert.match(map,/fileAuditFoundation/);for(const state of ['protected','denied','redacted'])assert.match(ui,new RegExp(state));assert.match(architecture,/64_系统监控\.jpg/);assert.match(runbook,/## 回滚/);const parsed=JSON.parse(registry);assert.equal(parsed.atomicTasks.length,17);assert.deepEqual(parsed.atomicTasks.map(item=>item.id),Array.from({length:17},(_,i)=>`M00-06.A${String(i+1).padStart(2,'0')}`));});
+import test from "node:test";
+import assert from "node:assert/strict";
+import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, relative } from "node:path";
+import {
+  buildScopedFilePath,
+  createAuditEvent,
+  issueDownloadGrant,
+  redactAuditMetadata,
+  verifyDownloadGrant,
+  writeScopedFile,
+} from "../../packages/storage/dist/index.js";
+const scope = {
+  organization_id: "org-a",
+  workspace_id: "ws-a",
+  category: "evidence",
+  resource_id: "resource-a",
+  filename: "evidence.json",
+};
+test("M00-06 path is organization/workspace isolated and rejects traversal", () => {
+  const path = buildScopedFilePath("C:\\storage", scope);
+  assert.match(path, /organizations[\\/]org-a[\\/]workspaces[\\/]ws-a/);
+  assert.throws(
+    () => buildScopedFilePath("C:\\storage", { ...scope, filename: "../secret" }),
+    /filename/,
+  );
+  assert.throws(
+    () => buildScopedFilePath("C:\\storage", { ...scope, organization_id: "" }),
+    /organization_id/,
+  );
+});
+test("M00-06 scoped write is atomic and leaves no temporary file", async () => {
+  const root = await mkdtemp(join(tmpdir(), "scoutops-m00-06-unit-"));
+  try {
+    const path = await writeScopedFile(root, scope, Buffer.from('{"ok":true}'));
+    assert.equal((await stat(path)).size, 11);
+    assert.ok(relative(root, path).startsWith("organizations"));
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+test("M00-06 short grant enforces signature, TTL and scope", () => {
+  const key = Buffer.alloc(32, 7);
+  const token = issueDownloadGrant("C:\\storage", scope, key, 60, 1000);
+  assert.equal(
+    verifyDownloadGrant(token, key, { organization_id: "org-a", workspace_id: "ws-a" }, 1059)
+      .organization_id,
+    "org-a",
+  );
+  assert.throws(
+    () => verifyDownloadGrant(token, key, { organization_id: "org-b", workspace_id: "ws-a" }, 1059),
+    /scope/,
+  );
+  assert.throws(
+    () => verifyDownloadGrant(token, key, { organization_id: "org-a", workspace_id: "ws-a" }, 1061),
+    /expired/,
+  );
+  assert.throws(() => issueDownloadGrant("C:\\storage", scope, key, 301, 1000), /TTL/);
+});
+test("M00-06 audit event redacts secrets and retains trace/scope", () => {
+  const event = createAuditEvent(
+    {
+      organization_id: "org-a",
+      workspace_id: "ws-a",
+      actor_id: "actor-a",
+      action: "file.read",
+      resource_type: "file",
+      resource_id: "file-a",
+      request_id: "request-a",
+      trace_id: "trace-a",
+      metadata: { password: "hidden", nested: { api_key: "hidden", safe: "ok" } },
+    },
+    new Date("2026-08-07T00:00:00Z"),
+  );
+  assert.equal(event.metadata.password, "[REDACTED]");
+  assert.equal(event.metadata.nested.api_key, "[REDACTED]");
+  assert.equal(event.metadata.nested.safe, "ok");
+  assert.equal(event.trace_id, "trace-a");
+  assert.equal(event.occurred_at, "2026-08-07T00:00:00.000Z");
+  assert.equal(redactAuditMetadata({ authorization: "bearer" }).authorization, "[REDACTED]");
+});
+test("M00-06 migrations are scoped, indexed, MySQL57 and reversible", async () => {
+  for (const name of ["0006a_m00_06_file_assets", "0006b_m00_06_audit_logs"]) {
+    const up = await readFile(`database/migrations/${name}.up.sql`, "utf8");
+    const down = await readFile(`database/migrations/${name}.down.sql`, "utf8");
+    assert.match(up, /organization_id/);
+    assert.match(up, /workspace_id/);
+    assert.match(up, /request_id|created_by/);
+    assert.match(up, /utf8mb4/);
+    assert.doesNotMatch(up, /CHECK\s*\(|utf8mb4_0900/i);
+    assert.match(down, /DROP TABLE/);
+  }
+});
+test("M00-06 OpenAPI, Feature Map, UI, docs and atomic evidence are synchronized", async () => {
+  const [api, map, ui, architecture, runbook, registry] = await Promise.all(
+    [
+      "docs/openapi.yaml",
+      "docs/feature-map.json",
+      "apps/web/src/components/FileAuditFoundation.vue",
+      "docs/architecture/m00-06-file-audit-foundation.md",
+      "docs/runbooks/m00-06-file-audit-foundation.md",
+      "verification/modules/M00-06.json",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  for (const token of ["x-scoutops-file-audit", "FileAsset", "AuditEvent"])
+    assert.match(api, new RegExp(token));
+  assert.match(map, /fileAuditFoundation/);
+  for (const state of ["protected", "denied", "redacted"]) assert.match(ui, new RegExp(state));
+  assert.match(architecture, /64_系统监控\.jpg/);
+  assert.match(runbook, /## 回滚/);
+  const parsed = JSON.parse(registry);
+  assert.equal(parsed.atomicTasks.length, 17);
+  assert.deepEqual(
+    parsed.atomicTasks.map((item) => item.id),
+    Array.from({ length: 17 }, (_, i) => `M00-06.A${String(i + 1).padStart(2, "0")}`),
+  );
+});

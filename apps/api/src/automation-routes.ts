@@ -20,10 +20,7 @@ const ids = (r: FastifyRequest) => ({
     request_id: ids(r).requestId,
     trace_id: ids(r).traceId,
   });
-export function registerAutomationRoutes(
-  app: FastifyInstance,
-  o: AutomationRouteOptions,
-) {
+export function registerAutomationRoutes(app: FastifyInstance, o: AutomationRouteOptions) {
   const scope = async (r: FastifyRequest, capability: Capability) => {
       const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
         x = await o.authorization.resolveSession(a.user.id, a.session.id);
@@ -43,12 +40,7 @@ export function registerAutomationRoutes(
     },
     write = async (r: FastifyRequest) => {
       if (r.headers.origin !== o.webOrigin)
-        throw new ApiError(
-          403,
-          "origin_forbidden",
-          "请求来源不允许。",
-          "从 ScoutOps 页面重试。",
-        );
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
       return {
         ...(await scope(r, "team:manage")),
         ...ids(r),
@@ -62,6 +54,11 @@ export function registerAutomationRoutes(
     const x = await o.service.create({ ...(await write(r)), value: r.body });
     reply.code(201);
     return env(x, r);
+  });
+  app.post("/api/v1/automations/preview", async (r) => {
+    if (r.headers.origin !== o.webOrigin)
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
+    return env(await o.service.preview({ ...(await scope(r, "team:manage")), value: r.body }), r);
   });
   app.patch("/api/v1/automations/:id", async (r) =>
     env(

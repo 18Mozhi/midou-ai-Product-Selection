@@ -2,11 +2,7 @@ import { buildApp } from "./app.js";
 import { readFile } from "node:fs/promises";
 import { loadRuntimeConfig } from "@scoutops/config";
 import { createDatabasePool } from "@scoutops/database";
-import {
-  createRedisConnection,
-  inspectRedisResilience,
-  ScopedRedisStore,
-} from "@scoutops/redis";
+import { createRedisConnection, inspectRedisResilience, ScopedRedisStore } from "@scoutops/redis";
 import {
   createArgon2PasswordHasher,
   EncryptedOutboxAuthDelivery,
@@ -92,30 +88,25 @@ const redisClient = createRedisConnection(config);
 redisClient.on("error", () => {});
 const redisStore = new ScopedRedisStore(redisClient);
 const runtimeTopologyRepository = new MySqlRuntimeTopologyRepository(pool);
-const runtimeTopologyService = new RuntimeTopologyService(
-  runtimeTopologyRepository,
-  {
-    expectedNodeId: config.runtimeTopology.nodeId,
-    expectedHostId: config.runtimeTopology.hostId,
-    staleAfterMs: config.runtimeTopology.staleAfterMs,
-    restartAlertThreshold: config.runtimeTopology.restartAlertThreshold,
-    workerSchedulerStaleAfterMs: config.runtime.workerSchedulerStaleAfterMs,
-    ...(config.runtime.workerSchedulerStateFile
-      ? {
-          workerSchedulerSnapshot: async () =>
-            JSON.parse(
-              await readFile(config.runtime.workerSchedulerStateFile, "utf8"),
-            ),
-        }
-      : {}),
-    ...(config.runtimeTopology.supervisorStateFile
-      ? {
-          supervisorSnapshot: async () =>
-            JSON.parse(await readFile(config.runtimeTopology.supervisorStateFile, "utf8")),
-        }
-      : {}),
-  },
-);
+const runtimeTopologyService = new RuntimeTopologyService(runtimeTopologyRepository, {
+  expectedNodeId: config.runtimeTopology.nodeId,
+  expectedHostId: config.runtimeTopology.hostId,
+  staleAfterMs: config.runtimeTopology.staleAfterMs,
+  restartAlertThreshold: config.runtimeTopology.restartAlertThreshold,
+  workerSchedulerStaleAfterMs: config.runtime.workerSchedulerStaleAfterMs,
+  ...(config.runtime.workerSchedulerStateFile
+    ? {
+        workerSchedulerSnapshot: async () =>
+          JSON.parse(await readFile(config.runtime.workerSchedulerStateFile, "utf8")),
+      }
+    : {}),
+  ...(config.runtimeTopology.supervisorStateFile
+    ? {
+        supervisorSnapshot: async () =>
+          JSON.parse(await readFile(config.runtimeTopology.supervisorStateFile, "utf8")),
+      }
+    : {}),
+});
 const redisResilienceService = new RedisResilienceService(
   {
     snapshot: async () => {
@@ -143,8 +134,7 @@ const fileResilienceService = new FileResilienceService(
   {
     usageWarningBasisPoints: config.fileResilience.usageWarningBasisPoints,
     usageStopBasisPoints: config.fileResilience.usageStopBasisPoints,
-    maximumRecoveryDrillAgeDays:
-      config.fileResilience.maximumRecoveryDrillAgeDays,
+    maximumRecoveryDrillAgeDays: config.fileResilience.maximumRecoveryDrillAgeDays,
   },
 );
 const crawlerSchedulerService = new CrawlerSchedulerService(
@@ -152,27 +142,20 @@ const crawlerSchedulerService = new CrawlerSchedulerService(
   new CrawlerSchedulerHostProbe(config.storage.evidenceRoot),
   config.crawlerScheduler,
 );
-const capacityBoundaryService = new CapacityBoundaryService(
-  new CapacityBoundaryRepository(pool),
-  {
-    readP95StopMs: config.capacityBoundary.readP95StopMs,
-    writeP95StopMs: config.capacityBoundary.writeP95StopMs,
-    errorRateStopBasisPoints: config.capacityBoundary.errorRateStopBasisPoints,
-    asyncLagStopSeconds: config.capacityBoundary.asyncLagStopSeconds,
-    maximumLoadBasisPoints: config.crawlerScheduler.maximumLoadBasisPoints,
-    minimumAvailableMemoryMb: config.crawlerScheduler.minimumAvailableMemoryMb,
-    minimumFreeDiskMb: config.crawlerScheduler.minimumFreeDiskMb,
-    maximumEvidenceAgeMinutes:
-      config.capacityBoundary.maximumEvidenceAgeMinutes,
-  },
-);
+const capacityBoundaryService = new CapacityBoundaryService(new CapacityBoundaryRepository(pool), {
+  readP95StopMs: config.capacityBoundary.readP95StopMs,
+  writeP95StopMs: config.capacityBoundary.writeP95StopMs,
+  errorRateStopBasisPoints: config.capacityBoundary.errorRateStopBasisPoints,
+  asyncLagStopSeconds: config.capacityBoundary.asyncLagStopSeconds,
+  maximumLoadBasisPoints: config.crawlerScheduler.maximumLoadBasisPoints,
+  minimumAvailableMemoryMb: config.crawlerScheduler.minimumAvailableMemoryMb,
+  minimumFreeDiskMb: config.crawlerScheduler.minimumFreeDiskMb,
+  maximumEvidenceAgeMinutes: config.capacityBoundary.maximumEvidenceAgeMinutes,
+});
 const authRepository = new MySqlAuthRepository(pool);
 const authOutbox = new MySqlAuthOutboxStore(pool);
 const authDelivery = config.security.credentialsMasterKey
-  ? new EncryptedOutboxAuthDelivery(
-      authOutbox,
-      config.security.credentialsMasterKey,
-    )
+  ? new EncryptedOutboxAuthDelivery(authOutbox, config.security.credentialsMasterKey)
   : new PendingAuthDelivery();
 const passwordHasher = createArgon2PasswordHasher({
   memoryCost: config.auth.argon2MemoryKib,
@@ -195,8 +178,7 @@ const mfa = new MfaService({
     maxAttempts: config.mfa.maxAttempts,
     recoveryCodeCount: config.mfa.recoveryCodeCount,
   },
-  completeLogin: (userId, context) =>
-    localAuth.completeSecondFactorLogin(userId, context),
+  completeLogin: (userId, context) => localAuth.completeSecondFactorLogin(userId, context),
   completeEnrollment: (userId) => localAuth.completeMfaEnrollment(userId),
 });
 localAuth = new LocalAuthService({
@@ -214,9 +196,7 @@ localAuth = new LocalAuthService({
   },
 });
 const idempotency = new MySqlAuthIdempotency(pool);
-const resourceGrants = new ResourceGrantService(
-  new MySqlResourceGrantRepository(pool),
-);
+const resourceGrants = new ResourceGrantService(new MySqlResourceGrantRepository(pool));
 const authorization = new AuthorizationService(
   new MySqlAuthorizationRepository(pool),
   undefined,
@@ -229,16 +209,10 @@ const providerAdapterRegistry = new ProviderAdapterRegistry({
   maxItemsPerBatch: config.providerAdapters.maxItemsPerBatch,
 });
 for (const adapter of createBuiltinSourceAdapters(
-  createProviderSourceFetch(
-    config.providerAdapters.proxy,
-    {},
-    AUTOMATIC_PROVIDER_SOURCE_HOSTS,
-  ),
+  createProviderSourceFetch(config.providerAdapters.proxy, {}, AUTOMATIC_PROVIDER_SOURCE_HOSTS),
 ))
   providerAdapterRegistry.register(adapter);
-const providerSourceService = new ProviderSourceService(
-  new MySqlProviderSourceRepository(pool),
-);
+const providerSourceService = new ProviderSourceService(new MySqlProviderSourceRepository(pool));
 const app = buildApp({
   logger: true,
   version: config.app.version,
@@ -268,17 +242,25 @@ const app = buildApp({
       },
     },
     ...(config.runtimeTopology.supervisorStateFile
-      ? [{
-          name: "supervisor" as const,
-          check: async () => {
-            try {
-              const snapshot = JSON.parse(await readFile(config.runtimeTopology.supervisorStateFile, "utf8"));
-              return snapshot?.status === "ready" && snapshot?.processes?.worker?.status === "running" && snapshot?.processes?.api?.status === "running" ? "available" as const : "unavailable" as const;
-            } catch {
-              return "unavailable" as const;
-            }
+      ? [
+          {
+            name: "supervisor" as const,
+            check: async () => {
+              try {
+                const snapshot = JSON.parse(
+                  await readFile(config.runtimeTopology.supervisorStateFile, "utf8"),
+                );
+                return snapshot?.status === "ready" &&
+                  snapshot?.processes?.worker?.status === "running" &&
+                  snapshot?.processes?.api?.status === "running"
+                  ? ("available" as const)
+                  : ("unavailable" as const);
+              } catch {
+                return "unavailable" as const;
+              }
+            },
           },
-        }]
+        ]
       : []),
   ],
   localAuth: {
@@ -332,9 +314,7 @@ const app = buildApp({
     secureCookie: config.nodeEnv === "production",
   },
   providerRegistry: {
-    service: new ProviderRegistryService(
-      new MySqlProviderRegistryRepository(pool),
-    ),
+    service: new ProviderRegistryService(new MySqlProviderRegistryRepository(pool)),
     authorization,
     auth: localAuth,
     secureCookie: config.nodeEnv === "production",
@@ -504,19 +484,13 @@ const { host, port } = config.app;
 
 try {
   const sourceCatalog = await providerSourceService.ensureCatalog();
-  app.log.info(
-    { sourceCatalog },
-    "automatic hotspot source catalog synchronized",
-  );
+  app.log.info({ sourceCatalog }, "automatic hotspot source catalog synchronized");
   await app.listen({ host, port });
   try {
     await publishRuntimeHeartbeat("ready");
   } catch (error) {
     if (config.nodeEnv === "production") throw error;
-    app.log.warn(
-      { error },
-      "runtime topology startup heartbeat unavailable outside production",
-    );
+    app.log.warn({ error }, "runtime topology startup heartbeat unavailable outside production");
   }
   runtimeHeartbeatTimer = setInterval(() => {
     void publishRuntimeHeartbeat("ready").catch((error) =>

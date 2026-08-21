@@ -58,7 +58,7 @@ test("M06-02.A06/A07/A08/A10/A13/A17 contracts frontend config and handoff stay 
     [
       "docs/openapi.yaml",
       "apps/web/src/components/PlatformDashboard.vue",
-      "apps/web/src/styles.css",
+      "apps/web/src/styles/platform-operations.css",
       "config/env.example",
       "config/schema.json",
       "docs/architecture/m06-02-platform-dashboard.md",
@@ -95,8 +95,12 @@ test("M06-02 platform overview gives novice administrators clear next actions", 
     "数据质量",
   ])
     assert.match(web, new RegExp(copy));
+  assert.match(
+    web,
+    /v-if="capabilities\?\.includes\(["']platform:superadmin["']\)"[\s\S]*管理组织和用户/,
+  );
   for (const path of [
-    "/platform-admin/accounts",
+    "/platform-admin/organizations",
     "/platform-admin/providers/sources",
     "/platform-admin/collection/overview",
   ])

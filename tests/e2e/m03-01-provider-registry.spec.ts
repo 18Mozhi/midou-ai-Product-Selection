@@ -21,6 +21,8 @@ const definition = {
     owner_label: "平台运营",
     terms_review_status: "approved",
     terms_reference_url: "https://example.test/terms",
+    terms_version: "2026-08",
+    terms_expires_at: "2027-08-07T17:00:00.000Z",
     terms_reviewed_at: "2026-08-07T17:00:00.000Z",
     status: "disabled",
     version: 1,
@@ -82,6 +84,7 @@ test("M03-01.A07/A08/A15 provider list and editor are responsive and visual", as
   }
   await page.getByRole("button", { name: "新建来源" }).click();
   await expect(page.getByRole("heading", { name: "登记来源" })).toBeVisible();
+  await page.getByRole("button", { name: "4 合规与发布" }).click();
   await expect(page.getByLabel("状态")).toHaveValue("disabled");
   await expect(page).toHaveScreenshot("m03-01-provider-registry.png", { fullPage: true });
   if (testInfo.project.name === "mobile-390")

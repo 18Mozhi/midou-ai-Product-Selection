@@ -334,6 +334,8 @@ test("M03-05.A03/A07/A10/A11/A14-A17 delivery surfaces are complete and Baota bo
   assert.match(repo, /manually_replayed/);
   assert.match(routes, /collection:replay/);
   assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
+  assert.match(web, /subqueryRetryText/);
+  assert.match(web, /下次重试.*任务级调度/);
   assert.match(css, /@media\s*\(max-width:\s*760px\)/);
   assert.match(live, /const now=new Date\(\);/);
   assert.doesNotMatch(live, /const now=new Date\(['"]\d{4}-\d{2}-\d{2}T/);
@@ -343,9 +345,10 @@ test("M03-05.A03/A07/A10/A11/A14-A17 delivery surfaces are complete and Baota bo
   assert.match(architecture, /M03-06/);
   assert.match(runbook, /宝塔.*Node Worker/s);
   assert.match(feature, /collectionTaskStateMachine/);
-  assert.match(e2e, /toHaveScreenshot/);
+  assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(blueprint, /M03-05/);
-  assert.match(worker, /private readonly taskId\?:string/);
+  assert.match(worker, /private readonly taskId\?\s*:\s*string/);
+  assert.match(worker, /signal\?\s*:\s*AbortSignal[\s\S]*executor\.execute/);
   assert.match(live, /new MySqlCollectionTaskWorkerRepository\(pool,\(\)=>0,id\)/);
   assert.match(
     live,

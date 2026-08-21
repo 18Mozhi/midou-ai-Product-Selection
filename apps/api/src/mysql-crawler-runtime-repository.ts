@@ -30,9 +30,13 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     const [profiles] = await this.pool.query<RowDataPacket[]>(
       [
         "SELECT p.id,p.code,p.name,p.provider_id,p.status,v.name provider_name,v.target_url,a.expires_at ",
-        "credential_expires_at,l.run_id,l.lease_owner,l.leased_at,l.heartbeat_at,l.expires_at FROM ",
+        "credential_expires_at,l.run_id,l.lease_owner,l.leased_at,l.heartbeat_at,l.expires_at,",
+        "f.status failure_status,f.error_code failure_error_code,f.finished_at failure_at FROM ",
         "crawler_profiles p JOIN providers v ON v.id=p.provider_id JOIN credential_assets a ON ",
-        "a.id=p.credential_asset_id LEFT JOIN crawler_profile_leases l ON l.crawler_profile_id=p.id ORDER BY ",
+        "a.id=p.credential_asset_id LEFT JOIN crawler_profile_leases l ON l.crawler_profile_id=p.id LEFT JOIN ",
+        "crawler_browser_runs f ON f.id=(SELECT f2.id FROM crawler_browser_runs f2 WHERE ",
+        "f2.crawler_profile_id=p.id AND f2.status IN ('blocked','failed','timed_out','cancelled') ORDER BY ",
+        "f2.started_at DESC,f2.id DESC LIMIT 1) ORDER BY ",
         "p.status='active' DESC,p.name,p.id",
       ].join(""),
     );
@@ -64,6 +68,14 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
             : new Date(row.credential_expires_at) <= new Date()
               ? ("expired" as const)
               : ("valid" as const),
+        last_failure:
+          row.failure_status == null
+            ? null
+            : {
+                status: String(row.failure_status),
+                error_code: row.failure_error_code == null ? null : String(row.failure_error_code),
+                occurred_at: new Date(row.failure_at).toISOString(),
+              },
         lease:
           row.run_id == null
             ? null
@@ -745,11 +757,11 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
         [
-          "SELECT j.organization_id,j.workspace_id,j.collection_task_id,p.updated_by FROM ",
-          "browser_collection_jobs j JOIN crawler_profile_leases l ON l.run_id=j.crawler_run_id AND ",
+          "SELECT j.organization_id,j.workspace_id,j.collection_task_id,j.status,p.updated_by FROM ",
+          "browser_collection_jobs j LEFT JOIN crawler_profile_leases l ON l.run_id=j.crawler_run_id AND ",
           "l.crawler_profile_id=j.crawler_profile_id JOIN crawler_profiles p ON p.id=j.crawler_profile_id WHERE ",
-          "j.id=? AND j.crawler_run_id=? AND j.crawler_profile_id=? AND j.status='leased' AND ",
-          "j.lease_token_hash=UNHEX(?) AND l.lease_token_hash=UNHEX(?) FOR UPDATE",
+          "j.id=? AND j.crawler_run_id=? AND j.crawler_profile_id=? AND ",
+          "j.lease_token_hash=UNHEX(?) AND (j.status<>'leased' OR l.lease_token_hash=UNHEX(?)) FOR UPDATE",
         ].join(""),
         [input.jobId, input.runId, input.profileId, input.leaseTokenHash, input.leaseTokenHash],
       );
@@ -760,6 +772,10 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           409,
           "浏览器作业租约已失效，不能回写结果。",
         );
+      if (row.status !== "leased") {
+        await c.commit();
+        return;
+      }
       const jobStatus = input.status === "timed_out" ? "timed_out" : input.status;
       await c.query(
         [
@@ -779,8 +795,8 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       );
       await c.query(
         [
-          "UPDATE browser_collection_jobs SET status=?,result_json=?,error_code=?,lease_owner=NULL,lease_token_",
-          "hash=NULL,lease_expires_at=NULL,finished_at=?,updated_at=? WHERE id=?",
+          "UPDATE browser_collection_jobs SET status=?,result_json=?,error_code=?,lease_owner=NULL,lease_expires_",
+          "at=NULL,finished_at=?,updated_at=? WHERE id=?",
         ].join(""),
         [
           jobStatus,

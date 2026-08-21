@@ -11,6 +11,17 @@ import {
   MadeInChinaSearchAdapter,
 } from "../../packages/provider-sources/dist/index.js";
 
+const withTransactionConnection = (pool) => ({
+  ...pool,
+  getConnection: async () => ({
+    beginTransaction: async () => {},
+    commit: async () => {},
+    rollback: async () => {},
+    release: () => {},
+    query: pool.query,
+  }),
+});
+
 test("core workspace public crawlers are enabled without official API credentials", () => {
   const amazon = BUILTIN_PROVIDER_SOURCES.find((item) => item.code === "amazon_product");
   const supplier = BUILTIN_PROVIDER_SOURCES.find((item) => item.code === "made_in_china_search");
@@ -225,7 +236,7 @@ test("collection worker quarantines exhausted queue entries without blocking fre
   assert.match(worker, /status='queued' AND attempt_count>=4/);
   assert.match(worker, /collection_attempt_overflow/);
   assert.match(worker, /status='queued' AND attempt_count<4/);
-  assert.match(worker, /retry_exhausted:true/);
+  assert.match(worker, /retry_exhausted:\s*true/);
 });
 
 test("automatic downstream tasks use crawler contracts and recover malformed historic tasks", async () => {
@@ -274,6 +285,8 @@ test("optional supplier failure keeps the second public crawler running", async 
       status: "enabled",
       terms_review_status: "approved",
       terms_reference_url: "https://example.test/terms",
+      terms_version: "2026-08",
+      terms_expires_at: "2099-08-31T00:00:00.000Z",
       created_by: "66666666-6666-4666-8666-666666666666",
     },
     ec21: {
@@ -287,6 +300,8 @@ test("optional supplier failure keeps the second public crawler running", async 
       status: "enabled",
       terms_review_status: "approved",
       terms_reference_url: "https://example.test/terms",
+      terms_version: "2026-08",
+      terms_expires_at: "2099-08-31T00:00:00.000Z",
       created_by: "66666666-6666-4666-8666-666666666666",
     },
   };
@@ -345,7 +360,12 @@ test("optional supplier failure keeps the second public crawler running", async 
       deduplicated: false,
     }),
   };
-  const executor = new ProviderSourceExecutor(pool, registry, evidence, "supplier-fallback-test");
+  const executor = new ProviderSourceExecutor(
+    withTransactionConnection(pool),
+    registry,
+    evidence,
+    "supplier-fallback-test",
+  );
   const outcomes = await executor.execute(
     {
       id: "33333333-3333-4333-8333-333333333333",
@@ -396,6 +416,8 @@ test("required non-retryable login failure blocks the collection task", async ()
     status: "enabled",
     terms_review_status: "approved",
     terms_reference_url: "https://example.com/terms",
+    terms_version: "2026-08",
+    terms_expires_at: "2099-08-31T00:00:00.000Z",
     created_by: "66666666-6666-4666-8666-666666666666",
   };
   const pool = {
@@ -406,7 +428,12 @@ test("required non-retryable login failure blocks the collection task", async ()
       throw new ProviderAdapterFailure("login_required", false);
     },
   };
-  const executor = new ProviderSourceExecutor(pool, registry, {}, "required-login-test");
+  const executor = new ProviderSourceExecutor(
+    withTransactionConnection(pool),
+    registry,
+    {},
+    "required-login-test",
+  );
   await assert.rejects(
     executor.execute(
       {
@@ -442,7 +469,12 @@ test("required disabled source fails instead of being reported as an empty succe
         ? [[{ id: "source", status: "disabled" }]]
         : [{ affectedRows: 1 }],
   };
-  const executor = new ProviderSourceExecutor(pool, {}, {}, "required-disabled-test");
+  const executor = new ProviderSourceExecutor(
+    withTransactionConnection(pool),
+    {},
+    {},
+    "required-disabled-test",
+  );
   await assert.rejects(
     executor.execute(
       {
@@ -485,6 +517,8 @@ test("parser drift pauses the provider before failing the required source", asyn
     status: "enabled",
     terms_review_status: "approved",
     terms_reference_url: "https://example.com/terms",
+    terms_version: "2026-08",
+    terms_expires_at: "2099-08-31T00:00:00.000Z",
     version: 4,
     created_by: "66666666-6666-4666-8666-666666666666",
   };

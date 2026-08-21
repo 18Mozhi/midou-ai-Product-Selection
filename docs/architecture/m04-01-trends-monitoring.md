@@ -12,13 +12,13 @@ Google News 记录按市场、语言以及 NFKC、小写和连续空白折叠后
 
 商品型热点频道仅包括爆款商品、Amazon、TikTok Shop、Etsy、eBay 和新品发布。首次出现的新主题由同一 Worker 在同一事务创建 M04-02 的待评估选品、关联当前真实趋势证据并写 `opportunity.candidate.discovered` 审计与 Outbox；后续同主题信号只增补证据。消费趋势、零售数据、搜索数据和社区讨论仍只进入热点中心，避免把每条新闻都冒充商品。自动发现结果保持 `recommendation_status=insufficient_data`，必须由人补齐竞争、成本和风险证据后再决策。
 
-投影、关注、取消关注、相关性和规则变更都在同一事务写 `trend_events` 与 `trend_outbox`，保留 `request_id`、`trace_id` 和组织/工作区范围。相关性更新不删除 `raw_evidence`、`normalized_records` 或 `trend_signals`。
+投影、关注、取消关注、相关性和规则变更都在同一事务写 `trend_events` 与 `trend_outbox`，保留 `request_id`、`trace_id` 和组织/工作区范围。相关性更新强制填写原因；详情从追加式事件返回最近 50 次标记和恢复记录，允许操作员按当前版本恢复为相关，不删除 `raw_evidence`、`normalized_records` 或 `trend_signals`。
 
 ## API 与权限
 
 读取接口要求 `trend:read`；关注、相关性和监控规则写入要求 `trend:manage`。服务端从 HttpOnly 会话解析组织和工作区，不接受请求体覆盖范围。所有写入要求与 `WEB_ORIGIN` 完全一致的 `Origin` 和 `Idempotency-Key`，并使用版本锁避免静默覆盖。
 
-监控规则包含名称、包含关键词、排除关键词、市场、语言、可选分类和状态。通知渠道当前固定为 `in_app`；邮件 Provider 尚未确认。
+监控规则包含名称、包含关键词、排除关键词、市场、语言、可选分类和状态。页面展示真实 `next_collection_at`，并从上一次 `last_collection_task_id` 的子查询读取失败或受阻来源名称；没有失败子查询时明确显示“无”。通知渠道当前固定为 `in_app`；邮件 Provider 尚未确认。
 
 ## 页面合同
 

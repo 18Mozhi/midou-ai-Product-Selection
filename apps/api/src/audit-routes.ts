@@ -1,6 +1,56 @@
-import type{FastifyInstance,FastifyRequest}from'fastify';import type{AuditOutcome,AuditQueryService}from'@scoutops/audit';import type{AuthorizationService}from'@scoutops/authorization';import type{LocalAuthService}from'@scoutops/auth';import{sessionToken}from'./auth-routes.js';
-export interface AuditRouteOptions{service:AuditQueryService;authorization:AuthorizationService;auth:LocalAuthService;secureCookie:boolean;}
-const ids=(request:FastifyRequest)=>({requestId:String(request.headers['x-request-id']),traceId:String(request.headers['x-trace-id'])});
-const envelope=(data:unknown,request:FastifyRequest)=>({data,request_id:String(request.headers['x-request-id']),trace_id:String(request.headers['x-trace-id'])});
-const parse=(query:Record<string,string|undefined>,organizationId?:string)=>({...(organizationId?{organizationId}:{}),...(query.action?{action:query.action}:{}),...(query.outcome?{outcome:query.outcome as AuditOutcome}:{}),...(query.resource_type?{resourceType:query.resource_type}:{}),...(query.request_id?{requestId:query.request_id}:{}),...(query.trace_id?{traceId:query.trace_id}:{}),...(query.occurred_from?{occurredFrom:new Date(query.occurred_from)}:{}),...(query.occurred_to?{occurredTo:new Date(query.occurred_to)}:{}),...(query.cursor?{cursor:query.cursor}:{}),...(query.limit?{limit:Number(query.limit)}:{limit:50})});
-export function registerAuditRoutes(app:FastifyInstance,options:AuditRouteOptions){const current=async(request:FastifyRequest)=>options.auth.authenticate(sessionToken(request,options.secureCookie));const read=async(request:FastifyRequest,organizationId?:string)=>{const authenticated=await current(request);await options.authorization.authorize({actorId:authenticated.user.id,...(organizationId?{organizationId}:{}),capability:'audit:read',surface:'api',...ids(request)});return envelope(await options.service.list(parse(request.query as Record<string,string|undefined>,organizationId)),request);};app.get('/api/v1/platform/audit-events',async request=>read(request));app.get('/api/v1/organizations/:organizationId/audit-events',async request=>read(request,(request.params as{organizationId:string}).organizationId));}
+import type { FastifyInstance, FastifyRequest } from "fastify";
+import type { AuditOutcome, AuditQueryService } from "@scoutops/audit";
+import type { AuthorizationService } from "@scoutops/authorization";
+import type { LocalAuthService } from "@scoutops/auth";
+import { sessionToken } from "./auth-routes.js";
+export interface AuditRouteOptions {
+  service: AuditQueryService;
+  authorization: AuthorizationService;
+  auth: LocalAuthService;
+  secureCookie: boolean;
+}
+const ids = (request: FastifyRequest) => ({
+  requestId: String(request.headers["x-request-id"]),
+  traceId: String(request.headers["x-trace-id"]),
+});
+const envelope = (data: unknown, request: FastifyRequest) => ({
+  data,
+  request_id: String(request.headers["x-request-id"]),
+  trace_id: String(request.headers["x-trace-id"]),
+});
+const parse = (query: Record<string, string | undefined>, organizationId?: string) => ({
+  ...(organizationId ? { organizationId } : {}),
+  ...(query.action ? { action: query.action } : {}),
+  ...(query.outcome ? { outcome: query.outcome as AuditOutcome } : {}),
+  ...(query.resource_type ? { resourceType: query.resource_type } : {}),
+  ...(query.request_id ? { requestId: query.request_id } : {}),
+  ...(query.trace_id ? { traceId: query.trace_id } : {}),
+  ...(query.occurred_from ? { occurredFrom: new Date(query.occurred_from) } : {}),
+  ...(query.occurred_to ? { occurredTo: new Date(query.occurred_to) } : {}),
+  ...(query.cursor ? { cursor: query.cursor } : {}),
+  ...(query.limit ? { limit: Number(query.limit) } : { limit: 50 }),
+});
+export function registerAuditRoutes(app: FastifyInstance, options: AuditRouteOptions) {
+  const current = async (request: FastifyRequest) =>
+    options.auth.authenticate(sessionToken(request, options.secureCookie));
+  const read = async (request: FastifyRequest, organizationId?: string) => {
+    const authenticated = await current(request);
+    await options.authorization.authorize({
+      actorId: authenticated.user.id,
+      ...(organizationId ? { organizationId } : {}),
+      capability: "audit:read",
+      surface: "api",
+      ...ids(request),
+    });
+    return envelope(
+      await options.service.list(
+        parse(request.query as Record<string, string | undefined>, organizationId),
+      ),
+      request,
+    );
+  };
+  app.get("/api/v1/platform/audit-events", async (request) => read(request));
+  app.get("/api/v1/organizations/:organizationId/audit-events", async (request) =>
+    read(request, (request.params as { organizationId: string }).organizationId),
+  );
+}

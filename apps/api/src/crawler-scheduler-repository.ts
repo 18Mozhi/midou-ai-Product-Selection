@@ -1,21 +1,35 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
-import type { CrawlerSchedulerRepository as Contract } from "./crawler-scheduler-service.js";
+import {
+  CrawlerSchedulerError,
+  type CrawlerSchedulerRepository as Contract,
+} from "./crawler-scheduler-service.js";
 
 const n = (value: unknown) => Number(value ?? 0);
 const iso = (value: unknown) =>
   value instanceof Date ? value.toISOString() : new Date(String(value)).toISOString();
+const percentile = (values: number[], ratio: number) =>
+  values.length ? values[Math.ceil(values.length * ratio) - 1]! : 0;
 
 export class CrawlerSchedulerRepository implements Contract {
   constructor(private readonly pool: Pool) {}
   async snapshot(now: Date) {
-    const [[leases], [providers], [profiles], [duplicates], [activeLeases]] = await Promise.all([
+    const [
+      [leases],
+      [providers],
+      [profiles],
+      [duplicates],
+      [activeLeases],
+      [providerSamples],
+      [trendRows],
+    ] = await Promise.all([
       this.pool.query<RowDataPacket[]>(
         "SELECT slot_type,COUNT(*) total FROM crawler_scheduler_leases WHERE expires_at>? GROUP BY slot_type",
         [now],
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT p.id,p.code,p.concurrency_limit configured_concurrency,\n          LEAST(p.concurrency_limit," +
+        "SELECT p.id,p.code,p.concurrency_limit configured_concurrency,p.circuit_failure_threshold," +
+          "COALESCE(c.consecutive_failures,0) consecutive_failures,c.last_error_code,c.state runtime_circuit_state,\n          LEAST(p.concurrency_limit," +
           "1) effective_concurrency,\n          COALESCE(l.active_leases,0) active_leases," +
           "\n          COALESCE(w.queued_tasks,0) queued_tasks,\n          COALESCE(w.longest_queue_wait_seconds," +
           "0) longest_queue_wait_seconds\n         FROM providers p\n         LEFT JOIN (\n       " +
@@ -26,8 +40,8 @@ export class CrawlerSchedulerRepository implements Contract {
           "t.available_at,?)) longest_queue_wait_seconds\n           FROM collection_subqueries " +
           "q\n           JOIN collection_tasks t ON t.id=q.task_id\n           WHERE t.status IN " +
           "('scheduled','queued','retry_scheduled','rate_limited')\n             AND t.available_at<=?\n" +
-          "           GROUP BY q.provider_id\n         ) w ON w.provider_id=p.id\n         WHERE " +
-          "p.status='enabled'\n         ORDER BY p.code",
+          "           GROUP BY q.provider_id\n         ) w ON w.provider_id=p.id\n         LEFT JOIN " +
+          "provider_runtime_circuits c ON c.provider_id=p.id WHERE p.status='enabled' ORDER BY p.code",
         [now, now, now],
       ),
       this.pool.query<RowDataPacket[]>(
@@ -52,7 +66,28 @@ export class CrawlerSchedulerRepository implements Contract {
           "'provider','crawler'),l.leased_at,l.slot_key\n         LIMIT 100",
         [now],
       ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT q.provider_id,q.status,TIMESTAMPDIFF(MICROSECOND,q.started_at,q.finished_at)/1000 duration_ms," +
+          "CASE WHEN t.status IN ('scheduled','queued','retry_scheduled','rate_limited') THEN " +
+          "GREATEST(0,TIMESTAMPDIFF(SECOND,t.available_at,?)) ELSE NULL END queue_wait_seconds " +
+          "FROM collection_subqueries q " +
+          "JOIN collection_tasks t ON t.id=q.task_id WHERE (q.finished_at>=DATE_SUB(?,INTERVAL 24 HOUR) " +
+          "OR t.status IN ('scheduled','queued','retry_scheduled','rate_limited')) ORDER BY q.provider_id," +
+          "q.finished_at DESC LIMIT 5000",
+        [now, now],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(started_at)/3600)*3600) bucket_at,COUNT(*) total," +
+          "SUM(status IN ('succeeded','succeeded_empty')) succeeded,SUM(status IN ('blocked','failed','timed_out','cancelled')) failed " +
+          "FROM crawler_browser_runs WHERE started_at>=DATE_SUB(?,INTERVAL 24 HOUR) GROUP BY bucket_at ORDER BY bucket_at",
+        [now],
+      ),
     ]);
+    const samplesByProvider = new Map<string, RowDataPacket[]>();
+    for (const row of providerSamples) {
+      const key = String(row.provider_id);
+      samplesByProvider.set(key, [...(samplesByProvider.get(key) ?? []), row]);
+    }
     const count = (type: string) => n(leases.find((row) => row.slot_type === type)?.total);
     return {
       active_worker_leases: count("worker"),
@@ -70,19 +105,58 @@ export class CrawlerSchedulerRepository implements Contract {
         heartbeat_at: iso(row.heartbeat_at),
         expires_at: iso(row.expires_at),
       })),
-      providers: providers.map((row) => ({
-        id: String(row.id),
-        code: String(row.code),
-        configured_concurrency: n(row.configured_concurrency),
-        effective_concurrency: n(row.effective_concurrency),
-        active_leases: n(row.active_leases),
-        queued_tasks: n(row.queued_tasks),
-        longest_queue_wait_seconds: n(row.longest_queue_wait_seconds),
-      })),
+      providers: providers.map((row) => {
+        const samples = samplesByProvider.get(String(row.id)) ?? [],
+          completed = samples.filter((item) => item.duration_ms != null),
+          durations = completed.map((item) => n(item.duration_ms)).sort((a, b) => a - b),
+          waits = samples
+            .filter((item) => item.queue_wait_seconds != null)
+            .map((item) => n(item.queue_wait_seconds))
+            .sort((a, b) => a - b),
+          succeeded = completed.filter((item) =>
+            ["succeeded", "succeeded_empty"].includes(String(item.status)),
+          ).length,
+          threshold = n(row.circuit_failure_threshold),
+          consecutive = n(row.consecutive_failures);
+        return {
+          id: String(row.id),
+          code: String(row.code),
+          configured_concurrency: n(row.configured_concurrency),
+          effective_concurrency: n(row.effective_concurrency),
+          active_leases: n(row.active_leases),
+          queued_tasks: n(row.queued_tasks),
+          longest_queue_wait_seconds: n(row.longest_queue_wait_seconds),
+          queue_wait_p50_seconds: percentile(waits, 0.5),
+          queue_wait_p95_seconds: percentile(waits, 0.95),
+          sample_count_24h: completed.length,
+          success_rate_basis_points_24h: completed.length
+            ? Math.round((succeeded / completed.length) * 10_000)
+            : null,
+          duration_p95_ms_24h: durations.length ? percentile(durations, 0.95) : null,
+          circuit_state:
+            row.runtime_circuit_state === "open" && consecutive >= threshold
+              ? ("open" as const)
+              : ("closed" as const),
+          circuit_failure_threshold: threshold,
+          consecutive_failures: consecutive,
+          last_error_code: row.last_error_code == null ? null : String(row.last_error_code),
+        };
+      }),
       profiles: profiles.map((row) => ({
         id: String(row.id),
         active_leases: n(row.active_leases),
       })),
+      trend: trendRows.map((row) => {
+        const total = n(row.total),
+          failed = n(row.failed);
+        return {
+          bucket_at: iso(row.bucket_at),
+          total,
+          succeeded: n(row.succeeded),
+          failed,
+          failure_rate_basis_points: total ? Math.round((failed / total) * 10_000) : 0,
+        };
+      }),
     };
   }
   async record(input: Parameters<Contract["record"]>[0]) {
@@ -194,6 +268,97 @@ export class CrawlerSchedulerRepository implements Contract {
         [
           randomUUID(),
           input.actorId,
+          input.requestId,
+          input.traceId,
+          JSON.stringify(result),
+          input.now,
+        ],
+      );
+      await c.commit();
+      return result;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  async recoverProvider(input: Parameters<Contract["recoverProvider"]>[0]) {
+    const c = await this.pool.getConnection(),
+      route = `/platform/operations/crawler-scheduler/providers/${input.providerId}/recover`;
+    try {
+      await c.beginTransaction();
+      const [replay] = await c.query<RowDataPacket[]>(
+        "SELECT result_json FROM crawler_scheduler_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",
+        [input.actorId, route, input.idempotencyKey],
+      );
+      if (replay[0]) {
+        await c.commit();
+        const value =
+          typeof replay[0].result_json === "string"
+            ? JSON.parse(replay[0].result_json)
+            : replay[0].result_json;
+        return { provider_id: String(value.provider_id), recovered: Boolean(value.recovered) };
+      }
+      const [providers] = await c.query<RowDataPacket[]>(
+          "SELECT id,status FROM providers WHERE id=? FOR UPDATE",
+          [input.providerId],
+        ),
+        provider = providers[0];
+      if (!provider)
+        throw new CrawlerSchedulerError("crawler_provider_not_found", 404, "刷新调度页面后重试。");
+      if (provider.status !== "enabled")
+        throw new CrawlerSchedulerError(
+          "crawler_provider_not_enabled",
+          409,
+          "先在来源目录完成配置并启用来源。",
+        );
+      const [circuits] = await c.query<RowDataPacket[]>(
+          "SELECT state,opened_at FROM provider_runtime_circuits WHERE provider_id=? FOR UPDATE",
+          [input.providerId],
+        ),
+        circuit = circuits[0],
+        result = { provider_id: input.providerId, recovered: circuit?.state === "open" };
+      if (circuit?.state === "open") {
+        const [healthRows] = await c.query<RowDataPacket[]>(
+            "SELECT health_status,last_checked_at FROM provider_adapter_health WHERE provider_id=? LIMIT 1",
+            [input.providerId],
+          ),
+          health = healthRows[0];
+        if (
+          health?.health_status !== "ready" ||
+          !health.last_checked_at ||
+          new Date(health.last_checked_at).getTime() <= new Date(circuit.opened_at).getTime()
+        )
+          throw new CrawlerSchedulerError(
+            "crawler_provider_recovery_evidence_required",
+            409,
+            "先在来源健康页完成一次晚于熔断时间且结果为正常的健康检查。",
+          );
+        await c.query(
+          "UPDATE provider_runtime_circuits SET state='closed',consecutive_failures=0,last_error_code=NULL,recovered_at=?,updated_at=? WHERE provider_id=?",
+          [input.now, input.now, input.providerId],
+        );
+      }
+      await c.query(
+        "INSERT INTO crawler_scheduler_operations(id,actor_id,route,idempotency_key,result_json,request_id,trace_id,created_at) VALUES(?,?,?,?,?,?,?,?)",
+        [
+          randomUUID(),
+          input.actorId,
+          route,
+          input.idempotencyKey,
+          JSON.stringify(result),
+          input.requestId,
+          input.traceId,
+          input.now,
+        ],
+      );
+      await c.query(
+        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,?,'platform.crawler_scheduler.provider_recover','provider',?,'succeeded',?,?,?,?,1)",
+        [
+          randomUUID(),
+          input.actorId,
+          input.providerId,
           input.requestId,
           input.traceId,
           JSON.stringify(result),

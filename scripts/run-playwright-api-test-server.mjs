@@ -11,8 +11,8 @@ const available = (name) => ({
 });
 const app = buildApp({
   version: "playwright-e2e",
-  buildSha: "playwright-real-api-chain",
-  configFingerprint: "playwright-in-memory-readiness",
+  buildSha: "0123456789abcdef0123456789abcdef01234567",
+  configFingerprint: "a".repeat(64),
   readinessChecks: [available("mysql"), available("redis")],
 });
 

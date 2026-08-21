@@ -1,4 +1,3 @@
-// @ts-nocheck -- mysql2 row arrays are validated by explicit not-found/version guards.
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
@@ -619,7 +618,7 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
         "SELECT COUNT(*) n FROM organization_api_tokens WHERE organization_id=? AND status='active' AND expires_at>? FOR UPDATE",
         [i.organizationId, now],
       );
-      if (Number(count[0].n) >= i.maxActive)
+      if (Number(count[0]?.n ?? 0) >= i.maxActive)
         throw new OrganizationAdminError("token_active_limit", 409, "撤销不用的 Token 后重试。");
       await c.query(
         "INSERT INTO organization_api_tokens (id,organization_id,name,token_prefix," +
@@ -755,7 +754,11 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
   private org(r: any) {
     return { ...r, version: Number(r.version), updated_at: iso(r.updated_at) };
   }
-  private version(row: any, expected: number, type: string) {
+  private version(
+    row: RowDataPacket | undefined,
+    expected: number,
+    type: string,
+  ): asserts row is RowDataPacket {
     if (!row) throw new OrganizationAdminError(`${type}_not_found`, 404, "刷新页面。");
     if (!Number.isInteger(expected) || Number(row.version) !== expected)
       throw new OrganizationAdminError(`${type}_version_conflict`, 409, "刷新页面后重试。");
@@ -775,7 +778,7 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
         "AND m.id<>?",
       [org, excluded],
     );
-    return Number(r[0].n) === 0;
+    return Number(r[0]?.n ?? 0) === 0;
   }
   private async operation(i: any) {
     const [r] = await this.pool.query<RowDataPacket[]>(

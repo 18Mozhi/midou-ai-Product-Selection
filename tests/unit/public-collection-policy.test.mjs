@@ -63,3 +63,26 @@ test("public collection preflight keeps robots throttling distinct from prohibit
       error.retryable === true,
   );
 });
+
+test("robots cache evicts the least recently used origin at its configured capacity", async () => {
+  const calls = [];
+  const fetcher = async (url) => {
+    calls.push(url);
+    return new Response("User-agent: *\nAllow: /", { status: 200 });
+  };
+  for (const origin of ["cache-a.test", "cache-b.test", "cache-c.test", "cache-a.test"])
+    await assertPublicCollectionPolicy({
+      providerTargetUrl: `https://${origin}/catalog`,
+      fetcher,
+      timeoutMs: 1000,
+      cacheTtlMs: 60_000,
+      cacheMaxEntries: 2,
+      now: () => 123_000,
+    });
+  assert.deepEqual(calls, [
+    "https://cache-a.test/robots.txt",
+    "https://cache-b.test/robots.txt",
+    "https://cache-c.test/robots.txt",
+    "https://cache-a.test/robots.txt",
+  ]);
+});
