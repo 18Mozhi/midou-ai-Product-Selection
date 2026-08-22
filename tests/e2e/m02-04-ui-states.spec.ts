@@ -12,8 +12,13 @@ test("M02-04.A08/A16 blocked state recovers through an explicit action", async (
   await expect(page.getByRole("heading", { name: "服务已恢复" })).toBeVisible();
 });
 test("M02-04.A07/A15 unknown route renders the reference-grounded 404 state", async ({ page }) => {
+  await page.goto("/ui-states");
   await page.goto("/route-that-does-not-exist");
   await expect(page.getByRole("heading", { name: "没有找到这个页面" })).toBeVisible();
+  await expect(page.getByText("最近有效页面：/ui-states")).toBeVisible();
+  await page.getByRole("button", { name: "返回最近页面" }).click();
+  await expect(page).toHaveURL(/\/ui-states$/);
+  await page.goto("/route-that-does-not-exist");
   await expect(page).toHaveScreenshot("m02-04-not-found.png", { fullPage: true });
 });
 test("M02-04.A08/A15 high-impact confirmation is keyboard safe and fail-closed", async ({

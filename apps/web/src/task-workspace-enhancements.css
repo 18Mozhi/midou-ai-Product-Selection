@@ -62,7 +62,7 @@
 }
 .task-batch-impact dt {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .task-batch-impact dd {
   margin: 4px 0 0;
@@ -94,7 +94,7 @@
 }
 .task-blocking-context span {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .task-blocking-context strong {
   margin-top: 5px;
@@ -256,7 +256,7 @@
 }
 .task-export-jobs header span {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .task-export-jobs a {
   color: var(--accent);

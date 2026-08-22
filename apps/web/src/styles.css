@@ -1,7 +1,7 @@
 :root {
   color: var(--so-text);
   background: var(--so-bg);
-  font-family: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+  font-family: var(--so-font-ui);
   font-synthesis: none;
   --panel: var(--so-panel);
   --line: var(--so-border);
@@ -66,7 +66,7 @@ a {
   background: linear-gradient(135deg, var(--cyan), var(--violet));
   color: var(--so-text);
 }
-nav {
+.app-shell nav {
   margin-top: 38px;
   display: grid;
   gap: 8px;
@@ -90,7 +90,7 @@ nav {
 .phase-label {
   margin-top: auto;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.08em;
 }
 
@@ -107,11 +107,11 @@ nav {
 .status-kicker {
   margin: 0 0 7px;
   color: var(--cyan);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.16em;
 }
-h1 {
+:where(.app-shell, .identity-page, .tenancy-page, .theme-page, .state-showcase) h1 {
   margin: 0;
   font-size: clamp(28px, 4vw, 46px);
   letter-spacing: -0.04em;
@@ -121,7 +121,7 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 999px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .status-card {
@@ -169,11 +169,11 @@ h1 {
   border-radius: 16px;
   background: color-mix(in srgb, var(--so-bg) 45%, transparent);
 }
-dt {
+:where(.app-shell, .identity-page, .tenancy-page, .theme-page, .state-showcase) dt {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
-dd {
+:where(.app-shell, .identity-page, .tenancy-page, .theme-page, .state-showcase) dd {
   margin: 8px 0 0;
   overflow-wrap: anywhere;
   font-weight: 650;
@@ -208,7 +208,7 @@ dd {
   border-top-color: var(--cyan);
   animation: spin 0.8s linear infinite;
 }
-button {
+:where(.app-shell, .identity-page, .tenancy-page, .theme-page, .state-showcase) button {
   border: 0;
   border-radius: 11px;
   padding: 10px 15px;
@@ -226,7 +226,7 @@ button {
 }
 .runtime-grid span {
   color: var(--cyan);
-  font-size: 12px;
+  font-size: 13px;
 }
 .runtime-grid h3 {
   margin: 18px 0 8px;
@@ -274,7 +274,7 @@ button {
   line-height: 1.65;
 }
 .state-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 760;
   letter-spacing: 0.08em;
 }
@@ -354,7 +354,7 @@ button {
   }
   .nav-link {
     padding: 8px;
-    font-size: 12px;
+    font-size: 13px;
     white-space: nowrap;
   }
   .phase-label {
@@ -422,7 +422,7 @@ button {
   max-width: 1480px;
   margin: auto;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .identity-brand {
   display: flex;
@@ -465,7 +465,7 @@ button {
 }
 .identity-kicker {
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.2em;
   font-weight: 800;
 }
@@ -581,7 +581,7 @@ button {
 .identity-card__head p {
   margin: 0 0 8px;
   color: var(--so-primary);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.18em;
 }
@@ -640,7 +640,7 @@ button {
   justify-content: space-between;
   gap: 12px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .identity-form-row .text-button {
   flex: none;
@@ -743,7 +743,7 @@ button {
   background: var(--so-panel-soft);
 }
 .mfa-status > span {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   padding: 6px 9px;
   border-radius: 999px;
@@ -910,7 +910,7 @@ button {
   border: 1px solid color-mix(in srgb, var(--so-primary-strong) 28%, transparent);
   border-radius: 50%;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
   font-style: normal;
 }
 .tenancy-step:first-child,
@@ -940,7 +940,7 @@ button {
 .tenancy-intro p {
   margin: 0 0 12px;
   color: var(--so-primary);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.22em;
 }
@@ -1017,7 +1017,7 @@ button {
 }
 .tenancy-card em {
   color: var(--so-primary);
-  font-size: 12px;
+  font-size: 13px;
   font-style: normal;
 }
 .tenancy-back {
@@ -1068,7 +1068,7 @@ button {
 .workspace-card em {
   margin-top: auto;
   color: var(--so-primary);
-  font-size: 12px;
+  font-size: 13px;
   font-style: normal;
 }
 .workspace-card:disabled {
@@ -1084,7 +1084,7 @@ button {
 .team-summary p {
   margin: 0;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .team-summary strong {
   display: block;
@@ -1154,7 +1154,7 @@ button {
 .tenancy-footer {
   padding: 0 10px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 @media (max-width: 720px) {
   .tenancy-page {
@@ -1168,7 +1168,7 @@ button {
   }
   .tenancy-account {
     padding: 8px 10px;
-    font-size: 11px;
+    font-size: 13px;
   }
   .tenancy-shell {
     min-height: 680px;

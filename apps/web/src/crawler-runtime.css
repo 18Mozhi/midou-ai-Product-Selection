@@ -15,7 +15,7 @@
 .crawler-title p {
   margin: 0 0 7px;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.13em;
 }
@@ -117,7 +117,7 @@
   margin-top: 3px;
 }
 .crawler-profile-grid article > span {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   color: var(--so-primary);
 }
@@ -132,7 +132,7 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 7px;
-  font-size: 11px;
+  font-size: 13px;
 }
 .crawler-profile-grid dt {
   color: var(--so-text-muted);
@@ -149,7 +149,7 @@
 .crawler-profile-grid article > p {
   margin: 0;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.6;
 }
 .crawler-profile-grid article > .crawler-lease-warning {
@@ -188,7 +188,7 @@
   padding: 10px;
   border-bottom: 1px solid var(--so-border);
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.05em;
 }
 .crawler-runs td {
@@ -210,7 +210,7 @@
   border-radius: 99px;
   background: var(--so-panel-muted);
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .crawler-runs td b[data-status="succeeded"] {
   background: var(--so-success-soft);

@@ -57,7 +57,9 @@ interface Rule {
   threshold_value: number | null;
   status: string;
 }
-const props = defineProps<{ apiBaseUrl: string }>(),
+const props = withDefaults(defineProps<{ apiBaseUrl: string; mode?: "list" | "rules" }>(), {
+    mode: "list",
+  }),
   route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
@@ -87,7 +89,8 @@ const form = reactive({
     direction: "decrease",
     threshold_value: 1,
   });
-const latest = computed(() => selected.value?.latest_snapshot ?? null),
+const rulesPage = computed(() => props.mode === "rules"),
+  latest = computed(() => selected.value?.latest_snapshot ?? null),
   baseline = computed(() => {
     const snapshots = selected.value?.snapshots ?? [];
     return snapshots.length ? (snapshots[snapshots.length - 1] ?? null) : latest.value;
@@ -278,7 +281,14 @@ async function submitCreateStep() {
   if (createStep.value < 3) createStep.value += 1;
   else await create();
 }
-function openRule(item?: Competitor) {
+async function openRule(item?: Competitor) {
+  if (!rulesPage.value) {
+    await router.push({
+      path: "/competitors/monitoring-rules",
+      query: item ? { competitor: item.id } : undefined,
+    });
+    return;
+  }
   rule.competitor_id = item?.id ?? "";
   showRule.value = true;
 }
@@ -357,6 +367,10 @@ async function toggle() {
 onMounted(() => {
   showCreate.value = route.query.create === "1";
   query.value = typeof route.query.q === "string" ? route.query.q : "";
+  if (rulesPage.value && typeof route.query.competitor === "string") {
+    rule.competitor_id = route.query.competitor;
+    showRule.value = true;
+  }
   void load();
 });
 watch(query, (value) => {
@@ -365,238 +379,287 @@ watch(query, (value) => {
 </script>
 <template>
   <section class="competitor-monitor" aria-labelledby="competitor-title">
-    <section class="member-module-guide">
-      <div>
-        <p>竞品监控怎么运行</p>
-        <h3>添加亚马逊等平台商品后，持续记录价格、评分和页面变化</h3>
-        <span
-          >每次快照都保留来源网址和采集时间。点击“查看详情”可追溯历史变化；没有真实快照时不会显示虚构曲线。</span
-        >
-      </div>
-      <ol>
-        <li>添加商品链接或商品编号</li>
-        <li>定时采集公开商品页</li>
-        <li>对比新旧快照</li>
-        <li>变化超过阈值时提醒</li>
-      </ol>
-    </section>
-    <header class="competitor-head">
-      <div>
-        <p>竞品情报</p>
-        <h2 id="competitor-title">竞品监控</h2>
-        <span>每个数字都来自可追溯快照；变化与阈值告警不会覆盖历史。</span>
-      </div>
-      <div>
-        <button type="button" class="ghost" @click="openRule()">监控规则</button
-        ><button type="button" @click="openCreate">添加竞品监控</button>
-      </div>
-    </header>
-    <p v-if="notice" class="competitor-notice" role="status">
-      {{ notice }} <code v-if="requestId">{{ requestId }}</code>
-    </p>
-    <section class="competitor-summary" aria-label="竞品监控数据总览">
-      <article>
-        <span>竞品总数</span><b>{{ summary.total }}</b>
-      </article>
-      <article>
-        <span>监控中</span><b>{{ summary.active }}</b>
-      </article>
-      <article>
-        <span>待首次采集</span><b>{{ summary.pending }}</b>
-      </article>
-      <article>
-        <span>历史快照</span><b>{{ summary.snapshots }}</b>
-      </article>
-    </section>
-    <div class="competitor-toolbar">
-      <label
-        >搜索竞品<input
-          v-model="query"
-          type="search"
-          placeholder="商品标题、ASIN 或来源站点" /></label
-      ><span>共 {{ filteredItems.length }} 条结果</span>
-    </div>
-    <UiStatePanel v-if="state !== 'ready'" :kind="state" :request-id="requestId" @primary="load" />
-    <div v-else class="competitor-grid">
-      <aside class="competitor-list">
-        <button
-          v-for="item in filteredItems"
-          :key="item.id"
-          :class="{ selected: selected?.id === item.id }"
-          @click="detail(item)"
-        >
-          <span
-            ><b>{{ item.title }}</b
-            ><small>{{ item.source_site }} · {{ item.market }}</small></span
-          ><strong v-if="item.latest_snapshot"
-            >{{ item.latest_snapshot.currency }} {{ item.latest_snapshot.current_price }}</strong
-          ><strong v-else class="competitor-pending">等待首次采集</strong
-          ><em :data-status="item.status">{{ statusText(item.status) }}</em>
-          <small class="competitor-detail-entry">查看详情 →</small>
-        </button>
-      </aside>
-      <article v-if="selected" class="competitor-detail">
-        <header>
-          <div>
-            <p>{{ selected.source_site }} / {{ selected.external_id }}</p>
-            <h3>{{ selected.title }}</h3>
-            <a :href="selected.product_url" target="_blank" rel="noopener noreferrer"
-              >打开外部来源商品（新窗口）</a
-            >
-          </div>
-          <div class="competitor-actions">
-            <button type="button" :disabled="busy" @click="collect">
-              {{ latest ? "立即采集" : "重新尝试首次采集" }}</button
-            ><button class="ghost" type="button" @click="openRule(selected)">当前竞品规则</button>
-            <div class="competitor-desktop-actions">
-              <button class="ghost" type="button" :disabled="busy" @click="toggle">
-                {{ selected.status === "active" ? "暂停监控" : "恢复监控" }}</button
-              ><button
-                class="danger ghost"
-                type="button"
-                :disabled="busy"
-                @click="deleting = selected"
-              >
-                删除竞品监控
-              </button>
-            </div>
-            <details class="competitor-mobile-actions">
-              <summary>更多操作</summary>
-              <button class="ghost" type="button" :disabled="busy" @click="toggle">
-                {{ selected.status === "active" ? "暂停监控" : "恢复监控" }}</button
-              ><button
-                class="danger ghost"
-                type="button"
-                :disabled="busy"
-                @click="deleting = selected"
-              >
-                删除竞品监控
-              </button>
-            </details>
-          </div>
-        </header>
-        <section v-if="latest" class="competitor-metrics">
-          <article>
-            <small>当前价格</small
-            ><b>{{
-              latest.current_price == null
-                ? "未采到"
-                : `${latest.currency ?? ""} ${latest.current_price}`
-            }}</b>
-          </article>
-          <article>
-            <small>排名</small
-            ><b>{{ latest.rank_value == null ? "未采到" : `#${latest.rank_value}` }}</b>
-          </article>
-          <article>
-            <small>评论 / 评分</small
-            ><b
-              >{{ latest.review_count == null ? "未采到" : latest.review_count }} /
-              {{ latest.rating_value == null ? "未采到" : latest.rating_value }}</b
-            >
-          </article>
-          <article>
-            <small>库存</small><b>{{ availabilityText(latest.availability) }}</b>
-          </article>
-        </section>
-        <section v-else class="competitor-baseline-pending">
-          <strong>已建立竞品，正在等待第一个真实快照</strong>
-          <p>
-            该商品由 ERP 中的 Amazon ASIN
-            建立。价格、排名、评论、评分和库存尚未从商品页采集到，因此这里不会用 0 或演示数据代替。
-          </p>
-          <a :href="selected.product_url" target="_blank" rel="noopener noreferrer"
-            >打开外部 Amazon 商品页（新窗口）</a
-          >
-        </section>
-        <section v-if="latest" class="competitor-comparison" aria-label="基线、变动与阈值">
-          <article>
-            <small>基线快照</small>
-            <b>{{ snapshotPrice(baseline) }}</b>
-            <time>{{ baseline ? timeText(baseline.captured_at) : "尚未建立" }}</time>
-          </article>
-          <article>
-            <small>当前快照</small>
-            <b>{{ snapshotPrice(latest) }}</b>
-            <time>{{ timeText(latest.captured_at) }}</time>
-          </article>
-          <article>
-            <small>已记录变动</small>
-            <b>{{ selected.changes?.length ?? 0 }} 项</b>
-            <span>首个快照只建立基线，后续快照才记录变化。</span>
-          </article>
-          <article>
-            <small>生效阈值</small>
-            <b>{{ applicableRules.length }} 条</b>
-            <ul v-if="applicableRules.length">
-              <li v-for="item in applicableRules" :key="item.id">{{ ruleText(item) }}</li>
-            </ul>
-            <span v-else>尚未配置适用于该竞品的阈值。</span>
-          </article>
-        </section>
-        <div v-if="latest" class="competitor-source">
-          <span :data-health="latest.source_status">{{
-            sourceStatusText(latest.source_status)
-          }}</span>
-          <p>采集于 {{ timeText(latest.captured_at) }} · {{ freshnessText(latest.freshness) }}</p>
-          <code>证据 {{ latest.evidence_id }}</code>
+    <template v-if="rulesPage">
+      <header class="competitor-head competitor-rule-page-head">
+        <div>
+          <p>竞品监控 / 独立规则页</p>
+          <h2 id="competitor-title">监控规则</h2>
+          <span>规则与商品详情分离；每条规则同时显示作用对象、指标、阈值和当前状态。</span>
         </div>
-        <section
-          class="competitor-history competitor-activity-timeline"
-          aria-label="竞品处理时间轴"
-        >
+        <div>
+          <RouterLink class="competitor-link-button ghost" to="/competitors"
+            >返回竞品列表</RouterLink
+          >
+          <button type="button" @click="openRule()">新建监控规则</button>
+        </div>
+      </header>
+      <p v-if="notice" class="competitor-notice" role="status">{{ notice }}</p>
+      <UiStatePanel
+        v-if="state !== 'ready'"
+        :kind="state"
+        :request-id="requestId"
+        @primary="load"
+      />
+      <section v-else class="competitor-rule-page-list" aria-label="竞品监控规则列表">
+        <article v-for="item in rules" :key="item.id">
+          <div>
+            <small>{{ item.competitor_id ? "指定竞品" : "工作区全部竞品" }}</small>
+            <strong>{{ ruleText(item) }}</strong>
+          </div>
+          <span>{{
+            item.competitor_id
+              ? items.find((row) => row.id === item.competitor_id)?.title || "竞品已移除"
+              : "全部竞品"
+          }}</span>
+          <em :data-status="item.status">{{ item.status === "active" ? "已生效" : "已停用" }}</em>
+        </article>
+        <div v-if="!rules.length" class="competitor-rule-empty">
+          <strong>尚未配置监控规则</strong>
+          <p>创建明确阈值后，只有真实快照变化达到阈值时才触发通知与任务。</p>
+          <button type="button" @click="openRule()">创建第一条规则</button>
+        </div>
+      </section>
+    </template>
+    <template v-else>
+      <section class="member-module-guide">
+        <div>
+          <p>竞品监控怎么运行</p>
+          <h3>添加亚马逊等平台商品后，持续记录价格、评分和页面变化</h3>
+          <span
+            >每次快照都保留来源网址和采集时间。点击“查看详情”可追溯历史变化；没有真实快照时不会显示虚构曲线。</span
+          >
+        </div>
+        <ol>
+          <li>添加商品链接或商品编号</li>
+          <li>定时采集公开商品页</li>
+          <li>对比新旧快照</li>
+          <li>变化超过阈值时提醒</li>
+        </ol>
+      </section>
+      <header class="competitor-head">
+        <div>
+          <p>竞品情报</p>
+          <h2 id="competitor-title">竞品监控</h2>
+          <span>每个数字都来自可追溯快照；变化与阈值告警不会覆盖历史。</span>
+        </div>
+        <div>
+          <button type="button" class="ghost" @click="openRule()">监控规则</button
+          ><button type="button" @click="openCreate">添加竞品监控</button>
+        </div>
+      </header>
+      <p v-if="notice" class="competitor-notice" role="status">
+        {{ notice }} <code v-if="requestId">{{ requestId }}</code>
+      </p>
+      <section class="competitor-summary" aria-label="竞品监控数据总览">
+        <article>
+          <span>竞品总数</span><b>{{ summary.total }}</b>
+        </article>
+        <article>
+          <span>监控中</span><b>{{ summary.active }}</b>
+        </article>
+        <article>
+          <span>待首次采集</span><b>{{ summary.pending }}</b>
+        </article>
+        <article>
+          <span>历史快照</span><b>{{ summary.snapshots }}</b>
+        </article>
+      </section>
+      <div class="competitor-toolbar">
+        <label
+          >搜索竞品<input
+            v-model="query"
+            type="search"
+            placeholder="商品标题、ASIN 或来源站点" /></label
+        ><span>共 {{ filteredItems.length }} 条结果</span>
+      </div>
+      <UiStatePanel
+        v-if="state !== 'ready'"
+        :kind="state"
+        :request-id="requestId"
+        @primary="load"
+      />
+      <div v-else class="competitor-grid">
+        <aside class="competitor-list">
+          <button
+            v-for="item in filteredItems"
+            :key="item.id"
+            :class="{ selected: selected?.id === item.id }"
+            @click="detail(item)"
+          >
+            <span
+              ><b>{{ item.title }}</b
+              ><small>{{ item.source_site }} · {{ item.market }}</small></span
+            ><strong v-if="item.latest_snapshot"
+              >{{ item.latest_snapshot.currency }} {{ item.latest_snapshot.current_price }}</strong
+            ><strong v-else class="competitor-pending">等待首次采集</strong
+            ><em :data-status="item.status">{{ statusText(item.status) }}</em>
+            <small class="competitor-detail-entry">查看详情 →</small>
+          </button>
+        </aside>
+        <article v-if="selected" class="competitor-detail">
           <header>
-            <h4>告警、任务与结论时间轴</h4>
-            <span>每次真实变化集中展示结论、告警送达和任务状态</span>
-          </header>
-          <article v-for="event in activityTimeline" :key="event.change.id">
-            <b>{{ fieldText(event.change.field) }}</b
-            ><strong>{{ changeText(event.change) }}</strong
-            ><time>{{ timeText(event.change.changed_at) }}</time>
-            <p class="competitor-timeline-conclusion">
-              <span>结论</span>{{ impactText(event.change.impact_explanation) }}
-            </p>
-            <div v-if="event.alerts.length" class="competitor-timeline-status">
-              <span v-for="alert in event.alerts" :key="alert.id">
-                系统告警 {{ notificationStatusText(alert.notification_status) }} · 系统任务
-                {{ alertTaskStatusText(alert.task_status) }}
-              </span>
+            <div>
+              <p>{{ selected.source_site }} / {{ selected.external_id }}</p>
+              <h3>{{ selected.title }}</h3>
+              <a :href="selected.product_url" target="_blank" rel="noopener noreferrer"
+                >打开外部来源商品（新窗口）</a
+              >
             </div>
-            <div v-else class="competitor-timeline-status"><span>未命中监控阈值</span></div>
-            <code>证据 {{ event.change.evidence_id }}</code>
-            <RouterLink
-              v-if="validationTasks[event.change.id]"
-              :to="`/tasks?task=${validationTasks[event.change.id]}`"
-              >打开验证任务</RouterLink
-            ><button
-              v-else
-              type="button"
-              :disabled="busy"
-              @click="createValidationTask(event.change)"
-            >
-              生成验证任务
-            </button>
-          </article>
-          <p v-if="!activityTimeline.length">尚无变化；首个快照只建立基线，不制造告警或结论。</p>
-        </section>
-        <section class="competitor-history snapshot-history" aria-label="价格与库存时间轴">
-          <header>
-            <h4>采集快照</h4>
-            <span>价格 · 库存 · 评分 · 评论 · 采集时间 · 证据</span>
+            <div class="competitor-actions">
+              <button type="button" :disabled="busy" @click="collect">
+                {{ latest ? "立即采集" : "重新尝试首次采集" }}</button
+              ><button class="ghost" type="button" @click="openRule(selected)">当前竞品规则</button>
+              <div class="competitor-desktop-actions">
+                <button class="ghost" type="button" :disabled="busy" @click="toggle">
+                  {{ selected.status === "active" ? "暂停监控" : "恢复监控" }}</button
+                ><button
+                  class="danger ghost"
+                  type="button"
+                  :disabled="busy"
+                  @click="deleting = selected"
+                >
+                  删除竞品监控
+                </button>
+              </div>
+              <details class="competitor-mobile-actions">
+                <summary>更多操作</summary>
+                <button class="ghost" type="button" :disabled="busy" @click="toggle">
+                  {{ selected.status === "active" ? "暂停监控" : "恢复监控" }}</button
+                ><button
+                  class="danger ghost"
+                  type="button"
+                  :disabled="busy"
+                  @click="deleting = selected"
+                >
+                  删除竞品监控
+                </button>
+              </details>
+            </div>
           </header>
-          <article v-for="snapshot in selected.snapshots ?? []" :key="snapshot.id">
-            <b>{{ snapshotPrice(snapshot) }}</b
-            ><strong
-              >{{ availabilityText(snapshot.availability) }} · 评分
-              {{ snapshot.rating_value ?? "未采到" }} · 评论
-              {{ snapshot.review_count ?? "未采到" }}</strong
-            ><time>{{ timeText(snapshot.captured_at) }}</time
-            ><code>证据 {{ snapshot.evidence_id }}</code>
-          </article>
-          <p v-if="!selected.snapshots?.length">尚无快照；点击“立即采集”可重新读取公开商品页。</p>
-        </section>
-      </article>
-    </div>
+          <section v-if="latest" class="competitor-metrics">
+            <article>
+              <small>当前价格</small
+              ><b>{{
+                latest.current_price == null
+                  ? "未采到"
+                  : `${latest.currency ?? ""} ${latest.current_price}`
+              }}</b>
+            </article>
+            <article>
+              <small>排名</small
+              ><b>{{ latest.rank_value == null ? "未采到" : `#${latest.rank_value}` }}</b>
+            </article>
+            <article>
+              <small>评论 / 评分</small
+              ><b
+                >{{ latest.review_count == null ? "未采到" : latest.review_count }} /
+                {{ latest.rating_value == null ? "未采到" : latest.rating_value }}</b
+              >
+            </article>
+            <article>
+              <small>库存</small><b>{{ availabilityText(latest.availability) }}</b>
+            </article>
+          </section>
+          <section v-else class="competitor-baseline-pending">
+            <strong>已建立竞品，正在等待第一个真实快照</strong>
+            <p>
+              该商品由 ERP 中的 Amazon ASIN
+              建立。价格、排名、评论、评分和库存尚未从商品页采集到，因此这里不会用 0
+              或演示数据代替。
+            </p>
+            <a :href="selected.product_url" target="_blank" rel="noopener noreferrer"
+              >打开外部 Amazon 商品页（新窗口）</a
+            >
+          </section>
+          <section v-if="latest" class="competitor-comparison" aria-label="基线、变动与阈值">
+            <article>
+              <small>基线快照</small>
+              <b>{{ snapshotPrice(baseline) }}</b>
+              <time>{{ baseline ? timeText(baseline.captured_at) : "尚未建立" }}</time>
+            </article>
+            <article>
+              <small>当前快照</small>
+              <b>{{ snapshotPrice(latest) }}</b>
+              <time>{{ timeText(latest.captured_at) }}</time>
+            </article>
+            <article>
+              <small>已记录变动</small>
+              <b>{{ selected.changes?.length ?? 0 }} 项</b>
+              <span>首个快照只建立基线，后续快照才记录变化。</span>
+            </article>
+            <article>
+              <small>生效阈值</small>
+              <b>{{ applicableRules.length }} 条</b>
+              <ul v-if="applicableRules.length">
+                <li v-for="item in applicableRules" :key="item.id">{{ ruleText(item) }}</li>
+              </ul>
+              <span v-else>尚未配置适用于该竞品的阈值。</span>
+            </article>
+          </section>
+          <div v-if="latest" class="competitor-source">
+            <span :data-health="latest.source_status">{{
+              sourceStatusText(latest.source_status)
+            }}</span>
+            <p>采集于 {{ timeText(latest.captured_at) }} · {{ freshnessText(latest.freshness) }}</p>
+            <code>证据 {{ latest.evidence_id }}</code>
+          </div>
+          <section
+            class="competitor-history competitor-activity-timeline"
+            aria-label="竞品处理时间轴"
+          >
+            <header>
+              <h4>告警、任务与结论时间轴</h4>
+              <span>每次真实变化集中展示结论、告警送达和任务状态</span>
+            </header>
+            <article v-for="event in activityTimeline" :key="event.change.id">
+              <b>{{ fieldText(event.change.field) }}</b
+              ><strong>{{ changeText(event.change) }}</strong
+              ><time>{{ timeText(event.change.changed_at) }}</time>
+              <p class="competitor-timeline-conclusion">
+                <span>结论</span>{{ impactText(event.change.impact_explanation) }}
+              </p>
+              <div v-if="event.alerts.length" class="competitor-timeline-status">
+                <span v-for="alert in event.alerts" :key="alert.id">
+                  系统告警 {{ notificationStatusText(alert.notification_status) }} · 系统任务
+                  {{ alertTaskStatusText(alert.task_status) }}
+                </span>
+              </div>
+              <div v-else class="competitor-timeline-status"><span>未命中监控阈值</span></div>
+              <code>证据 {{ event.change.evidence_id }}</code>
+              <RouterLink
+                v-if="validationTasks[event.change.id]"
+                :to="`/tasks?task=${validationTasks[event.change.id]}`"
+                >打开验证任务</RouterLink
+              ><button
+                v-else
+                type="button"
+                :disabled="busy"
+                @click="createValidationTask(event.change)"
+              >
+                生成验证任务
+              </button>
+            </article>
+            <p v-if="!activityTimeline.length">尚无变化；首个快照只建立基线，不制造告警或结论。</p>
+          </section>
+          <section class="competitor-history snapshot-history" aria-label="价格与库存时间轴">
+            <header>
+              <h4>采集快照</h4>
+              <span>价格 · 库存 · 评分 · 评论 · 采集时间 · 证据</span>
+            </header>
+            <article v-for="snapshot in selected.snapshots ?? []" :key="snapshot.id">
+              <b>{{ snapshotPrice(snapshot) }}</b
+              ><strong
+                >{{ availabilityText(snapshot.availability) }} · 评分
+                {{ snapshot.rating_value ?? "未采到" }} · 评论
+                {{ snapshot.review_count ?? "未采到" }}</strong
+              ><time>{{ timeText(snapshot.captured_at) }}</time
+              ><code>证据 {{ snapshot.evidence_id }}</code>
+            </article>
+            <p v-if="!selected.snapshots?.length">尚无快照；点击“立即采集”可重新读取公开商品页。</p>
+          </section>
+        </article>
+      </div>
+    </template>
     <div
       v-if="showCreate"
       class="competitor-modal"

@@ -16,7 +16,7 @@ test("UI governance keeps responsive, status, dialog and error boundaries shared
       ].map((path) => readFile(path, "utf8")),
     );
   assert.match(main, /responsive-baselines\.css/);
-  for (const width of [390, 768, 1280]) assert.match(responsive, new RegExp(String(width)));
+  for (const width of [390, 768, 1024, 1440]) assert.match(responsive, new RegExp(String(width)));
   assert.match(responsive, /safe-area-inset-bottom/);
   assert.match(accessibility, /--so-touch-target:\s*44px/);
   assert.match(statusLabels, /statusLabel/);

@@ -156,7 +156,7 @@ const time = (value: string) => new Date(value).toLocaleString("zh-CN", { hour12
   background: var(--so-panel-soft);
   color: var(--so-text-muted);
   font-style: normal;
-  font-size: 11px;
+  font-size: 13px;
 }
 .compatibility-matrix i[data-status="compatible"] {
   background: var(--so-success-soft);

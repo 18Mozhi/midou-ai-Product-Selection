@@ -833,7 +833,7 @@ onMounted(load);
 }
 .source-purpose-head p {
   color: var(--so-info);
-  font-size: 12px;
+  font-size: 13px;
 }
 .source-purpose-head span {
   color: var(--so-text-muted);
@@ -880,7 +880,7 @@ onMounted(load);
   display: block;
   margin-top: 6px;
   color: var(--so-info);
-  font-size: 12px;
+  font-size: 13px;
   overflow-wrap: anywhere;
   text-decoration: none;
 }
@@ -908,7 +908,7 @@ onMounted(load);
   background: var(--so-panel-soft);
 }
 .source-list dt {
-  font-size: 11px;
+  font-size: 13px;
 }
 .source-list dd {
   margin: 5px 0 0;

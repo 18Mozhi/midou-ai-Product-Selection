@@ -13,8 +13,36 @@ export const platformOperationsNavigation = [
   { label: "容量边界", path: "/platform-admin/capacity" },
 ] as const;
 
+const breadcrumbRoutes: Record<string, string> = {
+  工作台: "/home",
+  洞察与选品: "/opportunities",
+  运营工具: "/automations",
+  选品机会: "/opportunities",
+  全部任务: "/tasks",
+  供应链与利润: "/sourcing",
+  组织后台: "/org-admin",
+  平台后台: "/platform-admin",
+  账号与组织: "/platform-admin/accounts",
+  热点与采集: "/platform-admin/providers",
+  数据治理: "/platform-admin/data",
+  运营中心: "/platform-admin/content",
+  安全中心: "/platform-admin/security",
+  系统运维: "/platform-admin/status",
+};
+
+export function breadcrumbTrail(labels: string[], currentPath: string) {
+  return labels.map((label, index) => {
+    const path = index === labels.length - 1 ? undefined : breadcrumbRoutes[label];
+    return { label, path: path && path !== currentPath ? path : undefined };
+  });
+}
+
 export function navigationParentPath(path: string) {
-  if (["/platform-admin/accounts", "/platform-admin/organizations"].includes(path))
+  if (
+    path === "/platform-admin/accounts" ||
+    path === "/platform-admin/organizations" ||
+    path.startsWith("/platform-admin/organizations/")
+  )
     return "/platform-admin/organizations";
   if (path === "/platform-admin/users") return "/platform-admin/users";
   if (["/platform-admin/permissions", "/platform-admin/admins"].includes(path))
@@ -31,6 +59,8 @@ export function routeEntityIds(path: string) {
   return {
     opportunityId: path.match(/^\/opportunities\/([0-9a-f-]{36})$/i)?.[1] ?? "",
     taskId: path.match(/^\/tasks\/([0-9a-f-]{36})$/i)?.[1] ?? "",
+    platformOrganizationId:
+      path.match(/^\/platform-admin\/organizations\/([0-9a-f-]{36})$/i)?.[1] ?? "",
   };
 }
 
@@ -57,6 +87,8 @@ export function surfaceProps(input: {
     case "platform-account-center":
       return {
         ...common,
+        routePath: input.path,
+        organizationId: ids.platformOrganizationId || undefined,
         initialTab: ["/platform-admin/admins", "/platform-admin/permissions"].includes(input.path)
           ? "admins"
           : input.path === "/platform-admin/users"
@@ -75,6 +107,8 @@ export function surfaceProps(input: {
       };
     case "opportunity-workspace":
       return { ...common, opportunityId: ids.opportunityId || undefined };
+    case "competitor-monitor":
+      return { ...common, mode: input.path.endsWith("/monitoring-rules") ? "rules" : "list" };
     case "cost-rule-console":
       return { ...common, roles: input.roles };
     case "provider-runtime-surface":

@@ -342,7 +342,7 @@ onMounted(load);
 .platform-data-hero p {
   margin: 0;
   color: var(--so-primary);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.16em;
 }
@@ -414,7 +414,7 @@ onMounted(load);
   padding: 11px 9px;
   border-bottom: 1px solid var(--so-border);
   text-align: left;
-  font-size: 12px;
+  font-size: 13px;
 }
 .platform-data td small {
   margin-top: 4px;
@@ -425,7 +425,7 @@ onMounted(load);
 }
 .platform-data footer {
   text-align: right;
-  font-size: 11px;
+  font-size: 13px;
 }
 .platform-data-table details summary,
 .platform-data footer details summary {

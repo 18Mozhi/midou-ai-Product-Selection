@@ -37,7 +37,15 @@ export function useNavigationShellTheme(request: Request) {
     }
   }
 
-  async function chooseTheme(theme: ThemeId) {
+  async function chooseTheme(theme: ThemeId, persist = true) {
+    if (!persist) {
+      ++sequence;
+      applyTheme(theme);
+      activeTheme.value = theme;
+      themeOpen.value = false;
+      themeNotice.value = "主题已沿用到当前后台；选择业务范围后会同步到账号偏好。";
+      return;
+    }
     if (themeVersion.value === null) await loadThemePreference(false);
     ++sequence;
     const previousTheme = activeTheme.value;

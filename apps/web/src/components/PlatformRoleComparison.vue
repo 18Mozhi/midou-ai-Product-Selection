@@ -161,7 +161,7 @@ const comparison = computed(() => {
 }
 .role-comparison > header p {
   color: var(--so-primary);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
 }
 .role-comparison > header h3 {
@@ -243,7 +243,7 @@ const comparison = computed(() => {
 }
 .role-comparison__matrix dt {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .role-comparison__matrix dd {
   margin: 4px 0 0;

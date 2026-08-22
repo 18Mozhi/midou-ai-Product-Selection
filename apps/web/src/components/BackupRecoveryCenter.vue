@@ -339,7 +339,7 @@ onMounted(load);
 }
 .eyebrow {
   color: var(--cyan);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.18em;
   margin: 0 0 8px;
@@ -432,7 +432,7 @@ button {
 }
 .panel-title span {
   color: var(--cyan);
-  font-size: 11px;
+  font-size: 13px;
 }
 table {
   border-collapse: collapse;
@@ -446,7 +446,7 @@ td {
 }
 th {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
   text-transform: uppercase;
 }
 td {
@@ -463,7 +463,7 @@ dl div {
 }
 dt {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 dd {
   font-weight: 700;
@@ -505,7 +505,7 @@ dd {
 .empty,
 footer {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
   padding: 18px 0;
 }
 footer {

@@ -28,9 +28,19 @@
   }
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 769px) and (max-width: 1024px) {
   :root {
-    --so-page-gutter: 28px;
+    --so-page-gutter: 20px;
+  }
+  .role-content {
+    padding-right: var(--so-page-gutter);
+    padding-left: var(--so-page-gutter);
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --so-page-gutter: 32px;
   }
   .role-content {
     padding-right: var(--so-page-gutter);

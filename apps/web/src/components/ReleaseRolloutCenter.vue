@@ -377,7 +377,7 @@ onMounted(load);
 }
 .hero p {
   color: var(--cyan);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.17em;
   margin: 0 0 8px;
@@ -471,7 +471,7 @@ button {
 }
 .panel header span {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .panel header code {
   color: var(--cyan);
@@ -537,7 +537,7 @@ td {
 }
 th {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 td {
   font-size: 13px;
@@ -578,7 +578,7 @@ dd {
 }
 footer {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
   text-align: right;
 }
 .blockers details summary,

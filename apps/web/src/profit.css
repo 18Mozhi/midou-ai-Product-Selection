@@ -14,7 +14,7 @@
 .cost-console p {
   margin: 0;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.12em;
 }
 
@@ -129,7 +129,7 @@
 }
 
 .cost-rule-list b {
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .cost-rule-detail {
@@ -233,7 +233,7 @@
   display: grid;
   gap: 6px;
   margin: 12px 0;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .cost-modal form > div,

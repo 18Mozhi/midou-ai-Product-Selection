@@ -32,7 +32,7 @@
 .score-rules-hero p {
   margin: 0 0 8px;
   color: var(--so-primary);
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.16em;
 }
@@ -84,7 +84,7 @@
 .score-rule-list > header {
   padding: 7px 12px;
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
 }
 .score-rule-list > article {
   margin-top: 7px;
@@ -102,7 +102,7 @@
 .score-rule-list article small {
   margin-top: 5px;
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
 }
 .score-rule-list article b[data-status="active"] {
   color: var(--so-success);
@@ -142,7 +142,7 @@
   position: relative;
   padding: 3px 6px;
   display: block;
-  font-size: 8px;
+  font-size: 13px;
   font-style: normal;
 }
 .score-dimension-form {
@@ -166,7 +166,7 @@
   border-radius: 9px;
 }
 .score-dimension-form label {
-  font-size: 8px;
+  font-size: 13px;
 }
 .score-dimension-form input,
 .score-dimension-form select {
@@ -207,7 +207,7 @@
 .score-preview-summary dt,
 .score-preview-table small {
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
 }
 .score-preview-summary dd {
   margin: 4px 0 0;
@@ -236,7 +236,7 @@
 }
 .score-preview-table em {
   color: var(--so-warning);
-  font-size: 8px;
+  font-size: 13px;
   font-style: normal;
 }
 .score-preview-table b[data-delta^="-"] {
@@ -251,7 +251,7 @@
 .opportunity-score aside {
   margin-top: 12px;
   color: var(--so-warning);
-  font-size: 9px;
+  font-size: 13px;
 }
 .opportunity-score footer {
   margin-top: 14px;
@@ -266,7 +266,7 @@
   color: var(--so-text);
   background: var(--so-panel);
   text-decoration: none;
-  font-size: 9px;
+  font-size: 13px;
 }
 .opportunity-score dd small {
   display: block;

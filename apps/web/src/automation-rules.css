@@ -15,7 +15,7 @@
 }
 .automation-center header p,
 .automation-detail > p {
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.13em;
   color: var(--accent);
 }
@@ -67,7 +67,7 @@
 .automation-grid i {
   font-style: normal;
   color: var(--so-success);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 .automation-grid article[data-status="paused"] i {
@@ -97,7 +97,7 @@
 .automation-flow small,
 .automation-last-run > span {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .automation-grid dl {
   display: grid;
@@ -107,7 +107,7 @@
   padding-top: 14px;
 }
 .automation-grid dt {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-muted);
 }
 .automation-grid dd {
@@ -131,7 +131,7 @@
   grid-column: 1 / -1;
   color: var(--so-danger);
   font-style: normal;
-  font-size: 12px;
+  font-size: 13px;
 }
 .automation-detail {
   position: fixed;
@@ -164,7 +164,7 @@
 .automation-detail li em {
   color: var(--so-danger);
   font-style: normal;
-  font-size: 12px;
+  font-size: 13px;
 }
 .automation-detail li a {
   color: var(--accent);
@@ -201,7 +201,7 @@
 .automation-center label {
   display: grid;
   gap: 6px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 .automation-center input,
@@ -299,7 +299,7 @@
 }
 .automation-templates > header span {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .automation-templates > div {
   display: grid;

@@ -264,7 +264,7 @@ onMounted(() => load());
 }
 .audit-page aside p,
 .main header p {
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.14em;
   color: var(--so-text-muted);
 }
@@ -320,7 +320,7 @@ onMounted(() => load());
   border-radius: 50%;
 }
 .seed-badge strong {
-  font-size: 10px;
+  font-size: 13px;
   color: var(--so-primary);
 }
 .scope-tabs {
@@ -347,7 +347,7 @@ onMounted(() => load());
 .scope-tabs em {
   margin-left: auto;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .filters {
   display: grid;
@@ -359,7 +359,7 @@ onMounted(() => load());
   border-radius: 10px;
 }
 .filters label {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--so-text-muted);
 }
 .filters input,
@@ -432,7 +432,7 @@ onMounted(() => load());
   align-items: center;
 }
 .thead {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--so-text-muted);
   background: var(--so-panel-soft);
 }
@@ -457,7 +457,7 @@ onMounted(() => load());
 }
 .table i {
   font-style: normal;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--so-success);
 }
 .table i[data-outcome="blocked"],
@@ -465,7 +465,7 @@ onMounted(() => load());
   color: var(--so-danger);
 }
 .table code {
-  font-size: 11px;
+  font-size: 13px;
 }
 .table .more {
   display: block;
@@ -476,7 +476,7 @@ onMounted(() => load());
   padding: 22px;
 }
 .detail > p {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--so-primary);
   letter-spacing: 0.1em;
 }
@@ -493,7 +493,7 @@ onMounted(() => load());
   padding-bottom: 8px;
 }
 .detail dt {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--so-text-muted);
 }
 .detail dd {
@@ -506,7 +506,7 @@ onMounted(() => load());
   padding: 12px;
   border-radius: 7px;
   overflow: auto;
-  font-size: 11px;
+  font-size: 13px;
 }
 .detail > small {
   color: var(--so-text-muted);

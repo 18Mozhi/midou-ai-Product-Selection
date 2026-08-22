@@ -33,7 +33,7 @@
 .selection-candidates header p {
   margin: 0 0 6px;
   color: var(--so-info);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.14em;
 }
@@ -48,7 +48,7 @@
   padding: 6px 10px;
   color: var(--so-primary);
   background: var(--so-primary-soft);
-  font-size: 11px;
+  font-size: 13px;
   white-space: nowrap;
 }
 
@@ -104,7 +104,7 @@
 .selection-candidate-grid i {
   margin-top: 7px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
   font-style: normal;
   line-height: 1.5;
 }
@@ -117,7 +117,7 @@
   grid-column: 2;
   justify-self: start;
   color: var(--so-info);
-  font-size: 12px;
+  font-size: 13px;
   text-decoration: none;
 }
 .selection-timeline li {
@@ -165,7 +165,7 @@
 }
 .selection-timeline small,
 .selection-timeline time {
-  font-size: 11px;
+  font-size: 13px;
 }
 .selection-timeline time {
   grid-column: 2;
@@ -184,7 +184,7 @@
 }
 .selection-block-owner dt {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .selection-block-owner dd {
   margin: 4px 0 0;

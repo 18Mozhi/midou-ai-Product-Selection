@@ -421,7 +421,7 @@ onMounted(load);
   display: flex;
   justify-content: space-between;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .platform-alerts details summary,
 .platform-observed details summary {

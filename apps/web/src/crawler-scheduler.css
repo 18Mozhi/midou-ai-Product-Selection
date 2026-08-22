@@ -29,7 +29,7 @@
 .crawler-scheduler__panel header p {
   margin: 0;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.18em;
 }
 .crawler-scheduler__hero h2 {
@@ -119,7 +119,7 @@
 .crawler-scheduler__metrics span,
 .crawler-scheduler dt {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .crawler-scheduler__metrics strong {
   font-size: 22px;
@@ -148,7 +148,7 @@
 }
 .crawler-scheduler__panel header span {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .crawler-scheduler__queue-summary {
   display: grid;
@@ -204,7 +204,7 @@
 .crawler-scheduler__circuit button {
   margin: 7px 0 0 6px;
   padding: 5px 8px;
-  font-size: 12px;
+  font-size: 13px;
 }
 .crawler-scheduler__sources details {
   margin-top: 7px;
@@ -212,7 +212,7 @@
 .crawler-scheduler__sources summary {
   cursor: pointer;
   color: var(--so-primary);
-  font-size: 12px;
+  font-size: 13px;
 }
 .crawler-scheduler__receipt-grid {
   display: grid;
@@ -362,7 +362,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .crawler-scheduler footer strong {
   color: var(--so-success);

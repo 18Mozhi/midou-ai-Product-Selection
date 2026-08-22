@@ -251,7 +251,7 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
     styles,
     /role-mobile-nav\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/,
   );
-  assert.match(component, /v-for="item in items\.slice\(0, 4\)"/);
+  assert.match(component, /v-for="item in primaryItems"/);
   assert.match(component, /aria-controls="role-navigation"[\s\S]*?<span>更多<\/span>/);
   assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>新建组织<\/span>/);
   assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>邀请成员<\/span>/);
@@ -271,8 +271,12 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.doesNotMatch(main, /addEventListener\(["']click["']/);
   assert.match(component, /rememberMemberRoute/);
   assert.match(navigationMemory, /getLastMemberRoute/);
+  assert.match(navigationMemory, /getLastValidRoute/);
   assert.match(navigationMemory, /getRecentOrganizationIds/);
-  assert.doesNotMatch(componentEvidence + navigationMemory, /(?:local|session)Storage/);
+  assert.match(navigationMemory, /localStorage/);
+  assert.match(navigationMemory, /scoutops:navigation:last-member-route/);
+  assert.match(component, /breadcrumbTrail/);
+  assert.match(component, /申请权限或联系管理员/);
   assert.match(component, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   assert.match(landingRedirect, /\/me\/landing/);
@@ -289,7 +293,7 @@ test("M02-03 each role shell keeps its role-specific primary action in the top b
   const component = await read("apps/web/src/components/NavigationShell.vue");
   const platformCreatePattern = [
     `v-if="shell === 'platform_admin' && allCapabilities\\.includes\\('platform:superadmin'\\)"`,
-    `\\s+class="role-create"\\s+to="/platform-admin/organizations\\?create=1"[\\s\\S]*?新建组织`,
+    `\\s+class="role-create"\\s+to="/platform-admin/organizations/new"[\\s\\S]*?新建组织`,
   ].join("");
   assert.match(component, new RegExp(platformCreatePattern));
   assert.match(

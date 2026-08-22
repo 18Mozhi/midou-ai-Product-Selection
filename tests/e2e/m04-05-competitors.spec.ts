@@ -165,3 +165,21 @@ test("competitor search and detail restore from the URL", async ({ page }) => {
   await expect(page.getByLabel("搜索竞品")).toHaveValue("净水");
   await expect(page.getByRole("heading", { name: item.title })).toBeVisible();
 });
+
+test("competitor monitoring rules use an independent route and retain the source competitor", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto(`/competitors?competitor=${id}`);
+  await page.getByRole("button", { name: "当前竞品规则" }).click();
+  await expect(page).toHaveURL(new RegExp(`/competitors/monitoring-rules\\?competitor=${id}`));
+  await expect(page.getByRole("heading", { name: "监控规则", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "新建监控规则" })).toBeVisible();
+  await expect(page.getByLabel("竞品（留空为工作区全局）")).toHaveValue(id);
+  await page.getByRole("button", { name: "关闭告警规则" }).click();
+  await expect(page.getByLabel("竞品监控规则列表").getByText("价格 · 减少 USD 2")).toBeVisible();
+  await expect(page.getByRole("link", { name: "返回竞品列表" })).toHaveAttribute(
+    "href",
+    "/competitors",
+  );
+});

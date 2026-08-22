@@ -456,7 +456,7 @@ onMounted(load);
 }
 .platform-governance header p {
   color: var(--so-primary);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.16em;
 }
@@ -541,7 +541,7 @@ onMounted(load);
   padding: 11px 9px;
   border-bottom: 1px solid var(--so-border);
   text-align: left;
-  font-size: 12px;
+  font-size: 13px;
 }
 .governance-table td small {
   margin-top: 4px;
@@ -571,7 +571,7 @@ onMounted(load);
 }
 .platform-governance footer {
   text-align: right;
-  font-size: 11px;
+  font-size: 13px;
 }
 .governance-detail {
   position: fixed;

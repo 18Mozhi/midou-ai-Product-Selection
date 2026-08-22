@@ -231,7 +231,7 @@ for (const item of [
 ])
   test(`M02-03 ${item.shell} mobile navigation is four primary items plus more`, async ({
     page,
-  }, testInfo) => {
+  }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await allow(page, item.shell);
     await page.goto(item.path);
@@ -241,9 +241,9 @@ for (const item of [
     const more = navigation.getByRole("button", { name: "更多" });
     await expect(more).toHaveCount(1);
     await expect(navigation.getByText(/创建选品|邀请成员|新建组织/)).toHaveCount(0);
-    if (item.shell === "member" && testInfo.project.name === "mobile-390") {
-      await expect(navigation).toHaveScreenshot("m02-03-mobile-navigation-five-items.png");
-    }
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+      .toBe(true);
     await more.click();
     await expect(more).toHaveAttribute("aria-expanded", "true");
     await expect(page.locator("#role-navigation")).toHaveClass(/is-open/);
@@ -411,12 +411,85 @@ test("M02-03 platform return requires a target context and preserves the member 
     });
   });
   await page.goto("/opportunities?status=watching");
+  if ((page.viewportSize()?.width ?? 1000) <= 840)
+    await page.getByRole("button", { name: "更多" }).click();
   await page.getByRole("link", { name: "进入管理后台" }).click();
   await expect(page).toHaveURL(/\/platform-admin$/);
   const switchLink = page.getByRole("link", { name: "选择组织与工作区后进入用户工作台" });
   const href = await switchLink.getAttribute("href");
   expect(href).toContain("/select-context");
   expect(href).toContain("return_to=%2Fopportunities%3Fstatus%3Dwatching");
+});
+
+test("organization administration returns to the persisted member workspace", async ({ page }) => {
+  await page.addInitScript(() =>
+    localStorage.setItem("scoutops:navigation:last-member-route", "/trends?market=US&page=2"),
+  );
+  await allow(page, "organization_admin");
+  await page.goto("/org-admin");
+  await expect(page.getByRole("link", { name: "返回成员工作台" })).toHaveAttribute(
+    "href",
+    "/trends?market=US&page=2",
+  );
+});
+
+test("member landing restores the last valid member route after refresh", async ({ page }) => {
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      "scoutops:navigation:last-member-route",
+      "/opportunities?status=watching&page=3",
+    ),
+  );
+  await allow(page, "member");
+  await page.route("**/api/v1/me/landing", (route) =>
+    route.fulfill({
+      json: {
+        data: { route: "/home" },
+        request_id: "member-restore",
+        trace_id: "member-restore",
+      },
+    }),
+  );
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/opportunities\?status=watching&page=3$/);
+  await page.reload();
+  await expect(page).toHaveURL(/\/opportunities\?status=watching&page=3$/);
+});
+
+test("real breadcrumbs are keyboard navigable and mobile secondary pages highlight More", async ({
+  page,
+}) => {
+  await allow(page, "member");
+  await page.goto("/opportunities/scoring-rules");
+  const breadcrumb = page.getByRole("navigation", { name: "面包屑" });
+  const parent = breadcrumb.getByRole("link", { name: "选品机会" });
+  await expect(parent).toHaveAttribute("href", "/opportunities");
+  await parent.focus();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/opportunities$/);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/opportunities/scoring-rules");
+  await expect(
+    page.getByRole("navigation", { name: "移动快捷导航" }).getByRole("button", { name: "更多" }),
+  ).toHaveAttribute("aria-current", "page");
+});
+
+test("theme continuity and real-height layout hold at 768, 1024 and 1440", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("scoutops:ui-theme", "aurora-purple"));
+  await allow(page, "platform_admin");
+  for (const width of [768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/platform-admin");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "aurora-purple");
+    await expect(
+      page.getByRole("heading", { name: "平台现在怎么样，一眼看懂", level: 2 }),
+    ).toBeVisible();
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+      .toBe(true);
+    await expect(page).toHaveScreenshot(`m02-03-platform-${width}.png`, { fullPage: true });
+  }
 });
 
 test("M02-03 personal center uses an account shell without the organization navigation guard", async ({

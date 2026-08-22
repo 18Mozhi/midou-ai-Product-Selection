@@ -22,7 +22,7 @@ test("body copy and interactive controls preserve the accessibility floor", asyn
 
   assert.match(accessibility, /--so-font-body:\s*1rem/);
   assert.match(accessibility, /--so-touch-target:\s*44px/);
-  assert.match(accessibility, /#app small\s*\{\s*font-size:\s*0\.75rem/);
+  assert.match(accessibility, /#app small\s*\{\s*font-size:\s*var\(--so-font-meta\)/);
   assert.match(
     accessibility,
     /#app\s+:where\(p, li, dd, td, label, input, select, textarea, button\)/,
@@ -66,6 +66,8 @@ test("saved theme and session density are applied before Vue mounts", async () =
   assert.match(shellTheme, /\/me\/ui-preferences/);
   assert.match(shellTheme, /主题保存失败，已恢复原主题/);
   assert.match(tokens, /\[data-density="compact"\]/);
+  assert.match(tokens, /--so-font-meta:\s*0\.8125rem/);
+  assert.doesNotMatch(shell, /applyTheme\("cloud-white"\)/);
   for (const alias of ["--surface", "--text-primary", "--accent", "--border"])
     assert.match(tokens, new RegExp(alias));
   for (const source of [task, approval, notification]) {

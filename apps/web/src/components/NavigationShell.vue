@@ -10,7 +10,7 @@ import {
 } from "vue";
 import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
-import { applyCachedTheme, applyShellDensity, applyTheme, themes } from "../design/theme";
+import { applyCachedTheme, applyShellDensity, themes } from "../design/theme";
 import { getLastMemberRoute, rememberMemberRoute } from "../navigation-memory";
 import {
   authorizedNavigation,
@@ -19,6 +19,7 @@ import {
   shellRoleSummary,
 } from "../navigation-shell-permissions";
 import {
+  breadcrumbTrail,
   navigationParentPath as resolveNavigationParentPath,
   pageSummary as resolvePageSummary,
   platformOperationsNavigation,
@@ -182,9 +183,12 @@ const pageTitle = computed(() =>
     : (activeItem.value?.label ?? shellTitle.value),
 );
 const breadcrumbs = computed(() =>
-  Array.isArray(route.meta.breadcrumb)
-    ? route.meta.breadcrumb.filter((item): item is string => typeof item === "string")
-    : [pageTitle.value],
+  breadcrumbTrail(
+    Array.isArray(route.meta.breadcrumb)
+      ? route.meta.breadcrumb.filter((item): item is string => typeof item === "string")
+      : [pageTitle.value],
+    routePath.value,
+  ),
 );
 const requiredCapabilities = computed(() =>
   Array.isArray(route.meta.capabilities)
@@ -195,6 +199,19 @@ const routeAllowed = computed(() =>
   canOpenRoute(requiredCapabilities.value, allCapabilities.value),
 );
 const roleSummary = computed(() => shellRoleSummary(props.shell, guard.value));
+const primaryItems = computed(() => items.value.slice(0, 4));
+const moreActive = computed(
+  () =>
+    routePath.value !== activeItem.value?.path ||
+    !primaryItems.value.some((item) => item.path === activeItem.value?.path),
+);
+const primaryActionLabel = computed(() =>
+  props.shell === "member"
+    ? "创建选品"
+    : props.shell === "organization_admin"
+      ? "邀请成员"
+      : "新建组织",
+);
 const memberReturnPath = () => {
   return getLastMemberRoute();
 };
@@ -212,7 +229,10 @@ const activeSurface = computed(() => String(route.meta.surface ?? ""));
 const activeCachePolicy = computed(() => String(route.meta.cachePolicy ?? "none"));
 const selectedSurfaceComponent = computed(() => surfaceComponents[activeSurface.value] ?? null);
 const surfaceCacheKey = computed(() => {
-  const routeIdentity = String(route.name ?? routePath.value);
+  const routeIdentity =
+    activeSurface.value === "platform-account-center"
+      ? activeSurface.value
+      : String(route.name ?? routePath.value);
   if (activeCachePolicy.value !== "reset_on_scope") return routeIdentity;
   return `${routeIdentity}:${guard.value?.organization_id ?? "none"}:${guard.value?.workspace_id ?? "none"}`;
 });
@@ -280,8 +300,8 @@ async function load() {
 onMounted(() => {
   void load();
   applyShellDensity(props.shell !== "member");
-  if (props.shell === "member") void loadThemePreference(false);
-  else applyTheme("cloud-white");
+  applyCachedTheme();
+  if (props.shell !== "platform_admin") void loadThemePreference(false);
   window.addEventListener("keydown", handleDiscoveryShortcut);
 });
 watch(
@@ -295,14 +315,13 @@ watch(
   () => props.shell,
   (shell) => {
     applyShellDensity(shell !== "member");
-    if (shell === "member") void loadThemePreference(false);
-    else applyTheme("cloud-white");
+    applyCachedTheme();
+    if (shell !== "platform_admin") void loadThemePreference(false);
   },
 );
 onUnmounted(() => {
   window.removeEventListener("keydown", handleDiscoveryShortcut);
   if (props.shell !== "member") {
-    applyCachedTheme();
     applyShellDensity(false);
   }
 });
@@ -347,7 +366,10 @@ onUnmounted(() => {
         ><span v-else><small>范围</small>平台全局</span>
       </div>
       <div class="role-top-actions">
-        <div v-if="shell === 'member'" class="role-theme-switcher">
+        <div v-if="state === 'ready'" class="role-identity" aria-label="当前身份">
+          <small>当前身份</small><strong>{{ roleSummary }}</strong>
+        </div>
+        <div class="role-theme-switcher">
           <button type="button" aria-label="切换界面主题" @click="themeOpen = !themeOpen">
             <AppIcon name="theme" /> <span>主题</span>
           </button>
@@ -358,19 +380,22 @@ onUnmounted(() => {
         <RouterLink
           v-if="shell === 'platform_admin' && allCapabilities.includes('platform:superadmin')"
           class="role-create"
-          to="/platform-admin/organizations?create=1"
+          to="/platform-admin/organizations/new"
+          :aria-label="primaryActionLabel"
           ><AppIcon name="plus" /> <span>新建组织</span></RouterLink
         >
         <RouterLink
           v-else-if="shell === 'organization_admin'"
           class="role-create"
           to="/org-admin/members"
+          :aria-label="primaryActionLabel"
           ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink
         >
         <button
           v-else-if="shell === 'member'"
           type="button"
           class="role-create"
+          :aria-label="primaryActionLabel"
           @click="openDiscovery('create')"
         >
           <AppIcon name="plus" /> <span>创建选品</span>
@@ -384,7 +409,23 @@ onUnmounted(() => {
           ><span class="role-switch-mobile">用户面板</span></RouterLink
         >
         <RouterLink
-          v-else-if="guard?.platform_roles?.length"
+          v-else-if="shell === 'organization_admin'"
+          class="role-switch"
+          :to="memberReturnPath()"
+          aria-label="返回成员工作台"
+          ><AppIcon name="switch" /><span class="role-switch-desktop">返回成员工作台</span
+          ><span class="role-switch-mobile">工作台</span></RouterLink
+        >
+        <RouterLink
+          v-else-if="guard?.roles?.includes('organization_admin')"
+          class="role-switch"
+          to="/org-admin"
+          aria-label="进入组织管理后台"
+          ><AppIcon name="switch" /><span class="role-switch-desktop">进入组织后台</span
+          ><span class="role-switch-mobile">组织后台</span></RouterLink
+        >
+        <RouterLink
+          v-if="shell === 'member' && guard?.platform_roles?.length"
           class="role-switch"
           to="/platform-admin"
           aria-label="进入管理后台"
@@ -414,14 +455,6 @@ onUnmounted(() => {
           }}
           · {{ roleSummary }}</small
         >
-      </div>
-      <div v-if="shell === 'member'" class="role-sidebar-actions">
-        <button type="button" @click="(openDiscovery('search'), (menuOpen = false))">
-          <AppIcon name="search" /> 搜索
-        </button>
-        <button type="button" @click="(openDiscovery('create'), (menuOpen = false))">
-          <AppIcon name="plus" /> 创建选品
-        </button>
       </div>
       <label v-if="items.length >= 8" class="role-menu-search">
         <span class="so-visually-hidden">搜索导航菜单</span>
@@ -456,6 +489,32 @@ onUnmounted(() => {
         </details>
         <p v-if="!menuGroups.length" class="role-menu-empty">没有匹配的菜单或分组。</p>
       </nav>
+      <div v-if="state === 'ready'" class="role-sidebar-utility">
+        <RouterLink
+          v-if="shell === 'platform_admin'"
+          :to="contextSwitchTarget"
+          aria-label="选择组织与工作区后进入用户工作台"
+          ><AppIcon name="switch" />返回用户工作台</RouterLink
+        >
+        <RouterLink
+          v-else-if="shell === 'organization_admin'"
+          :to="memberReturnPath()"
+          aria-label="返回成员工作台"
+          ><AppIcon name="switch" />返回成员工作台</RouterLink
+        >
+        <RouterLink
+          v-else-if="guard?.roles?.includes('organization_admin')"
+          to="/org-admin"
+          aria-label="进入组织管理后台"
+          ><AppIcon name="switch" />进入组织后台</RouterLink
+        >
+        <RouterLink
+          v-if="shell === 'member' && guard?.platform_roles?.length"
+          to="/platform-admin"
+          aria-label="进入管理后台"
+          ><AppIcon name="switch" />进入管理后台</RouterLink
+        >
+      </div>
     </aside>
     <section class="role-content">
       <section v-if="state !== 'ready'" class="role-gate-state" aria-live="polite">
@@ -480,7 +539,10 @@ onUnmounted(() => {
       <template v-else-if="routeAllowed">
         <nav v-if="!opportunityId" class="role-page-breadcrumb" aria-label="面包屑">
           <template v-for="(item, index) in breadcrumbs" :key="`${item}-${index}`">
-            <span>{{ item }}</span
+            <RouterLink v-if="item.path" :to="item.path">{{ item.label }}</RouterLink
+            ><span v-else :aria-current="index === breadcrumbs.length - 1 ? 'page' : undefined">{{
+              item.label
+            }}</span
             ><b v-if="index < breadcrumbs.length - 1">/</b>
           </template>
         </nav>
@@ -519,18 +581,22 @@ onUnmounted(() => {
         <p>路由权限</p>
         <h1>无权打开此页面</h1>
         <p>当前角色不包含该页面要求的能力，请返回有权访问的模块。</p>
-        <RouterLink :to="items[0]?.path || '/home'">返回工作台</RouterLink>
+        <div class="role-gate-actions">
+          <RouterLink :to="items[0]?.path || '/home'">返回工作台</RouterLink>
+          <RouterLink to="/me?section=permissions">申请权限或联系管理员</RouterLink>
+        </div>
       </section>
     </section>
     <nav v-if="state === 'ready'" class="role-mobile-nav" aria-label="移动快捷导航">
       <RouterLink
-        v-for="item in items.slice(0, 4)"
+        v-for="item in primaryItems"
         :key="item.path"
         :to="item.path"
         :aria-current="activeItem?.path === item.path ? 'page' : undefined"
         ><i><AppIcon :name="item.icon" /></i><span>{{ item.label }}</span></RouterLink
       ><button
         type="button"
+        :aria-current="moreActive ? 'page' : undefined"
         aria-controls="role-navigation"
         :aria-expanded="menuOpen"
         @click="menuOpen = true"
@@ -538,13 +604,13 @@ onUnmounted(() => {
         <i><AppIcon name="menu" /></i><span>更多</span>
       </button>
     </nav>
-    <div v-if="shell === 'member' && themeOpen" class="role-theme-menu">
+    <div v-if="themeOpen" class="role-theme-menu">
       <button
         v-for="theme in themes"
         :key="theme.id"
         type="button"
         :aria-pressed="activeTheme === theme.id"
-        @click="chooseTheme(theme.id)"
+        @click="chooseTheme(theme.id, shell !== 'platform_admin')"
       >
         <i :data-theme-dot="theme.id"></i
         ><span
@@ -556,7 +622,7 @@ onUnmounted(() => {
       </button>
       <RouterLink to="/settings/theme">更多外观设置</RouterLink>
     </div>
-    <p v-if="shell === 'member' && themeNotice" class="role-theme-notice" role="status">
+    <p v-if="themeNotice" class="role-theme-notice" role="status">
       {{ themeNotice }}
     </p>
     <DiscoveryOverlay
@@ -569,77 +635,4 @@ onUnmounted(() => {
   </main>
 </template>
 
-<style scoped>
-.platform-secondary-nav {
-  position: sticky;
-  top: 68px;
-  z-index: 8;
-  display: flex;
-  gap: 4px;
-  margin: -4px 0 18px;
-  padding: 6px;
-  overflow-x: auto;
-  border: 1px solid var(--so-border);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--so-bg-elevated) 94%, transparent);
-  box-shadow: 0 10px 28px color-mix(in srgb, var(--so-shadow-color) 24%, transparent);
-}
-
-.platform-secondary-nav a {
-  flex: 0 0 auto;
-  min-height: 40px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0 13px;
-  border-radius: 7px;
-  color: var(--so-text-muted);
-  text-decoration: none;
-  font-weight: 750;
-  white-space: nowrap;
-}
-
-.platform-secondary-nav a:hover,
-.platform-secondary-nav a[aria-current="page"] {
-  color: var(--so-text);
-  background: var(--so-panel-soft);
-}
-
-.platform-secondary-nav a[aria-current="page"] {
-  box-shadow: inset 0 -2px var(--so-primary);
-}
-
-.role-sidebar-actions {
-  display: none;
-}
-
-@media (max-width: 840px) {
-  .platform-secondary-nav {
-    top: 64px;
-    margin-inline: -4px;
-  }
-
-  .platform-secondary-nav a {
-    min-height: 44px;
-  }
-
-  .role-sidebar-actions {
-    margin-bottom: 14px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .role-sidebar-actions button {
-    min-height: 44px;
-    border: 1px solid var(--so-border);
-    border-radius: 10px;
-    color: var(--so-text);
-    background: var(--so-panel-soft);
-    font-weight: 750;
-  }
-
-  .role-theme-switcher span {
-    display: none;
-  }
-}
-</style>
+<style scoped src="../navigation-shell-scoped.css"></style>

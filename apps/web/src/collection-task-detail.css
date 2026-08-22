@@ -16,7 +16,7 @@
 .collection-detail-history > article small,
 .collection-detail-empty {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .collection-detail-history > article small {
   overflow-wrap: anywhere;

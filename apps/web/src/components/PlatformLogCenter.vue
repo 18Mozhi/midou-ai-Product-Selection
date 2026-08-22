@@ -452,7 +452,7 @@ onMounted(load);
 .platform-log-chain > header span,
 .platform-log-chain__sources code {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .platform-log-chain__sources {
   display: flex;

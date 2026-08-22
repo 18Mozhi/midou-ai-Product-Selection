@@ -165,6 +165,24 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
     .toBe(true);
 });
 
+test("platform organization list, create and detail are independently deep-linkable", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/platform-admin/organizations/new");
+  await expect(page).toHaveURL(/\/platform-admin\/organizations\/new$/);
+  const wizard = page.getByRole("dialog", { name: "新建组织" });
+  await expect(wizard.getByRole("heading", { name: "新建组织" })).toBeVisible();
+  await wizard.getByRole("button", { name: "取消" }).click();
+  await expect(page).toHaveURL(/\/platform-admin\/organizations$/);
+
+  await page.goto(`/platform-admin/organizations/${org}`);
+  const detail = page.getByRole("dialog", { name: "米豆选品团队" });
+  await expect(detail).toBeVisible();
+  await detail.getByRole("button", { name: "关闭组织详情" }).click();
+  await expect(page).toHaveURL(/\/platform-admin\/organizations$/);
+});
+
 test("M06-01.A06/A09 creates organization with audited idempotent request", async ({
   page,
 }, testInfo) => {

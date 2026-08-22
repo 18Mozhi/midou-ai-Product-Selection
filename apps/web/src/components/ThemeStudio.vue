@@ -244,6 +244,17 @@ onMounted(load);
             <div class="preview-top">
               <span><b>选</b>决策概览</span><small>实时预览</small>
             </div>
+            <div class="theme-shell-previews" aria-label="三套壳层同步预览">
+              <article data-shell-preview="member">
+                <small>成员工作台</small><strong>今日行动</strong><span>业务操作与主题同步</span>
+              </article>
+              <article data-shell-preview="organization">
+                <small>组织管理后台</small><strong>治理概览</strong><span>不强制切换浅色</span>
+              </article>
+              <article data-shell-preview="platform">
+                <small>平台管理后台</small><strong>异常优先</strong><span>继承当前主题</span>
+              </article>
+            </div>
             <div class="preview-metrics">
               <article>
                 <span>机会评分</span><strong>87</strong><small>高潜力 · 文字结论</small>

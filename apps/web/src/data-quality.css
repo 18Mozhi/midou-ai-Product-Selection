@@ -18,7 +18,7 @@
 .quality-resolution header p {
   margin: 0 0 7px;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.13em;
 }
@@ -39,7 +39,7 @@
   border-radius: 99px;
   padding: 7px 11px;
   color: var(--so-text);
-  font-size: 12px;
+  font-size: 13px;
 }
 .quality-metrics {
   display: grid;
@@ -99,7 +99,7 @@
 }
 .quality-card > header span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .quality-card input,
 .quality-card select,
@@ -130,7 +130,7 @@
 .quality-batch-toolbar span,
 .quality-batch-toolbar label {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .quality-batch-toolbar .wide {
   grid-column: 1 / -2;
@@ -159,7 +159,7 @@
 }
 .quality-drilldown span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .quality-table-wrap {
   overflow: auto;
@@ -175,7 +175,7 @@
   padding: 10px;
   border-bottom: 1px solid var(--so-border-strong);
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .quality-card td {
   padding: 13px 10px;
@@ -213,7 +213,7 @@
   display: inline-block;
   padding: 4px 8px;
   border-radius: 99px;
-  font-size: 11px;
+  font-size: 13px;
 }
 .quality-card td b[data-severity="critical"] {
   background: var(--so-panel-soft);
@@ -248,7 +248,7 @@
   border-radius: 99px;
   background: var(--so-panel);
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .quality-run-grid header b[data-status="passed"] {
   background: var(--so-panel-soft);
@@ -310,7 +310,7 @@
   background: var(--so-panel);
 }
 .quality-detail dt {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--so-text-muted);
 }
 .quality-detail dd {

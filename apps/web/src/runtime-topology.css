@@ -26,7 +26,7 @@
 .topology-hero p,
 .topology-panel header p {
   color: var(--topology-cyan);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.18em;
   margin: 0 0 8px;
@@ -126,7 +126,7 @@
 .topology-verdict small {
   color: var(--topology-muted);
   display: block;
-  font-size: 10px;
+  font-size: 13px;
   letter-spacing: 0.12em;
 }
 .topology-verdict strong {
@@ -143,7 +143,7 @@
   border: 1px solid var(--so-warning-border);
   border-radius: 999px;
   color: var(--so-warning);
-  font-size: 11px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 800;
   padding: 8px 11px;
@@ -267,7 +267,7 @@
 }
 .topology-nodes article > div span {
   color: var(--topology-muted);
-  font-size: 11px;
+  font-size: 13px;
   text-transform: uppercase;
 }
 .topology-nodes h4 {
@@ -296,7 +296,7 @@
   text-align: right;
 }
 .topology-nodes dl div {
-  font-size: 11px;
+  font-size: 13px;
 }
 .topology-empty,
 .topology-clear {
@@ -338,7 +338,7 @@
 }
 .topology-blockers article code {
   color: var(--topology-amber);
-  font-size: 12px;
+  font-size: 13px;
   overflow-wrap: anywhere;
 }
 .topology-blockers article p {
@@ -348,7 +348,7 @@
 .topology-footer {
   color: var(--topology-muted);
   display: flex;
-  font-size: 11px;
+  font-size: 13px;
   gap: 16px;
   justify-content: flex-end;
 }
@@ -496,7 +496,7 @@
 }
 .topology-processes dt {
   color: var(--topology-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .topology-processes dd {
   margin: 0;
@@ -524,7 +524,7 @@
 .topology-restart-trends header small,
 .topology-restart-trends footer {
   color: var(--topology-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .topology-restart-trends svg {
   height: 68px;
@@ -584,7 +584,7 @@
 .topology-health-grid header small,
 .topology-health-grid footer {
   color: var(--topology-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .topology-health-grid dl {
   display: grid;
@@ -599,7 +599,7 @@
 }
 .topology-health-grid dt {
   color: var(--topology-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .topology-health-grid dd {
   font-weight: 800;
@@ -623,7 +623,7 @@
 }
 .topology-scheduler-metrics dt {
   color: var(--topology-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .topology-scheduler-metrics dd {
   font-weight: 800;
@@ -684,7 +684,7 @@
 }
 .topology-alert-associations > span {
   color: var(--topology-muted);
-  font-size: 12px;
+  font-size: 13px;
   margin-right: 2px;
 }
 .topology-alert-associations > b,
@@ -693,7 +693,7 @@
   border: 1px solid color-mix(in srgb, var(--topology-amber) 32%, transparent);
   border-radius: 999px;
   color: var(--so-text-primary);
-  font-size: 12px;
+  font-size: 13px;
   padding: 4px 8px;
   text-decoration: none;
 }
@@ -703,7 +703,7 @@
 .topology-alerts details,
 .topology-blockers details {
   color: var(--topology-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .topology-alerts summary,
 .topology-blockers summary {

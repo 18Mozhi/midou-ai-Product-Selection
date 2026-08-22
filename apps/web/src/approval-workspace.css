@@ -74,7 +74,7 @@ dialog form > div {
 .approval-metrics span {
   display: block;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .approval-metrics b {
   display: block;
@@ -459,7 +459,7 @@ dialog form > div {
   flex-wrap: wrap;
   gap: 6px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .approval-escalation-path span {
   padding: 4px 7px;

@@ -131,7 +131,25 @@ for (const [file, content] of webFiles) {
         ? argumentsText === "progressStorageKey,next.id"
         : argumentsText === "progressStorageKey";
     });
-  if (localStorageCount > 0 && !themePreferenceOnly && !selectionJourneyProgressOnly)
+  const navigationMemoryOnly =
+    file === "apps/web/src/navigation-memory.ts" &&
+    localStorageCount === 2 &&
+    localStorageUses.length === 2 &&
+    content.includes('MEMBER_ROUTE_KEY = "scoutops:navigation:last-member-route"') &&
+    content.includes('VALID_ROUTE_KEY = "scoutops:navigation:last-valid-route"') &&
+    content.includes('RECENT_ORGANIZATIONS_KEY = "scoutops:navigation:recent-organizations"') &&
+    content.includes('value.startsWith("/") && !value.startsWith("//")') &&
+    content.includes(".slice(0, 5)") &&
+    localStorageUses.some((match) => match[1] === "getItem" && match[2].trim() === "key") &&
+    localStorageUses.some(
+      (match) => match[1] === "setItem" && match[2].replace(/\s/g, "") === "key,value",
+    );
+  if (
+    localStorageCount > 0 &&
+    !themePreferenceOnly &&
+    !selectionJourneyProgressOnly &&
+    !navigationMemoryOnly
+  )
     add("browser-sensitive-storage", file, 1, "local_storage_forbidden");
   const sessionUses = [...content.matchAll(/sessionStorage\.(?:getItem|setItem)\(([^\n]*)/g)];
   const notificationCursorOnly =

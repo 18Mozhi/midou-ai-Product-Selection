@@ -28,12 +28,12 @@
 .notification-ops-grid header span,
 .notification-ops .notification-delivery-head span {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .notification-ops-grid a,
 .notification-ops .notification-delivery-head a {
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
 }
 .notification-ops-grid ul {
   margin: 12px 0 0;

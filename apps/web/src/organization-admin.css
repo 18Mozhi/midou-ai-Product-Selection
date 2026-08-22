@@ -20,7 +20,7 @@
 .org-admin-card > p:first-child {
   margin: 0 0 8px;
   color: var(--so-primary);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.17em;
 }
@@ -70,7 +70,7 @@
 .org-admin-metrics small {
   display: block;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .org-admin-metrics b {
   display: block;
@@ -153,7 +153,7 @@
   border-radius: 999px;
   color: var(--so-success);
   background: var(--so-success-soft);
-  font-size: 10px;
+  font-size: 13px;
   font-style: normal;
 }
 .org-admin-profile dl {
@@ -168,7 +168,7 @@
 }
 .org-admin-profile dt {
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .org-admin-profile dd {
   margin: 7px 0 0;
@@ -182,7 +182,7 @@
   margin: 10px 0;
   gap: 6px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .org-admin-card input,
 .org-admin-card select,
@@ -220,12 +220,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
 }
 .org-admin-technical {
   margin-top: 7px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .org-admin-technical summary {
   width: fit-content;
@@ -237,7 +237,7 @@
   margin-top: 6px;
   word-break: break-all;
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .org-admin-actions input,
 .org-admin-actions select {
@@ -385,7 +385,7 @@
   border-radius: 7px;
   color: var(--so-info);
   background: var(--so-primary-soft);
-  font-size: 9px;
+  font-size: 13px;
 }
 .org-admin-summary-row {
   display: grid;

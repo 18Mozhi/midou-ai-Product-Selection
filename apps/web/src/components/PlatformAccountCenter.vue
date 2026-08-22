@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
@@ -26,9 +27,20 @@ interface Data {
   users: any[];
   admins: any[];
 }
-const props = withDefaults(defineProps<{ apiBaseUrl: string; initialTab?: Tab }>(), {
-    initialTab: "organizations",
-  }),
+const props = withDefaults(
+    defineProps<{
+      apiBaseUrl: string;
+      initialTab?: Tab;
+      routePath?: string;
+      organizationId?: string;
+    }>(),
+    {
+      initialTab: "organizations",
+      routePath: "/platform-admin/organizations",
+      organizationId: "",
+    },
+  ),
+  router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   tab = ref<Tab>(props.initialTab),
@@ -39,6 +51,7 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; initialTab?: Tab }>
   message = ref(""),
   busy = ref(""),
   createUserOpen = ref(false),
+  createOrganizationButton = ref<HTMLButtonElement | null>(null),
   organizationDetailOpen = ref(false),
   detailOpen = ref(false),
   passwordOpen = ref(false),
@@ -48,7 +61,7 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; initialTab?: Tab }>
   pendingReasonAction = ref<null | ((value: string) => Promise<void>)>(null),
   selected = ref<any>(null),
   detail = ref<any>(null),
-  createOpen = ref(new URLSearchParams(window.location.search).get("create") === "1"),
+  createOpen = ref(props.routePath.endsWith("/new")),
   form = reactive({ name: "", slug: "", initial_admin_user_id: "" }),
   organizationForm = reactive({
     name: "",
@@ -81,6 +94,10 @@ watch(
   (value) => {
     tab.value = value;
   },
+);
+watch(
+  () => [props.routePath, props.organizationId],
+  () => syncOrganizationRoute(),
 );
 const rows = computed(() =>
     tab.value === "organizations"
@@ -131,6 +148,7 @@ async function load() {
     data.value = accountResponse.data;
     platformRoles.value = roleResponse.data;
     state.value = "ready";
+    syncOrganizationRoute();
   } catch (e) {
     message.value = e instanceof ApiClientError ? e.actionHint : "读取失败";
     state.value = "error";
@@ -162,12 +180,22 @@ async function createOrganization() {
     form.slug = "";
     form.initial_admin_user_id = "";
     createOpen.value = false;
-    openOrganization(data.value?.organizations.find((item) => item.id === created.id) ?? created);
+    const organization =
+      data.value?.organizations.find((item) => item.id === created.id) ?? created;
+    showOrganization(organization);
+    await router.replace(`/platform-admin/organizations/${created.id}`);
     message.value = "组织和默认工作区已创建，已进入组织详情。";
   }
 }
-function openOrganizationWizard() {
+async function openOrganizationWizard() {
   createOpen.value = true;
+  await router.push("/platform-admin/organizations/new");
+}
+async function closeOrganizationWizard() {
+  createOpen.value = false;
+  await router.replace("/platform-admin/organizations");
+  await nextTick();
+  createOrganizationButton.value?.focus();
 }
 function askReason(title: string, action: (value: string) => Promise<void>) {
   reasonTitle.value = title;
@@ -196,7 +224,7 @@ async function toggleOrganization(item: any) {
       })
     ) {
       const updated = data.value?.organizations.find((row) => row.id === item.id);
-      if (updated) openOrganization(updated);
+      if (updated) showOrganization(updated);
     }
   });
 }
@@ -231,12 +259,34 @@ async function role(userId: string, roleCode: string, enabled: boolean) {
     }
   });
 }
-function openOrganization(item: any) {
+function showOrganization(item: any) {
   selected.value = item;
   organizationForm.name = item.name;
   organizationForm.timezone = item.timezone || "Asia/Shanghai";
   organizationForm.data_retention_days = Number(item.data_retention_days || 365);
   organizationDetailOpen.value = true;
+}
+async function openOrganization(item: any) {
+  showOrganization(item);
+  await router.push(`/platform-admin/organizations/${item.id}`);
+}
+async function closeOrganizationDetail() {
+  organizationDetailOpen.value = false;
+  await router.replace("/platform-admin/organizations");
+}
+function syncOrganizationRoute() {
+  if (props.routePath.endsWith("/new")) {
+    createOpen.value = true;
+    organizationDetailOpen.value = false;
+    return;
+  }
+  createOpen.value = false;
+  if (props.organizationId && data.value) {
+    const organization = data.value.organizations.find((item) => item.id === props.organizationId);
+    if (organization) showOrganization(organization);
+    return;
+  }
+  organizationDetailOpen.value = false;
 }
 async function updateOrganization() {
   if (!selected.value) return;
@@ -249,7 +299,7 @@ async function updateOrganization() {
       )
     ) {
       const updated = data.value?.organizations.find((item) => item.id === selected.value.id);
-      if (updated) openOrganization(updated);
+      if (updated) showOrganization(updated);
       message.value = "组织资料已更新。";
     }
   });
@@ -330,7 +380,8 @@ onMounted(load);
         <span>创建组织、启停账号、分配平台管理员。所有操作都会留审计记录。</span>
       </div>
       <div class="hero-actions">
-        <button @click="openOrganizationWizard"><AppIcon name="plus" /> 新建组织</button
+        <button ref="createOrganizationButton" @click="openOrganizationWizard">
+          <AppIcon name="plus" /> 新建组织</button
         ><button @click="openCreateUser(tab === 'admins')">
           <AppIcon name="plus" /> {{ tab === "admins" ? "新建管理员" : "新建用户" }}
         </button>
@@ -411,7 +462,7 @@ onMounted(load);
       :busy="Boolean(busy)"
       :users="data?.users || []"
       :form="form"
-      @close="createOpen = false"
+      @close="closeOrganizationWizard"
       @submit="createOrganization"
     />
     <dialog
@@ -470,7 +521,7 @@ onMounted(load);
       :form="organizationForm"
       :busy="Boolean(busy)"
       :status-text="statusText"
-      @close="organizationDetailOpen = false"
+      @close="closeOrganizationDetail"
       @save="updateOrganization"
       @toggle-status="toggleOrganization"
     />

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from "vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { applyCachedTheme, applyTheme } from "../design/theme";
 import AppIcon from "./AppIcon.vue";
 import PersonalCenter from "./PersonalCenter.vue";
 
@@ -18,9 +17,6 @@ const activeSection = computed(() => {
   const requested = typeof route.query.section === "string" ? route.query.section : "profile";
   return sections.some((item) => item.key === requested) ? requested : "profile";
 });
-
-onMounted(() => applyTheme("cloud-white"));
-onUnmounted(() => applyCachedTheme());
 </script>
 
 <template>
@@ -47,7 +43,7 @@ onUnmounted(() => applyCachedTheme());
     </aside>
     <section class="account-content">
       <nav class="account-breadcrumb" aria-label="面包屑">
-        <span>账号</span><b>/</b><span>个人中心</span>
+        <RouterLink to="/home">工作台</RouterLink><b>/</b><span aria-current="page">个人中心</span>
       </nav>
       <PersonalCenter :api-base-url="apiBaseUrl" :initial-section="activeSection" account-shell />
     </section>
@@ -118,7 +114,7 @@ onUnmounted(() => applyCachedTheme());
 .account-sidebar p {
   margin: 0 10px 12px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -154,6 +150,10 @@ onUnmounted(() => applyCachedTheme());
 }
 .account-breadcrumb b {
   color: var(--so-border);
+}
+.account-breadcrumb a {
+  color: var(--so-primary);
+  text-decoration: none;
 }
 @media (max-width: 760px) {
   .account-shell {

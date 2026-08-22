@@ -16,7 +16,7 @@
   margin: 4px 0;
 }
 .report-center header p {
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.14em;
   color: var(--accent);
 }
@@ -67,7 +67,7 @@
 .report-scope span,
 .report-conclusion span {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .report-conclusion {
   display: grid;
@@ -108,7 +108,7 @@
   padding: 16px;
 }
 .report-metrics span {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
 }
 .report-metrics b {
@@ -191,7 +191,7 @@
 }
 .report-export-list i {
   font-style: normal;
-  font-size: 11px;
+  font-size: 13px;
   text-transform: uppercase;
 }
 .report-export-list i[data-status="succeeded"] {
@@ -207,11 +207,11 @@
 }
 .report-export-list .report-export-expiry {
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .report-export-list span {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .report-export-links {
   display: flex;
@@ -220,7 +220,7 @@
 }
 .report-export-links a {
   color: var(--accent);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 @media (max-width: 700px) {

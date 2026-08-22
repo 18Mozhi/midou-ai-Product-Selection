@@ -107,7 +107,7 @@
 .onboarding-copy > p {
   margin: 0;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.2em;
 }
@@ -306,10 +306,14 @@
   background: radial-gradient(circle at 74% 8%, var(--so-glow), transparent 26%), var(--so-bg);
 }
 .role-shell[data-shell="organization_admin"] {
-  --role-accent: var(--so-chart-2);
+  --role-accent: var(--so-primary);
+  --so-glow: transparent;
+  --so-shadow: none;
 }
 .role-shell[data-shell="platform_admin"] {
   --role-accent: var(--so-primary);
+  --so-glow: transparent;
+  --so-shadow: none;
 }
 .role-shell *:focus-visible {
   outline: 3px solid var(--so-focus);
@@ -362,7 +366,7 @@
   border-radius: 11px;
   color: var(--so-text);
   background: var(--so-panel-soft);
-  font-size: 12px;
+  font-size: 13px;
 }
 .role-context small {
   color: var(--so-text-muted);
@@ -371,6 +375,26 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+.role-identity {
+  max-width: 180px;
+  padding: 0 10px;
+  display: grid;
+  gap: 1px;
+  border-left: 1px solid var(--so-border);
+}
+.role-identity small,
+.role-identity strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.role-identity small {
+  color: var(--so-text-muted);
+  font-size: var(--so-font-meta);
+}
+.role-identity strong {
+  font-size: var(--so-font-meta);
 }
 .role-top-actions button,
 .role-top-actions a,
@@ -396,7 +420,7 @@
   border: 1px solid var(--so-border);
   border-radius: 5px;
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .role-top-actions .role-create {
   color: var(--so-on-primary);
@@ -427,7 +451,7 @@
 .role-sidebar-head small {
   margin-top: 7px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .role-menu-search {
   min-height: 40px;
@@ -452,7 +476,7 @@
 .role-menu-empty {
   margin: 10px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .role-gate-technical {
   max-width: 520px;
@@ -481,7 +505,7 @@
   justify-content: space-between;
   color: var(--so-text-muted);
   cursor: pointer;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
   list-style: none;
@@ -540,7 +564,7 @@
 }
 .role-sidebar-foot > span {
   color: var(--so-success);
-  font-size: 10px;
+  font-size: 13px;
 }
 .role-sidebar-foot p {
   margin: 0;
@@ -550,12 +574,12 @@
   display: block;
 }
 .role-sidebar-foot strong {
-  font-size: 11px;
+  font-size: 13px;
 }
 .role-sidebar-foot small {
   margin-top: 4px;
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
 }
 .role-content {
   min-width: 0;
@@ -601,6 +625,14 @@
   color: var(--so-text);
   font-weight: 750;
 }
+.role-page-breadcrumb a {
+  color: var(--so-primary);
+  text-decoration: none;
+}
+.role-page-breadcrumb a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .role-page-breadcrumb b {
   color: var(--so-border);
 }
@@ -624,7 +656,7 @@
 .role-page-head p {
   margin: 0 0 9px;
   color: var(--role-accent);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.16em;
 }
@@ -642,7 +674,7 @@
   border-radius: 999px;
   color: var(--so-success);
   background: color-mix(in srgb, var(--so-success) 9%, transparent);
-  font-size: 10px;
+  font-size: 13px;
 }
 .role-notice {
   margin-bottom: 18px;
@@ -654,7 +686,7 @@
   border-radius: 11px;
   color: var(--so-text-muted);
   background: color-mix(in srgb, var(--so-info) 8%, transparent);
-  font-size: 12px;
+  font-size: 13px;
 }
 .role-notice > span {
   color: var(--so-info);
@@ -701,7 +733,7 @@
 .role-ready-hero p:first-child {
   margin: 0;
   color: var(--role-accent);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.18em;
 }
@@ -728,7 +760,7 @@
 }
 .role-ready-panel dt {
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .role-ready-panel dd {
   margin: 9px 0 0;
@@ -769,7 +801,7 @@
 .role-gate-state > p:first-of-type {
   margin: 20px 0 8px;
   color: var(--role-accent);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.17em;
 }
@@ -799,8 +831,33 @@
   background: linear-gradient(120deg, var(--so-primary-strong), var(--role-accent));
   font-weight: 750;
 }
+.role-gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.role-gate-actions a + a {
+  color: var(--so-text);
+  border: 1px solid var(--so-border);
+  background: transparent;
+}
 .role-mobile-nav {
   display: none;
+}
+@media (min-width: 841px) and (max-width: 1100px) {
+  .role-topbar {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+  .role-context {
+    display: none;
+  }
+  .role-top-actions {
+    justify-self: end;
+  }
+  .role-identity {
+    max-width: 140px;
+  }
 }
 @media (max-width: 840px) {
   .role-shell {
@@ -830,12 +887,23 @@
   .role-top-actions {
     grid-column: 3;
   }
+  .role-identity {
+    display: none;
+  }
   .role-top-actions button,
   .role-top-actions a {
     display: none;
   }
   .role-top-actions a:last-child {
     display: flex;
+  }
+  .role-top-actions .role-create {
+    min-width: var(--so-touch-target);
+    padding-inline: 10px;
+    display: flex;
+  }
+  .role-top-actions .role-create span {
+    display: none;
   }
   .role-menu-toggle span {
     display: none;
@@ -912,7 +980,7 @@
     color: var(--so-text-muted);
     text-decoration: none;
     background: transparent;
-    font-size: 9px;
+    font-size: 13px;
   }
   .role-mobile-nav span {
     white-space: nowrap;
@@ -922,13 +990,15 @@
     font-size: 16px;
     font-style: normal;
   }
-  .role-mobile-nav a[aria-current="page"] {
+  .role-mobile-nav a[aria-current="page"],
+  .role-mobile-nav button[aria-current="page"] {
     color: var(--so-text);
+    background: var(--so-primary-soft);
   }
   .role-shell[data-shell="member"] .role-mobile-nav a,
   .role-shell[data-shell="member"] .role-mobile-nav button,
   .role-shell[data-shell="member"] .role-mobile-nav span {
-    font-size: 9px;
+    font-size: 13px;
   }
   .role-gate-state {
     min-height: calc(100vh - 174px);
@@ -1003,7 +1073,7 @@
 .state-showcase > header > span,
 .state-showcase > footer {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .state-stage {
   min-height: 720px;
@@ -1026,7 +1096,7 @@
 .state-stage > aside > p:first-child {
   margin: 0;
   color: var(--so-primary);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.18em;
 }
@@ -1191,7 +1261,7 @@
 .ui-state-panel > p {
   margin: 19px 0 8px;
   color: var(--so-primary);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.18em;
 }
@@ -1220,13 +1290,13 @@
 }
 .ui-state-panel dt {
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
 }
 .ui-state-panel dd {
   margin: 5px 0 0;
   overflow-wrap: anywhere;
   color: var(--so-text);
-  font-size: 11px;
+  font-size: 13px;
 }
 .ui-state-panel footer {
   margin-top: 22px;
@@ -1310,7 +1380,7 @@
 .confirm-dialog > p {
   margin: 18px 0 7px;
   color: var(--so-danger);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.16em;
 }
@@ -1340,7 +1410,7 @@
   display: flex;
   gap: 9px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.5;
 }
 .confirm-check input {

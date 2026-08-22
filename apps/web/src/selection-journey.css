@@ -17,7 +17,7 @@
 .selection-decision header p {
   margin: 0 0 6px;
   color: var(--so-info);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.14em;
 }
@@ -163,7 +163,7 @@
 }
 .selection-status dt {
   color: var(--so-info);
-  font-size: 11px;
+  font-size: 13px;
 }
 .selection-status dd {
   margin: 6px 0 0;
@@ -180,7 +180,7 @@
   background: var(--so-primary-soft);
   padding: 6px 10px;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
 }
 .selection-evidence p,
 .selection-evidence code,

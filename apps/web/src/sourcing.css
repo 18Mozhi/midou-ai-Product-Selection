@@ -53,7 +53,7 @@
 .sourcing-layout main > header p {
   margin: 0;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.14em;
 }
@@ -97,7 +97,7 @@
 .sourcing-summary span,
 .sourcing-toolbar span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .sourcing-summary b {
   display: block;
@@ -120,7 +120,7 @@
   gap: 6px;
   width: min(420px, 100%);
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 .sourcing-toolbar input {
@@ -173,7 +173,7 @@
 }
 .sourcing-pending span {
   color: var(--so-warning);
-  font-size: 12px;
+  font-size: 13px;
 }
 .sourcing-erp-reference {
   display: grid;
@@ -235,7 +235,7 @@
 .sourcing-layout > aside strong {
   margin-top: 8px;
   color: var(--so-primary);
-  font-size: 12px;
+  font-size: 13px;
 }
 .sourcing-layout > aside button.selected {
   border-color: var(--so-primary-border);
@@ -300,7 +300,7 @@
   background: var(--so-panel-soft);
 }
 .supplier-cards dt {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--so-text-muted);
 }
 .supplier-cards dd {
@@ -315,7 +315,7 @@
   color: var(--so-primary);
 }
 .supplier-cards footer code {
-  font-size: 10px;
+  font-size: 13px;
   color: var(--so-text-muted);
   flex: 1;
 }
@@ -373,7 +373,7 @@
 }
 .sourcing-specification-hint span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .sourcing-modal {
   position: fixed;
@@ -467,7 +467,7 @@
 }
 .sourcing-progress dt {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .sourcing-progress dd {
   margin: 3px 0 0;
@@ -484,7 +484,7 @@
 }
 .sourcing-modal > form > dl dt {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .sourcing-modal > form > dl dd {
   margin: 4px 0 0;
@@ -543,7 +543,7 @@
 }
 .sourcing-comparison-grid dt {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .sourcing-comparison-grid dd {
   margin: 5px 0 0;

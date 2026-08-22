@@ -13,7 +13,7 @@
 }
 .open-explain span {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.65;
 }
 @media (max-width: 800px) {
@@ -36,7 +36,7 @@
 }
 .commercial-guide span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .commercial .create .wide {
   grid-column: span 2;

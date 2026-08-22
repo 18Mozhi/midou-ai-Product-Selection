@@ -374,12 +374,12 @@
       "densities": ["standard", "compact"],
       "scope": "signed-in user plus server-resolved active organization and workspace",
       "truth": "versioned synchronous MySQL preference, transactionally paired with audit and idempotency record",
-      "bootstrap": "cached theme is applied before Vue mounts, then reconciled with the signed-in server preference; failed writes restore the previous theme",
+      "bootstrap": "cached theme is applied before Vue mounts and inherited by member organization platform and account shells without forcing cloud-white; member and organization contexts reconcile with the signed-in server preference while platform-global context keeps the validated local theme id until a business scope is selected; failed writes restore the previous theme",
       "apiClientBoundary": "standalone theme settings and shell theme controls share the same frontend API client and preserve version conflict, scope, correlation and rollback behavior",
       "densityRuntime": "standard and compact are session-only presentation modes with no API, database or additional browser storage contract; organization and platform shells default to compact, member shell restores the in-memory member choice",
       "tableViewBoundary": "all current desktop table surfaces share session-only column visibility, first-visible-column freeze and local standard or compact density controls through TableViewControls; at least one column always remains visible, mobile summary cards and detail drawers remain unchanged, and no API database or browser storage contract is added",
-      "styleBoundary": "all production CSS and Vue scoped styles consume semantic theme tokens directly or component-local semantic aliases; the obsolete unimported global theme-compat patch is removed and the unit gate rejects raw component hex, rgb, rgba, hsl and hsla colors plus every !important override",
-      "accessibility": "status icon plus text; charts include value, period, source and freshness; keyboard radiogroups and visible focus; body copy and form controls have a computed 16px floor and auxiliary small copy has a 12px floor; compact desktop controls use 36px while coarse-pointer and mobile targets retain a computed 44px by 44px floor without !important",
+      "styleBoundary": "all production CSS and Vue scoped styles consume semantic theme tokens directly or component-local semantic aliases; deep-ocean uses one restrained blue accent family, administrative shells disable decorative glow, cloud-white raises border and muted-text contrast, and the unit gate rejects raw component hex, rgb, rgba, hsl and hsla colors plus every !important override and unscoped visual button or heading selectors",
+      "accessibility": "status icon plus text; charts include value, period, source and freshness; keyboard radiogroups and visible focus; body copy and form controls have a computed 16px floor and metadata or auxiliary copy has a 13px floor; all density and breakpoint targets retain a computed 44px by 44px floor without !important",
       "modalAccessibility": "all native business dialogs use one showModal top-layer controller with Escape handling and invoking-control focus return; custom confirmation and responsive filter surfaces explicitly trap focus and restore it when closed",
       "async": "not applicable; preference reads and writes are synchronous and create no Worker, Crawler, queue, file, export, SSE or provider work",
       "verificationRunId": "3c8eef1b-fedd-48fe-9478-b6f38272dccf",
@@ -438,6 +438,8 @@
         "/org-admin",
         "/platform-admin",
         "/platform-admin/organizations",
+        "/platform-admin/organizations/new",
+        "/platform-admin/organizations/{organizationId}",
         "/platform-admin/users",
         "/platform-admin/admins",
         "/api/v1/me/landing",
@@ -453,11 +455,11 @@
         "high-resolution 10 platform admin"
       ],
       "contextPresentation": "member and organization shells receive persisted organization_name and workspace_name; the UI never exposes UUID fragments as labels",
-      "routeIntegrity": "route-catalog.ts is the single frontend registry for title, breadcrumb, shell, capability and shell navigation metadata; menu capabilities are derived from route metadata, while RouterLink and router push or replace own internal navigation without a global click interceptor; unknown routes use the dedicated not-found route without default menu highlighting, /me has one account-level PersonalCenter owner, platform accounts have organization, user and administrator deep links, provider credentials only appear inside provider context, and collection plus operations use stable secondary navigation; member return paths and recent organization order live only in bounded SPA memory rather than browser storage; lazy business components with KeepAlive preserve bounded page state; platform navigation separates business operations collection and data governance and security and advanced operations, while eight-or-more-item sidebars can search by menu or group; the mobile bottom navigation is limited to four role-priority entries plus More, whose drawer retains member search and selection creation; trend, opportunity and collection overview filters use one state-preserving mobile drawer; the shared 390px occlusion helper checks member opportunity and platform scheduler handoffs against the fixed bottom navigation and requires zero overlap, and shell dialogs render above the bottom bar with bounded viewport height",
+      "routeIntegrity": "route-catalog.ts is the single frontend registry for title, breadcrumb, shell, capability and shell navigation metadata; menu capabilities are derived from route metadata, while RouterLink and router push or replace own internal navigation without a global click interceptor; breadcrumbs resolve only real parent routes; unknown routes use the dedicated not-found route and the last valid internal route without default menu highlighting; /me has one account-level PersonalCenter owner; platform organization list create and detail plus user and administrator pages have independent deep links; provider credentials only appear inside provider context, and collection plus operations use stable secondary navigation; bounded localStorage keys retain only safe same-origin member and valid routes plus at most five recent organization ids, never identity permission result or credential data; lazy business components with KeepAlive preserve bounded page state; platform navigation separates business operations collection and data governance and security and advanced operations, while eight-or-more-item sidebars can search by menu or group; the mobile bottom navigation is limited to four role-priority entries plus More, secondary routes mark More current, and its drawer retains member search and selection creation; trend, opportunity and collection overview filters use one state-preserving mobile drawer; 390 768 1024 and 1440 checks cover navigation continuity overflow and fixed-action clearance, and shell dialogs render above the bottom bar with bounded viewport height",
       "apiClientBoundary": "navigation guard and shell theme preference reads and writes use the shared frontend API client for credentials, correlation, JSON envelopes, idempotency and business error mapping; the UI presents Chinese role labels and preserves request_id trace_id and action_hint on failures while keeping correlation identifiers inside collapsed fault details",
-      "mobileNavigation": "at 840px and below every shell renders up to four authorized primary routes plus one More control in a five-column bottom bar; More opens the complete permission-filtered drawer and quick-create actions do not add a sixth bottom item",
+      "mobileNavigation": "at 840px and below every shell renders up to four authorized primary routes plus one More control in a five-column bottom bar; secondary routes mark More as current; the top bar retains the current role primary action; More opens the complete permission-filtered drawer and quick-create actions do not add a sixth bottom item",
       "memberPresentation": "member shell exposes quick theme switching, larger Chinese typography and removes internal guard codes and security implementation slogans from ordinary pages",
-      "nonGoals": "no quick-create mutation, new persistence, async service or environment value; platform and organization shells omit member-only search and notification links",
+      "nonGoals": "no quick-create mutation, server persistence, async service or environment value; platform and organization shells omit member-only search and notification links",
       "verificationRunId": "e0784965-a07b-4eec-84c1-f5e393d7dd27",
       "status": "verified",
       "statusDetail": "module_verified"
@@ -1809,7 +1811,7 @@
     "securityGate": {
       "module": "M07-02",
       "entrypoints": ["../verification/security-gate.json", "../scripts/verify-security-gate.mjs"],
-      "scope": "dependency secrets SQL XSS CSRF SSRF upload authorization logging and Baota edge release gate; browser storage blocks sensitive records and permits only exact validated non-sensitive theme ID, UUID-v4 unfinished selection-journey ID and current-tab anonymous realtime counter contracts",
+      "scope": "dependency secrets SQL XSS CSRF SSRF upload authorization logging and Baota edge release gate; browser storage blocks sensitive records and permits only exact validated non-sensitive theme ID, UUID-v4 unfinished selection-journey ID, safe same-origin navigation paths with at most five recent organization ids, and current-tab anonymous realtime counter contracts",
       "runtimeBoundary": "local CI or Baota-controlled finite release task only; no production API table page permission daemon or multi-node claim",
       "securityHeaders": [
         "Content-Security-Policy",
@@ -2725,6 +2727,13 @@
       "statusDetail": "M04-05_module_verified"
     },
     {
+      "path": "/competitors/monitoring-rules",
+      "view": "CompetitorMonitor",
+      "domain": "competitor-monitoring-rules",
+      "status": "implemented",
+      "statusDetail": "independent_route_pending_full_verification"
+    },
+    {
       "path": "/sourcing",
       "view": "SourcingWorkspace",
       "domain": "sourcing",
@@ -2868,6 +2877,18 @@
       "path": "/platform-admin/organizations",
       "view": "PlatformAccountCenter",
       "domain": "platform-organizations",
+      "status": "implemented"
+    },
+    {
+      "path": "/platform-admin/organizations/new",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-organization-create",
+      "status": "implemented"
+    },
+    {
+      "path": "/platform-admin/organizations/{organizationId}",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-organization-detail",
       "status": "implemented"
     },
     {

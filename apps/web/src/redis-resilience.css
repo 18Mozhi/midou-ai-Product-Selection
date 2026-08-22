@@ -26,7 +26,7 @@
 .redis-resilience__hero p,
 .redis-resilience__panel header p {
   color: var(--rr-cyan);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 900;
   letter-spacing: 0.18em;
   margin: 0 0 8px;
@@ -126,7 +126,7 @@
 .redis-resilience__verdict small {
   color: var(--rr-muted);
   display: block;
-  font-size: 10px;
+  font-size: 13px;
   letter-spacing: 0.12em;
 }
 .redis-resilience__verdict strong {
@@ -143,7 +143,7 @@
   border: 1px solid var(--so-warning-border);
   border-radius: 999px;
   color: var(--so-warning);
-  font-size: 11px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 800;
   padding: 8px 11px;
@@ -278,7 +278,7 @@
 .redis-resilience__hotspot-list small,
 .redis-resilience__hotspot-empty span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .redis-resilience__hotspot-list {
   display: grid;
@@ -325,7 +325,7 @@
 }
 .redis-resilience__truth-note {
   margin: 12px 0 0;
-  font-size: 12px;
+  font-size: 13px;
 }
 .redis-resilience__findings > div {
   display: grid;
@@ -344,7 +344,7 @@
 }
 .redis-resilience__findings article code {
   color: var(--rr-amber);
-  font-size: 12px;
+  font-size: 13px;
   overflow-wrap: anywhere;
 }
 .redis-resilience__findings article[data-severity="blocked"] code {
@@ -366,7 +366,7 @@
 .redis-resilience__footer {
   color: var(--rr-muted);
   display: flex;
-  font-size: 11px;
+  font-size: 13px;
   gap: 16px;
   justify-content: flex-end;
 }

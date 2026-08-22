@@ -14,7 +14,7 @@
   font-size: 13px;
 }
 .role-shell[data-shell="member"] small {
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.55;
 }
 .role-shell[data-shell="member"] button,
@@ -260,7 +260,7 @@
 }
 .opportunity-picture i {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
   text-align: center;
   font-style: normal;
 }
@@ -389,7 +389,7 @@
   color: var(--so-text);
   background: var(--so-bg-elevated);
   box-shadow: var(--so-shadow);
-  font-size: 12px;
+  font-size: 13px;
 }
 @media (max-width: 700px) {
   .role-theme-notice {

@@ -738,7 +738,7 @@ dialog footer button:last-child {
 .platform-topology-node small,
 .platform-topology-lanes h4 small {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .platform-topology-header > a,
 .platform-propagation-alert a {
@@ -790,7 +790,7 @@ dialog footer button:last-child {
   background: var(--so-panel-soft);
   color: var(--so-text-muted);
   font-style: normal;
-  font-size: 11px;
+  font-size: 13px;
 }
 .platform-topology-node i[data-state="healthy"],
 .platform-topology-node i[data-state="ready"] {
@@ -822,7 +822,7 @@ dialog footer button:last-child {
 .platform-topology-node dt,
 .platform-topology-node dd {
   margin: 0;
-  font-size: 11px;
+  font-size: 13px;
 }
 .platform-topology-node dt {
   color: var(--so-text-muted);
@@ -865,7 +865,7 @@ dialog footer button:last-child {
 .platform-realtime-degradation > small,
 .platform-realtime-degradation article span {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .platform-realtime-degradation header i {
   flex: none;
@@ -874,7 +874,7 @@ dialog footer button:last-child {
   background: var(--so-success-soft);
   color: var(--so-success);
   font-style: normal;
-  font-size: 11px;
+  font-size: 13px;
 }
 .platform-realtime-degradation header i[data-state="warning"] {
   background: var(--so-warning-soft);
@@ -911,7 +911,7 @@ dialog footer button:last-child {
 .platform-propagation-empty {
   margin: 6px 0 0;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .platform-status-grid h3 {
   margin-top: 0;
@@ -931,7 +931,7 @@ dialog footer button:last-child {
 .platform-management > footer {
   color: var(--so-text-muted);
   text-align: right;
-  font-size: 11px;
+  font-size: 13px;
 }
 .platform-management > footer details {
   margin-top: 6px;

@@ -25,7 +25,7 @@
     min-width: 82px;
     justify-content: center;
     flex-direction: column;
-    font-size: 10px;
+    font-size: 13px;
     text-align: center;
   }
   .state-canvas {
@@ -110,7 +110,7 @@
 .discovery-dialog > header p {
   margin: 0 0 6px;
   color: var(--so-primary);
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.17em;
 }
@@ -149,7 +149,7 @@
 }
 .discovery-dialog form kbd {
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .discovery-search-form {
   display: grid;
@@ -164,7 +164,7 @@
   display: grid;
   gap: 5px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .discovery-filters select,
 .discovery-filters input {
@@ -236,7 +236,7 @@
 .discovery-results small {
   margin-top: 5px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .discovery-results > a > b {
   color: var(--so-primary);
@@ -248,7 +248,7 @@
   gap: 12px;
   border-top: 1px solid var(--so-border);
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .discovery-dialog > footer a {
   color: var(--so-primary);
@@ -351,7 +351,7 @@
   text-align: left;
   padding: 9px;
   border-bottom: 1px solid var(--border);
-  font-size: 12px;
+  font-size: 13px;
 }
 .collection-ops td small {
   display: block;
@@ -409,7 +409,7 @@
 }
 .collection-root-list span {
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .collection-root-list details {
   padding: 0 11px 9px;
@@ -431,12 +431,12 @@
 .collection-ops details code {
   overflow-wrap: anywhere;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .collection-ops footer {
   text-align: right;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 @media (max-width: 800px) {
   .collection-ops form {
@@ -530,7 +530,7 @@
 .platform-kpis small {
   display: block;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .platform-kpis strong {
   display: block;
@@ -559,12 +559,12 @@
 }
 .platform-dashboard-grid header span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .platform-dashboard table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: 13px;
 }
 .platform-dashboard th,
 .platform-dashboard td {
@@ -639,7 +639,7 @@
 }
 .platform-storage dt {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .platform-storage dd {
   margin: 4px 0;
@@ -651,7 +651,7 @@
   align-items: center;
   gap: 8px;
   margin: 10px 0;
-  font-size: 12px;
+  font-size: 13px;
 }
 .platform-queue-bars b {
   height: 6px;
@@ -674,7 +674,7 @@
 .platform-observed {
   text-align: right;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .platform-inline-empty {
   padding: 30px;
@@ -740,7 +740,7 @@
 .security-kpis span {
   display: block;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .security-kpis strong {
   font-size: 24px;
@@ -786,7 +786,7 @@
 .security-ops td {
   padding: 9px;
   border-bottom: 1px solid var(--so-border);
-  font-size: 12px;
+  font-size: 13px;
 }
 .security-ops td small {
   display: block;
@@ -795,7 +795,7 @@
 .security-ops footer {
   text-align: right;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .security-ops details summary {
   min-height: var(--so-touch-target);
@@ -866,7 +866,7 @@
   display: grid;
   gap: 5px;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .open-platform input {
   min-width: 230px;
@@ -934,7 +934,7 @@
 .open-platform td {
   padding: 9px 6px;
   border-bottom: 1px solid var(--border);
-  font-size: 11px;
+  font-size: 13px;
   text-align: left;
 }
 .open-platform td button {
@@ -1074,7 +1074,7 @@
   display: grid;
   gap: 5px;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .commercial input,
 .commercial select {
@@ -1125,7 +1125,7 @@
   border-radius: 999px;
   background: color-mix(in srgb, var(--so-primary-strong) 12%, transparent);
   color: var(--so-primary-strong);
-  font-size: 10px;
+  font-size: 13px;
 }
 .commercial-plans h3 {
   margin: 4px 0;
@@ -1268,7 +1268,7 @@
 }
 .platform-get-started > header span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .platform-get-started > div {
   margin-top: 14px;
@@ -1291,7 +1291,7 @@
 }
 .platform-get-started a span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.55;
 }
 @media (max-width: 700px) {
@@ -1341,10 +1341,7 @@
     gap: 6px;
   }
   .role-top-actions .role-switch {
-    flex: 0 0 auto;
-    min-width: auto;
-    padding: 0 8px;
-    display: flex;
+    display: none;
   }
   .role-switch-desktop {
     display: none;

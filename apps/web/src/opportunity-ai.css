@@ -70,7 +70,7 @@
   line-height: 1.5;
 }
 .opportunity-ai code {
-  font-size: 10px;
+  font-size: 13px;
   color: var(--so-muted);
   overflow-wrap: anywhere;
 }
@@ -82,7 +82,7 @@
 .opportunity-ai footer span {
   margin-right: auto;
   color: var(--so-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .opportunity-ai .reject {
   background: var(--so-danger);

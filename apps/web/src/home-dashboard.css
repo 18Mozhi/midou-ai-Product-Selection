@@ -23,7 +23,7 @@
 .home-empty p {
   margin: 0 0 7px;
   color: var(--so-primary);
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.17em;
 }
@@ -50,7 +50,7 @@
 }
 .home-hero dt {
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
 }
 .home-hero dd {
   margin: 5px 0 0;
@@ -94,7 +94,7 @@
 }
 .home-empty nav small {
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .home-grid {
   margin-top: 14px;
@@ -120,7 +120,7 @@
 .home-grid header > span,
 .home-grid header > a {
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
   text-decoration: none;
 }
 .home-actions {
@@ -160,7 +160,7 @@
 .home-actions em {
   display: block;
   color: var(--so-warning);
-  font-size: 9px;
+  font-size: 13px;
   font-style: normal;
 }
 .home-actions strong,
@@ -179,7 +179,7 @@
 .home-health small {
   margin-top: 4px;
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .home-action-signals {
   margin-top: 8px;
@@ -193,7 +193,7 @@
   border-radius: 999px;
   color: var(--so-text-muted);
   background: var(--so-bg-elevated);
-  font-size: 8px;
+  font-size: 13px;
   font-weight: 700;
 }
 .home-actions > a[data-priority="blocking"] .home-action-signals b:first-child,
@@ -208,11 +208,11 @@
 }
 .home-actions dt {
   color: var(--so-text-muted);
-  font-size: 8px;
+  font-size: 13px;
 }
 .home-actions dd {
   margin: 4px 0 0;
-  font-size: 10px;
+  font-size: 13px;
 }
 .home-actions dl div:last-child dd {
   max-width: 128px;
@@ -227,7 +227,7 @@
 .home-radar > a > span,
 .home-follows > a > span {
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
   text-align: right;
 }
 .home-health {
@@ -235,14 +235,14 @@
 }
 .home-health > a > b {
   color: var(--so-primary);
-  font-size: 10px;
+  font-size: 13px;
 }
 .home-truth {
   padding: 14px 4px 0;
   display: flex;
   justify-content: space-between;
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
 }
 .opportunity-mobile-shell {
   margin-top: 26px;
@@ -254,7 +254,7 @@
 .opportunity-mobile-shell > header a,
 .opportunity-mobile-shell > header span {
   color: var(--so-primary);
-  font-size: 10px;
+  font-size: 13px;
   text-decoration: none;
 }
 .opportunity-mobile-shell > section {
@@ -279,7 +279,7 @@
 .opportunity-signal p {
   margin: 18px 0 5px;
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .opportunity-signal strong {
   display: block;
@@ -401,7 +401,7 @@
     min-width: 56px;
     padding: 9px 6px;
     white-space: nowrap;
-    font-size: 11px;
+    font-size: 13px;
   }
   .opportunity-skeleton-grid {
     grid-template-columns: 1fr;

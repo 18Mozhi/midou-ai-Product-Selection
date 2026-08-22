@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import { getLastValidRoute } from "../navigation-memory";
 import { UI_STATE_KINDS, type UiStateKind } from "../ui/state-contract";
 const props = defineProps<{ initialState?: UiStateKind }>();
+const router = useRouter();
 const query = new URLSearchParams(window.location.search).get("state") as UiStateKind | null;
 const current = ref<UiStateKind>(
     props.initialState ?? (UI_STATE_KINDS.includes(query as UiStateKind) ? query! : "empty"),
   ),
   dialogOpen = ref(false),
   confirmed = ref(false);
+const recentRoute = computed(() => getLastValidRoute());
 const labels: Record<UiStateKind, string> = {
   loading: "加载",
   empty: "空结果",
@@ -20,13 +24,20 @@ const labels: Record<UiStateKind, string> = {
   recovery: "已恢复",
   not_found: "404",
 };
-function primary() {
+async function primary() {
+  if (current.value === "not_found") {
+    await router.push(recentRoute.value);
+    return;
+  }
   current.value =
-    current.value === "blocked" || current.value === "error"
-      ? "recovery"
-      : current.value === "not_found"
-        ? "empty"
-        : current.value;
+    current.value === "blocked" || current.value === "error" ? "recovery" : current.value;
+}
+async function secondary() {
+  if (current.value === "not_found") {
+    await router.push("/home");
+    return;
+  }
+  current.value = "empty";
 }
 </script>
 <template>
@@ -61,11 +72,20 @@ function primary() {
         <div class="state-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
         <UiStatePanel
           :kind="current"
+          :description="
+            current === 'not_found'
+              ? `地址可能已变更。可返回最近有效页面 ${recentRoute}，或回到今日行动。`
+              : undefined
+          "
+          :primary-label="current === 'not_found' ? '返回最近页面' : undefined"
+          :secondary-label="current === 'not_found' ? '返回今日行动' : undefined"
           request-id="m02-04-request"
           trace-id="m02-04-trace"
           @primary="primary"
-          @secondary="current = 'empty'"
-        /><small>示例仅验证组件合同，不代表真实业务结果。</small>
+          @secondary="secondary"
+        /><code v-if="current === 'not_found'" class="state-recent-route"
+          >最近有效页面：{{ recentRoute }}</code
+        ><small>示例仅验证组件合同，不代表真实业务结果。</small>
       </div>
     </section>
     <footer>

@@ -224,7 +224,7 @@ onMounted(load);
 .acceptance-1688__actions > div > p,
 .acceptance-1688__run > div > p {
   color: var(--so-primary);
-  font-size: 12px;
+  font-size: 13px;
 }
 .acceptance-1688 button,
 .acceptance-1688 a {
@@ -261,7 +261,7 @@ onMounted(load);
   margin: 0;
 }
 .acceptance-1688 dt {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--so-text-muted);
 }
 .acceptance-1688 dd {

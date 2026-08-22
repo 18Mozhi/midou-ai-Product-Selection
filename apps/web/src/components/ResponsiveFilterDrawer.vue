@@ -141,7 +141,7 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
   .responsive-filter-drawer__trigger b,
   .responsive-filter-drawer__sheet small {
     color: var(--so-text-muted);
-    font-size: 0.75rem;
+    font-size: var(--so-font-meta);
   }
 
   .responsive-filter-drawer__trigger i {

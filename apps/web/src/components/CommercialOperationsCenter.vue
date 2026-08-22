@@ -658,7 +658,7 @@ small {
 .commercial label {
   display: grid;
   gap: 5px;
-  font-size: 12px;
+  font-size: 13px;
 }
 .commercial button,
 .commercial input,

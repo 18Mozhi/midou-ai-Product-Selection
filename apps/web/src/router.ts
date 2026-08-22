@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { rememberValidRoute } from "./navigation-memory";
 import { appRoutes } from "./route-catalog";
 
 export const router = createRouter({
@@ -14,4 +15,5 @@ export const router = createRouter({
 router.afterEach((to) => {
   const title = typeof to.meta.title === "string" ? to.meta.title : "";
   document.title = title ? `${title} · 智能选品` : "智能选品";
+  if (to.meta.notFound !== true) rememberValidRoute(to.fullPath);
 });

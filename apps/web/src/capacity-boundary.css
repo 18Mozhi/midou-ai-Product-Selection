@@ -29,7 +29,7 @@
 .capacity-boundary__panel header p {
   margin: 0;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.18em;
 }
 .capacity-boundary__hero h2 {
@@ -119,7 +119,7 @@
 .capacity-boundary__metrics span,
 .capacity-boundary dt {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .capacity-boundary__metrics strong {
   font-size: 22px;
@@ -148,7 +148,7 @@
 }
 .capacity-boundary__panel header span {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .capacity-boundary__bars {
   display: grid;
@@ -222,7 +222,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .capacity-boundary footer strong {
   color: var(--so-success);

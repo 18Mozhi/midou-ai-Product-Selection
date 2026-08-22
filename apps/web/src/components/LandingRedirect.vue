@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
+import { getLastMemberRoute } from "../navigation-memory";
 import UiStatePanel from "./UiStatePanel.vue";
 
 type State = "loading" | "blocked";
@@ -21,7 +22,9 @@ async function resolveLanding() {
       state.value = "blocked";
       return;
     }
-    await router.replace(response.data.route);
+    await router.replace(
+      response.data.route === "/home" ? getLastMemberRoute() : response.data.route,
+    );
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;

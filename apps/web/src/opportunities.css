@@ -39,7 +39,7 @@
 .opportunity-modal header p {
   margin: 0 0 7px;
   color: var(--so-primary);
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.16em;
 }
@@ -85,7 +85,7 @@
   display: grid;
   gap: 7px;
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .opportunity-filters input,
 .opportunity-filters select,
@@ -122,7 +122,7 @@
 .opportunity-list-summary span {
   display: block;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .opportunity-list-summary b {
   display: block;
@@ -181,7 +181,7 @@
 .opportunity-evidence > header span,
 .opportunity-decisions > header span {
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .opportunity-list-row {
   position: relative;
@@ -217,7 +217,7 @@
 .opportunity-list a small {
   margin-top: 5px;
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
 }
 .opportunity-list dl {
   margin: 0;
@@ -232,18 +232,18 @@
 }
 .opportunity-list dt {
   color: var(--so-text-muted);
-  font-size: 8px;
+  font-size: 13px;
 }
 .opportunity-list dd {
   margin: 4px 0 0;
-  font-size: 9px;
+  font-size: 13px;
 }
 .opportunity-list-row > a > b {
   padding: 6px 8px;
   border-radius: 999px;
   color: var(--so-warning);
   background: color-mix(in srgb, var(--so-warning) 10%, transparent);
-  font-size: 8px;
+  font-size: 13px;
 }
 .opportunity-row-select {
   position: absolute;
@@ -301,7 +301,7 @@
 }
 .opportunity-detail > header span {
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .opportunity-detail > header > div:last-child {
   text-align: center;
@@ -332,7 +332,7 @@
 .opportunity-recommendation span,
 .opportunity-recommendation small {
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
 }
 .opportunity-recommendation strong {
   margin: 4px 0;
@@ -361,7 +361,7 @@
 .opportunity-blocker-summary article small {
   margin-top: 4px;
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 .opportunity-redecision-ready a,
 .opportunity-blocker-summary a,
@@ -371,7 +371,7 @@
   border-radius: 9px;
   color: var(--so-primary);
   background: var(--so-panel);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 750;
   text-decoration: none;
   white-space: nowrap;
@@ -389,12 +389,12 @@
 }
 .opportunity-blocker-summary > header p {
   color: var(--so-primary);
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 800;
 }
 .opportunity-blocker-summary > header strong {
   color: var(--so-warning);
-  font-size: 11px;
+  font-size: 13px;
 }
 .opportunity-blocker-summary article {
   margin-top: 10px;
@@ -551,11 +551,11 @@
 }
 .opportunity-score dt {
   color: var(--so-text-muted);
-  font-size: 8px;
+  font-size: 13px;
 }
 .opportunity-score dd {
   margin: 5px 0 0;
-  font-size: 10px;
+  font-size: 13px;
 }
 .opportunity-section.warning {
   border-left: 3px solid var(--so-warning);
@@ -580,12 +580,12 @@
 .opportunity-decisions article small {
   margin-top: 5px;
   color: var(--so-text-muted);
-  font-size: 9px;
+  font-size: 13px;
 }
 .opportunity-evidence a b {
   align-self: center;
   color: var(--so-primary);
-  font-size: 9px;
+  font-size: 13px;
 }
 .opportunity-list .opportunity-empty-copy {
   padding: 30px;
@@ -671,7 +671,7 @@
   border-radius: 9px;
   color: var(--so-text-muted);
   background: color-mix(in srgb, var(--so-info) 7%, transparent);
-  font-size: 10px;
+  font-size: 13px;
 }
 .opportunity-modal footer {
   display: flex;
@@ -705,7 +705,7 @@
   align-self: center;
   margin-right: auto;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   text-decoration: none;
 }
 @media (max-width: 1100px) {
@@ -806,7 +806,7 @@
   }
   .opportunity-decision-bar button {
     padding: 10px 5px;
-    font-size: 10px;
+    font-size: 13px;
   }
   .opportunity-decision-bar > a {
     grid-column: 1/-1;

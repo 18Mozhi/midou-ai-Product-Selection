@@ -1,0 +1,80 @@
+.platform-secondary-nav {
+  position: sticky;
+  top: 68px;
+  z-index: 8;
+  display: flex;
+  gap: 4px;
+  margin: -4px 0 18px;
+  padding: 6px;
+  overflow-x: auto;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--so-bg-elevated) 94%, transparent);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--so-shadow-color) 24%, transparent);
+}
+
+.platform-secondary-nav a {
+  flex: 0 0 auto;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 13px;
+  border-radius: 7px;
+  color: var(--so-text-muted);
+  text-decoration: none;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.platform-secondary-nav a:hover,
+.platform-secondary-nav a[aria-current="page"] {
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+
+.platform-secondary-nav a[aria-current="page"] {
+  box-shadow: inset 0 -2px var(--so-primary);
+}
+
+.role-sidebar-utility {
+  display: none;
+}
+
+@media (max-width: 840px) {
+  .platform-secondary-nav {
+    top: 64px;
+    margin-inline: -4px;
+  }
+
+  .platform-secondary-nav a {
+    min-height: 44px;
+  }
+
+  .role-sidebar-utility {
+    margin-top: auto;
+    padding-top: 12px;
+    display: grid;
+    gap: 8px;
+    border-top: 1px solid var(--so-border);
+  }
+
+  .role-sidebar-utility a {
+    min-height: var(--so-touch-target);
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border-radius: var(--so-control-radius);
+    color: var(--so-text);
+    text-decoration: none;
+    background: var(--so-panel-soft);
+  }
+
+  .role-theme-switcher span {
+    display: none;
+  }
+
+  .role-top-actions .role-switch {
+    display: none;
+  }
+}

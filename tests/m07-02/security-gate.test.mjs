@@ -56,6 +56,10 @@ test("M07-02 browser storage gate allows only exact validated non-sensitive reco
     "utf8",
   );
   const realtime = await readFile(resolve(root, "apps/web/src/realtime-client-metrics.ts"), "utf8");
+  const navigationMemory = await readFile(
+    resolve(root, "apps/web/src/navigation-memory.ts"),
+    "utf8",
+  );
   assert.match(gate, /file === "apps\/web\/src\/design\/theme\.ts"/);
   assert.match(gate, /localStorageCount === 2/);
   assert.match(gate, /argumentsText === "themeStorageKey"/);
@@ -64,7 +68,14 @@ test("M07-02 browser storage gate allows only exact validated non-sensitive reco
   assert.match(gate, /progressStorageKey,next\.id/);
   assert.match(gate, /file === "apps\/web\/src\/realtime-client-metrics\.ts"/);
   assert.match(gate, /scoutops:realtime-client-metrics/);
+  assert.match(gate, /file === "apps\/web\/src\/navigation-memory\.ts"/);
+  assert.match(gate, /navigationMemoryOnly/);
+  for (const key of ["last-member-route", "last-valid-route", "recent-organizations"])
+    assert.match(navigationMemory, new RegExp(key));
+  assert.match(navigationMemory, /value\.startsWith\("\/"\).*!value\.startsWith\("\/\/"\)/);
+  assert.match(navigationMemory, /slice\(0, 5\)/);
   assert.doesNotMatch(theme, /token|secret|session|credential/i);
   assert.match(journey, /journeyIdPattern/);
   assert.doesNotMatch(realtime, /token|secret|credential|request_id|user_id/i);
+  assert.doesNotMatch(navigationMemory, /token|secret|credential|request_id|user_id/i);
 });
