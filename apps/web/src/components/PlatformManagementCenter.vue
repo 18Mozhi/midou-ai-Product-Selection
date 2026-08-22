@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
+import {
+  readRealtimeClientMetrics,
+  realtimeMetricsEvent,
+  realtimeReconnectRateBasisPoints,
+  type RealtimeClientMetrics,
+} from "../realtime-client-metrics";
 import { useAuditedReason } from "../use-audited-reason";
 import { useModalDialog } from "../use-modal-dialog";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
@@ -9,8 +15,20 @@ import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
 import PlatformManagementRecordList from "./PlatformManagementRecordList.vue";
 import PlatformNotificationOperations from "./PlatformNotificationOperations.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
+import {
+  formatPlatformManagementTime as when,
+  platformManagementStateName as stateName,
+  platformManagementSummaryName as summaryName,
+  platformManagementTitles as titles,
+  type PlatformManagementDomain as Domain,
+} from "./platform-management-presentation";
+import {
+  statusTopologyDefinitions,
+  statusTopologyLaneMeta,
+  type StatusService,
+  type StatusServiceCode,
+} from "./platform-status-topology";
 
-type Domain = "content" | "notifications" | "email" | "status";
 const props = defineProps<{ apiBaseUrl: string; domain: string }>();
 const request = createApiClient(props.apiBaseUrl);
 const domain = computed<Domain>(
@@ -56,76 +74,74 @@ const messageEditor = ref<any>(null),
     reason: "编辑平台消息",
     expected_version: 1,
   });
-const titles: Record<Domain, [string, string]> = {
-  content: ["内容管理", "审核跨组织热点内容，处理无关和过期主题。"],
-  notifications: ["通知管理", "查看站内通知、接收人、已读状态和各渠道投递结果。"],
-  email: ["邮件管理", "统一查看账号邮件与业务通知邮件的队列、失败和死信状态。"],
-  status: ["系统状态", "查看 API、数据库、账号、来源和采集任务的真实运行状态。"],
-};
 const summaryEntries = computed(() => Object.entries(data.value?.summary ?? {}));
+const statusServices = computed<StatusService[]>(() => data.value?.services ?? []);
+const statusServiceByCode = computed(
+  () => new Map(statusServices.value.map((service) => [service.code, service])),
+);
+const affectedServiceCodes = (code: StatusServiceCode) => {
+  const affected = new Set<StatusServiceCode>();
+  const pending = [code];
+  while (pending.length) {
+    const current = pending.shift();
+    if (!current) continue;
+    for (const candidate of statusTopologyDefinitions) {
+      if (affected.has(candidate.code) || !candidate.dependencies.includes(current)) continue;
+      affected.add(candidate.code);
+      pending.push(candidate.code);
+    }
+  }
+  return [...affected];
+};
+const statusTopologyNodes = computed(() =>
+  statusTopologyDefinitions.map((definition) => {
+    const service = statusServiceByCode.value.get(definition.code);
+    return {
+      ...definition,
+      name: service?.name ?? definition.fallbackName,
+      status: service?.status ?? "unknown",
+      detail: service?.detail ?? "尚无运行观测",
+      observedAt: service?.observed_at ?? null,
+      href: service?.href ?? definition.href,
+      dependencyNames: definition.dependencies.map(
+        (code) =>
+          statusServiceByCode.value.get(code)?.name ??
+          statusTopologyDefinitions.find((item) => item.code === code)?.fallbackName ??
+          code,
+      ),
+      affectedNames: affectedServiceCodes(definition.code).map(
+        (code) =>
+          statusServiceByCode.value.get(code)?.name ??
+          statusTopologyDefinitions.find((item) => item.code === code)?.fallbackName ??
+          code,
+      ),
+    };
+  }),
+);
+const statusTopologyLanes = computed(() =>
+  (Object.keys(statusTopologyLaneMeta) as Array<keyof typeof statusTopologyLaneMeta>).map(
+    (lane) => ({
+      code: lane,
+      name: statusTopologyLaneMeta[lane][0],
+      description: statusTopologyLaneMeta[lane][1],
+      nodes: statusTopologyNodes.value.filter((node) => node.lane === lane),
+    }),
+  ),
+);
+const propagationWarnings = computed(() =>
+  statusTopologyNodes.value.filter((node) => !["healthy", "ready"].includes(node.status)),
+);
+const realtimeMetrics = ref(readRealtimeClientMetrics());
+const realtimeReconnectRate = computed(
+  () => `${(realtimeReconnectRateBasisPoints(realtimeMetrics.value) / 100).toFixed(2)}%`,
+);
+const syncRealtimeMetrics = (event?: Event) => {
+  const detail = (event as CustomEvent<RealtimeClientMetrics> | undefined)?.detail;
+  realtimeMetrics.value = detail ?? readRealtimeClientMetrics();
+};
 const activeFilterCount = computed(
   () => Number(Boolean(query.value.trim())) + Number(Boolean(status.value)),
 );
-const summaryName = (key: string) =>
-  (
-    ({
-      total: "总记录",
-      active: "展示中",
-      review: "需复核",
-      unread: "未读",
-      critical: "严重",
-      succeeded: "已送达",
-      blocked: "受阻",
-      api: "后端接口",
-      database: "数据库",
-      dashboard_reads: "15 分钟访问",
-      active_organizations: "活动组织",
-      active_users: "活动用户",
-    }) as Record<string, string>
-  )[key] ?? key;
-const stateName = (value: unknown) =>
-  (
-    ({
-      active: "展示中",
-      irrelevant: "无关",
-      stale: "已过期",
-      delivered: "已送达",
-      succeeded: "成功",
-      pending: "等待",
-      pending_placeholder: "待配置",
-      blocked_provider: "服务商受阻",
-      dead_letter: "死信",
-      failed: "失败",
-      queued: "排队中",
-      retry_scheduled: "等待重试",
-      suppressed: "已停止投递",
-      healthy: "正常",
-      ready: "正常",
-      warning: "警告",
-      blocked: "阻断",
-      degraded: "降级",
-      unknown: "待检查",
-      stopped: "已停止",
-      enabled: "启用",
-      disabled: "停用",
-      read: "已读",
-      unread: "未读",
-      draft: "草稿",
-      published: "已发布",
-      cancelled: "已取消",
-      system_fixed: "系统内置",
-      pending_provider_selection: "邮件服务待配置",
-      in_app: "站内通知",
-      email: "邮件",
-      task: "任务",
-      approval: "审批",
-      competitor: "竞品",
-      system: "系统",
-      info: "普通",
-      critical: "严重",
-    }) as Record<string, string>
-  )[String(value)] ?? String(value ?? "—");
-const when = (value: unknown) => (value ? new Date(String(value)).toLocaleString("zh-CN") : "—");
 async function api<T>(path: string, options: RequestInit = {}) {
   try {
     const response = await request<T>(path, options);
@@ -302,7 +318,12 @@ watch(domain, () => {
   messageEditor.value = null;
   load();
 });
-onMounted(load);
+onMounted(() => {
+  syncRealtimeMetrics();
+  window.addEventListener(realtimeMetricsEvent, syncRealtimeMetrics);
+  void load();
+});
+onUnmounted(() => window.removeEventListener(realtimeMetricsEvent, syncRealtimeMetrics));
 </script>
 
 <template>
@@ -413,21 +434,100 @@ onMounted(load);
         @email-action="manageEmail"
       />
       <div v-else class="platform-status-grid">
-        <section class="platform-service-status">
-          <header>
-            <h3>服务运行状态</h3>
-            <span>5 分钟内观测为实时</span>
+        <section class="platform-service-topology">
+          <header class="platform-topology-header">
+            <div>
+              <h3>依赖拓扑与故障传播</h3>
+              <span>状态来自最新运行观测；5 分钟外的观测标记为已过期。</span>
+            </div>
+            <RouterLink to="/platform-admin/topology">查看实时拓扑</RouterLink>
           </header>
-          <RouterLink v-for="item in data.services" :key="item.code" :to="item.href">
-            <span
-              ><b>{{ item.name }}</b
-              ><small>{{ item.detail }}</small></span
+          <div class="platform-topology-lanes">
+            <section v-for="lane in statusTopologyLanes" :key="lane.code">
+              <h4>
+                <span>{{ lane.name }}</span
+                ><small>{{ lane.description }}</small>
+              </h4>
+              <RouterLink
+                v-for="node in lane.nodes"
+                :key="node.code"
+                class="platform-topology-node"
+                :data-state="node.status"
+                :to="node.href"
+              >
+                <span class="platform-topology-node__title"
+                  ><b>{{ node.name }}</b
+                  ><i :data-state="node.status">{{ stateName(node.status) }}</i></span
+                >
+                <small>{{ node.detail }} · {{ when(node.observedAt) }}</small>
+                <dl>
+                  <div>
+                    <dt>依赖</dt>
+                    <dd>{{ node.dependencyNames.join("、") || "基础资源" }}</dd>
+                  </div>
+                  <div>
+                    <dt>异常影响</dt>
+                    <dd>{{ node.impact }}</dd>
+                  </div>
+                </dl>
+              </RouterLink>
+            </section>
+          </div>
+          <div class="platform-propagation" aria-live="polite">
+            <h4>当前需核查的传播范围</h4>
+            <article
+              v-for="node in propagationWarnings"
+              :key="node.code"
+              class="platform-propagation-alert"
+              :data-state="node.status"
             >
-            <span
-              ><i :data-state="item.status">{{ stateName(item.status) }}</i
-              ><small>{{ when(item.observed_at) }}</small></span
+              <div>
+                <b>{{ node.name }}当前{{ stateName(node.status) }}</b
+                ><RouterLink :to="node.href">进入处理</RouterLink>
+              </div>
+              <p>
+                如异常持续，优先核查{{ node.impact
+                }}<template v-if="node.affectedNames.length"
+                  >；关联服务：{{ node.affectedNames.join("、") }}</template
+                >。
+              </p>
+            </article>
+            <p v-if="!propagationWarnings.length" class="platform-propagation-empty">
+              当前未观测到需要核查的异常传播链。
+            </p>
+          </div>
+          <section class="platform-realtime-degradation" aria-label="实时连接退化统计">
+            <header>
+              <div>
+                <h4>实时连接退化</h4>
+                <span>仅统计当前浏览器标签页会话，不代表全站或其他用户。</span>
+              </div>
+              <i :data-state="realtimeMetrics.reconnecting ? 'warning' : 'ready'">
+                {{ realtimeMetrics.reconnecting ? "正在自动重连" : "当前未处于重连" }}
+              </i>
+            </header>
+            <div>
+              <article>
+                <small>SSE 重连率</small>
+                <strong>{{ realtimeReconnectRate }}</strong>
+                <span
+                  >{{ realtimeMetrics.reconnect_count }} 次重连 /
+                  {{ realtimeMetrics.connection_open_count + realtimeMetrics.reconnect_count }}
+                  次连接事件</span
+                >
+              </article>
+              <article>
+                <small>降级轮询次数</small>
+                <strong>{{ realtimeMetrics.fallback_poll_count }}</strong>
+                <span>连接异常时刷新一次通知事实</span>
+              </article>
+            </div>
+            <small
+              >会话开始 {{ when(realtimeMetrics.session_started_at) }} · 最近重连
+              {{ when(realtimeMetrics.last_reconnect_at) }} · 最近降级轮询
+              {{ when(realtimeMetrics.last_fallback_poll_at) }}</small
             >
-          </RouterLink>
+          </section>
         </section>
         <section>
           <h3>采集任务状态</h3>
@@ -610,39 +710,81 @@ dialog footer button:last-child {
   grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
-.platform-service-status {
+.platform-service-topology {
   grid-column: 1 / -1;
 }
-.platform-service-status header,
-.platform-service-status a,
-.platform-service-status a > span {
+.platform-topology-header,
+.platform-topology-node__title,
+.platform-propagation-alert > div {
   display: flex;
   align-items: center;
 }
-.platform-service-status header,
-.platform-service-status a {
+.platform-topology-header,
+.platform-topology-node__title,
+.platform-propagation-alert > div {
   justify-content: space-between;
   gap: 16px;
 }
-.platform-service-status header span,
-.platform-service-status small {
+.platform-topology-header > div {
+  display: grid;
+  gap: 4px;
+}
+.platform-topology-header h3,
+.platform-topology-lanes h4,
+.platform-propagation h4 {
+  margin: 0;
+}
+.platform-topology-header span,
+.platform-topology-node small,
+.platform-topology-lanes h4 small {
   color: var(--so-text-muted);
   font-size: 11px;
 }
-.platform-service-status a {
-  padding: 11px 10px;
-  border-bottom: 1px solid var(--so-border);
+.platform-topology-header > a,
+.platform-propagation-alert a {
+  flex: none;
+  color: var(--so-primary);
   text-decoration: none;
 }
-.platform-service-status a > span {
-  align-items: flex-start;
-  flex-direction: column;
+.platform-topology-lanes {
+  display: grid;
+  grid-template-columns: 0.8fr 1.4fr 1.2fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+.platform-topology-lanes > section {
+  min-width: 0;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  padding: 10px;
+  background: var(--so-panel-soft);
+}
+.platform-topology-lanes h4 {
+  display: grid;
   gap: 3px;
+  padding: 2px 2px 9px;
 }
-.platform-service-status a > span:last-child {
-  align-items: flex-end;
+.platform-topology-node {
+  display: grid;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel);
+  text-decoration: none;
+  color: var(--so-text);
 }
-.platform-service-status i {
+.platform-topology-node[data-state="warning"],
+.platform-topology-node[data-state="degraded"],
+.platform-topology-node[data-state="stale"] {
+  border-color: color-mix(in srgb, var(--so-warning) 42%, var(--so-border));
+}
+.platform-topology-node[data-state="blocked"],
+.platform-topology-node[data-state="stopped"] {
+  border-color: color-mix(in srgb, var(--so-danger) 46%, var(--so-border));
+}
+.platform-topology-node i {
   border-radius: 999px;
   padding: 3px 8px;
   background: var(--so-panel-soft);
@@ -650,32 +792,137 @@ dialog footer button:last-child {
   font-style: normal;
   font-size: 11px;
 }
-.platform-service-status i[data-state="healthy"],
-.platform-service-status i[data-state="ready"] {
+.platform-topology-node i[data-state="healthy"],
+.platform-topology-node i[data-state="ready"] {
   background: var(--so-success-soft);
   color: var(--so-success);
 }
-.platform-service-status i[data-state="warning"],
-.platform-service-status i[data-state="degraded"],
-.platform-service-status i[data-state="stale"] {
+.platform-topology-node i[data-state="warning"],
+.platform-topology-node i[data-state="degraded"],
+.platform-topology-node i[data-state="stale"] {
   background: var(--so-warning-soft);
   color: var(--so-warning);
 }
-.platform-service-status i[data-state="blocked"],
-.platform-service-status i[data-state="stopped"] {
+.platform-topology-node i[data-state="blocked"],
+.platform-topology-node i[data-state="stopped"] {
   background: var(--so-danger-soft);
   color: var(--so-danger);
+}
+.platform-topology-node dl {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+.platform-topology-node dl > div {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+.platform-topology-node dt,
+.platform-topology-node dd {
+  margin: 0;
+  font-size: 11px;
+}
+.platform-topology-node dt {
+  color: var(--so-text-muted);
+}
+.platform-topology-node dd {
+  overflow-wrap: anywhere;
+}
+.platform-propagation {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.platform-realtime-degradation {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.platform-realtime-degradation > header,
+.platform-realtime-degradation > header > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.platform-realtime-degradation > header > div {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 3px;
+}
+.platform-realtime-degradation h4 {
+  margin: 0;
+}
+.platform-realtime-degradation header span,
+.platform-realtime-degradation > small,
+.platform-realtime-degradation article span {
+  color: var(--so-text-muted);
+  font-size: 11px;
+}
+.platform-realtime-degradation header i {
+  flex: none;
+  border-radius: 999px;
+  padding: 4px 9px;
+  background: var(--so-success-soft);
+  color: var(--so-success);
+  font-style: normal;
+  font-size: 11px;
+}
+.platform-realtime-degradation header i[data-state="warning"] {
+  background: var(--so-warning-soft);
+  color: var(--so-warning);
+}
+.platform-realtime-degradation > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.platform-realtime-degradation article {
+  display: grid;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel);
+}
+.platform-realtime-degradation article strong {
+  font-size: 21px;
+}
+.platform-propagation-alert {
+  margin-top: 9px;
+  padding: 10px;
+  border-left: 3px solid var(--so-warning);
+  border-radius: 8px;
+  background: var(--so-panel);
+}
+.platform-propagation-alert[data-state="blocked"],
+.platform-propagation-alert[data-state="stopped"] {
+  border-left-color: var(--so-danger);
+}
+.platform-propagation-alert p,
+.platform-propagation-empty {
+  margin: 6px 0 0;
+  color: var(--so-text-muted);
+  font-size: 12px;
 }
 .platform-status-grid h3 {
   margin-top: 0;
 }
-.platform-status-grid section div {
+.platform-status-grid > section:not(.platform-service-topology) > div {
   display: flex;
   justify-content: space-between;
   padding: 10px;
   border-bottom: 1px solid var(--so-border);
 }
-.platform-status-grid a {
+.platform-status-grid > section:not(.platform-service-topology) > a {
   display: inline-block;
   margin-top: 14px;
   color: var(--so-primary);
@@ -730,6 +977,20 @@ dialog footer {
     flex-direction: column;
   }
   .platform-status-grid {
+    grid-template-columns: 1fr;
+  }
+  .platform-topology-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .platform-topology-lanes {
+    grid-template-columns: 1fr;
+  }
+  .platform-realtime-degradation > header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .platform-realtime-degradation > div {
     grid-template-columns: 1fr;
   }
 }

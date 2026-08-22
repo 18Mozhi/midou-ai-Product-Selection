@@ -10,6 +10,7 @@ const data = {
       quotas: { collection_tasks: 100, open_api_requests: 1000, report_exports: 20 },
       status: "active",
       version: 2,
+      assignment_count: 3,
       updated_at: "2026-08-08T00:00:00Z",
     },
   ],
@@ -88,12 +89,18 @@ test("M06-06 edit, renew, status confirmation and dependency recovery", async ({
   await page.getByLabel("结束", { exact: true }).fill("2026-10-01T00:00");
   await page.getByRole("button", { name: "确认调整" }).click();
   await expect(page.getByText("确认调整组织配额方案？")).toBeVisible();
+  const impact = page.getByLabel("配额变更影响范围");
+  await expect(impact).toContainText("组织 o1");
+  await expect(impact).toContainText("采集任务");
+  await expect(impact).toContainText("100（当前余量 58）");
+  await expect(impact).toContainText("新周期用量将在变更后重新统计");
   await page.getByRole("button", { name: "确认执行" }).click();
   await expect
     .poll(() => renewal)
     .toMatchObject({ organization_id: "o1", plan_id: "p1", reason: "分配或调整配额方案" });
   await page.getByRole("button", { name: "退役", exact: true }).click();
   await expect(page.getByText("确认退役配额方案？")).toBeVisible();
+  await expect(page.getByLabel("配额变更影响范围")).toContainText("3 个当前仍分配该方案的组织");
   await page.getByRole("button", { name: "取消" }).click();
   await page.unroute("**/api/v1/platform/commercial?**");
   let status = 429;

@@ -2,10 +2,19 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import {
+  ProfitService,
   ProfitServiceError,
   validateCostInput,
   validateCostRule,
 } from "../../apps/api/dist/profit-service.js";
+
+const ids = {
+  org: "00000000-0000-4000-8000-000000000441",
+  ws: "00000000-0000-4000-8000-000000000442",
+  actor: "00000000-0000-4000-8000-000000000443",
+  reviewer: "00000000-0000-4000-8000-000000000444",
+  opportunity: "00000000-0000-4000-8000-000000000445",
+};
 
 const fees = [
   { type: "platform_fee", mode: "percentage_of_sale", value: 10, currency: null },
@@ -50,17 +59,73 @@ test("M04-04.A01/A02/A04/A12 requires every explicit fee and provenance", () => 
   assert.equal(input.currency, "CNY");
 });
 
+test("M04-04 cost submission requires a distinct reviewer and forwards immutable review actions", async () => {
+  const calls = [],
+    repository = {
+      recordCost: async (input) => (calls.push(input), { id: input.id, status: "pending" }),
+      reviewCost: async (input) => (
+        calls.push(input),
+        { id: input.reviewId, status: input.decision }
+      ),
+    },
+    service = new ProfitService(repository),
+    context = {
+      organizationId: ids.org,
+      workspaceId: ids.ws,
+      actorId: ids.actor,
+      roleCodes: ["selection_manager"],
+      requestId: "request-cost-review",
+      traceId: "trace-cost-review",
+      idempotencyKey: "idem-cost-review",
+    },
+    value = {
+      platform: "amazon",
+      input_type: "purchase_price",
+      amount_value: 40,
+      currency: "CNY",
+      source_type: "supplier_quote",
+      source_ref_id: "quote-1",
+      evidence_id: ids.reviewer,
+      observed_at: new Date().toISOString(),
+      expected_version: 1,
+      reviewer_id: ids.reviewer,
+    };
+  await service.recordCost({ ...context, opportunityId: ids.opportunity, value });
+  assert.equal(calls[0].value.reviewer_id, ids.reviewer);
+  await service.reviewCost({
+    ...context,
+    actorId: ids.reviewer,
+    opportunityId: ids.opportunity,
+    reviewId: ids.actor,
+    value: { decision: "approved", reason: "成本证据已复核", expected_version: 1 },
+  });
+  assert.equal(calls[1].decision, "approved");
+  assert.throws(
+    () =>
+      service.recordCost({
+        ...context,
+        opportunityId: ids.opportunity,
+        value: { ...value, reviewer_id: ids.actor },
+      }),
+    (error) =>
+      error instanceof ProfitServiceError && error.code === "cost_input_self_review_forbidden",
+  );
+});
+
 test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () => {
   const paths = [
     "database/migrations/0017d_profit_cost_m04_04.up.sql",
     "database/migrations/0017d_profit_cost_m04_04.down.sql",
+    "database/migrations/0064_governed_workflow_confirmations.up.sql",
     "apps/api/src/profit-service.ts",
     "apps/api/src/mysql-profit-repository.ts",
     "apps/api/src/profit-routes.ts",
     "apps/worker/src/opportunity-profit-worker.ts",
+    "apps/worker/src/notification-outbox-worker.ts",
     "apps/web/src/components/CostRuleConsole.vue",
     "apps/web/src/components/OpportunityWorkspace.vue",
     "apps/web/src/components/OpportunityProfitPanel.vue",
+    "apps/web/src/components/OpportunityCostReviewQueue.vue",
     "apps/web/src/profit.css",
     "apps/web/src/opportunity-profit.css",
     "config/schema.json",
@@ -77,13 +142,16 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
   const [
     up,
     down,
+    governanceUp,
     service,
     repository,
     routes,
     worker,
+    notificationWorker,
     consoleUi,
     opportunityShell,
     profitPanel,
+    costReviewQueue,
     ruleCss,
     profitCss,
     schema,
@@ -101,19 +169,30 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
     /cost_rules[\s\S]*exchange_rate_quotes[\s\S]*opportunity_profit_runs[\s\S]*opportunity_profit_components/,
   );
   assert.match(down, /DROP TABLE IF EXISTS `cost_rules`/);
+  assert.match(governanceUp, /opportunity_cost_input_reviews[\s\S]*due_at/);
   assert.match(
     service,
     /cost_rule_fee_lines_invalid[\s\S]*validateExchangeQuote[\s\S]*cost_rule_approval_role_forbidden/,
   );
   assert.match(repository, /rollback[\s\S]*exchange_provider_not_approved/);
+  assert.match(
+    repository,
+    /is_current,submitted_by[\s\S]*approval\.cost_input\.review_due_soon[\s\S]*reviewer_id/,
+  );
   assert.match(routes, /cost:confirm[\s\S]*profit-runs/);
   assert.match(worker, /insufficient_data[\s\S]*net_profit[\s\S]*dead_letter/);
+  assert.match(
+    notificationWorker,
+    /approval\.cost_input\.review_due_soon[\s\S]*approval\.cost_input\.overdue/,
+  );
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(consoleUi, new RegExp(state));
   assert.match(opportunityShell, /profit-analysis[\s\S]*OpportunityProfitPanel/);
-  assert.match(profitPanel, /确认成本输入[\s\S]*重新计算/);
+  assert.match(profitPanel, /提交成本复核[\s\S]*重新计算/);
+  assert.match(`${profitPanel}\n${costReviewQueue}`, /成本复核队列[\s\S]*指定复核人/);
   assert.ok(opportunityShell.split(/\r?\n/).length < 1000);
   assert.ok(profitPanel.split(/\r?\n/).length < 200);
+  assert.ok(costReviewQueue.split(/\r?\n/).length < 160);
   assert.match(ruleCss, /@media\s*\(\s*max-width:\s*820px\s*\)/);
   assert.match(ruleCss, /var\(--so-panel\)/);
   assert.match(ruleCss, /var\(--so-primary\)/);

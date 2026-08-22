@@ -5,7 +5,12 @@ const files = Object.fromEntries(
   await Promise.all(
     [
       "apps/crawler/scoutops_crawler/__main__.py",
+      "apps/crawler/scoutops_crawler/completion_receipts.py",
+      "apps/crawler/scoutops_crawler/execution_runner.py",
+      "apps/crawler/scoutops_crawler/lease_client.py",
+      "apps/crawler/scoutops_crawler/main_loop.py",
       "apps/crawler/scoutops_crawler/runtime_client.py",
+      "apps/crawler/scoutops_crawler/runtime_transport.py",
       "apps/crawler/scoutops_crawler/playwright_bridge.py",
       "apps/crawler/scoutops_crawler/config.py",
       "apps/api/src/crawler-runtime-routes.ts",

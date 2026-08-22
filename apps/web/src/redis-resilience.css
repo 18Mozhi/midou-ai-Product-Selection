@@ -237,6 +237,96 @@
 .redis-resilience__panel dd {
   margin: 0;
 }
+.redis-resilience__risk > article {
+  padding: 14px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.redis-resilience__risk > article[data-severity="warning"] {
+  border-color: var(--so-warning);
+}
+.redis-resilience__risk > article[data-severity="blocked"] {
+  border-color: var(--so-danger);
+}
+.redis-resilience__risk > article p,
+.redis-resilience__risk > article small,
+.redis-resilience__truth-note {
+  color: var(--so-text-muted);
+}
+.redis-resilience__hotspots {
+  background: color-mix(in srgb, var(--so-panel-soft) 84%, transparent);
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  margin-top: 14px;
+  padding: 16px;
+}
+.redis-resilience__hotspots > header,
+.redis-resilience__hotspots > footer,
+.redis-resilience__hotspot-list article > div {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+.redis-resilience__hotspots h4 {
+  font-size: 15px;
+  margin: 3px 0 0;
+}
+.redis-resilience__hotspots header small,
+.redis-resilience__hotspots header span,
+.redis-resilience__hotspots footer,
+.redis-resilience__hotspot-list small,
+.redis-resilience__hotspot-empty span {
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.redis-resilience__hotspot-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+.redis-resilience__hotspot-list article {
+  display: grid;
+  gap: 8px;
+}
+.redis-resilience__hotspot-list article > div:first-child,
+.redis-resilience__hotspot-value {
+  align-items: start;
+  display: grid;
+  gap: 2px;
+}
+.redis-resilience__hotspot-value {
+  justify-items: end;
+}
+.redis-resilience__hotspot-list i {
+  background: var(--so-border);
+  border-radius: 99px;
+  display: block;
+  height: 5px;
+  overflow: hidden;
+}
+.redis-resilience__hotspot-list i span {
+  background: linear-gradient(90deg, var(--rr-cyan), var(--rr-green));
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+  max-width: 100%;
+}
+.redis-resilience__hotspot-empty {
+  display: grid;
+  gap: 5px;
+  margin-top: 16px;
+}
+.redis-resilience__hotspots > footer {
+  border-top: 1px solid var(--so-border);
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 12px;
+}
+.redis-resilience__truth-note {
+  margin: 12px 0 0;
+  font-size: 12px;
+}
 .redis-resilience__findings > div {
   display: grid;
 }
@@ -327,6 +417,10 @@
   }
   .redis-resilience__persistence-grid {
     grid-template-columns: 1fr;
+  }
+  .redis-resilience__hotspots > footer {
+    align-items: flex-start;
+    flex-direction: column;
   }
   .redis-resilience__findings article {
     gap: 7px;

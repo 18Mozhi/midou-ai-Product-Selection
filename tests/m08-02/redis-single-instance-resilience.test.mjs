@@ -85,6 +85,131 @@ test("M08-02.A02/A04/A12 evaluates persistence memory and connection limits with
   assert.ok(blocked.findings.some((item) => item.code === "redis_memory_unbounded"));
 });
 
+test("Redis keyspace sampling is bounded, memory-based and never returns scoped key identities", async () => {
+  const { inspectRedisKeyspaceHotspots, REDIS_KEYSPACE_SAMPLE_LIMIT } =
+    await import("../../packages/redis/dist/index.js");
+  const organizationId = "00000000-0000-4000-8000-000000000891",
+    workspaceId = "00000000-0000-4000-8000-000000000892",
+    keys = [
+      `scoutops:v1:queue:org:${organizationId}:ws:${workspaceId}:collection-task:task-a`,
+      `scoutops:v1:queue:org:${organizationId}:ws:${workspaceId}:collection-ready:task-b`,
+      `scoutops:v1:rate:org:${organizationId}:ws:${workspaceId}:login:user-a`,
+      "scoutops:v1:queue:malformed",
+    ],
+    sizes = new Map([
+      [keys[0], 900],
+      [keys[1], 75],
+      [keys[2], 25],
+    ]),
+    calls = [];
+  const sample = await inspectRedisKeyspaceHotspots({
+    ping: async () => "PONG",
+    info: async () => "",
+    configGet: async () => ({}),
+    scan: async (cursor, options) => {
+      calls.push([cursor, options]);
+      return { cursor: "0", keys };
+    },
+    memoryUsage: async (key) => sizes.get(key) ?? null,
+  });
+  assert.equal(sample.status, "sampled");
+  assert.equal(sample.sample_limit, REDIS_KEYSPACE_SAMPLE_LIMIT);
+  assert.equal(sample.scanned_keys, 4);
+  assert.equal(sample.measured_keys, 3);
+  assert.equal(sample.ignored_keys, 1);
+  assert.equal(sample.total_sampled_bytes, 1000);
+  assert.deepEqual(calls, [["0", { MATCH: "scoutops:v1:*", COUNT: 32 }]]);
+  assert.deepEqual(sample.hotspots, [
+    {
+      purpose: "queue",
+      resource: "collection_task",
+      sampled_keys: 1,
+      sampled_bytes: 900,
+      sampled_share_basis_points: 9000,
+    },
+    {
+      purpose: "queue",
+      resource: "collection_ready",
+      sampled_keys: 1,
+      sampled_bytes: 75,
+      sampled_share_basis_points: 750,
+    },
+    {
+      purpose: "rate",
+      resource: "other",
+      sampled_keys: 1,
+      sampled_bytes: 25,
+      sampled_share_basis_points: 250,
+    },
+  ]);
+  assert.equal(sample.access_frequency_available, false);
+  assert.doesNotMatch(
+    JSON.stringify(sample),
+    new RegExp(`${organizationId}|${workspaceId}|task-a|user-a`),
+  );
+});
+
+test("Redis keyspace sampling stops at the fixed sample limit", async () => {
+  const { inspectRedisKeyspaceHotspots, REDIS_KEYSPACE_SAMPLE_LIMIT } =
+    await import("../../packages/redis/dist/index.js");
+  let scanCalls = 0,
+    memoryCalls = 0;
+  const sample = await inspectRedisKeyspaceHotspots({
+    ping: async () => "PONG",
+    info: async () => "",
+    configGet: async () => ({}),
+    scan: async () => {
+      scanCalls += 1;
+      return {
+        cursor: "9",
+        keys: Array.from(
+          { length: 200 },
+          (_, index) =>
+            `scoutops:v1:queue:org:org-${index}:ws:ws-${index}:collection-task:item-${index}`,
+        ),
+      };
+    },
+    memoryUsage: async () => (memoryCalls += 1),
+  });
+  assert.equal(scanCalls, 1);
+  assert.equal(sample.scanned_keys, REDIS_KEYSPACE_SAMPLE_LIMIT);
+  assert.equal(memoryCalls, REDIS_KEYSPACE_SAMPLE_LIMIT);
+  assert.equal(sample.truncated, true);
+});
+
+test("keyspace sampling failure does not erase independent Redis resilience facts", async () => {
+  const { inspectRedisResilience } = await import("../../packages/redis/dist/index.js");
+  const snapshot = await inspectRedisResilience({
+    ping: async () => "PONG",
+    info: async (section) =>
+      ({
+        server: "uptime_in_seconds:600",
+        persistence:
+          "loading:0\naof_last_write_status:ok\nrdb_last_bgsave_status:ok\naof_last_bgrewrite_status:ok",
+        memory: "used_memory:1024\nmaxmemory:4096\nmaxmemory_policy:noeviction",
+        clients: "connected_clients:2\nmaxclients:512",
+        stats: "rejected_connections:0\nevicted_keys:0",
+      })[section] ?? "",
+    configGet: async (parameter) =>
+      ({
+        appendonly: { appendonly: "yes" },
+        save: { save: "3600 1" },
+        maxmemory: { maxmemory: "4096" },
+        "maxmemory-policy": { "maxmemory-policy": "noeviction" },
+        maxclients: { maxclients: "512" },
+      })[parameter] ?? {},
+    scan: async () => {
+      throw new Error("ACL denied");
+    },
+    memoryUsage: async () => 0,
+  });
+  assert.equal(snapshot.available, true);
+  assert.equal(snapshot.usedMemoryBytes, 1024);
+  assert.equal(snapshot.maxMemoryPolicy, "noeviction");
+  assert.equal(snapshot.keyspaceSample.status, "unavailable");
+  assert.equal(snapshot.keyspaceSample.unavailable_reason, "scan_failed");
+});
+
 test("M08-02.A06/A09/A11/A13 operations route is authorized audited and sanitized", async () => {
   const { buildApp } = await import("../../apps/api/dist/app.js");
   const calls = [];
@@ -97,6 +222,28 @@ test("M08-02.A06/A09/A11/A13 operations route is authorized audited and sanitize
         persistence: { aof_enabled: true, rdb_enabled: true },
         memory: { used_bytes: 1, max_bytes: 536870912, usage_basis_points: 0 },
         connections: { connected: 1, maximum: 512, usage_basis_points: 20 },
+        keyspace_sample: {
+          status: "sampled",
+          basis: "bounded_memory_usage",
+          sample_limit: 128,
+          scanned_keys: 2,
+          measured_keys: 2,
+          ignored_keys: 0,
+          failed_measurements: 0,
+          total_sampled_bytes: 1024,
+          truncated: false,
+          access_frequency_available: false,
+          unavailable_reason: null,
+          hotspots: [
+            {
+              purpose: "queue",
+              resource: "collection_task",
+              sampled_keys: 2,
+              sampled_bytes: 1024,
+              sampled_share_basis_points: 10000,
+            },
+          ],
+        },
         findings: [],
         single_instance: true,
         sentinel_enabled: false,
@@ -184,7 +331,8 @@ test("M08-02.A03/A10/A14 migration and configuration remain MySQL57 and backend-
 test("M08-02.A04/A09/A14 persists observation view and audit in one transaction", async () => {
   const { MySqlRedisResilienceRepository } =
     await import("../../apps/api/dist/mysql-redis-resilience-repository.js");
-  const calls = [];
+  const calls = [],
+    valueSets = [];
   const connection = {
     beginTransaction: async () => calls.push("begin"),
     commit: async () => calls.push("commit"),
@@ -193,6 +341,7 @@ test("M08-02.A04/A09/A14 persists observation view and audit in one transaction"
     query: async (sql, values = []) => {
       assert.equal(values.length, (sql.match(/\?/g) ?? []).length, `placeholder mismatch: ${sql}`);
       calls.push(sql);
+      valueSets.push(values);
       return [[], []];
     },
   };
@@ -217,6 +366,28 @@ test("M08-02.A04/A09/A14 persists observation view and audit in one transaction"
       rejectedConnections: 0,
       evictedKeys: 0,
       uptimeSeconds: 10,
+      keyspaceSample: {
+        status: "sampled",
+        basis: "bounded_memory_usage",
+        sample_limit: 128,
+        scanned_keys: 1,
+        measured_keys: 1,
+        ignored_keys: 0,
+        failed_measurements: 0,
+        total_sampled_bytes: 64,
+        truncated: false,
+        access_frequency_available: false,
+        unavailable_reason: null,
+        hotspots: [
+          {
+            purpose: "queue",
+            resource: "collection_task",
+            sampled_keys: 1,
+            sampled_bytes: 64,
+            sampled_share_basis_points: 10000,
+          },
+        ],
+      },
     },
     evaluation: {
       state: "ready",
@@ -237,6 +408,11 @@ test("M08-02.A04/A09/A14 persists observation view and audit in one transaction"
     calls.filter((item) => typeof item === "string" && item.startsWith("INSERT INTO")).length,
     3,
   );
+  const auditMetadata = valueSets
+    .flat()
+    .find((value) => typeof value === "string" && value.includes('"keyspace_sample"'));
+  assert.match(auditMetadata, /bounded_memory_usage[\s\S]*collection_task/);
+  assert.doesNotMatch(auditMetadata, /scoutops:v1:|organization_id|workspace_id|payload/);
 });
 
 test("M08-02.A07/A08/A15/A16 UI and production evidence cover full states and single-instance recovery", async () => {
@@ -262,6 +438,14 @@ test("M08-02.A07/A08/A15/A16 UI and production evidence cover full states and si
     "recovering",
   ])
     assert.match(ui, new RegExp(state));
+  assert.match(
+    ui,
+    /键淘汰风险[\s\S]*max_memory_policy[\s\S]*键空间占用热点[\s\S]*不把内存占比冒充访问频率/,
+  );
+  assert.match(
+    `${ui}\n${e2e}`,
+    /bounded_memory_usage[\s\S]*sample_limit[\s\S]*access_frequency_available/,
+  );
   assert.match(e2e, /390/);
   assert.match(manifest, /appendonly/);
   assert.match(manifest, /noeviction/);

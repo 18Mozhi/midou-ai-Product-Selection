@@ -85,7 +85,9 @@ test("M03-01.A07/A08/A15 provider list and editor are responsive and visual", as
   await page.getByRole("button", { name: "新建来源" }).click();
   await expect(page.getByRole("heading", { name: "登记来源" })).toBeVisible();
   await page.getByRole("button", { name: "4 合规与发布" }).click();
-  await expect(page.getByLabel("状态")).toHaveValue("disabled");
+  await expect(page.getByRole("combobox", { name: "发布状态", exact: true })).toHaveValue(
+    "disabled",
+  );
   await expect(page).toHaveScreenshot("m03-01-provider-registry.png", { fullPage: true });
   if (testInfo.project.name === "mobile-390")
     await expect(page.locator(".provider-editor")).toBeVisible();

@@ -17,6 +17,10 @@ const profiles = [
     provider_id: "00000000-0000-4000-8000-000000000812",
     provider_name: "Market Browser",
     status: "active",
+    target_domain: "market.example.test",
+    credential_expires_at: "2026-08-10T20:02:00.000Z",
+    login_status: "valid",
+    last_failure: null,
     lease: {
       run_id: "00000000-0000-4000-8000-000000000821",
       lease_owner: "crawler-s0-01",
@@ -32,6 +36,10 @@ const profiles = [
     provider_id: "00000000-0000-4000-8000-000000000814",
     provider_name: "Supplier Browser",
     status: "active",
+    target_domain: "supplier.example.test",
+    credential_expires_at: null,
+    login_status: "unknown",
+    last_failure: null,
     lease: null,
   },
   {
@@ -41,6 +49,10 @@ const profiles = [
     provider_id: "00000000-0000-4000-8000-000000000816",
     provider_name: "Archived Source",
     status: "disabled",
+    target_domain: "archive.example.test",
+    credential_expires_at: "2026-08-01T00:00:00.000Z",
+    login_status: "expired",
+    last_failure: null,
     lease: null,
   },
 ];
@@ -123,6 +135,13 @@ test("M03-04.A07/A08/A15 runtime monitor is responsive and visual", async ({ pag
   await page.goto(runtimePath);
   await expect(page.getByRole("heading", { name: "采集运行监控", level: 2 })).toBeVisible();
   await expect(page.getByText("US Market Profile")).toBeVisible();
+  await expect(page.getByText("过期占用", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText(/租约已过期，存在僵尸占用风险/)).toBeVisible();
+  await expect(
+    page.getByText("Market Browser · market.example.test", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText(/登录档案到期预警：即将到期 · 3 天后/)).toBeVisible();
+  await expect(page.getByText("登录档案到期预警：未提供有效期，无法预测")).toBeVisible();
   if ((page.viewportSize()?.width ?? 1000) <= 760) {
     await expect(page.getByRole("button", { name: /已拦截 · 0 条.*需要验证码/ })).toBeVisible();
     await page.getByRole("button", { name: /已拦截 · 0 条/ }).click();

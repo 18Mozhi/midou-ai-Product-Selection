@@ -83,6 +83,53 @@
 .profit-components em {
   color: var(--so-warning);
 }
+.profit-current-inputs,
+.profit-review-queue {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--so-border);
+}
+.profit-current-inputs article,
+.profit-review-queue > article {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel);
+}
+.profit-current-inputs small,
+.profit-review-queue small,
+.profit-review-queue > header span,
+.profit-review-queue > article > p {
+  color: var(--so-text-muted);
+}
+.profit-review-queue > header,
+.profit-review-queue > article > header,
+.profit-review-queue > article > footer,
+.profit-review-queue > article > form > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.profit-review-queue > article[data-status="pending"],
+.profit-review-queue > article[data-status="overdue"] {
+  border-left: 4px solid var(--so-warning);
+}
+.profit-review-queue > article[data-status="overdue"] {
+  border-color: color-mix(in srgb, var(--so-danger) 60%, var(--so-border));
+}
+.profit-review-queue > article > form,
+.profit-review-queue > article > form label {
+  display: grid;
+  gap: 8px;
+}
+.profit-review-queue textarea {
+  min-height: 76px;
+}
 .profit-input {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -133,6 +180,10 @@
 }
 @media (max-width: 640px) {
   .opportunity-profit > header {
+    display: grid;
+  }
+  .profit-review-queue > header,
+  .profit-review-queue > article > header {
     display: grid;
   }
   .profit-summary,

@@ -57,6 +57,25 @@ test("M07-03.A12-A16 preflight always passes and production evidence is opt-in",
   assert.equal(JSON.parse(production.stdout).status, "passed");
 });
 
+test("M07-03 deployer runs source and built-artifact gates before remote credentials", async () => {
+  const deployer = await readFile("scripts/deploy-baota.py", "utf8");
+  assert.match(
+    deployer,
+    /verify_local_source_preflight[\s\S]*format:check[\s\S]*verify:runtime-docs[\s\S]*verify:release-matrix/,
+  );
+  assert.match(
+    deployer,
+    /def build_package[\s\S]*npm_executable\(\), "run", "build"[\s\S]*verify_local_build_preflight/,
+  );
+  const main = deployer.slice(deployer.indexOf("def main()"));
+  assert.ok(
+    main.indexOf("verify_local_source_preflight(repo)") <
+      main.indexOf("release_source_identity(repo)"),
+  );
+  assert.ok(main.indexOf("build_package(") < main.indexOf("read_windows_credential()"));
+  assert.match(deployer, /verify-baota-deployment\.mjs", "--preflight"/);
+});
+
 test("M07-03.A17 docs, OpenAPI, Feature Map and evidence schema stay synchronized", async () => {
   const all = (
     await Promise.all(

@@ -11,6 +11,8 @@ const base = {
   source_ref_id: topicId,
   owner_id: "00000000-0000-4000-8000-000000000423",
   lifecycle_status: "ready",
+  lifecycle_entered_at: "2026-08-07T20:00:00.000Z",
+  lifecycle_dwell_seconds: 14400,
   recommendation_status: "insufficient_data",
   overall_score: null,
   trend_score: null,
@@ -108,6 +110,27 @@ async function ready(page: Page) {
           scored_at: null,
           latest_score_run: null,
           score_components: [],
+          adoption_blockers: [
+            {
+              code: "evidence_insufficient",
+              status: "cleared",
+              progress_percent: 100,
+              next_action: "证据覆盖阻断已解除。",
+              task_id: null,
+              task_status: null,
+              score_job_status: null,
+            },
+            {
+              code: "recommendation_insufficient",
+              status: "blocked",
+              progress_percent: null,
+              next_action: "启用评分规则并在补采后重新评分。",
+              task_id: null,
+              task_status: null,
+              score_job_status: null,
+            },
+          ],
+          redecision_ready: false,
           evidence,
           decisions: decided
             ? [

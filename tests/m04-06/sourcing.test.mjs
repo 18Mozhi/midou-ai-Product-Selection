@@ -52,6 +52,9 @@ test("M04-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
       "apps/api/src/sourcing-routes.ts",
       "apps/worker/src/sourcing-projection-worker.ts",
       "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/SourcingComparisonPanel.vue",
+      "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+      "apps/web/src/components/sourcing-workspace-types.ts",
       "apps/web/src/sourcing.css",
       "config/schema.json",
       "config/env.example",
@@ -72,6 +75,9 @@ test("M04-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
       routes,
       worker,
       ui,
+      comparisonPanel,
+      dialogs,
+      uiTypes,
       css,
       schema,
       env,
@@ -92,8 +98,9 @@ test("M04-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(repo, /sourcing_collection_task_not_ready[\s\S]*purchase_quantity_below_moq/);
   assert.match(routes, /supplier_quote:manage[\s\S]*purchase-tasks/);
   assert.match(worker, /product-supply-csv-v1[\s\S]*dead_letter/);
+  const uiSurface = `${uiTypes}\n${ui}\n${comparisonPanel}\n${dialogs}`;
   for (const s of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
-    assert.match(ui, new RegExp(s));
+    assert.match(uiSurface, new RegExp(s));
   assert.match(css, /@media\s*\(\s*max-width:\s*820px\s*\)/);
   assert.match(schema, /SOURCING_PROJECTION_POLL_MS/);
   assert.match(env, /SOURCING_PROJECTION_LEASE_SECONDS/);
@@ -115,28 +122,37 @@ test("M04-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(blueprint, /M04-06 实现合同/);
 });
 test("M04-06 saved comparisons align specification MOQ price and lead time without inventing login renewal", async () => {
-  const [ui, costRuleUi, css, architecture, e2e, feature, runbook] = await Promise.all(
-    [
-      "apps/web/src/components/SourcingWorkspace.vue",
-      "apps/web/src/components/CostRuleConsole.vue",
-      "apps/web/src/sourcing.css",
-      "docs/architecture/m04-06-sourcing.md",
-      "tests/e2e/m04-06-sourcing.spec.ts",
-      "docs/feature-map.json",
-      "docs/runbooks/m04-06-sourcing.md",
-    ].map((path) => readFile(path, "utf8")),
-  );
-  assert.match(ui, /规格、最小起订量与交期对比[\s\S]*最小起订量[\s\S]*报价[\s\S]*交期/);
-  assert.match(ui, /找货流程[\s\S]*搜索货源[\s\S]*确认报价[\s\S]*对比供应商[\s\S]*创建采购任务/);
+  const [ui, comparisonPanel, dialogs, costRuleUi, css, architecture, e2e, feature, runbook] =
+    await Promise.all(
+      [
+        "apps/web/src/components/SourcingWorkspace.vue",
+        "apps/web/src/components/SourcingComparisonPanel.vue",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "apps/web/src/components/CostRuleConsole.vue",
+        "apps/web/src/sourcing.css",
+        "docs/architecture/m04-06-sourcing.md",
+        "tests/e2e/m04-06-sourcing.spec.ts",
+        "docs/feature-map.json",
+        "docs/runbooks/m04-06-sourcing.md",
+      ].map((path) => readFile(path, "utf8")),
+    );
+  const uiSurface = `${ui}\n${comparisonPanel}\n${dialogs}`;
+  assert.match(uiSurface, /规格、最小起订量与交期对比[\s\S]*最小起订量[\s\S]*报价[\s\S]*交期/);
+  assert.match(uiSurface, /规格归一化提示/);
+  assert.match(uiSurface, /系统不会自动换算或判断等价/);
   assert.match(
-    ui,
+    uiSurface,
+    /找货流程[\s\S]*搜索货源[\s\S]*确认报价[\s\S]*对比供应商[\s\S]*创建采购任务/,
+  );
+  assert.match(
+    uiSurface,
     /到岸价[\s\S]*待费用规则计算[\s\S]*已选 \{\{ selectedQuotes\.length \}\} \/ 5 家供应商/,
   );
-  assert.match(ui, /完整采集进度[\s\S]*查看采集任务明细/);
-  assert.match(ui, /报价新鲜度/);
-  assert.match(ui, /确认依据证据（可搜索）[\s\S]*sourcing-evidence-options/);
-  assert.match(ui, /结构化采购创建[\s\S]*锁定报价版本[\s\S]*采购数量/);
-  assert.doesNotMatch(ui, /window\.prompt/);
+  assert.match(uiSurface, /完整采集进度[\s\S]*查看采集任务明细/);
+  assert.match(uiSurface, /报价新鲜度/);
+  assert.match(uiSurface, /确认依据证据（可搜索）[\s\S]*sourcing-evidence-options/);
+  assert.match(uiSurface, /结构化采购创建[\s\S]*锁定报价版本[\s\S]*采购数量/);
+  assert.doesNotMatch(uiSurface, /window\.prompt/);
   assert.match(costRuleUi, /route\.query\.from[\s\S]*返回当前找货记录/);
   assert.match(css, /sourcing-comparison-grid[\s\S]*sourcing-compare-tray/);
   assert.match(architecture, /blocked_login[\s\S]*不伪造登录续期入口/);

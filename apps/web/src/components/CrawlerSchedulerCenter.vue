@@ -30,6 +30,14 @@ interface Dto {
     active_crawler: number;
     duplicate_count: number;
   };
+  expired_leases: {
+    total: number;
+    task_count: number;
+    worker: number;
+    crawler: number;
+    provider: number;
+    oldest_expired_at: string | null;
+  };
   active_leases: Array<{
     slot_type: "worker" | "crawler" | "provider";
     provider_name: string | null;
@@ -73,6 +81,18 @@ interface Dto {
     free_disk_mb: number;
     observed_at: string;
   };
+  receipt_spool: null | {
+    pending_count: number;
+    pending_bytes: number;
+    quarantined_count: number;
+    quarantined_bytes: number;
+    oldest_pending_at: string | null;
+    retention_days: number;
+    max_bytes: number;
+    minimum_free_disk_mb: number;
+    free_disk_mb: number;
+    observed_at: string;
+  };
   findings: Array<{
     code: string;
     severity: "warning" | "blocked";
@@ -94,6 +114,33 @@ const data = ref<Dto | null>(null),
   circuitConfirm = ref<Dto["providers"][number] | null>(null),
   providerRecovering = ref(""),
   saving = ref(false);
+const queueSummary = computed(() => {
+  const providers = data.value?.providers ?? [];
+  return {
+    queued: providers.reduce((sum, item) => sum + item.queued_tasks, 0),
+    oldest: providers.reduce(
+      (oldest, item) => Math.max(oldest, item.longest_queue_wait_seconds),
+      0,
+    ),
+    starvationRisks: providers.filter(
+      (item) =>
+        item.queued_tasks > 0 &&
+        item.sample_count_24h > 0 &&
+        item.queue_wait_p95_seconds > 0 &&
+        item.longest_queue_wait_seconds > item.queue_wait_p95_seconds,
+    ).length,
+  };
+});
+const expiredLeaseImpact = computed(() => {
+  const impact = data.value?.expired_leases;
+  if (!impact || impact.total === 0) return "当前没有过期租约；确认后不会修改任何活动槽位。";
+  const types = [
+    impact.worker ? `Worker ${impact.worker}` : "",
+    impact.crawler ? `Crawler ${impact.crawler}` : "",
+    impact.provider ? `来源 ${impact.provider}` : "",
+  ].filter(Boolean);
+  return `将回收 ${impact.total} 个过期槽位（${types.join("、")}），关联 ${impact.task_count} 个采集任务；最早于 ${impact.oldest_expired_at ? time(impact.oldest_expired_at) : "时间未知"} 到期。活动租约不会被修改。`;
+});
 const verdict = computed(
   () =>
     (
@@ -135,6 +182,20 @@ const milliseconds = (value: number | null) =>
     : value < 1000
       ? `${Math.round(value)} ms`
       : `${(value / 1000).toFixed(1)} 秒`;
+const bytes = (value: number) => {
+  if (value < 1024) return `${value} B`;
+  if (value < 1024 * 1024) return `${(value / 1024).toFixed(1)} KB`;
+  if (value < 1024 * 1024 * 1024) return `${(value / 1024 / 1024).toFixed(1)} MB`;
+  return `${(value / 1024 / 1024 / 1024).toFixed(1)} GB`;
+};
+const queueRiskText = (item: Dto["providers"][number]) => {
+  if (item.queued_tasks === 0) return "无排队，无饥饿风险";
+  if (item.sample_count_24h === 0 || item.queue_wait_p95_seconds <= 0)
+    return "缺少近 24 小时等待基线，需持续观察";
+  if (item.longest_queue_wait_seconds > item.queue_wait_p95_seconds)
+    return "最长等待已高于近 24 小时 P95，存在饥饿风险";
+  return "最长等待仍在近 24 小时 P95 范围内";
+};
 const status = (kind: ApiFailureKind): State =>
   kind === "expired" || kind === "forbidden" || kind === "rate_limited" ? kind : "unavailable";
 
@@ -284,6 +345,17 @@ onMounted(() => {
             </div>
             <span>配置值会被单机上限收紧到 1</span>
           </header>
+          <section class="crawler-scheduler__queue-summary" aria-label="采集排队摘要">
+            <article>
+              <small>待领取任务</small><strong>{{ queueSummary.queued }}</strong>
+            </article>
+            <article>
+              <small>最老等待</small><strong>{{ duration(queueSummary.oldest) }}</strong>
+            </article>
+            <article>
+              <small>饥饿风险来源</small><strong>{{ queueSummary.starvationRisks }}</strong>
+            </article>
+          </section>
           <div class="crawler-scheduler__sources">
             <p v-if="message" class="crawler-scheduler__operation-message" aria-live="polite">
               {{ message }}
@@ -317,6 +389,7 @@ onMounted(() => {
                 >等待分位 P50 {{ duration(item.queue_wait_p50_seconds) }} · P95
                 {{ duration(item.queue_wait_p95_seconds) }}</small
               >
+              <small class="crawler-scheduler__queue-risk">{{ queueRiskText(item) }}</small>
               <small
                 >24 小时成功率 {{ rate(item.success_rate_basis_points_24h) }} · 耗时 P95
                 {{ milliseconds(item.duration_p95_ms_24h) }} · 样本
@@ -372,6 +445,49 @@ onMounted(() => {
           </dl>
         </aside>
       </div>
+      <section class="crawler-scheduler__panel crawler-scheduler__receipts">
+        <header>
+          <div>
+            <p>完成回执</p>
+            <h3>容量、保留期与磁盘水位</h3>
+          </div>
+          <span v-if="data.receipt_spool">观测于 {{ time(data.receipt_spool.observed_at) }}</span>
+          <span v-else>等待 Python Crawler 上报</span>
+        </header>
+        <div v-if="data.receipt_spool" class="crawler-scheduler__receipt-grid">
+          <article>
+            <small>待回写</small><strong>{{ data.receipt_spool.pending_count }}</strong>
+            <span>{{ bytes(data.receipt_spool.pending_bytes) }}</span>
+          </article>
+          <article>
+            <small>隔离待审阅</small><strong>{{ data.receipt_spool.quarantined_count }}</strong>
+            <span>{{ bytes(data.receipt_spool.quarantined_bytes) }}</span>
+          </article>
+          <article>
+            <small>最老待回写</small>
+            <strong>{{
+              data.receipt_spool.oldest_pending_at
+                ? time(data.receipt_spool.oldest_pending_at)
+                : "无积压"
+            }}</strong>
+            <span>保留期 {{ data.receipt_spool.retention_days }} 天；到期只告警，不自动删除</span>
+          </article>
+          <article>
+            <small>目录容量</small>
+            <strong>{{
+              bytes(data.receipt_spool.pending_bytes + data.receipt_spool.quarantined_bytes)
+            }}</strong>
+            <span>告警上限 {{ bytes(data.receipt_spool.max_bytes) }}</span>
+          </article>
+          <article>
+            <small>所在磁盘可用</small><strong>{{ data.receipt_spool.free_disk_mb }} MB</strong>
+            <span>停止线 {{ data.receipt_spool.minimum_free_disk_mb }} MB</span>
+          </article>
+        </div>
+        <p v-else class="crawler-scheduler__empty">
+          尚无受限回执目录观测；调度保持阻断，重启 Python Crawler 后重新核验。
+        </p>
+      </section>
       <section class="crawler-scheduler__panel crawler-scheduler__trend">
         <header>
           <div>
@@ -458,7 +574,7 @@ onMounted(() => {
       :open="confirming"
       title="回收过期调度租约？"
       description="仅删除服务端确认已经过期的 Worker、Crawler 与来源调度槽位。"
-      impact="不会终止有效任务，不会删除采集历史、审计或浏览器档案。"
+      :impact="expiredLeaseImpact"
       confirm-label="确认回收"
       confirmation-text="确认回收"
       @cancel="confirming = false"

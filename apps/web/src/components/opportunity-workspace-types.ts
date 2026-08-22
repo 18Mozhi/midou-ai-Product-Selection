@@ -14,6 +14,8 @@ export interface OpportunitySummary {
   source_ref_id: string | null;
   owner_id: string | null;
   lifecycle_status: string;
+  lifecycle_entered_at: string;
+  lifecycle_dwell_seconds: number;
   recommendation_status: string;
   overall_score: number | null;
   trend_score: number | null;
@@ -33,6 +35,16 @@ export interface OpportunitySummary {
 }
 
 export interface OpportunityDetail extends OpportunitySummary {
+  adoption_blockers: Array<{
+    code: "evidence_insufficient" | "recommendation_insufficient";
+    status: "blocked" | "in_progress" | "cleared";
+    progress_percent: number | null;
+    next_action: string;
+    task_id: string | null;
+    task_status: string | null;
+    score_job_status: string | null;
+  }>;
+  redecision_ready: boolean;
   score_rule_version: string | null;
   scored_at: string | null;
   latest_score_run: null | {
@@ -112,5 +124,30 @@ export interface OpportunityProfitAnalysis {
     observed_at: string;
     input_version: number;
     platform: string;
+  }>;
+  cost_input_reviews: Array<{
+    id: string;
+    cost_input_id: string;
+    input_type: "sale_price" | "purchase_price" | "logistics";
+    amount_value: number;
+    currency: string;
+    platform: string;
+    source_type: string;
+    source_ref_id: string;
+    evidence_id: string;
+    observed_at: string;
+    input_version: number;
+    submitter_id: string;
+    submitter_label: string;
+    reviewer_id: string;
+    reviewer_label: string;
+    status: "pending" | "approved" | "rejected";
+    due_at: string;
+    overdue: boolean;
+    decision_reason: string | null;
+    reviewed_at: string | null;
+    version: number;
+    created_at: string;
+    can_review: boolean;
   }>;
 }

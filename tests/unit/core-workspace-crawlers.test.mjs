@@ -197,16 +197,23 @@ test("core workspace migration is MySQL 5.7 compatible and keeps crawler project
 test("core list pages expose explicit detail and operational actions", async () => {
   const [tasks, opportunities, competitors, sourcing] = await Promise.all(
     [
-      "TaskWorkspace.vue",
+      ["TaskWorkspace.vue", "TaskListPanel.vue", "TaskDetailPanel.vue"],
       "OpportunityWorkspace.vue",
       "CompetitorMonitor.vue",
-      "SourcingWorkspace.vue",
-    ].map((name) => readFile(`apps/web/src/components/${name}`, "utf8")),
+      ["SourcingWorkspace.vue", "SourcingComparisonPanel.vue"],
+    ].map((name) =>
+      Array.isArray(name)
+        ? Promise.all(name.map((file) => readFile(`apps/web/src/components/${file}`, "utf8"))).then(
+            (parts) => parts.join("\n"),
+          )
+        : readFile(`apps/web/src/components/${name}`, "utf8"),
+    ),
   );
   assert.match(tasks, /查看详情.*删除/s);
   assert.match(opportunities, /采集 Amazon 竞品.*采集公开供应商/s);
   assert.match(competitors, /立即采集.*采集快照.*删除竞品监控/s);
-  assert.match(sourcing, /重新采集.*供应商报价对比历史.*删除找货记录/s);
+  assert.match(sourcing, /重新采集.*删除找货记录/s);
+  assert.match(sourcing, /供应商报价对比历史/);
 });
 
 test("opportunity summaries reuse crawled Amazon images and real downstream counts", async () => {
@@ -232,7 +239,13 @@ test("sourcing lists show opportunity names while retaining internal trace ids",
 });
 
 test("collection worker quarantines exhausted queue entries without blocking fresh crawls", async () => {
-  const worker = await readFile("apps/worker/src/collection-task-worker.ts", "utf8");
+  const worker = (
+    await Promise.all(
+      ["collection-task-state-machine.ts", "collection-task-dead-letter.ts"].map((name) =>
+        readFile(`apps/worker/src/${name}`, "utf8"),
+      ),
+    )
+  ).join("\n");
   assert.match(worker, /status='queued' AND attempt_count>=4/);
   assert.match(worker, /collection_attempt_overflow/);
   assert.match(worker, /status='queued' AND attempt_count<4/);
@@ -240,7 +253,13 @@ test("collection worker quarantines exhausted queue entries without blocking fre
 });
 
 test("automatic downstream tasks use crawler contracts and recover malformed historic tasks", async () => {
-  const worker = await readFile("apps/worker/src/trend-projection-worker.ts", "utf8");
+  const worker = (
+    await Promise.all(
+      ["trend-projection-worker.ts", "trend-projection-persistence.ts"].map((name) =>
+        readFile(`apps/worker/src/${name}`, "utf8"),
+      ),
+    )
+  ).join("\n");
   assert.match(worker, /page_url: String\(row\.product_url\)/);
   assert.match(worker, /page_url: canonicalUrl/);
   assert.match(worker, /JSON_EXTRACT\(q\.target_json,'\$\.page_url'\).*IS NOT NULL/s);
@@ -266,6 +285,145 @@ test("adapter failures keep their source error across duplicated package instanc
     retryable: false,
     status: "degraded",
   });
+});
+
+test("RSS execution distinguishes empty success, parse failure and no new content", async () => {
+  const [{ ProviderSourceExecutor }, { ProviderAdapterFailure }] = await Promise.all([
+      import("../../apps/worker/dist/provider-source-executor.js"),
+      import("../../packages/provider-adapters/dist/index.js"),
+    ]),
+    provider = {
+      id: "55555555-5555-4555-8555-555555555559",
+      code: "rss-result-kind-test",
+      access_mode: "public_rss",
+      target_url: "https://example.test/feed.xml",
+      parser_version: "rss-result-kind-v1",
+      timeout_ms: 20000,
+      fields_json: ["title"],
+      status: "enabled",
+      circuit_failure_threshold: 3,
+      terms_review_status: "approved",
+      terms_reference_url: "https://example.test/terms",
+      terms_version: "2026-08",
+      terms_expires_at: "2099-08-31T00:00:00.000Z",
+      created_by: "66666666-6666-4666-8666-666666666666",
+    },
+    completedEvents = [],
+    pool = {
+      query: async (sql, values = []) => {
+        if (sql.includes("FROM providers p")) return [[provider]];
+        if (sql.startsWith("SELECT state,consecutive_failures")) return [[]];
+        if (sql.includes("INSERT INTO collection_task_events"))
+          completedEvents.push(JSON.parse(values[8]));
+        return [{ affectedRows: 1 }];
+      },
+    },
+    record = {
+      externalId: "rss-existing-item",
+      observedAt: "2026-08-22T01:00:00.000Z",
+      evidenceRef: "syndication-feed:rss-existing-item",
+      payload: {
+        raw_content: "<item><title>Existing</title></item>",
+        content_type: "application/rss+xml",
+        canonical_url: "https://example.test/existing",
+        fields: { title: "Existing" },
+        source_paths: { title: "rss.item.title" },
+      },
+    },
+    task = {
+      id: "33333333-3333-4333-8333-333333333339",
+      organizationId: "11111111-1111-4111-8111-111111111111",
+      workspaceId: "22222222-2222-4222-8222-222222222222",
+      attemptCount: 1,
+      requestId: "rss-result-kind",
+      traceId: "rss-result-kind",
+      leaseToken: "unused",
+      subqueries: [
+        {
+          id: "44444444-4444-4444-8444-444444444449",
+          providerId: provider.id,
+          ordinal: 0,
+          required: false,
+          target: {},
+        },
+      ],
+    };
+  let scenario = "empty";
+  const registry = {
+      collect: async () => {
+        if (scenario === "empty") throw new ProviderAdapterFailure("empty_result", true);
+        if (scenario === "parse") throw new ProviderAdapterFailure("invalid_payload", false);
+        return { records: [record], nextCursor: null };
+      },
+      normalize: (_code, raw, context) => ({
+        external_id: raw.externalId,
+        observed_at: raw.observedAt,
+        canonical_url: raw.payload.canonical_url,
+        fields: raw.payload.fields,
+        evidence_ref: raw.evidenceRef,
+        provenance: {
+          provider_id: context.provider.id,
+          adapter_key: context.provider.code,
+          adapter_version: "rss-result-kind-adapter-v1",
+          parser_version: context.provider.parserVersion,
+        },
+      }),
+    },
+    evidence = {
+      persist: async () => ({
+        evidence_id: "existing-evidence",
+        normalized_record_id: "existing-record",
+        deduplicated: true,
+      }),
+    },
+    executor = new ProviderSourceExecutor(
+      withTransactionConnection(pool),
+      registry,
+      evidence,
+      "rss-result-kind-test",
+    );
+
+  let [outcome] = await executor.execute(task, async () => {});
+  assert.deepEqual(
+    {
+      status: outcome.status,
+      errorCode: outcome.errorCode,
+      resultKind: outcome.resultKind,
+    },
+    { status: "succeeded_empty", errorCode: null, resultKind: "empty_success" },
+  );
+  scenario = "parse";
+  [outcome] = await executor.execute(task, async () => {});
+  assert.deepEqual(
+    {
+      status: outcome.status,
+      errorCode: outcome.errorCode,
+      resultKind: outcome.resultKind,
+    },
+    { status: "failed", errorCode: "parse_failed", resultKind: "parse_failed" },
+  );
+  scenario = "duplicate";
+  [outcome] = await executor.execute(task, async () => {});
+  assert.deepEqual(
+    {
+      status: outcome.status,
+      availableResultCount: outcome.availableResultCount,
+      resultKind: outcome.resultKind,
+      freshResultCount: outcome.freshResultCount,
+      deduplicatedResultCount: outcome.deduplicatedResultCount,
+    },
+    {
+      status: "succeeded_empty",
+      availableResultCount: 0,
+      resultKind: "no_new_content",
+      freshResultCount: 0,
+      deduplicatedResultCount: 1,
+    },
+  );
+  assert.deepEqual(
+    completedEvents.slice(-3).map((event) => event.result_kind),
+    ["empty_success", "parse_failed", "no_new_content"],
+  );
 });
 
 test("optional supplier failure keeps the second public crawler running", async () => {

@@ -29,6 +29,7 @@ npm run verify:module -- M03-01
 - 409：刷新最新版本，或为新的业务操作生成新的 Idempotency-Key。
 - `public_source_compliance_required`：公开来源尚未批准条款或缺少 HTTPS 参考地址，保持禁用并由负责人复核。
 - `robots_disallowed`：目标路径被同源 robots 明确禁止，任务进入 robots 受阻；不得绕过，先由负责人复核来源政策。
+- robots 判定审计：在采集任务详情展开对应子查询，核对 `scoutops-robots-policy-v1`、命中 User-agent、Allow/Disallow 规则预览与 HTTP 状态。规则预览被截断时使用同一事件中的 SHA-256 对照原始 robots 文本；没有判定元数据的旧任务不得补猜命中规则。
 - 503/blocked：在宝塔检查 Node API 和 MySQL 状态、连接数与错误日志，携带 request_id/trace_id 定位。
 - 页面空态：表示尚未登记来源，不得以示例数据填充。
 

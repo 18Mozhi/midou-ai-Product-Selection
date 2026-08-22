@@ -458,6 +458,35 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       await c.beginTransaction();
       await c.query(
         [
+          "INSERT INTO crawler_completion_spool_status(crawler_id,pending_count,pending_bytes,",
+          "quarantined_count,quarantined_bytes,oldest_pending_at,retention_days,max_bytes,",
+          "minimum_free_disk_mb,free_disk_mb,request_id,trace_id,observed_at) ",
+          "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE ",
+          "pending_count=VALUES(pending_count),pending_bytes=VALUES(pending_bytes),",
+          "quarantined_count=VALUES(quarantined_count),",
+          "quarantined_bytes=VALUES(quarantined_bytes),oldest_pending_at=VALUES(oldest_pending_at),",
+          "retention_days=VALUES(retention_days),max_bytes=VALUES(max_bytes),",
+          "minimum_free_disk_mb=VALUES(minimum_free_disk_mb),free_disk_mb=VALUES(free_disk_mb),",
+          "request_id=VALUES(request_id),trace_id=VALUES(trace_id),observed_at=VALUES(observed_at)",
+        ].join(""),
+        [
+          input.leaseOwner,
+          input.completionSpool.pendingCount,
+          input.completionSpool.pendingBytes,
+          input.completionSpool.quarantinedCount,
+          input.completionSpool.quarantinedBytes,
+          input.completionSpool.oldestPendingAt,
+          input.completionSpool.retentionDays,
+          input.completionSpool.maxBytes,
+          input.completionSpool.minimumFreeDiskMb,
+          input.completionSpool.freeDiskMb,
+          input.requestId,
+          input.traceId,
+          input.now,
+        ],
+      );
+      await c.query(
+        [
           "UPDATE crawler_browser_runs r JOIN browser_collection_jobs j ON j.crawler_run_id=r.id SET ",
           "r.status='timed_out',r.error_code='lease_expired',r.finished_at=? WHERE j.status='leased' AND ",
           "j.lease_expires_at<=? AND r.status='running'",

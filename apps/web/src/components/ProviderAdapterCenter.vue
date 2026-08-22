@@ -28,6 +28,23 @@ interface AdapterSummary {
   runtime_parser_failure_count_24h: number;
   runtime_login_failure_count_24h: number;
   runtime_empty_success_count_24h: number;
+  runtime_circuit_state: "closed" | "open";
+  runtime_consecutive_failures: number;
+  runtime_failure_threshold: number;
+  runtime_error_budget_remaining: number;
+  runtime_last_error_code: string | null;
+  runtime_circuit_opened_at: string | null;
+  runtime_last_recovered_at: string | null;
+  runtime_recovery_gate_met: boolean;
+  compatibility_matrix: Array<{
+    parser_version: string;
+    page_version_sha256: string;
+    status: "compatible" | "incompatible" | "mixed" | "unverified";
+    observation_count: number;
+    succeeded_count: number;
+    parser_failure_count: number;
+    last_observed_at: string;
+  }>;
   version: number;
   updated_at: string;
 }
@@ -79,6 +96,16 @@ const accessModeText = (value: string) =>
       empty: "成功但无结果",
       other: "其他异常",
     })[value],
+  circuitText = (item: AdapterSummary) =>
+    item.runtime_circuit_state === "open" ? "来源已暂停" : "来源可调度",
+  recoveryText = (item: AdapterSummary) =>
+    item.runtime_circuit_state === "closed"
+      ? item.runtime_last_recovered_at
+        ? `最近恢复 ${item.runtime_last_recovered_at.slice(0, 19).replace("T", " ")}`
+        : "当前无需恢复"
+      : item.runtime_recovery_gate_met
+        ? "健康检查已通过，可前往采集调度解除暂停"
+        : "需要执行晚于暂停时间的真实健康检查",
   percentText = (value: number | null) =>
     value === null ? "暂无样本" : `${(value / 100).toFixed(1)}%`;
 const filtered = computed(() =>
@@ -158,6 +185,11 @@ onMounted(load);
           ><strong>{{ items.filter((x) => x.health_status === "ready").length }}</strong
           ><span>仅真实探针可变为 ready</span>
         </article>
+        <article>
+          <small>来源暂停</small
+          ><strong>{{ items.filter((x) => x.runtime_circuit_state === "open").length }}</strong
+          ><span>按各来源连续失败阈值</span>
+        </article>
       </div>
       <div class="adapter-toolbar">
         <label
@@ -222,6 +254,7 @@ onMounted(load);
                   <th>实现</th>
                   <th>健康</th>
                   <th>24 小时运行</th>
+                  <th>错误预算与恢复门</th>
                   <th>最近检查</th>
                   <th></th>
                 </tr>
@@ -263,6 +296,20 @@ onMounted(load);
                       {{ item.runtime_parser_failure_count_24h }} · 登录
                       {{ item.runtime_login_failure_count_24h }} · 空结果
                       {{ item.runtime_empty_success_count_24h }}</small
+                    >
+                  </td>
+                  <td>
+                    <b :data-circuit="item.runtime_circuit_state">{{ circuitText(item) }}</b>
+                    <small
+                      >连续失败 {{ item.runtime_consecutive_failures }} / 阈值
+                      {{ item.runtime_failure_threshold }} · 剩余
+                      {{ item.runtime_error_budget_remaining }}</small
+                    >
+                    <small>{{ recoveryText(item) }}</small>
+                    <RouterLink
+                      v-if="item.runtime_circuit_state === 'open' && item.runtime_recovery_gate_met"
+                      to="/platform-admin/crawler-scheduler"
+                      >前往解除暂停</RouterLink
                     >
                   </td>
                   <td>
@@ -330,6 +377,17 @@ onMounted(load);
               <dd>{{ row.runtime_duration_p95_ms_24h ?? "—" }} ms</dd>
             </div>
             <div>
+              <dt>错误预算</dt>
+              <dd>
+                连续失败 {{ row.runtime_consecutive_failures }} / 阈值
+                {{ row.runtime_failure_threshold }}，剩余 {{ row.runtime_error_budget_remaining }}
+              </dd>
+            </div>
+            <div>
+              <dt>来源运行状态</dt>
+              <dd>{{ circuitText(row) }}；{{ recoveryText(row) }}</dd>
+            </div>
+            <div>
               <dt>运行问题分布</dt>
               <dd>
                 网络 {{ row.runtime_network_failure_count_24h }} · 解析
@@ -356,6 +414,11 @@ onMounted(load);
           <button type="button" :disabled="probing === row.id" @click="probe(row)">
             {{ probing === row.id ? "检查中…" : "执行健康检查" }}
           </button>
+          <RouterLink
+            v-if="row.runtime_circuit_state === 'open' && row.runtime_recovery_gate_met"
+            to="/platform-admin/crawler-scheduler"
+            >前往采集调度解除暂停</RouterLink
+          >
           <details>
             <summary>技术详情</summary>
             <dl>
@@ -378,6 +441,14 @@ onMounted(load);
               <div>
                 <dt>错误码</dt>
                 <dd>{{ row.last_error_code ?? "—" }}</dd>
+              </div>
+              <div>
+                <dt>运行错误码</dt>
+                <dd>{{ row.runtime_last_error_code ?? "—" }}</dd>
+              </div>
+              <div>
+                <dt>暂停时间</dt>
+                <dd>{{ row.runtime_circuit_opened_at ?? "—" }}</dd>
               </div>
             </dl>
           </details>

@@ -468,6 +468,21 @@ test("system status aggregates real operations observations and management links
   page,
 }) => {
   await nav(page);
+  await page.addInitScript(() =>
+    sessionStorage.setItem(
+      "scoutops:realtime-client-metrics",
+      JSON.stringify({
+        session_started_at: "2026-08-18T11:30:00.000Z",
+        connection_open_count: 8,
+        reconnect_count: 2,
+        fallback_poll_count: 2,
+        last_open_at: "2026-08-18T11:59:30.000Z",
+        last_reconnect_at: "2026-08-18T11:59:00.000Z",
+        last_fallback_poll_at: "2026-08-18T11:59:01.000Z",
+        reconnecting: false,
+      }),
+    ),
+  );
   await page.route("**/api/v1/platform/management?**", (route) =>
     route.fulfill({
       json: env({
@@ -537,12 +552,166 @@ test("system status aggregates real operations observations and management links
   );
   await page.goto("/platform-admin/status");
   await expect(page.getByRole("heading", { name: "系统状态", level: 2 })).toBeVisible();
-  await expect(page.getByText("Python Crawler")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "依赖拓扑与故障传播", level: 3 })).toBeVisible();
+  await expect(page.getByText("访问入口", { exact: true })).toBeVisible();
+  await expect(page.getByText("共享依赖", { exact: true })).toBeVisible();
+  await expect(page.getByText("异步执行", { exact: true })).toBeVisible();
+  await expect(page.getByText("Python Crawler", { exact: true })).toBeVisible();
   await expect(page.getByText("1 个实例 · 1 个活动任务")).toBeVisible();
-  await expect(page.getByRole("link", { name: "Redis", exact: true })).toHaveAttribute(
-    "href",
-    "/platform-admin/redis",
+  const propagation = page.locator(".platform-propagation");
+  await expect(propagation.getByText("Redis当前警告", { exact: true })).toBeVisible();
+  await expect(propagation.getByText("文件存储当前已过期", { exact: true })).toBeVisible();
+  await expect(propagation).toContainText("API 就绪、队列协调、限流与实时通知");
+  await expect(propagation).toContainText("证据保存、报表导出与采集回执暂存");
+  const realtime = page.getByRole("region", { name: "实时连接退化统计" });
+  await expect(realtime.getByText("SSE 重连率", { exact: true })).toBeVisible();
+  await expect(realtime.getByText("20.00%", { exact: true })).toBeVisible();
+  await expect(realtime.getByText("降级轮询次数", { exact: true })).toBeVisible();
+  await expect(realtime.getByText("2", { exact: true })).toBeVisible();
+  await expect(realtime).toContainText("仅统计当前浏览器标签页会话");
+  await expect(
+    page.locator(".platform-topology-node").filter({ hasText: /^Redis/ }),
+  ).toHaveAttribute("href", "/platform-admin/redis");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+    .toBe(true);
+});
+
+test("chain logs group trace events and deep-link exceptional task and source facts", async ({
+  page,
+}) => {
+  await nav(page);
+  let exportBody: Record<string, string> | null = null;
+  await page.route("**/api/v1/platform/management/logs/exports", async (route) => {
+    exportBody = route.request().postDataJSON();
+    await route.fulfill({
+      status: 200,
+      contentType: "text/csv; charset=utf-8",
+      headers: {
+        "content-disposition": 'attachment; filename="platform-logs.csv"',
+        "x-request-id": "request-log-export",
+      },
+      body: "\ufeffoccurred_at,trace_id,source\r\n2026-08-18T12:00:02.000Z,trace-shared,crawler",
+    });
+  });
+  await page.route("**/api/v1/platform/management?**", (route) =>
+    route.fulfill({
+      json: env({
+        domain: "logs",
+        summary: { total: 3, api: 1, worker: 1, crawler: 1 },
+        items: [
+          {
+            id: "crawler-event",
+            source: "crawler",
+            event_type: "crawler.run.failed",
+            resource_type: "crawler_run",
+            resource_id: "00000000-0000-4000-8000-000000000613",
+            status: "failed",
+            error_code: "blocked_login",
+            request_id: "request-crawler",
+            trace_id: "trace-shared",
+            occurred_at: "2026-08-18T12:00:02.000Z",
+            task_id: "00000000-0000-4000-8000-000000000611",
+            provider_id: "00000000-0000-4000-8000-000000000612",
+            provider_name: "1688 网页采集",
+          },
+          {
+            id: "api-event",
+            source: "api",
+            event_type: "collection.task.read",
+            resource_type: "collection_task",
+            resource_id: "00000000-0000-4000-8000-000000000611",
+            status: "succeeded",
+            error_code: null,
+            request_id: "request-api",
+            trace_id: "trace-shared",
+            occurred_at: "2026-08-18T12:00:01.000Z",
+            task_id: null,
+            provider_id: null,
+            provider_name: null,
+          },
+          {
+            id: "worker-event",
+            source: "worker",
+            event_type: "collection.task.failed",
+            resource_type: "collection_task",
+            resource_id: "00000000-0000-4000-8000-000000000614",
+            status: "failed_terminal",
+            error_code: "parser_failed",
+            request_id: "request-worker",
+            trace_id: "trace-worker",
+            occurred_at: "2026-08-18T11:59:00.000Z",
+            task_id: "00000000-0000-4000-8000-000000000614",
+            provider_id: null,
+            provider_name: null,
+          },
+        ],
+        observed_at: "2026-08-18T12:00:03.000Z",
+      }),
+    }),
   );
+  await page.goto("/platform-admin/logs");
+  await expect(page.getByText("调用链 2 条", { exact: true })).toBeVisible();
+  const sharedChain = page.locator(".platform-log-chain").filter({ hasText: "trace-shared" });
+  await expect(sharedChain).toContainText("2 个事件 · 1 个异常");
+  const workerChain = page.locator(".platform-log-chain").filter({ hasText: "trace-worker" });
+  if ((page.viewportSize()?.width ?? 1280) <= 760) {
+    const sharedEvents = sharedChain.locator(".responsive-data-view__mobile article > button");
+    await expect(sharedEvents.first()).toContainText("collection.task.read");
+    await expect(sharedEvents.last()).toContainText("crawler.run.failed");
+    await sharedEvents.last().click();
+    const crawlerDetail = page.getByRole("dialog", { name: "爬虫 · crawler.run.failed" });
+    await expect(crawlerDetail.getByRole("link", { name: "查看关联任务" })).toHaveAttribute(
+      "href",
+      /\/platform-admin\/collection\?task=/,
+    );
+    await expect(crawlerDetail.getByRole("link", { name: "查看关联来源" })).toHaveAttribute(
+      "href",
+      /\/platform-admin\/providers\/sources\?provider_id=/,
+    );
+    await crawlerDetail.getByRole("button", { name: "关闭详情" }).click();
+    await workerChain.locator(".responsive-data-view__mobile article > button").click();
+    const workerDetail = page.getByRole("dialog", { name: "Worker · collection.task.failed" });
+    await expect(workerDetail.getByRole("link", { name: "查看关联任务" })).toBeVisible();
+    await expect(workerDetail.getByRole("link", { name: "查看关联来源" })).toHaveCount(0);
+    await workerDetail.getByRole("button", { name: "关闭详情" }).click();
+  } else {
+    await expect(sharedChain.locator("tbody tr").first()).toContainText("collection.task.read");
+    await expect(sharedChain.locator("tbody tr").last()).toContainText("crawler.run.failed");
+    await expect(sharedChain.getByRole("link", { name: "查看关联任务" })).toHaveAttribute(
+      "href",
+      /\/platform-admin\/collection\?task=/,
+    );
+    await expect(sharedChain.getByRole("link", { name: "查看关联来源" })).toHaveAttribute(
+      "href",
+      /\/platform-admin\/providers\/sources\?provider_id=/,
+    );
+    await expect(workerChain.getByRole("link", { name: "查看关联任务" })).toBeVisible();
+    await expect(workerChain.getByRole("link", { name: "查看关联来源" })).toHaveCount(0);
+  }
+  const logQuery = page.getByPlaceholder("请求编号、链路编号、任务、事件或错误码");
+  if (!(await logQuery.isVisible())) {
+    await page.getByRole("button", { name: "筛选链路日志" }).click();
+  }
+  await logQuery.fill("trace-shared");
+  await page.getByLabel("运行面").selectOption("crawler");
+  const mobileFilter = page.getByRole("dialog", { name: "筛选链路日志" });
+  if (await mobileFilter.isVisible()) {
+    await mobileFilter.getByRole("button", { name: "关闭筛选条件" }).click();
+  }
+  await page.getByRole("button", { name: "导出当前筛选" }).click();
+  const dialog = page.getByRole("dialog", { name: "填写日志导出原因" });
+  await expect(dialog).toBeVisible();
+  const download = page.waitForEvent("download");
+  await dialog.getByRole("button", { name: "确认提交" }).click();
+  await download;
+  expect(exportBody).toEqual({
+    query: "trace-shared",
+    source: "crawler",
+    reason: "导出当前链路日志用于故障排查",
+  });
+  await expect(page.getByText("当前筛选日志已导出", { exact: false })).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))

@@ -4,6 +4,10 @@ import {
   PlatformDashboardError,
   type PlatformDashboardRepository,
 } from "./platform-dashboard-service.js";
+import { readPlatformCollectionMetrics } from "./mysql-platform-dashboard-collection-metrics.js";
+import { readPlatformRiskMetrics } from "./mysql-platform-dashboard-risk-metrics.js";
+import { readPlatformScaleMetrics } from "./mysql-platform-dashboard-scale-metrics.js";
+import { readPlatformStorageMetrics } from "./mysql-platform-dashboard-storage-metrics.js";
 const n = (v: any) => Number(v ?? 0),
   iso = (v: any) => (v ? new Date(v).toISOString() : null);
 export class MySqlPlatformDashboardRepository implements PlatformDashboardRepository {
@@ -16,77 +20,23 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
   async read(i: any) {
     const since = new Date(this.now().getTime() - i.windowMinutes * 60000),
       now = this.now();
-    const [
-      [orgs],
-      [users],
-      [providers],
-      [tasks],
-      [quality],
-      [storage],
-      [queues],
-      [providerRows],
-      [trend],
-      [alerts],
-      [activity],
-    ] = await Promise.all([
-      this.pool.query<RowDataPacket[]>(
-        "SELECT COUNT(*) total FROM organizations WHERE status='active'",
-      ),
-      this.pool.query<RowDataPacket[]>("SELECT COUNT(*) total FROM users WHERE status='active'"),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT COUNT(*) total FROM providers WHERE status='enabled'",
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT SUM(status IN ('succeeded','succeeded_empty','completed_with_warnings')) success_count," +
-          "SUM(status IN ('failed_terminal','dead_letter')) failed_count,SUM(status IN ('queued'," +
-          "'leased','running','parsing','validating','retry_scheduled')) queue_backlog," +
-          "SUM(lease_expires_at IS NOT NULL AND lease_expires_at<? AND status IN ('leased'," +
-          "'running')) expired_leases FROM collection_tasks WHERE updated_at>=?",
-        [now, since],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT SUM(status='open') open_count,SUM(status='open' AND severity='critical') critical_count FROM data_quality_issues",
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT COALESCE(SUM(CASE WHEN status='active' THEN size_bytes ELSE 0 END)," +
-          "0) total_bytes,COALESCE(SUM(CASE WHEN status='active' AND created_at>=? THEN size_bytes " +
-          "ELSE 0 END),0) growth_bytes FROM file_assets",
-        [since],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT status,COUNT(*) total FROM collection_tasks WHERE status IN ('queued'," +
-          "'leased','running','parsing','validating','retry_scheduled','failed_terminal'," +
-          "'dead_letter') GROUP BY status ORDER BY status",
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT p.id,p.code,p.name,COUNT(s.id) observed_count,SUM(s.status IN ('succeeded'," +
-          "'succeeded_empty')) success_count,SUM(s.status IN ('failed','blocked')) failed_count," +
-          "MAX(s.updated_at) last_observed_at FROM providers p LEFT JOIN collection_subqueries " +
-          "s ON s.provider_id=p.id AND s.updated_at>=? WHERE p.status='enabled' GROUP BY p.id," +
-          "p.code,p.name ORDER BY p.name",
-        [since],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT DATE_FORMAT(updated_at,IF(?<=1440,'%Y-%m-%d %H:00:00','%Y-%m-%d 00:00:00')) bucket," +
-          "SUM(status IN ('succeeded','succeeded_empty','completed_with_warnings')) succeeded," +
-          "SUM(status IN ('failed_terminal','dead_letter')) failed FROM collection_tasks WHERE " +
-          "updated_at>=? GROUP BY bucket ORDER BY bucket",
-        [i.windowMinutes, since],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT id,organization_id,workspace_id,'quality' kind,severity,metric_code code," +
-          "updated_at observed_at FROM data_quality_issues WHERE status='open' UNION ALL SELECT " +
-          "id,organization_id,workspace_id,'task' kind,IF(status='dead_letter','critical'," +
-          "'warning') severity,COALESCE(last_error_code,status) code,updated_at observed_at FROM " +
-          "collection_tasks WHERE status IN ('failed_terminal','dead_letter') ORDER BY observed_at " +
-          "DESC LIMIT ?",
-        [this.errorLimit],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT action,outcome,resource_type,request_id,occurred_at FROM platform_audit_events ORDER BY occurred_at DESC LIMIT 10",
-      ),
-    ]);
-    const terminal = n(tasks[0]?.success_count) + n(tasks[0]?.failed_count),
+    const [scale, collection, risk, storage] = await Promise.all([
+        readPlatformScaleMetrics(this.pool),
+        readPlatformCollectionMetrics(this.pool, { since, now, windowMinutes: i.windowMinutes }),
+        readPlatformRiskMetrics(this.pool, this.errorLimit),
+        readPlatformStorageMetrics(this.pool, since),
+      ]),
+      orgs = scale.organizations,
+      users = scale.users,
+      providers = scale.providers,
+      tasks = collection.tasks,
+      queues = collection.queues,
+      providerRows = collection.providers,
+      trend = collection.trend,
+      quality = risk.quality,
+      alerts = risk.alerts,
+      activity = risk.activity;
+    const terminal = n(tasks?.success_count) + n(tasks?.failed_count),
       provider_health = providerRows.map((r: any) => {
         const observed = n(r.observed_count),
           fail = n(r.failed_count),
@@ -102,21 +52,20 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           last_observed_at: iso(r.last_observed_at),
         };
       });
-    const openAlerts =
-      n(quality[0]?.open_count) + n(tasks[0]?.failed_count) + n(tasks[0]?.expired_leases);
+    const openAlerts = n(quality?.open_count) + n(tasks?.failed_count) + n(tasks?.expired_leases);
     const result = {
       window: i.window,
       summary: {
-        active_organizations: n(orgs[0]?.total),
-        active_users: n(users[0]?.total),
-        enabled_providers: n(providers[0]?.total),
+        active_organizations: n(orgs?.total),
+        active_users: n(users?.total),
+        enabled_providers: n(providers?.total),
         task_success_rate: terminal
-          ? Math.round((n(tasks[0]?.success_count) * 10000) / terminal) / 100
+          ? Math.round((n(tasks?.success_count) * 10000) / terminal) / 100
           : null,
-        queue_backlog: n(tasks[0]?.queue_backlog),
+        queue_backlog: n(tasks?.queue_backlog),
         open_alerts: openAlerts,
-        storage_bytes: n(storage[0]?.total_bytes),
-        file_growth_bytes: n(storage[0]?.growth_bytes),
+        storage_bytes: n(storage?.total_bytes),
+        file_growth_bytes: n(storage?.growth_bytes),
       },
       queues: queues.map((r: any) => ({ status: r.status, total: n(r.total) })),
       provider_health,
@@ -129,23 +78,23 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         { code: "mysql", status: "healthy", value: "query_succeeded" },
         {
           code: "queue",
-          status: n(tasks[0]?.queue_backlog) >= this.queueWarning ? "warning" : "healthy",
-          value: n(tasks[0]?.queue_backlog),
+          status: n(tasks?.queue_backlog) >= this.queueWarning ? "warning" : "healthy",
+          value: n(tasks?.queue_backlog),
         },
         {
           code: "expired_leases",
-          status: n(tasks[0]?.expired_leases) > 0 ? "critical" : "healthy",
-          value: n(tasks[0]?.expired_leases),
+          status: n(tasks?.expired_leases) > 0 ? "critical" : "healthy",
+          value: n(tasks?.expired_leases),
         },
         {
           code: "data_quality",
           status:
-            n(quality[0]?.critical_count) > 0
+            n(quality?.critical_count) > 0
               ? "critical"
-              : n(quality[0]?.open_count) > 0
+              : n(quality?.open_count) > 0
                 ? "warning"
                 : "healthy",
-          value: n(quality[0]?.open_count),
+          value: n(quality?.open_count),
         },
       ],
       alerts: alerts.map((r: any) => ({
@@ -178,7 +127,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           JSON.stringify({
             window: i.window,
             open_alerts: openAlerts,
-            queue_backlog: n(tasks[0]?.queue_backlog),
+            queue_backlog: n(tasks?.queue_backlog),
           }),
           now,
         ],
@@ -200,24 +149,27 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       const [rows] = await this.pool.query<RowDataPacket[]>(
         `SELECT * FROM (
           SELECT 'api' source,id,action event_type,resource_type,resource_id,outcome status,
-            NULL error_code,request_id,trace_id,occurred_at
+            NULL error_code,request_id,trace_id,occurred_at,NULL task_id,NULL provider_id,
+            NULL provider_name
           FROM platform_audit_events
           WHERE (?='%' OR ?='api') AND (action LIKE ? OR resource_type LIKE ? OR
             COALESCE(resource_id,'') LIKE ? OR request_id LIKE ? OR trace_id LIKE ?)
           UNION ALL
           SELECT 'worker' source,id,event_type,'collection_task' resource_type,task_id resource_id,
             to_status status,JSON_UNQUOTE(JSON_EXTRACT(metadata_json,'$.error_code')) error_code,
-            request_id,trace_id,occurred_at
+            request_id,trace_id,occurred_at,task_id task_id,NULL provider_id,NULL provider_name
           FROM collection_task_events
           WHERE (?='%' OR ?='worker') AND (event_type LIKE ? OR task_id LIKE ? OR
             request_id LIKE ? OR trace_id LIKE ? OR
             COALESCE(JSON_UNQUOTE(JSON_EXTRACT(metadata_json,'$.error_code')),'') LIKE ?)
           UNION ALL
-          SELECT 'crawler' source,id,CONCAT('crawler.run.',status) event_type,
-            'crawler_run' resource_type,id resource_id,status,error_code,request_id,trace_id,started_at occurred_at
-          FROM crawler_browser_runs
-          WHERE (?='%' OR ?='crawler') AND (id LIKE ? OR status LIKE ? OR
-            COALESCE(error_code,'') LIKE ? OR request_id LIKE ? OR trace_id LIKE ?)
+          SELECT 'crawler' source,r.id,CONCAT('crawler.run.',r.status) event_type,
+            'crawler_run' resource_type,r.id resource_id,r.status,r.error_code,r.request_id,r.trace_id,
+            r.started_at occurred_at,j.collection_task_id task_id,r.provider_id,p.name provider_name
+          FROM crawler_browser_runs r JOIN providers p ON p.id=r.provider_id
+          LEFT JOIN browser_collection_jobs j ON j.crawler_run_id=r.id
+          WHERE (?='%' OR ?='crawler') AND (r.id LIKE ? OR r.status LIKE ? OR
+            COALESCE(r.error_code,'') LIKE ? OR r.request_id LIKE ? OR r.trace_id LIKE ?)
         ) operational_logs ORDER BY occurred_at DESC,id DESC LIMIT 200`,
         [
           status,
@@ -1360,6 +1312,34 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           entity: i.entity,
           query: i.query,
           status: i.status,
+          reason: i.reason,
+          row_count: data.items.length,
+        }),
+        i.now,
+      ],
+    );
+    return data;
+  }
+  async exportLogs(i: any) {
+    const data: any = await this.readManagement({
+      ...i,
+      domain: "logs",
+      entity: "trends",
+      status: i.source,
+    });
+    await this.pool.query(
+      "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+        "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
+        "schema_version) VALUES(?,NULL,NULL,?,'platform.logs.export','operational_logs'," +
+        "NULL,'succeeded',?,?,?,?,1)",
+      [
+        randomUUID(),
+        i.actorId,
+        i.requestId,
+        i.traceId,
+        JSON.stringify({
+          query: i.query,
+          source: i.source,
           reason: i.reason,
           row_count: data.items.length,
         }),

@@ -7,7 +7,7 @@
     {"id":"M02-02.A04","evidence":"existing authenticated identity and tenancy services reused unchanged"},
     {"id":"M02-02.A05","evidence":"existing auth delivery outbox retained with no new UI-owned async work"},
     {"id":"M02-02.A06","evidence":"existing OpenAPI auth and context contracts consumed without invented fields"},
-    {"id":"M02-02.A07","evidence":"reference-grounded login registration recovery verification tenancy onboarding layouts"},
+    {"id":"M02-02.A07","evidence":"reference-grounded login registration recovery verification tenancy onboarding layouts with 44px brand and compact mobile auxiliary actions"},
     {"id":"M02-02.A08","evidence":"keyboard forms loading success error expired blocked and recovery interactions"},
     {"id":"M02-02.A09","evidence":"HttpOnly session and server-side organization workspace guards preserved"},
     {"id":"M02-02.A10","evidence":"existing browser allowlist and Baota configuration reused without new values"},

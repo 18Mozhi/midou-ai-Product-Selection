@@ -108,10 +108,10 @@ export function registerProviderSourceRoutes(app: FastifyInstance, o: ProviderSo
     return envelope(result, r);
   });
   app.get("/api/v1/platform/provider-sources/:providerId/parser-samples", async (r, reply) => {
-    await actor(r, "provider:configure");
+    const actorId = await actor(r, "provider:configure");
     reply.header("cache-control", "private, no-store");
     return envelope(
-      await o.service.parserSamples((r.params as { providerId: string }).providerId),
+      await o.service.parserSamples((r.params as { providerId: string }).providerId, actorId),
       r,
     );
   });
@@ -135,6 +135,21 @@ export function registerProviderSourceRoutes(app: FastifyInstance, o: ProviderSo
           idempotencyKey: requireIdempotencyKey(r),
           ...ids(r),
         });
+      reply.code(201);
+      return envelope(result, r);
+    },
+  );
+  app.post(
+    "/api/v1/platform/provider-sources/:providerId/parser-samples/:sampleId/reviews",
+    async (r, reply) => {
+      const actorId = await write(r, "provider:configure"),
+        params = r.params as { providerId: string; sampleId: string },
+        result = await o.service.reviewParserSample(
+          params.providerId,
+          params.sampleId,
+          r.body as never,
+          { actorId, idempotencyKey: requireIdempotencyKey(r), ...ids(r) },
+        );
       reply.code(201);
       return envelope(result, r);
     },

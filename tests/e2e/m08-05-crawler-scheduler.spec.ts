@@ -11,6 +11,14 @@ const envelope = (data: unknown) => ({ data, request_id: "m08-05-e2e", trace_id:
       maximum_crawlers: 1,
     },
     leases: { active_worker: 0, active_crawler: 0, duplicate_count: 0 },
+    expired_leases: {
+      total: 3,
+      task_count: 1,
+      worker: 1,
+      crawler: 1,
+      provider: 1,
+      oldest_expired_at: "2026-08-15T07:55:00.000Z",
+    },
     active_leases: [],
     providers: [
       {
@@ -20,7 +28,7 @@ const envelope = (data: unknown) => ({ data, request_id: "m08-05-e2e", trace_id:
         effective_concurrency: 1,
         active_leases: 0,
         queued_tasks: 3,
-        longest_queue_wait_seconds: 125,
+        longest_queue_wait_seconds: 180,
         queue_wait_p50_seconds: 45,
         queue_wait_p95_seconds: 125,
         sample_count_24h: 20,
@@ -88,8 +96,17 @@ test("M08-05.A07/A08/A15 desktop and 390 single-host scheduler truth", async ({ 
   await expect(page.getByRole("heading", { level: 2, name: "运行与配额" })).toBeVisible();
   await expect(page.getByText("采集调度已就绪")).toBeVisible();
   await expect(page.getByText("1 / 1")).toHaveCount(2);
-  await expect(page.getByText("等待 3 个任务 · 最长 2 分钟")).toBeVisible();
+  await expect(page.getByText("等待 3 个任务 · 最长 3 分钟")).toBeVisible();
   await expect(page.getByText("等待 0 个任务 · 最长 0 秒")).toBeVisible();
+  await expect(page.getByRole("region", { name: "采集排队摘要" })).toContainText(
+    "待领取任务3最老等待3 分钟饥饿风险来源1",
+  );
+  await expect(page.getByText("最长等待已高于近 24 小时 P95，存在饥饿风险")).toBeVisible();
+  await page.getByRole("button", { name: "回收过期租约" }).click();
+  await expect(page.getByRole("heading", { name: "回收过期调度租约？" })).toBeVisible();
+  await expect(page.getByText(/将回收 3 个过期槽位.*Worker 1.*Crawler 1.*来源 1/)).toBeVisible();
+  await expect(page.getByText(/关联 1 个采集任务/)).toBeVisible();
+  await page.getByRole("button", { name: "取消" }).click();
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();

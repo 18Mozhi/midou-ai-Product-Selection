@@ -212,6 +212,11 @@ test("等待老化让低优先级队列最终获得执行机会", async () => {
   scheduler.start();
   await waitFor(() => events.length === 1);
   nowMs += 60;
+  const agedQueue = scheduler.snapshot().queues.find((queue) => queue.name === "low-aged");
+  assert.equal(agedQueue.aging_interval_ms, 1);
+  assert.equal(agedQueue.maximum_aging_boost, 100);
+  assert.equal(agedQueue.effective_priority - agedQueue.priority, 60);
+  assert.equal(agedQueue.queue_delay_ms, 60);
   releaseHigh();
   await waitFor(() => events.length === 2);
   assert.deepEqual(events, ["high", "low"]);
@@ -325,6 +330,23 @@ test("运行拓扑统一收敛卡死、队列熔断与快照异常", async () =>
             deferred_total: 0,
             suspected_stuck: true,
             circuit_state: "open",
+            last_result_at: now.toISOString(),
+            last_result_status: "failed_terminal",
+            last_result_error_code: "source_changed",
+            last_business_objects: [
+              {
+                type: "collection_task",
+                id: "collection-task-1",
+                label: "采集任务",
+                href: "/platform-admin/collection?task=collection-task-1",
+              },
+              {
+                type: "collection_task",
+                id: "unsafe-task",
+                label: "外部地址",
+                href: "https://example.invalid/task",
+              },
+            ],
           },
         ],
         observed_at: now.toISOString(),
@@ -343,8 +365,27 @@ test("运行拓扑统一收敛卡死、队列熔断与快照异常", async () =>
       "worker_scheduler_suspected_stuck",
       "worker_scheduler_queue_circuit_open",
       "worker_scheduler_snapshot_publish_failed",
+      "worker_business_result_failed",
     ],
   );
+  assert.deepEqual(result.alerts[0].queues, ["collection_tasks"]);
+  assert.deepEqual(result.alerts[1].queues, ["collection_tasks"]);
+  assert.deepEqual(result.alerts.at(-1), {
+    code: "worker_business_result_failed",
+    severity: "warning",
+    actionHint: "打开关联业务对象核对失败事实；没有精确对象时仅按队列继续排查。",
+    root_cause_code: "source_changed",
+    queues: ["collection_tasks"],
+    business_objects: [
+      {
+        type: "collection_task",
+        id: "collection-task-1",
+        label: "采集任务",
+        href: "/platform-admin/collection?task=collection-task-1",
+      },
+    ],
+    occurred_at: now.toISOString(),
+  });
   assert.equal((await service.businessHealth()).status, "unavailable");
 });
 
@@ -375,4 +416,68 @@ test("业务可用性端点独立于存活和依赖就绪端点", async () => {
   assert.equal(response.headers["cache-control"], "no-store");
   assert.equal(response.headers["x-request-id"], "business-health");
   await app.close();
+});
+
+test("Worker 结果只保留允许关联的业务对象和错误码", async () => {
+  const { normalizeQueueRunObservation } = await import("../../apps/worker/dist/worker-pollers.js");
+  assert.deepEqual(
+    normalizeQueueRunObservation("collection_tasks", {
+      status: "failed_terminal",
+      task_id: "collection-task-1",
+      error_code: "source_changed",
+      payload: "must-not-leak",
+      token: "must-not-leak",
+    }),
+    {
+      status: "failed_terminal",
+      error_code: "source_changed",
+      business_objects: [
+        {
+          type: "collection_task",
+          id: "collection-task-1",
+          label: "采集任务",
+          href: "/platform-admin/collection?task=collection-task-1",
+        },
+      ],
+    },
+  );
+  assert.equal(normalizeQueueRunObservation("collection_tasks", { status: "idle" }), null);
+});
+
+test("调度快照保存最近业务失败关联但不保存原始结果载荷", async () => {
+  const { QueueScheduler } = await import("../../apps/worker/dist/queue-scheduler.js");
+  const scheduler = new QueueScheduler({ maxConcurrency: 1, tickMs: 5 });
+  scheduler.register({
+    name: "opportunity_scoring",
+    priority: 50,
+    intervalMs: 10_000,
+    run: async () => ({
+      status: "failed_terminal",
+      error_code: "score_blocked_by_data_quality_regression",
+      business_objects: [
+        {
+          type: "opportunity",
+          id: "opportunity-1",
+          label: "选品机会",
+          href: "/opportunities/opportunity-1",
+        },
+      ],
+      raw_snapshot: "must-not-leak",
+    }),
+  });
+  scheduler.start();
+  await waitFor(() => scheduler.snapshot().completed_total === 1);
+  const queue = scheduler.snapshot().queues[0];
+  assert.equal(queue.last_result_status, "failed_terminal");
+  assert.equal(queue.last_result_error_code, "score_blocked_by_data_quality_regression");
+  assert.deepEqual(queue.last_business_objects, [
+    {
+      type: "opportunity",
+      id: "opportunity-1",
+      label: "选品机会",
+      href: "/opportunities/opportunity-1",
+    },
+  ]);
+  assert.doesNotMatch(JSON.stringify(queue), /must-not-leak|raw_snapshot/);
+  await scheduler.stop();
 });

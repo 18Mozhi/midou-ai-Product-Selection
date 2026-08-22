@@ -1,1 +1,50 @@
-{"moduleId":"M03-01","phaseId":"P03","name":"来源注册中心","dependencies":["M01-06","M02-03"],"atomicTasks":[{"id":"M03-01.A01","evidence":"platform-global provider registry scope and non-goals"},{"id":"M03-01.A02","evidence":"versioned provider technical contract"},{"id":"M03-01.A03","evidence":"MySQL57 provider current version audit operation migrations"},{"id":"M03-01.A04","evidence":"validated version locked idempotent provider service"},{"id":"M03-01.A05","evidence":"registry is synchronous; scheduling deferred to owning modules"},{"id":"M03-01.A06","evidence":"OpenAPI list create update provider contracts"},{"id":"M03-01.A07","evidence":"platform provider table and editor desktop 390"},{"id":"M03-01.A08","evidence":"loading empty error conflict disabled and recovery states"},{"id":"M03-01.A09","evidence":"platform provider configure authorization and no organization exposure"},{"id":"M03-01.A10","evidence":"no new runtime secrets or environment values"},{"id":"M03-01.A11","evidence":"correlated provider audit and version history"},{"id":"M03-01.A12","evidence":"validation enablement version and idempotency unit tests"},{"id":"M03-01.A13","evidence":"OpenAPI DTO frontend contract"},{"id":"M03-01.A14","evidence":"MySQL57 version audit idempotency and cleanup"},{"id":"M03-01.A15","evidence":"Playwright desktop 390 provider visual"},{"id":"M03-01.A16","evidence":"conflict forbidden dependency and rollback drill"},{"id":"M03-01.A17","evidence":"blueprint Feature Map env runbook migration rollback"}],"commands":["npm run build","node --test tests/m03-01/provider-registry.test.mjs","node scripts/verify-provider-registry-live.mjs","npx playwright test tests/e2e/m03-01-provider-registry.spec.ts","npm run verify:docs"]}
+{
+  "moduleId": "M03-01",
+  "phaseId": "P03",
+  "name": "来源注册中心",
+  "dependencies": ["M01-06", "M02-03"],
+  "atomicTasks": [
+    { "id": "M03-01.A01", "evidence": "platform-global provider registry scope and non-goals" },
+    { "id": "M03-01.A02", "evidence": "versioned provider technical contract" },
+    {
+      "id": "M03-01.A03",
+      "evidence": "MySQL57 provider current version audit operation migrations"
+    },
+    { "id": "M03-01.A04", "evidence": "validated version locked idempotent provider service" },
+    {
+      "id": "M03-01.A05",
+      "evidence": "registry is synchronous; scheduling deferred to owning modules"
+    },
+    { "id": "M03-01.A06", "evidence": "OpenAPI list create update provider contracts" },
+    { "id": "M03-01.A07", "evidence": "platform provider table and editor desktop 390" },
+    { "id": "M03-01.A08", "evidence": "loading empty error conflict disabled and recovery states" },
+    {
+      "id": "M03-01.A09",
+      "evidence": "platform provider configure authorization and no organization exposure"
+    },
+    { "id": "M03-01.A10", "evidence": "no new runtime secrets or environment values" },
+    {
+      "id": "M03-01.A11",
+      "evidence": "correlated provider audit version history and versioned robots matched-rule decision metadata"
+    },
+    {
+      "id": "M03-01.A12",
+      "evidence": "validation enablement version idempotency and robots decision unit tests"
+    },
+    {
+      "id": "M03-01.A13",
+      "evidence": "OpenAPI DTO frontend and validated robots decision projection contract"
+    },
+    { "id": "M03-01.A14", "evidence": "MySQL57 version audit idempotency and cleanup" },
+    { "id": "M03-01.A15", "evidence": "Playwright desktop 390 provider visual" },
+    { "id": "M03-01.A16", "evidence": "conflict forbidden dependency and rollback drill" },
+    { "id": "M03-01.A17", "evidence": "blueprint Feature Map env runbook migration rollback" }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m03-01/provider-registry.test.mjs",
+    "node scripts/verify-provider-registry-live.mjs",
+    "npx playwright test tests/e2e/m03-01-provider-registry.spec.ts",
+    "npm run verify:docs"
+  ]
+}

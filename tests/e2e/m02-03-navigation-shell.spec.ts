@@ -179,8 +179,37 @@ for (const item of [
     await expect(
       page.getByText(/navigation_(member|organization_admin|platform_admin)_allowed/),
     ).toHaveCount(0);
+    const roleLabel =
+      item.shell === "member"
+        ? "普通成员"
+        : item.shell === "organization_admin"
+          ? "组织管理员"
+          : "平台超级管理员";
+    await expect(page.locator(".role-sidebar").getByText(roleLabel)).toBeVisible();
+    await expect(
+      page
+        .locator(".role-sidebar")
+        .getByText(item.shell === "platform_admin" ? "platform_super_admin" : item.shell, {
+          exact: true,
+        }),
+    ).toHaveCount(0);
     await expect(page).toHaveScreenshot(item.snapshot, { fullPage: true });
   });
+
+test("platform navigation searches grouped business and advanced operations menus", async ({
+  page,
+}) => {
+  await allow(page, "platform_admin");
+  await page.goto("/platform-admin");
+  const sidebar = page.locator(".role-sidebar");
+  const search = sidebar.getByRole("searchbox", { name: "搜索导航菜单" });
+  await search.fill("高级运维");
+  await expect(sidebar.getByText("高级运维", { exact: true })).toBeVisible();
+  await expect(sidebar.getByRole("link", { name: "系统运维" })).toBeVisible();
+  await expect(sidebar.getByText("业务运营", { exact: true })).toHaveCount(0);
+  await search.fill("不存在的菜单");
+  await expect(sidebar.getByText("没有匹配的菜单或分组。")).toBeVisible();
+});
 
 test("M02-03.A08 mobile drawer is keyboard operable", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -285,6 +314,8 @@ test("M02-03.A16 forbidden shell shows request id and safe recovery", async ({ p
   );
   await page.goto("/platform-admin");
   await expect(page.getByRole("heading", { name: "无权进入此工作台" })).toBeVisible();
+  await expect(page.getByText("关联编号：m02-03-forbidden")).not.toBeVisible();
+  await page.getByText("故障详情", { exact: true }).click();
   await expect(page.getByText("关联编号：m02-03-forbidden")).toBeVisible();
   await expect(page.getByRole("link", { name: "返回成员工作台" })).toHaveAttribute("href", "/home");
 });

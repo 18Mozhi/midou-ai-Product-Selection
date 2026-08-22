@@ -20,4 +20,4 @@ M07-03 当前部署目标为惠州 `192.168.1.220`、`midouai.mozhiz.cn` 与 `/w
 
 ## 自动证据
 
-`scripts/verify-baota-deployment.mjs --preflight` 校验固定目标、六类基础面板对象、构建产物、本地上传器、配置分组、Nginx、Python 心跳、外部管理器禁令和秘密边界。`--production` 额外要求 manifest healthy，并读取符合 `verification/baota-production-evidence.schema.json` 的忽略文件；证据 commit 必须等于当前 Git HEAD，并覆盖版本、配置指纹、迁移版本、面板对象、live/ready/version、Worker/Crawler 心跳、MySQL 5.7/utf8mb4、本机 Redis 和宝塔日志。缺失、过期或矛盾时返回 blocked/failed。
+`scripts/deploy-baota.py` 在 Git fetch、构建、Windows 凭据读取和上传之前先要求工作树干净，并依次执行 `format:check`、运行文档一致性与发布矩阵门；因此格式或发布合同错误不会拖到远端连接阶段。构建完成后（含 `--skip-build` 复用产物）再执行 `scripts/verify-baota-deployment.mjs --preflight`，校验固定目标、六类基础面板对象、构建产物、本地上传器、配置分组、Nginx、Python 心跳、外部管理器禁令和秘密边界，只有通过才允许打包和读取凭据。`--production` 额外要求 manifest healthy，并读取符合 `verification/baota-production-evidence.schema.json` 的忽略文件；证据 commit 必须等于当前 Git HEAD，并覆盖版本、配置指纹、迁移版本、面板对象、live/ready/version、Worker/Crawler 心跳、MySQL 5.7/utf8mb4、本机 Redis 和宝塔日志。缺失、过期或矛盾时返回 blocked/failed。

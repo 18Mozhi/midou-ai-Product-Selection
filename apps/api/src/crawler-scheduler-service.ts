@@ -47,6 +47,14 @@ export interface CrawlerSchedulerSnapshot {
   active_worker_leases: number;
   active_crawler_leases: number;
   duplicate_lease_count: number;
+  expired_leases: {
+    total: number;
+    task_count: number;
+    worker: number;
+    crawler: number;
+    provider: number;
+    oldest_expired_at: string | null;
+  };
   active_leases: CrawlerSchedulerLeaseAssociation[];
   providers: CrawlerSchedulerProvider[];
   profiles: CrawlerSchedulerProfile[];
@@ -60,6 +68,18 @@ export interface CrawlerSchedulerSnapshot {
   resource: {
     load_basis_points: number;
     available_memory_mb: number;
+    free_disk_mb: number;
+    observed_at: string;
+  };
+  receipt_spool: null | {
+    pending_count: number;
+    pending_bytes: number;
+    quarantined_count: number;
+    quarantined_bytes: number;
+    oldest_pending_at: string | null;
+    retention_days: number;
+    max_bytes: number;
+    minimum_free_disk_mb: number;
     free_disk_mb: number;
     observed_at: string;
   };
@@ -175,6 +195,43 @@ export function evaluateCrawlerScheduler(
     snapshot.resource.free_disk_mb < Math.ceil(policy.minimumFreeDiskMb * 1.25)
   )
     warning("crawler_resource_warning", "资源接近停止线，暂缓扩大任务量并持续观察。");
+  const spool = snapshot.receipt_spool;
+  if (!spool)
+    blocked("crawler_completion_spool_missing", "重启 Python Crawler 并确认完成回执水位已上报。");
+  else {
+    const observedAge = (now.getTime() - Date.parse(spool.observed_at)) / 1000,
+      totalBytes = spool.pending_bytes + spool.quarantined_bytes,
+      oldestAgeDays = spool.oldest_pending_at
+        ? (now.getTime() - Date.parse(spool.oldest_pending_at)) / 86_400_000
+        : 0;
+    if (!Number.isFinite(observedAge) || observedAge < 0 || observedAge > policy.staleAfterSeconds)
+      blocked("crawler_completion_spool_stale", "检查 Python Crawler 运行状态并恢复水位上报。");
+    if (spool.free_disk_mb < spool.minimum_free_disk_mb)
+      blocked(
+        "crawler_completion_spool_disk_stop",
+        "停止领取新作业并通过宝塔恢复受限运行目录磁盘水位。",
+      );
+    if (totalBytes >= spool.max_bytes)
+      blocked(
+        "crawler_completion_spool_capacity_stop",
+        "停止领取新作业，优先恢复回写并人工审阅隔离回执。",
+      );
+    else if (totalBytes >= Math.round(spool.max_bytes * 0.8))
+      warning(
+        "crawler_completion_spool_capacity_warning",
+        "回执目录已达到容量上限的 80%，优先恢复回写。",
+      );
+    if (spool.oldest_pending_at && oldestAgeDays >= spool.retention_days)
+      warning(
+        "crawler_completion_spool_retention_warning",
+        "最老待回写回执已达到保留期；修复回写合同后人工处理，系统不会自动删除。",
+      );
+    if (spool.quarantined_count > 0)
+      warning(
+        "crawler_completion_spool_quarantine_pending",
+        "隔离区存在重复不可重试或结构损坏回执，请按 correlation 人工审阅。",
+      );
+  }
   return {
     state: findings.some((item) => item.severity === "blocked")
       ? "blocked"
@@ -215,11 +272,13 @@ export class CrawlerSchedulerService {
         active_crawler: snapshot.active_crawler_leases,
         duplicate_count: snapshot.duplicate_lease_count,
       },
+      expired_leases: snapshot.expired_leases,
       active_leases: snapshot.active_leases,
       providers: snapshot.providers,
       profiles: snapshot.profiles,
       trend: snapshot.trend,
       resource: snapshot.resource,
+      receipt_spool: snapshot.receipt_spool,
       findings: evaluation.findings,
       observed_at: observedAt.toISOString(),
       capacity_claim: "unverified",

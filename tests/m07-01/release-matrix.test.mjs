@@ -98,6 +98,22 @@ test("M07-01 keeps mocked screenshots below the frozen ratio and reuses mobile o
   assert.match(helper, /role-mobile-nav/);
 });
 
+test("M07-01 runs desktop and mobile browser projects with independent service lifecycles", async () => {
+  const [runner, functional, verifier, packageJson] = await Promise.all([
+    readFile(resolve(root, "scripts/run-playwright-projects.mjs"), "utf8"),
+    readFile(resolve(root, "scripts/verify-functional.mjs"), "utf8"),
+    readFile(resolve(root, "scripts/verify-release-matrix.mjs"), "utf8"),
+    readFile(resolve(root, "package.json"), "utf8").then(JSON.parse),
+  ]);
+  assert.match(runner, /\["desktop-chromium", "mobile-390"\]/);
+  assert.match(runner, /for \(const project of projects\)/);
+  assert.match(runner, /spawnSync/);
+  assert.match(runner, /--project=\$\{project\}/);
+  assert.equal(packageJson.scripts["test:e2e"], "node scripts/run-playwright-projects.mjs");
+  assert.match(functional, /run-playwright-projects\.mjs/);
+  assert.match(verifier, /run-playwright-projects\.mjs/);
+});
+
 test("M07-01.A17 blueprint performance budgets are immutable matrix values", () => {
   assert.deepEqual(matrix.performanceTargets, {
     newMemberJourneyMs: 180000,

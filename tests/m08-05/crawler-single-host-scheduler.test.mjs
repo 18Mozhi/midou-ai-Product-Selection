@@ -5,6 +5,8 @@ import test from "node:test";
 const required = [
   "database/migrations/0034_crawler_scheduler_m08_05.up.sql",
   "database/migrations/0034_crawler_scheduler_m08_05.down.sql",
+  "database/migrations/0061_crawler_completion_spool_status.up.sql",
+  "database/migrations/0061_crawler_completion_spool_status.down.sql",
   "apps/api/src/crawler-scheduler-service.ts",
   "apps/api/src/crawler-scheduler-repository.ts",
   "apps/api/src/crawler-scheduler-routes.ts",
@@ -74,12 +76,32 @@ test("M08-05.A02/A04/A12 fails closed on process counts leases provider quotas a
     active_worker_leases: 0,
     active_crawler_leases: 0,
     duplicate_lease_count: 0,
+    expired_leases: {
+      total: 0,
+      task_count: 0,
+      worker: 0,
+      crawler: 0,
+      provider: 0,
+      oldest_expired_at: null,
+    },
     active_leases: [],
     providers: [provider],
     profiles: [{ id: "profile", active_leases: 0 }],
     resource: {
       load_basis_points: 3000,
       available_memory_mb: 4096,
+      free_disk_mb: 8192,
+      observed_at: "2026-08-15T08:00:00.000Z",
+    },
+    receipt_spool: {
+      pending_count: 0,
+      pending_bytes: 0,
+      quarantined_count: 0,
+      quarantined_bytes: 0,
+      oldest_pending_at: null,
+      retention_days: 30,
+      max_bytes: 536870912,
+      minimum_free_disk_mb: 4096,
       free_disk_mb: 8192,
       observed_at: "2026-08-15T08:00:00.000Z",
     },
@@ -120,6 +142,38 @@ test("M08-05.A02/A04/A12 fails closed on process counts leases provider quotas a
     ).state,
     "blocked",
   );
+  const receiptWarning = evaluateCrawlerScheduler(
+    {
+      ...base,
+      receipt_spool: {
+        ...base.receipt_spool,
+        pending_bytes: 450_000_000,
+        quarantined_count: 2,
+        oldest_pending_at: "2026-07-15T08:00:00.000Z",
+      },
+    },
+    policy,
+    new Date("2026-08-15T08:00:30.000Z"),
+  );
+  assert.equal(receiptWarning.state, "warning");
+  for (const code of [
+    "crawler_completion_spool_capacity_warning",
+    "crawler_completion_spool_retention_warning",
+    "crawler_completion_spool_quarantine_pending",
+  ])
+    assert.ok(receiptWarning.findings.some((item) => item.code === code));
+  const receiptBlocked = evaluateCrawlerScheduler(
+    {
+      ...base,
+      receipt_spool: { ...base.receipt_spool, free_disk_mb: 2048 },
+    },
+    policy,
+    new Date("2026-08-15T08:00:30.000Z"),
+  );
+  assert.equal(receiptBlocked.state, "blocked");
+  assert.ok(
+    receiptBlocked.findings.some((item) => item.code === "crawler_completion_spool_disk_stop"),
+  );
 });
 
 test("M08-05 scheduler evaluates resource freshness after the host probe completes", async () => {
@@ -132,10 +186,30 @@ test("M08-05 scheduler evaluates resource freshness after the host probe complet
       active_worker_leases: 0,
       active_crawler_leases: 0,
       duplicate_lease_count: 0,
+      expired_leases: {
+        total: 0,
+        task_count: 0,
+        worker: 0,
+        crawler: 0,
+        provider: 0,
+        oldest_expired_at: null,
+      },
       active_leases: [],
       providers: [],
       profiles: [],
       trend: [],
+      receipt_spool: {
+        pending_count: 0,
+        pending_bytes: 0,
+        quarantined_count: 0,
+        quarantined_bytes: 0,
+        oldest_pending_at: null,
+        retention_days: 30,
+        max_bytes: 536870912,
+        minimum_free_disk_mb: 4096,
+        free_disk_mb: 8192,
+        observed_at: clock.toISOString(),
+      },
     }),
     record: async (input) => {
       recorded = input;
@@ -222,6 +296,44 @@ test("M08-05 independently observes the Node Worker and BaoTa Python Crawler", a
   assert.match(pythonProjects[0].startCommand, /python -m scoutops_crawler/);
 });
 
+test("M08-05 Python Crawler separates main loop lease execution receipts and transport", async () => {
+  const [
+    entrypoint,
+    mainLoop,
+    leases,
+    execution,
+    receipts,
+    transport,
+    facade,
+    feature,
+    architecture,
+  ] = await Promise.all(
+    [
+      "apps/crawler/scoutops_crawler/__main__.py",
+      "apps/crawler/scoutops_crawler/main_loop.py",
+      "apps/crawler/scoutops_crawler/lease_client.py",
+      "apps/crawler/scoutops_crawler/execution_runner.py",
+      "apps/crawler/scoutops_crawler/completion_receipts.py",
+      "apps/crawler/scoutops_crawler/runtime_transport.py",
+      "apps/crawler/scoutops_crawler/runtime_client.py",
+      "docs/feature-map.json",
+      "docs/architecture/m08-05-crawler-single-host-scheduler.md",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  assert.match(entrypoint, /from \.main_loop import run_loop/);
+  assert.doesNotMatch(entrypoint, /PlaywrightBridge|client\.heartbeat|client\.complete/);
+  assert.match(mainLoop, /def run_once[\s\S]*execute_lease[\s\S]*client\.complete/);
+  assert.match(leases, /class CrawlerLeaseClient[\s\S]*def acquire[\s\S]*def heartbeat/);
+  assert.match(execution, /def execute_lease[\s\S]*PlaywrightBridge/);
+  assert.match(receipts, /class CompletionReceiptClient[\s\S]*created_at[\s\S]*_pending_sort_key/);
+  assert.match(transport, /class CrawlerRuntimeTransport[\s\S]*max_attempts/);
+  assert.match(facade, /CrawlerLeaseClient[\s\S]*CompletionReceiptClient/);
+  for (const copy of [feature, architecture]) {
+    assert.match(copy, /main_loop\.py|主循环/);
+    assert.match(copy, /completion_receipts\.py|终态回执/);
+  }
+});
+
 test("M08-05.A04/A06/A09 operations route is platform-only and never returns lease tokens", async () => {
   const { buildApp } = await import("../../apps/api/dist/app.js");
   const calls = [],
@@ -235,6 +347,14 @@ test("M08-05.A04/A06/A09 operations route is platform-only and never returns lea
         maximum_crawlers: 1,
       },
       leases: { active_worker: 0, active_crawler: 0, duplicate_count: 0 },
+      expired_leases: {
+        total: 0,
+        task_count: 0,
+        worker: 0,
+        crawler: 0,
+        provider: 0,
+        oldest_expired_at: null,
+      },
       active_leases: [],
       providers: [],
       profiles: [],
@@ -325,6 +445,7 @@ test("M08-05.A03/A05/A10/A13 migration config and runtime enforce one Worker and
     up,
     down,
     worker,
+    workerStateMachine,
     crawler,
     openapi,
     featureMap,
@@ -338,6 +459,7 @@ test("M08-05.A03/A05/A10/A13 migration config and runtime enforce one Worker and
       "database/migrations/0034_crawler_scheduler_m08_05.up.sql",
       "database/migrations/0034_crawler_scheduler_m08_05.down.sql",
       "apps/worker/src/collection-task-worker.ts",
+      "apps/worker/src/collection-task-state-machine.ts",
       "apps/api/src/mysql-crawler-runtime-repository.ts",
       "docs/openapi.yaml",
       "docs/feature-map.json",
@@ -356,7 +478,8 @@ test("M08-05.A03/A05/A10/A13 migration config and runtime enforce one Worker and
   assert.match(up, /utf8mb4/);
   assert.doesNotMatch(up, /CHECK\s*\(|utf8mb4_0900|INVISIBLE\s+INDEX/i);
   assert.match(down, /DROP TABLE IF EXISTS `crawler_scheduler_leases`/);
-  assert.match(worker, /crawler_scheduler_leases/);
+  assert.match(worker, /MySqlCollectionTaskWorkerRepository/);
+  assert.match(workerStateMachine, /crawler_scheduler_leases/);
   assert.match(crawler, /crawler_scheduler_leases/);
   const config = loadRuntimeConfig(
     {
@@ -415,6 +538,14 @@ test("M08-05 scheduler observation write has a complete transaction and matching
       active_worker_leases: 0,
       active_crawler_leases: 0,
       duplicate_lease_count: 0,
+      expired_leases: {
+        total: 0,
+        task_count: 0,
+        worker: 0,
+        crawler: 0,
+        provider: 0,
+        oldest_expired_at: null,
+      },
       active_leases: [],
       providers: [],
       profiles: [],
@@ -497,6 +628,8 @@ test("M08-05.A07/A08/A15/A16 UI and rollback cover the full image-grounded state
   ])
     assert.match(ui, new RegExp(state));
   assert.match(e2e, /390/);
+  assert.match(ui, /queueSummary[\s\S]*采集排队摘要/);
+  assert.match(ui, /queueRiskText[\s\S]*高于近 24 小时 P95[\s\S]*饥饿风险/);
   for (const image of [
     "61_平台运营-概览.jpg",
     "62_采集来源管理.jpg",
@@ -545,6 +678,19 @@ test("M08-05 links leases and due provider queues without returning secrets", as
           ];
         }
         if (sql.startsWith("SELECT p.id,COUNT")) return [[]];
+        if (sql.startsWith("SELECT COUNT(*) total,COUNT"))
+          return [
+            [
+              {
+                total: 3,
+                task_count: 1,
+                worker: 1,
+                crawler: 1,
+                provider: 1,
+                oldest_expired_at: new Date("2026-08-15T07:55:00.000Z"),
+              },
+            ],
+          ];
         if (sql.includes("SELECT COUNT(*) total")) return [[{ total: 0 }]];
         if (sql.startsWith("SELECT l.slot_type"))
           return [
@@ -580,6 +726,23 @@ test("M08-05 links leases and due provider queues without returning secrets", as
           ];
         if (sql.startsWith("SELECT FROM_UNIXTIME"))
           return [[{ bucket_at: now, total: 2, succeeded: 1, failed: 1 }]];
+        if (sql.startsWith("SELECT pending_count"))
+          return [
+            [
+              {
+                pending_count: 1,
+                pending_bytes: 1024,
+                quarantined_count: 0,
+                quarantined_bytes: 0,
+                oldest_pending_at: new Date("2026-08-15T07:59:00.000Z"),
+                retention_days: 30,
+                max_bytes: 536870912,
+                minimum_free_disk_mb: 4096,
+                free_disk_mb: 8192,
+                observed_at: now,
+              },
+            ],
+          ];
         throw new Error(`unexpected query ${sql}`);
       },
     },
@@ -628,6 +791,26 @@ test("M08-05 links leases and due provider queues without returning secrets", as
       expires_at: "2026-08-15T08:01:00.000Z",
     },
   ]);
+  assert.deepEqual(result.expired_leases, {
+    total: 3,
+    task_count: 1,
+    worker: 1,
+    crawler: 1,
+    provider: 1,
+    oldest_expired_at: "2026-08-15T07:55:00.000Z",
+  });
+  assert.deepEqual(result.receipt_spool, {
+    pending_count: 1,
+    pending_bytes: 1024,
+    quarantined_count: 0,
+    quarantined_bytes: 0,
+    oldest_pending_at: "2026-08-15T07:59:00.000Z",
+    retention_days: 30,
+    max_bytes: 536870912,
+    minimum_free_disk_mb: 4096,
+    free_disk_mb: 8192,
+    observed_at: "2026-08-15T08:00:00.000Z",
+  });
   assert.doesNotMatch(JSON.stringify(result), /lease_token|token_hash|credential|cookie/i);
 });
 

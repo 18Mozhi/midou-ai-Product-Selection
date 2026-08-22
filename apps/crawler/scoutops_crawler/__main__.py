@@ -7,8 +7,7 @@ import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from .config import load_config
-from .playwright_bridge import PlaywrightBridge, PlaywrightBridgeError
-from .runtime_client import CrawlerRuntimeClient, RuntimeClientError
+from .main_loop import run_loop, run_once as run_main_loop_once
 
 ENV_KEY = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 SENSITIVE_LOG_KEY = re.compile(
@@ -77,78 +76,26 @@ def event(config, status: str, **fields) -> None:
 
 
 def run_once(config, stopped: threading.Event) -> bool:
-    client = CrawlerRuntimeClient(config)
-    flushed, pending = client.flush_pending()
-    if flushed or pending:
-        event(config, "completion_retry", completed=flushed, pending=pending)
-    lease = client.acquire()
-    if lease is None:
-        return False
-    event(config, "running", run_id=lease.run_id, request_id=lease.request_id, trace_id=lease.trace_id)
-    heartbeat_stopped = threading.Event()
-    heartbeat_failed = threading.Event()
-    heartbeat_error = []
+    """Preserve the production one-cycle entrypoint while main-loop logic stays isolated."""
+    return run_main_loop_once(config, stopped, event)
 
-    def maintain_lease() -> None:
-        interval = min(config.heartbeat_seconds, max(5, config.lease_seconds // 3))
-        while not heartbeat_stopped.wait(interval) and not stopped.is_set():
-            try:
-                client.heartbeat(lease)
-            except RuntimeClientError as error:
-                heartbeat_error.append(error.code)
-                heartbeat_failed.set()
-                return
-
-    thread = threading.Thread(target=maintain_lease, name="crawler-lease-heartbeat", daemon=True)
-    thread.start()
-    try:
-        request = dict(lease.execution_request)
-        request["request_id"] = lease.request_id
-        request["trace_id"] = lease.trace_id
-        request["credential"] = lease.credential
-        request["master_key"] = config.credentials_master_key
-        request["locale"] = lease.locale
-        request["timezone"] = lease.timezone
-        result = PlaywrightBridge(config).run(request, heartbeat_failed)
-    except (OSError, json.JSONDecodeError, PlaywrightBridgeError) as error:
-        code = getattr(error, "code", "crawler_execution_request_invalid")
-        result = {"status": "dependency_failed", "page_count": 0, "item_count": 0, "detail_count": 0, "duration_ms": 0, "error_code": code}
-        diagnostic = getattr(error, "stderr_diagnostic", None)
-        if diagnostic:
-            result["stderr_diagnostic"] = diagnostic
-    finally:
-        heartbeat_stopped.set()
-        thread.join(timeout=2)
-    if heartbeat_error:
-        result = {
-            "status": "dependency_failed",
-            "page_count": int(result.get("page_count", 0)),
-            "item_count": int(result.get("item_count", 0)),
-            "detail_count": int(result.get("detail_count", 0)),
-            "duration_ms": int(result.get("duration_ms", 0)),
-            "error_code": "crawler_heartbeat_failed",
-            "heartbeat_error_code": heartbeat_error[0],
-            **({"stderr_diagnostic": result["stderr_diagnostic"]} if result.get("stderr_diagnostic") else {}),
-        }
-    client.complete(lease, result)
-    event(config, "completed", run_id=lease.run_id, result_status=result.get("status"), error_code=result.get("error_code"), request_id=lease.request_id, trace_id=lease.trace_id)
-    return True
 
 def main() -> None:
-    parser=argparse.ArgumentParser();parser.add_argument("--once",action="store_true");parser.add_argument("--env-file");args=parser.parse_args();load_env_file(args.env_file);config=load_config()
-    stopped=threading.Event()
-    def stop(_signum,_frame):stopped.set()
-    signal.signal(signal.SIGTERM,stop);signal.signal(signal.SIGINT,stop)
-    while not stopped.is_set():
-        try:
-            processed = run_once(config, stopped)
-        except RuntimeClientError as error:
-            event(config, "api_error", error_code=error.code)
-            processed = False
-        if args.once:
-            break
-        if not processed:
-            stopped.wait(config.heartbeat_seconds)
-    event(config,"stopped")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--once", action="store_true")
+    parser.add_argument("--env-file")
+    args = parser.parse_args()
+    load_env_file(args.env_file)
+    config = load_config()
+    stopped = threading.Event()
 
-if __name__ == "__main__":main()
+    def stop(_signum, _frame):
+        stopped.set()
+
+    signal.signal(signal.SIGTERM, stop)
+    signal.signal(signal.SIGINT, stop)
+    run_loop(config, stopped, args.once, event)
+
+
+if __name__ == "__main__":
+    main()

@@ -150,15 +150,49 @@ async function setup(page: Page) {
           rule_version: "SCORE-2026-08",
           basis: [],
         },
+        decision_context_diff: {
+          available: true,
+          observed_at: "2026-08-08T10:00:00.000Z",
+          has_changes: true,
+          evidence_summary: {
+            before_complete: 3,
+            before_total: 4,
+            before_percent: 75,
+            after_complete: 4,
+            after_total: 4,
+            after_percent: 100,
+          },
+          requirement_changes: [
+            {
+              code: "risk",
+              label: "风险识别",
+              before_complete: false,
+              after_complete: true,
+              before_detail: "尚未形成风险等级",
+              after_detail: "风险等级 medium",
+            },
+          ],
+          basis_changes: [
+            {
+              code: "risk_level",
+              label: "风险等级",
+              before: "unknown",
+              after: "medium",
+            },
+          ],
+          rule_version_changes: [],
+        },
         nodes: [
           {
             id: "00000000-0000-4000-8000-000000000927",
             ordinal: 1,
             name: "选品经理复核",
             approver_id: actor,
+            approver_name: "选品经理",
             active_approver_id: actor,
             active_approver_name: "选品经理",
             escalation_assignee_id: actor,
+            escalation_assignee_name: "运营负责人",
             status: "pending",
             due_at: item.due_at,
             escalated_at: null,
@@ -173,9 +207,11 @@ async function setup(page: Page) {
             ordinal: 2,
             name: "采购负责人确认",
             approver_id: actor,
+            approver_name: "采购负责人",
             active_approver_id: actor,
             active_approver_name: "采购负责人",
             escalation_assignee_id: actor,
+            escalation_assignee_name: "组织管理员",
             status: "waiting",
             due_at: null,
             escalated_at: null,
@@ -210,8 +246,14 @@ test("M05-02.A07/A08/A09/A15 renders approval inbox timeline and mandatory reaso
   await page.getByRole("button", { name: /便携净水杯采纳决策复核/ }).click();
   await expect(page).toHaveURL(new RegExp(`approval=${approvalId}`));
   await expect(page.getByLabel("审批依据与影响范围")).toContainText("机会决策");
-  await expect(page.getByText("75%", { exact: true })).toBeVisible();
+  await expect(
+    page.locator(".approval-decision-context > header").getByText("75%", { exact: true }),
+  ).toBeVisible();
   await expect(page.getByText(/发起审批时已锁定/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: "提交快照与当前证据" })).toBeVisible();
+  await expect(page.getByText("已有变化", { exact: true })).toBeVisible();
+  await expect(page.getByText("当前完整度")).toBeVisible();
+  await expect(page.getByText("当前：风险等级 medium")).toBeVisible();
   await expect(page.getByText("SCORE-2026-08", { exact: true })).toBeVisible();
   await expect(page.getByText("PROFIT-US-AMZ-2026-08", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "决策依据" })).toBeVisible();
@@ -223,6 +265,8 @@ test("M05-02.A07/A08/A09/A15 renders approval inbox timeline and mandatory reaso
   await expect(page.getByText(decisionId, { exact: true }).first()).not.toBeVisible();
   await expect(page.getByText(actor, { exact: false }).first()).not.toBeVisible();
   await expect(page.getByText("选品经理复核").last()).toBeVisible();
+  await expect(page.getByText("运营负责人")).toBeVisible();
+  await expect(page.getByText("超时后 →").first()).toBeVisible();
   await expect(page.getByText("批准与驳回均必填")).toBeVisible();
   await expect(page.getByRole("button", { name: "批准并流转" })).toBeDisabled();
 });

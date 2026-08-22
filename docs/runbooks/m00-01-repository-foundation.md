@@ -4,8 +4,11 @@
 
 ```powershell
 npm install
+npm run build
 npm run verify:module -- M00-01
 ```
+
+`npm run build` 会打印拓扑层、workspace 数和并发上限；同一层最多并行四个真实 `build:*` 命令，下游只有在内部依赖全部通过后才开始。出现 `workspace_build_script_missing` 或 `workspace_dependency_cycle` 时先修复对应 `package.json` 或根构建脚本，不得改回易漂移的手工串行清单来绕过。
 
 单独启动时，先构建共享合同，再启动对应进程：
 

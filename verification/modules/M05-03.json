@@ -22,7 +22,7 @@
     },
     {
       "id": "M05-03.A05",
-      "evidence": "Baota Worker global Outbox lease retry dead letter and dedupe"
+      "evidence": "Baota Worker global Outbox lease retry dead letter dedupe and opportunity redecision reminder projection"
     },
     {
       "id": "M05-03.A06",
@@ -46,11 +46,11 @@
     },
     {
       "id": "M05-03.A11",
-      "evidence": "source event audit request trace deliveries and health logs"
+      "evidence": "source event audit request trace deliveries evidence completion score correlation and health logs"
     },
     {
       "id": "M05-03.A12",
-      "evidence": "actions preferences pending mail provider guard workflow filters root-cause pagination version and validation unit tests"
+      "evidence": "actions preferences pending mail provider guard workflow filters root-cause pagination opportunity redecision copy version and validation unit tests"
     },
     {
       "id": "M05-03.A13",

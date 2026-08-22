@@ -167,6 +167,20 @@ def local_node_executable() -> str:
     return executable
 
 
+def verify_local_source_preflight(repo: Path) -> None:
+    npm = local_npm_executable()
+    for script in ("format:check", "verify:runtime-docs", "verify:release-matrix"):
+        subprocess.run([npm, "run", script], cwd=repo, check=True)
+
+
+def verify_local_build_preflight(repo: Path) -> None:
+    subprocess.run(
+        [local_node_executable(), "scripts/verify-baota-deployment.mjs", "--preflight"],
+        cwd=repo,
+        check=True,
+    )
+
+
 def verify_release_change_ownership(repo: Path) -> None:
     manifest = repo / ".artifacts" / "release-change-ownership.json"
     if not manifest.is_file():
@@ -189,6 +203,7 @@ def build_package(repo: Path, source_identity: dict[str, str], skip_build: bool,
     build_sha = source_identity["local_sha"]
     if not skip_build:
         subprocess.run([local_npm_executable(), "run", "build"], cwd=repo, check=True)
+    verify_local_build_preflight(repo)
 
     package_root = temp_root / "package"
     frontend = package_root / "frontend"
@@ -548,6 +563,7 @@ def main() -> None:
     repo = Path(__file__).resolve().parents[1]
     if run(["git", "status", "--porcelain"], repo):
         raise RuntimeError("Git worktree must be clean before production deployment")
+    verify_local_source_preflight(repo)
     source_identity = release_source_identity(repo)
     build_sha = source_identity["local_sha"]
     if len(build_sha) != 40:
@@ -588,7 +604,7 @@ def main() -> None:
             migrate = (
                 f"cd '{remote_stage}/backend' && "
                 f"'{NODE_BIN}' --env-file='{PROJECT_ROOT}/config/product_scout.env' "
-                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql"
+                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql 0059_selection_journey_candidates.up.sql 0060_opportunity_workflow_visibility.up.sql 0061_crawler_completion_spool_status.up.sql 0062_runtime_process_restart_observations.up.sql 0063_runtime_health_endpoint_probes.up.sql 0064_governed_workflow_confirmations.up.sql"
             )
             ssh_exec(client, migrate, timeout=120)
             remote_python(client, panel_deploy_source(build_sha, args.initialize_layout), timeout=300)

@@ -147,6 +147,32 @@ async function setup(page: Page) {
             status: "published",
             node_count: 2,
             current_version: 3,
+            version_diff: {
+              from_version: 2,
+              to_version: 3,
+              change_count: 2,
+              changes: [
+                {
+                  kind: "changed",
+                  ordinal: 1,
+                  node_name: "选品经理复核",
+                  fields: [
+                    {
+                      field: "sla_minutes",
+                      label: "处理时限（分钟）",
+                      before: 60,
+                      after: 30,
+                    },
+                  ],
+                },
+                {
+                  kind: "added",
+                  ordinal: 2,
+                  node_name: "采购负责人确认",
+                  fields: [],
+                },
+              ],
+            },
           },
         ],
         items: [
@@ -269,6 +295,10 @@ test("organization member choices replace raw ids and approval ids stay technica
   await page.goto("/org-admin/approvals");
   await expect(page.getByText("选品复核模板", { exact: true })).toBeVisible();
   await expect(page.getByText("厨房收纳机会复核", { exact: true })).toBeVisible();
+  await page.getByText(/预览 v2 → v3 差异/).click();
+  await expect(page.getByText("处理时限（分钟）")).toBeVisible();
+  await expect(page.getByText("60 → 30")).toBeVisible();
+  await expect(page.getByText("当前版本新增")).toBeVisible();
   const resourceId = page.locator("code").filter({ hasText: approvalResource });
   await expect(resourceId).not.toBeVisible();
   await page.getByText("技术详情", { exact: true }).click();
@@ -287,7 +317,7 @@ test("organization governance matrix, data comparison and audit filters", async 
   await page.goto("/org-admin/audit");
   await page.getByLabel("操作").fill("organization.member");
   await page.getByLabel("结果").selectOption("succeeded");
-  await page.getByLabel("对象").fill("membership");
+  await page.getByLabel("对象", { exact: true }).fill("membership");
   await page.getByRole("button", { name: "应用筛选" }).click();
   await expect(page.getByText("organization.member.disabled")).toBeVisible();
 });

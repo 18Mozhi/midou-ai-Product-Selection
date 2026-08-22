@@ -85,9 +85,11 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
           [...values, input.pageSize, offset],
         ),
         this.pool.query<RowDataPacket[]>(
-          `SELECT i.*,p.name provider_name,r.parser_version,u.email assigned_member_label
+          `SELECT i.*,p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,
+          u.email assigned_member_label
          FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id
          LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id
+         LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id
          LEFT JOIN memberships am ON am.id=i.assigned_membership_id
          LEFT JOIN users u ON u.id=am.user_id
          ${issueClause}
@@ -160,9 +162,10 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         [id],
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT i.*,p.name provider_name,r.parser_version,u.email assigned_member_label " +
+        "SELECT i.*,p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,u.email assigned_member_label " +
           "FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id " +
           "LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id " +
+          "LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id " +
           "LEFT JOIN memberships am ON am.id=i.assigned_membership_id LEFT JOIN users u ON u.id=am.user_id " +
           "WHERE i.raw_evidence_id=? ORDER BY i.created_at DESC",
         [id],
@@ -180,6 +183,168 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
       quality_issues: issues.map(issue),
     };
   }
+  async createFromTrendEvidence(
+    input: Parameters<DataQualityRepository["createFromTrendEvidence"]>[0],
+  ) {
+    const c = await this.pool.getConnection(),
+      route = `/trends/${input.topicId}/evidence/${input.evidenceId}/quality-issues`;
+    try {
+      await c.beginTransaction();
+      const [operations] = await c.query<RowDataPacket[]>(
+        "SELECT result_json FROM evidence_data_operations WHERE actor_id=? AND route=? AND idempotency_key=? FOR UPDATE",
+        [input.actorId, route, input.idempotencyKey],
+      );
+      if (operations[0]) {
+        await c.commit();
+        return json(operations[0].result_json) as {
+          issue: QualityIssueSummary;
+          created: boolean;
+        };
+      }
+      const [signals] = await c.query<RowDataPacket[]>(
+        `SELECT s.id signal_id,s.topic_id,s.organization_id,s.workspace_id,s.provider_id,
+          s.raw_evidence_id,s.normalized_record_id,e.parser_version,p.name provider_name
+         FROM trend_signals s
+         JOIN raw_evidence e ON e.id=s.raw_evidence_id
+         JOIN providers p ON p.id=s.provider_id
+         WHERE s.id=? AND s.topic_id=? AND s.organization_id=? AND s.workspace_id=?
+         LIMIT 1 FOR UPDATE`,
+        [input.evidenceId, input.topicId, input.organizationId, input.workspaceId],
+      );
+      const signal = signals[0];
+      if (!signal)
+        throw new DataQualityServiceError(
+          "trend_evidence_not_found",
+          404,
+          "刷新趋势详情后重新选择证据。",
+        );
+      const [existing] = await c.query<RowDataPacket[]>(
+        `SELECT i.*,p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,
+          u.email assigned_member_label
+         FROM data_quality_issues i
+         JOIN providers p ON p.id=i.provider_id
+         LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id
+         LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id
+         LEFT JOIN memberships am ON am.id=i.assigned_membership_id
+         LEFT JOIN users u ON u.id=am.user_id
+         WHERE i.organization_id=? AND i.workspace_id=? AND i.raw_evidence_id=?
+           AND i.metric_code='trend_evidence_anomaly' AND i.status='open'
+         ORDER BY i.created_at DESC LIMIT 1 FOR UPDATE`,
+        [input.organizationId, input.workspaceId, signal.raw_evidence_id],
+      );
+      let result: { issue: QualityIssueSummary; created: boolean };
+      if (existing[0]) {
+        result = { issue: issue(existing[0]), created: false };
+      } else {
+        const issueId = randomUUID(),
+          row = {
+            id: issueId,
+            organization_id: signal.organization_id,
+            workspace_id: signal.workspace_id,
+            provider_id: signal.provider_id,
+            provider_name: signal.provider_name,
+            reconciliation_run_id: null,
+            raw_evidence_id: signal.raw_evidence_id,
+            normalized_record_id: signal.normalized_record_id,
+            parser_version: signal.parser_version,
+            metric_code: "trend_evidence_anomaly",
+            field_path: null,
+            severity: input.severity,
+            status: "open",
+            actual_value: null,
+            threshold_value: null,
+            assigned_membership_id: null,
+            assigned_member_label: null,
+            attribution_reason: input.reason,
+            resolution_reason: null,
+            version: 1,
+            created_at: input.now,
+            updated_at: input.now,
+          } as RowDataPacket;
+        await c.query(
+          `INSERT INTO data_quality_issues
+           (id,organization_id,workspace_id,provider_id,reconciliation_run_id,raw_evidence_id,
+            normalized_record_id,metric_code,field_path,severity,status,actual_value,threshold_value,
+            details_json,assigned_membership_id,attribution_reason,attributed_by,attributed_at,
+            resolved_by,resolution_reason,resolved_at,request_id,trace_id,version,created_at,updated_at)
+           VALUES (?,?,?,?,NULL,?,?,?,?,?,? ,NULL,NULL,?,NULL,?,?,?,NULL,NULL,NULL,?,?,1,?,?)`,
+          [
+            issueId,
+            signal.organization_id,
+            signal.workspace_id,
+            signal.provider_id,
+            signal.raw_evidence_id,
+            signal.normalized_record_id,
+            "trend_evidence_anomaly",
+            null,
+            input.severity,
+            "open",
+            JSON.stringify({
+              origin: "trend_detail",
+              topic_id: input.topicId,
+              signal_id: input.evidenceId,
+              reason: input.reason,
+            }),
+            input.reason,
+            input.actorId,
+            input.now,
+            input.requestId,
+            input.traceId,
+            input.now,
+            input.now,
+          ],
+        );
+        await this.event(
+          c,
+          row,
+          "data_quality.issue.created",
+          "data_quality_issue",
+          issueId,
+          input.actorId,
+          input.requestId,
+          input.traceId,
+          {
+            origin: "trend_detail",
+            topic_id: input.topicId,
+            signal_id: input.evidenceId,
+            reason: input.reason,
+          },
+          input.now,
+        );
+        await this.outbox(
+          c,
+          row,
+          "data_quality.issue.created",
+          "data_quality_issue",
+          issueId,
+          { issue_id: issueId, topic_id: input.topicId, signal_id: input.evidenceId },
+          input.requestId,
+          input.traceId,
+          input.now,
+        );
+        result = { issue: issue(row), created: true };
+      }
+      await c.query(
+        "INSERT INTO evidence_data_operations (id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+        [
+          randomUUID(),
+          input.actorId,
+          route,
+          input.idempotencyKey,
+          result.issue.id,
+          JSON.stringify(result),
+          input.now,
+        ],
+      );
+      await c.commit();
+      return result;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
   async batchIssues(input: Parameters<DataQualityRepository["batchIssues"]>[0]) {
     const c = await this.pool.getConnection(),
       route = "/platform/data-quality/issues/batch",
@@ -196,9 +361,11 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
       }
       const placeholders = ids.map(() => "?").join(","),
         [rows] = await c.query<RowDataPacket[]>(
-          `SELECT i.*,p.name provider_name,r.parser_version,u.email assigned_member_label
+          `SELECT i.*,p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,
+           u.email assigned_member_label
            FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id
            LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id
+           LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id
            LEFT JOIN memberships am ON am.id=i.assigned_membership_id
            LEFT JOIN users u ON u.id=am.user_id
            WHERE i.id IN (${placeholders}) ORDER BY i.id FOR UPDATE`,
@@ -337,9 +504,10 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         return json(ops[0].result_json) as QualityIssueSummary;
       }
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT i.*,p.name provider_name,r.parser_version,u.email assigned_member_label " +
+        "SELECT i.*,p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,u.email assigned_member_label " +
           "FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id " +
           "LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id " +
+          "LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id " +
           "LEFT JOIN memberships am ON am.id=i.assigned_membership_id LEFT JOIN users u ON u.id=am.user_id " +
           "WHERE i.id=? FOR UPDATE",
         [input.id],

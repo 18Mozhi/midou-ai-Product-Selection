@@ -3,6 +3,7 @@ import { computed, onMounted, reactive, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import ResponsiveDataView from "./ResponsiveDataView.vue";
 import "../credential-assets.css";
 import "../credential-login.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
@@ -544,39 +545,87 @@ onMounted(async () => {
           </div>
           <span>仅按真实来源绑定、凭证有效期和运行档案状态判定</span>
         </header>
-        <table v-if="compatibilityRows.length">
-          <thead>
-            <tr>
-              <th>来源</th>
-              <th>已绑定登录资料</th>
-              <th>运行档案</th>
-              <th>兼容状态</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in compatibilityRows" :key="row.provider.id">
-              <td>
-                <strong>{{ row.provider.name }}</strong
-                ><small>{{ row.provider.code }}</small>
-              </td>
-              <td>
-                {{
-                  row.assets.length ? row.assets.map((asset) => asset.name).join("、") : "未配置"
-                }}
-              </td>
-              <td>
-                {{
-                  row.profiles.length
-                    ? row.profiles.map((profile) => profile.name).join("、")
-                    : "未关联"
-                }}
-              </td>
-              <td>
-                <b :data-ready="row.ready">{{ row.status }}</b>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <ResponsiveDataView
+          v-if="compatibilityRows.length"
+          :rows="compatibilityRows"
+          :row-key="(row) => row.provider.id"
+          title="账号与来源兼容矩阵"
+          :detail-title="(row) => row.provider.name"
+        >
+          <template #desktop>
+            <table>
+              <thead>
+                <tr>
+                  <th>来源</th>
+                  <th>已绑定登录资料</th>
+                  <th>运行档案</th>
+                  <th>兼容状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="row in compatibilityRows" :key="row.provider.id">
+                  <td>
+                    <strong>{{ row.provider.name }}</strong
+                    ><small>{{ row.provider.code }}</small>
+                  </td>
+                  <td>
+                    {{
+                      row.assets.length
+                        ? row.assets.map((asset) => asset.name).join("、")
+                        : "未配置"
+                    }}
+                  </td>
+                  <td>
+                    {{
+                      row.profiles.length
+                        ? row.profiles.map((profile) => profile.name).join("、")
+                        : "未关联"
+                    }}
+                  </td>
+                  <td>
+                    <b :data-ready="row.ready">{{ row.status }}</b>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </template>
+          <template #summary="{ row }">
+            <strong>{{ row.provider.name }}</strong>
+            <small>{{ row.status }}</small>
+          </template>
+          <template #detail="{ row }">
+            <dl>
+              <div>
+                <dt>兼容状态</dt>
+                <dd>
+                  <b :data-ready="row.ready">{{ row.status }}</b>
+                </dd>
+              </div>
+              <div>
+                <dt>已绑定登录资料</dt>
+                <dd>
+                  {{
+                    row.assets.length ? row.assets.map((asset) => asset.name).join("、") : "未配置"
+                  }}
+                </dd>
+              </div>
+              <div>
+                <dt>运行档案</dt>
+                <dd>
+                  {{
+                    row.profiles.length
+                      ? row.profiles.map((profile) => profile.name).join("、")
+                      : "未关联"
+                  }}
+                </dd>
+              </div>
+            </dl>
+            <details>
+              <summary>技术详情</summary>
+              <code>{{ row.provider.code }}</code>
+            </details>
+          </template>
+        </ResponsiveDataView>
         <p v-else>当前没有需要网页登录的来源，不创建虚构兼容关系。</p>
       </section>
     </section>

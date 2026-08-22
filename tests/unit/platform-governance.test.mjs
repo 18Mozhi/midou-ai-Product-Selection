@@ -23,13 +23,27 @@ test("platform governance covers rules workflows automation versions approvals r
   const [web, shell, repository] = await Promise.all(
     [
       "apps/web/src/components/PlatformGovernanceCenter.vue",
-      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/route-catalog.ts",
       "apps/api/src/mysql-platform-dashboard-repository.ts",
     ].map((path) => readFile(path, "utf8")),
   );
-  for (const label of ["评分规则", "费用与风险", "审批工作流", "自动化规则", "灰度与回滚", "配置版本"])
+  for (const label of [
+    "评分规则",
+    "费用与风险",
+    "审批工作流",
+    "自动化规则",
+    "灰度与回滚",
+    "配置版本",
+  ])
     assert.match(web, new RegExp(label));
   assert.match(shell, /\/platform-admin\/governance/);
-  for (const table of ["score_rules", "cost_rules", "approval_templates", "automation_rules", "deployment_releases", "provider_versions"])
+  for (const table of [
+    "score_rules",
+    "cost_rules",
+    "approval_templates",
+    "automation_rules",
+    "deployment_releases",
+    "provider_versions",
+  ])
     assert.match(repository, new RegExp(table));
 });

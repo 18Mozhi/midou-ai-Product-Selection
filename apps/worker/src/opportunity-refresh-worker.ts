@@ -68,6 +68,7 @@ export class MySqlOpportunityRefreshWorker {
       return {
         status,
         job_id: job.id,
+        opportunity_id: job.opportunityId,
         error_code: wrapped.code,
         ...(process.env.NODE_ENV === "production"
           ? {}
@@ -134,11 +135,15 @@ export class MySqlOpportunityRefreshWorker {
       const evidenceCount = Number(counts[0]?.evidence_count ?? 0),
         sourceCount = Number(counts[0]?.source_count ?? 0);
       await connection.query(
-        "UPDATE opportunities SET evidence_count=?,source_count=?,coverage_status=?,lifecycle_status=?,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+        "UPDATE opportunities SET evidence_count=?,source_count=?,coverage_status=?," +
+          "lifecycle_entered_at=IF(lifecycle_status<>?,?,lifecycle_entered_at)," +
+          "lifecycle_status=?,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
         [
           evidenceCount,
           sourceCount,
           evidenceCount ? "partial" : "insufficient",
+          evidenceCount ? "ready" : "candidate",
+          now,
           evidenceCount ? "ready" : "candidate",
           now,
           job.opportunityId,

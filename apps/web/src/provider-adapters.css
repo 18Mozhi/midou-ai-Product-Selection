@@ -44,7 +44,7 @@
 }
 .adapter-metrics {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
 .adapter-metrics article {
@@ -101,7 +101,7 @@
 .adapter-table-wrap table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1180px;
+  min-width: 1420px;
 }
 .adapter-table-wrap th,
 .adapter-center .adapter-table-wrap td {
@@ -166,6 +166,14 @@
 .adapter-table-wrap b[data-runtime-category="other"] {
   background: var(--so-warning-soft);
   color: var(--so-warning);
+}
+.adapter-table-wrap b[data-circuit="closed"] {
+  background: var(--so-success-soft);
+  color: var(--so-success);
+}
+.adapter-table-wrap b[data-circuit="open"] {
+  background: var(--so-danger-soft);
+  color: var(--so-danger);
 }
 .adapter-center .adapter-table-wrap button,
 .adapter-center .adapter-empty button {

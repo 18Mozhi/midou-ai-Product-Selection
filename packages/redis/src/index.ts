@@ -94,6 +94,29 @@ export interface RedisConnection {
 }
 
 export type RedisResilienceState = "ready" | "warning" | "blocked";
+export type RedisKeyspaceHotspotResource = "collection_ready" | "collection_task" | "other";
+export type RedisKeyspaceSampleStatus = "sampled" | "partial" | "empty" | "unavailable";
+export interface RedisKeyspaceHotspot {
+  purpose: RedisPurpose;
+  resource: RedisKeyspaceHotspotResource;
+  sampled_keys: number;
+  sampled_bytes: number;
+  sampled_share_basis_points: number;
+}
+export interface RedisKeyspaceSample {
+  status: RedisKeyspaceSampleStatus;
+  basis: "bounded_memory_usage";
+  sample_limit: number;
+  scanned_keys: number;
+  measured_keys: number;
+  ignored_keys: number;
+  failed_measurements: number;
+  total_sampled_bytes: number;
+  truncated: boolean;
+  access_frequency_available: false;
+  unavailable_reason: "command_unsupported" | "scan_failed" | null;
+  hotspots: RedisKeyspaceHotspot[];
+}
 export interface RedisResilienceSnapshot {
   available: boolean;
   loading: boolean;
@@ -109,6 +132,7 @@ export interface RedisResilienceSnapshot {
   rejectedConnections: number;
   evictedKeys: number;
   uptimeSeconds: number;
+  keyspaceSample?: RedisKeyspaceSample;
 }
 export interface RedisResiliencePolicy {
   memoryWarningBasisPoints: number;
@@ -203,6 +227,183 @@ export interface RedisResilienceConnection {
   ping(): Promise<string>;
   info(section?: string): Promise<string>;
   configGet(parameter: string): Promise<Record<string, string>>;
+  scan?(
+    cursor: string,
+    options: { MATCH: string; COUNT: number },
+  ): Promise<{ cursor: string | number; keys: string[] }>;
+  memoryUsage?(key: string): Promise<number | null>;
+}
+
+export const REDIS_KEYSPACE_SAMPLE_LIMIT = 128;
+const REDIS_KEYSPACE_SCAN_COUNT = 32,
+  REDIS_KEYSPACE_MAX_SCAN_ROUNDS = 32,
+  REDIS_KEYSPACE_MEASUREMENT_BATCH = 16,
+  redisPurposes = new Set<RedisPurpose>(["cache", "queue", "rate", "sse"]),
+  emptyKeyspaceSample = (
+    status: RedisKeyspaceSampleStatus,
+    unavailableReason: RedisKeyspaceSample["unavailable_reason"] = null,
+  ): RedisKeyspaceSample => ({
+    status,
+    basis: "bounded_memory_usage",
+    sample_limit: REDIS_KEYSPACE_SAMPLE_LIMIT,
+    scanned_keys: 0,
+    measured_keys: 0,
+    ignored_keys: 0,
+    failed_measurements: 0,
+    total_sampled_bytes: 0,
+    truncated: false,
+    access_frequency_available: false,
+    unavailable_reason: unavailableReason,
+    hotspots: [],
+  });
+
+function classifyScopedRedisKey(
+  key: string,
+): { purpose: RedisPurpose; resource: RedisKeyspaceHotspotResource } | null {
+  const parts = key.split(":");
+  if (
+    parts.length < 8 ||
+    parts[0] !== "scoutops" ||
+    parts[1] !== "v1" ||
+    parts[3] !== "org" ||
+    parts[5] !== "ws" ||
+    !parts[4] ||
+    !parts[6] ||
+    !parts[7] ||
+    !redisPurposes.has(parts[2] as RedisPurpose)
+  )
+    return null;
+  let resource = "";
+  try {
+    resource = decodeURIComponent(parts[7] ?? "");
+  } catch {
+    return null;
+  }
+  return {
+    purpose: parts[2] as RedisPurpose,
+    resource:
+      resource === "collection-ready"
+        ? "collection_ready"
+        : resource === "collection-task"
+          ? "collection_task"
+          : "other",
+  };
+}
+
+export async function inspectRedisKeyspaceHotspots(
+  client: RedisResilienceConnection,
+): Promise<RedisKeyspaceSample> {
+  if (!client.scan || !client.memoryUsage)
+    return emptyKeyspaceSample("unavailable", "command_unsupported");
+  const keys = new Set<string>();
+  let cursor = "0",
+    rounds = 0,
+    truncated = false;
+  try {
+    do {
+      const result = await client.scan(cursor, {
+        MATCH: "scoutops:v1:*",
+        COUNT: REDIS_KEYSPACE_SCAN_COUNT,
+      });
+      cursor = String(result.cursor);
+      rounds += 1;
+      for (const key of result.keys) {
+        if (keys.size >= REDIS_KEYSPACE_SAMPLE_LIMIT) {
+          truncated = true;
+          break;
+        }
+        keys.add(String(key));
+      }
+      if (keys.size >= REDIS_KEYSPACE_SAMPLE_LIMIT || rounds >= REDIS_KEYSPACE_MAX_SCAN_ROUNDS) {
+        if (cursor !== "0") truncated = true;
+        break;
+      }
+    } while (cursor !== "0");
+  } catch {
+    return emptyKeyspaceSample("unavailable", "scan_failed");
+  }
+
+  const classified = [...keys].map((key) => ({ key, classification: classifyScopedRedisKey(key) })),
+    valid = classified.filter(
+      (
+        item,
+      ): item is {
+        key: string;
+        classification: { purpose: RedisPurpose; resource: RedisKeyspaceHotspotResource };
+      } => item.classification !== null,
+    );
+  if (!valid.length) {
+    return {
+      ...emptyKeyspaceSample("empty"),
+      scanned_keys: keys.size,
+      ignored_keys: classified.length,
+      truncated,
+    };
+  }
+
+  const groups = new Map<
+    string,
+    { purpose: RedisPurpose; resource: RedisKeyspaceHotspotResource; keys: number; bytes: number }
+  >();
+  let measuredKeys = 0,
+    failedMeasurements = 0;
+  for (let offset = 0; offset < valid.length; offset += REDIS_KEYSPACE_MEASUREMENT_BATCH) {
+    const batch = valid.slice(offset, offset + REDIS_KEYSPACE_MEASUREMENT_BATCH),
+      measurements = await Promise.allSettled(batch.map((item) => client.memoryUsage!(item.key)));
+    measurements.forEach((measurement, index) => {
+      const item = batch[index]!;
+      if (
+        measurement.status !== "fulfilled" ||
+        measurement.value === null ||
+        !Number.isSafeInteger(Number(measurement.value)) ||
+        Number(measurement.value) < 0
+      ) {
+        failedMeasurements += 1;
+        return;
+      }
+      const key = `${item.classification.purpose}:${item.classification.resource}`,
+        current = groups.get(key) ?? {
+          purpose: item.classification.purpose,
+          resource: item.classification.resource,
+          keys: 0,
+          bytes: 0,
+        };
+      current.keys += 1;
+      current.bytes += Number(measurement.value);
+      measuredKeys += 1;
+      groups.set(key, current);
+    });
+  }
+  const totalBytes = [...groups.values()].reduce((sum, item) => sum + item.bytes, 0),
+    hotspots = [...groups.values()]
+      .map((item) => ({
+        purpose: item.purpose,
+        resource: item.resource,
+        sampled_keys: item.keys,
+        sampled_bytes: item.bytes,
+        sampled_share_basis_points:
+          totalBytes > 0 ? Math.round((item.bytes / totalBytes) * 10_000) : 0,
+      }))
+      .sort(
+        (left, right) =>
+          right.sampled_bytes - left.sampled_bytes ||
+          left.purpose.localeCompare(right.purpose) ||
+          left.resource.localeCompare(right.resource),
+      );
+  return {
+    status: failedMeasurements > 0 ? "partial" : measuredKeys > 0 ? "sampled" : "empty",
+    basis: "bounded_memory_usage",
+    sample_limit: REDIS_KEYSPACE_SAMPLE_LIMIT,
+    scanned_keys: keys.size,
+    measured_keys: measuredKeys,
+    ignored_keys: classified.length - valid.length,
+    failed_measurements: failedMeasurements,
+    total_sampled_bytes: totalBytes,
+    truncated,
+    access_frequency_available: false,
+    unavailable_reason: null,
+    hotspots,
+  };
 }
 
 const infoValues = (raw: string) =>
@@ -236,6 +437,7 @@ export async function inspectRedisResilience(
       maxMemory,
       policy,
       maxClients,
+      keyspaceSample,
     ] = await Promise.all([
       client.info("server"),
       client.info("persistence"),
@@ -247,6 +449,7 @@ export async function inspectRedisResilience(
       client.configGet("maxmemory"),
       client.configGet("maxmemory-policy"),
       client.configGet("maxclients"),
+      inspectRedisKeyspaceHotspots(client),
     ]);
     const server = infoValues(serverRaw),
       persistence = infoValues(persistenceRaw),
@@ -280,6 +483,7 @@ export async function inspectRedisResilience(
       rejectedConnections: safeNumber(stats.rejected_connections),
       evictedKeys: safeNumber(stats.evicted_keys),
       uptimeSeconds: safeNumber(server.uptime_in_seconds),
+      keyspaceSample,
     };
   } catch {
     return {
@@ -297,6 +501,7 @@ export async function inspectRedisResilience(
       rejectedConnections: 0,
       evictedKeys: 0,
       uptimeSeconds: 0,
+      keyspaceSample: emptyKeyspaceSample("unavailable", "scan_failed"),
     };
   }
 }

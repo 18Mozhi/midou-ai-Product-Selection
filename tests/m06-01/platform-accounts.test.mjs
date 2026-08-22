@@ -106,6 +106,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       "apps/api/src/mysql-platform-account-repository.ts",
       "apps/api/src/platform-account-routes.ts",
       "apps/web/src/components/PlatformAccountCenter.vue",
+      "apps/web/src/components/PlatformOrganizationRecords.vue",
+      "apps/web/src/components/PlatformUserRecords.vue",
       "apps/web/src/components/OrganizationCreationWizard.vue",
       "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
       "apps/web/src/components/PlatformAdminRecords.vue",
@@ -123,6 +125,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       repository,
       routes,
       accountShell,
+      organizationRecords,
+      userRecords,
       wizard,
       organizationDetail,
       adminRecords,
@@ -133,9 +137,16 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       routeCatalog,
       live,
     ] = values,
-    web = [accountShell, wizard, organizationDetail, adminRecords, comparison, detailDialog].join(
-      "\n",
-    );
+    web = [
+      accountShell,
+      organizationRecords,
+      userRecords,
+      wizard,
+      organizationDetail,
+      adminRecords,
+      comparison,
+      detailDialog,
+    ].join("\n");
   assert.match(migration, /platform_account_operations/);
   assert.match(service, /cannot_disable_self/);
   assert.match(repository, /platform_audit_events/);
@@ -170,7 +181,15 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   for (const capability of CAPABILITIES)
     assert.match(web, new RegExp(capability.replace(":", "\\:")));
   assert.ok(accountShell.split(/\r?\n/).length < 1000);
-  for (const component of [wizard, organizationDetail, adminRecords, comparison, detailDialog])
+  for (const component of [
+    organizationRecords,
+    userRecords,
+    wizard,
+    organizationDetail,
+    adminRecords,
+    comparison,
+    detailDialog,
+  ])
     assert.ok(component.split(/\r?\n/).length < 300);
   assert.match(routeCatalog, /账号与组织/);
   assert.doesNotMatch(navigation, /label: "Redis 韧性"|label: "MySQL 韧性"|label: "文件韧性"/);
@@ -180,5 +199,11 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(live, /cannot_disable_self/);
   assert.match(live, /cannot_revoke_self_superadmin/);
   assert.match(live, /platform_audit_events/);
+  assert.match(live, /BUILTIN_ROLES/);
+  assert.match(live, /platform_role_catalog_drift/);
+  assert.match(live, /for \(const capability of CAPABILITIES\)/);
+  assert.match(live, /platform_capability_unexpected_allow/);
+  assert.match(live, /authorization_decisions/);
+  assert.match(live, /platform_permission_decision_audit_failed/);
   assert.match(live, /assertCleanup/);
 });

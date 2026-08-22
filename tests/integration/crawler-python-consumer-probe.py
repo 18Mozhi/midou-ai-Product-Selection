@@ -2,6 +2,7 @@ import threading
 import time
 
 from scoutops_crawler import __main__ as crawler_main
+from scoutops_crawler import execution_runner
 from scoutops_crawler.config import load_config
 
 
@@ -25,6 +26,6 @@ class DeterministicPlaywrightBridge:
         }
 
 
-crawler_main.PlaywrightBridge = DeterministicPlaywrightBridge
+execution_runner.PlaywrightBridge = DeterministicPlaywrightBridge
 processed = crawler_main.run_once(load_config(), threading.Event())
 print(f"consumer_processed={str(processed).lower()}", flush=True)

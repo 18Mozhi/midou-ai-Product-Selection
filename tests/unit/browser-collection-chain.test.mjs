@@ -29,6 +29,17 @@ const ids = {
   run: "00000000-0000-4000-8000-000000000488",
   profile: "00000000-0000-4000-8000-000000000489",
 };
+const completionSpool = {
+  pending_count: 1,
+  pending_bytes: 1024,
+  quarantined_count: 0,
+  quarantined_bytes: 0,
+  oldest_pending_at: "2026-08-20T00:00:00.000Z",
+  retention_days: 30,
+  max_bytes: 536870912,
+  minimum_free_disk_mb: 4096,
+  free_disk_mb: 8192,
+};
 
 const searchSnapshot = {
   schema_version: ALIBABA_1688_SNAPSHOT_SCHEMAS.search,
@@ -284,9 +295,10 @@ test("internal browser job API returns encrypted assignment only to the crawler 
     method: "POST",
     url: "/api/v1/internal/crawler-runtime/jobs/acquire",
     headers,
-    payload: { lease_owner: "crawler-1", lease_seconds: 120 },
+    payload: { lease_owner: "crawler-1", lease_seconds: 120, completion_spool: completionSpool },
   });
   assert.equal(acquired.statusCode, 200);
+  assert.deepEqual(calls[0][1].completionSpool, completionSpool);
   assert.equal(acquired.json().data.job.collection_task_id, ids.task);
   assert.equal(acquired.json().data.credential.ciphertext_base64, "YQ==");
   const completed = await app.inject({
@@ -310,6 +322,69 @@ test("internal browser job API returns encrypted assignment only to the crawler 
   assert.equal(calls.at(-1)[0], "complete");
   assert.equal(calls.at(-1)[1].status, "succeeded_empty");
   await app.close();
+});
+
+test("crawler completion spool status is persisted when no browser job is available", async () => {
+  const statements = [],
+    lifecycle = [],
+    now = new Date("2026-08-21T00:00:00.000Z"),
+    connection = {
+      beginTransaction: async () => lifecycle.push("begin"),
+      commit: async () => lifecycle.push("commit"),
+      rollback: async () => lifecycle.push("rollback"),
+      release: () => lifecycle.push("release"),
+      query: async (sql, values) => {
+        statements.push({ sql, values });
+        if (sql.startsWith("SELECT slot_key")) return [[]];
+        if (sql.startsWith("SELECT j.*")) return [[]];
+        return [{ affectedRows: 1 }];
+      },
+    },
+    repository = new MySqlCrawlerRuntimeRepository({
+      getConnection: async () => connection,
+    }),
+    result = await repository.acquireJob({
+      actorId: ids.actor,
+      requestId: "completion-spool-request",
+      traceId: "completion-spool-trace",
+      leaseOwner: "crawler-1",
+      leaseSeconds: 120,
+      runId: ids.run,
+      leaseId: "00000000-0000-4000-8000-000000000490",
+      leaseTokenHash: "a".repeat(64),
+      completionSpool: {
+        pendingCount: 1,
+        pendingBytes: 1024,
+        quarantinedCount: 2,
+        quarantinedBytes: 2048,
+        oldestPendingAt: new Date("2026-08-20T00:00:00.000Z"),
+        retentionDays: 30,
+        maxBytes: 536870912,
+        minimumFreeDiskMb: 4096,
+        freeDiskMb: 8192,
+      },
+      now,
+      expiresAt: new Date("2026-08-21T00:02:00.000Z"),
+    });
+
+  assert.equal(result, null);
+  assert.match(statements[0].sql, /^INSERT INTO crawler_completion_spool_status/);
+  assert.deepEqual(statements[0].values, [
+    "crawler-1",
+    1,
+    1024,
+    2,
+    2048,
+    new Date("2026-08-20T00:00:00.000Z"),
+    30,
+    536870912,
+    4096,
+    8192,
+    "completion-spool-request",
+    "completion-spool-trace",
+    now,
+  ]);
+  assert.deepEqual(lifecycle, ["begin", "commit", "release"]);
 });
 
 test("crawler completion replay with the original lease digest is idempotent", async () => {

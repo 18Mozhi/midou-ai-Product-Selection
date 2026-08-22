@@ -12,6 +12,12 @@ const data = ref<any>(null),
   hint = ref("");
 const when = (value?: string | null) => (value ? new Date(value).toLocaleString() : "尚无记录");
 const bytes = (value: number) => (value ? `${(value / 1024 / 1024).toFixed(1)} MB` : "0 MB");
+const drillReminder = (remaining?: number | null) => {
+  if (remaining == null) return "尚无演练证据";
+  if (remaining < 0) return `已到期 ${Math.abs(remaining)} 天`;
+  if (remaining === 0) return "今天到期";
+  return `还剩 ${remaining} 天到期`;
+};
 const assetText = (value: string) =>
     (
       ({
@@ -243,6 +249,13 @@ onMounted(load);
               <dt>最近隔离恢复</dt>
               <dd>{{ when(data.latest_drill?.finished_at) }}</dd>
             </div>
+            <div class="drill-expiry" :data-expired="data.days_until_drill_expiry < 0">
+              <dt>演练证据到期</dt>
+              <dd>
+                {{ when(data.drill_expires_at) }}
+                <small>{{ drillReminder(data.days_until_drill_expiry) }}</small>
+              </dd>
+            </div>
             <div>
               <dt>实际恢复耗时</dt>
               <dd>
@@ -455,6 +468,15 @@ dt {
 dd {
   font-weight: 700;
   margin: 5px 0 0;
+}
+.drill-expiry small {
+  color: var(--amber);
+  display: block;
+  font-weight: 700;
+  margin-top: 5px;
+}
+.drill-expiry[data-expired="true"] small {
+  color: var(--so-danger);
 }
 .blockers {
   padding: 19px;

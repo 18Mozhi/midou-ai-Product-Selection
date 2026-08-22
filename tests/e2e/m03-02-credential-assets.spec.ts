@@ -3,6 +3,8 @@ const provider = {
     id: "00000000-0000-4000-8000-000000000802",
     code: "browser_source",
     name: "登录页来源",
+    target_url: "https://example.test/login",
+    access_mode: "authenticated_browser",
   },
   asset = {
     id: "00000000-0000-4000-8000-000000000803",
@@ -88,6 +90,16 @@ test("M03-02.A07/A08/A15 masked credential vault is responsive and visual", asyn
   await expect(page.getByRole("heading", { name: "凭证与浏览器档案", level: 2 })).toBeVisible();
   await expect(page.getByText("0123456789abcdef")).toBeVisible();
   await expect(page.getByText(/secret-never|cookie-value|payload_ciphertext/)).toHaveCount(0);
+  if ((page.viewportSize()?.width ?? 1280) <= 760) {
+    await expect(page.getByRole("table")).toBeHidden();
+    await page.getByRole("button", { name: /登录页来源.*待关联有效运行档案/ }).click();
+    const detail = page.getByRole("dialog", { name: "登录页来源" });
+    await expect(detail).toContainText("北美浏览器档案");
+    await expect(detail).toContainText("北美采集档案 A");
+    await detail.getByRole("button", { name: "关闭详情" }).click();
+  } else {
+    await expect(page.getByRole("table")).toBeVisible();
+  }
   await page.getByRole("button", { name: "凭证资产" }).click();
   await expect(page.getByRole("heading", { name: "创建凭证资产" })).toBeVisible();
   await expect(page.getByLabel("需要加密保存的内容")).toHaveAttribute("type", "password");

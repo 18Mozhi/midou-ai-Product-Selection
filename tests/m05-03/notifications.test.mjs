@@ -195,6 +195,10 @@ test("M05-03.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   );
   assert.match(values[4], /pending_placeholder/);
   assert.match(values[4], /notificationBody\(category\)/);
+  assert.match(
+    values[4],
+    /task\.evidence_completion\.redecision_ready[\s\S]*机会可重新决策[\s\S]*补采与重新评分已完成/,
+  );
   assert.match(values[4], /dead_letter/);
   assert.match(
     values[5],

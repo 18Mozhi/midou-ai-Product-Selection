@@ -65,6 +65,18 @@ export class MySqlRedisResilienceRepository implements RedisResilienceRepository
             memory_usage_basis_points: input.evaluation.memoryUsageBasisPoints,
             connection_usage_basis_points: input.evaluation.connectionUsageBasisPoints,
             finding_codes: input.evaluation.findings.map((item) => item.code),
+            keyspace_sample: input.snapshot.keyspaceSample
+              ? {
+                  status: input.snapshot.keyspaceSample.status,
+                  basis: input.snapshot.keyspaceSample.basis,
+                  sample_limit: input.snapshot.keyspaceSample.sample_limit,
+                  scanned_keys: input.snapshot.keyspaceSample.scanned_keys,
+                  measured_keys: input.snapshot.keyspaceSample.measured_keys,
+                  total_sampled_bytes: input.snapshot.keyspaceSample.total_sampled_bytes,
+                  truncated: input.snapshot.keyspaceSample.truncated,
+                  hotspots: input.snapshot.keyspaceSample.hotspots,
+                }
+              : null,
             mode: "single_instance",
           }),
           input.observedAt,

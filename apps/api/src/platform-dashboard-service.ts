@@ -29,6 +29,15 @@ export interface PlatformDashboardRepository {
     traceId: string;
     now: Date;
   }): Promise<unknown>;
+  exportLogs(input: {
+    actorId: string;
+    query: string;
+    source: string;
+    reason: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<unknown>;
   moderateTrend(input: {
     actorId: string;
     topicId: string;
@@ -164,6 +173,26 @@ export class PlatformDashboardService {
       entity,
       query,
       status,
+      reason,
+      now: this.now(),
+    });
+  }
+  exportLogs(value: any, context: { actorId: string; requestId: string; traceId: string }) {
+    const query = String(value?.query ?? "").trim(),
+      source = String(value?.source ?? "").trim(),
+      reason = String(value?.reason ?? "").trim();
+    if (query.length > 120 || !["", "api", "worker", "crawler"].includes(source))
+      throw new PlatformDashboardError(
+        "platform_management_filter_invalid",
+        400,
+        "缩短检索条件并选择有效运行面后重试。",
+      );
+    if (reason.length < 2 || reason.length > 300)
+      throw new PlatformDashboardError("reason_invalid", 400, "填写 2–300 字的导出原因。");
+    return this.repository.exportLogs({
+      ...context,
+      query,
+      source,
       reason,
       now: this.now(),
     });

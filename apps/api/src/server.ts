@@ -65,6 +65,8 @@ import { SelectionJourneyService } from "./selection-journey-service.js";
 import { MySqlSelectionJourneyRepository } from "./mysql-selection-journey-repository.js";
 import { RuntimeTopologyService } from "./runtime-topology-service.js";
 import { MySqlRuntimeTopologyRepository } from "./mysql-runtime-topology-repository.js";
+import { RuntimeHealthProbeMonitor } from "./runtime-health-probe.js";
+import { MySqlRuntimeHealthProbeRepository } from "./mysql-runtime-health-probe-repository.js";
 import { RedisResilienceService } from "./redis-resilience-service.js";
 import { MySqlRedisResilienceRepository } from "./mysql-redis-resilience-repository.js";
 import { MySqlResilienceProbe } from "./mysql-resilience-probe.js";
@@ -88,11 +90,31 @@ const redisClient = createRedisConnection(config);
 redisClient.on("error", () => {});
 const redisStore = new ScopedRedisStore(redisClient);
 const runtimeTopologyRepository = new MySqlRuntimeTopologyRepository(pool);
+const runtimeHealthProbePolicy = {
+  intervalMs: config.runtimeTopology.healthProbeIntervalMs,
+  timeoutMs: config.runtimeTopology.healthProbeTimeoutMs,
+  windowMinutes: config.runtimeTopology.healthProbeWindowMinutes,
+  retentionHours: config.runtimeTopology.healthProbeRetentionHours,
+};
+const runtimeHealthProbeMonitor = new RuntimeHealthProbeMonitor(
+  new MySqlRuntimeHealthProbeRepository(pool),
+  runtimeHealthProbePolicy,
+  async ({ path, signal, requestId, traceId }) => {
+    const response = await fetch(`http://127.0.0.1:${config.app.port}${path}`, {
+      signal,
+      headers: { "x-request-id": requestId, "x-trace-id": traceId },
+    });
+    await response.body?.cancel();
+    return { statusCode: response.status };
+  },
+);
 const runtimeTopologyService = new RuntimeTopologyService(runtimeTopologyRepository, {
   expectedNodeId: config.runtimeTopology.nodeId,
   expectedHostId: config.runtimeTopology.hostId,
   staleAfterMs: config.runtimeTopology.staleAfterMs,
   restartAlertThreshold: config.runtimeTopology.restartAlertThreshold,
+  healthProbePolicy: runtimeHealthProbePolicy,
+  healthProbeSnapshot: () => runtimeHealthProbeMonitor.snapshot(),
   workerSchedulerStaleAfterMs: config.runtime.workerSchedulerStaleAfterMs,
   ...(config.runtime.workerSchedulerStateFile
     ? {
@@ -127,6 +149,7 @@ const fileResilienceService = new FileResilienceService(
     pool,
     config.storage.evidenceRoot,
     config.storage.exportRoot,
+    config.storage.runtimeTempRoot,
     config.fileResilience.checksumSampleLimit,
     config.fileResilience.maximumRecoveryDrillAgeDays,
   ),
@@ -455,6 +478,7 @@ registerOperationsDomainRoutes({
   capacityBoundaryService,
 });
 let runtimeHeartbeatTimer: ReturnType<typeof setInterval> | undefined;
+let runtimeHealthProbeTimer: ReturnType<typeof setInterval> | undefined;
 const publishRuntimeHeartbeat = async (status: "ready" | "stopped") => {
   const correlation = `runtime-${config.runtimeTopology.nodeId}-${Date.now()}`;
   await runtimeTopologyRepository.heartbeat({
@@ -472,6 +496,8 @@ const publishRuntimeHeartbeat = async (status: "ready" | "stopped") => {
 };
 app.addHook("onClose", async () => {
   if (runtimeHeartbeatTimer) clearInterval(runtimeHeartbeatTimer);
+  if (runtimeHealthProbeTimer) clearInterval(runtimeHealthProbeTimer);
+  await runtimeHealthProbeMonitor.stop();
   try {
     await publishRuntimeHeartbeat("stopped");
   } catch (error) {
@@ -498,6 +524,15 @@ try {
     );
   }, config.runtimeTopology.heartbeatMs);
   runtimeHeartbeatTimer.unref();
+  void runtimeHealthProbeMonitor
+    .runCycle()
+    .catch((error) => app.log.warn({ error }, "runtime health probe cycle failed"));
+  runtimeHealthProbeTimer = setInterval(() => {
+    void runtimeHealthProbeMonitor
+      .runCycle()
+      .catch((error) => app.log.warn({ error }, "runtime health probe cycle failed"));
+  }, config.runtimeTopology.healthProbeIntervalMs);
+  runtimeHealthProbeTimer.unref();
 } catch (error) {
   app.log.error({ error }, "API startup failed");
   try {

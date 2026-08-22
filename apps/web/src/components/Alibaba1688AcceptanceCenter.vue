@@ -19,6 +19,17 @@ interface Acceptance {
     started_at: string;
     finished_at: string | null;
   } | null;
+  coverage_matrix: {
+    parser_version: string;
+    observed_at: string | null;
+    rows: Array<{
+      key: "search" | "detail" | "pagination";
+      contract: string;
+      state: "covered" | "not_observed" | "not_exercised" | "invalid";
+      observed_count: number;
+      reason: string;
+    }>;
+  };
   pending_reasons: string[];
 }
 const props = defineProps<{ apiBaseUrl: string }>();
@@ -36,6 +47,13 @@ const title = computed(() =>
 );
 const gateName = { login: "登录态", captcha: "验证码", parser: "字段解析" } as const;
 const gateState = { passed: "已通过", blocked: "已阻断", pending: "待验收" } as const;
+const matrixName = { search: "搜索结果", detail: "商品详情", pagination: "翻页覆盖" } as const;
+const matrixState = {
+  covered: "已覆盖",
+  not_observed: "未观测",
+  not_exercised: "未演练",
+  invalid: "合同异常",
+} as const;
 const time = (value: string | null) =>
   value ? new Date(value).toLocaleString("zh-CN", { hour12: false }) : "尚无证据";
 async function load() {
@@ -103,6 +121,30 @@ onMounted(load);
           <small>证据时间：{{ time(gate.evidence_at) }}</small>
         </article>
       </section>
+      <section class="acceptance-1688__matrix" aria-labelledby="acceptance-1688-matrix-title">
+        <header>
+          <div>
+            <p>真实作业覆盖</p>
+            <h3 id="acceptance-1688-matrix-title">搜索、详情与翻页矩阵</h3>
+          </div>
+          <small
+            >解析器 {{ data.coverage_matrix.parser_version }} ·
+            {{ time(data.coverage_matrix.observed_at) }}</small
+          >
+        </header>
+        <div>
+          <article
+            v-for="row in data.coverage_matrix.rows"
+            :key="row.key"
+            :data-matrix-state="row.state"
+          >
+            <span>{{ matrixName[row.key] }}</span
+            ><strong>{{ matrixState[row.state] }}</strong
+            ><small>{{ row.contract }} · {{ row.observed_count }} 项</small>
+            <p>{{ row.reason }}</p>
+          </article>
+        </div>
+      </section>
       <section v-if="data.pending_reasons.length" class="acceptance-1688__actions">
         <div>
           <p>待配置原因</p>
@@ -156,6 +198,7 @@ onMounted(load);
 .acceptance-1688__state,
 .acceptance-1688__verdict,
 .acceptance-1688__gates article,
+.acceptance-1688__matrix,
 .acceptance-1688__actions,
 .acceptance-1688__run {
   border: 1px solid var(--so-border);
@@ -229,6 +272,35 @@ onMounted(load);
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
+.acceptance-1688__matrix {
+  padding: 18px;
+}
+.acceptance-1688__matrix > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: end;
+}
+.acceptance-1688__matrix > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.acceptance-1688__matrix article {
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-left: 3px solid var(--so-warning);
+  border-radius: 10px;
+}
+.acceptance-1688__matrix article[data-matrix-state="covered"] {
+  border-left-color: var(--so-success);
+}
+.acceptance-1688__matrix article[data-matrix-state="invalid"] {
+  border-left-color: var(--so-danger);
+}
 .acceptance-1688__gates article {
   padding: 16px;
   border-top: 3px solid var(--so-warning);
@@ -273,6 +345,11 @@ onMounted(load);
     gap: 14px;
   }
   .acceptance-1688__gates {
+    grid-template-columns: 1fr;
+  }
+  .acceptance-1688__matrix > header,
+  .acceptance-1688__matrix > div {
+    display: grid;
     grid-template-columns: 1fr;
   }
   .acceptance-1688__verdict dl,

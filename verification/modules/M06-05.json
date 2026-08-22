@@ -1,1 +1,65 @@
-{"moduleId":"M06-05","phaseId":"P06","name":"Open API and Webhooks","dependencies":["M01-06","M05-03","M06-04"],"atomicTasks":[{"id":"M06-05.A01","evidence":"independent management and open API scope freeze"},{"id":"M06-05.A02","evidence":"client scope quota nonce webhook delivery and event objects"},{"id":"M06-05.A03","evidence":"MySQL57 client nonce usage webhook delivery audit migration and rollback"},{"id":"M06-05.A04","evidence":"one-time secret validation and independent open API auth service"},{"id":"M06-05.A05","evidence":"Baota Worker signed delivery leases retries dead letter replay"},{"id":"M06-05.A06","evidence":"OpenAPI management and open status contracts"},{"id":"M06-05.A07","evidence":"concept 67 and 68 desktop and 390 management UI"},{"id":"M06-05.A08","evidence":"loading empty error secret once delivery and recovery states"},{"id":"M06-05.A09","evidence":"platform token manage guard scopes SSRF DNS and secret exclusion"},{"id":"M06-05.A10","evidence":"validated API and Webhook Baota environment configuration"},{"id":"M06-05.A11","evidence":"usage platform audit outbox immutable delivery events request trace"},{"id":"M06-05.A12","evidence":"validation replay SSRF persistence unit coverage"},{"id":"M06-05.A13","evidence":"OpenAPI frontend config feature map contracts"},{"id":"M06-05.A14","evidence":"real MySQL57 client auth nonce encrypted webhook delivery audit cleanup"},{"id":"M06-05.A15","evidence":"Playwright desktop and 390 open platform visuals"},{"id":"M06-05.A16","evidence":"invalid scope nonce replay quota private DNS retry dead letter rollback drills"},{"id":"M06-05.A17","evidence":"blueprint feature map env architecture runbook tuning restart rollback"}],"commands":["npm run build","node --test tests/m06-05/open-platform.test.mjs","node scripts/verify-open-platform-live.mjs","npx playwright test tests/e2e/m06-05-open-platform.spec.ts","npm run verify:docs"]}
+{
+  "moduleId": "M06-05",
+  "phaseId": "P06",
+  "name": "Open API and Webhooks",
+  "dependencies": ["M01-06", "M05-03", "M06-04"],
+  "atomicTasks": [
+    { "id": "M06-05.A01", "evidence": "independent management and open API scope freeze" },
+    {
+      "id": "M06-05.A02",
+      "evidence": "client scope quota nonce webhook delivery and event objects"
+    },
+    {
+      "id": "M06-05.A03",
+      "evidence": "MySQL57 client nonce usage webhook delivery audit migration and rollback"
+    },
+    {
+      "id": "M06-05.A04",
+      "evidence": "one-time secret validation and independent open API auth service"
+    },
+    {
+      "id": "M06-05.A05",
+      "evidence": "Baota Worker signed delivery leases retries dead letter replay"
+    },
+    { "id": "M06-05.A06", "evidence": "OpenAPI management and open status contracts" },
+    {
+      "id": "M06-05.A07",
+      "evidence": "concept 67 and 68 desktop and 390 management UI with pre-write token permission impact preview"
+    },
+    {
+      "id": "M06-05.A08",
+      "evidence": "loading empty error secret once delivery token risk confirmation and recovery states"
+    },
+    {
+      "id": "M06-05.A09",
+      "evidence": "platform token manage guard scopes SSRF DNS and secret exclusion"
+    },
+    { "id": "M06-05.A10", "evidence": "validated API and Webhook Baota environment configuration" },
+    {
+      "id": "M06-05.A11",
+      "evidence": "usage platform audit outbox immutable delivery events request trace"
+    },
+    { "id": "M06-05.A12", "evidence": "validation replay SSRF persistence unit coverage" },
+    { "id": "M06-05.A13", "evidence": "OpenAPI frontend config feature map contracts" },
+    {
+      "id": "M06-05.A14",
+      "evidence": "real MySQL57 client auth nonce encrypted webhook delivery audit cleanup"
+    },
+    { "id": "M06-05.A15", "evidence": "Playwright desktop and 390 open platform visuals" },
+    {
+      "id": "M06-05.A16",
+      "evidence": "invalid scope nonce replay quota private DNS retry dead letter rollback drills"
+    },
+    {
+      "id": "M06-05.A17",
+      "evidence": "blueprint feature map env architecture runbook tuning restart rollback"
+    }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m06-05/open-platform.test.mjs",
+    "node scripts/verify-open-platform-live.mjs",
+    "npx playwright test tests/e2e/m06-05-open-platform.spec.ts",
+    "npm run verify:docs"
+  ]
+}

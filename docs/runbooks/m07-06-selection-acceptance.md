@@ -2,7 +2,7 @@
 
 ## 宝塔对象与配置
 
-在当前惠州单机的宝塔计划任务中创建或更新有限任务 `product-scout-selection-acceptance`，工作目录指向当前发布目录。候选版本启用前，先由宝塔有限发布任务按顺序应用 `0028_selection_journeys_m07_06.up.sql` 和 `0029_collection_task_evidence_links_m07_06.up.sql` 并登记 `schema_migrations`；随后执行：
+在当前惠州单机的宝塔计划任务中创建或更新有限任务 `product-scout-selection-acceptance`，工作目录指向当前发布目录。候选版本启用前，先由宝塔有限发布任务按顺序应用 `0028_selection_journeys_m07_06.up.sql`、`0029_collection_task_evidence_links_m07_06.up.sql` 和 `0059_selection_journey_candidates.up.sql` 并登记 `schema_migrations`；随后执行：
 
 ```text
 node scripts/run-baota-selection-acceptance.mjs --production
@@ -38,7 +38,7 @@ node scripts/run-baota-selection-acceptance.mjs --production
 
 1. 在网站导航隐藏 `/opportunities/start` 或通过宝塔切回上一已验证同机版本；通过宝塔重启网站与 Node API。
 2. 停止新的 M07-06 有限任务，不停止或删除既有采集任务、审计、Outbox 和原始证据。
-3. 如必须回滚迁移，先导出 `selection_journeys`、决策、事件、Outbox、操作记录和 `collection_task_evidence_links`。先切回不读取关联表的旧版本，再执行 `0029_collection_task_evidence_links_m07_06.down.sql`；只有继续完整撤销 M07-06 时才执行 `0028_selection_journeys_m07_06.down.sql`。原始证据仍保留首个采集任务字段，但删除关联表会丢失重复任务的关联审计；没有导出不得执行。
+3. 如必须回滚迁移，先导出 `selection_journeys`、决策、事件、Outbox、操作记录和 `collection_task_evidence_links`。切回旧版本前先停止新决策写入；切回后执行 `0059_selection_journey_candidates.down.sql` 会移除决策中的候选引用。继续撤销时再执行 `0029_collection_task_evidence_links_m07_06.down.sql`；只有完整撤销 M07-06 时才执行 `0028_selection_journeys_m07_06.down.sql`。删除关联会丢失候选选择或重复任务关联审计，没有导出不得执行。
 4. 回滚后复核既有 `/opportunities`、采集任务和 Provider 配置未变化；所有生产操作仍只通过宝塔。
 5. 如回滚项目代理，先禁用 `google_news_search`，删除 ScoutOps 宝塔对象中的四个 `PROVIDER_PROXY_*` 变量并重启 API/Worker；禁止影响系统或其他项目网络设置。
 

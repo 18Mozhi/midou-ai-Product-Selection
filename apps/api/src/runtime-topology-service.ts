@@ -1,7 +1,16 @@
 import { evaluateRuntimeTopology, type RuntimeNodeSnapshot } from "@scoutops/runtime-topology";
+import type { RuntimeHealthEndpointSummary } from "./runtime-health-probe.js";
 
 export interface RuntimeTopologyRepository {
-  snapshot(): Promise<{ nodes: RuntimeNodeSnapshot[] }>;
+  snapshot(now: Date): Promise<{
+    nodes: RuntimeNodeSnapshot[];
+    processHistory?: Array<{
+      process_name: string;
+      status: string;
+      restart_count: number;
+      observed_at: string;
+    }>;
+  }>;
   recordView(input: {
     actorId: string;
     requestId: string;
@@ -9,6 +18,7 @@ export interface RuntimeTopologyRepository {
     observedAt: Date;
     state: string;
     activeApiInstances: number;
+    processes: Array<{ name: string; status: string; restartCount: number }>;
   }): Promise<void>;
   heartbeat(input: {
     nodeId: string;
@@ -24,11 +34,79 @@ export interface RuntimeTopologyRepository {
   }): Promise<void>;
 }
 
+interface RuntimeBusinessObjectAssociation {
+  type:
+    | "collection_task"
+    | "business_task"
+    | "opportunity"
+    | "trend_topic"
+    | "report_export"
+    | "automation_execution";
+  id: string;
+  label: string;
+  href: string | null;
+}
+
+interface RuntimeTopologyAlert {
+  code: string;
+  severity: "warning" | "critical";
+  actionHint: string;
+  root_cause_code: string | null;
+  queues: string[];
+  business_objects: RuntimeBusinessObjectAssociation[];
+  occurred_at: string | null;
+}
+
+const runtimeBusinessObjectTypes = new Set<RuntimeBusinessObjectAssociation["type"]>([
+  "collection_task",
+  "business_task",
+  "opportunity",
+  "trend_topic",
+  "report_export",
+  "automation_execution",
+]);
+
+const boundedRuntimeText = (value: unknown, maximum: number) =>
+  typeof value === "string" && value.trim().length > 0 && value.trim().length <= maximum
+    ? value.trim()
+    : null;
+
+const sanitizeRuntimeBusinessObjects = (value: unknown): RuntimeBusinessObjectAssociation[] =>
+  Array.isArray(value)
+    ? value.slice(0, 4).flatMap((item) => {
+        if (!item || typeof item !== "object" || Array.isArray(item)) return [];
+        const association = item as Record<string, unknown>;
+        const type = boundedRuntimeText(association.type, 64) as
+          RuntimeBusinessObjectAssociation["type"] | null;
+        const id = boundedRuntimeText(association.id, 200);
+        const label = boundedRuntimeText(association.label, 80);
+        const href = association.href === null ? null : boundedRuntimeText(association.href, 500);
+        if (!type || !runtimeBusinessObjectTypes.has(type) || !id || !label) return [];
+        if (href !== null && (!href.startsWith("/") || href.startsWith("//"))) return [];
+        return [{ type, id, label, href }];
+      })
+    : [];
+
 export interface RuntimeTopologyPolicy {
   expectedNodeId: string;
   expectedHostId: string;
   staleAfterMs: number;
   restartAlertThreshold?: number;
+  healthProbePolicy?: {
+    intervalMs: number;
+    timeoutMs: number;
+    windowMinutes: number;
+    retentionHours: number;
+  };
+  healthProbeSnapshot?: () => Promise<{
+    status: "ready" | "empty";
+    interval_ms: number;
+    timeout_ms: number;
+    window_minutes: number;
+    retention_hours: number;
+    endpoints: RuntimeHealthEndpointSummary[];
+    observed_at: string;
+  }>;
   workerSchedulerStaleAfterMs?: number;
   workerSchedulerSnapshot?: () => Promise<null | {
     status: "running" | "stopping" | "stopped";
@@ -47,11 +125,14 @@ export interface RuntimeTopologyPolicy {
       name: string;
       priority: number;
       effective_priority?: number;
+      aging_interval_ms?: number;
+      maximum_aging_boost?: number;
       max_concurrency?: number;
       timeout_ms?: number;
       max_retries?: number;
       active_runs?: number;
       running: boolean;
+      due?: boolean;
       queue_delay_ms: number;
       longest_running_ms?: number;
       suspected_stuck?: boolean;
@@ -62,6 +143,11 @@ export interface RuntimeTopologyPolicy {
       timed_out_total?: number;
       retry_total?: number;
       deferred_total: number;
+      last_failed_at?: string | null;
+      last_result_at?: string | null;
+      last_result_status?: string | null;
+      last_result_error_code?: string | null;
+      last_business_objects?: RuntimeBusinessObjectAssociation[];
     }>;
     observed_at: string;
   }>;
@@ -92,10 +178,35 @@ export class RuntimeTopologyService {
 
   private async evaluate() {
     const observedAt = this.now();
-    const snapshot = await this.repository.snapshot();
+    const snapshot = await this.repository.snapshot(observedAt);
+    const healthProbes = this.policy.healthProbePolicy
+      ? ((await this.policy.healthProbeSnapshot?.().catch(() => null)) ?? {
+          status: "unavailable" as const,
+          interval_ms: this.policy.healthProbePolicy.intervalMs,
+          timeout_ms: this.policy.healthProbePolicy.timeoutMs,
+          window_minutes: this.policy.healthProbePolicy.windowMinutes,
+          retention_hours: this.policy.healthProbePolicy.retentionHours,
+          endpoints: [],
+          observed_at: observedAt.toISOString(),
+        })
+      : null;
     const supervisor = (await this.policy.supervisorSnapshot?.().catch(() => null)) ?? null;
-    const workerScheduler =
+    const rawWorkerScheduler =
       (await this.policy.workerSchedulerSnapshot?.().catch(() => null)) ?? null;
+    const workerScheduler = rawWorkerScheduler
+      ? {
+          ...rawWorkerScheduler,
+          queues: rawWorkerScheduler.queues.map((queue) => ({
+            ...queue,
+            due: queue.due === true,
+            last_failed_at: queue.last_failed_at ?? null,
+            last_result_at: queue.last_result_at ?? null,
+            last_result_status: queue.last_result_status ?? null,
+            last_result_error_code: queue.last_result_error_code ?? null,
+            last_business_objects: sanitizeRuntimeBusinessObjects(queue.last_business_objects),
+          })),
+        }
+      : null;
     const evaluation = evaluateRuntimeTopology({
       now: observedAt,
       staleAfterMs: this.policy.staleAfterMs,
@@ -116,57 +227,138 @@ export class RuntimeTopologyService {
         workerSchedulerAgeMs >= 0 &&
         workerSchedulerAgeMs <= (this.policy.workerSchedulerStaleAfterMs ?? 90_000),
       );
-    const alerts: Array<{ code: string; severity: "warning" | "critical"; actionHint: string }> =
-      [];
-    if (!workerSchedulerFresh)
+    const schedulerQueues = workerScheduler?.queues ?? [];
+    const recent = (value?: string | null) => {
+      if (!value) return false;
+      const ageMs = observedAt.getTime() - Date.parse(value);
+      return Number.isFinite(ageMs) && ageMs >= 0 && ageMs <= 60_000;
+    };
+    const queueNames = (predicate: (queue: (typeof schedulerQueues)[number]) => boolean) =>
+      schedulerQueues.filter(predicate).map((queue) => queue.name);
+    const alerts: RuntimeTopologyAlert[] = [];
+    const pushAlert = (
+      alert: Omit<
+        RuntimeTopologyAlert,
+        "root_cause_code" | "queues" | "business_objects" | "occurred_at"
+      > &
+        Partial<
+          Pick<
+            RuntimeTopologyAlert,
+            "root_cause_code" | "queues" | "business_objects" | "occurred_at"
+          >
+        >,
+    ) =>
       alerts.push({
+        root_cause_code: null,
+        queues: [],
+        business_objects: [],
+        occurred_at: null,
+        ...alert,
+      });
+    if (!workerSchedulerFresh)
+      pushAlert({
         code: "worker_scheduler_heartbeat_stale",
         severity: "critical",
         actionHint: "在宝塔检查 Node Worker，并确认调度状态文件持续更新。",
+        occurred_at: workerScheduler?.observed_at ?? null,
       });
     if (workerScheduler?.backpressure)
-      alerts.push({
+      pushAlert({
         code: "worker_scheduler_backpressure",
         severity: "warning",
         actionHint: "优先处理高优先级积压；确认资源水位后再调整 Worker 并发配额。",
+        queues: queueNames((queue) => queue.due === true),
+        occurred_at: workerScheduler.observed_at,
       });
     if ((workerScheduler?.failed_last_minute ?? 0) > 0)
-      alerts.push({
+      pushAlert({
         code: "worker_scheduler_recent_failures",
         severity: "warning",
         actionHint: "按失败队列下钻日志并携带 request_id 处理依赖错误。",
+        queues: queueNames((queue) => recent(queue.last_failed_at)),
+        occurred_at:
+          schedulerQueues
+            .map((queue) => queue.last_failed_at)
+            .filter((value): value is string => recent(value))
+            .sort()
+            .at(-1) ?? null,
       });
     if ((workerScheduler?.suspected_stuck_runs ?? 0) > 0)
-      alerts.push({
+      pushAlert({
         code: "worker_scheduler_suspected_stuck",
         severity: "critical",
         actionHint: "按运行时长定位疑似卡死队列；先核对租约和取消信号，再通过宝塔重启 Worker。",
+        queues: queueNames((queue) => queue.suspected_stuck === true),
+        occurred_at: workerScheduler?.observed_at ?? null,
       });
     if (workerScheduler?.queues.some((queue) => queue.circuit_state === "open"))
-      alerts.push({
+      pushAlert({
         code: "worker_scheduler_queue_circuit_open",
         severity: "critical",
         actionHint: "按队列查看连续失败和最近错误，修复依赖后等待队列级熔断窗口恢复。",
+        queues: queueNames((queue) => queue.circuit_state === "open"),
+        occurred_at: workerScheduler.observed_at,
       });
     if ((workerScheduler?.snapshot_publish_failed_total ?? 0) > 0)
-      alerts.push({
+      pushAlert({
         code: "worker_scheduler_snapshot_publish_failed",
         severity: "warning",
         actionHint: "检查调度状态文件目录的权限和磁盘；业务任务结果不受该观测写入失败影响。",
+        occurred_at: workerScheduler?.observed_at ?? null,
       });
+    for (const queue of schedulerQueues)
+      if (queue.last_result_error_code && recent(queue.last_result_at))
+        pushAlert({
+          code: "worker_business_result_failed",
+          severity: "warning",
+          actionHint: "打开关联业务对象核对失败事实；没有精确对象时仅按队列继续排查。",
+          root_cause_code: queue.last_result_error_code,
+          queues: [queue.name],
+          business_objects: queue.last_business_objects ?? [],
+          occurred_at: queue.last_result_at ?? null,
+        });
     if (
       supervisor &&
       Object.values(supervisor.processes).some(
         (process) => process.restart_count >= (this.policy.restartAlertThreshold ?? 5),
       )
     )
-      alerts.push({
+      pushAlert({
         code: "backend_restart_loop",
         severity: "critical",
         actionHint: "停止继续重启，在宝塔检查最近一次退出原因和熔断时间。",
+        occurred_at: supervisor.observed_at,
       });
     const state =
       !workerSchedulerFresh && evaluation.state === "ready" ? "stale" : evaluation.state;
+    const processes = supervisor
+      ? Object.entries(supervisor.processes).map(([name, process]) => ({
+          name,
+          status: process.status,
+          pid: process.pid,
+          restart_count: process.restart_count,
+          ready_at: process.ready_at ?? null,
+          circuit_open_until: process.circuit_open_until,
+          last_failure: process.last_failure ?? null,
+        }))
+      : [];
+    const samples = [
+      ...(snapshot.processHistory ?? []),
+      ...processes.map((process) => ({
+        process_name: process.name,
+        status: process.status,
+        restart_count: process.restart_count,
+        observed_at: observedAt.toISOString(),
+      })),
+    ].sort((left, right) => Date.parse(left.observed_at) - Date.parse(right.observed_at));
+    const previous = new Map<string, number>();
+    const restartTrend = samples.map((sample) => {
+      const prior = previous.get(sample.process_name),
+        counterReset = prior !== undefined && sample.restart_count < prior,
+        restartDelta = prior === undefined || counterReset ? 0 : sample.restart_count - prior;
+      previous.set(sample.process_name, sample.restart_count);
+      return { ...sample, restart_delta: restartDelta, counter_reset: counterReset };
+    });
     return {
       _node_state: evaluation.state,
       state,
@@ -187,17 +379,9 @@ export class RuntimeTopologyService {
           version: node.version,
           last_heartbeat_at: node.lastHeartbeatAt.toISOString(),
         })),
-      processes: supervisor
-        ? Object.entries(supervisor.processes).map(([name, process]) => ({
-            name,
-            status: process.status,
-            pid: process.pid,
-            restart_count: process.restart_count,
-            ready_at: process.ready_at ?? null,
-            circuit_open_until: process.circuit_open_until,
-            last_failure: process.last_failure ?? null,
-          }))
-        : [],
+      processes,
+      restart_trend: restartTrend,
+      health_probes: healthProbes,
       worker_scheduler: workerScheduler,
       supervisor_pid: supervisor?.supervisor_pid ?? null,
       blockers: [
@@ -230,6 +414,11 @@ export class RuntimeTopologyService {
       observedAt: new Date(result.observed_at),
       state: result.state,
       activeApiInstances: result.active_api_instances,
+      processes: result.processes.map((process) => ({
+        name: process.name,
+        status: process.status,
+        restartCount: process.restart_count,
+      })),
     });
     return result;
   }

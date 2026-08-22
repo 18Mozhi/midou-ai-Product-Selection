@@ -6,7 +6,7 @@
   "atomicTasks": [
     {
       "id": "M05-02.A01",
-      "evidence": "scope approval templates requests nodes reasons escalation only"
+      "evidence": "scope approval templates requests nodes reasons timeout assignee path and escalation only"
     },
     {
       "id": "M05-02.A02",
@@ -26,11 +26,11 @@
     },
     {
       "id": "M05-02.A06",
-      "evidence": "OpenAPI template request evidence completeness rule version decision basis detail and action contracts"
+      "evidence": "OpenAPI template request captured-to-current evidence completeness rule version decision basis detail and action contracts"
     },
     {
       "id": "M05-02.A07",
-      "evidence": "approval inbox evidence completeness rule versions decision basis detail timeline templates desktop and 390 layout"
+      "evidence": "approval inbox submission-current evidence diff rule versions decision basis detail original current timeout assignee timeline templates desktop and 390 layout"
     },
     {
       "id": "M05-02.A08",
@@ -50,7 +50,7 @@
     },
     {
       "id": "M05-02.A12",
-      "evidence": "node SLA reason version decision-to-opportunity resource evidence snapshot and task not-applicable unit tests"
+      "evidence": "node SLA reason version decision-to-opportunity resource evidence snapshot current comparison and task not-applicable unit tests"
     },
     {
       "id": "M05-02.A13",
@@ -62,7 +62,7 @@
     },
     {
       "id": "M05-02.A15",
-      "evidence": "Playwright desktop 390 inbox detail timeline visual regression"
+      "evidence": "Playwright desktop 390 inbox detail timeout escalation path timeline visual regression"
     },
     {
       "id": "M05-02.A16",

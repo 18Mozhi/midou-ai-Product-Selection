@@ -310,6 +310,46 @@
 .org-admin-template-grid article i {
   width: fit-content;
 }
+.org-admin-template-diff {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--so-border);
+}
+.org-admin-template-diff summary {
+  cursor: pointer;
+  color: var(--so-primary);
+  font-weight: 700;
+}
+.org-admin-template-change {
+  display: grid;
+  gap: 6px;
+  margin-top: 9px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--so-panel-soft);
+}
+.org-admin-template-change[data-kind="added"] {
+  border-left: 3px solid var(--so-success);
+}
+.org-admin-template-change[data-kind="removed"] {
+  border-left: 3px solid var(--so-danger);
+}
+.org-admin-template-change dl,
+.org-admin-template-change dl > div {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+.org-admin-template-change dl > div {
+  grid-template-columns: minmax(90px, 0.7fr) 1fr;
+}
+.org-admin-template-change dt {
+  color: var(--so-text-muted);
+}
+.org-admin-template-change dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
 .org-admin-card .org-admin-subheading {
   margin-top: 24px;
 }

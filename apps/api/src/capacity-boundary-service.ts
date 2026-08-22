@@ -29,6 +29,9 @@ export interface CapacityBoundaryPolicy {
 export interface CapacityBoundaryFinding {
   code: string;
   severity: "warning" | "blocked";
+  reason: string;
+  owner_role_code: "platform_operations_admin";
+  owner_label: "平台运维管理员";
   action_hint: string;
 }
 export interface CapacityBoundaryEvaluation {
@@ -71,49 +74,121 @@ export function evaluateCapacityBoundary(
   now = new Date(),
 ): CapacityBoundaryEvaluation {
   const findings: CapacityBoundaryFinding[] = [];
-  const blocked = (code: string, action_hint: string) =>
-    findings.push({ code, severity: "blocked", action_hint });
-  const warning = (code: string, action_hint: string) =>
-    findings.push({ code, severity: "warning", action_hint });
+  const finding = (
+    severity: CapacityBoundaryFinding["severity"],
+    code: string,
+    reason: string,
+    action_hint: string,
+  ) =>
+    findings.push({
+      code,
+      severity,
+      reason,
+      owner_role_code: "platform_operations_admin",
+      owner_label: "平台运维管理员",
+      action_hint,
+    });
+  const blocked = (code: string, reason: string, action_hint: string) =>
+    finding("blocked", code, reason, action_hint);
+  const warning = (code: string, reason: string, action_hint: string) =>
+    finding("warning", code, reason, action_hint);
   const age = now.getTime() - Date.parse(snapshot.observed_at);
   if (!Number.isFinite(age) || age < 0 || age > policy.maximumEvidenceAgeMinutes * 60000)
-    blocked("capacity_evidence_stale", "重新运行惠州单机受控容量基线并签发同提交证据。");
+    blocked(
+      "capacity_evidence_stale",
+      "当前容量证据已超过允许的新鲜度窗口。",
+      "重新运行惠州单机受控容量基线并签发同提交证据。",
+    );
   if (snapshot.measured_concurrency < 5)
     blocked(
       "capacity_measurement_missing",
+      "固定并发 5 尚未形成完整通过的生产测量。",
       "固定并发 5 必须先完整通过，禁止用规划值或未通过档位代替实测边界。",
     );
   if (snapshot.read_p95_ms > policy.readP95StopMs)
-    blocked("capacity_read_latency_exceeded", "保持降载并检查 API、MySQL 与 Redis 读路径。");
+    blocked(
+      "capacity_read_latency_exceeded",
+      "核心读取 P95 已超过固定停止线。",
+      "保持降载并检查 API、MySQL 与 Redis 读路径。",
+    );
   else if (snapshot.read_p95_ms >= Math.round(policy.readP95StopMs * 0.9))
-    warning("capacity_read_latency_warning", "读 P95 接近停止线，暂停后台非关键工作并持续观察。");
+    warning(
+      "capacity_read_latency_warning",
+      "核心读取 P95 已进入停止线前 10% 的预警区间。",
+      "读 P95 接近停止线，暂停后台非关键工作并持续观察。",
+    );
   if (snapshot.write_p95_ms > policy.writeP95StopMs)
-    blocked("capacity_write_latency_exceeded", "停止新增后台工作并检查 MySQL 持久写路径。");
+    blocked(
+      "capacity_write_latency_exceeded",
+      "核心写入 P95 已超过固定停止线。",
+      "停止新增后台工作并检查 MySQL 持久写路径。",
+    );
   else if (snapshot.write_p95_ms >= Math.round(policy.writeP95StopMs * 0.9))
     warning(
       "capacity_write_latency_warning",
+      "核心写入 P95 已进入停止线前 10% 的预警区间。",
       "写 P95 接近停止线，维持单 Worker/Crawler 并降低任务进入速度。",
     );
   if (snapshot.error_rate_basis_points >= policy.errorRateStopBasisPoints)
-    blocked("capacity_error_rate_exceeded", "停止扩大并发并按 trace_id 排查失败请求。");
+    blocked(
+      "capacity_error_rate_exceeded",
+      "生产测量错误率已达到固定停止线。",
+      "停止扩大并发并按 trace_id 排查失败请求。",
+    );
   else if (snapshot.error_rate_basis_points >= Math.round(policy.errorRateStopBasisPoints * 0.8))
-    warning("capacity_error_rate_warning", "错误率接近停止线，保持当前实测边界不再扩大。");
+    warning(
+      "capacity_error_rate_warning",
+      "生产测量错误率已进入停止线前 20% 的预警区间。",
+      "错误率接近停止线，保持当前实测边界不再扩大。",
+    );
   if (snapshot.async_lag_seconds > policy.asyncLagStopSeconds)
-    blocked("capacity_async_lag_exceeded", "保持任务排队并暂停非关键异步处理。");
+    blocked(
+      "capacity_async_lag_exceeded",
+      "异步任务滞后已超过固定停止线。",
+      "保持任务排队并暂停非关键异步处理。",
+    );
   else if (snapshot.async_lag_seconds >= Math.round(policy.asyncLagStopSeconds * 0.8))
-    warning("capacity_async_lag_warning", "异步滞后接近停止线，优先处理既有队列。");
+    warning(
+      "capacity_async_lag_warning",
+      "异步任务滞后已进入停止线前 20% 的预警区间。",
+      "异步滞后接近停止线，优先处理既有队列。",
+    );
   if (snapshot.load_basis_points >= policy.maximumLoadBasisPoints)
-    blocked("capacity_host_load_exceeded", "通过宝塔停止新增后台工作并核查主机资源。");
+    blocked(
+      "capacity_host_load_exceeded",
+      "单机归一化负载已达到固定上限。",
+      "通过宝塔停止新增后台工作并核查主机资源。",
+    );
   else if (snapshot.load_basis_points >= Math.round(policy.maximumLoadBasisPoints * 0.9))
-    warning("capacity_host_load_warning", "主机负载接近停止线，保持降载策略。");
+    warning(
+      "capacity_host_load_warning",
+      "单机归一化负载已进入上限前 10% 的预警区间。",
+      "主机负载接近停止线，保持降载策略。",
+    );
   if (snapshot.available_memory_mb < policy.minimumAvailableMemoryMb)
-    blocked("capacity_memory_exceeded", "保持降载并通过宝塔检查内存使用。");
+    blocked(
+      "capacity_memory_exceeded",
+      "单机可用内存低于固定安全下限。",
+      "保持降载并通过宝塔检查内存使用。",
+    );
   if (snapshot.free_disk_mb < policy.minimumFreeDiskMb)
-    blocked("capacity_disk_exceeded", "停止新增文件任务并通过宝塔清理或扩容受控目录。");
+    blocked(
+      "capacity_disk_exceeded",
+      "单机可用磁盘低于固定安全下限。",
+      "停止新增文件任务并通过宝塔清理或扩容受控目录。",
+    );
   if (!snapshot.archive_verified)
-    blocked("capacity_archive_unverified", "通过宝塔有限任务验证归档副本后再签发容量边界。");
+    blocked(
+      "capacity_archive_unverified",
+      "当前容量证据尚未签认加密归档事实。",
+      "通过宝塔有限任务验证归档副本后再签发容量边界。",
+    );
   if (!snapshot.recovery_verified)
-    blocked("capacity_recovery_unverified", "在隔离库和隔离目录完成恢复演练后再签发容量边界。");
+    blocked(
+      "capacity_recovery_unverified",
+      "当前容量证据尚未签认隔离恢复事实。",
+      "在隔离库和隔离目录完成恢复演练后再签发容量边界。",
+    );
 
   if (snapshot.measured_concurrency < 20) {
     const expectedNext =
@@ -125,11 +200,13 @@ export function evaluateCapacityBoundary(
     )
       blocked(
         "capacity_boundary_stop_missing",
+        "低于规划上限的证据没有保留正确的下一档失败事实。",
         "低于规划测量上限的边界必须保留下一档真实失败码和失败档位。",
       );
     else
       warning(
         "capacity_next_stage_gate_failed",
+        `并发 ${snapshot.failed_next_concurrency} 的下一档生产测量未通过。`,
         `并发 ${snapshot.failed_next_concurrency} 已触发 ${snapshot.failed_next_code}；容量声明仅限已通过的并发 ${snapshot.measured_concurrency}，不得继续扩大。`,
       );
   } else if (
@@ -139,6 +216,7 @@ export function evaluateCapacityBoundary(
   )
     blocked(
       "capacity_boundary_stop_invalid",
+      "并发 20 的生产证据与规划上限结束语义不一致。",
       "并发 20 证据必须明确以规划测量上限结束且没有伪造下一档。",
     );
 

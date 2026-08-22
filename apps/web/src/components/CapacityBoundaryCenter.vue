@@ -45,6 +45,9 @@ interface Dto {
   findings: Array<{
     code: string;
     severity: "warning" | "blocked";
+    reason: string;
+    owner_role_code: "platform_operations_admin";
+    owner_label: "平台运维管理员";
     action_hint: string;
   }>;
   single_host: true;
@@ -290,9 +293,16 @@ onMounted(() => {
             :key="item.code"
             :data-severity="item.severity"
           >
-            <span>{{ String(index + 1).padStart(2, "0") }}</span
-            ><code>{{ item.code }}</code>
-            <p>{{ item.action_hint }}</p>
+            <span>{{ String(index + 1).padStart(2, "0") }}</span>
+            <div>
+              <strong>{{ item.reason }}</strong>
+              <small>责任人：{{ item.owner_label }}</small>
+              <p>{{ item.action_hint }}</p>
+              <details>
+                <summary>技术详情</summary>
+                <code>{{ item.code }} · {{ item.owner_role_code }}</code>
+              </details>
+            </div>
           </article>
         </div>
         <div v-else class="capacity-boundary__clear">

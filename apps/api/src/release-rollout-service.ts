@@ -203,6 +203,16 @@ export class ReleaseRolloutService {
     const sourceAligned = [this.policy.sourceLocalSha, this.policy.sourceRemoteSha]
       .filter(Boolean)
       .every((sha) => sha === currentBuildSha);
+    const gateDurationMs = (gate: Record<string, unknown>) => {
+      const timedAction = gate.gate_kind === "migration" || gate.gate_kind === "rollback";
+      if (timedAction && (gate.metadata as { timing_schema?: number } | null)?.timing_schema !== 2)
+        return null;
+      const startedAt = gate.started_at ? Date.parse(String(gate.started_at)) : Number.NaN;
+      const finishedAt = gate.finished_at ? Date.parse(String(gate.finished_at)) : Number.NaN;
+      return Number.isFinite(startedAt) && Number.isFinite(finishedAt) && finishedAt >= startedAt
+        ? finishedAt - startedAt
+        : null;
+    };
     const state = !historicalLatest
       ? "empty"
       : !latest || !identityAligned || !sourceAligned
@@ -245,7 +255,10 @@ export class ReleaseRolloutService {
             this.policy.sourceMigrationVersion ?? latest?.migration_version ?? null,
         },
       },
-      gates: gates.map(({ metadata: _metadata, ...gate }) => gate),
+      gates: gates.map((gate) => {
+        const { metadata: _metadata, ...sanitized } = gate;
+        return { ...sanitized, duration_ms: gateDurationMs(gate) };
+      }),
       automatic_stop_verified: Boolean(stopped),
       rollback_verified: Boolean(rollback),
       blockers: [

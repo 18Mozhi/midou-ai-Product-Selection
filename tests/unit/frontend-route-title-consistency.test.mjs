@@ -24,10 +24,9 @@ test("Feature Map frontend routes are unique and /me has one PersonalCenter owne
 });
 
 test("Feature Map frontend routes match the actual navigation dispatch", async () => {
-  const [featureMap, catalog, shell] = await Promise.all([
+  const [featureMap, catalog] = await Promise.all([
     readFile("docs/feature-map.json", "utf8").then(JSON.parse),
     readFile("apps/web/src/route-catalog.ts", "utf8"),
-    readFile("apps/web/src/components/NavigationShell.vue", "utf8"),
   ]);
   const mappedRoutes = new Set(featureMap.routes.map((route) => route.path));
   const actualRoutes = new Set();
@@ -52,23 +51,24 @@ test("Feature Map frontend routes match the actual navigation dispatch", async (
 });
 
 test("crawler scheduler menu, page heading and content heading have distinct consistent names", async () => {
-  const [catalog, shell, page] = await Promise.all([
+  const [catalog, routeState, page] = await Promise.all([
     readFile("apps/web/src/route-catalog.ts", "utf8"),
-    readFile("apps/web/src/components/NavigationShell.vue", "utf8"),
+    readFile("apps/web/src/navigation-shell-route-state.ts", "utf8"),
     readFile("apps/web/src/components/CrawlerSchedulerCenter.vue", "utf8"),
   ]);
   assert.match(catalog, /"\/platform-admin\/crawler-scheduler"[\s\S]*?"采集调度"/);
-  assert.match(shell, /label: "采集调度"/);
+  assert.match(routeState, /label: "采集调度"/);
   assert.match(page, /<h2>运行与配额<\/h2>/);
   assert.doesNotMatch(page, /<h2>采集执行器调度<\/h2>/);
 });
 
 test("formal routes centralize titles, permissions and breadcrumbs without fallback highlighting", async () => {
-  const [router, catalog, shell, main] = await Promise.all(
+  const [router, catalog, shell, permissions, main] = await Promise.all(
     [
       "apps/web/src/router.ts",
       "apps/web/src/route-catalog.ts",
       "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/navigation-shell-permissions.ts",
       "apps/web/src/main.ts",
     ].map((path) => readFile(path, "utf8")),
   );
@@ -79,9 +79,9 @@ test("formal routes centralize titles, permissions and breadcrumbs without fallb
   assert.doesNotMatch(shell, /items\.value\[0\]/);
   assert.match(shell, /routeAllowed/);
   assert.doesNotMatch(main, /addEventListener\(["']click["']/);
-  assert.match(shell, /navigationItemsFor/);
+  assert.match(permissions, /navigationItemsFor/);
   assert.equal(
-    new Set([...catalog.matchAll(/group: "([^"]+)"/g)].map((match) => match[1])).has("运行"),
+    new Set([...catalog.matchAll(/group: "([^"]+)"/g)].map((match) => match[1])).has("高级运维"),
     true,
   );
 });

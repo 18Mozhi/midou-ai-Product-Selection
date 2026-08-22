@@ -5,7 +5,6 @@ import { relative, resolve } from "node:path";
 const root = process.cwd();
 const timeout = 900_000;
 const npm = "npm";
-const npx = "npx";
 async function collectNodeTests(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const files = [];
@@ -57,10 +56,9 @@ const steps = [
   },
   {
     id: "playwright-e2e",
-    label: "playwright-e2e",
-    command: npx,
-    args: ["playwright", "test"],
-    shell: process.platform === "win32",
+    label: "playwright-e2e-independent-project-lifecycles",
+    command: process.execPath,
+    args: ["scripts/run-playwright-projects.mjs"],
   },
   {
     id: "verify-docs",

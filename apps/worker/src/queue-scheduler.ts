@@ -3,6 +3,25 @@ export interface QueueSchedulerRunContext {
   max_attempts: number;
 }
 
+export interface QueueBusinessObjectAssociation {
+  type:
+    | "collection_task"
+    | "business_task"
+    | "opportunity"
+    | "trend_topic"
+    | "report_export"
+    | "automation_execution";
+  id: string;
+  label: string;
+  href: string | null;
+}
+
+export interface QueueRunObservation {
+  status: string;
+  error_code: string | null;
+  business_objects: QueueBusinessObjectAssociation[];
+}
+
 export interface QueueSchedulerJob {
   name: string;
   intervalMs: number;
@@ -51,6 +70,8 @@ interface QueueSchedulerJobState extends QueueSchedulerJob {
   lastFailedAt: string | null;
   lastError: string | null;
   lastQueueDelayMs: number;
+  lastResult: QueueRunObservation | null;
+  lastResultAt: string | null;
 }
 
 interface CompletionEvent {
@@ -59,7 +80,7 @@ interface CompletionEvent {
 }
 
 type RunOutcome =
-  | { status: "succeeded" }
+  | { status: "succeeded"; observation: QueueRunObservation | null }
   | { status: "failed"; error: string }
   | { status: "timed_out"; error: string }
   | { status: "cancelled"; error: string };
@@ -88,12 +109,15 @@ export interface QueueSchedulerSnapshot {
     name: string;
     priority: number;
     effective_priority: number;
+    aging_interval_ms: number;
+    maximum_aging_boost: number;
     interval_ms: number;
     max_concurrency: number;
     timeout_ms: number;
     max_retries: number;
     active_runs: number;
     running: boolean;
+    due: boolean;
     queue_delay_ms: number;
     longest_running_ms: number;
     suspected_stuck: boolean;
@@ -111,6 +135,10 @@ export interface QueueSchedulerSnapshot {
     last_completed_at: string | null;
     last_failed_at: string | null;
     last_error: string | null;
+    last_result_at: string | null;
+    last_result_status: string | null;
+    last_result_error_code: string | null;
+    last_business_objects: QueueBusinessObjectAssociation[];
   }>;
   observed_at: string;
 }
@@ -120,6 +148,43 @@ const positive = (value: number | undefined, fallback: number, minimum = 1) =>
 
 const errorMessage = (error: unknown) =>
   (error instanceof Error ? error.message : "unknown").slice(0, 240);
+
+const associationTypes = new Set<QueueBusinessObjectAssociation["type"]>([
+  "collection_task",
+  "business_task",
+  "opportunity",
+  "trend_topic",
+  "report_export",
+  "automation_execution",
+]);
+
+const boundedText = (value: unknown, maximum: number) =>
+  typeof value === "string" && value.trim().length > 0 && value.trim().length <= maximum
+    ? value.trim()
+    : null;
+
+const runObservation = (value: unknown): QueueRunObservation | null => {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const source = value as Record<string, unknown>;
+  const status = boundedText(source.status, 64);
+  if (!status) return null;
+  const errorCode = boundedText(source.error_code, 120);
+  const businessObjects = Array.isArray(source.business_objects)
+    ? source.business_objects.slice(0, 4).flatMap((item) => {
+        if (!item || typeof item !== "object" || Array.isArray(item)) return [];
+        const association = item as Record<string, unknown>;
+        const type = boundedText(association.type, 64) as
+          QueueBusinessObjectAssociation["type"] | null;
+        const id = boundedText(association.id, 200);
+        const label = boundedText(association.label, 80);
+        const href = association.href === null ? null : boundedText(association.href, 500);
+        if (!type || !associationTypes.has(type) || !id || !label) return [];
+        if (href !== null && (!href.startsWith("/") || href.startsWith("//"))) return [];
+        return [{ type, id, label, href }];
+      })
+    : [];
+  return { status, error_code: errorCode, business_objects: businessObjects };
+};
 
 const abortableDelay = (delayMs: number, signal: AbortSignal) =>
   new Promise<void>((resolve, reject) => {
@@ -191,6 +256,8 @@ export class QueueScheduler {
       lastFailedAt: null,
       lastError: null,
       lastQueueDelayMs: 0,
+      lastResult: null,
+      lastResultAt: null,
     });
     return this;
   }
@@ -221,6 +288,7 @@ export class QueueScheduler {
     const nowMs = observedAt.getTime();
     this.pruneCompletions(nowMs);
     const due = this.dueJobs(nowMs);
+    const dueQueueNames = new Set(due.map((job) => job.name));
     const completedLastMinute = this.completions.length;
     const failedLastMinute = this.completions.filter((item) => item.failed).length;
     const queues = this.jobs
@@ -239,12 +307,15 @@ export class QueueScheduler {
           name: job.name,
           priority: job.priority,
           effective_priority: this.effectivePriority(job, nowMs),
+          aging_interval_ms: job.agingIntervalMs,
+          maximum_aging_boost: job.maximumAgingBoost,
           interval_ms: job.intervalMs,
           max_concurrency: job.maxConcurrency,
           timeout_ms: job.timeoutMs,
           max_retries: job.maxRetries,
           active_runs: job.activeRuns.size,
           running: job.activeRuns.size > 0,
+          due: dueQueueNames.has(job.name),
           queue_delay_ms: Math.max(job.lastQueueDelayMs, Math.max(0, nowMs - job.nextRunAt)),
           longest_running_ms: longestRunningMs,
           suspected_stuck: longestRunningMs >= job.stuckAfterMs,
@@ -268,6 +339,10 @@ export class QueueScheduler {
           last_completed_at: job.lastCompletedAt,
           last_failed_at: job.lastFailedAt,
           last_error: job.lastError,
+          last_result_at: job.lastResultAt,
+          last_result_status: job.lastResult?.status ?? null,
+          last_result_error_code: job.lastResult?.error_code ?? null,
+          last_business_objects: job.lastResult?.business_objects ?? [],
         };
       });
     return {
@@ -376,10 +451,10 @@ export class QueueScheduler {
             reject(error);
           }, job.timeoutMs);
         });
-        await Promise.race([operation, timeoutOperation]);
+        const value = await Promise.race([operation, timeoutOperation]);
         if (run.controller.signal.aborted)
           return { status: "cancelled", error: "scheduler_stopping" };
-        return { status: "succeeded" };
+        return { status: "succeeded", observation: runObservation(value) };
       } catch (error) {
         if (run.controller.signal.aborted)
           return { status: "cancelled", error: "scheduler_stopping" };
@@ -411,6 +486,10 @@ export class QueueScheduler {
     if (outcome.status === "succeeded") {
       job.consecutiveFailures = 0;
       job.lastError = null;
+      if (outcome.observation) {
+        job.lastResult = outcome.observation;
+        job.lastResultAt = completedAt.toISOString();
+      }
     } else if (outcome.status === "cancelled") {
       job.cancelledTotal += 1;
       job.lastError = outcome.error;

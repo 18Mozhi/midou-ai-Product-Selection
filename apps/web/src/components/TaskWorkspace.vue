@@ -8,27 +8,13 @@ import {
   type ApiRequestOptions,
 } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
+import TaskBatchActions from "./TaskBatchActions.vue";
+import TaskDetailPanel from "./TaskDetailPanel.vue";
+import TaskListPanel from "./TaskListPanel.vue";
+import type { BatchTaskAction, MemberOption, Task, TaskActionEditor } from "./task-workspace-types";
 import "../task-workspace.css";
 import "../task-workspace-enhancements.css";
 type State = "loading" | "ready" | "empty" | "error" | "forbidden" | "expired" | "rate_limited";
-type Task = {
-  id: string;
-  title: string;
-  description: string;
-  status: string;
-  priority: string;
-  assignee_id: string;
-  due_at: string | null;
-  sla_status: string;
-  source_type: string;
-  source_ref_id: string | null;
-  collection_task_id: string | null;
-  progress_percent: number;
-  progress_note: string | null;
-  version: number;
-  comments?: any[];
-  events?: any[];
-};
 type ExportTask = {
   id: string;
   report_type: "opportunity" | "trend" | "team";
@@ -36,12 +22,13 @@ type ExportTask = {
   attempt_count: number;
   row_count: number | null;
   last_error_code: string | null;
+  queue_position: number | null;
+  estimated_completion_at: string | null;
+  estimate_sample_size: number;
   created_at: string;
   updated_at: string;
   expires_at: string;
 };
-type MemberOption = { id: string; label: string };
-type TaskActionEditor = "pause" | "cancel" | "delay" | "transfer" | "progress";
 const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all"; taskId?: string }>(),
   route = useRoute(),
   router = useRouter(),
@@ -77,8 +64,10 @@ const props = defineProps<{ apiBaseUrl: string; mode: "today" | "all"; taskId?: 
   deleteReason = ref(""),
   editing = ref<Task | null>(null),
   selectedIds = ref<string[]>([]),
-  batchAction = ref<"pause" | "resume" | "cancel">("pause"),
+  batchAction = ref<BatchTaskAction>("pause"),
   batchReason = ref(""),
+  batchDueAt = ref(""),
+  batchAssigneeId = ref(""),
   showBatchImpact = ref(false),
   form = ref({ title: "", description: "", priority: "normal", due_at: "" }),
   comment = ref("");
@@ -102,17 +91,9 @@ const closeTaskEditor = () => {
     () => showCreate.value,
     closeTaskEditor,
   ),
-  { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
-    () => showBatchImpact.value,
-    () => (showBatchImpact.value = false),
-  ),
   { dialogElement: deleteDialogElement, handleCancel: handleDeleteCancel } = useModalDialog(
     () => Boolean(deleting.value),
     closeDeleteDialog,
-  ),
-  { dialogElement: actionDialogElement, handleCancel: handleActionCancel } = useModalDialog(
-    () => Boolean(taskActionEditor.value),
-    () => (taskActionEditor.value = null),
   );
 const pageSize = 10,
   visible = computed(() => tasks.value.filter((x) => !status.value || x.status === status.value)),
@@ -140,6 +121,19 @@ const pageSize = 10,
           : !["completed", "cancelled"].includes(task.status),
     ),
   ),
+  blockingContext = computed(() => {
+    if (!selected.value) return null;
+    const events = selected.value.events ?? [],
+      pause = [...events].reverse().find((item) => item.event_type === "task.pause"),
+      member = memberOptions.value.find((item) => item.id === selected.value?.assignee_id);
+    return {
+      reason:
+        selected.value.status === "paused"
+          ? String(pause?.payload?.reason ?? "暂停事件未记录可展示原因")
+          : "当前任务未处于阻塞状态",
+      nextOwner: member?.label ?? "已分配负责人（成员目录暂不可用）",
+    };
+  }),
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
   returnPath = computed(() => {
     const value = typeof route.query.from === "string" ? route.query.from : "";
@@ -206,7 +200,11 @@ const exportStatusLabel = (value: string) =>
       ? "前往报表页下载文件"
       : ["dead_letter", "expired"].includes(item.status)
         ? "前往报表页重新生成"
-        : "系统正在异步处理，无需停留等待";
+        : item.queue_position == null
+          ? "系统正在异步处理，无需停留等待"
+          : item.estimated_completion_at
+            ? `队列第 ${item.queue_position} 位 · 预计 ${time(item.estimated_completion_at)} 完成`
+            : `队列第 ${item.queue_position} 位 · 暂无历史样本可估算`;
 async function api<T = any>(
   path: string,
   options?: ApiRequestOptions,
@@ -420,15 +418,20 @@ async function submitTaskAction() {
     rethrowUnexpectedError(error);
   }
 }
-function previewBatch(action: "pause" | "resume" | "cancel") {
+function previewBatch(action: BatchTaskAction) {
   batchAction.value = action;
   batchReason.value = "";
+  batchDueAt.value = "";
+  batchAssigneeId.value = "";
   showBatchImpact.value = true;
 }
 async function confirmBatch() {
   if (
     !batchEligible.value.length ||
-    (["pause", "cancel"].includes(batchAction.value) && !batchReason.value.trim())
+    (["pause", "cancel", "delay", "transfer"].includes(batchAction.value) &&
+      !batchReason.value.trim()) ||
+    (batchAction.value === "delay" && !batchDueAt.value) ||
+    (batchAction.value === "transfer" && !batchAssigneeId.value)
   )
     return;
   busy.value = true;
@@ -442,6 +445,15 @@ async function confirmBatch() {
           expected_version: task.version,
           ...(["pause", "cancel"].includes(batchAction.value)
             ? { reason: batchReason.value.trim() }
+            : {}),
+          ...(batchAction.value === "delay"
+            ? {
+                reason: batchReason.value.trim(),
+                due_at: new Date(batchDueAt.value).toISOString(),
+              }
+            : {}),
+          ...(batchAction.value === "transfer"
+            ? { reason: batchReason.value.trim(), assignee_id: batchAssigneeId.value }
             : {}),
         },
       });
@@ -559,63 +571,34 @@ watch(
           <span>已完成</span><b>{{ summary.completed }}</b>
         </article>
       </div>
-      <div class="task-filter">
-        <button
-          v-for="x in [
-            { v: '', t: '全部' },
-            { v: 'todo', t: '待处理' },
-            { v: 'in_progress', t: '进行中' },
-            { v: 'paused', t: '已暂停' },
-            { v: 'completed', t: '已完成' },
-          ]"
-          :key="x.v"
-          :aria-pressed="status === x.v"
-          @click="setStatus(x.v)"
-        >
-          {{ x.t }}
-        </button>
-      </div>
-      <div v-if="selectedIds.length" class="task-batch-bar">
-        <span>已选 {{ selectedIds.length }} 项</span>
-        <button type="button" @click="previewBatch('pause')">批量暂停</button>
-        <button type="button" @click="previewBatch('resume')">批量继续</button>
-        <button type="button" class="danger" @click="previewBatch('cancel')">批量取消</button>
-      </div>
-      <section v-if="!visible.length" class="task-state">
-        <h3>当前没有任务</h3>
-        <p>创建任务后会在此显示；系统不会填充示例业务数据。</p>
-      </section>
-      <div v-else class="task-list">
-        <article v-for="x in visible" :key="x.id">
-          <label class="task-row-select"
-            ><input v-model="selectedIds" type="checkbox" :value="x.id" /><span class="sr-only"
-              >选择任务：{{ x.title }}</span
-            ></label
-          >
-          <RouterLink
-            class="task-row-main"
-            :to="{ path: `/tasks/${x.id}`, query: { from: route.fullPath } }"
-          >
-            <i :data-priority="x.priority"></i
-            ><span
-              ><strong>{{ x.title }}</strong
-              ><small>{{ x.description || "无补充说明" }}</small></span
-            ><em>{{ label(x.status) }}</em
-            ><span class="task-progress"
-              ><b>{{ phase(x) }}</b
-              ><i><u :style="{ width: `${x.progress_percent || 0}%` }"></u></i></span
-            ><span
-              ><strong>{{ label(x.sla_status) }}</strong
-              ><small>{{ time(x.due_at) }}</small></span
-            ><b>查看详情 →</b>
-          </RouterLink>
-          <details class="task-row-actions">
-            <summary :aria-label="`任务操作：${x.title}`">•••</summary>
-            <button type="button" @click="askRemove(x)">删除任务</button>
-          </details>
-        </article>
-      </div></template
-    >
+      <TaskBatchActions
+        :open="showBatchImpact"
+        :action="batchAction"
+        :targets="batchTargets"
+        :eligible="batchEligible"
+        :members="memberOptions"
+        :reason="batchReason"
+        :due-at="batchDueAt"
+        :assignee-id="batchAssigneeId"
+        :busy="busy"
+        @start="previewBatch"
+        @close="showBatchImpact = false"
+        @confirm="confirmBatch"
+        @update:reason="batchReason = $event"
+        @update:due-at="batchDueAt = $event"
+        @update:assignee-id="batchAssigneeId = $event" />
+      <TaskListPanel
+        :tasks="visible"
+        :selected-ids="selectedIds"
+        :status="status"
+        :route-full-path="route.fullPath"
+        :label="label"
+        :phase="phase"
+        :time="time"
+        @update:selected-ids="selectedIds = $event"
+        @status="setStatus"
+        @remove="askRemove"
+    /></template>
     <section v-else class="task-export-jobs">
       <header>
         <div>
@@ -684,217 +667,29 @@ watch(
         </div>
       </form>
     </dialog>
-    <aside v-if="selected" class="task-detail">
-      <RouterLink :to="returnPath" aria-label="关闭任务详情">×</RouterLink>
-      <p>
-        {{ selected.source_type === "manual" ? "手动创建" : "系统生成" }} · 第
-        {{ selected.version }} 版
-      </p>
-      <h3>{{ selected.title }}</h3>
-      <span>{{ selected.description || "无补充说明" }}</span>
-      <dl>
-        <div>
-          <dt>状态</dt>
-          <dd>{{ label(selected.status) }}</dd>
-        </div>
-        <div>
-          <dt>当前阶段</dt>
-          <dd>{{ phase(selected) }} · {{ selected.progress_note || "尚未记录进展" }}</dd>
-        </div>
-        <div>
-          <dt>处理时限</dt>
-          <dd>
-            {{ label(selected.sla_status) }} · {{ time(selected.due_at) }}<br />
-            <small>{{ slaNext(selected) }}</small>
-          </dd>
-        </div>
-        <div>
-          <dt>负责人</dt>
-          <dd>已分配负责人</dd>
-        </div>
-        <div>
-          <dt>底层采集任务</dt>
-          <dd v-if="selected.collection_task_id">
-            <RouterLink :to="`/platform-admin/collection?task=${selected.collection_task_id}`"
-              >查看关联采集任务</RouterLink
-            >
-          </dd>
-          <dd v-else>当前业务任务未关联采集任务</dd>
-        </div>
-      </dl>
-      <details class="task-technical">
-        <summary>技术详情</summary>
-        <dl>
-          <div>
-            <dt>负责人账号编号</dt>
-            <dd>{{ selected.assignee_id }}</dd>
-          </div>
-          <div>
-            <dt>任务编号</dt>
-            <dd>{{ selected.id }}</dd>
-          </div>
-        </dl>
-      </details>
-      <div class="task-actions">
-        <button v-if="selected.status === 'todo'" @click="action('start')">开始</button
-        ><button v-if="selected.status === 'in_progress'" @click="action('pause')">暂停</button
-        ><button v-if="selected.status === 'paused'" @click="action('resume')">继续</button
-        ><button
-          v-if="['todo', 'in_progress', 'paused'].includes(selected.status)"
-          @click="action('complete')"
-        >
-          完成</button
-        ><button
-          v-if="!['completed', 'cancelled'].includes(selected.status)"
-          @click="action('delay')"
-        >
-          延期</button
-        ><button
-          v-if="!['completed', 'cancelled'].includes(selected.status)"
-          class="danger"
-          @click="action('cancel')"
-        >
-          取消任务</button
-        ><button @click="action('transfer')">转交</button>
-        <button @click="action('progress')">更新进度</button><button @click="editTask">编辑</button>
-        <details class="task-detail-more">
-          <summary>更多任务操作</summary>
-          <button class="danger" type="button" @click="askRemove(selected)">删除任务</button>
-        </details>
-      </div>
-      <section class="task-activity">
-        <h4>任务活动</h4>
-        <article v-for="x in activity" :key="`${x.kind}-${x.id}`" :data-kind="x.kind">
-          <b>{{ x.title }}</b>
-          <p>{{ x.body }}</p>
-          <small>{{ time(x.created_at) }}</small>
-        </article>
-        <p v-if="!activity.length">暂无任务活动。</p>
-        <form @submit.prevent="addComment">
-          <textarea
-            v-model="comment"
-            placeholder="添加可审计评论"
-            required
-            maxlength="2000"
-          ></textarea
-          ><button>添加评论</button>
-        </form>
-      </section>
-    </aside>
-    <dialog
-      ref="actionDialogElement"
-      class="task-action-dialog"
-      aria-label="任务操作表单"
-      @cancel="handleActionCancel"
-    >
-      <form @submit.prevent="submitTaskAction">
-        <h3>
-          {{
-            taskActionEditor === "transfer"
-              ? "转交任务"
-              : taskActionEditor === "delay"
-                ? "调整任务期限"
-                : taskActionEditor === "progress"
-                  ? "更新任务进度"
-                  : taskActionEditor === "pause"
-                    ? "暂停任务"
-                    : "取消任务"
-          }}
-        </h3>
-        <p>提交后会写入任务活动与审计记录，并使用当前任务版本进行冲突校验。</p>
-        <label v-if="taskActionEditor === 'transfer'">
-          接收成员
-          <select v-model="taskActionForm.assignee_id" required>
-            <option value="" disabled>请选择可访问当前工作区的成员</option>
-            <option v-for="member in memberOptions" :key="member.id" :value="member.id">
-              {{ member.label }}
-            </option>
-          </select>
-        </label>
-        <label v-if="taskActionEditor === 'delay'">
-          新截止时间
-          <input v-model="taskActionForm.due_at" type="datetime-local" required />
-        </label>
-        <template v-if="taskActionEditor === 'progress'">
-          <label>
-            完成进度（0–100）
-            <input
-              v-model.number="taskActionForm.progress_percent"
-              type="number"
-              min="0"
-              max="100"
-              step="1"
-              required
-            />
-          </label>
-          <label>
-            本次进展说明
-            <textarea
-              v-model="taskActionForm.progress_note"
-              maxlength="500"
-              required
-              placeholder="说明已完成内容、当前阻塞和下一步"
-            ></textarea>
-          </label>
-        </template>
-        <label v-else>
-          操作原因
-          <textarea
-            v-model="taskActionForm.reason"
-            maxlength="500"
-            required
-            placeholder="请填写可审计的操作原因"
-          ></textarea>
-        </label>
-        <div>
-          <button type="button" @click="taskActionEditor = null">返回</button>
-          <button type="submit">确认提交</button>
-        </div>
-      </form>
-    </dialog>
-    <dialog
-      ref="batchDialogElement"
-      class="task-batch-impact"
-      aria-label="确认批量任务操作"
-      @cancel="handleBatchCancel"
-    >
-      <form @submit.prevent="confirmBatch">
-        <h3>
-          确认批量{{
-            batchAction === "pause" ? "暂停" : batchAction === "resume" ? "继续" : "取消"
-          }}
-        </h3>
-        <p>影响范围会在执行前固定；不符合当前状态的任务不会被修改。</p>
-        <dl>
-          <div>
-            <dt>已选择</dt>
-            <dd>{{ batchTargets.length }} 项</dd>
-          </div>
-          <div>
-            <dt>可执行</dt>
-            <dd>{{ batchEligible.length }} 项</dd>
-          </div>
-          <div>
-            <dt>跳过</dt>
-            <dd>{{ batchTargets.length - batchEligible.length }} 项</dd>
-          </div>
-          <div>
-            <dt>关联采集任务</dt>
-            <dd>
-              {{ batchEligible.filter((item) => item.collection_task_id).length }}
-              项（仅展示关联，不联动取消底层任务）
-            </dd>
-          </div>
-        </dl>
-        <label v-if="batchAction !== 'resume'"
-          >操作原因<textarea v-model="batchReason" required maxlength="500"></textarea>
-        </label>
-        <div>
-          <button type="button" @click="showBatchImpact = false">返回</button
-          ><button :disabled="busy || !batchEligible.length">确认执行</button>
-        </div>
-      </form>
-    </dialog>
+    <TaskDetailPanel
+      v-if="selected"
+      :task="selected"
+      :return-path="returnPath"
+      :blocking-context="blockingContext"
+      :activity="activity"
+      :action-editor="taskActionEditor"
+      :action-form="taskActionForm"
+      :members="memberOptions"
+      :comment="comment"
+      :label="label"
+      :phase="phase"
+      :time="time"
+      :sla-next="slaNext"
+      @action="action"
+      @edit="editTask"
+      @remove="askRemove"
+      @submit-action="submitTaskAction"
+      @close-action="taskActionEditor = null"
+      @add-comment="addComment"
+      @update:comment="comment = $event"
+      @update:action-form="taskActionForm = $event"
+    />
     <dialog
       ref="deleteDialogElement"
       class="task-delete-dialog"

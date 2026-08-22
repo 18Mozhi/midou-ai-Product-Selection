@@ -13,6 +13,7 @@ import {
 } from "../../apps/worker/dist/collection-task-worker.js";
 import { buildApp } from "../../apps/api/dist/app.js";
 import { CollectionTaskService } from "../../apps/api/dist/collection-task-service.js";
+import { MySqlCollectionTaskRepository } from "../../apps/api/dist/mysql-collection-task-repository.js";
 
 test("M03-05.A01/A02/A04/A12 enforces transitions, retries and terminal coverage", () => {
   assert.equal(assertTaskTransition("draft", "scheduled"), "scheduled");
@@ -258,6 +259,105 @@ test("M03-05.A06/A08/A09/A13 API applies capability, cache, origin, idempotency 
   await app.close();
 });
 
+test("M03-05 task detail exposes the audited RSS result kind without a new database column", async () => {
+  const taskId = "00000000-0000-4000-8000-000000000521",
+    subqueryId = "00000000-0000-4000-8000-000000000522",
+    now = new Date("2026-08-22T01:00:00.000Z"),
+    repository = new MySqlCollectionTaskRepository({
+      query: async (sql) => {
+        if (sql.includes("FROM collection_tasks WHERE id="))
+          return [
+            [
+              {
+                id: taskId,
+                organization_id: "00000000-0000-4000-8000-000000000523",
+                workspace_id: "00000000-0000-4000-8000-000000000524",
+                status: "succeeded_empty",
+                coverage_status: "insufficient",
+                priority: "normal",
+                scheduled_at: now,
+                available_at: now,
+                attempt_count: 1,
+                successful_subquery_count: 1,
+                failed_subquery_count: 0,
+                blocked_subquery_count: 0,
+                available_result_count: 0,
+                missing_fields_json: "[]",
+                last_error_code: null,
+                replay_of_task_id: null,
+                replay_reason: null,
+                request_id: "rss-detail-kind",
+                trace_id: "rss-detail-kind",
+                version: 2,
+                created_at: now,
+                updated_at: now,
+              },
+            ],
+          ];
+        if (sql.includes("FROM collection_subqueries q"))
+          return [
+            [
+              {
+                id: subqueryId,
+                provider_id: "00000000-0000-4000-8000-000000000525",
+                provider_name: "公开 RSS",
+                ordinal: 0,
+                is_required: 0,
+                status: "succeeded_empty",
+                available_result_count: 0,
+                missing_fields_json: "[]",
+                error_code: null,
+                retryable: 0,
+                started_at: now,
+                finished_at: now,
+              },
+            ],
+          ];
+        if (sql.includes("FROM collection_task_events"))
+          return [
+            [
+              {
+                id: "event-1",
+                event_type: "collection.subquery.completed",
+                from_status: "running",
+                to_status: "succeeded_empty",
+                actor_type: "worker",
+                actor_id: "worker-1",
+                request_id: "rss-detail-kind",
+                trace_id: "rss-detail-kind",
+                metadata_json: JSON.stringify({
+                  subquery_id: subqueryId,
+                  result_kind: "no_new_content",
+                  fresh_result_count: 0,
+                  deduplicated_result_count: 3,
+                  robots_policy_decision: {
+                    decision_version: "scoutops-robots-policy-v1",
+                    allowed: true,
+                    decision_basis: "matched_rule",
+                    robots_url: "https://example.test/robots.txt",
+                    robots_http_status: 200,
+                    matched_user_agent: "ScoutOpsPublicCrawler",
+                    matched_rule: {
+                      directive: "allow",
+                      pattern_preview: "/feed",
+                      pattern_sha256: "a".repeat(64),
+                      truncated: false,
+                    },
+                  },
+                }),
+                occurred_at: now,
+              },
+            ],
+          ];
+        return [[]];
+      },
+    });
+  const detail = await repository.detail(taskId);
+  assert.equal(detail.subqueries[0].result_kind, "no_new_content");
+  assert.equal(detail.subqueries[0].robots_decision.matched_rule.pattern_preview, "/feed");
+  assert.equal(detail.events[0].metadata.deduplicated_result_count, 3);
+});
+
 test("M03-05.A06 query pagination accepts HTTP strings but rejects ambiguous values", async () => {
   let received;
   const service = new CollectionTaskService({
@@ -284,6 +384,10 @@ test("M03-05.A03/A07/A10/A11/A14-A17 delivery surfaces are complete and Baota bo
     "database/migrations/0016e_collection_tasks_m03_05.down.sql",
     "packages/collection-tasks/src/index.ts",
     "apps/worker/src/collection-task-worker.ts",
+    "apps/worker/src/collection-task-contracts.ts",
+    "apps/worker/src/collection-task-state-machine.ts",
+    "apps/worker/src/collection-task-evidence.ts",
+    "apps/worker/src/collection-task-dead-letter.ts",
     "apps/api/src/mysql-collection-task-repository.ts",
     "apps/api/src/collection-task-routes.ts",
     "apps/web/src/components/CollectionTaskCenter.vue",
@@ -304,6 +408,10 @@ test("M03-05.A03/A07/A10/A11/A14-A17 delivery surfaces are complete and Baota bo
       down,
       domain,
       worker,
+      workerContracts,
+      workerStateMachine,
+      workerEvidence,
+      workerDeadLetter,
       repo,
       routes,
       web,
@@ -318,6 +426,7 @@ test("M03-05.A03/A07/A10/A11/A14-A17 delivery surfaces are complete and Baota bo
       e2e,
       blueprint,
     ] = values;
+  const workerSurface = `${worker}\n${workerContracts}\n${workerStateMachine}\n${workerEvidence}\n${workerDeadLetter}`;
   for (const table of [
     "collection_tasks",
     "collection_subqueries",
@@ -330,11 +439,13 @@ test("M03-05.A03/A07/A10/A11/A14-A17 delivery surfaces are complete and Baota bo
     assert.ok(up.includes(`CREATE TABLE \`${table}\``));
   assert.match(down, /DROP TABLE IF EXISTS `collection_tasks`/);
   assert.match(domain, /retryAvailableAt/);
-  assert.match(worker, /FOR UPDATE/);
+  assert.match(workerStateMachine, /FOR UPDATE/);
   assert.match(repo, /manually_replayed/);
   assert.match(routes, /collection:replay/);
   assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
   assert.match(web, /subqueryRetryText/);
+  assert.match(web, /subqueryDurationText[\s\S]*collection-subquery-missing/);
+  assert.match(web, /recoveryAction[\s\S]*建议恢复动作/);
   assert.match(web, /下次重试.*任务级调度/);
   assert.match(css, /@media\s*\(max-width:\s*760px\)/);
   assert.match(live, /const now=new Date\(\);/);
@@ -347,8 +458,14 @@ test("M03-05.A03/A07/A10/A11/A14-A17 delivery surfaces are complete and Baota bo
   assert.match(feature, /collectionTaskStateMachine/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(blueprint, /M03-05/);
-  assert.match(worker, /private readonly taskId\?\s*:\s*string/);
-  assert.match(worker, /signal\?\s*:\s*AbortSignal[\s\S]*executor\.execute/);
+  assert.match(workerStateMachine, /readonly taskId:\s*string \| undefined/);
+  assert.match(workerSurface, /signal\?\s*:\s*AbortSignal[\s\S]*executor\.execute/);
+  assert.match(workerStateMachine, /completeCollectionTask\(this[\s\S]*failCollectionTask\(this/);
+  assert.match(workerEvidence, /summarizeCoverage[\s\S]*collection_subqueries/);
+  assert.match(
+    workerDeadLetter,
+    /recoverExpiredCollectionTasks[\s\S]*collection_attempt_overflow[\s\S]*collection_dead_letters/,
+  );
   assert.match(live, /new MySqlCollectionTaskWorkerRepository\(pool,\(\)=>0,id\)/);
   assert.match(
     live,

@@ -40,7 +40,7 @@ test("body copy and interactive controls preserve the accessibility floor", asyn
 });
 
 test("saved theme and session density are applied before Vue mounts", async () => {
-  const [main, theme, tokens, studio, shell, task, personal, approval, notification] =
+  const [main, theme, tokens, studio, shell, shellTheme, task, personal, approval, notification] =
     await Promise.all(
       [
         "apps/web/src/main.ts",
@@ -48,6 +48,7 @@ test("saved theme and session density are applied before Vue mounts", async () =
         "apps/web/src/design/tokens.css",
         "apps/web/src/components/ThemeStudio.vue",
         "apps/web/src/components/NavigationShell.vue",
+        "apps/web/src/use-navigation-shell-theme.ts",
         "apps/web/src/task-workspace.css",
         "apps/web/src/components/PersonalCenter.vue",
         "apps/web/src/approval-workspace.css",
@@ -62,6 +63,8 @@ test("saved theme and session density are applied before Vue mounts", async () =
   assert.match(theme, /applyShellDensity\(administrative: boolean\)/);
   assert.match(studio, /aria-label="页面密度"/);
   assert.match(shell, /applyShellDensity\(props\.shell !== "member"\)/);
+  assert.match(shellTheme, /\/me\/ui-preferences/);
+  assert.match(shellTheme, /主题保存失败，已恢复原主题/);
   assert.match(tokens, /\[data-density="compact"\]/);
   for (const alias of ["--surface", "--text-primary", "--accent", "--border"])
     assert.match(tokens, new RegExp(alias));
@@ -88,13 +91,13 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
 });
 
 test("icon-only production actions expose hover and focus names", async () => {
-  const [main, shell, credentials, registry, sourcing] = await Promise.all(
+  const [main, shell, credentials, registry, sourcingDialogs] = await Promise.all(
     [
       "apps/web/src/main.ts",
       "apps/web/src/components/NavigationShell.vue",
       "apps/web/src/components/CredentialAssetCenter.vue",
       "apps/web/src/components/ProviderRegistry.vue",
-      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/SourcingWorkspaceDialogs.vue",
     ].map((path) => readFile(path, "utf8")),
   );
   assert.match(main, /button\[aria-label\],a\[aria-label\]/);
@@ -104,6 +107,6 @@ test("icon-only production actions expose hover and focus names", async () => {
   for (const label of ["关闭凭证编辑", "关闭浏览器档案编辑"])
     assert.match(credentials, new RegExp(label));
   assert.match(registry, /关闭来源设置编辑/);
-  assert.match(sourcing, /关闭供应商搜索/);
-  assert.match(sourcing, /关闭报价编辑/);
+  assert.match(sourcingDialogs, /关闭供应商搜索/);
+  assert.match(sourcingDialogs, /关闭报价编辑/);
 });

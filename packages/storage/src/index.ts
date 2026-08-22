@@ -196,7 +196,7 @@ export function createAuditEvent(input: AuditEventInput, occurredAt = new Date()
 export type FileResilienceState = "ready" | "warning" | "blocked";
 export type FileRecoveryStatus = "verified" | "stale" | "blocked" | "empty";
 export interface FileRootSnapshot {
-  kind: "evidence" | "export";
+  kind: "evidence" | "export" | "temp";
   available: boolean;
   writable: boolean;
   totalBytes: number;
@@ -252,10 +252,10 @@ export function evaluateFileResilience(
   const warning = (code: string, actionHint: string) =>
     findings.push({ code, severity: "warning", actionHint });
   if (
-    snapshot.roots.length !== 2 ||
+    snapshot.roots.length !== 3 ||
     snapshot.roots.some((root) => !root.available || !root.writable)
   )
-    blocked("file_root_unavailable", "在宝塔核对证据与导出受控目录的挂载、权限和可写状态。");
+    blocked("file_root_unavailable", "在宝塔核对证据、导出与临时受控目录的挂载、权限和可写状态。");
   if (snapshot.publicDirectoryExposed)
     blocked(
       "file_root_publicly_exposed",

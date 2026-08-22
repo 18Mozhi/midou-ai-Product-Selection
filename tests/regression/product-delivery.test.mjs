@@ -7,10 +7,11 @@ const read = (path) => readFile(path, "utf8");
 // Regression: ISSUE-001 — the production root rendered the M00 foundation harness
 // Found by repository and live-browser QA on 2026-08-17.
 test("production root resolves the authenticated role landing instead of the foundation harness", async () => {
-  const [html, app, shell] = await Promise.all([
+  const [html, app, shell, catalog] = await Promise.all([
     read("apps/web/index.html"),
     read("apps/web/src/App.vue"),
     read("apps/web/src/components/NavigationShell.vue"),
+    read("apps/web/src/route-catalog.ts"),
   ]);
 
   assert.match(html, /<title>智能选品<\/title>/);
@@ -18,10 +19,8 @@ test("production root resolves the authenticated role landing instead of the fou
   assert.match(app, /<LandingRedirect\s+v-if="selectedView === 'landing'"/);
   assert.doesNotMatch(app, /FOUNDATION\s*\/\s*M00-01/);
   assert.doesNotMatch(app, />自动验收</);
-  assert.match(
-    shell,
-    /routePath\.value\s*===\s*["']\/["']\s*\|\|\s*routePath\.value\s*===\s*["']\/home["']/,
-  );
+  assert.match(catalog, /route\("\/", "landing"/);
+  assert.match(catalog, /member\("\/home", "home", "今日行动"/);
   assert.doesNotMatch(shell, /\{\{\s*phaseLabel\s*\}\}/);
 });
 
@@ -71,7 +70,7 @@ test("unified backend build and lifecycle contracts are registered", async () =>
   ]);
 
   assert.equal(packageJson.scripts["build:backend"], "tsc -p apps/backend/tsconfig.json");
-  assert.match(packageJson.scripts.build, /build:backend/);
+  assert.equal(packageJson.scripts.build, "node scripts/build-workspaces.mjs");
   assert.equal(backendPackage.name, "@scoutops/backend");
   assert.match(supervisor, /restart/i);
   assert.match(`${supervisor}\n${server}`, /SIGTERM/);
@@ -147,9 +146,37 @@ test("every live verifier that creates organizations clears the default workspac
 test("production product QA waits for the selected tenant context and never embeds QA credentials", async () => {
   const source = await read("scripts/verify-production-product.mjs");
   assert.match(source, /getByText\("工作范围已就绪", \{ exact: true \}\)\.waitFor\(\)/);
-  assert.match(source, /SCOUTOPS_QA_ADMIN_EMAIL/);
-  assert.match(source, /SCOUTOPS_QA_MEMBER_EMAIL/);
+  assert.match(source, /credentials\("SCOUTOPS_QA_ADMIN"\)/);
+  assert.match(source, /credentials\("SCOUTOPS_QA_MEMBER"\)/);
+  assert.match(source, /SCOUTOPS_QA_SELECTION_MANAGER/);
+  assert.match(source, /SCOUTOPS_QA_ORGANIZATION_ADMIN/);
+  assert.match(source, /SCOUTOPS_QA_PLATFORM_OPERATIONS/);
+  assert.match(source, /SCOUTOPS_QA_PLATFORM_SECURITY/);
+  assert.match(source, /readProtectedRouteCatalog/);
+  assert.match(source, /authorized route catalog is not fully covered/);
+  assert.doesNotMatch(source, /visibleRoutes/);
   assert.doesNotMatch(source, /qa\.platform\.20260818|qa\.member\.20260818|Qa-Platform|Qa-Member/);
+});
+
+test("production route QA derives every protected route from the frontend route catalog", async () => {
+  const { authorizedRoutesFor, readProtectedRouteCatalog } =
+    await import("../../scripts/production-route-catalog.mjs");
+  const catalog = await readProtectedRouteCatalog();
+  assert.equal(catalog.length, 56);
+  assert.deepEqual(
+    Object.fromEntries(
+      ["member", "organization_admin", "platform_admin"].map((shell) => [
+        shell,
+        catalog.filter((route) => route.shell === shell).length,
+      ]),
+    ),
+    { member: 16, organization_admin: 9, platform_admin: 31 },
+  );
+  assert.deepEqual(
+    catalog.filter((route) => route.dynamic).map((route) => route.path),
+    ["/opportunities/:opportunityId", "/tasks/:taskId"],
+  );
+  assert.equal(authorizedRoutesFor(catalog, "platform_admin", ["platform:secure"]).length, 1);
 });
 
 // Regression: ISSUE-009 — release identity and service paths must no longer

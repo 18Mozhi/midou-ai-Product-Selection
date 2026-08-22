@@ -8,7 +8,7 @@
 
 ## 边界
 
-- Vue 页面禁止 `v-html`、`innerHTML`、动态代码执行和敏感本地存储；唯一允许的 `localStorage` 用途是 `apps/web/src/design/theme.ts` 读写经过枚举校验的非敏感主题 ID，门禁同时锁定文件、调用次数和 `themeStorageKey` 参数。新窗口链接必须同时声明 `noopener noreferrer`。
+- Vue 页面禁止 `v-html`、`innerHTML`、动态代码执行和敏感本地存储。门禁只精确允许三类非敏感记录：`theme.ts` 读写枚举校验后的主题 ID；`SelectionJourney.vue` 读写或删除通过 UUID v4 校验的未完成旅程 ID；`realtime-client-metrics.ts` 在当前标签页 `sessionStorage` 读写不含身份、请求或通知内容的匿名连接计数。每类例外均锁定文件、键、调用次数和写入表达式；新窗口链接必须同时声明 `noopener noreferrer`。
 - Cookie 会话继续以 HttpOnly、SameSite=Strict 为主，写请求由后端同源校验和既有权限服务最终裁决；前端隐藏不构成授权。
 - SQL 必须使用参数占位；门禁阻断传给 query/execute 的模板插值。
 - Webhook 发送前重新解析 DNS、拒绝私网/回环/链路本地地址，并把 HTTPS 请求固定到已验证地址，防止 DNS 重绑定。

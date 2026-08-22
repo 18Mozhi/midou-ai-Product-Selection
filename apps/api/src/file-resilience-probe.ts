@@ -26,13 +26,14 @@ export class FileResilienceProbe {
     private readonly pool: Pool,
     private readonly evidenceRoot: string,
     private readonly exportRoot: string,
+    private readonly runtimeTempRoot: string,
     private readonly checksumSampleLimit: number,
     private readonly maximumRecoveryDrillAgeDays: number,
     private readonly publicRoot = resolve(process.cwd(), "apps/web/dist"),
     private readonly now = () => new Date(),
   ) {}
   private async root(
-    kind: "evidence" | "export",
+    kind: "evidence" | "export" | "temp",
     path: string,
     activeFiles: number,
     indexedBytes: number,
@@ -81,6 +82,7 @@ export class FileResilienceProbe {
         number(exportTotals[0]?.active_files),
         number(exportTotals[0]?.indexed_bytes),
       ),
+      this.root("temp", this.runtimeTempRoot, 0, 0),
     ]);
     const [evidenceRows] = await this.pool.query<RowDataPacket[]>(
       "SELECT relative_path,content_sha256 FROM file_assets WHERE status='active' AND category='evidence' ORDER BY updated_at DESC,id DESC LIMIT ?",
@@ -187,7 +189,9 @@ export class FileResilienceProbe {
       isolatedRestoreVerified: Boolean(drillVerified),
       recoveryDrillAgeDays: drillAge === null ? null : Number(drillAge.toFixed(2)),
       publicDirectoryExposed:
-        inside(this.publicRoot, this.evidenceRoot) || inside(this.publicRoot, this.exportRoot),
+        inside(this.publicRoot, this.evidenceRoot) ||
+        inside(this.publicRoot, this.exportRoot) ||
+        inside(this.publicRoot, this.runtimeTempRoot),
       sharedStorageEnabled: false,
       backupServerUsed: false,
     };

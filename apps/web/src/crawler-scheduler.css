@@ -150,6 +150,25 @@
   color: var(--muted);
   font-size: 12px;
 }
+.crawler-scheduler__queue-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.crawler-scheduler__queue-summary article {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 9px;
+  background: var(--so-panel-soft);
+}
+.crawler-scheduler__queue-summary small {
+  color: var(--muted);
+}
+.crawler-scheduler__queue-summary strong {
+  color: var(--so-text);
+}
 .crawler-scheduler__sources {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -195,6 +214,27 @@
   color: var(--so-primary);
   font-size: 12px;
 }
+.crawler-scheduler__receipt-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 13px;
+}
+.crawler-scheduler__receipt-grid article {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  padding: 11px;
+  border-radius: 9px;
+  background: var(--so-panel-soft);
+}
+.crawler-scheduler__receipt-grid small,
+.crawler-scheduler__receipt-grid span {
+  color: var(--muted);
+}
+.crawler-scheduler__receipt-grid strong {
+  overflow-wrap: anywhere;
+}
 .crawler-scheduler__trend > div {
   display: grid;
   gap: 7px;
@@ -234,6 +274,9 @@
 }
 .crawler-scheduler__sources small + small {
   margin-top: 4px;
+}
+.crawler-scheduler__sources .crawler-scheduler__queue-risk {
+  color: var(--so-warning);
 }
 .crawler-scheduler dl {
   display: grid;
@@ -336,6 +379,9 @@
   .crawler-scheduler__layout {
     grid-template-columns: 1fr;
   }
+  .crawler-scheduler__receipt-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 @media (max-width: 520px) {
   .crawler-scheduler {
@@ -376,6 +422,12 @@
     margin-left: 0;
   }
   .crawler-scheduler__sources {
+    grid-template-columns: 1fr;
+  }
+  .crawler-scheduler__queue-summary {
+    grid-template-columns: 1fr;
+  }
+  .crawler-scheduler__receipt-grid {
     grid-template-columns: 1fr;
   }
   .crawler-scheduler dl {

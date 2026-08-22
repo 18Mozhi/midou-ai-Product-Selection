@@ -8,6 +8,23 @@ export interface HomeDashboardRepository {
   }): Promise<HomeDashboardItem[]>;
 }
 const limits = { action: 5, change: 6, follow: 6, health: 3 } as const;
+const priorityRank = { overdue: 5, blocking: 4, high_risk: 3, high_value: 2, normal: 1 },
+  riskRank = { critical: 6, high: 5, medium: 4, normal: 3, low: 2, unknown: 1 };
+function actionOrder(a: HomeDashboardItem, b: HomeDashboardItem) {
+  const priority = priorityRank[b.priority ?? "normal"] - priorityRank[a.priority ?? "normal"];
+  if (priority) return priority;
+  const risk =
+    (riskRank[b.risk_level ?? "unknown"] ?? 0) - (riskRank[a.risk_level ?? "unknown"] ?? 0);
+  if (risk) return risk;
+  const value =
+    (b.value_score ?? Number.NEGATIVE_INFINITY) - (a.value_score ?? Number.NEGATIVE_INFINITY);
+  if (value) return value;
+  const aDue = a.due_at ? Date.parse(a.due_at) : Number.POSITIVE_INFINITY,
+    bDue = b.due_at ? Date.parse(b.due_at) : Number.POSITIVE_INFINITY;
+  if (aDue !== bDue) return aDue - bDue;
+  const observed = Date.parse(b.observed_at) - Date.parse(a.observed_at);
+  return observed || b.id.localeCompare(a.id);
+}
 export class HomeDashboardService {
   constructor(
     private readonly repository: HomeDashboardRepository,
@@ -20,13 +37,18 @@ export class HomeDashboardService {
     capabilities: string[];
   }): Promise<HomeDashboardSummary> {
     const rows = await this.repository.list(input),
+      ordered = [
+        ...rows.filter((item) => item.kind === "action").sort(actionOrder),
+        ...rows.filter((item) => item.kind !== "action"),
+      ],
       groups = {
         actions: [] as HomeDashboardItem[],
         changes: [] as HomeDashboardItem[],
         follows: [] as HomeDashboardItem[],
         health: [] as HomeDashboardItem[],
       };
-    for (const item of rows) {
+    const actionRoutes = new Set<string>();
+    for (const item of ordered) {
       const key =
         item.kind === "action"
           ? "actions"
@@ -35,6 +57,10 @@ export class HomeDashboardService {
             : item.kind === "follow"
               ? "follows"
               : "health";
+      if (item.kind === "action") {
+        if (actionRoutes.has(item.route)) continue;
+        actionRoutes.add(item.route);
+      }
       if (groups[key].length < limits[item.kind]) groups[key].push(item);
     }
     return {

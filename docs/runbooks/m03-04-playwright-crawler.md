@@ -15,6 +15,9 @@
 - `CRAWLER_API_BASE_URL`：固定指向本机统一 Node API。组织、工作区、档案和执行计划由 Worker 创建的 `browser_collection_jobs` 决定，不再配置静态 UUID 或请求文件。
 - `CRAWLER_LEASE_SECONDS`：30–600 秒；心跳间隔必须小于租约时长。
 - `CRAWLER_COMPLETION_SPOOL_ROOT`：完成回传失败的受限暂存目录；生产固定放在 `/www/wwwroot/ai选品/runtime` 下，目录及文件分别使用 0700/0600 权限，禁止放入网站目录或备份外传。
+- `CRAWLER_COMPLETION_RETENTION_DAYS`：待回写与隔离回执的人工处置保留期，默认 30 天；到期只告警，不自动删除。
+- `CRAWLER_COMPLETION_MAX_BYTES`：受限回执目录聚合容量停止线，默认 512 MiB。
+- `CRAWLER_COMPLETION_MIN_FREE_DISK_MB`：回执目录所在磁盘可用空间停止线，默认 4096 MB。
 
 Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-python` 启动时读取；共享配置或凭证安全边界代码修改后应在宝塔分别重启两个项目。Cookie 写入 API 必须返回 `Cache-Control: no-store`，入库前转换为 AES-256-GCM 密文；Python 结构化事件会递归脱敏 cookie、credential、token、authorization、secret 与 master key 类字段。不要把密钥、Cookie 或档案内容写入日志或文档。
 
@@ -27,7 +30,7 @@ Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-py
 3. 本地运行 `python -m unittest discover -s apps/crawler/tests -p "test_*.py"`、`node --test tests/unit/credential-cookie-security-boundary.test.mjs` 与 `npm run test:integration`。集成测试必须显示 Python 真实 HTTP 消费的领取、续租、完成及无任务不发心跳均通过，并显示加密登录态真实 Chromium 的成功采集、登录失效受阻、证据生成和临时档案清理均通过；不得用外部账号或纯 Mock 截图替代。
 4. 在发布目录复用锁文件安装依赖，安装项目固定的 Playwright Chromium；不得在请求处理中下载浏览器。
 5. 构建后运行 `npm run verify:crawler-chain` 与 `npm run verify:module -- M03-04`。前者检查生产调用方和真实集成测试未被移除，后者继续覆盖真实本地 Chromium、MySQL 5.7 独占租约、Python bridge、桌面和 390px 视觉验收。
-6. 由宝塔重启 `ai选品` 和 `ai选品-python`，在 `/platform-admin/collection/browser-runtime` 确认档案有效期、目标域名、活动租约和最近运行可读，并检查 Python 的 running/completed 日志；成功作业应在 `browser_evidence_artifacts` 同时出现 `dom_fragment` 与 `screenshot`，解析版本与 Provider 一致，文件位于受控 `EVIDENCE_ROOT` 而非网站目录；没有 `browser_collection_jobs.status='queued'` 时不应出现空闲心跳。
+6. 由宝塔重启 `ai选品` 和 `ai选品-python`，在 `/platform-admin/collection/browser-runtime` 确认档案明确有效期与剩余天数、目标域名、活动租约占用实例与来源、过期租约的僵尸占用风险和最近运行可读；未设置有效期必须显示“无法预测”，不能猜测。在 `/platform-admin/crawler-scheduler` 确认完成回执的待回写/隔离数量、保留期、容量和磁盘水位已更新。再检查 Python 的 running/completed 日志；成功作业应在 `browser_evidence_artifacts` 同时出现 `dom_fragment` 与 `screenshot`，解析版本与 Provider 一致，文件位于受控 `EVIDENCE_ROOT` 而非网站目录；没有 `browser_collection_jobs.status='queued'` 时不应出现空闲心跳。
 
 ## 故障处理
 

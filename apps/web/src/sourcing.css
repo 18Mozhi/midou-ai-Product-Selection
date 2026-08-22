@@ -357,6 +357,24 @@
 .sourcing-compare-tray span {
   color: var(--so-text-muted);
 }
+.sourcing-specification-hint {
+  display: grid;
+  gap: 5px;
+  margin: 12px 0;
+  padding: 11px 13px;
+  border: 1px solid var(--so-border);
+  border-left: 3px solid var(--so-success);
+  border-radius: var(--so-control-radius);
+  background: var(--so-panel-soft);
+}
+.sourcing-specification-hint[data-status="format_only"],
+.sourcing-specification-hint[data-status="needs_review"] {
+  border-left-color: var(--so-warning);
+}
+.sourcing-specification-hint span {
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
 .sourcing-modal {
   position: fixed;
   inset: 0;

@@ -1,29 +1,7 @@
 <script setup lang="ts">
 import { statusLabel } from "../ui/status-labels";
-
-interface ProfitAnalysis {
-  latest_run: null | {
-    status: "calculated" | "insufficient_data";
-    rule_version_code: string;
-    currency: string | null;
-    sale_price: number | null;
-    total_cost: number | null;
-    net_profit: number | null;
-    net_margin_percent: number | null;
-    missing_fields: string[];
-    components: Array<{
-      component_type: string;
-      source_amount: number | null;
-      source_currency: string | null;
-      converted_amount: number | null;
-      target_currency: string | null;
-      source_ref_id: string | null;
-      evidence_id: string | null;
-      exchange_quote_id: string | null;
-      missing_reason: string | null;
-    }>;
-  };
-}
+import OpportunityCostReviewQueue from "./OpportunityCostReviewQueue.vue";
+import type { OpportunityProfitAnalysis as ProfitAnalysis } from "./opportunity-workspace-types";
 
 defineProps<{
   profit: ProfitAnalysis | null;
@@ -36,14 +14,26 @@ defineProps<{
     source_ref_id: string;
     evidence_id: string;
     observed_at: string;
+    reviewer_id: string;
   };
+  reviewerOptions: Array<{ id: string; label: string }>;
   busy: boolean;
 }>();
 
 defineEmits<{
   confirmCost: [];
   queueProfit: [];
+  reviewCost: [
+    payload: {
+      reviewId: string;
+      decision: "approved" | "rejected";
+      reason: string;
+      expectedVersion: number;
+    },
+  ];
 }>();
+const inputLabel = (value: string) =>
+  ({ sale_price: "含税售价", purchase_price: "采购价", logistics: "物流" })[value] ?? value;
 </script>
 
 <template>
@@ -107,8 +97,21 @@ defineEmits<{
         ><em v-if="item.missing_reason">{{ item.missing_reason }}</em>
       </article>
     </div>
+    <section v-if="profit?.current_inputs.length" class="profit-current-inputs">
+      <h5>已生效成本</h5>
+      <article v-for="item in profit.current_inputs" :key="`${item.platform}:${item.input_type}`">
+        <strong>{{ inputLabel(item.input_type) }}</strong>
+        <span>{{ item.amount_value }} {{ item.currency }} · {{ item.platform }}</span>
+        <small>v{{ item.input_version }} · {{ item.source_ref_id }}</small>
+      </article>
+    </section>
+    <OpportunityCostReviewQueue
+      :reviews="profit?.cost_input_reviews || []"
+      :busy="busy"
+      @review-cost="$emit('reviewCost', $event)"
+    />
     <form class="profit-input" @submit.prevent="$emit('confirmCost')">
-      <h5>确认成本输入</h5>
+      <h5>提交成本复核</h5>
       <label>平台<input v-model="costForm.platform" required maxlength="80" /></label>
       <label
         >类型<select v-model="costForm.input_type">
@@ -130,8 +133,16 @@ defineEmits<{
       <label>来源标识<input v-model="costForm.source_ref_id" required maxlength="255" /></label>
       <label>证据 ID<input v-model="costForm.evidence_id" required maxlength="36" /></label>
       <label>观测时间<input v-model="costForm.observed_at" required type="datetime-local" /></label>
+      <label
+        >指定复核人<select v-model="costForm.reviewer_id" required>
+          <option value="" disabled>请选择另一名成本确认人</option>
+          <option v-for="item in reviewerOptions" :key="item.id" :value="item.id">
+            {{ item.label }}
+          </option>
+        </select></label
+      >
       <footer>
-        <button type="submit" :disabled="busy">确认当前输入</button
+        <button type="submit" :disabled="busy || !costForm.reviewer_id">提交双人复核</button
         ><button type="button" :disabled="busy" @click="$emit('queueProfit')">重新计算</button>
       </footer>
     </form>

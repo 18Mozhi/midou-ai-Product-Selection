@@ -409,7 +409,7 @@
   color: var(--so-text-muted);
   font-size: 9px;
 }
-.trend-evidence > a {
+.trend-evidence-item {
   margin-top: 9px;
   padding: 12px;
   display: flex;
@@ -417,24 +417,38 @@
   gap: 16px;
   border: 1px solid var(--so-border);
   border-radius: 10px;
-  color: var(--so-text);
   background: var(--so-panel-soft);
-  text-decoration: none;
 }
-.trend-evidence a strong,
-.trend-evidence a small {
+.trend-evidence-item strong,
+.trend-evidence-item small {
   display: block;
 }
-.trend-evidence a small {
+.trend-evidence-item small {
   margin-top: 6px;
   color: var(--so-text-muted);
   font-size: 9px;
 }
-.trend-evidence a b {
+.trend-evidence-actions {
   align-self: center;
-  color: var(--so-primary);
-  font-size: 9px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   white-space: nowrap;
+}
+.trend-evidence-actions a,
+.trend-evidence-actions button {
+  padding: 8px 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  color: var(--so-primary);
+  background: var(--so-panel);
+  font-size: 9px;
+  font-weight: 750;
+  text-decoration: none;
+}
+.trend-evidence-actions button:disabled {
+  color: var(--so-text-muted);
+  cursor: default;
 }
 .trend-lower {
   margin-top: 14px;
@@ -743,11 +757,10 @@
   .trend-conclusion dl {
     grid-template-columns: 1fr 1fr 1fr;
   }
-  .trend-evidence > a {
+  .trend-evidence-item {
     display: block;
   }
-  .trend-evidence a b {
-    display: block;
+  .trend-evidence-actions {
     margin-top: 9px;
   }
   .trend-lower {

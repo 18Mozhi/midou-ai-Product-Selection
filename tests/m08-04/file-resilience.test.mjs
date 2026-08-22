@@ -54,7 +54,7 @@ test("M08-04.A02/A04/A12 evaluates roots integrity capacity and explicit recover
     indexedBytes: 10,
   });
   const base = {
-    roots: [root("evidence"), root("export")],
+    roots: [root("evidence"), root("export"), root("temp")],
     checksumSampledFiles: 2,
     checksumVerifiedFiles: 2,
     checksumMismatchFiles: 0,
@@ -69,7 +69,7 @@ test("M08-04.A02/A04/A12 evaluates roots integrity capacity and explicit recover
   };
   assert.equal(evaluateFileResilience(base, policy).state, "ready");
   const warning = evaluateFileResilience(
-    { ...base, roots: [root("evidence", 200), root("export")] },
+    { ...base, roots: [root("evidence", 200), root("export"), root("temp")] },
     policy,
   );
   assert.equal(warning.state, "warning");
@@ -109,6 +109,15 @@ test("M08-04.A04/A06/A09 service and operations route preserve explicit recovery
         activeFiles: 1,
         indexedBytes: 10,
       },
+      {
+        kind: "temp",
+        available: true,
+        writable: true,
+        totalBytes: 1000,
+        availableBytes: 900,
+        activeFiles: 0,
+        indexedBytes: 0,
+      },
     ],
     checksumSampledFiles: 2,
     checksumVerifiedFiles: 2,
@@ -133,6 +142,7 @@ test("M08-04.A04/A06/A09 service and operations route preserve explicit recovery
   assert.equal(dto.state, "blocked");
   assert.equal(dto.recovery.encrypted_same_host_copy, true);
   assert.equal(dto.recovery.isolated_restore_verified, false);
+  assert.equal(dto.directories.find((item) => item.kind === "temp")?.usage_basis_points, 1000);
   assert.equal(recorded.length, 1);
   const { buildApp } = await import("../../apps/api/dist/app.js");
   const calls = [];
@@ -165,7 +175,10 @@ test("M08-04.A04/A06/A09 service and operations route preserve explicit recovery
   assert.equal(response.headers["cache-control"], "private, no-store");
   assert.equal(calls[0][1].capability, "platform:operate");
   assert.equal(calls[1][1].requestId, "file-request");
-  assert.doesNotMatch(response.body, /EVIDENCE_ROOT|EXPORT_ROOT|content_sha256|organizations\//i);
+  assert.doesNotMatch(
+    response.body,
+    /EVIDENCE_ROOT|EXPORT_ROOT|RUNTIME_TMP_ROOT|content_sha256|organizations\//i,
+  );
   await app.close();
 });
 
@@ -210,6 +223,7 @@ test("M08-04.A03/A05/A10/A13 migration config worker and manifests stay MySQL57 
       FILE_STORAGE_STOP_PERCENT: "85",
       FILE_STORAGE_CHECKSUM_SAMPLE_LIMIT: "7",
       FILE_STORAGE_RECOVERY_DRILL_MAX_AGE_DAYS: "60",
+      RUNTIME_TMP_ROOT: "./runtime/tmp-test",
     },
     "api",
   );
@@ -217,6 +231,7 @@ test("M08-04.A03/A05/A10/A13 migration config worker and manifests stay MySQL57 
   assert.equal(config.fileResilience.usageStopBasisPoints, 8500);
   assert.equal(config.fileResilience.checksumSampleLimit, 7);
   assert.equal(config.fileResilience.maximumRecoveryDrillAgeDays, 60);
+  assert.match(config.storage.runtimeTempRoot, /runtime[\\/]tmp-test$/);
   assert.throws(
     () =>
       loadRuntimeConfig(
@@ -236,6 +251,8 @@ test("M08-04.A03/A05/A10/A13 migration config worker and manifests stay MySQL57 
     assert.match(schema, new RegExp(key));
     assert.match(env, new RegExp(key));
   }
+  assert.match(schema, /RUNTIME_TMP_ROOT/);
+  assert.match(env, /RUNTIME_TMP_ROOT/);
   for (const source of [openapi, featureMap, manifest, evidenceSchema])
     assert.match(source, /M08-04|file resilience|本机文件韧性/i);
 });
@@ -319,6 +336,7 @@ test("M08-04.A07/A08/A15/A16 UI evidence and rollback cover full states and imag
     "recovering",
   ])
     assert.match(ui, new RegExp(state));
+  assert.match(ui, /临时目录[\s\S]*不建立持久索引/);
   assert.match(e2e, /390/);
   for (const image of [
     "61_平台运营-概览.jpg",

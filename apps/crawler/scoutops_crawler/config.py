@@ -29,6 +29,9 @@ class CrawlerConfig:
     service_token: str
     lease_seconds: int
     completion_spool_root: str
+    completion_spool_retention_days: int
+    completion_spool_max_bytes: int
+    completion_spool_minimum_free_disk_mb: int
 
 
 def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
@@ -43,6 +46,29 @@ def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
     completion_spool_root = values.get(
         "CRAWLER_COMPLETION_SPOOL_ROOT", "./runtime/crawler-completions"
     ).strip()
+    try:
+        completion_spool_retention_days = int(values.get("CRAWLER_COMPLETION_RETENTION_DAYS", "30"))
+        completion_spool_max_bytes = int(values.get("CRAWLER_COMPLETION_MAX_BYTES", "536870912"))
+        completion_spool_minimum_free_disk_mb = int(
+            values.get("CRAWLER_COMPLETION_MIN_FREE_DISK_MB", "4096")
+        )
+    except ValueError as error:
+        raise ConfigError(
+            "CRAWLER_COMPLETION_RETENTION_DAYS",
+            "completion spool limits must be integers",
+        ) from error
+    if completion_spool_retention_days < 1 or completion_spool_retention_days > 3650:
+        raise ConfigError("CRAWLER_COMPLETION_RETENTION_DAYS", "must be an integer from 1 to 3650")
+    if completion_spool_max_bytes < 1048576 or completion_spool_max_bytes > 1099511627776:
+        raise ConfigError(
+            "CRAWLER_COMPLETION_MAX_BYTES",
+            "must be an integer from 1048576 to 1099511627776",
+        )
+    if completion_spool_minimum_free_disk_mb < 128 or completion_spool_minimum_free_disk_mb > 1048576:
+        raise ConfigError(
+            "CRAWLER_COMPLETION_MIN_FREE_DISK_MB",
+            "must be an integer from 128 to 1048576",
+        )
     master_key_version = values.get("CREDENTIALS_MASTER_KEY_VERSION", "v1").strip()
     if not re.fullmatch(r"[A-Za-z0-9._-]{1,80}", master_key_version):
         raise ConfigError(
@@ -87,6 +113,27 @@ def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
         "api_base_url": api_base_url,
         "lease_seconds": lease_seconds,
         "completion_spool_root": completion_spool_root,
+        "completion_spool_retention_days": completion_spool_retention_days,
+        "completion_spool_max_bytes": completion_spool_max_bytes,
+        "completion_spool_minimum_free_disk_mb": completion_spool_minimum_free_disk_mb,
     }
     fingerprint = hashlib.sha256(json.dumps(safe, sort_keys=True).encode()).hexdigest()
-    return CrawlerConfig(crawler_id, evidence_root, master_key, fingerprint, heartbeat_seconds, credential_temp_root, master_key_version, playwright_node_binary, playwright_runner_path, playwright_run_timeout_seconds, api_base_url, service_token, lease_seconds, completion_spool_root)
+    return CrawlerConfig(
+        crawler_id,
+        evidence_root,
+        master_key,
+        fingerprint,
+        heartbeat_seconds,
+        credential_temp_root,
+        master_key_version,
+        playwright_node_binary,
+        playwright_runner_path,
+        playwright_run_timeout_seconds,
+        api_base_url,
+        service_token,
+        lease_seconds,
+        completion_spool_root,
+        completion_spool_retention_days,
+        completion_spool_max_bytes,
+        completion_spool_minimum_free_disk_mb,
+    )

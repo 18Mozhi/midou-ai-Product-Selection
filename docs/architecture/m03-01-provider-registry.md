@@ -24,7 +24,7 @@ M03-01 只交付平台全局的 Provider 技术合同注册中心。`providers` 
 
 M03-01 是同步注册配置，因此异步处理不适用。调度、采集、租约、限流、死信和健康计算由 M03-03 及后续所属模块实现。没有新增环境变量、Redis key、文件、事件、SSE、导出或面板外服务；继续复用 `APP_WEB_ORIGIN`、MySQL 与既有 Baota Node API。
 
-公开来源进入后续 Worker 执行链时，先读取已批准的条款复核事实，再请求目标同源的 `/robots.txt`。匹配 `ScoutOpsPublicCrawler`，无专用组时匹配 `*`，按最长 Allow/Disallow 规则决定目标路径；明确禁止返回 `robots_disallowed`，429 保留为限流，网络或超时保留可重试错误，不能把不可达伪装为允许或禁止。robots 文本只在进程内短时缓存，不新增持久化事实。来源中心的批量公开来源入口只选择已批准且有参考地址的定义；其他既有入口即使已排队，Worker 仍按同一门禁失败关闭，不能绕过最终执行检查。
+公开来源进入后续 Worker 执行链时，先读取已批准的条款复核事实，再请求目标同源的 `/robots.txt`。匹配 `ScoutOpsPublicCrawler`，无专用组时匹配 `*`，按最长 Allow/Disallow 规则决定目标路径；明确禁止返回 `robots_disallowed`，429 保留为限流，网络或超时保留可重试错误，不能把不可达伪装为允许或禁止。判定器固定为 `scoutops-robots-policy-v1`，返回 robots HTTP 状态、命中的 User-agent，以及最终胜出的 Allow/Disallow 规则；规则预览最多 500 字符并同时保存完整规则 SHA-256，避免把异常超长 robots 行写入审计。Worker 把该判定保存到 `collection.subquery.completed` 事件，任务详情从事件投影；旧事件没有判定时保持未知，不补猜。robots 文本仍只在进程内短时缓存，不新增数据库字段。来源中心的批量公开来源入口只选择已批准且有参考地址的定义；其他既有入口即使已排队，Worker 仍按同一门禁失败关闭，不能绕过最终执行检查。
 
 ## 回滚
 

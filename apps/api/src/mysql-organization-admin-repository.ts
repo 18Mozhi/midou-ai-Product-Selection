@@ -541,15 +541,127 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
         "t.status,t.current_version,t.revision,w.name ORDER BY t.status,t.name",
       [i.organizationId],
     );
+    const [versionNodes] = await this.pool.query<RowDataPacket[]>(
+      "SELECT v.template_id,v.version_number,v.status version_status,n.ordinal,n.name," +
+        "n.sla_minutes,COALESCE(NULLIF(approver_profile.display_name,''),approver.email) approver_name," +
+        "COALESCE(NULLIF(escalation_profile.display_name,''),escalation.email) escalation_name " +
+        "FROM approval_template_versions v JOIN approval_templates t ON t.id=v.template_id " +
+        "LEFT JOIN approval_template_nodes n ON n.template_version_id=v.id " +
+        "LEFT JOIN users approver ON approver.id=n.approver_id " +
+        "LEFT JOIN user_profiles approver_profile ON approver_profile.user_id=n.approver_id " +
+        "LEFT JOIN users escalation ON escalation.id=n.escalation_assignee_id " +
+        "LEFT JOIN user_profiles escalation_profile ON escalation_profile.user_id=n.escalation_assignee_id " +
+        "WHERE t.organization_id=? ORDER BY v.template_id,v.version_number,n.ordinal",
+      [i.organizationId],
+    );
+    const versionsByTemplate = new Map<string, Map<number, any[]>>();
+    for (const row of versionNodes) {
+      const templateId = String(row.template_id),
+        version = Number(row.version_number),
+        versions = versionsByTemplate.get(templateId) ?? new Map<number, any[]>(),
+        nodes = versions.get(version) ?? [];
+      if (row.ordinal != null)
+        nodes.push({
+          ordinal: Number(row.ordinal),
+          name: String(row.name),
+          approver_name: row.approver_name ? String(row.approver_name) : "未设置展示名称",
+          sla_minutes: Number(row.sla_minutes),
+          escalation_name: row.escalation_name ? String(row.escalation_name) : "未设置展示名称",
+        });
+      versions.set(version, nodes);
+      versionsByTemplate.set(templateId, versions);
+    }
     return {
       summary: Object.fromEntries(summary.map((r) => [String(r.status), Number(r.count)])),
-      templates: templates.map((r) => ({ ...r, node_count: Number(r.node_count) })),
+      templates: templates.map((r) => ({
+        ...r,
+        node_count: Number(r.node_count),
+        version_diff: this.templateVersionDiff(
+          Number(r.current_version),
+          versionsByTemplate.get(String(r.id)) ?? new Map(),
+        ),
+      })),
       items: items.map((r) => ({
         ...r,
         current_node_ordinal: Number(r.current_node_ordinal),
         created_at: iso(r.created_at),
         completed_at: iso(r.completed_at),
       })),
+    };
+  }
+  private templateVersionDiff(currentVersion: number, versions: Map<number, any[]>) {
+    const availableVersions = [...versions.keys()]
+        .filter((version) => version < currentVersion)
+        .sort((left, right) => right - left),
+      previousVersion = availableVersions[0] ?? null;
+    if (previousVersion === null)
+      return {
+        from_version: null,
+        to_version: currentVersion,
+        change_count: 0,
+        changes: [],
+      };
+    const beforeNodes = new Map(
+        (versions.get(previousVersion) ?? []).map((node) => [node.ordinal, node]),
+      ),
+      afterNodes = new Map(
+        (versions.get(currentVersion) ?? []).map((node) => [node.ordinal, node]),
+      ),
+      ordinals = [...new Set([...beforeNodes.keys(), ...afterNodes.keys()])].sort(
+        (left, right) => left - right,
+      ),
+      changes = ordinals.flatMap((ordinal) => {
+        const before = beforeNodes.get(ordinal),
+          after = afterNodes.get(ordinal);
+        if (!before)
+          return [
+            {
+              kind: "added",
+              ordinal,
+              node_name: after.name,
+              fields: [],
+            },
+          ];
+        if (!after)
+          return [
+            {
+              kind: "removed",
+              ordinal,
+              node_name: before.name,
+              fields: [],
+            },
+          ];
+        const fields = (
+          [
+            ["name", "节点名称"],
+            ["approver_name", "审批人"],
+            ["sla_minutes", "处理时限（分钟）"],
+            ["escalation_name", "超时接收人"],
+          ] as Array<[string, string]>
+        )
+          .filter(([field]) => before[field] !== after[field])
+          .map(([field, label]) => ({
+            field,
+            label,
+            before: before[field],
+            after: after[field],
+          }));
+        return fields.length
+          ? [
+              {
+                kind: "changed",
+                ordinal,
+                node_name: after.name,
+                fields,
+              },
+            ]
+          : [];
+      });
+    return {
+      from_version: previousVersion,
+      to_version: currentVersion,
+      change_count: changes.length,
+      changes,
     };
   }
   async data(i: any) {

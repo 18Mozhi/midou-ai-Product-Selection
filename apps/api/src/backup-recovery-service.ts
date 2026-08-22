@@ -37,6 +37,12 @@ export class BackupRecoveryService {
     const drillAgeDays = drillDate
       ? Math.floor((now.getTime() - drillDate.getTime()) / 86_400_000)
       : null;
+    const drillExpiresAt = drillDate
+      ? new Date(drillDate.getTime() + this.policy.maximumDrillAgeDays * 86_400_000)
+      : null;
+    const daysUntilDrillExpiry = drillExpiresAt
+      ? Math.ceil((drillExpiresAt.getTime() - now.getTime()) / 86_400_000)
+      : null;
     const backupVerified =
       latestBackup?.status === "verified" &&
       latestBackup?.encrypted === true &&
@@ -72,6 +78,9 @@ export class BackupRecoveryService {
       },
       latest_backup: latestBackup ?? null,
       latest_drill: latestDrill ?? null,
+      drill_age_days: drillAgeDays,
+      drill_expires_at: drillExpiresAt?.toISOString() ?? null,
+      days_until_drill_expiry: daysUntilDrillExpiry,
       recovery_copy_verified: recoveryAssets.length > 0,
       targets: result.assets.map(({ run_id: _runId, ...asset }) => asset),
       blockers: [

@@ -6,8 +6,17 @@ import {
   type ProviderAdapterRegistry,
   type ProviderRuntimeDefinition,
 } from "@scoutops/provider-adapters";
-import { assertPublicCollectionPolicy, sourceEvidencePayload } from "@scoutops/provider-sources";
-import type { CollectionErrorCode, SubqueryOutcome } from "@scoutops/collection-tasks";
+import {
+  assertPublicCollectionPolicy,
+  publicCollectionPolicyDecision,
+  sourceEvidencePayload,
+  type RobotsPolicyDecision,
+} from "@scoutops/provider-sources";
+import type {
+  CollectionErrorCode,
+  CollectionResultKind,
+  SubqueryOutcome,
+} from "@scoutops/collection-tasks";
 import {
   CollectionExecutionError,
   type ClaimedCollectionTask,
@@ -38,6 +47,22 @@ const code = (value: string): CollectionErrorCode =>
     : value.includes("parse") || value.includes("payload")
       ? "parse_failed"
       : "validation_failed";
+type PersistedSubqueryOutcome = SubqueryOutcome & {
+  id: string;
+  resultKind?: CollectionResultKind;
+  freshResultCount?: number;
+  deduplicatedResultCount?: number;
+  robotsDecision?: RobotsPolicyDecision;
+};
+class ProviderCollectionExecutionError extends CollectionExecutionError {
+  constructor(
+    code: CollectionErrorCode,
+    rateLimitResetAt?: Date,
+    readonly robotsDecision?: RobotsPolicyDecision,
+  ) {
+    super(code, rateLimitResetAt);
+  }
+}
 export class ProviderSourceExecutor implements CollectionTaskExecutor {
   constructor(
     private readonly pool: Pool,
@@ -52,12 +77,12 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       "UPDATE provider_source_replay_runs SET status='running',updated_at=NOW(3) WHERE task_id=? AND status='scheduled'",
       [task.id],
     );
-    const outcomes: Array<SubqueryOutcome & { id: string }> = [];
+    const outcomes: PersistedSubqueryOutcome[] = [];
     const taskFailures: CollectionExecutionError[] = [];
     for (const query of task.subqueries) {
       signal?.throwIfAborted();
       await heartbeat();
-      let outcome: SubqueryOutcome & { id: string };
+      let outcome: PersistedSubqueryOutcome;
       try {
         outcome = await this.collect(task, query, heartbeat, signal);
       } catch (error) {
@@ -81,6 +106,10 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           availableResultCount: 0,
           missingFields: [],
           errorCode: failure.code,
+          ...(failure.code === "parse_failed" ? { resultKind: "parse_failed" as const } : {}),
+          ...(failure instanceof ProviderCollectionExecutionError && failure.robotsDecision
+            ? { robotsDecision: failure.robotsDecision }
+            : {}),
         };
       }
       outcomes.push(outcome);
@@ -111,7 +140,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
   private async persistSubqueryOutcome(
     task: ClaimedCollectionTask,
     providerId: string,
-    outcome: SubqueryOutcome & { id: string },
+    outcome: PersistedSubqueryOutcome,
   ) {
     const connection = await this.pool.getConnection(),
       now = new Date();
@@ -156,6 +185,10 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
             required: outcome.required,
             available_result_count: outcome.availableResultCount,
             error_code: outcome.errorCode,
+            result_kind: outcome.resultKind,
+            fresh_result_count: outcome.freshResultCount,
+            deduplicated_result_count: outcome.deduplicatedResultCount,
+            robots_policy_decision: outcome.robotsDecision,
           }),
           now,
         ],
@@ -173,7 +206,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
     query: ClaimedCollectionTask["subqueries"][number],
     heartbeat: () => Promise<void>,
     signal?: AbortSignal,
-  ): Promise<SubqueryOutcome & { id: string }> {
+  ): Promise<PersistedSubqueryOutcome> {
     const [rows] = await this.pool.query<RowDataPacket[]>(
         [
           "SELECT p.id,p.code,p.access_mode,p.target_url,p.parser_version,p.timeout_ms,p.fields_json,p.status",
@@ -213,6 +246,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         missingFields: provider.fields,
         errorCode: "source_circuit_open",
       };
+    let robotsDecision: RobotsPolicyDecision | undefined;
     try {
       if (["public_page", "public_rss"].includes(provider.accessMode)) {
         if (
@@ -224,7 +258,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         )
           throw new ProviderAdapterFailure("permission_denied", false);
         if (this.publicPolicyFetch)
-          await assertPublicCollectionPolicy({
+          robotsDecision = await assertPublicCollectionPolicy({
             providerTargetUrl: provider.targetUrl,
             target: query.target,
             fetcher: this.publicPolicyFetch,
@@ -280,6 +314,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           });
       if (browserCollection?.parseError) throw browserCollection.parseError;
       let available = 0,
+        fresh = 0,
+        deduplicated = 0,
         hasDedupeConflict = false;
       for (const raw of batch.records) {
         const normalized = this.registry.normalize(provider.code, raw, context),
@@ -291,7 +327,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
             sourceValueHash: sha(source.fields[fieldPath] ?? null),
           }));
         try {
-          await this.evidence.persist({
+          const persisted = await this.evidence.persist({
             organizationId: task.organizationId,
             workspaceId: task.workspaceId,
             taskId: task.id,
@@ -320,6 +356,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
             actorId: String(row.created_by),
           });
           available += 1;
+          if (persisted.deduplicated) deduplicated += 1;
+          else fresh += 1;
         } catch (error) {
           if (
             error instanceof EvidencePersistenceError &&
@@ -344,6 +382,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           availableResultCount: available,
           missingFields: [],
           errorCode: "validation_failed",
+          ...(robotsDecision ? { robotsDecision } : {}),
         };
       }
       await this.recordProviderRuntimeResult(
@@ -351,17 +390,29 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         Number(row.circuit_failure_threshold),
         null,
       );
+      const noNewRssContent = provider.accessMode === "public_rss" && available > 0 && fresh === 0,
+        emptyRssSuccess = provider.accessMode === "public_rss" && batch.records.length === 0,
+        countForTask = noNewRssContent && !query.required ? 0 : available;
       return {
         id: query.id,
         required: query.required,
-        status: available ? "succeeded" : "succeeded_empty",
-        availableResultCount: available,
+        status: countForTask ? "succeeded" : "succeeded_empty",
+        availableResultCount: countForTask,
         missingFields: [],
         errorCode: null,
+        ...(noNewRssContent
+          ? { resultKind: "no_new_content" as const }
+          : emptyRssSuccess
+            ? { resultKind: "empty_success" as const }
+            : {}),
+        freshResultCount: fresh,
+        deduplicatedResultCount: deduplicated,
+        ...(robotsDecision ? { robotsDecision } : {}),
       };
     } catch (error) {
       const failure = classifyProviderAdapterFailure(error),
         mapped = code(failure.code),
+        policyDecision = robotsDecision ?? publicCollectionPolicyDecision(error) ?? undefined,
         blocked = [
           "login_required",
           "session_expired",
@@ -369,6 +420,25 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           "robots_disallowed",
           "permission_denied",
         ].includes(mapped);
+      if (provider.accessMode === "public_rss" && mapped === "empty_result") {
+        await this.recordProviderRuntimeResult(
+          provider.id,
+          Number(row.circuit_failure_threshold),
+          null,
+        );
+        return {
+          id: query.id,
+          required: query.required,
+          status: "succeeded_empty",
+          availableResultCount: 0,
+          missingFields: [],
+          errorCode: null,
+          resultKind: "empty_success",
+          freshResultCount: 0,
+          deduplicatedResultCount: 0,
+          ...(policyDecision ? { robotsDecision: policyDecision } : {}),
+        };
+      }
       await this.recordProviderRuntimeResult(
         provider.id,
         Number(row.circuit_failure_threshold),
@@ -378,8 +448,12 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         await this.pauseProviderForParserDrift(task, provider, String(row.created_by), failure);
       if (query.required) {
         if (mapped === "rate_limited")
-          throw new CollectionExecutionError(mapped, new Date(Date.now() + 300000));
-        throw new CollectionExecutionError(mapped);
+          throw new ProviderCollectionExecutionError(
+            mapped,
+            new Date(Date.now() + 300000),
+            policyDecision,
+          );
+        throw new ProviderCollectionExecutionError(mapped, undefined, policyDecision);
       }
       return {
         id: query.id,
@@ -388,6 +462,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         availableResultCount: 0,
         missingFields: provider.fields,
         errorCode: mapped,
+        ...(mapped === "parse_failed" ? { resultKind: "parse_failed" as const } : {}),
+        ...(policyDecision ? { robotsDecision: policyDecision } : {}),
       };
     }
   }

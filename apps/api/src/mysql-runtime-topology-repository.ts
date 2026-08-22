@@ -12,11 +12,21 @@ const isoDate = (value: unknown) => new Date(String(value));
 export class MySqlRuntimeTopologyRepository implements RuntimeTopologyRepository {
   constructor(private readonly pool: Pool) {}
 
-  async snapshot() {
-    const [nodes] = await this.pool.query<RowDataPacket[]>(
-      "SELECT node_id,host_id,role,status,region_code,zone_code,build_sha,app_version," +
-        "last_heartbeat_at FROM runtime_nodes ORDER BY role,node_id",
-    );
+  async snapshot(now: Date) {
+    const [[nodes], [processRows]] = await Promise.all([
+      this.pool.query<RowDataPacket[]>(
+        "SELECT node_id,host_id,role,status,region_code,zone_code,build_sha,app_version," +
+          "last_heartbeat_at FROM runtime_nodes ORDER BY role,node_id",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT process_name,status,restart_count,observed_at FROM (" +
+          "SELECT process_name,status,restart_count,observed_at FROM " +
+          "runtime_process_restart_observations WHERE observed_at>=? " +
+          "ORDER BY observed_at DESC,process_name LIMIT 600) recent " +
+          "ORDER BY observed_at,process_name",
+        [new Date(now.getTime() - 86_400_000)],
+      ),
+    ]);
     return {
       nodes: nodes.map((row): RuntimeNodeSnapshot => ({
         nodeId: String(row.node_id),
@@ -29,6 +39,12 @@ export class MySqlRuntimeTopologyRepository implements RuntimeTopologyRepository
         version: String(row.app_version),
         lastHeartbeatAt: isoDate(row.last_heartbeat_at),
       })),
+      processHistory: processRows.map((row) => ({
+        process_name: String(row.process_name),
+        status: String(row.status),
+        restart_count: Number(row.restart_count),
+        observed_at: isoDate(row.observed_at).toISOString(),
+      })),
     };
   }
 
@@ -39,6 +55,7 @@ export class MySqlRuntimeTopologyRepository implements RuntimeTopologyRepository
     observedAt: Date;
     state: string;
     activeApiInstances: number;
+    processes: Array<{ name: string; status: string; restartCount: number }>;
   }) {
     const connection = await this.pool.getConnection();
     try {
@@ -47,6 +64,24 @@ export class MySqlRuntimeTopologyRepository implements RuntimeTopologyRepository
         "INSERT INTO runtime_topology_views(id,actor_id,request_id,trace_id,observed_at) VALUES(?,?,?,?,?)",
         [randomUUID(), input.actorId, input.requestId, input.traceId, input.observedAt],
       );
+      const sampleBucketAt = new Date(Math.floor(input.observedAt.getTime() / 300_000) * 300_000);
+      for (const process of input.processes)
+        await connection.query(
+          "INSERT INTO runtime_process_restart_observations(id,process_name,status,restart_count," +
+            "sample_bucket_at,request_id,trace_id,observed_at) VALUES(?,?,?,?,?,?,?,?) " +
+            "ON DUPLICATE KEY UPDATE status=VALUES(status),restart_count=VALUES(restart_count)," +
+            "request_id=VALUES(request_id),trace_id=VALUES(trace_id),observed_at=VALUES(observed_at)",
+          [
+            randomUUID(),
+            process.name,
+            process.status,
+            process.restartCount,
+            sampleBucketAt,
+            input.requestId,
+            input.traceId,
+            input.observedAt,
+          ],
+        );
       await connection.query(
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
           "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +

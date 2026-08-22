@@ -61,6 +61,18 @@ export function registerScoringRoutes(app: FastifyInstance, options: ScoringRout
   app.get("/api/v1/opportunity-score-rules", async (request) =>
     envelope(await options.service.list(await scope(request, "opportunity:read")), request),
   );
+  app.get("/api/v1/opportunity-score-rules/:id/preview", async (request) => {
+    const query = request.query as { page?: string; page_size?: string };
+    return envelope(
+      await options.service.preview({
+        ...(await scope(request, "opportunity:approve")),
+        ruleId: (request.params as { id: string }).id,
+        page: query.page == null ? 1 : Number(query.page),
+        pageSize: query.page_size == null ? 20 : Number(query.page_size),
+      }),
+      request,
+    );
+  });
   app.post("/api/v1/opportunity-score-rules", async (request, reply) => {
     const result = await options.service.create({
       ...(await write(request, "opportunity:decide")),

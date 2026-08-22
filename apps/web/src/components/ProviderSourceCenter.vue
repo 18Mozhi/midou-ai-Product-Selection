@@ -1,18 +1,23 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
+import ProviderCompatibilityMatrixDialog from "./ProviderCompatibilityMatrixDialog.vue";
 import ProviderParserSampleDialog from "./ProviderParserSampleDialog.vue";
+import ProviderSourceConfigurationDialog from "./ProviderSourceConfigurationDialog.vue";
 import type {
-  ConfigurationChange,
   ConfigurationVersion,
   ParserSample,
   ParserSampleCandidate,
   ParserSampleReplay,
+  ProviderCompatibilitySummary,
+  ProviderPageCompatibilityObservation,
   ProviderSourceItem as SourceItem,
   ProviderSourceViewState as ViewState,
 } from "./provider-source-types";
 
 const props = defineProps<{ apiBaseUrl: string }>();
+const route = useRoute();
 const request = createApiClient(props.apiBaseUrl);
 const state = ref<ViewState>("loading");
 const items = ref<SourceItem[]>([]);
@@ -31,6 +36,7 @@ const sampleSource = ref<SourceItem | null>(null);
 const sampleLoading = ref(false);
 const sampleSaving = ref<string | null>(null);
 const sampleReplaying = ref<string | null>(null);
+const sampleReviewing = ref<string | null>(null);
 const sampleOverview = reactive<{
   samples: ParserSample[];
   candidates: ParserSampleCandidate[];
@@ -42,6 +48,11 @@ const versionHistory = ref<ConfigurationVersion[]>([]);
 const versionCurrentVersion = ref<number | null>(null);
 const rollingBack = ref<number | null>(null);
 const rollbackReason = ref("恢复已验证的来源采集设置");
+const compatibilitySource = ref<SourceItem | null>(null);
+const compatibilityLoading = ref(false);
+const compatibilityError = ref("");
+const compatibilityAdapterVersion = ref<string | null>(null);
+const compatibilityRows = ref<ProviderPageCompatibilityObservation[]>([]);
 const form = reactive({
   schedule_minutes: 15,
   timeout_ms: 20000,
@@ -50,10 +61,14 @@ const form = reactive({
   reason: "调整来源采集配置",
 });
 
+const linkedProviderId = computed(() =>
+  typeof route.query.provider_id === "string" ? route.query.provider_id : "",
+);
 const filtered = computed(() =>
   items.value.filter((item) => {
     const term = query.value.trim().toLowerCase();
     return (
+      (!linkedProviderId.value || item.provisioned?.id === linkedProviderId.value) &&
       (!term ||
         `${item.name} ${item.code} ${item.markets.join(" ")} ${item.target_url}`
           .toLowerCase()
@@ -65,6 +80,38 @@ const filtered = computed(() =>
       (!accessMode.value || item.access_mode === accessMode.value)
     );
   }),
+);
+const purposeDefinitions = [
+  {
+    key: "market_signals",
+    label: "市场热点与消费者信号",
+    description: "用于发现新闻、搜索趋势和社区讨论。",
+  },
+  {
+    key: "product_competition",
+    label: "商品与竞品观察",
+    description: "用于观察商品、榜单和电商平台变化。",
+  },
+  {
+    key: "supply_sourcing",
+    label: "供应链找货",
+    description: "用于查找供应商和货源线索。",
+  },
+] as const;
+type SourcePurpose = (typeof purposeDefinitions)[number]["key"];
+const sourcePurpose = (item: SourceItem): SourcePurpose =>
+  item.category === "product_supply"
+    ? "supply_sourcing"
+    : item.category === "ecommerce"
+      ? "product_competition"
+      : "market_signals";
+const groupedSources = computed(() =>
+  purposeDefinitions
+    .map((definition) => ({
+      ...definition,
+      items: filtered.value.filter((item) => sourcePurpose(item) === definition.key),
+    }))
+    .filter((group) => group.items.length > 0),
 );
 const counts = computed(() => ({
   all: items.value.length,
@@ -80,6 +127,26 @@ const marketOptions = computed(() =>
 const languageOptions = computed(() =>
   [...new Set(items.value.flatMap((item) => item.languages))].sort(),
 );
+const configurationPreview = computed(() => {
+  const item = editing.value;
+  if (!item?.provisioned) return null;
+  const sameIntervalCount = items.value.filter(
+    (candidate) =>
+      candidate.provisioned?.id !== item.provisioned?.id &&
+      candidate.availability === "automatic" &&
+      candidate.provisioned?.status === "enabled" &&
+      candidate.provisioned.schedule_minutes === form.schedule_minutes,
+  ).length;
+  const configuredLimit =
+      item.provisioned.concurrency_snapshot?.configured_limit ?? item.concurrency_limit,
+    activeCount = item.provisioned.concurrency_snapshot?.active_subquery_count ?? 0;
+  return {
+    same_interval_enabled_count: sameIntervalCount + (form.status === "enabled" ? 1 : 0),
+    configured_limit: configuredLimit,
+    active_count: activeCount,
+    available_count: Math.max(0, configuredLimit - activeCount),
+  };
+});
 const failure = (status: number): ViewState =>
   status === 401
     ? "expired"
@@ -116,24 +183,6 @@ const modeText = (value: string) =>
       manual: "人工录入",
     }) as Record<string, string>
   )[value] ?? value;
-const displayValue = (value: unknown) => {
-  const text = typeof value === "string" ? value : JSON.stringify(value);
-  return text == null ? "未提供" : text.length > 240 ? `${text.slice(0, 240)}…` : text;
-};
-const configurationFieldText = (field: ConfigurationChange["field"]) =>
-  ({
-    schedule_minutes: "采集频率",
-    timeout_ms: "单次超时",
-    retry_limit: "失败重试",
-    status: "运行状态",
-  })[field];
-const configurationActionText = (action: string) =>
-  ({
-    created: "创建配置",
-    updated: "更新配置",
-    configuration_updated: "更新采集设置",
-    configuration_rolled_back: "从历史版本恢复",
-  })[action] ?? "配置变更";
 const successText = (item: SourceItem) => {
   const success = item.provisioned?.last_success;
   if (!success) return "尚无成功任务";
@@ -166,6 +215,10 @@ async function load() {
   try {
     items.value = (await api<SourceItem[]>("/platform/provider-sources")) ?? [];
     state.value = items.value.length ? "ready" : "empty";
+    if (linkedProviderId.value) {
+      const linked = items.value.find((item) => item.provisioned?.id === linkedProviderId.value);
+      message.value = linked ? `已定位关联来源：${linked.name}` : "关联来源不在当前来源目录中。";
+    }
   } catch (error) {
     state.value = error instanceof ApiClientError ? failure(error.status) : "blocked";
   }
@@ -190,15 +243,39 @@ async function save() {
   try {
     const isAutomatic = editing.value.availability === "automatic";
     const source = editing.value.provisioned;
-    await api(`/platform/provider-sources/${source.id}/configuration`, {
+    const requiresPublicSmoke =
+      source.status !== "enabled" &&
+      form.status === "enabled" &&
+      ["public_page", "public_rss"].includes(editing.value.access_mode);
+    let saved = await api<any>(`/platform/provider-sources/${source.id}/configuration`, {
       method: "PUT",
-      body: JSON.stringify({ ...form, expected_version: source.version }),
+      body: JSON.stringify({
+        ...form,
+        status: requiresPublicSmoke ? "disabled" : form.status,
+        expected_version: source.version,
+      }),
     });
+    if (requiresPublicSmoke) {
+      Object.assign(source, saved);
+      const smoke = await api<any>(`/platform/provider-adapters/${source.id}/health-check`, {
+        method: "POST",
+      });
+      if (smoke?.health_status !== "ready") {
+        message.value = `当前配置已安全保存为停用；真实页面烟测未通过：${smoke?.last_error_code ?? "来源暂不可用"}。`;
+        return;
+      }
+      saved = await api<any>(`/platform/provider-sources/${source.id}/configuration`, {
+        method: "PUT",
+        body: JSON.stringify({ ...form, expected_version: saved.version }),
+      });
+    }
     editing.value = null;
     await load();
-    message.value = isAutomatic
-      ? "来源配置已保存；频率、超时、重试和启停状态不会再被启动同步覆盖。"
-      : "来源设置已保存；该来源完成解析合同验收前不会进入自动采集。";
+    message.value = requiresPublicSmoke
+      ? "真实页面烟测已通过，来源配置已启用。"
+      : isAutomatic
+        ? "来源配置已保存；频率、超时、重试和启停状态不会再被启动同步覆盖。"
+        : "来源设置已保存；该来源完成网页登录和可用性检查前不会进入自动采集。";
   } catch {
     if (!message.value) message.value = "来源配置服务暂不可用，本次没有保存。";
   } finally {
@@ -274,6 +351,32 @@ async function testSource(item: SourceItem) {
     testing.value = null;
   }
 }
+
+async function loadCompatibility(item: SourceItem) {
+  if (!item.provisioned) return;
+  compatibilitySource.value = item;
+  compatibilityLoading.value = true;
+  compatibilityError.value = "";
+  compatibilityAdapterVersion.value = null;
+  compatibilityRows.value = [];
+  try {
+    const response = await request<ProviderCompatibilitySummary[]>("/platform/provider-adapters");
+    requestId.value = response.request_id;
+    const summary = response.data.find((candidate) => candidate.id === item.provisioned?.id);
+    if (!summary) {
+      compatibilityError.value = "当前来源没有对应的采集程序观测。";
+      return;
+    }
+    compatibilityAdapterVersion.value = summary.adapter_version;
+    compatibilityRows.value = summary.compatibility_matrix ?? [];
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? requestId.value;
+    compatibilityError.value = failure?.actionHint ?? "解析兼容矩阵暂不可用，请稍后重试。";
+  } finally {
+    compatibilityLoading.value = false;
+  }
+}
 async function loadParserSamples(item: SourceItem) {
   if (!item.provisioned) return;
   sampleSource.value = item;
@@ -333,6 +436,36 @@ async function replayParserSample(sample: ParserSample) {
     sampleReplaying.value = null;
   }
 }
+async function reviewParserSample(
+  sample: ParserSample,
+  decision: "approved" | "rejected",
+  reason: string,
+) {
+  if (!sampleSource.value?.provisioned) return;
+  sampleReviewing.value = sample.id;
+  try {
+    await api(
+      `/platform/provider-sources/${sampleSource.value.provisioned.id}/parser-samples/${sample.id}/reviews`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          decision,
+          reason: reason.trim(),
+          expected_version: sample.review_version,
+        }),
+      },
+    );
+    await loadParserSamples(sampleSource.value);
+    message.value =
+      decision === "approved"
+        ? "固定样本审批通过；当前解析器回放一致后可启用来源。"
+        : "固定样本已驳回并保留审计记录；请从新的真实作业重新固定样本。";
+  } catch {
+    if (!message.value) message.value = "固定样本审批服务暂不可用。";
+  } finally {
+    sampleReviewing.value = null;
+  }
+}
 
 onMounted(load);
 </script>
@@ -343,11 +476,7 @@ onMounted(load);
       <div>
         <p>热点来源</p>
         <h2>多平台、多国家来源已自动登记</h2>
-        <span
-          >公开
-          RSS、论坛与电商内容直接由爬虫采集；需要登录的平台可保存浏览器档案，完成解析验收后才会进入自动采集，不需要配置官方
-          API。</span
-        >
+        <span>公开信息源由系统自动采集；需要登录的平台完成网页登录配置后才能运行。</span>
       </div>
       <RouterLink to="/platform-admin/providers">管理来源规则</RouterLink>
     </header>
@@ -374,7 +503,7 @@ onMounted(load);
       <ol>
         <li>公开信息订阅和论坛频道会自动采集，不需要密钥。</li>
         <li>频率、超时、重试、启停可直接在本页修改。</li>
-        <li>网页登录型平台先保存浏览器档案，完成解析验收后才进入自动采集。</li>
+        <li>网页登录型平台需要先完成网页登录配置。</li>
       </ol>
     </aside>
     <form class="source-filter" @submit.prevent>
@@ -426,221 +555,148 @@ onMounted(load);
       <p>{{ message }}</p>
       <button v-if="!['expired', 'forbidden'].includes(state)" @click="load">重新加载</button>
     </div>
-    <section v-else class="source-list">
-      <article v-for="item in filtered" :key="item.code" :data-availability="item.availability">
-        <header>
+    <section v-else class="source-purpose-groups" aria-label="按业务用途分组的热点来源">
+      <section v-for="group in groupedSources" :key="group.key" class="source-purpose-group">
+        <header class="source-purpose-head">
           <div>
-            <small>{{ categoryText(item.category) }} · {{ item.markets.join(" / ") }}</small>
-            <h3>{{ item.name }}</h3>
+            <p>业务用途</p>
+            <h3>{{ group.label }}</h3>
           </div>
-          <b>{{ statusText(item) }}</b>
+          <span>{{ group.description }} 共 {{ group.items.length }} 个来源</span>
         </header>
-        <p>
-          {{ item.policy_note }}
-          <a
-            v-if="item.target_url.startsWith('https://')"
-            class="source-target"
-            :href="item.target_url"
-            target="_blank"
-            rel="noopener noreferrer"
-            >查看来源页面 ↗</a
+        <div class="source-list">
+          <article
+            v-for="item in group.items"
+            :key="item.code"
+            :data-availability="item.availability"
           >
-        </p>
-        <dl>
-          <div>
-            <dt>采集方式</dt>
-            <dd>{{ modeText(item.access_mode) }}</dd>
-          </div>
-          <div>
-            <dt>频率</dt>
-            <dd>
-              {{ item.provisioned?.schedule_minutes ?? item.schedule_minutes }}
-              分钟
-            </dd>
-          </div>
-          <div>
-            <dt>超时 / 重试</dt>
-            <dd>
-              {{ item.provisioned?.timeout_ms ?? item.timeout_ms }} ms /
-              {{ item.provisioned?.retry_limit ?? item.retry_limit }} 次
-            </dd>
-          </div>
-          <div>
-            <dt>负责人</dt>
-            <dd>{{ item.owner_label }}</dd>
-          </div>
-          <div>
-            <dt>更新 SLA</dt>
-            <dd>{{ slaText(item) }}</dd>
-          </div>
-          <div>
-            <dt>最近成功任务</dt>
-            <dd>{{ successText(item) }}</dd>
-          </div>
-          <div>
-            <dt>影响范围</dt>
-            <dd>
-              {{ categoryText(item.category) }} · {{ item.markets.join(" / ") }} ·
-              {{ item.fields.length }} 类字段
-            </dd>
-          </div>
-        </dl>
-        <footer>
-          <span>{{ item.languages.join(" / ") }} · {{ item.fields.length }} 类数据字段</span
-          ><button
-            v-if="
-              item.provisioned &&
-              item.availability === 'automatic' &&
-              ['public_page', 'public_rss'].includes(item.access_mode)
-            "
-            type="button"
-            :disabled="testing === item.provisioned.id"
-            @click="testSource(item)"
-          >
-            {{ testing === item.provisioned.id ? "测试中…" : "匿名测试" }}</button
-          ><button v-if="item.provisioned" type="button" @click="beginEdit(item)">
-            编辑采集设置</button
-          ><button v-if="item.provisioned" type="button" @click="loadConfigurationVersions(item)">
-            版本与回滚</button
-          ><RouterLink
-            v-if="item.access_mode === 'authenticated_browser'"
-            :to="`/platform-admin/credentials?provider_code=${encodeURIComponent(item.code)}&mode=login`"
-            >配置网页登录</RouterLink
-          ><button
-            v-if="item.code === '1688_search' && item.provisioned"
-            type="button"
-            @click="loadParserSamples(item)"
-          >
-            固定样本回放</button
-          ><RouterLink
-            v-if="item.code === '1688_search'"
-            to="/platform-admin/providers/sources/1688-acceptance"
-            >登录与验证码验收</RouterLink
-          ><span v-if="!item.provisioned && item.access_mode !== 'authenticated_browser'"
-            >等待系统登记</span
-          >
-        </footer>
-      </article>
-      <p v-if="!filtered.length" class="source-state">没有符合筛选条件的来源。</p>
-    </section>
-    <div
-      v-if="editing"
-      class="source-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="source-edit-title"
-    >
-      <form @submit.prevent="save">
-        <header>
-          <div>
-            <p>编辑采集来源</p>
-            <h3 id="source-edit-title">{{ editing.name }}</h3>
-          </div>
-          <button type="button" aria-label="关闭来源编辑" @click="editing = null">×</button>
-        </header>
-        <label
-          >采集频率（分钟）<input
-            v-model.number="form.schedule_minutes"
-            type="number"
-            min="1"
-            max="10080"
-            required /></label
-        ><label
-          >单次超时（毫秒）<input
-            v-model.number="form.timeout_ms"
-            type="number"
-            min="1000"
-            max="120000"
-            required /></label
-        ><label
-          >失败重试次数<input
-            v-model.number="form.retry_limit"
-            type="number"
-            min="0"
-            max="10"
-            required /></label
-        ><label
-          >{{
-            editing.availability === "automatic"
-              ? "运行状态"
-              : "来源设置状态（解析验收前不会自动采集）"
-          }}<select v-model="form.status">
-            <option value="enabled">启用</option>
-            <option value="disabled">停用</option>
-          </select></label
-        ><label
-          >变更原因<textarea
-            v-model="form.reason"
-            minlength="2"
-            maxlength="500"
-            required
-          ></textarea>
-        </label>
-        <footer>
-          <button type="button" @click="editing = null">取消</button
-          ><button :disabled="saving">
-            {{ saving ? "保存中…" : "保存配置" }}
-          </button>
-        </footer>
-      </form>
-    </div>
-    <div
-      v-if="versionSource"
-      class="source-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="configuration-version-title"
-    >
-      <section class="configuration-version-panel">
-        <header>
-          <div>
-            <p>配置版本</p>
-            <h3 id="configuration-version-title">版本、差异与回滚 · {{ versionSource.name }}</h3>
-          </div>
-          <button type="button" aria-label="关闭配置版本" @click="versionSource = null">×</button>
-        </header>
-        <p>只展示采集频率、超时、重试和启停状态；凭证、Cookie 与受限环境值不会进入版本详情。</p>
-        <label
-          >回滚原因<textarea
-            v-model="rollbackReason"
-            minlength="2"
-            maxlength="500"
-            required
-          ></textarea>
-        </label>
-        <div v-if="versionLoading" class="source-state">正在读取配置版本…</div>
-        <ol v-else class="configuration-version-list">
-          <li v-for="version in versionHistory" :key="version.version">
             <header>
               <div>
-                <strong>第 {{ version.version }} 版</strong>
-                <span
-                  >{{ configurationActionText(version.action) }} ·
-                  {{ new Date(version.created_at).toLocaleString("zh-CN") }}</span
-                >
+                <small>{{ categoryText(item.category) }} · {{ item.markets.join(" / ") }}</small>
+                <h3>{{ item.name }}</h3>
               </div>
-              <b v-if="version.current">当前版本</b>
-              <button
-                v-else-if="version.rollback_available"
-                type="button"
-                :disabled="rollingBack === version.version || rollbackReason.trim().length < 2"
-                @click="rollbackConfiguration(version)"
-              >
-                {{ rollingBack === version.version ? "恢复中…" : "恢复此版本" }}
-              </button>
+              <b>{{ statusText(item) }}</b>
             </header>
-            <ul v-if="version.changes.length">
-              <li v-for="change in version.changes" :key="change.field">
-                <span>{{ configurationFieldText(change.field) }}</span>
-                <code>{{ displayValue(change.before) }} → {{ displayValue(change.after) }}</code>
-              </li>
-            </ul>
-            <p v-else>与上一版本的可见采集设置一致。</p>
-          </li>
-        </ol>
-        <p v-if="!versionLoading && !versionHistory.length">还没有可用配置版本。</p>
+            <p>
+              {{ item.policy_note }}
+              <a
+                v-if="item.target_url.startsWith('https://')"
+                class="source-target"
+                :href="item.target_url"
+                target="_blank"
+                rel="noopener noreferrer"
+                >查看来源页面 ↗</a
+              >
+            </p>
+            <dl>
+              <div>
+                <dt>采集方式</dt>
+                <dd>{{ modeText(item.access_mode) }}</dd>
+              </div>
+              <div>
+                <dt>频率</dt>
+                <dd>
+                  {{ item.provisioned?.schedule_minutes ?? item.schedule_minutes }}
+                  分钟
+                </dd>
+              </div>
+              <div>
+                <dt>超时 / 重试</dt>
+                <dd>
+                  {{ item.provisioned?.timeout_ms ?? item.timeout_ms }} ms /
+                  {{ item.provisioned?.retry_limit ?? item.retry_limit }} 次
+                </dd>
+              </div>
+              <div>
+                <dt>负责人</dt>
+                <dd>{{ item.owner_label }}</dd>
+              </div>
+              <div>
+                <dt>更新 SLA</dt>
+                <dd>{{ slaText(item) }}</dd>
+              </div>
+              <div>
+                <dt>最近成功任务</dt>
+                <dd>{{ successText(item) }}</dd>
+              </div>
+              <div>
+                <dt>影响范围</dt>
+                <dd>
+                  {{ categoryText(item.category) }} · {{ item.markets.join(" / ") }} ·
+                  {{ item.fields.length }} 类字段
+                </dd>
+              </div>
+            </dl>
+            <footer>
+              <span>{{ item.languages.join(" / ") }} · {{ item.fields.length }} 类数据字段</span
+              ><button
+                v-if="
+                  item.provisioned &&
+                  item.availability === 'automatic' &&
+                  ['public_page', 'public_rss'].includes(item.access_mode)
+                "
+                type="button"
+                :disabled="testing === item.provisioned.id"
+                @click="testSource(item)"
+              >
+                {{ testing === item.provisioned.id ? "测试中…" : "匿名测试" }}</button
+              ><button v-if="item.provisioned" type="button" @click="beginEdit(item)">
+                编辑采集设置</button
+              ><button
+                v-if="
+                  item.provisioned &&
+                  ['public_page', 'authenticated_browser'].includes(item.access_mode)
+                "
+                type="button"
+                @click="loadCompatibility(item)"
+              >
+                解析兼容矩阵</button
+              ><button
+                v-if="item.provisioned"
+                type="button"
+                @click="loadConfigurationVersions(item)"
+              >
+                版本与回滚</button
+              ><RouterLink
+                v-if="item.access_mode === 'authenticated_browser'"
+                :to="`/platform-admin/credentials?provider_code=${encodeURIComponent(item.code)}&mode=login`"
+                >配置网页登录</RouterLink
+              ><button
+                v-if="item.code === '1688_search' && item.provisioned"
+                type="button"
+                @click="loadParserSamples(item)"
+              >
+                固定样本回放</button
+              ><RouterLink
+                v-if="item.code === '1688_search'"
+                to="/platform-admin/providers/sources/1688-acceptance"
+                >登录准备状态</RouterLink
+              ><span v-if="!item.provisioned && item.access_mode !== 'authenticated_browser'"
+                >等待系统登记</span
+              >
+            </footer>
+          </article>
+        </div>
       </section>
-    </div>
+      <p v-if="!groupedSources.length" class="source-state">没有符合筛选条件的来源。</p>
+    </section>
+    <ProviderSourceConfigurationDialog
+      :editing="editing"
+      :form="form"
+      :preview="configurationPreview"
+      :saving="saving"
+      :version-source="versionSource"
+      :version-loading="versionLoading"
+      :version-history="versionHistory"
+      :rolling-back="rollingBack"
+      :rollback-reason="rollbackReason"
+      @close-edit="editing = null"
+      @save="save"
+      @close-versions="versionSource = null"
+      @rollback="rollbackConfiguration"
+      @update:form="Object.assign(form, $event)"
+      @update:rollback-reason="rollbackReason = $event"
+    />
     <ProviderParserSampleDialog
       v-if="sampleSource"
       :source-name="sampleSource.name"
@@ -650,9 +706,20 @@ onMounted(load);
       :latest-replay="latestReplay"
       :saving-candidate-id="sampleSaving"
       :replaying-sample-id="sampleReplaying"
+      :reviewing-sample-id="sampleReviewing"
       @close="sampleSource = null"
       @create="createParserSample"
       @replay="replayParserSample"
+      @review="reviewParserSample"
+    />
+    <ProviderCompatibilityMatrixDialog
+      v-if="compatibilitySource"
+      :source-name="compatibilitySource.name"
+      :adapter-version="compatibilityAdapterVersion"
+      :loading="compatibilityLoading"
+      :error="compatibilityError"
+      :rows="compatibilityRows"
+      @close="compatibilitySource = null"
     />
   </section>
 </template>
@@ -732,10 +799,7 @@ onMounted(load);
   gap: 10px;
 }
 .source-filter input,
-.source-filter select,
-.source-modal input,
-.source-modal select,
-.source-modal textarea {
+.source-filter select {
   padding: 10px;
   border: 1px solid var(--so-border);
   border-radius: 9px;
@@ -745,6 +809,35 @@ onMounted(load);
 .source-filter input {
   flex: 1;
   min-width: 280px;
+}
+.source-purpose-groups,
+.source-purpose-group {
+  display: grid;
+  gap: 16px;
+}
+.source-purpose-group {
+  padding: 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--so-panel-soft) 58%, transparent);
+}
+.source-purpose-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+.source-purpose-head p,
+.source-purpose-head h3 {
+  margin: 0;
+}
+.source-purpose-head p {
+  color: var(--so-info);
+  font-size: 12px;
+}
+.source-purpose-head span {
+  color: var(--so-text-muted);
+  text-align: right;
 }
 .source-list {
   display: grid;
@@ -844,98 +937,6 @@ onMounted(load);
   padding: 30px;
   text-align: center;
 }
-.source-modal {
-  position: fixed;
-  z-index: 80;
-  inset: 0;
-  padding: 20px;
-  display: grid;
-  place-items: center;
-  background: color-mix(in srgb, var(--so-bg) 80%, transparent);
-}
-.source-modal form {
-  width: min(520px, 100%);
-  display: grid;
-  gap: 14px;
-  padding: 24px;
-  border: 1px solid var(--so-border);
-  border-radius: 18px;
-  background: var(--so-bg-elevated);
-  box-shadow: var(--so-shadow);
-}
-.configuration-version-panel {
-  display: grid;
-  gap: 14px;
-}
-.configuration-version-panel > header,
-.configuration-version-list > li > header,
-.configuration-version-list > li > header > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-.configuration-version-panel > header,
-.configuration-version-list > li > header {
-  align-items: center;
-}
-.configuration-version-panel label,
-.configuration-version-list > li > header > div {
-  flex-direction: column;
-}
-.configuration-version-panel textarea {
-  width: 100%;
-  min-height: 72px;
-}
-.configuration-version-list {
-  display: grid;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.configuration-version-list > li {
-  padding: 14px;
-  border: 1px solid var(--so-border);
-  border-radius: 12px;
-  background: var(--so-panel-soft);
-}
-.configuration-version-list ul {
-  display: grid;
-  gap: 6px;
-  margin-top: 12px;
-}
-.configuration-version-list ul li {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-.source-modal header,
-.source-modal footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-.source-modal h3,
-.source-modal p {
-  margin: 0;
-}
-.source-modal label {
-  display: grid;
-  gap: 6px;
-}
-.source-modal header > button {
-  font-size: 22px;
-  color: var(--so-text);
-  background: transparent;
-}
-.source-modal footer {
-  justify-content: flex-end;
-}
-.source-modal footer button:first-child {
-  color: var(--so-text);
-  background: var(--so-panel-soft);
-}
 @media (max-width: 760px) {
   .novice {
     padding-bottom: 76px;
@@ -950,6 +951,16 @@ onMounted(load);
   }
   .source-filter {
     flex-direction: column;
+  }
+  .source-purpose-group {
+    padding: 12px;
+  }
+  .source-purpose-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .source-purpose-head span {
+    text-align: left;
   }
   .source-list {
     grid-template-columns: 1fr;

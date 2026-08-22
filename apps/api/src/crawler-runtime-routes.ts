@@ -122,6 +122,7 @@ export function registerCrawlerRuntimeRoutes(app: FastifyInstance, o: CrawlerRun
         actorId,
         leaseOwner: String(body.lease_owner ?? ""),
         leaseSeconds: Number(body.lease_seconds ?? 0),
+        completionSpool: body.completion_spool,
         ...ids(r),
       });
     if (!assignment) return reply.code(204).send();

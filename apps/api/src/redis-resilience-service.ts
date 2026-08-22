@@ -1,5 +1,6 @@
 import type { RedisResilienceDto } from "@scoutops/contracts";
 import {
+  REDIS_KEYSPACE_SAMPLE_LIMIT,
   evaluateRedisResilience,
   type RedisResiliencePolicy,
   type RedisResilienceSnapshot,
@@ -35,6 +36,20 @@ export class RedisResilienceService {
     const observedAt = this.now();
     const snapshot = await this.probe.snapshot();
     const evaluation = evaluateRedisResilience(snapshot, this.policy);
+    const keyspaceSample = snapshot.keyspaceSample ?? {
+      status: "unavailable" as const,
+      basis: "bounded_memory_usage" as const,
+      sample_limit: REDIS_KEYSPACE_SAMPLE_LIMIT,
+      scanned_keys: 0,
+      measured_keys: 0,
+      ignored_keys: 0,
+      failed_measurements: 0,
+      total_sampled_bytes: 0,
+      truncated: false,
+      access_frequency_available: false as const,
+      unavailable_reason: "command_unsupported" as const,
+      hotspots: [],
+    };
     await this.repository.record({ ...input, observedAt, snapshot, evaluation });
     return {
       state: evaluation.state,
@@ -57,6 +72,9 @@ export class RedisResilienceService {
         rejected: snapshot.rejectedConnections,
       },
       evicted_keys: snapshot.evictedKeys,
+      max_memory_policy: snapshot.maxMemoryPolicy,
+      uptime_seconds: snapshot.uptimeSeconds,
+      keyspace_sample: keyspaceSample,
       findings: evaluation.findings.map((item) => ({
         code: item.code,
         severity: item.severity,

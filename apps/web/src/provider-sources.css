@@ -167,10 +167,54 @@
 .source-message {
   color: var(--so-text-muted);
 }
+.source-smoke-notice {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--so-warning) 42%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--so-warning) 10%, transparent);
+  color: var(--so-text);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.source-schedule-preview {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.source-schedule-preview h4,
+.source-schedule-preview p,
+.source-schedule-preview dl,
+.source-schedule-preview dd {
+  margin: 0;
+}
+.source-schedule-preview > p,
+.source-schedule-preview dt {
+  color: var(--so-text-muted);
+}
+.source-schedule-preview dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.source-schedule-preview dl > div {
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--so-panel);
+}
+.source-schedule-preview dd {
+  margin-top: 4px;
+}
 @media (max-width: 760px) {
   .source-metrics,
   .source-grid,
   .source-replay {
+    grid-template-columns: 1fr;
+  }
+  .source-schedule-preview dl {
     grid-template-columns: 1fr;
   }
   .source-replay header,

@@ -87,6 +87,10 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     "0056_provider_terms_version_expiry.up.sql",
     "0057_data_quality_issue_workflow.up.sql",
     "0058_opportunity_archive_stage.up.sql",
+    "0059_selection_journey_candidates.up.sql",
+    "0060_opportunity_workflow_visibility.up.sql",
+    "0061_crawler_completion_spool_status.up.sql",
+    "0062_runtime_process_restart_observations.up.sql",
   ];
   let previousIndex = -1;
   for (const migration of orderedMigrations) {
@@ -128,14 +132,22 @@ test("allowlisted deployment migrations use the locked statement splitter", asyn
     "0056_provider_terms_version_expiry.up.sql",
     "0057_data_quality_issue_workflow.up.sql",
     "0058_opportunity_archive_stage.up.sql",
+    "0059_selection_journey_candidates.up.sql",
+    "0060_opportunity_workflow_visibility.up.sql",
+    "0061_crawler_completion_spool_status.up.sql",
+    "0062_runtime_process_restart_observations.up.sql",
   ]) {
     const sql = await readFile(`database/migrations/${name}`, "utf8");
     const statements = splitSqlStatements(sql);
     assert.ok(statements.length >= 1, `${name} must contain executable SQL`);
     assert.ok(statements.every((statement) => !statement.includes(";")));
+    const expectedStatementCounts = {
+      "0054_crawler_succeeded_empty.up.sql": 2,
+      "0060_opportunity_workflow_visibility.up.sql": 4,
+    };
     assert.equal(
       statements.length,
-      name === "0054_crawler_succeeded_empty.up.sql" ? 2 : 1,
+      expectedStatementCounts[name] ?? 1,
       `${name} statement count changed unexpectedly`,
     );
   }

@@ -20,6 +20,8 @@
 3. 复用现有依赖构建并运行 `npm run verify:module -- M03-06`。验收包含 MySQL 5.7 事务、文件完整性、去重冲突、字段溯源、质量阈值、组织隔离、受控下载、审计及桌面/390px 页面。
 4. 由宝塔重启 Node API 与 Node Worker；M03-07 完成前不要接入或启动真实 Provider 执行器。
 5. 在 `/platform-admin/data` 核对证据、质量问题、核对运行、详情血缘和短时下载。使用 request_id/trace_id 关联 Node Worker、Node API、事件与 Outbox。
+6. 从一条核对运行选择“查看异常字段与样本”，确认列表只保留同一 `reconciliation_run_id` 的问题；存在关联证据时继续打开完整溯源，核对字段路径和 Parser 版本。
+7. 核对“即将到期”与证据行剩余天数均以响应中的服务端观测时间计算；已到期证据只进入治理提示，本页面不得执行物理删除。
 
 ## 告警、故障与恢复
 

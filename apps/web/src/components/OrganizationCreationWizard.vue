@@ -62,7 +62,7 @@ function close() {
             required
             minlength="2"
             maxlength="120"
-            placeholder="例如：米豆选品团队"
+            placeholder="例如：智能选品团队"
           />
         </label>
         <label>

@@ -3,6 +3,8 @@ import test from "node:test";
 
 import {
   assertPublicCollectionPolicy,
+  evaluateRobotsPolicy,
+  publicCollectionPolicyDecision,
   robotsAllows,
 } from "../../packages/provider-sources/dist/index.js";
 
@@ -17,6 +19,16 @@ test("robots policy uses the most specific matching allow or disallow rule", () 
   assert.equal(robotsAllows(robots, "https://example.test/private/item"), true);
   assert.equal(robotsAllows(robots, "https://example.test/catalog/secret"), false);
   assert.equal(robotsAllows(robots, "https://example.test/catalog/public/item"), true);
+  const decision = evaluateRobotsPolicy(robots, "https://example.test/catalog/public/item");
+  assert.equal(decision.matched_user_agent, "ScoutOpsPublicCrawler");
+  assert.deepEqual(
+    {
+      directive: decision.matched_rule.directive,
+      pattern_preview: decision.matched_rule.pattern_preview,
+    },
+    { directive: "allow", pattern_preview: "/catalog/public/" },
+  );
+  assert.match(decision.matched_rule.pattern_sha256, /^[a-f0-9]{64}$/);
 });
 
 test("public collection preflight blocks a robots-disallowed target before collection", async () => {
@@ -32,19 +44,41 @@ test("public collection preflight blocks a robots-disallowed target before colle
         timeoutMs: 1000,
         cacheTtlMs: 0,
       }),
-    (error) => error?.name === "ProviderAdapterFailure" && error.code === "robots_disallowed",
+    (error) => {
+      const decision = publicCollectionPolicyDecision(error);
+      return (
+        error?.name === "ProviderAdapterFailure" &&
+        error.code === "robots_disallowed" &&
+        decision?.decision_version === "scoutops-robots-policy-v1" &&
+        decision.allowed === false &&
+        decision.matched_rule?.directive === "disallow" &&
+        decision.matched_rule.pattern_preview === "/catalog/"
+      );
+    },
   );
   assert.deepEqual(calls, ["https://example.test/robots.txt"]);
 });
 
 test("public collection preflight treats a missing robots file as allowed", async () => {
-  await assert.doesNotReject(() =>
-    assertPublicCollectionPolicy({
-      providerTargetUrl: "https://example.test/catalog/public",
-      fetcher: async () => new Response("", { status: 404 }),
-      timeoutMs: 1000,
-      cacheTtlMs: 0,
-    }),
+  const decision = await assertPublicCollectionPolicy({
+    providerTargetUrl: "https://example.test/catalog/public",
+    fetcher: async () => new Response("", { status: 404 }),
+    timeoutMs: 1000,
+    cacheTtlMs: 0,
+  });
+  assert.deepEqual(
+    {
+      allowed: decision.allowed,
+      decision_basis: decision.decision_basis,
+      robots_http_status: decision.robots_http_status,
+      matched_rule: decision.matched_rule,
+    },
+    {
+      allowed: true,
+      decision_basis: "missing_robots",
+      robots_http_status: 404,
+      matched_rule: null,
+    },
   );
 });
 

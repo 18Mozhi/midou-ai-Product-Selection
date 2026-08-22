@@ -104,6 +104,8 @@ const detail = (task = tasks[1]) => ({
       available_result_count: 0,
       missing_fields: ["market.price"],
       error_code: "timeout",
+      result_kind: null,
+      robots_decision: null,
       retryable: false,
       started_at: "2026-08-07T18:21:00.000Z",
       finished_at: "2026-08-07T18:37:00.000Z",
@@ -210,6 +212,9 @@ test("M03-05.A08/A09/A16 dead letter detail requires an explicit confirmed repla
     await page.getByRole("button", { name: "打开完整任务详情" }).click();
   } else await page.getByRole("button", { name: "查看" }).nth(1).click();
   await expect(page.getByText("Market Signals")).toBeVisible();
+  await expect(page.getByText("结果 0 条 · 耗时 16 分 0 秒 · timeout")).toBeVisible();
+  await expect(page.getByText("缺失 market.price")).toBeVisible();
+  await expect(page.getByRole("region", { name: "建议恢复动作" })).toContainText("填写原因并重放");
   await page
     .getByPlaceholder("说明恢复条件和重放原因（2–500 字）")
     .fill("登录状态与来源连接已恢复");
@@ -217,6 +222,89 @@ test("M03-05.A08/A09/A16 dead letter detail requires an explicit confirmed repla
   await page.getByPlaceholder("确认重放").fill("确认重放");
   await page.getByRole("button", { name: "确认重放" }).click();
   await expect(page.getByText(/已创建重放任务/)).toBeVisible();
+});
+test("collection task failures expose a factual recovery destination", async ({ page }) => {
+  await nav(page);
+  await list(page);
+  await page.route(`**/api/v1/platform/collection/tasks/${ids.task}`, (route) =>
+    route.fulfill({
+      json: {
+        data: detail(tasks[0]),
+        request_id: "m03-05-warning-detail",
+        trace_id: "m03-05-warning-detail",
+      },
+    }),
+  );
+  await page.goto(`/platform-admin/collection?task=${ids.task}`);
+  const recovery = page.getByRole("region", { name: "建议恢复动作" });
+  await expect(recovery).toContainText("查看根因与来源健康");
+  await expect(recovery.getByRole("link", { name: "查看根因与来源健康" })).toHaveAttribute(
+    "href",
+    "/platform-admin/collection/overview",
+  );
+});
+test("RSS subqueries label empty success, parse failure and no new content separately", async ({
+  page,
+}) => {
+  await nav(page);
+  await list(page);
+  const rssDetail: any = detail(tasks[0]);
+  rssDetail.subqueries = [
+    {
+      ...rssDetail.subqueries[0],
+      id: "00000000-0000-4000-8000-000000000983",
+      provider_name: "RSS 空频道",
+      status: "succeeded_empty",
+      error_code: null,
+      result_kind: "empty_success",
+      robots_decision: {
+        decision_version: "scoutops-robots-policy-v1",
+        allowed: true,
+        decision_basis: "matched_rule",
+        robots_url: "https://example.test/robots.txt",
+        robots_http_status: 200,
+        matched_user_agent: "ScoutOpsPublicCrawler",
+        matched_rule: {
+          directive: "allow",
+          pattern_preview: "/feed/",
+          pattern_sha256: "a".repeat(64),
+          truncated: false,
+        },
+      },
+    },
+    {
+      ...rssDetail.subqueries[0],
+      id: "00000000-0000-4000-8000-000000000984",
+      provider_name: "RSS 增量频道",
+      status: "succeeded_empty",
+      error_code: null,
+      result_kind: "no_new_content",
+    },
+    {
+      ...rssDetail.subqueries[0],
+      id: "00000000-0000-4000-8000-000000000985",
+      provider_name: "RSS 异常频道",
+      status: "failed",
+      error_code: "parse_failed",
+      result_kind: "parse_failed",
+    },
+  ];
+  await page.route(`**/api/v1/platform/collection/tasks/${ids.task}`, (route) =>
+    route.fulfill({
+      json: {
+        data: rssDetail,
+        request_id: "m03-05-rss-result-kind",
+        trace_id: "m03-05-rss-result-kind",
+      },
+    }),
+  );
+  await page.goto(`/platform-admin/collection?task=${ids.task}`);
+  await expect(page.getByText("空成功：来源响应有效，但没有可解析条目")).toBeVisible();
+  await expect(page.getByText("无新内容：本次结果均已存在，未重复写入")).toBeVisible();
+  await expect(page.getByText("解析失败：来源载荷未通过当前解析合同")).toBeVisible();
+  await expect(page.getByText("robots 判定：允许 · Allow /feed/")).toBeVisible();
+  await page.getByText("robots 判定：允许 · Allow /feed/").click();
+  await expect(page.getByText(/判定版本 scoutops-robots-policy-v1/)).toBeVisible();
 });
 test("M03-05.A08/A09/A16 empty forbidden and dependency states are truthful", async ({ page }) => {
   await nav(page);

@@ -22,3 +22,25 @@ test("[real-api] readiness renders from Fastify without interception and produce
   expect(screenshot.readUInt32BE(20)).toBeGreaterThan(300);
   expect(screenshot.byteLength).toBeGreaterThan(10_000);
 });
+
+test("[real-api] liveness and readiness stay reachable in one unmocked browser session", async ({
+  page,
+  request,
+}) => {
+  const readyResponse = page.waitForResponse((response) =>
+    response.url().endsWith("/api/v1/health/ready"),
+  );
+  await page.goto("/?view=api");
+  expect((await readyResponse).status()).toBe(200);
+  const live = await request.get("/api/v1/health/live");
+  expect(live.status()).toBe(200);
+  expect((await live.json()).data).toMatchObject({
+    status: "ok",
+    service: "ai-selection-backend",
+    version: "playwright-e2e",
+  });
+  await expect(page.getByTestId("api-ready")).toBeVisible();
+  const screenshot = await page.screenshot({ fullPage: true });
+  expect(screenshot.subarray(1, 4).toString("ascii")).toBe("PNG");
+  expect(screenshot.byteLength).toBeGreaterThan(10_000);
+});

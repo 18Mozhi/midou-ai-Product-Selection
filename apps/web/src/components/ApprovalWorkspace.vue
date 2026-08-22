@@ -41,9 +41,13 @@ type Approval = {
     ordinal: number;
     name: string;
     status: string;
+    approver_name: string;
     active_approver_id: string;
     active_approver_name: string;
+    escalation_assignee_id: string;
+    escalation_assignee_name: string;
     due_at: string | null;
+    escalated_at: string | null;
     decision_reason: string | null;
     decided_by_name: string | null;
   }>;
@@ -98,6 +102,39 @@ type Approval = {
     missing_items: string[];
     rule_version: string;
     basis: string[];
+  };
+  decision_context_diff?: {
+    available: boolean;
+    observed_at: string | null;
+    has_changes: boolean;
+    evidence_summary: {
+      before_complete: number;
+      before_total: number;
+      before_percent: number | null;
+      after_complete: number;
+      after_total: number;
+      after_percent: number | null;
+    } | null;
+    requirement_changes: Array<{
+      code: string;
+      label: string;
+      before_complete: boolean | null;
+      after_complete: boolean | null;
+      before_detail: string | null;
+      after_detail: string | null;
+    }>;
+    basis_changes: Array<{
+      code: string;
+      label: string;
+      before: string | null;
+      after: string | null;
+    }>;
+    rule_version_changes: Array<{
+      code: string;
+      label: string;
+      before: string | null;
+      after: string | null;
+    }>;
   };
 };
 const props = defineProps<{ apiBaseUrl: string }>(),
@@ -561,6 +598,80 @@ watch(
               : `历史审批未保存快照，以下为当前事实 · ${time(selected.decision_context.observed_at)}`
           }}
         </p>
+        <section
+          v-if="selected.decision_context_diff?.available"
+          class="approval-context-diff"
+          :data-changed="selected.decision_context_diff.has_changes"
+        >
+          <header>
+            <div>
+              <h4>提交快照与当前证据</h4>
+              <small>当前事实读取于 {{ time(selected.decision_context_diff.observed_at) }}</small>
+            </div>
+            <strong v-if="selected.decision_context_diff.has_changes">已有变化</strong>
+            <strong v-else>保持一致</strong>
+          </header>
+          <div v-if="selected.decision_context_diff.evidence_summary" class="approval-diff-summary">
+            <span>
+              <small>提交时完整度</small>
+              <b
+                >{{ selected.decision_context_diff.evidence_summary.before_percent ?? "不适用"
+                }}<template
+                  v-if="selected.decision_context_diff.evidence_summary.before_percent !== null"
+                  >%</template
+                ></b
+              >
+            </span>
+            <em>→</em>
+            <span>
+              <small>当前完整度</small>
+              <b
+                >{{ selected.decision_context_diff.evidence_summary.after_percent ?? "不适用"
+                }}<template
+                  v-if="selected.decision_context_diff.evidence_summary.after_percent !== null"
+                  >%</template
+                ></b
+              >
+            </span>
+          </div>
+          <p v-if="!selected.decision_context_diff.has_changes" class="approval-diff-empty">
+            当前证据、事实和规则版本与提交审批时一致。
+          </p>
+          <div
+            v-for="change in selected.decision_context_diff.requirement_changes"
+            :key="`requirement-${change.code}`"
+            class="approval-diff-row"
+          >
+            <b>{{ change.label }}</b>
+            <span :data-complete="change.before_complete"
+              >提交时：{{ change.before_detail ?? "无" }}</span
+            >
+            <em>→</em>
+            <span :data-complete="change.after_complete"
+              >当前：{{ change.after_detail ?? "无" }}</span
+            >
+          </div>
+          <div
+            v-for="change in selected.decision_context_diff.basis_changes"
+            :key="`basis-${change.code}`"
+            class="approval-diff-row"
+          >
+            <b>{{ change.label }}</b>
+            <span>提交时：{{ basisValue(change.before) }}</span>
+            <em>→</em>
+            <span>当前：{{ basisValue(change.after) }}</span>
+          </div>
+          <div
+            v-for="change in selected.decision_context_diff.rule_version_changes"
+            :key="`rule-${change.code}`"
+            class="approval-diff-row"
+          >
+            <b>{{ change.label }}</b>
+            <span>提交时：{{ change.before ?? "未生成" }}</span>
+            <em>→</em>
+            <span>当前：{{ change.after ?? "未生成" }}</span>
+          </div>
+        </section>
         <template v-if="selected.decision_context.evidence.applicable">
           <progress
             :value="selected.decision_context.evidence.complete"
@@ -626,7 +737,12 @@ watch(
           <div>
             <b>{{ node.ordinal }}. {{ node.name }}</b
             ><span>{{ statusText(node.status) }} · {{ time(node.due_at) }}</span
-            ><small>审批人 {{ node.active_approver_name }}</small>
+            ><small>当前审批人 {{ node.active_approver_name }}</small>
+            <div class="approval-escalation-path">
+              <span>{{ node.approver_name }}</span
+              ><em>超时后 →</em><span>{{ node.escalation_assignee_name }}</span>
+            </div>
+            <small v-if="node.escalated_at">已于 {{ time(node.escalated_at) }} 升级</small>
             <p v-if="node.decision_reason">{{ node.decision_reason }}</p>
           </div>
         </article>

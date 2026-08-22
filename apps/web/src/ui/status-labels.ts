@@ -41,3 +41,13 @@ export const statusLabel = (value: string | null | undefined) =>
   value ? (labels[value] ?? "待确认") : "未提供";
 
 export const technicalStatus = (value: string | null | undefined) => value ?? "unknown";
+
+export const durationLabel = (seconds: number) => {
+  const safe = Math.max(0, Number(seconds) || 0),
+    days = Math.floor(safe / 86400),
+    hours = Math.floor((safe % 86400) / 3600),
+    minutes = Math.floor((safe % 3600) / 60);
+  if (days) return `${days} 天 ${hours} 小时`;
+  if (hours) return `${hours} 小时 ${minutes} 分钟`;
+  return `${minutes} 分钟`;
+};

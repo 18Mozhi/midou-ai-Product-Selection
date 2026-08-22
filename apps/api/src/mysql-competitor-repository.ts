@@ -58,6 +58,8 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
       })),
       alerts: alerts.map((r) => ({
         id: String(r.id),
+        change_id: String(r.change_id),
+        rule_id: String(r.rule_id),
         notification_status: r.notification_status,
         task_status: r.task_status,
         payload: parse(r.payload_json),

@@ -60,7 +60,7 @@ const decisionLabel = {
         <strong>真实数据流</strong>
         <span
           >浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给
-          ai选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。</span
+          智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。</span
         >
       </aside>
       <label

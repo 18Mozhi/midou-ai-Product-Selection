@@ -48,8 +48,47 @@ const bytes = (value?: number) =>
     : value >= 1073741824
       ? `${(value / 1073741824).toFixed(1)} GiB`
       : `${(value / 1048576).toFixed(1)} MiB`;
+const compactBytes = (value: number) =>
+  value >= 1048576
+    ? `${(value / 1048576).toFixed(1)} MiB`
+    : value >= 1024
+      ? `${(value / 1024).toFixed(1)} KiB`
+      : `${value} B`;
+const purposeLabel = {
+  cache: "缓存",
+  queue: "队列与租约",
+  rate: "限流",
+  sse: "实时消息",
+} as const;
+const resourceLabel = {
+  collection_ready: "采集就绪队列",
+  collection_task: "采集任务租约",
+  other: "其他受限键",
+} as const;
+const sampleStatusLabel = {
+  sampled: "采样完成",
+  partial: "部分采样",
+  empty: "暂无受限键",
+  unavailable: "采样不可用",
+} as const;
 const time = (value?: string) =>
   value ? new Date(value).toLocaleString("zh-CN", { hour12: false }) : "尚无记录";
+const evictionRisk = computed(() => {
+  if (!data.value) return { level: "unknown", text: "尚无观测" };
+  if (data.value.evicted_keys > 0)
+    return {
+      level: "blocked",
+      text: `实例启动后已累计淘汰 ${data.value.evicted_keys} 个键，需先核对受影响队列与实时协调。`,
+    };
+  if (data.value.max_memory_policy !== "noeviction")
+    return { level: "blocked", text: `当前策略 ${data.value.max_memory_policy} 允许静默淘汰。` };
+  if (data.value.memory.usage_basis_points >= 8000)
+    return {
+      level: "warning",
+      text: "noeviction 不会静默淘汰，但接近内存上限时新写入会失败。",
+    };
+  return { level: "ready", text: "noeviction 已启用，当前未记录键淘汰。" };
+});
 
 async function load() {
   state.value = "loading";
@@ -197,6 +236,69 @@ onMounted(load);
           </dl>
         </aside>
       </div>
+      <section class="redis-resilience__panel redis-resilience__risk">
+        <header>
+          <div>
+            <p>内存风险</p>
+            <h3>键淘汰风险</h3>
+          </div>
+          <span>{{ data.max_memory_policy }}</span>
+        </header>
+        <article :data-severity="evictionRisk.level">
+          <strong>{{ percent(data.memory.usage_basis_points) }} 内存水位</strong>
+          <p>{{ evictionRisk.text }}</p>
+          <small>累计值覆盖当前实例 {{ Math.floor(data.uptime_seconds / 86400) }} 天运行期。</small>
+        </article>
+        <section class="redis-resilience__hotspots" aria-labelledby="redis-hotspot-heading">
+          <header>
+            <div>
+              <small>脱敏有界采样</small>
+              <h4 id="redis-hotspot-heading">键空间占用热点</h4>
+            </div>
+            <span>{{ sampleStatusLabel[data.keyspace_sample.status] }}</span>
+          </header>
+          <div v-if="data.keyspace_sample.hotspots.length" class="redis-resilience__hotspot-list">
+            <article
+              v-for="item in data.keyspace_sample.hotspots"
+              :key="`${item.purpose}:${item.resource}`"
+            >
+              <div>
+                <strong>{{ resourceLabel[item.resource] }}</strong>
+                <small>{{ purposeLabel[item.purpose] }} · {{ item.sampled_keys }} 个采样键</small>
+              </div>
+              <div class="redis-resilience__hotspot-value">
+                <b>{{ percent(item.sampled_share_basis_points) }}</b>
+                <small>{{ compactBytes(item.sampled_bytes) }}</small>
+              </div>
+              <i aria-hidden="true"
+                ><span :style="{ width: `${item.sampled_share_basis_points / 100}%` }"></span
+              ></i>
+            </article>
+          </div>
+          <div v-else class="redis-resilience__hotspot-empty">
+            <b>{{ sampleStatusLabel[data.keyspace_sample.status] }}</b>
+            <span v-if="data.keyspace_sample.unavailable_reason === 'command_unsupported'"
+              >当前客户端不支持受限 SCAN 与 MEMORY USAGE。</span
+            >
+            <span v-else-if="data.keyspace_sample.unavailable_reason === 'scan_failed'"
+              >本次采样失败；Redis 总体韧性结论仍由独立运行事实决定。</span
+            >
+            <span v-else>当前采样范围内没有可归类的 ScoutOps 业务键。</span>
+          </div>
+          <footer>
+            <span
+              >已测 {{ data.keyspace_sample.measured_keys }} / 已扫描
+              {{ data.keyspace_sample.scanned_keys }}，上限
+              {{ data.keyspace_sample.sample_limit }}</span
+            >
+            <span v-if="data.keyspace_sample.truncated">已达到有界采样范围</span>
+          </footer>
+        </section>
+        <p class="redis-resilience__truth-note">
+          这里只显示受限键的采样内存占比，不返回键名、组织、工作区或载荷，也不把内存占比冒充访问频率；
+          noeviction 模式不提供可信 LFU 热度。
+        </p>
+      </section>
       <section class="redis-resilience__panel redis-resilience__findings">
         <header>
           <div>

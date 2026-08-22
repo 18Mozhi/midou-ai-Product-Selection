@@ -99,6 +99,7 @@ export interface RuntimeConfig {
   storage: {
     evidenceRoot: string;
     exportRoot: string;
+    runtimeTempRoot: string;
     credentialTempRoot: string;
   };
   security: {
@@ -172,6 +173,10 @@ export interface RuntimeConfig {
     heartbeatMs: number;
     staleAfterMs: number;
     restartAlertThreshold: number;
+    healthProbeIntervalMs: number;
+    healthProbeTimeoutMs: number;
+    healthProbeWindowMinutes: number;
+    healthProbeRetentionHours: number;
     supervisorStateFile: string;
     productionEvidenceFile: string;
   };
@@ -342,12 +347,15 @@ export function loadRuntimeConfig(
   const production = nodeEnv === "production";
   const evidenceRoot = resolve(cwd, text(env, "EVIDENCE_ROOT", "./runtime/evidence"));
   const exportRoot = resolve(cwd, text(env, "EXPORT_ROOT", "./runtime/exports"));
+  const runtimeTempRoot = resolve(cwd, text(env, "RUNTIME_TMP_ROOT", "./runtime/tmp"));
   const credentialTempRoot = resolve(
     cwd,
     text(env, "CREDENTIAL_TEMP_ROOT", "./runtime/credential-tmp"),
   );
   if (evidenceRoot === exportRoot)
     throw new ConfigError("EXPORT_ROOT", "must not equal EVIDENCE_ROOT");
+  if (runtimeTempRoot === evidenceRoot || runtimeTempRoot === exportRoot)
+    throw new ConfigError("RUNTIME_TMP_ROOT", "must not equal EVIDENCE_ROOT or EXPORT_ROOT");
   const configuredProviderProxy = providerProxy(env);
   const base = {
     target,
@@ -508,7 +516,7 @@ export function loadRuntimeConfig(
       pollMs: integer(env, "AI_ANALYSIS_POLL_MS", 2000, 250, 60000),
       leaseSeconds: integer(env, "AI_ANALYSIS_LEASE_SECONDS", 120, 30, 3600),
     },
-    storage: { evidenceRoot, exportRoot, credentialTempRoot },
+    storage: { evidenceRoot, exportRoot, runtimeTempRoot, credentialTempRoot },
     security: {
       sessionSecret: secret(env, "SESSION_SECRET", production, 32),
       credentialsMasterKey: secret(env, "CREDENTIALS_MASTER_KEY", production, 32),
@@ -607,6 +615,10 @@ export function loadRuntimeConfig(
       heartbeatMs: integer(env, "RUNTIME_NODE_HEARTBEAT_MS", 30000, 5000, 60000),
       staleAfterMs: integer(env, "RUNTIME_NODE_STALE_AFTER_SECONDS", 90, 30, 600) * 1000,
       restartAlertThreshold: integer(env, "BACKEND_RESTART_CIRCUIT_THRESHOLD", 5, 2, 50),
+      healthProbeIntervalMs: integer(env, "RUNTIME_HEALTH_PROBE_INTERVAL_MS", 30000, 10000, 300000),
+      healthProbeTimeoutMs: integer(env, "RUNTIME_HEALTH_PROBE_TIMEOUT_MS", 5000, 500, 30000),
+      healthProbeWindowMinutes: integer(env, "RUNTIME_HEALTH_PROBE_WINDOW_MINUTES", 60, 5, 1440),
+      healthProbeRetentionHours: integer(env, "RUNTIME_HEALTH_PROBE_RETENTION_HOURS", 72, 1, 720),
       supervisorStateFile: text(env, "BACKEND_SUPERVISOR_STATE_FILE"),
       productionEvidenceFile: text(
         env,
@@ -773,6 +785,14 @@ export function loadRuntimeConfig(
     );
   if (base.runtimeTopology.mode !== "single_host")
     throw new ConfigError("RUNTIME_TOPOLOGY_MODE", "must be single_host");
+  if (
+    base.runtimeTopology.healthProbeWindowMinutes >
+    base.runtimeTopology.healthProbeRetentionHours * 60
+  )
+    throw new ConfigError(
+      "RUNTIME_HEALTH_PROBE_WINDOW_MINUTES",
+      "must not exceed RUNTIME_HEALTH_PROBE_RETENTION_HOURS",
+    );
   if (base.redisResilience.memoryWarningBasisPoints >= base.redisResilience.memoryStopBasisPoints)
     throw new ConfigError(
       "REDIS_MEMORY_WARNING_PERCENT",

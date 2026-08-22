@@ -36,7 +36,9 @@
 
 ## 6. 验收与故障定位
 
-发布前先执行 `npm run build` 和 `npm run verify:functional`。生产站点使用专用临时账号执行 `npm run verify:production-product`；账号和密码仅通过 `SCOUTOPS_QA_ADMIN_EMAIL`、`SCOUTOPS_QA_ADMIN_PASSWORD`、`SCOUTOPS_QA_MEMBER_EMAIL`、`SCOUTOPS_QA_MEMBER_PASSWORD` 注入，不写入 Git、截图或报告。脚本逐页访问管理员与成员可见菜单，阻断 API 4xx/5xx、控制台错误、阶段占位页、会话丢失以及失效的快捷创建入口。
+发布前先执行 `npm run build` 和 `npm run verify:functional`。生产站点使用六个专用临时账号执行 `npm run verify:production-product`，账号分别只能拥有普通成员、选品经理、组织管理员、平台运营管理员、平台安全管理员和平台超级管理员角色。账号和密码只通过 `config/env.example` 中的 `SCOUTOPS_QA_*` 变量注入，不写入 Git、截图或报告。
+
+脚本直接解析 `apps/web/src/route-catalog.ts`，按每个账号从 `/api/v1/me/navigation` 取得的真实能力计算全部授权路由，不再只遍历侧栏菜单。每个静态路由都必须打开；机会详情和任务详情必须从验收组织的真实列表取得一条已持久化记录后打开。它同时阻断角色叠加、越权能力、Route Catalog 漏测、API 4xx/5xx、控制台错误、阶段占位页、会话丢失以及失效的快捷创建入口。生产报告只保存角色、能力、路由与错误事实，不保存邮箱、密码或 Cookie。
 
 生产目录固定为 `/www/wwwroot/ai选品/frontend`（Vue 网站）、`backend`（Node 项目“ai选品”）、`python`（Python 3.12 项目“ai选品-python”）、`config/runtime/backups`。健康检查使用 `/api/v1/health/live`、`/api/v1/health/ready` 和 `/api/v1/health/version`。统一 Node 后端监督 API/Worker，宝塔分别负责网站、Node 和 Python 的启动、停止、重启和日志；服务器不使用 Git 或 `current/releases`。
 

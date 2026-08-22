@@ -20,6 +20,23 @@ const navigation = {
     last_latency_ms: null,
     last_error_code: null,
     consecutive_failures: 0,
+    latest_runtime_category: "unknown",
+    runtime_sample_count_24h: 0,
+    runtime_success_rate_basis_points_24h: null,
+    runtime_duration_p95_ms_24h: null,
+    runtime_network_failure_count_24h: 0,
+    runtime_parser_failure_count_24h: 0,
+    runtime_login_failure_count_24h: 0,
+    runtime_empty_success_count_24h: 0,
+    runtime_circuit_state: "closed",
+    runtime_consecutive_failures: 0,
+    runtime_failure_threshold: 5,
+    runtime_error_budget_remaining: 5,
+    runtime_last_error_code: null,
+    runtime_circuit_opened_at: null,
+    runtime_last_recovered_at: null,
+    runtime_recovery_gate_met: false,
+    compatibility_matrix: [],
     version: 0,
     updated_at: "1970-01-01T00:00:00.000Z",
   },
@@ -49,6 +66,12 @@ const navigation = {
       health_status: "blocked",
       last_error_code: "adapter_not_registered",
       consecutive_failures: 1,
+      runtime_circuit_state: "open",
+      runtime_consecutive_failures: 3,
+      runtime_failure_threshold: 3,
+      runtime_error_budget_remaining: 0,
+      runtime_last_error_code: "timeout",
+      runtime_circuit_opened_at: "2026-08-07T19:29:00.000Z",
       version: 1,
     },
   ];
@@ -87,8 +110,11 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
       body: JSON.stringify({
         data: {
           ...items[1],
+          health_status: "ready",
           last_checked_at: "2026-08-07T19:31:00.000Z",
           last_latency_ms: 0,
+          last_error_code: null,
+          runtime_recovery_gate_met: true,
           version: 2,
         },
         request_id: "m03-03-probe",
@@ -122,15 +148,20 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
     const dialog = page.getByRole("dialog", { name: "登录态商品来源" });
     await expect(dialog).toBeVisible();
     await expect(dialog.getByText("尚未登记适配器")).toBeVisible();
+    await expect(dialog.getByText(/连续失败 3 \/ 阈值 3/)).toBeVisible();
+    await expect(dialog.getByText(/晚于暂停时间/)).toBeVisible();
     await dialog.getByText("技术详情").click();
     await expect(dialog.getByText("adapter_not_registered")).toBeVisible();
     await dialog.getByRole("button", { name: "执行健康检查" }).click();
+    await expect(dialog.getByRole("link", { name: "前往采集调度解除暂停" })).toBeVisible();
     await dialog.getByRole("button", { name: "关闭详情" }).click();
   } else {
     await expect(page.getByText("尚未登记适配器")).toBeVisible();
+    await expect(page.getByText(/连续失败 3 \/ 阈值 3/)).toBeVisible();
     await page.getByRole("button", { name: "健康检查" }).last().click();
+    await expect(page.getByRole("link", { name: "前往解除暂停" })).toBeVisible();
   }
-  await expect(page.getByRole("status")).toContainText("已记录受阻原因");
+  await expect(page.getByRole("status")).toContainText("健康检查通过");
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }, testInfo) => {

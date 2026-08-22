@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 const env = (data: any) => ({ data, request_id: "m07-05-e2e", trace_id: "m07-05-e2e" });
-const gates = [5, 25, 100].map((percent) => ({
+const gates: any[] = [5, 25, 100].map((percent) => ({
   id: `gate-${percent}`,
   release_id: "release-1",
   gate_kind: `canary_${percent}`,
@@ -14,6 +14,38 @@ const gates = [5, 25, 100].map((percent) => ({
   async_lag_seconds: 2,
   finished_at: "2026-08-08T14:55:00Z",
 }));
+gates.push(
+  {
+    id: "gate-migration",
+    release_id: "release-1",
+    gate_kind: "migration",
+    status: "passed",
+    traffic_percent: 0,
+    observe_seconds: 0,
+    sample_count: 0,
+    error_rate_percent: null,
+    read_p95_ms: null,
+    write_p95_ms: null,
+    async_lag_seconds: null,
+    duration_ms: 1250,
+    finished_at: "2026-08-08T14:00:01.250Z",
+  },
+  {
+    id: "gate-rollback",
+    release_id: "release-1",
+    gate_kind: "rollback",
+    status: "rolled_back",
+    traffic_percent: 0,
+    observe_seconds: 0,
+    sample_count: 0,
+    error_rate_percent: null,
+    read_p95_ms: null,
+    write_p95_ms: null,
+    async_lag_seconds: null,
+    duration_ms: 2500,
+    finished_at: "2026-08-08T14:30:02.500Z",
+  },
+);
 const base = {
   policy: {
     percentages: [5, 25, 100],
@@ -80,6 +112,8 @@ test("M07-05.A07/A08/A15 desktop and 390 rollout truth", async ({ page }) => {
   await page.goto("/platform-admin/releases");
   await expect(page.getByRole("heading", { name: "发布与回滚控制台" })).toBeVisible();
   await expect(page.getByText("发布门已通过")).toBeVisible();
+  await expect(page.getByText("迁移耗时 1.3 秒")).toBeVisible();
+  await expect(page.getByText("回滚耗时").locator("..")).toContainText("2.5 秒");
   await expect(page).toHaveScreenshot("m07-05-release-rollout-desktop.png", { fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();

@@ -97,9 +97,12 @@ async function setup(page: Page) {
         alerts: [
           {
             id: "a1",
+            change_id: "c1",
+            rule_id: "00000000-0000-4000-8000-000000000508",
             notification_status: "queued",
             task_status: "queued",
             payload: { field: "current_price" },
+            created_at: "2026-08-08T12:01:01.000Z",
           },
         ],
       }),
@@ -125,6 +128,11 @@ test("M04-05.A07/A08/A09/A15 renders source-backed baseline changes thresholds a
   await expect(page.getByText(/证据 00000000/).first()).toBeVisible();
   await expect(page.getByText("USD 29.99 → 26.99")).toBeVisible();
   await expect(page.getByText("有货 → 缺货")).toBeVisible();
+  const activity = page.getByLabel("竞品处理时间轴");
+  await expect(activity.getByText("告警、任务与结论时间轴")).toBeVisible();
+  await expect(activity.getByText("系统告警 待发送 · 系统任务 待创建")).toBeVisible();
+  await expect(activity.getByText("结论").first()).toBeVisible();
+  await expect(activity.getByText("未命中监控阈值")).toBeVisible();
   await expect(
     page.getByLabel("价格与库存时间轴").getByText("缺货 · 评分 4.6 · 评论 825"),
   ).toBeVisible();

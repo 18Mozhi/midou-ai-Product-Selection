@@ -228,6 +228,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "apps/api/src/opportunity-routes.ts",
     "apps/web/src/components/OpportunityWorkspace.vue",
     "apps/web/src/components/OpportunityListPanel.vue",
+    "apps/web/src/components/OpportunityDecisionPanel.vue",
     "apps/web/src/opportunities.css",
     "config/schema.json",
     "config/env.example",
@@ -249,6 +250,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       routes,
       web,
       listWeb,
+      decisionWeb,
       css,
       schema,
       env,
@@ -272,13 +274,13 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(routes, /lifecycle_status[\s\S]*owner_id/);
   assert.match(routes, /opportunities\/batch[\s\S]*evidence-completion-tasks/);
   assert.match(routes, /opportunity:decide/);
-  const webContract = `${web}\n${listWeb}`;
+  const webContract = `${web}\n${listWeb}\n${decisionWeb}`;
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(webContract, new RegExp(state));
   assert.match(webContract, /证据完整度[\s\S]*阻断原因[\s\S]*缺少可采纳证据/);
   assert.match(webContract, /证据新鲜度：观测于/);
   assert.match(webContract, /阶段[\s\S]*负责人[\s\S]*批量指派[\s\S]*批量复核[\s\S]*批量归档/);
-  assert.match(web, /生成补数任务/);
+  assert.match(webContract, /生成补数任务/);
   assert.match(web, /evidence-completion-tasks/);
   assert.match(webContract, /route\.query\.from[\s\S]*route\.query\.tab[\s\S]*applyListFilters/);
   assert.match(css, /position:\s*fixed[\s\S]*safe-area-inset-bottom/);
@@ -305,6 +307,6 @@ test("M04-02 live verification reuses an enabled production source without ownin
   const live = await readFile("scripts/verify-opportunities-live.mjs", "utf8");
   assert.match(live, /sourceService\.list\(\)/);
   assert.match(live, /providerOwned/);
-  assert.match(live, /created\.providerOwned&&created\.provider/);
+  assert.match(live, /created\.providerOwned\s*&&\s*created\.provider/);
   assert.match(live, /provider_source_existing_not_enabled/);
 });

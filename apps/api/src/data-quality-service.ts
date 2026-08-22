@@ -78,6 +78,19 @@ export interface DataQualityRepository {
     totalIssues: number;
   }>;
   evidenceDetail(id: string): Promise<Record<string, unknown> | null>;
+  createFromTrendEvidence(input: {
+    organizationId: string;
+    workspaceId: string;
+    topicId: string;
+    evidenceId: string;
+    actorId: string;
+    severity: "warning" | "critical";
+    reason: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<{ issue: QualityIssueSummary; created: boolean }>;
   resolveIssue(input: {
     id: string;
     actorId: string;
@@ -187,13 +200,14 @@ export class DataQualityService {
         400,
         "page 应为正整数，page_size 应为 1–100。",
       );
-    return this.repository.dashboard({
+    const result = await this.repository.dashboard({
       ...(input.organization_id ? { organizationId: input.organization_id } : {}),
       ...(input.workspace_id ? { workspaceId: input.workspace_id } : {}),
       ...(input.status && input.status !== "all" ? { status: input.status } : {}),
       page,
       pageSize,
     });
+    return { ...result, observedAt: this.now().toISOString() };
   }
   async detail(id: string) {
     if (!uuid.test(id))
@@ -201,6 +215,42 @@ export class DataQualityService {
     const value = await this.repository.evidenceDetail(id);
     if (!value) throw new DataQualityServiceError("evidence_not_found", 404, "刷新证据列表。");
     return value;
+  }
+  async createFromTrendEvidence(
+    topicId: string,
+    evidenceId: string,
+    body: { severity?: unknown; reason?: unknown },
+    context: {
+      organizationId: string;
+      workspaceId: string;
+      actorId: string;
+      idempotencyKey: string;
+      requestId: string;
+      traceId: string;
+    },
+  ) {
+    if (!uuid.test(topicId) || !uuid.test(evidenceId))
+      throw new DataQualityServiceError(
+        "trend_evidence_id_invalid",
+        400,
+        "刷新趋势详情后重新选择证据。",
+      );
+    const severity = String(body?.severity ?? ""),
+      reason = typeof body?.reason === "string" ? body.reason.trim() : "";
+    if (!["warning", "critical"].includes(severity) || reason.length < 2 || reason.length > 500)
+      throw new DataQualityServiceError(
+        "trend_evidence_issue_invalid",
+        400,
+        "选择风险等级并填写 2–500 字异常说明。",
+      );
+    return this.repository.createFromTrendEvidence({
+      ...context,
+      topicId,
+      evidenceId,
+      severity: severity as "warning" | "critical",
+      reason,
+      now: this.now(),
+    });
   }
   async resolveIssue(
     id: string,

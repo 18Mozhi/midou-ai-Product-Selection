@@ -152,6 +152,16 @@ test("M07-04.A04/A08/A12/A16 service fails closed and expires old drills", async
   const verified = await read([backup, currentDrill], [replica]);
   assert.equal(verified.state, "verified");
   assert.equal(verified.blockers.length, 0);
+  assert.equal(verified.drill_age_days, 0);
+  assert.equal(verified.drill_expires_at, "2026-11-06T10:00:00.000Z");
+  assert.equal(verified.days_until_drill_expiry, 90);
+  const expiring = await read(
+    [backup, { ...currentDrill, finished_at: "2026-05-11T12:00:00.000Z" }],
+    [replica],
+  );
+  assert.equal(expiring.state, "verified");
+  assert.equal(expiring.drill_age_days, 89);
+  assert.equal(expiring.days_until_drill_expiry, 1);
   assert.equal(
     (await read([{ ...backup, actual_rpo_minutes: 16 }, currentDrill], [replica])).state,
     "blocked",

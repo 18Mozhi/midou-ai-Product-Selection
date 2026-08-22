@@ -496,6 +496,7 @@ test("M08-03.A07/A08/A15/A16 UI and production evidence cover full states and re
     "recovering",
   ])
     assert.match(ui, new RegExp(state));
+  assert.match(ui, /慢查询与锁等待影响[\s\S]*不把累计值冒充当前延迟[\s\S]*innodb_row_lock_waits/);
   assert.match(e2e, /390/);
   assert.match(manifest, /single_primary/);
   assert.match(manifest, /innodb_flush_log_at_trx_commit/);

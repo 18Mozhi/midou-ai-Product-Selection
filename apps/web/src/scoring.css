@@ -177,6 +177,77 @@
   color: var(--so-text);
   background: var(--so-bg);
 }
+.score-preview-modal > section {
+  width: min(980px, 100%);
+  max-height: calc(100vh - 36px);
+  padding: 25px;
+  display: grid;
+  gap: 15px;
+  border: 1px solid var(--so-border);
+  border-radius: 22px;
+  background: var(--so-bg-elevated);
+  box-shadow: var(--so-shadow-dialog);
+  overflow: auto;
+}
+.score-preview-modal > section > p {
+  color: var(--so-text-muted);
+}
+.score-preview-summary {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+.score-preview-summary div {
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+}
+.score-preview-summary dt,
+.score-preview-table small {
+  color: var(--so-text-muted);
+  font-size: 9px;
+}
+.score-preview-summary dd {
+  margin: 4px 0 0;
+  font-size: 20px;
+  font-weight: 800;
+}
+.score-preview-table {
+  display: grid;
+  gap: 7px;
+}
+.score-preview-table article {
+  padding: 11px;
+  display: grid;
+  grid-template-columns: 1.6fr repeat(5, minmax(0, 0.6fr));
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+}
+.score-preview-table strong,
+.score-preview-table small,
+.score-preview-table b,
+.score-preview-table em {
+  display: block;
+}
+.score-preview-table em {
+  color: var(--so-warning);
+  font-size: 8px;
+  font-style: normal;
+}
+.score-preview-table b[data-delta^="-"] {
+  color: var(--so-danger);
+}
+.score-preview-table b[data-delta]:not([data-delta^="-"]) {
+  color: var(--so-success);
+}
+.score-preview-modal footer {
+  align-items: center;
+}
 .opportunity-score aside {
   margin-top: 12px;
   color: var(--so-warning);
@@ -219,6 +290,15 @@
   .score-rules-hero button {
     width: 100%;
   }
+  .score-preview-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .score-preview-table article {
+    grid-template-columns: 1fr 1fr;
+  }
+  .score-preview-table article > div:first-child {
+    grid-column: 1/-1;
+  }
 }
 @media (max-width: 640px) {
   .score-rules {
@@ -242,5 +322,8 @@
   }
   .score-dimension-form > div > span {
     grid-column: 1/-1;
+  }
+  .score-preview-modal > section {
+    padding: 18px 14px;
   }
 }

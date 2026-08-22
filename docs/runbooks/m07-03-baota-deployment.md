@@ -8,7 +8,7 @@
 2. 复制 `verification/release-change-ownership.example.json` 为 Git 忽略的 `.artifacts/release-change-ownership.json`，把 `baseSha` 设为上次已发布 commit、`headSha` 设为当前 HEAD，并按实际工作包填写负责人、commit 与变更路径。运行 `npm run verify:release-ownership`；漏项、重复归属、区间外变更、同一路径跨工作包或 HEAD 漂移必须先修正，禁止把未知并行变更统归到当前任务。
 3. 在宝塔确认网站、Node 项目“ai选品”和 Python 项目“ai选品-python”均由面板创建和管理；不得保留独立 API、Worker、Canary 或面板外常驻项目，也不要用 systemd、独立 PM2、宿主 crontab或屏外 Docker Compose代替。
 4. Node/Python 只读取 `/www/wwwroot/ai选品/config/product_scout.env` 受限环境；秘密只填宝塔受限配置，检查页面、项目环境、日志和任务输出均无秘密。
-5. 本地使用锁文件完整安装依赖并构建同一提交，然后运行 `python scripts/deploy-baota.py` 上传运行包；不得在服务器执行 Git 或源码构建。脚本会再次校验发布归属清单，然后只允许执行内置白名单中的升序迁移，校验迁移校验值后切换固定目录，并通过宝塔接口更新或重启“ai选品”和“ai选品-python”；不会创建面板外服务。
+5. 本地使用锁文件完整安装依赖，然后运行 `python scripts/deploy-baota.py` 上传运行包；不得在服务器执行 Git 或源码构建。脚本在 Git fetch 和构建前自动执行格式、运行文档与发布矩阵门，构建后自动执行固定宝塔产物 preflight；任一失败都不会读取 Windows 凭据或连接服务器。随后脚本校验发布归属清单，只允许执行内置白名单中的升序迁移，校验迁移校验值后切换固定目录，并通过宝塔接口更新或重启“ai选品”和“ai选品-python”；不会创建面板外服务。
 6. 合并 Nginx 模板并在宝塔执行配置检查；确认 `/api/`、`/open/`、SSE 和 SPA 回退。TLS 由宝塔网站签发，DNS/NAT 未完成时不得宣称公网可用。
 
 ## 生产验收

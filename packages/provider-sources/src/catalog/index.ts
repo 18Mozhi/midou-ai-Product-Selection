@@ -689,10 +689,10 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
   production_policy: "setup_required",
   policy_note:
     code === "1688_search"
-      ? "搜索、商品详情与供应商浏览器输出合同已版本化；仍需真实登录档案和任务领取链验收后才能启用。"
+      ? "搜索、商品详情与供应商采集能力已登记；完成网页登录准备和来源检查后才能启用。"
       : access === "authenticated_browser"
         ? "已配置平台真实登录入口；上传 Cookie 或读取当前浏览器 Cookie 后，还需完成该平台页面解析合同才会进入自动采集，不要求官方 API Key。"
-        : "已配置平台真实公开入口；页面字段解析合同验收通过后即可启用匿名爬虫，不要求登录或官方 API Key。",
+        : "已配置平台真实公开入口；完成来源可用性检查后即可启用匿名爬虫，不要求登录或官方 API Key。",
 }));
 export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
   {

@@ -32,6 +32,7 @@ test("M05-04.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
       "apps/api/src/realtime-routes.ts",
       "apps/worker/src/notification-outbox-worker.ts",
       "apps/web/src/components/NotificationCenter.vue",
+      "apps/web/src/realtime-client-metrics.ts",
       "docs/architecture/m05-04-realtime-sse.md",
       "docs/runbooks/m05-04-realtime-sse.md",
       "docs/openapi.yaml",
@@ -44,5 +45,7 @@ test("M05-04.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(v[1], /recipient_id=\?[\s\S]*id>\?/);
   assert.match(v[2], /Last-Event-ID|last-event-id[\s\S]*text\/event-stream[\s\S]*heartbeat/);
   assert.match(v[4], /EventSource[\s\S]*last-event-id|last_event_id/);
+  assert.match(v[4], /beginRealtimeReconnect[\s\S]*recordRealtimeFallbackPoll[\s\S]*load\(\)/);
+  assert.match(v[5], /sessionStorage[\s\S]*reconnect_count[\s\S]*fallback_poll_count/);
   assert.equal(JSON.parse(v.at(-1)).atomicTasks.length, 17);
 });

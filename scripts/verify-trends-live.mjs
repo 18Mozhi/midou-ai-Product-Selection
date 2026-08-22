@@ -1,38 +1,382 @@
-import { randomUUID, createHash } from 'node:crypto';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { loadRuntimeConfig } from '../packages/config/dist/index.js';
-import { createDatabasePool } from '../packages/database/dist/index.js';
-import { createRedisConnection, ScopedRedisStore } from '../packages/redis/dist/index.js';
-import { ProviderSourceService } from '../apps/api/dist/provider-source-service.js';
-import { MySqlProviderSourceRepository } from '../apps/api/dist/mysql-provider-source-repository.js';
-import { MySqlEvidencePersistence } from '../apps/worker/dist/evidence-persistence.js';
-import { MySqlTrendProjectionWorker } from '../apps/worker/dist/trend-projection-worker.js';
-import { TrendService } from '../apps/api/dist/trend-service.js';
-import { MySqlTrendRepository } from '../apps/api/dist/mysql-trend-repository.js';
+import { randomUUID, createHash } from "node:crypto";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { loadRuntimeConfig } from "../packages/config/dist/index.js";
+import { createDatabasePool } from "../packages/database/dist/index.js";
+import { createRedisConnection, ScopedRedisStore } from "../packages/redis/dist/index.js";
+import { ProviderSourceService } from "../apps/api/dist/provider-source-service.js";
+import { MySqlProviderSourceRepository } from "../apps/api/dist/mysql-provider-source-repository.js";
+import { MySqlEvidencePersistence } from "../apps/worker/dist/evidence-persistence.js";
+import { MySqlTrendProjectionWorker } from "../apps/worker/dist/trend-projection-worker.js";
+import { TrendService } from "../apps/api/dist/trend-service.js";
+import { MySqlTrendRepository } from "../apps/api/dist/mysql-trend-repository.js";
+import { DataQualityService } from "../apps/api/dist/data-quality-service.js";
+import { MySqlDataQualityRepository } from "../apps/api/dist/mysql-data-quality-repository.js";
 
-const requestId=randomUUID(),traceId=randomUUID(),now=new Date('2026-08-07T15:00:00.000Z'),config=loadRuntimeConfig(process.env,'worker'),pool=createDatabasePool(config),redisClient=createRedisConnection(config),redis=new ScopedRedisStore(redisClient),root=await mkdtemp(join(tmpdir(),'scoutops-m04-01-live-'));
-const ids={actor:randomUUID(),organization:randomUUID(),workspace:randomUUID(),otherOrganization:randomUUID(),otherWorkspace:randomUUID()},created={provider:null,task:null};
-const sha=value=>createHash('sha256').update(String(value)).digest('hex');
+const requestId = randomUUID(),
+  traceId = randomUUID(),
+  now = new Date("2026-08-07T15:00:00.000Z"),
+  config = loadRuntimeConfig(process.env, "worker"),
+  pool = createDatabasePool(config),
+  redisClient = createRedisConnection(config),
+  redis = new ScopedRedisStore(redisClient),
+  root = await mkdtemp(join(tmpdir(), "scoutops-m04-01-live-"));
+const ids = {
+    actor: randomUUID(),
+    organization: randomUUID(),
+    workspace: randomUUID(),
+    otherOrganization: randomUUID(),
+    otherWorkspace: randomUUID(),
+  },
+  created = { provider: null, task: null };
+const sha = (value) => createHash("sha256").update(String(value)).digest("hex");
 
-async function migrate(){const[rows]=await pool.query("SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='trend_topics'");if(Number(rows[0].count))return;const sql=await readFile('database/migrations/0017a_trends_m04_01.up.sql','utf8');for(const statement of sql.split(';').map(value=>value.trim()).filter(Boolean))await pool.query(statement);}
-async function cleanup(){
-  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
-for(const sql of['DELETE FROM trend_operations WHERE actor_id=?','DELETE FROM trend_outbox WHERE organization_id IN (?,?)','DELETE FROM trend_events WHERE organization_id IN (?,?)','DELETE FROM trend_projection_jobs WHERE organization_id IN (?,?)','DELETE FROM trend_monitoring_rules WHERE organization_id IN (?,?)','DELETE FROM trend_topic_follows WHERE organization_id IN (?,?)','DELETE FROM trend_topic_keywords WHERE organization_id IN (?,?)','DELETE FROM trend_signals WHERE organization_id IN (?,?)','DELETE FROM trend_topics WHERE organization_id IN (?,?)','DELETE FROM evidence_data_operations WHERE actor_id=?','DELETE FROM evidence_data_outbox WHERE organization_id IN (?,?)','DELETE FROM evidence_data_events WHERE organization_id IN (?,?)','DELETE FROM field_provenance WHERE organization_id IN (?,?)','DELETE FROM normalized_records WHERE organization_id IN (?,?)','DELETE FROM raw_evidence WHERE organization_id IN (?,?)','DELETE FROM file_assets WHERE organization_id IN (?,?)','DELETE FROM provider_source_replay_runs WHERE organization_id IN (?,?)','DELETE FROM collection_task_outbox WHERE organization_id IN (?,?)','DELETE FROM collection_task_events WHERE organization_id IN (?,?)','DELETE FROM collection_task_attempts WHERE task_id=?','DELETE FROM collection_subqueries WHERE organization_id IN (?,?)','DELETE FROM collection_tasks WHERE organization_id IN (?,?)','DELETE FROM provider_source_operations WHERE actor_id=?','DELETE FROM provider_versions WHERE actor_id=?']){try{const params=sql.includes('task_id')?[created.task]:sql.includes('actor_id')?[ids.actor]:[ids.organization,ids.otherOrganization];await pool.query(sql,params);}catch{}}if(created.provider){try{await pool.query('DELETE FROM provider_adapter_health WHERE provider_id=?',[created.provider]);}catch{}try{await pool.query('DELETE FROM providers WHERE id=?',[created.provider]);}catch{}}for(const[sql,id]of[['DELETE FROM workspaces WHERE id=?',ids.workspace],['DELETE FROM workspaces WHERE id=?',ids.otherWorkspace],['DELETE FROM organizations WHERE id=?',ids.organization],['DELETE FROM organizations WHERE id=?',ids.otherOrganization],['DELETE FROM users WHERE id=?',ids.actor]])try{await pool.query(sql,[id]);}catch{}try{await rm(root,{recursive:true,force:true});}catch{}}
+async function migrate() {
+  const [rows] = await pool.query(
+    "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='trend_topics'",
+  );
+  if (Number(rows[0].count)) return;
+  const sql = await readFile("database/migrations/0017a_trends_m04_01.up.sql", "utf8");
+  for (const statement of sql
+    .split(";")
+    .map((value) => value.trim())
+    .filter(Boolean))
+    await pool.query(statement);
+}
+async function cleanup() {
+  try {
+    await pool.query(
+      "UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'",
+    );
+  } catch {}
+  for (const sql of [
+    "DELETE FROM trend_operations WHERE actor_id=?",
+    "DELETE FROM trend_outbox WHERE organization_id IN (?,?)",
+    "DELETE FROM trend_events WHERE organization_id IN (?,?)",
+    "DELETE FROM trend_projection_jobs WHERE organization_id IN (?,?)",
+    "DELETE FROM trend_monitoring_rules WHERE organization_id IN (?,?)",
+    "DELETE FROM trend_topic_follows WHERE organization_id IN (?,?)",
+    "DELETE FROM trend_topic_keywords WHERE organization_id IN (?,?)",
+    "DELETE FROM trend_signals WHERE organization_id IN (?,?)",
+    "DELETE FROM trend_topics WHERE organization_id IN (?,?)",
+    "DELETE FROM evidence_data_operations WHERE actor_id=?",
+    "DELETE FROM evidence_data_outbox WHERE organization_id IN (?,?)",
+    "DELETE FROM evidence_data_events WHERE organization_id IN (?,?)",
+    "DELETE FROM data_quality_issues WHERE organization_id IN (?,?)",
+    "DELETE FROM field_provenance WHERE organization_id IN (?,?)",
+    "DELETE FROM normalized_records WHERE organization_id IN (?,?)",
+    "DELETE FROM raw_evidence WHERE organization_id IN (?,?)",
+    "DELETE FROM file_assets WHERE organization_id IN (?,?)",
+    "DELETE FROM provider_source_replay_runs WHERE organization_id IN (?,?)",
+    "DELETE FROM collection_task_outbox WHERE organization_id IN (?,?)",
+    "DELETE FROM collection_task_events WHERE organization_id IN (?,?)",
+    "DELETE FROM collection_task_attempts WHERE task_id=?",
+    "DELETE FROM collection_subqueries WHERE organization_id IN (?,?)",
+    "DELETE FROM collection_tasks WHERE organization_id IN (?,?)",
+    "DELETE FROM provider_source_operations WHERE actor_id=?",
+    "DELETE FROM provider_versions WHERE actor_id=?",
+  ]) {
+    try {
+      const params = sql.includes("task_id")
+        ? [created.task]
+        : sql.includes("actor_id")
+          ? [ids.actor]
+          : [ids.organization, ids.otherOrganization];
+      await pool.query(sql, params);
+    } catch {}
+  }
+  if (created.provider) {
+    try {
+      await pool.query("DELETE FROM provider_adapter_health WHERE provider_id=?", [
+        created.provider,
+      ]);
+    } catch {}
+    try {
+      await pool.query("DELETE FROM providers WHERE id=?", [created.provider]);
+    } catch {}
+  }
+  for (const [sql, id] of [
+    ["DELETE FROM workspaces WHERE id=?", ids.workspace],
+    ["DELETE FROM workspaces WHERE id=?", ids.otherWorkspace],
+    ["DELETE FROM organizations WHERE id=?", ids.organization],
+    ["DELETE FROM organizations WHERE id=?", ids.otherOrganization],
+    ["DELETE FROM users WHERE id=?", ids.actor],
+  ])
+    try {
+      await pool.query(sql, [id]);
+    } catch {}
+  try {
+    await rm(root, { recursive: true, force: true });
+  } catch {}
+}
 
-try{
-  const[versions]=await pool.query('SELECT VERSION() version,@@character_set_server charset,DATABASE() database_name,CURRENT_USER() account_name'),runtime=versions[0];if(!String(runtime.version).startsWith('5.7.')||runtime.charset!=='utf8mb4'||runtime.database_name!=='product_scout'||!String(runtime.account_name).startsWith('product_scout@'))throw new Error('requires MySQL57 utf8mb4 product_scout business account');
-  await redis.connect();if((await redis.health(requestId,traceId)).status!=='available')throw new Error('redis unavailable');await migrate();await cleanup();
-  const email=`m04-01-${requestId}@example.test`;await pool.query("INSERT INTO users (id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES (?,?,?,'live-probe','active',?,?,1,?,?)",[ids.actor,email,email,now,now,now,now]);
-  for(const[org,ws,suffix]of[[ids.organization,ids.workspace,'primary'],[ids.otherOrganization,ids.otherWorkspace,'other']]){await pool.query("INSERT INTO organizations (id,name,slug,status,timezone,data_retention_days,default_workspace_id,created_by,version,created_at,updated_at) VALUES (?,?,?,'active','Asia/Shanghai',365,NULL,?,1,?,?)",[org,`M04-01 ${suffix}`,`m0401-${suffix}-${requestId.slice(0,8)}`,ids.actor,now,now]);await pool.query("INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,'默认工作区','default','active',?,1,?,?)",[ws,org,ids.actor,now,now]);}
-  const sourceRepo=new MySqlProviderSourceRepository(pool),sourceService=new ProviderSourceService(sourceRepo,()=>now),provision=await sourceService.provision('google_news_search',{actorId:ids.actor,idempotencyKey:'m04-provision',requestId,traceId});created.provider=provision.id;await pool.query("UPDATE providers SET status='enabled',version=version+1,updated_by=?,updated_at=? WHERE id=?",[ids.actor,now,provision.id]);
-  const scheduled=await sourceService.replay(provision.id,{organization_id:ids.organization,workspace_id:ids.workspace,query:'ai skincare'},{actorId:ids.actor,idempotencyKey:'m04-replay',requestId,traceId});created.task=scheduled.task_id;
-  const[queries]=await pool.query('SELECT id FROM collection_subqueries WHERE task_id=?',[scheduled.task_id]),subqueryId=String(queries[0].id),evidence=new MySqlEvidencePersistence(pool,root,10485760,()=>now),payload={title:'AI Skin Care Demand Rises',summary:'Retailers report new demand.',published_at:'2026-08-07T14:00:00.000Z',source_url:'https://example.test/news/ai-skincare',publisher:'Example News',canonical_url:'https://example.test/news/ai-skincare',observed_at:'2026-08-07T14:05:00.000Z',evidence_ref:'m04-live'};
-  const persisted=await evidence.persist({organizationId:ids.organization,workspaceId:ids.workspace,taskId:scheduled.task_id,subqueryId,providerId:provision.id,sourceUrl:payload.source_url,canonicalUrl:payload.canonical_url,dedupeKey:'m04-ai-skincare',contentType:'application/rss+xml',content:Buffer.from('<item>AI Skin Care Demand Rises</item>'),capturedAt:new Date(payload.observed_at),parserVersion:'google-news-rss-v1',adapterVersion:'google-news-rss-adapter-v1',recordKey:'m04-ai-skincare',recordSchemaVersion:'provider-source-v1',normalizedPayload:payload,provenance:['title','summary','published_at','source_url','publisher'].map(field=>({fieldPath:field,sourcePath:`rss.item.${field}`,transformVersion:'google-news-rss-v1',sourceValueHash:sha(payload[field])})),requestId,traceId,actorId:ids.actor});
-  const projector=new MySqlTrendProjectionWorker(pool,'worker-m04-live',120,()=>now);let projected;const projectionResults=[];for(let i=0;i<20;i++){const result=await projector.processOnce();projectionResults.push(result);if(result.topic_id){projected=result;break;}if(result.status==='idle')break;}if(!projected||projected.status!=='succeeded')throw new Error(`trend projection did not succeed: ${JSON.stringify(projectionResults)}`);
-  const service=new TrendService(new MySqlTrendRepository(pool,()=>now)),scope={organizationId:ids.organization,workspaceId:ids.workspace,actorId:ids.actor},other={organizationId:ids.otherOrganization,workspaceId:ids.otherWorkspace,actorId:ids.actor},listed=await service.list({...scope,page:1,pageSize:20});if(listed.total!==1||listed.items[0].heat.value!==1||listed.items[0].heat.unit!=='signals'||listed.items[0].confidence.status!=='insufficient_data')throw new Error('trend truthful metrics mismatch');const detail=await service.get({...scope,topicId:projected.topic_id});if(detail.evidence.length!==1||detail.timeline.length!==1||detail.keywords[0]?.type!=='primary'||detail.evidence[0].raw_evidence_id!==persisted.evidence_id)throw new Error('trend evidence chain mismatch');if((await service.list({...other,page:1,pageSize:20})).total!==0)throw new Error('trend isolation failed');
-  const write={...scope,requestId,traceId,idempotencyKey:'follow-live'},follow=await service.follow({...write,topicId:projected.topic_id,followed:true}),followReplay=await service.follow({...write,topicId:projected.topic_id,followed:true});if(!follow.followed||followReplay.topic_id!==follow.topic_id)throw new Error('follow idempotency failed');const ruleInput={name:'AI Skin Care Watch',include_keywords:['AI skincare'],negative_keywords:['medical claim'],market:'US',language:'en-US',category:'beauty',notification_channel:'in_app'},createdRule=await service.createRule({...write,idempotencyKey:'rule-live',rule:ruleInput}),replayedRule=await service.createRule({...write,idempotencyKey:'rule-live',rule:ruleInput});if(createdRule.id!==replayedRule.id||createdRule.status!=='enabled')throw new Error('rule idempotency failed');const paused=await service.updateRule({...write,idempotencyKey:'rule-pause-live',ruleId:createdRule.id,status:'paused',expectedVersion:1});if(paused.status!=='paused'||paused.version!==2)throw new Error('rule version update failed');const relevance=await service.relevance({...write,idempotencyKey:'relevance-live',topicId:projected.topic_id,status:'irrelevant',reason:'live drill',expectedVersion:detail.version});if(relevance.status!=='irrelevant')throw new Error('relevance failed');
-  const[[events],[outbox],[recordsAfter]]=await Promise.all([pool.query('SELECT request_id,trace_id,event_type FROM trend_events WHERE organization_id=?',[ids.organization]),pool.query('SELECT status,event_type FROM trend_outbox WHERE organization_id=?',[ids.organization]),pool.query('SELECT id FROM raw_evidence WHERE id=?',[persisted.evidence_id])]);if(events.length<4||events.some(row=>row.request_id!==requestId||row.trace_id!==traceId)||outbox.length!==events.length||recordsAfter.length!==1)throw new Error('audit outbox or evidence preservation mismatch');
-  await cleanup();console.log(JSON.stringify({status:'passed',module:'M04-01',mysql:runtime.version,redis:'available',normalized_record_to_topic:'passed',truthful_heat_unit:'signals',confidence_status:'insufficient_data',timeline:1,keyword_contract:'primary_full_title',evidence_chain:'passed',follow_idempotency:'passed',monitoring_rule_idempotency_and_version:'passed',relevance_preserves_evidence:'passed',organization_workspace_isolation:'passed',audit_outbox_correlation:'passed',cleanup:'passed',request_id:requestId,trace_id:traceId}));
-}catch(error){console.error(JSON.stringify({status:'blocked',code:error?.code??'trend_live_failed',message:error instanceof Error?error.message:'unknown',stack:error instanceof Error?error.stack:'unknown',request_id:requestId,trace_id:traceId}));process.exitCode=2;}finally{await cleanup();await redis.close();await pool.end();}
+try {
+  const [versions] = await pool.query(
+      "SELECT VERSION() version,@@character_set_server charset,DATABASE() database_name,CURRENT_USER() account_name",
+    ),
+    runtime = versions[0];
+  if (
+    !String(runtime.version).startsWith("5.7.") ||
+    runtime.charset !== "utf8mb4" ||
+    runtime.database_name !== "product_scout" ||
+    !String(runtime.account_name).startsWith("product_scout@")
+  )
+    throw new Error("requires MySQL57 utf8mb4 product_scout business account");
+  await redis.connect();
+  if ((await redis.health(requestId, traceId)).status !== "available")
+    throw new Error("redis unavailable");
+  await migrate();
+  await cleanup();
+  const email = `m04-01-${requestId}@example.test`;
+  await pool.query(
+    "INSERT INTO users (id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES (?,?,?,'live-probe','active',?,?,1,?,?)",
+    [ids.actor, email, email, now, now, now, now],
+  );
+  for (const [org, ws, suffix] of [
+    [ids.organization, ids.workspace, "primary"],
+    [ids.otherOrganization, ids.otherWorkspace, "other"],
+  ]) {
+    await pool.query(
+      "INSERT INTO organizations (id,name,slug,status,timezone,data_retention_days,default_workspace_id,created_by,version,created_at,updated_at) VALUES (?,?,?,'active','Asia/Shanghai',365,NULL,?,1,?,?)",
+      [org, `M04-01 ${suffix}`, `m0401-${suffix}-${requestId.slice(0, 8)}`, ids.actor, now, now],
+    );
+    await pool.query(
+      "INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,'默认工作区','default','active',?,1,?,?)",
+      [ws, org, ids.actor, now, now],
+    );
+  }
+  const sourceRepo = new MySqlProviderSourceRepository(pool),
+    sourceService = new ProviderSourceService(sourceRepo, () => now),
+    provision = await sourceService.provision("google_news_search", {
+      actorId: ids.actor,
+      idempotencyKey: "m04-provision",
+      requestId,
+      traceId,
+    });
+  created.provider = provision.id;
+  await pool.query(
+    "UPDATE providers SET status='enabled',version=version+1,updated_by=?,updated_at=? WHERE id=?",
+    [ids.actor, now, provision.id],
+  );
+  const scheduled = await sourceService.replay(
+    provision.id,
+    { organization_id: ids.organization, workspace_id: ids.workspace, query: "ai skincare" },
+    { actorId: ids.actor, idempotencyKey: "m04-replay", requestId, traceId },
+  );
+  created.task = scheduled.task_id;
+  const [queries] = await pool.query("SELECT id FROM collection_subqueries WHERE task_id=?", [
+      scheduled.task_id,
+    ]),
+    subqueryId = String(queries[0].id),
+    evidence = new MySqlEvidencePersistence(pool, root, 10485760, () => now),
+    payload = {
+      title: "AI Skin Care Demand Rises",
+      summary: "Retailers report new demand.",
+      published_at: "2026-08-07T14:00:00.000Z",
+      source_url: "https://example.test/news/ai-skincare",
+      publisher: "Example News",
+      canonical_url: "https://example.test/news/ai-skincare",
+      observed_at: "2026-08-07T14:05:00.000Z",
+      evidence_ref: "m04-live",
+    };
+  const persisted = await evidence.persist({
+    organizationId: ids.organization,
+    workspaceId: ids.workspace,
+    taskId: scheduled.task_id,
+    subqueryId,
+    providerId: provision.id,
+    sourceUrl: payload.source_url,
+    canonicalUrl: payload.canonical_url,
+    dedupeKey: "m04-ai-skincare",
+    contentType: "application/rss+xml",
+    content: Buffer.from("<item>AI Skin Care Demand Rises</item>"),
+    capturedAt: new Date(payload.observed_at),
+    parserVersion: "google-news-rss-v1",
+    adapterVersion: "google-news-rss-adapter-v1",
+    recordKey: "m04-ai-skincare",
+    recordSchemaVersion: "provider-source-v1",
+    normalizedPayload: payload,
+    provenance: ["title", "summary", "published_at", "source_url", "publisher"].map((field) => ({
+      fieldPath: field,
+      sourcePath: `rss.item.${field}`,
+      transformVersion: "google-news-rss-v1",
+      sourceValueHash: sha(payload[field]),
+    })),
+    requestId,
+    traceId,
+    actorId: ids.actor,
+  });
+  const projector = new MySqlTrendProjectionWorker(pool, "worker-m04-live", 120, () => now);
+  let projected;
+  const projectionResults = [];
+  for (let i = 0; i < 20; i++) {
+    const result = await projector.processOnce();
+    projectionResults.push(result);
+    if (result.topic_id) {
+      projected = result;
+      break;
+    }
+    if (result.status === "idle") break;
+  }
+  if (!projected || projected.status !== "succeeded")
+    throw new Error(`trend projection did not succeed: ${JSON.stringify(projectionResults)}`);
+  const service = new TrendService(new MySqlTrendRepository(pool, () => now)),
+    scope = { organizationId: ids.organization, workspaceId: ids.workspace, actorId: ids.actor },
+    other = {
+      organizationId: ids.otherOrganization,
+      workspaceId: ids.otherWorkspace,
+      actorId: ids.actor,
+    },
+    listed = await service.list({ ...scope, page: 1, pageSize: 20 });
+  if (
+    listed.total !== 1 ||
+    listed.items[0].heat.value !== 1 ||
+    listed.items[0].heat.unit !== "signals" ||
+    listed.items[0].confidence.status !== "insufficient_data"
+  )
+    throw new Error("trend truthful metrics mismatch");
+  const detail = await service.get({ ...scope, topicId: projected.topic_id });
+  if (
+    detail.evidence.length !== 1 ||
+    detail.timeline.length !== 1 ||
+    detail.keywords[0]?.type !== "primary" ||
+    detail.evidence[0].raw_evidence_id !== persisted.evidence_id
+  )
+    throw new Error("trend evidence chain mismatch");
+  if ((await service.list({ ...other, page: 1, pageSize: 20 })).total !== 0)
+    throw new Error("trend isolation failed");
+  const qualityService = new DataQualityService(
+      new MySqlDataQualityRepository(pool),
+      { evidenceRoot: root, downloadSigningKey: "", downloadGrantSeconds: 120 },
+      () => now,
+    ),
+    qualityContext = { ...scope, idempotencyKey: "trend-quality-live", requestId, traceId },
+    quality = await qualityService.createFromTrendEvidence(
+      projected.topic_id,
+      detail.evidence[0].id,
+      { severity: "warning", reason: "live trend evidence anomaly" },
+      qualityContext,
+    ),
+    qualityReplay = await qualityService.createFromTrendEvidence(
+      projected.topic_id,
+      detail.evidence[0].id,
+      { severity: "warning", reason: "live trend evidence anomaly" },
+      qualityContext,
+    ),
+    qualityDedupe = await qualityService.createFromTrendEvidence(
+      projected.topic_id,
+      detail.evidence[0].id,
+      { severity: "critical", reason: "same evidence second report" },
+      { ...qualityContext, idempotencyKey: "trend-quality-live-2" },
+    );
+  if (
+    !quality.created ||
+    qualityReplay.issue.id !== quality.issue.id ||
+    qualityDedupe.created ||
+    qualityDedupe.issue.id !== quality.issue.id ||
+    quality.issue.raw_evidence_id !== persisted.evidence_id ||
+    quality.issue.parser_version !== "google-news-rss-v1"
+  )
+    throw new Error("trend evidence quality issue idempotency or evidence chain failed");
+  const write = { ...scope, requestId, traceId, idempotencyKey: "follow-live" },
+    follow = await service.follow({ ...write, topicId: projected.topic_id, followed: true }),
+    followReplay = await service.follow({ ...write, topicId: projected.topic_id, followed: true });
+  if (!follow.followed || followReplay.topic_id !== follow.topic_id)
+    throw new Error("follow idempotency failed");
+  const ruleInput = {
+      name: "AI Skin Care Watch",
+      include_keywords: ["AI skincare"],
+      negative_keywords: ["medical claim"],
+      market: "US",
+      language: "en-US",
+      category: "beauty",
+      notification_channel: "in_app",
+    },
+    createdRule = await service.createRule({
+      ...write,
+      idempotencyKey: "rule-live",
+      rule: ruleInput,
+    }),
+    replayedRule = await service.createRule({
+      ...write,
+      idempotencyKey: "rule-live",
+      rule: ruleInput,
+    });
+  if (createdRule.id !== replayedRule.id || createdRule.status !== "enabled")
+    throw new Error("rule idempotency failed");
+  const paused = await service.updateRule({
+    ...write,
+    idempotencyKey: "rule-pause-live",
+    ruleId: createdRule.id,
+    status: "paused",
+    expectedVersion: 1,
+  });
+  if (paused.status !== "paused" || paused.version !== 2)
+    throw new Error("rule version update failed");
+  const relevance = await service.relevance({
+    ...write,
+    idempotencyKey: "relevance-live",
+    topicId: projected.topic_id,
+    status: "irrelevant",
+    reason: "live drill",
+    expectedVersion: detail.version,
+  });
+  if (relevance.status !== "irrelevant") throw new Error("relevance failed");
+  const [[events], [outbox], [recordsAfter]] = await Promise.all([
+    pool.query("SELECT request_id,trace_id,event_type FROM trend_events WHERE organization_id=?", [
+      ids.organization,
+    ]),
+    pool.query("SELECT status,event_type FROM trend_outbox WHERE organization_id=?", [
+      ids.organization,
+    ]),
+    pool.query("SELECT id FROM raw_evidence WHERE id=?", [persisted.evidence_id]),
+  ]);
+  if (
+    events.length < 4 ||
+    events.some((row) => row.request_id !== requestId || row.trace_id !== traceId) ||
+    outbox.length !== events.length ||
+    recordsAfter.length !== 1
+  )
+    throw new Error("audit outbox or evidence preservation mismatch");
+  await cleanup();
+  console.log(
+    JSON.stringify({
+      status: "passed",
+      module: "M04-01",
+      mysql: runtime.version,
+      redis: "available",
+      normalized_record_to_topic: "passed",
+      truthful_heat_unit: "signals",
+      confidence_status: "insufficient_data",
+      timeline: 1,
+      keyword_contract: "primary_full_title",
+      evidence_chain: "passed",
+      evidence_quality_issue: "passed",
+      follow_idempotency: "passed",
+      monitoring_rule_idempotency_and_version: "passed",
+      relevance_preserves_evidence: "passed",
+      organization_workspace_isolation: "passed",
+      audit_outbox_correlation: "passed",
+      cleanup: "passed",
+      request_id: requestId,
+      trace_id: traceId,
+    }),
+  );
+} catch (error) {
+  console.error(
+    JSON.stringify({
+      status: "blocked",
+      code: error?.code ?? "trend_live_failed",
+      message: error instanceof Error ? error.message : "unknown",
+      stack: error instanceof Error ? error.stack : "unknown",
+      request_id: requestId,
+      trace_id: traceId,
+    }),
+  );
+  process.exitCode = 2;
+} finally {
+  await cleanup();
+  await redis.close();
+  await pool.end();
+}

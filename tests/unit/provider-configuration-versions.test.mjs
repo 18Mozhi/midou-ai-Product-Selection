@@ -167,6 +167,81 @@ test("provider configuration rollback validates target and current versions befo
   assert.equal(input.reason, "恢复稳定设置");
 });
 
+test("public source enablement requires a successful real-page smoke test for the persisted timeout", async () => {
+  const calls = [];
+  const current = {
+    id: providerId,
+    code: "example_public_feed",
+    access_mode: "public_rss",
+    version: 3,
+    schedule_minutes: 30,
+    timeout_ms: 20_000,
+    retry_limit: 2,
+    status: "disabled",
+    parser_version: "feed-v1",
+    terms_review_status: "approved",
+    terms_reference_url: "https://example.test/terms",
+    terms_version: "2026-08",
+    terms_expires_at: "2099-08-31T00:00:00.000Z",
+    updated_at: "2026-08-20T02:00:00.000Z",
+  };
+  const repository = (health) =>
+    new MySqlProviderSourceRepository({
+      getConnection: async () => ({
+        beginTransaction: async () => {},
+        commit: async () => {},
+        rollback: async () => {},
+        release: () => {},
+        query: async (sql, params = []) => {
+          calls.push({ sql, params });
+          if (sql.includes("FROM provider_source_operations")) return [[], []];
+          if (sql === "SELECT * FROM providers WHERE id=? FOR UPDATE") return [[current], []];
+          if (sql.includes("FROM provider_adapter_health")) return [[health], []];
+          return [[], []];
+        },
+      }),
+    });
+  const input = {
+    providerId,
+    scheduleMinutes: 30,
+    timeoutMs: 20_000,
+    retryLimit: 2,
+    status: "enabled",
+    expectedVersion: 3,
+    reason: "完成真实页面烟测后启用",
+    actorId,
+    route: `/platform/provider-sources/${providerId}/configuration`,
+    idempotencyKey: "enable-public-source",
+    requestId: "request-smoke",
+    traceId: "trace-smoke",
+    now: new Date("2026-08-20T02:05:00.000Z"),
+  };
+
+  await assert.rejects(
+    () =>
+      repository({
+        health_status: "ready",
+        last_checked_at: "2026-08-20T01:59:59.999Z",
+      }).updateConfiguration(input),
+    { code: "provider_source_smoke_test_required", statusCode: 409 },
+  );
+  await assert.rejects(
+    () =>
+      repository({
+        health_status: "ready",
+        last_checked_at: "2026-08-20T02:01:00.000Z",
+      }).updateConfiguration({ ...input, timeoutMs: 30_000 }),
+    { code: "provider_source_smoke_test_required", statusCode: 409 },
+  );
+  const result = await repository({
+    health_status: "ready",
+    last_checked_at: "2026-08-20T02:01:00.000Z",
+  }).updateConfiguration(input);
+  assert.equal(result.status, "enabled");
+  assert.equal(result.version, 4);
+  assert.ok(calls.some(({ sql }) => sql.includes("UPDATE providers SET schedule_minutes")));
+});
+
 test("provider configuration migration and contracts keep MySQL57 append-only rollback semantics", async () => {
   const [up, down, routes, openapi, featureMap] = await Promise.all(
     [

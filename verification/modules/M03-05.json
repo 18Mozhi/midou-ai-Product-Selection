@@ -1,1 +1,77 @@
-{"moduleId":"M03-05","phaseId":"P03","name":"Collection Task State Machine","dependencies":["M00-04","M03-03"],"atomicTasks":[{"id":"M03-05.A01","evidence":"task subquery retry dead-letter replay scope and downstream non-goals"},{"id":"M03-05.A02","evidence":"task subquery attempt outbox dead-letter status coverage contracts"},{"id":"M03-05.A03","evidence":"MySQL57 scoped task subquery attempt outbox operation migrations"},{"id":"M03-05.A04","evidence":"transactional state machine idempotency version and audit service"},{"id":"M03-05.A05","evidence":"Baota Worker scheduler lease heartbeat retry dead-letter and Redis coordination"},{"id":"M03-05.A06","evidence":"OpenAPI paged task detail and manual replay contracts"},{"id":"M03-05.A07","evidence":"collection task monitor table detail coverage and status desktop 390"},{"id":"M03-05.A08","evidence":"filters replay confirmation loading empty error forbidden blocked recovery states"},{"id":"M03-05.A09","evidence":"collection replay authorization organization workspace worker event guards"},{"id":"M03-05.A10","evidence":"Baota-only poll lease and Redis coordination configuration"},{"id":"M03-05.A11","evidence":"correlated task attempts transitions outbox metrics and health impact"},{"id":"M03-05.A12","evidence":"transition coverage retry jitter terminal and invalid input unit tests"},{"id":"M03-05.A13","evidence":"OpenAPI DTO event and worker executor compatibility tests"},{"id":"M03-05.A14","evidence":"MySQL57 Redis transaction lease retry dead-letter replay isolation integration"},{"id":"M03-05.A15","evidence":"Playwright desktop 390 task monitor detail replay visual"},{"id":"M03-05.A16","evidence":"expired lease timeout rate limit blocked permission dependency rollback recovery drills"},{"id":"M03-05.A17","evidence":"blueprint Feature Map env runbook migration rollback and Baota handoff"}],"commands":["npm run build","node --test tests/m03-05/collection-task-state-machine.test.mjs","node scripts/verify-collection-task-live.mjs","npx playwright test tests/e2e/m03-05-collection-tasks.spec.ts","npm run verify:docs"]}
+{
+  "moduleId": "M03-05",
+  "phaseId": "P03",
+  "name": "Collection Task State Machine",
+  "dependencies": ["M00-04", "M03-03"],
+  "atomicTasks": [
+    {
+      "id": "M03-05.A01",
+      "evidence": "task subquery retry dead-letter replay scope and downstream non-goals"
+    },
+    {
+      "id": "M03-05.A02",
+      "evidence": "task subquery attempt outbox dead-letter status coverage contracts"
+    },
+    {
+      "id": "M03-05.A03",
+      "evidence": "MySQL57 scoped task subquery attempt outbox operation migrations"
+    },
+    {
+      "id": "M03-05.A04",
+      "evidence": "transactional state machine idempotency version and audit service"
+    },
+    {
+      "id": "M03-05.A05",
+      "evidence": "Baota Worker scheduler lease heartbeat retry dead-letter and Redis coordination"
+    },
+    { "id": "M03-05.A06", "evidence": "OpenAPI paged task detail and manual replay contracts" },
+    {
+      "id": "M03-05.A07",
+      "evidence": "collection task monitor and detail show per-subquery result missing fields persisted duration retryability RSS empty-success no-new-content parse-failure distinctions and factual recovery destinations on desktop and 390"
+    },
+    {
+      "id": "M03-05.A08",
+      "evidence": "filters replay confirmation loading empty error forbidden blocked recovery states"
+    },
+    {
+      "id": "M03-05.A09",
+      "evidence": "collection replay authorization organization workspace worker event guards"
+    },
+    {
+      "id": "M03-05.A10",
+      "evidence": "Baota-only poll lease and Redis coordination configuration"
+    },
+    {
+      "id": "M03-05.A11",
+      "evidence": "correlated task attempts transitions outbox metrics and health impact"
+    },
+    {
+      "id": "M03-05.A12",
+      "evidence": "transition coverage retry jitter terminal and invalid input unit tests"
+    },
+    {
+      "id": "M03-05.A13",
+      "evidence": "OpenAPI DTO audited RSS result-kind and validated robots decision projections plus worker executor compatibility tests"
+    },
+    {
+      "id": "M03-05.A14",
+      "evidence": "MySQL57 Redis transaction lease retry dead-letter replay isolation integration"
+    },
+    { "id": "M03-05.A15", "evidence": "Playwright desktop 390 task monitor detail replay visual" },
+    {
+      "id": "M03-05.A16",
+      "evidence": "expired lease timeout rate limit blocked permission dependency rollback recovery drills"
+    },
+    {
+      "id": "M03-05.A17",
+      "evidence": "blueprint Feature Map env runbook migration rollback and Baota handoff"
+    }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m03-05/collection-task-state-machine.test.mjs",
+    "node scripts/verify-collection-task-live.mjs",
+    "npx playwright test tests/e2e/m03-05-collection-tasks.spec.ts",
+    "npm run verify:docs"
+  ]
+}

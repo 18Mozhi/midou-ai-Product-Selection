@@ -43,6 +43,8 @@ Playwright 默认继续使用本地开发端口 4101/5173；宝塔模块验收�
 
 ## 数据迁移与回滚
 
+历史宝塔发布任务在执行第一条迁移前记录 `migration` 门的 `started_at`，全部迁移完成后记录 `finished_at`；自动停止时在写回 0% candidate 分流、执行 Nginx 检查与 reload 前记录 `rollback` 门的 `started_at`，稳定流量恢复后记录 `finished_at`。新时间区间同时标记 `timing_schema=2`。API 仅对该版本且开始、结束均有效、结束不早于开始的区间计算 `duration_ms`；旧记录不具备完整计时语义，继续显示“尚无记录”而不是虚假的 0 秒。发布中心据此展示迁移和自动回滚真实耗时，不用观察时长或发布总时长代替。
+
 `0027a_release_rollout_attempts_m07_05.up.sql` 将 `(stage, build_sha)` 唯一键替换为普通查询索引，允许同一构建的多次发布尝试保留独立审计。它兼容 MySQL 5.7/utf8mb4；down 迁移只有在不存在重复 stage/build 时才能恢复唯一键，否则必须保留 0027a。完整逆序为 0027a → 0027 → 0026，执行前先导出发布审计。
 
 迁移 `0026_release_rollout_m07_05.up.sql`、`0027_release_write_probe_m07_05.up.sql` 与 `0027a_release_rollout_attempts_m07_05.up.sql` 兼容 MySQL 5.7/utf8mb4。应用回滚不删除 gate/event/probe 审计。只有确认无发布记录依赖后才能按 `0027a`、`0027`、`0026` 的逆序执行 down migration；执行前必须先导出发布审计。回滚配置时由宝塔任务写入 0% candidate 分流、执行 Nginx `-t` 后由宝塔 Nginx reload，不使用 systemd、独立 PM2、宿主 crontab 或面板外服务。

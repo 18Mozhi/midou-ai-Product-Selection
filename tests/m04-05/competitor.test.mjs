@@ -106,6 +106,8 @@ test("M04-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(ui, /添加竞品步骤[\s\S]*商品链接[\s\S]*市场信息[\s\S]*确认采集/);
   assert.match(ui, /价格与库存时间轴/);
   assert.match(ui, /当前竞品规则[\s\S]*删除竞品监控/);
+  assert.match(ui, /告警、任务与结论时间轴[\s\S]*系统告警[\s\S]*系统任务[\s\S]*结论/);
+  assert.match(repository, /change_id:[\s\S]*rule_id:[\s\S]*notification_status/);
   assert.match(ui, /createValidationTask/);
   assert.match(ui, /生成验证任务/);
   assert.match(ui, /打开验证任务/);

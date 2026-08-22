@@ -32,7 +32,7 @@
     "build:backend": "tsc -p apps/backend/tsconfig.json",
     "typecheck:web": "vue-tsc --noEmit -p apps/web/tsconfig.json",
     "build:web": "npm run typecheck:web && vite build --config apps/web/vite.config.ts",
-    "build": "npm run build:contracts && npm run build:config && npm run build:database && npm run build:redis && npm run build:storage && npm run build:credentials && npm run build:provider-adapters && npm run build:playwright-crawler && npm run build:collection-tasks && npm run build:data-quality && npm run build:runtime-topology && npm run build:provider-sources && npm run build:auth && npm run build:tenancy && npm run build:authorization && npm run build:resource-grants && npm run build:audit && npm run build:preferences && npm run build:api && npm run build:worker && npm run build:backend && npm run build:web",
+    "build": "node scripts/build-workspaces.mjs",
     "start:backend": "node apps/backend/dist/server.js",
     "start:e2e-api": "npm run build:contracts && npm run build:api && node scripts/run-playwright-api-test-server.mjs",
     "dev:api": "npm run build:contracts && node --watch apps/api/dist/server.js",
@@ -60,7 +60,7 @@
     "verify:e2e-realism": "node scripts/verify-e2e-realism.mjs",
     "verify:crawler-chain": "node scripts/verify-crawler-production-chain.mjs",
     "verify:plans": "node scripts/verify-plans.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "node scripts/run-playwright-projects.mjs"
   },
   "dependencies": {
     "argon2": "^0.45.1",

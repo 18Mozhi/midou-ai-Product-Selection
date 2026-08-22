@@ -24,10 +24,16 @@ test("M02-05.A01/A02/A04/A12 trims and validates scoped search inputs", async ()
     query: "  机会  ",
     capabilities: ["task:read"],
     limit: 20,
+    resourceType: "opportunity",
+    status: "ready",
+    assignee: "  采购负责人  ",
   });
   assert.equal(captured.query, "机会");
   assert.equal(captured.organizationId, org);
   assert.equal(captured.workspaceId, workspace);
+  assert.equal(captured.resourceType, "opportunity");
+  assert.equal(captured.status, "ready");
+  assert.equal(captured.assignee, "采购负责人");
   assert.deepEqual(result.scope, { organization_id: org, workspace_id: workspace });
   await assert.rejects(
     () =>
@@ -59,6 +65,12 @@ test("M02-05.A04/A08/A09/A12 quick entries expose routes only after capability f
     ["member", "workspace"],
   );
   assert.equal(service.quickActions([]).length, 0);
+  assert.deepEqual(
+    service
+      .quickActions(["task:create", "membership:manage", "workspace:manage"], "organization_admin")
+      .map((item) => item.id),
+    ["member", "workspace", "task"],
+  );
   assert.ok(
     service
       .quickActions(["task:create"])
@@ -90,7 +102,7 @@ test("M02-05.A06/A09/A11/A13 API preserves authenticated scope and correlation e
   const app = buildApp({ discovery: { service, authorization, auth, secureCookie: false } });
   const response = await app.inject({
     method: "GET",
-    url: "/api/v1/me/global-search?q=%E6%9C%BA%E4%BC%9A",
+    url: "/api/v1/me/global-search?q=%E6%9C%BA%E4%BC%9A&resource_type=opportunity&status=ready&assignee=%E9%87%87%E8%B4%AD",
     headers: {
       cookie: "scoutops_session=test",
       "x-request-id": "m02-05-request",
@@ -102,6 +114,9 @@ test("M02-05.A06/A09/A11/A13 API preserves authenticated scope and correlation e
   assert.equal(calls[0].capability, "task:read");
   assert.equal(calls[1].organizationId, org);
   assert.equal(calls[1].workspaceId, workspace);
+  assert.equal(calls[1].resourceType, "opportunity");
+  assert.equal(calls[1].status, "ready");
+  assert.equal(calls[1].assignee, "采购");
   const invalid = await app.inject({
     method: "GET",
     url: "/api/v1/me/global-search?q=x",
@@ -168,6 +183,7 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
     repo,
     overlay,
     shell,
+    discovery,
     apiClient,
     openapi,
     env,
@@ -182,6 +198,7 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
       "apps/api/src/mysql-discovery-repository.ts",
       "apps/web/src/components/DiscoveryOverlay.vue",
       "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/use-navigation-discovery.ts",
       "apps/web/src/api-client.ts",
       "docs/openapi.yaml",
       "config/env.example",
@@ -197,6 +214,7 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(down, /DROP TABLE/);
   assert.match(repo, /organization_id=\?/);
   assert.match(repo, /required_capability IN/);
+  assert.match(repo, /resource_type=\?[\s\S]*status=\?[\s\S]*assignee_name LIKE/);
   for (const table of ["tasks", "opportunities", "raw_evidence", "collection_tasks"])
     assert.match(repo, new RegExp(`FROM ${table}|JOIN ${table}`));
   assert.match(repo, /\/tasks\/[\s\S]*\/opportunities\/[\s\S]*evidence=[\s\S]*task=/);
@@ -205,10 +223,13 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(openapi, /name: shell[\s\S]*required: true/);
   assert.match(overlay, /createApiClient/);
   assert.match(overlay, /任务[\s\S]*机会[\s\S]*证据[\s\S]*采集任务/);
+  assert.match(overlay, /对象类型[\s\S]*状态[\s\S]*负责人/);
+  assert.match(overlay, /recentActionIds[\s\S]*最近使用/);
+  assert.doesNotMatch(overlay, /\{\{ item\.required_capability \}\}/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   for (const state of ["loading", "empty", "expired", "forbidden", "blocked"])
     assert.match(overlay, new RegExp(state));
-  assert.match(shell, /event\.metaKey\s*\|\|\s*event\.ctrlKey/);
+  assert.match(discovery, /event\.metaKey\s*\|\|\s*event\.ctrlKey/);
   assert.match(shell, /role-mobile-nav/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(e2e, /Control\+K/);

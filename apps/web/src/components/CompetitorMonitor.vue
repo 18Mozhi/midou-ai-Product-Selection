@@ -41,9 +41,12 @@ interface Competitor {
   }>;
   alerts?: Array<{
     id: string;
+    change_id: string;
+    rule_id: string;
     notification_status: string;
     task_status: string;
     payload: Record<string, string>;
+    created_at: string;
   }>;
 }
 interface Rule {
@@ -91,6 +94,12 @@ const latest = computed(() => selected.value?.latest_snapshot ?? null),
   }),
   applicableRules = computed(() =>
     rules.value.filter((item) => !item.competitor_id || item.competitor_id === selected.value?.id),
+  ),
+  activityTimeline = computed(() =>
+    (selected.value?.changes ?? []).map((change) => ({
+      change,
+      alerts: (selected.value?.alerts ?? []).filter((alert) => alert.change_id === change.id),
+    })),
   ),
   filteredItems = computed(() => {
     const needle = query.value.trim().toLowerCase();
@@ -140,6 +149,10 @@ const statusText = (value: string) =>
     field === "availability" ? availabilityText(value) : value,
   impactText = (value: string) =>
     value.replace(/\bin_stock\b/g, "有货").replace(/\bout_of_stock\b/g, "缺货"),
+  notificationStatusText = (value: string) =>
+    ({ queued: "待发送", delivered: "已通知", failed: "发送失败" })[value] ?? value,
+  alertTaskStatusText = (value: string) =>
+    ({ queued: "待创建", created: "已创建", failed: "创建失败" })[value] ?? value,
   timeText = (value: string) =>
     new Intl.DateTimeFormat("zh-CN", {
       year: "numeric",
@@ -528,26 +541,43 @@ watch(query, (value) => {
           <p>采集于 {{ timeText(latest.captured_at) }} · {{ freshnessText(latest.freshness) }}</p>
           <code>证据 {{ latest.evidence_id }}</code>
         </div>
-        <section class="competitor-history">
+        <section
+          class="competitor-history competitor-activity-timeline"
+          aria-label="竞品处理时间轴"
+        >
           <header>
-            <h4>变化记录</h4>
-            <span>字段 · 前值 · 当前值 · 时间 · 证据 · 影响</span>
+            <h4>告警、任务与结论时间轴</h4>
+            <span>每次真实变化集中展示结论、告警送达和任务状态</span>
           </header>
-          <article v-for="change in selected.changes ?? []" :key="change.id">
-            <b>{{ fieldText(change.field) }}</b
-            ><strong>{{ changeText(change) }}</strong
-            ><time>{{ timeText(change.changed_at) }}</time>
-            <p>{{ impactText(change.impact_explanation) }}</p>
-            <code>证据 {{ change.evidence_id }}</code>
+          <article v-for="event in activityTimeline" :key="event.change.id">
+            <b>{{ fieldText(event.change.field) }}</b
+            ><strong>{{ changeText(event.change) }}</strong
+            ><time>{{ timeText(event.change.changed_at) }}</time>
+            <p class="competitor-timeline-conclusion">
+              <span>结论</span>{{ impactText(event.change.impact_explanation) }}
+            </p>
+            <div v-if="event.alerts.length" class="competitor-timeline-status">
+              <span v-for="alert in event.alerts" :key="alert.id">
+                系统告警 {{ notificationStatusText(alert.notification_status) }} · 系统任务
+                {{ alertTaskStatusText(alert.task_status) }}
+              </span>
+            </div>
+            <div v-else class="competitor-timeline-status"><span>未命中监控阈值</span></div>
+            <code>证据 {{ event.change.evidence_id }}</code>
             <RouterLink
-              v-if="validationTasks[change.id]"
-              :to="`/tasks?task=${validationTasks[change.id]}`"
+              v-if="validationTasks[event.change.id]"
+              :to="`/tasks?task=${validationTasks[event.change.id]}`"
               >打开验证任务</RouterLink
-            ><button v-else type="button" :disabled="busy" @click="createValidationTask(change)">
+            ><button
+              v-else
+              type="button"
+              :disabled="busy"
+              @click="createValidationTask(event.change)"
+            >
               生成验证任务
             </button>
           </article>
-          <p v-if="!selected.changes?.length">尚无变化；首个快照只建立基线，不制造变化。</p>
+          <p v-if="!activityTimeline.length">尚无变化；首个快照只建立基线，不制造告警或结论。</p>
         </section>
         <section class="competitor-history snapshot-history" aria-label="价格与库存时间轴">
           <header>

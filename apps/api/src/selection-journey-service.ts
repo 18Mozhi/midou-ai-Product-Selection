@@ -4,6 +4,14 @@ import type { DecisionAction } from "./opportunity-service.js";
 export type SelectionInputKind = "keyword" | "asin" | "product_url";
 export type SelectionJourneyState =
   "accepted" | "running" | "result_ready" | "succeeded_empty" | "blocked" | "failed" | "decided";
+export interface SelectionJourneyCandidate {
+  raw_evidence_id: string;
+  title: string | null;
+  publisher: string | null;
+  canonical_url: string;
+  observed_at: string;
+  topic_id: string | null;
+}
 export interface SelectionJourneyResult {
   id: string;
   organization_id: string;
@@ -16,14 +24,8 @@ export interface SelectionJourneyResult {
   state: SelectionJourneyState;
   coverage_status: string | null;
   available_result_count: number;
-  first_result: null | {
-    raw_evidence_id: string;
-    title: string | null;
-    publisher: string | null;
-    canonical_url: string;
-    observed_at: string;
-    topic_id: string | null;
-  };
+  results: SelectionJourneyCandidate[];
+  first_result: SelectionJourneyCandidate | null;
   blocked_reason: string | null;
   blocked_owner: string | null;
   blocked_next_step: string | null;
@@ -32,7 +34,13 @@ export interface SelectionJourneyResult {
     status: "waiting" | "active" | "completed" | "blocked";
     occurred_at: string | null;
   }>;
-  decision: null | { action: DecisionAction; reason: string; actor_id: string; created_at: string };
+  decision: null | {
+    action: DecisionAction;
+    reason: string;
+    selected_raw_evidence_id: string | null;
+    actor_id: string;
+    created_at: string;
+  };
   opportunity_id: string | null;
   verification_task_id: string | null;
   accepted_at: string;
@@ -81,6 +89,7 @@ export interface SelectionJourneyRepository {
     idempotencyKey: string;
     action: DecisionAction;
     reason: string;
+    selectedRawEvidenceId: string | null;
     now: Date;
   }): Promise<SelectionJourneyResult>;
 }
@@ -144,7 +153,11 @@ function journeyId(value: string) {
     );
   return value;
 }
-function decision(value: { action?: unknown; reason?: unknown }) {
+function decision(value: {
+  action?: unknown;
+  reason?: unknown;
+  selected_raw_evidence_id?: unknown;
+}) {
   if (!["adopt", "observe", "reject"].includes(String(value?.action)))
     throw new SelectionJourneyError(
       "selection_decision_invalid",
@@ -158,7 +171,25 @@ function decision(value: { action?: unknown; reason?: unknown }) {
       400,
       "填写 1–1000 个字符的决策原因。",
     );
-  return { action: value.action as DecisionAction, reason };
+  const selectedRawEvidenceId =
+    value.selected_raw_evidence_id == null ? null : String(value.selected_raw_evidence_id);
+  if (selectedRawEvidenceId !== null && !uuid.test(selectedRawEvidenceId))
+    throw new SelectionJourneyError(
+      "selection_candidate_invalid",
+      400,
+      "重新选择当前旅程中的候选结果。",
+    );
+  if (value.action === "adopt" && selectedRawEvidenceId === null)
+    throw new SelectionJourneyError(
+      "selection_candidate_required",
+      400,
+      "采纳前请选择一条候选结果。",
+    );
+  return {
+    action: value.action as DecisionAction,
+    reason,
+    selectedRawEvidenceId: value.action === "adopt" ? selectedRawEvidenceId : null,
+  };
 }
 
 export class SelectionJourneyService {
@@ -227,7 +258,7 @@ export class SelectionJourneyService {
     requestId: string;
     traceId: string;
     idempotencyKey: string;
-    value: { action?: unknown; reason?: unknown };
+    value: { action?: unknown; reason?: unknown; selected_raw_evidence_id?: unknown };
   }) {
     const parsed = decision(context.value);
     return this.repository.decide({

@@ -123,13 +123,13 @@ test("M06-04.A07/A08/A15 security operations visual sanitized", async ({ page })
     await tokenDialog.getByRole("button", { name: "关闭详情" }).click();
   } else {
     const credentialSection = page.getByRole("heading", { name: "凭证生命周期" }).locator("..");
-    await credentialSection.locator("summary").click();
+    await credentialSection.getByText("技术详情", { exact: true }).click();
     await expect(credentialSection.getByText("0123456789abcdef", { exact: true })).toBeVisible();
-    await credentialSection.locator("summary").click();
+    await credentialSection.getByText("技术详情", { exact: true }).click();
     const tokenSection = page.getByRole("heading", { name: "组织访问令牌" }).locator("..");
-    await tokenSection.locator("summary").click();
+    await tokenSection.getByText("技术详情", { exact: true }).click();
     await expect(tokenSection.getByText("sco_org_public", { exact: true })).toBeVisible();
-    await tokenSection.locator("summary").click();
+    await tokenSection.getByText("技术详情", { exact: true }).click();
   }
   await page.getByRole("link", { name: "平台审计" }).click();
   await expect(page).toHaveURL(/view=audit/);

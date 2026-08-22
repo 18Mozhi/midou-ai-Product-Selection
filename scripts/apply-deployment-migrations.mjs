@@ -33,6 +33,12 @@ const allowed = new Set([
   "0056_provider_terms_version_expiry.up.sql",
   "0057_data_quality_issue_workflow.up.sql",
   "0058_opportunity_archive_stage.up.sql",
+  "0059_selection_journey_candidates.up.sql",
+  "0060_opportunity_workflow_visibility.up.sql",
+  "0061_crawler_completion_spool_status.up.sql",
+  "0062_runtime_process_restart_observations.up.sql",
+  "0063_runtime_health_endpoint_probes.up.sql",
+  "0064_governed_workflow_confirmations.up.sql",
 ]);
 export function splitSqlStatements(source) {
   const statements = [];

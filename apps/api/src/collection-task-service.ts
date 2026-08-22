@@ -4,6 +4,7 @@ import {
   type CollectionTaskStatus,
   type CoverageStatus,
 } from "@scoutops/collection-tasks";
+import type { RobotsPolicyDecision } from "@scoutops/provider-sources";
 export interface CollectionTaskSummary {
   id: string;
   organization_id: string;
@@ -38,6 +39,8 @@ export interface CollectionSubquerySummary {
   available_result_count: number;
   missing_fields: string[];
   error_code: string | null;
+  result_kind: "empty_success" | "no_new_content" | "parse_failed" | null;
+  robots_decision: RobotsPolicyDecision | null;
   retryable: boolean;
   started_at: string | null;
   finished_at: string | null;

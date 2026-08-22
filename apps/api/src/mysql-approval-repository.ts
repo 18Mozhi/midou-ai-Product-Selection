@@ -7,6 +7,98 @@ const parse = <T>(value: unknown): T =>
 const iso = (value: unknown) =>
   value == null ? null : (value instanceof Date ? value : new Date(String(value))).toISOString();
 
+type DecisionContextItem = {
+  code: string;
+  label: string;
+  complete?: boolean;
+  detail?: string;
+  value?: string | null;
+};
+
+export const compareApprovalDecisionContexts = (snapshot: any, current: any) => {
+  const requirements = new Map<string, DecisionContextItem>();
+  for (const item of snapshot.evidence?.requirements ?? []) requirements.set(item.code, item);
+  for (const item of current.evidence?.requirements ?? [])
+    if (!requirements.has(item.code)) requirements.set(item.code, item);
+  const requirementChanges = [...requirements.values()]
+    .map((item) => {
+      const before = (snapshot.evidence?.requirements ?? []).find(
+          (candidate: DecisionContextItem) => candidate.code === item.code,
+        ),
+        after = (current.evidence?.requirements ?? []).find(
+          (candidate: DecisionContextItem) => candidate.code === item.code,
+        );
+      return {
+        code: item.code,
+        label: before?.label ?? after?.label ?? item.code,
+        before_complete: before?.complete ?? null,
+        after_complete: after?.complete ?? null,
+        before_detail: before?.detail ?? null,
+        after_detail: after?.detail ?? null,
+      };
+    })
+    .filter(
+      (item) =>
+        item.before_complete !== item.after_complete || item.before_detail !== item.after_detail,
+    );
+  const basisItems = new Map<string, DecisionContextItem>();
+  for (const item of snapshot.basis_items ?? []) basisItems.set(item.code, item);
+  for (const item of current.basis_items ?? [])
+    if (!basisItems.has(item.code)) basisItems.set(item.code, item);
+  const basisChanges = [...basisItems.values()]
+    .map((item) => {
+      const before = (snapshot.basis_items ?? []).find(
+          (candidate: DecisionContextItem) => candidate.code === item.code,
+        ),
+        after = (current.basis_items ?? []).find(
+          (candidate: DecisionContextItem) => candidate.code === item.code,
+        );
+      return {
+        code: item.code,
+        label: before?.label ?? after?.label ?? item.code,
+        before: before?.value ?? null,
+        after: after?.value ?? null,
+      };
+    })
+    .filter((item) => item.before !== item.after);
+  const ruleVersions = ["scoring", "profit"]
+    .map((code) => ({
+      code,
+      label: code === "scoring" ? "评分规则" : "利润规则",
+      before: snapshot.rule_versions?.[code] ?? null,
+      after: current.rule_versions?.[code] ?? null,
+    }))
+    .filter((item) => item.before !== item.after);
+  const beforeComplete = Number(snapshot.evidence?.complete ?? 0),
+    afterComplete = Number(current.evidence?.complete ?? 0),
+    beforeTotal = Number(snapshot.evidence?.total ?? 0),
+    afterTotal = Number(current.evidence?.total ?? 0),
+    beforePercent = snapshot.evidence?.percent ?? null,
+    afterPercent = current.evidence?.percent ?? null;
+  return {
+    available: true,
+    observed_at: current.observed_at,
+    has_changes:
+      beforeComplete !== afterComplete ||
+      beforeTotal !== afterTotal ||
+      beforePercent !== afterPercent ||
+      requirementChanges.length > 0 ||
+      basisChanges.length > 0 ||
+      ruleVersions.length > 0,
+    evidence_summary: {
+      before_complete: beforeComplete,
+      before_total: beforeTotal,
+      before_percent: beforePercent,
+      after_complete: afterComplete,
+      after_total: afterTotal,
+      after_percent: afterPercent,
+    },
+    requirement_changes: requirementChanges,
+    basis_changes: basisChanges,
+    rule_version_changes: ruleVersions,
+  };
+};
+
 export class MySqlApprovalRepository implements ApprovalRepository {
   constructor(
     private readonly pool: Pool,
@@ -235,9 +327,9 @@ export class MySqlApprovalRepository implements ApprovalRepository {
     if (!rows[0])
       throw new ApprovalServiceError("approval_request_not_found", 404, "刷新审批列表。");
     const [nodes] = await this.pool.query<RowDataPacket[]>(
-        "SELECT n.*,\n                approver_profile.display_name active_approver_name," +
+        "SELECT n.*,\n                original_profile.display_name approver_name,\n                approver_profile.display_name active_approver_name,\n                escalation_profile.display_name escalation_assignee_name," +
           "\n                decided_profile.display_name decided_by_name\n         FROM approval_node_runs " +
-          "n\n         LEFT JOIN user_profiles approver_profile\n           ON approver_profile.user_id=n.active_approver_id\n" +
+          "n\n         LEFT JOIN user_profiles original_profile\n           ON original_profile.user_id=n.approver_id\n         LEFT JOIN user_profiles approver_profile\n           ON approver_profile.user_id=n.active_approver_id\n         LEFT JOIN user_profiles escalation_profile\n           ON escalation_profile.user_id=n.escalation_assignee_id\n" +
           "         LEFT JOIN user_profiles decided_profile\n           ON decided_profile.user_id=n.decided_by\n" +
           "         WHERE n.approval_request_id=?\n           AND n.organization_id=?\n          " +
           " AND n.workspace_id=?\n         ORDER BY n.ordinal",
@@ -252,8 +344,9 @@ export class MySqlApprovalRepository implements ApprovalRepository {
         [i.requestIdValue, i.organizationId, i.workspaceId],
       );
     const approvalTemplateVersion = Number(rows[0].rule_version),
-      decisionContext = rows[0].decision_context_json
-        ? parse(rows[0].decision_context_json)
+      hasCapturedContext = Boolean(rows[0].decision_context_json),
+      decisionContext = hasCapturedContext
+        ? parse<any>(rows[0].decision_context_json)
         : await this.loadDecisionContext(
             this.pool,
             {
@@ -265,21 +358,50 @@ export class MySqlApprovalRepository implements ApprovalRepository {
             },
             this.now(),
             "live_fallback",
-          );
+          ),
+      currentDecisionContext = hasCapturedContext
+        ? await this.loadDecisionContext(
+            this.pool,
+            {
+              organizationId: i.organizationId,
+              workspaceId: i.workspaceId,
+              resourceType: String(rows[0].resource_type),
+              resourceId: String(rows[0].resource_id),
+              approvalTemplateVersion,
+            },
+            this.now(),
+            "live_fallback",
+          )
+        : decisionContext;
     return {
       ...this.request(rows[0], i.actorId),
       approval_template_version: approvalTemplateVersion,
       decision_context: decisionContext,
+      decision_context_diff: hasCapturedContext
+        ? compareApprovalDecisionContexts(decisionContext, currentDecisionContext)
+        : {
+            available: false,
+            observed_at: currentDecisionContext.observed_at,
+            has_changes: false,
+            evidence_summary: null,
+            requirement_changes: [],
+            basis_changes: [],
+            rule_version_changes: [],
+          },
       nodes: nodes.map((r) => ({
         id: String(r.id),
         ordinal: Number(r.ordinal),
         name: String(r.name),
         approver_id: String(r.approver_id),
+        approver_name: r.approver_name ? String(r.approver_name) : "未设置展示名称",
         active_approver_id: String(r.active_approver_id),
         active_approver_name: r.active_approver_name
           ? String(r.active_approver_name)
           : "未设置展示名称",
         escalation_assignee_id: String(r.escalation_assignee_id),
+        escalation_assignee_name: r.escalation_assignee_name
+          ? String(r.escalation_assignee_name)
+          : "未设置展示名称",
         status: String(r.status),
         due_at: iso(r.due_at),
         escalated_at: iso(r.escalated_at),

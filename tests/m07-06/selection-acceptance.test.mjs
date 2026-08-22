@@ -12,12 +12,14 @@ test("M07-06.A01-A06 exposes a member-scoped real selection journey", async () =
     journeyMigration,
     evidenceLinkMigration,
     evidenceLinkRollback,
+    candidateMigration,
   ] = await Promise.all([
     import("../../apps/api/dist/selection-journey-service.js"),
     read("apps/api/src/selection-journey-routes.ts"),
     read("database/migrations/0028_selection_journeys_m07_06.up.sql"),
     read("database/migrations/0029_collection_task_evidence_links_m07_06.up.sql"),
     read("database/migrations/0029_collection_task_evidence_links_m07_06.down.sql"),
+    read("database/migrations/0059_selection_journey_candidates.up.sql"),
   ]);
   const created = [];
   const service = new SelectionJourneyService({
@@ -46,7 +48,11 @@ test("M07-06.A01-A06 exposes a member-scoped real selection journey", async () =
   assert.match(evidenceLinkMigration, /UNIQUE KEY `uq_collection_task_evidence`/);
   assert.match(evidenceLinkMigration, /INSERT INTO `collection_task_evidence_links`/);
   assert.match(evidenceLinkRollback, /DROP TABLE IF EXISTS `collection_task_evidence_links`/);
-  assert.doesNotMatch(`${journeyMigration}\n${evidenceLinkMigration}`, /utf8mb4_0900|CHECK\s*\(/i);
+  assert.match(candidateMigration, /selected_raw_evidence_id/);
+  assert.doesNotMatch(
+    `${journeyMigration}\n${evidenceLinkMigration}\n${candidateMigration}`,
+    /utf8mb4_0900|CHECK\s*\(/i,
+  );
 });
 
 test("M07-06.A07-A17 keeps UI, contracts, production evidence and rollback synchronized", async () => {
@@ -79,9 +85,12 @@ test("M07-06.A07-A17 keeps UI, contracts, production evidence and rollback synch
     "回滚",
   ])
     assert.match(all, new RegExp(token));
-  assert.match(files[0], /390/);
+  assert.match(files[1], /max-width:\s*390px/);
   assert.match(files[0], /真实来源/);
   assert.match(files[0], /没有演示数据替代真实结果/);
+  assert.match(files[0], /localStorage\.setItem\(progressStorageKey/);
+  assert.match(files[0], /比较 \{\{ candidates\.length \}\} 条候选后再生成机会/);
+  assert.doesNotMatch(files[0], /验收时钟|180 秒|DECIDED|state\.toUpperCase/);
 });
 
 test("M07-06.A08/A12/A16 validates input and refuses deadline relaxation", async () => {
@@ -120,12 +129,38 @@ test("M07-06.A08/A12/A16 validates input and refuses deadline relaxation", async
       }),
     { code: "selection_product_url_invalid" },
   );
+  assert.throws(
+    () =>
+      service.decide({
+        ...context,
+        journeyId: "77777777-7777-4777-8777-777777777777",
+        value: { action: "adopt", reason: "生成机会" },
+      }),
+    { code: "selection_candidate_required" },
+  );
   const accepted = await service.create({
     ...context,
     value: { input_kind: "product_url", input_value: "https://example.com/product" },
   });
   assert.equal(accepted.providerCode, "google_news_search");
   assert.equal(accepted.deadlineAt.toISOString(), "2026-08-10T12:03:00.000Z");
+});
+
+test("M07-06 candidate comparison scopes adoption to one selected evidence", async () => {
+  const [repository, openapi, migration, rollback] = await Promise.all([
+    read("apps/api/src/mysql-selection-journey-repository.ts"),
+    read("docs/openapi.yaml"),
+    read("database/migrations/0059_selection_journey_candidates.up.sql"),
+    read("database/migrations/0059_selection_journey_candidates.down.sql"),
+  ]);
+  assert.match(repository, /e\.captured_at,e\.id LIMIT 20/);
+  assert.match(repository, /i\.action === "adopt" && signal\?\.topic_id/);
+  assert.match(repository, /l\.raw_evidence_id=\?/);
+  assert.match(repository, /selected_raw_evidence_id/);
+  assert.match(openapi, /SelectionJourneyCandidate/);
+  assert.match(openapi, /only adopt creates or reuses an opportunity/);
+  assert.match(migration, /FOREIGN KEY \(`selected_raw_evidence_id`\)/);
+  assert.match(rollback, /DROP COLUMN `selected_raw_evidence_id`/);
 });
 
 test("M07-06.A04/A08 keeps a journey running until the collection task is terminal", async () => {
@@ -177,9 +212,10 @@ test("M07-06.A04 live verification accepts an already running journey", async ()
   const verifier = await read("scripts/verify-selection-acceptance-live.mjs");
   assert.match(
     verifier,
-    /\["accepted","running"\]\.includes\(created\.state\)/,
+    /\[\s*"accepted",\s*"running",?\s*\]\.includes\(created\.state\)/,
     "the production worker may advance a newly committed journey before create() reads it back",
   );
+  assert.match(verifier, /0059_selection_journey_candidates\.up\.sql/);
 });
 
 test("M07-06.A04/A05/A14 links deduplicated evidence to every scoped collection task", async () => {
@@ -485,6 +521,8 @@ test("M03-07 automatic feeds skip conflicting already-seen items while M07-06 re
       required: false,
       status: "succeeded",
       availableResultCount: 2,
+      freshResultCount: 2,
+      deduplicatedResultCount: 0,
       missingFields: [],
       errorCode: null,
     },

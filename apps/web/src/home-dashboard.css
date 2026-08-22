@@ -181,6 +181,26 @@
   color: var(--so-text-muted);
   font-size: 10px;
 }
+.home-action-signals {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.home-action-signals b {
+  padding: 3px 6px;
+  border: 1px solid var(--so-border);
+  border-radius: 999px;
+  color: var(--so-text-muted);
+  background: var(--so-bg-elevated);
+  font-size: 8px;
+  font-weight: 700;
+}
+.home-actions > a[data-priority="blocking"] .home-action-signals b:first-child,
+.home-actions > a[data-priority="overdue"] .home-action-signals b:first-child {
+  color: var(--so-warning);
+  border-color: color-mix(in srgb, var(--so-warning) 35%, var(--so-border));
+}
 .home-actions dl {
   margin: 0;
   display: flex;
@@ -193,6 +213,11 @@
 .home-actions dd {
   margin: 4px 0 0;
   font-size: 10px;
+}
+.home-actions dl div:last-child dd {
+  max-width: 128px;
+  color: var(--so-primary);
+  font-weight: 750;
 }
 .home-radar > a,
 .home-follows > a,

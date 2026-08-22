@@ -2,6 +2,11 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
+import {
+  beginRealtimeReconnect,
+  recordRealtimeFallbackPoll,
+  recordRealtimeOpen,
+} from "../realtime-client-metrics";
 import { useModalDialog } from "../use-modal-dialog";
 import "../notification-center.css";
 import { statusLabel } from "../ui/status-labels";
@@ -290,10 +295,14 @@ function connectRealtime() {
     withCredentials: true,
   });
   stream.onopen = () => {
+    recordRealtimeOpen();
     realtimeState.value = "connected";
   };
   stream.onerror = () => {
     realtimeState.value = "reconnecting";
+    if (!beginRealtimeReconnect()) return;
+    recordRealtimeFallbackPoll();
+    void load();
   };
   stream.addEventListener("notification.changed", (event) => {
     const message = event as MessageEvent;

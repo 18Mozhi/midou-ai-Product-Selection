@@ -13,6 +13,37 @@ const base = {
   memory: { used_bytes: 134217728, max_bytes: 536870912, usage_basis_points: 2500 },
   connections: { connected: 18, maximum: 512, usage_basis_points: 352, rejected: 0 },
   evicted_keys: 0,
+  max_memory_policy: "noeviction",
+  uptime_seconds: 172800,
+  keyspace_sample: {
+    status: "sampled",
+    basis: "bounded_memory_usage",
+    sample_limit: 128,
+    scanned_keys: 12,
+    measured_keys: 12,
+    ignored_keys: 0,
+    failed_measurements: 0,
+    total_sampled_bytes: 1048576,
+    truncated: false,
+    access_frequency_available: false,
+    unavailable_reason: null,
+    hotspots: [
+      {
+        purpose: "queue",
+        resource: "collection_task",
+        sampled_keys: 8,
+        sampled_bytes: 786432,
+        sampled_share_basis_points: 7500,
+      },
+      {
+        purpose: "queue",
+        resource: "collection_ready",
+        sampled_keys: 4,
+        sampled_bytes: 262144,
+        sampled_share_basis_points: 2500,
+      },
+    ],
+  },
   findings: [],
   single_instance: true,
   sentinel_enabled: false,
@@ -46,10 +77,25 @@ test("M08-02.A07/A08/A15 desktop and 390 Redis resilience truth", async ({ page 
   await expect(page.getByRole("heading", { name: "缓存服务单实例韧性" })).toBeVisible();
   await expect(page.getByText("单 Redis 韧性门已满足")).toBeVisible();
   await expect(page.getByText("512.0 MiB")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "键淘汰风险" })).toBeVisible();
+  await expect(page.getByText("noeviction 已启用，当前未记录键淘汰。")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "键空间占用热点" })).toBeVisible();
+  await expect(page.getByText("采集任务租约")).toBeVisible();
+  await expect(page.getByText("75.0%")).toBeVisible();
+  await expect(page.getByText(/不把内存占比冒充访问频率/)).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
+  await expect(page).toHaveScreenshot("m08-02-redis-resilience-desktop.png", { fullPage: true });
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByText("不启用 Sentinel、集群、副本或备用服务器")).toBeVisible();
+  await expect(page.getByText("采集就绪队列")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
+  await expect(page).toHaveScreenshot("m08-02-redis-resilience-mobile-390.png", { fullPage: true });
 });
 
 test("M08-02.A08/A09/A16 warning blocked empty forbidden expired rate limited unavailable and recovering", async ({

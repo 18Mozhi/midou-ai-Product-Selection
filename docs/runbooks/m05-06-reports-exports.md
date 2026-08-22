@@ -8,6 +8,8 @@ Node API 与 Node Worker 必须在宝塔配置相同的 `REPORT_EXPORT_ROOT`。W
 
 用户可以在报表页直接重新生成已过期或 `dead_letter` 的文件。该动作不会恢复、覆盖或删除旧文件，而是创建新的 `queued` 任务；使用审计事件 `report.export.regenerated` 和字段 `regenerated_from_export_id` 追查来源。仍在排队、生成、等待重试或有效期内的文件会返回 409，避免重复消耗 Worker 配额。重新生成功能不增加环境变量，仍使用现有 `REPORT_EXPORT_*` 配置。
 
+队列位置按唯一宝塔 Node Worker 的全局领取顺序计算，但接口只返回当前工作区自身任务。ETA 使用最近最多 20 次成功导出的完整耗时中位数；`estimate_sample_size=0` 时页面必须显示无法估算。若预计时间长期偏离实际，先核对 Worker 是否只有一个受宝塔管理的实例、活动租约是否卡住、重试任务的 `available_at`、最近成功样本量与报表行数，不得手工填写固定 ETA 或把租约时长当生成耗时。
+
 ## 恢复和回滚
 
 租约到期可自动重领。文件缺失时 API 返回 503，应核对 API/Worker 根目录是否一致；如原记录已经过期或最终失败，可在页面重新生成。到期文件由 Worker 清理，不可恢复。

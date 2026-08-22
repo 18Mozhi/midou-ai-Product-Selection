@@ -33,6 +33,8 @@ export interface OpportunitySummary {
   source_ref_id: string | null;
   owner_id: string | null;
   lifecycle_status: string;
+  lifecycle_entered_at: string;
+  lifecycle_dwell_seconds: number;
   recommendation_status: "insufficient_data" | "recommend" | "observe" | "not_recommend";
   overall_score: number | null;
   trend_score: number | null;
@@ -51,6 +53,16 @@ export interface OpportunitySummary {
   updated_at: string;
 }
 export interface OpportunityDetail extends OpportunitySummary {
+  adoption_blockers: Array<{
+    code: OpportunityBlockingReason;
+    status: "blocked" | "in_progress" | "cleared";
+    progress_percent: number | null;
+    next_action: string;
+    task_id: string | null;
+    task_status: string | null;
+    score_job_status: string | null;
+  }>;
+  redecision_ready: boolean;
   score_rule_version: string | null;
   scored_at: string | null;
   latest_score_run: null | {

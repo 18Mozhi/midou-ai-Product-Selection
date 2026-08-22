@@ -16,6 +16,10 @@
 - 输出：`apps/*`、`packages/contracts`、迁移/回滚、模块测试和 M00-01 Runbook。
 - 失败：任一运行边界不可构建；组织任务缺少 `organization_id`/`workspace_id` 仍可执行；健康响应缺少 request/trace 标识；页面没有加载、成功、错误或 390px 状态；迁移不兼容 MySQL 5.7。
 
+## 构建依赖图
+
+根命令 `npm run build` 读取 `apps/*`、`packages/*` 下真实 `package.json`，只把 `dependencies`、`devDependencies`、`peerDependencies` 和 `optionalDependencies` 中属于当前 workspace 的包视为构建边。脚本拒绝不支持的 workspace glob、缺失的 `build:<目录名>`、缺失内部节点和循环依赖；每个拓扑层最多并行四个编译进程，当前层全部通过后才启动下游层。单个编译失败时保留该进程输出并阻断后续层，不用手工维护一条容易漂移的串行命令。Python Crawler 不含 Node `package.json`，继续由 Python 测试和发布包门禁独立验证，不伪装成 npm workspace。
+
 ## 数据与权限
 
 `outbox_events` 是本模块唯一持久化对象。组织事件必须包含 `organization_id`；工作区事件按业务适用性包含 `workspace_id`。公开存活检查不读取组织数据，其他后台工作在进入执行器前调用共享范围断言。后续 M00-03、M00-04、M00-05 和 M00-06 将分别补齐真实迁移执行、Redis、API 安全中间件和审计持久化。

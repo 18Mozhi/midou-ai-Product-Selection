@@ -44,6 +44,9 @@ const issue = {
   workspace_id: ids.ws,
   provider_id: ids.provider,
   provider_name: "Market Evidence",
+  reconciliation_run_id: ids.run,
+  raw_evidence_id: ids.evidence,
+  parser_version: "parser-v3",
   metric_code: "title_accuracy",
   field_path: "title",
   severity: "critical",
@@ -90,6 +93,7 @@ async function dashboard(
     reconciliationRuns: [run],
     totalEvidence: 1,
     totalIssues: 1,
+    observedAt: "2026-09-02T12:00:00.000Z",
   },
 ) {
   await page.route("**/api/v1/platform/data-quality?**", (route) =>
@@ -121,10 +125,34 @@ test("M03-06.A07/A08/A15 evidence quality dashboard is responsive and visual", a
   if ((page.viewportSize()?.width ?? 1000) <= 760) {
     await expect(page.getByRole("button", { name: /Market Evidence · 18.3 KB/ })).toBeVisible();
     await page.getByRole("button", { name: /Market Evidence · 18.3 KB/ }).click();
+    await expect(page.getByText("4 天内到期").last()).toBeVisible();
     await page.getByText("技术详情").click();
     await expect(page.getByText(ids.evidence, { exact: true })).toBeVisible();
     await page.getByRole("button", { name: "关闭详情" }).last().click();
-  } else await expect(page.getByText("18.3 KB", { exact: true })).toBeVisible();
+  } else {
+    await expect(page.getByText("18.3 KB", { exact: true })).toBeVisible();
+    await expect(page.getByText("4 天内到期").first()).toBeVisible();
+  }
+});
+test("data quality run drills into affected fields, samples and parser version", async ({
+  page,
+}) => {
+  await nav(page);
+  await dashboard(page);
+  await page.goto("/platform-admin/data");
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  await page.getByRole("button", { name: "核对运行" }).click();
+  await expect(page.getByText("US · parser-v3")).toBeVisible();
+  await page.getByRole("button", { name: "查看异常字段与样本" }).click();
+  await expect(page.getByText("异常样本下钻")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /标题准确率 · 待处理/ }).click();
+    await expect(page.getByText("title", { exact: true })).toBeVisible();
+    await expect(page.getByText("parser-v3", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "关闭详情" }).last().click();
+  } else await expect(page.getByText(/title · 解析 parser-v3/)).toBeVisible();
+  await page.getByRole("button", { name: "返回全部问题" }).click();
+  await expect(page.getByText("异常样本下钻")).toBeHidden();
 });
 test("M02-01 semantic roles keep data quality readable in every theme", async ({ page }) => {
   await nav(page);

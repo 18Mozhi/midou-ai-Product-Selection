@@ -18,6 +18,7 @@
 - 数据库只保存带域分离前缀的 SHA-256 租约令牌摘要。令牌只在首次成功获得租约时交给内部 Crawler，幂等重放不再次返回令牌，监控 API 永不返回令牌。
 - 心跳和完成必须同时匹配 run、profile 和令牌摘要。到期租约可由显式运维动作回收，对应运行写为 `timed_out / lease_expired`，所有 acquire、heartbeat、release、recover 均落不可变事件。
 - Python 心跳调用不重试；第一次失败即通知桥接层终止 Playwright 子进程，禁止浏览器在失去租约后继续操作目标站。普通 API 领取和完成回传使用有上限的指数退避与抖动。完成回传失败时，带 correlation 的结果与租约令牌写入权限 0600 的 `CRAWLER_COMPLETION_SPOOL_ROOT`，后续循环先重试再领取新作业；完成接口以原令牌摘要接受幂等重放，成功后不改写既有终态。
+- Python Crawler 每次领取轮询同时上报完成回执目录的待回写/隔离数量、字节数、最老回执时间、配置保留期、容量上限和所在磁盘可用量。Node 只保存脱敏聚合值，不接收路径、文件名或回执内容；达到保留期、容量或磁盘停止线只告警或阻断新领取，绝不自动删除待回写或隔离回执。
 - `0054_crawler_succeeded_empty` 将浏览器运行与作业的真实空结果保留为 `succeeded_empty`，不得折叠成普通成功。Playwright stderr 只保存最多 4000 字符的单行脱敏诊断到受限 `result_json`，平台监控不返回该字段。
 
 ## 浏览器与档案
@@ -26,13 +27,13 @@
 
 浏览器档案秘密是 base64 编码的 `tar.gz` user-data archive，由 M03-02 AES-256-GCM 资产临时物化。解包拒绝绝对路径、目录穿越、反斜杠、链接和未知类型，并限制压缩大小、解压大小及文件数。档案 Buffer、明文压缩包、解压目录和 Chromium context 在成功、受阻、异常与超时路径都由 finally 清理。
 
-Python Crawler 不读取静态执行请求文件。它使用服务 Token 调用 `/internal/crawler-runtime/jobs/acquire`，无任务时得到 204 且不发送空闲心跳；有任务时获得业务关联、代码生成的计划、档案元数据、加密凭证记录和一次性租约。加密凭证与主密钥仅通过 stdin 交给固定 Node runner，runner 在准确临时目录内解密、使用并清理，参数不经 shell 拼接，stdout 只返回带 correlation 的有界结构结果。生产 Python Crawler 与 Node 后端一样只能由宝塔面板管理。
+Python Crawler 不读取静态执行请求文件。它使用服务 Token 调用 `/internal/crawler-runtime/jobs/acquire`，每次领取前先提交受限回执目录的计数、字节数、最老创建时间、保留阈值和可用磁盘；无任务时仍保存这份脱敏水位并返回 204，不发送空闲心跳；有任务时获得业务关联、代码生成的计划、档案元数据、加密凭证记录和一次性租约。水位合同不包含路径、文件名或回执内容。加密凭证与主密钥仅通过 stdin 交给固定 Node runner，runner 在准确临时目录内解密、使用并清理，参数不经 shell 拼接，stdout 只返回带 correlation 的有界结构结果。生产 Python Crawler 与 Node 后端一样只能由宝塔面板管理。
 
 集成门禁在本机随机端口运行真实 Fastify，并从独立 Python 进程调用生产 `run_once`，验证 job acquire、活动租约 heartbeat、complete 及无任务 204 路径；另用 AES-GCM 加密测试 Cookie 启动真实 Chromium，验证登录有效、登录失效、截图/DOM 证据与临时档案清理。该门禁不连接外部平台、不使用真实账号，且不能由 `page.route` 或截图 Mock 替代。
 
 ## 权限与响应
 
-采集运行列表在桌面保留事实表格；390px 使用统一摘要卡片与右侧详情抽屉，不再横向滚动宽表。档案卡展示当前租约和最近一次失败；运行详情只在 `lease_expired` 有事实证据时提示“可能重复执行”，不把普通失败推断成重复。完整运行、组织、工作区、请求、链路与错误标识只在可展开的“技术详情”中展示。
+采集运行列表在桌面保留事实表格；390px 使用统一摘要卡片与右侧详情抽屉，不再横向滚动宽表。档案卡使用服务端 `observed_at` 与凭证明确 `expires_at` 计算到期天数；没有有效期时明确“无法预测”，不根据历史登录表现猜测。当前租约显式展示占用实例和 Provider/目标域名来源；只有租约已早于 `observed_at` 时才标记“僵尸占用风险”并允许进入既有过期回收，不声称已探测到操作系统僵尸进程。档案卡继续展示最近一次失败；运行详情只在 `lease_expired` 有事实证据时提示“可能重复执行”，不把普通失败推断成重复。完整运行、组织、工作区、请求、链路与错误标识只在可展开的“技术详情”中展示。
 
 平台监控 `GET /api/v1/platform/crawler-runtime` 与过期回收 `POST /api/v1/platform/crawler-runtime/recover-expired` 要求已登录且具备 `collection:replay`。写操作校验同源 Origin 和 Idempotency-Key。平台响应只含档案元数据、租约时间/实例、范围化运行统计和 correlation，不含凭证明文、密文、临时路径、执行计划或租约令牌。只有 Crawler 服务 Token 可以访问 job acquire/heartbeat/complete；内部 acquire 返回密文而非明文，完成结果限制为 2 MB 并同时核对 job、run、profile 和租约摘要。DOM 与截图必须成对出现、类型与解析版本符合来源合同且哈希一致，否则按解析漂移失败关闭，不能落入证据目录。
 

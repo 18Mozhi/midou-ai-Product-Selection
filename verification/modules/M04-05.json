@@ -1,1 +1,83 @@
-{"moduleId":"M04-05","phaseId":"P04","name":"Competitor Monitoring","dependencies":["M04-04"],"atomicTasks":[{"id":"M04-05.A01","evidence":"scope identity snapshot change threshold output and failure boundaries"},{"id":"M04-05.A02","evidence":"competitor snapshot job rule change alert event outbox and status contracts"},{"id":"M04-05.A03","evidence":"MySQL57 scoped migration indexes immutable snapshots and rollback"},{"id":"M04-05.A04","evidence":"identity provenance snapshot rule idempotency transaction version lock and audit services"},{"id":"M04-05.A05","evidence":"Baota Node Worker lease retry comparison threshold alert dead-letter and outbox"},{"id":"M04-05.A06","evidence":"OpenAPI list detail create snapshot action rules DTO errors and permissions"},{"id":"M04-05.A07","evidence":"desktop and 390 competitor list detail history and rule console"},{"id":"M04-05.A08","evidence":"create forms loading empty error forbidden expired blocked and recovery states"},{"id":"M04-05.A09","evidence":"competitor read manage API Worker event organization and workspace guards"},{"id":"M04-05.A10","evidence":"poll lease config schema env Baota restart validation and secret scan"},{"id":"M04-05.A11","evidence":"correlated snapshots changes alerts queue health events and evidence provenance"},{"id":"M04-05.A12","evidence":"identity URL metric provenance threshold direction and source state unit tests"},{"id":"M04-05.A13","evidence":"OpenAPI DTO route event capability and client compatibility tests"},{"id":"M04-05.A14","evidence":"MySQL57 transactions Worker comparison threshold idempotency and organization isolation integration"},{"id":"M04-05.A15","evidence":"Playwright desktop 390 list detail provenance keyboard forms and visual regression"},{"id":"M04-05.A16","evidence":"missing provider paused item duplicate snapshot dependency failure lease retry and dead-letter drills"},{"id":"M04-05.A17","evidence":"blueprint Feature Map env architecture runbook migration rollback and Baota handoff"}],"commands":["npm run build","node --test tests/m04-05/competitor.test.mjs","node scripts/verify-competitors-live.mjs","npx playwright test tests/e2e/m04-05-competitors.spec.ts","npm run verify:docs"]}
+{
+  "moduleId": "M04-05",
+  "phaseId": "P04",
+  "name": "Competitor Monitoring",
+  "dependencies": ["M04-04"],
+  "atomicTasks": [
+    {
+      "id": "M04-05.A01",
+      "evidence": "scope identity snapshot change threshold output and failure boundaries"
+    },
+    {
+      "id": "M04-05.A02",
+      "evidence": "competitor snapshot job rule change alert event outbox and status contracts"
+    },
+    {
+      "id": "M04-05.A03",
+      "evidence": "MySQL57 scoped migration indexes immutable snapshots and rollback"
+    },
+    {
+      "id": "M04-05.A04",
+      "evidence": "identity provenance snapshot rule idempotency transaction version lock and audit services"
+    },
+    {
+      "id": "M04-05.A05",
+      "evidence": "Baota Node Worker lease retry comparison threshold alert dead-letter and outbox"
+    },
+    {
+      "id": "M04-05.A06",
+      "evidence": "OpenAPI list detail create snapshot action rules DTO errors and permissions"
+    },
+    {
+      "id": "M04-05.A07",
+      "evidence": "desktop and 390 competitor list detail unified change alert task conclusion timeline and rule console"
+    },
+    {
+      "id": "M04-05.A08",
+      "evidence": "create forms loading empty error forbidden expired blocked alert task status and recovery states"
+    },
+    {
+      "id": "M04-05.A09",
+      "evidence": "competitor read manage API Worker event organization and workspace guards"
+    },
+    {
+      "id": "M04-05.A10",
+      "evidence": "poll lease config schema env Baota restart validation and secret scan"
+    },
+    {
+      "id": "M04-05.A11",
+      "evidence": "correlated snapshots changes alerts queue health events and evidence provenance"
+    },
+    {
+      "id": "M04-05.A12",
+      "evidence": "identity URL metric provenance threshold direction and source state unit tests"
+    },
+    {
+      "id": "M04-05.A13",
+      "evidence": "OpenAPI DTO route event capability and client compatibility tests"
+    },
+    {
+      "id": "M04-05.A14",
+      "evidence": "MySQL57 transactions Worker comparison threshold idempotency and organization isolation integration"
+    },
+    {
+      "id": "M04-05.A15",
+      "evidence": "Playwright desktop 390 list detail provenance keyboard forms and visual regression"
+    },
+    {
+      "id": "M04-05.A16",
+      "evidence": "missing provider paused item duplicate snapshot dependency failure lease retry and dead-letter drills"
+    },
+    {
+      "id": "M04-05.A17",
+      "evidence": "blueprint Feature Map env architecture runbook migration rollback and Baota handoff"
+    }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m04-05/competitor.test.mjs",
+    "node scripts/verify-competitors-live.mjs",
+    "npx playwright test tests/e2e/m04-05-competitors.spec.ts",
+    "npm run verify:docs"
+  ]
+}

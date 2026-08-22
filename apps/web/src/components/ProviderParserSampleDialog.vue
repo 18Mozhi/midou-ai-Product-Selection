@@ -1,10 +1,19 @@
 <script setup lang="ts">
+import ProviderParserSampleReview from "./ProviderParserSampleReview.vue";
+
 interface ParserSample {
   id: string;
   name: string;
   baseline_parser_version: string;
   last_replay_status: "never" | "passed" | "changed" | "failed";
   last_replay_at: string | null;
+  review_status: "pending" | "approved" | "rejected";
+  reviewed_by: string | null;
+  review_reason: string | null;
+  reviewed_at: string | null;
+  review_version: number;
+  created_by: string;
+  can_review: boolean;
   created_at: string;
 }
 
@@ -29,16 +38,20 @@ defineProps<{
   latestReplay: ParserSampleReplay | null;
   savingCandidateId: string | null;
   replayingSampleId: string | null;
+  reviewingSampleId: string | null;
 }>();
 
 defineEmits<{
   close: [];
   create: [candidate: ParserSampleCandidate];
   replay: [sample: ParserSample];
+  review: [sample: ParserSample, decision: "approved" | "rejected", reason: string];
 }>();
 
 const replayText = (value: ParserSample["last_replay_status"] | ParserSampleReplay["status"]) =>
   ({ never: "尚未回放", passed: "一致通过", changed: "发现差异", failed: "解析失败" })[value];
+const reviewText = (value: ParserSample["review_status"]) =>
+  ({ pending: "待另一管理员审批", approved: "审批通过", rejected: "已驳回" })[value];
 
 const displayValue = (value: unknown) => {
   const text = typeof value === "string" ? value : JSON.stringify(value);
@@ -56,7 +69,10 @@ const displayValue = (value: unknown) => {
         </div>
         <button type="button" aria-label="关闭固定样本回放" @click="$emit('close')">×</button>
       </header>
-      <p>只能从同时保存截图、DOM 和结构化快照的真实浏览器作业固化；回放一致才允许启用来源。</p>
+      <p>
+        只能从同时保存截图、DOM
+        和结构化快照的真实浏览器作业固化；当前解析器回放一致且另一管理员审批通过后，才允许启用来源。
+      </p>
       <div v-if="loading" class="source-state">正在读取固定样本…</div>
       <template v-else>
         <section>
@@ -83,9 +99,21 @@ const displayValue = (value: unknown) => {
         <section>
           <h4>已固定样本</h4>
           <article v-for="sample in samples" :key="sample.id">
-            <div>
-              <strong>{{ sample.name }}</strong>
-              <span>{{ replayText(sample.last_replay_status) }}</span>
+            <div class="sample-summary">
+              <div>
+                <strong>{{ sample.name }}</strong>
+                <span
+                  >{{ replayText(sample.last_replay_status) }} ·
+                  {{ reviewText(sample.review_status) }}</span
+                >
+              </div>
+              <p v-if="sample.review_reason">审批结论：{{ sample.review_reason }}</p>
+              <ProviderParserSampleReview
+                v-if="sample.review_status === 'pending'"
+                :sample="sample"
+                :reviewing="reviewingSampleId === sample.id"
+                @review="(decision, reason) => $emit('review', sample, decision, reason)"
+              />
             </div>
             <button
               type="button"
@@ -156,6 +184,10 @@ const displayValue = (value: unknown) => {
 .parser-diff li {
   display: grid;
   gap: 4px;
+}
+.parser-sample-panel article .sample-summary {
+  flex: 1;
+  gap: 10px;
 }
 .parser-sample-panel span,
 .parser-sample-panel > p {

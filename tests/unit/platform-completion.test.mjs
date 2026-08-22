@@ -180,9 +180,11 @@ test("source catalog exposes the latest persisted successful task without invent
               status: "enabled",
               version: 1,
               schedule_minutes: 30,
+              concurrency_limit: 2,
               timeout_ms: 15000,
               retry_limit: 2,
               updated_at: "2026-08-20T03:00:00.000Z",
+              active_subquery_count: 1,
               last_success_task_id: "00000000-0000-4000-8000-000000000122",
               last_success_status: "succeeded",
               last_success_result_count: 7,
@@ -195,6 +197,11 @@ test("source catalog exposes the latest persisted successful task without invent
     [source] = await repository.listProvisioned(["gnews_us_consumer_trends"]);
   assert.equal(source.last_success.available_result_count, 7);
   assert.equal(source.last_success.finished_at, "2026-08-20T02:30:00.000Z");
+  assert.deepEqual(source.concurrency_snapshot, {
+    configured_limit: 2,
+    active_subquery_count: 1,
+  });
+  assert.match(sql, /active\.status IN \('pending','running'\)/);
   assert.match(sql, /candidate\.status IN \('succeeded','succeeded_empty'\)/);
   assert.match(sql, /candidate\.finished_at DESC,candidate\.id DESC/);
 
@@ -262,7 +269,10 @@ test("platform operations correlate API Worker and crawler events without raw pa
       new URL("../../apps/web/src/components/PlatformLogCenter.vue", import.meta.url),
       "utf8",
     ),
-    readFile(new URL("../../apps/web/src/components/NavigationShell.vue", import.meta.url), "utf8"),
+    readFile(
+      new URL("../../apps/web/src/navigation-shell-route-state.ts", import.meta.url),
+      "utf8",
+    ),
   ]);
   assert.match(service, /"logs"/);
   for (const table of ["platform_audit_events", "collection_task_events", "crawler_browser_runs"])

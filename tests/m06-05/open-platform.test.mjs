@@ -103,3 +103,11 @@ test("M06-05.A06/A07/A08/A13/A15/A17 documented UI and contracts", async () => {
   ])
     assert.match(all, new RegExp(x.replaceAll("/", "\\/")));
 });
+test("M06-05.A07/A08 token actions preview concrete permission and access impact", async () => {
+  const center = await readFile("apps/web/src/components/OpenPlatformCenter.vue", "utf8");
+  assert.match(center, /令牌权限风险预览/);
+  assert.match(center, /不包含业务数据写入权限/);
+  assert.match(center, /旧密钥立即失效/);
+  assert.match(center, /撤销后该账号立即无法调用开放接口/);
+  assert.match(center, /status:read/);
+});

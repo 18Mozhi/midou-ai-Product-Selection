@@ -1,21 +1,20 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import {
+  calculateScoreProjection,
+  type ScoreProjectionDimension,
+  type ScoreProjectionInput,
+} from "@scoutops/contracts";
 type Job = {
   id: string;
   organizationId: string;
   workspaceId: string;
   opportunityId: string;
   ruleId: string;
+  triggerTaskId: string | null;
   requestId: string;
   traceId: string;
   attemptCount: number;
-};
-type Dimension = {
-  code: string;
-  label: string;
-  weight: number;
-  required: boolean;
-  evidence_group: "market" | "competition" | "cost" | "other";
 };
 export type ScoringWorkerResult =
   | { status: "idle" }
@@ -37,8 +36,15 @@ export class OpportunityScoringError extends Error {
   }
 }
 const parse = <T>(value: unknown): T =>
-    typeof value === "string" ? (JSON.parse(value) as T) : (value as T),
-  round = (value: number) => Math.round(value * 100) / 100;
+  typeof value === "string" ? (JSON.parse(value) as T) : (value as T);
+export const hasBlockingQualityRegression = (rows: unknown[]) =>
+  rows.some((row) => {
+    const value = row as { reconciliation_status?: unknown; critical_issue_count?: unknown };
+    return (
+      String(value.reconciliation_status ?? "") === "failed" ||
+      Number(value.critical_issue_count ?? 0) > 0
+    );
+  });
 export class MySqlOpportunityScoringWorker {
   constructor(
     private readonly pool: Pool,
@@ -71,7 +77,12 @@ export class MySqlOpportunityScoringWorker {
             ? "dead_letter"
             : "scheduled";
       await this.finish(job, status, wrapped.code);
-      return { status, job_id: job.id, error_code: wrapped.code };
+      return {
+        status,
+        job_id: job.id,
+        opportunity_id: job.opportunityId,
+        error_code: wrapped.code,
+      };
     }
   }
   private async claim() {
@@ -100,6 +111,7 @@ export class MySqlOpportunityScoringWorker {
         workspaceId: String(row.workspace_id),
         opportunityId: String(row.opportunity_id),
         ruleId: String(row.score_rule_id),
+        triggerTaskId: row.trigger_task_id == null ? null : String(row.trigger_task_id),
         requestId: String(row.request_id),
         traceId: String(row.trace_id),
         attemptCount: Number(row.attempt_count) + 1,
@@ -123,7 +135,7 @@ export class MySqlOpportunityScoringWorker {
       const rule = rules[0];
       if (!rule) throw new OpportunityScoringError("score_rule_unavailable", false);
       const [opportunities] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
+        "SELECT id,owner_id FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
         [job.opportunityId, job.organizationId, job.workspaceId],
       );
       if (!opportunities[0]) throw new OpportunityScoringError("opportunity_scope_missing", false);
@@ -131,66 +143,47 @@ export class MySqlOpportunityScoringWorker {
         "SELECT * FROM opportunity_score_inputs WHERE opportunity_id=? AND organization_id=? AND workspace_id=? AND is_current=1",
         [job.opportunityId, job.organizationId, job.workspaceId],
       );
-      const dimensions = parse<Dimension[]>(rule.dimensions_json),
-        thresholds = parse<{ recommend_min: number; observe_min: number }>(rule.thresholds_json),
-        byCode = new Map(inputs.map((item) => [String(item.dimension_code), item])),
-        required = dimensions.filter((item) => item.required),
-        valid = dimensions.map((dimension) => {
-          const input = byCode.get(dimension.code),
-            evidence = input ? parse<string[]>(input.evidence_ids_json) : [],
-            missing = input ? parse<string[]>(input.missing_fields_json) : [];
-          const usable = Boolean(
-            input &&
-            input.score_value != null &&
-            input.evidence_group === dimension.evidence_group &&
-            evidence.length,
+      const evidenceIds = [
+        ...new Set(inputs.flatMap((item) => parse<string[]>(item.evidence_ids_json ?? "[]"))),
+      ];
+      if (evidenceIds.length) {
+        const placeholders = evidenceIds.map(() => "?").join(","),
+          [qualityRows] = await c.query<RowDataPacket[]>(
+            `SELECT e.id evidence_id,
+              (SELECT r.status FROM reconciliation_runs r
+               WHERE r.organization_id=e.organization_id AND r.workspace_id=e.workspace_id
+                 AND r.provider_id=e.provider_id AND r.parser_version=e.parser_version
+               ORDER BY r.window_ended_at DESC,r.id DESC LIMIT 1) reconciliation_status,
+              (SELECT COUNT(*) FROM data_quality_issues i
+               WHERE i.organization_id=e.organization_id AND i.workspace_id=e.workspace_id
+                 AND i.raw_evidence_id=e.id AND i.status='open' AND i.severity='critical') critical_issue_count
+             FROM raw_evidence e
+             WHERE e.organization_id=? AND e.workspace_id=? AND e.id IN (${placeholders})`,
+            [job.organizationId, job.workspaceId, ...evidenceIds],
           );
-          return {
-            dimension,
-            input,
-            evidence,
-            missing: [
-              ...missing,
-              ...(!input ? [`${dimension.code}.input`] : []),
-              ...(input && input.evidence_group !== dimension.evidence_group
-                ? [`${dimension.code}.evidence_group`]
-                : []),
-              ...(input && input.score_value != null && !evidence.length
-                ? [`${dimension.code}.evidence`]
-                : []),
-            ],
-            usable,
-          };
-        }),
-        covered = required.filter(
-          (dimension) => valid.find((item) => item.dimension.code === dimension.code)?.usable,
-        ).length,
-        coverage = round(required.length ? (covered / required.length) * 100 : 0),
-        available = valid.filter((item) => item.usable),
-        availableWeight = available.reduce((sum, item) => sum + item.dimension.weight, 0),
-        overall =
-          coverage >= 50 && availableWeight > 0
-            ? round(
-                available.reduce(
-                  (sum, item) => sum + Number(item.input!.score_value) * item.dimension.weight,
-                  0,
-                ) / availableWeight,
-              )
-            : null,
-        groups = new Set(available.map((item) => item.dimension.evidence_group)),
-        complete =
-          coverage >= 80 &&
-          ["market", "competition", "cost"].every((group) => groups.has(group as any)),
-        recommendation =
-          overall == null
-            ? "insufficient_data"
-            : complete && overall >= thresholds.recommend_min
-              ? "recommend"
-              : overall >= thresholds.observe_min
-                ? "observe"
-                : "not_recommend",
+        if (hasBlockingQualityRegression(qualityRows))
+          throw new OpportunityScoringError("score_blocked_by_data_quality_regression", false);
+      }
+      const dimensions = parse<ScoreProjectionDimension[]>(rule.dimensions_json),
+        thresholds = parse<{ recommend_min: number; observe_min: number }>(rule.thresholds_json),
+        normalizedInputs: ScoreProjectionInput[] = inputs.map((item) => ({
+          id: String(item.id),
+          input_version: Number(item.input_version),
+          dimension_code: String(item.dimension_code),
+          evidence_group: item.evidence_group,
+          score_value: item.score_value == null ? null : Number(item.score_value),
+          evidence_ids: parse<string[]>(item.evidence_ids_json),
+          missing_fields: parse<string[]>(item.missing_fields_json),
+        })),
+        projection = calculateScoreProjection(dimensions, thresholds, normalizedInputs),
+        overall = projection.overall_score,
+        coverage = projection.coverage_percent,
+        recommendation = projection.recommendation_status,
+        complete = projection.complete_core_evidence,
+        available = projection.components.filter((item) => item.usable),
+        byCode = new Map(normalizedInputs.map((item) => [item.dimension_code, item])),
         runId = randomUUID(),
-        missing = [...new Set(valid.flatMap((item) => (item.usable ? [] : item.missing)))],
+        missing = projection.missing_fields,
         status = overall == null ? "insufficient_data" : "calculated";
       await c.query(
         "INSERT INTO opportunity_score_runs (id,organization_id,workspace_id,opportunity_id,score_rule_id,rule_version_code,status,overall_score,coverage_percent,confidence_score,recommendation_status,missing_fields_json,input_snapshot_json,request_id,trace_id,scored_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -208,47 +201,54 @@ export class MySqlOpportunityScoringWorker {
           recommendation,
           JSON.stringify(missing),
           JSON.stringify(
-            available.map((item) => ({
-              input_id: String(item.input!.id),
-              input_version: Number(item.input!.input_version),
-              dimension_code: item.dimension.code,
-            })),
+            available.map((item) => {
+              const input = byCode.get(item.dimension_code)!;
+              return {
+                input_id: String(input.id),
+                input_version: Number(input.input_version),
+                dimension_code: item.dimension_code,
+              };
+            }),
           ),
           job.requestId,
           job.traceId,
           now,
         ],
       );
-      for (const item of valid)
+      for (const item of projection.components)
         await c.query(
           "INSERT INTO opportunity_score_components (id,score_run_id,dimension_code,weight_percent,input_score,weighted_score,evidence_ids_json,missing_fields_json) VALUES (?,?,?,?,?,?,?,?)",
           [
             randomUUID(),
             runId,
-            item.dimension.code,
-            item.dimension.weight,
-            item.usable ? Number(item.input!.score_value) : null,
-            item.usable
-              ? round((Number(item.input!.score_value) * item.dimension.weight) / 100)
-              : null,
-            JSON.stringify(item.evidence),
-            JSON.stringify(item.usable ? [] : item.missing),
+            item.dimension_code,
+            item.weight_percent,
+            item.usable ? item.input_score : null,
+            item.weighted_score,
+            JSON.stringify(item.evidence_ids),
+            JSON.stringify(item.usable ? [] : item.missing_fields),
           ],
         );
-      const trend = available.find((item) => item.dimension.code === "market_demand"),
-        competition = available.find((item) => item.dimension.code === "competition"),
+      const trend = available.find((item) => item.dimension_code === "market_demand"),
+        competition = available.find((item) => item.dimension_code === "competition"),
         coverageStatus = complete ? "complete" : coverage >= 50 ? "partial" : "insufficient";
       await c.query(
-        "UPDATE opportunities SET overall_score=?,trend_score=?,competition_score=?,recommendation_status=?,confidence_status=?,confidence_score=?,coverage_status=?,score_rule_version=?,scored_at=?,lifecycle_status=IF(lifecycle_status IN ('candidate','validating'),'ready',lifecycle_status),version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+        "UPDATE opportunities SET overall_score=?,trend_score=?,competition_score=?," +
+          "recommendation_status=?,confidence_status=?,confidence_score=?,coverage_status=?," +
+          "score_rule_version=?,scored_at=?,lifecycle_entered_at=IF(lifecycle_status IN " +
+          "('candidate','validating'),?,lifecycle_entered_at),lifecycle_status=IF(" +
+          "lifecycle_status IN ('candidate','validating'),'ready',lifecycle_status)," +
+          "version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
         [
           overall,
-          trend ? Number(trend.input!.score_value) : null,
-          competition ? Number(competition.input!.score_value) : null,
+          trend?.input_score ?? null,
+          competition?.input_score ?? null,
           recommendation,
           overall == null ? "insufficient_data" : "measured",
           overall == null ? null : coverage,
           coverageStatus,
           rule.version_code,
+          now,
           now,
           now,
           job.opportunityId,
@@ -275,6 +275,42 @@ export class MySqlOpportunityScoringWorker {
         },
         now,
       );
+      if (job.triggerTaskId) {
+        const [tasks] = await c.query<RowDataPacket[]>(
+            "SELECT assignee_id FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? " +
+              "AND source_type='evidence_completion' AND status='completed' LIMIT 1",
+            [job.triggerTaskId, job.organizationId, job.workspaceId],
+          ),
+          recipientId = opportunities[0]?.owner_id ?? tasks[0]?.assignee_id;
+        if (tasks[0] && recipientId) {
+          await c.query(
+            "INSERT INTO outbox_events (id,organization_id,workspace_id,event_type,schema_version," +
+              "payload_json,status,attempt_count,available_at,request_id,trace_id,created_at," +
+              "updated_at,version) VALUES (?,?,?,'task.evidence_completion.redecision_ready',1," +
+              "?,'pending',0,?,?,?,?,?,1)",
+            [
+              randomUUID(),
+              job.organizationId,
+              job.workspaceId,
+              JSON.stringify({
+                recipient_id: String(recipientId),
+                resource_type: "opportunity",
+                resource_id: job.opportunityId,
+                opportunity_id: job.opportunityId,
+                trigger_task_id: job.triggerTaskId,
+                score_run_id: runId,
+                recommendation_status: recommendation,
+                title: "机会可重新决策",
+              }),
+              now,
+              job.requestId,
+              job.traceId,
+              now,
+              now,
+            ],
+          );
+        }
+      }
       await c.commit();
       return { coverage, complete };
     } catch (error) {
@@ -296,10 +332,28 @@ export class MySqlOpportunityScoringWorker {
         status === "scheduled"
           ? new Date(now.getTime() + delays[Math.min(job.attemptCount - 1, 2)]!)
           : now;
-    await this.pool.query(
-      "UPDATE opportunity_score_jobs SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=?,updated_at=? WHERE id=? AND lease_owner=?",
-      [stored, available, errorCode, now, job.id, this.workerId],
-    );
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      await c.query(
+        "UPDATE opportunity_score_jobs SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=?,updated_at=? WHERE id=? AND lease_owner=?",
+        [stored, available, errorCode, now, job.id, this.workerId],
+      );
+      if (errorCode === "score_blocked_by_data_quality_regression")
+        await this.event(
+          c,
+          job,
+          "opportunity.score.blocked_by_data_quality",
+          { job_id: job.id, error_code: errorCode },
+          now,
+        );
+      await c.commit();
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
   }
   private async event(c: PoolConnection, job: Job, eventType: string, payload: unknown, now: Date) {
     const eventId = randomUUID();

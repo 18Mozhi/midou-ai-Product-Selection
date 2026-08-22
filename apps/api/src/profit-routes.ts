@@ -58,9 +58,14 @@ export function registerProfitRoutes(app: FastifyInstance, o: ProfitRouteOptions
         organizationId: resolved.organizationId,
         workspaceId: resolved.workspaceId,
         opportunityId: (r.params as { id: string }).id,
+        actorId: resolved.actorId,
       }),
       r,
     );
+  });
+  app.get("/api/v1/cost-input-reviewers", async (r) => {
+    const resolved = await scope(r, "cost:confirm");
+    return envelope(await o.service.listCostReviewers(resolved), r);
   });
   app.post("/api/v1/cost-rules", async (r, reply) => {
     const result = await o.service.createRule({
@@ -103,6 +108,18 @@ export function registerProfitRoutes(app: FastifyInstance, o: ProfitRouteOptions
     });
     reply.code(201);
     return envelope(result, r);
+  });
+  app.post("/api/v1/opportunities/:id/cost-input-reviews/:reviewId/actions", async (r) => {
+    const params = r.params as { id: string; reviewId: string };
+    return envelope(
+      await o.service.reviewCost({
+        ...(await write(r, "cost:confirm")),
+        opportunityId: params.id,
+        reviewId: params.reviewId,
+        value: r.body as never,
+      }),
+      r,
+    );
   });
   app.post("/api/v1/opportunities/:id/profit-runs", async (r, reply) => {
     const result = await o.service.queue({

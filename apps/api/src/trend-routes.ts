@@ -8,6 +8,8 @@ import type {
   MonitoringRuleStatus,
   TrendService,
   TrendStatus,
+  TrendTopicChangeOperation,
+  TrendTopicChangeStatus,
 } from "./trend-service.js";
 
 export interface TrendRouteOptions {
@@ -109,6 +111,47 @@ export function registerTrendRoutes(app: FastifyInstance, options: TrendRouteOpt
       request,
     );
   });
+  app.get("/api/v1/trends/change-requests", async (request) => {
+    const query = request.query as { status?: TrendTopicChangeStatus };
+    return envelope(
+      await options.service.listChangeRequests({
+        ...(await scope(request, "trend:manage")),
+        ...(query.status ? { status: query.status } : {}),
+      }),
+      request,
+    );
+  });
+  app.post("/api/v1/trends/change-requests", async (request, reply) => {
+    const result = await options.service.proposeTopicChange({
+      ...(await write(request)),
+      value: request.body as {
+        operation: TrendTopicChangeOperation;
+        target_topic_id: string;
+        source_topic_ids?: unknown;
+        signal_ids?: unknown;
+        new_title?: unknown;
+        new_category?: unknown;
+        expected_versions: unknown;
+        reason: unknown;
+      },
+    });
+    reply.code(201);
+    return envelope(result, request);
+  });
+  app.post("/api/v1/trends/change-requests/:id/decisions", async (request) =>
+    envelope(
+      await options.service.decideTopicChange({
+        ...(await write(request)),
+        changeRequestId: (request.params as { id: string }).id,
+        value: request.body as {
+          decision: "confirm" | "reject";
+          reason: unknown;
+          expected_version: unknown;
+        },
+      }),
+      request,
+    ),
+  );
   app.get("/api/v1/trends/:id", async (request) =>
     envelope(
       await options.service.get({

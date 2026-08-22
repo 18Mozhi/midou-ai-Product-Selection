@@ -14,7 +14,10 @@ const parse = <T>(v: unknown): T => (typeof v === "string" ? (JSON.parse(v) as T
     v == null ? null : v instanceof Date ? v.toISOString() : new Date(String(v)).toISOString(),
   day = (v: unknown) => (v instanceof Date ? v.toISOString().slice(0, 10) : String(v).slice(0, 10));
 export class MySqlProfitRepository implements ProfitRepository {
-  constructor(private readonly pool: Pool) {}
+  constructor(
+    private readonly pool: Pool,
+    private readonly now: () => Date = () => new Date(),
+  ) {}
   async listRules(input: { organizationId: string; workspaceId: string }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT r.*,GROUP_CONCAT(CASE WHEN a.decision='approved' THEN a.approval_role END) approvals " +
@@ -28,6 +31,7 @@ export class MySqlProfitRepository implements ProfitRepository {
     organizationId: string;
     workspaceId: string;
     opportunityId: string;
+    actorId: string;
   }): Promise<ProfitAnalysis> {
     const [opportunities] = await this.pool.query<RowDataPacket[]>(
       "SELECT id FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=? LIMIT 1",
@@ -45,6 +49,16 @@ export class MySqlProfitRepository implements ProfitRepository {
     const [runs] = await this.pool.query<RowDataPacket[]>(
       "SELECT * FROM opportunity_profit_runs WHERE opportunity_id=? AND organization_id=? AND " +
         "workspace_id=? ORDER BY calculated_at DESC,id DESC LIMIT 1",
+      [input.opportunityId, input.organizationId, input.workspaceId],
+    );
+    const [reviews] = await this.pool.query<RowDataPacket[]>(
+      "SELECT r.*,i.input_type,i.amount_value,i.currency,i.platform,i.source_type," +
+        "i.source_ref_id,i.evidence_id,i.observed_at,i.input_version," +
+        "submitter.email submitter_label,reviewer.email reviewer_label FROM " +
+        "opportunity_cost_input_reviews r JOIN opportunity_cost_inputs i ON i.id=r.cost_input_id " +
+        "JOIN users submitter ON submitter.id=r.submitter_id JOIN users reviewer ON " +
+        "reviewer.id=r.reviewer_id WHERE r.opportunity_id=? AND r.organization_id=? AND " +
+        "r.workspace_id=? ORDER BY FIELD(r.status,'pending','rejected','approved'),r.created_at DESC LIMIT 50",
       [input.opportunityId, input.organizationId, input.workspaceId],
     );
     const run = runs[0];
@@ -99,13 +113,50 @@ export class MySqlProfitRepository implements ProfitRepository {
         input_version: Number(item.input_version),
         platform: String(item.platform),
       })),
+      cost_input_reviews: reviews.map((item) => ({
+        id: String(item.id),
+        cost_input_id: String(item.cost_input_id),
+        input_type: item.input_type,
+        amount_value: Number(item.amount_value),
+        currency: String(item.currency),
+        platform: String(item.platform),
+        source_type: String(item.source_type),
+        source_ref_id: String(item.source_ref_id),
+        evidence_id: String(item.evidence_id),
+        observed_at: iso(item.observed_at)!,
+        input_version: Number(item.input_version),
+        submitter_id: String(item.submitter_id),
+        submitter_label: String(item.submitter_label),
+        reviewer_id: String(item.reviewer_id),
+        reviewer_label: String(item.reviewer_label),
+        status: item.status,
+        due_at: iso(item.due_at)!,
+        overdue: item.status === "pending" && new Date(item.due_at) <= this.now(),
+        decision_reason: item.decision_reason == null ? null : String(item.decision_reason),
+        reviewed_at: iso(item.reviewed_at),
+        version: Number(item.version),
+        created_at: iso(item.created_at)!,
+        can_review: item.status === "pending" && String(item.reviewer_id) === input.actorId,
+      })),
     };
+  }
+  async listCostReviewers(input: { organizationId: string; workspaceId: string; actorId: string }) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT DISTINCT m.user_id id,u.email label FROM memberships m JOIN users u ON u.id=m.user_id " +
+        "JOIN membership_data_scopes s ON s.membership_id=m.id JOIN membership_role_assignments " +
+        "mra ON mra.membership_id=m.id JOIN role_capabilities rc ON rc.role_code=mra.role_code " +
+        "AND rc.capability_code='cost:confirm' WHERE m.organization_id=? AND m.status='active' " +
+        "AND u.status='active' AND m.user_id<>? AND (s.scope_type='organization' OR " +
+        "(s.scope_type='workspace' AND s.workspace_id=?)) ORDER BY u.email,m.user_id",
+      [input.organizationId, input.actorId, input.workspaceId],
+    );
+    return rows.map((row) => ({ id: String(row.id), label: String(row.label) }));
   }
   async createRule(input: ProfitWriteContext & { id: string; value: any; route: string }) {
     const previous = await this.operation<CostRule>(input);
     if (previous) return previous;
     const c = await this.pool.getConnection(),
-      now = new Date();
+      now = this.now();
     try {
       await c.beginTransaction();
       await c.query(
@@ -395,7 +446,7 @@ export class MySqlProfitRepository implements ProfitRepository {
     const previous = await this.operation<any>(input);
     if (previous) return previous;
     const c = await this.pool.getConnection(),
-      now = new Date();
+      now = this.now();
     try {
       await c.beginTransaction();
       const [ops] = await c.query<RowDataPacket[]>(
@@ -410,6 +461,21 @@ export class MySqlProfitRepository implements ProfitRepository {
           409,
           "刷新机会并使用最新 version。",
         );
+      const [reviewers] = await c.query<RowDataPacket[]>(
+        "SELECT DISTINCT m.user_id FROM memberships m JOIN users u ON u.id=m.user_id JOIN " +
+          "membership_data_scopes s ON s.membership_id=m.id JOIN membership_role_assignments mra " +
+          "ON mra.membership_id=m.id JOIN role_capabilities rc ON rc.role_code=mra.role_code AND " +
+          "rc.capability_code='cost:confirm' WHERE m.organization_id=? AND m.user_id=? AND " +
+          "m.status='active' AND u.status='active' AND (s.scope_type='organization' OR " +
+          "(s.scope_type='workspace' AND s.workspace_id=?)) LIMIT 1 FOR UPDATE",
+        [input.organizationId, input.value.reviewer_id, input.workspaceId],
+      );
+      if (!reviewers[0] || input.value.reviewer_id === input.actorId)
+        throw new ProfitServiceError(
+          "cost_input_reviewer_ineligible",
+          409,
+          "选择另一名仍可访问当前工作区且具备成本确认权限的成员。",
+        );
       const [versions] = await c.query<RowDataPacket[]>(
           "SELECT COALESCE(MAX(input_version),0)+1 next_version FROM opportunity_cost_inputs WHERE " +
             "opportunity_id=? AND platform=? AND input_type=?",
@@ -417,14 +483,10 @@ export class MySqlProfitRepository implements ProfitRepository {
         ),
         inputVersion = Number(versions[0]?.next_version ?? 1);
       await c.query(
-        "UPDATE opportunity_cost_inputs SET is_current=0 WHERE opportunity_id=? AND platform=? AND input_type=? AND is_current=1",
-        [input.opportunityId, input.value.platform, input.value.input_type],
-      );
-      await c.query(
         "INSERT INTO opportunity_cost_inputs (id,organization_id,workspace_id,opportunity_id," +
           "platform,input_type,amount_value,currency,source_type,source_ref_id,evidence_id," +
-          "observed_at,input_version,is_current,confirmed_by,request_id,trace_id,created_at) VALUES " +
-          "(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)",
+          "observed_at,input_version,is_current,submitted_by,confirmed_by,request_id,trace_id,created_at) VALUES " +
+          "(?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,NULL,?,?,?)",
         [
           input.id,
           input.organizationId,
@@ -445,17 +507,57 @@ export class MySqlProfitRepository implements ProfitRepository {
           now,
         ],
       );
-      const [rules] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM cost_rules WHERE organization_id=? AND workspace_id=? AND market=? AND " +
-          "platform=? AND status='active' AND effective_from<=? ORDER BY effective_from DESC LIMIT " +
-          "1",
-        [input.organizationId, input.workspaceId, op.market, input.value.platform, now],
+      const reviewId = randomUUID(),
+        dueAt = new Date(now.getTime() + 24 * 60 * 60 * 1000),
+        reminderAt = new Date(dueAt.getTime() - 4 * 60 * 60 * 1000);
+      await c.query(
+        "INSERT INTO opportunity_cost_input_reviews (id,organization_id,workspace_id,opportunity_id," +
+          "cost_input_id,submitter_id,reviewer_id,status,due_at,decision_reason,reviewed_at," +
+          "request_id,trace_id,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,'pending',?," +
+          "NULL,NULL,?,?,1,?,?)",
+        [
+          reviewId,
+          input.organizationId,
+          input.workspaceId,
+          input.opportunityId,
+          input.id,
+          input.actorId,
+          input.value.reviewer_id,
+          dueAt,
+          input.requestId,
+          input.traceId,
+          now,
+          now,
+        ],
       );
-      let jobStatus = "waiting_for_active_rule";
-      if (rules[0]) {
-        await this.queueOne(c, input, input.opportunityId, String(rules[0].id), now);
-        jobStatus = "queued";
-      }
+      for (const scheduled of [
+        { eventType: "approval.cost_input.review_due_soon", availableAt: reminderAt },
+        { eventType: "approval.cost_input.overdue", availableAt: dueAt },
+      ])
+        await c.query(
+          "INSERT INTO outbox_events (id,organization_id,workspace_id,event_type,schema_version," +
+            "payload_json,status,attempt_count,available_at,leased_at,lease_expires_at,published_at," +
+            "request_id,trace_id,created_at,updated_at,version) VALUES (?,?,?,?,1,?,'pending',0,?," +
+            "NULL,NULL,NULL,?,?,?,?,1)",
+          [
+            randomUUID(),
+            input.organizationId,
+            input.workspaceId,
+            scheduled.eventType,
+            JSON.stringify({
+              review_id: reviewId,
+              recipient_id: input.value.reviewer_id,
+              resource_type: "opportunity",
+              resource_id: input.opportunityId,
+              opportunity_id: input.opportunityId,
+            }),
+            scheduled.availableAt,
+            input.requestId.slice(0, 64),
+            input.traceId.slice(0, 64),
+            now,
+            now,
+          ],
+        );
       const version = Number(op.version) + 1;
       await c.query("UPDATE opportunities SET version=?,updated_at=? WHERE id=?", [
         version,
@@ -464,24 +566,129 @@ export class MySqlProfitRepository implements ProfitRepository {
       ]);
       const result = {
         input_id: input.id,
+        review_id: reviewId,
         opportunity_id: input.opportunityId,
+        version,
+        review_status: "pending" as const,
+        due_at: dueAt.toISOString(),
+      };
+      await this.record(
+        c,
+        input,
+        "opportunity.cost_input.review_requested",
+        input.opportunityId,
+        {
+          input_type: input.value.input_type,
+          input_version: inputVersion,
+          currency: input.value.currency,
+          reviewer_id: input.value.reviewer_id,
+          review_id: reviewId,
+          due_at: dueAt.toISOString(),
+        },
+        now,
+      );
+      await this.save(c, input, input.id, result, now);
+      await c.commit();
+      return result;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  async reviewCost(input: Parameters<ProfitRepository["reviewCost"]>[0]) {
+    const previous =
+      await this.operation<Awaited<ReturnType<ProfitRepository["reviewCost"]>>>(input);
+    if (previous) return previous;
+    const c = await this.pool.getConnection(),
+      now = this.now();
+    try {
+      await c.beginTransaction();
+      const [rows] = await c.query<RowDataPacket[]>(
+          "SELECT r.*,i.platform,i.input_type,i.input_version,o.market,o.version opportunity_version " +
+            "FROM opportunity_cost_input_reviews r JOIN opportunity_cost_inputs i ON " +
+            "i.id=r.cost_input_id JOIN opportunities o ON o.id=r.opportunity_id WHERE r.id=? AND " +
+            "r.opportunity_id=? AND r.organization_id=? AND r.workspace_id=? FOR UPDATE",
+          [input.reviewId, input.opportunityId, input.organizationId, input.workspaceId],
+        ),
+        review = rows[0];
+      if (!review)
+        throw new ProfitServiceError("cost_input_review_not_found", 404, "刷新成本复核队列。");
+      if (String(review.reviewer_id) !== input.actorId)
+        throw new ProfitServiceError(
+          "cost_input_review_assignee_forbidden",
+          403,
+          "由该复核单指定的另一名成本确认人处理。",
+        );
+      if (String(review.submitter_id) === input.actorId)
+        throw new ProfitServiceError(
+          "cost_input_self_review_forbidden",
+          403,
+          "提交人与复核人必须是两个不同的活动用户。",
+        );
+      if (review.status !== "pending" || Number(review.version) !== input.expectedVersion)
+        throw new ProfitServiceError(
+          "cost_input_review_conflict",
+          409,
+          "该成本复核已处理或版本已变化，请刷新后重试。",
+        );
+      let jobStatus = "not_queued";
+      if (input.decision === "approved") {
+        await c.query(
+          "UPDATE opportunity_cost_inputs SET is_current=0 WHERE opportunity_id=? AND platform=? " +
+            "AND input_type=? AND is_current=1",
+          [input.opportunityId, review.platform, review.input_type],
+        );
+        await c.query(
+          "UPDATE opportunity_cost_inputs SET is_current=1,confirmed_by=? WHERE id=? AND opportunity_id=?",
+          [input.actorId, review.cost_input_id, input.opportunityId],
+        );
+        const [rules] = await c.query<RowDataPacket[]>(
+          "SELECT id FROM cost_rules WHERE organization_id=? AND workspace_id=? AND market=? AND " +
+            "platform=? AND status='active' AND effective_from<=? ORDER BY effective_from DESC LIMIT 1",
+          [input.organizationId, input.workspaceId, review.market, review.platform, now],
+        );
+        jobStatus = "waiting_for_active_rule";
+        if (rules[0]) {
+          await this.queueOne(c, input, input.opportunityId, String(rules[0].id), now);
+          jobStatus = "queued";
+        }
+      }
+      await c.query(
+        "UPDATE opportunity_cost_input_reviews SET status=?,decision_reason=?,reviewed_at=?," +
+          "version=version+1,updated_at=? WHERE id=?",
+        [input.decision, input.reason, now, now, input.reviewId],
+      );
+      const version = Number(review.opportunity_version) + 1;
+      await c.query(
+        "UPDATE opportunities SET version=?,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+        [version, now, input.opportunityId, input.organizationId, input.workspaceId],
+      );
+      const result = {
+        review_id: input.reviewId,
+        input_id: String(review.cost_input_id),
+        opportunity_id: input.opportunityId,
+        review_status: input.decision,
         version,
         job_status: jobStatus,
       };
       await this.record(
         c,
         input,
-        "opportunity.cost_input.confirmed",
+        `opportunity.cost_input.${input.decision}`,
         input.opportunityId,
         {
-          input_type: input.value.input_type,
-          input_version: inputVersion,
-          currency: input.value.currency,
+          review_id: input.reviewId,
+          input_id: String(review.cost_input_id),
+          input_type: review.input_type,
+          input_version: Number(review.input_version),
           job_status: jobStatus,
+          reason: input.reason,
         },
         now,
       );
-      await this.save(c, input, input.id, result, now);
+      await this.save(c, input, input.reviewId, result, now);
       await c.commit();
       return result;
     } catch (error) {

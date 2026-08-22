@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="DataRow extends Record<string, any>">
-import { nextTick, shallowRef } from "vue";
+import { computed, nextTick, shallowRef } from "vue";
+import TableViewControls from "./TableViewControls.vue";
 
 const props = defineProps<{
   rows: DataRow[];
@@ -9,19 +10,24 @@ const props = defineProps<{
   emptyMessage?: string;
 }>();
 
-const selected = shallowRef<DataRow | null>(null),
+const selectedKey = shallowRef<string | null>(null),
+  selected = computed(() =>
+    selectedKey.value === null
+      ? null
+      : (props.rows.find((row) => props.rowKey(row) === selectedKey.value) ?? null),
+  ),
   closeButton = shallowRef<HTMLButtonElement | null>(null);
 let trigger: HTMLButtonElement | null = null;
 
 async function show(row: DataRow, event: MouseEvent) {
   trigger = event.currentTarget as HTMLButtonElement;
-  selected.value = row;
+  selectedKey.value = props.rowKey(row);
   await nextTick();
   closeButton.value?.focus();
 }
 
 async function close() {
-  selected.value = null;
+  selectedKey.value = null;
   await nextTick();
   trigger?.focus();
 }
@@ -29,7 +35,9 @@ async function close() {
 
 <template>
   <div class="responsive-data-view">
-    <div class="responsive-data-view__desktop"><slot name="desktop" /></div>
+    <TableViewControls class="responsive-data-view__desktop"
+      ><slot name="desktop"
+    /></TableViewControls>
     <div class="responsive-data-view__mobile" :aria-label="title">
       <p v-if="!rows.length" class="responsive-data-view__empty">
         {{ emptyMessage || "暂无记录" }}

@@ -3,17 +3,20 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 test("responsive data view keeps desktop tables and moves mobile details into a named drawer", async () => {
-  const [view, collection, runtime, tasks, quality, management, notifications] = await Promise.all(
-    [
-      "apps/web/src/components/ResponsiveDataView.vue",
-      "apps/web/src/components/CollectionOperationsConsole.vue",
-      "apps/web/src/components/CollectionRuntimeCenter.vue",
-      "apps/web/src/components/CollectionTaskCenter.vue",
-      "apps/web/src/components/DataQualityCenter.vue",
-      "apps/web/src/components/PlatformManagementRecordList.vue",
-      "apps/web/src/components/PlatformNotificationOperations.vue",
-    ].map((path) => readFile(path, "utf8")),
-  );
+  const [view, collection, runtime, tasks, quality, management, notifications, credentials, logs] =
+    await Promise.all(
+      [
+        "apps/web/src/components/ResponsiveDataView.vue",
+        "apps/web/src/components/CollectionOperationsConsole.vue",
+        "apps/web/src/components/CollectionRuntimeCenter.vue",
+        "apps/web/src/components/CollectionTaskCenter.vue",
+        "apps/web/src/components/DataQualityCenter.vue",
+        "apps/web/src/components/PlatformManagementRecordList.vue",
+        "apps/web/src/components/PlatformNotificationOperations.vue",
+        "apps/web/src/components/CredentialAssetCenter.vue",
+        "apps/web/src/components/PlatformLogCenter.vue",
+      ].map((path) => readFile(path, "utf8")),
+    );
 
   assert.match(view, /aria-haspopup="dialog"/);
   assert.match(view, /role="dialog"/);
@@ -21,6 +24,7 @@ test("responsive data view keeps desktop tables and moves mobile details into a 
   assert.match(view, /@keydown\.esc="close"/);
   assert.match(view, /:close="close"/);
   assert.match(view, /emptyMessage \|\| "暂无记录"/);
+  assert.match(view, /props\.rows\.find[\s\S]*props\.rowKey\(row\)/);
   assert.match(view, /max-width: 760px/);
   assert.match(view, /var\(--so-touch-target\)/);
   assert.doesNotMatch(view, /!important|#[0-9a-f]{3,8}\b/i);
@@ -41,4 +45,12 @@ test("responsive data view keeps desktop tables and moves mobile details into a 
     assert.match(component, /<summary>技术详情<\/summary>/);
     assert.doesNotMatch(component, /min-width:\s*760px/);
   }
+  assert.equal((credentials.match(/<ResponsiveDataView/g) ?? []).length, 1);
+  assert.match(credentials, /title="账号与来源兼容矩阵"/);
+  assert.match(credentials, /<summary>技术详情<\/summary>/);
+  assert.doesNotMatch(credentials, /min-width:\s*680px/);
+  assert.equal((logs.match(/<ResponsiveDataView/g) ?? []).length, 1);
+  assert.match(logs, /:title="`调用链 \$\{shortId\(chain\.traceId\)\}`"/);
+  assert.match(logs, /<summary>技术详情<\/summary>/);
+  assert.doesNotMatch(logs, /platform-log-table-wrap table,[\s\S]*display:\s*grid/);
 });

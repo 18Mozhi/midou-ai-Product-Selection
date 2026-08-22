@@ -200,6 +200,18 @@ test("M04-01.A04/A06/A09 service validates pagination versions and scoped writes
     async listRules() {
       return [];
     },
+    async listChangeRequests(input) {
+      calls.push(["listChangeRequests", input]);
+      return [];
+    },
+    async proposeTopicChange(input) {
+      calls.push(["proposeTopicChange", input]);
+      return { id: input.requestIdValue, status: "pending", version: 1 };
+    },
+    async decideTopicChange(input) {
+      calls.push(["decideTopicChange", input]);
+      return { id: input.changeRequestId, status: `${input.decision}ed`, version: 2 };
+    },
     async setFollow(input) {
       calls.push(["follow", input]);
       return { topic_id: input.topicId, followed: input.followed };
@@ -257,6 +269,42 @@ test("M04-01.A04/A06/A09 service validates pagination versions and scoped writes
   const created = await service.createRule({ ...write, rule: ruleInput });
   assert.equal(created.status, "enabled");
   await service.updateRule({ ...write, ruleId: ids.rule, status: "paused", expectedVersion: 1 });
+  await service.listChangeRequests({ ...scope, status: "pending" });
+  await service.proposeTopicChange({
+    ...write,
+    value: {
+      operation: "split",
+      target_topic_id: ids.topic,
+      source_topic_ids: [],
+      signal_ids: [ids.rule],
+      new_title: "AI 护肤设备",
+      new_category: "beauty",
+      expected_versions: { [ids.topic]: 2 },
+      reason: "证据属于不同商品方向",
+    },
+  });
+  await service.decideTopicChange({
+    ...write,
+    changeRequestId: ids.rule,
+    value: { decision: "confirm", reason: "证据边界已复核", expected_version: 1 },
+  });
+  assert.equal(calls.at(-2)[1].signalIds[0], ids.rule);
+  assert.equal(calls.at(-1)[1].decision, "confirm");
+  assert.throws(
+    () =>
+      service.proposeTopicChange({
+        ...write,
+        value: {
+          operation: "split",
+          target_topic_id: ids.topic,
+          source_topic_ids: [],
+          signal_ids: [ids.rule],
+          expected_versions: { [ids.topic]: 2 },
+          reason: "缺少新主题名",
+        },
+      }),
+    (error) => error instanceof TrendServiceError && error.code === "trend_input_invalid",
+  );
   assert.throws(
     () => service.list({ ...scope, page: 0, pageSize: 20 }),
     /trend_pagination_invalid/,
@@ -344,11 +392,20 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   const paths = [
     "database/migrations/0017a_trends_m04_01.up.sql",
     "database/migrations/0017a_trends_m04_01.down.sql",
+    "database/migrations/0064_governed_workflow_confirmations.up.sql",
     "apps/worker/src/trend-projection-worker.ts",
+    "apps/worker/src/trend-projection-calculation.ts",
+    "apps/worker/src/trend-projection-persistence.ts",
+    "apps/worker/src/trend-projection-alerts.ts",
     "apps/api/src/trend-service.ts",
     "apps/api/src/mysql-trend-repository.ts",
     "apps/api/src/trend-routes.ts",
     "apps/web/src/components/TrendDashboard.vue",
+    "apps/web/src/components/TrendFilterPanel.vue",
+    "apps/web/src/components/TrendDetailPanel.vue",
+    "apps/web/src/components/TrendEvidenceTimeline.vue",
+    "apps/web/src/components/TrendChangeQueue.vue",
+    "apps/web/src/components/trend-workspace-types.ts",
     "config/schema.json",
     "config/env.example",
     "docs/openapi.yaml",
@@ -363,11 +420,20 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     [
       up,
       down,
+      governanceUp,
       worker,
+      calculation,
+      persistence,
+      alerts,
       service,
       repository,
       routes,
       web,
+      filterPanel,
+      detailPanel,
+      evidenceTimeline,
+      changeQueue,
+      webTypes,
       schema,
       env,
       openapi,
@@ -378,28 +444,40 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       live,
       blueprint,
     ] = values;
+  const projectionSurface = `${calculation}\n${persistence}\n${alerts}\n${worker}`;
   assert.match(
     up,
     /trend_topics[\s\S]*trend_projection_jobs[\s\S]*trend_events[\s\S]*trend_outbox[\s\S]*trend:manage/,
   );
+  assert.match(governanceUp, /trend_topic_change_requests[\s\S]*opportunity_cost_input_reviews/);
   assert.match(down, /DROP TABLE IF EXISTS `trend_topics`/);
   assert.match(worker, /succeeded_empty[\s\S]*failed_terminal[\s\S]*dead_letter/);
   assert.match(service, /timeline_sources[\s\S]*insufficient_data/);
   assert.match(repository, /GROUP BY provider_id[\s\S]*timeline_sources/);
   assert.match(repository, /organization_id=\?[\s\S]*workspace_id=\?/);
-  assert.match(routes, /trend:read[\s\S]*trend:manage/);
   assert.match(
-    web,
+    repository,
+    /trend_change_self_confirmation_forbidden[\s\S]*trend_change_opportunity_conflict/,
+  );
+  assert.match(routes, /trend:read[\s\S]*trend:manage/);
+  const webSurface = `${webTypes}\n${web}\n${filterPanel}\n${detailPanel}\n${evidenceTimeline}\n${changeQueue}`;
+  assert.match(
+    webSurface,
     /loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/,
   );
-  assert.match(web, /来源筛选[\s\S]*timeline_sources/);
-  assert.match(web, /相关性回溯/);
+  assert.match(webSurface, /来源筛选[\s\S]*timeline_sources/);
+  assert.match(webSurface, /相关性回溯/);
+  assert.match(webSurface, /合并主题[\s\S]*拆分主题[\s\S]*待确认/);
   assert.match(web, /变更原因/);
   assert.match(web, /下次采集[\s\S]*上次失败来源/);
-  assert.match(web, /个来源[\s\S]*新鲜度[\s\S]*可信度/);
+  assert.match(webSurface, /个来源[\s\S]*新鲜度[\s\S]*可信度/);
   assert.match(schema, /TREND_PROJECTION_POLL_MS/);
   assert.match(env, /TREND_PROJECTION_LEASE_SECONDS/);
   assert.match(openapi, /\/trends\/\{topicId\}\/follow:[\s\S]*timeline_sources/);
+  assert.match(
+    openapi,
+    /\/trends\/change-requests:[\s\S]*\/trends\/change-requests\/\{requestId\}\/decisions:/,
+  );
   assert.match(feature, /trendDomain[\s\S]*timelineFilter/);
   assert.match(architecture, /heat[\s\S]*signals/);
   assert.match(runbook, /宝塔[\s\S]*回滚/);
@@ -407,38 +485,45 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(live, /MySqlTrendProjectionWorker/);
   assert.match(blueprint, /M04-01 实现合同/);
   assert.match(
-    worker,
+    projectionSurface,
     /isAutomaticProductDiscoveryProvider[\s\S]*opportunity\.candidate\.discovered/,
   );
   assert.match(
-    worker,
+    persistence,
     /enqueueMissingAutomaticDownstream[\s\S]*competitor_snapshot[\s\S]*sourcing_search/,
   );
   assert.match(
-    worker,
+    persistence,
     /competitor\.collection\.auto_scheduled[\s\S]*sourcing\.collection\.auto_scheduled/,
   );
-  assert.match(worker, /CONVERT\(o\.id USING utf8mb4\) COLLATE utf8mb4_bin/);
-  assert.match(worker, /CONVERT\(c\.id USING utf8mb4\) COLLATE utf8mb4_bin/);
+  assert.match(persistence, /CONVERT\(o\.id USING utf8mb4\) COLLATE utf8mb4_bin/);
+  assert.match(persistence, /CONVERT\(c\.id USING utf8mb4\) COLLATE utf8mb4_bin/);
   assert.match(
-    worker,
+    persistence,
     /scheduleCoreCollection[\s\S]*UPDATE sourcing_searches SET collection_task_id/,
   );
   assert.match(
-    worker,
+    persistence,
     /page_url: String\(row\.product_url\)[\s\S]*query: buildSupplierSearchQuery\(String\(row\.name\)\)/,
   );
-  assert.match(worker, /page_url: canonicalUrl[\s\S]*query: buildSupplierSearchQuery\(title\)/);
   assert.match(
-    worker,
+    persistence,
+    /page_url: canonicalUrl[\s\S]*query: buildSupplierSearchQuery\(title\)/,
+  );
+  assert.match(
+    persistence,
     /CHAR_LENGTH\(JSON_UNQUOTE\(JSON_EXTRACT\(q\.target_json,'\$\.query'\)\)\) BETWEEN 1 AND 300/,
   );
-  assert.match(worker, /query_contract[\s\S]*supplier-keywords-v2/);
-  assert.match(worker, /input_ref,status[\s\S]*'opportunity'[\s\S]*'queued'/);
+  assert.match(persistence, /query_contract[\s\S]*supplier-keywords-v2/);
+  assert.match(persistence, /input_ref,status[\s\S]*'opportunity'[\s\S]*'queued'/);
   assert.match(
-    worker,
+    alerts,
     /evaluateMonitoringRules[\s\S]*trend\.monitoring_rule\.matched[\s\S]*last_evaluated_at/,
   );
+  assert.match(calculation, /calculateTrendProjection[\s\S]*topicKey/);
+  assert.match(persistence, /class TrendProjectionPersistence[\s\S]*beginTransaction/);
+  assert.match(alerts, /class TrendProjectionAlerts[\s\S]*trend_outbox/);
+  assert.match(worker, /class MySqlTrendProjectionWorker[\s\S]*this\.persistence\.project\(job\)/);
   assert.match(openapi, /商品型自动热点频道[\s\S]*待评估选品/);
   assert.match(feature, /automaticProductDiscovery/);
   assert.match(architecture, /商品型热点频道[\s\S]*待评估选品/);

@@ -49,10 +49,13 @@ async function api<T>(
 async function load() {
   state.value = "loading";
   try {
+    const selectedId = selectedExport.value?.id;
     [report.value, exports.value] = await Promise.all([
       api<any>(`/reports/${type.value}`),
       api<any[]>("/report-exports"),
     ]);
+    if (selectedId)
+      selectedExport.value = exports.value.find((item) => item.id === selectedId) ?? null;
     state.value = report.value.summary.total || report.value.summary.members ? "ready" : "empty";
   } catch (error) {
     rethrowUnexpectedError(error);
@@ -183,11 +186,18 @@ const labels: Record<ReportType, string> = {
     expired: "已过期",
   },
   statusLabel = (value: unknown) => statusLabels[String(value)] ?? "状态待确认",
+  queueEstimate = (item: any) => {
+    if (item.queue_position == null) return "";
+    if (!item.estimated_completion_at)
+      return `队列第 ${item.queue_position} 位 · 暂无历史样本，无法估算完成时间`;
+    return `队列第 ${item.queue_position} 位 · 预计 ${new Date(
+      item.estimated_completion_at,
+    ).toLocaleString("zh-CN", { hour12: false })} 完成`;
+  },
   statusHint = (item: any) => {
     if (isExpired(item)) return "文件已过期，可重新生成";
-    if (item.status === "queued") return "正在等待 Worker 领取";
-    if (item.status === "leased") return "Worker 正在生成文件";
-    if (item.status === "retry_scheduled") return "系统将在退避后自动重试";
+    if (["queued", "leased", "retry_scheduled"].includes(item.status))
+      return queueEstimate(item) || "系统正在异步处理";
     if (item.status === "dead_letter") return "自动重试已结束，可重新生成";
     return item.row_count == null ? "等待生成" : `${item.row_count} 行 · ${item.byte_size} 字节`;
   },
@@ -383,6 +393,32 @@ watch(
           <dt>文件大小</dt>
           <dd>
             {{ selectedExport.byte_size == null ? "等待生成" : `${selectedExport.byte_size} 字节` }}
+          </dd>
+        </div>
+        <div v-if="selectedExport.queue_position != null">
+          <dt>队列位置</dt>
+          <dd>第 {{ selectedExport.queue_position }} 位</dd>
+        </div>
+        <div v-if="selectedExport.queue_position != null">
+          <dt>预计完成</dt>
+          <dd>
+            {{
+              selectedExport.estimated_completion_at
+                ? new Date(selectedExport.estimated_completion_at).toLocaleString("zh-CN", {
+                    hour12: false,
+                  })
+                : "暂无历史样本，暂无法估算"
+            }}
+          </dd>
+        </div>
+        <div v-if="selectedExport.queue_position != null">
+          <dt>估算依据</dt>
+          <dd>
+            {{
+              selectedExport.estimate_sample_size
+                ? `全局最近 ${selectedExport.estimate_sample_size} 次成功导出的中位完成耗时`
+                : "尚无成功导出样本"
+            }}
           </dd>
         </div>
         <div>

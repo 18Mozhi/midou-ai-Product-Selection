@@ -25,7 +25,7 @@ const task = {
   created_at: "2026-08-08T09:00:00.000Z",
   updated_at: "2026-08-08T10:00:00.000Z",
 };
-async function setup(page: Page) {
+async function setup(page: Page, pausedDetail = false) {
   let themePreference = {
     theme: "deep-ocean",
     source: "saved",
@@ -127,10 +127,14 @@ async function setup(page: Page) {
       }),
     }),
   );
+  await page.route("**/api/v1/tasks/member-options", (r) =>
+    r.fulfill({ json: env([{ id: actor, label: "测试成员" }]) }),
+  );
   await page.route(`**/api/v1/tasks/${taskId}`, (r) =>
     r.fulfill({
       json: env({
         ...task,
+        status: pausedDetail ? "paused" : task.status,
         comments: [
           {
             id: "00000000-0000-4000-8000-000000000806",
@@ -139,7 +143,17 @@ async function setup(page: Page) {
             created_at: "2026-08-08T10:05:00.000Z",
           },
         ],
-        events: [],
+        events: pausedDetail
+          ? [
+              {
+                id: "00000000-0000-4000-8000-000000000808",
+                event_type: "task.pause",
+                actor_id: actor,
+                payload: { reason: "等待供应商补充交期证明" },
+                created_at: "2026-08-08T10:08:00.000Z",
+              },
+            ]
+          : [],
       }),
     }),
   );
@@ -167,7 +181,7 @@ async function setup(page: Page) {
 test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on desktop and 390", async ({
   page,
 }) => {
-  await setup(page);
+  await setup(page, true);
   await page.goto("/work");
   await expect(page.getByRole("heading", { name: "今日工作", level: 2 })).toBeVisible();
   await expect(page.getByText("24 小时内到期")).toBeVisible();
@@ -178,7 +192,26 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
   await expect(page.getByRole("heading", { name: "任务活动" })).toBeVisible();
   await expect(page.getByText("报价证据已核验，等待确认交期。")).toBeVisible();
   await expect(page.getByText("下一步：在期限前完成当前阶段")).toBeVisible();
+  const blockingContext = page.getByLabel("阻塞与下一负责人");
+  await expect(blockingContext.getByText("等待供应商补充交期证明")).toBeVisible();
+  await expect(blockingContext.getByText("测试成员", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "转交" })).toBeVisible();
+});
+
+test("task center previews batch transfer and delay with scoped inputs", async ({ page }) => {
+  await setup(page);
+  await page.goto("/tasks");
+  await page.getByRole("checkbox", { name: /核验便携净水杯供应商报价/ }).check();
+  await page.getByRole("checkbox", { name: /补齐竞品价格证据/ }).check();
+  await page.getByRole("button", { name: "批量调整负责人" }).click();
+  const transfer = page.getByRole("dialog", { name: "确认批量任务操作" });
+  await expect(transfer.getByText("确认批量调整负责人")).toBeVisible();
+  await expect(transfer.getByLabel("新负责人")).toHaveValue("");
+  await transfer.getByRole("button", { name: "返回" }).click();
+  await page.getByRole("button", { name: "批量延期" }).click();
+  const delay = page.getByRole("dialog", { name: "确认批量任务操作" });
+  await expect(delay.getByText("确认批量延期")).toBeVisible();
+  await expect(delay.getByLabel("新截止时间")).toBeVisible();
 });
 
 test("M05-01 quick create route opens the task form", async ({ page }) => {

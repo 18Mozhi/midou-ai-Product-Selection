@@ -24,6 +24,12 @@ interface RuntimeNode {
   version?: string;
   last_heartbeat_at: string;
 }
+interface RuntimeBusinessObjectAssociation {
+  type: string;
+  id: string;
+  label: string;
+  href: string | null;
+}
 interface TopologyData {
   state: "ready" | "empty" | "blocked" | "stale";
   mode: "single_host";
@@ -40,6 +46,38 @@ interface TopologyData {
     circuit_open_until: string | null;
     last_failure: string | null;
   }>;
+  restart_trend: Array<{
+    process_name: string;
+    status: string;
+    restart_count: number;
+    restart_delta: number;
+    counter_reset: boolean;
+    observed_at: string;
+  }>;
+  health_probes: {
+    status: "ready" | "empty" | "unavailable";
+    interval_ms: number;
+    timeout_ms: number;
+    window_minutes: number;
+    retention_hours: number;
+    endpoints: Array<{
+      endpoint: "live" | "ready" | "available";
+      sample_count: number;
+      success_count: number;
+      http_error_count: number;
+      timeout_count: number;
+      network_error_count: number;
+      availability_basis_points: number;
+      latency_p50_ms: number | null;
+      latency_p95_ms: number | null;
+      latency_p99_ms: number | null;
+      latency_max_ms: number | null;
+      last_status_code: number | null;
+      last_outcome: "succeeded" | "http_error" | "timeout" | "network_error" | null;
+      last_observed_at: string | null;
+    }>;
+    observed_at: string;
+  } | null;
   worker_scheduler?: {
     status: "running" | "stopping" | "stopped";
     max_concurrency: number;
@@ -57,6 +95,8 @@ interface TopologyData {
       name: string;
       priority: number;
       effective_priority: number;
+      aging_interval_ms: number;
+      maximum_aging_boost: number;
       max_concurrency: number;
       timeout_ms: number;
       max_retries: number;
@@ -77,7 +117,15 @@ interface TopologyData {
   } | null;
   supervisor_pid: number | null;
   blockers: Array<{ code: string; actionHint: string }>;
-  alerts?: Array<{ code: string; severity: "warning" | "critical"; actionHint: string }>;
+  alerts?: Array<{
+    code: string;
+    severity: "warning" | "critical";
+    actionHint: string;
+    root_cause_code: string | null;
+    queues: string[];
+    business_objects: RuntimeBusinessObjectAssociation[];
+    occurred_at: string | null;
+  }>;
   load_balancing_enabled: false;
   backup_server_used: false;
   multi_node_claim: false;
@@ -123,6 +171,7 @@ const alertLabels: Record<string, string> = {
   worker_scheduler_queue_circuit_open: "队列连续失败已熔断",
   worker_scheduler_snapshot_publish_failed: "调度状态写入失败",
   backend_restart_loop: "后端连续重启",
+  worker_business_result_failed: "业务处理返回失败",
 };
 const queueLabels: Record<string, string> = {
   collection_tasks: "采集任务",
@@ -144,18 +193,75 @@ const queueLabels: Record<string, string> = {
   automatic_rule_sources: "规则采集",
   automatic_full_sources: "全量采集",
 };
+const healthEndpointLabels = {
+  live: "进程存活",
+  ready: "同步依赖就绪",
+  available: "业务可处理",
+} as const;
+const healthOutcomeLabels = {
+  succeeded: "正常",
+  http_error: "接口异常",
+  timeout: "探测超时",
+  network_error: "连接失败",
+} as const;
+const queueRows = computed(() =>
+  (data.value?.worker_scheduler?.queues ?? []).map((queue) => {
+    const agingBoost = Math.max(0, queue.effective_priority - queue.priority);
+    const maximumAgingBoost = Math.max(0, queue.maximum_aging_boost ?? 0);
+    return {
+      ...queue,
+      aging_boost: agingBoost,
+      starvation_risk:
+        !queue.running &&
+        queue.queue_delay_ms > 0 &&
+        maximumAgingBoost > 0 &&
+        agingBoost >= maximumAgingBoost,
+    };
+  }),
+);
+const agedQueueCount = computed(
+  () => queueRows.value.filter((queue) => queue.aging_boost > 0).length,
+);
+const starvationRiskCount = computed(
+  () => queueRows.value.filter((queue) => queue.starvation_risk).length,
+);
 const visibleQueues = computed(() => {
-  const queues = data.value?.worker_scheduler?.queues ?? [];
+  const queues = queueRows.value;
   const exceptional = queues.filter(
     (queue) =>
       queue.running ||
       queue.queue_delay_ms > 0 ||
       queue.failed_total > 0 ||
       queue.suspected_stuck ||
-      queue.circuit_state === "open",
+      queue.circuit_state === "open" ||
+      queue.starvation_risk,
   );
-  return (exceptional.length ? exceptional : queues).slice(0, 6);
+  return (exceptional.length ? exceptional : queues).slice(0, 18);
 });
+const restartSeries = computed(() => {
+  const samples = data.value?.restart_trend ?? [];
+  return ["api", "worker"]
+    .map((name) => {
+      const rows = samples.filter((sample) => sample.process_name === name);
+      return {
+        name,
+        rows,
+        restart_delta: rows.reduce((total, sample) => total + sample.restart_delta, 0),
+        counter_resets: rows.filter((sample) => sample.counter_reset).length,
+      };
+    })
+    .filter((series) => series.rows.length);
+});
+const restartPoints = (rows: TopologyData["restart_trend"]) => {
+  const maximum = Math.max(1, ...rows.map((sample) => sample.restart_count));
+  return rows
+    .map((sample, index) => {
+      const x = rows.length === 1 ? 0 : (index / (rows.length - 1)) * 240;
+      const y = 56 - (sample.restart_count / maximum) * 48;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+};
 const time = (value?: string) =>
   value ? new Date(value).toLocaleString("zh-CN", { hour12: false }) : "尚无记录";
 
@@ -328,12 +434,107 @@ onMounted(load);
                 <code>{{ process.last_failure }}</code>
               </details>
             </article>
+            <div v-if="restartSeries.length" class="topology-restart-trends">
+              <article v-for="series in restartSeries" :key="series.name">
+                <header>
+                  <span
+                    ><b>{{ series.name === "api" ? "Node API" : "Node Worker" }}</b
+                    ><small>最近 24 小时 · 五分钟观测桶</small></span
+                  >
+                  <strong>新增重启 {{ series.restart_delta }}</strong>
+                </header>
+                <svg
+                  viewBox="0 0 240 64"
+                  role="img"
+                  :aria-label="`${series.name} 最近 24 小时累计重启趋势`"
+                  preserveAspectRatio="none"
+                >
+                  <line x1="0" y1="56" x2="240" y2="56" />
+                  <polyline :points="restartPoints(series.rows)" />
+                </svg>
+                <footer>
+                  <span>{{ series.rows.length }} 个真实观测</span>
+                  <span v-if="series.counter_resets"
+                    >计数器重置 {{ series.counter_resets }} 次</span
+                  >
+                  <span v-else>未发现计数器重置</span>
+                  <span>最新 {{ time(series.rows.at(-1)?.observed_at) }}</span>
+                </footer>
+              </article>
+            </div>
+          </section>
+          <section v-if="data.health_probes" class="topology-health-probes">
+            <header>
+              <div>
+                <p>连续探测</p>
+                <h3>健康接口耗时分位数</h3>
+              </div>
+              <span :data-node-state="data.health_probes.status">
+                {{
+                  data.health_probes.status === "ready"
+                    ? "持续观测中"
+                    : data.health_probes.status === "empty"
+                      ? "等待首轮样本"
+                      : "观测不可用"
+                }}
+              </span>
+            </header>
+            <div v-if="data.health_probes.endpoints.length" class="topology-health-grid">
+              <article
+                v-for="endpoint in data.health_probes.endpoints"
+                :key="endpoint.endpoint"
+                :data-probe-outcome="endpoint.last_outcome || 'empty'"
+              >
+                <header>
+                  <span
+                    ><b>{{ healthEndpointLabels[endpoint.endpoint] }}</b
+                    ><small>/health/{{ endpoint.endpoint }}</small></span
+                  >
+                  <strong>{{
+                    endpoint.last_outcome ? healthOutcomeLabels[endpoint.last_outcome] : "尚无样本"
+                  }}</strong>
+                </header>
+                <dl>
+                  <div>
+                    <dt>P50</dt>
+                    <dd>{{ endpoint.latency_p50_ms ?? "—" }} ms</dd>
+                  </div>
+                  <div>
+                    <dt>P95</dt>
+                    <dd>{{ endpoint.latency_p95_ms ?? "—" }} ms</dd>
+                  </div>
+                  <div>
+                    <dt>P99</dt>
+                    <dd>{{ endpoint.latency_p99_ms ?? "—" }} ms</dd>
+                  </div>
+                  <div>
+                    <dt>超时</dt>
+                    <dd>{{ endpoint.timeout_count }}</dd>
+                  </div>
+                </dl>
+                <footer>
+                  <span>可用率 {{ (endpoint.availability_basis_points / 100).toFixed(2) }}%</span>
+                  <span>{{ endpoint.sample_count }} 个样本</span>
+                  <span>最近 HTTP {{ endpoint.last_status_code ?? "—" }}</span>
+                </footer>
+              </article>
+            </div>
+            <div v-else class="topology-empty">
+              <b>连续探测样本暂不可用</b>
+              <span>运行拓扑仍保留心跳事实；检查迁移和 Node API 日志后重试。</span>
+            </div>
+            <small>
+              最近 {{ data.health_probes.window_minutes }} 分钟 · 每
+              {{ Math.round(data.health_probes.interval_ms / 1000) }} 秒 · 超时门
+              {{ data.health_probes.timeout_ms }} ms · 样本保留
+              {{ data.health_probes.retention_hours }} 小时
+            </small>
           </section>
           <section v-if="data.worker_scheduler" class="topology-scheduler">
             <header>
               <div>
                 <p>统一调度</p>
-                <h3>队列优先级与背压</h3>
+                <h3>队列老化与实际调度延迟</h3>
               </div>
               <span :data-node-state="data.worker_scheduler.status">{{
                 data.worker_scheduler.status === "running" ? "运行中" : "未运行"
@@ -363,16 +564,29 @@ onMounted(load);
                 <dt>疑似卡死</dt>
                 <dd>{{ data.worker_scheduler.suspected_stuck_runs }}</dd>
               </div>
+              <div>
+                <dt>已老化队列</dt>
+                <dd>{{ agedQueueCount }}</dd>
+              </div>
+              <div>
+                <dt>饥饿风险</dt>
+                <dd>{{ starvationRiskCount }}</dd>
+              </div>
             </dl>
             <div class="topology-queue-list">
               <article
                 v-for="queue in visibleQueues"
                 :key="queue.name"
-                :data-queue-alert="queue.suspected_stuck || queue.circuit_state === 'open'"
+                :data-queue-alert="
+                  queue.suspected_stuck || queue.circuit_state === 'open' || queue.starvation_risk
+                "
               >
                 <span
                   ><b>{{ queueLabels[queue.name] ?? "后台任务" }}</b
-                  ><small>优先级 {{ queue.priority }} → {{ queue.effective_priority }}</small></span
+                  ><small
+                    >基础优先级 {{ queue.priority }} · 有效优先级
+                    {{ queue.effective_priority }}</small
+                  ></span
                 >
                 <span
                   ><b>{{
@@ -387,7 +601,19 @@ onMounted(load);
                             : "空闲"
                   }}</b
                   ><small v-if="queue.running">运行 {{ queue.longest_running_ms }} ms</small
-                  ><small v-else>延迟 {{ queue.queue_delay_ms }} ms</small></span
+                  ><small v-else>实际调度延迟 {{ queue.queue_delay_ms }} ms</small></span
+                >
+                <span class="topology-queue-aging" :data-risk="queue.starvation_risk"
+                  ><b>{{
+                    queue.starvation_risk
+                      ? "饥饿风险"
+                      : queue.aging_boost > 0
+                        ? "老化保护中"
+                        : "尚未老化"
+                  }}</b
+                  ><small v-if="queue.aging_boost > 0"
+                    >优先级已提升 {{ queue.aging_boost }} / {{ queue.maximum_aging_boost }}</small
+                  ><small v-else>每 {{ queue.aging_interval_ms || "—" }} ms 检查一次</small></span
                 >
                 <details>
                   <summary>调度策略</summary>
@@ -453,12 +679,34 @@ onMounted(load);
           </div>
           <span>{{ data.alerts.length }} 项</span>
         </header>
-        <article v-for="item in data.alerts" :key="item.code" :data-severity="item.severity">
+        <article
+          v-for="item in data.alerts"
+          :key="`${item.code}:${item.queues.join(',')}:${item.root_cause_code || ''}`"
+          :data-severity="item.severity"
+        >
           <strong>{{ alertLabels[item.code] ?? "运行状态异常" }}</strong>
           <p>{{ item.actionHint }}</p>
+          <div v-if="item.queues.length" class="topology-alert-associations">
+            <span>关联队列</span>
+            <b v-for="queue in item.queues" :key="queue">{{ queueLabels[queue] ?? "后台任务" }}</b>
+          </div>
+          <div v-if="item.business_objects.length" class="topology-alert-associations">
+            <span>关联业务对象</span>
+            <template v-for="object in item.business_objects" :key="`${object.type}:${object.id}`">
+              <RouterLink v-if="object.href" :to="object.href"
+                >{{ object.label }} · {{ short(object.id) }}</RouterLink
+              >
+              <b v-else>{{ object.label }} · {{ short(object.id) }}</b>
+            </template>
+          </div>
+          <small v-if="item.occurred_at">发生于 {{ time(item.occurred_at) }}</small>
           <details>
             <summary>技术详情</summary>
             <code>{{ item.code }}</code>
+            <code v-if="item.root_cause_code">root_cause {{ item.root_cause_code }}</code>
+            <code v-for="object in item.business_objects" :key="object.id">
+              {{ object.type }} {{ object.id }}
+            </code>
           </details>
         </article>
       </section>

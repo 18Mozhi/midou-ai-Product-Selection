@@ -213,12 +213,16 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
     "database/migrations/0016g_provider_sources_m03_07.down.sql",
     "database/migrations/0036_automatic_hotspot_sources.up.sql",
     "database/migrations/0036_automatic_hotspot_sources.down.sql",
+    "database/migrations/0064_governed_workflow_confirmations.up.sql",
     "apps/worker/src/provider-source-executor.ts",
     "apps/worker/src/automatic-source-scheduler.ts",
     "apps/api/src/provider-source-service.ts",
     "apps/api/src/provider-source-routes.ts",
+    "apps/api/src/mysql-provider-source-sample-review-repository.ts",
     "apps/web/src/components/ProviderSourceCenter.vue",
     "apps/web/src/components/provider-source-types.ts",
+    "apps/web/src/components/ProviderParserSampleDialog.vue",
+    "apps/web/src/components/ProviderParserSampleReview.vue",
     "packages/provider-sources/src/proxy-fetch.ts",
     "config/env.example",
     "config/schema.json",
@@ -237,12 +241,16 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
       down,
       automaticUp,
       automaticDown,
+      governanceUp,
       executor,
       scheduler,
       service,
       routes,
+      sampleReviewRepository,
       web,
       webTypes,
+      sampleDialog,
+      sampleReview,
       proxy,
       env,
       schema,
@@ -254,26 +262,51 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
       live,
       automaticLive,
       blueprint,
-    ] = values;
+    ] = values,
+    configurationDialog = await readFile(
+      "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+      "utf8",
+    ),
+    webSurface = `${web}\n${configurationDialog}`;
   assert.match(up, /provider_source_replay_runs/);
   assert.match(down, /DROP TABLE IF EXISTS `provider_source_replay_runs`/);
   assert.match(automaticUp, /automatic_source_schedules[\s\S]*provider_refresh_operations/);
   assert.match(automaticDown, /DROP TABLE IF EXISTS `automatic_source_schedules`/);
+  assert.match(governanceUp, /review_status[\s\S]*review_version/);
   assert.match(executor, /MySqlEvidencePersistence/);
   assert.match(scheduler, /batchSize\s*=\s*16/);
   assert.match(scheduler, /provider_offset/);
   assert.match(service, /syncCatalog[\s\S]*refresh/);
   assert.match(routes, /collection:replay[\s\S]*trend:read/);
+  assert.match(routes, /parser-samples\/:sampleId\/reviews/);
+  assert.match(
+    sampleReviewRepository,
+    /parser_sample_self_review_forbidden[\s\S]*provider\.parser_sample/,
+  );
   assert.match(
     `${webTypes}\n${web}`,
     /loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/,
   );
+  assert.match(web, /市场热点与消费者信号[\s\S]*商品与竞品观察[\s\S]*供应链找货/);
+  assert.match(web, /groupedSources[\s\S]*按业务用途分组的热点来源/);
+  assert.match(webSurface, /烟测并启用/);
+  assert.match(webSurface, /真实页面烟测/);
+  assert.match(webSurface, /解析兼容矩阵/);
+  assert.match(webSurface, /ProviderCompatibilityMatrixDialog/);
+  for (const text of ["审批通过", "驳回样本", "创建人不能审批自己的样本"])
+    assert.match(`${web}\n${webTypes}\n${sampleDialog}\n${sampleReview}`, new RegExp(text));
+  assert.match(webSurface, /configurationPreview[\s\S]*调度同频与当前并发占用/);
+  assert.doesNotMatch(webSurface, /解析合同验收前|完成解析验收后/);
   assert.match(proxy, /news\.google\.com/);
   assert.match(proxy, /Proxy-Authorization/);
   assert.match(env, /AUTOMATIC_SOURCE_SCHEDULER_POLL_MS/);
   assert.match(schema, /automaticSources/);
   assert.match(openapi, /\/provider-sources\/refresh:/);
+  assert.match(openapi, /provider_source_smoke_test_required/);
+  assert.match(openapi, /parser-samples\/\{sampleId\}\/reviews/);
   assert.match(feature, /100\+ code-owned hotspot/);
+  assert.match(feature, /publicEnablementSmokeGate/);
+  assert.match(feature, /configurationSchedulingPreview/);
   assert.match(architecture, /100 个以上[\s\S]*自动采集/);
   assert.match(runbook, /宝塔.*统一后端“ai选品”/s);
   assert.doesNotMatch(runbook, /`product-scout-api` Node 项目|`product-scout-worker` Node 项目/);
@@ -313,11 +346,90 @@ test("provider source package keeps catalog parsers and adapters in separate mod
   assert.ok(facade.split(/\r?\n/).length < 20);
 });
 
+test("API provider source repository separates catalog samples reviews and configuration versions", async () => {
+  const [facade, catalog, samples, sampleReviews, versions, shared] = await Promise.all(
+    [
+      "apps/api/src/mysql-provider-source-repository.ts",
+      "apps/api/src/mysql-provider-source-catalog-repository.ts",
+      "apps/api/src/mysql-provider-source-sample-repository.ts",
+      "apps/api/src/mysql-provider-source-sample-review-repository.ts",
+      "apps/api/src/mysql-provider-source-version-repository.ts",
+      "apps/api/src/mysql-provider-source-repository-shared.ts",
+    ].map((file) => readFile(file, "utf8")),
+  );
+  assert.match(facade, /MySqlProviderSourceCatalogRepository/);
+  assert.match(facade, /MySqlProviderSourceSampleRepository/);
+  assert.match(facade, /MySqlProviderSourceSampleReviewRepository/);
+  assert.match(facade, /MySqlProviderSourceVersionRepository/);
+  assert.match(facade, /implements ProviderSourceRepository/);
+  assert.match(catalog, /syncCatalog[\s\S]*provision/);
+  assert.doesNotMatch(catalog, /provider_parser_samples|configuration_rolled_back/);
+  assert.match(samples, /provider_parser_samples[\s\S]*recordParserReplay/);
+  assert.doesNotMatch(samples, /configuration_rolled_back/);
+  assert.match(
+    sampleReviews,
+    /parser_sample_self_review_forbidden[\s\S]*review_version=review_version\+1/,
+  );
+  assert.match(versions, /configurationVersions[\s\S]*configuration_rolled_back/);
+  assert.match(shared, /providerSourceByOperation/);
+  assert.ok(facade.split(/\r?\n/).length < 500);
+  assert.ok(catalog.split(/\r?\n/).length < 320);
+  assert.ok(samples.split(/\r?\n/).length < 700);
+  assert.ok(sampleReviews.split(/\r?\n/).length < 180);
+  assert.ok(versions.split(/\r?\n/).length < 520);
+});
+
 test("1688 acceptance reports login captcha and parser evidence without exposing credentials", async () => {
   const { MySqlProviderSourceRepository } =
       await import("../../apps/api/dist/mysql-provider-source-repository.js"),
     now = new Date("2026-08-21T08:00:00.000Z"),
     queries = [];
+  const offer = {
+      offer_id: "1234567890",
+      title: "折叠桌面灯",
+      supplier_id: "supplier-100",
+      supplier_name: "示例供应商",
+      quoted_price: 12.5,
+      currency: "CNY",
+      moq: 100,
+      location: "广东 惠州",
+      canonical_url: "https://detail.1688.com/offer/1234567890.html",
+      dom_fragment: '<article data-offer-id="1234567890">折叠桌面灯</article>',
+      source_paths: {
+        title: "article h2",
+        supplier_name: "article .company-name",
+        quoted_price: "article .price",
+        moq: "article .moq",
+        location: "article .location",
+        canonical_url: "article a.offer-link[href]",
+      },
+    },
+    snapshots = {
+      search: {
+        schema_version: "1688.search.v1",
+        source_url: "https://s.1688.com/selloffer/offer_search.htm?keywords=lamp",
+        observed_at: "2026-08-21T07:10:00.000Z",
+        items: [offer],
+      },
+      offer_details: [
+        {
+          schema_version: "1688.offer-detail.v1",
+          source_url: offer.canonical_url,
+          observed_at: "2026-08-21T07:11:00.000Z",
+          offer: {
+            ...offer,
+            specification: "白色 / USB-C",
+            lead_time_days: 7,
+            source_paths: {
+              ...offer.source_paths,
+              supplier_id: "#company[data-id]",
+              specification: "#specifications",
+              lead_time_days: "#delivery-time",
+            },
+          },
+        },
+      ],
+    };
   const pool = {
     query: async (sql) => {
       queries.push(sql);
@@ -328,7 +440,7 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
               id: "00000000-0000-4000-8000-000000001688",
               status: "disabled",
               owner_label: "平台来源中心",
-              parser_version: "1688-browser-snapshot-v1",
+              parser_version: "1688-browser-contract-v1",
             },
           ],
         ];
@@ -350,8 +462,20 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
           [
             {
               last_replay_status: "passed",
+              review_status: "approved",
               last_replay_at: new Date("2026-08-21T07:20:00.000Z"),
-              baseline_parser_version: "1688-browser-snapshot-v1",
+              baseline_parser_version: "1688-browser-contract-v1",
+            },
+          ],
+        ];
+      if (sql.includes("FROM browser_collection_jobs j LEFT JOIN crawler_browser_runs"))
+        return [
+          [
+            {
+              execution_request_json: JSON.stringify({ plan: { max_pages: 1 } }),
+              result_json: JSON.stringify({ snapshots }),
+              finished_at: new Date("2026-08-21T07:12:00.000Z"),
+              page_count: 1,
             },
           ],
         ];
@@ -365,6 +489,15 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
     ["passed", "passed", "passed"],
   );
   assert.equal(result.owner_label, "平台来源中心");
+  assert.deepEqual(
+    result.coverage_matrix.rows.map((row) => [row.key, row.state, row.observed_count]),
+    [
+      ["search", "covered", 1],
+      ["detail", "covered", 1],
+      ["pagination", "not_exercised", 1],
+    ],
+  );
+  assert.equal(result.coverage_matrix.parser_version, "1688-browser-contract-v1");
   assert.deepEqual(result.pending_reasons, []);
   assert.doesNotMatch(JSON.stringify(result), /cookie|credential_asset_id|lease_token|payload/i);
   assert.match(

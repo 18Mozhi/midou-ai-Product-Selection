@@ -361,13 +361,25 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
             "t.market FROM collection_task_evidence_links l JOIN raw_evidence e ON e.id=l.raw_evidence_id " +
             "JOIN normalized_records n ON n.id=l.normalized_record_id LEFT JOIN trend_signals s ON " +
             "s.normalized_record_id=n.id LEFT JOIN trend_topics t ON t.id=s.topic_id WHERE l.collection_task_id=? " +
-            "AND l.organization_id=? AND l.workspace_id=? ORDER BY l.created_at,e.captured_at," +
+            "AND l.organization_id=? AND l.workspace_id=? AND l.raw_evidence_id=? ORDER BY l.created_at,e.captured_at," +
             "s.observed_at LIMIT 1",
-          [journey.task_id, i.organizationId, i.workspaceId],
+          [journey.task_id, i.organizationId, i.workspaceId, i.selectedRawEvidenceId],
         ),
         signal = signals[0];
+      if (i.action === "adopt" && !signal)
+        throw new SelectionJourneyError(
+          "selection_candidate_not_found",
+          409,
+          "所选候选不属于当前旅程，请刷新候选结果后重试。",
+        );
+      if (i.action === "adopt" && signal && !signal.topic_id)
+        throw new SelectionJourneyError(
+          "selection_candidate_topic_pending",
+          409,
+          "所选候选尚未形成可用主题，请选择其他候选或继续观察。",
+        );
       let opportunityId: string | null = null;
-      if (hasResult && signal?.topic_id) {
+      if (i.action === "adopt" && signal?.topic_id) {
         const [existing] = await c.query<RowDataPacket[]>(
           "SELECT id,decision_status,version FROM opportunities WHERE organization_id=? AND workspace_id=? " +
             "AND source_type='trend_topic' AND source_ref_id=? LIMIT 1 FOR UPDATE",
@@ -424,8 +436,15 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
             "created_at) SELECT UUID(),s.organization_id,s.workspace_id,?,'trend_signal'," +
             "s.id,s.provider_id,s.raw_evidence_id,s.observed_at,? FROM collection_task_evidence_links " +
             "l JOIN normalized_records n ON n.id=l.normalized_record_id JOIN trend_signals s ON s.normalized_record_id=n.id " +
-            "WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=?",
-          [opportunityId, i.now, journey.task_id, i.organizationId, i.workspaceId],
+            "WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=? AND l.raw_evidence_id=?",
+          [
+            opportunityId,
+            i.now,
+            journey.task_id,
+            i.organizationId,
+            i.workspaceId,
+            i.selectedRawEvidenceId,
+          ],
         );
         await c.query(
           "INSERT INTO opportunity_decisions (id,organization_id,workspace_id,opportunity_id," +
@@ -468,7 +487,11 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
             i.actorId,
             i.requestId,
             i.traceId,
-            JSON.stringify({ action: i.action, selection_journey_id: i.journeyId }),
+            JSON.stringify({
+              action: i.action,
+              selection_journey_id: i.journeyId,
+              selected_raw_evidence_id: i.selectedRawEvidenceId,
+            }),
             i.now,
           ],
         );
@@ -476,14 +499,15 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
       const decisionId = randomUUID();
       await c.query(
         "INSERT INTO selection_journey_decisions (id,journey_id,organization_id,workspace_id," +
-          "opportunity_id,action,reason,actor_id,request_id,trace_id,created_at) VALUES (?," +
-          "?,?,?,?,?,?,?,?,?,?)",
+          "opportunity_id,selected_raw_evidence_id,action,reason,actor_id,request_id,trace_id,created_at) VALUES (?," +
+          "?,?,?,?,?,?,?,?,?,?,?)",
         [
           decisionId,
           i.journeyId,
           i.organizationId,
           i.workspaceId,
           opportunityId,
+          i.selectedRawEvidenceId,
           i.action,
           i.reason,
           i.actorId,
@@ -545,7 +569,12 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         c,
         { ...i, journeyId: i.journeyId },
         "selection.journey.decided",
-        { action: i.action, opportunity_id: opportunityId, has_result: hasResult },
+        {
+          action: i.action,
+          opportunity_id: opportunityId,
+          has_result: hasResult,
+          selected_raw_evidence_id: i.selectedRawEvidenceId,
+        },
         i.now,
       );
       await c.query(
@@ -587,11 +616,11 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           "AND l.workspace_id=j.workspace_id JOIN raw_evidence e ON e.id=l.raw_evidence_id JOIN " +
           "normalized_records n ON n.id=l.normalized_record_id LEFT JOIN trend_signals s ON s.normalized_record_id=n.id " +
           "WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? ORDER BY l.created_at," +
-          "e.captured_at LIMIT 1",
+          "e.captured_at,e.id LIMIT 20",
         [id, organizationId, workspaceId],
       ),
       db.query<RowDataPacket[]>(
-        "SELECT action,reason,actor_id,created_at FROM selection_journey_decisions WHERE journey_id=? " +
+        "SELECT action,reason,selected_raw_evidence_id,actor_id,created_at FROM selection_journey_decisions WHERE journey_id=? " +
           "AND organization_id=? AND workspace_id=? LIMIT 1",
         [id, organizationId, workspaceId],
       ),
@@ -609,15 +638,24 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
     ]);
     const row = journeys[0][0];
     if (!row) return null;
-    const evidence = results[0][0],
+    const candidates = results[0].map((evidence) => {
+        const payload = json(evidence.payload_json) ?? {};
+        return {
+          raw_evidence_id: String(evidence.raw_evidence_id),
+          title: evidence.title ?? payload.title ?? null,
+          publisher: evidence.publisher ?? payload.publisher ?? null,
+          canonical_url: String(evidence.signal_url ?? evidence.canonical_url),
+          observed_at: iso(evidence.observed_at ?? evidence.captured_at)!,
+          topic_id: evidence.topic_id == null ? null : String(evidence.topic_id),
+        };
+      }),
       decision = decisions[0][0],
-      payload = evidence ? (json(evidence.payload_json) ?? {}) : {},
       derived = state(
         { status: row.task_status, journey_state: row.state },
-        Boolean(evidence),
+        candidates.length > 0,
         Boolean(decision),
       ),
-      terminalAt = row.finished_at ?? evidence?.captured_at ?? null,
+      terminalAt = row.finished_at ?? results[0][0]?.captured_at ?? null,
       end = decision?.created_at ?? terminalAt ?? now,
       elapsed = Math.max(0, new Date(end).getTime() - new Date(row.created_at).getTime());
     const taskEvents = events[0],
@@ -656,16 +694,8 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
       state: derived,
       coverage_status: row.coverage_status ?? null,
       available_result_count: Number(row.available_result_count),
-      first_result: evidence
-        ? {
-            raw_evidence_id: String(evidence.raw_evidence_id),
-            title: evidence.title ?? payload.title ?? null,
-            publisher: evidence.publisher ?? payload.publisher ?? null,
-            canonical_url: String(evidence.signal_url ?? evidence.canonical_url),
-            observed_at: iso(evidence.observed_at ?? evidence.captured_at)!,
-            topic_id: evidence.topic_id == null ? null : String(evidence.topic_id),
-          }
-        : null,
+      results: candidates,
+      first_result: candidates[0] ?? null,
       blocked_reason: blockedReason,
       blocked_owner: blockedReason ? String(row.owner_label) : null,
       blocked_next_step: nextStep,
@@ -711,6 +741,10 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         ? {
             action: decision.action,
             reason: String(decision.reason),
+            selected_raw_evidence_id:
+              decision.selected_raw_evidence_id == null
+                ? null
+                : String(decision.selected_raw_evidence_id),
             actor_id: String(decision.actor_id),
             created_at: iso(decision.created_at)!,
           }

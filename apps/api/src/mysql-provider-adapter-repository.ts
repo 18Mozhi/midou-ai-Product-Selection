@@ -2,13 +2,15 @@ import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type {
   AdapterRuntimeHealthWindow,
+  AdapterRuntimeCircuit,
   ProviderAdapterRepository,
   StoredAdapterHealth,
 } from "./provider-adapter-service.js";
+import type { ProviderPageCompatibilityObservation } from "@scoutops/contracts";
 import { ProviderAdapterServiceError, toRuntimeProvider } from "./provider-adapter-service.js";
 
 const providerColumns =
-  "id,code,name,access_mode,target_url,parser_version,timeout_ms,fields_json,status";
+  "id,code,name,access_mode,target_url,parser_version,timeout_ms,fields_json,status,circuit_failure_threshold";
 const unknown = (providerId: string): StoredAdapterHealth => ({
   providerId,
   adapterVersion: null,
@@ -30,10 +32,28 @@ const health = (row: RowDataPacket, providerId = String(row.provider_id)): Store
         lastCheckedAt: new Date(row.last_checked_at).toISOString(),
         lastLatencyMs: row.last_latency_ms == null ? null : Number(row.last_latency_ms),
         lastErrorCode: row.last_error_code == null ? null : String(row.last_error_code),
-        consecutiveFailures: Number(row.consecutive_failures),
+        consecutiveFailures: Number(row.health_consecutive_failures ?? row.consecutive_failures),
         version: Number(row.health_version ?? row.version),
         updatedAt: new Date(row.health_updated_at ?? row.updated_at).toISOString(),
       };
+
+const runtimeCircuit = (row: Record<string, unknown>): AdapterRuntimeCircuit => ({
+  state: row.runtime_circuit_state === "open" ? "open" : "closed",
+  consecutiveFailures: Number(row.runtime_consecutive_failures ?? 0),
+  lastErrorCode: row.runtime_last_error_code == null ? null : String(row.runtime_last_error_code),
+  openedAt:
+    row.runtime_circuit_opened_at == null
+      ? null
+      : new Date(String(row.runtime_circuit_opened_at)).toISOString(),
+  recoveredAt:
+    row.runtime_last_recovered_at == null
+      ? null
+      : new Date(String(row.runtime_last_recovered_at)).toISOString(),
+  updatedAt:
+    row.runtime_circuit_updated_at == null
+      ? null
+      : new Date(String(row.runtime_circuit_updated_at)).toISOString(),
+});
 
 const percentile = (values: number[], ratio: number) =>
   values.length ? values[Math.ceil(values.length * ratio) - 1]! : null;
@@ -95,15 +115,74 @@ const runtimeWindow = (rows: RowDataPacket[]): AdapterRuntimeHealthWindow => {
   };
 };
 
+const compatibilityStatus = (
+  succeeded: number,
+  parserFailures: number,
+): ProviderPageCompatibilityObservation["status"] =>
+  succeeded && parserFailures
+    ? "mixed"
+    : succeeded
+      ? "compatible"
+      : parserFailures
+        ? "incompatible"
+        : "unverified";
+
+const compatibilityRows = (rows: RowDataPacket[]) => {
+  const byProvider = new Map<string, ProviderPageCompatibilityObservation[]>();
+  for (const row of rows) {
+    const providerId = String(row.provider_id),
+      succeeded = Number(row.succeeded_count),
+      parserFailures = Number(row.parser_failure_count),
+      observation: ProviderPageCompatibilityObservation = {
+        parser_version: String(row.parser_version),
+        page_version_sha256: String(row.content_sha256),
+        status: compatibilityStatus(succeeded, parserFailures),
+        observation_count: Number(row.observation_count),
+        succeeded_count: succeeded,
+        parser_failure_count: parserFailures,
+        last_observed_at: new Date(row.last_observed_at).toISOString(),
+      };
+    const current = byProvider.get(providerId) ?? [];
+    if (current.length < 8) current.push(observation);
+    byProvider.set(providerId, current);
+  }
+  return byProvider;
+};
+
+const compatibilitySql = (filterProvider: boolean) =>
+  [
+    "SELECT evidence.provider_id,evidence.parser_version,evidence.content_sha256,",
+    "COUNT(*) observation_count,MAX(evidence.captured_at) last_observed_at,",
+    "SUM(CASE WHEN subquery.status IN ('succeeded','succeeded_empty') THEN 1 ELSE 0 END) succeeded_count,",
+    "SUM(CASE WHEN subquery.error_code IN ('source_changed','parse_failed','validation_failed',",
+    "'invalid_payload','response_too_large') THEN 1 ELSE 0 END) parser_failure_count FROM (",
+    "SELECT provider_id,parser_version,content_sha256,captured_at,collection_subquery_id ",
+    "FROM browser_evidence_artifacts WHERE kind='dom_fragment' AND status='active' ",
+    "AND retention_until>UTC_TIMESTAMP(3)",
+    filterProvider ? " AND provider_id=?" : "",
+    " UNION ALL SELECT provider_id,parser_version,content_sha256,captured_at,collection_subquery_id ",
+    "FROM raw_evidence WHERE status='active' AND retention_until>UTC_TIMESTAMP(3) ",
+    "AND content_type LIKE 'text/html%'",
+    filterProvider ? " AND provider_id=?" : "",
+    ") evidence JOIN collection_subqueries subquery ON subquery.id=evidence.collection_subquery_id ",
+    "GROUP BY evidence.provider_id,evidence.parser_version,evidence.content_sha256 ",
+    "ORDER BY last_observed_at DESC LIMIT 5000",
+  ].join("");
+
 export class MySqlProviderAdapterRepository implements ProviderAdapterRepository {
   constructor(private readonly pool: Pool) {}
 
   async list() {
-    const [[rows], [samples]] = await Promise.all([
+    const [[rows], [samples], [compatibility]] = await Promise.all([
       this.pool.query<RowDataPacket[]>(
         "SELECT p.*,h.adapter_version,h.health_status,h.last_checked_at,h.last_latency_ms," +
-          "h.last_error_code,h.consecutive_failures,h.version health_version,h.updated_at health_updated_at " +
-          "FROM providers p LEFT JOIN provider_adapter_health h ON h.provider_id=p.id ORDER BY " +
+          "h.last_error_code,h.consecutive_failures health_consecutive_failures," +
+          "h.version health_version,h.updated_at health_updated_at,c.state runtime_circuit_state," +
+          "c.consecutive_failures runtime_consecutive_failures,c.last_error_code runtime_last_error_code," +
+          "c.opened_at runtime_circuit_opened_at,c.recovered_at runtime_last_recovered_at," +
+          "c.updated_at runtime_circuit_updated_at FROM providers p " +
+          "LEFT JOIN provider_adapter_health h ON h.provider_id=p.id " +
+          "LEFT JOIN provider_runtime_circuits c ON c.provider_id=p.id ORDER BY " +
           "p.status='enabled' DESC,p.name,p.id",
       ),
       this.pool.query<RowDataPacket[]>(
@@ -112,16 +191,20 @@ export class MySqlProviderAdapterRepository implements ProviderAdapterRepository
           "FROM collection_subqueries WHERE finished_at>=DATE_SUB(UTC_TIMESTAMP(3),INTERVAL 24 HOUR) " +
           "ORDER BY provider_id,finished_at DESC LIMIT 5000",
       ),
+      this.pool.query<RowDataPacket[]>(compatibilitySql(false)),
     ]);
     const byProvider = new Map<string, RowDataPacket[]>();
     for (const sample of samples) {
       const key = String(sample.provider_id);
       byProvider.set(key, [...(byProvider.get(key) ?? []), sample]);
     }
+    const compatibilityByProvider = compatibilityRows(compatibility);
     return rows.map((row) => ({
       provider: toRuntimeProvider(row),
       health: health(row, String(row.id)),
       runtime: runtimeWindow(byProvider.get(String(row.id)) ?? []),
+      circuit: runtimeCircuit(row),
+      compatibility: compatibilityByProvider.get(String(row.id)) ?? [],
     }));
   }
 
@@ -135,6 +218,26 @@ export class MySqlProviderAdapterRepository implements ProviderAdapterRepository
       [providerId],
     );
     return runtimeWindow(rows);
+  }
+
+  async runtimeCircuit(providerId: string) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT p.circuit_failure_threshold,c.state runtime_circuit_state," +
+        "c.consecutive_failures runtime_consecutive_failures,c.last_error_code runtime_last_error_code," +
+        "c.opened_at runtime_circuit_opened_at,c.recovered_at runtime_last_recovered_at," +
+        "c.updated_at runtime_circuit_updated_at FROM providers p " +
+        "LEFT JOIN provider_runtime_circuits c ON c.provider_id=p.id WHERE p.id=? LIMIT 1",
+      [providerId],
+    );
+    return rows[0] ? runtimeCircuit(rows[0]) : runtimeCircuit({});
+  }
+
+  async compatibilityMatrix(providerId: string) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(compatibilitySql(true), [
+      providerId,
+      providerId,
+    ]);
+    return compatibilityRows(rows).get(providerId) ?? [];
   }
 
   async getProvider(id: string) {

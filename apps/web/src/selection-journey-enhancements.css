@@ -9,11 +9,116 @@
 .selection-start,
 .selection-status,
 .selection-evidence,
+.selection-candidates,
 .selection-decision,
 .selection-complete {
   border-color: var(--so-border);
   background: linear-gradient(145deg, var(--so-panel), var(--so-bg-elevated));
   box-shadow: var(--so-shadow);
+}
+
+.selection-candidates {
+  padding: 22px;
+  border: 1px solid var(--so-border);
+  border-radius: 16px;
+}
+
+.selection-candidates > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.selection-candidates header p {
+  margin: 0 0 6px;
+  color: var(--so-info);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.selection-candidates h3 {
+  margin: 5px 0;
+  color: var(--so-text);
+}
+
+.selection-candidates header b {
+  border-radius: 99px;
+  padding: 6px 10px;
+  color: var(--so-primary);
+  background: var(--so-primary-soft);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.selection-candidate-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.selection-candidate-grid > label {
+  min-width: 0;
+  padding: 15px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+  cursor: pointer;
+}
+
+.selection-candidate-grid > label[data-selected="true"] {
+  border-color: var(--so-primary);
+  box-shadow: inset 0 0 0 1px var(--so-primary);
+}
+
+.selection-candidate-grid input {
+  margin-top: 4px;
+  accent-color: var(--so-primary);
+}
+
+.selection-candidate-grid span,
+.selection-candidate-grid small,
+.selection-candidate-grid strong,
+.selection-candidate-grid em,
+.selection-candidate-grid i {
+  display: block;
+}
+
+.selection-candidate-grid small {
+  color: var(--so-primary);
+  font-weight: 800;
+}
+
+.selection-candidate-grid strong {
+  margin-top: 5px;
+  color: var(--so-text);
+  overflow-wrap: anywhere;
+}
+
+.selection-candidate-grid em,
+.selection-candidate-grid i {
+  margin-top: 7px;
+  color: var(--so-text-muted);
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.selection-candidate-grid i {
+  color: var(--so-warning);
+}
+
+.selection-candidate-grid a {
+  grid-column: 2;
+  justify-self: start;
+  color: var(--so-info);
+  font-size: 12px;
+  text-decoration: none;
 }
 .selection-timeline li {
   position: relative;
@@ -87,6 +192,14 @@
 }
 
 @media (max-width: 760px) {
+  .selection-candidates > header {
+    flex-direction: column;
+  }
+
+  .selection-candidate-grid {
+    grid-template-columns: 1fr;
+  }
+
   .selection-timeline {
     grid-template-columns: 1fr;
     gap: 12px;

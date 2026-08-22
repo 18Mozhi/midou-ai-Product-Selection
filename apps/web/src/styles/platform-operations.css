@@ -128,7 +128,7 @@
 .discovery-dialog form {
   padding: 0 24px 16px;
 }
-.discovery-dialog form label {
+.discovery-dialog .discovery-query {
   min-height: 54px;
   padding: 0 15px;
   display: flex;
@@ -139,7 +139,7 @@
   background: var(--so-bg);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--so-primary) 10%, transparent);
 }
-.discovery-dialog form input {
+.discovery-dialog .discovery-query input {
   min-width: 0;
   flex: 1;
   border: 0;
@@ -150,6 +150,36 @@
 .discovery-dialog form kbd {
   color: var(--so-text-muted);
   font-size: 10px;
+}
+.discovery-search-form {
+  display: grid;
+  gap: 10px;
+}
+.discovery-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.25fr;
+  gap: 8px;
+}
+.discovery-filters label {
+  display: grid;
+  gap: 5px;
+  color: var(--so-text-muted);
+  font-size: 11px;
+}
+.discovery-filters select,
+.discovery-filters input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+.discovery-filters :disabled {
+  color: var(--so-text-muted);
+  opacity: 0.7;
 }
 .discovery-hint {
   margin: 4px 24px 24px;
@@ -243,6 +273,13 @@
   }
   .discovery-dialog .ui-state-panel {
     margin-inline: 16px;
+  }
+  .discovery-filters {
+    grid-template-columns: 1fr;
+  }
+  .discovery-filters select,
+  .discovery-filters input {
+    min-height: 44px;
   }
   .discovery-results a {
     grid-template-columns: 36px 1fr;
@@ -956,8 +993,45 @@
 .open-confirm p {
   color: var(--text-muted);
 }
+.open-token-risk {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+.open-token-risk h4,
+.open-token-risk p,
+.open-token-risk dl,
+.open-token-risk ul {
+  margin: 0;
+}
+.open-token-risk dl > div {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.35fr) 1fr;
+  gap: 8px;
+}
+.open-token-risk dt {
+  color: var(--text-muted);
+}
+.open-token-risk dd {
+  margin: 0;
+}
+.open-token-risk ul {
+  display: grid;
+  gap: 6px;
+  padding-left: 20px;
+  color: var(--text-muted);
+}
 .open-confirm button {
   margin-right: 8px;
+}
+@media (max-width: 480px) {
+  .open-token-risk dl > div {
+    grid-template-columns: 1fr;
+  }
 }
 .commercial {
   display: grid;

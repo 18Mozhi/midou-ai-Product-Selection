@@ -3,6 +3,9 @@ import { computed, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
 import { useAuditedReason } from "../use-audited-reason";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
+import OrganizationApprovalPanel from "./OrganizationApprovalPanel.vue";
+import OrganizationMemberPanel from "./OrganizationMemberPanel.vue";
+import OrganizationRolePanel from "./OrganizationRolePanel.vue";
 import "../organization-admin.css";
 const props = defineProps<{
     apiBaseUrl: string;
@@ -456,168 +459,42 @@ onMounted(load);
           ><button :disabled="busy">保存并审计</button>
         </form>
       </section>
-      <section v-else-if="view === 'members'" class="org-admin-grid">
-        <form class="org-admin-card" @submit.prevent="submit('/org/admin/invitations', form)">
-          <h3>邀请成员</h3>
-          <label>邮箱<input v-model="form.email" type="email" required /></label
-          ><label
-            >角色<select v-model="form.role_code" required>
-              <option value="member">普通成员</option>
-              <option value="selection_manager">选品经理</option>
-              <option value="procurement_member">采购成员</option>
-              <option value="organization_admin">组织管理员</option>
-              <option value="auditor">审计员</option>
-            </select></label
-          ><label>原因<textarea v-model="form.reason" required></textarea></label
-          ><button :disabled="busy">创建邀请</button
-          ><small>邮件服务尚未配置时，邀请会显示“等待邮件服务”，不会假装已经发送。</small>
-        </form>
-        <article class="org-admin-card">
-          <header class="org-admin-section-header">
-            <h3>邀请记录</h3>
-            <nav aria-label="邀请状态">
-              <button
-                :aria-pressed="invitationTab === 'pending'"
-                @click="invitationTab = 'pending'"
-              >
-                待接受 {{ pendingInvitations.length }}
-              </button>
-              <button
-                :aria-pressed="invitationTab === 'expired'"
-                @click="invitationTab = 'expired'"
-              >
-                已失效 {{ expiredInvitations.length }}
-              </button>
-            </nav>
-          </header>
-          <p v-if="!visibleInvitations.length">
-            {{ invitationTab === "pending" ? "暂无待接受邀请。" : "暂无已失效邀请。" }}
-          </p>
-          <div v-for="x in visibleInvitations" :key="x.id" class="org-admin-line">
-            <div>
-              <b>{{ x.email }}</b
-              ><small>{{ roleText(x.role_code) }} · {{ fmt(x.expires_at) }}</small>
-            </div>
-            <i>{{ invitationTab === "expired" ? "已失效" : statusText(x.status) }}</i>
-          </div>
-        </article>
-        <article class="org-admin-card org-admin-wide">
-          <header class="org-admin-section-header">
-            <div>
-              <h3>组织成员</h3>
-              <small>显示 {{ filteredMembers.length }} / {{ data?.items?.length ?? 0 }} 人</small>
-            </div>
-          </header>
-          <div class="org-admin-filters" aria-label="成员筛选">
-            <label
-              >搜索<input v-model="memberQuery" type="search" placeholder="姓名或邮箱"
-            /></label>
-            <label
-              >状态<select v-model="memberStatus">
-                <option value="">全部状态</option>
-                <option value="active">正常使用</option>
-                <option value="disabled">已停用</option>
-                <option value="locked">已锁定</option>
-              </select></label
-            >
-            <label
-              >角色<select v-model="memberRole">
-                <option value="">全部角色</option>
-                <option
-                  v-for="role in [
-                    'member',
-                    'selection_manager',
-                    'procurement_member',
-                    'organization_admin',
-                    'auditor',
-                  ]"
-                  :key="role"
-                  :value="role"
-                >
-                  {{ roleText(role) }}
-                </option>
-              </select></label
-            >
-            <label
-              >团队<select v-model="memberTeam">
-                <option value="">全部团队</option>
-                <option v-for="team in availableTeams" :key="team" :value="team">{{ team }}</option>
-              </select></label
-            >
-          </div>
-          <div v-for="x in filteredMembers" :key="x.id" class="org-admin-line">
-            <div>
-              <b>{{ x.email }}</b
-              ><small
-                >{{ x.roles.map(roleText).join("、") || "尚未分配角色" }} ·
-                {{ x.teams?.join("、") || "未加入团队" }} ·
-                {{ x.scopes.map(scopeText).join("、") || "无数据范围" }} · 第
-                {{ x.version }} 版</small
-              >
-            </div>
-            <div class="org-admin-actions">
-              <details class="org-admin-technical">
-                <summary>技术详情</summary>
-                <code>成员 ID：{{ x.id }}</code>
-              </details>
-              <select v-model="memberRoles[x.id]" aria-label="选择成员角色">
-                <option
-                  v-for="role in [
-                    'member',
-                    'selection_manager',
-                    'procurement_member',
-                    'organization_admin',
-                    'auditor',
-                  ]"
-                  :key="role"
-                  :value="role"
-                >
-                  {{ roleText(role) }}
-                </option>
-              </select>
-              <button type="button" :disabled="busy" @click="assignRole(x)">分配角色</button>
-              <button type="button" :disabled="busy" @click="memberAction(x)">
-                {{ x.status === "active" ? "禁用成员" : "恢复成员" }}
-              </button>
-              <i>{{ statusText(x.status) }}</i>
-            </div>
-          </div>
-          <p v-if="!filteredMembers.length">没有符合当前筛选条件的成员。</p>
-        </article>
-      </section>
-      <section v-else-if="view === 'roles'" class="org-admin-role-grid">
-        <article v-for="x in rows" :key="x.code" class="org-admin-card">
-          <i>{{ roleText(x.code) }}</i>
-          <h3>{{ x.name }}</h3>
-          <p>{{ x.description }}</p>
-          <div class="org-admin-chips">
-            <span v-for="c in x.capabilities" :key="c">{{ capabilityText(c) }}</span>
-          </div>
-          <small>影响预览：该角色可执行 {{ x.capabilities.length }} 项业务操作。</small>
-        </article>
-        <article class="org-admin-card org-admin-role-matrix">
-          <header>
-            <div>
-              <p>能力矩阵</p>
-              <h3>角色影响对比</h3>
-            </div>
-          </header>
-          <div role="table" aria-label="角色能力矩阵">
-            <div role="row" class="org-admin-matrix-head">
-              <b role="columnheader">业务能力</b
-              ><b v-for="role in rows" :key="role.code" role="columnheader">{{
-                roleText(role.code)
-              }}</b>
-            </div>
-            <div v-for="capability in roleCapabilities" :key="capability" role="row">
-              <span role="cell">{{ capabilityText(capability) }}</span
-              ><span v-for="role in rows" :key="role.code" role="cell">{{
-                role.capabilities.includes(capability) ? "具备" : "—"
-              }}</span>
-            </div>
-          </div>
-        </article>
-      </section>
+      <OrganizationMemberPanel
+        v-else-if="view === 'members'"
+        :form="form"
+        :busy="busy"
+        :invitation-tab="invitationTab"
+        :pending-invitations="pendingInvitations"
+        :expired-invitations="expiredInvitations"
+        :visible-invitations="visibleInvitations"
+        :members="filteredMembers"
+        :total-members="data?.items?.length ?? 0"
+        :member-query="memberQuery"
+        :member-status="memberStatus"
+        :member-role="memberRole"
+        :member-team="memberTeam"
+        :available-teams="availableTeams"
+        :member-roles="memberRoles"
+        :role-text="roleText"
+        :scope-text="scopeText"
+        :status-text="statusText"
+        :format-time="fmt"
+        @invite="submit('/org/admin/invitations', form)"
+        @update-invitation-tab="invitationTab = $event"
+        @update-member-query="memberQuery = $event"
+        @update-member-status="memberStatus = $event"
+        @update-member-role="memberRole = $event"
+        @update-member-team="memberTeam = $event"
+        @assign-role="assignRole"
+        @member-action="memberAction"
+      />
+      <OrganizationRolePanel
+        v-else-if="view === 'roles'"
+        :roles="rows"
+        :capabilities="roleCapabilities"
+        :role-text="roleText"
+        :capability-text="capabilityText"
+      />
       <section v-else-if="view === 'workspaces'" class="org-admin-grid">
         <form class="org-admin-card" @submit.prevent="submit('/org/admin/workspaces', form)">
           <h3>创建工作区</h3>
@@ -681,47 +558,15 @@ onMounted(load);
           </div>
         </article>
       </section>
-      <section v-else-if="view === 'approvals'" class="org-admin-card">
-        <header class="org-admin-section-header">
-          <div>
-            <p>组织治理</p>
-            <h3>审批模板</h3>
-          </div>
-          <small>模板按所属工作区展示；发布与修改继续使用既有审批合同。</small>
-        </header>
-        <div class="org-admin-template-grid">
-          <article v-for="template in data?.templates" :key="template.id">
-            <i>{{ statusText(template.status) }}</i
-            ><b>{{ template.name }}</b
-            ><small
-              >{{ template.workspace_name }} · {{ template.node_count }} 个节点 · 当前第
-              {{ template.current_version }} 版</small
-            >
-          </article>
-        </div>
-        <h3 class="org-admin-subheading">审批记录</h3>
-        <div class="org-admin-summary-row">
-          <span v-for="(v, k) in data?.summary" :key="k"
-            ><b>{{ v }}</b
-            ><small>{{ summaryText(String(k)) }}</small></span
-          >
-        </div>
-        <div v-for="x in rows" :key="x.id" class="org-admin-line">
-          <div>
-            <b>{{ x.title }}</b
-            ><small
-              >当前第 {{ x.current_node_ordinal }} 阶段 · 提交于 {{ fmt(x.created_at) }}</small
-            >
-            <details class="org-admin-technical">
-              <summary>技术详情</summary>
-              <code>记录 ID：{{ x.resource_id }}</code>
-              <code>模板 ID：{{ x.template_id }}</code>
-            </details>
-          </div>
-          <i>{{ statusText(x.status) }}</i>
-        </div>
-        <p v-if="!rows.length">暂无组织级审批记录。</p>
-      </section>
+      <OrganizationApprovalPanel
+        v-else-if="view === 'approvals'"
+        :templates="data?.templates ?? []"
+        :approvals="rows"
+        :summary="data?.summary ?? {}"
+        :status-text="statusText"
+        :summary-text="summaryText"
+        :format-time="fmt"
+      />
       <section v-else-if="view === 'tokens'" class="org-admin-grid">
         <form
           class="org-admin-card"

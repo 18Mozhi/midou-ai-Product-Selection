@@ -29,7 +29,13 @@ const item = (id: string, kind: string, title: string, route: string, extra = {}
   title,
   reason: "来自当前工作区的已验证投影",
   route,
+  source_module: "projection",
+  source_label: "工作事项",
+  context_label: "去处理",
   priority: null,
+  risk_level: null,
+  value_score: null,
+  blocked: false,
   owner_label: null,
   due_at: null,
   source_count: null,
@@ -65,6 +71,11 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
           actions: [
             item("00000000-0000-4000-8000-000000000610", "action", "处理逾期采集复核", "/tasks/1", {
               priority: "overdue",
+              source_module: "task",
+              source_label: "采集跟进",
+              context_label: "打开完整处理上下文",
+              risk_level: "critical",
+              blocked: true,
               owner_label: "陈宇航",
               due_at: "2026-08-07T18:00:00.000Z",
             }),
@@ -106,6 +117,10 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   await page.goto("/home");
   await expect(page.getByRole("heading", { name: "今天最值得做什么？" })).toBeVisible();
   await expect(page.getByText("处理逾期采集复核")).toBeVisible();
+  await expect(page.getByText("风险 紧急")).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /处理逾期采集复核.*打开完整处理上下文/ }),
+  ).toHaveAttribute("href", "/tasks/1");
   await expect(page.getByText("竞品来源延迟")).toBeVisible();
   await expect(page.getByRole("heading", { name: "异常与数据健康" })).toBeVisible();
   const changeAction = page.getByRole("link", { name: /户外照明热度变化.*去处理/ });

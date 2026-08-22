@@ -20,6 +20,7 @@ const provider = {
   timeoutMs: 1000,
   fields: ["title"],
   status: "disabled",
+  circuitFailureThreshold: 5,
 };
 const actor = "00000000-0000-4000-8000-000000000732",
   now = new Date("2026-08-07T19:30:00.000Z"),
@@ -209,9 +210,54 @@ test("M03-03.A04/A11/A12 missing implementation is persisted as truthful blocked
   assert.equal(result.latest_runtime_category, "unknown");
   assert.equal(result.runtime_sample_count_24h, 0);
   assert.equal(result.runtime_success_rate_basis_points_24h, null);
+  assert.equal(result.runtime_circuit_state, "closed");
+  assert.equal(result.runtime_failure_threshold, 5);
+  assert.equal(result.runtime_error_budget_remaining, 5);
+  assert.equal(result.runtime_recovery_gate_met, false);
+  assert.deepEqual(result.compatibility_matrix, []);
   assert.equal(recorded.requestId, "request-1");
   assert.equal(recorded.traceId, "trace-1");
   assert.doesNotMatch(JSON.stringify(result), /cookie|secret|payload/i);
+});
+
+test("source health derives runtime error budget and requires a post-open ready probe", async () => {
+  const service = new ProviderAdapterService(
+      {
+        list: async () => [
+          {
+            provider: { ...provider, circuitFailureThreshold: 3 },
+            health: {
+              providerId: provider.id,
+              adapterVersion: "test-v1",
+              healthStatus: "ready",
+              lastCheckedAt: "2026-08-07T19:31:00.000Z",
+              lastLatencyMs: 7,
+              lastErrorCode: null,
+              consecutiveFailures: 0,
+              version: 2,
+              updatedAt: "2026-08-07T19:31:00.000Z",
+            },
+            circuit: {
+              state: "open",
+              consecutiveFailures: 3,
+              lastErrorCode: "timeout",
+              openedAt: "2026-08-07T19:30:00.000Z",
+              recoveredAt: null,
+              updatedAt: "2026-08-07T19:30:00.000Z",
+            },
+          },
+        ],
+      },
+      new ProviderAdapterRegistry(limits).register(adapter),
+      () => now,
+    ),
+    [result] = await service.list();
+  assert.equal(result.runtime_circuit_state, "open");
+  assert.equal(result.runtime_consecutive_failures, 3);
+  assert.equal(result.runtime_failure_threshold, 3);
+  assert.equal(result.runtime_error_budget_remaining, 0);
+  assert.equal(result.runtime_recovery_gate_met, true);
+  assert.equal(result.runtime_last_error_code, "timeout");
 });
 
 test("M03-03.A06/A09/A11/A13 API enforces provider configure, origin, idempotency and correlation", async () => {
@@ -237,6 +283,15 @@ test("M03-03.A06/A09/A11/A13 API enforces provider configure, origin, idempotenc
       runtime_parser_failure_count_24h: 0,
       runtime_login_failure_count_24h: 0,
       runtime_empty_success_count_24h: 0,
+      runtime_circuit_state: "closed",
+      runtime_consecutive_failures: 0,
+      runtime_failure_threshold: 5,
+      runtime_error_budget_remaining: 5,
+      runtime_last_error_code: null,
+      runtime_circuit_opened_at: null,
+      runtime_last_recovered_at: null,
+      runtime_recovery_gate_met: false,
+      compatibility_matrix: [],
       version: 0,
       updated_at: new Date(0).toISOString(),
     },
@@ -353,11 +408,18 @@ test("M03-03.A03/A06-A10/A13/A15-A17 delivery evidence covers adapters without i
   assert.match(repo, /FOR UPDATE/);
   assert.match(repo, /collection_subqueries/);
   assert.match(repo, /runtimeCategory/);
+  assert.match(repo, /browser_evidence_artifacts[\s\S]*raw_evidence[\s\S]*content_sha256/);
+  assert.match(repo, /provider_runtime_circuits[\s\S]*runtime_consecutive_failures/);
+  for (const status of ["compatible", "incompatible", "mixed", "unverified"])
+    assert.match(repo, new RegExp(`"${status}"`));
   assert.match(routes, /provider:configure/);
   assert.match(service, /adapter_not_registered/);
   assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
   assert.match(web, /成功率[\s\S]*P95[\s\S]*样本/);
   assert.match(web, /网络[\s\S]*解析[\s\S]*登录[\s\S]*空结果/);
+  assert.match(web, /错误预算与恢复门[\s\S]*runtime_error_budget_remaining/);
+  assert.match(openapi, /runtime_failure_threshold[\s\S]*runtime_recovery_gate_met/);
+  assert.match(openapi, /page_version_sha256[\s\S]*parser_failure_count/);
   assert.match(css, /@media\s*\(max-width:\s*640px\)/);
   assert.match(shell, /provider-runtime-surface/);
   assert.match(openapi, /\/platform\/provider-adapters\/\{providerId\}\/health-check:/);

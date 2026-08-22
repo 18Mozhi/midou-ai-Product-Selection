@@ -29,6 +29,10 @@ export interface ProvisionedSource {
   timeout_ms: number;
   retry_limit: number;
   updated_at: string;
+  concurrency_snapshot?: {
+    configured_limit: number;
+    active_subquery_count: number;
+  };
   last_success: {
     task_id: string;
     status: "succeeded" | "succeeded_empty";
@@ -56,6 +60,17 @@ export interface Provider1688Acceptance {
     started_at: string;
     finished_at: string | null;
   } | null;
+  coverage_matrix: {
+    parser_version: string;
+    observed_at: string | null;
+    rows: Array<{
+      key: "search" | "detail" | "pagination";
+      contract: string;
+      state: "covered" | "not_observed" | "not_exercised" | "invalid";
+      observed_count: number;
+      reason: string;
+    }>;
+  };
   pending_reasons: string[];
 }
 export interface ProviderSourceReplay {
@@ -106,6 +121,13 @@ export interface ParserSample {
   baseline_parser_version: string;
   last_replay_status: "never" | "passed" | "changed" | "failed";
   last_replay_at: string | null;
+  review_status: "pending" | "approved" | "rejected";
+  reviewed_by: string | null;
+  review_reason: string | null;
+  reviewed_at: string | null;
+  review_version: number;
+  created_by: string;
+  can_review: boolean;
   created_at: string;
 }
 export interface ParserSampleReplay {
@@ -196,6 +218,7 @@ export interface ProviderSourceRepository {
   }): Promise<ProvisionedSource>;
   parserSampleOverview(
     providerId: string,
+    actorId: string,
   ): Promise<{ samples: ParserSample[]; candidates: Omit<ParserSampleCandidate, "snapshots">[] }>;
   parserSampleByOperation(
     actorId: string,
@@ -256,6 +279,19 @@ export interface ProviderSourceRepository {
     traceId: string;
     now: Date;
   }): Promise<ParserSampleReplay>;
+  reviewParserSample(input: {
+    sampleId: string;
+    providerId: string;
+    decision: "approved" | "rejected";
+    reason: string;
+    expectedVersion: number;
+    actorId: string;
+    route: string;
+    idempotencyKey: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+  }): Promise<ParserSample>;
 }
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const source = (code: string) => {
@@ -558,10 +594,10 @@ export class ProviderSourceService {
       now: this.now(),
     });
   }
-  parserSamples(providerId: string) {
+  parserSamples(providerId: string, actorId: string) {
     if (!uuid.test(providerId))
       throw new ProviderSourceServiceError("provider_id_invalid", 400, "刷新来源目录后重试。");
-    return this.repository.parserSampleOverview(providerId);
+    return this.repository.parserSampleOverview(providerId, actorId);
   }
   async createParserSample(
     providerId: string,
@@ -694,6 +730,51 @@ export class ProviderSourceService {
       outputSha256: output === null ? null : hash(output),
       diff,
       errorCode,
+      route,
+      ...context,
+      now: this.now(),
+    });
+  }
+  async reviewParserSample(
+    providerId: string,
+    sampleId: string,
+    value: { decision?: unknown; reason?: unknown; expected_version?: unknown },
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    if (!uuid.test(providerId) || !uuid.test(sampleId))
+      throw new ProviderSourceServiceError(
+        "parser_sample_target_invalid",
+        400,
+        "刷新固定样本后重试。",
+      );
+    const decision = String(value?.decision ?? ""),
+      reason = String(value?.reason ?? "").trim(),
+      expectedVersion = Number(value?.expected_version),
+      route = `/platform/provider-sources/${providerId}/parser-samples/${sampleId}/reviews`;
+    if (
+      !["approved", "rejected"].includes(decision) ||
+      reason.length < 2 ||
+      reason.length > 1000 ||
+      !Number.isSafeInteger(expectedVersion) ||
+      expectedVersion < 1
+    )
+      throw new ProviderSourceServiceError(
+        "parser_sample_review_invalid",
+        400,
+        "提交通过或驳回结论、至少 2 个字符的原因和当前审批版本。",
+      );
+    const previous = await this.repository.parserSampleByOperation(
+      context.actorId,
+      route,
+      context.idempotencyKey,
+    );
+    if (previous) return previous;
+    return this.repository.reviewParserSample({
+      sampleId,
+      providerId,
+      decision: decision as "approved" | "rejected",
+      reason,
+      expectedVersion,
       route,
       ...context,
       now: this.now(),

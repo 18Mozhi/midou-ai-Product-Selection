@@ -19,6 +19,13 @@ const data = ref<any>(null),
   requestId = ref(""),
   hint = ref("");
 const time = (value?: string | null) => (value ? new Date(value).toLocaleString() : "尚无记录");
+const gate = (kind: string) =>
+  data.value?.gates?.find((item: any) => item.gate_kind === kind) ?? null;
+const duration = (value?: number | null) => {
+  if (value === null || value === undefined || !Number.isFinite(Number(value))) return "尚无记录";
+  const milliseconds = Number(value);
+  return milliseconds < 1000 ? `${milliseconds} ms` : `${(milliseconds / 1000).toFixed(1)} 秒`;
+};
 const sha = (value?: string) => (value ? value.slice(0, 10) : "—");
 const statusText = (value?: string | null) =>
     (
@@ -135,7 +142,13 @@ onMounted(load);
         </article>
         <article>
           <span>迁移</span><strong>{{ data.versions?.production?.migration_version || "—" }}</strong
-          ><small>数据库 5.7</small>
+          ><small>迁移耗时 {{ duration(gate("migration")?.duration_ms) }}</small>
+        </article>
+        <article>
+          <span>回滚耗时</span><strong>{{ duration(gate("rollback")?.duration_ms) }}</strong
+          ><small>{{
+            gate("rollback") ? statusText(gate("rollback")?.status) : "尚未发生回滚"
+          }}</small>
         </article>
         <article>
           <span>发布状态</span><strong>{{ statusText(data.latest_release?.status) }}</strong

@@ -4,6 +4,8 @@
 
 M08-06 收口容量状态的软件合同：规划用户数 100、规划并发区间 5–20 都不是承诺，默认且已完成的软件状态为 `capacity_claim=unverified`。只有另行执行可选同提交生产测量且事实全部通过，才允许显示 `measured_single_host_limited`；该测量不属于软件完成门。不建设负载均衡、备用服务器、多节点或 10,000 用户能力。
 
+容量告警和阻断项同时返回原因、处置动作与责任角色。责任角色固定为已经持有 `platform:operate` 的 `platform_operations_admin`，页面显示“平台运维管理员”；系统没有值班人或单一负责人事实时不得编造具体姓名。
+
 ## 事实链与失败关闭
 
 宝塔有限任务固定按 5→10→20 并发逐档执行，每档生产测量不少于 `CAPACITY_BOUNDARY_STAGE_SECONDS=60` 秒；每个虚拟用户顺序完成一次 TLS 核心读和一次签名持久写，同一轮用户并发发起。生产发布包不依赖 `.git` 元数据，任务在测量前必须确认宝塔受限环境注入的 `BUILD_SHA`、本机宝塔 Nginx TLS `/api/v1/health/version` 返回的构建和 MySQL 中 `healthy` 发布记录三者一致。任务把聚合事实写入 MySQL 5.7 的 `capacity_boundary_observations`；API 只读取最新 `production_benchmark`，用固定停止线重新判定，并把每次读取和 `request_id`/`trace_id` 写入平台审计。页面上的规划数永远与实测数分开。低档位越线即停止：若固定并发 5 未通过，证据保持 `blocked/unverified`；若至少一个档位通过，证据只签发最后通过档位，并在 `boundaryStop` 和审计中保留下一个失败档位的完整指标与失败码，API 以 `warning/shed_background` 明确不得继续扩大。不得跳档、缩短到 60 秒以下、把失败档位计入容量声明，或用规划值、截图及旧提交窗口补足。

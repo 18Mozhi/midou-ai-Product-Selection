@@ -1,9 +1,11 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket, ResultSetHeader } from "mysql2/promise";
 import {
   TrendServiceError,
+  normalizeTrendTitle,
   type TrendMonitoringRule,
   type TrendRepository,
+  type TrendTopicChangeRequest,
   type TrendTopicDetail,
   type TrendTopicSummary,
 } from "./trend-service.js";
@@ -54,6 +56,34 @@ const rule = (row: RowDataPacket): TrendMonitoringRule => ({
   created_at: iso(row.created_at),
   updated_at: iso(row.updated_at),
 });
+const changeRequest = (
+  row: RowDataPacket,
+  sourceTopics: TrendTopicChangeRequest["source_topics"],
+): TrendTopicChangeRequest => ({
+  id: String(row.id),
+  operation: row.operation,
+  target_topic: {
+    id: String(row.target_topic_id),
+    title: String(row.target_title),
+    market: String(row.target_market),
+    language: String(row.target_language),
+    version: Number(row.target_version),
+  },
+  source_topics: sourceTopics,
+  signal_ids: json<string[]>(row.signal_ids_json),
+  new_title: row.new_title == null ? null : String(row.new_title),
+  new_category: row.new_category == null ? null : String(row.new_category),
+  reason: String(row.reason),
+  status: row.status,
+  result_topic_id: row.result_topic_id == null ? null : String(row.result_topic_id),
+  proposed_by: String(row.proposed_by),
+  decided_by: row.decided_by == null ? null : String(row.decided_by),
+  decision_reason: row.decision_reason == null ? null : String(row.decision_reason),
+  decided_at: row.decided_at == null ? null : iso(row.decided_at),
+  version: Number(row.version),
+  created_at: iso(row.created_at),
+  updated_at: iso(row.updated_at),
+});
 
 export class MySqlTrendRepository implements TrendRepository {
   constructor(
@@ -81,7 +111,7 @@ export class MySqlTrendRepository implements TrendRepository {
     if (input.status) {
       clauses.push("t.status=?");
       params.push(input.status);
-    }
+    } else clauses.push("t.status<>'archived'");
     if (input.followed !== undefined)
       (clauses.push(
         `${input.followed ? "" : "NOT "}EXISTS (SELECT 1 FROM trend_topic_follows f WHERE f.topic_id=t.id AND f.user_id=?)`,
@@ -244,6 +274,270 @@ export class MySqlTrendRepository implements TrendRepository {
         ? (failures.get(item.last_collection_task_id) ?? [])
         : [],
     }));
+  }
+
+  async listChangeRequests(input: Parameters<TrendRepository["listChangeRequests"]>[0]) {
+    const params: unknown[] = [input.organizationId, input.workspaceId],
+      status = input.status ? " AND c.status=?" : "";
+    if (input.status) params.push(input.status);
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT c.*,t.title target_title,t.market target_market,t.language target_language," +
+        "t.version target_version FROM trend_topic_change_requests c JOIN trend_topics t ON " +
+        "t.id=c.target_topic_id AND t.organization_id=c.organization_id AND " +
+        `t.workspace_id=c.workspace_id WHERE c.organization_id=? AND c.workspace_id=?${status} ` +
+        "ORDER BY FIELD(c.status,'pending','rejected','confirmed'),c.created_at DESC,c.id DESC LIMIT 100",
+      params,
+    );
+    return Promise.all(
+      rows.map(async (row) => {
+        const ids = json<string[]>(row.source_topic_ids_json);
+        if (!ids.length) return changeRequest(row, []);
+        const [sources] = await this.pool.query<RowDataPacket[]>(
+          `SELECT id,title,market,language,version FROM trend_topics WHERE organization_id=? AND ` +
+            `workspace_id=? AND id IN (${ids.map(() => "?").join(",")}) ORDER BY title,id`,
+          [input.organizationId, input.workspaceId, ...ids],
+        );
+        return changeRequest(
+          row,
+          sources.map((source) => ({
+            id: String(source.id),
+            title: String(source.title),
+            market: String(source.market),
+            language: String(source.language),
+            version: Number(source.version),
+          })),
+        );
+      }),
+    );
+  }
+
+  async proposeTopicChange(input: Parameters<TrendRepository["proposeTopicChange"]>[0]) {
+    return this.write(input, input.requestIdValue, async (c) => {
+      const topicIds = [input.targetTopicId, ...input.sourceTopicIds],
+        [topics] = await c.query<RowDataPacket[]>(
+          `SELECT id,title,market,language,status,version FROM trend_topics WHERE organization_id=? AND ` +
+            `workspace_id=? AND id IN (${topicIds.map(() => "?").join(",")}) ORDER BY id FOR UPDATE`,
+          [input.organizationId, input.workspaceId, ...topicIds],
+        );
+      if (topics.length !== topicIds.length)
+        throw new TrendServiceError(
+          "trend_change_topic_not_found",
+          404,
+          "刷新主题列表后重新选择。",
+        );
+      const byId = new Map(topics.map((item) => [String(item.id), item])),
+        target = byId.get(input.targetTopicId)!;
+      for (const topicId of topicIds) {
+        const current = byId.get(topicId)!;
+        if (current.status !== "active")
+          throw new TrendServiceError("trend_change_topic_inactive", 409, "只能治理当前活动主题。");
+        if (Number(current.version) !== input.expectedVersions[topicId])
+          throw new TrendServiceError(
+            "trend_change_topic_version_conflict",
+            409,
+            "主题已变化，刷新确认队列后重新提议。",
+          );
+        if (current.market !== target.market || current.language !== target.language)
+          throw new TrendServiceError(
+            "trend_change_scope_mismatch",
+            409,
+            "只能合并相同市场和语言的主题。",
+          );
+      }
+      if (input.operation === "split") {
+        const [signals] = await c.query<RowDataPacket[]>(
+          `SELECT id FROM trend_signals WHERE organization_id=? AND workspace_id=? AND topic_id=? ` +
+            `AND id IN (${input.signalIds.map(() => "?").join(",")}) FOR UPDATE`,
+          [input.organizationId, input.workspaceId, input.targetTopicId, ...input.signalIds],
+        );
+        const [counts] = await c.query<RowDataPacket[]>(
+          "SELECT COUNT(*) total FROM trend_signals WHERE organization_id=? AND workspace_id=? AND topic_id=?",
+          [input.organizationId, input.workspaceId, input.targetTopicId],
+        );
+        if (
+          signals.length !== input.signalIds.length ||
+          signals.length >= Number(counts[0]?.total ?? 0)
+        )
+          throw new TrendServiceError(
+            "trend_split_signal_invalid",
+            409,
+            "拆分必须选择当前主题的部分证据，并至少保留一条原主题证据。",
+          );
+      }
+      const now = this.now();
+      await c.query(
+        "INSERT INTO trend_topic_change_requests (id,organization_id,workspace_id,operation," +
+          "target_topic_id,source_topic_ids_json,signal_ids_json,new_title,new_category," +
+          "expected_versions_json,reason,status,result_topic_id,proposed_by,decided_by," +
+          "decision_reason,decided_at,request_id,trace_id,version,created_at,updated_at) VALUES " +
+          "(?,?,?,?,?,?,?,?,?,?,?,'pending',NULL,?,NULL,NULL,NULL,?,?,1,?,?)",
+        [
+          input.requestIdValue,
+          input.organizationId,
+          input.workspaceId,
+          input.operation,
+          input.targetTopicId,
+          JSON.stringify(input.sourceTopicIds),
+          JSON.stringify(input.signalIds),
+          input.newTitle,
+          input.newCategory,
+          JSON.stringify(input.expectedVersions),
+          input.reason,
+          input.actorId,
+          input.requestId,
+          input.traceId,
+          now,
+          now,
+        ],
+      );
+      await this.event(
+        c,
+        input,
+        "trend.topic_change.proposed",
+        "trend_topic_change_request",
+        input.requestIdValue,
+        {
+          operation: input.operation,
+          target_topic_id: input.targetTopicId,
+          source_topic_ids: input.sourceTopicIds,
+          signal_ids: input.signalIds,
+        },
+        "user",
+      );
+      return changeRequest(
+        {
+          id: input.requestIdValue,
+          operation: input.operation,
+          target_topic_id: input.targetTopicId,
+          target_title: target.title,
+          target_market: target.market,
+          target_language: target.language,
+          target_version: target.version,
+          source_topic_ids_json: input.sourceTopicIds,
+          signal_ids_json: input.signalIds,
+          new_title: input.newTitle,
+          new_category: input.newCategory,
+          reason: input.reason,
+          status: "pending",
+          result_topic_id: null,
+          proposed_by: input.actorId,
+          decided_by: null,
+          decision_reason: null,
+          decided_at: null,
+          version: 1,
+          created_at: now,
+          updated_at: now,
+        } as RowDataPacket,
+        input.sourceTopicIds.map((id) => {
+          const source = byId.get(id)!;
+          return {
+            id,
+            title: String(source.title),
+            market: String(source.market),
+            language: String(source.language),
+            version: Number(source.version),
+          };
+        }),
+      );
+    });
+  }
+
+  async decideTopicChange(input: Parameters<TrendRepository["decideTopicChange"]>[0]) {
+    return this.write(input, input.changeRequestId, async (c) => {
+      const [requests] = await c.query<RowDataPacket[]>(
+          "SELECT c.*,t.title target_title,t.market target_market,t.language target_language," +
+            "t.version target_version FROM trend_topic_change_requests c JOIN trend_topics t ON " +
+            "t.id=c.target_topic_id WHERE c.id=? AND c.organization_id=? AND c.workspace_id=? FOR UPDATE",
+          [input.changeRequestId, input.organizationId, input.workspaceId],
+        ),
+        request = requests[0];
+      if (!request)
+        throw new TrendServiceError("trend_change_request_not_found", 404, "刷新主题确认队列。");
+      if (request.status !== "pending" || Number(request.version) !== input.expectedVersion)
+        throw new TrendServiceError(
+          "trend_change_request_conflict",
+          409,
+          "该提议已处理或版本已变化，请刷新确认队列。",
+        );
+      if (String(request.proposed_by) === input.actorId)
+        throw new TrendServiceError(
+          "trend_change_self_confirmation_forbidden",
+          403,
+          "提议人与确认人必须是两个不同的活动用户。",
+        );
+      const now = this.now(),
+        sourceIds = json<string[]>(request.source_topic_ids_json),
+        signalIds = json<string[]>(request.signal_ids_json),
+        expectedVersions = json<Record<string, number>>(request.expected_versions_json),
+        topicIds = [String(request.target_topic_id), ...sourceIds],
+        [topics] = await c.query<RowDataPacket[]>(
+          `SELECT * FROM trend_topics WHERE organization_id=? AND workspace_id=? AND id IN ` +
+            `(${topicIds.map(() => "?").join(",")}) ORDER BY id FOR UPDATE`,
+          [input.organizationId, input.workspaceId, ...topicIds],
+        );
+      const byId = new Map(topics.map((item) => [String(item.id), item]));
+      if (topics.length !== topicIds.length)
+        throw new TrendServiceError(
+          "trend_change_topic_not_found",
+          404,
+          "涉及主题已不存在，驳回提议或刷新后重建。",
+        );
+      if (input.decision === "confirm")
+        for (const topicId of topicIds) {
+          const current = byId.get(topicId)!;
+          if (current.status !== "active" || Number(current.version) !== expectedVersions[topicId])
+            throw new TrendServiceError(
+              "trend_change_topic_version_conflict",
+              409,
+              "涉及主题已变化，当前提议不能确认。",
+            );
+        }
+      let resultTopicId: string | null = null;
+      if (input.decision === "confirm" && request.operation === "merge") {
+        await this.confirmMerge(c, input, String(request.target_topic_id), sourceIds, now);
+        resultTopicId = String(request.target_topic_id);
+      } else if (input.decision === "confirm") {
+        resultTopicId = input.splitTopicId;
+        await this.confirmSplit(c, input, request, signalIds, resultTopicId, now);
+      }
+      const status = input.decision === "confirm" ? "confirmed" : "rejected";
+      await c.query(
+        "UPDATE trend_topic_change_requests SET status=?,result_topic_id=?,decided_by=?," +
+          "decision_reason=?,decided_at=?,version=version+1,updated_at=? WHERE id=?",
+        [status, resultTopicId, input.actorId, input.reason, now, now, input.changeRequestId],
+      );
+      await this.event(
+        c,
+        input,
+        `trend.topic_change.${status}`,
+        "trend_topic_change_request",
+        input.changeRequestId,
+        { operation: request.operation, result_topic_id: resultTopicId, reason: input.reason },
+        "user",
+      );
+      return changeRequest(
+        {
+          ...request,
+          status,
+          result_topic_id: resultTopicId,
+          decided_by: input.actorId,
+          decision_reason: input.reason,
+          decided_at: now,
+          version: input.expectedVersion + 1,
+          updated_at: now,
+        } as RowDataPacket,
+        sourceIds.map((id) => {
+          const source = byId.get(id)!;
+          return {
+            id,
+            title: String(source.title),
+            market: String(source.market),
+            language: String(source.language),
+            version: Number(source.version),
+          };
+        }),
+      );
+    });
   }
 
   async setFollow(input: Parameters<TrendRepository["setFollow"]>[0]) {
@@ -411,6 +705,203 @@ export class MySqlTrendRepository implements TrendRepository {
       );
       return result;
     });
+  }
+
+  private async confirmMerge(
+    c: PoolConnection,
+    input: Parameters<TrendRepository["decideTopicChange"]>[0],
+    targetTopicId: string,
+    sourceTopicIds: string[],
+    now: Date,
+  ) {
+    const allTopicIds = [targetTopicId, ...sourceTopicIds],
+      placeholders = allTopicIds.map(() => "?").join(","),
+      [opportunities] = await c.query<RowDataPacket[]>(
+        `SELECT id,source_ref_id FROM opportunities WHERE organization_id=? AND workspace_id=? ` +
+          `AND source_type='trend_topic' AND source_ref_id IN (${placeholders}) FOR UPDATE`,
+        [input.organizationId, input.workspaceId, ...allTopicIds],
+      );
+    if (opportunities.length > 1)
+      throw new TrendServiceError(
+        "trend_change_opportunity_conflict",
+        409,
+        "多个主题已经生成机会；先在机会工作台人工处理，再确认合并。",
+      );
+    await c.query(
+      `UPDATE trend_signals SET topic_id=? WHERE organization_id=? AND workspace_id=? AND ` +
+        `topic_id IN (${sourceTopicIds.map(() => "?").join(",")})`,
+      [targetTopicId, input.organizationId, input.workspaceId, ...sourceTopicIds],
+    );
+    await c.query(
+      `INSERT IGNORE INTO trend_topic_keywords (id,organization_id,workspace_id,topic_id,keyword,` +
+        `keyword_type,language,market,created_at) SELECT UUID(),organization_id,workspace_id,?,keyword,` +
+        `keyword_type,language,market,? FROM trend_topic_keywords WHERE organization_id=? AND ` +
+        `workspace_id=? AND topic_id IN (${sourceTopicIds.map(() => "?").join(",")})`,
+      [targetTopicId, now, input.organizationId, input.workspaceId, ...sourceTopicIds],
+    );
+    await c.query(
+      `INSERT IGNORE INTO trend_topic_follows (id,organization_id,workspace_id,topic_id,user_id,created_at) ` +
+        `SELECT UUID(),organization_id,workspace_id,?,user_id,? FROM trend_topic_follows WHERE ` +
+        `organization_id=? AND workspace_id=? AND topic_id IN ` +
+        `(${sourceTopicIds.map(() => "?").join(",")})`,
+      [targetTopicId, now, input.organizationId, input.workspaceId, ...sourceTopicIds],
+    );
+    await c.query(
+      `DELETE FROM trend_topic_keywords WHERE organization_id=? AND workspace_id=? AND topic_id IN ` +
+        `(${sourceTopicIds.map(() => "?").join(",")})`,
+      [input.organizationId, input.workspaceId, ...sourceTopicIds],
+    );
+    await c.query(
+      `DELETE FROM trend_topic_follows WHERE organization_id=? AND workspace_id=? AND topic_id IN ` +
+        `(${sourceTopicIds.map(() => "?").join(",")})`,
+      [input.organizationId, input.workspaceId, ...sourceTopicIds],
+    );
+    if (opportunities[0] && String(opportunities[0].source_ref_id) !== targetTopicId)
+      await c.query(
+        "UPDATE opportunities SET source_ref_id=?,version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+        [targetTopicId, now, String(opportunities[0].id), input.organizationId, input.workspaceId],
+      );
+    await c.query(
+      `UPDATE trend_topics SET status='archived',signal_count=0,source_count=0,heat_value=0,` +
+        `version=version+1,updated_at=? WHERE organization_id=? AND workspace_id=? AND id IN ` +
+        `(${sourceTopicIds.map(() => "?").join(",")})`,
+      [now, input.organizationId, input.workspaceId, ...sourceTopicIds],
+    );
+    await this.refreshTopicMetrics(c, targetTopicId, now);
+  }
+
+  private async confirmSplit(
+    c: PoolConnection,
+    input: Parameters<TrendRepository["decideTopicChange"]>[0],
+    request: RowDataPacket,
+    signalIds: string[],
+    resultTopicId: string,
+    now: Date,
+  ) {
+    const sourceTopicId = String(request.target_topic_id),
+      [signals] = await c.query<RowDataPacket[]>(
+        `SELECT * FROM trend_signals WHERE organization_id=? AND workspace_id=? AND topic_id=? AND id IN ` +
+          `(${signalIds.map(() => "?").join(",")}) ORDER BY id FOR UPDATE`,
+        [input.organizationId, input.workspaceId, sourceTopicId, ...signalIds],
+      ),
+      [counts] = await c.query<RowDataPacket[]>(
+        "SELECT COUNT(*) total FROM trend_signals WHERE organization_id=? AND workspace_id=? AND topic_id=?",
+        [input.organizationId, input.workspaceId, sourceTopicId],
+      );
+    if (signals.length !== signalIds.length || signals.length >= Number(counts[0]?.total ?? 0))
+      throw new TrendServiceError(
+        "trend_split_signal_invalid",
+        409,
+        "所选证据已变化，刷新主题详情后重新提议。",
+      );
+    const title = String(request.new_title),
+      normalizedTitle = normalizeTrendTitle(title),
+      key = createHash("sha256")
+        .update(
+          `${String(request.target_market)}\u0000${String(request.target_language)}\u0000${normalizedTitle}`,
+        )
+        .digest("hex"),
+      firstSeen = signals.reduce(
+        (value, item) =>
+          new Date(item.published_at) < new Date(value) ? item.published_at : value,
+        signals[0]!.published_at,
+      ),
+      lastSeen = signals.reduce(
+        (value, item) =>
+          new Date(item.published_at) > new Date(value) ? item.published_at : value,
+        signals[0]!.published_at,
+      ),
+      freshAt = signals.reduce(
+        (value, item) => (new Date(item.observed_at) > new Date(value) ? item.observed_at : value),
+        signals[0]!.observed_at,
+      ),
+      sourceCount = new Set(signals.map((item) => String(item.provider_id))).size;
+    try {
+      await c.query(
+        "INSERT INTO trend_topics (id,organization_id,workspace_id,topic_key,title,category,market," +
+          "language,status,signal_count,source_count,heat_value,heat_unit,momentum_percent," +
+          "confidence_score,confidence_status,first_seen_at,last_seen_at,source_fresh_at,version," +
+          "created_by,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,'active',?,?,?,'signals',NULL," +
+          "NULL,'insufficient_data',?,?,?,1,?,?,?)",
+        [
+          resultTopicId,
+          input.organizationId,
+          input.workspaceId,
+          key,
+          title,
+          request.new_category,
+          request.target_market,
+          request.target_language,
+          signals.length,
+          sourceCount,
+          signals.length,
+          firstSeen,
+          lastSeen,
+          freshAt,
+          request.proposed_by,
+          now,
+          now,
+        ],
+      );
+    } catch (error) {
+      if ((error as { code?: string }).code === "ER_DUP_ENTRY")
+        throw new TrendServiceError(
+          "trend_split_title_conflict",
+          409,
+          "新主题名称已存在；修改名称后重新提议。",
+        );
+      throw error;
+    }
+    await c.query(
+      "INSERT INTO trend_topic_keywords (id,organization_id,workspace_id,topic_id,keyword," +
+        "keyword_type,language,market,created_at) VALUES (?,?,?,?,?,'primary',?,?,?)",
+      [
+        randomUUID(),
+        input.organizationId,
+        input.workspaceId,
+        resultTopicId,
+        normalizedTitle,
+        request.target_language,
+        request.target_market,
+        now,
+      ],
+    );
+    await c.query(
+      `UPDATE trend_signals SET topic_id=? WHERE organization_id=? AND workspace_id=? AND topic_id=? ` +
+        `AND id IN (${signalIds.map(() => "?").join(",")})`,
+      [resultTopicId, input.organizationId, input.workspaceId, sourceTopicId, ...signalIds],
+    );
+    await this.refreshTopicMetrics(c, sourceTopicId, now);
+  }
+
+  private async refreshTopicMetrics(c: PoolConnection, topicId: string, now: Date) {
+    const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT COUNT(*) signal_count,COUNT(DISTINCT provider_id) source_count," +
+          "MIN(published_at) first_seen_at,MAX(published_at) last_seen_at," +
+          "MAX(observed_at) source_fresh_at FROM trend_signals WHERE topic_id=?",
+        [topicId],
+      ),
+      row = rows[0];
+    if (!row || Number(row.signal_count) < 1)
+      throw new TrendServiceError(
+        "trend_change_empty_topic",
+        409,
+        "治理操作不能产生没有证据的活动主题。",
+      );
+    await c.query(
+      "UPDATE trend_topics SET signal_count=?,source_count=?,heat_value=?,first_seen_at=?," +
+        "last_seen_at=?,source_fresh_at=?,version=version+1,updated_at=? WHERE id=?",
+      [
+        Number(row.signal_count),
+        Number(row.source_count),
+        Number(row.signal_count),
+        row.first_seen_at,
+        row.last_seen_at,
+        row.source_fresh_at,
+        now,
+        topicId,
+      ],
+    );
   }
 
   private async write<T>(

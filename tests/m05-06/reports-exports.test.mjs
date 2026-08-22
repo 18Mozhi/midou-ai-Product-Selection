@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import Fastify from "fastify";
 import { ReportService, ReportServiceError } from "../../apps/api/dist/report-service.js";
+import { MySqlReportRepository } from "../../apps/api/dist/mysql-report-repository.js";
 import { registerReportRoutes } from "../../apps/api/dist/report-routes.js";
 import { csvCell, csvBuffer } from "../../apps/worker/dist/report-export-worker.js";
 test("M05-06.A01/A02/A04/A12 locks report and CSV truth boundaries", async () => {
@@ -132,6 +133,67 @@ test("M05-06 exposes scoped idempotent regeneration through the real route", asy
     await app.close();
   }
 });
+test("M05-06 derives global queue position and ETA only from successful export history", async () => {
+  const ownId = "00000000-0000-4000-8000-000000000570",
+    aheadId = "00000000-0000-4000-8000-000000000571",
+    now = new Date("2026-08-19T10:00:00.000Z"),
+    pool = {
+      query: async (sql) => {
+        if (sql.startsWith("SELECT * FROM report_exports WHERE organization_id="))
+          return [
+            [
+              {
+                id: ownId,
+                report_type: "opportunity",
+                format: "csv",
+                status: "queued",
+                attempt_count: 0,
+                filename: "opportunity.csv",
+                row_count: null,
+                byte_size: null,
+                expires_at: "2026-08-20T10:00:00.000Z",
+                last_error_code: null,
+                version: 1,
+                created_at: "2026-08-19T10:00:00.000Z",
+                updated_at: "2026-08-19T10:00:00.000Z",
+              },
+            ],
+          ];
+        if (sql.includes("status IN ('queued','leased','retry_scheduled')"))
+          return [
+            [
+              {
+                id: aheadId,
+                status: "leased",
+                available_at: "2026-08-19T09:58:00.000Z",
+                lease_expires_at: "2026-08-19T10:05:00.000Z",
+                created_at: "2026-08-19T09:58:00.000Z",
+                updated_at: "2026-08-19T09:59:30.000Z",
+              },
+              {
+                id: ownId,
+                status: "queued",
+                available_at: "2026-08-19T10:00:00.000Z",
+                lease_expires_at: null,
+                created_at: "2026-08-19T10:00:00.000Z",
+                updated_at: "2026-08-19T10:00:00.000Z",
+              },
+            ],
+          ];
+        if (sql.includes("TIMESTAMPDIFF(SECOND,created_at,updated_at)"))
+          return [
+            [{ completion_seconds: 60 }, { completion_seconds: 120 }, { completion_seconds: 180 }],
+          ];
+        throw new Error(`unexpected query: ${sql}`);
+      },
+    },
+    repository = new MySqlReportRepository(pool, () => now),
+    [item] = await repository.listExports({ organizationId: "org", workspaceId: "workspace" });
+  assert.equal(item.queue_position, 2);
+  assert.equal(item.estimate_sample_size, 3);
+  assert.equal(item.median_completion_seconds, 120);
+  assert.equal(item.estimated_completion_at, "2026-08-19T10:03:30.000Z");
+});
 test("M05-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   const files = [
       "database/migrations/0018f_reports_m05_06.up.sql",
@@ -149,10 +211,12 @@ test("M05-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     v = await Promise.all(files.map((x) => readFile(x, "utf8")));
   assert.match(v[0], /report_exports[\s\S]*report_export_operations/);
   assert.match(v[1], /organization_id=\?[\s\S]*workspace_id=\?/);
+  assert.match(v[1], /queue_position[\s\S]*estimated_completion_at[\s\S]*TIMESTAMPDIFF/);
   assert.match(v[2], /report:read[\s\S]*regenerate[\s\S]*text\/csv/);
   assert.match(v[3], /row_limit_exceeded[\s\S]*expired/);
   assert.match(v[4], /数据不足[\s\S]*重新生成|到期后由 Worker 清理/);
   assert.match(v[5], /全部已落库记录[\s\S]*observed_at/);
   assert.match(v[4], /结论摘要[\s\S]*在任务中心查看/);
+  assert.match(v[4], /队列第[\s\S]*预计完成[\s\S]*估算依据/);
   assert.equal(JSON.parse(v.at(-1)).atomicTasks.length, 17);
 });

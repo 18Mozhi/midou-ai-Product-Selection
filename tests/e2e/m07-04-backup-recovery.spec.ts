@@ -10,6 +10,9 @@ const base = {
   },
   latest_backup: { actual_rpo_minutes: 5, finished_at: "2026-08-08T13:00:00Z" },
   latest_drill: null,
+  drill_age_days: null,
+  drill_expires_at: null,
+  days_until_drill_expiry: null,
   recovery_copy_verified: false,
   targets: [
     {
@@ -69,6 +72,29 @@ test("M07-04.A07/A08/A15 desktop and 390 recovery truth", async ({ page }) => {
   await expect(page.getByText("recovery_copy_unverified", { exact: true })).toBeVisible();
   await page.locator(".blockers summary").click();
   await page.evaluate(() => window.scrollTo(0, 0));
+});
+test("M07-04.A07/A11 reminds before restore drill evidence expires", async ({ page }) => {
+  await page.route("**/api/v1/platform/operations/backup-recovery", (route) =>
+    route.fulfill({
+      json: env({
+        ...base,
+        state: "verified",
+        latest_drill: { finished_at: "2026-05-16T13:30:00Z" },
+        drill_age_days: 84,
+        drill_expires_at: "2026-08-14T13:30:00Z",
+        days_until_drill_expiry: 6,
+        recovery_copy_verified: true,
+        blockers: [],
+      }),
+    }),
+  );
+  await page.goto("/platform-admin/operations");
+  await expect(page.getByText("还剩 6 天到期")).toBeVisible();
+  await expect(page.getByText("演练证据到期")).toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.reload();
+  await expect(page.getByText("还剩 6 天到期")).toBeVisible();
 });
 test("M07-04.A08/A16 loading empty stale verified forbidden and expired states", async ({
   page,

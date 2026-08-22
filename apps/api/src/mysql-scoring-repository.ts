@@ -1,9 +1,15 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
+  calculateScoreProjection,
+  type ScoreProjectionDimension,
+  type ScoreProjectionInput,
+} from "@scoutops/contracts";
+import {
   ScoringServiceError,
   type ScoreRule,
   type ScoreRuleAction,
+  type ScoreRulePreview,
   type ScoreWriteContext,
   type ScoringRepository,
 } from "./scoring-service.js";
@@ -36,6 +42,120 @@ export class MySqlScoringRepository implements ScoringRepository {
       [input.organizationId, input.workspaceId],
     );
     return rows.map(dto);
+  }
+  async preview(input: {
+    organizationId: string;
+    workspaceId: string;
+    ruleId: string;
+    page: number;
+    pageSize: number;
+  }): Promise<ScoreRulePreview> {
+    const [rules] = await this.pool.query<RowDataPacket[]>(
+      "SELECT id,version_code,status,dimensions_json,thresholds_json FROM score_rules " +
+        "WHERE id=? AND organization_id=? AND workspace_id=?",
+      [input.ruleId, input.organizationId, input.workspaceId],
+    );
+    const rule = rules[0];
+    if (!rule) throw new ScoringServiceError("score_rule_not_found", 404, "刷新规则列表。");
+    if (!["draft", "pending_approval", "approved"].includes(String(rule.status)))
+      throw new ScoringServiceError(
+        "score_rule_preview_status_invalid",
+        409,
+        "仅草稿、待审批或已批准但未启用的规则可做发布前预览。",
+      );
+    const [counts] = await this.pool.query<RowDataPacket[]>(
+        "SELECT COUNT(*) total FROM opportunities WHERE organization_id=? AND workspace_id=?",
+        [input.organizationId, input.workspaceId],
+      ),
+      total = Number(counts[0]?.total ?? 0),
+      [opportunities] = await this.pool.query<RowDataPacket[]>(
+        "SELECT id,name,lifecycle_status,overall_score,recommendation_status,score_rule_version " +
+          "FROM opportunities WHERE organization_id=? AND workspace_id=? " +
+          "ORDER BY updated_at DESC,id DESC LIMIT ? OFFSET ?",
+        [
+          input.organizationId,
+          input.workspaceId,
+          input.pageSize,
+          (input.page - 1) * input.pageSize,
+        ],
+      );
+    const opportunityIds = opportunities.map((item) => String(item.id));
+    let inputRows: RowDataPacket[] = [];
+    if (opportunityIds.length) {
+      const placeholders = opportunityIds.map(() => "?").join(",");
+      [inputRows] = await this.pool.query<RowDataPacket[]>(
+        `SELECT opportunity_id,id,input_version,dimension_code,evidence_group,score_value,evidence_ids_json,missing_fields_json FROM opportunity_score_inputs WHERE organization_id=? AND workspace_id=? AND is_current=1 AND opportunity_id IN (${placeholders})`,
+        [input.organizationId, input.workspaceId, ...opportunityIds],
+      );
+    }
+    const inputsByOpportunity = new Map<string, ScoreProjectionInput[]>();
+    for (const row of inputRows) {
+      const opportunityId = String(row.opportunity_id),
+        values = inputsByOpportunity.get(opportunityId) ?? [];
+      values.push({
+        id: String(row.id),
+        input_version: Number(row.input_version),
+        dimension_code: String(row.dimension_code),
+        evidence_group: row.evidence_group,
+        score_value: row.score_value == null ? null : Number(row.score_value),
+        evidence_ids: parse<string[]>(row.evidence_ids_json),
+        missing_fields: parse<string[]>(row.missing_fields_json),
+      });
+      inputsByOpportunity.set(opportunityId, values);
+    }
+    const dimensions = parse<ScoreProjectionDimension[]>(rule.dimensions_json),
+      thresholds = parse<{ recommend_min: number; observe_min: number }>(rule.thresholds_json),
+      items = opportunities.map((opportunity) => {
+        const opportunityId = String(opportunity.id),
+          projection = calculateScoreProjection(
+            dimensions,
+            thresholds,
+            inputsByOpportunity.get(opportunityId) ?? [],
+          ),
+          currentScore =
+            opportunity.overall_score == null ? null : Number(opportunity.overall_score),
+          scoreDelta =
+            currentScore == null || projection.overall_score == null
+              ? null
+              : Math.round((projection.overall_score - currentScore) * 100) / 100;
+        return {
+          opportunity_id: opportunityId,
+          opportunity_name: String(opportunity.name),
+          lifecycle_status: String(opportunity.lifecycle_status),
+          current_score: currentScore,
+          current_recommendation_status: String(opportunity.recommendation_status),
+          current_rule_version:
+            opportunity.score_rule_version == null ? null : String(opportunity.score_rule_version),
+          projected_score: projection.overall_score,
+          projected_recommendation_status: projection.recommendation_status,
+          projected_coverage_percent: projection.coverage_percent,
+          score_delta: scoreDelta,
+          recommendation_changed:
+            String(opportunity.recommendation_status) !== projection.recommendation_status,
+          missing_fields: projection.missing_fields,
+        };
+      }),
+      pageSummary = {
+        increased: items.filter((item) => item.score_delta != null && item.score_delta > 0).length,
+        decreased: items.filter((item) => item.score_delta != null && item.score_delta < 0).length,
+        unchanged: items.filter((item) => item.score_delta === 0).length,
+        newly_calculable: items.filter(
+          (item) => item.current_score == null && item.projected_score != null,
+        ).length,
+        insufficient_data: items.filter((item) => item.projected_score == null).length,
+        recommendation_changed: items.filter((item) => item.recommendation_changed).length,
+      };
+    return {
+      rule_id: String(rule.id),
+      rule_version_code: String(rule.version_code),
+      rule_status: rule.status,
+      page: input.page,
+      page_size: input.pageSize,
+      total,
+      items,
+      page_summary: pageSummary,
+      read_only: true,
+    };
   }
   async create(input: ScoreWriteContext & { id: string; value: any; route: string }) {
     const previous = await this.operation<ScoreRule>(input);

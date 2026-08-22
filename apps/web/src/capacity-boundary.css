@@ -187,7 +187,7 @@
 }
 .capacity-boundary__findings article {
   display: grid;
-  grid-template-columns: 34px 260px 1fr;
+  grid-template-columns: 34px 1fr;
   gap: 9px;
   padding: 11px;
   border-left: 3px solid var(--so-warning);
@@ -197,8 +197,16 @@
   border-color: var(--so-danger-border);
 }
 .capacity-boundary__findings p {
-  margin: 0;
+  margin: 5px 0 0;
   color: var(--muted);
+}
+.capacity-boundary__findings article div > small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+}
+.capacity-boundary__findings details {
+  margin-top: 7px;
 }
 .capacity-boundary .capacity-boundary__clear {
   padding: 17px;
@@ -275,9 +283,6 @@
   }
   .capacity-boundary__findings article {
     grid-template-columns: 28px 1fr;
-  }
-  .capacity-boundary__findings article p {
-    grid-column: 2;
   }
   .capacity-boundary footer {
     display: grid;

@@ -86,7 +86,12 @@ export class MySqlOpportunityProfitWorker {
           ? "dead_letter"
           : "scheduled";
       await this.finish(job, status, wrapped.code);
-      return { status, job_id: job.id, error_code: wrapped.code };
+      return {
+        status,
+        job_id: job.id,
+        opportunity_id: job.opportunityId,
+        error_code: wrapped.code,
+      };
     }
   }
 

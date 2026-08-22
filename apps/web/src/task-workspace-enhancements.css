@@ -71,6 +71,35 @@
 .task-batch-impact textarea {
   min-height: 96px;
 }
+.task-batch-impact input,
+.task-batch-impact select {
+  width: 100%;
+  min-height: 44px;
+}
+.task-blocking-context {
+  margin: 14px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.task-blocking-context div {
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+}
+.task-blocking-context span,
+.task-blocking-context strong {
+  display: block;
+}
+.task-blocking-context span {
+  color: var(--so-text-muted);
+  font-size: 11px;
+}
+.task-blocking-context strong {
+  margin-top: 5px;
+  color: var(--so-text);
+}
 .task-action-dialog form {
   width: min(520px, calc(100vw - 52px));
 }
@@ -85,6 +114,9 @@
     width: 100%;
   }
   .task-batch-impact dl {
+    grid-template-columns: 1fr;
+  }
+  .task-blocking-context {
     grid-template-columns: 1fr;
   }
 }

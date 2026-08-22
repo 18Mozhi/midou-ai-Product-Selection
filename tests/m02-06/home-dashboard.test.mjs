@@ -14,8 +14,14 @@ const org = "00000000-0000-4000-8000-000000000601",
     kind,
     title: `${kind}-${id}`,
     reason: "verified",
-    route: "/tasks/example",
+    route: `/tasks/${id}`,
+    source_module: "projection",
+    source_label: "工作事项",
+    context_label: "去处理",
     priority: kind === "action" ? "normal" : null,
+    risk_level: null,
+    value_score: null,
+    blocked: false,
     owner_label: null,
     due_at: null,
     source_count: kind === "change" ? 2 : null,
@@ -51,6 +57,50 @@ test("M02-06.A01/A02/A04/A12 service groups and caps the truthful projection", a
     actorId: actor,
     capabilities: ["task:read"],
   });
+});
+test("M02-06 merges cross-module actions by deadline blocker risk value and route", async () => {
+  const rows = [
+    { ...item("action", 1), title: "普通任务", due_at: "2026-08-09T00:00:00.000Z" },
+    {
+      ...item("action", 2),
+      title: "高价值机会",
+      source_module: "opportunity",
+      source_label: "选品机会",
+      context_label: "进入决策上下文",
+      priority: "high_value",
+      value_score: 91,
+    },
+    {
+      ...item("action", 3),
+      title: "高风险任务",
+      source_module: "task",
+      source_label: "证据补采",
+      priority: "high_risk",
+      risk_level: "high",
+    },
+    {
+      ...item("action", 4),
+      title: "阻断审批",
+      source_module: "approval",
+      source_label: "审批",
+      context_label: "打开完整审批上下文",
+      priority: "blocking",
+      risk_level: "medium",
+      blocked: true,
+    },
+    { ...item("action", 5), title: "逾期任务", priority: "overdue" },
+    { ...item("action", 6), title: "重复路由", route: "/tasks/5", priority: "normal" },
+  ];
+  const result = await new HomeDashboardService({ list: async () => rows }).get({
+    organizationId: org,
+    workspaceId: workspace,
+    actorId: actor,
+    capabilities: ["task:read", "opportunity:read"],
+  });
+  assert.deepEqual(
+    result.actions.map((entry) => entry.title),
+    ["逾期任务", "阻断审批", "高风险任务", "高价值机会", "普通任务"],
+  );
 });
 test("M02-06.A04/A12 empty projection remains empty and does not invent metrics", async () => {
   const result = await new HomeDashboardService({ list: async () => [] }).get({
@@ -144,6 +194,11 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     "workspace_id=\?",
     "required_capability IN",
     "kind='health' AND audience_user_id=\?",
+    "FROM tasks t",
+    "FROM approval_requests r",
+    "FROM opportunities o",
+    "/tasks/approvals\\?approval=",
+    "UTC_TIMESTAMP\\(3\\)",
   ])
     assert.match(repo, new RegExp(rule));
   assert.match(openapi, /\/me\/home-dashboard:/);
@@ -151,6 +206,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   assert.match(home, /真实任务、趋势、机会和来源状态/);
   assert.match(home, /home-priority-grid[\s\S]*今日行动[\s\S]*异常与数据健康/);
+  assert.match(home, /source_label[\s\S]*riskLabel[\s\S]*value_score[\s\S]*context_label/);
   assert.match(home, /home-secondary[\s\S]*变化与关注/);
   assert.match(home, /source_count[\s\S]*去处理/);
   assert.doesNotMatch(home, /全链路教学/);

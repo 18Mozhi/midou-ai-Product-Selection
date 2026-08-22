@@ -58,6 +58,38 @@ export interface ScoreInput {
   observed_at: string;
   expected_version: number;
 }
+export interface ScoreRulePreviewItem {
+  opportunity_id: string;
+  opportunity_name: string;
+  lifecycle_status: string;
+  current_score: number | null;
+  current_recommendation_status: string;
+  current_rule_version: string | null;
+  projected_score: number | null;
+  projected_recommendation_status: string;
+  projected_coverage_percent: number;
+  score_delta: number | null;
+  recommendation_changed: boolean;
+  missing_fields: string[];
+}
+export interface ScoreRulePreview {
+  rule_id: string;
+  rule_version_code: string;
+  rule_status: ScoreRuleStatus;
+  page: number;
+  page_size: number;
+  total: number;
+  items: ScoreRulePreviewItem[];
+  page_summary: {
+    increased: number;
+    decreased: number;
+    unchanged: number;
+    newly_calculable: number;
+    insufficient_data: number;
+    recommendation_changed: number;
+  };
+  read_only: true;
+}
 export class ScoringServiceError extends Error {
   constructor(
     readonly code: string,
@@ -204,6 +236,13 @@ export function validateScoreInput(value: ScoreInput) {
 }
 export interface ScoringRepository {
   list(input: { organizationId: string; workspaceId: string }): Promise<ScoreRule[]>;
+  preview(input: {
+    organizationId: string;
+    workspaceId: string;
+    ruleId: string;
+    page: number;
+    pageSize: number;
+  }): Promise<ScoreRulePreview>;
   create(
     input: ScoreWriteContext & {
       id: string;
@@ -241,6 +280,35 @@ export class ScoringService {
   constructor(private readonly repository: ScoringRepository) {}
   list(input: { organizationId: string; workspaceId: string }) {
     return this.repository.list(input);
+  }
+  preview(input: {
+    organizationId: string;
+    workspaceId: string;
+    ruleId: string;
+    page?: number;
+    pageSize?: number;
+  }) {
+    const page = input.page ?? 1,
+      pageSize = input.pageSize ?? 20;
+    if (
+      !Number.isSafeInteger(page) ||
+      page < 1 ||
+      !Number.isSafeInteger(pageSize) ||
+      pageSize < 1 ||
+      pageSize > 100
+    )
+      throw new ScoringServiceError(
+        "score_rule_preview_pagination_invalid",
+        400,
+        "使用 page>=1 且 page_size 为 1–100 后重试。",
+      );
+    return this.repository.preview({
+      organizationId: input.organizationId,
+      workspaceId: input.workspaceId,
+      ruleId: uuid(input.ruleId, "score_rule_id"),
+      page,
+      pageSize,
+    });
   }
   create(input: ScoreWriteContext & { value: Parameters<typeof validateScoreRule>[0] }) {
     return this.repository.create({

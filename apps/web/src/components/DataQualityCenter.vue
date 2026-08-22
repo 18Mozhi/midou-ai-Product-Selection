@@ -68,8 +68,10 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   runs = ref<Run[]>([]),
   totalEvidence = ref(0),
   totalIssues = ref(0),
+  observedAt = ref(""),
   requestId = ref(""),
   tab = ref<"evidence" | "issues" | "runs">("evidence"),
+  selectedRunId = ref(""),
   query = ref(""),
   detail = ref<any>(null),
   notice = ref(""),
@@ -95,10 +97,11 @@ const filteredEvidence = computed(() =>
   filteredIssues = computed(() =>
     issues.value.filter(
       (item) =>
-        !query.value ||
-        [item.metric_code, item.provider_name, item.field_path].some((value) =>
-          value?.toLowerCase().includes(query.value.toLowerCase()),
-        ),
+        (!selectedRunId.value || item.reconciliation_run_id === selectedRunId.value) &&
+        (!query.value ||
+          [item.metric_code, item.provider_name, item.field_path].some((value) =>
+            value?.toLowerCase().includes(query.value.toLowerCase()),
+          )),
     ),
   ),
   metrics = computed(() => ({
@@ -107,6 +110,20 @@ const filteredEvidence = computed(() =>
       .length,
     passed: runs.value.filter((item) => item.status === "passed").length,
   })),
+  retentionRisks = computed(() => {
+    const observed = Date.parse(observedAt.value);
+    if (!Number.isFinite(observed)) return { expiring: 0, expired: 0 };
+    return evidence.value.reduce(
+      (result, item) => {
+        const expiry = Date.parse(item.retention_until);
+        if (!Number.isFinite(expiry)) return result;
+        if (expiry <= observed) result.expired += 1;
+        else if (expiry - observed <= 7 * 86400000) result.expiring += 1;
+        return result;
+      },
+      { expiring: 0, expired: 0 },
+    );
+  }),
   qualityHighlightCodes = [
     "title_accuracy",
     "price_accuracy",
@@ -187,6 +204,14 @@ const failure = (code: number): State =>
     })[value] ?? value,
   qualityStatusLabel = (value: string) =>
     ({ passed: "通过", failed: "未通过", insufficient_sample: "样本不足" })[value] ?? "状态未知";
+const retentionStatus = (value: string) => {
+  const observed = Date.parse(observedAt.value),
+    expiry = Date.parse(value);
+  if (!Number.isFinite(observed) || !Number.isFinite(expiry)) return "到期风险未知";
+  if (expiry <= observed) return "已到期，等待受控治理";
+  const days = Math.ceil((expiry - observed) / 86400000);
+  return days <= 7 ? `${days} 天内到期` : `剩余 ${days} 天`;
+};
 async function load() {
   state.value = "loading";
   notice.value = "";
@@ -200,6 +225,7 @@ async function load() {
     selectedIssueIds.value = [];
     totalEvidence.value = response.data.totalEvidence ?? 0;
     totalIssues.value = response.data.totalIssues ?? 0;
+    observedAt.value = response.data.observedAt ?? "";
     state.value =
       evidence.value.length || issues.value.length || runs.value.length ? "ready" : "empty";
   } catch (error) {
@@ -239,6 +265,16 @@ async function grantDownload(item: Evidence) {
 function beginResolve(item: Issue) {
   resolving.value = item;
   reason.value = "";
+}
+function drillIntoRun(run: Run) {
+  selectedRunId.value = run.id;
+  query.value = "";
+  tab.value = "issues";
+  notice.value = `${run.provider_name} · ${run.parser_version}：正在查看本次核对的异常样本与字段。`;
+}
+function clearRunDrilldown() {
+  selectedRunId.value = "";
+  notice.value = "已返回全部质量问题。";
 }
 async function resolveIssue() {
   if (!resolving.value) return;
@@ -359,6 +395,10 @@ onMounted(async () => {
           <small>通过核对</small><strong>{{ metrics.passed }}</strong
           ><span>按来源与解析器</span>
         </article>
+        <article>
+          <small>即将到期</small><strong>{{ retentionRisks.expiring }}</strong
+          ><span>{{ retentionRisks.expired }} 条已到期</span>
+        </article>
       </div>
       <section class="quality-card" aria-labelledby="quality-highlight-title">
         <header>
@@ -444,7 +484,11 @@ onMounted(async () => {
                     {{ item.content_type }}<small>{{ size(item.size_bytes) }}</small>
                   </td>
                   <td>
-                    {{ time(item.captured_at) }}<small>至 {{ time(item.retention_until) }}</small>
+                    {{ time(item.captured_at)
+                    }}<small
+                      >保留至 {{ time(item.retention_until) }} ·
+                      {{ retentionStatus(item.retention_until) }}</small
+                    >
                   </td>
                   <td>
                     <button @click="openEvidence(item.id)">详情</button
@@ -480,7 +524,9 @@ onMounted(async () => {
               </div>
               <div>
                 <dt>保留期限</dt>
-                <dd>{{ time(row.retention_until) }}</dd>
+                <dd>
+                  {{ time(row.retention_until) }} · {{ retentionStatus(row.retention_until) }}
+                </dd>
               </div>
             </dl>
             <div class="quality-mobile-actions">
@@ -530,6 +576,13 @@ onMounted(async () => {
             </details>
           </template>
         </ResponsiveDataView>
+        <section v-if="tab === 'issues' && selectedRunId" class="quality-drilldown" role="status">
+          <div>
+            <strong>异常样本下钻</strong>
+            <span>仅显示当前核对运行关联的问题；可继续打开证据查看字段溯源。</span>
+          </div>
+          <button type="button" class="secondary" @click="clearRunDrilldown">返回全部问题</button>
+        </section>
         <section
           v-if="tab === 'issues'"
           class="quality-batch-toolbar"
@@ -729,7 +782,7 @@ onMounted(async () => {
             </details>
           </template>
         </ResponsiveDataView>
-        <div v-else class="quality-run-grid">
+        <div v-else-if="tab === 'runs'" class="quality-run-grid">
           <article v-for="run in runs" :key="run.id">
             <header>
               <div>
@@ -749,6 +802,9 @@ onMounted(async () => {
                 >
               </li>
             </ul>
+            <button type="button" class="secondary" @click="drillIntoRun(run)">
+              查看异常字段与样本
+            </button>
           </article>
         </div>
       </section>

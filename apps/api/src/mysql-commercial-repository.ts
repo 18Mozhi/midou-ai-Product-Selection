@@ -110,7 +110,10 @@ export class MySqlCommercialRepository implements CommercialRepository {
   }
   async read(i: any) {
     const [plans] = await this.pool.query<RowDataPacket[]>(
-      "SELECT id,code,name,description,quotas_json,status,version,updated_at FROM commercial_plans ORDER BY status,code LIMIT ?",
+      "SELECT p.id,p.code,p.name,p.description,p.quotas_json,p.status,p.version,p.updated_at," +
+        "(SELECT COUNT(*) FROM organization_plan_assignments a WHERE a.plan_id=p.id " +
+        "AND a.status IN ('active','suspended')) assignment_count FROM commercial_plans p " +
+        "ORDER BY p.status,p.code LIMIT ?",
       [i.limit],
     );
     let assignment = null,
@@ -188,6 +191,7 @@ export class MySqlCommercialRepository implements CommercialRepository {
       plans: plans.map((r: any) => ({
         ...r,
         quotas: json(r.quotas_json),
+        assignment_count: Number(r.assignment_count),
         quotas_json: undefined,
         updated_at: iso(r.updated_at),
       })),

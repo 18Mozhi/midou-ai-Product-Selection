@@ -12,7 +12,13 @@ interface Item {
   title: string;
   reason: string;
   route: string;
+  source_module: "projection" | "task" | "approval" | "opportunity";
+  source_label: string;
+  context_label: string;
   priority: "overdue" | "blocking" | "high_risk" | "high_value" | "normal" | null;
+  risk_level: "unknown" | "low" | "normal" | "medium" | "high" | "critical" | null;
+  value_score: number | null;
+  blocked: boolean;
   owner_label: string | null;
   due_at: string | null;
   source_count: number | null;
@@ -52,6 +58,11 @@ const total = computed(() =>
       normal: "普通",
     })[value ?? "normal"],
   date = (value: string | null) => (value ? new Date(value).toLocaleString("zh-CN") : "未设置");
+const riskLabel = (value: Item["risk_level"]) =>
+    ({ unknown: "待识别", low: "低", normal: "普通", medium: "中", high: "高", critical: "紧急" })[
+      value ?? "unknown"
+    ],
+  score = (value: number) => (Number.isInteger(value) ? String(value) : value.toFixed(1));
 const failure = (kind: ApiFailureKind): State =>
   kind === "expired"
     ? "expired"
@@ -156,6 +167,12 @@ onMounted(load);
                 <em>{{ priorityLabel(item.priority) }}</em
                 ><strong>{{ item.title }}</strong
                 ><small>{{ item.reason }}</small>
+                <span class="home-action-signals">
+                  <b>{{ item.source_label }}</b>
+                  <b v-if="item.risk_level">风险 {{ riskLabel(item.risk_level) }}</b>
+                  <b v-if="item.value_score !== null">价值 {{ score(item.value_score) }}</b>
+                  <b v-if="item.due_at">时限 {{ date(item.due_at) }}</b>
+                </span>
               </div>
               <dl>
                 <div>
@@ -163,8 +180,8 @@ onMounted(load);
                   <dd>{{ item.owner_label || "未分配" }}</dd>
                 </div>
                 <div>
-                  <dt>截止</dt>
-                  <dd>{{ date(item.due_at) }}</dd>
+                  <dt>下一步</dt>
+                  <dd>{{ item.context_label }} →</dd>
                 </div>
               </dl></RouterLink
             >

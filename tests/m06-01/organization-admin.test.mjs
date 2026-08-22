@@ -5,6 +5,7 @@ import {
   OrganizationAdminService,
   OrganizationAdminError,
 } from "../../apps/api/dist/organization-admin-service.js";
+import { MySqlOrganizationAdminRepository } from "../../apps/api/dist/mysql-organization-admin-repository.js";
 const org = "00000000-0000-4000-8000-000000000601",
   ws = "00000000-0000-4000-8000-000000000602";
 function fake() {
@@ -90,7 +91,16 @@ test("M06-01.A03/A05/A11/A16 migration is MySQL57, auditable and reversible", as
   assert.match(repo, /delete stored\.secret/);
 });
 test("M06-01 organization pages use novice labels and keep UUIDs in technical details", async () => {
-  const web = await readFile("apps/web/src/components/OrganizationAdminCenter.vue", "utf8");
+  const web = (
+    await Promise.all(
+      [
+        "apps/web/src/components/OrganizationAdminCenter.vue",
+        "apps/web/src/components/OrganizationMemberPanel.vue",
+        "apps/web/src/components/OrganizationRolePanel.vue",
+        "apps/web/src/components/OrganizationApprovalPanel.vue",
+      ].map((path) => readFile(path, "utf8")),
+    )
+  ).join("\n");
   for (const copy of [
     "组织后台",
     "组织基本资料",
@@ -115,18 +125,23 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
   assert.match(web, /workspaceName\(data\?\.default_workspace_id\)/);
   assert.match(
     web,
-    /<details class="org-admin-technical">[\s\S]*成员 ID：\{\{ x\.id \}\}[\s\S]*<\/details>/,
+    /<details class="org-admin-technical">[\s\S]*成员 ID：\{\{ member\.id \}\}[\s\S]*<\/details>/,
   );
 });
 test("M06-01 organization governance exposes filters, matrix and factual comparisons", async () => {
-  const [repo, routes, web, map] = await Promise.all([
+  const [repo, routes, center, members, roles, approvals, map] = await Promise.all([
     readFile("apps/api/src/mysql-organization-admin-repository.ts", "utf8"),
     readFile("apps/api/src/organization-admin-routes.ts", "utf8"),
     readFile("apps/web/src/components/OrganizationAdminCenter.vue", "utf8"),
+    readFile("apps/web/src/components/OrganizationMemberPanel.vue", "utf8"),
+    readFile("apps/web/src/components/OrganizationRolePanel.vue", "utf8"),
+    readFile("apps/web/src/components/OrganizationApprovalPanel.vue", "utf8"),
     readFile("docs/feature-map.json", "utf8"),
   ]);
+  const web = [center, members, roles, approvals].join("\n");
   assert.match(repo, /team_names/);
   assert.match(repo, /approval_templates/);
+  assert.match(repo, /approval_template_versions[\s\S]*templateVersionDiff/);
   assert.match(repo, /async data\(i: any\)/);
   assert.match(repo, /current_node_ordinal/);
   assert.doesNotMatch(repo, /workflow_template_id|requested_at/);
@@ -141,4 +156,71 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
   ])
     assert.match(web, new RegExp(copy));
   assert.match(map, /"\/org-admin\/teams"/);
+});
+test("M06-01 compares the current approval template with its immediate previous version", async () => {
+  const templateId = "00000000-0000-4000-8000-000000000618",
+    pool = {
+      query: async (sql) => {
+        if (sql.includes("FROM approval_requests WHERE organization_id=? GROUP BY")) return [[]];
+        if (sql.includes("FROM approval_requests WHERE organization_id=? ORDER BY")) return [[]];
+        if (sql.includes("COUNT(n.id) node_count FROM approval_templates"))
+          return [
+            [
+              {
+                id: templateId,
+                name: "选品复核模板",
+                resource_type: "opportunity_decision",
+                status: "published",
+                current_version: 2,
+                revision: 3,
+                workspace_name: "新品决策工作区",
+                node_count: 2,
+              },
+            ],
+          ];
+        if (sql.includes("FROM approval_template_versions v JOIN approval_templates"))
+          return [
+            [
+              {
+                template_id: templateId,
+                version_number: 1,
+                ordinal: 1,
+                name: "选品经理复核",
+                approver_name: "张经理",
+                sla_minutes: 60,
+                escalation_name: "组织管理员",
+              },
+              {
+                template_id: templateId,
+                version_number: 2,
+                ordinal: 1,
+                name: "选品经理复核",
+                approver_name: "李经理",
+                sla_minutes: 30,
+                escalation_name: "组织管理员",
+              },
+              {
+                template_id: templateId,
+                version_number: 2,
+                ordinal: 2,
+                name: "采购确认",
+                approver_name: "采购负责人",
+                sla_minutes: 120,
+                escalation_name: "组织管理员",
+              },
+            ],
+          ];
+        throw new Error(`unexpected query: ${sql}`);
+      },
+    },
+    repository = new MySqlOrganizationAdminRepository(pool),
+    result = await repository.approvals({ organizationId: org });
+  assert.equal(result.templates[0].version_diff.from_version, 1);
+  assert.equal(result.templates[0].version_diff.to_version, 2);
+  assert.equal(result.templates[0].version_diff.change_count, 2);
+  assert.deepEqual(
+    result.templates[0].version_diff.changes[0].fields.map((item) => item.label),
+    ["审批人", "处理时限（分钟）"],
+  );
+  assert.equal(result.templates[0].version_diff.changes[1].kind, "added");
 });

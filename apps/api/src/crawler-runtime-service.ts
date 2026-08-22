@@ -70,6 +70,17 @@ export interface RuntimeContext {
   requestId: string;
   traceId: string;
 }
+export interface CrawlerCompletionSpoolStatus {
+  pendingCount: number;
+  pendingBytes: number;
+  quarantinedCount: number;
+  quarantinedBytes: number;
+  oldestPendingAt: Date | null;
+  retentionDays: number;
+  maxBytes: number;
+  minimumFreeDiskMb: number;
+  freeDiskMb: number;
+}
 export interface AcquireInput extends RuntimeContext {
   organizationId: string;
   workspaceId: string;
@@ -124,6 +135,7 @@ export interface CrawlerRuntimeRepository {
       runId: string;
       leaseId: string;
       leaseTokenHash: string;
+      completionSpool: CrawlerCompletionSpoolStatus;
       now: Date;
       expiresAt: Date;
     },
@@ -166,6 +178,65 @@ export class CrawlerRuntimeError extends Error {
   }
 }
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const spoolInteger = (value: unknown, minimum: number, maximum: number) => {
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) && parsed >= minimum && parsed <= maximum ? parsed : null;
+};
+function completionSpool(value: unknown): CrawlerCompletionSpoolStatus {
+  const source = value && typeof value === "object" && !Array.isArray(value) ? value : {},
+    record = source as Record<string, unknown>,
+    pendingCount = spoolInteger(record.pending_count, 0, 4_294_967_295),
+    pendingBytes = spoolInteger(record.pending_bytes, 0, 1_099_511_627_776),
+    quarantinedCount = spoolInteger(record.quarantined_count, 0, 4_294_967_295),
+    quarantinedBytes = spoolInteger(record.quarantined_bytes, 0, 1_099_511_627_776),
+    retentionDays = spoolInteger(record.retention_days, 1, 3650),
+    maxBytes = spoolInteger(record.max_bytes, 1_048_576, 1_099_511_627_776),
+    minimumFreeDiskMb = spoolInteger(record.minimum_free_disk_mb, 128, 1_048_576),
+    freeDiskMb = spoolInteger(record.free_disk_mb, 0, 4_294_967_295),
+    oldestPendingAt =
+      record.oldest_pending_at == null ? null : new Date(String(record.oldest_pending_at)),
+    allowed = new Set([
+      "pending_count",
+      "pending_bytes",
+      "quarantined_count",
+      "quarantined_bytes",
+      "oldest_pending_at",
+      "retention_days",
+      "max_bytes",
+      "minimum_free_disk_mb",
+      "free_disk_mb",
+    ]);
+  if (
+    Object.keys(record).some((key) => !allowed.has(key)) ||
+    [
+      pendingCount,
+      pendingBytes,
+      quarantinedCount,
+      quarantinedBytes,
+      retentionDays,
+      maxBytes,
+      minimumFreeDiskMb,
+      freeDiskMb,
+    ].some((item) => item === null) ||
+    (oldestPendingAt !== null && !Number.isFinite(oldestPendingAt.getTime()))
+  )
+    throw new CrawlerRuntimeError(
+      "crawler_completion_spool_invalid",
+      400,
+      "按受限完成回执目录合同提交计数、容量、保留期和磁盘水位。",
+    );
+  return {
+    pendingCount: pendingCount!,
+    pendingBytes: pendingBytes!,
+    quarantinedCount: quarantinedCount!,
+    quarantinedBytes: quarantinedBytes!,
+    oldestPendingAt,
+    retentionDays: retentionDays!,
+    maxBytes: maxBytes!,
+    minimumFreeDiskMb: minimumFreeDiskMb!,
+    freeDiskMb: freeDiskMb!,
+  };
+}
 export class CrawlerRuntimeService {
   constructor(
     private readonly repository: CrawlerRuntimeRepository,
@@ -276,7 +347,9 @@ export class CrawlerRuntimeService {
   recoverExpired(context: RuntimeContext & { idempotencyKey: string }) {
     return this.repository.recoverExpired({ ...context, now: this.now() });
   }
-  async acquireJob(input: { leaseOwner: string; leaseSeconds: number } & RuntimeContext) {
+  async acquireJob(
+    input: { leaseOwner: string; leaseSeconds: number; completionSpool: unknown } & RuntimeContext,
+  ) {
     if (!/^[A-Za-z0-9._:-]{2,160}$/.test(input.leaseOwner))
       throw new CrawlerRuntimeError(
         "crawler_lease_owner_invalid",
@@ -293,6 +366,7 @@ export class CrawlerRuntimeService {
       lease = createLeaseToken(),
       assignment = await this.repository.acquireJob({
         ...input,
+        completionSpool: completionSpool(input.completionSpool),
         runId: randomUUID(),
         leaseId: lease.id,
         leaseTokenHash: hashLeaseToken(lease.token),

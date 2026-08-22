@@ -31,6 +31,129 @@ export interface ErrorEnvelope {
   trace_id: string;
 }
 
+export type ScoreEvidenceGroup = "market" | "competition" | "cost" | "other";
+
+export interface ScoreProjectionDimension {
+  code: string;
+  weight: number;
+  required: boolean;
+  evidence_group: ScoreEvidenceGroup;
+}
+
+export interface ScoreProjectionInput {
+  id?: string;
+  input_version?: number;
+  dimension_code: string;
+  evidence_group: ScoreEvidenceGroup;
+  score_value: number | null;
+  evidence_ids: string[];
+  missing_fields: string[];
+}
+
+export interface ScoreProjectionResult {
+  overall_score: number | null;
+  coverage_percent: number;
+  recommendation_status: "recommend" | "observe" | "not_recommend" | "insufficient_data";
+  missing_fields: string[];
+  complete_core_evidence: boolean;
+  components: Array<{
+    dimension_code: string;
+    weight_percent: number;
+    input_score: number | null;
+    weighted_score: number | null;
+    evidence_ids: string[];
+    missing_fields: string[];
+    usable: boolean;
+  }>;
+}
+
+const roundScore = (value: number) => Math.round(value * 100) / 100;
+
+export function calculateScoreProjection(
+  dimensions: ScoreProjectionDimension[],
+  thresholds: { recommend_min: number; observe_min: number },
+  inputs: ScoreProjectionInput[],
+): ScoreProjectionResult {
+  const byCode = new Map(inputs.map((item) => [item.dimension_code, item])),
+    required = dimensions.filter((item) => item.required),
+    components = dimensions.map((dimension) => {
+      const input = byCode.get(dimension.code),
+        evidence = input?.evidence_ids ?? [],
+        missing = input?.missing_fields ?? [],
+        usable = Boolean(
+          input &&
+          input.score_value != null &&
+          input.evidence_group === dimension.evidence_group &&
+          evidence.length,
+        );
+      return {
+        dimension_code: dimension.code,
+        weight_percent: dimension.weight,
+        input_score: input?.score_value ?? null,
+        weighted_score:
+          usable && input?.score_value != null
+            ? roundScore(input.score_value * (dimension.weight / 100))
+            : null,
+        evidence_ids: evidence,
+        missing_fields: [
+          ...missing,
+          ...(!input ? [`${dimension.code}.input`] : []),
+          ...(input && input.evidence_group !== dimension.evidence_group
+            ? [`${dimension.code}.evidence_group`]
+            : []),
+          ...(input && input.score_value != null && !evidence.length
+            ? [`${dimension.code}.evidence`]
+            : []),
+        ],
+        usable,
+      };
+    }),
+    covered = required.filter(
+      (dimension) => components.find((item) => item.dimension_code === dimension.code)?.usable,
+    ).length,
+    coverage = roundScore(required.length ? (covered / required.length) * 100 : 0),
+    available = components.filter((item) => item.usable && item.input_score != null),
+    availableWeight = available.reduce((sum, item) => sum + item.weight_percent, 0),
+    overall =
+      coverage >= 50 && availableWeight > 0
+        ? roundScore(
+            available.reduce(
+              (sum, item) => sum + Number(item.input_score) * item.weight_percent,
+              0,
+            ) / availableWeight,
+          )
+        : null,
+    groups = new Set(
+      components
+        .filter((item) => item.usable)
+        .map((item) => dimensions.find((dimension) => dimension.code === item.dimension_code)!)
+        .map((dimension) => dimension.evidence_group),
+    ),
+    complete =
+      coverage >= 80 &&
+      (["market", "competition", "cost"] as ScoreEvidenceGroup[]).every((group) =>
+        groups.has(group),
+      ),
+    recommendation =
+      overall == null
+        ? "insufficient_data"
+        : complete && overall >= thresholds.recommend_min
+          ? "recommend"
+          : overall >= thresholds.observe_min
+            ? "observe"
+            : "not_recommend";
+  return {
+    overall_score: overall,
+    coverage_percent: coverage,
+    recommendation_status: recommendation,
+    missing_fields: [
+      ...new Set(components.flatMap((item) => (item.usable ? [] : item.missing_fields))),
+    ],
+    complete_core_evidence: complete,
+    components,
+  };
+}
+
 export type LocalAccountStatus = "pending_verification" | "active" | "disabled";
 export type LocalSessionStatus = "active" | "revoked" | "expired";
 
@@ -158,6 +281,9 @@ export interface GlobalSearchResult {
   resource_id: string;
   title: string;
   subtitle: string | null;
+  status: string | null;
+  assignee_id: string | null;
+  assignee_name: string | null;
   route: string;
   updated_at: string;
 }
@@ -175,13 +301,21 @@ export interface QuickActionSummary {
 }
 export type HomeDashboardKind = "action" | "change" | "follow" | "health";
 export type HomeActionPriority = "overdue" | "blocking" | "high_risk" | "high_value" | "normal";
+export type HomeActionSourceModule = "projection" | "task" | "approval" | "opportunity";
+export type HomeActionRisk = "unknown" | "low" | "normal" | "medium" | "high" | "critical";
 export interface HomeDashboardItem {
   id: string;
   kind: HomeDashboardKind;
   title: string;
   reason: string;
   route: string;
+  source_module: HomeActionSourceModule;
+  source_label: string;
+  context_label: string;
   priority: HomeActionPriority | null;
+  risk_level: HomeActionRisk | null;
+  value_score: number | null;
+  blocked: boolean;
   owner_label: string | null;
   due_at: string | null;
   source_count: number | null;
@@ -232,6 +366,15 @@ export type ProviderDefinitionInput = Omit<
   ProviderDefinition,
   "id" | "terms_reviewed_at" | "version" | "updated_at"
 >;
+export interface ProviderPageCompatibilityObservation {
+  parser_version: string;
+  page_version_sha256: string;
+  status: "compatible" | "incompatible" | "mixed" | "unverified";
+  observation_count: number;
+  succeeded_count: number;
+  parser_failure_count: number;
+  last_observed_at: string;
+}
 export interface ProviderAdapterSummary {
   id: string;
   code: string;
@@ -254,6 +397,15 @@ export interface ProviderAdapterSummary {
   runtime_parser_failure_count_24h: number;
   runtime_login_failure_count_24h: number;
   runtime_empty_success_count_24h: number;
+  runtime_circuit_state: "closed" | "open";
+  runtime_consecutive_failures: number;
+  runtime_failure_threshold: number;
+  runtime_error_budget_remaining: number;
+  runtime_last_error_code: string | null;
+  runtime_circuit_opened_at: string | null;
+  runtime_last_recovered_at: string | null;
+  runtime_recovery_gate_met: boolean;
+  compatibility_matrix: ProviderPageCompatibilityObservation[];
   version: number;
   updated_at: string;
 }
@@ -409,6 +561,27 @@ export interface RedisResilienceFindingDto {
   severity: "warning" | "blocked";
   action_hint: string;
 }
+export interface RedisKeyspaceHotspotDto {
+  purpose: "cache" | "queue" | "rate" | "sse";
+  resource: "collection_ready" | "collection_task" | "other";
+  sampled_keys: number;
+  sampled_bytes: number;
+  sampled_share_basis_points: number;
+}
+export interface RedisKeyspaceSampleDto {
+  status: "sampled" | "partial" | "empty" | "unavailable";
+  basis: "bounded_memory_usage";
+  sample_limit: number;
+  scanned_keys: number;
+  measured_keys: number;
+  ignored_keys: number;
+  failed_measurements: number;
+  total_sampled_bytes: number;
+  truncated: boolean;
+  access_frequency_available: false;
+  unavailable_reason: "command_unsupported" | "scan_failed" | null;
+  hotspots: RedisKeyspaceHotspotDto[];
+}
 export interface RedisResilienceDto {
   state: "ready" | "warning" | "blocked";
   mode: "single_instance";
@@ -426,6 +599,9 @@ export interface RedisResilienceDto {
     rejected: number;
   };
   evicted_keys: number;
+  max_memory_policy: string;
+  uptime_seconds: number;
+  keyspace_sample: RedisKeyspaceSampleDto;
   findings: RedisResilienceFindingDto[];
   single_instance: true;
   sentinel_enabled: false;
@@ -490,7 +666,7 @@ export interface FileResilienceDto {
   state: "ready" | "warning" | "blocked";
   mode: "local_managed_directories";
   directories: Array<{
-    kind: "evidence" | "export";
+    kind: "evidence" | "export" | "temp";
     available: boolean;
     writable: boolean;
     used_bytes: number;

@@ -176,6 +176,9 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
     new RegExp(`from=/sourcing\\?record=${searchId}`),
   );
   const comparison = page.getByLabel("规格、最小起订量与交期对比");
+  const specificationHint = page.getByLabel("规格归一化提示");
+  await expect(specificationHint).toContainText("存在 2 种规格文本，尚未归一");
+  await expect(specificationHint).toContainText("系统不会自动换算或判断等价");
   await expect(comparison.getByText("500ml / 蓝色 / 单只彩盒")).toBeVisible();
   await expect(comparison.getByText("600ml / 绿色 / 双滤芯")).toBeVisible();
   await expect(comparison.getByText("300", { exact: true })).toBeVisible();
@@ -188,6 +191,49 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await expect(page.getByRole("button", { name: "保存报价对比" })).toBeDisabled();
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page).toHaveScreenshot("m04-06-sourcing.png", { fullPage: true });
+});
+
+test("opportunity sourcing detail exposes designated dual-person cost review", async ({ page }) => {
+  await setup(page);
+  const opportunityId = "00000000-0000-4000-8000-000000000612";
+  const opportunitySearch = {
+    id: searchId,
+    input_type: "opportunity",
+    input_ref: opportunityId,
+    status: "completed",
+    candidate_count: 1,
+    missing_fields: [],
+    created_at: "2026-08-08T12:00:00.000Z",
+  };
+  await page.unroute(`**/api/v1/sourcing/searches/${searchId}`);
+  await page.unroute("**/api/v1/sourcing/searches");
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({ json: envelope({ ...opportunitySearch, candidates: [readyCandidate] }) }),
+  );
+  await page.route("**/api/v1/sourcing/searches", (route) =>
+    route.fulfill({ json: envelope([opportunitySearch]) }),
+  );
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) =>
+    route.fulfill({ json: envelope({ id: opportunityId, version: 8 }) }),
+  );
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
+    route.fulfill({
+      json: envelope({ latest_run: null, current_inputs: [], cost_input_reviews: [] }),
+    }),
+  );
+  await page.route("**/api/v1/cost-input-reviewers", (route) =>
+    route.fulfill({
+      json: envelope([{ id: "00000000-0000-4000-8000-000000000613", label: "供应链成本复核人" }]),
+    }),
+  );
+  await page.goto("/sourcing");
+  await expect(page.getByRole("heading", { name: "双人成本复核" })).toBeVisible();
+  await expect(page.getByText("提交后 24 小时内由指定复核人处理")).toBeVisible();
+  await expect(page.getByLabel("指定复核人")).toContainText("供应链成本复核人");
+  await expect(page.getByRole("link", { name: "打开机会详情" })).toHaveAttribute(
+    "href",
+    new RegExp(`/opportunities/${opportunityId}`),
+  );
 });
 
 test("供应链详情完整跟随深色与浅色主题", async ({ page }) => {

@@ -12,7 +12,12 @@ const state = ref<State>("loading"),
   organizationId = ref(""),
   notice = ref(""),
   secret = ref(""),
-  pending = ref<{ title: string; path: string; body: any } | null>(null),
+  pending = ref<{
+    title: string;
+    path: string;
+    body: any;
+    tokenRisk: null | { scope: string; permissions: string[]; consequences: string[] };
+  } | null>(null),
   form = ref({ name: "", target_url: "", reason: "开放平台配置变更" });
 async function call(path: string, method = "GET", body?: any) {
   try {
@@ -46,21 +51,13 @@ async function load() {
       (e as any).status === 429 ? "rate_limited" : (e as any).status >= 500 ? "blocked" : "error";
   }
 }
-async function createClient() {
-  try {
-    const r = await call("/platform/open/clients", "POST", {
-      organization_id: organizationId.value,
-      name: form.value.name,
-      scopes: ["status:read"],
-      reason: form.value.reason,
-    });
-    secret.value = r.secret;
-    notice.value = "接口访问账号已创建；密钥仅显示本次。";
-    await load();
-    state.value = "ready";
-  } catch (e) {
-    notice.value = e instanceof ApiClientError ? e.actionHint : "创建失败";
-  }
+function createClient() {
+  prepare("创建接口访问账号", "/platform/open/clients", {
+    organization_id: organizationId.value,
+    name: form.value.name,
+    scopes: ["status:read"],
+    reason: form.value.reason,
+  });
 }
 async function createWebhook() {
   try {
@@ -91,7 +88,35 @@ async function action(path: string, body: any) {
   }
 }
 function prepare(title: string, path: string, body: any) {
-  pending.value = { title, path, body };
+  pending.value = { title, path, body, tokenRisk: buildTokenRisk(path, body) };
+}
+function buildTokenRisk(path: string, body: any) {
+  if (path === "/platform/open/clients")
+    return {
+      scope: `组织 ${body.organization_id || "未填写"} · ${body.name || "未命名访问账号"}`,
+      permissions: (body.scopes ?? []).map(scopeText),
+      consequences: [
+        "只允许读取开放接口的系统状态，不包含业务数据写入权限。",
+        "新密钥仅显示一次；分钟配额和到期时间由服务端受限配置确定，创建后可在列表核对。",
+      ],
+    };
+  const match = path.match(/^\/platform\/open\/clients\/([^/]+)\/actions$/),
+    client = match ? data.value.clients.find((item: any) => item.id === match[1]) : null;
+  if (!client) return null;
+  return {
+    scope: `组织 ${client.organization_id} · ${client.name}`,
+    permissions: client.scopes.map(scopeText),
+    consequences:
+      body.action === "rotate"
+        ? [
+            `权限范围和每分钟 ${client.quota_per_minute} 次限额保持不变。`,
+            "旧密钥立即失效；新密钥仅显示一次，所有调用方必须同步替换。",
+          ]
+        : [
+            `将终止当前 ${client.scopes.map(scopeText).join("、")} 权限。`,
+            "撤销后该账号立即无法调用开放接口，不能恢复；需要重新创建账号才能再次接入。",
+          ],
+  };
 }
 async function confirm() {
   if (!pending.value) return;
@@ -141,6 +166,19 @@ const eventText = (value: string) =>
     <aside v-if="pending" class="open-confirm">
       <strong>确认{{ pending.title }}？</strong>
       <p>该操作会改变密钥或投递状态，并同步写入审计；请确认变更原因准确。</p>
+      <section v-if="pending.tokenRisk" class="open-token-risk" aria-label="令牌权限风险预览">
+        <h4>令牌权限风险预览</h4>
+        <p>{{ pending.tokenRisk.scope }}</p>
+        <dl>
+          <div>
+            <dt>授权能力</dt>
+            <dd>{{ pending.tokenRisk.permissions.join("、") }}</dd>
+          </div>
+        </dl>
+        <ul>
+          <li v-for="item in pending.tokenRisk.consequences" :key="item">{{ item }}</li>
+        </ul>
+      </section>
       <button @click="pending = null">取消</button
       ><button class="danger" @click="confirm">确认执行</button>
     </aside>

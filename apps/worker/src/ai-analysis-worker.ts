@@ -170,6 +170,7 @@ export class MySqlAiAnalysisWorker {
       return {
         status: "succeeded" as const,
         job_id: job.id,
+        opportunity_id: job.opportunity,
         ...(await this.complete(job, generated)),
       };
     } catch (e) {
@@ -183,7 +184,12 @@ export class MySqlAiAnalysisWorker {
             ? "dead_letter"
             : "retry_scheduled";
       await this.fail(job, terminal, x.code);
-      return { status: terminal, job_id: job.id, error_code: x.code };
+      return {
+        status: terminal,
+        job_id: job.id,
+        opportunity_id: job.opportunity,
+        error_code: x.code,
+      };
     }
   }
   private async claim(): Promise<Job | null> {

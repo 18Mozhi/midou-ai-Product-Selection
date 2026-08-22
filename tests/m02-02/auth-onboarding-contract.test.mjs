@@ -57,6 +57,18 @@ test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and tru
   assert.match(identity, /智能选品账号/);
   assert.doesNotMatch(identity, /AI SELECTION ACCOUNT|SECURITY CENTER/);
   assert.match(styles, /identity-form-row \.text-button[\s\S]*white-space:\s*nowrap/);
+  assert.match(
+    styles,
+    /identity-page\[data-mode=["']login["']\] \.identity-brand[\s\S]*min-height:\s*44px/,
+  );
+  assert.match(
+    styles,
+    /@media\s*\(\s*max-width:\s*820px\s*\)[\s\S]*identity-page\[data-mode=["']login["']\] \.identity-card__foot[\s\S]*grid-template-columns:\s*repeat\(2/,
+  );
+  assert.match(
+    styles,
+    /identity-page\[data-mode=["']login["']\] \.identity-card__foot button,[\s\S]*identity-page\[data-mode=["']login["']\] \.identity-card__foot a[\s\S]*min-height:\s*44px/,
+  );
   for (const state of ["empty", "forbidden", "expired", "selected"])
     assert.match(tenancy, new RegExp(state));
   assert.match(onboarding, /aria-current/);

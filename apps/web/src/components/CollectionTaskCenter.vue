@@ -36,7 +36,24 @@ interface Detail {
     available_result_count: number;
     missing_fields: string[];
     error_code: string | null;
+    result_kind: "empty_success" | "no_new_content" | "parse_failed" | null;
+    robots_decision: {
+      decision_version: string;
+      allowed: boolean;
+      decision_basis: string;
+      robots_url: string;
+      robots_http_status: number;
+      matched_user_agent: string | null;
+      matched_rule: {
+        directive: "allow" | "disallow";
+        pattern_preview: string;
+        pattern_sha256: string;
+        truncated: boolean;
+      } | null;
+    } | null;
     retryable: boolean;
+    started_at: string | null;
+    finished_at: string | null;
   }>;
   attempts: Array<Record<string, unknown>>;
   events: Array<Record<string, unknown>>;
@@ -139,6 +156,65 @@ const subqueryRetryText = (task: Task, retryable: boolean) => {
   if (!["retry_scheduled", "rate_limited"].includes(task.status)) return "尚未安排下次重试";
   return `下次重试 ${time(task.available_at)}（任务级调度）`;
 };
+const resultKindText = (value: Detail["subqueries"][number]["result_kind"]) =>
+  value === "empty_success"
+    ? "空成功：来源响应有效，但没有可解析条目"
+    : value === "no_new_content"
+      ? "无新内容：本次结果均已存在，未重复写入"
+      : value === "parse_failed"
+        ? "解析失败：来源载荷未通过当前解析合同"
+        : "";
+const robotsDecisionText = (value: NonNullable<Detail["subqueries"][number]["robots_decision"]>) =>
+  value.matched_rule
+    ? `${value.allowed ? "允许" : "禁止"} · ${value.matched_rule.directive === "allow" ? "Allow" : "Disallow"} ${value.matched_rule.pattern_preview}${value.matched_rule.truncated ? "…" : ""}`
+    : value.decision_basis === "missing_robots"
+      ? "允许 · 来源未提供 robots.txt"
+      : value.decision_basis === "http_status"
+        ? `禁止 · robots.txt 返回 HTTP ${value.robots_http_status}`
+        : "允许 · 没有命中限制规则";
+const subqueryDurationText = (startedAt: string | null, finishedAt: string | null) => {
+  if (!startedAt) return "尚未开始";
+  if (!finishedAt) return `执行中 · ${time(startedAt)} 开始`;
+  const durationMs = new Date(finishedAt).getTime() - new Date(startedAt).getTime();
+  if (!Number.isFinite(durationMs) || durationMs < 0) return "耗时不可用";
+  const seconds = Math.round(durationMs / 1000);
+  if (seconds < 60) return `耗时 ${seconds} 秒`;
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `耗时 ${minutes} 分 ${remainingSeconds} 秒`;
+};
+const recoveryAction = computed(() => {
+  const task = detail.value?.task;
+  if (!task) return null;
+  if (task.status === "dead_letter")
+    return {
+      kind: "replay" as const,
+      label: "填写原因并重放",
+      description: "确认来源恢复后创建新任务；原任务和全部尝试记录保留。",
+    };
+  if (["blocked_login", "blocked_captcha"].includes(task.status))
+    return {
+      kind: "link" as const,
+      to: "/platform-admin/credentials",
+      label: "检查网页登录",
+      description: "更新或验证受控浏览器档案后，再回到任务查看恢复结果。",
+    };
+  if (task.status === "blocked_robots" || task.last_error_code === "source_changed")
+    return {
+      kind: "link" as const,
+      to: "/platform-admin/providers/sources",
+      label: "检查来源设置",
+      description: "核对来源规则、页面变化和当前启用状态。",
+    };
+  if (["failed_terminal", "completed_with_warnings"].includes(task.status))
+    return {
+      kind: "link" as const,
+      to: "/platform-admin/collection/overview",
+      label: "查看根因与来源健康",
+      description: "按真实错误根因继续下钻，不覆盖当前失败记录。",
+    };
+  return null;
+});
 async function load() {
   state.value = "loading";
   notice.value = "";
@@ -413,6 +489,15 @@ onMounted(async () => {
               <small>事件</small><strong>{{ detail.events.length }}</strong>
             </article>
           </div>
+          <section v-if="recoveryAction" class="collection-recovery" aria-label="建议恢复动作">
+            <div>
+              <small>下一步</small>
+              <strong>{{ recoveryAction.label }}</strong>
+              <span>{{ recoveryAction.description }}</span>
+            </div>
+            <a v-if="recoveryAction.kind === 'replay'" href="#collection-replay">进入重放</a>
+            <RouterLink v-else :to="recoveryAction.to">{{ recoveryAction.label }}</RouterLink>
+          </section>
           <section>
             <h4>子查询覆盖</h4>
             <article v-for="item in detail.subqueries" :key="item.id" class="collection-subquery">
@@ -421,8 +506,26 @@ onMounted(async () => {
                 ><small>{{ item.is_required ? "必需来源" : "可选来源" }}</small>
               </div>
               <b :data-status="item.status">{{ label(item.status) }}</b
-              ><span>{{ item.available_result_count }} 条 · {{ item.error_code || "无错误" }}</span
-              ><small>{{ subqueryRetryText(detail.task, item.retryable) }}</small>
+              ><span class="collection-subquery-result"
+                >结果 {{ item.available_result_count }} 条 ·
+                {{ subqueryDurationText(item.started_at, item.finished_at) }} ·
+                {{ item.error_code || "无错误" }}</span
+              ><small class="collection-subquery-missing">{{
+                item.missing_fields.length ? `缺失 ${item.missing_fields.join("、")}` : "无缺失字段"
+              }}</small
+              ><small v-if="item.result_kind" class="collection-subquery-kind">{{
+                resultKindText(item.result_kind)
+              }}</small>
+              <details v-if="item.robots_decision" class="collection-subquery-policy">
+                <summary>robots 判定：{{ robotsDecisionText(item.robots_decision) }}</summary>
+                <small
+                  >判定版本 {{ item.robots_decision.decision_version }} · User-agent
+                  {{ item.robots_decision.matched_user_agent || "未命中分组" }}</small
+                >
+              </details>
+              ><small class="collection-subquery-retry">{{
+                subqueryRetryText(detail.task, item.retryable)
+              }}</small>
             </article>
           </section>
           <section class="collection-detail-history">
@@ -465,7 +568,7 @@ onMounted(async () => {
               ><small>{{ cell(detail.dead_letter) }}</small>
             </article>
           </section>
-          <footer v-if="detail.task.status === 'dead_letter'">
+          <footer v-if="detail.task.status === 'dead_letter'" id="collection-replay">
             <label
               >人工重放原因<textarea
                 v-model="replayReason"

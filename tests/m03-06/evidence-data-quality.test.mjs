@@ -18,6 +18,8 @@ const ids = {
   ws: "00000000-0000-4000-8000-000000000603",
   evidence: "00000000-0000-4000-8000-000000000604",
   issue: "00000000-0000-4000-8000-000000000605",
+  topic: "00000000-0000-4000-8000-000000000606",
+  signal: "00000000-0000-4000-8000-000000000607",
 };
 test("M03-06.A03 scopes evidence operation idempotency by tenant and provider", async () => {
   const { evidenceOperationIdempotencyKey } =
@@ -112,6 +114,10 @@ test("M03-06.A06/A09/A13 platform API enforces capability, origin, idempotency a
       detail: (...v) => repository.evidenceDetail(...v),
       resolveIssue: async (...v) => (calls.push(v), { id: ids.issue }),
       batchIssues: async (...v) => (calls.push(v), [{ id: ids.issue }]),
+      createFromTrendEvidence: async (...v) => (
+        calls.push(v),
+        { issue: { id: ids.issue }, created: true }
+      ),
       issueDownload: async () => ({ grant: "signed", expires_at: "2026-08-07T00:02:00Z" }),
       download: async () => ({
         content: Buffer.from("ok"),
@@ -119,8 +125,13 @@ test("M03-06.A06/A09/A13 platform API enforces capability, origin, idempotency a
         sha256: sha256("ok"),
       }),
     },
-    authorization = { authorize: async (value) => calls.push(value) },
-    auth = { authenticate: async () => ({ user: { id: ids.actor } }) },
+    authorization = {
+      authorize: async (value) => calls.push(value),
+      resolveSession: async () => ({
+        context: { organization_id: ids.org, workspace_id: ids.ws },
+      }),
+    },
+    auth = { authenticate: async () => ({ user: { id: ids.actor }, session: { id: "session" } }) },
     app = buildApp({
       dataQuality: {
         service,
@@ -144,6 +155,26 @@ test("M03-06.A06/A09/A13 platform API enforces capability, origin, idempotency a
     requestId: "dq-read",
     traceId: "dq-trace",
   });
+  response = await app.inject({
+    method: "POST",
+    url: `/api/v1/trends/${ids.topic}/evidence/${ids.signal}/quality-issues`,
+    headers: {
+      cookie: "scoutops_session=x",
+      origin: "http://127.0.0.1:5173",
+      "idempotency-key": "trend-quality-1",
+    },
+    payload: { severity: "critical", reason: "页面字段与原始证据不一致" },
+  });
+  assert.equal(response.statusCode, 201);
+  assert.equal(response.json().data.issue.id, ids.issue);
+  assert.ok(
+    calls.some(
+      (value) =>
+        value?.capability === "trend:manage" &&
+        value.organizationId === ids.org &&
+        value.workspaceId === ids.ws,
+    ),
+  );
   response = await app.inject({
     method: "POST",
     url: `/api/v1/platform/data/evidence/${ids.evidence}/download-grant`,
@@ -203,6 +234,46 @@ test("M03-06.A06/A09/A13 platform API enforces capability, origin, idempotency a
   assert.equal(response.statusCode, 200);
   assert.equal(response.headers["x-content-sha256"], sha256("ok"));
   await app.close();
+});
+test("trend evidence anomaly validates scope and reuses the data-quality workflow", async () => {
+  const calls = [],
+    service = new DataQualityService(
+      {
+        createFromTrendEvidence: async (input) => (
+          calls.push(input),
+          { issue: { id: ids.issue }, created: true }
+        ),
+      },
+      { evidenceRoot: "", downloadSigningKey: "", downloadGrantSeconds: 120 },
+      () => new Date("2026-08-22T00:00:00.000Z"),
+    ),
+    context = {
+      organizationId: ids.org,
+      workspaceId: ids.ws,
+      actorId: ids.actor,
+      idempotencyKey: "trend-quality-1",
+      requestId: "request-trend-quality",
+      traceId: "trace-trend-quality",
+    };
+  const result = await service.createFromTrendEvidence(
+    ids.topic,
+    ids.signal,
+    { severity: "warning", reason: " 标题解析异常 " },
+    context,
+  );
+  assert.equal(result.created, true);
+  assert.equal(calls[0].reason, "标题解析异常");
+  assert.equal(calls[0].now.toISOString(), "2026-08-22T00:00:00.000Z");
+  await assert.rejects(
+    () =>
+      service.createFromTrendEvidence(
+        ids.topic,
+        ids.signal,
+        { severity: "low", reason: "错误等级" },
+        context,
+      ),
+    /trend_evidence_issue_invalid/,
+  );
 });
 test("M03-06.A09/A16 short download grants are scoped, idempotent and content integrity is verified", async () => {
   const root = await mkdtemp(join(tmpdir(), "scoutops-m03-06-unit-")),
@@ -333,6 +404,8 @@ test("M03-06.A03-A05/A07-A11/A14-A17 delivery evidence is complete and Baota bou
   assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
   assert.match(web, /批量处理开放问题/);
   assert.match(web, /查看关联证据/);
+  assert.match(web, /selectedRunId[\s\S]*查看异常字段与样本[\s\S]*字段溯源/);
+  assert.match(web, /retentionRisks[\s\S]*即将到期[\s\S]*retentionStatus/);
   assert.match(css, /@media\s*\(max-width:\s*760px\)/);
   assert.match(openapi, /\/platform\/data-quality:/);
   assert.match(env, /EVIDENCE_DOWNLOAD_SIGNING_KEY/);

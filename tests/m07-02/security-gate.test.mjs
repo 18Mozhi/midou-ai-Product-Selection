@@ -48,12 +48,23 @@ test("M07-02.A14-A17 contracts include Baota edge hardening, operational rollbac
   assert.match(openapi, /securityGate: npm run verify:security-gate/);
 });
 
-test("M07-02 browser storage gate allows only the validated non-sensitive theme preference", async () => {
+test("M07-02 browser storage gate allows only exact validated non-sensitive records", async () => {
   const gate = await readFile(resolve(root, "scripts/verify-security-gate.mjs"), "utf8");
   const theme = await readFile(resolve(root, "apps/web/src/design/theme.ts"), "utf8");
-  assert.match(gate, /file === 'apps\/web\/src\/design\/theme\.ts'/);
+  const journey = await readFile(
+    resolve(root, "apps/web/src/components/SelectionJourney.vue"),
+    "utf8",
+  );
+  const realtime = await readFile(resolve(root, "apps/web/src/realtime-client-metrics.ts"), "utf8");
+  assert.match(gate, /file === "apps\/web\/src\/design\/theme\.ts"/);
   assert.match(gate, /localStorageCount === 2/);
-  assert.match(gate, /argumentsText === 'themeStorageKey'/);
-  assert.match(gate, /argumentsText === 'themeStorageKey,theme'/);
+  assert.match(gate, /argumentsText === "themeStorageKey"/);
+  assert.match(gate, /argumentsText === "themeStorageKey,theme"/);
+  assert.match(gate, /file === "apps\/web\/src\/components\/SelectionJourney\.vue"/);
+  assert.match(gate, /progressStorageKey,next\.id/);
+  assert.match(gate, /file === "apps\/web\/src\/realtime-client-metrics\.ts"/);
+  assert.match(gate, /scoutops:realtime-client-metrics/);
   assert.doesNotMatch(theme, /token|secret|session|credential/i);
+  assert.match(journey, /journeyIdPattern/);
+  assert.doesNotMatch(realtime, /token|secret|credential|request_id|user_id/i);
 });

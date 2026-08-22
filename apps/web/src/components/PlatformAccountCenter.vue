@@ -6,10 +6,11 @@ import { useModalDialog } from "../use-modal-dialog";
 import AppIcon from "./AppIcon.vue";
 import OrganizationCreationWizard from "./OrganizationCreationWizard.vue";
 import PlatformAdminRecords from "./PlatformAdminRecords.vue";
+import PlatformOrganizationRecords from "./PlatformOrganizationRecords.vue";
 import PlatformOrganizationDetailDialog from "./PlatformOrganizationDetailDialog.vue";
 import PlatformRoleComparison from "./PlatformRoleComparison.vue";
 import PlatformUserDetailDialog from "./PlatformUserDetailDialog.vue";
-import ResponsiveDataView from "./ResponsiveDataView.vue";
+import PlatformUserRecords from "./PlatformUserRecords.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 type Tab = "organizations" | "users" | "admins";
 type State = "loading" | "ready" | "empty" | "error";
@@ -389,186 +390,20 @@ onMounted(load);
         v-if="tab === 'admins' && platformRoles.length"
         :roles="platformRoles"
       />
-      <ResponsiveDataView
+      <PlatformOrganizationRecords
         v-if="tab === 'organizations'"
-        class="account-table-wrap"
         :rows="rows"
-        :row-key="(item) => item.id"
-        title="组织记录"
-        :detail-title="(item) => item.name"
-        empty-message="没有符合条件的组织。"
-      >
-        <template #desktop>
-          <table>
-            <thead>
-              <tr>
-                <th>组织</th>
-                <th>成员</th>
-                <th>工作区</th>
-                <th>状态</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in rows" :key="item.id">
-                <td>
-                  <strong>{{ item.name }}</strong
-                  ><small>{{ item.slug }}</small>
-                </td>
-                <td>{{ item.member_count }} 人</td>
-                <td>{{ item.workspace_count }} 个</td>
-                <td>
-                  <b :data-status="item.status">{{ statusText(item.status) }}</b>
-                </td>
-                <td>
-                  <button :disabled="Boolean(busy)" @click="openOrganization(item)">
-                    查看详情
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </template>
-        <template #summary="{ row }"
-          ><span class="responsive-record-summary"
-            ><strong>{{ row.name }}</strong
-            ><small
-              >{{ statusText(row.status) }} · {{ row.member_count }} 人 ·
-              {{ row.workspace_count }} 个工作区</small
-            ></span
-          ></template
-        >
-        <template #detail="{ row, close }">
-          <dl>
-            <div>
-              <dt>组织标识</dt>
-              <dd>{{ row.slug }}</dd>
-            </div>
-            <div>
-              <dt>成员</dt>
-              <dd>{{ row.member_count }} 人</dd>
-            </div>
-            <div>
-              <dt>工作区</dt>
-              <dd>{{ row.workspace_count }} 个</dd>
-            </div>
-            <div>
-              <dt>状态</dt>
-              <dd>{{ statusText(row.status) }}</dd>
-            </div>
-          </dl>
-          <div class="mobile-actions">
-            <button
-              :disabled="Boolean(busy)"
-              @click="
-                openOrganization(row);
-                close();
-              "
-            >
-              打开组织详情
-            </button>
-          </div>
-          <details>
-            <summary>技术详情</summary>
-            <dl>
-              <div>
-                <dt>组织 UUID</dt>
-                <dd>{{ row.id }}</dd>
-              </div>
-            </dl>
-          </details>
-        </template>
-      </ResponsiveDataView>
-      <ResponsiveDataView
+        :busy="Boolean(busy)"
+        :status-text="statusText"
+        @open-organization="openOrganization"
+      />
+      <PlatformUserRecords
         v-else-if="tab === 'users'"
-        class="account-table-wrap"
         :rows="rows"
-        :row-key="(item) => item.id"
-        title="用户记录"
-        :detail-title="(item) => item.email"
-        empty-message="没有符合条件的用户。"
-      >
-        <template #desktop>
-          <table>
-            <thead>
-              <tr>
-                <th>用户</th>
-                <th>所在组织</th>
-                <th>平台角色</th>
-                <th>状态</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in rows" :key="item.id">
-                <td>
-                  <strong>{{ item.email }}</strong
-                  ><small>注册于 {{ new Date(item.created_at).toLocaleDateString() }}</small>
-                </td>
-                <td>{{ item.organization_names || "尚未加入组织" }}</td>
-                <td>{{ item.platform_roles.map(roleText).join("、") || "普通用户" }}</td>
-                <td>
-                  <b :data-status="item.status">{{ statusText(item.status) }}</b>
-                </td>
-                <td>
-                  <button :disabled="Boolean(busy)" @click="openUserDetail(item)">账号详情</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </template>
-        <template #summary="{ row }"
-          ><span class="responsive-record-summary"
-            ><strong>{{ row.email }}</strong
-            ><small
-              >{{ statusText(row.status) }} · {{ row.organization_names || "尚未加入组织" }}</small
-            ></span
-          ></template
-        >
-        <template #detail="{ row, close }">
-          <dl>
-            <div>
-              <dt>所在组织</dt>
-              <dd>{{ row.organization_names || "尚未加入组织" }}</dd>
-            </div>
-            <div>
-              <dt>平台角色</dt>
-              <dd>{{ row.platform_roles.map(roleText).join("、") || "普通用户" }}</dd>
-            </div>
-            <div>
-              <dt>状态</dt>
-              <dd>{{ statusText(row.status) }}</dd>
-            </div>
-            <div>
-              <dt>活动会话</dt>
-              <dd>{{ row.active_session_count || 0 }} 个</dd>
-            </div>
-            <div>
-              <dt>注册时间</dt>
-              <dd>{{ new Date(row.created_at).toLocaleDateString() }}</dd>
-            </div>
-          </dl>
-          <div class="mobile-actions">
-            <button
-              @click="
-                openUserDetail(row);
-                close();
-              "
-            >
-              打开账号详情
-            </button>
-          </div>
-          <details>
-            <summary>技术详情</summary>
-            <dl>
-              <div>
-                <dt>用户 UUID</dt>
-                <dd>{{ row.id }}</dd>
-              </div>
-            </dl>
-          </details>
-        </template>
-      </ResponsiveDataView>
+        :status-text="statusText"
+        :role-text="roleText"
+        @open-user="openUserDetail"
+      />
       <PlatformAdminRecords v-else :rows="rows" @open-user="openUserDetail" />
     </template>
     <OrganizationCreationWizard

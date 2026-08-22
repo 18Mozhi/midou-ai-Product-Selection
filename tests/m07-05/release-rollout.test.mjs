@@ -260,6 +260,42 @@ test("M07-05.A04/A08/A12/A16 release truth fails closed across current-release b
     ).state,
     "rolled_back",
   );
+  const timedGates = await readState(
+    [{ ...current, status: "rolled_back" }],
+    [
+      {
+        release_id: current.id,
+        gate_kind: "migration",
+        status: "passed",
+        metadata: { timing_schema: 2 },
+        started_at: "2026-08-08T12:00:00.000Z",
+        finished_at: "2026-08-08T12:00:01.250Z",
+      },
+      {
+        release_id: current.id,
+        gate_kind: "rollback",
+        status: "rolled_back",
+        metadata: { timing_schema: 2 },
+        started_at: "2026-08-08T12:15:00.000Z",
+        finished_at: "2026-08-08T12:15:02.500Z",
+      },
+    ],
+  );
+  assert.equal(timedGates.gates.find((gate) => gate.gate_kind === "migration").duration_ms, 1250);
+  assert.equal(timedGates.gates.find((gate) => gate.gate_kind === "rollback").duration_ms, 2500);
+  const legacyTiming = await readState(
+    [{ ...current, status: "rolled_back" }],
+    [
+      {
+        release_id: current.id,
+        gate_kind: "rollback",
+        status: "rolled_back",
+        started_at: "2026-08-08T12:15:00.000Z",
+        finished_at: "2026-08-08T12:15:00.000Z",
+      },
+    ],
+  );
+  assert.equal(legacyTiming.gates[0].duration_ms, null);
   assert.equal(
     (await readState([{ ...current, id: "new-release", status: "healthy" }], passed)).state,
     "blocked",
@@ -306,6 +342,8 @@ test("M07-05.A06-A17 API, UI, config and documentation contracts stay synchroniz
     "5",
     "25",
     "100",
+    "迁移耗时",
+    "回滚耗时",
     "回滚",
   ])
     assert.match(all, new RegExp(token));
@@ -571,7 +609,7 @@ test("M07-05 reaches the BaoTa Nginx loopback while preserving production TLS id
   assert.match(runner, /lookup:/);
   assert.match(
     runner,
-    /options\.all \? callback\(null, \[\{ address: connectAddress, family: 4 \}\]\)/,
+    /options\.all\s*\?\s*callback\(null, \[\{ address: connectAddress, family: 4 \}\]\)/,
   );
   assert.match(runner, /servername: target\.hostname/);
   assert.doesNotMatch(runner, /rejectUnauthorized:\s*false/);

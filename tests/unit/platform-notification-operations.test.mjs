@@ -112,6 +112,7 @@ test("platform message service rejects mail even when the UI is bypassed", () =>
 test("platform management keeps orchestration and message views in bounded components", async () => {
   const limits = new Map([
     ["apps/web/src/components/PlatformManagementCenter.vue", 1_000],
+    ["apps/web/src/components/platform-management-presentation.ts", 100],
     ["apps/web/src/components/PlatformMessageWorkbench.vue", 200],
     ["apps/web/src/components/PlatformMessageEditor.vue", 200],
     ["apps/web/src/components/PlatformManagementRecordList.vue", 400],

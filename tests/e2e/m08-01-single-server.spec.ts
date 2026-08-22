@@ -39,6 +39,90 @@ const base = {
       last_failure: "exit:1",
     },
   ],
+  restart_trend: [
+    {
+      process_name: "api",
+      status: "running",
+      restart_count: 0,
+      restart_delta: 0,
+      counter_reset: false,
+      observed_at: "2026-08-14T01:55:00.000Z",
+    },
+    {
+      process_name: "worker",
+      status: "running",
+      restart_count: 1,
+      restart_delta: 0,
+      counter_reset: false,
+      observed_at: "2026-08-14T01:55:00.000Z",
+    },
+    {
+      process_name: "worker",
+      status: "running",
+      restart_count: 3,
+      restart_delta: 2,
+      counter_reset: false,
+      observed_at: "2026-08-14T02:00:00.000Z",
+    },
+  ],
+  health_probes: {
+    status: "ready",
+    interval_ms: 30000,
+    timeout_ms: 5000,
+    window_minutes: 60,
+    retention_hours: 72,
+    observed_at: "2026-08-14T02:00:06.000Z",
+    endpoints: [
+      {
+        endpoint: "live",
+        sample_count: 120,
+        success_count: 120,
+        http_error_count: 0,
+        timeout_count: 0,
+        network_error_count: 0,
+        availability_basis_points: 10000,
+        latency_p50_ms: 4,
+        latency_p95_ms: 9,
+        latency_p99_ms: 13,
+        latency_max_ms: 18,
+        last_status_code: 200,
+        last_outcome: "succeeded",
+        last_observed_at: "2026-08-14T02:00:05.000Z",
+      },
+      {
+        endpoint: "ready",
+        sample_count: 120,
+        success_count: 119,
+        http_error_count: 0,
+        timeout_count: 1,
+        network_error_count: 0,
+        availability_basis_points: 9917,
+        latency_p50_ms: 18,
+        latency_p95_ms: 44,
+        latency_p99_ms: 181,
+        latency_max_ms: 5000,
+        last_status_code: 200,
+        last_outcome: "succeeded",
+        last_observed_at: "2026-08-14T02:00:05.000Z",
+      },
+      {
+        endpoint: "available",
+        sample_count: 120,
+        success_count: 118,
+        http_error_count: 2,
+        timeout_count: 0,
+        network_error_count: 0,
+        availability_basis_points: 9833,
+        latency_p50_ms: 26,
+        latency_p95_ms: 73,
+        latency_p99_ms: 214,
+        latency_max_ms: 281,
+        last_status_code: 200,
+        last_outcome: "succeeded",
+        last_observed_at: "2026-08-14T02:00:05.000Z",
+      },
+    ],
+  },
   supervisor_pid: 1200,
   worker_scheduler: {
     status: "running",
@@ -46,7 +130,7 @@ const base = {
     active_runs: 3,
     due_queue_count: 2,
     backpressure: true,
-    max_queue_delay_ms: 680,
+    max_queue_delay_ms: 68000,
     suspected_stuck_runs: 0,
     snapshot_publish_failed_total: 0,
     last_snapshot_error: null,
@@ -59,11 +143,14 @@ const base = {
         name: "collection_tasks",
         priority: 100,
         effective_priority: 100,
+        aging_interval_ms: 30000,
+        maximum_aging_boost: 100,
         max_concurrency: 1,
         timeout_ms: 300000,
         max_retries: 0,
         active_runs: 1,
         running: true,
+        due: false,
         queue_delay_ms: 120,
         longest_running_ms: 15200,
         suspected_stuck: false,
@@ -74,17 +161,31 @@ const base = {
         timed_out_total: 0,
         retry_total: 0,
         deferred_total: 2,
+        last_result_at: "2026-08-14T02:00:04.000Z",
+        last_result_status: "failed_terminal",
+        last_result_error_code: "source_changed",
+        last_business_objects: [
+          {
+            type: "collection_task",
+            id: "00000000-0000-4000-8000-000000000801",
+            label: "采集任务",
+            href: "/platform-admin/collection?task=00000000-0000-4000-8000-000000000801",
+          },
+        ],
       },
       {
         name: "notification_outbox",
         priority: 80,
         effective_priority: 82,
+        aging_interval_ms: 30000,
+        maximum_aging_boost: 2,
         max_concurrency: 1,
         timeout_ms: 60000,
         max_retries: 2,
         active_runs: 0,
         running: false,
-        queue_delay_ms: 680,
+        due: true,
+        queue_delay_ms: 68000,
         longest_running_ms: 0,
         suspected_stuck: false,
         circuit_state: "closed",
@@ -94,6 +195,10 @@ const base = {
         timed_out_total: 0,
         retry_total: 1,
         deferred_total: 4,
+        last_result_at: null,
+        last_result_status: null,
+        last_result_error_code: null,
+        last_business_objects: [],
       },
     ],
   },
@@ -102,6 +207,26 @@ const base = {
       code: "worker_scheduler_backpressure",
       severity: "warning",
       actionHint: "优先处理高优先级积压。",
+      root_cause_code: null,
+      queues: ["notification_outbox"],
+      business_objects: [],
+      occurred_at: "2026-08-14T02:00:05.000Z",
+    },
+    {
+      code: "worker_business_result_failed",
+      severity: "warning",
+      actionHint: "打开关联业务对象核对失败事实。",
+      root_cause_code: "source_changed",
+      queues: ["collection_tasks"],
+      business_objects: [
+        {
+          type: "collection_task",
+          id: "00000000-0000-4000-8000-000000000801",
+          label: "采集任务",
+          href: "/platform-admin/collection?task=00000000-0000-4000-8000-000000000801",
+        },
+      ],
+      occurred_at: "2026-08-14T02:00:04.000Z",
     },
   ],
   blockers: [],
@@ -138,15 +263,39 @@ test("M08-01.A07/A08/A15 desktop and 390 single-server truth", async ({ page }) 
   await expect(page.getByRole("heading", { name: "单机运行控制台" })).toBeVisible();
   await expect(page.getByText("单机运行门已满足")).toBeVisible();
   await expect(page.getByText("不做负载均衡")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "队列优先级与背压" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "队列老化与实际调度延迟" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "健康接口耗时分位数" })).toBeVisible();
+  await expect(page.getByText("P99", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("99.17%")).toBeVisible();
+  await expect(page.getByText("超时门 5000 ms", { exact: false })).toBeVisible();
   await expect(page.getByText("任务调度发生背压")).toBeVisible();
+  const businessAlert = page.locator(".topology-alerts article").filter({
+    hasText: "业务处理返回失败",
+  });
+  await expect(businessAlert).toContainText("采集任务");
+  await expect(businessAlert.getByRole("link", { name: /采集任务/ })).toHaveAttribute(
+    "href",
+    /\/platform-admin\/collection\?task=/,
+  );
+  await expect(businessAlert.getByText("source_changed", { exact: false })).toBeHidden();
   await expect(page.getByText("5.56%")).toBeVisible();
+  await expect(page.getByText("新增重启 2")).toBeVisible();
+  await expect(page.getByText("2 个真实观测")).toBeVisible();
   await expect(page.getByText("运行 15200 ms")).toBeVisible();
+  await expect(page.getByText("实际调度延迟 68000 ms")).toBeVisible();
+  await expect(page.locator('.topology-queue-aging[data-risk="true"]')).toContainText("饥饿风险");
+  await expect(page.getByText("优先级已提升 2 / 2")).toBeVisible();
   await expect(page.getByText("worker_scheduler_backpressure")).toBeHidden();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
   await expect(page).toHaveScreenshot("m08-01-single-server-desktop.png", { fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByText("huizhou-single-host")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
   await expect(page).toHaveScreenshot("m08-01-single-server-mobile-390.png", { fullPage: true });
 });
 

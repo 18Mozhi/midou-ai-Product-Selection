@@ -93,11 +93,15 @@
       "codeStyleCommand": "npm run verify:code-style",
       "staticAnalysisCommand": "npm run verify:static-analysis",
       "codeStyleVerifier": "../scripts/verify-code-style.mjs",
+      "workspaceBuildGraph": "../scripts/build-workspaces.mjs",
+      "workspaceBuildBoundary": "npm run build derives internal workspace dependencies from direct apps and packages package manifests, rejects unsupported globs missing build scripts and cycles, and compiles each topological level with at most four parallel child processes; downstream API Worker and Web builds never start before their internal dependencies pass",
+      "e2eServiceLifecycleBoundary": "npm run test:e2e, verify:functional and the release-matrix browser gate invoke desktop-chromium and mobile-390 as two sequential Playwright processes; each process independently starts and stops its Fastify and Vite webServer lifecycle, and a desktop failure prevents mobile execution without sharing browser or in-memory service state",
       "repositorySqlPolicy": "all tracked Repository source lines are scanned on every run and must not exceed 160 characters; violations fail as repository_sql_max_line_length_failed even when the Repository was not changed in the current worktree",
       "workerHandlerBoundary": "apps/worker/src/index.ts owns dependency assembly and structured logs only; apps/worker/src/worker-queue-registry.ts declaratively owns every queue's independent concurrency timeout retry circuit aging and stuck thresholds, queue-scheduler.ts owns cancellation and snapshot-isolated accounting, and every business handler remains in its independent worker or scheduler module with domain SQL forbidden in the entrypoint",
       "frontendApiClientBoundary": "the shared frontend transport owns credentials, request_id, trace_id, write idempotency and standardized server error mapping for both JSON envelopes and raw file responses; every frontend business module is forbidden from calling fetch directly and the boundary test scans all TypeScript and Vue source files",
       "frontendTypecheckBoundary": "build:web must run strict vue-tsc before Vite bundling; the web tsconfig targets ES2022, emits no duplicate output and persists its ignored .web.tsbuildinfo cache so unchanged follow-up checks can reuse compiler state",
       "productionProductCommand": "npm run verify:production-product",
+      "productionRouteAcceptanceBoundary": "six isolated accounts with exactly member selection_manager organization_admin platform_operations_admin platform_security_admin and platform_super_admin roles obtain server-side capabilities from /me/navigation; the verifier parses every protected frontend route directly from route-catalog.ts, resolves task and opportunity details from persisted acceptance records, and fails unless the union covers the complete catalog without API or console errors",
       "userGuide": "../docs/user-guide-ai-selection.md",
       "functionalScope": "P00-P08 production code style and accessibility/Promise static gates, software build, functional Node/Python tests, desktop/390 E2E, docs, plans, release matrix and security gate; excludes same-commit deployment evidence, disk diagnostics, production load tests and capacity claims",
       "completionProfile": "software",
@@ -361,7 +365,8 @@
         "../apps/web/src/components/DiscoveryOverlay.vue",
         "../apps/web/src/components/ThemeStudio.vue",
         "../apps/web/src/components/NavigationShell.vue",
-        "../apps/web/src/components/ResponsiveFilterDrawer.vue"
+        "../apps/web/src/components/ResponsiveFilterDrawer.vue",
+        "../apps/web/src/components/TableViewControls.vue"
       ],
       "route": "/settings/theme",
       "api": ["GET /api/v1/me/ui-preferences", "PUT /api/v1/me/ui-preferences"],
@@ -372,6 +377,7 @@
       "bootstrap": "cached theme is applied before Vue mounts, then reconciled with the signed-in server preference; failed writes restore the previous theme",
       "apiClientBoundary": "standalone theme settings and shell theme controls share the same frontend API client and preserve version conflict, scope, correlation and rollback behavior",
       "densityRuntime": "standard and compact are session-only presentation modes with no API, database or additional browser storage contract; organization and platform shells default to compact, member shell restores the in-memory member choice",
+      "tableViewBoundary": "all current desktop table surfaces share session-only column visibility, first-visible-column freeze and local standard or compact density controls through TableViewControls; at least one column always remains visible, mobile summary cards and detail drawers remain unchanged, and no API database or browser storage contract is added",
       "styleBoundary": "all production CSS and Vue scoped styles consume semantic theme tokens directly or component-local semantic aliases; the obsolete unimported global theme-compat patch is removed and the unit gate rejects raw component hex, rgb, rgba, hsl and hsla colors plus every !important override",
       "accessibility": "status icon plus text; charts include value, period, source and freshness; keyboard radiogroups and visible focus; body copy and form controls have a computed 16px floor and auxiliary small copy has a 12px floor; compact desktop controls use 36px while coarse-pointer and mobile targets retain a computed 44px by 44px floor without !important",
       "modalAccessibility": "all native business dialogs use one showModal top-layer controller with Escape handling and invoking-control focus return; custom confirmation and responsive filter surfaces explicitly trap focus and restore it when closed",
@@ -398,6 +404,7 @@
         "/onboarding"
       ],
       "contracts": "reuses M01-01 local identity, M01-02 MFA and M01-03 tenancy APIs without new fields",
+      "responsiveBoundary": "the login brand entry keeps a 44px minimum touch height on every viewport; mobile auxiliary account actions use a two-column 44px touch grid to reduce vertical occupation without shrinking targets or changing identity behavior",
       "imageEvidence": [
         "concepts 01-10",
         "high-resolution 02 login",
@@ -418,6 +425,10 @@
         "../apps/web/src/App.vue",
         "../apps/web/src/components/LandingRedirect.vue",
         "../apps/web/src/components/NavigationShell.vue",
+        "../apps/web/src/navigation-shell-permissions.ts",
+        "../apps/web/src/navigation-shell-route-state.ts",
+        "../apps/web/src/use-navigation-shell-theme.ts",
+        "../apps/web/src/use-navigation-discovery.ts",
         "../apps/web/src/components/AccountShell.vue",
         "../apps/web/src/navigation-memory.ts"
       ],
@@ -434,6 +445,7 @@
       ],
       "shells": ["member", "organization_admin", "platform_admin", "account"],
       "guard": "root and successful authentication resolve an audited role-aware landing before the selected shell performs its own server-side role and tenancy guard",
+      "frontendModuleBoundary": "NavigationShell owns shell layout guard loading and component mounting; navigation-shell-permissions filters the server-owned capability facts, navigation-shell-route-state resolves route aliases page summaries and surface props, use-navigation-shell-theme owns versioned preference state and rollback, and use-navigation-discovery owns search and quick-create state plus the keyboard shortcut",
       "imageEvidence": [
         "concepts 11, 15-17, 55-71",
         "high-resolution 01 member",
@@ -441,8 +453,8 @@
         "high-resolution 10 platform admin"
       ],
       "contextPresentation": "member and organization shells receive persisted organization_name and workspace_name; the UI never exposes UUID fragments as labels",
-      "routeIntegrity": "route-catalog.ts is the single frontend registry for title, breadcrumb, shell, capability and shell navigation metadata; menu capabilities are derived from route metadata, while RouterLink and router push or replace own internal navigation without a global click interceptor; unknown routes use the dedicated not-found route without default menu highlighting, /me has one account-level PersonalCenter owner, platform accounts have organization, user and administrator deep links, provider credentials only appear inside provider context, and collection plus operations use stable secondary navigation; member return paths and recent organization order live only in bounded SPA memory rather than browser storage; lazy business components with KeepAlive preserve bounded page state; the mobile bottom navigation is limited to four role-priority entries plus More, whose drawer retains member search and selection creation; trend, opportunity and collection overview filters use one state-preserving mobile drawer; the shared 390px occlusion helper checks member opportunity and platform scheduler handoffs against the fixed bottom navigation and requires zero overlap, and shell dialogs render above the bottom bar with bounded viewport height",
-      "apiClientBoundary": "navigation guard and shell theme preference reads and writes use the shared frontend API client for credentials, correlation, JSON envelopes, idempotency and business error mapping; the UI preserves request_id, trace_id and action_hint on failures",
+      "routeIntegrity": "route-catalog.ts is the single frontend registry for title, breadcrumb, shell, capability and shell navigation metadata; menu capabilities are derived from route metadata, while RouterLink and router push or replace own internal navigation without a global click interceptor; unknown routes use the dedicated not-found route without default menu highlighting, /me has one account-level PersonalCenter owner, platform accounts have organization, user and administrator deep links, provider credentials only appear inside provider context, and collection plus operations use stable secondary navigation; member return paths and recent organization order live only in bounded SPA memory rather than browser storage; lazy business components with KeepAlive preserve bounded page state; platform navigation separates business operations collection and data governance and security and advanced operations, while eight-or-more-item sidebars can search by menu or group; the mobile bottom navigation is limited to four role-priority entries plus More, whose drawer retains member search and selection creation; trend, opportunity and collection overview filters use one state-preserving mobile drawer; the shared 390px occlusion helper checks member opportunity and platform scheduler handoffs against the fixed bottom navigation and requires zero overlap, and shell dialogs render above the bottom bar with bounded viewport height",
+      "apiClientBoundary": "navigation guard and shell theme preference reads and writes use the shared frontend API client for credentials, correlation, JSON envelopes, idempotency and business error mapping; the UI presents Chinese role labels and preserves request_id trace_id and action_hint on failures while keeping correlation identifiers inside collapsed fault details",
       "mobileNavigation": "at 840px and below every shell renders up to four authorized primary routes plus one More control in a five-column bottom bar; More opens the complete permission-filtered drawer and quick-create actions do not add a sixth bottom item",
       "memberPresentation": "member shell exposes quick theme switching, larger Chinese typography and removes internal guard codes and security implementation slogans from ordinary pages",
       "nonGoals": "no quick-create mutation, new persistence, async service or environment value; platform and organization shells omit member-only search and notification links",
@@ -487,8 +499,8 @@
       ],
       "routes": ["/api/v1/me/global-search", "/api/v1/me/quick-actions", "/notifications"],
       "scope": "global search uses the server-resolved organization/workspace; quick actions use the explicitly guarded member, organization_admin or platform_admin shell",
-      "searchProjection": "MySQL 5.7 synchronous read model combines compatible search_documents with live scoped task opportunity evidence and collection-task facts, deduplicates by resource type and id, retains stable cursor and literal wildcard escaping, and emits internal detail routes only",
-      "quickCreate": "authorized navigation entries open the owning page's real create state via create=1; the discovery endpoint performs no business mutation or optimistic success",
+      "searchProjection": "MySQL 5.7 synchronous read model combines compatible search_documents with live scoped task opportunity evidence and collection-task facts, deduplicates by resource type and id, retains stable cursor and literal wildcard escaping, filters exact resource type and status plus task assignee or opportunity owner name or id, and emits internal detail routes only",
+      "quickCreate": "authorized navigation entries are ordered by validated shell role priority and open the owning page's real create state via create=1; the SPA temporarily promotes up to five recently used entries without persistent tracking, and the discovery endpoint performs no business mutation or optimistic success",
       "apiClientBoundary": "global search and quick actions use the shared frontend API client and surface the server request_id, trace_id and action_hint without changing the endpoint contract",
       "async": "not applicable; core task opportunity evidence and collection results are read directly so no missing index writer can make them undiscoverable",
       "configuration": "no new environment values; existing VITE_API_BASE_URL only",
@@ -518,8 +530,8 @@
       ],
       "presentationBoundary": "the first fold prioritizes today actions and current-user anomalies only; full-chain teaching stays in first-time onboarding; every change keeps an explicit action to its stored internal route",
       "actionOrder": ["overdue", "blocking", "high_risk", "high_value", "normal"],
-      "scope": "exact organization and workspace; required capability; health exact authenticated audience user",
-      "truth": "synchronous MySQL 5.7 projection read; empty until P03-P05 owning modules write real data",
+      "scope": "exact organization and workspace; required capability; active tasks assigned to the actor, pending approvals at the actor's current node, pending opportunities owned by or created unassigned by the actor, and health exact authenticated audience user",
+      "truth": "synchronous MySQL 5.7 cross-module read from tasks approvals opportunities plus stored change follow and health projections; no missing projection writer can leave today's actions empty",
       "apiClientBoundary": "the home projection uses the shared frontend API client and preserves standardized expired, forbidden, blocked and error states plus request_id, trace_id and action_hint",
       "opportunityDetail": "responsive route and section skeleton only; P04 metrics, profit, risk and evidence are not fabricated",
       "async": "not applicable in M02-06; no Worker, Crawler, queue, outbox, event, file, export or SSE",
@@ -573,6 +585,7 @@
       "truth": "MySQL 5.7 current definition plus immutable correlated versions and idempotent operations",
       "permission": "authenticated platform provider:configure; same-origin and Idempotency-Key for writes",
       "async": "public_page and public_rss execution requires approved terms metadata with a non-empty version and future expiry plus a same-origin robots.txt preflight before adapter collection; missing or expired terms fail closed and blocked robots remain blocked_robots",
+      "robotsDecisionAudit": "the versioned scoutops-robots-policy-v1 evaluator returns the exact winning Allow or Disallow rule as a bounded preview plus full SHA-256, robots HTTP status and matched user-agent; the Worker stores the decision in collection.subquery.completed metadata and task detail projects only validated decisions without a schema migration",
       "configuration": "no new environment values or secrets; existing APP_WEB_ORIGIN and MySQL configuration only",
       "imageEvidence": ["concept 62 provider management"],
       "verificationRunId": "fb4fe378-9280-48a6-a0de-d90b0513d33f",
@@ -600,6 +613,7 @@
         "/api/v1/platform/crawler-profiles"
       ],
       "scope": "platform-global encrypted credential and crawler profile assets, including Playwright storageState JSON, browser cookie JSON, Netscape cookies.txt, tar.gz browser profiles, direct login-page jump and a restricted ai选品 browser helper that reads the user-selected site's current-browser cookies; cookie domains are validated against the provider target domain; the account-source compatibility matrix derives readiness only from exact provider binding, active unexpired credential metadata and active crawler-profile state without exposing secrets; credential rotation completes active renewal work and transactionally requeues a live login-blocked browser job or clones a terminal login-blocked collection task for automatic replay",
+      "presentationBoundary": "the compatibility matrix keeps shared column visibility freeze and density controls on desktop; at 390 pixels every source becomes a summary card whose named side drawer shows bound credential and profile facts, while provider code remains inside technical details and no horizontal table is rendered",
       "encryption": "AES-256-GCM with random nonce, authentication tag, asset/type/key-version AAD and Baota-only master key",
       "loggingBoundary": "credential mutation responses are no-store; API repositories receive only sealed payloads; BaoTa Python crawler events recursively redact cookie credential token authorization secret and master-key fields",
       "responseBoundary": "masked fingerprint and metadata only; no decrypt, export, ciphertext, nonce or auth-tag API",
@@ -625,14 +639,17 @@
         "../apps/api/src/provider-adapter-service.ts",
         "../apps/api/src/mysql-provider-adapter-repository.ts",
         "../apps/api/src/provider-adapter-routes.ts",
-        "../apps/web/src/components/ProviderAdapterCenter.vue"
+        "../apps/web/src/components/ProviderAdapterCenter.vue",
+        "../apps/web/src/components/ProviderCompatibilityMatrixDialog.vue"
       ],
       "routes": [
         "/platform-admin/providers/adapters",
         "/api/v1/platform/provider-adapters",
         "/api/v1/platform/provider-adapters/{providerId}/health-check"
       ],
-      "scope": "platform-global adapter registration and health; collect invocation contract requires organization and workspace scope; the source health page separates network parser login and succeeded-empty runtime outcomes and shows the truthful 24-hour success rate P95 duration and sample count from completed subqueries; mobile uses summary cards with a health-action detail drawer and raw identifiers codes versions and errors stay inside technical details",
+      "scope": "platform-global adapter registration and health; collect invocation contract requires organization and workspace scope; the source health page separates network parser login and succeeded-empty runtime outcomes and shows the truthful 24-hour success rate P95 duration and sample count from completed subqueries; it also shows each Provider runtime consecutive failures against its configured circuit threshold and keeps runtime circuit failures separate from adapter probe failures; the source detail compatibility matrix groups retained DOM or HTML content SHA-256 page versions by parser version and exact subquery outcomes, returns at most eight recent pairs per Provider, and never returns source content URL organization workspace task or correlation fields; mobile uses summary cards with a health-action detail drawer and raw identifiers codes versions and errors stay inside technical details",
+      "runtimeErrorBudgetBoundary": "remaining budget is max(provider circuit_failure_threshold minus provider_runtime_circuits consecutive_failures, zero); an open circuit is recovery eligible only after a real ready adapter health check newer than opened_at; the check never closes the circuit and the existing audited crawler scheduler recovery remains required",
+      "pageCompatibilityBoundary": "compatible requires succeeded or succeeded_empty; incompatible requires a parser-classified error; both becomes mixed and all other outcomes stay unverified; the matrix is read-only and never enables disables or schedules a source",
       "contract": ["collect", "normalize", "healthCheck"],
       "failureBoundary": "provider code must have an explicitly registered matching access-mode adapter; otherwise blocked adapter_not_registered",
       "permission": "authenticated platform provider:configure; same-origin and Idempotency-Key for health writes",
@@ -686,7 +703,7 @@
         "/api/v1/internal/crawler-runtime/jobs/{jobId}/heartbeat",
         "/api/v1/internal/crawler-runtime/jobs/{jobId}/complete"
       ],
-      "scope": "Node Worker owns the business collection task and enqueues one browser_collection_job per authenticated-browser subquery; the BaoTa Python Crawler claims that job, renews the job/profile/single-host leases together, aborts the Playwright child immediately when heartbeat fails, calls the fixed Node Playwright runner and writes the bounded result back to the same task and subquery; failed completion callbacks are retained in a permission-restricted local spool and retried with stable correlation, API faults use bounded exponential backoff with jitter, succeeded_empty remains distinct from succeeded, and sanitized bounded stderr diagnostics are retained in result_json; evidence-enabled plans return a bounded JPEG screenshot and item DOM fragment with SHA-256 and parser version, which the Worker persists under EVIDENCE_ROOT and links to the browser job, business task and subquery; expired credentials and login-blocked runs create an assigned collection follow-up task linked to the collection task, and a validated credential rotation completes the follow-up then requeues or clones the blocked work for login verification",
+      "scope": "Node Worker owns the business collection task and enqueues one browser_collection_job per authenticated-browser subquery; the BaoTa Python Crawler claims that job, renews the job/profile/single-host leases together, aborts the Playwright child immediately when heartbeat fails, calls the fixed Node Playwright runner and writes the bounded result back to the same task and subquery; the runtime page derives credential expiry warning days only from response observed_at and explicit credential_expires_at, shows the Provider and target domain occupying each profile, and labels an expired lease as zombie-occupation risk without claiming operating-system process detection; failed completion callbacks are retained in a permission-restricted local spool and retried with stable correlation, API faults use bounded exponential backoff with jitter, succeeded_empty remains distinct from succeeded, and sanitized bounded stderr diagnostics are retained in result_json; evidence-enabled plans return a bounded JPEG screenshot and item DOM fragment with SHA-256 and parser version, which the Worker persists under EVIDENCE_ROOT and links to the browser job, business task and subquery; expired credentials and login-blocked runs create an assigned collection follow-up task linked to the collection task, and a validated credential rotation completes the follow-up then requeues or clones the blocked work for login verification",
       "actions": ["bounded search", "pagination", "scroll", "same-allowlist detail pages"],
       "blockedStates": [
         "blocked_login",
@@ -733,6 +750,10 @@
       "entrypoints": [
         "../packages/collection-tasks/src/index.ts",
         "../apps/worker/src/collection-task-worker.ts",
+        "../apps/worker/src/collection-task-contracts.ts",
+        "../apps/worker/src/collection-task-state-machine.ts",
+        "../apps/worker/src/collection-task-evidence.ts",
+        "../apps/worker/src/collection-task-dead-letter.ts",
         "../apps/api/src/collection-task-service.ts",
         "../apps/api/src/mysql-collection-task-repository.ts",
         "../apps/api/src/collection-task-routes.ts",
@@ -745,7 +766,8 @@
         "/api/v1/platform/collection/tasks/{taskId}",
         "/api/v1/platform/collection/tasks/{taskId}/replay"
       ],
-      "scope": "organization and workspace scoped task, subquery, attempt, event, outbox and dead-letter truth in MySQL 5.7; each Provider subquery is isolated, its result or error is committed with a collection.subquery.completed event immediately, all sibling sources execute, and only then does the Worker apply the existing task-level retry, blocked or terminal policy; task detail shows every subquery retryability and, while retry-scheduled or rate-limited, the shared task available_at explicitly labeled as task-level scheduling rather than fabricating provider-specific backoff",
+      "scope": "organization and workspace scoped task, subquery, attempt, event, outbox and dead-letter truth in MySQL 5.7; each Provider subquery is isolated, its result or error is committed with a collection.subquery.completed event immediately, all sibling sources execute, and only then does the Worker apply the existing task-level retry, blocked or terminal policy; task detail shows every subquery result count, missing fields, persisted start-to-finish duration and retryability, while failure recovery links to existing credential, source health, source setting or confirmed replay surfaces; retry-scheduled or rate-limited work uses the shared task available_at explicitly labeled as task-level scheduling rather than fabricating provider-specific backoff",
+      "rssResultKinds": "public RSS subquery completion events distinguish empty_success for a valid feed with no entries, no_new_content when parsed records only link immutable existing evidence, and parse_failed for a payload that fails the current parser contract; task detail projects this audited event metadata without adding or guessing a persisted source field",
       "states": [
         "draft",
         "scheduled",
@@ -772,8 +794,9 @@
       "retryPolicy": "maximum 4 total attempts; 1, 5 and 15 minute backoff plus at most 20 percent jitter; rate limit uses reset time",
       "credentialRenewalReplay": "validated credential rotation preserves the blocked task history; active browser work is requeued in place, while blocked_login and historic login-misclassified empty or warning terminal tasks are marked automatically_replayed and cloned as a new scheduled task",
       "queueRecovery": "queued rows with attempt_count at or above 4 are transactionally quarantined to dead_letter with collection_attempt_overflow event, outbox and dead-letter audit; normal claims require attempt_count below 4 so an exhausted head row cannot block fresh crawls",
+      "workerModuleBoundary": "collection-task-worker owns one-pass orchestration and Redis coordination; collection-task-state-machine owns queue readiness leases heartbeats and transitions; collection-task-evidence owns persisted subquery outcomes and terminal coverage without replacing M03-06 raw evidence storage; collection-task-dead-letter owns expired lease recovery retry classification overflow quarantine and dead-letter persistence; public worker exports and queue contracts remain compatible",
       "permission": "authenticated platform collection:replay; same-origin Origin, Idempotency-Key and reason for dead-letter replay",
-      "responseBoundary": "task status, coverage, scoped counts, subqueries, attempts, events, dead-letter and correlation; no target_json, lease token or credential",
+      "responseBoundary": "task status, coverage, scoped counts, subqueries, attempts, events, dead-letter, validated robots decision version and matched rule, and correlation; no target_json, lease token or credential",
       "mobilePresentationBoundary": "at 390px collection tasks render as status and evidence summary cards; the detail drawer preserves coverage and missing-field facts, links to the full task detail, and confines complete task, organization, workspace, request and error identifiers to technical details",
       "configuration": ["COLLECTION_TASK_POLL_MS", "COLLECTION_TASK_LEASE_SECONDS"],
       "runtimeBoundary": "the state machine owns task leases, task-level retries and terminal coverage while the M03-07 Provider executor persists each subquery outcome independently before returning or raising the aggregate task failure; a single source cannot prevent sibling execution, but MySQL persistence failure still fails closed",
@@ -825,6 +848,8 @@
         "source_success_rate"
       ],
       "presentationBoundary": "the quality page surfaces the latest persisted title price currency external-id and canonical-url accuracy metrics plus duplicate ratio and source freshness individually; it preserves threshold sample count and insufficient-sample truth, shows no-data explicitly, and never invents a composite accuracy score",
+      "drilldownBoundary": "each reconciliation run can narrow the existing issue list by persisted reconciliation_run_id; affected fields and parser version stay visible, and issues linked to raw evidence open the immutable sample lineage without inventing unstored sample rows",
+      "retentionRiskBoundary": "the API supplies the observation clock and the evidence page derives expired and within-seven-day risk only from persisted retention_until; it does not delete evidence or invent a retention policy",
       "mobilePresentationBoundary": "at 390px evidence and issue tables become summary cards with detail drawers; download, lineage and resolution actions remain reachable, while complete evidence, organization, workspace, hash and correlation identifiers stay inside technical details",
       "permission": "authenticated platform platform:operate; same-origin Origin, Idempotency-Key and optimistic version for individual or 1-50 atomic batch issue attribution assignment and close operations; assignment requires one active membership valid for every selected issue organization; controlled download grants and accesses are audited",
       "responseBoundary": "metadata, normalized versions, provenance and issues only; no raw content, storage path, credential or cookie outside the integrity-checked download endpoint",
@@ -859,19 +884,28 @@
         "../packages/provider-sources/src/proxy-fetch.ts",
         "../apps/api/src/provider-source-service.ts",
         "../apps/api/src/mysql-provider-source-repository.ts",
+        "../apps/api/src/mysql-provider-source-catalog-repository.ts",
+        "../apps/api/src/mysql-provider-source-sample-repository.ts",
+        "../apps/api/src/mysql-provider-source-sample-review-repository.ts",
+        "../apps/api/src/mysql-provider-source-version-repository.ts",
+        "../apps/api/src/mysql-provider-source-repository-shared.ts",
         "../apps/api/src/provider-source-routes.ts",
         "../apps/worker/src/provider-source-executor.ts",
         "../apps/worker/src/automatic-source-scheduler.ts",
         "../apps/web/src/components/ProviderSourceCenter.vue",
         "../apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+        "../apps/web/src/components/ProviderSourceConfigurationDialog.vue",
         "../apps/web/src/components/ProviderParserSampleDialog.vue",
+        "../apps/web/src/components/ProviderParserSampleReview.vue",
+        "../apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
         "../database/migrations/0038_remove_official_api_provider_mode.up.sql",
         "../database/migrations/0043_trend_rule_collection_schedule.up.sql",
         "../database/migrations/0051a_provider_parser_samples.up.sql",
         "../database/migrations/0051b_provider_parser_sample_replay_runs.up.sql",
         "../database/migrations/0051c_provider_parser_sample_operations.up.sql",
         "../database/migrations/0053_provider_configuration_versions.up.sql",
-        "../database/migrations/0056_provider_terms_version_expiry.up.sql"
+        "../database/migrations/0056_provider_terms_version_expiry.up.sql",
+        "../database/migrations/0064_governed_workflow_confirmations.up.sql"
       ],
       "routes": [
         "/platform-admin/providers/sources",
@@ -883,11 +917,13 @@
         "/api/v1/platform/provider-sources/{providerId}/configuration/rollbacks",
         "/api/v1/platform/provider-sources/{providerId}/parser-samples",
         "/api/v1/platform/provider-sources/{providerId}/parser-samples/{sampleId}/replays",
+        "/api/v1/platform/provider-sources/{providerId}/parser-samples/{sampleId}/reviews",
         "/api/v1/platform/provider-sources/{code}/provision",
         "/api/v1/platform/provider-sources/{providerId}/replays",
         "/api/v1/provider-sources/refresh"
       ],
-      "scope": "100+ code-owned hotspot and product-source channels; currently 180 catalog entries including 138 automatic crawler channels across 24 hosts, plus organization/workspace automatic and user-operated core collection tasks and evidence; each source exposes its code-owned owner, explicit market/category/field impact, schedule-derived update target and latest persisted successful subquery without inventing an independent SLA",
+      "scope": "100+ code-owned hotspot and product-source channels; currently 180 catalog entries including 138 automatic crawler channels across 24 hosts, plus organization/workspace automatic and user-operated core collection tasks and evidence; the source center groups real catalog entries into market and consumer signals, product and competitor observation, and supply sourcing while keeping developer acceptance copy in technical documentation; each source exposes its code-owned owner, explicit market/category/field impact, schedule-derived update target and latest persisted successful subquery without inventing an independent SLA",
+      "apiRepositoryBoundary": "mysql-provider-source-repository.ts remains the ProviderSourceRepository-compatible composition root and owns only replay and refresh orchestration; catalog registration and provisioning SQL lives in mysql-provider-source-catalog-repository.ts, fixed-sample and 1688 acceptance SQL lives in mysql-provider-source-sample-repository.ts, immutable second-person sample decisions live in mysql-provider-source-sample-review-repository.ts, and configuration history update and rollback SQL lives in mysql-provider-source-version-repository.ts; shared row projection and idempotent provider-operation lookup are centralized without changing API or persistence contracts",
       "sources": [
         "96 automatic Google News fixed RSS market/topic channels",
         "40 automatic non-Google RSS/Atom or fixed public-page news ecommerce community and trend channels, including current Shopify blog and eBay announcement HTML pages",
@@ -900,12 +936,16 @@
         "ec21_supplier_search independent public supplier fallback crawler",
         "1688_search registered authenticated-browser job routing and versioned output contracts for search offers, offer details and suppliers; source remains setup-required and disabled until a real logged-in fixed sample proves field extraction"
       ],
-      "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; 1688 has a dedicated acceptance page that reports the configured owner and exact pending reasons, and enabling requires an active non-expired browser profile, a successful login-state run that was not captcha-blocked, and a passed fixed-sample replay for the current parser version; official_api is removed from the runtime contract and migrated to public_page; no source fabricates platform data",
+      "admissionBoundary": "fixed public RSS Atom and public marketplace pages auto-register enabled; authenticated-browser and manual entries remain disabled until a real login profile or explicit input exists; 1688 has a dedicated acceptance page that reports the configured owner and exact pending reasons, and enabling requires an active non-expired browser profile, a successful login-state run that was not captcha-blocked, plus a fixed sample approved by a different provider:configure administrator whose latest replay passes on the current parser version; rejected immutable samples remain auditable but cannot satisfy the gate; official_api is removed from the runtime contract and migrated to public_page; no source fabricates platform data",
+      "alibaba1688CoverageMatrix": "the dedicated acceptance API reads only the latest real browser job: search and offer-detail rows are marked covered only after their versioned snapshots pass 1688.search.v1 and 1688.offer-detail.v1 parsing; pagination compares execution_request_json.plan.max_pages with the persisted crawler page_count and reports the current one-page plan as not_exercised instead of claiming pagination coverage; this matrix is observational and does not weaken or replace login captcha or current-parser fixed-sample enablement gates",
       "outboundBoundary": "Every automatic URL and proxy host is derived from the code-owned source catalog; the optional Baota-restricted project HTTP CONNECT proxy accepts only those exact HTTPS hosts without setting global HTTP_PROXY or HTTPS_PROXY; Google News rejects redirects, CSV uses inline content, and callers cannot supply an outbound URL or proxy",
       "limits": "Google RSS 2MB and 20 persisted records per task; Amazon Made-in-China and EC21 public pages 5MB and 20 product records per source task; CSV 1MB exact 8-column header 100 parsed rows and 20 persisted records per task; 1688 browser snapshots accept at most 100 search items and 250KB of bounded DOM evidence per record, with exact HTTPS 1688 host and field-path validation",
-      "permission": "provider:configure for catalog, provision and fixing eligible real parser samples; collection:replay for scoped source and fixed-sample replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
+      "permission": "provider:configure for catalog provision fixing eligible real parser samples and second-person sample review; a sample creator cannot review the same immutable sample; collection:replay for scoped source and fixed-sample replay; trend:read for immediate organization refresh; writes require same-origin Origin and Idempotency-Key",
       "persistence": "MySQL 5.7 automatic_source_schedules, provider_refresh_operations, immutable provider configuration snapshots with append-only rollback versions, immutable real-job parser samples and replay differences plus M03-05 task/event/outbox and M03-06 immutable evidence, normalized record and field provenance",
       "configurationVersionBoundary": "the source center exposes only schedule, timeout, retry and enabled-state differences; rollback revalidates the current optimistic version plus current public terms or logged-in parser acceptance and writes a new configuration_rolled_back version and audit event without mutating history; credentials, cookies, restricted environment values, raw snapshots, actor ids and correlation ids never enter the browser response",
+      "publicEnablementSmokeGate": "a disabled public_page or public_rss source is first saved as disabled, then the registered adapter performs a bounded request against the persisted real target and parses the response; only a ready health row checked at or after that provider configuration update and using the same persisted timeout can be enabled, and direct API or enabled rollback requests fail with provider_source_smoke_test_required when the evidence is absent, stale or for a different timeout",
+      "configurationSchedulingPreview": "the source edit dialog recomputes how many currently enabled automatic sources would share the proposed schedule_minutes value and pairs that estimate with a read-time MySQL count of this provider's pending or running collection_subqueries versus its configured concurrency_limit; because no per-provider phase is persisted, the UI labels same-interval counts as possible shared windows rather than guaranteed collisions and labels concurrency as a current snapshot rather than a future forecast",
+      "frontendModuleBoundary": "ProviderSourceCenter owns catalog filters cards API calls smoke-test compatibility-read orchestration and version-locked writes; ProviderSourceConfigurationDialog owns edit scheduling preview version history and rollback presentation; ProviderParserSampleDialog owns candidate baseline and replay presentation while ProviderParserSampleReview owns the bounded immutable second-person decision form; ProviderCompatibilityMatrixDialog owns retained DOM or HTML page-fingerprint compatibility presentation without duplicating source API orchestration",
       "parserDriftBoundary": "source_changed transactionally disables the enabled Provider before the required collection source fails; provider version and platform audit preserve parser version, source code and correlation, and only an operator may restore the source after parser and replay verification",
       "liveVerificationCleanup": "random m03-07 example.test scope only; delete M07-06 collection_task_evidence_links before evidence/task/provider principals and fail closed unless provider, workspace, organization and user are all absent",
       "configuration": [
@@ -939,10 +979,21 @@
         "../apps/api/src/trend-service.ts",
         "../apps/api/src/mysql-trend-repository.ts",
         "../apps/api/src/trend-routes.ts",
+        "../apps/api/src/data-quality-service.ts",
+        "../apps/api/src/mysql-data-quality-repository.ts",
+        "../apps/api/src/data-quality-routes.ts",
         "../apps/worker/src/trend-projection-worker.ts",
+        "../apps/worker/src/trend-projection-calculation.ts",
+        "../apps/worker/src/trend-projection-persistence.ts",
+        "../apps/worker/src/trend-projection-alerts.ts",
         "../apps/worker/src/automatic-source-scheduler.ts",
         "../apps/web/src/components/TrendDashboard.vue",
-        "../database/migrations/0043_trend_rule_collection_schedule.up.sql"
+        "../apps/web/src/components/TrendFilterPanel.vue",
+        "../apps/web/src/components/TrendDetailPanel.vue",
+        "../apps/web/src/components/TrendEvidenceTimeline.vue",
+        "../apps/web/src/components/TrendChangeQueue.vue",
+        "../database/migrations/0043_trend_rule_collection_schedule.up.sql",
+        "../database/migrations/0064_governed_workflow_confirmations.up.sql"
       ],
       "routes": [
         "/trends",
@@ -950,21 +1001,28 @@
         "/api/v1/trends/{topicId}",
         "/api/v1/trends/{topicId}/follow",
         "/api/v1/trends/{topicId}/relevance",
+        "/api/v1/trends/{topicId}/evidence/{evidenceId}/quality-issues",
+        "/api/v1/trends/change-requests",
+        "/api/v1/trends/change-requests/{requestId}/decisions",
         "/api/v1/trends/monitoring-rules",
         "/api/v1/trends/monitoring-rules/{ruleId}"
       ],
-      "scope": "organization and workspace scoped manual and automatic trend topics signals timelines keywords follows and monitoring rules",
-      "presentationBoundary": "the trend list precedes the collapsed help panel and exposes source count, source freshness and measured-or-insufficient confidence on every item; follow, monitoring and opportunity conversion remain distinct actions; relevance changes require an operator reason and the detail returns append-only mark and restore history, while monitoring rules expose the next collection time and failed or blocked sources from the last factual collection task",
+      "scope": "organization and workspace scoped manual and automatic trend topics signals timelines keywords follows monitoring rules trend-evidence quality issue creation and version-locked topic merge or exact-signal split confirmation requests",
+      "topicGovernanceBoundary": "a different active user with trend:manage must confirm or reject every proposal; merge retains the target consolidates signals keywords and follows then archives sources, blocks multiple opportunity identities and rebinds a sole opportunity; split moves only explicitly selected signals to the explicitly named new topic while existing opportunities remain on the original topic",
+      "presentationBoundary": "the trend list precedes the collapsed help panel and exposes source count, source freshness and measured-or-insufficient confidence on every item; follow, monitoring and opportunity conversion remain distinct actions; relevance changes require an operator reason and the detail returns append-only mark and restore history; each evidence row can report an anomaly into the existing data-quality workflow, while monitoring rules expose the next collection time and failed or blocked sources from the last factual collection task",
       "navigationState": "q market category status sort page topic and section are URL-backed; copied view links restore the same client view without claiming server-side saved-view persistence, and direct topic links load scoped details even outside the current list page",
       "layoutBoundary": "desktop uses an adjustable 32 to 48 percent master list with sticky detail actions; narrow screens use one column and empty filters expose an explicit recovery action",
       "timelineFilter": "trend detail returns aggregate timeline plus source-scoped points grouped by the real provider_id and publisher label so the browser can filter without inventing client-side attribution",
-      "apiClientBoundary": "trend reads, follow/relevance writes, monitoring-rule writes and source refresh use the shared frontend API client with correlation, idempotency and standardized recovery hints",
+      "apiClientBoundary": "trend reads, follow/relevance writes, evidence-quality writes, monitoring-rule writes and source refresh use the shared frontend API client with correlation, idempotency and standardized recovery hints",
+      "frontendModuleBoundary": "TrendDashboard owns route state API requests topic selection and monitoring-rule orchestration; TrendFilterPanel owns filter presentation, TrendDetailPanel owns selected-topic facts and actions, and TrendEvidenceTimeline owns evidence relevance history source filtering and keyword presentation without duplicating trend contracts",
+      "evidenceQualityBoundary": "trend:manage can create a warning or critical data_quality_issues record only from a signal inside the current session organization workspace and topic; provider raw evidence normalized record and parser version are server-derived, and an existing open trend_evidence_anomaly issue is returned instead of duplicated",
       "projection": "Baota Node Worker scans normalized records, leases idempotent projection jobs and projects manual Google News plus every code-owned automatic Google/non-Google RSS, forum and fixed public marketplace source; market and language derive from the source catalog while unsupported records terminate as succeeded_empty",
+      "projectionModuleBoundary": "trend-projection-worker owns queue recovery leasing retries and orchestration; trend-projection-calculation owns provider classification input validation and topic-key calculation; trend-projection-persistence owns the atomic topic signal keyword and job writes; trend-projection-alerts owns monitoring-rule matches plus trend and opportunity event/outbox writes without changing the existing queue or data contract",
       "automaticProductDiscovery": "only concrete product evidence with a product URL or explicit price plus image creates an automatic opportunity; every newly discovered Amazon product automatically queues a high-priority public-page competitor snapshot with page_url and Made-in-China plus EC21 supplier searches using the supplier-keywords-v2 auditable generic keyword contract capped at 120 characters and preserving the requested URL across the restricted proxy transport; an optional supplier failure does not block the next source, and the Worker backfills exactly one missing or legacy malformed downstream task for historical automatic products; community posts and seller news remain trend evidence unless a user monitoring rule explicitly matches",
       "monitoringRuleEvaluation": "each rule stores a 15–10080 minute interval and source cursor; the Baota Worker schedules market-matching sources with the rule keywords, then every newly projected topic evaluates include and negative keywords plus market and language; matched topics are followed, promoted to evidence-backed opportunities and auditable",
       "heatBoundary": "heat is the observed signal count with unit signals; momentum and confidence remain insufficient_data until a measured contract exists",
-      "permission": "trend:read for scoped reads; trend:manage for follow relevance and monitoring writes; same-origin Origin and Idempotency-Key required",
-      "audit": "user and Worker writes persist trend_events and trend_outbox with request_id and trace_id; original evidence is never deleted by relevance actions",
+      "permission": "trend:read for scoped reads; trend:manage for follow relevance evidence-quality and monitoring writes; same-origin Origin and Idempotency-Key required",
+      "audit": "trend writes persist trend_events and trend_outbox; evidence anomaly creation reuses evidence_data_events evidence_data_outbox and evidence_data_operations; every write retains request_id and trace_id, and original evidence is never deleted",
       "configuration": ["TREND_PROJECTION_POLL_MS", "TREND_PROJECTION_LEASE_SECONDS"],
       "runtimeBoundary": "projection runs inside the Baota-managed Node Worker; no panel-external production service",
       "imageEvidence": [
@@ -990,9 +1048,12 @@
         "../apps/api/src/erp-product-import-routes.ts",
         "../apps/worker/src/core-collection-projection-worker.ts",
         "../apps/web/src/components/OpportunityWorkspace.vue",
+        "../apps/web/src/components/OpportunityDecisionPanel.vue",
         "../apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "../apps/web/src/components/OpportunityListPanel.vue",
-        "../database/migrations/0042_erp_product_import.up.sql"
+        "../apps/web/src/components/opportunity-workspace-presentation.ts",
+        "../database/migrations/0042_erp_product_import.up.sql",
+        "../database/migrations/0060_opportunity_workflow_visibility.up.sql"
       ],
       "routes": [
         "/opportunities",
@@ -1006,17 +1067,18 @@
         "/api/v1/opportunities/{opportunityId}/competitor-discovery",
         "/api/v1/imports/erp-products"
       ],
-      "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs; the list filters persisted evidence coverage with coverage_status, adoption blockers with blocking_reason, stage with lifecycle_status and eligible owner with owner_id, and supports atomic batch assignment archive and review-task creation",
-      "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; blocking reasons are derived only from the same persisted evidence and recommendation fields that enforce adoption, scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese",
+      "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs; the list filters persisted evidence coverage with coverage_status, adoption blockers with blocking_reason, stage with lifecycle_status and eligible owner with owner_id, displays persisted lifecycle_entered_at plus server-calculated dwell time, and supports atomic batch assignment archive and review-task creation",
+      "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; blocking reasons and release progress derive only from persisted opportunity facts, evidence-completion tasks and score jobs that enforce adoption; scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese",
       "navigationState": "list filters scope and page are URL-backed; detail tabs use the tab query and every list-to-detail link carries a validated same-origin from path so returning restores the source view",
-      "decisionLayout": "detail removes the duplicate large page hero, presents the truthful recommendation first and keeps adopt observe reject plus evidence recovery in a fixed safe-area-aware bottom decision bar",
+      "decisionLayout": "detail removes the duplicate large page hero, presents the truthful recommendation first, centralizes every adoption blocker with its linked task and score-job release progress, shows a redecision-ready notice after replenishment scoring, and keeps adopt observe reject plus evidence recovery in a fixed safe-area-aware bottom decision bar",
       "modalAccessibility": "ERP import opportunity creation and decision forms use native modal top-layer dialogs with Escape handling focus trapping and invoking-control focus return",
       "apiClientBoundary": "opportunity lists, details, AI analyses, downstream competitor and sourcing counts, decisions and other writes use the shared frontend JSON client; optional AI and downstream counts still degrade independently without masking the core opportunity state",
+      "frontendModuleBoundary": "OpportunityWorkspace owns route state API requests and detail orchestration; OpportunityListPanel owns list filtering and summary presentation, OpportunityDecisionPanel owns blocker release status redecision notice and decision actions, OpportunityProfitPanel owns profit and cost presentation, and OpportunityWorkspaceDialogs owns audited create import and decision forms without duplicating opportunity business contracts",
       "refresh": "Baota Node Worker leases opportunity refresh jobs and links only persisted trend signals; trend-only evidence remains partial because competition and cost inputs are absent",
       "productImages": "structured marketplace crawlers extract JSON-LD or linked product image URLs; ERP imports map the confirmed product image field; opportunity list resolves the newest scoped evidence image and otherwise shows an explicit pending-capture placeholder",
       "erpImport": "the restricted browser helper reads the existing ERP Authorization token only inside the logged-in ERP tab and imports immutable evidence, opportunities, actual ASIN competitors and evidence-linked ERP historical-cost supplier candidates; missing MOQ specification lead time and location stay explicit rather than being presented as confirmed quotes",
       "permission": "opportunity:read for scoped reads; existing opportunity:decide for candidate creation and required-reason decisions; same-origin Origin and Idempotency-Key required",
-      "audit": "manual creation, automatic opportunity.candidate.discovered, evidence refresh, atomic batch actions, linked evidence-completion tasks and decision changes persist correlated opportunity_events and opportunity_outbox; completing a linked evidence task queues scoring only when an active rule exists, and decisions do not rewrite scores or evidence",
+      "audit": "manual creation, automatic opportunity.candidate.discovered, evidence refresh, atomic batch actions, linked evidence-completion tasks and decision changes persist correlated opportunity_events and opportunity_outbox; completing a linked evidence task queues scoring only when an active rule exists and records trigger_task_id, completed scoring queues a scoped redecision-ready notification for the owner or task assignee, and decisions do not rewrite scores or evidence",
       "configuration": ["OPPORTUNITY_REFRESH_POLL_MS", "OPPORTUNITY_REFRESH_LEASE_SECONDS"],
       "runtimeBoundary": "refresh runs inside the Baota-managed Node Worker; no panel-external production service",
       "imageEvidence": [
@@ -1041,6 +1103,7 @@
         "../apps/api/src/scoring-service.ts",
         "../apps/api/src/mysql-scoring-repository.ts",
         "../apps/api/src/scoring-routes.ts",
+        "../packages/contracts/src/index.ts",
         "../apps/worker/src/opportunity-scoring-worker.ts",
         "../apps/web/src/components/ScoreRuleConsole.vue",
         "../apps/web/src/components/OpportunityWorkspace.vue"
@@ -1049,13 +1112,15 @@
         "/opportunities/scoring-rules",
         "/api/v1/opportunity-score-rules",
         "/api/v1/opportunity-score-rules/{scoreRuleId}/actions",
+        "/api/v1/opportunity-score-rules/{scoreRuleId}/preview",
         "/api/v1/opportunities/{opportunityId}/score-inputs",
         "/api/v1/opportunities/{opportunityId}/score-runs"
       ],
-      "scope": "organization and workspace scoped versioned rules inputs jobs immutable runs components approvals and rollback",
-      "truthBoundary": "no default weights thresholds or missing scores; below 50 percent is insufficient and recommendation requires at least 80 percent plus market competition and cost evidence",
+      "scope": "organization and workspace scoped versioned rules inputs jobs immutable runs components approvals rollback and read-only pre-publish opportunity impact preview",
+      "truthBoundary": "no default weights thresholds or missing scores; preview reuses current persisted inputs and the production calculator without creating runs or changing opportunities; below 50 percent is insufficient and recommendation requires at least 80 percent plus market competition and cost evidence",
+      "qualityGateBoundary": "before writing a score run the Worker resolves current input evidence IDs to raw evidence; a failed latest reconciliation for the same provider and parser, or an open critical issue on that evidence, fails the job terminally with score_blocked_by_data_quality_regression and preserves the previous score",
       "apiClientBoundary": "score-rule reads and lifecycle writes use the shared frontend API client without changing rule versions, evidence thresholds or approval transitions",
-      "permission": "opportunity:read for rule and explanation reads; opportunity:decide for draft submit input and rerun; opportunity:approve for approve reject activate and rollback",
+      "permission": "opportunity:read for rule and explanation reads; opportunity:decide for draft submit input and rerun; opportunity:approve for pre-publish preview approve reject activate and rollback",
       "audit": "rule transitions input writes and scoring runs persist correlated opportunity_events and opportunity_outbox while historical runs remain immutable",
       "configuration": ["OPPORTUNITY_SCORING_POLL_MS", "OPPORTUNITY_SCORING_LEASE_SECONDS"],
       "runtimeBoundary": "scoring runs inside the Baota-managed Node Worker; MySQL is the rule and score truth and Redis is coordination only",
@@ -1077,20 +1142,26 @@
         "../apps/worker/src/opportunity-profit-worker.ts",
         "../apps/web/src/components/CostRuleConsole.vue",
         "../apps/web/src/components/OpportunityWorkspace.vue",
-        "../apps/web/src/components/OpportunityProfitPanel.vue"
+        "../apps/web/src/components/OpportunityProfitPanel.vue",
+        "../apps/web/src/components/OpportunityCostReviewQueue.vue",
+        "../apps/web/src/components/SourcingCostConfirmationPanel.vue",
+        "../database/migrations/0064_governed_workflow_confirmations.up.sql"
       ],
       "routes": [
         "/sourcing/cost-rules",
         "/api/v1/cost-rules",
         "/api/v1/cost-rules/{costRuleId}/actions",
         "/api/v1/exchange-rates",
+        "/api/v1/cost-input-reviewers",
         "/api/v1/opportunities/{opportunityId}/cost-inputs",
+        "/api/v1/opportunities/{opportunityId}/cost-input-reviews/{reviewId}/actions",
         "/api/v1/opportunities/{opportunityId}/profit-runs",
         "/api/v1/opportunities/{opportunityId}/profit-analysis"
       ],
-      "scope": "organization and workspace scoped versioned fee rules dual approvals exchange quotes cost inputs jobs immutable profit runs components and rollback",
-      "truthBoundary": "all four fees are explicit; missing required inputs or an approved historical exchange rate stays insufficient_data and never emits numeric ROI",
-      "apiClientBoundary": "cost-rule reads and lifecycle writes use the shared frontend API client without browser-side ROI calculation or inferred fee values",
+      "scope": "organization and workspace scoped versioned fee rules dual approvals exchange quotes second-person-reviewed cost inputs jobs immutable profit runs components and rollback",
+      "truthBoundary": "all four fees are explicit; a submitted cost input remains inactive until its distinct assigned cost:confirm reviewer approves it; rejection or deadline never activates it; missing required inputs or an approved historical exchange rate stays insufficient_data and never emits numeric ROI",
+      "costReviewBoundary": "submission creates a 24-hour pending review and schedules a reviewer reminder four hours before expiry plus an overdue escalation to the reviewer and organization administrators; scheduled delivery rechecks pending state and never auto-approves; approval atomically supersedes the prior current input and queues profit recalculation",
+      "apiClientBoundary": "cost-rule reads and lifecycle writes use the shared frontend API client without browser-side ROI calculation or inferred fee values; OpportunityProfitPanel keeps calculation and input presentation while OpportunityCostReviewQueue owns only the pending review interaction and emits decisions to its parent",
       "permission": "opportunity:read for rules and profit analysis; cost:confirm for rates inputs and reruns; opportunity:approve for rule creation approval publish reject and rollback",
       "audit": "rule transitions rates inputs and profit runs persist correlated opportunity_events and opportunity_outbox while historical inputs and runs remain immutable",
       "configuration": ["PROFIT_CALCULATION_POLL_MS", "PROFIT_CALCULATION_LEASE_SECONDS"],
@@ -1124,8 +1195,8 @@
         "/api/v1/competitor-monitor-rules"
       ],
       "scope": "organization and workspace scoped competitor identities immutable source snapshots comparison jobs changes threshold rules alerts events and outbox",
-      "truthBoundary": "Amazon identities can be added by product URL and are collected from the public product page without an official API; nullable price rank reviews rating and availability remain visibly missing when the page does not expose them, no zero or sample value is substituted, and detail views distinguish the oldest baseline, current snapshot, recorded changes and applicable explicit thresholds while price changes use the currency from their evidence-linked snapshot",
-      "pageFlow": "competitor creation uses link market and confirmation steps over the existing API fields; detail exposes a price and availability timeline, contextual rules, explicit first-collection recovery and external-link warnings, and every persisted change can create a high-priority validation task whose description locks the competitor change evidence and observed time before linking to task detail; mobile secondary actions live under a named menu",
+      "truthBoundary": "Amazon identities can be added by product URL and are collected from the public product page without an official API; nullable price rank reviews rating and availability remain visibly missing when the page does not expose them, no zero or sample value is substituted, and detail views distinguish the oldest baseline, current snapshot, recorded changes and applicable explicit thresholds while price changes use the currency from their evidence-linked snapshot; alerts remain explicitly linked by change_id and unmatched changes are not presented as alerts",
+      "pageFlow": "competitor creation uses link market and confirmation steps over the existing API fields; detail exposes a price and availability timeline plus a unified change alert task and conclusion timeline, contextual rules, explicit first-collection recovery and external-link warnings, and every persisted change can create a high-priority validation task whose description locks the competitor change evidence and observed time before linking to task detail; mobile secondary actions live under a named menu",
       "apiClientBoundary": "competitor lists, details, collection actions, rules and audited deletes use the shared frontend JSON client; rule-list failure remains an optional degradation and does not hide an otherwise available competitor list",
       "permission": "competitor:read for scoped list and full detail; competitor:manage for create collect thresholds pause resume and audited soft delete; auditors remain read only",
       "audit": "user and Worker writes preserve request_id trace_id evidence source references immutable changes and queued downstream delivery state",
@@ -1150,7 +1221,10 @@
         "../apps/api/src/sourcing-routes.ts",
         "../apps/worker/src/sourcing-projection-worker.ts",
         "../apps/worker/src/core-collection-projection-worker.ts",
-        "../apps/web/src/components/SourcingWorkspace.vue"
+        "../apps/web/src/components/SourcingWorkspace.vue",
+        "../apps/web/src/components/SourcingComparisonPanel.vue",
+        "../apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "../apps/web/src/components/SourcingCostConfirmationPanel.vue"
       ],
       "routes": [
         "/sourcing",
@@ -1162,9 +1236,10 @@
         "/api/v1/sourcing/purchase-tasks"
       ],
       "scope": "organization and workspace scoped searches projection jobs candidates immutable quote versions comparisons purchase tasks events and outbox",
-      "truthBoundary": "a user search queues independent Made-in-China and EC21 public supplier-page crawlers without official API credentials; supplier title price image source URL and observed time are projected with immutable evidence, opportunity searches expose the joined opportunity name as display_name while retaining input_ref only for traceability, unavailable MOQ specification lead location confidence stability and risk stay explicit until evidence-backed human confirmation, confirmed cards use the immutable current quote MOQ price currency observed time and evidence rather than stale candidate values, and saved comparisons use one consistent supplier specification MOQ price and lead-time field order; no login-renewal link is fabricated while this domain has only public-page executors",
-      "pageFlow": "the URL-backed master-detail workspace presents search quote comparison and purchase stages; detail shows factual collection-task subquery progress and links to the task, quote cards prioritize price MOQ quote freshness lead time and an explicitly uncalculated landed cost, missing fields point to quote confirmation with a scoped searchable evidence selector, a fixed tray enforces the existing two-to-five quote comparison boundary, structured purchase creation locks the quote version MOQ and evidence, and cost rules preserve a validated return path to the current sourcing record",
+      "truthBoundary": "a user search queues independent Made-in-China and EC21 public supplier-page crawlers without official API credentials; supplier title price image source URL and observed time are projected with immutable evidence, opportunity searches expose the joined opportunity name as display_name while retaining input_ref only for traceability, unavailable MOQ specification lead location confidence stability and risk stay explicit until evidence-backed human confirmation, confirmed cards use the immutable current quote MOQ price currency observed time and evidence rather than stale candidate values, saved comparisons use one consistent supplier specification MOQ price and lead-time field order, and specification hints compare formatting only without converting units or claiming semantic equivalence; no login-renewal link is fabricated while this domain has only public-page executors",
+      "pageFlow": "the URL-backed master-detail workspace presents search quote comparison and purchase stages; detail shows factual collection-task subquery progress and links to the task, quote cards prioritize price MOQ quote freshness lead time and an explicitly uncalculated landed cost, missing fields point to quote confirmation with a scoped searchable evidence selector, each saved comparison warns when supplier specifications still need normalization, a fixed tray enforces the existing two-to-five quote comparison boundary, structured purchase creation locks the quote version MOQ and evidence, and opportunity-based searches expose the M04-04 cost submission second-review queue without duplicating profit calculation rules",
       "apiClientBoundary": "sourcing searches, details, refreshes, quote and purchase writes, comparisons and audited deletes use the shared frontend JSON client; comparison-history failure remains an optional degradation and does not hide an otherwise available sourcing list",
+      "frontendModuleBoundary": "SourcingWorkspace owns route state API requests search selection and write orchestration; SourcingComparisonPanel owns saved quote comparison and specification-normalization presentation, while SourcingWorkspaceDialogs owns search quote confirmation purchase and audited-delete forms without duplicating sourcing contracts",
       "permission": "sourcing:read for scoped lists details and comparison history; supplier_quote:manage for create refresh audited soft delete quote confirmation comparisons and purchase task creation",
       "audit": "writes preserve idempotency request_id trace_id actor immutable evidence references sourcing_events and sourcing_outbox",
       "configuration": ["SOURCING_PROJECTION_POLL_MS", "SOURCING_PROJECTION_LEASE_SECONDS"],
@@ -1230,7 +1305,10 @@
         "../apps/api/src/mysql-business-task-repository.ts",
         "../apps/api/src/business-task-routes.ts",
         "../apps/worker/src/business-task-projection-worker.ts",
-        "../apps/web/src/components/TaskWorkspace.vue"
+        "../apps/web/src/components/TaskWorkspace.vue",
+        "../apps/web/src/components/TaskListPanel.vue",
+        "../apps/web/src/components/TaskBatchActions.vue",
+        "../apps/web/src/components/TaskDetailPanel.vue"
       ],
       "routes": [
         "/work",
@@ -1242,11 +1320,12 @@
         "/api/v1/tasks/{taskId}/comments",
         "/api/v1/tasks/{taskId}/actions"
       ],
-      "scope": "organization and workspace scoped business tasks with create edit auditable soft-delete start complete cancel delay transfer progress immutable comments events idempotent operations audit and outbox",
+      "scope": "organization and workspace scoped business tasks with create edit auditable soft-delete start pause resume complete cancel single or batch delay and transfer progress immutable comments events idempotent operations audit and outbox",
       "truthBoundary": "SLA is derived only from persisted due_at; missing upstream deadlines remain not_set and M05-02 approvals M05-03 notifications M05-04 SSE are not fabricated",
-      "pageFlow": "today and all-task lists preserve status and pagination in the URL; independent detail routes carry a validated source return path, expose SLA level deadline and next step, group delete under named secondary actions, and merge persisted events and comments into a time-ordered activity stream while keeping progress stage-first; transfer uses an eligible organization-member selector, delay uses a date-time control, and progress uses a structured audited form",
+      "pageFlow": "today and all-task lists preserve status and pagination in the URL; independent detail routes carry a validated source return path, expose SLA level deadline and next step, fixed persisted pause reason and current assignee as next owner, group delete under named secondary actions, and merge persisted events and comments into a time-ordered activity stream while keeping progress stage-first; single and batch transfer use an eligible organization-member selector, single and batch delay use a date-time control, and progress uses a structured audited form",
       "secondaryWorkView": "the all-task route can switch to an URL-backed export-task view that reads the existing report export lifecycle; it does not merge report jobs into or fabricate rows in the business tasks table",
-      "apiClientBoundary": "task list, detail, create, edit, comments, progress, soft-delete and single or batch lifecycle actions use the shared frontend API client; each write retains its independent idempotency key",
+      "apiClientBoundary": "task list, detail, create, edit, comments, progress, soft-delete and single or batch lifecycle delay and transfer actions use the shared frontend API client; each selected task keeps its own version and independent idempotency key",
+      "frontendModuleBoundary": "TaskWorkspace owns route state, API requests and task operation orchestration; TaskListPanel owns list filtering and selection presentation, TaskBatchActions owns batch impact and scoped input presentation, and TaskDetailPanel owns facts, actions and activity presentation without changing API or state-machine contracts",
       "permission": "task:read for reads, task:create for creation, task:update for content progress soft-delete status due and comments, task:assign for transfer",
       "configuration": [
         "BUSINESS_TASK_PROJECTION_POLL_MS",
@@ -1282,8 +1361,8 @@
         "/api/v1/tasks/approvals/{approvalRequestId}/actions"
       ],
       "scope": "organization and workspace scoped immutable published templates approval requests evidence and rule snapshots node runs actions idempotent operations audit and outbox",
-      "truthBoundary": "requests lock the published template version; opportunity decision requests resolve the decision id to its opportunity and snapshot evidence completeness scoring profit risk rule versions and decision basis; pre-0047 requests are labeled live fallback and task approvals are evidence-not-applicable; approve and reject require reasons; overdue Worker only escalates the active approver and never decides",
-      "pageFlow": "involvement=decidable or requested splits the inbox before pagination while preserving legacy mine semantics; URL-backed status page and approval detail state support notification deep links, and the detail keeps impact scope current node and evidence basis visible before decisions with a validated notification return path; publishing a template requires an auditable reason in a version-preview confirmation dialog",
+      "truthBoundary": "requests lock the published template version; opportunity decision requests resolve the decision id to its opportunity and snapshot evidence completeness scoring profit risk rule versions and decision basis; detail reads rebuild current facts without writes and return captured-to-current requirement basis and rule-version differences; pre-0047 requests are labeled live fallback without a fabricated diff and task approvals are evidence-not-applicable; approve and reject require reasons; overdue Worker only escalates the active approver and never decides",
+      "pageFlow": "involvement=decidable or requested splits the inbox before pagination while preserving legacy mine semantics; URL-backed status page and approval detail state support notification deep links, and the detail keeps impact scope current node captured-to-current evidence differences evidence basis and each node original-current-timeout-assignee escalation path visible before decisions with a validated notification return path; publishing a template requires an auditable reason in a version-preview confirmation dialog",
       "permission": "task:read for reads and task:assign for template request and decision writes",
       "configuration": ["APPROVAL_ESCALATION_POLL_MS", "APPROVAL_ESCALATION_LEASE_SECONDS"],
       "runtimeBoundary": "decision context snapshots are captured synchronously by the Baota-managed Node API; overdue node escalation runs only in the unified Baota-managed Node Worker",
@@ -1299,6 +1378,7 @@
         "../apps/api/src/mysql-notification-repository.ts",
         "../apps/api/src/notification-routes.ts",
         "../apps/worker/src/notification-outbox-worker.ts",
+        "../apps/worker/src/opportunity-scoring-worker.ts",
         "../apps/web/src/components/NotificationCenter.vue",
         "../database/migrations/0046_notification_workflow_root_cause.up.sql"
       ],
@@ -1308,7 +1388,7 @@
         "/api/v1/notifications/{notificationId}/actions",
         "/api/v1/me/notification-preferences"
       ],
-      "scope": "organization workspace and current recipient scoped notification facts root-cause groups workflow states preferences deliveries idempotent operations and audit",
+      "scope": "organization workspace and current recipient scoped notification facts root-cause groups workflow states preferences deliveries evidence-completion redecision reminders idempotent operations and audit",
       "truthBoundary": "source Outbox and recipient are preserved; open in_progress and closed filters execute before root-cause grouping and pagination, the newest notification represents each group without rewriting older facts; self-service email preference is fixed off while the mail provider is pending, and historical placeholder facts are preserved",
       "pageFlow": "category workflow unread pagination and current detail are URL-backed; grouped rows expose read and workflow state plus the persisted root-cause group count, and internal action routes carry a validated return path so supported task and approval details return to the originating notification state",
       "permission": "notification:read for current-recipient reads actions and self preferences",
@@ -1331,11 +1411,12 @@
         "../apps/api/src/mysql-realtime-repository.ts",
         "../apps/api/src/realtime-routes.ts",
         "../apps/worker/src/notification-outbox-worker.ts",
-        "../apps/web/src/components/NotificationCenter.vue"
+        "../apps/web/src/components/NotificationCenter.vue",
+        "../apps/web/src/realtime-client-metrics.ts"
       ],
       "routes": ["/api/v1/realtime/events", "/notifications"],
       "scope": "authenticated notification read organization workspace and current recipient scoped monotonic SSE replay",
-      "truthBoundary": "SSE only invalidates notification facts; Last-Event-ID is monotonic and replay is bounded",
+      "truthBoundary": "SSE only invalidates notification facts; Last-Event-ID is monotonic and replay is bounded; reconnect and fallback-refresh observations remain browser-tab session scoped and contain no notification or identity data",
       "permission": "notification:read with current session and recipient scope",
       "configuration": [
         "REALTIME_POLL_MS",
@@ -1404,8 +1485,8 @@
         "/api/v1/report-exports/{reportExportId}/download"
       ],
       "scope": "current organization and workspace factual opportunity trend and team aggregates plus asynchronous CSV exports and idempotent regeneration",
-      "truthBoundary": "aggregates only persisted facts and preserves missing values; CSV row overflow fails instead of truncating; regeneration creates a new queued export only from an expired or final-failure record and preserves the source export",
-      "pageFlow": "fixed report-type secondary navigation is URL-backed; all report types declare the current-workspace all-persisted-records scope and observed_at cutoff, lead with a factual conclusion summary on mobile, and expose the same asynchronous export lifecycle in the global task center without fabricating business tasks",
+      "truthBoundary": "aggregates only persisted facts and preserves missing values; CSV row overflow fails instead of truncating; active export queue position follows the global Worker claim order while only scoped records are returned, and ETA is nullable and derived from the median of up to 20 recent successful full completion durations; regeneration creates a new queued export only from an expired or final-failure record and preserves the source export",
+      "pageFlow": "fixed report-type secondary navigation is URL-backed; all report types declare the current-workspace all-persisted-records scope and observed_at cutoff, lead with a factual conclusion summary on mobile, show active export queue position estimated completion and sample basis, and expose the same asynchronous export lifecycle in the global task center without fabricating business tasks",
       "permission": "report:read on API list create detail regeneration and file download with current context",
       "configuration": [
         "REPORT_EXPORT_POLL_MS",
@@ -1431,7 +1512,10 @@
         "../apps/api/src/organization-admin-service.ts",
         "../apps/api/src/mysql-organization-admin-repository.ts",
         "../apps/api/src/organization-admin-routes.ts",
-        "../apps/web/src/components/OrganizationAdminCenter.vue"
+        "../apps/web/src/components/OrganizationAdminCenter.vue",
+        "../apps/web/src/components/OrganizationMemberPanel.vue",
+        "../apps/web/src/components/OrganizationRolePanel.vue",
+        "../apps/web/src/components/OrganizationApprovalPanel.vue"
       ],
       "routes": [
         "/org-admin",
@@ -1446,9 +1530,10 @@
         "/api/v1/org/admin/*"
       ],
       "scope": "current organization profile members invitations fixed roles workspaces teams approvals exports tokens and audit",
-      "truthBoundary": "all counters and lists are MySQL facts; invitation delivery stays pending until a provider exists; token secrets are returned once and never stored",
+      "truthBoundary": "all counters and lists are MySQL facts; approval governance compares the current template version only with its nearest persisted predecessor by node ordinal and member display facts without changing either version; invitation delivery stays pending until a provider exists; token secrets are returned once and never stored",
       "presentationBoundary": "organization profile and member management remain separate routes; capability codes are translated to novice Chinese labels; workspace and membership UUIDs are used only as form values and are visible only inside collapsed technical details",
-      "pageFlow": "governance metrics stay on the organization overview; member search plus status role and team filters use real membership facts, invitations separate actionable and expired records, roles expose a capability impact matrix, workspace and team management use independent secondary routes, approval templates are visible in organization context, organization data compares persisted counts across workspaces, token secrets carry a one-time warning, and audit events filter by action outcome and object",
+      "pageFlow": "governance metrics stay on the organization overview; member search plus status role and team filters use real membership facts, invitations separate actionable and expired records, roles expose a capability impact matrix, workspace and team management use independent secondary routes, approval templates expose current-to-previous node additions removals and field differences in organization context, organization data compares persisted counts across workspaces, token secrets carry a one-time warning, and audit events filter by action outcome and object",
+      "frontendModuleBoundary": "OrganizationAdminCenter owns route state API writes and cross-section orchestration; OrganizationMemberPanel owns invitations member filters and member actions, OrganizationRolePanel owns role and capability presentation, and OrganizationApprovalPanel owns template version differences and approval records without duplicating organization contracts",
       "permission": "organization admin shell plus per-route organization manage membership role workspace team approval token audit and report capabilities",
       "configuration": [
         "ORG_INVITATION_TTL_HOURS",
@@ -1476,6 +1561,8 @@
         "../apps/api/src/mysql-platform-account-repository.ts",
         "../apps/api/src/platform-account-routes.ts",
         "../apps/web/src/components/PlatformAccountCenter.vue",
+        "../apps/web/src/components/PlatformOrganizationRecords.vue",
+        "../apps/web/src/components/PlatformUserRecords.vue",
         "../apps/web/src/components/PlatformAdminRecords.vue",
         "../apps/web/src/components/OrganizationCreationWizard.vue",
         "../apps/web/src/components/PlatformOrganizationDetailDialog.vue",
@@ -1499,12 +1586,13 @@
         "/api/v1/platform/roles"
       ],
       "scope": "platform-super-admin organization, local user and fixed platform administrator create, read, edit, status, role, session and forced-password management with novice labels",
-      "truthBoundary": "only MySQL account and non-secret session metadata; no password hashes, session tokens, IP or user-agent hashes or credentials; organization creation grants the selected first administrator an organization data scope; disable and forced-password operations revoke active user_sessions",
-      "permission": "platform:superadmin plus same-origin Origin, Idempotency-Key and audited reason for writes",
+      "truthBoundary": "only MySQL account and non-secret session metadata; no password hashes, session tokens, IP or user-agent hashes or credentials; organization creation grants the selected first administrator an organization data scope; disable and forced-password operations revoke active user_sessions; the live gate compares all persisted platform role capabilities with the fixed code catalog and records every allowed and denied decision",
+      "permission": "platform:superadmin plus same-origin Origin, Idempotency-Key and audited reason for writes; the live MySQL gate assigns each fixed platform role to an isolated account, exercises every capability through AuthorizationService, and verifies authorization_decisions before cleanup",
       "persistence": "platform_account_operations idempotency plus existing organizations, workspaces, memberships, fixed role assignments, membership_data_scopes and platform_audit_events",
       "organizationWizard": "the platform create-organization dialog separates organization identity from first-administrator selection and impact confirmation; it validates step one before continuing, submits the unchanged atomic name, slug and optional initial_admin_user_id contract only after final confirmation, then opens the created organization detail",
       "roleComparison": "platform super administrators compare any two active platform roles from the server-owned roles and role_capabilities catalog; the UI defaults to differences only, uses Chinese capability labels, and never infers authorization from visible buttons",
       "responsiveAccountView": "desktop account lists use tables while narrow screens use summary cards, record detail drawers and a state-preserving filter drawer; organization, user and administrator list actions all enter their detail view, account status, session, password and platform-role operations stay inside the relevant detail, and raw organization or user UUIDs appear only inside technical details",
+      "frontendModuleBoundary": "PlatformAccountCenter owns API filters audited writes dialogs and tab orchestration; PlatformOrganizationRecords owns organization list presentation, PlatformUserRecords owns ordinary-user list presentation, PlatformAdminRecords owns administrator list presentation, and PlatformRoleComparison owns server-provided capability comparison without duplicating permission decisions",
       "modalAccessibility": "account-management dialogs use the native modal top layer, trap focus, close with Escape and restore focus to the invoking control; opaque dialog surfaces and backdrops prevent underlying content from bleeding through",
       "navigationBoundary": "platform, organization-admin and member shells have distinct primary menus; infrastructure pages are removed from the novice platform primary navigation but protected historical routes remain",
       "imageEvidence": [
@@ -1520,9 +1608,14 @@
       "entrypoints": [
         "../apps/api/src/platform-dashboard-service.ts",
         "../apps/api/src/mysql-platform-dashboard-repository.ts",
+        "../apps/api/src/mysql-platform-dashboard-scale-metrics.ts",
+        "../apps/api/src/mysql-platform-dashboard-collection-metrics.ts",
+        "../apps/api/src/mysql-platform-dashboard-risk-metrics.ts",
+        "../apps/api/src/mysql-platform-dashboard-storage-metrics.ts",
         "../apps/api/src/platform-dashboard-routes.ts",
         "../apps/web/src/components/PlatformDashboard.vue",
         "../apps/web/src/components/PlatformManagementCenter.vue",
+        "../apps/web/src/components/platform-management-presentation.ts",
         "../apps/web/src/components/PlatformLogCenter.vue",
         "../apps/web/src/components/PlatformManagementRecordList.vue",
         "../apps/web/src/components/PlatformMessageWorkbench.vue",
@@ -1544,21 +1637,24 @@
         "/api/v1/platform/dashboard",
         "/api/v1/platform/management",
         "/api/v1/platform/management/data/exports",
+        "/api/v1/platform/management/logs/exports",
         "/api/v1/platform/management/content/{topicId}",
         "/api/v1/platform/management/messages",
         "/api/v1/platform/management/messages/{messageId}",
         "/api/v1/platform/management/messages/{messageId}/actions",
         "/api/v1/platform/management/email/{source}/{deliveryId}/actions"
       ],
-      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, unified backend database cache file task-processing and crawler status management with dedicated operations links, plus a bounded cross-runtime chain-log search across API audit, Worker task and crawler run events; dashboard mobile provider health and platform data governance content notification or retained email records use summary cards with detail drawers, mobile filters use a state-preserving drawer, and provider alert-scope record version request identifiers raw delivery values or error codes stay inside technical details or API values rather than primary UI copy",
-      "truthBoundary": "no sample remains unknown or null; no credentials, payloads, internal file paths or invented uptime and capacity claims; /platform-admin/email and all email enable controls stay closed while Mail provider is pending_provider_selection",
-      "permission": "platform:operate on the API; platform role navigation guard on the page; dashboard reads and platform data exports write correlated platform audit events",
+      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, unified backend database cache file task-processing and crawler status management with dedicated operations links and a six-service dependency topology with bounded fault-propagation review scope, browser-tab SSE reconnect-rate and fallback-refresh observations, plus a bounded cross-runtime chain-log search grouped by trace_id across API audit, Worker task and crawler run events with exact exceptional task and crawler-provider deep links when persisted associations exist; log CSV export reuses the active query and source filter plus the same 200-row boundary, formula-protects cells and audits actor reason filter and row count; dashboard mobile provider health and platform data governance content notification or retained email records use summary cards with detail drawers, mobile filters use a state-preserving drawer, and provider alert-scope record version request identifiers raw delivery values or error codes stay inside technical details or API values rather than primary UI copy",
+      "presentationBoundary": "every platform table keeps shared desktop column freeze visibility and density controls; at 390 pixels provider health data governance content notifications retained email and each trace-grouped log event render as summary cards with named side drawers, preserve exact task and provider deep links, and keep identifiers inside technical details without horizontal wide tables",
+      "metricQueryBoundary": "the dashboard repository composes four read-only MySQL 5.7 metric domains in parallel: organization user and provider scale, collection task queue provider health and trend, quality alerts and recent platform activity, and file storage totals and growth; response assembly null or unknown semantics and the correlated dashboard view plus platform audit transaction remain in the repository while management writes exports and moderation are unchanged",
+      "truthBoundary": "no sample remains unknown or null; log responses and exports exclude raw audit metadata task payload crawler result stderr credentials cookies and internal paths; no invented uptime and capacity claims; /platform-admin/email and all email enable controls stay closed while Mail provider is pending_provider_selection",
+      "permission": "platform:operate on the API; platform role navigation guard on the page; dashboard reads and platform data or log exports write correlated platform audit events, with same-origin enforcement on exports",
       "configuration": [
         "PLATFORM_DASHBOARD_DEFAULT_WINDOW",
         "PLATFORM_DASHBOARD_QUEUE_WARNING",
         "PLATFORM_DASHBOARD_ERROR_LIMIT"
       ],
-      "runtimeBoundary": "synchronous MySQL 5.7 read model under Baota Node API; chain-log search reuses the indexed request_id and trace_id columns in platform_audit_events, collection_task_events and crawler_browser_runs, returns at most 200 normalized rows without raw metadata, payloads or credentials; persisted topology and resilience observations are reused, observations older than five minutes are explicitly stale, and no dashboard daemon or server-side service is created",
+      "runtimeBoundary": "synchronous MySQL 5.7 read model under Baota Node API; chain-log search and audited CSV export reuse the indexed request_id and trace_id columns in platform_audit_events, collection_task_events and crawler_browser_runs, return at most 200 normalized rows plus exact browser-job task and provider associations without raw metadata payloads stderr credentials or cookies; trace grouping is presentation-only and no log copy or export worker is created; persisted topology and resilience observations are reused, observations older than five minutes are explicitly stale; SSE degradation observations stay in the current browser tab sessionStorage and are never uploaded; no dashboard daemon or server-side service is created",
       "imageEvidence": [
         "concept 61 platform operations overview",
         "high resolution 10 platform operations cockpit"
@@ -1633,8 +1729,8 @@
         "/api/v1/platform/open/deliveries/{deliveryId}/replay",
         "/open/v1/status"
       ],
-      "scope": "organization-owned API Clients, scopes, per-minute quotas, Webhook endpoints, signed delivery attempts and immutable delivery events",
-      "presentationBoundary": "desktop tables and mobile summary cards with detail drawers share the same client webhook and delivery records; client webhook delivery organization identifiers public prefixes fingerprints raw error codes and request IDs remain collapsed under technical details while statuses and events use Chinese business labels",
+      "scope": "organization-owned API Clients, scopes, per-minute quotas, pre-write token permission impact previews, Webhook endpoints, signed delivery attempts and immutable delivery events",
+      "presentationBoundary": "desktop tables and mobile summary cards with detail drawers share the same client webhook and delivery records; API Client create rotate and revoke confirmations preview real scopes organization quota and access consequences without inventing unavailable scopes or arbitrary risk grades; client webhook delivery organization identifiers public prefixes fingerprints raw error codes and request IDs remain collapsed under technical details while statuses and events use Chinese business labels",
       "truthBoundary": "API and Webhook secrets are returned once; only Client hash or AES-256-GCM Webhook ciphertext is persisted; overview never selects secret material",
       "permission": "platform_token:manage plus same-origin and idempotency for management; independent Bearer timestamp nonce scope quota middleware for /open/v1",
       "configuration": [
@@ -1668,9 +1764,9 @@
         "/api/v1/platform/commercial/assignments",
         "/api/v1/platform/commercial/adjustments"
       ],
-      "scope": "quota-only plan create/edit/status, organization quota assignment/change/end, persisted-period usage and reasoned manual adjustments; no billing or payment deduction",
+      "scope": "quota-only plan create/edit/status, organization quota assignment/change/end, persisted-period usage, reasoned manual adjustments and pre-write organization/quota impact preview; no billing or payment deduction",
       "truthBoundary": "usage reads collection_tasks, open_api_usage and report_exports by organization and explicit period; no price currency invoice tax or payment provider is defined",
-      "presentationBoundary": "until a real billing contract exists, navigation and user-facing copy identify this module as quota management and do not present membership renewal package price or payment conclusions",
+      "presentationBoundary": "until a real billing contract exists, navigation and user-facing copy identify this module as quota management and do not present membership renewal package price or payment conclusions; confirmation previews show assigned organization count and current-to-proposed quota impact without predicting new-period usage",
       "permission": "platform:operate read guard; same-origin Idempotency-Key reason and version guard for writes",
       "configuration": ["COMMERCIAL_RECENT_LIMIT"],
       "runtimeBoundary": "synchronous Baota Node API reads plus existing organization outbox; no new Worker Crawler daemon or multi-node claim",
@@ -1713,7 +1809,7 @@
     "securityGate": {
       "module": "M07-02",
       "entrypoints": ["../verification/security-gate.json", "../scripts/verify-security-gate.mjs"],
-      "scope": "dependency secrets SQL XSS CSRF SSRF upload authorization logging and Baota edge release gate; browser storage blocks all localStorage except the exact validated non-sensitive theme ID preference contract",
+      "scope": "dependency secrets SQL XSS CSRF SSRF upload authorization logging and Baota edge release gate; browser storage blocks sensitive records and permits only exact validated non-sensitive theme ID, UUID-v4 unfinished selection-journey ID and current-tab anonymous realtime counter contracts",
       "runtimeBoundary": "local CI or Baota-controlled finite release task only; no production API table page permission daemon or multi-node claim",
       "securityHeaders": [
         "Content-Security-Policy",
@@ -1739,7 +1835,7 @@
       ],
       "routes": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
       "scope": "惠州 S0 单主机、宝塔管理的 Web API Worker Crawler MySQL Redis release backup and log objects",
-      "truthBoundary": "same-commit production evidence, local-only private services and sanitized health; before reading Windows credentials or uploading, the fixed-layout deployer requires an ignored ownership manifest that exactly assigns every commit and changed path from an ancestor release base to current HEAD, rejecting missing duplicate extra cross-package or drifted assignments; it has no current or releases migration or deletion branch and fails closed on unsupported root entries before stopping Node; no P08 capacity claim",
+      "truthBoundary": "same-commit production evidence, local-only private services and sanitized health; before Git fetch, build, Windows credentials or upload, the fixed-layout deployer requires a clean worktree and runs the repository format, runtime-document and release-matrix gates; after build or when reusing dist it runs the fixed BaoTa artifact preflight, then requires an ignored ownership manifest that exactly assigns every commit and changed path from an ancestor release base to current HEAD, rejecting missing duplicate extra cross-package or drifted assignments; it has no current or releases migration or deletion branch and fails closed on unsupported root entries before stopping Node; no P08 capacity claim",
       "configuration": ["APP_VERSION", "BUILD_SHA", "WEB_ORIGIN"],
       "verificationRunId": "950732f7-9b5a-4d4a-b271-d5ec0cf975d9",
       "status": "verified",
@@ -1756,7 +1852,7 @@
       ],
       "routes": ["/platform-admin/operations", "/api/v1/platform/operations/backup-recovery"],
       "scope": "MySQL evidence export and non-secret config encrypted backups on the current Huizhou host with a separate encrypted recovery root",
-      "presentationBoundary": "backup assets use desktop tables and mobile summary cards with a detail drawer; raw asset and storage role codes plus request IDs stay under collapsed technical details while business labels remain Chinese",
+      "presentationBoundary": "backup assets use desktop tables and mobile summary cards with a detail drawer; restore evidence always shows its policy-derived expiry time and signed remaining days so operators see the approaching deadline without a fabricated reminder threshold; raw asset and storage role codes plus request IDs stay under collapsed technical details while business labels remain Chinese",
       "truthBoundary": "verified only after same-host encrypted-copy integrity and a logically isolated restore check business data audit chain evidence hashes and permission boundaries within 90 days; host disk and site failure are not protected",
       "permission": "platform:operate read only; backup and restore execute only in Baota scheduled tasks",
       "configuration": [
@@ -1809,7 +1905,7 @@
         "/api/v1/platform/operations/releases/write-probe"
       ],
       "scope": "当前发布使用固定目录和单一宝塔 Node 后端；部署器要求 main 工作树干净、本地 HEAD 与批准的 origin/main 完全一致，并拒绝不属于当前批准仓库祖先历史的生产 BUILD_SHA；旧双槽渐进发布仅保留为只读审计事实",
-      "presentationBoundary": "历史门禁事实使用桌面表格和移动摘要卡片加详情抽屉；门禁 ID 类型 发布 ID 阻断代码和请求 ID 仅在折叠技术详情中展示，用户状态统一显示中文",
+      "presentationBoundary": "历史门禁事实使用桌面表格和移动摘要卡片加详情抽屉；发布中心展示 timing_schema 2 记录的真实迁移和自动回滚耗时，旧记录或不完整时间区间显示尚无记录而不伪造零值；门禁 ID 类型 发布 ID 阻断代码和请求 ID 仅在折叠技术详情中展示，用户状态统一显示中文",
       "executionStatus": "historical_disabled_by_single_node_topology",
       "currentDeploymentEntrypoint": "../scripts/deploy-baota.py",
       "currentRuntimeManifest": "../infra/baota/service-manifest.json",
@@ -1822,7 +1918,7 @@
         "pythonProjectName": "ai选品-python",
         "persistentCandidateProjects": 0
       },
-      "truthBoundary": "the current page reports the deployment-captured local SHA, approved remote main SHA and running production SHA together; only release evidence whose build SHA, app version and config fingerprint match the current runtime can verify it, so an older historical SHA never proves the current version. The fixed-layout deployer also requires /health/ready, /health/available and /health/version after restart. Historical rollout evidence was verified only from a manually triggered single rollout instance holding the MySQL session named lock, a distinct immutable release attempt, current release gates with at least 30 minutes per stage, real BaoTa Nginx candidate samples, proxy-safe HMAC writes and current build identity; no backup server or P08 capacity claim.",
+      "truthBoundary": "the current page reports the deployment-captured local SHA, approved remote main SHA and running production SHA together; only release evidence whose build SHA, app version and config fingerprint match the current runtime can verify it, so an older historical SHA never proves the current version. Migration and rollback duration is derived only from valid timing_schema 2 gate start and finish timestamps; legacy zero-like intervals remain unknown. The fixed-layout deployer also requires /health/ready, /health/available and /health/version after restart. Historical rollout evidence was verified only from a manually triggered single rollout instance holding the MySQL session named lock, a distinct immutable release attempt, current release gates with at least 30 minutes per stage, real BaoTa Nginx candidate samples, proxy-safe HMAC writes and current build identity; no backup server or P08 capacity claim.",
       "configuration": [
         "PLAYWRIGHT_API_PORT",
         "PLAYWRIGHT_WEB_PORT",
@@ -1958,6 +2054,7 @@
         "../apps/api/src/selection-journey-routes.ts",
         "../apps/worker/src/evidence-persistence.ts",
         "../apps/web/src/components/SelectionJourney.vue",
+        "../database/migrations/0059_selection_journey_candidates.up.sql",
         "../scripts/run-baota-selection-acceptance.mjs"
       ],
       "routes": [
@@ -1966,7 +2063,7 @@
         "/api/v1/selection-journeys/{id}",
         "/api/v1/selection-journeys/{id}/decisions"
       ],
-      "scope": "ordinary member real keyword ASIN or product URL journey through enabled google_news_search collection task first verifiable result or succeeded_empty or explicit block then audited decision and evidence view",
+      "scope": "ordinary member real keyword ASIN or product URL journey through enabled google_news_search; browser resumes the persisted journey by id, compares up to 20 scoped evidence candidates, and only an explicit adopt of one selected candidate generates or reuses an opportunity",
       "thresholds": {
         "createApiMs": 3000,
         "acceptedVisibleMs": 15000,
@@ -2034,10 +2131,15 @@
       "module": "M08-01",
       "entrypoints": [
         "../packages/runtime-topology/src/index.ts",
+        "../database/migrations/0062_runtime_process_restart_observations.up.sql",
+        "../database/migrations/0063_runtime_health_endpoint_probes.up.sql",
+        "../apps/api/src/runtime-health-probe.ts",
+        "../apps/api/src/mysql-runtime-health-probe-repository.ts",
         "../apps/api/src/runtime-topology-service.ts",
         "../apps/api/src/mysql-runtime-topology-repository.ts",
         "../apps/api/src/runtime-topology-routes.ts",
         "../apps/worker/src/queue-scheduler.ts",
+        "../apps/worker/src/worker-pollers.ts",
         "../apps/worker/src/worker-queue-registry.ts",
         "../apps/worker/src/worker-scheduler-state.ts",
         "../apps/web/src/components/RuntimeTopologyCenter.vue",
@@ -2050,8 +2152,8 @@
         "/api/v1/health/nodes",
         "/api/v1/platform/operations/topology"
       ],
-      "scope": "M08-01 configured single-host API heartbeat, declarative Worker queues with independent concurrency timeout retry circuit aging and stuck thresholds plus bounded global concurrency and backpressure, BaoTa single-upstream Nginx evidence, sanitized health and audited operations view",
-      "truthBoundary": "live proves only the API process, ready proves synchronous dependencies, available additionally requires a fresh running Worker scheduler; runtime status exposes queue delay, active runtime, suspected stuck runs, queue circuits, retries, timeout counts, snapshot publication failures, recent failure rate, backpressure, heartbeat expiry and restart-loop alerts without task payloads or secrets; snapshot publication failure never changes a business run result",
+      "scope": "M08-01 configured single-host API heartbeat, in-process continuous probes of the fixed live ready and available health endpoints with timeout and latency percentiles, declarative Worker queues with independent concurrency timeout retry circuit aging and stuck thresholds plus bounded global concurrency and backpressure, factual queue aging and starvation-risk monitoring, exact runtime-alert queue and allowlisted recent business-object associations, five-minute API and Worker restart observations with a bounded 24-hour trend, BaoTa single-upstream Nginx evidence, sanitized health and audited operations view",
+      "truthBoundary": "live proves only the API process, ready proves synchronous dependencies, available additionally requires a fresh running Worker scheduler; the existing BaoTa API process probes only those three loopback HTTP endpoints, persists status code latency and bounded outcome without response bodies, reports P50 P95 P99 and timeout counts over the configured window, and cannot detect a fully stopped event loop by itself so node heartbeat staleness remains authoritative for process loss; runtime status exposes queue delay, base and effective priority, aging interval, maximum aging boost, starvation risk only after maximum boost is exhausted while still waiting, active runtime, suspected stuck runs, queue circuits, retries, timeout counts, snapshot publication failures, recent failure rate, backpressure, heartbeat expiry and restart-loop alerts without task payloads or secrets; backpressure failure stuck and circuit alerts associate only queues selected by the current scheduler snapshot, while a business-object association exists only for a latest one-minute Worker result carrying a stable error code and an allowlisted exact object identifier; missing associations stay empty and arbitrary URLs raw payloads or prior objects are never inferred; restart history persists only supervisor-reported cumulative counts and status when an authorized topology read occurs, computes nonnegative deltas, and marks a counter reset when the supervisor counter decreases; snapshot publication failure never changes a business run result",
       "runtimeStatePermissionBoundary": "production fixes Worker and supervisor snapshots under /www/wwwroot/ai选品/runtime; the BaoTa deployer enforces root:www and 2770 on runtime plus the five fixed writable subdirectories so www-managed API Worker and Python processes can write without opening access to other host users",
       "apiClientBoundary": "the platform runtime topology read uses the shared frontend JSON client and preserves distinct expired forbidden rate-limited and unavailable states with correlated action hints",
       "permission": "public health returns sanitized counts; the operations view requires platform:operate and records request_id trace_id read audit",
@@ -2063,6 +2165,10 @@
         "RUNTIME_NODE_ZONE",
         "RUNTIME_NODE_HEARTBEAT_MS",
         "RUNTIME_NODE_STALE_AFTER_SECONDS",
+        "RUNTIME_HEALTH_PROBE_INTERVAL_MS",
+        "RUNTIME_HEALTH_PROBE_TIMEOUT_MS",
+        "RUNTIME_HEALTH_PROBE_WINDOW_MINUTES",
+        "RUNTIME_HEALTH_PROBE_RETENTION_HOURS",
         "WORKER_MAX_CONCURRENCY",
         "WORKER_SCHEDULER_TICK_MS",
         "WORKER_SCHEDULER_STATE_FILE",
@@ -2113,6 +2219,7 @@
       "module": "M08-02",
       "entrypoints": [
         "../packages/redis/src/index.ts",
+        "../packages/contracts/src/index.ts",
         "../apps/api/src/redis-resilience-service.ts",
         "../apps/api/src/mysql-redis-resilience-repository.ts",
         "../apps/api/src/redis-resilience-routes.ts",
@@ -2121,9 +2228,11 @@
         "../scripts/verify-redis-resilience-production.mjs"
       ],
       "routes": ["/platform-admin/redis", "/api/v1/platform/operations/redis"],
-      "scope": "M08-02 current Huizhou BaoTa Redis single-instance persistence resource limits fail-closed alerts restart and recovery evidence",
+      "scope": "M08-02 current Huizhou BaoTa Redis single-instance persistence resource limits fail-closed alerts bounded sanitized keyspace memory hotspots restart and recovery evidence",
       "truthBoundary": "ready requires loopback protected-mode AOF everysec RDB save rules nonzero maxmemory noeviction bounded maxclients zero rejected connections zero evicted keys and a current BaoTa recovery drill",
-      "permission": "the operations view requires platform:operate and transactionally appends a platform audit with request_id and trace_id; no connection URL password raw key or payload is returned",
+      "presentationBoundary": "the page explains eviction risk from persisted maxmemory policy memory watermark evicted-key count and instance uptime, then separately displays bounded keyspace memory-occupancy hotspots without describing sampled memory share as access frequency",
+      "keyspaceSamplingBoundary": "the live probe uses SCAN MATCH scoutops:v1:* with a fixed 128-key ceiling and MEMORY USAGE in batches of at most 16; output is aggregated only by the four code-owned purposes plus collection-ready collection-task or other resource classes, and includes sample counts bytes share truncation and partial-failure facts without raw keys organization or workspace identifiers payloads hashes or inferred LFU frequency",
+      "permission": "the operations view requires platform:operate and transactionally appends a platform audit with request_id trace_id and the same sanitized keyspace sample aggregate; no connection URL password raw key scope identifier or payload is returned",
       "configuration": [
         "REDIS_MEMORY_WARNING_PERCENT",
         "REDIS_MEMORY_STOP_PERCENT",
@@ -2180,6 +2289,7 @@
       "routes": ["/platform-admin/mysql", "/api/v1/platform/operations/mysql"],
       "scope": "M08-03 current Huizhou BaoTa MySQL 5.7 single-primary durability I/O slow-query capacity and recovery evidence",
       "truthBoundary": "ready requires MySQL 5.7 writable single primary, ROW binlog that includes product_scout, the reviewed durability contract, readable master status, no replica, resource watermarks and current encrypted same-host isolated recovery evidence; release durability samples use the compact 0032a table without deleting historical probe evidence",
+      "presentationBoundary": "the page presents slow-query window rate and gate severity separately from cumulative InnoDB row-lock waits and current running threads, and explicitly avoids describing cumulative counters as current query latency",
       "permission": "the operations view requires platform:operate and transactionally appends observation view and platform audit with request_id trace_id; no host port account password path binlog name or SQL is returned",
       "configuration": [
         "MYSQL_CONNECTION_WARNING_PERCENT",
@@ -2248,8 +2358,8 @@
         "../scripts/verify-file-resilience-production.mjs"
       ],
       "routes": ["/platform-admin/files", "/api/v1/platform/operations/files"],
-      "scope": "M08-04 current Huizhou BaoTa local evidence and export directory resilience with scoped paths checksums watermarks and same-host recovery evidence",
-      "truthBoundary": "ready requires two distinct readable writable organization-and-workspace-scoped local managed roots outside the public site, bounded checksum samples with no mismatch or missing files, plus current evidence/export encrypted same-host copies and isolated recovery verification",
+      "scope": "M08-04 current Huizhou BaoTa local evidence export and runtime temporary directory resilience with scoped paths checksums watermarks and same-host recovery evidence",
+      "truthBoundary": "ready requires three distinct readable writable local managed roots outside the public site; evidence and export remain organization-and-workspace scoped and checksum sampled with current encrypted recovery copies, while runtime temporary files expose only filesystem watermarks and are intentionally not treated as durable indexed assets",
       "permission": "the operations view requires platform:operate and transactionally appends observation view and platform audit with request_id trace_id; no host path filename hash organization workspace account or credential is returned",
       "configuration": [
         "FILE_STORAGE_WARNING_PERCENT",
@@ -2259,7 +2369,8 @@
         "FILE_STORAGE_PRODUCTION_EVIDENCE_FILE",
         "FILE_STORAGE_EVIDENCE_MAX_AGE_MINUTES"
       ],
-      "runtimeBoundary": "two BaoTa-managed local directories and one current API on the current Huizhou host with no shared storage load balancer backup server or capacity claim",
+      "runtimeBoundary": "three BaoTa-managed local directories and one current API on the current Huizhou host with no shared storage load balancer backup server or capacity claim; production must set RUNTIME_TMP_ROOT=/www/wwwroot/ai选品/runtime/tmp and restart the BaoTa Node project before this third watermark is current",
+      "productionVerificationBoundary": "the checked-in production evidence predates runtime temporary-directory observation and must not be treated as verification of the new third root; rerun the bounded production verifier after deployment before claiming it current",
       "imageEvidence": [
         "core 10 platform cockpit",
         "concept 61 operations",
@@ -2294,6 +2405,7 @@
       "entrypoints": [
         "../database/migrations/0034_crawler_scheduler_m08_05.up.sql",
         "../database/migrations/0055_provider_runtime_circuits.up.sql",
+        "../database/migrations/0061_crawler_completion_spool_status.up.sql",
         "../apps/api/src/crawler-scheduler-service.ts",
         "../apps/api/src/crawler-scheduler-repository.ts",
         "../apps/api/src/crawler-scheduler-probe.ts",
@@ -2302,6 +2414,11 @@
         "../apps/worker/src/collection-task-worker.ts",
         "../apps/worker/src/provider-source-executor.ts",
         "../apps/api/src/mysql-crawler-runtime-repository.ts",
+        "../apps/crawler/scoutops_crawler/main_loop.py",
+        "../apps/crawler/scoutops_crawler/lease_client.py",
+        "../apps/crawler/scoutops_crawler/execution_runner.py",
+        "../apps/crawler/scoutops_crawler/completion_receipts.py",
+        "../apps/crawler/scoutops_crawler/runtime_transport.py",
         "../apps/web/src/components/CrawlerSchedulerCenter.vue",
         "../infra/baota/crawler-single-host-scheduler-manifest.json",
         "../scripts/verify-crawler-scheduler-production.mjs"
@@ -2312,10 +2429,11 @@
         "/api/v1/platform/operations/crawler-scheduler/recover-expired",
         "/api/v1/platform/operations/crawler-scheduler/providers/:providerId/recover"
       ],
-      "scope": "M08-05 current Huizhou BaoTa single-host Crawler and Worker scheduling with one global slot each, provider effective concurrency one, exclusive browser profiles, source-isolated runtime circuits and recovery evidence, queue wait percentiles, 24-hour throughput/failure trend, MySQL lease truth and host resource stop gates",
-      "truthBoundary": "ready requires exactly one supervised Node Worker and one separately BaoTa-managed Python Crawler process observed from Linux process facts, no global provider or profile lease overflow, a current resource observation below the fixed stop gates and MySQL 5.7 as lease truth",
+      "scope": "M08-05 current Huizhou BaoTa single-host Crawler and Worker scheduling with one global slot each, provider effective concurrency one, exclusive browser profiles, source-isolated runtime circuits and recovery evidence, queue wait percentiles, 24-hour throughput/failure trend, sanitized completion-receipt capacity retention and disk watermarks, MySQL lease truth and host resource stop gates",
+      "truthBoundary": "ready requires exactly one supervised Node Worker and one separately BaoTa-managed Python Crawler process observed from Linux process facts, no global provider or profile lease overflow, a current resource observation below the fixed stop gates, a current completion-spool observation below its configured capacity and disk stop gates, and MySQL 5.7 as lease truth",
       "leaseAssociationBoundary": "the operations API reads up to 100 active crawler_scheduler_leases and links each slot to its logical Node Worker or Python Crawler role, collection task status, provider name, heartbeat and expiry; task run process and slot identifiers stay inside technical details, while scope IDs targets tokens hashes credentials and payloads remain excluded",
-      "queueCapacityBoundary": "each enabled provider reports active versus effective concurrency plus distinct collection tasks whose available_at is already due in scheduled queued retry_scheduled or rate_limited state and the longest due wait in seconds; future backoff tasks are excluded and no capacity claim is inferred",
+      "queueCapacityBoundary": "each enabled provider reports active versus effective concurrency plus distinct collection tasks whose available_at is already due in scheduled queued retry_scheduled or rate_limited state and the longest due wait in seconds; the page aggregates due backlog and oldest wait, and flags starvation risk only when a source longest wait exceeds its sampled 24-hour P95, while missing samples remain an explicit missing baseline; future backoff tasks are excluded and no capacity claim is inferred",
+      "expiredLeasePreviewBoundary": "the read model aggregates expired scheduler slots by worker crawler and provider plus distinct associated task count and oldest expiry; the confirmation dialog shows that snapshot before recovery, while the recovery transaction independently rechecks expires_at against its current server clock and never deletes an active slot from the preview alone",
       "apiClientBoundary": "crawler scheduler reads and idempotent expired-slot recovery use the shared frontend JSON client without changing single-host limits, resource stop gates or lease truth",
       "permission": "platform operations read and idempotent expired-slot recovery require platform:operate; responses exclude task payloads scope identifiers lease tokens hashes credentials cookies and paths while observation recovery and failure retain request_id trace_id and audit",
       "configuration": [
@@ -2324,9 +2442,12 @@
         "CRAWLER_SCHEDULER_MIN_FREE_DISK_MB",
         "CRAWLER_SCHEDULER_STALE_AFTER_SECONDS",
         "CRAWLER_SCHEDULER_PRODUCTION_EVIDENCE_FILE",
-        "CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES"
+        "CRAWLER_SCHEDULER_EVIDENCE_MAX_AGE_MINUTES",
+        "CRAWLER_COMPLETION_RETENTION_DAYS",
+        "CRAWLER_COMPLETION_MAX_BYTES",
+        "CRAWLER_COMPLETION_MIN_FREE_DISK_MB"
       ],
-      "runtimeBoundary": "the single BaoTa ai选品 Node backend owns API and Worker while the separate BaoTa ai选品-python project owns Crawler heartbeat and the Python-to-Playwright bridge on the same Huizhou host; Redis remains scoped queue coordination and MySQL 5.7 remains lease truth; no load balancer backup server multi-node or capacity claim",
+      "runtimeBoundary": "the single BaoTa ai选品 Node backend owns API and Worker while the separate BaoTa ai选品-python project owns Crawler heartbeat and the Python-to-Playwright bridge on the same Huizhou host; the Python package separates main-loop orchestration, lease acquire and heartbeat, Playwright execution, durable completion receipts and bounded API transport behind the unchanged python -m scoutops_crawler entrypoint; pending receipts replay by persisted creation time, retryable dependency failures remain pending, and a repeated nonretryable receipt is preserved under the restricted spool quarantine directory instead of blocking the active queue; every authenticated job acquire reports only counts byte totals oldest creation time retention thresholds and free disk, persists the observation even on an empty 204 queue, and excludes paths file names and receipt contents; Redis remains scoped queue coordination and MySQL 5.7 remains lease truth; no load balancer backup server multi-node or capacity claim",
       "imageEvidence": [
         "core 10 platform cockpit",
         "concept 61 operations",
@@ -2379,7 +2500,7 @@
         "/api/v1/platform/operations/capacity/drills"
       ],
       "scope": "M08-06 software completion and honest capacity state for the current single-host product; server devices production resource evidence and capacity load tests are optional operations rather than software completion gates",
-      "truthBoundary": "software completion keeps capacityClaim unverified when optional same-commit production measurements are absent or blocked; planned users and concurrency are never promoted to measured claims, while any separately executed measurement must still preserve ordered stages fixed thresholds failure evidence and canonical UTC timestamps",
+      "truthBoundary": "software completion keeps capacityClaim unverified when optional same-commit production measurements are absent or blocked; planned users and concurrency are never promoted to measured claims, while any separately executed measurement must still preserve ordered stages fixed thresholds failure evidence and canonical UTC timestamps; every warning and blocker exposes a factual reason action and the platform_operations_admin responsibility role inherited from platform:operate without fabricating an individual assignee",
       "apiClientBoundary": "capacity reads and idempotent archive-recovery attestations use the shared frontend JSON client; absent capacity evidence still maps to the explicit empty state rather than an availability or measured-capacity claim",
       "permission": "platform operations read and idempotent archive_recovery attestation require platform:operate; responses exclude customer payloads paths filenames hashes credentials cookies and SQL while view drill and failure retain request_id trace_id and audit",
       "configuration": [

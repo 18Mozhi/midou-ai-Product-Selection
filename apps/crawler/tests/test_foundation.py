@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scoutops_crawler.foundation import FoundationTask, validate_task
 from scoutops_crawler.config import ConfigError, load_config
+from scoutops_crawler.completion_receipts import CompletionReceiptClient
 from scoutops_crawler.playwright_bridge import PlaywrightBridge, PlaywrightBridgeError, sanitize_stderr
 from scoutops_crawler.__main__ import event, load_env_file
 from scoutops_crawler.runtime_client import CrawlerLease, CrawlerRuntimeClient, RuntimeClientError
@@ -139,7 +140,7 @@ class FoundationTaskTest(unittest.TestCase):
             "job-1", "run-1", "profile-1", "x" * 64, "request-1", "trace-1", {}, {}, "zh-CN", "Asia/Shanghai"
         )
         with patch(
-            "scoutops_crawler.runtime_client.urllib.request.urlopen",
+            "scoutops_crawler.runtime_transport.urllib.request.urlopen",
             side_effect=urllib.error.URLError("down"),
         ):
             with self.assertRaises(RuntimeClientError):
@@ -156,7 +157,7 @@ class FoundationTaskTest(unittest.TestCase):
             random_source=lambda: 0.5,
         )
         with patch(
-            "scoutops_crawler.runtime_client.urllib.request.urlopen",
+            "scoutops_crawler.runtime_transport.urllib.request.urlopen",
             side_effect=[
                 urllib.error.URLError("down-1"),
                 urllib.error.URLError("down-2"),
@@ -187,31 +188,148 @@ class FoundationTaskTest(unittest.TestCase):
                 self.assertEqual(client.flush_pending(), (1, 0))
             self.assertEqual(list(Path(directory).glob("*.json")), [])
 
+    def test_completion_receipts_retry_by_persisted_creation_time(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config = load_config({"CRAWLER_COMPLETION_SPOOL_ROOT": directory})
+            transport = Mock()
+            receipt = CompletionReceiptClient(config, transport)
+            later = {
+                "schema_version": 1,
+                "created_at": "2026-08-22T10:00:02+00:00",
+                "path": "/later",
+                "body": {"run_id": "later"},
+                "request_id": "request-later",
+                "trace_id": "trace-later",
+                "idempotency_key": "crawler-complete:later",
+            }
+            earlier = {
+                **later,
+                "created_at": "2026-08-22T10:00:01+00:00",
+                "path": "/earlier",
+                "body": {"run_id": "earlier"},
+                "request_id": "request-earlier",
+                "trace_id": "trace-earlier",
+                "idempotency_key": "crawler-complete:earlier",
+            }
+            (Path(directory) / "a-later.json").write_text(json.dumps(later), encoding="utf-8")
+            (Path(directory) / "z-earlier.json").write_text(json.dumps(earlier), encoding="utf-8")
+            self.assertEqual(receipt.flush_pending(), (2, 0))
+            self.assertEqual(
+                [call.args[0] for call in transport.post.call_args_list],
+                ["/earlier", "/later"],
+            )
+
+    def test_completion_receipts_quarantine_repeated_nonretryable_failures(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config = load_config({"CRAWLER_COMPLETION_SPOOL_ROOT": directory})
+            transport = Mock()
+            transport.post.side_effect = RuntimeClientError("crawler_api_http_400", retryable=False)
+            receipt = CompletionReceiptClient(config, transport)
+            pending = {
+                "schema_version": 1,
+                "created_at": "2026-08-22T10:00:01+00:00",
+                "path": "/complete",
+                "body": {"run_id": "failed-run"},
+                "request_id": "request-failed",
+                "trace_id": "trace-failed",
+                "idempotency_key": "crawler-complete:failed-run",
+            }
+            source = Path(directory) / "failed.json"
+            source.write_text(json.dumps(pending), encoding="utf-8")
+            self.assertEqual(receipt.flush_pending(), (0, 1))
+            self.assertTrue(source.exists())
+            self.assertEqual(receipt.flush_pending(), (0, 1))
+            self.assertFalse(source.exists())
+            quarantined = list((Path(directory) / "quarantine").glob("*.json"))
+            self.assertEqual(len(quarantined), 1)
+            self.assertEqual(json.loads(quarantined[0].read_text(encoding="utf-8"))["failure_count"], 2)
+
+    def test_completion_receipts_keep_retryable_api_failures_pending(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config = load_config({"CRAWLER_COMPLETION_SPOOL_ROOT": directory})
+            transport = Mock()
+            transport.post.side_effect = RuntimeClientError("crawler_api_unavailable", retryable=True)
+            receipt = CompletionReceiptClient(config, transport)
+            pending = {
+                "schema_version": 1,
+                "created_at": "2026-08-22T10:00:01+00:00",
+                "path": "/complete",
+                "body": {"run_id": "retry-run"},
+                "request_id": "request-retry",
+                "trace_id": "trace-retry",
+                "idempotency_key": "crawler-complete:retry-run",
+            }
+            source = Path(directory) / "retry.json"
+            source.write_text(json.dumps(pending), encoding="utf-8")
+            self.assertEqual(receipt.flush_pending(), (0, 1))
+            self.assertEqual(receipt.flush_pending(), (0, 1))
+            self.assertTrue(source.exists())
+            self.assertEqual(list((Path(directory) / "quarantine").glob("*.json")), [])
+
+    def test_completion_receipt_status_reports_capacity_without_deleting_expired_files(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config = load_config({
+                "CRAWLER_COMPLETION_SPOOL_ROOT": directory,
+                "CRAWLER_COMPLETION_RETENTION_DAYS": "7",
+                "CRAWLER_COMPLETION_MAX_BYTES": "1048576",
+                "CRAWLER_COMPLETION_MIN_FREE_DISK_MB": "128",
+            })
+            pending = Path(directory) / "pending.json"
+            pending.write_text(
+                json.dumps({"created_at": "2026-08-01T00:00:00+00:00"}),
+                encoding="utf-8",
+            )
+            receipt = CompletionReceiptClient(config, Mock())
+            status = receipt.status()
+            self.assertEqual(status["pending_count"], 1)
+            self.assertGreater(status["pending_bytes"], 0)
+            self.assertEqual(status["oldest_pending_at"], "2026-08-01T00:00:00+00:00")
+            self.assertEqual(status["retention_days"], 7)
+            self.assertEqual(status["max_bytes"], 1048576)
+            self.assertTrue(pending.exists())
+
+    def test_crawler_entrypoint_delegates_to_split_runtime_modules(self) -> None:
+        root = Path(__file__).resolve().parents[1] / "scoutops_crawler"
+        entrypoint = (root / "__main__.py").read_text(encoding="utf-8")
+        runtime = (root / "runtime_client.py").read_text(encoding="utf-8")
+        self.assertIn("from .main_loop import run_loop", entrypoint)
+        self.assertNotIn("PlaywrightBridge", entrypoint)
+        self.assertIn("CrawlerLeaseClient", runtime)
+        self.assertIn("CompletionReceiptClient", runtime)
+
     def test_runtime_client_does_not_claim_without_scoped_assignment(self) -> None:
         client = CrawlerRuntimeClient(load_config())
         self.assertIsNone(client.acquire())
 
     def test_runtime_client_claims_business_browser_job_without_static_request_file(self) -> None:
-        config = load_config({"CRAWLER_SERVICE_TOKEN": "service-token"})
-        client = CrawlerRuntimeClient(config)
-        assignment = {
-            "data": {
-                "job": {
-                    "id": "job-1",
-                    "execution_request": {"plan": {"start_url": "https://s.1688.com/"}},
-                },
-                "run": {"id": "run-1", "request_id": "request-1", "trace_id": "trace-1"},
-                "profile": {"id": "profile-1", "locale": "zh-CN", "timezone": "Asia/Shanghai"},
-                "credential": {"asset_id": "asset-1", "kind": "cookie_bundle"},
-                "lease_token": "x" * 64,
+        with tempfile.TemporaryDirectory() as directory:
+            config = load_config({
+                "CRAWLER_SERVICE_TOKEN": "service-token",
+                "CRAWLER_COMPLETION_SPOOL_ROOT": directory,
+            })
+            client = CrawlerRuntimeClient(config)
+            assignment = {
+                "data": {
+                    "job": {
+                        "id": "job-1",
+                        "execution_request": {"plan": {"start_url": "https://s.1688.com/"}},
+                    },
+                    "run": {"id": "run-1", "request_id": "request-1", "trace_id": "trace-1"},
+                    "profile": {"id": "profile-1", "locale": "zh-CN", "timezone": "Asia/Shanghai"},
+                    "credential": {"asset_id": "asset-1", "kind": "cookie_bundle"},
+                    "lease_token": "x" * 64,
+                }
             }
-        }
-        with patch.object(client, "_post", return_value=assignment) as post:
-            lease = client.acquire()
-        self.assertIsNotNone(lease)
-        self.assertEqual(lease.job_id, "job-1")
-        self.assertEqual(lease.execution_request["plan"]["start_url"], "https://s.1688.com/")
-        self.assertEqual(post.call_args.args[0], "/api/v1/internal/crawler-runtime/jobs/acquire")
+            with patch.object(client, "_post", return_value=assignment) as post:
+                lease = client.acquire()
+            self.assertIsNotNone(lease)
+            self.assertEqual(lease.job_id, "job-1")
+            self.assertEqual(lease.execution_request["plan"]["start_url"], "https://s.1688.com/")
+            self.assertEqual(post.call_args.args[0], "/api/v1/internal/crawler-runtime/jobs/acquire")
+            spool = post.call_args.args[1]["completion_spool"]
+            self.assertEqual(spool["pending_count"], 0)
+            self.assertEqual(spool["retention_days"], 30)
+            self.assertNotIn("path", spool)
 
     def test_production_crawler_no_longer_requires_static_scope_or_request_file(self) -> None:
         config = load_config({

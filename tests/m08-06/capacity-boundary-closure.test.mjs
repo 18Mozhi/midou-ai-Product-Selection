@@ -106,6 +106,11 @@ test("M08-06.A02/A04/A12 evaluates measured latency error queue resource recover
   assert.equal(blocked.state, "blocked");
   for (const code of ["capacity_write_latency_exceeded", "capacity_recovery_unverified"])
     assert.ok(blocked.findings.some((item) => item.code === code));
+  for (const finding of blocked.findings) {
+    assert.equal(finding.owner_role_code, "platform_operations_admin");
+    assert.equal(finding.owner_label, "平台运维管理员");
+    assert.ok(finding.reason.length > 0);
+  }
   assert.equal(
     evaluateCapacityBoundary(
       { ...limited, failed_next_concurrency: 20 },

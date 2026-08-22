@@ -49,6 +49,25 @@ const bytes = (value?: number) =>
       : `${(value / 1048576).toFixed(1)} MiB`;
 const time = (value?: string) =>
   value ? new Date(value).toLocaleString("zh-CN", { hour12: false }) : "尚无记录";
+const findingSeverity = (codes: string[]) => {
+  const finding = data.value?.findings.find((item) => codes.includes(item.code));
+  return finding?.severity ?? "ready";
+};
+const slowQueryImpact = computed(() => {
+  if (!data.value) return "尚无观测";
+  const severity = findingSeverity(["mysql_slow_query_warning", "mysql_slow_query_stop"]);
+  if (severity === "blocked") return "已达到阻断线；高成本任务应停止";
+  if (severity === "warning") return "已达到预警线；需核对索引与执行计划";
+  return data.value.slow_queries.per_minute > 0
+    ? "当前窗口存在慢查询增量，尚未触发门禁"
+    : "当前窗口未观察到慢查询增量";
+});
+const rowLockImpact = computed(() => {
+  if (!data.value) return "尚无观测";
+  return data.value.io.innodb_row_lock_waits > 0
+    ? `实例启动后累计 ${data.value.io.innodb_row_lock_waits} 次；需结合长事务日志判断当前影响`
+    : "实例启动后未记录行锁等待";
+});
 async function load() {
   state.value = "loading";
   actionHint.value = "";
@@ -205,6 +224,27 @@ onMounted(load);
           </dl>
         </aside>
       </div>
+      <section class="mysql-resilience__panel mysql-resilience__impact">
+        <header>
+          <div>
+            <p>业务影响</p>
+            <h3>慢查询与锁等待影响</h3>
+          </div>
+          <span>不把累计值冒充当前延迟</span>
+        </header>
+        <div>
+          <article
+            :data-severity="findingSeverity(['mysql_slow_query_warning', 'mysql_slow_query_stop'])"
+          >
+            <strong>慢查询</strong><b>{{ data.slow_queries.per_minute.toFixed(2) }} 次/分钟</b
+            ><span>{{ slowQueryImpact }}</span>
+          </article>
+          <article :data-severity="findingSeverity(['mysql_row_lock_waits'])">
+            <strong>行锁等待</strong><b>{{ data.io.innodb_row_lock_waits }} 次累计</b
+            ><span>{{ rowLockImpact }}；当前运行线程 {{ data.connections.running }}。</span>
+          </article>
+        </div>
+      </section>
       <section class="mysql-resilience__panel mysql-resilience__findings">
         <header>
           <div>

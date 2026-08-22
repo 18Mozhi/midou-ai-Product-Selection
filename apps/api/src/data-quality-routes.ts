@@ -32,6 +32,23 @@ export function registerDataQualityRoutes(app: FastifyInstance, o: DataQualityRo
     });
     return a.user.id;
   };
+  const trendActor = async (r: FastifyRequest) => {
+    const a = await o.auth.authenticate(sessionToken(r, o.secureCookie));
+    const resolved = await o.authorization.resolveSession(a.user.id, a.session.id);
+    await o.authorization.authorize({
+      actorId: a.user.id,
+      organizationId: resolved.context.organization_id,
+      workspaceId: resolved.context.workspace_id,
+      capability: "trend:manage",
+      surface: "api",
+      ...ids(r),
+    });
+    return {
+      actorId: a.user.id,
+      organizationId: resolved.context.organization_id,
+      workspaceId: resolved.context.workspace_id,
+    };
+  };
   const origin = (r: FastifyRequest) => {
     if (r.headers.origin !== o.webOrigin)
       throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
@@ -75,6 +92,23 @@ export function registerDataQualityRoutes(app: FastifyInstance, o: DataQualityRo
       }),
       r,
     );
+  });
+  app.post("/api/v1/trends/:topicId/evidence/:evidenceId/quality-issues", async (r, reply) => {
+    origin(r);
+    const context = await trendActor(r),
+      params = r.params as { topicId: string; evidenceId: string },
+      result = await o.service.createFromTrendEvidence(
+        params.topicId,
+        params.evidenceId,
+        r.body as any,
+        {
+          ...context,
+          idempotencyKey: requireIdempotencyKey(r),
+          ...ids(r),
+        },
+      );
+    reply.code(result.created ? 201 : 200);
+    return envelope(result, r);
   });
   app.post("/api/v1/platform/data/evidence/:evidenceId/download-grant", async (r) => {
     origin(r);

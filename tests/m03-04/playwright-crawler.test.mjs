@@ -252,6 +252,9 @@ test("M03-04.A03/A05-A10/A13/A15-A17 delivery evidence is complete and Baota bou
   assert.match(repo, /FOR UPDATE/);
   assert.match(routes, /collection:replay/);
   assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
+  assert.match(web, /expiryForecast[\s\S]*未提供有效期，无法预测/);
+  assert.match(web, /expiredLeaseRisks[\s\S]*过期占用/);
+  assert.match(web, /占用来源[\s\S]*僵尸占用风险/);
   assert.match(css, /@media\s*\(\s*max-width:\s*760px\s*\)/);
   assert.match(openapi, /\/platform\/crawler-runtime:/);
   assert.match(env, /PLAYWRIGHT_NAVIGATION_TIMEOUT_MS/);

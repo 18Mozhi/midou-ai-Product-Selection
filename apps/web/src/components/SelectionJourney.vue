@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onUnmounted, reactive, ref } from "vue";
+import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import { statusLabel } from "../ui/status-labels";
 import { ApiClientError, createApiClient } from "../api-client";
@@ -18,14 +18,15 @@ interface Journey {
   state: JourneyState;
   coverage_status: string | null;
   available_result_count: number;
-  first_result: null | {
+  results: Array<{
     raw_evidence_id: string;
     title: string | null;
     publisher: string | null;
     canonical_url: string;
     observed_at: string;
     topic_id: string | null;
-  };
+  }>;
+  first_result: Journey["results"][number] | null;
   blocked_reason: string | null;
   blocked_owner: string | null;
   blocked_next_step: string | null;
@@ -34,7 +35,12 @@ interface Journey {
     status: "waiting" | "active" | "completed" | "blocked";
     occurred_at: string | null;
   }>;
-  decision: null | { action: string; reason: string; created_at: string };
+  decision: null | {
+    action: string;
+    reason: string;
+    selected_raw_evidence_id: string | null;
+    created_at: string;
+  };
   opportunity_id: string | null;
   verification_task_id: string | null;
   accepted_at: string;
@@ -48,6 +54,8 @@ interface Journey {
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
   request = createApiClient(props.apiBaseUrl),
+  progressStorageKey = "scoutops.selection-journey.active-id",
+  journeyIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu,
   form = reactive<{ input_kind: Kind; input_value: string }>({
     input_kind: "keyword",
     input_value: "",
@@ -57,9 +65,9 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   state = ref<"ready" | "loading" | "error" | "expired" | "forbidden" | "blocked">("ready"),
   message = ref(""),
   requestId = ref(""),
+  selectedResultId = ref(""),
   busy = ref(false);
-let timer: number | undefined,
-  startedAt = 0;
+let timer: number | undefined;
 const terminal = computed(
     () =>
       journey.value &&
@@ -68,6 +76,16 @@ const terminal = computed(
       ),
   ),
   seconds = computed(() => Math.ceil((journey.value?.elapsed_ms ?? 0) / 1000)),
+  candidates = computed(() =>
+    journey.value?.results?.length
+      ? journey.value.results
+      : journey.value?.first_result
+        ? [journey.value.first_result]
+        : [],
+  ),
+  selectedCandidate = computed(() =>
+    candidates.value.find((candidate) => candidate.raw_evidence_id === selectedResultId.value),
+  ),
   stateTitle = computed(
     () =>
       ({
@@ -81,7 +99,11 @@ const terminal = computed(
       })[journey.value?.state ?? "accepted"],
   ),
   stageLabel = (stage: Journey["timeline"][number]["stage"]) =>
-    ({ queued: "排队", collecting: "采集", parsing: "解析", decision: "决策" })[stage];
+    ({ queued: "已排队", collecting: "正在收集", parsing: "正在整理", decision: "等待决策" })[
+      stage
+    ],
+  decisionLabel = (action: string) =>
+    ({ adopt: "已采纳", observe: "继续观察", reject: "已驳回" })[action] ?? action;
 function applyFailure(error: unknown, fallback: string) {
   if (error instanceof ApiClientError) {
     state.value =
@@ -99,17 +121,28 @@ function stop() {
 }
 function schedule() {
   stop();
-  if (!terminal.value && Date.now() - startedAt <= 180000) timer = window.setTimeout(load, 2000);
+  if (!terminal.value) timer = window.setTimeout(load, 2000);
+}
+function applyJourney(next: Journey) {
+  journey.value = next;
+  const available = next.results?.length
+    ? next.results
+    : next.first_result
+      ? [next.first_result]
+      : [];
+  if (!available.some((candidate) => candidate.raw_evidence_id === selectedResultId.value))
+    selectedResultId.value = available.length === 1 ? (available[0]?.raw_evidence_id ?? "") : "";
+  if (next.state === "decided") localStorage.removeItem(progressStorageKey);
+  else localStorage.setItem(progressStorageKey, next.id);
 }
 async function create() {
   busy.value = true;
   state.value = "loading";
   message.value = "";
-  startedAt = Date.now();
   try {
     const result = await request<Journey>("/selection-journeys", { method: "POST", body: form });
     requestId.value = result.request_id;
-    journey.value = result.data;
+    applyJourney(result.data);
     state.value = "ready";
     schedule();
   } catch (error) {
@@ -123,10 +156,8 @@ async function load() {
   try {
     const result = await request<Journey>(`/selection-journeys/${journey.value.id}`);
     requestId.value = result.request_id;
-    journey.value = result.data;
+    applyJourney(result.data);
     state.value = "ready";
-    if (Date.now() - startedAt > 180000 && !terminal.value)
-      message.value = "已超过 180 秒生产验收阈值；任务仍保留，当前验收判定为阻断。";
     schedule();
   } catch (error) {
     applyFailure(error, "状态连接中断；任务不会因页面关闭而取消。");
@@ -139,10 +170,14 @@ async function decide() {
   try {
     const result = await request<Journey>(`/selection-journeys/${journey.value.id}/decisions`, {
       method: "POST",
-      body: decision,
+      body: {
+        ...decision,
+        selected_raw_evidence_id:
+          decision.action === "adopt" ? selectedResultId.value || null : null,
+      },
     });
     requestId.value = result.request_id;
-    journey.value = result.data;
+    applyJourney(result.data);
     decision.reason = "";
     stop();
   } catch (error) {
@@ -157,16 +192,43 @@ function reset() {
   state.value = "ready";
   message.value = "";
   form.input_value = "";
+  selectedResultId.value = "";
+  localStorage.removeItem(progressStorageKey);
 }
+async function resume() {
+  const savedJourneyId = localStorage.getItem(progressStorageKey);
+  if (!savedJourneyId) return;
+  if (!journeyIdPattern.test(savedJourneyId)) {
+    localStorage.removeItem(progressStorageKey);
+    return;
+  }
+  state.value = "loading";
+  try {
+    const result = await request<Journey>(`/selection-journeys/${savedJourneyId}`);
+    requestId.value = result.request_id;
+    applyJourney(result.data);
+    state.value = "ready";
+    message.value = result.data.state === "decided" ? "" : "已恢复上次未完成的选品进度。";
+    schedule();
+  } catch (error) {
+    if (error instanceof ApiClientError && error.status === 404) {
+      localStorage.removeItem(progressStorageKey);
+      state.value = "ready";
+      return;
+    }
+    applyFailure(error, "暂时无法恢复上次进度，请稍后重试。");
+  }
+}
+onMounted(resume);
 onUnmounted(stop);
 </script>
 <template>
-  <section class="selection-journey" aria-label="真实选品验收，桌面与 390px 移动布局">
+  <section class="selection-journey" aria-label="选品旅程">
     <header>
       <div>
-        <p>真实选品</p>
-        <h2>开始一次真实选品</h2>
-        <span>成员直接输入，系统选择已启用真实来源；不需要进入来源 配置。</span>
+        <p>选品旅程</p>
+        <h2>开始一次选品</h2>
+        <span>输入商品线索后可离开页面，系统会保存进度并在回来时继续显示。</span>
       </div>
       <RouterLink to="/opportunities">返回机会列表</RouterLink>
     </header>
@@ -217,11 +279,8 @@ onUnmounted(stop);
           "
       /></label>
       <aside>
-        <strong>验收时钟</strong
-        ><span
-          >95% 的任务创建在 3 秒内完成 · 15 秒内显示已接收/排队 · 180
-          秒内出现首个真实结果、succeeded_empty 或明确受阻状态。</span
-        >
+        <strong>任务会在后台继续</strong
+        ><span>关闭或离开本页不会取消任务，返回后会自动恢复当前进度。</span>
       </aside>
       <button type="submit" :disabled="busy">
         {{ busy ? "正在创建真实任务…" : "创建真实选品任务" }}
@@ -231,18 +290,11 @@ onUnmounted(stop);
       ><section class="selection-status" :data-state="journey.state" aria-live="polite">
         <header>
           <div>
-            <small>{{ journey.state.toUpperCase() }} · {{ journey.task_status }}</small>
+            <small>选品进度</small>
             <h3>{{ stateTitle }}</h3>
           </div>
-          <strong>{{ seconds }} 秒 / 180 秒</strong>
+          <strong>已进行 {{ seconds }} 秒</strong>
         </header>
-        <div class="selection-progress">
-          <i
-            :style="{
-              width: `${Math.min(100, (journey.elapsed_ms / 180000) * 100)}%`,
-            }"
-          ></i>
-        </div>
         <ol class="selection-timeline" aria-label="选品处理时间轴">
           <li v-for="step in journey.timeline" :key="step.stage" :data-status="step.status">
             <i aria-hidden="true"></i>
@@ -267,34 +319,46 @@ onUnmounted(stop);
             <dd>{{ journey.provider_code }}</dd>
           </div>
           <div>
-            <dt>任务</dt>
-            <dd>{{ journey.task_id.slice(0, 8) }}…</dd>
-          </div>
-          <div>
-            <dt>覆盖 / 结果</dt>
-            <dd>
-              {{ journey.coverage_status ?? "等待中" }} · {{ journey.available_result_count }} 条
-            </dd>
+            <dt>候选结果</dt>
+            <dd>{{ journey.available_result_count }} 条</dd>
           </div>
         </dl>
       </section>
-      <article v-if="journey.first_result" class="selection-evidence">
+      <section v-if="candidates.length" class="selection-candidates">
         <header>
           <div>
-            <p>首个可核验结果</p>
-            <h3>{{ journey.first_result.title || "真实来源记录" }}</h3>
+            <p>候选比较</p>
+            <h3>比较 {{ candidates.length }} 条候选后再生成机会</h3>
           </div>
-          <b>真实来源</b>
+          <b>已选 {{ selectedResultId ? 1 : 0 }} 条</b>
         </header>
-        <p>
-          {{ journey.first_result.publisher || "来源未提供发布者" }} ·
-          {{ new Date(journey.first_result.observed_at).toLocaleString() }}
-        </p>
-        <code>证据 {{ journey.first_result.raw_evidence_id }}</code
-        ><a :href="journey.first_result.canonical_url" target="_blank" rel="noopener noreferrer"
-          >查看来源原文 ↗</a
-        >
-      </article>
+        <div class="selection-candidate-grid">
+          <label
+            v-for="(candidate, index) in candidates"
+            :key="candidate.raw_evidence_id"
+            :data-selected="selectedResultId === candidate.raw_evidence_id"
+          >
+            <input
+              v-model="selectedResultId"
+              type="radio"
+              name="selection-candidate"
+              :value="candidate.raw_evidence_id"
+            />
+            <span>
+              <small>候选 {{ index + 1 }}</small>
+              <strong>{{ candidate.title || "真实来源记录" }}</strong>
+              <em
+                >{{ candidate.publisher || "来源未提供发布者" }} ·
+                {{ new Date(candidate.observed_at).toLocaleString() }}</em
+              >
+              <i v-if="!candidate.topic_id">暂不能生成机会，可继续观察</i>
+            </span>
+            <a :href="candidate.canonical_url" target="_blank" rel="noopener noreferrer" @click.stop
+              >查看来源原文 ↗</a
+            >
+          </label>
+        </div>
+      </section>
       <article v-else-if="terminal" class="selection-evidence selection-evidence--empty">
         <header>
           <div>
@@ -340,20 +404,20 @@ onUnmounted(stop);
         <div class="selection-actions">
           <label
             v-for="item in [
-              { value: 'adopt', label: '采纳' },
+              { value: 'adopt', label: '采纳并生成机会' },
               { value: 'observe', label: '继续观察' },
               { value: 'reject', label: '驳回' },
             ]"
             :key="item.value"
             :class="{
-              disabled: item.value === 'adopt' && !journey.first_result?.topic_id,
+              disabled: item.value === 'adopt' && !selectedCandidate?.topic_id,
             }"
             ><input
               v-model="decision.action"
               type="radio"
               name="decision"
               :value="item.value"
-              :disabled="item.value === 'adopt' && !journey.first_result?.topic_id"
+              :disabled="item.value === 'adopt' && !selectedCandidate?.topic_id"
             /><span>{{ item.label }}</span></label
           >
         </div>
@@ -369,11 +433,9 @@ onUnmounted(stop);
         </button>
       </form>
       <article v-if="journey.decision" class="selection-complete">
-        <p>DECIDED · {{ journey.decision.action }}</p>
+        <p>决策已保存 · {{ decisionLabel(journey.decision.action) }}</p>
         <h3>{{ journey.decision.reason }}</h3>
-        <span
-          >{{ new Date(journey.decision.created_at).toLocaleString() }} ·
-          {{ journey.within_deadline ? "在 180 秒阈值内" : "超过 180 秒阈值" }}</span
+        <span>{{ new Date(journey.decision.created_at).toLocaleString() }}</span
         ><RouterLink v-if="journey.opportunity_id" :to="`/opportunities/${journey.opportunity_id}`"
           >查看机会、证据与决策历史 ↗</RouterLink
         >

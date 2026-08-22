@@ -1,1 +1,83 @@
-{"moduleId":"M04-03","phaseId":"P04","name":"Scoring Rule Engine","dependencies":["M04-02"],"atomicTasks":[{"id":"M04-03.A01","evidence":"explicit score rule scope non-goals dependencies inputs outputs and failure boundaries"},{"id":"M04-03.A02","evidence":"versioned rule dimension threshold input run component job action and status contracts"},{"id":"M04-03.A03","evidence":"MySQL57 scoped scoring migration indexes constraints immutable history and rollback"},{"id":"M04-03.A04","evidence":"validation weighted calculation idempotent transactions version locks actions and audit service"},{"id":"M04-03.A05","evidence":"Baota Node Worker leases retries warnings terminal dead-letter recovery and outbox"},{"id":"M04-03.A06","evidence":"OpenAPI rules actions inputs reruns DTO errors idempotency permissions and version locks"},{"id":"M04-03.A07","evidence":"desktop and 390 score rule list forms actions and opportunity score explanation"},{"id":"M04-03.A08","evidence":"rule forms transitions loading empty error forbidden expired blocked conflict and recovery states"},{"id":"M04-03.A09","evidence":"opportunity read decide approve route API Worker event organization and workspace guards"},{"id":"M04-03.A10","evidence":"scoring poll lease config schema env Baota startup validation and secret scan"},{"id":"M04-03.A11","evidence":"correlated rule input score events metrics coverage missing fields health impact and alerts"},{"id":"M04-03.A12","evidence":"weights thresholds evidence missing values dimensions states and errors unit tests"},{"id":"M04-03.A13","evidence":"OpenAPI DTO event score input rule action and client compatibility tests"},{"id":"M04-03.A14","evidence":"MySQL57 Redis transactions retries idempotency history and organization isolation integration"},{"id":"M04-03.A15","evidence":"Playwright desktop 390 score rules explanations keyboard workflow and visual regression"},{"id":"M04-03.A16","evidence":"partial coverage dependency failure lease expiry rollback retry conflict and dead-letter drills"},{"id":"M04-03.A17","evidence":"blueprint Feature Map env architecture runbook migration rollback and Baota handoff"}],"commands":["npm run build","node --test tests/m04-03/scoring.test.mjs","node scripts/verify-scoring-live.mjs","npx playwright test tests/e2e/m04-03-scoring.spec.ts","npm run verify:docs"]}
+{
+  "moduleId": "M04-03",
+  "phaseId": "P04",
+  "name": "Scoring Rule Engine",
+  "dependencies": ["M04-02"],
+  "atomicTasks": [
+    {
+      "id": "M04-03.A01",
+      "evidence": "explicit score rule scope non-goals dependencies inputs outputs and failure boundaries"
+    },
+    {
+      "id": "M04-03.A02",
+      "evidence": "versioned rule dimension threshold input run component job trigger task action preview and status contracts"
+    },
+    {
+      "id": "M04-03.A03",
+      "evidence": "MySQL57 scoped scoring migration indexes constraints immutable history task linkage and rollback"
+    },
+    {
+      "id": "M04-03.A04",
+      "evidence": "shared production and preview calculation read-only pagination validation idempotent transactions version locks actions and audit service"
+    },
+    {
+      "id": "M04-03.A05",
+      "evidence": "Baota Node Worker leases retries warnings terminal dead-letter recovery outbox evidence quality regression gate and evidence completion redecision reminder"
+    },
+    {
+      "id": "M04-03.A06",
+      "evidence": "OpenAPI rules actions read-only pre-publish preview inputs reruns DTO errors idempotency permissions and version locks"
+    },
+    {
+      "id": "M04-03.A07",
+      "evidence": "desktop and 390 score rule list pre-publish opportunity impact preview forms actions and score explanation"
+    },
+    {
+      "id": "M04-03.A08",
+      "evidence": "rule forms preview transitions loading empty error forbidden expired blocked conflict and recovery states"
+    },
+    {
+      "id": "M04-03.A09",
+      "evidence": "opportunity read decide approve preview route API Worker event organization and workspace guards"
+    },
+    {
+      "id": "M04-03.A10",
+      "evidence": "scoring poll lease config schema env Baota startup validation and secret scan"
+    },
+    {
+      "id": "M04-03.A11",
+      "evidence": "correlated rule input score events metrics coverage missing fields health impact and alerts"
+    },
+    {
+      "id": "M04-03.A12",
+      "evidence": "weights thresholds production-preview parity evidence quality gate missing values dimensions states reminder source and errors unit tests"
+    },
+    {
+      "id": "M04-03.A13",
+      "evidence": "OpenAPI DTO event score input rule action preview and client compatibility tests"
+    },
+    {
+      "id": "M04-03.A14",
+      "evidence": "MySQL57 read-only preview Redis transactions retries idempotency history and organization isolation integration"
+    },
+    {
+      "id": "M04-03.A15",
+      "evidence": "Playwright desktop 390 score rules impact preview explanations keyboard workflow and visual regression"
+    },
+    {
+      "id": "M04-03.A16",
+      "evidence": "partial coverage dependency failure lease expiry rollback retry conflict and dead-letter drills"
+    },
+    {
+      "id": "M04-03.A17",
+      "evidence": "blueprint Feature Map env architecture runbook migration rollback and Baota handoff"
+    }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m04-03/scoring.test.mjs",
+    "node scripts/verify-scoring-live.mjs",
+    "npx playwright test tests/e2e/m04-03-scoring.spec.ts",
+    "npm run verify:docs"
+  ]
+}

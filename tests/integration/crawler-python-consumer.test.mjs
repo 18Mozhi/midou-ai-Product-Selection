@@ -26,6 +26,10 @@ const runPythonConsumer = async (
   serviceToken,
   { completionSpoolRoot, expectedCode = 0 } = {},
 ) => {
+  const ownedSpoolRoot = completionSpoolRoot
+    ? null
+    : await mkdtemp(resolve(tmpdir(), "scoutops-crawler-status-"));
+  const spoolRoot = completionSpoolRoot ?? ownedSpoolRoot;
   const child = spawn("python", ["tests/integration/crawler-python-consumer-probe.py"], {
     cwd: root,
     shell: false,
@@ -38,7 +42,7 @@ const runPythonConsumer = async (
       CRAWLER_ID: "crawler-integration",
       CRAWLER_HEARTBEAT_SECONDS: "5",
       CRAWLER_LEASE_SECONDS: "30",
-      ...(completionSpoolRoot ? { CRAWLER_COMPLETION_SPOOL_ROOT: completionSpoolRoot } : {}),
+      CRAWLER_COMPLETION_SPOOL_ROOT: spoolRoot,
       NO_PROXY: "127.0.0.1,localhost",
       no_proxy: "127.0.0.1,localhost",
     },
@@ -53,8 +57,12 @@ const runPythonConsumer = async (
     stderr += chunk;
   });
   const [code] = await once(child, "exit");
-  assert.equal(code, expectedCode, stderr || stdout);
-  return { stdout, stderr };
+  try {
+    assert.equal(code, expectedCode, stderr || stdout);
+    return { stdout, stderr };
+  } finally {
+    if (ownedSpoolRoot) await rm(ownedSpoolRoot, { recursive: true, force: true });
+  }
 };
 
 const startRuntimeApi = async ({ assignmentAvailable, completionFailures = 0 }) => {
@@ -154,6 +162,9 @@ test("Python crawler consumes, renews and completes a real Fastify job over HTTP
     assert.equal(complete.itemCount, 2);
     assert.equal(complete.result.request_id, acquire.requestId);
     assert.equal(complete.result.trace_id, acquire.traceId);
+    assert.equal(acquire.completionSpool.pendingCount, 0);
+    assert.equal(acquire.completionSpool.retentionDays, 30);
+    assert.doesNotMatch(JSON.stringify(acquire.completionSpool), /path|filename|content/i);
   } finally {
     await runtime.app.close();
   }
@@ -168,6 +179,7 @@ test("Python crawler does not emit an idle heartbeat when Fastify has no job", a
       runtime.calls.map(([name]) => name),
       ["acquire"],
     );
+    assert.equal(runtime.calls[0][1].completionSpool.pendingCount, 0);
   } finally {
     await runtime.app.close();
   }

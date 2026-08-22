@@ -50,7 +50,8 @@ export class NotificationOutboxWorker {
             : String(event.event_type).startsWith("automation.")
               ? "system"
               : "task",
-        recipients = await this.recipients(event, payload);
+        actionable = await this.isStillActionable(event, payload),
+        recipients = actionable ? await this.recipients(event, payload) : [];
       for (const recipient of recipients)
         await this.create(event, payload, category, recipient, now);
       await this.pool.query(
@@ -75,8 +76,30 @@ export class NotificationOutboxWorker {
       };
     }
   }
+  private async isStillActionable(event: any, payload: any) {
+    if (!String(event.event_type).startsWith("approval.cost_input.")) return true;
+    if (!payload.review_id) return false;
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT status FROM opportunity_cost_input_reviews WHERE id=? AND organization_id=? AND workspace_id=? LIMIT 1",
+      [payload.review_id, event.organization_id, event.workspace_id],
+    );
+    return rows[0]?.status === "pending";
+  }
   private async recipients(event: any, p: any) {
     const direct = p.recipient_id ?? p.active_approver_id ?? p.assignee_id;
+    if (event.event_type === "approval.cost_input.overdue") {
+      const [rows] = await this.pool.query<RowDataPacket[]>(
+        "SELECT DISTINCT m.user_id FROM memberships m JOIN membership_role_assignments r ON " +
+          "r.membership_id=m.id AND r.role_code='organization_admin' JOIN users u ON u.id=m.user_id " +
+          "JOIN membership_data_scopes s ON s.membership_id=m.id WHERE m.organization_id=? AND " +
+          "m.status='active' AND u.status='active' AND (s.scope_type='organization' OR " +
+          "(s.scope_type='workspace' AND s.workspace_id=?))",
+        [event.organization_id, event.workspace_id],
+      );
+      return [
+        ...new Set([direct ? String(direct) : "", ...rows.map((row) => String(row.user_id))]),
+      ].filter(Boolean);
+    }
     if (direct) return [String(direct)];
     if (String(event.event_type).startsWith("approval.")) {
       const requestId = p.approval_request_id ?? p.resource_id;
@@ -111,15 +134,29 @@ export class NotificationOutboxWorker {
       inApp = !pref || Boolean(pref.in_app_enabled),
       email = Boolean(pref?.email_enabled);
     if (!categoryEnabled) return;
-    const title =
-        category === "system" && p.title
-          ? String(p.title)
-          : category === "approval"
-            ? "审批状态更新"
-            : category === "competitor"
-              ? "竞品监控更新"
-              : "任务状态更新",
-      body = notificationBody(category),
+    const redecisionReady = event.event_type === "task.evidence_completion.redecision_ready",
+      costDueSoon = event.event_type === "approval.cost_input.review_due_soon",
+      costOverdue = event.event_type === "approval.cost_input.overdue",
+      title = redecisionReady
+        ? String(p.title ?? "机会可重新决策")
+        : costDueSoon
+          ? "成本复核即将到期"
+          : costOverdue
+            ? "成本复核已超时"
+            : category === "system" && p.title
+              ? String(p.title)
+              : category === "approval"
+                ? "审批状态更新"
+                : category === "competitor"
+                  ? "竞品监控更新"
+                  : "任务状态更新",
+      body = redecisionReady
+        ? "补采与重新评分已完成，请查看最新证据、阻断状态和评分后重新决策。"
+        : costDueSoon
+          ? "该成本输入将在 4 小时后到期，请核对金额、来源与证据并完成复核。"
+          : costOverdue
+            ? "该成本输入已超过 24 小时复核期限，仍不会自动生效，请立即处理。"
+            : notificationBody(category),
       resourceType = p.resource_type ?? category,
       resourceId = p.resource_id ?? p.task_id ?? p.approval_request_id ?? null,
       notificationId = randomUUID();
@@ -132,7 +169,7 @@ export class NotificationOutboxWorker {
         recipient,
         event.id,
         category,
-        event.event_type === "approval.overdue" ? "warning" : "info",
+        event.event_type === "approval.overdue" || costOverdue ? "warning" : "info",
         title,
         body,
         resourceType,
@@ -158,7 +195,7 @@ export class NotificationOutboxWorker {
           JSON.stringify({
             notification_id: id,
             category,
-            severity: event.event_type === "approval.overdue" ? "warning" : "info",
+            severity: event.event_type === "approval.overdue" || costOverdue ? "warning" : "info",
           }),
           now,
         ],

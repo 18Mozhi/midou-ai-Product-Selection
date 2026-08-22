@@ -69,6 +69,14 @@ test("M06-05.A07/A08/A15 desktop and 390 open platform", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "开放接口与事件回调", level: 2 })).toBeVisible();
   await expect(page.getByText("sco_open_public", { exact: true })).not.toBeVisible();
   await expect(page.getByText("webhook_timeout", { exact: true })).not.toBeVisible();
+  await page.getByLabel("组织编号").fill("o1");
+  await page.getByLabel("名称").fill("状态观察接入");
+  await page.getByRole("button", { name: "创建接口访问账号" }).click();
+  const creationRisk = page.getByLabel("令牌权限风险预览");
+  await expect(creationRisk).toContainText("组织 o1 · 状态观察接入");
+  await expect(creationRisk).toContainText("读取系统状态");
+  await expect(creationRisk).toContainText("不包含业务数据写入权限");
+  await page.getByRole("button", { name: "取消" }).click();
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
@@ -94,6 +102,10 @@ test("M06-05.A08/A16 confirmation rate limit and dependency recovery", async ({ 
     await dialog.getByRole("button", { name: "关闭详情" }).click();
   } else await page.getByRole("button", { name: "轮换", exact: true }).click();
   await expect(page.getByText("确认轮换接口访问密钥？")).toBeVisible();
+  const rotationRisk = page.getByLabel("令牌权限风险预览");
+  await expect(rotationRisk).toContainText("报表只读 Client");
+  await expect(rotationRisk).toContainText("每分钟 60 次限额保持不变");
+  await expect(rotationRisk).toContainText("旧密钥立即失效");
   await page.getByRole("button", { name: "取消" }).click();
   await page.unroute("**/api/v1/platform/open");
   let status = 429;

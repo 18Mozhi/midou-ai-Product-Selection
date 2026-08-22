@@ -19,9 +19,11 @@ export class CrawlerSchedulerRepository implements Contract {
       [providers],
       [profiles],
       [duplicates],
+      [expiredLeases],
       [activeLeases],
       [providerSamples],
       [trendRows],
+      [receiptSpoolRows],
     ] = await Promise.all([
       this.pool.query<RowDataPacket[]>(
         "SELECT slot_type,COUNT(*) total FROM crawler_scheduler_leases WHERE expires_at>? GROUP BY slot_type",
@@ -58,6 +60,13 @@ export class CrawlerSchedulerRepository implements Contract {
         [now],
       ),
       this.pool.query<RowDataPacket[]>(
+        "SELECT COUNT(*) total,COUNT(DISTINCT task_id) task_count," +
+          "SUM(slot_type='worker') worker,SUM(slot_type='crawler') crawler," +
+          "SUM(slot_type='provider') provider,MIN(expires_at) oldest_expired_at " +
+          "FROM crawler_scheduler_leases WHERE expires_at<=?",
+        [now],
+      ),
+      this.pool.query<RowDataPacket[]>(
         "SELECT l.slot_type,l.task_id,l.run_id,l.lease_owner,l.heartbeat_at,l.expires_at," +
           "\n          t.status task_status,p.name provider_name\n         FROM crawler_scheduler_leases " +
           "l\n         LEFT JOIN collection_tasks t ON t.id=l.task_id\n         LEFT JOIN providers " +
@@ -82,6 +91,9 @@ export class CrawlerSchedulerRepository implements Contract {
           "FROM crawler_browser_runs WHERE started_at>=DATE_SUB(?,INTERVAL 24 HOUR) GROUP BY bucket_at ORDER BY bucket_at",
         [now],
       ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT pending_count,pending_bytes,quarantined_count,quarantined_bytes,oldest_pending_at,retention_days,max_bytes,minimum_free_disk_mb,free_disk_mb,observed_at FROM crawler_completion_spool_status ORDER BY observed_at DESC LIMIT 1",
+      ),
     ]);
     const samplesByProvider = new Map<string, RowDataPacket[]>();
     for (const row of providerSamples) {
@@ -93,6 +105,17 @@ export class CrawlerSchedulerRepository implements Contract {
       active_worker_leases: count("worker"),
       active_crawler_leases: count("crawler"),
       duplicate_lease_count: n(duplicates[0]?.total),
+      expired_leases: {
+        total: n(expiredLeases[0]?.total),
+        task_count: n(expiredLeases[0]?.task_count),
+        worker: n(expiredLeases[0]?.worker),
+        crawler: n(expiredLeases[0]?.crawler),
+        provider: n(expiredLeases[0]?.provider),
+        oldest_expired_at:
+          expiredLeases[0]?.oldest_expired_at == null
+            ? null
+            : iso(expiredLeases[0].oldest_expired_at),
+      },
       active_leases: activeLeases.map((row) => ({
         slot_type: String(row.slot_type) as "worker" | "crawler" | "provider",
         provider_name: row.provider_name == null ? null : String(row.provider_name),
@@ -157,6 +180,23 @@ export class CrawlerSchedulerRepository implements Contract {
           failure_rate_basis_points: total ? Math.round((failed / total) * 10_000) : 0,
         };
       }),
+      receipt_spool: receiptSpoolRows[0]
+        ? {
+            pending_count: n(receiptSpoolRows[0].pending_count),
+            pending_bytes: n(receiptSpoolRows[0].pending_bytes),
+            quarantined_count: n(receiptSpoolRows[0].quarantined_count),
+            quarantined_bytes: n(receiptSpoolRows[0].quarantined_bytes),
+            oldest_pending_at:
+              receiptSpoolRows[0].oldest_pending_at == null
+                ? null
+                : iso(receiptSpoolRows[0].oldest_pending_at),
+            retention_days: n(receiptSpoolRows[0].retention_days),
+            max_bytes: n(receiptSpoolRows[0].max_bytes),
+            minimum_free_disk_mb: n(receiptSpoolRows[0].minimum_free_disk_mb),
+            free_disk_mb: n(receiptSpoolRows[0].free_disk_mb),
+            observed_at: iso(receiptSpoolRows[0].observed_at),
+          }
+        : null,
     };
   }
   async record(input: Parameters<Contract["record"]>[0]) {

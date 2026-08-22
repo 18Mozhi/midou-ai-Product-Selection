@@ -25,7 +25,7 @@ const verdict = computed(
     (
       ({
         loading: ["正在核对本机受控目录", "读取容量、索引、校验和与同机恢复事实。"],
-        ready: ["本机文件韧性门已满足", "证据与导出目录符合当前 S0 单机边界。"],
+        ready: ["本机文件韧性门已满足", "证据、导出与临时目录符合当前 S0 单机边界。"],
         warning: ["本机文件接近预警线", "当前可用，但需要按告警项处理。"],
         blocked: ["本机文件韧性门已阻断", "停止新增大文件任务，并通过宝塔核验目录与恢复副本。"],
         empty: ["尚无本机文件观测", "确认宝塔 Node API 与受控目录后重新核验。"],
@@ -41,6 +41,10 @@ const verdict = computed(
     )[state.value],
 );
 const percent = (value: number) => `${(value / 100).toFixed(1)}%`;
+const rootLabel = (kind: "evidence" | "export" | "temp") =>
+  ({ evidence: "证据目录", export: "导出目录", temp: "临时目录" })[kind];
+const rootPurpose = (kind: "evidence" | "export" | "temp") =>
+  ({ evidence: "不可变证据", export: "限时导出", temp: "运行临时文件" })[kind];
 const bytes = (value: number) =>
   value >= 1099511627776
     ? `${(value / 1099511627776).toFixed(2)} TiB`
@@ -81,7 +85,9 @@ onMounted(load);
       <div>
         <p>本机受管存储</p>
         <h2>本机文件韧性</h2>
-        <span>证据与导出只写入惠州当前主机的宝塔受控目录；不使用共享存储或备用服务器。</span>
+        <span
+          >证据、导出与临时文件只写入惠州当前主机的宝塔受控目录；不使用共享存储或备用服务器。</span
+        >
       </div>
       <button type="button" @click="load">刷新文件事实</button>
     </header>
@@ -120,12 +126,12 @@ onMounted(load);
       </section>
       <section class="file-resilience__metrics">
         <article v-for="root in data.directories" :key="root.kind">
-          <span>{{ root.kind === "evidence" ? "证据目录" : "导出目录" }}</span
+          <span>{{ rootLabel(root.kind) }}</span
           ><strong>{{ percent(root.usage_basis_points) }}</strong
-          ><small
-            >{{ bytes(root.used_bytes) }} / {{ bytes(root.total_bytes) }} ·
-            {{ root.active_files }} 个活动文件</small
-          >
+          ><small>
+            {{ bytes(root.used_bytes) }} / {{ bytes(root.total_bytes) }} ·
+            {{ root.kind === "temp" ? "不建立持久索引" : `${root.active_files} 个活动文件` }}
+          </small>
         </article>
         <article>
           <span>校验和</span
@@ -152,7 +158,7 @@ onMounted(load);
           <div class="file-resilience__roots">
             <article v-for="root in data.directories" :key="root.kind">
               <div>
-                <b>{{ root.kind === "evidence" ? "不可变证据" : "限时导出" }}</b
+                <b>{{ rootPurpose(root.kind) }}</b
                 ><span>{{ root.available && root.writable ? "可读写" : "不可用" }}</span>
               </div>
               <progress :value="root.usage_basis_points" max="10000"></progress>
@@ -222,7 +228,8 @@ onMounted(load);
           </article>
         </div>
         <div v-else class="file-resilience__clear">
-          <b>当前无本机文件韧性阻断</b><span>证据、导出、校验和与同机恢复功能均可正常使用。</span>
+          <b>当前无本机文件韧性阻断</b
+          ><span>证据、导出、临时目录、校验和与同机恢复功能均可正常使用。</span>
         </div>
       </section>
       <footer class="file-resilience__footer">

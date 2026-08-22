@@ -4,6 +4,11 @@ import type { AuthorizationService } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 import type { PlatformDashboardService } from "./platform-dashboard-service.js";
+const csvCell = (value: unknown) => {
+  const text = String(value ?? ""),
+    safe = /^[=+\-@]/.test(text) ? `'${text}` : text;
+  return `"${safe.replaceAll('"', '""')}"`;
+};
 export interface PlatformDashboardRouteOptions {
   service: PlatformDashboardService;
   authorization: AuthorizationService;
@@ -102,11 +107,7 @@ export function registerPlatformDashboardRoutes(
       ],
       csv = [
         columns.join(","),
-        ...data.items.map((item: any) =>
-          columns
-            .map((column) => `"${String(item[column] ?? "").replaceAll('"', '""')}"`)
-            .join(","),
-        ),
+        ...data.items.map((item: any) => columns.map((column) => csvCell(item[column])).join(",")),
       ].join("\r\n");
     reply
       .header("content-type", "text/csv; charset=utf-8")
@@ -114,6 +115,36 @@ export function registerPlatformDashboardRoutes(
         "content-disposition",
         `attachment; filename="platform-${data.entity}-${Date.now()}.csv"`,
       )
+      .header("x-request-id", c.requestId)
+      .header("x-trace-id", c.traceId);
+    return `\ufeff${csv}`;
+  });
+  app.post("/api/v1/platform/management/logs/exports", async (r: FastifyRequest, reply) => {
+    if (r.headers.origin !== o.webOrigin)
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
+    const c = await context(r),
+      data: any = await o.service.exportLogs(r.body, c),
+      columns = [
+        "occurred_at",
+        "trace_id",
+        "source",
+        "event_type",
+        "status",
+        "error_code",
+        "resource_type",
+        "resource_id",
+        "task_id",
+        "provider_id",
+        "provider_name",
+        "request_id",
+      ],
+      csv = [
+        columns.join(","),
+        ...data.items.map((item: any) => columns.map((column) => csvCell(item[column])).join(",")),
+      ].join("\r\n");
+    reply
+      .header("content-type", "text/csv; charset=utf-8")
+      .header("content-disposition", `attachment; filename="platform-logs-${Date.now()}.csv"`)
       .header("x-request-id", c.requestId)
       .header("x-trace-id", c.traceId);
     return `\ufeff${csv}`;

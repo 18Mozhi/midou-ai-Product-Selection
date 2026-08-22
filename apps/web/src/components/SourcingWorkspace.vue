@@ -2,82 +2,17 @@
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import SourcingComparisonPanel from "./SourcingComparisonPanel.vue";
+import SourcingCostConfirmationPanel from "./SourcingCostConfirmationPanel.vue";
+import SourcingWorkspaceDialogs from "./SourcingWorkspaceDialogs.vue";
 import UiStatePanel from "./UiStatePanel.vue";
+import type {
+  SourcingCandidate as Candidate,
+  SourcingComparison,
+  SourcingSearch as Search,
+  SourcingState as State,
+} from "./sourcing-workspace-types";
 import "../sourcing.css";
-type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
-type Candidate = {
-  id: string;
-  supplier_name: string;
-  product_title: string;
-  specification: string | null;
-  moq: number | null;
-  quoted_price: number;
-  currency: string;
-  lead_time_days: number | null;
-  location: string | null;
-  original_url: string;
-  observed_at: string;
-  evidence_id: string;
-  confidence_value: number | null;
-  status: string;
-  missing_fields: string[];
-  quote: {
-    id: string;
-    version: number;
-    stability_status: string;
-    risk_level: string;
-    observed_at: string;
-    evidence_id: string;
-  } | null;
-};
-type Search = {
-  id: string;
-  input_type: string;
-  input_ref: string;
-  display_name?: string;
-  status: string;
-  candidate_count: number;
-  missing_fields: string[];
-  created_at: string;
-  updated_at: string;
-  candidates?: Candidate[];
-  erp_reference?: {
-    normalized_record_id: string;
-    evidence_id: string;
-    title: string;
-    image_url: string | null;
-    supplier_code: string | null;
-    cost_cny: number | null;
-    cost_usd: number | null;
-    source_url: string;
-    observed_at: string;
-  } | null;
-  collection_task_id?: string;
-  collection_progress?: {
-    status: string;
-    total_subqueries: number;
-    successful_subqueries: number;
-    failed_subqueries: number;
-    blocked_subqueries: number;
-    active_subqueries: number;
-    available_at: string;
-  } | null;
-};
-type ComparisonQuote = {
-  id: string;
-  supplier_name: string;
-  product_title: string;
-  specification: string;
-  moq: number;
-  quoted_price: number;
-  currency: string;
-  lead_time_days: number;
-  location: string;
-  confidence_value: number;
-  stability_status: string;
-  risk_level: string;
-  evidence_id: string;
-};
 const props = defineProps<{ apiBaseUrl: string }>(),
   route = useRoute(),
   router = useRouter(),
@@ -92,9 +27,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   query = ref(""),
   deleting = ref<Search | null>(null),
   deleteReason = ref(""),
-  comparisons = ref<
-    Array<{ id: string; name: string; quotes: ComparisonQuote[]; created_at: string }>
-  >([]),
+  comparisons = ref<SourcingComparison[]>([]),
   quoteCandidate = ref<Candidate | null>(null),
   purchaseCandidate = ref<Candidate | null>(null),
   selectedQuotes = ref<string[]>([]),
@@ -214,16 +147,7 @@ async function load() {
     requestId.value = response.request_id;
     items.value = response.data;
     try {
-      comparisons.value = (
-        await request<
-          Array<{
-            id: string;
-            name: string;
-            quotes: ComparisonQuote[];
-            created_at: string;
-          }>
-        >("/sourcing/comparisons")
-      ).data;
+      comparisons.value = (await request<SourcingComparison[]>("/sourcing/comparisons")).data;
     } catch {
       comparisons.value = [];
     }
@@ -500,6 +424,11 @@ watch(query, (value) => {
         <p v-if="selected.missing_fields.length" class="missing">
           当前候选仍缺：{{ missingText }}。必须人工带证据确认。
         </p>
+        <SourcingCostConfirmationPanel
+          v-if="selected.input_type === 'opportunity'"
+          :api-base-url="apiBaseUrl"
+          :opportunity-id="selected.input_ref"
+        />
         <section v-if="selected.collection_progress" class="sourcing-progress">
           <header>
             <div>
@@ -638,51 +567,7 @@ watch(query, (value) => {
             </footer>
           </article>
         </section>
-        <section class="sourcing-comparisons">
-          <header>
-            <div>
-              <small>已保存记录</small>
-              <h4>供应商报价对比历史</h4>
-            </div>
-            <span>{{ comparisons.length }} 份</span>
-          </header>
-          <article v-for="comparison in comparisons" :key="comparison.id">
-            <header>
-              <div>
-                <b>{{ comparison.name }}</b
-                ><small>{{
-                  new Date(comparison.created_at).toLocaleString("zh-CN", { hour12: false })
-                }}</small>
-              </div>
-              <strong>{{ comparison.quotes.length }} 家现行报价</strong>
-            </header>
-            <div class="sourcing-comparison-grid" aria-label="规格、最小起订量与交期对比">
-              <section v-for="item in comparison.quotes" :key="item.id">
-                <b>{{ item.supplier_name }}</b>
-                <small>{{ item.product_title }}</small>
-                <dl>
-                  <div>
-                    <dt>规格</dt>
-                    <dd>{{ item.specification }}</dd>
-                  </div>
-                  <div>
-                    <dt>最小起订量</dt>
-                    <dd>{{ item.moq }}</dd>
-                  </div>
-                  <div>
-                    <dt>报价</dt>
-                    <dd>{{ item.currency }} {{ item.quoted_price }}</dd>
-                  </div>
-                  <div>
-                    <dt>交期</dt>
-                    <dd>{{ item.lead_time_days }} 天</dd>
-                  </div>
-                </dl>
-              </section>
-            </div>
-          </article>
-          <p v-if="!comparisons.length">选择两家以上已确认报价后，可保存对比记录。</p>
-        </section>
+        <SourcingComparisonPanel :comparisons="comparisons" />
       </main>
     </div>
     <aside v-if="selectedQuotes.length" class="sourcing-compare-tray" aria-live="polite">
@@ -692,207 +577,26 @@ watch(query, (value) => {
         保存报价对比
       </button>
     </aside>
-    <div v-if="showSearch" class="sourcing-modal" role="dialog" aria-modal="true">
-      <form @submit.prevent="create">
-        <header>
-          <h3>发起供应商找货</h3>
-          <button
-            type="button"
-            aria-label="关闭供应商搜索"
-            title="关闭供应商搜索"
-            @click="closeSearch"
-          >
-            ×
-          </button>
-        </header>
-        <label
-          >输入类型<select v-model="form.input_type">
-            <option value="keyword">关键词</option>
-            <option value="opportunity">机会</option>
-          </select></label
-        ><label
-          >{{ form.input_type === "opportunity" ? "机会编号" : "商品关键词"
-          }}<input
-            v-model="form.input_ref"
-            required
-            :placeholder="
-              form.input_type === 'opportunity'
-                ? '从选品机会详情进入会自动填写'
-                : '例如：折叠收纳箱'
-            "
-        /></label>
-        <aside>
-          系统会直接爬取公开供应商商品页，保存供应商、商品、价格、图片、网址与采集时间；网页没有披露的
-          MOQ、规格和交期会明确标为待确认。
-        </aside>
-        <footer>
-          <button type="button" class="ghost" @click="closeSearch">取消</button
-          ><button type="submit" :disabled="busy">开始公开网页采集</button>
-        </footer>
-      </form>
-    </div>
-    <div v-if="quoteCandidate" class="sourcing-modal" role="dialog" aria-modal="true">
-      <form @submit.prevent="confirm">
-        <header>
-          <h3>确认完整供应商报价</h3>
-          <button
-            type="button"
-            aria-label="关闭报价编辑"
-            title="关闭报价编辑"
-            @click="quoteCandidate = null"
-          >
-            ×
-          </button>
-        </header>
-        <label>规格<input v-model="quote.specification" required /></label>
-        <div class="form-grid">
-          <label
-            >最小起订量<input v-model.number="quote.moq" type="number" min="1" required
-          /></label>
-          <label
-            >交期（天）<input
-              v-model.number="quote.lead_time_days"
-              type="number"
-              min="0"
-              required /></label
-          ><label>所在地<input v-model="quote.location" required /></label
-          ><label
-            >可信度（0–100）<input
-              v-model.number="quote.confidence_value"
-              type="number"
-              min="0"
-              max="100"
-              required /></label
-          ><label
-            >稳定性<select v-model="quote.stability_status">
-              <option value="stable">稳定</option>
-              <option value="variable">波动</option>
-              <option value="unknown">未知</option>
-            </select></label
-          ><label
-            >风险<select v-model="quote.risk_level">
-              <option value="low">低</option>
-              <option value="medium">中</option>
-              <option value="high">高</option>
-              <option value="unknown">未知</option>
-            </select></label
-          ><label
-            >观测时间<input v-model="quote.observed_at" type="datetime-local" required
-          /></label>
-        </div>
-        <label
-          >确认依据证据（可搜索）<input
-            v-model="quote.evidence_id"
-            type="search"
-            list="sourcing-evidence-options"
-            required
-            placeholder="输入证据编号或从候选中选择"
-        /></label>
-        <datalist id="sourcing-evidence-options">
-          <option v-for="option in evidenceOptions" :key="option.id" :value="option.id">
-            {{ option.label }}
-          </option>
-        </datalist>
-        <footer>
-          <button type="button" class="ghost" @click="quoteCandidate = null">取消</button
-          ><button type="submit" :disabled="busy">确认新版本</button>
-        </footer>
-      </form>
-    </div>
-    <div
-      v-if="purchaseCandidate"
-      class="sourcing-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="purchase-task-title"
-    >
-      <form @submit.prevent="purchase">
-        <header>
-          <div>
-            <small>结构化采购创建</small>
-            <h3 id="purchase-task-title">创建采购任务</h3>
-          </div>
-          <button type="button" aria-label="关闭采购任务创建" @click="purchaseCandidate = null">
-            ×
-          </button>
-        </header>
-        <dl>
-          <div>
-            <dt>供应商</dt>
-            <dd>{{ purchaseCandidate.supplier_name }}</dd>
-          </div>
-          <div>
-            <dt>锁定报价版本</dt>
-            <dd>v{{ purchaseCandidate.quote?.version }}</dd>
-          </div>
-          <div>
-            <dt>最小起订量（MOQ）</dt>
-            <dd>{{ purchaseCandidate.moq }}</dd>
-          </div>
-          <div>
-            <dt>报价证据</dt>
-            <dd>{{ purchaseCandidate.quote?.evidence_id }}</dd>
-          </div>
-        </dl>
-        <label
-          >采购数量<input
-            v-model.number="purchaseForm.quantity"
-            type="number"
-            :min="purchaseCandidate.moq ?? 1"
-            step="1"
-            required
-        /></label>
-        <label
-          >创建原因<textarea
-            v-model="purchaseForm.reason"
-            minlength="2"
-            maxlength="1000"
-            rows="3"
-            required
-          ></textarea>
-        </label>
-        <footer>
-          <button type="button" class="ghost" @click="purchaseCandidate = null">取消</button
-          ><button
-            type="submit"
-            :disabled="
-              busy ||
-              purchaseForm.reason.trim().length < 2 ||
-              purchaseForm.quantity < (purchaseCandidate.moq ?? 1)
-            "
-          >
-            确认创建
-          </button>
-        </footer>
-      </form>
-    </div>
-    <div v-if="deleting" class="sourcing-modal" role="dialog" aria-modal="true">
-      <form @submit.prevent="removeSearch">
-        <header>
-          <h3>删除找货记录</h3>
-          <button
-            type="button"
-            aria-label="关闭删除确认"
-            title="关闭删除确认"
-            @click="deleting = null"
-          >
-            ×
-          </button>
-        </header>
-        <p>删除“{{ searchName(deleting) }}”后不再显示在工作台，候选证据和审计记录仍保留。</p>
-        <label
-          >删除原因<textarea
-            v-model="deleteReason"
-            required
-            maxlength="500"
-            placeholder="请填写删除原因"
-          ></textarea>
-        </label>
-        <footer>
-          <button type="button" class="ghost" @click="deleting = null">取消</button
-          ><button type="submit" class="danger" :disabled="busy">确认删除</button>
-        </footer>
-      </form>
-    </div>
+    <SourcingWorkspaceDialogs
+      :show-search="showSearch"
+      :search-form="form"
+      :quote-candidate="quoteCandidate"
+      :quote="quote"
+      :evidence-options="evidenceOptions"
+      :purchase-candidate="purchaseCandidate"
+      :purchase-form="purchaseForm"
+      :deleting="deleting"
+      :delete-reason="deleteReason"
+      :busy="busy"
+      @close-search="closeSearch"
+      @create="create"
+      @close-quote="quoteCandidate = null"
+      @confirm-quote="confirm"
+      @close-purchase="purchaseCandidate = null"
+      @purchase="purchase"
+      @close-delete="deleting = null"
+      @remove-search="removeSearch"
+      @update-delete-reason="deleteReason = $event"
+    />
   </section>
 </template>

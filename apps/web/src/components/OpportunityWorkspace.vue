@@ -3,13 +3,15 @@ import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import OpportunityListPanel from "./OpportunityListPanel.vue";
+import OpportunityDecisionPanel from "./OpportunityDecisionPanel.vue";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
 import OpportunityWorkspaceDialogs from "./OpportunityWorkspaceDialogs.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
-import { statusLabel } from "../ui/status-labels";
+import { durationLabel, statusLabel } from "../ui/status-labels";
 import { useAuditedReason } from "../use-audited-reason";
 import { useModalDialog } from "../use-modal-dialog";
+import { opportunityStatusLabel } from "./opportunity-workspace-presentation";
 import type {
   OpportunityDetail as Detail,
   OpportunityProfitAnalysis as ProfitAnalysis,
@@ -23,36 +25,12 @@ import "../opportunity-selection-entry.css";
 import "../opportunity-ai.css";
 const route = useRoute();
 const router = useRouter();
-const opportunityStatus = (value: string) =>
-  (
-    ({
-      pending: "待判断",
-      adopt: "采纳",
-      adopted: "已采纳",
-      observe: "继续观察",
-      observing: "观察中",
-      reject: "驳回",
-      rejected: "已驳回",
-      insufficient: "不完整",
-      partial: "部分完整",
-      complete: "完整",
-      insufficient_data: "待补充数据",
-      calculated: "已计算",
-      unknown: "待识别",
-      low: "低",
-      medium: "中",
-      high: "高",
-      manual: "手动创建",
-      trend_topic: "热点自动发现",
-      evidence_insufficient: "缺少可采纳证据",
-      recommendation_insufficient: "尚无可靠推荐结论",
-    }) as Record<string, string>
-  )[value] ?? value;
 const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   items = ref<Opportunity[]>([]),
   memberOptions = ref<Array<{ id: string; label: string }>>([]),
+  costReviewerOptions = ref<Array<{ id: string; label: string }>>([]),
   selectedOpportunityIds = ref<string[]>([]),
   detail = ref<Detail | null>(null),
   profit = ref<ProfitAnalysis | null>(null),
@@ -99,6 +77,7 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
     source_ref_id: "",
     evidence_id: "",
     observed_at: new Date().toISOString().slice(0, 16),
+    reviewer_id: "",
   });
 const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
   () => showBatch.value,
@@ -169,6 +148,13 @@ async function load() {
     if (props.opportunityId) {
       detail.value = (await read(`/opportunities/${props.opportunityId}`)).data;
       profit.value = (await read(`/opportunities/${props.opportunityId}/profit-analysis`)).data;
+      try {
+        costReviewerOptions.value = (
+          await request<Array<{ id: string; label: string }>>("/cost-input-reviewers")
+        ).data;
+      } catch {
+        costReviewerOptions.value = [];
+      }
       await loadAi();
       try {
         const [competitorsResponse, sourcingResponse] = await Promise.all([
@@ -428,12 +414,35 @@ async function confirmCost() {
     source_ref_id: costForm.source_ref_id,
     evidence_id: costForm.evidence_id,
     observed_at: new Date(costForm.observed_at).toISOString(),
+    reviewer_id: costForm.reviewer_id,
     expected_version: detail.value.version,
   });
   if (result) {
     await load();
-    message.value = `${costForm.input_type} 已确认并保留来源；旧版本未改写。`;
+    message.value = `${costForm.input_type} 已提交双人复核；通过前不会影响利润。`;
   }
+}
+async function reviewCost(payload: {
+  reviewId: string;
+  decision: "approved" | "rejected";
+  reason: string;
+  expectedVersion: number;
+}) {
+  if (!detail.value) return;
+  const result = await write(
+    `/opportunities/${detail.value.id}/cost-input-reviews/${payload.reviewId}/actions`,
+    {
+      decision: payload.decision,
+      reason: payload.reason,
+      expected_version: payload.expectedVersion,
+    },
+  );
+  if (!result) return;
+  await load();
+  message.value =
+    payload.decision === "approved"
+      ? "成本复核已通过并生效；如有活动费用规则，利润重算已排队。"
+      : "成本复核已驳回；原提交保留但不会进入利润计算。";
 }
 async function queueProfit() {
   if (!detail.value) return;
@@ -621,8 +630,9 @@ watch(
             </p>
             <h3>{{ detail.name }}</h3>
             <span
-              >更新 {{ freshness(detail.updated_at) }} · v{{ detail.version }} · 来源
-              {{ opportunityStatus(detail.source_type) }}</span
+              >当前阶段已停留 {{ durationLabel(detail.lifecycle_dwell_seconds) }} · 更新
+              {{ freshness(detail.updated_at) }} · v{{ detail.version }} · 来源
+              {{ opportunityStatusLabel(detail.source_type) }}</span
             >
           </div>
           <div>
@@ -640,37 +650,12 @@ watch(
             >
           </div>
         </section>
-        <nav class="opportunity-decision-bar" aria-label="机会决策操作">
-          <button
-            :disabled="
-              detail.recommendation_status === 'insufficient_data' ||
-              detail.coverage_status === 'insufficient' ||
-              detail.evidence_count === 0
-            "
-            :title="
-              detail.recommendation_status === 'insufficient_data' ||
-              detail.coverage_status === 'insufficient' ||
-              detail.evidence_count === 0
-                ? '证据不足，先补齐缺失项'
-                : '采纳当前机会'
-            "
-            @click="startDecision('adopt')"
-          >
-            采纳</button
-          ><button @click="startDecision('observe')">继续观察</button
-          ><button class="reject" @click="startDecision('reject')">驳回</button>
-          <button
-            v-if="
-              detail.recommendation_status === 'insufficient_data' ||
-              detail.coverage_status === 'insufficient'
-            "
-            type="button"
-            :disabled="busy"
-            @click="createEvidenceTask"
-          >
-            生成补数任务
-          </button>
-        </nav>
+        <OpportunityDecisionPanel
+          :detail="detail"
+          :busy="busy"
+          @decide="startDecision"
+          @create-evidence-task="createEvidenceTask"
+        />
         <section
           v-if="detail.recommendation_status === 'insufficient_data'"
           class="opportunity-next-steps"
@@ -748,7 +733,7 @@ watch(
             <strong>{{ detail.evidence_count }} 条 / {{ detail.source_count }} 个来源</strong
             ><span
               >覆盖状态：{{
-                opportunityStatus(detail.coverage_status)
+                opportunityStatusLabel(detail.coverage_status)
               }}。市场、竞争、成本三类未齐全时不能自动推荐。</span
             >
           </article>
@@ -758,7 +743,7 @@ watch(
             <strong>{{
               profit?.latest_run?.status === "calculated"
                 ? `${profit.latest_run.net_margin_percent}%`
-                : opportunityStatus(detail.profit_status)
+                : opportunityStatusLabel(detail.profit_status)
             }}</strong
             ><span v-if="profit?.latest_run?.status === 'calculated'"
               >净利润 {{ profit.latest_run.net_profit }} {{ profit.latest_run.currency }} · 规则
@@ -768,7 +753,7 @@ watch(
           <article>
             <p>风险</p>
             <h4>风险</h4>
-            <strong>{{ opportunityStatus(detail.risk_level) }}</strong
+            <strong>{{ opportunityStatusLabel(detail.risk_level) }}</strong
             ><span>尚无适用风险输入，不以“低风险”代替未知。</span>
           </article>
         </section>
@@ -798,8 +783,10 @@ watch(
           v-else-if="tab === 'profit'"
           :profit="profit"
           :cost-form="costForm"
+          :reviewer-options="costReviewerOptions"
           :busy="busy"
           @confirm-cost="confirmCost"
+          @review-cost="reviewCost"
           @queue-profit="queueProfit"
         />
         <section v-else-if="tab === 'risk'" class="opportunity-section">
@@ -908,7 +895,7 @@ watch(
           </header>
           <p v-if="!detail.decisions.length" class="opportunity-empty-copy">尚无决策记录。</p>
           <article v-for="item in detail.decisions" :key="item.id">
-            <b>{{ opportunityStatus(item.action) }}</b>
+            <b>{{ opportunityStatusLabel(item.action) }}</b>
             <div>
               <strong>{{ item.reason }}</strong
               ><small

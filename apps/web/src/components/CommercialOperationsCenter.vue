@@ -48,6 +48,7 @@ const quotaNames: Record<string, string> = {
   open_api_requests: "外部接口请求",
   report_exports: "报表导出",
 };
+const quotaKeys = Object.keys(quotaNames);
 
 const localDate = (value?: string | null) =>
   value ? new Date(value).toISOString().slice(0, 16) : "";
@@ -136,7 +137,114 @@ function prepare(
   body: any,
   success = "变更已写入审计。",
 ) {
-  pending.value = { title, path, method, body, success };
+  pending.value = { title, path, method, body, success, impact: buildImpact(path, body) };
+}
+function buildImpact(path: string, body: any) {
+  const rows: Array<{ label: string; before: string; after: string; note?: string }> = [];
+  if (path.startsWith("/platform/commercial/plans/")) {
+    const planId = path.split("/").at(-1),
+      current = data.value.plans.find((item: any) => item.id === planId);
+    if (current)
+      for (const key of quotaKeys) {
+        const before = Number(current.quotas[key] ?? 0),
+          after = Number(body.quotas?.[key] ?? before);
+        if (before !== after)
+          rows.push({ label: quotaNames[key]!, before: String(before), after: String(after) });
+      }
+    if (current?.status !== body.status)
+      rows.push({
+        label: "方案状态",
+        before: statusText(current?.status),
+        after: statusText(body.status),
+      });
+    return {
+      scope: `${current?.assignment_count ?? 0} 个当前仍分配该方案的组织；方案 ${current?.name ?? "未找到"}`,
+      rows,
+      note:
+        current?.assignment_count > 0
+          ? "保存后这些组织的基础配额会随方案新版本变化；人工调整仍单独叠加。"
+          : "当前没有活动或暂停组织分配该方案。",
+    };
+  }
+  if (path === "/platform/commercial/assignments") {
+    const target = data.value.plans.find((item: any) => item.id === body.plan_id),
+      current = data.value.assignment,
+      periodChanged =
+        Boolean(current) &&
+        (localDate(current.period_start) !== body.period_start ||
+          localDate(current.period_end) !== body.period_end);
+    rows.push({
+      label: "配额方案",
+      before: current?.plan_name ?? "未分配",
+      after: target?.name ?? "未选择",
+    });
+    rows.push({
+      label: "统计周期",
+      before: current
+        ? `${localDate(current.period_start)} 至 ${localDate(current.period_end)}`
+        : "未设置",
+      after: `${body.period_start || "未设置"} 至 ${body.period_end || "未设置"}`,
+    });
+    for (const key of quotaKeys) {
+      const before = Number(data.value.effective_quotas[key] ?? 0),
+        baseBefore = Number(current?.quotas?.[key] ?? 0),
+        activeAdjustment = before - baseBefore,
+        after = Math.max(0, Number(target?.quotas?.[key] ?? 0) + activeAdjustment),
+        used = Number(data.value.usage[key] ?? 0);
+      rows.push({
+        label: quotaNames[key]!,
+        before: `${before}（当前余量 ${Math.max(0, before - used)}）`,
+        after: periodChanged
+          ? `${after}（新周期用量将在变更后重新统计）`
+          : `${after}（预计余量 ${Math.max(0, after - used)}）`,
+      });
+    }
+    return {
+      scope: `组织 ${body.organization_id || "未填写"}`,
+      rows,
+      note: "基础配额来自目标方案；当前有效人工调整按原记录继续叠加，不在此操作中删除。",
+    };
+  }
+  if (path === "/platform/commercial/adjustments") {
+    const key = String(body.quota_key),
+      before = Number(data.value.effective_quotas[key] ?? 0),
+      after = Math.max(0, before + Number(body.delta_value ?? 0)),
+      used = Number(data.value.usage[key] ?? 0);
+    rows.push({
+      label: quotaNames[key] ?? key,
+      before: `${before}（余量 ${Math.max(0, before - used)}）`,
+      after: `${after}（余量 ${Math.max(0, after - used)}）`,
+    });
+    return {
+      scope: `组织 ${body.organization_id || "未填写"} · 当前统计周期`,
+      rows,
+      note: "调整只改变选中的计量项，并按填写的生效与失效时间参与有效配额。",
+    };
+  }
+  if (path.endsWith("/revoke")) {
+    const adjustmentId = path.split("/").at(-2),
+      item = data.value.adjustments.find((entry: any) => entry.id === adjustmentId),
+      key = String(item?.quota_key ?? ""),
+      before = Number(data.value.effective_quotas[key] ?? 0),
+      after = Math.max(0, before - Number(item?.delta_value ?? 0)),
+      used = Number(data.value.usage[key] ?? 0);
+    if (item)
+      rows.push({
+        label: quotaNames[key] ?? key,
+        before: `${before}（余量 ${Math.max(0, before - used)}）`,
+        after: `${after}（余量 ${Math.max(0, after - used)}）`,
+      });
+    return {
+      scope: `组织 ${organizationId.value || "未填写"} · 当前统计周期`,
+      rows,
+      note: "撤销只移除这一条仍有效的人工调整，其他方案和调整保持不变。",
+    };
+  }
+  return {
+    scope: organizationId.value ? `组织 ${organizationId.value}` : "平台配额配置",
+    rows,
+    note: "该操作会保留版本、原因和审计记录。",
+  };
 }
 function savePlan() {
   const item = editingPlan.value;
@@ -206,6 +314,20 @@ onMounted(load);
     <aside v-if="pending" class="confirm">
       <strong>确认{{ pending.title }}？</strong>
       <p>该操作会改变配额方案版本、分配状态或组织额度，并写入平台审计。</p>
+      <section class="commercial-impact-preview" aria-label="配额变更影响范围">
+        <h4>影响范围</h4>
+        <p>{{ pending.impact.scope }}</p>
+        <dl v-if="pending.impact.rows.length">
+          <div v-for="row in pending.impact.rows" :key="row.label">
+            <dt>{{ row.label }}</dt>
+            <dd>
+              <span>{{ row.before }}</span
+              ><em>→</em><strong>{{ row.after }}</strong>
+            </dd>
+          </div>
+        </dl>
+        <p>{{ pending.impact.note }}</p>
+      </section>
       <button @click="pending = null">取消</button><button @click="confirm">确认执行</button>
     </aside>
     <section v-if="state === 'loading'" class="state">正在读取真实配额方案与用量…</section>
@@ -567,6 +689,43 @@ small {
 .confirm {
   border-color: var(--so-border-strong);
 }
+.commercial-impact-preview {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
+  padding: 14px;
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+}
+.commercial-impact-preview h4,
+.commercial-impact-preview p,
+.commercial-impact-preview dl {
+  margin: 0;
+}
+.commercial-impact-preview dl,
+.commercial-impact-preview dl > div {
+  display: grid;
+  gap: 8px;
+}
+.commercial-impact-preview dl > div {
+  grid-template-columns: minmax(120px, 0.6fr) 1fr;
+  padding-top: 8px;
+  border-top: 1px solid var(--so-border);
+}
+.commercial-impact-preview dt {
+  color: var(--so-text-muted);
+}
+.commercial-impact-preview dd {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.commercial-impact-preview em {
+  color: var(--so-text-muted);
+  font-style: normal;
+}
 .create {
   display: grid;
   grid-template-columns: repeat(6, minmax(100px, 1fr));
@@ -717,6 +876,10 @@ dialog textarea {
   .create,
   .renew,
   .adjust {
+    grid-template-columns: 1fr;
+  }
+  .commercial-impact-preview dl > div,
+  .commercial-impact-preview dd {
     grid-template-columns: 1fr;
   }
 }

@@ -40,6 +40,8 @@ const opportunityCountsSql = sqlText(
   "WHERE ss.input_type='opportunity' AND ss.input_ref=o.id AND ss.deleted_at IS NULL)",
   "supplier_candidate_count",
 );
+const opportunityLifecycleSql =
+  "GREATEST(0,TIMESTAMPDIFF(SECOND,o.lifecycle_entered_at,UTC_TIMESTAMP(3))) lifecycle_dwell_seconds";
 const summary = (row: RowDataPacket): OpportunitySummary => ({
   id: String(row.id),
   name: String(row.name),
@@ -50,6 +52,8 @@ const summary = (row: RowDataPacket): OpportunitySummary => ({
   source_ref_id: row.source_ref_id == null ? null : String(row.source_ref_id),
   owner_id: row.owner_id == null ? null : String(row.owner_id),
   lifecycle_status: String(row.lifecycle_status),
+  lifecycle_entered_at: iso(row.lifecycle_entered_at ?? row.updated_at),
+  lifecycle_dwell_seconds: Number(row.lifecycle_dwell_seconds ?? 0),
   recommendation_status: row.recommendation_status,
   overall_score: numberOrNull(row.overall_score),
   trend_score: numberOrNull(row.trend_score),
@@ -140,7 +144,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       ),
       [rows] = await this.pool.query<RowDataPacket[]>(
         sqlText(
-          `SELECT o.*,${opportunityImageSql} image_url,${opportunityCountsSql}`,
+          `SELECT o.*,${opportunityImageSql} image_url,${opportunityCountsSql},${opportunityLifecycleSql}`,
           `FROM opportunities o WHERE ${sql}`,
           "ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?",
         ),
@@ -167,7 +171,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
   }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       sqlText(
-        `SELECT o.*,${opportunityImageSql} image_url,${opportunityCountsSql}`,
+        `SELECT o.*,${opportunityImageSql} image_url,${opportunityCountsSql},${opportunityLifecycleSql}`,
         "FROM opportunities o",
         "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1",
       ),
@@ -194,6 +198,21 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       ),
       [input.opportunityId, input.organizationId, input.workspaceId],
     );
+    const [[evidenceTasks], [scoreJobs]] = await Promise.all([
+      this.pool.query<RowDataPacket[]>(
+        "SELECT id,status,progress_percent,assignee_id,due_at,completed_at,created_at,updated_at " +
+          "FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
+          "source_type='evidence_completion' AND source_ref_id=? AND deleted_at IS NULL " +
+          "ORDER BY created_at DESC,id DESC LIMIT 1",
+        [input.organizationId, input.workspaceId, input.opportunityId],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT id,status,trigger_task_id,last_error_code,created_at,updated_at FROM opportunity_score_jobs " +
+          "WHERE organization_id=? AND workspace_id=? AND opportunity_id=? " +
+          "ORDER BY created_at DESC,id DESC LIMIT 1",
+        [input.organizationId, input.workspaceId, input.opportunityId],
+      ),
+    ]);
     let scoreRun: RowDataPacket | undefined,
       components: RowDataPacket[] = [];
     try {
@@ -217,8 +236,59 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     } catch (error) {
       if ((error as { code?: string }).code !== "ER_NO_SUCH_TABLE") throw error;
     }
+    const evidenceTask = evidenceTasks[0],
+      scoreJob = scoreJobs[0],
+      evidenceBlocked = Number(row.evidence_count) === 0 || row.coverage_status === "insufficient",
+      qualityRegressionBlocked =
+        String(scoreJob?.last_error_code ?? "") === "score_blocked_by_data_quality_regression",
+      recommendationBlocked =
+        row.recommendation_status === "insufficient_data" || qualityRegressionBlocked,
+      scoreInProgress =
+        scoreJob && ["queued", "leased", "retry_scheduled"].includes(String(scoreJob.status)),
+      evidenceInProgress =
+        evidenceBlocked && evidenceTask && !["cancelled"].includes(String(evidenceTask.status)),
+      redecisionReady = Boolean(
+        evidenceTask &&
+        String(evidenceTask.status) === "completed" &&
+        scoreJob &&
+        String(scoreJob.trigger_task_id) === String(evidenceTask.id) &&
+        ["succeeded", "completed_with_warnings"].includes(String(scoreJob.status)),
+      );
     return {
       ...summary(row),
+      adoption_blockers: [
+        {
+          code: "evidence_insufficient",
+          status: evidenceBlocked ? (evidenceInProgress ? "in_progress" : "blocked") : "cleared",
+          progress_percent: evidenceTask ? Number(evidenceTask.progress_percent ?? 0) : null,
+          next_action: evidenceBlocked
+            ? evidenceTask
+              ? String(evidenceTask.status) === "completed"
+                ? "补采任务已完成，等待评分结果。"
+                : "继续完成补采任务。"
+              : "创建补采任务并补齐真实证据。"
+            : "证据覆盖阻断已解除。",
+          task_id: evidenceTask ? String(evidenceTask.id) : null,
+          task_status: evidenceTask ? String(evidenceTask.status) : null,
+          score_job_status: scoreJob ? String(scoreJob.status) : null,
+        },
+        {
+          code: "recommendation_insufficient",
+          status: recommendationBlocked ? (scoreInProgress ? "in_progress" : "blocked") : "cleared",
+          progress_percent: null,
+          next_action: recommendationBlocked
+            ? qualityRegressionBlocked
+              ? "关联证据的最新质量核对未通过；先解决数据质量问题，再重新评分。"
+              : scoreInProgress
+                ? "评分任务处理中，完成后会提醒重新决策。"
+                : "启用评分规则并在补采后重新评分。"
+            : "推荐结论阻断已解除。",
+          task_id: evidenceTask ? String(evidenceTask.id) : null,
+          task_status: evidenceTask ? String(evidenceTask.status) : null,
+          score_job_status: scoreJob ? String(scoreJob.status) : null,
+        },
+      ],
+      redecision_ready: redecisionReady,
       score_rule_version: row.score_rule_version == null ? null : String(row.score_rule_version),
       scored_at: row.scored_at == null ? null : iso(row.scored_at),
       latest_score_run: scoreRun
@@ -467,10 +537,13 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         ],
       );
       await connection.query(
-        "UPDATE opportunities SET decision_status=?,lifecycle_status=?,version=?," +
-          "updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+        "UPDATE opportunities SET decision_status=?," +
+          "lifecycle_entered_at=IF(lifecycle_status<>?,?,lifecycle_entered_at)," +
+          "lifecycle_status=?,version=?,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
         [
           status,
+          status,
+          now,
           status,
           version,
           now,
@@ -610,9 +683,19 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
                 ? "validating"
                 : String(row.lifecycle_status);
         await connection.query(
-          "UPDATE opportunities SET owner_id=IF(?='assign',?,owner_id),lifecycle_status=?," +
-            "version=?,updated_at=? WHERE id=?",
-          [input.value.action, input.value.assignee_id, lifecycle, version, now, item.id],
+          "UPDATE opportunities SET owner_id=IF(?='assign',?,owner_id)," +
+            "lifecycle_entered_at=IF(lifecycle_status<>?,?,lifecycle_entered_at)," +
+            "lifecycle_status=?,version=?,updated_at=? WHERE id=?",
+          [
+            input.value.action,
+            input.value.assignee_id,
+            lifecycle,
+            now,
+            lifecycle,
+            version,
+            now,
+            item.id,
+          ],
         );
         let taskId: string | undefined;
         if (input.value.action === "review") {

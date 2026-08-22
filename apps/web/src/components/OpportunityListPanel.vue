@@ -31,6 +31,8 @@ interface Opportunity {
   blocking_reasons: Array<"evidence_insufficient" | "recommendation_insufficient">;
   owner_id: string | null;
   lifecycle_status: string;
+  lifecycle_entered_at: string;
+  lifecycle_dwell_seconds: number;
   version: number;
   updated_at: string;
 }
@@ -94,7 +96,16 @@ const opportunityStatus = (value: string) =>
       hour12: false,
     }).format(new Date(value)),
   ownerLabel = (ownerId: string | null) =>
-    props.memberOptions.find((member) => member.id === ownerId)?.label ?? "未指派";
+    props.memberOptions.find((member) => member.id === ownerId)?.label ?? "未指派",
+  dwellLabel = (seconds: number) => {
+    const safe = Math.max(0, Number(seconds) || 0),
+      days = Math.floor(safe / 86400),
+      hours = Math.floor((safe % 86400) / 3600),
+      minutes = Math.floor((safe % 3600) / 60);
+    if (days) return `${days} 天 ${hours} 小时`;
+    if (hours) return `${hours} 小时 ${minutes} 分钟`;
+    return `${minutes} 分钟`;
+  };
 
 function changeScope(event: Event) {
   emit("update:listScope", (event.target as HTMLSelectElement).value as Scope);
@@ -251,10 +262,15 @@ function changeScope(event: Event) {
             </dd>
           </div>
           <div>
-            <dt>阶段 / 负责人</dt>
+            <dt>当前阶段 / 停留</dt>
             <dd>
-              {{ opportunityStatus(item.lifecycle_status) }} · {{ ownerLabel(item.owner_id) }}
+              {{ opportunityStatus(item.lifecycle_status) }} ·
+              {{ dwellLabel(item.lifecycle_dwell_seconds) }}
             </dd>
+          </div>
+          <div>
+            <dt>负责人</dt>
+            <dd>{{ ownerLabel(item.owner_id) }}</dd>
           </div>
         </dl>
         <b :data-status="item.decision_status"

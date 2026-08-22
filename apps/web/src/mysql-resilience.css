@@ -169,6 +169,29 @@
   margin: 5px 0 0;
   color: var(--so-text);
 }
+.mysql-resilience__impact > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.mysql-resilience__impact article {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.mysql-resilience__impact article[data-severity="warning"] {
+  border-color: var(--so-warning);
+}
+.mysql-resilience__impact article[data-severity="blocked"] {
+  border-color: var(--so-danger);
+}
+.mysql-resilience__impact article span {
+  color: var(--muted);
+  font-size: 12px;
+}
 .mysql-resilience__findings > div {
   display: grid;
   gap: 8px;
@@ -218,6 +241,9 @@
     grid-template-columns: repeat(2, 1fr);
   }
   .mysql-resilience__layout {
+    grid-template-columns: 1fr;
+  }
+  .mysql-resilience__impact > div {
     grid-template-columns: 1fr;
   }
 }

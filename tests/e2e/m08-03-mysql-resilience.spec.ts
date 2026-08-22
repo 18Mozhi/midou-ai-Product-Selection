@@ -51,6 +51,8 @@ test("M08-03.A07/A08/A15 desktop and 390 single-primary truth", async ({ page })
   await page.goto("/platform-admin/mysql");
   await expect(page.getByRole("heading", { name: "数据库 5.7 单主韧性" })).toBeVisible();
   await expect(page.getByText("MySQL 单主韧性门已满足")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "慢查询与锁等待影响" })).toBeVisible();
+  await expect(page.getByText("实例启动后未记录行锁等待")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(

@@ -86,6 +86,9 @@ async function setup(page: Page) {
           byte_size: 4096,
           expires_at: "2026-09-09T12:00:00.000Z",
           last_error_code: null,
+          queue_position: null,
+          estimated_completion_at: null,
+          estimate_sample_size: 0,
           version: 3,
           created_at: "2026-08-08T12:00:00.000Z",
           updated_at: "2026-08-08T12:01:00.000Z",
@@ -101,6 +104,9 @@ async function setup(page: Page) {
           byte_size: null,
           expires_at: "2026-09-09T12:00:00.000Z",
           last_error_code: null,
+          queue_position: 1,
+          estimated_completion_at: "2026-08-08T12:04:00.000Z",
+          estimate_sample_size: 10,
           version: 2,
           created_at: "2026-08-08T12:02:00.000Z",
           updated_at: "2026-08-08T12:02:01.000Z",
@@ -116,6 +122,9 @@ async function setup(page: Page) {
           byte_size: 2048,
           expires_at: "2026-08-09T12:00:00.000Z",
           last_error_code: null,
+          queue_position: null,
+          estimated_completion_at: null,
+          estimate_sample_size: 0,
           version: 4,
           created_at: "2026-08-07T12:00:00.000Z",
           updated_at: "2026-08-09T12:00:00.000Z",
@@ -131,6 +140,9 @@ async function setup(page: Page) {
           byte_size: null,
           expires_at: "2026-09-09T12:00:00.000Z",
           last_error_code: null,
+          queue_position: 2,
+          estimated_completion_at: "2026-08-08T12:06:00.000Z",
+          estimate_sample_size: 10,
           version: 1,
           created_at: "2026-08-08T12:03:00.000Z",
           updated_at: "2026-08-08T12:03:00.000Z",
@@ -166,6 +178,8 @@ test("M05-06.A07/A08/A15 desktop factual report and export lifecycle", async ({ 
   await expect(page.getByText("文件到期后由 Worker 清理")).toBeVisible();
   await expect(page.locator('i[data-status="queued"]')).toHaveText("排队中");
   await expect(page.locator('i[data-status="leased"]')).toHaveText("生成中");
+  await expect(page.getByText(/队列第 1 位 · 预计/)).toBeVisible();
+  await expect(page.getByText(/队列第 2 位 · 预计/)).toBeVisible();
   await expect(page.locator('i[data-status="expired"]')).toHaveText("已过期");
   await expect(page.getByText("expired", { exact: true })).toHaveCount(0);
   await expect(page.getByText("继续观察", { exact: true })).toBeVisible();

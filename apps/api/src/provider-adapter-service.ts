@@ -1,4 +1,7 @@
-import type { ProviderAdapterSummary } from "@scoutops/contracts";
+import type {
+  ProviderAdapterSummary,
+  ProviderPageCompatibilityObservation,
+} from "@scoutops/contracts";
 import {
   classifyProviderAdapterFailure,
   type AdapterHealthSignal,
@@ -21,6 +24,7 @@ export class ProviderAdapterServiceError extends Error {
 export interface AdapterProviderRecord extends ProviderRuntimeDefinition {
   name: string;
   status: "draft" | "disabled" | "enabled";
+  circuitFailureThreshold: number;
 }
 
 export interface StoredAdapterHealth {
@@ -46,6 +50,24 @@ export interface AdapterRuntimeHealthWindow {
   emptySuccessCount: number;
 }
 
+export interface AdapterRuntimeCircuit {
+  state: "closed" | "open";
+  consecutiveFailures: number;
+  lastErrorCode: string | null;
+  openedAt: string | null;
+  recoveredAt: string | null;
+  updatedAt: string | null;
+}
+
+const closedRuntimeCircuit = (): AdapterRuntimeCircuit => ({
+  state: "closed",
+  consecutiveFailures: 0,
+  lastErrorCode: null,
+  openedAt: null,
+  recoveredAt: null,
+  updatedAt: null,
+});
+
 const emptyRuntimeWindow = (): AdapterRuntimeHealthWindow => ({
   latestCategory: "unknown",
   sampleCount: 0,
@@ -63,9 +85,13 @@ export interface ProviderAdapterRepository {
       provider: AdapterProviderRecord;
       health: StoredAdapterHealth;
       runtime?: AdapterRuntimeHealthWindow;
+      circuit?: AdapterRuntimeCircuit;
+      compatibility?: ProviderPageCompatibilityObservation[];
     }>
   >;
   runtimeWindow?(providerId: string): Promise<AdapterRuntimeHealthWindow>;
+  runtimeCircuit?(providerId: string): Promise<AdapterRuntimeCircuit>;
+  compatibilityMatrix?(providerId: string): Promise<ProviderPageCompatibilityObservation[]>;
   getProvider(id: string): Promise<AdapterProviderRecord | null>;
   findReplay(input: {
     providerId: string;
@@ -97,7 +123,9 @@ export class ProviderAdapterService {
 
   async list(): Promise<ProviderAdapterSummary[]> {
     const rows = await this.repository.list();
-    return rows.map(({ provider, health, runtime }) => this.summary(provider, health, runtime));
+    return rows.map(({ provider, health, runtime, circuit, compatibility }) =>
+      this.summary(provider, health, runtime, circuit, compatibility),
+    );
   }
 
   async probe(
@@ -116,7 +144,14 @@ export class ProviderAdapterService {
       route,
       idempotencyKey: context.idempotencyKey,
     });
-    if (replay) return this.summary(provider, replay, await this.runtimeWindow(providerId));
+    if (replay)
+      return this.summary(
+        provider,
+        replay,
+        await this.runtimeWindow(providerId),
+        await this.runtimeCircuit(providerId),
+        await this.compatibilityMatrix(providerId),
+      );
 
     const registered = this.registry.has(provider.code, provider.accessMode);
     let signal: AdapterHealthSignal;
@@ -158,18 +193,41 @@ export class ProviderAdapterService {
       ...context,
       now: this.now(),
     });
-    return this.summary(provider, stored, await this.runtimeWindow(providerId));
+    return this.summary(
+      provider,
+      stored,
+      await this.runtimeWindow(providerId),
+      await this.runtimeCircuit(providerId),
+      await this.compatibilityMatrix(providerId),
+    );
   }
 
   private async runtimeWindow(providerId: string): Promise<AdapterRuntimeHealthWindow> {
     return this.repository.runtimeWindow?.(providerId) ?? emptyRuntimeWindow();
   }
 
+  private async runtimeCircuit(providerId: string): Promise<AdapterRuntimeCircuit> {
+    return this.repository.runtimeCircuit?.(providerId) ?? closedRuntimeCircuit();
+  }
+
+  private async compatibilityMatrix(providerId: string) {
+    return this.repository.compatibilityMatrix?.(providerId) ?? [];
+  }
+
   private summary(
     provider: AdapterProviderRecord,
     health: StoredAdapterHealth,
     runtime = emptyRuntimeWindow(),
+    circuit = closedRuntimeCircuit(),
+    compatibility: ProviderPageCompatibilityObservation[] = [],
   ): ProviderAdapterSummary {
+    const recoveryGateMet = Boolean(
+      circuit.state === "open" &&
+      circuit.openedAt &&
+      health.healthStatus === "ready" &&
+      health.lastCheckedAt &&
+      Date.parse(health.lastCheckedAt) > Date.parse(circuit.openedAt),
+    );
     return {
       id: provider.id,
       code: provider.code,
@@ -191,6 +249,18 @@ export class ProviderAdapterService {
       runtime_parser_failure_count_24h: runtime.parserFailureCount,
       runtime_login_failure_count_24h: runtime.loginFailureCount,
       runtime_empty_success_count_24h: runtime.emptySuccessCount,
+      runtime_circuit_state: circuit.state,
+      runtime_consecutive_failures: circuit.consecutiveFailures,
+      runtime_failure_threshold: provider.circuitFailureThreshold,
+      runtime_error_budget_remaining: Math.max(
+        0,
+        provider.circuitFailureThreshold - circuit.consecutiveFailures,
+      ),
+      runtime_last_error_code: circuit.lastErrorCode,
+      runtime_circuit_opened_at: circuit.openedAt,
+      runtime_last_recovered_at: circuit.recoveredAt,
+      runtime_recovery_gate_met: recoveryGateMet,
+      compatibility_matrix: compatibility,
       version: health.version,
       updated_at: health.updatedAt,
     };
@@ -214,5 +284,6 @@ export function toRuntimeProvider(row: Record<string, unknown>): AdapterProvider
     timeoutMs: Number(row.timeout_ms),
     fields: parse(row.fields_json),
     status: row.status as AdapterProviderRecord["status"],
+    circuitFailureThreshold: Number(row.circuit_failure_threshold),
   };
 }

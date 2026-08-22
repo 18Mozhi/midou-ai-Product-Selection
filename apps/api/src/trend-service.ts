@@ -1,7 +1,9 @@
 import { randomUUID } from "node:crypto";
 
-export type TrendStatus = "active" | "irrelevant" | "stale";
+export type TrendStatus = "active" | "irrelevant" | "stale" | "archived";
 export type MonitoringRuleStatus = "enabled" | "paused";
+export type TrendTopicChangeOperation = "merge" | "split";
+export type TrendTopicChangeStatus = "pending" | "confirmed" | "rejected";
 
 export interface TrendTopicSummary {
   id: string;
@@ -81,6 +83,26 @@ export interface TrendMonitoringRule {
   next_collection_at: string | null;
   last_collection_task_id: string | null;
   last_failed_sources: string[];
+  version: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TrendTopicChangeRequest {
+  id: string;
+  operation: TrendTopicChangeOperation;
+  target_topic: Pick<TrendTopicSummary, "id" | "title" | "market" | "language" | "version">;
+  source_topics: Array<Pick<TrendTopicSummary, "id" | "title" | "market" | "language" | "version">>;
+  signal_ids: string[];
+  new_title: string | null;
+  new_category: string | null;
+  reason: string;
+  status: TrendTopicChangeStatus;
+  result_topic_id: string | null;
+  proposed_by: string;
+  decided_by: string | null;
+  decision_reason: string | null;
+  decided_at: string | null;
   version: number;
   created_at: string;
   updated_at: string;
@@ -202,6 +224,33 @@ export interface TrendRepository {
   ): Promise<{ items: TrendTopicSummary[]; total: number }>;
   get(input: TrendScope & { topicId: string }): Promise<TrendTopicDetail | null>;
   listRules(input: TrendScope): Promise<TrendMonitoringRule[]>;
+  listChangeRequests(
+    input: TrendScope & { status?: TrendTopicChangeStatus },
+  ): Promise<TrendTopicChangeRequest[]>;
+  proposeTopicChange(
+    input: TrendWriteContext & {
+      requestIdValue: string;
+      operation: TrendTopicChangeOperation;
+      targetTopicId: string;
+      sourceTopicIds: string[];
+      signalIds: string[];
+      newTitle: string | null;
+      newCategory: string | null;
+      expectedVersions: Record<string, number>;
+      reason: string;
+      route: string;
+    },
+  ): Promise<TrendTopicChangeRequest>;
+  decideTopicChange(
+    input: TrendWriteContext & {
+      changeRequestId: string;
+      decision: "confirm" | "reject";
+      reason: string;
+      expectedVersion: number;
+      splitTopicId: string;
+      route: string;
+    },
+  ): Promise<TrendTopicChangeRequest>;
   setFollow(
     input: TrendWriteContext & {
       topicId: string;
@@ -247,6 +296,15 @@ const uuid = (value: string, field: string) =>
     36,
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
   );
+
+const uuidList = (value: unknown, field: string, minimum: number, maximum: number) => {
+  if (!Array.isArray(value) || value.length < minimum || value.length > maximum)
+    throw new TrendServiceError("trend_change_input_invalid", 400, `修正 ${field} 后重试。`);
+  const result = value.map((item) => uuid(String(item), field));
+  if (new Set(result).size !== result.length)
+    throw new TrendServiceError("trend_change_input_invalid", 400, `${field} 不能包含重复项。`);
+  return result;
+};
 
 export class TrendService {
   constructor(private readonly repository: TrendRepository) {}
@@ -300,6 +358,118 @@ export class TrendService {
 
   listRules(input: TrendScope) {
     return this.repository.listRules(input);
+  }
+  listChangeRequests(input: TrendScope & { status?: TrendTopicChangeStatus }) {
+    if (input.status && !["pending", "confirmed", "rejected"].includes(input.status))
+      throw new TrendServiceError(
+        "trend_change_status_invalid",
+        400,
+        "使用 pending、confirmed 或 rejected 筛选确认队列。",
+      );
+    return this.repository.listChangeRequests(input);
+  }
+
+  proposeTopicChange(
+    input: TrendWriteContext & {
+      value: {
+        operation: TrendTopicChangeOperation;
+        target_topic_id: string;
+        source_topic_ids?: unknown;
+        signal_ids?: unknown;
+        new_title?: unknown;
+        new_category?: unknown;
+        expected_versions: unknown;
+        reason: unknown;
+      };
+    },
+  ) {
+    const operation = input.value?.operation,
+      targetTopicId = uuid(String(input.value?.target_topic_id ?? ""), "target_topic_id"),
+      sourceTopicIds = uuidList(
+        input.value?.source_topic_ids ?? [],
+        "source_topic_ids",
+        operation === "merge" ? 1 : 0,
+        operation === "merge" ? 10 : 0,
+      ),
+      signalIds = uuidList(
+        input.value?.signal_ids ?? [],
+        "signal_ids",
+        operation === "split" ? 1 : 0,
+        operation === "split" ? 100 : 0,
+      );
+    if (!["merge", "split"].includes(operation))
+      throw new TrendServiceError("trend_change_input_invalid", 400, "选择合并或拆分。 ");
+    if (sourceTopicIds.includes(targetTopicId))
+      throw new TrendServiceError("trend_change_input_invalid", 400, "合并来源不能包含目标主题。");
+    const expected = input.value?.expected_versions;
+    if (!expected || typeof expected !== "object" || Array.isArray(expected))
+      throw new TrendServiceError("trend_change_version_invalid", 400, "提交涉及主题的当前版本。");
+    const expectedVersions: Record<string, number> = {};
+    for (const topicId of [targetTopicId, ...sourceTopicIds]) {
+      const version = Number((expected as Record<string, unknown>)[topicId]);
+      if (!Number.isSafeInteger(version) || version < 1)
+        throw new TrendServiceError(
+          "trend_change_version_invalid",
+          400,
+          "提交涉及主题的当前版本。",
+        );
+      expectedVersions[topicId] = version;
+    }
+    const newTitle =
+        operation === "split" ? boundedText(input.value.new_title, "new_title", 500) : null,
+      newCategory =
+        operation === "split" && input.value.new_category != null && input.value.new_category !== ""
+          ? boundedText(input.value.new_category, "new_category", 80)
+          : null,
+      reason = boundedText(input.value.reason, "reason", 1000);
+    if (reason.length < 2)
+      throw new TrendServiceError("trend_change_reason_invalid", 400, "原因至少填写 2 个字符。");
+    return this.repository.proposeTopicChange({
+      ...input,
+      requestIdValue: randomUUID(),
+      operation,
+      targetTopicId,
+      sourceTopicIds,
+      signalIds,
+      newTitle,
+      newCategory,
+      expectedVersions,
+      reason,
+      route: "POST:/api/v1/trends/change-requests",
+    });
+  }
+
+  decideTopicChange(
+    input: TrendWriteContext & {
+      changeRequestId: string;
+      value: { decision: "confirm" | "reject"; reason: unknown; expected_version: unknown };
+    },
+  ) {
+    const changeRequestId = uuid(input.changeRequestId, "change_request_id"),
+      decision = input.value?.decision,
+      expectedVersion = Number(input.value?.expected_version),
+      reason = boundedText(input.value?.reason, "reason", 1000);
+    if (
+      !["confirm", "reject"].includes(decision) ||
+      !Number.isSafeInteger(expectedVersion) ||
+      expectedVersion < 1
+    )
+      throw new TrendServiceError(
+        "trend_change_decision_invalid",
+        400,
+        "提交确认或驳回动作和当前版本。",
+      );
+    if (reason.length < 2)
+      throw new TrendServiceError("trend_change_reason_invalid", 400, "原因至少填写 2 个字符。");
+    return this.repository.decideTopicChange({
+      ...input,
+      changeRequestId,
+      decision,
+      reason,
+      expectedVersion,
+      splitTopicId: randomUUID(),
+      route: `POST:/api/v1/trends/change-requests/${changeRequestId}/decisions`,
+    });
   }
   follow(input: TrendWriteContext & { topicId: string; followed: boolean }) {
     const topicId = uuid(input.topicId, "topic_id");

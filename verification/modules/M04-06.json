@@ -1,1 +1,80 @@
-{"moduleId":"M04-06","phaseId":"P04","name":"Sourcing Discovery","dependencies":["M04-05"],"atomicTasks":[{"id":"M04-06.A01","evidence":"scope supported inputs existing provider boundary outputs and failures"},{"id":"M04-06.A02","evidence":"search projection candidate quote comparison purchase task event outbox contracts"},{"id":"M04-06.A03","evidence":"MySQL57 scoped migration immutable quote versions indexes rollback"},{"id":"M04-06.A04","evidence":"validation idempotency transaction scope and MOQ services"},{"id":"M04-06.A05","evidence":"Baota Worker projection lease retry warning terminal dead-letter and outbox"},{"id":"M04-06.A06","evidence":"OpenAPI search detail quotes comparisons purchase tasks errors and permissions"},{"id":"M04-06.A07","evidence":"desktop and 390 search candidates comparison quote and purchase surfaces"},{"id":"M04-06.A08","evidence":"forms loading empty error forbidden expired blocked missing and recovery states"},{"id":"M04-06.A09","evidence":"sourcing read supplier quote manage API Worker event organization workspace guards"},{"id":"M04-06.A10","evidence":"projection poll lease config schema env Baota restart and secret scan"},{"id":"M04-06.A11","evidence":"correlated search quote comparison purchase events provenance and queue status"},{"id":"M04-06.A12","evidence":"input quote risk comparison count MOQ and missing field unit tests"},{"id":"M04-06.A13","evidence":"OpenAPI DTO Provider normalized record event and client compatibility tests"},{"id":"M04-06.A14","evidence":"MySQL57 projection immutable versions comparison MOQ idempotency and isolation"},{"id":"M04-06.A15","evidence":"Playwright desktop 390 provenance missing state comparison and visual regression"},{"id":"M04-06.A16","evidence":"unsupported record incomplete candidate dependency failure lease retry and dead-letter drills"},{"id":"M04-06.A17","evidence":"blueprint Feature Map env architecture runbook migration rollback and Baota handoff"}],"commands":["npm run build","node --test tests/m04-06/sourcing.test.mjs","node scripts/verify-sourcing-live.mjs","npx playwright test tests/e2e/m04-06-sourcing.spec.ts","npm run verify:docs"]}
+{
+  "moduleId": "M04-06",
+  "phaseId": "P04",
+  "name": "Sourcing Discovery",
+  "dependencies": ["M04-05"],
+  "atomicTasks": [
+    {
+      "id": "M04-06.A01",
+      "evidence": "scope supported inputs existing provider boundary outputs and failures"
+    },
+    {
+      "id": "M04-06.A02",
+      "evidence": "search projection candidate quote comparison purchase task event outbox contracts"
+    },
+    {
+      "id": "M04-06.A03",
+      "evidence": "MySQL57 scoped migration immutable quote versions indexes rollback"
+    },
+    { "id": "M04-06.A04", "evidence": "validation idempotency transaction scope and MOQ services" },
+    {
+      "id": "M04-06.A05",
+      "evidence": "Baota Worker projection lease retry warning terminal dead-letter and outbox"
+    },
+    {
+      "id": "M04-06.A06",
+      "evidence": "OpenAPI search detail quotes comparisons purchase tasks and M04-04 cost reviewer action errors and permissions"
+    },
+    {
+      "id": "M04-06.A07",
+      "evidence": "desktop and 390 search candidates comparison specification normalization hint quote purchase and opportunity cost second-review surfaces"
+    },
+    {
+      "id": "M04-06.A08",
+      "evidence": "forms loading empty error forbidden expired blocked missing and recovery states"
+    },
+    {
+      "id": "M04-06.A09",
+      "evidence": "sourcing read supplier quote manage API Worker event organization workspace guards"
+    },
+    {
+      "id": "M04-06.A10",
+      "evidence": "projection poll lease config schema env Baota restart and secret scan"
+    },
+    {
+      "id": "M04-06.A11",
+      "evidence": "correlated search quote comparison purchase events provenance and queue status"
+    },
+    {
+      "id": "M04-06.A12",
+      "evidence": "input quote risk comparison count MOQ and missing field unit tests"
+    },
+    {
+      "id": "M04-06.A13",
+      "evidence": "OpenAPI DTO Provider normalized record event and client compatibility tests"
+    },
+    {
+      "id": "M04-06.A14",
+      "evidence": "MySQL57 projection immutable versions comparison MOQ idempotency and isolation"
+    },
+    {
+      "id": "M04-06.A15",
+      "evidence": "Playwright desktop 390 provenance missing state comparison and visual regression"
+    },
+    {
+      "id": "M04-06.A16",
+      "evidence": "unsupported record incomplete candidate dependency failure lease retry and dead-letter drills"
+    },
+    {
+      "id": "M04-06.A17",
+      "evidence": "blueprint Feature Map env architecture runbook migration rollback and Baota handoff"
+    }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m04-06/sourcing.test.mjs",
+    "node scripts/verify-sourcing-live.mjs",
+    "npx playwright test tests/e2e/m04-06-sourcing.spec.ts",
+    "npm run verify:docs"
+  ]
+}

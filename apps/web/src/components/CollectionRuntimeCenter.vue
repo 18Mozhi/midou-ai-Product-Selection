@@ -54,9 +54,18 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   message = ref(""),
   query = ref(""),
   status = ref("all"),
+  observedAt = ref(""),
   confirming = ref(false),
   saving = ref(false);
 const activeLeases = computed(() => profiles.value.filter((item) => item.lease)),
+  expiredLeaseRisks = computed(() =>
+    profiles.value.filter(
+      (item) =>
+        item.lease &&
+        observedAt.value &&
+        new Date(item.lease.expires_at).getTime() <= new Date(observedAt.value).getTime(),
+    ),
+  ),
   duplicateRiskRuns = computed(() =>
     runs.value.filter((item) => item.error_code === "lease_expired"),
   ),
@@ -83,12 +92,13 @@ async function load() {
   state.value = "loading";
   message.value = "";
   try {
-    const response = await request<{ profiles: Profile[]; runs: Run[] }>(
+    const response = await request<{ profiles: Profile[]; runs: Run[]; observed_at: string }>(
       "/platform/crawler-runtime",
     );
     requestId.value = response.request_id;
     profiles.value = response.data.profiles;
     runs.value = response.data.runs;
+    observedAt.value = response.data.observed_at;
     state.value = profiles.value.length || runs.value.length ? "ready" : "empty";
   } catch (error) {
     if (error instanceof ApiClientError) {
@@ -151,6 +161,21 @@ const errorText = (value: string | null) =>
         } as Record<string, string>
       )[value] ?? "查看详情获取原因")
     : "无错误";
+const expiryForecast = (profile: Profile) => {
+  if (!profile.credential_expires_at || !observedAt.value) return "未提供有效期，无法预测";
+  const remainingMs =
+    new Date(profile.credential_expires_at).getTime() - new Date(observedAt.value).getTime();
+  if (!Number.isFinite(remainingMs)) return "有效期不可用";
+  if (remainingMs <= 0) return `已到期 · ${time(profile.credential_expires_at)}`;
+  const remainingDays = Math.max(1, Math.ceil(remainingMs / 86_400_000));
+  return `${remainingDays <= 7 ? "即将到期" : "预计到期"} · ${remainingDays} 天后 · ${time(profile.credential_expires_at)}`;
+};
+const leaseExpired = (profile: Profile) =>
+  Boolean(
+    profile.lease &&
+    observedAt.value &&
+    new Date(profile.lease.expires_at).getTime() <= new Date(observedAt.value).getTime(),
+  );
 onMounted(load);
 </script>
 <template>
@@ -182,6 +207,10 @@ onMounted(load);
           <small>异常运行</small><strong>{{ blockedRuns.length }}</strong
           ><span>重复执行风险 {{ duplicateRiskRuns.length }} 条</span>
         </article>
+        <article>
+          <small>过期占用</small><strong>{{ expiredLeaseRisks.length }}</strong
+          ><span>过期租约形成的僵尸风险</span>
+        </article>
       </div>
       <section class="crawler-leases">
         <header>
@@ -200,18 +229,31 @@ onMounted(load);
               ><small>{{ profile.provider_name }} · {{ profile.code }}</small>
             </div>
             <span>{{
-              profile.lease ? "使用中" : profile.status === "active" ? "可用" : "已停用"
+              profile.lease
+                ? leaseExpired(profile)
+                  ? "过期占用"
+                  : "使用中"
+                : profile.status === "active"
+                  ? "可用"
+                  : "已停用"
             }}</span>
             <dl v-if="profile.lease">
               <div>
-                <dt>实例</dt>
+                <dt>占用实例</dt>
                 <dd>{{ profile.lease.lease_owner }}</dd>
+              </div>
+              <div>
+                <dt>占用来源</dt>
+                <dd>{{ profile.provider_name }} · {{ profile.target_domain }}</dd>
               </div>
               <div>
                 <dt>到期</dt>
                 <dd>{{ time(profile.lease.expires_at) }}</dd>
               </div>
             </dl>
+            <p v-if="profile.lease && leaseExpired(profile)" class="crawler-lease-warning">
+              租约已过期，存在僵尸占用风险；先核对占用实例，再使用“回收过期运行”。
+            </p>
             <p>
               登录状态：{{
                 profile.login_status === "valid"
@@ -222,6 +264,7 @@ onMounted(load);
               }}
               · 绑定站点：{{ profile.target_domain }}
             </p>
+            <p>登录档案到期预警：{{ expiryForecast(profile) }}</p>
             <p v-if="profile.last_failure">
               最近失败：{{ errorText(profile.last_failure.error_code) }} ·
               {{ time(profile.last_failure.occurred_at) }}

@@ -6,6 +6,7 @@ export type CostRuleStatus =
 export type CostRuleAction = "submit" | "approve" | "reject" | "publish" | "rollback";
 export type ApprovalRole = "selection_manager" | "organization_admin";
 export type CostInputType = "sale_price" | "purchase_price" | "logistics";
+export type CostInputReviewStatus = "pending" | "approved" | "rejected";
 export interface FeeLine {
   type: FeeType;
   mode: FeeMode;
@@ -62,6 +63,31 @@ export interface ProfitAnalysis {
     observed_at: string;
     input_version: number;
     platform: string;
+  }>;
+  cost_input_reviews: Array<{
+    id: string;
+    cost_input_id: string;
+    input_type: CostInputType;
+    amount_value: number;
+    currency: string;
+    platform: string;
+    source_type: string;
+    source_ref_id: string;
+    evidence_id: string;
+    observed_at: string;
+    input_version: number;
+    submitter_id: string;
+    submitter_label: string;
+    reviewer_id: string;
+    reviewer_label: string;
+    status: CostInputReviewStatus;
+    due_at: string;
+    overdue: boolean;
+    decision_reason: string | null;
+    reviewed_at: string | null;
+    version: number;
+    created_at: string;
+    can_review: boolean;
   }>;
 }
 export interface ProfitWriteContext {
@@ -253,7 +279,13 @@ export interface ProfitRepository {
     organizationId: string;
     workspaceId: string;
     opportunityId: string;
+    actorId: string;
   }): Promise<ProfitAnalysis>;
+  listCostReviewers(input: {
+    organizationId: string;
+    workspaceId: string;
+    actorId: string;
+  }): Promise<Array<{ id: string; label: string }>>;
   createRule(
     input: ProfitWriteContext & {
       id: string;
@@ -288,12 +320,31 @@ export interface ProfitRepository {
     input: ProfitWriteContext & {
       id: string;
       opportunityId: string;
-      value: ReturnType<typeof validateCostInput>;
+      value: ReturnType<typeof validateCostInput> & { reviewer_id: string };
       route: string;
     },
   ): Promise<{
     input_id: string;
+    review_id: string;
     opportunity_id: string;
+    version: number;
+    review_status: "pending";
+    due_at: string;
+  }>;
+  reviewCost(
+    input: ProfitWriteContext & {
+      reviewId: string;
+      opportunityId: string;
+      decision: "approved" | "rejected";
+      reason: string;
+      expectedVersion: number;
+      route: string;
+    },
+  ): Promise<{
+    review_id: string;
+    input_id: string;
+    opportunity_id: string;
+    review_status: "approved" | "rejected";
     version: number;
     job_status: string;
   }>;
@@ -311,11 +362,19 @@ export class ProfitService {
   listRules(input: { organizationId: string; workspaceId: string }) {
     return this.repository.listRules(input);
   }
-  getAnalysis(input: { organizationId: string; workspaceId: string; opportunityId: string }) {
+  getAnalysis(input: {
+    organizationId: string;
+    workspaceId: string;
+    opportunityId: string;
+    actorId: string;
+  }) {
     return this.repository.getAnalysis({
       ...input,
       opportunityId: uuid(input.opportunityId, "opportunity_id"),
     });
+  }
+  listCostReviewers(input: { organizationId: string; workspaceId: string; actorId: string }) {
+    return this.repository.listCostReviewers(input);
   }
   createRule(
     input: ProfitWriteContext & {
@@ -402,12 +461,58 @@ export class ProfitService {
     },
   ) {
     const opportunityId = uuid(input.opportunityId, "opportunity_id");
+    const value = validateCostInput(input.value),
+      reviewerId = uuid((input.value as { reviewer_id?: unknown }).reviewer_id, "reviewer_id");
+    if (reviewerId === input.actorId)
+      throw new ProfitServiceError(
+        "cost_input_self_review_forbidden",
+        403,
+        "提交人与复核人必须是两个不同的活动用户。",
+      );
     return this.repository.recordCost({
       ...input,
       id: randomUUID(),
       opportunityId,
-      value: validateCostInput(input.value),
+      value: { ...value, reviewer_id: reviewerId },
       route: `POST:/api/v1/opportunities/${opportunityId}/cost-inputs`,
+    });
+  }
+  reviewCost(
+    input: ProfitWriteContext & {
+      opportunityId: string;
+      reviewId: string;
+      value: { decision: unknown; reason: unknown; expected_version: unknown };
+    },
+  ) {
+    const opportunityId = uuid(input.opportunityId, "opportunity_id"),
+      reviewId = uuid(input.reviewId, "review_id"),
+      decision = input.value?.decision,
+      expectedVersion = Number(input.value?.expected_version),
+      reason = bounded(input.value?.reason, "reason", 1000);
+    if (
+      !["approved", "rejected"].includes(String(decision)) ||
+      !Number.isSafeInteger(expectedVersion) ||
+      expectedVersion < 1
+    )
+      throw new ProfitServiceError(
+        "cost_input_review_invalid",
+        400,
+        "提交通过或驳回动作和当前复核版本。",
+      );
+    if (reason.length < 2)
+      throw new ProfitServiceError(
+        "cost_input_review_reason_invalid",
+        400,
+        "复核说明至少 2 个字符。",
+      );
+    return this.repository.reviewCost({
+      ...input,
+      opportunityId,
+      reviewId,
+      decision: decision as "approved" | "rejected",
+      reason,
+      expectedVersion,
+      route: `POST:/api/v1/opportunities/${opportunityId}/cost-input-reviews/${reviewId}/actions`,
     });
   }
   queue(

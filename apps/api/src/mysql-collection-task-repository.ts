@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { ROBOTS_DECISION_VERSION, type RobotsPolicyDecision } from "@scoutops/provider-sources";
 import type {
   CollectionTaskDetail,
   CollectionTaskRepository,
@@ -9,6 +10,33 @@ import { CollectionTaskServiceError } from "./collection-task-service.js";
 const json = (value: unknown): any => (typeof value === "string" ? JSON.parse(value) : value);
 const iso = (value: unknown) =>
   value == null ? null : new Date(value as string | Date).toISOString();
+const robotsDecision = (value: unknown): RobotsPolicyDecision | null => {
+  if (!value || typeof value !== "object") return null;
+  const item = value as Record<string, unknown>,
+    rule = item.matched_rule as Record<string, unknown> | null;
+  if (
+    item.decision_version !== ROBOTS_DECISION_VERSION ||
+    typeof item.allowed !== "boolean" ||
+    !["matched_rule", "no_matching_rule", "missing_robots", "http_status"].includes(
+      String(item.decision_basis),
+    ) ||
+    typeof item.robots_url !== "string" ||
+    !/^https?:\/\/[^\s]+\/robots\.txt$/.test(item.robots_url) ||
+    !Number.isInteger(item.robots_http_status) ||
+    Number(item.robots_http_status) < 100 ||
+    Number(item.robots_http_status) > 599 ||
+    (item.matched_user_agent !== null && typeof item.matched_user_agent !== "string") ||
+    (rule !== null &&
+      (!rule ||
+        !["allow", "disallow"].includes(String(rule.directive)) ||
+        typeof rule.pattern_preview !== "string" ||
+        rule.pattern_preview.length > 500 ||
+        !/^[a-f0-9]{64}$/.test(String(rule.pattern_sha256)) ||
+        typeof rule.truncated !== "boolean"))
+  )
+    return null;
+  return value as RobotsPolicyDecision;
+};
 const task = (row: RowDataPacket): CollectionTaskSummary => ({
   id: String(row.id),
   organization_id: String(row.organization_id),
@@ -265,6 +293,27 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
     ]);
     const row = tasks[0][0];
     if (!row) return null;
+    const resultKinds = new Map<
+        string,
+        CollectionTaskDetail["subqueries"][number]["result_kind"]
+      >(),
+      robotsDecisions = new Map<string, RobotsPolicyDecision>();
+    for (const event of events[0]) {
+      if (String(event.event_type) !== "collection.subquery.completed") continue;
+      const metadata = json(event.metadata_json) ?? {},
+        subqueryId = String(metadata.subquery_id ?? ""),
+        resultKind = metadata.result_kind;
+      if (
+        subqueryId &&
+        ["empty_success", "no_new_content", "parse_failed"].includes(String(resultKind))
+      )
+        resultKinds.set(
+          subqueryId,
+          resultKind as CollectionTaskDetail["subqueries"][number]["result_kind"],
+        );
+      const policyDecision = robotsDecision(metadata.robots_policy_decision);
+      if (subqueryId && policyDecision) robotsDecisions.set(subqueryId, policyDecision);
+    }
     return {
       task: task(row),
       subqueries: subqueries[0].map((item) => ({
@@ -277,6 +326,8 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
         available_result_count: Number(item.available_result_count),
         missing_fields: json(item.missing_fields_json) ?? [],
         error_code: item.error_code == null ? null : String(item.error_code),
+        result_kind: resultKinds.get(String(item.id)) ?? null,
+        robots_decision: robotsDecisions.get(String(item.id)) ?? null,
         retryable: Boolean(item.retryable),
         started_at: iso(item.started_at),
         finished_at: iso(item.finished_at),

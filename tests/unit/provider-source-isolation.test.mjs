@@ -3,6 +3,87 @@ import assert from "node:assert/strict";
 
 import { ProviderSourceExecutor } from "../../apps/worker/dist/provider-source-executor.js";
 
+test("public-page robots decisions retain the policy version and matched rule in subquery audit", async () => {
+  const completed = [];
+  const connection = {
+    beginTransaction: async () => {},
+    commit: async () => {},
+    rollback: async () => {},
+    release: () => {},
+    query: async (sql, values = []) => {
+      if (sql.startsWith("SELECT state,consecutive_failures")) return [[]];
+      if (sql.includes("INSERT INTO collection_task_events")) completed.push(JSON.parse(values[8]));
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const pool = {
+    query: async (sql) => {
+      if (sql.startsWith("SELECT p.id"))
+        return [
+          [
+            {
+              id: "provider-robots-audit",
+              code: "public-page-robots-audit",
+              access_mode: "public_page",
+              target_url: "https://robots-audit.test/catalog/private",
+              parser_version: "public-page-v1",
+              timeout_ms: 1000,
+              fields_json: ["title"],
+              status: "enabled",
+              circuit_failure_threshold: 3,
+              runtime_circuit_state: "closed",
+              terms_review_status: "approved",
+              terms_reference_url: "https://robots-audit.test/terms",
+              terms_version: "2026-08",
+              terms_expires_at: "2099-08-31T00:00:00.000Z",
+              created_by: "actor-robots-audit",
+            },
+          ],
+        ];
+      return [{ affectedRows: 1 }];
+    },
+    getConnection: async () => connection,
+  };
+  const executor = new ProviderSourceExecutor(
+    pool,
+    { collect: async () => assert.fail("robots-disallowed pages must not reach the adapter") },
+    {},
+    "worker-robots-audit",
+    undefined,
+    async () =>
+      new Response("User-agent: ScoutOpsPublicCrawler\nDisallow: /catalog/private", {
+        status: 200,
+      }),
+  );
+  const [outcome] = await executor.execute(
+    {
+      id: "task-robots-audit",
+      organizationId: "org-robots-audit",
+      workspaceId: "workspace-robots-audit",
+      attemptCount: 1,
+      requestId: "request-robots-audit",
+      traceId: "trace-robots-audit",
+      leaseToken: "lease-robots-audit",
+      subqueries: [
+        {
+          id: "query-robots-audit",
+          providerId: "provider-robots-audit",
+          ordinal: 1,
+          required: false,
+          target: {},
+        },
+      ],
+    },
+    async () => {},
+  );
+  assert.equal(outcome.status, "blocked");
+  assert.equal(outcome.errorCode, "robots_disallowed");
+  assert.equal(outcome.robotsDecision.decision_version, "scoutops-robots-policy-v1");
+  assert.equal(outcome.robotsDecision.matched_rule.directive, "disallow");
+  assert.equal(outcome.robotsDecision.matched_rule.pattern_preview, "/catalog/private");
+  assert.equal(completed[0].robots_policy_decision.matched_rule.directive, "disallow");
+});
+
 test("provider executor persists every subquery before applying required-source failure", async () => {
   const statements = [];
   const connection = {

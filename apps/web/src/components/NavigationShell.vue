@@ -10,16 +10,25 @@ import {
 } from "vue";
 import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
-import {
-  applyCachedTheme,
-  applyShellDensity,
-  applyTheme,
-  isThemeId,
-  themes,
-  type ThemeId,
-} from "../design/theme";
+import { applyCachedTheme, applyShellDensity, applyTheme, themes } from "../design/theme";
 import { getLastMemberRoute, rememberMemberRoute } from "../navigation-memory";
-import { navigationItemsFor, type ShellNavigationItem } from "../route-catalog";
+import {
+  authorizedNavigation,
+  canOpenRoute,
+  shellCapabilities,
+  shellRoleSummary,
+} from "../navigation-shell-permissions";
+import {
+  navigationParentPath as resolveNavigationParentPath,
+  pageSummary as resolvePageSummary,
+  platformOperationsNavigation,
+  routeEntityIds,
+  surfaceProps,
+  type NavigationShellKind,
+} from "../navigation-shell-route-state";
+import type { ShellNavigationItem } from "../route-catalog";
+import { useNavigationDiscovery } from "../use-navigation-discovery";
+import { useNavigationShellTheme } from "../use-navigation-shell-theme";
 import AppIcon from "./AppIcon.vue";
 import "../member-workspace-polish.css";
 
@@ -102,7 +111,7 @@ const surfaceComponents: Record<string, Component> = {
   "commercial-operations-center": CommercialOperationsCenter,
 };
 
-type Shell = "member" | "organization_admin" | "platform_admin";
+type Shell = NavigationShellKind;
 type State =
   "loading" | "ready" | "expired" | "forbidden" | "context_required" | "rate_limited" | "blocked";
 interface GuardSummary {
@@ -117,10 +126,6 @@ interface GuardSummary {
   platform_capabilities: string[];
   guard_reason: string;
 }
-interface ThemePreference {
-  theme: ThemeId;
-  version: number;
-}
 const props = defineProps<{ shell: Shell; apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 const route = useRoute();
@@ -131,58 +136,14 @@ const state = ref<State>("loading"),
   traceId = ref(""),
   actionHint = ref(""),
   menuOpen = ref(false),
-  themeOpen = ref(false),
-  activeTheme = ref<ThemeId>(
-    isThemeId(document.documentElement.dataset.theme)
-      ? document.documentElement.dataset.theme
-      : "deep-ocean",
-  ),
-  themeVersion = ref<number | null>(null),
-  themeNotice = ref(""),
-  discoveryMode = ref<"search" | "create" | null>(null);
-let themePreferenceSequence = 0;
-const platformOperationsNavigation = [
-  { label: "系统状态", path: "/platform-admin/status" },
-  { label: "链路日志", path: "/platform-admin/logs" },
-  { label: "服务拓扑", path: "/platform-admin/topology" },
-  { label: "采集调度", path: "/platform-admin/crawler-scheduler" },
-  { label: "Redis", path: "/platform-admin/redis" },
-  { label: "MySQL", path: "/platform-admin/mysql" },
-  { label: "文件存储", path: "/platform-admin/files" },
-  { label: "备份恢复", path: "/platform-admin/operations" },
-  { label: "发布管理", path: "/platform-admin/releases" },
-  { label: "容量边界", path: "/platform-admin/capacity" },
-];
-const allCapabilities = computed(() =>
-  props.shell === "platform_admin"
-    ? (guard.value?.platform_capabilities ?? [])
-    : (guard.value?.capabilities ?? []),
-);
-const items = computed(() => {
-  const source = navigationItemsFor(props.shell);
-  return source.filter(
-    (item) =>
-      item.capabilities.length === 0 ||
-      item.capabilities.some((cap) => allCapabilities.value.includes(cap)),
-  );
-});
-const navigationParentPath = computed(() => {
-  if (["/platform-admin/accounts", "/platform-admin/organizations"].includes(routePath.value))
-    return "/platform-admin/organizations";
-  if (routePath.value === "/platform-admin/users") return "/platform-admin/users";
-  if (["/platform-admin/permissions", "/platform-admin/admins"].includes(routePath.value))
-    return "/platform-admin/admins";
-  if (
-    routePath.value.startsWith("/platform-admin/providers") ||
-    routePath.value === "/platform-admin/credentials"
-  )
-    return "/platform-admin/providers/sources";
-  if (routePath.value.startsWith("/platform-admin/collection"))
-    return "/platform-admin/collection/overview";
-  if (platformOperationsNavigation.some((item) => item.path === routePath.value))
-    return "/platform-admin/status";
-  return routePath.value;
-});
+  menuQuery = ref("");
+const { themeOpen, activeTheme, themeNotice, loadThemePreference, chooseTheme } =
+  useNavigationShellTheme(request);
+const { discoveryMode, openDiscovery, closeDiscovery, handleDiscoveryShortcut } =
+  useNavigationDiscovery(() => props.shell);
+const allCapabilities = computed(() => shellCapabilities(props.shell, guard.value));
+const items = computed(() => authorizedNavigation(props.shell, allCapabilities.value));
+const navigationParentPath = computed(() => resolveNavigationParentPath(routePath.value));
 const activeItem = computed(
   () =>
     items.value.find((item) => item.path === navigationParentPath.value) ||
@@ -195,9 +156,17 @@ const activeItem = computed(
       .sort((left, right) => right.path.length - left.path.length)[0] ||
     null,
 );
+const visibleMenuItems = computed(() => {
+  const needle = menuQuery.value.trim().toLocaleLowerCase();
+  if (!needle) return items.value;
+  return items.value.filter((item) =>
+    `${item.label} ${item.group}`.toLocaleLowerCase().includes(needle),
+  );
+});
 const menuGroups = computed(() => {
   const groups = new Map<string, ShellNavigationItem[]>();
-  for (const item of items.value) groups.set(item.group, [...(groups.get(item.group) ?? []), item]);
+  for (const item of visibleMenuItems.value)
+    groups.set(item.group, [...(groups.get(item.group) ?? []), item]);
   return [...groups].map(([label, groupItems]) => ({ label, items: groupItems }));
 });
 const shellTitle = computed(() =>
@@ -222,15 +191,10 @@ const requiredCapabilities = computed(() =>
     ? route.meta.capabilities.filter((item): item is string => typeof item === "string")
     : [],
 );
-const routeAllowed = computed(
-  () =>
-    requiredCapabilities.value.length === 0 ||
-    requiredCapabilities.value.some((capability) => allCapabilities.value.includes(capability)),
+const routeAllowed = computed(() =>
+  canOpenRoute(requiredCapabilities.value, allCapabilities.value),
 );
-const roleSummary = computed(() => {
-  const roles = props.shell === "platform_admin" ? guard.value?.platform_roles : guard.value?.roles;
-  return roles?.length ? roles.join(" · ") : "当前角色";
-});
+const roleSummary = computed(() => shellRoleSummary(props.shell, guard.value));
 const memberReturnPath = () => {
   return getLastMemberRoute();
 };
@@ -238,111 +202,12 @@ const contextSwitchTarget = computed(
   () =>
     `/select-context?return_to=${encodeURIComponent(memberReturnPath())}&from=${encodeURIComponent(route.fullPath)}`,
 );
-const isHome = computed(
-    () => props.shell === "member" && (routePath.value === "/" || routePath.value === "/home"),
-  ),
-  isTasks = computed(
-    () =>
-      props.shell === "member" &&
-      (["/work", "/tasks"].includes(routePath.value) ||
-        /^\/tasks\/[0-9a-f-]{36}$/i.test(routePath.value)),
-  ),
-  isApprovals = computed(() => props.shell === "member" && routePath.value === "/tasks/approvals"),
-  isNotifications = computed(
-    () => props.shell === "member" && routePath.value === "/notifications",
-  ),
-  isAutomations = computed(() => props.shell === "member" && routePath.value === "/automations"),
-  isReports = computed(() => props.shell === "member" && routePath.value === "/reports"),
-  isPersonal = computed(() => props.shell === "member" && routePath.value === "/me"),
-  isOrganizationAdmin = computed(
-    () => props.shell === "organization_admin" && routePath.value.startsWith("/org-admin"),
-  ),
-  isPlatformDashboard = computed(
-    () => props.shell === "platform_admin" && routePath.value === "/platform-admin",
-  ),
-  isPlatformAccounts = computed(
-    () =>
-      props.shell === "platform_admin" &&
-      [
-        "/platform-admin/accounts",
-        "/platform-admin/permissions",
-        "/platform-admin/organizations",
-        "/platform-admin/users",
-        "/platform-admin/admins",
-      ].includes(routePath.value),
-  ),
-  isPlatformManagement = computed(
-    () =>
-      props.shell === "platform_admin" &&
-      [
-        "/platform-admin/content",
-        "/platform-admin/notifications",
-        "/platform-admin/status",
-      ].includes(routePath.value),
-  ),
-  isPlatformLogs = computed(
-    () => props.shell === "platform_admin" && routePath.value === "/platform-admin/logs",
-  ),
-  isPlatformGovernance = computed(
-    () => props.shell === "platform_admin" && routePath.value === "/platform-admin/governance",
-  ),
-  isBackupRecovery = computed(
-    () => props.shell === "platform_admin" && routePath.value === "/platform-admin/operations",
-  ),
-  isReleaseRollout = computed(
-    () => props.shell === "platform_admin" && routePath.value === "/platform-admin/releases",
-  ),
-  isRuntimeTopology = computed(
-    () => props.shell === "platform_admin" && routePath.value === "/platform-admin/topology",
-  ),
-  isRedisResilience = computed(
-    () => props.shell === "platform_admin" && routePath.value === "/platform-admin/redis",
-  ),
-  isMySqlResilience = computed(
-    () => props.shell === "platform_admin" && routePath.value === "/platform-admin/mysql",
-  ),
-  isFileResilience = computed(
-    () => props.shell === "platform_admin" && routePath.value === "/platform-admin/files",
-  ),
-  isCrawlerScheduler = computed(
-    () =>
-      props.shell === "platform_admin" && routePath.value === "/platform-admin/crawler-scheduler",
-  ),
-  isCapacityBoundary = computed(
-    () => props.shell === "platform_admin" && routePath.value === "/platform-admin/capacity",
-  ),
+const opportunityId = computed(() => routeEntityIds(routePath.value).opportunityId),
   isPlatformOperationsRoute = computed(
     () =>
       props.shell === "platform_admin" &&
       platformOperationsNavigation.some((item) => item.path === routePath.value),
-  ),
-  isTrends = computed(() => props.shell === "member" && routePath.value === "/trends"),
-  isScoringRules = computed(
-    () => props.shell === "member" && routePath.value === "/opportunities/scoring-rules",
-  ),
-  isSelectionJourney = computed(
-    () => props.shell === "member" && routePath.value === "/opportunities/start",
-  ),
-  isOpportunities = computed(
-    () =>
-      props.shell === "member" &&
-      (routePath.value === "/opportunities" || routePath.value.startsWith("/opportunities/")),
-  ),
-  isCompetitors = computed(
-    () => props.shell === "member" && routePath.value.startsWith("/competitors"),
-  ),
-  isSourcing = computed(() => props.shell === "member" && routePath.value === "/sourcing"),
-  isCostRules = computed(
-    () => props.shell === "member" && routePath.value.startsWith("/sourcing/cost-rules"),
-  ),
-  opportunityId = computed(() => {
-    const match = routePath.value.match(/^\/opportunities\/([0-9a-f-]{36})$/i);
-    return match?.[1] ?? "";
-  }),
-  taskId = computed(() => {
-    const match = routePath.value.match(/^\/tasks\/([0-9a-f-]{36})$/i);
-    return match?.[1] ?? "";
-  });
+  );
 const activeSurface = computed(() => String(route.meta.surface ?? ""));
 const activeCachePolicy = computed(() => String(route.meta.cachePolicy ?? "none"));
 const selectedSurfaceComponent = computed(() => surfaceComponents[activeSurface.value] ?? null);
@@ -351,128 +216,20 @@ const surfaceCacheKey = computed(() => {
   if (activeCachePolicy.value !== "reset_on_scope") return routeIdentity;
   return `${routeIdentity}:${guard.value?.organization_id ?? "none"}:${guard.value?.workspace_id ?? "none"}`;
 });
-const selectedSurfaceProps = computed<Record<string, unknown>>(() => {
-  const common = { apiBaseUrl: props.apiBaseUrl };
-  switch (activeSurface.value) {
-    case "task-workspace":
-      return {
-        ...common,
-        mode: routePath.value === "/work" ? "today" : "all",
-        taskId: taskId.value || undefined,
-      };
-    case "organization-admin-center":
-      return {
-        ...common,
-        routePath: routePath.value,
-        organizationId: guard.value?.organization_id || "",
-      };
-    case "platform-account-center":
-      return {
-        ...common,
-        initialTab:
-          routePath.value === "/platform-admin/admins" ||
-          routePath.value === "/platform-admin/permissions"
-            ? "admins"
-            : routePath.value === "/platform-admin/users"
-              ? "users"
-              : "organizations",
-      };
-    case "platform-dashboard":
-      return { ...common, capabilities: allCapabilities.value };
-    case "platform-management-center":
-      return { ...common, domain: routePath.value.split("/").pop() || "status" };
-    case "trend-dashboard":
-      return {
-        ...common,
-        organizationId: guard.value?.organization_id || "",
-        workspaceId: guard.value?.workspace_id || "",
-      };
-    case "opportunity-workspace":
-      return { ...common, opportunityId: opportunityId.value || undefined };
-    case "cost-rule-console":
-      return { ...common, roles: guard.value?.roles ?? [] };
-    case "provider-runtime-surface":
-      return { ...common, routePath: routePath.value, capabilities: allCapabilities.value };
-    case "collection-runtime-surface":
-      return { ...common, routePath: routePath.value };
-    default:
-      return common;
-  }
-});
-const pageSummary = computed(() =>
-  isOrganizationAdmin.value
-    ? "组织资料、成员、角色、工作区、团队、审批、Token 与审计均受当前组织权限和审计边界保护。"
-    : isPlatformDashboard.value
-      ? "先看今天有没有新热点、采集是否正常，再处理需要人工确认的事项。"
-      : isPlatformAccounts.value
-        ? "管理组织、普通用户和平台管理员；不用理解内部权限代码。"
-        : isBackupRecovery.value
-          ? "备份副本、RPO/RTO 与隔离恢复结论均来自可审计记录；未验证条件明确阻断。"
-          : isReleaseRollout.value
-            ? "版本、迁移、渐进观察门、自动停止与回滚均来自宝塔发布任务的审计事实。"
-            : isRuntimeTopology.value
-              ? "当前惠州单机的 API 心跳、宝塔 Nginx 单上游和私有服务只按可审计事实判定；不启用负载均衡或多节点。"
-              : isRedisResilience.value
-                ? "当前宝塔单 Redis 的持久化、内存与连接上限、告警和恢复状态只按可审计事实判定；不启用 Sentinel、集群或副本。"
-                : isMySqlResilience.value
-                  ? "当前宝塔 MySQL 5.7 单主的持久化、I/O、慢查询、容量与隔离恢复只按可审计事实判定；不启用读副本、负载均衡或备用服务器。"
-                  : isFileResilience.value
-                    ? "当前宝塔本机证据与导出目录的组织隔离、容量、校验和与同机恢复只按可审计事实判定；不启用共享存储或备用服务器。"
-                    : isTasks.value || isApprovals.value || isNotifications.value
-                      ? "把选品工作拆成具体任务，查看负责人、期限、运行进度和处理记录。"
-                      : isSourcing.value
-                        ? "供应链候选、版本化报价、最多五家对比和采购任务均保留来源与缺失项。"
-                        : isCompetitors.value
-                          ? "持续记录竞品价格、评分、页面变化和告警，点击记录可查看详情。"
-                          : isCostRules.value
-                            ? "维护费用和汇率规则，计算商品利润并明确展示缺失成本。"
-                            : isOpportunities.value
-                              ? "汇总商品图片、趋势、竞争、利润、风险和原始证据，辅助判断是否值得做。"
-                              : isTrends.value
-                                ? "用热度、增速、来源和证据判断市场变化，并可转为选品机会。"
-                                : "",
+const selectedSurfaceProps = computed<Record<string, unknown>>(() =>
+  surfaceProps({
+    surface: activeSurface.value,
+    path: routePath.value,
+    apiBaseUrl: props.apiBaseUrl,
+    organizationId: guard.value?.organization_id,
+    workspaceId: guard.value?.workspace_id,
+    capabilities: allCapabilities.value,
+    roles: guard.value?.roles ?? [],
+  }),
 );
+const pageSummary = computed(() => resolvePageSummary(props.shell, routePath.value));
 const contextName = (value: string | null | undefined, fallback: string) =>
   value?.trim() || fallback;
-async function loadThemePreference(showFailure = false) {
-  const sequence = ++themePreferenceSequence;
-  try {
-    const response = await request<ThemePreference>("/me/ui-preferences");
-    if (!isThemeId(response.data?.theme)) throw new Error("主题偏好读取失败");
-    if (sequence !== themePreferenceSequence) return false;
-    activeTheme.value = response.data.theme;
-    themeVersion.value = Number(response.data.version ?? 0);
-    applyTheme(activeTheme.value);
-    return true;
-  } catch {
-    if (showFailure) themeNotice.value = "主题偏好暂时无法同步，已保留当前界面主题。";
-    return false;
-  }
-}
-async function chooseTheme(theme: ThemeId) {
-  if (themeVersion.value === null) await loadThemePreference(false);
-  ++themePreferenceSequence;
-  const previousTheme = activeTheme.value;
-  applyTheme(theme);
-  activeTheme.value = theme;
-  themeOpen.value = false;
-  themeNotice.value = "正在保存主题…";
-  try {
-    const response = await request<ThemePreference>("/me/ui-preferences", {
-      method: "PUT",
-      body: { theme, expected_version: themeVersion.value ?? 0 },
-    });
-    if (!isThemeId(response.data?.theme)) throw new Error("主题保存失败");
-    activeTheme.value = response.data.theme;
-    themeVersion.value = Number(response.data.version);
-    applyTheme(activeTheme.value);
-    themeNotice.value = "主题已应用到全部模块。";
-  } catch {
-    activeTheme.value = previousTheme;
-    applyTheme(previousTheme);
-    themeNotice.value = "主题保存失败，已恢复原主题，请稍后重试。";
-  }
-}
 const stateCopy = computed(
   () =>
     (
@@ -520,22 +277,12 @@ async function load() {
     state.value = "blocked";
   }
 }
-function shortcut(event: KeyboardEvent) {
-  if (
-    props.shell === "member" &&
-    (event.metaKey || event.ctrlKey) &&
-    event.key.toLowerCase() === "k"
-  ) {
-    event.preventDefault();
-    discoveryMode.value = "search";
-  }
-}
 onMounted(() => {
   void load();
   applyShellDensity(props.shell !== "member");
   if (props.shell === "member") void loadThemePreference(false);
   else applyTheme("cloud-white");
-  window.addEventListener("keydown", shortcut);
+  window.addEventListener("keydown", handleDiscoveryShortcut);
 });
 watch(
   () => route.fullPath,
@@ -553,7 +300,7 @@ watch(
   },
 );
 onUnmounted(() => {
-  window.removeEventListener("keydown", shortcut);
+  window.removeEventListener("keydown", handleDiscoveryShortcut);
   if (props.shell !== "member") {
     applyCachedTheme();
     applyShellDensity(false);
@@ -605,7 +352,7 @@ onUnmounted(() => {
             <AppIcon name="theme" /> <span>主题</span>
           </button>
         </div>
-        <button v-if="shell === 'member'" type="button" @click="discoveryMode = 'search'">
+        <button v-if="shell === 'member'" type="button" @click="openDiscovery('search')">
           <AppIcon name="search" /> <span>搜索</span><kbd>快捷键</kbd>
         </button>
         <RouterLink
@@ -624,7 +371,7 @@ onUnmounted(() => {
           v-else-if="shell === 'member'"
           type="button"
           class="role-create"
-          @click="discoveryMode = 'create'"
+          @click="openDiscovery('create')"
         >
           <AppIcon name="plus" /> <span>创建选品</span>
         </button>
@@ -669,18 +416,30 @@ onUnmounted(() => {
         >
       </div>
       <div v-if="shell === 'member'" class="role-sidebar-actions">
-        <button type="button" @click="((discoveryMode = 'search'), (menuOpen = false))">
+        <button type="button" @click="(openDiscovery('search'), (menuOpen = false))">
           <AppIcon name="search" /> 搜索
         </button>
-        <button type="button" @click="((discoveryMode = 'create'), (menuOpen = false))">
+        <button type="button" @click="(openDiscovery('create'), (menuOpen = false))">
           <AppIcon name="plus" /> 创建选品
         </button>
       </div>
+      <label v-if="items.length >= 8" class="role-menu-search">
+        <span class="so-visually-hidden">搜索导航菜单</span>
+        <AppIcon name="search" :size="15" />
+        <input
+          v-model="menuQuery"
+          type="search"
+          placeholder="搜索菜单或分组"
+          aria-label="搜索导航菜单"
+        />
+      </label>
       <nav v-if="state === 'ready'" class="role-nav-groups">
         <details
           v-for="group in menuGroups"
           :key="group.label"
-          :open="group.items.some((item) => activeItem?.path === item.path)"
+          :open="
+            Boolean(menuQuery.trim()) || group.items.some((item) => activeItem?.path === item.path)
+          "
         >
           <summary>
             <span>{{ group.label }}</span
@@ -691,10 +450,11 @@ onUnmounted(() => {
             :key="item.path"
             :to="item.path"
             :aria-current="activeItem?.path === item.path ? 'page' : undefined"
-            @click="menuOpen = false"
+            @click="((menuOpen = false), (menuQuery = ''))"
             ><i><AppIcon :name="item.icon" /></i><span>{{ item.label }}</span></RouterLink
           >
         </details>
+        <p v-if="!menuGroups.length" class="role-menu-empty">没有匹配的菜单或分组。</p>
       </nav>
     </aside>
     <section class="role-content">
@@ -705,9 +465,12 @@ onUnmounted(() => {
         <p>访问保护</p>
         <h1>{{ stateCopy[0] }}</h1>
         <p>{{ stateCopy[1] }}</p>
-        <small v-if="actionHint">{{ actionHint }}</small
-        ><code v-if="requestId">关联编号：{{ requestId }}</code
-        ><code v-if="traceId && traceId !== requestId">链路编号：{{ traceId }}</code>
+        <small v-if="actionHint">{{ actionHint }}</small>
+        <details v-if="requestId || traceId" class="role-gate-technical">
+          <summary>故障详情</summary>
+          <code v-if="requestId">关联编号：{{ requestId }}</code
+          ><code v-if="traceId && traceId !== requestId">链路编号：{{ traceId }}</code>
+        </details>
         <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
         ><RouterLink v-else-if="state === 'context_required'" to="/select-context"
           >选择组织与工作区</RouterLink
@@ -801,7 +564,7 @@ onUnmounted(() => {
       :mode="discoveryMode || 'search'"
       :shell="shell"
       :api-base-url="apiBaseUrl"
-      @close="discoveryMode = null"
+      @close="closeDiscovery"
     />
   </main>
 </template>

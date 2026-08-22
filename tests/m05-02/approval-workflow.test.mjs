@@ -8,7 +8,10 @@ import {
   validateDecision,
   ApprovalServiceError,
 } from "../../apps/api/dist/approval-service.js";
-import { MySqlApprovalRepository } from "../../apps/api/dist/mysql-approval-repository.js";
+import {
+  MySqlApprovalRepository,
+  compareApprovalDecisionContexts,
+} from "../../apps/api/dist/mysql-approval-repository.js";
 const uuid = "00000000-0000-4000-8000-000000000901";
 test("M05-02.A01/A02/A04/A12 locks versioned nodes and mandatory reasons", () => {
   const value = validateTemplate({
@@ -158,6 +161,58 @@ test("M05-02 does not fabricate evidence completeness for task approvals", async
   assert.equal(context.snapshot_status, "live_fallback");
   assert.match(context.evidence.note, /未配置独立证据完整度规则/);
 });
+test("M05-02 compares the captured submission evidence with current facts", () => {
+  const base = {
+      observed_at: "2026-08-19T08:00:00.000Z",
+      evidence: {
+        complete: 2,
+        total: 4,
+        percent: 50,
+        requirements: [
+          {
+            code: "risk",
+            label: "风险识别",
+            complete: false,
+            detail: "尚未形成风险等级",
+          },
+        ],
+      },
+      rule_versions: { scoring: "SCORE-1", profit: null },
+      basis_items: [{ code: "risk_level", label: "风险等级", value: "unknown" }],
+    },
+    current = {
+      observed_at: "2026-08-19T09:00:00.000Z",
+      evidence: {
+        complete: 3,
+        total: 4,
+        percent: 75,
+        requirements: [
+          { code: "risk", label: "风险识别", complete: true, detail: "风险等级 medium" },
+        ],
+      },
+      rule_versions: { scoring: "SCORE-2", profit: null },
+      basis_items: [{ code: "risk_level", label: "风险等级", value: "medium" }],
+    },
+    diff = compareApprovalDecisionContexts(base, current);
+  assert.equal(diff.has_changes, true);
+  assert.deepEqual(diff.evidence_summary, {
+    before_complete: 2,
+    before_total: 4,
+    before_percent: 50,
+    after_complete: 3,
+    after_total: 4,
+    after_percent: 75,
+  });
+  assert.equal(diff.requirement_changes[0].before_complete, false);
+  assert.equal(diff.requirement_changes[0].after_complete, true);
+  assert.deepEqual(diff.basis_changes[0], {
+    code: "risk_level",
+    label: "风险等级",
+    before: "unknown",
+    after: "medium",
+  });
+  assert.equal(diff.rule_version_changes[0].after, "SCORE-2");
+});
 test("M05-02 splits actionable and requested approvals before repository pagination", async () => {
   const calls = [],
     service = new ApprovalService({
@@ -211,10 +266,14 @@ test("M05-02.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(values[2], /FROM opportunity_decisions ["' +\n\r]*d[\s\S]*JOIN opportunities o/);
   assert.match(values[2], /decision_context_json/);
   assert.match(values[2], /approval_version_conflict[\s\S]*outbox_events/);
+  assert.match(values[2], /original_profile[\s\S]*escalation_profile/);
+  assert.match(values[2], /compareApprovalDecisionContexts[\s\S]*decision_context_diff/);
   assert.match(values[4], /node_sla_overdue[\s\S]*approval\.overdue/);
   assert.match(values[5], /证据完整度[\s\S]*规则版本[\s\S]*决策依据[\s\S]*批准与驳回均必填/);
   assert.match(values[5], /expected_revision/);
   assert.match(values[5], /发布审批模板[\s\S]*发布原因/);
+  assert.match(values[5], /当前审批人[\s\S]*超时后[\s\S]*escalation_assignee_name/);
+  assert.match(values[5], /提交快照与当前证据[\s\S]*requirement_changes/);
   assert.doesNotMatch(values[5], /window\.prompt/);
   assert.equal(JSON.parse(values.at(-2)).atomicTasks.length, 17);
   assert.match(values.at(-1), /0047_approval_decision_context_snapshot\.up\.sql/);

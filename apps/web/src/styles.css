@@ -433,6 +433,9 @@ button {
   font-size: 22px;
   font-weight: 760;
 }
+.identity-page[data-mode="login"] .identity-brand {
+  min-height: 44px;
+}
 .identity-brand span {
   display: grid;
   place-items: center;
@@ -825,6 +828,19 @@ button {
   }
   .identity-card__foot button {
     min-height: 34px;
+  }
+  .identity-page[data-mode="login"] .identity-card__foot {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 10px;
+  }
+  .identity-page[data-mode="login"] .identity-card__foot button,
+  .identity-page[data-mode="login"] .identity-card__foot a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
   }
   .identity-footer {
     flex-direction: column;

@@ -2,10 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import {
+  ScoringService,
   ScoringServiceError,
   validateScoreInput,
   validateScoreRule,
 } from "../../apps/api/dist/scoring-service.js";
+import { calculateScoreProjection } from "../../packages/contracts/dist/index.js";
+import { hasBlockingQualityRegression } from "../../apps/worker/dist/opportunity-scoring-worker.js";
 const dimensions = [
   {
     code: "market_demand",
@@ -83,6 +86,83 @@ test("M04-03.A02/A04/A12 score inputs require provenance and truthful missing fi
       error instanceof ScoringServiceError && error.code === "score_input_evidence_required",
   );
 });
+test("M04-03 score preview reuses the production calculation without writing state", async () => {
+  const projection = calculateScoreProjection(dimensions, { recommend_min: 75, observe_min: 55 }, [
+    {
+      dimension_code: "market_demand",
+      evidence_group: "market",
+      score_value: 82,
+      evidence_ids: ["market-evidence"],
+      missing_fields: [],
+    },
+    {
+      dimension_code: "competition",
+      evidence_group: "competition",
+      score_value: 70,
+      evidence_ids: ["competition-evidence"],
+      missing_fields: [],
+    },
+    {
+      dimension_code: "profit",
+      evidence_group: "cost",
+      score_value: 88,
+      evidence_ids: ["cost-evidence"],
+      missing_fields: [],
+    },
+  ]);
+  assert.equal(projection.overall_score, 80.2);
+  assert.equal(projection.recommendation_status, "recommend");
+  let received;
+  const service = new ScoringService({
+    preview(input) {
+      received = input;
+      return Promise.resolve({ read_only: true });
+    },
+  });
+  assert.deepEqual(
+    await service.preview({
+      organizationId: "org",
+      workspaceId: "ws",
+      ruleId: "00000000-0000-4000-8000-000000000435",
+      page: 2,
+      pageSize: 20,
+    }),
+    { read_only: true },
+  );
+  assert.equal(received.page, 2);
+  assert.throws(
+    () =>
+      service.preview({
+        organizationId: "org",
+        workspaceId: "ws",
+        ruleId: "00000000-0000-4000-8000-000000000435",
+        page: 1,
+        pageSize: 101,
+      }),
+    (error) =>
+      error instanceof ScoringServiceError &&
+      error.code === "score_rule_preview_pagination_invalid",
+  );
+});
+test("M04-03 downstream scoring stops on a failed latest reconciliation or open critical evidence issue", () => {
+  assert.equal(
+    hasBlockingQualityRegression([
+      { reconciliation_status: "passed", critical_issue_count: 0 },
+      { reconciliation_status: "failed", critical_issue_count: 0 },
+    ]),
+    true,
+  );
+  assert.equal(
+    hasBlockingQualityRegression([{ reconciliation_status: "passed", critical_issue_count: 1 }]),
+    true,
+  );
+  assert.equal(
+    hasBlockingQualityRegression([
+      { reconciliation_status: "insufficient_sample", critical_issue_count: 0 },
+    ]),
+    false,
+  );
+});
 test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", async () => {
   const paths = [
     "database/migrations/0017c_scoring_rules_m04_03.up.sql",
@@ -90,6 +170,7 @@ test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "apps/api/src/scoring-service.ts",
     "apps/api/src/mysql-scoring-repository.ts",
     "apps/api/src/scoring-routes.ts",
+    "packages/contracts/src/index.ts",
     "apps/worker/src/opportunity-scoring-worker.ts",
     "apps/web/src/components/ScoreRuleConsole.vue",
     "apps/web/src/components/OpportunityWorkspace.vue",
@@ -111,6 +192,7 @@ test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       service,
       repository,
       routes,
+      calculator,
       worker,
       consoleUi,
       opportunityUi,
@@ -133,9 +215,15 @@ test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(service, /score_rule_weight_invalid[\s\S]*score_input_evidence_required/);
   assert.match(repository, /pending_approval[\s\S]*rollback[\s\S]*organization_id=\?/);
   assert.match(routes, /opportunity:read[\s\S]*opportunity:decide[\s\S]*opportunity:approve/);
+  assert.match(calculator, /coverage\s*>=\s*50[\s\S]*coverage\s*>=\s*80/);
+  assert.match(worker, /calculateScoreProjection[\s\S]*completed_with_warnings[\s\S]*dead_letter/);
   assert.match(
     worker,
-    /coverage\s*>=\s*50[\s\S]*coverage\s*>=\s*80[\s\S]*completed_with_warnings[\s\S]*dead_letter/,
+    /triggerTaskId[\s\S]*task\.evidence_completion\.redecision_ready[\s\S]*recipient_id/,
+  );
+  assert.match(
+    worker,
+    /reconciliation_runs[\s\S]*data_quality_issues[\s\S]*score_blocked_by_data_quality_regression/,
   );
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(consoleUi, new RegExp(state));
@@ -143,7 +231,9 @@ test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(css, /@media\s*\(\s*max-width:\s*640px\s*\)/);
   assert.match(schema, /OPPORTUNITY_SCORING_POLL_MS/);
   assert.match(env, /OPPORTUNITY_SCORING_LEASE_SECONDS/);
-  assert.match(openapi, /opportunity-score-rules/);
+  assert.match(openapi, /opportunity-score-rules[\s\S]*scoreRuleId.*preview/);
+  assert.match(repository, /page_summary:[\s\S]*read_only:\s*true/);
+  assert.match(consoleUi, /预览影响[\s\S]*发布影响预览/);
   assert.match(feature, /scoringEngine/);
   assert.match(architecture, /50%[\s\S]*80%/);
   assert.match(runbook, /宝塔[\s\S]*回滚/);

@@ -1,1 +1,83 @@
-{"moduleId":"M05-01","phaseId":"P05","name":"Business Task Center","dependencies":["M04-07"],"atomicTasks":[{"id":"M05-01.A01","evidence":"scope task center only and excludes approvals notifications SSE reports"},{"id":"M05-01.A02","evidence":"scoped tasks comments events operations status priority version SLA contracts"},{"id":"M05-01.A03","evidence":"MySQL57 tasks comments events operations sourcing lease migration rollback"},{"id":"M05-01.A04","evidence":"validation pagination idempotency transitions version transfer comment services"},{"id":"M05-01.A05","evidence":"Baota Worker leased sourcing purchase task projection and retry"},{"id":"M05-01.A06","evidence":"OpenAPI task list summary detail create comments actions contracts"},{"id":"M05-01.A07","evidence":"today work task list detail create comments desktop and 390 layout"},{"id":"M05-01.A08","evidence":"loading empty error forbidden expired rate limited conflicts and recovery"},{"id":"M05-01.A09","evidence":"task read create update assign API Worker organization workspace guards"},{"id":"M05-01.A10","evidence":"projection poll lease env schema Baota restart configuration"},{"id":"M05-01.A11","evidence":"audit logs task events outbox request trace and source correlation"},{"id":"M05-01.A12","evidence":"input states transitions due truth version and comments unit tests"},{"id":"M05-01.A13","evidence":"OpenAPI DTO errors pagination idempotency and permission contracts"},{"id":"M05-01.A14","evidence":"MySQL57 create comment start transfer isolation audit outbox integration"},{"id":"M05-01.A15","evidence":"Playwright desktop 390 today task detail SLA comments visual regression"},{"id":"M05-01.A16","evidence":"lease recovery version conflict invalid assignee dependency and rollback drills"},{"id":"M05-01.A17","evidence":"blueprint Feature Map env architecture runbook migration rollback Baota handoff"}],"commands":["npm run build","node --test tests/m05-01/business-tasks.test.mjs","node scripts/verify-business-tasks-live.mjs","npx playwright test tests/e2e/m05-01-business-tasks.spec.ts","npm run verify:docs"]}
+{
+  "moduleId": "M05-01",
+  "phaseId": "P05",
+  "name": "Business Task Center",
+  "dependencies": ["M04-07"],
+  "atomicTasks": [
+    {
+      "id": "M05-01.A01",
+      "evidence": "scope task center only and excludes approvals notifications SSE reports"
+    },
+    {
+      "id": "M05-01.A02",
+      "evidence": "scoped tasks comments events operations status priority version SLA and evidence completion score trigger contracts"
+    },
+    {
+      "id": "M05-01.A03",
+      "evidence": "MySQL57 tasks comments events operations sourcing lease and score trigger migration rollback"
+    },
+    {
+      "id": "M05-01.A04",
+      "evidence": "validation pagination idempotency transitions version single and batch transfer delay comment and evidence completion services"
+    },
+    {
+      "id": "M05-01.A05",
+      "evidence": "Baota Worker leased sourcing purchase task projection and retry"
+    },
+    {
+      "id": "M05-01.A06",
+      "evidence": "OpenAPI task list summary detail create comments actions contracts"
+    },
+    {
+      "id": "M05-01.A07",
+      "evidence": "today work split task list batch actions detail fixed blocker and next owner create comments desktop and 390 layout"
+    },
+    {
+      "id": "M05-01.A08",
+      "evidence": "loading empty error forbidden expired rate limited conflicts skipped batch items and recovery"
+    },
+    {
+      "id": "M05-01.A09",
+      "evidence": "task read create update assign API Worker organization workspace guards"
+    },
+    {
+      "id": "M05-01.A10",
+      "evidence": "projection poll lease env schema Baota restart configuration"
+    },
+    {
+      "id": "M05-01.A11",
+      "evidence": "audit logs task events outbox request trace source and trigger task correlation"
+    },
+    {
+      "id": "M05-01.A12",
+      "evidence": "input states transitions due truth version transfer delay evidence completion score trigger and comments unit tests"
+    },
+    {
+      "id": "M05-01.A13",
+      "evidence": "OpenAPI DTO errors pagination idempotency and permission contracts"
+    },
+    {
+      "id": "M05-01.A14",
+      "evidence": "MySQL57 create comment start transfer isolation audit outbox integration"
+    },
+    {
+      "id": "M05-01.A15",
+      "evidence": "Playwright desktop 390 task batch transfer delay detail blocker SLA comments visual regression"
+    },
+    {
+      "id": "M05-01.A16",
+      "evidence": "lease recovery version conflict invalid assignee dependency and rollback drills"
+    },
+    {
+      "id": "M05-01.A17",
+      "evidence": "blueprint Feature Map env architecture runbook migration rollback Baota handoff"
+    }
+  ],
+  "commands": [
+    "npm run build",
+    "node --test tests/m05-01/business-tasks.test.mjs",
+    "node scripts/verify-business-tasks-live.mjs",
+    "npx playwright test tests/e2e/m05-01-business-tasks.spec.ts",
+    "npm run verify:docs"
+  ]
+}

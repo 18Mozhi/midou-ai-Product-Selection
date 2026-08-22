@@ -6,6 +6,26 @@ const envelope = (data: unknown) => ({
   request_id: "onboarding-e2e-request",
   trace_id: "onboarding-e2e-trace",
 });
+test("M02-02.A07/A15 login brand and mobile auxiliary actions keep compact touch targets", async ({
+  page,
+}) => {
+  await page.goto("/login");
+  const brand = page.getByRole("link", { name: /智能选品/ }).first();
+  await expect(brand).toBeVisible();
+  expect((await brand.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.reload();
+  const actions = await page.locator(".identity-card__foot .text-button").evaluateAll((nodes) =>
+    nodes.map((node) => {
+      const box = node.getBoundingClientRect();
+      return { y: box.y, height: box.height };
+    }),
+  );
+  expect(actions).toHaveLength(3);
+  expect(Math.abs(actions[0].y - actions[1].y)).toBeLessThanOrEqual(1);
+  for (const action of actions) expect(action.height).toBeGreaterThanOrEqual(44);
+});
 test("M02-02.A07/A08/A15 login uses the real contract and continues to tenancy by keyboard", async ({
   page,
 }) => {

@@ -41,12 +41,16 @@ export const COLLECTION_ERROR_CODES = [
 export type CollectionErrorCode = (typeof COLLECTION_ERROR_CODES)[number];
 export type SubqueryStatus =
   "pending" | "running" | "succeeded" | "succeeded_empty" | "failed" | "blocked";
+export type CollectionResultKind = "empty_success" | "no_new_content" | "parse_failed";
 export interface SubqueryOutcome {
   required: boolean;
   status: SubqueryStatus;
   availableResultCount: number;
   missingFields: string[];
   errorCode: CollectionErrorCode | null;
+  resultKind?: CollectionResultKind;
+  freshResultCount?: number;
+  deduplicatedResultCount?: number;
 }
 export interface CoverageSummary {
   terminalStatus: "succeeded" | "succeeded_empty" | "completed_with_warnings";

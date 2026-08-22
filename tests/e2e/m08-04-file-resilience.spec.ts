@@ -24,6 +24,16 @@ const base = {
       active_files: 26,
       indexed_bytes: 19327352832,
     },
+    {
+      kind: "temp",
+      available: true,
+      writable: true,
+      used_bytes: 32212254720,
+      total_bytes: 429496729600,
+      usage_basis_points: 750,
+      active_files: 0,
+      indexed_bytes: 0,
+    },
   ],
   integrity: { sampled_files: 20, verified_files: 20, mismatch_files: 0, missing_files: 0 },
   recovery: {
@@ -65,10 +75,14 @@ test("M08-04.A07/A08/A15 desktop and 390 local-file truth", async ({ page }) => 
   await expect(page.getByRole("heading", { name: "本机文件韧性" })).toBeVisible();
   await expect(page.getByText("本机文件韧性门已满足")).toBeVisible();
   await expect(page.getByText("20 / 20")).toBeVisible();
+  await expect(page.getByText("临时目录", { exact: true })).toBeVisible();
+  await expect(page.getByText("不建立持久索引")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(
-    page.getByText("证据与导出只写入惠州当前主机的宝塔受控目录；不使用共享存储或备用服务器。"),
+    page.getByText(
+      "证据、导出与临时文件只写入惠州当前主机的宝塔受控目录；不使用共享存储或备用服务器。",
+    ),
   ).toBeVisible();
 });
 test("M08-04.A08/A09/A16 warning blocked empty forbidden expired rate limited unavailable and recovering", async ({

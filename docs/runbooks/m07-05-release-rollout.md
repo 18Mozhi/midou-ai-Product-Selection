@@ -69,6 +69,8 @@ MySQL 5.7 的宝塔受限 `my.cnf` 必须显式设置 `innodb_flush_log_at_trx_c
 
 ## 自动停止与人工回滚
 
+发布中心的“迁移耗时”来自当前匹配发布 `migration` 门的完整时间区间，“回滚耗时”来自 `rollback` 门从开始切回稳定流量到 Nginx reload 完成的时间区间。只有 `timing_schema=2` 的新记录才显示数值；“尚无记录”表示未发生该动作、动作未结束或历史记录没有完整计时语义，不得按 0 秒解释。异常时按该门的 request_id/trace_id 对照宝塔任务日志。页面由 Node API 动态读取，不需要重启常驻服务；历史脚本已退出当前单后端生产调用链，不得为了生成耗时重新启用双槽或计划任务。
+
 脚本在样本不足或阈值超限时自动把 candidate 比例改为 0%，Nginx 检查通过后 reload，并记录 automatic_stop/rollback。若任务进程异常退出，在宝塔将 `000-product-scout-release-upstream.conf` 设为只含本次 `RELEASE_STABLE_API_PORT`，先运行宝塔 Nginx 配置检查再 reload。确认公网 `/health/version` 返回稳定构建后，在宝塔停止失败候选槽。每次执行生成独立 release ID；不得删除、复用或覆盖失败 release、gate/event、备份或审计记录。回滚 `0027a_release_rollout_attempts_m07_05.down.sql` 前必须确认没有相同 stage/build 的多次尝试，否则恢复唯一键会失败并必须保留 0027a。
 
 本模块只提供同机应用版本回滚。主机、磁盘、站点或 MySQL 故障不能靠候选项目恢复；当前没有备用服务器。

@@ -120,7 +120,8 @@ export class MySqlReportRepository implements ReportRepository {
       "SELECT * FROM report_exports WHERE organization_id=? AND workspace_id=? ORDER BY created_at DESC LIMIT 100",
       [i.organizationId, i.workspaceId],
     );
-    return rows.map((r) => this.view(r));
+    const queueFacts = await this.queueFacts();
+    return rows.map((r) => this.view(r, queueFacts.get(String(r.id))));
   }
   async detail(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
@@ -128,7 +129,8 @@ export class MySqlReportRepository implements ReportRepository {
       [i.exportId, i.organizationId, i.workspaceId],
     );
     if (!rows[0]) throw new ReportServiceError("report_export_not_found", 404, "刷新导出列表。");
-    return this.view(rows[0]);
+    const queueFacts = await this.queueFacts();
+    return this.view(rows[0], queueFacts.get(String(rows[0].id)));
   }
   async createExport(i: any) {
     const old = await this.operation(i);
@@ -191,7 +193,15 @@ export class MySqlReportRepository implements ReportRepository {
       c.release();
     }
   }
-  private view(r: any) {
+  private view(
+    r: any,
+    queue?: {
+      position: number;
+      estimatedCompletionAt: string | null;
+      estimateSampleSize: number;
+      medianCompletionSeconds: number | null;
+    },
+  ) {
     return {
       id: String(r.id),
       report_type: String(r.report_type),
@@ -203,10 +213,78 @@ export class MySqlReportRepository implements ReportRepository {
       byte_size: r.byte_size == null ? null : Number(r.byte_size),
       expires_at: iso(r.expires_at),
       last_error_code: r.last_error_code ? String(r.last_error_code) : null,
+      queue_position: queue?.position ?? null,
+      estimated_completion_at: queue?.estimatedCompletionAt ?? null,
+      estimate_sample_size: queue?.estimateSampleSize ?? 0,
+      median_completion_seconds: queue?.medianCompletionSeconds ?? null,
       version: Number(r.version),
       created_at: iso(r.created_at),
       updated_at: iso(r.updated_at),
     };
+  }
+  private async queueFacts() {
+    const now = this.now(),
+      [queueRows] = await this.pool.query<RowDataPacket[]>(
+        "SELECT id,status,available_at,lease_expires_at,created_at,updated_at FROM report_exports " +
+          "WHERE status IN ('queued','leased','retry_scheduled') AND expires_at>? " +
+          "ORDER BY CASE WHEN status='leased' AND lease_expires_at>? THEN 0 ELSE 1 END," +
+          "available_at,id",
+        [now, now],
+      ),
+      [sampleRows] = await this.pool.query<RowDataPacket[]>(
+        "SELECT TIMESTAMPDIFF(SECOND,created_at,updated_at) completion_seconds FROM report_exports " +
+          "WHERE status='succeeded' AND updated_at>=created_at ORDER BY updated_at DESC,id DESC LIMIT 20",
+      ),
+      durations = sampleRows
+        .map((row) => Number(row.completion_seconds))
+        .filter((value) => Number.isFinite(value) && value > 0)
+        .sort((left, right) => left - right),
+      sampleSize = durations.length,
+      medianSeconds = sampleSize
+        ? durations.length % 2
+          ? durations[Math.floor(durations.length / 2)]!
+          : Math.round(
+              (durations[durations.length / 2 - 1]! + durations[durations.length / 2]!) / 2,
+            )
+        : null,
+      facts = new Map<
+        string,
+        {
+          position: number;
+          estimatedCompletionAt: string | null;
+          estimateSampleSize: number;
+          medianCompletionSeconds: number | null;
+        }
+      >();
+    let cursor = now.valueOf();
+    queueRows.forEach((row, index) => {
+      let estimatedCompletionAt: string | null = null;
+      if (medianSeconds !== null) {
+        const availableAt = new Date(row.available_at).valueOf();
+        if (
+          row.status === "leased" &&
+          row.lease_expires_at &&
+          new Date(row.lease_expires_at).valueOf() > now.valueOf()
+        ) {
+          const elapsedSeconds = Math.max(
+            0,
+            Math.floor((now.valueOf() - new Date(row.updated_at).valueOf()) / 1000),
+          );
+          cursor =
+            Math.max(cursor, now.valueOf()) + Math.max(1, medianSeconds - elapsedSeconds) * 1000;
+        } else {
+          cursor = Math.max(cursor, availableAt, now.valueOf()) + medianSeconds * 1000;
+        }
+        estimatedCompletionAt = new Date(cursor).toISOString();
+      }
+      facts.set(String(row.id), {
+        position: index + 1,
+        estimatedCompletionAt,
+        estimateSampleSize: sampleSize,
+        medianCompletionSeconds: medianSeconds,
+      });
+    });
+    return facts;
   }
   private async operation(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(

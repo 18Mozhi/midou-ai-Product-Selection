@@ -113,8 +113,8 @@ if (mode === "--node") {
     group === "all" ? Object.values(matrix.browserGroups).flat() : matrix.browserGroups[group];
   if (!specs) fail(`unknown browser group: ${group ?? "(missing)"}`);
   run(
-    "npx",
-    ["playwright", "test", ...specs.map((name) => `tests/e2e/${name}`)],
+    "node",
+    ["scripts/run-playwright-projects.mjs", ...specs.map((name) => `tests/e2e/${name}`)],
     `browser-${group}`,
   );
 } else if (mode !== "--validate") {

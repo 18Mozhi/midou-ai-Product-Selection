@@ -74,6 +74,10 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
   page,
 }) => {
   await navigation(page);
+  const reviewerId = "00000000-0000-4000-8000-000000000448";
+  const reviewId = "00000000-0000-4000-8000-000000000449";
+  let reviewStatus: "pending" | "approved" = "pending",
+    reviewBody: any = null;
   const detail = {
     id: opportunityId,
     name: "户外净水杯利润机会",
@@ -142,6 +146,17 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
   await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) =>
     route.fulfill({ json: envelope(detail) }),
   );
+  await page.route("**/api/v1/cost-input-reviewers", (route) =>
+    route.fulfill({ json: envelope([{ id: reviewerId, label: "成本复核人" }]) }),
+  );
+  await page.route(
+    `**/api/v1/opportunities/${opportunityId}/cost-input-reviews/${reviewId}/actions`,
+    async (route) => {
+      reviewBody = route.request().postDataJSON();
+      reviewStatus = "approved";
+      await route.fulfill({ json: envelope({ status: "approved" }) });
+    },
+  );
   await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
     route.fulfill({
       json: envelope({
@@ -161,6 +176,28 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
           components,
         },
         current_inputs: [],
+        cost_input_reviews: [
+          {
+            id: reviewId,
+            cost_input_id: "00000000-0000-4000-8000-000000000450",
+            input_type: "purchase_price",
+            amount_value: 40,
+            currency: "CNY",
+            platform: "amazon",
+            input_version: 1,
+            evidence_id: "00000000-0000-4000-8000-000000000447",
+            submitter_id: "00000000-0000-4000-8000-000000000451",
+            submitter_label: "成本提交人",
+            reviewer_id: reviewerId,
+            reviewer_label: "成本复核人",
+            status: reviewStatus,
+            due_at: "2026-08-23T12:00:00.000Z",
+            overdue: false,
+            can_review: reviewStatus === "pending",
+            decision_reason: reviewStatus === "approved" ? "报价证据与币种一致" : null,
+            version: reviewStatus === "approved" ? 2 : 1,
+          },
+        ],
       }),
     }),
   );
@@ -170,4 +207,20 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
   await expect(page.getByText("69.4 USD", { exact: false }).first()).toBeVisible();
   await expect(page.getByText("汇率快照 00000000-0000-4000-8000-000000000446")).toBeVisible();
   await expect(page.getByText("净利润 = 含税售价")).toBeVisible();
+  const reviewQueue = page.locator(".profit-review-queue");
+  await expect(reviewQueue.getByText("提交后 24 小时内由指定复核人处理")).toBeVisible();
+  await expect(page.getByLabel("指定复核人")).toContainText("成本复核人");
+  await reviewQueue.getByRole("button", { name: "通过", exact: true }).click();
+  await reviewQueue.getByLabel("复核说明").fill("报价证据与币种一致");
+  await reviewQueue.getByRole("button", { name: "提交", exact: true }).click();
+  await expect
+    .poll(() => reviewBody)
+    .toMatchObject({
+      decision: "approved",
+      reason: "报价证据与币种一致",
+      expected_version: 1,
+    });
+  await expect(
+    page.getByText("成本复核已通过并生效；如有活动费用规则，利润重算已排队。"),
+  ).toBeVisible();
 });

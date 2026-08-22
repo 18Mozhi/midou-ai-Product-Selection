@@ -5,20 +5,32 @@ export class MySqlDiscoveryRepository implements DiscoveryRepository {
   async search(input: Parameters<DiscoveryRepository["search"]>[0]) {
     if (!input.capabilities.length) return { items: [], nextCursor: null };
     const derivedSql = [
-        "SELECT id,resource_type,resource_id,title,subtitle,route,required_capability,updated_at",
+        "SELECT id,resource_type,resource_id,title,subtitle," +
+          "CAST(NULL AS CHAR(40)) status,CAST(NULL AS CHAR(36)) assignee_id," +
+          "CAST(NULL AS CHAR(255)) assignee_name,route,required_capability,updated_at",
         "FROM search_documents WHERE organization_id=? AND workspace_id=?",
-        "UNION ALL SELECT id,'task',id,title,description,CONCAT('/tasks/',id),'task:read',updated_at",
-        "FROM tasks WHERE organization_id=? AND workspace_id=? AND deleted_at IS NULL",
-        "UNION ALL SELECT id,'opportunity',id,name,CONCAT(market,' · ',COALESCE(category,'未分类'))," +
-          "CONCAT('/opportunities/',id),'opportunity:read',updated_at",
-        "FROM opportunities WHERE organization_id=? AND workspace_id=?",
+        "UNION ALL SELECT t.id,'task',t.id,t.title,t.description,t.status,t.assignee_id," +
+          "COALESCE(NULLIF(task_profile.display_name,''),task_user.email)," +
+          "CONCAT('/tasks/',t.id),'task:read',t.updated_at",
+        "FROM tasks t LEFT JOIN users task_user ON task_user.id=t.assignee_id " +
+          "LEFT JOIN user_profiles task_profile ON task_profile.user_id=t.assignee_id " +
+          "WHERE t.organization_id=? AND t.workspace_id=? AND t.deleted_at IS NULL",
+        "UNION ALL SELECT o.id,'opportunity',o.id,o.name," +
+          "CONCAT(o.market,' · ',COALESCE(o.category,'未分类')),o.lifecycle_status,o.owner_id," +
+          "COALESCE(NULLIF(owner_profile.display_name,''),owner_user.email)," +
+          "CONCAT('/opportunities/',o.id),'opportunity:read',o.updated_at",
+        "FROM opportunities o LEFT JOIN users owner_user ON owner_user.id=o.owner_id " +
+          "LEFT JOIN user_profiles owner_profile ON owner_profile.user_id=o.owner_id " +
+          "WHERE o.organization_id=? AND o.workspace_id=?",
         "UNION ALL SELECT e.id,'evidence',e.id,CONCAT('证据 · ',p.name),e.canonical_url," +
-          "CONCAT('/platform-admin/data?evidence=',e.id),'platform:operate',e.created_at",
+          "e.status,NULL,NULL,CONCAT('/platform-admin/data?evidence=',e.id)," +
+          "'platform:operate',e.created_at",
         "FROM raw_evidence e JOIN providers p ON p.id=e.provider_id " +
           "WHERE e.organization_id=? AND e.workspace_id=?",
         "UNION ALL SELECT id,'collection_task',id,CONCAT('采集任务 · ',LEFT(id,8))," +
           "CONCAT(status,IF(last_error_code IS NULL,'',CONCAT(' · ',last_error_code)))," +
-          "CONCAT('/platform-admin/collection?task=',id),'collection:replay',updated_at",
+          "status,NULL,NULL,CONCAT('/platform-admin/collection?task=',id)," +
+          "'collection:replay',updated_at",
         "FROM collection_tasks WHERE organization_id=? AND workspace_id=?",
       ].join(" "),
       scopeParams = [
@@ -43,6 +55,19 @@ export class MySqlDiscoveryRepository implements DiscoveryRepository {
     const escaped = input.query.replace(/[!%_]/g, (value) => `!${value}`),
       pattern = `%${escaped}%`;
     params.push(pattern, pattern);
+    if (input.resourceType) {
+      clauses.push("resource_type=?");
+      params.push(input.resourceType);
+    }
+    if (input.status) {
+      clauses.push("status=?");
+      params.push(input.status);
+    }
+    if (input.assignee) {
+      const escapedAssignee = input.assignee.replace(/[!%_]/g, (value) => `!${value}`);
+      clauses.push("(assignee_id=? OR assignee_name LIKE ? ESCAPE '!')");
+      params.push(input.assignee, `%${escapedAssignee}%`);
+    }
     if (input.cursor) {
       const [rows] = await this.pool.query<RowDataPacket[]>(
         `SELECT updated_at,id FROM (${derivedSql}) cursor_documents WHERE id=? LIMIT 1`,
@@ -53,7 +78,7 @@ export class MySqlDiscoveryRepository implements DiscoveryRepository {
       params.push(rows[0].updated_at, rows[0].updated_at, input.cursor);
     }
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      `SELECT id,resource_type,resource_id,title,subtitle,route,updated_at
+      `SELECT id,resource_type,resource_id,title,subtitle,status,assignee_id,assignee_name,route,updated_at
        FROM (${derivedSql}) search_scope
        WHERE ${clauses.join(" AND ")}
        ORDER BY updated_at DESC,id DESC LIMIT ?`,
@@ -73,6 +98,9 @@ export class MySqlDiscoveryRepository implements DiscoveryRepository {
           resource_id: String(row.resource_id),
           title: String(row.title),
           subtitle: row.subtitle === null ? null : String(row.subtitle),
+          status: row.status === null ? null : String(row.status),
+          assignee_id: row.assignee_id === null ? null : String(row.assignee_id),
+          assignee_name: row.assignee_name === null ? null : String(row.assignee_name),
           route: String(row.route),
           updated_at: new Date(row.updated_at).toISOString(),
         }));

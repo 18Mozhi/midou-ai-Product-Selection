@@ -1,8 +1,25 @@
+import { createHash } from "node:crypto";
 import { ProviderAdapterFailure } from "@scoutops/provider-adapters";
 
 const CRAWLER_AGENT = "ScoutOpsPublicCrawler",
   MAX_ROBOTS_BYTES = 512_000,
-  cache = new Map<string, { body: string; expiresAt: number }>();
+  cache = new Map<string, { body: string; status: number; expiresAt: number }>();
+export const ROBOTS_DECISION_VERSION = "scoutops-robots-policy-v1";
+
+export interface RobotsPolicyDecision {
+  decision_version: typeof ROBOTS_DECISION_VERSION;
+  allowed: boolean;
+  decision_basis: "matched_rule" | "no_matching_rule" | "missing_robots" | "http_status";
+  robots_url: string;
+  robots_http_status: number;
+  matched_user_agent: string | null;
+  matched_rule: {
+    directive: "allow" | "disallow";
+    pattern_preview: string;
+    pattern_sha256: string;
+    truncated: boolean;
+  } | null;
+}
 
 interface RobotsRule {
   allow: boolean;
@@ -21,7 +38,11 @@ const ruleRegex = (pattern: string) => {
   return new RegExp(`^${source}${anchored ? "$" : ""}`);
 };
 
-export function robotsAllows(body: string, targetUrl: string, crawlerAgent = CRAWLER_AGENT) {
+export function evaluateRobotsPolicy(
+  body: string,
+  targetUrl: string,
+  crawlerAgent = CRAWLER_AGENT,
+) {
   const groups: RobotsGroup[] = [];
   let current: RobotsGroup | null = null;
   for (const rawLine of body.split(/\r?\n/)) {
@@ -62,7 +83,39 @@ export function robotsAllows(body: string, targetUrl: string, crawlerAgent = CRA
         const length = (value: RobotsRule) => value.pattern.replace(/[\*$]/g, "").length;
         return length(right) - length(left) || Number(right.allow) - Number(left.allow);
       });
-  return matched[0]?.allow ?? true;
+  const rule = matched[0],
+    pattern = rule?.pattern ?? "";
+  return {
+    allowed: rule?.allow ?? true,
+    matched_user_agent: specificity > 0 ? crawlerAgent : specificity === 0 ? "*" : null,
+    matched_rule: rule
+      ? {
+          directive: rule.allow ? ("allow" as const) : ("disallow" as const),
+          pattern_preview: pattern.slice(0, 500),
+          pattern_sha256: createHash("sha256").update(pattern).digest("hex"),
+          truncated: pattern.length > 500,
+        }
+      : null,
+  };
+}
+
+export const robotsAllows = (body: string, targetUrl: string, crawlerAgent = CRAWLER_AGENT) =>
+  evaluateRobotsPolicy(body, targetUrl, crawlerAgent).allowed;
+
+const policyFailure = (code: string, retryable: boolean, decision?: RobotsPolicyDecision) =>
+  Object.assign(new ProviderAdapterFailure(code, retryable), {
+    ...(decision ? { robotsDecision: decision } : {}),
+  });
+
+export function publicCollectionPolicyDecision(error: unknown): RobotsPolicyDecision | null {
+  const decision = (error as { robotsDecision?: unknown } | null)?.robotsDecision;
+  if (
+    !decision ||
+    typeof decision !== "object" ||
+    (decision as RobotsPolicyDecision).decision_version !== ROBOTS_DECISION_VERSION
+  )
+    return null;
+  return decision as RobotsPolicyDecision;
 }
 
 const collectionTarget = (providerTargetUrl: string, target?: Record<string, unknown>) => {
@@ -92,12 +145,13 @@ export async function assertPublicCollectionPolicy(input: {
   const robotsUrl = `${target.origin}/robots.txt`,
     now = input.now?.() ?? Date.now(),
     cached = cache.get(robotsUrl);
-  let body = cached && cached.expiresAt > now ? cached.body : null;
-  if (body !== null) {
+  let robotsResponse =
+    cached && cached.expiresAt > now ? { body: cached.body, status: cached.status } : null;
+  if (robotsResponse !== null) {
     cache.delete(robotsUrl);
     cache.set(robotsUrl, cached!);
   }
-  if (body === null) {
+  if (robotsResponse === null) {
     let response: Response;
     try {
       response = await input.fetcher(robotsUrl, {
@@ -110,23 +164,33 @@ export async function assertPublicCollectionPolicy(input: {
       });
     } catch (error) {
       if (error instanceof ProviderAdapterFailure) throw error;
-      throw new ProviderAdapterFailure(
+      throw policyFailure(
         error instanceof Error && error.name === "TimeoutError" ? "timeout" : "network_error",
         true,
       );
     }
-    if (response.status === 404 || response.status === 410) body = "";
-    else if (response.status === 401 || response.status === 403)
-      throw new ProviderAdapterFailure("robots_disallowed", false);
+    if (response.status === 401 || response.status === 403)
+      throw policyFailure("robots_disallowed", false, {
+        decision_version: ROBOTS_DECISION_VERSION,
+        allowed: false,
+        decision_basis: "http_status",
+        robots_url: robotsUrl,
+        robots_http_status: response.status,
+        matched_user_agent: null,
+        matched_rule: null,
+      });
     else if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
     else if (response.status >= 500) throw new ProviderAdapterFailure("network_error", true);
-    else if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
-    else {
+    else if (![404, 410].includes(response.status) && !response.ok)
+      throw new ProviderAdapterFailure("permission_denied", false);
+    let body = "";
+    if (response.status !== 404 && response.status !== 410) {
       const bytes = new Uint8Array(await response.arrayBuffer());
       if (bytes.byteLength > MAX_ROBOTS_BYTES)
         throw new ProviderAdapterFailure("invalid_payload", false);
       body = new TextDecoder().decode(bytes);
     }
+    robotsResponse = { body, status: response.status };
     const cacheTtlMs = input.cacheTtlMs ?? 900_000;
     const cacheMaxEntries = Math.min(10_000, Math.max(1, input.cacheMaxEntries ?? 256));
     if (cacheTtlMs > 0) {
@@ -136,9 +200,24 @@ export async function assertPublicCollectionPolicy(input: {
         if (oldest === undefined) break;
         cache.delete(oldest);
       }
-      cache.set(robotsUrl, { body, expiresAt: now + cacheTtlMs });
+      cache.set(robotsUrl, { ...robotsResponse, expiresAt: now + cacheTtlMs });
     }
   }
-  if (!robotsAllows(body, target.toString()))
-    throw new ProviderAdapterFailure("robots_disallowed", false);
+  const evaluated = evaluateRobotsPolicy(robotsResponse.body, target.toString()),
+    decision: RobotsPolicyDecision = {
+      decision_version: ROBOTS_DECISION_VERSION,
+      allowed: evaluated.allowed,
+      decision_basis:
+        robotsResponse.status === 404 || robotsResponse.status === 410
+          ? "missing_robots"
+          : evaluated.matched_rule
+            ? "matched_rule"
+            : "no_matching_rule",
+      robots_url: robotsUrl,
+      robots_http_status: robotsResponse.status,
+      matched_user_agent: evaluated.matched_user_agent,
+      matched_rule: evaluated.matched_rule,
+    };
+  if (!decision.allowed) throw policyFailure("robots_disallowed", false, decision);
+  return decision;
 }

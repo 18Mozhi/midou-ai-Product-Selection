@@ -1,7 +1,8 @@
 import { test, expect, type Page } from "@playwright/test";
 
 const topicId = "00000000-0000-4000-8000-000000000404",
-  ruleId = "00000000-0000-4000-8000-000000000405";
+  ruleId = "00000000-0000-4000-8000-000000000405",
+  issueId = "00000000-0000-4000-8000-000000000412";
 const topic = {
   id: topicId,
   title: "AI 驱动的个性化护肤",
@@ -19,6 +20,14 @@ const topic = {
   source_fresh_at: "2026-08-07T14:05:00.000Z",
   followed: false,
   version: 3,
+};
+const mergeTopic = {
+  ...topic,
+  id: "00000000-0000-4000-8000-000000000413",
+  title: "个性化美容推荐",
+  signal_count: 2,
+  source_count: 1,
+  version: 2,
 };
 const detail = {
   ...topic,
@@ -105,8 +114,37 @@ async function navigation(page: Page) {
     }),
   );
 }
-async function ready(page: Page) {
+async function ready(page: Page, topics = [topic]) {
   await navigation(page);
+  let changeRequests: unknown[] = [];
+  await page.route("**/api/v1/trends/change-requests", async (route) => {
+    if (route.request().method() === "POST") {
+      const body = route.request().postDataJSON() as any;
+      changeRequests = [
+        {
+          id: "00000000-0000-4000-8000-000000000414",
+          operation: body.operation,
+          target_topic: topic,
+          source_topics: body.source_topic_ids.includes(mergeTopic.id) ? [mergeTopic] : [],
+          signal_ids: body.signal_ids,
+          new_title: body.new_title,
+          new_category: body.new_category,
+          reason: body.reason,
+          status: "pending",
+          result_topic_id: null,
+          proposed_by: "00000000-0000-4000-8000-000000000415",
+          decided_by: null,
+          decision_reason: null,
+          decided_at: null,
+          version: 1,
+          created_at: "2026-08-22T12:00:00.000Z",
+          updated_at: "2026-08-22T12:00:00.000Z",
+        },
+      ];
+      return route.fulfill({ status: 201, json: envelope(changeRequests[0]) });
+    }
+    return route.fulfill({ json: envelope(changeRequests) });
+  });
   await page.route("**/api/v1/trends/monitoring-rules", async (route) => {
     if (route.request().method() === "POST")
       return route.fulfill({
@@ -134,11 +172,23 @@ async function ready(page: Page) {
       body: JSON.stringify(envelope({ topic_id: topicId, followed: true })),
     }),
   );
+  await page.route(`**/api/v1/trends/${topicId}/evidence/*/quality-issues`, (route) =>
+    route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify(
+        envelope({
+          created: true,
+          issue: { id: issueId, severity: "warning", status: "open", version: 1 },
+        }),
+      ),
+    }),
+  );
   await page.route("**/api/v1/trends?*", (route) =>
     route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(envelope([topic], { page: 1, page_size: 20, total: 1 })),
+      body: JSON.stringify(envelope(topics, { page: 1, page_size: 20, total: topics.length })),
     }),
   );
 }
@@ -155,9 +205,15 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await expect(trendList.getByText("可信度 数据不足")).toBeVisible();
   await expect(page.getByText("实际信号数", { exact: true })).toBeVisible();
   await expect(page.getByText("置信度：数据不足；不会用默认分数代替。")).toBeVisible();
-  await expect(page.getByRole("link", { name: /AI Skin Care Demand Rises/ })).toContainText(
-    "Example News",
-  );
+  const evidence = page.locator(".trend-evidence-item").filter({
+    hasText: "AI Skin Care Demand Rises",
+  });
+  await expect(evidence).toContainText("Example News");
+  await evidence.getByRole("button", { name: "报告异常" }).click();
+  await page.getByLabel("异常说明").fill("标题与原始页面字段不一致");
+  await page.getByRole("button", { name: "创建质量工单" }).click();
+  await expect(page.getByText(new RegExp(`质量工单 ${issueId} 已创建`))).toBeVisible();
+  await expect(evidence.getByRole("button", { name: "已建质量工单" })).toBeDisabled();
   await expect(page.locator(".trend-workbench + .trend-explainer")).toBeVisible();
   await expect(page.locator(".trend-explainer")).not.toHaveAttribute("open");
   await expect(page.getByRole("link", { name: "转为机会" })).toHaveAttribute(
@@ -187,6 +243,21 @@ test("M04-01.A08/A09 monitoring rule and empty/forbidden states are explicit", a
   await page.getByLabel("包含关键词（逗号分隔）").fill("desk lamp");
   await page.getByRole("button", { name: "创建并启用" }).click();
   await expect(page.getByText("监控规则已启用；当前仅发送站内通知。")).toBeVisible();
+});
+
+test("trend governance proposes a merge into a second-person confirmation queue", async ({
+  page,
+}) => {
+  await ready(page, [topic, mergeTopic]);
+  await page.goto("/trends");
+  await page.getByRole("button", { name: /合并与拆分/ }).click();
+  await expect(page.getByRole("heading", { name: "合并与拆分确认队列" })).toBeVisible();
+  await page.getByText(`${mergeTopic.title} · v${mergeTopic.version}`).click();
+  await page.getByLabel("提议原因").fill("两个主题描述同一消费信号");
+  await page.getByRole("button", { name: "提交确认队列" }).click();
+  await expect(page.getByText("治理提议已进入确认队列；需要另一位趋势管理员确认。")).toBeVisible();
+  await expect(page.getByText("1 项待确认")).toBeVisible();
+  await expect(page.getByText(`并入：${mergeTopic.title}`)).toBeVisible();
 });
 
 test("trend view URL restores filters, sorting and direct topic navigation", async ({ page }) => {

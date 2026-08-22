@@ -248,14 +248,15 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
           autoScoreJobId = randomUUID();
           await c.query(
             "INSERT INTO opportunity_score_jobs (id,organization_id,workspace_id,opportunity_id," +
-              "score_rule_id,status,attempt_count,available_at,request_id,trace_id,created_at," +
-              "updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
+              "score_rule_id,trigger_task_id,status,attempt_count,available_at,request_id,trace_id," +
+              "created_at,updated_at) VALUES (?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
             [
               autoScoreJobId,
               i.organizationId,
               i.workspaceId,
               String(r.source_ref_id),
               String(rules[0].id),
+              i.taskId,
               now,
               i.requestId,
               i.traceId,
@@ -264,10 +265,11 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
             ],
           );
           await c.query(
-            "UPDATE opportunities SET lifecycle_status=IF(lifecycle_status='archived'," +
-              "lifecycle_status,'validating'),version=version+1,updated_at=? WHERE id=? " +
-              "AND organization_id=? AND workspace_id=?",
-            [now, String(r.source_ref_id), i.organizationId, i.workspaceId],
+            "UPDATE opportunities SET lifecycle_entered_at=IF(lifecycle_status NOT IN " +
+              "('archived','validating'),?,lifecycle_entered_at),lifecycle_status=IF(" +
+              "lifecycle_status='archived',lifecycle_status,'validating'),version=version+1," +
+              "updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+            [now, now, String(r.source_ref_id), i.organizationId, i.workspaceId],
           );
         }
       }

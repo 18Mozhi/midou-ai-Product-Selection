@@ -25,6 +25,37 @@ interface Rule {
   activated_at: string | null;
   updated_at: string;
 }
+interface RulePreview {
+  rule_id: string;
+  rule_version_code: string;
+  rule_status: string;
+  page: number;
+  page_size: number;
+  total: number;
+  items: Array<{
+    opportunity_id: string;
+    opportunity_name: string;
+    lifecycle_status: string;
+    current_score: number | null;
+    current_recommendation_status: string;
+    current_rule_version: string | null;
+    projected_score: number | null;
+    projected_recommendation_status: string;
+    projected_coverage_percent: number;
+    score_delta: number | null;
+    recommendation_changed: boolean;
+    missing_fields: string[];
+  }>;
+  page_summary: {
+    increased: number;
+    decreased: number;
+    unchanged: number;
+    newly_calculable: number;
+    insufficient_data: number;
+    recommendation_changed: number;
+  };
+  read_only: true;
+}
 const props = defineProps<{ apiBaseUrl: string }>(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
@@ -37,7 +68,11 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   selected = ref<Rule | null>(null),
   action = ref<Action>("submit"),
   reason = ref(""),
-  targetRuleId = ref("");
+  targetRuleId = ref(""),
+  showPreview = ref(false),
+  previewing = ref(false),
+  previewRule = ref<Rule | null>(null),
+  preview = ref<RulePreview | null>(null);
 const definitions = [
   ["market_demand", "市场需求"],
   ["competition", "竞争"],
@@ -137,6 +172,32 @@ function begin(rule: Rule, value: Action) {
   targetRuleId.value = "";
   showAction.value = true;
 }
+async function loadPreview(rule: Rule, page = 1) {
+  previewRule.value = rule;
+  showPreview.value = true;
+  previewing.value = true;
+  message.value = "";
+  try {
+    const response = await request<RulePreview>(
+      `/opportunity-score-rules/${rule.id}/preview?page=${page}&page_size=20`,
+    );
+    requestId.value = response.request_id;
+    preview.value = response.data;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      message.value = error.actionHint;
+    } else message.value = "预览依赖暂不可用；规则和机会状态均未改变。";
+  } finally {
+    previewing.value = false;
+  }
+}
+function changePreviewPage(page: number) {
+  if (previewRule.value) void loadPreview(previewRule.value, page);
+}
+const scoreText = (value: number | null) => (value == null ? "数据不足" : value.toFixed(2)),
+  deltaText = (value: number | null) =>
+    value == null ? "不可比较" : `${value > 0 ? "+" : ""}${value.toFixed(2)}`;
 async function runAction() {
   if (!selected.value) return;
   const result = await post(`/opportunity-score-rules/${selected.value.id}/actions`, {
@@ -202,6 +263,13 @@ onMounted(() => void load());
           ><small>审批 {{ time(rule.approved_at) }}</small>
         </div>
         <nav>
+          <button
+            v-if="['draft', 'pending_approval', 'approved'].includes(rule.status)"
+            type="button"
+            @click="loadPreview(rule)"
+          >
+            预览影响
+          </button>
           <button v-if="rule.status === 'draft'" @click="begin(rule, 'submit')">提交</button
           ><button v-if="rule.status === 'pending_approval'" @click="begin(rule, 'approve')">
             批准</button
@@ -284,6 +352,97 @@ onMounted(() => void load());
           </button>
         </footer>
       </form>
+    </div>
+    <div
+      v-if="showPreview && previewRule"
+      class="opportunity-modal score-preview-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="score-rule-preview-title"
+    >
+      <section>
+        <header>
+          <div>
+            <p>只读试算 · 不写入评分运行</p>
+            <h3 id="score-rule-preview-title">发布影响预览 · {{ previewRule.version_code }}</h3>
+          </div>
+          <button type="button" aria-label="关闭" @click="showPreview = false">×</button>
+        </header>
+        <p v-if="previewing" role="status">正在按当前持久化输入试算…</p>
+        <template v-else-if="preview">
+          <aside>
+            当前页 {{ preview.items.length }} / 共
+            {{ preview.total }} 个机会；只比较当前页，不改规则、机会或历史评分。
+          </aside>
+          <dl class="score-preview-summary">
+            <div>
+              <dt>分数上升</dt>
+              <dd>{{ preview.page_summary.increased }}</dd>
+            </div>
+            <div>
+              <dt>分数下降</dt>
+              <dd>{{ preview.page_summary.decreased }}</dd>
+            </div>
+            <div>
+              <dt>新可计算</dt>
+              <dd>{{ preview.page_summary.newly_calculable }}</dd>
+            </div>
+            <div>
+              <dt>结论变化</dt>
+              <dd>{{ preview.page_summary.recommendation_changed }}</dd>
+            </div>
+            <div>
+              <dt>仍数据不足</dt>
+              <dd>{{ preview.page_summary.insufficient_data }}</dd>
+            </div>
+          </dl>
+          <div class="score-preview-table">
+            <article v-for="item in preview.items" :key="item.opportunity_id">
+              <div>
+                <strong>{{ item.opportunity_name }}</strong>
+                <small
+                  >{{ item.lifecycle_status }} · 当前规则
+                  {{ item.current_rule_version ?? "未评分" }}</small
+                >
+              </div>
+              <div>
+                <small>当前</small><b>{{ scoreText(item.current_score) }}</b>
+              </div>
+              <div>
+                <small>试算</small><b>{{ scoreText(item.projected_score) }}</b>
+              </div>
+              <div>
+                <small>变化</small
+                ><b :data-delta="item.score_delta">{{ deltaText(item.score_delta) }}</b>
+              </div>
+              <div>
+                <small>结论</small><b>{{ item.projected_recommendation_status }}</b>
+                <em v-if="item.recommendation_changed">有变化</em>
+              </div>
+              <div>
+                <small>覆盖</small><b>{{ item.projected_coverage_percent }}%</b>
+              </div>
+            </article>
+            <p v-if="!preview.items.length">当前工作区尚无机会可预览。</p>
+          </div>
+          <footer>
+            <button
+              type="button"
+              :disabled="preview.page <= 1 || previewing"
+              @click="changePreviewPage(preview.page - 1)"
+            >
+              上一页</button
+            ><span>第 {{ preview.page }} 页</span
+            ><button
+              type="button"
+              :disabled="preview.page * preview.page_size >= preview.total || previewing"
+              @click="changePreviewPage(preview.page + 1)"
+            >
+              下一页
+            </button>
+          </footer>
+        </template>
+      </section>
     </div>
     <div
       v-if="showAction && selected"

@@ -43,8 +43,10 @@ async function base(page: any) {
 
 test("M02-05.A07/A08/A15 keyboard search is responsive and visual", async ({ page }) => {
   await base(page);
-  await page.route("**/api/v1/me/global-search?**", (route) =>
-    route.fulfill({
+  let searchUrl = "";
+  await page.route("**/api/v1/me/global-search?**", (route) => {
+    searchUrl = route.request().url();
+    return route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
@@ -56,6 +58,9 @@ test("M02-05.A07/A08/A15 keyboard search is responsive and visual", async ({ pag
               resource_id: "00000000-0000-4000-8000-000000000511",
               title: "户外照明机会",
               subtitle: "当前工作区已索引记录",
+              status: "ready",
+              assignee_id: "00000000-0000-4000-8000-000000000512",
+              assignee_name: "选品经理",
               route: "/opportunities/00000000-0000-4000-8000-000000000511",
               updated_at: "2026-08-07T15:00:00.000Z",
             },
@@ -69,8 +74,8 @@ test("M02-05.A07/A08/A15 keyboard search is responsive and visual", async ({ pag
         request_id: "m02-05-search",
         trace_id: "m02-05-search",
       }),
-    }),
-  );
+    });
+  });
   await page.goto("/home");
   await expect(
     page.locator(".role-top-actions").getByRole("link", { name: "个人中心" }),
@@ -78,9 +83,16 @@ test("M02-05.A07/A08/A15 keyboard search is responsive and visual", async ({ pag
   await page.keyboard.press("Control+K");
   const dialog = page.getByRole("dialog", { name: "全局搜索" });
   await expect(dialog).toBeVisible();
+  await dialog.getByLabel("对象类型").selectOption("opportunity");
+  await dialog.getByLabel("状态").selectOption("ready");
+  await dialog.getByLabel("负责人").fill("选品经理");
   await dialog.getByPlaceholder("输入至少 2 个字符").fill("户外照明");
   await dialog.getByPlaceholder("输入至少 2 个字符").press("Enter");
   await expect(dialog.getByRole("link", { name: /户外照明机会/ })).toBeVisible();
+  await expect(dialog.getByText(/待决策 · 负责人 选品经理/)).toBeVisible();
+  expect(searchUrl).toContain("resource_type=opportunity");
+  expect(searchUrl).toContain("status=ready");
+  expect(searchUrl).toContain("assignee=%E9%80%89%E5%93%81%E7%BB%8F%E7%90%86");
 
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();

@@ -71,6 +71,7 @@ test("M06-06.A03/A05/A10/A11/A12/A14/A16 persistence and audit", async () => {
     "platform_audit_events",
     "outbox_events",
     "COMMERCIAL_RECENT_LIMIT",
+    "assignment_count",
   ])
     assert.match(all, new RegExp(marker));
   for (const forbidden of ["payment_intent", "invoice_id", "tax_rate", "credit_card"])
@@ -111,6 +112,9 @@ test("M06-06.A07/A08/A13 presents the quota-only boundary truthfully", async () 
   const navigation = await readFile("apps/web/src/route-catalog.ts", "utf8");
   assert.match(center, /组织配额与用量/);
   assert.match(center, /当前不包含计费、价格或支付/);
+  assert.match(center, /配额变更影响范围/);
+  assert.match(center, /assignment_count/);
+  assert.match(center, /新周期用量将在变更后重新统计/);
   assert.match(navigation, /label: "配额管理"/);
   assert.doesNotMatch(center, /会员、套餐、续期|确认续期\/变更|套餐与续期管理/);
 });

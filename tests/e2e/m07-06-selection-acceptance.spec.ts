@@ -12,6 +12,7 @@ const env = (data: any) => ({ data, request_id: "m07-06-e2e", trace_id: "m07-06-
     state: "accepted",
     coverage_status: null,
     available_result_count: 0,
+    results: [],
     first_result: null,
     blocked_reason: null,
     decision: null,
@@ -71,7 +72,9 @@ test("M07-06.A07/A08/A15 member completes real result decision and evidence view
     elapsed_ms: 12000,
   };
   await page.route("**/api/v1/selection-journeys", (r) =>
-    r.request().method() === "POST" ? r.fulfill({ status: 202, json: env(base) }) : r.continue(),
+    r.request().method() === "POST"
+      ? r.fulfill({ status: 202, json: env(base) })
+      : r.fulfill({ json: env(decided ? { ...result, state: "decided" } : result) }),
   );
   await page.route(`**/api/v1/selection-journeys/${base.id}`, (r) =>
     r.fulfill({
@@ -112,7 +115,7 @@ test("M07-06.A07/A08/A15 member completes real result decision and evidence view
     });
   });
   await page.goto("/opportunities/start");
-  await expect(page.getByRole("heading", { name: "开始一次真实选品" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "开始一次选品" })).toBeVisible();
   await page.getByPlaceholder("例如 portable blender").fill("portable blender");
   await page.getByRole("button", { name: "创建真实选品任务" }).click();
   await expect(page.getByText("首个可验证结果已到达")).toBeVisible({ timeout: 5000 });
@@ -124,12 +127,78 @@ test("M07-06.A07/A08/A15 member completes real result decision and evidence view
   const isMobile = (page.viewportSize()?.width ?? 0) <= 430;
   await page.getByLabel("决策原因").fill("保留真实来源结果并继续观察");
   await page.getByRole("button", { name: "保存审计决策" }).click();
-  const decision = page.getByText("DECIDED · observe");
+  const decision = page.getByText("决策已保存 · 继续观察");
   await expect(decision).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await decision.evaluate((el) =>
     el.closest("article")?.scrollIntoView({ block: "center", behavior: "instant" }),
   );
+});
+test("selection journey resumes and adopts only the compared candidate", async ({ page }) => {
+  const first = {
+      raw_evidence_id: "55555555-5555-4555-8555-555555555551",
+      title: "候选一：信息不足",
+      publisher: "来源一",
+      canonical_url: "https://example.com/candidate-one",
+      observed_at: "2026-08-10T12:00:11.000Z",
+      topic_id: null,
+    },
+    second = {
+      raw_evidence_id: "55555555-5555-4555-8555-555555555552",
+      title: "候选二：可生成机会",
+      publisher: "来源二",
+      canonical_url: "https://example.com/candidate-two",
+      observed_at: "2026-08-10T12:00:12.000Z",
+      topic_id: "66666666-6666-4666-8666-666666666666",
+    },
+    result = {
+      ...base,
+      task_status: "succeeded",
+      state: "result_ready",
+      coverage_status: "partial",
+      available_result_count: 2,
+      results: [first, second],
+      first_result: first,
+      terminal_at: "2026-08-10T12:00:12.000Z",
+      elapsed_ms: 12000,
+    };
+  let decisionBody: any = null;
+  await page.addInitScript(({ key, id }) => localStorage.setItem(key, id), {
+    key: "scoutops.selection-journey.active-id",
+    id: base.id,
+  });
+  await page.route(`**/api/v1/selection-journeys/${base.id}`, (route) =>
+    route.fulfill({ json: env(result) }),
+  );
+  await page.route(`**/api/v1/selection-journeys/${base.id}/decisions`, async (route) => {
+    decisionBody = route.request().postDataJSON();
+    await route.fulfill({
+      status: 201,
+      json: env({
+        ...result,
+        state: "decided",
+        decision: {
+          action: "adopt",
+          reason: "比较后选择候选二",
+          selected_raw_evidence_id: second.raw_evidence_id,
+          actor_id: "77777777-7777-4777-8777-777777777777",
+          created_at: "2026-08-10T12:00:20.000Z",
+        },
+        opportunity_id: "88888888-8888-4888-8888-888888888888",
+        decided_at: "2026-08-10T12:00:20.000Z",
+      }),
+    });
+  });
+  await page.goto("/opportunities/start");
+  await expect(page.getByText("已恢复上次未完成的选品进度。")).toBeVisible();
+  await expect(page.getByText("比较 2 条候选后再生成机会")).toBeVisible();
+  await page.getByText("候选二：可生成机会").click();
+  await page.getByLabel("采纳并生成机会").check();
+  await page.getByLabel("决策原因").fill("比较后选择候选二");
+  await page.getByRole("button", { name: "保存审计决策" }).click();
+  expect(decisionBody?.selected_raw_evidence_id).toBe(second.raw_evidence_id);
+  await expect(page.getByText("决策已保存 · 已采纳")).toBeVisible();
+  await expect(page.getByRole("link", { name: "查看机会、证据与决策历史 ↗" })).toBeVisible();
 });
 test("M07-06.A08/A16 shows succeeded_empty and forbidden without fake evidence", async ({
   page,

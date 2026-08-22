@@ -22,6 +22,8 @@ const row = {
   source_ref_id: null,
   owner_id: null,
   lifecycle_status: "candidate",
+  lifecycle_entered_at: "2026-08-19T20:00:00.000Z",
+  lifecycle_dwell_seconds: 14400,
   recommendation_status: "insufficient_data",
   overall_score: null,
   trend_score: null,
@@ -54,6 +56,8 @@ test("opportunity blocker filters reuse the persisted adoption guard facts", asy
     "evidence_insufficient",
     "recommendation_insufficient",
   ]);
+  assert.equal(result.items[0].lifecycle_dwell_seconds, 14400);
+  assert.match(statements[1].sql, /lifecycle_entered_at[\s\S]*lifecycle_dwell_seconds/);
   assert.ok(
     statements.every(({ sql }) =>
       sql.includes("(o.evidence_count=0 OR o.coverage_status='insufficient')"),
@@ -65,4 +69,46 @@ test("opportunity blocker filters reuse the persisted adoption guard facts", asy
   assert.ok(
     statements.every(({ sql }) => sql.includes("o.recommendation_status='insufficient_data'")),
   );
+});
+
+test("opportunity detail centralizes persisted blocker release progress", async () => {
+  const repository = new MySqlOpportunityRepository({
+    query: async (sql) => {
+      if (sql.includes("FROM opportunities o")) return [[row], []];
+      if (sql.includes("FROM tasks WHERE"))
+        return [
+          [
+            {
+              id: "00000000-0000-4000-8000-000000000425",
+              status: "completed",
+              progress_percent: 100,
+            },
+          ],
+          [],
+        ];
+      if (sql.includes("FROM opportunity_score_jobs"))
+        return [
+          [
+            {
+              id: "00000000-0000-4000-8000-000000000426",
+              status: "queued",
+              trigger_task_id: "00000000-0000-4000-8000-000000000425",
+            },
+          ],
+          [],
+        ];
+      return [[], []];
+    },
+  });
+  const detail = await repository.get({
+    organizationId: scope.organizationId,
+    workspaceId: scope.workspaceId,
+    actorId: scope.actorId,
+    opportunityId: row.id,
+  });
+  assert.equal(detail.adoption_blockers[0].status, "in_progress");
+  assert.equal(detail.adoption_blockers[0].progress_percent, 100);
+  assert.equal(detail.adoption_blockers[1].status, "in_progress");
+  assert.equal(detail.adoption_blockers[1].score_job_status, "queued");
+  assert.equal(detail.redecision_ready, false);
 });

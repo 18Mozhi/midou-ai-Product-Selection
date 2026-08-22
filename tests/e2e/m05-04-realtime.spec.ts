@@ -11,6 +11,7 @@ async function setup(page: Page) {
       onerror: any;
       listeners = new Map();
       constructor() {
+        setTimeout(() => this.onerror?.({}), 5);
         setTimeout(() => {
           this.onopen?.({});
           const cb = this.listeners.get("notification.changed") as any;
@@ -77,5 +78,17 @@ test("M05-04.A07/A08/A09/A15 reconnects and stores Last-Event-ID on desktop and 
   await expect
     .poll(() => page.evaluate(() => sessionStorage.getItem("scoutops:last-event-id")))
     .toBe("42");
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        JSON.parse(sessionStorage.getItem("scoutops:realtime-client-metrics") ?? "null"),
+      ),
+    )
+    .toMatchObject({
+      connection_open_count: 1,
+      reconnect_count: 1,
+      fallback_poll_count: 1,
+      reconnecting: false,
+    });
   await expect(page.getByText("当前没有通知")).toBeVisible();
 });

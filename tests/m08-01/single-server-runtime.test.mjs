@@ -5,7 +5,13 @@ import test from "node:test";
 const requiredFiles = [
   "database/migrations/0030_load_balancing_m08_01.up.sql",
   "database/migrations/0030_load_balancing_m08_01.down.sql",
+  "database/migrations/0062_runtime_process_restart_observations.up.sql",
+  "database/migrations/0062_runtime_process_restart_observations.down.sql",
+  "database/migrations/0063_runtime_health_endpoint_probes.up.sql",
+  "database/migrations/0063_runtime_health_endpoint_probes.down.sql",
   "packages/runtime-topology/src/index.ts",
+  "apps/api/src/runtime-health-probe.ts",
+  "apps/api/src/mysql-runtime-health-probe-repository.ts",
   "apps/api/src/mysql-runtime-topology-repository.ts",
   "apps/api/src/runtime-topology-routes.ts",
   "apps/web/src/components/RuntimeTopologyCenter.vue",
@@ -34,11 +40,139 @@ test("M08-01.A01-A17 deliver a Baota-only single-server runtime boundary", async
     "rollback",
     "backupServerUsed",
     "loadBalancingEnabled",
+    "restart_trend",
   ])
     assert.match(all, new RegExp(token, "i"));
   assert.doesNotMatch(
     all,
     /systemctl\s|docker(?:-|\s)compose\s+up|pm2\s+start|10000 users supported/i,
+  );
+});
+
+test("M08-01 queue monitoring exposes scheduler aging policy and factual delay", async () => {
+  const [scheduler, service, web, openapi, architecture, runbook, feature] = await Promise.all(
+    [
+      "apps/worker/src/queue-scheduler.ts",
+      "apps/api/src/runtime-topology-service.ts",
+      "apps/web/src/components/RuntimeTopologyCenter.vue",
+      "docs/openapi.yaml",
+      "docs/architecture/m08-01-single-server.md",
+      "docs/runbooks/m08-01-single-server.md",
+      "docs/feature-map.json",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  for (const field of ["aging_interval_ms", "maximum_aging_boost"])
+    for (const contract of [scheduler, service, openapi]) assert.match(contract, new RegExp(field));
+  for (const copy of ["队列老化与实际调度延迟", "已老化队列", "饥饿风险", "实际调度延迟"])
+    assert.match(web, new RegExp(copy));
+  assert.match(architecture, /最大老化增益/);
+  assert.match(runbook, /饥饿风险/);
+  assert.match(JSON.parse(feature).implementation.runtimeTopology.truthBoundary, /starvation risk/);
+});
+
+test("M08-01 continuously probes only fixed health endpoints and records bounded outcomes", async () => {
+  const { RuntimeHealthProbeMonitor, RUNTIME_HEALTH_ENDPOINTS } =
+    await import("../../apps/api/dist/runtime-health-probe.js");
+  const writes = [];
+  const repository = {
+    record: async (input) => writes.push(input),
+    summarize: async () => [],
+  };
+  const monitor = new RuntimeHealthProbeMonitor(
+    repository,
+    { intervalMs: 30_000, timeoutMs: 5, windowMinutes: 60, retentionHours: 72 },
+    async ({ path, signal }) => {
+      if (path.endsWith("/live")) return { statusCode: 200 };
+      if (path.endsWith("/ready")) return { statusCode: 503 };
+      return new Promise((resolve, reject) => {
+        signal.addEventListener("abort", () => reject(new Error("aborted")), { once: true });
+      });
+    },
+  );
+  assert.deepEqual(
+    RUNTIME_HEALTH_ENDPOINTS.map((item) => item.endpoint),
+    ["live", "ready", "available"],
+  );
+  assert.equal(await monitor.runCycle(), true);
+  assert.deepEqual(
+    writes[0].samples.map((item) => [item.endpoint, item.outcome, item.statusCode]),
+    [
+      ["live", "succeeded", 200],
+      ["ready", "http_error", 503],
+      ["available", "timeout", null],
+    ],
+  );
+  assert.equal(writes[0].retentionHours, 72);
+  assert.ok(writes[0].samples.every((item) => !("body" in item)));
+});
+
+test("M08-01 health probe repository calculates endpoint P50 P95 P99 and timeout counts", async () => {
+  const { MySqlRuntimeHealthProbeRepository } =
+    await import("../../apps/api/dist/mysql-runtime-health-probe-repository.js");
+  const observedAt = new Date("2026-08-22T10:00:00.000Z");
+  const rows = [10, 20, 30, 40, 50].map((latency, index) => ({
+    endpoint: "live",
+    outcome: index === 4 ? "timeout" : "succeeded",
+    status_code: index === 4 ? null : 200,
+    latency_ms: latency,
+    observed_at: new Date(observedAt.getTime() - (5 - index) * 1000),
+  }));
+  const repository = new MySqlRuntimeHealthProbeRepository({
+    query: async () => [rows],
+  });
+  const summaries = await repository.summarize({ observedAt, windowMinutes: 60 });
+  const live = summaries.find((item) => item.endpoint === "live");
+  assert.deepEqual(
+    {
+      sample_count: live.sample_count,
+      timeout_count: live.timeout_count,
+      availability_basis_points: live.availability_basis_points,
+      latency_p50_ms: live.latency_p50_ms,
+      latency_p95_ms: live.latency_p95_ms,
+      latency_p99_ms: live.latency_p99_ms,
+    },
+    {
+      sample_count: 5,
+      timeout_count: 1,
+      availability_basis_points: 8000,
+      latency_p50_ms: 30,
+      latency_p95_ms: 50,
+      latency_p99_ms: 50,
+    },
+  );
+});
+
+test("M08-01 runtime alerts correlate exact queues and allowlisted business objects", async () => {
+  const [scheduler, pollers, service, web, openapi, architecture, runbook, feature] =
+    await Promise.all(
+      [
+        "apps/worker/src/queue-scheduler.ts",
+        "apps/worker/src/worker-pollers.ts",
+        "apps/api/src/runtime-topology-service.ts",
+        "apps/web/src/components/RuntimeTopologyCenter.vue",
+        "docs/openapi.yaml",
+        "docs/architecture/m08-01-single-server.md",
+        "docs/runbooks/m08-01-single-server.md",
+        "docs/feature-map.json",
+      ].map((path) => readFile(path, "utf8")),
+    );
+  for (const field of [
+    "last_result_error_code",
+    "last_business_objects",
+    "root_cause_code",
+    "business_objects",
+  ])
+    assert.match(`${scheduler}\n${service}\n${openapi}`, new RegExp(field));
+  assert.match(pollers, /normalizeQueueRunObservation/);
+  assert.match(pollers, /\/platform-admin\/collection\?task=/);
+  assert.match(pollers, /\/opportunities\//);
+  assert.match(web, /关联队列/);
+  assert.match(web, /关联业务对象/);
+  assert.match(architecture, /不按队列类型猜测具体对象/);
+  assert.match(runbook, /不得出现原始 payload/);
+  assert.match(
+    JSON.parse(feature).implementation.runtimeTopology.truthBoundary,
+    /allowlisted exact object identifier/,
   );
 });
 
@@ -236,6 +370,15 @@ test("M08-01.A03/A10/A14 validates single-host config and transactional reposito
   ]);
   const runtime = loadRuntimeConfig({}, "api");
   assert.equal(runtime.runtimeTopology.mode, "single_host");
+  assert.deepEqual(
+    {
+      interval: runtime.runtimeTopology.healthProbeIntervalMs,
+      timeout: runtime.runtimeTopology.healthProbeTimeoutMs,
+      window: runtime.runtimeTopology.healthProbeWindowMinutes,
+      retention: runtime.runtimeTopology.healthProbeRetentionHours,
+    },
+    { interval: 30_000, timeout: 5_000, window: 60, retention: 72 },
+  );
   assert.equal(
     runtime.runtimeTopology.productionEvidenceFile.endsWith(
       "m08-01-single-server-production-evidence.json",
@@ -247,6 +390,14 @@ test("M08-01.A03/A10/A14 validates single-host config and transactional reposito
     /RUNTIME_TOPOLOGY_MODE/,
   );
   assert.throws(() => loadRuntimeConfig({ RUNTIME_HOST_ID: "bad host" }, "api"), /RUNTIME_HOST_ID/);
+  assert.throws(
+    () =>
+      loadRuntimeConfig(
+        { RUNTIME_HEALTH_PROBE_WINDOW_MINUTES: "120", RUNTIME_HEALTH_PROBE_RETENTION_HOURS: "1" },
+        "api",
+      ),
+    /RUNTIME_HEALTH_PROBE_WINDOW_MINUTES/,
+  );
 
   const calls = [];
   const connection = {
@@ -283,6 +434,10 @@ test("M08-01.A03/A10/A14 validates single-host config and transactional reposito
     observedAt,
     state: "ready",
     activeApiInstances: 1,
+    processes: [
+      { name: "api", status: "running", restartCount: 2 },
+      { name: "worker", status: "running", restartCount: 1 },
+    ],
   });
   assert.equal(calls.filter((item) => item === "begin").length, 2);
   assert.equal(calls.filter((item) => item === "commit").length, 2);
@@ -291,6 +446,115 @@ test("M08-01.A03/A10/A14 validates single-host config and transactional reposito
   assert.ok(
     calls.every((item) => typeof item !== "string" || !item.includes("load_balancer_observations")),
   );
+  assert.equal(
+    calls.filter(
+      (item) => typeof item === "string" && item.startsWith("INSERT INTO runtime_process_restart"),
+    ).length,
+    2,
+  );
+});
+
+test("M08-01 keeps a truthful 24-hour process restart trend and marks counter resets", async () => {
+  const { RuntimeTopologyService } =
+    await import("../../apps/api/dist/runtime-topology-service.js");
+  const now = new Date("2026-08-14T02:10:00.000Z"),
+    views = [];
+  const service = new RuntimeTopologyService(
+    {
+      snapshot: async () => ({
+        nodes: [
+          {
+            nodeId: "api-primary",
+            hostId: "huizhou-single-host",
+            role: "api",
+            status: "ready",
+            region: "惠州",
+            zone: "primary",
+            buildSha: "a".repeat(40),
+            version: "0.1.0",
+            lastHeartbeatAt: now,
+          },
+        ],
+        processHistory: [
+          {
+            process_name: "api",
+            status: "running",
+            restart_count: 2,
+            observed_at: "2026-08-14T02:00:00.000Z",
+          },
+          {
+            process_name: "worker",
+            status: "running",
+            restart_count: 5,
+            observed_at: "2026-08-14T02:00:00.000Z",
+          },
+          {
+            process_name: "api",
+            status: "running",
+            restart_count: 4,
+            observed_at: "2026-08-14T02:05:00.000Z",
+          },
+          {
+            process_name: "worker",
+            status: "running",
+            restart_count: 1,
+            observed_at: "2026-08-14T02:05:00.000Z",
+          },
+        ],
+      }),
+      recordView: async (input) => views.push(input),
+      heartbeat: async () => {},
+    },
+    {
+      expectedNodeId: "api-primary",
+      expectedHostId: "huizhou-single-host",
+      staleAfterMs: 90_000,
+      restartAlertThreshold: 20,
+      supervisorSnapshot: async () => ({
+        supervisor_pid: 1200,
+        status: "ready",
+        processes: {
+          api: {
+            status: "running",
+            pid: 1201,
+            restart_count: 5,
+            ready_at: now.toISOString(),
+            circuit_open_until: null,
+          },
+          worker: {
+            status: "running",
+            pid: 1202,
+            restart_count: 2,
+            ready_at: now.toISOString(),
+            circuit_open_until: null,
+          },
+        },
+        observed_at: now.toISOString(),
+      }),
+    },
+    () => now,
+  );
+  const result = await service.read({ actorId: "actor", requestId: "request", traceId: "trace" });
+  assert.deepEqual(
+    result.restart_trend
+      .filter((sample) => sample.process_name === "api")
+      .map((sample) => sample.restart_delta),
+    [0, 2, 1],
+  );
+  assert.deepEqual(
+    result.restart_trend
+      .filter((sample) => sample.process_name === "worker")
+      .map((sample) => [sample.restart_delta, sample.counter_reset]),
+    [
+      [0, false],
+      [0, true],
+      [1, false],
+    ],
+  );
+  assert.deepEqual(views[0].processes, [
+    { name: "api", status: "running", restartCount: 5 },
+    { name: "worker", status: "running", restartCount: 2 },
+  ]);
 });
 
 test("M08-01.A13/A16 production evidence proves one BaoTa host without load-balancing claims", async () => {

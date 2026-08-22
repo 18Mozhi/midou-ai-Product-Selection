@@ -139,6 +139,18 @@ test("M02-03 regression: preferred landing sends platform and organization admin
   });
 });
 
+test("M02-03 shell presents business labels grouped search and collapsed failure identifiers", async () => {
+  const [shell, permissions, catalog] = await Promise.all([
+    read("apps/web/src/components/NavigationShell.vue"),
+    read("apps/web/src/navigation-shell-permissions.ts"),
+    read("apps/web/src/route-catalog.ts"),
+  ]);
+  assert.match(`${shell}\n${permissions}`, /普通成员[\s\S]*平台超级管理员/);
+  assert.match(shell, /搜索导航菜单[\s\S]*没有匹配的菜单或分组/);
+  assert.match(shell, /role-gate-technical[\s\S]*故障详情[\s\S]*关联编号/);
+  assert.match(catalog, /业务运营[\s\S]*采集与数据[\s\S]*治理与安全[\s\S]*高级运维/);
+});
+
 test("M02-03.A06/A13 authenticated API validates shell and preserves error contract", async () => {
   const repo = new InMemoryAuthorizationRepository();
   repo.contexts.set(session, { user_id: actor, organization_id: org, workspace_id: workspace });
@@ -180,6 +192,10 @@ test("M02-03.A06/A13 authenticated API validates shell and preserves error contr
 test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay explicit", async () => {
   const [
     component,
+    permissions,
+    routeState,
+    shellTheme,
+    discovery,
     navigationMemory,
     routeCatalog,
     main,
@@ -196,6 +212,10 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   ] = await Promise.all(
     [
       "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/navigation-shell-permissions.ts",
+      "apps/web/src/navigation-shell-route-state.ts",
+      "apps/web/src/use-navigation-shell-theme.ts",
+      "apps/web/src/use-navigation-discovery.ts",
       "apps/web/src/navigation-memory.ts",
       "apps/web/src/route-catalog.ts",
       "apps/web/src/main.ts",
@@ -211,10 +231,11 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
       "tests/e2e/m02-03-navigation-shell.spec.ts",
     ].map(read),
   );
+  const componentEvidence = [component, permissions, routeState, shellTheme, discovery].join("\n");
   for (const shell of ["member", "organization_admin", "platform_admin"])
-    assert.match(component + openapi, new RegExp(shell));
+    assert.match(componentEvidence + openapi, new RegExp(shell));
   for (const path of ["/home", "/org-admin", "/platform-admin"])
-    assert.match(app + component, new RegExp(path.replaceAll("/", "\\/")));
+    assert.match(app + componentEvidence, new RegExp(path.replaceAll("/", "\\/")));
   for (const state of [
     "loading",
     "expired",
@@ -236,8 +257,8 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>邀请成员<\/span>/);
   assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>创建选品<\/span>/);
   assert.match(component, /aria-current/);
-  assert.match(component, /navigationItemsFor/);
-  assert.doesNotMatch(component, /const\s+(memberMenu|orgMenu|platformMenu)/);
+  assert.match(componentEvidence, /navigationItemsFor/);
+  assert.doesNotMatch(componentEvidence, /const\s+(memberMenu|orgMenu|platformMenu)/);
   assert.match(routeCatalog, /navigationCatalog/);
   assert.match(routeCatalog, /surfaceAliases/);
   assert.match(routeCatalog, /cachePolicy/);
@@ -251,7 +272,7 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(component, /rememberMemberRoute/);
   assert.match(navigationMemory, /getLastMemberRoute/);
   assert.match(navigationMemory, /getRecentOrganizationIds/);
-  assert.doesNotMatch(component + navigationMemory, /(?:local|session)Storage/);
+  assert.doesNotMatch(componentEvidence + navigationMemory, /(?:local|session)Storage/);
   assert.match(component, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   assert.match(landingRedirect, /\/me\/landing/);
