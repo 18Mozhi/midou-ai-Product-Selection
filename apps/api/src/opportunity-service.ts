@@ -53,6 +53,40 @@ export interface OpportunitySummary {
   updated_at: string;
 }
 export interface OpportunityDetail extends OpportunitySummary {
+  lineage: {
+    freshness: {
+      observed_at: string | null;
+      age_seconds: number | null;
+    };
+    failure_impact: {
+      level: "none" | "degraded" | "blocked";
+      codes: string[];
+      affected_stages: string[];
+    };
+    request_ids: string[];
+    trace_ids: string[];
+    nodes: Array<{
+      kind:
+        | "source"
+        | "collection_task"
+        | "collection_attempt"
+        | "evidence"
+        | "quality_issue"
+        | "trend"
+        | "opportunity"
+        | "score"
+        | "profit"
+        | "task"
+        | "notification";
+      id: string;
+      label: string;
+      status: string;
+      occurred_at: string;
+      request_id: string | null;
+      trace_id: string | null;
+      route: string;
+    }>;
+  };
   adoption_blockers: Array<{
     code: OpportunityBlockingReason;
     status: "blocked" | "in_progress" | "cleared";

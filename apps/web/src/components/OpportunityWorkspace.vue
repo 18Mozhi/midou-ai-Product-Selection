@@ -92,6 +92,7 @@ const {
 } = useAuditedReason();
 const tabs: [Tab, string][] = [
   ["overview", "结论"],
+  ["lineage", "业务血缘"],
   ["evidence", "证据"],
   ["profit", "利润与成本"],
   ["risk", "风险"],
@@ -100,6 +101,22 @@ const tabs: [Tab, string][] = [
   ["ai", "AI 辅助"],
   ["decisions", "决策历史"],
 ];
+const lineageKindLabel = (kind: string) =>
+  ({
+    source: "来源健康",
+    collection_task: "采集任务",
+    collection_attempt: "执行尝试",
+    evidence: "原始证据",
+    quality_issue: "质量问题",
+    trend: "趋势",
+    opportunity: "机会",
+    score: "评分",
+    profit: "利润",
+    task: "任务",
+    notification: "通知",
+  })[kind] ?? kind;
+const lineageImpactLabel = (level: string) =>
+  ({ none: "未发现失败影响", degraded: "部分环节降级", blocked: "存在阻断影响" })[level] ?? level;
 const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
 const returnPath = computed(() => {
   const value = typeof route.query.from === "string" ? route.query.from : "/opportunities";
@@ -756,6 +773,66 @@ watch(
             <strong>{{ opportunityStatusLabel(detail.risk_level) }}</strong
             ><span>尚无适用风险输入，不以“低风险”代替未知。</span>
           </article>
+        </section>
+        <section v-else-if="tab === 'lineage'" class="opportunity-lineage">
+          <header>
+            <div>
+              <p>端到端事实链</p>
+              <h4>业务血缘追踪</h4>
+              <span>每个节点均来自当前工作区的持久化记录；缺失环节保持缺失。</span>
+            </div>
+            <b :data-impact="detail.lineage.failure_impact.level">
+              {{ lineageImpactLabel(detail.lineage.failure_impact.level) }}
+            </b>
+          </header>
+          <dl class="opportunity-lineage-summary">
+            <div>
+              <dt>数据新鲜度</dt>
+              <dd v-if="detail.lineage.freshness.observed_at">
+                {{ freshness(detail.lineage.freshness.observed_at) }} · 距今
+                {{ durationLabel(detail.lineage.freshness.age_seconds ?? 0) }}
+              </dd>
+              <dd v-else>尚无原始证据观测时间</dd>
+            </div>
+            <div>
+              <dt>失败影响</dt>
+              <dd>
+                {{
+                  detail.lineage.failure_impact.affected_stages.map(lineageKindLabel).join("、") ||
+                  "无"
+                }}
+              </dd>
+            </div>
+          </dl>
+          <p v-if="!detail.lineage.nodes.length" class="opportunity-empty-copy">
+            当前机会尚无可追踪的业务节点。
+          </p>
+          <ol v-else class="opportunity-lineage-list">
+            <li v-for="node in detail.lineage.nodes" :key="node.kind + ':' + node.id">
+              <span>{{ lineageKindLabel(node.kind) }}</span>
+              <div>
+                <strong>{{ node.label }}</strong>
+                <small
+                  >{{ freshness(node.occurred_at) }} ·
+                  {{ statusLabel(node.status.split(":")[0]) }}</small
+                >
+                <details>
+                  <summary>技术链路</summary>
+                  <code>request_id: {{ node.request_id ?? "未记录" }}</code>
+                  <code>trace_id: {{ node.trace_id ?? "未记录" }}</code>
+                  <code>resource_id: {{ node.id }}</code>
+                </details>
+              </div>
+              <RouterLink :to="node.route">打开节点</RouterLink>
+            </li>
+          </ol>
+          <details
+            v-if="detail.lineage.failure_impact.codes.length"
+            class="opportunity-lineage-impact"
+          >
+            <summary>查看失败影响代码</summary>
+            <code v-for="code in detail.lineage.failure_impact.codes" :key="code">{{ code }}</code>
+          </details>
         </section>
         <section v-else-if="tab === 'market'" class="opportunity-section">
           <p>市场证据</p>

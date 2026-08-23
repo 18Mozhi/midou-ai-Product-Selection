@@ -1405,7 +1405,11 @@ paths:
             schema: { type: string, enum: [product, all], default: product },
           }
         - { name: category, in: query, schema: { type: string, maxLength: 80 } }
-        - { name: status, in: query, schema: { type: string, enum: [active, irrelevant, stale, archived] } }
+        - {
+            name: status,
+            in: query,
+            schema: { type: string, enum: [active, irrelevant, stale, archived] },
+          }
         - { name: followed, in: query, schema: { type: boolean } }
       responses:
         "200":
@@ -1425,7 +1429,11 @@ paths:
       description: Requires trend:manage. Archived merge sources remain auditable and are hidden from the default topic list.
       security: [{ HttpOnlySession: [] }]
       parameters:
-        - { name: status, in: query, schema: { type: string, enum: [pending, confirmed, rejected] } }
+        - {
+            name: status,
+            in: query,
+            schema: { type: string, enum: [pending, confirmed, rejected] },
+          }
       responses:
         "200": { $ref: "#/components/responses/Success" }
         "401": { $ref: "#/components/responses/Error" }
@@ -9494,7 +9502,8 @@ components:
         version: { type: integer, minimum: 1 }
     TrendTopicChangeInput:
       type: object
-      required: [operation, target_topic_id, source_topic_ids, signal_ids, reason, expected_versions]
+      required:
+        [operation, target_topic_id, source_topic_ids, signal_ids, reason, expected_versions]
       properties:
         operation: { type: string, enum: [merge, split] }
         target_topic_id: { type: string, format: uuid }
@@ -10112,7 +10121,12 @@ components:
         evidence_id: { type: string, format: uuid }
         observed_at: { type: string, format: date-time }
         expected_version: { type: integer, minimum: 1 }
-        reviewer_id: { type: string, format: uuid, description: Must be a different active member with cost:confirm. }
+        reviewer_id:
+          {
+            type: string,
+            format: uuid,
+            description: Must be a different active member with cost:confirm.,
+          }
     ProfitAnalysisEnvelope:
       type: object
       required: [data, request_id, trace_id]
@@ -10127,7 +10141,8 @@ components:
               type: array
               items:
                 type: object
-                required: [id, status, submitter_id, reviewer_id, due_at, overdue, can_review, version]
+                required:
+                  [id, status, submitter_id, reviewer_id, due_at, overdue, can_review, version]
                 properties:
                   id: { type: string, format: uuid }
                   status: { type: string, enum: [pending, approved, rejected] }
@@ -10258,11 +10273,63 @@ components:
                   score_components,
                   adoption_blockers,
                   redecision_ready,
+                  lineage,
                   evidence,
                   decisions,
                   section_status,
                 ]
               properties:
+                lineage:
+                  type: object
+                  required: [freshness, failure_impact, request_ids, trace_ids, nodes]
+                  properties:
+                    freshness:
+                      type: object
+                      required: [observed_at, age_seconds]
+                      properties:
+                        observed_at: { type: string, format: date-time, nullable: true }
+                        age_seconds: { type: integer, minimum: 0, nullable: true }
+                    failure_impact:
+                      type: object
+                      required: [level, codes, affected_stages]
+                      properties:
+                        level: { type: string, enum: [none, degraded, blocked] }
+                        codes: { type: array, items: { type: string } }
+                        affected_stages: { type: array, items: { type: string } }
+                    request_ids: { type: array, items: { type: string } }
+                    trace_ids: { type: array, items: { type: string } }
+                    nodes:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          [kind, id, label, status, occurred_at, request_id, trace_id, route]
+                        properties:
+                          kind:
+                            {
+                              type: string,
+                              enum:
+                                [
+                                  source,
+                                  collection_task,
+                                  collection_attempt,
+                                  evidence,
+                                  quality_issue,
+                                  trend,
+                                  opportunity,
+                                  score,
+                                  profit,
+                                  task,
+                                  notification,
+                                ],
+                            }
+                          id: { type: string }
+                          label: { type: string }
+                          status: { type: string }
+                          occurred_at: { type: string, format: date-time }
+                          request_id: { type: string, nullable: true }
+                          trace_id: { type: string, nullable: true }
+                          route: { type: string }
                 score_rule_version: { type: string, nullable: true }
                 scored_at: { type: string, format: date-time, nullable: true }
                 latest_score_run:

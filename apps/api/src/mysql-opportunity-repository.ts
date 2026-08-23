@@ -163,6 +163,308 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     );
     return rows.map((row) => ({ id: String(row.id), label: String(row.label) }));
   }
+  private async lineage(input: {
+    organizationId: string;
+    workspaceId: string;
+    opportunityId: string;
+  }): Promise<OpportunityDetail["lineage"]> {
+    const scope = [input.opportunityId, input.organizationId, input.workspaceId],
+      [
+        sourceRows = [],
+        attemptRows = [],
+        qualityRows = [],
+        trendRows = [],
+        opportunityRows = [],
+        scoreRows = [],
+        profitRows = [],
+        taskRows = [],
+        notificationRows = [],
+      ] = await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          sqlText(
+            "SELECT DISTINCT p.id source_id,p.name source_name,",
+            "COALESCE(h.health_status,p.status) source_status,h.last_error_code source_error_code,",
+            "COALESCE(h.last_checked_at,re.captured_at) source_checked_at,",
+            "re.id evidence_id,re.status evidence_status,re.captured_at,re.request_id,re.trace_id,",
+            "ct.id collection_task_id,ct.status collection_status,ct.last_error_code,",
+            "ct.created_at task_created_at,ct.request_id task_request_id,ct.trace_id task_trace_id",
+            "FROM opportunity_evidence_links l JOIN raw_evidence re ON re.id=l.raw_evidence_id",
+            "JOIN providers p ON p.id=re.provider_id LEFT JOIN provider_adapter_health h ON h.provider_id=p.id",
+            "JOIN collection_tasks ct ON ct.id=re.collection_task_id",
+            "WHERE l.opportunity_id=? AND l.organization_id=? AND l.workspace_id=?",
+            "ORDER BY re.captured_at DESC LIMIT 20",
+          ),
+          scope,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          sqlText(
+            "SELECT DISTINCT a.id,a.task_id,a.status,a.error_code,a.created_at,a.request_id,a.trace_id",
+            "FROM collection_task_attempts a JOIN raw_evidence re ON re.collection_task_id=a.task_id",
+            "JOIN opportunity_evidence_links l ON l.raw_evidence_id=re.id",
+            "WHERE l.opportunity_id=? AND l.organization_id=? AND l.workspace_id=?",
+            "ORDER BY a.created_at DESC LIMIT 20",
+          ),
+          scope,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          sqlText(
+            "SELECT DISTINCT q.id,q.metric_code,q.severity,q.status,q.updated_at,q.request_id,q.trace_id",
+            "FROM data_quality_issues q JOIN opportunity_evidence_links l ON l.raw_evidence_id=q.raw_evidence_id",
+            "WHERE l.opportunity_id=? AND q.organization_id=? AND q.workspace_id=?",
+            "ORDER BY q.updated_at DESC LIMIT 20",
+          ),
+          scope,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          sqlText(
+            "SELECT DISTINCT t.id,t.title,t.status,t.source_fresh_at,s.request_id,s.trace_id",
+            "FROM opportunities o JOIN trend_topics t ON t.id=o.source_ref_id AND o.source_type='trend_topic'",
+            "LEFT JOIN trend_signals s ON s.topic_id=t.id",
+            "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=?",
+            "ORDER BY s.observed_at DESC LIMIT 1",
+          ),
+          scope,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          sqlText(
+            "SELECT o.id,o.name,o.decision_status,o.updated_at,e.request_id,e.trace_id",
+            "FROM opportunities o LEFT JOIN opportunity_events e ON e.resource_type='opportunity'",
+            "AND e.resource_id=o.id AND e.organization_id=o.organization_id AND e.workspace_id=o.workspace_id",
+            "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=?",
+            "ORDER BY e.occurred_at DESC LIMIT 1",
+          ),
+          scope,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT id,status,scored_at,request_id,trace_id FROM opportunity_score_runs " +
+            "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? " +
+            "ORDER BY scored_at DESC LIMIT 10",
+          scope,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT id,status,calculated_at,request_id,trace_id FROM opportunity_profit_runs " +
+            "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? " +
+            "ORDER BY calculated_at DESC LIMIT 10",
+          scope,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          sqlText(
+            "SELECT t.id,t.title,t.status,t.updated_at,e.request_id,e.trace_id",
+            "FROM tasks t LEFT JOIN task_events e ON e.id=(SELECT e2.id FROM task_events e2",
+            "WHERE e2.task_id=t.id ORDER BY e2.created_at DESC,e2.id DESC LIMIT 1)",
+            "WHERE t.organization_id=? AND t.workspace_id=? AND t.source_ref_id=? AND t.deleted_at IS NULL",
+            "ORDER BY t.updated_at DESC LIMIT 20",
+          ),
+          [input.organizationId, input.workspaceId, input.opportunityId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          sqlText(
+            "SELECT n.id,n.title,n.severity,n.created_at,o.request_id,o.trace_id",
+            "FROM notifications n JOIN outbox_events o ON o.id=n.source_event_id",
+            "WHERE n.organization_id=? AND n.workspace_id=? AND (n.resource_id=? OR n.resource_id IN",
+            "(SELECT t.id FROM tasks t WHERE t.organization_id=? AND t.workspace_id=? AND",
+            "t.source_ref_id=? AND t.deleted_at IS NULL)) ORDER BY n.created_at DESC LIMIT 20",
+          ),
+          [
+            input.organizationId,
+            input.workspaceId,
+            input.opportunityId,
+            input.organizationId,
+            input.workspaceId,
+            input.opportunityId,
+          ],
+        ),
+      ]).then((results) => results.map(([rows]) => rows));
+    const nodes: OpportunityDetail["lineage"]["nodes"] = [],
+      seen = new Set<string>(),
+      add = (node: OpportunityDetail["lineage"]["nodes"][number]) => {
+        const key = `${node.kind}:${node.id}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          nodes.push(node);
+        }
+      };
+    for (const row of sourceRows) {
+      add({
+        kind: "source",
+        id: String(row.source_id),
+        label: String(row.source_name),
+        status: row.source_error_code
+          ? [row.source_status, row.source_error_code].map(String).join(":")
+          : String(row.source_status),
+        occurred_at: iso(row.source_checked_at),
+        request_id: String(row.request_id),
+        trace_id: String(row.trace_id),
+        route: `/platform-admin/providers/sources?provider_id=${encodeURIComponent(String(row.source_id))}`,
+      });
+      add({
+        kind: "collection_task",
+        id: String(row.collection_task_id),
+        label: "采集任务",
+        status: String(row.collection_status),
+        occurred_at: iso(row.task_created_at),
+        request_id: String(row.task_request_id),
+        trace_id: String(row.task_trace_id),
+        route: `/platform-admin/collection?task_id=${encodeURIComponent(String(row.collection_task_id))}`,
+      });
+      add({
+        kind: "evidence",
+        id: String(row.evidence_id),
+        label: "原始证据",
+        status: String(row.evidence_status),
+        occurred_at: iso(row.captured_at),
+        request_id: String(row.request_id),
+        trace_id: String(row.trace_id),
+        route: `/platform-admin/data?evidence_id=${encodeURIComponent(String(row.evidence_id))}`,
+      });
+    }
+    for (const row of attemptRows)
+      add({
+        kind: "collection_attempt",
+        id: String(row.id),
+        label: "采集尝试",
+        status: row.error_code ? `${row.status}:${row.error_code}` : String(row.status),
+        occurred_at: iso(row.created_at),
+        request_id: String(row.request_id),
+        trace_id: String(row.trace_id),
+        route: `/platform-admin/collection?task_id=${encodeURIComponent(String(row.task_id))}`,
+      });
+    for (const row of qualityRows)
+      add({
+        kind: "quality_issue",
+        id: String(row.id),
+        label: `质量问题：${String(row.metric_code)}`,
+        status: `${String(row.status)}:${String(row.severity)}`,
+        occurred_at: iso(row.updated_at),
+        request_id: String(row.request_id),
+        trace_id: String(row.trace_id),
+        route: `/platform-admin/data?issue_id=${encodeURIComponent(String(row.id))}`,
+      });
+    for (const row of trendRows)
+      add({
+        kind: "trend",
+        id: String(row.id),
+        label: String(row.title),
+        status: String(row.status),
+        occurred_at: iso(row.source_fresh_at),
+        request_id: row.request_id == null ? null : String(row.request_id),
+        trace_id: row.trace_id == null ? null : String(row.trace_id),
+        route: `/trends?topic_id=${encodeURIComponent(String(row.id))}`,
+      });
+    for (const row of opportunityRows)
+      add({
+        kind: "opportunity",
+        id: String(row.id),
+        label: String(row.name),
+        status: String(row.decision_status),
+        occurred_at: iso(row.updated_at),
+        request_id: row.request_id == null ? null : String(row.request_id),
+        trace_id: row.trace_id == null ? null : String(row.trace_id),
+        route: `/opportunities/${encodeURIComponent(String(row.id))}?tab=lineage`,
+      });
+    for (const row of scoreRows)
+      add({
+        kind: "score",
+        id: String(row.id),
+        label: "机会评分",
+        status: String(row.status),
+        occurred_at: iso(row.scored_at),
+        request_id: String(row.request_id),
+        trace_id: String(row.trace_id),
+        route: `/opportunities/${encodeURIComponent(input.opportunityId)}?tab=overview`,
+      });
+    for (const row of profitRows)
+      add({
+        kind: "profit",
+        id: String(row.id),
+        label: "利润核算",
+        status: String(row.status),
+        occurred_at: iso(row.calculated_at),
+        request_id: String(row.request_id),
+        trace_id: String(row.trace_id),
+        route: `/opportunities/${encodeURIComponent(input.opportunityId)}?tab=profit`,
+      });
+    for (const row of taskRows)
+      add({
+        kind: "task",
+        id: String(row.id),
+        label: String(row.title),
+        status: String(row.status),
+        occurred_at: iso(row.updated_at),
+        request_id: row.request_id == null ? null : String(row.request_id),
+        trace_id: row.trace_id == null ? null : String(row.trace_id),
+        route: `/tasks/${encodeURIComponent(String(row.id))}`,
+      });
+    for (const row of notificationRows)
+      add({
+        kind: "notification",
+        id: String(row.id),
+        label: String(row.title),
+        status: String(row.severity),
+        occurred_at: iso(row.created_at),
+        request_id: String(row.request_id),
+        trace_id: String(row.trace_id),
+        route: `/notifications?notification_id=${encodeURIComponent(String(row.id))}`,
+      });
+    const stageOrder = [
+      "source",
+      "collection_task",
+      "collection_attempt",
+      "evidence",
+      "quality_issue",
+      "trend",
+      "opportunity",
+      "score",
+      "profit",
+      "task",
+      "notification",
+    ];
+    nodes.sort(
+      (left, right) =>
+        stageOrder.indexOf(left.kind) - stageOrder.indexOf(right.kind) ||
+        new Date(left.occurred_at).getTime() - new Date(right.occurred_at).getTime(),
+    );
+    const codes = new Set<string>(),
+      affectedStages = new Set<string>();
+    let level: "none" | "degraded" | "blocked" = "none";
+    for (const node of nodes) {
+      const status = node.status.toLowerCase();
+      const blocked =
+        /blocked|failed_terminal|dead_letter/.test(status) ||
+        (node.kind === "quality_issue" && status === "open:critical");
+      const degraded =
+        blocked ||
+        /warning|retry_scheduled|rate_limited|succeeded_empty|insufficient_data/.test(status) ||
+        (node.kind === "quality_issue" && status === "open:warning");
+      if (degraded) {
+        affectedStages.add(node.kind);
+        codes.add(node.status);
+        if (blocked) level = "blocked";
+        else if (level === "none") level = "degraded";
+      }
+    }
+    const observedAt = sourceRows
+      .map((row) => new Date(row.captured_at as string | Date))
+      .sort((left, right) => right.getTime() - left.getTime())[0];
+    return {
+      freshness: {
+        observed_at: observedAt ? observedAt.toISOString() : null,
+        age_seconds: observedAt
+          ? Math.max(0, Math.floor((Date.now() - observedAt.getTime()) / 1000))
+          : null,
+      },
+      failure_impact: {
+        level,
+        codes: [...codes],
+        affected_stages: [...affectedStages],
+      },
+      request_ids: [
+        ...new Set(nodes.flatMap((node) => (node.request_id ? [node.request_id] : []))),
+      ],
+      trace_ids: [...new Set(nodes.flatMap((node) => (node.trace_id ? [node.trace_id] : [])))],
+      nodes,
+    };
+  }
   async get(input: {
     organizationId: string;
     workspaceId: string;
@@ -179,6 +481,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     );
     const row = rows[0];
     if (!row) return null;
+    const lineage = await this.lineage(input);
     const [evidence] = await this.pool.query<RowDataPacket[]>(
       sqlText(
         "SELECT l.id,s.title,s.publisher,s.canonical_url,l.provider_id,",
@@ -256,6 +559,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       );
     return {
       ...summary(row),
+      lineage,
       adoption_blockers: [
         {
           code: "evidence_insufficient",

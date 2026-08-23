@@ -6,6 +6,10 @@
 
 M04-02 的事实边界是：趋势证据可使市场分区变为 covered，但单一市场证据只能得到 `partial` 覆盖。评分、利润、竞品和风险输入分别由后续模块交付；当前值保持 null、`insufficient_data` 或 `unknown`。人工决定单独留痕，不修改原始评分与证据。
 
+## 业务血缘读模型
+
+机会详情以机会 ID、组织 ID 和工作区 ID 为共同边界，只读连接 Provider、采集任务、采集尝试、原始证据、数据质量问题、趋势主题、评分运行、利润运行、业务任务和通知。每个真实节点返回自身的 `request_id`、`trace_id`、状态、发生时间和可达业务路由；没有关联记录时不创建占位节点。新鲜度使用最新原始证据的 `captured_at` 与当前时间的客观差值。失败影响仅由已持久化的 blocked、failed_terminal、dead_letter、重试/限速、数据不足及未解决质量问题状态归类，不改变任何评分或人工决策。
+
 机会列表的证据完整度筛选直接匹配持久化 `coverage_status`（`insufficient`、`partial`、`complete`），与组织、工作区和其他列表条件共同下推到 MySQL。该筛选不推断推荐质量、利润状态或风险结论。
 
 机会列表的阻断原因筛选只复用采纳接口已经执行的事实条件：`evidence_insufficient` 对应证据数为零或覆盖状态为 `insufficient`，`recommendation_insufficient` 对应推荐状态为 `insufficient_data`。列表响应返回同一组 `blocking_reasons` 并在界面翻译为中文；不把利润不足或风险未知擅自升级为采纳阻断。

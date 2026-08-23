@@ -507,7 +507,8 @@
 .opportunity-overview > article,
 .opportunity-section,
 .opportunity-evidence,
-.opportunity-decisions {
+.opportunity-decisions,
+.opportunity-lineage {
   min-height: 180px;
   padding: 18px;
   border: 1px solid var(--so-border);
@@ -608,6 +609,69 @@
 .opportunity-decisions article strong,
 .opportunity-decisions article small {
   display: block;
+}
+.opportunity-lineage > header,
+.opportunity-lineage-list li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.opportunity-lineage > header span,
+.opportunity-lineage-list small,
+.opportunity-lineage-summary dt {
+  color: var(--so-text-muted);
+}
+.opportunity-lineage > header b[data-impact="blocked"] {
+  color: var(--so-danger);
+}
+.opportunity-lineage > header b[data-impact="degraded"] {
+  color: var(--so-warning);
+}
+.opportunity-lineage-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+.opportunity-lineage-summary > div,
+.opportunity-lineage-list li {
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel);
+}
+.opportunity-lineage-summary dd {
+  margin: 5px 0 0;
+}
+.opportunity-lineage-list {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.opportunity-lineage-list li > span {
+  min-width: 84px;
+  color: var(--so-primary);
+  font-weight: 700;
+}
+.opportunity-lineage-list li > div {
+  flex: 1;
+  min-width: 0;
+}
+.opportunity-lineage-list code,
+.opportunity-lineage-impact code {
+  display: block;
+  overflow-wrap: anywhere;
+  margin-top: 4px;
+  color: var(--so-text-muted);
+}
+.opportunity-lineage-list a {
+  white-space: nowrap;
+}
+.opportunity-lineage-impact {
+  margin-top: 14px;
 }
 .opportunity-modal {
   position: fixed;
@@ -817,6 +881,18 @@
   }
   .opportunity-overview {
     grid-template-columns: 1fr;
+  }
+  .opportunity-lineage > header,
+  .opportunity-lineage-list li {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .opportunity-lineage-summary {
+    grid-template-columns: 1fr;
+  }
+  .opportunity-lineage-list a {
+    width: 100%;
+    text-align: center;
   }
   .opportunity-evidence > a {
     display: block;

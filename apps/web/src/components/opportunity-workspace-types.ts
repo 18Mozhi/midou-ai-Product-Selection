@@ -2,7 +2,15 @@ export type OpportunityWorkspaceState =
   "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 
 export type OpportunityTab =
-  "overview" | "market" | "competition" | "profit" | "risk" | "ai" | "evidence" | "decisions";
+  | "overview"
+  | "lineage"
+  | "market"
+  | "competition"
+  | "profit"
+  | "risk"
+  | "ai"
+  | "evidence"
+  | "decisions";
 
 export interface OpportunitySummary {
   id: string;
@@ -35,6 +43,26 @@ export interface OpportunitySummary {
 }
 
 export interface OpportunityDetail extends OpportunitySummary {
+  lineage: {
+    freshness: { observed_at: string | null; age_seconds: number | null };
+    failure_impact: {
+      level: "none" | "degraded" | "blocked";
+      codes: string[];
+      affected_stages: string[];
+    };
+    request_ids: string[];
+    trace_ids: string[];
+    nodes: Array<{
+      kind: string;
+      id: string;
+      label: string;
+      status: string;
+      occurred_at: string;
+      request_id: string | null;
+      trace_id: string | null;
+      route: string;
+    }>;
+  };
   adoption_blockers: Array<{
     code: "evidence_insufficient" | "recommendation_insufficient";
     status: "blocked" | "in_progress" | "cleared";
