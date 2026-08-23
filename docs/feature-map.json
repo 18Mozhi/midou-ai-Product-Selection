@@ -137,12 +137,7 @@
       "liveGate": "../scripts/verify-redis-live.mjs",
       "purposes": ["cache", "queue", "rate", "sse"],
       "keyScope": "scoutops:v1:<purpose>:org:<organization_id>:ws:<workspace_id>:...",
-      "ttlPolicy": {
-        "cache": 300,
-        "queue": 86400,
-        "rate": 60,
-        "sse": 86400
-      },
+      "ttlPolicy": { "cache": 300, "queue": 86400, "rate": 60, "sse": 86400 },
       "runtimeEndpoint": "/api/v1/platform/operations/redis",
       "status": "verified",
       "statusDetail": "module_verified"
@@ -1808,6 +1803,21 @@
       "status": "verified",
       "statusDetail": "module_verified"
     },
+    "productionAcceptance": {
+      "module": "M07-01",
+      "entrypoints": [
+        "../infra/baota/production-acceptance-manifest.json",
+        "../scripts/run-baota-production-acceptance.mjs",
+        "../scripts/verify-production-api-coverage.mjs",
+        "../scripts/verify-production-product.mjs",
+        "../config/route-catalog.json"
+      ],
+      "scope": "one-time six-role production tenant, 220 OpenAPI paths, 253 operations, 59 protected routes and automatic scoped cleanup",
+      "runtimeBoundary": "manual finite BaoTa task only; no daemon, no valid write payloads, no persistent acceptance account or tenant",
+      "cleanupBoundary": "exact run users organization workspace resources and trace references are deleted with a per-table manifest and zero-reference verification",
+      "status": "implemented",
+      "statusDetail": "local_preflight_and_production_execution_pending"
+    },
     "securityGate": {
       "module": "M07-02",
       "entrypoints": ["../verification/security-gate.json", "../scripts/verify-security-gate.mjs"],
@@ -2658,10 +2668,11 @@
   },
   "routes": [
     {
-      "path": "/home",
-      "view": "HomeDashboard",
-      "domain": "work",
-      "status": "implemented"
+      "path": "/settings/theme",
+      "view": "ThemeStudio",
+      "domain": "personal-preferences",
+      "status": "verified",
+      "statusDetail": "M02-01_module_verified"
     },
     {
       "path": "/me",
@@ -2670,13 +2681,7 @@
       "loading": "profile is loaded and rendered first; authorization, sessions, notifications and assets settle independently in the background with explicit partial-failure feedback",
       "status": "implemented"
     },
-    {
-      "path": "/settings/theme",
-      "view": "ThemeStudio",
-      "domain": "personal-preferences",
-      "status": "verified",
-      "statusDetail": "M02-01_module_verified"
-    },
+    { "path": "/home", "view": "HomeDashboard", "domain": "work", "status": "implemented" },
     {
       "path": "/work",
       "view": "TaskWorkspace",
@@ -2706,18 +2711,18 @@
       "statusDetail": "M07-06_module_verified"
     },
     {
-      "path": "/opportunities/{opportunityId}",
-      "view": "OpportunityWorkspace",
-      "domain": "opportunities",
-      "status": "verified",
-      "statusDetail": "M04-04_profit_analysis_verified"
-    },
-    {
       "path": "/opportunities/scoring-rules",
       "view": "ScoreRuleConsole",
       "domain": "opportunities",
       "status": "verified",
       "statusDetail": "M04-03_module_verified"
+    },
+    {
+      "path": "/opportunities/{opportunityId}",
+      "view": "OpportunityWorkspace",
+      "domain": "opportunities",
+      "status": "verified",
+      "statusDetail": "M04-04_profit_analysis_verified"
     },
     {
       "path": "/competitors",
@@ -2867,13 +2872,6 @@
       "statusDetail": "implemented_pending_live_verification"
     },
     {
-      "path": "/platform-admin/permissions",
-      "view": "PlatformAccountCenter",
-      "domain": "platform-accounts-permissions",
-      "status": "implemented",
-      "statusDetail": "implemented_pending_live_verification"
-    },
-    {
       "path": "/platform-admin/organizations",
       "view": "PlatformAccountCenter",
       "domain": "platform-organizations",
@@ -2904,6 +2902,13 @@
       "status": "implemented"
     },
     {
+      "path": "/platform-admin/permissions",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-accounts-permissions",
+      "status": "implemented",
+      "statusDetail": "implemented_pending_live_verification"
+    },
+    {
       "path": "/platform-admin/providers",
       "view": "ProviderRegistry",
       "domain": "platform",
@@ -2921,6 +2926,13 @@
       "path": "/platform-admin/providers/sources",
       "view": "ProviderSourceCenter",
       "domain": "platform",
+      "status": "verified",
+      "statusDetail": "M03-07_module_verified"
+    },
+    {
+      "path": "/platform-admin/providers/sources/1688-acceptance",
+      "view": "Alibaba1688AcceptanceCenter",
+      "domain": "provider-sources-1688-acceptance",
       "status": "verified",
       "statusDetail": "M03-07_module_verified"
     },
@@ -2981,18 +2993,11 @@
       "statusDetail": "M06-02_module_verified"
     },
     {
-      "path": "/platform-admin/status",
-      "view": "PlatformManagementCenter",
-      "domain": "platform-system-status",
+      "path": "/platform-admin/commercial",
+      "view": "CommercialOperationsCenter",
+      "domain": "commercial-operations",
       "status": "verified",
-      "statusDetail": "M06-02_module_verified"
-    },
-    {
-      "path": "/platform-admin/logs",
-      "view": "PlatformLogCenter",
-      "domain": "platform-operational-logs",
-      "status": "implemented",
-      "statusDetail": "implemented_pending_full_verification"
+      "statusDetail": "M06-06_module_verified"
     },
     {
       "path": "/platform-admin/security",
@@ -3009,11 +3014,18 @@
       "statusDetail": "M06-05_module_verified"
     },
     {
-      "path": "/platform-admin/commercial",
-      "view": "CommercialOperationsCenter",
-      "domain": "commercial-operations",
+      "path": "/platform-admin/status",
+      "view": "PlatformManagementCenter",
+      "domain": "platform-system-status",
       "status": "verified",
-      "statusDetail": "M06-06_module_verified"
+      "statusDetail": "M06-02_module_verified"
+    },
+    {
+      "path": "/platform-admin/logs",
+      "view": "PlatformLogCenter",
+      "domain": "platform-operational-logs",
+      "status": "implemented",
+      "statusDetail": "implemented_pending_full_verification"
     },
     {
       "path": "/platform-admin/operations",
@@ -3324,5 +3336,6 @@
     "No production service may run outside Baota panel management."
   ],
   "statusDetail": "P00_P08_product_functionally_verified_single_server",
-  "statusEnum": ["planned", "implemented", "verified", "blocked", "deprecated"]
+  "statusEnum": ["planned", "implemented", "verified", "blocked", "deprecated"],
+  "routeCatalogSource": "../config/route-catalog.json"
 }

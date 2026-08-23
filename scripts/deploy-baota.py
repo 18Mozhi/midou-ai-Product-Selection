@@ -228,8 +228,25 @@ def build_package(repo: Path, source_identity: dict[str, str], skip_build: bool,
 
     script_target = backend / "scripts"
     script_target.mkdir()
-    shutil.copy2(repo / "scripts/run-playwright-crawler.mjs", script_target)
-    shutil.copy2(repo / "scripts/apply-deployment-migrations.mjs", script_target)
+    for script in (
+        "run-playwright-crawler.mjs",
+        "apply-deployment-migrations.mjs",
+        "production-route-catalog.mjs",
+        "verify-production-product.mjs",
+        "verify-production-api-coverage.mjs",
+        "run-baota-production-acceptance.mjs",
+    ):
+        shutil.copy2(repo / f"scripts/{script}", script_target)
+
+    for relative in (
+        "config/route-catalog.json",
+        "infra/baota/production-acceptance-manifest.json",
+        "docs/openapi.yaml",
+    ):
+        source = repo / relative
+        target = backend / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
 
     migrations = repo / "database/migrations"
     if migrations.is_dir():

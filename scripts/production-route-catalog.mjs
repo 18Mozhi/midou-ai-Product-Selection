@@ -1,59 +1,52 @@
 import { readFile } from "node:fs/promises";
-import ts from "typescript";
 
-const SHELL_FACTORIES = new Map([
-  ["member", "member"],
-  ["organization", "organization_admin"],
-  ["platform", "platform_admin"],
-]);
+export async function readRouteCatalogManifest(file = "config/route-catalog.json") {
+  const manifest = JSON.parse(await readFile(file, "utf8"));
+  if (manifest?.schemaVersion !== 1 || !Array.isArray(manifest.routes))
+    throw new Error("route_catalog_schema_invalid");
+  return manifest;
+}
 
-const stringValue = (node) =>
-  node && (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) ? node.text : null;
-
-const stringArray = (node) => {
-  if (!node) return [];
-  if (!ts.isArrayLiteralExpression(node))
-    throw new Error("route_capabilities_must_be_literal_array");
-  const values = node.elements.map(stringValue);
-  if (values.some((value) => value === null))
-    throw new Error("route_capabilities_must_be_literal_strings");
-  return values;
-};
-
-export async function readProtectedRouteCatalog(file = "apps/web/src/route-catalog.ts") {
-  const sourceText = await readFile(file, "utf8");
-  const source = ts.createSourceFile(file, sourceText, ts.ScriptTarget.Latest, true);
-  const routes = [];
-  const visit = (node) => {
-    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
-      const shell = SHELL_FACTORIES.get(node.expression.text);
-      if (shell) {
-        const path = stringValue(node.arguments[0]);
-        if (!path) throw new Error(`route_path_must_be_literal:${node.expression.text}`);
-        routes.push({
-          path,
-          shell,
-          capabilities: stringArray(node.arguments[4]),
-          dynamic: path.includes(":"),
-        });
-      }
-    }
-    ts.forEachChild(node, visit);
-  };
-  visit(source);
+export async function readProtectedRouteCatalog(file = "config/route-catalog.json") {
+  const manifest = await readRouteCatalogManifest(file);
+  const routes = manifest.routes
+    .filter((route) => route.acceptance === "protected")
+    .map((route) => ({
+      path: route.path,
+      name: route.name,
+      shell: route.shell,
+      capabilities: [...route.capabilities],
+      dynamic: route.path.includes(":"),
+      resolver: route.productionResolver ?? null,
+    }));
   const duplicates = routes.filter(
     (route, index) => routes.findIndex((candidate) => candidate.path === route.path) !== index,
   );
-  if (duplicates.length) throw new Error(`duplicate_protected_routes:${duplicates.join(",")}`);
+  if (duplicates.length)
+    throw new Error(
+      `duplicate_protected_routes:${duplicates.map((route) => route.path).join(",")}`,
+    );
   return routes;
 }
 
-export function authorizedRoutesFor(catalog, shell, capabilities) {
+export function isRouteAuthorized(route, shell, capabilities) {
+  if (route.shell !== shell) return false;
   const granted = new Set(capabilities);
-  return catalog.filter(
-    (route) =>
-      route.shell === shell &&
-      (route.capabilities.length === 0 ||
-        route.capabilities.some((capability) => granted.has(capability))),
+  return (
+    route.capabilities.length === 0 ||
+    route.capabilities.some((capability) => granted.has(capability))
   );
+}
+
+export function authorizedRoutesFor(catalog, shell, capabilities) {
+  return catalog.filter((route) => isRouteAuthorized(route, shell, capabilities));
+}
+
+export function roleRouteMatrix(catalog, shell, capabilities) {
+  return catalog.map((route) => ({
+    path: route.path,
+    shell: route.shell,
+    required_capabilities: [...route.capabilities],
+    decision: isRouteAuthorized(route, shell, capabilities) ? "allow" : "deny",
+  }));
 }

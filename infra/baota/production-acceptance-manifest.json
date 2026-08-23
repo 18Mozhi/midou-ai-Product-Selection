@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "productionManager": "baota",
+  "topology": "single_host_huizhou",
+  "task": {
+    "name": "product-scout-production-acceptance",
+    "kind": "finite_node_task",
+    "schedule": "manual",
+    "command": "node scripts/run-baota-production-acceptance.mjs --production",
+    "workingDirectory": "/www/wwwroot/ai选品/backend",
+    "daemon": false,
+    "timeoutSeconds": 1800
+  },
+  "baseline": {
+    "openapiFile": "docs/openapi.yaml",
+    "pathCount": 220,
+    "operationCount": 253,
+    "protectedRouteCount": 59,
+    "roleCount": 6
+  },
+  "tenant": {
+    "organizationLabel": "AI选品功能验收组织",
+    "workspaceLabel": "功能验收工作区",
+    "emailDomain": "acceptance.invalid",
+    "verifiedEmailRequired": true,
+    "singleRoleRequired": true,
+    "minimumSeed": ["opportunity", "task"]
+  },
+  "apiProbe": {
+    "realFastifyRequired": true,
+    "writePolicy": "validation_or_authorization_block_only",
+    "allowedOutcomes": ["success", "empty", "blocked", "unauthenticated", "unauthorized"],
+    "routeNotFoundAllowed": false
+  },
+  "cleanup": {
+    "required": true,
+    "deleteSessions": true,
+    "deleteRelatedData": true,
+    "verifyZeroReferences": true,
+    "deletionManifestRequired": true
+  },
+  "restrictedEnvironment": [
+    "SCOUTOPS_ACCEPTANCE_PASSWORD",
+    "SCOUTOPS_ACCEPTANCE_BASE_URL",
+    "SCOUTOPS_ACCEPTANCE_REPORT_FILE"
+  ]
+}

@@ -20,10 +20,10 @@ test("platform governance is a validated platform management domain", async () =
 });
 
 test("platform governance covers rules workflows automation versions approvals rollout and rollback", async () => {
-  const [web, shell, repository] = await Promise.all(
+  const [web, routeCatalog, repository] = await Promise.all(
     [
       "apps/web/src/components/PlatformGovernanceCenter.vue",
-      "apps/web/src/route-catalog.ts",
+      "config/route-catalog.json",
       "apps/api/src/mysql-platform-dashboard-repository.ts",
     ].map((path) => readFile(path, "utf8")),
   );
@@ -36,7 +36,10 @@ test("platform governance covers rules workflows automation versions approvals r
     "配置版本",
   ])
     assert.match(web, new RegExp(label));
-  assert.match(shell, /\/platform-admin\/governance/);
+  assert.equal(
+    JSON.parse(routeCatalog).routes.some((route) => route.path === "/platform-admin/governance"),
+    true,
+  );
   for (const table of [
     "score_rules",
     "cost_rules",

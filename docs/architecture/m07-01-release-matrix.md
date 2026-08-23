@@ -24,6 +24,12 @@ M07-01 把 P00–P06 的现有自动化组织为可执行发布矩阵，覆盖�
 
 ## 生产授权路由验收
 
-软件矩阵通过后，`npm run verify:production-product` 使用六个隔离账号覆盖普通成员、选品经理、组织管理员、平台运营管理员、平台安全管理员和平台超级管理员。`scripts/production-route-catalog.mjs` 只读解析前端权威 `route-catalog.ts` 的成员、组织和平台路由及能力要求；验收脚本再使用 `/me/navigation` 返回的服务端真实角色与能力计算每个账号应访问的页面。六个账号的覆盖并集必须等于 Route Catalog 全部受保护路由，新增路由不会因未加入侧栏而静默漏测。
+软件矩阵通过后，`npm run verify:production-product` 使用六个隔离账号覆盖普通成员、选品经理、组织管理员、平台运营管理员、平台安全管理员和平台超级管理员。`config/route-catalog.json` 是 Route Catalog、Feature Map 路由段、生产六角色目录和回归矩阵的唯一机器可读来源；`npm run generate:route-artifacts` 生成前端只读目录与 Feature Map 路由段，`npm run verify:route-artifacts` 对漂移失败关闭。验收脚本使用 `/me/navigation` 返回的服务端真实角色与能力，为每个账号生成覆盖全部受保护路由的 `allow`/`deny` 矩阵，并遍历全部 `allow` 页面。六个账号的授权覆盖并集必须等于全部受保护路由，新增路由不会因未加入侧栏或漏改测试常量而静默漏测。
 
-机会详情和任务详情必须从对应真实列表解析已持久化 UUID；没有验收记录时门禁失败，不以占位 ID 或 Mock 响应代替。每个账号必须只有一个预期角色，受限角色含禁止能力或非平台账号含平台角色时立即失败。报告保存路由模板、实际路径、标题、正文长度、能力和错误，不保存邮箱、密码、Cookie 或响应正文。
+机会详情、任务详情和组织详情的动态解析规则与父列表路径也登记在同一目录，必须从对应真实列表解析已持久化 UUID；没有验收记录时门禁失败，不以占位 ID 或 Mock 响应代替。每个账号必须只有一个预期角色，受限角色含禁止能力或非平台账号含平台角色时立即失败。schema v3 报告保存 6×全部受保护路由的允许/拒绝矩阵、路由模板、实际路径、标题、正文长度、能力和错误，不保存邮箱、密码、Cookie 或响应正文。
+
+## 一次性生产验收租户
+
+`infra/baota/production-acceptance-manifest.json` 锁定一个手工触发、最长 1800 秒且不常驻的宝塔 Node 任务。任务从受限环境读取一个一次性强密码，在 MySQL 5.7 中创建六个邮箱已验证、互斥单角色账号，以及一个隔离组织、工作区、一条机会和一条任务；成员侧三个账号分别只有 `member`、`selection_manager`、`organization_admin`，平台侧三个账号分别只有 `platform_operations_admin`、`platform_security_admin`、`platform_super_admin`。
+
+同一任务从 `docs/openapi.yaml` 读取 220 个路径、253 个操作及 `x-required-capability`，所有请求都进入正式 HTTPS 和真实 Fastify。GET 使用服务端 `/me/navigation` 返回的真实能力选择授权账号；写操作只允许在鉴权、CSRF、请求 schema 或领域前置条件处安全受阻，不提交有效生产业务载荷。随后复用同一机器路由目录完成 59 条受保护路由和 354 个角色允许/拒绝矩阵单元。无论验收成功或失败，`finally` 都按本次精确用户、组织、工作区、对象和 trace 标记删除账号、会话、上下文、审计及关联业务数据，再逐表复核剩余引用为零并输出删除清单；报告不保存邮箱、密码、Cookie 或响应正文。

@@ -7,10 +7,11 @@ const read = (path) => readFile(path, "utf8");
 // Regression: ISSUE-001 — the production root rendered the M00 foundation harness
 // Found by repository and live-browser QA on 2026-08-17.
 test("production root resolves the authenticated role landing instead of the foundation harness", async () => {
-  const [html, app, shell, catalog] = await Promise.all([
+  const [html, app, shell, catalog, routeAdapter] = await Promise.all([
     read("apps/web/index.html"),
     read("apps/web/src/App.vue"),
     read("apps/web/src/components/NavigationShell.vue"),
+    read("config/route-catalog.json").then(JSON.parse),
     read("apps/web/src/route-catalog.ts"),
   ]);
 
@@ -19,8 +20,12 @@ test("production root resolves the authenticated role landing instead of the fou
   assert.match(app, /<LandingRedirect\s+v-if="selectedView === 'landing'"/);
   assert.doesNotMatch(app, /FOUNDATION\s*\/\s*M00-01/);
   assert.doesNotMatch(app, />自动验收</);
-  assert.match(catalog, /route\("\/", "landing"/);
-  assert.match(catalog, /member\("\/home", "home", "今日行动"/);
+  const landing = catalog.routes.find((route) => route.path === "/");
+  assert.equal(landing?.name, "landing");
+  assert.equal(landing?.title, "正在进入");
+  assert.equal(landing?.view, "landing");
+  assert.equal(catalog.routes.find((route) => route.path === "/home")?.title, "今日行动");
+  assert.match(routeAdapter, /route-catalog\.generated\.json/);
   assert.doesNotMatch(shell, /\{\{\s*phaseLabel\s*\}\}/);
 });
 
@@ -80,10 +85,11 @@ test("unified backend build and lifecycle contracts are registered", async () =>
 // Regression: ISSUE-005 — visible navigation linked to phase placeholders rather than features
 // Found by route-to-component audit on 2026-08-17.
 test("every visible production navigation entry resolves to a real feature surface", async () => {
-  const [shell, identity, app, catalog] = await Promise.all([
+  const [shell, identity, app, catalog, routeAdapter] = await Promise.all([
     read("apps/web/src/components/NavigationShell.vue"),
     read("apps/web/src/components/LocalIdentity.vue"),
     read("apps/web/src/App.vue"),
+    read("config/route-catalog.json").then(JSON.parse),
     read("apps/web/src/route-catalog.ts"),
   ]);
 
@@ -97,11 +103,11 @@ test("every visible production navigation entry resolves to a real feature surfa
   }
 
   for (const accountRoute of ["/platform-admin/organizations", "/platform-admin/admins"]) {
-    assert.match(catalog, new RegExp(accountRoute.replaceAll("/", "\\/")));
+    assert.ok(catalog.routes.some((route) => route.path === accountRoute));
   }
 
-  assert.doesNotMatch(catalog, /['"]\/me['"]\s*,[^\n]*view:\s*['"]local-identity['"]/);
-  assert.match(catalog, /route\(["']\/me["']/);
+  assert.equal(catalog.routes.find((route) => route.path === "/me")?.view, "account");
+  assert.match(routeAdapter, /manifest\.routes\.map/);
   assert.doesNotMatch(shell, /isAccountCenter|import LocalIdentity/);
   assert.doesNotMatch(identity, /['"]\/me['"]\s*:\s*['"]sessions['"]/);
   assert.match(identity, /pathModes\[window\.location\.pathname\]/);
@@ -115,13 +121,13 @@ test("production identity and onboarding use real routes while harness views sta
     read("apps/web/src/App.vue"),
     read("apps/web/src/components/NavigationShell.vue"),
     read("apps/web/src/components/LocalIdentity.vue"),
-    read("apps/web/src/route-catalog.ts"),
+    read("config/route-catalog.json").then(JSON.parse),
   ]);
 
   assert.match(app, /import\.meta\.env\.DEV/);
   assert.match(app, /selectedView === 'landing'/);
-  assert.match(catalog, /route\(["']\/login["'][\s\S]*?view:\s*["']local-identity["']/);
-  assert.match(catalog, /route\(["']\/select-context["'][\s\S]*?view:\s*["']tenancy["']/);
+  assert.equal(catalog.routes.find((route) => route.path === "/login")?.view, "local-identity");
+  assert.equal(catalog.routes.find((route) => route.path === "/select-context")?.view, "tenancy");
   assert.match(identity, /['"]\/register['"]\s*:\s*['"]register['"]/);
   assert.doesNotMatch(`${shell}\n${identity}`, /\?view=local-identity|\?view=tenancy/);
 });
@@ -144,25 +150,48 @@ test("every live verifier that creates organizations clears the default workspac
 
 // Regression: ISSUE-008 — production QA navigated before tenant selection had been persisted.
 test("production product QA waits for the selected tenant context and never embeds QA credentials", async () => {
-  const source = await read("scripts/verify-production-product.mjs");
+  const [source, catalog] = await Promise.all([
+    read("scripts/verify-production-product.mjs"),
+    read("config/route-catalog.json").then(JSON.parse),
+  ]);
   assert.match(source, /getByText\("工作范围已就绪", \{ exact: true \}\)\.waitFor\(\)/);
-  assert.match(source, /credentials\("SCOUTOPS_QA_ADMIN"\)/);
-  assert.match(source, /credentials\("SCOUTOPS_QA_MEMBER"\)/);
-  assert.match(source, /SCOUTOPS_QA_SELECTION_MANAGER/);
-  assert.match(source, /SCOUTOPS_QA_ORGANIZATION_ADMIN/);
-  assert.match(source, /SCOUTOPS_QA_PLATFORM_OPERATIONS/);
-  assert.match(source, /SCOUTOPS_QA_PLATFORM_SECURITY/);
+  assert.match(source, /readRouteCatalogManifest/);
+  assert.match(source, /credentials\(profile\.credentialPrefix\)/);
+  assert.equal(catalog.productionAcceptance.roles.length, 6);
+  assert.deepEqual(
+    catalog.productionAcceptance.roles.map((profile) => profile.credentialPrefix),
+    [
+      "SCOUTOPS_QA_MEMBER",
+      "SCOUTOPS_QA_SELECTION_MANAGER",
+      "SCOUTOPS_QA_ORGANIZATION_ADMIN",
+      "SCOUTOPS_QA_PLATFORM_OPERATIONS",
+      "SCOUTOPS_QA_PLATFORM_SECURITY",
+      "SCOUTOPS_QA_ADMIN",
+    ],
+  );
   assert.match(source, /readProtectedRouteCatalog/);
+  assert.match(source, /roleRouteMatrix/);
   assert.match(source, /authorized route catalog is not fully covered/);
   assert.doesNotMatch(source, /visibleRoutes/);
   assert.doesNotMatch(source, /qa\.platform\.20260818|qa\.member\.20260818|Qa-Platform|Qa-Member/);
 });
 
 test("production route QA derives every protected route from the frontend route catalog", async () => {
-  const { authorizedRoutesFor, readProtectedRouteCatalog } =
-    await import("../../scripts/production-route-catalog.mjs");
-  const catalog = await readProtectedRouteCatalog();
-  assert.equal(catalog.length, 56);
+  const {
+    authorizedRoutesFor,
+    readProtectedRouteCatalog,
+    readRouteCatalogManifest,
+    roleRouteMatrix,
+  } = await import("../../scripts/production-route-catalog.mjs");
+  const [catalog, manifest, authorization] = await Promise.all([
+    readProtectedRouteCatalog(),
+    readRouteCatalogManifest(),
+    import("../../packages/authorization/dist/index.js"),
+  ]);
+  assert.equal(
+    catalog.length,
+    manifest.routes.filter((route) => route.acceptance === "protected").length,
+  );
   assert.deepEqual(
     Object.fromEntries(
       ["member", "organization_admin", "platform_admin"].map((shell) => [
@@ -170,13 +199,36 @@ test("production route QA derives every protected route from the frontend route 
         catalog.filter((route) => route.shell === shell).length,
       ]),
     ),
-    { member: 16, organization_admin: 9, platform_admin: 31 },
+    Object.fromEntries(
+      ["member", "organization_admin", "platform_admin"].map((shell) => [
+        shell,
+        manifest.routes.filter((route) => route.acceptance === "protected" && route.shell === shell)
+          .length,
+      ]),
+    ),
   );
   assert.deepEqual(
     catalog.filter((route) => route.dynamic).map((route) => route.path),
-    ["/opportunities/:opportunityId", "/tasks/:taskId"],
+    manifest.routes
+      .filter((route) => route.acceptance === "protected" && route.path.includes(":"))
+      .map((route) => route.path),
   );
   assert.equal(authorizedRoutesFor(catalog, "platform_admin", ["platform:secure"]).length, 1);
+  for (const profile of manifest.productionAcceptance.roles) {
+    const role = authorization.BUILTIN_ROLES.find((candidate) => candidate.code === profile.role);
+    assert.ok(role, `missing built-in role ${profile.role}`);
+    const matrix = roleRouteMatrix(catalog, profile.shell, role.capabilities);
+    assert.equal(matrix.length, catalog.length);
+    assert.equal(
+      matrix.filter((entry) => entry.decision === "allow").length,
+      authorizedRoutesFor(catalog, profile.shell, role.capabilities).length,
+    );
+    assert.equal(
+      matrix.filter((entry) => entry.decision === "allow").length +
+        matrix.filter((entry) => entry.decision === "deny").length,
+      catalog.length,
+    );
+  }
 });
 
 // Regression: ISSUE-009 — release identity and service paths must no longer

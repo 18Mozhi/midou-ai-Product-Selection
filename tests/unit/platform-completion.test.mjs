@@ -216,9 +216,14 @@ test("source catalog exposes the latest persisted successful task without invent
 test("platform navigation exposes complete management domains and role switching", async () => {
   const [shell, catalog] = await Promise.all([
     readFile(new URL("../../apps/web/src/components/NavigationShell.vue", import.meta.url), "utf8"),
-    readFile(new URL("../../apps/web/src/route-catalog.ts", import.meta.url), "utf8"),
+    readFile(new URL("../../config/route-catalog.json", import.meta.url), "utf8").then(JSON.parse),
   ]);
-  const navigation = `${catalog}\n${shell}`;
+  const navigation = `${catalog.routes
+    .map(
+      (route) =>
+        `${route.title}:${route.breadcrumb.join(":")}:${route.navigation?.group ?? ""}:${route.navigation?.label ?? ""}:${route.path}`,
+    )
+    .join("\n")}\n${shell}`;
   for (const label of [
     "账号与组织",
     "组织管理",

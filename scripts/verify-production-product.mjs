@@ -2,7 +2,12 @@ import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { chromium } from "playwright";
-import { authorizedRoutesFor, readProtectedRouteCatalog } from "./production-route-catalog.mjs";
+import {
+  authorizedRoutesFor,
+  readProtectedRouteCatalog,
+  readRouteCatalogManifest,
+  roleRouteMatrix,
+} from "./production-route-catalog.mjs";
 
 const required = (name) => {
   const value = process.env[name]?.trim();
@@ -29,56 +34,16 @@ const reportFile = resolve(
 const organizationLabel =
   process.env.SCOUTOPS_QA_ORGANIZATION_LABEL?.trim() || "AI选品功能验收组织";
 const workspaceLabel = process.env.SCOUTOPS_QA_WORKSPACE_LABEL?.trim() || "功能验收工作区";
-const profiles = [
-  {
-    key: "member",
-    role: "member",
-    shell: "member",
-    landing: /\/home$/,
-    account: credentials("SCOUTOPS_QA_MEMBER"),
-    forbidden: ["team:manage", "report:read", "platform:operate", "platform:secure"],
-  },
-  {
-    key: "selection_manager",
-    role: "selection_manager",
-    shell: "member",
-    landing: /\/home$/,
-    account: credentials("SCOUTOPS_QA_SELECTION_MANAGER"),
-    forbidden: ["organization:manage", "platform:operate", "platform:secure"],
-  },
-  {
-    key: "organization_admin",
-    role: "organization_admin",
-    shell: "organization_admin",
-    landing: /\/org-admin$/,
-    account: credentials("SCOUTOPS_QA_ORGANIZATION_ADMIN"),
-    forbidden: ["platform:operate", "platform:secure", "platform:superadmin"],
-  },
-  {
-    key: "platform_operations_admin",
-    role: "platform_operations_admin",
-    shell: "platform_admin",
-    landing: /\/platform-admin$/,
-    account: credentials("SCOUTOPS_QA_PLATFORM_OPERATIONS"),
-    forbidden: ["platform:secure", "platform:superadmin", "platform_token:manage"],
-  },
-  {
-    key: "platform_security_admin",
-    role: "platform_security_admin",
-    shell: "platform_admin",
-    landing: /\/platform-admin\/security$/,
-    account: credentials("SCOUTOPS_QA_PLATFORM_SECURITY"),
-    forbidden: ["platform:operate", "platform:superadmin", "provider:configure"],
-  },
-  {
-    key: "platform_super_admin",
-    role: "platform_super_admin",
-    shell: "platform_admin",
-    landing: /\/platform-admin$/,
-    account: credentials("SCOUTOPS_QA_ADMIN"),
-    forbidden: [],
-  },
-];
+const qaTraceId = process.env.SCOUTOPS_QA_TRACE_ID?.trim() || randomUUID();
+const routeManifest = await readRouteCatalogManifest();
+const profiles = routeManifest.productionAcceptance.roles.map((profile) => ({
+  key: profile.key,
+  role: profile.role,
+  shell: profile.shell,
+  landing: new RegExp(`${profile.landingPath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`),
+  account: credentials(profile.credentialPrefix),
+  forbidden: profile.forbiddenCapabilities,
+}));
 
 const assert = (condition, message) => {
   if (!condition) throw new Error(message);
@@ -90,12 +55,13 @@ await mkdir(resolve(reportFile, ".."), { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
 const report = {
-  schema_version: 2,
+  schema_version: 3,
   base_url: baseUrl,
   started_at: new Date().toISOString(),
   route_catalog_count: protectedRouteCatalog.length,
   roles: {},
   status: "failed",
+  trace_id: qaTraceId,
 };
 
 async function selectContextIfNeeded(profile, page) {
@@ -113,7 +79,7 @@ async function readGuard(profile, context) {
       headers: {
         accept: "application/json",
         "x-request-id": randomUUID(),
-        "x-trace-id": randomUUID(),
+        "x-trace-id": qaTraceId,
       },
     },
   );
@@ -149,6 +115,9 @@ async function createRoleSession(profile) {
     ignoreHTTPSErrors: false,
     viewport: { width: 1440, height: 1000 },
   });
+  await context.route("**/api/**", (route) =>
+    route.continue({ headers: { ...route.request().headers(), "x-trace-id": qaTraceId } }),
+  );
   const page = await context.newPage();
   const apiFailures = [];
   const consoleErrors = [];
@@ -171,26 +140,16 @@ async function createRoleSession(profile) {
   return { context, page, apiFailures, consoleErrors, guard, capabilities };
 }
 
-const dynamicResolvers = {
-  "/opportunities/:opportunityId": {
-    parent: "/opportunities",
-    pattern: /^\/opportunities\/[0-9a-f-]{36}$/i,
-  },
-  "/tasks/:taskId": {
-    parent: "/tasks",
-    pattern: /^\/tasks\/[0-9a-f-]{36}$/i,
-  },
-};
-
 async function concreteRoute(page, route) {
   if (!route.dynamic) return route.path;
-  const resolver = dynamicResolvers[route.path];
+  const resolver = route.resolver;
   assert(resolver, `no production resolver for ${route.path}`);
-  await page.goto(`${baseUrl}${resolver.parent}`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}${resolver.parentPath}`, { waitUntil: "networkidle" });
   const paths = await page
     .locator('a[href^="/"]')
     .evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
-  const resolved = paths.find((path) => resolver.pattern.test(path));
+  const pattern = new RegExp(resolver.pathPattern, "i");
+  const resolved = paths.find((path) => pattern.test(path));
   assert(resolved, `${route.path} has no persisted acceptance record`);
   return resolved;
 }
@@ -292,6 +251,15 @@ try {
           fullPage: true,
         });
       const routes = await checkRoutes(profile, session);
+      const routeMatrix = roleRouteMatrix(
+        protectedRouteCatalog,
+        profile.shell,
+        session.capabilities,
+      );
+      assert(
+        routeMatrix.filter((entry) => entry.decision === "allow").length === routes.length,
+        `${profile.key} route allow matrix drifted from traversal`,
+      );
       const quickActions = await verifyQuickActions(profile, session);
       assert(
         session.consoleErrors.length === 0,
@@ -303,6 +271,9 @@ try {
         capabilities: [...session.capabilities].sort(),
         routes,
         route_count: routes.length,
+        route_matrix: routeMatrix,
+        allow_count: routeMatrix.filter((entry) => entry.decision === "allow").length,
+        deny_count: routeMatrix.filter((entry) => entry.decision === "deny").length,
         quick_actions: quickActions,
         api_failures: session.apiFailures,
         console_errors: session.consoleErrors,

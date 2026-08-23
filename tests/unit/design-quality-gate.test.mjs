@@ -44,10 +44,10 @@ test("design tokens keep one accent family and administrative shells disable dec
 });
 
 test("navigation recovery and responsive quality are contract tested beyond screenshots", async () => {
-  const [memory, shell, routes, responsive] = await Promise.all([
+  const [memory, shell, routeCatalog, responsive] = await Promise.all([
     read("apps/web/src/navigation-memory.ts"),
     read("apps/web/src/components/NavigationShell.vue"),
-    read("apps/web/src/route-catalog.ts"),
+    read("config/route-catalog.json").then(JSON.parse),
     read("apps/web/src/responsive-baselines.css"),
   ]);
   assert.match(memory, /last-member-route[\s\S]*localStorage/);
@@ -55,8 +55,9 @@ test("navigation recovery and responsive quality are contract tested beyond scre
   assert.match(shell, /breadcrumbTrail[\s\S]*RouterLink/);
   assert.match(shell, /moreActive[\s\S]*aria-current/);
   assert.match(shell, /返回成员工作台/);
-  assert.match(routes, /\/competitors\/monitoring-rules/);
-  assert.match(routes, /\/platform-admin\/organizations\/new/);
-  assert.match(routes, /\/platform-admin\/organizations\/:organizationId/);
+  const routePaths = new Set(routeCatalog.routes.map((route) => route.path));
+  assert.equal(routePaths.has("/competitors/monitoring-rules"), true);
+  assert.equal(routePaths.has("/platform-admin/organizations/new"), true);
+  assert.equal(routePaths.has("/platform-admin/organizations/:organizationId"), true);
   for (const width of [390, 768, 1024, 1440]) assert.match(responsive, new RegExp(String(width)));
 });
