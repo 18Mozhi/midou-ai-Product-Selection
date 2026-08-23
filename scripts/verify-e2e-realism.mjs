@@ -4,6 +4,13 @@ import { resolve } from "node:path";
 const root = process.cwd();
 const e2eRoot = resolve(root, "tests/e2e");
 const specs = (await readdir(e2eRoot)).filter((name) => name.endsWith(".spec.ts"));
+const productionManifest = JSON.parse(
+  await readFile(resolve(root, "infra/baota/production-acceptance-manifest.json"), "utf8"),
+);
+const productionCoreVerifier = await readFile(
+  resolve(root, "scripts/verify-production-core-e2e.mjs"),
+  "utf8",
+);
 let screenshotCalls = 0;
 let screenshotCallsInMockedFiles = 0;
 let realApiScreenshotCases = 0;
@@ -24,6 +31,20 @@ for (const spec of specs) {
     realApiScreenshotCases += 1;
 }
 
+const productionRealStackScreenshots = Number(
+  productionManifest.baseline?.realCoreScreenshotCount ?? 0,
+);
+if (
+  productionRealStackScreenshots !== 2 ||
+  /page\.route\s*\(/.test(productionCoreVerifier) ||
+  !/source_decision_task/.test(productionCoreVerifier) ||
+  !/sourcing_cost_profit/.test(productionCoreVerifier) ||
+  !/dependencies\?\.mysql === "available"/.test(productionCoreVerifier) ||
+  !/dependencies\?\.redis === "available"/.test(productionCoreVerifier)
+)
+  throw new Error("production_core_real_stack_screenshot_contract_invalid");
+screenshotCalls += productionRealStackScreenshots;
+
 if (screenshotCalls === 0) throw new Error("e2e_screenshot_coverage_missing");
 const mockedRatio = screenshotCallsInMockedFiles / screenshotCalls;
 if (mockedRatio >= 0.5)
@@ -39,5 +60,6 @@ console.log(
     `mocked_file_screenshots=${screenshotCallsInMockedFiles}`,
     `mocked_ratio=${mockedRatio.toFixed(4)}`,
     `real_api_screenshot_cases=${realApiScreenshotCases}`,
+    `production_real_stack_screenshots=${productionRealStackScreenshots}`,
   ].join(" "),
 );

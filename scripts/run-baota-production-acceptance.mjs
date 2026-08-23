@@ -67,6 +67,9 @@ const routeReportFile = resolve(
   process.env.SCOUTOPS_QA_REPORT_FILE ??
     ".artifacts/verification/production-product-functional.json",
 );
+const coreE2eReportFile = resolve(
+  process.env.SCOUTOPS_CORE_E2E_REPORT_FILE ?? ".artifacts/verification/production-core-e2e.json",
+);
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
 const roleProfiles = routeManifest.productionAcceptance.roles;
@@ -75,6 +78,19 @@ const state = {
   workspaceId: randomUUID(),
   opportunityId: randomUUID(),
   taskId: randomUUID(),
+  trendTopicId: randomUUID(),
+  collectionTaskId: randomUUID(),
+  collectionSubqueryId: randomUUID(),
+  fileAssetId: randomUUID(),
+  rawEvidenceId: randomUUID(),
+  normalizedRecordId: randomUUID(),
+  sourcingSearchId: randomUUID(),
+  sourcingCandidateId: randomUUID(),
+  costRuleId: randomUUID(),
+  saleCostInputId: randomUUID(),
+  purchaseCostInputId: randomUUID(),
+  logisticsCostInputId: randomUUID(),
+  profitRunId: randomUUID(),
   users: Object.fromEntries(roleProfiles.map((profile) => [profile.key, randomUUID()])),
   memberships: Object.fromEntries(
     roleProfiles
@@ -95,6 +111,7 @@ let lockHeld = false;
 let cleanupReport = { status: "not_started", tables: [], deleted_rows: 0, remaining_rows: null };
 let routeReport = null;
 let apiReport = null;
+let coreE2eReport = null;
 let failure = null;
 
 const placeholders = (values) => values.map(() => "?").join(",");
@@ -185,13 +202,30 @@ async function seed() {
       [state.users[profile.key], profile.role, state.users.platform_super_admin, now],
     );
   await pool.query(
-    "INSERT INTO opportunities(id,organization_id,workspace_id,name,market,category,source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status,overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status,confidence_score,evidence_count,source_count,coverage_status,score_rule_version,scored_at,decision_status,version,created_by,created_at,updated_at) VALUES(?,?,?,'生产验收机会','US','acceptance','manual',NULL,?,'ready','insufficient_data',NULL,NULL,NULL,'insufficient_data','unknown','insufficient_data',NULL,0,0,'insufficient',NULL,NULL,'pending',1,?,?,?)",
+    "INSERT INTO trend_topics(id,organization_id,workspace_id,topic_key,title,category,market,language,status,signal_count,source_count,heat_value,heat_unit,momentum_percent,confidence_score,confidence_status,first_seen_at,last_seen_at,source_fresh_at,version,created_by,created_at,updated_at) VALUES(?,?,?,SHA2(?,256),?,'acceptance','US','zh-CN','active',1,1,1,'signals',NULL,NULL,'insufficient_data',?,?,?,1,?,?,?)",
+    [
+      state.trendTopicId,
+      state.organizationId,
+      state.workspaceId,
+      `production-acceptance-${runId}`,
+      `生产验收趋势 ${runId.slice(0, 8)}`,
+      now,
+      now,
+      now,
+      state.users.selection_manager,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO opportunities(id,organization_id,workspace_id,name,market,category,source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status,overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status,confidence_score,evidence_count,source_count,coverage_status,score_rule_version,scored_at,decision_status,version,created_by,created_at,updated_at) VALUES(?,?,?,'生产验收机会','US','acceptance','trend_topic',?,?,'ready','observe',72,76,68,'calculated','low','measured',82,1,1,'partial',NULL,NULL,'pending',1,?,?,?)",
     [
       state.opportunityId,
       state.organizationId,
       state.workspaceId,
-      state.users.member,
-      state.users.member,
+      state.trendTopicId,
+      state.users.selection_manager,
+      state.users.selection_manager,
       now,
       now,
     ],
@@ -208,6 +242,187 @@ async function seed() {
       now,
     ],
   );
+  const [[provider]] = await pool.query(
+    "SELECT id FROM providers WHERE status='enabled' ORDER BY updated_at DESC,id LIMIT 1",
+  );
+  if (!provider?.id) throw new Error("production_acceptance_enabled_provider_missing");
+  await pool.query(
+    "INSERT INTO collection_tasks(id,organization_id,workspace_id,status,coverage_status,priority,scheduled_at,available_at,finished_at,attempt_count,successful_subquery_count,failed_subquery_count,blocked_subquery_count,available_result_count,missing_fields_json,last_error_code,request_id,trace_id,version,created_by,created_at,updated_at) VALUES(?,?,?,'succeeded','complete','normal',?,?,?,1,1,0,0,1,'[]',NULL,?,?,1,?,?,?)",
+    [
+      state.collectionTaskId,
+      state.organizationId,
+      state.workspaceId,
+      now,
+      now,
+      now,
+      runId,
+      runId,
+      state.users.selection_manager,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO collection_subqueries(id,task_id,organization_id,workspace_id,provider_id,ordinal,target_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,started_at,finished_at,version,created_at,updated_at) VALUES(?,?,?,?,?,1,'{}',1,'succeeded',1,'[]',NULL,0,?,?,1,?,?)",
+    [
+      state.collectionSubqueryId,
+      state.collectionTaskId,
+      state.organizationId,
+      state.workspaceId,
+      provider.id,
+      now,
+      now,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO file_assets(id,organization_id,workspace_id,category,relative_path,content_sha256,size_bytes,status,created_by,created_at,updated_at) VALUES(?,?,?,'evidence',?,SHA2(?,256),1,'active',?,?,?)",
+    [
+      state.fileAssetId,
+      state.organizationId,
+      state.workspaceId,
+      `production-acceptance/${runId}.json`,
+      runId,
+      state.users.selection_manager,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO raw_evidence(id,organization_id,workspace_id,collection_task_id,collection_subquery_id,provider_id,file_asset_id,source_url,canonical_url,dedupe_key,content_sha256,content_type,size_bytes,captured_at,parser_version,adapter_version,retention_until,status,request_id,trace_id,created_by,created_at) VALUES(?,?,?,?,?,?,?,'https://example.test/acceptance-source','https://example.test/acceptance-source',?,SHA2(?,256),'application/json',1,?,'acceptance-v1','acceptance-v1',DATE_ADD(?,INTERVAL 1 DAY),'active',?,?,?,?)",
+    [
+      state.rawEvidenceId,
+      state.organizationId,
+      state.workspaceId,
+      state.collectionTaskId,
+      state.collectionSubqueryId,
+      provider.id,
+      state.fileAssetId,
+      `acceptance-${runId}`,
+      runId,
+      now,
+      now,
+      runId,
+      runId,
+      state.users.selection_manager,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO normalized_records(id,organization_id,workspace_id,provider_id,raw_evidence_id,record_key,schema_version,record_version,payload_json,supersedes_record_id,correction_reason,status,request_id,trace_id,created_by,created_at) VALUES(?,?,?,?,?,?,'product-supply-csv-v1',1,?,NULL,NULL,'active',?,?,?,?)",
+    [
+      state.normalizedRecordId,
+      state.organizationId,
+      state.workspaceId,
+      provider.id,
+      state.rawEvidenceId,
+      `acceptance-${runId}`,
+      JSON.stringify({
+        fields: {
+          external_id: `ACC-${runId.slice(0, 8)}`,
+          title: "生产验收便携净水杯",
+          price: 12.8,
+          currency: "CNY",
+          supplier_name: "生产验收供应商",
+          moq: 100,
+          canonical_url: "https://example.test/acceptance-source",
+          observed_at: now.toISOString(),
+        },
+      }),
+      runId,
+      runId,
+      state.users.selection_manager,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO sourcing_searches(id,organization_id,workspace_id,collection_task_id,input_type,input_ref,status,candidate_count,missing_fields_json,request_id,trace_id,created_by,created_at,updated_at) VALUES(?,?,?,?,'opportunity',?,'completed_with_warnings',1,?,?,?,?,?,?)",
+    [
+      state.sourcingSearchId,
+      state.organizationId,
+      state.workspaceId,
+      state.collectionTaskId,
+      state.opportunityId,
+      JSON.stringify(["specification", "lead_time_days", "location", "confidence_value"]),
+      runId,
+      runId,
+      state.users.selection_manager,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO sourcing_candidates(id,organization_id,workspace_id,search_id,provider_id,normalized_record_id,raw_evidence_id,external_id,supplier_name,product_title,specification,moq,quoted_price,currency,lead_time_days,location,original_url,observed_at,confidence_value,status,missing_fields_json,created_at) VALUES(?,?,?,?,?,?,?,?,'生产验收供应商','生产验收便携净水杯',NULL,100,12.8,'CNY',NULL,NULL,'https://example.test/acceptance-source',?,NULL,'incomplete',?,?)",
+    [
+      state.sourcingCandidateId,
+      state.organizationId,
+      state.workspaceId,
+      state.sourcingSearchId,
+      provider.id,
+      state.normalizedRecordId,
+      state.rawEvidenceId,
+      `ACC-${runId.slice(0, 8)}`,
+      now,
+      JSON.stringify(["specification", "lead_time_days", "location", "confidence_value"]),
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO cost_rules(id,organization_id,workspace_id,market,platform,version_code,name,status,fee_lines_json,effective_from,revision,submitted_by,submitted_at,published_by,published_at,rollback_target_id,rolled_back_at,created_by,created_at,updated_at) VALUES(?,?,?,'US','amazon',?,'生产验收费用规则','active','[]',CURRENT_DATE(),1,?,?,?,?,NULL,NULL,?,?,?)",
+    [
+      state.costRuleId,
+      state.organizationId,
+      state.workspaceId,
+      `acceptance-${runId.slice(0, 8)}`,
+      state.users.selection_manager,
+      now,
+      state.users.organization_admin,
+      now,
+      state.users.selection_manager,
+      now,
+      now,
+    ],
+  );
+  for (const [id, inputType, amount, currency, sourceRef] of [
+    [state.saleCostInputId, "sale_price", 100, "USD", "acceptance-sale"],
+    [state.purchaseCostInputId, "purchase_price", 40, "CNY", "acceptance-quote"],
+    [state.logisticsCostInputId, "logistics", 5, "USD", "acceptance-logistics"],
+  ])
+    await pool.query(
+      "INSERT INTO opportunity_cost_inputs(id,organization_id,workspace_id,opportunity_id,platform,input_type,amount_value,currency,source_type,source_ref_id,evidence_id,observed_at,input_version,is_current,confirmed_by,request_id,trace_id,created_at) VALUES(?,?,?,?,'amazon',?,?,?,?,?,?,?,1,1,?,?,?,?)",
+      [
+        id,
+        state.organizationId,
+        state.workspaceId,
+        state.opportunityId,
+        inputType,
+        amount,
+        currency,
+        "production_acceptance",
+        sourceRef,
+        state.rawEvidenceId,
+        now,
+        state.users.organization_admin,
+        runId,
+        runId,
+        now,
+      ],
+    );
+  await pool.query(
+    "INSERT INTO opportunity_profit_runs(id,organization_id,workspace_id,opportunity_id,cost_rule_id,rule_version_code,platform,market,status,currency,sale_price,total_cost,net_profit,net_margin_percent,missing_fields_json,input_snapshot_json,exchange_snapshot_json,request_id,trace_id,calculated_at) VALUES(?,?,?,?,?,?,'amazon','US','calculated','USD',100,30.6,69.4,69.4,'[]','{}','{}',?,?,?)",
+    [
+      state.profitRunId,
+      state.organizationId,
+      state.workspaceId,
+      state.opportunityId,
+      state.costRuleId,
+      `acceptance-${runId.slice(0, 8)}`,
+      runId,
+      runId,
+      now,
+    ],
+  );
 }
 
 function childEnvironment() {
@@ -220,6 +435,7 @@ function childEnvironment() {
     SCOUTOPS_QA_WORKSPACE_LABEL: manifest.tenant.workspaceLabel,
     SCOUTOPS_QA_TRACE_ID: runId,
     SCOUTOPS_QA_REPORT_FILE: routeReportFile,
+    SCOUTOPS_CORE_E2E_REPORT_FILE: coreE2eReportFile,
     SCOUTOPS_ACCEPTANCE_API_REPORT_FILE: apiReportFile,
     SCOUTOPS_ACCEPTANCE_RESOURCE_IDS: JSON.stringify(state),
   };
@@ -355,6 +571,8 @@ try {
   apiReport = JSON.parse(await readFile(apiReportFile, "utf8"));
   runChild("scripts/verify-production-product.mjs");
   routeReport = JSON.parse(await readFile(routeReportFile, "utf8"));
+  runChild("scripts/verify-production-core-e2e.mjs");
+  coreE2eReport = JSON.parse(await readFile(coreE2eReportFile, "utf8"));
 } catch (error) {
   failure = error instanceof Error ? error.message : String(error);
 } finally {
@@ -384,7 +602,12 @@ const report = {
     single_role_accounts: roleProfiles.length,
     organizations: 1,
     workspaces: 1,
+    trends: 1,
     opportunities: 1,
+    collection_evidence: 1,
+    sourcing_candidates: 1,
+    cost_inputs: 3,
+    profit_runs: 1,
     tasks: 1,
   },
   api: apiReport
@@ -403,6 +626,14 @@ const report = {
           (sum, role) => sum + (role.route_matrix?.length ?? 0),
           0,
         ),
+      }
+    : null,
+  core_e2e: coreE2eReport
+    ? {
+        status: coreE2eReport.status,
+        dependencies: coreE2eReport.dependencies,
+        chains: coreE2eReport.chains,
+        screenshot_count: coreE2eReport.screenshots?.length ?? 0,
       }
     : null,
   cleanup: cleanupReport,

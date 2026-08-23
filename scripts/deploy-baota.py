@@ -234,6 +234,7 @@ def build_package(repo: Path, source_identity: dict[str, str], skip_build: bool,
         "production-route-catalog.mjs",
         "verify-production-product.mjs",
         "verify-production-api-coverage.mjs",
+        "verify-production-core-e2e.mjs",
         "run-baota-production-acceptance.mjs",
     ):
         shutil.copy2(repo / f"scripts/{script}", script_target)

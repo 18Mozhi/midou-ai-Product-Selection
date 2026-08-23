@@ -1779,13 +1779,14 @@
         "../scripts/verify-release-matrix.mjs",
         "../scripts/verify-e2e-realism.mjs",
         "../tests/e2e/m00-09-real-api-acceptance.spec.ts",
+        "../scripts/verify-production-core-e2e.mjs",
         "../tests/e2e/helpers/mobile-occlusion.ts",
         "../scripts/lib/typescript-test-loader.mjs"
       ],
       "scope": "P00-P06 role source collection task quality desktop mobile performance and security regression matrix",
       "runtimeBoundary": "local CI or Baota-controlled release task only; no production API table page permission daemon or multi-node claim",
       "browserGroups": ["p00", "p01", "p02", "p03", "p04", "p05", "p06"],
-      "e2eTruthBoundary": "at least two real API screenshot cases reach Fastify without page.route and cover readiness plus release identity; screenshot calls in files with route interception stay below 50 percent and remain visual-only; member and platform mobile shells share a zero-overlap bottom-navigation probe",
+      "e2eTruthBoundary": "two local real API screenshot cases reach Fastify without page.route and cover readiness plus release identity; the finite production acceptance adds two interception-free core screenshots after real MySQL and Redis readiness for source-decision-task and sourcing-cost-profit; mocked-file screenshots are 17 of 37 or 45.95 percent and remain visual-only; member and platform mobile shells share a zero-overlap bottom-navigation probe",
       "performanceTargets": {
         "lcpMs": 2500,
         "inpMs": 200,
@@ -1810,10 +1811,12 @@
         "../scripts/run-baota-production-acceptance.mjs",
         "../scripts/verify-production-api-coverage.mjs",
         "../scripts/verify-production-product.mjs",
+        "../scripts/verify-production-core-e2e.mjs",
         "../config/route-catalog.json"
       ],
-      "scope": "one-time six-role production tenant, 220 OpenAPI paths, 253 operations, 59 protected routes and automatic scoped cleanup",
-      "runtimeBoundary": "manual finite BaoTa task only; no daemon, no valid write payloads, no persistent acceptance account or tenant",
+      "scope": "one-time six-role production tenant, 220 OpenAPI paths, 253 operations, 59 protected routes, two real core business chains and automatic scoped cleanup",
+      "runtimeBoundary": "manual finite BaoTa task only; no daemon, generic operation coverage uses no valid write payloads, and only the two manifest-authorized core E2E chains perform valid writes before exact cleanup; no persistent acceptance account or tenant",
+      "coreE2eBoundary": "Playwright performs no browser request interception, requires Fastify readiness to report real MySQL and Redis available, then covers trend to opportunity decision to task and sourcing candidate to quote confirmation to cost and profit with two screenshots",
       "cleanupBoundary": "exact run users organization workspace resources and trace references are deleted with a per-table manifest and zero-reference verification",
       "status": "implemented",
       "statusDetail": "local_preflight_and_production_execution_pending"

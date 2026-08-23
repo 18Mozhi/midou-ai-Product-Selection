@@ -10,7 +10,7 @@ M07-01 把 P00–P06 的现有自动化组织为可执行发布矩阵，覆盖�
 - A04/A05 仅编排既有 Node API、Worker、Crawler、Outbox、Redis 和真实数据库验收；不创建新的生产服务或 daemon。
 - A04 在 Node 原生支持时启用 `--experimental-strip-types`；Node 20 等不支持该参数的运行时改用项目内 TypeScript 依赖提供的只读测试加载器，保证同一矩阵可执行且不新增依赖或生产进程。
 - A06 只在 OpenAPI 顶层扩展声明发布矩阵不是运行时 API；不新增 HTTP 路由、DTO 或错误码。
-- A07/A08/A15 重跑 48 个页面场景，并在 desktop-chromium 与 mobile-390 两个项目上执行；其中真实 API 截图用浏览器经 Vite 访问实际 Fastify，不允许路由拦截。纯 Mock 截图调用占比不得超过 84%，只能承担视觉回归，不能独立证明功能链路。成员与平台壳层复用移动遮挡 helper，末端内容与固定底栏重叠必须为 0；M07-01 没有单独业务页面。
+- A07/A08/A15 重跑 48 个页面场景，并在 desktop-chromium 与 mobile-390 两个项目上执行；其中真实 API 截图用浏览器经 Vite 访问实际 Fastify，不允许路由拦截。带路由拦截文件的截图调用占比必须低于 50%，只能承担视觉回归，不能独立证明功能链路。一次性生产验收另补两张不拦截请求的核心链路截图，先证明 MySQL 与 Redis 均为 `available`，再覆盖“趋势→机会决策→任务”和“找货候选→报价确认→成本/利润”；当前机器统计为 17/37，即 45.95%。成员与平台壳层复用移动遮挡 helper，末端内容与固定底栏重叠必须为 0；M07-01 没有单独业务页面。
 - 全量 E2E 入口通过 `scripts/run-playwright-projects.mjs` 依次执行 desktop-chromium 与 mobile-390。每次 Playwright 子进程独立启动并在退出时关闭 Fastify 与 Vite `webServer`；前一个项目非零时立即停止，后一个项目不复用其服务、浏览器或内存状态。定向调试仍可直接调用 Playwright，但软件功能门和发布矩阵浏览器门必须使用该编排器。
 - A09/A11 通过既有组织权限、审计、request_id/trace_id 和安全运营链路取证。执行器自身只接受清单内固定分组与命令，不接受任意 shell 命令。
 
@@ -30,6 +30,6 @@ M07-01 把 P00–P06 的现有自动化组织为可执行发布矩阵，覆盖�
 
 ## 一次性生产验收租户
 
-`infra/baota/production-acceptance-manifest.json` 锁定一个手工触发、最长 1800 秒且不常驻的宝塔 Node 任务。任务从受限环境读取一个一次性强密码，在 MySQL 5.7 中创建六个邮箱已验证、互斥单角色账号，以及一个隔离组织、工作区、一条机会和一条任务；成员侧三个账号分别只有 `member`、`selection_manager`、`organization_admin`，平台侧三个账号分别只有 `platform_operations_admin`、`platform_security_admin`、`platform_super_admin`。
+`infra/baota/production-acceptance-manifest.json` 锁定一个手工触发、最长 1800 秒且不常驻的宝塔 Node 任务。任务从受限环境读取一个一次性强密码，在 MySQL 5.7 中创建六个邮箱已验证、互斥单角色账号，以及一个隔离组织、工作区和带同一 trace 的趋势、机会、采集证据、找货候选、成本输入、利润运行与任务种子；成员侧三个账号分别只有 `member`、`selection_manager`、`organization_admin`，平台侧三个账号分别只有 `platform_operations_admin`、`platform_security_admin`、`platform_super_admin`。
 
-同一任务从 `docs/openapi.yaml` 读取 220 个路径、253 个操作及 `x-required-capability`，所有请求都进入正式 HTTPS 和真实 Fastify。GET 使用服务端 `/me/navigation` 返回的真实能力选择授权账号；写操作只允许在鉴权、CSRF、请求 schema 或领域前置条件处安全受阻，不提交有效生产业务载荷。随后复用同一机器路由目录完成 59 条受保护路由和 354 个角色允许/拒绝矩阵单元。无论验收成功或失败，`finally` 都按本次精确用户、组织、工作区、对象和 trace 标记删除账号、会话、上下文、审计及关联业务数据，再逐表复核剩余引用为零并输出删除清单；报告不保存邮箱、密码、Cookie 或响应正文。
+同一任务从 `docs/openapi.yaml` 读取 220 个路径、253 个操作及 `x-required-capability`，所有请求都进入正式 HTTPS 和真实 Fastify。GET 使用服务端 `/me/navigation` 返回的真实能力选择授权账号；通用写覆盖只允许在鉴权、CSRF、请求 schema 或领域前置条件处安全受阻，不提交有效生产业务载荷。其后 `verify-production-core-e2e.mjs` 使用选品经理账号执行两条被明确授权的真实业务写链，浏览器不注册 `page.route`，并要求 `/health/ready` 同时返回真实 MySQL/Redis 可用；最后复用同一机器路由目录完成 59 条受保护路由和 354 个角色允许/拒绝矩阵单元。无论验收成功或失败，`finally` 都按本次精确用户、组织、工作区、对象和 trace 标记删除账号、会话、上下文、审计及关联业务数据，再逐表复核剩余引用为零并输出删除清单；报告不保存邮箱、密码、Cookie 或响应正文。

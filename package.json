@@ -47,6 +47,7 @@
     "verify:all": "node scripts/verify-all.mjs",
     "verify:functional": "node scripts/verify-functional.mjs",
     "verify:production-product": "node scripts/verify-production-product.mjs",
+    "verify:production-core-e2e": "node scripts/verify-production-core-e2e.mjs",
     "verify:production-acceptance": "node scripts/run-baota-production-acceptance.mjs",
     "generate:route-artifacts": "node scripts/generate-route-artifacts.mjs --write",
     "verify:route-artifacts": "node scripts/generate-route-artifacts.mjs --check",

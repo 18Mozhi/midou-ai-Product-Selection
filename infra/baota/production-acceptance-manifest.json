@@ -16,7 +16,8 @@
     "pathCount": 220,
     "operationCount": 253,
     "protectedRouteCount": 59,
-    "roleCount": 6
+    "roleCount": 6,
+    "realCoreScreenshotCount": 2
   },
   "tenant": {
     "organizationLabel": "AI选品功能验收组织",
@@ -24,13 +25,29 @@
     "emailDomain": "acceptance.invalid",
     "verifiedEmailRequired": true,
     "singleRoleRequired": true,
-    "minimumSeed": ["opportunity", "task"]
+    "minimumSeed": [
+      "trend",
+      "opportunity",
+      "collection_evidence",
+      "sourcing_candidate",
+      "cost_inputs",
+      "profit_run",
+      "task"
+    ]
   },
   "apiProbe": {
     "realFastifyRequired": true,
     "writePolicy": "validation_or_authorization_block_only",
     "allowedOutcomes": ["success", "empty", "blocked", "unauthenticated", "unauthorized"],
     "routeNotFoundAllowed": false
+  },
+  "coreE2e": {
+    "realFastifyRequired": true,
+    "realMySqlRequired": true,
+    "realRedisRequired": true,
+    "browserInterceptionAllowed": false,
+    "chains": ["source_decision_task", "sourcing_cost_profit"],
+    "screenshotCount": 2
   },
   "cleanup": {
     "required": true,
@@ -42,6 +59,8 @@
   "restrictedEnvironment": [
     "SCOUTOPS_ACCEPTANCE_PASSWORD",
     "SCOUTOPS_ACCEPTANCE_BASE_URL",
-    "SCOUTOPS_ACCEPTANCE_REPORT_FILE"
+    "SCOUTOPS_ACCEPTANCE_REPORT_FILE",
+    "SCOUTOPS_CORE_E2E_REPORT_FILE",
+    "SCOUTOPS_CORE_E2E_SCREENSHOT_DIR"
   ]
 }

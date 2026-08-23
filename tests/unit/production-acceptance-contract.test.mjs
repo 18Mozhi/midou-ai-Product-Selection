@@ -22,16 +22,18 @@ test("production acceptance locks the 220 path, 253 operation, 59 route and six 
     manifest.baseline.protectedRouteCount,
   );
   assert.equal(routeCatalog.productionAcceptance.roles.length, manifest.baseline.roleCount);
+  assert.equal(manifest.baseline.realCoreScreenshotCount, 2);
   assert.equal(manifest.task.schedule, "manual");
   assert.equal(manifest.task.daemon, false);
   assert.equal(manifest.cleanup.verifyZeroReferences, true);
 });
 
 test("production acceptance only probes writes through safe blocking and always cleans exact markers", async () => {
-  const [runner, apiCoverage, routeCoverage, deployer] = await Promise.all([
+  const [runner, apiCoverage, routeCoverage, coreE2e, deployer] = await Promise.all([
     read("scripts/run-baota-production-acceptance.mjs"),
     read("scripts/verify-production-api-coverage.mjs"),
     read("scripts/verify-production-product.mjs"),
+    read("scripts/verify-production-core-e2e.mjs"),
     read("scripts/deploy-baota.py"),
   ]);
   assert.match(apiCoverage, /validation_or_authorization_block_only|isWrite/);
@@ -44,10 +46,25 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.match(runner, /SCOUTOPS_ACCEPTANCE_PASSWORD/);
   assert.doesNotMatch(runner, /Qa-Platform|Qa-Member|password:\s*["'][^"']{12}/);
   assert.match(routeCoverage, /SCOUTOPS_QA_TRACE_ID/);
+  assert.match(runner, /verify-production-core-e2e\.mjs/);
+  for (const table of [
+    "trend_topics",
+    "collection_tasks",
+    "raw_evidence",
+    "sourcing_candidates",
+    "opportunity_cost_inputs",
+    "opportunity_profit_runs",
+  ])
+    assert.match(runner, new RegExp(`INSERT INTO ${table}`));
+  assert.match(coreE2e, /dependencies\?\.mysql === "available"/);
+  assert.match(coreE2e, /dependencies\?\.redis === "available"/);
+  assert.match(coreE2e, /extraHTTPHeaders: \{ "x-trace-id": traceId \}/);
+  assert.doesNotMatch(coreE2e, /page\.route\s*\(/);
   for (const file of [
     "production-route-catalog.mjs",
     "verify-production-product.mjs",
     "verify-production-api-coverage.mjs",
+    "verify-production-core-e2e.mjs",
     "run-baota-production-acceptance.mjs",
   ])
     assert.match(deployer, new RegExp(file.replaceAll(".", "\\.")));
