@@ -81,6 +81,20 @@ test("M01-01.A06/A09/A13 API sets HttpOnly session and never returns opaque toke
   const cookie = login.headers["set-cookie"];
   assert.match(cookie, /scoutops_session=.*HttpOnly; SameSite=Strict; Max-Age=2592000/);
   assert.doesNotMatch(cookie, /Secure/);
+  const anonymousStatus = await app.inject({
+    method: "GET",
+    url: "/api/v1/auth/session-status",
+  });
+  assert.equal(anonymousStatus.statusCode, 200);
+  assert.deepEqual(anonymousStatus.json().data, { authenticated: false });
+  const authenticatedStatus = await app.inject({
+    method: "GET",
+    url: "/api/v1/auth/session-status",
+    headers: { cookie },
+  });
+  assert.equal(authenticatedStatus.statusCode, 200);
+  assert.deepEqual(authenticatedStatus.json().data, { authenticated: true });
+  assert.equal(authenticatedStatus.headers["cache-control"], "no-store");
   const sessions = await app.inject({
     method: "GET",
     url: "/api/v1/me/sessions",

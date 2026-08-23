@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiEnvelope } from "../api-client";
 import { publicConfig } from "../config";
 
@@ -17,6 +17,7 @@ type IdentityMode =
 type RequestState =
   "idle" | "loading" | "success" | "error" | "expired" | "rate_limited" | "blocked";
 const params = new URLSearchParams(window.location.search);
+const route = useRoute();
 const router = useRouter();
 const apiRequest = createApiClient(publicConfig.apiBaseUrl);
 const pathModes: Record<string, IdentityMode> = {
@@ -27,8 +28,19 @@ const pathModes: Record<string, IdentityMode> = {
   "/reset-password": "reset",
   "/security/mfa": "mfa",
 };
+const publicQueryModes = new Set<IdentityMode>([
+  "login",
+  "register",
+  "forgot",
+  "verify",
+  "reset",
+  "mfa-challenge",
+]);
+const queryMode = params.get("mode") as IdentityMode | null;
 const mode = ref<IdentityMode>(
-  (params.get("mode") as IdentityMode) || pathModes[window.location.pathname] || "login",
+  queryMode && publicQueryModes.has(queryMode)
+    ? queryMode
+    : pathModes[window.location.pathname] || "login",
 );
 const requestState = ref<RequestState>(params.get("state") === "expired" ? "expired" : "idle");
 const email = ref("");
@@ -126,6 +138,11 @@ async function request<T = unknown>(
   }
 }
 async function enterApplication() {
+  const redirect = params.get("redirect");
+  if (redirect?.startsWith("/") && !redirect.startsWith("//")) {
+    await router.replace(redirect);
+    return;
+  }
   const result = await request<{ route: string }>("/me/landing", undefined, "GET");
   if (result?.data?.route) await router.replace(result.data.route);
 }
@@ -260,6 +277,7 @@ async function changeSeedPassword() {
 onMounted(() => {
   if (mode.value === "verify" && params.get("token")) void confirmEmail();
   if (mode.value === "sessions") void loadSessions();
+  if (mode.value === "mfa") void loadMfa();
 });
 </script>
 
@@ -303,6 +321,14 @@ onMounted(() => {
         >
           <strong>链接已过期</strong>
           <p>验证与重置令牌均为单次使用。请重新申请，不要继续提交旧链接。</p>
+        </div>
+        <div
+          v-if="route.query.reason === 'authentication_required'"
+          class="identity-notice identity-notice--warning"
+          data-testid="authentication-required"
+        >
+          <strong>需要登录</strong>
+          <p>请先登录，再进入安全会话或 MFA 设置。</p>
         </div>
         <div
           v-if="['error', 'rate_limited', 'blocked'].includes(requestState)"
@@ -574,10 +600,8 @@ onMounted(() => {
           >
             返回登录
           </button>
-          <button type="button" class="text-button" @click="switchMode('sessions')">
-            查看安全会话
-          </button>
-          <button type="button" class="text-button" @click="switchMode('mfa')">管理 MFA</button>
+          <RouterLink class="text-button" to="/me?section=security">查看安全会话</RouterLink>
+          <RouterLink class="text-button" to="/security/mfa">管理 MFA</RouterLink>
           <RouterLink
             v-if="mode === 'login' && requestState === 'success'"
             class="text-button"

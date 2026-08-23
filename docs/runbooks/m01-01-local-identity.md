@@ -4,12 +4,12 @@
 
 1. 在宝塔受限环境保留已有 `CREDENTIALS_MASTER_KEY`；不得把值写入 Git、日志或文档。按 `config/env.example` 设置 `AUTH_ARGON2_*`、密码长度、会话/动作令牌 TTL、锁定阈值和 `AUTH_OUTBOX_POLL_MS`。
 2. 按 `0008a` 到 `0008f` 顺序执行 up 迁移。生产数据库固定 MySQL 5.7、`product_scout` 业务账号、utf8mb4。
-3. 先在宝塔发布静态 Web 和 Node API，再发布 Node Worker。配置由进程启动时读取；任何 `AUTH_*` 或主密钥变化后必须在宝塔分别重启 API 与 Worker。
+3. 先在宝塔发布静态 Web 和 Node API，再发布 Node Worker。`GET /api/v1/auth/session-status` 随 Node API 发布，需在宝塔重启 Node 项目 `ai选品` 后生效；配置由进程启动时读取，任何 `AUTH_*` 或主密钥变化后必须在宝塔分别重启 API 与 Worker。
 4. 当前生产邮件 Provider 未确认。保持投递为 `blocked_provider`，注册 API 返回可操作的 `mail_provider_pending`，不得为了演示绕过投递或把令牌返回浏览器。Provider 选型、跨境与回调合同必须在后续获批后再接入。
 
 ## 验证与观测
 
-最小验证依次运行 `npm run build`、`node --test tests/m01-01/local-auth.test.mjs`、`node --test tests/m01-01/auth-api.test.mjs`、`node --test tests/m01-01/identity-contract.test.mjs`。使用隔离 MySQL 5.7 时设置安全的本地 `DB_HOST/DB_PORT/DB_NAME/DB_USER/DB_PASSWORD/CREDENTIALS_MASTER_KEY` 后运行 `node scripts/verify-local-auth-live.mjs`；脚本会创建并清理唯一探针数据。视觉门禁为 `npx playwright test tests/e2e/m01-01-local-identity.spec.ts`，最终统一运行 `npm run verify:module -- M01-01`。
+最小验证依次运行 `npm run build`、`node --test tests/m01-01/local-auth.test.mjs`、`node --test tests/m01-01/auth-api.test.mjs`、`node --test tests/m01-01/identity-contract.test.mjs`。另需确认匿名请求 `/api/v1/auth/session-status` 返回 200 与 `authenticated=false`，从登录页点击安全会话/MFA 不请求任何 `/me/*` 接口。使用隔离 MySQL 5.7 时设置安全的本地 `DB_HOST/DB_PORT/DB_NAME/DB_USER/DB_PASSWORD/CREDENTIALS_MASTER_KEY` 后运行 `node scripts/verify-local-auth-live.mjs`；脚本会创建并清理唯一探针数据。视觉门禁为 `npx playwright test tests/e2e/m01-01-local-identity.spec.ts`，最终统一运行 `npm run verify:module -- M01-01`。
 
 宝塔日志只观察事件名、状态、request_id、trace_id 和重试次数，不记录邮箱、密码、Cookie、原始动作令牌或主密钥。重点告警：注册投递连续失败、Outbox `dead_letter` 增长、`blocked_provider` 非预期出现、登录锁定激增、数据库不可用。定位时以 trace_id 关联 API 安全事件和 Worker Outbox 行。
 

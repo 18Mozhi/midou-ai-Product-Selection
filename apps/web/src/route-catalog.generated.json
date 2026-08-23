@@ -148,7 +148,8 @@
       "notFound": false,
       "surface": "security-mfa",
       "cachePolicy": "none",
-      "acceptance": "public"
+      "acceptance": "public",
+      "sessionRequired": true
     },
     {
       "path": "/select-context",
@@ -208,6 +209,7 @@
       "surface": "personal-center",
       "cachePolicy": "none",
       "acceptance": "public",
+      "sessionRequired": true,
       "featureMap": {
         "path": "/me",
         "view": "PersonalCenter",

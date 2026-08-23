@@ -420,6 +420,19 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "423": { $ref: "#/components/responses/Error" }
+  /auth/session-status:
+    get:
+      summary: Resolve browser session presence without using an expected 401 response
+      description: Returns authenticated false with HTTP 200 when the HttpOnly session cookie is missing or invalid. The response is no-store and exposes no user, session or tenancy identifiers.
+      security: []
+      responses:
+        "200":
+          description: Current browser session status for frontend account-route admission
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SessionStatusEnvelope" }
+        "429": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /auth/mfa/totp/verify:
     post:
       summary: Complete a short-lived MFA login challenge and create a session
@@ -7889,6 +7902,17 @@ components:
             properties:
               { data: { type: array, items: { $ref: "#/components/schemas/SessionSummary" } } },
           }
+    SessionStatusEnvelope:
+      allOf:
+        - { $ref: "#/components/schemas/SuccessEnvelope" }
+        - type: object
+          properties:
+            data:
+              type: object
+              additionalProperties: false
+              required: [authenticated]
+              properties:
+                authenticated: { type: boolean }
     ThemeId:
       type: string
       enum: [deep-ocean, aurora-purple, cloud-white]

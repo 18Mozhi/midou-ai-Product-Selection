@@ -826,8 +826,11 @@ a {
     align-items: flex-start;
     flex-direction: column;
   }
-  .identity-card__foot button {
+  .identity-card__foot button,
+  .identity-card__foot a {
     min-height: 34px;
+    display: inline-flex;
+    align-items: center;
   }
   .identity-page[data-mode="login"] .identity-card__foot {
     display: grid;

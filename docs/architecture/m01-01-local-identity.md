@@ -20,7 +20,7 @@ Argon2id 默认 `memory=19456 KiB,time=2,parallelism=1`，对应 OWASP Password 
 
 ## 页面与失败状态
 
-`LocalIdentity.vue` 覆盖 login、register、forgot、verify、reset、sessions，以及 idle、loading、success、error、expired。请求使用真实 OpenAPI 路径和 `credentials: include`；页面不写 localStorage/sessionStorage。桌面和 390px 快照覆盖登录、注册与会话，键盘路径覆盖模式切换、过期恢复和安全会话入口。
+`LocalIdentity.vue` 覆盖 login、register、forgot、verify、reset、sessions，以及 idle、loading、success、error、expired。请求使用真实 OpenAPI 路径和 `credentials: include`；页面不写 localStorage/sessionStorage。登录页的安全会话与 MFA 辅助入口先进入机器路由目录声明的会话门禁；公开 `GET /auth/session-status` 始终以 200 返回匿名/已登录布尔值，不暴露用户、会话或租户标识，匿名访问直接带安全站内回跳地址返回登录页，不再用预期 401 判断落地。桌面和 390px 快照覆盖登录、注册与匿名安全入口，键盘路径覆盖模式切换与过期恢复。
 
 ## A01–A17 证据索引
 

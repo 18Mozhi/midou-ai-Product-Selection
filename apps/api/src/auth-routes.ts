@@ -163,6 +163,20 @@ export function registerLocalAuthRoutes(app: FastifyInstance, options: LocalAuth
       work,
     );
 
+  app.get("/api/v1/auth/session-status", async (request, reply) => {
+    reply.header("cache-control", "no-store");
+    const token = cookieValue(request, cookieName(options.secureCookie));
+    if (!token) return envelope({ authenticated: false }, request);
+    try {
+      await options.service.authenticate(token, { allowSecuritySetup: true });
+      return envelope({ authenticated: true }, request);
+    } catch (error) {
+      if (error instanceof AuthError && error.statusCode === 401)
+        return envelope({ authenticated: false }, request);
+      throw error;
+    }
+  });
+
   app.post(
     "/api/v1/auth/register",
     {

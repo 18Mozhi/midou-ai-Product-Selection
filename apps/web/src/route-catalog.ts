@@ -12,6 +12,7 @@ export interface AppRouteMeta {
   notFound?: boolean;
   surface?: string;
   cachePolicy?: "none" | "preserve" | "reset_on_scope";
+  sessionRequired?: boolean;
 }
 
 export interface ShellNavigationItem {
@@ -34,6 +35,7 @@ interface RouteCatalogEntry {
   surface: string;
   cachePolicy: "none" | "preserve" | "reset_on_scope";
   acceptance: "public" | "protected" | "internal" | "fallback";
+  sessionRequired?: boolean;
   navigation?: {
     label: string;
     icon: string;
@@ -62,6 +64,7 @@ export const appRoutes: RouteRecordRaw[] = manifest.routes.map((entry) => ({
     notFound: entry.notFound,
     surface: entry.surface,
     cachePolicy: entry.cachePolicy,
+    sessionRequired: entry.sessionRequired === true,
   } satisfies AppRouteMeta,
 }));
 

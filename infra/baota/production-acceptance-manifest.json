@@ -13,8 +13,8 @@
   },
   "baseline": {
     "openapiFile": "docs/openapi.yaml",
-    "pathCount": 221,
-    "operationCount": 254,
+    "pathCount": 222,
+    "operationCount": 255,
     "protectedRouteCount": 59,
     "roleCount": 6,
     "realCoreScreenshotCount": 2

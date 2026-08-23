@@ -48,6 +48,7 @@ test("M01-01.A06/A09/A13 OpenAPI freezes local email account and own-session con
     "/auth/register:",
     "/auth/email-verification/confirm:",
     "/auth/login:",
+    "/auth/session-status:",
     "/auth/logout:",
     "/auth/password-reset/request:",
     "/auth/password-reset/confirm:",
@@ -131,4 +132,20 @@ test("M01-01 login waits for a real MFA code and explains the 30-day session", a
   );
   assert.match(ui, /登录状态最长保留 30 天/);
   assert.doesNotMatch(ui, /会话关闭浏览器后失效/);
+});
+
+test("M01-01 anonymous security entry uses a 200 session probe before protected APIs", async () => {
+  const [router, ui, catalog] = await Promise.all([
+    readFile("apps/web/src/router.ts", "utf8"),
+    readFile("apps/web/src/components/LocalIdentity.vue", "utf8"),
+    readFile("config/route-catalog.json", "utf8"),
+  ]);
+  assert.match(router, /sessionRequired[\s\S]*?\/auth\/session-status/);
+  assert.match(router, /path:\s*["']\/login["'][\s\S]*?redirect:\s*to\.fullPath/);
+  assert.match(ui, /to=["']\/me\?section=security["']/);
+  assert.match(ui, /to=["']\/security\/mfa["']/);
+  assert.doesNotMatch(ui, /@click=["']switchMode\(["']sessions/);
+  const manifest = JSON.parse(catalog);
+  for (const path of ["/me", "/security/mfa"])
+    assert.equal(manifest.routes.find((route) => route.path === path).sessionRequired, true);
 });

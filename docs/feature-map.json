@@ -207,6 +207,7 @@
         "/api/v1/auth/register",
         "/api/v1/auth/email-verification/confirm",
         "/api/v1/auth/login",
+        "/api/v1/auth/session-status",
         "/api/v1/auth/logout",
         "/api/v1/auth/password-reset/request",
         "/api/v1/auth/password-reset/confirm",
@@ -218,6 +219,7 @@
       "delivery": "AES-256-GCM MySQL outbox; provider selection pending and explicitly blocked",
       "scope": "local email account and own sessions only; MFA and enterprise identity capabilities are tracked separately by M01-02",
       "apiClientBoundary": "local identity and own-session requests use the shared frontend API client; server error message, action hint and request/trace correlation remain visible without exposing tokens",
+      "anonymousAdmissionBoundary": "login does not call protected identity APIs; /me and /security/mfa are marked sessionRequired in the canonical route catalog and use the public no-store 200 session-status boolean before rendering, while missing or invalid sessions return to login with a same-origin relative redirect and no user session or tenant identifiers",
       "status": "verified",
       "statusDetail": "module_verified"
     },
@@ -398,14 +400,14 @@
         "/select-context",
         "/onboarding"
       ],
-      "contracts": "reuses M01-01 local identity, M01-02 MFA and M01-03 tenancy APIs without new fields",
+      "contracts": "reuses M01-01 local identity, M01-02 MFA and M01-03 tenancy APIs; adds only the identifier-free /auth/session-status boolean read for account-route admission",
       "responsiveBoundary": "the login brand entry keeps a 44px minimum touch height on every viewport; mobile auxiliary account actions use a two-column 44px touch grid to reduce vertical occupation without shrinking targets or changing identity behavior",
       "imageEvidence": [
         "concepts 01-10",
         "high-resolution 02 login",
         "high-resolution 03 registration guide"
       ],
-      "nonGoals": "no phone login, Google, Microsoft or SSO activation; no onboarding persistence; no new API, migration, environment value or production service",
+      "nonGoals": "no phone login, Google, Microsoft or SSO activation; no onboarding persistence; no migration, environment value or production service",
       "verificationRunId": "facffd5e-7749-4831-ac73-9db677b608a8",
       "status": "verified",
       "statusDetail": "module_verified"
@@ -1819,7 +1821,7 @@
         "../scripts/verify-production-core-e2e.mjs",
         "../config/route-catalog.json"
       ],
-      "scope": "one-time six-role production tenant, 221 OpenAPI paths, 254 operations, 59 protected routes, two real core business chains and automatic scoped cleanup",
+      "scope": "one-time six-role production tenant, 222 OpenAPI paths, 255 operations, 59 protected routes, two real core business chains and automatic scoped cleanup",
       "runtimeBoundary": "manual finite BaoTa task only; no daemon, generic operation coverage uses no valid write payloads, and only the two manifest-authorized core E2E chains perform valid writes before exact cleanup; no persistent acceptance account or tenant",
       "coreE2eBoundary": "Playwright performs no browser request interception, requires Fastify readiness to report real MySQL and Redis available, then covers trend to opportunity decision to task and sourcing candidate to quote confirmation to cost and profit with two screenshots",
       "cleanupBoundary": "exact run users organization workspace resources and trace references are deleted with a per-table manifest and zero-reference verification",
