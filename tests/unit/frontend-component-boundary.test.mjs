@@ -15,6 +15,7 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
     [`${components}/ProviderParserSampleDialog.vue`, 240],
     [`${components}/ProviderParserSampleReview.vue`, 100],
     [`${components}/OpportunityWorkspace.vue`, 1_000],
+    [`${components}/OpportunityLineagePanel.vue`, 140],
     [`${components}/OpportunityDecisionPanel.vue`, 180],
     [`${components}/OpportunityWorkspaceDialogs.vue`, 240],
     [`${components}/TrendDashboard.vue`, 800],
@@ -65,6 +66,8 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
   assert.match(opportunities, /<OpportunityWorkspaceDialogs/);
   assert.match(opportunities, /import OpportunityDecisionPanel/);
   assert.match(opportunities, /<OpportunityDecisionPanel/);
+  assert.match(opportunities, /import OpportunityLineagePanel/);
+  assert.match(opportunities, /<OpportunityLineagePanel/);
   assert.match(trends, /import TrendFilterPanel/);
   assert.match(trends, /<TrendFilterPanel/);
   assert.match(trends, /import TrendDetailPanel/);

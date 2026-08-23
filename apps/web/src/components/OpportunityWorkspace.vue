@@ -5,6 +5,7 @@ import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-cli
 import OpportunityListPanel from "./OpportunityListPanel.vue";
 import OpportunityDecisionPanel from "./OpportunityDecisionPanel.vue";
 import OpportunityFeedbackPanel from "./OpportunityFeedbackPanel.vue";
+import OpportunityLineagePanel from "./OpportunityLineagePanel.vue";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
 import OpportunityWorkspaceDialogs from "./OpportunityWorkspaceDialogs.vue";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -12,29 +13,29 @@ import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import { durationLabel, statusLabel } from "../ui/status-labels";
 import { useAuditedReason } from "../use-audited-reason";
 import { useModalDialog } from "../use-modal-dialog";
-import { opportunityStatusLabel } from "./opportunity-workspace-presentation";
-import type {
-  OpportunityDetail as Detail,
-  OpportunityProfitAnalysis as ProfitAnalysis,
-  OpportunitySummary as Opportunity,
-  OpportunityTab as Tab,
-  OpportunityWorkspaceState as State,
-} from "./opportunity-workspace-types";
+import {
+  formatOpportunityTime as freshness,
+  opportunityStatusLabel,
+  opportunityTabs as tabs,
+  resolveOpportunityTab,
+  safeOpportunityReturnPath,
+} from "./opportunity-workspace-presentation";
+import type * as OpportunityTypes from "./opportunity-workspace-types";
 import "../opportunities.css";
 import "../opportunity-profit.css";
 import "../opportunity-selection-entry.css";
 import "../opportunity-ai.css";
-const route = useRoute();
-const router = useRouter();
+const route = useRoute(),
+  router = useRouter();
 const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
   request = createApiClient(props.apiBaseUrl),
-  state = ref<State>("loading"),
-  items = ref<Opportunity[]>([]),
+  state = ref<OpportunityTypes.OpportunityWorkspaceState>("loading"),
+  items = ref<OpportunityTypes.OpportunitySummary[]>([]),
   memberOptions = ref<Array<{ id: string; label: string }>>([]),
   costReviewerOptions = ref<Array<{ id: string; label: string }>>([]),
   selectedOpportunityIds = ref<string[]>([]),
-  detail = ref<Detail | null>(null),
-  profit = ref<ProfitAnalysis | null>(null),
+  detail = ref<OpportunityTypes.OpportunityDetail | null>(null),
+  profit = ref<OpportunityTypes.OpportunityProfitAnalysis | null>(null),
   aiAnalyses = ref<any[]>([]),
   total = ref(0),
   page = ref(1),
@@ -43,7 +44,7 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
   busy = ref(false),
   listScope = ref<"product" | "all">("product"),
   downstream = ref({ competitors: 0, snapshots: 0, searches: 0, suppliers: 0 }),
-  tab = ref<Tab>("overview"),
+  tab = ref<OpportunityTypes.OpportunityTab>("overview"),
   showCreate = ref(false),
   showErpImport = ref(false),
   erpImportLimit = ref(200),
@@ -105,53 +106,14 @@ const {
   submit: submitAiReviewReason,
   cancel: cancelAiReviewReason,
 } = useAuditedReason();
-const tabs: [Tab, string][] = [
-  ["overview", "结论"],
-  ["lineage", "业务血缘"],
-  ["feedback", "经营复盘"],
-  ["evidence", "证据"],
-  ["profit", "利润与成本"],
-  ["risk", "风险"],
-  ["market", "市场"],
-  ["competition", "竞争"],
-  ["ai", "AI 辅助"],
-  ["decisions", "决策历史"],
-];
-const lineageKindLabel = (kind: string) =>
-  ({
-    source: "来源健康",
-    collection_task: "采集任务",
-    collection_attempt: "执行尝试",
-    evidence: "原始证据",
-    quality_issue: "质量问题",
-    trend: "趋势",
-    opportunity: "机会",
-    score: "评分",
-    profit: "利润",
-    task: "任务",
-    notification: "通知",
-  })[kind] ?? kind;
-const lineageImpactLabel = (level: string) =>
-  ({ none: "未发现失败影响", degraded: "部分环节降级", blocked: "存在阻断影响" })[level] ?? level;
 const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
-const returnPath = computed(() => {
-  const value = typeof route.query.from === "string" ? route.query.from : "/opportunities";
-  return value.startsWith("/") && !value.startsWith("//") ? value : "/opportunities";
-});
-const stateFrom = (kind: ApiFailureKind): State =>
+const returnPath = computed(() => safeOpportunityReturnPath(route.query.from));
+const stateFrom = (kind: ApiFailureKind): OpportunityTypes.OpportunityWorkspaceState =>
   kind === "expired" || kind === "forbidden"
     ? kind
     : kind === "blocked" || kind === "rate_limited"
       ? "blocked"
       : "error";
-const freshness = (value: string) =>
-  new Intl.DateTimeFormat("zh-CN", {
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).format(new Date(value));
 async function read(path: string) {
   try {
     const response = await request<any>(path);
@@ -561,15 +523,14 @@ async function goListPage(nextPage: number) {
   if (nextPage < 1 || nextPage > pageCount.value) return;
   await router.push({ query: { ...route.query, page: nextPage === 1 ? undefined : nextPage } });
 }
-async function setTab(nextTab: Tab) {
+async function setTab(nextTab: OpportunityTypes.OpportunityTab) {
   tab.value = nextTab;
   await router.replace({
     query: { ...route.query, tab: nextTab === "overview" ? undefined : nextTab },
   });
 }
 function syncTabFromRoute() {
-  const requestedTab = typeof route.query.tab === "string" ? route.query.tab : "overview";
-  tab.value = tabs.some(([value]) => value === requestedTab) ? (requestedTab as Tab) : "overview";
+  tab.value = resolveOpportunityTab(route.query.tab);
 }
 let loadQueued = false;
 function queueLoad() {
@@ -804,66 +765,7 @@ watch(
             ><span>尚无适用风险输入，不以“低风险”代替未知。</span>
           </article>
         </section>
-        <section v-else-if="tab === 'lineage'" class="opportunity-lineage">
-          <header>
-            <div>
-              <p>端到端事实链</p>
-              <h4>业务血缘追踪</h4>
-              <span>每个节点均来自当前工作区的持久化记录；缺失环节保持缺失。</span>
-            </div>
-            <b :data-impact="detail.lineage.failure_impact.level">
-              {{ lineageImpactLabel(detail.lineage.failure_impact.level) }}
-            </b>
-          </header>
-          <dl class="opportunity-lineage-summary">
-            <div>
-              <dt>数据新鲜度</dt>
-              <dd v-if="detail.lineage.freshness.observed_at">
-                {{ freshness(detail.lineage.freshness.observed_at) }} · 距今
-                {{ durationLabel(detail.lineage.freshness.age_seconds ?? 0) }}
-              </dd>
-              <dd v-else>尚无原始证据观测时间</dd>
-            </div>
-            <div>
-              <dt>失败影响</dt>
-              <dd>
-                {{
-                  detail.lineage.failure_impact.affected_stages.map(lineageKindLabel).join("、") ||
-                  "无"
-                }}
-              </dd>
-            </div>
-          </dl>
-          <p v-if="!detail.lineage.nodes.length" class="opportunity-empty-copy">
-            当前机会尚无可追踪的业务节点。
-          </p>
-          <ol v-else class="opportunity-lineage-list">
-            <li v-for="node in detail.lineage.nodes" :key="node.kind + ':' + node.id">
-              <span>{{ lineageKindLabel(node.kind) }}</span>
-              <div>
-                <strong>{{ node.label }}</strong>
-                <small
-                  >{{ freshness(node.occurred_at) }} ·
-                  {{ statusLabel(node.status.split(":")[0]) }}</small
-                >
-                <details>
-                  <summary>技术链路</summary>
-                  <code>request_id: {{ node.request_id ?? "未记录" }}</code>
-                  <code>trace_id: {{ node.trace_id ?? "未记录" }}</code>
-                  <code>resource_id: {{ node.id }}</code>
-                </details>
-              </div>
-              <RouterLink :to="node.route">打开节点</RouterLink>
-            </li>
-          </ol>
-          <details
-            v-if="detail.lineage.failure_impact.codes.length"
-            class="opportunity-lineage-impact"
-          >
-            <summary>查看失败影响代码</summary>
-            <code v-for="code in detail.lineage.failure_impact.codes" :key="code">{{ code }}</code>
-          </details>
-        </section>
+        <OpportunityLineagePanel v-else-if="tab === 'lineage'" :lineage="detail.lineage" />
         <OpportunityFeedbackPanel
           v-else-if="tab === 'feedback'"
           :feedback="detail.operating_feedback"

@@ -316,7 +316,7 @@ const percent = (value: number, total: number) =>
   }
   .api-coverage td::before {
     color: var(--so-text-muted);
-    font-size: 12px;
+    font-size: var(--so-font-meta);
   }
   .api-coverage td:nth-child(1)::before {
     content: "接口";

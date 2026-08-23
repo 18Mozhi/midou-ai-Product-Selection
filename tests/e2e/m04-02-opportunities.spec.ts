@@ -110,6 +110,29 @@ async function ready(page: Page) {
           scored_at: null,
           latest_score_run: null,
           score_components: [],
+          lineage: {
+            freshness: { observed_at: evidence[0].observed_at, age_seconds: 3600 },
+            failure_impact: {
+              level: "degraded",
+              codes: ["insufficient_data"],
+              affected_stages: ["score"],
+            },
+            request_ids: ["m04-02-e2e-request"],
+            trace_ids: ["m04-02-e2e-trace"],
+            nodes: [
+              {
+                kind: "opportunity",
+                id: opportunityId,
+                label: base.name,
+                status: "pending",
+                occurred_at: base.updated_at,
+                request_id: "m04-02-e2e-request",
+                trace_id: "m04-02-e2e-trace",
+                route: `/opportunities/${opportunityId}?tab=lineage`,
+              },
+            ],
+          },
+          operating_feedback: { facts: [], calibration: null },
           adoption_blockers: [
             {
               code: "evidence_insufficient",
@@ -221,6 +244,8 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   );
   await expect(page.locator(".opportunity-tabs button")).toHaveText([
     "结论",
+    "业务血缘",
+    "经营复盘",
     "证据",
     "利润与成本",
     "风险",
@@ -230,6 +255,12 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
     "决策历史",
   ]);
   await expect(page.getByText("尚无评分运行；缺失输入不会用默认值补齐。")).toBeVisible();
+  await page.getByRole("button", { name: "业务血缘" }).click();
+  await expect(page.getByRole("heading", { name: "业务血缘追踪" })).toBeVisible();
+  await expect(page.getByText("部分环节降级", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "经营复盘" }).click();
+  await expect(page.getByRole("heading", { name: "决策后反馈" })).toBeVisible();
+  await expect(page.getByText("尚无经营复盘事实。")).toBeVisible();
   await page.getByRole("button", { name: "利润与成本" }).click();
   await expect(page.getByText("数据不足，不能生成可靠 ROI")).toBeVisible();
   await page.getByRole("button", { name: "证据", exact: true }).click();

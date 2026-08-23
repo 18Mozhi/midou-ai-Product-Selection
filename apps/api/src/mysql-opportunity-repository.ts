@@ -344,7 +344,8 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         trace_id: String(row.trace_id),
         route: `/platform-admin/data?issue_id=${encodeURIComponent(String(row.id))}`,
       });
-    for (const row of trendRows)
+    for (const row of trendRows) {
+      if (row.source_fresh_at == null) continue;
       add({
         kind: "trend",
         id: String(row.id),
@@ -355,6 +356,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         trace_id: row.trace_id == null ? null : String(row.trace_id),
         route: `/trends?topic_id=${encodeURIComponent(String(row.id))}`,
       });
+    }
     for (const row of opportunityRows)
       add({
         kind: "opportunity",

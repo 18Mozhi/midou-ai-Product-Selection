@@ -150,10 +150,12 @@ test("business lineage joins the persisted source-to-notification chain and expo
 });
 
 test("business lineage UI keeps correlation, freshness and failure impact visible", async () => {
-  const [web, feature] = await Promise.all([
+  const [workspace, panel, feature] = await Promise.all([
     readFile("apps/web/src/components/OpportunityWorkspace.vue", "utf8"),
+    readFile("apps/web/src/components/OpportunityLineagePanel.vue", "utf8"),
     readFile("docs/feature-map.json", "utf8"),
   ]);
+  const web = workspace + panel;
   for (const copy of ["业务血缘追踪", "数据新鲜度", "失败影响", "request_id", "trace_id"])
     assert.match(web, new RegExp(copy));
   assert.match(JSON.parse(feature).implementation.opportunityDomain.scope, /lineage|血缘/i);
