@@ -232,6 +232,7 @@ export interface RuntimeConfig {
     defaultWindow: "15m" | "24h" | "7d" | "30d";
     queueWarning: number;
     errorLimit: number;
+    apiCoverageReportFile: string;
   };
   collectionConsole: { recentLimit: number };
   securityOperations: { defaultWindow: "24h" | "7d" | "30d"; recentLimit: number };
@@ -706,6 +707,14 @@ export function loadRuntimeConfig(
         "15m" | "24h" | "7d" | "30d",
       queueWarning: integer(env, "PLATFORM_DASHBOARD_QUEUE_WARNING", 1000, 1, 1000000),
       errorLimit: integer(env, "PLATFORM_DASHBOARD_ERROR_LIMIT", 20, 1, 100),
+      apiCoverageReportFile: resolve(
+        process.cwd(),
+        text(
+          env,
+          "SCOUTOPS_ACCEPTANCE_API_REPORT_FILE",
+          "./.artifacts/verification/production-api-coverage.json",
+        ),
+      ),
     },
     collectionConsole: {
       recentLimit: integer(env, "COLLECTION_CONSOLE_RECENT_LIMIT", 50, 10, 200),

@@ -1277,6 +1277,27 @@
       }
     },
     {
+      "path": "/platform-admin/api-coverage",
+      "name": "platform-api-coverage",
+      "title": "接口覆盖",
+      "breadcrumb": ["平台后台", "系统运维", "接口覆盖"],
+      "shell": "platform_admin",
+      "view": null,
+      "capabilities": ["platform:operate", "platform:superadmin"],
+      "notFound": false,
+      "surface": "platform-management-center",
+      "cachePolicy": "preserve",
+      "acceptance": "protected",
+      "featureMap": {
+        "path": "/platform-admin/api-coverage",
+        "view": "ApiCoverageDashboard",
+        "domain": "platform-api-coverage",
+        "status": "verified",
+        "statusDetail": "machine_catalog_and_live_report_join_verified"
+      },
+      "navigation": { "label": "接口覆盖", "icon": "list", "group": "高级运维" }
+    },
+    {
       "path": "/platform-admin/operations",
       "name": "platform-operations",
       "title": "备份与恢复",

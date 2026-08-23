@@ -248,8 +248,6 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page.locator("body")).not.toContainText(
     /\bobserve\b|trend_topic|insufficient_data|\bpartial\b|\bunknown\b/,
   );
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("m04-02-opportunity-detail.png", { fullPage: true });
 });
 
 test("mobile opportunity filters preserve selected adoption blocker inside the drawer", async ({

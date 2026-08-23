@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "source": "config/api-coverage-metadata.json",
+  "default": {
+    "dataSource": "mysql57_business",
+    "uiConsumers": [],
+    "crawlerSideEffect": "none"
+  },
+  "rules": [
+    {
+      "prefix": "/health",
+      "dataSource": "runtime_health",
+      "uiConsumers": ["/platform-admin/status"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/auth",
+      "dataSource": "mysql57_identity",
+      "uiConsumers": ["/login", "/select-context"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/me",
+      "dataSource": "mysql57_identity_business",
+      "uiConsumers": ["/home", "/me"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/internal/crawler-runtime",
+      "dataSource": "mysql57_crawler_runtime",
+      "uiConsumers": [],
+      "crawlerSideEffect": "crawler_callback"
+    },
+    {
+      "prefix": "/platform/crawler-runtime",
+      "dataSource": "mysql57_crawler_runtime",
+      "uiConsumers": ["/platform-admin/crawler-runtime"],
+      "crawlerSideEffect": "crawler_control"
+    },
+    {
+      "prefix": "/platform/crawler-profiles",
+      "dataSource": "mysql57_encrypted_credentials",
+      "uiConsumers": ["/platform-admin/crawler-profiles"],
+      "crawlerSideEffect": "crawler_control"
+    },
+    {
+      "prefix": "/platform/credential",
+      "dataSource": "mysql57_encrypted_credentials",
+      "uiConsumers": ["/platform-admin/credentials"],
+      "crawlerSideEffect": "crawler_control"
+    },
+    {
+      "prefix": "/platform/provider",
+      "dataSource": "mysql57_provider_registry",
+      "uiConsumers": ["/platform-admin/providers"],
+      "crawlerSideEffect": "crawler_control"
+    },
+    {
+      "prefix": "/platform/collection",
+      "dataSource": "mysql57_redis_collection",
+      "uiConsumers": ["/platform-admin/collection/overview"],
+      "crawlerSideEffect": "crawler_control"
+    },
+    {
+      "prefix": "/provider-sources/refresh",
+      "dataSource": "external_sources_via_worker",
+      "uiConsumers": ["/platform-admin/providers/sources"],
+      "crawlerSideEffect": "crawler_dispatch"
+    },
+    {
+      "prefix": "/sourcing/searches",
+      "dataSource": "external_supplier_pages_via_crawler",
+      "uiConsumers": ["/sourcing"],
+      "crawlerSideEffect": "crawler_dispatch"
+    },
+    {
+      "prefix": "/realtime",
+      "dataSource": "redis_sse",
+      "uiConsumers": ["/notifications"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/ai-analyses",
+      "dataSource": "openai_compatible_model",
+      "uiConsumers": ["/opportunities"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/analysis",
+      "dataSource": "openai_compatible_model",
+      "uiConsumers": ["/opportunities"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/trends",
+      "dataSource": "mysql57_trends",
+      "uiConsumers": ["/trends"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/opportunities",
+      "dataSource": "mysql57_opportunities",
+      "uiConsumers": ["/opportunities"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/opportunity-score-rules",
+      "dataSource": "mysql57_rules",
+      "uiConsumers": ["/settings/scoring"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/cost-rules",
+      "dataSource": "mysql57_rules",
+      "uiConsumers": ["/settings/cost-rules"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/competitor",
+      "dataSource": "mysql57_competitors",
+      "uiConsumers": ["/competitors"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/sourcing",
+      "dataSource": "mysql57_sourcing",
+      "uiConsumers": ["/sourcing"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/tasks",
+      "dataSource": "mysql57_tasks",
+      "uiConsumers": ["/work", "/approvals"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/notifications",
+      "dataSource": "mysql57_notifications",
+      "uiConsumers": ["/notifications"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/reports",
+      "dataSource": "mysql57_exports",
+      "uiConsumers": ["/reports"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/report-exports",
+      "dataSource": "mysql57_files",
+      "uiConsumers": ["/reports"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/platform",
+      "dataSource": "mysql57_platform_operations",
+      "uiConsumers": ["/platform-admin"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/org",
+      "dataSource": "mysql57_tenancy",
+      "uiConsumers": ["/org-admin"],
+      "crawlerSideEffect": "none"
+    },
+    {
+      "prefix": "/organizations",
+      "dataSource": "mysql57_tenancy",
+      "uiConsumers": ["/select-context"],
+      "crawlerSideEffect": "none"
+    }
+  ]
+}

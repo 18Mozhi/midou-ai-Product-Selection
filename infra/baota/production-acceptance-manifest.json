@@ -15,7 +15,7 @@
     "openapiFile": "docs/openapi.yaml",
     "pathCount": 222,
     "operationCount": 255,
-    "protectedRouteCount": 59,
+    "protectedRouteCount": 60,
     "roleCount": 6,
     "realCoreScreenshotCount": 2
   },

@@ -1,10 +1,12 @@
-export type PlatformManagementDomain = "content" | "notifications" | "email" | "status";
+export type PlatformManagementDomain =
+  "content" | "notifications" | "email" | "status" | "api-coverage";
 
 export const platformManagementTitles: Record<PlatformManagementDomain, [string, string]> = {
   content: ["内容管理", "审核跨组织热点内容，处理无关和过期主题。"],
   notifications: ["通知管理", "查看站内通知、接收人、已读状态和各渠道投递结果。"],
   email: ["邮件管理", "统一查看账号邮件与业务通知邮件的队列、失败和死信状态。"],
   status: ["系统状态", "查看 API、数据库、账号、来源和采集任务的真实运行状态。"],
+  "api-coverage": ["接口覆盖", "按角色、结果、来源、UI 消费方和爬虫副作用核对当前 OpenAPI。"],
 };
 
 const summaryNames: Record<string, string> = {

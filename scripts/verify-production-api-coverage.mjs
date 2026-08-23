@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { readRouteCatalogManifest } from "./production-route-catalog.mjs";
@@ -45,6 +45,14 @@ function parseOperations(source) {
 }
 
 const openapi = parseOperations(await readFile(manifest.baseline.openapiFile, "utf8"));
+const catalogFingerprint = createHash("sha256")
+  .update(
+    openapi.operations
+      .map((operation) => `${operation.method} ${operation.path}`)
+      .sort()
+      .join("\n"),
+  )
+  .digest("hex");
 if (
   openapi.paths.length !== manifest.baseline.pathCount ||
   openapi.operations.length !== manifest.baseline.operationCount
@@ -228,11 +236,12 @@ const counts = Object.fromEntries(
   ]),
 );
 const report = {
-  schema_version: 1,
+  schema_version: 2,
   status: "passed",
   base_url: baseUrl,
   path_count: openapi.paths.length,
   operation_count: results.length,
+  catalog_fingerprint: catalogFingerprint,
   counts,
   operations: results,
   captured_at: new Date().toISOString(),

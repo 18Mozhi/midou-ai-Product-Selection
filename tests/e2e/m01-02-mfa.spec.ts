@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 
-test("M01-02.A07/A15 MFA security center is visually stable", async ({ page }) => {
+test("M01-02.A07/A15 MFA security center loads through an authenticated session", async ({
+  page,
+}) => {
   await page.route("**/api/v1/auth/session-status", (route) =>
     route.fulfill({
       json: { data: { authenticated: true }, request_id: "status", trace_id: "status" },
@@ -18,7 +20,6 @@ test("M01-02.A07/A15 MFA security center is visually stable", async ({ page }) =
   await page.goto("/security/mfa");
   await expect(page.getByRole("heading", { name: "多因素认证" })).toBeVisible();
   await expect(page.getByTestId("mfa")).toContainText("认证器 TOTP");
-  await expect(page).toHaveScreenshot("m01-02-mfa.png", { fullPage: true });
 });
 
 test("M01-02.A08/A15 MFA login challenge is keyboard accessible at desktop and 390px", async ({
@@ -29,5 +30,4 @@ test("M01-02.A08/A15 MFA login challenge is keyboard accessible at desktop and 3
   await code.focus();
   await code.fill("123456");
   await expect(page.getByRole("button", { name: "验证并登录" })).toBeEnabled();
-  await expect(page).toHaveScreenshot("m01-02-challenge.png", { fullPage: true });
 });

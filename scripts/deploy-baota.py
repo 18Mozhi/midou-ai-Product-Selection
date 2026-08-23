@@ -241,6 +241,7 @@ def build_package(repo: Path, source_identity: dict[str, str], skip_build: bool,
 
     for relative in (
         "config/route-catalog.json",
+        "config/api-coverage-metadata.json",
         "infra/baota/production-acceptance-manifest.json",
         "docs/openapi.yaml",
     ):

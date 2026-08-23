@@ -10,6 +10,7 @@ import {
 import { useAuditedReason } from "../use-audited-reason";
 import { useModalDialog } from "../use-modal-dialog";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
+import ApiCoverageDashboard from "./ApiCoverageDashboard.vue";
 import PlatformMessageEditor from "./PlatformMessageEditor.vue";
 import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
 import PlatformManagementRecordList from "./PlatformManagementRecordList.vue";
@@ -33,7 +34,7 @@ const props = defineProps<{ apiBaseUrl: string; domain: string }>();
 const request = createApiClient(props.apiBaseUrl);
 const domain = computed<Domain>(
   () =>
-    (["content", "notifications", "email", "status"].includes(props.domain)
+    (["content", "notifications", "email", "status", "api-coverage"].includes(props.domain)
       ? props.domain
       : "status") as Domain,
 );
@@ -164,10 +165,12 @@ async function load() {
     const count =
       domain.value === "status"
         ? (data.value?.collections?.length ?? 0) + (data.value?.sources?.length ?? 0)
-        : ["notifications", "email"].includes(domain.value)
-          ? (data.value?.items?.length ?? 0) + (data.value?.messages?.length ?? 0)
-          : (data.value?.items?.length ?? 0);
-    state.value = count || domain.value === "status" ? "ready" : "empty";
+        : domain.value === "api-coverage"
+          ? (data.value?.operations?.length ?? 0)
+          : ["notifications", "email"].includes(domain.value)
+            ? (data.value?.items?.length ?? 0) + (data.value?.messages?.length ?? 0)
+            : (data.value?.items?.length ?? 0);
+    state.value = count || ["status", "api-coverage"].includes(domain.value) ? "ready" : "empty";
   } catch (error) {
     message.value = error instanceof Error ? error.message : "管理数据暂不可用";
     state.value = "error";
@@ -343,18 +346,30 @@ onUnmounted(() => window.removeEventListener(realtimeMetricsEvent, syncRealtimeM
       </div>
     </header>
     <ResponsiveFilterDrawer
-      v-if="domain !== 'status'"
+      v-if="!['status'].includes(domain)"
       :label="`筛选${titles[domain][0]}`"
       :active-count="activeFilterCount"
     >
       <form class="platform-management-filter" @submit.prevent="load">
         <input
           v-model="query"
-          :placeholder="domain === 'content' ? '搜索主题、分类或市场' : '搜索标题、邮箱或组织'"
+          :placeholder="
+            domain === 'content'
+              ? '搜索主题、分类或市场'
+              : domain === 'api-coverage'
+                ? '搜索接口、能力、来源或 UI'
+                : '搜索标题、邮箱或组织'
+          "
         /><select
           v-model="status"
           :aria-label="
-            domain === 'content' ? '内容状态' : domain === 'notifications' ? '通知类型' : '邮件状态'
+            domain === 'content'
+              ? '内容状态'
+              : domain === 'notifications'
+                ? '通知类型'
+                : domain === 'api-coverage'
+                  ? '验收结果'
+                  : '邮件状态'
           "
         >
           <option value="">全部状态</option>
@@ -367,6 +382,12 @@ onUnmounted(() => window.removeEventListener(realtimeMetricsEvent, syncRealtimeM
             <option value="approval">审批</option>
             <option value="competitor">竞品</option>
             <option value="system">系统</option></template
+          ><template v-else-if="domain === 'api-coverage'"
+            ><option value="success">成功</option>
+            <option value="empty">空结果</option>
+            <option value="blocked">受阻</option>
+            <option value="unauthorized">越权拒绝</option>
+            <option value="not_run">未执行</option></template
           ><template v-else
             ><option value="succeeded">已送达</option>
             <option value="blocked_provider">服务商受阻</option>
@@ -391,7 +412,7 @@ onUnmounted(() => window.removeEventListener(realtimeMetricsEvent, syncRealtimeM
       <button v-if="state !== 'loading'" @click="load">重新加载</button>
     </section>
     <template v-else-if="data"
-      ><div class="platform-management-kpis">
+      ><div v-if="domain !== 'api-coverage'" class="platform-management-kpis">
         <article v-for="[key, value] in summaryEntries" :key="key">
           <small>{{ summaryName(key) }}</small
           ><strong :data-state="value">{{ stateName(value) }}</strong>
@@ -433,6 +454,7 @@ onUnmounted(() => window.removeEventListener(realtimeMetricsEvent, syncRealtimeM
         @review="beginReview"
         @email-action="manageEmail"
       />
+      <ApiCoverageDashboard v-else-if="domain === 'api-coverage'" :data="data" />
       <div v-else class="platform-status-grid">
         <section class="platform-service-topology">
           <header class="platform-topology-header">

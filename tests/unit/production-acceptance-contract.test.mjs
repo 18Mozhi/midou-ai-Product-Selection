@@ -5,7 +5,7 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(path, "utf8");
 
-test("production acceptance locks the 222 path, 255 operation, 59 route and six role baseline", async () => {
+test("production acceptance locks the 222 path, 255 operation, 60 route and six role baseline", async () => {
   const [manifest, routeCatalog, openapi] = await Promise.all([
     read("infra/baota/production-acceptance-manifest.json").then(JSON.parse),
     read("config/route-catalog.json").then(JSON.parse),
@@ -91,7 +91,7 @@ test("production acceptance preflight is read-only and reports the current machi
       production_verified: false,
       paths: 222,
       operations: 255,
-      protected_routes: 59,
+      protected_routes: 60,
       roles: 6,
     },
   );

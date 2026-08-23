@@ -1616,9 +1616,11 @@
         "../apps/api/src/mysql-platform-dashboard-collection-metrics.ts",
         "../apps/api/src/mysql-platform-dashboard-risk-metrics.ts",
         "../apps/api/src/mysql-platform-dashboard-storage-metrics.ts",
+        "../apps/api/src/api-coverage-dashboard.ts",
         "../apps/api/src/platform-dashboard-routes.ts",
         "../apps/web/src/components/PlatformDashboard.vue",
         "../apps/web/src/components/PlatformManagementCenter.vue",
+        "../apps/web/src/components/ApiCoverageDashboard.vue",
         "../apps/web/src/components/platform-management-presentation.ts",
         "../apps/web/src/components/PlatformLogCenter.vue",
         "../apps/web/src/components/PlatformManagementRecordList.vue",
@@ -1628,7 +1630,9 @@
         "../apps/web/src/platform-notification-operations.css",
         "../apps/web/src/components/PlatformDataCenter.vue",
         "../apps/web/src/components/PlatformGovernanceCenter.vue",
-        "../database/migrations/0040_platform_messages.up.sql"
+        "../database/migrations/0040_platform_messages.up.sql",
+        "../config/api-coverage-metadata.json",
+        "../scripts/verify-production-api-coverage.mjs"
       ],
       "routes": [
         "/platform-admin",
@@ -1638,6 +1642,7 @@
         "/platform-admin/notifications",
         "/platform-admin/status",
         "/platform-admin/logs",
+        "/platform-admin/api-coverage",
         "/api/v1/platform/dashboard",
         "/api/v1/platform/management",
         "/api/v1/platform/management/data/exports",
@@ -1648,17 +1653,18 @@
         "/api/v1/platform/management/messages/{messageId}/actions",
         "/api/v1/platform/management/email/{source}/{deliveryId}/actions"
       ],
-      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, unified backend database cache file task-processing and crawler status management with dedicated operations links and a six-service dependency topology with bounded fault-propagation review scope, browser-tab SSE reconnect-rate and fallback-refresh observations, plus a bounded cross-runtime chain-log search grouped by trace_id across API audit, Worker task and crawler run events with exact exceptional task and crawler-provider deep links when persisted associations exist; log CSV export reuses the active query and source filter plus the same 200-row boundary, formula-protects cells and audits actor reason filter and row count; dashboard mobile provider health and platform data governance content notification or retained email records use summary cards with detail drawers, mobile filters use a state-preserving drawer, and provider alert-scope record version request identifiers raw delivery values or error codes stay inside technical details or API values rather than primary UI copy",
+      "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, unified backend database cache file task-processing and crawler status management with dedicated operations links and a six-service dependency topology with bounded fault-propagation review scope, browser-tab SSE reconnect-rate and fallback-refresh observations, a bounded cross-runtime chain-log search grouped by trace_id, and a current API coverage dashboard grouped by role, outcome, declared data source, UI consumer and crawler side effect",
       "presentationBoundary": "every platform table keeps shared desktop column freeze visibility and density controls; at 390 pixels provider health data governance content notifications retained email and each trace-grouped log event render as summary cards with named side drawers, preserve exact task and provider deep links, and keep identifiers inside technical details without horizontal wide tables",
       "metricQueryBoundary": "the dashboard repository composes four read-only MySQL 5.7 metric domains in parallel: organization user and provider scale, collection task queue provider health and trend, quality alerts and recent platform activity, and file storage totals and growth; response assembly null or unknown semantics and the correlated dashboard view plus platform audit transaction remain in the repository while management writes exports and moderation are unchanged",
-      "truthBoundary": "no sample remains unknown or null; log responses and exports exclude raw audit metadata task payload crawler result stderr credentials cookies and internal paths; no invented uptime and capacity claims; /platform-admin/email and all email enable controls stay closed while Mail provider is pending_provider_selection",
+      "truthBoundary": "API coverage reads the current OpenAPI and machine metadata on every request and accepts production outcomes only when schema 2, counts and catalog SHA-256 match; missing or older reports remain missing or outdated and contribute zero verified operations. No sample remains unknown or null; log responses and exports exclude raw audit metadata task payload crawler result stderr credentials cookies and internal paths; no invented uptime and capacity claims; /platform-admin/email and all email enable controls stay closed while Mail provider is pending_provider_selection",
       "permission": "platform:operate on the API; platform role navigation guard on the page; dashboard reads and platform data or log exports write correlated platform audit events, with same-origin enforcement on exports",
       "configuration": [
         "PLATFORM_DASHBOARD_DEFAULT_WINDOW",
         "PLATFORM_DASHBOARD_QUEUE_WARNING",
-        "PLATFORM_DASHBOARD_ERROR_LIMIT"
+        "PLATFORM_DASHBOARD_ERROR_LIMIT",
+        "SCOUTOPS_ACCEPTANCE_API_REPORT_FILE"
       ],
-      "runtimeBoundary": "synchronous MySQL 5.7 read model under Baota Node API; chain-log search and audited CSV export reuse the indexed request_id and trace_id columns in platform_audit_events, collection_task_events and crawler_browser_runs, return at most 200 normalized rows plus exact browser-job task and provider associations without raw metadata payloads stderr credentials or cookies; trace grouping is presentation-only and no log copy or export worker is created; persisted topology and resilience observations are reused, observations older than five minutes are explicitly stale; SSE degradation observations stay in the current browser tab sessionStorage and are never uploaded; no dashboard daemon or server-side service is created",
+      "runtimeBoundary": "synchronous MySQL 5.7 read model under Baota Node API; API coverage additionally reads the deployment-packaged OpenAPI, route catalog, coverage metadata and finite BaoTa acceptance report without a daemon or new service. Chain-log search and audited CSV export reuse indexed request_id and trace_id columns, return at most 200 normalized rows and no raw metadata, payload, stderr, credential or cookie; persisted topology and resilience observations are reused, observations older than five minutes are explicitly stale; SSE degradation observations stay in the current browser tab sessionStorage and are never uploaded",
       "imageEvidence": [
         "concept 61 platform operations overview",
         "high resolution 10 platform operations cockpit"
@@ -1821,7 +1827,7 @@
         "../scripts/verify-production-core-e2e.mjs",
         "../config/route-catalog.json"
       ],
-      "scope": "one-time six-role production tenant, 222 OpenAPI paths, 255 operations, 59 protected routes, two real core business chains and automatic scoped cleanup",
+      "scope": "one-time six-role production tenant, 222 OpenAPI paths, 255 operations, 60 protected routes, two real core business chains and automatic scoped cleanup",
       "runtimeBoundary": "manual finite BaoTa task only; no daemon, generic operation coverage uses no valid write payloads, and only the two manifest-authorized core E2E chains perform valid writes before exact cleanup; no persistent acceptance account or tenant",
       "coreE2eBoundary": "Playwright performs no browser request interception, requires Fastify readiness to report real MySQL and Redis available, then covers trend to opportunity decision to task and sourcing candidate to quote confirmation to cost and profit with two screenshots",
       "cleanupBoundary": "exact run users organization workspace resources and trace references are deleted with a per-table manifest and zero-reference verification",
@@ -3036,6 +3042,13 @@
       "domain": "platform-operational-logs",
       "status": "implemented",
       "statusDetail": "implemented_pending_full_verification"
+    },
+    {
+      "path": "/platform-admin/api-coverage",
+      "view": "ApiCoverageDashboard",
+      "domain": "platform-api-coverage",
+      "status": "verified",
+      "statusDetail": "machine_catalog_and_live_report_join_verified"
     },
     {
       "path": "/platform-admin/operations",

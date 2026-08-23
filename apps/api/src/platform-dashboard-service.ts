@@ -1,6 +1,13 @@
 export type PlatformDashboardWindow = "15m" | "24h" | "7d" | "30d";
 export type PlatformManagementDomain =
-  "content" | "notifications" | "email" | "status" | "logs" | "data" | "governance";
+  | "content"
+  | "notifications"
+  | "email"
+  | "status"
+  | "logs"
+  | "data"
+  | "governance"
+  | "api_coverage";
 export type PlatformDataEntity = "trends" | "opportunities" | "competitors" | "suppliers";
 export interface PlatformDashboardRepository {
   read(input: {
@@ -114,9 +121,16 @@ export class PlatformDashboardService {
   }) {
     const domain = String(input.domain ?? "status") as PlatformManagementDomain;
     if (
-      !["content", "notifications", "email", "status", "logs", "data", "governance"].includes(
-        domain,
-      )
+      ![
+        "content",
+        "notifications",
+        "email",
+        "status",
+        "logs",
+        "data",
+        "governance",
+        "api_coverage",
+      ].includes(domain)
     )
       throw new PlatformDashboardError(
         "platform_management_domain_invalid",

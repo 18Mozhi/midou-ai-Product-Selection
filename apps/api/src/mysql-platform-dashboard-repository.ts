@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { resolve } from "node:path";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
   PlatformDashboardError,
@@ -8,6 +9,7 @@ import { readPlatformCollectionMetrics } from "./mysql-platform-dashboard-collec
 import { readPlatformRiskMetrics } from "./mysql-platform-dashboard-risk-metrics.js";
 import { readPlatformScaleMetrics } from "./mysql-platform-dashboard-scale-metrics.js";
 import { readPlatformStorageMetrics } from "./mysql-platform-dashboard-storage-metrics.js";
+import { readApiCoverageDashboard } from "./api-coverage-dashboard.js";
 const n = (v: any) => Number(v ?? 0),
   iso = (v: any) => (v ? new Date(v).toISOString() : null);
 export class MySqlPlatformDashboardRepository implements PlatformDashboardRepository {
@@ -16,6 +18,10 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     private readonly queueWarning = 1000,
     private readonly errorLimit = 20,
     private readonly now = () => new Date(),
+    private readonly apiCoverageReportFile = resolve(
+      process.cwd(),
+      ".artifacts/verification/production-api-coverage.json",
+    ),
   ) {}
   async read(i: any) {
     const since = new Date(this.now().getTime() - i.windowMinutes * 60000),
@@ -142,6 +148,16 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     return result;
   }
   async readManagement(i: any) {
+    if (i.domain === "api_coverage")
+      return readApiCoverageDashboard({
+        openapiFile: resolve(process.cwd(), "docs/openapi.yaml"),
+        routeCatalogFile: resolve(process.cwd(), "config/route-catalog.json"),
+        metadataFile: resolve(process.cwd(), "config/api-coverage-metadata.json"),
+        reportFile: this.apiCoverageReportFile,
+        query: i.query,
+        status: i.status,
+        now: this.now(),
+      });
     const like = `%${i.query.replace(/[\\%_]/g, "\\$&")}%`,
       filter = i.query ? like : "%",
       status = i.status || "%";

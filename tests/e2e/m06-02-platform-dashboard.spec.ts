@@ -90,6 +90,70 @@ async function nav(page: Page) {
     }),
   );
 }
+test("API coverage dashboard exposes the current production truth dimensions on desktop and mobile", async ({
+  page,
+}) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/management?domain=api-coverage**", (route) =>
+    route.fulfill({
+      json: env({
+        domain: "api_coverage",
+        report_status: "current",
+        catalog_fingerprint: "a".repeat(64),
+        summary: {
+          paths: 222,
+          operations: 255,
+          verified: 255,
+          coverage_percent: 100,
+          ui_consumed: 180,
+          crawler_side_effects: 12,
+        },
+        by_outcome: [{ key: "success", count: 255 }],
+        by_role: [
+          {
+            key: "platform_operations_admin",
+            expected_allowed: 255,
+            verified: 255,
+            success: 255,
+            empty: 0,
+            blocked: 0,
+            unauthorized: 0,
+          },
+        ],
+        by_data_source: [{ key: "mysql57_business", count: 255 }],
+        by_ui_consumer: [{ key: "/platform-admin/api-coverage", count: 1 }],
+        by_crawler_side_effect: [{ key: "none", count: 255 }],
+        operations: [
+          {
+            method: "GET",
+            path: "/api/v1/platform/management",
+            expected_roles: ["platform_operations_admin"],
+            verification_role: "platform_operations_admin",
+            outcome: "success",
+            data_source: "mysql57_business",
+            ui_consumers: ["/platform-admin/api-coverage"],
+            crawler_side_effect: "none",
+          },
+        ],
+        total_filtered: 255,
+        captured_at: "2026-08-23T12:00:00.000Z",
+        age_seconds: 60,
+      }),
+    }),
+  );
+  await page.goto("/platform-admin/api-coverage");
+  await expect(page.getByRole("heading", { name: "接口覆盖", level: 2 })).toBeVisible();
+  for (const heading of ["结果覆盖", "六角色覆盖", "数据来源", "UI 消费方", "爬虫副作用"])
+    await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+  await expect(page.getByText("100.00%", { exact: true })).toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.reload();
+  await expect(page.getByText("/api/v1/platform/management", { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
+});
 test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ page }) => {
   await nav(page);
   await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));

@@ -4609,8 +4609,8 @@ paths:
         "503": { $ref: "#/components/responses/Error" }
   /platform/management:
     get:
-      summary: Read platform data, governance, content, notification, email, system-status or operational-log facts
-      description: Requires platform:operate. Returns bounded cross-organization operational facts without credentials, message secrets or raw crawler payloads. The logs domain correlates up to 200 API audit, Worker task and crawler run events by request_id and trace_id; crawler events additionally return their exact persisted collection task and provider association plus the provider display name so exceptional rows can link to the existing task and source pages. API or Worker rows without an exact provider association keep it null. The response only returns normalized status and error codes, not raw event metadata. The status domain also summarizes the latest persisted BaoTa API topology, Redis, MySQL, file-storage and Worker/Crawler scheduler observations, marking observations older than five minutes as stale and linking to the dedicated operations views.
+      summary: Read platform data, governance, content, notification, email, system-status, API-coverage or operational-log facts
+      description: Requires platform:operate. Returns bounded cross-organization operational facts without credentials, message secrets or raw crawler payloads. The api_coverage domain joins the current OpenAPI operation catalog, six-role route source, declared data-source/UI/crawler-effect metadata and latest production acceptance report on every read. A report contributes to the coverage rate only when its schema, path/operation counts and SHA-256 catalog fingerprint match the current OpenAPI. The logs domain correlates up to 200 API audit, Worker task and crawler run events by request_id and trace_id; crawler events additionally return their exact persisted collection task and provider association plus the provider display name so exceptional rows can link to the existing task and source pages. API or Worker rows without an exact provider association keep it null. The response only returns normalized status and error codes, not raw event metadata. The status domain also summarizes the latest persisted BaoTa API topology, Redis, MySQL, file-storage and Worker/Crawler scheduler observations, marking observations older than five minutes as stale and linking to the dedicated operations views.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
@@ -4620,7 +4620,7 @@ paths:
             schema:
               {
                 type: string,
-                enum: [content, notifications, email, status, logs, data, governance],
+                enum: [content, notifications, email, status, logs, data, governance, api_coverage],
               },
           }
         - {
@@ -4636,7 +4636,14 @@ paths:
         - { name: query, in: query, schema: { type: string, maxLength: 120 } }
         - { name: status, in: query, schema: { type: string, maxLength: 40 } }
       responses:
-        "200": { description: Current management facts }
+        "200":
+          description: Current management facts; api_coverage returns the current machine catalog joined to the latest matching production report
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - { $ref: "#/components/schemas/ApiCoverageDashboardEnvelope" }
+                  - { type: object, additionalProperties: true }
         "400": { $ref: "#/components/responses/Error" }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
@@ -7913,6 +7920,54 @@ components:
               required: [authenticated]
               properties:
                 authenticated: { type: boolean }
+    ApiCoverageDashboardEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, request_id, trace_id]
+      properties:
+        data:
+          type: object
+          additionalProperties: true
+          required:
+            [
+              domain,
+              report_status,
+              catalog_fingerprint,
+              summary,
+              by_outcome,
+              by_role,
+              by_data_source,
+              by_ui_consumer,
+              by_crawler_side_effect,
+              operations,
+              observed_at,
+            ]
+          properties:
+            domain: { type: string, enum: [api_coverage] }
+            report_status: { type: string, enum: [current, outdated, invalid, missing] }
+            catalog_fingerprint: { type: string, pattern: "^[0-9a-f]{64}$" }
+            summary:
+              type: object
+              required:
+                [paths, operations, verified, coverage_percent, ui_consumed, crawler_side_effects]
+              properties:
+                paths: { type: integer, minimum: 0 }
+                operations: { type: integer, minimum: 0 }
+                verified: { type: integer, minimum: 0 }
+                coverage_percent: { type: number, minimum: 0, maximum: 100 }
+                ui_consumed: { type: integer, minimum: 0 }
+                crawler_side_effects: { type: integer, minimum: 0 }
+            by_outcome: { type: array, items: { type: object, additionalProperties: true } }
+            by_role: { type: array, items: { type: object, additionalProperties: true } }
+            by_data_source: { type: array, items: { type: object, additionalProperties: true } }
+            by_ui_consumer: { type: array, items: { type: object, additionalProperties: true } }
+            by_crawler_side_effect:
+              { type: array, items: { type: object, additionalProperties: true } }
+            operations:
+              { type: array, maxItems: 300, items: { type: object, additionalProperties: true } }
+            observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
     ThemeId:
       type: string
       enum: [deep-ocean, aurora-purple, cloud-white]

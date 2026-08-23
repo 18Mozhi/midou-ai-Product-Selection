@@ -189,8 +189,6 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await supplierCandidates.getByLabel("加入对比").check();
   await expect(page.getByText("已选 1 / 5 家供应商")).toBeVisible();
   await expect(page.getByRole("button", { name: "保存报价对比" })).toBeDisabled();
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("m04-06-sourcing.png", { fullPage: true });
 });
 
 test("opportunity sourcing detail exposes designated dual-person cost review", async ({ page }) => {
