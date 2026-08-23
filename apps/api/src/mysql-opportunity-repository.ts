@@ -6,6 +6,8 @@ import {
   type OpportunityCreateInput,
   type OpportunityDecision,
   type OpportunityDetail,
+  type OpportunityOperatingFact,
+  type OpportunityOperatingFeedback,
   type OpportunityRepository,
   type OpportunitySummary,
   type OpportunityWriteContext,
@@ -13,6 +15,8 @@ import {
 
 const iso = (value: unknown) =>
   value instanceof Date ? value.toISOString() : new Date(String(value)).toISOString();
+const dateOnly = (value: unknown) =>
+  value instanceof Date ? value.toISOString().slice(0, 10) : String(value).slice(0, 10);
 const numberOrNull = (value: unknown) => (value == null ? null : Number(value));
 const parse = <T>(value: unknown): T =>
   typeof value === "string" ? (JSON.parse(value) as T) : (value as T);
@@ -465,6 +469,78 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       nodes,
     };
   }
+  private async operatingFeedback(
+    input: { organizationId: string; workspaceId: string; opportunityId: string },
+    database: Pool | PoolConnection = this.pool,
+  ): Promise<OpportunityOperatingFeedback> {
+    const [rows] = await database.query<RowDataPacket[]>(
+      "SELECT * FROM opportunity_operating_facts WHERE opportunity_id=? AND organization_id=? " +
+        "AND workspace_id=? ORDER BY period_end DESC,created_at DESC,id DESC LIMIT 20",
+      [input.opportunityId, input.organizationId, input.workspaceId],
+    );
+    const facts: OpportunityOperatingFact[] = rows.map((row) => ({
+        id: String(row.id),
+        period_start: dateOnly(row.period_start),
+        period_end: dateOnly(row.period_end),
+        sales_units: Number(row.sales_units),
+        revenue_amount: Number(row.revenue_amount),
+        ad_spend_amount: Number(row.ad_spend_amount),
+        returned_units: Number(row.returned_units),
+        purchase_lead_time_days: Number(row.purchase_lead_time_days),
+        actual_profit_amount: Number(row.actual_profit_amount),
+        currency: String(row.currency),
+        source_ref: String(row.source_ref),
+        notes: row.notes == null ? null : String(row.notes),
+        score_rule_version_snapshot:
+          row.score_rule_version_snapshot == null ? null : String(row.score_rule_version_snapshot),
+        profit_rule_version_snapshot:
+          row.profit_rule_version_snapshot == null
+            ? null
+            : String(row.profit_rule_version_snapshot),
+        decision_status_snapshot: row.decision_status_snapshot,
+        predicted_profit_amount: numberOrNull(row.predicted_profit_amount),
+        predicted_currency: row.predicted_currency == null ? null : String(row.predicted_currency),
+        quoted_lead_time_days: numberOrNull(row.quoted_lead_time_days),
+        observed_at: iso(row.observed_at),
+        request_id: String(row.request_id),
+        trace_id: String(row.trace_id),
+        created_at: iso(row.created_at),
+      })),
+      latest = facts[0];
+    if (!latest) return { facts, calibration: null };
+    const sameProfitCurrency =
+      latest.predicted_profit_amount !== null && latest.predicted_currency === latest.currency;
+    return {
+      facts,
+      calibration: {
+        fact_id: latest.id,
+        return_rate_percent:
+          latest.sales_units > 0
+            ? Math.round((latest.returned_units / latest.sales_units) * 10_000) / 100
+            : null,
+        ad_spend_ratio_percent:
+          latest.revenue_amount > 0
+            ? Math.round((latest.ad_spend_amount / latest.revenue_amount) * 10_000) / 100
+            : null,
+        profit_variance_amount: sameProfitCurrency
+          ? Math.round(
+              (latest.actual_profit_amount - Number(latest.predicted_profit_amount)) * 1_000_000,
+            ) / 1_000_000
+          : null,
+        profit_variance_currency: sameProfitCurrency ? latest.currency : null,
+        lead_time_variance_days:
+          latest.quoted_lead_time_days === null
+            ? null
+            : latest.purchase_lead_time_days - latest.quoted_lead_time_days,
+        score_rule_version: latest.score_rule_version_snapshot,
+        profit_rule_version: latest.profit_rule_version_snapshot,
+        decision_status_snapshot: latest.decision_status_snapshot,
+        human_review_required: true,
+        automatic_rule_update: false,
+        automatic_decision: false,
+      },
+    };
+  }
   async get(input: {
     organizationId: string;
     workspaceId: string;
@@ -481,7 +557,10 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     );
     const row = rows[0];
     if (!row) return null;
-    const lineage = await this.lineage(input);
+    const [lineage, operatingFeedback] = await Promise.all([
+      this.lineage(input),
+      this.operatingFeedback(input),
+    ]);
     const [evidence] = await this.pool.query<RowDataPacket[]>(
       sqlText(
         "SELECT l.id,s.title,s.publisher,s.canonical_url,l.provider_id,",
@@ -559,6 +638,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       );
     return {
       ...summary(row),
+      operating_feedback: operatingFeedback,
       lineage,
       adoption_blockers: [
         {
@@ -1163,6 +1243,126 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         );
       }
       const result = { task_id: taskId, created, status: existing[0]?.status ?? "todo" };
+      await connection.query(
+        "INSERT INTO opportunity_operations (id,actor_id,route,idempotency_key,resource_id," +
+          "result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+        [
+          randomUUID(),
+          input.actorId,
+          input.route,
+          input.idempotencyKey,
+          input.opportunityId,
+          JSON.stringify(result),
+          now,
+        ],
+      );
+      await connection.commit();
+      return result;
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+  }
+  async createOperatingFeedback(
+    input: Parameters<OpportunityRepository["createOperatingFeedback"]>[0],
+  ) {
+    const previous = await this.operation<OpportunityOperatingFeedback>(input);
+    if (previous) return previous;
+    const connection = await this.pool.getConnection(),
+      now = new Date(),
+      factId = randomUUID();
+    try {
+      await connection.beginTransaction();
+      const [[opportunities], [profits], [quotes]] = await Promise.all([
+          connection.query<RowDataPacket[]>(
+            "SELECT id,version,decision_status,score_rule_version FROM opportunities " +
+              "WHERE id=? AND organization_id=? AND workspace_id=? LIMIT 1 FOR UPDATE",
+            [input.opportunityId, input.organizationId, input.workspaceId],
+          ),
+          connection.query<RowDataPacket[]>(
+            "SELECT rule_version_code,net_profit,currency FROM opportunity_profit_runs " +
+              "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? " +
+              "ORDER BY calculated_at DESC,id DESC LIMIT 1",
+            [input.opportunityId, input.organizationId, input.workspaceId],
+          ),
+          connection.query<RowDataPacket[]>(
+            "SELECT q.lead_time_days FROM sourcing_searches s " +
+              "JOIN sourcing_candidates c ON c.search_id=s.id " +
+              "JOIN supplier_quotes q ON q.candidate_id=c.id AND q.is_current=1 " +
+              "WHERE s.input_type='opportunity' AND s.input_ref=? AND s.organization_id=? " +
+              "AND s.workspace_id=? AND s.deleted_at IS NULL " +
+              "ORDER BY q.created_at DESC,q.id DESC LIMIT 1",
+            [input.opportunityId, input.organizationId, input.workspaceId],
+          ),
+        ]),
+        opportunity = opportunities[0],
+        profit = profits[0],
+        quote = quotes[0];
+      if (!opportunity)
+        throw new OpportunityServiceError("opportunity_not_found", 404, "刷新机会列表后重试。");
+      if (Number(opportunity.version) !== input.value.expected_version)
+        throw new OpportunityServiceError(
+          "opportunity_version_conflict",
+          409,
+          "刷新机会详情后重新提交复盘事实。",
+        );
+      await connection.query(
+        "INSERT INTO opportunity_operating_facts " +
+          "(id,organization_id,workspace_id,opportunity_id,period_start,period_end,sales_units," +
+          "revenue_amount,ad_spend_amount,returned_units,purchase_lead_time_days," +
+          "actual_profit_amount,currency,source_ref,notes,score_rule_version_snapshot," +
+          "profit_rule_version_snapshot,decision_status_snapshot,predicted_profit_amount," +
+          "predicted_currency,quoted_lead_time_days,observed_at,request_id,trace_id,created_by," +
+          "created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        [
+          factId,
+          input.organizationId,
+          input.workspaceId,
+          input.opportunityId,
+          input.value.period_start,
+          input.value.period_end,
+          input.value.sales_units,
+          input.value.revenue_amount,
+          input.value.ad_spend_amount,
+          input.value.returned_units,
+          input.value.purchase_lead_time_days,
+          input.value.actual_profit_amount,
+          input.value.currency,
+          input.value.source_ref,
+          input.value.notes ?? null,
+          opportunity.score_rule_version ?? null,
+          profit?.rule_version_code ?? null,
+          opportunity.decision_status,
+          profit?.net_profit ?? null,
+          profit?.currency ?? null,
+          quote?.lead_time_days ?? null,
+          new Date(input.value.observed_at),
+          input.requestId,
+          input.traceId,
+          input.actorId,
+          now,
+        ],
+      );
+      await this.record(
+        connection,
+        input,
+        "opportunity.operating_feedback.recorded",
+        input.opportunityId,
+        {
+          fact_id: factId,
+          period_start: input.value.period_start,
+          period_end: input.value.period_end,
+          score_rule_version: opportunity.score_rule_version ?? null,
+          profit_rule_version: profit?.rule_version_code ?? null,
+          human_review_required: true,
+          automatic_rule_update: false,
+          automatic_decision: false,
+        },
+        now,
+      );
+      const result = await this.operatingFeedback(input, connection);
       await connection.query(
         "INSERT INTO opportunity_operations (id,actor_id,route,idempotency_key,resource_id," +
           "result_json,created_at) VALUES (?,?,?,?,?,?,?)",

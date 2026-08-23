@@ -12,9 +12,9 @@
 
 报告中的 `route_catalog_count` 必须与 `covered_route_templates` 数量一致，六个角色都必须有独立 `route_count`、`allow_count`、`deny_count` 和长度等于 `route_catalog_count` 的 `route_matrix`，且 `api_failures`、`console_errors` 为空。`must have exactly` 表示账号角色叠加；`contains a forbidden capability` 表示生产权限目录漂移；`has no persisted acceptance record` 表示补齐隔离验收数据后重跑；`authorized route catalog is not fully covered` 表示新增受保护路由没有任何验收角色可达。路由目录和验收变量都不是常驻运行配置，修改后不需要重启 API、Worker 或 Crawler；重新生成路由产物并运行有限验收即可。
 
-完整的一次性生产验收在宝塔计划任务中按 `infra/baota/production-acceptance-manifest.json` 创建 `product-scout-production-acceptance`，手工执行 `node scripts/run-baota-production-acceptance.mjs --production`。只在该任务的受限环境配置 `SCOUTOPS_ACCEPTANCE_PASSWORD`；其余地址和报告路径可沿用 `config/env.example`。先在本地或发布预检执行 `npm run verify:production-acceptance`，应只输出 220/253/59/6 基线且不连接数据库、不创建账号。
+完整的一次性生产验收在宝塔计划任务中按 `infra/baota/production-acceptance-manifest.json` 创建 `product-scout-production-acceptance`，手工执行 `node scripts/run-baota-production-acceptance.mjs --production`。只在该任务的受限环境配置 `SCOUTOPS_ACCEPTANCE_PASSWORD`；其余地址和报告路径可沿用 `config/env.example`。先在本地或发布预检执行 `npm run verify:production-acceptance`，应只输出 221/254/59/6 基线且不连接数据库、不创建账号。
 
-生产任务成功报告必须同时满足：`operation_count=253`、`route_catalog_count=59`、`matrix_cells=354`、六个已验证单角色账号、一个组织、一个工作区、两条 `core_e2e` 链路、两张真实栈截图，以及 `cleanup.status=passed`、`cleanup.remaining_rows=0`。`core_e2e.dependencies` 中 MySQL 与 Redis 都必须为 `available`；`cleanup.tables` 是逐表删除清单。任务失败但清理成功时仍返回非零，禁止把清理成功冒充验收成功。进程被主机强制终止时 `finally` 无法保证执行，应先按报告中的 run/trace 标记核对残留，不得使用宽泛邮箱或组织条件删除生产数据。
+生产任务成功报告必须同时满足：`operation_count=254`、`route_catalog_count=59`、`matrix_cells=354`、六个已验证单角色账号、一个组织、一个工作区、两条 `core_e2e` 链路、两张真实栈截图，以及 `cleanup.status=passed`、`cleanup.remaining_rows=0`。`core_e2e.dependencies` 中 MySQL 与 Redis 都必须为 `available`；`cleanup.tables` 是逐表删除清单。任务失败但清理成功时仍返回非零，禁止把清理成功冒充验收成功。进程被主机强制终止时 `finally` 无法保证执行，应先按报告中的 run/trace 标记核对残留，不得使用宽泛邮箱或组织条件删除生产数据。
 
 ## 故障定位
 

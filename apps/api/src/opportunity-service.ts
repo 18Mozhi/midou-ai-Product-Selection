@@ -52,7 +52,64 @@ export interface OpportunitySummary {
   version: number;
   updated_at: string;
 }
+export interface OpportunityOperatingFeedbackInput {
+  period_start: string;
+  period_end: string;
+  sales_units: number;
+  revenue_amount: number;
+  ad_spend_amount: number;
+  returned_units: number;
+  purchase_lead_time_days: number;
+  actual_profit_amount: number;
+  currency: string;
+  source_ref: string;
+  notes?: string | null;
+  observed_at: string;
+  expected_version: number;
+}
+export interface OpportunityOperatingFact {
+  id: string;
+  period_start: string;
+  period_end: string;
+  sales_units: number;
+  revenue_amount: number;
+  ad_spend_amount: number;
+  returned_units: number;
+  purchase_lead_time_days: number;
+  actual_profit_amount: number;
+  currency: string;
+  source_ref: string;
+  notes: string | null;
+  score_rule_version_snapshot: string | null;
+  profit_rule_version_snapshot: string | null;
+  decision_status_snapshot: OpportunityDecision;
+  predicted_profit_amount: number | null;
+  predicted_currency: string | null;
+  quoted_lead_time_days: number | null;
+  observed_at: string;
+  request_id: string;
+  trace_id: string;
+  created_at: string;
+}
+export interface OpportunityOperatingFeedback {
+  facts: OpportunityOperatingFact[];
+  calibration: null | {
+    fact_id: string;
+    return_rate_percent: number | null;
+    ad_spend_ratio_percent: number | null;
+    profit_variance_amount: number | null;
+    profit_variance_currency: string | null;
+    lead_time_variance_days: number | null;
+    score_rule_version: string | null;
+    profit_rule_version: string | null;
+    decision_status_snapshot: OpportunityDecision;
+    human_review_required: true;
+    automatic_rule_update: false;
+    automatic_decision: false;
+  };
+}
 export interface OpportunityDetail extends OpportunitySummary {
+  operating_feedback: OpportunityOperatingFeedback;
   lineage: {
     freshness: {
       observed_at: string | null;
@@ -168,6 +225,95 @@ const uuid = (value: unknown, field: string) =>
     36,
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
   );
+const operatingInteger = (value: unknown, field: string, maximum: number) => {
+  if (!Number.isSafeInteger(value) || Number(value) < 0 || Number(value) > maximum)
+    throw new OpportunityServiceError(
+      "opportunity_operating_feedback_invalid",
+      400,
+      "修正 " + field + " 后重试。",
+    );
+  return Number(value);
+};
+const operatingAmount = (value: unknown, field: string, allowNegative = false) => {
+  if (
+    typeof value !== "number" ||
+    !Number.isFinite(value) ||
+    Math.abs(value) > 1_000_000_000_000 ||
+    (!allowNegative && value < 0)
+  )
+    throw new OpportunityServiceError(
+      "opportunity_operating_feedback_invalid",
+      400,
+      "修正 " + field + " 后重试。",
+    );
+  return Math.round(value * 1_000_000) / 1_000_000;
+};
+const operatingDate = (value: unknown, field: string) => {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    throw new OpportunityServiceError(
+      "opportunity_operating_feedback_invalid",
+      400,
+      "修正 " + field + " 后重试。",
+    );
+  }
+  const parsed = new Date(value + "T00:00:00.000Z");
+  if (Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value)
+    throw new OpportunityServiceError(
+      "opportunity_operating_feedback_invalid",
+      400,
+      "修正 " + field + " 后重试。",
+    );
+  return value;
+};
+export function validateOperatingFeedback(
+  value: OpportunityOperatingFeedbackInput,
+): OpportunityOperatingFeedbackInput {
+  if (!value || typeof value !== "object")
+    throw new OpportunityServiceError(
+      "opportunity_operating_feedback_invalid",
+      400,
+      "按 OpenAPI 提交经营复盘事实。",
+    );
+  const periodStart = operatingDate(value.period_start, "period_start"),
+    periodEnd = operatingDate(value.period_end, "period_end"),
+    salesUnits = operatingInteger(value.sales_units, "sales_units", 1_000_000_000),
+    returnedUnits = operatingInteger(value.returned_units, "returned_units", 1_000_000_000),
+    expectedVersion = operatingInteger(value.expected_version, "expected_version", 2_147_483_647),
+    observedAt = new Date(value.observed_at);
+  if (periodEnd < periodStart || returnedUnits > salesUnits || expectedVersion < 1)
+    throw new OpportunityServiceError(
+      "opportunity_operating_feedback_invalid",
+      400,
+      "复盘周期、退货数量或机会版本不一致。",
+    );
+  if (Number.isNaN(observedAt.getTime()))
+    throw new OpportunityServiceError(
+      "opportunity_operating_feedback_invalid",
+      400,
+      "observed_at 必须是有效时间。",
+    );
+  const notes =
+    value.notes == null || value.notes === "" ? null : bounded(value.notes, "notes", 1000);
+  return {
+    period_start: periodStart,
+    period_end: periodEnd,
+    sales_units: salesUnits,
+    revenue_amount: operatingAmount(value.revenue_amount, "revenue_amount"),
+    ad_spend_amount: operatingAmount(value.ad_spend_amount, "ad_spend_amount"),
+    returned_units: returnedUnits,
+    purchase_lead_time_days: operatingInteger(
+      value.purchase_lead_time_days,
+      "purchase_lead_time_days",
+      3650,
+    ),
+    actual_profit_amount: operatingAmount(value.actual_profit_amount, "actual_profit_amount", true),
+    currency: bounded(value.currency, "currency", 3, /^[A-Za-z]{3}$/).toUpperCase(),
+    source_ref: bounded(value.source_ref, "source_ref", 255),
+    notes,
+    observed_at: observedAt.toISOString(),
+    expected_version: expectedVersion,
+  };
+}
 export function validateOpportunityInput(value: OpportunityCreateInput): OpportunityCreateInput {
   if (!value || typeof value !== "object")
     throw new OpportunityServiceError(
@@ -256,6 +402,13 @@ export interface OpportunityRepository {
       route: string;
     },
   ): Promise<any>;
+  createOperatingFeedback(
+    input: OpportunityWriteContext & {
+      opportunityId: string;
+      value: OpportunityOperatingFeedbackInput;
+      route: string;
+    },
+  ): Promise<OpportunityOperatingFeedback>;
 }
 export class OpportunityService {
   constructor(private readonly repository: OpportunityRepository) {}
@@ -439,6 +592,20 @@ export class OpportunityService {
       opportunityId,
       expectedVersion,
       route: `POST:/api/v1/opportunities/${opportunityId}/evidence-completion-tasks`,
+    });
+  }
+  createOperatingFeedback(
+    input: OpportunityWriteContext & {
+      opportunityId: string;
+      value: OpportunityOperatingFeedbackInput;
+    },
+  ) {
+    const opportunityId = uuid(input.opportunityId, "opportunity_id");
+    return this.repository.createOperatingFeedback({
+      ...input,
+      opportunityId,
+      value: validateOperatingFeedback(input.value),
+      route: "POST:/api/v1/opportunities/:id/operating-feedback",
     });
   }
 }

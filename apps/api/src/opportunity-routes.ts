@@ -10,6 +10,7 @@ import type {
   OpportunityLifecycle,
   OpportunityCreateInput,
   OpportunityDecision,
+  OpportunityOperatingFeedbackInput,
   OpportunityService,
 } from "./opportunity-service.js";
 
@@ -143,6 +144,15 @@ export function registerOpportunityRoutes(app: FastifyInstance, options: Opportu
       value: request.body,
     });
     reply.code(result.created ? 201 : 200);
+    return envelope(result, request);
+  });
+  app.post("/api/v1/opportunities/:id/operating-feedback", async (request, reply) => {
+    const result = await options.service.createOperatingFeedback({
+      ...(await write(request)),
+      opportunityId: (request.params as { id: string }).id,
+      value: request.body as OpportunityOperatingFeedbackInput,
+    });
+    reply.code(201);
     return envelope(result, request);
   });
 }

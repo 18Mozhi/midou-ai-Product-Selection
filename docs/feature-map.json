@@ -1046,12 +1046,15 @@
         "../apps/worker/src/core-collection-projection-worker.ts",
         "../apps/web/src/components/OpportunityWorkspace.vue",
         "../apps/web/src/components/OpportunityDecisionPanel.vue",
+        "../apps/web/src/components/OpportunityFeedbackPanel.vue",
         "../apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "../apps/web/src/components/OpportunityListPanel.vue",
         "../apps/web/src/components/opportunity-workspace-presentation.ts",
         "../tests/m04-02/business-lineage.test.mjs",
         "../database/migrations/0042_erp_product_import.up.sql",
-        "../database/migrations/0060_opportunity_workflow_visibility.up.sql"
+        "../database/migrations/0060_opportunity_workflow_visibility.up.sql",
+        "../database/migrations/0065_opportunity_operating_feedback.up.sql",
+        "../tests/m04-02/operating-feedback.test.mjs"
       ],
       "routes": [
         "/opportunities",
@@ -1061,12 +1064,13 @@
         "/api/v1/opportunities/batch",
         "/api/v1/opportunities/{opportunityId}",
         "/api/v1/opportunities/{opportunityId}/evidence-completion-tasks",
+        "/api/v1/opportunities/{opportunityId}/operating-feedback",
         "/api/v1/opportunities/{opportunityId}/decisions",
         "/api/v1/opportunities/{opportunityId}/competitor-discovery",
         "/api/v1/imports/erp-products"
       ],
-      "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs; the list filters persisted evidence coverage with coverage_status, adoption blockers with blocking_reason, stage with lifecycle_status and eligible owner with owner_id, displays persisted lifecycle_entered_at plus server-calculated dwell time, and supports atomic batch assignment archive and review-task creation; the opportunity lineage tab joins scoped persisted source health, collection task, attempt, raw evidence, quality issue, trend, opportunity, score, profit, business task and notification nodes with direct routes",
-      "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; blocking reasons and release progress derive only from persisted opportunity facts, evidence-completion tasks and score jobs that enforce adoption; lineage exposes exact request_id trace_id, latest evidence observation age, factual failure codes and affected stages without inventing missing nodes or crossing organization and workspace scope; scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese",
+      "scope": "organization and workspace scoped manual, automatically discovered and Midou ERP-imported opportunity candidates, trend evidence links, human decisions and refresh jobs; the list filters persisted evidence coverage with coverage_status, adoption blockers with blocking_reason, stage with lifecycle_status and eligible owner with owner_id, displays persisted lifecycle_entered_at plus server-calculated dwell time, and supports atomic batch assignment archive and review-task creation; the opportunity lineage tab joins scoped persisted source health, collection task, attempt, raw evidence, quality issue, trend, opportunity, score, profit, business task and notification nodes with direct routes; the operating feedback tab appends actual sales revenue advertising returns purchase lead time and profit facts with decision score-rule profit-rule predicted-profit and quoted-lead-time snapshots",
+      "truthBoundary": "the default list shows product-analyzable opportunities and offers an explicit all-leads scope; blocking reasons and release progress derive only from persisted opportunity facts, evidence-completion tasks and score jobs that enforce adoption; lineage exposes exact request_id trace_id, latest evidence observation age, factual failure codes and affected stages without inventing missing nodes or crossing organization and workspace scope; operating calibration derives return rate advertising ratio same-currency profit variance and quote-to-actual lead-time variance only from immutable facts, requires human review, and never changes a rule score or decision automatically; scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese",
       "navigationState": "list filters scope and page are URL-backed; detail tabs use the tab query and every list-to-detail link carries a validated same-origin from path so returning restores the source view",
       "decisionLayout": "detail removes the duplicate large page hero, presents the truthful recommendation first, centralizes every adoption blocker with its linked task and score-job release progress, shows a redecision-ready notice after replenishment scoring, and keeps adopt observe reject plus evidence recovery in a fixed safe-area-aware bottom decision bar",
       "modalAccessibility": "ERP import opportunity creation and decision forms use native modal top-layer dialogs with Escape handling focus trapping and invoking-control focus return",
@@ -1815,7 +1819,7 @@
         "../scripts/verify-production-core-e2e.mjs",
         "../config/route-catalog.json"
       ],
-      "scope": "one-time six-role production tenant, 220 OpenAPI paths, 253 operations, 59 protected routes, two real core business chains and automatic scoped cleanup",
+      "scope": "one-time six-role production tenant, 221 OpenAPI paths, 254 operations, 59 protected routes, two real core business chains and automatic scoped cleanup",
       "runtimeBoundary": "manual finite BaoTa task only; no daemon, generic operation coverage uses no valid write payloads, and only the two manifest-authorized core E2E chains perform valid writes before exact cleanup; no persistent acceptance account or tenant",
       "coreE2eBoundary": "Playwright performs no browser request interception, requires Fastify readiness to report real MySQL and Redis available, then covers trend to opportunity decision to task and sourcing candidate to quote confirmation to cost and profit with two screenshots",
       "cleanupBoundary": "exact run users organization workspace resources and trace references are deleted with a per-table manifest and zero-reference verification",

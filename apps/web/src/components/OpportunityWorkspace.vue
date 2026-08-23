@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import OpportunityListPanel from "./OpportunityListPanel.vue";
 import OpportunityDecisionPanel from "./OpportunityDecisionPanel.vue";
+import OpportunityFeedbackPanel from "./OpportunityFeedbackPanel.vue";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
 import OpportunityWorkspaceDialogs from "./OpportunityWorkspaceDialogs.vue";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -78,6 +79,20 @@ const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
     evidence_id: "",
     observed_at: new Date().toISOString().slice(0, 16),
     reviewer_id: "",
+  }),
+  feedbackForm = reactive({
+    period_start: new Date().toISOString().slice(0, 10),
+    period_end: new Date().toISOString().slice(0, 10),
+    sales_units: 0,
+    revenue_amount: 0,
+    ad_spend_amount: 0,
+    returned_units: 0,
+    purchase_lead_time_days: 0,
+    actual_profit_amount: 0,
+    currency: "USD",
+    source_ref: "",
+    notes: "",
+    observed_at: new Date().toISOString(),
   });
 const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
   () => showBatch.value,
@@ -93,6 +108,7 @@ const {
 const tabs: [Tab, string][] = [
   ["overview", "结论"],
   ["lineage", "业务血缘"],
+  ["feedback", "经营复盘"],
   ["evidence", "证据"],
   ["profit", "利润与成本"],
   ["risk", "风险"],
@@ -242,6 +258,20 @@ async function discoverSuppliers() {
     input_ref: detail.value.id,
   });
   if (result) message.value = `公开供应商采集已排队，任务编号 ${result.task_id}。`;
+}
+async function submitOperatingFeedback() {
+  if (!detail.value) return;
+  feedbackForm.observed_at = new Date().toISOString();
+  const result = await write("/opportunities/" + detail.value.id + "/operating-feedback", {
+    ...feedbackForm,
+    currency: feedbackForm.currency.toUpperCase(),
+    expected_version: detail.value.version,
+  });
+  if (!result) return;
+  detail.value.operating_feedback = result;
+  feedbackForm.source_ref = "";
+  feedbackForm.notes = "";
+  message.value = "经营复盘事实已写入；规则和人工决策均未自动变更。";
 }
 async function write(path: string, body: unknown) {
   busy.value = true;
@@ -834,6 +864,13 @@ watch(
             <code v-for="code in detail.lineage.failure_impact.codes" :key="code">{{ code }}</code>
           </details>
         </section>
+        <OpportunityFeedbackPanel
+          v-else-if="tab === 'feedback'"
+          :feedback="detail.operating_feedback"
+          :form="feedbackForm"
+          :busy="busy"
+          @submit="submitOperatingFeedback"
+        />
         <section v-else-if="tab === 'market'" class="opportunity-section">
           <p>市场证据</p>
           <h4>市场证据</h4>

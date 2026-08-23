@@ -8,12 +8,13 @@
 
 - Node API 与 Node Worker 均继续由宝塔面板管理，不创建额外生产服务。
 - `OPPORTUNITY_REFRESH_POLL_MS` 与 `OPPORTUNITY_REFRESH_LEASE_SECONDS` 只放在宝塔受限环境；修改后在面板重启 Node Worker。
-- 上线先执行 MySQL 5.7 迁移 `0017b_opportunities_m04_02.up.sql` 与 `0060_opportunity_workflow_visibility.up.sql`，再重启 Node API 和 Node Worker，最后检查 `/api/v1/health/ready`。
+- 上线先执行 MySQL 5.7 迁移 `0017b_opportunities_m04_02.up.sql`、`0060_opportunity_workflow_visibility.up.sql` 与 `0065_opportunity_operating_feedback.up.sql`，再重启 Node API 和 Node Worker，最后检查 `/api/v1/health/ready`。
 - 发布自动发现选品逻辑后，确认商品型 `gnews_*` 主题能建立 `trend_topic` 来源候选、关联至少一条真实证据并保持 `insufficient_data`；普通新闻与数据频道不得批量生成候选。
 
 ## 观测和处置
 
 - 使用 request_id/trace_id 关联 `opportunity_events`、`opportunity_outbox` 和 `opportunity_refresh_jobs`。
+- 在“经营复盘”页签写入一段真实周期数据，确认退货率、广告投入占比、同币种利润偏差和报价交期偏差来自保存事实；没有可比基线时必须显示“没有可比基线”。复盘后评分规则、利润规则和决策状态不得自动变化。
 - `retry_scheduled` 会按 1/5/15 分钟退避；`failed_terminal` 表示来源已失效等不可重试输入，`dead_letter` 表示依赖错误耗尽四次。
 - 页面显示 `insufficient_data` 或 `unknown` 是事实状态，不应通过手工 SQL 填入分数、ROI 或低风险。
 - 机会列表可按“不完整 / 部分完整 / 完整”筛选，也可按“缺少可采纳证据 / 尚无可靠推荐结论”筛选；后者只对应采纳接口已有的持久化阻断条件。两类筛选都无需配置或重启 Worker。应用发布后需由宝塔重启 Node API 并更新网站静态文件。
@@ -23,4 +24,4 @@
 
 ## 回滚
 
-先在宝塔关闭机会入口并停止 Node Worker，回滚应用版本；只回滚本批次时先执行 `0060_opportunity_workflow_visibility.down.sql`，完整移除机会域时再执行 `0017b_opportunities_m04_02.down.sql`。下迁移会移除阶段进入时间与评分 Job 的补采任务关联，已经投递的通知和审计事实保留。只有确认无需保留本模块业务数据时才执行完整结构回滚；审计或证据需要留存时应先完成受控归档，不得以删除掩盖失败。恢复时重新应用迁移、启动 API/Worker，并运行 `npm run verify:module -- M04-02`。
+先在宝塔关闭机会入口并停止 Node Worker，回滚应用版本。经营复盘表包含业务事实，只有完成受控归档并确认可删除后才能执行 `0065_opportunity_operating_feedback.down.sql`；随后按需执行 `0060_opportunity_workflow_visibility.down.sql`，完整移除机会域时再执行 `0017b_opportunities_m04_02.down.sql`。下迁移会移除阶段进入时间与评分 Job 的补采任务关联，已经投递的通知和审计事实保留。恢复时重新应用迁移、启动 API/Worker，并运行 `npm run verify:module -- M04-02`。

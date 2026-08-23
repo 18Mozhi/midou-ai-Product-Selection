@@ -1888,6 +1888,33 @@ paths:
         "201": { $ref: "#/components/responses/Success" }
         "403": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+  /opportunities/{opportunityId}/operating-feedback:
+    post:
+      summary: Append actual operating facts and return human-review calibration deltas
+      description: Records actual sales, revenue, advertising spend, returns, purchase lead time and profit with immutable rule and decision snapshots. It never updates a rule, score or human decision automatically.
+      x-required-capability: opportunity:decide
+      parameters:
+        - { name: opportunityId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/OpportunityOperatingFeedbackInput" }
+      responses:
+        "201":
+          {
+            description: Appended operating fact and current calibration view,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/OpportunityOperatingFeedbackEnvelope" } },
+              },
+          }
+        "400": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
   /opportunity-score-rules:
     get:
       summary: List versioned scoring rules in the active workspace
@@ -10257,6 +10284,137 @@ components:
           }
         request_id: { type: string }
         trace_id: { type: string }
+    OpportunityOperatingFeedbackInput:
+      type: object
+      additionalProperties: false
+      required:
+        [
+          period_start,
+          period_end,
+          sales_units,
+          revenue_amount,
+          ad_spend_amount,
+          returned_units,
+          purchase_lead_time_days,
+          actual_profit_amount,
+          currency,
+          source_ref,
+          observed_at,
+          expected_version,
+        ]
+      properties:
+        period_start: { type: string, format: date }
+        period_end: { type: string, format: date }
+        sales_units: { type: integer, minimum: 0 }
+        revenue_amount: { type: number, minimum: 0 }
+        ad_spend_amount: { type: number, minimum: 0 }
+        returned_units: { type: integer, minimum: 0 }
+        purchase_lead_time_days: { type: integer, minimum: 0, maximum: 3650 }
+        actual_profit_amount: { type: number }
+        currency: { type: string, pattern: "^[A-Za-z]{3}$" }
+        source_ref: { type: string, minLength: 1, maxLength: 255 }
+        notes: { type: string, maxLength: 1000, nullable: true }
+        observed_at: { type: string, format: date-time }
+        expected_version: { type: integer, minimum: 1 }
+    OpportunityOperatingFact:
+      type: object
+      required:
+        [
+          id,
+          period_start,
+          period_end,
+          sales_units,
+          revenue_amount,
+          ad_spend_amount,
+          returned_units,
+          purchase_lead_time_days,
+          actual_profit_amount,
+          currency,
+          source_ref,
+          notes,
+          score_rule_version_snapshot,
+          profit_rule_version_snapshot,
+          decision_status_snapshot,
+          predicted_profit_amount,
+          predicted_currency,
+          quoted_lead_time_days,
+          observed_at,
+          request_id,
+          trace_id,
+          created_at,
+        ]
+      properties:
+        id: { type: string, format: uuid }
+        period_start: { type: string, format: date }
+        period_end: { type: string, format: date }
+        sales_units: { type: integer, minimum: 0 }
+        revenue_amount: { type: number, minimum: 0 }
+        ad_spend_amount: { type: number, minimum: 0 }
+        returned_units: { type: integer, minimum: 0 }
+        purchase_lead_time_days: { type: integer, minimum: 0 }
+        actual_profit_amount: { type: number }
+        currency: { type: string }
+        source_ref: { type: string }
+        notes: { type: string, nullable: true }
+        score_rule_version_snapshot: { type: string, nullable: true }
+        profit_rule_version_snapshot: { type: string, nullable: true }
+        decision_status_snapshot: { type: string, enum: [pending, adopted, observing, rejected] }
+        predicted_profit_amount: { type: number, nullable: true }
+        predicted_currency: { type: string, nullable: true }
+        quoted_lead_time_days: { type: integer, nullable: true }
+        observed_at: { type: string, format: date-time }
+        request_id: { type: string }
+        trace_id: { type: string }
+        created_at: { type: string, format: date-time }
+    OpportunityOperatingFeedback:
+      type: object
+      required: [facts, calibration]
+      properties:
+        facts:
+          {
+            type: array,
+            maxItems: 20,
+            items: { $ref: "#/components/schemas/OpportunityOperatingFact" },
+          }
+        calibration:
+          type: object
+          nullable: true
+          required:
+            [
+              fact_id,
+              return_rate_percent,
+              ad_spend_ratio_percent,
+              profit_variance_amount,
+              profit_variance_currency,
+              lead_time_variance_days,
+              score_rule_version,
+              profit_rule_version,
+              decision_status_snapshot,
+              human_review_required,
+              automatic_rule_update,
+              automatic_decision,
+            ]
+          properties:
+            fact_id: { type: string, format: uuid }
+            return_rate_percent: { type: number, nullable: true }
+            ad_spend_ratio_percent: { type: number, nullable: true }
+            profit_variance_amount: { type: number, nullable: true }
+            profit_variance_currency: { type: string, nullable: true }
+            lead_time_variance_days: { type: integer, nullable: true }
+            score_rule_version: { type: string, nullable: true }
+            profit_rule_version: { type: string, nullable: true }
+            decision_status_snapshot:
+              { type: string, enum: [pending, adopted, observing, rejected] }
+            human_review_required: { type: boolean, enum: [true] }
+            automatic_rule_update: { type: boolean, enum: [false] }
+            automatic_decision: { type: boolean, enum: [false] }
+    OpportunityOperatingFeedbackEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        data: { $ref: "#/components/schemas/OpportunityOperatingFeedback" }
+        request_id: { type: string }
+        trace_id: { type: string }
     OpportunityDetailEnvelope:
       type: object
       required: [data, request_id, trace_id]
@@ -10274,11 +10432,13 @@ components:
                   adoption_blockers,
                   redecision_ready,
                   lineage,
+                  operating_feedback,
                   evidence,
                   decisions,
                   section_status,
                 ]
               properties:
+                operating_feedback: { $ref: "#/components/schemas/OpportunityOperatingFeedback" }
                 lineage:
                   type: object
                   required: [freshness, failure_impact, request_ids, trace_ids, nodes]

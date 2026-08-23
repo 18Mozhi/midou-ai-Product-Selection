@@ -4,6 +4,7 @@ export type OpportunityWorkspaceState =
 export type OpportunityTab =
   | "overview"
   | "lineage"
+  | "feedback"
   | "market"
   | "competition"
   | "profit"
@@ -43,6 +44,46 @@ export interface OpportunitySummary {
 }
 
 export interface OpportunityDetail extends OpportunitySummary {
+  operating_feedback: {
+    facts: Array<{
+      id: string;
+      period_start: string;
+      period_end: string;
+      sales_units: number;
+      revenue_amount: number;
+      ad_spend_amount: number;
+      returned_units: number;
+      purchase_lead_time_days: number;
+      actual_profit_amount: number;
+      currency: string;
+      source_ref: string;
+      notes: string | null;
+      score_rule_version_snapshot: string | null;
+      profit_rule_version_snapshot: string | null;
+      decision_status_snapshot: string;
+      predicted_profit_amount: number | null;
+      predicted_currency: string | null;
+      quoted_lead_time_days: number | null;
+      observed_at: string;
+      request_id: string;
+      trace_id: string;
+      created_at: string;
+    }>;
+    calibration: null | {
+      fact_id: string;
+      return_rate_percent: number | null;
+      ad_spend_ratio_percent: number | null;
+      profit_variance_amount: number | null;
+      profit_variance_currency: string | null;
+      lead_time_variance_days: number | null;
+      score_rule_version: string | null;
+      profit_rule_version: string | null;
+      decision_status_snapshot: string;
+      human_review_required: true;
+      automatic_rule_update: false;
+      automatic_decision: false;
+    };
+  };
   lineage: {
     freshness: { observed_at: string | null; age_seconds: number | null };
     failure_impact: {

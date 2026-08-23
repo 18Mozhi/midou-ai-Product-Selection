@@ -39,6 +39,7 @@ const allowed = new Set([
   "0062_runtime_process_restart_observations.up.sql",
   "0063_runtime_health_endpoint_probes.up.sql",
   "0064_governed_workflow_confirmations.up.sql",
+  "0065_opportunity_operating_feedback.up.sql",
 ]);
 export function splitSqlStatements(source) {
   const statements = [];

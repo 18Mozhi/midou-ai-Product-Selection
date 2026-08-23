@@ -508,7 +508,8 @@
 .opportunity-section,
 .opportunity-evidence,
 .opportunity-decisions,
-.opportunity-lineage {
+.opportunity-lineage,
+.opportunity-feedback {
   min-height: 180px;
   padding: 18px;
   border: 1px solid var(--so-border);
@@ -672,6 +673,76 @@
 }
 .opportunity-lineage-impact {
   margin-top: 14px;
+}
+.opportunity-feedback > header,
+.opportunity-feedback > ol > li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.opportunity-feedback > header span,
+.opportunity-feedback > ol span,
+.opportunity-feedback > ol small {
+  display: block;
+  margin-top: 5px;
+  color: var(--so-text-muted);
+}
+.opportunity-feedback-calibration {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+  margin: 18px 0;
+}
+.opportunity-feedback-calibration > div,
+.opportunity-feedback > ol > li {
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel);
+}
+.opportunity-feedback-calibration span,
+.opportunity-feedback-calibration strong {
+  display: block;
+}
+.opportunity-feedback-calibration strong {
+  margin-top: 6px;
+}
+.opportunity-feedback-calibration footer {
+  grid-column: 1/-1;
+  color: var(--so-text-muted);
+}
+.opportunity-feedback form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+.opportunity-feedback form label,
+.opportunity-feedback form input,
+.opportunity-feedback form textarea {
+  width: 100%;
+}
+.opportunity-feedback form label {
+  display: grid;
+  gap: 5px;
+}
+.opportunity-feedback form .wide {
+  grid-column: span 2;
+}
+.opportunity-feedback form button {
+  align-self: end;
+}
+.opportunity-feedback > ol {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.opportunity-feedback code {
+  display: block;
+  overflow-wrap: anywhere;
 }
 .opportunity-modal {
   position: fixed;
@@ -883,12 +954,21 @@
     grid-template-columns: 1fr;
   }
   .opportunity-lineage > header,
-  .opportunity-lineage-list li {
+  .opportunity-lineage-list li,
+  .opportunity-feedback > header,
+  .opportunity-feedback > ol > li {
     align-items: stretch;
     flex-direction: column;
   }
   .opportunity-lineage-summary {
     grid-template-columns: 1fr;
+  }
+  .opportunity-feedback-calibration,
+  .opportunity-feedback form {
+    grid-template-columns: 1fr;
+  }
+  .opportunity-feedback form .wide {
+    grid-column: auto;
   }
   .opportunity-lineage-list a {
     width: 100%;
