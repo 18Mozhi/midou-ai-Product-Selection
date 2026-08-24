@@ -221,7 +221,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         ),
         this.pool.query<RowDataPacket[]>(
           sqlText(
-            "SELECT DISTINCT t.id,t.title,t.status,t.source_fresh_at,s.request_id,s.trace_id",
+            "SELECT DISTINCT t.id,t.title,t.status,t.source_fresh_at,s.observed_at,s.request_id,s.trace_id",
             "FROM opportunities o JOIN trend_topics t ON t.id=o.source_ref_id AND o.source_type='trend_topic'",
             "LEFT JOIN trend_signals s ON s.topic_id=t.id",
             "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=?",
