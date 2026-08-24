@@ -111,6 +111,13 @@ const {
   cancel: cancelAiReviewReason,
 } = useAuditedReason();
 const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
+const canDecide = computed(() => props.capabilities?.includes("opportunity:decide") ?? false);
+const canManageCompetitors = computed(
+  () => props.capabilities?.includes("competitor:manage") ?? false,
+);
+const canManageSuppliers = computed(
+  () => props.capabilities?.includes("supplier_quote:manage") ?? false,
+);
 const canConfirmCost = computed(() => props.capabilities?.includes("cost:confirm") ?? false);
 const returnPath = computed(() => safeOpportunityReturnPath(route.query.from));
 const stateFrom = (kind: ApiFailureKind): OpportunityTypes.OpportunityWorkspaceState =>
@@ -554,7 +561,11 @@ function queueLoad() {
 onMounted(() => {
   syncTabFromRoute();
   syncListRoute();
-  if (!props.opportunityId && (route.query.create === "1" || route.query.source_topic_id)) {
+  if (
+    !props.opportunityId &&
+    canDecide.value &&
+    (route.query.create === "1" || route.query.source_topic_id)
+  ) {
     form.source_topic_id =
       typeof route.query.source_topic_id === "string" ? route.query.source_topic_id : "";
     form.name = typeof route.query.name === "string" ? route.query.name : "";
@@ -603,11 +614,12 @@ watch(
         <h2>{{ opportunityId ? "机会详情" : "选品机会" }}</h2>
         <span>评分、利润、风险和证据均展示真实状态；缺少下游输入时明确标记数据不足。</span>
       </div>
-      <div class="opportunity-hero-actions">
+      <div v-if="canDecide" class="opportunity-hero-actions">
         <RouterLink to="/opportunities/start">开始真实选品</RouterLink
         ><button type="button" class="ghost" @click="showErpImport = true">从 ERP 导入</button
         ><button type="button" @click="showCreate = true">＋ 手工创建机会</button>
       </div>
+      <span v-else>当前角色可查看机会事实与历史，写入操作需要“机会决策”权限。</span>
     </header>
     <nav v-else class="opportunity-detail-return" aria-label="机会详情返回路径">
       <RouterLink :to="returnPath">← 返回来源列表</RouterLink>
@@ -627,6 +639,7 @@ watch(
       :member-options="memberOptions"
       :selected-ids="selectedOpportunityIds"
       :page="page"
+      :can-decide="canDecide"
       @apply="applyListFilters"
       @batch="openBatch"
       @page="goListPage"
@@ -671,6 +684,7 @@ watch(
         <OpportunityDecisionPanel
           :detail="detail"
           :busy="busy"
+          :can-decide="canDecide"
           @decide="startDecision"
           @create-evidence-task="createEvidenceTask"
         />
@@ -682,9 +696,19 @@ watch(
             <b>为什么还不能给出结论？</b
             ><span>系统只在证据足够时评分。可直接启动真实网页采集，不需要填写官方 API。</span>
           </div>
-          <button type="button" :disabled="busy" @click="discoverCompetitors">
+          <button
+            v-if="canManageCompetitors"
+            type="button"
+            :disabled="busy"
+            @click="discoverCompetitors"
+          >
             ① 采集 Amazon 竞品</button
-          ><button type="button" :disabled="busy" @click="discoverSuppliers">
+          ><button
+            v-if="canManageSuppliers"
+            type="button"
+            :disabled="busy"
+            @click="discoverSuppliers"
+          >
             ② 采集公开供应商</button
           ><RouterLink to="/opportunities/scoring-rules">③ 检查评分规则</RouterLink>
         </section>
@@ -709,8 +733,18 @@ watch(
               {{ downstream.suppliers }} 个供应商候选</span
             >
             <footer>
-              <button type="button" :disabled="busy" @click="discoverCompetitors">采集竞品</button
-              ><button type="button" :disabled="busy" @click="discoverSuppliers">采集供应商</button
+              <button
+                v-if="canManageCompetitors"
+                type="button"
+                :disabled="busy"
+                @click="discoverCompetitors"
+                >采集竞品</button
+              ><button
+                v-if="canManageSuppliers"
+                type="button"
+                :disabled="busy"
+                @click="discoverSuppliers"
+                >采集供应商</button
               ><RouterLink to="/competitors">查看竞品详情</RouterLink
               ><RouterLink to="/sourcing">查看供应链详情</RouterLink>
             </footer>
@@ -742,7 +776,9 @@ watch(
             </aside>
             <footer>
               <RouterLink to="/opportunities/scoring-rules">管理规则版本</RouterLink
-              ><button type="button" :disabled="busy" @click="queueScore">重新评分</button>
+              ><button v-if="canDecide" type="button" :disabled="busy" @click="queueScore">
+                重新评分
+              </button>
             </footer>
           </article>
           <article>
@@ -781,6 +817,7 @@ watch(
           :feedback="detail.operating_feedback"
           :form="feedbackForm"
           :busy="busy"
+          :can-write="canDecide"
           @submit="submitOperatingFeedback"
         />
         <section v-else-if="tab === 'market'" class="opportunity-section">
@@ -801,7 +838,12 @@ watch(
             >快照已经保留价格、评分、评论、采集时间和原始证据，可进入竞品工作台查看变化历史。</span
           ><span v-else>尚未关联竞品快照；点击下方按钮即可采集公开 Amazon 商品页。</span>
           <footer>
-            <button type="button" :disabled="busy" @click="discoverCompetitors">立即采集竞品</button
+            <button
+              v-if="canManageCompetitors"
+              type="button"
+              :disabled="busy"
+              @click="discoverCompetitors"
+              >立即采集竞品</button
             ><RouterLink to="/competitors">打开竞品监控详情</RouterLink>
           </footer>
         </section>
@@ -829,7 +871,9 @@ watch(
               <h4>AI 辅助分析</h4>
               <span>仅摘要、分类和缺失提示；输出不能替代事实、评分、利润或人工决策。</span>
             </div>
-            <button type="button" :disabled="busy" @click="queueAi">生成新分析</button>
+            <button v-if="canDecide" type="button" :disabled="busy" @click="queueAi">
+              生成新分析
+            </button>
           </header>
           <aside>所有内容均标记 ai_generated，并保留输入快照哈希、模型名和人工抽检状态。</aside>
           <p v-if="!aiAnalyses.length" class="opportunity-empty-copy">
@@ -868,7 +912,7 @@ watch(
               </section>
               <footer>
                 <span>模型 {{ item.result.model_name }} · 原始输出不可改写</span
-                ><template v-if="item.result.review_status === 'pending'"
+                ><template v-if="canDecide && item.result.review_status === 'pending'"
                   ><button type="button" @click="reviewAi(item.result.id, 'approved')">
                     抽检通过</button
                   ><button
@@ -935,6 +979,7 @@ watch(
       </article></template
     >
     <OpportunityWorkspaceDialogs
+      v-if="canDecide"
       v-model:erp-import-open="showErpImport"
       v-model:create-open="showCreate"
       v-model:decision-open="showDecision"
@@ -950,6 +995,7 @@ watch(
       @import-file="importErpFile"
     />
     <dialog
+      v-if="canDecide"
       ref="batchDialogElement"
       class="opportunity-modal opportunity-batch-dialog"
       aria-label="机会批量操作影响预览"

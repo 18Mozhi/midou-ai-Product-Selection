@@ -47,6 +47,7 @@ const props = defineProps<{
     memberOptions: Array<{ id: string; label: string }>;
     selectedIds: string[];
     page: number;
+    canDecide: boolean;
   }>(),
   emit = defineEmits<{
     apply: [];
@@ -192,14 +193,18 @@ function changeScope(event: Event) {
       </div>
       <span>共 {{ total }} 个机会 · 按更新时间排序</span>
     </header>
-    <nav v-if="selectedIds.length" class="opportunity-batch-bar" aria-label="机会批量操作">
+    <nav
+      v-if="canDecide && selectedIds.length"
+      class="opportunity-batch-bar"
+      aria-label="机会批量操作"
+    >
       <span>已选 {{ selectedIds.length }} 项</span>
       <button type="button" @click="emit('batch', 'assign')">批量指派</button>
       <button type="button" @click="emit('batch', 'review')">批量复核</button>
       <button type="button" class="danger" @click="emit('batch', 'archive')">批量归档</button>
     </nav>
     <article v-for="item in items" :key="item.id" class="opportunity-list-row">
-      <label class="opportunity-row-select">
+      <label v-if="canDecide" class="opportunity-row-select">
         <input
           type="checkbox"
           :checked="selectedIds.includes(item.id)"

@@ -6,6 +6,7 @@ import type { OpportunityDetail } from "./opportunity-workspace-types";
 defineProps<{
   detail: OpportunityDetail;
   busy: boolean;
+  canDecide: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -62,7 +63,7 @@ const blockerStatus = (value: "blocked" | "in_progress" | "cleared") =>
       <RouterLink v-if="blocker.task_id" :to="`/tasks?task=${blocker.task_id}`"
         >查看补采任务</RouterLink
       ><button
-        v-else-if="blocker.status !== 'cleared'"
+        v-else-if="canDecide && blocker.status !== 'cleared'"
         type="button"
         :disabled="busy"
         @click="emit('createEvidenceTask')"
@@ -71,7 +72,12 @@ const blockerStatus = (value: "blocked" | "in_progress" | "cleared") =>
       </button>
     </article>
   </section>
-  <nav id="opportunity-decision-actions" class="opportunity-decision-bar" aria-label="机会决策操作">
+  <nav
+    v-if="canDecide"
+    id="opportunity-decision-actions"
+    class="opportunity-decision-bar"
+    aria-label="机会决策操作"
+  >
     <button
       :disabled="
         detail.recommendation_status === 'insufficient_data' ||
@@ -102,4 +108,7 @@ const blockerStatus = (value: "blocked" | "in_progress" | "cleared") =>
       生成补数任务
     </button>
   </nav>
+  <aside v-else class="opportunity-decision-bar" role="status">
+    当前角色为只读机会视图；决策、补数和状态变更需要“机会决策”权限。
+  </aside>
 </template>

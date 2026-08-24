@@ -18,6 +18,7 @@ defineProps<{
     observed_at: string;
   };
   busy: boolean;
+  canWrite: boolean;
 }>();
 defineEmits<{ submit: [] }>();
 const metric = (value: number | null, suffix = "") =>
@@ -60,7 +61,7 @@ const metric = (value: number | null, suffix = "") =>
         {{ feedback.calibration.decision_status_snapshot }}
       </footer>
     </article>
-    <form @submit.prevent="$emit('submit')">
+    <form v-if="canWrite" @submit.prevent="$emit('submit')">
       <label>周期开始<input v-model="form.period_start" type="date" required /></label>
       <label>周期结束<input v-model="form.period_end" type="date" required /></label>
       <label
@@ -115,6 +116,9 @@ const metric = (value: number | null, suffix = "") =>
       </label>
       <button type="submit" :disabled="busy">{{ busy ? "正在写入…" : "写入复盘事实" }}</button>
     </form>
+    <aside v-else class="opportunity-empty-copy">
+      当前角色可查看复盘事实；写入经营反馈需要“机会决策”权限。
+    </aside>
     <p v-if="!feedback.facts.length" class="opportunity-empty-copy">尚无经营复盘事实。</p>
     <ol v-else>
       <li v-for="fact in feedback.facts" :key="fact.id">
