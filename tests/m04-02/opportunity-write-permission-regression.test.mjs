@@ -22,6 +22,8 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(list, /v-if="canDecide && selectedIds\.length"/);
   assert.match(list, /v-if="canDecide" class="opportunity-row-select"/);
   assert.match(list, /@click="emit\('reset'\)">重置/);
+  assert.match(list, /canDecide \? '开始创建' : '刷新列表'/);
+  assert.match(list, /state === 'empty' \? '清除筛选' : '返回机会列表'/);
   assert.match(list, /state === 'empty' && canDecide \? emit\('create'\) : emit\('apply'\)/);
   assert.match(workspace, /async function resetListFilters\(\)/);
   assert.match(workspace, /@reset="resetListFilters"/);

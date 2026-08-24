@@ -186,8 +186,8 @@ function changeScope(event: Event) {
     v-if="state !== 'ready'"
     :kind="state"
     :request-id="requestId"
-    :primary-label="state === 'empty' && canDecide ? '开始创建' : ''"
-    :secondary-label="state === 'empty' ? '清除筛选' : ''"
+    :primary-label="state === 'empty' ? (canDecide ? '开始创建' : '刷新列表') : ''"
+    :secondary-label="state === 'empty' ? '清除筛选' : '返回机会列表'"
     @primary="state === 'empty' && canDecide ? emit('create') : emit('apply')"
     @secondary="emit('reset')"
   />
