@@ -94,7 +94,11 @@ const envelope = (data: unknown, meta?: unknown) => ({
   request_id: "m04-01-e2e-request",
   trace_id: "m04-01-e2e-trace",
 });
-async function navigation(page: Page) {
+const managerCapabilities = ["task:read", "trend:read", "trend:manage"];
+async function navigation(page: Page, capabilities = managerCapabilities) {
+  await page.route("**/api/v1/me/ui-preferences", (route) =>
+    route.fulfill({ json: envelope({ theme: "deep-ocean", version: 1 }) }),
+  );
   await page.route("**/api/v1/me/navigation?shell=member", (route) =>
     route.fulfill({
       status: 200,
@@ -105,7 +109,7 @@ async function navigation(page: Page) {
           organization_id: "00000000-0000-4000-8000-000000000401",
           workspace_id: "00000000-0000-4000-8000-000000000402",
           roles: ["member"],
-          capabilities: ["task:read", "trend:read", "trend:manage"],
+          capabilities,
           platform_roles: [],
           platform_capabilities: [],
           guard_reason: "navigation_member_allowed",
@@ -114,10 +118,15 @@ async function navigation(page: Page) {
     }),
   );
 }
-async function ready(page: Page, topics = [topic]) {
-  await navigation(page);
+async function ready(
+  page: Page,
+  topics = [topic],
+  options: { capabilities?: string[]; onGovernanceRequest?: () => void } = {},
+) {
+  await navigation(page, options.capabilities);
   let changeRequests: unknown[] = [];
   await page.route("**/api/v1/trends/change-requests", async (route) => {
+    options.onGovernanceRequest?.();
     if (route.request().method() === "POST") {
       const body = route.request().postDataJSON() as any;
       changeRequests = [
@@ -243,6 +252,43 @@ test("M04-01.A08/A09 monitoring rule and empty/forbidden states are explicit", a
   await page.getByLabel("包含关键词（逗号分隔）").fill("desk lamp");
   await page.getByRole("button", { name: "创建并启用" }).click();
   await expect(page.getByText("监控规则已启用；当前仅发送站内通知。")).toBeVisible();
+});
+
+test("trend:read-only loads topics and rules without requesting or exposing governance", async ({
+  page,
+}) => {
+  let governanceRequests = 0;
+  const consoleErrors: string[] = [],
+    requestFailures: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") consoleErrors.push(message.text());
+  });
+  page.on("requestfailed", (request) => requestFailures.push(request.url()));
+  await ready(page, [topic], {
+    capabilities: ["task:read", "trend:read"],
+    onGovernanceRequest: () => (governanceRequests += 1),
+  });
+
+  await page.goto("/trends?section=governance");
+  await expect(page).not.toHaveURL(/section=governance/);
+  await expect(page.getByRole("heading", { name: topic.title })).toBeVisible();
+  await expect(page.getByRole("button", { name: "立即获取热点" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /合并与拆分/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /创建监控/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "关注", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "标记无关" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "报告异常" })).toHaveCount(0);
+
+  await page.getByRole("button", { name: /监控规则/ }).click();
+  await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
+  await expect(page.getByText(/当前为只读权限/)).toBeVisible();
+  await expect(page.getByText(rule.name)).toBeVisible();
+  await expect(page.getByRole("button", { name: "暂停" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "查看趋势结果" })).toBeVisible();
+  await page.waitForLoadState("networkidle");
+  expect(governanceRequests).toBe(0);
+  expect(consoleErrors).toEqual([]);
+  expect(requestFailures).toEqual([]);
 });
 
 test("trend governance proposes a merge into a second-person confirmation queue", async ({

@@ -104,6 +104,7 @@ export function surfaceProps(input: {
         ...common,
         organizationId: input.organizationId || "",
         workspaceId: input.workspaceId || "",
+        capabilities: input.capabilities,
       };
     case "opportunity-workspace":
       return { ...common, opportunityId: ids.opportunityId || undefined };

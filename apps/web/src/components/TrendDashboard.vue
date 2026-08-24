@@ -22,6 +22,7 @@ const props = defineProps<{
     apiBaseUrl: string;
     organizationId: string;
     workspaceId: string;
+    capabilities: string[];
   }>(),
   route = useRoute(),
   router = useRouter(),
@@ -76,7 +77,8 @@ const stateFrom = (kind: ApiFailureKind): State =>
       : kind === "blocked" || kind === "rate_limited"
         ? "blocked"
         : "error";
-const activeFilterCount = computed(() => Object.values(filters).filter(Boolean).length),
+const canManageTrends = computed(() => props.capabilities.includes("trend:manage")),
+  activeFilterCount = computed(() => Object.values(filters).filter(Boolean).length),
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20))),
   sortedTopics = computed(() => {
     const items = [...topics.value];
@@ -130,10 +132,13 @@ async function load() {
     const params = new URLSearchParams({ page: String(page.value), page_size: "20" });
     for (const [key, value] of Object.entries(filters))
       if (value) params.set(key === "q" ? "q" : key, value);
+    const governanceRequest = canManageTrends.value
+      ? read("/trends/change-requests")
+      : Promise.resolve({ data: [] });
     const [list, ruleList, governanceList] = await Promise.all([
       read(`/trends?${params}`),
       read("/trends/monitoring-rules"),
-      read("/trends/change-requests"),
+      governanceRequest,
     ]);
     topics.value = list.data;
     rules.value = ruleList.data.map((item: Rule) => ({
@@ -176,12 +181,15 @@ function syncFromRoute() {
   sort.value = ["impact", "latest", "momentum", "followed"].includes(String(route.query.sort))
     ? (route.query.sort as typeof sort.value)
     : "impact";
+  const governanceRequested = route.query.section === "governance";
   tab.value =
     route.query.section === "rules"
       ? "rules"
-      : route.query.section === "governance"
+      : governanceRequested && canManageTrends.value
         ? "governance"
         : "topics";
+  if (governanceRequested && !canManageTrends.value)
+    void router.replace({ query: { ...route.query, section: undefined } });
 }
 async function applyFilters() {
   const previousPath = route.fullPath;
@@ -216,6 +224,7 @@ async function goPage(nextPage: number) {
   });
 }
 async function setTab(nextTab: "topics" | "rules" | "governance") {
+  if (nextTab === "governance" && !canManageTrends.value) return;
   await router.push({
     query: {
       ...route.query,
@@ -257,8 +266,13 @@ async function write(path: string, method: string, body?: unknown) {
     busy.value = "";
   }
 }
+function requireTrendManage() {
+  if (canManageTrends.value) return true;
+  message.value = "当前账号仅有趋势查看权限，管理操作未执行。";
+  return false;
+}
 async function follow() {
-  if (!selected.value) return;
+  if (!selected.value || !requireTrendManage()) return;
   const result = await write(
     `/trends/${selected.value.id}/follow`,
     selected.value.followed ? "DELETE" : "PUT",
@@ -271,7 +285,7 @@ async function follow() {
   }
 }
 async function markIrrelevant() {
-  if (!selected.value || !relevanceDialog.value) return;
+  if (!selected.value || !relevanceDialog.value || !requireTrendManage()) return;
   const targetStatus = relevanceDialog.value;
   const result = await write(`/trends/${selected.value.id}/relevance`, "POST", {
     status: targetStatus,
@@ -289,16 +303,18 @@ async function markIrrelevant() {
   }
 }
 function openRelevance(status: "active" | "irrelevant") {
+  if (!requireTrendManage()) return;
   relevanceReason.value = "";
   relevanceDialog.value = status;
 }
 function openAnomaly(item: Detail["evidence"][number]) {
+  if (!requireTrendManage()) return;
   anomalyEvidence.value = item;
   anomalySeverity.value = "warning";
   anomalyReason.value = "";
 }
 async function createQualityIssue() {
-  if (!selected.value || !anomalyEvidence.value) return;
+  if (!selected.value || !anomalyEvidence.value || !requireTrendManage()) return;
   const evidenceId = anomalyEvidence.value.id,
     result = await write(
       `/trends/${selected.value.id}/evidence/${evidenceId}/quality-issues`,
@@ -314,6 +330,7 @@ async function createQualityIssue() {
     : `该证据已有未关闭质量工单 ${result.issue.id}，请直接继续处理。`;
 }
 async function createRule() {
+  if (!requireTrendManage()) return;
   const result = await write("/trends/monitoring-rules", "POST", {
     name: form.name,
     include_keywords: form.include_keywords
@@ -347,6 +364,7 @@ async function createRule() {
   }
 }
 async function toggleRule(item: Rule) {
+  if (!requireTrendManage()) return;
   const result = await write(`/trends/monitoring-rules/${item.id}`, "PATCH", {
     status: item.status === "enabled" ? "paused" : "enabled",
     expected_version: item.version,
@@ -358,6 +376,7 @@ async function toggleRule(item: Rule) {
   }
 }
 async function proposeTopicChange(payload: Record<string, unknown>) {
+  if (!requireTrendManage()) return;
   const result = await write("/trends/change-requests", "POST", payload);
   if (!result) return;
   await load();
@@ -370,6 +389,7 @@ async function decideTopicChange(payload: {
   reason: string;
   expectedVersion: number;
 }) {
+  if (!requireTrendManage()) return;
   const result = await write(`/trends/change-requests/${payload.requestId}/decisions`, "POST", {
     decision: payload.decision,
     reason: payload.reason,
@@ -423,6 +443,17 @@ watch(
   () => [route.query.section, route.query.sort],
   () => syncFromRoute(),
 );
+watch(canManageTrends, (allowed) => {
+  if (allowed) {
+    void load();
+    return;
+  }
+  changeRequests.value = [];
+  showRule.value = false;
+  anomalyEvidence.value = null;
+  relevanceDialog.value = null;
+  if (tab.value === "governance") void setTab("topics");
+});
 onMounted(() => {
   syncFromRoute();
   void load();
@@ -442,7 +473,7 @@ onMounted(() => {
           {{
             busy === "/provider-sources/refresh" ? "正在启动，预计 1–3 分钟" : "立即获取热点"
           }}</button
-        ><button type="button" @click="showRule = true">＋ 创建监控</button
+        ><button v-if="canManageTrends" type="button" @click="showRule = true">＋ 创建监控</button
         ><button class="secondary" type="button" @click="setTab('rules')">订阅管理</button>
       </div>
     </header>
@@ -452,6 +483,7 @@ onMounted(() => {
       ><button :aria-current="tab === 'rules' ? 'page' : undefined" @click="setTab('rules')">
         监控规则 <b>{{ rules.length }}</b></button
       ><button
+        v-if="canManageTrends"
         :aria-current="tab === 'governance' ? 'page' : undefined"
         @click="setTab('governance')"
       >
@@ -534,6 +566,7 @@ onMounted(() => {
           :busy="busy"
           :quality-issue-ids="qualityIssueIds"
           :opportunity-route="opportunityRoute"
+          :can-manage="canManageTrends"
           @follow="follow"
           @create-rule="showRule = true"
           @change-relevance="openRelevance"
@@ -562,9 +595,10 @@ onMounted(() => {
         <div>
           <p>订阅规则</p>
           <h3>趋势监控规则</h3>
-          <span>当前仅提供站内通知；邮件服务未确认，不显示为已接通。</span>
+          <span v-if="canManageTrends">当前仅提供站内通知；邮件服务未确认，不显示为已接通。</span
+          ><span v-else>当前为只读权限；可查看规则与结果，不能创建、暂停或恢复规则。</span>
         </div>
-        <button type="button" @click="showRule = true">＋ 创建规则</button>
+        <button v-if="canManageTrends" type="button" @click="showRule = true">＋ 创建规则</button>
       </header>
       <UiStatePanel
         v-if="state !== 'ready' && state !== 'empty'"
@@ -573,8 +607,10 @@ onMounted(() => {
         @primary="load"
       />
       <div v-else-if="!rules.length" class="trend-rule-empty">
-        <strong>还没有监控规则</strong><span>按关键词、市场和语言建立第一条规则。</span
-        ><button type="button" @click="showRule = true">创建监控规则</button>
+        <strong>还没有监控规则</strong
+        ><span v-if="canManageTrends">按关键词、市场和语言建立第一条规则。</span
+        ><span v-else>当前工作区尚无可查看的监控规则。</span
+        ><button v-if="canManageTrends" type="button" @click="showRule = true">创建监控规则</button>
       </div>
       <article v-for="item in rules" :key="item.id">
         <div>
@@ -618,14 +654,14 @@ onMounted(() => {
             <dd>v{{ item.version }}</dd>
           </div>
         </dl>
-        <button type="button" @click="toggleRule(item)">
+        <button v-if="canManageTrends" type="button" @click="toggleRule(item)">
           {{ item.status === "enabled" ? "暂停" : "启用" }}
         </button>
         <button type="button" class="secondary" @click="viewRuleTopics(item)">查看趋势结果</button>
       </article>
     </section>
     <TrendChangeQueue
-      v-else
+      v-else-if="canManageTrends"
       :topics="topics"
       :selected="selected"
       :requests="changeRequests"
@@ -634,7 +670,7 @@ onMounted(() => {
       @decide="decideTopicChange"
     />
     <div
-      v-if="showRule"
+      v-if="showRule && canManageTrends"
       class="trend-modal"
       role="dialog"
       aria-modal="true"
@@ -681,7 +717,7 @@ onMounted(() => {
       </form>
     </div>
     <div
-      v-if="anomalyEvidence"
+      v-if="anomalyEvidence && canManageTrends"
       class="trend-modal"
       role="dialog"
       aria-modal="true"
@@ -721,7 +757,7 @@ onMounted(() => {
       </form>
     </div>
     <div
-      v-if="relevanceDialog"
+      v-if="relevanceDialog && canManageTrends"
       class="trend-modal"
       role="dialog"
       aria-modal="true"

@@ -9,6 +9,7 @@ defineProps<{
   busy: string;
   qualityIssueIds: Record<string, string>;
   opportunityRoute: string;
+  canManage: boolean;
 }>();
 const emit = defineEmits<{
   follow: [];
@@ -44,18 +45,23 @@ const freshness = (value: string) =>
       </div>
     </header>
     <div class="trend-actions">
-      <button type="button" @click="emit('follow')">
+      <button v-if="canManage" type="button" @click="emit('follow')">
         {{ detail.followed ? "已关注" : "关注" }}</button
-      ><button type="button" @click="emit('createRule')">创建监控</button
+      ><button v-if="canManage" type="button" @click="emit('createRule')">创建监控</button
       ><RouterLink :to="opportunityRoute">转为机会</RouterLink
       ><button
-        v-if="detail.status !== 'irrelevant'"
+        v-if="canManage && detail.status !== 'irrelevant'"
         class="quiet"
         type="button"
         @click="emit('changeRelevance', 'irrelevant')"
       >
         标记无关</button
-      ><button v-else class="quiet" type="button" @click="emit('changeRelevance', 'active')">
+      ><button
+        v-else-if="canManage"
+        class="quiet"
+        type="button"
+        @click="emit('changeRelevance', 'active')"
+      >
         恢复为相关
       </button>
     </div>
@@ -90,6 +96,7 @@ const freshness = (value: string) =>
       :detail="detail"
       :busy="busy"
       :quality-issue-ids="qualityIssueIds"
+      :can-manage="canManage"
       @report-anomaly="emit('reportAnomaly', $event)"
     />
   </article>

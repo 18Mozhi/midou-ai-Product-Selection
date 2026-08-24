@@ -320,6 +320,7 @@ test("M04-01.A06/A09/A13 API derives tenant scope and enforces origin plus idemp
     service = {
       list: async (input) => (calls.push(["list", input]), { items: [], total: 0 }),
       listRules: async (input) => (calls.push(["rules", input]), []),
+      listChangeRequests: async (input) => (calls.push(["changeRequests", input]), []),
       get: async () => ({}),
       follow: async (input) => (
         calls.push(["follow", input]),
@@ -357,6 +358,20 @@ test("M04-01.A06/A09/A13 API derives tenant scope and enforces origin plus idemp
   assert.equal(calls[0][1].capability, "trend:read");
   assert.equal(calls[1][1].organizationId, ids.org);
   assert.equal(calls[1][1].workspaceId, ids.ws);
+  response = await app.inject({
+    method: "GET",
+    url: "/api/v1/trends/monitoring-rules",
+    headers: { cookie: "scoutops_session=test" },
+  });
+  assert.equal(response.statusCode, 200);
+  assert.equal(calls.filter(([name]) => name === "authorize").at(-1)[1].capability, "trend:read");
+  response = await app.inject({
+    method: "GET",
+    url: "/api/v1/trends/change-requests",
+    headers: { cookie: "scoutops_session=test" },
+  });
+  assert.equal(response.statusCode, 200);
+  assert.equal(calls.filter(([name]) => name === "authorize").at(-1)[1].capability, "trend:manage");
   response = await app.inject({
     method: "PUT",
     url: `/api/v1/trends/${ids.topic}/follow`,

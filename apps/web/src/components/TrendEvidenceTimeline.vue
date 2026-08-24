@@ -6,6 +6,7 @@ const props = defineProps<{
   detail: TrendDetail;
   busy: string;
   qualityIssueIds: Record<string, string>;
+  canManage: boolean;
 }>();
 const emit = defineEmits<{ reportAnomaly: [item: TrendDetail["evidence"][number]] }>();
 const timelineSource = ref("");
@@ -58,6 +59,7 @@ watch(
       ><span class="trend-evidence-actions"
         ><a :href="item.canonical_url" target="_blank" rel="noopener noreferrer">查看原文 ↗</a
         ><button
+          v-if="canManage"
           type="button"
           :disabled="Boolean(busy) || Boolean(qualityIssueIds[item.id])"
           @click="emit('reportAnomaly', item)"
