@@ -107,7 +107,11 @@ export function surfaceProps(input: {
         capabilities: input.capabilities,
       };
     case "opportunity-workspace":
-      return { ...common, opportunityId: ids.opportunityId || undefined };
+      return {
+        ...common,
+        opportunityId: ids.opportunityId || undefined,
+        capabilities: input.capabilities,
+      };
     case "competitor-monitor":
       return { ...common, mode: input.path.endsWith("/monitoring-rules") ? "rules" : "list" };
     case "cost-rule-console":

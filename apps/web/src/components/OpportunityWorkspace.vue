@@ -27,7 +27,11 @@ import "../opportunity-selection-entry.css";
 import "../opportunity-ai.css";
 const route = useRoute(),
   router = useRouter();
-const props = defineProps<{ apiBaseUrl: string; opportunityId?: string }>(),
+const props = defineProps<{
+    apiBaseUrl: string;
+    opportunityId?: string;
+    capabilities?: string[];
+  }>(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<OpportunityTypes.OpportunityWorkspaceState>("loading"),
   items = ref<OpportunityTypes.OpportunitySummary[]>([]),
@@ -107,6 +111,7 @@ const {
   cancel: cancelAiReviewReason,
 } = useAuditedReason();
 const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
+const canConfirmCost = computed(() => props.capabilities?.includes("cost:confirm") ?? false);
 const returnPath = computed(() => safeOpportunityReturnPath(route.query.from));
 const stateFrom = (kind: ApiFailureKind): OpportunityTypes.OpportunityWorkspaceState =>
   kind === "expired" || kind === "forbidden"
@@ -143,11 +148,15 @@ async function load() {
     if (props.opportunityId) {
       detail.value = (await read(`/opportunities/${props.opportunityId}`)).data;
       profit.value = (await read(`/opportunities/${props.opportunityId}/profit-analysis`)).data;
-      try {
-        costReviewerOptions.value = (
-          await request<Array<{ id: string; label: string }>>("/cost-input-reviewers")
-        ).data;
-      } catch {
+      if (canConfirmCost.value) {
+        try {
+          costReviewerOptions.value = (
+            await request<Array<{ id: string; label: string }>>("/cost-input-reviewers")
+          ).data;
+        } catch {
+          costReviewerOptions.value = [];
+        }
+      } else {
         costReviewerOptions.value = [];
       }
       await loadAi();
@@ -801,6 +810,7 @@ watch(
           :profit="profit"
           :cost-form="costForm"
           :reviewer-options="costReviewerOptions"
+          :can-confirm-cost="canConfirmCost"
           :busy="busy"
           @confirm-cost="confirmCost"
           @review-cost="reviewCost"

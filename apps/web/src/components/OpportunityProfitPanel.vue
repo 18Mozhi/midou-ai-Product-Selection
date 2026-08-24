@@ -3,22 +3,26 @@ import { statusLabel } from "../ui/status-labels";
 import OpportunityCostReviewQueue from "./OpportunityCostReviewQueue.vue";
 import type { OpportunityProfitAnalysis as ProfitAnalysis } from "./opportunity-workspace-types";
 
-defineProps<{
-  profit: ProfitAnalysis | null;
-  costForm: {
-    platform: string;
-    input_type: "sale_price" | "purchase_price" | "logistics";
-    amount_value: number;
-    currency: string;
-    source_type: string;
-    source_ref_id: string;
-    evidence_id: string;
-    observed_at: string;
-    reviewer_id: string;
-  };
-  reviewerOptions: Array<{ id: string; label: string }>;
-  busy: boolean;
-}>();
+withDefaults(
+  defineProps<{
+    profit: ProfitAnalysis | null;
+    costForm: {
+      platform: string;
+      input_type: "sale_price" | "purchase_price" | "logistics";
+      amount_value: number;
+      currency: string;
+      source_type: string;
+      source_ref_id: string;
+      evidence_id: string;
+      observed_at: string;
+      reviewer_id: string;
+    };
+    reviewerOptions: Array<{ id: string; label: string }>;
+    busy: boolean;
+    canConfirmCost?: boolean;
+  }>(),
+  { canConfirmCost: true },
+);
 
 defineEmits<{
   confirmCost: [];
@@ -110,7 +114,7 @@ const inputLabel = (value: string) =>
       :busy="busy"
       @review-cost="$emit('reviewCost', $event)"
     />
-    <form class="profit-input" @submit.prevent="$emit('confirmCost')">
+    <form v-if="canConfirmCost" class="profit-input" @submit.prevent="$emit('confirmCost')">
       <h5>提交成本复核</h5>
       <label>平台<input v-model="costForm.platform" required maxlength="80" /></label>
       <label
@@ -146,5 +150,9 @@ const inputLabel = (value: string) =>
         ><button type="button" :disabled="busy" @click="$emit('queueProfit')">重新计算</button>
       </footer>
     </form>
+    <aside v-else class="profit-missing">
+      <strong>当前角色为只读成本视图</strong
+      ><span>可以查看利润事实与复核记录；提交成本和重新计算需要“确认成本”权限。</span>
+    </aside>
   </section>
 </template>
