@@ -15,8 +15,13 @@ import {
 
 const iso = (value: unknown) =>
   value instanceof Date ? value.toISOString() : new Date(String(value)).toISOString();
-const dateOnly = (value: unknown) =>
-  value instanceof Date ? value.toISOString().slice(0, 10) : String(value).slice(0, 10);
+export const mysqlDateOnly = (value: unknown) => {
+  if (!(value instanceof Date)) return String(value).slice(0, 10);
+  const year = value.getFullYear(),
+    month = String(value.getMonth() + 1).padStart(2, "0"),
+    day = String(value.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 const numberOrNull = (value: unknown) => (value == null ? null : Number(value));
 const parse = <T>(value: unknown): T =>
   typeof value === "string" ? (JSON.parse(value) as T) : (value as T);
@@ -482,8 +487,8 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     );
     const facts: OpportunityOperatingFact[] = rows.map((row) => ({
         id: String(row.id),
-        period_start: dateOnly(row.period_start),
-        period_end: dateOnly(row.period_end),
+        period_start: mysqlDateOnly(row.period_start),
+        period_end: mysqlDateOnly(row.period_end),
         sales_units: Number(row.sales_units),
         revenue_amount: Number(row.revenue_amount),
         ad_spend_amount: Number(row.ad_spend_amount),
