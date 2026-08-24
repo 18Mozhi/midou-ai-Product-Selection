@@ -1,7 +1,10 @@
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { LocalAuthService } from "@scoutops/auth";
-import type { AuthorizationService } from "@scoutops/authorization";
-import type { ProviderSourceService } from "./provider-source-service.js";
+import { AuthorizationError, type AuthorizationService } from "@scoutops/authorization";
+import {
+  parseProviderSourceRefreshScope,
+  type ProviderSourceService,
+} from "./provider-source-service.js";
 import { sessionToken } from "./auth-routes.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 
@@ -25,7 +28,7 @@ const ids = (r: FastifyRequest) => ({
 export function registerProviderSourceRoutes(app: FastifyInstance, o: ProviderSourceRouteOptions) {
   const actor = async (
       r: FastifyRequest,
-      capability: "provider:configure" | "collection:replay" | "trend:read",
+      capability: "provider:configure" | "collection:replay",
     ) => {
       const a = await o.auth.authenticate(sessionToken(r, o.secureCookie));
       await o.authorization.authorize({
@@ -36,13 +39,40 @@ export function registerProviderSourceRoutes(app: FastifyInstance, o: ProviderSo
       });
       return a.user.id;
     },
-    write = async (
-      r: FastifyRequest,
-      capability: "provider:configure" | "collection:replay" | "trend:read",
-    ) => {
+    write = async (r: FastifyRequest, capability: "provider:configure" | "collection:replay") => {
       if (r.headers.origin !== o.webOrigin)
         throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
       return actor(r, capability);
+    },
+    refreshScope = async (r: FastifyRequest) => {
+      if (r.headers.origin !== o.webOrigin)
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
+      const requested = parseProviderSourceRefreshScope(
+          r.body as { organization_id?: unknown; workspace_id?: unknown },
+        ),
+        authenticated = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
+        resolved = await o.authorization.resolveSession(
+          authenticated.user.id,
+          authenticated.session.id,
+        );
+      await o.authorization.authorize({
+        actorId: authenticated.user.id,
+        organizationId: resolved.context.organization_id,
+        workspaceId: resolved.context.workspace_id,
+        capability: "trend:read",
+        surface: "api",
+        ...ids(r),
+      });
+      if (
+        requested.organizationId !== resolved.context.organization_id ||
+        requested.workspaceId !== resolved.context.workspace_id
+      )
+        throw new AuthorizationError("tenancy_context_mismatch", 409, "先切换到目标组织和工作区。");
+      return {
+        actorId: authenticated.user.id,
+        organizationId: resolved.context.organization_id,
+        workspaceId: resolved.context.workspace_id,
+      };
     };
   app.get("/api/v1/platform/provider-sources", async (r, reply) => {
     await actor(r, "provider:configure");
@@ -155,12 +185,15 @@ export function registerProviderSourceRoutes(app: FastifyInstance, o: ProviderSo
     },
   );
   app.post("/api/v1/provider-sources/refresh", async (r, reply) => {
-    const actorId = await write(r, "trend:read"),
-      result = await o.service.refresh(r.body as never, {
-        actorId,
-        idempotencyKey: requireIdempotencyKey(r),
-        ...ids(r),
-      });
+    const scope = await refreshScope(r),
+      result = await o.service.refresh(
+        { organization_id: scope.organizationId, workspace_id: scope.workspaceId },
+        {
+          actorId: scope.actorId,
+          idempotencyKey: requireIdempotencyKey(r),
+          ...ids(r),
+        },
+      );
     reply.code(202);
     return envelope(result, r);
   });

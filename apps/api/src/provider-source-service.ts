@@ -294,6 +294,21 @@ export interface ProviderSourceRepository {
   }): Promise<ParserSample>;
 }
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+export function parseProviderSourceRefreshScope(value: {
+  organization_id?: unknown;
+  workspace_id?: unknown;
+}) {
+  const organizationId = String(value?.organization_id ?? ""),
+    workspaceId = String(value?.workspace_id ?? "");
+  if (!uuid.test(organizationId) || !uuid.test(workspaceId))
+    throw new ProviderSourceServiceError(
+      "provider_source_scope_invalid",
+      400,
+      "重新选择组织和工作区后再刷新热点。",
+    );
+  return { organizationId, workspaceId };
+}
 const source = (code: string) => {
   const result = BUILTIN_PROVIDER_SOURCES.find((item) => item.code === code);
   if (!result)
@@ -578,14 +593,7 @@ export class ProviderSourceService {
     value: { organization_id?: unknown; workspace_id?: unknown },
     context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
   ) {
-    const organizationId = String(value?.organization_id ?? ""),
-      workspaceId = String(value?.workspace_id ?? "");
-    if (!uuid.test(organizationId) || !uuid.test(workspaceId))
-      throw new ProviderSourceServiceError(
-        "provider_source_scope_invalid",
-        400,
-        "重新选择组织和工作区后再刷新热点。",
-      );
+    const { organizationId, workspaceId } = parseProviderSourceRefreshScope(value);
     return this.repository.refresh({
       organizationId,
       workspaceId,
