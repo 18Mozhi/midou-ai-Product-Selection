@@ -536,6 +536,13 @@ async function applyListFilters() {
   });
   if (route.fullPath === previousPath) await load();
 }
+async function resetListFilters() {
+  for (const key of Object.keys(filters) as Array<keyof typeof filters>) filters[key] = "";
+  listScope.value = "product";
+  const previousPath = route.fullPath;
+  await router.push({ query: {} });
+  if (route.fullPath === previousPath) await load();
+}
 async function goListPage(nextPage: number) {
   if (nextPage < 1 || nextPage > pageCount.value) return;
   await router.push({ query: { ...route.query, page: nextPage === 1 ? undefined : nextPage } });
@@ -642,7 +649,9 @@ watch(
       :can-decide="canDecide"
       @apply="applyListFilters"
       @batch="openBatch"
+      @create="showCreate = true"
       @page="goListPage"
+      @reset="resetListFilters"
       @update:selected-ids="selectedOpportunityIds = $event"
     />
     <template v-else

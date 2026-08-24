@@ -55,6 +55,8 @@ const props = defineProps<{
     "update:listScope": [value: Scope];
     "update:selectedIds": [value: string[]];
     batch: [value: "assign" | "archive" | "review"];
+    create: [];
+    reset: [];
   }>(),
   route = useRoute(),
   pageCount = computed(() => Math.max(1, Math.ceil(props.total / 20))),
@@ -162,7 +164,8 @@ function changeScope(event: Event) {
           <option value="product">可分析商品</option>
           <option value="all">全部线索</option>
         </select></label
-      ><button type="submit">筛选</button>
+      ><button type="submit">筛选</button
+      ><button type="button" @click="emit('reset')">重置</button>
     </form>
   </ResponsiveFilterDrawer>
   <section class="opportunity-list-summary" aria-label="选品机会数据总览">
@@ -183,7 +186,10 @@ function changeScope(event: Event) {
     v-if="state !== 'ready'"
     :kind="state"
     :request-id="requestId"
-    @primary="emit('apply')"
+    :primary-label="state === 'empty' && canDecide ? '开始创建' : ''"
+    :secondary-label="state === 'empty' ? '清除筛选' : ''"
+    @primary="state === 'empty' && canDecide ? emit('create') : emit('apply')"
+    @secondary="emit('reset')"
   />
   <section v-else class="opportunity-list">
     <header>
