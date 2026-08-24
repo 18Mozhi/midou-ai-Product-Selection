@@ -3,11 +3,12 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 test("opportunity write controls follow their existing API capabilities", async () => {
-  const [workspace, list, decision, feedback] = await Promise.all([
+  const [workspace, list, decision, feedback, styles] = await Promise.all([
     readFile("apps/web/src/components/OpportunityWorkspace.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityListPanel.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityDecisionPanel.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityFeedbackPanel.vue", "utf8"),
+    readFile("apps/web/src/opportunities.css", "utf8"),
   ]);
 
   assert.match(workspace, /includes\("opportunity:decide"\)/);
@@ -27,4 +28,8 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(decision, /v-if="canDecide"[\s\S]*aria-label="机会决策操作"/);
   assert.match(decision, /canDecide && blocker\.status !== 'cleared'/);
   assert.match(feedback, /<form v-if="canWrite"/);
+  assert.match(
+    styles,
+    /@media \(max-width: 1100px\)[\s\S]*\.opportunity-filters[\s\S]*repeat\(2, minmax\(0, 1fr\)\)/,
+  );
 });
