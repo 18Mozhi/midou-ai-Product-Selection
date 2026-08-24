@@ -136,9 +136,16 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       "UPDATE provider_source_replay_runs SET status=?,item_count=?,error_code=?,updated_at=NOW(3) WHERE task_id=?",
       [status, available, failed?.errorCode ?? null, task.id],
     );
-    if (taskFailures.length) {
+    const requiredOutcomeFailure = outcomes.find(
+      (outcome) => outcome.required && ["failed", "blocked"].includes(outcome.status),
+    );
+    if (taskFailures.length || requiredOutcomeFailure) {
       const rateLimit = taskFailures.find((failure) => failure.code === "rate_limited");
-      throw rateLimit ?? taskFailures[0]!;
+      throw (
+        rateLimit ??
+        taskFailures[0] ??
+        new CollectionExecutionError(code(requiredOutcomeFailure?.errorCode ?? "validation_failed"))
+      );
     }
     return outcomes;
   }

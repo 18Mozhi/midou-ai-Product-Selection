@@ -195,6 +195,20 @@ function reset() {
   selectedResultId.value = "";
   localStorage.removeItem(progressStorageKey);
 }
+function handleStateSecondary() {
+  if (state.value === "blocked") {
+    message.value = journey.value
+      ? "本次仅状态读取受阻；已创建的后台任务不会自动取消，也不会自动重复提交。"
+      : "本次创建未获得服务端成功确认；页面未保存活动旅程，也不会自动重复提交。";
+    return;
+  }
+  if (state.value === "forbidden") {
+    message.value =
+      "请联系组织管理员核对 task:create 与 opportunity:decide 能力；当前页面不会展示或写入受限数据。";
+    return;
+  }
+  window.history.back();
+}
 async function resume() {
   const savedJourneyId = localStorage.getItem(progressStorageKey);
   if (!savedJourneyId) return;
@@ -238,6 +252,7 @@ onUnmounted(stop);
       :request-id="requestId"
       :action-hint="message"
       @primary="journey ? load() : reset()"
+      @secondary="handleStateSecondary"
     />
     <form v-if="!journey" class="selection-start" @submit.prevent="create">
       <div class="selection-kind" role="radiogroup" aria-label="输入类型">
@@ -365,7 +380,7 @@ onUnmounted(stop);
             <p>明确终止状态</p>
             <h3>
               {{
-                journey.state === "succeeded_empty"
+                journey.task_status === "succeeded_empty"
                   ? "真实来源没有返回可用结果"
                   : "真实来源已明确受阻"
               }}

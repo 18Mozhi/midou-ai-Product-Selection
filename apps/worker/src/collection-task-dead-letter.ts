@@ -157,6 +157,35 @@ export async function failCollectionTask(
   try {
     await c.beginTransaction();
     const row = await context.lock(c, task);
+    const [subqueries] = await c.query<RowDataPacket[]>(
+        "SELECT status,available_result_count,missing_fields_json FROM collection_subqueries WHERE task_id=?",
+        [task.id],
+      ),
+      summary = subqueries.reduce(
+        (result, subquery) => {
+          const status = String(subquery.status),
+            missingFields =
+              typeof subquery.missing_fields_json === "string"
+                ? JSON.parse(subquery.missing_fields_json)
+                : subquery.missing_fields_json;
+          if (["succeeded", "succeeded_empty"].includes(status))
+            result.successfulSubqueryCount += 1;
+          else if (status === "failed") result.failedSubqueryCount += 1;
+          else if (status === "blocked") result.blockedSubqueryCount += 1;
+          result.availableResultCount += Number(subquery.available_result_count ?? 0);
+          if (Array.isArray(missingFields))
+            for (const field of missingFields)
+              if (typeof field === "string") result.missingFields.add(field);
+          return result;
+        },
+        {
+          successfulSubqueryCount: 0,
+          failedSubqueryCount: 0,
+          blockedSubqueryCount: 0,
+          availableResultCount: 0,
+          missingFields: new Set<string>(),
+        },
+      );
     let available = now;
     if (classification.status === "retry_scheduled")
       available = retryAvailableAt(task.attemptCount, now, context.random());
@@ -170,7 +199,9 @@ export async function failCollectionTask(
       statement(
         "UPDATE collection_tasks SET status=?,available_at=?,rate_limit_reset_at=?,",
         "last_error_code=?,lease_owner=NULL,lease_token_hash=NULL,",
-        "lease_expires_at=NULL,finished_at=?,version=version+1,updated_at=? ",
+        "lease_expires_at=NULL,finished_at=?,successful_subquery_count=?,",
+        "failed_subquery_count=?,blocked_subquery_count=?,available_result_count=?,",
+        "missing_fields_json=?,version=version+1,updated_at=? ",
         "WHERE id=?",
       ),
       [
@@ -181,6 +212,11 @@ export async function failCollectionTask(
         classification.status === "retry_scheduled" || classification.status === "rate_limited"
           ? null
           : now,
+        summary.successfulSubqueryCount,
+        summary.failedSubqueryCount,
+        summary.blockedSubqueryCount,
+        summary.availableResultCount,
+        JSON.stringify([...summary.missingFields].sort()),
         now,
         task.id,
       ],

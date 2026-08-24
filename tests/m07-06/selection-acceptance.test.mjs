@@ -90,6 +90,8 @@ test("M07-06.A07-A17 keeps UI, contracts, production evidence and rollback synch
   assert.match(files[0], /没有演示数据替代真实结果/);
   assert.match(files[0], /localStorage\.setItem\(progressStorageKey/);
   assert.match(files[0], /比较 \{\{ candidates\.length \}\} 条候选后再生成机会/);
+  assert.match(files[0], /@secondary="handleStateSecondary"/);
+  assert.match(files[0], /本次创建未获得服务端成功确认/);
   assert.doesNotMatch(files[0], /验收时钟|180 秒|DECIDED|state\.toUpperCase/);
 });
 
@@ -216,6 +218,149 @@ test("M07-06.A04 live verification accepts an already running journey", async ()
     "the production worker may advance a newly committed journey before create() reads it back",
   );
   assert.match(verifier, /0059_selection_journey_candidates\.up\.sql/);
+});
+
+test("M07-06 rejects a non-compliant public source before scheduling collection work", async () => {
+  const { MySqlSelectionJourneyRepository } =
+    await import("../../apps/api/dist/mysql-selection-journey-repository.js");
+  const repository = await read("apps/api/src/mysql-selection-journey-repository.ts");
+  const complianceGate = repository.indexOf('"selection_source_compliance_required"');
+  const taskInsert = repository.indexOf('"INSERT INTO collection_tasks');
+  assert.ok(complianceGate > 0, "selection creation must expose an actionable compliance error");
+  assert.ok(
+    complianceGate < taskInsert,
+    "provider compliance must be checked before tasks, subqueries, events or outbox rows are written",
+  );
+  assert.match(repository, /terms_review_status !== "approved"/);
+  assert.match(
+    repository,
+    /new Date\(provider\.terms_expires_at\)\.getTime\(\) <= i\.now\.getTime\(\)/,
+  );
+
+  const statements = [];
+  const connection = {
+    beginTransaction: async () => statements.push("BEGIN"),
+    commit: async () => statements.push("COMMIT"),
+    rollback: async () => statements.push("ROLLBACK"),
+    release: () => statements.push("RELEASE"),
+    query: async (sql) => {
+      statements.push(sql);
+      if (sql.includes("FROM selection_journey_operations")) return [[]];
+      if (sql.includes("FROM workspaces w")) return [[{ id: "workspace" }]];
+      if (sql.includes("FROM providers WHERE"))
+        return [
+          [
+            {
+              id: "provider",
+              code: "google_news_search",
+              access_mode: "public_rss",
+              terms_review_status: "pending",
+              terms_reference_url: null,
+              terms_version: null,
+              terms_expires_at: null,
+            },
+          ],
+        ];
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const mysqlRepository = new MySqlSelectionJourneyRepository({
+    getConnection: async () => connection,
+  });
+  await assert.rejects(
+    () =>
+      mysqlRepository.create({
+        journeyId: "11111111-1111-4111-8111-111111111111",
+        taskId: "22222222-2222-4222-8222-222222222222",
+        subqueryId: "33333333-3333-4333-8333-333333333333",
+        organizationId: "44444444-4444-4444-8444-444444444444",
+        workspaceId: "55555555-5555-4555-8555-555555555555",
+        actorId: "66666666-6666-4666-8666-666666666666",
+        requestId: "77777777-7777-4777-8777-777777777777",
+        traceId: "77777777-7777-4777-8777-777777777777",
+        idempotencyKey: "compliance-gate",
+        inputKind: "keyword",
+        inputValue: "portable blender",
+        inputSha256: "a".repeat(64),
+        providerCode: "google_news_search",
+        deadlineAt: new Date("2026-08-24T12:03:00.000Z"),
+        now: new Date("2026-08-24T12:00:00.000Z"),
+      }),
+    { code: "selection_source_compliance_required", statusCode: 409 },
+  );
+  assert.ok(statements.includes("ROLLBACK"));
+  assert.ok(!statements.some((sql) => typeof sql === "string" && sql.startsWith("INSERT")));
+});
+
+test("M07-06 preserves the real empty-result label after an audit decision", async () => {
+  const [component, repository] = await Promise.all([
+    read("apps/web/src/components/SelectionJourney.vue"),
+    read("apps/api/src/mysql-selection-journey-repository.ts"),
+  ]);
+  assert.match(component, /journey\.task_status === "succeeded_empty"/);
+  assert.doesNotMatch(component, /journey\.state === "succeeded_empty"/);
+  assert.match(
+    repository,
+    /taskFailedOrBlocked \|\| derived === "blocked" \|\| derived === "failed"/,
+  );
+  assert.match(repository, /row\.last_error_code \?\?/);
+});
+
+test("M07-06 failure finalization keeps parent and subquery coverage counters aligned", async () => {
+  const [{ failCollectionTask }, { CollectionExecutionError }] = await Promise.all([
+    import("../../apps/worker/dist/collection-task-dead-letter.js"),
+    import("../../apps/worker/dist/collection-task-contracts.js"),
+  ]);
+  const updates = [];
+  const connection = {
+    beginTransaction: async () => {},
+    commit: async () => {},
+    rollback: async () => {},
+    release: () => {},
+    query: async (sql, values) => {
+      if (sql.includes("FROM collection_subqueries"))
+        return [
+          [
+            {
+              status: "blocked",
+              available_result_count: 0,
+              missing_fields_json: JSON.stringify(["title", "summary"]),
+            },
+          ],
+        ];
+      if (sql.includes("UPDATE collection_tasks SET")) updates.push({ sql, values });
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const task = {
+    id: "11111111-1111-4111-8111-111111111111",
+    organizationId: "22222222-2222-4222-8222-222222222222",
+    workspaceId: "33333333-3333-4333-8333-333333333333",
+    attemptCount: 1,
+    requestId: "m07-06-coverage-request",
+    traceId: "m07-06-coverage-trace",
+    leaseToken: "lease-token",
+    subqueries: [],
+  };
+  const result = await failCollectionTask(
+    {
+      pool: { getConnection: async () => connection },
+      random: () => 0,
+      taskId: task.id,
+      lock: async () => ({ status: "running", lease_owner: "worker-m07-06" }),
+      event: async () => {},
+      outbox: async () => {},
+    },
+    task,
+    new CollectionExecutionError("robots_disallowed"),
+    new Date("2026-08-24T12:00:00.000Z"),
+  );
+  assert.equal(result.status, "blocked_robots");
+  assert.equal(updates.length, 1);
+  assert.match(updates[0].sql, /blocked_subquery_count=\?/);
+  assert.equal(updates[0].values[7], 1, "one blocked subquery must be stored on the parent task");
+  assert.equal(updates[0].values[8], 0);
+  assert.equal(updates[0].values[9], JSON.stringify(["summary", "title"]));
 });
 
 test("M07-06.A04/A05/A14 links deduplicated evidence to every scoped collection task", async () => {
@@ -534,40 +679,31 @@ test("M03-07 automatic feeds skip conflicting already-seen items while M07-06 re
   );
 
   allRecordsAlreadySeen = true;
-  const duplicateOnlyOutcomes = await executor.execute(
-    {
-      id: "77777777-7777-4777-8777-777777777777",
-      organizationId: "11111111-1111-4111-8111-111111111111",
-      workspaceId: "22222222-2222-4222-8222-222222222222",
-      attemptCount: 1,
-      requestId: "m07-06-duplicate-only-request",
-      traceId: "m07-06-duplicate-only-trace",
-      leaseToken: "not-used-by-executor",
-      subqueries: [
+  await assert.rejects(
+    () =>
+      executor.execute(
         {
-          id: "88888888-8888-4888-8888-888888888888",
-          providerId: "55555555-5555-4555-8555-555555555555",
-          ordinal: 0,
-          required: true,
-          target: { query: "portable blender" },
+          id: "77777777-7777-4777-8777-777777777777",
+          organizationId: "11111111-1111-4111-8111-111111111111",
+          workspaceId: "22222222-2222-4222-8222-222222222222",
+          attemptCount: 1,
+          requestId: "m07-06-duplicate-only-request",
+          traceId: "m07-06-duplicate-only-trace",
+          leaseToken: "not-used-by-executor",
+          subqueries: [
+            {
+              id: "88888888-8888-4888-8888-888888888888",
+              providerId: "55555555-5555-4555-8555-555555555555",
+              ordinal: 0,
+              required: true,
+              target: { query: "portable blender" },
+            },
+          ],
         },
-      ],
-    },
-    async () => {},
-  );
-  assert.deepEqual(
-    duplicateOnlyOutcomes,
-    [
-      {
-        id: "88888888-8888-4888-8888-888888888888",
-        required: true,
-        status: "failed",
-        availableResultCount: 0,
-        missingFields: [],
-        errorCode: "validation_failed",
-      },
-    ],
-    "a required selection journey must keep a normalized-data conflict explicit",
+        async () => {},
+      ),
+    { code: "validation_failed" },
+    "a required selection journey must fail explicitly instead of becoming succeeded_empty",
   );
   assert.deepEqual(replayUpdates[1]?.slice(0, 3), ["failed", 0, "validation_failed"]);
 });

@@ -74,7 +74,8 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           "选择活动组织与工作区后重试。",
         );
       const [providers] = await c.query<RowDataPacket[]>(
-          "SELECT id,code FROM providers WHERE code=? AND status='enabled' LIMIT 1 FOR UPDATE",
+          "SELECT id,code,access_mode,terms_review_status,terms_reference_url,terms_version," +
+            "terms_expires_at FROM providers WHERE code=? AND status='enabled' LIMIT 1 FOR UPDATE",
           [i.providerCode],
         ),
         provider = providers[0];
@@ -83,6 +84,19 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           "selection_source_unavailable",
           409,
           "当前真实来源未启用；请联系平台运营人员复核来源状态，成员无需进入 Provider 配置。",
+        );
+      if (
+        ["public_page", "public_rss"].includes(String(provider.access_mode)) &&
+        (provider.terms_review_status !== "approved" ||
+          !provider.terms_reference_url ||
+          !provider.terms_version ||
+          !provider.terms_expires_at ||
+          new Date(provider.terms_expires_at).getTime() <= i.now.getTime())
+      )
+        throw new SelectionJourneyError(
+          "selection_source_compliance_required",
+          409,
+          "请联系平台来源负责人完成条款复核后重试；普通成员无需进入 Provider 配置。",
         );
       const target = { query: i.inputValue, input_kind: i.inputKind };
       await c.query(
@@ -650,6 +664,9 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         };
       }),
       decision = decisions[0][0],
+      taskFailedOrBlocked =
+        String(row.task_status).startsWith("blocked_") ||
+        ["permission_denied", "failed_terminal", "dead_letter"].includes(String(row.task_status)),
       derived = state(
         { status: row.task_status, journey_state: row.state },
         candidates.length > 0,
@@ -666,7 +683,7 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
       parsingAt = iso(first(["parsing", "validating", "persisted"])),
       decisionAt = iso(decision?.created_at ?? terminalAt);
     const blockedReason =
-      derived === "blocked" || derived === "failed"
+      taskFailedOrBlocked || derived === "blocked" || derived === "failed"
         ? (row.last_error_code ??
           (row.state === "blocked" ? "selection_deadline_exceeded" : String(row.task_status)))
         : null;
@@ -704,7 +721,7 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         {
           stage: "collecting",
           status:
-            derived === "blocked" && !collectingAt
+            (taskFailedOrBlocked || derived === "blocked") && !collectingAt
               ? "blocked"
               : collectingAt
                 ? "completed"
@@ -716,7 +733,7 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         {
           stage: "parsing",
           status:
-            derived === "blocked" && Boolean(collectingAt) && !parsingAt
+            (taskFailedOrBlocked || derived === "blocked") && Boolean(collectingAt) && !parsingAt
               ? "blocked"
               : parsingAt
                 ? "completed"

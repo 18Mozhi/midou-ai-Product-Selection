@@ -2095,7 +2095,7 @@
         "/api/v1/selection-journeys/{id}",
         "/api/v1/selection-journeys/{id}/decisions"
       ],
-      "scope": "ordinary member real keyword ASIN or product URL journey through enabled google_news_search; browser resumes the persisted journey by id, compares up to 20 scoped evidence candidates, and only an explicit adopt of one selected candidate generates or reuses an opportunity",
+      "scope": "ordinary member real keyword ASIN or product URL journey through enabled and currently compliant google_news_search; non-compliant public sources fail before task or outbox creation, required failed or blocked subqueries cannot become succeeded_empty, the browser resumes the persisted journey by id, compares up to 20 scoped evidence candidates, and only an explicit adopt of one selected candidate generates or reuses an opportunity",
       "thresholds": {
         "createApiMs": 3000,
         "acceptedVisibleMs": 15000,
