@@ -382,6 +382,7 @@ async function createEvidenceTask() {
     expected_version: detail.value.version,
   });
   if (result) {
+    await load();
     message.value = result.created
       ? "补数任务已创建；完成任务后系统会自动重新评分。"
       : "该机会已有补数任务，已保留原任务与审计链。";
@@ -579,7 +580,7 @@ watch(
     route.query.page,
   ],
   () => {
-    if (props.opportunityId) return;
+    if (props.opportunityId || route.path !== "/opportunities") return;
     syncListRoute();
     queueLoad();
   },
