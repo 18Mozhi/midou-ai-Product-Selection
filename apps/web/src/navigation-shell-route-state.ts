@@ -112,6 +112,8 @@ export function surfaceProps(input: {
         opportunityId: ids.opportunityId || undefined,
         capabilities: input.capabilities,
       };
+    case "score-rule-console":
+      return { ...common, capabilities: input.capabilities };
     case "competitor-monitor":
       return { ...common, mode: input.path.endsWith("/monitoring-rules") ? "rules" : "list" };
     case "cost-rule-console":

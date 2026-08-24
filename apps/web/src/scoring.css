@@ -110,6 +110,16 @@
 .score-rule-list article b[data-status="pending_approval"] {
   color: var(--so-warning);
 }
+.score-rule-list article b[data-status="approved"] {
+  color: var(--so-info);
+}
+.score-rule-list article b[data-status="rejected"],
+.score-rule-list article b[data-status="rolled_back"] {
+  color: var(--so-danger);
+}
+.score-rule-list article b[data-status="retired"] {
+  color: var(--so-text-muted);
+}
 .score-rule-list nav {
   display: flex;
   flex-wrap: wrap;
@@ -121,6 +131,14 @@
   border-radius: 8px;
   color: var(--so-text);
   background: var(--so-panel);
+}
+.score-rule-readonly-note {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.score-rules-hero > .score-rule-readonly-note {
+  max-width: 220px;
+  text-align: right;
 }
 .score-weight-list {
   display: grid;
@@ -177,6 +195,40 @@
   color: var(--so-text);
   background: var(--so-bg);
 }
+.score-form-summary,
+.score-dialog-error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: 13px;
+}
+.score-form-summary {
+  color: var(--so-warning);
+  background: color-mix(in srgb, var(--so-warning) 9%, transparent);
+}
+.score-form-summary[data-valid="true"] {
+  color: var(--so-success);
+  background: color-mix(in srgb, var(--so-success) 9%, transparent);
+}
+.score-dialog-error {
+  border: 1px solid color-mix(in srgb, var(--so-danger) 50%, var(--so-border));
+  color: var(--so-danger);
+  background: color-mix(in srgb, var(--so-danger) 9%, var(--so-bg-elevated));
+}
+.score-dialog-error code {
+  overflow-wrap: anywhere;
+}
+.score-dialog-error p {
+  margin: 0 0 10px;
+}
+.score-dialog-error button {
+  min-height: 36px;
+  padding: 7px 11px;
+  border: 1px solid currentcolor;
+  border-radius: 8px;
+  color: inherit;
+  background: transparent;
+}
 .score-preview-modal > section {
   width: min(980px, 100%);
   max-height: calc(100vh - 36px);
@@ -228,11 +280,17 @@
   border-radius: 10px;
   background: var(--so-panel-soft);
 }
+.score-preview-table article > div {
+  min-width: 0;
+}
 .score-preview-table strong,
 .score-preview-table small,
 .score-preview-table b,
 .score-preview-table em {
   display: block;
+}
+.score-preview-table b {
+  overflow-wrap: anywhere;
 }
 .score-preview-table em {
   color: var(--so-warning);

@@ -328,7 +328,7 @@
       "breadcrumb": ["洞察与选品", "选品机会", "评分规则"],
       "shell": "member",
       "view": null,
-      "capabilities": [],
+      "capabilities": ["opportunity:read"],
       "notFound": false,
       "surface": "score-rule-console",
       "cachePolicy": "reset_on_scope",

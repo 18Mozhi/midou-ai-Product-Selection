@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import UiStatePanel from "./UiStatePanel.vue";
+import "../opportunities.css";
 import "../scoring.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type Action = "submit" | "approve" | "reject" | "activate" | "rollback";
@@ -56,7 +58,9 @@ interface RulePreview {
   };
   read_only: true;
 }
-const props = defineProps<{ apiBaseUrl: string }>(),
+const props = withDefaults(defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(), {
+    capabilities: () => [],
+  }),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   rules = ref<Rule[]>([]),
@@ -64,13 +68,16 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   message = ref(""),
   busy = ref(false),
   showCreate = ref(false),
+  createError = ref(""),
   showAction = ref(false),
+  actionError = ref(""),
   selected = ref<Rule | null>(null),
   action = ref<Action>("submit"),
   reason = ref(""),
   targetRuleId = ref(""),
   showPreview = ref(false),
   previewing = ref(false),
+  previewError = ref(""),
   previewRule = ref<Rule | null>(null),
   preview = ref<RulePreview | null>(null);
 const definitions = [
@@ -83,19 +90,88 @@ const definitions = [
   ["risk", "风险"],
   ["data_quality", "数据质量"],
 ];
-const form = reactive({
-  version_code: "",
-  name: "",
-  recommend_min: null as number | null,
-  observe_min: null as number | null,
-  dimensions: definitions.map(([code, label]) => ({
+const blankDimensions = () =>
+  definitions.map(([code, label]) => ({
     code,
     label,
     weight: 0,
     required: false,
     evidence_group: "other",
-  })),
+  }));
+const form = reactive({
+  version_code: "",
+  name: "",
+  recommend_min: null as number | null,
+  observe_min: null as number | null,
+  dimensions: blankDimensions(),
 });
+const capabilities = computed(() => new Set(props.capabilities)),
+  canDecide = computed(() => capabilities.value.has("opportunity:decide")),
+  canApprove = computed(() => capabilities.value.has("opportunity:approve")),
+  activeDimensions = computed(() => form.dimensions.filter((item) => item.weight > 0)),
+  weightTotal = computed(
+    () =>
+      Math.round(activeDimensions.value.reduce((sum, item) => sum + item.weight, 0) * 100) / 100,
+  ),
+  createValidation = computed(() => {
+    if (!form.version_code.trim() || !form.name.trim()) return "请填写版本代码和规则名称。";
+    if (form.recommend_min == null || form.observe_min == null) return "请填写推荐与观察阈值。";
+    if (
+      form.recommend_min < 0 ||
+      form.recommend_min > 100 ||
+      form.observe_min < 0 ||
+      form.observe_min > 100
+    )
+      return "推荐与观察阈值必须在 0 到 100 之间。";
+    if (form.recommend_min <= form.observe_min) return "推荐阈值必须大于观察阈值。";
+    if (activeDimensions.value.length < 2) return "至少配置 2 个权重大于 0 的评分维度。";
+    if (weightTotal.value !== 100) return `当前权重合计 ${weightTotal.value}%，必须为 100%。`;
+    if (!activeDimensions.value.some((item) => item.required))
+      return "至少将 1 个已启用维度标记为必填。";
+    return "";
+  }),
+  statusLabels: Record<string, string> = {
+    draft: "草稿",
+    pending_approval: "待审批",
+    approved: "已批准",
+    active: "已启用",
+    rejected: "已拒绝",
+    retired: "已停用",
+    rolled_back: "已回滚",
+  },
+  recommendationLabels: Record<string, string> = {
+    recommend: "推荐",
+    observe: "观察",
+    insufficient_data: "数据不足",
+  },
+  lifecycleLabels: Record<string, string> = {
+    candidate: "候选",
+    validating: "验证中",
+    ready: "可决策",
+    adopted: "已采纳",
+    observing: "观察中",
+    rejected: "已驳回",
+    archived: "已归档",
+  },
+  actionLabels: Record<Action, string> = {
+    submit: "提交审批",
+    approve: "批准",
+    reject: "拒绝",
+    activate: "启用",
+    rollback: "回滚",
+  };
+const { dialogElement: createDialogElement, handleCancel: cancelCreate } = useModalDialog(
+    () => showCreate.value,
+    () => closeCreate(),
+  ),
+  { dialogElement: previewDialogElement, handleCancel: cancelPreview } = useModalDialog(
+    () => showPreview.value && Boolean(previewRule.value),
+    () => closePreview(),
+  ),
+  { dialogElement: actionDialogElement, handleCancel: cancelAction } = useModalDialog(
+    () => showAction.value && Boolean(selected.value),
+    () => closeAction(),
+  );
 const stateFrom = (kind: ApiFailureKind): State =>
     kind === "expired"
       ? "expired"
@@ -129,9 +205,25 @@ async function load() {
     } else state.value = "blocked";
   }
 }
-async function post(path: string, body: unknown) {
+const scoreRuleErrorLabels: Record<string, string> = {
+    score_rule_version_conflict: "版本代码已存在。",
+    score_rule_revision_conflict: "规则已被其他操作更新。",
+    score_rule_transition_invalid: "当前规则状态不允许此操作。",
+    score_rule_not_found: "规则不存在或不属于当前工作区。",
+    score_rule_weight_invalid: "维度权重合计必须为 100。",
+    score_rule_threshold_invalid: "推荐与观察阈值无效。",
+    score_rule_action_invalid: "规则动作无效。",
+    score_rule_rollback_target_required: "请选择要恢复的历史规则版本。",
+    score_rule_rollback_target_invalid: "所选历史规则版本不可用于回滚。",
+    score_rule_preview_status_invalid: "当前规则状态不能预览发布影响。",
+    score_rule_preview_pagination_invalid: "预览页码或每页数量无效。",
+  },
+  apiErrorText = (error: ApiClientError) =>
+    `${scoreRuleErrorLabels[error.code] ?? error.userMessage} ${error.actionHint}`.trim();
+async function post(path: string, body: unknown, setError: (value: string) => void) {
+  if (busy.value) return null;
   busy.value = true;
-  message.value = "";
+  setError("");
   try {
     const response = await request<any>(path, { method: "POST", body });
     requestId.value = response.request_id;
@@ -139,44 +231,77 @@ async function post(path: string, body: unknown) {
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
-      message.value = error.actionHint;
+      setError(apiErrorText(error));
       return null;
     }
-    message.value = "依赖暂不可用，未写入状态。";
+    setError("依赖暂不可用，未写入状态。请检查网络后重试。");
     return null;
   } finally {
     busy.value = false;
   }
 }
+function resetForm() {
+  form.version_code = "";
+  form.name = "";
+  form.recommend_min = null;
+  form.observe_min = null;
+  form.dimensions.splice(0, form.dimensions.length, ...blankDimensions());
+}
+function openCreate() {
+  createError.value = "";
+  showCreate.value = true;
+}
+function closeCreate() {
+  showCreate.value = false;
+  createError.value = "";
+}
+function closePreview() {
+  showPreview.value = false;
+  previewError.value = "";
+}
+function closeAction() {
+  showAction.value = false;
+  actionError.value = "";
+}
 async function create() {
+  if (!canDecide.value || createValidation.value) return;
   const dimensions = form.dimensions.filter((item) => item.weight > 0),
-    result = await post("/opportunity-score-rules", {
-      version_code: form.version_code,
-      name: form.name,
-      dimensions,
-      thresholds: {
-        recommend_min: form.recommend_min,
-        observe_min: form.observe_min,
+    result = await post(
+      "/opportunity-score-rules",
+      {
+        version_code: form.version_code,
+        name: form.name,
+        dimensions,
+        thresholds: {
+          recommend_min: form.recommend_min,
+          observe_min: form.observe_min,
+        },
       },
-    });
+      (value) => (createError.value = value),
+    );
   if (result) {
-    showCreate.value = false;
+    closeCreate();
+    resetForm();
     await load();
     message.value = "草稿已创建；发布前仍需提交、审批和启用。";
   }
 }
 function begin(rule: Rule, value: Action) {
+  if ((value === "submit" && !canDecide.value) || (value !== "submit" && !canApprove.value)) return;
   selected.value = rule;
   action.value = value;
   reason.value = "";
   targetRuleId.value = "";
+  actionError.value = "";
   showAction.value = true;
 }
 async function loadPreview(rule: Rule, page = 1) {
+  if (!canApprove.value || previewing.value) return;
   previewRule.value = rule;
   showPreview.value = true;
   previewing.value = true;
-  message.value = "";
+  previewError.value = "";
+  preview.value = null;
   try {
     const response = await request<RulePreview>(
       `/opportunity-score-rules/${rule.id}/preview?page=${page}&page_size=20`,
@@ -186,8 +311,8 @@ async function loadPreview(rule: Rule, page = 1) {
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
-      message.value = error.actionHint;
-    } else message.value = "预览依赖暂不可用；规则和机会状态均未改变。";
+      previewError.value = apiErrorText(error);
+    } else previewError.value = "预览依赖暂不可用；规则和机会状态均未改变。";
   } finally {
     previewing.value = false;
   }
@@ -200,16 +325,20 @@ const scoreText = (value: number | null) => (value == null ? "数据不足" : va
     value == null ? "不可比较" : `${value > 0 ? "+" : ""}${value.toFixed(2)}`;
 async function runAction() {
   if (!selected.value) return;
-  const result = await post(`/opportunity-score-rules/${selected.value.id}/actions`, {
-    action: action.value,
-    reason: reason.value,
-    expected_revision: selected.value.revision,
-    ...(action.value === "rollback" ? { target_rule_id: targetRuleId.value } : {}),
-  });
+  const result = await post(
+    `/opportunity-score-rules/${selected.value.id}/actions`,
+    {
+      action: action.value,
+      reason: reason.value,
+      expected_revision: selected.value.revision,
+      ...(action.value === "rollback" ? { target_rule_id: targetRuleId.value } : {}),
+    },
+    (value) => (actionError.value = value),
+  );
   if (result) {
-    showAction.value = false;
+    closeAction();
     await load();
-    message.value = `规则动作 ${action.value} 已审计记录。`;
+    message.value = `${actionLabels[action.value]}已完成并写入审计记录。`;
   }
 }
 onMounted(() => void load());
@@ -222,7 +351,8 @@ onMounted(() => void load());
         <h2>评分规则引擎</h2>
         <span>权重、阈值、证据覆盖与计算结果均版本化；历史结果不会被新规则或回滚改写。</span>
       </div>
-      <button type="button" @click="showCreate = true">＋ 新建规则草稿</button>
+      <button v-if="canDecide" type="button" @click="openCreate">＋ 新建规则草稿</button>
+      <span v-else class="score-rule-readonly-note">当前身份仅可查看规则。</span>
     </header>
     <p v-if="message" class="opportunity-message" role="status">
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
@@ -236,7 +366,10 @@ onMounted(() => void load());
     <section v-else-if="state === 'empty'" class="score-empty">
       <strong>尚无评分规则</strong
       ><span>智能选品不提供虚构默认权重；请创建、审批并启用明确版本。</span
-      ><button type="button" @click="showCreate = true">创建首个草稿</button>
+      ><button v-if="canDecide" type="button" @click="openCreate">创建首个草稿</button
+      ><span v-else class="score-rule-readonly-note"
+        >请联系具备规则提交权限的成员创建首个草稿。</span
+      >
     </section>
     <section v-else class="score-rule-list">
       <header>
@@ -259,33 +392,48 @@ onMounted(() => void load());
           >
         </div>
         <div>
-          <b :data-status="rule.status">{{ rule.status }}</b
+          <b :data-status="rule.status">{{ statusLabels[rule.status] ?? rule.status }}</b
           ><small>审批 {{ time(rule.approved_at) }}</small>
         </div>
         <nav>
           <button
-            v-if="['draft', 'pending_approval', 'approved'].includes(rule.status)"
+            v-if="canApprove && ['draft', 'pending_approval', 'approved'].includes(rule.status)"
             type="button"
             @click="loadPreview(rule)"
           >
             预览影响
           </button>
-          <button v-if="rule.status === 'draft'" @click="begin(rule, 'submit')">提交</button
-          ><button v-if="rule.status === 'pending_approval'" @click="begin(rule, 'approve')">
+          <button v-if="canDecide && rule.status === 'draft'" @click="begin(rule, 'submit')">
+            提交</button
+          ><button
+            v-if="canApprove && rule.status === 'pending_approval'"
+            @click="begin(rule, 'approve')"
+          >
             批准</button
-          ><button v-if="rule.status === 'pending_approval'" @click="begin(rule, 'reject')">
+          ><button
+            v-if="canApprove && rule.status === 'pending_approval'"
+            @click="begin(rule, 'reject')"
+          >
             拒绝</button
-          ><button v-if="rule.status === 'approved'" @click="begin(rule, 'activate')">启用</button
-          ><button v-if="rule.status === 'active'" @click="begin(rule, 'rollback')">回滚</button>
+          ><button v-if="canApprove && rule.status === 'approved'" @click="begin(rule, 'activate')">
+            启用</button
+          ><button v-if="canApprove && rule.status === 'active'" @click="begin(rule, 'rollback')">
+            回滚
+          </button>
+          <small
+            v-if="rule.status === 'pending_approval' && !canApprove"
+            class="score-rule-readonly-note"
+            >等待有审批权限的成员处理</small
+          >
         </nav>
       </article>
     </section>
-    <div
+    <dialog
       v-if="showCreate"
+      ref="createDialogElement"
       class="opportunity-modal"
-      role="dialog"
-      aria-modal="true"
       aria-labelledby="score-rule-create-title"
+      @cancel="cancelCreate"
     >
       <form @submit.prevent="create">
         <header>
@@ -293,7 +441,7 @@ onMounted(() => void load());
             <p>不使用默认数值</p>
             <h3 id="score-rule-create-title">新建评分规则草稿</h3>
           </div>
-          <button type="button" aria-label="关闭" @click="showCreate = false">×</button>
+          <button type="button" aria-label="关闭" @click="closeCreate">×</button>
         </header>
         <div>
           <label
@@ -330,35 +478,45 @@ onMounted(() => void load());
             ><label
               >权重<input
                 v-model.number="item.weight"
+                :aria-label="`${item.label}权重`"
                 type="number"
                 min="0"
                 max="100"
                 step="0.01" /></label
             ><label
-              >证据组<select v-model="item.evidence_group">
+              >证据组<select v-model="item.evidence_group" :aria-label="`${item.label}证据组`">
                 <option value="market">市场</option>
                 <option value="competition">竞争</option>
                 <option value="cost">成本</option>
                 <option value="other">其他</option>
               </select></label
-            ><label><input v-model="item.required" type="checkbox" /> 必填</label>
+            ><label
+              ><input v-model="item.required" type="checkbox" :aria-label="`${item.label}必填`" />
+              必填</label
+            >
           </div>
         </section>
+        <p class="score-form-summary" :data-valid="!createValidation" role="status">
+          {{ createValidation || `权重合计 ${weightTotal}%，可以保存草稿。` }}
+        </p>
+        <p v-if="createError" class="score-dialog-error" role="alert">
+          {{ createError }} <code v-if="requestId">{{ requestId }}</code>
+        </p>
         <aside>规则不会自动生效；需持有相应权限的人员提交、批准并启用。</aside>
         <footer>
-          <button type="button" @click="showCreate = false">取消</button
-          ><button type="submit" :disabled="busy">
+          <button type="button" @click="closeCreate">取消</button
+          ><button type="submit" :disabled="busy || Boolean(createValidation)">
             {{ busy ? "保存中…" : "保存草稿" }}
           </button>
         </footer>
       </form>
-    </div>
-    <div
+    </dialog>
+    <dialog
       v-if="showPreview && previewRule"
+      ref="previewDialogElement"
       class="opportunity-modal score-preview-modal"
-      role="dialog"
-      aria-modal="true"
       aria-labelledby="score-rule-preview-title"
+      @cancel="cancelPreview"
     >
       <section>
         <header>
@@ -366,9 +524,15 @@ onMounted(() => void load());
             <p>只读试算 · 不写入评分运行</p>
             <h3 id="score-rule-preview-title">发布影响预览 · {{ previewRule.version_code }}</h3>
           </div>
-          <button type="button" aria-label="关闭" @click="showPreview = false">×</button>
+          <button type="button" aria-label="关闭" @click="closePreview">×</button>
         </header>
         <p v-if="previewing" role="status">正在按当前持久化输入试算…</p>
+        <div v-else-if="previewError" class="score-dialog-error" role="alert">
+          <p>
+            {{ previewError }} <code v-if="requestId">{{ requestId }}</code>
+          </p>
+          <button type="button" @click="loadPreview(previewRule)">重试预览</button>
+        </div>
         <template v-else-if="preview">
           <aside>
             当前页 {{ preview.items.length }} / 共
@@ -401,7 +565,7 @@ onMounted(() => void load());
               <div>
                 <strong>{{ item.opportunity_name }}</strong>
                 <small
-                  >{{ item.lifecycle_status }} · 当前规则
+                  >{{ lifecycleLabels[item.lifecycle_status] ?? item.lifecycle_status }} · 当前规则
                   {{ item.current_rule_version ?? "未评分" }}</small
                 >
               </div>
@@ -416,7 +580,11 @@ onMounted(() => void load());
                 ><b :data-delta="item.score_delta">{{ deltaText(item.score_delta) }}</b>
               </div>
               <div>
-                <small>结论</small><b>{{ item.projected_recommendation_status }}</b>
+                <small>结论</small
+                ><b>{{
+                  recommendationLabels[item.projected_recommendation_status] ??
+                  item.projected_recommendation_status
+                }}</b>
                 <em v-if="item.recommendation_changed">有变化</em>
               </div>
               <div>
@@ -443,21 +611,23 @@ onMounted(() => void load());
           </footer>
         </template>
       </section>
-    </div>
-    <div
+    </dialog>
+    <dialog
       v-if="showAction && selected"
+      ref="actionDialogElement"
       class="opportunity-modal"
-      role="dialog"
-      aria-modal="true"
       aria-labelledby="score-rule-action-title"
+      @cancel="cancelAction"
     >
       <form @submit.prevent="runAction">
         <header>
           <div>
             <p>留痕状态变更</p>
-            <h3 id="score-rule-action-title">{{ action }} · {{ selected.version_code }}</h3>
+            <h3 id="score-rule-action-title">
+              {{ actionLabels[action] }} · {{ selected.version_code }}
+            </h3>
           </div>
-          <button type="button" aria-label="关闭" @click="showAction = false">×</button>
+          <button type="button" aria-label="关闭" @click="closeAction">×</button>
         </header>
         <label>原因（必填）<textarea v-model="reason" required maxlength="1000"></textarea></label
         ><label v-if="action === 'rollback'"
@@ -472,12 +642,15 @@ onMounted(() => void load());
             </option>
           </select></label
         >
+        <p v-if="actionError" class="score-dialog-error" role="alert">
+          {{ actionError }} <code v-if="requestId">{{ requestId }}</code>
+        </p>
         <aside>状态变化和原因会写入审计与事务消息；历史评分运行保持不变。</aside>
         <footer>
-          <button type="button" @click="showAction = false">取消</button
-          ><button type="submit" :disabled="busy">确认 {{ action }}</button>
+          <button type="button" @click="closeAction">取消</button
+          ><button type="submit" :disabled="busy">确认{{ actionLabels[action] }}</button>
         </footer>
       </form>
-    </div>
+    </dialog>
   </section>
 </template>

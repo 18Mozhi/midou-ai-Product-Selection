@@ -25,7 +25,16 @@ const opportunityId = "00000000-0000-4000-8000-000000000434",
     },
     { code: "profit", label: "利润", weight: 30, required: true, evidence_group: "cost" },
   ];
-async function navigation(page: Page) {
+async function navigation(
+  page: Page,
+  capabilities = [
+    "task:read",
+    "trend:read",
+    "opportunity:read",
+    "opportunity:decide",
+    "opportunity:approve",
+  ],
+) {
   await page.route("**/api/v1/me/navigation?shell=member", (route) =>
     route.fulfill({
       json: envelope({
@@ -33,13 +42,7 @@ async function navigation(page: Page) {
         organization_id: "00000000-0000-4000-8000-000000000421",
         workspace_id: "00000000-0000-4000-8000-000000000422",
         roles: ["selection_manager"],
-        capabilities: [
-          "task:read",
-          "trend:read",
-          "opportunity:read",
-          "opportunity:decide",
-          "opportunity:approve",
-        ],
+        capabilities,
         platform_roles: [],
         platform_capabilities: [],
         guard_reason: "navigation_member_allowed",
@@ -134,16 +137,49 @@ test("M04-03.A07/A08/A09/A15 score rule versions support audited responsive work
   await page.getByRole("button", { name: "预览影响" }).click();
   const previewDialog = page.getByRole("dialog", { name: /发布影响预览/ });
   await expect(previewDialog).toBeVisible();
+  await expect(previewDialog).toHaveJSProperty("open", true);
   await expect(previewDialog.getByText("便携式智能净水杯机会")).toBeVisible();
   await expect(previewDialog.getByText("-1.80")).toBeVisible();
-  await previewDialog.getByRole("button", { name: "关闭" }).click();
+  await page.keyboard.press("Escape");
+  await expect(previewDialog).toBeHidden();
+  await expect(page.getByRole("button", { name: "预览影响" })).toBeFocused();
   await page.getByRole("button", { name: "提交" }).click();
   const dialog = page.getByRole("dialog");
   await dialog.getByLabel("原因（必填）").fill("提交候选权重等待审批");
-  await dialog.getByRole("button", { name: "确认 submit" }).click();
-  await expect(page.getByText("规则动作 submit 已审计记录。")).toBeVisible();
-  await expect(page.getByText("pending_approval", { exact: true })).toBeVisible();
+  await dialog.getByRole("button", { name: "确认提交审批" }).click();
+  await expect(page.getByText("提交审批已完成并写入审计记录。")).toBeVisible();
+  await expect(page.getByText("待审批", { exact: true })).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
+});
+test("M04-03 score rule approval controls follow real navigation capabilities", async ({
+  page,
+}) => {
+  await navigation(page, ["opportunity:read", "opportunity:decide"]);
+  await page.route("**/api/v1/opportunity-score-rules", (route) =>
+    route.fulfill({
+      json: envelope([
+        {
+          id: draftId,
+          version_code: "org-v2",
+          name: "等待审批的评分规则",
+          status: "pending_approval",
+          dimensions,
+          thresholds: { recommend_min: 78, observe_min: 58 },
+          revision: 2,
+          submitted_at: "2026-08-07T11:10:00.000Z",
+          approved_at: null,
+          activated_at: null,
+          updated_at: "2026-08-07T11:10:00.000Z",
+        },
+      ]),
+    }),
+  );
+
+  await page.goto("/opportunities/scoring-rules");
+  await expect(page.getByText("等待有审批权限的成员处理")).toBeVisible();
+  await expect(page.getByRole("button", { name: "预览影响" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "批准" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "拒绝" })).toHaveCount(0);
 });
 test("M04-03.A07/A08/A15 opportunity score explanation exposes inputs evidence missing and confidence", async ({
   page,
