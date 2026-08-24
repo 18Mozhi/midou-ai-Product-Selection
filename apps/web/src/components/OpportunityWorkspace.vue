@@ -7,6 +7,8 @@ import OpportunityDecisionPanel from "./OpportunityDecisionPanel.vue";
 import OpportunityFeedbackPanel from "./OpportunityFeedbackPanel.vue";
 import OpportunityLineagePanel from "./OpportunityLineagePanel.vue";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
+import OpportunityDetailInsights from "./OpportunityDetailInsights.vue";
+import OpportunityAiPanel from "./OpportunityAiPanel.vue";
 import OpportunityWorkspaceDialogs from "./OpportunityWorkspaceDialogs.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
@@ -41,6 +43,9 @@ const props = defineProps<{
   detail = ref<OpportunityTypes.OpportunityDetail | null>(null),
   profit = ref<OpportunityTypes.OpportunityProfitAnalysis | null>(null),
   aiAnalyses = ref<any[]>([]),
+  aiLoadState = ref<OpportunityTypes.OpportunityPartialLoadState>("loading"),
+  downstreamLoadState = ref<OpportunityTypes.OpportunityPartialLoadState>("loading"),
+  competitorItems = ref<OpportunityTypes.OpportunityCompetitorSummary[]>([]),
   total = ref(0),
   page = ref(1),
   requestId = ref(""),
@@ -115,8 +120,20 @@ const canDecide = computed(() => props.capabilities?.includes("opportunity:decid
 const canManageCompetitors = computed(
   () => props.capabilities?.includes("competitor:manage") ?? false,
 );
+const canReadCompetitors = computed(
+  () =>
+    props.capabilities?.includes("competitor:read") ||
+    props.capabilities?.includes("competitor:manage") ||
+    false,
+);
 const canManageSuppliers = computed(
   () => props.capabilities?.includes("supplier_quote:manage") ?? false,
+);
+const canReadSourcing = computed(
+  () =>
+    props.capabilities?.includes("sourcing:read") ||
+    props.capabilities?.includes("supplier_quote:manage") ||
+    false,
 );
 const canConfirmCost = computed(() => props.capabilities?.includes("cost:confirm") ?? false);
 const returnPath = computed(() => safeOpportunityReturnPath(route.query.from));
@@ -141,11 +158,47 @@ async function read(path: string) {
   }
 }
 async function loadAi() {
+  aiLoadState.value = "loading";
   try {
     const response = await request<any[]>(`/opportunities/${props.opportunityId}/ai-analyses`);
     aiAnalyses.value = Array.isArray(response.data) ? response.data : [];
-  } catch {
-    aiAnalyses.value = [];
+    aiLoadState.value = "ready";
+  } catch (error) {
+    aiLoadState.value = "error";
+    if (error instanceof ApiClientError) requestId.value = error.requestId;
+  }
+}
+async function loadDownstream() {
+  downstreamLoadState.value = "loading";
+  try {
+    const [competitorsResponse, sourcingResponse] = await Promise.all([
+        canReadCompetitors.value
+          ? request<OpportunityTypes.OpportunityCompetitorSummary[]>("/competitors")
+          : Promise.resolve({ data: [] as OpportunityTypes.OpportunityCompetitorSummary[] }),
+        canReadSourcing.value
+          ? request<any[]>("/sourcing/searches")
+          : Promise.resolve({ data: [] as any[] }),
+      ]),
+      competitors = competitorsResponse.data.filter(
+        (item) => item.opportunity_id === props.opportunityId,
+      ),
+      searches = sourcingResponse.data.filter(
+        (item: any) => item.input_type === "opportunity" && item.input_ref === props.opportunityId,
+      );
+    competitorItems.value = competitors;
+    downstream.value = {
+      competitors: competitors.length,
+      snapshots: competitors.reduce((sum, item) => sum + Number(item.snapshot_count ?? 0), 0),
+      searches: searches.length,
+      suppliers: searches.reduce(
+        (sum: number, item: any) => sum + Number(item.candidate_count ?? 0),
+        0,
+      ),
+    };
+    downstreamLoadState.value = "ready";
+  } catch (error) {
+    downstreamLoadState.value = "error";
+    if (error instanceof ApiClientError) requestId.value = error.requestId;
   }
 }
 async function load() {
@@ -166,39 +219,7 @@ async function load() {
       } else {
         costReviewerOptions.value = [];
       }
-      await loadAi();
-      try {
-        const [competitorsResponse, sourcingResponse] = await Promise.all([
-            request<any[]>("/competitors"),
-            request<any[]>("/sourcing/searches"),
-          ]),
-          competitors = competitorsResponse.data.filter(
-            (item: any) => item.opportunity_id === props.opportunityId,
-          ),
-          searches = sourcingResponse.data.filter(
-            (item: any) =>
-              item.input_type === "opportunity" && item.input_ref === props.opportunityId,
-          );
-        downstream.value = {
-          competitors: competitors.length,
-          snapshots: competitors.reduce(
-            (sum: number, item: any) => sum + Number(item.snapshot_count ?? 0),
-            0,
-          ),
-          searches: searches.length,
-          suppliers: searches.reduce(
-            (sum: number, item: any) => sum + Number(item.candidate_count ?? 0),
-            0,
-          ),
-        };
-      } catch {
-        downstream.value = {
-          competitors: 0,
-          snapshots: 0,
-          searches: 0,
-          suppliers: 0,
-        };
-      }
+      await Promise.all([loadAi(), loadDownstream()]);
       state.value = "ready";
       return;
     }
@@ -682,11 +703,12 @@ watch(
         </header>
         <section class="opportunity-recommendation">
           <div>
-            <span>推荐结论</span><strong>{{ statusLabel(detail.recommendation_status) }}</strong
+            <span>推荐结论</span
+            ><strong>{{ opportunityStatusLabel(detail.recommendation_status) }}</strong
             ><small
               >规则版本：{{ detail.score_rule_version ?? "尚未计算" }} · 置信度：{{
-                statusLabel(detail.confidence.status)
-              }}</small
+                opportunityStatusLabel(detail.confidence.status)
+              }}{{ detail.confidence.score == null ? "" : `（${detail.confidence.score}）` }}</small
             >
           </div>
         </section>
@@ -732,94 +754,25 @@ watch(
             {{ item[1] }}
           </button>
         </nav>
-        <section v-if="tab === 'overview'" class="opportunity-overview">
-          <article class="opportunity-downstream">
-            <p>下游补全</p>
-            <h4>竞品与供应链数据</h4>
-            <strong>{{ downstream.competitors + downstream.suppliers }} 项</strong
-            ><span
-              >{{ downstream.competitors }} 个竞品 · {{ downstream.snapshots }} 个快照 ·
-              {{ downstream.suppliers }} 个供应商候选</span
-            >
-            <footer>
-              <button
-                v-if="canManageCompetitors"
-                type="button"
-                :disabled="busy"
-                @click="discoverCompetitors"
-                >采集竞品</button
-              ><button
-                v-if="canManageSuppliers"
-                type="button"
-                :disabled="busy"
-                @click="discoverSuppliers"
-                >采集供应商</button
-              ><RouterLink to="/competitors">查看竞品详情</RouterLink
-              ><RouterLink to="/sourcing">查看供应链详情</RouterLink>
-            </footer>
-          </article>
-          <article class="opportunity-score">
-            <p>评分解释</p>
-            <h4>机会评分解读</h4>
-            <strong>{{ detail.overall_score ?? "数据不足" }}</strong
-            ><span v-if="detail.latest_score_run"
-              >规则 {{ detail.score_rule_version }} · 覆盖
-              {{ detail.latest_score_run.coverage_percent }}% ·
-              {{ freshness(detail.latest_score_run.scored_at) }}</span
-            ><span v-else>尚无评分运行；缺失输入不会用默认值补齐。</span>
-            <dl>
-              <div v-for="item in detail.score_components" :key="item.dimension_code">
-                <dt>{{ item.dimension_code }} · {{ item.weight_percent }}%</dt>
-                <dd>
-                  {{ item.input_score ?? "缺失" }}
-                  <small>{{ item.evidence_ids.length }} 条证据</small>
-                </dd>
-              </div>
-              <div v-if="!detail.score_components.length">
-                <dt>缺失项</dt>
-                <dd>尚无评分输入</dd>
-              </div>
-            </dl>
-            <aside v-if="detail.latest_score_run?.missing_fields.length">
-              缺失：{{ detail.latest_score_run.missing_fields.join("、") }}
-            </aside>
-            <footer>
-              <RouterLink to="/opportunities/scoring-rules">管理规则版本</RouterLink
-              ><button v-if="canDecide" type="button" :disabled="busy" @click="queueScore">
-                重新评分
-              </button>
-            </footer>
-          </article>
-          <article>
-            <p>证据覆盖</p>
-            <h4>证据覆盖</h4>
-            <strong>{{ detail.evidence_count }} 条 / {{ detail.source_count }} 个来源</strong
-            ><span
-              >覆盖状态：{{
-                opportunityStatusLabel(detail.coverage_status)
-              }}。市场、竞争、成本三类未齐全时不能自动推荐。</span
-            >
-          </article>
-          <article>
-            <p>利润</p>
-            <h4>利润与成本</h4>
-            <strong>{{
-              profit?.latest_run?.status === "calculated"
-                ? `${profit.latest_run.net_margin_percent}%`
-                : opportunityStatusLabel(detail.profit_status)
-            }}</strong
-            ><span v-if="profit?.latest_run?.status === 'calculated'"
-              >净利润 {{ profit.latest_run.net_profit }} {{ profit.latest_run.currency }} · 规则
-              {{ profit.latest_run.rule_version_code }}</span
-            ><span v-else>数据不足时不生成投资回报率；缺失项在利润页逐项展示。</span>
-          </article>
-          <article>
-            <p>风险</p>
-            <h4>风险</h4>
-            <strong>{{ opportunityStatusLabel(detail.risk_level) }}</strong
-            ><span>尚无适用风险输入，不以“低风险”代替未知。</span>
-          </article>
-        </section>
+        <OpportunityDetailInsights
+          v-if="['overview', 'market', 'competition', 'risk'].includes(tab)"
+          :tab="tab"
+          :detail="detail"
+          :profit="profit"
+          :downstream="downstream"
+          :downstream-state="downstreamLoadState"
+          :competitor-items="competitorItems"
+          :busy="busy"
+          :can-decide="canDecide"
+          :can-manage-competitors="canManageCompetitors"
+          :can-manage-suppliers="canManageSuppliers"
+          :can-read-competitors="canReadCompetitors"
+          :can-read-sourcing="canReadSourcing"
+          @discover-competitors="discoverCompetitors"
+          @discover-suppliers="discoverSuppliers"
+          @queue-score="queueScore"
+          @retry-downstream="loadDownstream"
+        />
         <OpportunityLineagePanel v-else-if="tab === 'lineage'" :lineage="detail.lineage" />
         <OpportunityFeedbackPanel
           v-else-if="tab === 'feedback'"
@@ -829,33 +782,6 @@ watch(
           :can-write="canDecide"
           @submit="submitOperatingFeedback"
         />
-        <section v-else-if="tab === 'market'" class="opportunity-section">
-          <p>市场证据</p>
-          <h4>市场证据</h4>
-          <strong>{{ detail.section_status.market }}</strong
-          ><span
-            >已关联 {{ detail.evidence_count }} 条趋势信号，来自
-            {{ detail.source_count }} 个真实来源。</span
-          >
-        </section>
-        <section v-else-if="tab === 'competition'" class="opportunity-section">
-          <p>竞争情况</p>
-          <h4>竞争对比</h4>
-          <strong
-            >{{ downstream.competitors }} 个竞品 · {{ downstream.snapshots }} 个真实快照</strong
-          ><span v-if="downstream.snapshots"
-            >快照已经保留价格、评分、评论、采集时间和原始证据，可进入竞品工作台查看变化历史。</span
-          ><span v-else>尚未关联竞品快照；点击下方按钮即可采集公开 Amazon 商品页。</span>
-          <footer>
-            <button
-              v-if="canManageCompetitors"
-              type="button"
-              :disabled="busy"
-              @click="discoverCompetitors"
-              >立即采集竞品</button
-            ><RouterLink to="/competitors">打开竞品监控详情</RouterLink>
-          </footer>
-        </section>
         <OpportunityProfitPanel
           v-else-if="tab === 'profit'"
           :profit="profit"
@@ -867,79 +793,16 @@ watch(
           @review-cost="reviewCost"
           @queue-profit="queueProfit"
         />
-        <section v-else-if="tab === 'risk'" class="opportunity-section">
-          <p>风险</p>
-          <h4>风险分析</h4>
-          <strong>数据不足</strong
-          ><span>合规、侵权、供应、趋势、利润和数据质量风险尚未全部评估。</span>
-        </section>
-        <section v-else-if="tab === 'ai'" class="opportunity-ai">
-          <header>
-            <div>
-              <p>智能辅助</p>
-              <h4>AI 辅助分析</h4>
-              <span>仅摘要、分类和缺失提示；输出不能替代事实、评分、利润或人工决策。</span>
-            </div>
-            <button v-if="canDecide" type="button" :disabled="busy" @click="queueAi">
-              生成新分析
-            </button>
-          </header>
-          <aside>所有内容均标记 ai_generated，并保留输入快照哈希、模型名和人工抽检状态。</aside>
-          <p v-if="!aiAnalyses.length" class="opportunity-empty-copy">
-            尚无 AI 分析；当前机会事实未被修改。
-          </p>
-          <article v-for="item in aiAnalyses" :key="item.id">
-            <header>
-              <div>
-                <b>{{ item.status }}</b
-                ><small
-                  >{{ freshness(item.created_at) }} · 输入
-                  {{ item.input_sha256.slice(0, 12) }}…</small
-                >
-              </div>
-              <em v-if="item.result"
-                >智能分析 · {{ item.result.review_status === "pending" ? "待复核" : "已复核" }}</em
-              >
-            </header>
-            <template v-if="item.result"
-              ><h5>{{ item.result.content.summary }}</h5>
-              <section>
-                <div>
-                  <strong>分类观察</strong>
-                  <p v-for="entry in item.result.content.classifications" :key="entry.label">
-                    <b>{{ entry.label }}</b
-                    >{{ entry.rationale }}<code>{{ entry.source_refs.join(" · ") }}</code>
-                  </p>
-                </div>
-                <div>
-                  <strong>缺失提示</strong>
-                  <p v-for="entry in item.result.content.missing_fields" :key="entry.field">
-                    <b>{{ entry.field }}</b
-                    >{{ entry.reason }}<code>{{ entry.source_refs.join(" · ") }}</code>
-                  </p>
-                </div>
-              </section>
-              <footer>
-                <span>模型 {{ item.result.model_name }} · 原始输出不可改写</span
-                ><template v-if="canDecide && item.result.review_status === 'pending'"
-                  ><button type="button" @click="reviewAi(item.result.id, 'approved')">
-                    抽检通过</button
-                  ><button
-                    type="button"
-                    class="reject"
-                    @click="reviewAi(item.result.id, 'rejected')"
-                  >
-                    抽检驳回
-                  </button></template
-                ><b v-else>{{ item.result.review?.notes }}</b>
-              </footer></template
-            >
-            <p v-else>
-              等待 Worker；失败时显示
-              {{ item.last_error_code || "无错误码" }}，可重新生成而不覆盖本记录。
-            </p>
-          </article>
-        </section>
+        <OpportunityAiPanel
+          v-else-if="tab === 'ai'"
+          :analyses="aiAnalyses"
+          :load-state="aiLoadState"
+          :busy="busy"
+          :can-decide="canDecide"
+          @queue="queueAi"
+          @retry="loadAi"
+          @review="reviewAi"
+        />
         <section v-else-if="tab === 'evidence'" class="opportunity-evidence">
           <header>
             <div>

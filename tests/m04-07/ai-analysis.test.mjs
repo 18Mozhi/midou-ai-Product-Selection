@@ -55,6 +55,7 @@ test("M04-07.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
       "apps/api/src/ai-analysis-routes.ts",
       "apps/worker/src/ai-analysis-worker.ts",
       "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/OpportunityAiPanel.vue",
       "apps/web/src/opportunity-ai.css",
       "config/schema.json",
       "config/env.example",
@@ -74,6 +75,7 @@ test("M04-07.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
       repo,
       routes,
       worker,
+      workspace,
       ui,
       css,
       schema,
@@ -93,6 +95,7 @@ test("M04-07.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(routes, /opportunity:read/);
   assert.match(routes, /opportunity:decide/);
   assert.match(worker, /chat\/completions[\s\S]*response_format[\s\S]*dead_letter/);
+  assert.match(workspace, /OpportunityAiPanel/);
   assert.match(ui, /AI 辅助分析[\s\S]*ai_generated[\s\S]*抽检通过/);
   assert.match(css, /@media\s*\(\s*max-width:\s*700px\s*\)/);
   assert.match(schema, /AI_RETRY_LIMIT/);

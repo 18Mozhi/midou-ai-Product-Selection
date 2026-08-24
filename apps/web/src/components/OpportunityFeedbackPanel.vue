@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { OpportunityDetail } from "./opportunity-workspace-types";
+import { opportunityStatusLabel } from "./opportunity-workspace-presentation";
 
 defineProps<{
   feedback: OpportunityDetail["operating_feedback"];
@@ -58,7 +59,7 @@ const metric = (value: number | null, suffix = "") =>
       <footer>
         评分规则 {{ feedback.calibration.score_rule_version ?? "无快照" }} · 利润规则
         {{ feedback.calibration.profit_rule_version ?? "无快照" }} ·
-        {{ feedback.calibration.decision_status_snapshot }}
+        {{ opportunityStatusLabel(feedback.calibration.decision_status_snapshot) }}
       </footer>
     </article>
     <form v-if="canWrite" @submit.prevent="$emit('submit')">
@@ -129,7 +130,11 @@ const metric = (value: number | null, suffix = "") =>
             {{ fact.returned_units }} · 交期 {{ fact.purchase_lead_time_days }} 天 · 利润
             {{ fact.actual_profit_amount }} {{ fact.currency }}</span
           >
-          <small>来源：{{ fact.source_ref }} · 决策快照：{{ fact.decision_status_snapshot }}</small>
+          <small
+            >来源：{{ fact.source_ref }} · 决策快照：{{
+              opportunityStatusLabel(fact.decision_status_snapshot)
+            }}</small
+          >
         </div>
         <details>
           <summary>审计链路</summary>

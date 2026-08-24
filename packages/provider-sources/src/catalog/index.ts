@@ -670,7 +670,20 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
           "canonical_url",
           "observed_at",
         ]
-      : ["title", "observed_at", "source_url"],
+      : code === "amazon_product"
+        ? [
+            "asin",
+            "title",
+            "price",
+            "currency",
+            "position",
+            "review_count",
+            "rating_value",
+            "availability",
+            "image_url",
+            "source_url",
+          ]
+        : ["title", "observed_at", "source_url"],
   schedule_minutes: 30,
   concurrency_limit: 1,
   timeout_ms: 20000,
@@ -680,19 +693,25 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
   retention_days: 90,
   failure_rules: ["permission_denied", "login_required", "rate_limited", "source_changed"],
   parser_version:
-    code === "1688_search" ? ALIBABA_1688_BROWSER_PARSER_VERSION : "setup-required-v1",
+    code === "1688_search"
+      ? ALIBABA_1688_BROWSER_PARSER_VERSION
+      : code === "amazon_product"
+        ? "amazon-structured-product-v2"
+        : "setup-required-v1",
   healthcheck_url: null,
   owner_label: "平台来源中心",
-  status: "disabled",
+  status: code === "amazon_product" ? "enabled" : "disabled",
   category: category as SourceCategory,
-  availability: "setup_required",
-  production_policy: "setup_required",
+  availability: code === "amazon_product" ? "manual" : "setup_required",
+  production_policy: code === "amazon_product" ? "ready_for_owner_enablement" : "setup_required",
   policy_note:
-    code === "1688_search"
-      ? "搜索、商品详情与供应商采集能力已登记；完成网页登录准备和来源检查后才能启用。"
-      : access === "authenticated_browser"
-        ? "已配置平台真实登录入口；上传 Cookie 或读取当前浏览器 Cookie 后，还需完成该平台页面解析合同才会进入自动采集，不要求官方 API Key。"
-        : "已配置平台真实公开入口；完成来源可用性检查后即可启用匿名爬虫，不要求登录或官方 API Key。",
+    code === "amazon_product"
+      ? "用户发起竞品采集时抓取公开 Amazon 商品页，不需要官方 API；价格、评分和评论只保留页面真实披露值。"
+      : code === "1688_search"
+        ? "搜索、商品详情与供应商采集能力已登记；完成网页登录准备和来源检查后才能启用。"
+        : access === "authenticated_browser"
+          ? "已配置平台真实登录入口；上传 Cookie 或读取当前浏览器 Cookie 后，还需完成该平台页面解析合同才会进入自动采集，不要求官方 API Key。"
+          : "已配置平台真实公开入口；完成来源可用性检查后即可启用匿名爬虫，不要求登录或官方 API Key。",
 }));
 export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
   {

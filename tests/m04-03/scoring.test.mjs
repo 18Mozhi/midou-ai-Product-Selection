@@ -207,6 +207,10 @@ test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       live,
       blueprint,
     ] = values;
+  const opportunityScoringUi = `${opportunityUi}\n${await readFile(
+    "apps/web/src/components/OpportunityDetailInsights.vue",
+    "utf8",
+  )}`;
   assert.match(
     up,
     /score_rules[\s\S]*opportunity_score_inputs[\s\S]*opportunity_score_jobs[\s\S]*opportunity_score_runs[\s\S]*opportunity_score_components/,
@@ -227,7 +231,7 @@ test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   );
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(consoleUi, new RegExp(state));
-  assert.match(opportunityUi, /latest_score_run[\s\S]*score_components[\s\S]*重新评分/);
+  assert.match(opportunityScoringUi, /latest_score_run[\s\S]*score_components[\s\S]*重新评分/);
   assert.match(css, /@media\s*\(\s*max-width:\s*640px\s*\)/);
   assert.match(schema, /OPPORTUNITY_SCORING_POLL_MS/);
   assert.match(env, /OPPORTUNITY_SCORING_LEASE_SECONDS/);

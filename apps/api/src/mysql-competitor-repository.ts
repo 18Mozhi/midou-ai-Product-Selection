@@ -408,13 +408,14 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
   private async amazonProvider(c: PoolConnection) {
     const [rows] = await c.query<RowDataPacket[]>(
       "SELECT id FROM providers WHERE code='amazon_product' AND status='enabled' AND access_mode='public_page' " +
-        "LIMIT 1 FOR UPDATE",
+        "AND terms_review_status='approved' AND terms_reference_url IS NOT NULL AND terms_version IS NOT NULL " +
+        "AND terms_expires_at>NOW(3) LIMIT 1 FOR UPDATE",
     );
     if (!rows[0])
       throw new CompetitorServiceError(
         "amazon_crawler_unavailable",
         409,
-        "Amazon 公开页面爬虫尚未启用，请联系平台管理员检查来源状态。",
+        "Amazon 公开页面爬虫尚未启用或条款复核已失效，请联系平台管理员检查来源状态。",
       );
     return { id: String(rows[0].id) };
   }

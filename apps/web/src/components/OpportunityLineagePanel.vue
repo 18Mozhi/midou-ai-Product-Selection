@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { durationLabel, statusLabel } from "../ui/status-labels";
+import { durationLabel } from "../ui/status-labels";
 import type { OpportunityDetail } from "./opportunity-workspace-types";
+import { opportunityStatusLabel } from "./opportunity-workspace-presentation";
 
 defineProps<{ lineage: OpportunityDetail["lineage"] }>();
 
@@ -65,7 +66,8 @@ const freshness = (value: string) =>
         <div>
           <strong>{{ node.label }}</strong>
           <small
-            >{{ freshness(node.occurred_at) }} · {{ statusLabel(node.status.split(":")[0]) }}</small
+            >{{ freshness(node.occurred_at) }} ·
+            {{ opportunityStatusLabel(node.status.split(":")[0]) }}</small
           >
           <details>
             <summary>技术链路</summary>

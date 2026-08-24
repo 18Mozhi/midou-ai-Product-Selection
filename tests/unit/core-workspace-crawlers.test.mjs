@@ -28,6 +28,10 @@ test("core workspace public crawlers are enabled without official API credential
   const amazon = BUILTIN_PROVIDER_SOURCES.find((item) => item.code === "amazon_product");
   const supplier = BUILTIN_PROVIDER_SOURCES.find((item) => item.code === "made_in_china_search");
   assert.equal(amazon?.access_mode, "public_page");
+  assert.equal(amazon?.status, "enabled");
+  assert.equal(amazon?.availability, "manual");
+  assert.equal(amazon?.parser_version, "amazon-structured-product-v2");
+  assert.ok(amazon?.fields.includes("rating_value"));
   assert.equal(supplier?.access_mode, "public_page");
   assert.equal(supplier?.availability, "manual");
   assert.equal(
@@ -302,6 +306,19 @@ test("opportunity summaries reuse crawled Amazon images and real downstream coun
   assert.match(repository, /JSON_EXTRACT\(n\.payload_json,'\$\.image_url'\)/);
   assert.match(repository, /competitor_count/);
   assert.match(repository, /supplier_candidate_count/);
+});
+
+test("core crawler entrypoints reject enabled providers whose compliance review is missing or expired", async () => {
+  const [competitor, sourcing] = await Promise.all([
+    readFile("apps/api/src/mysql-competitor-repository.ts", "utf8"),
+    readFile("apps/api/src/mysql-sourcing-repository.ts", "utf8"),
+  ]);
+  for (const repository of [competitor, sourcing]) {
+    assert.match(repository, /terms_review_status='approved'/);
+    assert.match(repository, /terms_reference_url IS NOT NULL/);
+    assert.match(repository, /terms_version IS NOT NULL/);
+    assert.match(repository, /terms_expires_at>NOW\(3\)/);
+  }
 });
 
 test("sourcing lists show opportunity names while retaining internal trace ids", async () => {

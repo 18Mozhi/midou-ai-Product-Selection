@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { statusLabel } from "../ui/status-labels";
 import OpportunityCostReviewQueue from "./OpportunityCostReviewQueue.vue";
 import type { OpportunityProfitAnalysis as ProfitAnalysis } from "./opportunity-workspace-types";
+import {
+  opportunityProfitComponentLabel,
+  opportunityStatusLabel,
+} from "./opportunity-workspace-presentation";
 
 withDefaults(
   defineProps<{
@@ -56,7 +59,7 @@ const inputLabel = (value: string) =>
       :data-status="profit.latest_run.status"
     >
       <article>
-        <small>状态</small><strong>{{ statusLabel(profit.latest_run.status) }}</strong
+        <small>状态</small><strong>{{ opportunityStatusLabel(profit.latest_run.status) }}</strong
         ><span>规则 {{ profit.latest_run.rule_version_code }}</span>
       </article>
       <article>
@@ -92,7 +95,7 @@ const inputLabel = (value: string) =>
         :data-missing="Boolean(item.missing_reason)"
       >
         <header>
-          <strong>{{ item.component_type }}</strong
+          <strong>{{ opportunityProfitComponentLabel(item.component_type) }}</strong
           ><b>{{ item.converted_amount ?? "缺失" }} {{ item.target_currency ?? "" }}</b>
         </header>
         <span>原始 {{ item.source_amount ?? "—" }} {{ item.source_currency ?? "" }}</span

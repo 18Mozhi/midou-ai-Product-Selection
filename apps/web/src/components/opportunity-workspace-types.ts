@@ -1,6 +1,26 @@
 export type OpportunityWorkspaceState =
   "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 
+export type OpportunityPartialLoadState = "loading" | "ready" | "error";
+
+export interface OpportunityCompetitorSummary {
+  id: string;
+  opportunity_id: string | null;
+  market: string;
+  source_site: string;
+  external_id: string;
+  title: string;
+  snapshot_count: number;
+  latest_snapshot: null | {
+    current_price: number | null;
+    currency: string | null;
+    review_count: number | null;
+    rating_value: number | null;
+    captured_at: string;
+    freshness: string;
+  };
+}
+
 export type OpportunityTab =
   | "overview"
   | "lineage"

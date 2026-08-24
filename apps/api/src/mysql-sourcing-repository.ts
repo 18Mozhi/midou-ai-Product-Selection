@@ -518,7 +518,9 @@ export class MySqlSourcingRepository implements SourcingRepository {
   private async supplierProviders(c: PoolConnection) {
     const [rows] = await c.query<RowDataPacket[]>(
       "SELECT id FROM providers WHERE code IN ('dhgate_supplier_search','made_in_china_search','ec21_supplier_search') " +
-        "AND status='enabled' AND access_mode='public_page' ORDER BY FIELD(code,'dhgate_supplier_search','made_in_china_search','ec21_supplier_search') FOR UPDATE",
+        "AND status='enabled' AND access_mode='public_page' AND terms_review_status='approved' " +
+        "AND terms_reference_url IS NOT NULL AND terms_version IS NOT NULL AND terms_expires_at>NOW(3) " +
+        "ORDER BY FIELD(code,'dhgate_supplier_search','made_in_china_search','ec21_supplier_search') FOR UPDATE",
     );
     return rows.map((row) => String(row.id));
   }
