@@ -5,8 +5,10 @@ import test from "node:test";
 import {
   BUILTIN_PROVIDER_SOURCES,
   parseAmazonProductPage,
+  parseDhgateSupplierSearchPage,
   parseEc21SupplierSearchPage,
   parseMadeInChinaSearchPage,
+  AmazonProductSearchAdapter,
   Ec21SupplierSearchAdapter,
   MadeInChinaSearchAdapter,
 } from "../../packages/provider-sources/dist/index.js";
@@ -31,6 +33,38 @@ test("core workspace public crawlers are enabled without official API credential
   assert.equal(
     BUILTIN_PROVIDER_SOURCES.find((item) => item.code === "ec21_supplier_search")?.access_mode,
     "public_page",
+  );
+  assert.equal(
+    BUILTIN_PROVIDER_SOURCES.find((item) => item.code === "dhgate_supplier_search")?.status,
+    "enabled",
+  );
+});
+
+test("DHgate supplier parser preserves store price currency and product evidence", () => {
+  const html = [
+    '<html><body><div class="gitem" itemcode="1086031311">',
+    '<a class="pic" supplierid="supplier-1" itemcode="1086031311" ',
+    'href="https://www.dhgate.com/product/storage-box/1086031311.html?sku=1">',
+    '<img src="//img.dhresource.com/box.jpg" alt="Foldable Storage Box"></a>',
+    '<p class="name"><a href="https://www.dhgate.com/product/storage-box/1086031311.html">',
+    "Foldable <strong>Storage</strong> Box</a></p>",
+    '<div class="pro-price"><strong>US $7.34 - 8.75</strong>/ Piece</div>',
+    '<div class="pro-store"><a href="https://www.dhgate.com/store/1" ',
+    'supplierid="supplier-1"><i></i>Box Factory</a></div></div></body></html>',
+  ].join("");
+  const [record] = parseDhgateSupplierSearchPage(
+    html,
+    "https://www.dhgate.com/wholesale/storage-box.html",
+    5,
+  );
+  assert.equal(record.externalId, "1086031311");
+  assert.equal(record.payload.fields.supplier_name, "Box Factory");
+  assert.equal(record.payload.fields.price, 7.34);
+  assert.equal(record.payload.fields.currency, "USD");
+  assert.equal(record.payload.fields.moq, null);
+  assert.equal(
+    record.payload.canonical_url,
+    "https://www.dhgate.com/product/storage-box/1086031311.html",
   );
 });
 
@@ -99,6 +133,18 @@ test("supplier adapters accept proxy responses whose native url field is empty",
   );
 });
 
+test("Made-in-China verification redirects are classified as captcha instead of parser drift", async () => {
+  const adapter = new MadeInChinaSearchAdapter(async () =>
+    Object.defineProperty(new Response("<html><title>请验证</title></html>"), "url", {
+      value: "https://captcha.made-in-china.com/verification.html",
+    }),
+  );
+  await assert.rejects(
+    adapter.collect({ target: { query: "storage box" }, limit: 1 }, AbortSignal.timeout(1000)),
+    (error) => error?.code === "captcha" && error?.retryable === false,
+  );
+});
+
 test("Amazon product parser preserves real listing metrics and evidence URL", () => {
   const html = [
     '<html><body><div data-component-type="s-search-result" data-asin="B0ABCDEF12">',
@@ -110,9 +156,43 @@ test("Amazon product parser preserves real listing metrics and evidence URL", ()
   const [record] = parseAmazonProductPage(html, "https://www.amazon.com/s?k=storage+box", 5);
   assert.equal(record.externalId, "B0ABCDEF12");
   assert.equal(record.payload.fields.price, 29.99);
+  assert.equal(record.payload.fields.currency, "USD");
   assert.equal(record.payload.fields.rating_value, 4.6);
   assert.equal(record.payload.fields.review_count, 1234);
   assert.equal(record.payload.canonical_url, "https://www.amazon.com/dp/B0ABCDEF12");
+});
+
+test("Amazon product parser preserves the response currency instead of forcing USD", () => {
+  const html = [
+    '<html><body><div data-component-type="s-search-result" data-asin="B0CNYPRC01">',
+    '<h2><a href="/dp/B0CNYPRC01"><span>Portable Storage Box</span></a></h2>',
+    '<span class="a-price"><span class="a-offscreen">CNY&nbsp;181.41</span></span>',
+    '<img class="s-image" src="https://images.example/cny-box.jpg"></div></body></html>',
+  ].join("");
+  const [record] = parseAmazonProductPage(html, "https://www.amazon.com/s?k=storage+box", 1);
+  assert.equal(record.payload.fields.price, 181.41);
+  assert.equal(record.payload.fields.currency, "CNY");
+});
+
+test("Amazon adapter keeps injected transports for deterministic replay and reports v3", async () => {
+  let requestedUrl = "";
+  const adapter = new AmazonProductSearchAdapter(async (url) => {
+    requestedUrl = String(url);
+    return new Response(
+      '<html><body><div data-component-type="s-search-result" data-asin="B0ABCDEF12">' +
+        '<h2><a href="/dp/B0ABCDEF12"><span>Storage Box</span></a></h2>' +
+        '<span class="a-price"><span class="a-offscreen">$29.99</span></span>' +
+        '<img class="s-image" src="https://images.example/box.jpg"></div></body></html>',
+      { status: 200 },
+    );
+  });
+  const result = await adapter.collect(
+    { target: { query: "storage box" }, limit: 1 },
+    AbortSignal.timeout(1000),
+  );
+  assert.equal(adapter.version, "amazon-structured-product-adapter-v3");
+  assert.match(requestedUrl, /^https:\/\/www\.amazon\.com\/s\?k=storage%20box$/);
+  assert.equal(result.records.length, 1);
 });
 
 test("Amazon product parser prefers versioned JSON-LD product facts", () => {
@@ -250,6 +330,19 @@ test("collection worker quarantines exhausted queue entries without blocking fre
   assert.match(worker, /collection_attempt_overflow/);
   assert.match(worker, /status='queued' AND attempt_count<4/);
   assert.match(worker, /retry_exhausted:\s*true/);
+});
+
+test("dynamic product crawls use task-scoped evidence keys and auditable record versions", async () => {
+  const [executor, persistence] = await Promise.all([
+    readFile("apps/worker/src/provider-source-executor.ts", "utf8"),
+    readFile("apps/worker/src/evidence-persistence.ts", "utf8"),
+  ]);
+  assert.match(executor, /VERSIONED_PRODUCT_SOURCES[\s\S]*amazon_product/);
+  assert.match(executor, /task_id: task\.id, external_id: normalized\.external_id/);
+  assert.match(persistence, /findExistingRecord\(connection, value\)/);
+  assert.match(persistence, /SET status='superseded'/);
+  assert.match(persistence, /previousRecord \? Number\(previousRecord\.record_version\) \+ 1 : 1/);
+  assert.match(persistence, /supersedes_record_id: previousRecord\.record_id/);
 });
 
 test("automatic downstream tasks use crawler contracts and recover malformed historic tasks", async () => {

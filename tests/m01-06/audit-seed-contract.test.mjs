@@ -32,6 +32,7 @@ test("M01-06.A03/A06/A10/A13/A17 contracts include seed security audit paginatio
   assert.ok(parsed.secretKeys.includes("PLATFORM_ADMIN_SEED_PASSWORD"));
   assert.ok(parsed.backendGroups.oneTimeSeed.includes("PLATFORM_ADMIN_SEED_EMAIL"));
   assert.match(env, /成功后必须删除/);
+  assert.match(cli, /ProviderSourceService[\s\S]*ensureCatalog/);
   assert.match(feature, /auditSecurity/);
   assert.match(upA, /must_change_password/);
   assert.match(downA, /DROP COLUMN `must_change_password`/);

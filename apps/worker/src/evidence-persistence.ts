@@ -22,6 +22,10 @@ type ExistingEvidence = RowDataPacket & {
   adapter_version: string;
   schema_version: string;
 };
+type ExistingRecord = RowDataPacket & {
+  record_id: string;
+  record_version: number;
+};
 export interface BrowserEvidenceArtifactInput {
   organizationId: string;
   workspaceId: string;
@@ -100,6 +104,7 @@ export class MySqlEvidencePersistence {
       const evidenceId = randomUUID();
       const fileAssetId = randomUUID();
       const recordId = randomUUID();
+      const previousRecord = await this.findExistingRecord(connection, value);
       const fileInput = {
         organization_id: value.organizationId as OrganizationId,
         workspace_id: value.workspaceId as WorkspaceId,
@@ -160,11 +165,16 @@ export class MySqlEvidencePersistence {
           now,
         ],
       );
+      if (previousRecord)
+        await connection.query(
+          "UPDATE normalized_records SET status='superseded' WHERE id=? AND status='active'",
+          [previousRecord.record_id],
+        );
       await connection.query(
         [
           "INSERT INTO normalized_records (id,organization_id,workspace_id,provider_id,raw_evidence_id,",
           "record_key,schema_version,record_version,payload_json,supersedes_record_id,correction_reason,status,",
-          "request_id,trace_id,created_by,created_at) VALUES (?,?,?,?,?,?,?,1,?,NULL,NULL,'active',?,?,?,?)",
+          "request_id,trace_id,created_by,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,NULL,'active',?,?,?,?)",
         ].join(""),
         [
           recordId,
@@ -174,7 +184,9 @@ export class MySqlEvidencePersistence {
           evidenceId,
           value.recordKey,
           value.recordSchemaVersion,
+          previousRecord ? Number(previousRecord.record_version) + 1 : 1,
           JSON.stringify(value.normalizedPayload),
+          previousRecord?.record_id ?? null,
           value.requestId,
           value.traceId,
           value.actorId,
@@ -208,7 +220,11 @@ export class MySqlEvidencePersistence {
         "evidence.persisted",
         "raw_evidence",
         evidenceId,
-        { normalized_record_id: recordId, content_sha256: value.contentHash },
+        {
+          normalized_record_id: recordId,
+          content_sha256: value.contentHash,
+          ...(previousRecord ? { supersedes_record_id: previousRecord.record_id } : {}),
+        },
         now,
       );
       await this.outbox(
@@ -537,6 +553,18 @@ export class MySqlEvidencePersistence {
         "n.id DESC LIMIT 1 FOR UPDATE",
       ].join(""),
       [value.organizationId, value.workspaceId, value.providerId, value.dedupeKey],
+    );
+    return rows[0] ?? null;
+  }
+
+  private async findExistingRecord(connection: PoolConnection, value: ValidatedEvidence) {
+    const [rows] = await connection.query<ExistingRecord[]>(
+      [
+        "SELECT id record_id,record_version FROM normalized_records WHERE organization_id=? AND workspace_id=? ",
+        "AND provider_id=? AND record_key=? AND status='active' ORDER BY record_version DESC,created_at DESC,id DESC ",
+        "LIMIT 1 FOR UPDATE",
+      ].join(""),
+      [value.organizationId, value.workspaceId, value.providerId, value.recordKey],
     );
     return rows[0] ?? null;
   }

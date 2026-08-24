@@ -132,11 +132,8 @@ export class MySqlSourcingRepository implements SourcingRepository {
             throw new SourcingServiceError("opportunity_not_found", 404, "选择当前工作区机会。");
           query = String(opportunities[0].name);
         }
-        const [providers] = await c.query<RowDataPacket[]>(
-          "SELECT id FROM providers WHERE code='made_in_china_search' AND status='enabled' AND " +
-            "access_mode='public_page' LIMIT 1 FOR UPDATE",
-        );
-        if (!providers[0])
+        const providers = await this.supplierProviders(c);
+        if (!providers.length)
           throw new SourcingServiceError(
             "supplier_crawler_unavailable",
             409,
@@ -145,7 +142,7 @@ export class MySqlSourcingRepository implements SourcingRepository {
         await this.enqueueCollection(
           c,
           i,
-          String(providers[0].id),
+          providers,
           { query, projection_type: "sourcing_search", search_id: i.id },
           now,
         );
@@ -388,11 +385,8 @@ export class MySqlSourcingRepository implements SourcingRepository {
         );
         if (opportunities[0]) query = String(opportunities[0].name);
       }
-      const [providers] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM providers WHERE code='made_in_china_search' AND status='enabled' AND " +
-          "access_mode='public_page' LIMIT 1 FOR UPDATE",
-      );
-      if (!providers[0])
+      const providers = await this.supplierProviders(c);
+      if (!providers.length)
         throw new SourcingServiceError(
           "supplier_crawler_unavailable",
           409,
@@ -401,7 +395,7 @@ export class MySqlSourcingRepository implements SourcingRepository {
       await this.enqueueCollection(
         c,
         i,
-        String(providers[0].id),
+        providers,
         { query, projection_type: "sourcing_search", search_id: i.searchId },
         now,
       );
@@ -461,7 +455,7 @@ export class MySqlSourcingRepository implements SourcingRepository {
   private async enqueueCollection(
     c: PoolConnection,
     i: any,
-    providerId: string,
+    providerIds: string[],
     target: Record<string, unknown>,
     now: Date,
   ) {
@@ -484,13 +478,6 @@ export class MySqlSourcingRepository implements SourcingRepository {
         now,
       ],
     );
-    const [alternatives] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM providers WHERE code='ec21_supplier_search' AND status='enabled' AND access_mode='public_page' LIMIT 1",
-      ),
-      providerIds = [
-        providerId,
-        ...alternatives.map((row) => String(row.id)).filter((id) => id !== providerId),
-      ];
     for (let index = 0; index < providerIds.length; index++)
       await c.query(
         "INSERT INTO collection_subqueries(id,task_id,organization_id,workspace_id," +
@@ -527,6 +514,13 @@ export class MySqlSourcingRepository implements SourcingRepository {
         now,
       ],
     );
+  }
+  private async supplierProviders(c: PoolConnection) {
+    const [rows] = await c.query<RowDataPacket[]>(
+      "SELECT id FROM providers WHERE code IN ('dhgate_supplier_search','made_in_china_search','ec21_supplier_search') " +
+        "AND status='enabled' AND access_mode='public_page' ORDER BY FIELD(code,'dhgate_supplier_search','made_in_china_search','ec21_supplier_search') FOR UPDATE",
+    );
+    return rows.map((row) => String(row.id));
   }
   private search(r: RowDataPacket) {
     return {

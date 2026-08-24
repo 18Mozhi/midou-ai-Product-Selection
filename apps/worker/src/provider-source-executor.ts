@@ -25,6 +25,12 @@ import {
 import { EvidencePersistenceError, MySqlEvidencePersistence } from "./evidence-persistence.js";
 import type { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
 const sha = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
+const VERSIONED_PRODUCT_SOURCES = new Set([
+  "amazon_product",
+  "dhgate_supplier_search",
+  "made_in_china_search",
+  "ec21_supplier_search",
+]);
 const codes = new Set<CollectionErrorCode>([
   "network_error",
   "timeout",
@@ -335,7 +341,9 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
             providerId: provider.id,
             sourceUrl: source.canonical_url,
             canonicalUrl: normalized.canonical_url ?? source.canonical_url,
-            dedupeKey: normalized.external_id,
+            dedupeKey: VERSIONED_PRODUCT_SOURCES.has(provider.code)
+              ? sha({ task_id: task.id, external_id: normalized.external_id })
+              : normalized.external_id,
             contentType: source.content_type,
             content: Buffer.from(source.raw_content),
             capturedAt: new Date(normalized.observed_at),

@@ -254,7 +254,7 @@ export class TrendProjectionPersistence {
           );
         }
         const searchId = row.search_id == null ? null : String(row.search_id),
-          supplierProviderIds = [providers.madeInChina, providers.ec21].filter(
+          supplierProviderIds = [providers.dhgate, providers.madeInChina, providers.ec21].filter(
             (value): value is string => Boolean(value),
           );
         if (searchId && Boolean(row.sourcing_task_missing) && supplierProviderIds.length) {
@@ -300,11 +300,12 @@ export class TrendProjectionPersistence {
 
   private async downstreamProviders(c: PoolConnection) {
     const [rows] = await c.query<RowDataPacket[]>(
-      "SELECT id,code FROM providers WHERE code IN ('amazon_product','made_in_china_search','ec21_supplier_search') AND status='enabled' AND access_mode='public_page'",
+      "SELECT id,code FROM providers WHERE code IN ('amazon_product','dhgate_supplier_search','made_in_china_search','ec21_supplier_search') AND status='enabled' AND access_mode='public_page'",
     );
     const values = new Map(rows.map((row) => [String(row.code), String(row.id)]));
     return {
       amazon: values.get("amazon_product") ?? null,
+      dhgate: values.get("dhgate_supplier_search") ?? null,
       madeInChina: values.get("made_in_china_search") ?? null,
       ec21: values.get("ec21_supplier_search") ?? null,
     };

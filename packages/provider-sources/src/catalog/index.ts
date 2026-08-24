@@ -838,6 +838,41 @@ export const BUILTIN_PROVIDER_SOURCES: readonly BuiltinSourceDefinition[] = [
       "用户发起找货时抓取 EC21 公开供应商商品列表；与中国制造网并行执行，单一来源受限时不会伪造结果。",
   },
   {
+    code: "dhgate_supplier_search",
+    name: "DHgate 批发供应商搜索",
+    access_mode: "public_page",
+    target_url: "https://www.dhgate.com/wholesale/{slug}.html",
+    markets: ["GLOBAL"],
+    languages: ["en-US"],
+    fields: [
+      "title",
+      "supplier_name",
+      "price",
+      "currency",
+      "moq",
+      "image_url",
+      "source_url",
+      "observed_at",
+    ],
+    schedule_minutes: 1440,
+    concurrency_limit: 1,
+    timeout_ms: 30000,
+    retry_limit: 2,
+    circuit_failure_threshold: 4,
+    dedupe_key: "source_url",
+    retention_days: 180,
+    failure_rules: ["network_error", "rate_limited", "source_changed"],
+    parser_version: "dhgate-supplier-search-v1",
+    healthcheck_url: "https://www.dhgate.com/wholesale/storage-box.html",
+    owner_label: "平台供应链中心",
+    status: "enabled",
+    category: "product_supply",
+    availability: "manual",
+    production_policy: "ready_for_owner_enablement",
+    policy_note:
+      "用户发起找货时抓取 robots 允许的 DHgate 批发公开页；价格、币种、店铺和商品链接均保留原页证据，MOQ 缺失时不会填充默认值。",
+  },
+  {
     code: "manual_product_supply_csv",
     name: "商品与供应链 CSV 导入",
     access_mode: "import",
@@ -878,7 +913,12 @@ export const AUTOMATIC_PROVIDER_SOURCE_HOSTS = Object.freeze([
     BUILTIN_PROVIDER_SOURCES.filter(
       (item) =>
         item.availability === "automatic" ||
-        ["amazon_product", "made_in_china_search", "ec21_supplier_search"].includes(item.code),
+        [
+          "amazon_product",
+          "made_in_china_search",
+          "ec21_supplier_search",
+          "dhgate_supplier_search",
+        ].includes(item.code),
     ).map((item) => new URL(item.target_url).hostname.toLowerCase()),
   ),
 ]);

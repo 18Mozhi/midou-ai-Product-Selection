@@ -9,9 +9,11 @@ import {
   type ProviderNormalizedRecord,
   type ProviderRawRecord,
 } from "@scoutops/provider-adapters";
+import { request as httpsRequest } from "node:https";
 import { BUILTIN_PROVIDER_SOURCES } from "../catalog/index.js";
 import {
   parseAmazonProductPage,
+  parseDhgateSupplierSearchPage,
   parseEc21SupplierSearchPage,
   parseGoogleNewsRss,
   parseMadeInChinaSearchPage,
@@ -21,6 +23,59 @@ import {
   sourceEvidencePayload,
   text,
 } from "../parsers/index.js";
+
+const AMAZON_MAX_RESPONSE_BYTES = 5 * 1024 * 1024;
+
+async function fetchAmazonWithNativeHttps(
+  url: string,
+  signal: AbortSignal,
+  headers: Record<string, string>,
+) {
+  return await new Promise<Response>((resolve, reject) => {
+    let settled = false;
+    const finish = (error: unknown, response?: Response) => {
+      if (settled) return;
+      settled = true;
+      signal.removeEventListener("abort", abort);
+      if (error) reject(error);
+      else resolve(response!);
+    };
+    const request = httpsRequest(url, { method: "GET", headers }, (incoming) => {
+      const chunks: Buffer[] = [];
+      let bytes = 0;
+      incoming.on("data", (chunk: Buffer) => {
+        bytes += chunk.length;
+        if (bytes > AMAZON_MAX_RESPONSE_BYTES) {
+          incoming.destroy();
+          request.destroy();
+          finish(new ProviderAdapterFailure("invalid_payload", false));
+          return;
+        }
+        chunks.push(chunk);
+      });
+      incoming.once("error", (error) => finish(error));
+      incoming.once("end", () => {
+        const responseHeaders = new Headers();
+        for (const [name, value] of Object.entries(incoming.headers)) {
+          if (Array.isArray(value)) for (const item of value) responseHeaders.append(name, item);
+          else if (value !== undefined) responseHeaders.set(name, value);
+        }
+        const response = new Response(new Uint8Array(Buffer.concat(chunks)), {
+          status: incoming.statusCode ?? 502,
+          headers: responseHeaders,
+          ...(incoming.statusMessage ? { statusText: incoming.statusMessage } : {}),
+        });
+        Object.defineProperty(response, "url", { configurable: true, value: url });
+        finish(null, response);
+      });
+    });
+    const abort = () => request.destroy(signal.reason);
+    request.once("error", (error) => finish(signal.aborted ? signal.reason : error));
+    if (signal.aborted) abort();
+    else signal.addEventListener("abort", abort, { once: true });
+    request.end();
+  });
+}
 
 abstract class SourceAdapter implements ProviderAdapter {
   abstract readonly key: string;
@@ -368,8 +423,8 @@ export class FixedStructuredPublicPageAdapter extends SourceAdapter {
 export class AmazonProductSearchAdapter extends SourceAdapter {
   readonly key = "amazon_product";
   readonly accessMode = "public_page" as const;
-  readonly version = "amazon-structured-product-adapter-v2";
-  constructor(private readonly fetcher: typeof fetch = fetch) {
+  readonly version = "amazon-structured-product-adapter-v3";
+  constructor(private readonly fetcher?: typeof fetch) {
     super();
   }
   private url(target: Record<string, unknown> | undefined) {
@@ -384,16 +439,15 @@ export class AmazonProductSearchAdapter extends SourceAdapter {
     return `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
   }
   private async response(url: string, signal: AbortSignal) {
-    const response = await this.fetcher(url, {
-      signal,
-      redirect: "error",
-      headers: {
+    const headers = {
         accept: "text/html,application/xhtml+xml",
         "accept-language": "en-US,en;q=0.9",
         "user-agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36",
       },
-    });
+      response = this.fetcher
+        ? await this.fetcher(url, { signal, redirect: "error", headers })
+        : await fetchAmazonWithNativeHttps(url, signal, headers);
     if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
     if (response.status >= 500) throw new ProviderAdapterFailure("network_error", true);
     if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
@@ -458,6 +512,8 @@ export class MadeInChinaSearchAdapter extends SourceAdapter {
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36",
       },
     });
+    if (new URL(response.url || url).hostname.toLowerCase() === "captcha.made-in-china.com")
+      throw new ProviderAdapterFailure("captcha", false);
     if (!/(^|\.)made-in-china\.com$/i.test(new URL(response.url || url).hostname))
       throw new ProviderAdapterFailure("permission_denied", false);
     if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
@@ -562,6 +618,77 @@ export class Ec21SupplierSearchAdapter extends SourceAdapter {
     }
   }
 }
+export class DhgateSupplierSearchAdapter extends SourceAdapter {
+  readonly key = "dhgate_supplier_search";
+  readonly accessMode = "public_page" as const;
+  readonly version = "dhgate-supplier-search-adapter-v1";
+  constructor(private readonly fetcher: typeof fetch = fetch) {
+    super();
+  }
+  private url(target: Record<string, unknown> | undefined) {
+    const query = text(target?.query, "query", 300),
+      slug = query
+        .normalize("NFKC")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((part) => encodeURIComponent(part))
+        .join("+");
+    if (!slug) throw new ProviderAdapterFailure("query_invalid", false);
+    return `https://www.dhgate.com/wholesale/${slug}.html`;
+  }
+  private async response(url: string, signal: AbortSignal) {
+    const response = await this.fetcher(url, {
+      signal,
+      redirect: "follow",
+      headers: {
+        accept: "text/html,application/xhtml+xml",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36",
+      },
+    });
+    if (new URL(response.url || url).hostname !== "www.dhgate.com")
+      throw new ProviderAdapterFailure("permission_denied", false);
+    if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
+    if (response.status >= 500) throw new ProviderAdapterFailure("network_error", true);
+    if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
+    return response;
+  }
+  async collect(request: ProviderCollectRequest, signal: AbortSignal) {
+    const url = this.url(request.target),
+      response = await this.response(url, signal);
+    return {
+      records: parseDhgateSupplierSearchPage(
+        await response.text(),
+        url,
+        Math.min(request.limit, 20),
+      ),
+      nextCursor: null,
+    };
+  }
+  async healthCheck(_: AdapterHealthContext, signal: AbortSignal) {
+    const started = Date.now(),
+      url = this.url({ query: "storage box" });
+    try {
+      const response = await this.response(url, signal);
+      parseDhgateSupplierSearchPage(await response.text(), url, 1);
+      return {
+        status: "ready" as const,
+        latencyMs: Date.now() - started,
+        errorCode: null,
+        message: "DHgate 批发公开页可抓取。",
+      };
+    } catch (error) {
+      return {
+        status: "degraded" as const,
+        latencyMs: Date.now() - started,
+        errorCode: error instanceof ProviderAdapterFailure ? error.code : "network_error",
+        message: "DHgate 批发公开页当前不可解析。",
+      };
+    }
+  }
+}
 export class ManualProductSupplyCsvAdapter extends SourceAdapter {
   readonly key = "manual_product_supply_csv";
   readonly accessMode = "import" as const;
@@ -615,9 +742,10 @@ export function createBuiltinSourceAdapters(fetcher: typeof fetch = fetch) {
             )
           : new FixedGoogleNewsRssAdapter(item.code, item.target_url, fetcher),
     ),
-    new AmazonProductSearchAdapter(fetcher),
+    new AmazonProductSearchAdapter(fetcher === fetch ? undefined : fetcher),
     new MadeInChinaSearchAdapter(fetcher),
     new Ec21SupplierSearchAdapter(fetcher),
+    new DhgateSupplierSearchAdapter(fetcher),
     new ManualProductSupplyCsvAdapter(),
     new Alibaba1688BrowserAdapter(),
   ];

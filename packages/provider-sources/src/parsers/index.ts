@@ -468,6 +468,15 @@ const money = (value: string | undefined) => {
   const parsed = Number(value.replace(/[^0-9.]/g, ""));
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 };
+const priceCurrency = (value: string | undefined) => {
+  if (!value) return null;
+  const code = value.match(/(?:^|[^A-Z])([A-Z]{3})(?=[^A-Z]|$)/)?.[1];
+  if (code) return code;
+  if (/\$/.test(value)) return "USD";
+  if (/€/.test(value)) return "EUR";
+  if (/£/.test(value)) return "GBP";
+  return null;
+};
 const countValue = (value: string | undefined) => {
   if (!value) return null;
   const parsed = Number(value.replace(/[^0-9]/g, ""));
@@ -640,6 +649,7 @@ export function parseAmazonProductPage(
           pageUrl,
         ) || null,
       price = money(priceText),
+      currency = price == null ? null : priceCurrency(priceText),
       rating = ratingText ? Number(ratingText) : null,
       reviews = countValue(reviewText);
     if (!title || !sourceUrl) continue;
@@ -647,7 +657,7 @@ export function parseAmazonProductPage(
         asin: item.asin,
         title: title.slice(0, 1000),
         price,
-        currency: price == null ? null : "USD",
+        currency,
         position: blocks.length ? index + 1 : null,
         review_count: reviews,
         rating_value:
@@ -833,6 +843,83 @@ export function parseEc21SupplierSearchPage(
       externalId: sha(sourceUrl),
       observedAt,
       evidenceRef: `ec21-product:${sha(sourceUrl)}`,
+      payload,
+    });
+    if (records.length >= Math.min(20, limit)) break;
+  }
+  if (!records.length) throw new ProviderAdapterFailure("source_changed", false);
+  return records;
+}
+
+export function parseDhgateSupplierSearchPage(
+  html: string,
+  pageUrl: string,
+  limit = 20,
+): ProviderRawRecord[] {
+  if (typeof html !== "string" || Buffer.byteLength(html) > 5_000_000 || !/<html\b/i.test(html))
+    throw new ProviderAdapterFailure("invalid_payload", false);
+  const starts = [...html.matchAll(/<div\b[^>]*class=["'][^"']*\bgitem\b[^"']*["'][^>]*>/gi)].map(
+      (match) => match.index ?? 0,
+    ),
+    observedAt = new Date().toISOString(),
+    records: ProviderRawRecord[] = [];
+  for (let index = 0; index < starts.length; index++) {
+    const block = html.slice(
+        starts[index]!,
+        starts[index + 1] ?? Math.min(html.length, starts[index]! + 30000),
+      ),
+      productAnchor = block.match(
+        /<a\b(?=[^>]*\bitemcode=["']([0-9]+)["'])(?=[^>]*\bhref=["'](https:\/\/www\.dhgate\.com\/product\/[^"']+)["'])[^>]*>/i,
+      ),
+      externalId = productAnchor?.[1] ?? "",
+      sourceUrl = productAnchor?.[2] ? cleanUrl(productAnchor[2], pageUrl) : "",
+      title = stripHtml(
+        block.match(
+          /<p\b[^>]*class=["'][^"']*\bname\b[^"']*["'][^>]*>[\s\S]*?<a\b[^>]*>([\s\S]*?)<\/a>/i,
+        )?.[1] ??
+          block.match(/<img\b[^>]*\balt=["']([^"']+)["']/i)?.[1] ??
+          "",
+      ),
+      priceText = stripHtml(
+        block.match(
+          /<div\b[^>]*class=["'][^"']*\bpro-price\b[^"']*["'][^>]*>[\s\S]*?<strong\b[^>]*>([\s\S]*?)<\/strong>/i,
+        )?.[1] ?? "",
+      ),
+      price = /^US\s*\$/i.test(priceText) ? money(priceText.split("-")[0]) : null,
+      currency = price == null ? null : "USD",
+      supplier = stripHtml(
+        block.match(
+          /<div\b[^>]*class=["'][^"']*\bpro-store\b[^"']*["'][^>]*>[\s\S]*?<a\b[^>]*\bsupplierid=["'][^"']+["'][^>]*>([\s\S]*?)<\/a>/i,
+        )?.[1] ?? "",
+      ),
+      imageUrl =
+        absoluteUrl(block.match(/<img\b[^>]*(?:src|data-src)=["']([^"']+)["']/i)?.[1], pageUrl) ||
+        null;
+    if (!externalId || !sourceUrl || !title || !supplier || price == null || !currency) continue;
+    const fields = {
+        title: title.slice(0, 1000),
+        supplier_name: supplier.slice(0, 500),
+        price,
+        currency,
+        moq: null,
+        image_url: imageUrl,
+        source_url: sourceUrl,
+        publisher: "DHgate",
+        observed_at: observedAt,
+      },
+      payload: SourceEvidencePayload = {
+        raw_content: block.slice(0, 30000),
+        content_type: "text/html",
+        canonical_url: sourceUrl,
+        fields,
+        source_paths: Object.fromEntries(
+          Object.keys(fields).map((key) => [key, `dhgate.html.${key}`]),
+        ),
+      };
+    records.push({
+      externalId,
+      observedAt,
+      evidenceRef: `dhgate-product:${externalId}:${sha(sourceUrl)}`,
       payload,
     });
     if (records.length >= Math.min(20, limit)) break;

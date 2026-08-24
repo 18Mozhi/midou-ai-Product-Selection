@@ -2,7 +2,9 @@
 
 ## 边界
 
-本模块支持两条真实入口：外部 Provider 提交带证据的完整快照；普通成员提交 Amazon 商品 URL 后，由已启用的 `amazon_product` 公开页面适配器采集。后者不需要官方 API，也不以示例值补齐页面没有披露的字段。Amazon Parser v2 优先读取页面中的 Schema.org Product JSON-LD，以 SKU/商品 URL 确认 ASIN，并保留结构化字段路径与原始 JSON-LD 证据；仅在页面没有有效 Product 结构化数据时回退到既有语义 HTML 标记，无法形成真实商品记录时以 `source_changed` 失败关闭。竞品身份按组织、工作区、市场、来源站点和外部商品 ID 唯一。
+本模块支持两条真实入口：外部 Provider 提交带证据的完整快照；普通成员提交 Amazon 商品 URL 后，由已启用的 `amazon_product` 公开页面适配器采集。后者不需要官方 API，也不以示例值补齐页面没有披露的字段。Amazon Adapter v3 对无代理直连使用 Node 原生 HTTPS，避免 Undici 被目标站误判为 503；配置专用 Provider 代理时仍遵循代理传输。Parser v2 优先读取页面中的 Schema.org Product JSON-LD，以 SKU/商品 URL 确认 ASIN，并保留结构化字段路径与原始 JSON-LD 证据；仅在页面没有有效 Product 结构化数据时回退到既有语义 HTML 标记。HTML 价格币种按响应中的 ISO 代码或明确货币符号提取，无法确认时保持为空，不把访问区域返回的 CNY 强制写成 USD。无法形成真实商品记录时以 `source_changed` 失败关闭。竞品身份按组织、工作区、市场、来源站点和外部商品 ID 唯一。
+
+重复采集使用任务级原始证据键与稳定 ASIN 记录键：同一任务重试保持幂等，不同任务观测到同一 ASIN 时创建下一版 `normalized_records`，旧版标记为 `superseded` 且新版记录 `supersedes_record_id`。竞品主体仍按 ASIN 去重，下游每次有效观测生成新快照。
 
 ## 数据流
 
