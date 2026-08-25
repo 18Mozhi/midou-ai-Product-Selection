@@ -120,6 +120,8 @@ export function surfaceProps(input: {
         mode: input.path.endsWith("/monitoring-rules") ? "rules" : "list",
         capabilities: input.capabilities,
       };
+    case "sourcing-workspace":
+      return { ...common, capabilities: input.capabilities };
     case "cost-rule-console":
       return { ...common, roles: input.roles };
     case "provider-runtime-surface":

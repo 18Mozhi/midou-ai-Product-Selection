@@ -4,7 +4,10 @@ import { ApiClientError, createApiClient } from "../api-client";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
 import type { OpportunityProfitAnalysis } from "./opportunity-workspace-types";
 
-const props = defineProps<{ apiBaseUrl: string; opportunityId: string }>(),
+const props = withDefaults(
+    defineProps<{ apiBaseUrl: string; opportunityId: string; canConfirmCost?: boolean }>(),
+    { canConfirmCost: false },
+  ),
   request = createApiClient(props.apiBaseUrl),
   profit = ref<OpportunityProfitAnalysis | null>(null),
   opportunityVersion = ref(0),
@@ -31,7 +34,9 @@ async function load() {
     const [opportunity, analysis, reviewerList] = await Promise.all([
       request<any>(`/opportunities/${props.opportunityId}`),
       request<OpportunityProfitAnalysis>(`/opportunities/${props.opportunityId}/profit-analysis`),
-      request<Array<{ id: string; label: string }>>("/cost-input-reviewers"),
+      props.canConfirmCost
+        ? request<Array<{ id: string; label: string }>>("/cost-input-reviewers")
+        : Promise.resolve({ data: [] as Array<{ id: string; label: string }> }),
     ]);
     opportunityVersion.value = Number(opportunity.data.version);
     profit.value = analysis.data;
@@ -130,6 +135,7 @@ onMounted(load);
       :profit="profit"
       :cost-form="costForm"
       :reviewer-options="reviewers"
+      :can-confirm-cost="canConfirmCost"
       :busy="busy"
       @confirm-cost="submitCost"
       @review-cost="reviewCost"

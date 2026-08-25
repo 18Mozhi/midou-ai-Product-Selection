@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import type { SourcingCandidate, SourcingSearch } from "./sourcing-workspace-types";
 
 const props = defineProps<{
@@ -39,15 +39,68 @@ const deleteReasonModel = computed({
   get: () => props.deleteReason,
   set: (value: string) => emit("updateDeleteReason", value),
 });
+const searchDialog = ref<HTMLElement | null>(null),
+  quoteDialog = ref<HTMLElement | null>(null),
+  purchaseDialog = ref<HTMLElement | null>(null),
+  deleteDialog = ref<HTMLElement | null>(null),
+  inputLabel = computed(
+    () =>
+      ({
+        keyword: "商品关键词",
+        image: "图片地址或图片证据编号",
+        opportunity: "机会编号",
+        product_url: "商品链接",
+      })[props.searchForm.input_type] ?? "查找内容",
+  ),
+  inputPlaceholder = computed(
+    () =>
+      ({
+        keyword: "例如：折叠收纳箱",
+        image: "输入可访问的图片地址或已有图片证据编号",
+        opportunity: "从选品机会详情进入会自动填写",
+        product_url: "输入需要查找同类货源的商品链接",
+      })[props.searchForm.input_type] ?? "请输入查找内容",
+  );
+function focusFirst(dialog: () => HTMLElement | null) {
+  void nextTick(() =>
+    window.requestAnimationFrame(() =>
+      dialog()?.querySelector<HTMLElement>("select, input, textarea, button")?.focus(),
+    ),
+  );
+}
+watch(
+  () => props.showSearch,
+  (open) => open && focusFirst(() => searchDialog.value),
+);
+watch(
+  () => props.quoteCandidate,
+  (value) => value && focusFirst(() => quoteDialog.value),
+);
+watch(
+  () => props.purchaseCandidate,
+  (value) => value && focusFirst(() => purchaseDialog.value),
+);
+watch(
+  () => props.deleting,
+  (value) => value && focusFirst(() => deleteDialog.value),
+);
 const searchName = (item: SourcingSearch | null) =>
   item?.display_name || item?.input_ref || "供应商";
 </script>
 
 <template>
-  <div v-if="showSearch" class="sourcing-modal" role="dialog" aria-modal="true">
+  <div
+    v-if="showSearch"
+    ref="searchDialog"
+    class="sourcing-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="sourcing-search-title"
+    @keydown.esc="emit('closeSearch')"
+  >
     <form @submit.prevent="emit('create')">
       <header>
-        <h3>发起供应商找货</h3>
+        <h3 id="sourcing-search-title">发起供应商找货</h3>
         <button
           type="button"
           aria-label="关闭供应商搜索"
@@ -60,18 +113,18 @@ const searchName = (item: SourcingSearch | null) =>
       <label
         >输入类型<select v-model="searchForm.input_type">
           <option value="keyword">关键词</option>
+          <option value="image">图片</option>
           <option value="opportunity">机会</option>
+          <option value="product_url">商品链接</option>
         </select></label
       ><label
-        >{{ searchForm.input_type === "opportunity" ? "机会编号" : "商品关键词"
+        >{{ inputLabel
         }}<input
           v-model="searchForm.input_ref"
           required
-          :placeholder="
-            searchForm.input_type === 'opportunity'
-              ? '从选品机会详情进入会自动填写'
-              : '例如：折叠收纳箱'
-          "
+          maxlength="2048"
+          :inputmode="['image', 'product_url'].includes(searchForm.input_type) ? 'url' : 'text'"
+          :placeholder="inputPlaceholder"
       /></label>
       <aside>
         系统会直接爬取公开供应商商品页，保存供应商、商品、价格、图片、网址与采集时间；网页没有披露的
@@ -83,10 +136,18 @@ const searchName = (item: SourcingSearch | null) =>
       </footer>
     </form>
   </div>
-  <div v-if="quoteCandidate" class="sourcing-modal" role="dialog" aria-modal="true">
+  <div
+    v-if="quoteCandidate"
+    ref="quoteDialog"
+    class="sourcing-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="sourcing-quote-title"
+    @keydown.esc="emit('closeQuote')"
+  >
     <form @submit.prevent="emit('confirmQuote')">
       <header>
-        <h3>确认完整供应商报价</h3>
+        <h3 id="sourcing-quote-title">确认完整供应商报价</h3>
         <button
           type="button"
           aria-label="关闭报价编辑"
@@ -149,10 +210,12 @@ const searchName = (item: SourcingSearch | null) =>
   </div>
   <div
     v-if="purchaseCandidate"
+    ref="purchaseDialog"
     class="sourcing-modal"
     role="dialog"
     aria-modal="true"
     aria-labelledby="purchase-task-title"
+    @keydown.esc="emit('closePurchase')"
   >
     <form @submit.prevent="emit('purchase')">
       <header>
@@ -214,10 +277,18 @@ const searchName = (item: SourcingSearch | null) =>
       </footer>
     </form>
   </div>
-  <div v-if="deleting" class="sourcing-modal" role="dialog" aria-modal="true">
+  <div
+    v-if="deleting"
+    ref="deleteDialog"
+    class="sourcing-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="sourcing-delete-title"
+    @keydown.esc="emit('closeDelete')"
+  >
     <form @submit.prevent="emit('removeSearch')">
       <header>
-        <h3>删除找货记录</h3>
+        <h3 id="sourcing-delete-title">删除找货记录</h3>
         <button
           type="button"
           aria-label="关闭删除确认"

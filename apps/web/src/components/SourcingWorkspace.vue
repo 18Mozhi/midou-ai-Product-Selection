@@ -13,7 +13,9 @@ import type {
   SourcingState as State,
 } from "./sourcing-workspace-types";
 import "../sourcing.css";
-const props = defineProps<{ apiBaseUrl: string }>(),
+const props = withDefaults(defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(), {
+    capabilities: () => [],
+  }),
   route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
@@ -59,6 +61,13 @@ const missingLabels: Record<string, string> = {
     stability_status: "稳定性",
     risk_level: "风险",
   },
+  canManage = computed(() => props.capabilities.includes("supplier_quote:manage")),
+  canConfirmCost = computed(() => props.capabilities.includes("cost:confirm")),
+  canInspectCollection = computed(
+    () =>
+      props.capabilities.includes("platform:operate") ||
+      props.capabilities.includes("platform:superadmin"),
+  ),
   candidates = computed(() => selected.value?.candidates ?? []),
   searchName = (item: Search | null | undefined) =>
     item?.display_name || item?.input_ref || "供应商",
@@ -142,15 +151,13 @@ const missingLabels: Record<string, string> = {
         : "error";
 async function load() {
   state.value = "loading";
+  notice.value = "";
+  selectedQuotes.value = [];
   try {
     const response = await request<Search[]>("/sourcing/searches");
     requestId.value = response.request_id;
     items.value = response.data;
-    try {
-      comparisons.value = (await request<SourcingComparison[]>("/sourcing/comparisons")).data;
-    } catch {
-      comparisons.value = [];
-    }
+    comparisons.value = (await request<SourcingComparison[]>("/sourcing/comparisons")).data;
     const requestedRecord = typeof route.query.record === "string" ? route.query.record : "";
     selected.value =
       items.value.find((x) => x.id === requestedRecord) ??
@@ -172,6 +179,7 @@ async function load() {
   }
 }
 async function detail(item: Search, syncRoute = true) {
+  if (selected.value?.id !== item.id) selectedQuotes.value = [];
   selected.value = item;
   try {
     const response = await request<Search>(`/sourcing/searches/${item.id}`);
@@ -211,12 +219,24 @@ async function create() {
   }
 }
 function openSearch() {
+  if (!canManage.value) return;
   showSearch.value = true;
   void router.replace({ query: { ...route.query, create: "1" } });
 }
 function closeSearch() {
   showSearch.value = false;
   void router.replace({ query: { ...route.query, create: undefined } });
+}
+function resetQuery() {
+  query.value = "";
+}
+function handleStatePrimary() {
+  if (state.value === "empty" && canManage.value) openSearch();
+  else void load();
+}
+function handleStateSecondary() {
+  if (state.value === "empty") resetQuery();
+  else void load();
 }
 async function confirm() {
   if (!quoteCandidate.value) return;
@@ -247,18 +267,22 @@ function openQuote(candidate: Candidate) {
   quote.lead_time_days = candidate.lead_time_days ?? 7;
   quote.location = candidate.location ?? "";
   quote.confidence_value = candidate.confidence_value ?? 80;
+  quote.stability_status = candidate.quote?.stability_status ?? "unknown";
+  quote.risk_level = candidate.quote?.risk_level ?? "unknown";
   quote.observed_at = new Date(candidate.observed_at).toISOString().slice(0, 16);
   quote.evidence_id = candidate.evidence_id;
 }
 async function compare() {
+  const selectedCount = selectedQuotes.value.length;
   if (
     await post("/sourcing/comparisons", {
       name: `${searchName(selected.value)} 报价对比`,
       quote_ids: selectedQuotes.value,
     })
   ) {
-    notice.value = `已保存 ${selectedQuotes.value.length} 家报价对比。`;
     selectedQuotes.value = [];
+    await load();
+    notice.value = `已保存 ${selectedCount} 家报价对比。`;
   }
 }
 function openPurchase(candidate: Candidate) {
@@ -326,6 +350,12 @@ onMounted(() => {
 watch(query, (value) => {
   void router.replace({ query: { ...route.query, q: value || undefined, create: undefined } });
 });
+watch(
+  () => route.query.create,
+  (value) => {
+    showSearch.value = value === "1" && canManage.value;
+  },
+);
 </script>
 <template>
   <section class="sourcing-workspace">
@@ -360,7 +390,7 @@ watch(query, (value) => {
         <h2>供应链找货</h2>
         <span>采集事实先投影为候选；缺失规格、交期、地点、可信度与风险时禁止进入可靠对比。</span>
       </div>
-      <button type="button" @click="openSearch">发起供应商找货</button>
+      <button v-if="canManage" type="button" @click="openSearch">发起供应商找货</button>
     </header>
     <p v-if="notice" class="sourcing-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
@@ -387,7 +417,25 @@ watch(query, (value) => {
           placeholder="关键词、机会编号或状态" /></label
       ><span>共 {{ filteredItems.length }} 条结果</span>
     </div>
-    <UiStatePanel v-if="state !== 'ready'" :kind="state" :request-id="requestId" @primary="load" />
+    <UiStatePanel
+      v-if="state !== 'ready'"
+      :kind="state"
+      :request-id="requestId"
+      :action-hint="notice"
+      :primary-label="state === 'empty' && !canManage ? '重新加载' : ''"
+      @primary="handleStatePrimary"
+      @secondary="handleStateSecondary"
+    />
+    <UiStatePanel
+      v-else-if="!filteredItems.length"
+      kind="empty"
+      title="没有匹配的找货记录"
+      description="当前搜索条件没有命中记录；清空搜索后可继续查看原有找货结果。"
+      primary-label="清空搜索"
+      :secondary-label="canManage ? '发起新找货' : '重新加载'"
+      @primary="resetQuery"
+      @secondary="canManage ? openSearch() : load()"
+    />
     <div v-else class="sourcing-layout">
       <aside>
         <button
@@ -411,12 +459,20 @@ watch(query, (value) => {
             >
           </div>
           <div class="sourcing-actions">
-            <button type="button" :disabled="busy" @click="refreshSearch">重新采集</button
+            <template v-if="canManage">
+              <button type="button" :disabled="busy" @click="refreshSearch">
+                重新采集
+              </button></template
             ><RouterLink
               class="sourcing-cost-link"
               :to="{ path: '/sourcing/cost-rules', query: { from: route.fullPath } }"
               >费用与利润规则</RouterLink
-            ><button type="button" class="danger ghost" @click="deleting = selected">
+            ><button
+              v-if="canManage"
+              type="button"
+              class="danger ghost"
+              @click="deleting = selected"
+            >
               删除找货记录
             </button>
           </div>
@@ -428,6 +484,7 @@ watch(query, (value) => {
           v-if="selected.input_type === 'opportunity'"
           :api-base-url="apiBaseUrl"
           :opportunity-id="selected.input_ref"
+          :can-confirm-cost="canConfirmCost"
         />
         <section v-if="selected.collection_progress" class="sourcing-progress">
           <header>
@@ -470,7 +527,9 @@ watch(query, (value) => {
               <dd>{{ selected.collection_progress.blocked_subqueries }}</dd>
             </div>
           </dl>
-          <RouterLink :to="`/platform-admin/collection?task=${selected.collection_task_id}`"
+          <RouterLink
+            v-if="canInspectCollection"
+            :to="`/platform-admin/collection?task=${selected.collection_task_id}`"
             >查看采集任务明细</RouterLink
           >
         </section>
@@ -505,7 +564,7 @@ watch(query, (value) => {
         <section class="supplier-cards">
           <article v-for="item in candidates" :key="item.id" :data-ready="item.status === 'ready'">
             <header>
-              <label v-if="item.quote"
+              <label v-if="canManage && item.quote"
                 ><input
                   type="checkbox"
                   :checked="selectedQuotes.includes(item.quote.id)"
@@ -562,15 +621,22 @@ watch(query, (value) => {
                 >打开外部原始商品页（新窗口）</a
               ><time>采集于 {{ timeText(item.observed_at) }}</time
               ><code>证据 {{ item.evidence_id }}</code
-              ><button v-if="!item.quote" type="button" @click="openQuote(item)">确认报价</button
-              ><button v-else type="button" @click="openPurchase(item)">创建采购任务</button>
+              ><button v-if="canManage && !item.quote" type="button" @click="openQuote(item)">
+                确认报价</button
+              ><button v-else-if="canManage" type="button" @click="openPurchase(item)">
+                创建采购任务
+              </button>
             </footer>
           </article>
         </section>
         <SourcingComparisonPanel :comparisons="comparisons" />
       </main>
     </div>
-    <aside v-if="selectedQuotes.length" class="sourcing-compare-tray" aria-live="polite">
+    <aside
+      v-if="canManage && selectedQuotes.length"
+      class="sourcing-compare-tray"
+      aria-live="polite"
+    >
       <strong>已选 {{ selectedQuotes.length }} / 5 家供应商</strong>
       <span>{{ selectedQuotes.length < 2 ? "至少再选一家才能对比" : "可以保存本次报价对比" }}</span>
       <button type="button" :disabled="selectedQuotes.length < 2 || busy" @click="compare">
@@ -578,6 +644,7 @@ watch(query, (value) => {
       </button>
     </aside>
     <SourcingWorkspaceDialogs
+      v-if="canManage"
       :show-search="showSearch"
       :search-form="form"
       :quote-candidate="quoteCandidate"

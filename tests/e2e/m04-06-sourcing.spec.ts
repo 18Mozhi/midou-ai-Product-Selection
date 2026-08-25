@@ -72,7 +72,10 @@ const comparisonQuote = {
   evidence_id: "00000000-0000-4000-8000-000000000610",
 };
 
-async function setup(page: Page) {
+async function setup(
+  page: Page,
+  capabilities = ["task:read", "sourcing:read", "supplier_quote:manage", "cost:confirm"],
+) {
   let preference = { theme: "deep-ocean", version: 1 };
   await page.route("**/api/v1/me/ui-preferences", async (route) => {
     if (route.request().method() === "PUT") {
@@ -88,7 +91,7 @@ async function setup(page: Page) {
         organization_id: "00000000-0000-4000-8000-000000000607",
         workspace_id: "00000000-0000-4000-8000-000000000608",
         roles: ["selection_manager"],
-        capabilities: ["task:read", "sourcing:read", "supplier_quote:manage"],
+        capabilities,
         platform_roles: [],
         platform_capabilities: [],
         guard_reason: "navigation_member_allowed",
@@ -157,6 +160,12 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await page.goto("/sourcing?create=1");
   await expect(page.getByRole("heading", { name: "供应链找货", level: 2 })).toBeVisible();
   await expect(page.getByRole("heading", { name: "发起供应商找货" })).toBeVisible();
+  await expect(page.getByLabel("输入类型").locator("option")).toHaveText([
+    "关键词",
+    "图片",
+    "机会",
+    "商品链接",
+  ]);
   await page.getByRole("button", { name: "关闭供应商搜索" }).click();
   const supplierCandidates = page.locator(".supplier-cards");
   await expect(supplierCandidates.getByText("宁波澄净户外用品厂")).toBeVisible();
@@ -250,4 +259,101 @@ test("供应链详情完整跟随深色与浅色主题", async ({ page }) => {
     (element) => getComputedStyle(element).backgroundColor,
   );
   expect(lightBackground).not.toBe(deepBackground);
+});
+
+test("empty state opens the real sourcing form", async ({ page }) => {
+  await setup(page);
+  await page.unroute("**/api/v1/sourcing/searches");
+  await page.route("**/api/v1/sourcing/searches", (route) => route.fulfill({ json: envelope([]) }));
+  await page.goto("/sourcing");
+  await page.getByRole("button", { name: "开始创建" }).click();
+  const dialog = page.getByRole("dialog", { name: "发起供应商找货" });
+  await expect(dialog).toBeVisible();
+  await expect(page.getByRole("button", { name: "关闭供应商搜索" })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+});
+
+test("loading and blocked dependency remain explicit and retryable", async ({ page }) => {
+  await setup(page);
+  await page.unroute("**/api/v1/sourcing/searches");
+  await page.route("**/api/v1/sourcing/searches", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    await route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "sourcing_dependency_unavailable",
+          message: "sourcing dependency unavailable",
+          action_hint: "检查服务状态后重新尝试。",
+        },
+        request_id: "m04-06-failure-request",
+        trace_id: "m04-06-failure-trace",
+      },
+    });
+  });
+  await page.goto("/sourcing");
+  await expect(page.getByRole("heading", { name: "正在读取真实数据" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "依赖暂时受阻" })).toBeVisible();
+  await expect(page.getByText("检查服务状态后重新尝试。").first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "稍后重试" })).toBeVisible();
+});
+
+test("unmatched sourcing search can be reset without showing unrelated detail", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/sourcing");
+  await page.getByLabel("搜索找货记录").fill("不存在的找货记录");
+  await expect(page.getByRole("heading", { name: "没有匹配的找货记录" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "便携净水杯" })).toHaveCount(0);
+  await page.getByRole("button", { name: "清空搜索" }).click();
+  await expect(page.getByRole("heading", { name: "便携净水杯" })).toBeVisible();
+});
+
+test("read-only sourcing role sees facts without write controls", async ({ page }) => {
+  await setup(page, ["task:read", "sourcing:read"]);
+  await page.goto("/sourcing");
+  await expect(page.getByText("供应商报价对比历史")).toBeVisible();
+  await expect(page.getByRole("button", { name: "发起供应商找货" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "重新采集" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "删除找货记录" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "确认报价" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "创建采购任务" })).toHaveCount(0);
+  await expect(page.getByLabel("加入对比")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "查看采集任务明细" })).toHaveCount(0);
+});
+
+test("opening another incomplete quote resets carried risk choices", async ({ page }) => {
+  await setup(page);
+  const anotherCandidate = {
+    ...incompleteCandidate,
+    id: "00000000-0000-4000-8000-000000000614",
+    supplier_name: "第二家待确认供应商",
+    evidence_id: "00000000-0000-4000-8000-000000000615",
+  };
+  await page.unroute(`**/api/v1/sourcing/searches/${searchId}`);
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({
+      json: envelope({
+        id: searchId,
+        input_type: "keyword",
+        input_ref: "便携净水杯",
+        status: "completed_with_warnings",
+        candidate_count: 2,
+        missing_fields: incompleteCandidate.missing_fields,
+        created_at: "2026-08-08T12:00:00.000Z",
+        updated_at: "2026-08-08T12:05:00.000Z",
+        candidates: [incompleteCandidate, anotherCandidate],
+      }),
+    }),
+  );
+  await page.goto("/sourcing");
+  await page.getByRole("button", { name: "确认报价" }).first().click();
+  await page.getByLabel("稳定性").selectOption("stable");
+  await page.getByLabel("风险").selectOption("low");
+  await page.getByRole("button", { name: "关闭报价编辑" }).click();
+  await page.getByRole("button", { name: "确认报价" }).nth(1).click();
+  await expect(page.getByLabel("稳定性")).toHaveValue("unknown");
+  await expect(page.getByLabel("风险")).toHaveValue("unknown");
 });

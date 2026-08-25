@@ -1,8 +1,353 @@
-import{randomUUID}from'node:crypto';import{readFile}from'node:fs/promises';import{setTimeout as delay}from'node:timers/promises';import{loadRuntimeConfig}from'../packages/config/dist/index.js';import{createDatabasePool}from'../packages/database/dist/index.js';import{SourcingService,SourcingServiceError}from'../apps/api/dist/sourcing-service.js';import{MySqlSourcingRepository}from'../apps/api/dist/mysql-sourcing-repository.js';
-const requestId=randomUUID(),traceId=randomUUID(),now=new Date(),pool=createDatabasePool(loadRuntimeConfig(process.env,'worker')),ids={actor:randomUUID(),org:randomUUID(),ws:randomUUID(),otherOrg:randomUUID(),otherWs:randomUUID(),provider:randomUUID(),task:randomUUID(),subquery:randomUUID()},service=new SourcingService(new MySqlSourcingRepository(pool)),scope={organizationId:ids.org,workspaceId:ids.ws,actorId:ids.actor},write=key=>({...scope,requestId,traceId,idempotencyKey:key});
-async function migrate(){const[rows]=await pool.query("SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='sourcing_searches'");if(Number(rows[0].count))return;const sql=await readFile('database/migrations/0017f_sourcing_m04_06.up.sql','utf8');for(const s of sql.split(';').map(v=>v.replace(/^--.*$/gm,'').trim()).filter(Boolean))await pool.query(s);}
-async function cleanup(){
-  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
-for(const sql of['DELETE FROM sourcing_operations WHERE actor_id=?','DELETE FROM sourcing_outbox WHERE organization_id IN (?,?)','DELETE FROM sourcing_events WHERE organization_id IN (?,?)','DELETE FROM sourcing_purchase_tasks WHERE organization_id IN (?,?)','DELETE FROM sourcing_comparisons WHERE organization_id IN (?,?)','DELETE FROM supplier_quotes WHERE organization_id IN (?,?)','DELETE FROM sourcing_candidates WHERE organization_id IN (?,?)','DELETE FROM sourcing_projection_jobs WHERE organization_id IN (?,?)','DELETE FROM sourcing_searches WHERE organization_id IN (?,?)'])try{await pool.query(sql,sql.includes('actor_id')?[ids.actor]:[ids.org,ids.otherOrg]);}catch{}for(const sql of['DELETE FROM collection_task_evidence_links WHERE organization_id=?','DELETE FROM field_provenance WHERE organization_id=?','DELETE FROM normalized_records WHERE organization_id=?','DELETE FROM raw_evidence WHERE organization_id=?','DELETE FROM file_assets WHERE organization_id=?','DELETE FROM collection_subqueries WHERE task_id=?','DELETE FROM collection_tasks WHERE id=?'])try{await pool.query(sql,sql.includes('task')?[ids.task]:[ids.org]);}catch{}for(const[sql,id]of[['DELETE FROM providers WHERE id=?',ids.provider],['DELETE FROM workspaces WHERE id=?',ids.ws],['DELETE FROM workspaces WHERE id=?',ids.otherWs],['DELETE FROM organizations WHERE id=?',ids.org],['DELETE FROM organizations WHERE id=?',ids.otherOrg],['DELETE FROM users WHERE id=?',ids.actor]])try{await pool.query(sql,[id]);}catch{}}
-async function seed(){const email=`m04-06-${requestId}@example.test`;await pool.query("INSERT INTO users (id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES (?,?,?,'live-probe','active',?,?,1,?,?)",[ids.actor,email,email,now,now,now,now]);for(const[org,ws,label]of[[ids.org,ids.ws,'primary'],[ids.otherOrg,ids.otherWs,'other']]){await pool.query("INSERT INTO organizations (id,name,slug,status,timezone,data_retention_days,default_workspace_id,created_by,version,created_at,updated_at) VALUES (?,?,?,'active','Asia/Shanghai',365,NULL,?,1,?,?)",[org,`M04-06 ${label}`,`m0406-${label}-${requestId.slice(0,8)}`,ids.actor,now,now]);await pool.query("INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,?,?,'active',?,1,?,?)",[ws,org,`M04-06 ${label}`,`m0406-${label}`,ids.actor,now,now]);await pool.query('UPDATE organizations SET default_workspace_id=? WHERE id=?',[ws,org]);}await pool.query("INSERT INTO providers (id,code,name,target_url,access_mode,markets_json,languages_json,fields_json,schedule_minutes,concurrency_limit,timeout_ms,retry_limit,circuit_failure_threshold,dedupe_key,retention_days,failure_rules_json,parser_version,healthcheck_url,owner_label,status,version,created_by,updated_by,created_at,updated_at) VALUES (?,?,?,'inline://product-supply-csv-v1','import','[\"GLOBAL\"]','[\"und\"]','[\"external_id\",\"title\",\"price\",\"currency\",\"supplier_name\",\"moq\",\"canonical_url\",\"observed_at\"]',10080,1,10000,0,1,'external_id',365,'[\"validation_failed\"]','product-supply-csv-v1',NULL,'平台运营','enabled',1,?,?,?,?)",[ids.provider,`m04_06_${requestId.slice(0,8)}`,'M04-06 supply CSV',ids.actor,ids.actor,now,now]);await pool.query("INSERT INTO collection_tasks (id,organization_id,workspace_id,status,coverage_status,priority,scheduled_at,available_at,finished_at,attempt_count,successful_subquery_count,failed_subquery_count,blocked_subquery_count,available_result_count,missing_fields_json,last_error_code,request_id,trace_id,version,created_by,created_at,updated_at) VALUES (?,?,?,'succeeded','complete','normal',?,?,?,1,1,0,0,2,'[]',NULL,?,?,1,?,?,?)",[ids.task,ids.org,ids.ws,now,now,now,requestId,traceId,ids.actor,now,now]);await pool.query("INSERT INTO collection_subqueries (id,task_id,organization_id,workspace_id,provider_id,ordinal,target_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,started_at,finished_at,version,created_at,updated_at) VALUES (?,?,?,?,?,1,'{}',1,'succeeded',2,'[]',NULL,0,?,?,1,?,?)",[ids.subquery,ids.task,ids.org,ids.ws,ids.provider,now,now,now,now]);for(let i=1;i<=2;i++){const file=randomUUID(),evidence=randomUUID(),record=randomUUID(),fields={external_id:`SUP-${i}`,title:`净水杯供应款 ${i}`,price:10+i,currency:'CNY',supplier_name:`供应商 ${i}`,moq:100*i,canonical_url:`https://example.test/supply/${i}`,observed_at:now.toISOString()};await pool.query("INSERT INTO file_assets (id,organization_id,workspace_id,category,relative_path,content_sha256,size_bytes,status,created_by,created_at,updated_at) VALUES (?,?,?,'evidence',?,REPEAT(?,64),1,'active',?,?,?)",[file,ids.org,ids.ws,`m0406/${file}.json`,String(i),ids.actor,now,now]);await pool.query("INSERT INTO raw_evidence (id,organization_id,workspace_id,collection_task_id,collection_subquery_id,provider_id,file_asset_id,source_url,canonical_url,dedupe_key,content_sha256,content_type,size_bytes,captured_at,parser_version,adapter_version,retention_until,status,request_id,trace_id,created_by,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,REPEAT(?,64),'application/json',1,?,?,?,?,'active',?,?,?,?)",[evidence,ids.org,ids.ws,ids.task,ids.subquery,ids.provider,file,fields.canonical_url,fields.canonical_url,`SUP-${i}`,String(i),now,'product-supply-csv-v1','manual-product-supply-csv-adapter-v1',new Date(now.getTime()+86400000),requestId,traceId,ids.actor,now]);await pool.query("INSERT INTO normalized_records (id,organization_id,workspace_id,provider_id,raw_evidence_id,record_key,schema_version,record_version,payload_json,supersedes_record_id,correction_reason,status,request_id,trace_id,created_by,created_at) VALUES (?,?,?,?,?,?,'product-supply-csv-v1',1,?,NULL,NULL,'active',?,?,?,?)",[record,ids.org,ids.ws,ids.provider,evidence,`SUP-${i}`,JSON.stringify({fields}),requestId,traceId,ids.actor,now]);await pool.query("INSERT INTO collection_task_evidence_links (id,organization_id,workspace_id,collection_task_id,collection_subquery_id,provider_id,raw_evidence_id,normalized_record_id,link_type,request_id,trace_id,created_by,created_at) VALUES (?,?,?,?,?,?,?,?,'captured',?,?,?,?)",[randomUUID(),ids.org,ids.ws,ids.task,ids.subquery,ids.provider,evidence,record,requestId,traceId,ids.actor,now]);}}
-try{const[vr]=await pool.query('SELECT VERSION() version,@@character_set_server charset,DATABASE() database_name,CURRENT_USER() account_name'),runtime=vr[0];if(!String(runtime.version).startsWith('5.7.')||runtime.charset!=='utf8mb4'||runtime.database_name!=='product_scout'||!String(runtime.account_name).startsWith('product_scout@'))throw new Error('requires MySQL57 utf8mb4 product_scout business account');await migrate();await cleanup();await seed();const search=await service.createSearch({...write('search'),value:{collection_task_id:ids.task,input_type:'keyword',input_ref:'净水杯'}}),replay=await service.createSearch({...write('search'),value:{collection_task_id:ids.task,input_type:'keyword',input_ref:'净水杯'}});if(search.id!==replay.id)throw new Error('search idempotency failed');let projected=null;for(let i=0;i<40;i++){const[rows]=await pool.query('SELECT status,last_error_code FROM sourcing_projection_jobs WHERE id=? AND organization_id=? AND workspace_id=?',[search.job_id,ids.org,ids.ws]);const row=rows[0];if(!row)throw new Error('projection job missing');if(['completed_with_warnings','succeeded_empty'].includes(row.status)){projected=row;break;}if(['failed_terminal','dead_letter'].includes(row.status))throw new Error(`projection failed ${row.last_error_code??row.status}`);await delay(250);}if(!projected||projected.status!=='completed_with_warnings')throw new Error('projection timeout');let detail=await service.detail({organizationId:ids.org,workspaceId:ids.ws,searchId:search.id});if(detail.candidates.length!==2||detail.candidates.some(x=>x.status!=='incomplete'||!x.missing_fields.includes('specification')))throw new Error('missing field truth failed');const quoteIds=[];for(const[index,candidate]of detail.candidates.entries()){const q=await service.confirmQuote({...write(`quote-${index}`),value:{candidate_id:candidate.id,specification:`500ml 规格 ${index+1}`,lead_time_days:7+index,location:index?'广东':'浙江',confidence_value:85-index,stability_status:index?'variable':'stable',risk_level:index?'medium':'low',observed_at:now.toISOString(),evidence_id:candidate.evidence_id}});quoteIds.push(q.id);}const comparison=await service.createComparison({...write('comparison'),value:{name:'两家供应商对比',quote_ids:quoteIds}});if(comparison.quote_count!==2)throw new Error('comparison failed');let below=false;try{await service.createPurchaseTask({...write('below-moq'),value:{quote_id:quoteIds[0],quantity:1,reason:'验证 MOQ'}});}catch(e){below=e instanceof SourcingServiceError&&e.code==='purchase_quantity_below_moq';}if(!below)throw new Error('MOQ guard missing');const purchase=await service.createPurchaseTask({...write('purchase'),value:{quote_id:quoteIds[0],quantity:detail.candidates[0].moq,reason:'已核验规格和报价'}});if(purchase.status!=='queued')throw new Error('purchase queue failed');const other=await service.list({organizationId:ids.otherOrg,workspaceId:ids.otherWs}),comparisons=await service.listComparisons(scope);if(other.length||comparisons[0]?.quotes.length!==2)throw new Error('isolation or comparison read failed');const[[counts],[events]]=await Promise.all([pool.query('SELECT (SELECT COUNT(*) FROM supplier_quotes WHERE organization_id=?) quotes,(SELECT COUNT(*) FROM sourcing_purchase_tasks WHERE organization_id=? AND status=\'queued\') tasks',[ids.org,ids.org]),pool.query('SELECT request_id,trace_id FROM sourcing_events WHERE organization_id=?',[ids.org])]);if(Number(counts[0]?.quotes)!==2||Number(counts[0]?.tasks)!==1||events.some(x=>x.request_id!==requestId||x.trace_id!==traceId))throw new Error('history or correlation failed');await cleanup();console.log(JSON.stringify({status:'passed',module:'M04-06',mysql:runtime.version,provider_projection:'product-supply-csv-v1',production_worker_projection:'passed',projection_job_id:search.job_id,incomplete_candidates:2,confirmed_quote_versions:2,comparison_max_five:'passed',comparison_count:2,moq_guard:'passed',purchase_task_queued:'passed',idempotency:'passed',organization_workspace_isolation:'passed',audit_outbox_correlation:'passed',cleanup:'passed',request_id:requestId,trace_id:traceId}));}catch(e){console.error(JSON.stringify({status:'blocked',code:e?.code??'sourcing_live_failed',message:e instanceof Error?e.message:'unknown',action_hint:e?.actionHint??null,stack:e instanceof Error?e.stack:'unknown',request_id:requestId,trace_id:traceId}));process.exitCode=2;}finally{await cleanup();await pool.end();}
+import { randomUUID } from "node:crypto";
+import { readFile } from "node:fs/promises";
+import { setTimeout as delay } from "node:timers/promises";
+import { loadRuntimeConfig } from "../packages/config/dist/index.js";
+import { createDatabasePool } from "../packages/database/dist/index.js";
+import { SourcingService, SourcingServiceError } from "../apps/api/dist/sourcing-service.js";
+import { MySqlSourcingRepository } from "../apps/api/dist/mysql-sourcing-repository.js";
+const requestId = randomUUID(),
+  traceId = randomUUID(),
+  now = new Date(),
+  pool = createDatabasePool(loadRuntimeConfig(process.env, "worker")),
+  ids = {
+    actor: randomUUID(),
+    org: randomUUID(),
+    ws: randomUUID(),
+    otherOrg: randomUUID(),
+    otherWs: randomUUID(),
+    provider: randomUUID(),
+    task: randomUUID(),
+    subquery: randomUUID(),
+  },
+  service = new SourcingService(new MySqlSourcingRepository(pool)),
+  scope = { organizationId: ids.org, workspaceId: ids.ws, actorId: ids.actor },
+  write = (key) => ({ ...scope, requestId, traceId, idempotencyKey: key });
+async function migrate() {
+  const [rows] = await pool.query(
+    "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='sourcing_searches'",
+  );
+  if (Number(rows[0].count)) return;
+  const sql = await readFile("database/migrations/0017f_sourcing_m04_06.up.sql", "utf8");
+  for (const s of sql
+    .split(";")
+    .map((v) => v.replace(/^--.*$/gm, "").trim())
+    .filter(Boolean))
+    await pool.query(s);
+}
+async function cleanup() {
+  try {
+    await pool.query(
+      "UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'",
+    );
+  } catch {}
+  for (const sql of [
+    "DELETE FROM sourcing_operations WHERE actor_id=?",
+    "DELETE FROM sourcing_outbox WHERE organization_id IN (?,?)",
+    "DELETE FROM sourcing_events WHERE organization_id IN (?,?)",
+    "DELETE FROM sourcing_purchase_tasks WHERE organization_id IN (?,?)",
+    "DELETE FROM sourcing_comparisons WHERE organization_id IN (?,?)",
+    "DELETE FROM supplier_quotes WHERE organization_id IN (?,?)",
+    "DELETE FROM sourcing_candidates WHERE organization_id IN (?,?)",
+    "DELETE FROM sourcing_projection_jobs WHERE organization_id IN (?,?)",
+    "DELETE FROM sourcing_searches WHERE organization_id IN (?,?)",
+  ])
+    try {
+      await pool.query(sql, sql.includes("actor_id") ? [ids.actor] : [ids.org, ids.otherOrg]);
+    } catch {}
+  for (const sql of [
+    "DELETE FROM collection_task_evidence_links WHERE organization_id=?",
+    "DELETE FROM field_provenance WHERE organization_id=?",
+    "DELETE FROM normalized_records WHERE organization_id=?",
+    "DELETE FROM raw_evidence WHERE organization_id=?",
+    "DELETE FROM file_assets WHERE organization_id=?",
+    "DELETE FROM collection_subqueries WHERE task_id=?",
+    "DELETE FROM collection_tasks WHERE id=?",
+  ])
+    try {
+      await pool.query(sql, sql.includes("task") ? [ids.task] : [ids.org]);
+    } catch {}
+  for (const [sql, id] of [
+    ["DELETE FROM providers WHERE id=?", ids.provider],
+    ["DELETE FROM workspaces WHERE id=?", ids.ws],
+    ["DELETE FROM workspaces WHERE id=?", ids.otherWs],
+    ["DELETE FROM organizations WHERE id=?", ids.org],
+    ["DELETE FROM organizations WHERE id=?", ids.otherOrg],
+    ["DELETE FROM users WHERE id=?", ids.actor],
+  ])
+    try {
+      await pool.query(sql, [id]);
+    } catch {}
+}
+async function seed() {
+  const email = `m04-06-${requestId}@example.test`;
+  await pool.query(
+    "INSERT INTO users (id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES (?,?,?,'live-probe','active',?,?,1,?,?)",
+    [ids.actor, email, email, now, now, now, now],
+  );
+  for (const [org, ws, label] of [
+    [ids.org, ids.ws, "primary"],
+    [ids.otherOrg, ids.otherWs, "other"],
+  ]) {
+    await pool.query(
+      "INSERT INTO organizations (id,name,slug,status,timezone,data_retention_days,default_workspace_id,created_by,version,created_at,updated_at) VALUES (?,?,?,'active','Asia/Shanghai',365,NULL,?,1,?,?)",
+      [org, `M04-06 ${label}`, `m0406-${label}-${requestId.slice(0, 8)}`, ids.actor, now, now],
+    );
+    await pool.query(
+      "INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,?,?,'active',?,1,?,?)",
+      [ws, org, `M04-06 ${label}`, `m0406-${label}`, ids.actor, now, now],
+    );
+    await pool.query("UPDATE organizations SET default_workspace_id=? WHERE id=?", [ws, org]);
+  }
+  await pool.query(
+    'INSERT INTO providers (id,code,name,target_url,access_mode,markets_json,languages_json,fields_json,schedule_minutes,concurrency_limit,timeout_ms,retry_limit,circuit_failure_threshold,dedupe_key,retention_days,failure_rules_json,parser_version,healthcheck_url,owner_label,status,version,created_by,updated_by,created_at,updated_at) VALUES (?,?,?,\'inline://product-supply-csv-v1\',\'import\',\'["GLOBAL"]\',\'["und"]\',\'["external_id","title","price","currency","supplier_name","moq","canonical_url","observed_at"]\',10080,1,10000,0,1,\'external_id\',365,\'["validation_failed"]\',\'product-supply-csv-v1\',NULL,\'平台运营\',\'enabled\',1,?,?,?,?)',
+    [
+      ids.provider,
+      `m04_06_${requestId.slice(0, 8)}`,
+      "M04-06 supply CSV",
+      ids.actor,
+      ids.actor,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO collection_tasks (id,organization_id,workspace_id,status,coverage_status,priority,scheduled_at,available_at,finished_at,attempt_count,successful_subquery_count,failed_subquery_count,blocked_subquery_count,available_result_count,missing_fields_json,last_error_code,request_id,trace_id,version,created_by,created_at,updated_at) VALUES (?,?,?,'succeeded','complete','normal',?,?,?,1,1,0,0,2,'[]',NULL,?,?,1,?,?,?)",
+    [ids.task, ids.org, ids.ws, now, now, now, requestId, traceId, ids.actor, now, now],
+  );
+  await pool.query(
+    "INSERT INTO collection_subqueries (id,task_id,organization_id,workspace_id,provider_id,ordinal,target_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,started_at,finished_at,version,created_at,updated_at) VALUES (?,?,?,?,?,1,'{}',1,'succeeded',2,'[]',NULL,0,?,?,1,?,?)",
+    [ids.subquery, ids.task, ids.org, ids.ws, ids.provider, now, now, now, now],
+  );
+  for (let i = 1; i <= 2; i++) {
+    const file = randomUUID(),
+      evidence = randomUUID(),
+      record = randomUUID(),
+      fields = {
+        external_id: `SUP-${i}`,
+        title: `净水杯供应款 ${i}`,
+        price: 10 + i,
+        currency: "CNY",
+        supplier_name: `供应商 ${i}`,
+        moq: 100 * i,
+        canonical_url: `https://example.test/supply/${i}`,
+        observed_at: now.toISOString(),
+      };
+    await pool.query(
+      "INSERT INTO file_assets (id,organization_id,workspace_id,category,relative_path,content_sha256,size_bytes,status,created_by,created_at,updated_at) VALUES (?,?,?,'evidence',?,REPEAT(?,64),1,'active',?,?,?)",
+      [file, ids.org, ids.ws, `m0406/${file}.json`, String(i), ids.actor, now, now],
+    );
+    await pool.query(
+      "INSERT INTO raw_evidence (id,organization_id,workspace_id,collection_task_id,collection_subquery_id,provider_id,file_asset_id,source_url,canonical_url,dedupe_key,content_sha256,content_type,size_bytes,captured_at,parser_version,adapter_version,retention_until,status,request_id,trace_id,created_by,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,REPEAT(?,64),'application/json',1,?,?,?,?,'active',?,?,?,?)",
+      [
+        evidence,
+        ids.org,
+        ids.ws,
+        ids.task,
+        ids.subquery,
+        ids.provider,
+        file,
+        fields.canonical_url,
+        fields.canonical_url,
+        `SUP-${i}`,
+        String(i),
+        now,
+        "product-supply-csv-v1",
+        "manual-product-supply-csv-adapter-v1",
+        new Date(now.getTime() + 86400000),
+        requestId,
+        traceId,
+        ids.actor,
+        now,
+      ],
+    );
+    await pool.query(
+      "INSERT INTO normalized_records (id,organization_id,workspace_id,provider_id,raw_evidence_id,record_key,schema_version,record_version,payload_json,supersedes_record_id,correction_reason,status,request_id,trace_id,created_by,created_at) VALUES (?,?,?,?,?,?,'product-supply-csv-v1',1,?,NULL,NULL,'active',?,?,?,?)",
+      [
+        record,
+        ids.org,
+        ids.ws,
+        ids.provider,
+        evidence,
+        `SUP-${i}`,
+        JSON.stringify(fields),
+        requestId,
+        traceId,
+        ids.actor,
+        now,
+      ],
+    );
+    await pool.query(
+      "INSERT INTO collection_task_evidence_links (id,organization_id,workspace_id,collection_task_id,collection_subquery_id,provider_id,raw_evidence_id,normalized_record_id,link_type,request_id,trace_id,created_by,created_at) VALUES (?,?,?,?,?,?,?,?,'captured',?,?,?,?)",
+      [
+        randomUUID(),
+        ids.org,
+        ids.ws,
+        ids.task,
+        ids.subquery,
+        ids.provider,
+        evidence,
+        record,
+        requestId,
+        traceId,
+        ids.actor,
+        now,
+      ],
+    );
+  }
+}
+try {
+  const [vr] = await pool.query(
+      "SELECT VERSION() version,@@character_set_server charset,DATABASE() database_name,CURRENT_USER() account_name",
+    ),
+    runtime = vr[0];
+  if (
+    !String(runtime.version).startsWith("5.7.") ||
+    runtime.charset !== "utf8mb4" ||
+    runtime.database_name !== "product_scout" ||
+    !String(runtime.account_name).startsWith("product_scout@")
+  )
+    throw new Error("requires MySQL57 utf8mb4 product_scout business account");
+  await migrate();
+  await cleanup();
+  await seed();
+  const search = await service.createSearch({
+      ...write("search"),
+      value: { collection_task_id: ids.task, input_type: "keyword", input_ref: "净水杯" },
+    }),
+    replay = await service.createSearch({
+      ...write("search"),
+      value: { collection_task_id: ids.task, input_type: "keyword", input_ref: "净水杯" },
+    });
+  if (search.id !== replay.id) throw new Error("search idempotency failed");
+  let projected = null;
+  for (let i = 0; i < 40; i++) {
+    const [rows] = await pool.query(
+      "SELECT status,last_error_code FROM sourcing_projection_jobs WHERE id=? AND organization_id=? AND workspace_id=?",
+      [search.job_id, ids.org, ids.ws],
+    );
+    const row = rows[0];
+    if (!row) throw new Error("projection job missing");
+    if (["completed_with_warnings", "succeeded_empty"].includes(row.status)) {
+      projected = row;
+      break;
+    }
+    if (["failed_terminal", "dead_letter"].includes(row.status))
+      throw new Error(`projection failed ${row.last_error_code ?? row.status}`);
+    await delay(250);
+  }
+  if (!projected || projected.status !== "completed_with_warnings")
+    throw new Error("projection timeout");
+  let detail = await service.detail({
+    organizationId: ids.org,
+    workspaceId: ids.ws,
+    searchId: search.id,
+  });
+  if (
+    detail.candidates.length !== 2 ||
+    detail.candidates.some(
+      (x) => x.status !== "incomplete" || !x.missing_fields.includes("specification"),
+    )
+  )
+    throw new Error("missing field truth failed");
+  const quoteIds = [];
+  for (const [index, candidate] of detail.candidates.entries()) {
+    const q = await service.confirmQuote({
+      ...write(`quote-${index}`),
+      value: {
+        candidate_id: candidate.id,
+        moq: candidate.moq,
+        specification: `500ml 规格 ${index + 1}`,
+        lead_time_days: 7 + index,
+        location: index ? "广东" : "浙江",
+        confidence_value: 85 - index,
+        stability_status: index ? "variable" : "stable",
+        risk_level: index ? "medium" : "low",
+        observed_at: now.toISOString(),
+        evidence_id: candidate.evidence_id,
+      },
+    });
+    quoteIds.push(q.id);
+  }
+  const comparison = await service.createComparison({
+    ...write("comparison"),
+    value: { name: "两家供应商对比", quote_ids: quoteIds },
+  });
+  if (comparison.quote_count !== 2) throw new Error("comparison failed");
+  let below = false;
+  try {
+    await service.createPurchaseTask({
+      ...write("below-moq"),
+      value: { quote_id: quoteIds[0], quantity: 1, reason: "验证 MOQ" },
+    });
+  } catch (e) {
+    below = e instanceof SourcingServiceError && e.code === "purchase_quantity_below_moq";
+  }
+  if (!below) throw new Error("MOQ guard missing");
+  const purchase = await service.createPurchaseTask({
+    ...write("purchase"),
+    value: {
+      quote_id: quoteIds[0],
+      quantity: detail.candidates[0].moq,
+      reason: "已核验规格和报价",
+    },
+  });
+  if (purchase.status !== "queued") throw new Error("purchase queue failed");
+  const other = await service.list({ organizationId: ids.otherOrg, workspaceId: ids.otherWs }),
+    comparisons = await service.listComparisons(scope);
+  if (other.length || comparisons[0]?.quotes.length !== 2)
+    throw new Error("isolation or comparison read failed");
+  const [[counts], [events]] = await Promise.all([
+    pool.query(
+      "SELECT (SELECT COUNT(*) FROM supplier_quotes WHERE organization_id=?) quotes,(SELECT COUNT(*) FROM sourcing_purchase_tasks WHERE organization_id=? AND status='queued') tasks",
+      [ids.org, ids.org],
+    ),
+    pool.query("SELECT request_id,trace_id FROM sourcing_events WHERE organization_id=?", [
+      ids.org,
+    ]),
+  ]);
+  if (
+    Number(counts[0]?.quotes) !== 2 ||
+    Number(counts[0]?.tasks) !== 1 ||
+    events.some((x) => x.request_id !== requestId || x.trace_id !== traceId)
+  )
+    throw new Error("history or correlation failed");
+  await cleanup();
+  console.log(
+    JSON.stringify({
+      status: "passed",
+      module: "M04-06",
+      mysql: runtime.version,
+      provider_projection: "product-supply-csv-v1",
+      production_worker_projection: "passed",
+      projection_job_id: search.job_id,
+      incomplete_candidates: 2,
+      confirmed_quote_versions: 2,
+      comparison_max_five: "passed",
+      comparison_count: 2,
+      moq_guard: "passed",
+      purchase_task_queued: "passed",
+      idempotency: "passed",
+      organization_workspace_isolation: "passed",
+      audit_outbox_correlation: "passed",
+      cleanup: "passed",
+      request_id: requestId,
+      trace_id: traceId,
+    }),
+  );
+} catch (e) {
+  console.error(
+    JSON.stringify({
+      status: "blocked",
+      code: e?.code ?? "sourcing_live_failed",
+      message: e instanceof Error ? e.message : "unknown",
+      action_hint: e?.actionHint ?? null,
+      stack: e instanceof Error ? e.stack : "unknown",
+      request_id: requestId,
+      trace_id: traceId,
+    }),
+  );
+  process.exitCode = 2;
+} finally {
+  await cleanup();
+  await pool.end();
+}
