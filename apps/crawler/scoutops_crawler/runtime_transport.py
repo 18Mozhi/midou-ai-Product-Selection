@@ -22,6 +22,10 @@ class CrawlerRuntimeTransport:
         self.config = config
         self._sleep = sleeper
         self._random = random_source
+        # The crawler API is an internal loopback hop. Do not inherit Windows or
+        # host-level proxy settings, otherwise urllib can send 127.0.0.1 to the
+        # system proxy and turn a healthy local API into a misleading 502.
+        self._opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
     def post(
         self,
@@ -49,7 +53,7 @@ class CrawlerRuntimeTransport:
                 method="POST",
             )
             try:
-                with urllib.request.urlopen(request, timeout=15) as response:
+                with self._opener.open(request, timeout=15) as response:
                     if empty_is_none and response.status == 204:
                         return None
                     return json.load(response)

@@ -139,10 +139,7 @@ class FoundationTaskTest(unittest.TestCase):
         lease = CrawlerLease(
             "job-1", "run-1", "profile-1", "x" * 64, "request-1", "trace-1", {}, {}, "zh-CN", "Asia/Shanghai"
         )
-        with patch(
-            "scoutops_crawler.runtime_transport.urllib.request.urlopen",
-            side_effect=urllib.error.URLError("down"),
-        ):
+        with patch.object(client._transport._opener, "open", side_effect=urllib.error.URLError("down")):
             with self.assertRaises(RuntimeClientError):
                 client.heartbeat(lease)
         sleeper.assert_not_called()
@@ -156,8 +153,9 @@ class FoundationTaskTest(unittest.TestCase):
             sleeper=delays.append,
             random_source=lambda: 0.5,
         )
-        with patch(
-            "scoutops_crawler.runtime_transport.urllib.request.urlopen",
+        with patch.object(
+            client._transport._opener,
+            "open",
             side_effect=[
                 urllib.error.URLError("down-1"),
                 urllib.error.URLError("down-2"),
@@ -167,6 +165,14 @@ class FoundationTaskTest(unittest.TestCase):
             result = client._post("/retry", {}, "request-1", "trace-1")
         self.assertEqual(result["data"]["accepted"], True)
         self.assertEqual(delays, [0.25, 0.5])
+
+    def test_runtime_client_bypasses_system_proxy_for_internal_api(self) -> None:
+        with patch("scoutops_crawler.runtime_transport.urllib.request.build_opener") as build:
+            build.return_value = Mock()
+            CrawlerRuntimeClient(load_config())
+        proxy_handler = build.call_args.args[0]
+        self.assertIsInstance(proxy_handler, urllib.request.ProxyHandler)
+        self.assertEqual(proxy_handler.proxies, {})
 
     def test_failed_completion_is_spooled_and_retried(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

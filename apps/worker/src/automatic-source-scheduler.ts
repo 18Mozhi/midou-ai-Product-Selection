@@ -96,7 +96,9 @@ export class MySqlAutomaticSourceScheduler {
       }
       const [allProviders] = await c.query<RowDataPacket[]>(
         statement(
-          "SELECT id,code FROM providers WHERE status='enabled' AND parser_version IN ",
+          "SELECT id,code FROM providers WHERE status='enabled' ",
+          "AND terms_review_status='approved' AND terms_reference_url IS NOT NULL ",
+          "AND terms_version IS NOT NULL AND terms_expires_at>NOW(3) AND parser_version IN ",
           "('google-news-fixed-rss-v1','syndication-feed-v1',",
           "'structured-public-page-v1') ORDER BY code",
         ),
@@ -259,6 +261,8 @@ export class MySqlAutomaticSourceScheduler {
     const [providerRows] = await c.query<RowDataPacket[]>(
       statement(
         "SELECT id,code,markets_json FROM providers WHERE status='enabled' ",
+        "AND terms_review_status='approved' AND terms_reference_url IS NOT NULL ",
+        "AND terms_version IS NOT NULL AND terms_expires_at>NOW(3) ",
         "AND parser_version IN ('google-news-rss-v1','google-news-fixed-rss-v1',",
         "'syndication-feed-v1','structured-public-page-v1') ORDER BY code",
       ),

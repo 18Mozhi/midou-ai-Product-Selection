@@ -34,7 +34,7 @@
 - 1688 的 `source_configuration_invalid`：检查是否为 HTTPS 1688 域名、搜索入口是否为 `s.1688.com`，以及详情 URL 中商品 ID 是否与记录一致。该错误不是登录续期信号，不能通过重放绕过。
 - 固定公开榜单页面无结果：先核对页面是否调整结构或返回地区/验证页面；解析器会以 `source_changed` 失败，不会把空白或错误页当成商品数据。
 - `invalid_payload`：核对响应类型与编码；项目代理会在 2 MB 解压上限内处理 gzip/deflate/br，频道解析器支持 RSS、Atom 与 RDF，超限或未知编码继续失败关闭。
-- 自动任务不生成：核对 `automatic_source_schedules.next_scheduled_at`、组织/默认工作区状态和统一后端 Worker 日志。
+- 自动任务不生成：核对 `automatic_source_schedules.next_scheduled_at`、组织/默认工作区状态、来源是否已启用，以及公开来源的条款批准状态、HTTPS 参考地址、条款版本和有效期；没有合规可用来源时调度器只顺延 5 分钟，不写入必然得到 `permission_denied` 的任务。再检查统一后端 Worker 日志。
 - 手动刷新失败：核对当前会话的活动组织/工作区、`trend:read`、Origin 与 Idempotency-Key。
 
 所有排障都只检查“ai选品”项目自己的日志、表和证据；不得操作 PVE、其他项目、系统磁盘调度器或面板外服务。

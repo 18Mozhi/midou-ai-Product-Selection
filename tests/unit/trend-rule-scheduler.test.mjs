@@ -63,6 +63,15 @@ test("rule scheduler queries the manual keyword crawler and completes all source
       (sql) => sql.includes("google-news-rss-v1") && sql.includes("google-news-fixed-rss-v1"),
     ),
   );
+  assert.ok(
+    statements.some(
+      (sql) =>
+        sql.includes("terms_review_status='approved'") &&
+        sql.includes("terms_reference_url IS NOT NULL") &&
+        sql.includes("terms_version IS NOT NULL") &&
+        sql.includes("terms_expires_at>NOW(3)"),
+    ),
+  );
   assert.equal(ruleUpdate[0], 16);
   assert.equal(new Date(ruleUpdate[2]).toISOString(), "2026-08-19T10:01:00.000Z");
   assert.ok(
@@ -74,6 +83,65 @@ test("rule scheduler queries the manual keyword crawler and completes all source
     ),
   );
   assert.ok(statements.some((sql) => sql.includes("SELECT id FROM users WHERE id=?")));
+});
+
+test("full automatic source scheduler skips persistence when no terms-approved provider is eligible", async () => {
+  const now = new Date("2026-08-19T10:00:00.000Z");
+  const statements = [];
+  let scheduleUpdate = null;
+  const connection = {
+    beginTransaction: async () => {},
+    commit: async () => {},
+    rollback: async () => {},
+    release: () => {},
+    query: async (sql, values = []) => {
+      statements.push(sql);
+      if (sql.startsWith("SELECT COUNT(*) count FROM collection_tasks"))
+        return [[{ count: 0 }], []];
+      if (sql.includes("SELECT s.* FROM automatic_source_schedules"))
+        return [
+          [
+            {
+              id: "00000000-0000-4000-8000-000000004401",
+              organization_id: "00000000-0000-4000-8000-000000004402",
+              workspace_id: "00000000-0000-4000-8000-000000004403",
+              provider_offset: 0,
+            },
+          ],
+          [],
+        ];
+      if (sql.includes("SELECT id,code FROM providers")) return [[], []];
+      if (sql.startsWith("UPDATE automatic_source_schedules SET next_scheduled_at"))
+        scheduleUpdate = values;
+      return [[], []];
+    },
+  };
+  const result = await new MySqlAutomaticSourceScheduler(
+    { getConnection: async () => connection },
+    16,
+    () => now,
+    {
+      systemActorId: "00000000-0000-4000-8000-000000004399",
+      tenantActiveTaskBudget: 2,
+      queueBacklogLimit: 1000,
+    },
+  ).processFullOnce();
+
+  assert.deepEqual(result, { status: "idle" });
+  assert.ok(
+    statements.some(
+      (sql) =>
+        sql.includes("SELECT id,code FROM providers") &&
+        sql.includes("terms_review_status='approved'") &&
+        sql.includes("terms_expires_at>NOW(3)"),
+    ),
+  );
+  assert.equal(
+    statements.some((sql) => sql.startsWith("INSERT INTO collection_tasks")),
+    false,
+  );
+  assert.equal(new Date(scheduleUpdate[0]).toISOString(), now.toISOString());
+  assert.equal(scheduleUpdate[2], "00000000-0000-4000-8000-000000004401");
 });
 
 test("automatic source scheduler blocks new work at the global backlog gate", async () => {
