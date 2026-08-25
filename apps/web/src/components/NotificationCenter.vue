@@ -54,7 +54,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   }),
   selected = ref<Item | null>(null),
   category = ref(
-    ["task", "approval", "competitor", ""].includes(String(route.query.category ?? ""))
+    ["task", "approval", "competitor", "system", ""].includes(String(route.query.category ?? ""))
       ? String(route.query.category ?? "")
       : "",
   ),
@@ -84,9 +84,18 @@ const { dialogElement: preferencesDialogElement, handleCancel: handlePreferences
     () => showPreferences.value,
     () => (showPreferences.value = false),
   );
+const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
+  () => Boolean(selected.value),
+  () => void closeDetail(),
+);
 let stream: EventSource | null = null;
+let loadGeneration = 0;
 const pageSize = 20,
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
+  hasSourceRoute = computed(() => {
+    const target = selected.value?.action_route ?? "";
+    return target.startsWith("/") && !target.startsWith("//");
+  }),
   sourceRoute = computed(() => {
     const target = selected.value?.action_route ?? "";
     if (!target.startsWith("/") || target.startsWith("//")) return "/notifications";
@@ -152,6 +161,7 @@ async function api<T>(
   }
 }
 async function load() {
+  const generation = ++loadGeneration;
   state.value = "loading";
   try {
     const q = new URLSearchParams({ page: String(page.value), page_size: String(pageSize) });
@@ -165,14 +175,19 @@ async function load() {
       api<any>("/notifications/summary"),
       api<any>("/me/notification-preferences"),
     ]);
+    if (generation !== loadGeneration) return;
     items.value = list;
     summary.value = sum;
     preferences.value = { ...pref, email_enabled: false };
     state.value = list.length ? "ready" : "empty";
     const notificationId =
-      typeof route.query.notification === "string" ? route.query.notification : "";
+      typeof route.query.notification === "string"
+        ? route.query.notification
+        : typeof route.query.notification_id === "string"
+          ? route.query.notification_id
+          : "";
     if (notificationId && notificationId !== selected.value?.id)
-      await openById(notificationId, false);
+      await openById(notificationId, typeof route.query.notification !== "string");
   } catch (error) {
     rethrowUnexpectedError(error);
   }
@@ -181,7 +196,10 @@ async function openById(id: string, syncUrl = true) {
   try {
     const detail = await api<Item>(`/notifications/${id}`, {}, false);
     selected.value = detail;
-    if (syncUrl) await router.replace({ query: { ...route.query, notification: detail.id } });
+    if (syncUrl)
+      await router.replace({
+        query: { ...route.query, notification: detail.id, notification_id: undefined },
+      });
     if (!detail.read_at) {
       const result = await api<Partial<Item>>(
         `/notifications/${detail.id}/actions`,
@@ -208,11 +226,19 @@ async function openById(id: string, syncUrl = true) {
   }
 }
 async function open(item: Item) {
-  await openById(item.id);
+  if (busy.value) return;
+  busy.value = true;
+  try {
+    await openById(item.id);
+  } finally {
+    busy.value = false;
+  }
 }
 async function closeDetail() {
   selected.value = null;
-  await router.replace({ query: { ...route.query, notification: undefined } });
+  await router.replace({
+    query: { ...route.query, notification: undefined, notification_id: undefined },
+  });
 }
 async function setFilters(
   values: Partial<{ category: string; status: string; unread: boolean; page: number }>,
@@ -230,20 +256,26 @@ async function setFilters(
             ? String(Math.min(pageCount.value, Math.max(1, values.page)))
             : undefined,
       notification: undefined,
+      notification_id: undefined,
     },
   });
 }
 async function markAll() {
+  if (busy.value) return;
+  busy.value = true;
   try {
     await api("/notifications/actions", { method: "POST" }, false);
     notice.value = "当前工作区通知已全部标记已读。";
     await load();
   } catch (error) {
     rethrowUnexpectedError(error);
+  } finally {
+    busy.value = false;
   }
 }
 async function updateWorkflow(action: "start" | "close" | "reopen") {
-  if (!selected.value) return;
+  if (!selected.value || busy.value) return;
+  busy.value = true;
   try {
     const result = await api<Partial<Item>>(
       `/notifications/${selected.value.id}/actions`,
@@ -263,9 +295,12 @@ async function updateWorkflow(action: "start" | "close" | "reopen") {
     await load();
   } catch (error) {
     rethrowUnexpectedError(error);
+  } finally {
+    busy.value = false;
   }
 }
 async function savePreferences() {
+  if (busy.value) return;
   busy.value = true;
   try {
     await api(
@@ -318,7 +353,9 @@ onUnmounted(() => stream?.close());
 watch(
   () => [route.query.category, route.query.status, route.query.unread, route.query.page],
   ([nextCategory, nextStatus, nextUnread, nextPage], previous) => {
-    category.value = ["task", "approval", "competitor"].includes(String(nextCategory ?? ""))
+    category.value = ["task", "approval", "competitor", "system"].includes(
+      String(nextCategory ?? ""),
+    )
       ? String(nextCategory)
       : "";
     workflowStatus.value = ["open", "in_progress", "closed"].includes(String(nextStatus ?? ""))
@@ -330,9 +367,16 @@ watch(
   },
 );
 watch(
-  () => route.query.notification,
-  (value) => {
-    if (typeof value === "string" && value !== selected.value?.id) void openById(value, false);
+  () => [route.query.notification, route.query.notification_id],
+  ([notification, legacyNotification]) => {
+    const value =
+      typeof notification === "string"
+        ? notification
+        : typeof legacyNotification === "string"
+          ? legacyNotification
+          : "";
+    if (value && value !== selected.value?.id)
+      void openById(value, typeof notification !== "string");
     else if (!value) selected.value = null;
   },
 );
@@ -353,8 +397,8 @@ watch(
               ? "实时连接中"
               : "实时重连中"
         }}</span>
-        <button class="secondary" @click="showPreferences = true">通知偏好</button
-        ><button @click="markAll">全部已读</button>
+        <button class="secondary" :disabled="busy" @click="showPreferences = true">通知偏好</button
+        ><button :disabled="busy" @click="markAll">全部已读</button>
       </div>
     </header>
     <div v-if="notice" class="notification-notice" aria-live="polite">
@@ -385,6 +429,7 @@ watch(
           { v: 'task', t: '任务' },
           { v: 'approval', t: '审批' },
           { v: 'competitor', t: '竞品' },
+          { v: 'system', t: '系统' },
         ]"
         :key="x.v"
         :aria-pressed="category === x.v"
@@ -442,6 +487,7 @@ watch(
         v-for="item in items"
         :key="item.id"
         :class="{ unread: !item.read_at }"
+        :disabled="busy"
         @click="open(item)"
       >
         <i :data-category="item.category">{{ label(item.category).slice(0, 1) }}</i
@@ -463,8 +509,14 @@ watch(
       <span>第 {{ page }} / {{ pageCount }} 页 · 共 {{ total }} 组</span>
       <button :disabled="page >= pageCount" @click="setFilters({ page: page + 1 })">下一页</button>
     </nav>
-    <aside v-if="selected" class="notification-detail">
-      <button @click="closeDetail" aria-label="关闭消息详情">×</button>
+    <dialog
+      v-if="selected"
+      ref="detailDialogElement"
+      class="notification-detail"
+      aria-label="消息详情"
+      @cancel="handleDetailCancel"
+    >
+      <button :disabled="busy" @click="closeDetail" aria-label="关闭消息详情">×</button>
       <p>{{ label(selected.category) }} · {{ time(selected.created_at) }}</p>
       <h3>{{ selected.title }}</h3>
       <article>{{ displayBody(selected) }}</article>
@@ -491,12 +543,13 @@ watch(
       </dl>
       <small>站内消息来自事务消息；页面不显示队列、浏览器凭证或邮件地址。</small>
       <footer class="notification-workflow-actions">
-        <RouterLink :to="sourceRoute"
+        <RouterLink v-if="hasSourceRoute" :to="sourceRoute"
           >返回来源：{{ resourceLabel(selected.resource_type) }}</RouterLink
         >
         <button
           v-if="selected.workflow_status === 'open'"
           type="button"
+          :disabled="busy"
           @click="updateWorkflow('start')"
         >
           开始处理
@@ -504,11 +557,14 @@ watch(
         <button
           v-if="selected.workflow_status !== 'closed'"
           type="button"
+          :disabled="busy"
           @click="updateWorkflow('close')"
         >
           关闭
         </button>
-        <button v-else type="button" @click="updateWorkflow('reopen')">重新打开</button>
+        <button v-else type="button" :disabled="busy" @click="updateWorkflow('reopen')">
+          重新打开
+        </button>
       </footer>
       <details
         v-if="selected.resource_id || selected.resource_type || selected.root_cause_key"
@@ -530,8 +586,13 @@ watch(
           </div>
         </dl>
       </details>
-    </aside>
-    <dialog ref="preferencesDialogElement" aria-label="通知偏好" @cancel="handlePreferencesCancel">
+    </dialog>
+    <dialog
+      ref="preferencesDialogElement"
+      class="notification-preferences"
+      aria-label="通知偏好"
+      @cancel="handlePreferencesCancel"
+    >
       <form @submit.prevent="savePreferences">
         <h3>通知偏好</h3>
         <label><input v-model="preferences.in_app_enabled" type="checkbox" /> 站内通知</label
@@ -541,7 +602,7 @@ watch(
         ><label><input v-model="preferences.task_enabled" type="checkbox" /> 任务事件</label
         ><label><input v-model="preferences.approval_enabled" type="checkbox" /> 审批事件</label
         ><label><input v-model="preferences.competitor_enabled" type="checkbox" /> 竞品事件</label>
-        <p>启用邮件只产生 pending_placeholder 记录，接入真实 Provider 前不会向外部发送。</p>
+        <p>邮件渠道固定关闭；接入并验收真实 Provider 前不会产生外部发送。</p>
         <div>
           <button type="button" class="secondary" @click="showPreferences = false">取消</button
           ><button :disabled="busy">保存</button>

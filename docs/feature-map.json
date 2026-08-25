@@ -1388,6 +1388,7 @@
       "entrypoints": [
         "../apps/api/src/notification-service.ts",
         "../apps/api/src/mysql-notification-repository.ts",
+        "../apps/api/src/mysql-opportunity-repository.ts",
         "../apps/api/src/notification-routes.ts",
         "../apps/worker/src/notification-outbox-worker.ts",
         "../apps/worker/src/opportunity-scoring-worker.ts",
@@ -1402,7 +1403,7 @@
       ],
       "scope": "organization workspace and current recipient scoped notification facts root-cause groups workflow states preferences deliveries evidence-completion redecision reminders idempotent operations and audit",
       "truthBoundary": "source Outbox and recipient are preserved; open in_progress and closed filters execute before root-cause grouping and pagination, the newest notification represents each group without rewriting older facts; self-service email preference is fixed off while the mail provider is pending, and historical placeholder facts are preserved",
-      "pageFlow": "category workflow unread pagination and current detail are URL-backed; grouped rows expose read and workflow state plus the persisted root-cause group count, and internal action routes carry a validated return path so supported task and approval details return to the originating notification state",
+      "pageFlow": "task approval competitor and system category filters plus workflow unread pagination and current detail are URL-backed; notification is canonical while legacy notification_id detail links normalize after a successful scoped read; grouped rows expose read and workflow state plus the persisted root-cause group count, supported task and approval_request action routes open their real detail surfaces with a validated return path, unsupported or missing resources do not expose a misleading platform-admin link, detail is an Escape-closeable modal, and mutating controls suppress duplicate in-flight submission",
       "permission": "notification:read for current-recipient reads actions and self preferences",
       "configuration": [
         "NOTIFICATION_OUTBOX_POLL_MS",

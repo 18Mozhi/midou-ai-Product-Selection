@@ -6,7 +6,7 @@
 
 通知列表的 `workflow_status` 筛选和同根因聚合由 Node API 在 MySQL 查询中执行，不依赖浏览器对当前页二次过滤。排查数量不一致时，按当前 organization_id、workspace_id、recipient_id 和 delivered 站内投递范围检查 `root_cause_key`；不得通过删除旧通知来修正组数。状态动作使用通知 version 和幂等键，409 表示代表记录已经变化，应刷新后重试。
 
-页面核对时确认分类、处理状态、仅未读和分页可由 URL 刷新恢复，`notification` 可直接打开详情；列表需同时区分已读/未读和未处理/处理中/已关闭，并明确同根因合并数量。关联业务链接必须携带 `from`，任务或审批详情应能返回原通知。该前端变化无需重启 Node 或 Python，发布 `frontend` 静态资源即可。
+页面核对时确认任务、审批、竞品、系统分类，处理状态、仅未读和分页可由 URL 刷新恢复，`notification` 可直接打开详情，旧 `notification_id` 链接应自动收敛为规范参数；列表需同时区分已读/未读和未处理/处理中/已关闭，并明确同根因合并数量。关联业务链接必须携带 `from`，任务应直达 `/tasks/:taskId`，`approval` 与 `approval_request` 应直达审批详情；无可验证来源的系统通知不应显示平台管理链接。双击已读、处理状态或全部已读操作时只允许一个请求在途，详情对话框应支持 Escape 关闭和焦点返回。该前端变化无需重启 Node 或 Python；通知来源路由映射的 Node 变化发布时需在宝塔重启统一后端。
 
 回滚时先在宝塔停止“ai选品”并等待 leased 到期，再关闭通知路由。必须先执行 `0046_notification_workflow_root_cause.down.sql` 移除处理状态和根因索引，再按需执行 `0018c_notifications_m05_03.down.sql`；已有通知时只回滚应用并保留表只读。不要删除全局 Outbox、审计或其他模块事件来掩盖通知故障。
 

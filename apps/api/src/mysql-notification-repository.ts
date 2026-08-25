@@ -315,8 +315,8 @@ export class MySqlNotificationRepository implements NotificationRepository {
   private dto(r: RowDataPacket) {
     const actionRoute = r.resource_id
       ? r.resource_type === "task"
-        ? `/tasks?task=${r.resource_id}`
-        : r.resource_type === "approval"
+        ? `/tasks/${r.resource_id}`
+        : ["approval", "approval_request"].includes(String(r.resource_type))
           ? `/tasks/approvals?approval=${r.resource_id}`
           : r.resource_type === "competitor"
             ? `/competitors?competitor=${r.resource_id}`
@@ -324,8 +324,8 @@ export class MySqlNotificationRepository implements NotificationRepository {
               ? `/opportunities/${r.resource_id}`
               : r.resource_type === "collection_task"
                 ? `/platform-admin/collection?task=${r.resource_id}`
-                : "/platform-admin/status"
-      : "/platform-admin/status";
+                : ""
+      : "";
     return {
       id: String(r.id),
       category: String(r.category),

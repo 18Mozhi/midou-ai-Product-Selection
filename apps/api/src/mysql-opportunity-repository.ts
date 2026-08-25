@@ -415,7 +415,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         occurred_at: iso(row.created_at),
         request_id: String(row.request_id),
         trace_id: String(row.trace_id),
-        route: `/notifications?notification_id=${encodeURIComponent(String(row.id))}`,
+        route: `/notifications?notification=${encodeURIComponent(String(row.id))}`,
       });
     const stageOrder = [
       "source",

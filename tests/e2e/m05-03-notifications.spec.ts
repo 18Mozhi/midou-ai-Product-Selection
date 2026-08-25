@@ -22,7 +22,8 @@ const id = "00000000-0000-4000-8000-000000000931",
     created_at: "2026-08-08T10:00:00.000Z",
   };
 async function setup(page: Page) {
-  const listRequests: string[] = [];
+  const listRequests: string[] = [],
+    actionBodies: Array<{ action: string }> = [];
   let workflowStatus = item.workflow_status,
     version = item.version;
   await page.route("**/api/v1/me/navigation?shell=member", (r) =>
@@ -80,6 +81,7 @@ async function setup(page: Page) {
     expect(r.request().headers()["x-request-id"]).toBeTruthy();
     expect(r.request().headers()["x-trace-id"]).toBeTruthy();
     const body = r.request().postDataJSON();
+    actionBodies.push(body);
     workflowStatus =
       body.action === "start"
         ? "in_progress"
@@ -98,7 +100,7 @@ async function setup(page: Page) {
       }),
     });
   });
-  return { listRequests };
+  return { actionBodies, listRequests };
 }
 test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on desktop and 390", async ({
   page,
@@ -109,6 +111,7 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
   await expect(page.getByText("审批状态更新")).toBeVisible();
   await expect(page.getByText(/已合并 3 条同根因通知/)).toBeVisible();
   await page.getByRole("button", { name: /审批状态更新/ }).click();
+  await expect(page.getByRole("dialog", { name: "消息详情" })).toBeVisible();
   await expect(page.getByText(/站内消息来自事务消息/)).toBeVisible();
   await expect(page.getByText("同一根因的 3 条通知已自动合并展示。")).toBeVisible();
   await expect(page.getByText("需关注", { exact: true })).toBeVisible();
@@ -148,6 +151,27 @@ test("notification filters and detail restore from the URL", async ({ page }) =>
     "true",
   );
   await expect(page.getByRole("heading", { name: "审批状态更新" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "系统", exact: true })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog", { name: "消息详情" })).toHaveCount(0);
+});
+
+test("legacy notification_id links normalize to the canonical detail URL", async ({ page }) => {
+  await setup(page);
+  await page.goto(`/notifications?notification_id=${id}`);
+  await expect(page.getByRole("dialog", { name: "消息详情" })).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`notification=${id}`));
+  await expect(page).not.toHaveURL(/notification_id=/);
+});
+
+test("workflow actions ignore repeated clicks while the first request is in flight", async ({
+  page,
+}) => {
+  const { actionBodies } = await setup(page);
+  await page.goto(`/notifications?notification=${id}`);
+  await page.getByRole("button", { name: "开始处理" }).dblclick();
+  await expect(page.getByText("通知已进入处理中。")).toBeVisible();
+  expect(actionBodies.filter(({ action }) => action === "start")).toHaveLength(1);
 });
 
 test("M05-03 mail preference stays disabled until the provider is connected", async ({ page }) => {

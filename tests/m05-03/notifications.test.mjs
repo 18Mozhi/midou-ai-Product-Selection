@@ -101,6 +101,33 @@ test("M05-03 keeps internal event codes out of notification copy", () => {
   assert.equal(body, "审批状态已变化，请查看关联记录。");
   assert.doesNotMatch(body, /approval\.overdue/);
 });
+test("M05-03 maps only supported notification sources to accessible business routes", () => {
+  const repository = new MySqlNotificationRepository({}),
+    row = (resource_type, resource_id = "00000000-0000-4000-8000-000000000945") => ({
+      id: "00000000-0000-4000-8000-000000000944",
+      category: "system",
+      severity: "warning",
+      title: "来源状态更新",
+      body: "需要处理",
+      resource_type,
+      resource_id,
+      root_cause_key: null,
+      workflow_status: "open",
+      read_at: null,
+      version: 1,
+      created_at: "2026-08-19T10:00:00.000Z",
+    });
+  assert.equal(
+    repository.dto(row("task")).action_route,
+    "/tasks/00000000-0000-4000-8000-000000000945",
+  );
+  assert.equal(
+    repository.dto(row("approval_request")).action_route,
+    "/tasks/approvals?approval=00000000-0000-4000-8000-000000000945",
+  );
+  assert.equal(repository.dto(row(null, null)).action_route, "");
+  assert.equal(repository.dto(row("unknown")).action_route, "");
+});
 test("M05-03 groups root causes before pagination and keeps the newest representative", async () => {
   const seen = [],
     row = (id, rootCause, createdAt, workflowStatus = "in_progress") => ({
