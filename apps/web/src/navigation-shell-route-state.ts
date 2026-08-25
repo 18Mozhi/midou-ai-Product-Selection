@@ -81,6 +81,7 @@ export function surfaceProps(input: {
         ...common,
         mode: input.path === "/work" ? "today" : "all",
         taskId: ids.taskId || undefined,
+        capabilities: input.capabilities,
       };
     case "organization-admin-center":
       return { ...common, routePath: input.path, organizationId: input.organizationId || "" };

@@ -55,6 +55,8 @@ export function registerBusinessTaskRoutes(app: FastifyInstance, o: BusinessTask
         page: q.page,
         pageSize: q.page_size,
         status: q.status,
+        query: q.query,
+        sort: q.sort,
         mine: q.mine,
       });
     return env(x.items, r, {

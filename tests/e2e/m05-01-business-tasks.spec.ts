@@ -25,7 +25,20 @@ const task = {
   created_at: "2026-08-08T09:00:00.000Z",
   updated_at: "2026-08-08T10:00:00.000Z",
 };
-async function setup(page: Page, pausedDetail = false) {
+async function setup(
+  page: Page,
+  pausedDetail = false,
+  capabilities = [
+    "task:read",
+    "task:create",
+    "task:update",
+    "task:assign",
+    "notification:read",
+    "opportunity:decide",
+    "report:read",
+  ],
+) {
+  const observed = { createRequests: 0 };
   let themePreference = {
     theme: "deep-ocean",
     source: "saved",
@@ -34,6 +47,9 @@ async function setup(page: Page, pausedDetail = false) {
     version: 1,
     updated_at: "2026-08-19T00:00:00.000Z",
   };
+  await page.route("**/api/v1/auth/session-status", (route) =>
+    route.fulfill({ json: env({ authenticated: true }) }),
+  );
   await page.route("**/api/v1/me/navigation?shell=member", (r) =>
     r.fulfill({
       json: env({
@@ -43,14 +59,7 @@ async function setup(page: Page, pausedDetail = false) {
         organization_name: "米豆智能选品",
         workspace_name: "跨境新品工作区",
         roles: ["selection_manager"],
-        capabilities: [
-          "task:read",
-          "task:create",
-          "task:update",
-          "task:assign",
-          "notification:read",
-          "opportunity:decide",
-        ],
+        capabilities,
         platform_roles: [],
         platform_capabilities: [],
         guard_reason: "navigation_member_allowed",
@@ -173,10 +182,21 @@ async function setup(page: Page, pausedDetail = false) {
             version: 1,
           },
         ]),
-        meta: { page: 1, page_size: 50, total: 2 },
+        meta: {
+          page: Number(new URL(r.request().url()).searchParams.get("page") ?? 1),
+          page_size: 10,
+          total: new URL(r.request().url()).searchParams.get("page") === "2" ? 20 : 2,
+        },
       },
     }),
   );
+  await page.route("**/api/v1/tasks", async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    observed.createRequests += 1;
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    await route.fulfill({ status: 201, json: env({ ...task, id: crypto.randomUUID() }) });
+  });
+  return observed;
 }
 test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on desktop and 390", async ({
   page,
@@ -260,6 +280,71 @@ test("task status and pagination restore from the URL", async ({ page }) => {
     "true",
   );
   await expect.poll(() => new URL(page.url()).searchParams.get("page")).toBe("2");
+});
+
+test("task list sends paused, search and sort to the API and reset clears URL state", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/tasks");
+  const pausedRequest = page.waitForRequest(
+    (request) =>
+      request.url().includes("/api/v1/tasks?") &&
+      new URL(request.url()).searchParams.get("status") === "paused",
+  );
+  await page.getByRole("button", { name: "已暂停" }).click();
+  await pausedRequest;
+  await page.getByPlaceholder("搜索标题或说明").fill("供应商报价");
+  const searchRequest = page.waitForRequest((request) => {
+    const url = new URL(request.url());
+    return (
+      url.pathname.endsWith("/api/v1/tasks") &&
+      url.searchParams.get("query") === "供应商报价" &&
+      url.searchParams.get("sort") === "updated_desc"
+    );
+  });
+  await page.getByLabel("排序").selectOption("updated_desc");
+  await searchRequest;
+  await expect.poll(() => new URL(page.url()).searchParams.get("query")).toBe("供应商报价");
+  await page.getByRole("button", { name: "重置" }).first().click();
+  await expect.poll(() => new URL(page.url()).search).toBe("");
+});
+
+test("read-only task role does not receive write, batch, delete or export controls", async ({
+  page,
+}) => {
+  await setup(page, false, ["task:read"]);
+  await page.goto("/tasks");
+  await expect(page.getByText("当前角色可查看工作区任务")).toBeVisible();
+  await expect(page.getByRole("button", { name: "＋ 新建任务" })).toHaveCount(0);
+  await expect(page.getByRole("checkbox")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "导出任务" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "删除任务" })).toHaveCount(0);
+  await page.goto("/tasks?create=1");
+  await expect(page.getByRole("dialog", { name: "新建任务" })).toHaveCount(0);
+});
+
+test("task update role keeps lifecycle batch controls but not assignment or export", async ({
+  page,
+}) => {
+  await setup(page, false, ["task:read", "task:create", "task:update"]);
+  await page.goto("/tasks");
+  await page.getByRole("checkbox", { name: "选择本页 2 项" }).check();
+  await expect(page.getByRole("button", { name: "批量暂停" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "批量调整负责人" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "导出任务" })).toHaveCount(0);
+});
+
+test("task create disables duplicate submission while the real request is pending", async ({
+  page,
+}) => {
+  const observed = await setup(page);
+  await page.goto("/tasks");
+  await page.getByRole("button", { name: "＋ 新建任务" }).click();
+  await page.getByLabel("标题").fill("重复提交保护");
+  await page.getByRole("button", { name: "创建任务" }).dblclick();
+  await expect(page.getByText("任务已创建，可以立即开始并持续更新进度。")).toBeVisible();
+  expect(observed.createRequests).toBe(1);
 });
 
 test("personal center renders the core profile instead of staying on its loading state", async ({

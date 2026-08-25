@@ -109,14 +109,23 @@ export class BusinessTaskService {
   constructor(private readonly repo: BusinessTaskRepository) {}
   list(i: any) {
     const page = Math.max(1, Number(i.page) || 1),
-      pageSize = Math.min(200, Math.max(1, Number(i.pageSize) || 50));
+      pageSize = Math.min(200, Math.max(1, Number(i.pageSize) || 50)),
+      status = String(i.status ?? "").trim(),
+      query = String(i.query ?? "").trim(),
+      sort = String(i.sort ?? "priority_due").trim();
+    if (status && !["todo", "in_progress", "paused", "completed", "cancelled"].includes(status))
+      throw new BusinessTaskError("task_status_invalid", 400, "选择有效任务状态。");
+    if (query.length > 200)
+      throw new BusinessTaskError("task_query_invalid", 400, "搜索内容不能超过 200 个字符。");
+    if (!["priority_due", "due_asc", "updated_desc", "created_desc"].includes(sort))
+      throw new BusinessTaskError("task_sort_invalid", 400, "选择有效排序方式。");
     return this.repo.list({
       ...i,
       page,
       pageSize,
-      status: ["todo", "in_progress", "completed", "cancelled"].includes(i.status)
-        ? i.status
-        : null,
+      status: status || null,
+      query: query || null,
+      sort,
       mine: i.mine === "true",
     });
   }

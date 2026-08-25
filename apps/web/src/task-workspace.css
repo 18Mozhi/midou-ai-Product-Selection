@@ -55,7 +55,7 @@
 }
 .task-metrics {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 12px;
 }
 .task-metrics article {
@@ -80,6 +80,53 @@
   display: flex;
   gap: 8px;
   overflow: auto;
+}
+.task-filter-panel {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 14px;
+  background: var(--so-panel);
+}
+.task-search {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(180px, 260px) auto auto;
+  gap: 10px;
+  align-items: end;
+}
+.task-search label {
+  display: grid;
+  gap: 5px;
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.task-search input,
+.task-search select {
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+.task-select-current {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--so-text-muted);
+}
+.task-select-current label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.task-readonly-note {
+  margin: 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--so-info);
+  color: var(--so-text-muted);
+  background: var(--so-panel);
 }
 .task-filter button[aria-pressed="true"] {
   border-color: var(--so-primary);
@@ -112,6 +159,12 @@
   background: var(--so-panel);
   text-align: left;
   text-decoration: none;
+}
+.task-list-readonly > article {
+  padding-left: 0;
+}
+.task-list-readonly .task-row-main {
+  padding-right: 18px;
 }
 .task-row-main:hover {
   background: var(--so-panel-soft);
@@ -161,6 +214,14 @@
 .task-list span strong,
 .task-list span small {
   display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.task-list span small {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 .task-list em {
   color: var(--so-primary);
@@ -207,6 +268,10 @@
   border-radius: 8px;
   color: var(--so-text);
   background: var(--so-panel-soft);
+}
+.task-workspace button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 .task-detail {
   position: fixed;
@@ -287,6 +352,12 @@
   }
   .task-metrics {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .task-search {
+    grid-template-columns: 1fr 1fr;
+  }
+  .task-search label {
+    grid-column: 1 / -1;
   }
   .task-row-main {
     grid-template-columns: 6px 1fr auto;

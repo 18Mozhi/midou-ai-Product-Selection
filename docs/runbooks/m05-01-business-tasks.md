@@ -4,9 +4,9 @@
 
 应用迁移后在宝塔重启唯一的“ai选品”统一后端。内部 Worker 读取 `BUSINESS_TASK_PROJECTION_POLL_MS` 和 `BUSINESS_TASK_PROJECTION_LEASE_SECONDS`；调整后必须在宝塔重启“ai选品”。生产不得另建 Worker 项目或使用面板外 PM2、systemd、crontab。
 
-观察 Node Worker 日志中的 `business_task_projection`，并检查 `/api/v1/tasks`。`not_set` 表示上游未提供期限，不是故障。租约过期会被下一次轮询接管；来源唯一键避免重复任务。
+观察 Node Worker 日志中的 `business_task_projection`，并检查 `/api/v1/tasks`。成功投影应生成中文标题的 `sourcing_purchase` 任务，把 `sourcing_outbox.status` 更新为 `published` 并清空 `leased_by`、`leased_at`、`lease_expires_at`；该表没有 `published_at` 字段。若日志出现 `Illegal mix of collations`，说明运行包没有包含采购 ID 从 `ascii` 到 `utf8mb4` 的显式转换。`not_set` 表示上游未提供期限，不是故障。租约过期会被下一次轮询接管；来源唯一键避免重复任务。
 
-任务详情前端路由为 `/tasks/{taskId}`；列表状态与分页位于 URL，详情应返回原 `/work` 或 `/tasks` 筛选。任务活动按时间合并事件与评论，SLA 同时显示等级、期限和下一步。暂停任务应固定显示最近一次 pause 事件原因与当前成员目录中的负责人。批量延期和负责人调整先核对选择数、可执行数与跳过数，再确认新截止时间或当前工作区成员；每项应产生独立 `task.delay` 或 `task.transfer` 事件。该页面变化只需发布新版 `frontend` 静态资源，不新增迁移、环境变量或 API，Node、Python、MySQL 与 Redis 均无需重启。
+任务详情前端路由为 `/tasks/{taskId}`；列表状态、搜索、排序与分页位于 URL，详情应返回原 `/work` 或 `/tasks` 筛选。搜索覆盖当前组织和工作区内的标题与说明，排序只接受 `priority_due`、`due_asc`、`updated_desc`、`created_desc`；筛选或翻页会清空本页选择，避免批量操作误带不可见记录。任务活动按时间合并事件与评论，SLA 同时显示等级、期限和下一步。暂停任务应固定显示最近一次 pause 事件原因与当前成员目录中的负责人。批量延期和负责人调整先核对选择数、可执行数与跳过数，再确认新截止时间或当前工作区成员；每项应产生独立 `task.delay` 或 `task.transfer` 事件，并核对页面汇总的成功、失败、跳过数量。该批次不新增迁移、环境变量或依赖；前端需重新构建发布，Node API 与同一宝塔项目内的 Worker 因列表契约和投影状态更新变更，必须由宝塔重启“ai选品”，Python、MySQL 与 Redis 无需重启。
 
 ## 故障与回滚
 

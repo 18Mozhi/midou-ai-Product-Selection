@@ -2666,6 +2666,22 @@ paths:
             schema: { type: integer, minimum: 1, maximum: 200, default: 50 },
           }
         - { name: status, in: query, schema: { $ref: "#/components/schemas/BusinessTaskStatus" } }
+        - {
+            name: query,
+            in: query,
+            description: Case-insensitive task title or description search within the current scope,
+            schema: { type: string, maxLength: 200 },
+          }
+        - {
+            name: sort,
+            in: query,
+            schema:
+              {
+                type: string,
+                enum: [priority_due, due_asc, updated_desc, created_desc],
+                default: priority_due,
+              },
+          }
         - { name: mine, in: query, schema: { type: boolean, default: false } }
       responses:
         "200":
@@ -2679,6 +2695,7 @@ paths:
           }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "400": { $ref: "#/components/responses/Error" }
     post:
       summary: Create an assigned business task
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
@@ -2787,7 +2804,7 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /tasks/{taskId}/actions:
     post:
-      summary: Start complete cancel delay transfer or update progress on a versioned task
+      summary: Start pause resume complete cancel delay transfer or update progress on a versioned task
       parameters:
         [
           { name: taskId, in: path, required: true, schema: { type: string, format: uuid } },
@@ -8662,7 +8679,13 @@ components:
           }
         expected_version: { type: integer, minimum: 1 }
         reason:
-          { type: string, maxLength: 500, description: Required for cancel, delay and transfer }
+          {
+            type: string,
+            maxLength: 500,
+            description: Required for pause,
+            cancel,
+            delay and transfer,
+          }
         due_at: { type: string, format: date-time, description: Required for delay }
         assignee_id: { type: string, format: uuid, description: Required for transfer }
         progress_percent:

@@ -1331,16 +1331,18 @@
       ],
       "scope": "organization and workspace scoped business tasks with create edit auditable soft-delete start pause resume complete cancel single or batch delay and transfer progress immutable comments events idempotent operations audit and outbox",
       "truthBoundary": "SLA is derived only from persisted due_at; missing upstream deadlines remain not_set and M05-02 approvals M05-03 notifications M05-04 SSE are not fabricated",
-      "pageFlow": "today and all-task lists preserve status and pagination in the URL; independent detail routes carry a validated source return path, expose SLA level deadline and next step, fixed persisted pause reason and current assignee as next owner, group delete under named secondary actions, and merge persisted events and comments into a time-ordered activity stream while keeping progress stage-first; single and batch transfer use an eligible organization-member selector, single and batch delay use a date-time control, and progress uses a structured audited form",
+      "pageFlow": "today and all-task lists preserve status query sort and pagination in the URL and apply them before server-side pagination; independent detail routes carry a validated source return path, expose SLA level deadline and next step, fixed persisted pause reason and current assignee as next owner, group delete under named secondary actions, and merge persisted events and comments into a time-ordered activity stream while keeping progress stage-first; single and batch transfer use an eligible organization-member selector, single and batch delay use a date-time control, and progress uses a structured audited form",
       "secondaryWorkView": "the all-task route can switch to an URL-backed export-task view that reads the existing report export lifecycle; it does not merge report jobs into or fabricate rows in the business tasks table",
-      "apiClientBoundary": "task list, detail, create, edit, comments, progress, soft-delete and single or batch lifecycle delay and transfer actions use the shared frontend API client; each selected task keeps its own version and independent idempotency key",
+      "apiClientBoundary": "task list status query sort and pagination, detail, create, edit, comments, progress, soft-delete and single or batch lifecycle delay and transfer actions use the shared frontend API client; each selected task keeps its own version and independent idempotency key, duplicate submits are locked, and batch outcomes distinguish success failure and skipped items",
       "frontendModuleBoundary": "TaskWorkspace owns route state, API requests and task operation orchestration; TaskListPanel owns list filtering and selection presentation, TaskBatchActions owns batch impact and scoped input presentation, and TaskDetailPanel owns facts, actions and activity presentation without changing API or state-machine contracts",
+      "listQueryContract": "GET /api/v1/tasks accepts status including paused and cancelled, bounded query over title or description, whitelisted sort and page/page_size; filters and sort are applied inside organization and workspace scope before pagination",
+      "capabilityPresentation": "task:create gates create, task:update gates selection batch and delete, task:assign gates transfer, and report:read gates the export-task view while API authorization remains authoritative",
       "permission": "task:read for reads, task:create for creation, task:update for content progress soft-delete status due and comments, task:assign for transfer",
       "configuration": [
         "BUSINESS_TASK_PROJECTION_POLL_MS",
         "BUSINESS_TASK_PROJECTION_LEASE_SECONDS"
       ],
-      "runtimeBoundary": "M04-06 sourcing purchase outbox projection runs only in the Baota-managed Node Worker with lease recovery and source idempotency",
+      "runtimeBoundary": "M04-06 sourcing purchase outbox projection runs only in the Baota-managed Node Worker with lease recovery and source idempotency; success uses the persisted published status and clears existing lease fields without writing a non-existent published_at column",
       "imageEvidence": [
         "concept 12 today action",
         "concept 23 today work",

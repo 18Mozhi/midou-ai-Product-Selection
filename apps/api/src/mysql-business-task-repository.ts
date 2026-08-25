@@ -20,6 +20,25 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
       where.push("assignee_id=?");
       args.push(i.actorId);
     }
+    if (i.query) {
+      const escaped = String(i.query)
+        .replace(/\\/g, "\\\\")
+        .replace(/%/g, "\\%")
+        .replace(/_/g, "\\_");
+      where.push("(title LIKE ? OR description LIKE ?)");
+      args.push(`%${escaped}%`, `%${escaped}%`);
+    }
+    const orderBy =
+      (
+        {
+          priority_due:
+            "CASE priority WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END,due_at IS NULL,due_at,created_at DESC",
+          due_asc: "due_at IS NULL,due_at,created_at DESC",
+          updated_desc: "updated_at DESC,created_at DESC",
+          created_desc: "created_at DESC,id DESC",
+        } as Record<string, string>
+      )[i.sort] ??
+      "CASE priority WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END,due_at IS NULL,due_at,created_at DESC";
     const [count] = await this.pool.query<RowDataPacket[]>(
         `SELECT COUNT(*) total FROM tasks WHERE ${where.join(" AND ")}`,
         args,
@@ -27,9 +46,7 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
       [rows] = await this.pool.query<RowDataPacket[]>(
         `SELECT * FROM tasks
          WHERE ${where.join(" AND ")}
-         ORDER BY CASE priority
-          WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4
-         END,due_at IS NULL,due_at,created_at DESC LIMIT ? OFFSET ?`,
+         ORDER BY ${orderBy} LIMIT ? OFFSET ?`,
         [...args, i.pageSize, (i.page - 1) * i.pageSize],
       );
     return {
@@ -49,6 +66,7 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
     const summary = {
       todo: 0,
       in_progress: 0,
+      paused: 0,
       completed: 0,
       cancelled: 0,
       overdue: 0,

@@ -12,6 +12,7 @@ const props = defineProps<{
   dueAt: string;
   assigneeId: string;
   busy: boolean;
+  canAssign: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -40,7 +41,9 @@ const actionLabel = (action: BatchTaskAction) =>
     <button type="button" @click="$emit('start', 'pause')">批量暂停</button>
     <button type="button" @click="$emit('start', 'resume')">批量继续</button>
     <button type="button" @click="$emit('start', 'delay')">批量延期</button>
-    <button type="button" @click="$emit('start', 'transfer')">批量调整负责人</button>
+    <button v-if="canAssign" type="button" @click="$emit('start', 'transfer')">
+      批量调整负责人
+    </button>
     <button type="button" class="danger" @click="$emit('start', 'cancel')">批量取消</button>
   </div>
   <dialog

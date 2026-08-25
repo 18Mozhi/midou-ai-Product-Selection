@@ -5,6 +5,7 @@ import {
   validateTask,
   validateAction,
   BusinessTaskError,
+  BusinessTaskService,
 } from "../../apps/api/dist/business-task-service.js";
 test("M05-01.A01/A02/A04/A12 locks truthful task and SLA inputs", () => {
   const v = validateTask({
@@ -47,6 +48,53 @@ test("M05-01.A01/A02/A04/A12 locks truthful task and SLA inputs", () => {
     },
   );
 });
+test("task list keeps paused, query and whitelisted sort as server-side filters", async () => {
+  let received;
+  const service = new BusinessTaskService({
+    list: async (input) => {
+      received = input;
+      return { items: [], total: 0, page: input.page, page_size: input.pageSize };
+    },
+  });
+  await service.list({
+    page: "2",
+    pageSize: "10",
+    status: "paused",
+    query: "  亚马逊报价  ",
+    sort: "updated_desc",
+    mine: "true",
+  });
+  assert.deepEqual(
+    {
+      page: received.page,
+      pageSize: received.pageSize,
+      status: received.status,
+      query: received.query,
+      sort: received.sort,
+      mine: received.mine,
+    },
+    {
+      page: 2,
+      pageSize: 10,
+      status: "paused",
+      query: "亚马逊报价",
+      sort: "updated_desc",
+      mine: true,
+    },
+  );
+  assert.throws(
+    () => service.list({ status: "unknown" }),
+    (error) => error instanceof BusinessTaskError && error.code === "task_status_invalid",
+  );
+  assert.throws(
+    () => service.list({ query: "x".repeat(201) }),
+    (error) => error instanceof BusinessTaskError && error.code === "task_query_invalid",
+  );
+  assert.throws(
+    () => service.list({ sort: "title_asc" }),
+    (error) => error instanceof BusinessTaskError && error.code === "task_sort_invalid",
+  );
+});
 test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   const files = [
     "database/migrations/0018a_business_tasks_m05_01.up.sql",
@@ -77,6 +125,9 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(values[1], /progress_percent[\s\S]*deleted_at/);
   assert.match(values[2], /task_version_conflict[\s\S]*outbox_events/);
   assert.match(values[4], /sourcing\.purchase_task\.queued[\s\S]*lease_expires_at/);
+  assert.match(values[4], /CONVERT\(p\.id USING utf8mb4\)/);
+  assert.match(values[4], /status='published',leased_by=NULL,leased_at=NULL,lease_expires_at=NULL/);
+  assert.doesNotMatch(values[4], /sourcing_outbox SET status='published',published_at/);
   assert.match(taskUi, /更新进度|编辑|删除任务|任务活动/);
   assert.match(taskUi, /task-row-actions[\s\S]*删除任务/);
   assert.match(taskUi, /status:[\s\S]*page:[\s\S]*from:[\s\S]*slaNext/);
@@ -89,6 +140,11 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(taskUi, /阻塞原因[\s\S]*下一负责人/);
   assert.match(taskUi, /task\.pause[\s\S]*payload\?\.reason/);
   assert.match(taskUi, /TaskListPanel[\s\S]*TaskBatchActions[\s\S]*TaskDetailPanel/);
+  assert.match(
+    taskUi,
+    /capabilities\?: string\[\][\s\S]*canCreate[\s\S]*canUpdate[\s\S]*canAssign/,
+  );
+  assert.match(taskUi, /搜索标题或说明[\s\S]*最近更新[\s\S]*已取消/);
   assert.doesNotMatch(taskUi, /window\.prompt/);
   assert.match(values[3], /\/api\/v1\/tasks\/member-options/);
   assert.match(values[2], /membership_data_scopes[\s\S]*scope_type='workspace'/);
