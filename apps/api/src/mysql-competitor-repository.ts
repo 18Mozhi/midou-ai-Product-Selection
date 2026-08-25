@@ -240,7 +240,7 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
       await c.beginTransaction();
       if (i.value.competitor_id) {
         const [r] = await c.query<RowDataPacket[]>(
-          "SELECT id FROM competitors WHERE id=? AND organization_id=? AND workspace_id=?",
+          "SELECT id FROM competitors WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL",
           [i.value.competitor_id, i.organizationId, i.workspaceId],
         );
         if (!r[0])

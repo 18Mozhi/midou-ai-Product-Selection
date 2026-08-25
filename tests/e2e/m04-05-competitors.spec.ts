@@ -67,6 +67,8 @@ async function setup(
           direction: "decrease",
           threshold_value: 2,
           status: "enabled",
+          revision: 1,
+          updated_at: "2026-08-08T12:01:01.000Z",
         },
       ]),
     }),
@@ -321,9 +323,66 @@ test("competitor monitoring rules use an independent route and retain the source
   await expect(page.getByRole("heading", { name: "新建监控规则" })).toBeVisible();
   await expect(page.getByLabel("竞品（留空为工作区全局）")).toHaveValue(id);
   await page.getByRole("button", { name: "关闭告警规则" }).click();
+  await expect(page).toHaveURL("/competitors/monitoring-rules");
   await expect(page.getByLabel("竞品监控规则列表").getByText("价格 · 减少 USD 2")).toBeVisible();
+  await expect(page.getByLabel("竞品监控规则列表").getByText("已生效")).toBeVisible();
+  await expect(page.getByText("更新于 2026/08/08 20:01 · 版本 1")).toBeVisible();
   await expect(page.getByRole("link", { name: "返回竞品列表" })).toHaveAttribute(
     "href",
     "/competitors",
   );
+
+  await page.goto(`/competitors/monitoring-rules?competitor=${id}`);
+  await page.getByRole("button", { name: "启用规则" }).click();
+  await expect(page).toHaveURL("/competitors/monitoring-rules");
+  await expect(page.getByText("监控阈值已启用。")).toBeVisible();
+});
+
+test("monitoring rule form only offers directions accepted by the selected metric", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/competitors/monitoring-rules");
+  await page.getByRole("button", { name: "新建监控规则" }).click();
+  const metric = page.getByLabel("指标"),
+    direction = page.getByLabel("方向");
+  await metric.selectOption("availability");
+  await expect(direction).toHaveValue("change");
+  await expect(direction.locator("option")).toHaveText(["任意变化", "变为缺货"]);
+  await direction.selectOption("became_unavailable");
+  await metric.selectOption("price");
+  await expect(direction).toHaveValue("change");
+  await expect(direction.locator('option[value="became_unavailable"]')).toHaveCount(0);
+});
+
+test("monitoring rules API failure is not presented as an empty rule list", async ({ page }) => {
+  await setup(page);
+  await page.unroute("**/api/v1/competitor-monitor-rules");
+  await page.route("**/api/v1/competitor-monitor-rules", (route) =>
+    route.fulfill({
+      status: 500,
+      json: {
+        error: {
+          code: "rule_read_failed",
+          message: "rule_read_failed",
+          action_hint: "规则读取失败",
+        },
+        request_id: "rule-read-failed-request",
+        trace_id: "rule-read-failed-trace",
+      },
+    }),
+  );
+  await page.goto("/competitors/monitoring-rules");
+  await expect(page.getByText("规则读取失败")).toBeVisible();
+  await expect(page.getByText("尚未配置监控规则")).toHaveCount(0);
+});
+
+test("auditor can read monitoring rules without receiving rule write controls", async ({
+  page,
+}) => {
+  await setup(page, ["task:read", "competitor:read"]);
+  await page.goto(`/competitors/monitoring-rules?competitor=${id}`);
+  await expect(page.getByLabel("竞品监控规则列表").getByText("已生效")).toBeVisible();
+  await expect(page.getByRole("button", { name: "新建监控规则" })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "新建监控规则" })).toHaveCount(0);
 });

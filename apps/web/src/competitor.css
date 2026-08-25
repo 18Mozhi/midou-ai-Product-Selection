@@ -599,12 +599,29 @@
 .competitor-rule-page-list article span {
   color: var(--so-text-muted);
 }
+.competitor-rule-page-list .competitor-rule-meta {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  overflow-wrap: anywhere;
+}
+.competitor-rule-page-list .competitor-rule-meta b {
+  color: var(--so-text);
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
 .competitor-rule-page-list article em {
   padding: 5px 9px;
   border-radius: var(--so-control-radius);
   color: var(--so-success);
   background: var(--so-success-soft);
   font-style: normal;
+}
+.competitor-rule-page-list article em[data-status="disabled"] {
+  color: var(--so-text-muted);
+  background: var(--so-panel-muted);
 }
 .competitor-rule-empty {
   padding: 28px;

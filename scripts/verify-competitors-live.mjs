@@ -243,6 +243,41 @@ try {
     throw new Error(
       `threshold or isolation mismatch ${JSON.stringify({ changes: detail.changes.length, alerts: detail.alerts.length, other: other.length })}`,
     );
+  const deletedCandidate = await service.create({
+    ...write("create-deleted-target"),
+    value: {
+      provider_id: ids.provider,
+      market: "US",
+      source_site: "Example US",
+      external_id: "SKU-DELETED",
+      product_url: "https://example.test/products/SKU-DELETED",
+      title: "已删除竞品",
+    },
+  });
+  await service.remove({
+    ...write("remove-deleted-target"),
+    competitorId: deletedCandidate.id,
+    value: {
+      expected_revision: 1,
+      reason: "验证软删除目标不能再创建规则",
+    },
+  });
+  let deletedRuleRejected = false;
+  try {
+    await service.createRule({
+      ...write("rule-for-deleted-target"),
+      value: {
+        competitor_id: deletedCandidate.id,
+        metric: "price",
+        direction: "decrease",
+        threshold_value: 1,
+      },
+    });
+  } catch (error) {
+    deletedRuleRejected =
+      error instanceof CompetitorServiceError && error.code === "competitor_not_found";
+  }
+  if (!deletedRuleRejected) throw new Error("soft-deleted competitor accepted as rule target");
   const [countResult, eventResult] = await Promise.all([
     pool.query(
       "SELECT (SELECT COUNT(*) FROM competitor_snapshots WHERE competitor_id=?) snapshots," +
@@ -283,6 +318,7 @@ try {
       notification_task_delivered: "passed",
       idempotency: "passed",
       organization_workspace_isolation: "passed",
+      soft_deleted_rule_target: "rejected",
       audit_outbox_correlation: "passed",
       cleanup: "passed",
       request_id: requestId,

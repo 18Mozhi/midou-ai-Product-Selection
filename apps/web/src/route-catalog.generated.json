@@ -402,8 +402,8 @@
         "path": "/competitors/monitoring-rules",
         "view": "CompetitorMonitor",
         "domain": "competitor-monitoring-rules",
-        "status": "implemented",
-        "statusDetail": "independent_route_pending_full_verification"
+        "status": "verified",
+        "statusDetail": "M04-05_module_verified"
       }
     },
     {

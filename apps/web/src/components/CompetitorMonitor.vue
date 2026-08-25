@@ -65,6 +65,8 @@ interface Rule {
   direction: string;
   threshold_value: number | null;
   status: string;
+  revision: number;
+  updated_at: string;
 }
 const props = withDefaults(
     defineProps<{
@@ -94,6 +96,7 @@ const props = withDefaults(
   deleting = ref<Competitor | null>(null),
   deleteReason = ref(""),
   createDialog = ref<HTMLElement | null>(null),
+  ruleDialog = ref<HTMLElement | null>(null),
   deleteDialog = ref<HTMLElement | null>(null),
   validationTasks = ref<Record<string, string>>({});
 let collectionRefreshTimer: ReturnType<typeof setTimeout> | null = null;
@@ -112,6 +115,7 @@ const form = reactive({
   });
 const rulesPage = computed(() => props.mode === "rules"),
   canManage = computed(() => props.capabilities.includes("competitor:manage")),
+  enabledRules = computed(() => rules.value.filter((item) => item.status === "enabled")),
   canCreateTask = computed(() => props.capabilities.includes("task:create")),
   latest = computed(() => selected.value?.latest_snapshot ?? null),
   latestCollection = computed(() => selected.value?.latest_collection ?? null),
@@ -263,7 +267,11 @@ const statusText = (value: string) =>
     if (item.metric === "availability") return label;
     const currency = item.metric === "price" ? `${latest.value?.currency ?? "币种未采到"} ` : "";
     return `${label} ${currency}${item.threshold_value ?? "未提供"}`;
-  };
+  },
+  ruleTargetText = (item: Rule) =>
+    item.competitor_id
+      ? items.value.find((row) => row.id === item.competitor_id)?.title || "竞品已移除"
+      : "全部竞品";
 function clearCollectionRefresh() {
   if (collectionRefreshTimer) clearTimeout(collectionRefreshTimer);
   collectionRefreshTimer = null;
@@ -280,13 +288,17 @@ function scheduleCollectionRefresh() {
 async function load() {
   clearCollectionRefresh();
   state.value = "loading";
+  notice.value = "";
   try {
     const response = await request<Competitor[]>("/competitors");
     requestId.value = response.request_id;
     items.value = response.data;
     try {
-      rules.value = (await request<Rule[]>("/competitor-monitor-rules")).data;
-    } catch {
+      const ruleResponse = await request<Rule[]>("/competitor-monitor-rules");
+      rules.value = ruleResponse.data;
+      if (rulesPage.value) requestId.value = ruleResponse.request_id;
+    } catch (error) {
+      if (rulesPage.value) throw error;
       rules.value = [];
     }
     const requestedCompetitor =
@@ -297,7 +309,7 @@ async function load() {
       items.value[0] ??
       null;
     selected.value = nextSelected;
-    state.value = items.value.length ? "ready" : "empty";
+    state.value = rulesPage.value ? "ready" : items.value.length ? "ready" : "empty";
     if (selected.value) await detail(selected.value, false);
   } catch (error) {
     if (error instanceof ApiClientError) {
@@ -393,8 +405,18 @@ async function openRule(item?: Competitor) {
     return;
   }
   if (!canManage.value) return;
+  notice.value = "";
+  requestId.value = "";
   rule.competitor_id = item?.id ?? "";
+  rule.metric = "price";
+  rule.direction = "decrease";
+  rule.threshold_value = 1;
   showRule.value = true;
+  void nextTick(() => ruleDialog.value?.querySelector<HTMLSelectElement>("select")?.focus());
+}
+function closeRule() {
+  showRule.value = false;
+  void router.replace({ query: { ...route.query, competitor: undefined } });
 }
 async function collect() {
   if (!selected.value || !canManage.value || selected.value.status !== "active") return;
@@ -468,7 +490,7 @@ async function createRule() {
     ...(rule.metric === "availability" ? {} : { threshold_value: Number(rule.threshold_value) }),
   });
   if (result) {
-    showRule.value = false;
+    closeRule();
     await load();
     notice.value = "监控阈值已启用。";
   }
@@ -514,7 +536,7 @@ function clearSearch() {
 function handleEscape(event: KeyboardEvent) {
   if (event.key !== "Escape") return;
   if (deleting.value) deleting.value = null;
-  else if (showRule.value) showRule.value = false;
+  else if (showRule.value) closeRule();
   else if (showCreate.value) closeCreate();
 }
 onMounted(() => {
@@ -540,6 +562,14 @@ watch(canManage, (allowed) => {
   showRule.value = false;
   deleting.value = null;
 });
+watch(
+  () => rule.metric,
+  (metric) => {
+    if (metric === "availability") {
+      if (!["change", "became_unavailable"].includes(rule.direction)) rule.direction = "change";
+    } else if (rule.direction === "became_unavailable") rule.direction = "change";
+  },
+);
 </script>
 <template>
   <section class="competitor-monitor" aria-labelledby="competitor-title">
@@ -573,12 +603,11 @@ watch(canManage, (allowed) => {
             <small>{{ item.competitor_id ? "指定竞品" : "工作区全部竞品" }}</small>
             <strong>{{ ruleText(item) }}</strong>
           </div>
-          <span>{{
-            item.competitor_id
-              ? items.find((row) => row.id === item.competitor_id)?.title || "竞品已移除"
-              : "全部竞品"
-          }}</span>
-          <em :data-status="item.status">{{ item.status === "active" ? "已生效" : "已停用" }}</em>
+          <span class="competitor-rule-meta"
+            ><b :title="ruleTargetText(item)">{{ ruleTargetText(item) }}</b
+            ><small>更新于 {{ timeText(item.updated_at) }} · 版本 {{ item.revision }}</small></span
+          >
+          <em :data-status="item.status">{{ item.status === "enabled" ? "已生效" : "已停用" }}</em>
         </article>
         <div v-if="!rules.length" class="competitor-rule-empty">
           <strong>尚未配置监控规则</strong>
@@ -955,6 +984,7 @@ watch(canManage, (allowed) => {
     </div>
     <div
       v-if="showRule && canManage"
+      ref="ruleDialog"
       class="competitor-modal"
       role="dialog"
       aria-modal="true"
@@ -966,12 +996,7 @@ watch(canManage, (allowed) => {
             <p>明确阈值</p>
             <h3 id="new-rule">新建监控规则</h3>
           </div>
-          <button
-            type="button"
-            aria-label="关闭告警规则"
-            title="关闭告警规则"
-            @click="showRule = false"
-          >
+          <button type="button" aria-label="关闭告警规则" title="关闭告警规则" @click="closeRule">
             ×
           </button>
         </header>
@@ -991,8 +1016,8 @@ watch(canManage, (allowed) => {
           </select></label
         ><label
           >方向<select v-model="rule.direction">
-            <option value="increase">增加</option>
-            <option value="decrease">减少</option>
+            <option v-if="rule.metric !== 'availability'" value="increase">增加</option>
+            <option v-if="rule.metric !== 'availability'" value="decrease">减少</option>
             <option value="change">任意变化</option>
             <option v-if="rule.metric === 'availability'" value="became_unavailable">
               变为缺货
@@ -1008,13 +1033,13 @@ watch(canManage, (allowed) => {
         /></label>
         <aside>
           当前已启用
-          {{ rules.length }} 条规则；只有达到显式阈值的变化才排队通知与任务。
+          {{ enabledRules.length }} 条规则；只有达到显式阈值的变化才排队通知与任务。
         </aside>
         <p v-if="notice" class="competitor-dialog-notice" role="alert">
           {{ notice }} <code v-if="requestId">{{ requestId }}</code>
         </p>
         <footer>
-          <button type="button" class="ghost" @click="showRule = false">取消</button
+          <button type="button" class="ghost" @click="closeRule">取消</button
           ><button type="submit" :disabled="busy">启用规则</button>
         </footer>
       </form>
