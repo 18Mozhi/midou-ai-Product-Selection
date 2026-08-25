@@ -12,7 +12,11 @@ import {
 const parse = <T>(v: unknown): T => (typeof v === "string" ? (JSON.parse(v) as T) : (v as T)),
   iso = (v: unknown) =>
     v == null ? null : v instanceof Date ? v.toISOString() : new Date(String(v)).toISOString(),
-  day = (v: unknown) => (v instanceof Date ? v.toISOString().slice(0, 10) : String(v).slice(0, 10));
+  pad = (value: number) => String(value).padStart(2, "0");
+export const databaseDay = (v: unknown) =>
+  v instanceof Date
+    ? `${v.getFullYear()}-${pad(v.getMonth() + 1)}-${pad(v.getDate())}`
+    : String(v).slice(0, 10);
 export class MySqlProfitRepository implements ProfitRepository {
   constructor(
     private readonly pool: Pool,
@@ -778,7 +782,7 @@ export class MySqlProfitRepository implements ProfitRepository {
       name: String(row.name),
       status: row.status,
       fee_lines: parse(row.fee_lines_json),
-      effective_from: day(row.effective_from),
+      effective_from: databaseDay(row.effective_from),
       revision: Number(row.revision),
       approvals: row.approvals ? (String(row.approvals).split(",") as ApprovalRole[]) : [],
       published_at: iso(row.published_at),

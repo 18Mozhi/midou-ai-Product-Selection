@@ -8,15 +8,18 @@ const envelope = (data: unknown) => ({
   trace_id: "m04-04-e2e-trace",
 });
 
-async function navigation(page: Page) {
+async function navigation(
+  page: Page,
+  overrides: { roles?: string[]; capabilities?: string[] } = {},
+) {
   await page.route("**/api/v1/me/navigation?shell=member", (route) =>
     route.fulfill({
       json: envelope({
         shell: "member",
         organization_id: "00000000-0000-4000-8000-000000000441",
         workspace_id: "00000000-0000-4000-8000-000000000442",
-        roles: ["selection_manager", "organization_admin"],
-        capabilities: [
+        roles: overrides.roles ?? ["selection_manager", "organization_admin"],
+        capabilities: overrides.capabilities ?? [
           "task:read",
           "opportunity:read",
           "opportunity:approve",
@@ -36,7 +39,9 @@ test("M04-04.A07/A08/A09/A15 cost rule console exposes explicit fees and dual ap
 }) => {
   await navigation(page);
   let status = "draft",
-    revision = 1;
+    revision = 1,
+    approvals: string[] = [];
+  const actionBodies: any[] = [];
   const rule = () => ({
     id: ruleId,
     market: "US",
@@ -52,22 +57,222 @@ test("M04-04.A07/A08/A09/A15 cost rule console exposes explicit fees and dual ap
     ],
     effective_from: "2026-08-08",
     revision,
-    approvals: [],
+    approvals,
     published_at: null,
     updated_at: "2026-08-08T10:00:00.000Z",
   });
   await page.route("**/api/v1/cost-rules", (route) => route.fulfill({ json: envelope([rule()]) }));
   await page.route(`**/api/v1/cost-rules/${ruleId}/actions`, (route) => {
-    status = "pending_approval";
-    revision = 2;
+    const body = route.request().postDataJSON();
+    actionBodies.push(body);
+    revision++;
+    if (body.action === "submit") status = "pending_approval";
+    if (body.action === "approve") {
+      approvals = [...approvals, body.approval_role];
+      if (approvals.length === 2) status = "approved";
+    }
+    if (body.action === "publish") status = "active";
     return route.fulfill({ json: envelope(rule()) });
   });
   await page.goto("/sourcing/cost-rules");
   await expect(page.getByRole("heading", { name: "费用与利润规则", level: 2 })).toBeVisible();
   await expect(page.getByRole("heading", { name: "美国站标准费用", level: 3 })).toBeVisible();
-  await expect(page.getByText("platform_fee")).toBeVisible();
+  await expect(page.getByText("平台费", { exact: true })).toBeVisible();
+  await expect(page.getByText("按售价百分比", { exact: true }).first()).toBeVisible();
   await page.getByRole("button", { name: "提交审批" }).click();
-  await expect(page.getByText("规则已执行 submit；历史版本未改写。")).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "提交费用规则审批" })).toBeVisible();
+  await page.getByLabel("操作原因（至少 2 个字）").fill("提交美国站费用规则审批");
+  await page.getByRole("button", { name: "确认提交审批" }).click();
+  await expect(page.getByText("规则已提交审批，历史版本与审计记录均已保留。")).toBeVisible();
+  await page.getByRole("button", { name: "选品经理批准" }).click();
+  await page.getByLabel("操作原因（至少 2 个字）").fill("选品经理复核费用完整");
+  await page.getByRole("button", { name: "确认批准" }).click();
+  await page.getByRole("button", { name: "组织管理员批准" }).click();
+  await page.getByLabel("操作原因（至少 2 个字）").fill("组织管理员确认费率有效");
+  await page.getByRole("button", { name: "确认批准" }).click();
+  await page.getByRole("button", { name: "发布规则" }).click();
+  await page.getByLabel("操作原因（至少 2 个字）").fill("双审批完成后发布");
+  await page.getByRole("button", { name: "确认发布" }).click();
+  expect(actionBodies).toMatchObject([
+    { action: "submit", reason: "提交美国站费用规则审批", expected_revision: 1 },
+    {
+      action: "approve",
+      approval_role: "selection_manager",
+      reason: "选品经理复核费用完整",
+    },
+    {
+      action: "approve",
+      approval_role: "organization_admin",
+      reason: "组织管理员确认费率有效",
+    },
+    { action: "publish", reason: "双审批完成后发布" },
+  ]);
+  await expect(page.locator(".cost-rule-detail > header > b")).toHaveText("生效中");
+});
+
+test("M04-04 cost rule console uses capabilities, explicit entry and keyboard-safe dialogs", async ({
+  page,
+}) => {
+  await navigation(page, {
+    roles: ["selection_manager"],
+    capabilities: ["opportunity:read"],
+  });
+  await page.route("**/api/v1/cost-rules", (route) => route.fulfill({ json: envelope([]) }));
+  await page.goto("/sourcing/cost-rules");
+  await expect(page.getByRole("button", { name: "新建规则" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "刷新列表" })).toBeVisible();
+
+  await page.unroute("**/api/v1/me/navigation?shell=member");
+  await navigation(page, {
+    roles: ["selection_manager"],
+    capabilities: ["opportunity:read", "opportunity:approve"],
+  });
+  await page.reload();
+  const createButton = page.getByRole("button", { name: "新建规则" });
+  await createButton.click();
+  const dialog = page.getByRole("dialog", { name: "新建费用规则草稿" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel("平台费 %")).toHaveValue("");
+  await expect(dialog.getByRole("button", { name: "保存草稿" })).toBeDisabled();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(createButton).toBeFocused();
+});
+
+test("M04-04 cost rule console paginates accumulated versions", async ({ page }) => {
+  await navigation(page, { roles: ["auditor"], capabilities: ["opportunity:read"] });
+  const accumulated = Array.from({ length: 12 }, (_, index) => ({
+    id: `00000000-0000-4000-8000-${String(500 + index).padStart(12, "0")}`,
+    market: "US",
+    platform: "amazon",
+    version_code: `archive-${index + 1}`,
+    name: `历史规则 ${index + 1}`,
+    status: "retired",
+    fee_lines: [
+      { type: "platform_fee", mode: "percentage_of_sale", value: 10, currency: null },
+      { type: "payment_fee", mode: "percentage_of_sale", value: 3, currency: null },
+      { type: "tax", mode: "percentage_of_sale", value: 5, currency: null },
+      { type: "fulfillment", mode: "fixed_amount", value: 2, currency: "USD" },
+    ],
+    effective_from: "2026-08-25",
+    revision: 4,
+    approvals: ["selection_manager", "organization_admin"],
+    published_at: "2026-08-25T01:00:00.000Z",
+    updated_at: "2026-08-25T01:00:00.000Z",
+  }));
+  await page.route("**/api/v1/cost-rules", (route) =>
+    route.fulfill({ json: envelope(accumulated) }),
+  );
+  await page.goto("/sourcing/cost-rules");
+  await expect(page.locator(".cost-rule-list > button")).toHaveCount(10);
+  await expect(page.getByText("第 1 / 2 页", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page.locator(".cost-rule-list > button")).toHaveCount(2);
+  await expect(page.getByText("第 2 / 2 页", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "历史规则 11", level: 3 })).toBeVisible();
+});
+
+test("M04-04 cost rule console exposes audited reject and rollback", async ({ page }) => {
+  await navigation(page, { roles: ["selection_manager"] });
+  const retiredId = "00000000-0000-4000-8000-000000000446";
+  const makeRule = (id: string, name: string, version: string, ruleStatus: string) => ({
+    id,
+    market: "US",
+    platform: "amazon",
+    version_code: version,
+    name,
+    status: ruleStatus,
+    fee_lines: [
+      { type: "platform_fee", mode: "percentage_of_sale", value: 10, currency: null },
+      { type: "payment_fee", mode: "percentage_of_sale", value: 3, currency: null },
+      { type: "tax", mode: "percentage_of_sale", value: 5, currency: null },
+      { type: "fulfillment", mode: "fixed_amount", value: 2, currency: "USD" },
+    ],
+    effective_from: "2026-08-25",
+    revision: 5,
+    approvals: ["selection_manager", "organization_admin"],
+    published_at: "2026-08-25T01:00:00.000Z",
+    updated_at: "2026-08-25T01:00:00.000Z",
+  });
+  const active = makeRule(ruleId, "当前费用规则", "v2", "active"),
+    retired = makeRule(retiredId, "历史费用规则", "v1", "retired");
+  let actionBody: any = null;
+  await page.route("**/api/v1/cost-rules", (route) =>
+    route.fulfill({ json: envelope([active, retired]) }),
+  );
+  await page.route(`**/api/v1/cost-rules/${ruleId}/actions`, async (route) => {
+    actionBody = route.request().postDataJSON();
+    await route.fulfill({ json: envelope({ ...retired, status: "active", revision: 6 }) });
+  });
+  await page.goto("/sourcing/cost-rules");
+  await page.getByRole("searchbox", { name: "搜索规则" }).fill("历史");
+  await expect(page.getByRole("button", { name: /当前费用规则/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /历史费用规则/ })).toBeVisible();
+  await page.getByRole("button", { name: "重置" }).click();
+  await page.getByRole("combobox", { name: "状态" }).selectOption("retired");
+  await expect(page.getByText("共 1 条", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "重置" }).click();
+  await page.getByRole("button", { name: /历史费用规则/ }).click();
+  await expect(page).toHaveURL(new RegExp(`rule=${retiredId}`));
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "历史费用规则", level: 3 })).toBeVisible();
+  await page.getByRole("button", { name: /当前费用规则/ }).click();
+  await page.getByRole("button", { name: "回滚到历史版本" }).click();
+  await expect(page.getByLabel("恢复目标")).toContainText("历史费用规则 · v1 · 已停用");
+  await page.getByLabel("操作原因（至少 2 个字）").fill("恢复已验证的上一版本");
+  await page.getByRole("button", { name: "确认回滚" }).click();
+  expect(actionBody).toMatchObject({
+    action: "rollback",
+    reason: "恢复已验证的上一版本",
+    target_rule_id: retiredId,
+    expected_revision: 5,
+  });
+});
+
+test("M04-04 cost rule console records a real-role rejection reason", async ({ page }) => {
+  await navigation(page, { roles: ["selection_manager"] });
+  let ruleStatus = "pending_approval";
+  const pending = {
+    id: ruleId,
+    market: "US",
+    platform: "amazon",
+    version_code: "reject-v1",
+    name: "待拒绝费用规则",
+    status: ruleStatus,
+    fee_lines: [
+      { type: "platform_fee", mode: "percentage_of_sale", value: 10, currency: null },
+      { type: "payment_fee", mode: "percentage_of_sale", value: 3, currency: null },
+      { type: "tax", mode: "percentage_of_sale", value: 5, currency: null },
+      { type: "fulfillment", mode: "fixed_amount", value: 2, currency: "USD" },
+    ],
+    effective_from: "2026-08-25",
+    revision: 2,
+    approvals: [],
+    published_at: null,
+    updated_at: "2026-08-25T01:00:00.000Z",
+  };
+  let actionBody: any = null;
+  await page.route("**/api/v1/cost-rules", (route) =>
+    route.fulfill({ json: envelope([{ ...pending, status: ruleStatus }]) }),
+  );
+  await page.route(`**/api/v1/cost-rules/${ruleId}/actions`, async (route) => {
+    actionBody = route.request().postDataJSON();
+    ruleStatus = "rejected";
+    await route.fulfill({
+      json: envelope({ ...pending, status: ruleStatus, revision: 3 }),
+    });
+  });
+  await page.goto("/sourcing/cost-rules");
+  await page.getByRole("button", { name: "选品经理拒绝" }).click();
+  await page.getByLabel("操作原因（至少 2 个字）").fill("费用证据不足");
+  await page.getByRole("button", { name: "确认拒绝" }).click();
+  expect(actionBody).toMatchObject({
+    action: "reject",
+    approval_role: "selection_manager",
+    reason: "费用证据不足",
+    expected_revision: 2,
+  });
+  await expect(page.locator(".cost-rule-detail > header > b")).toHaveText("已拒绝");
 });
 
 test("M04-04.A07/A08/A15 profit detail shows formula components provenance and historical quote", async ({

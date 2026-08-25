@@ -16,6 +16,9 @@ const requestId = randomUUID(),
   pool = createDatabasePool(loadRuntimeConfig(process.env, "worker"));
 const ids = {
   actor: randomUUID(),
+  reviewer: randomUUID(),
+  reviewerMembership: randomUUID(),
+  reviewerScope: randomUUID(),
   organization: randomUUID(),
   workspace: randomUUID(),
   opportunity: randomUUID(),
@@ -32,6 +35,14 @@ const service = new ProfitService(new MySqlProfitRepository(pool)),
     roleCodes: ["selection_manager", "organization_admin"],
   };
 const write = (key) => ({ ...scope, requestId, traceId, idempotencyKey: key });
+const reviewerWrite = (key) => ({
+  ...scope,
+  actorId: ids.reviewer,
+  roleCodes: ["procurement_member"],
+  requestId,
+  traceId,
+  idempotencyKey: key,
+});
 const fee_lines = [
   {
     type: "platform_fee",
@@ -49,10 +60,7 @@ async function migrate() {
     "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='cost_rules'",
   );
   if (Number(rows[0].count)) return;
-  const sql = await readFile(
-    "database/migrations/0017d_profit_cost_m04_04.up.sql",
-    "utf8",
-  );
+  const sql = await readFile("database/migrations/0017d_profit_cost_m04_04.up.sql", "utf8");
   for (const statement of sql
     .split(";")
     .map((value) => value.trim())
@@ -74,6 +82,7 @@ async function cleanup() {
     "DELETE FROM opportunity_profit_components WHERE profit_run_id IN (SELECT id FROM opportunity_profit_runs WHERE organization_id IN (?,?))",
     "DELETE FROM opportunity_profit_runs WHERE organization_id IN (?,?)",
     "DELETE FROM opportunity_profit_jobs WHERE organization_id IN (?,?)",
+    "DELETE FROM opportunity_cost_input_reviews WHERE organization_id IN (?,?)",
     "DELETE FROM opportunity_cost_inputs WHERE organization_id IN (?,?)",
     "DELETE FROM exchange_rate_quotes WHERE organization_id IN (?,?)",
     "DELETE FROM cost_rule_approvals WHERE organization_id IN (?,?)",
@@ -83,9 +92,18 @@ async function cleanup() {
     "DELETE FROM opportunity_decisions WHERE organization_id IN (?,?)",
     "DELETE FROM opportunity_evidence_links WHERE organization_id IN (?,?)",
     "DELETE FROM opportunities WHERE organization_id IN (?,?)",
+    "DELETE FROM outbox_events WHERE organization_id IN (?,?)",
   ])
     try {
       await pool.query(sql, sql.includes("actor_id") ? [ids.actor] : orgs);
+    } catch {}
+  for (const sql of [
+    "DELETE FROM membership_data_scopes WHERE membership_id=?",
+    "DELETE FROM membership_role_assignments WHERE membership_id=?",
+    "DELETE FROM memberships WHERE id=?",
+  ])
+    try {
+      await pool.query(sql, [ids.reviewerMembership]);
     } catch {}
   for (const [sql, id] of [
     ["DELETE FROM providers WHERE id=?", ids.provider],
@@ -93,6 +111,7 @@ async function cleanup() {
     ["DELETE FROM workspaces WHERE id=?", ids.otherWorkspace],
     ["DELETE FROM organizations WHERE id=?", ids.organization],
     ["DELETE FROM organizations WHERE id=?", ids.otherOrganization],
+    ["DELETE FROM users WHERE id=?", ids.reviewer],
     ["DELETE FROM users WHERE id=?", ids.actor],
   ])
     try {
@@ -105,30 +124,37 @@ async function seed() {
     "INSERT INTO users (id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES (?,?,?,'live-probe','active',?,?,1,?,?)",
     [ids.actor, email, email, now, now, now, now],
   );
+  const reviewerEmail = `m04-04-reviewer-${requestId}@example.test`;
+  await pool.query(
+    "INSERT INTO users (id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES (?,?,?,'live-probe','active',?,?,1,?,?)",
+    [ids.reviewer, reviewerEmail, reviewerEmail, now, now, now, now],
+  );
   for (const [org, ws, suffix] of [
     [ids.organization, ids.workspace, "primary"],
     [ids.otherOrganization, ids.otherWorkspace, "other"],
   ]) {
     await pool.query(
       "INSERT INTO organizations (id,name,slug,status,timezone,data_retention_days,default_workspace_id,created_by,version,created_at,updated_at) VALUES (?,?,?,'active','Asia/Shanghai',365,NULL,?,1,?,?)",
-      [
-        org,
-        `M04-04 ${suffix}`,
-        `m0404-${suffix}-${requestId.slice(0, 8)}`,
-        ids.actor,
-        now,
-        now,
-      ],
+      [org, `M04-04 ${suffix}`, `m0404-${suffix}-${requestId.slice(0, 8)}`, ids.actor, now, now],
     );
     await pool.query(
       "INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,?,?,'active',?,1,?,?)",
       [ws, org, `M04-04 ${suffix}`, `m0404-${suffix}`, ids.actor, now, now],
     );
-    await pool.query(
-      "UPDATE organizations SET default_workspace_id=? WHERE id=?",
-      [ws, org],
-    );
+    await pool.query("UPDATE organizations SET default_workspace_id=? WHERE id=?", [ws, org]);
   }
+  await pool.query(
+    "INSERT INTO memberships (id,organization_id,user_id,status,joined_at,version,created_at,updated_at) VALUES (?,?,?,'active',?,1,?,?)",
+    [ids.reviewerMembership, ids.organization, ids.reviewer, now, now, now],
+  );
+  await pool.query(
+    "INSERT INTO membership_role_assignments (membership_id,role_code,created_by,created_at) VALUES (?,'procurement_member',?,?)",
+    [ids.reviewerMembership, ids.actor, now],
+  );
+  await pool.query(
+    "INSERT INTO membership_data_scopes (id,membership_id,scope_type,scope_key,workspace_id,team_id,created_by,version,created_at) VALUES (?,?,'organization',?,NULL,NULL,?,1,?)",
+    [ids.reviewerScope, ids.reviewerMembership, ids.organization, ids.actor, now],
+  );
   for (const [id, org, ws, name] of [
     [ids.opportunity, ids.organization, ids.workspace, "primary"],
     [ids.otherOpportunity, ids.otherOrganization, ids.otherWorkspace, "other"],
@@ -217,9 +243,7 @@ try {
       fee_lines: fee_lines.slice(0, 3),
     });
   } catch (error) {
-    invalid =
-      error instanceof ProfitServiceError &&
-      error.code === "cost_rule_fee_lines_invalid";
+    invalid = error instanceof ProfitServiceError && error.code === "cost_rule_fee_lines_invalid";
   }
   if (!invalid) throw new Error("explicit fee validation missing");
   const draft = await service.createRule({
@@ -285,9 +309,20 @@ try {
         evidence_id: randomUUID(),
         observed_at: now.toISOString(),
         expected_version: version,
+        reviewer_id: ids.reviewer,
       },
     });
-    version = result.version;
+    const reviewed = await service.reviewCost({
+      ...reviewerWrite(`cost-${key}-review`),
+      opportunityId: ids.opportunity,
+      reviewId: result.review_id,
+      value: {
+        decision: "approved",
+        reason: "成本证据与币种已复核",
+        expected_version: 1,
+      },
+    });
+    version = reviewed.version;
   }
   const active = await approveAndPublish(draft, "v1");
   if (active.status !== "active" || active.approvals.length !== 2)
@@ -299,10 +334,7 @@ try {
       () => new Date(now.getTime() + 1000),
     ),
     partial = await worker.processOnce();
-  if (
-    partial.status !== "completed_with_warnings" ||
-    partial.profit_status !== "insufficient_data"
-  )
+  if (partial.status !== "completed_with_warnings" || partial.profit_status !== "insufficient_data")
     throw new Error(`missing rate must block ROI: ${JSON.stringify(partial)}`);
   let analysis = await service.getAnalysis({
     organizationId: ids.organization,
@@ -327,10 +359,9 @@ try {
       evidence_id: randomUUID(),
     },
   });
-  const [[current]] = await pool.query(
-    "SELECT version FROM opportunities WHERE id=?",
-    [ids.opportunity],
-  );
+  const [[current]] = await pool.query("SELECT version FROM opportunities WHERE id=?", [
+    ids.opportunity,
+  ]);
   await service.queue({
     ...write("profit-rerun"),
     opportunityId: ids.opportunity,
@@ -342,10 +373,7 @@ try {
     120,
     () => new Date(now.getTime() + 2000),
   ).processOnce();
-  if (
-    complete.status !== "succeeded" ||
-    complete.profit_status !== "calculated"
-  )
+  if (complete.status !== "succeeded" || complete.profit_status !== "calculated")
     throw new Error(`complete profit failed: ${JSON.stringify(complete)}`);
   analysis = await service.getAnalysis({
     organizationId: ids.organization,
@@ -358,9 +386,7 @@ try {
     analysis.latest_run?.total_cost !== 30.6 ||
     analysis.latest_run.components.length !== 7
   )
-    throw new Error(
-      `profit formula mismatch: ${JSON.stringify(analysis.latest_run)}`,
-    );
+    throw new Error(`profit formula mismatch: ${JSON.stringify(analysis.latest_run)}`);
   const second = await service.createRule({
       ...write("rule-v2-create"),
       value: {
@@ -396,17 +422,13 @@ try {
       "SELECT request_id,trace_id FROM opportunity_events WHERE organization_id=? AND (event_type LIKE 'cost_rule.%' OR event_type LIKE 'exchange_rate.%' OR event_type LIKE 'opportunity.profit.%')",
       [ids.organization],
     ),
-    pool.query("SELECT id FROM cost_rules WHERE organization_id=?", [
-      ids.otherOrganization,
-    ]),
+    pool.query("SELECT id FROM cost_rules WHERE organization_id=?", [ids.otherOrganization]),
   ]);
   if (
     Number(counts[0]?.runs) !== 2 ||
     Number(counts[0]?.components) !== 14 ||
     events.length < 12 ||
-    events.some(
-      (row) => row.request_id !== requestId || row.trace_id !== traceId,
-    ) ||
+    events.some((row) => row.request_id !== requestId || row.trace_id !== traceId) ||
     otherRules.length
   )
     throw new Error(

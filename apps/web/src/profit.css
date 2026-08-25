@@ -41,6 +41,11 @@
   cursor: pointer;
 }
 
+.cost-console button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
 .cost-head-actions button,
 .cost-rule-detail footer button:last-child {
   border-color: var(--so-primary);
@@ -79,6 +84,52 @@
   gap: 16px;
 }
 
+.cost-rule-browser {
+  min-width: 0;
+}
+
+.cost-rule-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(120px, 0.45fr);
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel);
+}
+
+.cost-rule-filters label {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+
+.cost-rule-filters input,
+.cost-rule-filters select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--so-control-height);
+  padding: 8px 10px;
+  border: 1px solid var(--so-border);
+  border-radius: var(--so-control-radius);
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+
+.cost-rule-filters button,
+.cost-rule-filters output {
+  align-self: center;
+}
+
+.cost-rule-filters output {
+  justify-self: end;
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+
 .cost-rule-list,
 .cost-rule-detail {
   overflow: hidden;
@@ -86,6 +137,23 @@
   border-radius: 12px;
   color: var(--so-text);
   background: var(--so-panel);
+}
+
+.cost-console p.cost-filter-empty {
+  padding: 24px 16px;
+  color: var(--so-text-muted);
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.cost-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  color: var(--so-text-muted);
+  font-size: 13px;
 }
 
 .cost-rule-list > button {
@@ -118,9 +186,27 @@
   background: var(--so-success);
 }
 
+.cost-rule-list i[data-status="pending_approval"],
+.cost-rule-list i[data-status="approved"] {
+  background: var(--so-warning);
+}
+
+.cost-rule-list i[data-status="rejected"],
+.cost-rule-list i[data-status="rolled_back"] {
+  background: var(--so-danger);
+}
+
 .cost-rule-list span {
   display: grid;
   gap: 4px;
+  min-width: 0;
+}
+
+.cost-rule-list strong,
+.cost-rule-list small,
+.cost-rule-detail h3,
+.cost-rule-detail header span {
+  overflow-wrap: anywhere;
 }
 
 .cost-rule-list small,
@@ -152,6 +238,24 @@
   border-radius: 20px;
   color: var(--so-success);
   background: color-mix(in srgb, var(--so-success) 13%, var(--so-panel-soft));
+}
+
+.cost-rule-detail > header > b[data-status="draft"],
+.cost-rule-detail > header > b[data-status="retired"] {
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
+
+.cost-rule-detail > header > b[data-status="pending_approval"],
+.cost-rule-detail > header > b[data-status="approved"] {
+  color: var(--so-warning);
+  background: color-mix(in srgb, var(--so-warning) 12%, var(--so-panel-soft));
+}
+
+.cost-rule-detail > header > b[data-status="rejected"],
+.cost-rule-detail > header > b[data-status="rolled_back"] {
+  color: var(--so-danger);
+  background: color-mix(in srgb, var(--so-danger) 12%, var(--so-panel-soft));
 }
 
 .cost-fees {
@@ -198,30 +302,33 @@
 
 .cost-rule-detail footer {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
   margin-top: 20px;
 }
 
 .cost-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  background: var(--so-scrim);
-}
-
-.cost-modal form {
-  overflow: auto;
-  width: min(620px, 100%);
-  max-height: 90vh;
-  padding: 24px;
+  width: min(620px, calc(100vw - 24px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
   border: 1px solid var(--so-border);
   border-radius: 14px;
   color: var(--so-text);
   background: var(--so-bg-elevated);
   box-shadow: var(--so-shadow);
+}
+
+.cost-modal::backdrop {
+  background: var(--so-scrim);
+}
+
+.cost-modal form {
+  overflow: auto;
+  box-sizing: border-box;
+  width: 100%;
+  max-height: calc(100dvh - 34px);
+  padding: 24px;
 }
 
 .cost-modal form > header {
@@ -243,7 +350,9 @@
   gap: 0 12px;
 }
 
-.cost-modal input {
+.cost-modal input,
+.cost-modal select,
+.cost-modal textarea {
   box-sizing: border-box;
   width: 100%;
   padding: 10px;
@@ -251,6 +360,10 @@
   border-radius: 7px;
   color: var(--so-text);
   background: var(--so-panel-soft);
+}
+
+.cost-modal textarea {
+  resize: vertical;
 }
 
 .cost-modal fieldset {
@@ -263,6 +376,44 @@
   padding: 11px;
   color: var(--so-warning);
   background: color-mix(in srgb, var(--so-warning) 10%, var(--so-panel));
+}
+
+.cost-form-summary,
+.cost-dialog-error,
+.cost-action-context {
+  padding: 10px 12px;
+  border-radius: 8px;
+  letter-spacing: 0;
+}
+
+.cost-console p.cost-form-summary {
+  color: var(--so-warning);
+  background: color-mix(in srgb, var(--so-warning) 10%, var(--so-panel));
+}
+
+.cost-console p.cost-form-summary[data-valid="true"] {
+  color: var(--so-success);
+  background: color-mix(in srgb, var(--so-success) 10%, var(--so-panel));
+}
+
+.cost-console p.cost-dialog-error {
+  color: var(--so-danger);
+  background: color-mix(in srgb, var(--so-danger) 10%, var(--so-panel));
+}
+
+.cost-console p.cost-action-context {
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
+
+.cost-readonly-note {
+  color: var(--so-text-muted);
+}
+
+.cost-rule-actions .danger {
+  border-color: color-mix(in srgb, var(--so-danger) 52%, var(--so-border));
+  color: var(--so-danger);
+  background: color-mix(in srgb, var(--so-danger) 8%, var(--so-panel));
 }
 
 .cost-modal footer {
@@ -300,5 +451,23 @@
   .cost-modal form > div,
   .cost-modal fieldset {
     grid-template-columns: 1fr;
+  }
+
+  .cost-modal form {
+    padding: 18px;
+  }
+
+  .cost-rule-filters {
+    grid-template-columns: minmax(0, 1fr) minmax(110px, 0.55fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .cost-rule-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-rule-filters output {
+    justify-self: start;
   }
 }

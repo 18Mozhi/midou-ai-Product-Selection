@@ -123,7 +123,7 @@ export function surfaceProps(input: {
     case "sourcing-workspace":
       return { ...common, capabilities: input.capabilities };
     case "cost-rule-console":
-      return { ...common, roles: input.roles };
+      return { ...common, roles: input.roles, capabilities: input.capabilities };
     case "provider-runtime-surface":
       return { ...common, routePath: input.path, capabilities: input.capabilities };
     case "collection-runtime-surface":

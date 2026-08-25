@@ -7,6 +7,7 @@ import {
   validateCostInput,
   validateCostRule,
 } from "../../apps/api/dist/profit-service.js";
+import { databaseDay } from "../../apps/api/dist/mysql-profit-repository.js";
 
 const ids = {
   org: "00000000-0000-4000-8000-000000000441",
@@ -57,6 +58,23 @@ test("M04-04.A01/A02/A04/A12 requires every explicit fee and provenance", () => 
     expected_version: 1,
   });
   assert.equal(input.currency, "CNY");
+});
+
+test("M04-04 preserves a MySQL DATE as the same calendar day", () => {
+  class LocalMysqlDate extends Date {
+    getFullYear() {
+      return 2026;
+    }
+    getMonth() {
+      return 7;
+    }
+    getDate() {
+      return 25;
+    }
+  }
+  const value = new LocalMysqlDate("2026-08-24T16:00:00.000Z");
+  assert.equal(databaseDay(value), "2026-08-25");
+  assert.equal(databaseDay("2026-08-25"), "2026-08-25");
 });
 
 test("M04-04 cost submission requires a distinct reviewer and forwards immutable review actions", async () => {
@@ -196,6 +214,7 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
   assert.match(ruleCss, /@media\s*\(\s*max-width:\s*820px\s*\)/);
   assert.match(ruleCss, /var\(--so-panel\)/);
   assert.match(ruleCss, /var\(--so-primary\)/);
+  assert.match(ruleCss, /overflow-wrap:\s*anywhere/);
   assert.doesNotMatch(ruleCss, /!important|#[0-9a-f]{3,8}\b/i);
   assert.match(profitCss, /@media\s*\(\s*max-width:\s*640px\s*\)/);
   assert.match(schema, /PROFIT_CALCULATION_POLL_MS/);
