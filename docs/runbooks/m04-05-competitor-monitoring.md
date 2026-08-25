@@ -15,7 +15,9 @@
 - 重复采集异常：同一任务重试应复用任务级证据键；新的采集任务应形成下一版活动规范记录，并让旧版变为 `superseded`。若出现 `evidence_dedupe_conflict`，核对 Worker 是否仍把动态商品的稳定 ASIN 直接当成原始证据键。
 - Amazon 解析升级：先应用 `0052a_amazon_structured_parser.up.sql`，再通过宝塔重启统一 Node 项目 `ai选品`。新任务的证据应优先显示 `application/ld+json` 与 `amazon.jsonld.Product.*` 字段路径；旧 HTML 回退证据仍可读取。无需重启 Python 项目。
 - 告警未产生：核对规则范围、指标、方向和显式阈值。首个快照只是基线。
+- 告警长期停在排队：依次检查 `competitor_outbox.status`、同 ID 的 `outbox_events.status`、`competitor_alerts.task_status/notification_status`、`tasks.source_type='selection_verification'` 和站内 `notification_deliveries`。业务任务投影与通知发布都由统一宝塔 Node Worker 运行；没有单独的竞品通知服务。偏好关闭时通知状态会明确失败，任务仍可独立创建。
 - 页面核对：详情应同时显示最早基线、当前快照、变化数和适用阈值；价格变化必须显示证据快照币种与变化时间。“告警、任务与结论时间轴”应按同一 `change_id` 展示影响结论、通知状态和系统任务状态，未命中规则的变化显示“未命中监控阈值”。若告警状态缺失，先核对 `competitor_alerts.change_id/rule_id/notification_status/task_status`，不能从通知记录反推或改写变化事实。该呈现不新增配置，发布静态资源即可生效。
+- 首次采集不刷新：详情 API 必须返回 `latest_collection`；页面在 `scheduled/queued/leased/running/parsing/validating/persisted/retry_scheduled` 状态下每 2 秒刷新，终态后停止。404/410 商品页应记录 `empty_result`，不得误报为权限拒绝；其他失败按 `last_error_code` 显示，不能继续展示为“等待首次采集”。
 - 交互核对：添加入口必须依次经过商品链接、市场信息、确认采集三步；详情价格与库存时间轴应显示真实采集时间，当前竞品规则应自动选中该竞品。390px 下暂停与“删除竞品监控”只能从“更多操作”展开，外部链接必须标注新窗口。
 - 配置修改后必须在宝塔重启 Node Worker；API 配置未动态读取。
 

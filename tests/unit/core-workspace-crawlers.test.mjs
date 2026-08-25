@@ -199,6 +199,20 @@ test("Amazon adapter keeps injected transports for deterministic replay and repo
   assert.equal(result.records.length, 1);
 });
 
+test("Amazon product links that no longer exist close as empty results instead of permission denial", async () => {
+  const adapter = new AmazonProductSearchAdapter(
+    async () => new Response("not found", { status: 404 }),
+  );
+  await assert.rejects(
+    () =>
+      adapter.collect(
+        { target: { page_url: "https://www.amazon.com/dp/B000000000" }, limit: 1 },
+        AbortSignal.timeout(1000),
+      ),
+    (error) => error?.code === "empty_result" && error?.retryable === false,
+  );
+});
+
 test("Amazon product parser prefers versioned JSON-LD product facts", () => {
   const product = {
       "@context": "https://schema.org",

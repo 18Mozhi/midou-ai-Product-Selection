@@ -192,6 +192,40 @@
 .competitor-mobile-actions {
   display: none;
 }
+.competitor-collection-state {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 18px 0;
+  padding: 14px 16px;
+  border: 1px solid var(--so-warning-border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--so-warning) 8%, var(--so-panel-soft));
+}
+.competitor-collection-state[data-status="failed_terminal"],
+.competitor-collection-state[data-status="dead_letter"],
+.competitor-collection-state[data-status^="blocked_"] {
+  border-color: color-mix(in srgb, var(--so-danger) 35%, var(--so-border));
+  background: color-mix(in srgb, var(--so-danger) 8%, var(--so-panel-soft));
+}
+.competitor-collection-state div {
+  display: grid;
+  gap: 4px;
+}
+.competitor-collection-state small,
+.competitor-collection-state p,
+.competitor-collection-state code,
+.competitor-readonly-hint {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.competitor-collection-state p {
+  margin: 0;
+}
+.competitor-collection-state code {
+  overflow-wrap: anywhere;
+}
 .competitor-metrics {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -396,6 +430,9 @@
   color: var(--so-text-muted);
   background: var(--so-panel-soft);
 }
+.competitor-readonly-hint {
+  align-self: center;
+}
 .competitor-modal {
   position: fixed;
   inset: 0;
@@ -416,6 +453,19 @@
 }
 .competitor-modal form.rule-form {
   width: min(480px, 100%);
+}
+.competitor-dialog-notice {
+  margin: 16px 0 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--so-danger);
+  background: color-mix(in srgb, var(--so-danger) 8%, var(--so-panel-soft));
+  color: var(--so-text);
+}
+.competitor-dialog-notice code {
+  display: block;
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+  color: var(--so-text-muted);
 }
 .competitor-modal header,
 .competitor-modal footer {
@@ -617,6 +667,10 @@
   }
   .competitor-actions > button {
     flex: 1;
+  }
+  .competitor-collection-state {
+    align-items: flex-start;
+    flex-direction: column;
   }
   .competitor-desktop-actions {
     display: none;

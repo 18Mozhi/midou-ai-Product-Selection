@@ -9,6 +9,8 @@ import {
 } from "../apps/api/dist/competitor-service.js";
 import { MySqlCompetitorRepository } from "../apps/api/dist/mysql-competitor-repository.js";
 import { MySqlCompetitorMonitorWorker } from "../apps/worker/dist/competitor-monitor-worker.js";
+import { projectBusinessTaskOnce } from "../apps/worker/dist/business-task-projection-worker.js";
+import { NotificationOutboxWorker } from "../apps/worker/dist/notification-outbox-worker.js";
 
 const requestId = randomUUID(),
   traceId = randomUUID(),
@@ -53,6 +55,11 @@ async function cleanup() {
   } catch {}
 
   for (const sql of [
+    "DELETE FROM notification_deliveries WHERE organization_id IN (?,?)",
+    "DELETE FROM realtime_events WHERE organization_id IN (?,?)",
+    "DELETE FROM notifications WHERE organization_id IN (?,?)",
+    "DELETE FROM outbox_events WHERE organization_id IN (?,?)",
+    "DELETE FROM tasks WHERE organization_id IN (?,?) AND source_type='selection_verification'",
     "DELETE FROM competitor_operations WHERE actor_id=?",
     "DELETE FROM competitor_outbox WHERE organization_id IN (?,?)",
     "DELETE FROM competitor_events WHERE organization_id IN (?,?)",
@@ -65,10 +72,7 @@ async function cleanup() {
     "DELETE FROM competitors WHERE organization_id IN (?,?)",
   ])
     try {
-      await pool.query(
-        sql,
-        sql.includes("actor_id") ? [ids.actor] : [ids.org, ids.otherOrg],
-      );
+      await pool.query(sql, sql.includes("actor_id") ? [ids.actor] : [ids.org, ids.otherOrg]);
     } catch {}
   for (const [sql, id] of [
     ["DELETE FROM providers WHERE id=?", ids.provider],
@@ -94,23 +98,13 @@ async function seed() {
   ]) {
     await pool.query(
       "INSERT INTO organizations (id,name,slug,status,timezone,data_retention_days,default_workspace_id,created_by,version,created_at,updated_at) VALUES (?,?,?,'active','Asia/Shanghai',365,NULL,?,1,?,?)",
-      [
-        org,
-        `M04-05 ${label}`,
-        `m0405-${label}-${requestId.slice(0, 8)}`,
-        ids.actor,
-        now,
-        now,
-      ],
+      [org, `M04-05 ${label}`, `m0405-${label}-${requestId.slice(0, 8)}`, ids.actor, now, now],
     );
     await pool.query(
       "INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,?,?,'active',?,1,?,?)",
       [ws, org, `M04-05 ${label}`, `m0405-${label}`, ids.actor, now, now],
     );
-    await pool.query(
-      "UPDATE organizations SET default_workspace_id=? WHERE id=?",
-      [ws, org],
-    );
+    await pool.query("UPDATE organizations SET default_workspace_id=? WHERE id=?", [ws, org]);
   }
   await pool.query(
     "INSERT INTO providers (id,code,name,target_url,access_mode,markets_json,languages_json,fields_json,schedule_minutes,concurrency_limit,timeout_ms,retry_limit,circuit_failure_threshold,dedupe_key,retention_days,failure_rules_json,parser_version,healthcheck_url,owner_label,status,version,created_by,updated_by,created_at,updated_at) VALUES (?,?,?,'https://example.test/products','public_page','[\"US\"]','[\"en-US\"]','[\"price\",\"rank\",\"review_count\",\"availability\"]',60,1,1000,2,5,'external_id',365,'[\"rate_limited\"]','v1',NULL,'竞品数据管理员','enabled',1,?,?,?,?)",
@@ -132,9 +126,7 @@ const snapshot = (price, rank, review, availability, ref) => ({
   review_count: review,
   rating_value: 4.6,
   availability,
-  captured_at: new Date(
-    now.getTime() + (ref === "baseline" ? 0 : 60000),
-  ).toISOString(),
+  captured_at: new Date(now.getTime() + (ref === "baseline" ? 0 : 60000)).toISOString(),
   freshness: "fresh",
   source_status: "healthy",
   source_ref_id: `provider:${ref}`,
@@ -216,6 +208,28 @@ try {
   ).processOnce();
   if (compared.status !== "succeeded" || compared.change_count !== 4)
     throw new Error(`comparison mismatch ${JSON.stringify(compared)}`);
+  await pool.query(
+    "UPDATE competitor_outbox SET available_at=NOW(3) WHERE organization_id=? AND workspace_id=? AND status='pending'",
+    [ids.org, ids.ws],
+  );
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    await projectBusinessTaskOnce(pool, "worker-m0405", 120);
+    const [pending] = await pool.query(
+      "SELECT COUNT(*) count FROM competitor_outbox WHERE organization_id=? AND status='pending'",
+      [ids.org],
+    );
+    if (Number(pending[0].count) === 0) break;
+  }
+  const notificationWorker = new NotificationOutboxWorker(pool, 120, 3);
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    await notificationWorker.processOnce();
+    const [pending] = await pool.query(
+      "SELECT COUNT(*) count FROM outbox_events WHERE organization_id=? AND " +
+        "event_type LIKE 'competitor.%' AND status IN ('pending','leased')",
+      [ids.org],
+    );
+    if (Number(pending[0].count) === 0) break;
+  }
   const detail = await service.get({
       organizationId: ids.org,
       workspaceId: ids.ws,
@@ -231,19 +245,26 @@ try {
     );
   const [countResult, eventResult] = await Promise.all([
     pool.query(
-      "SELECT (SELECT COUNT(*) FROM competitor_snapshots WHERE competitor_id=?) snapshots,(SELECT COUNT(*) FROM competitor_alerts WHERE competitor_id=? AND notification_status='queued' AND task_status='queued') alerts",
-      [created.id, created.id],
+      "SELECT (SELECT COUNT(*) FROM competitor_snapshots WHERE competitor_id=?) snapshots," +
+        "(SELECT COUNT(*) FROM competitor_alerts WHERE competitor_id=? AND " +
+        "notification_status='delivered' AND task_status='created') alerts," +
+        "(SELECT COUNT(*) FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
+        "source_type='selection_verification') tasks," +
+        "(SELECT COUNT(*) FROM notifications WHERE organization_id=? AND workspace_id=? AND " +
+        "category='competitor') notifications",
+      [created.id, created.id, ids.org, ids.ws, ids.org, ids.ws],
     ),
-    pool.query(
-      "SELECT request_id,trace_id FROM competitor_events WHERE organization_id=?",
-      [ids.org],
-    ),
+    pool.query("SELECT request_id,trace_id FROM competitor_events WHERE organization_id=?", [
+      ids.org,
+    ]),
   ]);
   const counts = countResult[0][0],
     events = eventResult[0];
   if (
     Number(counts.snapshots) !== 2 ||
     Number(counts.alerts) !== 2 ||
+    Number(counts.tasks) !== 2 ||
+    Number(counts.notifications) !== 2 ||
     events.some((r) => r.request_id !== requestId || r.trace_id !== traceId)
   )
     throw new Error(
@@ -259,7 +280,7 @@ try {
       immutable_snapshots: 2,
       change_records: 4,
       threshold_alert: 2,
-      notification_task_queued: "passed",
+      notification_task_delivered: "passed",
       idempotency: "passed",
       organization_workspace_isolation: "passed",
       audit_outbox_correlation: "passed",

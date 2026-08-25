@@ -44,8 +44,29 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
       "SELECT * FROM competitor_alerts WHERE competitor_id=? ORDER BY created_at DESC,id DESC LIMIT 100",
       [i.competitorId],
     );
+    const [collectionAttempts] = await this.pool.query<RowDataPacket[]>(
+      "SELECT t.id,t.status,t.last_error_code,t.attempt_count,t.available_result_count,t.updated_at " +
+        "FROM competitor_events e JOIN collection_tasks t ON " +
+        "t.id=CONVERT(JSON_UNQUOTE(JSON_EXTRACT(e.payload_json,'$.task_id')) USING ascii) " +
+        "WHERE e.competitor_id=? AND e.organization_id=? AND e.workspace_id=? AND " +
+        "e.event_type IN ('competitor.created','competitor.collection.scheduled') " +
+        "ORDER BY e.created_at DESC,e.id DESC LIMIT 1",
+      [i.competitorId, i.organizationId, i.workspaceId],
+    );
     return {
       ...this.dto(rows[0]),
+      latest_collection: collectionAttempts[0]
+        ? {
+            task_id: String(collectionAttempts[0].id),
+            status: String(collectionAttempts[0].status),
+            last_error_code: collectionAttempts[0].last_error_code
+              ? String(collectionAttempts[0].last_error_code)
+              : null,
+            attempt_count: Number(collectionAttempts[0].attempt_count),
+            available_result_count: Number(collectionAttempts[0].available_result_count),
+            updated_at: iso(collectionAttempts[0].updated_at),
+          }
+        : null,
       snapshots: snapshots.map((r) => this.snapshot(r)),
       changes: changes.map((r) => ({
         id: String(r.id),

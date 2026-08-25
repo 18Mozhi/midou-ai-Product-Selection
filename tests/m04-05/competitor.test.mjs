@@ -58,6 +58,8 @@ test("M04-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     "apps/api/src/mysql-competitor-repository.ts",
     "apps/api/src/competitor-routes.ts",
     "apps/worker/src/competitor-monitor-worker.ts",
+    "apps/worker/src/business-task-projection-worker.ts",
+    "apps/worker/src/notification-outbox-worker.ts",
     "apps/web/src/components/CompetitorMonitor.vue",
     "apps/web/src/competitor.css",
     "config/schema.json",
@@ -78,6 +80,8 @@ test("M04-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
       repository,
       routes,
       worker,
+      businessProjection,
+      notificationWorker,
       ui,
       css,
       schema,
@@ -99,6 +103,15 @@ test("M04-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(repository, /competitor_snapshot_jobs[\s\S]*competitor_provider_not_approved/);
   assert.match(routes, /competitor:manage[\s\S]*monitor-rules/);
   assert.match(worker, /impact_explanation[\s\S]*dead_letter/);
+  assert.match(
+    businessProjection,
+    /competitor_outbox[\s\S]*selection_verification[\s\S]*task_status='created'/,
+  );
+  assert.match(businessProjection, /outbox_events[\s\S]*status='delivered'/);
+  assert.match(
+    notificationWorker,
+    /competitor\.threshold\.triggered[\s\S]*notification_status[\s\S]*delivered/,
+  );
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(ui, new RegExp(state));
   assert.match(ui, /基线快照[\s\S]*当前快照[\s\S]*生效阈值/);
@@ -109,6 +122,8 @@ test("M04-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(ui, /告警、任务与结论时间轴[\s\S]*系统告警[\s\S]*系统任务[\s\S]*结论/);
   assert.match(repository, /change_id:[\s\S]*rule_id:[\s\S]*notification_status/);
   assert.match(ui, /createValidationTask/);
+  assert.match(ui, /latest_collection[\s\S]*scheduleCollectionRefresh/);
+  assert.match(ui, /canManage[\s\S]*competitor:manage/);
   assert.match(ui, /生成验证任务/);
   assert.match(ui, /打开验证任务/);
   assert.match(css, /competitor-comparison[\s\S]*@media\s*\(\s*max-width:\s*820px\s*\)/);

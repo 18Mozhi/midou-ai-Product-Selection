@@ -52,16 +52,29 @@ export class NotificationOutboxWorker {
               : "task",
         actionable = await this.isStillActionable(event, payload),
         recipients = actionable ? await this.recipients(event, payload) : [];
+      let createdNotifications = 0;
       for (const recipient of recipients)
-        await this.create(event, payload, category, recipient, now);
+        if (await this.create(event, payload, category, recipient, now)) createdNotifications += 1;
       await this.pool.query(
         "UPDATE outbox_events SET status='published',published_at=?,lease_expires_at=NULL,version=version+1,updated_at=? WHERE id=?",
         [now, now, event.id],
       );
+      if (event.event_type === "competitor.threshold.triggered")
+        await this.pool.query(
+          "UPDATE competitor_alerts SET notification_status=?,updated_at=? WHERE id=? AND " +
+            "organization_id=? AND workspace_id=?",
+          [
+            createdNotifications > 0 ? "delivered" : "failed",
+            now,
+            event.id,
+            event.organization_id,
+            event.workspace_id,
+          ],
+        );
       return {
         status: "published" as const,
         event_id: String(event.id),
-        notifications: recipients.length,
+        notifications: createdNotifications,
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : "unknown";
@@ -133,7 +146,7 @@ export class NotificationOutboxWorker {
       categoryEnabled = !pref || Boolean(pref[`${category}_enabled`]),
       inApp = !pref || Boolean(pref.in_app_enabled),
       email = Boolean(pref?.email_enabled);
-    if (!categoryEnabled) return;
+    if (!categoryEnabled) return false;
     const redecisionReady = event.event_type === "task.evidence_completion.redecision_ready",
       costDueSoon = event.event_type === "approval.cost_input.review_due_soon",
       costOverdue = event.event_type === "approval.cost_input.overdue",
@@ -229,5 +242,6 @@ export class NotificationOutboxWorker {
         now,
       ],
     );
+    return true;
   }
 }

@@ -39,7 +39,10 @@ const id = "00000000-0000-4000-8000-000000000505",
     captured_at: "2026-08-01T12:01:00.000Z",
     evidence_id: "00000000-0000-4000-8000-000000000510",
   };
-async function setup(page: Page) {
+async function setup(
+  page: Page,
+  capabilities = ["task:read", "task:create", "competitor:read", "competitor:manage"],
+) {
   await page.route("**/api/v1/me/navigation?shell=member", (r) =>
     r.fulfill({
       json: envelope({
@@ -47,7 +50,7 @@ async function setup(page: Page) {
         organization_id: "00000000-0000-4000-8000-000000000501",
         workspace_id: "00000000-0000-4000-8000-000000000502",
         roles: ["member"],
-        capabilities: ["task:read", "competitor:read", "competitor:manage"],
+        capabilities,
         platform_roles: [],
         platform_capabilities: [],
         guard_reason: "navigation_member_allowed",
@@ -73,6 +76,14 @@ async function setup(page: Page) {
     r.fulfill({
       json: envelope({
         ...item,
+        latest_collection: {
+          task_id: "00000000-0000-4000-8000-000000000511",
+          status: "succeeded",
+          last_error_code: null,
+          attempt_count: 1,
+          available_result_count: 1,
+          updated_at: "2026-08-08T12:01:01.000Z",
+        },
         snapshots: [item.latest_snapshot, baseline],
         changes: [
           {
@@ -152,6 +163,10 @@ test("competitor creation uses link, market and confirmation steps", async ({ pa
   await dialog.getByLabel("商品网址").fill("https://www.amazon.com/dp/B0SCOUTOPS");
   await dialog.getByRole("button", { name: "下一步" }).click();
   await expect(dialog.getByText("2 市场信息")).toHaveAttribute("aria-current", "step");
+  await expect(dialog.getByLabel("市场")).toHaveAttribute("pattern", "[A-Za-z0-9._-]+");
+  await expect(dialog.getByLabel("市场")).toHaveAttribute("maxlength", "40");
+  await expect(dialog.getByLabel("关联机会编号（可选）")).toHaveAttribute("maxlength", "36");
+  await expect(dialog.getByLabel("监控名称")).toHaveAttribute("maxlength", "500");
   await dialog.getByLabel("市场").fill("US");
   await dialog.getByLabel("监控名称").fill("便携式净水杯竞品");
   await dialog.getByRole("button", { name: "下一步" }).click();
@@ -164,6 +179,135 @@ test("competitor search and detail restore from the URL", async ({ page }) => {
   await page.goto(`/competitors?q=净水&competitor=${id}`);
   await expect(page.getByLabel("搜索竞品")).toHaveValue("净水");
   await expect(page.getByRole("heading", { name: item.title })).toBeVisible();
+});
+
+test("initial selection loads full snapshot history and empty search can be reset", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/competitors");
+  await expect(
+    page.getByLabel("价格与库存时间轴").getByText("缺货 · 评分 4.6 · 评论 825"),
+  ).toBeVisible();
+  await page.getByLabel("搜索竞品").fill("不存在的 ASIN");
+  await expect(page.getByRole("heading", { name: "没有匹配的竞品" })).toBeVisible();
+  await page.getByRole("button", { name: "清空搜索" }).click();
+  await expect(page.getByRole("button", { name: /便携式净水杯竞品/ })).toBeVisible();
+});
+
+test("auditor keeps full read detail but does not receive competitor write controls", async ({
+  page,
+}) => {
+  await setup(page, ["task:read", "competitor:read"]);
+  await page.goto("/competitors?create=1");
+  await expect(page.getByRole("heading", { name: item.title })).toBeVisible();
+  await expect(page.getByRole("button", { name: "添加竞品监控" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "立即采集" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "暂停监控" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "删除竞品监控" })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "添加竞品监控" })).toHaveCount(0);
+});
+
+test("queued first collection refreshes the selected detail until a real snapshot arrives", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.unroute("**/api/v1/competitors");
+  await page.unroute(`**/api/v1/competitors/${id}`);
+  const pending = { ...item, snapshot_count: 0, latest_snapshot: null };
+  let detailReads = 0;
+  await page.route("**/api/v1/competitors", (route) =>
+    route.fulfill({ json: envelope([pending]) }),
+  );
+  await page.route(`**/api/v1/competitors/${id}`, (route) => {
+    detailReads += 1;
+    route.fulfill({
+      json: envelope(
+        detailReads === 1
+          ? {
+              ...pending,
+              latest_collection: {
+                task_id: "00000000-0000-4000-8000-000000000511",
+                status: "queued",
+                last_error_code: null,
+                attempt_count: 0,
+                available_result_count: 0,
+                updated_at: "2026-08-08T12:00:00.000Z",
+              },
+              snapshots: [],
+              changes: [],
+              alerts: [],
+            }
+          : {
+              ...item,
+              latest_collection: {
+                task_id: "00000000-0000-4000-8000-000000000511",
+                status: "succeeded",
+                last_error_code: null,
+                attempt_count: 1,
+                available_result_count: 1,
+                updated_at: "2026-08-08T12:01:01.000Z",
+              },
+              snapshots: [item.latest_snapshot],
+              changes: [],
+              alerts: [],
+            },
+      ),
+    });
+  });
+  await page.goto("/competitors");
+  await expect(page.getByText("已排队", { exact: true })).toBeVisible();
+  await expect(page.getByText("USD 26.99").first()).toBeVisible({ timeout: 5_000 });
+  expect(detailReads).toBeGreaterThanOrEqual(2);
+});
+
+test("manual collection keeps polling when the first detail read still points at the previous task", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.unroute(`**/api/v1/competitors/${id}`);
+  const previousTask = "00000000-0000-4000-8000-000000000511",
+    currentTask = "00000000-0000-4000-8000-000000000512";
+  let detailReads = 0;
+  await page.route(`**/api/v1/competitors/${id}/collect`, (route) =>
+    route.fulfill({ json: envelope({ task_id: currentTask, status: "scheduled" }) }),
+  );
+  await page.route(`**/api/v1/competitors/${id}`, (route) => {
+    detailReads += 1;
+    const completed = detailReads >= 3;
+    return route.fulfill({
+      json: envelope({
+        ...item,
+        snapshot_count: completed ? 3 : 2,
+        latest_collection: {
+          task_id: completed ? currentTask : previousTask,
+          status: "succeeded",
+          last_error_code: null,
+          attempt_count: 1,
+          available_result_count: 1,
+          updated_at: completed ? "2026-08-08T12:03:00.000Z" : "2026-08-08T12:01:01.000Z",
+        },
+        snapshots: completed
+          ? [
+              {
+                ...item.latest_snapshot,
+                id: "00000000-0000-4000-8000-000000000513",
+                current_price: 25.99,
+              },
+              item.latest_snapshot,
+              baseline,
+            ]
+          : [item.latest_snapshot, baseline],
+        changes: [],
+        alerts: [],
+      }),
+    });
+  });
+  await page.goto("/competitors");
+  await page.getByRole("button", { name: "立即采集" }).click();
+  await expect(page.getByRole("button", { name: "采集中…" })).toBeDisabled();
+  await expect(page.getByText("USD 25.99").first()).toBeVisible({ timeout: 7_000 });
+  expect(detailReads).toBeGreaterThanOrEqual(3);
 });
 
 test("competitor monitoring rules use an independent route and retain the source competitor", async ({

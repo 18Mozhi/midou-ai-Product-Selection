@@ -115,7 +115,11 @@ export function surfaceProps(input: {
     case "score-rule-console":
       return { ...common, capabilities: input.capabilities };
     case "competitor-monitor":
-      return { ...common, mode: input.path.endsWith("/monitoring-rules") ? "rules" : "list" };
+      return {
+        ...common,
+        mode: input.path.endsWith("/monitoring-rules") ? "rules" : "list",
+        capabilities: input.capabilities,
+      };
     case "cost-rule-console":
       return { ...common, roles: input.roles };
     case "provider-runtime-surface":

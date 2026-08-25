@@ -450,6 +450,8 @@ export class AmazonProductSearchAdapter extends SourceAdapter {
         : await fetchAmazonWithNativeHttps(url, signal, headers);
     if (response.status === 429) throw new ProviderAdapterFailure("rate_limited", true);
     if (response.status >= 500) throw new ProviderAdapterFailure("network_error", true);
+    if (response.status === 404 || response.status === 410)
+      throw new ProviderAdapterFailure("empty_result", false);
     if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
     return response;
   }

@@ -1190,6 +1190,8 @@
         "../apps/api/src/competitor-routes.ts",
         "../apps/worker/src/competitor-monitor-worker.ts",
         "../apps/worker/src/core-collection-projection-worker.ts",
+        "../apps/worker/src/business-task-projection-worker.ts",
+        "../apps/worker/src/notification-outbox-worker.ts",
         "../apps/web/src/components/CompetitorMonitor.vue"
       ],
       "routes": [
@@ -1203,12 +1205,12 @@
       ],
       "scope": "organization and workspace scoped competitor identities immutable source snapshots comparison jobs changes threshold rules alerts events and outbox",
       "truthBoundary": "Amazon identities can be added by product URL and are collected from the public product page without an official API; HTML price currency is derived from the actual response and is never forced to USD, recurring captures create an auditable normalized-record version that supersedes the prior active observation while retaining the stable ASIN identity, nullable price rank reviews rating and availability remain visibly missing when the page does not expose them, no zero or sample value is substituted, and detail views distinguish the oldest baseline, current snapshot, recorded changes and applicable explicit thresholds while price changes use the currency from their evidence-linked snapshot; alerts remain explicitly linked by change_id and unmatched changes are not presented as alerts",
-      "pageFlow": "competitor creation uses link market and confirmation steps over the existing API fields; detail exposes a price and availability timeline plus a unified change alert task and conclusion timeline, contextual rules, explicit first-collection recovery and external-link warnings, and every persisted change can create a high-priority validation task whose description locks the competitor change evidence and observed time before linking to task detail; mobile secondary actions live under a named menu",
-      "apiClientBoundary": "competitor lists, details, collection actions, rules and audited deletes use the shared frontend JSON client; Amazon collection creation rejects sources whose platform-terms review is missing or expired before any collection task is persisted; rule-list failure remains an optional degradation and does not hide an otherwise available competitor list",
-      "permission": "competitor:read for scoped list and full detail; competitor:manage for create collect thresholds pause resume and audited soft delete; auditors remain read only",
-      "audit": "user and Worker writes preserve request_id trace_id evidence source references immutable changes and queued downstream delivery state",
+      "pageFlow": "competitor creation uses link market and confirmation steps over the existing API fields; detail automatically refreshes a queued or running public-page collection until it reaches a factual terminal state, exposes collection failures without inferring them from a missing snapshot, and renders the complete price and availability timeline on initial selection; the unified change alert task and conclusion timeline, contextual rules, explicit first-collection recovery and external-link warnings remain available, and every persisted change can create a high-priority validation task whose description locks the competitor change evidence and observed time before linking to task detail; empty search results have an explicit reset and mobile secondary actions live under a named menu",
+      "apiClientBoundary": "competitor lists, full details including latest_collection, collection actions, rules and audited deletes use the shared frontend JSON client; Amazon collection creation rejects sources whose platform-terms review is missing or expired before any collection task is persisted; Amazon 404 and 410 responses close as empty_result rather than permission denial; rule-list failure remains an optional degradation and does not hide an otherwise available competitor list",
+      "permission": "competitor:read for scoped list and full detail; competitor:manage for create collect thresholds pause resume and audited soft delete; task:create for manual validation-task creation; write controls consume the real navigation capability set while the API remains fail closed, so auditors remain read only",
+      "audit": "user and Worker writes preserve request_id trace_id evidence source references immutable changes and downstream task and in-app notification delivery state; the business-task projection consumes competitor_outbox idempotently by change_id before the notification outbox publishes the same alert id",
       "configuration": ["COMPETITOR_MONITOR_POLL_MS", "COMPETITOR_MONITOR_LEASE_SECONDS"],
-      "runtimeBoundary": "comparison runs inside the Baota-managed Node Worker; P05 consumes queued notification and task outbox contracts",
+      "runtimeBoundary": "comparison, competitor-outbox task projection and in-app notification publication run inside the Baota-managed Node Worker; no additional runtime service is introduced",
       "imageEvidence": [
         "concept 41 competitor list",
         "concept 42 competitor detail",

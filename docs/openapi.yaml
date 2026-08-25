@@ -2344,7 +2344,7 @@ paths:
   /competitors/{competitorId}:
     get:
       summary: Read competitor snapshots and change-linked evidence alert and task delivery state
-      description: Each alert includes change_id and rule_id so clients can place the persisted impact conclusion, notification state and downstream task state on one factual timeline without inferring an alert for unmatched changes.
+      description: Each alert includes change_id and rule_id so clients can place the persisted impact conclusion, notification state and downstream task state on one factual timeline without inferring an alert for unmatched changes. The detail also returns the latest public-page collection attempt so the page can distinguish queued, running, retrying, blocked and terminal failure states without guessing from a missing snapshot.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:read
       parameters:
@@ -7075,7 +7075,7 @@ components:
       properties:
         provider_id: { type: string, format: uuid, nullable: true }
         opportunity_id: { type: string, format: uuid, nullable: true }
-        market: { type: string, minLength: 1, maxLength: 40 }
+        market: { type: string, minLength: 1, maxLength: 40, pattern: "^[A-Za-z0-9._-]+$" }
         source_site: { type: string, minLength: 1, maxLength: 120 }
         external_id: { type: string, minLength: 1, maxLength: 255 }
         product_url: { type: string, format: uri }
@@ -7119,6 +7119,46 @@ components:
         revision: { type: integer, minimum: 1 }
         latest_snapshot:
           { allOf: [{ $ref: "#/components/schemas/CompetitorSnapshotInput" }], nullable: true }
+        latest_collection:
+          allOf: [{ $ref: "#/components/schemas/CompetitorCollectionAttempt" }]
+          nullable: true
+        updated_at: { type: string, format: date-time }
+    CompetitorCollectionAttempt:
+      type: object
+      required:
+        [task_id, status, last_error_code, attempt_count, available_result_count, updated_at]
+      properties:
+        task_id: { type: string, format: uuid }
+        status:
+          {
+            type: string,
+            enum:
+              [
+                draft,
+                scheduled,
+                queued,
+                leased,
+                running,
+                parsing,
+                validating,
+                persisted,
+                retry_scheduled,
+                blocked_login,
+                blocked_captcha,
+                blocked_robots,
+                rate_limited,
+                succeeded,
+                succeeded_empty,
+                completed_with_warnings,
+                failed_terminal,
+                dead_letter,
+                manually_replayed,
+                automatically_replayed,
+              ],
+          }
+        last_error_code: { type: string, nullable: true }
+        attempt_count: { type: integer, minimum: 0 }
+        available_result_count: { type: integer, minimum: 0 }
         updated_at: { type: string, format: date-time }
     OrganizationMembershipSummary:
       type: object

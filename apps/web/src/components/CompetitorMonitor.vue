@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -18,6 +18,14 @@ interface Snapshot {
   source_status: string;
   evidence_id: string;
 }
+interface CollectionAttempt {
+  task_id: string;
+  status: string;
+  last_error_code: string | null;
+  attempt_count: number;
+  available_result_count: number;
+  updated_at: string;
+}
 interface Competitor {
   id: string;
   market: string;
@@ -29,6 +37,7 @@ interface Competitor {
   revision: number;
   snapshot_count: number;
   latest_snapshot: Snapshot | null;
+  latest_collection?: CollectionAttempt | null;
   snapshots?: Snapshot[];
   changes?: Array<{
     id: string;
@@ -57,9 +66,17 @@ interface Rule {
   threshold_value: number | null;
   status: string;
 }
-const props = withDefaults(defineProps<{ apiBaseUrl: string; mode?: "list" | "rules" }>(), {
-    mode: "list",
-  }),
+const props = withDefaults(
+    defineProps<{
+      apiBaseUrl: string;
+      mode?: "list" | "rules";
+      capabilities?: string[];
+    }>(),
+    {
+      mode: "list",
+      capabilities: () => [],
+    },
+  ),
   route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
@@ -76,7 +93,11 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; mode?: "list" | "ru
   query = ref(""),
   deleting = ref<Competitor | null>(null),
   deleteReason = ref(""),
+  createDialog = ref<HTMLElement | null>(null),
+  deleteDialog = ref<HTMLElement | null>(null),
   validationTasks = ref<Record<string, string>>({});
+let collectionRefreshTimer: ReturnType<typeof setTimeout> | null = null;
+let pendingCollectionTask: { competitorId: string; taskId: string } | null = null;
 const form = reactive({
     market: "US",
     product_url: "",
@@ -90,7 +111,23 @@ const form = reactive({
     threshold_value: 1,
   });
 const rulesPage = computed(() => props.mode === "rules"),
+  canManage = computed(() => props.capabilities.includes("competitor:manage")),
+  canCreateTask = computed(() => props.capabilities.includes("task:create")),
   latest = computed(() => selected.value?.latest_snapshot ?? null),
+  latestCollection = computed(() => selected.value?.latest_collection ?? null),
+  collectionPending = computed(() =>
+    [
+      "draft",
+      "scheduled",
+      "queued",
+      "leased",
+      "running",
+      "parsing",
+      "validating",
+      "persisted",
+      "retry_scheduled",
+    ].includes(latestCollection.value?.status ?? ""),
+  ),
   baseline = computed(() => {
     const snapshots = selected.value?.snapshots ?? [];
     return snapshots.length ? (snapshots[snapshots.length - 1] ?? null) : latest.value;
@@ -132,6 +169,39 @@ const statusText = (value: string) =>
       running: "首次采集中",
       failed: "首次采集失败",
     })[value] ?? value,
+  collectionStatusText = (value: string) =>
+    ({
+      draft: "准备采集",
+      scheduled: "已排队",
+      queued: "已排队",
+      leased: "Worker 已领取",
+      running: "正在采集",
+      parsing: "正在解析",
+      validating: "正在校验",
+      persisted: "正在生成快照",
+      retry_scheduled: "等待自动重试",
+      blocked_login: "登录状态阻塞",
+      blocked_captcha: "验证码阻塞",
+      blocked_robots: "来源规则阻塞",
+      rate_limited: "来源限流",
+      succeeded: "采集成功",
+      succeeded_empty: "未采到商品数据",
+      completed_with_warnings: "部分采集成功",
+      failed_terminal: "采集失败",
+      dead_letter: "多次重试失败",
+      manually_replayed: "已人工重放",
+      automatically_replayed: "已自动重放",
+    })[value] ?? value,
+  collectionErrorText = (value: string | null) =>
+    ({
+      empty_result: "商品页未返回可用商品记录，请检查链接或 ASIN 后重新采集。",
+      source_changed: "商品页结构已变化，当前解析器未生成有效记录。",
+      permission_denied: "来源拒绝访问；请确认商品链接仍可公开访问。",
+      blocked_robots: "来源 robots 规则阻止本次采集。",
+      rate_limited: "来源触发限流，请稍后重新采集。",
+      network_error: "来源网络暂不可用，请稍后重试。",
+      timeout: "采集超时，请稍后重试。",
+    })[value ?? ""] ?? "采集未形成可用快照，请按任务状态检查来源后重试。",
   availabilityText = (value: string) =>
     ({ in_stock: "有货", out_of_stock: "缺货", unknown: "未知" })[value] ?? value,
   sourceStatusText = (value: string) =>
@@ -194,7 +264,21 @@ const statusText = (value: string) =>
     const currency = item.metric === "price" ? `${latest.value?.currency ?? "币种未采到"} ` : "";
     return `${label} ${currency}${item.threshold_value ?? "未提供"}`;
   };
+function clearCollectionRefresh() {
+  if (collectionRefreshTimer) clearTimeout(collectionRefreshTimer);
+  collectionRefreshTimer = null;
+}
+function scheduleCollectionRefresh() {
+  clearCollectionRefresh();
+  if (!selected.value || !collectionPending.value) return;
+  const competitorId = selected.value.id;
+  collectionRefreshTimer = setTimeout(async () => {
+    if (selected.value?.id !== competitorId) return;
+    await detail(selected.value, false);
+  }, 2000);
+}
 async function load() {
+  clearCollectionRefresh();
   state.value = "loading";
   try {
     const response = await request<Competitor[]>("/competitors");
@@ -207,13 +291,14 @@ async function load() {
     }
     const requestedCompetitor =
       typeof route.query.competitor === "string" ? route.query.competitor : "";
-    selected.value =
+    const nextSelected =
       items.value.find((item) => item.id === requestedCompetitor) ??
       items.value.find((item) => item.id === selected.value?.id) ??
       items.value[0] ??
       null;
+    selected.value = nextSelected;
     state.value = items.value.length ? "ready" : "empty";
-    if (requestedCompetitor && selected.value) await detail(selected.value, false);
+    if (selected.value) await detail(selected.value, false);
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
@@ -223,13 +308,26 @@ async function load() {
   }
 }
 async function detail(item: Competitor, syncRoute = true) {
+  clearCollectionRefresh();
+  if (syncRoute) notice.value = "";
   selected.value = item;
   try {
     const response = await request<Competitor>(`/competitors/${item.id}`);
     requestId.value = response.request_id;
-    selected.value = response.data;
+    const pendingMatches = pendingCollectionTask?.competitorId === item.id,
+      collectionMatches =
+        pendingMatches &&
+        response.data.latest_collection?.task_id === pendingCollectionTask?.taskId,
+      next =
+        pendingMatches && !collectionMatches
+          ? { ...response.data, latest_collection: selected.value?.latest_collection ?? null }
+          : response.data;
+    selected.value = next;
+    if (collectionMatches && !collectionPending.value) pendingCollectionTask = null;
+    items.value = items.value.map((row) => (row.id === next.id ? next : row));
     if (syncRoute)
       await router.replace({ query: { ...route.query, competitor: item.id, create: undefined } });
+    scheduleCollectionRefresh();
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
@@ -255,6 +353,7 @@ async function post(path: string, body: unknown) {
   }
 }
 async function create() {
+  if (!canManage.value) return;
   const result = await post("/competitors", {
     market: form.market,
     product_url: form.product_url,
@@ -268,9 +367,13 @@ async function create() {
   }
 }
 function openCreate() {
+  if (!canManage.value) return;
+  notice.value = "";
+  requestId.value = "";
   createStep.value = 1;
   showCreate.value = true;
   void router.replace({ query: { ...route.query, create: "1" } });
+  void nextTick(() => createDialog.value?.querySelector<HTMLInputElement>("input")?.focus());
 }
 function closeCreate() {
   createStep.value = 1;
@@ -289,16 +392,33 @@ async function openRule(item?: Competitor) {
     });
     return;
   }
+  if (!canManage.value) return;
   rule.competitor_id = item?.id ?? "";
   showRule.value = true;
 }
 async function collect() {
-  if (!selected.value) return;
+  if (!selected.value || !canManage.value || selected.value.status !== "active") return;
   const result = await post(`/competitors/${selected.value.id}/collect`, {});
-  if (result) notice.value = `已开始重新采集，任务编号 ${result.task_id}。`;
+  if (result) {
+    notice.value = `已开始重新采集，任务编号 ${result.task_id}。`;
+    const pendingCollection: CollectionAttempt = {
+      task_id: result.task_id,
+      status: result.status ?? "scheduled",
+      last_error_code: null,
+      attempt_count: 0,
+      available_result_count: 0,
+      updated_at: new Date().toISOString(),
+    };
+    pendingCollectionTask = { competitorId: selected.value.id, taskId: result.task_id };
+    selected.value = { ...selected.value, latest_collection: pendingCollection };
+    items.value = items.value.map((item) =>
+      item.id === selected.value?.id ? { ...item, latest_collection: pendingCollection } : item,
+    );
+    scheduleCollectionRefresh();
+  }
 }
 async function createValidationTask(change: NonNullable<Competitor["changes"]>[number]) {
-  if (!selected.value) return;
+  if (!selected.value || !canCreateTask.value) return;
   const result = await post("/tasks", {
     title: `复核竞品变化 · ${fieldText(change.field)} · ${selected.value.title}`.slice(0, 200),
     description:
@@ -314,7 +434,7 @@ async function createValidationTask(change: NonNullable<Competitor["changes"]>[n
   notice.value = `验证任务已创建：${result.title}`;
 }
 async function remove() {
-  if (!deleting.value || !deleteReason.value.trim()) return;
+  if (!deleting.value || !deleteReason.value.trim() || !canManage.value) return;
   busy.value = true;
   try {
     const response = await request(`/competitors/${deleting.value.id}`, {
@@ -340,6 +460,7 @@ async function remove() {
   }
 }
 async function createRule() {
+  if (!canManage.value) return;
   const result = await post("/competitor-monitor-rules", {
     competitor_id: rule.competitor_id || null,
     metric: rule.metric,
@@ -353,7 +474,7 @@ async function createRule() {
   }
 }
 async function toggle() {
-  if (!selected.value) return;
+  if (!selected.value || !canManage.value) return;
   const status = selected.value.status === "active" ? "paused" : "active",
     result = await post(`/competitors/${selected.value.id}/actions`, {
       status,
@@ -364,17 +485,60 @@ async function toggle() {
     notice.value = status === "paused" ? "监控已暂停。" : "监控已恢复。";
   }
 }
+function openDelete() {
+  if (!selected.value || !canManage.value) return;
+  deleting.value = selected.value;
+  deleteReason.value = "";
+  notice.value = "";
+  void nextTick(() => deleteDialog.value?.querySelector<HTMLTextAreaElement>("textarea")?.focus());
+}
+function handleStatePrimary() {
+  if (state.value === "empty" && canManage.value) {
+    if (rulesPage.value) void openRule();
+    else openCreate();
+  } else if (state.value === "expired")
+    void router.push(`/login?return_to=${encodeURIComponent(route.fullPath)}`);
+  else if (state.value === "forbidden") void router.push("/home");
+  else void load();
+}
+function handleStateSecondary() {
+  if (state.value === "empty") {
+    if (canManage.value) void load();
+    else void router.push("/home");
+  } else if (state.value === "error") router.back();
+  else void router.push("/home");
+}
+function clearSearch() {
+  query.value = "";
+}
+function handleEscape(event: KeyboardEvent) {
+  if (event.key !== "Escape") return;
+  if (deleting.value) deleting.value = null;
+  else if (showRule.value) showRule.value = false;
+  else if (showCreate.value) closeCreate();
+}
 onMounted(() => {
-  showCreate.value = route.query.create === "1";
+  showCreate.value = route.query.create === "1" && canManage.value;
   query.value = typeof route.query.q === "string" ? route.query.q : "";
   if (rulesPage.value && typeof route.query.competitor === "string") {
     rule.competitor_id = route.query.competitor;
-    showRule.value = true;
+    showRule.value = canManage.value;
   }
+  window.addEventListener("keydown", handleEscape);
   void load();
+});
+onUnmounted(() => {
+  clearCollectionRefresh();
+  window.removeEventListener("keydown", handleEscape);
 });
 watch(query, (value) => {
   void router.replace({ query: { ...route.query, q: value || undefined, create: undefined } });
+});
+watch(canManage, (allowed) => {
+  if (allowed) return;
+  showCreate.value = false;
+  showRule.value = false;
+  deleting.value = null;
 });
 </script>
 <template>
@@ -390,7 +554,7 @@ watch(query, (value) => {
           <RouterLink class="competitor-link-button ghost" to="/competitors"
             >返回竞品列表</RouterLink
           >
-          <button type="button" @click="openRule()">新建监控规则</button>
+          <button v-if="canManage" type="button" @click="openRule()">新建监控规则</button>
         </div>
       </header>
       <p v-if="notice" class="competitor-notice" role="status">{{ notice }}</p>
@@ -398,7 +562,10 @@ watch(query, (value) => {
         v-if="state !== 'ready'"
         :kind="state"
         :request-id="requestId"
-        @primary="load"
+        :primary-label="state === 'empty' && canManage ? '创建第一条规则' : undefined"
+        :secondary-label="state === 'empty' ? (canManage ? '刷新数据' : '返回工作台') : undefined"
+        @primary="handleStatePrimary"
+        @secondary="handleStateSecondary"
       />
       <section v-else class="competitor-rule-page-list" aria-label="竞品监控规则列表">
         <article v-for="item in rules" :key="item.id">
@@ -416,7 +583,7 @@ watch(query, (value) => {
         <div v-if="!rules.length" class="competitor-rule-empty">
           <strong>尚未配置监控规则</strong>
           <p>创建明确阈值后，只有真实快照变化达到阈值时才触发通知与任务。</p>
-          <button type="button" @click="openRule()">创建第一条规则</button>
+          <button v-if="canManage" type="button" @click="openRule()">创建第一条规则</button>
         </div>
       </section>
     </template>
@@ -444,10 +611,14 @@ watch(query, (value) => {
         </div>
         <div>
           <button type="button" class="ghost" @click="openRule()">监控规则</button
-          ><button type="button" @click="openCreate">添加竞品监控</button>
+          ><button v-if="canManage" type="button" @click="openCreate">添加竞品监控</button>
         </div>
       </header>
-      <p v-if="notice" class="competitor-notice" role="status">
+      <p
+        v-if="notice && !showCreate && !showRule && !deleting"
+        class="competitor-notice"
+        role="status"
+      >
         {{ notice }} <code v-if="requestId">{{ requestId }}</code>
       </p>
       <section class="competitor-summary" aria-label="竞品监控数据总览">
@@ -476,7 +647,20 @@ watch(query, (value) => {
         v-if="state !== 'ready'"
         :kind="state"
         :request-id="requestId"
-        @primary="load"
+        :primary-label="state === 'empty' && canManage ? '添加竞品监控' : undefined"
+        :secondary-label="state === 'empty' ? (canManage ? '刷新数据' : '返回工作台') : undefined"
+        @primary="handleStatePrimary"
+        @secondary="handleStateSecondary"
+      />
+      <UiStatePanel
+        v-else-if="!filteredItems.length"
+        kind="empty"
+        title="没有匹配的竞品"
+        description="当前搜索条件没有结果；清空搜索后可恢复完整列表。"
+        primary-label="清空搜索"
+        :secondary-label="canManage ? '添加竞品监控' : '刷新数据'"
+        @primary="clearSearch"
+        @secondary="canManage ? openCreate() : load()"
       />
       <div v-else class="competitor-grid">
         <aside class="competitor-list">
@@ -489,8 +673,7 @@ watch(query, (value) => {
             <span
               ><b>{{ item.title }}</b
               ><small>{{ item.source_site }} · {{ item.market }}</small></span
-            ><strong v-if="item.latest_snapshot"
-              >{{ item.latest_snapshot.currency }} {{ item.latest_snapshot.current_price }}</strong
+            ><strong v-if="item.latest_snapshot">{{ snapshotPrice(item.latest_snapshot) }}</strong
             ><strong v-else class="competitor-pending">等待首次采集</strong
             ><em :data-status="item.status">{{ statusText(item.status) }}</em>
             <small class="competitor-detail-entry">查看详情 →</small>
@@ -506,36 +689,53 @@ watch(query, (value) => {
               >
             </div>
             <div class="competitor-actions">
-              <button type="button" :disabled="busy" @click="collect">
-                {{ latest ? "立即采集" : "重新尝试首次采集" }}</button
+              <button
+                v-if="canManage"
+                type="button"
+                :disabled="busy || collectionPending || selected.status !== 'active'"
+                @click="collect"
+              >
+                {{
+                  selected.status !== "active"
+                    ? "恢复后可采集"
+                    : collectionPending
+                      ? "采集中…"
+                      : latest
+                        ? "立即采集"
+                        : "重新尝试首次采集"
+                }}</button
               ><button class="ghost" type="button" @click="openRule(selected)">当前竞品规则</button>
-              <div class="competitor-desktop-actions">
+              <div v-if="canManage" class="competitor-desktop-actions">
                 <button class="ghost" type="button" :disabled="busy" @click="toggle">
                   {{ selected.status === "active" ? "暂停监控" : "恢复监控" }}</button
-                ><button
-                  class="danger ghost"
-                  type="button"
-                  :disabled="busy"
-                  @click="deleting = selected"
-                >
+                ><button class="danger ghost" type="button" :disabled="busy" @click="openDelete">
                   删除竞品监控
                 </button>
               </div>
-              <details class="competitor-mobile-actions">
+              <details v-if="canManage" class="competitor-mobile-actions">
                 <summary>更多操作</summary>
                 <button class="ghost" type="button" :disabled="busy" @click="toggle">
                   {{ selected.status === "active" ? "暂停监控" : "恢复监控" }}</button
-                ><button
-                  class="danger ghost"
-                  type="button"
-                  :disabled="busy"
-                  @click="deleting = selected"
-                >
+                ><button class="danger ghost" type="button" :disabled="busy" @click="openDelete">
                   删除竞品监控
                 </button>
               </details>
             </div>
           </header>
+          <section
+            v-if="latestCollection && latestCollection.status !== 'succeeded'"
+            class="competitor-collection-state"
+            :data-status="latestCollection.status"
+            aria-live="polite"
+          >
+            <div>
+              <small>最近一次采集</small>
+              <strong>{{ collectionStatusText(latestCollection.status) }}</strong>
+              <p v-if="collectionPending">页面会自动刷新任务状态和新快照，无需手工刷新。</p>
+              <p v-else>{{ collectionErrorText(latestCollection.last_error_code) }}</p>
+            </div>
+            <code>任务 {{ latestCollection.task_id }}</code>
+          </section>
           <section v-if="latest" class="competitor-metrics">
             <article>
               <small>当前价格</small
@@ -561,11 +761,14 @@ watch(query, (value) => {
             </article>
           </section>
           <section v-else class="competitor-baseline-pending">
-            <strong>已建立竞品，正在等待第一个真实快照</strong>
+            <strong>{{
+              collectionPending
+                ? "已建立竞品，正在等待第一个真实快照"
+                : "已建立竞品，但最近一次采集未形成快照"
+            }}</strong>
             <p>
-              该商品由 ERP 中的 Amazon ASIN
-              建立。价格、排名、评论、评分和库存尚未从商品页采集到，因此这里不会用 0
-              或演示数据代替。
+              价格、排名、评论、评分和库存尚未从公开商品页采集到，因此这里不会用 0
+              或演示数据代替。请按最近一次采集状态检查链接或重新采集。
             </p>
             <a :href="selected.product_url" target="_blank" rel="noopener noreferrer"
               >打开外部 Amazon 商品页（新窗口）</a
@@ -631,13 +834,14 @@ watch(query, (value) => {
                 :to="`/tasks?task=${validationTasks[event.change.id]}`"
                 >打开验证任务</RouterLink
               ><button
-                v-else
+                v-else-if="canCreateTask"
                 type="button"
                 :disabled="busy"
                 @click="createValidationTask(event.change)"
               >
                 生成验证任务
               </button>
+              <span v-else class="competitor-readonly-hint">只读：无创建任务权限</span>
             </article>
             <p v-if="!activityTimeline.length">尚无变化；首个快照只建立基线，不制造告警或结论。</p>
           </section>
@@ -661,7 +865,8 @@ watch(query, (value) => {
       </div>
     </template>
     <div
-      v-if="showCreate"
+      v-if="showCreate && canManage"
+      ref="createDialog"
       class="competitor-modal"
       role="dialog"
       aria-modal="true"
@@ -683,16 +888,35 @@ watch(query, (value) => {
           <li :aria-current="createStep === 3 ? 'step' : undefined">3 确认采集</li>
         </ol>
         <template v-if="createStep === 1">
-          <label>商品网址<input v-model="form.product_url" required type="url" /></label>
+          <label
+            >商品网址<input v-model="form.product_url" required type="url" maxlength="2048"
+          /></label>
           <aside>填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。</aside>
         </template>
         <template v-else-if="createStep === 2">
           <div class="form-grid">
-            <label>市场<input v-model="form.market" required /></label
-            ><label>关联机会编号（可选）<input v-model="form.opportunity_id" /></label>
+            <label
+              >市场<input
+                v-model="form.market"
+                required
+                maxlength="40"
+                pattern="[A-Za-z0-9._-]+"
+                title="仅支持字母、数字、点、下划线和连字符"
+            /></label>
+            <label
+              >关联机会编号（可选）<input
+                v-model="form.opportunity_id"
+                maxlength="36"
+                pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}"
+                title="请输入有效的机会 UUID"
+            /></label>
           </div>
           <label
-            >监控名称<input v-model="form.title" required placeholder="例如：Amazon 收纳箱头部竞品"
+            >监控名称<input
+              v-model="form.title"
+              required
+              maxlength="500"
+              placeholder="例如：Amazon 收纳箱头部竞品"
           /></label>
         </template>
         <section v-else class="competitor-create-review">
@@ -716,6 +940,9 @@ watch(query, (value) => {
           </dl>
           <aside>确认后读取公开商品页并建立首个证据快照；页面未披露的数据继续显示为未采到。</aside>
         </section>
+        <p v-if="notice" class="competitor-dialog-notice" role="alert">
+          {{ notice }} <code v-if="requestId">{{ requestId }}</code>
+        </p>
         <footer>
           <button v-if="createStep === 1" type="button" class="ghost" @click="closeCreate">
             取消</button
@@ -727,7 +954,7 @@ watch(query, (value) => {
       </form>
     </div>
     <div
-      v-if="showRule"
+      v-if="showRule && canManage"
       class="competitor-modal"
       role="dialog"
       aria-modal="true"
@@ -783,13 +1010,22 @@ watch(query, (value) => {
           当前已启用
           {{ rules.length }} 条规则；只有达到显式阈值的变化才排队通知与任务。
         </aside>
+        <p v-if="notice" class="competitor-dialog-notice" role="alert">
+          {{ notice }} <code v-if="requestId">{{ requestId }}</code>
+        </p>
         <footer>
           <button type="button" class="ghost" @click="showRule = false">取消</button
           ><button type="submit" :disabled="busy">启用规则</button>
         </footer>
       </form>
     </div>
-    <div v-if="deleting" class="competitor-modal" role="dialog" aria-modal="true">
+    <div
+      v-if="deleting && canManage"
+      ref="deleteDialog"
+      class="competitor-modal"
+      role="dialog"
+      aria-modal="true"
+    >
       <form class="rule-form" @submit.prevent="remove">
         <header>
           <div>
@@ -814,6 +1050,9 @@ watch(query, (value) => {
             placeholder="请填写删除原因"
           ></textarea>
         </label>
+        <p v-if="notice" class="competitor-dialog-notice" role="alert">
+          {{ notice }} <code v-if="requestId">{{ requestId }}</code>
+        </p>
         <footer>
           <button type="button" class="ghost" @click="deleting = null">取消</button
           ><button type="submit" class="danger" :disabled="busy">确认删除</button>
