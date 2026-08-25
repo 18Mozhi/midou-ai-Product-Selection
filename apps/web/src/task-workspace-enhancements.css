@@ -180,8 +180,13 @@
   max-width: 980px;
   margin: 0 auto;
 }
-.task-detail-route > :not(.task-detail):not(dialog) {
+.task-detail-route > :not(.task-detail):not(dialog):not(.task-detail-state):not(.task-notice) {
   display: none;
+}
+.task-detail-route .task-detail-state {
+  min-height: 320px;
+  display: grid;
+  place-content: center;
 }
 .task-detail-route .task-detail {
   position: static;

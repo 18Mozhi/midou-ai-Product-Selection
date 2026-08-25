@@ -38,7 +38,14 @@ async function setup(
     "report:read",
   ],
 ) {
-  const observed = { createRequests: 0 };
+  const observed = {
+    createRequests: 0,
+    detailRequests: 0,
+    listRequests: 0,
+    summaryRequests: 0,
+    actionRequests: 0,
+    commentRequests: 0,
+  };
   let themePreference = {
     theme: "deep-ocean",
     source: "saved",
@@ -125,8 +132,9 @@ async function setup(
       json: env({ total: 0, unread: 0, task: 0, approval: 0, competitor: 0, system: 0 }),
     }),
   );
-  await page.route("**/api/v1/tasks/summary", (r) =>
-    r.fulfill({
+  await page.route("**/api/v1/tasks/summary", (r) => {
+    observed.summaryRequests += 1;
+    return r.fulfill({
       json: env({
         todo: 2,
         in_progress: 1,
@@ -134,13 +142,14 @@ async function setup(
         cancelled: 0,
         overdue: 1,
       }),
-    }),
-  );
+    });
+  });
   await page.route("**/api/v1/tasks/member-options", (r) =>
     r.fulfill({ json: env([{ id: actor, label: "测试成员" }]) }),
   );
-  await page.route(`**/api/v1/tasks/${taskId}`, (r) =>
-    r.fulfill({
+  await page.route(`**/api/v1/tasks/${taskId}`, (r) => {
+    observed.detailRequests += 1;
+    return r.fulfill({
       json: env({
         ...task,
         status: pausedDetail ? "paused" : task.status,
@@ -152,22 +161,42 @@ async function setup(
             created_at: "2026-08-08T10:05:00.000Z",
           },
         ],
-        events: pausedDetail
-          ? [
-              {
-                id: "00000000-0000-4000-8000-000000000808",
-                event_type: "task.pause",
-                actor_id: actor,
-                payload: { reason: "等待供应商补充交期证明" },
-                created_at: "2026-08-08T10:08:00.000Z",
-              },
-            ]
-          : [],
+        events: [
+          ...(pausedDetail
+            ? [
+                {
+                  id: "00000000-0000-4000-8000-000000000808",
+                  event_type: "task.pause",
+                  actor_id: actor,
+                  payload: { reason: "等待供应商补充交期证明" },
+                  created_at: "2026-08-08T10:08:00.000Z",
+                },
+              ]
+            : []),
+          {
+            id: "00000000-0000-4000-8000-000000000809",
+            event_type: "task.comment.created",
+            actor_id: actor,
+            payload: { comment_id: "00000000-0000-4000-8000-000000000806" },
+            created_at: "2026-08-08T10:05:00.000Z",
+          },
+        ],
       }),
-    }),
-  );
-  await page.route("**/api/v1/tasks?*", (r) =>
-    r.fulfill({
+    });
+  });
+  await page.route(`**/api/v1/tasks/${taskId}/actions`, async (route) => {
+    observed.actionRequests += 1;
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    await route.fulfill({ json: env({ ...task, version: task.version + 1 }) });
+  });
+  await page.route(`**/api/v1/tasks/${taskId}/comments`, async (route) => {
+    observed.commentRequests += 1;
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    await route.fulfill({ status: 201, json: env({ id: crypto.randomUUID() }) });
+  });
+  await page.route("**/api/v1/tasks?*", (r) => {
+    observed.listRequests += 1;
+    return r.fulfill({
       json: {
         ...env([
           task,
@@ -188,8 +217,8 @@ async function setup(
           total: new URL(r.request().url()).searchParams.get("page") === "2" ? 20 : 2,
         },
       },
-    }),
-  );
+    });
+  });
   await page.route("**/api/v1/tasks", async (route) => {
     if (route.request().method() !== "POST") return route.fallback();
     observed.createRequests += 1;
@@ -215,7 +244,86 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
   const blockingContext = page.getByLabel("阻塞与下一负责人");
   await expect(blockingContext.getByText("等待供应商补充交期证明")).toBeVisible();
   await expect(blockingContext.getByText("测试成员", { exact: true })).toBeVisible();
+  await expect(page.getByText("已暂停 · 35%", { exact: true })).toBeVisible();
+  await expect(page.getByText("已完成亚马逊竞品初筛", { exact: true })).toBeVisible();
+  await expect(page.getByText("报价证据已核验，等待确认交期。", { exact: true })).toHaveCount(1);
+  await expect(page.getByText("comment.created", { exact: true })).toHaveCount(0);
+  await expect(
+    page.locator(".task-detail-facts").getByText("测试成员", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("暂停任务", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "转交" })).toBeVisible();
+});
+
+test("task detail hides every write entry for read-only roles", async ({ page }) => {
+  await setup(page, false, ["task:read"]);
+  await page.goto(`/tasks/${taskId}?from=%2Ftasks%3Fstatus%3Din_progress`);
+  await expect(page.getByText("当前角色仅可查看任务事实与活动记录")).toBeVisible();
+  await expect(page.getByRole("link", { name: "关闭任务详情" })).toHaveAttribute(
+    "href",
+    "/tasks?status=in_progress",
+  );
+  await expect(page.getByRole("group", { name: "任务操作" })).toHaveCount(0);
+  await expect(page.getByPlaceholder("添加可审计评论")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "删除任务" })).toHaveCount(0);
+});
+
+test("task update role keeps detail editing but cannot transfer ownership", async ({ page }) => {
+  await setup(page, false, ["task:read", "task:update"]);
+  await page.goto(`/tasks/${taskId}`);
+  await expect(page.getByRole("button", { name: "暂停" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "更新进度" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "编辑" })).toBeVisible();
+  await expect(page.getByPlaceholder("添加可审计评论")).toBeVisible();
+  await expect(page.getByRole("button", { name: "转交" })).toHaveCount(0);
+});
+
+test("task detail blocks duplicate lifecycle and comment submissions", async ({ page }) => {
+  const observed = await setup(page);
+  await page.goto(`/tasks/${taskId}`);
+  await page.getByRole("button", { name: "完成" }).dblclick();
+  await expect(page.getByText(/任务已完成|任务动作已记录/)).toBeVisible();
+  expect(observed.actionRequests).toBe(1);
+  await page.getByPlaceholder("添加可审计评论").fill("重复提交保护验证");
+  await page.getByRole("button", { name: "添加评论" }).dblclick();
+  await expect(page.getByPlaceholder("添加可审计评论")).toHaveValue("");
+  expect(observed.commentRequests).toBe(1);
+});
+
+test("direct task detail loads only its required APIs and rejects nested return routes", async ({
+  page,
+}) => {
+  const observed = await setup(page);
+  await page.goto(`/tasks/${taskId}?from=${encodeURIComponent(`/tasks/${taskId}`)}`);
+  await expect(page.getByRole("heading", { name: task.title, level: 3 })).toBeVisible();
+  await expect(page.getByRole("link", { name: "关闭任务详情" })).toHaveAttribute("href", "/tasks");
+  expect(observed.detailRequests).toBe(1);
+  expect(observed.listRequests).toBe(0);
+  expect(observed.summaryRequests).toBe(0);
+});
+
+test("direct task detail exposes a recoverable not-found state", async ({ page }) => {
+  await setup(page);
+  await page.route(`**/api/v1/tasks/${taskId}`, (route) =>
+    route.fulfill({
+      status: 404,
+      json: {
+        error: {
+          code: "task_not_found",
+          message: "任务不存在。",
+          action_hint: "返回任务列表后刷新。",
+        },
+        request_id: "m05-01-not-found",
+        trace_id: "m05-01-not-found",
+      },
+    }),
+  );
+  await page.goto(`/tasks/${taskId}`);
+  await expect(page.getByRole("heading", { name: "任务不存在或已删除" })).toBeVisible();
+  await expect(
+    page.locator(".task-detail-state").getByText("返回任务列表后刷新。", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "重新加载" })).toBeVisible();
 });
 
 test("task center previews batch transfer and delay with scoped inputs", async ({ page }) => {
@@ -263,7 +371,8 @@ test("member workspace shows Chinese context theme switch and task progress with
     .evaluate((element) => getComputedStyle(element).backgroundImage);
   expect(afterTheme).not.toBe(beforeTheme);
   await page.locator(".task-row-main").filter({ hasText: "核验便携净水杯供应商报价" }).click();
-  await expect(page.getByText("执行中 · 已完成亚马逊竞品初筛")).toBeVisible();
+  await expect(page.getByText("执行中 · 35%", { exact: true })).toBeVisible();
+  await expect(page.getByText("已完成亚马逊竞品初筛", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "更新进度" })).toBeVisible();
   await expect(page.getByRole("button", { name: "编辑" })).toBeVisible();
   await page.getByText("更多任务操作", { exact: true }).click();

@@ -169,20 +169,23 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
     }
   }
   async action(i: any) {
-    const old = await this.operation(i);
-    if (old) return old;
-    if (i.value.action === "transfer")
-      await this.ensureAssignee(i.organizationId, i.workspaceId, i.value.assignee_id);
     const c = await this.pool.getConnection(),
       now = this.now();
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT * FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",
+        "SELECT * FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
         [i.taskId, i.organizationId, i.workspaceId],
       );
+      const old = await this.operation(i, c);
+      if (old) {
+        await c.commit();
+        return old;
+      }
       const r = rows[0];
-      if (!r) throw new BusinessTaskError("task_not_found", 404, "刷新任务列表。");
+      if (!r || r.deleted_at) throw new BusinessTaskError("task_not_found", 404, "刷新任务列表。");
+      if (i.value.action === "transfer")
+        await this.ensureAssignee(i.organizationId, i.workspaceId, i.value.assignee_id);
       if (Number(r.version) !== i.value.expected_version)
         throw new BusinessTaskError("task_version_conflict", 409, "刷新任务后重试。");
       let status = String(r.status),
@@ -306,7 +309,11 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
         i,
         `task.${i.value.action}`,
         i.taskId,
-        { ...result, reason: i.value.reason },
+        {
+          ...result,
+          reason: i.value.reason,
+          ...(i.value.action === "progress" ? { progress_note: i.value.progress_note } : {}),
+        },
         now,
       );
       await this.save(c, i, i.taskId, result, now);
@@ -320,17 +327,21 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
     }
   }
   async comment(i: any) {
-    const old = await this.operation(i);
-    if (old) return old;
     const c = await this.pool.getConnection(),
       now = this.now();
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",
+        "SELECT id,deleted_at FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
         [i.taskId, i.organizationId, i.workspaceId],
       );
-      if (!rows[0]) throw new BusinessTaskError("task_not_found", 404, "刷新任务列表。");
+      const old = await this.operation(i, c);
+      if (old) {
+        await c.commit();
+        return old;
+      }
+      if (!rows[0] || rows[0].deleted_at)
+        throw new BusinessTaskError("task_not_found", 404, "刷新任务列表。");
       await c.query(
         "INSERT INTO task_comments (id,organization_id,workspace_id,task_id,body,created_by,created_at) VALUES (?,?,?,?,?,?,?)",
         [i.id, i.organizationId, i.workspaceId, i.taskId, i.body, i.actorId, now],
@@ -354,19 +365,22 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
     }
   }
   async update(i: any) {
-    const old = await this.operation(i);
-    if (old) return old;
-    await this.ensureAssignee(i.organizationId, i.workspaceId, i.value.assignee_id);
     const c = await this.pool.getConnection(),
       now = this.now();
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT version FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",
+        "SELECT version,deleted_at FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
         [i.taskId, i.organizationId, i.workspaceId],
       );
+      const old = await this.operation(i, c);
+      if (old) {
+        await c.commit();
+        return old;
+      }
       const r = rows[0];
-      if (!r) throw new BusinessTaskError("task_not_found", 404, "刷新任务列表。");
+      if (!r || r.deleted_at) throw new BusinessTaskError("task_not_found", 404, "刷新任务列表。");
+      await this.ensureAssignee(i.organizationId, i.workspaceId, i.value.assignee_id);
       if (Number(r.version) !== i.value.expected_version)
         throw new BusinessTaskError("task_version_conflict", 409, "刷新任务后重试。");
       const version = Number(r.version) + 1;
@@ -396,18 +410,21 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
     }
   }
   async remove(i: any) {
-    const old = await this.operation(i);
-    if (old) return old;
     const c = await this.pool.getConnection(),
       now = this.now();
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT version FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",
+        "SELECT version,deleted_at FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
         [i.taskId, i.organizationId, i.workspaceId],
       );
+      const old = await this.operation(i, c);
+      if (old) {
+        await c.commit();
+        return old;
+      }
       const r = rows[0];
-      if (!r) throw new BusinessTaskError("task_not_found", 404, "刷新任务列表。");
+      if (!r || r.deleted_at) throw new BusinessTaskError("task_not_found", 404, "刷新任务列表。");
       if (Number(r.version) !== i.value.expected_version)
         throw new BusinessTaskError("task_version_conflict", 409, "刷新任务后重试。");
       const version = Number(r.version) + 1;
@@ -479,8 +496,8 @@ export class MySqlBusinessTaskRepository implements BusinessTaskRepository {
         "选择可访问当前工作区的活动成员。",
       );
   }
-  private async operation(i: any) {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
+  private async operation(i: any, connection: Pick<PoolConnection, "query"> = this.pool) {
+    const [rows] = await connection.query<RowDataPacket[]>(
       "SELECT result_json FROM task_operations WHERE actor_id=? AND route_key=? AND idempotency_key=?",
       [i.actorId, i.route, i.idempotencyKey],
     );

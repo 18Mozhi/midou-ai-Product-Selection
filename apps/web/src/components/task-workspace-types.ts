@@ -47,6 +47,7 @@ export type TaskActivity = Record<string, any> & {
   kind: "event" | "comment";
   body: string;
   title: string;
+  actorLabel: string;
   created_at: string;
 };
 

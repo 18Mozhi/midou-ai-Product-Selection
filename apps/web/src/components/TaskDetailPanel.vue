@@ -18,6 +18,10 @@ const props = defineProps<{
   actionForm: TaskActionForm;
   members: MemberOption[];
   comment: string;
+  assigneeLabel: string;
+  canUpdate: boolean;
+  canAssign: boolean;
+  busy: boolean;
   label: (value: string) => string;
   phase: (task: Task) => string;
   time: (value: string | null) => string;
@@ -46,18 +50,28 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
 
 <template>
   <aside class="task-detail">
-    <RouterLink :to="returnPath" aria-label="关闭任务详情">×</RouterLink>
-    <p>{{ task.source_type === "manual" ? "手动创建" : "系统生成" }} · 第 {{ task.version }} 版</p>
-    <h3>{{ task.title }}</h3>
-    <span>{{ task.description || "无补充说明" }}</span>
-    <dl>
+    <header class="task-detail-header">
+      <div>
+        <p>
+          {{ task.source_type === "manual" ? "手动创建" : "系统生成" }} · 第 {{ task.version }} 版
+        </p>
+        <h3>{{ task.title }}</h3>
+        <span>{{ task.description || "无补充说明" }}</span>
+      </div>
+      <RouterLink :to="returnPath" aria-label="关闭任务详情">×</RouterLink>
+    </header>
+    <dl class="task-detail-facts">
       <div>
         <dt>状态</dt>
         <dd>{{ label(task.status) }}</dd>
       </div>
       <div>
         <dt>当前阶段</dt>
-        <dd>{{ phase(task) }} · {{ task.progress_note || "尚未记录进展" }}</dd>
+        <dd>
+          <span>{{ phase(task) }} · {{ task.progress_percent }}%</span>
+          <progress :value="task.progress_percent" max="100">{{ task.progress_percent }}%</progress>
+          <small>{{ task.progress_note || "尚未记录进展" }}</small>
+        </dd>
       </div>
       <div>
         <dt>处理时限</dt>
@@ -69,7 +83,7 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
       </div>
       <div>
         <dt>负责人</dt>
-        <dd>已分配负责人</dd>
+        <dd>{{ assigneeLabel }}</dd>
       </div>
       <div>
         <dt>底层采集任务</dt>
@@ -102,35 +116,63 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
         </div>
       </dl>
     </details>
-    <div class="task-actions">
-      <button v-if="task.status === 'todo'" @click="$emit('action', 'start')">开始</button>
-      <button v-if="task.status === 'in_progress'" @click="$emit('action', 'pause')">暂停</button>
-      <button v-if="task.status === 'paused'" @click="$emit('action', 'resume')">继续</button>
+    <p v-if="!canUpdate && !canAssign" class="task-detail-readonly" role="status">
+      当前角色仅可查看任务事实与活动记录，修改入口已按权限隐藏。
+    </p>
+    <div v-if="canUpdate || canAssign" class="task-actions" aria-label="任务操作">
       <button
-        v-if="['todo', 'in_progress', 'paused'].includes(task.status)"
+        v-if="canUpdate && task.status === 'todo'"
+        :disabled="busy"
+        @click="$emit('action', 'start')"
+      >
+        开始
+      </button>
+      <button
+        v-if="canUpdate && task.status === 'in_progress'"
+        :disabled="busy"
+        @click="$emit('action', 'pause')"
+      >
+        暂停
+      </button>
+      <button
+        v-if="canUpdate && task.status === 'paused'"
+        :disabled="busy"
+        @click="$emit('action', 'resume')"
+      >
+        继续
+      </button>
+      <button
+        v-if="canUpdate && ['todo', 'in_progress', 'paused'].includes(task.status)"
+        :disabled="busy"
         @click="$emit('action', 'complete')"
       >
         完成
       </button>
       <button
-        v-if="!['completed', 'cancelled'].includes(task.status)"
+        v-if="canUpdate && !['completed', 'cancelled'].includes(task.status)"
+        :disabled="busy"
         @click="$emit('action', 'delay')"
       >
         延期
       </button>
       <button
-        v-if="!['completed', 'cancelled'].includes(task.status)"
+        v-if="canUpdate && !['completed', 'cancelled'].includes(task.status)"
         class="danger"
+        :disabled="busy"
         @click="$emit('action', 'cancel')"
       >
         取消任务
       </button>
-      <button @click="$emit('action', 'transfer')">转交</button>
-      <button @click="$emit('action', 'progress')">更新进度</button>
-      <button @click="$emit('edit')">编辑</button>
-      <details class="task-detail-more">
+      <button v-if="canAssign" :disabled="busy" @click="$emit('action', 'transfer')">转交</button>
+      <button v-if="canUpdate" :disabled="busy" @click="$emit('action', 'progress')">
+        更新进度
+      </button>
+      <button v-if="canUpdate" :disabled="busy" @click="$emit('edit')">编辑</button>
+      <details v-if="canUpdate" class="task-detail-more">
         <summary>更多任务操作</summary>
-        <button class="danger" type="button" @click="$emit('remove', task)">删除任务</button>
+        <button class="danger" type="button" :disabled="busy" @click="$emit('remove', task)">
+          删除任务
+        </button>
       </details>
     </div>
     <section class="task-activity">
@@ -138,18 +180,19 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
       <article v-for="item in activity" :key="`${item.kind}-${item.id}`" :data-kind="item.kind">
         <b>{{ item.title }}</b>
         <p>{{ item.body }}</p>
-        <small>{{ time(item.created_at) }}</small>
+        <small>{{ item.actorLabel }} · {{ time(item.created_at) }}</small>
       </article>
       <p v-if="!activity.length">暂无任务活动。</p>
-      <form @submit.prevent="$emit('addComment')">
+      <form v-if="canUpdate" @submit.prevent="$emit('addComment')">
         <textarea
           :value="comment"
           placeholder="添加可审计评论"
           required
           maxlength="2000"
+          :disabled="busy"
           @input="$emit('update:comment', ($event.target as HTMLTextAreaElement).value)"
         ></textarea
-        ><button>添加评论</button>
+        ><button :disabled="busy">{{ busy ? "正在提交…" : "添加评论" }}</button>
       </form>
     </section>
   </aside>
@@ -237,7 +280,7 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
       </label>
       <div>
         <button type="button" @click="$emit('closeAction')">返回</button
-        ><button type="submit">确认提交</button>
+        ><button type="submit" :disabled="busy">{{ busy ? "正在提交…" : "确认提交" }}</button>
       </div>
     </form>
   </dialog>

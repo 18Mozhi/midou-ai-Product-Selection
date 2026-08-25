@@ -14,7 +14,8 @@ import TaskListPanel from "./TaskListPanel.vue";
 import type { BatchTaskAction, MemberOption, Task, TaskActionEditor } from "./task-workspace-types";
 import "../task-workspace.css";
 import "../task-workspace-enhancements.css";
-type State = "loading" | "ready" | "empty" | "error" | "forbidden" | "expired" | "rate_limited";
+type State =
+  "loading" | "ready" | "empty" | "error" | "not_found" | "forbidden" | "expired" | "rate_limited";
 type ExportTask = {
   id: string;
   report_type: "opportunity" | "trend" | "team";
@@ -129,6 +130,15 @@ const pageSize = 10,
         due_soon: "24 小时内到期",
         on_track: "按期",
         not_set: "未设置期限",
+        start: "开始任务",
+        pause: "暂停任务",
+        resume: "继续任务",
+        complete: "完成任务",
+        cancel: "取消任务",
+        delay: "调整期限",
+        transfer: "转交任务",
+        progress: "更新进度",
+        updated: "编辑任务",
       }) as any
     )[v] ?? v,
   batchTargets = computed(() => tasks.value.filter((task) => selectedIds.value.includes(task.id))),
@@ -154,14 +164,18 @@ const pageSize = 10,
       nextOwner: member?.label ?? "已分配负责人（成员目录暂不可用）",
     };
   }),
+  assigneeLabel = computed(
+    () =>
+      memberOptions.value.find((item) => item.id === selected.value?.assignee_id)?.label ??
+      "负责人目录暂不可用",
+  ),
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
   returnPath = computed(() => {
     const value = typeof route.query.from === "string" ? route.query.from : "";
     return value === "/work" ||
       value.startsWith("/work?") ||
       value === "/tasks" ||
-      value.startsWith("/tasks?") ||
-      value.startsWith("/tasks/")
+      value.startsWith("/tasks?")
       ? value
       : "/tasks";
   }),
@@ -194,17 +208,23 @@ const pageSize = 10,
   activity = computed(() => {
     if (!selected.value) return [];
     return [
-      ...(selected.value.events ?? []).map((item) => ({
-        ...item,
-        kind: "event" as const,
-        body: item.payload?.progress_note || item.payload?.reason || "任务状态已更新",
-        title: label(String(item.event_type).replace("task.", "")),
-      })),
+      ...(selected.value.events ?? [])
+        .filter((item) => item.event_type !== "task.comment.created")
+        .map((item) => ({
+          ...item,
+          kind: "event" as const,
+          body: item.payload?.progress_note || item.payload?.reason || "任务状态已更新",
+          title: label(String(item.event_type).replace("task.", "")),
+          actorLabel:
+            memberOptions.value.find((member) => member.id === item.actor_id)?.label ?? "系统记录",
+        })),
       ...(selected.value.comments ?? []).map((item) => ({
         ...item,
         kind: "comment" as const,
         body: item.body,
         title: "评论",
+        actorLabel:
+          memberOptions.value.find((member) => member.id === item.created_by)?.label ?? "系统记录",
       })),
     ].sort((a, b) => new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf());
   });
@@ -251,9 +271,11 @@ async function api<T = any>(
             ? "expired"
             : error.kind === "forbidden"
               ? "forbidden"
-              : error.kind === "rate_limited"
-                ? "rate_limited"
-                : "error";
+              : props.taskId && error.status === 404
+                ? "not_found"
+                : error.kind === "rate_limited"
+                  ? "rate_limited"
+                  : "error";
       throw error;
     }
     notice.value = "网络连接异常，请稍后重试。";
@@ -272,6 +294,18 @@ async function load() {
       }
       exportTasks.value = await api<ExportTask[]>("/report-exports");
       state.value = exportTasks.value.length ? "ready" : "empty";
+      return;
+    }
+    if (props.taskId) {
+      const loaded = await openById(props.taskId, true);
+      if (!loaded) return;
+      try {
+        memberOptions.value = await api<MemberOption[]>("/tasks/member-options");
+      } catch (error) {
+        if (!(error instanceof ApiClientError)) throw error;
+        memberOptions.value = [];
+        notice.value = "任务已加载；组织成员目录暂不可用，负责人显示与转交需稍后重试。";
+      }
       return;
     }
     const params = new URLSearchParams({ page: String(page.value), page_size: String(pageSize) });
@@ -299,7 +333,6 @@ async function load() {
       await setPage(pageCount.value);
       return;
     }
-    if (props.taskId) await openById(props.taskId);
   } catch (error) {
     rethrowUnexpectedError(error);
   }
@@ -315,12 +348,18 @@ async function setView(value: "business" | "exports") {
     },
   });
 }
-async function openById(id: string) {
+async function openById(id: string, resetState = false) {
+  if (resetState) {
+    state.value = "loading";
+    selected.value = null;
+  }
   try {
     selected.value = await api(`/tasks/${id}`);
     state.value = "ready";
+    return true;
   } catch (error) {
     rethrowUnexpectedError(error);
+    return false;
   }
 }
 async function open(x: Task) {
@@ -396,7 +435,7 @@ async function create() {
   }
 }
 function editTask() {
-  if (!selected.value) return;
+  if (!selected.value || !canUpdate.value || busy.value) return;
   editing.value = selected.value;
   form.value = {
     title: selected.value.title,
@@ -407,7 +446,8 @@ function editTask() {
   showCreate.value = true;
 }
 function openActionEditor(name: TaskActionEditor) {
-  if (!selected.value) return;
+  if (!selected.value || busy.value || (name === "transfer" ? !canAssign.value : !canUpdate.value))
+    return;
   taskActionEditor.value = name;
   taskActionForm.value = {
     reason: "",
@@ -423,28 +463,39 @@ function askRemove(task: Task) {
   deleteReason.value = "";
 }
 async function removeTask() {
-  if (!deleting.value || !deleteReason.value.trim()) return;
+  if (busy.value || !canUpdate.value || !deleting.value || !deleteReason.value.trim()) return;
+  busy.value = true;
   try {
     await api(`/tasks/${deleting.value.id}`, {
       method: "DELETE",
       body: { expected_version: deleting.value.version, reason: deleteReason.value.trim() },
     });
     notice.value = "任务已删除，历史审计记录仍然保留。";
-    if (selected.value?.id === deleting.value.id) selected.value = null;
+    const removedSelectedTask = selected.value?.id === deleting.value.id;
     deleting.value = null;
     deleteReason.value = "";
+    if (props.taskId && removedSelectedTask) {
+      await router.replace(returnPath.value);
+      return;
+    }
+    if (removedSelectedTask) selected.value = null;
     await load();
   } catch (error) {
     rethrowUnexpectedError(error);
+  } finally {
+    busy.value = false;
   }
 }
 async function action(name: string) {
-  if (!selected.value) return;
+  if (busy.value || !selected.value || (name === "transfer" ? !canAssign.value : !canUpdate.value))
+    return;
   if (["pause", "cancel", "delay", "transfer", "progress"].includes(name)) {
     openActionEditor(name as TaskActionEditor);
     return;
   }
+  busy.value = true;
   try {
+    const taskId = selected.value.id;
     const result = await api<any>(`/tasks/${selected.value.id}/actions`, {
       method: "POST",
       body: { action: name, expected_version: selected.value.version },
@@ -455,14 +506,21 @@ async function action(name: string) {
         : name === "complete" && result.auto_score_status === "waiting_for_active_rule"
           ? "任务已完成；当前没有活动评分规则，暂未生成评分任务。"
           : "任务动作已记录。";
-    await open(selected.value);
-    await load();
+    await openById(taskId, true);
   } catch (error) {
     rethrowUnexpectedError(error);
+  } finally {
+    busy.value = false;
   }
 }
 async function submitTaskAction() {
-  if (!selected.value || !taskActionEditor.value) return;
+  if (
+    busy.value ||
+    !selected.value ||
+    !taskActionEditor.value ||
+    (taskActionEditor.value === "transfer" ? !canAssign.value : !canUpdate.value)
+  )
+    return;
   const actionName = taskActionEditor.value,
     body: Record<string, unknown> = {
       action: actionName,
@@ -476,14 +534,17 @@ async function submitTaskAction() {
     body.progress_percent = Number(taskActionForm.value.progress_percent);
     body.progress_note = taskActionForm.value.progress_note.trim();
   }
+  busy.value = true;
   try {
+    const taskId = selected.value.id;
     await api(`/tasks/${selected.value.id}/actions`, { method: "POST", body });
     notice.value = actionName === "progress" ? "任务进度已更新。" : "任务动作已记录。";
     taskActionEditor.value = null;
-    await openById(selected.value.id);
-    await load();
+    await openById(taskId, true);
   } catch (error) {
     rethrowUnexpectedError(error);
+  } finally {
+    busy.value = false;
   }
 }
 function previewBatch(action: BatchTaskAction) {
@@ -550,16 +611,20 @@ async function clearQuickCreate() {
   });
 }
 async function addComment() {
-  if (!selected.value || !comment.value.trim()) return;
+  if (busy.value || !canUpdate.value || !selected.value || !comment.value.trim()) return;
+  busy.value = true;
   try {
+    const taskId = selected.value.id;
     await api(`/tasks/${selected.value.id}/comments`, {
       method: "POST",
       body: { body: comment.value },
     });
     comment.value = "";
-    await open(selected.value);
+    await openById(taskId, true);
   } catch (error) {
     rethrowUnexpectedError(error);
+  } finally {
+    busy.value = false;
   }
 }
 onMounted(() => {
@@ -576,7 +641,7 @@ watch(
   () => props.taskId,
   (taskId) => {
     if (taskId) {
-      void openById(taskId);
+      void load();
       return;
     }
     selected.value = null;
@@ -638,20 +703,30 @@ watch(
         导出任务
       </button>
     </nav>
-    <section v-if="state === 'loading'" class="task-state">正在读取任务…</section>
     <section
-      v-else-if="['error', 'forbidden', 'expired', 'rate_limited'].includes(state)"
+      v-if="state === 'loading'"
       class="task-state"
+      :class="{ 'task-detail-state': Boolean(taskId) }"
+      role="status"
+    >
+      {{ taskId ? "正在读取任务详情…" : "正在读取任务…" }}
+    </section>
+    <section
+      v-else-if="['error', 'not_found', 'forbidden', 'expired', 'rate_limited'].includes(state)"
+      class="task-state"
+      :class="{ 'task-detail-state': Boolean(taskId) }"
     >
       <h3>
         {{
           state === "expired"
             ? "登录已失效"
-            : state === "forbidden"
-              ? "无权访问任务"
-              : state === "rate_limited"
-                ? "请求过于频繁"
-                : "任务服务暂不可用"
+            : state === "not_found"
+              ? "任务不存在或已删除"
+              : state === "forbidden"
+                ? "无权访问任务"
+                : state === "rate_limited"
+                  ? "请求过于频繁"
+                  : "任务服务暂不可用"
         }}
       </h3>
       <p>{{ notice }}</p>
@@ -795,6 +870,10 @@ watch(
       :action-form="taskActionForm"
       :members="memberOptions"
       :comment="comment"
+      :assignee-label="assigneeLabel"
+      :can-update="canUpdate"
+      :can-assign="canAssign"
+      :busy="busy"
       :label="label"
       :phase="phase"
       :time="time"
@@ -826,8 +905,10 @@ watch(
           ></textarea>
         </label>
         <div>
-          <button type="button" @click="closeDeleteDialog">取消</button
-          ><button class="danger" type="submit">确认删除</button>
+          <button type="button" :disabled="busy" @click="closeDeleteDialog">取消</button
+          ><button class="danger" type="submit" :disabled="busy">
+            {{ busy ? "正在删除…" : "确认删除" }}
+          </button>
         </div>
       </form>
     </dialog>

@@ -124,6 +124,8 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(values[0], /task_comments[\s\S]*task_events[\s\S]*task_operations/);
   assert.match(values[1], /progress_percent[\s\S]*deleted_at/);
   assert.match(values[2], /task_version_conflict[\s\S]*outbox_events/);
+  assert.match(values[2], /FOR UPDATE[\s\S]*this\.operation\(i, c\)/);
+  assert.match(values[2], /task\.\$\{i\.value\.action\}[\s\S]*progress_note/);
   assert.match(values[4], /sourcing\.purchase_task\.queued[\s\S]*lease_expires_at/);
   assert.match(values[4], /CONVERT\(p\.id USING utf8mb4\)/);
   assert.match(values[4], /status='published',leased_by=NULL,leased_at=NULL,lease_expires_at=NULL/);
@@ -139,6 +141,10 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(taskUi, /批量延期[\s\S]*批量调整负责人/);
   assert.match(taskUi, /阻塞原因[\s\S]*下一负责人/);
   assert.match(taskUi, /task\.pause[\s\S]*payload\?\.reason/);
+  assert.match(taskUi, /assigneeLabel[\s\S]*负责人目录暂不可用/);
+  assert.match(taskUi, /canUpdate[\s\S]*canAssign[\s\S]*busy/);
+  assert.match(taskUi, /任务不存在或已删除[\s\S]*重新加载/);
+  assert.match(taskUi, /当前角色仅可查看任务事实与活动记录/);
   assert.match(taskUi, /TaskListPanel[\s\S]*TaskBatchActions[\s\S]*TaskDetailPanel/);
   assert.match(
     taskUi,
