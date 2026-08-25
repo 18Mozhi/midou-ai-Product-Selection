@@ -58,6 +58,14 @@ async function setup(page: Page) {
       ]),
     }),
   );
+  await page.route("**/api/v1/tasks/member-options", (r) =>
+    r.fulfill({
+      json: env([
+        { id: actor, label: "选品经理" },
+        { id: "00000000-0000-4000-8000-000000000930", label: "运营负责人" },
+      ]),
+    }),
+  );
   await page.route(`**/api/v1/tasks/approvals/${approvalId}`, (r) =>
     r.fulfill({
       json: env({
@@ -222,7 +230,15 @@ async function setup(page: Page) {
             version: 1,
           },
         ],
-        actions: [],
+        actions: [
+          {
+            id: "00000000-0000-4000-8000-000000000931",
+            action: "escalated",
+            reason: "节点超过处理时限，已转交运营负责人。",
+            actor_name: "审批升级任务",
+            created_at: "2026-08-09T10:01:00.000Z",
+          },
+        ],
       }),
     }),
   );
@@ -265,10 +281,40 @@ test("M05-02.A07/A08/A09/A15 renders approval inbox timeline and mandatory reaso
   await expect(page.getByText(decisionId, { exact: true }).first()).not.toBeVisible();
   await expect(page.getByText(actor, { exact: false }).first()).not.toBeVisible();
   await expect(page.getByText("选品经理复核").last()).toBeVisible();
-  await expect(page.getByText("运营负责人")).toBeVisible();
+  await expect(
+    page.locator(".approval-escalation-path").getByText("运营负责人", { exact: true }),
+  ).toBeVisible();
   await expect(page.getByText("超时后 →").first()).toBeVisible();
+  await expect(page.getByRole("region", { name: "审批操作记录" })).toContainText(
+    "节点超过处理时限",
+  );
   await expect(page.getByText("批准与驳回均必填")).toBeVisible();
   await expect(page.getByRole("button", { name: "批准并流转" })).toBeDisabled();
+});
+
+test("approval inbox hides write entries and decision actions without task:assign", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/me/navigation?shell=member", (r) =>
+    r.fulfill({
+      json: env({
+        shell: "member",
+        organization_id: "00000000-0000-4000-8000-000000000925",
+        workspace_id: "00000000-0000-4000-8000-000000000926",
+        roles: ["auditor"],
+        capabilities: ["task:read"],
+        platform_roles: [],
+        platform_capabilities: [],
+        guard_reason: "navigation_member_allowed",
+      }),
+    }),
+  );
+  await page.goto(`/tasks/approvals?approval=${approvalId}`);
+  await expect(page.getByText("只读权限")).toBeVisible();
+  await expect(page.getByRole("button", { name: "配置模板" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "发起审批" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "批准并流转" })).toHaveCount(0);
 });
 
 test("approval inbox splits actionable and requested views and restores detail deep links", async ({

@@ -83,6 +83,8 @@ export function surfaceProps(input: {
         taskId: ids.taskId || undefined,
         capabilities: input.capabilities,
       };
+    case "approval-workspace":
+      return { ...common, capabilities: input.capabilities };
     case "organization-admin-center":
       return { ...common, routePath: input.path, organizationId: input.organizationId || "" };
     case "platform-account-center":

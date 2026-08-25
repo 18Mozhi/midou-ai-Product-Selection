@@ -6,6 +6,16 @@ const parse = <T>(value: unknown): T =>
   typeof value === "string" ? JSON.parse(value) : (value as T);
 const iso = (value: unknown) =>
   value == null ? null : (value instanceof Date ? value : new Date(String(value))).toISOString();
+const normalizeApprovalResourceRoute = (context: any) =>
+  context?.resource?.type === "task"
+    ? {
+        ...context,
+        resource: {
+          ...context.resource,
+          route: `/tasks/${context.resource.id}`,
+        },
+      }
+    : context;
 
 type DecisionContextItem = {
   code: string;
@@ -304,7 +314,8 @@ export class MySqlApprovalRepository implements ApprovalRepository {
          LEFT JOIN approval_node_runs n ON n.approval_request_id=r.id
           AND n.ordinal=r.current_node_ordinal
          WHERE ${where.join(" AND ")}
-         ORDER BY (r.status='pending') DESC,r.updated_at DESC LIMIT ? OFFSET ?`,
+         ORDER BY (r.status='pending') DESC,n.due_at IS NULL,n.due_at ASC,
+           r.updated_at DESC,r.id DESC LIMIT ? OFFSET ?`,
         [...args, i.pageSize, (i.page - 1) * i.pageSize],
       );
     return {
@@ -359,6 +370,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
             this.now(),
             "live_fallback",
           ),
+      normalizedDecisionContext = normalizeApprovalResourceRoute(decisionContext),
       currentDecisionContext = hasCapturedContext
         ? await this.loadDecisionContext(
             this.pool,
@@ -372,13 +384,13 @@ export class MySqlApprovalRepository implements ApprovalRepository {
             this.now(),
             "live_fallback",
           )
-        : decisionContext;
+        : normalizedDecisionContext;
     return {
       ...this.request(rows[0], i.actorId),
       approval_template_version: approvalTemplateVersion,
-      decision_context: decisionContext,
+      decision_context: normalizedDecisionContext,
       decision_context_diff: hasCapturedContext
-        ? compareApprovalDecisionContexts(decisionContext, currentDecisionContext)
+        ? compareApprovalDecisionContexts(normalizedDecisionContext, currentDecisionContext)
         : {
             available: false,
             observed_at: currentDecisionContext.observed_at,
@@ -703,7 +715,7 @@ export class MySqlApprovalRepository implements ApprovalRepository {
           type: "task",
           id: input.resourceId,
           label: task?.title ? String(task.title) : "关联任务",
-          route: `/tasks?task=${input.resourceId}`,
+          route: `/tasks/${input.resourceId}`,
         },
         evidence: {
           applicable: false,

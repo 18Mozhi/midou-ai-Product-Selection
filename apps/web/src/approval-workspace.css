@@ -43,6 +43,14 @@ dialog form > div {
   display: flex;
   gap: 10px;
 }
+.approval-workspace header .approval-readonly-badge {
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 999px;
+  color: var(--so-text-muted);
+  letter-spacing: 0;
+}
 .approval-notice {
   padding: 12px 16px;
   background: var(--so-panel-strong);
@@ -122,6 +130,21 @@ dialog form > div {
   text-align: center;
   color: var(--so-text-muted);
 }
+.approval-detail-state {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 35;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(460px, calc(100vw - 48px));
+  padding: 14px 16px;
+  border: 1px solid var(--so-primary-border);
+  border-radius: 10px;
+  background: var(--so-bg-elevated);
+  box-shadow: 0 14px 36px var(--so-shadow-color);
+}
 .approval-list {
   display: grid;
   gap: 8px;
@@ -182,6 +205,18 @@ dialog form > div {
   border-left: 1px solid var(--so-border-strong);
   padding: 34px;
   box-shadow: -20px 0 60px var(--so-shadow-color);
+}
+.approval-detail-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 29;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  border-radius: 0;
+  background: color-mix(in srgb, var(--so-bg) 48%, transparent);
+  cursor: default;
 }
 .approval-detail .close {
   float: right;
@@ -421,8 +456,43 @@ dialog form > div {
   border: 1px solid var(--so-border-strong);
   border-radius: 9px;
 }
+.approval-form-context {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--so-panel-strong);
+  color: var(--so-text-muted);
+}
 .approval-timeline {
   margin: 28px 0;
+}
+.approval-action-history {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0;
+  padding: 16px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 12px;
+  background: var(--so-panel-strong);
+}
+.approval-action-history h4,
+.approval-action-history p {
+  margin: 0;
+}
+.approval-action-history article {
+  display: grid;
+  gap: 7px;
+  padding-top: 10px;
+  border-top: 1px solid var(--so-border-strong);
+}
+.approval-action-history article > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.approval-action-history span,
+.approval-action-history > p {
+  color: var(--so-text-muted);
 }
 .approval-timeline article {
   display: grid;

@@ -1363,6 +1363,7 @@
         "../apps/api/src/approval-routes.ts",
         "../apps/worker/src/approval-escalation-worker.ts",
         "../apps/web/src/components/ApprovalWorkspace.vue",
+        "../apps/web/src/navigation-shell-route-state.ts",
         "../database/migrations/0047_approval_decision_context_snapshot.up.sql"
       ],
       "routes": [
@@ -1373,7 +1374,7 @@
       ],
       "scope": "organization and workspace scoped immutable published templates approval requests evidence and rule snapshots node runs actions idempotent operations audit and outbox",
       "truthBoundary": "requests lock the published template version; opportunity decision requests resolve the decision id to its opportunity and snapshot evidence completeness scoring profit risk rule versions and decision basis; detail reads rebuild current facts without writes and return captured-to-current requirement basis and rule-version differences; pre-0047 requests are labeled live fallback without a fabricated diff and task approvals are evidence-not-applicable; approve and reject require reasons; overdue Worker only escalates the active approver and never decides",
-      "pageFlow": "involvement=decidable or requested splits the inbox before pagination while preserving legacy mine semantics; URL-backed status page and approval detail state support notification deep links, and the detail keeps impact scope current node captured-to-current evidence differences evidence basis and each node original-current-timeout-assignee escalation path visible before decisions with a validated notification return path; publishing a template requires an auditable reason in a version-preview confirmation dialog",
+      "pageFlow": "involvement=decidable or requested splits the inbox before pagination while preserving legacy mine semantics; deterministic due-time updated-time and request-id ordering prevents cross-page drift and page metrics are explicitly page scoped; URL-backed status page and approval detail state support notification deep links, missing or cross-workspace detail keeps the list usable, task links normalize to the explicit detail route, and the detail keeps impact scope current node captured-to-current evidence differences evidence basis node escalation path and immutable action history visible before decisions with a validated notification return path; task:assign controls write entry visibility, template members come from the scoped member directory, request resource type is locked by the published template, and publishing requires an auditable reason in a version-preview confirmation dialog",
       "permission": "task:read for reads and task:assign for template request and decision writes",
       "configuration": ["APPROVAL_ESCALATION_POLL_MS", "APPROVAL_ESCALATION_LEASE_SECONDS"],
       "runtimeBoundary": "decision context snapshots are captured synchronously by the Baota-managed Node API; overdue node escalation runs only in the unified Baota-managed Node Worker",

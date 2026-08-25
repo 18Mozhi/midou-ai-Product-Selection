@@ -237,8 +237,16 @@ test("M05-02 splits actionable and requested approvals before repository paginat
   );
   assert.match(repository, /involvement === "requested"[\s\S]*requested_by=\?/);
   assert.match(repository, /involvement === "decidable"[\s\S]*active_approver_id=\?/);
+  assert.match(repository, /ORDER BY \(r\.status='pending'\)[\s\S]*n\.due_at[\s\S]*r\.id DESC/);
+  assert.match(repository, /route: `\/tasks\/\$\{input\.resourceId\}`/);
+  assert.match(repository, /normalizeApprovalResourceRoute/);
   assert.match(routes, /involvement: q\.involvement/);
   assert.match(ui, /待我处理[\s\S]*我发起的[\s\S]*审批依据与影响范围/);
+  assert.match(ui, /canManage[\s\S]*task:assign/);
+  assert.match(ui, /只读权限/);
+  assert.match(ui, /审批操作记录[\s\S]*selected\.actions/);
+  assert.match(ui, /当前页审批中[\s\S]*当前页待我审批[\s\S]*当前页节点超时/);
+  assert.match(ui, /资源类型由模板锁定/);
   assert.match(openapi, /name: involvement[\s\S]*decidable, requested/);
 });
 test("M05-02.A03/A05-A11/A13-A17 delivery evidence exists", async () => {

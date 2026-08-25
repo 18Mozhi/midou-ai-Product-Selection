@@ -22,6 +22,7 @@ type Template = {
   revision: number;
   node_count: number;
 };
+type MemberOption = { id: string; label: string };
 type Approval = {
   id: string;
   title: string;
@@ -137,14 +138,17 @@ type Approval = {
     }>;
   };
 };
-const props = defineProps<{ apiBaseUrl: string }>(),
+const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(),
   route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<ViewState>("loading"),
   approvals = ref<Approval[]>([]),
   templates = ref<Template[]>([]),
+  memberOptions = ref<MemberOption[]>([]),
   selected = ref<Approval | null>(null),
+  detailBusy = ref(false),
+  detailNotice = ref(""),
   queue = ref(route.query.view === "requested" ? "requested" : "decidable"),
   filter = ref(
     ["pending", "approved", "rejected", "cancelled", ""].includes(String(route.query.status ?? ""))
@@ -190,7 +194,8 @@ const { dialogElement: templateDialogElement, handleCancel: handleTemplateCancel
       publishReason.value = "";
     },
   );
-const pendingCount = computed(() => approvals.value.filter((x) => x.status === "pending").length),
+const canManage = computed(() => props.capabilities?.includes("task:assign") ?? false),
+  pendingCount = computed(() => approvals.value.filter((x) => x.status === "pending").length),
   mineCount = computed(() => approvals.value.filter((x) => x.can_decide).length),
   overdueCount = computed(
     () =>
@@ -204,7 +209,10 @@ const pendingCount = computed(() => approvals.value.filter((x) => x.status === "
   notificationReturn = computed(() => {
     const value = typeof route.query.from === "string" ? route.query.from : "";
     return value === "/notifications" || value.startsWith("/notifications?") ? value : "";
-  });
+  }),
+  selectedTemplate = computed(() =>
+    published.value.find((item) => item.id === requestForm.value.template_id),
+  );
 const statusText = (x: string) =>
     (
       ({
@@ -237,6 +245,14 @@ const statusText = (x: string) =>
     )[x] ?? "未知状态",
   resourceText = (x: string) =>
     ({ task: "任务", opportunity_decision: "机会决策" })[x] ?? "业务记录",
+  actionText = (x: string) =>
+    ({
+      approve: "批准",
+      approved: "批准",
+      reject: "驳回",
+      rejected: "驳回",
+      escalated: "超时升级",
+    })[x] ?? x,
   basisValue = (value: string | null) =>
     value == null || value === ""
       ? "未提供"
@@ -272,7 +288,7 @@ async function api<T>(
 async function load() {
   state.value = "loading";
   try {
-    const [list, tpl] = await Promise.all([
+    const [list, tpl, members] = await Promise.all([
       api<Approval[]>(
         `/tasks/approvals?page=${page.value}&page_size=${pageSize}&involvement=${queue.value}${filter.value ? `&status=${filter.value}` : ""}`,
         {},
@@ -282,9 +298,11 @@ async function load() {
         },
       ),
       api<Template[]>("/tasks/approval-templates"),
+      canManage.value ? api<MemberOption[]>("/tasks/member-options") : Promise.resolve([]),
     ]);
     approvals.value = list;
     templates.value = tpl;
+    memberOptions.value = members;
     state.value = list.length ? "ready" : "empty";
     const approvalId = typeof route.query.approval === "string" ? route.query.approval : "";
     if (approvalId) await openById(approvalId, false);
@@ -293,13 +311,23 @@ async function load() {
   }
 }
 async function openById(id: string, syncUrl = true) {
+  detailBusy.value = true;
+  detailNotice.value = "";
   try {
-    selected.value = await api<Approval>(`/tasks/approvals/${id}`);
+    selected.value = await api<Approval>(`/tasks/approvals/${id}`, {}, false);
     reason.value = "";
-    state.value = "ready";
     if (syncUrl) await router.replace({ query: { ...route.query, approval: selected.value.id } });
   } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null;
+    selected.value = null;
+    detailNotice.value =
+      failure?.status === 404
+        ? "该审批记录不存在或不属于当前工作区。"
+        : (failure?.actionHint ?? "审批详情读取失败，请重试。");
+    if (!syncUrl) await router.replace({ query: { ...route.query, approval: undefined } });
     rethrowUnexpectedError(error);
+  } finally {
+    detailBusy.value = false;
   }
 }
 async function open(item: Approval) {
@@ -401,8 +429,9 @@ function openPublish(t: Template) {
   publishReason.value = "";
 }
 async function publish() {
-  if (!publishTarget.value || !publishReason.value.trim()) return;
+  if (busy.value || !publishTarget.value || !publishReason.value.trim()) return;
   const target = publishTarget.value;
+  busy.value = true;
   try {
     await api(
       `/tasks/approval-templates/${target.id}/actions`,
@@ -418,12 +447,25 @@ async function publish() {
     await load();
   } catch (error) {
     rethrowUnexpectedError(error);
+  } finally {
+    busy.value = false;
   }
 }
 async function createRequest() {
   busy.value = true;
   try {
-    await api("/tasks/approvals", { method: "POST", body: requestForm.value }, false);
+    await api(
+      "/tasks/approvals",
+      {
+        method: "POST",
+        body: {
+          ...requestForm.value,
+          title: requestForm.value.title.trim(),
+          resource_id: requestForm.value.resource_id.trim(),
+        },
+      },
+      false,
+    );
     showRequest.value = false;
     notice.value = "审批已发起；第一节点 SLA 已开始计时。";
     await load();
@@ -441,6 +483,13 @@ watch(
     else if (!value) selected.value = null;
   },
 );
+watch(
+  () => requestForm.value.template_id,
+  () => {
+    if (selectedTemplate.value)
+      requestForm.value.resource_type = selectedTemplate.value.resource_type;
+  },
+);
 </script>
 <template>
   <section class="approval-workspace">
@@ -450,10 +499,11 @@ watch(
         <h2>审批中心</h2>
         <span>模板版本、节点时限、人工原因与升级记录均来自当前工作区后端。</span>
       </div>
-      <div>
+      <div v-if="canManage">
         <button class="secondary" @click="showTemplate = true">配置模板</button
         ><button @click="showRequest = true">＋ 发起审批</button>
       </div>
+      <p v-else class="approval-readonly-badge">只读权限</p>
     </header>
     <div v-if="notice" class="approval-notice" aria-live="polite">
       {{ notice }}
@@ -464,13 +514,13 @@ watch(
     </div>
     <section class="approval-metrics">
       <article>
-        <span>审批中</span><b>{{ pendingCount }}</b>
+        <span>当前页审批中</span><b>{{ pendingCount }}</b>
       </article>
       <article>
-        <span>待我审批</span><b>{{ mineCount }}</b>
+        <span>当前页待我审批</span><b>{{ mineCount }}</b>
       </article>
       <article class="alert">
-        <span>节点超时</span><b>{{ overdueCount }}</b>
+        <span>当前页节点超时</span><b>{{ overdueCount }}</b>
       </article>
       <article>
         <span>已发布模板</span><b>{{ published.length }}</b>
@@ -537,17 +587,36 @@ watch(
         ><b>查看 →</b>
       </button>
     </div>
+    <section v-if="detailBusy" class="approval-detail-state" aria-live="polite">
+      正在读取审批详情…
+    </section>
+    <section v-else-if="detailNotice" class="approval-detail-state" role="alert">
+      {{ detailNotice }}
+      <button class="secondary" @click="detailNotice = ''">关闭提示</button>
+    </section>
     <nav v-if="total > pageSize" class="approval-pagination" aria-label="审批分页">
       <button :disabled="page <= 1" @click="setPage(page - 1)">上一页</button>
       <span>第 {{ page }} / {{ pageCount }} 页 · 共 {{ total }} 项</span>
       <button :disabled="page >= pageCount" @click="setPage(page + 1)">下一页</button>
     </nav>
-    <aside v-if="selected" class="approval-detail">
+    <div
+      v-if="selected"
+      class="approval-detail-backdrop"
+      aria-hidden="true"
+      @click="closeDetail"
+    ></div>
+    <aside
+      v-if="selected"
+      class="approval-detail"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="approval-detail-title"
+    >
       <button class="close" aria-label="关闭审批详情" title="关闭审批详情" @click="closeDetail">
         ×
       </button>
       <p>{{ selected.template_name }} / 模板 v{{ selected.approval_template_version ?? "—" }}</p>
-      <h3>{{ selected.title }}</h3>
+      <h3 id="approval-detail-title">{{ selected.title }}</h3>
       <RouterLink
         v-if="selected.decision_context?.resource"
         class="approval-resource-link"
@@ -747,7 +816,18 @@ watch(
           </div>
         </article>
       </div>
-      <section v-if="selected.can_decide">
+      <section class="approval-action-history" aria-label="审批操作记录">
+        <h4>操作记录</h4>
+        <p v-if="!selected.actions?.length">尚无批准、驳回或升级记录。</p>
+        <article v-for="action in selected.actions" :key="action.id">
+          <div>
+            <strong>{{ actionText(action.action) }}</strong>
+            <span>{{ action.actor_name || "未知成员" }} · {{ time(action.created_at) }}</span>
+          </div>
+          <p>{{ action.reason }}</p>
+        </article>
+      </section>
+      <section v-if="selected.can_decide && canManage">
         <p
           v-if="
             selected.decision_context?.evidence.applicable &&
@@ -817,10 +897,21 @@ watch(
         /></label>
         <details class="approval-form-technical">
           <summary>技术配置：审批人与超时接收人</summary>
-          <label>审批人账号编号<input v-model="templateForm.approver_id" required /></label
+          <label
+            >审批人<select v-model="templateForm.approver_id" required>
+              <option value="" disabled>请选择当前工作区成员</option>
+              <option v-for="member in memberOptions" :key="member.id" :value="member.id">
+                {{ member.label }}
+              </option>
+            </select></label
           ><label
-            >超时接收人账号编号<input v-model="templateForm.escalation_assignee_id" required
-          /></label>
+            >超时接收人<select v-model="templateForm.escalation_assignee_id" required>
+              <option value="" disabled>请选择当前工作区成员</option>
+              <option v-for="member in memberOptions" :key="member.id" :value="member.id">
+                {{ member.label }}
+              </option>
+            </select></label
+          >
         </details>
         <p>草稿必须显式发布；超时只升级审批人，不会自动批准或驳回。</p>
         <div>
@@ -870,12 +961,12 @@ watch(
               {{ t.name }}
             </option>
           </select></label
-        ><label
-          >资源类型<select v-model="requestForm.resource_type">
-            <option value="task">任务</option>
-            <option value="opportunity_decision">机会决策</option>
-          </select></label
         >
+        <p v-if="selectedTemplate" class="approval-form-context">
+          关联类型：{{
+            resourceText(selectedTemplate.resource_type)
+          }}。资源类型由模板锁定，不能单独改写。
+        </p>
         <details class="approval-form-technical">
           <summary>技术配置：关联资源编号</summary>
           <label>资源编号<input v-model="requestForm.resource_id" required /></label>
@@ -883,7 +974,7 @@ watch(
         <label>审批标题<input v-model="requestForm.title" required maxlength="200" /></label>
         <div>
           <button type="button" class="secondary" @click="showRequest = false">取消</button
-          ><button :disabled="busy">发起</button>
+          ><button :disabled="busy || !published.length">发起</button>
         </div>
       </form>
     </dialog>
