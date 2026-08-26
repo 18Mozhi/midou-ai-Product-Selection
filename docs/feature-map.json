@@ -1451,18 +1451,20 @@
         "../apps/api/src/mysql-automation-repository.ts",
         "../apps/api/src/automation-routes.ts",
         "../apps/worker/src/automation-worker.ts",
-        "../apps/web/src/components/AutomationRuleCenter.vue"
+        "../apps/web/src/components/AutomationRuleCenter.vue",
+        "../database/migrations/0066_automation_task_source_restore.up.sql"
       ],
       "routes": [
         "/automations",
         "/api/v1/automations",
         "/api/v1/automations/preview",
         "/api/v1/automations/{automationRuleId}",
-        "/api/v1/automations/{automationRuleId}/actions"
+        "/api/v1/automations/{automationRuleId}/actions",
+        "/api/v1/tasks/member-options"
       ],
       "scope": "organization and workspace scoped versioned rules with detail, audited full editing, notification-derived executions, safe actions and idempotent operations",
       "truthBoundary": "rules only consume persisted notification facts; actions notify an owner or create a human task and never approve or change opportunity facts",
-      "pageFlow": "rule cards use an explicit trigger condition action sequence and show the latest execution status time and translated failure reason; creation offers editable business templates and a read-only dry run with 30-day matches rate-window impact and real notification samples, while execution history links real created tasks and the persisted triggering notification source chain without routing platform alerts into the member automation surface",
+      "pageFlow": "rule cards use an explicit trigger condition action sequence and show the latest execution status time and translated failure reason; creation offers editable business templates, current-workspace member selectors and a read-only dry run with 30-day matches rate-window impact and real notification samples; URL-backed modal execution history supports refresh, back and Escape, and links real created tasks plus the persisted triggering notification source chain without routing platform alerts into the member automation surface",
       "permission": "team:manage for reads and writes with active current context",
       "configuration": [
         "AUTOMATION_POLL_MS",

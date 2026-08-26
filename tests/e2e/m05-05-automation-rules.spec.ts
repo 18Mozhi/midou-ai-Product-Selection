@@ -44,6 +44,9 @@ async function setup(page: Page) {
     }),
   );
   await page.route("**/api/v1/automations", (r) => r.fulfill({ json: envelope([rule]) }));
+  await page.route("**/api/v1/tasks/member-options", (r) =>
+    r.fulfill({ json: envelope([{ id: user, label: "验收负责人" }]) }),
+  );
   await page.route(`**/api/v1/automations/${ruleId}`, (r) =>
     r.fulfill({
       json: envelope({
@@ -77,9 +80,13 @@ test("M05-05.A07/A08/A15 desktop rules and execution drawer", async ({ page }) =
   await expect(page.getByText("动作执行失败，系统将按策略重试")).toBeVisible();
 
   await page.getByRole("button", { name: "查看详情" }).click();
+  await expect(page).toHaveURL(new RegExp(`rule=${ruleId}`));
   await expect(page.getByText("规则详情与执行记录")).toBeVisible();
   await expect(page.getByText("规则 v1 · 尝试 1 次")).toBeVisible();
   await expect(page.getByRole("link", { name: "查看触发通知与来源" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page).not.toHaveURL(/rule=/);
+  await expect(page.getByRole("button", { name: "查看详情" })).toBeFocused();
 });
 test("automation rule can enter edit mode with existing values", async ({ page }) => {
   await setup(page);
@@ -87,6 +94,8 @@ test("automation rule can enter edit mode with existing values", async ({ page }
   await page.getByRole("button", { name: "编辑", exact: true }).click();
   await expect(page.getByRole("heading", { name: "编辑自动化规则" })).toBeVisible();
   await expect(page.getByLabel("规则名称")).toHaveValue("审批超时人工跟进");
+  await expect(page.getByLabel("规则负责人")).toHaveValue(user);
+  await expect(page.getByLabel("修改原因")).toBeVisible();
   await expect(page.getByRole("button", { name: "保存修改" })).toBeVisible();
 });
 test("M05-05.A07/A08/A15 mobile create rule layout", async ({ page }) => {

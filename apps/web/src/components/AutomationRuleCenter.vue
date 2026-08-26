@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
 import "../automation-rules.css";
@@ -25,6 +26,7 @@ type RuleTemplate = Pick<
   Rule,
   "name" | "trigger_event_type" | "condition_severity" | "action_type" | "action_title"
 >;
+type MemberOption = { id: string; label: string };
 type AutomationPreview = {
   mode: "read_only";
   matched_30d: number;
@@ -44,18 +46,23 @@ type AutomationPreview = {
 };
 const props = defineProps<{ apiBaseUrl: string }>(),
   request = createApiClient(props.apiBaseUrl),
+  route = useRoute(),
+  router = useRouter(),
   state = ref("loading"),
   rules = ref<Rule[]>([]),
+  memberOptions = ref<MemberOption[]>([]),
   selected = ref<any>(null),
   notice = ref(""),
   requestId = ref(""),
   showCreate = ref(false),
   editing = ref<Rule | null>(null),
-  deepLinkHandled = ref(false),
+  routeSyncReady = ref(false),
   busy = ref(false),
   previewing = ref(false),
   preview = ref<AutomationPreview | null>(null),
-  form = ref({
+  editReason = ref(""),
+  editorFormElement = ref<HTMLFormElement | null>(null),
+  emptyForm = () => ({
     name: "",
     trigger_event_type: "approval.overdue",
     condition_severity: "any",
@@ -65,11 +72,16 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     action_title: "",
     rate_limit_count: 20,
     rate_limit_window_minutes: 60,
-  });
+  }),
+  form = ref(emptyForm());
 const { dialogElement: createDialogElement, handleCancel: handleCreateCancel } = useModalDialog(
-  () => showCreate.value,
-  closeEditor,
-);
+    () => showCreate.value,
+    closeEditor,
+  ),
+  { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
+    () => Boolean(selected.value),
+    closeDetail,
+  );
 const templates: Array<RuleTemplate & { description: string }> = [
   {
     name: "审批超时提醒",
@@ -112,20 +124,27 @@ async function api(path: string, init?: RequestInit) {
 async function load() {
   state.value = "loading";
   try {
-    rules.value = await api("/automations");
+    const [loadedRules, loadedMembers] = await Promise.all([
+      api("/automations"),
+      api("/tasks/member-options"),
+    ]);
+    rules.value = loadedRules;
+    memberOptions.value = loadedMembers;
     state.value = rules.value.length ? "ready" : "empty";
-    if (!deepLinkHandled.value) {
-      deepLinkHandled.value = true;
-      const params = new URLSearchParams(location.search),
-        target = rules.value.find((item) => item.id === params.get("rule"));
-      if (target) params.get("action") === "edit" ? edit(target) : await open(target);
-    }
+    routeSyncReady.value = true;
+    await applyRouteState();
   } catch (error) {
     rethrowUnexpectedError(error);
   }
 }
-async function open(rule: Rule) {
+async function open(rule: Rule, syncRoute = true) {
+  if (syncRoute) {
+    await navigateToRule(rule);
+    return;
+  }
   try {
+    showCreate.value = false;
+    editing.value = null;
     selected.value = await api(`/automations/${rule.id}`);
   } catch (error) {
     rethrowUnexpectedError(error);
@@ -141,13 +160,14 @@ async function create() {
         ...(editing.value
           ? {
               expected_version: editing.value.version,
-              reason: "编辑自动化规则",
+              reason: editReason.value,
             }
           : {}),
         action_assignee_id:
           form.value.action_type === "create_task" ? form.value.action_assignee_id : null,
       }),
     });
+    await clearRuleQuery(true);
     showCreate.value = false;
     notice.value = editing.value
       ? "自动化规则已更新并保留审计记录。"
@@ -160,7 +180,12 @@ async function create() {
     busy.value = false;
   }
 }
-function edit(rule: Rule) {
+function edit(rule: Rule, syncRoute = true) {
+  if (syncRoute) {
+    void navigateToRule(rule, "edit");
+    return;
+  }
+  selected.value = null;
   editing.value = rule;
   form.value = {
     name: rule.name,
@@ -173,13 +198,60 @@ function edit(rule: Rule) {
     rate_limit_count: rule.rate_limit_count,
     rate_limit_window_minutes: rule.rate_limit_window_minutes,
   };
+  editReason.value = "";
   preview.value = null;
   showCreate.value = true;
 }
 function closeEditor() {
   showCreate.value = false;
   editing.value = null;
+  editReason.value = "";
   preview.value = null;
+  if (route.query.rule) void clearRuleQuery();
+}
+function closeDetail() {
+  selected.value = null;
+  if (route.query.rule) void clearRuleQuery();
+}
+async function clearRuleQuery(replace = false) {
+  const query = { ...route.query };
+  delete query.rule;
+  delete query.action;
+  await (replace ? router.replace({ query }) : router.push({ query }));
+}
+async function navigateToRule(rule: Rule, action?: "edit") {
+  const query: Record<string, any> = { ...route.query, rule: rule.id };
+  if (action) query.action = action;
+  else delete query.action;
+  await router.push({ query });
+}
+async function applyRouteState() {
+  const ruleId = typeof route.query.rule === "string" ? route.query.rule : "";
+  if (!ruleId) {
+    selected.value = null;
+    showCreate.value = false;
+    editing.value = null;
+    editReason.value = "";
+    preview.value = null;
+    return;
+  }
+  const target = rules.value.find((item) => item.id === ruleId);
+  if (!target) {
+    notice.value = "链接中的自动化规则不存在或不在当前工作区。";
+    await clearRuleQuery(true);
+    return;
+  }
+  if (route.query.action === "edit") edit(target, false);
+  else await open(target, false);
+}
+async function openCreator() {
+  if (route.query.rule) await clearRuleQuery(true);
+  selected.value = null;
+  editing.value = null;
+  editReason.value = "";
+  form.value = emptyForm();
+  preview.value = null;
+  showCreate.value = true;
 }
 function applyTemplate(template: RuleTemplate) {
   form.value = {
@@ -189,6 +261,7 @@ function applyTemplate(template: RuleTemplate) {
   preview.value = null;
 }
 async function runPreview() {
+  if (!editorFormElement.value?.reportValidity()) return;
   previewing.value = true;
   try {
     preview.value = await api("/automations/preview", {
@@ -268,6 +341,22 @@ const trigger = (v: string) =>
   time = (v: string | null) =>
     v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "尚未执行";
 onMounted(load);
+watch(
+  () => [route.query.rule, route.query.action],
+  () => {
+    if (routeSyncReady.value) void applyRouteState();
+  },
+);
+watch(
+  () => form.value.trigger_event_type,
+  (value) => {
+    if (value.startsWith("task.") && form.value.action_type === "create_task") {
+      form.value.action_type = "notify_owner";
+      form.value.action_assignee_id = "";
+      preview.value = null;
+    }
+  },
+);
 </script>
 <template>
   <section class="automation-center">
@@ -277,7 +366,7 @@ onMounted(load);
         <h2>自动化规则</h2>
         <span>配置“发生什么情况、通知谁或创建什么任务”，并查看每次执行结果。</span>
       </div>
-      <button @click="showCreate = true">创建规则</button>
+      <button :disabled="busy" @click="openCreator">创建规则</button>
     </header>
     <div v-if="notice" class="automation-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
@@ -285,7 +374,9 @@ onMounted(load);
     <section v-if="state === 'loading'" class="automation-state">正在读取规则…</section>
     <section
       v-else-if="
-        ['error', 'expired', 'forbidden', 'rate_limited', 'version_conflict'].includes(state)
+        ['error', 'blocked', 'expired', 'forbidden', 'rate_limited', 'version_conflict'].includes(
+          state,
+        )
       "
       class="automation-state"
     >
@@ -295,11 +386,13 @@ onMounted(load);
             ? "登录已失效"
             : state === "forbidden"
               ? "无权管理自动化"
-              : state === "rate_limited"
-                ? "请求过于频繁"
-                : state === "version_conflict"
-                  ? "规则版本已变化"
-                  : "规则服务暂不可用"
+              : state === "blocked"
+                ? "规则服务暂不可用"
+                : state === "rate_limited"
+                  ? "请求过于频繁"
+                  : state === "version_conflict"
+                    ? "规则版本已变化"
+                    : "规则服务暂不可用"
         }}
       </h3>
       <p>{{ notice }}</p>
@@ -348,16 +441,22 @@ onMounted(load);
           <em v-if="rule.latest_error_code">{{ failureReason(rule.latest_error_code) }}</em>
         </div>
         <footer>
-          <button class="secondary" @click="open(rule)">查看详情</button
-          ><button class="secondary" @click="edit(rule)">编辑</button
+          <button class="secondary" :disabled="busy" @click="open(rule)">查看详情</button
+          ><button class="secondary" :disabled="busy" @click="edit(rule)">编辑</button
           ><button :disabled="busy" @click="status(rule)">
             {{ rule.status === "active" ? "暂停" : "恢复" }}
           </button>
         </footer>
       </article>
     </div>
-    <aside v-if="selected" class="automation-detail">
-      <button aria-label="关闭执行记录" @click="selected = null">×</button>
+    <dialog
+      v-if="selected"
+      ref="detailDialogElement"
+      class="automation-detail"
+      :aria-label="selected ? `${selected.name}执行记录` : '自动化执行记录'"
+      @cancel="handleDetailCancel"
+    >
+      <button aria-label="关闭执行记录" @click="closeDetail()">×</button>
       <p>规则详情与执行记录</p>
       <h3>{{ selected.name }}</h3>
       <ul v-if="selected.executions?.length">
@@ -385,13 +484,13 @@ onMounted(load);
         </li>
       </ul>
       <p v-else>尚无匹配事件，未执行任何动作。</p>
-    </aside>
+    </dialog>
     <dialog
       ref="createDialogElement"
       :aria-label="editing ? '编辑自动化规则' : '创建自动化规则'"
       @cancel="handleCreateCancel"
     >
-      <form @submit.prevent="create">
+      <form ref="editorFormElement" @submit.prevent="create">
         <h3>{{ editing ? "编辑自动化规则" : "创建自动化规则" }}</h3>
         <section v-if="!editing" class="automation-templates">
           <header><b>从业务模板开始</b><span>选择后仍可逐项调整</span></header>
@@ -438,28 +537,37 @@ onMounted(load);
             </select></label
           >
         </section>
-        ><label
-          >规则负责人账号编号<input
-            v-model="form.owner_id"
-            required
-            pattern="[0-9a-fA-F-]{36}" /></label
+        <label
+          >规则负责人<select v-model="form.owner_id" required>
+            <option disabled value="">请选择当前工作区成员</option>
+            <option v-for="member in memberOptions" :key="member.id" :value="member.id">
+              {{ member.label }}
+            </option>
+          </select></label
         ><label v-if="form.action_type === 'create_task'"
-          >任务负责人账号编号<input
-            v-model="form.action_assignee_id"
-            required
-            pattern="[0-9a-fA-F-]{36}" /></label
+          >任务负责人<select v-model="form.action_assignee_id" required>
+            <option disabled value="">请选择当前工作区成员</option>
+            <option v-for="member in memberOptions" :key="member.id" :value="member.id">
+              {{ member.label }}
+            </option>
+          </select></label
         ><label>动作标题<input v-model="form.action_title" required maxlength="200" /></label>
+        <label v-if="editing"
+          >修改原因<textarea v-model="editReason" required maxlength="500"></textarea>
+        </label>
         <div class="automation-pair">
           <label
             >最多执行次数<input
               v-model.number="form.rate_limit_count"
               type="number"
+              required
               min="1"
               max="1000" /></label
           ><label
             >时间窗（分钟）<input
               v-model.number="form.rate_limit_window_minutes"
               type="number"
+              required
               min="1"
               max="1440"
           /></label>
@@ -508,7 +616,7 @@ onMounted(load);
           <p v-else>当前条件没有历史匹配样本；保存后仍只会处理未来真实事件。</p>
         </section>
         <footer>
-          <button type="button" class="secondary" @click="closeEditor">取消</button>
+          <button type="button" class="secondary" @click="closeEditor()">取消</button>
           <button type="button" class="secondary" :disabled="previewing" @click="runPreview">
             {{ previewing ? "正在试运行…" : "试运行并预览影响" }}</button
           ><button :disabled="busy">

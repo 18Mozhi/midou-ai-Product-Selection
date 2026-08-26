@@ -12,7 +12,7 @@
 
 1. 在页面暂停所有 active 规则，并等待 leased 执行结束。
 2. 在宝塔停止 Node Worker 和 Node API，备份数据库。
-3. 仅当不存在 `source_type='automation'` 的任务时执行 `0018e_automation_rules_m05_05.down.sql`；否则先保留数据并停止回滚。
+3. 仅当不存在 `source_type='automation'` 的任务时，先执行 `0066_automation_task_source_restore.down.sql`，再执行 `0018e_automation_rules_m05_05.down.sql`；否则先保留数据并停止回滚。
 4. 在宝塔恢复上一版本并移除四个 `AUTOMATION_*` 配置，随后启动 API/Worker 并检查健康状态。
 
 回滚会删除规则及执行历史，必须保留备份和审计导出。

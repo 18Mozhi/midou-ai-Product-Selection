@@ -22,6 +22,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /0051c_provider_parser_sample_operations\.up\.sql/);
   assert.match(deploy, /0052a_amazon_structured_parser\.up\.sql/);
   assert.match(deploy, /0052b_provider_public_compliance\.up\.sql/);
+  assert.match(deploy, /0066_automation_task_source_restore\.up\.sql/);
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
   assert.match(deploy, /verify-release-change-ownership\.mjs/);
   assert.match(deploy, /release-change-ownership\.json/);
@@ -91,6 +92,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     "0060_opportunity_workflow_visibility.up.sql",
     "0061_crawler_completion_spool_status.up.sql",
     "0062_runtime_process_restart_observations.up.sql",
+    "0066_automation_task_source_restore.up.sql",
   ];
   let previousIndex = -1;
   for (const migration of orderedMigrations) {
@@ -136,6 +138,7 @@ test("allowlisted deployment migrations use the locked statement splitter", asyn
     "0060_opportunity_workflow_visibility.up.sql",
     "0061_crawler_completion_spool_status.up.sql",
     "0062_runtime_process_restart_observations.up.sql",
+    "0066_automation_task_source_restore.up.sql",
   ]) {
     const sql = await readFile(`database/migrations/${name}`, "utf8");
     const statements = splitSqlStatements(sql);

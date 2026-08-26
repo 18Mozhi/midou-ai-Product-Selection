@@ -63,9 +63,23 @@ test("M05-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(v[1], /notifications n JOIN outbox_events e[\s\S]*LIMIT 5/);
   assert.match(v[4], /试运行并预览影响/);
   assert.match(v[4], /只读，不会创建通知或任务/);
+  assert.match(v[4], /tasks\/member-options/);
+  assert.match(v[4], /'blocked'[\s\S]*规则服务暂不可用/);
   assert.match(v[7], /\/automations\/preview[\s\S]*AutomationRulePreview/);
   assert.match(v[6], /宝塔[\s\S]*回滚/);
   assert.equal(JSON.parse(v.at(-1)).atomicTasks.length, 17);
+});
+test("later task extensions preserve the automation source contract", async () => {
+  const [operationalTaskMigration, compatibilityMigration, worker] = await Promise.all(
+    [
+      "database/migrations/0045_operational_task_links.up.sql",
+      "database/migrations/0066_automation_task_source_restore.up.sql",
+      "apps/worker/src/automation-worker.ts",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  assert.doesNotMatch(operationalTaskMigration, /'automation'/);
+  assert.match(compatibilityMigration, /MODIFY `source_type`[\s\S]*'automation'/);
+  assert.match(worker, /source_type[\s\S]*'automation'/);
 });
 test("automation detail can enter an audited full edit flow", async () => {
   const { AutomationService } = await import("../../apps/api/dist/automation-service.js");
