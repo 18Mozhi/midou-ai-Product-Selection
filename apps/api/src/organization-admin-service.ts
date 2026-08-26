@@ -5,7 +5,7 @@ export class OrganizationAdminError extends Error {
     readonly code: string,
     readonly statusCode: number,
     readonly actionHint: string,
-    message = code,
+    message = actionHint,
   ) {
     super(message);
     this.name = "OrganizationAdminError";

@@ -81,6 +81,11 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
         "SELECT version FROM organizations WHERE id=? FOR UPDATE",
         [i.organizationId],
       );
+      const replay = await this.operation(i, c, true);
+      if (replay) {
+        await c.rollback();
+        return replay;
+      }
       this.version(rows[0], i.value.expected_version, "organization");
       await c.query(
         "UPDATE organizations SET name=?,logo_url=?,timezone=?,data_retention_days=?," +
@@ -892,10 +897,10 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
     );
     return Number(r[0]?.n ?? 0) === 0;
   }
-  private async operation(i: any) {
-    const [r] = await this.pool.query<RowDataPacket[]>(
+  private async operation(i: any, executor: Pick<Pool, "query"> = this.pool, currentRead = false) {
+    const [r] = await executor.query<RowDataPacket[]>(
       "SELECT result_json FROM organization_admin_operations WHERE organization_id=? AND actor_id=? " +
-        "AND route_key=? AND idempotency_key=?",
+        `AND route_key=? AND idempotency_key=?${currentRead ? " FOR UPDATE" : ""}`,
       [i.organizationId, i.actorId, i.route, i.idempotencyKey],
     );
     return r[0] ? parse(r[0].result_json) : null;

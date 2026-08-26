@@ -32,6 +32,15 @@
   margin-top: 8px;
   color: var(--so-text-muted);
 }
+.org-admin-refresh {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+}
+.org-admin-refresh small {
+  color: var(--so-text-muted);
+  font-size: var(--so-font-meta);
+}
 .org-admin-hero button,
 .org-admin-card button,
 .org-admin-state button {
@@ -42,6 +51,12 @@
   background: linear-gradient(110deg, var(--so-primary), var(--so-primary-strong));
   font-weight: 750;
 }
+.org-admin-hero button:disabled,
+.org-admin-card button:disabled,
+.org-admin-state button:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
 .org-admin-notice {
   margin-top: 14px;
   padding: 12px 15px;
@@ -49,6 +64,16 @@
   border-radius: 10px;
   color: var(--so-text-muted);
   background: var(--so-primary-soft);
+}
+.org-admin-notice[data-kind="success"] {
+  border-color: var(--so-success-border);
+  color: var(--so-success);
+  background: var(--so-success-soft);
+}
+.org-admin-notice[data-kind="error"] {
+  border-color: var(--so-danger-border);
+  color: var(--so-danger);
+  background: var(--so-danger-soft);
 }
 .org-admin-notice code {
   float: right;
@@ -437,6 +462,13 @@
     padding: 20px;
     align-items: flex-start;
     flex-direction: column;
+  }
+  .org-admin-refresh {
+    width: 100%;
+    justify-items: stretch;
+  }
+  .org-admin-refresh small {
+    order: 2;
   }
   .org-admin-hero h2 {
     font-size: 27px;

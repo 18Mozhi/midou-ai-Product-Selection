@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import type { Page } from "@playwright/test";
+import type { Page, Route } from "@playwright/test";
 
 const org = "00000000-0000-4000-8000-000000000601";
 const ws = "00000000-0000-4000-8000-000000000602";
@@ -261,6 +261,113 @@ test("M06-01.A07/A08/A15 desktop organization dashboard", async ({ page }) => {
   await expect(page.getByText("新品决策工作区").first()).toBeVisible();
   await expect(page.getByLabel("默认工作区")).toHaveValue(ws);
   await expect(page.getByText(ws, { exact: true })).toHaveCount(0);
+});
+
+test("organization overview keeps facts visible during refresh and retains audited success", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/org-admin");
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+
+  let releaseRefresh: () => void = () => {};
+  const refreshGate = new Promise<void>((resolve) => {
+    releaseRefresh = resolve;
+  });
+  await page.route("**/api/v1/org/admin/summary", async (route) => {
+    await refreshGate;
+    await route.fallback();
+  });
+  await page.getByRole("button", { name: "刷新数据" }).click();
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("aria-busy", "true");
+  await expect(page.locator(".org-admin-metrics article")).toHaveCount(6);
+  await expect(page.getByRole("button", { name: "正在刷新…" })).toBeDisabled();
+  releaseRefresh();
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("aria-busy", "false");
+
+  await page.getByLabel("变更原因").fill("验证成功反馈");
+  await page.getByRole("button", { name: "保存并审计" }).click();
+  await expect(page.getByRole("status")).toContainText("操作已完成并写入审计");
+  await expect(page.getByRole("status")).toContainText("m06-01-e2e");
+});
+
+test("organization overview keeps the form available for validation and version conflicts", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/org-admin");
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+
+  let patchRequests = 0;
+  page.on("request", (request) => {
+    if (
+      request.method() === "PATCH" &&
+      new URL(request.url()).pathname === "/api/v1/org/admin/profile"
+    )
+      patchRequests += 1;
+  });
+  await page.getByLabel("Logo HTTPS 地址").fill("http://example.test/logo.png");
+  await page.getByLabel("变更原因").fill("验证 HTTPS 校验");
+  await page.getByRole("button", { name: "保存并审计" }).click();
+  await expect(page.getByLabel("Logo HTTPS 地址")).toHaveJSProperty(
+    "validationMessage",
+    "Logo 地址必须以 https:// 开头，或保持为空。",
+  );
+  expect(patchRequests).toBe(0);
+
+  await page.getByLabel("Logo HTTPS 地址").fill("https://example.test/logo.png");
+  await page.route("**/api/v1/org/admin/profile", async (route) => {
+    if (route.request().method() !== "PATCH") return route.fallback();
+    await route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "organization_version_conflict",
+          message: "organization_version_conflict",
+          action_hint: "刷新页面后重试。",
+        },
+        request_id: "m06-01-conflict",
+        trace_id: "m06-01-conflict",
+      },
+    });
+  });
+  await page.getByRole("button", { name: "保存并审计" }).click();
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+  await expect(page.getByRole("button", { name: "保存并审计" })).toBeVisible();
+  await expect(page.getByRole("alert")).toContainText("数据已被其他操作更新");
+  await expect(page.getByRole("alert")).toContainText("m06-01-conflict");
+});
+
+test("organization overview shows an explicit blocked state and recovers with real facts", async ({
+  page,
+}) => {
+  await setup(page);
+  const blockedHandler = async (route: Route) => {
+    await route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "organization_service_unavailable",
+          message: "组织数据暂时不可读取。",
+          action_hint: "检查服务状态后重试。",
+        },
+        request_id: "m06-01-blocked",
+        trace_id: "m06-01-blocked",
+      },
+    });
+  };
+  await page.route("**/api/v1/org/admin/**", blockedHandler);
+  await page.goto("/org-admin");
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "blocked");
+  await expect(page.getByRole("heading", { name: "组织数据暂不可用" })).toBeVisible();
+  await expect(page.locator(".org-admin-metrics article")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "保存并审计" })).toHaveCount(0);
+  await expect(page.getByText("m06-01-blocked")).toBeVisible();
+
+  await page.unroute("**/api/v1/org/admin/**", blockedHandler);
+  await page.getByRole("button", { name: "重新加载" }).click();
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+  await expect(page.locator(".org-admin-metrics article")).toHaveCount(6);
 });
 
 test("M06-01.A07/A08/A15 mobile member and invitation state", async ({ page }) => {

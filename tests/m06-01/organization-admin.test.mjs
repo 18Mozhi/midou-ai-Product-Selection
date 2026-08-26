@@ -59,6 +59,12 @@ test("M06-01.A01/A02/A04/A12 validates scoped admin contracts", async () => {
     () => s.createToken({ value: { name: "write", scopes: ["organization:manage"], reason: "x" } }),
     (e) => e.code === "token_scope_invalid",
   );
+  const validationError = new OrganizationAdminError(
+    "retention_invalid",
+    400,
+    "数据保留天数必须为 30–3650。",
+  );
+  assert.equal(validationError.message, "数据保留天数必须为 30–3650。");
 });
 test("M06-01.A06/A09/A13 token is random, hashed and read-only scoped", async () => {
   const f = fake(),
@@ -89,6 +95,11 @@ test("M06-01.A03/A05/A11/A16 migration is MySQL57, auditable and reversible", as
   assert.match(repo, /INSERT INTO audit_logs/);
   assert.match(repo, /INSERT INTO outbox_events/);
   assert.match(repo, /delete stored\.secret/);
+  assert.match(
+    repo,
+    /SELECT version FROM organizations WHERE id=\? FOR UPDATE[\s\S]*this\.operation\(i, c, true\)/,
+  );
+  assert.match(repo, /currentRead \? " FOR UPDATE" : ""/);
 });
 test("M06-01 organization pages use novice labels and keep UUIDs in technical details", async () => {
   const web = (
@@ -156,6 +167,25 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
   ])
     assert.match(web, new RegExp(copy));
   assert.match(map, /"\/org-admin\/teams"/);
+});
+test("M06-01 organization overview preserves facts and form context across refresh and write feedback", async () => {
+  const [center, styles] = await Promise.all([
+    readFile("apps/web/src/components/OrganizationAdminCenter.vue", "utf8"),
+    readFile("apps/web/src/organization-admin.css", "utf8"),
+  ]);
+  assert.match(center, /let loadSequence = 0/);
+  assert.match(center, /sequence !== loadSequence/);
+  assert.match(center, /load\(\{ background: true, preserveNotice: true \}\)/);
+  assert.match(center, /noticeKind\.value = "success"/);
+  assert.match(center, /if \(busy\.value\) return/);
+  assert.match(center, /pattern="https:\/\/\.\*"/);
+  assert.match(center, /Logo 地址必须以 https:\/\/ 开头/);
+  assert.match(center, /数据已被其他操作更新/);
+  assert.match(center, /'error', 'blocked', 'expired'/);
+  assert.match(center, /组织数据暂不可用/);
+  assert.match(center, /:aria-busy="state === 'loading' \|\| refreshing"/);
+  assert.match(styles, /org-admin-notice\[data-kind="success"\]/);
+  assert.match(styles, /org-admin-notice\[data-kind="error"\]/);
 });
 test("M06-01 compares the current approval template with its immediate previous version", async () => {
   const templateId = "00000000-0000-4000-8000-000000000618",
