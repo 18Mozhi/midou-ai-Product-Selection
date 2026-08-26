@@ -150,6 +150,50 @@ async function setup(page: Page) {
       ]),
     }),
   );
+  await page.route("**/api/v1/report-exports/00000000-0000-4000-8000-000000000563", (r) =>
+    r.fulfill({
+      json: envelope({
+        id: "00000000-0000-4000-8000-000000000563",
+        report_type: "opportunity",
+        format: "csv",
+        status: "succeeded",
+        attempt_count: 1,
+        filename: "scoutops-opportunity.csv",
+        row_count: 28,
+        byte_size: 4096,
+        expires_at: "2026-09-09T12:00:00.000Z",
+        last_error_code: null,
+        queue_position: null,
+        estimated_completion_at: null,
+        estimate_sample_size: 0,
+        version: 3,
+        created_at: "2026-08-08T12:00:00.000Z",
+        updated_at: "2026-08-08T12:01:00.000Z",
+      }),
+    }),
+  );
+  await page.route("**/api/v1/report-exports/00000000-0000-4000-8000-000000000566", (r) =>
+    r.fulfill({
+      json: envelope({
+        id: "00000000-0000-4000-8000-000000000566",
+        report_type: "team",
+        format: "csv",
+        status: "queued",
+        attempt_count: 0,
+        filename: "scoutops-team-regenerated.csv",
+        row_count: null,
+        byte_size: null,
+        expires_at: "2026-09-19T12:00:00.000Z",
+        last_error_code: null,
+        queue_position: 3,
+        estimated_completion_at: "2026-08-08T12:08:00.000Z",
+        estimate_sample_size: 10,
+        version: 1,
+        created_at: "2026-08-08T12:04:00.000Z",
+        updated_at: "2026-08-08T12:04:00.000Z",
+      }),
+    }),
+  );
   await page.route(
     "**/api/v1/report-exports/00000000-0000-4000-8000-000000000565/regenerate",
     (r) => {
@@ -187,16 +231,41 @@ test("M05-06.A07/A08/A15 desktop factual report and export lifecycle", async ({ 
   await expect(page.getByText("当前工作区全部已落库记录")).toBeVisible();
   await expect(page.getByText("共 28 个机会，已采纳 8 个，证据完整 17 个。")).toBeVisible();
   await expect(page.getByText("报表怎么用")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "刷新状态" })).toBeVisible();
+
+  await page.getByRole("button", { name: "查看详情" }).first().click();
+  await expect(page).toHaveURL(/export=00000000-0000-4000-8000-000000000563/);
+  await expect(page.getByRole("dialog", { name: "机会分析导出详情" })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("dialog", { name: "机会分析导出详情" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog", { name: "机会分析导出详情" })).toHaveCount(0);
+  await expect(page).not.toHaveURL(/export=/);
+  await page.goBack();
+  await expect(page.getByRole("dialog", { name: "机会分析导出详情" })).toBeVisible();
+  await page.keyboard.press("Escape");
 
   await page.getByRole("button", { name: "趋势分析" }).click();
   await expect(page).toHaveURL(/report=trend/);
   await expect(page.getByText("128", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "重新生成" }).first().click();
   await expect(page.getByText("新的团队绩效导出已进入队列。")).toBeVisible();
+  await page.getByRole("button", { name: "关闭导出详情" }).click();
   await page.getByRole("link", { name: "在任务中心查看" }).click();
   await expect(page).toHaveURL(/\/tasks\?view=exports/);
   await expect(page.getByRole("heading", { name: "导出任务" })).toBeVisible();
   await expect(page.getByText("前往报表页下载文件")).toBeVisible();
+});
+test("M05-06 report failure state identifies an unavailable service instead of an export conflict", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/reports");
+  await page.route("**/api/v1/reports/trend", (route) => route.abort("internetdisconnected"));
+  await page.getByRole("button", { name: "趋势分析" }).click();
+  await expect(page.getByRole("heading", { name: "报表服务暂不可用" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "重新加载" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "导出尚未就绪" })).toHaveCount(0);
 });
 test("M05-06.A07/A08/A15 mobile team report layout", async ({ page }) => {
   await setup(page);

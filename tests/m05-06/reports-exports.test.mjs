@@ -194,6 +194,58 @@ test("M05-06 derives global queue position and ETA only from successful export h
   assert.equal(item.median_completion_seconds, 120);
   assert.equal(item.estimated_completion_at, "2026-08-19T10:03:30.000Z");
 });
+test("M05-06 concurrent idempotency-key collision replays the committed export", async () => {
+  const expected = {
+      id: "00000000-0000-4000-8000-000000000572",
+      report_type: "trend",
+      format: "csv",
+      status: "queued",
+    },
+    input = {
+      id: "00000000-0000-4000-8000-000000000573",
+      organizationId: "org",
+      workspaceId: "workspace",
+      actorId: "actor",
+      requestId: "request",
+      traceId: "trace",
+      route: "POST:/api/v1/report-exports",
+      idempotencyKey: "same-concurrent-key",
+      value: {
+        report_type: "trend",
+        format: "csv",
+        filename: "trend.csv",
+        expires_at: new Date("2026-08-20T10:00:00.000Z"),
+      },
+    };
+  let operationReads = 0,
+    rolledBack = false;
+  const connection = {
+      beginTransaction: async () => undefined,
+      commit: async () => undefined,
+      rollback: async () => {
+        rolledBack = true;
+      },
+      release: () => undefined,
+      query: async (sql) => {
+        if (sql.startsWith("INSERT INTO report_export_operations"))
+          throw Object.assign(new Error("duplicate operation"), { code: "ER_DUP_ENTRY" });
+        return [[]];
+      },
+    },
+    pool = {
+      getConnection: async () => connection,
+      query: async (sql) => {
+        if (!sql.startsWith("SELECT result_json FROM report_export_operations"))
+          throw new Error(`unexpected query: ${sql}`);
+        operationReads += 1;
+        return operationReads === 1 ? [[]] : [[{ result_json: JSON.stringify(expected) }]];
+      },
+    },
+    repository = new MySqlReportRepository(pool);
+  assert.deepEqual(await repository.createExport(input), expected);
+  assert.equal(rolledBack, true);
+  assert.equal(operationReads, 2);
+});
 test("M05-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   const files = [
       "database/migrations/0018f_reports_m05_06.up.sql",

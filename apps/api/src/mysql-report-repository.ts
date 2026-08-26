@@ -188,6 +188,10 @@ export class MySqlReportRepository implements ReportRepository {
       return result;
     } catch (e) {
       await c.rollback();
+      if ((e as { code?: string }).code === "ER_DUP_ENTRY") {
+        const replay = await this.operation(i);
+        if (replay) return replay;
+      }
       throw e;
     } finally {
       c.release();

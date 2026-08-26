@@ -7,6 +7,7 @@ import {
   createApiResponseClient,
   rethrowUnexpectedError,
 } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import "../report-center.css";
 type ReportType = "opportunity" | "trend" | "team";
 const props = defineProps<{ apiBaseUrl: string }>(),
@@ -26,8 +27,15 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   notice = ref(""),
   requestId = ref(""),
   busy = ref(false),
-  regeneratingId = ref("");
+  refreshing = ref(false),
+  regeneratingId = ref(""),
+  downloadingId = ref("");
 let timer: number | undefined;
+let loadSequence = 0;
+const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
+  () => Boolean(selectedExport.value),
+  closeDetail,
+);
 async function api<T>(
   path: string,
   options: { method?: string; body?: unknown } = {},
@@ -46,18 +54,25 @@ async function api<T>(
     throw error;
   }
 }
-async function load() {
-  state.value = "loading";
+async function load(background = false) {
+  const sequence = ++loadSequence,
+    selectedType = type.value;
+  if (!background) state.value = "loading";
   try {
-    const selectedId = selectedExport.value?.id;
-    [report.value, exports.value] = await Promise.all([
-      api<any>(`/reports/${type.value}`),
-      api<any[]>("/report-exports"),
+    const [nextReport, nextExports] = await Promise.all([
+      api<any>(`/reports/${selectedType}`, {}, false),
+      api<any[]>("/report-exports", {}, false),
     ]);
-    if (selectedId)
-      selectedExport.value = exports.value.find((item) => item.id === selectedId) ?? null;
+    if (sequence !== loadSequence || selectedType !== type.value) return;
+    report.value = nextReport;
+    exports.value = nextExports;
+    await syncDetailFromRoute();
     state.value = report.value.summary.total || report.value.summary.members ? "ready" : "empty";
   } catch (error) {
+    if (sequence !== loadSequence) return;
+    const failure = error instanceof ApiClientError ? error : null;
+    if (!background)
+      state.value = failure?.kind === "conflict" ? "blocked" : (failure?.kind ?? "error");
     rethrowUnexpectedError(error);
   }
 }
@@ -84,6 +99,14 @@ async function createExport() {
     busy.value = false;
   }
 }
+async function refresh() {
+  refreshing.value = true;
+  try {
+    await load(true);
+  } finally {
+    refreshing.value = false;
+  }
+}
 async function regenerate(item: any) {
   regeneratingId.value = item.id;
   try {
@@ -93,10 +116,8 @@ async function regenerate(item: any) {
       false,
     );
     notice.value = `新的${labels[item.report_type as ReportType]}导出已进入队列。`;
-    selectedExport.value = null;
     await load();
-    const created = exports.value.find((entry) => entry.id === replacement.id);
-    if (created) selectedExport.value = created;
+    await setDetailQuery(replacement.id, true);
   } catch (error) {
     rethrowUnexpectedError(error);
   } finally {
@@ -104,6 +125,8 @@ async function regenerate(item: any) {
   }
 }
 async function download(item: any) {
+  if (downloadingId.value) return;
+  downloadingId.value = item.id;
   try {
     const correlationId = crypto.randomUUID();
     requestId.value = correlationId;
@@ -122,6 +145,40 @@ async function download(item: any) {
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? requestId.value;
     notice.value = failure?.actionHint ?? "下载连接失败，请稍后重试。";
+  } finally {
+    downloadingId.value = "";
+  }
+}
+async function openDetail(item: any) {
+  await setDetailQuery(item.id);
+}
+function closeDetail() {
+  selectedExport.value = null;
+  if (route.query.export) void setDetailQuery();
+}
+async function setDetailQuery(exportId?: string, replace = false) {
+  const query = { ...route.query };
+  if (exportId) query.export = exportId;
+  else delete query.export;
+  await (replace ? router.replace({ query }) : router.push({ query }));
+}
+async function syncDetailFromRoute() {
+  const exportId = typeof route.query.export === "string" ? route.query.export : "";
+  if (!exportId) {
+    selectedExport.value = null;
+    return;
+  }
+  try {
+    selectedExport.value = await api<any>(`/report-exports/${exportId}`, {}, false);
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      notice.value =
+        error.status === 404 ? "链接中的导出记录不存在或不在当前工作区。" : error.actionHint;
+      selectedExport.value = null;
+      await setDetailQuery(undefined, true);
+      return;
+    }
+    throw error;
   }
 }
 const labels: Record<ReportType, string> = {
@@ -208,19 +265,22 @@ onMounted(() => {
   void load();
   timer = window.setInterval(() => {
     if (exports.value.some((x) => ["queued", "leased", "retry_scheduled"].includes(x.status)))
-      void load();
+      void load(true);
   }, 5000);
 });
 onUnmounted(() => clearInterval(timer));
 watch(
-  () => route.query.report,
-  (value) => {
+  () => [route.query.report, route.query.export],
+  ([value, exportId], [previousValue, previousExportId]) => {
     const next = ["opportunity", "trend", "team"].includes(String(value))
       ? (value as ReportType)
       : "opportunity";
-    if (next === type.value) return;
-    type.value = next;
-    void load();
+    if (next !== type.value) {
+      type.value = next;
+      void load();
+      return;
+    }
+    if (exportId !== previousExportId) void syncDetailFromRoute();
   },
 );
 </script>
@@ -265,12 +325,12 @@ watch(
               : state === "rate_limited"
                 ? "请求过于频繁"
                 : state === "blocked"
-                  ? "导出尚未就绪"
+                  ? "报表服务暂不可用"
                   : "报表服务暂不可用"
         }}
       </h3>
       <p>{{ notice }}</p>
-      <button @click="load">重新加载</button>
+      <button @click="load()">重新加载</button>
     </section>
     <template v-else
       ><section class="report-conclusion" aria-live="polite">
@@ -339,6 +399,9 @@ watch(
         </div>
         <div class="report-export-links">
           <small>文件到期后由 Worker 清理</small>
+          <button class="secondary" :disabled="refreshing" @click="refresh">
+            {{ refreshing ? "正在刷新…" : "刷新状态" }}
+          </button>
           <RouterLink to="/tasks?view=exports">在任务中心查看</RouterLink>
         </div>
       </header>
@@ -359,8 +422,12 @@ watch(
               }}</small
             >
           </div>
-          <button v-if="item.status === 'succeeded' && !isExpired(item)" @click="download(item)">
-            下载</button
+          <button
+            v-if="item.status === 'succeeded' && !isExpired(item)"
+            :disabled="downloadingId === item.id"
+            @click="download(item)"
+          >
+            {{ downloadingId === item.id ? "正在下载…" : "下载" }}</button
           ><button
             v-else-if="canRegenerate(item)"
             :disabled="regeneratingId === item.id"
@@ -369,13 +436,19 @@ watch(
             {{ regeneratingId === item.id ? "正在提交…" : "重新生成" }}
           </button>
           <span v-else>{{ statusLabel(item.status) }}</span
-          ><button class="secondary" @click="selectedExport = item">查看详情</button>
+          ><button class="secondary" @click="openDetail(item)">查看详情</button>
         </article>
       </div>
       <div v-else class="report-empty">尚无导出任务。</div>
     </section>
-    <aside v-if="selectedExport" class="report-detail">
-      <button aria-label="关闭导出详情" @click="selectedExport = null">×</button>
+    <dialog
+      v-if="selectedExport"
+      ref="detailDialogElement"
+      class="report-detail"
+      :aria-label="`${labels[selectedExport.report_type as ReportType]}导出详情`"
+      @cancel="handleDetailCancel"
+    >
+      <button aria-label="关闭导出详情" @click="closeDetail">×</button>
       <p>导出详情</p>
       <h3>{{ labels[selectedExport.report_type as ReportType] }}</h3>
       <dl>
@@ -443,6 +516,6 @@ watch(
         <summary>技术详情</summary>
         <code>{{ selectedExport.last_error_code }}</code>
       </details>
-    </aside>
+    </dialog>
   </section>
 </template>
