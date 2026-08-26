@@ -687,7 +687,7 @@
         "view": "OrganizationAdminCenter",
         "domain": "organization-roles",
         "status": "verified",
-        "statusDetail": "M06-01_module_verified"
+        "statusDetail": "M06-01_role_governance_live_verified"
       },
       "navigation": {
         "label": "角色与权限",
@@ -712,7 +712,7 @@
         "view": "OrganizationAdminCenter",
         "domain": "organization-workspaces",
         "status": "verified",
-        "statusDetail": "M06-01_module_verified"
+        "statusDetail": "M06-01_workspace_governance_live_verified"
       },
       "navigation": {
         "label": "工作区管理",

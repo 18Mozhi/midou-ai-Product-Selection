@@ -445,6 +445,125 @@ test("organization overview shows an explicit blocked state and recovers with re
   await expect(page.locator(".org-admin-metrics article")).toHaveCount(6);
 });
 
+test("organization workspaces expose truthful governance controls and audited writes", async ({
+  page,
+}) => {
+  const workspaceRows = Array.from({ length: 10 }, (_, index) => ({
+      id: index === 0 ? ws : `00000000-0000-4000-8000-${String(index + 800).padStart(12, "0")}`,
+      name: index === 0 ? "新品决策工作区" : `区域工作区 ${index}`,
+      slug: index === 0 ? "new-products" : `region-${index}`,
+      status: index === 9 ? "archived" : "active",
+      member_count: 10 - index,
+      version: 1,
+      created_at: "2026-08-01T00:00:00.000Z",
+      updated_at: `2026-08-${String(index + 1).padStart(2, "0")}T00:00:00.000Z`,
+    })),
+    writes: Array<{ path: string; body: Record<string, unknown> }> = [];
+  await setup(page);
+  await page.unroute("**/api/v1/org/admin/workspaces");
+  await page.route("**/api/v1/org/admin/workspaces**", async (route) => {
+    const request = route.request(),
+      path = new URL(request.url()).pathname;
+    if (request.method() === "GET") return route.fulfill({ json: env(workspaceRows) });
+    const body = request.postDataJSON();
+    writes.push({ path, body });
+    if (path.endsWith("/actions")) {
+      const target = workspaceRows.find((item) => path.includes(item.id));
+      if (target) {
+        target.status = body.action === "archive" ? "archived" : "active";
+        target.version += 1;
+      }
+      return route.fulfill({ json: env(target) });
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    workspaceRows.push({
+      id: "00000000-0000-4000-8000-000000000899",
+      name: body.name,
+      slug: body.slug,
+      status: "active",
+      member_count: 0,
+      version: 1,
+      created_at: "2026-08-27T00:00:00.000Z",
+      updated_at: "2026-08-27T00:00:00.000Z",
+    });
+    return route.fulfill({ status: 201, json: env(workspaceRows.at(-1)) });
+  });
+
+  await page.goto("/org-admin/workspaces");
+  const workspaceItems = page.locator('.org-workspace-list > [role="listitem"]');
+  await expect(page.getByRole("region", { name: "工作区治理台" })).toBeVisible();
+  await expect(page.getByLabel("工作区统计")).toContainText("10");
+  await expect(workspaceItems).toHaveCount(8);
+  await expect(page.getByRole("navigation", { name: "工作区分页" })).toContainText(
+    "第 1 / 2 页 · 共 10 条",
+  );
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(workspaceItems).toHaveCount(2);
+
+  await page.getByRole("searchbox", { name: "搜索工作区" }).fill("区域工作区 9");
+  await expect(workspaceItems).toHaveCount(1);
+  await page.getByRole("button", { name: /已归档 1/ }).click();
+  await expect(workspaceItems).toHaveCount(1);
+  await page.getByRole("button", { name: "重置筛选" }).click();
+  await expect(page.getByRole("button", { name: "默认工作区不可归档" })).toBeDisabled();
+
+  await page.getByRole("listitem", { name: "选择工作区 区域工作区 1" }).click();
+  await page.getByRole("button", { name: "归档工作区" }).click();
+  const archiveDialog = page.getByRole("dialog", { name: "归档工作区原因" });
+  await archiveDialog.getByRole("textbox").fill("区域业务已经结束");
+  await archiveDialog.getByRole("button", { name: "确认提交" }).click();
+  await expect(page.getByRole("status")).toContainText("工作区已归档并写入审计");
+
+  let createRequests = 0;
+  page.on("request", (request) => {
+    if (
+      request.method() === "POST" &&
+      new URL(request.url()).pathname === "/api/v1/org/admin/workspaces"
+    )
+      createRequests += 1;
+  });
+  await page.getByRole("button", { name: "新建工作区" }).click();
+  await page.getByLabel("工作区名称").fill("亚太增长验证");
+  await page.getByLabel("英文标识").fill("Invalid Slug");
+  await page.getByLabel("创建原因").fill("建立亚太市场数据边界");
+  await page.getByRole("button", { name: "创建并写入审计" }).click();
+  expect(
+    await page
+      .getByLabel("英文标识")
+      .evaluate((element: HTMLInputElement) => element.validity.patternMismatch),
+  ).toBe(true);
+  expect(createRequests).toBe(0);
+  await page.getByLabel("英文标识").fill("apac-growth");
+  await page.getByRole("button", { name: "创建并写入审计" }).dblclick();
+  await expect(page.getByRole("status")).toContainText("工作区已创建并写入审计");
+
+  expect(writes).toHaveLength(2);
+  expect(writes[0]).toMatchObject({
+    body: { action: "archive", expected_version: 1, reason: "区域业务已经结束" },
+  });
+  expect(writes[1]).toMatchObject({
+    path: "/api/v1/org/admin/workspaces",
+    body: {
+      name: "亚太增长验证",
+      slug: "apac-growth",
+      reason: "建立亚太市场数据边界",
+    },
+  });
+});
+
+test("organization workspaces show an actionable empty state without invented rows", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.unroute("**/api/v1/org/admin/workspaces");
+  await page.route("**/api/v1/org/admin/workspaces", (route) => route.fulfill({ json: env([]) }));
+  await page.goto("/org-admin/workspaces");
+  await expect(page.getByRole("heading", { name: "当前组织还没有工作区" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "新建工作区" })).toBeVisible();
+  await expect(page.locator('.org-workspace-list > [role="listitem"]')).toHaveCount(0);
+  await expect(page.getByText("创建首个工作区后，业务数据才能获得明确边界。")).toBeVisible();
+});
+
 test("M06-01.A07/A08/A15 mobile member and invitation state", async ({ page }) => {
   await setup(page);
   await page.setViewportSize({ width: 390, height: 844 });

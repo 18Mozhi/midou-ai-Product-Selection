@@ -11,6 +11,7 @@ import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import OrganizationApprovalPanel from "./OrganizationApprovalPanel.vue";
 import OrganizationMemberPanel from "./OrganizationMemberPanel.vue";
 import OrganizationRolePanel from "./OrganizationRolePanel.vue";
+import OrganizationWorkspacePanel from "./OrganizationWorkspacePanel.vue";
 import "../organization-admin.css";
 const props = defineProps<{
     apiBaseUrl: string;
@@ -79,6 +80,11 @@ const view = computed(() =>
           audit: "组织审计",
         }) as any
       )[view.value] || "治理概览",
+  ),
+  subtitle = computed(() =>
+    view.value === "workspaces"
+      ? "创建和维护当前组织的数据边界，安全归档不再使用的工作区。"
+      : "管理当前组织的成员、权限、工作区和审计记录。",
   );
 async function api(path: string, init: ApiRequestOptions = {}) {
   if (init.signal) return request<any>(path, init);
@@ -203,6 +209,13 @@ async function readView(currentView: string) {
         grant_targets: grantTargets.data,
       },
       requestId: roles.request_id,
+    };
+  }
+  if (currentView === "workspaces") {
+    const response = await api("/org/admin/workspaces");
+    return {
+      value: { workspaces: response.data },
+      requestId: response.request_id,
     };
   }
   if (currentView === "teams") {
@@ -554,12 +567,27 @@ async function revokeResourceGrant(grant: any) {
 async function workspaceAction(item: any) {
   const action = item.status === "active" ? "archive" : "restore";
   const reason = await auditedReason(action === "archive" ? "归档工作区" : "恢复工作区");
-  if (!reason) return;
-  await submit(`/org/admin/workspaces/${item.id}/actions`, {
-    action,
-    expected_version: item.version,
-    reason,
+  if (!reason) return false;
+  const succeeded = await submit(
+    `/org/admin/workspaces/${item.id}/actions`,
+    {
+      action,
+      expected_version: item.version,
+      reason,
+    },
+    "POST",
+    { preserveForm: true },
+  );
+  if (succeeded)
+    notice.value = action === "archive" ? "工作区已归档并写入审计。" : "工作区已恢复并写入审计。";
+  return Boolean(succeeded);
+}
+async function createWorkspace(value: { name: string; slug: string; reason: string }) {
+  const succeeded = await submit("/org/admin/workspaces", value, "POST", {
+    preserveForm: true,
   });
+  if (succeeded) notice.value = "工作区已创建并写入审计。";
+  return Boolean(succeeded);
 }
 async function teamMemberAction(item: any, action: "assign" | "remove") {
   const membership_id = teamMembers.value[item.id]?.trim();
@@ -663,7 +691,7 @@ const activeMembers = computed(() =>
       : view.value === "roles"
         ? (data.value?.roles ?? [])
         : view.value === "workspaces"
-          ? (data.value ?? [])
+          ? (data.value?.workspaces ?? [])
           : view.value === "teams"
             ? (data.value?.teams ?? [])
             : view.value === "approvals"
@@ -777,7 +805,7 @@ onMounted(() => void load());
       <div>
         <p>组织后台</p>
         <h2>{{ title }}</h2>
-        <span>管理当前组织的成员、权限、工作区和审计记录。</span>
+        <span>{{ subtitle }}</span>
       </div>
       <div class="org-admin-refresh">
         <small v-if="summary?.observed_at">
@@ -1023,29 +1051,14 @@ onMounted(() => void load());
         @extend-grant="extendResourceGrant"
         @revoke-grant="revokeResourceGrant"
       />
-      <section v-else-if="view === 'workspaces'" class="org-admin-grid">
-        <form class="org-admin-card" @submit.prevent="submit('/org/admin/workspaces', form)">
-          <h3>创建工作区</h3>
-          <label>名称<input v-model="form.name" required /></label
-          ><label>英文标识<input v-model="form.slug" pattern="[a-z0-9-]+" required /></label
-          ><label>创建原因<textarea v-model="form.reason" required></textarea></label
-          ><button :disabled="busy">创建工作区</button>
-        </form>
-        <article class="org-admin-card org-admin-wide">
-          <h3>工作区</h3>
-          <div v-for="x in data?.workspaces" :key="x.id" class="org-admin-line">
-            <div>
-              <b>{{ x.name }}</b
-              ><small>{{ x.slug }} · {{ x.member_count }} 名成员 · 第 {{ x.version }} 版</small>
-            </div>
-            <div class="org-admin-actions">
-              <button type="button" :disabled="busy" @click="workspaceAction(x)">
-                {{ x.status === "active" ? "归档" : "恢复" }}</button
-              ><i>{{ statusText(x.status) }}</i>
-            </div>
-          </div>
-        </article>
-      </section>
+      <OrganizationWorkspacePanel
+        v-else-if="view === 'workspaces'"
+        :workspaces="data?.workspaces ?? []"
+        :default-workspace-id="summary?.organization?.default_workspace_id"
+        :busy="busy"
+        :create-workspace="createWorkspace"
+        :perform-workspace-action="workspaceAction"
+      />
       <section v-else-if="view === 'teams'" class="org-admin-grid">
         <form class="org-admin-card" @submit.prevent="submit('/org/admin/teams', form)">
           <h3>创建团队</h3>
