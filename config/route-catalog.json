@@ -737,7 +737,7 @@
         "view": "OrganizationAdminCenter",
         "domain": "organization-teams",
         "status": "verified",
-        "statusDetail": "M06-01_module_verified"
+        "statusDetail": "M06-01_team_governance_live_verified"
       },
       "navigation": {
         "label": "团队管理",

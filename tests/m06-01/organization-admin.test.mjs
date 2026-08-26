@@ -128,6 +128,17 @@ test("M06-01.A03/A05/A11/A16 migration is MySQL57, auditable and reversible", as
     /SELECT version FROM organizations WHERE id=\? FOR UPDATE[\s\S]*this\.operation\(i, c, true\)/,
   );
   assert.match(repo, /currentRead \? " FOR UPDATE" : ""/);
+  assert.match(
+    repo,
+    /async createTeam[\s\S]*SELECT id FROM organizations WHERE id=\? FOR UPDATE[\s\S]*this\.operation\(i, c, true\)/,
+  );
+  assert.match(
+    repo,
+    /async teamMemberAction[\s\S]*SELECT id FROM teams WHERE id=\? AND organization_id=\? FOR UPDATE[\s\S]*this\.operation\(i, c, true\)/,
+  );
+  assert.match(repo, /organization\.team\.member_assigned/);
+  assert.match(repo, /organization\.team\.member_removed/);
+  assert.doesNotMatch(repo, /member_\$\{i\.value\.action\}ed/);
 });
 test("M06-01 organization pages use novice labels and keep UUIDs in technical details", async () => {
   const web = (
@@ -136,6 +147,7 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
         "apps/web/src/components/OrganizationAdminCenter.vue",
         "apps/web/src/components/OrganizationMemberPanel.vue",
         "apps/web/src/components/OrganizationRolePanel.vue",
+        "apps/web/src/components/OrganizationTeamPanel.vue",
         "apps/web/src/components/OrganizationWorkspacePanel.vue",
         "apps/web/src/components/OrganizationApprovalPanel.vue",
       ].map((path) => readFile(path, "utf8")),
@@ -155,7 +167,7 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
     "等待接受",
     "技术详情",
     "负责人（可选）",
-    "选择团队成员",
+    "当前组织成员",
     "邮箱（每行一个）",
     "撤销邀请",
     "重置筛选",
@@ -163,6 +175,8 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
     "工作区治理台",
     "工作区范围分配数",
     "默认工作区不可归档",
+    "团队治理台",
+    "团队成员关系",
   ])
     assert.match(web, new RegExp(copy));
   assert.doesNotMatch(
@@ -176,17 +190,19 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
   );
 });
 test("M06-01 organization governance exposes filters, matrix and factual comparisons", async () => {
-  const [repo, routes, center, members, roles, workspaces, approvals, map] = await Promise.all([
-    readFile("apps/api/src/mysql-organization-admin-repository.ts", "utf8"),
-    readFile("apps/api/src/organization-admin-routes.ts", "utf8"),
-    readFile("apps/web/src/components/OrganizationAdminCenter.vue", "utf8"),
-    readFile("apps/web/src/components/OrganizationMemberPanel.vue", "utf8"),
-    readFile("apps/web/src/components/OrganizationRolePanel.vue", "utf8"),
-    readFile("apps/web/src/components/OrganizationWorkspacePanel.vue", "utf8"),
-    readFile("apps/web/src/components/OrganizationApprovalPanel.vue", "utf8"),
-    readFile("docs/feature-map.json", "utf8"),
-  ]);
-  const web = [center, members, roles, workspaces, approvals].join("\n");
+  const [repo, routes, center, members, roles, teams, workspaces, approvals, map] =
+    await Promise.all([
+      readFile("apps/api/src/mysql-organization-admin-repository.ts", "utf8"),
+      readFile("apps/api/src/organization-admin-routes.ts", "utf8"),
+      readFile("apps/web/src/components/OrganizationAdminCenter.vue", "utf8"),
+      readFile("apps/web/src/components/OrganizationMemberPanel.vue", "utf8"),
+      readFile("apps/web/src/components/OrganizationRolePanel.vue", "utf8"),
+      readFile("apps/web/src/components/OrganizationTeamPanel.vue", "utf8"),
+      readFile("apps/web/src/components/OrganizationWorkspacePanel.vue", "utf8"),
+      readFile("apps/web/src/components/OrganizationApprovalPanel.vue", "utf8"),
+      readFile("docs/feature-map.json", "utf8"),
+    ]);
+  const web = [center, members, roles, teams, workspaces, approvals].join("\n");
   assert.match(repo, /team_names/);
   assert.match(repo, /approval_templates/);
   assert.match(repo, /approval_template_versions[\s\S]*templateVersionDiff/);
@@ -229,12 +245,21 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
     "工作区分页",
     "创建并写入审计",
     "归档会发生什么",
+    "搜索团队",
+    "团队状态",
+    "团队分页",
+    "当前可治理边界",
   ])
     assert.match(web, new RegExp(copy));
   assert.match(center, /value: \{ workspaces: response\.data \}/);
   assert.match(workspaces, /pattern="\^\[a-z0-9\]/);
   assert.doesNotMatch(workspaces, /pattern="\[a-z0-9-\]\+"/);
   assert.match(workspaces, /<summary>技术详情<\/summary>/);
+  assert.match(teams, /maxlength="120"/);
+  assert.match(teams, /maxlength="80"/);
+  assert.match(teams, /pageSize = 8/);
+  assert.match(teams, /当前接口只返回团队成员数量/);
+  assert.match(center, /value: \{ teams: teams\.data, members: members\.data\.items \?\? \[\] \}/);
   assert.match(map, /"\/org-admin\/teams"/);
 });
 test("M06-01 organization overview preserves facts and form context across refresh and write feedback", async () => {

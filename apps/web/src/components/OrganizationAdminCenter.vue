@@ -11,6 +11,7 @@ import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import OrganizationApprovalPanel from "./OrganizationApprovalPanel.vue";
 import OrganizationMemberPanel from "./OrganizationMemberPanel.vue";
 import OrganizationRolePanel from "./OrganizationRolePanel.vue";
+import OrganizationTeamPanel from "./OrganizationTeamPanel.vue";
 import OrganizationWorkspacePanel from "./OrganizationWorkspacePanel.vue";
 import "../organization-admin.css";
 const props = defineProps<{
@@ -34,7 +35,6 @@ const props = defineProps<{
     [],
   ),
   memberRoles = ref<Record<string, string>>({}),
-  teamMembers = ref<Record<string, string>>({}),
   memberQuery = ref(""),
   memberStatus = ref(""),
   memberRole = ref(""),
@@ -84,7 +84,9 @@ const view = computed(() =>
   subtitle = computed(() =>
     view.value === "workspaces"
       ? "创建和维护当前组织的数据边界，安全归档不再使用的工作区。"
-      : "管理当前组织的成员、权限、工作区和审计记录。",
+      : view.value === "teams"
+        ? "维护当前组织的团队、负责人、默认流程与成员协作关系。"
+        : "管理当前组织的成员、权限、工作区和审计记录。",
   );
 async function api(path: string, init: ApiRequestOptions = {}) {
   if (init.signal) return request<any>(path, init);
@@ -589,19 +591,32 @@ async function createWorkspace(value: { name: string; slug: string; reason: stri
   if (succeeded) notice.value = "工作区已创建并写入审计。";
   return Boolean(succeeded);
 }
-async function teamMemberAction(item: any, action: "assign" | "remove") {
-  const membership_id = teamMembers.value[item.id]?.trim();
-  if (!membership_id) {
-    notice.value = "请先选择当前组织成员。";
-    return;
-  }
+async function createTeam(value: {
+  name: string;
+  lead_membership_id: string;
+  default_workflow_key: string;
+  reason: string;
+}) {
+  const succeeded = await submit("/org/admin/teams", value, "POST", { preserveForm: true });
+  if (succeeded) notice.value = "团队已创建并写入审计。";
+  return Boolean(succeeded);
+}
+async function teamMemberAction(item: any, action: "assign" | "remove", membership_id: string) {
   const reason = await auditedReason(action === "assign" ? "分配团队成员" : "移除团队成员");
-  if (!reason) return;
-  await submit(`/org/admin/teams/${item.id}/members`, {
-    action,
-    membership_id,
-    reason,
-  });
+  if (!reason) return false;
+  const succeeded = await submit(
+    `/org/admin/teams/${item.id}/members`,
+    {
+      action,
+      membership_id,
+      reason,
+    },
+    "POST",
+    { preserveForm: true },
+  );
+  if (succeeded)
+    notice.value = action === "assign" ? "成员已分配并写入审计。" : "成员已移除并写入审计。";
+  return Boolean(succeeded);
 }
 async function tokenAction(item: any, action: "rotate" | "revoke") {
   const reason = await auditedReason(action === "rotate" ? "轮换组织 Token" : "撤销组织 Token");
@@ -1059,46 +1074,14 @@ onMounted(() => void load());
         :create-workspace="createWorkspace"
         :perform-workspace-action="workspaceAction"
       />
-      <section v-else-if="view === 'teams'" class="org-admin-grid">
-        <form class="org-admin-card" @submit.prevent="submit('/org/admin/teams', form)">
-          <h3>创建团队</h3>
-          <label>名称<input v-model="form.name" required /></label
-          ><label
-            >负责人（可选）<select v-model="form.lead_membership_id">
-              <option value="">暂不设置</option>
-              <option v-for="member in activeMembers" :key="member.id" :value="member.id">
-                {{ member.email }}
-              </option>
-            </select></label
-          ><label>默认工作流程（可选）<input v-model="form.default_workflow_key" /></label
-          ><label>创建原因<textarea v-model="form.reason" required></textarea></label
-          ><button :disabled="busy">创建团队</button>
-        </form>
-        <article class="org-admin-card org-admin-wide">
-          <h3>团队</h3>
-          <div v-for="x in rows" :key="x.id" class="org-admin-line">
-            <div>
-              <b>{{ x.name }}</b
-              ><small>{{ x.member_count }} 名成员 · 负责人 {{ x.lead_email || "未设置" }}</small>
-            </div>
-            <div class="org-admin-actions">
-              <select v-model="teamMembers[x.id]" aria-label="选择团队成员">
-                <option value="">请选择成员</option>
-                <option v-for="member in activeMembers" :key="member.id" :value="member.id">
-                  {{ member.email }}
-                </option>
-              </select>
-              <button type="button" :disabled="busy" @click="teamMemberAction(x, 'assign')">
-                分配成员
-              </button>
-              <button type="button" :disabled="busy" @click="teamMemberAction(x, 'remove')">
-                移除成员
-              </button>
-              <i>{{ statusText(x.status) }}</i>
-            </div>
-          </div>
-        </article>
-      </section>
+      <OrganizationTeamPanel
+        v-else-if="view === 'teams'"
+        :teams="data?.teams ?? []"
+        :members="data?.members ?? []"
+        :busy="busy"
+        :create-team="createTeam"
+        :perform-member-action="teamMemberAction"
+      />
       <OrganizationApprovalPanel
         v-else-if="view === 'approvals'"
         :templates="data?.templates ?? []"

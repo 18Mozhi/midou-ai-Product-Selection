@@ -514,6 +514,12 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
       now = this.now();
     try {
       await c.beginTransaction();
+      await c.query("SELECT id FROM organizations WHERE id=? FOR UPDATE", [i.organizationId]);
+      const replay = await this.operation(i, c, true);
+      if (replay) {
+        await c.rollback();
+        return replay;
+      }
       if (i.value.lead_membership_id)
         await this.sameMember(c, i.organizationId, i.value.lead_membership_id);
       await c.query(
@@ -558,6 +564,11 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
         "SELECT id FROM teams WHERE id=? AND organization_id=? FOR UPDATE",
         [i.teamId, i.organizationId],
       );
+      const replay = await this.operation(i, c, true);
+      if (replay) {
+        await c.rollback();
+        return replay;
+      }
       if (!t[0]) throw new OrganizationAdminError("team_not_found", 404, "刷新团队列表。");
       await this.sameMember(c, i.organizationId, i.value.membership_id);
       if (i.value.action === "assign")
@@ -574,7 +585,9 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
       await this.finish(
         c,
         i,
-        `organization.team.member_${i.value.action}ed`,
+        i.value.action === "assign"
+          ? "organization.team.member_assigned"
+          : "organization.team.member_removed",
         "team",
         i.teamId,
         result,

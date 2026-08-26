@@ -205,7 +205,12 @@ async function setup(page: Page) {
           name: "采购协作组",
           status: "active",
           member_count: 2,
+          lead_membership_id: memberAdmin,
           lead_email: "admin@example.test",
+          default_workflow_key: "opportunity-review",
+          version: 1,
+          created_at: "2026-08-01T00:00:00.000Z",
+          updated_at: "2026-08-20T00:00:00.000Z",
         },
       ]),
     }),
@@ -564,6 +569,125 @@ test("organization workspaces show an actionable empty state without invented ro
   await expect(page.getByText("创建首个工作区后，业务数据才能获得明确边界。")).toBeVisible();
 });
 
+test("organization teams expose searchable governance, bounded creation and audited membership writes", async ({
+  page,
+}) => {
+  const teamRows = Array.from({ length: 10 }, (_, index) => ({
+      id: `00000000-0000-4000-8000-${String(index + 900).padStart(12, "0")}`,
+      name: `团队治理样本 ${String(index + 1).padStart(2, "0")}`,
+      status: index === 9 ? "archived" : "active",
+      member_count: index % 4,
+      lead_membership_id: index % 2 ? memberBuyer : null,
+      lead_email: index % 2 ? "buyer@example.test" : null,
+      default_workflow_key: index % 3 ? null : `workflow-${index + 1}`,
+      version: 1,
+      created_at: "2026-08-01T00:00:00.000Z",
+      updated_at: `2026-08-${String(index + 1).padStart(2, "0")}T00:00:00.000Z`,
+    })),
+    writes: Array<{ path: string; body: Record<string, unknown> }> = [];
+  await setup(page);
+  await page.unroute("**/api/v1/org/admin/teams");
+  await page.route("**/api/v1/org/admin/teams**", async (route) => {
+    const request = route.request(),
+      path = new URL(request.url()).pathname;
+    if (request.method() === "GET") return route.fulfill({ json: env(teamRows) });
+    const body = request.postDataJSON();
+    writes.push({ path, body });
+    if (path.endsWith("/members")) {
+      const target = teamRows.find((team) => path.includes(team.id));
+      if (target)
+        target.member_count += body.action === "assign" ? 1 : Math.max(-target.member_count, -1);
+      return route.fulfill({ json: env({ id: target?.id, ...body }) });
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    teamRows.push({
+      id: "00000000-0000-4000-8000-000000000999",
+      name: body.name,
+      status: "active",
+      member_count: body.lead_membership_id ? 1 : 0,
+      lead_membership_id: body.lead_membership_id || null,
+      lead_email: body.lead_membership_id ? "buyer@example.test" : null,
+      default_workflow_key: body.default_workflow_key || null,
+      version: 1,
+      created_at: "2026-08-27T00:00:00.000Z",
+      updated_at: "2026-08-27T00:00:00.000Z",
+    });
+    return route.fulfill({ status: 201, json: env(teamRows.at(-1)) });
+  });
+
+  await page.goto("/org-admin/teams");
+  const teamItems = page.locator('.org-team-list > [role="listitem"]');
+  await expect(page.getByRole("region", { name: "团队治理台" })).toBeVisible();
+  await expect(page.getByLabel("团队统计")).toContainText("10");
+  await expect(teamItems).toHaveCount(8);
+  await expect(page.getByRole("navigation", { name: "团队分页" })).toContainText(
+    "第 1 / 2 页 · 共 10 条",
+  );
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(teamItems).toHaveCount(2);
+  await page.getByRole("searchbox", { name: "搜索团队" }).fill("团队治理样本 10");
+  await expect(teamItems).toHaveCount(1);
+  await page.getByRole("button", { name: /已归档 1/ }).click();
+  await expect(teamItems).toHaveCount(1);
+  await page.getByRole("button", { name: "重置筛选" }).click();
+
+  await page.getByRole("listitem", { name: "选择团队 团队治理样本 02" }).click();
+  await expect(page.getByRole("heading", { name: "团队治理样本 02" })).toBeVisible();
+  await page.getByLabel("当前组织成员").selectOption(memberBuyer);
+  await page.getByRole("button", { name: "分配成员" }).click();
+  const assignDialog = page.getByRole("dialog", { name: "分配团队成员原因" });
+  await assignDialog.getByRole("textbox").fill("加入采购协作范围");
+  await assignDialog.getByRole("button", { name: "确认提交" }).click();
+  await expect(page.locator(".org-admin-notice")).toContainText("成员已分配并写入审计");
+
+  let createRequests = 0;
+  page.on("request", (request) => {
+    if (
+      request.method() === "POST" &&
+      new URL(request.url()).pathname === "/api/v1/org/admin/teams"
+    )
+      createRequests += 1;
+  });
+  await page.getByRole("button", { name: "新建团队" }).click();
+  await page.getByLabel("团队名称").fill("A".repeat(121));
+  await expect(page.getByLabel("团队名称")).toHaveValue("A".repeat(120));
+  await page.getByLabel("团队名称").fill("亚太新品采购组");
+  await page.getByLabel("负责人（可选）").selectOption(memberBuyer);
+  await page.getByLabel("默认工作流程（可选）").fill("opportunity-review");
+  await page.getByLabel("创建原因").fill("建立亚太新品采购协作边界");
+  await page.getByRole("button", { name: "创建并写入审计" }).dblclick();
+  await expect(page.locator(".org-admin-notice")).toContainText("团队已创建并写入审计");
+
+  expect(createRequests).toBe(1);
+  expect(writes).toHaveLength(2);
+  expect(writes[0]).toMatchObject({
+    path: "/api/v1/org/admin/teams/00000000-0000-4000-8000-000000000901/members",
+    body: { action: "assign", membership_id: memberBuyer, reason: "加入采购协作范围" },
+  });
+  expect(writes[1]).toMatchObject({
+    path: "/api/v1/org/admin/teams",
+    body: {
+      name: "亚太新品采购组",
+      lead_membership_id: memberBuyer,
+      default_workflow_key: "opportunity-review",
+      reason: "建立亚太新品采购协作边界",
+    },
+  });
+});
+
+test("organization teams show an actionable empty state without invented rows", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.unroute("**/api/v1/org/admin/teams");
+  await page.route("**/api/v1/org/admin/teams", (route) => route.fulfill({ json: env([]) }));
+  await page.goto("/org-admin/teams");
+  await expect(page.getByRole("heading", { name: "当前组织还没有团队" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "新建团队" })).toBeVisible();
+  await expect(page.locator('.org-team-list > [role="listitem"]')).toHaveCount(0);
+  await expect(page.getByText("创建首个团队后即可设置负责人并分配活动成员。")).toBeVisible();
+});
+
 test("M06-01.A07/A08/A15 mobile member and invitation state", async ({ page }) => {
   await setup(page);
   await page.setViewportSize({ width: 390, height: 844 });
@@ -667,8 +791,9 @@ test("organization member choices replace raw ids and approval ids stay technica
 }) => {
   await setup(page);
   await page.goto("/org-admin/teams");
+  await page.getByRole("button", { name: "新建团队" }).click();
   await expect(page.getByLabel("负责人（可选）")).toContainText("admin@example.test");
-  await expect(page.getByLabel("选择团队成员")).toContainText("buyer@example.test");
+  await expect(page.getByLabel("当前组织成员")).toContainText("buyer@example.test");
   await expect(page.getByText(memberBuyer, { exact: true })).toHaveCount(0);
 
   await page.goto("/org-admin/approvals");
