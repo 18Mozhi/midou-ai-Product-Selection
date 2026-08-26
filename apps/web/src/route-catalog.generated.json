@@ -716,7 +716,7 @@
         "view": "OrganizationAdminCenter",
         "domain": "organization-data",
         "status": "verified",
-        "statusDetail": "M06-01_module_verified"
+        "statusDetail": "M06-01_organization_data_live_verified"
       },
       "navigation": { "label": "组织数据", "icon": "chart", "group": "组织治理" }
     },

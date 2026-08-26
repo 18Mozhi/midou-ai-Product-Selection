@@ -317,27 +317,34 @@ async function setup(page: Page) {
   await page.route("**/api/v1/org/admin/data", (r) =>
     r.fulfill({
       json: env({
-        comparisons: [
-          {
-            id: ws,
-            name: "新品决策工作区",
-            status: "active",
-            trends: 38,
-            opportunities: 12,
-            tasks: 7,
-            exports: 3,
-          },
-        ],
-        exports: [
-          {
-            id: "00000000-0000-4000-8000-000000000619",
-            workspace_name: "新品决策工作区",
-            report_type: "opportunity",
-            status: "succeeded",
-            row_count: 12,
-            created_at: "2026-08-08T10:00:00.000Z",
-          },
-        ],
+        comparisons: Array.from({ length: 12 }, (_, index) => ({
+          id: index === 0 ? ws : `00000000-0000-4000-8000-${String(630 + index).padStart(12, "0")}`,
+          name:
+            index === 0
+              ? "新品决策工作区"
+              : index === 11
+                ? "历史归档工作区"
+                : `业务工作区 ${String(index + 1).padStart(2, "0")}`,
+          status: index === 11 ? "archived" : "active",
+          trends: 38 - index,
+          opportunities: 12 + index,
+          tasks: 7 + index,
+          exports: 3 + (index % 4),
+        })),
+        exports: Array.from({ length: 23 }, (_, index) => ({
+          id:
+            index === 0
+              ? "00000000-0000-4000-8000-000000000619"
+              : `00000000-0000-4000-8000-${String(700 + index).padStart(12, "0")}`,
+          workspace_name: index % 2 ? "业务工作区 02" : "新品决策工作区",
+          report_type: ["opportunity", "trend", "team"][index % 3],
+          status: ["succeeded", "queued", "leased", "retry_scheduled", "dead_letter", "expired"][
+            index % 6
+          ],
+          row_count: index % 6 === 0 ? 12 + index : null,
+          created_at: `2026-08-${String(23 - index).padStart(2, "0")}T10:00:00.000Z`,
+          updated_at: `2026-08-${String(23 - index).padStart(2, "0")}T11:00:00.000Z`,
+        })),
         observed_at: "2026-08-08T12:00:00.000Z",
       }),
     }),
@@ -1009,12 +1016,59 @@ test("organization resource grants validate and send audited create, extend and 
   });
 });
 
-test("organization data comparison and audit filters", async ({ page }) => {
+test("organization data filters, sorts, paginates and preserves URL state", async ({ page }) => {
   await setup(page);
 
   await page.goto("/org-admin/data");
   await expect(page.getByRole("table", { name: "跨工作区数据比较" })).toBeVisible();
+  await expect(page.getByLabel("工作区分页")).toContainText("第 1 / 2 页 · 共 12 个工作区");
+  await expect(page.locator(".org-data-table [role='row']")).toHaveCount(9);
+  await page.getByLabel("搜索工作区").fill("新品决策");
   await expect(page.getByText("新品决策工作区").first()).toBeVisible();
+  await page.getByRole("button", { name: "重置筛选" }).click();
+
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page.getByLabel("工作区分页")).toContainText("第 2 / 2 页");
+  await page.getByLabel("搜索工作区").fill("历史归档");
+  await expect(page).toHaveURL(/org_data_workspace_query=/);
+  await expect(page.getByText("历史归档工作区")).toBeVisible();
+  await expect(
+    page.getByRole("table", { name: "跨工作区数据比较" }).getByText("已归档"),
+  ).toBeVisible();
+  await page.reload();
+  await expect(page.getByLabel("搜索工作区")).toHaveValue("历史归档");
+  await page.getByRole("button", { name: "重置筛选" }).click();
+
+  await page.getByRole("button", { name: /导出履历 23/ }).click();
+  const exportList = page.getByLabel("最近导出记录");
+  await expect(exportList.locator("article")).toHaveCount(10);
+  await expect(exportList.getByText("等待重试").first()).toBeVisible();
+  await expect(exportList.getByText("多次失败").first()).toBeVisible();
+  await page.getByLabel("生成状态").selectOption("retry_scheduled");
+  await expect(page).toHaveURL(/org_data_export_status=retry_scheduled/);
+  await expect(exportList.locator("article")).toHaveCount(4);
+  await expect(exportList.getByText("等待重试")).toHaveCount(4);
+});
+
+test("organization data has a responsive factual card layout", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await setup(page);
+  await page.goto("/org-admin/data");
+  await expect(page.getByRole("heading", { name: "跨工作区数据账本" })).toBeVisible();
+  await expect(page.getByText("数量不等于数据质量")).toBeVisible();
+  const widths = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    content: document.documentElement.scrollWidth,
+  }));
+  expect(widths.content).toBeLessThanOrEqual(widths.viewport);
+  await expect(page.locator(".org-data-table [role='row']").nth(1)).toHaveCSS(
+    "grid-template-columns",
+    /.+ .+/,
+  );
+});
+
+test("organization audit filters", async ({ page }) => {
+  await setup(page);
 
   await page.goto("/org-admin/audit");
   await page.getByLabel("操作").fill("organization.member");

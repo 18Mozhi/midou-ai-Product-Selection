@@ -9,6 +9,7 @@ import {
 import { useAuditedReason } from "../use-audited-reason";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import OrganizationApprovalPanel from "./OrganizationApprovalPanel.vue";
+import OrganizationDataPanel from "./OrganizationDataPanel.vue";
 import OrganizationMemberPanel from "./OrganizationMemberPanel.vue";
 import OrganizationRolePanel from "./OrganizationRolePanel.vue";
 import OrganizationTeamPanel from "./OrganizationTeamPanel.vue";
@@ -88,7 +89,9 @@ const view = computed(() =>
         ? "维护当前组织的团队、负责人、默认流程与成员协作关系。"
         : view.value === "approvals"
           ? "跨工作区核对审批进度和模板版本，不绕过原业务审批合同。"
-          : "管理当前组织的成员、权限、工作区和审计记录。",
+          : view.value === "data"
+            ? "跨工作区核对数据规模与导出历史，不以数量冒充数据质量。"
+            : "管理当前组织的成员、权限、工作区和审计记录。",
   );
 async function api(path: string, init: ApiRequestOptions = {}) {
   if (init.signal) return request<any>(path, init);
@@ -717,9 +720,7 @@ const activeMembers = computed(() =>
                 ? (data.value ?? [])
                 : view.value === "audit"
                   ? (data.value?.items ?? [])
-                  : view.value === "data"
-                    ? (data.value?.exports ?? [])
-                    : [],
+                  : [],
   ),
   fmt = (v: any) =>
     v == null
@@ -1163,40 +1164,7 @@ onMounted(() => void load());
           <p v-if="!rows.length">尚无组织访问令牌。</p>
         </article>
       </section>
-      <section v-else-if="view === 'data'" class="org-admin-card">
-        <header class="org-admin-section-header">
-          <div>
-            <p>跨工作区比较</p>
-            <h3>组织数据概览</h3>
-          </div>
-          <small>截至 {{ fmt(data?.observed_at) }}</small>
-        </header>
-        <div class="org-admin-comparison" role="table" aria-label="跨工作区数据比较">
-          <div role="row" class="org-admin-matrix-head">
-            <b role="columnheader">工作区</b><b role="columnheader">热点</b
-            ><b role="columnheader">机会</b><b role="columnheader">任务</b
-            ><b role="columnheader">导出</b>
-          </div>
-          <div v-for="item in data?.comparisons" :key="item.id" role="row">
-            <span role="cell"
-              ><b>{{ item.name }}</b
-              ><small>{{ statusText(item.status) }}</small></span
-            ><span role="cell">{{ item.trends }}</span
-            ><span role="cell">{{ item.opportunities }}</span
-            ><span role="cell">{{ item.tasks }}</span
-            ><span role="cell">{{ item.exports }}</span>
-          </div>
-        </div>
-        <h3 class="org-admin-subheading">最近导出</h3>
-        <div v-for="x in rows" :key="x.id" class="org-admin-line">
-          <div>
-            <b>{{ x.workspace_name }} · {{ x.report_type }}</b
-            ><small>{{ x.row_count ?? "等待生成" }} 行 · {{ fmt(x.created_at) }}</small>
-          </div>
-          <i>{{ statusText(x.status) }}</i>
-        </div>
-        <p v-if="!rows.length">暂无组织导出记录。</p>
-      </section>
+      <OrganizationDataPanel v-else-if="view === 'data'" :data="data" :format-time="fmt" />
       <section v-else class="org-admin-card">
         <form class="org-admin-filters org-admin-audit-filters" @submit.prevent="load()">
           <label

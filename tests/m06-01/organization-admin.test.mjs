@@ -150,6 +150,7 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
         "apps/web/src/components/OrganizationTeamPanel.vue",
         "apps/web/src/components/OrganizationWorkspacePanel.vue",
         "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "apps/web/src/components/OrganizationDataPanel.vue",
       ].map((path) => readFile(path, "utf8")),
     )
   ).join("\n");
@@ -190,19 +191,30 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
   );
 });
 test("M06-01 organization governance exposes filters, matrix and factual comparisons", async () => {
-  const [repo, routes, center, members, roles, teams, workspaces, approvals, map] =
-    await Promise.all([
-      readFile("apps/api/src/mysql-organization-admin-repository.ts", "utf8"),
-      readFile("apps/api/src/organization-admin-routes.ts", "utf8"),
-      readFile("apps/web/src/components/OrganizationAdminCenter.vue", "utf8"),
-      readFile("apps/web/src/components/OrganizationMemberPanel.vue", "utf8"),
-      readFile("apps/web/src/components/OrganizationRolePanel.vue", "utf8"),
-      readFile("apps/web/src/components/OrganizationTeamPanel.vue", "utf8"),
-      readFile("apps/web/src/components/OrganizationWorkspacePanel.vue", "utf8"),
-      readFile("apps/web/src/components/OrganizationApprovalPanel.vue", "utf8"),
-      readFile("docs/feature-map.json", "utf8"),
-    ]);
-  const web = [center, members, roles, teams, workspaces, approvals].join("\n");
+  const [
+    repo,
+    routes,
+    center,
+    members,
+    roles,
+    teams,
+    workspaces,
+    approvals,
+    organizationData,
+    map,
+  ] = await Promise.all([
+    readFile("apps/api/src/mysql-organization-admin-repository.ts", "utf8"),
+    readFile("apps/api/src/organization-admin-routes.ts", "utf8"),
+    readFile("apps/web/src/components/OrganizationAdminCenter.vue", "utf8"),
+    readFile("apps/web/src/components/OrganizationMemberPanel.vue", "utf8"),
+    readFile("apps/web/src/components/OrganizationRolePanel.vue", "utf8"),
+    readFile("apps/web/src/components/OrganizationTeamPanel.vue", "utf8"),
+    readFile("apps/web/src/components/OrganizationWorkspacePanel.vue", "utf8"),
+    readFile("apps/web/src/components/OrganizationApprovalPanel.vue", "utf8"),
+    readFile("apps/web/src/components/OrganizationDataPanel.vue", "utf8"),
+    readFile("docs/feature-map.json", "utf8"),
+  ]);
+  const web = [center, members, roles, teams, workspaces, approvals, organizationData].join("\n");
   assert.match(repo, /team_names/);
   assert.match(repo, /approval_templates/);
   assert.match(repo, /approval_template_versions[\s\S]*templateVersionDiff/);
@@ -279,6 +291,33 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
   assert.match(approvals, /published: "已发布"/);
   assert.match(approvals, /cancelled: "已取消"/);
   assert.doesNotMatch(approvals, />\s*(发布|回退模板|审批通过|审批驳回)\s*</);
+  for (const copy of [
+    "跨工作区数据账本",
+    "数量不等于数据质量",
+    "未删除任务",
+    "接口最多返回 100 条",
+    "工作区比较",
+    "导出履历",
+    "搜索工作区",
+    "工作区状态",
+    "报表类型",
+    "生成状态",
+    "等待重试",
+    "多次失败",
+    "重置筛选",
+    "工作区分页",
+    "导出记录分页",
+    "前往报表工作台",
+  ])
+    assert.match(organizationData, new RegExp(copy));
+  assert.match(organizationData, /workspacePageSize = 8/);
+  assert.match(organizationData, /exportPageSize = 10/);
+  assert.match(organizationData, /org_data_workspace_status/);
+  assert.match(organizationData, /org_data_export_status/);
+  assert.match(organizationData, /router\.replace/);
+  assert.match(organizationData, /retry_scheduled: "等待重试"/);
+  assert.match(organizationData, /dead_letter: "多次失败"/);
+  assert.doesNotMatch(organizationData, />\s*(新建导出|下载导出|删除导出)\s*</);
   assert.match(map, /"\/org-admin\/teams"/);
 });
 test("M06-01 organization overview preserves facts and form context across refresh and write feedback", async () => {
