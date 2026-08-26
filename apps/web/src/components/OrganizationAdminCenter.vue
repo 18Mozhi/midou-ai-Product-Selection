@@ -86,7 +86,9 @@ const view = computed(() =>
       ? "创建和维护当前组织的数据边界，安全归档不再使用的工作区。"
       : view.value === "teams"
         ? "维护当前组织的团队、负责人、默认流程与成员协作关系。"
-        : "管理当前组织的成员、权限、工作区和审计记录。",
+        : view.value === "approvals"
+          ? "跨工作区核对审批进度和模板版本，不绕过原业务审批合同。"
+          : "管理当前组织的成员、权限、工作区和审计记录。",
   );
 async function api(path: string, init: ApiRequestOptions = {}) {
   if (init.signal) return request<any>(path, init);

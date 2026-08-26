@@ -218,15 +218,17 @@ async function setup(page: Page) {
   await page.route("**/api/v1/org/admin/approvals", (r) =>
     r.fulfill({
       json: env({
-        summary: { pending: 1 },
+        summary: { pending: 3, approved: 3, rejected: 2, cancelled: 2 },
         templates: [
           {
             id: "00000000-0000-4000-8000-000000000618",
             name: "选品复核模板",
             workspace_name: "新品决策工作区",
+            resource_type: "opportunity_decision",
             status: "published",
             node_count: 2,
             current_version: 3,
+            revision: 4,
             version_diff: {
               from_version: 2,
               to_version: 3,
@@ -254,18 +256,43 @@ async function setup(page: Page) {
               ],
             },
           },
-        ],
-        items: [
           {
-            id: "00000000-0000-4000-8000-000000000616",
-            template_id: "00000000-0000-4000-8000-000000000618",
-            resource_id: approvalResource,
-            title: "厨房收纳机会复核",
-            current_node_ordinal: 1,
-            status: "pending",
-            created_at: "2026-08-08T10:00:00.000Z",
+            id: "00000000-0000-4000-8000-000000000619",
+            name: "采购首次审批模板",
+            workspace_name: "采购协作工作区",
+            resource_type: "task",
+            status: "draft",
+            node_count: 1,
+            current_version: 1,
+            revision: 1,
+            version_diff: {
+              from_version: null,
+              to_version: 1,
+              change_count: 0,
+              changes: [],
+            },
           },
         ],
+        items: Array.from({ length: 10 }, (_, index) => ({
+          id:
+            index === 0
+              ? "00000000-0000-4000-8000-000000000616"
+              : `00000000-0000-4000-8000-${String(700 + index).padStart(12, "0")}`,
+          template_id:
+            index % 2
+              ? "00000000-0000-4000-8000-000000000619"
+              : "00000000-0000-4000-8000-000000000618",
+          resource_id:
+            index === 0
+              ? approvalResource
+              : `00000000-0000-4000-8000-${String(800 + index).padStart(12, "0")}`,
+          resource_type: index % 2 ? "task" : "opportunity_decision",
+          title: index === 0 ? "厨房收纳机会复核" : `审批记录 ${index + 1}`,
+          current_node_ordinal: (index % 3) + 1,
+          status: ["pending", "approved", "rejected", "cancelled"][index % 4],
+          created_at: `2026-08-${String(18 - index).padStart(2, "0")}T10:00:00.000Z`,
+          completed_at: index % 4 === 0 ? null : "2026-08-20T10:00:00.000Z",
+        })),
       }),
     }),
   );
@@ -797,16 +824,53 @@ test("organization member choices replace raw ids and approval ids stay technica
   await expect(page.getByText(memberBuyer, { exact: true })).toHaveCount(0);
 
   await page.goto("/org-admin/approvals");
-  await expect(page.getByText("选品复核模板", { exact: true })).toBeVisible();
+  await expect(page.getByText("选品复核模板", { exact: true }).first()).toBeVisible();
   await expect(page.getByText("厨房收纳机会复核", { exact: true })).toBeVisible();
-  await page.getByText(/预览 v2 → v3 差异/).click();
+  await page.getByRole("button", { name: /模板版本/ }).click();
+  await page.getByRole("button", { name: /选品复核模板/ }).click();
   await expect(page.getByText("处理时限（分钟）")).toBeVisible();
-  await expect(page.getByText("60 → 30")).toBeVisible();
-  await expect(page.getByText("当前版本新增")).toBeVisible();
+  await expect(page.locator("del").filter({ hasText: "60" })).toBeVisible();
+  await expect(page.locator("ins").filter({ hasText: "30" })).toBeVisible();
+  await expect(page.getByText("当前版本新增了这个审批节点。")).toBeVisible();
+  await page.getByRole("button", { name: /审批记录/ }).click();
   const resourceId = page.locator("code").filter({ hasText: approvalResource });
   await expect(resourceId).not.toBeVisible();
-  await page.getByText("技术详情", { exact: true }).click();
+  await page
+    .locator(".org-approval-request-list article")
+    .filter({ hasText: "厨房收纳机会复核" })
+    .getByText("技术详情", { exact: true })
+    .click();
   await expect(resourceId).toBeVisible();
+});
+
+test("organization approval governance filters, paginates and restores URL-backed state", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/org-admin/approvals");
+  await expect(page.getByText("已取消", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("共 10 条，当前第 1 / 2 页")).toBeVisible();
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page.getByText("共 10 条，当前第 2 / 2 页")).toBeVisible();
+
+  await page.getByRole("button", { name: "重置", exact: true }).click();
+  await page.getByLabel("搜索审批").fill("厨房收纳");
+  await page.locator(".org-approval-toolbar select").first().selectOption("pending");
+  await expect(page.getByText("厨房收纳机会复核", { exact: true })).toBeVisible();
+  await expect(page.getByText("共 1 条，当前第 1 / 1 页")).toBeVisible();
+
+  await page.getByRole("button", { name: /模板版本/ }).click();
+  await page.locator(".org-approval-toolbar select").first().selectOption("draft");
+  await expect(page).toHaveURL(/approval_view=templates/);
+  await expect(page).toHaveURL(/approval_template_status=draft/);
+  await page.reload();
+  await expect(page.getByRole("button", { name: /模板版本/ })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.locator(".org-approval-toolbar select").first()).toHaveValue("draft");
+  await expect(page.getByRole("button", { name: /采购首次审批模板/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /选品复核模板/ })).toHaveCount(0);
 });
 
 test("organization roles expose searchable role, capability, scope and grant facts", async ({

@@ -260,6 +260,25 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
   assert.match(teams, /pageSize = 8/);
   assert.match(teams, /当前接口只返回团队成员数量/);
   assert.match(center, /value: \{ teams: teams\.data, members: members\.data\.items \?\? \[\] \}/);
+  for (const copy of [
+    "跨工作区审批态势",
+    "只读边界",
+    "审批总量",
+    "已取消",
+    "当前接口最多返回最近 100 条",
+    "模板版本",
+    "首个持久化版本",
+    "前往审批工作台",
+  ])
+    assert.match(approvals, new RegExp(copy));
+  assert.match(approvals, /requestPageSize = 8/);
+  assert.match(approvals, /templatePageSize = 6/);
+  assert.match(approvals, /approval_view/);
+  assert.match(approvals, /approval_template_status/);
+  assert.match(approvals, /router\.replace/);
+  assert.match(approvals, /published: "已发布"/);
+  assert.match(approvals, /cancelled: "已取消"/);
+  assert.doesNotMatch(approvals, />\s*(发布|回退模板|审批通过|审批驳回)\s*</);
   assert.match(map, /"\/org-admin\/teams"/);
 });
 test("M06-01 organization overview preserves facts and form context across refresh and write feedback", async () => {

@@ -762,7 +762,7 @@
         "view": "OrganizationAdminCenter",
         "domain": "organization-approvals",
         "status": "verified",
-        "statusDetail": "M06-01_module_verified"
+        "statusDetail": "M06-01_approval_governance_live_verified"
       },
       "navigation": {
         "label": "审批模板",
