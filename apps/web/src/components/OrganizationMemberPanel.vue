@@ -2,30 +2,41 @@
 defineProps<{
   form: any;
   busy: boolean;
+  invitationResults: Array<{ email: string; status: "success" | "error"; message: string }>;
   invitationTab: "pending" | "expired";
   pendingInvitations: any[];
   expiredInvitations: any[];
   visibleInvitations: any[];
   members: any[];
+  filteredMembers: number;
   totalMembers: number;
   memberQuery: string;
   memberStatus: string;
   memberRole: string;
   memberTeam: string;
+  memberSort: string;
+  memberPage: number;
+  memberPageCount: number;
   availableTeams: string[];
   memberRoles: Record<string, string>;
   roleText: (value: string) => string;
   scopeText: (value: string) => string;
   statusText: (value: string) => string;
+  effectiveMemberStatus: (member: any) => string;
   formatTime: (value: string) => string;
 }>();
 const emit = defineEmits<{
   invite: [];
+  invitationAction: [invitation: any];
   updateInvitationTab: [value: "pending" | "expired"];
   updateMemberQuery: [value: string];
   updateMemberStatus: [value: string];
   updateMemberRole: [value: string];
   updateMemberTeam: [value: string];
+  updateMemberSort: [value: string];
+  updateMemberPage: [value: number];
+  resetMemberFilters: [];
+  updateMemberRoleSelection: [value: { memberId: string; role: string }];
   assignRole: [member: any];
   memberAction: [member: any];
 }>();
@@ -41,17 +52,33 @@ const valueOf = (event: Event) => (event.target as HTMLInputElement | HTMLSelect
 
 <template>
   <section class="org-admin-grid">
-    <form class="org-admin-card" @submit.prevent="emit('invite')">
+    <form class="org-admin-card org-admin-invite-form" @submit.prevent="emit('invite')">
       <h3>邀请成员</h3>
-      <label>邮箱<input v-model="form.email" type="email" required /></label>
+      <label
+        >邮箱（每行一个）<textarea
+          v-model="form.emails"
+          required
+          autocomplete="off"
+          placeholder="name@company.com"
+          aria-describedby="org-member-invite-help"
+        ></textarea>
+      </label>
       <label
         >角色<select v-model="form.role_code" required>
           <option v-for="role in roles" :key="role" :value="role">{{ roleText(role) }}</option>
         </select></label
       >
-      <label>原因<textarea v-model="form.reason" required></textarea></label>
-      <button :disabled="busy">创建邀请</button
-      ><small>邮件服务尚未配置时，邀请会显示“等待邮件服务”，不会假装已经发送。</small>
+      <label>原因<textarea v-model="form.reason" required maxlength="500"></textarea></label>
+      <button :disabled="busy">{{ busy ? "正在创建…" : "创建邀请" }}</button>
+      <small id="org-member-invite-help"
+        >支持单个或批量邀请；每行填写一个邮箱。邮件服务尚未配置时，邀请会显示“等待邮件服务”，不会假装已经发送。</small
+      >
+      <ul v-if="invitationResults.length" class="org-admin-invite-results" aria-label="邀请结果">
+        <li v-for="result in invitationResults" :key="result.email" :data-status="result.status">
+          <b>{{ result.email }}</b
+          ><span>{{ result.message }}</span>
+        </li>
+      </ul>
     </form>
     <article class="org-admin-card">
       <header class="org-admin-section-header">
@@ -81,14 +108,27 @@ const valueOf = (event: Event) => (event.target as HTMLInputElement | HTMLSelect
             >{{ roleText(invitation.role_code) }} · {{ formatTime(invitation.expires_at) }}</small
           >
         </div>
-        <i>{{ invitationTab === "expired" ? "已失效" : statusText(invitation.status) }}</i>
+        <div class="org-admin-actions">
+          <button
+            v-if="invitationTab === 'pending'"
+            type="button"
+            :disabled="busy"
+            @click="emit('invitationAction', invitation)"
+          >
+            撤销邀请
+          </button>
+          <i :data-status="invitation.status">{{ statusText(invitation.status) }}</i>
+        </div>
       </div>
     </article>
     <article class="org-admin-card org-admin-wide">
       <header class="org-admin-section-header">
         <div>
           <h3>组织成员</h3>
-          <small>显示 {{ members.length }} / {{ totalMembers }} 人</small>
+          <small
+            >筛选 {{ filteredMembers }} / {{ totalMembers }} 人 · 第 {{ memberPage }} /
+            {{ memberPageCount }} 页</small
+          >
         </div>
       </header>
       <div class="org-admin-filters" aria-label="成员筛选">
@@ -119,10 +159,21 @@ const valueOf = (event: Event) => (event.target as HTMLInputElement | HTMLSelect
             <option v-for="team in availableTeams" :key="team" :value="team">{{ team }}</option>
           </select></label
         >
+        <label
+          >排序<select :value="memberSort" @change="emit('updateMemberSort', valueOf($event))">
+            <option value="name_asc">姓名 / 邮箱升序</option>
+            <option value="joined_desc">最近加入</option>
+            <option value="status_asc">状态优先</option>
+          </select></label
+        >
+        <button type="button" class="org-admin-secondary" @click="emit('resetMemberFilters')">
+          重置筛选
+        </button>
       </div>
       <div v-for="member in members" :key="member.id" class="org-admin-line">
         <div>
-          <b>{{ member.email }}</b
+          <b>{{ member.display_name || member.email }}</b>
+          <small v-if="member.display_name" class="org-admin-member-email">{{ member.email }}</small
           ><small
             >{{ member.roles.map(roleText).join("、") || "尚未分配角色" }} ·
             {{ member.teams?.join("、") || "未加入团队" }} ·
@@ -135,7 +186,16 @@ const valueOf = (event: Event) => (event.target as HTMLInputElement | HTMLSelect
             <summary>技术详情</summary>
             <code>成员 ID：{{ member.id }}</code>
           </details>
-          <select v-model="memberRoles[member.id]" aria-label="选择成员角色">
+          <select
+            :value="memberRoles[member.id] || member.roles[0] || 'member'"
+            :aria-label="`选择 ${member.display_name || member.email} 的角色`"
+            @change="
+              emit('updateMemberRoleSelection', {
+                memberId: member.id,
+                role: valueOf($event),
+              })
+            "
+          >
             <option v-for="role in roles" :key="role" :value="role">{{ roleText(role) }}</option>
           </select>
           <button type="button" :disabled="busy" @click="emit('assignRole', member)">
@@ -144,10 +204,31 @@ const valueOf = (event: Event) => (event.target as HTMLInputElement | HTMLSelect
           <button type="button" :disabled="busy" @click="emit('memberAction', member)">
             {{ member.status === "active" ? "禁用成员" : "恢复成员" }}
           </button>
-          <i>{{ statusText(member.status) }}</i>
+          <i :data-status="effectiveMemberStatus(member)">{{
+            statusText(effectiveMemberStatus(member))
+          }}</i>
         </div>
       </div>
       <p v-if="!members.length">没有符合当前筛选条件的成员。</p>
+      <nav v-if="memberPageCount > 1" class="org-admin-pagination" aria-label="成员分页">
+        <button
+          type="button"
+          class="org-admin-secondary"
+          :disabled="memberPage <= 1"
+          @click="emit('updateMemberPage', memberPage - 1)"
+        >
+          上一页
+        </button>
+        <span>第 {{ memberPage }} / {{ memberPageCount }} 页</span>
+        <button
+          type="button"
+          class="org-admin-secondary"
+          :disabled="memberPage >= memberPageCount"
+          @click="emit('updateMemberPage', memberPage + 1)"
+        >
+          下一页
+        </button>
+      </nav>
     </article>
   </section>
 </template>

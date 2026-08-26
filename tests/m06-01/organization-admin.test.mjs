@@ -55,6 +55,26 @@ test("M06-01.A01/A02/A04/A12 validates scoped admin contracts", async () => {
     () => s.invite({ value: { email: "bad", role_code: "member", reason: "x" } }),
     (e) => e.code === "invitation_email_invalid",
   );
+  await s.invitationAction({
+    invitationId: "00000000-0000-4000-8000-000000000699",
+    value: { action: "revoke", expected_version: 1, reason: "撤销错误邀请" },
+  });
+  assert.equal(f.calls.at(-1)[0], "invitationAction");
+  assert.equal(f.calls.at(-1)[1].value.action, "revoke");
+  assert.throws(
+    () =>
+      s.invitationAction({
+        invitationId: "00000000-0000-4000-8000-000000000699",
+        value: { action: "resend", expected_version: 1, reason: "x" },
+      }),
+    (e) => e.code === "invitation_action_invalid",
+  );
+  await s.assignRole({
+    membershipId: "00000000-0000-4000-8000-000000000698",
+    value: { role_code: "auditor", expected_version: 7, reason: "并发角色回归" },
+  });
+  assert.equal(f.calls.at(-1)[0], "assignRole");
+  assert.equal(f.calls.at(-1)[1].value.expected_version, 7);
   assert.throws(
     () => s.createToken({ value: { name: "write", scopes: ["organization:manage"], reason: "x" } }),
     (e) => e.code === "token_scope_invalid",
@@ -92,6 +112,14 @@ test("M06-01.A03/A05/A11/A16 migration is MySQL57, auditable and reversible", as
   assert.match(down, /DROP TABLE IF EXISTS `organization_api_tokens`/);
   assert.match(repo, /last_admin_forbidden/);
   assert.match(repo, /default_workspace_archive_forbidden/);
+  assert.match(repo, /LEFT JOIN user_profiles p ON p\.user_id=u\.id/);
+  assert.match(repo, /u\.status account_status/);
+  assert.match(repo, /async invitationAction\(i: any\)/);
+  assert.match(repo, /SELECT id FROM organizations WHERE id=\? FOR UPDATE/);
+  assert.match(
+    repo,
+    /SELECT \* FROM memberships WHERE id=\? AND organization_id=\? FOR UPDATE[\s\S]*this\.operation\(i, c, true\)[\s\S]*this\.version\(m\[0\], i\.value\.expected_version, "membership"\)/,
+  );
   assert.match(repo, /INSERT INTO audit_logs/);
   assert.match(repo, /INSERT INTO outbox_events/);
   assert.match(repo, /delete stored\.secret/);
@@ -127,6 +155,10 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
     "技术详情",
     "负责人（可选）",
     "选择团队成员",
+    "邮箱（每行一个）",
+    "撤销邀请",
+    "重置筛选",
+    "成员分页",
   ])
     assert.match(web, new RegExp(copy));
   assert.doesNotMatch(
@@ -157,6 +189,12 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
   assert.match(repo, /current_node_ordinal/);
   assert.doesNotMatch(repo, /workflow_template_id|requested_at/);
   assert.match(routes, /org\/admin\/data[\s\S]*report:read/);
+  assert.match(routes, /org\/admin\/invitations\/:id\/actions[\s\S]*membership:manage/);
+  assert.match(center, /String\(item\.display_name \?\? ""\)/);
+  assert.match(center, /effectiveMemberStatus/);
+  assert.match(center, /memberPageSize = 10/);
+  assert.match(center, /for \(const email of accepted\)/);
+  assert.match(center, /role_code, expected_version: item\.version, reason/);
   for (const copy of [
     "邀请状态",
     "成员筛选",
@@ -178,6 +216,8 @@ test("M06-01 organization overview preserves facts and form context across refre
   assert.match(center, /load\(\{ background: true, preserveNotice: true \}\)/);
   assert.match(center, /noticeKind\.value = "success"/);
   assert.match(center, /if \(busy\.value\) return/);
+  assert.match(center, /requestTimeoutMs = 12_000/);
+  assert.match(center, /organization_request_timeout/);
   assert.match(center, /pattern="https:\/\/\.\*"/);
   assert.match(center, /Logo 地址必须以 https:\/\/ 开头/);
   assert.match(center, /数据已被其他操作更新/);

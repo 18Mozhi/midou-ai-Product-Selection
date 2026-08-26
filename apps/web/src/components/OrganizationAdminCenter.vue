@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
+import {
+  ApiClientError,
+  createApiClient,
+  rethrowUnexpectedError,
+  type ApiRequestOptions,
+} from "../api-client";
 import { useAuditedReason } from "../use-audited-reason";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import OrganizationApprovalPanel from "./OrganizationApprovalPanel.vue";
@@ -13,6 +18,7 @@ const props = defineProps<{
     organizationId: string;
   }>(),
   request = createApiClient(props.apiBaseUrl),
+  requestTimeoutMs = 12_000,
   state = ref("loading"),
   data = ref<any>(null),
   summary = ref<any>(null),
@@ -23,12 +29,17 @@ const props = defineProps<{
   refreshing = ref(false),
   secret = ref(""),
   form = ref<any>({ reason: "" }),
+  invitationResults = ref<Array<{ email: string; status: "success" | "error"; message: string }>>(
+    [],
+  ),
   memberRoles = ref<Record<string, string>>({}),
   teamMembers = ref<Record<string, string>>({}),
   memberQuery = ref(""),
   memberStatus = ref(""),
   memberRole = ref(""),
   memberTeam = ref(""),
+  memberSort = ref("name_asc"),
+  memberPage = ref(1),
   invitationTab = ref<"pending" | "expired">("pending"),
   auditFilters = ref({ action: "", outcome: "", resource_type: "" });
 let loadSequence = 0;
@@ -58,8 +69,34 @@ const view = computed(() =>
         }) as any
       )[view.value] || "治理概览",
   );
-async function api(path: string, init?: RequestInit) {
-  return request<any>(path, init ?? {});
+async function api(path: string, init: ApiRequestOptions = {}) {
+  if (init.signal) return request<any>(path, init);
+  const controller = new AbortController(),
+    requestId = crypto.randomUUID(),
+    timeout = window.setTimeout(() => controller.abort(), requestTimeoutMs);
+  try {
+    return await request<any>(path, {
+      ...init,
+      signal: controller.signal,
+      requestId,
+      traceId: requestId,
+    });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError")
+      throw new ApiClientError(
+        408,
+        "organization_request_timeout",
+        "blocked",
+        "组织后台请求超时。",
+        "检查网络或服务状态后重试。",
+        requestId,
+        requestId,
+        { cause: error },
+      );
+    throw error;
+  } finally {
+    window.clearTimeout(timeout);
+  }
 }
 function applyFailure(error: unknown, pageFailure: boolean) {
   const failure = error instanceof ApiClientError ? error : null;
@@ -145,6 +182,17 @@ async function load(options: { background?: boolean; preserveNotice?: boolean } 
         reason: "",
       };
     }
+    if (currentView === "members") {
+      if (!form.value.role_code)
+        form.value = {
+          emails: form.value.emails ?? form.value.email ?? "",
+          role_code: "member",
+          reason: form.value.reason ?? "",
+        };
+      for (const member of data.value?.items ?? [])
+        if (!memberRoles.value[member.id])
+          memberRoles.value[member.id] = member.roles?.[0] ?? "member";
+    }
     state.value = (
       Array.isArray(data.value) ? data.value.length : Object.keys(data.value ?? {}).length
     )
@@ -168,7 +216,12 @@ function auditPath() {
     query.set("resource_type", auditFilters.value.resource_type.trim());
   return `/organizations/${props.organizationId}/audit-events?${query}`;
 }
-async function submit(path: string, value: any, method = "POST") {
+async function submit(
+  path: string,
+  value: any,
+  method = "POST",
+  options: { preserveForm?: boolean } = {},
+) {
   if (busy.value) return;
   busy.value = true;
   try {
@@ -176,7 +229,7 @@ async function submit(path: string, value: any, method = "POST") {
       result = response.data,
       writeRequestId = response.request_id;
     secret.value = result?.secret ?? "";
-    form.value = { reason: "" };
+    if (!options.preserveForm) form.value = { reason: "" };
     await load({ background: true, preserveNotice: true });
     noticeKind.value = "success";
     notice.value = secret.value
@@ -194,6 +247,75 @@ async function submit(path: string, value: any, method = "POST") {
     busy.value = false;
   }
 }
+async function inviteMembers() {
+  if (busy.value) return;
+  const rawEmails = String(form.value.emails ?? "")
+      .split(/[\n,;]+/)
+      .map((value) => value.trim().toLowerCase())
+      .filter(Boolean),
+    emails = [...new Set(rawEmails)],
+    role_code = String(form.value.role_code ?? ""),
+    reason = String(form.value.reason ?? "").trim(),
+    validEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 254;
+  invitationResults.value = [];
+  if (!emails.length || !role_code || !reason || reason.length > 500) {
+    noticeKind.value = "error";
+    notice.value = "请填写邮箱、角色和 1–500 个字符的邀请原因。";
+    return;
+  }
+  const invalid = emails.filter((value) => !validEmail(value)),
+    accepted = emails.filter(validEmail);
+  invitationResults.value = invalid.map((email) => ({
+    email,
+    status: "error" as const,
+    message: "邮箱格式无效",
+  }));
+  busy.value = true;
+  let lastWriteRequestId = "";
+  try {
+    for (const email of accepted) {
+      try {
+        const response = await api("/org/admin/invitations", {
+          method: "POST",
+          body: JSON.stringify({ email, role_code, reason }),
+        });
+        lastWriteRequestId = response.request_id;
+        invitationResults.value.push({ email, status: "success", message: "已创建待投递邀请" });
+      } catch (error) {
+        const failure = error instanceof ApiClientError ? error : null;
+        invitationResults.value.push({
+          email,
+          status: "error",
+          message: failure?.userMessage ?? "请求未完成",
+        });
+        if (failure && ["expired", "forbidden"].includes(failure.kind)) {
+          applyFailure(error, true);
+          break;
+        }
+        rethrowUnexpectedError(error);
+      }
+    }
+    const succeeded = invitationResults.value.filter((item) => item.status === "success").length,
+      failed = invitationResults.value.length - succeeded,
+      duplicates = rawEmails.length - emails.length;
+    if (succeeded) await load({ background: true, preserveNotice: true });
+    form.value = {
+      emails: invitationResults.value
+        .filter((item) => item.status === "error")
+        .map((item) => item.email)
+        .join("\n"),
+      role_code,
+      reason: failed ? reason : "",
+    };
+    noticeKind.value = failed ? "error" : "success";
+    notice.value = `邀请处理完成：成功 ${succeeded}，失败 ${failed}${
+      duplicates ? `，输入重复 ${duplicates} 条已合并` : ""
+    }。`;
+    requestId.value = lastWriteRequestId;
+  } finally {
+    busy.value = false;
+  }
+}
 async function auditedReason(action: string) {
   return (
     (await askAuditedReason({
@@ -207,17 +329,33 @@ async function memberAction(item: any) {
   const action = item.status === "active" ? "disable" : "restore";
   const reason = await auditedReason(action === "disable" ? "禁用成员" : "恢复成员");
   if (!reason) return;
-  await submit(`/org/admin/members/${item.id}/actions`, {
-    action,
-    expected_version: item.version,
-    reason,
-  });
+  await submit(
+    `/org/admin/members/${item.id}/actions`,
+    { action, expected_version: item.version, reason },
+    "POST",
+    { preserveForm: true },
+  );
 }
 async function assignRole(item: any) {
   const role_code = memberRoles.value[item.id] || item.roles[0] || "member";
   const reason = await auditedReason(`分配${roleText(role_code)}`);
   if (!reason) return;
-  await submit(`/org/admin/members/${item.id}/roles`, { role_code, reason });
+  await submit(
+    `/org/admin/members/${item.id}/roles`,
+    { role_code, expected_version: item.version, reason },
+    "POST",
+    { preserveForm: true },
+  );
+}
+async function invitationAction(item: any) {
+  const reason = await auditedReason("撤销邀请");
+  if (!reason) return;
+  await submit(
+    `/org/admin/invitations/${item.id}/actions`,
+    { action: "revoke", expected_version: item.version, reason },
+    "POST",
+    { preserveForm: true },
+  );
 }
 async function workspaceAction(item: any) {
   const action = item.status === "active" ? "archive" : "restore";
@@ -262,15 +400,46 @@ const activeMembers = computed(() =>
       (data.value?.items ?? []).flatMap((item: any) => item.teams ?? []) as string[],
     ),
   ]),
+  effectiveMemberStatus = (item: any) =>
+    item.status !== "active"
+      ? item.status
+      : ["locked", "disabled"].includes(item.account_status)
+        ? item.account_status
+        : "active",
   filteredMembers = computed(() => {
     const query = memberQuery.value.trim().toLowerCase();
     return (data.value?.items ?? []).filter(
       (item: any) =>
-        (!query || String(item.email).toLowerCase().includes(query)) &&
-        (!memberStatus.value || item.status === memberStatus.value) &&
+        (!query ||
+          String(item.email).toLowerCase().includes(query) ||
+          String(item.display_name ?? "")
+            .toLowerCase()
+            .includes(query)) &&
+        (!memberStatus.value || effectiveMemberStatus(item) === memberStatus.value) &&
         (!memberRole.value || item.roles?.includes(memberRole.value)) &&
         (!memberTeam.value || item.teams?.includes(memberTeam.value)),
     );
+  }),
+  sortedMembers = computed(() =>
+    [...filteredMembers.value].sort((left: any, right: any) => {
+      if (memberSort.value === "joined_desc")
+        return new Date(right.joined_at).valueOf() - new Date(left.joined_at).valueOf();
+      if (memberSort.value === "status_asc")
+        return effectiveMemberStatus(left).localeCompare(effectiveMemberStatus(right), "zh-CN");
+      return String(left.display_name || left.email).localeCompare(
+        String(right.display_name || right.email),
+        "zh-CN",
+      );
+    }),
+  ),
+  memberPageSize = 10,
+  memberPageCount = computed(() =>
+    Math.max(1, Math.ceil(sortedMembers.value.length / memberPageSize)),
+  ),
+  currentMemberPage = computed(() => Math.min(memberPage.value, memberPageCount.value)),
+  pagedMembers = computed(() => {
+    const start = (currentMemberPage.value - 1) * memberPageSize;
+    return sortedMembers.value.slice(start, start + memberPageSize);
   }),
   pendingInvitations = computed(() =>
     (data.value?.invitations ?? []).filter(
@@ -567,28 +736,61 @@ onMounted(() => void load());
         v-else-if="view === 'members'"
         :form="form"
         :busy="busy"
+        :invitation-results="invitationResults"
         :invitation-tab="invitationTab"
         :pending-invitations="pendingInvitations"
         :expired-invitations="expiredInvitations"
         :visible-invitations="visibleInvitations"
-        :members="filteredMembers"
+        :members="pagedMembers"
+        :filtered-members="filteredMembers.length"
         :total-members="data?.items?.length ?? 0"
         :member-query="memberQuery"
         :member-status="memberStatus"
         :member-role="memberRole"
         :member-team="memberTeam"
+        :member-sort="memberSort"
+        :member-page="currentMemberPage"
+        :member-page-count="memberPageCount"
         :available-teams="availableTeams"
         :member-roles="memberRoles"
         :role-text="roleText"
         :scope-text="scopeText"
         :status-text="statusText"
+        :effective-member-status="effectiveMemberStatus"
         :format-time="fmt"
-        @invite="submit('/org/admin/invitations', form)"
+        @invite="inviteMembers"
+        @invitation-action="invitationAction"
         @update-invitation-tab="invitationTab = $event"
-        @update-member-query="memberQuery = $event"
-        @update-member-status="memberStatus = $event"
-        @update-member-role="memberRole = $event"
-        @update-member-team="memberTeam = $event"
+        @update-member-query="
+          memberQuery = $event;
+          memberPage = 1;
+        "
+        @update-member-status="
+          memberStatus = $event;
+          memberPage = 1;
+        "
+        @update-member-role="
+          memberRole = $event;
+          memberPage = 1;
+        "
+        @update-member-team="
+          memberTeam = $event;
+          memberPage = 1;
+        "
+        @update-member-sort="
+          memberSort = $event;
+          memberPage = 1;
+        "
+        @update-member-page="memberPage = $event"
+        @reset-member-filters="
+          memberQuery = '';
+          memberStatus = '';
+          memberRole = '';
+          memberTeam = '';
+          memberSort = 'name_asc';
+          memberPage = 1;
+        "
+        @update-member-role-selection="memberRoles[$event.memberId] = $event.role"
         @assign-role="assignRole"
         @member-action="memberAction"
       />

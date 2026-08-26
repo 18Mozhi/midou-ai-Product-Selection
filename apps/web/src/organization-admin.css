@@ -154,6 +154,15 @@
   background: var(--so-primary-soft);
   color: var(--so-primary);
 }
+.org-admin-card button.org-admin-secondary {
+  border: 1px solid var(--so-border);
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
+.org-admin-card button.org-admin-secondary:hover:not(:disabled) {
+  border-color: var(--so-primary-border);
+  color: var(--so-primary);
+}
 .org-admin-filters {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -165,6 +174,10 @@
 }
 .org-admin-filters label {
   margin: 0;
+}
+.org-admin-filters > button {
+  align-self: end;
+  min-height: 42px;
 }
 .org-admin-card p,
 .org-admin-card small {
@@ -180,6 +193,19 @@
   background: var(--so-success-soft);
   font-size: 13px;
   font-style: normal;
+}
+.org-admin-card i[data-status="disabled"],
+.org-admin-card i[data-status="revoked"],
+.org-admin-card i[data-status="expired"] {
+  border-color: var(--so-danger-border);
+  color: var(--so-danger);
+  background: var(--so-danger-soft);
+}
+.org-admin-card i[data-status="locked"],
+.org-admin-card i[data-status="pending_delivery"] {
+  border-color: var(--so-warning-border);
+  color: var(--so-warning);
+  background: var(--so-warning-soft);
 }
 .org-admin-profile dl {
   display: grid;
@@ -223,6 +249,14 @@
 .org-admin-card textarea {
   min-height: 72px;
   resize: vertical;
+}
+.org-admin-invite-form {
+  display: grid;
+  align-content: start;
+}
+.org-admin-invite-form > button {
+  width: fit-content;
+  margin: 4px 0 8px;
 }
 .org-admin-line {
   min-height: 64px;
@@ -280,6 +314,43 @@
 .org-admin-line b,
 .org-admin-line small {
   display: block;
+}
+.org-admin-member-email {
+  overflow-wrap: anywhere;
+  color: var(--so-info) !important;
+}
+.org-admin-invite-results {
+  display: grid;
+  gap: 7px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.org-admin-invite-results li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
+.org-admin-invite-results li[data-status="success"] span {
+  color: var(--so-success);
+}
+.org-admin-invite-results li[data-status="error"] span {
+  color: var(--so-danger);
+}
+.org-admin-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+.org-admin-pagination span {
+  color: var(--so-text-muted);
+  font-size: 13px;
 }
 .org-admin-role-grid {
   margin-top: 2px;
@@ -505,6 +576,21 @@
   }
   .org-admin-line {
     align-items: flex-start;
+    flex-direction: column;
+  }
+  .org-admin-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .org-admin-pagination {
+    justify-content: space-between;
+  }
+  .org-admin-invite-results li {
+    flex-direction: column;
+    gap: 3px;
+  }
+  .org-admin-invite-form > button {
+    width: 100%;
   }
   .org-admin-line small {
     word-break: break-all;

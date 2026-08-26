@@ -1178,6 +1178,46 @@ paths:
           "403": { $ref: "#/components/responses/Error" },
           "409": { $ref: "#/components/responses/Error" },
         }
+  /org/admin/invitations/{invitationId}/actions:
+    post:
+      summary: Revoke a pending organization invitation
+      description: Requires membership:manage, is versioned and idempotent, and only accepts invitations from the current organization that are still pending delivery or acceptance.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        [
+          { name: invitationId, in: path, required: true, schema: { type: string, format: uuid } },
+          { $ref: "#/components/parameters/IdempotencyKey" },
+        ]
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json:
+                {
+                  schema:
+                    {
+                      type: object,
+                      required: [action, expected_version, reason],
+                      properties:
+                        {
+                          action: { type: string, enum: [revoke] },
+                          expected_version: { type: integer, minimum: 1 },
+                          reason: { type: string, minLength: 1, maxLength: 500 },
+                        },
+                    },
+                },
+            },
+        }
+      responses:
+        {
+          "200": { description: Audited revoked invitation state },
+          "400": { $ref: "#/components/responses/Error" },
+          "401": { $ref: "#/components/responses/Error" },
+          "403": { $ref: "#/components/responses/Error" },
+          "404": { $ref: "#/components/responses/Error" },
+          "409": { $ref: "#/components/responses/Error" },
+        }
   /org/admin/members/{membershipId}/actions:
     post:
       summary: Disable or restore a same-organization membership
@@ -1206,6 +1246,38 @@ paths:
           { name: membershipId, in: path, required: true, schema: { type: string, format: uuid } },
           { $ref: "#/components/parameters/IdempotencyKey" },
         ]
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json:
+                {
+                  schema:
+                    {
+                      type: object,
+                      required: [role_code, expected_version, reason],
+                      properties:
+                        {
+                          role_code:
+                            {
+                              type: string,
+                              enum:
+                                [
+                                  member,
+                                  selection_manager,
+                                  procurement_member,
+                                  organization_admin,
+                                  auditor,
+                                ],
+                            },
+                          expected_version: { type: integer, minimum: 1 },
+                          reason: { type: string, minLength: 1, maxLength: 500 },
+                        },
+                    },
+                },
+            },
+        }
       responses:
         {
           "200": { description: Audited role assignment },

@@ -54,6 +54,7 @@ export interface OrganizationAdminRepository {
   updateProfile(i: any): Promise<any>;
   members(i: any): Promise<any>;
   invite(i: any): Promise<any>;
+  invitationAction(i: any): Promise<any>;
   memberAction(i: any): Promise<any>;
   roles(i: any): Promise<any>;
   assignRole(i: any): Promise<any>;
@@ -145,6 +146,22 @@ export class OrganizationAdminService {
       },
     });
   }
+  invitationAction(i: any) {
+    const action = String(i.value?.action ?? "");
+    if (action !== "revoke")
+      throw new OrganizationAdminError("invitation_action_invalid", 400, "选择撤销邀请。");
+    return this.repo.invitationAction({
+      ...i,
+      id: randomUUID(),
+      invitationId: uuid(i.invitationId, "invitation"),
+      route: "POST:/api/v1/org/admin/invitations/:id/actions",
+      value: {
+        action,
+        expected_version: Number(i.value?.expected_version),
+        reason: reason(i.value?.reason),
+      },
+    });
+  }
   memberAction(i: any) {
     const action = String(i.value?.action ?? "");
     if (!["disable", "restore"].includes(action))
@@ -170,7 +187,11 @@ export class OrganizationAdminService {
       id: randomUUID(),
       membershipId: uuid(i.membershipId, "membership"),
       route: "POST:/api/v1/org/admin/members/:id/roles",
-      value: { role_code: role, reason: reason(i.value?.reason) },
+      value: {
+        role_code: role,
+        expected_version: Number(i.value?.expected_version),
+        reason: reason(i.value?.reason),
+      },
     });
   }
   createWorkspace(i: any) {

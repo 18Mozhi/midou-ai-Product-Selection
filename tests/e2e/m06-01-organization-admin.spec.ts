@@ -54,7 +54,9 @@ const members = {
   items: [
     {
       id: memberAdmin,
+      display_name: "林管理员",
       email: "admin@example.test",
+      account_status: "active",
       status: "active",
       roles: ["organization_admin"],
       scopes: ["organization"],
@@ -64,13 +66,27 @@ const members = {
     },
     {
       id: memberBuyer,
+      display_name: "陈采购",
       email: "buyer@example.test",
+      account_status: "active",
       status: "active",
       roles: ["procurement_member"],
       scopes: ["workspace"],
       teams: ["采购协作组"],
       version: 1,
       joined_at: "2026-08-02T00:00:00.000Z",
+    },
+    {
+      id: "00000000-0000-4000-8000-000000000621",
+      display_name: "钱锁定",
+      email: "locked@example.test",
+      account_status: "locked",
+      status: "active",
+      roles: ["member"],
+      scopes: ["organization"],
+      teams: [],
+      version: 1,
+      joined_at: "2026-08-03T00:00:00.000Z",
     },
   ],
   invitations: [
@@ -80,6 +96,7 @@ const members = {
       role_code: "member",
       status: "pending_delivery",
       expires_at: "2026-09-11T00:00:00.000Z",
+      version: 1,
     },
     {
       id: "00000000-0000-4000-8000-000000000617",
@@ -87,6 +104,7 @@ const members = {
       role_code: "member",
       status: "expired",
       expires_at: "2026-08-11T00:00:00.000Z",
+      version: 2,
     },
   ],
 };
@@ -381,13 +399,91 @@ test("M06-01.A07/A08/A15 mobile member and invitation state", async ({ page }) =
   await expect(page.getByText("expired@example.test")).toBeVisible();
   await page.getByRole("button", { name: /待接受/ }).click();
   await page.getByLabel("团队").selectOption("采购协作组");
-  await expect(page.getByText("buyer@example.test")).toBeVisible();
+  await expect(page.getByText("陈采购")).toBeVisible();
   await expect(page.getByText("admin@example.test")).toHaveCount(0);
   const memberId = page.locator("code").filter({ hasText: memberBuyer });
   await expect(memberId).not.toBeVisible();
 
   await page.getByText("技术详情", { exact: true }).first().click();
   await expect(memberId).toBeVisible();
+});
+
+test("organization members use persisted names and account states with truthful defaults", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/org-admin/members");
+  const inviteCard = page.locator(".org-admin-card").filter({
+    has: page.getByRole("heading", { name: "邀请成员" }),
+  });
+  await expect(inviteCard.getByRole("combobox", { name: "角色" })).toHaveValue("member");
+  await expect(page.getByRole("combobox", { name: "选择 林管理员 的角色" })).toHaveValue(
+    "organization_admin",
+  );
+
+  await page.getByRole("searchbox", { name: "搜索", exact: true }).fill("林管理员");
+  await expect(page.getByText("admin@example.test")).toBeVisible();
+  await page.getByRole("combobox", { name: "状态", exact: true }).selectOption("locked");
+  await expect(page.getByText("钱锁定")).toHaveCount(0);
+  await page.getByRole("button", { name: "重置筛选" }).click();
+  await page.getByRole("combobox", { name: "状态", exact: true }).selectOption("locked");
+  await expect(page.getByText("钱锁定")).toBeVisible();
+  await expect(page.locator('i[data-status="locked"]')).toHaveText("已锁定");
+});
+
+test("organization member batch invitations keep per-email outcomes", async ({ page }) => {
+  await setup(page);
+  const payloads: Array<{ email: string; role_code: string; reason: string }> = [];
+  await page.route("**/api/v1/org/admin/invitations", async (route) => {
+    payloads.push(route.request().postDataJSON());
+    await route.fulfill({
+      status: 202,
+      json: env({
+        id: crypto.randomUUID(),
+        email: payloads.at(-1)?.email,
+        role_code: payloads.at(-1)?.role_code,
+        status: "pending_delivery",
+      }),
+    });
+  });
+  await page.goto("/org-admin/members");
+  const inviteCard = page.locator(".org-admin-card").filter({
+    has: page.getByRole("heading", { name: "邀请成员" }),
+  });
+  await inviteCard
+    .getByRole("textbox", { name: "邮箱（每行一个）" })
+    .fill("one@example.test\ntwo@example.test");
+  await inviteCard.getByRole("textbox", { name: "原因" }).fill("批量邀请回归");
+  await inviteCard.getByRole("button", { name: "创建邀请" }).click();
+  await expect(page.getByRole("status")).toContainText("成功 2，失败 0");
+  await expect(page.getByLabel("邀请结果").getByRole("listitem")).toHaveCount(2);
+  expect(payloads.map((item) => item.email)).toEqual(["one@example.test", "two@example.test"]);
+  expect(payloads.every((item) => item.role_code === "member")).toBe(true);
+});
+
+test("organization pending invitation can be revoked with version and audited reason", async ({
+  page,
+}) => {
+  await setup(page);
+  let payload: { action?: string; expected_version?: number; reason?: string } = {};
+  await page.route("**/api/v1/org/admin/invitations/*/actions", async (route) => {
+    payload = route.request().postDataJSON();
+    await route.fulfill({
+      json: env({
+        id: "00000000-0000-4000-8000-000000000613",
+        status: "revoked",
+        version: 2,
+      }),
+    });
+  });
+  await page.goto("/org-admin/members");
+  const invitation = page.locator(".org-admin-line").filter({ hasText: "new@example.test" });
+  await invitation.getByRole("button", { name: "撤销邀请" }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByRole("textbox").fill("撤销误发邀请");
+  await dialog.getByRole("button", { name: "确认提交" }).click();
+  await expect(page.getByRole("status")).toContainText("操作已完成并写入审计");
+  expect(payload).toEqual({ action: "revoke", expected_version: 1, reason: "撤销误发邀请" });
 });
 
 test("organization member choices replace raw ids and approval ids stay technical", async ({

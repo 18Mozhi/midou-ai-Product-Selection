@@ -68,6 +68,16 @@ export function registerOrganizationAdminRoutes(
       r,
     );
   });
+  app.post("/api/v1/org/admin/invitations/:id/actions", async (r) =>
+    env(
+      await o.service.invitationAction({
+        ...(await write(r, "membership:manage")),
+        invitationId: (r.params as any).id,
+        value: r.body,
+      }),
+      r,
+    ),
+  );
   app.post("/api/v1/org/admin/members/:id/actions", async (r) =>
     env(
       await o.service.memberAction({

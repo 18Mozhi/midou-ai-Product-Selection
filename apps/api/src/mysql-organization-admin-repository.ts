@@ -125,14 +125,14 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
   }
   async members(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT m.id,m.user_id,u.email,m.status,m.joined_at,m.version,GROUP_CONCAT(DISTINCT r.role_code " +
+      "SELECT m.id,m.user_id,u.email,p.display_name,u.status account_status,m.status,m.joined_at,m.version,GROUP_CONCAT(DISTINCT r.role_code " +
         "ORDER BY r.role_code) roles,GROUP_CONCAT(DISTINCT s.scope_type ORDER BY s.scope_type) " +
         "scopes,GROUP_CONCAT(DISTINCT t.id ORDER BY t.id) team_ids,GROUP_CONCAT(DISTINCT t.name " +
         "ORDER BY t.name SEPARATOR '||') team_names " +
-        "FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN membership_role_assignments " +
+        "FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN user_profiles p ON p.user_id=u.id LEFT JOIN membership_role_assignments " +
         "r ON r.membership_id=m.id LEFT JOIN membership_data_scopes s ON s.membership_id=m.id " +
         "LEFT JOIN team_memberships tm ON tm.membership_id=m.id LEFT JOIN teams t ON t.id=tm.team_id " +
-        "WHERE m.organization_id=? GROUP BY m.id,m.user_id,u.email,m.status,m.joined_at," +
+        "WHERE m.organization_id=? GROUP BY m.id,m.user_id,u.email,p.display_name,u.status,m.status,m.joined_at," +
         "m.version ORDER BY m.status,u.email",
       [i.organizationId],
     );
@@ -165,6 +165,12 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
       now = this.now();
     try {
       await c.beginTransaction();
+      await c.query("SELECT id FROM organizations WHERE id=? FOR UPDATE", [i.organizationId]);
+      const replay = await this.operation(i, c, true);
+      if (replay) {
+        await c.rollback();
+        return replay;
+      }
       const [dupe] = await c.query<RowDataPacket[]>(
         "SELECT 1 FROM memberships m JOIN users u ON u.id=m.user_id WHERE m.organization_id=? " +
           "AND u.email_normalized=? UNION SELECT 1 FROM organization_invitations WHERE organization_id=? " +
@@ -220,6 +226,53 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
       c.release();
     }
   }
+  async invitationAction(i: any) {
+    const old = await this.operation(i);
+    if (old) return old;
+    const c = await this.pool.getConnection(),
+      now = this.now();
+    try {
+      await c.beginTransaction();
+      const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT * FROM organization_invitations WHERE id=? AND organization_id=? FOR UPDATE",
+        [i.invitationId, i.organizationId],
+      );
+      const replay = await this.operation(i, c, true);
+      if (replay) {
+        await c.rollback();
+        return replay;
+      }
+      this.version(rows[0], i.value.expected_version, "invitation");
+      if (!["pending_delivery", "pending_acceptance"].includes(rows[0].status))
+        throw new OrganizationAdminError(
+          "invitation_not_actionable",
+          409,
+          "刷新邀请记录并选择仍待接受的邀请。",
+        );
+      const version = Number(rows[0].version) + 1;
+      await c.query(
+        "UPDATE organization_invitations SET status='revoked',version=?,updated_at=? WHERE id=?",
+        [version, now, i.invitationId],
+      );
+      const result = { id: i.invitationId, status: "revoked", version };
+      await this.finish(
+        c,
+        i,
+        "organization.invitation.revoked",
+        "organization_invitation",
+        i.invitationId,
+        result,
+        now,
+      );
+      await c.commit();
+      return result;
+    } catch (e) {
+      await c.rollback();
+      throw e;
+    } finally {
+      c.release();
+    }
+  }
   async memberAction(i: any) {
     const old = await this.operation(i);
     if (old) return old;
@@ -231,6 +284,11 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
         "SELECT * FROM memberships WHERE id=? AND organization_id=? FOR UPDATE",
         [i.membershipId, i.organizationId],
       );
+      const replay = await this.operation(i, c, true);
+      if (replay) {
+        await c.rollback();
+        return replay;
+      }
       this.version(rows[0], i.value.expected_version, "membership");
       if (rows[0].user_id === i.actorId && i.value.action === "disable")
         throw new OrganizationAdminError(
@@ -293,7 +351,12 @@ export class MySqlOrganizationAdminRepository implements OrganizationAdminReposi
         "SELECT * FROM memberships WHERE id=? AND organization_id=? FOR UPDATE",
         [i.membershipId, i.organizationId],
       );
-      if (!m[0]) throw new OrganizationAdminError("membership_not_found", 404, "刷新成员列表。");
+      const replay = await this.operation(i, c, true);
+      if (replay) {
+        await c.rollback();
+        return replay;
+      }
+      this.version(m[0], i.value.expected_version, "membership");
       const [existing] = await c.query<RowDataPacket[]>(
         "SELECT role_code FROM membership_role_assignments WHERE membership_id=?",
         [i.membershipId],
