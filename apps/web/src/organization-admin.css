@@ -516,12 +516,400 @@
   text-align: center;
   color: var(--so-text-muted);
 }
+.org-role-page {
+  display: grid;
+  gap: 16px;
+}
+.org-role-summary,
+.org-scope-definitions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.org-role-summary article,
+.org-scope-definitions article {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.org-role-summary span,
+.org-role-summary b,
+.org-role-summary small,
+.org-scope-definitions span,
+.org-scope-definitions b,
+.org-scope-definitions small {
+  display: block;
+}
+.org-role-summary span,
+.org-scope-definitions span {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.org-role-summary b,
+.org-scope-definitions b {
+  margin: 5px 0;
+  font-size: 24px;
+}
+.org-role-summary small,
+.org-scope-definitions small {
+  min-height: 40px;
+  color: var(--so-text-muted);
+  line-height: 1.45;
+}
+.org-role-tabs,
+.org-grant-toolbar > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.org-role-tabs {
+  padding: 5px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.org-role-tabs button,
+.org-grant-toolbar button {
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: var(--so-text-muted);
+  background: transparent;
+}
+.org-role-tabs button[aria-pressed="true"],
+.org-grant-toolbar button[aria-pressed="true"] {
+  border-color: var(--so-primary-border);
+  color: var(--so-primary);
+  background: var(--so-primary-soft);
+}
+.org-role-toolbar,
+.org-grant-toolbar,
+.org-role-matrix-filters {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+}
+.org-role-toolbar label,
+.org-grant-toolbar label,
+.org-role-matrix-filters label {
+  display: grid;
+  gap: 6px;
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.org-role-toolbar input,
+.org-grant-toolbar input,
+.org-role-matrix-filters input,
+.org-role-matrix-filters select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+.org-role-toolbar > span,
+.org-grant-toolbar > span,
+.org-role-matrix-filters + span {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.org-role-browser,
+.org-grant-browser {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.6fr);
+  gap: 14px;
+  align-items: start;
+}
+.org-role-list,
+.org-grant-list {
+  display: grid;
+  gap: 8px;
+}
+.org-role-list > button,
+.org-grant-list > button {
+  width: 100%;
+  min-height: 74px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 11px;
+  color: var(--so-text);
+  text-align: left;
+  background: var(--so-panel-soft);
+}
+.org-role-list > button:hover,
+.org-role-list > button.selected,
+.org-grant-list > button:hover,
+.org-grant-list > button.selected {
+  border-color: var(--so-primary-border);
+  background: var(--so-primary-soft);
+}
+.org-role-list > button > span:first-child {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: var(--so-primary);
+  background: var(--so-panel);
+  font-weight: 800;
+}
+.org-role-list button div,
+.org-role-list button strong,
+.org-role-list button small,
+.org-grant-list button strong,
+.org-grant-list button span,
+.org-grant-list button small {
+  min-width: 0;
+  display: block;
+}
+.org-role-list button small,
+.org-grant-list button span,
+.org-grant-list button small {
+  color: var(--so-text-muted);
+  line-height: 1.4;
+}
+.org-role-list button em {
+  color: var(--so-primary);
+  font-size: 13px;
+  font-style: normal;
+}
+.org-role-detail,
+.org-grant-detail {
+  margin-top: 0;
+}
+.org-role-detail > span,
+.org-grant-intro span {
+  color: var(--so-text-muted);
+  line-height: 1.6;
+}
+.org-role-group {
+  margin-top: 15px;
+}
+.org-role-group > b {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.org-role-detail details,
+.org-grant-detail details {
+  margin: 16px 0;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: var(--so-panel-soft);
+}
+.org-role-detail summary,
+.org-grant-detail summary {
+  cursor: pointer;
+  color: var(--so-primary);
+  font-weight: 700;
+}
+.org-role-detail details code,
+.org-grant-detail details code {
+  display: block;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+  color: var(--so-text-muted);
+}
+.org-admin-role-matrix {
+  margin-top: 0;
+  overflow: visible;
+}
+.org-admin-role-matrix > .org-role-matrix-filters {
+  min-width: 0;
+  grid-template-columns: minmax(220px, 1fr) minmax(180px, 0.6fr) auto;
+  margin: 12px 0;
+}
+.org-role-matrix-filters button {
+  min-height: 44px;
+}
+.org-admin-role-matrix > .org-role-matrix-scroll {
+  min-width: 0;
+  display: block;
+  overflow: auto;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+}
+.org-role-matrix-scroll [role="table"] {
+  min-width: 760px;
+}
+.org-role-matrix-scroll [role="row"] {
+  grid-template-columns: minmax(190px, 1.35fr) repeat(5, minmax(102px, 1fr));
+}
+.org-role-matrix-scroll [role="cell"]:first-child strong,
+.org-role-matrix-scroll [role="cell"]:first-child small {
+  display: block;
+}
+.org-role-matrix-scroll [role="cell"]:first-child small {
+  margin-top: 3px;
+  color: var(--so-text-muted);
+}
+.org-role-matrix-scroll [role="cell"] > b {
+  color: var(--so-success);
+}
+.org-role-matrix-scroll [role="cell"] > i {
+  color: var(--so-text-subtle);
+  font-style: normal;
+}
+.org-role-empty {
+  padding: 20px;
+  text-align: center;
+  color: var(--so-text-muted);
+}
+.org-scope-definitions .org-admin-card {
+  margin-top: 0;
+}
+.org-scope-current {
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.6fr) 1fr;
+  gap: 16px;
+  align-items: center;
+}
+.org-scope-current > small {
+  grid-column: 1 / -1;
+}
+.org-scope-members {
+  margin-top: 0;
+}
+.org-scope-member-facts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.org-scope-member-facts span {
+  padding: 5px 8px;
+  border-radius: 7px;
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+  font-size: 13px;
+}
+.org-grant-intro {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.org-grant-intro h3 {
+  margin-bottom: 8px;
+}
+.org-grant-form {
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 16px;
+}
+.org-grant-form > header,
+.org-grant-form > fieldset,
+.org-grant-form > button {
+  grid-column: 1 / -1;
+}
+.org-grant-form fieldset {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+}
+.org-grant-form fieldset label {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+.org-grant-form fieldset input {
+  width: 20px;
+  min-height: 20px;
+}
+.org-grant-form > button {
+  min-height: 44px;
+}
+.org-grant-toolbar {
+  grid-template-columns: 1fr minmax(260px, 0.6fr);
+}
+.org-grant-list > button {
+  grid-template-columns: 1fr;
+}
+.org-grant-list > button i {
+  width: fit-content;
+  padding: 4px 7px;
+  border: 1px solid var(--so-success-border);
+  border-radius: 999px;
+  color: var(--so-success);
+  background: var(--so-success-soft);
+  font-size: 12px;
+  font-style: normal;
+}
+.org-grant-list > button i[data-status="expired"],
+.org-grant-list > button i[data-status="revoked"] {
+  border-color: var(--so-danger-border);
+  color: var(--so-danger);
+  background: var(--so-danger-soft);
+}
+.org-grant-detail dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.org-grant-detail dl div {
+  padding: 10px;
+  border-radius: 9px;
+  background: var(--so-panel-soft);
+}
+.org-grant-detail dt {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.org-grant-detail dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+.org-grant-mutation {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--so-border);
+}
+.org-grant-mutation .danger {
+  color: var(--so-danger);
+  background: var(--so-danger-soft);
+}
+.org-grant-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  color: var(--so-text-muted);
+}
+.org-grant-pagination span {
+  font-size: 13px;
+}
 @media (max-width: 980px) {
   .org-admin-metrics {
     grid-template-columns: repeat(3, 1fr);
   }
   .org-admin-role-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .org-role-summary,
+  .org-scope-definitions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .org-role-browser,
+  .org-grant-browser {
+    grid-template-columns: 1fr;
   }
 }
 @media (max-width: 620px) {
@@ -594,5 +982,57 @@
   }
   .org-admin-line small {
     word-break: break-all;
+  }
+  .org-role-summary,
+  .org-scope-definitions,
+  .org-role-toolbar,
+  .org-grant-toolbar,
+  .org-admin-role-matrix > .org-role-matrix-filters,
+  .org-grant-form,
+  .org-scope-current {
+    grid-template-columns: 1fr;
+  }
+  .org-role-summary small,
+  .org-scope-definitions small {
+    min-height: 0;
+  }
+  .org-role-tabs {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .org-role-tabs button {
+    text-align: left;
+  }
+  .org-role-list > button {
+    grid-template-columns: auto 1fr;
+  }
+  .org-role-list button em {
+    grid-column: 2;
+  }
+  .org-scope-current > small {
+    grid-column: auto;
+  }
+  .org-scope-member-facts {
+    justify-content: flex-start;
+  }
+  .org-grant-intro {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .org-grant-intro button,
+  .org-grant-form > button {
+    width: 100%;
+  }
+  .org-grant-form > header,
+  .org-grant-form > fieldset,
+  .org-grant-form > button {
+    grid-column: auto;
+  }
+  .org-grant-detail dl {
+    grid-template-columns: 1fr;
+  }
+  .org-grant-pagination {
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
 }

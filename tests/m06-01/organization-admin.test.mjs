@@ -195,10 +195,27 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
   assert.match(center, /memberPageSize = 10/);
   assert.match(center, /for \(const email of accepted\)/);
   assert.match(center, /role_code, expected_version: item\.version, reason/);
+  assert.match(center, /api\("\/me\/authorization"\)/);
+  assert.match(center, /resource-grants\?page=\$\{resourceGrantPage\.value\}&limit=20/);
+  assert.match(center, /status=\$\{resourceGrantStatus\.value\}/);
+  assert.match(center, /grant_counts/);
+  assert.match(center, /resource-grant-targets/);
+  assert.match(center, /createResourceGrant/);
+  assert.match(center, /extendResourceGrant/);
+  assert.match(center, /revokeResourceGrant/);
   for (const copy of [
     "邀请状态",
     "成员筛选",
     "角色能力矩阵",
+    "角色模板与能力",
+    "成员数据范围预览",
+    "指定资源授权",
+    "创建并写入审计",
+    "延长授权",
+    "撤销授权",
+    "资源授权分页",
+    "上一页",
+    "下一页",
     "跨工作区数据比较",
     "只显示一次",
     "应用筛选",
@@ -218,6 +235,8 @@ test("M06-01 organization overview preserves facts and form context across refre
   assert.match(center, /if \(busy\.value\) return/);
   assert.match(center, /requestTimeoutMs = 12_000/);
   assert.match(center, /organization_request_timeout/);
+  assert.match(center, /organization_network_unavailable/);
+  assert.match(center, /网络连接不可用/);
   assert.match(center, /pattern="https:\/\/\.\*"/);
   assert.match(center, /Logo 地址必须以 https:\/\/ 开头/);
   assert.match(center, /数据已被其他操作更新/);

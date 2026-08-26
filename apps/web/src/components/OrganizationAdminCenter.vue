@@ -41,7 +41,18 @@ const props = defineProps<{
   memberSort = ref("name_asc"),
   memberPage = ref(1),
   invitationTab = ref<"pending" | "expired">("pending"),
-  auditFilters = ref({ action: "", outcome: "", resource_type: "" });
+  auditFilters = ref({ action: "", outcome: "", resource_type: "" }),
+  resourceGrantPage = ref(1),
+  resourceGrantStatus = ref("all"),
+  resourceGrantForm = ref<any>({
+    workspace_id: "",
+    resource_type: "opportunity",
+    resource_id: "",
+    grantee_membership_id: "",
+    actions: ["opportunity:read"],
+    reason: "",
+    expires_at: "",
+  });
 let loadSequence = 0;
 const {
   request: auditedReasonRequest,
@@ -93,6 +104,17 @@ async function api(path: string, init: ApiRequestOptions = {}) {
         requestId,
         { cause: error },
       );
+    if (error instanceof TypeError)
+      throw new ApiClientError(
+        503,
+        "organization_network_unavailable",
+        "blocked",
+        "网络连接不可用。",
+        "恢复网络连接后重新刷新。",
+        requestId,
+        requestId,
+        { cause: error },
+      );
     throw error;
   } finally {
     window.clearTimeout(timeout);
@@ -139,6 +161,49 @@ async function readView(currentView: string) {
   if (currentView === "data") {
     const response = await api("/org/admin/data");
     return { value: response.data, requestId: response.request_id };
+  }
+  if (currentView === "roles") {
+    const grantPath = `/org/${props.organizationId}/resource-grants?page=${resourceGrantPage.value}&limit=20${
+        resourceGrantStatus.value === "all" ? "" : `&status=${resourceGrantStatus.value}`
+      }`,
+      [
+        roles,
+        authorization,
+        members,
+        workspaces,
+        grants,
+        grantTargets,
+        activeGrants,
+        expiredGrants,
+        revokedGrants,
+      ] = await Promise.all([
+        api("/org/admin/roles"),
+        api("/me/authorization"),
+        api("/org/admin/members"),
+        api("/org/admin/workspaces"),
+        api(grantPath),
+        api(`/org/${props.organizationId}/resource-grant-targets`),
+        api(`/org/${props.organizationId}/resource-grants?page=1&limit=1&status=active`),
+        api(`/org/${props.organizationId}/resource-grants?page=1&limit=1&status=expired`),
+        api(`/org/${props.organizationId}/resource-grants?page=1&limit=1&status=revoked`),
+      ]);
+    return {
+      value: {
+        roles: roles.data,
+        authorization: authorization.data,
+        members: members.data.items ?? [],
+        workspaces: workspaces.data,
+        grants: grants.data,
+        grant_meta: grants.meta,
+        grant_counts: {
+          active: Number((activeGrants.meta as any)?.total ?? 0),
+          expired: Number((expiredGrants.meta as any)?.total ?? 0),
+          revoked: Number((revokedGrants.meta as any)?.total ?? 0),
+        },
+        grant_targets: grantTargets.data,
+      },
+      requestId: roles.request_id,
+    };
   }
   if (currentView === "teams") {
     const [teams, members] = await Promise.all([
@@ -193,6 +258,19 @@ async function load(options: { background?: boolean; preserveNotice?: boolean } 
         if (!memberRoles.value[member.id])
           memberRoles.value[member.id] = member.roles?.[0] ?? "member";
     }
+    if (currentView === "roles") {
+      const existing = resourceGrantForm.value,
+        workspaceId =
+          existing.workspace_id ||
+          data.value?.authorization?.workspace_id ||
+          data.value?.workspaces?.[0]?.id ||
+          "";
+      resourceGrantForm.value = {
+        ...existing,
+        workspace_id: workspaceId,
+        expires_at: existing.expires_at || defaultGrantExpiry(),
+      };
+    }
     state.value = (
       Array.isArray(data.value) ? data.value.length : Object.keys(data.value ?? {}).length
     )
@@ -237,12 +315,14 @@ async function submit(
       : "操作已完成并写入审计。";
     requestId.value = writeRequestId;
     if (result?.secret) secret.value = result.secret;
+    return true;
   } catch (error) {
     applyFailure(
       error,
       error instanceof ApiClientError && ["expired", "forbidden"].includes(error.kind),
     );
     rethrowUnexpectedError(error);
+    return false;
   } finally {
     busy.value = false;
   }
@@ -357,6 +437,120 @@ async function invitationAction(item: any) {
     { preserveForm: true },
   );
 }
+const resourceActions: Record<string, string[]> = {
+  task: ["task:read", "task:update"],
+  opportunity: ["opportunity:read", "opportunity:decide"],
+  competitor: ["competitor:read"],
+  sourcing: ["sourcing:read", "supplier_quote:manage", "cost:confirm"],
+};
+function defaultGrantExpiry(days = 7) {
+  const value = new Date(Date.now() + days * 86_400_000);
+  value.setMinutes(value.getMinutes() - value.getTimezoneOffset());
+  return value.toISOString().slice(0, 16);
+}
+function updateResourceGrantType(resourceType: string) {
+  resourceGrantForm.value.resource_type = resourceType;
+  resourceGrantForm.value.actions = [resourceActions[resourceType]?.[0]].filter(Boolean);
+}
+function validateGrantExpiry(value: string) {
+  const expiresAt = new Date(value),
+    remaining = expiresAt.valueOf() - Date.now();
+  if (!Number.isFinite(expiresAt.valueOf()) || remaining <= 0 || remaining > 30 * 86_400_000) {
+    noticeKind.value = "error";
+    notice.value = "授权到期时间必须晚于当前时间，且不得超过 30 天。";
+    return null;
+  }
+  return expiresAt.toISOString();
+}
+async function createResourceGrant() {
+  if (busy.value) return;
+  const expiresAt = validateGrantExpiry(resourceGrantForm.value.expires_at),
+    actions = [...new Set(resourceGrantForm.value.actions ?? [])];
+  if (!expiresAt) return;
+  if (!actions.length) {
+    noticeKind.value = "error";
+    notice.value = "至少选择一项最小必要动作。";
+    return;
+  }
+  busy.value = true;
+  try {
+    const response = await api(`/org/${props.organizationId}/resource-grants`, {
+        method: "POST",
+        body: JSON.stringify({
+          ...resourceGrantForm.value,
+          actions,
+          reason: String(resourceGrantForm.value.reason ?? "").trim(),
+          expires_at: expiresAt,
+        }),
+      }),
+      writeRequestId = response.request_id,
+      firstAction = resourceActions[resourceGrantForm.value.resource_type]?.[0];
+    resourceGrantForm.value = {
+      ...resourceGrantForm.value,
+      resource_id: "",
+      grantee_membership_id: "",
+      actions: firstAction ? [firstAction] : [],
+      reason: "",
+      expires_at: defaultGrantExpiry(),
+    };
+    resourceGrantPage.value = 1;
+    resourceGrantStatus.value = "all";
+    await load({ background: true, preserveNotice: true });
+    noticeKind.value = "success";
+    notice.value = "指定资源授权已创建并写入审计。";
+    requestId.value = writeRequestId;
+  } catch (error) {
+    applyFailure(
+      error,
+      error instanceof ApiClientError && ["expired", "forbidden"].includes(error.kind),
+    );
+    rethrowUnexpectedError(error);
+  } finally {
+    busy.value = false;
+  }
+}
+async function updateResourceGrantStatus(status: string) {
+  if (refreshing.value) return;
+  resourceGrantStatus.value = status;
+  resourceGrantPage.value = 1;
+  await load({ background: true });
+}
+async function updateResourceGrantPage(page: number) {
+  if (refreshing.value || page < 1) return;
+  resourceGrantPage.value = page;
+  await load({ background: true });
+}
+async function extendResourceGrant(value: { grant: any; reason: string; expires_at: string }) {
+  if (busy.value) return;
+  const expiresAt = validateGrantExpiry(value.expires_at);
+  if (!expiresAt) return;
+  if (
+    await submit(
+      `/org/${props.organizationId}/resource-grants/${value.grant.id}/expiry`,
+      {
+        expected_version: value.grant.version,
+        reason: value.reason.trim(),
+        expires_at: expiresAt,
+      },
+      "PATCH",
+      { preserveForm: true },
+    )
+  )
+    notice.value = "授权到期时间已更新并写入审计。";
+}
+async function revokeResourceGrant(grant: any) {
+  const reason = await auditedReason("撤销指定资源授权");
+  if (!reason) return;
+  if (
+    await submit(
+      `/org/${props.organizationId}/resource-grants/${grant.id}/revoke`,
+      { expected_version: grant.version, reason },
+      "POST",
+      { preserveForm: true },
+    )
+  )
+    notice.value = "指定资源授权已撤销并写入审计。";
+}
 async function workspaceAction(item: any) {
   const action = item.status === "active" ? "archive" : "restore";
   const reason = await auditedReason(action === "archive" ? "归档工作区" : "恢复工作区");
@@ -460,14 +654,14 @@ const activeMembers = computed(() =>
   ),
   roleCapabilities = computed<string[]>(() => [
     ...new Set<string>(
-      (data.value ?? []).flatMap((item: any) => item.capabilities ?? []) as string[],
+      (data.value?.roles ?? []).flatMap((item: any) => item.capabilities ?? []) as string[],
     ),
   ]),
   rows = computed(() =>
     view.value === "members"
       ? (data.value?.items ?? [])
       : view.value === "roles"
-        ? (data.value ?? [])
+        ? (data.value?.roles ?? [])
         : view.value === "workspaces"
           ? (data.value ?? [])
           : view.value === "teams"
@@ -522,8 +716,14 @@ const statusText = (v: string) =>
     }) as Record<string, string>
   )[v] ?? "其他状态";
 const scopeText = (v: string) =>
-  (({ organization: "组织范围", workspace: "工作区范围" }) as Record<string, string>)[v] ??
-  "指定范围";
+  (
+    ({
+      own: "本人范围",
+      team: "团队范围",
+      organization: "组织范围",
+      workspace: "工作区范围",
+    }) as Record<string, string>
+  )[v] ?? "指定范围";
 const capabilityText = (v: string) =>
   (
     ({
@@ -536,6 +736,7 @@ const capabilityText = (v: string) =>
       "opportunity:decide": "提交选品决定",
       "opportunity:approve": "审核选品",
       "competitor:read": "查看竞品",
+      "competitor:manage": "管理竞品监控",
       "sourcing:read": "查看供应链",
       "supplier_quote:manage": "维护供应商报价",
       "cost:confirm": "确认成本",
@@ -550,6 +751,8 @@ const capabilityText = (v: string) =>
       "organization_token:manage": "管理组织 Token",
       "audit:read": "查看审计",
       "report:read": "查看报表",
+      "provider:configure": "配置数据来源",
+      "trend:manage": "管理热点规则",
     }) as Record<string, string>
   )[v] ?? "其他授权";
 const summaryText = (v: string) =>
@@ -798,8 +1001,27 @@ onMounted(() => void load());
         v-else-if="view === 'roles'"
         :roles="rows"
         :capabilities="roleCapabilities"
+        :authorization="data?.authorization"
+        :members="data?.members ?? []"
+        :workspaces="data?.workspaces ?? []"
+        :grants="data?.grants ?? []"
+        :grant-meta="data?.grant_meta"
+        :grant-counts="data?.grant_counts ?? { active: 0, expired: 0, revoked: 0 }"
+        :grant-status="resourceGrantStatus"
+        :grant-targets="data?.grant_targets ?? []"
+        :grant-form="resourceGrantForm"
+        :resource-actions="resourceActions"
+        :busy="busy || refreshing"
         :role-text="roleText"
+        :scope-text="scopeText"
         :capability-text="capabilityText"
+        :format-time="fmt"
+        @update-grant-type="updateResourceGrantType"
+        @update-grant-status="updateResourceGrantStatus"
+        @update-grant-page="updateResourceGrantPage"
+        @create-grant="createResourceGrant"
+        @extend-grant="extendResourceGrant"
+        @revoke-grant="revokeResourceGrant"
       />
       <section v-else-if="view === 'workspaces'" class="org-admin-grid">
         <form class="org-admin-card" @submit.prevent="submit('/org/admin/workspaces', form)">

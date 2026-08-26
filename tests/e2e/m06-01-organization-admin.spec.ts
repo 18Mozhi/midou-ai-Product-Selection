@@ -6,8 +6,30 @@ const ws = "00000000-0000-4000-8000-000000000602";
 const memberAdmin = "00000000-0000-4000-8000-000000000611";
 const memberBuyer = "00000000-0000-4000-8000-000000000612";
 const approvalResource = "00000000-0000-4000-8000-000000000614";
-const env = (data: unknown) => ({
+const grantResource = "00000000-0000-4000-8000-000000000624";
+const activeGrant = {
+  id: "00000000-0000-4000-8000-000000000625",
+  organization_id: org,
+  workspace_id: ws,
+  resource_type: "opportunity",
+  resource_id: grantResource,
+  grantee_membership_id: memberBuyer,
+  grantor_id: "00000000-0000-4000-8000-000000000626",
+  reason: "采购团队核对供应报价",
+  status: "active",
+  effective_status: "active",
+  expires_at: "2026-09-01T10:00:00.000Z",
+  revoked_at: null,
+  revoked_by: null,
+  revocation_reason: null,
+  version: 1,
+  created_at: "2026-08-20T10:00:00.000Z",
+  updated_at: "2026-08-20T10:00:00.000Z",
+  actions: ["opportunity:read", "opportunity:decide"],
+};
+const env = (data: unknown, meta?: unknown) => ({
   data,
+  ...(meta ? { meta } : {}),
   request_id: "m06-01-e2e",
   trace_id: "m06-01-e2e",
 });
@@ -140,6 +162,41 @@ async function setup(page: Page) {
   await page.route("**/api/v1/org/admin/profile", (r) => r.fulfill({ json: env(profile) }));
   await page.route("**/api/v1/org/admin/workspaces", (r) => r.fulfill({ json: env(workspaces) }));
   await page.route("**/api/v1/org/admin/members", (r) => r.fulfill({ json: env(members) }));
+  await page.route("**/api/v1/me/authorization", (r) =>
+    r.fulfill({
+      json: env({
+        organization_id: org,
+        workspace_id: ws,
+        roles: ["organization_admin"],
+        capabilities: ["role:read", "role:manage", "membership:read"],
+        data_scopes: [{ scope: "organization" }],
+      }),
+    }),
+  );
+  await page.route(`**/api/v1/org/${org}/resource-grant-targets`, (r) =>
+    r.fulfill({
+      json: env([
+        {
+          id: memberBuyer,
+          user_id: "00000000-0000-4000-8000-000000000627",
+          email: "buyer@example.test",
+          status: "active",
+        },
+      ]),
+    }),
+  );
+  await page.route(`**/api/v1/org/${org}/resource-grants*`, (r) => {
+    if (r.request().method() !== "GET")
+      return r.fulfill({ status: 201, json: env({ ...activeGrant, version: 2 }) });
+    const query = new URL(r.request().url()).searchParams,
+      status = query.get("status"),
+      items = !status || status === "active" ? [activeGrant] : [],
+      pageNumber = Number(query.get("page") ?? 1),
+      limit = Number(query.get("limit") ?? 20);
+    return r.fulfill({
+      json: env(items, { page: pageNumber, limit, total: items.length }),
+    });
+  });
   await page.route("**/api/v1/org/admin/teams", (r) =>
     r.fulfill({
       json: env([
@@ -508,10 +565,144 @@ test("organization member choices replace raw ids and approval ids stay technica
   await expect(resourceId).toBeVisible();
 });
 
-test("organization governance matrix, data comparison and audit filters", async ({ page }) => {
+test("organization roles expose searchable role, capability, scope and grant facts", async ({
+  page,
+}) => {
   await setup(page);
   await page.goto("/org-admin/roles");
   await expect(page.getByRole("table", { name: "角色能力矩阵" })).toBeVisible();
+  await expect(page.getByText("固定角色模板", { exact: true }).first()).toBeVisible();
+
+  await page.getByLabel("搜索角色或能力").fill("审计");
+  await expect(page.getByRole("button", { name: /审计员/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /组织管理员/ })).toHaveCount(0);
+  await page.getByLabel("搜索角色或能力").fill("");
+  await page.getByLabel("搜索能力").fill("组织");
+  await expect(
+    page.getByRole("table", { name: "角色能力矩阵" }).getByText("管理组织", { exact: true }),
+  ).toBeVisible();
+  await page.getByLabel("业务域").selectOption({ label: "组织治理" });
+  await page.getByRole("button", { name: "重置", exact: true }).click();
+
+  await page.getByRole("button", { name: "数据范围" }).click();
+  await expect(page.getByRole("heading", { name: "我的有效数据范围" })).toBeVisible();
+  await page.getByLabel("搜索成员").fill("陈采购");
+  await page.getByLabel("数据范围").selectOption("workspace");
+  await expect(page.getByText("陈采购", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "重置", exact: true }).click();
+
+  await page.getByRole("button", { name: /指定资源授权 1/ }).click();
+  await expect(page.getByText("采购团队核对供应报价")).toBeVisible();
+  await page.getByRole("button", { name: "已撤销 0" }).click();
+  await expect(page.getByRole("heading", { name: "当前状态没有资源授权" })).toBeVisible();
+  await page.getByRole("button", { name: "全部 1" }).click();
+  await page.getByLabel("搜索当前页授权").fill("陈采购");
+  await expect(page.getByText("采购团队核对供应报价")).toBeVisible();
+});
+
+test("organization resource grants use truthful server pagination beyond one page", async ({
+  page,
+}) => {
+  const grants = Array.from({ length: 21 }, (_, index) => ({
+    ...activeGrant,
+    id: `00000000-0000-4000-8000-${String(index + 700).padStart(12, "0")}`,
+    reason: `分页授权 ${index + 1}`,
+  }));
+  await setup(page);
+  await page.route(`**/api/v1/org/${org}/resource-grants*`, (route) => {
+    if (route.request().method() !== "GET") return route.fallback();
+    const query = new URL(route.request().url()).searchParams,
+      status = query.get("status"),
+      pageNumber = Number(query.get("page") ?? 1),
+      limit = Number(query.get("limit") ?? 20),
+      statusItems = status && status !== "active" ? [] : grants,
+      items = status
+        ? statusItems.slice(0, limit)
+        : grants.slice((pageNumber - 1) * limit, pageNumber * limit);
+    return route.fulfill({
+      json: env(items, { page: pageNumber, limit, total: statusItems.length }),
+    });
+  });
+  await page.goto("/org-admin/roles");
+  await page.getByRole("button", { name: "指定资源授权 21" }).click();
+  await expect(page.getByRole("navigation", { name: "资源授权分页" })).toContainText(
+    "第 1 / 2 页 · 共 21 条",
+  );
+  await expect(page.locator(".org-grant-list > button")).toHaveCount(20);
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page.getByRole("navigation", { name: "资源授权分页" })).toContainText(
+    "第 2 / 2 页 · 共 21 条",
+  );
+  await expect(page.locator(".org-grant-list > button")).toHaveCount(1);
+  await page.getByRole("button", { name: "上一页" }).click();
+  await expect(page.locator(".org-grant-list > button")).toHaveCount(20);
+});
+
+test("organization resource grants validate and send audited create, extend and revoke writes", async ({
+  page,
+}) => {
+  const writes: Array<{ method: string; url: string; body: Record<string, unknown> }> = [];
+  await page.clock.setFixedTime(new Date("2026-08-26T10:00:00.000Z"));
+  await setup(page);
+  const captureWrite = async (route: Route) => {
+    if (route.request().method() === "GET") return route.fallback();
+    writes.push({
+      method: route.request().method(),
+      url: route.request().url(),
+      body: route.request().postDataJSON(),
+    });
+    return route.fulfill({
+      status: route.request().method() === "POST" ? 201 : 200,
+      json: env({ ...activeGrant, version: 2 }),
+    });
+  };
+  await page.route(`**/api/v1/org/${org}/resource-grants*`, captureWrite);
+  await page.route(`**/api/v1/org/${org}/resource-grants/**`, captureWrite);
+  await page.goto("/org-admin/roles");
+  await page.getByRole("button", { name: /指定资源授权 1/ }).click();
+  await expect(page.getByLabel("新到期时间")).not.toHaveValue("");
+  await page.getByRole("button", { name: "创建授权" }).click();
+  const createForm = page.locator("form.org-grant-form");
+  await createForm.getByLabel("资源编号").fill(grantResource);
+  await createForm.getByLabel("目标成员").selectOption(memberBuyer);
+  await createForm.getByLabel("业务原因").fill("临时协作核价");
+  await createForm.getByRole("button", { name: "创建并写入审计" }).click();
+  await expect(page.getByText("指定资源授权已创建并写入审计。")).toBeVisible();
+
+  await page.getByLabel("变更原因").fill("延长核价窗口");
+  await page.getByRole("button", { name: "延长授权" }).click();
+  await expect(page.getByText("授权到期时间已更新并写入审计。")).toBeVisible();
+
+  await page.getByRole("button", { name: "撤销授权" }).click();
+  const dialog = page.getByRole("dialog", { name: "撤销指定资源授权原因" });
+  await dialog.getByRole("textbox").fill("协作已经结束");
+  await dialog.getByRole("button", { name: "确认提交" }).click();
+  await expect(page.getByText("指定资源授权已撤销并写入审计。")).toBeVisible();
+
+  expect(writes).toHaveLength(3);
+  expect(writes[0]).toMatchObject({
+    method: "POST",
+    body: {
+      workspace_id: ws,
+      resource_type: "opportunity",
+      resource_id: grantResource,
+      grantee_membership_id: memberBuyer,
+      actions: ["opportunity:read"],
+      reason: "临时协作核价",
+    },
+  });
+  expect(writes[1]).toMatchObject({
+    method: "PATCH",
+    body: { expected_version: 1, reason: "延长核价窗口" },
+  });
+  expect(writes[2]).toMatchObject({
+    method: "POST",
+    body: { expected_version: 1, reason: "协作已经结束" },
+  });
+});
+
+test("organization data comparison and audit filters", async ({ page }) => {
+  await setup(page);
 
   await page.goto("/org-admin/data");
   await expect(page.getByRole("table", { name: "跨工作区数据比较" })).toBeVisible();
