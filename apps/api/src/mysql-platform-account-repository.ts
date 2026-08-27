@@ -454,8 +454,7 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
       );
       if (operations[0]) {
         await c.commit();
-        const value = operations[0].result_json;
-        return (typeof value === "string" ? JSON.parse(value) : value) as T;
+        return this.parseOperationResult<T>(operations[0].result_json);
       }
       const result = await work(c);
       await c.query(
@@ -474,16 +473,31 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
     } catch (error) {
       await c.rollback();
       if (error instanceof PlatformAccountError) throw error;
-      if ((error as { code?: string }).code === "ER_DUP_ENTRY")
+      if ((error as { code?: string }).code === "ER_DUP_ENTRY") {
+        const replay = await this.findOperation<T>(input.actorId, route, input.idempotencyKey);
+        if (replay.found) return replay.value;
         throw new PlatformAccountError(
           "platform_account_conflict",
           409,
           "标识或状态已变化，请刷新后重试。",
         );
+      }
       throw error;
     } finally {
       c.release();
     }
+  }
+  private parseOperationResult<T>(value: unknown) {
+    return (typeof value === "string" ? JSON.parse(value) : value) as T;
+  }
+  private async findOperation<T>(actorId: string, route: string, idempotencyKey: string) {
+    const [operations] = await this.pool.query<RowDataPacket[]>(
+      "SELECT result_json FROM platform_account_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",
+      [actorId, route, idempotencyKey],
+    );
+    return operations[0]
+      ? { found: true as const, value: this.parseOperationResult<T>(operations[0].result_json) }
+      : { found: false as const, value: undefined };
   }
   private routeFromInput(input: any) {
     if (input.organizationId) return "/platform/accounts/organizations/status";

@@ -8,6 +8,8 @@
 
 `/platform-admin/organizations` 列表只使用组织名称、英文标识和组织状态筛选；筛选无结果时，桌面表格与移动卡片都显示可清除的空状态，而不是保留空表头。列表继续读取原账号概览接口，不新增接口、数据库字段或权限推断。
 
+`/platform-admin/organizations/{organizationId}` 详情继续从账号概览读取组织事实，并使用原更新与状态接口。不存在或已不可访问的组织会在详情模态内显示可重试、可返回列表的明确状态；资料更新和停用、恢复的成功或失败反馈也固定显示在详情模态内，避免被模态层遮挡。同一操作者、路由与 Idempotency-Key 的并发写入发生唯一键竞争时，仓储会在事务回滚后回放已提交的 `platform_account_operations` 结果；只有没有对应操作记录的真实业务唯一键冲突才返回 409。
+
 管理员管理页通过只读 `GET /api/v1/platform/roles` 获取当前数据库中的活动平台角色与能力映射。该接口要求 `platform:superadmin`，前端可选择任意两种角色并默认只显示能力差异；能力代码只用于匹配，普通界面显示中文动作名称。授权事实仍由 `roles` 与 `role_capabilities` 决定，页面按钮与对比结果都不是权限边界。
 
 生产角色门禁使用同一 `MySqlAuthorizationRepository` 读取 `roles`、`role_capabilities` 和 `platform_role_assignments`。它先校验运营管理员、安全管理员和超级管理员的数据库目录与代码内固定目录完全一致，再为隔离的临时账号逐个授予单一平台角色，对全部能力分别执行真实允许或拒绝判定，并核对 `authorization_decisions` 的允许、拒绝数量。门禁不根据前端菜单或按钮推断权限，也不会增加角色或能力。

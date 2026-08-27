@@ -6,11 +6,16 @@ const props = defineProps<{
   organization: any | null;
   form: { name: string; timezone: string; data_retention_days: number };
   busy: boolean;
+  missing: boolean;
+  errorMessage: string;
+  successMessage: string;
   statusText: (value: string) => string;
 }>();
 
 const emit = defineEmits<{
   close: [];
+  retry: [];
+  clearFeedback: [];
   save: [];
   toggleStatus: [organization: any];
 }>();
@@ -24,10 +29,21 @@ const { dialogElement, handleCancel } = useModalDialog(
   <dialog
     ref="dialogElement"
     class="organization-detail-dialog"
-    :aria-label="organization?.name ?? '组织详情'"
+    :aria-label="organization?.name ?? (missing ? '未找到组织' : '组织详情')"
     @cancel="handleCancel"
   >
-    <form v-if="organization" @submit.prevent="$emit('save')">
+    <section v-if="missing" class="organization-detail-state" role="alert">
+      <small>组织详情</small>
+      <h3>未找到该组织</h3>
+      <p>该组织可能已被删除，或当前账号已无法访问。请重新加载，或返回组织列表选择其他组织。</p>
+      <footer>
+        <button type="button" class="secondary" :disabled="busy" @click="$emit('retry')">
+          重新加载
+        </button>
+        <button type="button" @click="$emit('close')">返回组织列表</button>
+      </footer>
+    </section>
+    <form v-else-if="organization" @submit.prevent="$emit('save')">
       <header>
         <div>
           <small>组织详情</small>
@@ -48,8 +64,21 @@ const { dialogElement, handleCancel } = useModalDialog(
       </div>
       <section class="organization-profile">
         <h4>组织资料与设置</h4>
-        <label>组织名称<input v-model="form.name" required minlength="2" maxlength="120" /></label>
-        <label>时区<input v-model="form.timezone" required maxlength="64" /></label>
+        <label
+          >组织名称<input
+            v-model="form.name"
+            required
+            minlength="2"
+            maxlength="120"
+            @input="$emit('clearFeedback')"
+        /></label>
+        <label
+          >时区<input
+            v-model="form.timezone"
+            required
+            maxlength="64"
+            @input="$emit('clearFeedback')"
+        /></label>
         <label
           >数据保留天数<input
             v-model.number="form.data_retention_days"
@@ -57,8 +86,15 @@ const { dialogElement, handleCancel } = useModalDialog(
             min="30"
             max="3650"
             required
+            @input="$emit('clearFeedback')"
         /></label>
       </section>
+      <p v-if="errorMessage" class="organization-feedback is-error" role="alert">
+        <strong>操作未完成</strong><span>{{ errorMessage }}</span>
+      </p>
+      <p v-else-if="successMessage" class="organization-feedback is-success" role="status">
+        <strong>操作成功</strong><span>{{ successMessage }}</span>
+      </p>
       <details>
         <summary>技术详情</summary>
         <dl>
@@ -108,7 +144,8 @@ dialog::backdrop {
   backdrop-filter: blur(4px);
 }
 form,
-.organization-profile {
+.organization-profile,
+.organization-detail-state {
   display: grid;
   gap: 14px;
 }
@@ -120,7 +157,9 @@ footer {
   gap: 10px;
 }
 header h3,
-.organization-profile h4 {
+.organization-profile h4,
+.organization-detail-state h3,
+.organization-detail-state p {
   margin: 0;
 }
 header small,
@@ -163,6 +202,30 @@ input {
   border-radius: 8px;
   color: var(--so-text);
   background: var(--so-panel-soft);
+}
+summary {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  cursor: pointer;
+}
+.organization-feedback {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid;
+  border-radius: 10px;
+}
+.organization-feedback.is-error {
+  border-color: color-mix(in srgb, var(--so-danger) 55%, var(--so-border));
+  color: var(--so-danger);
+  background: color-mix(in srgb, var(--so-danger) 8%, var(--so-bg-elevated));
+}
+.organization-feedback.is-success {
+  border-color: color-mix(in srgb, var(--so-success) 55%, var(--so-border));
+  color: var(--so-success);
+  background: color-mix(in srgb, var(--so-success) 8%, var(--so-bg-elevated));
 }
 dl {
   display: grid;

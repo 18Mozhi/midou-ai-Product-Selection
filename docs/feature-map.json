@@ -2929,7 +2929,8 @@
       "path": "/platform-admin/organizations/{organizationId}",
       "view": "PlatformAccountCenter",
       "domain": "platform-organization-detail",
-      "status": "implemented"
+      "status": "implemented",
+      "statusDetail": "organization_detail_live_mysql_update_status_audit_idempotency_missing_error_retry_permission_refresh_and_responsive_verification_completed"
     },
     {
       "path": "/platform-admin/users",

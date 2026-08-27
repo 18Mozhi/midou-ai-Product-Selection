@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { PlatformAccountService } from "../../apps/api/dist/platform-account-service.js";
+import { MySqlPlatformAccountRepository } from "../../apps/api/dist/mysql-platform-account-repository.js";
 import { CAPABILITIES } from "../../packages/authorization/dist/index.js";
 const actor = "00000000-0000-4000-8000-000000000601",
   other = "00000000-0000-4000-8000-000000000602",
@@ -99,6 +100,29 @@ test("M06-01 platform account service validates novice organization and account 
     (error) => error.code === "cannot_revoke_self_superadmin",
   );
 });
+test("M06-01 concurrent idempotency collision replays the committed platform operation", async () => {
+  const expected = { id: other, status: "active" };
+  let connectionQueryCount = 0;
+  const connection = {
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release: () => {},
+      query: async () => {
+        connectionQueryCount += 1;
+        if (connectionQueryCount === 1) return [[], []];
+        throw Object.assign(new Error("duplicate operation"), { code: "ER_DUP_ENTRY" });
+      },
+    },
+    pool = {
+      getConnection: async () => connection,
+      query: async () => [[{ result_json: JSON.stringify(expected) }], []],
+    },
+    repository = new MySqlPlatformAccountRepository(pool);
+  const result = await repository.write(context, async () => expected);
+  assert.deepEqual(result, expected);
+  assert.equal(connectionQueryCount, 2);
+});
 test("M06-01 platform account delivery includes API, migration, novice UI, permissions and audit", async () => {
   const paths = [
       "database/migrations/0036_automatic_hotspot_sources.up.sql",
@@ -150,6 +174,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(migration, /platform_account_operations/);
   assert.match(service, /cannot_disable_self/);
   assert.match(repository, /platform_audit_events/);
+  assert.match(repository, /findOperation<T>/);
   assert.match(repository, /CONVERT\(o\.slug USING utf8mb4\) COLLATE utf8mb4_unicode_ci LIKE/);
   assert.match(repository, /UPDATE user_sessions SET status='revoked'/);
   assert.match(repository, /user.password.forced_reset/);
@@ -168,6 +193,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(web, /同时创建默认工作区和组织级数据范围/);
   assert.match(accountShell, /已进入组织详情/);
   assert.match(organizationDetail, /组织详情[\s\S]*停用组织[\s\S]*保存组织资料/);
+  assert.match(organizationDetail, /未找到该组织/);
+  assert.match(organizationDetail, /操作未完成/);
   assert.doesNotMatch(accountShell, /@click="toggleOrganization\(item\)"/);
   assert.doesNotMatch(accountShell, /@click="toggleUser\(item\)"/);
   assert.doesNotMatch(adminRecords, /emit\('role'/);

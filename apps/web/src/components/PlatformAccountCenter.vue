@@ -57,6 +57,9 @@ const props = withDefaults(
   createUserOpen = ref(false),
   createOrganizationButton = ref<HTMLButtonElement | null>(null),
   organizationDetailOpen = ref(false),
+  organizationMissing = ref(false),
+  organizationError = ref(""),
+  organizationSuccess = ref(""),
   detailOpen = ref(false),
   passwordOpen = ref(false),
   reasonOpen = ref(false),
@@ -287,15 +290,22 @@ function cancelReason() {
   pendingReasonAction.value = null;
 }
 async function toggleOrganization(item: any) {
+  clearOrganizationFeedback();
   askReason(item.status === "active" ? "停用组织" : "恢复组织", async (why) => {
     if (
-      await write(`/platform/accounts/organizations/${item.id}/status`, {
-        status: item.status === "active" ? "archived" : "active",
-        reason: why,
-      })
+      await write(
+        `/platform/accounts/organizations/${item.id}/status`,
+        {
+          status: item.status === "active" ? "archived" : "active",
+          reason: why,
+        },
+        "POST",
+        (value) => (organizationError.value = value),
+      )
     ) {
       const updated = data.value?.organizations.find((row) => row.id === item.id);
       if (updated) showOrganization(updated);
+      organizationSuccess.value = item.status === "active" ? "组织已停用。" : "组织已恢复。";
     }
   });
 }
@@ -332,46 +342,63 @@ async function role(userId: string, roleCode: string, enabled: boolean) {
 }
 function showOrganization(item: any) {
   selected.value = item;
+  organizationMissing.value = false;
   organizationForm.name = item.name;
   organizationForm.timezone = item.timezone || "Asia/Shanghai";
   organizationForm.data_retention_days = Number(item.data_retention_days || 365);
   organizationDetailOpen.value = true;
 }
 async function openOrganization(item: any) {
+  clearOrganizationFeedback();
   showOrganization(item);
   await router.push(`/platform-admin/organizations/${item.id}`);
 }
 async function closeOrganizationDetail() {
   organizationDetailOpen.value = false;
+  organizationMissing.value = false;
+  clearOrganizationFeedback();
   await router.replace("/platform-admin/organizations");
+}
+function clearOrganizationFeedback() {
+  organizationError.value = "";
+  organizationSuccess.value = "";
 }
 function syncOrganizationRoute() {
   if (props.routePath.endsWith("/new")) {
     createOpen.value = true;
     organizationDetailOpen.value = false;
+    organizationMissing.value = false;
     return;
   }
   createOpen.value = false;
   if (props.organizationId && data.value) {
     const organization = data.value.organizations.find((item) => item.id === props.organizationId);
     if (organization) showOrganization(organization);
+    else {
+      selected.value = null;
+      organizationMissing.value = true;
+      organizationDetailOpen.value = true;
+    }
     return;
   }
   organizationDetailOpen.value = false;
+  organizationMissing.value = false;
 }
 async function updateOrganization() {
   if (!selected.value) return;
+  clearOrganizationFeedback();
   askReason("保存组织资料", async (why) => {
     if (
       await write(
         `/platform/accounts/organizations/${selected.value.id}`,
         { ...organizationForm, reason: why },
         "PATCH",
+        (value) => (organizationError.value = value),
       )
     ) {
       const updated = data.value?.organizations.find((item) => item.id === selected.value.id);
       if (updated) showOrganization(updated);
-      message.value = "组织资料已更新。";
+      organizationSuccess.value = "组织资料已更新。";
     }
   });
 }
@@ -627,8 +654,13 @@ onMounted(load);
       :organization="selected"
       :form="organizationForm"
       :busy="Boolean(busy)"
+      :missing="organizationMissing"
+      :error-message="organizationError"
+      :success-message="organizationSuccess"
       :status-text="statusText"
       @close="closeOrganizationDetail"
+      @retry="load"
+      @clear-feedback="clearOrganizationFeedback"
       @save="updateOrganization"
       @toggle-status="toggleOrganization"
     />
