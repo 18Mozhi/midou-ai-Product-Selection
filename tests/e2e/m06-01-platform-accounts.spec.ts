@@ -165,6 +165,109 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
     .toBe(true);
 });
 
+test("account overview remains usable when the role catalog is unavailable", async ({ page }) => {
+  await setup(page);
+  let roleRequests = 0;
+  await page.route("**/api/v1/platform/roles", (route: any) => {
+    roleRequests += 1;
+    return route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "dependency_unavailable",
+          message: "角色目录暂不可用。",
+          action_hint: "稍后重试。",
+        },
+      },
+    });
+  });
+  await page.goto("/platform-admin/accounts");
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  await expect(
+    mobile
+      ? page.getByRole("button", { name: /米豆选品团队.*查看详情/ })
+      : page.getByRole("cell", { name: "米豆选品团队 midou-team" }),
+  ).toBeVisible();
+  expect(roleRequests).toBe(0);
+
+  await page
+    .getByRole("navigation", { name: "账号与组织二级导航" })
+    .getByRole("link", { name: "管理员管理", exact: true })
+    .click();
+  await expect(
+    mobile
+      ? page.getByRole("button", { name: /admin@example.test.*查看详情/ })
+      : page.getByRole("cell", { name: /admin@example.test/ }),
+  ).toBeVisible();
+  await expect(page.getByText(/账号记录仍可继续使用/)).toBeVisible();
+  await expect.poll(() => roleRequests).toBe(3);
+});
+
+test("failed duplicate refresh keeps the last successful account facts", async ({ page }) => {
+  await setup(page);
+  let failRefresh = false;
+  let accountRequests = 0;
+  await page.route("**/api/v1/platform/accounts?**", (route: any) => {
+    accountRequests += 1;
+    return failRefresh
+      ? route.fulfill({
+          status: 503,
+          json: {
+            error: {
+              code: "dependency_unavailable",
+              message: "账号数据暂不可用。",
+              action_hint: "稍后重试。",
+            },
+          },
+        })
+      : route.fulfill({ json: env(overview) });
+  });
+  await page.goto("/platform-admin/accounts");
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  const organizationRecord = mobile
+    ? page.getByRole("button", { name: /米豆选品团队.*查看详情/ })
+    : page.getByRole("cell", { name: "米豆选品团队 midou-team" });
+  await expect(organizationRecord).toBeVisible();
+  failRefresh = true;
+  await page.getByRole("button", { name: "刷新数据" }).evaluate((button: HTMLElement) => {
+    button.click();
+    button.click();
+  });
+  await expect(page.getByText(/已保留上次成功读取的数据/)).toBeVisible();
+  await expect(organizationRecord).toBeVisible();
+  await expect(page.getByRole("button", { name: "刷新数据" })).toBeEnabled();
+  expect(accountRequests).toBe(4);
+});
+
+test("account overview exposes a recoverable empty filter state", async ({ page }) => {
+  await setup(page);
+  await page.route("**/api/v1/platform/accounts?**", (route: any) => {
+    const query = new URL(route.request().url()).searchParams.get("query");
+    return route.fulfill({
+      json: env(query ? { ...overview, organizations: [] } : overview),
+    });
+  });
+  await page.goto("/platform-admin/accounts");
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  if (mobile) {
+    await page.getByRole("button", { name: "账号筛选" }).click();
+  }
+  const filters = mobile ? page.getByRole("dialog", { name: "账号筛选" }) : page;
+  await filters.getByPlaceholder("搜索组织名称或用户邮箱").fill("不存在的组织");
+  await filters.getByRole("button", { name: "搜索" }).click();
+  await expect(page.getByText("没有符合当前条件的组织", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "清除筛选" }).click();
+  if (mobile) {
+    await page.getByRole("button", { name: "账号筛选", exact: true }).click();
+  }
+  await expect(filters.getByRole("button", { name: "重置" })).toBeDisabled();
+  await expect(
+    (page.viewportSize()?.width ?? 0) <= 760
+      ? page.getByRole("button", { name: /米豆选品团队.*查看详情/ })
+      : page.getByRole("cell", { name: "米豆选品团队 midou-team" }),
+  ).toBeVisible();
+});
+
 test("platform organization list, create and detail are independently deep-linkable", async ({
   page,
 }) => {

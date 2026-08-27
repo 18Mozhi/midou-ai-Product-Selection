@@ -115,7 +115,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       "apps/web/src/components/PlatformUserDetailDialog.vue",
       "apps/web/src/use-modal-dialog.ts",
       "apps/web/src/components/NavigationShell.vue",
-      "apps/web/src/route-catalog.ts",
+      "config/route-catalog.json",
       "scripts/verify-platform-accounts-live.mjs",
     ],
     values = await Promise.all(paths.map((path) => readFile(path, "utf8"))),
@@ -150,6 +150,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(migration, /platform_account_operations/);
   assert.match(service, /cannot_disable_self/);
   assert.match(repository, /platform_audit_events/);
+  assert.match(repository, /CONVERT\(o\.slug USING utf8mb4\) COLLATE utf8mb4_unicode_ci LIKE/);
   assert.match(repository, /UPDATE user_sessions SET status='revoked'/);
   assert.match(repository, /user.password.forced_reset/);
   assert.match(repository, /user.sessions.revoked/);
@@ -175,6 +176,10 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(modalDialog, /handleCancel/);
   assert.match(modalDialog, /returnFocus\?\.focus\(\)/);
   assert.match(web, /\/platform\/roles/);
+  assert.match(accountShell, /if \(tab\.value === "admins"\) await loadPlatformRoles\(\)/);
+  assert.match(accountShell, /已保留上次成功读取的数据/);
+  assert.match(accountShell, /if \(refreshing\.value\) return/);
+  assert.match(accountShell, /没有符合当前条件的组织/);
   assert.match(web, /角色权限差异/);
   assert.match(comparison, /differencesOnly/);
   assert.match(web, /不以页面按钮推测权限/);

@@ -1618,6 +1618,7 @@
       "roleComparison": "platform super administrators compare any two active platform roles from the server-owned roles and role_capabilities catalog; the UI defaults to differences only, uses Chinese capability labels, and never infers authorization from visible buttons",
       "responsiveAccountView": "desktop account lists use tables while narrow screens use summary cards, record detail drawers and a state-preserving filter drawer; organization, user and administrator list actions all enter their detail view, account status, session, password and platform-role operations stay inside the relevant detail, and raw organization or user UUIDs appear only inside technical details",
       "frontendModuleBoundary": "PlatformAccountCenter owns API filters audited writes dialogs and tab orchestration; PlatformOrganizationRecords owns organization list presentation, PlatformUserRecords owns ordinary-user list presentation, PlatformAdminRecords owns administrator list presentation, and PlatformRoleComparison owns server-provided capability comparison without duplicating permission decisions",
+      "frontendRefreshBoundary": "the account overview loads organization and user facts independently from the administrator-only role catalog; role-catalog failure cannot clear account facts, duplicate refresh is coalesced, a failed refresh preserves the last successful facts, and a 12-second browser timeout exposes an explicit retry state; organization-name and ASCII-slug filtering share an explicit utf8mb4 comparison boundary so Chinese queries remain valid on MySQL 5.7",
       "modalAccessibility": "account-management dialogs use the native modal top layer, trap focus, close with Escape and restore focus to the invoking control; opaque dialog surfaces and backdrops prevent underlying content from bleeding through",
       "navigationBoundary": "platform, organization-admin and member shells have distinct primary menus; infrastructure pages are removed from the novice platform primary navigation but protected historical routes remain",
       "imageEvidence": [
@@ -1626,7 +1627,7 @@
         "concept 62 collection source management"
       ],
       "status": "implemented",
-      "statusDetail": "implemented_pending_live_verification"
+      "statusDetail": "account_overview_live_mysql_api_worker_crawler_permission_role_failure_refresh_and_responsive_verification_completed"
     },
     "platformDashboard": {
       "module": "M06-02",
@@ -2907,7 +2908,7 @@
       "view": "PlatformAccountCenter",
       "domain": "platform-accounts",
       "status": "implemented",
-      "statusDetail": "implemented_pending_live_verification"
+      "statusDetail": "account_overview_live_mysql_api_worker_crawler_permission_role_failure_refresh_and_responsive_verification_completed"
     },
     {
       "path": "/platform-admin/organizations",

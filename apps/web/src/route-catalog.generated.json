@@ -800,7 +800,7 @@
         "view": "PlatformAccountCenter",
         "domain": "platform-accounts",
         "status": "implemented",
-        "statusDetail": "implemented_pending_live_verification"
+        "statusDetail": "account_overview_live_mysql_api_worker_crawler_permission_role_failure_refresh_and_responsive_verification_completed"
       }
     },
     {

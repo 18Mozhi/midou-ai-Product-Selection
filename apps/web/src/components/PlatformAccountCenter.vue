@@ -49,6 +49,9 @@ const props = withDefaults(
   query = ref(""),
   status = ref(""),
   message = ref(""),
+  refreshing = ref(false),
+  rolesLoading = ref(false),
+  lastUpdatedAt = ref<Date | null>(null),
   busy = ref(""),
   createUserOpen = ref(false),
   createOrganizationButton = ref<HTMLButtonElement | null>(null),
@@ -93,6 +96,7 @@ watch(
   () => props.initialTab,
   (value) => {
     tab.value = value;
+    if (value === "admins" && !platformRoles.value.length) void loadPlatformRoles();
   },
 );
 watch(
@@ -108,6 +112,11 @@ const rows = computed(() =>
   ),
   activeFilterCount = computed(
     () => Number(Boolean(query.value.trim())) + Number(Boolean(status.value)),
+  ),
+  updatedText = computed(() =>
+    lastUpdatedAt.value
+      ? `最近更新 ${lastUpdatedAt.value.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
+      : "尚未完成读取",
   ),
   statusText = (v: string) =>
     (
@@ -134,25 +143,56 @@ const rows = computed(() =>
         auditor: "审计员",
       }) as Record<string, string>
     )[v] ?? v;
+async function loadPlatformRoles() {
+  if (rolesLoading.value) return;
+  rolesLoading.value = true;
+  try {
+    const response = await request<RoleCapabilitySummary[]>("/platform/roles");
+    platformRoles.value = response.data;
+  } catch (e) {
+    message.value = `${e instanceof ApiClientError ? e.actionHint : "角色目录读取失败"} 账号记录仍可继续使用。`;
+  } finally {
+    rolesLoading.value = false;
+  }
+}
 async function load() {
-  state.value = "loading";
+  if (refreshing.value) return;
+  const hadData = Boolean(data.value);
+  if (!hadData) state.value = "loading";
+  refreshing.value = true;
   message.value = "";
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 12_000);
   try {
     const p = new URLSearchParams();
-    if (query.value) p.set("query", query.value);
+    if (query.value.trim()) p.set("query", query.value.trim());
     if (status.value) p.set("status", status.value);
-    const [accountResponse, roleResponse] = await Promise.all([
-      request<Data>(`/platform/accounts?${p}`),
-      request<RoleCapabilitySummary[]>("/platform/roles"),
-    ]);
+    const accountResponse = await request<Data>(`/platform/accounts?${p}`, {
+      signal: controller.signal,
+    });
     data.value = accountResponse.data;
-    platformRoles.value = roleResponse.data;
     state.value = "ready";
+    lastUpdatedAt.value = new Date();
     syncOrganizationRoute();
+    if (tab.value === "admins") await loadPlatformRoles();
   } catch (e) {
-    message.value = e instanceof ApiClientError ? e.actionHint : "读取失败";
-    state.value = "error";
+    const action =
+      e instanceof DOMException && e.name === "AbortError"
+        ? "读取超过 12 秒，请稍后重试。"
+        : e instanceof ApiClientError
+          ? e.actionHint
+          : "读取失败";
+    message.value = hadData ? `${action} 已保留上次成功读取的数据。` : action;
+    state.value = hadData ? "ready" : "error";
+  } finally {
+    window.clearTimeout(timeout);
+    refreshing.value = false;
   }
+}
+async function resetFilters() {
+  query.value = "";
+  status.value = "";
+  await load();
 }
 async function write<T = unknown>(path: string, body: unknown, method = "POST") {
   busy.value = path;
@@ -383,7 +423,9 @@ onMounted(load);
         <button ref="createOrganizationButton" @click="openOrganizationWizard">
           <AppIcon name="plus" /> 新建组织</button
         ><button @click="openCreateUser(tab === 'admins')">
-          <AppIcon name="plus" /> {{ tab === "admins" ? "新建管理员" : "新建用户" }}
+          <AppIcon name="plus" /> {{ tab === "admins" ? "新建管理员" : "新建用户" }}</button
+        ><button class="secondary" :disabled="refreshing || Boolean(busy)" @click="load">
+          {{ refreshing ? "正在刷新…" : "刷新数据" }}
         </button>
       </div>
     </header>
@@ -428,9 +470,18 @@ onMounted(load);
           <option value="active">正常使用</option>
           <option value="disabled">已停用</option>
           <option value="archived">已停用组织</option></select
-        ><button>搜索</button>
+        ><button :disabled="refreshing">搜索</button
+        ><button
+          type="button"
+          class="secondary"
+          :disabled="!activeFilterCount || refreshing"
+          @click="resetFilters"
+        >
+          重置
+        </button>
       </form>
     </ResponsiveFilterDrawer>
+    <p class="account-updated" aria-live="polite">{{ updatedText }}</p>
     <p v-if="message" class="account-message">{{ message }}</p>
     <section v-if="state === 'loading'" class="account-state">正在读取真实组织与用户…</section>
     <section v-else-if="state === 'error'" class="account-state">
@@ -441,8 +492,17 @@ onMounted(load);
         v-if="tab === 'admins' && platformRoles.length"
         :roles="platformRoles"
       />
+      <section
+        v-if="routePath === '/platform-admin/accounts' && !rows.length"
+        class="account-empty"
+        aria-live="polite"
+      >
+        <strong>没有符合当前条件的组织</strong>
+        <span>调整组织名称或状态筛选后重试。</span>
+        <button v-if="activeFilterCount" type="button" @click="resetFilters">清除筛选</button>
+      </section>
       <PlatformOrganizationRecords
-        v-if="tab === 'organizations'"
+        v-else-if="tab === 'organizations'"
         :rows="rows"
         :busy="Boolean(busy)"
         :status-text="statusText"
@@ -622,6 +682,11 @@ onMounted(load);
   align-items: center;
   gap: 6px;
 }
+.hero-actions button:disabled,
+.account-filter button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
 .account-metrics {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -670,6 +735,38 @@ onMounted(load);
 .account-filter select {
   min-width: 180px;
   padding: 10px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-bg-elevated);
+}
+.account-filter button.secondary {
+  color: var(--so-text);
+  background: var(--so-panel);
+  border: 1px solid var(--so-border-strong);
+}
+.account-updated {
+  margin: -8px 0 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
+  text-align: right;
+}
+.account-empty {
+  padding: 28px;
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  border: 1px dashed var(--so-border-strong);
+  border-radius: 14px;
+  color: var(--so-text);
+  background: var(--so-panel);
+}
+.account-empty span {
+  color: var(--so-text-muted);
+}
+.account-empty button {
+  min-height: 40px;
+  padding: 9px 14px;
   border: 1px solid var(--so-border-strong);
   border-radius: 9px;
   color: var(--so-text);

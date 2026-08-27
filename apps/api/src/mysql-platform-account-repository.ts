@@ -14,8 +14,9 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
         "SELECT o.id,o.name,o.slug,o.status,o.timezone,o.data_retention_days,o.created_at," +
           "o.updated_at,COUNT(DISTINCT m.id) member_count,COUNT(DISTINCT w.id) workspace_count " +
           "FROM organizations o LEFT JOIN memberships m ON m.organization_id=o.id LEFT JOIN workspaces " +
-          "w ON w.organization_id=o.id WHERE (?='' OR o.name LIKE ? ESCAPE '\\\\' OR o.slug LIKE " +
-          "? ESCAPE '\\\\') AND (?='' OR o.status=?) GROUP BY o.id ORDER BY o.updated_at DESC LIMIT " +
+          "w ON w.organization_id=o.id WHERE (?='' OR o.name LIKE ? ESCAPE '\\\\' OR " +
+          "CONVERT(o.slug USING utf8mb4) COLLATE utf8mb4_unicode_ci LIKE ? ESCAPE '\\\\') AND " +
+          "(?='' OR o.status=?) GROUP BY o.id ORDER BY o.updated_at DESC LIMIT " +
           "?",
         [input.query, like, like, status, status, input.limit],
       ),
