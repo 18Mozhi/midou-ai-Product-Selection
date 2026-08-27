@@ -354,6 +354,11 @@ test("M06-01.A06/A09 creates organization with audited idempotent request", asyn
   await expect(progress.locator('[aria-current="step"]')).toContainText("组织资料");
   expect(request).toBeNull();
   await dialog.getByLabel("组织名称", { exact: true }).fill("新团队");
+  await dialog.getByLabel("组织标识").fill("bad slug!");
+  await dialog.getByRole("button", { name: "下一步：选择管理员" }).click();
+  await expect(progress.locator('[aria-current="step"]')).toContainText("组织资料");
+  await expect(dialog.getByLabel("组织标识")).toHaveJSProperty("validity.patternMismatch", true);
+  expect(request).toBeNull();
   await dialog.getByLabel("组织标识").fill("new-team");
   await dialog.getByRole("button", { name: "下一步：选择管理员" }).click();
   await expect(progress.locator('[aria-current="step"]')).toContainText("管理员与确认");
@@ -369,6 +374,54 @@ test("M06-01.A06/A09 creates organization with audited idempotent request", asyn
   });
   await expect(detail.getByText("组织详情", { exact: true })).toBeVisible();
   await expect(detail.getByRole("button", { name: "保存组织资料" })).toBeVisible();
+});
+
+test("organization creation keeps API failures inside the wizard and supports retry", async ({
+  page,
+}) => {
+  await setup(page);
+  let attempts = 0;
+  await page.route("**/api/v1/platform/accounts/organizations", async (route: any) => {
+    attempts += 1;
+    if (attempts === 1) {
+      await route.fulfill({
+        status: 400,
+        json: {
+          error: {
+            code: "organization_slug_invalid",
+            message: "组织标识不合法。",
+            action_hint: "组织标识使用 2–63 位小写字母、数字或连字符。",
+          },
+          request_id: "m06-01-create-failure",
+          trace_id: "m06-01-create-failure",
+        },
+      });
+      return;
+    }
+    await route.fulfill({
+      status: 201,
+      json: env({
+        id: createdOrg,
+        name: "失败重试团队",
+        slug: "retry-team",
+        status: "active",
+        default_workspace_id: ws,
+      }),
+    });
+  });
+  await page.goto("/platform-admin/organizations/new");
+  const dialog = page.getByRole("dialog", { name: "新建组织" });
+  await dialog.getByLabel("组织名称", { exact: true }).fill("失败重试团队");
+  await dialog.getByLabel("组织标识").fill("retry-team");
+  await dialog.getByRole("button", { name: "下一步：选择管理员" }).click();
+  await dialog.getByRole("button", { name: "确认创建" }).click();
+  const alert = dialog.getByRole("alert");
+  await expect(alert).toContainText("创建未完成");
+  await expect(alert).toContainText("组织标识使用 2–63 位小写字母、数字或连字符。");
+  await expect(page).toHaveURL(/\/platform-admin\/organizations\/new$/);
+  await dialog.getByRole("button", { name: "确认创建" }).click();
+  await expect(page).toHaveURL(new RegExp(`/platform-admin/organizations/${createdOrg}$`));
+  expect(attempts).toBe(2);
 });
 
 test("M06-01 account actions expose tooltips, user-panel switch, create account and session detail", async ({

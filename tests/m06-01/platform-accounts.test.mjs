@@ -184,6 +184,11 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(accountShell, /搜索组织名称或标识/);
   assert.match(accountShell, /organizationEmptyState/);
   assert.match(accountShell, /清除筛选/);
+  assert.match(accountShell, /createError/);
+  assert.match(accountShell, /@clear-error="createError = ''"/);
+  assert.match(wizard, /\[a-z0-9\]\(\?:\[a-z0-9\]\|-\)\{1,62\}/);
+  assert.match(wizard, /organization-wizard__error/);
+  assert.match(wizard, /创建未完成/);
   assert.match(web, /角色权限差异/);
   assert.match(comparison, /differencesOnly/);
   assert.match(web, /不以页面按钮推测权限/);

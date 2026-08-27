@@ -1614,7 +1614,7 @@
       "truthBoundary": "only MySQL account and non-secret session metadata; no password hashes, session tokens, IP or user-agent hashes or credentials; organization creation grants the selected first administrator an organization data scope; disable and forced-password operations revoke active user_sessions; the live gate compares all persisted platform role capabilities with the fixed code catalog and records every allowed and denied decision",
       "permission": "platform:superadmin plus same-origin Origin, Idempotency-Key and audited reason for writes; the live MySQL gate assigns each fixed platform role to an isolated account, exercises every capability through AuthorizationService, and verifies authorization_decisions before cleanup",
       "persistence": "platform_account_operations idempotency plus existing organizations, workspaces, memberships, fixed role assignments, membership_data_scopes and platform_audit_events",
-      "organizationWizard": "the platform create-organization dialog separates organization identity from first-administrator selection and impact confirmation; it validates step one before continuing, submits the unchanged atomic name, slug and optional initial_admin_user_id contract only after final confirmation, then opens the created organization detail",
+      "organizationWizard": "the platform create-organization dialog separates organization identity from first-administrator selection and impact confirmation; it validates the 2-63 character lowercase ASCII slug with a browser-valid pattern before continuing, keeps API failure guidance inside the open wizard for correction and retry, submits the unchanged atomic name, slug and optional initial_admin_user_id contract only after final confirmation, then opens the created organization detail",
       "roleComparison": "platform super administrators compare any two active platform roles from the server-owned roles and role_capabilities catalog; the UI defaults to differences only, uses Chinese capability labels, and never infers authorization from visible buttons",
       "responsiveAccountView": "desktop account lists use tables while narrow screens use summary cards, record detail drawers and a state-preserving filter drawer; organization, user and administrator list actions all enter their detail view, account status, session, password and platform-role operations stay inside the relevant detail, and raw organization or user UUIDs appear only inside technical details",
       "frontendModuleBoundary": "PlatformAccountCenter owns API filters audited writes dialogs and tab orchestration; PlatformOrganizationRecords owns organization list presentation, PlatformUserRecords owns ordinary-user list presentation, PlatformAdminRecords owns administrator list presentation, and PlatformRoleComparison owns server-provided capability comparison without duplicating permission decisions",
@@ -2922,7 +2922,8 @@
       "path": "/platform-admin/organizations/new",
       "view": "PlatformAccountCenter",
       "domain": "platform-organization-create",
-      "status": "implemented"
+      "status": "implemented",
+      "statusDetail": "organization_create_live_mysql_atomic_scope_audit_validation_error_retry_permission_and_responsive_verification_completed"
     },
     {
       "path": "/platform-admin/organizations/{organizationId}",

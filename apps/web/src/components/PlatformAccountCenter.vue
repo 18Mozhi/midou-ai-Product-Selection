@@ -53,6 +53,7 @@ const props = withDefaults(
   rolesLoading = ref(false),
   lastUpdatedAt = ref<Date | null>(null),
   busy = ref(""),
+  createError = ref(""),
   createUserOpen = ref(false),
   createOrganizationButton = ref<HTMLButtonElement | null>(null),
   organizationDetailOpen = ref(false),
@@ -208,7 +209,12 @@ async function resetFilters() {
   status.value = "";
   await load();
 }
-async function write<T = unknown>(path: string, body: unknown, method = "POST") {
+async function write<T = unknown>(
+  path: string,
+  body: unknown,
+  method = "POST",
+  onError?: (value: string) => void,
+) {
   busy.value = path;
   message.value = "";
   try {
@@ -216,19 +222,28 @@ async function write<T = unknown>(path: string, body: unknown, method = "POST") 
     await load();
     return response.data;
   } catch (e) {
-    message.value = e instanceof ApiClientError ? e.actionHint : "操作失败";
+    const action = e instanceof ApiClientError ? e.actionHint : "操作失败";
+    if (onError) onError(action);
+    else message.value = action;
     return null;
   } finally {
     busy.value = "";
   }
 }
 async function createOrganization() {
+  if (busy.value) return;
+  createError.value = "";
   const body = {
     name: form.name,
     slug: form.slug,
     ...(form.initial_admin_user_id ? { initial_admin_user_id: form.initial_admin_user_id } : {}),
   };
-  const created = await write<any>("/platform/accounts/organizations", body);
+  const created = await write<any>(
+    "/platform/accounts/organizations",
+    body,
+    "POST",
+    (value) => (createError.value = value),
+  );
   if (created) {
     form.name = "";
     form.slug = "";
@@ -242,10 +257,12 @@ async function createOrganization() {
   }
 }
 async function openOrganizationWizard() {
+  createError.value = "";
   createOpen.value = true;
   await router.push("/platform-admin/organizations/new");
 }
 async function closeOrganizationWizard() {
+  createError.value = "";
   createOpen.value = false;
   await router.replace("/platform-admin/organizations");
   await nextTick();
@@ -548,8 +565,10 @@ onMounted(load);
     <OrganizationCreationWizard
       :open="createOpen"
       :busy="Boolean(busy)"
+      :error-message="createError"
       :users="data?.users || []"
       :form="form"
+      @clear-error="createError = ''"
       @close="closeOrganizationWizard"
       @submit="createOrganization"
     />

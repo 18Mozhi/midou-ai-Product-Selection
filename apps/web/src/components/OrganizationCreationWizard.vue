@@ -11,10 +11,11 @@ interface OrganizationForm {
 const props = defineProps<{
   open: boolean;
   busy: boolean;
+  errorMessage: string;
   users: Array<{ id: string; email: string; status: string }>;
   form: OrganizationForm;
 }>();
-const emit = defineEmits<{ close: []; submit: [] }>();
+const emit = defineEmits<{ close: []; submit: []; clearError: [] }>();
 const step = ref<1 | 2>(1);
 const formElement = ref<HTMLFormElement | null>(null);
 const { dialogElement, handleCancel } = useModalDialog(
@@ -31,6 +32,7 @@ watch(
 
 function continueToConfirmation() {
   if (!formElement.value?.reportValidity()) return;
+  emit("clearError");
   step.value = 2;
 }
 
@@ -63,6 +65,7 @@ function close() {
             minlength="2"
             maxlength="120"
             placeholder="例如：智能选品团队"
+            @input="emit('clearError')"
           />
         </label>
         <label>
@@ -70,16 +73,24 @@ function close() {
           <input
             v-model="form.slug"
             required
-            pattern="[a-z0-9][a-z0-9-]{1,62}"
+            pattern="[a-z0-9](?:[a-z0-9]|-){1,62}"
+            minlength="2"
+            maxlength="63"
+            autocapitalize="none"
+            autocomplete="off"
+            spellcheck="false"
+            aria-describedby="organization-slug-help"
             placeholder="例如：midou-team"
+            @input="emit('clearError')"
           />
+          <small id="organization-slug-help">2–63 位小写字母、数字或连字符。</small>
         </label>
       </section>
       <section v-else class="organization-wizard__step">
         <p>选择首位组织管理员，并在创建前核对影响范围。</p>
         <label>
           首位组织管理员
-          <select v-model="form.initial_admin_user_id">
+          <select v-model="form.initial_admin_user_id" @change="emit('clearError')">
             <option value="">当前超级管理员</option>
             <option
               v-for="item in users"
@@ -91,6 +102,10 @@ function close() {
             </option>
           </select>
         </label>
+        <p v-if="errorMessage" class="organization-wizard__error" role="alert">
+          <strong>创建未完成</strong>
+          <span>{{ errorMessage }}</span>
+        </p>
         <dl class="organization-wizard__summary">
           <div>
             <dt>组织</dt>
@@ -108,11 +123,13 @@ function close() {
       </section>
       <footer>
         <button type="button" @click="close">取消</button>
-        <button v-if="step === 2" type="button" @click="step = 1">上一步</button>
+        <button v-if="step === 2" type="button" @click="((step = 1), emit('clearError'))">
+          上一步
+        </button>
         <button v-if="step === 1" type="button" @click="continueToConfirmation">
           下一步：选择管理员
         </button>
-        <button v-else :disabled="busy">确认创建</button>
+        <button v-else :disabled="busy">{{ busy ? "正在创建…" : "确认创建" }}</button>
       </footer>
     </form>
   </dialog>
@@ -196,6 +213,23 @@ select {
 .organization-wizard__step > p {
   margin: 0;
   color: var(--so-text-muted);
+}
+.organization-wizard__step small {
+  color: var(--so-text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.organization-wizard__error {
+  padding: 12px 14px;
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--so-danger);
+  border-radius: 10px;
+  color: var(--so-text);
+  background: color-mix(in srgb, var(--so-danger) 12%, var(--so-bg-elevated));
+}
+.organization-wizard__error strong {
+  color: var(--so-danger);
 }
 .organization-wizard__summary {
   margin: 0;

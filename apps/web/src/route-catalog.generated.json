@@ -840,7 +840,8 @@
         "path": "/platform-admin/organizations/new",
         "view": "PlatformAccountCenter",
         "domain": "platform-organization-create",
-        "status": "implemented"
+        "status": "implemented",
+        "statusDetail": "organization_create_live_mysql_atomic_scope_audit_validation_error_retry_permission_and_responsive_verification_completed"
       }
     },
     {
