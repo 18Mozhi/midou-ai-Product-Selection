@@ -819,7 +819,8 @@
         "path": "/platform-admin/organizations",
         "view": "PlatformAccountCenter",
         "domain": "platform-organizations",
-        "status": "implemented"
+        "status": "implemented",
+        "statusDetail": "organization_list_live_mysql_api_worker_crawler_permission_filter_empty_refresh_and_responsive_verification_completed"
       },
       "navigation": { "label": "组织管理", "icon": "building", "group": "业务运营" }
     },

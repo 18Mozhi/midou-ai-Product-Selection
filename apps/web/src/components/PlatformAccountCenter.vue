@@ -110,6 +110,20 @@ const rows = computed(() =>
         ? (data.value?.users ?? [])
         : (data.value?.admins ?? []),
   ),
+  organizationListRoute = computed(
+    () => props.routePath === "/platform-admin/organizations" && tab.value === "organizations",
+  ),
+  organizationEmptyState = computed(
+    () =>
+      !rows.value.length &&
+      tab.value === "organizations" &&
+      (props.routePath === "/platform-admin/accounts" || organizationListRoute.value),
+  ),
+  filterLabel = computed(() => (organizationListRoute.value ? "组织筛选" : "账号筛选")),
+  searchPlaceholder = computed(() =>
+    organizationListRoute.value ? "搜索组织名称或标识" : "搜索组织名称或用户邮箱",
+  ),
+  statusLabel = computed(() => (organizationListRoute.value ? "组织状态" : "账号状态")),
   activeFilterCount = computed(
     () => Number(Boolean(query.value.trim())) + Number(Boolean(status.value)),
   ),
@@ -415,9 +429,17 @@ onMounted(load);
   <section class="account-center">
     <header class="account-hero">
       <div>
-        <p>组织与用户</p>
-        <h2>谁在使用智能选品，一眼看懂</h2>
-        <span>创建组织、启停账号、分配平台管理员。所有操作都会留审计记录。</span>
+        <p>{{ organizationListRoute ? "平台组织" : "组织与用户" }}</p>
+        <h2>
+          {{
+            organizationListRoute ? "组织、状态与隔离边界，一眼看懂" : "谁在使用智能选品，一眼看懂"
+          }}
+        </h2>
+        <span>{{
+          organizationListRoute
+            ? "核对成员与工作区数量，进入详情维护资料、停用或恢复。所有操作都会留审计记录。"
+            : "创建组织、启停账号、分配平台管理员。所有操作都会留审计记录。"
+        }}</span>
       </div>
       <div class="hero-actions">
         <button ref="createOrganizationButton" @click="openOrganizationWizard">
@@ -463,13 +485,16 @@ onMounted(load);
         >管理员管理</RouterLink
       >
     </nav>
-    <ResponsiveFilterDrawer label="账号筛选" :active-count="activeFilterCount">
+    <ResponsiveFilterDrawer :label="filterLabel" :active-count="activeFilterCount">
       <form class="account-filter" @submit.prevent="load">
-        <input v-model="query" placeholder="搜索组织名称或用户邮箱" /><select v-model="status">
+        <input v-model="query" :placeholder="searchPlaceholder" /><select
+          v-model="status"
+          :aria-label="statusLabel"
+        >
           <option value="">全部状态</option>
           <option value="active">正常使用</option>
-          <option value="disabled">已停用</option>
-          <option value="archived">已停用组织</option></select
+          <option v-if="!organizationListRoute" value="disabled">已停用</option>
+          <option v-if="tab === 'organizations'" value="archived">已停用组织</option></select
         ><button :disabled="refreshing">搜索</button
         ><button
           type="button"
@@ -492,14 +517,17 @@ onMounted(load);
         v-if="tab === 'admins' && platformRoles.length"
         :roles="platformRoles"
       />
-      <section
-        v-if="routePath === '/platform-admin/accounts' && !rows.length"
-        class="account-empty"
-        aria-live="polite"
-      >
-        <strong>没有符合当前条件的组织</strong>
-        <span>调整组织名称或状态筛选后重试。</span>
+      <section v-if="organizationEmptyState" class="account-empty" aria-live="polite">
+        <strong>{{ activeFilterCount ? "没有符合当前条件的组织" : "还没有组织" }}</strong>
+        <span>{{
+          activeFilterCount
+            ? "调整组织名称、标识或状态筛选后重试。"
+            : "创建首个组织后，系统会同时建立默认工作区和组织级数据范围。"
+        }}</span>
         <button v-if="activeFilterCount" type="button" @click="resetFilters">清除筛选</button>
+        <button v-else-if="organizationListRoute" type="button" @click="openOrganizationWizard">
+          新建组织
+        </button>
       </section>
       <PlatformOrganizationRecords
         v-else-if="tab === 'organizations'"

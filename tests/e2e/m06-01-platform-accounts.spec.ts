@@ -268,6 +268,36 @@ test("account overview exposes a recoverable empty filter state", async ({ page 
   ).toBeVisible();
 });
 
+test("organization list uses organization-specific filters and a recoverable empty state", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/platform/accounts?**", (route: any) => {
+    const query = new URL(route.request().url()).searchParams.get("query");
+    return route.fulfill({ json: env(query ? { ...overview, organizations: [] } : overview) });
+  });
+  await page.goto("/platform-admin/organizations");
+  await expect(page.getByRole("heading", { name: "组织、状态与隔离边界，一眼看懂" })).toBeVisible();
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  if (mobile) await page.getByRole("button", { name: "组织筛选" }).click();
+  const filters = mobile ? page.getByRole("dialog", { name: "组织筛选" }) : page;
+  await expect(filters.getByPlaceholder("搜索组织名称或标识")).toBeVisible();
+  await expect(filters.getByLabel("组织状态").locator("option")).toHaveText([
+    "全部状态",
+    "正常使用",
+    "已停用组织",
+  ]);
+  await filters.getByPlaceholder("搜索组织名称或标识").fill("不存在的组织");
+  await filters.getByRole("button", { name: "搜索" }).click();
+  await expect(page.getByText("没有符合当前条件的组织", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "清除筛选" }).click();
+  await expect(
+    mobile
+      ? page.getByRole("button", { name: /米豆选品团队.*查看详情/ })
+      : page.getByRole("cell", { name: "米豆选品团队 midou-team" }),
+  ).toBeVisible();
+});
+
 test("platform organization list, create and detail are independently deep-linkable", async ({
   page,
 }) => {

@@ -6,6 +6,8 @@
 
 平台创建组织使用 `/platform-admin/organizations/new` 独立路由的两步向导：第一步只填写并校验组织名称与英文标识，第二步选择首位组织管理员并明确展示将同时创建默认工作区和组织级数据范围。向导只在最终确认时调用原有创建接口，仍一次提交 `name`、`slug` 和可选的 `initial_admin_user_id`，不拆分后端事务，也不产生半成品组织；创建成功后进入 `/platform-admin/organizations/{organizationId}` 详情路由，便于继续核对或维护资料。列表、创建、详情的前进后退状态均由 Vue Router 管理。
 
+`/platform-admin/organizations` 列表只使用组织名称、英文标识和组织状态筛选；筛选无结果时，桌面表格与移动卡片都显示可清除的空状态，而不是保留空表头。列表继续读取原账号概览接口，不新增接口、数据库字段或权限推断。
+
 管理员管理页通过只读 `GET /api/v1/platform/roles` 获取当前数据库中的活动平台角色与能力映射。该接口要求 `platform:superadmin`，前端可选择任意两种角色并默认只显示能力差异；能力代码只用于匹配，普通界面显示中文动作名称。授权事实仍由 `roles` 与 `role_capabilities` 决定，页面按钮与对比结果都不是权限边界。
 
 生产角色门禁使用同一 `MySqlAuthorizationRepository` 读取 `roles`、`role_capabilities` 和 `platform_role_assignments`。它先校验运营管理员、安全管理员和超级管理员的数据库目录与代码内固定目录完全一致，再为隔离的临时账号逐个授予单一平台角色，对全部能力分别执行真实允许或拒绝判定，并核对 `authorization_decisions` 的允许、拒绝数量。门禁不根据前端菜单或按钮推断权限，也不会增加角色或能力。
