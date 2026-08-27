@@ -60,6 +60,14 @@
 
 ## 安全与失败
 
+## 组织令牌治理
+
+`/org-admin/tokens` 只治理当前组织的系统读取凭据。页面汇总全部、活动、七天内到期、从未调用和历史生命周期记录，并按名称、前缀、scope 或状态搜索，支持生命周期、固定读取范围、排序和六条分页；筛选与页码写入 `org_token_*` URL 查询参数，刷新、返回和多标签页保留上下文。令牌记录 ID 与版本只在折叠技术详情中显示。
+
+创建表单必须显式勾选至少一个固定只读 scope，不再在空选择时静默补入 `task:read`。有效期继续使用既有 1–365 天合同，名称、原因和到期日期在提交前集中核对。创建或轮换成功返回的明文只在一次性提示区出现，操作者可以复制并主动清除；页面离开后无法找回。轮换确认明确说明旧令牌立即失效，撤销确认明确说明不能恢复，两个动作继续携带审计原因、幂等键和当前版本。
+
+接口仍为 `GET/POST /api/v1/org/admin/tokens` 与 `POST /api/v1/org/admin/tokens/{id}/actions`，权限仍为 `organization_token:manage`，数据库仍为 `organization_api_tokens`。服务端会话确定组织边界，创建、轮换和撤销在同一事务写事实、`audit_logs`、`outbox_events` 与幂等结果；持久化与日志只保留哈希、前缀和生命周期元数据，不保留明文。本次页面治理不修改 API、数据库结构、Worker、爬虫或配置。
+
 - 路由分别要求 organization、membership、role、workspace、team、approval、organization_token、audit 或 report 能力；`/org-admin/data` 单独要求 `report:read`。
 - 自我禁用、移除最后一位活动组织管理员、归档默认工作区、跨组织负责人/团队成员全部失败关闭。
 - Token 只允许 `task:read`、`trend:read`、`opportunity:read`、`report:read`；明文仅返回一次，数据库只保存 SHA-256 哈希和前缀。

@@ -13,6 +13,7 @@ import OrganizationDataPanel from "./OrganizationDataPanel.vue";
 import OrganizationMemberPanel from "./OrganizationMemberPanel.vue";
 import OrganizationRolePanel from "./OrganizationRolePanel.vue";
 import OrganizationTeamPanel from "./OrganizationTeamPanel.vue";
+import OrganizationTokenPanel from "./OrganizationTokenPanel.vue";
 import OrganizationWorkspacePanel from "./OrganizationWorkspacePanel.vue";
 import "../organization-admin.css";
 const props = defineProps<{
@@ -91,7 +92,9 @@ const view = computed(() =>
           ? "跨工作区核对审批进度和模板版本，不绕过原业务审批合同。"
           : view.value === "data"
             ? "跨工作区核对数据规模与导出历史，不以数量冒充数据质量。"
-            : "管理当前组织的成员、权限、工作区和审计记录。",
+            : view.value === "tokens"
+              ? "签发、轮换和撤销当前组织的固定只读令牌，明文仅在成功响应中显示一次。"
+              : "管理当前组织的成员、权限、工作区和审计记录。",
   );
 async function api(path: string, init: ApiRequestOptions = {}) {
   if (init.signal) return request<any>(path, init);
@@ -624,13 +627,40 @@ async function teamMemberAction(item: any, action: "assign" | "remove", membersh
   return Boolean(succeeded);
 }
 async function tokenAction(item: any, action: "rotate" | "revoke") {
-  const reason = await auditedReason(action === "rotate" ? "轮换组织 Token" : "撤销组织 Token");
-  if (!reason) return;
-  await submit(`/org/admin/tokens/${item.id}/actions`, {
-    action,
-    expected_version: item.version,
-    reason,
-  });
+  const rotating = action === "rotate",
+    reason =
+      (await askAuditedReason({
+        title: rotating ? `轮换“${item.name}”密钥` : `撤销“${item.name}”访问`,
+        description: rotating
+          ? "提交后旧令牌立即失效，新明文只在本次成功响应中显示一次。原因会写入组织审计。"
+          : "提交后该令牌立即失效且不能恢复。原因会写入组织审计。",
+        initialValue: "",
+      })) ?? "";
+  if (!reason) return false;
+  return Boolean(
+    await submit(
+      `/org/admin/tokens/${item.id}/actions`,
+      {
+        action,
+        expected_version: item.version,
+        reason,
+      },
+      "POST",
+      { preserveForm: true },
+    ),
+  );
+}
+async function createOrganizationToken(value: {
+  name: string;
+  scopes: string[];
+  ttl_days: number;
+  reason: string;
+}) {
+  secret.value = "";
+  return Boolean(await submit("/org/admin/tokens", value, "POST", { preserveForm: true }));
+}
+function dismissTokenSecret() {
+  secret.value = "";
 }
 const activeMembers = computed(() =>
     (data.value?.members ?? []).filter((item: any) => item.status === "active"),
@@ -716,11 +746,9 @@ const activeMembers = computed(() =>
             ? (data.value?.teams ?? [])
             : view.value === "approvals"
               ? (data.value?.items ?? [])
-              : view.value === "tokens"
-                ? (data.value ?? [])
-                : view.value === "audit"
-                  ? (data.value?.items ?? [])
-                  : [],
+              : view.value === "audit"
+                ? (data.value?.items ?? [])
+                : [],
   ),
   fmt = (v: any) =>
     v == null
@@ -1094,76 +1122,16 @@ onMounted(() => void load());
         :summary-text="summaryText"
         :format-time="fmt"
       />
-      <section v-else-if="view === 'tokens'" class="org-admin-grid">
-        <form
-          class="org-admin-card"
-          @submit.prevent="
-            submit('/org/admin/tokens', {
-              ...form,
-              scopes: form.scopes || ['task:read'],
-              ttl_days: form.ttl_days || 90,
-            })
-          "
-        >
-          <h3>创建只读访问令牌</h3>
-          <label>名称<input v-model="form.name" required /></label
-          ><label
-            >允许查看的内容<select v-model="form.scopes" multiple required>
-              <option value="task:read">任务</option>
-              <option value="trend:read">热点趋势</option>
-              <option value="opportunity:read">选品机会</option>
-              <option value="report:read">报表</option>
-            </select></label
-          ><label
-            >有效天数<input
-              v-model.number="form.ttl_days"
-              type="number"
-              min="1"
-              max="365"
-              value="90" /></label
-          ><label>创建原因<textarea v-model="form.reason" required></textarea></label
-          ><button :disabled="busy">创建令牌</button>
-        </form>
-        <article class="org-admin-card">
-          <h3>令牌明文</h3>
-          <strong class="org-admin-secret-warning"
-            >只显示一次：离开本页后无法再次查看，请立即保存到受限位置。</strong
-          >
-          <code v-if="secret" class="org-admin-secret">{{ secret }}</code>
-          <p v-else>明文只在创建或轮换成功后显示一次。</p>
-        </article>
-        <article class="org-admin-card org-admin-wide">
-          <div v-for="x in rows" :key="x.id" class="org-admin-line">
-            <div>
-              <b>{{ x.name }}</b
-              ><small
-                >{{ x.token_prefix }}… · {{ x.scopes.map(capabilityText).join("、") }} · 到期
-                {{ fmt(x.expires_at) }}</small
-              >
-            </div>
-            <div class="org-admin-actions">
-              <button
-                v-if="x.status === 'active'"
-                type="button"
-                :disabled="busy"
-                @click="tokenAction(x, 'rotate')"
-              >
-                轮换
-              </button>
-              <button
-                v-if="x.status === 'active'"
-                type="button"
-                :disabled="busy"
-                @click="tokenAction(x, 'revoke')"
-              >
-                撤销
-              </button>
-              <i>{{ statusText(x.status) }}</i>
-            </div>
-          </div>
-          <p v-if="!rows.length">尚无组织访问令牌。</p>
-        </article>
-      </section>
+      <OrganizationTokenPanel
+        v-else-if="view === 'tokens'"
+        :tokens="Array.isArray(data) ? data : []"
+        :secret="secret"
+        :busy="busy || refreshing"
+        :format-time="fmt"
+        :create-token="createOrganizationToken"
+        :perform-token-action="tokenAction"
+        :dismiss-secret="dismissTokenSecret"
+      />
       <OrganizationDataPanel v-else-if="view === 'data'" :data="data" :format-time="fmt" />
       <section v-else class="org-admin-card">
         <form class="org-admin-filters org-admin-audit-filters" @submit.prevent="load()">

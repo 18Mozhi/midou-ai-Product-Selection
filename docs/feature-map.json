@@ -1533,7 +1533,8 @@
         "../apps/web/src/components/OrganizationTeamPanel.vue",
         "../apps/web/src/components/OrganizationWorkspacePanel.vue",
         "../apps/web/src/components/OrganizationApprovalPanel.vue",
-        "../apps/web/src/components/OrganizationDataPanel.vue"
+        "../apps/web/src/components/OrganizationDataPanel.vue",
+        "../apps/web/src/components/OrganizationTokenPanel.vue"
       ],
       "routes": [
         "/org-admin",
@@ -2881,7 +2882,7 @@
       "view": "OrganizationAdminCenter",
       "domain": "organization-tokens",
       "status": "verified",
-      "statusDetail": "M06-01_module_verified"
+      "statusDetail": "M06-01_organization_token_governance_live_verified"
     },
     {
       "path": "/org-admin/audit",

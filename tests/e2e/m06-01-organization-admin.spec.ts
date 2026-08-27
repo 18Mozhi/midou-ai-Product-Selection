@@ -50,6 +50,18 @@ const summary = {
   recent_audit_events: 1238,
   observed_at: "2026-08-08T12:00:00.000Z",
 };
+const organizationTokens = Array.from({ length: 8 }, (_, index) => ({
+  id: `00000000-0000-4000-8000-${String(900 + index).padStart(12, "0")}`,
+  name: index === 0 ? "月度经营报表" : `只读系统 ${index + 1}`,
+  token_prefix: `sco_org_e2e_${index + 1}`,
+  scopes: index % 2 ? ["task:read"] : ["trend:read", "report:read"],
+  status: index === 6 ? "rotated" : index === 7 ? "revoked" : "active",
+  expires_at: index === 0 ? "2026-08-30T12:00:00.000Z" : "2027-08-08T12:00:00.000Z",
+  last_used_at: index === 1 ? null : "2026-08-08T11:00:00.000Z",
+  version: 1,
+  created_at: `2026-08-${String(index + 1).padStart(2, "0")}T10:00:00.000Z`,
+  updated_at: "2026-08-08T12:00:00.000Z",
+}));
 const profile = {
   id: org,
   name: "Global Goods Co.",
@@ -348,6 +360,9 @@ async function setup(page: Page) {
         observed_at: "2026-08-08T12:00:00.000Z",
       }),
     }),
+  );
+  await page.route("**/api/v1/org/admin/tokens", (r) =>
+    r.fulfill({ json: env(organizationTokens) }),
   );
   await page.route("**/api/v1/organizations/*/audit-events**", (r) =>
     r.fulfill({
@@ -1076,4 +1091,56 @@ test("organization audit filters", async ({ page }) => {
   await page.getByLabel("对象", { exact: true }).fill("membership");
   await page.getByRole("button", { name: "应用筛选" }).click();
   await expect(page.getByText("organization.member.disabled")).toBeVisible();
+});
+
+test("organization tokens require explicit scopes and preserve lifecycle filters", async ({
+  page,
+}) => {
+  await setup(page);
+  let tokenPosts = 0;
+  page.on("request", (request) => {
+    if (
+      request.method() === "POST" &&
+      new URL(request.url()).pathname === "/api/v1/org/admin/tokens"
+    )
+      tokenPosts += 1;
+  });
+  await page.goto("/org-admin/tokens");
+  await expect(page.getByRole("heading", { name: "组织只读访问凭据" })).toBeVisible();
+  await expect(page.getByLabel("组织令牌列表").locator("article")).toHaveCount(6);
+  await expect(page.getByLabel("令牌分页")).toContainText("第 1 / 2 页");
+
+  await page.getByLabel("令牌名称").fill("数据仓库只读连接");
+  await page.getByLabel("创建原因").fill("验证显式最小权限");
+  await page.getByRole("button", { name: "创建并显示一次明文" }).click();
+  await expect(page.getByRole("alert")).toHaveText("至少选择一个只读权限范围。");
+  expect(tokenPosts).toBe(0);
+
+  await page.getByLabel("搜索令牌").fill("月度经营");
+  await expect(page).toHaveURL(/org_token_query=/);
+  await expect(page.getByLabel("组织令牌列表").locator("article")).toHaveCount(1);
+  await page.reload();
+  await expect(page.getByLabel("搜索令牌")).toHaveValue("月度经营");
+  await page.getByRole("button", { name: "重置筛选" }).click();
+
+  await page.getByRole("button", { name: "轮换密钥" }).first().click();
+  await expect(page.getByRole("dialog")).toContainText("旧令牌立即失效");
+  await page.getByRole("button", { name: "取消" }).click();
+  await page.getByRole("button", { name: "撤销访问" }).first().click();
+  await expect(page.getByRole("dialog")).toContainText("立即失效且不能恢复");
+});
+
+test("organization tokens stay readable without mobile overflow", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await setup(page);
+  await page.goto("/org-admin/tokens");
+  const dimensions = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    content: document.documentElement.scrollWidth,
+  }));
+  expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
+  const buttonHeights = await page
+    .locator(".org-token-panel button:visible")
+    .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().height));
+  expect(Math.min(...buttonHeights)).toBeGreaterThanOrEqual(38);
 });

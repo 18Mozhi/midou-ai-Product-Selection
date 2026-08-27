@@ -737,7 +737,7 @@
         "view": "OrganizationAdminCenter",
         "domain": "organization-tokens",
         "status": "verified",
-        "statusDetail": "M06-01_module_verified"
+        "statusDetail": "M06-01_organization_token_governance_live_verified"
       },
       "navigation": { "label": "组织令牌", "icon": "key", "group": "安全与审计" }
     },

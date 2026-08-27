@@ -151,6 +151,7 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
         "apps/web/src/components/OrganizationWorkspacePanel.vue",
         "apps/web/src/components/OrganizationApprovalPanel.vue",
         "apps/web/src/components/OrganizationDataPanel.vue",
+        "apps/web/src/components/OrganizationTokenPanel.vue",
       ].map((path) => readFile(path, "utf8")),
     )
   ).join("\n");
@@ -178,6 +179,12 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
     "默认工作区不可归档",
     "团队治理台",
     "团队成员关系",
+    "组织只读访问凭据",
+    "固定只读 scope",
+    "未选择时不会静默添加默认权限",
+    "令牌生命周期",
+    "轮换密钥",
+    "撤销访问",
   ])
     assert.match(web, new RegExp(copy));
   assert.doesNotMatch(
@@ -201,6 +208,7 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
     workspaces,
     approvals,
     organizationData,
+    organizationTokens,
     map,
   ] = await Promise.all([
     readFile("apps/api/src/mysql-organization-admin-repository.ts", "utf8"),
@@ -212,9 +220,19 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
     readFile("apps/web/src/components/OrganizationWorkspacePanel.vue", "utf8"),
     readFile("apps/web/src/components/OrganizationApprovalPanel.vue", "utf8"),
     readFile("apps/web/src/components/OrganizationDataPanel.vue", "utf8"),
+    readFile("apps/web/src/components/OrganizationTokenPanel.vue", "utf8"),
     readFile("docs/feature-map.json", "utf8"),
   ]);
-  const web = [center, members, roles, teams, workspaces, approvals, organizationData].join("\n");
+  const web = [
+    center,
+    members,
+    roles,
+    teams,
+    workspaces,
+    approvals,
+    organizationData,
+    organizationTokens,
+  ].join("\n");
   assert.match(repo, /team_names/);
   assert.match(repo, /approval_templates/);
   assert.match(repo, /approval_template_versions[\s\S]*templateVersionDiff/);
@@ -318,7 +336,25 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
   assert.match(organizationData, /retry_scheduled: "等待重试"/);
   assert.match(organizationData, /dead_letter: "多次失败"/);
   assert.doesNotMatch(organizationData, />\s*(新建导出|下载导出|删除导出)\s*</);
+  for (const copy of [
+    "7 天内到期",
+    "从未调用",
+    "重置筛选",
+    "令牌分页",
+    "复制明文",
+    "我已安全保存",
+    "仅当前组织",
+  ])
+    assert.match(organizationTokens, new RegExp(copy));
+  assert.match(organizationTokens, /scopes: \[\]/);
+  assert.match(organizationTokens, /type="checkbox"/);
+  assert.match(organizationTokens, /org_token_status/);
+  assert.match(organizationTokens, /router\.replace/);
+  assert.doesNotMatch(center, /scopes:\s*form\.scopes\s*\|\|\s*\["task:read"\]/);
+  assert.match(center, /旧令牌立即失效/);
+  assert.match(center, /立即失效且不能恢复/);
   assert.match(map, /"\/org-admin\/teams"/);
+  assert.match(map, /"\/org-admin\/tokens"/);
 });
 test("M06-01 organization overview preserves facts and form context across refresh and write feedback", async () => {
   const [center, styles] = await Promise.all([
