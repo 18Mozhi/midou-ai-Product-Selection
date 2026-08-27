@@ -1,21 +1,32 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>();
 const request = createApiClient(props.apiBaseUrl);
 type State = "loading" | "ready" | "empty" | "expired" | "forbidden" | "rate_limited" | "blocked";
+type WindowCode = "15m" | "24h" | "7d" | "30d";
+const route = useRoute(),
+  router = useRouter(),
+  windows = new Set<WindowCode>(["15m", "24h", "7d", "30d"]),
+  requestedWindow = String(route.query.window ?? "24h") as WindowCode;
 const state = ref<State>("loading"),
   data = ref<any>(null),
-  windowCode = ref("24h"),
+  windowCode = ref<WindowCode>(windows.has(requestedWindow) ? requestedWindow : "24h"),
   requestId = ref(""),
-  hint = ref("");
+  hint = ref(""),
+  pending = ref(false),
+  refreshError = ref("");
 const stateText = computed(
   () =>
     (
       ({
         loading: ["正在准备管理首页", "正在核对组织、用户、热点来源和采集进度。"],
-        empty: ["这段时间还没有采集记录", "系统仍会继续自动获取热点；也可以选择更长时间查看。"],
+        empty: [
+          "平台还没有可展示的业务事实",
+          "系统仍会继续自动获取热点；也可以先配置来源或创建组织。",
+        ],
         expired: ["登录已失效", "重新登录后会回到管理首页。"],
         forbidden: ["当前账号不能进入平台管理后台", "请联系超级管理员分配平台管理权限。"],
         rate_limited: ["刷新太频繁了", "稍等片刻再刷新，不会影响后台自动采集。"],
@@ -48,30 +59,55 @@ const signalText = (v: string) =>
     ({
       mysql: "数据库",
       queue: "任务队列",
+      expired_leases: "过期任务租约",
       data_quality: "数据质量",
       providers: "热点来源",
       storage: "文件存储",
     }) as Record<string, string>
   )[v] ?? "系统检查";
-const signalValue = (v: unknown) =>
+const signalValue = (code: string, v: unknown) =>
   v === "query_succeeded"
     ? "正常"
     : v === "ready"
       ? "正常"
       : v === "warning"
         ? "需要关注"
-        : String(v);
+        : typeof v === "number" && ["queue", "expired_leases", "data_quality"].includes(code)
+          ? `${v} 个`
+          : String(v);
 const alertText = (kind: string, code: string) =>
   (
     ({
+      network_timeout: "采集请求超时",
+      parser_changed: "页面解析规则可能变化",
+      rate_limited: "来源触发限流",
+      blocked_captcha: "采集遇到验证码",
+      blocked_login: "采集登录状态失效",
+      title_accuracy: "标题准确性需要检查",
+    }) as Record<string, string>
+  )[code] ??
+  (
+    {
       quality: "数据质量问题",
-      collection: "采集问题",
+      task: "采集任务问题",
       provider: "来源问题",
       system: "系统问题",
-    }) as Record<string, string>
+    } as Record<string, string>
   )[kind] ??
-  ({ title_accuracy: "标题准确性需要检查" } as Record<string, string>)[code] ??
-  "需要人工查看";
+  "未分类问题";
+const trendTotals = computed(() =>
+  (data.value?.task_trend ?? []).reduce(
+    (total: { succeeded: number; failed: number }, item: any) => ({
+      succeeded: total.succeeded + (Number(item.succeeded) || 0),
+      failed: total.failed + (Number(item.failed) || 0),
+    }),
+    { succeeded: 0, failed: 0 },
+  ),
+);
+const successRateText = computed(() => {
+  const value = data.value?.summary?.task_success_rate;
+  return value === null || value === undefined ? "暂无样本" : `${Number(value).toFixed(1)}%`;
+});
 const trendPoints = (key: "succeeded" | "failed") => {
   const rows = data.value?.task_trend ?? [],
     max = Math.max(
@@ -86,33 +122,67 @@ const trendPoints = (key: "succeeded" | "failed") => {
     .join(" ");
 };
 async function load() {
-  state.value = "loading";
-  requestId.value = "";
+  if (pending.value) return;
+  pending.value = true;
+  refreshError.value = "";
+  hint.value = "";
+  if (!data.value) {
+    state.value = "loading";
+    requestId.value = "";
+  }
+  const controller = new AbortController();
+  let timedOut = false;
+  const timeout = window.setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, 12000);
   try {
-    const response = await request<any>(`/platform/dashboard?window=${windowCode.value}`);
+    const response = await request<any>(`/platform/dashboard?window=${windowCode.value}`, {
+      signal: controller.signal,
+    });
     requestId.value = response.request_id;
     data.value = response.data;
-    const operational =
-      response.data.queues.length +
-      response.data.provider_health.reduce((n: number, p: any) => n + p.observed_count, 0) +
-      response.data.alerts.length;
-    state.value = operational === 0 ? "empty" : "ready";
+    const summary = response.data?.summary ?? {},
+      factual =
+        Number(summary.active_organizations ?? 0) +
+        Number(summary.active_users ?? 0) +
+        Number(summary.enabled_providers ?? 0) +
+        Number(summary.storage_bytes ?? 0) +
+        (response.data?.queues?.length ?? 0) +
+        (response.data?.alerts?.length ?? 0);
+    state.value = factual === 0 ? "empty" : "ready";
   } catch (error) {
     const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? "";
-    hint.value = failure?.actionHint ?? "";
-    state.value =
-      failure?.kind === "expired" ||
-      failure?.kind === "forbidden" ||
-      failure?.kind === "rate_limited"
-        ? failure.kind
-        : "blocked";
+    if (data.value && state.value === "ready") {
+      refreshError.value = timedOut
+        ? "刷新超过 12 秒，继续显示上一份观测结果。"
+        : "刷新失败，继续显示上一份观测结果。";
+      requestId.value = failure?.requestId ?? requestId.value;
+    } else {
+      requestId.value = failure?.requestId ?? "";
+      hint.value = timedOut
+        ? "请求超过 12 秒，请检查 API 与数据库状态。"
+        : (failure?.actionHint ?? "");
+      state.value =
+        failure?.kind === "expired" ||
+        failure?.kind === "forbidden" ||
+        failure?.kind === "rate_limited"
+          ? failure.kind
+          : "blocked";
+    }
+  } finally {
+    window.clearTimeout(timeout);
+    pending.value = false;
   }
+}
+async function changeWindow() {
+  await router.replace({ query: { ...route.query, window: windowCode.value } });
+  await load();
 }
 onMounted(load);
 </script>
 <template>
-  <section class="platform-dashboard" aria-live="polite">
+  <section class="platform-dashboard" aria-live="polite" :aria-busy="pending">
     <div class="platform-dashboard-toolbar">
       <div>
         <p>管理员首页</p>
@@ -122,13 +192,15 @@ onMounted(load);
         >
       </div>
       <label
-        >查看范围<select v-model="windowCode" @change="load">
+        >查看范围<select v-model="windowCode" :disabled="pending" @change="changeWindow">
           <option value="15m">最近 15 分钟</option>
           <option value="24h">最近 24 小时</option>
           <option value="7d">最近 7 天</option>
           <option value="30d">最近 30 天</option>
         </select></label
-      ><button type="button" @click="load">刷新</button>
+      ><button type="button" :disabled="pending" @click="load">
+        {{ pending ? "刷新中…" : "刷新" }}
+      </button>
     </div>
     <section v-if="state !== 'ready'" class="platform-dashboard-state" :data-kind="state">
       <span>{{ state === "loading" ? "···" : "!" }}</span>
@@ -145,7 +217,60 @@ onMounted(load);
       ><RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink>
     </section>
     <template v-else-if="data"
-      ><section class="platform-get-started">
+      ><div v-if="refreshError" class="platform-refresh-feedback" role="alert">
+        <span>{{ refreshError }}</span
+        ><button type="button" :disabled="pending" @click="load">重新刷新</button>
+      </div>
+      <div class="platform-action-summary">
+        <RouterLink to="/platform-admin/collection">
+          <span>等待处理</span><strong>{{ data.summary.queue_backlog }}</strong
+          ><small>查看排队、运行或受阻的采集任务 →</small>
+        </RouterLink>
+        <RouterLink to="/platform-admin/collection/overview?root_cause=1">
+          <span>需要关注</span><strong>{{ data.summary.open_alerts }}</strong
+          ><small>按错误根因查看异常 →</small>
+        </RouterLink>
+      </div>
+      <section class="platform-facts" aria-labelledby="platform-facts-heading">
+        <header>
+          <div>
+            <p>真实数据概览</p>
+            <h3 id="platform-facts-heading">平台事实</h3>
+          </div>
+          <span>来自当前 MySQL 5.7 与所选时间范围</span>
+        </header>
+        <div>
+          <article>
+            <span>活跃组织</span><strong>{{ data.summary.active_organizations }}</strong
+            ><RouterLink
+              v-if="capabilities?.includes('platform:superadmin')"
+              to="/platform-admin/organizations"
+              >查看组织</RouterLink
+            ><small v-else>仅超级管理员可查看明细</small>
+          </article>
+          <article>
+            <span>活跃用户</span><strong>{{ data.summary.active_users }}</strong
+            ><RouterLink
+              v-if="capabilities?.includes('platform:superadmin')"
+              to="/platform-admin/users"
+              >查看用户</RouterLink
+            ><small v-else>仅超级管理员可查看明细</small>
+          </article>
+          <article>
+            <span>启用来源</span><strong>{{ data.summary.enabled_providers }}</strong
+            ><RouterLink to="/platform-admin/providers/sources">查看来源</RouterLink>
+          </article>
+          <article>
+            <span>任务成功率</span><strong>{{ successRateText }}</strong
+            ><RouterLink to="/platform-admin/collection">查看任务</RouterLink>
+          </article>
+          <article>
+            <span>窗内文件增长</span><strong>{{ bytes(data.summary.file_growth_bytes) }}</strong
+            ><RouterLink to="/platform-admin/data">查看数据</RouterLink>
+          </article>
+        </div>
+      </section>
+      <section class="platform-get-started">
         <header>
           <h3>今天先做什么</h3>
           <span>按需要进入，不懂技术参数也能管理</span>
@@ -162,22 +287,13 @@ onMounted(load);
           >
         </div>
       </section>
-      <div class="platform-action-summary">
-        <RouterLink to="/platform-admin/collection">
-          <span>等待处理</span><strong>{{ data.summary.queue_backlog }}</strong
-          ><small>查看排队、运行或受阻的采集任务 →</small>
-        </RouterLink>
-        <RouterLink to="/platform-admin/collection/overview?root_cause=1">
-          <span>需要关注</span><strong>{{ data.summary.open_alerts }}</strong
-          ><small>按错误根因查看异常 →</small>
-        </RouterLink>
-      </div>
       <div class="platform-dashboard-grid">
         <section class="platform-trend-chart">
           <header>
             <h3>采集任务趋势</h3>
             <span
-              ><i data-series="success"></i>成功 <i data-series="failed"></i>失败 ·
+              ><i data-series="success"></i>成功 {{ trendTotals.succeeded }}
+              <i data-series="failed"></i>失败 {{ trendTotals.failed }} ·
               {{ data.task_trend.length }} 个时间点</span
             >
           </header>
@@ -190,7 +306,7 @@ onMounted(load);
             v-else
             viewBox="0 0 600 180"
             role="img"
-            aria-label="采集任务成功和失败趋势折线图"
+            :aria-label="`采集任务成功和失败趋势折线图：成功 ${trendTotals.succeeded}，失败 ${trendTotals.failed}`"
             preserveAspectRatio="none"
           >
             <line v-for="y in [20, 70, 120, 170]" :key="y" x1="0" :y1="y" x2="600" :y2="y" />
@@ -317,7 +433,7 @@ onMounted(load);
           <ul class="platform-signals">
             <li v-for="s in data.health_signals" :key="s.code">
               <i :data-health="s.status"></i><span>{{ signalText(s.code) }}</span
-              ><strong>{{ signalValue(s.value) }}</strong>
+              ><strong>{{ signalValue(s.code, s.value) }}</strong>
             </li>
           </ul>
           <dl class="platform-storage">

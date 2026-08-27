@@ -472,11 +472,11 @@
 }
 .platform-dashboard-toolbar {
   display: flex;
-  align-items: end;
+  align-items: center;
   gap: 14px;
   padding: 22px;
   border: 1px solid var(--so-border-strong);
-  background: linear-gradient(135deg, var(--so-bg-elevated), var(--so-panel-soft));
+  background: linear-gradient(105deg, var(--so-bg-elevated), var(--so-panel-soft));
   border-radius: 16px;
 }
 .platform-dashboard-toolbar > div {
@@ -485,7 +485,7 @@
 .platform-dashboard-toolbar p {
   margin: 0;
   color: var(--so-success);
-  font: 700 11px monospace;
+  font: 700 13px/1.4 var(--so-font-ui);
   letter-spacing: 0.14em;
 }
 .platform-dashboard-toolbar h2 {
@@ -503,6 +503,7 @@
 }
 .platform-dashboard-toolbar select,
 .platform-dashboard-toolbar button {
+  min-height: var(--so-touch-target);
   border: 1px solid var(--so-border-strong);
   background: var(--so-bg-elevated);
   color: var(--so-text);
@@ -511,6 +512,90 @@
 }
 .platform-dashboard-toolbar button {
   cursor: pointer;
+}
+.platform-dashboard-toolbar select:disabled,
+.platform-dashboard-toolbar button:disabled {
+  cursor: wait;
+  opacity: 0.64;
+}
+.platform-dashboard-toolbar select:focus-visible,
+.platform-dashboard-toolbar button:focus-visible,
+.platform-dashboard a:focus-visible {
+  outline: 2px solid var(--so-primary);
+  outline-offset: 3px;
+}
+.platform-refresh-feedback {
+  margin: 0;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid var(--so-warning-border);
+  border-radius: 12px;
+  color: var(--so-warning);
+  background: color-mix(in srgb, var(--so-warning) 8%, var(--so-bg-elevated));
+}
+.platform-refresh-feedback button {
+  min-height: var(--so-touch-target);
+  padding: 8px 13px;
+  border: 1px solid var(--so-warning-border);
+  border-radius: 8px;
+  color: var(--so-text);
+  background: var(--so-bg-elevated);
+}
+.platform-facts {
+  padding: 18px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 16px;
+  background: var(--so-bg-elevated);
+}
+.platform-facts > header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 13px;
+}
+.platform-facts > header p {
+  margin: 0 0 3px;
+  color: var(--so-text-muted);
+  font: 700 13px/1.4 var(--so-font-ui);
+  letter-spacing: 0.08em;
+}
+.platform-facts h3 {
+  margin: 0;
+  font-size: 18px;
+}
+.platform-facts > header span,
+.platform-facts article span,
+.platform-facts article small {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.platform-facts > div {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+.platform-facts article {
+  min-width: 0;
+  padding: 13px 14px;
+  display: grid;
+  gap: 5px;
+  border-left: 2px solid var(--so-primary);
+  background: var(--so-panel-soft);
+}
+.platform-facts article strong {
+  overflow-wrap: anywhere;
+  font-size: 22px;
+  line-height: 1.2;
+}
+.platform-facts article a {
+  width: fit-content;
+  color: var(--so-primary);
+  font-size: 13px;
+  text-decoration: none;
 }
 .platform-kpis {
   display: grid;
@@ -541,6 +626,7 @@
 .platform-dashboard-grid {
   display: grid;
   grid-template-columns: 1.35fr 1fr;
+  align-items: start;
   gap: 14px;
 }
 .platform-dashboard-grid > section {
@@ -549,6 +635,7 @@
 }
 .platform-dashboard-grid header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 14px;
@@ -601,7 +688,7 @@
 .platform-signals li,
 .platform-alerts li {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   padding: 9px;
   background: var(--so-bg-elevated);
@@ -685,6 +772,9 @@
   .platform-kpis {
     grid-template-columns: repeat(3, 1fr);
   }
+  .platform-facts > div {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 @media (max-width: 700px) {
   .platform-dashboard-toolbar {
@@ -693,6 +783,18 @@
   }
   .platform-kpis {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .platform-dashboard-toolbar button,
+  .platform-dashboard-toolbar select {
+    width: 100%;
+  }
+  .platform-refresh-feedback,
+  .platform-facts > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .platform-facts > div {
+    grid-template-columns: 1fr;
   }
   .platform-dashboard-grid {
     grid-template-columns: 1fr;
@@ -1318,6 +1420,13 @@
   color: var(--so-text);
   text-decoration: none;
   background: var(--so-bg-elevated);
+  transition:
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+.platform-action-summary a:hover {
+  border-color: var(--so-warning-border);
+  transform: translateY(-1px);
 }
 .platform-action-summary strong {
   grid-row: 1/3;

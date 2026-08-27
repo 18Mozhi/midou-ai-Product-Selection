@@ -779,7 +779,7 @@
         "view": "PlatformDashboard",
         "domain": "platform",
         "status": "implemented",
-        "statusDetail": "novice_dashboard_accounts_sources_collection_quality_security_and_advanced_navigation_implemented"
+        "statusDetail": "platform_dashboard_live_mysql_api_permission_failure_and_responsive_verification_completed"
       },
       "navigation": { "label": "平台概览", "icon": "home", "group": "业务运营" }
     },

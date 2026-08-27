@@ -184,7 +184,10 @@ test("M06-02.A06/A07/A08/A10/A13/A17 contracts frontend config and handoff stay 
   assert.equal(JSON.parse(feature).implementation.platformDashboard.module, "M06-02");
 });
 test("M06-02 platform overview gives novice administrators clear next actions", async () => {
-  const web = await readFile("apps/web/src/components/PlatformDashboard.vue", "utf8");
+  const [web, styles] = await Promise.all([
+    readFile("apps/web/src/components/PlatformDashboard.vue", "utf8"),
+    readFile("apps/web/src/styles/platform-operations.css", "utf8"),
+  ]);
   for (const copy of [
     "今天先做什么",
     "系统会自动获取热点",
@@ -196,6 +199,14 @@ test("M06-02 platform overview gives novice administrators clear next actions", 
     "数据库",
     "任务队列",
     "数据质量",
+    "平台事实",
+    "活跃组织",
+    "活跃用户",
+    "启用来源",
+    "任务成功率",
+    "窗内文件增长",
+    "过期任务租约",
+    "采集任务问题",
   ])
     assert.match(web, new RegExp(copy));
   assert.match(
@@ -208,6 +219,12 @@ test("M06-02 platform overview gives novice administrators clear next actions", 
     "/platform-admin/collection/overview",
   ])
     assert.match(web, new RegExp(path.replaceAll("/", "\\/")));
+  assert.match(web, /route\.query\.window/);
+  assert.match(web, /router\.replace\([\s\S]*window:\s*windowCode\.value/);
+  assert.match(web, /if \(pending\.value\) return/);
+  assert.match(web, /刷新超过 12 秒，继续显示上一份观测结果/);
+  assert.match(styles, /\.platform-facts[\s\S]*grid-template-columns:\s*repeat\(5/);
+  assert.match(styles, /\.platform-refresh-feedback/);
   assert.doesNotMatch(
     web,
     /PLATFORM OPERATIONS \/ REAL FACTS|当前 active|enabled<\/small>|<span>\{\{s\.code\}\}<\/span>|<span>\{\{q\.status\}\}<\/span>/,

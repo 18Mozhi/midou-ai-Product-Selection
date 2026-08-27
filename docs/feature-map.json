@@ -1693,7 +1693,7 @@
       ],
       "verificationRunId": "d424c7a8-eb72-4ddd-b9aa-3ce93ffbbe96",
       "status": "implemented",
-      "statusDetail": "implemented_pending_full_verification"
+      "statusDetail": "platform_dashboard_live_mysql_api_permission_failure_and_responsive_verification_completed"
     },
     "collectionOperationsConsole": {
       "module": "M06-03",
@@ -2900,7 +2900,7 @@
       "view": "PlatformDashboard",
       "domain": "platform",
       "status": "implemented",
-      "statusDetail": "novice_dashboard_accounts_sources_collection_quality_security_and_advanced_navigation_implemented"
+      "statusDetail": "platform_dashboard_live_mysql_api_permission_failure_and_responsive_verification_completed"
     },
     {
       "path": "/platform-admin/accounts",

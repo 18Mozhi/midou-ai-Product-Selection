@@ -53,6 +53,7 @@ const env = (data: any) => ({ data, request_id: "m06-02-e2e", trace_id: "m06-02-
     health_signals: [
       { code: "mysql", status: "healthy", value: "query_succeeded" },
       { code: "queue", status: "healthy", value: 7 },
+      { code: "expired_leases", status: "critical", value: 1 },
       { code: "data_quality", status: "warning", value: 1 },
     ],
     alerts: [
@@ -64,6 +65,15 @@ const env = (data: any) => ({ data, request_id: "m06-02-e2e", trace_id: "m06-02-
         severity: "warning",
         code: "title_accuracy",
         observed_at: "2026-08-08T11:45:00.000Z",
+      },
+      {
+        id: "a2",
+        organization_id: "00000000-0000-4000-8000-000000000601",
+        workspace_id: "00000000-0000-4000-8000-000000000602",
+        kind: "task",
+        severity: "critical",
+        code: "parser_changed",
+        observed_at: "2026-08-08T11:40:00.000Z",
       },
     ],
     activity: [],
@@ -163,6 +173,13 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
   ).toBeVisible();
   await expect(page.getByRole("link", { name: /等待处理 7/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /需要关注 2/ })).toBeVisible();
+  const facts = page.getByRole("region", { name: "平台事实" });
+  await expect(facts).toContainText("活跃组织42");
+  await expect(facts).toContainText("活跃用户318");
+  await expect(facts).toContainText("启用来源3");
+  await expect(facts).toContainText("任务成功率96.4%");
+  await expect(page.getByText("过期任务租约", { exact: true })).toBeVisible();
+  await expect(page.getByText("页面解析规则可能变化", { exact: true })).toBeVisible();
   if ((page.viewportSize()?.width ?? 0) <= 760) {
     await expect(page.getByText("待观测来源 · 未知", { exact: true })).toBeVisible();
   } else {
@@ -190,7 +207,26 @@ test("M06-02.A08/A16 empty forbidden and dependency states recover truthfully", 
   await page.route("**/api/v1/platform/dashboard?**", (r) =>
     r.fulfill(
       status === 200
-        ? { json: env({ ...dashboard, queues: [], provider_health: [], alerts: [] }) }
+        ? {
+            json: env({
+              ...dashboard,
+              summary: {
+                active_organizations: 0,
+                active_users: 0,
+                enabled_providers: 0,
+                task_success_rate: null,
+                queue_backlog: 0,
+                open_alerts: 0,
+                storage_bytes: 0,
+                file_growth_bytes: 0,
+              },
+              queues: [],
+              provider_health: [],
+              task_trend: [],
+              health_signals: [],
+              alerts: [],
+            }),
+          }
         : {
             status,
             contentType: "application/json",
@@ -207,13 +243,76 @@ test("M06-02.A08/A16 empty forbidden and dependency states recover truthfully", 
     ),
   );
   await page.goto("/platform-admin");
-  await expect(page.getByRole("heading", { name: "这段时间还没有采集记录" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "平台还没有可展示的业务事实" })).toBeVisible();
   status = 403;
   await page.reload();
   await expect(page.getByRole("heading", { name: "当前账号不能进入平台管理后台" })).toBeVisible();
   status = 503;
   await page.reload();
   await expect(page.getByRole("heading", { name: "管理首页暂时无法读取数据" })).toBeVisible();
+});
+
+test("platform window persists and failed refresh keeps the last factual snapshot", async ({
+  page,
+}) => {
+  await nav(page);
+  let failRefresh = false;
+  const logicalReads = new Set<string>();
+  await page.route("**/api/v1/platform/dashboard?**", async (route) => {
+    logicalReads.add(route.request().headers()["x-request-id"] ?? "missing");
+    if (failRefresh) {
+      await new Promise((resolve) => setTimeout(resolve, 80));
+      await route.fulfill({
+        status: 503,
+        contentType: "application/json",
+        body: JSON.stringify({
+          error: {
+            code: "dependency_unavailable",
+            message: "数据库暂不可用",
+            action_hint: "检查测试数据库。",
+          },
+          request_id: "m06-02-refresh-failed",
+          trace_id: "m06-02-refresh-failed",
+        }),
+      });
+      return;
+    }
+    await route.fulfill({ json: env(dashboard) });
+  });
+
+  await page.goto("/platform-admin");
+  await page.getByRole("combobox", { name: "查看范围" }).selectOption("7d");
+  await expect(page).toHaveURL(/window=7d/);
+  await page.reload();
+  await expect(page.getByRole("combobox", { name: "查看范围" })).toHaveValue("7d");
+
+  const readsBeforeFailure = logicalReads.size;
+  failRefresh = true;
+  await page.getByRole("button", { name: "刷新" }).evaluate((button: HTMLButtonElement) => {
+    button.click();
+    button.click();
+  });
+  await expect(page.getByRole("alert")).toContainText("继续显示上一份观测结果");
+  await expect(page.getByRole("region", { name: "平台事实" })).toContainText("活跃组织42");
+  expect(logicalReads.size).toBe(readsBeforeFailure + 1);
+});
+
+test("platform dashboard reports a bounded timeout instead of waiting forever", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "One browser proves the 12s timeout.");
+  await nav(page);
+  await page.route("**/api/v1/platform/dashboard?**", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 13_000));
+    await route.abort("timedout");
+  });
+
+  await page.goto("/platform-admin");
+  await expect(page.getByRole("heading", { name: "管理首页暂时无法读取数据" })).toBeVisible({
+    timeout: 15_000,
+  });
+  await expect(page.getByText("请求超过 12 秒，请检查 API 与数据库状态。")).toBeVisible();
+  await expect(page.getByRole("button", { name: "重新读取" })).toBeVisible();
 });
 
 test("platform completion renders trend and management without overflow or console errors", async ({
@@ -264,7 +363,7 @@ test("platform completion renders trend and management without overflow or conso
     }),
   );
   await page.goto("/platform-admin");
-  await expect(page.getByLabel("采集任务成功和失败趋势折线图")).toBeVisible();
+  await expect(page.getByLabel(/采集任务成功和失败趋势折线图：成功 43，失败 3/)).toBeVisible();
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
