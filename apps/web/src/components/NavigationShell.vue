@@ -143,7 +143,9 @@ const { themeOpen, activeTheme, themeNotice, loadThemePreference, chooseTheme } 
 const { discoveryMode, openDiscovery, closeDiscovery, handleDiscoveryShortcut } =
   useNavigationDiscovery(() => props.shell);
 const allCapabilities = computed(() => shellCapabilities(props.shell, guard.value));
-const items = computed(() => authorizedNavigation(props.shell, allCapabilities.value));
+const items = computed(() =>
+  authorizedNavigation(props.shell, allCapabilities.value, guard.value?.roles ?? []),
+);
 const navigationParentPath = computed(() => resolveNavigationParentPath(routePath.value));
 const activeItem = computed(
   () =>
@@ -196,7 +198,12 @@ const requiredCapabilities = computed(() =>
     : [],
 );
 const routeAllowed = computed(() =>
-  canOpenRoute(requiredCapabilities.value, allCapabilities.value),
+  canOpenRoute(
+    requiredCapabilities.value,
+    allCapabilities.value,
+    props.shell,
+    guard.value?.roles ?? [],
+  ),
 );
 const roleSummary = computed(() => shellRoleSummary(props.shell, guard.value));
 const primaryItems = computed(() => items.value.slice(0, 4));
@@ -387,6 +394,7 @@ onUnmounted(() => {
         <RouterLink
           v-else-if="shell === 'organization_admin'"
           class="role-create"
+          v-show="guard?.roles?.includes('organization_admin')"
           to="/org-admin/members"
           :aria-label="primaryActionLabel"
           ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink

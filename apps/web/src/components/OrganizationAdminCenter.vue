@@ -8,6 +8,7 @@ import {
 } from "../api-client";
 import { useAuditedReason } from "../use-audited-reason";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
+import OrganizationAuditPanel from "./OrganizationAuditPanel.vue";
 import OrganizationApprovalPanel from "./OrganizationApprovalPanel.vue";
 import OrganizationDataPanel from "./OrganizationDataPanel.vue";
 import OrganizationMemberPanel from "./OrganizationMemberPanel.vue";
@@ -16,6 +17,27 @@ import OrganizationTeamPanel from "./OrganizationTeamPanel.vue";
 import OrganizationTokenPanel from "./OrganizationTokenPanel.vue";
 import OrganizationWorkspacePanel from "./OrganizationWorkspacePanel.vue";
 import "../organization-admin.css";
+type OrganizationAuditFilters = {
+  action: string;
+  outcome: string;
+  resource_type: string;
+  request_id: string;
+  trace_id: string;
+  occurred_from: string;
+  occurred_to: string;
+};
+const initialAuditFilters = (): OrganizationAuditFilters => {
+  const query = new URLSearchParams(window.location.search);
+  return {
+    action: query.get("org_audit_action") ?? "",
+    outcome: query.get("org_audit_outcome") ?? "",
+    resource_type: query.get("org_audit_resource") ?? "",
+    request_id: query.get("org_audit_request") ?? "",
+    trace_id: query.get("org_audit_trace") ?? "",
+    occurred_from: query.get("org_audit_from") ?? "",
+    occurred_to: query.get("org_audit_to") ?? "",
+  };
+};
 const props = defineProps<{
     apiBaseUrl: string;
     routePath: string;
@@ -44,7 +66,7 @@ const props = defineProps<{
   memberSort = ref("name_asc"),
   memberPage = ref(1),
   invitationTab = ref<"pending" | "expired">("pending"),
-  auditFilters = ref({ action: "", outcome: "", resource_type: "" }),
+  auditFilters = ref<OrganizationAuditFilters>(initialAuditFilters()),
   resourceGrantPage = ref(1),
   resourceGrantStatus = ref("all"),
   resourceGrantForm = ref<any>({
@@ -94,7 +116,9 @@ const view = computed(() =>
             ? "跨工作区核对数据规模与导出历史，不以数量冒充数据质量。"
             : view.value === "tokens"
               ? "签发、轮换和撤销当前组织的固定只读令牌，明文仅在成功响应中显示一次。"
-              : "管理当前组织的成员、权限、工作区和审计记录。",
+              : view.value === "audit"
+                ? "只读核对当前组织的治理操作、后台执行结果与完整请求追踪。"
+                : "管理当前组织的成员、权限、工作区和审计记录。",
   );
 async function api(path: string, init: ApiRequestOptions = {}) {
   if (init.signal) return request<any>(path, init);
@@ -244,7 +268,9 @@ async function readView(currentView: string) {
 async function load(options: { background?: boolean; preserveNotice?: boolean } = {}) {
   const sequence = ++loadSequence,
     currentView = view.value,
-    background = Boolean(options.background && summary.value && data.value);
+    background = Boolean(
+      options.background && data.value && (currentView === "audit" || summary.value),
+    );
   refreshing.value = background;
   if (!background) state.value = "loading";
   if (!options.preserveNotice) {
@@ -253,11 +279,11 @@ async function load(options: { background?: boolean; preserveNotice?: boolean } 
   }
   try {
     const [summaryResponse, viewResponse] = await Promise.all([
-      api("/org/admin/summary"),
+      currentView === "audit" ? Promise.resolve(null) : api("/org/admin/summary"),
       readView(currentView),
     ]);
     if (sequence !== loadSequence) return;
-    summary.value = summaryResponse.data;
+    if (summaryResponse) summary.value = summaryResponse.data;
     data.value = viewResponse.value;
     requestId.value = viewResponse.requestId;
     if (currentView === "summary") {
@@ -309,14 +335,50 @@ async function load(options: { background?: boolean; preserveNotice?: boolean } 
     if (sequence === loadSequence) refreshing.value = false;
   }
 }
-function auditPath() {
+function auditPath(cursor = "") {
   const query = new URLSearchParams({ limit: "50" });
   if (auditFilters.value.action.trim()) query.set("action", auditFilters.value.action.trim());
   if (auditFilters.value.outcome) query.set("outcome", auditFilters.value.outcome);
   if (auditFilters.value.resource_type.trim())
     query.set("resource_type", auditFilters.value.resource_type.trim());
+  if (auditFilters.value.request_id.trim())
+    query.set("request_id", auditFilters.value.request_id.trim());
+  if (auditFilters.value.trace_id.trim()) query.set("trace_id", auditFilters.value.trace_id.trim());
+  if (auditFilters.value.occurred_from)
+    query.set("occurred_from", auditFilters.value.occurred_from);
+  if (auditFilters.value.occurred_to) query.set("occurred_to", auditFilters.value.occurred_to);
+  if (cursor) query.set("cursor", cursor);
   return `/organizations/${props.organizationId}/audit-events?${query}`;
 }
+async function loadAuditPage(next: OrganizationAuditFilters, append = false) {
+  if (busy.value) return;
+  busy.value = true;
+  auditFilters.value = { ...next };
+  try {
+    const cursor = append ? String(data.value?.nextCursor ?? "") : "",
+      response = await api(auditPath(cursor));
+    data.value = append
+      ? {
+          items: [...(data.value?.items ?? []), ...(response.data?.items ?? [])],
+          nextCursor: response.data?.nextCursor ?? null,
+        }
+      : response.data;
+    requestId.value = response.request_id;
+    notice.value = "";
+    noticeKind.value = "info";
+    state.value = "ready";
+  } catch (error) {
+    const failure = error instanceof ApiClientError ? error : null,
+      replacePage =
+        ["expired", "forbidden"].includes(failure?.kind ?? "") || !data.value?.items?.length;
+    applyFailure(error, replacePage);
+    rethrowUnexpectedError(error);
+  } finally {
+    busy.value = false;
+  }
+}
+const applyAuditFilters = (next: OrganizationAuditFilters) => loadAuditPage(next),
+  loadMoreAudit = () => loadAuditPage(auditFilters.value, true);
 async function submit(
   path: string,
   value: any,
@@ -845,7 +907,7 @@ onMounted(() => void load());
   <section
     class="org-admin-center"
     :data-state="state"
-    :aria-busy="state === 'loading' || refreshing"
+    :aria-busy="state === 'loading' || refreshing || (view === 'audit' && busy)"
   >
     <header class="org-admin-hero">
       <div>
@@ -1133,35 +1195,16 @@ onMounted(() => void load());
         :dismiss-secret="dismissTokenSecret"
       />
       <OrganizationDataPanel v-else-if="view === 'data'" :data="data" :format-time="fmt" />
-      <section v-else class="org-admin-card">
-        <form class="org-admin-filters org-admin-audit-filters" @submit.prevent="load()">
-          <label
-            >操作<input v-model="auditFilters.action" placeholder="例如 organization.member"
-          /></label>
-          <label
-            >结果<select v-model="auditFilters.outcome">
-              <option value="">全部结果</option>
-              <option value="succeeded">成功</option>
-              <option value="failed">失败</option>
-              <option value="blocked">已阻止</option>
-            </select></label
-          >
-          <label
-            >对象<input v-model="auditFilters.resource_type" placeholder="例如 membership"
-          /></label>
-          <button>应用筛选</button>
-        </form>
-        <div v-for="x in rows" :key="x.id" class="org-admin-line">
-          <div>
-            <b>{{ x.action || x.report_type }}</b
-            ><small
-              >{{ x.resource_type || x.status }} · {{ fmt(x.occurred_at || x.created_at) }}</small
-            >
-          </div>
-          <i>{{ x.outcome || x.status }}</i>
-        </div>
-        <p v-if="!rows.length">暂无记录；不会用示例数据补齐。</p>
-      </section>
+      <OrganizationAuditPanel
+        v-else
+        :events="rows"
+        :next-cursor="data?.nextCursor ?? null"
+        :filters="auditFilters"
+        :busy="busy || refreshing"
+        :format-time="fmt"
+        :apply-filters="applyAuditFilters"
+        :load-more="loadMoreAudit"
+      />
     </template>
     <AuditedReasonDialog
       :open="auditedReasonOpen"

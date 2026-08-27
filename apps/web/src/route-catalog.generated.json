@@ -748,7 +748,7 @@
       "breadcrumb": ["组织后台", "组织审计"],
       "shell": "organization_admin",
       "view": null,
-      "capabilities": [],
+      "capabilities": ["audit:read"],
       "notFound": false,
       "surface": "organization-admin-center",
       "cachePolicy": "reset_on_scope",
@@ -758,7 +758,7 @@
         "view": "OrganizationAdminCenter",
         "domain": "organization-audit",
         "status": "verified",
-        "statusDetail": "M06-01_module_verified"
+        "statusDetail": "M06-01_organization_audit_live_verified"
       },
       "navigation": { "label": "组织审计", "icon": "shield", "group": "安全与审计" }
     },

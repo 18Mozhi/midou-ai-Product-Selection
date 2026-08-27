@@ -112,34 +112,70 @@ export class MySqlAuditRepository implements AuditRepository {
     await this.insert(this.pool, event);
   }
   async list(filter: AuditFilter) {
-    const clauses: string[] = [];
-    const params: unknown[] = [];
-    const add = (sql: string, value: unknown) => {
-      clauses.push(sql);
-      params.push(value);
-    };
-    if (filter.organizationId !== undefined) add("organization_id=?", filter.organizationId);
-    else clauses.push("organization_id IS NULL");
-    if (filter.action) add("action=?", filter.action);
-    if (filter.outcome) add("outcome=?", filter.outcome);
-    if (filter.resourceType) add("resource_type=?", filter.resourceType);
-    if (filter.requestId) add("request_id=?", filter.requestId);
-    if (filter.traceId) add("trace_id=?", filter.traceId);
-    if (filter.occurredFrom) add("occurred_at>=?", filter.occurredFrom);
-    if (filter.occurredTo) add("occurred_at<=?", filter.occurredTo);
+    const scopedSource =
+        filter.organizationId === undefined
+          ? `(SELECT ${eventColumns} FROM platform_audit_events WHERE organization_id IS NULL) scoped_audit`
+          : `(SELECT ${eventColumns} FROM platform_audit_events WHERE organization_id=?
+             UNION ALL
+             SELECT id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,
+               'succeeded' outcome,request_id,trace_id,metadata_json metadata,occurred_at,schema_version
+             FROM audit_logs WHERE organization_id=?) scoped_audit`,
+      scopeParams =
+        filter.organizationId === undefined ? [] : [filter.organizationId, filter.organizationId];
+    const platformClauses = [
+        filter.organizationId === undefined ? "organization_id IS NULL" : "organization_id=?",
+      ],
+      platformParams: unknown[] =
+        filter.organizationId === undefined ? [] : [filter.organizationId],
+      logClauses = filter.organizationId === undefined ? [] : ["organization_id=?"],
+      logParams: unknown[] = filter.organizationId === undefined ? [] : [filter.organizationId],
+      addBoth = (sql: string, value: unknown) => {
+        platformClauses.push(sql);
+        platformParams.push(value);
+        if (filter.organizationId !== undefined) {
+          logClauses.push(sql);
+          logParams.push(value);
+        }
+      };
+    if (filter.action) addBoth("action=?", filter.action);
+    if (filter.outcome) {
+      platformClauses.push("outcome=?");
+      platformParams.push(filter.outcome);
+      if (filter.organizationId !== undefined && filter.outcome !== "succeeded")
+        logClauses.push("1=0");
+    }
+    if (filter.resourceType) addBoth("resource_type=?", filter.resourceType);
+    if (filter.requestId) addBoth("request_id=?", filter.requestId);
+    if (filter.traceId) addBoth("trace_id=?", filter.traceId);
+    if (filter.occurredFrom) addBoth("occurred_at>=?", filter.occurredFrom);
+    if (filter.occurredTo) addBoth("occurred_at<=?", filter.occurredTo);
     if (filter.cursor) {
       const [cursorRows] = await this.pool.query<RowDataPacket[]>(
-        "SELECT occurred_at FROM platform_audit_events WHERE id=? LIMIT 1",
-        [filter.cursor],
+        `SELECT occurred_at FROM ${scopedSource} WHERE id=? LIMIT 1`,
+        [...scopeParams, filter.cursor],
       );
-      if (cursorRows[0]) {
-        clauses.push("(occurred_at<? OR (occurred_at=? AND id<?))");
-        params.push(cursorRows[0].occurred_at, cursorRows[0].occurred_at, filter.cursor);
+      if (!cursorRows[0])
+        throw new AuditError("audit_cursor_invalid", 400, "cursor 不属于当前审计范围。");
+      const cursorClause = "(occurred_at<? OR (occurred_at=? AND id<?))";
+      platformClauses.push(cursorClause);
+      platformParams.push(cursorRows[0].occurred_at, cursorRows[0].occurred_at, filter.cursor);
+      if (filter.organizationId !== undefined) {
+        logClauses.push(cursorClause);
+        logParams.push(cursorRows[0].occurred_at, cursorRows[0].occurred_at, filter.cursor);
       }
     }
-    const limit = filter.limit ?? 50;
+    const filteredSource =
+        filter.organizationId === undefined
+          ? `(SELECT ${eventColumns} FROM platform_audit_events WHERE ${platformClauses.join(" AND ")}) scoped_audit`
+          : `(SELECT ${eventColumns} FROM platform_audit_events WHERE ${platformClauses.join(" AND ")}
+             UNION ALL
+             SELECT id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,
+               'succeeded' outcome,request_id,trace_id,metadata_json metadata,occurred_at,schema_version
+             FROM audit_logs WHERE ${logClauses.join(" AND ")}) scoped_audit`,
+      params = [...platformParams, ...logParams],
+      limit = filter.limit ?? 50;
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      `SELECT ${eventColumns} FROM platform_audit_events WHERE ${clauses.join(" AND ")} ORDER BY occurred_at DESC,id DESC LIMIT ?`,
+      `SELECT ${eventColumns} FROM ${filteredSource} ORDER BY occurred_at DESC,id DESC LIMIT ?`,
       [...params, limit + 1],
     );
     const items = rows.slice(0, limit).map(mapEvent);

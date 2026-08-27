@@ -62,6 +62,29 @@ const organizationTokens = Array.from({ length: 8 }, (_, index) => ({
   created_at: `2026-08-${String(index + 1).padStart(2, "0")}T10:00:00.000Z`,
   updated_at: "2026-08-08T12:00:00.000Z",
 }));
+const organizationAuditEvents = Array.from({ length: 55 }, (_, index) => ({
+  id: `00000000-0000-4000-8000-${String(620 + index).padStart(12, "0")}`,
+  organization_id: org,
+  workspace_id: ws,
+  actor_id: memberAdmin,
+  action:
+    index % 3 === 0
+      ? "organization.member.invited"
+      : index % 3 === 1
+        ? "organization.collection.run.failed"
+        : "organization.collection.run.blocked",
+  resource_type: index % 3 === 0 ? "membership" : "collection_run",
+  resource_id: `00000000-0000-4000-8000-${String(760 + index).padStart(12, "0")}`,
+  outcome: index % 3 === 0 ? "succeeded" : index % 3 === 1 ? "failed" : "blocked",
+  request_id: `m06-01-audit-request-${String(index + 1).padStart(3, "0")}`,
+  trace_id: `m06-01-audit-trace-${String(Math.floor(index / 4) + 1).padStart(3, "0")}`,
+  metadata:
+    index === 0
+      ? { reason: "新增采购成员", api_token: "synthetic-redaction-probe" }
+      : { source: "e2e", sequence: index + 1 },
+  occurred_at: new Date(Date.parse("2026-08-27T10:00:00.000Z") - index * 60_000).toISOString(),
+  schema_version: 1,
+}));
 const profile = {
   id: org,
   name: "Global Goods Co.",
@@ -364,21 +387,24 @@ async function setup(page: Page) {
   await page.route("**/api/v1/org/admin/tokens", (r) =>
     r.fulfill({ json: env(organizationTokens) }),
   );
-  await page.route("**/api/v1/organizations/*/audit-events**", (r) =>
-    r.fulfill({
-      json: env({
-        items: [
-          {
-            id: "00000000-0000-4000-8000-000000000620",
-            action: "organization.member.disabled",
-            resource_type: "membership",
-            outcome: "succeeded",
-            occurred_at: "2026-08-08T11:00:00.000Z",
-          },
-        ],
-      }),
-    }),
-  );
+  await page.route("**/api/v1/organizations/*/audit-events**", (route) => {
+    const query = new URL(route.request().url()).searchParams,
+      filtered = organizationAuditEvents.filter(
+        (event) =>
+          (!query.get("action") || event.action === query.get("action")) &&
+          (!query.get("outcome") || event.outcome === query.get("outcome")) &&
+          (!query.get("resource_type") || event.resource_type === query.get("resource_type")) &&
+          (!query.get("request_id") || event.request_id === query.get("request_id")) &&
+          (!query.get("trace_id") || event.trace_id === query.get("trace_id")),
+      ),
+      cursorIndex = query.get("cursor")
+        ? filtered.findIndex((event) => event.id === query.get("cursor")) + 1
+        : 0,
+      limit = Number(query.get("limit") ?? 50),
+      items = filtered.slice(cursorIndex, cursorIndex + limit),
+      nextCursor = filtered.length > cursorIndex + limit ? (items.at(-1)?.id ?? null) : null;
+    return route.fulfill({ json: env({ items, nextCursor }) });
+  });
 }
 
 test("M06-01.A07/A08/A15 desktop organization dashboard", async ({ page }) => {
@@ -1082,15 +1108,166 @@ test("organization data has a responsive factual card layout", async ({ page }) 
   );
 });
 
-test("organization audit filters", async ({ page }) => {
+test("organization audit unifies readable details filters cursor and URL state", async ({
+  page,
+}) => {
   await setup(page);
+  const auditRequests: URL[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.includes("/audit-events"))
+      auditRequests.push(new URL(request.url()));
+  });
 
   await page.goto("/org-admin/audit");
-  await page.getByLabel("操作").fill("organization.member");
-  await page.getByLabel("结果").selectOption("succeeded");
-  await page.getByLabel("对象", { exact: true }).fill("membership");
+  await expect(page.getByRole("heading", { name: "组织审计账本" })).toBeVisible();
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(50);
+  await expect(page.getByLabel("当前已加载审计汇总")).toContainText("不是全库总数");
+  await expect(page.getByLabel("审计记录详情").locator("pre")).toContainText("[已脱敏]");
+  await expect(page.getByLabel("审计记录详情")).not.toContainText("synthetic-redaction-probe");
+  await page.getByRole("button", { name: "加载更多记录" }).click();
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(55);
+
+  await page.getByLabel("页内搜索").fill("失败");
+  await expect(page).toHaveURL(/org_audit_query=/);
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(18);
+  await page.getByLabel("页内搜索").fill("");
+  await page.getByLabel("操作代码（精确）").fill("organization.member.invited");
+  await page.getByLabel("执行结果").selectOption("succeeded");
+  await page.getByLabel("对象类型（精确）").fill("membership");
   await page.getByRole("button", { name: "应用筛选" }).click();
-  await expect(page.getByText("organization.member.disabled")).toBeVisible();
+  await expect(page).toHaveURL(/org_audit_action=organization.member.invited/);
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(19);
+  expect(auditRequests.at(-1)?.searchParams.get("resource_type")).toBe("membership");
+  await page.reload();
+  await expect(page.getByLabel("操作代码（精确）")).toHaveValue("organization.member.invited");
+  await page.getByRole("button", { name: "重置筛选" }).click();
+  await expect(page.getByLabel("操作代码（精确）")).toHaveValue("");
+});
+
+test("organization audit validates ranges and has no mobile overflow", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await setup(page);
+  await page.goto("/org-admin/audit");
+  await page.getByText("高级追踪与时间筛选").click();
+  await page.getByLabel("开始时间").fill("2026-08-28T12:00");
+  await page.getByLabel("结束时间").fill("2026-08-27T12:00");
+  await page.getByRole("button", { name: "应用筛选" }).click();
+  await expect(page.getByRole("alert")).toContainText("开始时间不能晚于结束时间");
+  const dimensions = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    content: document.documentElement.scrollWidth,
+  }));
+  expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
+  const buttonHeights = await page
+    .locator(".org-audit-panel button:visible")
+    .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().height));
+  expect(Math.min(...buttonHeights)).toBeGreaterThanOrEqual(34);
+});
+
+test("organization audit auditor can open only the read-only capability route", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/me/navigation?shell=organization_admin", (route) =>
+    route.fulfill({
+      json: env({
+        shell: "organization_admin",
+        organization_id: org,
+        workspace_id: ws,
+        roles: ["auditor"],
+        capabilities: ["audit:read"],
+        platform_roles: [],
+        platform_capabilities: [],
+        guard_reason: "navigation_organization_admin_audit_allowed",
+      }),
+    }),
+  );
+  let memberReads = 0,
+    summaryReads = 0;
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname === "/api/v1/org/admin/members") memberReads += 1;
+    if (new URL(request.url()).pathname === "/api/v1/org/admin/summary") summaryReads += 1;
+  });
+
+  await page.goto("/org-admin/audit");
+  await expect(page.getByLabel("当前身份")).toContainText("审计员");
+  await expect(page.getByRole("heading", { name: "组织审计账本" })).toBeVisible();
+  await expect(page.locator(".role-nav-groups a")).toHaveCount(1);
+  await expect(page.getByRole("link", { name: "邀请成员" })).toHaveCount(0);
+  expect(summaryReads).toBe(0);
+
+  await page.goto("/org-admin/members");
+  await expect(page.getByRole("heading", { name: "无权打开此页面" })).toBeVisible();
+  expect(memberReads).toBe(0);
+});
+
+test("organization audit distinguishes empty, HTTP failure and offline states", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/organizations/*/audit-events**", (route) =>
+    route.fulfill({ json: env({ items: [], nextCursor: null }) }),
+  );
+  await page.goto("/org-admin/audit");
+  await expect(page.getByText("当前组织暂无审计记录")).toBeVisible();
+  await expect(page.getByText("不会用示例数据补齐。")).toBeVisible();
+
+  await page.unroute("**/api/v1/organizations/*/audit-events**");
+  await setup(page);
+  let failureRequests = 0;
+  await page.route("**/api/v1/organizations/*/audit-events**", (route) => {
+    failureRequests += 1;
+    return route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "audit_temporarily_unavailable",
+          message: "审计查询暂不可用。",
+          action_hint: "检查数据库连接后重试。",
+        },
+        request_id: "m06-01-audit-failure",
+        trace_id: "m06-01-audit-failure",
+      },
+    });
+  });
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "组织数据暂不可用" })).toBeVisible();
+  await expect(page.locator(".org-admin-state p")).toHaveText(
+    "审计查询暂不可用。 检查数据库连接后重试。",
+  );
+  expect(failureRequests).toBe(3);
+
+  await page.unroute("**/api/v1/organizations/*/audit-events**");
+  await setup(page);
+  let offlineRequests = 0;
+  await page.route("**/api/v1/organizations/*/audit-events**", (route) => {
+    offlineRequests += 1;
+    return route.abort("internetdisconnected");
+  });
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "组织数据暂不可用" })).toBeVisible();
+  await expect(page.locator(".org-admin-state p")).toContainText("网络连接暂不可用");
+  await expect(page.locator(".org-admin-state p")).toContainText("请检查网络后重试");
+  expect(offlineRequests).toBe(3);
+});
+
+test("organization audit fails closed after the organization request timeout", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "timeout contract needs one browser run");
+  await setup(page);
+  await page.route("**/api/v1/organizations/*/audit-events**", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 13_000));
+    if (!route.request().isNavigationRequest())
+      await route.fulfill({ json: env({ items: [], nextCursor: null }) }).catch(() => undefined);
+  });
+  await page.goto("/org-admin/audit");
+  await expect(page.getByRole("heading", { name: "组织数据暂不可用" })).toBeVisible({
+    timeout: 15_000,
+  });
+  await expect(page.locator(".org-admin-state p")).toHaveText(
+    "组织后台请求超时。 检查网络或服务状态后重试。",
+  );
 });
 
 test("organization tokens require explicit scopes and preserve lifecycle filters", async ({

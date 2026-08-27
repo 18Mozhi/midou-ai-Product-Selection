@@ -14,15 +14,28 @@ export function shellCapabilities(shell: NavigationShellKind, guard: NavigationG
     : (guard?.capabilities ?? []);
 }
 
-export function authorizedNavigation(shell: NavigationShellKind, capabilities: string[]) {
+export function authorizedNavigation(
+  shell: NavigationShellKind,
+  capabilities: string[],
+  roles: string[] = [],
+) {
+  const limitedOrganizationShell =
+    shell === "organization_admin" && !roles.includes("organization_admin");
   return navigationItemsFor(shell).filter(
     (item) =>
-      item.capabilities.length === 0 ||
+      (!limitedOrganizationShell && item.capabilities.length === 0) ||
       item.capabilities.some((capability) => capabilities.includes(capability)),
   );
 }
 
-export function canOpenRoute(required: string[], capabilities: string[]) {
+export function canOpenRoute(
+  required: string[],
+  capabilities: string[],
+  shell?: NavigationShellKind,
+  roles: string[] = [],
+) {
+  if (shell === "organization_admin" && !roles.includes("organization_admin") && !required.length)
+    return false;
   return required.length === 0 || required.some((capability) => capabilities.includes(capability));
 }
 

@@ -167,3 +167,32 @@ test("M01-06.A08/A09 restricted seed session cannot read audit before setup comp
   assert.equal(response.json().error.code, "security_setup_required");
   await app.close();
 });
+
+test("M01-06 organization audit rejects invalid filters and unauthenticated access", async () => {
+  const app = fixture();
+  for (const [query, code] of [
+    ["outcome=unknown", "audit_outcome_invalid"],
+    ["occurred_from=not-a-date", "audit_time_invalid"],
+    [
+      "occurred_from=2026-08-28T00%3A00%3A00Z&occurred_to=2026-08-27T00%3A00%3A00Z",
+      "audit_range_invalid",
+    ],
+    ["cursor=not-a-uuid", "audit_cursor_invalid"],
+    ["limit=101", "audit_limit_invalid"],
+  ]) {
+    const response = await app.inject({
+      method: "GET",
+      url: `/api/v1/organizations/${org}/audit-events?${query}`,
+      headers: cookie,
+    });
+    assert.equal(response.statusCode, 400, query);
+    assert.equal(response.json().error.code, code, query);
+  }
+  const unauthenticated = await app.inject({
+    method: "GET",
+    url: `/api/v1/organizations/${org}/audit-events`,
+  });
+  assert.equal(unauthenticated.statusCode, 401);
+  assert.equal(unauthenticated.json().error.code, "session_invalid");
+  await app.close();
+});

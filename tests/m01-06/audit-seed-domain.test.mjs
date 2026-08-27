@@ -65,6 +65,54 @@ test("M01-06.A08/A12 validates seed input and cursor query boundaries", async ()
     () => query.list({ occurredFrom: new Date("2026-08-08"), occurredTo: new Date("2026-08-07") }),
     (error) => error.code === "audit_range_invalid",
   );
+  for (const [filter, code] of [
+    [{ outcome: "unknown" }, "audit_outcome_invalid"],
+    [{ occurredFrom: new Date("invalid") }, "audit_time_invalid"],
+    [{ cursor: "not-a-uuid" }, "audit_cursor_invalid"],
+    [{ requestId: "x".repeat(129) }, "audit_request_id_invalid"],
+  ])
+    assert.throws(
+      () => query.list(filter),
+      (error) => error.code === code,
+    );
+});
+test("M01-06 organization audit cursor is scoped and does not skip the next record", async () => {
+  const repository = new InMemoryAuditRepository(),
+    query = new AuditQueryService(repository),
+    org = "00000000-0000-4000-8000-000000000701";
+  repository.events.push(
+    ...Array.from({ length: 3 }, (_, index) => ({
+      id: `00000000-0000-4000-8000-${String(710 + index).padStart(12, "0")}`,
+      organization_id: org,
+      workspace_id: null,
+      actor_id: actor,
+      action: "organization.member.updated",
+      resource_type: "membership",
+      resource_id: null,
+      outcome: "succeeded",
+      request_id: `request-${index}`,
+      trace_id: `trace-${index}`,
+      metadata: {},
+      occurred_at: new Date(now.getTime() - index * 1000),
+      schema_version: 1,
+    })),
+  );
+  const first = await query.list({ organizationId: org, limit: 2 });
+  assert.equal(first.items.length, 2);
+  assert.equal(first.nextCursor, first.items[1].id);
+  const second = await query.list({ organizationId: org, limit: 2, cursor: first.nextCursor });
+  assert.deepEqual(
+    second.items.map((item) => item.id),
+    [repository.events[2].id],
+  );
+  await assert.rejects(
+    () =>
+      query.list({
+        organizationId: org,
+        cursor: "00000000-0000-4000-8000-000000000799",
+      }),
+    (error) => error.code === "audit_cursor_invalid",
+  );
 });
 test("M01-06.A09/A12 auditor role is read-only and platform audit needs platform capability", async () => {
   const auditor = BUILTIN_ROLES.find((role) => role.code === "auditor");

@@ -85,6 +85,30 @@ export class AuditQueryService {
     const limit = filter.limit ?? 50;
     if (!Number.isInteger(limit) || limit < 1 || limit > 100)
       throw new AuditError("audit_limit_invalid", 400, "limit 必须为 1–100。");
+    if (filter.outcome && !["succeeded", "failed", "blocked"].includes(filter.outcome))
+      throw new AuditError(
+        "audit_outcome_invalid",
+        400,
+        "outcome 必须为 succeeded、failed 或 blocked。",
+      );
+    const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (filter.organizationId && !uuid.test(filter.organizationId))
+      throw new AuditError("audit_organization_invalid", 400, "organizationId 必须为有效 UUID。");
+    if (filter.cursor && !uuid.test(filter.cursor))
+      throw new AuditError("audit_cursor_invalid", 400, "cursor 必须来自当前审计结果页。");
+    for (const [value, maximum, code, hint] of [
+      [filter.action, 128, "audit_action_invalid", "action 长度必须为 1–128。"],
+      [filter.resourceType, 80, "audit_resource_type_invalid", "resource_type 长度必须为 1–80。"],
+      [filter.requestId, 128, "audit_request_id_invalid", "request_id 长度必须为 1–128。"],
+      [filter.traceId, 128, "audit_trace_id_invalid", "trace_id 长度必须为 1–128。"],
+    ] as const)
+      if (value !== undefined && (value.trim().length === 0 || value.length > maximum))
+        throw new AuditError(code, 400, hint);
+    if (
+      (filter.occurredFrom && Number.isNaN(filter.occurredFrom.getTime())) ||
+      (filter.occurredTo && Number.isNaN(filter.occurredTo.getTime()))
+    )
+      throw new AuditError("audit_time_invalid", 400, "审计时间必须为有效日期时间。");
     if (filter.occurredFrom && filter.occurredTo && filter.occurredFrom > filter.occurredTo)
       throw new AuditError("audit_range_invalid", 400, "调整审计时间范围后重试。");
     return this.repository.list({ ...filter, limit });
@@ -138,11 +162,15 @@ export class InMemoryAuditRepository implements AuditRepository {
       .sort(
         (a, b) => b.occurred_at.getTime() - a.occurred_at.getTime() || b.id.localeCompare(a.id),
       );
-    const start = filter.cursor
-        ? Math.max(0, items.findIndex((e) => e.id === filter.cursor) + 1)
-        : 0,
+    const cursorIndex = filter.cursor ? items.findIndex((e) => e.id === filter.cursor) : -1;
+    if (filter.cursor && cursorIndex < 0)
+      throw new AuditError("audit_cursor_invalid", 400, "cursor 不属于当前审计范围。");
+    const start = filter.cursor ? cursorIndex + 1 : 0,
       limit = filter.limit ?? 50,
       page = items.slice(start, start + limit);
-    return { items: page, nextCursor: items[start + limit]?.id ?? null };
+    return {
+      items: page,
+      nextCursor: items.length > start + limit ? (page.at(-1)?.id ?? null) : null,
+    };
   }
 }

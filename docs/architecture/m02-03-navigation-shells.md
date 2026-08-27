@@ -8,7 +8,7 @@
 
 - `GET /api/v1/me/landing` 先验证 HttpOnly 会话，再按真实平台角色、当前组织管理员角色、普通成员上下文的优先级返回 `/platform-admin`、`/org-admin`、`/home` 或 `/select-context`。公开根路径 `/` 和登录/MFA 成功后都消费该结果，不再默认打开成员壳层或设备会话。
 - `GET /api/v1/me/navigation?shell=member|organization_admin|platform_admin` 再由 `AuthorizationService.guardNavigationShell` 读取真实角色、能力及可选租户上下文。
-- 成员壳层要求活动成员资格和已选组织/工作区；组织后台额外要求 `organization_admin`；平台后台要求任一真实平台角色，且不依赖组织上下文。
+- 成员壳层要求活动成员资格和已选组织/工作区；组织后台默认要求 `organization_admin`，唯一只读例外是同时具有 `auditor` 角色与 `audit:read` 能力的活动成员进入 `/org-admin/audit`。审计员只获得带 `audit:read` 的组织审计目录和路由，空能力的组织管理路由继续失败关闭，顶部也不展示邀请成员写入口。平台后台要求任一真实平台角色，且不依赖组织上下文。
 - 每次允许或拒绝写入现有 `authorization_decisions`，保留 actor、组织/工作区（适用时）、代表能力、结果、原因、`request_id` 与 `trace_id`。前端菜单只是服务端结果的展示层，不能代替后续 API/Worker/导出/文件/事件/SSE Guard。
 - 菜单只使用服务端返回的 capabilities 过滤。三个壳层不会互相混入菜单，也不读取其他组织数据。
 

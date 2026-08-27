@@ -152,6 +152,7 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
         "apps/web/src/components/OrganizationApprovalPanel.vue",
         "apps/web/src/components/OrganizationDataPanel.vue",
         "apps/web/src/components/OrganizationTokenPanel.vue",
+        "apps/web/src/components/OrganizationAuditPanel.vue",
       ].map((path) => readFile(path, "utf8")),
     )
   ).join("\n");
@@ -185,6 +186,11 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
     "令牌生命周期",
     "轮换密钥",
     "撤销访问",
+    "组织审计账本",
+    "服务端权限校验",
+    "页内搜索",
+    "高级追踪与时间筛选",
+    "脱敏上下文",
   ])
     assert.match(web, new RegExp(copy));
   assert.doesNotMatch(
@@ -209,6 +215,7 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
     approvals,
     organizationData,
     organizationTokens,
+    organizationAudit,
     map,
   ] = await Promise.all([
     readFile("apps/api/src/mysql-organization-admin-repository.ts", "utf8"),
@@ -221,6 +228,7 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
     readFile("apps/web/src/components/OrganizationApprovalPanel.vue", "utf8"),
     readFile("apps/web/src/components/OrganizationDataPanel.vue", "utf8"),
     readFile("apps/web/src/components/OrganizationTokenPanel.vue", "utf8"),
+    readFile("apps/web/src/components/OrganizationAuditPanel.vue", "utf8"),
     readFile("docs/feature-map.json", "utf8"),
   ]);
   const web = [
@@ -232,6 +240,7 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
     approvals,
     organizationData,
     organizationTokens,
+    organizationAudit,
   ].join("\n");
   assert.match(repo, /team_names/);
   assert.match(repo, /approval_templates/);
@@ -351,6 +360,14 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
   assert.match(organizationTokens, /org_token_status/);
   assert.match(organizationTokens, /router\.replace/);
   assert.doesNotMatch(center, /scopes:\s*form\.scopes\s*\|\|\s*\["task:read"\]/);
+  assert.match(center, /request_id/);
+  assert.match(center, /trace_id/);
+  assert.match(center, /occurred_from/);
+  assert.match(center, /nextCursor/);
+  assert.match(organizationAudit, /org_audit_action/);
+  assert.match(organizationAudit, /\[已脱敏\]/);
+  assert.match(organizationAudit, /加载更多记录/);
+  assert.doesNotMatch(organizationAudit, />\s*(编辑|删除|重放任务)\s*</);
   assert.match(center, /旧令牌立即失效/);
   assert.match(center, /立即失效且不能恢复/);
   assert.match(map, /"\/org-admin\/teams"/);
@@ -375,7 +392,10 @@ test("M06-01 organization overview preserves facts and form context across refre
   assert.match(center, /数据已被其他操作更新/);
   assert.match(center, /'error', 'blocked', 'expired'/);
   assert.match(center, /组织数据暂不可用/);
-  assert.match(center, /:aria-busy="state === 'loading' \|\| refreshing"/);
+  assert.match(
+    center,
+    /:aria-busy="state === 'loading' \|\| refreshing \|\| \(view === 'audit' && busy\)"/,
+  );
   assert.match(styles, /org-admin-notice\[data-kind="success"\]/);
   assert.match(styles, /org-admin-notice\[data-kind="error"\]/);
 });

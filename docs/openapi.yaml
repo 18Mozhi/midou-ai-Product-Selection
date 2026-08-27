@@ -726,7 +726,7 @@ paths:
   /me/navigation:
     get:
       summary: Guard and describe one authenticated navigation shell
-      description: The server derives shell access from active organization membership or platform role and writes an authorization decision. Platform administrators do not require an organization context.
+      description: The server derives shell access from active organization membership or platform role and writes an authorization decision. The organization shell accepts organization administrators and an active auditor with audit:read; the auditor receives only capability-gated audit navigation and cannot open unscoped organization management routes. Platform administrators do not require an organization context.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
@@ -1452,13 +1452,15 @@ paths:
   /organizations/{organizationId}/audit-events:
     get:
       summary: Query audit events restricted to one organization
-      description: Requires audit:read plus a matching active organization scope; auditor remains read-only.
+      description: Requires audit:read plus a matching active organization scope; auditor remains read-only. Results unify organization-scoped platform audit events with committed transactional audit logs. Existing transactional log rows are exposed as succeeded outcomes; no secret material is returned.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { $ref: "#/components/parameters/OrganizationId" }
         - { $ref: "#/components/parameters/AuditAction" }
         - { $ref: "#/components/parameters/AuditOutcome" }
         - { $ref: "#/components/parameters/AuditResourceType" }
+        - { $ref: "#/components/parameters/AuditRequestId" }
+        - { $ref: "#/components/parameters/AuditTraceId" }
         - { $ref: "#/components/parameters/AuditCursor" }
         - { $ref: "#/components/parameters/AuditLimit" }
         - { $ref: "#/components/parameters/AuditOccurredFrom" }
@@ -5898,6 +5900,8 @@ components:
     AuditOutcome:
       { name: outcome, in: query, schema: { type: string, enum: [succeeded, failed, blocked] } }
     AuditResourceType: { name: resource_type, in: query, schema: { type: string, maxLength: 64 } }
+    AuditRequestId: { name: request_id, in: query, schema: { type: string, maxLength: 128 } }
+    AuditTraceId: { name: trace_id, in: query, schema: { type: string, maxLength: 128 } }
     AuditCursor: { name: cursor, in: query, schema: { type: string, format: uuid } }
     AuditLimit:
       { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 50 } }

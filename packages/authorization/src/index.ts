@@ -434,9 +434,16 @@ export class AuthorizationService {
   ) {
     const context = await this.repository.findSessionContext(sessionId, actorId);
     const subject = await this.repository.loadSubject(actorId, context?.organization_id);
+    const organizationAdministrator = subject.role_codes.includes("organization_admin"),
+      organizationAuditor =
+        subject.role_codes.includes("auditor") && subject.capabilities.includes("audit:read");
     const capability: Capability =
       shell === "organization_admin"
-        ? "organization:manage"
+        ? organizationAdministrator
+          ? "organization:manage"
+          : organizationAuditor
+            ? "audit:read"
+            : "organization:manage"
         : shell === "platform_admin"
           ? subject.platform_capabilities.includes("platform:superadmin")
             ? "platform:superadmin"
@@ -451,11 +458,13 @@ export class AuthorizationService {
           ? Boolean(
               context &&
               subject.membership_active &&
-              subject.role_codes.includes("organization_admin"),
+              (organizationAdministrator || organizationAuditor),
             )
           : subject.platform_role_codes.length > 0;
     const reason = allowed
-      ? `navigation_${shell}_allowed`
+      ? shell === "organization_admin" && organizationAuditor && !organizationAdministrator
+        ? "navigation_organization_admin_audit_allowed"
+        : `navigation_${shell}_allowed`
       : !context && shell !== "platform_admin"
         ? "tenancy_context_required"
         : `navigation_${shell}_denied`;
