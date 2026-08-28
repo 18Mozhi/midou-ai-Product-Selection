@@ -24,6 +24,13 @@ M03-02 交付平台全局的 `credential_assets` 与 `crawler_profiles`。账号
 
 `withMaterializedCredential` 只供已授权 Worker/Crawler 任务调用：在 `CREDENTIAL_TEMP_ROOT` 下创建随机、受限目录和 `0600` 文件，将回调包在 `try/finally` 中，并在成功或异常后清空内存 Buffer、删除准确的临时目录。M03-02 验证异常注入后的清理；M03-04 才把该合同接入真实 Playwright 采集任务。没有新增面板外生产服务、公开文件、Redis 真相或浏览器端密钥。
 
+## 页面运行合同
+
+- `/platform-admin/credentials` 首次进入并行读取凭证元数据、运行档案和来源选项；只有三项都成功才原子替换页面事实。后续刷新设置 12 秒截止时间并阻止重复触发，失败或超时保留上一次成功读取的数据与时间，不把暂时故障渲染成空数据。
+- 来源页、1688 验收页等入口可使用 `provider_id` 精确打开对应来源的网页登录表单；为兼容既有内部链接仍接受 `provider_code`。页面只用服务端返回的 Provider 标识，不按名称猜测归属。
+- 凭证、运行档案和网页登录表单通过具名模态对话框承载，打开后聚焦首个字段，Escape 可关闭，Tab 焦点留在对话框内，关闭后焦点返回触发入口。桌面、1024 像素和 390 像素均不依赖页面下方的隐藏内联表单。
+- 浏览器助手下载是同源静态 ZIP，不包含凭证；浏览器插件或下载接管软件可能拦截下载，此时应直接验证静态资源 200 和 ZIP 内容，再将客户端拦截标记为环境阻塞，不得把它解释为凭证接口成功。
+
 ## 回滚
 
 先在宝塔停止统一 Node 后端和 Python Crawler，确认没有凭证写入、自动重放或主密钥轮换任务；备份数据库后先执行 `0049_credential_renewal_auto_replay.down.sql`，再执行 `0016b_credential_assets_m03_02.down.sql`。回滚按 profile operations、profile versions、profiles、asset operations、asset versions、assets 顺序删除。随后回滚代码与配置并由宝塔重启。删除表会永久失去密文和版本审计，未验证备份恢复前禁止生产执行。

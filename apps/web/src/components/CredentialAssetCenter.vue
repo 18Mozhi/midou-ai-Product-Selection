@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
@@ -52,6 +52,11 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   selected = ref<Asset | null>(null),
   revokeTarget = ref<Asset | null>(null),
   saving = ref(false),
+  refreshing = ref(false),
+  lastUpdatedAt = ref<string | null>(null),
+  refreshNotice = ref(""),
+  refreshNoticeTone = ref<"success" | "danger">("success"),
+  editorPanel = ref<HTMLElement | null>(null),
   loginFileName = ref(""),
   loginPayload = ref(""),
   loginProvider = ref<Provider | null>(null),
@@ -74,6 +79,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     timezone: "America/Los_Angeles",
     status: "disabled",
   });
+let activeController: AbortController | null = null,
+  editorReturnFocus: HTMLElement | null = null;
 const failure = (s: number): State =>
     s === 401
       ? "expired"
@@ -126,6 +133,11 @@ const failure = (s: number): State =>
         ready: compatibleProfiles.length > 0,
       };
     }),
+  ),
+  lastUpdatedLabel = computed(() =>
+    lastUpdatedAt.value
+      ? new Date(lastUpdatedAt.value).toLocaleTimeString("zh-CN", { hour12: false })
+      : "尚未完成读取",
   );
 const kindText = (value: string) =>
   (
@@ -140,25 +152,90 @@ const kindText = (value: string) =>
 const statusText = (value: string) =>
   (({ active: "可用", revoked: "已撤销", disabled: "已停用" }) as Record<string, string>)[value] ??
   value;
-async function get(path: string) {
-  const response = await request<any>(path);
-  requestId.value = response.request_id;
-  return response.data;
-}
+const providerName = (providerId: string) =>
+  providers.value.find((provider) => provider.id === providerId)?.name ?? "未知来源";
+const assetName = (assetId: string) =>
+  assets.value.find((asset) => asset.id === assetId)?.name ?? "凭证引用不可用";
 async function load() {
-  state.value = "loading";
+  if (refreshing.value) return;
+  const preserve = lastUpdatedAt.value !== null;
+  if (!preserve) state.value = "loading";
+  refreshing.value = true;
   message.value = "";
+  refreshNotice.value = "";
+  activeController = new AbortController();
+  const timer = window.setTimeout(() => activeController?.abort(), 12_000);
   try {
-    [assets.value, profiles.value, providers.value] = await Promise.all([
-      get("/platform/credential-assets"),
-      get("/platform/crawler-profiles"),
-      get("/platform/credential-provider-options"),
+    const [nextAssets, nextProfiles, nextProviders] = await Promise.all([
+      request<Asset[]>("/platform/credential-assets", { signal: activeController.signal }),
+      request<Profile[]>("/platform/crawler-profiles", { signal: activeController.signal }),
+      request<Provider[]>("/platform/credential-provider-options", {
+        signal: activeController.signal,
+      }),
     ]);
+    assets.value = nextAssets.data;
+    profiles.value = nextProfiles.data;
+    providers.value = nextProviders.data;
+    requestId.value = nextProviders.request_id;
     state.value = assets.value.length || profiles.value.length ? "ready" : "empty";
+    lastUpdatedAt.value = new Date().toISOString();
+    if (preserve) {
+      refreshNoticeTone.value = "success";
+      refreshNotice.value = "凭证元数据与运行档案已刷新。";
+    }
   } catch (error) {
     const apiError = error instanceof ApiClientError ? error : null;
+    const timedOut = error instanceof DOMException && error.name === "AbortError";
     requestId.value = apiError?.requestId ?? requestId.value;
-    state.value = failure(apiError?.status ?? 503);
+    message.value = timedOut
+      ? "读取超过 12 秒，请稍后重试。"
+      : (apiError?.actionHint ?? "网络连接异常，请稍后重试。");
+    if (preserve) {
+      refreshNoticeTone.value = "danger";
+      refreshNotice.value = timedOut
+        ? "刷新超过 12 秒，已保留上一次成功读取的数据。"
+        : `${message.value} 已保留上一次成功读取的数据。`;
+    } else state.value = failure(apiError?.status ?? (timedOut ? 504 : 503));
+  } finally {
+    window.clearTimeout(timer);
+    activeController = null;
+    refreshing.value = false;
+  }
+}
+function focusEditor() {
+  editorReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  void nextTick(() => {
+    editorPanel.value
+      ?.querySelector<HTMLElement>(
+        ".credential-fields input, .credential-fields select, .credential-fields textarea",
+      )
+      ?.focus();
+  });
+}
+function closeEditor() {
+  editor.value = null;
+  selected.value = null;
+  assetForm.value = "";
+  loginPayload.value = "";
+  const returnTarget = editorReturnFocus;
+  editorReturnFocus = null;
+  void nextTick(() => returnTarget?.focus());
+}
+function trapEditorFocus(event: KeyboardEvent) {
+  const focusable = Array.from(
+    editorPanel.value?.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+    ) ?? [],
+  ).filter((element) => !element.hasAttribute("hidden"));
+  if (!focusable.length) return;
+  const first = focusable[0],
+    last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last?.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first?.focus();
   }
 }
 function openAsset() {
@@ -173,6 +250,7 @@ function openAsset() {
     value: "",
     expires_at: "",
   });
+  focusEditor();
 }
 function openRotate(asset: Asset) {
   editor.value = "rotate";
@@ -183,6 +261,7 @@ function openRotate(asset: Asset) {
   assetForm.expires_at = asset.expires_at
     ? new Date(asset.expires_at).toISOString().slice(0, 16)
     : "";
+  focusEditor();
 }
 function openProfile() {
   editor.value = "profile";
@@ -199,6 +278,7 @@ function openProfile() {
     timezone: "America/Los_Angeles",
     status: "disabled",
   });
+  focusEditor();
 }
 function openLogin(provider?: Provider) {
   loginProvider.value = provider ?? loginProviders.value[0] ?? null;
@@ -207,6 +287,7 @@ function openLogin(provider?: Provider) {
   loginMode.value = "cookie_file";
   message.value = "";
   editor.value = "login";
+  focusEditor();
 }
 async function chooseLoginArchive(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0];
@@ -322,6 +403,7 @@ async function write(path: string, body: unknown) {
   }
 }
 async function saveAsset() {
+  if (saving.value) return;
   const ok =
     editor.value === "rotate" && selected.value
       ? await write(`/platform/credential-assets/${selected.value.id}/rotate`, {
@@ -349,12 +431,14 @@ async function saveAsset() {
   }
 }
 async function saveProfile() {
+  if (saving.value) return;
   if (await write("/platform/crawler-profiles", profileForm)) {
     editor.value = null;
     await load();
   }
 }
 async function saveLogin() {
+  if (saving.value) return;
   const provider = loginProvider.value;
   if (!provider || !loginPayload.value) return;
   const stamp = Date.now().toString(36),
@@ -396,6 +480,7 @@ async function saveLogin() {
   message.value = `${provider.name} 网页登录档案已加密保存；该来源完成解析验收后，采集任务才会使用此档案。`;
 }
 async function revoke() {
+  if (saving.value) return;
   const target = revokeTarget.value;
   if (!target) return;
   if (
@@ -412,12 +497,19 @@ onMounted(async () => {
   await load();
   const params = new URLSearchParams(location.search);
   if (params.get("mode") === "login") {
-    openLogin(providers.value.find((item) => item.code === params.get("provider_code")));
+    const providerId = params.get("provider_id"),
+      providerCode = params.get("provider_code");
+    openLogin(
+      providers.value.find(
+        (item) => item.id === providerId || (providerCode !== null && item.code === providerCode),
+      ),
+    );
   }
 });
+onBeforeUnmount(() => activeController?.abort());
 </script>
 <template>
-  <section class="credential-center">
+  <section class="credential-center" :aria-busy="refreshing">
     <header>
       <div>
         <p>平台安全资料库</p>
@@ -426,14 +518,34 @@ onMounted(async () => {
           >这里保存需要登录的网站资料。密码和登录状态加密后不会在页面回显，采集任务只能临时使用。</span
         >
       </div>
-      <div>
-        <a class="helper-download" href="/browser-helper/scoutops-browser-helper.zip"
-          >下载浏览器助手</a
-        ><button type="button" @click="openLogin()">＋ 配置网页登录</button
-        ><button type="button" @click="openProfile">＋ 关联运行档案</button
-        ><button type="button" class="primary" @click="openAsset">＋ 凭证资产</button>
+      <div class="credential-header-actions">
+        <div class="credential-refresh-meta">
+          <small>最近读取 {{ lastUpdatedLabel }}</small>
+          <button type="button" :disabled="refreshing" @click="load">
+            {{ refreshing ? "刷新中…" : "刷新数据" }}
+          </button>
+        </div>
+        <div class="credential-primary-actions">
+          <a
+            class="helper-download"
+            href="/browser-helper/scoutops-browser-helper.zip"
+            download="scoutops-browser-helper.zip"
+            >下载浏览器助手</a
+          ><button type="button" @click="openLogin()">配置网页登录</button
+          ><button type="button" @click="openProfile">关联运行档案</button
+          ><button type="button" class="primary" @click="openAsset">新建凭证资产</button>
+        </div>
       </div>
     </header>
+    <p
+      v-if="refreshNotice"
+      class="credential-refresh-notice"
+      :data-tone="refreshNoticeTone"
+      role="status"
+      aria-live="polite"
+    >
+      {{ refreshNotice }}
+    </p>
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
@@ -467,7 +579,7 @@ onMounted(async () => {
           <header>
             <span aria-hidden="true">{{ asset.kind === "browser_profile" ? "▣" : "⌘" }}</span>
             <div>
-              <small>{{ kindText(asset.kind) }}</small>
+              <small>{{ kindText(asset.kind) }} · {{ providerName(asset.provider_id) }}</small>
               <h3>{{ asset.name }}</h3>
             </div>
             <b>{{ statusText(asset.status) }}</b>
@@ -531,9 +643,13 @@ onMounted(async () => {
           <span>仅保存元数据和受控凭证引用</span>
         </header>
         <article v-for="profile in profiles" :key="profile.id">
-          <strong>{{ profile.name }}</strong
-          ><span>语言：{{ profile.locale }} · 时区：{{ profile.timezone }}</span
-          ><b>{{ statusText(profile.status) }}</b>
+          <strong>{{ profile.name }}</strong>
+          <span
+            >{{ providerName(profile.provider_id) }} ·
+            {{ assetName(profile.credential_asset_id) }}</span
+          >
+          <span>语言：{{ profile.locale }} · 时区：{{ profile.timezone }}</span>
+          <b>{{ statusText(profile.status) }} · v{{ profile.version }}</b>
         </article>
         <p v-if="!profiles.length">暂无浏览器档案；不会创建模拟档案。</p>
       </section>
@@ -629,232 +745,252 @@ onMounted(async () => {
         <p v-else>当前没有需要网页登录的来源，不创建虚构兼容关系。</p>
       </section>
     </section>
-    <form
-      v-if="editor === 'asset' || editor === 'rotate'"
-      class="credential-editor"
-      @submit.prevent="saveAsset"
-    >
-      <header>
-        <div>
-          <p>
-            {{ editor === "rotate" ? "更新加密资料" : "新建加密资料" }}
-          </p>
-          <h3>
-            {{ editor === "rotate" ? `轮换 ${selected?.name}` : "创建凭证资产" }}
-          </h3>
-        </div>
-        <button
-          type="button"
-          aria-label="关闭凭证编辑"
-          title="关闭凭证编辑"
-          @click="
-            editor = null;
-            assetForm.value = '';
-          "
+    <Teleport to="body">
+      <div
+        v-if="editor"
+        class="credential-editor-backdrop"
+        @mousedown.self="closeEditor"
+        @keydown.esc="closeEditor"
+      >
+        <form
+          v-if="editor === 'asset' || editor === 'rotate'"
+          ref="editorPanel"
+          class="credential-editor"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="editor === 'rotate' ? `轮换 ${selected?.name}` : '创建凭证资产'"
+          @keydown.tab="trapEditorFocus"
+          @submit.prevent="saveAsset"
         >
-          ×
-        </button>
-      </header>
-      <div class="credential-fields">
-        <label v-if="editor === 'asset'"
-          >所属来源<select v-model="assetForm.provider_id" required>
-            <option value="" disabled>选择来源</option>
-            <option v-for="p in providers" :key="p.id" :value="p.id">
-              {{ p.name }}
-            </option>
-          </select></label
-        ><label v-if="editor === 'asset'">名称<input v-model="assetForm.name" required /></label
-        ><label v-if="editor === 'asset'"
-          >类型<select v-model="assetForm.kind">
-            <option
-              v-for="v in [
-                'api_key',
-                'account_secret',
-                'cookie_bundle',
-                'private_key',
-                'browser_profile',
-              ]"
-              :key="v"
+          <header>
+            <div>
+              <p>
+                {{ editor === "rotate" ? "更新加密资料" : "新建加密资料" }}
+              </p>
+              <h3>
+                {{ editor === "rotate" ? `轮换 ${selected?.name}` : "创建凭证资产" }}
+              </h3>
+            </div>
+            <button
+              type="button"
+              aria-label="关闭凭证编辑"
+              title="关闭凭证编辑"
+              @click="closeEditor"
             >
-              {{ kindText(v) }}
-            </option>
-          </select></label
-        ><label
-          >内容格式<select v-model="assetForm.encoding">
-            <option value="utf8">文字</option>
-            <option value="base64">文件编码</option>
-          </select></label
-        ><label class="secret"
-          >需要加密保存的内容<input
-            v-model="assetForm.value"
-            type="password"
-            required
-            autocomplete="new-password"
-          /><small>仅本次写入；保存后立即从页面状态清除。</small></label
-        ><label
-          >到期时间（可选）<input v-model="assetForm.expires_at" type="datetime-local"
-        /></label>
+              ×
+            </button>
+          </header>
+          <div class="credential-fields">
+            <label v-if="editor === 'asset'"
+              >所属来源<select v-model="assetForm.provider_id" required>
+                <option value="" disabled>选择来源</option>
+                <option v-for="p in providers" :key="p.id" :value="p.id">
+                  {{ p.name }}
+                </option>
+              </select></label
+            ><label v-if="editor === 'asset'">名称<input v-model="assetForm.name" required /></label
+            ><label v-if="editor === 'asset'"
+              >类型<select v-model="assetForm.kind">
+                <option
+                  v-for="v in [
+                    'api_key',
+                    'account_secret',
+                    'cookie_bundle',
+                    'private_key',
+                    'browser_profile',
+                  ]"
+                  :key="v"
+                >
+                  {{ kindText(v) }}
+                </option>
+              </select></label
+            ><label
+              >内容格式<select v-model="assetForm.encoding">
+                <option value="utf8">文字</option>
+                <option value="base64">文件编码</option>
+              </select></label
+            ><label class="secret"
+              >需要加密保存的内容<input
+                v-model="assetForm.value"
+                type="password"
+                required
+                autocomplete="new-password"
+              /><small>仅本次写入；保存后立即从页面状态清除。</small></label
+            ><label
+              >到期时间（可选）<input v-model="assetForm.expires_at" type="datetime-local"
+            /></label>
+          </div>
+          <p v-if="message" role="status">
+            {{ message }} <code v-if="requestId">{{ requestId }}</code>
+          </p>
+          <footer>
+            <button type="button" class="secondary" :disabled="saving" @click="closeEditor">
+              取消
+            </button>
+            <button type="submit" :disabled="saving || !assetForm.value">
+              {{ saving ? "加密写入中…" : editor === "rotate" ? "确认轮换" : "加密保存" }}
+            </button>
+          </footer>
+        </form>
+        <form
+          v-if="editor === 'profile'"
+          ref="editorPanel"
+          class="credential-editor"
+          role="dialog"
+          aria-modal="true"
+          aria-label="创建浏览器档案引用"
+          @keydown.tab="trapEditorFocus"
+          @submit.prevent="saveProfile"
+        >
+          <header>
+            <div>
+              <p>关联网页采集档案</p>
+              <h3>创建浏览器档案引用</h3>
+            </div>
+            <button
+              type="button"
+              aria-label="关闭浏览器档案编辑"
+              title="关闭浏览器档案编辑"
+              @click="closeEditor"
+            >
+              ×
+            </button>
+          </header>
+          <div class="credential-fields">
+            <label
+              >网页登录档案<select
+                v-model="profileForm.credential_asset_id"
+                required
+                @change="
+                  profileForm.provider_id =
+                    browserAssets.find((x) => x.id === profileForm.credential_asset_id)
+                      ?.provider_id ?? ''
+                "
+              >
+                <option value="" disabled>选择加密档案</option>
+                <option v-for="a in browserAssets" :key="a.id" :value="a.id">
+                  {{ a.name }}
+                </option>
+              </select></label
+            ><label
+              >内部标识<input
+                v-model="profileForm.code"
+                required
+                pattern="[a-z0-9_]{2,80}" /></label
+            ><label>名称<input v-model="profileForm.name" required /></label
+            ><label>页面语言<input v-model="profileForm.locale" required /></label
+            ><label>所在时区<input v-model="profileForm.timezone" required /></label
+            ><label
+              >状态<select v-model="profileForm.status">
+                <option value="disabled">先停用</option>
+                <option value="active">立即启用</option>
+              </select></label
+            >
+          </div>
+          <p v-if="!browserAssets.length">需要先导入一个可用的网页登录档案。</p>
+          <footer>
+            <button type="button" class="secondary" :disabled="saving" @click="closeEditor">
+              取消
+            </button>
+            <button type="submit" :disabled="saving || !browserAssets.length">保存档案引用</button>
+          </footer>
+        </form>
+        <form
+          v-if="editor === 'login'"
+          ref="editorPanel"
+          class="credential-editor login-editor"
+          role="dialog"
+          aria-modal="true"
+          aria-label="导入已经登录的浏览器档案"
+          @keydown.tab="trapEditorFocus"
+          @submit.prevent="saveLogin"
+        >
+          <header>
+            <div>
+              <p>配置网页登录</p>
+              <h3>导入已经登录的浏览器档案</h3>
+            </div>
+            <button type="button" aria-label="关闭" @click="closeEditor">×</button>
+          </header>
+          <aside class="login-guide">
+            <strong>支持哪些格式？</strong>
+            <p>
+              首选 Cookie JSON、Playwright storageState JSON 或 Netscape cookies.txt；也可上传专用
+              Chromium 的 .tar.gz 档案。公开页面不要求登录，可直接匿名测试。
+            </p>
+            <ol>
+              <li>“从当前浏览器读取”只读取当前所选来源域名。</li>
+              <li>Cookie 不在页面回显，保存后立即从页面内存清除。</li>
+              <li>完整浏览器档案仅用于确实依赖浏览器状态的网站。</li>
+            </ol>
+          </aside>
+          <div class="credential-fields">
+            <label
+              >需要登录的来源<select v-model="loginProvider" required>
+                <option :value="null" disabled>请选择</option>
+                <option v-for="item in loginProviders" :key="item.id" :value="item">
+                  {{ item.name }}
+                </option>
+              </select></label
+            ><label
+              >导入方式<select
+                v-model="loginMode"
+                @change="
+                  loginPayload = '';
+                  loginFileName = '';
+                "
+              >
+                <option value="cookie_file">上传 Cookie 文件</option>
+                <option value="browser">从当前浏览器读取</option>
+                <option value="archive">完整浏览器档案</option>
+              </select></label
+            ><label v-if="loginMode !== 'browser'" class="archive-picker"
+              >{{ loginMode === "archive" ? "浏览器登录档案" : "Cookie 文件"
+              }}<input
+                type="file"
+                :accept="
+                  loginMode === 'archive'
+                    ? '.gz,application/gzip'
+                    : '.json,.txt,.cookies,application/json,text/plain'
+                "
+                required
+                @change="chooseLoginArchive"
+              /><small>{{
+                loginFileName ||
+                (loginMode === "archive"
+                  ? "请选择 .tar.gz 文件"
+                  : "请选择 Cookie JSON 或 cookies.txt")
+              }}</small></label
+            >
+          </div>
+          <aside v-if="loginProvider" class="login-provider-status">
+            <div>
+              <strong>{{ loginProvider.name }}</strong>
+              <span v-if="loginNeedsAuthentication">该来源需要登录状态</span>
+              <span v-else>该来源是公开页面，可不登录直接测试</span>
+            </div>
+            <button type="button" @click="openLoginPage">
+              打开{{ loginNeedsAuthentication ? "登录" : "来源" }}页面 ↗
+            </button>
+            <button
+              v-if="loginMode === 'browser'"
+              type="button"
+              :disabled="saving"
+              @click="acquireBrowserCookies"
+            >
+              从当前浏览器读取 Cookie
+            </button>
+          </aside>
+          <p v-if="message" role="status">{{ message }}</p>
+          <footer>
+            <button type="button" @click="closeEditor">取消</button
+            ><button :disabled="saving || !loginProvider || !loginPayload">
+              {{ saving ? "加密保存中…" : "加密保存并启用" }}
+            </button>
+          </footer>
+        </form>
       </div>
-      <p v-if="message" role="status">
-        {{ message }} <code v-if="requestId">{{ requestId }}</code>
-      </p>
-      <footer>
-        <button type="submit" :disabled="saving || !assetForm.value">
-          {{ saving ? "加密写入中…" : editor === "rotate" ? "确认轮换" : "加密保存" }}
-        </button>
-      </footer>
-    </form>
-    <form v-if="editor === 'profile'" class="credential-editor" @submit.prevent="saveProfile">
-      <header>
-        <div>
-          <p>关联网页采集档案</p>
-          <h3>创建浏览器档案引用</h3>
-        </div>
-        <button
-          type="button"
-          aria-label="关闭浏览器档案编辑"
-          title="关闭浏览器档案编辑"
-          @click="editor = null"
-        >
-          ×
-        </button>
-      </header>
-      <div class="credential-fields">
-        <label
-          >网页登录档案<select
-            v-model="profileForm.credential_asset_id"
-            required
-            @change="
-              profileForm.provider_id =
-                browserAssets.find((x) => x.id === profileForm.credential_asset_id)?.provider_id ??
-                ''
-            "
-          >
-            <option value="" disabled>选择加密档案</option>
-            <option v-for="a in browserAssets" :key="a.id" :value="a.id">
-              {{ a.name }}
-            </option>
-          </select></label
-        ><label
-          >内部标识<input v-model="profileForm.code" required pattern="[a-z0-9_]{2,80}" /></label
-        ><label>名称<input v-model="profileForm.name" required /></label
-        ><label>页面语言<input v-model="profileForm.locale" required /></label
-        ><label>所在时区<input v-model="profileForm.timezone" required /></label
-        ><label
-          >状态<select v-model="profileForm.status">
-            <option value="disabled">先停用</option>
-            <option value="active">立即启用</option>
-          </select></label
-        >
-      </div>
-      <p v-if="!browserAssets.length">需要先导入一个可用的网页登录档案。</p>
-      <footer>
-        <button type="submit" :disabled="saving || !browserAssets.length">保存档案引用</button>
-      </footer>
-    </form>
-    <form
-      v-if="editor === 'login'"
-      class="credential-editor login-editor"
-      @submit.prevent="saveLogin"
-    >
-      <header>
-        <div>
-          <p>配置网页登录</p>
-          <h3>导入已经登录的浏览器档案</h3>
-        </div>
-        <button
-          type="button"
-          aria-label="关闭"
-          @click="
-            editor = null;
-            loginPayload = '';
-          "
-        >
-          ×
-        </button>
-      </header>
-      <aside class="login-guide">
-        <strong>支持哪些格式？</strong>
-        <p>
-          首选 Cookie JSON、Playwright storageState JSON 或 Netscape cookies.txt；也可上传专用
-          Chromium 的 .tar.gz 档案。公开页面不要求登录，可直接匿名测试。
-        </p>
-        <ol>
-          <li>“从当前浏览器读取”只读取当前所选来源域名。</li>
-          <li>Cookie 不在页面回显，保存后立即从页面内存清除。</li>
-          <li>完整浏览器档案仅用于确实依赖浏览器状态的网站。</li>
-        </ol>
-      </aside>
-      <div class="credential-fields">
-        <label
-          >需要登录的来源<select v-model="loginProvider" required>
-            <option :value="null" disabled>请选择</option>
-            <option v-for="item in loginProviders" :key="item.id" :value="item">
-              {{ item.name }}
-            </option>
-          </select></label
-        ><label
-          >导入方式<select
-            v-model="loginMode"
-            @change="
-              loginPayload = '';
-              loginFileName = '';
-            "
-          >
-            <option value="cookie_file">上传 Cookie 文件</option>
-            <option value="browser">从当前浏览器读取</option>
-            <option value="archive">完整浏览器档案</option>
-          </select></label
-        ><label v-if="loginMode !== 'browser'" class="archive-picker"
-          >{{ loginMode === "archive" ? "浏览器登录档案" : "Cookie 文件"
-          }}<input
-            type="file"
-            :accept="
-              loginMode === 'archive'
-                ? '.gz,application/gzip'
-                : '.json,.txt,.cookies,application/json,text/plain'
-            "
-            required
-            @change="chooseLoginArchive"
-          /><small>{{
-            loginFileName ||
-            (loginMode === "archive" ? "请选择 .tar.gz 文件" : "请选择 Cookie JSON 或 cookies.txt")
-          }}</small></label
-        >
-      </div>
-      <aside v-if="loginProvider" class="login-provider-status">
-        <div>
-          <strong>{{ loginProvider.name }}</strong>
-          <span v-if="loginNeedsAuthentication">该来源需要登录状态</span>
-          <span v-else>该来源是公开页面，可不登录直接测试</span>
-        </div>
-        <button type="button" @click="openLoginPage">
-          打开{{ loginNeedsAuthentication ? "登录" : "来源" }}页面 ↗
-        </button>
-        <button
-          v-if="loginMode === 'browser'"
-          type="button"
-          :disabled="saving"
-          @click="acquireBrowserCookies"
-        >
-          从当前浏览器读取 Cookie
-        </button>
-      </aside>
-      <p v-if="message" role="status">{{ message }}</p>
-      <footer>
-        <button
-          type="button"
-          @click="
-            editor = null;
-            loginPayload = '';
-          "
-        >
-          取消</button
-        ><button :disabled="saving || !loginProvider || !loginPayload">
-          {{ saving ? "加密保存中…" : "加密保存并启用" }}
-        </button>
-      </footer>
-    </form>
+    </Teleport>
     <ConfirmDialog
       :open="Boolean(revokeTarget)"
       title="确认撤销凭证资产？"

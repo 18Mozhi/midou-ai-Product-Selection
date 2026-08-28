@@ -628,7 +628,7 @@
       "imageEvidence": ["concept 68 key rotation and platform security navigation shell"],
       "verificationRunId": "6b01b631-ae6a-4add-a06a-016f989d7411",
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "credential_assets_live_mysql_api_worker_crawler_deep_link_refresh_timeout_preserve_data_encrypted_upload_rotation_revocation_idempotency_permission_validation_download_service_responsive_and_accessibility_verification_completed"
     },
     "providerAdapters": {
       "module": "M03-03",
@@ -2985,7 +2985,7 @@
       "view": "CredentialAssetCenter",
       "domain": "credential-assets",
       "status": "verified",
-      "statusDetail": "M03-02_module_verified"
+      "statusDetail": "credential_assets_live_mysql_api_worker_crawler_deep_link_refresh_timeout_preserve_data_encrypted_upload_rotation_revocation_idempotency_permission_validation_download_service_responsive_and_accessibility_verification_completed"
     },
     {
       "path": "/platform-admin/collection",
