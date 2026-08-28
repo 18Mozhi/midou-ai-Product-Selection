@@ -5137,7 +5137,7 @@ paths:
   /platform/collection/console:
     get:
       summary: Read the audited source and collection operations console
-      description: Requires platform:operate. Optional organization_id, workspace_id, provider_id, window and exact error_code scope task, attempt, dead-letter and quality rows; root causes count exact collection_dead_letters.error_code facts only, excluding attempts that have not entered dead letter. Source definitions remain platform-global. Write and replay actions use their existing versioned idempotent endpoints.
+      description: Requires platform:operate. Optional organization_id, workspace_id, provider_id, window and exact error_code scope task, attempt, dead-letter and quality rows; attempt_page and dead_letter_page independently page the two detail collections using the server-configured page size and return exact totals. Root causes count exact collection_dead_letters.error_code facts only, excluding attempts that have not entered dead letter. Source definitions remain platform-global. Write and replay actions use their existing versioned idempotent endpoints.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: organization_id, in: query, schema: { type: string, format: uuid } }
@@ -5162,6 +5162,18 @@ paths:
             description: Drill recent attempts and dead letters by an exact returned error root,
             schema: { type: string, maxLength: 80 },
           }
+        - {
+            name: attempt_page,
+            in: query,
+            description: One-based page for task attempts,
+            schema: { type: integer, minimum: 1, default: 1 },
+          }
+        - {
+            name: dead_letter_page,
+            in: query,
+            description: One-based page for dead-letter records,
+            schema: { type: integer, minimum: 1, default: 1 },
+          }
       responses:
         "200":
           {
@@ -5169,12 +5181,15 @@ paths:
             task states,
             recent attempts,
             dead letters grouped by exact failure root,
-            quality summary and controlled action links,
+            quality summary,
+            independent attempt and dead-letter pagination totals and controlled action links,
             content: { application/json: { schema: { type: object } } },
           }
         "400": { $ref: "#/components/responses/Error" }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
         "429": { $ref: "#/components/responses/Error" }
         "503": { $ref: "#/components/responses/Error" }
   /platform/security/operations:

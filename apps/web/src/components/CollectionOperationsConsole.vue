@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import { statusLabel } from "../ui/status-labels";
 import ConfirmDialog from "./ConfirmDialog.vue";
@@ -7,21 +8,42 @@ import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
+const route = useRoute(),
+  router = useRouter(),
+  queryText = (name: string) => {
+    const value = route.query[name];
+    return typeof value === "string" ? value : "";
+  },
+  queryPage = (name: string) => {
+    const value = queryText(name);
+    return /^\d{1,6}$/.test(value) && Number(value) > 0 ? Number(value) : 1;
+  },
+  initialWindow = ["24h", "7d", "30d", "all"].includes(queryText("window"))
+    ? queryText("window")
+    : "24h";
 const state = ref("loading"),
   data = ref<any>(null),
-  org = ref(""),
-  workspace = ref(""),
-  provider = ref(""),
-  timeWindow = ref("24h"),
-  errorCode = ref(""),
+  org = ref(queryText("organization_id")),
+  workspace = ref(queryText("workspace_id")),
+  provider = ref(queryText("provider_id")),
+  timeWindow = ref(initialWindow),
+  errorCode = ref(queryText("error_code")),
+  attemptPage = ref(queryPage("attempt_page")),
+  deadLetterPage = ref(queryPage("dead_letter_page")),
   requestId = ref(""),
   hint = ref(""),
+  refreshNotice = ref(""),
+  refreshing = ref(false),
   selectedDeadLetterIds = ref<string[]>([]),
   batchReason = ref(""),
   batchPreview = ref(false),
   batchId = ref(""),
   batchBusy = ref(false),
-  batchNotice = ref("");
+  batchNotice = ref(""),
+  batchFailures = ref<Array<{ task: string; reason: string }>>([]),
+  rootCauseSection = ref<HTMLElement | null>(null);
+let activeController: AbortController | null = null;
+const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const selectedDeadLetters = computed(() =>
     (data.value?.dead_letters ?? []).filter(
       (item: any) => item.status === "open" && selectedDeadLetterIds.value.includes(item.id),
@@ -43,16 +65,56 @@ const selectedDeadLetters = computed(() =>
       [org.value, workspace.value, provider.value, errorCode.value].filter(Boolean).length +
       (timeWindow.value === "24h" ? 0 : 1),
   );
-async function load() {
-  state.value = "loading";
+
+function scopeValidation() {
+  if (org.value && !uuidPattern.test(org.value.trim())) return "请输入有效的组织 ID。";
+  if (workspace.value && !uuidPattern.test(workspace.value.trim()))
+    return "请输入有效的工作区 ID。";
+  if (provider.value && !uuidPattern.test(provider.value)) return "请选择有效的采集来源。";
+  return "";
+}
+
+async function syncUrl() {
+  const query: Record<string, string> = {};
+  if (org.value.trim()) query.organization_id = org.value.trim();
+  if (workspace.value.trim()) query.workspace_id = workspace.value.trim();
+  if (provider.value) query.provider_id = provider.value;
+  if (timeWindow.value !== "24h") query.window = timeWindow.value;
+  if (errorCode.value) query.error_code = errorCode.value;
+  if (attemptPage.value > 1) query.attempt_page = String(attemptPage.value);
+  if (deadLetterPage.value > 1) query.dead_letter_page = String(deadLetterPage.value);
+  if (route.query.root_cause === "1") query.root_cause = "1";
+  await router.replace({ query });
+}
+
+async function load(options: { updateUrl?: boolean } = {}) {
+  if (refreshing.value) return;
+  const validation = scopeValidation();
+  if (validation) {
+    refreshNotice.value = validation;
+    return;
+  }
+  const hadData = Boolean(data.value);
+  refreshing.value = true;
+  refreshNotice.value = "";
+  hint.value = "";
+  if (!hadData) state.value = "loading";
   const q = new URLSearchParams();
-  if (org.value) q.set("organization_id", org.value);
-  if (workspace.value) q.set("workspace_id", workspace.value);
+  if (org.value.trim()) q.set("organization_id", org.value.trim());
+  if (workspace.value.trim()) q.set("workspace_id", workspace.value.trim());
   if (provider.value) q.set("provider_id", provider.value);
   q.set("window", timeWindow.value);
   if (errorCode.value) q.set("error_code", errorCode.value);
+  q.set("attempt_page", String(attemptPage.value));
+  q.set("dead_letter_page", String(deadLetterPage.value));
+  activeController = new AbortController();
+  const controller = activeController;
+  const timer = window.setTimeout(() => controller.abort(), 15_000);
   try {
-    const response = await request<any>(`/platform/collection/console?${q}`);
+    if (options.updateUrl !== false) await syncUrl();
+    const response = await request<any>(`/platform/collection/console?${q}`, {
+      signal: controller.signal,
+    });
     requestId.value = response.request_id;
     data.value = response.data;
     const openIds = new Set(
@@ -70,12 +132,34 @@ async function load() {
         : "empty";
   } catch (error) {
     const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? "";
-    hint.value = failure?.actionHint ?? "";
-    state.value = failure?.kind ?? "blocked";
+    const message = controller.signal.aborted
+      ? "读取超过 15 秒，已安全取消；当前已验证数据仍保留。"
+      : (failure?.actionHint ?? "网络或服务异常，当前已验证数据仍保留。");
+    if (hadData) {
+      refreshNotice.value = message.includes("当前已验证数据仍保留")
+        ? message
+        : `${message} 当前已验证数据仍保留。`;
+      state.value = "ready";
+    } else {
+      requestId.value = failure?.requestId ?? "";
+      hint.value = message;
+      state.value = failure?.kind ?? "blocked";
+    }
+  } finally {
+    window.clearTimeout(timer);
+    if (activeController === controller) activeController = null;
+    refreshing.value = false;
   }
 }
-onMounted(load);
+onMounted(async () => {
+  await load();
+  if (route.query.root_cause === "1") {
+    await nextTick();
+    rootCauseSection.value?.scrollIntoView({ block: "start" });
+    rootCauseSection.value?.focus();
+  }
+});
+onBeforeUnmount(() => activeController?.abort());
 const when = (v: string | null) =>
     v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "未检查",
   linkLabels: Record<string, string> = {
@@ -93,6 +177,7 @@ const when = (v: string | null) =>
         healthy: "正常",
         warning: "需要关注",
         degraded: "性能下降",
+        blocked: "采集受阻",
         critical: "严重异常",
         unknown: "尚未检查",
       }) as Record<string, string>
@@ -142,16 +227,53 @@ const when = (v: string | null) =>
   attemptRowKey = (item: any) => item.id,
   attemptDetailTitle = (item: any) => `第 ${item.attempt_number} 次尝试详情`,
   drillRootCause = async (value: string) => {
+    if (refreshing.value) return;
     errorCode.value = errorCode.value === value ? "" : value;
+    attemptPage.value = 1;
+    deadLetterPage.value = 1;
     await load();
   };
 
-function toggleDeadLetter(id: string, checked: boolean) {
+function applyScope() {
+  attemptPage.value = 1;
+  deadLetterPage.value = 1;
+  void load();
+}
+
+function resetScope() {
+  org.value = "";
+  workspace.value = "";
+  provider.value = "";
+  timeWindow.value = "24h";
+  errorCode.value = "";
+  attemptPage.value = 1;
+  deadLetterPage.value = 1;
+  void load();
+}
+
+function goToPage(kind: "attempts" | "dead_letters", page: number) {
+  if (refreshing.value || page < 1) return;
+  if (kind === "attempts") attemptPage.value = page;
+  else deadLetterPage.value = page;
+  void load();
+}
+
+function rangeLabel(meta: any) {
+  if (!meta?.total) return "0 条";
+  const start = (meta.page - 1) * meta.page_size + 1;
+  const end = Math.min(meta.page * meta.page_size, meta.total);
+  return `${start}–${end} / ${meta.total} 条`;
+}
+
+function toggleDeadLetter(id: string, event: Event) {
+  const target = event.target as HTMLInputElement;
+  const checked = target.checked;
   if (!checked) {
     selectedDeadLetterIds.value = selectedDeadLetterIds.value.filter((value) => value !== id);
     return;
   }
   if (selectedDeadLetterIds.value.length >= 20) {
+    target.checked = false;
     batchNotice.value = "每批最多选择 20 条开放死信。";
     return;
   }
@@ -159,6 +281,8 @@ function toggleDeadLetter(id: string, checked: boolean) {
 }
 
 function previewBatchReplay() {
+  batchNotice.value = "";
+  batchFailures.value = [];
   if (!selectedDeadLetters.value.length) {
     batchNotice.value = "请先选择要重放的开放死信。";
     return;
@@ -172,10 +296,13 @@ function previewBatchReplay() {
 }
 
 async function confirmBatchReplay() {
+  if (batchBusy.value) return;
   batchBusy.value = true;
+  batchPreview.value = false;
+  const batchItems = [...selectedDeadLetters.value];
   const succeeded = new Set<string>();
-  let failed = 0;
-  for (const item of selectedDeadLetters.value) {
+  batchFailures.value = [];
+  for (const item of batchItems) {
     try {
       await request(`/platform/collection/tasks/${item.task_id}/replay`, {
         method: "POST",
@@ -183,51 +310,86 @@ async function confirmBatchReplay() {
         body: { reason: batchReason.value.trim() },
       });
       succeeded.add(item.id);
-    } catch {
-      failed += 1;
+    } catch (error) {
+      const failure = error instanceof ApiClientError ? error : null;
+      batchFailures.value.push({
+        task: item.task_id.slice(0, 8),
+        reason: failure?.actionHint ?? "重放请求失败，请查看任务详情与服务端日志。",
+      });
     }
   }
   selectedDeadLetterIds.value = selectedDeadLetterIds.value.filter((id) => !succeeded.has(id));
-  batchNotice.value = `批量重放完成：成功 ${succeeded.size} 条，失败 ${failed} 条；每条均保留独立任务历史、幂等记录与审计。`;
-  batchPreview.value = false;
+  batchNotice.value = `批量重放完成：成功 ${succeeded.size} 条，失败 ${batchFailures.value.length} 条；每条均保留独立任务历史、幂等记录与审计。`;
   batchBusy.value = false;
-  await load();
+  await load({ updateUrl: false });
 }
 </script>
 <template>
   <section class="collection-ops">
     <header>
-      <div>
-        <p>采集运行管理</p>
-        <h2>来源与采集控制台</h2>
-        <span
-          >来源配置、健康、任务尝试、死信和质量问题使用同一事实视图；敏感操作仍进入对应受控页面。</span
-        >
+      <div class="collection-ops-heading">
+        <div>
+          <p>采集运行管理</p>
+          <h2>来源与采集控制台</h2>
+          <span
+            >来源配置、健康、任务尝试、死信和质量问题使用同一事实视图；敏感操作仍进入对应受控页面。</span
+          >
+        </div>
+        <button type="button" :disabled="refreshing" @click="load()">
+          {{ refreshing ? "正在刷新" : "刷新数据" }}
+        </button>
       </div>
       <ResponsiveFilterDrawer label="采集范围与时间" :active-count="scopeFilterCount">
-        <form @submit.prevent="load">
-          <input v-model="org" aria-label="组织 ID 筛选" placeholder="组织 ID（可选）" /><input
-            v-model="workspace"
-            aria-label="工作区 ID 筛选"
-            placeholder="工作区 ID（可选）"
-          /><select v-model="provider" aria-label="采集来源筛选">
-            <option value="">全部来源</option>
-            <option
-              v-for="source in data?.source_options ?? []"
-              :key="source.id"
-              :value="source.id"
-            >
-              {{ source.name }}
-            </option></select
-          ><select v-model="timeWindow" aria-label="观测时间筛选">
-            <option value="24h">最近 24 小时</option>
-            <option value="7d">最近 7 天</option>
-            <option value="30d">最近 30 天</option>
-            <option value="all">全部时间</option></select
-          ><button>应用范围</button>
+        <form @submit.prevent="applyScope">
+          <label class="collection-filter-field"
+            ><span>组织 ID</span
+            ><input
+              v-model="org"
+              aria-label="组织 ID 筛选"
+              placeholder="可选，输入完整 UUID" /></label
+          ><label class="collection-filter-field"
+            ><span>工作区 ID</span
+            ><input
+              v-model="workspace"
+              aria-label="工作区 ID 筛选"
+              placeholder="可选，输入完整 UUID"
+          /></label>
+          <label class="collection-filter-field"
+            ><span>采集来源</span
+            ><select v-model="provider" aria-label="采集来源筛选">
+              <option value="">全部来源</option>
+              <option
+                v-for="source in data?.source_options ?? []"
+                :key="source.id"
+                :value="source.id"
+              >
+                {{ source.name }}
+              </option>
+            </select></label
+          ><label class="collection-filter-field"
+            ><span>观测时间</span
+            ><select v-model="timeWindow" aria-label="观测时间筛选">
+              <option value="24h">最近 24 小时</option>
+              <option value="7d">最近 7 天</option>
+              <option value="30d">最近 30 天</option>
+              <option value="all">全部时间</option>
+            </select></label
+          >
+          <div class="collection-filter-actions">
+            <button type="button" :disabled="refreshing || !scopeFilterCount" @click="resetScope">
+              重置
+            </button>
+            <button type="submit" :disabled="refreshing">
+              {{ refreshing ? "正在应用" : "应用范围" }}
+            </button>
+          </div>
         </form>
       </ResponsiveFilterDrawer>
     </header>
+    <p v-if="refreshNotice" class="collection-refresh-notice" role="alert">
+      {{ refreshNotice }}
+      <button type="button" :disabled="refreshing" @click="load()">重试</button>
+    </p>
     <section v-if="state !== 'ready'" class="platform-dashboard-state" :data-kind="state">
       <h3>
         {{
@@ -246,7 +408,11 @@ async function confirmBatchReplay() {
       </h3>
       <p>{{ hint || "刷新或检查宝塔 Node API 与 MySQL 后重试。" }}</p>
       <code v-if="requestId">request_id: {{ requestId }}</code
-      ><button v-if="!['loading', 'expired', 'forbidden'].includes(state)" @click="load">
+      ><button
+        v-if="!['loading', 'expired', 'forbidden'].includes(state)"
+        :disabled="refreshing"
+        @click="load()"
+      >
         重新读取
       </button>
     </section>
@@ -260,6 +426,7 @@ async function confirmBatchReplay() {
         <section>
           <h3>来源与健康</h3>
           <ResponsiveDataView
+            v-if="data.sources.length"
             title="来源与健康"
             :rows="data.sources"
             :row-key="sourceRowKey"
@@ -339,24 +506,27 @@ async function confirmBatchReplay() {
               </details>
             </template>
           </ResponsiveDataView>
+          <p v-else class="collection-section-empty">当前范围没有来源健康记录。</p>
         </section>
         <section>
           <h3>任务状态</h3>
-          <div class="collection-state-chips">
+          <div v-if="data.task_states.length" class="collection-state-chips">
             <span v-for="t in data.task_states" :key="t.status"
               ><b>{{ t.total }}</b
               >{{ statusLabel(t.status) }}</span
             >
           </div>
+          <p v-else class="collection-section-empty">当前范围没有任务状态记录。</p>
           <h3>质量问题</h3>
-          <div class="collection-state-chips">
+          <div v-if="data.quality.length" class="collection-state-chips">
             <span v-for="q in data.quality" :key="q.status + q.severity"
               ><b>{{ q.total }}</b
               >{{ statusLabel(q.status) }} · {{ q.severity === "critical" ? "严重" : "警告" }}</span
             >
           </div>
+          <p v-else class="collection-section-empty">当前范围没有质量问题。</p>
         </section>
-        <section class="collection-root-causes">
+        <section ref="rootCauseSection" class="collection-root-causes" tabindex="-1">
           <header>
             <div>
               <h3>错误根因</h3>
@@ -395,8 +565,12 @@ async function confirmBatchReplay() {
           <p v-else>当前筛选范围没有采集错误。</p>
         </section>
         <section>
-          <h3>最近尝试</h3>
+          <header class="collection-section-header">
+            <h3>最近尝试</h3>
+            <span>{{ rangeLabel(data.pagination?.attempts) }}</span>
+          </header>
           <ResponsiveDataView
+            v-if="data.attempts.length"
             title="最近尝试"
             :rows="data.attempts"
             :row-key="attemptRowKey"
@@ -477,21 +651,60 @@ async function confirmBatchReplay() {
               </details>
             </template>
           </ResponsiveDataView>
+          <p v-else class="collection-section-empty">当前页没有任务尝试。</p>
+          <nav
+            v-if="data.pagination?.attempts?.total_pages > 1"
+            class="collection-pagination"
+            aria-label="最近尝试分页"
+          >
+            <button
+              type="button"
+              :disabled="refreshing || data.pagination.attempts.page <= 1"
+              @click="goToPage('attempts', data.pagination.attempts.page - 1)"
+            >
+              上一页
+            </button>
+            <span
+              >第 {{ data.pagination.attempts.page }} /
+              {{ data.pagination.attempts.total_pages }} 页</span
+            >
+            <button
+              type="button"
+              :disabled="
+                refreshing || data.pagination.attempts.page >= data.pagination.attempts.total_pages
+              "
+              @click="goToPage('attempts', data.pagination.attempts.page + 1)"
+            >
+              下一页
+            </button>
+          </nav>
         </section>
         <section>
-          <h3>开放与已重放死信</h3>
+          <header class="collection-section-header">
+            <h3>开放与已重放死信</h3>
+            <span>{{ rangeLabel(data.pagination?.dead_letters) }}</span>
+          </header>
           <p v-if="batchNotice" aria-live="polite">{{ batchNotice }}</p>
+          <details v-if="batchFailures.length" class="collection-batch-failures">
+            <summary>查看失败条目（{{ batchFailures.length }}）</summary>
+            <ul>
+              <li v-for="failure in batchFailures" :key="failure.task">
+                任务 {{ failure.task }}…：{{ failure.reason }}
+              </li>
+            </ul>
+          </details>
           <details>
             <summary>批量安全重放</summary>
             <p>
               只处理明确勾选的开放死信，每批最多 20 条；执行前会固定展示根因、组织和工作区影响范围。
             </p>
+            <p>已选择 {{ selectedDeadLetterIds.length }} / 20 条；切换死信页会清除非当前页选择。</p>
             <label v-for="d in data.dead_letters" :key="`select-${d.id}`">
               <input
                 type="checkbox"
                 :checked="selectedDeadLetterIds.includes(d.id)"
                 :disabled="d.status !== 'open' || batchBusy"
-                @change="toggleDeadLetter(d.id, ($event.target as HTMLInputElement).checked)"
+                @change="toggleDeadLetter(d.id, $event)"
               />
               选择{{ errorLabel(d.error_code) }}死信 {{ d.task_id.slice(0, 8) }}…
             </label>
@@ -504,10 +717,10 @@ async function confirmBatchReplay() {
               ></textarea>
             </label>
             <button type="button" :disabled="batchBusy" @click="previewBatchReplay">
-              预览批量重放
+              {{ batchBusy ? "正在重放" : "预览批量重放" }}
             </button>
           </details>
-          <ul>
+          <ul v-if="data.dead_letters.length">
             <li v-for="d in data.dead_letters" :key="d.id">
               <b>{{ errorLabel(d.error_code) }}</b
               ><span>{{ statusLabel(d.status) }} · {{ when(d.created_at) }}</span
@@ -526,6 +739,34 @@ async function confirmBatchReplay() {
               </details>
             </li>
           </ul>
+          <p v-else class="collection-section-empty">当前页没有死信记录。</p>
+          <nav
+            v-if="data.pagination?.dead_letters?.total_pages > 1"
+            class="collection-pagination"
+            aria-label="死信记录分页"
+          >
+            <button
+              type="button"
+              :disabled="refreshing || data.pagination.dead_letters.page <= 1"
+              @click="goToPage('dead_letters', data.pagination.dead_letters.page - 1)"
+            >
+              上一页
+            </button>
+            <span
+              >第 {{ data.pagination.dead_letters.page }} /
+              {{ data.pagination.dead_letters.total_pages }} 页</span
+            >
+            <button
+              type="button"
+              :disabled="
+                refreshing ||
+                data.pagination.dead_letters.page >= data.pagination.dead_letters.total_pages
+              "
+              @click="goToPage('dead_letters', data.pagination.dead_letters.page + 1)"
+            >
+              下一页
+            </button>
+          </nav>
         </section>
       </div>
       <footer>观测时间 {{ when(data.observed_at) }} · request_id {{ requestId }}</footer></template

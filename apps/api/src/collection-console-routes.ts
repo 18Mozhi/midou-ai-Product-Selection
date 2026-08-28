@@ -36,6 +36,8 @@ export function registerCollectionConsoleRoutes(
         providerId: query.provider_id,
         window: query.window,
         errorCode: query.error_code,
+        attemptPage: query.attempt_page,
+        deadLetterPage: query.dead_letter_page,
         requestId,
         traceId,
       }),

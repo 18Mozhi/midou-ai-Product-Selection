@@ -70,6 +70,10 @@ const data = {
       latest_at: "2026-08-08T11:00:00Z",
     },
   ],
+  pagination: {
+    attempts: { page: 1, page_size: 50, total: 1, total_pages: 1 },
+    dead_letters: { page: 1, page_size: 50, total: 1, total_pages: 1 },
+  },
   links: {
     provider_registry: "/platform-admin/providers",
     adapter_health: "/platform-admin/providers/adapters",
@@ -124,12 +128,15 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
   await page.getByRole("button", { name: "应用范围" }).click();
   await expect.poll(() => consoleUrl).toContain(`provider_id=${providerId}`);
   expect(consoleUrl).toContain("window=7d");
+  await expect(page).toHaveURL(new RegExp(`provider_id=${providerId}`));
+  await expect(page).toHaveURL(/window=7d/);
 
   await page
     .locator(".collection-root-causes")
     .getByRole("button", { name: /页面解析失败/ })
     .click();
   await expect.poll(() => consoleUrl).toContain("error_code=parser_failed");
+  await expect(page).toHaveURL(/error_code=parser_failed/);
   await expect(
     startsMobile
       ? page.getByRole("button", { name: /第 2 次尝试 · 终止失败/ })
@@ -226,7 +233,10 @@ test("M06-03.A17 batch safely replays explicitly selected open dead letters", as
   await expect(page.getByText(/请求超时 1 条/)).toBeVisible();
   await page.getByLabel("我已阅读影响范围，并确认只处理上述对象").check();
   await page.getByPlaceholder("确认重放").fill("确认重放");
-  await page.getByRole("button", { name: "确认批量重放", exact: true }).click();
+  await page.getByRole("button", { name: "确认批量重放", exact: true }).evaluate((button) => {
+    button.click();
+    button.click();
+  });
 
   await expect.poll(() => replays.length).toBe(2);
   await expect(page.getByText(/批量重放完成：成功 2 条，失败 0 条/)).toBeVisible();
@@ -240,6 +250,63 @@ test("M06-03.A17 batch safely replays explicitly selected open dead letters", as
   }
   expect(replays[0].url).toContain(data.dead_letters[0].task_id);
   expect(replays[1].url).toContain(secondTaskId);
+});
+
+test("M06-03 pages complete attempt and dead-letter facts and preserves verified data on refresh failure", async ({
+  page,
+}) => {
+  await navigation(page);
+  let status = 200;
+  let reads = 0;
+  const paged = {
+    ...data,
+    sources: [{ ...data.sources[0], health_status: "blocked" }],
+    pagination: {
+      attempts: { page: 1, page_size: 50, total: 66, total_pages: 2 },
+      dead_letters: { page: 1, page_size: 50, total: 58, total_pages: 2 },
+    },
+  };
+  await page.route("**/api/v1/platform/collection/console?**", (route) => {
+    reads += 1;
+    if (status !== 200)
+      return route.fulfill({
+        status,
+        json: envelope({ error: { action_hint: "请稍后重试" } }),
+      });
+    return route.fulfill({ json: envelope(paged) });
+  });
+
+  await page.goto("/platform-admin/collection/overview?window=all");
+  if ((page.viewportSize()?.width ?? 0) <= 760)
+    await expect(page.getByRole("button", { name: /公开趋势 RSS.*采集受阻/ })).toBeVisible();
+  else await expect(page.getByText("采集受阻", { exact: true })).toBeVisible();
+  await expect(page.getByText("1–50 / 66 条", { exact: true })).toBeVisible();
+  await expect(page.getByText("1–50 / 58 条", { exact: true })).toBeVisible();
+  await page
+    .getByRole("navigation", { name: "最近尝试分页" })
+    .getByRole("button", { name: "下一页" })
+    .click();
+  await expect(page).toHaveURL(/attempt_page=2/);
+
+  const beforeDuplicate = reads;
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  if (mobile) await page.getByRole("button", { name: "采集范围与时间" }).click();
+  await page.getByRole("button", { name: "应用范围" }).evaluate((button) => {
+    button.click();
+    button.click();
+  });
+  await expect.poll(() => reads).toBe(beforeDuplicate + 1);
+  if (mobile) {
+    const closeFilter = page
+      .locator(".responsive-filter-drawer__sheet > header")
+      .getByRole("button", { name: "关闭筛选条件" });
+    if (await closeFilter.isVisible().catch(() => false)) await closeFilter.click();
+  }
+
+  status = 503;
+  await page.getByRole("button", { name: "刷新数据" }).click();
+  await expect(page.getByRole("heading", { name: "来源与健康" })).toBeVisible();
+  await expect(page.getByRole("alert")).toContainText("当前已验证数据仍保留");
 });
 
 test("M06-03.A08/A16 empty forbidden blocked", async ({ page }) => {

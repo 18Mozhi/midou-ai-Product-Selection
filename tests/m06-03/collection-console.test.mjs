@@ -23,12 +23,16 @@ test("M06-03.A01/A02/A04/A12 validates scope source time and exact error filters
     providerId,
     window: "7d",
     errorCode: "parser_failed",
+    attemptPage: "3",
+    deadLetterPage: "2",
   });
   assert.equal(calls[0].organizationId, organizationId);
   assert.equal(calls[0].workspaceId, workspaceId);
   assert.equal(calls[0].providerId, providerId);
   assert.equal(calls[0].window, "7d");
   assert.equal(calls[0].errorCode, "parser_failed");
+  assert.equal(calls[0].attemptPage, 3);
+  assert.equal(calls[0].deadLetterPage, 2);
   assert.equal(calls[0].recentLimit, 25);
   assert.throws(
     () => service.read({ organizationId: "bad" }),
@@ -45,6 +49,11 @@ test("M06-03.A01/A02/A04/A12 validates scope source time and exact error filters
     (error) =>
       error instanceof CollectionConsoleError &&
       error.code === "collection_console_error_code_invalid",
+  );
+  assert.throws(
+    () => service.read({ attemptPage: "0" }),
+    (error) =>
+      error instanceof CollectionConsoleError && error.code === "collection_console_page_invalid",
   );
 });
 
@@ -73,6 +82,8 @@ test("M06-03.A03/A05/A09/A11/A16 reads audited real source and root-cause relati
   assert.match(route, /providerId: query\.provider_id/);
   assert.match(route, /window: query\.window/);
   assert.match(route, /errorCode: query\.error_code/);
+  assert.match(route, /attemptPage: query\.attempt_page/);
+  assert.match(route, /deadLetterPage: query\.dead_letter_page/);
   assert.match(route, /capability: "platform:operate"/);
   assert.doesNotMatch(repository, /credential|cookie|payload_json/i);
   for (const line of repository.split(/\r?\n/))
@@ -116,10 +127,14 @@ test("M06-03 repository applies one source and time scope to task facts without 
         return [
           [{ error_code: "parser_failed", total: 1, latest_at: new Date("2026-08-19T01:00:00Z") }],
         ];
+      if (sql.includes("SELECT COUNT(*) total") && sql.includes("FROM collection_dead_letters"))
+        return [[{ total: 31 }]];
       if (sql.includes("FROM collection_dead_letters"))
         return [[{ error_code: "parser_failed", created_at: new Date("2026-08-19T01:00:00Z") }]];
       if (sql.includes("FROM data_quality_issues"))
         return [[{ severity: "warning", status: "open", total: 1 }]];
+      if (sql.includes("SELECT COUNT(*) total") && sql.includes("FROM collection_task_attempts"))
+        return [[{ total: 44 }]];
       if (sql.includes("FROM collection_task_attempts"))
         return [[{ attempt_number: 2, started_at: null, finished_at: null }]];
       throw new Error(`unexpected query: ${sql}`);
@@ -145,6 +160,8 @@ test("M06-03 repository applies one source and time scope to task facts without 
     providerId,
     window: "24h",
     errorCode: "parser_failed",
+    attemptPage: 2,
+    deadLetterPage: 2,
     recentLimit: 25,
     requestId: "request",
     traceId: "trace",
@@ -153,6 +170,18 @@ test("M06-03 repository applies one source and time scope to task facts without 
   assert.equal(result.root_causes[0].error_code, "parser_failed");
   assert.equal(result.root_causes[0].total, 1);
   assert.equal(result.filters.provider_id, providerId);
+  assert.deepEqual(result.pagination.attempts, {
+    page: 2,
+    page_size: 25,
+    total: 44,
+    total_pages: 2,
+  });
+  assert.deepEqual(result.pagination.dead_letters, {
+    page: 2,
+    page_size: 25,
+    total: 31,
+    total_pages: 2,
+  });
   for (const [sql, values] of calls)
     assert.equal((sql.match(/\?/g) ?? []).length, values.length, sql);
   const factQueries = calls.filter(([sql]) =>
@@ -194,6 +223,11 @@ test("M06-03.A06/A07/A08/A10/A13/A17 delivery contracts", async () => {
     "blocked",
     "provider_id",
     "error_code",
+    "attempt_page",
+    "dead_letter_page",
+    "pagination",
+    "刷新数据",
+    "当前已验证数据仍保留",
     "root_causes",
     "告警类别",
     "blocked_captcha",

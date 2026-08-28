@@ -50,6 +50,17 @@ const errorCode = (value: unknown) => {
   return normalized || null;
 };
 
+const pageValue = (value: unknown, field: string) => {
+  const normalized = String(value ?? "1").trim();
+  if (!/^\d{1,6}$/.test(normalized) || Number(normalized) < 1)
+    throw new CollectionConsoleError(
+      "collection_console_page_invalid",
+      400,
+      `提交有效${field}页码。`,
+    );
+  return Number(normalized);
+};
+
 export class CollectionConsoleService {
   constructor(
     private readonly repo: CollectionConsoleRepository,
@@ -64,6 +75,8 @@ export class CollectionConsoleService {
       providerId: uuid(input.providerId, "来源"),
       window: windowValue(input.window),
       errorCode: errorCode(input.errorCode),
+      attemptPage: pageValue(input.attemptPage, "尝试记录"),
+      deadLetterPage: pageValue(input.deadLetterPage, "死信记录"),
       recentLimit: this.recentLimit,
     });
   }

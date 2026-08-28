@@ -307,10 +307,46 @@
 .collection-ops > header span {
   color: var(--text-muted);
 }
+.collection-ops > header .collection-ops-heading,
+.collection-ops .collection-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.collection-ops-heading > div {
+  min-width: 0;
+}
+.collection-ops-heading > button,
+.collection-pagination button,
+.collection-refresh-notice button {
+  min-height: var(--so-touch-target);
+  padding: 9px 13px;
+  white-space: nowrap;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-bg-elevated);
+}
+.collection-ops-heading > button:disabled,
+.collection-pagination button:disabled,
+.collection-refresh-notice button:disabled {
+  cursor: wait;
+  opacity: 0.58;
+}
 .collection-ops form {
   display: grid;
   grid-template-columns: repeat(2, minmax(170px, 1fr)) repeat(2, minmax(130px, 0.7fr)) auto;
   gap: 8px;
+  align-items: end;
+}
+.collection-ops form > .collection-filter-field {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  color: var(--so-text-muted);
+  font-size: 12px;
 }
 .collection-ops input {
   min-width: 0;
@@ -318,8 +354,37 @@
 .collection-ops select {
   min-width: 0;
 }
+.collection-ops form input,
+.collection-ops form select,
 .collection-ops form button {
+  min-height: var(--so-touch-target);
+}
+.collection-ops form > .collection-filter-field > input,
+.collection-ops form > .collection-filter-field > select {
+  width: 100%;
+}
+.collection-filter-actions {
+  display: flex;
+  gap: 8px;
+}
+.collection-filter-actions button {
   white-space: nowrap;
+}
+.collection-filter-actions button:first-child {
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+.collection-refresh-notice {
+  margin: 0;
+  padding: 11px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--so-warning-border);
+  border-radius: 11px;
+  color: var(--so-warning);
+  background: color-mix(in srgb, var(--so-warning) 8%, var(--so-bg-elevated));
 }
 .collection-ops-links {
   display: flex;
@@ -356,6 +421,22 @@
 .collection-ops td small {
   display: block;
   color: var(--text-muted);
+}
+.collection-ops i[data-health] {
+  font-style: normal;
+  font-weight: 700;
+}
+.collection-ops i[data-health="ready"],
+.collection-ops i[data-health="healthy"] {
+  color: var(--so-success);
+}
+.collection-ops i[data-health="degraded"],
+.collection-ops i[data-health="warning"] {
+  color: var(--so-warning);
+}
+.collection-ops i[data-health="blocked"],
+.collection-ops i[data-health="critical"] {
+  color: var(--so-danger);
 }
 .collection-state-chips {
   display: flex;
@@ -417,6 +498,43 @@
 .collection-clear-root {
   white-space: nowrap;
 }
+.collection-root-causes:focus-visible {
+  outline: 2px solid var(--so-primary);
+  outline-offset: 3px;
+}
+.collection-section-header {
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+.collection-section-header h3 {
+  margin: 0;
+}
+.collection-section-header span,
+.collection-section-empty {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.collection-section-empty {
+  margin: 10px 0 0;
+  padding: 13px;
+  border: 1px dashed var(--so-border);
+  border-radius: 10px;
+}
+.collection-pagination {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.collection-pagination span {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.collection-batch-failures {
+  margin-bottom: 12px;
+  color: var(--so-danger);
+}
 .collection-ops-grid ul {
   list-style: none;
   padding: 0;
@@ -438,9 +556,29 @@
   color: var(--text-muted);
   font-size: 13px;
 }
+@media (max-width: 1180px) {
+  .collection-ops form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .collection-filter-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+  .collection-ops-grid {
+    grid-template-columns: 1fr;
+  }
+}
 @media (max-width: 800px) {
   .collection-ops form {
     grid-template-columns: 1fr;
+  }
+  .collection-ops-heading,
+  .collection-refresh-notice {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .collection-ops-heading > button {
+    width: 100%;
   }
   .collection-ops-grid {
     grid-template-columns: 1fr;
@@ -452,8 +590,12 @@
   .collection-ops select {
     width: 100%;
   }
+  .collection-filter-actions,
   .collection-ops form button {
     width: 100%;
+  }
+  .collection-pagination {
+    justify-content: space-between;
   }
   .collection-root-causes > header {
     flex-direction: column;

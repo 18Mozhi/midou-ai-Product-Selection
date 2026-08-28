@@ -31,60 +31,83 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
     const attemptFilter = this.attemptFilter(input, since);
     const deadRootFilter = this.deadFilter({ ...input, errorCode: null }, since);
 
-    const [[sourceRows], [taskRows], [deadRows], [qualityRows], [attemptRows], [rootRows]] =
-      await Promise.all([
-        this.pool.query<RowDataPacket[]>(
-          "SELECT p.id, p.code, p.name, p.status, p.owner_label,\n                  p.schedule_minutes," +
-            " p.concurrency_limit, p.parser_version,\n                  h.health_status," +
-            " h.last_checked_at, h.last_latency_ms,\n                  h.last_error_code," +
-            " h.consecutive_failures\n             FROM providers p\n        LEFT JOIN provider_adapter_health " +
-            "h ON h.provider_id = p.id\n         ORDER BY p.status = 'enabled' DESC, p.name",
-        ),
-        this.pool.query<RowDataPacket[]>(
-          `SELECT t.status, COUNT(*) total
+    const deadOffset = (input.deadLetterPage - 1) * input.recentLimit;
+    const attemptOffset = (input.attemptPage - 1) * input.recentLimit;
+    const [
+      [sourceRows],
+      [taskRows],
+      [deadRows],
+      [deadCountRows],
+      [qualityRows],
+      [attemptRows],
+      [attemptCountRows],
+      [rootRows],
+    ] = await Promise.all([
+      this.pool.query<RowDataPacket[]>(
+        "SELECT p.id, p.code, p.name, p.status, p.owner_label,\n                  p.schedule_minutes," +
+          " p.concurrency_limit, p.parser_version,\n                  h.health_status," +
+          " h.last_checked_at, h.last_latency_ms,\n                  h.last_error_code," +
+          " h.consecutive_failures\n             FROM providers p\n        LEFT JOIN provider_adapter_health " +
+          "h ON h.provider_id = p.id\n         ORDER BY p.status = 'enabled' DESC, p.name",
+      ),
+      this.pool.query<RowDataPacket[]>(
+        `SELECT t.status, COUNT(*) total
              FROM collection_tasks t
              ${taskFilter.sql}
          GROUP BY t.status
          ORDER BY t.status`,
-          taskFilter.values,
-        ),
-        this.pool.query<RowDataPacket[]>(
-          `SELECT d.id, d.task_id, d.organization_id, d.workspace_id,
+        taskFilter.values,
+      ),
+      this.pool.query<RowDataPacket[]>(
+        `SELECT d.id, d.task_id, d.organization_id, d.workspace_id,
                   d.error_code, d.status, d.created_at
              FROM collection_dead_letters d
              ${deadFilter.sql}
          ORDER BY d.created_at DESC
-            LIMIT ?`,
-          [...deadFilter.values, input.recentLimit],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          `SELECT q.severity, q.status, COUNT(*) total
+            LIMIT ? OFFSET ?`,
+        [...deadFilter.values, input.recentLimit, deadOffset],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        `SELECT COUNT(*) total
+             FROM collection_dead_letters d
+             ${deadFilter.sql}`,
+        deadFilter.values,
+      ),
+      this.pool.query<RowDataPacket[]>(
+        `SELECT q.severity, q.status, COUNT(*) total
              FROM data_quality_issues q
              ${qualityFilter.sql}
          GROUP BY q.severity, q.status
          ORDER BY q.status, q.severity`,
-          qualityFilter.values,
-        ),
-        this.pool.query<RowDataPacket[]>(
-          `SELECT a.id, a.task_id, t.organization_id, t.workspace_id,
+        qualityFilter.values,
+      ),
+      this.pool.query<RowDataPacket[]>(
+        `SELECT a.id, a.task_id, t.organization_id, t.workspace_id,
                   a.attempt_number, a.worker_id, a.status, a.error_code,
                   a.started_at, a.finished_at, a.trace_id
              FROM collection_task_attempts a
              JOIN collection_tasks t ON t.id = a.task_id
              ${attemptFilter.sql}
          ORDER BY a.created_at DESC
-            LIMIT ?`,
-          [...attemptFilter.values, input.recentLimit],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          `SELECT d.error_code, COUNT(*) total, MAX(d.created_at) latest_at
+            LIMIT ? OFFSET ?`,
+        [...attemptFilter.values, input.recentLimit, attemptOffset],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        `SELECT COUNT(*) total
+             FROM collection_task_attempts a
+             JOIN collection_tasks t ON t.id = a.task_id
+             ${attemptFilter.sql}`,
+        attemptFilter.values,
+      ),
+      this.pool.query<RowDataPacket[]>(
+        `SELECT d.error_code, COUNT(*) total, MAX(d.created_at) latest_at
              FROM collection_dead_letters d
              ${deadRootFilter.sql}
          GROUP BY d.error_code
          ORDER BY total DESC, latest_at DESC, d.error_code`,
-          deadRootFilter.values,
-        ),
-      ]);
+        deadRootFilter.values,
+      ),
+    ]);
 
     const sources = sourceRows.map((row: any) => ({
       ...row,
@@ -130,6 +153,18 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
         total: numberValue(row.total),
         latest_at: iso(row.latest_at),
       })),
+      pagination: {
+        attempts: this.pagination(
+          input.attemptPage,
+          input.recentLimit,
+          numberValue(attemptCountRows[0]?.total),
+        ),
+        dead_letters: this.pagination(
+          input.deadLetterPage,
+          input.recentLimit,
+          numberValue(deadCountRows[0]?.total),
+        ),
+      },
       links: {
         provider_registry: "/platform-admin/providers",
         adapter_health: "/platform-admin/providers/adapters",
@@ -283,6 +318,15 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
     };
   }
 
+  private pagination(page: number, pageSize: number, total: number) {
+    return {
+      page,
+      page_size: pageSize,
+      total,
+      total_pages: total ? Math.ceil(total / pageSize) : 0,
+    };
+  }
+
   private async audit(input: any, observedAt: Date) {
     const connection = await this.pool.getConnection();
     try {
@@ -321,6 +365,9 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
             provider_filter_id: input.providerId,
             window: input.window,
             error_code: input.errorCode,
+            attempt_page: input.attemptPage,
+            dead_letter_page: input.deadLetterPage,
+            page_size: input.recentLimit,
           }),
           observedAt,
         ],
