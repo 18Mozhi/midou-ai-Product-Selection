@@ -28,6 +28,28 @@ const definition = {
     version: 1,
     updated_at: "2026-08-07T17:00:00.000Z",
   },
+  blockedDefinition = {
+    ...definition,
+    id: "00000000-0000-4000-8000-000000000703",
+    code: "pending_public_source",
+    name: "待复核公开来源",
+    terms_review_status: "pending",
+    terms_reference_url: null,
+    terms_version: null,
+    terms_expires_at: null,
+    terms_reviewed_at: null,
+    status: "enabled",
+  },
+  definitions = [
+    definition,
+    blockedDefinition,
+    ...Array.from({ length: 23 }, (_, index) => ({
+      ...definition,
+      id: `00000000-0000-4000-8000-${String(index + 800).padStart(12, "0")}`,
+      code: `provider_fixture_${String(index + 1).padStart(2, "0")}`,
+      name: `来源定义 ${String(index + 1).padStart(2, "0")}`,
+    })),
+  ],
   navigation = {
     shell: "platform_admin",
     organization_id: null,
@@ -61,7 +83,7 @@ test("M03-01.A07/A08/A15 provider list and editor are responsive and visual", as
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
-        data: [definition],
+        data: definitions,
         request_id: "m03-01-list",
         trace_id: "m03-01-list",
       }),
@@ -69,9 +91,13 @@ test("M03-01.A07/A08/A15 provider list and editor are responsive and visual", as
   );
   await page.goto("/platform-admin/providers");
   await expect(page.getByRole("heading", { name: "来源注册中心", level: 2 })).toBeVisible();
+  await expect(page.getByRole("region", { name: "来源定义概览" })).toContainText("25");
+  await expect(page.getByRole("note")).toContainText("已启用");
+  await expect(page.getByText("第 1 / 2 页 · 每页 20 条")).toBeVisible();
   if (testInfo.project.name === "mobile-390") {
-    await expect(page.getByText("公开趋势 RSS · 未启用", { exact: true })).toBeVisible();
-    await page.getByRole("button", { name: /公开趋势 RSS · 未启用/ }).click();
+    const recordButton = page.getByRole("button", { name: /公开趋势 RSS.*未进入调度/ });
+    await expect(recordButton).toBeVisible();
+    await recordButton.click();
     const dialog = page.getByRole("dialog", { name: "公开趋势 RSS" });
     await expect(dialog).toBeVisible();
     await expect(dialog.getByText("公开订阅源", { exact: true })).toBeVisible();
@@ -79,16 +105,23 @@ test("M03-01.A07/A08/A15 provider list and editor are responsive and visual", as
     await expect(dialog.getByText(definition.id)).toBeVisible();
     await dialog.getByRole("button", { name: "关闭详情" }).click();
   } else {
-    await expect(page.getByText("公开趋势 RSS", { exact: true })).toBeVisible();
-    await expect(page.getByText("未启用", { exact: true })).toBeVisible();
+    await expect(page.getByRole("table").getByText("公开趋势 RSS", { exact: true })).toBeVisible();
+    await expect(page.getByText("未进入调度", { exact: true }).first()).toBeVisible();
   }
+  await page.getByRole("searchbox", { name: "搜索", exact: true }).fill("待复核公开来源");
+  await expect(page.getByText("共 25 条，当前筛选 1 条")).toBeVisible();
+  await expect(page.locator('[data-admission="blocked"]:visible')).toContainText("执行受阻");
+  await page.getByRole("button", { name: "重置" }).click();
   await page.getByRole("button", { name: "新建来源" }).click();
   await expect(page.getByRole("heading", { name: "登记来源" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("heading", { name: "登记来源" })).toBeHidden();
+  await expect(page.getByRole("button", { name: "新建来源" })).toBeFocused();
+  await page.getByRole("button", { name: "新建来源" }).click();
   await page.getByRole("button", { name: "4 合规与发布" }).click();
   await expect(page.getByRole("combobox", { name: "发布状态", exact: true })).toHaveValue(
     "disabled",
   );
-  await expect(page).toHaveScreenshot("m03-01-provider-registry.png", { fullPage: true });
   if (testInfo.project.name === "mobile-390")
     await expect(page.locator(".provider-editor")).toBeVisible();
 });

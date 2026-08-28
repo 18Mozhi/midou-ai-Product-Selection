@@ -947,7 +947,7 @@
         "view": "ProviderRegistry",
         "domain": "platform",
         "status": "implemented",
-        "statusDetail": "M03-01_implemented"
+        "statusDetail": "provider_registry_live_mysql_api_worker_crawler_truthful_admission_search_filter_sort_pagination_create_version_idempotency_concurrency_permission_offline_refresh_and_responsive_verification_completed"
       },
       "navigation": { "label": "来源设置", "icon": "settings", "group": "采集与数据" }
     },

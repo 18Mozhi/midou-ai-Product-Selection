@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -39,11 +39,24 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   state = ref<State>("loading"),
   items = ref<Provider[]>([]),
   requestId = ref(""),
+  loadMessage = ref(""),
+  refreshing = ref(false),
+  successMessage = ref(""),
   editing = ref<Provider | null>(null),
   editorOpen = ref(false),
   editorStep = ref(1),
   saving = ref(false),
   message = ref(""),
+  searchQuery = ref(""),
+  statusFilter = ref("all"),
+  accessModeFilter = ref("all"),
+  admissionFilter = ref("all"),
+  sortOrder = ref("name_asc"),
+  page = ref(1),
+  pageSize = 20,
+  editorPanel = ref<HTMLFormElement | null>(null),
+  editorTrigger = ref<HTMLElement | null>(null),
+  loadController = ref<AbortController | null>(null),
   form = reactive({
     code: "",
     name: "",
@@ -115,6 +128,91 @@ const accessModeText = (value: string) =>
     "未知状态",
   termsStatusText = (value: Provider["terms_review_status"]) =>
     value === "approved" ? "已批准" : value === "rejected" ? "已拒绝" : "待复核";
+type AdmissionState = "inactive" | "blocked" | "compliant" | "runtime_gate" | "registered";
+const admission = (item: Provider): { state: AdmissionState; label: string; detail: string } => {
+    if (item.status !== "enabled")
+      return {
+        state: "inactive",
+        label: "未进入调度",
+        detail: item.status === "draft" ? "定义仍为草稿" : "来源定义未启用",
+      };
+    if (["public_page", "public_rss"].includes(item.access_mode)) {
+      const expiresAt = item.terms_expires_at
+        ? new Date(item.terms_expires_at).getTime()
+        : Number.NaN;
+      const complete =
+        item.terms_review_status === "approved" &&
+        Boolean(item.terms_reference_url) &&
+        Boolean(item.terms_version) &&
+        Number.isFinite(expiresAt) &&
+        expiresAt > Date.now();
+      return complete
+        ? {
+            state: "compliant",
+            label: "合规门禁已满足",
+            detail: "仅表示公开采集准入条件完整，不代表采集任务已成功",
+          }
+        : {
+            state: "blocked",
+            label: "执行受阻",
+            detail:
+              item.terms_review_status === "rejected"
+                ? "公开采集条款已拒绝"
+                : item.terms_review_status !== "approved"
+                  ? "公开采集条款尚未批准"
+                  : !item.terms_reference_url || !item.terms_version
+                    ? "公开采集条款资料不完整"
+                    : "公开采集条款已过期或缺少有效期",
+          };
+    }
+    if (item.access_mode === "authenticated_browser")
+      return {
+        state: "runtime_gate",
+        label: "需运行时登录门禁",
+        detail: "定义已启用，执行仍取决于登录态、风控与采集程序状态",
+      };
+    return {
+      state: "registered",
+      label: item.access_mode === "import" ? "等待导入" : "等待人工录入",
+      detail: "定义已启用，数据进入仍取决于对应导入或人工流程",
+    };
+  },
+  admissionText = (item: Provider) => admission(item).label,
+  normalizedSearch = computed(() => searchQuery.value.trim().toLocaleLowerCase("zh-CN")),
+  filteredItems = computed(() => {
+    const result = items.value.filter((item) => {
+      const matchesSearch =
+        !normalizedSearch.value ||
+        [item.name, item.code, item.owner_label, ...item.markets, ...item.languages]
+          .join(" ")
+          .toLocaleLowerCase("zh-CN")
+          .includes(normalizedSearch.value);
+      return (
+        matchesSearch &&
+        (statusFilter.value === "all" || item.status === statusFilter.value) &&
+        (accessModeFilter.value === "all" || item.access_mode === accessModeFilter.value) &&
+        (admissionFilter.value === "all" || admission(item).state === admissionFilter.value)
+      );
+    });
+    return [...result].sort((left, right) => {
+      if (sortOrder.value === "updated_desc")
+        return new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime();
+      if (sortOrder.value === "status")
+        return admissionText(left).localeCompare(admissionText(right), "zh-CN");
+      return left.name.localeCompare(right.name, "zh-CN");
+    });
+  }),
+  pageCount = computed(() => Math.max(1, Math.ceil(filteredItems.value.length / pageSize))),
+  visibleItems = computed(() =>
+    filteredItems.value.slice((page.value - 1) * pageSize, page.value * pageSize),
+  ),
+  enabledCount = computed(() => items.value.filter((item) => item.status === "enabled").length),
+  blockedCount = computed(
+    () => items.value.filter((item) => admission(item).state === "blocked").length,
+  ),
+  inactiveCount = computed(
+    () => items.value.filter((item) => admission(item).state === "inactive").length,
+  );
 const list = (v: string) =>
     v
       .split(",")
@@ -187,19 +285,46 @@ const list = (v: string) =>
     Object.entries(formErrors.value).filter(([field]) => stepForField[field] === editorStep.value),
   );
 async function load() {
-  state.value = "loading";
+  loadController.value?.abort();
+  const controller = new AbortController();
+  loadController.value = controller;
+  loadMessage.value = "";
+  refreshing.value = Boolean(items.value.length);
+  if (!items.value.length) state.value = "loading";
+  const timeout = window.setTimeout(() => controller.abort("provider_registry_timeout"), 12000);
   try {
-    const response = await request<Provider[]>("/platform/providers");
+    const response = await request<Provider[]>("/platform/providers", {
+      signal: controller.signal,
+    });
     requestId.value = response.request_id;
     items.value = response.data;
     state.value = items.value.length ? "ready" : "empty";
+    page.value = 1;
   } catch (error) {
+    if (controller !== loadController.value) return;
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? "";
-    state.value = apiError ? failure(apiError.status) : "blocked";
+    const nextState = apiError ? failure(apiError.status) : "blocked";
+    if (items.value.length) {
+      state.value = "ready";
+      loadMessage.value =
+        controller.signal.aborted && !apiError
+          ? "刷新超过 12 秒，已保留上次成功数据。"
+          : `刷新失败：${apiError?.actionHint ?? "请稍后重试。"} 已保留上次成功数据。`;
+    } else state.value = nextState;
+  } finally {
+    window.clearTimeout(timeout);
+    refreshing.value = false;
+    if (loadController.value === controller) loadController.value = null;
   }
 }
-function edit(item?: Provider) {
+function edit(item?: Provider, event?: Event) {
+  editorTrigger.value =
+    event?.currentTarget instanceof HTMLElement
+      ? event.currentTarget
+      : document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
   editing.value = item ?? null;
   editorOpen.value = true;
   editorStep.value = 1;
@@ -244,11 +369,13 @@ function edit(item?: Provider) {
           status: "disabled",
         },
   );
+  void nextTick(() => editorPanel.value?.querySelector<HTMLElement>("input, select")?.focus());
 }
 function closeEditor() {
   editing.value = null;
   editorOpen.value = false;
   message.value = "";
+  void nextTick(() => editorTrigger.value?.focus());
 }
 function applyTemplate() {
   const shared = {
@@ -286,6 +413,7 @@ function nextStep() {
   message.value = "";
 }
 async function save() {
+  if (saving.value) return;
   if (Object.keys(formErrors.value).length) {
     editorStep.value = Math.min(
       ...Object.keys(formErrors.value).map((field) => stepForField[field] ?? 4),
@@ -311,6 +439,8 @@ async function save() {
     },
     path = editing.value ? `/platform/providers/${editing.value.id}` : "/platform/providers";
   try {
+    const savedName = form.name;
+    const action = editing.value ? "更新" : "创建";
     const response = await request(path, {
       method: editing.value ? "PUT" : "POST",
       body,
@@ -318,6 +448,7 @@ async function save() {
     requestId.value = response.request_id;
     closeEditor();
     await load();
+    successMessage.value = `${savedName}已${action}，来源定义列表已刷新。`;
   } catch (error) {
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? "";
@@ -326,18 +457,63 @@ async function save() {
     saving.value = false;
   }
 }
+function resetFilters() {
+  searchQuery.value = "";
+  statusFilter.value = "all";
+  accessModeFilter.value = "all";
+  admissionFilter.value = "all";
+  sortOrder.value = "name_asc";
+}
+watch([searchQuery, statusFilter, accessModeFilter, admissionFilter, sortOrder], () => {
+  page.value = 1;
+});
+watch(pageCount, (count) => {
+  if (page.value > count) page.value = count;
+});
 onMounted(load);
+onBeforeUnmount(() => loadController.value?.abort());
 </script>
 <template>
   <section class="provider-registry">
-    <header>
-      <div>
-        <p>来源登记与平台资产</p>
+    <header class="provider-hero">
+      <div class="provider-hero-copy">
+        <p>来源合同与执行门禁</p>
         <h2>来源注册中心</h2>
-        <span>技术合同版本化；未启用不进入生产默认调度。</span>
+        <span>管理平台级技术合同；“定义已启用”不等于采集已经运行或成功。</span>
       </div>
-      <button type="button" @click="edit()">＋ 新建来源</button>
+      <button type="button" @click="edit(undefined, $event)">＋ 新建来源</button>
     </header>
+    <section v-if="items.length" class="provider-overview" aria-label="来源定义概览">
+      <article>
+        <span>来源定义</span><strong>{{ items.length }}</strong
+        ><small>平台全局技术合同</small>
+      </article>
+      <article>
+        <span>已启用定义</span><strong>{{ enabledCount }}</strong
+        ><small>仍需通过对应执行链门禁</small>
+      </article>
+      <article data-tone="danger">
+        <span>公开采集受阻</span><strong>{{ blockedCount }}</strong
+        ><small>条款待复核、资料不全或已过期</small>
+      </article>
+      <article>
+        <span>未进入调度</span><strong>{{ inactiveCount }}</strong
+        ><small>草稿或未启用</small>
+      </article>
+    </section>
+    <aside v-if="items.length" class="provider-truth-note" role="note">
+      <strong>状态口径</strong>
+      <span
+        >本页“已启用”只描述来源定义。公开页面/订阅源还必须完成条款复核；登录浏览器还受登录态、验证码与风控影响；最终采集结果请到“采集管理”核验。</span
+      >
+    </aside>
+    <p v-if="successMessage" class="provider-feedback" data-tone="success" role="status">
+      {{ successMessage }}
+    </p>
+    <p v-if="loadMessage" class="provider-feedback" data-tone="warning" role="status">
+      {{ loadMessage }}
+      <button type="button" @click="load">再次刷新</button>
+    </p>
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
@@ -347,11 +523,76 @@ onMounted(load);
     <section v-else-if="state === 'empty' && !editorOpen" class="provider-empty">
       <h3>还没有来源定义</h3>
       <p>先登记真实目标 URL、字段、频率、并发、超时、去重与失败规则。</p>
-      <button type="button" @click="edit()">登记第一个来源</button>
+      <button type="button" @click="edit(undefined, $event)">登记第一个来源</button>
+    </section>
+    <section v-else-if="items.length && !editorOpen" class="provider-list-tools">
+      <div class="provider-list-heading">
+        <div>
+          <h3>来源定义</h3>
+          <span>共 {{ items.length }} 条，当前筛选 {{ filteredItems.length }} 条</span>
+        </div>
+        <button type="button" :disabled="refreshing" @click="load">
+          {{ refreshing ? "刷新中…" : "刷新真实数据" }}
+        </button>
+      </div>
+      <div class="provider-filters">
+        <label class="provider-search"
+          ><span>搜索</span
+          ><input v-model="searchQuery" type="search" placeholder="名称、代码、负责人、市场" />
+        </label>
+        <label
+          ><span>定义状态</span
+          ><select v-model="statusFilter">
+            <option value="all">全部</option>
+            <option value="enabled">已启用</option>
+            <option value="disabled">未启用</option>
+            <option value="draft">草稿</option>
+          </select></label
+        >
+        <label
+          ><span>接入方式</span
+          ><select v-model="accessModeFilter">
+            <option value="all">全部</option>
+            <option value="public_page">公开页面</option>
+            <option value="public_rss">公开订阅源</option>
+            <option value="authenticated_browser">登录浏览器</option>
+            <option value="import">文件导入</option>
+            <option value="manual">人工录入</option>
+          </select></label
+        >
+        <label
+          ><span>执行门禁</span
+          ><select v-model="admissionFilter">
+            <option value="all">全部</option>
+            <option value="blocked">执行受阻</option>
+            <option value="compliant">合规门禁已满足</option>
+            <option value="runtime_gate">需运行时登录门禁</option>
+            <option value="registered">等待导入或人工录入</option>
+            <option value="inactive">未进入调度</option>
+          </select></label
+        >
+        <label
+          ><span>排序</span
+          ><select v-model="sortOrder">
+            <option value="name_asc">名称 A–Z</option>
+            <option value="updated_desc">最近更新</option>
+            <option value="status">执行门禁</option>
+          </select></label
+        >
+        <button type="button" class="provider-reset" @click="resetFilters">重置</button>
+      </div>
+    </section>
+    <section
+      v-if="items.length && !editorOpen && !filteredItems.length"
+      class="provider-empty provider-filter-empty"
+    >
+      <h3>没有匹配的来源</h3>
+      <p>当前搜索或筛选条件没有结果，来源定义未被删除。</p>
+      <button type="button" @click="resetFilters">清除筛选条件</button>
     </section>
     <ResponsiveDataView
-      v-else-if="items.length && !editorOpen"
-      :rows="items"
+      v-else-if="visibleItems.length && !editorOpen"
+      :rows="visibleItems"
       :row-key="(item) => item.id"
       title="来源定义"
       :detail-title="(item) => item.name"
@@ -371,10 +612,10 @@ onMounted(load);
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in items" :key="item.id">
+              <tr v-for="item in visibleItems" :key="item.id">
                 <td>
                   <strong>{{ item.name }}</strong
-                  ><small>{{ item.target_url }}</small>
+                  ><small>{{ item.code }} · {{ item.owner_label }}</small>
                 </td>
                 <td>
                   {{ accessModeText(item.access_mode)
@@ -385,11 +626,16 @@ onMounted(load);
                 <td>
                   {{ item.parser_version }}<small>定义版本 {{ item.version }}</small>
                 </td>
-                <td>
-                  <span :data-status="item.status">{{ providerStatusText(item.status) }}</span
-                  ><small>条款：{{ termsStatusText(item.terms_review_status) }}</small>
+                <td class="provider-admission">
+                  <span :data-admission="admission(item).state">{{ admissionText(item) }}</span
+                  ><small>{{ admission(item).detail }}</small
+                  ><small
+                    >定义：{{ providerStatusText(item.status) }} · 条款：{{
+                      termsStatusText(item.terms_review_status)
+                    }}</small
+                  >
                 </td>
-                <td><button type="button" @click="edit(item)">编辑</button></td>
+                <td><button type="button" @click="edit(item, $event)">编辑</button></td>
               </tr>
             </tbody>
           </table>
@@ -397,11 +643,12 @@ onMounted(load);
       </template>
       <template #summary="{ row }">
         <span class="responsive-record-summary">
-          <strong>{{ row.name }} · {{ providerStatusText(row.status) }}</strong>
+          <strong>{{ row.name }}</strong>
           <small
             >{{ accessModeText(row.access_mode) }} · {{ row.markets.join(" · ") }} · 每
             {{ row.schedule_minutes }} 分钟</small
           >
+          <em :data-admission="admission(row).state">{{ admissionText(row) }}</em>
         </span>
       </template>
       <template #detail="{ row, close }">
@@ -427,6 +674,10 @@ onMounted(load);
             <dd>{{ providerStatusText(row.status) }}</dd>
           </div>
           <div>
+            <dt>执行门禁</dt>
+            <dd>{{ admissionText(row) }} · {{ admission(row).detail }}</dd>
+          </div>
+          <div>
             <dt>条款复核</dt>
             <dd>{{ termsStatusText(row.terms_review_status) }}</dd>
           </div>
@@ -449,7 +700,7 @@ onMounted(load);
           type="button"
           @click="
             close();
-            edit(row);
+            edit(row, $event);
           "
         >
           编辑来源
@@ -481,198 +732,221 @@ onMounted(load);
         </details>
       </template>
     </ResponsiveDataView>
-    <form
-      v-if="editorOpen"
-      class="provider-editor"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="provider-editor-title"
-      novalidate
-      @submit.prevent="save"
+    <nav
+      v-if="filteredItems.length > pageSize && !editorOpen"
+      class="provider-pagination"
+      aria-label="来源定义分页"
     >
-      <header>
-        <div>
-          <p>{{ editing ? "编辑定义版本" : "新建来源定义" }}</p>
-          <h3 id="provider-editor-title">{{ editing ? "编辑来源" : "登记来源" }}</h3>
-        </div>
-        <button
-          type="button"
-          aria-label="关闭来源设置编辑"
-          title="关闭来源设置编辑"
-          @click="closeEditor"
-        >
-          ×
-        </button>
-      </header>
-      <ol class="provider-editor-steps" aria-label="来源登记步骤">
-        <li v-for="(label, index) in steps" :key="label" :data-active="editorStep === index + 1">
+      <span>第 {{ page }} / {{ pageCount }} 页 · 每页 {{ pageSize }} 条</span>
+      <div>
+        <button type="button" :disabled="page <= 1" @click="page--">上一页</button>
+        <button type="button" :disabled="page >= pageCount" @click="page++">下一页</button>
+      </div>
+    </nav>
+    <div
+      v-if="editorOpen"
+      class="provider-editor-layer"
+      role="presentation"
+      @mousedown.self="closeEditor"
+    >
+      <form
+        ref="editorPanel"
+        class="provider-editor"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="provider-editor-title"
+        novalidate
+        @keydown.esc.stop.prevent="closeEditor"
+        @submit.prevent="save"
+      >
+        <header>
+          <div>
+            <p>{{ editing ? "编辑定义版本" : "新建来源定义" }}</p>
+            <h3 id="provider-editor-title">{{ editing ? "编辑来源" : "登记来源" }}</h3>
+          </div>
           <button
             type="button"
-            :aria-current="editorStep === index + 1 ? 'step' : undefined"
-            @click="editorStep = index + 1"
+            aria-label="关闭来源设置编辑"
+            title="关闭来源设置编辑"
+            @click="closeEditor"
           >
-            <span>{{ index + 1 }}</span
-            >{{ label }}
+            ×
           </button>
-        </li>
-      </ol>
-      <div class="provider-template-bar">
-        <span>当前模板：{{ accessModeText(form.access_mode) }}</span>
-        <button type="button" @click="applyTemplate">应用技术模板</button>
-      </div>
-      <div v-if="editorStep === 1" class="provider-fields">
-        <label
-          >来源代码（技术标识）<input v-model.trim="form.code" autocomplete="off" />
-          <small v-if="formErrors.code">{{ formErrors.code }}</small></label
-        ><label
-          >名称<input v-model="form.name" />
-          <small v-if="formErrors.name">{{ formErrors.name }}</small></label
-        ><label class="wide"
-          >目标 URL<input v-model="form.target_url" />
-          <small v-if="formErrors.target_url">{{ formErrors.target_url }}</small></label
-        ><label
-          >负责人<input v-model="form.owner_label" />
-          <small v-if="formErrors.owner_label">{{ formErrors.owner_label }}</small></label
-        ><label
-          >接入模式<select v-model="form.access_mode">
-            <option
-              v-for="v in [
-                'public_page',
-                'public_rss',
-                'authenticated_browser',
-                'import',
-                'manual',
-              ]"
-              :key="v"
-              :value="v"
+        </header>
+        <ol class="provider-editor-steps" aria-label="来源登记步骤">
+          <li v-for="(label, index) in steps" :key="label" :data-active="editorStep === index + 1">
+            <button
+              type="button"
+              :aria-current="editorStep === index + 1 ? 'step' : undefined"
+              @click="editorStep = index + 1"
             >
-              {{ accessModeText(v) }}
-            </option>
-          </select></label
-        >
-      </div>
-      <div v-else-if="editorStep === 2" class="provider-fields">
-        <label
-          >市场<input v-model="form.markets" placeholder="US,CN" />
-          <small v-if="formErrors.markets">{{ formErrors.markets }}</small></label
-        ><label
-          >语言<input v-model="form.languages" placeholder="en-US,zh-CN" />
-          <small v-if="formErrors.languages">{{ formErrors.languages }}</small></label
-        ><label class="wide"
-          >字段清单<input v-model="form.fields" />
-          <small v-if="formErrors.fields">{{ formErrors.fields }}</small></label
-        ><label
-          >去重键<input v-model="form.dedupe_key" />
-          <small v-if="formErrors.dedupe_key">{{ formErrors.dedupe_key }}</small></label
-        ><label
-          >解析器版本<input v-model="form.parser_version" />
-          <small v-if="formErrors.parser_version">{{ formErrors.parser_version }}</small></label
-        ><label class="wide"
-          >健康检查 URL<input v-model="form.healthcheck_url" />
-          <small v-if="formErrors.healthcheck_url">{{ formErrors.healthcheck_url }}</small></label
-        >
-      </div>
-      <div v-else-if="editorStep === 3" class="provider-fields">
-        <label
-          >频率（分钟）<input
-            v-model.number="form.schedule_minutes"
-            type="number"
-            min="1"
-            max="10080"
-          />
-          <small v-if="formErrors.schedule_minutes">{{ formErrors.schedule_minutes }}</small></label
-        ><label
-          >并发<input v-model.number="form.concurrency_limit" type="number" min="1" max="20" />
-          <small v-if="formErrors.concurrency_limit">{{
-            formErrors.concurrency_limit
-          }}</small></label
-        ><label
-          >超时 ms<input v-model.number="form.timeout_ms" type="number" min="1000" max="120000" />
-          <small v-if="formErrors.timeout_ms">{{ formErrors.timeout_ms }}</small></label
-        ><label
-          >重试<input v-model.number="form.retry_limit" type="number" min="0" max="10" />
-          <small v-if="formErrors.retry_limit">{{ formErrors.retry_limit }}</small></label
-        ><label
-          >熔断阈值<input
-            v-model.number="form.circuit_failure_threshold"
-            type="number"
-            min="1"
-            max="20"
-          />
-          <small v-if="formErrors.circuit_failure_threshold">{{
-            formErrors.circuit_failure_threshold
-          }}</small></label
-        ><label
-          >保留天数<input v-model.number="form.retention_days" type="number" min="1" max="3650" />
-          <small v-if="formErrors.retention_days">{{ formErrors.retention_days }}</small></label
-        ><label class="wide"
-          >失败规则<input v-model="form.failure_rules" />
-          <small v-if="formErrors.failure_rules">{{ formErrors.failure_rules }}</small></label
-        >
-      </div>
-      <div v-else class="provider-fields">
-        <label
-          >平台条款复核<select v-model="form.terms_review_status">
-            <option value="pending">待复核</option>
-            <option value="approved">已批准</option>
-            <option value="rejected">已拒绝</option>
-          </select></label
-        ><label
-          >发布状态<select v-model="form.status">
-            <option value="draft">草稿</option>
-            <option value="disabled">未启用</option>
-            <option value="enabled">已启用</option>
-          </select></label
-        ><label class="wide"
-          >条款参考 URL<input
-            v-model="form.terms_reference_url"
-            type="url"
-            placeholder="https://…"
-          />
-          <small v-if="formErrors.terms_reference_url">{{
-            formErrors.terms_reference_url
-          }}</small></label
-        ><label
-          >条款版本<input v-model="form.terms_version" placeholder="例如 2026-08" />
-          <small v-if="formErrors.terms_version">{{ formErrors.terms_version }}</small></label
-        ><label
-          >条款到期时间<input v-model="form.terms_expires_at" type="datetime-local" />
-          <small v-if="formErrors.terms_expires_at">{{ formErrors.terms_expires_at }}</small></label
-        >
-        <section class="provider-publish-preview wide">
-          <strong>发布预览</strong>
-          <span>{{ form.name || "未命名来源" }} · {{ accessModeText(form.access_mode) }}</span>
-          <span
-            >{{ list(form.markets).join(" · ") || "未填写市场" }} /
-            {{ list(form.languages).join(" · ") || "未填写语言" }}</span
+              <span>{{ index + 1 }}</span
+              >{{ label }}
+            </button>
+          </li>
+        </ol>
+        <div class="provider-template-bar">
+          <span>当前模板：{{ accessModeText(form.access_mode) }}</span>
+          <button type="button" @click="applyTemplate">应用技术模板</button>
+        </div>
+        <div v-if="editorStep === 1" class="provider-fields">
+          <label
+            >来源代码（技术标识）<input v-model.trim="form.code" autocomplete="off" />
+            <small v-if="formErrors.code">{{ formErrors.code }}</small></label
+          ><label
+            >名称<input v-model="form.name" />
+            <small v-if="formErrors.name">{{ formErrors.name }}</small></label
+          ><label class="wide"
+            >目标 URL<input v-model="form.target_url" />
+            <small v-if="formErrors.target_url">{{ formErrors.target_url }}</small></label
+          ><label
+            >负责人<input v-model="form.owner_label" />
+            <small v-if="formErrors.owner_label">{{ formErrors.owner_label }}</small></label
+          ><label
+            >接入模式<select v-model="form.access_mode">
+              <option
+                v-for="v in [
+                  'public_page',
+                  'public_rss',
+                  'authenticated_browser',
+                  'import',
+                  'manual',
+                ]"
+                :key="v"
+                :value="v"
+              >
+                {{ accessModeText(v) }}
+              </option>
+            </select></label
           >
-          <span
-            >每 {{ form.schedule_minutes }} 分钟 · 并发 {{ form.concurrency_limit }} ·
-            {{ providerStatusText(form.status) }}</span
+        </div>
+        <div v-else-if="editorStep === 2" class="provider-fields">
+          <label
+            >市场<input v-model="form.markets" placeholder="US,CN" />
+            <small v-if="formErrors.markets">{{ formErrors.markets }}</small></label
+          ><label
+            >语言<input v-model="form.languages" placeholder="en-US,zh-CN" />
+            <small v-if="formErrors.languages">{{ formErrors.languages }}</small></label
+          ><label class="wide"
+            >字段清单<input v-model="form.fields" />
+            <small v-if="formErrors.fields">{{ formErrors.fields }}</small></label
+          ><label
+            >去重键<input v-model="form.dedupe_key" />
+            <small v-if="formErrors.dedupe_key">{{ formErrors.dedupe_key }}</small></label
+          ><label
+            >解析器版本<input v-model="form.parser_version" />
+            <small v-if="formErrors.parser_version">{{ formErrors.parser_version }}</small></label
+          ><label class="wide"
+            >健康检查 URL<input v-model="form.healthcheck_url" />
+            <small v-if="formErrors.healthcheck_url">{{ formErrors.healthcheck_url }}</small></label
           >
-        </section>
-      </div>
-      <div v-if="message" class="provider-editor-message" role="status">
-        <span>{{ message }}</span>
-        <details v-if="requestId">
-          <summary>技术详情</summary>
-          <code>{{ requestId }}</code>
-        </details>
-      </div>
-      <footer>
-        <button v-if="editorStep > 1" type="button" class="secondary" @click="editorStep--">
-          上一步
-        </button>
-        <span
-          >第 {{ editorStep }} / 4 步<span v-if="currentStepErrors.length">
-            · {{ currentStepErrors.length }} 项待修正</span
-          ></span
-        >
-        <button v-if="editorStep < 4" type="button" @click="nextStep">下一步</button>
-        <button v-else type="submit" :disabled="saving || Object.keys(formErrors).length > 0">
-          {{ saving ? "保存中…" : editing ? "保存新版本" : "创建来源" }}
-        </button>
-      </footer>
-    </form>
+        </div>
+        <div v-else-if="editorStep === 3" class="provider-fields">
+          <label
+            >频率（分钟）<input
+              v-model.number="form.schedule_minutes"
+              type="number"
+              min="1"
+              max="10080"
+            />
+            <small v-if="formErrors.schedule_minutes">{{
+              formErrors.schedule_minutes
+            }}</small></label
+          ><label
+            >并发<input v-model.number="form.concurrency_limit" type="number" min="1" max="20" />
+            <small v-if="formErrors.concurrency_limit">{{
+              formErrors.concurrency_limit
+            }}</small></label
+          ><label
+            >超时 ms<input v-model.number="form.timeout_ms" type="number" min="1000" max="120000" />
+            <small v-if="formErrors.timeout_ms">{{ formErrors.timeout_ms }}</small></label
+          ><label
+            >重试<input v-model.number="form.retry_limit" type="number" min="0" max="10" />
+            <small v-if="formErrors.retry_limit">{{ formErrors.retry_limit }}</small></label
+          ><label
+            >熔断阈值<input
+              v-model.number="form.circuit_failure_threshold"
+              type="number"
+              min="1"
+              max="20"
+            />
+            <small v-if="formErrors.circuit_failure_threshold">{{
+              formErrors.circuit_failure_threshold
+            }}</small></label
+          ><label
+            >保留天数<input v-model.number="form.retention_days" type="number" min="1" max="3650" />
+            <small v-if="formErrors.retention_days">{{ formErrors.retention_days }}</small></label
+          ><label class="wide"
+            >失败规则<input v-model="form.failure_rules" />
+            <small v-if="formErrors.failure_rules">{{ formErrors.failure_rules }}</small></label
+          >
+        </div>
+        <div v-else class="provider-fields">
+          <label
+            >平台条款复核<select v-model="form.terms_review_status">
+              <option value="pending">待复核</option>
+              <option value="approved">已批准</option>
+              <option value="rejected">已拒绝</option>
+            </select></label
+          ><label
+            >发布状态<select v-model="form.status">
+              <option value="draft">草稿</option>
+              <option value="disabled">未启用</option>
+              <option value="enabled">已启用</option>
+            </select></label
+          ><label class="wide"
+            >条款参考 URL<input
+              v-model="form.terms_reference_url"
+              type="url"
+              placeholder="https://…"
+            />
+            <small v-if="formErrors.terms_reference_url">{{
+              formErrors.terms_reference_url
+            }}</small></label
+          ><label
+            >条款版本<input v-model="form.terms_version" placeholder="例如 2026-08" />
+            <small v-if="formErrors.terms_version">{{ formErrors.terms_version }}</small></label
+          ><label
+            >条款到期时间<input v-model="form.terms_expires_at" type="datetime-local" />
+            <small v-if="formErrors.terms_expires_at">{{
+              formErrors.terms_expires_at
+            }}</small></label
+          >
+          <section class="provider-publish-preview wide">
+            <strong>发布预览</strong>
+            <span>{{ form.name || "未命名来源" }} · {{ accessModeText(form.access_mode) }}</span>
+            <span
+              >{{ list(form.markets).join(" · ") || "未填写市场" }} /
+              {{ list(form.languages).join(" · ") || "未填写语言" }}</span
+            >
+            <span
+              >每 {{ form.schedule_minutes }} 分钟 · 并发 {{ form.concurrency_limit }} ·
+              {{ providerStatusText(form.status) }}</span
+            >
+          </section>
+        </div>
+        <div v-if="message" class="provider-editor-message" role="status">
+          <span>{{ message }}</span>
+          <details v-if="requestId">
+            <summary>技术详情</summary>
+            <code>{{ requestId }}</code>
+          </details>
+        </div>
+        <footer>
+          <button v-if="editorStep > 1" type="button" class="secondary" @click="editorStep--">
+            上一步
+          </button>
+          <span
+            >第 {{ editorStep }} / 4 步<span v-if="currentStepErrors.length">
+              · {{ currentStepErrors.length }} 项待修正</span
+            ></span
+          >
+          <button v-if="editorStep < 4" type="button" @click="nextStep">下一步</button>
+          <button v-else type="submit" :disabled="saving || Object.keys(formErrors).length > 0">
+            {{ saving ? "保存中…" : editing ? "保存新版本" : "创建来源" }}
+          </button>
+        </footer>
+      </form>
+    </div>
   </section>
 </template>

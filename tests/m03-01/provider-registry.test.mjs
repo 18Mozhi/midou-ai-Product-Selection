@@ -263,7 +263,12 @@ test("M03-01.A03/A06-A10/A13/A15-A17 delivery contracts are complete and platfor
   assert.match(shell, /provider-runtime-surface/);
   assert.match(web, /基本信息[\s\S]*范围与字段[\s\S]*执行策略[\s\S]*合规与发布/);
   assert.match(web, /应用技术模板/);
-  assert.match(web, /items\.length && !editorOpen/);
+  assert.match(web, /visibleItems\.length && !editorOpen/);
+  assert.match(web, /“定义已启用”不等于采集已经运行或成功/);
+  assert.match(web, /执行受阻/);
+  assert.match(web, /pageSize = 20/);
+  assert.match(web, /provider_registry_timeout/);
+  assert.match(web, /@keydown\.esc\.stop\.prevent="closeEditor"/);
   assert.match(openapi, /\/platform\/providers\/\{providerId\}:/);
   assert.match(openapi, /ProviderDefinitionInput:/);
   assert.match(complianceUp, /terms_review_status/);
