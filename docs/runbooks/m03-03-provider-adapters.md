@@ -6,6 +6,7 @@
 2. 在 Node API 与后续调用适配器的 Node Worker 宝塔受限环境配置 `PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS`、`PROVIDER_ADAPTER_MAX_RESPONSE_BYTES`、`PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH`；初始值以 `config/env.example` 为准。
 3. 运行 `npm run build`，由宝塔重启 Node API；M03-03 不新增 systemd、独立 PM2、宿主机 crontab、面板外 Docker 或常驻采集进程。当前 Crawler 不调用该包，无需因本模块重启。
 4. 访问 `/platform-admin/providers/adapters`。未在代码中注册的 Provider 显示“待登记”，健康检查显示“受阻”是预期的真实状态；原始 `adapter_not_registered` 只在“技术详情”展示，不得手工改为健康。
+   已登记来源在首次健康检查前也应显示当前进程注册的适配器版本，但健康仍保持“待检查”；使用搜索、来源状态、登记状态、健康状态和排序定位来源，目录固定每页 20 条。刷新超时或失败时必须保留最近一次成功数据。
 5. 核对来源健康的 24 小时窗口：成功率、P95 和样本量来自已完成子查询；网络、解析、登录和成功空结果必须分开显示。样本量为 0 时页面应显示“暂无样本”，不得用探针延迟填充运行 P95。
 6. 核对“错误预算与恢复门”：连续运行失败和阈值必须分别来自 `provider_runtime_circuits` 与 `providers`。来源暂停后先在本页执行真实健康检查；只有检查结果为健康且时间晚于暂停时间，页面才显示可解除并直达采集调度。健康检查不得自动清零运行熔断，探针自身连续失败也不得冒充运行错误预算。
 7. 在热点来源页选择一个已有真实 HTML/DOM 证据的公开页面或登录页面来源，打开“解析兼容矩阵”。页面版本必须等于留存证据的 SHA-256，解析结论必须与对应子查询成功或解析类失败一致；网络与登录失败只能显示待验证。没有证据时保持空状态，不得触发新采集或自动启停来源。

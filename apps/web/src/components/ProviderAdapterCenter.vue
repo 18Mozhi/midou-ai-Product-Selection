@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -53,9 +53,17 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   state = ref<State>("loading"),
   items = ref<AdapterSummary[]>([]),
   requestId = ref(""),
+  query = ref(""),
   mode = ref("all"),
+  providerStatus = ref("all"),
+  registration = ref("all"),
   health = ref("all"),
+  sort = ref("attention"),
+  page = ref(1),
+  pageSize = 20,
   probing = ref<string | null>(null),
+  refreshing = ref(false),
+  lastUpdatedAt = ref<string | null>(null),
   message = ref("");
 const failure = (status: number): State =>
   status === 401
@@ -108,29 +116,95 @@ const accessModeText = (value: string) =>
         : "需要执行晚于暂停时间的真实健康检查",
   percentText = (value: number | null) =>
     value === null ? "暂无样本" : `${(value / 100).toFixed(1)}%`;
-const filtered = computed(() =>
-    items.value.filter(
+const healthPriority: Record<AdapterSummary["health_status"], number> = {
+    blocked: 0,
+    degraded: 1,
+    unknown: 2,
+    ready: 3,
+  },
+  filtered = computed(() => {
+    const keyword = query.value.trim().toLocaleLowerCase("zh-CN");
+    return items.value.filter(
       (item) =>
+        (!keyword ||
+          [
+            item.name,
+            item.code,
+            item.adapter_version ?? "",
+            item.last_error_code ?? "",
+            accessModeText(item.access_mode),
+          ].some((value) => value.toLocaleLowerCase("zh-CN").includes(keyword))) &&
         (mode.value === "all" || item.access_mode === mode.value) &&
+        (providerStatus.value === "all" || item.provider_status === providerStatus.value) &&
+        (registration.value === "all" ||
+          item.adapter_registered === (registration.value === "registered")) &&
         (health.value === "all" || item.health_status === health.value),
-    ),
+    );
+  }),
+  sorted = computed(() =>
+    [...filtered.value].sort((left, right) => {
+      if (sort.value === "name") return left.name.localeCompare(right.name, "zh-CN");
+      if (sort.value === "recent")
+        return (right.last_checked_at ?? "").localeCompare(left.last_checked_at ?? "");
+      return (
+        Number(right.runtime_circuit_state === "open") -
+          Number(left.runtime_circuit_state === "open") ||
+        Number(left.adapter_registered) - Number(right.adapter_registered) ||
+        healthPriority[left.health_status] - healthPriority[right.health_status] ||
+        left.name.localeCompare(right.name, "zh-CN")
+      );
+    }),
+  ),
+  totalPages = computed(() => Math.max(1, Math.ceil(sorted.value.length / pageSize))),
+  pageItems = computed(() =>
+    sorted.value.slice((page.value - 1) * pageSize, page.value * pageSize),
   ),
   registered = computed(() => items.value.filter((item) => item.adapter_registered).length);
+watch([query, mode, providerStatus, registration, health, sort], () => (page.value = 1));
+watch(totalPages, (value) => {
+  if (page.value > value) page.value = value;
+});
+function resetFilters() {
+  query.value = "";
+  mode.value = "all";
+  providerStatus.value = "all";
+  registration.value = "all";
+  health.value = "all";
+  sort.value = "attention";
+}
 async function load() {
-  state.value = "loading";
+  const preserve = items.value.length > 0;
+  if (!preserve) state.value = "loading";
+  refreshing.value = true;
   message.value = "";
+  const controller = new AbortController(),
+    timer = window.setTimeout(() => controller.abort(), 12_000);
   try {
-    const response = await request<AdapterSummary[]>("/platform/provider-adapters");
+    const response = await request<AdapterSummary[]>("/platform/provider-adapters", {
+      signal: controller.signal,
+    });
     requestId.value = response.request_id;
     items.value = response.data;
+    lastUpdatedAt.value = new Date().toISOString();
     state.value = items.value.length ? "ready" : "empty";
+    if (preserve) message.value = `已刷新 ${items.value.length} 个来源适配器状态`;
   } catch (error) {
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? "";
-    state.value = apiError ? failure(apiError.status) : "blocked";
+    if (preserve) {
+      state.value = "ready";
+      message.value =
+        error instanceof DOMException && error.name === "AbortError"
+          ? "刷新超时，已保留上一次成功数据"
+          : (apiError?.actionHint ?? "刷新失败，已保留上一次成功数据");
+    } else state.value = apiError ? failure(apiError.status) : "blocked";
+  } finally {
+    window.clearTimeout(timer);
+    refreshing.value = false;
   }
 }
 async function probe(item: AdapterSummary) {
+  if (probing.value) return;
   probing.value = item.id;
   message.value = "";
   try {
@@ -162,7 +236,13 @@ onMounted(load);
         <h2>适配器运行时</h2>
         <span>统一采集、标准化与健康检查合同；真实实现按来源代码注册。</span>
       </div>
-      <RouterLink to="/platform-admin/providers">返回来源定义</RouterLink>
+      <div class="adapter-heading-actions">
+        <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>
+        <button type="button" :disabled="refreshing" @click="load">
+          {{ refreshing ? "刷新中…" : "刷新状态" }}
+        </button>
+        <RouterLink to="/platform-admin/providers">返回来源定义</RouterLink>
+      </div>
     </header>
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
@@ -192,6 +272,13 @@ onMounted(load);
         </article>
       </div>
       <div class="adapter-toolbar">
+        <label class="adapter-search"
+          >搜索来源<input
+            v-model="query"
+            type="search"
+            placeholder="名称、代码、版本或错误码"
+            autocomplete="off"
+        /></label>
         <label
           >接入模式<select v-model="mode">
             <option value="all">全部模式</option>
@@ -210,6 +297,19 @@ onMounted(load);
             </option>
           </select></label
         ><label
+          >来源状态<select v-model="providerStatus">
+            <option value="all">全部状态</option>
+            <option value="enabled">已启用</option>
+            <option value="disabled">未启用</option>
+            <option value="draft">草稿</option>
+          </select></label
+        ><label
+          >登记状态<select v-model="registration">
+            <option value="all">全部状态</option>
+            <option value="registered">已登记</option>
+            <option value="unregistered">待登记</option>
+          </select></label
+        ><label
           >健康状态<select v-model="health">
             <option value="all">全部状态</option>
             <option value="unknown">待检查</option>
@@ -217,7 +317,14 @@ onMounted(load);
             <option value="degraded">降级</option>
             <option value="blocked">受阻</option>
           </select></label
-        ><span>{{ filtered.length }} 个结果</span>
+        ><label
+          >排序<select v-model="sort">
+            <option value="attention">需关注优先</option>
+            <option value="name">名称顺序</option>
+            <option value="recent">最近检查</option>
+          </select></label
+        ><button type="button" class="adapter-reset" @click="resetFilters">重置</button>
+        <span>{{ filtered.length }} 个结果</span>
       </div>
       <section v-if="state === 'empty'" class="adapter-empty">
         <h3>还没有来源可绑定适配器</h3>
@@ -239,7 +346,7 @@ onMounted(load);
       </section>
       <ResponsiveDataView
         v-else
-        :rows="filtered"
+        :rows="pageItems"
         :row-key="(item) => item.id"
         title="来源适配器"
         :detail-title="(item) => item.name"
@@ -260,7 +367,7 @@ onMounted(load);
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in filtered" :key="item.id">
+                <tr v-for="item in pageItems" :key="item.id">
                   <td>
                     <strong>{{ item.name }}</strong
                     ><small>{{ providerStatusText(item.provider_status) }}</small>
@@ -273,7 +380,7 @@ onMounted(load);
                     <b :data-registered="item.adapter_registered">{{
                       item.adapter_registered ? "已登记" : "待登记"
                     }}</b>
-                    <small>{{ item.adapter_version ?? "等待真实适配器" }}</small>
+                    <small>{{ item.adapter_version ?? "未提供实现版本" }}</small>
                   </td>
                   <td>
                     <b :data-health="item.health_status">{{ healthText(item.health_status) }}</b>
@@ -323,7 +430,7 @@ onMounted(load);
                     >
                   </td>
                   <td>
-                    <button type="button" :disabled="probing === item.id" @click="probe(item)">
+                    <button type="button" :disabled="probing !== null" @click="probe(item)">
                       {{ probing === item.id ? "检查中…" : "健康检查" }}
                     </button>
                   </td>
@@ -411,7 +518,7 @@ onMounted(load);
               <dd>{{ errorText(row.last_error_code) }}</dd>
             </div>
           </dl>
-          <button type="button" :disabled="probing === row.id" @click="probe(row)">
+          <button type="button" :disabled="probing !== null" @click="probe(row)">
             {{ probing === row.id ? "检查中…" : "执行健康检查" }}
           </button>
           <RouterLink
@@ -454,6 +561,11 @@ onMounted(load);
           </details>
         </template>
       </ResponsiveDataView>
+      <nav v-if="filtered.length" class="adapter-pagination" aria-label="来源适配器分页">
+        <button type="button" :disabled="page === 1" @click="page--">上一页</button>
+        <span>第 {{ page }} / {{ totalPages }} 页 · 每页 {{ pageSize }} 条</span>
+        <button type="button" :disabled="page === totalPages" @click="page++">下一页</button>
+      </nav>
       <div v-if="message" class="adapter-message" role="status">
         <span>{{ message }}</span>
         <details v-if="requestId">

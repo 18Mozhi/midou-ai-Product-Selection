@@ -1075,7 +1075,7 @@
         "view": "ProviderAdapterCenter",
         "domain": "provider-adapters",
         "status": "verified",
-        "statusDetail": "M03-03_module_verified"
+        "statusDetail": "provider_adapter_live_mysql_api_worker_crawler_registry_version_search_filter_sort_pagination_refresh_timeout_permission_idempotency_and_responsive_verification_completed"
       }
     },
     {

@@ -221,6 +221,9 @@ export class ProviderAdapterService {
     circuit = closedRuntimeCircuit(),
     compatibility: ProviderPageCompatibilityObservation[] = [],
   ): ProviderAdapterSummary {
+    const registeredAdapter = this.registry
+      .describe()
+      .find((item) => item.key === provider.code && item.access_mode === provider.accessMode);
     const recoveryGateMet = Boolean(
       circuit.state === "open" &&
       circuit.openedAt &&
@@ -234,8 +237,8 @@ export class ProviderAdapterService {
       name: provider.name,
       access_mode: provider.accessMode,
       provider_status: provider.status,
-      adapter_registered: this.registry.has(provider.code, provider.accessMode),
-      adapter_version: health.adapterVersion,
+      adapter_registered: Boolean(registeredAdapter),
+      adapter_version: health.adapterVersion ?? registeredAdapter?.version ?? null,
       health_status: health.healthStatus,
       last_checked_at: health.lastCheckedAt,
       last_latency_ms: health.lastLatencyMs,

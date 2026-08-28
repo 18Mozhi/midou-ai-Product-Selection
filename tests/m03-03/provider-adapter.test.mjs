@@ -220,6 +220,31 @@ test("M03-03.A04/A11/A12 missing implementation is persisted as truthful blocked
   assert.doesNotMatch(JSON.stringify(result), /cookie|secret|payload/i);
 });
 
+test("registered adapter version is visible before the first health probe", async () => {
+  const unknown = {
+      providerId: provider.id,
+      adapterVersion: null,
+      healthStatus: "unknown",
+      lastCheckedAt: null,
+      lastLatencyMs: null,
+      lastErrorCode: null,
+      consecutiveFailures: 0,
+      version: 0,
+      updatedAt: new Date(0).toISOString(),
+    },
+    service = new ProviderAdapterService(
+      {
+        list: async () => [{ provider, health: unknown }],
+      },
+      new ProviderAdapterRegistry(limits).register(adapter),
+      () => now,
+    ),
+    [result] = await service.list();
+  assert.equal(result.adapter_registered, true);
+  assert.equal(result.adapter_version, "test-v1");
+  assert.equal(result.health_status, "unknown");
+});
+
 test("source health derives runtime error budget and requires a post-open ready probe", async () => {
   const service = new ProviderAdapterService(
       {
@@ -415,6 +440,9 @@ test("M03-03.A03/A06-A10/A13/A15-A17 delivery evidence covers adapters without i
   assert.match(routes, /provider:configure/);
   assert.match(service, /adapter_not_registered/);
   assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
+  assert.match(web, /搜索来源[\s\S]*来源状态[\s\S]*登记状态[\s\S]*排序/);
+  assert.match(web, /pageSize = 20[\s\S]*上一页[\s\S]*下一页/);
+  assert.match(web, /刷新超时，已保留上一次成功数据/);
   assert.match(web, /成功率[\s\S]*P95[\s\S]*样本/);
   assert.match(web, /网络[\s\S]*解析[\s\S]*登录[\s\S]*空结果/);
   assert.match(web, /错误预算与恢复门[\s\S]*runtime_error_budget_remaining/);

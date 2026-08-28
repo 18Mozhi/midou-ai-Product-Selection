@@ -144,7 +144,7 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
     semanticText.expected,
   ]);
   if (testInfo.project.name === "mobile-390") {
-    await page.getByRole("button", { name: "查看详情" }).last().click();
+    await page.getByRole("button", { name: /登录态商品来源.*查看详情/ }).click();
     const dialog = page.getByRole("dialog", { name: "登录态商品来源" });
     await expect(dialog).toBeVisible();
     await expect(dialog.getByText("尚未登记适配器")).toBeVisible();
@@ -187,6 +187,48 @@ test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }, t
       { exact: true },
     ),
   ).toBeVisible();
+});
+test("adapter catalog search, registration filter, reset and pagination bound the rendered rows", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  const catalog = Array.from({ length: 45 }, (_, index) => ({
+    ...base,
+    id: `00000000-0000-4000-8000-${String(800000000000 + index).padStart(12, "0")}`,
+    code: `catalog_source_${index + 1}`,
+    name: `测试来源 ${String(index + 1).padStart(2, "0")}`,
+    access_mode: index % 2 ? "public_page" : "public_rss",
+    adapter_registered: index % 3 !== 0,
+    adapter_version: index % 3 !== 0 ? "catalog-v1" : null,
+    health_status: "unknown" as const,
+  }));
+  await page.route("**/api/v1/platform/provider-adapters", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ data: catalog, request_id: "catalog-list", trace_id: "catalog-list" }),
+    }),
+  );
+  await page.goto("/platform-admin/providers/adapters");
+  await expect(page.getByText("第 1 / 3 页 · 每页 20 条")).toBeVisible();
+  const rendered =
+    testInfo.project.name === "mobile-390"
+      ? page.getByRole("button", { name: /查看详情/ })
+      : page.locator(".adapter-table-wrap tbody tr");
+  await expect(rendered).toHaveCount(20);
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page.getByText("第 2 / 3 页 · 每页 20 条")).toBeVisible();
+  await page.getByLabel("搜索来源").fill("catalog_source_45");
+  await expect(page.getByText("1 个结果")).toBeVisible();
+  await expect(
+    testInfo.project.name === "mobile-390"
+      ? page.getByRole("button", { name: /测试来源 45.*查看详情/ })
+      : page.getByText("测试来源 45", { exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "重置" }).click();
+  await expect(page.getByText("45 个结果")).toBeVisible();
+  await page.getByLabel("登记状态").selectOption("unregistered");
+  await expect(page.getByText("15 个结果")).toBeVisible();
 });
 test("M03-03.A08/A09/A16 empty forbidden and dependency states stay actionable", async ({
   page,
