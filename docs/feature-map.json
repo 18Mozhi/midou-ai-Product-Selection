@@ -2978,7 +2978,7 @@
       "view": "Alibaba1688AcceptanceCenter",
       "domain": "provider-sources-1688-acceptance",
       "status": "verified",
-      "statusDetail": "M03-07_module_verified"
+      "statusDetail": "provider_1688_acceptance_live_mysql_api_worker_crawler_gate_matrix_refresh_timeout_preserve_data_scoped_actions_permission_and_responsive_verification_completed"
     },
     {
       "path": "/platform-admin/credentials",

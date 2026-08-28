@@ -464,12 +464,108 @@ test("1688 acceptance shows the factual search detail and pagination coverage ma
     }),
   );
   await page.goto("/platform-admin/providers/sources/1688-acceptance");
+  await expect(page.getByRole("heading", { name: "尚未满足启用条件" })).toBeVisible();
+  await expect(page.getByText("2 / 3", { exact: true })).toBeVisible();
+  await expect(page.getByText("overall setup_required", { exact: true })).toBeHidden();
   await expect(page.getByRole("heading", { name: "搜索、详情与翻页矩阵" })).toBeVisible();
   await expect(page.getByText("搜索结果")).toBeVisible();
   await expect(page.getByText("商品详情", { exact: true })).toBeVisible();
   await expect(page.getByText("翻页覆盖")).toBeVisible();
   await expect(page.getByText("执行计划只允许 1 页，本次未演练翻页。")).toBeVisible();
   await expect(page.getByText("1688.search.v1 · 12 项")).toBeVisible();
+  const sampleLink = page.getByRole("link", { name: "定位 1688 固定样本" });
+  await expect(sampleLink).toHaveAttribute(
+    "href",
+    `/platform-admin/providers/sources?provider_id=${setup[2].provisioned.id}`,
+  );
+  await page.getByText("技术详情", { exact: true }).click();
+  await expect(page.getByText("overall setup_required", { exact: true })).toBeVisible();
+});
+
+test("1688 acceptance refresh keeps verified facts and suppresses duplicate reads on failure", async ({
+  page,
+}) => {
+  await nav(page, "platform_admin");
+  let reads = 0;
+  let releaseRefresh = () => {};
+  const refreshBlocked = new Promise<void>((resolve) => {
+    releaseRefresh = resolve;
+  });
+  const acceptance = {
+    provider_id: setup[2].provisioned.id,
+    source_status: "disabled",
+    owner_label: "平台来源中心",
+    overall: "setup_required",
+    gates: [
+      {
+        key: "login",
+        state: "pending",
+        evidence_at: null,
+        reason: "需要有效浏览器档案并完成一次登录态运行。",
+      },
+      {
+        key: "captcha",
+        state: "pending",
+        evidence_at: null,
+        reason: "尚无可证明验证码未阻断的成功登录态运行。",
+      },
+      {
+        key: "parser",
+        state: "pending",
+        evidence_at: null,
+        reason: "需要用真实登录样本完成当前解析器版本回放并通过人工审批。",
+      },
+    ],
+    latest_run: null,
+    coverage_matrix: {
+      parser_version: "1688-browser-contract-v1",
+      observed_at: null,
+      rows: [
+        {
+          key: "search",
+          contract: "1688.search.v1",
+          state: "not_observed",
+          observed_count: 0,
+          reason: "尚无真实浏览器作业可验证搜索覆盖。",
+        },
+        {
+          key: "detail",
+          contract: "1688.offer-detail.v1",
+          state: "not_observed",
+          observed_count: 0,
+          reason: "尚无真实浏览器作业可验证详情覆盖。",
+        },
+        {
+          key: "pagination",
+          contract: "browser-plan-pagination-v1",
+          state: "not_observed",
+          observed_count: 0,
+          reason: "尚无真实浏览器作业可验证翻页覆盖。",
+        },
+      ],
+    },
+    pending_reasons: ["需要有效浏览器档案并完成一次登录态运行。"],
+  };
+  await page.route("**/api/v1/platform/provider-sources/1688-acceptance", async (route) => {
+    reads += 1;
+    if (reads === 1) return route.fulfill({ json: envelope(acceptance) });
+    await refreshBlocked;
+    return route.abort("internetdisconnected");
+  });
+  await page.goto("/platform-admin/providers/sources/1688-acceptance");
+  await expect(page.getByRole("heading", { name: "尚未满足启用条件" })).toBeVisible();
+  const refresh = page.locator(".acceptance-1688__refresh button");
+  const pendingRefresh = refresh.click();
+  await expect.poll(() => reads).toBe(2);
+  await expect(refresh).toBeDisabled();
+  await refresh.evaluate((button: HTMLButtonElement) => button.click());
+  expect(reads).toBe(2);
+  releaseRefresh();
+  await pendingRefresh;
+  await expect(page.getByRole("status")).toContainText("已保留上一次成功读取的验收事实");
+  await expect(page.getByRole("heading", { name: "尚未满足启用条件" })).toBeVisible();
+  await expect(refresh).toBeEnabled();
+  expect(reads).toBeGreaterThanOrEqual(2);
 });
 
 test("M03-07.A08/A09 member can manually schedule immediate hotspot refresh", async ({ page }) => {
