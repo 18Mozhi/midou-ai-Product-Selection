@@ -109,6 +109,88 @@ async function setup(page: any) {
   );
 }
 
+test("platform permission page reads only the real role catalog and preserves comparison state", async ({
+  page,
+}) => {
+  await setup(page);
+  let accountRequests = 0;
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/platform/accounts")) accountRequests += 1;
+  });
+  await page.goto("/platform-admin/permissions");
+  await expect(page).toHaveTitle("角色权限 · 智能选品");
+  await expect(page.getByRole("heading", { name: "角色能力边界，一眼对比" })).toBeVisible();
+  await expect(page.getByText("roles + role_capabilities", { exact: true })).toBeVisible();
+  await expect(page.getByRole("table")).toHaveCount(0);
+  expect(accountRequests).toBe(0);
+
+  await page.getByLabel("右侧角色").selectOption("platform_super_admin");
+  await page.getByPlaceholder("搜索权限名称").fill("平台角色");
+  await expect(page.getByRole("heading", { name: /管理平台角色与账号/ })).toBeVisible();
+  await expect
+    .poll(() => new URL(page.url()).searchParams.get("right_role"))
+    .toBe("platform_super_admin");
+  await expect
+    .poll(() => new URL(page.url()).searchParams.get("capability_query"))
+    .toBe("平台角色");
+  await page.reload();
+  await expect(page.getByLabel("右侧角色")).toHaveValue("platform_super_admin");
+  await expect(page.getByPlaceholder("搜索权限名称")).toHaveValue("平台角色");
+});
+
+test("platform permission page exposes empty and recoverable role catalog states", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/platform/roles", (route: any) => route.fulfill({ json: env([]) }));
+  await page.goto("/platform-admin/permissions");
+  await expect(page.getByText("角色目录为空", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "重新检查" })).toBeVisible();
+});
+
+test("failed permission refresh keeps the last successful matrix", async ({ page }) => {
+  await setup(page);
+  let failRefresh = false;
+  await page.route("**/api/v1/platform/roles", (route: any) =>
+    failRefresh
+      ? route.fulfill({
+          status: 503,
+          json: {
+            error: {
+              code: "dependency_unavailable",
+              message: "角色目录暂不可用。",
+              action_hint: "稍后重试。",
+            },
+          },
+        })
+      : route.fulfill({ json: env(platformRoles) }),
+  );
+  await page.goto("/platform-admin/permissions");
+  await expect(page.getByText("仅平台运营管理员").first()).toBeVisible();
+  failRefresh = true;
+  await page.getByRole("button", { name: "刷新角色目录" }).click();
+  await expect(page.getByText(/已保留上次成功读取的权限矩阵/)).toBeVisible();
+  await expect(page.getByText("仅平台运营管理员").first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "刷新角色目录" })).toBeEnabled();
+});
+
+test("permission catalog timeout exposes a retry action instead of an endless loader", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/platform/roles", async (route: any) => {
+    await new Promise((resolve) => setTimeout(resolve, 13_000));
+    await route.fulfill({ json: env(platformRoles) }).catch(() => undefined);
+  });
+  await page.goto("/platform-admin/permissions");
+  await expect(page.getByText("角色目录读取超过 12 秒，请稍后重试。", { exact: true })).toBeVisible(
+    {
+      timeout: 15_000,
+    },
+  );
+  await expect(page.getByRole("button", { name: "重新加载" })).toBeEnabled();
+});
+
 test("M06-01.A07/A08/A15 novice platform account center separates organizations users and admins", async ({
   page,
 }) => {

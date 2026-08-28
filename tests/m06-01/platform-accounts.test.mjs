@@ -272,6 +272,13 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(wizard, /创建未完成/);
   assert.match(web, /角色权限差异/);
   assert.match(comparison, /differencesOnly/);
+  assert.match(comparison, /capabilityQuery/);
+  assert.match(comparison, /capabilityGroup/);
+  assert.match(comparison, /router\.replace/);
+  assert.match(accountShell, /permissionsRoute\.value/);
+  assert.match(accountShell, /正在读取真实平台角色目录/);
+  assert.match(accountShell, /已保留上次成功读取的权限矩阵/);
+  assert.match(accountShell, /:persist-selection="true"/);
   assert.match(adminRecords, /overflow-wrap: anywhere/);
   assert.match(adminRecords, /min-width: 0/);
   assert.match(detailDialog, /errorMessage/);
@@ -293,6 +300,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   ])
     assert.ok(component.split(/\r?\n/).length < 300);
   assert.match(routeCatalog, /账号与组织/);
+  assert.match(routeCatalog, /"title": "角色权限"/);
+  assert.match(routeCatalog, /"label": "角色权限"/);
   assert.doesNotMatch(navigation, /label: "Redis 韧性"|label: "MySQL 韧性"|label: "文件韧性"/);
   assert.match(live, /user_sessions/);
   assert.match(live, /organization_admin_scope_failed/);

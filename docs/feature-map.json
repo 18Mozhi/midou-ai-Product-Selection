@@ -2950,7 +2950,7 @@
       "view": "PlatformAccountCenter",
       "domain": "platform-accounts-permissions",
       "status": "implemented",
-      "statusDetail": "implemented_pending_live_verification"
+      "statusDetail": "permission_comparison_live_mysql_role_catalog_search_filter_refresh_persistence_empty_failure_timeout_permission_and_responsive_verification_completed_pending_user_acceptance"
     },
     {
       "path": "/platform-admin/providers",

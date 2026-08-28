@@ -26,6 +26,7 @@
   color: var(--so-text-muted);
 }
 .account-hero button,
+.account-hero .hero-actions a,
 .account-filter button {
   min-height: 44px;
   border: 0;
@@ -34,6 +35,7 @@
   background: var(--so-primary);
   color: var(--so-on-primary);
   font-weight: 800;
+  text-decoration: none;
 }
 .hero-actions {
   display: flex;
@@ -49,6 +51,14 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+.hero-actions a.secondary {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--so-border-strong);
+  background: var(--so-panel-soft);
+  color: var(--so-text);
 }
 .hero-actions button:disabled,
 .account-filter button:disabled {
@@ -198,6 +208,25 @@ td b[data-status="archived"] {
 .account-message {
   padding: 18px;
   text-align: center;
+}
+.account-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  border: 1px dashed var(--so-border-strong);
+  border-radius: 14px;
+  background: var(--so-panel);
+}
+.account-state span {
+  color: var(--so-text-muted);
+}
+.account-state button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-bg-elevated);
 }
 .account-message {
   background: var(--so-warning-soft);
