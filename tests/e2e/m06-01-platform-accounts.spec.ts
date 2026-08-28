@@ -551,3 +551,112 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
   await expect(page.getByRole("heading", { name: "buyer@example.test" })).toBeVisible();
   await expect(page.getByText("Chrome", { exact: true })).toBeVisible();
 });
+
+test("administrator list persists filters and exposes a desktop and mobile empty state", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/platform/accounts?**", (route: any) => {
+    const query = new URL(route.request().url()).searchParams.get("query");
+    return route.fulfill({ json: env(query ? { ...overview, admins: [] } : overview) });
+  });
+  await page.goto("/platform-admin/admins");
+  await expect(page.getByRole("heading", { name: "授权、会话与登录状态，一处管理" })).toBeVisible();
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  if (mobile) await page.getByRole("button", { name: "管理员筛选" }).click();
+  const filters = mobile ? page.getByRole("dialog", { name: "管理员筛选" }) : page;
+  const search = filters.getByPlaceholder("搜索管理员邮箱");
+  await search.fill("missing-admin@example.test");
+  await filters.getByRole("button", { name: "搜索" }).click();
+  await expect(page).toHaveURL(/query=missing-admin(?:%40|@)example\.test/);
+  await expect(page.getByText("没有符合当前条件的管理员", { exact: true })).toBeVisible();
+  await page.reload();
+  if (mobile) await page.getByRole("button", { name: /管理员筛选.*1 项已选/ }).click();
+  const reloadedFilters = mobile ? page.getByRole("dialog", { name: "管理员筛选" }) : page;
+  await expect(reloadedFilters.getByPlaceholder("搜索管理员邮箱")).toHaveValue(
+    "missing-admin@example.test",
+  );
+  if (mobile) await reloadedFilters.getByRole("button", { name: "关闭筛选条件" }).click();
+  await page.getByRole("button", { name: "清除筛选" }).click();
+  await expect(page).toHaveURL(/\/platform-admin\/admins$/);
+  await expect(
+    mobile
+      ? page.getByRole("button", { name: /admin@example\.test.*查看详情/ })
+      : page.getByRole("cell", { name: /admin@example\.test/ }),
+  ).toBeVisible();
+});
+
+test("administrator write failures stay inside their active dialogs", async ({ page }) => {
+  await setup(page);
+  const adminId = overview.admins[0].id;
+  await page.route("**/api/v1/platform/accounts/users", (route: any) =>
+    route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "email_conflict",
+          message: "账号已存在。",
+          action_hint: "请使用其他邮箱，或进入现有账号详情。",
+        },
+      },
+    }),
+  );
+  await page.route(`**/api/v1/platform/accounts/users/${adminId}`, (route: any) =>
+    route.fulfill({
+      json: env({
+        user: {
+          id: adminId,
+          email: "admin@example.test",
+          status: "active",
+          must_change_password: false,
+          must_enroll_mfa: false,
+        },
+        memberships: [],
+        sessions: [],
+      }),
+    }),
+  );
+  await page.route(`**/api/v1/platform/accounts/users/${adminId}/status`, (route: any) =>
+    route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "cannot_disable_self",
+          message: "不能停用当前账号。",
+          action_hint: "请由另一位超级管理员执行。",
+        },
+      },
+    }),
+  );
+  await page.goto("/platform-admin/admins");
+  await page.getByRole("button", { name: "新建管理员" }).click();
+  const createDialog = page.getByRole("dialog", { name: "新建用户或平台管理员" });
+  await expect(createDialog.getByLabel("临时密码", { exact: true })).toHaveAttribute(
+    "maxlength",
+    "128",
+  );
+  await createDialog.getByLabel("邮箱", { exact: true }).fill("admin@example.test");
+  await createDialog.getByLabel("临时密码", { exact: true }).fill("temporary-password");
+  await createDialog.getByRole("button", { name: "确认创建" }).click();
+  await expect(createDialog.getByRole("alert")).toContainText("请使用其他邮箱");
+  await createDialog.getByRole("button", { name: "取消" }).click();
+
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  if (mobile) {
+    await page.getByRole("button", { name: /admin@example\.test.*查看详情/ }).click();
+    await page
+      .getByRole("dialog", { name: "admin@example.test" })
+      .getByRole("button", { name: "打开账号详情" })
+      .click();
+  } else {
+    await page.getByRole("button", { name: "账号详情" }).click();
+  }
+  const detail = page.getByRole("dialog", { name: "admin@example.test" });
+  await detail.getByRole("button", { name: "停用登录" }).click();
+  await page
+    .getByRole("dialog", { name: "停用用户并撤销会话" })
+    .getByRole("button", { name: "确认执行" })
+    .click();
+  await expect(detail.getByRole("alert")).toContainText("请由另一位超级管理员执行");
+  await expect(detail).toBeVisible();
+});

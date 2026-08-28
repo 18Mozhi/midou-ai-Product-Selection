@@ -32,6 +32,7 @@ test("M06-01 platform account service validates novice organization and account 
       { hash: async (value) => `argon2:${value}`, verify: async () => true },
       12,
       256,
+      "m06-01-platform-account-idempotency-test-key",
     );
   await service.createOrganization({ name: "米豆选品团队", slug: "midou-team" }, context);
   await service.organizationStatus(
@@ -82,6 +83,10 @@ test("M06-01 platform account service validates novice organization and account 
   assert.equal(calls.length, 8);
   assert.equal(calls[5].passwordHash, "argon2:temporary-password");
   assert.equal("temporary_password" in calls[5], false);
+  for (const call of calls) {
+    assert.match(call.requestHash, /^[a-f0-9]{64}$/);
+    assert.equal("temporary_password" in call, false);
+  }
   assert.throws(
     () => service.userStatus(actor, { status: "disabled", reason: "停用自己" }, context),
     (error) => error.code === "cannot_disable_self",
@@ -101,7 +106,9 @@ test("M06-01 platform account service validates novice organization and account 
   );
 });
 test("M06-01 concurrent idempotency collision replays the committed platform operation", async () => {
-  const expected = { id: other, status: "active" };
+  const expected = { id: other, status: "active" },
+    requestHash = "a".repeat(64),
+    operationContext = { ...context, requestHash };
   let connectionQueryCount = 0;
   const connection = {
       beginTransaction: async () => {},
@@ -116,12 +123,51 @@ test("M06-01 concurrent idempotency collision replays the committed platform ope
     },
     pool = {
       getConnection: async () => connection,
-      query: async () => [[{ result_json: JSON.stringify(expected) }], []],
+      query: async () => [
+        [
+          {
+            result_json: JSON.stringify({
+              schema_version: 2,
+              request_hash: requestHash,
+              result: expected,
+            }),
+          },
+        ],
+        [],
+      ],
     },
     repository = new MySqlPlatformAccountRepository(pool);
-  const result = await repository.write(context, async () => expected);
+  const result = await repository.write(operationContext, async () => expected);
   assert.deepEqual(result, expected);
   assert.equal(connectionQueryCount, 2);
+});
+test("M06-01 rejects an idempotency key reused with a different request body", async () => {
+  const stored = { id: other, status: "active" },
+    connection = {
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release: () => {},
+      query: async () => [
+        [
+          {
+            result_json: JSON.stringify({
+              schema_version: 2,
+              request_hash: "a".repeat(64),
+              result: stored,
+            }),
+          },
+        ],
+        [],
+      ],
+    },
+    repository = new MySqlPlatformAccountRepository({
+      getConnection: async () => connection,
+    });
+  await assert.rejects(
+    repository.write({ ...context, requestHash: "b".repeat(64) }, async () => stored),
+    (error) => error.code === "idempotency_key_reused" && error.statusCode === 409,
+  );
 });
 test("M06-01 platform account delivery includes API, migration, novice UI, permissions and audit", async () => {
   const paths = [
@@ -175,6 +221,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(service, /cannot_disable_self/);
   assert.match(repository, /platform_audit_events/);
   assert.match(repository, /findOperation<T>/);
+  assert.match(repository, /idempotency_key_reused/);
+  assert.match(repository, /request_hash/);
   assert.match(repository, /CONVERT\(o\.slug USING utf8mb4\) COLLATE utf8mb4_unicode_ci LIKE/);
   assert.match(repository, /UPDATE user_sessions SET status='revoked'/);
   assert.match(repository, /user.password.forced_reset/);
@@ -211,6 +259,12 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(accountShell, /搜索组织名称或标识/);
   assert.match(accountShell, /organizationEmptyState/);
   assert.match(accountShell, /清除筛选/);
+  assert.match(accountShell, /搜索管理员邮箱/);
+  assert.match(accountShell, /没有符合当前条件的管理员/);
+  assert.match(accountShell, /adminEmptyState/);
+  assert.match(accountShell, /createUserError/);
+  assert.match(accountShell, /passwordError/);
+  assert.match(accountShell, /route\.query\.query/);
   assert.match(accountShell, /createError/);
   assert.match(accountShell, /@clear-error="createError = ''"/);
   assert.match(wizard, /\[a-z0-9\]\(\?:\[a-z0-9\]\|-\)\{1,62\}/);
@@ -218,6 +272,12 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(wizard, /创建未完成/);
   assert.match(web, /角色权限差异/);
   assert.match(comparison, /differencesOnly/);
+  assert.match(adminRecords, /overflow-wrap: anywhere/);
+  assert.match(adminRecords, /min-width: 0/);
+  assert.match(detailDialog, /errorMessage/);
+  assert.match(detailDialog, /successMessage/);
+  assert.match(detailDialog, /\$emit\('retry'\)/);
+  assert.match(detailDialog, /:disabled="busy"/);
   assert.match(web, /不以页面按钮推测权限/);
   for (const capability of CAPABILITIES)
     assert.match(web, new RegExp(capability.replace(":", "\\:")));

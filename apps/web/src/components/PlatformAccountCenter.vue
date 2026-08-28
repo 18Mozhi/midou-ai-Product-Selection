@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
@@ -40,20 +40,22 @@ const props = withDefaults(
       organizationId: "",
     },
   ),
+  route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   tab = ref<Tab>(props.initialTab),
   data = ref<Data | null>(null),
   platformRoles = ref<RoleCapabilitySummary[]>([]),
-  query = ref(""),
-  status = ref(""),
+  query = ref(typeof route.query.query === "string" ? route.query.query.slice(0, 120) : ""),
+  status = ref(typeof route.query.status === "string" ? route.query.status.slice(0, 30) : ""),
   message = ref(""),
   refreshing = ref(false),
   rolesLoading = ref(false),
   lastUpdatedAt = ref<Date | null>(null),
   busy = ref(""),
   createError = ref(""),
+  createUserError = ref(""),
   createUserOpen = ref(false),
   createOrganizationButton = ref<HTMLButtonElement | null>(null),
   organizationDetailOpen = ref(false),
@@ -61,7 +63,10 @@ const props = withDefaults(
   organizationError = ref(""),
   organizationSuccess = ref(""),
   detailOpen = ref(false),
+  detailError = ref(""),
+  detailSuccess = ref(""),
   passwordOpen = ref(false),
+  passwordError = ref(""),
   reasonOpen = ref(false),
   reasonTitle = ref("确认操作"),
   reasonText = ref("平台管理员人工操作"),
@@ -107,6 +112,16 @@ watch(
   () => [props.routePath, props.organizationId],
   () => syncOrganizationRoute(),
 );
+watch(
+  () => [route.query.query, route.query.status],
+  ([routeQuery, routeStatus]) => {
+    const nextQuery = typeof routeQuery === "string" ? routeQuery.slice(0, 120) : "";
+    const nextStatus = typeof routeStatus === "string" ? routeStatus.slice(0, 30) : "";
+    if (nextQuery !== query.value) query.value = nextQuery;
+    if (nextStatus !== status.value) status.value = nextStatus;
+    void load();
+  },
+);
 const rows = computed(() =>
     tab.value === "organizations"
       ? (data.value?.organizations ?? [])
@@ -117,17 +132,32 @@ const rows = computed(() =>
   organizationListRoute = computed(
     () => props.routePath === "/platform-admin/organizations" && tab.value === "organizations",
   ),
+  accountOverviewRoute = computed(() => props.routePath === "/platform-admin/accounts"),
+  adminListRoute = computed(
+    () => props.routePath === "/platform-admin/admins" && tab.value === "admins",
+  ),
   organizationEmptyState = computed(
     () =>
       !rows.value.length &&
       tab.value === "organizations" &&
       (props.routePath === "/platform-admin/accounts" || organizationListRoute.value),
   ),
-  filterLabel = computed(() => (organizationListRoute.value ? "组织筛选" : "账号筛选")),
-  searchPlaceholder = computed(() =>
-    organizationListRoute.value ? "搜索组织名称或标识" : "搜索组织名称或用户邮箱",
+  adminEmptyState = computed(() => adminListRoute.value && !rows.value.length),
+  filterLabel = computed(() =>
+    organizationListRoute.value ? "组织筛选" : adminListRoute.value ? "管理员筛选" : "账号筛选",
   ),
-  statusLabel = computed(() => (organizationListRoute.value ? "组织状态" : "账号状态")),
+  searchPlaceholder = computed(() =>
+    organizationListRoute.value
+      ? "搜索组织名称或标识"
+      : adminListRoute.value
+        ? "搜索管理员邮箱"
+        : accountOverviewRoute.value
+          ? "搜索组织名称或用户邮箱"
+          : "搜索用户邮箱",
+  ),
+  statusLabel = computed(() =>
+    organizationListRoute.value ? "组织状态" : adminListRoute.value ? "管理员状态" : "账号状态",
+  ),
   activeFilterCount = computed(
     () => Number(Boolean(query.value.trim())) + Number(Boolean(status.value)),
   ),
@@ -207,10 +237,24 @@ async function load() {
     refreshing.value = false;
   }
 }
+async function applyFilters() {
+  const nextQuery = { ...route.query } as Record<string, string | string[] | null | undefined>;
+  if (query.value.trim()) nextQuery.query = query.value.trim();
+  else delete nextQuery.query;
+  if (status.value) nextQuery.status = status.value;
+  else delete nextQuery.status;
+  const currentQuery = typeof route.query.query === "string" ? route.query.query : "";
+  const currentStatus = typeof route.query.status === "string" ? route.query.status : "";
+  if (currentQuery === (nextQuery.query ?? "") && currentStatus === (nextQuery.status ?? "")) {
+    await load();
+    return;
+  }
+  await router.replace({ query: nextQuery });
+}
 async function resetFilters() {
   query.value = "";
   status.value = "";
-  await load();
+  await applyFilters();
 }
 async function write<T = unknown>(
   path: string,
@@ -310,33 +354,48 @@ async function toggleOrganization(item: any) {
   });
 }
 async function toggleUser(item: any) {
+  clearDetailFeedback();
   askReason(item.status === "active" ? "停用用户并撤销会话" : "恢复用户", async (why) => {
     if (
-      await write(`/platform/accounts/users/${item.id}/status`, {
-        status: item.status === "active" ? "disabled" : "active",
-        reason: why,
-      })
+      await write(
+        `/platform/accounts/users/${item.id}/status`,
+        {
+          status: item.status === "active" ? "disabled" : "active",
+          reason: why,
+        },
+        "POST",
+        (value) => (detailError.value = value),
+      )
     ) {
       const updated = [...(data.value?.users ?? []), ...(data.value?.admins ?? [])].find(
         (row) => row.id === item.id,
       );
-      if (updated && detailOpen.value) await openUserDetail(updated);
+      detailSuccess.value =
+        item.status === "active" ? "账号已停用，活动会话已撤销。" : "账号已恢复登录。";
+      if (updated && detailOpen.value) await openUserDetail(updated, true);
     }
   });
 }
 async function role(userId: string, roleCode: string, enabled: boolean) {
+  clearDetailFeedback();
   askReason(`${enabled ? "授予" : "撤销"}${roleText(roleCode)}`, async (why) => {
     if (
-      await write(`/platform/accounts/users/${userId}/platform-role`, {
-        role_code: roleCode,
-        enabled,
-        reason: why,
-      })
+      await write(
+        `/platform/accounts/users/${userId}/platform-role`,
+        {
+          role_code: roleCode,
+          enabled,
+          reason: why,
+        },
+        "POST",
+        (value) => (detailError.value = value),
+      )
     ) {
       const updated = [...(data.value?.users ?? []), ...(data.value?.admins ?? [])].find(
         (row) => row.id === userId,
       );
-      if (updated && detailOpen.value) await openUserDetail(updated);
+      detailSuccess.value = `${roleText(roleCode)}已${enabled ? "授予" : "撤销"}。`;
+      if (updated && detailOpen.value) await openUserDetail(updated, true);
     }
   });
 }
@@ -403,6 +462,7 @@ async function updateOrganization() {
   });
 }
 function openCreateUser(asAdmin = false) {
+  createUserError.value = "";
   userForm.email = "";
   userForm.temporary_password = "";
   userForm.platform_role_code = asAdmin ? "platform_operations_admin" : "";
@@ -411,18 +471,33 @@ function openCreateUser(asAdmin = false) {
   createUserOpen.value = true;
 }
 async function createUser() {
+  createUserError.value = "";
   if (
-    await write("/platform/accounts/users", {
-      ...userForm,
-      organization_id: userForm.organization_id || null,
-      platform_role_code: userForm.platform_role_code || null,
-    })
+    await write(
+      "/platform/accounts/users",
+      {
+        ...userForm,
+        organization_id: userForm.organization_id || null,
+        platform_role_code: userForm.platform_role_code || null,
+      },
+      "POST",
+      (value) => (createUserError.value = value),
+    )
   ) {
     createUserOpen.value = false;
     message.value = "账号已创建；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。";
   }
 }
-async function openUserDetail(item: any) {
+function clearDetailFeedback() {
+  detailError.value = "";
+  detailSuccess.value = "";
+}
+function closeUserDetail() {
+  detailOpen.value = false;
+  clearDetailFeedback();
+}
+async function openUserDetail(item: any, preserveFeedback = false) {
+  if (!preserveFeedback) clearDetailFeedback();
   selected.value = item;
   detail.value = null;
   detailOpen.value = true;
@@ -430,23 +505,29 @@ async function openUserDetail(item: any) {
     const response = await request<any>(`/platform/accounts/users/${item.id}`);
     detail.value = response.data;
   } catch (e) {
-    message.value = e instanceof ApiClientError ? e.actionHint : "读取详情失败";
-    detailOpen.value = false;
+    detailError.value = e instanceof ApiClientError ? e.actionHint : "读取详情失败";
   }
 }
 function openPassword(item: any) {
   selected.value = item;
   passwordForm.temporary_password = "";
+  passwordError.value = "";
   passwordOpen.value = true;
 }
 async function resetPassword() {
   if (!selected.value) return;
+  passwordError.value = "";
   askReason("强制重置密码并撤销全部会话", async (why) => {
     if (
-      await write(`/platform/accounts/users/${selected.value.id}/password`, {
-        temporary_password: passwordForm.temporary_password,
-        reason: why,
-      })
+      await write(
+        `/platform/accounts/users/${selected.value.id}/password`,
+        {
+          temporary_password: passwordForm.temporary_password,
+          reason: why,
+        },
+        "POST",
+        (value) => (passwordError.value = value),
+      )
     ) {
       passwordOpen.value = false;
       detailOpen.value = false;
@@ -455,15 +536,21 @@ async function resetPassword() {
   });
 }
 function revokeSessions(item: any, sessionId: string | null = null) {
+  clearDetailFeedback();
   askReason(sessionId ? "撤销该会话" : "撤销全部活动会话", async (why) => {
     if (
-      await write(`/platform/accounts/users/${item.id}/sessions/revoke`, {
-        session_id: sessionId,
-        reason: why,
-      })
+      await write(
+        `/platform/accounts/users/${item.id}/sessions/revoke`,
+        {
+          session_id: sessionId,
+          reason: why,
+        },
+        "POST",
+        (value) => (detailError.value = value),
+      )
     ) {
-      message.value = "会话已撤销。";
-      if (detailOpen.value) await openUserDetail(item);
+      detailSuccess.value = sessionId ? "该会话已撤销。" : "全部活动会话已撤销。";
+      if (detailOpen.value) await openUserDetail(item, true);
     }
   });
 }
@@ -473,16 +560,36 @@ onMounted(load);
   <section class="account-center">
     <header class="account-hero">
       <div>
-        <p>{{ organizationListRoute ? "平台组织" : "组织与用户" }}</p>
+        <p>
+          {{
+            accountOverviewRoute
+              ? "组织与用户"
+              : organizationListRoute
+                ? "平台组织"
+                : adminListRoute
+                  ? "平台管理员"
+                  : "平台用户"
+          }}
+        </p>
         <h2>
           {{
-            organizationListRoute ? "组织、状态与隔离边界，一眼看懂" : "谁在使用智能选品，一眼看懂"
+            accountOverviewRoute
+              ? "谁在使用智能选品，一眼看懂"
+              : organizationListRoute
+                ? "组织、状态与隔离边界，一眼看懂"
+                : adminListRoute
+                  ? "授权、会话与登录状态，一处管理"
+                  : "用户归属与登录状态，一眼看懂"
           }}
         </h2>
         <span>{{
-          organizationListRoute
-            ? "核对成员与工作区数量，进入详情维护资料、停用或恢复。所有操作都会留审计记录。"
-            : "创建组织、启停账号、分配平台管理员。所有操作都会留审计记录。"
+          accountOverviewRoute
+            ? "创建组织、启停账号、分配平台管理员。所有操作都会留审计记录。"
+            : organizationListRoute
+              ? "核对成员与工作区数量，进入详情维护资料、停用或恢复。所有操作都会留审计记录。"
+              : adminListRoute
+                ? "创建运营、安全或超级管理员，维护角色、会话与登录状态。所有操作都会留审计记录。"
+                : "创建用户、核对组织归属并维护登录状态。所有操作都会留审计记录。"
         }}</span>
       </div>
       <div class="hero-actions">
@@ -530,7 +637,7 @@ onMounted(load);
       >
     </nav>
     <ResponsiveFilterDrawer :label="filterLabel" :active-count="activeFilterCount">
-      <form class="account-filter" @submit.prevent="load">
+      <form class="account-filter" @submit.prevent="applyFilters">
         <input v-model="query" :placeholder="searchPlaceholder" /><select
           v-model="status"
           :aria-label="statusLabel"
@@ -557,10 +664,6 @@ onMounted(load);
       暂时无法读取。<button @click="load">重新加载</button>
     </section>
     <template v-else>
-      <PlatformRoleComparison
-        v-if="tab === 'admins' && platformRoles.length"
-        :roles="platformRoles"
-      />
       <section v-if="organizationEmptyState" class="account-empty" aria-live="polite">
         <strong>{{ activeFilterCount ? "没有符合当前条件的组织" : "还没有组织" }}</strong>
         <span>{{
@@ -587,7 +690,21 @@ onMounted(load);
         :role-text="roleText"
         @open-user="openUserDetail"
       />
+      <section v-else-if="adminEmptyState" class="account-empty" aria-live="polite">
+        <strong>{{ activeFilterCount ? "没有符合当前条件的管理员" : "还没有可授权账号" }}</strong>
+        <span>{{
+          activeFilterCount
+            ? "调整管理员邮箱或状态筛选后重试。"
+            : "创建首位平台管理员，或从用户管理选择现有账号授予平台角色。"
+        }}</span>
+        <button v-if="activeFilterCount" type="button" @click="resetFilters">清除筛选</button>
+        <button v-else type="button" @click="openCreateUser(true)">新建管理员</button>
+      </section>
       <PlatformAdminRecords v-else :rows="rows" @open-user="openUserDetail" />
+      <PlatformRoleComparison
+        v-if="tab === 'admins' && platformRoles.length"
+        :roles="platformRoles"
+      />
     </template>
     <OrganizationCreationWizard
       :open="createOpen"
@@ -605,8 +722,19 @@ onMounted(load);
       @cancel="handleCreateUserCancel"
     >
       <form @submit.prevent="createUser">
-        <h3>新建用户或平台管理员</h3>
+        <h3>
+          {{
+            accountOverviewRoute
+              ? "新建用户或平台管理员"
+              : tab === "admins"
+                ? "新建平台管理员"
+                : "新建用户"
+          }}
+        </h3>
         <p>账号立即可用；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。</p>
+        <p v-if="createUserError" class="dialog-feedback dialog-feedback--error" role="alert">
+          {{ createUserError }}
+        </p>
         <label>邮箱<input v-model="userForm.email" type="email" required maxlength="254" /></label>
         <label
           >临时密码<input
@@ -614,6 +742,7 @@ onMounted(load);
             type="password"
             required
             minlength="12"
+            maxlength="128"
             autocomplete="new-password"
         /></label>
         <label
@@ -644,7 +773,14 @@ onMounted(load);
           </select></label
         >
         <footer>
-          <button type="button" @click="createUserOpen = false">取消</button
+          <button
+            type="button"
+            @click="
+              createUserOpen = false;
+              createUserError = '';
+            "
+          >
+            取消</button
           ><button :disabled="Boolean(busy)">确认创建</button>
         </footer>
       </form>
@@ -668,9 +804,13 @@ onMounted(load);
       :open="detailOpen"
       :detail="detail"
       :selected="selected"
+      :busy="Boolean(busy)"
+      :error-message="detailError"
+      :success-message="detailSuccess"
       :status-text="statusText"
       :role-text="roleText"
-      @close="detailOpen = false"
+      @close="closeUserDetail"
+      @retry="selected && openUserDetail(selected)"
       @toggle-status="toggleUser"
       @role="role"
       @reset-password="openPassword"
@@ -680,12 +820,16 @@ onMounted(load);
       <form @submit.prevent="resetPassword">
         <h3>强制重置密码</h3>
         <p>保存后会撤销该用户全部活动会话，并要求首次登录修改密码。</p>
+        <p v-if="passwordError" class="dialog-feedback dialog-feedback--error" role="alert">
+          {{ passwordError }}
+        </p>
         <label
           >新临时密码<input
             v-model="passwordForm.temporary_password"
             type="password"
             required
             minlength="12"
+            maxlength="128"
             autocomplete="new-password"
         /></label>
         <footer>
@@ -709,279 +853,4 @@ onMounted(load);
     </dialog>
   </section>
 </template>
-<style scoped>
-.account-center {
-  display: grid;
-  gap: 18px;
-  color: var(--so-text);
-}
-.account-hero {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  align-items: center;
-  padding: 24px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, var(--so-panel-soft), var(--so-bg-elevated));
-  color: var(--so-text);
-}
-.account-hero p {
-  margin: 0;
-  color: var(--so-primary);
-  font-weight: 800;
-}
-.account-hero h2 {
-  margin: 6px 0;
-  font-size: 28px;
-}
-.account-hero span {
-  color: var(--so-text-muted);
-}
-.account-hero button,
-.account-filter button {
-  border: 0;
-  border-radius: 10px;
-  padding: 11px 16px;
-  background: var(--so-primary);
-  color: var(--so-on-primary);
-  font-weight: 800;
-}
-.hero-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.hero-actions button:last-child {
-  background: var(--so-panel-soft);
-  color: var(--so-text);
-  border: 1px solid var(--so-border-strong);
-}
-.hero-actions button {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.hero-actions button:disabled,
-.account-filter button:disabled {
-  cursor: not-allowed;
-  opacity: 0.58;
-}
-.account-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-.account-metrics article {
-  padding: 18px;
-  border: 1px solid var(--so-border);
-  border-radius: 14px;
-  background: var(--so-panel);
-  color: var(--so-text);
-}
-.account-metrics small,
-.account-metrics span {
-  display: block;
-  color: var(--so-text-muted);
-}
-.account-metrics strong {
-  display: block;
-  font-size: 28px;
-  margin: 5px 0;
-  color: var(--so-text);
-}
-.account-tabs {
-  display: flex;
-  gap: 8px;
-}
-.account-tabs a {
-  text-decoration: none;
-  border: 1px solid var(--so-border-strong);
-  border-radius: 999px;
-  padding: 9px 15px;
-  background: var(--so-panel);
-  color: var(--so-text);
-}
-.account-tabs a.on {
-  border-color: var(--so-primary);
-  background: var(--so-primary);
-  color: var(--so-on-primary);
-}
-.account-filter {
-  display: flex;
-  gap: 10px;
-}
-.account-filter input,
-.account-filter select {
-  min-width: 180px;
-  padding: 10px;
-  border: 1px solid var(--so-border-strong);
-  border-radius: 9px;
-  color: var(--so-text);
-  background: var(--so-bg-elevated);
-}
-.account-filter button.secondary {
-  color: var(--so-text);
-  background: var(--so-panel);
-  border: 1px solid var(--so-border-strong);
-}
-.account-updated {
-  margin: -8px 0 0;
-  color: var(--so-text-muted);
-  font-size: 13px;
-  text-align: right;
-}
-.account-empty {
-  padding: 28px;
-  display: grid;
-  justify-items: start;
-  gap: 8px;
-  border: 1px dashed var(--so-border-strong);
-  border-radius: 14px;
-  color: var(--so-text);
-  background: var(--so-panel);
-}
-.account-empty span {
-  color: var(--so-text-muted);
-}
-.account-empty button {
-  min-height: 40px;
-  padding: 9px 14px;
-  border: 1px solid var(--so-border-strong);
-  border-radius: 9px;
-  color: var(--so-text);
-  background: var(--so-bg-elevated);
-}
-.account-table-wrap {
-  background: var(--so-panel);
-  border: 1px solid var(--so-border);
-  border-radius: 14px;
-  color: var(--so-text);
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  color: var(--so-text);
-}
-th,
-td {
-  padding: 14px;
-  text-align: left;
-  border-bottom: 1px solid var(--so-border);
-}
-th {
-  color: var(--so-text-muted);
-}
-td strong,
-td small {
-  display: block;
-}
-td strong {
-  color: var(--so-text);
-}
-td small {
-  color: var(--so-text-muted);
-  margin-top: 4px;
-}
-td button {
-  margin: 2px;
-  border: 1px solid var(--so-border-strong);
-  background: var(--so-bg-elevated);
-  color: var(--so-text);
-  border-radius: 8px;
-  padding: 7px 10px;
-}
-td b[data-status="active"] {
-  color: var(--so-success);
-}
-td b[data-status="disabled"],
-td b[data-status="archived"] {
-  color: var(--so-danger);
-}
-.mobile-actions {
-  display: grid;
-  gap: 8px;
-}
-.account-state,
-.account-message {
-  padding: 18px;
-  text-align: center;
-}
-.account-message {
-  background: var(--so-warning-soft);
-  color: var(--so-warning);
-  border-radius: 10px;
-}
-dialog {
-  position: fixed;
-  inset: 0;
-  margin: auto;
-  border: 0;
-  border-radius: 16px;
-  background: var(--so-bg-elevated);
-  color: var(--so-text);
-  border: 1px solid var(--so-border-strong);
-  box-shadow: 0 24px 80px color-mix(in srgb, var(--so-shadow-color) 40%, transparent);
-  z-index: 10;
-}
-dialog::backdrop {
-  background: color-mix(in srgb, var(--so-bg) 70%, transparent);
-  backdrop-filter: blur(4px);
-}
-dialog form {
-  display: grid;
-  gap: 14px;
-  min-width: 340px;
-  padding: 10px;
-}
-dialog label {
-  display: grid;
-  gap: 6px;
-}
-dialog input,
-dialog select,
-dialog textarea {
-  padding: 10px;
-  color: var(--so-text);
-  background: var(--so-panel-soft);
-  border: 1px solid var(--so-border-strong);
-  border-radius: 8px;
-}
-dialog textarea {
-  min-height: 90px;
-  resize: vertical;
-}
-dialog footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-@media (max-width: 700px) {
-  .account-center {
-    padding-bottom: 76px;
-  }
-  .account-hero {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .account-metrics {
-    grid-template-columns: 1fr;
-  }
-  .account-filter {
-    flex-direction: column;
-  }
-  .account-tabs {
-    overflow: auto;
-  }
-  .account-table-wrap {
-    padding: 0;
-    background: transparent;
-    border: 0;
-  }
-  dialog {
-    width: calc(100% - 28px);
-  }
-  dialog form {
-    min-width: 0;
-  }
-}
-</style>
+<style scoped src="./PlatformAccountCenter.css"></style>

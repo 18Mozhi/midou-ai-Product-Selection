@@ -45,6 +45,7 @@ export function registerPlatformDomainRoutes(context: PlatformDomainContext) {
       context.passwordHasher,
       context.config.auth.passwordMinLength,
       context.config.auth.passwordMaxLength,
+      context.config.security.credentialsMasterKey,
     ),
     ...common,
   });

@@ -1,4 +1,5 @@
 import { ApiError } from "./api-foundation.js";
+import { createHmac } from "node:crypto";
 import type { PasswordHasher } from "@scoutops/auth";
 import { normalizeEmail } from "@scoutops/auth";
 export class PlatformAccountError extends ApiError {
@@ -15,6 +16,7 @@ export interface PlatformAccountRepository {
     initialAdminUserId: string;
     actorId: string;
     idempotencyKey: string;
+    requestHash: string;
     requestId: string;
     traceId: string;
     now: Date;
@@ -28,6 +30,7 @@ export interface PlatformAccountRepository {
     reason: string;
     actorId: string;
     idempotencyKey: string;
+    requestHash: string;
     requestId: string;
     traceId: string;
     now: Date;
@@ -43,6 +46,7 @@ export interface PlatformAccountRepository {
     organizationRoleCode: "member" | "organization_admin";
     actorId: string;
     idempotencyKey: string;
+    requestHash: string;
     requestId: string;
     traceId: string;
     now: Date;
@@ -55,6 +59,7 @@ export interface PlatformAccountRepository {
     reason: string;
     actorId: string;
     idempotencyKey: string;
+    requestHash: string;
     requestId: string;
     traceId: string;
     now: Date;
@@ -66,6 +71,7 @@ export interface PlatformAccountRepository {
     reason: string;
     actorId: string;
     idempotencyKey: string;
+    requestHash: string;
     requestId: string;
     traceId: string;
     now: Date;
@@ -77,6 +83,7 @@ export interface PlatformAccountRepository {
     reason: string;
     actorId: string;
     idempotencyKey: string;
+    requestHash: string;
     requestId: string;
     traceId: string;
     now: Date;
@@ -87,6 +94,7 @@ export interface PlatformAccountRepository {
     reason: string;
     actorId: string;
     idempotencyKey: string;
+    requestHash: string;
     requestId: string;
     traceId: string;
     now: Date;
@@ -98,6 +106,7 @@ export interface PlatformAccountRepository {
     reason: string;
     actorId: string;
     idempotencyKey: string;
+    requestHash: string;
     requestId: string;
     traceId: string;
     now: Date;
@@ -109,14 +118,22 @@ const reason = (value: unknown) => {
     throw new PlatformAccountError("reason_invalid", 400, "填写 2–300 字的操作原因。");
   return value.trim();
 };
+const requestHash = (value: unknown, key: string) =>
+  createHmac("sha256", key)
+    .update("scoutops:platform-account-idempotency:v1\0")
+    .update(JSON.stringify(value))
+    .digest("hex");
 export class PlatformAccountService {
   constructor(
     private readonly repository: PlatformAccountRepository,
     private readonly now: () => Date = () => new Date(),
     private readonly passwordHasher?: PasswordHasher,
     private readonly passwordMinLength = 12,
-    private readonly passwordMaxLength = 256,
-  ) {}
+    private readonly passwordMaxLength = 128,
+    private readonly requestHashKey = "",
+  ) {
+    if (!requestHashKey) throw new Error("platform_account_request_hash_key_required");
+  }
   overview(query: unknown, status: unknown) {
     return this.repository.overview({
       query: typeof query === "string" ? query.trim().slice(0, 120) : "",
@@ -153,6 +170,10 @@ export class PlatformAccountService {
       name,
       slug,
       initialAdminUserId,
+      requestHash: requestHash(
+        { name, slug, initial_admin_user_id: initialAdminUserId },
+        this.requestHashKey,
+      ),
       ...context,
       route: "/platform/accounts/organizations",
       now: this.now(),
@@ -184,6 +205,16 @@ export class PlatformAccountService {
       timezone,
       dataRetentionDays,
       reason: reason(value?.reason),
+      requestHash: requestHash(
+        {
+          organization_id: id,
+          name,
+          timezone,
+          data_retention_days: dataRetentionDays,
+          reason: reason(value?.reason),
+        },
+        this.requestHashKey,
+      ),
       ...context,
       route: "/platform/accounts/organizations/update",
       now: this.now(),
@@ -223,6 +254,16 @@ export class PlatformAccountService {
       platformRoleCode: platformRoleCode as any,
       organizationId,
       organizationRoleCode,
+      requestHash: requestHash(
+        {
+          email,
+          temporary_password: password,
+          platform_role_code: platformRoleCode,
+          organization_id: organizationId,
+          organization_role_code: organizationRoleCode,
+        },
+        this.requestHashKey,
+      ),
       ...context,
       route: "/platform/accounts/users",
       now: this.now(),
@@ -253,6 +294,14 @@ export class PlatformAccountService {
       userId: id,
       passwordHash: await this.passwordHasher.hash(password),
       reason: reason(value?.reason),
+      requestHash: requestHash(
+        {
+          user_id: id,
+          temporary_password: password,
+          reason: reason(value?.reason),
+        },
+        this.requestHashKey,
+      ),
       ...context,
       route: "/platform/accounts/users/password",
       now: this.now(),
@@ -272,6 +321,14 @@ export class PlatformAccountService {
       userId: id,
       sessionId,
       reason: reason(value?.reason),
+      requestHash: requestHash(
+        {
+          user_id: id,
+          session_id: sessionId,
+          reason: reason(value?.reason),
+        },
+        this.requestHashKey,
+      ),
       ...context,
       route: "/platform/accounts/users/sessions/revoke",
       now: this.now(),
@@ -291,6 +348,14 @@ export class PlatformAccountService {
       organizationId: id,
       status,
       reason: reason(value?.reason),
+      requestHash: requestHash(
+        {
+          organization_id: id,
+          status,
+          reason: reason(value?.reason),
+        },
+        this.requestHashKey,
+      ),
       ...context,
       now: this.now(),
     });
@@ -315,6 +380,10 @@ export class PlatformAccountService {
       userId: id,
       status,
       reason: reason(value?.reason),
+      requestHash: requestHash(
+        { user_id: id, status, reason: reason(value?.reason) },
+        this.requestHashKey,
+      ),
       ...context,
       now: this.now(),
     });
@@ -349,6 +418,15 @@ export class PlatformAccountService {
       roleCode,
       enabled: value.enabled,
       reason: reason(value?.reason),
+      requestHash: requestHash(
+        {
+          user_id: id,
+          role_code: roleCode,
+          enabled: value.enabled,
+          reason: reason(value?.reason),
+        },
+        this.requestHashKey,
+      ),
       ...context,
       now: this.now(),
     });

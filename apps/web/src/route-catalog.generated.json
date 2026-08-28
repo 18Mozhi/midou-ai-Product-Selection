@@ -904,7 +904,8 @@
         "path": "/platform-admin/admins",
         "view": "PlatformAccountCenter",
         "domain": "platform-administrators",
-        "status": "implemented"
+        "status": "implemented",
+        "statusDetail": "administrator_management_live_mysql_api_worker_crawler_create_role_session_status_password_idempotency_permission_failure_refresh_and_responsive_verification_completed"
       },
       "navigation": { "label": "管理员管理", "icon": "shield", "group": "业务运营" }
     },

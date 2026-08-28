@@ -95,6 +95,8 @@ const roleText = (value: string) =>
 
 <style scoped>
 .account-table-wrap {
+  min-width: 0;
+  overflow-x: auto;
   color: var(--so-text);
   background: var(--so-panel);
   border: 1px solid var(--so-border);
@@ -119,7 +121,11 @@ td strong,
 td small {
   display: block;
 }
+td strong {
+  overflow-wrap: anywhere;
+}
 td button {
+  min-height: 44px;
   padding: 7px 10px;
   margin: 2px;
   color: var(--so-text);

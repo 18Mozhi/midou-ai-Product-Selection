@@ -9337,7 +9337,7 @@ components:
       required: [email, temporary_password]
       properties:
         email: { type: string, format: email, maxLength: 254 }
-        temporary_password: { type: string, minLength: 12, maxLength: 256 }
+        temporary_password: { type: string, minLength: 12, maxLength: 128 }
         platform_role_code:
           {
             type: string,
@@ -9351,7 +9351,7 @@ components:
       additionalProperties: false
       required: [temporary_password, reason]
       properties:
-        temporary_password: { type: string, minLength: 12, maxLength: 256 }
+        temporary_password: { type: string, minLength: 12, maxLength: 128 }
         reason: { type: string, minLength: 2, maxLength: 300 }
     PlatformSessionRevokeInput:
       type: object

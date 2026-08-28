@@ -438,6 +438,7 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
       actorId: string;
       route?: string;
       idempotencyKey: string;
+      requestHash: string;
       requestId: string;
       traceId: string;
       now: Date;
@@ -453,8 +454,10 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
         [input.actorId, route, input.idempotencyKey],
       );
       if (operations[0]) {
+        const replay = this.parseOperation<T>(operations[0].result_json);
+        this.assertReplayMatches(input.requestHash, replay.requestHash);
         await c.commit();
-        return this.parseOperationResult<T>(operations[0].result_json);
+        return replay.result;
       }
       const result = await work(c);
       await c.query(
@@ -464,7 +467,7 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
           input.actorId,
           route,
           input.idempotencyKey,
-          JSON.stringify(result),
+          JSON.stringify({ schema_version: 2, request_hash: input.requestHash, result }),
           input.now,
         ],
       );
@@ -475,7 +478,10 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
       if (error instanceof PlatformAccountError) throw error;
       if ((error as { code?: string }).code === "ER_DUP_ENTRY") {
         const replay = await this.findOperation<T>(input.actorId, route, input.idempotencyKey);
-        if (replay.found) return replay.value;
+        if (replay.found) {
+          this.assertReplayMatches(input.requestHash, replay.requestHash);
+          return replay.value;
+        }
         throw new PlatformAccountError(
           "platform_account_conflict",
           409,
@@ -487,17 +493,38 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
       c.release();
     }
   }
-  private parseOperationResult<T>(value: unknown) {
-    return (typeof value === "string" ? JSON.parse(value) : value) as T;
+  private parseOperation<T>(value: unknown) {
+    const parsed = (typeof value === "string" ? JSON.parse(value) : value) as any;
+    return parsed?.schema_version === 2 && typeof parsed.request_hash === "string"
+      ? { requestHash: parsed.request_hash as string, result: parsed.result as T }
+      : { requestHash: null, result: parsed as T };
+  }
+  private assertReplayMatches(requestHash: string, storedHash: string | null) {
+    if (storedHash !== null && storedHash !== requestHash)
+      throw new PlatformAccountError(
+        "idempotency_key_reused",
+        409,
+        "该幂等键已用于不同请求，请重新发起操作。",
+      );
   }
   private async findOperation<T>(actorId: string, route: string, idempotencyKey: string) {
     const [operations] = await this.pool.query<RowDataPacket[]>(
       "SELECT result_json FROM platform_account_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",
       [actorId, route, idempotencyKey],
     );
-    return operations[0]
-      ? { found: true as const, value: this.parseOperationResult<T>(operations[0].result_json) }
-      : { found: false as const, value: undefined };
+    if (operations[0]) {
+      const replay = this.parseOperation<T>(operations[0].result_json);
+      return {
+        found: true as const,
+        value: replay.result,
+        requestHash: replay.requestHash,
+      };
+    }
+    return {
+      found: false as const,
+      value: undefined,
+      requestHash: null,
+    };
   }
   private routeFromInput(input: any) {
     if (input.organizationId) return "/platform/accounts/organizations/status";

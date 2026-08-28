@@ -5,12 +5,16 @@ const props = defineProps<{
   open: boolean;
   detail: any | null;
   selected: any | null;
+  busy: boolean;
+  errorMessage: string;
+  successMessage: string;
   statusText: (value: string) => string;
   roleText: (value: string) => string;
 }>();
 
 const emit = defineEmits<{
   close: [];
+  retry: [];
   toggleStatus: [user: any];
   role: [userId: string, roleCode: string, enabled: boolean];
   resetPassword: [user: any];
@@ -40,6 +44,12 @@ const currentRoles = () => props.selected?.roles ?? props.selected?.platform_rol
         </div>
         <button aria-label="关闭账号详情" title="关闭账号详情" @click="$emit('close')">关闭</button>
       </header>
+      <p v-if="errorMessage" class="detail-feedback detail-feedback--error" role="alert">
+        {{ errorMessage }}
+      </p>
+      <p v-if="successMessage" class="detail-feedback detail-feedback--success" role="status">
+        {{ successMessage }}
+      </p>
       <div class="detail-grid">
         <article>
           <small>账号状态</small><strong>{{ statusText(detail.user.status) }}</strong>
@@ -78,6 +88,7 @@ const currentRoles = () => props.selected?.roles ?? props.selected?.platform_rol
           ><small>{{ new Date(session.last_seen_at).toLocaleString() }}</small>
           <button
             v-if="session.status === 'active'"
+            :disabled="busy"
             @click="$emit('revokeSessions', selected, session.id)"
           >
             撤销
@@ -90,22 +101,32 @@ const currentRoles = () => props.selected?.roles ?? props.selected?.platform_rol
         <button
           v-for="code in roleCodes"
           :key="code"
-          :disabled="selected?.status !== 'active'"
+          :disabled="busy || selected?.status !== 'active'"
           @click="$emit('role', selected.id, code, !currentRoles().includes(code))"
         >
           {{ currentRoles().includes(code) ? "撤销" : "授予" }}{{ roleText(code) }}
         </button>
       </div>
       <footer>
-        <button @click="$emit('toggleStatus', selected)">
+        <button :disabled="busy" @click="$emit('toggleStatus', selected)">
           {{ selected?.status === "active" ? "停用登录" : "恢复登录" }}
         </button>
-        <button @click="$emit('resetPassword', selected)">强制改密</button>
-        <button @click="$emit('revokeSessions', selected, null)">撤销全部会话</button>
+        <button :disabled="busy" @click="$emit('resetPassword', selected)">强制改密</button>
+        <button :disabled="busy" @click="$emit('revokeSessions', selected, null)">
+          撤销全部会话
+        </button>
         <button @click="$emit('close')">关闭</button>
       </footer>
     </section>
-    <section v-else class="account-state">正在读取账号详情…</section>
+    <section v-else-if="errorMessage" class="account-state account-state--error" role="alert">
+      <strong>账号详情暂时无法读取</strong>
+      <span>{{ errorMessage }}</span>
+      <div>
+        <button type="button" @click="$emit('retry')">重试</button>
+        <button type="button" @click="$emit('close')">关闭</button>
+      </div>
+    </section>
+    <section v-else class="account-state" aria-live="polite">正在读取账号详情…</section>
   </dialog>
 </template>
 
@@ -138,6 +159,29 @@ dialog::backdrop {
   color: var(--so-text);
   background: transparent;
   font-size: 26px;
+}
+.detail-dialog button {
+  min-height: 44px;
+  padding: 9px 12px;
+}
+.detail-dialog button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+.detail-feedback {
+  margin: 12px 0 0;
+  padding: 11px 13px;
+  border-radius: 9px;
+}
+.detail-feedback--error {
+  border: 1px solid color-mix(in srgb, var(--so-danger) 45%, var(--so-border));
+  color: var(--so-danger);
+  background: var(--so-danger-soft);
+}
+.detail-feedback--success {
+  border: 1px solid color-mix(in srgb, var(--so-success) 45%, var(--so-border));
+  color: var(--so-success);
+  background: color-mix(in srgb, var(--so-success) 12%, var(--so-panel));
 }
 .detail-grid {
   display: grid;
@@ -179,13 +223,27 @@ dialog::backdrop {
   flex-wrap: wrap;
 }
 footer {
+  margin-top: 18px;
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+  flex-wrap: wrap;
 }
 .account-state {
   padding: 18px;
   text-align: center;
+}
+.account-state--error {
+  display: grid;
+  gap: 12px;
+}
+.account-state--error span {
+  color: var(--so-text-muted);
+}
+.account-state--error div {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 }
 @media (max-width: 700px) {
   dialog {
