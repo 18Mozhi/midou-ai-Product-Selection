@@ -141,7 +141,9 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
   await expect(page.getByText("已经替你配置好的部分")).toBeVisible();
   await expect(page.getByRole("heading", { name: "市场热点与消费者信号" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "商品与竞品观察" })).toBeVisible();
+  await page.getByLabel("业务类型").selectOption("product_supply");
   await expect(page.getByRole("heading", { name: "供应链找货" })).toBeVisible();
+  await page.getByRole("button", { name: "重置筛选" }).click();
   await expect(page.getByText("解析验收")).toHaveCount(0);
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
   await expect(page.getByRole("heading", { name: "Amazon 登录页" })).toBeVisible();
@@ -152,6 +154,47 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
   await expect(page.getByRole("heading", { name: "调度同频与当前并发占用" })).toBeVisible();
   await page.getByRole("button", { name: "关闭来源编辑" }).click();
   await page.evaluate(() => window.scrollTo(0, 0));
+});
+
+test("source catalog paginates the real-size directory and preserves filter state in the URL", async ({
+  page,
+}) => {
+  await nav(page, "platform_admin");
+  let reads = 0;
+  await page.route("**/api/v1/platform/provider-sources", (route) => {
+    reads += 1;
+    return route.fulfill({ json: envelope(sources) });
+  });
+  await page.goto("/platform-admin/providers/sources");
+
+  await expect(page.locator(".source-list article")).toHaveCount(20);
+  await expect(page.getByRole("navigation", { name: "热点来源分页" })).toContainText(
+    "第 1 / 8 页 · 当前 1–20，共 146 个来源",
+  );
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page).toHaveURL(/page=2/);
+  await expect(page.getByRole("navigation", { name: "热点来源分页" })).toContainText("当前 21–40");
+
+  await page.getByLabel("搜索来源").fill("Amazon");
+  await expect(page.locator(".source-list article")).toHaveCount(1);
+  await expect(page).toHaveURL(/q=Amazon/);
+  await page.reload();
+  await expect(page.getByLabel("搜索来源")).toHaveValue("Amazon");
+  await expect(page.getByRole("heading", { name: "Amazon 登录页" })).toBeVisible();
+
+  await page.getByLabel("搜索来源").fill("");
+  await page.getByLabel("准备状态").selectOption("setup_required");
+  await page.getByLabel("排序").selectOption("attention");
+  await expect(
+    page.locator('.source-list article[data-availability="setup_required"]'),
+  ).toHaveCount(6);
+  await page.getByRole("button", { name: "重置筛选" }).click();
+  await expect(page.locator(".source-list article")).toHaveCount(20);
+  await expect(page).not.toHaveURL(/q=|availability=|sort=/);
+
+  await page.getByRole("button", { name: "刷新来源" }).click();
+  await expect(page.getByRole("status").last()).toContainText("已刷新 146 个来源频道");
+  expect(reads).toBeGreaterThanOrEqual(3);
 });
 
 test("platform administrator can save source schedule, retry and enablement", async ({ page }) => {

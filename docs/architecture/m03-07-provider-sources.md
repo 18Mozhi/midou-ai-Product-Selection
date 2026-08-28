@@ -12,6 +12,8 @@
 
 每个来源同时展示代码目录中的负责人、由类型/市场/字段组成的影响范围，以及该 Provider 最近一条真实 `succeeded / succeeded_empty` 子查询的完成时间与结果数。当前没有独立 SLA 配置字段，页面只把已配置 `schedule_minutes` 标为“沿用采集计划”的更新目标，不伪造承诺或达标结论；待实施与手动来源明确显示“未设自动 SLA”。所有尚未完成生产接通的 `setup_required` 来源统一标为“待实施”。
 
+来源目录在浏览器中每页展示 20 条，不再一次性挂载全部 181 个来源卡片。搜索、业务类型、准备状态、市场、语言、接入模式、排序和页码写入当前页面 URL，因此刷新、返回和多标签页复制链接时仍能恢复同一视图；`provider_id` 关联入口继续优先收窄到精确来源。分页只减少前端 DOM，API 仍一次返回同一份平台全局真实目录，不改变来源数量、分组、权限或数据合同。管理员可手动刷新目录；刷新期间保留当前卡片，12 秒超时或依赖失败时保留上一次成功数据并明确提示，不把旧数据标成最新。
+
 ## 自动与手动数据流
 
 `@scoutops/provider-sources` 入口只作为兼容导出面；代码内置来源目录位于 `src/catalog/`，纯解析与证据映射位于 `src/parsers/`，网络/浏览器/导入适配器及注册工厂位于 `src/adapters/`。解析器不领取任务、不持有凭证，适配器不重新定义来源目录，调用方继续从包根入口导入以保持现有合同。
@@ -45,7 +47,7 @@
 
 编辑弹窗在保存前同时展示两项有边界的运行预估：按当前目录计算保存后与拟议 `schedule_minutes` 相同的已启用自动来源数；从 MySQL 读取该 Provider 当前 `pending / running` 子查询数并对照 `concurrency_limit` 展示占用和剩余配置槽位。前者只代表“可能进入同一调度窗口”，因为当前模型没有保存每个来源的独立相位；后者是打开页面时的真实快照，不推断未来任务量。页面不会据此生成高/中/低风险等级或阻止保存。
 
-前端按来源目录、配置与样本回放拆分展示边界：`ProviderSourceCenter.vue` 继续拥有目录筛选、来源卡片、API、真实烟测、样本审批和版本锁编排；`ProviderSourceConfigurationDialog.vue` 只承载编辑预估、版本差异与回滚表单；`ProviderParserSampleDialog.vue` 承载候选、固定基线和回放差异，`ProviderParserSampleReview.vue` 承载单条样本的第二人审批表单。子组件不直接发起请求，不复制准入规则，也不改变来源合同。
+前端按来源目录、配置与样本回放拆分展示边界：`ProviderSourceCenter.vue` 继续拥有目录筛选、URL 状态、分页、保留旧数据的刷新、来源卡片、API、真实烟测、样本审批和版本锁编排；`ProviderSourceConfigurationDialog.vue` 只承载编辑预估、版本差异与回滚表单；`ProviderParserSampleDialog.vue` 承载候选、固定基线和回放差异，`ProviderParserSampleReview.vue` 承载单条样本的第二人审批表单。子组件不直接发起请求，不复制准入规则，也不改变来源合同。
 
 公开页面和登录页面来源的“解析兼容矩阵”由 `ProviderCompatibilityMatrixDialog.vue` 展示；父页面只复用 M03-03 适配器读取接口并按当前 Provider 精确关联。矩阵使用留存 DOM/HTML 的 SHA-256 作为页面版本，呈现解析器版本、实际成功/解析失败计数和最近观测，不读取原文、不把快照 schema 当页面版本，也不自动改变来源状态。
 

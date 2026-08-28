@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
-import { useRoute } from "vue-router";
+import { computed, onMounted, reactive, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import ProviderCompatibilityMatrixDialog from "./ProviderCompatibilityMatrixDialog.vue";
 import ProviderParserSampleDialog from "./ProviderParserSampleDialog.vue";
@@ -18,15 +18,28 @@ import type {
 
 const props = defineProps<{ apiBaseUrl: string }>();
 const route = useRoute();
+const router = useRouter();
+const queryParam = (key: string) =>
+  typeof route.query[key] === "string" ? route.query[key].toString() : "";
 const request = createApiClient(props.apiBaseUrl);
 const state = ref<ViewState>("loading");
 const items = ref<SourceItem[]>([]);
-const query = ref("");
-const category = ref("");
-const availability = ref("");
-const market = ref("");
-const language = ref("");
-const accessMode = ref("");
+const query = ref(queryParam("q"));
+const category = ref(queryParam("category"));
+const availability = ref(queryParam("availability"));
+const market = ref(queryParam("market"));
+const language = ref(queryParam("language"));
+const accessMode = ref(queryParam("access_mode"));
+const sort = ref(
+  ["business", "attention", "name", "recent"].includes(queryParam("sort"))
+    ? queryParam("sort")
+    : "business",
+);
+const initialPage = Number.parseInt(queryParam("page"), 10);
+const page = ref(Number.isInteger(initialPage) && initialPage > 0 ? initialPage : 1);
+const pageSize = 20;
+const refreshing = ref(false);
+const lastUpdatedAt = ref<string | null>(null);
 const message = ref("");
 const requestId = ref("");
 const editing = ref<SourceItem | null>(null);
@@ -105,14 +118,48 @@ const sourcePurpose = (item: SourceItem): SourcePurpose =>
     : item.category === "ecommerce"
       ? "product_competition"
       : "market_signals";
+const availabilityPriority = (item: SourceItem) =>
+  item.availability === "setup_required"
+    ? 0
+    : item.availability === "automatic" && item.provisioned?.status !== "enabled"
+      ? 1
+      : item.availability === "automatic"
+        ? 2
+        : 3;
+const sorted = computed(() =>
+  [...filtered.value].sort((left, right) => {
+    if (sort.value === "attention")
+      return (
+        availabilityPriority(left) - availabilityPriority(right) ||
+        left.name.localeCompare(right.name, "zh-CN")
+      );
+    if (sort.value === "name") return left.name.localeCompare(right.name, "zh-CN");
+    if (sort.value === "recent")
+      return (
+        (right.provisioned?.last_success?.finished_at ?? "").localeCompare(
+          left.provisioned?.last_success?.finished_at ?? "",
+        ) || left.name.localeCompare(right.name, "zh-CN")
+      );
+    return 0;
+  }),
+);
+const totalPages = computed(() => Math.max(1, Math.ceil(sorted.value.length / pageSize)));
+const pageItems = computed(() =>
+  sorted.value.slice((page.value - 1) * pageSize, page.value * pageSize),
+);
 const groupedSources = computed(() =>
   purposeDefinitions
     .map((definition) => ({
       ...definition,
-      items: filtered.value.filter((item) => sourcePurpose(item) === definition.key),
+      items: pageItems.value.filter((item) => sourcePurpose(item) === definition.key),
+      total: filtered.value.filter((item) => sourcePurpose(item) === definition.key).length,
     }))
     .filter((group) => group.items.length > 0),
 );
+const resultRange = computed(() => ({
+  start: sorted.value.length ? (page.value - 1) * pageSize + 1 : 0,
+  end: Math.min(page.value * pageSize, sorted.value.length),
+}));
 const counts = computed(() => ({
   all: items.value.length,
   automatic: items.value.filter((item) => item.availability === "automatic").length,
@@ -147,6 +194,46 @@ const configurationPreview = computed(() => {
     available_count: Math.max(0, configuredLimit - activeCount),
   };
 });
+function syncUrlState() {
+  const next = {
+    ...route.query,
+    q: query.value || undefined,
+    category: category.value || undefined,
+    availability: availability.value || undefined,
+    market: market.value || undefined,
+    language: language.value || undefined,
+    access_mode: accessMode.value || undefined,
+    sort: sort.value === "business" ? undefined : sort.value,
+    page: page.value === 1 ? undefined : String(page.value),
+  };
+  void router.replace({ query: next });
+}
+watch([query, category, availability, market, language, accessMode, sort], () => {
+  if (page.value !== 1) page.value = 1;
+  else syncUrlState();
+});
+watch(page, syncUrlState);
+watch(totalPages, (value) => {
+  if (page.value > value) page.value = value;
+});
+function resetFilters() {
+  query.value = "";
+  category.value = "";
+  availability.value = "";
+  market.value = "";
+  language.value = "";
+  accessMode.value = "";
+  sort.value = "business";
+}
+function changePage(next: number) {
+  page.value = Math.min(totalPages.value, Math.max(1, next));
+  window.requestAnimationFrame(() => {
+    document.getElementById("source-results")?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "start",
+    });
+  });
+}
 const failure = (status: number): ViewState =>
   status === 401
     ? "expired"
@@ -210,17 +297,32 @@ async function api<T>(path: string, options: RequestInit = {}) {
 }
 
 async function load() {
-  state.value = "loading";
+  const preserve = items.value.length > 0;
+  if (!preserve) state.value = "loading";
+  refreshing.value = true;
   message.value = "";
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), 12_000);
   try {
-    items.value = (await api<SourceItem[]>("/platform/provider-sources")) ?? [];
+    items.value =
+      (await api<SourceItem[]>("/platform/provider-sources", { signal: controller.signal })) ?? [];
+    lastUpdatedAt.value = new Date().toISOString();
     state.value = items.value.length ? "ready" : "empty";
     if (linkedProviderId.value) {
       const linked = items.value.find((item) => item.provisioned?.id === linkedProviderId.value);
       message.value = linked ? `已定位关联来源：${linked.name}` : "关联来源不在当前来源目录中。";
-    }
+    } else if (preserve) message.value = `已刷新 ${items.value.length} 个来源频道。`;
   } catch (error) {
-    state.value = error instanceof ApiClientError ? failure(error.status) : "blocked";
+    if (preserve) {
+      state.value = "ready";
+      message.value =
+        error instanceof DOMException && error.name === "AbortError"
+          ? "刷新超时，已保留上一次成功加载的来源目录。"
+          : `${message.value || "刷新失败。"} 已保留上一次成功加载的来源目录。`;
+    } else state.value = error instanceof ApiClientError ? failure(error.status) : "blocked";
+  } finally {
+    window.clearTimeout(timer);
+    refreshing.value = false;
   }
 }
 
@@ -333,7 +435,7 @@ async function rollbackConfiguration(version: ConfigurationVersion) {
   }
 }
 async function testSource(item: SourceItem) {
-  if (!item.provisioned) return;
+  if (!item.provisioned || testing.value) return;
   testing.value = item.provisioned.id;
   message.value = "";
   try {
@@ -478,7 +580,13 @@ onMounted(load);
         <h2>多平台、多国家来源已自动登记</h2>
         <span>公开信息源由系统自动采集；需要登录的平台完成网页登录配置后才能运行。</span>
       </div>
-      <RouterLink to="/platform-admin/providers">管理来源规则</RouterLink>
+      <div class="source-guide-actions">
+        <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>
+        <button type="button" :disabled="refreshing" @click="load">
+          {{ refreshing ? "刷新中…" : "刷新来源" }}
+        </button>
+        <RouterLink to="/platform-admin/providers">管理来源规则</RouterLink>
+      </div>
     </header>
     <div class="source-metrics">
       <article>
@@ -506,37 +614,58 @@ onMounted(load);
         <li>网页登录型平台需要先完成网页登录配置。</li>
       </ol>
     </aside>
-    <form class="source-filter" @submit.prevent>
-      <input v-model="query" placeholder="搜索 Amazon、eBay、Reddit、国家或来源网址" /><select
-        v-model="category"
-      >
-        <option value="">全部类型</option>
-        <option value="news">新闻</option>
-        <option value="ecommerce">电商平台</option>
-        <option value="data">趋势数据</option>
-        <option value="community">论坛社区</option>
-        <option value="product_supply">商品供应链</option></select
-      ><select v-model="availability">
-        <option value="">全部状态</option>
-        <option value="automatic">自动采集</option>
-        <option value="setup_required">需要完成配置</option>
-        <option value="manual">手动来源</option></select
-      ><select v-model="market">
-        <option value="">全部地区</option>
-        <option v-for="item in marketOptions" :key="item" :value="item">{{ item }}</option></select
-      ><select v-model="language">
-        <option value="">全部语言</option>
-        <option v-for="item in languageOptions" :key="item" :value="item">
-          {{ item }}
-        </option></select
-      ><select v-model="accessMode">
-        <option value="">全部接入模式</option>
-        <option value="public_rss">公开 RSS/Atom</option>
-        <option value="public_page">公开页面</option>
-        <option value="authenticated_browser">网页登录</option>
-        <option value="import">文件导入</option>
-        <option value="manual">人工录入</option>
-      </select>
+    <form class="source-filter" aria-label="来源目录筛选" @submit.prevent>
+      <label class="source-search"
+        >搜索来源<input
+          v-model="query"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索 Amazon、eBay、Reddit、国家或来源网址"
+      /></label>
+      <label
+        >业务类型<select v-model="category">
+          <option value="">全部类型</option>
+          <option value="news">新闻</option>
+          <option value="ecommerce">电商平台</option>
+          <option value="data">趋势数据</option>
+          <option value="community">论坛社区</option>
+          <option value="product_supply">商品供应链</option>
+        </select></label
+      ><label
+        >准备状态<select v-model="availability">
+          <option value="">全部状态</option>
+          <option value="automatic">自动采集</option>
+          <option value="setup_required">需要完成配置</option>
+          <option value="manual">手动来源</option>
+        </select></label
+      ><label
+        >市场<select v-model="market">
+          <option value="">全部地区</option>
+          <option v-for="item in marketOptions" :key="item" :value="item">{{ item }}</option>
+        </select></label
+      ><label
+        >语言<select v-model="language">
+          <option value="">全部语言</option>
+          <option v-for="item in languageOptions" :key="item" :value="item">{{ item }}</option>
+        </select></label
+      ><label
+        >接入模式<select v-model="accessMode">
+          <option value="">全部接入模式</option>
+          <option value="public_rss">公开 RSS/Atom</option>
+          <option value="public_page">公开页面</option>
+          <option value="authenticated_browser">网页登录</option>
+          <option value="import">文件导入</option>
+          <option value="manual">人工录入</option>
+        </select></label
+      ><label
+        >排序<select v-model="sort">
+          <option value="business">业务目录顺序</option>
+          <option value="attention">待配置优先</option>
+          <option value="name">名称顺序</option>
+          <option value="recent">最近成功任务</option>
+        </select></label
+      ><button type="button" class="source-reset" @click="resetFilters">重置筛选</button>
+      <span class="source-result-count">找到 {{ filtered.length }} 个来源</span>
     </form>
     <p v-if="message" class="source-message" role="status">
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
@@ -555,14 +684,22 @@ onMounted(load);
       <p>{{ message }}</p>
       <button v-if="!['expired', 'forbidden'].includes(state)" @click="load">重新加载</button>
     </div>
-    <section v-else class="source-purpose-groups" aria-label="按业务用途分组的热点来源">
+    <section
+      v-else
+      id="source-results"
+      class="source-purpose-groups"
+      aria-label="按业务用途分组的热点来源"
+    >
       <section v-for="group in groupedSources" :key="group.key" class="source-purpose-group">
         <header class="source-purpose-head">
           <div>
             <p>业务用途</p>
             <h3>{{ group.label }}</h3>
           </div>
-          <span>{{ group.description }} 共 {{ group.items.length }} 个来源</span>
+          <span
+            >{{ group.description }} 本页 {{ group.items.length }} 个，筛选结果共
+            {{ group.total }} 个</span
+          >
         </header>
         <div class="source-list">
           <article
@@ -636,7 +773,7 @@ onMounted(load);
                   ['public_page', 'public_rss'].includes(item.access_mode)
                 "
                 type="button"
-                :disabled="testing === item.provisioned.id"
+                :disabled="Boolean(testing)"
                 @click="testSource(item)"
               >
                 {{ testing === item.provisioned.id ? "测试中…" : "匿名测试" }}</button
@@ -679,6 +816,17 @@ onMounted(load);
         </div>
       </section>
       <p v-if="!groupedSources.length" class="source-state">没有符合筛选条件的来源。</p>
+      <nav v-if="filtered.length" class="source-pagination" aria-label="热点来源分页">
+        <button type="button" :disabled="page === 1" @click="changePage(page - 1)">上一页</button>
+        <span
+          >第 {{ page }} / {{ totalPages }} 页 · 当前 {{ resultRange.start }}–{{
+            resultRange.end
+          }}，共 {{ filtered.length }} 个来源</span
+        >
+        <button type="button" :disabled="page === totalPages" @click="changePage(page + 1)">
+          下一页
+        </button>
+      </nav>
     </section>
     <ProviderSourceConfigurationDialog
       :editing="editing"
@@ -750,14 +898,30 @@ onMounted(load);
 .source-guide span {
   opacity: 0.8;
 }
-.source-guide a {
+.source-guide-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.source-guide-actions small {
+  color: var(--so-text-muted);
+}
+.source-guide a,
+.source-guide button {
   white-space: nowrap;
   color: var(--so-on-primary);
   background: var(--so-primary);
   padding: 11px 16px;
+  border: 1px solid transparent;
   border-radius: 10px;
   font-weight: 800;
   text-decoration: none;
+}
+.source-guide button:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 .source-metrics {
   display: grid;
@@ -795,20 +959,44 @@ onMounted(load);
 }
 .source-filter {
   display: flex;
+  align-items: end;
   flex-wrap: wrap;
   gap: 10px;
 }
-.source-filter input,
-.source-filter select {
+.source-filter label {
+  display: grid;
+  gap: 5px;
+  color: var(--so-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.source-filter label input,
+.source-filter label select {
   padding: 10px;
   border: 1px solid var(--so-border);
   border-radius: 9px;
   color: var(--so-text);
   background: var(--so-panel-soft);
+  font: inherit;
+  font-weight: 500;
 }
-.source-filter input {
+.source-filter .source-search {
   flex: 1;
   min-width: 280px;
+}
+.source-reset {
+  min-height: 39px;
+  padding: 9px 13px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-panel);
+}
+.source-result-count {
+  align-self: center;
+  margin-left: auto;
+  color: var(--so-text-muted);
+  white-space: nowrap;
 }
 .source-purpose-groups,
 .source-purpose-group {
@@ -933,6 +1121,26 @@ onMounted(load);
   border-radius: 10px;
   background: var(--so-panel-soft);
 }
+.source-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 8px 0 4px;
+  color: var(--so-text-muted);
+}
+.source-pagination button {
+  min-width: 88px;
+  padding: 9px 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-panel);
+}
+.source-pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
 .source-state {
   padding: 30px;
   text-align: center;
@@ -946,11 +1154,25 @@ onMounted(load);
     flex-direction: column;
     gap: 16px;
   }
+  .source-guide-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
   .source-metrics {
     grid-template-columns: 1fr 1fr;
   }
   .source-filter {
     flex-direction: column;
+    align-items: stretch;
+  }
+  .source-filter label,
+  .source-filter .source-search {
+    width: 100%;
+    min-width: 0;
+  }
+  .source-result-count {
+    align-self: flex-start;
+    margin-left: 0;
   }
   .source-purpose-group {
     padding: 12px;
@@ -969,7 +1191,12 @@ onMounted(load);
     grid-template-columns: 1fr;
   }
   .source-list dl {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .source-pagination {
+    align-items: stretch;
+    flex-direction: column;
+    text-align: center;
   }
 }
 </style>

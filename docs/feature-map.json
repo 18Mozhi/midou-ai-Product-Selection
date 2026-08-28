@@ -2971,7 +2971,7 @@
       "view": "ProviderSourceCenter",
       "domain": "platform",
       "status": "verified",
-      "statusDetail": "M03-07_module_verified"
+      "statusDetail": "provider_sources_live_mysql_api_worker_crawler_catalog_search_filter_sort_pagination_url_state_refresh_timeout_configuration_smoke_version_rollback_compatibility_permission_idempotency_and_responsive_verification_completed"
     },
     {
       "path": "/platform-admin/providers/sources/1688-acceptance",
