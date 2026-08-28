@@ -926,7 +926,7 @@
         "view": "PlatformAccountCenter",
         "domain": "platform-accounts-permissions",
         "status": "implemented",
-        "statusDetail": "permission_comparison_live_mysql_role_catalog_search_filter_refresh_persistence_empty_failure_timeout_permission_and_responsive_verification_completed_pending_user_acceptance"
+        "statusDetail": "permission_comparison_live_mysql_role_catalog_search_filter_refresh_persistence_empty_failure_timeout_permission_and_responsive_verification_completed"
       },
       "navigation": { "label": "角色权限", "icon": "key", "group": "治理与安全" }
     },
