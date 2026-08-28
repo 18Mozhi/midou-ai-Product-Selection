@@ -765,7 +765,7 @@
         "/api/v1/platform/collection/tasks/{taskId}",
         "/api/v1/platform/collection/tasks/{taskId}/replay"
       ],
-      "scope": "organization and workspace scoped task, subquery, attempt, event, outbox and dead-letter truth in MySQL 5.7; each Provider subquery is isolated, its result or error is committed with a collection.subquery.completed event immediately, all sibling sources execute, and only then does the Worker apply the existing task-level retry, blocked or terminal policy; task detail shows every subquery result count, missing fields, persisted start-to-finish duration and retryability, while failure recovery links to existing credential, source health, source setting or confirmed replay surfaces; retry-scheduled or rate-limited work uses the shared task available_at explicitly labeled as task-level scheduling rather than fabricating provider-specific backoff",
+      "scope": "organization and workspace scoped task, subquery, attempt, event, outbox and dead-letter truth in MySQL 5.7; each Provider subquery is isolated, its result or error is committed with a collection.subquery.completed event immediately, all sibling sources execute, and only then does the Worker apply the existing task-level retry, blocked or terminal policy; task detail shows every subquery result count, missing fields, persisted start-to-finish duration and retryability, while failure recovery links to existing credential, source health, source setting or confirmed replay surfaces; retry-scheduled or rate-limited work uses the shared task available_at explicitly labeled as task-level scheduling rather than fabricating provider-specific backoff; the platform page exposes all server pages and task states, labels search as current-page filtering, preserves verified rows across refresh, offline, dependency and 15-second timeout failures, persists page/status/task context in the URL, and presents detail as a focus-managed dialog; concurrent identical replay requests return the same committed result task",
       "rssResultKinds": "public RSS subquery completion events distinguish empty_success for a valid feed with no entries, no_new_content when parsed records only link immutable existing evidence, and parse_failed for a payload that fails the current parser contract; task detail projects this audited event metadata without adding or guessing a persisted source field",
       "states": [
         "draft",
@@ -2992,7 +2992,7 @@
       "view": "CollectionTaskCenter",
       "domain": "collection-tasks",
       "status": "verified",
-      "statusDetail": "M03-05_module_verified"
+      "statusDetail": "collection_tasks_live_mysql_redis_api_worker_crawler_pagination_all_states_current_page_filter_refresh_offline_timeout_preserve_data_detail_url_accessibility_failure_isolation_manual_replay_concurrent_idempotency_permission_and_responsive_verification_completed"
     },
     {
       "path": "/platform-admin/collection/overview",

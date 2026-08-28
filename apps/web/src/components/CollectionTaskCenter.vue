@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
@@ -62,6 +63,31 @@ interface Detail {
 
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
+const route = useRoute(),
+  router = useRouter(),
+  pageSize = 50,
+  requestTimeoutMs = 15_000,
+  taskStatuses = [
+    "draft",
+    "scheduled",
+    "queued",
+    "leased",
+    "running",
+    "parsing",
+    "validating",
+    "persisted",
+    "retry_scheduled",
+    "rate_limited",
+    "blocked_login",
+    "blocked_captcha",
+    "blocked_robots",
+    "succeeded",
+    "succeeded_empty",
+    "completed_with_warnings",
+    "failed_terminal",
+    "dead_letter",
+    "manually_replayed",
+  ] as const;
 const state = ref<ViewState>("loading"),
   tasks = ref<Task[]>([]),
   detail = ref<Detail | null>(null),
@@ -70,11 +96,22 @@ const state = ref<ViewState>("loading"),
   query = ref(""),
   page = ref(1),
   total = ref(0),
+  listLoading = ref(false),
+  listIssue = ref(""),
   detailLoading = ref(false),
+  detailIssue = ref(""),
+  replayIssue = ref(""),
   confirming = ref(false),
   replayReason = ref(""),
   notice = ref(""),
-  saving = ref(false);
+  saving = ref(false),
+  detailPanel = ref<HTMLElement | null>(null),
+  detailCloseButton = ref<HTMLButtonElement | null>(null);
+let listController: AbortController | null = null,
+  detailController: AbortController | null = null,
+  detailSequence = 0,
+  detailOpenedFromList = false,
+  returnFocus: HTMLElement | null = null;
 const filtered = computed(() =>
   tasks.value.filter(
     (item) =>
@@ -107,6 +144,12 @@ const metrics = computed(() => ({
   ).length,
   evidence: tasks.value.reduce((sum, item) => sum + item.available_result_count, 0),
 }));
+const totalPages = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
+  pageStart = computed(() => (total.value ? (page.value - 1) * pageSize + 1 : 0)),
+  pageEnd = computed(() => Math.min(page.value * pageSize, total.value)),
+  detailOpen = computed(
+    () => detailLoading.value || Boolean(detail.value) || Boolean(detailIssue.value),
+  );
 const failure = (code: number): ViewState =>
   code === 401
     ? "expired"
@@ -215,43 +258,108 @@ const recoveryAction = computed(() => {
     };
   return null;
 });
-async function load() {
-  state.value = "loading";
-  notice.value = "";
+const timeoutController = (kind: "list" | "detail") => {
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort("request_timeout"), requestTimeoutMs);
+  if (kind === "list") listController = controller;
+  else detailController = controller;
+  return { controller, stop: () => window.clearTimeout(timer) };
+};
+const syncListQuery = () => {
+  const queryParams = { ...route.query };
+  if (page.value > 1) queryParams.page = String(page.value);
+  else delete queryParams.page;
+  if (status.value !== "all") queryParams.status = status.value;
+  else delete queryParams.status;
+  void router.replace({ query: queryParams });
+};
+async function load(options: { preserve?: boolean } = {}) {
+  if (listLoading.value) return;
+  listLoading.value = true;
+  listIssue.value = "";
+  if (!options.preserve || !tasks.value.length) state.value = "loading";
   const params = new URLSearchParams({
     page: String(page.value),
-    page_size: "50",
+    page_size: String(pageSize),
   });
   if (status.value !== "all") params.set("status", status.value);
+  listController?.abort("superseded");
+  const timeout = timeoutController("list");
   try {
-    const response = await request<Task[]>(`/platform/collection/tasks?${params}`);
+    const response = await request<Task[]>(`/platform/collection/tasks?${params}`, {
+      signal: timeout.controller.signal,
+    });
     requestId.value = response.request_id;
     tasks.value = response.data ?? [];
     total.value = (response.meta as { total?: number } | undefined)?.total ?? tasks.value.length;
+    if (!tasks.value.length && total.value > 0 && page.value > 1) {
+      page.value = Math.min(page.value - 1, Math.ceil(total.value / pageSize));
+      syncListQuery();
+      listLoading.value = false;
+      timeout.stop();
+      await load();
+      return;
+    }
     state.value = tasks.value.length ? "ready" : "empty";
   } catch (error) {
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? "";
-    state.value = apiError ? failure(apiError.status) : "blocked";
+    const message = timeout.controller.signal.aborted
+      ? "任务列表读取超过 15 秒，已停止等待；当前页面数据未被覆盖。"
+      : apiError?.actionHint || "任务列表暂不可用，请稍后重试。";
+    if (tasks.value.length && options.preserve) {
+      state.value = "ready";
+      listIssue.value = message;
+    } else state.value = apiError ? failure(apiError.status) : "blocked";
+  } finally {
+    timeout.stop();
+    if (listController === timeout.controller) listController = null;
+    listLoading.value = false;
   }
 }
-async function openTask(id: string) {
+async function openTask(id: string, options: { updateUrl?: boolean } = {}) {
+  if (options.updateUrl) {
+    const active = document.activeElement;
+    returnFocus = active instanceof HTMLElement ? active : null;
+    detailOpenedFromList = true;
+    await router.push({ query: { ...route.query, task: id } });
+    return;
+  }
+  const sequence = ++detailSequence;
+  detailController?.abort("superseded");
+  detail.value = null;
+  detailIssue.value = "";
   detailLoading.value = true;
+  const timeout = timeoutController("detail");
   try {
-    const response = await request<Detail>(`/platform/collection/tasks/${id}`);
+    const response = await request<Detail>(`/platform/collection/tasks/${id}`, {
+      signal: timeout.controller.signal,
+    });
+    if (sequence !== detailSequence) return;
     requestId.value = response.request_id;
     detail.value = response.data;
   } catch (error) {
+    if (sequence !== detailSequence) return;
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? requestId.value;
-    notice.value = apiError?.actionHint ?? "任务详情依赖暂不可用";
+    detailIssue.value = timeout.controller.signal.aborted
+      ? "任务详情读取超过 15 秒，已停止等待。"
+      : apiError?.actionHint || "任务详情依赖暂不可用。";
   } finally {
-    detailLoading.value = false;
+    timeout.stop();
+    if (detailController === timeout.controller) detailController = null;
+    if (sequence === detailSequence) {
+      detailLoading.value = false;
+      await nextTick();
+      detailCloseButton.value?.focus();
+    }
   }
 }
 async function replay() {
-  if (!detail.value) return;
+  if (!detail.value || saving.value) return;
   saving.value = true;
+  confirming.value = false;
+  replayIssue.value = "";
   try {
     const response = await request<Detail>(
       `/platform/collection/tasks/${detail.value.task.id}/replay`,
@@ -261,21 +369,108 @@ async function replay() {
     const successNotice = `已创建重放任务 ${response.data.task.id.slice(0, 8)}…，原任务与全部尝试记录已保留。`;
     detail.value = response.data;
     replayReason.value = "";
-    await load();
+    await router.replace({ query: { ...route.query, task: response.data.task.id } });
+    await load({ preserve: true });
     notice.value = successNotice;
   } catch (error) {
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? requestId.value;
-    notice.value = apiError?.actionHint ?? "依赖不可用，未执行重放";
+    replayIssue.value = apiError?.actionHint ?? "依赖不可用，未执行重放。";
   } finally {
     saving.value = false;
-    confirming.value = false;
   }
 }
-onMounted(async () => {
+function closeDetail() {
+  detailController?.abort("closed");
+  detailSequence += 1;
+  detail.value = null;
+  detailIssue.value = "";
+  detailLoading.value = false;
+  replayReason.value = "";
+  replayIssue.value = "";
+  if (detailOpenedFromList && route.query.task) {
+    detailOpenedFromList = false;
+    router.back();
+  } else {
+    const queryParams = { ...route.query };
+    delete queryParams.task;
+    void router.replace({ query: queryParams });
+  }
+  void nextTick(() => returnFocus?.focus());
+}
+function detailKeydown(event: KeyboardEvent) {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeDetail();
+    return;
+  }
+  if (event.key !== "Tab" || !detailPanel.value) return;
+  const focusable = [
+    ...detailPanel.value.querySelectorAll<HTMLElement>(
+      "a[href],button:not([disabled]),textarea:not([disabled]),summary,[tabindex]:not([tabindex='-1'])",
+    ),
+  ];
+  const first = focusable[0],
+    last = focusable.at(-1);
+  if (!first || !last) return;
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+async function changeStatus() {
+  page.value = 1;
+  query.value = "";
+  syncListQuery();
   await load();
-  const taskId = new URLSearchParams(window.location.search).get("task");
+}
+async function changePage(nextPage: number) {
+  if (listLoading.value || nextPage < 1 || nextPage > totalPages.value) return;
+  page.value = nextPage;
+  query.value = "";
+  syncListQuery();
+  await load();
+  document.querySelector(".collection-task-table-card")?.scrollIntoView({ behavior: "smooth" });
+}
+watch(
+  () => route.query.task,
+  async (value) => {
+    const taskId = typeof value === "string" && /^[0-9a-f-]{36}$/i.test(value) ? value : "";
+    if (!taskId) {
+      detail.value = null;
+      detailIssue.value = "";
+      detailLoading.value = false;
+      await nextTick();
+      returnFocus?.focus();
+      return;
+    }
+    await openTask(taskId);
+  },
+);
+watch(detailOpen, async (open) => {
+  document.body.classList.toggle("collection-detail-open", open);
+  if (!open) return;
+  await nextTick();
+  detailCloseButton.value?.focus();
+});
+onMounted(async () => {
+  const initialStatus = typeof route.query.status === "string" ? route.query.status : "";
+  status.value = taskStatuses.includes(initialStatus as (typeof taskStatuses)[number])
+    ? initialStatus
+    : "all";
+  const initialPage = Number(route.query.page);
+  page.value = Number.isInteger(initialPage) && initialPage > 0 ? initialPage : 1;
+  await load();
+  const taskId = typeof route.query.task === "string" ? route.query.task : "";
   if (taskId && /^[0-9a-f-]{36}$/i.test(taskId)) await openTask(taskId);
+});
+onBeforeUnmount(() => {
+  listController?.abort("unmounted");
+  detailController?.abort("unmounted");
+  document.body.classList.remove("collection-detail-open");
 });
 </script>
 
@@ -287,10 +482,26 @@ onMounted(async () => {
         <h2 id="collection-task-title">采集任务监控</h2>
         <span>集中查看任务进度、来源覆盖、失败原因和重试记录；每个任务都可以展开详情。</span>
       </div>
-      <RouterLink to="/platform-admin/collection/browser-runtime">浏览器运行时</RouterLink>
+      <div class="collection-task-title-actions">
+        <button type="button" :disabled="listLoading" @click="load({ preserve: true })">
+          {{ listLoading ? "正在刷新…" : "刷新任务" }}
+        </button>
+        <RouterLink to="/platform-admin/collection/browser-runtime">浏览器运行时</RouterLink>
+      </div>
     </header>
-    <UiStatePanel v-if="state !== 'ready'" :kind="state" :request-id="requestId" @primary="load" />
+    <UiStatePanel
+      v-if="state !== 'ready'"
+      :kind="state"
+      :request-id="requestId"
+      @primary="() => load()"
+    />
     <template v-else>
+      <div v-if="listIssue" class="collection-inline-issue" role="alert">
+        <span>{{ listIssue }}</span
+        ><button type="button" :disabled="listLoading" @click="load({ preserve: true })">
+          重新读取
+        </button>
+      </div>
       <div class="collection-task-metrics">
         <article>
           <small>处理中</small><strong>{{ metrics.active }}</strong
@@ -313,20 +524,43 @@ onMounted(async () => {
         <header>
           <div>
             <h3>任务队列</h3>
-            <span>{{ notice || `共 ${total} 个任务；覆盖不足不会自动给出推荐结论。` }}</span>
+            <span aria-live="polite">{{
+              notice ||
+              `共 ${total} 个任务 · 当前显示 ${pageStart}–${pageEnd}；覆盖不足不会自动给出推荐结论。`
+            }}</span>
           </div>
-          <div>
+          <div class="collection-task-filters">
             <input
               v-model="query"
-              aria-label="搜索采集任务"
-              placeholder="任务 / 组织 / 工作区 / 错误码"
-            /><select v-model="status" aria-label="采集任务状态" @change="load">
+              aria-label="筛选当前页采集任务"
+              placeholder="筛选当前页：任务 ID / 组织 ID / 工作区 ID / 错误码"
+            /><select v-model="status" aria-label="采集任务状态" @change="changeStatus">
               <option value="all">全部状态</option>
-              <option value="running">执行中</option>
-              <option value="retry_scheduled">等待重试</option>
-              <option value="completed_with_warnings">部分完成</option>
-              <option value="dead_letter">死信</option>
-              <option value="succeeded">成功</option>
+              <optgroup label="准备与执行">
+                <option value="draft">草稿</option>
+                <option value="scheduled">待调度</option>
+                <option value="queued">已排队</option>
+                <option value="leased">已租约</option>
+                <option value="running">执行中</option>
+                <option value="parsing">解析中</option>
+                <option value="validating">校验中</option>
+                <option value="persisted">已持久化</option>
+              </optgroup>
+              <optgroup label="等待与受阻">
+                <option value="retry_scheduled">等待重试</option>
+                <option value="rate_limited">限流等待</option>
+                <option value="blocked_login">登录受阻</option>
+                <option value="blocked_captcha">验证码受阻</option>
+                <option value="blocked_robots">网站规则限制</option>
+              </optgroup>
+              <optgroup label="完成与终止">
+                <option value="succeeded">成功</option>
+                <option value="succeeded_empty">无可用结果</option>
+                <option value="completed_with_warnings">部分完成</option>
+                <option value="failed_terminal">终止失败</option>
+                <option value="dead_letter">死信</option>
+                <option value="manually_replayed">已人工重放</option>
+              </optgroup>
             </select>
           </div>
         </header>
@@ -377,7 +611,9 @@ onMounted(async () => {
                     {{ time(item.updated_at) }}<small>{{ item.last_error_code || "无错误" }}</small>
                   </td>
                   <td>
-                    <button type="button" @click="openTask(item.id)">查看</button>
+                    <button type="button" @click="openTask(item.id, { updateUrl: true })">
+                      查看
+                    </button>
                   </td>
                 </tr>
                 <tr v-if="!filtered.length">
@@ -424,7 +660,7 @@ onMounted(async () => {
               type="button"
               @click="
                 close();
-                openTask(row.id);
+                openTask(row.id, { updateUrl: true });
               "
             >
               打开完整任务详情
@@ -456,136 +692,216 @@ onMounted(async () => {
             </details>
           </template>
         </ResponsiveDataView>
+        <nav v-if="totalPages > 1" class="collection-pagination" aria-label="采集任务分页">
+          <button type="button" :disabled="page <= 1 || listLoading" @click="changePage(page - 1)">
+            上一页
+          </button>
+          <span>第 {{ page }} / {{ totalPages }} 页 · 本页 {{ tasks.length }} 条</span>
+          <button
+            type="button"
+            :disabled="page >= totalPages || listLoading"
+            @click="changePage(page + 1)"
+          >
+            下一页
+          </button>
+        </nav>
       </section>
-      <aside v-if="detail || detailLoading" class="collection-task-detail" aria-live="polite">
-        <p v-if="detailLoading">正在读取任务详情…</p>
-        <template v-else-if="detail"
-          ><header>
-            <div>
-              <p>采集任务详情</p>
-              <h3>{{ detail.task.id }}</h3>
-              <span>关联编号 {{ detail.task.request_id }}</span>
-            </div>
-            <button
-              type="button"
-              aria-label="关闭任务详情"
-              title="关闭任务详情"
-              @click="detail = null"
-            >
-              ×
-            </button>
-          </header>
-          <div class="collection-detail-summary">
-            <article>
-              <small>状态</small><strong>{{ label(detail.task.status) }}</strong>
-            </article>
-            <article>
-              <small>覆盖</small><strong>{{ label(detail.task.coverage_status) }}</strong>
-            </article>
-            <article>
-              <small>尝试</small><strong>{{ detail.attempts.length }}</strong>
-            </article>
-            <article>
-              <small>事件</small><strong>{{ detail.events.length }}</strong>
-            </article>
-          </div>
-          <section v-if="recoveryAction" class="collection-recovery" aria-label="建议恢复动作">
-            <div>
-              <small>下一步</small>
-              <strong>{{ recoveryAction.label }}</strong>
-              <span>{{ recoveryAction.description }}</span>
-            </div>
-            <a v-if="recoveryAction.kind === 'replay'" href="#collection-replay">进入重放</a>
-            <RouterLink v-else :to="recoveryAction.to">{{ recoveryAction.label }}</RouterLink>
-          </section>
-          <section>
-            <h4>子查询覆盖</h4>
-            <article v-for="item in detail.subqueries" :key="item.id" class="collection-subquery">
-              <div>
-                <strong>{{ item.provider_name }}</strong
-                ><small>{{ item.is_required ? "必需来源" : "可选来源" }}</small>
-              </div>
-              <b :data-status="item.status">{{ label(item.status) }}</b
-              ><span class="collection-subquery-result"
-                >结果 {{ item.available_result_count }} 条 ·
-                {{ subqueryDurationText(item.started_at, item.finished_at) }} ·
-                {{ item.error_code || "无错误" }}</span
-              ><small class="collection-subquery-missing">{{
-                item.missing_fields.length ? `缺失 ${item.missing_fields.join("、")}` : "无缺失字段"
-              }}</small
-              ><small v-if="item.result_kind" class="collection-subquery-kind">{{
-                resultKindText(item.result_kind)
-              }}</small>
-              <details v-if="item.robots_decision" class="collection-subquery-policy">
-                <summary>robots 判定：{{ robotsDecisionText(item.robots_decision) }}</summary>
-                <small
-                  >判定版本 {{ item.robots_decision.decision_version }} · User-agent
-                  {{ item.robots_decision.matched_user_agent || "未命中分组" }}</small
-                >
-              </details>
-              ><small class="collection-subquery-retry">{{
-                subqueryRetryText(detail.task, item.retryable)
-              }}</small>
-            </article>
-          </section>
-          <section class="collection-detail-history">
-            <h4>执行尝试</h4>
-            <div v-if="!detail.attempts.length" class="collection-detail-empty">尚无执行尝试。</div>
-            <article v-for="(item, index) in detail.attempts" :key="cell(item.id) || index">
-              <strong
-                >第 {{ cell(item.attempt_number) || index + 1 }} 次 ·
-                {{ label(cell(item.status)) }}</strong
-              ><span
-                >执行器 {{ cell(item.worker_id || item.lease_owner) }} · 开始
-                {{ cell(item.started_at) }} · 完成 {{ cell(item.finished_at) }}</span
-              ><small>{{ cell(item.error_code || "无错误") }}</small>
-            </article>
-          </section>
-          <section class="collection-detail-history">
-            <h4>状态事件</h4>
-            <div v-if="!detail.events.length" class="collection-detail-empty">尚无状态事件。</div>
-            <article v-for="(item, index) in detail.events" :key="cell(item.id) || index">
-              <strong
-                >{{ cell(item.event_type) }} · {{ label(cell(item.from_status)) }} →
-                {{ label(cell(item.to_status)) }}</strong
-              ><span
-                >{{ cell(item.actor_type) }} · {{ cell(item.actor_id) }} ·
-                {{ cell(item.occurred_at) }}</span
-              >
-            </article>
-          </section>
-          <section class="collection-detail-history">
-            <h4>死信记录</h4>
-            <div v-if="!detail.dead_letter" class="collection-detail-empty">
-              该任务没有死信记录。
-            </div>
-            <article v-else>
-              <strong>{{ cell(detail.dead_letter.error_code || detail.dead_letter.status) }}</strong
-              ><span
-                >进入死信：{{
-                  cell(detail.dead_letter.created_at || detail.dead_letter.updated_at)
-                }}</span
-              ><small>{{ cell(detail.dead_letter) }}</small>
-            </article>
-          </section>
-          <footer v-if="detail.task.status === 'dead_letter'" id="collection-replay">
-            <label
-              >人工重放原因<textarea
-                v-model="replayReason"
-                rows="3"
-                maxlength="500"
-                placeholder="说明恢复条件和重放原因（2–500 字）"
-              ></textarea></label
-            ><button
-              type="button"
-              :disabled="replayReason.trim().length < 2 || saving"
-              @click="confirming = true"
-            >
-              人工重放
-            </button>
-          </footer></template
+      <div v-if="detailOpen" class="collection-task-detail-backdrop" @mousedown.self="closeDetail">
+        <aside
+          ref="detailPanel"
+          class="collection-task-detail"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="collection-detail-title"
+          aria-describedby="collection-detail-description"
+          aria-live="polite"
+          @keydown="detailKeydown"
         >
-      </aside>
+          <div v-if="detailLoading" class="collection-detail-state">
+            <span class="collection-detail-spinner" aria-hidden="true"></span>
+            <strong>正在读取任务详情…</strong>
+            <small>超过 15 秒会自动停止等待，不会显示上一条任务的数据。</small>
+          </div>
+          <div v-else-if="detailIssue" class="collection-detail-state" role="alert">
+            <strong>任务详情未能读取</strong>
+            <span>{{ detailIssue }}</span>
+            <div>
+              <button type="button" @click="openTask(String(route.query.task || ''))">重试</button>
+              <button type="button" @click="closeDetail">关闭</button>
+            </div>
+          </div>
+          <template v-else-if="detail"
+            ><header>
+              <div>
+                <p>采集任务详情</p>
+                <h3 id="collection-detail-title">任务 {{ detail.task.id.slice(0, 8) }}…</h3>
+                <span id="collection-detail-description"
+                  >{{ label(detail.task.status) }} · 更新于 {{ time(detail.task.updated_at) }}</span
+                >
+              </div>
+              <button
+                ref="detailCloseButton"
+                type="button"
+                aria-label="关闭任务详情"
+                title="关闭任务详情"
+                @click="closeDetail"
+              >
+                ×
+              </button>
+            </header>
+            <div class="collection-detail-summary">
+              <article>
+                <small>状态</small><strong>{{ label(detail.task.status) }}</strong>
+              </article>
+              <article>
+                <small>覆盖</small><strong>{{ label(detail.task.coverage_status) }}</strong>
+              </article>
+              <article>
+                <small>尝试</small><strong>{{ detail.attempts.length }}</strong>
+              </article>
+              <article>
+                <small>事件</small><strong>{{ detail.events.length }}</strong>
+              </article>
+            </div>
+            <section v-if="recoveryAction" class="collection-recovery" aria-label="建议恢复动作">
+              <div>
+                <small>下一步</small>
+                <strong>{{ recoveryAction.label }}</strong>
+                <span>{{ recoveryAction.description }}</span>
+              </div>
+              <a v-if="recoveryAction.kind === 'replay'" href="#collection-replay">进入重放</a>
+              <RouterLink v-else :to="recoveryAction.to">{{ recoveryAction.label }}</RouterLink>
+            </section>
+            <section>
+              <h4>子查询覆盖</h4>
+              <article v-for="item in detail.subqueries" :key="item.id" class="collection-subquery">
+                <div>
+                  <strong>{{ item.provider_name }}</strong
+                  ><small>{{ item.is_required ? "必需来源" : "可选来源" }}</small>
+                </div>
+                <b :data-status="item.status">{{ label(item.status) }}</b
+                ><span class="collection-subquery-result"
+                  >结果 {{ item.available_result_count }} 条 ·
+                  {{ subqueryDurationText(item.started_at, item.finished_at) }} ·
+                  {{ item.error_code || "无错误" }}</span
+                ><small class="collection-subquery-missing">{{
+                  item.missing_fields.length
+                    ? `缺失 ${item.missing_fields.join("、")}`
+                    : "无缺失字段"
+                }}</small
+                ><small v-if="item.result_kind" class="collection-subquery-kind">{{
+                  resultKindText(item.result_kind)
+                }}</small>
+                <details v-if="item.robots_decision" class="collection-subquery-policy">
+                  <summary>robots 判定：{{ robotsDecisionText(item.robots_decision) }}</summary>
+                  <small
+                    >判定版本 {{ item.robots_decision.decision_version }} · User-agent
+                    {{ item.robots_decision.matched_user_agent || "未命中分组" }}</small
+                  >
+                </details>
+                <small class="collection-subquery-retry">{{
+                  subqueryRetryText(detail.task, item.retryable)
+                }}</small>
+              </article>
+            </section>
+            <section class="collection-detail-history">
+              <h4>执行尝试</h4>
+              <div v-if="!detail.attempts.length" class="collection-detail-empty">
+                尚无执行尝试。
+              </div>
+              <article v-for="(item, index) in detail.attempts" :key="cell(item.id) || index">
+                <strong
+                  >第 {{ cell(item.attempt_number) || index + 1 }} 次 ·
+                  {{ label(cell(item.status)) }}</strong
+                ><span
+                  >执行器 {{ cell(item.worker_id || item.lease_owner) }} · 开始
+                  {{ cell(item.started_at) }} · 完成 {{ cell(item.finished_at) }}</span
+                ><small>{{ cell(item.error_code || "无错误") }}</small>
+              </article>
+            </section>
+            <section class="collection-detail-history">
+              <h4>状态事件</h4>
+              <div v-if="!detail.events.length" class="collection-detail-empty">尚无状态事件。</div>
+              <article v-for="(item, index) in detail.events" :key="cell(item.id) || index">
+                <strong
+                  >{{ cell(item.event_type) }} · {{ label(cell(item.from_status)) }} →
+                  {{ label(cell(item.to_status)) }}</strong
+                ><span
+                  >{{ cell(item.actor_type) }} · {{ cell(item.actor_id) }} ·
+                  {{ cell(item.occurred_at) }}</span
+                >
+              </article>
+            </section>
+            <section class="collection-detail-history">
+              <h4>死信记录</h4>
+              <div v-if="!detail.dead_letter" class="collection-detail-empty">
+                该任务没有死信记录。
+              </div>
+              <article v-else>
+                <strong>{{
+                  cell(detail.dead_letter.error_code || detail.dead_letter.status)
+                }}</strong
+                ><span
+                  >进入死信：{{
+                    cell(detail.dead_letter.created_at || detail.dead_letter.updated_at)
+                  }}</span
+                ><small>状态：{{ label(cell(detail.dead_letter.status)) }}</small
+                ><small v-if="detail.dead_letter.replay_reason"
+                  >重放原因：{{ cell(detail.dead_letter.replay_reason) }}</small
+                >
+              </article>
+            </section>
+            <details class="collection-technical-details">
+              <summary>技术标识与关联信息</summary>
+              <dl>
+                <div>
+                  <dt>任务 ID</dt>
+                  <dd>{{ detail.task.id }}</dd>
+                </div>
+                <div>
+                  <dt>组织 ID</dt>
+                  <dd>{{ detail.task.organization_id }}</dd>
+                </div>
+                <div>
+                  <dt>工作区 ID</dt>
+                  <dd>{{ detail.task.workspace_id }}</dd>
+                </div>
+                <div>
+                  <dt>请求 ID</dt>
+                  <dd>{{ detail.task.request_id }}</dd>
+                </div>
+                <div>
+                  <dt>错误码</dt>
+                  <dd>{{ detail.task.last_error_code || "—" }}</dd>
+                </div>
+              </dl>
+            </details>
+            <footer v-if="detail.task.status === 'dead_letter'" id="collection-replay">
+              <div v-if="replayIssue" class="collection-replay-issue" role="alert">
+                {{ replayIssue }}
+              </div>
+              <label
+                >人工重放原因<textarea
+                  v-model="replayReason"
+                  rows="3"
+                  maxlength="500"
+                  required
+                  aria-describedby="collection-replay-help"
+                  placeholder="说明恢复条件和重放原因（2–500 字）"
+                ></textarea></label
+              ><small id="collection-replay-help"
+                >仅在确认依赖恢复后提交；已输入 {{ replayReason.trim().length }} / 500 字。</small
+              ><button
+                type="button"
+                :disabled="replayReason.trim().length < 2 || saving"
+                @click="confirming = true"
+              >
+                {{ saving ? "正在创建重放任务…" : "人工重放" }}
+              </button>
+            </footer></template
+          >
+        </aside>
+      </div>
     </template>
     <ConfirmDialog
       :open="confirming"

@@ -346,3 +346,97 @@ test("M03-05.A08/A09/A16 empty forbidden and dependency states are truthful", as
   await page.reload();
   await expect(page.locator('[data-kind="blocked"]')).toBeVisible();
 });
+
+test("collection queue paginates all records and preserves accessible detail context", async ({
+  page,
+}) => {
+  await nav(page);
+  const pageOne = Array.from({ length: 50 }, (_, index) => ({
+    ...tasks[0],
+    id: `00000000-0000-4000-8000-${String(index + 1000).padStart(12, "0")}`,
+    request_id: `m03-05-page-${index + 1}`,
+  }));
+  await page.route("**/api/v1/platform/collection/tasks?**", (route) => {
+    const requestedPage = new URL(route.request().url()).searchParams.get("page");
+    const data = requestedPage === "2" ? [tasks[1]] : pageOne;
+    return route.fulfill({
+      json: {
+        data,
+        meta: { page: Number(requestedPage), page_size: 50, total: 51 },
+        request_id: `m03-05-page-${requestedPage}`,
+        trace_id: `m03-05-page-${requestedPage}`,
+      },
+    });
+  });
+  await page.route(`**/api/v1/platform/collection/tasks/${ids.dead}`, (route) =>
+    route.fulfill({
+      json: {
+        data: detail(),
+        request_id: "m03-05-page-detail",
+        trace_id: "m03-05-page-detail",
+      },
+    }),
+  );
+  await page.goto("/platform-admin/collection");
+  await expect(page.getByRole("navigation", { name: "采集任务分页" })).toContainText("第 1 / 2 页");
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page).toHaveURL(/page=2/);
+  await expect(page.getByText("本页 1 条")).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "筛选当前页采集任务" })).toBeVisible();
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /死信 · 0 条证据/ }).click();
+    await page.getByRole("button", { name: "打开完整任务详情" }).click();
+  } else await page.getByRole("button", { name: "查看" }).click();
+  await expect(page).toHaveURL(new RegExp(`page=2.*task=${ids.dead}|task=${ids.dead}.*page=2`));
+  const dialog = page.getByRole("dialog", { name: `任务 ${ids.dead.slice(0, 8)}…` });
+  await expect(dialog).toBeVisible();
+  await expect(page.getByRole("button", { name: "关闭任务详情" })).toBeFocused();
+  await page.reload();
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(page).toHaveURL(/page=2/);
+  await expect(page).not.toHaveURL(/task=/);
+});
+
+test("detail read failure never leaves the previous task visible", async ({ page }) => {
+  await nav(page);
+  await list(page);
+  let fail = false;
+  await page.route("**/api/v1/platform/collection/tasks/*", (route) =>
+    fail
+      ? route.fulfill({
+          status: 503,
+          json: {
+            error: {
+              code: "dependency_unavailable",
+              message: "详情依赖不可用",
+              action_hint: "稍后重试详情读取。",
+            },
+            request_id: "m03-05-detail-failed",
+            trace_id: "m03-05-detail-failed",
+          },
+        })
+      : route.fulfill({
+          json: {
+            data: detail(tasks[0]),
+            request_id: "m03-05-detail-ready",
+            trace_id: "m03-05-detail-ready",
+          },
+        }),
+  );
+  await page.goto("/platform-admin/collection");
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /部分完成 · 38 条证据/ }).click();
+    await page.getByRole("button", { name: "打开完整任务详情" }).click();
+  } else await page.getByRole("button", { name: "查看" }).first().click();
+  await expect(page.getByRole("dialog")).toContainText(tasks[0].id.slice(0, 8));
+  await page.getByRole("button", { name: "关闭任务详情" }).click();
+  fail = true;
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /死信 · 0 条证据/ }).click();
+    await page.getByRole("button", { name: "打开完整任务详情" }).click();
+  } else await page.getByRole("button", { name: "查看" }).nth(1).click();
+  await expect(page.getByRole("alert")).toContainText("任务详情未能读取");
+  await expect(page.getByRole("dialog")).not.toContainText(tasks[0].id.slice(0, 8));
+});

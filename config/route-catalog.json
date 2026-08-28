@@ -1160,7 +1160,7 @@
         "view": "CollectionTaskCenter",
         "domain": "collection-tasks",
         "status": "verified",
-        "statusDetail": "M03-05_module_verified"
+        "statusDetail": "collection_tasks_live_mysql_redis_api_worker_crawler_pagination_all_states_current_page_filter_refresh_offline_timeout_preserve_data_detail_url_accessibility_failure_isolation_manual_replay_concurrent_idempotency_permission_and_responsive_verification_completed"
       }
     },
     {

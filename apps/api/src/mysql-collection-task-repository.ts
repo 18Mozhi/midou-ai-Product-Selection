@@ -118,12 +118,21 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
           404,
           "刷新采集任务列表。",
         );
-      if (source.status !== "dead_letter")
+      if (source.status !== "dead_letter") {
+        const [committedOperations] = await c.query<RowDataPacket[]>(
+          "SELECT result_task_id FROM collection_task_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1 FOR UPDATE",
+          [input.actorId, route, input.idempotencyKey],
+        );
+        if (committedOperations[0]) {
+          await c.commit();
+          return (await this.readDetail(this.pool, String(committedOperations[0].result_task_id)))!;
+        }
         throw new CollectionTaskServiceError(
           "collection_replay_not_allowed",
           409,
           "只有 dead_letter 任务可以人工重放。",
         );
+      }
       const [subqueries] = await c.query<RowDataPacket[]>(
         "SELECT * FROM collection_subqueries WHERE task_id=? ORDER BY ordinal",
         [input.taskId],
