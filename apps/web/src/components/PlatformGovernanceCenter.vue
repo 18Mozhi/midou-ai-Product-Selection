@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
@@ -8,14 +9,63 @@ const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 type Section =
   "score_rules" | "cost_rules" | "approval_templates" | "automation_rules" | "releases";
-const section = ref<Section>("score_rules"),
-  state = ref<"loading" | "ready" | "empty" | "error">("loading"),
-  data = ref<any>(null),
-  query = ref(""),
-  status = ref(""),
+type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+interface Pagination {
+  page: number;
+  page_size: number;
+  total: number;
+  total_pages: number;
+}
+const sectionStatuses: Record<Section, string[]> = {
+  score_rules: [
+    "draft",
+    "pending_approval",
+    "approved",
+    "active",
+    "retired",
+    "rejected",
+    "rolled_back",
+  ],
+  cost_rules: [
+    "draft",
+    "pending_approval",
+    "approved",
+    "active",
+    "retired",
+    "rejected",
+    "rolled_back",
+  ],
+  approval_templates: ["draft", "published", "archived"],
+  automation_rules: ["active", "paused"],
+  releases: ["planned", "preflight_passed", "deploying", "healthy", "failed", "rolled_back"],
+};
+const route = useRoute(),
+  router = useRouter(),
+  queryValue = (name: string) => {
+    const value = route.query[name];
+    return typeof value === "string" ? value : "";
+  },
+  sectionValues = Object.keys(sectionStatuses) as Section[],
+  initialSection = sectionValues.includes(queryValue("section") as Section)
+    ? (queryValue("section") as Section)
+    : "score_rules",
+  initialStatus = sectionStatuses[initialSection].includes(queryValue("status"))
+    ? queryValue("status")
+    : "",
+  pageSize = 20,
+  section = ref<Section>(initialSection),
+  state = ref<State>("loading"),
+  data = ref<any>({ summary: {}, items: [], pagination: null }),
+  query = ref(queryValue("q").trim()),
+  queryDraft = ref(query.value),
+  status = ref(initialStatus),
+  statusDraft = ref(initialStatus),
+  page = ref(/^\d{1,4}$/.test(queryValue("page")) ? Math.max(1, Number(queryValue("page"))) : 1),
   message = ref(""),
   requestId = ref(""),
-  selected = ref<any>(null);
+  selected = ref<any>(null),
+  refreshing = ref(false);
+let activeController: AbortController | null = null;
 const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
   () => Boolean(selected.value),
   () => (selected.value = null),
@@ -58,10 +108,21 @@ const sections: Array<{
   },
 ];
 const current = computed(() => sections.find((item) => item.value === section.value)!);
-const rows = computed<any[]>(() => data.value?.[section.value] ?? []);
-const activeFilterCount = computed(
-  () => Number(Boolean(query.value.trim())) + Number(Boolean(status.value)),
+const rows = computed<any[]>(() => data.value?.items ?? []);
+const pagination = computed<Pagination>(
+  () => data.value?.pagination ?? { page: 1, page_size: pageSize, total: 0, total_pages: 0 },
 );
+const statusOptions = computed(() => sectionStatuses[section.value]);
+const hasLoadedFacts = computed(() => Boolean(data.value?.observed_at));
+const activeFilterCount = computed(
+  () => Number(Boolean(queryDraft.value.trim())) + Number(Boolean(statusDraft.value)),
+);
+const rangeLabel = computed(() => {
+  if (!pagination.value.total) return "0 条";
+  const start = (pagination.value.page - 1) * pagination.value.page_size + 1,
+    end = Math.min(pagination.value.page * pagination.value.page_size, pagination.value.total);
+  return `${start}–${end} / ${pagination.value.total} 条`;
+});
 const summaryName = (key: string) =>
   (
     ({
@@ -77,17 +138,19 @@ const statusName = (value: unknown) =>
   (
     ({
       active: "启用",
-      enabled: "启用",
-      disabled: "停用",
       paused: "暂停",
       draft: "草稿",
+      pending_approval: "待审批",
       published: "已发布",
       approved: "已批准",
+      rejected: "已驳回",
       retired: "已退役",
-      succeeded: "成功",
+      archived: "已归档",
+      planned: "已计划",
+      preflight_passed: "预检通过",
+      deploying: "发布中",
+      healthy: "运行健康",
       failed: "失败",
-      running: "进行中",
-      stopped: "已停止",
       rolled_back: "已回滚",
     }) as Record<string, string>
   )[String(value)] ?? String(value ?? "—");
@@ -112,25 +175,105 @@ const editHref = (item: any) =>
   section.value === "automation_rules"
     ? `/automations?rule=${item.id}&action=edit`
     : current.value.href;
-async function load() {
-  state.value = "loading";
+const versionText = (item: any) => {
+  if (section.value === "releases") return item.name ? `版本 ${item.name}` : "未记录版本";
+  if (section.value === "approval_templates")
+    return `第 ${item.current_version ?? item.revision} 版`;
+  if (section.value === "automation_rules") return `第 ${item.version} 版`;
+  return `第 ${item.revision} 版`;
+};
+const failureState = (error: ApiClientError): State =>
+  error.kind === "expired" || error.kind === "forbidden"
+    ? error.kind
+    : error.kind === "blocked" || error.kind === "rate_limited"
+      ? "blocked"
+      : "error";
+async function syncUrl() {
+  const next: Record<string, string> = {};
+  if (section.value !== "score_rules") next.section = section.value;
+  if (query.value) next.q = query.value;
+  if (status.value) next.status = status.value;
+  if (page.value > 1) next.page = String(page.value);
+  await router.replace({ query: next });
+}
+async function load(options: { updateUrl?: boolean } = {}) {
+  if (refreshing.value) return;
+  const hadData = hasLoadedFacts.value;
+  refreshing.value = true;
+  if (!hadData) state.value = "loading";
   message.value = "";
-  const params = new URLSearchParams({ domain: "governance" });
+  const params = new URLSearchParams({
+    domain: "governance",
+    section: section.value,
+    page: String(page.value),
+    page_size: String(pageSize),
+  });
   if (query.value.trim()) params.set("query", query.value.trim());
   if (status.value) params.set("status", status.value);
+  const controller = new AbortController();
+  activeController = controller;
+  const timer = window.setTimeout(() => controller.abort(), 15_000);
   try {
-    const response = await request<any>(`/platform/management?${params}`);
+    if (options.updateUrl !== false) await syncUrl();
+    const response = await request<any>(`/platform/management?${params}`, {
+      signal: controller.signal,
+    });
     requestId.value = response.request_id;
     data.value = response.data;
-    state.value = Object.values(response.data.summary).some(Number) ? "ready" : "empty";
+    page.value = response.data.pagination.page;
+    if (options.updateUrl !== false) await syncUrl();
+    state.value = response.data.pagination.total ? "ready" : "empty";
   } catch (error) {
     const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? "";
-    message.value = failure?.actionHint ?? "治理数据暂不可用";
-    state.value = "error";
+    requestId.value = failure?.requestId ?? requestId.value;
+    message.value = controller.signal.aborted
+      ? "读取超过 15 秒，已安全取消；上一份治理事实仍保留。"
+      : (failure?.actionHint ?? "网络或服务异常，上一份治理事实仍保留。");
+    state.value = hadData ? "ready" : failure ? failureState(failure) : "blocked";
+  } finally {
+    window.clearTimeout(timer);
+    if (activeController === controller) activeController = null;
+    refreshing.value = false;
   }
 }
-onMounted(load);
+function selectSection(value: Section) {
+  if (refreshing.value || value === section.value) return;
+  section.value = value;
+  status.value = "";
+  statusDraft.value = "";
+  page.value = 1;
+  selected.value = null;
+  void load();
+}
+function applyFilters() {
+  if (refreshing.value) return;
+  query.value = queryDraft.value.trim();
+  status.value = statusDraft.value;
+  page.value = 1;
+  void load();
+}
+function resetFilters() {
+  if (refreshing.value) return;
+  query.value = "";
+  queryDraft.value = "";
+  status.value = "";
+  statusDraft.value = "";
+  page.value = 1;
+  void load();
+}
+function goToPage(nextPage: number) {
+  if (
+    refreshing.value ||
+    nextPage < 1 ||
+    nextPage > pagination.value.total_pages ||
+    nextPage === page.value
+  )
+    return;
+  page.value = nextPage;
+  void load();
+}
+onMounted(() => void load());
+onBeforeUnmount(() => activeController?.abort());
 </script>
 
 <template>
@@ -143,57 +286,55 @@ onMounted(load);
           >统一核对跨组织规则版本、审批、自动化和发布回滚；写操作进入对应受权限保护的工作台。</span
         >
       </div>
-      <RouterLink :to="current.href">{{ current.action }}</RouterLink>
+      <div class="governance-header-actions">
+        <button type="button" :disabled="refreshing" @click="load()">
+          {{ refreshing ? "刷新中…" : "刷新事实" }}
+        </button>
+        <RouterLink :to="current.href">{{ current.action }}</RouterLink>
+      </div>
     </header>
     <ResponsiveFilterDrawer label="筛选治理记录" :active-count="activeFilterCount">
-      <form @submit.prevent="load">
-        <input v-model="query" placeholder="搜索规则、版本、组织或工作区" maxlength="120" /><select
-          v-model="status"
-          aria-label="治理状态"
-        >
-          <option value="">全部状态</option>
-          <option
-            v-for="value in [
-              'active',
-              'enabled',
-              'paused',
-              'draft',
-              'published',
-              'approved',
-              'retired',
-              'disabled',
-              'succeeded',
-              'failed',
-              'running',
-              'stopped',
-              'rolled_back',
-            ]"
-            :key="value"
-            :value="value"
-          >
-            {{ statusName(value) }}
-          </option></select
-        ><button>筛选</button>
+      <form @submit.prevent="applyFilters">
+        <label>
+          <span>搜索</span>
+          <input v-model="queryDraft" placeholder="搜索规则、版本、组织或工作区" maxlength="120" />
+        </label>
+        <label>
+          <span>状态</span>
+          <select v-model="statusDraft" aria-label="治理状态">
+            <option value="">全部状态</option>
+            <option v-for="value in statusOptions" :key="value" :value="value">
+              {{ statusName(value) }}
+            </option>
+          </select>
+        </label>
+        <div class="governance-filter-actions">
+          <button type="submit" :disabled="refreshing">应用筛选</button>
+          <button type="button" :disabled="refreshing || !activeFilterCount" @click="resetFilters">
+            重置
+          </button>
+        </div>
       </form>
     </ResponsiveFilterDrawer>
     <p v-if="message" class="governance-notice">{{ message }}</p>
-    <section v-if="state !== 'ready'" class="governance-state">
+    <section v-if="!hasLoadedFacts && state !== 'ready'" class="governance-state">
       <h3>
         {{
           state === "loading"
             ? "正在读取治理事实"
-            : state === "empty"
-              ? "当前没有治理记录"
-              : "治理数据暂不可用"
+            : state === "expired"
+              ? "登录状态已失效"
+              : state === "forbidden"
+                ? "当前账号无平台治理权限"
+                : "治理数据暂不可用"
         }}
       </h3>
-      <button v-if="state !== 'loading'" @click="load">重新加载</button>
+      <button v-if="state !== 'loading'" @click="load()">重新加载</button>
     </section>
     <template v-else>
       <div class="governance-summary">
         <article v-for="(value, key) in data.summary" :key="key">
-          <small>{{ summaryName(String(key)) }}</small
-          ><strong>{{ value }}</strong>
+          <small>{{ summaryName(String(key)) }}总量</small><strong>{{ value }}</strong>
         </article>
       </div>
       <nav aria-label="治理数据类型">
@@ -201,7 +342,8 @@ onMounted(load);
           v-for="item in sections"
           :key="item.value"
           :aria-current="section === item.value ? 'page' : undefined"
-          @click="section = item.value"
+          :disabled="refreshing"
+          @click="selectSection(item.value)"
         >
           {{ item.label }}
         </button>
@@ -247,14 +389,14 @@ onMounted(load);
                   <td>
                     <b>{{ statusName(item.status) }}</b>
                   </td>
-                  <td>v{{ item.revision || item.version || item.current_version || "—" }}</td>
+                  <td>{{ versionText(item) }}</td>
                   <td>
                     {{ item.updated_at ? new Date(item.updated_at).toLocaleString("zh-CN") : "—" }}
                   </td>
                   <td>
                     <button type="button" @click="selected = item">查看详情</button
                     ><RouterLink :to="editHref(item)">{{
-                      section === "releases" ? "进入管理" : "编辑"
+                      section === "automation_rules" ? "编辑规则" : "进入工作台"
                     }}</RouterLink>
                   </td>
                   <td>
@@ -270,10 +412,7 @@ onMounted(load);
           <template #summary="{ row }">
             <span class="responsive-record-summary">
               <strong>{{ row.name }} · {{ statusName(row.status) }}</strong>
-              <small
-                >{{ row.organization_name || "平台全局" }} · 第
-                {{ row.revision || row.version || row.current_version || "—" }} 版</small
-              >
+              <small>{{ row.organization_name || "平台全局" }} · {{ versionText(row) }}</small>
             </span>
           </template>
           <template #detail="{ row }">
@@ -300,7 +439,7 @@ onMounted(load);
               </div>
               <div>
                 <dt>版本</dt>
-                <dd>第 {{ row.revision || row.version || row.current_version || "—" }} 版</dd>
+                <dd>{{ versionText(row) }}</dd>
               </div>
               <div>
                 <dt>更新时间</dt>
@@ -323,10 +462,30 @@ onMounted(load);
               </dl>
             </details>
             <RouterLink :to="editHref(row)">{{
-              section === "releases" ? "进入管理页面" : "进入编辑页面"
+              section === "automation_rules" ? "进入规则编辑" : "进入所属工作台"
             }}</RouterLink>
           </template>
         </ResponsiveDataView>
+        <footer class="governance-pagination" aria-label="治理记录分页">
+          <span>{{ rangeLabel }}</span>
+          <nav v-if="pagination.total_pages > 1" aria-label="治理页码">
+            <button
+              type="button"
+              :disabled="refreshing || pagination.page <= 1"
+              @click="goToPage(pagination.page - 1)"
+            >
+              上一页
+            </button>
+            <span>第 {{ pagination.page }} / {{ pagination.total_pages }} 页</span>
+            <button
+              type="button"
+              :disabled="refreshing || pagination.page >= pagination.total_pages"
+              @click="goToPage(pagination.page + 1)"
+            >
+              下一页
+            </button>
+          </nav>
+        </footer>
       </div>
       <aside>
         <strong>配置版本</strong
@@ -341,6 +500,9 @@ onMounted(load);
       </aside>
       <footer>
         跨组织查看不会绕过业务权限；编辑、启停和发布仍使用版本锁并写入审计记录。
+        <span v-if="data.observed_at">
+          事实时间 {{ new Date(data.observed_at).toLocaleString("zh-CN") }}
+        </span>
         <details v-if="requestId">
           <summary>技术详情</summary>
           <span>请求 ID {{ requestId }}</span>
@@ -377,9 +539,7 @@ onMounted(load);
           <div>
             <dt>版本</dt>
             <dd>
-              第
-              {{ selected.revision || selected.version || selected.current_version || "—" }}
-              版
+              {{ versionText(selected) }}
             </dd>
           </div>
           <div v-if="selected.trigger_event_type">
@@ -428,7 +588,7 @@ onMounted(load);
         <footer>
           <button @click="selected = null">关闭</button
           ><RouterLink :to="editHref(selected)">{{
-            section === "releases" ? "进入管理页面" : "进入编辑页面"
+            section === "automation_rules" ? "进入规则编辑" : "进入所属工作台"
           }}</RouterLink>
         </footer>
       </section>
@@ -477,7 +637,12 @@ onMounted(load);
   color: var(--so-text);
   text-decoration: none;
 }
-.platform-governance header > a {
+.governance-header-actions {
+  display: flex;
+  align-self: flex-start;
+  gap: 8px;
+}
+.governance-header-actions a {
   align-self: flex-start;
   background: var(--so-primary-strong);
   color: var(--so-on-primary);
@@ -497,6 +662,21 @@ onMounted(load);
 }
 .platform-governance form input:first-child {
   flex: 1;
+}
+.platform-governance form label {
+  display: grid;
+  flex: 1;
+  gap: 5px;
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.platform-governance form label:nth-child(2) {
+  max-width: 220px;
+}
+.governance-filter-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
 }
 .platform-governance nav {
   flex-wrap: wrap;
@@ -545,6 +725,17 @@ onMounted(load);
 }
 .governance-table td small {
   margin-top: 4px;
+}
+.governance-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  text-align: left;
+}
+.governance-pagination nav {
+  align-items: center;
 }
 .governance-table details summary,
 .platform-governance footer details summary,
@@ -633,8 +824,23 @@ onMounted(load);
 @media (max-width: 760px) {
   .platform-governance > header,
   .platform-governance form,
-  .platform-governance aside {
+  .platform-governance aside,
+  .governance-pagination {
     flex-direction: column;
+  }
+  .governance-header-actions,
+  .governance-filter-actions,
+  .governance-pagination nav {
+    width: 100%;
+  }
+  .governance-header-actions > *,
+  .governance-filter-actions > *,
+  .governance-pagination nav > button {
+    flex: 1;
+    text-align: center;
+  }
+  .platform-governance form label:nth-child(2) {
+    max-width: none;
   }
   .platform-governance form input,
   .platform-governance form select,

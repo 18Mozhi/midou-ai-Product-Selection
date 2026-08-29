@@ -285,68 +285,124 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       };
     }
     if (i.domain === "governance") {
-      const [[scoreRules], [costRules], [approvals], [automations], [releases], [versions]] =
-        await Promise.all([
-          this.pool.query<RowDataPacket[]>(
+      const textLike = (column: string) =>
+        `CONVERT(${column} USING utf8mb4) COLLATE utf8mb4_unicode_ci LIKE ?`;
+      const sectionQueries: Record<
+        string,
+        { count: string; select: string; parameters: unknown[] }
+      > = {
+        score_rules: {
+          count:
+            "SELECT COUNT(*) total FROM score_rules r JOIN organizations o ON o.id=r.organization_id " +
+            `JOIN workspaces w ON w.id=r.workspace_id WHERE (${textLike("r.name")} OR ` +
+            `${textLike("r.version_code")} OR ${textLike("o.name")} OR ${textLike("w.name")}) ` +
+            "AND r.status LIKE ?",
+          select:
             "SELECT r.id,r.name,r.version_code,r.status,r.revision,r.updated_at,o.name organization_name," +
-              "w.name workspace_name FROM score_rules r JOIN organizations o ON o.id=r.organization_id " +
-              "JOIN workspaces w ON w.id=r.workspace_id WHERE (r.name LIKE ? OR r.version_code LIKE " +
-              "? OR o.name LIKE ?) AND r.status LIKE ? ORDER BY r.updated_at DESC LIMIT 40",
-            [filter, filter, filter, status],
-          ),
-          this.pool.query<RowDataPacket[]>(
-            "SELECT r.id,r.name,r.version_code,r.market,r.platform,r.status,r.revision," +
-              "r.updated_at,o.name organization_name,w.name workspace_name FROM cost_rules r JOIN organizations " +
-              "o ON o.id=r.organization_id JOIN workspaces w ON w.id=r.workspace_id WHERE (r.name LIKE " +
-              "? OR r.version_code LIKE ? OR o.name LIKE ?) AND r.status LIKE ? ORDER BY r.updated_at " +
-              "DESC LIMIT 40",
-            [filter, filter, filter, status],
-          ),
-          this.pool.query<RowDataPacket[]>(
-            "SELECT t.id,t.name,t.resource_type,t.status,t.current_version,t.revision," +
-              "t.updated_at,o.name organization_name,w.name workspace_name FROM approval_templates " +
-              "t JOIN organizations o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id " +
-              "WHERE (t.name LIKE ? OR o.name LIKE ? OR w.name LIKE ?) AND t.status LIKE ? ORDER BY " +
-              "t.updated_at DESC LIMIT 40",
-            [filter, filter, filter, status],
-          ),
-          this.pool.query<RowDataPacket[]>(
-            "SELECT a.id,a.name,a.trigger_event_type,a.condition_severity,a.action_type," +
-              "a.owner_id,a.action_assignee_id,a.action_title,a.rate_limit_count,a.rate_limit_window_minutes," +
-              "a.status,a.version,a.updated_at,o.name organization_name,w.name workspace_name FROM " +
-              "automation_rules a JOIN organizations o ON o.id=a.organization_id JOIN workspaces w " +
-              "ON w.id=a.workspace_id WHERE (a.name LIKE ? OR a.trigger_event_type LIKE ? OR o.name " +
-              "LIKE ?) AND a.status LIKE ? ORDER BY a.updated_at DESC LIMIT 40",
-            [filter, filter, filter, status],
-          ),
-          this.pool.query<RowDataPacket[]>(
+            "w.name workspace_name FROM score_rules r JOIN organizations o ON o.id=r.organization_id " +
+            `JOIN workspaces w ON w.id=r.workspace_id WHERE (${textLike("r.name")} OR ` +
+            `${textLike("r.version_code")} OR ${textLike("o.name")} OR ${textLike("w.name")}) ` +
+            "AND r.status LIKE ? ORDER BY r.updated_at DESC,r.id DESC LIMIT ? OFFSET ?",
+          parameters: [filter, filter, filter, filter, status],
+        },
+        cost_rules: {
+          count:
+            "SELECT COUNT(*) total FROM cost_rules r JOIN organizations o ON o.id=r.organization_id " +
+            `JOIN workspaces w ON w.id=r.workspace_id WHERE (${textLike("r.name")} OR ` +
+            `${textLike("r.version_code")} OR ${textLike("r.market")} OR ${textLike("r.platform")} OR ` +
+            `${textLike("o.name")} OR ${textLike("w.name")}) AND r.status LIKE ?`,
+          select:
+            "SELECT r.id,r.name,r.version_code,r.market,r.platform,r.status,r.revision,r.updated_at," +
+            "o.name organization_name,w.name workspace_name FROM cost_rules r JOIN organizations o ON " +
+            `o.id=r.organization_id JOIN workspaces w ON w.id=r.workspace_id WHERE (${textLike("r.name")} OR ` +
+            `${textLike("r.version_code")} OR ${textLike("r.market")} OR ${textLike("r.platform")} OR ` +
+            `${textLike("o.name")} OR ${textLike("w.name")}) AND r.status LIKE ? ORDER BY ` +
+            "r.updated_at DESC,r.id DESC LIMIT ? OFFSET ?",
+          parameters: [filter, filter, filter, filter, filter, filter, status],
+        },
+        approval_templates: {
+          count:
+            "SELECT COUNT(*) total FROM approval_templates t JOIN organizations o ON o.id=t.organization_id " +
+            `JOIN workspaces w ON w.id=t.workspace_id WHERE (${textLike("t.name")} OR ` +
+            `${textLike("t.resource_type")} OR ${textLike("o.name")} OR ${textLike("w.name")}) ` +
+            "AND t.status LIKE ?",
+          select:
+            "SELECT t.id,t.name,t.resource_type,t.status,t.current_version,t.revision,t.updated_at," +
+            "o.name organization_name,w.name workspace_name FROM approval_templates t JOIN organizations o " +
+            `ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id WHERE (${textLike("t.name")} OR ` +
+            `${textLike("t.resource_type")} OR ${textLike("o.name")} OR ${textLike("w.name")}) ` +
+            "AND t.status LIKE ? ORDER BY t.updated_at DESC,t.id DESC LIMIT ? OFFSET ?",
+          parameters: [filter, filter, filter, filter, status],
+        },
+        automation_rules: {
+          count:
+            "SELECT COUNT(*) total FROM automation_rules a JOIN organizations o ON o.id=a.organization_id " +
+            `JOIN workspaces w ON w.id=a.workspace_id WHERE (${textLike("a.name")} OR ` +
+            `${textLike("a.trigger_event_type")} OR ${textLike("a.action_title")} OR ${textLike("o.name")} ` +
+            `OR ${textLike("w.name")}) AND a.status LIKE ?`,
+          select:
+            "SELECT a.id,a.name,a.trigger_event_type,a.condition_severity,a.action_type,a.owner_id," +
+            "a.action_assignee_id,a.action_title,a.rate_limit_count,a.rate_limit_window_minutes,a.status," +
+            "a.version,a.updated_at,o.name organization_name,w.name workspace_name FROM automation_rules a " +
+            "JOIN organizations o ON o.id=a.organization_id JOIN workspaces w ON w.id=a.workspace_id WHERE " +
+            `(${textLike("a.name")} OR ${textLike("a.trigger_event_type")} OR ${textLike("a.action_title")} ` +
+            `OR ${textLike("o.name")} OR ${textLike("w.name")}) AND a.status LIKE ? ORDER BY ` +
+            "a.updated_at DESC,a.id DESC LIMIT ? OFFSET ?",
+          parameters: [filter, filter, filter, filter, filter, status],
+        },
+        releases: {
+          count:
+            `SELECT COUNT(*) total FROM deployment_releases WHERE (${textLike("app_version")} OR ` +
+            `${textLike("build_sha")} OR ${textLike("stage")}) AND status LIKE ?`,
+          select:
             "SELECT id,app_version name,build_sha version_code,stage,status,updated_at FROM deployment_releases " +
-              "WHERE (app_version LIKE ? OR build_sha LIKE ?) AND status LIKE ? ORDER BY updated_at " +
-              "DESC LIMIT 30",
-            [filter, filter, status],
-          ),
-          this.pool.query<RowDataPacket[]>(
-            "SELECT COUNT(*) total,MAX(created_at) latest_at FROM provider_versions",
-          ),
-        ]);
-      const normalize = (rows: RowDataPacket[]) =>
-        rows.map((row: any) => ({ ...row, updated_at: iso(row.updated_at) }));
+            `WHERE (${textLike("app_version")} OR ${textLike("build_sha")} OR ${textLike("stage")}) ` +
+            "AND status LIKE ? ORDER BY updated_at DESC,id DESC LIMIT ? OFFSET ?",
+          parameters: [filter, filter, filter, status],
+        },
+      };
+      const sectionQuery = sectionQueries[i.section]!;
+      const [[summaryRows], [countRows]] = await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          "SELECT (SELECT COUNT(*) FROM score_rules) score_rules," +
+            "(SELECT COUNT(*) FROM cost_rules) cost_rules," +
+            "(SELECT COUNT(*) FROM approval_templates) approval_templates," +
+            "(SELECT COUNT(*) FROM automation_rules) automation_rules," +
+            "(SELECT COUNT(*) FROM deployment_releases) releases," +
+            "(SELECT COUNT(*) FROM provider_versions) provider_versions," +
+            "(SELECT MAX(created_at) FROM provider_versions) provider_versions_latest_at",
+        ),
+        this.pool.query<RowDataPacket[]>(sectionQuery.count, sectionQuery.parameters),
+      ]);
+      const total = n(countRows[0]?.total),
+        totalPages = total ? Math.ceil(total / i.pageSize) : 0,
+        page = totalPages ? Math.min(i.page, totalPages) : 1,
+        offset = (page - 1) * i.pageSize,
+        [rows] = await this.pool.query<RowDataPacket[]>(sectionQuery.select, [
+          ...sectionQuery.parameters,
+          i.pageSize,
+          offset,
+        ]),
+        summaryRow: any = summaryRows[0] ?? {};
       return {
         domain: i.domain,
+        section: i.section,
         summary: {
-          score_rules: scoreRules.length,
-          cost_rules: costRules.length,
-          approval_templates: approvals.length,
-          automation_rules: automations.length,
-          releases: releases.length,
-          provider_versions: n(versions[0]?.total),
+          score_rules: n(summaryRow.score_rules),
+          cost_rules: n(summaryRow.cost_rules),
+          approval_templates: n(summaryRow.approval_templates),
+          automation_rules: n(summaryRow.automation_rules),
+          releases: n(summaryRow.releases),
+          provider_versions: n(summaryRow.provider_versions),
         },
-        score_rules: normalize(scoreRules),
-        cost_rules: normalize(costRules),
-        approval_templates: normalize(approvals),
-        automation_rules: normalize(automations),
-        releases: normalize(releases),
-        provider_versions_latest_at: iso(versions[0]?.latest_at),
+        items: rows.map((row: any) => ({ ...row, updated_at: iso(row.updated_at) })),
+        pagination: {
+          page,
+          page_size: i.pageSize,
+          total,
+          total_pages: totalPages,
+        },
+        provider_versions_latest_at: iso(summaryRow.provider_versions_latest_at),
         observed_at: this.now().toISOString(),
       };
     }

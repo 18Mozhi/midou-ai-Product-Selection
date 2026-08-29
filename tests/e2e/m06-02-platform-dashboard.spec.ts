@@ -420,7 +420,9 @@ test("platform completion exposes data governance notifications and user-panel s
   });
   await nav(page);
   await page.route("**/api/v1/platform/management?**", (route) => {
-    const domain = new URL(route.request().url()).searchParams.get("domain");
+    const url = new URL(route.request().url()),
+      domain = url.searchParams.get("domain"),
+      governanceSection = url.searchParams.get("section") ?? "score_rules";
     const data =
       domain === "data"
         ? {
@@ -445,6 +447,7 @@ test("platform completion exposes data governance notifications and user-panel s
         : domain === "governance"
           ? {
               domain,
+              section: governanceSection,
               summary: {
                 score_rules: 1,
                 cost_rules: 0,
@@ -453,32 +456,33 @@ test("platform completion exposes data governance notifications and user-panel s
                 releases: 0,
                 provider_versions: 2,
               },
-              score_rules: [
-                {
-                  id: "rule-1",
-                  name: "标准评分规则",
-                  version_code: "score-v1",
-                  organization_name: "米豆选品",
-                  workspace_name: "默认工作区",
-                  status: "active",
-                  revision: 1,
-                  updated_at: "2026-08-18T12:00:00.000Z",
-                },
-              ],
-              cost_rules: [],
-              approval_templates: [],
-              automation_rules: [
-                {
-                  id: "auto-1",
-                  name: "竞品降价提醒",
-                  trigger_event_type: "competitor.changed",
-                  status: "enabled",
-                  version: 1,
-                  updated_at: "2026-08-18T12:00:00.000Z",
-                },
-              ],
-              releases: [],
+              items:
+                governanceSection === "automation_rules"
+                  ? [
+                      {
+                        id: "auto-1",
+                        name: "竞品降价提醒",
+                        trigger_event_type: "competitor.changed",
+                        status: "active",
+                        version: 1,
+                        updated_at: "2026-08-18T12:00:00.000Z",
+                      },
+                    ]
+                  : [
+                      {
+                        id: "rule-1",
+                        name: "标准评分规则",
+                        version_code: "score-v1",
+                        organization_name: "米豆选品",
+                        workspace_name: "默认工作区",
+                        status: "active",
+                        revision: 1,
+                        updated_at: "2026-08-18T12:00:00.000Z",
+                      },
+                    ],
+              pagination: { page: 1, page_size: 20, total: 1, total_pages: 1 },
               provider_versions_latest_at: "2026-08-18T12:00:00.000Z",
+              observed_at: "2026-08-18T12:00:00.000Z",
             }
           : {
               domain: "notifications",
@@ -585,10 +589,11 @@ test("platform completion exposes data governance notifications and user-panel s
     await governanceDialog.getByRole("button", { name: "关闭详情" }).click();
   }
   await page.getByRole("button", { name: "自动化规则" }).click();
+  await expect(page).toHaveURL(/section=automation_rules/);
   if ((page.viewportSize()?.width ?? 1000) <= 760)
     await expect(page.getByRole("button", { name: /^竞品降价提醒 · 启用/ })).toBeVisible();
   else await expect(page.getByText("竞品降价提醒", { exact: true })).toBeVisible();
-  await expect(page.getByText("enabled", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("active", { exact: true })).toHaveCount(0);
 
   await page.goto("/platform-admin/notifications");
   await expect(page.getByRole("heading", { name: "通知管理", level: 2 })).toBeVisible();

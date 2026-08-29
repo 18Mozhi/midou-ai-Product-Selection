@@ -11,12 +11,46 @@ test("platform governance is a validated platform management domain", async () =
   await service.management({
     actorId: "actor",
     domain: "governance",
+    section: "score_rules",
     query: "v2",
     status: "active",
+    page: "2",
+    pageSize: "20",
     requestId: "request",
     traceId: "trace",
   });
   assert.equal(calls[0].domain, "governance");
+  assert.equal(calls[0].section, "score_rules");
+  assert.equal(calls[0].page, 2);
+  assert.equal(calls[0].pageSize, 20);
+});
+
+test("platform governance rejects cross-section statuses and invalid pagination", async () => {
+  const service = new PlatformDashboardService({ readManagement: async () => ({}) });
+  assert.throws(
+    () =>
+      service.management({
+        actorId: "actor",
+        domain: "governance",
+        section: "automation_rules",
+        status: "approved",
+        requestId: "request",
+        traceId: "trace",
+      }),
+    (error) => error.code === "platform_governance_status_invalid" && error.statusCode === 400,
+  );
+  assert.throws(
+    () =>
+      service.management({
+        actorId: "actor",
+        domain: "governance",
+        section: "releases",
+        page: 0,
+        requestId: "request",
+        traceId: "trace",
+      }),
+    (error) => error.code === "platform_governance_pagination_invalid" && error.statusCode === 400,
+  );
 });
 
 test("platform governance covers rules workflows automation versions approvals rollout and rollback", async () => {
@@ -49,4 +83,9 @@ test("platform governance covers rules workflows automation versions approvals r
     "provider_versions",
   ])
     assert.match(repository, new RegExp(table));
+  assert.match(web, /useRoute\(\)/);
+  assert.match(web, /AbortController/);
+  assert.match(web, /page_size/);
+  assert.match(repository, /pagination:/);
+  assert.match(repository, /LIMIT \? OFFSET \?/);
 });

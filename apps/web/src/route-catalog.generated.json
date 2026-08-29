@@ -1131,7 +1131,7 @@
         "view": "PlatformGovernanceCenter",
         "domain": "platform-governance",
         "status": "verified",
-        "statusDetail": "M06-02_module_verified"
+        "statusDetail": "M06-02_platform_governance_factual_pagination_url_failure_preservation_verified"
       },
       "navigation": { "label": "质量与规则", "icon": "settings", "group": "治理与安全" }
     },

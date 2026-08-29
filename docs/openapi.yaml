@@ -4744,11 +4744,32 @@ paths:
                 default: trends,
               },
           }
+        - {
+            name: section,
+            in: query,
+            description: Required for domain=governance. Selects one factual governance collection.,
+            schema:
+              {
+                type: string,
+                enum: [score_rules, cost_rules, approval_templates, automation_rules, releases],
+              },
+          }
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - {
+            name: page_size,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 100, default: 20 },
+          }
         - { name: query, in: query, schema: { type: string, maxLength: 120 } }
         - {
             name: status,
             in: query,
-            description: For domain=data, the accepted values are trends active/irrelevant/stale/archived; opportunities pending/adopted/observing/rejected; competitors active/paused; suppliers incomplete/ready/quarantined. Other domains keep their existing status contract.,
+            description: For domain=data,
+            values are entity-specific. For domain=governance,
+            values are section-specific and incompatible combinations return 400; score and cost use draft/pending_approval/approved/active/retired/rejected/rolled_back,
+            approval templates use draft/published/archived,
+            automation uses active/paused,
+            and releases use planned/preflight_passed/deploying/healthy/failed/rolled_back.,
             schema: { type: string, maxLength: 40 },
           }
       responses:

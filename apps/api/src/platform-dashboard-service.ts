@@ -9,11 +9,36 @@ export type PlatformManagementDomain =
   | "governance"
   | "api_coverage";
 export type PlatformDataEntity = "trends" | "opportunities" | "competitors" | "suppliers";
+export type PlatformGovernanceSection =
+  "score_rules" | "cost_rules" | "approval_templates" | "automation_rules" | "releases";
 const platformDataStatuses: Record<PlatformDataEntity, readonly string[]> = {
   trends: ["active", "irrelevant", "stale", "archived"],
   opportunities: ["pending", "adopted", "observing", "rejected"],
   competitors: ["active", "paused"],
   suppliers: ["incomplete", "ready", "quarantined"],
+};
+const platformGovernanceStatuses: Record<PlatformGovernanceSection, readonly string[]> = {
+  score_rules: [
+    "draft",
+    "pending_approval",
+    "approved",
+    "active",
+    "retired",
+    "rejected",
+    "rolled_back",
+  ],
+  cost_rules: [
+    "draft",
+    "pending_approval",
+    "approved",
+    "active",
+    "retired",
+    "rejected",
+    "rolled_back",
+  ],
+  approval_templates: ["draft", "published", "archived"],
+  automation_rules: ["active", "paused"],
+  releases: ["planned", "preflight_passed", "deploying", "healthy", "failed", "rolled_back"],
 };
 export interface PlatformDashboardRepository {
   read(input: {
@@ -27,6 +52,9 @@ export interface PlatformDashboardRepository {
     actorId: string;
     domain: PlatformManagementDomain;
     entity: PlatformDataEntity;
+    section: PlatformGovernanceSection | undefined;
+    page: number;
+    pageSize: number;
     query: string;
     status: string;
     requestId: string;
@@ -122,6 +150,9 @@ export class PlatformDashboardService {
     entity?: unknown;
     query?: unknown;
     status?: unknown;
+    section?: unknown;
+    page?: unknown;
+    pageSize?: unknown;
     requestId: string;
     traceId: string;
   }) {
@@ -145,7 +176,11 @@ export class PlatformDashboardService {
       );
     const entity = String(input.entity ?? "trends") as PlatformDataEntity,
       query = String(input.query ?? "").trim(),
-      status = String(input.status ?? "").trim();
+      status = String(input.status ?? "").trim(),
+      sectionValue = String(input.section ?? ""),
+      section = (sectionValue || undefined) as PlatformGovernanceSection | undefined,
+      page = Number(input.page ?? 1),
+      pageSize = Number(input.pageSize ?? 20);
     if (
       domain === "data" &&
       !["trends", "opportunities", "competitors", "suppliers"].includes(entity)
@@ -167,12 +202,43 @@ export class PlatformDashboardService {
         400,
         "选择当前数据类型支持的状态。",
       );
+    if (
+      domain === "governance" &&
+      (!section || !Object.prototype.hasOwnProperty.call(platformGovernanceStatuses, section))
+    )
+      throw new PlatformDashboardError(
+        "platform_governance_section_invalid",
+        400,
+        "选择评分、费用与风险、审批、自动化或发布治理分类。",
+      );
+    if (domain === "governance" && status && !platformGovernanceStatuses[section!].includes(status))
+      throw new PlatformDashboardError(
+        "platform_governance_status_invalid",
+        400,
+        "选择当前治理分类支持的状态。",
+      );
+    if (
+      domain === "governance" &&
+      (!Number.isInteger(page) ||
+        page < 1 ||
+        !Number.isInteger(pageSize) ||
+        pageSize < 1 ||
+        pageSize > 100)
+    )
+      throw new PlatformDashboardError(
+        "platform_governance_pagination_invalid",
+        400,
+        "page 应为正整数，page_size 应为 1–100。",
+      );
     return this.repository.readManagement({
       ...input,
       domain,
       entity,
       query,
       status,
+      section,
+      page,
+      pageSize,
     });
   }
   exportData(value: any, context: { actorId: string; requestId: string; traceId: string }) {
