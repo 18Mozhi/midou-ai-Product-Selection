@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
@@ -62,12 +63,24 @@ interface Run {
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
   request = createApiClient(props.apiBaseUrl),
+  route = useRoute(),
+  router = useRouter(),
+  queryValue = (name: string) => {
+    const value = route.query[name];
+    return typeof value === "string" ? value : "";
+  },
+  pageSize = 20,
+  initialPage = /^\d{1,3}$/.test(queryValue("quality_page"))
+    ? Math.max(1, Number(queryValue("quality_page")))
+    : 1,
   state = ref<State>("loading"),
   evidence = ref<Evidence[]>([]),
   issues = ref<Issue[]>([]),
   runs = ref<Run[]>([]),
   totalEvidence = ref(0),
   totalIssues = ref(0),
+  totalOpenIssues = ref(0),
+  totalCriticalIssues = ref(0),
   observedAt = ref(""),
   requestId = ref(""),
   tab = ref<"evidence" | "issues" | "runs">("evidence"),
@@ -78,7 +91,10 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   resolving = ref<Issue | null>(null),
   reason = ref(""),
   confirming = ref(false),
-  saving = ref(false);
+  saving = ref(false),
+  refreshing = ref(false),
+  page = ref(initialPage);
+let activeController: AbortController | null = null;
 const memberOptions = ref<Array<{ id: string; organization_id: string; label: string }>>([]),
   selectedIssueIds = ref<string[]>([]),
   batchAction = ref<"attribute" | "assign" | "close">("attribute"),
@@ -99,15 +115,14 @@ const filteredEvidence = computed(() =>
       (item) =>
         (!selectedRunId.value || item.reconciliation_run_id === selectedRunId.value) &&
         (!query.value ||
-          [item.metric_code, item.provider_name, item.field_path].some((value) =>
+          [item.id, item.metric_code, item.provider_name, item.field_path].some((value) =>
             value?.toLowerCase().includes(query.value.toLowerCase()),
           )),
     ),
   ),
   metrics = computed(() => ({
-    open: issues.value.filter((item) => item.status === "open").length,
-    critical: issues.value.filter((item) => item.status === "open" && item.severity === "critical")
-      .length,
+    open: totalOpenIssues.value,
+    critical: totalCriticalIssues.value,
     passed: runs.value.filter((item) => item.status === "passed").length,
   })),
   retentionRisks = computed(() => {
@@ -167,6 +182,14 @@ const filteredEvidence = computed(() =>
   batchImpact = computed(() => {
     const providers = [...new Set(selectedIssues.value.map((item) => item.provider_name))];
     return `将处理 ${selectedIssues.value.length} 个开放问题，涉及 ${providers.length} 个来源：${providers.join("、") || "无"}。历史证据与核对运行不会被删除。`;
+  }),
+  pageTotal = computed(() => (tab.value === "evidence" ? totalEvidence.value : totalIssues.value)),
+  totalPages = computed(() => Math.max(1, Math.ceil(pageTotal.value / pageSize))),
+  rangeLabel = computed(() => {
+    if (!pageTotal.value) return "0 条";
+    const start = (page.value - 1) * pageSize + 1,
+      end = Math.min(page.value * pageSize, pageTotal.value);
+    return `${start}–${end} / ${pageTotal.value} 条`;
   });
 const failure = (code: number): State =>
     code === 401
@@ -212,11 +235,26 @@ const retentionStatus = (value: string) => {
   const days = Math.ceil((expiry - observed) / 86400000);
   return days <= 7 ? `${days} 天内到期` : `剩余 ${days} 天`;
 };
-async function load() {
-  state.value = "loading";
+async function syncUrl() {
+  const next: Record<string, string> = { view: "quality" };
+  if (page.value > 1) next.quality_page = String(page.value);
+  await router.replace({ query: next });
+}
+async function load(options: { updateUrl?: boolean } = {}) {
+  if (refreshing.value) return;
+  const hadData = Boolean(evidence.value.length || issues.value.length || runs.value.length);
+  refreshing.value = true;
+  if (!hadData) state.value = "loading";
   notice.value = "";
+  const controller = new AbortController();
+  activeController = controller;
+  const timer = window.setTimeout(() => controller.abort(), 15_000);
   try {
-    const response = await request<any>("/platform/data-quality?page=1&page_size=50&status=all");
+    if (options.updateUrl !== false) await syncUrl();
+    const response = await request<any>(
+      `/platform/data-quality?page=${page.value}&page_size=${pageSize}&status=all`,
+      { signal: controller.signal },
+    );
     requestId.value = response.request_id;
     evidence.value = response.data.evidence ?? [];
     issues.value = response.data.issues ?? [];
@@ -225,14 +263,41 @@ async function load() {
     selectedIssueIds.value = [];
     totalEvidence.value = response.data.totalEvidence ?? 0;
     totalIssues.value = response.data.totalIssues ?? 0;
+    totalOpenIssues.value =
+      response.data.openIssues ??
+      issues.value.filter((item: Issue) => item.status === "open").length;
+    totalCriticalIssues.value =
+      response.data.criticalIssues ??
+      issues.value.filter((item: Issue) => item.status === "open" && item.severity === "critical")
+        .length;
     observedAt.value = response.data.observedAt ?? "";
     state.value =
       evidence.value.length || issues.value.length || runs.value.length ? "ready" : "empty";
   } catch (error) {
     const apiError = error instanceof ApiClientError ? error : null;
-    requestId.value = apiError?.requestId ?? "";
-    state.value = apiError ? failure(apiError.status) : "blocked";
+    requestId.value = apiError?.requestId ?? requestId.value;
+    notice.value = controller.signal.aborted
+      ? "读取超过 15 秒，已安全取消；上一份质量数据仍保留。"
+      : (apiError?.actionHint ?? "网络或服务异常，上一份质量数据仍保留。");
+    state.value = hadData ? "ready" : apiError ? failure(apiError.status) : "blocked";
+  } finally {
+    window.clearTimeout(timer);
+    if (activeController === controller) activeController = null;
+    refreshing.value = false;
   }
+}
+function switchTab(value: "evidence" | "issues" | "runs") {
+  if (value === tab.value || refreshing.value) return;
+  tab.value = value;
+  page.value = 1;
+  selectedIssueIds.value = [];
+  if (value === "runs") void syncUrl();
+  else void load();
+}
+function goToPage(value: number) {
+  if (refreshing.value || value < 1 || value > totalPages.value || value === page.value) return;
+  page.value = value;
+  void load();
 }
 async function openEvidence(id: string) {
   try {
@@ -357,10 +422,20 @@ async function executeBatch() {
   }
 }
 onMounted(async () => {
-  await load();
-  const evidenceId = new URLSearchParams(window.location.search).get("evidence");
+  await load({ updateUrl: false });
+  const params = new URLSearchParams(window.location.search),
+    evidenceId = params.get("evidence") || params.get("evidence_id"),
+    issueId = params.get("issue_id");
   if (evidenceId && /^[0-9a-f-]{36}$/i.test(evidenceId)) await openEvidence(evidenceId);
+  if (issueId && /^[0-9a-f-]{36}$/i.test(issueId)) {
+    tab.value = "issues";
+    query.value = issueId;
+    notice.value = filteredIssues.value.length
+      ? "已定位从业务页面进入的数据质量问题。"
+      : "当前页未包含该质量问题，请使用质量问题检索或分页继续定位。";
+  }
 });
+onBeforeUnmount(() => activeController?.abort());
 </script>
 <template>
   <section class="quality-center" aria-labelledby="quality-title">
@@ -392,11 +467,11 @@ onMounted(async () => {
           ><span>阻断不可靠数据</span>
         </article>
         <article>
-          <small>通过核对</small><strong>{{ metrics.passed }}</strong
+          <small>近期通过核对</small><strong>{{ metrics.passed }}</strong
           ><span>按来源与解析器</span>
         </article>
         <article>
-          <small>即将到期</small><strong>{{ retentionRisks.expiring }}</strong
+          <small>当前页即将到期</small><strong>{{ retentionRisks.expiring }}</strong
           ><span>{{ retentionRisks.expired }} 条已到期</span>
         </article>
       </div>
@@ -435,17 +510,20 @@ onMounted(async () => {
           <nav aria-label="数据质量视图">
             <button
               :aria-current="tab === 'evidence' ? 'page' : undefined"
-              @click="tab = 'evidence'"
+              @click="switchTab('evidence')"
             >
               证据</button
-            ><button :aria-current="tab === 'issues' ? 'page' : undefined" @click="tab = 'issues'">
+            ><button
+              :aria-current="tab === 'issues' ? 'page' : undefined"
+              @click="switchTab('issues')"
+            >
               质量问题</button
-            ><button :aria-current="tab === 'runs' ? 'page' : undefined" @click="tab = 'runs'">
+            ><button :aria-current="tab === 'runs' ? 'page' : undefined" @click="switchTab('runs')">
               核对运行
             </button>
           </nav>
           <div>
-            <span>{{ notice || "原文下载需要短时授权，并记录访问审计。" }}</span
+            <span role="status">{{ notice || "原文下载需要短时授权，并记录访问审计。" }}</span
             ><input
               v-model="query"
               aria-label="搜索证据与质量"
@@ -807,6 +885,23 @@ onMounted(async () => {
             </button>
           </article>
         </div>
+        <nav
+          v-if="tab !== 'runs' && pageTotal"
+          class="quality-pagination"
+          aria-label="证据与质量分页"
+        >
+          <button type="button" :disabled="refreshing || page <= 1" @click="goToPage(page - 1)">
+            上一页
+          </button>
+          <span>{{ rangeLabel }} · 第 {{ page }} / {{ totalPages }} 页</span>
+          <button
+            type="button"
+            :disabled="refreshing || page >= totalPages"
+            @click="goToPage(page + 1)"
+          >
+            下一页
+          </button>
+        </nav>
       </section>
       <aside v-if="detail" class="quality-detail">
         <header>

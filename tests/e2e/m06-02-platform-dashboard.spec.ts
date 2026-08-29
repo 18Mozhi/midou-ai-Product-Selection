@@ -529,7 +529,7 @@ test("platform completion exposes data governance notifications and user-panel s
   });
 
   await page.goto("/platform-admin/data");
-  await expect(page.getByRole("heading", { name: "全量业务数据", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "跨组织业务数据", level: 2 })).toBeVisible();
   if ((page.viewportSize()?.width ?? 1000) <= 760)
     await expect(page.getByRole("button", { name: /^便携照明趋势 · 展示中/ })).toBeVisible();
   else await expect(page.getByText("便携照明趋势", { exact: true })).toBeVisible();
@@ -541,12 +541,12 @@ test("platform completion exposes data governance notifications and user-panel s
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   if ((page.viewportSize()?.width ?? 1000) <= 760) {
-    await page.getByRole("button", { name: "筛选全量数据" }).click();
-    const dataFilters = page.getByRole("dialog", { name: "筛选全量数据" });
+    await page.getByRole("button", { name: "筛选近期数据" }).click();
+    const dataFilters = page.getByRole("dialog", { name: "筛选近期数据" });
     await dataFilters.getByPlaceholder("搜索名称、组织或工作区").fill("便携");
     await dataFilters.getByLabel("记录状态").selectOption("active");
     await dataFilters.getByRole("button", { name: "关闭筛选条件" }).click();
-    await page.getByRole("button", { name: /筛选全量数据.*2 项已选/ }).click();
+    await page.getByRole("button", { name: /筛选近期数据.*2 项已选/ }).click();
     await expect(dataFilters.getByPlaceholder("搜索名称、组织或工作区")).toHaveValue("便携");
     await expect(dataFilters.getByLabel("记录状态")).toHaveValue("active");
     await dataFilters.getByRole("button", { name: "关闭筛选条件" }).click();

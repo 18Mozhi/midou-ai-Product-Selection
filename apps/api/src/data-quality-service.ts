@@ -76,6 +76,8 @@ export interface DataQualityRepository {
     memberOptions: QualityIssueMemberOption[];
     totalEvidence: number;
     totalIssues: number;
+    openIssues: number;
+    criticalIssues: number;
   }>;
   evidenceDetail(id: string): Promise<Record<string, unknown> | null>;
   createFromTrendEvidence(input: {

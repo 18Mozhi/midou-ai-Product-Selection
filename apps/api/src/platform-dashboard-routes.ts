@@ -16,6 +16,30 @@ export interface PlatformDashboardRouteOptions {
   secureCookie: boolean;
   webOrigin: string;
 }
+const databaseFailure = (error: unknown) => {
+  const code =
+    error && typeof error === "object" && "code" in error
+      ? String((error as { code?: unknown }).code ?? "")
+      : "";
+  return (
+    code.startsWith("ER_") ||
+    ["ECONNREFUSED", "ECONNRESET", "ETIMEDOUT", "PROTOCOL_CONNECTION_LOST"].includes(code)
+  );
+};
+const withDependencyBoundary = async <T>(operation: () => Promise<T>) => {
+  try {
+    return await operation();
+  } catch (error) {
+    if (databaseFailure(error))
+      throw new ApiError(
+        503,
+        "platform_data_dependency_unavailable",
+        "平台数据暂不可用。",
+        "数据库或平台数据依赖暂不可用，请稍后重试。",
+      );
+    throw error;
+  }
+};
 export function registerPlatformDashboardRoutes(
   app: FastifyInstance,
   o: PlatformDashboardRouteOptions,
@@ -43,20 +67,22 @@ export function registerPlatformDashboardRoutes(
     };
   });
   app.get("/api/v1/platform/management", async (r: FastifyRequest, reply) => {
-    const c = await context(r),
-      query = r.query as any;
-    reply.header("cache-control", "private, no-store");
-    return {
-      data: await o.service.management({
-        ...c,
-        domain: query?.domain,
-        entity: query?.entity,
-        query: query?.query,
-        status: query?.status,
-      }),
-      request_id: c.requestId,
-      trace_id: c.traceId,
-    };
+    return withDependencyBoundary(async () => {
+      const c = await context(r),
+        query = r.query as any;
+      reply.header("cache-control", "private, no-store");
+      return {
+        data: await o.service.management({
+          ...c,
+          domain: query?.domain,
+          entity: query?.entity,
+          query: query?.query,
+          status: query?.status,
+        }),
+        request_id: c.requestId,
+        trace_id: c.traceId,
+      };
+    });
   });
   app.patch("/api/v1/platform/management/content/:topicId", async (r: FastifyRequest) => {
     if (r.headers.origin !== o.webOrigin)
@@ -91,33 +117,37 @@ export function registerPlatformDashboardRoutes(
   app.post("/api/v1/platform/management/data/exports", async (r: FastifyRequest, reply) => {
     if (r.headers.origin !== o.webOrigin)
       throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
-    const c = await context(r),
-      data: any = await o.service.exportData(r.body, c),
-      columns = [
-        "id",
-        "title",
-        "organization_name",
-        "workspace_name",
-        "category",
-        "market",
-        "status",
-        "metric_primary",
-        "metric_secondary",
-        "updated_at",
-      ],
-      csv = [
-        columns.join(","),
-        ...data.items.map((item: any) => columns.map((column) => csvCell(item[column])).join(",")),
-      ].join("\r\n");
-    reply
-      .header("content-type", "text/csv; charset=utf-8")
-      .header(
-        "content-disposition",
-        `attachment; filename="platform-${data.entity}-${Date.now()}.csv"`,
-      )
-      .header("x-request-id", c.requestId)
-      .header("x-trace-id", c.traceId);
-    return `\ufeff${csv}`;
+    return withDependencyBoundary(async () => {
+      const c = await context(r),
+        data: any = await o.service.exportData(r.body, c),
+        columns = [
+          "id",
+          "title",
+          "organization_name",
+          "workspace_name",
+          "category",
+          "market",
+          "status",
+          "metric_primary",
+          "metric_secondary",
+          "updated_at",
+        ],
+        csv = [
+          columns.join(","),
+          ...data.items.map((item: any) =>
+            columns.map((column) => csvCell(item[column])).join(","),
+          ),
+        ].join("\r\n");
+      reply
+        .header("content-type", "text/csv; charset=utf-8")
+        .header(
+          "content-disposition",
+          `attachment; filename="platform-${data.entity}-${Date.now()}.csv"`,
+        )
+        .header("x-request-id", c.requestId)
+        .header("x-trace-id", c.traceId);
+      return `\ufeff${csv}`;
+    });
   });
   app.post("/api/v1/platform/management/logs/exports", async (r: FastifyRequest, reply) => {
     if (r.headers.origin !== o.webOrigin)

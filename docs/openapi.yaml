@@ -4745,7 +4745,12 @@ paths:
               },
           }
         - { name: query, in: query, schema: { type: string, maxLength: 120 } }
-        - { name: status, in: query, schema: { type: string, maxLength: 40 } }
+        - {
+            name: status,
+            in: query,
+            description: For domain=data, the accepted values are trends active/irrelevant/stale/archived; opportunities pending/adopted/observing/rejected; competitors active/paused; suppliers incomplete/ready/quarantined. Other domains keep their existing status contract.,
+            schema: { type: string, maxLength: 40 },
+          }
       responses:
         "200":
           description: Current management facts; api_coverage returns the current machine catalog joined to the latest matching production report
@@ -4774,7 +4779,12 @@ paths:
               properties:
                 entity: { type: string, enum: [trends, opportunities, competitors, suppliers] }
                 query: { type: string, maxLength: 120 }
-                status: { type: string, maxLength: 40 }
+                status:
+                  {
+                    type: string,
+                    maxLength: 40,
+                    description: Must match the selected entity status set documented on GET /platform/management.,
+                  }
                 reason: { type: string, minLength: 2, maxLength: 300 }
       responses:
         "200":

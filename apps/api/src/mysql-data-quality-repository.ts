@@ -119,7 +119,9 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
           values,
         ),
         this.pool.query<RowDataPacket[]>(
-          `SELECT COUNT(*) total FROM data_quality_issues i ${issueClause}`,
+          `SELECT COUNT(*) total,SUM(i.status='open') open_count,
+          SUM(i.status='open' AND i.severity='critical') critical_count
+          FROM data_quality_issues i ${issueClause}`,
           issueValues,
         ),
       ]);
@@ -141,6 +143,8 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
       })),
       totalEvidence: Number(evCount[0]?.total ?? 0),
       totalIssues: Number(issueCount[0]?.total ?? 0),
+      openIssues: Number(issueCount[0]?.open_count ?? 0),
+      criticalIssues: Number(issueCount[0]?.critical_count ?? 0),
     };
   }
   async evidenceDetail(id: string) {

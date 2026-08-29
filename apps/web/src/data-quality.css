@@ -354,6 +354,18 @@
 .quality-resolution > button:disabled {
   opacity: 0.45;
 }
+.quality-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.quality-pagination button {
+  min-height: var(--so-touch-target);
+}
 @media (max-width: 760px) {
   .quality-title,
   .quality-card > header {
@@ -388,6 +400,9 @@
   }
   .quality-run-grid {
     grid-template-columns: 1fr;
+  }
+  .quality-pagination {
+    justify-content: space-between;
   }
   .quality-detail,
   .quality-resolution {

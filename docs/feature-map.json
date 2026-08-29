@@ -1695,7 +1695,7 @@
       ],
       "verificationRunId": "d424c7a8-eb72-4ddd-b9aa-3ce93ffbbe96",
       "status": "implemented",
-      "statusDetail": "platform_dashboard_live_mysql_api_permission_failure_and_responsive_verification_completed"
+      "statusDetail": "platform_dashboard_data_center_factual_status_bounded_pagination_deep_link_refresh_export_and_responsive_verification_completed"
     },
     "collectionOperationsConsole": {
       "module": "M06-03",

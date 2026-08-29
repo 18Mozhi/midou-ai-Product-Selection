@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, createApiResponseClient } from "../api-client";
 import { useAuditedReason } from "../use-audited-reason";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
@@ -8,18 +9,67 @@ import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 
 type Entity = "trends" | "opportunities" | "competitors" | "suppliers";
-const props = defineProps<{ apiBaseUrl: string }>();
-const request = createApiClient(props.apiBaseUrl);
-const requestResponse = createApiResponseClient(props.apiBaseUrl);
-const tab = ref<"records" | "quality">("records"),
-  entity = ref<Entity>("trends"),
-  query = ref(""),
-  status = ref(""),
-  state = ref<"loading" | "ready" | "empty" | "error">("loading"),
+type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+interface Pagination {
+  page: number;
+  page_size: number;
+  total: number;
+  total_pages: number;
+}
+const entityStatuses: Record<Entity, string[]> = {
+  trends: ["active", "irrelevant", "stale", "archived"],
+  opportunities: ["pending", "adopted", "observing", "rejected"],
+  competitors: ["active", "paused"],
+  suppliers: ["incomplete", "ready", "quarantined"],
+};
+const statusLabels: Record<Entity, Record<string, string>> = {
+  trends: { active: "展示中", irrelevant: "无关", stale: "已过期", archived: "已归档" },
+  opportunities: {
+    pending: "待决策",
+    adopted: "已采纳",
+    observing: "观察中",
+    rejected: "已拒绝",
+  },
+  competitors: { active: "监控中", paused: "已暂停" },
+  suppliers: { incomplete: "信息不完整", ready: "可评估", quarantined: "已隔离" },
+};
+const props = defineProps<{ apiBaseUrl: string }>(),
+  request = createApiClient(props.apiBaseUrl),
+  requestResponse = createApiResponseClient(props.apiBaseUrl),
+  route = useRoute(),
+  router = useRouter(),
+  queryValue = (name: string) => {
+    const value = route.query[name];
+    return typeof value === "string" ? value : "";
+  },
+  initialEntity = (["trends", "opportunities", "competitors", "suppliers"] as Entity[]).includes(
+    queryValue("entity") as Entity,
+  )
+    ? (queryValue("entity") as Entity)
+    : "trends",
+  hasQualityDeepLink = Boolean(
+    queryValue("evidence") || queryValue("evidence_id") || queryValue("issue_id"),
+  ),
+  initialStatus = entityStatuses[initialEntity].includes(queryValue("status"))
+    ? queryValue("status")
+    : "",
+  pageSize = 20,
+  tab = ref<"records" | "quality">(
+    queryValue("view") === "quality" || hasQualityDeepLink ? "quality" : "records",
+  ),
+  entity = ref<Entity>(initialEntity),
+  query = ref(queryValue("q").trim()),
+  queryDraft = ref(query.value),
+  status = ref(initialStatus),
+  statusDraft = ref(initialStatus),
+  page = ref(/^\d{1,3}$/.test(queryValue("page")) ? Math.max(1, Number(queryValue("page"))) : 1),
+  state = ref<State>("loading"),
   data = ref<any>({ summary: {}, items: [] }),
   message = ref(""),
   requestId = ref(""),
-  exporting = ref(false);
+  exporting = ref(false),
+  refreshing = ref(false);
+let activeController: AbortController | null = null;
 const {
   request: exportReasonRequest,
   open: exportReasonOpen,
@@ -45,64 +95,90 @@ const entities: Array<{
 ];
 const current = computed(() => entities.find((item) => item.value === entity.value)!);
 const summary = computed(() => Object.entries(data.value?.summary ?? {}));
-const entityStatuses: Record<Entity, string[]> = {
-  trends: ["active", "irrelevant", "stale"],
-  opportunities: ["draft", "reviewing", "approved", "rejected", "accepted", "archived"],
-  competitors: ["watching", "active", "stale"],
-  suppliers: ["active", "disabled"],
-};
 const statusOptions = computed(() => entityStatuses[entity.value]);
 const activeFilterCount = computed(
-  () => Number(Boolean(query.value.trim())) + Number(Boolean(status.value)),
+  () => Number(Boolean(queryDraft.value.trim())) + Number(Boolean(statusDraft.value)),
 );
-const statusName = (value: unknown) =>
-  (
-    ({
-      active: "展示中",
-      irrelevant: "无关",
-      stale: "已过期",
-      draft: "草稿",
-      reviewing: "审核中",
-      approved: "已通过",
-      rejected: "已拒绝",
-      accepted: "已采纳",
-      archived: "已归档",
-      watching: "监控中",
-      disabled: "已停用",
-    }) as Record<string, string>
-  )[String(value)] ?? "其他状态";
-const summaryName = (key: string) =>
-  (
-    ({
-      total: "当前记录",
-      active: "展示中",
-      irrelevant: "无关",
-      stale: "已过期",
-      draft: "草稿",
-      approved: "已通过",
-      rejected: "已拒绝",
-    }) as Record<string, string>
-  )[key] ?? statusName(key);
+const statusName = (value: unknown) => statusLabels[entity.value][String(value)] ?? "状态未知";
+const summaryName = (key: string) => (key === "total" ? "当前筛选" : statusName(key));
+const pagination = computed<Pagination>(() => {
+    const total = data.value?.items?.length ?? 0,
+      totalPages = total ? Math.ceil(total / pageSize) : 0;
+    return {
+      page: totalPages ? Math.min(page.value, totalPages) : 1,
+      page_size: pageSize,
+      total,
+      total_pages: totalPages,
+    };
+  }),
+  pagedItems = computed(() => {
+    const start = (pagination.value.page - 1) * pageSize;
+    return (data.value?.items ?? []).slice(start, start + pageSize);
+  }),
+  rangeLabel = computed(() => {
+    if (!pagination.value.total) return "0 条";
+    const start = (pagination.value.page - 1) * pageSize + 1,
+      end = Math.min(pagination.value.page * pageSize, pagination.value.total);
+    return `${start}–${end} / ${pagination.value.total} 条`;
+  });
 
-async function load() {
-  state.value = "loading";
+function failureState(error: ApiClientError): State {
+  return error.kind === "expired" || error.kind === "forbidden"
+    ? error.kind
+    : error.kind === "blocked" || error.kind === "rate_limited"
+      ? "blocked"
+      : "error";
+}
+async function syncRecordsUrl() {
+  const next: Record<string, string> = {};
+  if (entity.value !== "trends") next.entity = entity.value;
+  if (query.value) next.q = query.value;
+  if (status.value) next.status = status.value;
+  if (page.value > 1) next.page = String(page.value);
+  await router.replace({ query: next });
+}
+
+async function load(options: { updateUrl?: boolean } = {}) {
+  if (refreshing.value) return;
+  const hadData = Boolean(data.value?.items?.length);
+  refreshing.value = true;
+  if (!hadData) state.value = "loading";
   message.value = "";
   const params = new URLSearchParams({ domain: "data", entity: entity.value });
   if (query.value.trim()) params.set("query", query.value.trim());
   if (status.value) params.set("status", status.value);
+  const controller = new AbortController();
+  activeController = controller;
+  const timer = window.setTimeout(() => controller.abort(), 15_000);
   try {
-    const response = await request<any>(`/platform/management?${params}`);
+    if (options.updateUrl !== false) await syncRecordsUrl();
+    const response = await request<any>(`/platform/management?${params}`, {
+      signal: controller.signal,
+    });
     requestId.value = response.request_id;
     data.value = response.data;
+    const totalPages = Math.max(1, Math.ceil(response.data.items.length / pageSize));
+    if (page.value > totalPages) {
+      page.value = totalPages;
+      if (options.updateUrl !== false) await syncRecordsUrl();
+    }
     state.value = response.data.items.length ? "ready" : "empty";
   } catch (error) {
     const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? "";
-    message.value = failure?.actionHint ?? "全量数据暂不可用";
-    state.value = "error";
+    requestId.value = failure?.requestId ?? requestId.value;
+    const hint = controller.signal.aborted
+      ? "读取超过 15 秒，已安全取消；上一份结果仍保留。"
+      : (failure?.actionHint ?? "网络或服务异常，上一份结果仍保留。");
+    message.value = hint;
+    state.value = hadData ? "ready" : failure ? failureState(failure) : "blocked";
+  } finally {
+    window.clearTimeout(timer);
+    if (activeController === controller) activeController = null;
+    refreshing.value = false;
   }
 }
 async function exportCsv() {
+  if (exporting.value || exportReasonOpen.value) return;
   const reason = await askExportReason({
     title: "填写受控导出原因",
     description: "导出原因会与筛选范围、操作者和文件审计记录一起保存。",
@@ -143,26 +219,77 @@ async function exportCsv() {
   }
 }
 function selectEntity(value: Entity) {
+  if (refreshing.value || value === entity.value) return;
   entity.value = value;
   status.value = "";
+  statusDraft.value = "";
+  page.value = 1;
   void load();
 }
-onMounted(load);
+function applyFilters() {
+  if (refreshing.value) return;
+  query.value = queryDraft.value.trim();
+  status.value = statusDraft.value;
+  page.value = 1;
+  void load();
+}
+function resetFilters() {
+  if (refreshing.value) return;
+  query.value = "";
+  queryDraft.value = "";
+  status.value = "";
+  statusDraft.value = "";
+  page.value = 1;
+  void load();
+}
+function goToPage(nextPage: number) {
+  if (
+    refreshing.value ||
+    nextPage < 1 ||
+    nextPage > pagination.value.total_pages ||
+    nextPage === page.value
+  )
+    return;
+  page.value = nextPage;
+  void syncRecordsUrl();
+}
+async function selectTab(value: "records" | "quality") {
+  if (value === tab.value) return;
+  tab.value = value;
+  if (value === "quality") await router.replace({ query: { view: "quality" } });
+  else {
+    await syncRecordsUrl();
+    if (!data.value.items.length) void load({ updateUrl: false });
+  }
+}
+onMounted(() => {
+  if (tab.value === "records") void load();
+});
+onBeforeUnmount(() => activeController?.abort());
 </script>
 
 <template>
   <section class="platform-data">
     <header class="platform-data-hero">
       <div>
-        <p>平台全量数据中心</p>
-        <h2>全量业务数据</h2>
-        <span>跨组织查看热点、机会、竞品与供应商事实；导出会记录操作人、原因和范围。</span>
+        <p>平台近期数据中心</p>
+        <h2>跨组织业务数据</h2>
+        <span
+          >按当前筛选查看最近 100
+          条热点、机会、竞品与供应商事实；受控导出会记录操作人、原因和范围。</span
+        >
       </div>
       <nav aria-label="平台数据视图">
-        <button :aria-current="tab === 'records' ? 'page' : undefined" @click="tab = 'records'">
-          全量记录
+        <button
+          :aria-current="tab === 'records' ? 'page' : undefined"
+          @click="selectTab('records')"
+        >
+          近期记录
         </button>
-        <button :aria-current="tab === 'quality' ? 'page' : undefined" @click="tab = 'quality'">
+        <button
+          :aria-current="tab === 'quality' ? 'page' : undefined"
+          @click="selectTab('quality')"
+        >
           证据与质量
         </button>
       </nav>
@@ -180,22 +307,39 @@ onMounted(load);
           {{ item.label }}
         </button>
       </nav>
-      <ResponsiveFilterDrawer label="筛选全量数据" :active-count="activeFilterCount">
-        <form class="platform-data-filter" @submit.prevent="load">
-          <input v-model="query" placeholder="搜索名称、组织或工作区" maxlength="120" />
-          <select v-model="status" aria-label="记录状态">
-            <option value="">全部状态</option>
-            <option v-for="value in statusOptions" :key="value" :value="value">
-              {{ statusName(value) }}
-            </option>
-          </select>
-          <button>筛选</button>
-          <button type="button" :disabled="exporting" @click="exportCsv">
+      <ResponsiveFilterDrawer label="筛选近期数据" :active-count="activeFilterCount">
+        <form class="platform-data-filter" @submit.prevent="applyFilters">
+          <label
+            >搜索
+            <input
+              v-model="queryDraft"
+              placeholder="搜索名称、组织或工作区"
+              maxlength="120"
+              @keydown.enter.prevent="applyFilters"
+          /></label>
+          <label
+            >记录状态
+            <select v-model="statusDraft" aria-label="记录状态">
+              <option value="">全部状态</option>
+              <option v-for="value in statusOptions" :key="value" :value="value">
+                {{ statusName(value) }}
+              </option>
+            </select></label
+          >
+          <button :disabled="refreshing">{{ refreshing ? "正在筛选…" : "筛选" }}</button>
+          <button
+            type="button"
+            :disabled="refreshing || (!queryDraft && !statusDraft)"
+            @click="resetFilters"
+          >
+            重置
+          </button>
+          <button type="button" :disabled="exporting || refreshing" @click="exportCsv">
             {{ exporting ? "正在导出…" : "导出表格文件" }}
           </button>
         </form>
       </ResponsiveFilterDrawer>
-      <p v-if="message" class="platform-data-notice">{{ message }}</p>
+      <p v-if="message" class="platform-data-notice" role="status">{{ message }}</p>
       <section v-if="state !== 'ready'" class="platform-data-state">
         <h3>
           {{
@@ -207,7 +351,7 @@ onMounted(load);
           }}
         </h3>
         <p v-if="message">{{ message }}</p>
-        <button v-if="state !== 'loading'" @click="load">重新加载</button>
+        <button v-if="state !== 'loading'" :disabled="refreshing" @click="load()">重新加载</button>
       </section>
       <template v-else>
         <div class="platform-data-summary">
@@ -218,7 +362,7 @@ onMounted(load);
         </div>
         <div class="platform-data-table">
           <ResponsiveDataView
-            :rows="data.items"
+            :rows="pagedItems"
             :row-key="(item) => item.id"
             :title="`${current.label}记录`"
             :detail-title="(item) => item.title"
@@ -237,7 +381,7 @@ onMounted(load);
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="item in data.items" :key="item.id">
+                  <tr v-for="item in pagedItems" :key="item.id">
                     <td>
                       <strong>{{ item.title }}</strong>
                     </td>
@@ -302,8 +446,25 @@ onMounted(load);
             </template>
           </ResponsiveDataView>
         </div>
-        <footer>
-          最多显示当前筛选最近 100 条
+        <footer class="platform-data-footer">
+          <span>当前筛选最近 100 条范围内 · {{ rangeLabel }}</span>
+          <nav v-if="pagination.total_pages > 1" aria-label="业务数据分页">
+            <button
+              type="button"
+              :disabled="refreshing || pagination.page <= 1"
+              @click="goToPage(pagination.page - 1)"
+            >
+              上一页
+            </button>
+            <span>第 {{ pagination.page }} / {{ pagination.total_pages }} 页</span>
+            <button
+              type="button"
+              :disabled="refreshing || pagination.page >= pagination.total_pages"
+              @click="goToPage(pagination.page + 1)"
+            >
+              下一页
+            </button>
+          </nav>
           <details v-if="requestId">
             <summary>技术详情</summary>
             <span>请求 ID {{ requestId }}</span>
@@ -350,7 +511,7 @@ onMounted(load);
   margin: 6px 0;
 }
 .platform-data-hero span,
-.platform-data footer {
+.platform-data-footer {
   color: var(--so-text-muted);
 }
 .platform-data nav,
@@ -372,7 +533,18 @@ onMounted(load);
   background: var(--so-primary-strong);
   color: var(--so-on-primary);
 }
-.platform-data-filter input:first-child {
+.platform-data-filter label {
+  display: grid;
+  flex: 1;
+  gap: 5px;
+  color: var(--so-text-muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+.platform-data-filter label:first-child {
+  min-width: min(360px, 100%);
+}
+.platform-data-filter input {
   flex: 1;
 }
 .platform-data-summary {
@@ -423,9 +595,15 @@ onMounted(load);
 .platform-data-notice {
   text-align: center;
 }
-.platform-data footer {
-  text-align: right;
+.platform-data-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   font-size: 13px;
+}
+.platform-data-footer nav {
+  align-items: center;
 }
 .platform-data-table details summary,
 .platform-data footer details summary {
@@ -451,6 +629,16 @@ onMounted(load);
   .platform-data-filter select,
   .platform-data-filter button {
     width: 100%;
+  }
+  .platform-data-filter label:first-child {
+    min-width: 0;
+  }
+  .platform-data-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .platform-data-footer nav {
+    justify-content: space-between;
   }
 }
 </style>

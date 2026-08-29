@@ -9,6 +9,12 @@ export type PlatformManagementDomain =
   | "governance"
   | "api_coverage";
 export type PlatformDataEntity = "trends" | "opportunities" | "competitors" | "suppliers";
+const platformDataStatuses: Record<PlatformDataEntity, readonly string[]> = {
+  trends: ["active", "irrelevant", "stale", "archived"],
+  opportunities: ["pending", "adopted", "observing", "rejected"],
+  competitors: ["active", "paused"],
+  suppliers: ["incomplete", "ready", "quarantined"],
+};
 export interface PlatformDashboardRepository {
   read(input: {
     actorId: string;
@@ -155,6 +161,12 @@ export class PlatformDashboardService {
         400,
         "缩短筛选条件后重试。",
       );
+    if (domain === "data" && status && !platformDataStatuses[entity].includes(status))
+      throw new PlatformDashboardError(
+        "platform_data_status_invalid",
+        400,
+        "选择当前数据类型支持的状态。",
+      );
     return this.repository.readManagement({
       ...input,
       domain,
@@ -179,6 +191,12 @@ export class PlatformDashboardService {
         "platform_management_filter_invalid",
         400,
         "缩短筛选条件后重试。",
+      );
+    if (status && !platformDataStatuses[entity].includes(status))
+      throw new PlatformDashboardError(
+        "platform_data_status_invalid",
+        400,
+        "选择当前数据类型支持的状态。",
       );
     if (reason.length < 2 || reason.length > 300)
       throw new PlatformDashboardError("reason_invalid", 400, "填写 2–300 字的导出原因。");
