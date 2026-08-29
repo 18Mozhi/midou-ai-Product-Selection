@@ -26,22 +26,54 @@ const run = (row: RowDataPacket): CrawlerRunSummary => ({
 });
 export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
   constructor(private readonly pool: Pool) {}
-  async list() {
-    const [profiles] = await this.pool.query<RowDataPacket[]>(
-      [
-        "SELECT p.id,p.code,p.name,p.provider_id,p.status,v.name provider_name,v.target_url,a.expires_at ",
-        "credential_expires_at,l.run_id,l.lease_owner,l.leased_at,l.heartbeat_at,l.expires_at,",
-        "f.status failure_status,f.error_code failure_error_code,f.finished_at failure_at FROM ",
-        "crawler_profiles p JOIN providers v ON v.id=p.provider_id JOIN credential_assets a ON ",
-        "a.id=p.credential_asset_id LEFT JOIN crawler_profile_leases l ON l.crawler_profile_id=p.id LEFT JOIN ",
-        "crawler_browser_runs f ON f.id=(SELECT f2.id FROM crawler_browser_runs f2 WHERE ",
-        "f2.crawler_profile_id=p.id AND f2.status IN ('blocked','failed','timed_out','cancelled') ORDER BY ",
-        "f2.started_at DESC,f2.id DESC LIMIT 1) ORDER BY ",
-        "p.status='active' DESC,p.name,p.id",
-      ].join(""),
-    );
+  async list(input: Parameters<CrawlerRuntimeRepository["list"]>[0]) {
+    const conditions: string[] = [],
+      parameters: unknown[] = [];
+    if (input.status) {
+      conditions.push("status=?");
+      parameters.push(input.status);
+    }
+    if (input.query) {
+      conditions.push(
+        "(INSTR(LOWER(id),?)>0 OR INSTR(LOWER(COALESCE(error_code,'')),?)>0 OR INSTR(LOWER(request_id),?)>0 OR INSTR(LOWER(trace_id),?)>0)",
+      );
+      const normalized = input.query.toLowerCase();
+      parameters.push(normalized, normalized, normalized, normalized);
+    }
+    const where = conditions.length ? ` WHERE ${conditions.join(" AND ")}` : "",
+      [[profiles], [countRows], [metricRows]] = await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          [
+            "SELECT p.id,p.code,p.name,p.provider_id,p.status,v.name provider_name,v.target_url,a.expires_at ",
+            "credential_expires_at,l.run_id,l.lease_owner,l.leased_at,l.heartbeat_at,l.expires_at,",
+            "f.status failure_status,f.error_code failure_error_code,f.finished_at failure_at FROM ",
+            "crawler_profiles p JOIN providers v ON v.id=p.provider_id JOIN credential_assets a ON ",
+            "a.id=p.credential_asset_id LEFT JOIN crawler_profile_leases l ON l.crawler_profile_id=p.id LEFT JOIN ",
+            "crawler_browser_runs f ON f.id=(SELECT f2.id FROM crawler_browser_runs f2 WHERE ",
+            "f2.crawler_profile_id=p.id AND f2.status IN ('blocked','failed','timed_out','cancelled') ORDER BY ",
+            "f2.started_at DESC,f2.id DESC LIMIT 1) ORDER BY ",
+            "p.status='active' DESC,p.name,p.id",
+          ].join(""),
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT COUNT(*) total FROM crawler_browser_runs${where}`,
+          parameters,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          [
+            "SELECT COUNT(*) total,",
+            "SUM(status IN ('blocked','failed','timed_out')) abnormal,",
+            "SUM(error_code='lease_expired') duplicate_risk FROM crawler_browser_runs",
+          ].join(""),
+        ),
+      ]),
+      total = Number(countRows[0]?.total ?? 0),
+      totalPages = total === 0 ? 0 : Math.ceil(total / input.pageSize),
+      page = totalPages === 0 ? 1 : Math.min(input.page, totalPages),
+      offset = (page - 1) * input.pageSize;
     const [runs] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM crawler_browser_runs ORDER BY started_at DESC,id DESC LIMIT 100",
+      `SELECT * FROM crawler_browser_runs${where} ORDER BY started_at DESC,id DESC LIMIT ? OFFSET ?`,
+      [...parameters, input.pageSize, offset],
     );
     return {
       profiles: profiles.map((row) => ({
@@ -88,6 +120,17 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
               },
       })),
       runs: runs.map(run),
+      run_metrics: {
+        total: Number(metricRows[0]?.total ?? 0),
+        abnormal: Number(metricRows[0]?.abnormal ?? 0),
+        duplicate_risk: Number(metricRows[0]?.duplicate_risk ?? 0),
+      },
+      pagination: {
+        page,
+        page_size: input.pageSize,
+        total,
+        total_pages: totalPages,
+      },
     };
   }
   async acquire(input: Parameters<CrawlerRuntimeRepository["acquire"]>[0]) {

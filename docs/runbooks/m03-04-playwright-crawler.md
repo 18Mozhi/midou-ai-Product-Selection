@@ -31,7 +31,7 @@ Node/Worker 配置在统一后端启动时读取，Python 配置在 `ai选品-py
 3. 本地运行 `python -m unittest discover -s apps/crawler/tests -p "test_*.py"`、`node --test tests/unit/credential-cookie-security-boundary.test.mjs` 与 `npm run test:integration`。集成测试必须显示 Python 真实 HTTP 消费的领取、续租、完成及无任务不发心跳均通过，并显示加密登录态真实 Chromium 的成功采集、登录失效受阻、证据生成和临时档案清理均通过；不得用外部账号或纯 Mock 截图替代。
 4. 在发布目录复用锁文件安装依赖，安装项目固定的 Playwright Chromium；不得在请求处理中下载浏览器。
 5. 构建后运行 `npm run verify:crawler-chain` 与 `npm run verify:module -- M03-04`。前者检查生产调用方和真实集成测试未被移除，后者继续覆盖真实本地 Chromium、MySQL 5.7 独占租约、Python bridge、桌面和 390px 视觉验收。
-6. 由宝塔重启 `ai选品` 和 `ai选品-python`，在 `/platform-admin/collection/browser-runtime` 确认档案明确有效期与剩余天数、目标域名、活动租约占用实例与来源、过期租约的僵尸占用风险和最近运行可读；未设置有效期必须显示“无法预测”，不能猜测。在 `/platform-admin/crawler-scheduler` 确认完成回执的待回写/隔离数量、保留期、容量和磁盘水位已更新。再检查 Python 的 running/completed 日志；成功作业应在 `browser_evidence_artifacts` 同时出现 `dom_fragment` 与 `screenshot`，解析版本与 Provider 一致，文件位于受控 `EVIDENCE_ROOT` 而非网站目录；没有 `browser_collection_jobs.status='queued'` 时不应出现空闲心跳。
+6. 由宝塔重启 `ai选品` 和 `ai选品-python`，在 `/platform-admin/collection/browser-runtime` 确认档案明确有效期与剩余天数、目标域名、活动租约占用实例与来源、过期租约的僵尸占用风险和最近运行可读；未设置有效期必须显示“无法预测”，不能猜测。准备超过 25 条脱敏运行，验证下一页可达，精确搜索早于首 100 条的 trace_id 仍可返回，状态/搜索/页码在刷新和返回后保持；让读取挂起超过 15 秒时，旧事实必须保留。中文临时根目录下的本地真实 Chromium 成功和 `blocked_login` 两条生命周期必须同时通过，且临时目录清空。在 `/platform-admin/crawler-scheduler` 确认完成回执的待回写/隔离数量、保留期、容量和磁盘水位已更新。再检查 Python 的 running/completed 日志；成功作业应在 `browser_evidence_artifacts` 同时出现 `dom_fragment` 与 `screenshot`，解析版本与 Provider 一致，文件位于受控 `EVIDENCE_ROOT` 而非网站目录；没有 `browser_collection_jobs.status='queued'` 时不应出现空闲心跳。
 
 ## 故障处理
 

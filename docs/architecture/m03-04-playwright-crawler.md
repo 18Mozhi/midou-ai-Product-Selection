@@ -29,13 +29,15 @@
 
 Python Crawler 不读取静态执行请求文件。它使用服务 Token 调用 `/internal/crawler-runtime/jobs/acquire`，每次领取前先提交受限回执目录的计数、字节数、最老创建时间、保留阈值和可用磁盘；无任务时仍保存这份脱敏水位并返回 204，不发送空闲心跳；有任务时获得业务关联、代码生成的计划、档案元数据、加密凭证记录和一次性租约。水位合同不包含路径、文件名或回执内容。加密凭证与主密钥仅通过 stdin 交给固定 Node runner，runner 在准确临时目录内解密、使用并清理，参数不经 shell 拼接，stdout 只返回带 correlation 的有界结构结果。生产 Python Crawler 与 Node 后端一样只能由宝塔面板管理。
 
+Python `subprocess.Popen` 的文本管道显式固定为 UTF-8；这是 Python bridge、Node runner 和包含中文的宝塔目录 `/www/wwwroot/ai选品` 之间的运行合同。不得退回操作系统默认代码页，否则 Windows 本地验证中的中文 `CREDENTIAL_TEMP_ROOT` 会在 Node 侧失真并触发 `crawler_runner_temp_scope_invalid`。
+
 集成门禁在本机随机端口运行真实 Fastify，并从独立 Python 进程调用生产 `run_once`，验证 job acquire、活动租约 heartbeat、complete 及无任务 204 路径；另用 AES-GCM 加密测试 Cookie 启动真实 Chromium，验证登录有效、登录失效、截图/DOM 证据与临时档案清理。该门禁不连接外部平台、不使用真实账号，且不能由 `page.route` 或截图 Mock 替代。
 
 ## 权限与响应
 
-采集运行列表在桌面保留事实表格；390px 使用统一摘要卡片与右侧详情抽屉，不再横向滚动宽表。档案卡使用服务端 `observed_at` 与凭证明确 `expires_at` 计算到期天数；没有有效期时明确“无法预测”，不根据历史登录表现猜测。当前租约显式展示占用实例和 Provider/目标域名来源；只有租约已早于 `observed_at` 时才标记“僵尸占用风险”并允许进入既有过期回收，不声称已探测到操作系统僵尸进程。档案卡继续展示最近一次失败；运行详情只在 `lease_expired` 有事实证据时提示“可能重复执行”，不把普通失败推断成重复。完整运行、组织、工作区、请求、链路与错误标识只在可展开的“技术详情”中展示。
+采集运行列表在桌面保留事实表格；390px 使用统一摘要卡片与右侧详情抽屉，不再横向滚动宽表。运行历史由服务端按 25 条分页，状态和最长 160 字符的运行/错误/请求/链路标识搜索在 MySQL 事实集上执行，页码与筛选写入 URL；页面刷新、返回和共享链接不能退回前 100 条内的客户端筛选。档案卡使用服务端 `observed_at` 与凭证明确 `expires_at` 计算到期天数；没有有效期时明确“无法预测”，不根据历史登录表现猜测。当前租约显式展示占用实例和 Provider/目标域名来源；只有租约已早于 `observed_at` 时才标记“僵尸占用风险”并允许进入既有过期回收，不声称已探测到操作系统僵尸进程。档案卡继续展示最近一次失败；运行详情只在 `lease_expired` 有事实证据时提示“可能重复执行”，不把普通失败推断成重复。完整运行、组织、工作区、请求、链路与错误标识只在可展开的“技术详情”中展示。已有数据刷新使用 15 秒客户端截止并保留最后一次已验证事实；首次失败仍显示对应登录、权限或依赖状态。
 
-平台监控 `GET /api/v1/platform/crawler-runtime` 与过期回收 `POST /api/v1/platform/crawler-runtime/recover-expired` 要求已登录且具备 `collection:replay`。写操作校验同源 Origin 和 Idempotency-Key。平台响应只含档案元数据、租约时间/实例、范围化运行统计和 correlation，不含凭证明文、密文、临时路径、执行计划或租约令牌。只有 Crawler 服务 Token 可以访问 job acquire/heartbeat/complete；内部 acquire 返回密文而非明文，完成结果限制为 2 MB 并同时核对 job、run、profile 和租约摘要。DOM 与截图必须成对出现、类型与解析版本符合来源合同且哈希一致，否则按解析漂移失败关闭，不能落入证据目录。
+平台监控 `GET /api/v1/platform/crawler-runtime` 与过期回收 `POST /api/v1/platform/crawler-runtime/recover-expired` 要求已登录且具备 `collection:replay`。写操作校验同源 Origin 和 Idempotency-Key。列表仓库异常统一映射为可安全重试的 503 `crawler_runtime_dependency_unavailable`，不得把 SQL、表名或连接信息返回页面。平台响应只含档案元数据、租约时间/实例、范围化运行统计和 correlation，不含凭证明文、密文、临时路径、执行计划或租约令牌。只有 Crawler 服务 Token 可以访问 job acquire/heartbeat/complete；内部 acquire 返回密文而非明文，完成结果限制为 2 MB 并同时核对 job、run、profile 和租约摘要。DOM 与截图必须成对出现、类型与解析版本符合来源合同且哈希一致，否则按解析漂移失败关闭，不能落入证据目录。
 
 ## 回滚
 

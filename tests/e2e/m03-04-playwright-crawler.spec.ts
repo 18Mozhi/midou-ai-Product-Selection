@@ -109,6 +109,33 @@ const runs = [
     finished_at: "2026-08-07T19:30:00.913Z",
   },
 ];
+function runtimeSnapshot(url: string) {
+  const params = new URL(url).searchParams,
+    selectedStatus = params.get("status"),
+    query = (params.get("q") ?? "").toLowerCase(),
+    page = Number(params.get("page") ?? "1"),
+    filtered = runs.filter(
+      (item) =>
+        (!selectedStatus || item.status === selectedStatus) &&
+        (!query ||
+          [item.id, item.error_code, item.request_id, item.trace_id].some((value) =>
+            value?.toLowerCase().includes(query),
+          )),
+    );
+  return {
+    profiles,
+    runs: filtered,
+    run_metrics: { total: runs.length, abnormal: 1, duplicate_risk: 0 },
+    pagination: {
+      page,
+      page_size: 25,
+      total: filtered.length,
+      total_pages: filtered.length ? 1 : 0,
+    },
+    filters: { status: selectedStatus, query: query || null },
+    observed_at: "2026-08-07T20:02:00.000Z",
+  };
+}
 async function nav(page: any) {
   await page.route("**/api/v1/me/navigation?**", (route) =>
     route.fulfill({
@@ -121,12 +148,12 @@ async function nav(page: any) {
 const runtimePath = "/platform-admin/collection/browser-runtime";
 test("M03-04.A07/A08/A15 runtime monitor is responsive and visual", async ({ page }) => {
   await nav(page);
-  await page.route("**/api/v1/platform/crawler-runtime", (route) =>
+  await page.route("**/api/v1/platform/crawler-runtime?**", (route) =>
     route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
-        data: { profiles, runs, observed_at: "2026-08-07T20:02:00.000Z" },
+        data: runtimeSnapshot(route.request().url()),
         request_id: "m03-04-list",
         trace_id: "m03-04-list",
       }),
@@ -153,12 +180,12 @@ test("M03-04.A07/A08/A15 runtime monitor is responsive and visual", async ({ pag
 });
 test("M03-04.A08 filters and confirmed recovery stay explicit", async ({ page }) => {
   await nav(page);
-  await page.route("**/api/v1/platform/crawler-runtime", (route) =>
+  await page.route("**/api/v1/platform/crawler-runtime?**", (route) =>
     route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
-        data: { profiles, runs, observed_at: "2026-08-07T20:02:00.000Z" },
+        data: runtimeSnapshot(route.request().url()),
         request_id: "m03-04-list",
         trace_id: "m03-04-list",
       }),
@@ -177,10 +204,23 @@ test("M03-04.A08 filters and confirmed recovery stay explicit", async ({ page })
   );
   await page.goto(runtimePath);
   await page.getByLabel("运行状态").selectOption("blocked");
+  await page.getByRole("button", { name: "查询" }).click();
+  await expect(page).toHaveURL(/status=blocked/);
   if ((page.viewportSize()?.width ?? 1000) <= 760)
     await expect(page.getByRole("button", { name: /已拦截 · 0 条.*需要验证码/ })).toBeVisible();
   else await expect(page.getByText("需要验证码", { exact: true })).toBeVisible();
   await expect(page.getByText("42 条")).toHaveCount(0);
+  await page.reload();
+  await expect(page.getByLabel("运行状态")).toHaveValue("blocked");
+  await page.getByRole("button", { name: "重置" }).click();
+  await expect(page).not.toHaveURL(/status=/);
+  await page.getByLabel("搜索运行").fill("trace-success");
+  await page.getByRole("button", { name: "查询" }).click();
+  await expect(page).toHaveURL(/q=trace-success/);
+  if ((page.viewportSize()?.width ?? 1000) <= 760)
+    await expect(page.getByRole("button", { name: /成功 · 42 条/ })).toBeVisible();
+  else await expect(page.getByRole("cell", { name: /42 条/ })).toBeVisible();
+  await page.getByRole("button", { name: "重置" }).click();
   await page.getByRole("button", { name: "回收过期运行" }).click();
   await page.getByPlaceholder("确认回收").fill("确认回收");
   await page.getByRole("button", { name: "确认回收" }).click();
@@ -189,14 +229,21 @@ test("M03-04.A08 filters and confirmed recovery stay explicit", async ({ page })
 test("M03-04.A08/A09/A16 empty forbidden and dependency states are truthful", async ({ page }) => {
   await nav(page);
   let status = 200;
-  await page.route("**/api/v1/platform/crawler-runtime", (route) =>
+  await page.route("**/api/v1/platform/crawler-runtime?**", (route) =>
     route.fulfill(
       status === 200
         ? {
             status,
             contentType: "application/json",
             body: JSON.stringify({
-              data: { profiles: [], runs: [], observed_at: "2026-08-07T20:02:00.000Z" },
+              data: {
+                profiles: [],
+                runs: [],
+                run_metrics: { total: 0, abnormal: 0, duplicate_risk: 0 },
+                pagination: { page: 1, page_size: 25, total: 0, total_pages: 0 },
+                filters: { status: null, query: null },
+                observed_at: "2026-08-07T20:02:00.000Z",
+              },
               request_id: "m03-04-empty",
               trace_id: "m03-04-empty",
             }),

@@ -79,7 +79,14 @@ class FoundationTaskTest(unittest.TestCase):
 
     @patch("scoutops_crawler.playwright_bridge.subprocess.Popen")
     def test_playwright_bridge_uses_stdin_without_shell_and_checks_correlation(self, popen: Mock) -> None:
-        config = load_config({"PLAYWRIGHT_NODE_BINARY": "node-test", "PLAYWRIGHT_RUNNER_PATH": "runner.mjs"})
+        temp_root = "D:/项目/智能选品/credential-tmp"
+        config = load_config(
+            {
+                "PLAYWRIGHT_NODE_BINARY": "node-test",
+                "PLAYWRIGHT_RUNNER_PATH": "runner.mjs",
+                "CREDENTIAL_TEMP_ROOT": temp_root,
+            }
+        )
         process = Mock(returncode=0)
         process.communicate.return_value = (
             '{"status":"succeeded_empty","request_id":"r1","trace_id":"t1"}',
@@ -91,7 +98,10 @@ class FoundationTaskTest(unittest.TestCase):
         self.assertEqual(result["stderr_diagnostic"], "warning token=[REDACTED]")
         _, kwargs = popen.call_args
         self.assertFalse(kwargs["shell"])
-        self.assertIn('"request_id": "r1"', process.communicate.call_args.kwargs["input"])
+        self.assertEqual(kwargs["encoding"], "utf-8")
+        runner_input = json.loads(process.communicate.call_args.kwargs["input"])
+        self.assertEqual(runner_input["request_id"], "r1")
+        self.assertEqual(runner_input["temp_root"], temp_root)
 
     @patch("scoutops_crawler.playwright_bridge.subprocess.Popen")
     def test_playwright_bridge_fails_closed_on_invalid_output(self, popen: Mock) -> None:

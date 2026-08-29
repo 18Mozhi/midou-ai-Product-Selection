@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
@@ -45,18 +46,52 @@ interface Run {
   started_at: string;
   finished_at: string | null;
 }
+interface Pagination {
+  page: number;
+  page_size: number;
+  total: number;
+  total_pages: number;
+}
+interface RunMetrics {
+  total: number;
+  abnormal: number;
+  duplicate_risk: number;
+}
 const props = defineProps<{ apiBaseUrl: string }>(),
   request = createApiClient(props.apiBaseUrl),
+  route = useRoute(),
+  router = useRouter(),
+  queryValue = (name: string) => {
+    const value = route.query[name];
+    return typeof value === "string" ? value : "";
+  },
+  allowedStatuses = new Set([
+    "running",
+    "succeeded",
+    "succeeded_empty",
+    "blocked",
+    "failed",
+    "timed_out",
+    "cancelled",
+  ]),
+  initialStatus = allowedStatuses.has(queryValue("status")) ? queryValue("status") : "all",
+  initialPage = /^\d{1,6}$/.test(queryValue("page")) ? Number(queryValue("page")) : 1,
   state = ref<State>("loading"),
   profiles = ref<Profile[]>([]),
   runs = ref<Run[]>([]),
+  pagination = ref<Pagination>({ page: 1, page_size: 25, total: 0, total_pages: 0 }),
+  runMetrics = ref<RunMetrics>({ total: 0, abnormal: 0, duplicate_risk: 0 }),
   requestId = ref(""),
   message = ref(""),
-  query = ref(""),
-  status = ref("all"),
+  query = ref(queryValue("q").trim()),
+  queryDraft = ref(query.value),
+  status = ref(initialStatus),
+  page = ref(Math.max(1, initialPage)),
   observedAt = ref(""),
   confirming = ref(false),
-  saving = ref(false);
+  saving = ref(false),
+  refreshing = ref(false);
+let activeController: AbortController | null = null;
 const activeLeases = computed(() => profiles.value.filter((item) => item.lease)),
   expiredLeaseRisks = computed(() =>
     profiles.value.filter(
@@ -65,22 +100,6 @@ const activeLeases = computed(() => profiles.value.filter((item) => item.lease))
         observedAt.value &&
         new Date(item.lease.expires_at).getTime() <= new Date(observedAt.value).getTime(),
     ),
-  ),
-  duplicateRiskRuns = computed(() =>
-    runs.value.filter((item) => item.error_code === "lease_expired"),
-  ),
-  blockedRuns = computed(() =>
-    runs.value.filter((item) => ["blocked", "failed", "timed_out"].includes(item.status)),
-  ),
-  filtered = computed(() =>
-    runs.value.filter(
-      (item) =>
-        (status.value === "all" || item.status === status.value) &&
-        (!query.value ||
-          [item.id, item.error_code, item.trace_id].some((value) =>
-            value?.toLowerCase().includes(query.value.toLowerCase()),
-          )),
-    ),
   );
 const failure = (kind: ApiFailureKind): State =>
   kind === "expired" || kind === "forbidden"
@@ -88,27 +107,87 @@ const failure = (kind: ApiFailureKind): State =>
     : kind === "blocked" || kind === "rate_limited"
       ? "blocked"
       : "error";
-async function load() {
-  state.value = "loading";
+async function syncUrl() {
+  const next: Record<string, string> = {};
+  if (query.value) next.q = query.value;
+  if (status.value !== "all") next.status = status.value;
+  if (page.value > 1) next.page = String(page.value);
+  await router.replace({ query: next });
+}
+async function load(options: { updateUrl?: boolean } = {}) {
+  if (refreshing.value) return;
+  const hadData = Boolean(observedAt.value);
+  refreshing.value = true;
+  if (!hadData) state.value = "loading";
   message.value = "";
+  const search = new URLSearchParams({ page: String(page.value) });
+  if (query.value) search.set("q", query.value);
+  if (status.value !== "all") search.set("status", status.value);
+  const controller = new AbortController();
+  activeController = controller;
+  const timer = window.setTimeout(() => controller.abort(), 15_000);
   try {
-    const response = await request<{ profiles: Profile[]; runs: Run[]; observed_at: string }>(
-      "/platform/crawler-runtime",
-    );
+    if (options.updateUrl !== false) await syncUrl();
+    const response = await request<{
+      profiles: Profile[];
+      runs: Run[];
+      run_metrics: RunMetrics;
+      pagination: Pagination;
+      filters: { status: RunStatus | null; query: string | null };
+      observed_at: string;
+    }>(`/platform/crawler-runtime?${search}`, { signal: controller.signal });
     requestId.value = response.request_id;
     profiles.value = response.data.profiles;
     runs.value = response.data.runs;
+    runMetrics.value = response.data.run_metrics;
+    pagination.value = response.data.pagination;
+    const requestedPage = page.value;
+    page.value = response.data.pagination.page;
     observedAt.value = response.data.observed_at;
-    state.value = profiles.value.length || runs.value.length ? "ready" : "empty";
+    state.value = profiles.value.length || runMetrics.value.total ? "ready" : "empty";
+    if (requestedPage !== page.value) await syncUrl();
   } catch (error) {
-    if (error instanceof ApiClientError) {
-      requestId.value = error.requestId;
-      message.value = error.actionHint;
-      state.value = failure(error.kind);
-    } else state.value = "blocked";
+    const apiError = error instanceof ApiClientError ? error : null,
+      hint = controller.signal.aborted
+        ? "读取超过 15 秒，已安全取消；当前已验证数据仍保留。"
+        : (apiError?.actionHint ?? "网络或服务异常，当前已验证数据仍保留。");
+    requestId.value = apiError?.requestId ?? requestId.value;
+    if (hadData) {
+      message.value = hint.includes("当前已验证数据仍保留")
+        ? hint
+        : `${hint} 当前已验证数据仍保留。`;
+      state.value = "ready";
+    } else {
+      message.value = hint;
+      state.value = apiError ? failure(apiError.kind) : "blocked";
+    }
+  } finally {
+    window.clearTimeout(timer);
+    if (activeController === controller) activeController = null;
+    refreshing.value = false;
   }
 }
+function applyFilters() {
+  if (refreshing.value) return;
+  query.value = queryDraft.value.trim();
+  page.value = 1;
+  void load();
+}
+function resetFilters() {
+  if (refreshing.value) return;
+  query.value = "";
+  queryDraft.value = "";
+  status.value = "all";
+  page.value = 1;
+  void load();
+}
+function goToPage(nextPage: number) {
+  if (refreshing.value || nextPage < 1 || nextPage > pagination.value.total_pages) return;
+  page.value = nextPage;
+  void load();
+}
 async function recover() {
+  if (saving.value || expiredLeaseRisks.value.length === 0) return;
   saving.value = true;
   try {
     const response = await request<{ recovered: number }>(
@@ -116,8 +195,9 @@ async function recover() {
       { method: "POST", body: {} },
     );
     requestId.value = response.request_id;
-    message.value = `已回收 ${response.data.recovered} 个过期租约`;
-    await load();
+    const notice = `已回收 ${response.data.recovered} 个过期租约`;
+    await load({ updateUrl: false });
+    message.value = notice;
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
@@ -176,7 +256,14 @@ const leaseExpired = (profile: Profile) =>
     observedAt.value &&
     new Date(profile.lease.expires_at).getTime() <= new Date(observedAt.value).getTime(),
   );
-onMounted(load);
+const rangeLabel = computed(() => {
+  if (!pagination.value.total) return "0 条";
+  const start = (pagination.value.page - 1) * pagination.value.page_size + 1,
+    end = Math.min(pagination.value.page * pagination.value.page_size, pagination.value.total);
+  return `${start}–${end} / ${pagination.value.total} 条`;
+});
+onMounted(() => load());
+onBeforeUnmount(() => activeController?.abort());
 </script>
 <template>
   <section class="crawler-center" aria-labelledby="crawler-title">
@@ -186,8 +273,20 @@ onMounted(load);
         <h2 id="crawler-title">采集运行监控</h2>
         <span>查看哪些网页登录档案正在使用、哪些运行失败，以及失败发生的时间和原因。</span>
       </div>
-      <button type="button" :disabled="saving" @click="confirming = true">回收过期运行</button>
+      <div class="crawler-title-actions">
+        <button type="button" class="secondary" :disabled="refreshing" @click="load()">
+          {{ refreshing ? "刷新中…" : "刷新数据" }}
+        </button>
+        <button
+          type="button"
+          :disabled="saving || refreshing || expiredLeaseRisks.length === 0"
+          @click="confirming = true"
+        >
+          {{ saving ? "回收中…" : "回收过期运行" }}
+        </button>
+      </div>
     </header>
+    <p v-if="message" class="crawler-notice" aria-live="polite">{{ message }}</p>
     <UiStatePanel
       v-if="state !== 'ready'"
       :kind="state"
@@ -204,8 +303,10 @@ onMounted(load);
           ><span>同一档案仅一个</span>
         </article>
         <article>
-          <small>异常运行</small><strong>{{ blockedRuns.length }}</strong
-          ><span>重复执行风险 {{ duplicateRiskRuns.length }} 条</span>
+          <small>异常运行</small><strong>{{ runMetrics.abnormal }}</strong
+          ><span
+            >全部 {{ runMetrics.total }} 条 · 重复执行风险 {{ runMetrics.duplicate_risk }} 条</span
+          >
         </article>
         <article>
           <small>过期占用</small><strong>{{ expiredLeaseRisks.length }}</strong
@@ -215,7 +316,7 @@ onMounted(load);
       <section class="crawler-leases">
         <header>
           <h3>档案与租约</h3>
-          <span>{{ message || "租约令牌与凭证明文从不返回页面" }}</span>
+          <span>租约令牌与凭证明文从不返回页面</span>
         </header>
         <div class="crawler-profile-grid">
           <article
@@ -283,25 +384,37 @@ onMounted(load);
             <h3>最近运行</h3>
             <span>每次运行、拦截和失败都保留可追查的关联编号</span>
           </div>
-          <div>
-            <input
-              v-model="query"
-              aria-label="搜索运行"
-              placeholder="运行 ID / 错误码 / trace_id"
-            /><select v-model="status" aria-label="运行状态">
-              <option value="all">全部状态</option>
-              <option value="running">运行中</option>
-              <option value="succeeded">成功</option>
-              <option value="succeeded_empty">成功但无结果</option>
-              <option value="blocked">已拦截</option>
-              <option value="failed">失败</option>
-              <option value="timed_out">已超时</option>
-              <option value="cancelled">已取消</option>
-            </select>
-          </div>
+          <form class="crawler-run-filters" @submit.prevent="applyFilters">
+            <label>
+              <span>搜索运行</span>
+              <input
+                v-model="queryDraft"
+                aria-label="搜索运行"
+                maxlength="160"
+                placeholder="运行 ID / 错误码 / trace_id"
+            /></label>
+            <label>
+              <span>运行状态</span>
+              <select v-model="status" aria-label="运行状态">
+                <option value="all">全部状态</option>
+                <option value="running">运行中</option>
+                <option value="succeeded">成功</option>
+                <option value="succeeded_empty">成功但无结果</option>
+                <option value="blocked">已拦截</option>
+                <option value="failed">失败</option>
+                <option value="timed_out">已超时</option>
+                <option value="cancelled">已取消</option>
+              </select>
+            </label>
+            <button type="submit" :disabled="refreshing">查询</button>
+            <button type="button" class="secondary" :disabled="refreshing" @click="resetFilters">
+              重置
+            </button>
+          </form>
         </header>
         <ResponsiveDataView
-          :rows="filtered"
+          v-if="runs.length"
+          :rows="runs"
           :row-key="(item) => item.id"
           title="最近采集运行"
           :detail-title="(item) => `${statusText(item.status)} · ${time(item.started_at)}`"
@@ -319,7 +432,7 @@ onMounted(load);
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in filtered" :key="item.id">
+                <tr v-for="item in runs" :key="item.id">
                   <td>
                     <strong>{{ time(item.started_at) }}</strong
                     ><small>{{ errorText(item.error_code) }}</small>
@@ -337,9 +450,6 @@ onMounted(load);
                     {{ item.duration_ms === null ? "—" : `${item.duration_ms} 毫秒` }}
                   </td>
                   <td>{{ time(item.started_at) }}</td>
-                </tr>
-                <tr v-if="!filtered.length">
-                  <td colspan="6">当前筛选没有运行记录。</td>
                 </tr>
               </tbody>
             </table>
@@ -416,6 +526,25 @@ onMounted(load);
             </details>
           </template>
         </ResponsiveDataView>
+        <p v-else class="crawler-runs-empty">当前筛选没有运行记录。</p>
+        <nav v-if="pagination.total_pages > 1" class="crawler-pagination" aria-label="运行记录分页">
+          <button
+            type="button"
+            :disabled="refreshing || pagination.page <= 1"
+            @click="goToPage(pagination.page - 1)"
+          >
+            上一页
+          </button>
+          <span>{{ rangeLabel }} · 第 {{ pagination.page }} / {{ pagination.total_pages }} 页</span>
+          <button
+            type="button"
+            :disabled="refreshing || pagination.page >= pagination.total_pages"
+            @click="goToPage(pagination.page + 1)"
+          >
+            下一页
+          </button>
+        </nav>
+        <footer>观测时间 {{ time(observedAt) }} · request_id {{ requestId }}</footer>
       </section></template
     ><ConfirmDialog
       :open="confirming"

@@ -12,6 +12,7 @@ import {
   withExtractedProfileArchive,
 } from "../../packages/playwright-crawler/dist/index.js";
 import { buildApp } from "../../apps/api/dist/app.js";
+import { CrawlerRuntimeService } from "../../apps/api/dist/crawler-runtime-service.js";
 const limits = {
   navigationTimeoutMs: 1000,
   actionTimeoutMs: 500,
@@ -122,13 +123,33 @@ test("M03-04.A02/A11/A12 encrypted profile archive extraction rejects traversal 
 });
 test("M03-04.A06/A08/A09 API requires collection replay, same origin, idempotency and never exposes lease token", async () => {
   const calls = [],
+    listInputs = [],
     actor = "00000000-0000-4000-8000-000000000801",
     service = {
-      list: async () => ({ profiles: [], runs: [], observed_at: "2026-08-07T00:00:00.000Z" }),
+      list: async (input) => (
+        listInputs.push(input),
+        {
+          profiles: [],
+          runs: [],
+          run_metrics: { total: 0, abnormal: 0, duplicate_risk: 0 },
+          pagination: { page: 2, page_size: 25, total: 0, total_pages: 0 },
+          filters: { status: "blocked", query: "captcha" },
+          observed_at: "2026-08-07T00:00:00.000Z",
+        }
+      ),
       recoverExpired: async (context) => (calls.push(context), { recovered: 0 }),
     },
     authorization = { authorize: async (value) => calls.push(value) },
-    auth = { authenticate: async () => ({ user: { id: actor } }) },
+    auth = {
+      failureCode: null,
+      authenticate: async () => {
+        if (auth.failureCode)
+          throw Object.assign(new Error("database detail must stay private"), {
+            code: auth.failureCode,
+          });
+        return { user: { id: actor } };
+      },
+    },
     app = buildApp({
       crawlerRuntime: {
         service,
@@ -140,7 +161,7 @@ test("M03-04.A06/A08/A09 API requires collection replay, same origin, idempotenc
     });
   let response = await app.inject({
     method: "GET",
-    url: "/api/v1/platform/crawler-runtime",
+    url: "/api/v1/platform/crawler-runtime?page=2&status=blocked&q=captcha",
     headers: {
       cookie: "scoutops_session=test",
       "x-request-id": "crawler-read",
@@ -149,6 +170,7 @@ test("M03-04.A06/A08/A09 API requires collection replay, same origin, idempotenc
   });
   assert.equal(response.statusCode, 200);
   assert.equal(response.headers["cache-control"], "private, no-store");
+  assert.deepEqual({ ...listInputs[0] }, { page: "2", status: "blocked", q: "captcha" });
   assert.deepEqual(calls[0], {
     actorId: actor,
     capability: "collection:replay",
@@ -191,7 +213,63 @@ test("M03-04.A06/A08/A09 API requires collection replay, same origin, idempotenc
     ).statusCode,
     400,
   );
+  auth.failureCode = "ECONNREFUSED";
+  response = await app.inject({
+    method: "GET",
+    url: "/api/v1/platform/crawler-runtime",
+    headers: { cookie: "scoutops_session=test" },
+  });
+  assert.equal(response.statusCode, 503);
+  assert.equal(response.json().error.code, "crawler_runtime_dependency_unavailable");
+  assert.doesNotMatch(response.body, /database detail/);
   await app.close();
+});
+test("M03-04.A08 runtime list validates and normalizes server pagination filters", async () => {
+  const calls = [],
+    repository = {
+      list: async (input) => (
+        calls.push(input),
+        {
+          profiles: [],
+          runs: [],
+          run_metrics: { total: 129, abnormal: 49, duplicate_risk: 21 },
+          pagination: { page: input.page, page_size: input.pageSize, total: 21, total_pages: 1 },
+        }
+      ),
+    },
+    service = new CrawlerRuntimeService(repository, () => new Date("2026-08-07T00:00:00.000Z"));
+  const result = await service.list({ page: "2", status: "blocked", q: "  TRACE-OLD  " });
+  assert.deepEqual(calls[0], {
+    page: 2,
+    pageSize: 25,
+    status: "blocked",
+    query: "TRACE-OLD",
+  });
+  assert.equal(result.filters.query, "TRACE-OLD");
+  await assert.rejects(
+    () => service.list({ page: "0" }),
+    (error) => error.code === "crawler_runtime_page_invalid" && error.statusCode === 400,
+  );
+  await assert.rejects(
+    () => service.list({ status: "unknown" }),
+    (error) => error.code === "crawler_runtime_status_invalid" && error.statusCode === 400,
+  );
+  await assert.rejects(
+    () => service.list({ q: "x".repeat(161) }),
+    (error) => error.code === "crawler_runtime_query_invalid" && error.statusCode === 400,
+  );
+  const unavailable = new CrawlerRuntimeService({
+    list: async () => {
+      throw new Error("database detail must not escape");
+    },
+  });
+  await assert.rejects(
+    () => unavailable.list(),
+    (error) =>
+      error.code === "crawler_runtime_dependency_unavailable" &&
+      error.statusCode === 503 &&
+      !error.message.includes("database detail"),
+  );
 });
 test("M03-04.A03/A05-A10/A13/A15-A17 delivery evidence is complete and Baota bounded", async () => {
   const paths = [
@@ -248,6 +326,7 @@ test("M03-04.A03/A05-A10/A13/A15-A17 delivery evidence is complete and Baota bou
   assert.match(down, /DROP TABLE IF EXISTS `crawler_browser_runs`/);
   assert.match(pkg, /launchPersistentContext/);
   assert.match(bridge, /shell=False/);
+  assert.match(bridge, /encoding="utf-8"/);
   assert.match(runner, /stdin/);
   assert.match(repo, /FOR UPDATE/);
   assert.match(routes, /collection:replay/);

@@ -24,6 +24,30 @@ const envelope = (data: unknown, r: FastifyRequest) => ({
   trace_id: ids(r).traceId,
 });
 const digest = (value: string) => createHash("sha256").update(value).digest();
+const databaseFailure = (error: unknown) => {
+  const code =
+    error && typeof error === "object" && "code" in error
+      ? String((error as { code?: unknown }).code ?? "")
+      : "";
+  return (
+    code.startsWith("ER_") ||
+    ["ECONNREFUSED", "ECONNRESET", "ETIMEDOUT", "PROTOCOL_CONNECTION_LOST"].includes(code)
+  );
+};
+const withDependencyBoundary = async <T>(operation: () => Promise<T>) => {
+  try {
+    return await operation();
+  } catch (error) {
+    if (databaseFailure(error))
+      throw new ApiError(
+        503,
+        "crawler_runtime_dependency_unavailable",
+        "采集运行数据暂不可用。",
+        "数据库或采集运行依赖暂不可用，请稍后重试。",
+      );
+    throw error;
+  }
+};
 export function registerCrawlerRuntimeRoutes(app: FastifyInstance, o: CrawlerRuntimeRouteOptions) {
   const actor = async (r: FastifyRequest) => {
     const a = await o.auth.authenticate(sessionToken(r, o.secureCookie));
@@ -48,22 +72,26 @@ export function registerCrawlerRuntimeRoutes(app: FastifyInstance, o: CrawlerRun
     return o.serviceActorId;
   };
   app.get("/api/v1/platform/crawler-runtime", async (r, reply) => {
-    await actor(r);
-    reply.header("cache-control", "private, no-store");
-    return envelope(await o.service.list(), r);
+    return withDependencyBoundary(async () => {
+      await actor(r);
+      reply.header("cache-control", "private, no-store");
+      return envelope(await o.service.list(r.query as Record<string, unknown>), r);
+    });
   });
   app.post("/api/v1/platform/crawler-runtime/recover-expired", async (r) => {
-    if (r.headers.origin !== o.webOrigin)
-      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
-    const actorId = await actor(r);
-    return envelope(
-      await o.service.recoverExpired({
-        actorId,
-        idempotencyKey: requireIdempotencyKey(r),
-        ...ids(r),
-      }),
-      r,
-    );
+    return withDependencyBoundary(async () => {
+      if (r.headers.origin !== o.webOrigin)
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
+      const actorId = await actor(r);
+      return envelope(
+        await o.service.recoverExpired({
+          actorId,
+          idempotencyKey: requireIdempotencyKey(r),
+          ...ids(r),
+        }),
+        r,
+      );
+    });
   });
   app.post("/api/v1/internal/crawler-runtime/acquire", async (r) => {
     const actorId = serviceActor(r),

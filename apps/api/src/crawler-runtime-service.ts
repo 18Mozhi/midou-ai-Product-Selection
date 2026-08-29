@@ -42,7 +42,28 @@ export interface CrawlerProfileRuntime {
 export interface CrawlerRuntimeSnapshot {
   profiles: CrawlerProfileRuntime[];
   runs: CrawlerRunSummary[];
+  run_metrics: {
+    total: number;
+    abnormal: number;
+    duplicate_risk: number;
+  };
+  pagination: {
+    page: number;
+    page_size: number;
+    total: number;
+    total_pages: number;
+  };
+  filters: {
+    status: CrawlerRuntimeStatus | null;
+    query: string | null;
+  };
   observed_at: string;
+}
+export interface CrawlerRuntimeQuery {
+  page: number;
+  pageSize: number;
+  status: CrawlerRuntimeStatus | null;
+  query: string | null;
 }
 export interface BrowserCollectionAssignment {
   job: {
@@ -90,7 +111,9 @@ export interface AcquireInput extends RuntimeContext {
   leaseSeconds: number;
 }
 export interface CrawlerRuntimeRepository {
-  list(): Promise<{ profiles: CrawlerProfileRuntime[]; runs: CrawlerRunSummary[] }>;
+  list(
+    input: CrawlerRuntimeQuery,
+  ): Promise<Omit<CrawlerRuntimeSnapshot, "observed_at" | "filters">>;
   acquire(
     input: AcquireInput & {
       runId: string;
@@ -178,6 +201,15 @@ export class CrawlerRuntimeError extends Error {
   }
 }
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const runtimeStatuses = new Set<CrawlerRuntimeStatus>([
+  "running",
+  "succeeded",
+  "succeeded_empty",
+  "blocked",
+  "failed",
+  "timed_out",
+  "cancelled",
+]);
 const spoolInteger = (value: unknown, minimum: number, maximum: number) => {
   const parsed = Number(value);
   return Number.isSafeInteger(parsed) && parsed >= minimum && parsed <= maximum ? parsed : null;
@@ -241,10 +273,52 @@ export class CrawlerRuntimeService {
   constructor(
     private readonly repository: CrawlerRuntimeRepository,
     private readonly now: () => Date = () => new Date(),
+    private readonly pageSize = 25,
   ) {}
-  async list(): Promise<CrawlerRuntimeSnapshot> {
-    const result = await this.repository.list();
-    return { ...result, observed_at: this.now().toISOString() };
+  async list(input: Record<string, unknown> = {}): Promise<CrawlerRuntimeSnapshot> {
+    const pageValue = String(input.page ?? "1").trim(),
+      statusValue = String(input.status ?? "all").trim(),
+      queryValue = String(input.q ?? "").trim();
+    if (!/^\d{1,6}$/.test(pageValue) || Number(pageValue) < 1)
+      throw new CrawlerRuntimeError(
+        "crawler_runtime_page_invalid",
+        400,
+        "提交有效的运行记录页码。",
+      );
+    if (statusValue !== "all" && !runtimeStatuses.has(statusValue as CrawlerRuntimeStatus))
+      throw new CrawlerRuntimeError(
+        "crawler_runtime_status_invalid",
+        400,
+        "选择页面提供的运行状态后重试。",
+      );
+    if (queryValue.length > 160 || /[\u0000-\u001f\u007f]/.test(queryValue))
+      throw new CrawlerRuntimeError(
+        "crawler_runtime_query_invalid",
+        400,
+        "搜索内容应为不超过 160 个字符的运行标识、错误码或链路标识。",
+      );
+    const query = {
+      page: Number(pageValue),
+      pageSize: this.pageSize,
+      status: statusValue === "all" ? null : (statusValue as CrawlerRuntimeStatus),
+      query: queryValue || null,
+    };
+    let result: Awaited<ReturnType<CrawlerRuntimeRepository["list"]>>;
+    try {
+      result = await this.repository.list(query);
+    } catch (error) {
+      if (error instanceof CrawlerRuntimeError) throw error;
+      throw new CrawlerRuntimeError(
+        "crawler_runtime_dependency_unavailable",
+        503,
+        "数据库或采集运行依赖暂不可用，请稍后重试。",
+      );
+    }
+    return {
+      ...result,
+      filters: { status: query.status, query: query.query },
+      observed_at: this.now().toISOString(),
+    };
   }
   async acquire(input: AcquireInput) {
     if (
