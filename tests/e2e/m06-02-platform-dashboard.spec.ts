@@ -339,7 +339,7 @@ test("platform completion renders trend and management without overflow or conso
     route.fulfill({
       json: env({
         domain: "content",
-        summary: { total: 1, active: 1, review: 0 },
+        summary: { total: 135, active: 90, irrelevant: 25, stale: 19, archived: 1 },
         items: [
           {
             id: "00000000-0000-4000-8000-000000000701",
@@ -358,6 +358,7 @@ test("platform completion renders trend and management without overflow or conso
             workspace_name: "默认工作区",
           },
         ],
+        pagination: { page: 1, page_size: 20, total: 135, total_pages: 7 },
         observed_at: "2026-08-08T12:00:00.000Z",
       }),
     }),
@@ -369,6 +370,15 @@ test("platform completion renders trend and management without overflow or conso
     .toBe(true);
   await page.goto("/platform-admin/content");
   await expect(page.getByRole("heading", { name: "内容管理", level: 2 })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "内容分页" })).toContainText("共 135 条");
+  if ((page.viewportSize()?.width ?? 1000) <= 760)
+    await page.getByRole("button", { name: "筛选内容管理" }).click();
+  await expect(page.getByLabel("内容状态").getByRole("option", { name: "已归档" })).toHaveCount(1);
+  if ((page.viewportSize()?.width ?? 1000) <= 760)
+    await page
+      .getByRole("dialog", { name: "筛选内容管理" })
+      .getByRole("button", { name: "关闭筛选条件" })
+      .click();
   if ((page.viewportSize()?.width ?? 1000) <= 760) {
     await page.getByRole("button", { name: /便携式照明热度上升.*查看详情/ }).click();
     await page

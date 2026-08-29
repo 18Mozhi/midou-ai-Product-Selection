@@ -3,7 +3,7 @@ import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import type { PlatformManagementDomain as Domain } from "./platform-management-presentation";
 
 defineProps<{ domain: Exclude<Domain, "status">; label: string; activeCount: number }>();
-defineEmits<{ apply: [] }>();
+defineEmits<{ apply: []; reset: [] }>();
 const query = defineModel<string>("query", { required: true });
 const status = defineModel<string>("status", { required: true });
 </script>
@@ -13,6 +13,7 @@ const status = defineModel<string>("status", { required: true });
     <form class="platform-management-filter" @submit.prevent="$emit('apply')">
       <input
         v-model="query"
+        :aria-label="domain === 'content' ? '搜索热点内容' : `搜索${label}`"
         :placeholder="
           domain === 'content'
             ? '搜索主题、分类或市场'
@@ -36,7 +37,8 @@ const status = defineModel<string>("status", { required: true });
         <template v-if="domain === 'content'"
           ><option value="active">展示中</option>
           <option value="irrelevant">无关</option>
-          <option value="stale">已过期</option></template
+          <option value="stale">已过期</option>
+          <option value="archived">已归档</option></template
         ><template v-else-if="domain === 'notifications'"
           ><option value="task">任务</option>
           <option value="approval">审批</option>
@@ -54,7 +56,10 @@ const status = defineModel<string>("status", { required: true });
           <option value="dead_letter">死信</option>
           <option value="failed">失败</option></template
         ></select
-      ><button>筛选</button>
+      ><button>筛选</button
+      ><button v-if="domain === 'content'" type="button" class="secondary" @click="$emit('reset')">
+        重置
+      </button>
     </form>
   </ResponsiveFilterDrawer>
 </template>

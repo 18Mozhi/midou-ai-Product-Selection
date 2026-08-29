@@ -17,6 +17,7 @@ const platformDataStatuses: Record<PlatformDataEntity, readonly string[]> = {
   competitors: ["active", "paused"],
   suppliers: ["incomplete", "ready", "quarantined"],
 };
+const platformContentStatuses = ["active", "irrelevant", "stale", "archived"] as const;
 const platformGovernanceStatuses: Record<PlatformGovernanceSection, readonly string[]> = {
   score_rules: [
     "draft",
@@ -202,6 +203,12 @@ export class PlatformDashboardService {
         400,
         "选择当前数据类型支持的状态。",
       );
+    if (domain === "content" && status && !platformContentStatuses.includes(status as any))
+      throw new PlatformDashboardError(
+        "platform_content_status_invalid",
+        400,
+        "选择展示中、无关、已过期或已归档状态。",
+      );
     if (
       domain === "governance" &&
       (!section || !Object.prototype.hasOwnProperty.call(platformGovernanceStatuses, section))
@@ -218,7 +225,7 @@ export class PlatformDashboardService {
         "选择当前治理分类支持的状态。",
       );
     if (
-      domain === "governance" &&
+      ["content", "governance"].includes(domain) &&
       (!Number.isInteger(page) ||
         page < 1 ||
         !Number.isInteger(pageSize) ||
@@ -226,7 +233,9 @@ export class PlatformDashboardService {
         pageSize > 100)
     )
       throw new PlatformDashboardError(
-        "platform_governance_pagination_invalid",
+        domain === "content"
+          ? "platform_content_pagination_invalid"
+          : "platform_governance_pagination_invalid",
         400,
         "page 应为正整数，page_size 应为 1–100。",
       );

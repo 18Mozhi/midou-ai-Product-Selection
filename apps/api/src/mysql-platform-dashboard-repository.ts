@@ -407,26 +407,56 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       };
     }
     if (i.domain === "content") {
-      const [rows] = await this.pool.query<RowDataPacket[]>(
-        "SELECT t.id,t.title,t.category,t.market,t.language,t.status,t.signal_count," +
-          "t.source_count,t.heat_value,t.confidence_status,t.version,t.last_seen_at," +
-          "o.name organization_name,w.name workspace_name FROM trend_topics t JOIN organizations " +
-          "o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id WHERE (t.title " +
-          "LIKE ? OR t.category LIKE ? OR t.market LIKE ?) AND t.status LIKE ? ORDER BY t.last_seen_at " +
-          "DESC LIMIT 100",
-        [filter, filter, filter, status],
-      );
+      const searchPredicate =
+          "(t.title LIKE ? OR COALESCE(t.category,'') LIKE ? OR " +
+          "CONVERT(t.market USING utf8mb4) COLLATE utf8mb4_unicode_ci LIKE ?)",
+        searchParameters = [filter, filter, filter],
+        [[summaryRows], [filteredRows]] = await Promise.all([
+          this.pool.query<RowDataPacket[]>(
+            "SELECT COUNT(*) total," +
+              "SUM(t.status='active') active,SUM(t.status='irrelevant') irrelevant," +
+              "SUM(t.status='stale') stale,SUM(t.status='archived') archived " +
+              `FROM trend_topics t WHERE ${searchPredicate}`,
+            searchParameters,
+          ),
+          this.pool.query<RowDataPacket[]>(
+            `SELECT COUNT(*) total FROM trend_topics t WHERE ${searchPredicate} AND t.status LIKE ?`,
+            [...searchParameters, status],
+          ),
+        ]),
+        summaryRow = summaryRows[0] as any,
+        filteredRow = filteredRows[0] as any,
+        total = n((filteredRow as any).total),
+        totalPages = Math.max(1, Math.ceil(total / i.pageSize)),
+        page = Math.min(i.page, totalPages),
+        offset = (page - 1) * i.pageSize,
+        [rows] = await this.pool.query<RowDataPacket[]>(
+          "SELECT t.id,t.title,t.category,t.market,t.language,t.status,t.signal_count," +
+            "t.source_count,t.heat_value,t.confidence_status,t.version,t.last_seen_at," +
+            "o.name organization_name,w.name workspace_name FROM trend_topics t JOIN organizations " +
+            "o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id WHERE " +
+            `${searchPredicate} AND t.status LIKE ? ORDER BY t.last_seen_at DESC,t.id LIMIT ? OFFSET ?`,
+          [...searchParameters, status, i.pageSize, offset],
+        );
       return {
         domain: i.domain,
         summary: {
-          total: rows.length,
-          active: rows.filter((r: any) => r.status === "active").length,
-          review: rows.filter((r: any) => r.status !== "active").length,
+          total: n((summaryRow as any).total),
+          active: n((summaryRow as any).active),
+          irrelevant: n((summaryRow as any).irrelevant),
+          stale: n((summaryRow as any).stale),
+          archived: n((summaryRow as any).archived),
         },
         items: rows.map((r: any) => ({
           ...r,
           last_seen_at: iso(r.last_seen_at),
         })),
+        pagination: {
+          page,
+          page_size: i.pageSize,
+          total,
+          total_pages: totalPages,
+        },
         observed_at: this.now().toISOString(),
       };
     }

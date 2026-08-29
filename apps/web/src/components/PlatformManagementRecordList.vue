@@ -49,6 +49,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
             <th>组织 / 工作区</th>
             <th>市场</th>
             <th>信号 / 来源</th>
+            <th>置信度 / 最近观测</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
@@ -65,12 +66,31 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
             <td>{{ item.market }} · {{ item.language }}</td>
             <td>{{ item.signal_count }} / {{ item.source_count }}</td>
             <td>
+              {{ stateName(item.confidence_status) }}<small>{{ when(item.last_seen_at) }}</small>
+            </td>
+            <td>
               <b :data-state="item.status">{{ stateName(item.status) }}</b>
             </td>
             <td>
-              <button title="设为展示中" @click="emit('review', item, 'active')">展示</button
-              ><button title="标记为无关" @click="emit('review', item, 'irrelevant')">无关</button
-              ><button title="标记为过期" @click="emit('review', item, 'stale')">过期</button>
+              <button
+                :disabled="busy === item.id || item.status === 'active'"
+                title="设为展示中"
+                @click="emit('review', item, 'active')"
+              >
+                展示</button
+              ><button
+                :disabled="busy === item.id || item.status === 'irrelevant'"
+                title="标记为无关"
+                @click="emit('review', item, 'irrelevant')"
+              >
+                无关</button
+              ><button
+                :disabled="busy === item.id || item.status === 'stale'"
+                title="标记为过期"
+                @click="emit('review', item, 'stale')"
+              >
+                过期
+              </button>
             </td>
           </tr>
         </tbody>
@@ -104,9 +124,14 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
           <dt>状态</dt>
           <dd>{{ stateName(row.status) }}</dd>
         </div>
+        <div>
+          <dt>置信度 / 最近观测</dt>
+          <dd>{{ stateName(row.confidence_status) }} / {{ when(row.last_seen_at) }}</dd>
+        </div>
       </dl>
       <div class="record-actions">
         <button
+          :disabled="row.status === 'active'"
           @click="
             emit('review', row, 'active');
             close();
@@ -116,6 +141,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
         </button>
         <button
           class="secondary"
+          :disabled="row.status === 'irrelevant'"
           @click="
             emit('review', row, 'irrelevant');
             close();
@@ -125,6 +151,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
         </button>
         <button
           class="secondary"
+          :disabled="row.status === 'stale'"
           @click="
             emit('review', row, 'stale');
             close();
@@ -298,6 +325,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
 
 <style scoped>
 .platform-management-table {
+  min-width: 0;
   padding: 17px;
   border: 1px solid var(--so-border);
   border-radius: 14px;
@@ -305,6 +333,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
 }
 table {
   width: 100%;
+  min-width: 860px;
   border-collapse: collapse;
 }
 th,
@@ -317,6 +346,10 @@ td {
 td strong,
 td small {
   display: block;
+}
+td strong {
+  max-width: 260px;
+  overflow-wrap: anywhere;
 }
 td small {
   margin-top: 4px;
@@ -333,6 +366,7 @@ b[data-state="succeeded"] {
 }
 b[data-state="irrelevant"],
 b[data-state="stale"],
+b[data-state="archived"],
 b[data-state="dead_letter"],
 b[data-state="failed"] {
   color: var(--so-danger);
@@ -340,6 +374,10 @@ b[data-state="failed"] {
 .record-actions {
   display: grid;
   gap: 8px;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 @media (max-width: 760px) {
   .platform-management-table {

@@ -4721,7 +4721,7 @@ paths:
   /platform/management:
     get:
       summary: Read platform data, governance, content, notification, email, system-status, API-coverage or operational-log facts
-      description: Requires platform:operate. Returns bounded cross-organization operational facts without credentials, message secrets or raw crawler payloads. The api_coverage domain joins the current OpenAPI operation catalog, six-role route source, declared data-source/UI/crawler-effect metadata and latest production acceptance report on every read. A report contributes to the coverage rate only when its schema, path/operation counts and SHA-256 catalog fingerprint match the current OpenAPI. The logs domain correlates up to 200 API audit, Worker task and crawler run events by request_id and trace_id; crawler events additionally return their exact persisted collection task and provider association plus the provider display name so exceptional rows can link to the existing task and source pages. API or Worker rows without an exact provider association keep it null. The response only returns normalized status and error codes, not raw event metadata. The status domain also summarizes the latest persisted BaoTa API topology, Redis, MySQL, file-storage and Worker/Crawler scheduler observations, marking observations older than five minutes as stale and linking to the dedicated operations views.
+      description: Requires platform:operate. Returns bounded cross-organization operational facts without credentials, message secrets or raw crawler payloads. The content domain validates active/irrelevant/stale/archived read filters, returns untruncated status counts plus a filtered twenty-row page, and orders by last_seen_at then id; page values beyond the final page are clamped. The api_coverage domain joins the current OpenAPI operation catalog, six-role route source, declared data-source/UI/crawler-effect metadata and latest production acceptance report on every read. A report contributes to the coverage rate only when its schema, path/operation counts and SHA-256 catalog fingerprint match the current OpenAPI. The logs domain correlates up to 200 API audit, Worker task and crawler run events by request_id and trace_id; crawler events additionally return their exact persisted collection task and provider association plus the provider display name so exceptional rows can link to the existing task and source pages. API or Worker rows without an exact provider association keep it null. The response only returns normalized status and error codes, not raw event metadata. The status domain also summarizes the latest persisted BaoTa API topology, Redis, MySQL, file-storage and Worker/Crawler scheduler observations, marking observations older than five minutes as stale and linking to the dedicated operations views.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
@@ -4764,7 +4764,8 @@ paths:
         - {
             name: status,
             in: query,
-            description: For domain=data,
+            description: For domain=content,
+            values are active/irrelevant/stale/archived. For domain=data,
             values are entity-specific. For domain=governance,
             values are section-specific and incompatible combinations return 400; score and cost use draft/pending_approval/approved/active/retired/rejected/rolled_back,
             approval templates use draft/published/archived,
@@ -4846,7 +4847,7 @@ paths:
   /platform/management/content/{topicId}:
     patch:
       summary: Moderate a platform-visible trend topic
-      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Changes only the topic display status with optimistic version control, an audit event and a mandatory reason.
+      description: Requires platform:operate, same-origin Origin, a non-empty JSON body and Idempotency-Key. Changes only the topic display status with optimistic version control, a trend event, a platform audit event and a mandatory reason. Missing bodies return request_body_required instead of an internal error.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: topicId, in: path, required: true, schema: { type: string, format: uuid } }

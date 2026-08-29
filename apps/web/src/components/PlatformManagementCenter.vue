@@ -8,9 +8,9 @@ import {
   type RealtimeClientMetrics,
 } from "../realtime-client-metrics";
 import { useAuditedReason } from "../use-audited-reason";
-import { useModalDialog } from "../use-modal-dialog";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import ApiCoverageDashboard from "./ApiCoverageDashboard.vue";
+import PlatformContentPagination from "./PlatformContentPagination.vue";
 import PlatformMessageEditor from "./PlatformMessageEditor.vue";
 import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
 import PlatformManagementRecordList from "./PlatformManagementRecordList.vue";
@@ -29,6 +29,8 @@ import {
   type StatusService,
   type StatusServiceCode,
 } from "./platform-status-topology";
+import { usePlatformContentList } from "./use-platform-content-list";
+import { usePlatformContentReview } from "./use-platform-content-review";
 
 const props = defineProps<{ apiBaseUrl: string; domain: string }>();
 const request = createApiClient(props.apiBaseUrl);
@@ -44,14 +46,8 @@ const data = ref<any>(null),
   status = ref(""),
   message = ref(""),
   requestId = ref(""),
-  busy = ref("");
-const reviewItem = ref<any>(null),
-  reviewStatus = ref<"active" | "irrelevant" | "stale">("active"),
-  reviewReason = ref("");
-const { dialogElement: reviewDialogElement, handleCancel: handleReviewCancel } = useModalDialog(
-  () => Boolean(reviewItem.value),
-  () => (reviewItem.value = null),
-);
+  busy = ref(""),
+  refreshing = ref(false);
 const {
   request: actionReasonRequest,
   open: actionReasonOpen,
@@ -149,13 +145,44 @@ async function api<T>(path: string, options: RequestInit = {}) {
     requestId.value = response.request_id;
     return response.data;
   } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") throw error;
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? requestId.value;
     throw new Error(failure?.actionHint ?? "请求未完成");
   }
 }
+const {
+  page: contentPage,
+  readLocation: readContentLocation,
+  load: loadContent,
+  applyFilters: applyContentFilters,
+  resetFilters: resetContentFilters,
+  changePage: changeContentPage,
+  stop: stopContentLoad,
+} = usePlatformContentList({
+  domain,
+  query,
+  status,
+  data,
+  state,
+  message,
+  refreshing,
+  request: api,
+  reload: () => void load(),
+});
+const {
+  item: reviewItem,
+  status: reviewStatus,
+  reason: reviewReason,
+  dialogElement: reviewDialogElement,
+  handleCancel: handleReviewCancel,
+  begin: beginReview,
+  submit: submitReview,
+} = usePlatformContentReview({ request: api, reload: load, message, busy });
 async function load() {
+  if (await loadContent()) return;
   state.value = "loading";
+  refreshing.value = true;
   message.value = "";
   const params = new URLSearchParams({ domain: domain.value });
   if (query.value.trim()) params.set("query", query.value.trim());
@@ -174,33 +201,8 @@ async function load() {
   } catch (error) {
     message.value = error instanceof Error ? error.message : "管理数据暂不可用";
     state.value = "error";
-  }
-}
-function beginReview(item: any, statusValue: "active" | "irrelevant" | "stale") {
-  reviewItem.value = item;
-  reviewStatus.value = statusValue;
-  reviewReason.value = "";
-}
-async function submitReview() {
-  if (!reviewItem.value || reviewReason.value.trim().length < 2) return;
-  busy.value = reviewItem.value.id;
-  message.value = "";
-  try {
-    await api(`/platform/management/content/${reviewItem.value.id}`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        status: reviewStatus.value,
-        expected_version: reviewItem.value.version,
-        reason: reviewReason.value.trim(),
-      }),
-    });
-    reviewItem.value = null;
-    await load();
-    message.value = "内容状态已更新并写入审计记录。";
-  } catch (error) {
-    message.value = error instanceof Error ? error.message : "内容审核未完成";
   } finally {
-    busy.value = "";
+    refreshing.value = false;
   }
 }
 async function manageEmail(item: any, action: "retry" | "suppress") {
@@ -317,16 +319,22 @@ async function messageAction(item: any, action: "publish" | "cancel") {
 watch(domain, () => {
   query.value = "";
   status.value = "";
+  contentPage.value = 1;
+  readContentLocation();
   reviewItem.value = null;
   messageEditor.value = null;
   load();
 });
 onMounted(() => {
+  readContentLocation();
   syncRealtimeMetrics();
   window.addEventListener(realtimeMetricsEvent, syncRealtimeMetrics);
   void load();
 });
-onUnmounted(() => window.removeEventListener(realtimeMetricsEvent, syncRealtimeMetrics));
+onUnmounted(() => {
+  stopContentLoad();
+  window.removeEventListener(realtimeMetricsEvent, syncRealtimeMetrics);
+});
 </script>
 
 <template>
@@ -342,7 +350,9 @@ onUnmounted(() => window.removeEventListener(realtimeMetricsEvent, syncRealtimeM
           发布通知
         </button>
         <button v-if="domain === 'email'" type="button" @click="openMessage()">发送邮件</button>
-        <button type="button" @click="load">刷新数据</button>
+        <button type="button" :disabled="refreshing" @click="load">
+          {{ refreshing ? "刷新中…" : "刷新数据" }}
+        </button>
       </div>
     </header>
     <PlatformManagementFilter
@@ -352,7 +362,8 @@ onUnmounted(() => window.removeEventListener(realtimeMetricsEvent, syncRealtimeM
       :domain="domain"
       :label="titles[domain][0]"
       :active-count="activeFilterCount"
-      @apply="load"
+      @apply="applyContentFilters"
+      @reset="resetContentFilters"
     />
     <p v-if="message" class="platform-management-message">{{ message }}</p>
     <section v-if="state !== 'ready'" class="platform-management-state">
@@ -394,6 +405,12 @@ onUnmounted(() => window.removeEventListener(realtimeMetricsEvent, syncRealtimeM
         :when="when"
         @review="beginReview"
         @email-action="manageEmail"
+      />
+      <PlatformContentPagination
+        v-if="domain === 'content' && data.pagination"
+        :pagination="data.pagination"
+        :refreshing="refreshing"
+        @change="changeContentPage"
       />
       <PlatformNotificationOperations
         v-else-if="domain === 'notifications'"
@@ -582,6 +599,7 @@ onUnmounted(() => window.removeEventListener(realtimeMetricsEvent, syncRealtimeM
 
 <style scoped>
 .platform-management {
+  min-width: 0;
   display: grid;
   gap: 18px;
   color: var(--so-text);
@@ -634,6 +652,10 @@ onUnmounted(() => window.removeEventListener(realtimeMetricsEvent, syncRealtimeM
 }
 .platform-management button {
   cursor: pointer;
+}
+.platform-management button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 .platform-management-hero button,
 .platform-management-filter button,

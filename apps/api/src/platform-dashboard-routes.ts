@@ -87,19 +87,40 @@ export function registerPlatformDashboardRoutes(
       };
     });
   });
-  app.patch("/api/v1/platform/management/content/:topicId", async (r: FastifyRequest) => {
-    if (r.headers.origin !== o.webOrigin)
-      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
-    const c = await context(r);
-    return {
-      data: await o.service.moderateTrend((r.params as any).topicId, r.body, {
-        ...c,
-        idempotencyKey: requireIdempotencyKey(r),
-      }),
-      request_id: c.requestId,
-      trace_id: c.traceId,
-    };
-  });
+  app.patch(
+    "/api/v1/platform/management/content/:topicId",
+    {
+      onRequest: async (r) => {
+        const rawContentLength = r.headers["content-length"],
+          contentLength = rawContentLength === undefined ? undefined : Number(rawContentLength),
+          hasChunkedBody = r.headers["transfer-encoding"] !== undefined;
+        if (
+          (contentLength !== undefined &&
+            (!Number.isFinite(contentLength) || contentLength <= 0)) ||
+          (contentLength === undefined && !hasChunkedBody)
+        )
+          throw new ApiError(
+            400,
+            "request_body_required",
+            "请求正文不能为空。",
+            "提交目标状态、当前版本和审核原因。",
+          );
+      },
+    },
+    async (r: FastifyRequest) => {
+      if (r.headers.origin !== o.webOrigin)
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
+      const c = await context(r);
+      return {
+        data: await o.service.moderateTrend((r.params as any).topicId, r.body, {
+          ...c,
+          idempotencyKey: requireIdempotencyKey(r),
+        }),
+        request_id: c.requestId,
+        trace_id: c.traceId,
+      };
+    },
+  );
   app.post(
     "/api/v1/platform/management/email/:source/:deliveryId/actions",
     async (r: FastifyRequest) => {

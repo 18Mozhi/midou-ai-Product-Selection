@@ -1275,7 +1275,7 @@
         "view": "PlatformManagementCenter",
         "domain": "platform-content",
         "status": "verified",
-        "statusDetail": "M06-02_module_verified"
+        "statusDetail": "M06-02_content_factual_pagination_url_failure_permission_worker_projection_verified"
       },
       "navigation": {
         "label": "内容运营",
