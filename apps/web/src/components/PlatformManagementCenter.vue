@@ -15,7 +15,7 @@ import PlatformMessageEditor from "./PlatformMessageEditor.vue";
 import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
 import PlatformManagementRecordList from "./PlatformManagementRecordList.vue";
 import PlatformManagementFilter from "./PlatformManagementFilter.vue";
-import PlatformNotificationOperations from "./PlatformNotificationOperations.vue";
+import PlatformNotificationManagement from "./PlatformNotificationManagement.vue";
 import {
   formatPlatformManagementTime as when,
   platformManagementStateName as stateName,
@@ -31,6 +31,7 @@ import {
 } from "./platform-status-topology";
 import { usePlatformContentList } from "./use-platform-content-list";
 import { usePlatformContentReview } from "./use-platform-content-review";
+import { usePlatformNotificationList } from "./use-platform-notification-list";
 
 const props = defineProps<{ apiBaseUrl: string; domain: string }>();
 const request = createApiClient(props.apiBaseUrl);
@@ -170,6 +171,19 @@ const {
   request: api,
   reload: () => void load(),
 });
+const notificationList = usePlatformNotificationList({
+  domain,
+  query,
+  status,
+  data,
+  state,
+  message,
+  refreshing,
+  request: api,
+  reload: () => void load(),
+  fallbackApply: applyContentFilters,
+  fallbackReset: resetContentFilters,
+});
 const {
   item: reviewItem,
   status: reviewStatus,
@@ -180,6 +194,7 @@ const {
   submit: submitReview,
 } = usePlatformContentReview({ request: api, reload: load, message, busy });
 async function load() {
+  if (await notificationList.load()) return;
   if (await loadContent()) return;
   state.value = "loading";
   refreshing.value = true;
@@ -274,6 +289,7 @@ async function saveMessage() {
       method: editing ? "PATCH" : "POST",
       body: JSON.stringify(messageForm.value),
     });
+    if (!editing) notificationList.showNewestMessages();
     messageEditor.value = null;
     await load();
     message.value = editing ? "草稿已更新。" : "草稿已创建，可继续编辑或发布。";
@@ -321,18 +337,21 @@ watch(domain, () => {
   status.value = "";
   contentPage.value = 1;
   readContentLocation();
+  notificationList.readLocation();
   reviewItem.value = null;
   messageEditor.value = null;
   load();
 });
 onMounted(() => {
   readContentLocation();
+  notificationList.readLocation();
   syncRealtimeMetrics();
   window.addEventListener(realtimeMetricsEvent, syncRealtimeMetrics);
   void load();
 });
 onUnmounted(() => {
   stopContentLoad();
+  notificationList.stop();
   window.removeEventListener(realtimeMetricsEvent, syncRealtimeMetrics);
 });
 </script>
@@ -362,8 +381,8 @@ onUnmounted(() => {
       :domain="domain"
       :label="titles[domain][0]"
       :active-count="activeFilterCount"
-      @apply="applyContentFilters"
-      @reset="resetContentFilters"
+      @apply="notificationList.applyFilters"
+      @reset="notificationList.resetFilters"
     />
     <p v-if="message" class="platform-management-message">{{ message }}</p>
     <section v-if="state !== 'ready'" class="platform-management-state">
@@ -387,12 +406,11 @@ onUnmounted(() => {
         </article>
       </div>
       <PlatformMessageWorkbench
-        v-if="['notifications', 'email'].includes(domain)"
+        v-if="domain === 'email'"
         :domain="domain"
         :messages="data.messages"
         :state-name="stateName"
         :when="when"
-        @create="openMessage()"
         @edit="openMessage"
         @action="messageAction"
       />
@@ -412,14 +430,19 @@ onUnmounted(() => {
         :refreshing="refreshing"
         @change="changeContentPage"
       />
-      <PlatformNotificationOperations
-        v-else-if="domain === 'notifications'"
+      <PlatformNotificationManagement
+        v-if="domain === 'notifications'"
         :data="data"
+        :refreshing="refreshing"
         :state-name="stateName"
         :when="when"
+        @edit="openMessage"
+        @action="messageAction"
+        @message-page="notificationList.changeMessagePage"
+        @notification-page="notificationList.changePage"
       />
       <PlatformManagementRecordList
-        v-else-if="domain === 'email'"
+        v-if="domain === 'email'"
         domain="email"
         :items="data.items"
         :busy="busy"
@@ -428,8 +451,8 @@ onUnmounted(() => {
         @review="beginReview"
         @email-action="manageEmail"
       />
-      <ApiCoverageDashboard v-else-if="domain === 'api-coverage'" :data="data" />
-      <div v-else class="platform-status-grid">
+      <ApiCoverageDashboard v-if="domain === 'api-coverage'" :data="data" />
+      <div v-if="domain === 'status'" class="platform-status-grid">
         <section class="platform-service-topology">
           <header class="platform-topology-header">
             <div>

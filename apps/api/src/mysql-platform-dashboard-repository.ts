@@ -461,53 +461,77 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       };
     }
     if (i.domain === "notifications") {
-      const [[rows], [subscriptions], [deliveries], [automationRoutes], [competitorRoutes]] =
-        await Promise.all([
-          this.pool.query<RowDataPacket[]>(
-            "SELECT n.id,n.title,n.category,n.severity,n.read_at,n.created_at,u.email recipient_email," +
-              "o.name organization_name,GROUP_CONCAT(CONCAT(d.channel,':',d.status) ORDER BY d.channel " +
-              "SEPARATOR ',') delivery_status FROM notifications n JOIN users u ON u.id=n.recipient_id " +
-              "JOIN organizations o ON o.id=n.organization_id LEFT JOIN notification_deliveries d ON " +
-              "d.notification_id=n.id WHERE (n.title LIKE ? OR u.email LIKE ? OR o.name LIKE ?) AND " +
-              "n.category LIKE ? GROUP BY n.id,n.title,n.category,n.severity,n.read_at," +
-              "n.created_at,u.email,o.name ORDER BY n.created_at DESC LIMIT 100",
-            [filter, filter, filter, status],
-          ),
-          this.pool.query<RowDataPacket[]>(
-            "SELECT COUNT(*) total,SUM(in_app_enabled=1) in_app_enabled,SUM(email_enabled=1) email_enabled," +
-              "SUM(task_enabled=1) task_enabled,SUM(approval_enabled=1) approval_enabled," +
-              "SUM(competitor_enabled=1) competitor_enabled FROM notification_preferences",
-          ),
-          this.pool.query<RowDataPacket[]>(
-            "SELECT channel,status,COUNT(*) total FROM notification_deliveries GROUP BY channel,status ORDER BY channel,status",
-          ),
-          this.pool.query<RowDataPacket[]>(
-            "SELECT a.id,a.name,a.trigger_event_type event_type,a.action_type action_type," +
-              "a.status,a.version,o.name organization_name,w.name workspace_name,a.updated_at FROM " +
-              "automation_rules a JOIN organizations o ON o.id=a.organization_id JOIN workspaces w " +
-              "ON w.id=a.workspace_id ORDER BY a.updated_at DESC LIMIT 30",
-          ),
-          this.pool.query<RowDataPacket[]>(
-            "SELECT r.id,CONCAT('竞品 ',r.metric,' ',r.direction) name,CONCAT('competitor.'," +
-              "r.metric,'.',r.direction) event_type,'notify_owner' action_type,r.status," +
-              "r.revision version,o.name organization_name,w.name workspace_name,r.updated_at FROM " +
-              "competitor_monitor_rules r JOIN organizations o ON o.id=r.organization_id JOIN workspaces " +
-              "w ON w.id=r.workspace_id ORDER BY r.updated_at DESC LIMIT 30",
-          ),
-        ]);
-      const messageManagement = await this.messageManagement("notification");
+      const [
+        [summaryRows],
+        [subscriptions],
+        [deliveries],
+        [automationRoutes],
+        [competitorRoutes],
+        messageManagement,
+      ] = await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          "SELECT COUNT(*) total,SUM(n.read_at IS NULL) unread," +
+            "SUM(n.severity='critical') critical FROM notifications n JOIN users u ON " +
+            "u.id=n.recipient_id JOIN organizations o ON o.id=n.organization_id WHERE " +
+            "(n.title LIKE ? OR u.email LIKE ? OR o.name LIKE ?) AND n.category LIKE ?",
+          [filter, filter, filter, status],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT COUNT(*) total,SUM(in_app_enabled=1) in_app_enabled,SUM(email_enabled=1) email_enabled," +
+            "SUM(task_enabled=1) task_enabled,SUM(approval_enabled=1) approval_enabled," +
+            "SUM(competitor_enabled=1) competitor_enabled FROM notification_preferences",
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT channel,status,COUNT(*) total FROM notification_deliveries GROUP BY channel,status ORDER BY channel,status",
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT a.id,a.name,a.trigger_event_type event_type,a.action_type action_type," +
+            "a.status,a.version,o.name organization_name,w.name workspace_name,a.updated_at FROM " +
+            "automation_rules a JOIN organizations o ON o.id=a.organization_id JOIN workspaces w " +
+            "ON w.id=a.workspace_id ORDER BY a.updated_at DESC LIMIT 30",
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT r.id,CONCAT('竞品 ',r.metric,' ',r.direction) name,CONCAT('competitor.'," +
+            "r.metric,'.',r.direction) event_type,'notify_owner' action_type,r.status," +
+            "r.revision version,o.name organization_name,w.name workspace_name,r.updated_at FROM " +
+            "competitor_monitor_rules r JOIN organizations o ON o.id=r.organization_id JOIN workspaces " +
+            "w ON w.id=r.workspace_id ORDER BY r.updated_at DESC LIMIT 30",
+        ),
+        this.messageManagement("notification", i.messagePage, i.messagePageSize),
+      ]);
+      const summary = summaryRows[0] as any,
+        total = n(summary?.total),
+        totalPages = Math.max(1, Math.ceil(total / i.pageSize)),
+        page = Math.min(i.page, totalPages),
+        offset = (page - 1) * i.pageSize,
+        [rows] = await this.pool.query<RowDataPacket[]>(
+          "SELECT n.id,n.title,n.category,n.severity,n.read_at,n.created_at,u.email recipient_email," +
+            "o.name organization_name,GROUP_CONCAT(CONCAT(d.channel,':',d.status) ORDER BY d.channel " +
+            "SEPARATOR ',') delivery_status FROM notifications n JOIN users u ON u.id=n.recipient_id " +
+            "JOIN organizations o ON o.id=n.organization_id LEFT JOIN notification_deliveries d ON " +
+            "d.notification_id=n.id WHERE (n.title LIKE ? OR u.email LIKE ? OR o.name LIKE ?) AND " +
+            "n.category LIKE ? GROUP BY n.id,n.title,n.category,n.severity,n.read_at," +
+            "n.created_at,u.email,o.name ORDER BY n.created_at DESC,n.id DESC LIMIT ? OFFSET ?",
+          [filter, filter, filter, status, i.pageSize, offset],
+        );
       return {
         domain: i.domain,
         summary: {
-          total: rows.length,
-          unread: rows.filter((r: any) => !r.read_at).length,
-          critical: rows.filter((r: any) => r.severity === "critical").length,
+          total,
+          unread: n(summary?.unread),
+          critical: n(summary?.critical),
         },
         items: rows.map((r: any) => ({
           ...r,
           created_at: iso(r.created_at),
           read_at: iso(r.read_at),
         })),
+        pagination: {
+          page,
+          page_size: i.pageSize,
+          total,
+          total_pages: totalPages,
+        },
         templates: [
           {
             category: "task",
@@ -754,13 +778,14 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       observed_at: this.now().toISOString(),
     };
   }
-  private async messageManagement(kind: "notification" | "email") {
-    const [[messages], [organizations], [users]] = await Promise.all([
+  private async messageManagement(
+    kind: "notification" | "email",
+    requestedPage = 1,
+    pageSize = 100,
+  ) {
+    const [[[count]], [organizations], [users]] = await Promise.all([
       this.pool.query<RowDataPacket[]>(
-        "SELECT m.*,o.name organization_name,u.email user_email,creator.email created_by_email " +
-          "FROM platform_messages m LEFT JOIN organizations o ON o.id=m.organization_id LEFT JOIN " +
-          "users u ON u.id=m.user_id JOIN users creator ON creator.id=m.created_by WHERE m.kind=? " +
-          "ORDER BY m.updated_at DESC LIMIT 100",
+        "SELECT COUNT(*) total FROM platform_messages WHERE kind=?",
         [kind],
       ),
       this.pool.query<RowDataPacket[]>(
@@ -770,6 +795,17 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         "SELECT id,email FROM users WHERE status='active' ORDER BY email LIMIT 500",
       ),
     ]);
+    const total = n(count?.total),
+      totalPages = Math.max(1, Math.ceil(total / pageSize)),
+      page = Math.min(requestedPage, totalPages),
+      offset = (page - 1) * pageSize,
+      [messages] = await this.pool.query<RowDataPacket[]>(
+        "SELECT m.*,o.name organization_name,u.email user_email,creator.email created_by_email " +
+          "FROM platform_messages m LEFT JOIN organizations o ON o.id=m.organization_id LEFT JOIN " +
+          "users u ON u.id=m.user_id JOIN users creator ON creator.id=m.created_by WHERE m.kind=? " +
+          "ORDER BY m.updated_at DESC,m.id DESC LIMIT ? OFFSET ?",
+        [kind, pageSize, offset],
+      );
     return {
       messages: messages.map((row: any) => ({
         ...row,
@@ -780,6 +816,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         created_at: iso(row.created_at),
         updated_at: iso(row.updated_at),
       })),
+      message_pagination: {
+        page,
+        page_size: pageSize,
+        total,
+        total_pages: totalPages,
+      },
       audience_options: {
         organizations: organizations.map((row: any) => ({
           id: row.id,

@@ -7,7 +7,6 @@ defineProps<{
 }>();
 
 defineEmits<{
-  create: [];
   edit: [item: any];
   action: [item: any, action: "publish" | "cancel"];
 }>();
@@ -20,9 +19,6 @@ defineEmits<{
         <h3>{{ domain === "email" ? "邮件草稿与发送记录" : "通知草稿与发布记录" }}</h3>
         <span>先保存草稿，确认接收范围和发送方式后再发布；已发布内容不可直接篡改。</span>
       </div>
-      <button type="button" @click="$emit('create')">
-        ＋ {{ domain === "email" ? "新建邮件草稿" : "新建通知草稿" }}
-      </button>
     </header>
     <div class="message-list">
       <article v-for="item in messages" :key="item.id" :data-status="item.status">
@@ -73,7 +69,9 @@ defineEmits<{
           <button @click="$emit('action', item, 'cancel')">取消草稿</button>
         </footer>
       </article>
-      <p v-if="!messages.length" class="message-empty">还没有草稿。点击右上角即可创建。</p>
+      <p v-if="!messages.length" class="message-empty">
+        还没有草稿，可使用页面顶部的主要操作创建。
+      </p>
     </div>
   </section>
 </template>
@@ -110,6 +108,7 @@ defineEmits<{
   gap: 10px;
 }
 .message-list article {
+  min-width: 0;
   padding: 15px;
   border: 1px solid var(--so-border);
   border-left: 4px solid var(--so-text-muted);
@@ -122,10 +121,21 @@ defineEmits<{
 .message-list article[data-status="published"] {
   border-left-color: var(--so-success);
 }
+.message-list article > header > div {
+  min-width: 0;
+}
+.message-list h4 {
+  overflow-wrap: anywhere;
+}
 .message-list article p {
   min-height: 42px;
+  display: -webkit-box;
+  overflow: hidden;
   color: var(--so-text);
+  overflow-wrap: anywhere;
   white-space: pre-wrap;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 .message-list dl {
   margin: 12px 0;
@@ -138,7 +148,9 @@ defineEmits<{
   gap: 12px;
 }
 .message-list dd {
+  min-width: 0;
   margin: 0;
+  overflow-wrap: anywhere;
   text-align: right;
 }
 .message-empty {
@@ -149,6 +161,7 @@ defineEmits<{
 }
 button {
   box-sizing: border-box;
+  min-height: var(--so-touch-target);
   padding: 9px 12px;
   border: 1px solid var(--so-border-strong);
   border-radius: 9px;
@@ -158,6 +171,12 @@ button {
   font: inherit;
 }
 @media (max-width: 700px) {
+  .message-workbench > header,
+  .message-list article > header,
+  .message-list article > footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
   .message-list {
     grid-template-columns: 1fr;
   }

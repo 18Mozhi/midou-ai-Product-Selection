@@ -15,6 +15,9 @@ test("platform notification operations expose templates channels subscriptions d
         "apps/web/src/components/PlatformMessageWorkbench.vue",
         "apps/web/src/components/PlatformMessageEditor.vue",
         "apps/web/src/components/PlatformNotificationOperations.vue",
+        "apps/web/src/components/PlatformNotificationManagement.vue",
+        "apps/web/src/components/PlatformNotificationPagination.vue",
+        "apps/web/src/components/use-platform-notification-list.ts",
       ],
       "apps/web/src/styles/platform-operations.css",
       "apps/api/src/mysql-platform-dashboard-repository.ts",
@@ -36,6 +39,10 @@ test("platform notification operations expose templates channels subscriptions d
     "在平台规则总览配置",
   ])
     assert.match(web, new RegExp(label));
+  assert.match(web, /message_page_size/);
+  assert.match(web, /读取超时，已保留上次成功数据/);
+  assert.match(web, /label="通知与投递记录"/);
+  assert.match(web, /:aria-label="`\$\{label\}分页`"/);
   assert.match(web, /邮件服务未接入，管理入口已关闭/);
   assert.doesNotMatch(web, /href="\/platform-admin\/email"/);
   assert.doesNotMatch(web, /to="\/automations"/);
@@ -109,15 +116,63 @@ test("platform message service rejects mail even when the UI is bypassed", () =>
     );
 });
 
+test("notification management validates both factual and draft pagination", async () => {
+  let captured = null;
+  const service = new PlatformDashboardService({
+    readManagement: async (input) => {
+      captured = input;
+      return { items: [], messages: [] };
+    },
+  });
+  await service.management({
+    actorId: "actor",
+    domain: "notifications",
+    status: "task",
+    page: "2",
+    pageSize: "20",
+    messagePage: "3",
+    messagePageSize: "10",
+    requestId: "request",
+    traceId: "trace",
+  });
+  assert.equal(captured.page, 2);
+  assert.equal(captured.pageSize, 20);
+  assert.equal(captured.messagePage, 3);
+  assert.equal(captured.messagePageSize, 10);
+  for (const value of [{ status: "invalid" }, { page: 0 }, { messagePageSize: 101 }])
+    assert.throws(
+      () =>
+        service.management({
+          actorId: "actor",
+          domain: "notifications",
+          requestId: "request",
+          traceId: "trace",
+          ...value,
+        }),
+      (error) => error instanceof PlatformDashboardError && error.statusCode === 400,
+    );
+});
+
+test("notification repository counts before paging and keeps stable ordering", async () => {
+  const repository = await readFile("apps/api/src/mysql-platform-dashboard-repository.ts", "utf8");
+  assert.match(repository, /SELECT COUNT\(\*\) total,SUM\(n\.read_at IS NULL\) unread/);
+  assert.match(repository, /ORDER BY n\.created_at DESC,n\.id DESC LIMIT \? OFFSET \?/);
+  assert.match(repository, /message_pagination/);
+  assert.doesNotMatch(repository, /n\.created_at DESC LIMIT 100/);
+});
+
 test("platform management keeps orchestration and message views in bounded components", async () => {
   const limits = new Map([
-    ["apps/web/src/components/PlatformManagementCenter.vue", 1_000],
+    ["apps/web/src/components/PlatformManagementCenter.vue", 1_050],
     ["apps/web/src/components/PlatformManagementFilter.vue", 100],
     ["apps/web/src/components/platform-management-presentation.ts", 100],
     ["apps/web/src/components/PlatformMessageWorkbench.vue", 200],
     ["apps/web/src/components/PlatformMessageEditor.vue", 200],
     ["apps/web/src/components/PlatformManagementRecordList.vue", 400],
     ["apps/web/src/components/PlatformNotificationOperations.vue", 320],
+    ["apps/web/src/components/PlatformNotificationManagement.vue", 100],
+    ["apps/web/src/components/PlatformNotificationPagination.vue", 100],
+    ["apps/web/src/components/use-platform-notification-list.ts", 200],
   ]);
   for (const [path, limit] of limits) {
     const source = await readFile(path, "utf8");

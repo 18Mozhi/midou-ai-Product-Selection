@@ -40,6 +40,21 @@ const withDependencyBoundary = async <T>(operation: () => Promise<T>) => {
     throw error;
   }
 };
+const requireRequestBody = async (r: FastifyRequest) => {
+  const rawContentLength = r.headers["content-length"],
+    contentLength = rawContentLength === undefined ? undefined : Number(rawContentLength),
+    hasChunkedBody = r.headers["transfer-encoding"] !== undefined;
+  if (
+    (contentLength !== undefined && (!Number.isFinite(contentLength) || contentLength <= 0)) ||
+    (contentLength === undefined && !hasChunkedBody)
+  )
+    throw new ApiError(
+      400,
+      "request_body_required",
+      "请求正文不能为空。",
+      "提交通知内容、版本和操作原因。",
+    );
+};
 export function registerPlatformDashboardRoutes(
   app: FastifyInstance,
   o: PlatformDashboardRouteOptions,
@@ -81,6 +96,8 @@ export function registerPlatformDashboardRoutes(
           status: query?.status,
           page: query?.page,
           pageSize: query?.page_size,
+          messagePage: query?.message_page,
+          messagePageSize: query?.message_page_size,
         }),
         request_id: c.requestId,
         trace_id: c.traceId,
@@ -203,44 +220,56 @@ export function registerPlatformDashboardRoutes(
       .header("x-trace-id", c.traceId);
     return `\ufeff${csv}`;
   });
-  app.post("/api/v1/platform/management/messages", async (r: FastifyRequest, reply) => {
-    if (r.headers.origin !== o.webOrigin)
-      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
-    const c = await context(r);
-    reply.code(201);
-    return {
-      data: await o.service.createMessage(r.body, {
-        ...c,
-        idempotencyKey: requireIdempotencyKey(r),
-      }),
-      request_id: c.requestId,
-      trace_id: c.traceId,
-    };
-  });
-  app.patch("/api/v1/platform/management/messages/:messageId", async (r: FastifyRequest) => {
-    if (r.headers.origin !== o.webOrigin)
-      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
-    const c = await context(r);
-    return {
-      data: await o.service.updateMessage((r.params as any).messageId, r.body, {
-        ...c,
-        idempotencyKey: requireIdempotencyKey(r),
-      }),
-      request_id: c.requestId,
-      trace_id: c.traceId,
-    };
-  });
-  app.post("/api/v1/platform/management/messages/:messageId/actions", async (r: FastifyRequest) => {
-    if (r.headers.origin !== o.webOrigin)
-      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
-    const c = await context(r);
-    return {
-      data: await o.service.messageAction((r.params as any).messageId, r.body, {
-        ...c,
-        idempotencyKey: requireIdempotencyKey(r),
-      }),
-      request_id: c.requestId,
-      trace_id: c.traceId,
-    };
-  });
+  app.post(
+    "/api/v1/platform/management/messages",
+    { onRequest: requireRequestBody },
+    async (r: FastifyRequest, reply) => {
+      if (r.headers.origin !== o.webOrigin)
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
+      const c = await context(r);
+      reply.code(201);
+      return {
+        data: await o.service.createMessage(r.body, {
+          ...c,
+          idempotencyKey: requireIdempotencyKey(r),
+        }),
+        request_id: c.requestId,
+        trace_id: c.traceId,
+      };
+    },
+  );
+  app.patch(
+    "/api/v1/platform/management/messages/:messageId",
+    { onRequest: requireRequestBody },
+    async (r: FastifyRequest) => {
+      if (r.headers.origin !== o.webOrigin)
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
+      const c = await context(r);
+      return {
+        data: await o.service.updateMessage((r.params as any).messageId, r.body, {
+          ...c,
+          idempotencyKey: requireIdempotencyKey(r),
+        }),
+        request_id: c.requestId,
+        trace_id: c.traceId,
+      };
+    },
+  );
+  app.post(
+    "/api/v1/platform/management/messages/:messageId/actions",
+    { onRequest: requireRequestBody },
+    async (r: FastifyRequest) => {
+      if (r.headers.origin !== o.webOrigin)
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
+      const c = await context(r);
+      return {
+        data: await o.service.messageAction((r.params as any).messageId, r.body, {
+          ...c,
+          idempotencyKey: requireIdempotencyKey(r),
+        }),
+        request_id: c.requestId,
+        trace_id: c.traceId,
+      };
+    },
+  );
 }

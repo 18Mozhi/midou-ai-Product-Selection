@@ -1651,6 +1651,9 @@
         "../apps/web/src/components/PlatformMessageWorkbench.vue",
         "../apps/web/src/components/PlatformMessageEditor.vue",
         "../apps/web/src/components/PlatformNotificationOperations.vue",
+        "../apps/web/src/components/PlatformNotificationManagement.vue",
+        "../apps/web/src/components/PlatformNotificationPagination.vue",
+        "../apps/web/src/components/use-platform-notification-list.ts",
         "../apps/web/src/platform-notification-operations.css",
         "../apps/web/src/components/PlatformDataCenter.vue",
         "../apps/web/src/components/PlatformGovernanceCenter.vue",
@@ -3013,7 +3016,7 @@
       "view": "PlatformDataCenter",
       "domain": "platform-data",
       "status": "verified",
-      "statusDetail": "M06-02_module_verified"
+      "statusDetail": "M06-02_notification_factual_pagination_url_failure_permission_publish_audit_verified"
     },
     {
       "path": "/platform-admin/governance",

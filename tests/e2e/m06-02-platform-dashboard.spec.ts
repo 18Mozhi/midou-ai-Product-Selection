@@ -621,11 +621,11 @@ test("platform completion exposes data governance notifications and user-panel s
   await expect(page.getByText("in_app", { exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: "筛选通知管理" }).click();
   const notificationFilters = page.getByRole("dialog", { name: "筛选通知管理" });
-  await notificationFilters.getByPlaceholder("搜索标题、邮箱或组织").fill("采集");
+  await notificationFilters.getByLabel("搜索通知管理").fill("采集");
   await notificationFilters.getByLabel("通知类型").selectOption("task");
   await notificationFilters.getByRole("button", { name: "关闭筛选条件" }).click();
   await page.getByRole("button", { name: /筛选通知管理.*2 项已选/ }).click();
-  await expect(notificationFilters.getByPlaceholder("搜索标题、邮箱或组织")).toHaveValue("采集");
+  await expect(notificationFilters.getByLabel("搜索通知管理")).toHaveValue("采集");
   await expect(notificationFilters.getByLabel("通知类型")).toHaveValue("task");
   await notificationFilters.getByRole("button", { name: "关闭筛选条件" }).click();
   await page.getByRole("button", { name: /采集任务完成.*查看详情/ }).click();

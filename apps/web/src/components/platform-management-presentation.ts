@@ -60,6 +60,7 @@ const stateNames: Record<string, string> = {
   system_fixed: "系统内置",
   pending_provider_selection: "邮件服务待配置",
   in_app: "站内通知",
+  notification: "通知",
   email: "邮件",
   task: "任务",
   approval: "审批",

@@ -19,7 +19,9 @@ const status = defineModel<string>("status", { required: true });
             ? '搜索主题、分类或市场'
             : domain === 'api-coverage'
               ? '搜索接口、能力、来源或 UI'
-              : '搜索标题、邮箱或组织'
+              : domain === 'notifications'
+                ? '搜索通知标题、接收人邮箱或组织'
+                : '搜索标题、邮箱或组织'
         "
       /><select
         v-model="status"
@@ -33,7 +35,7 @@ const status = defineModel<string>("status", { required: true });
                 : '邮件状态'
         "
       >
-        <option value="">全部状态</option>
+        <option value="">{{ domain === "notifications" ? "全部类型" : "全部状态" }}</option>
         <template v-if="domain === 'content'"
           ><option value="active">展示中</option>
           <option value="irrelevant">无关</option>
@@ -57,9 +59,7 @@ const status = defineModel<string>("status", { required: true });
           <option value="failed">失败</option></template
         ></select
       ><button>筛选</button
-      ><button v-if="domain === 'content'" type="button" class="secondary" @click="$emit('reset')">
-        重置
-      </button>
+      ><button type="button" class="secondary" @click="$emit('reset')">重置</button>
     </form>
   </ResponsiveFilterDrawer>
 </template>

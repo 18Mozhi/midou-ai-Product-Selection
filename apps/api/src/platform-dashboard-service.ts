@@ -18,6 +18,7 @@ const platformDataStatuses: Record<PlatformDataEntity, readonly string[]> = {
   suppliers: ["incomplete", "ready", "quarantined"],
 };
 const platformContentStatuses = ["active", "irrelevant", "stale", "archived"] as const;
+const platformNotificationCategories = ["task", "approval", "competitor", "system"] as const;
 const platformGovernanceStatuses: Record<PlatformGovernanceSection, readonly string[]> = {
   score_rules: [
     "draft",
@@ -56,6 +57,8 @@ export interface PlatformDashboardRepository {
     section: PlatformGovernanceSection | undefined;
     page: number;
     pageSize: number;
+    messagePage: number;
+    messagePageSize: number;
     query: string;
     status: string;
     requestId: string;
@@ -154,6 +157,8 @@ export class PlatformDashboardService {
     section?: unknown;
     page?: unknown;
     pageSize?: unknown;
+    messagePage?: unknown;
+    messagePageSize?: unknown;
     requestId: string;
     traceId: string;
   }) {
@@ -181,7 +186,9 @@ export class PlatformDashboardService {
       sectionValue = String(input.section ?? ""),
       section = (sectionValue || undefined) as PlatformGovernanceSection | undefined,
       page = Number(input.page ?? 1),
-      pageSize = Number(input.pageSize ?? 20);
+      pageSize = Number(input.pageSize ?? 20),
+      messagePage = Number(input.messagePage ?? 1),
+      messagePageSize = Number(input.messagePageSize ?? 10);
     if (
       domain === "data" &&
       !["trends", "opportunities", "competitors", "suppliers"].includes(entity)
@@ -210,6 +217,16 @@ export class PlatformDashboardService {
         "选择展示中、无关、已过期或已归档状态。",
       );
     if (
+      domain === "notifications" &&
+      status &&
+      !platformNotificationCategories.includes(status as any)
+    )
+      throw new PlatformDashboardError(
+        "platform_notification_category_invalid",
+        400,
+        "选择任务、审批、竞品或系统通知类型。",
+      );
+    if (
       domain === "governance" &&
       (!section || !Object.prototype.hasOwnProperty.call(platformGovernanceStatuses, section))
     )
@@ -225,7 +242,7 @@ export class PlatformDashboardService {
         "选择当前治理分类支持的状态。",
       );
     if (
-      ["content", "governance"].includes(domain) &&
+      ["content", "governance", "notifications"].includes(domain) &&
       (!Number.isInteger(page) ||
         page < 1 ||
         !Number.isInteger(pageSize) ||
@@ -235,9 +252,24 @@ export class PlatformDashboardService {
       throw new PlatformDashboardError(
         domain === "content"
           ? "platform_content_pagination_invalid"
-          : "platform_governance_pagination_invalid",
+          : domain === "governance"
+            ? "platform_governance_pagination_invalid"
+            : "platform_notification_pagination_invalid",
         400,
         "page 应为正整数，page_size 应为 1–100。",
+      );
+    if (
+      domain === "notifications" &&
+      (!Number.isInteger(messagePage) ||
+        messagePage < 1 ||
+        !Number.isInteger(messagePageSize) ||
+        messagePageSize < 1 ||
+        messagePageSize > 100)
+    )
+      throw new PlatformDashboardError(
+        "platform_message_pagination_invalid",
+        400,
+        "message_page 应为正整数，message_page_size 应为 1–100。",
       );
     return this.repository.readManagement({
       ...input,
@@ -248,6 +280,8 @@ export class PlatformDashboardService {
       section,
       page,
       pageSize,
+      messagePage,
+      messagePageSize,
     });
   }
   exportData(value: any, context: { actorId: string; requestId: string; traceId: string }) {

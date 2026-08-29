@@ -1225,7 +1225,7 @@
         "view": "PlatformDataCenter",
         "domain": "platform-data",
         "status": "verified",
-        "statusDetail": "M06-02_module_verified"
+        "statusDetail": "M06-02_notification_factual_pagination_url_failure_permission_publish_audit_verified"
       },
       "navigation": {
         "label": "数据中心",
