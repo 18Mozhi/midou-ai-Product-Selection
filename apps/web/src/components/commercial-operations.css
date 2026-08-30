@@ -1,0 +1,686 @@
+.commercial {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  color: var(--so-text);
+}
+
+.commercial > * {
+  min-width: 0;
+}
+
+.commercial-hero,
+.commercial-summary article,
+.membership,
+.commercial-guide,
+.commercial-catalog,
+.notice,
+.state {
+  border: 1px solid var(--so-border);
+  background: var(--so-panel);
+}
+
+.commercial-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  padding: 24px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--so-panel-soft), var(--so-bg-elevated));
+}
+
+.commercial-hero-copy {
+  max-width: 760px;
+}
+
+.commercial-hero-copy p,
+.commercial-catalog header p,
+.commercial-dialog-form header p {
+  margin: 0;
+  color: var(--so-primary);
+  font: 700 11px/1.4 monospace;
+  letter-spacing: 0.08em;
+}
+
+.commercial-hero h2,
+.commercial-catalog h3,
+.commercial-dialog-form h3,
+.membership h3,
+.membership h4,
+.commercial-adjustment-heading h4 {
+  margin: 4px 0;
+}
+
+.commercial-hero-copy > span,
+.commercial-catalog header span,
+.commercial-inline-help,
+.commercial-adjustment-heading span,
+.commercial-guide span,
+.state span {
+  color: var(--so-text-muted);
+  line-height: 1.6;
+}
+
+.commercial-hero-actions,
+.commercial-organization-lookup,
+.commercial-row-actions,
+.commercial-pagination,
+.commercial-dialog-form footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.commercial-hero-actions {
+  justify-content: flex-end;
+  align-self: start;
+}
+
+.commercial-organization-lookup {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) auto auto;
+  align-items: end;
+  padding-top: 16px;
+  border-top: 1px solid var(--so-border);
+}
+
+.commercial-organization-lookup label {
+  max-width: 620px;
+}
+
+.commercial label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.commercial button,
+.commercial input,
+.commercial select,
+.commercial textarea,
+.commercial-dialog-form button,
+.commercial-dialog-form input,
+.commercial-dialog-form select,
+.commercial-dialog-form textarea {
+  box-sizing: border-box;
+  min-height: 42px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 9px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  padding: 9px 12px;
+  font: inherit;
+}
+
+.commercial input,
+.commercial select,
+.commercial textarea,
+.commercial-dialog-form input,
+.commercial-dialog-form select,
+.commercial-dialog-form textarea {
+  width: 100%;
+}
+
+.commercial button,
+.commercial-dialog-form button {
+  width: auto;
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.commercial button.primary,
+.commercial-dialog-form button.primary {
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-on-primary);
+}
+
+.commercial button.danger {
+  color: var(--so-danger);
+}
+
+.commercial button:disabled,
+.commercial-dialog-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.commercial :is(button, input, select, textarea):focus-visible,
+.commercial-dialog-form :is(button, input, select, textarea):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--so-primary) 30%, transparent);
+  outline-offset: 2px;
+}
+
+.notice,
+.state {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+}
+
+.notice[data-kind="success"] {
+  border-color: color-mix(in srgb, var(--so-success) 45%, var(--so-border));
+}
+
+.notice[data-kind="error"] {
+  border-color: color-mix(in srgb, var(--so-danger) 45%, var(--so-border));
+}
+
+.notice code {
+  overflow-wrap: anywhere;
+  color: var(--so-text-muted);
+}
+
+.commercial-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.commercial-summary article {
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.commercial-summary span {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+
+.commercial-summary strong {
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1;
+}
+
+.membership,
+.commercial-catalog {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.membership > header,
+.commercial-catalog > header,
+.assignment,
+.commercial-adjustment-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.membership > header > div,
+.assignment > div,
+.commercial-plan-table td:first-child,
+.commercial-plan-table td:nth-child(4) {
+  display: grid;
+  gap: 4px;
+}
+
+.membership > header b,
+.commercial-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+
+.membership > header b[data-status="active"],
+.commercial-status[data-status="active"] {
+  color: var(--so-success);
+}
+
+.membership > header b[data-status="suspended"],
+.commercial-status[data-status="draft"] {
+  color: var(--so-warning);
+}
+
+.assignment {
+  padding: 14px;
+  border-radius: 11px;
+  background: var(--so-panel-soft);
+}
+
+.renew,
+.adjust,
+.commercial-filters {
+  display: grid;
+  gap: 10px;
+  align-items: end;
+}
+
+.renew {
+  grid-template-columns:
+    minmax(180px, 1.3fr) repeat(2, minmax(180px, 1fr)) minmax(200px, 1.2fr)
+    auto;
+}
+
+.renew h4 {
+  grid-column: 1 / -1;
+}
+
+.usage {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.usage article {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 11px;
+  background: var(--so-panel-soft);
+}
+
+.usage article > b {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--so-panel-muted);
+}
+
+.usage article i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--so-primary);
+}
+
+.adjust {
+  grid-template-columns:
+    minmax(150px, 1fr) minmax(120px, 0.7fr) repeat(2, minmax(180px, 1fr))
+    minmax(220px, 1.3fr) auto;
+}
+
+.membership ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.membership li {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.7fr) minmax(180px, 1fr) minmax(240px, 1.4fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+}
+
+.membership li small {
+  overflow-wrap: anywhere;
+}
+
+.commercial-guide {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 13px 16px;
+  border-radius: 12px;
+}
+
+.commercial-guide strong {
+  flex: 0 0 auto;
+}
+
+.commercial-catalog > header > div {
+  min-width: 0;
+}
+
+.commercial-filters {
+  grid-template-columns: minmax(240px, 1fr) minmax(150px, 0.35fr) auto auto;
+  padding: 14px;
+  border-radius: 11px;
+  background: var(--so-panel-soft);
+}
+
+.commercial-plan-table-wrap {
+  overflow: auto;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+}
+
+.commercial-plan-table {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
+}
+
+.commercial-plan-table th,
+.commercial-plan-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--so-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.commercial-plan-table th {
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.commercial-plan-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.commercial-plan-table code,
+.commercial-plan-table small {
+  overflow-wrap: anywhere;
+  color: var(--so-text-muted);
+}
+
+.commercial-plan-table dl {
+  display: grid;
+  gap: 5px;
+  min-width: 150px;
+  margin: 0;
+}
+
+.commercial-plan-table dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.commercial-plan-table dt {
+  color: var(--so-text-muted);
+}
+
+.commercial-plan-table dd {
+  margin: 0;
+  font-weight: 750;
+}
+
+.commercial-row-actions {
+  min-width: 122px;
+}
+
+.commercial-pagination {
+  justify-content: flex-end;
+}
+
+.commercial-pagination span {
+  min-width: 100px;
+  color: var(--so-text-muted);
+  text-align: center;
+}
+
+.commercial-dialog-form {
+  display: grid;
+  gap: 12px;
+  padding: 4px;
+}
+
+.commercial-dialog-form header,
+.commercial-dialog-form footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.commercial-dialog-form footer {
+  justify-content: flex-end;
+  padding-top: 8px;
+}
+
+.commercial-dialog-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--so-text-muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.commercial-dialog-form textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.commercial-dialog-form fieldset {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+}
+
+.commercial-dialog-form legend {
+  color: var(--so-text-muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.commercial-impact-preview {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 14px;
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+}
+
+.commercial-impact-preview :is(h4, p, dl) {
+  margin: 0;
+}
+
+.commercial-impact-preview dl,
+.commercial-impact-preview dl > div {
+  display: grid;
+  gap: 8px;
+}
+
+.commercial-impact-preview dl > div {
+  grid-template-columns: minmax(110px, 0.5fr) 1fr;
+  padding-top: 8px;
+  border-top: 1px solid var(--so-border);
+}
+
+.commercial-impact-preview dt {
+  color: var(--so-text-muted);
+}
+
+.commercial-impact-preview dd {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.commercial-impact-preview em {
+  color: var(--so-text-muted);
+  font-style: normal;
+}
+
+dialog[open] {
+  width: min(620px, calc(100% - 28px));
+  max-height: calc(100vh - 28px);
+  overflow: auto;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 16px;
+  background: var(--so-bg-elevated);
+  color: var(--so-text);
+  box-shadow: var(--so-shadow-dialog);
+}
+
+dialog::backdrop {
+  background: color-mix(in srgb, var(--so-text) 52%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+@media (max-width: 1320px) {
+  .renew,
+  .adjust {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .renew h4,
+  .renew button,
+  .adjust .wide,
+  .adjust button {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 800px) {
+  .commercial {
+    padding-bottom: 88px;
+  }
+
+  .commercial-hero {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .commercial-hero-actions {
+    justify-content: flex-start;
+  }
+
+  .commercial-organization-lookup,
+  .renew,
+  .adjust,
+  .commercial-filters,
+  .usage {
+    grid-template-columns: 1fr;
+  }
+
+  .commercial-organization-lookup {
+    grid-column: auto;
+  }
+
+  .commercial-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .membership,
+  .commercial-catalog {
+    padding: 16px;
+  }
+
+  .membership > header,
+  .commercial-catalog > header,
+  .assignment,
+  .commercial-adjustment-heading {
+    display: grid;
+  }
+
+  .commercial-guide {
+    display: grid;
+  }
+
+  .commercial-plan-table-wrap {
+    overflow: visible;
+    border: 0;
+  }
+
+  .commercial-plan-table,
+  .commercial-plan-table tbody,
+  .commercial-plan-table tr,
+  .commercial-plan-table td {
+    display: block;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .commercial-plan-table thead {
+    display: none;
+  }
+
+  .commercial-plan-table tbody {
+    display: grid;
+    gap: 10px;
+  }
+
+  .commercial-plan-table tr {
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 1px solid var(--so-border);
+    border-radius: 11px;
+  }
+
+  .commercial-plan-table td {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: minmax(92px, 0.35fr) minmax(0, 1fr);
+    gap: 10px;
+    padding: 11px 12px;
+  }
+
+  .commercial-plan-table td::before {
+    content: attr(data-label);
+    color: var(--so-text-muted);
+    font-size: 12px;
+    font-weight: 750;
+  }
+
+  .commercial-plan-table td:first-child,
+  .commercial-plan-table td:nth-child(4) {
+    display: grid;
+  }
+
+  .commercial-plan-table td:first-child > *,
+  .commercial-plan-table td:nth-child(4) > * {
+    grid-column: 2;
+  }
+
+  .commercial-plan-table td:first-child::before,
+  .commercial-plan-table td:nth-child(4)::before {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+  }
+
+  .commercial-row-actions {
+    min-width: 0;
+  }
+
+  .membership li {
+    grid-template-columns: 1fr;
+  }
+
+  .commercial-dialog-form fieldset {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .commercial-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .commercial-hero-actions > *,
+  .commercial-organization-lookup > button,
+  .commercial-filters > button,
+  .commercial-row-actions > *,
+  .commercial-dialog-form footer > * {
+    flex: 1 1 auto;
+  }
+
+  .commercial-impact-preview dl > div,
+  .commercial-impact-preview dd {
+    grid-template-columns: 1fr;
+  }
+}

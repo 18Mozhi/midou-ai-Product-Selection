@@ -66,6 +66,47 @@ const version = (value: unknown) => {
     throw new CommercialError("expected_version_invalid", 400, "填写大于等于 1 的整数版本号。");
   return parsed;
 };
+const pageNumber = (value: unknown, label: string, fallback: number, maximum: number) => {
+  if (value === undefined || value === null || value === "") return fallback;
+  const parsed = Number(value);
+  if (!Number.isSafeInteger(parsed) || parsed < 1 || parsed > maximum)
+    throw new CommercialError(`${label}_invalid`, 400, `填写 1–${maximum} 的整数。`);
+  return parsed;
+};
+const optionalQuery = (value: unknown) => {
+  const normalized = String(value ?? "").trim();
+  if (normalized.length > 120)
+    throw new CommercialError("query_invalid", 400, "搜索内容不能超过 120 个字符。");
+  return normalized;
+};
+const databaseFailureCodes = new Set([
+  "ECONNREFUSED",
+  "ECONNRESET",
+  "ETIMEDOUT",
+  "PROTOCOL_CONNECTION_LOST",
+  "POOL_CLOSED",
+  "ER_CON_COUNT_ERROR",
+  "ER_LOCK_DEADLOCK",
+  "ER_LOCK_WAIT_TIMEOUT",
+  "ER_QUERY_TIMEOUT",
+]);
+export const rethrowCommercialDependency = (error: unknown): never => {
+  if (databaseFailureCodes.has(String((error as { code?: unknown })?.code ?? "")))
+    throw new CommercialError(
+      "commercial_dependency_unavailable",
+      503,
+      "配额数据库暂不可用，当前变更未确认写入，请稍后使用原幂等键重试。",
+    );
+  throw error;
+};
+const repositoryCall = async <T>(operation: Promise<T>) => {
+  try {
+    return await operation;
+  } catch (error) {
+    if (error instanceof CommercialError) throw error;
+    rethrowCommercialDependency(error);
+  }
+};
 
 export interface CommercialRepository {
   read(input: any): Promise<any>;
@@ -84,11 +125,29 @@ export class CommercialService {
   ) {}
 
   read(input: any) {
-    return this.repository.read({
-      ...input,
-      organizationId: input.organizationId ? uuid(input.organizationId, "organization_id") : null,
-      limit: this.limit,
-    });
+    const status = String(input.status ?? "");
+    if (status && !["draft", "active", "retired"].includes(status))
+      throw new CommercialError("plan_status_invalid", 400, "选择草稿、启用或退役状态。");
+    const defaultPageSize = Math.min(20, this.limit),
+      pageSize = pageNumber(input.pageSize, "page_size", defaultPageSize, this.limit),
+      adjustmentPageSize = pageNumber(
+        input.adjustmentPageSize,
+        "adjustment_page_size",
+        Math.min(10, this.limit),
+        this.limit,
+      );
+    return repositoryCall(
+      this.repository.read({
+        ...input,
+        organizationId: input.organizationId ? uuid(input.organizationId, "organization_id") : null,
+        query: optionalQuery(input.query),
+        status: status || null,
+        page: pageNumber(input.page, "page", 1, 1_000_000),
+        pageSize,
+        adjustmentPage: pageNumber(input.adjustmentPage, "adjustment_page", 1, 1_000_000),
+        adjustmentPageSize,
+      }),
+    );
   }
 
   createPlan(input: any) {
@@ -102,18 +161,20 @@ export class CommercialService {
         400,
         "使用 1–80 位小写字母、数字、下划线或连字符。",
       );
-    return this.repository.createPlan({
-      ...input,
-      id: randomUUID(),
-      route: "POST:/api/v1/platform/commercial/plans",
-      value: {
-        code,
-        name: text(value.name, "plan_name", 120),
-        description: value.description ? text(value.description, "description", 500) : null,
-        quotas: quotas(value.quotas),
-        reason: reason(value.reason),
-      },
-    });
+    return repositoryCall(
+      this.repository.createPlan({
+        ...input,
+        id: randomUUID(),
+        route: "POST:/api/v1/platform/commercial/plans",
+        value: {
+          code,
+          name: text(value.name, "plan_name", 120),
+          description: value.description ? text(value.description, "description", 500) : null,
+          quotas: quotas(value.quotas),
+          reason: reason(value.reason),
+        },
+      }),
+    );
   }
 
   updatePlan(input: any) {
@@ -121,20 +182,22 @@ export class CommercialService {
     const status = String(value.status ?? "");
     if (!["draft", "active", "retired"].includes(status))
       throw new CommercialError("plan_status_invalid", 400, "选择草稿、启用或退役。");
-    return this.repository.updatePlan({
-      ...input,
-      id: randomUUID(),
-      planId: uuid(input.planId, "plan_id"),
-      route: "PATCH:/api/v1/platform/commercial/plans/:id",
-      value: {
-        name: text(value.name, "plan_name", 120),
-        description: value.description ? text(value.description, "description", 500) : null,
-        quotas: quotas(value.quotas),
-        status,
-        expected_version: version(value.expected_version),
-        reason: reason(value.reason),
-      },
-    });
+    return repositoryCall(
+      this.repository.updatePlan({
+        ...input,
+        id: randomUUID(),
+        planId: uuid(input.planId, "plan_id"),
+        route: "PATCH:/api/v1/platform/commercial/plans/:id",
+        value: {
+          name: text(value.name, "plan_name", 120),
+          description: value.description ? text(value.description, "description", 500) : null,
+          quotas: quotas(value.quotas),
+          status,
+          expected_version: version(value.expected_version),
+          reason: reason(value.reason),
+        },
+      }),
+    );
   }
 
   assign(input: any) {
@@ -143,35 +206,43 @@ export class CommercialService {
     const end = date(value.period_end, "period_end");
     if (end <= start)
       throw new CommercialError("commercial_period_invalid", 400, "账期结束时间必须晚于开始时间。");
-    return this.repository.assign({
-      ...input,
-      id: randomUUID(),
-      route: "POST:/api/v1/platform/commercial/assignments",
-      value: {
-        organization_id: uuid(value.organization_id, "organization_id"),
-        plan_id: uuid(value.plan_id, "plan_id"),
-        period_start: start,
-        period_end: end,
-        reason: reason(value.reason),
-      },
-    });
+    return repositoryCall(
+      this.repository.assign({
+        ...input,
+        id: randomUUID(),
+        route: "POST:/api/v1/platform/commercial/assignments",
+        value: {
+          organization_id: uuid(value.organization_id, "organization_id"),
+          plan_id: uuid(value.plan_id, "plan_id"),
+          period_start: start,
+          period_end: end,
+          expected_version:
+            value.expected_version === undefined || value.expected_version === null
+              ? null
+              : version(value.expected_version),
+          reason: reason(value.reason),
+        },
+      }),
+    );
   }
 
   assignmentAction(input: any) {
     const action = String(input.value?.action ?? "");
     if (!["suspend", "resume", "end"].includes(action))
       throw new CommercialError("assignment_action_invalid", 400, "选择暂停、恢复或结束。");
-    return this.repository.assignmentAction({
-      ...input,
-      id: randomUUID(),
-      assignmentId: uuid(input.assignmentId, "assignment_id"),
-      route: "POST:/api/v1/platform/commercial/assignments/:id/actions",
-      value: {
-        action,
-        expected_version: version(input.value?.expected_version),
-        reason: reason(input.value?.reason),
-      },
-    });
+    return repositoryCall(
+      this.repository.assignmentAction({
+        ...input,
+        id: randomUUID(),
+        assignmentId: uuid(input.assignmentId, "assignment_id"),
+        route: "POST:/api/v1/platform/commercial/assignments/:id/actions",
+        value: {
+          action,
+          expected_version: version(input.value?.expected_version),
+          reason: reason(input.value?.reason),
+        },
+      }),
+    );
   }
 
   adjust(input: any) {
@@ -193,32 +264,36 @@ export class CommercialService {
     const expiresAt = value.expires_at ? date(value.expires_at, "expires_at") : null;
     if (expiresAt && expiresAt <= effectiveAt)
       throw new CommercialError("adjustment_period_invalid", 400, "失效时间必须晚于生效时间。");
-    return this.repository.adjust({
-      ...input,
-      id: randomUUID(),
-      route: "POST:/api/v1/platform/commercial/adjustments",
-      value: {
-        organization_id: uuid(value.organization_id, "organization_id"),
-        assignment_id: uuid(value.assignment_id, "assignment_id"),
-        quota_key: quotaKey,
-        delta_value: delta,
-        effective_at: effectiveAt,
-        expires_at: expiresAt,
-        reason: reason(value.reason),
-      },
-    });
+    return repositoryCall(
+      this.repository.adjust({
+        ...input,
+        id: randomUUID(),
+        route: "POST:/api/v1/platform/commercial/adjustments",
+        value: {
+          organization_id: uuid(value.organization_id, "organization_id"),
+          assignment_id: uuid(value.assignment_id, "assignment_id"),
+          quota_key: quotaKey,
+          delta_value: delta,
+          effective_at: effectiveAt,
+          expires_at: expiresAt,
+          reason: reason(value.reason),
+        },
+      }),
+    );
   }
 
   revokeAdjustment(input: any) {
-    return this.repository.revokeAdjustment({
-      ...input,
-      id: randomUUID(),
-      adjustmentId: uuid(input.adjustmentId, "adjustment_id"),
-      route: "POST:/api/v1/platform/commercial/adjustments/:id/revoke",
-      value: {
-        expected_version: version(input.value?.expected_version),
-        reason: reason(input.value?.reason),
-      },
-    });
+    return repositoryCall(
+      this.repository.revokeAdjustment({
+        ...input,
+        id: randomUUID(),
+        adjustmentId: uuid(input.adjustmentId, "adjustment_id"),
+        route: "POST:/api/v1/platform/commercial/adjustments/:id/revoke",
+        value: {
+          expected_version: version(input.value?.expected_version),
+          reason: reason(input.value?.reason),
+        },
+      }),
+    );
   }
 }

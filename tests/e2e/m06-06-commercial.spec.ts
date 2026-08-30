@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 const env = (data: any) => ({ data, request_id: "m06-06-e2e", trace_id: "m06-06-e2e" });
 const data = {
+  summary: { total: 1, draft: 0, active: 1, retired: 0 },
+  pagination: { page: 1, page_size: 20, total: 1, total_pages: 1 },
+  adjustment_pagination: { page: 1, page_size: 10, total: 1, total_pages: 1 },
   plans: [
     {
       id: "p1",
@@ -14,6 +17,7 @@ const data = {
       updated_at: "2026-08-08T00:00:00Z",
     },
   ],
+  organization: { id: "o1", name: "测试组织", status: "active" },
   assignment: {
     id: "a1",
     organization_id: "o1",

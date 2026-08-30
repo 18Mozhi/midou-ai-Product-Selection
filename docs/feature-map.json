@@ -1792,7 +1792,8 @@
         "../apps/api/src/commercial-service.ts",
         "../apps/api/src/mysql-commercial-repository.ts",
         "../apps/api/src/commercial-routes.ts",
-        "../apps/web/src/components/CommercialOperationsCenter.vue"
+        "../apps/web/src/components/CommercialOperationsCenter.vue",
+        "../apps/web/src/components/commercial-operations.css"
       ],
       "routes": [
         "/platform-admin/commercial",
@@ -1801,8 +1802,8 @@
         "/api/v1/platform/commercial/assignments",
         "/api/v1/platform/commercial/adjustments"
       ],
-      "scope": "quota-only plan create/edit/status, organization quota assignment/change/end, persisted-period usage, reasoned manual adjustments and pre-write organization/quota impact preview; no billing or payment deduction",
-      "truthBoundary": "usage reads collection_tasks, open_api_usage and report_exports by organization and explicit period; no price currency invoice tax or payment provider is defined",
+      "scope": "quota-only plan create/edit/status, stable searchable server pagination, organization quota assignment/change/end, persisted-period usage, independently paged reasoned manual adjustments and pre-write organization/quota impact preview; no billing or payment deduction",
+      "truthBoundary": "usage reads collection_tasks, open_api_usage and report_exports by organization and explicit period; effective quotas aggregate every currently effective adjustment independently from the visible adjustment history page; organization IDs must resolve to persisted organizations; no price currency invoice tax or payment provider is defined",
       "presentationBoundary": "until a real billing contract exists, navigation and user-facing copy identify this module as quota management and do not present membership renewal package price or payment conclusions; confirmation previews show assigned organization count and current-to-proposed quota impact without predicting new-period usage",
       "permission": "platform:operate read guard; same-origin Idempotency-Key reason and version guard for writes",
       "configuration": ["COMMERCIAL_RECENT_LIMIT"],
@@ -1810,7 +1811,7 @@
       "imageEvidence": ["concept 70 billing plans", "concept 71 plan comparison"],
       "verificationRunId": "934c8c7b-0e66-4856-9c47-8b40a331bb3a",
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "quota_pagination_effective_adjustment_url_state_and_concurrency_guards_verified"
     },
     "releaseTestMatrix": {
       "module": "M07-01",
@@ -3044,7 +3045,7 @@
       "view": "CommercialOperationsCenter",
       "domain": "commercial-operations",
       "status": "verified",
-      "statusDetail": "M06-06_module_verified"
+      "statusDetail": "M06-06_quota_pagination_effective_adjustment_and_url_state_verified"
     },
     {
       "path": "/platform-admin/security",

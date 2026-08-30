@@ -48,7 +48,43 @@ test("M06-06.A01/A02/A04/A09 validates quota-only commercial boundary", async ()
       }),
     (error) => error instanceof CommercialError,
   );
-  assert.equal((await service.read({})).limit, 25);
+  assert.deepEqual(await service.read({}), {
+    organizationId: null,
+    query: "",
+    status: null,
+    page: 1,
+    pageSize: 20,
+    adjustmentPage: 1,
+    adjustmentPageSize: 10,
+  });
+  assert.equal((await service.read({ page: "2", pageSize: "25" })).page, 2);
+  assert.equal((await service.read({ page: "2", pageSize: "25" })).pageSize, 25);
+  for (const invalid of [
+    { status: "deleted" },
+    { page: 0 },
+    { pageSize: 26 },
+    { adjustmentPage: -1 },
+    { query: "x".repeat(121) },
+  ])
+    assert.throws(
+      () => service.read(invalid),
+      (error) => error instanceof CommercialError,
+    );
+  assert.equal(
+    (
+      await service.assign({
+        value: {
+          organization_id: "00000000-0000-4000-8000-000000000001",
+          plan_id: "00000000-0000-4000-8000-000000000002",
+          period_start: "2026-08-01T00:00:00Z",
+          period_end: "2026-09-01T00:00:00Z",
+          expected_version: 3,
+          reason: "调整配额",
+        },
+      })
+    ).value.expected_version,
+    3,
+  );
 });
 
 test("M06-06.A03/A05/A10/A11/A12/A14/A16 persistence and audit", async () => {
@@ -72,10 +108,33 @@ test("M06-06.A03/A05/A10/A11/A12/A14/A16 persistence and audit", async () => {
     "outbox_events",
     "COMMERCIAL_RECENT_LIMIT",
     "assignment_count",
+    "SUM\\(delta_value\\)",
+    "organization_not_found",
+    "assignment_version_conflict",
+    "assignment_action_state_invalid",
+    "FIELD\\(p\\.status,'active','draft','retired'\\)",
   ])
     assert.match(all, new RegExp(marker));
   for (const forbidden of ["payment_intent", "invoice_id", "tax_rate", "credit_card"])
     assert.doesNotMatch(all, new RegExp(forbidden, "i"));
+});
+
+test("M06-06 maps known database outages to a retryable dependency response", async () => {
+  const unavailable = new CommercialService(
+    {
+      read: async () => {
+        throw Object.assign(new Error("connect failed"), { code: "ECONNREFUSED" });
+      },
+    },
+    25,
+  );
+  await assert.rejects(
+    unavailable.read({}),
+    (error) =>
+      error instanceof CommercialError &&
+      error.statusCode === 503 &&
+      error.code === "commercial_dependency_unavailable",
+  );
 });
 
 test("M06-06.A06/A07/A08/A13/A15/A17 contracts and docs", async () => {
@@ -103,18 +162,25 @@ test("M06-06.A06/A07/A08/A13/A15/A17 contracts and docs", async () => {
     "回滚",
     "不实现计费或支付扣款",
     "presentationBoundary",
+    "adjustment_page_size",
+    "organization_not_found",
+    "服务端分页",
   ])
     assert.match(all, new RegExp(marker.replaceAll("/", "\\/")));
 });
 
 test("M06-06.A07/A08/A13 presents the quota-only boundary truthfully", async () => {
   const center = await readFile("apps/web/src/components/CommercialOperationsCenter.vue", "utf8");
-  const navigation = await readFile("apps/web/src/route-catalog.ts", "utf8");
+  const navigation = await readFile("apps/web/src/route-catalog.generated.json", "utf8");
   assert.match(center, /组织配额与用量/);
   assert.match(center, /当前不包含计费、价格或支付/);
   assert.match(center, /配额变更影响范围/);
   assert.match(center, /assignment_count/);
   assert.match(center, /新周期用量将在变更后重新统计/);
-  assert.match(navigation, /label: "配额管理"/);
+  assert.match(center, /query/);
+  assert.match(center, /adjustmentPage/);
+  assert.match(center, /AbortController/);
+  assert.match(center, /type="datetime-local"/);
+  assert.match(navigation, /"label": "配额管理"/);
   assert.doesNotMatch(center, /会员、套餐、续期|确认续期\/变更|套餐与续期管理/);
 });

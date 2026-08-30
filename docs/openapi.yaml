@@ -1216,6 +1216,7 @@ paths:
           "401": { $ref: "#/components/responses/Error" },
           "403": { $ref: "#/components/responses/Error" },
           "404": { $ref: "#/components/responses/Error" },
+          "503": { $ref: "#/components/responses/Error" },
           "409": { $ref: "#/components/responses/Error" },
         }
   /org/admin/members/{membershipId}/actions:
@@ -5422,7 +5423,7 @@ paths:
   /platform/commercial:
     get:
       summary: Read quota-only commercial plans and optional organization usage
-      description: Requires platform:operate. Each plan includes assignment_count for active or suspended organization assignments so clients can preview impact. With organization_id, aggregates the current assignment period from persisted collection task, open API usage and report export facts. Does not return price, payment, invoice or tax data.
+      description: Requires platform:operate. Plans use stable active-first server pagination and each includes assignment_count for active or suspended organization assignments so clients can preview impact. With organization_id, validates that the organization exists, pages adjustment history independently, and aggregates the current assignment period from persisted collection task, open API usage and report export facts. Effective quotas include every currently effective adjustment, not only adjustments present on the requested history page. Does not return price, payment, invoice or tax data.
       security: [{ HttpOnlySession: [] }]
       parameters:
         [
@@ -5432,6 +5433,20 @@ paths:
             required: false,
             schema: { type: string, format: uuid },
           },
+          { name: query, in: query, schema: { type: string, maxLength: 120 } },
+          { name: status, in: query, schema: { type: string, enum: [draft, active, retired] } },
+          { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } },
+          {
+            name: page_size,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 100, default: 20 },
+          },
+          { name: adjustment_page, in: query, schema: { type: integer, minimum: 1, default: 1 } },
+          {
+            name: adjustment_page_size,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 100, default: 10 },
+          },
         ]
       responses:
         {
@@ -5440,6 +5455,7 @@ paths:
           "400": { $ref: "#/components/responses/Error" },
           "401": { $ref: "#/components/responses/Error" },
           "403": { $ref: "#/components/responses/Error" },
+          "404": { $ref: "#/components/responses/Error" },
         }
   /platform/commercial/plans:
     post:
@@ -5506,7 +5522,7 @@ paths:
   /platform/commercial/assignments:
     post:
       summary: Assign, renew or change an active quota plan and explicit period for an organization
-      description: Creates the current assignment when absent; otherwise updates the same versioned assignment with a new active plan and billing period. Every call requires a reason and writes audit and commercial events.
+      description: Creates the current assignment when absent; otherwise updates the same versioned assignment with a new active plan and explicit usage period. Updating an existing assignment requires expected_version. Every call requires a reason and writes audit and commercial events.
       security: [{ HttpOnlySession: [] }]
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       responses:

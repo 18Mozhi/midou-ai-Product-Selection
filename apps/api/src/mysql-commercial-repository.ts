@@ -109,18 +109,64 @@ export class MySqlCommercialRepository implements CommercialRepository {
       );
   }
   async read(i: any) {
-    const [plans] = await this.pool.query<RowDataPacket[]>(
-      "SELECT p.id,p.code,p.name,p.description,p.quotas_json,p.status,p.version,p.updated_at," +
-        "(SELECT COUNT(*) FROM organization_plan_assignments a WHERE a.plan_id=p.id " +
-        "AND a.status IN ('active','suspended')) assignment_count FROM commercial_plans p " +
-        "ORDER BY p.status,p.code LIMIT ?",
-      [i.limit],
-    );
+    const observedAt = this.now(),
+      conditions: string[] = [],
+      parameters: unknown[] = [];
+    if (i.status) {
+      conditions.push("p.status=?");
+      parameters.push(i.status);
+    }
+    if (i.query) {
+      const escaped = String(i.query)
+        .replaceAll("=", "==")
+        .replaceAll("%", "=%")
+        .replaceAll("_", "=_");
+      conditions.push(
+        "LOWER(CONCAT_WS(' ',p.code,p.name,COALESCE(p.description,''))) LIKE LOWER(?) ESCAPE '='",
+      );
+      parameters.push(`%${escaped}%`);
+    }
+    const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "",
+      [[summaryRow]] = await this.pool.query<RowDataPacket[]>(
+        "SELECT COUNT(*) total," +
+          "SUM(status='draft') draft,SUM(status='active') active,SUM(status='retired') retired " +
+          "FROM commercial_plans",
+      ),
+      [[filteredRow]] = await this.pool.query<RowDataPacket[]>(
+        `SELECT COUNT(*) total FROM commercial_plans p ${where}`,
+        parameters,
+      ),
+      total = Number(filteredRow?.total ?? 0),
+      totalPages = Math.max(1, Math.ceil(total / i.pageSize)),
+      page = Math.min(i.page, totalPages),
+      offset = (page - 1) * i.pageSize,
+      [plans] = await this.pool.query<RowDataPacket[]>(
+        "SELECT p.id,p.code,p.name,p.description,p.quotas_json,p.status,p.version,p.updated_at," +
+          "(SELECT COUNT(*) FROM organization_plan_assignments a WHERE a.plan_id=p.id " +
+          "AND a.status IN ('active','suspended')) assignment_count FROM commercial_plans p " +
+          `${where} ORDER BY FIELD(p.status,'active','draft','retired'),p.updated_at DESC,p.id DESC ` +
+          "LIMIT ? OFFSET ?",
+        [...parameters, i.pageSize, offset],
+      );
     let assignment = null,
+      organization = null,
       adjustments: any[] = [],
       usage = { collection_tasks: 0, open_api_requests: 0, report_exports: 0 },
-      effective: any = {};
+      effective: any = {},
+      adjustmentPagination = {
+        page: 1,
+        page_size: i.adjustmentPageSize,
+        total: 0,
+        total_pages: 1,
+      };
     if (i.organizationId) {
+      const [organizations] = await this.pool.query<RowDataPacket[]>(
+        "SELECT id,name,status FROM organizations WHERE id=? LIMIT 1",
+        [i.organizationId],
+      );
+      if (!organizations[0])
+        throw new CommercialError("organization_not_found", 404, "选择现有组织后重试。");
+      organization = organizations[0];
       const [a] = await this.pool.query<RowDataPacket[]>(
         "SELECT a.id,a.organization_id,a.plan_id,p.code plan_code,p.name plan_name," +
           "p.quotas_json,a.period_start,a.period_end,a.status,a.version,a.updated_at FROM organization_plan_assignments " +
@@ -129,11 +175,25 @@ export class MySqlCommercialRepository implements CommercialRepository {
       );
       assignment = a[0] ?? null;
       if (assignment) {
+        const [[adjustmentCount]] = await this.pool.query<RowDataPacket[]>(
+            "SELECT COUNT(*) total FROM commercial_quota_adjustments WHERE organization_id=?",
+            [i.organizationId],
+          ),
+          adjustmentTotal = Number(adjustmentCount?.total ?? 0),
+          adjustmentTotalPages = Math.max(1, Math.ceil(adjustmentTotal / i.adjustmentPageSize)),
+          adjustmentPage = Math.min(i.adjustmentPage, adjustmentTotalPages),
+          adjustmentOffset = (adjustmentPage - 1) * i.adjustmentPageSize;
+        adjustmentPagination = {
+          page: adjustmentPage,
+          page_size: i.adjustmentPageSize,
+          total: adjustmentTotal,
+          total_pages: adjustmentTotalPages,
+        };
         const [x] = await this.pool.query<RowDataPacket[]>(
           "SELECT id,quota_key,delta_value,reason,status,effective_at,expires_at,version," +
-            "updated_at FROM commercial_quota_adjustments WHERE organization_id=? ORDER BY updated_at " +
-            "DESC LIMIT ?",
-          [i.organizationId, i.limit],
+            "updated_at FROM commercial_quota_adjustments WHERE organization_id=? " +
+            "ORDER BY updated_at DESC,id DESC LIMIT ? OFFSET ?",
+          [i.organizationId, i.adjustmentPageSize, adjustmentOffset],
         );
         adjustments = x.map((r: any) => ({
           ...r,
@@ -167,16 +227,18 @@ export class MySqlCommercialRepository implements CommercialRepository {
           );
         usage = Object.fromEntries(Object.entries(u).map(([k, v]) => [k, Number(v)])) as any;
         effective = { ...json(assignment.quotas_json) };
-        for (const x of adjustments)
-          if (
-            x.status === "active" &&
-            new Date(x.effective_at) <= this.now() &&
-            (!x.expires_at || new Date(x.expires_at) > this.now())
-          )
-            effective[x.quota_key] = Math.max(
-              0,
-              Number(effective[x.quota_key] ?? 0) + Number(x.delta_value),
-            );
+        const [activeAdjustmentTotals] = await this.pool.query<RowDataPacket[]>(
+          "SELECT quota_key,SUM(delta_value) delta_value FROM commercial_quota_adjustments " +
+            "WHERE organization_id=? AND assignment_id=? AND status='active' AND effective_at<=? " +
+            "AND (expires_at IS NULL OR expires_at>?) GROUP BY quota_key",
+          [i.organizationId, assignment.id, observedAt, observedAt],
+        );
+        for (const activeAdjustment of activeAdjustmentTotals)
+          effective[activeAdjustment.quota_key] = Math.max(
+            0,
+            Number(effective[activeAdjustment.quota_key] ?? 0) +
+              Number(activeAdjustment.delta_value),
+          );
         assignment = {
           ...assignment,
           quotas: json(assignment.quotas_json),
@@ -188,6 +250,13 @@ export class MySqlCommercialRepository implements CommercialRepository {
       }
     }
     const result = {
+      summary: {
+        total: Number(summaryRow?.total ?? 0),
+        draft: Number(summaryRow?.draft ?? 0),
+        active: Number(summaryRow?.active ?? 0),
+        retired: Number(summaryRow?.retired ?? 0),
+      },
+      pagination: { page, page_size: i.pageSize, total, total_pages: totalPages },
       plans: plans.map((r: any) => ({
         ...r,
         quotas: json(r.quotas_json),
@@ -195,11 +264,13 @@ export class MySqlCommercialRepository implements CommercialRepository {
         quotas_json: undefined,
         updated_at: iso(r.updated_at),
       })),
+      organization,
       assignment,
       adjustments,
+      adjustment_pagination: adjustmentPagination,
       usage,
       effective_quotas: effective,
-      observed_at: this.now().toISOString(),
+      observed_at: observedAt.toISOString(),
       scope: { organization_id: i.organizationId ?? null },
     };
     await this.tx(async (c) => {
@@ -214,7 +285,13 @@ export class MySqlCommercialRepository implements CommercialRepository {
         "platform.commercial.read",
         "commercial_view",
         i.organizationId ?? i.actorId,
-        { organization_id: i.organizationId ?? null },
+        {
+          organization_id: i.organizationId ?? null,
+          query: i.query || null,
+          status: i.status,
+          page,
+          adjustment_page: adjustmentPagination.page,
+        },
       );
     });
     return result;
@@ -288,7 +365,7 @@ export class MySqlCommercialRepository implements CommercialRepository {
         i.value.plan_id,
       ]);
       if (!p[0] || p[0].status !== "active")
-        throw new CommercialError("active_plan_required", 409, "先启用套餐。");
+        throw new CommercialError("active_plan_required", 409, "先启用配额方案。");
       const [existing] = await c.query<RowDataPacket[]>(
         "SELECT id,version FROM organization_plan_assignments WHERE organization_id=? FOR UPDATE",
         [i.value.organization_id],
@@ -296,6 +373,12 @@ export class MySqlCommercialRepository implements CommercialRepository {
       const resource = existing[0]?.id ?? i.id,
         replay = await this.op(c, i, resource, { id: resource });
       if (replay) return replay;
+      if (
+        existing[0] &&
+        (!Number.isSafeInteger(Number(i.value.expected_version)) ||
+          Number(existing[0].version) !== Number(i.value.expected_version))
+      )
+        throw new CommercialError("assignment_version_conflict", 409, "刷新后重试。");
       if (existing[0])
         await c.query(
           "UPDATE organization_plan_assignments SET plan_id=?,period_start=?,period_end=?," +
@@ -363,6 +446,15 @@ export class MySqlCommercialRepository implements CommercialRepository {
           : i.value.action === "resume"
             ? "active"
             : "ended";
+      const allowed =
+        (r[0].status === "active" && ["suspend", "end"].includes(i.value.action)) ||
+        (r[0].status === "suspended" && ["resume", "end"].includes(i.value.action));
+      if (!allowed)
+        throw new CommercialError(
+          "assignment_action_state_invalid",
+          409,
+          "刷新组织配额状态后重试。",
+        );
       await c.query(
         "UPDATE organization_plan_assignments SET status=?,version=version+1,updated_by=?,updated_at=? WHERE id=?",
         [status, i.actorId, this.now(), i.assignmentId],
@@ -389,7 +481,7 @@ export class MySqlCommercialRepository implements CommercialRepository {
         throw new CommercialError(
           "assignment_scope_invalid",
           409,
-          "选择同组织且未结束的套餐分配。",
+          "选择同组织且未结束的配额分配。",
         );
       const replay = await this.op(c, i, i.id, { id: i.id, status: "active", version: 1 });
       if (replay) return replay;

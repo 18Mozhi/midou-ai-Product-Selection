@@ -3,7 +3,7 @@ import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
-import type { CommercialService } from "./commercial-service.js";
+import { rethrowCommercialDependency, type CommercialService } from "./commercial-service.js";
 export interface CommercialRouteOptions {
   service: CommercialService;
   authorization: AuthorizationService;
@@ -22,14 +22,18 @@ const ids = (r: FastifyRequest) => ({
   });
 export function registerCommercialRoutes(app: FastifyInstance, o: CommercialRouteOptions) {
   const actor = async (r: FastifyRequest) => {
-      const a = await o.auth.authenticate(sessionToken(r, o.secureCookie));
-      await o.authorization.authorize({
-        actorId: a.user.id,
-        capability: "platform:operate",
-        surface: "api",
-        ...ids(r),
-      });
-      return a.user.id;
+      try {
+        const a = await o.auth.authenticate(sessionToken(r, o.secureCookie));
+        await o.authorization.authorize({
+          actorId: a.user.id,
+          capability: "platform:operate",
+          surface: "api",
+          ...ids(r),
+        });
+        return a.user.id;
+      } catch (error) {
+        rethrowCommercialDependency(error);
+      }
     },
     write = async (r: FastifyRequest) => {
       if (r.headers.origin !== o.webOrigin)
@@ -43,6 +47,12 @@ export function registerCommercialRoutes(app: FastifyInstance, o: CommercialRout
       await o.service.read({
         actorId,
         organizationId: (r.query as any)?.organization_id ?? null,
+        query: (r.query as any)?.query,
+        status: (r.query as any)?.status,
+        page: (r.query as any)?.page,
+        pageSize: (r.query as any)?.page_size,
+        adjustmentPage: (r.query as any)?.adjustment_page,
+        adjustmentPageSize: (r.query as any)?.adjustment_page_size,
         ...ids(r),
       }),
       r,

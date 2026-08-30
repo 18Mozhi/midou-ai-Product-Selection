@@ -1325,7 +1325,7 @@
         "view": "CommercialOperationsCenter",
         "domain": "commercial-operations",
         "status": "verified",
-        "statusDetail": "M06-06_module_verified"
+        "statusDetail": "M06-06_quota_pagination_effective_adjustment_and_url_state_verified"
       },
       "navigation": {
         "label": "配额管理",
