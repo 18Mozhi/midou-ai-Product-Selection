@@ -5259,14 +5259,45 @@ paths:
   /platform/security/operations:
     get:
       summary: Read the audited platform security operations view
-      description: Requires platform:secure. Returns login outcomes, session metadata, credential lifecycle metadata, organization token metadata and platform audit rows; never returns token hashes, session tokens, credential ciphertext, nonces, auth tags, cookies or raw IP/user-agent values.
+      description: Requires platform:secure. Returns the selected, server-paginated security view plus current aggregate counts. Session, credential and organization-token status is computed against expires_at at the observation time. Never returns token hashes, session tokens, credential ciphertext, nonces, auth tags, cookies or raw IP/user-agent values; session device labels are reduced to coarse OS/browser categories.
       security: [{ HttpOnlySession: [] }]
       parameters:
-        [{ name: window, in: query, schema: { type: string, enum: [24h, 7d, 30d], default: 24h } }]
+        [
+          { name: window, in: query, schema: { type: string, enum: [24h, 7d, 30d], default: 24h } },
+          {
+            name: view,
+            in: query,
+            schema: { type: string, enum: [events, sessions, credentials, audit], default: events },
+          },
+          { name: query, in: query, schema: { type: string, maxLength: 120 } },
+          {
+            name: status,
+            in: query,
+            description: View-specific outcome or effective lifecycle status,
+            schema: { type: string, enum: [active, revoked, expired, succeeded, failed, blocked] },
+          },
+          { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } },
+          {
+            name: page_size,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 50, default: 20 },
+          },
+          {
+            name: token_page,
+            in: query,
+            description: Independent organization-token page for the credentials view,
+            schema: { type: integer, minimum: 1, default: 1 },
+          },
+          {
+            name: token_page_size,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 50, default: 20 },
+          },
+        ]
       responses:
         "200":
           {
-            description: Sanitized security operations facts,
+            description: Sanitized security operations facts with independent collection totals and pagination,
             content: { application/json: { schema: { type: object } } },
           }
         "400": { $ref: "#/components/responses/Error" }

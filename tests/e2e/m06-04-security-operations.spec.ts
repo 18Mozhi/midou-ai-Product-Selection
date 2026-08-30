@@ -77,6 +77,13 @@ const env = (data: any) => ({ data, request_id: "m06-04-e2e", trace_id: "m06-04-
         occurred_at: "2026-08-08T12:05:00Z",
       },
     ],
+    pagination: {
+      security_events: { page: 1, page_size: 20, total: 41, total_pages: 3 },
+      sessions: { page: 1, page_size: 20, total: 1, total_pages: 1 },
+      credential_assets: { page: 1, page_size: 20, total: 1, total_pages: 1 },
+      organization_tokens: { page: 1, page_size: 20, total: 1, total_pages: 1 },
+      audit_events: { page: 1, page_size: 20, total: 1, total_pages: 1 },
+    },
     links: {
       credential_assets: "/platform-admin/credentials",
       audit_search: "/platform-admin/security?view=audit",
@@ -107,6 +114,13 @@ test("M06-04.A07/A08/A15 security operations visual sanitized", async ({ page })
   await page.goto("/platform-admin/security");
   await expect(page.getByRole("heading", { name: "安全与密钥运营", level: 2 })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "安全中心二级导航" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "刷新数据" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "下一页" })).toBeVisible();
+  await page.getByLabel("事件时间窗").selectOption("30d");
+  await expect(page).toHaveURL(/window=30d/);
+  await page.getByRole("searchbox", { name: /搜索事件/ }).fill("login.failed");
+  await page.getByRole("button", { name: "查询" }).click();
+  await expect(page).toHaveURL(/query=login.failed/);
   await expect(page.getByText("0123456789abcdef", { exact: true })).not.toBeVisible();
   await page.getByRole("link", { name: "访问与凭证" }).click();
   await expect(page).toHaveURL(/view=credentials/);
@@ -122,11 +136,15 @@ test("M06-04.A07/A08/A15 security operations visual sanitized", async ({ page })
     await expect(tokenDialog.getByText("sco_org_public", { exact: true })).toBeVisible();
     await tokenDialog.getByRole("button", { name: "关闭详情" }).click();
   } else {
-    const credentialSection = page.getByRole("heading", { name: "凭证生命周期" }).locator("..");
+    const credentialSection = page
+      .getByRole("heading", { name: "凭证生命周期" })
+      .locator("xpath=ancestor::section[1]");
     await credentialSection.getByText("技术详情", { exact: true }).click();
     await expect(credentialSection.getByText("0123456789abcdef", { exact: true })).toBeVisible();
     await credentialSection.getByText("技术详情", { exact: true }).click();
-    const tokenSection = page.getByRole("heading", { name: "组织访问令牌" }).locator("..");
+    const tokenSection = page
+      .getByRole("heading", { name: "组织访问令牌" })
+      .locator("xpath=ancestor::section[1]");
     await tokenSection.getByText("技术详情", { exact: true }).click();
     await expect(tokenSection.getByText("sco_org_public", { exact: true })).toBeVisible();
     await tokenSection.getByText("技术详情", { exact: true }).click();
@@ -180,7 +198,7 @@ test("M06-04.A08/A16 empty forbidden blocked", async ({ page }) => {
     ),
   );
   await page.goto("/platform-admin/security");
-  await expect(page.getByRole("heading", { name: "当前时间窗没有安全事件" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "当前时间窗没有安全运营事实" })).toBeVisible();
   status = 403;
   await page.reload();
   await expect(page.getByRole("heading", { name: "你没有安全运营权限" })).toBeVisible();
