@@ -23,25 +23,135 @@ export class MySqlOpenPlatformRepository implements OpenPlatformRepository {
     }
   }
   async overview(i: any) {
-    const [clients] = await this.pool.query<RowDataPacket[]>(
-      "SELECT id,organization_id,name,client_prefix,scopes_json,quota_per_minute," +
-        "status,expires_at,last_used_at,version,updated_at FROM platform_api_clients WHERE (? " +
-        "IS NULL OR organization_id=?) ORDER BY updated_at DESC LIMIT 100",
-      [i.organizationId ?? null, i.organizationId ?? null],
-    );
-    const [hooks] = await this.pool.query<RowDataPacket[]>(
-      "SELECT id,organization_id,name,target_url,events_json,fingerprint,status," +
-        "version,updated_at FROM webhook_endpoints WHERE (? IS NULL OR organization_id=?) ORDER " +
-        "BY updated_at DESC LIMIT 100",
-      [i.organizationId ?? null, i.organizationId ?? null],
-    );
-    const [deliveries] = await this.pool.query<RowDataPacket[]>(
-      "SELECT d.id,d.endpoint_id,e.name endpoint_name,d.organization_id,d.event_type," +
-        "d.status,d.attempt_count,d.response_status,d.last_error_code,d.available_at," +
-        "d.updated_at FROM webhook_deliveries d JOIN webhook_endpoints e ON e.id=d.endpoint_id " +
-        "WHERE (? IS NULL OR d.organization_id=?) ORDER BY d.updated_at DESC LIMIT 100",
-      [i.organizationId ?? null, i.organizationId ?? null],
-    );
+    const escapeLike = (value: string) =>
+        value.replaceAll("\\", "\\\\").replaceAll("%", "\\%").replaceAll("_", "\\_"),
+      page = (value: any) => ({
+        limit: Number(value.pageSize),
+        offset: (Number(value.page) - 1) * Number(value.pageSize),
+      }),
+      clientStatus =
+        "CASE WHEN c.status='active' AND c.expires_at<=? THEN 'expired' ELSE c.status END",
+      clientWhere = ["(? IS NULL OR c.organization_id=?)"],
+      clientParams: any[] = [i.organizationId ?? null, i.organizationId ?? null],
+      hookWhere = ["(? IS NULL OR w.organization_id=?)"],
+      hookParams: any[] = [i.organizationId ?? null, i.organizationId ?? null],
+      deliveryWhere = ["(? IS NULL OR d.organization_id=?)"],
+      deliveryParams: any[] = [i.organizationId ?? null, i.organizationId ?? null];
+    if (i.clients.query) {
+      clientWhere.push("(c.name LIKE ? ESCAPE '\\\\' OR c.client_prefix LIKE ? ESCAPE '\\\\')");
+      const value = `%${escapeLike(i.clients.query)}%`;
+      clientParams.push(value, value);
+    }
+    if (i.clients.status !== "all") {
+      clientWhere.push(`${clientStatus}=?`);
+      clientParams.push(this.now(), i.clients.status);
+    }
+    if (i.webhooks.query) {
+      hookWhere.push("(w.name LIKE ? ESCAPE '\\\\' OR w.target_url LIKE ? ESCAPE '\\\\')");
+      const value = `%${escapeLike(i.webhooks.query)}%`;
+      hookParams.push(value, value);
+    }
+    if (i.webhooks.status !== "all") {
+      hookWhere.push("w.status=?");
+      hookParams.push(i.webhooks.status);
+    }
+    if (i.deliveries.query) {
+      deliveryWhere.push(
+        "(e.name LIKE ? ESCAPE '\\\\' OR d.event_type LIKE ? ESCAPE '\\\\' OR d.id=?)",
+      );
+      const value = `%${escapeLike(i.deliveries.query)}%`;
+      deliveryParams.push(value, value, i.deliveries.query);
+    }
+    if (i.deliveries.status !== "all") {
+      deliveryWhere.push("d.status=?");
+      deliveryParams.push(i.deliveries.status);
+    }
+    const clientSortMap: Record<string, string> = {
+        updated_desc: "c.updated_at DESC",
+        updated_asc: "c.updated_at ASC",
+        name_asc: "c.name ASC,c.id ASC",
+        name_desc: "c.name DESC,c.id DESC",
+      },
+      webhookSortMap: Record<string, string> = {
+        updated_desc: "w.updated_at DESC",
+        updated_asc: "w.updated_at ASC",
+        name_asc: "w.name ASC,w.id ASC",
+        name_desc: "w.name DESC,w.id DESC",
+      },
+      deliverySortMap: Record<string, string> = {
+        updated_desc: "d.updated_at DESC",
+        updated_asc: "d.updated_at ASC",
+        attempts_desc: "d.attempt_count DESC,d.updated_at DESC",
+      },
+      clientSort = clientSortMap[String(i.clients.sort)]!,
+      webhookSort = webhookSortMap[String(i.webhooks.sort)]!,
+      deliverySort = deliverySortMap[String(i.deliveries.sort)]!,
+      clientPage = page(i.clients),
+      webhookPage = page(i.webhooks),
+      deliveryPage = page(i.deliveries),
+      [
+        clientRowsResult,
+        hookRowsResult,
+        deliveryRowsResult,
+        clientCountResult,
+        hookCountResult,
+        deliveryCountResult,
+        clientSummaryResult,
+        hookSummaryResult,
+        deliverySummaryResult,
+      ] = await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          `SELECT c.id,c.organization_id,c.name,c.client_prefix,c.scopes_json,c.quota_per_minute,${clientStatus} status,c.expires_at,c.last_used_at,c.version,c.updated_at FROM platform_api_clients c WHERE ${clientWhere.join(" AND ")} ORDER BY ${clientSort} LIMIT ? OFFSET ?`,
+          [this.now(), ...clientParams, clientPage.limit, clientPage.offset],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT w.id,w.organization_id,w.name,w.target_url,w.events_json,w.fingerprint,w.status,w.version,w.updated_at FROM webhook_endpoints w WHERE ${hookWhere.join(" AND ")} ORDER BY ${webhookSort} LIMIT ? OFFSET ?`,
+          [...hookParams, webhookPage.limit, webhookPage.offset],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT d.id,d.endpoint_id,e.name endpoint_name,d.organization_id,d.event_type,d.status,d.attempt_count,d.response_status,d.last_error_code,d.available_at,d.updated_at FROM webhook_deliveries d JOIN webhook_endpoints e ON e.id=d.endpoint_id WHERE ${deliveryWhere.join(" AND ")} ORDER BY ${deliverySort} LIMIT ? OFFSET ?`,
+          [...deliveryParams, deliveryPage.limit, deliveryPage.offset],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT COUNT(*) total FROM platform_api_clients c WHERE ${clientWhere.join(" AND ")}`,
+          clientParams,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT COUNT(*) total FROM webhook_endpoints w WHERE ${hookWhere.join(" AND ")}`,
+          hookParams,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT COUNT(*) total FROM webhook_deliveries d JOIN webhook_endpoints e ON e.id=d.endpoint_id WHERE ${deliveryWhere.join(" AND ")}`,
+          deliveryParams,
+        ),
+        this.pool.query<RowDataPacket[]>(
+          `SELECT COUNT(*) total,SUM(${clientStatus}='active') active,SUM(${clientStatus}='expired') expired FROM platform_api_clients c WHERE (? IS NULL OR c.organization_id=?)`,
+          [this.now(), this.now(), i.organizationId ?? null, i.organizationId ?? null],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT COUNT(*) total,SUM(w.status='active') active FROM webhook_endpoints w WHERE (? IS NULL OR w.organization_id=?)",
+          [i.organizationId ?? null, i.organizationId ?? null],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT COUNT(*) total,SUM(d.status='dead_letter') dead_letter,SUM(d.status='retry_scheduled') retry_scheduled FROM webhook_deliveries d WHERE (? IS NULL OR d.organization_id=?)",
+          [i.organizationId ?? null, i.organizationId ?? null],
+        ),
+      ]),
+      clients = clientRowsResult[0],
+      hooks = hookRowsResult[0],
+      deliveries = deliveryRowsResult[0],
+      clientCount = Number(clientCountResult[0][0]?.total ?? 0),
+      hookCount = Number(hookCountResult[0][0]?.total ?? 0),
+      deliveryCount = Number(deliveryCountResult[0][0]?.total ?? 0),
+      clientSummary: RowDataPacket = clientSummaryResult[0][0] ?? ({} as RowDataPacket),
+      hookSummary: RowDataPacket = hookSummaryResult[0][0] ?? ({} as RowDataPacket),
+      deliverySummary: RowDataPacket = deliverySummaryResult[0][0] ?? ({} as RowDataPacket),
+      pagination = (input: any, total: number) => ({
+        page: Number(input.page),
+        page_size: Number(input.pageSize),
+        total,
+        total_pages: Math.max(1, Math.ceil(total / Number(input.pageSize))),
+      });
     return {
       clients: clients.map((r) => ({
         ...r,
@@ -62,6 +172,27 @@ export class MySqlOpenPlatformRepository implements OpenPlatformRepository {
         available_at: iso(r.available_at),
         updated_at: iso(r.updated_at),
       })),
+      summary: {
+        clients: {
+          total: Number(clientSummary.total ?? 0),
+          active: Number(clientSummary.active ?? 0),
+          expired: Number(clientSummary.expired ?? 0),
+        },
+        webhooks: {
+          total: Number(hookSummary.total ?? 0),
+          active: Number(hookSummary.active ?? 0),
+        },
+        deliveries: {
+          total: Number(deliverySummary.total ?? 0),
+          dead_letter: Number(deliverySummary.dead_letter ?? 0),
+          retry_scheduled: Number(deliverySummary.retry_scheduled ?? 0),
+        },
+      },
+      pagination: {
+        clients: pagination(i.clients, clientCount),
+        webhooks: pagination(i.webhooks, hookCount),
+        deliveries: pagination(i.deliveries, deliveryCount),
+      },
       scope: { organization_id: i.organizationId ?? null },
       observed_at: this.now().toISOString(),
     };

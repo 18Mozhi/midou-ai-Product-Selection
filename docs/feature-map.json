@@ -1767,7 +1767,7 @@
         "/open/v1/status"
       ],
       "scope": "organization-owned API Clients, scopes, per-minute quotas, pre-write token permission impact previews, Webhook endpoints, signed delivery attempts and immutable delivery events",
-      "presentationBoundary": "desktop tables and mobile summary cards with detail drawers share the same client webhook and delivery records; API Client create rotate and revoke confirmations preview real scopes organization quota and access consequences without inventing unavailable scopes or arbitrary risk grades; client webhook delivery organization identifiers public prefixes fingerprints raw error codes and request IDs remain collapsed under technical details while statuses and events use Chinese business labels",
+      "presentationBoundary": "desktop and mobile select one of the Client, Webhook and delivery workspaces at a time; every workspace uses server-filtered sorted paginated real records, total counts, URL-backed filters, mobile summary cards and detail drawers; API Client create rotate and revoke confirmations preview real scopes organization quota and access consequences without inventing unavailable scopes or arbitrary risk grades; client webhook delivery organization identifiers public prefixes fingerprints raw error codes and request IDs remain collapsed under technical details while statuses and events use Chinese business labels",
       "truthBoundary": "API and Webhook secrets are returned once; only Client hash or AES-256-GCM Webhook ciphertext is persisted; overview never selects secret material",
       "permission": "platform_token:manage plus same-origin and idempotency for management; independent Bearer timestamp nonce scope quota middleware for /open/v1",
       "configuration": [
@@ -1780,11 +1780,11 @@
         "WEBHOOK_DELIVERY_LEASE_SECONDS",
         "WEBHOOK_DELIVERY_TIMEOUT_MS"
       ],
-      "runtimeBoundary": "Baota S0 Node API and Node Worker; HTTPS-only per-attempt DNS and private-range rejection; 60/300/900 retry and fourth-attempt dead letter; no multi-node claim",
+      "runtimeBoundary": "Baota S0 Node API and Node Worker; overview reads validate UUID query parameters, cap every collection page at 50 records and map MySQL unavailability to 503 while preserving the browser's last successful view; HTTPS-only per-attempt DNS and private-range rejection; 60/300/900 retry and fourth-attempt dead letter; no multi-node claim",
       "imageEvidence": ["concept 67 token management", "concept 68 key rotation"],
       "verificationRunId": "5fdcf027-016b-47d2-938a-4f268a339fb4",
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "permission_pagination_filter_sort_and_worker_feedback_verified"
     },
     "commercialOperations": {
       "module": "M06-06",
@@ -3059,7 +3059,7 @@
       "view": "OpenPlatformCenter",
       "domain": "open-platform",
       "status": "verified",
-      "statusDetail": "M06-05_module_verified"
+      "statusDetail": "M06-05_permission_pagination_filter_sort_and_worker_feedback_verified"
     },
     {
       "path": "/platform-admin/status",

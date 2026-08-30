@@ -3,7 +3,7 @@ import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
-import type { OpenPlatformService } from "./open-platform-service.js";
+import { OpenPlatformError, type OpenPlatformService } from "./open-platform-service.js";
 export interface OpenPlatformRouteOptions {
   service: OpenPlatformService;
   authorization: AuthorizationService;
@@ -22,6 +22,23 @@ const ids = (r: FastifyRequest) => ({
     trace_id: ids(r).traceId,
   });
 export function registerOpenPlatformRoutes(app: FastifyInstance, o: OpenPlatformRouteOptions) {
+  const dependencyCodes = new Set([
+      "ECONNREFUSED",
+      "ECONNRESET",
+      "ETIMEDOUT",
+      "PROTOCOL_CONNECTION_LOST",
+      "POOL_CLOSED",
+    ]),
+    dependency = (error: unknown): never => {
+      if (error instanceof ApiError || error instanceof OpenPlatformError) throw error;
+      if (dependencyCodes.has(String((error as any)?.code ?? "")))
+        throw new OpenPlatformError(
+          "open_platform_dependency_unavailable",
+          503,
+          "检查 MySQL 连接并在恢复后重试。",
+        );
+      throw error;
+    };
   const actor = async (r: FastifyRequest) => {
     const a = await o.auth.authenticate(sessionToken(r, o.secureCookie));
     await o.authorization.authorize({
@@ -38,15 +55,19 @@ export function registerOpenPlatformRoutes(app: FastifyInstance, o: OpenPlatform
     return { actorId: await actor(r), idempotencyKey: requireIdempotencyKey(r), ...ids(r) };
   };
   app.get("/api/v1/platform/open", async (r, reply) => {
-    await actor(r);
-    reply.header("cache-control", "private, no-store");
-    return env(
-      await o.service.overview({
-        organizationId: (r.query as any)?.organization_id ?? null,
-        ...ids(r),
-      }),
-      r,
-    );
+    try {
+      await actor(r);
+      reply.header("cache-control", "private, no-store");
+      return env(
+        await o.service.overview({
+          query: r.query,
+          ...ids(r),
+        }),
+        r,
+      );
+    } catch (error) {
+      return dependency(error);
+    }
   });
   app.post("/api/v1/platform/open/clients", async (r, reply) => {
     reply.code(201);

@@ -1365,7 +1365,7 @@
       "breadcrumb": ["平台后台", "安全中心", "开放平台"],
       "shell": "platform_admin",
       "view": null,
-      "capabilities": ["platform:superadmin"],
+      "capabilities": ["platform_token:manage"],
       "notFound": false,
       "surface": "open-platform-center",
       "cachePolicy": "preserve",
@@ -1375,7 +1375,7 @@
         "view": "OpenPlatformCenter",
         "domain": "open-platform",
         "status": "verified",
-        "statusDetail": "M06-05_module_verified"
+        "statusDetail": "M06-05_permission_pagination_filter_sort_and_worker_feedback_verified"
       },
       "navigation": {
         "label": "开放平台",

@@ -10,9 +10,9 @@ const repo = new Proxy(
   { overview: async () => ({}), recordUsage: async () => {} },
   { get: (o, k) => o[k] ?? (async (i) => i) },
 );
-const service = () =>
+const service = (repository = repo) =>
   new OpenPlatformService(
-    repo,
+    repository,
     "unit-verification-master-key-32chars",
     "v1",
     {
@@ -24,6 +24,53 @@ const service = () =>
     },
     () => new Date("2026-08-08T08:00:00Z"),
   );
+test("M06-05.A06 overview validates and normalizes server pagination, filters and dependency failure", async () => {
+  let captured;
+  const repository = {
+    ...repo,
+    overview: async (input) => {
+      captured = input;
+      return { clients: [], webhooks: [], deliveries: [] };
+    },
+  };
+  await service(repository).overview({
+    query: {
+      organization_id: "00000000-0000-4000-8000-000000000001",
+      client_query: " status ",
+      client_status: "expired",
+      client_sort: "name_asc",
+      client_page: "2",
+      client_page_size: "50",
+    },
+  });
+  assert.equal(captured.organizationId, "00000000-0000-4000-8000-000000000001");
+  assert.deepEqual(captured.clients, {
+    query: "status",
+    status: "expired",
+    sort: "name_asc",
+    page: 2,
+    pageSize: 50,
+  });
+  assert.equal(captured.webhooks.pageSize, 20);
+  await assert.rejects(
+    () => service(repository).overview({ query: { organization_id: "bad" } }),
+    (error) => error.code === "organization_id_invalid" && error.statusCode === 400,
+  );
+  await assert.rejects(
+    () => service(repository).overview({ query: { delivery_page_size: "51" } }),
+    (error) => error.code === "delivery_page_size_invalid" && error.statusCode === 400,
+  );
+  await assert.rejects(
+    () =>
+      service({
+        ...repo,
+        overview: async () => {
+          throw new Error("database offline");
+        },
+      }).overview({ query: {} }),
+    (error) => error.code === "open_platform_dependency_unavailable" && error.statusCode === 503,
+  );
+});
 test("M06-05.A01/A02/A04/A09 client and webhook inputs are fail closed", async () => {
   assert.throws(
     () =>
@@ -83,6 +130,8 @@ test("M06-05.A06/A07/A08/A13/A15/A17 documented UI and contracts", async () => {
       [
         "docs/openapi.yaml",
         "apps/web/src/components/OpenPlatformCenter.vue",
+        "apps/web/src/open-platform.css",
+        "config/route-catalog.json",
         "apps/web/src/styles/platform-operations.css",
         "docs/feature-map.json",
         "docs/architecture/m06-05-open-platform.md",
@@ -100,6 +149,10 @@ test("M06-05.A06/A07/A08/A13/A15/A17 documented UI and contracts", async () => {
     "宝塔",
     "回滚",
     "390",
+    "platform_token:manage",
+    "client_page_size",
+    "OpenPlatformPagination",
+    "15 秒",
   ])
     assert.match(all, new RegExp(x.replaceAll("/", "\\/")));
 });
@@ -108,6 +161,8 @@ test("M06-05.A07/A08 token actions preview concrete permission and access impact
   assert.match(center, /令牌权限风险预览/);
   assert.match(center, /不包含业务数据写入权限/);
   assert.match(center, /旧密钥立即失效/);
-  assert.match(center, /撤销后该账号立即无法调用开放接口/);
+  assert.match(center, /访问立即终止且不可恢复/);
   assert.match(center, /status:read/);
+  assert.match(center, /webhookUpdate/);
+  assert.match(center, /currentPagination/);
 });

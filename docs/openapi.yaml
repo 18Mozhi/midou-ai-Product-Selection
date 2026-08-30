@@ -5317,6 +5317,45 @@ paths:
             required: false,
             schema: { type: string, format: uuid },
           },
+          { name: client_query, in: query, schema: { type: string, maxLength: 120 } },
+          {
+            name: client_status,
+            in: query,
+            schema: { type: string, enum: [all, active, expired, revoked, rotated], default: all },
+          },
+          {
+            name: client_sort,
+            in: query,
+            schema: { type: string, enum: [updated_desc, updated_asc, name_asc, name_desc], default: updated_desc },
+          },
+          { name: client_page, in: query, schema: { type: integer, minimum: 1, default: 1 } },
+          { name: client_page_size, in: query, schema: { type: integer, minimum: 1, maximum: 50, default: 20 } },
+          { name: webhook_query, in: query, schema: { type: string, maxLength: 120 } },
+          {
+            name: webhook_status,
+            in: query,
+            schema: { type: string, enum: [all, active, disabled], default: all },
+          },
+          {
+            name: webhook_sort,
+            in: query,
+            schema: { type: string, enum: [updated_desc, updated_asc, name_asc, name_desc], default: updated_desc },
+          },
+          { name: webhook_page, in: query, schema: { type: integer, minimum: 1, default: 1 } },
+          { name: webhook_page_size, in: query, schema: { type: integer, minimum: 1, maximum: 50, default: 20 } },
+          { name: delivery_query, in: query, schema: { type: string, maxLength: 120 } },
+          {
+            name: delivery_status,
+            in: query,
+            schema: { type: string, enum: [all, queued, leased, succeeded, retry_scheduled, dead_letter], default: all },
+          },
+          {
+            name: delivery_sort,
+            in: query,
+            schema: { type: string, enum: [updated_desc, updated_asc, attempts_desc], default: updated_desc },
+          },
+          { name: delivery_page, in: query, schema: { type: integer, minimum: 1, default: 1 } },
+          { name: delivery_page_size, in: query, schema: { type: integer, minimum: 1, maximum: 50, default: 20 } },
         ]
       responses:
         {
@@ -5331,6 +5370,9 @@ paths:
             },
           "401": { $ref: "#/components/responses/Error" },
           "403": { $ref: "#/components/responses/Error" },
+          "400": { $ref: "#/components/responses/Error" },
+          "429": { $ref: "#/components/responses/Error" },
+          "503": { $ref: "#/components/responses/Error" },
         }
   /platform/open/clients:
     post:
@@ -7093,17 +7135,50 @@ components:
         data:
           {
             type: object,
-            required: [clients, webhooks, deliveries, observed_at],
+            required: [clients, webhooks, deliveries, summary, pagination, scope, observed_at],
             properties:
               {
                 clients: { type: array, items: { type: object, additionalProperties: true } },
                 webhooks: { type: array, items: { type: object, additionalProperties: true } },
                 deliveries: { type: array, items: { type: object, additionalProperties: true } },
+                summary:
+                  {
+                    type: object,
+                    required: [clients, webhooks, deliveries],
+                    additionalProperties: false,
+                    properties:
+                      {
+                        clients: { type: object, required: [total, active, expired], additionalProperties: false, properties: { total: { type: integer }, active: { type: integer }, expired: { type: integer } } },
+                        webhooks: { type: object, required: [total, active], additionalProperties: false, properties: { total: { type: integer }, active: { type: integer } } },
+                        deliveries: { type: object, required: [total, dead_letter, retry_scheduled], additionalProperties: false, properties: { total: { type: integer }, dead_letter: { type: integer }, retry_scheduled: { type: integer } } },
+                      },
+                  },
+                pagination:
+                  {
+                    type: object,
+                    required: [clients, webhooks, deliveries],
+                    properties:
+                      {
+                        clients: { $ref: "#/components/schemas/OpenPlatformPagination" },
+                        webhooks: { $ref: "#/components/schemas/OpenPlatformPagination" },
+                        deliveries: { $ref: "#/components/schemas/OpenPlatformPagination" },
+                      },
+                  },
+                scope: { type: object, properties: { organization_id: { type: string, format: uuid, nullable: true } } },
                 observed_at: { type: string, format: date-time },
               },
           }
         request_id: { type: string }
         trace_id: { type: string }
+    OpenPlatformPagination:
+      type: object
+      additionalProperties: false
+      required: [page, page_size, total, total_pages]
+      properties:
+        page: { type: integer, minimum: 1 }
+        page_size: { type: integer, minimum: 1, maximum: 50 }
+        total: { type: integer, minimum: 0 }
+        total_pages: { type: integer, minimum: 1 }
     AutomationRuleCreate:
       type: object
       additionalProperties: false

@@ -25,6 +25,29 @@ const text = (v: unknown, label: string, max: number) => {
   return x;
 };
 const reason = (v: unknown) => text(v, "reason", 500);
+const optionalUuid = (v: unknown, label: string) => {
+    if (v === undefined || v === null || String(v).trim() === "") return null;
+    return uuid(v, label);
+  },
+  optionalText = (v: unknown, label: string, max: number) => {
+    const x = String(v ?? "").trim();
+    if (x.length > max)
+      throw new OpenPlatformError(`${label}_invalid`, 400, `最多填写 ${max} 个字符。`);
+    return x;
+  },
+  integer = (v: unknown, label: string, fallback: number, max: number) => {
+    if (v === undefined || v === null || v === "") return fallback;
+    const x = Number(v);
+    if (!Number.isInteger(x) || x < 1 || x > max)
+      throw new OpenPlatformError(`${label}_invalid`, 400, `填写 1–${max} 的整数。`);
+    return x;
+  },
+  choice = (v: unknown, label: string, allowed: readonly string[], fallback: string) => {
+    const x = String(v ?? fallback);
+    if (!allowed.includes(x))
+      throw new OpenPlatformError(`${label}_invalid`, 400, "选择有效筛选条件。");
+    return x;
+  };
 const allowedScopes = new Set(["status:read"]),
   allowedEvents = new Set([
     "scoutops.test",
@@ -80,8 +103,47 @@ export class OpenPlatformService {
     },
     private readonly now = () => new Date(),
   ) {}
-  overview(i: any) {
-    return this.repo.overview(i);
+  async overview(i: any) {
+    const q = i.query ?? {},
+      collection = (
+        key: "client" | "webhook" | "delivery",
+        statuses: readonly string[],
+        sorts: readonly string[],
+      ) => ({
+        query: optionalText(q[`${key}_query`], `${key}_query`, 120),
+        status: choice(q[`${key}_status`], `${key}_status`, ["all", ...statuses], "all"),
+        sort: choice(q[`${key}_sort`], `${key}_sort`, sorts, "updated_desc"),
+        page: integer(q[`${key}_page`], `${key}_page`, 1, 100000),
+        pageSize: integer(q[`${key}_page_size`], `${key}_page_size`, 20, 50),
+      });
+    try {
+      return await this.repo.overview({
+        ...i,
+        organizationId: optionalUuid(q.organization_id, "organization_id"),
+        clients: collection(
+          "client",
+          ["active", "expired", "revoked", "rotated"],
+          ["updated_desc", "updated_asc", "name_asc", "name_desc"],
+        ),
+        webhooks: collection(
+          "webhook",
+          ["active", "disabled"],
+          ["updated_desc", "updated_asc", "name_asc", "name_desc"],
+        ),
+        deliveries: collection(
+          "delivery",
+          ["queued", "leased", "succeeded", "retry_scheduled", "dead_letter"],
+          ["updated_desc", "updated_asc", "attempts_desc"],
+        ),
+      });
+    } catch (error) {
+      if (error instanceof OpenPlatformError) throw error;
+      throw new OpenPlatformError(
+        "open_platform_dependency_unavailable",
+        503,
+        "检查 MySQL 连接并在恢复后重试。",
+      );
+    }
   }
   createClient(i: any) {
     const v = i.value ?? {},
