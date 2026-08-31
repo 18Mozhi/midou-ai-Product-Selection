@@ -182,6 +182,82 @@ test("M08-04.A04/A06/A09 service and operations route preserve explicit recovery
   await app.close();
 });
 
+test("file operations route maps dependency failures to a sanitized 503", async () => {
+  const { buildApp } = await import("../../apps/api/dist/app.js");
+  const failure = Object.assign(new Error("private file database detail"), {
+    code: "PROTOCOL_CONNECTION_LOST",
+  });
+  const app = buildApp({
+    fileResilience: {
+      service: { read: async () => Promise.reject(failure) },
+      authorization: { authorize: async () => undefined },
+      auth: {
+        authenticate: async () => ({ user: { id: "actor" }, session: { id: "session" } }),
+      },
+      secureCookie: false,
+    },
+  });
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/files",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "file-failure-request",
+      "x-trace-id": "file-failure-trace",
+    },
+  });
+  assert.equal(response.statusCode, 503);
+  assert.equal(response.json().error.code, "file_resilience_dependency_unavailable");
+  assert.equal(response.json().request_id, "file-failure-request");
+  assert.doesNotMatch(
+    response.body,
+    /private file database detail|PROTOCOL_CONNECTION_LOST|127\.0\.0\.1/,
+  );
+  await app.close();
+});
+
+test("file operations route bounds reads and aborts the probe and repository chain", async () => {
+  const { buildApp } = await import("../../apps/api/dist/app.js");
+  let aborted = false;
+  const app = buildApp({
+    fileResilience: {
+      service: {
+        read: ({ signal }) =>
+          new Promise((_, reject) => {
+            signal.addEventListener(
+              "abort",
+              () => {
+                aborted = true;
+                reject(signal.reason);
+              },
+              { once: true },
+            );
+          }),
+      },
+      authorization: { authorize: async () => undefined },
+      auth: {
+        authenticate: async () => ({ user: { id: "actor" }, session: { id: "session" } }),
+      },
+      secureCookie: false,
+      readTimeoutMs: 10,
+    },
+  });
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/files",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "file-timeout-request",
+      "x-trace-id": "file-timeout-trace",
+    },
+  });
+  assert.equal(response.statusCode, 503);
+  assert.equal(response.json().error.code, "file_resilience_read_timeout");
+  assert.equal(response.json().request_id, "file-timeout-request");
+  assert.equal(aborted, true);
+  await app.close();
+});
+
 test("M08-04.A03/A05/A10/A13 migration config worker and manifests stay MySQL57 and backend-only", async () => {
   const [
     { loadRuntimeConfig },
@@ -332,12 +408,29 @@ test("M08-04.A07/A08/A15/A16 UI evidence and rollback cover full states and imag
     "forbidden",
     "expired",
     "rate_limited",
+    "timeout",
     "unavailable",
     "recovering",
   ])
     assert.match(ui, new RegExp(state));
   assert.match(ui, /临时目录[\s\S]*不建立持久索引/);
   assert.match(e2e, /390/);
+  for (const token of ["AbortController", "15_000", "refreshing", "refreshFailure"])
+    assert.match(ui, new RegExp(token));
+  const [route, service, repository, probe] = await Promise.all(
+    [
+      "apps/api/src/file-resilience-routes.ts",
+      "apps/api/src/file-resilience-service.ts",
+      "apps/api/src/file-resilience-repository.ts",
+      "apps/api/src/file-resilience-probe.ts",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  assert.match(route, /requestController\.signal/);
+  assert.match(route, /readTimeoutMs \?\? 14_000/);
+  assert.match(route, /file_resilience_read_timeout/);
+  assert.match(service, /signal\?\.throwIfAborted/);
+  assert.match(repository, /rollback[\s\S]*throwIfAborted|throwIfAborted[\s\S]*rollback/);
+  assert.match(probe, /createReadStream\(path, \{ signal \}\)/);
   for (const image of [
     "61_平台运营-概览.jpg",
     "64_系统监控.jpg",

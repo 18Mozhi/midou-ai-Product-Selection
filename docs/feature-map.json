@@ -2457,7 +2457,7 @@
       "sharedStorageEnabled": false,
       "loadBalancingEnabled": false,
       "backupServerUsed": false,
-      "statusDetail": "module_verified"
+      "statusDetail": "local_full_stack_live_api_permission_single_flight_refresh_bounded_abort_snapshot_preservation_dependency_503_filesystem_failure_recovery_and_responsive_verification_completed"
     },
     "crawlerSingleHostScheduler": {
       "module": "M08-05",

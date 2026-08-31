@@ -15,9 +15,14 @@ const inside = (root: string, target: string) => {
   const value = relative(resolve(root), resolve(target));
   return value === "" || (!isAbsolute(value) && value !== ".." && !value.startsWith(`..${sep}`));
 };
-async function sha256(path: string) {
+async function sha256(path: string, signal?: AbortSignal) {
+  signal?.throwIfAborted();
   const hash = createHash("sha256");
-  for await (const chunk of createReadStream(path)) hash.update(chunk);
+  for await (const chunk of createReadStream(path, { signal })) {
+    signal?.throwIfAborted();
+    hash.update(chunk);
+  }
+  signal?.throwIfAborted();
   return hash.digest("hex");
 }
 
@@ -37,10 +42,13 @@ export class FileResilienceProbe {
     path: string,
     activeFiles: number,
     indexedBytes: number,
+    signal?: AbortSignal,
   ): Promise<FileRootSnapshot> {
     try {
+      signal?.throwIfAborted();
       await access(path, constants.R_OK | constants.W_OK);
       const value = await statfs(path);
+      signal?.throwIfAborted();
       return {
         kind,
         available: true,
@@ -51,6 +59,7 @@ export class FileResilienceProbe {
         indexedBytes,
       };
     } catch {
+      signal?.throwIfAborted();
       return {
         kind,
         available: false,
@@ -62,32 +71,39 @@ export class FileResilienceProbe {
       };
     }
   }
-  async snapshot(): Promise<FileResilienceSnapshot> {
+  async snapshot(signal?: AbortSignal): Promise<FileResilienceSnapshot> {
+    signal?.throwIfAborted();
     const [evidenceTotals] = await this.pool.query<RowDataPacket[]>(
       "SELECT COUNT(*) active_files,COALESCE(SUM(size_bytes),0) indexed_bytes FROM file_assets WHERE status='active' AND category='evidence'",
     );
+    signal?.throwIfAborted();
     const [exportTotals] = await this.pool.query<RowDataPacket[]>(
       "SELECT COUNT(*) active_files,COALESCE(SUM(byte_size),0) indexed_bytes FROM report_exports WHERE status='succeeded' AND expires_at>UTC_TIMESTAMP(3)",
     );
+    signal?.throwIfAborted();
     const roots = await Promise.all([
       this.root(
         "evidence",
         this.evidenceRoot,
         number(evidenceTotals[0]?.active_files),
         number(evidenceTotals[0]?.indexed_bytes),
+        signal,
       ),
       this.root(
         "export",
         this.exportRoot,
         number(exportTotals[0]?.active_files),
         number(exportTotals[0]?.indexed_bytes),
+        signal,
       ),
-      this.root("temp", this.runtimeTempRoot, 0, 0),
+      this.root("temp", this.runtimeTempRoot, 0, 0, signal),
     ]);
+    signal?.throwIfAborted();
     const [evidenceRows] = await this.pool.query<RowDataPacket[]>(
       "SELECT relative_path,content_sha256 FROM file_assets WHERE status='active' AND category='evidence' ORDER BY updated_at DESC,id DESC LIMIT ?",
       [this.checksumSampleLimit],
     );
+    signal?.throwIfAborted();
     const remaining = Math.max(0, this.checksumSampleLimit - evidenceRows.length);
     const [exportRows] = remaining
       ? await this.pool.query<RowDataPacket[]>(
@@ -95,6 +111,7 @@ export class FileResilienceProbe {
           [remaining],
         )
       : [[] as RowDataPacket[], []];
+    signal?.throwIfAborted();
     const samples: Array<{ path: string; expected: string }> = [];
     for (const row of evidenceRows) {
       const target = resolve(this.evidenceRoot, String(row.relative_path));
@@ -122,14 +139,16 @@ export class FileResilienceProbe {
       mismatched = 0,
       missing = 0;
     for (const sample of samples) {
+      signal?.throwIfAborted();
       if (!sample.path) {
         missing++;
         continue;
       }
       try {
-        if ((await sha256(sample.path)) === sample.expected) verified++;
+        if ((await sha256(sample.path, signal)) === sample.expected) verified++;
         else mismatched++;
       } catch {
+        signal?.throwIfAborted();
         missing++;
       }
     }
@@ -138,6 +157,7 @@ export class FileResilienceProbe {
         "SELECT id,run_type,status,finished_at,isolated,encrypted,integrity_verified,permission_boundary_verified,audit_chain_verified,evidence_hash_verified FROM backup_recovery_runs WHERE run_type IN ('backup','restore_drill') ORDER BY started_at DESC LIMIT 20",
       )
       .catch(() => [[] as RowDataPacket[], []] as never);
+    signal?.throwIfAborted();
     const backup = runRows.find((row) => row.run_type === "backup"),
       drill = runRows.find((row) => row.run_type === "restore_drill");
     const [assetRows] = backup
@@ -148,6 +168,7 @@ export class FileResilienceProbe {
           )
           .catch(() => [[] as RowDataPacket[], []] as never)
       : [[] as RowDataPacket[], []];
+    signal?.throwIfAborted();
     const kinds = new Set(
       assetRows
         .filter((row) => Boolean(row.encrypted) && Boolean(row.integrity_verified))

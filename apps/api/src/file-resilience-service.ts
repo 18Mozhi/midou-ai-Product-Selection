@@ -6,7 +6,7 @@ import {
 } from "@scoutops/storage";
 
 export interface FileResilienceProbe {
-  snapshot(): Promise<FileResilienceSnapshot>;
+  snapshot(signal?: AbortSignal): Promise<FileResilienceSnapshot>;
 }
 export interface FileResilienceRepository {
   record(input: {
@@ -16,6 +16,7 @@ export interface FileResilienceRepository {
     observedAt: Date;
     snapshot: FileResilienceSnapshot;
     evaluation: ReturnType<typeof evaluateFileResilience>;
+    signal?: AbortSignal;
   }): Promise<void>;
 }
 
@@ -30,11 +31,15 @@ export class FileResilienceService {
     actorId: string;
     requestId: string;
     traceId: string;
+    signal?: AbortSignal;
   }): Promise<FileResilienceDto> {
-    const observedAt = this.now(),
-      snapshot = await this.probe.snapshot(),
-      evaluation = evaluateFileResilience(snapshot, this.policy);
+    input.signal?.throwIfAborted();
+    const observedAt = this.now();
+    const snapshot = await this.probe.snapshot(input.signal);
+    input.signal?.throwIfAborted();
+    const evaluation = evaluateFileResilience(snapshot, this.policy);
     await this.repository.record({ ...input, observedAt, snapshot, evaluation });
+    input.signal?.throwIfAborted();
     return {
       state: evaluation.state,
       mode: "local_managed_directories",

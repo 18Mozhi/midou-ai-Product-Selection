@@ -14,6 +14,8 @@
 6. 生产证据必须与当前 Git 提交一致，明确 `singleHost=true`、`sharedStorageEnabled=false`、`loadBalancingEnabled=false`、`backupServerUsed=false`、`capacityClaim=unverified`。
 7. 完成迁移与发布后只通过宝塔重启 Node API 和 Worker；前端为静态构建，由宝塔网站发布。配置运行时读取，修改环境变量后必须在宝塔重启对应 Node 项目。
 8. 当前仓库内生产证据早于临时目录水位扩展。部署后必须重新运行受限生产核验并生成与当前提交一致的证据，完成前不得宣称第三目录已在生产验证。
+9. 页面刷新只允许一个在途请求。API 14 秒、浏览器 15 秒为固定保护边界；超时、MySQL/网络/文件系统依赖故障只保留最后成功事实并显示 `request_id`。锁或依赖恢复后使用“重新核验”，不得把旧观测时间当成当前成功。
+10. 通过 `file_resilience_read_timeout` 或 `file_resilience_dependency_unavailable` 排障时，只在受限服务端日志按 `request_id`、`trace_id` 关联；禁止向浏览器、工单或报告复制 SQL、驱动错误、主机、路径、文件名、哈希、组织/工作区标识或凭证。
 
 ## 告警
 

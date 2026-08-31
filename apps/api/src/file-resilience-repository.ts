@@ -5,11 +5,13 @@ import type { FileResilienceRepository as Contract } from "./file-resilience-ser
 export class FileResilienceRepository implements Contract {
   constructor(private readonly pool: Pick<Pool, "getConnection">) {}
   async record(input: Parameters<Contract["record"]>[0]) {
+    input.signal?.throwIfAborted();
     const connection = await this.pool.getConnection(),
       observationId = randomUUID();
     const roots = input.snapshot.roots;
     try {
       await connection.beginTransaction();
+      input.signal?.throwIfAborted();
       await connection.query(
         "INSERT INTO file_resilience_observations(id,organization_id,workspace_id," +
           "manager,mode,state,root_count,available_root_count,active_file_count,indexed_bytes," +
@@ -37,6 +39,7 @@ export class FileResilienceRepository implements Contract {
           input.observedAt,
         ],
       );
+      input.signal?.throwIfAborted();
       await connection.query(
         "INSERT INTO file_resilience_views(id,actor_id,observation_id,request_id,trace_id,observed_at) VALUES(?,?,?,?,?,?)",
         [
@@ -48,6 +51,7 @@ export class FileResilienceRepository implements Contract {
           input.observedAt,
         ],
       );
+      input.signal?.throwIfAborted();
       await connection.query(
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
           "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
@@ -75,6 +79,7 @@ export class FileResilienceRepository implements Contract {
           input.observedAt,
         ],
       );
+      input.signal?.throwIfAborted();
       await connection.commit();
     } catch (error) {
       await connection.rollback();

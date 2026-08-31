@@ -258,7 +258,11 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "429": { $ref: "#/components/responses/Error" }
-        "503": { $ref: "#/components/responses/Error" }
+        "503":
+          description: Local file resilience dependency is unavailable or the bounded read times out; returns file_resilience_dependency_unavailable or file_resilience_read_timeout without driver, SQL, host, path, filename, hash, identifier, account or credential details
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
   /platform/operations/crawler-scheduler:
     get:
       summary: Read audited S0 single-host Crawler scheduler facts

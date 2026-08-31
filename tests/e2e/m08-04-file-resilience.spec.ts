@@ -85,6 +85,48 @@ test("M08-04.A07/A08/A15 desktop and 390 local-file truth", async ({ page }) => 
     ),
   ).toBeVisible();
 });
+test("file refresh is single-flight and preserves the last verified snapshot on failure", async ({
+  page,
+}) => {
+  let calls = 0;
+  let releaseRefresh: (() => void) | undefined;
+  await page.route("**/api/v1/platform/operations/files", async (route) => {
+    calls += 1;
+    if (calls === 1) {
+      await route.fulfill({ json: envelope(base) });
+      return;
+    }
+    if (calls === 2) await new Promise<void>((resolve) => (releaseRefresh = resolve));
+    await route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "file_resilience_dependency_unavailable",
+          message: "本机文件事实暂不可用。",
+          action_hint: "在宝塔检查 Node API、受控目录与 MySQL 后重新核验。",
+        },
+        request_id: "m08-04-refresh-failure",
+        trace_id: "m08-04-refresh-failure",
+      },
+    });
+  });
+  await page.goto("/platform-admin/files");
+  await expect(page.getByText("本机文件韧性门已满足")).toBeVisible();
+  const refresh = page.getByRole("button", { name: "刷新文件事实" });
+  await refresh.click();
+  await expect(page.getByRole("button", { name: "正在刷新…" })).toBeDisabled();
+  await page.getByRole("button", { name: "正在刷新…" }).evaluate((button: HTMLButtonElement) => {
+    button.click();
+    button.click();
+  });
+  expect(calls).toBe(2);
+  await expect(page.getByText("本机文件韧性门已满足")).toBeVisible();
+  await expect(page.getByText("20 / 20")).toBeVisible();
+  releaseRefresh?.();
+  await expect(page.getByText("刷新未完成")).toBeVisible();
+  await expect(page.getByText(/已保留上次成功的本机文件事实/)).toBeVisible();
+  await expect(page.getByText("本机文件韧性门已满足")).toBeVisible();
+});
 test("M08-04.A08/A09/A16 warning blocked empty forbidden expired rate limited unavailable and recovering", async ({
   page,
 }) => {
