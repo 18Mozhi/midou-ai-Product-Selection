@@ -9,6 +9,36 @@ import {
 export interface RedisResilienceProbe {
   snapshot(): Promise<RedisResilienceSnapshot>;
 }
+export const unavailableRedisResilienceSnapshot = (): RedisResilienceSnapshot => ({
+  available: false,
+  loading: false,
+  appendOnlyEnabled: false,
+  rdbEnabled: false,
+  aofLastWriteStatus: "unknown",
+  rdbLastSaveStatus: "unknown",
+  usedMemoryBytes: 0,
+  maxMemoryBytes: 0,
+  maxMemoryPolicy: "unknown",
+  connectedClients: 0,
+  maxClients: 0,
+  rejectedConnections: 0,
+  evictedKeys: 0,
+  uptimeSeconds: 0,
+  keyspaceSample: {
+    status: "unavailable",
+    basis: "bounded_memory_usage",
+    sample_limit: REDIS_KEYSPACE_SAMPLE_LIMIT,
+    scanned_keys: 0,
+    measured_keys: 0,
+    ignored_keys: 0,
+    failed_measurements: 0,
+    total_sampled_bytes: 0,
+    truncated: false,
+    access_frequency_available: false,
+    unavailable_reason: "scan_failed",
+    hotspots: [],
+  },
+});
 export interface RedisResilienceRepository {
   record(input: {
     actorId: string;

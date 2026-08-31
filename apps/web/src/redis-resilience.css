@@ -41,7 +41,8 @@
 }
 .redis-resilience__hero button,
 .redis-resilience__state button,
-.redis-resilience__state a {
+.redis-resilience__state a,
+.redis-resilience__refresh-notice button {
   background: var(--so-primary-strong);
   border: 1px solid var(--so-primary-border);
   border-radius: 9px;
@@ -50,6 +51,10 @@
   font: inherit;
   padding: 10px 15px;
   text-decoration: none;
+}
+.redis-resilience button:disabled {
+  cursor: progress;
+  opacity: 0.64;
 }
 .redis-resilience button:focus-visible,
 .redis-resilience a:focus-visible {
@@ -105,6 +110,28 @@
 }
 .redis-resilience__state code {
   color: var(--so-text-muted);
+}
+.redis-resilience__refresh-notice {
+  align-items: center;
+  background: var(--so-warning-soft);
+  border: 1px solid var(--so-warning-border);
+  border-radius: 12px;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 14px 18px;
+}
+.redis-resilience__refresh-notice b,
+.redis-resilience__refresh-notice code {
+  display: block;
+}
+.redis-resilience__refresh-notice p {
+  color: var(--rr-muted);
+  margin: 4px 0;
+}
+.redis-resilience__refresh-notice code {
+  color: var(--rr-muted);
+  overflow-wrap: anywhere;
 }
 .redis-resilience__verdict {
   align-items: center;
@@ -437,5 +464,12 @@
   .redis-resilience__state {
     align-items: flex-start;
     flex-wrap: wrap;
+  }
+  .redis-resilience__refresh-notice {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .redis-resilience__refresh-notice button {
+    width: 100%;
   }
 }

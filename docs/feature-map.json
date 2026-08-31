@@ -2277,6 +2277,7 @@
       "entrypoints": [
         "../packages/redis/src/index.ts",
         "../packages/contracts/src/index.ts",
+        "../apps/api/src/server.ts",
         "../apps/api/src/redis-resilience-service.ts",
         "../apps/api/src/mysql-redis-resilience-repository.ts",
         "../apps/api/src/redis-resilience-routes.ts",
@@ -2290,6 +2291,7 @@
       "presentationBoundary": "the page explains eviction risk from persisted maxmemory policy memory watermark evicted-key count and instance uptime, then separately displays bounded keyspace memory-occupancy hotspots without describing sampled memory share as access frequency",
       "keyspaceSamplingBoundary": "the live probe uses SCAN MATCH scoutops:v1:* with a fixed 128-key ceiling and MEMORY USAGE in batches of at most 16; output is aggregated only by the four code-owned purposes plus collection-ready collection-task or other resource classes, and includes sample counts bytes share truncation and partial-failure facts without raw keys organization or workspace identifiers payloads hashes or inferred LFU frequency",
       "permission": "the operations view requires platform:operate and transactionally appends a platform audit with request_id trace_id and the same sanitized keyspace sample aggregate; no connection URL password raw key scope identifier or payload is returned",
+      "refreshBoundary": "the browser keeps one in-flight refresh, preserves the last successful snapshot during refresh, aborts after 15 seconds, ignores late responses and retains the prior snapshot for timeout rate-limit or dependency failure; each operations read uses a short-lived non-retrying Redis probe connection so disconnect produces a bounded blocked snapshot and recovery is observed independently from shared Worker connections, while MySQL or audited-read dependency failures return a correlated sanitized 503",
       "configuration": [
         "REDIS_MEMORY_WARNING_PERCENT",
         "REDIS_MEMORY_STOP_PERCENT",
@@ -2328,7 +2330,7 @@
       "loadBalancingEnabled": false,
       "backupServerUsed": false,
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "redis_live_mysql57_api_worker_crawler_permission_single_flight_refresh_timeout_snapshot_preservation_dependency_failure_and_responsive_verification_completed"
     },
     "mysqlResilience": {
       "module": "M08-03",
@@ -3109,7 +3111,7 @@
       "view": "RedisResilienceCenter",
       "domain": "redis-resilience",
       "status": "verified",
-      "statusDetail": "M08-02_module_verified"
+      "statusDetail": "M08-02_redis_live_mysql57_api_worker_crawler_permission_single_flight_refresh_timeout_snapshot_preservation_dependency_failure_and_responsive_verification_completed"
     },
     {
       "path": "/platform-admin/mysql",

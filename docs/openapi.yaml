@@ -218,7 +218,11 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "429": { $ref: "#/components/responses/Error" }
-        "503": { $ref: "#/components/responses/Error" }
+        "503":
+          description: Redis resilience read dependency is unavailable; returns redis_resilience_dependency_unavailable without SQL, connection, host, key or credential details
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
   /platform/operations/mysql:
     get:
       summary: Read audited MySQL 5.7 single-primary resilience facts

@@ -210,6 +210,29 @@ test("keyspace sampling failure does not erase independent Redis resilience fact
   assert.equal(snapshot.keyspaceSample.unavailable_reason, "scan_failed");
 });
 
+test("Redis disconnect snapshot stays bounded and evaluates to a truthful blocked state", async () => {
+  const { RedisResilienceService, unavailableRedisResilienceSnapshot } =
+    await import("../../apps/api/dist/redis-resilience-service.js");
+  const records = [];
+  const service = new RedisResilienceService(
+    { snapshot: async () => unavailableRedisResilienceSnapshot() },
+    { record: async (input) => records.push(input) },
+    {
+      memoryWarningBasisPoints: 7500,
+      memoryStopBasisPoints: 9000,
+      connectionWarningBasisPoints: 7500,
+      connectionStopBasisPoints: 9000,
+    },
+    () => new Date("2026-08-31T06:30:00.000Z"),
+  );
+  const result = await service.read({ actorId: "actor", requestId: "request", traceId: "trace" });
+  assert.equal(result.state, "blocked");
+  assert.ok(result.findings.some((item) => item.code === "redis_unavailable"));
+  assert.equal(result.keyspace_sample.status, "unavailable");
+  assert.equal(result.keyspace_sample.sample_limit, 128);
+  assert.equal(records.length, 1);
+});
+
 test("M08-02.A06/A09/A11/A13 operations route is authorized audited and sanitized", async () => {
   const { buildApp } = await import("../../apps/api/dist/app.js");
   const calls = [];
@@ -275,6 +298,37 @@ test("M08-02.A06/A09/A11/A13 operations route is authorized audited and sanitize
   assert.equal(calls[0][1].capability, "platform:operate");
   assert.equal(calls[1][1].requestId, "redis-request");
   assert.doesNotMatch(response.body, /REDIS_PASSWORD|redis:\/\/|127\.0\.0\.1|6379/i);
+  await app.close();
+});
+
+test("Redis operations route maps dependency failures to a correlated sanitized 503", async () => {
+  const { buildApp } = await import("../../apps/api/dist/app.js");
+  const failure = Object.assign(new Error("private database detail"), {
+    code: "ER_LOCK_WAIT_TIMEOUT",
+  });
+  const app = buildApp({
+    redisResilience: {
+      service: { read: async () => Promise.reject(failure) },
+      authorization: { authorize: async () => undefined },
+      auth: {
+        authenticate: async () => ({ user: { id: "actor" }, session: { id: "session" } }),
+      },
+      secureCookie: false,
+    },
+  });
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/redis",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "redis-failure-request",
+      "x-trace-id": "redis-failure-trace",
+    },
+  });
+  assert.equal(response.statusCode, 503);
+  assert.equal(response.json().error.code, "redis_resilience_dependency_unavailable");
+  assert.equal(response.json().request_id, "redis-failure-request");
+  assert.doesNotMatch(response.body, /private database detail|ER_LOCK_WAIT_TIMEOUT|127\.0\.0\.1/);
   await app.close();
 });
 
@@ -434,6 +488,7 @@ test("M08-02.A07/A08/A15/A16 UI and production evidence cover full states and si
     "forbidden",
     "expired",
     "rate_limited",
+    "timeout",
     "unavailable",
     "recovering",
   ])
@@ -447,6 +502,8 @@ test("M08-02.A07/A08/A15/A16 UI and production evidence cover full states and si
     /bounded_memory_usage[\s\S]*sample_limit[\s\S]*access_frequency_available/,
   );
   assert.match(e2e, /390/);
+  for (const token of ["AbortController", "15_000", "refreshing", "refreshFailure"])
+    assert.match(ui, new RegExp(token));
   assert.match(manifest, /appendonly/);
   assert.match(manifest, /noeviction/);
   assert.match(architecture, /61_平台运营-概览\.jpg/);

@@ -12,6 +12,8 @@ ScoutOps 在当前惠州单台服务器上只运行一个由宝塔管理的 Redi
 
 `evaluateRedisResilience` 对不可用、加载中、AOF/RDB 关闭或失败、无内存上限、非 noeviction、无连接上限、内存/连接越线、拒绝连接与淘汰键失败关闭。`GET /api/v1/platform/operations/redis` 只返回脱敏资源数字和结论，要求 `platform:operate` 并与观测一起写入审计；不返回主机、端口、密码、原始键或队列载荷。
 
+运行探针不再等待断线 Redis 的无限重连：每次运维读取创建一个关闭自动重连的短生命周期 Redis 探针连接，成功后读取有界事实并立即关闭，连接失败则立即形成 `available=false` 的有界快照，由同一评估规则返回 `blocked` 并写入 MySQL 观测与审计。该探针不复用 Worker/队列的长连接状态，也不会因共享客户端处于重连中而把已恢复实例继续误报为不可用。MySQL、鉴权或审计依赖失败统一返回 `503 redis_resilience_dependency_unavailable`，错误体保留 request_id/trace_id，且不回显驱动错误、SQL、主机、连接信息或凭证。
+
 响应同时返回 `max_memory_policy` 与实例运行秒数，页面把策略、内存水位和累计 `evicted_keys` 组合为淘汰风险解释。淘汰数是当前实例运行期累计事实，不是当前分钟增量。
 
 键空间热点采用独立的受限采样合同：只执行 `SCAN MATCH scoutops:v1:*`，固定最多收集 128 个键、每轮 `COUNT 32`，并以最多 16 个并发读取 `MEMORY USAGE`。服务端验证 `scoutops:v1:<purpose>:org:<organization>:ws:<workspace>:<resource>` 结构，只聚合为 `cache/queue/rate/sse` 和 `collection_ready/collection_task/other` 固定分类，返回采样键数、字节数、样本内占比、截断和失败计数。原始键、组织/工作区标识、资源原文、值、TTL、哈希和载荷都不进入 DTO 或审计。
@@ -21,6 +23,8 @@ ScoutOps 在当前惠州单台服务器上只运行一个由宝塔管理的 Redi
 ## 页面依据
 
 页面读取并落实 `images-html/01_72_page_concepts/61_平台运营-概览.jpg`、`64_系统监控.jpg`、`69_异常告警.jpg` 与 `images-html/02_high_resolution_core_pages/10_霓虹科技平台驾驶舱_dashboard.png`：深海蓝运维驾驶舱、结论先行、四项资源卡、持久化状态、边界和告警列表；桌面与 390px 均保留文字、数值、时间和恢复动作，状态不只依赖颜色。
+
+刷新链路固定为单飞：同一页面只允许一个在途请求，按钮以 disabled/aria-busy 呈现；每次请求使用同一组前后端关联 ID，15 秒后主动取消。已有成功快照时，刷新中继续显示旧事实；超时、429 或 503 只显示“刷新未完成”通知并保留旧结论。401/403 仍清除旧数据并进入登录失效或无权限状态，避免越权保留。页面卸载会取消在途请求，迟到响应不能覆盖新页面状态。
 
 ## 失败与恢复边界
 

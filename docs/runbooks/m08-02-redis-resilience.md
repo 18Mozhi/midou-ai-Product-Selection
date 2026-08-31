@@ -6,6 +6,8 @@
 
 先执行 `npm run build`、`node --test tests/m08-02/redis-single-instance-resilience.test.mjs`、`node scripts/verify-redis-resilience-production.mjs --preflight`。生产配置和恢复证据签发后再执行 `node scripts/verify-redis-resilience-production.mjs --production` 与 `npm run verify:module -- M08-02`。
 
+页面回归还必须验证：首屏只产生一组观测/查看/审计；连续点击只保留一个在途请求；刷新期间旧快照可读；15 秒超时、429 与 503 保留旧快照并显示关联 request_id；401/403 不保留旧数据。Redis 断线应在一次请求内返回 `200/blocked` 的脱敏不可用快照，MySQL/鉴权/审计依赖失败应返回 JSON `503 redis_resilience_dependency_unavailable`，不得返回空体 500。
+
 ## 宝塔变更与重启
 
 1. 在宝塔有限任务中确认 Redis 只监听本机、当前服务由宝塔管理，并保存 `/www/server/redis/redis.conf` 的权限受限备份与 SHA-256。
@@ -23,6 +25,7 @@
 - 页面“淘汰键”是当前实例运行期累计值，不是当前分钟增量；结合实例运行天数与内存水位判断影响。“键空间占用热点”只对 `scoutops:v1:*` 最多采样 128 个键，以 `MEMORY USAGE` 汇总固定用途/资源类别；不得手工运行无界 `KEYS *`，也不得从采样内存占比推断访问频率。`partial` 表示部分键在采样期间已过期或读取失败，`unavailable` 表示 SCAN/采样命令不可用；两者不覆盖独立的持久化、内存水位和淘汰事实。
 - 页面和审计不应出现 Redis 原始键、组织/工作区标识、TTL、键哈希或值。若发现这些字段，立即停止发布并回滚应用包；无需修改 Redis 配置或清理任何业务键。
 - Redis 恢复不等于任务自动成功；Worker 依赖 MySQL 状态、租约和幂等规则继续处理。
+- 若页面刷新超过 15 秒仍无结果，先保存 request_id 并在宝塔查看 Node API/MySQL/Redis 日志；不得连续点击制造重复审计。修复后的页面会在 15 秒停止当前浏览器请求并保留最后一次成功事实，服务端迟到事务仍须由 request_id 核对，不能把浏览器取消等同于数据库回滚。
 
 ## 回滚
 

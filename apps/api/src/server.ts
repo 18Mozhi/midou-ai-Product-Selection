@@ -2,7 +2,12 @@ import { buildApp } from "./app.js";
 import { readFile } from "node:fs/promises";
 import { loadRuntimeConfig } from "@scoutops/config";
 import { createDatabasePool } from "@scoutops/database";
-import { createRedisConnection, inspectRedisResilience, ScopedRedisStore } from "@scoutops/redis";
+import {
+  createRedisConnection,
+  createRedisProbeConnection,
+  inspectRedisResilience,
+  ScopedRedisStore,
+} from "@scoutops/redis";
 import {
   createArgon2PasswordHasher,
   EncryptedOutboxAuthDelivery,
@@ -67,7 +72,10 @@ import { RuntimeTopologyService } from "./runtime-topology-service.js";
 import { MySqlRuntimeTopologyRepository } from "./mysql-runtime-topology-repository.js";
 import { RuntimeHealthProbeMonitor } from "./runtime-health-probe.js";
 import { MySqlRuntimeHealthProbeRepository } from "./mysql-runtime-health-probe-repository.js";
-import { RedisResilienceService } from "./redis-resilience-service.js";
+import {
+  RedisResilienceService,
+  unavailableRedisResilienceSnapshot,
+} from "./redis-resilience-service.js";
 import { MySqlRedisResilienceRepository } from "./mysql-redis-resilience-repository.js";
 import { MySqlResilienceProbe } from "./mysql-resilience-probe.js";
 import { MySqlResilienceRepository } from "./mysql-resilience-repository.js";
@@ -132,8 +140,19 @@ const runtimeTopologyService = new RuntimeTopologyService(runtimeTopologyReposit
 const redisResilienceService = new RedisResilienceService(
   {
     snapshot: async () => {
-      await redisStore.connect();
-      return inspectRedisResilience(redisClient);
+      const probeClient = createRedisProbeConnection(config);
+      probeClient.on("error", () => {});
+      try {
+        await probeClient.connect();
+        return await inspectRedisResilience(probeClient);
+      } catch {
+        return unavailableRedisResilienceSnapshot();
+      } finally {
+        if (probeClient.isOpen)
+          await probeClient.quit().catch(() => {
+            probeClient.destroy();
+          });
+      }
     },
   },
   new MySqlRedisResilienceRepository(pool),

@@ -517,6 +517,18 @@ export function createRedisConnection(config: RuntimeConfig): RedisClientType {
   });
 }
 
+export function createRedisProbeConnection(config: RuntimeConfig): RedisClientType {
+  return createClient({
+    socket: {
+      host: config.redis.host,
+      port: config.redis.port,
+      connectTimeout: config.redis.connectTimeoutMs,
+      reconnectStrategy: false,
+    },
+    ...(config.redis.password ? { password: config.redis.password } : {}),
+  });
+}
+
 export class ScopedRedisStore {
   constructor(private readonly client: RedisConnection) {}
 

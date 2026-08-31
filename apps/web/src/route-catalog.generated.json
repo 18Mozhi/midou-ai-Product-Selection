@@ -1379,7 +1379,7 @@
         "view": "RedisResilienceCenter",
         "domain": "redis-resilience",
         "status": "verified",
-        "statusDetail": "M08-02_module_verified"
+        "statusDetail": "M08-02_redis_live_mysql57_api_worker_crawler_permission_single_flight_refresh_timeout_snapshot_preservation_dependency_failure_and_responsive_verification_completed"
       }
     },
     {
