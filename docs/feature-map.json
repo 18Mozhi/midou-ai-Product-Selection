@@ -1963,6 +1963,7 @@
       ],
       "scope": "当前发布使用固定目录和单一宝塔 Node 后端；部署器要求 main 工作树干净、本地 HEAD 与批准的 origin/main 完全一致，并拒绝不属于当前批准仓库祖先历史的生产 BUILD_SHA；旧双槽渐进发布仅保留为只读审计事实",
       "presentationBoundary": "历史门禁事实使用桌面表格和移动摘要卡片加详情抽屉；发布中心展示 timing_schema 2 记录的真实迁移和自动回滚耗时，旧记录或不完整时间区间显示尚无记录而不伪造零值；门禁 ID 类型 发布 ID 阻断代码和请求 ID 仅在折叠技术详情中展示，用户状态统一显示中文",
+      "refreshBoundary": "浏览器刷新采用单飞控制并在 15 秒停止等待；已有成功快照时，限流、超时和依赖不可用只显示可重试告警而不清空事实。GET 读取在服务端 14 秒失败关闭，并在同一可取消 MySQL 事务中读取发布、门禁和写入成功审计；取消或失败必须回滚，401/403 不保留受保护快照。",
       "executionStatus": "historical_disabled_by_single_node_topology",
       "currentDeploymentEntrypoint": "../scripts/deploy-baota.py",
       "currentRuntimeManifest": "../infra/baota/service-manifest.json",
@@ -3097,7 +3098,7 @@
       "view": "ReleaseRolloutCenter",
       "domain": "release-operations",
       "status": "verified",
-      "statusDetail": "M07-05_module_verified"
+      "statusDetail": "M07-05_module_verified_bounded_single_flight_refresh"
     },
     {
       "path": "/platform-admin/topology",

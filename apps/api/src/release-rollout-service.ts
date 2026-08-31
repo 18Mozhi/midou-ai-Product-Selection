@@ -6,6 +6,7 @@ export interface ReleaseRolloutRepository {
     requestId: string;
     traceId: string;
     now: Date;
+    signal?: AbortSignal;
   }): Promise<{ releases: Array<Record<string, unknown>>; gates: Array<Record<string, unknown>> }>;
 }
 
@@ -139,7 +140,7 @@ export class ReleaseRolloutService {
     private readonly now = () => new Date(),
   ) {}
 
-  async read(input: { actorId: string; requestId: string; traceId: string }) {
+  async read(input: { actorId: string; requestId: string; traceId: string; signal?: AbortSignal }) {
     const observedAt = this.now(),
       result = await this.repository.read({ ...input, now: observedAt }),
       historicalLatest = result.releases[0] ?? null;

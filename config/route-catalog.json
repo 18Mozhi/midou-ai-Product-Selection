@@ -1490,7 +1490,7 @@
         "view": "ReleaseRolloutCenter",
         "domain": "release-operations",
         "status": "verified",
-        "statusDetail": "M07-05_module_verified"
+        "statusDetail": "M07-05_module_verified_bounded_single_flight_refresh"
       }
     },
     {

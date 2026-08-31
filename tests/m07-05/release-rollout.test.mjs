@@ -345,12 +345,148 @@ test("M07-05.A06-A17 API, UI, config and documentation contracts stay synchroniz
     "迁移耗时",
     "回滚耗时",
     "回滚",
+    "AbortController",
+    "15_000",
+    "refreshing",
+    "refreshFailure",
+    "release_rollout_read_timeout",
+    "beginTransaction",
+    "rollback",
   ])
     assert.match(all, new RegExp(token));
   assert.doesNotMatch(
     await read("apps/api/src/release-rollout-service.ts"),
     /password|cookie|token|private_key/i,
   );
+});
+
+test("M07-05 release route bounds reads and sanitizes dependency failures", async () => {
+  const { buildApp } = await import("../../apps/api/dist/app.js");
+  const route = (service, readTimeoutMs) => ({
+    service,
+    writeProbeService: { record: async () => ({ accepted: true }) },
+    authorization: { authorize: async () => undefined },
+    auth: {
+      authenticate: async () => ({ user: { id: "actor" }, session: { id: "session" } }),
+    },
+    secureCookie: false,
+    readTimeoutMs,
+  });
+  const failure = Object.assign(new Error("private mysql host detail"), {
+    code: "PROTOCOL_CONNECTION_LOST",
+  });
+  const dependencyApp = buildApp({
+    releaseRollout: route({ read: async () => Promise.reject(failure) }),
+  });
+  const dependency = await dependencyApp.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/releases",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "release-dependency-request",
+      "x-trace-id": "release-dependency-trace",
+    },
+  });
+  assert.equal(dependency.statusCode, 503);
+  assert.equal(dependency.json().error.code, "release_rollout_dependency_unavailable");
+  assert.equal(dependency.json().request_id, "release-dependency-request");
+  assert.doesNotMatch(dependency.body, /private mysql host detail|PROTOCOL_CONNECTION_LOST/);
+  await dependencyApp.close();
+
+  let aborted = false;
+  const timeoutApp = buildApp({
+    releaseRollout: route(
+      {
+        read: ({ signal }) =>
+          new Promise((_, reject) =>
+            signal.addEventListener(
+              "abort",
+              () => {
+                aborted = true;
+                reject(signal.reason);
+              },
+              { once: true },
+            ),
+          ),
+      },
+      10,
+    ),
+  });
+  const timeout = await timeoutApp.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/releases",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "release-timeout-request",
+      "x-trace-id": "release-timeout-trace",
+    },
+  });
+  assert.equal(timeout.statusCode, 503);
+  assert.equal(timeout.json().error.code, "release_rollout_read_timeout");
+  assert.equal(aborted, true);
+  await timeoutApp.close();
+});
+
+test("M07-05 reads release facts and success audit in one cancellable transaction", async () => {
+  const { MySqlReleaseRolloutRepository } =
+    await import("../../apps/api/dist/mysql-release-rollout-repository.js");
+  const calls = [];
+  const connection = {
+    beginTransaction: async () => calls.push("begin"),
+    commit: async () => calls.push("commit"),
+    rollback: async () => calls.push("rollback"),
+    release: () => calls.push("release"),
+    query: async (sql, values = []) => {
+      calls.push(sql);
+      assert.equal(values.length, (sql.match(/\?/g) ?? []).length);
+      return [[], []];
+    },
+  };
+  const repository = new MySqlReleaseRolloutRepository({
+    getConnection: async () => connection,
+    query: async () => [[], []],
+  });
+  assert.deepEqual(
+    await repository.read({
+      actorId: "actor",
+      requestId: "request",
+      traceId: "trace",
+      now: new Date("2026-08-08T12:00:00.000Z"),
+    }),
+    { releases: [], gates: [] },
+  );
+  assert.deepEqual(
+    calls.filter((item) => ["begin", "commit", "rollback", "release"].includes(item)),
+    ["begin", "commit", "release"],
+  );
+  assert.equal(calls.filter((item) => String(item).startsWith("INSERT INTO")).length, 1);
+
+  const controller = new AbortController();
+  const cancelledCalls = [];
+  const cancelledConnection = {
+    beginTransaction: async () => cancelledCalls.push("begin"),
+    commit: async () => cancelledCalls.push("commit"),
+    rollback: async () => cancelledCalls.push("rollback"),
+    release: () => cancelledCalls.push("release"),
+    query: async () => {
+      controller.abort();
+      return [[], []];
+    },
+  };
+  await assert.rejects(
+    new MySqlReleaseRolloutRepository({
+      getConnection: async () => cancelledConnection,
+      query: async () => [[], []],
+    }).read({
+      actorId: "actor",
+      requestId: "request",
+      traceId: "trace",
+      now: new Date("2026-08-08T12:00:00.000Z"),
+      signal: controller.signal,
+    }),
+    /aborted/i,
+  );
+  assert.deepEqual(cancelledCalls, ["begin", "rollback", "release"]);
 });
 
 test("M07-05 historical candidate tooling cannot create a second production backend", async () => {

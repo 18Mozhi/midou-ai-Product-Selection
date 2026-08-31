@@ -5086,7 +5086,7 @@ paths:
   /platform/operations/releases:
     get:
       summary: Read the audited production release and rollback gates
-      description: Requires platform:operate. Returns only the current S0 release identity, MySQL migration, 5/25/100 same-host candidate observations, automatic-stop and rollback facts recorded by the Baota release task. It never starts a deployment, exposes panel credentials, or claims a backup server, multi-node or 10000-user capacity.
+      description: Requires platform:operate. Returns only the current S0 release identity, MySQL migration, 5/25/100 same-host candidate observations, automatic-stop and rollback facts recorded by the Baota release task. The read is bounded to 14 seconds and uses one cancellable MySQL transaction so a cancelled or failed read cannot leave a successful audit row. Dependency failures return release_rollout_dependency_unavailable and bounded-read expiry returns release_rollout_read_timeout without exposing SQL, driver, host, account, path or credential details. It never starts a deployment, exposes panel credentials, or claims a backup server, multi-node or 10000-user capacity.
       security: [{ HttpOnlySession: [] }]
       responses:
         "200":

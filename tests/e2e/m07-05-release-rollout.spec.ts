@@ -173,4 +173,54 @@ test("M07-05.A08/A16 empty blocked stale stopped rolled back forbidden expired",
   status = 401;
   await page.reload();
   await expect(page.getByText("登录已失效")).toBeVisible();
+  await expect(page.getByRole("link", { name: "重新登录" })).toBeVisible();
+  status = 429;
+  await page.reload();
+  await expect(page.getByText("刷新过于频繁")).toBeVisible();
+  status = 503;
+  await page.reload();
+  await expect(page.getByText("发布事实暂不可用")).toBeVisible();
+});
+
+test("M07-05 refresh is single-flight and preserves the last verified snapshot on failure", async ({
+  page,
+}) => {
+  let calls = 0;
+  let releaseRefresh: (() => void) | undefined;
+  await page.route("**/api/v1/platform/operations/releases", async (route) => {
+    calls += 1;
+    if (calls === 1) {
+      await route.fulfill({ json: env({ ...base, state: "verified" }) });
+      return;
+    }
+    if (calls === 2) await new Promise<void>((resolve) => (releaseRefresh = resolve));
+    await route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "release_rollout_dependency_unavailable",
+          message: "发布事实暂不可用。",
+          action_hint: "在宝塔检查 Node API 与 MySQL 后重新核验。",
+        },
+        request_id: "m07-05-refresh-failure",
+        trace_id: "m07-05-refresh-failure",
+      },
+    });
+  });
+  await page.goto("/platform-admin/releases");
+  await expect(page.getByText("发布门已通过")).toBeVisible();
+  const refresh = page.getByRole("button", { name: "刷新发布事实" });
+  await refresh.click();
+  await expect(page.getByRole("button", { name: "正在刷新…" })).toBeDisabled();
+  await page.getByRole("button", { name: "正在刷新…" }).evaluate((button: HTMLButtonElement) => {
+    button.click();
+    button.click();
+  });
+  expect(calls).toBe(2);
+  await expect(page.getByText("发布门已通过")).toBeVisible();
+  await expect(page.getByText("5% → 25% → 100%", { exact: true })).toBeVisible();
+  releaseRefresh?.();
+  await expect(page.getByText("刷新未完成")).toBeVisible();
+  await expect(page.getByText(/已保留上次成功的发布事实/)).toBeVisible();
+  await expect(page.getByText("发布门已通过")).toBeVisible();
 });

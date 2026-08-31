@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
-const state = ref<
+type ViewState =
   | "loading"
   | "empty"
   | "blocked"
@@ -14,10 +14,35 @@ const state = ref<
   | "rolled_back"
   | "forbidden"
   | "expired"
->("loading");
+  | "rate_limited"
+  | "timeout"
+  | "unavailable";
+type RefreshFailure = "rate_limited" | "timeout" | "unavailable";
+const state = ref<ViewState>("loading");
 const data = ref<any>(null),
   requestId = ref(""),
-  hint = ref("");
+  hint = ref(""),
+  refreshing = ref(false),
+  refreshFailure = ref<RefreshFailure | null>(null);
+let controller: AbortController | null = null;
+let sequence = 0;
+const refreshNotice = computed(() => {
+  if (refreshFailure.value === "timeout")
+    return "读取超过 15 秒，已停止本次请求并保留上次成功的发布事实。";
+  if (refreshFailure.value === "rate_limited")
+    return "刷新过于频繁，已保留上次成功的发布事实；请稍后重试。";
+  if (refreshFailure.value === "unavailable")
+    return `${hint.value || "发布事实暂不可用，请在宝塔检查 Node API 与 MySQL。"} 已保留上次成功的发布事实。`;
+  return "";
+});
+const failureTitles: Partial<Record<ViewState, string>> = {
+  expired: "登录已失效",
+  forbidden: "你没有平台运维权限",
+  rate_limited: "刷新过于频繁",
+  timeout: "发布事实读取超时",
+  unavailable: "发布事实暂不可用",
+};
+const failureTitle = computed(() => failureTitles[state.value] ?? "发布事实暂不可用");
 const time = (value?: string | null) => (value ? new Date(value).toLocaleString() : "尚无记录");
 const gate = (kind: string) =>
   data.value?.gates?.find((item: any) => item.gate_kind === kind) ?? null;
@@ -49,21 +74,72 @@ const statusText = (value?: string | null) =>
       }) as Record<string, string>
     )[value] ?? "发布条件未满足";
 async function load() {
-  state.value = "loading";
+  if (controller) return;
+  const currentSequence = ++sequence;
+  const requestController = new AbortController();
+  const hasSnapshot = Boolean(data.value);
+  const correlationId = crypto.randomUUID();
+  controller = requestController;
+  refreshing.value = true;
+  refreshFailure.value = null;
+  if (!hasSnapshot) state.value = "loading";
+  hint.value = "";
+  let timedOut = false;
+  const timeout = window.setTimeout(() => {
+    timedOut = true;
+    requestController.abort();
+  }, 15_000);
   try {
-    const response = await request<any>("/platform/operations/releases");
+    const response = await request<any>("/platform/operations/releases", {
+      signal: requestController.signal,
+      requestId: correlationId,
+      traceId: correlationId,
+    });
+    if (currentSequence !== sequence) return;
     requestId.value = response.request_id;
     data.value = response.data;
-    state.value = response.data.state;
+    state.value = response.data?.state ?? "empty";
   } catch (error) {
+    if (
+      currentSequence !== sequence ||
+      (error instanceof DOMException && error.name === "AbortError" && !timedOut)
+    )
+      return;
+    if (timedOut) {
+      requestId.value = correlationId;
+      if (hasSnapshot) refreshFailure.value = "timeout";
+      else state.value = "timeout";
+      return;
+    }
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? "";
     hint.value = failure?.actionHint ?? "";
-    state.value =
-      failure?.kind === "expired" || failure?.kind === "forbidden" ? failure.kind : "blocked";
+    const failureState =
+      failure?.kind === "expired" ||
+      failure?.kind === "forbidden" ||
+      failure?.kind === "rate_limited"
+        ? failure.kind
+        : "unavailable";
+    if (hasSnapshot && failureState !== "expired" && failureState !== "forbidden")
+      refreshFailure.value = failureState;
+    else {
+      data.value = null;
+      state.value = failureState;
+    }
+  } finally {
+    window.clearTimeout(timeout);
+    if (currentSequence === sequence) {
+      controller = null;
+      refreshing.value = false;
+    }
   }
 }
 onMounted(load);
+onBeforeUnmount(() => {
+  sequence += 1;
+  controller?.abort();
+  controller = null;
+});
 </script>
 
 <template>
@@ -74,14 +150,37 @@ onMounted(load);
         <h2>发布与回滚控制台</h2>
         <span>只展示宝塔发布任务写入的版本、观察门、自动停止与回滚事实。</span>
       </div>
-      <button type="button" @click="load">刷新发布事实</button>
+      <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
+        {{ refreshing ? "正在刷新…" : "刷新发布事实" }}
+      </button>
     </header>
-    <section v-if="state === 'loading'" class="state">
+    <section
+      v-if="data && refreshFailure"
+      class="refresh-notice"
+      :data-kind="refreshFailure"
+      aria-live="polite"
+    >
+      <div>
+        <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
+        <span>{{ refreshNotice }}</span>
+        <code v-if="requestId">request_id {{ requestId }}</code>
+      </div>
+      <button type="button" :disabled="refreshing" @click="load">重新核验</button>
+    </section>
+    <section v-if="state === 'loading'" class="state" aria-live="polite">
       <b>正在核验当前发布</b><span>读取构建身份、迁移、备份前置和 5% / 25% / 100% 观察门。</span>
     </section>
-    <section v-else-if="state === 'forbidden' || state === 'expired'" class="state danger">
-      <b>{{ state === "expired" ? "登录已失效" : "你没有平台运维权限" }}</b
-      ><span>{{ hint || "请重新登录或联系平台管理员。" }}</span>
+    <section
+      v-else-if="['forbidden', 'expired', 'rate_limited', 'timeout', 'unavailable'].includes(state)"
+      class="state danger"
+      aria-live="polite"
+    >
+      <b>{{ failureTitle }}</b>
+      <span>{{ hint || "请重新登录、稍后重试或联系平台管理员。" }}</span>
+      <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink>
+      <button v-else-if="state !== 'forbidden'" type="button" :disabled="refreshing" @click="load">
+        重新核验
+      </button>
     </section>
     <template v-else-if="data">
       <section class="verdict" :data-state="state">
@@ -397,6 +496,34 @@ button {
   color: var(--so-on-primary);
   padding: 10px 15px;
 }
+button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+.refresh-notice {
+  align-items: center;
+  background: color-mix(in srgb, var(--so-warning) 10%, var(--so-panel));
+  border: 1px solid color-mix(in srgb, var(--so-warning) 55%, var(--so-border));
+  border-radius: 12px;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  padding: 16px 20px;
+}
+.refresh-notice div {
+  display: grid;
+  gap: 5px;
+}
+.refresh-notice span,
+.refresh-notice code {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.state a {
+  color: var(--so-primary);
+  font-weight: 700;
+  width: fit-content;
+}
 .state,
 .panel,
 .blockers,
@@ -597,7 +724,8 @@ footer details span {
 }
 @media (max-width: 760px) {
   .hero,
-  .verdict {
+  .verdict,
+  .refresh-notice {
     align-items: flex-start;
     flex-direction: column;
     gap: 15px;
