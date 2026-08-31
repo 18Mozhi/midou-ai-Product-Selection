@@ -5,10 +5,12 @@ import type { MySqlResilienceRepository as MySqlResilienceRepositoryContract } f
 export class MySqlResilienceRepository implements MySqlResilienceRepositoryContract {
   constructor(private readonly pool: Pick<Pool, "getConnection">) {}
   async record(input: Parameters<MySqlResilienceRepositoryContract["record"]>[0]) {
+    input.signal?.throwIfAborted();
     const connection = await this.pool.getConnection();
     const observationId = randomUUID();
     try {
       await connection.beginTransaction();
+      input.signal?.throwIfAborted();
       await connection.query(
         "INSERT INTO mysql_resilience_observations(id,organization_id,workspace_id," +
           "manager,mode,state,mysql_version,read_only_enabled,log_bin_enabled,binlog_format," +
@@ -58,6 +60,7 @@ export class MySqlResilienceRepository implements MySqlResilienceRepositoryContr
           input.observedAt,
         ],
       );
+      input.signal?.throwIfAborted();
       await connection.query(
         "INSERT INTO mysql_resilience_views(id,actor_id,observation_id,request_id,trace_id,observed_at) VALUES(?,?,?,?,?,?)",
         [
@@ -69,6 +72,7 @@ export class MySqlResilienceRepository implements MySqlResilienceRepositoryContr
           input.observedAt,
         ],
       );
+      input.signal?.throwIfAborted();
       await connection.query(
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
           "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
@@ -92,6 +96,7 @@ export class MySqlResilienceRepository implements MySqlResilienceRepositoryContr
           input.observedAt,
         ],
       );
+      input.signal?.throwIfAborted();
       await connection.commit();
     } catch (error) {
       await connection.rollback();

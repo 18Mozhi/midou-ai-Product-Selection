@@ -2401,7 +2401,7 @@
       "loadBalancingEnabled": false,
       "replicaEnabled": false,
       "backupServerUsed": false,
-      "statusDetail": "module_verified"
+      "statusDetail": "mysql57_live_api_worker_crawler_permission_single_flight_refresh_timeout_snapshot_preservation_dependency_503_recovery_and_responsive_verification_completed"
     },
     "fileResilience": {
       "module": "M08-04",
@@ -3292,7 +3292,7 @@
       "prefix": "/api/v1/platform/operations/mysql",
       "domain": "mysql-resilience",
       "status": "verified",
-      "statusDetail": "M08-03_module_verified"
+      "statusDetail": "M08-03_dependency_503_sanitized_and_correlated_verification_completed"
     },
     {
       "prefix": "/api/v1/platform/operations/files",

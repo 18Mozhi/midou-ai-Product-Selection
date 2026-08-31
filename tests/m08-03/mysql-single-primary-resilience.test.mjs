@@ -176,6 +176,82 @@ test("M08-03.A06/A09/A11/A13 operations route is authorized audited and sanitize
   await app.close();
 });
 
+test("MySQL operations route maps dependency failures to a correlated sanitized 503", async () => {
+  const { buildApp } = await import("../../apps/api/dist/app.js");
+  const failure = Object.assign(new Error("private database detail"), {
+    code: "PROTOCOL_CONNECTION_LOST",
+  });
+  const app = buildApp({
+    mysqlResilience: {
+      service: { read: async () => Promise.reject(failure) },
+      authorization: { authorize: async () => undefined },
+      auth: {
+        authenticate: async () => ({ user: { id: "actor" }, session: { id: "session" } }),
+      },
+      secureCookie: false,
+    },
+  });
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/mysql",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "mysql-failure-request",
+      "x-trace-id": "mysql-failure-trace",
+    },
+  });
+  assert.equal(response.statusCode, 503);
+  assert.equal(response.json().error.code, "mysql_resilience_dependency_unavailable");
+  assert.equal(response.json().request_id, "mysql-failure-request");
+  assert.doesNotMatch(
+    response.body,
+    /private database detail|PROTOCOL_CONNECTION_LOST|127\.0\.0\.1/,
+  );
+  await app.close();
+});
+
+test("MySQL operations route bounds reads and aborts the repository chain", async () => {
+  const { buildApp } = await import("../../apps/api/dist/app.js");
+  let aborted = false;
+  const app = buildApp({
+    mysqlResilience: {
+      service: {
+        read: ({ signal }) =>
+          new Promise((_, reject) => {
+            signal.addEventListener(
+              "abort",
+              () => {
+                aborted = true;
+                reject(signal.reason);
+              },
+              { once: true },
+            );
+          }),
+      },
+      authorization: { authorize: async () => undefined },
+      auth: {
+        authenticate: async () => ({ user: { id: "actor" }, session: { id: "session" } }),
+      },
+      secureCookie: false,
+      readTimeoutMs: 10,
+    },
+  });
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/mysql",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "mysql-timeout-request",
+      "x-trace-id": "mysql-timeout-trace",
+    },
+  });
+  assert.equal(response.statusCode, 503);
+  assert.equal(response.json().error.code, "mysql_resilience_read_timeout");
+  assert.equal(response.json().request_id, "mysql-timeout-request");
+  assert.equal(aborted, true);
+  await app.close();
+});
+
 test("M08-03.A03/A10/A14 migration and configuration remain MySQL57 and backend-only", async () => {
   const [{ loadRuntimeConfig }, up, down, schema, env] = await Promise.all([
     import("../../packages/config/dist/index.js"),
@@ -492,12 +568,27 @@ test("M08-03.A07/A08/A15/A16 UI and production evidence cover full states and re
     "forbidden",
     "expired",
     "rate_limited",
+    "timeout",
     "unavailable",
     "recovering",
   ])
     assert.match(ui, new RegExp(state));
   assert.match(ui, /慢查询与锁等待影响[\s\S]*不把累计值冒充当前延迟[\s\S]*innodb_row_lock_waits/);
   assert.match(e2e, /390/);
+  for (const token of ["AbortController", "15_000", "refreshing", "refreshFailure"])
+    assert.match(ui, new RegExp(token));
+  const [route, service, repository] = await Promise.all(
+    [
+      "apps/api/src/mysql-resilience-routes.ts",
+      "apps/api/src/mysql-resilience-service.ts",
+      "apps/api/src/mysql-resilience-repository.ts",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  assert.match(route, /requestController\.signal/);
+  assert.match(route, /readTimeoutMs \?\? 14_000/);
+  assert.match(route, /mysql_resilience_read_timeout/);
+  assert.match(service, /signal\?\.throwIfAborted/);
+  assert.match(repository, /rollback[\s\S]*throwIfAborted|throwIfAborted[\s\S]*rollback/);
   assert.match(manifest, /single_primary/);
   assert.match(manifest, /innodb_flush_log_at_trx_commit/);
   assert.match(manifest, /sync_binlog/);

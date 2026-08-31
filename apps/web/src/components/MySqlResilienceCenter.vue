@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import type { MySqlResilienceDto } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
 import "../mysql-resilience.css";
@@ -12,14 +12,20 @@ type ViewState =
   | "forbidden"
   | "expired"
   | "rate_limited"
+  | "timeout"
   | "unavailable"
   | "recovering";
+type RefreshFailure = "rate_limited" | "timeout" | "unavailable";
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 const state = ref<ViewState>("loading"),
   data = ref<MySqlResilienceDto | null>(null),
   requestId = ref(""),
-  actionHint = ref("");
+  actionHint = ref(""),
+  refreshing = ref(false),
+  refreshFailure = ref<RefreshFailure | null>(null);
+let controller: AbortController | null = null;
+let sequence = 0;
 const verdict = computed(
   () =>
     (
@@ -31,7 +37,8 @@ const verdict = computed(
         empty: ["尚无 MySQL 观测", "确认宝塔 MySQL 与 Node API 后重新核验。"],
         forbidden: ["没有平台运维权限", actionHint.value || "需要 platform:operate 能力。"],
         expired: ["登录已失效", "重新登录后再核验。"],
-        rate_limited: ["刷新过于频繁", "稍后重试。"],
+        rate_limited: ["刷新过于频繁", "稍后重试；现有结论不会因此升级。"],
+        timeout: ["读取 MySQL 运行事实超时", "本次请求已在 15 秒后停止，请检查服务状态再重试。"],
         unavailable: [
           "MySQL 运行事实暂不可用",
           actionHint.value || "在宝塔检查 MySQL 与 Node API。",
@@ -40,6 +47,15 @@ const verdict = computed(
       }) satisfies Record<ViewState, [string, string]>
     )[state.value],
 );
+const refreshNotice = computed(() => {
+  if (refreshFailure.value === "timeout")
+    return "读取超过 15 秒，已停止本次请求并保留上次成功的 MySQL 运行事实。";
+  if (refreshFailure.value === "rate_limited")
+    return "刷新过于频繁，已保留上次成功的 MySQL 运行事实；请稍后重试。";
+  if (refreshFailure.value === "unavailable")
+    return `${actionHint.value || "MySQL 运行事实暂不可用，请在宝塔核对 Node API 与 MySQL。"} 已保留上次成功的 MySQL 运行事实。`;
+  return "";
+});
 const percent = (value?: number) => (value === undefined ? "—" : `${(value / 100).toFixed(1)}%`);
 const bytes = (value?: number) =>
   value === undefined
@@ -69,10 +85,28 @@ const rowLockImpact = computed(() => {
     : "实例启动后未记录行锁等待";
 });
 async function load() {
-  state.value = "loading";
+  if (controller) return;
+  const currentSequence = ++sequence;
+  const requestController = new AbortController();
+  const hasSnapshot = Boolean(data.value);
+  const correlationId = crypto.randomUUID();
+  controller = requestController;
+  refreshing.value = true;
+  refreshFailure.value = null;
+  if (!hasSnapshot) state.value = "loading";
   actionHint.value = "";
+  let timedOut = false;
+  const timeout = window.setTimeout(() => {
+    timedOut = true;
+    requestController.abort();
+  }, 15_000);
   try {
-    const response = await request<MySqlResilienceDto | null>("/platform/operations/mysql");
+    const response = await request<MySqlResilienceDto | null>("/platform/operations/mysql", {
+      signal: requestController.signal,
+      requestId: correlationId,
+      traceId: correlationId,
+    });
+    if (currentSequence !== sequence) return;
     requestId.value = response.request_id;
     if (!response.data) {
       data.value = null;
@@ -82,18 +116,46 @@ async function load() {
     data.value = response.data;
     state.value = response.data.state;
   } catch (error) {
+    if (
+      currentSequence !== sequence ||
+      (error instanceof DOMException && error.name === "AbortError" && !timedOut)
+    )
+      return;
+    if (timedOut) {
+      requestId.value = correlationId;
+      if (hasSnapshot) refreshFailure.value = "timeout";
+      else state.value = "timeout";
+      return;
+    }
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? "";
     actionHint.value = failure?.actionHint ?? "";
-    state.value =
+    const failureState =
       failure?.kind === "expired" ||
       failure?.kind === "forbidden" ||
       failure?.kind === "rate_limited"
         ? failure.kind
         : "unavailable";
+    if (hasSnapshot && !["expired", "forbidden"].includes(failureState))
+      refreshFailure.value = failureState as RefreshFailure;
+    else {
+      data.value = null;
+      state.value = failureState;
+    }
+  } finally {
+    window.clearTimeout(timeout);
+    if (currentSequence === sequence) {
+      controller = null;
+      refreshing.value = false;
+    }
   }
 }
 onMounted(load);
+onBeforeUnmount(() => {
+  sequence += 1;
+  controller?.abort();
+  controller = null;
+});
 </script>
 <template>
   <section class="mysql-resilience" :data-state="state">
@@ -103,8 +165,23 @@ onMounted(load);
         <h2>数据库 5.7 单主韧性</h2>
         <span>惠州单机只运行一个宝塔 MySQL 主实例；不启用读副本、负载均衡或备用服务器。</span>
       </div>
-      <button type="button" @click="load">刷新运行事实</button>
+      <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
+        {{ refreshing ? "正在刷新…" : "刷新运行事实" }}
+      </button>
     </header>
+    <section
+      v-if="data && refreshFailure"
+      class="mysql-resilience__refresh-notice"
+      :data-kind="refreshFailure"
+      aria-live="polite"
+    >
+      <div>
+        <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
+        <p>{{ refreshNotice }}</p>
+        <code v-if="requestId">request_id {{ requestId }}</code>
+      </div>
+      <button type="button" :disabled="refreshing" @click="load">重新核验</button>
+    </section>
     <section
       v-if="state === 'loading' || state === 'recovering'"
       class="mysql-resilience__state"
@@ -117,7 +194,9 @@ onMounted(load);
       </div>
     </section>
     <section
-      v-else-if="['forbidden', 'expired', 'rate_limited', 'unavailable', 'empty'].includes(state)"
+      v-else-if="
+        ['forbidden', 'expired', 'rate_limited', 'timeout', 'unavailable', 'empty'].includes(state)
+      "
       class="mysql-resilience__state mysql-resilience__state--danger"
       aria-live="polite"
     >
@@ -127,7 +206,8 @@ onMounted(load);
         <p>{{ verdict[1] }}</p>
         <code v-if="requestId">request_id {{ requestId }}</code>
       </div>
-      <button type="button" @click="load">重新核验</button>
+      <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
+      ><button v-else type="button" :disabled="refreshing" @click="load">重新核验</button>
     </section>
     <template v-else-if="data">
       <section class="mysql-resilience__verdict" :data-verdict="state">

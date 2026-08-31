@@ -16,6 +16,7 @@ export interface MySqlResilienceRepository {
     observedAt: Date;
     snapshot: MySqlResilienceSnapshot;
     evaluation: ReturnType<typeof evaluateMySqlResilience>;
+    signal?: AbortSignal;
   }): Promise<void>;
 }
 
@@ -30,11 +31,15 @@ export class MySqlResilienceService {
     actorId: string;
     requestId: string;
     traceId: string;
+    signal?: AbortSignal;
   }): Promise<MySqlResilienceDto> {
+    input.signal?.throwIfAborted();
     const observedAt = this.now();
     const snapshot = await this.probe.snapshot();
+    input.signal?.throwIfAborted();
     const evaluation = evaluateMySqlResilience(snapshot, this.policy);
     await this.repository.record({ ...input, observedAt, snapshot, evaluation });
+    input.signal?.throwIfAborted();
     const usedBytes = Math.max(
       0,
       snapshot.dataFilesystemTotalBytes - snapshot.dataFilesystemAvailableBytes,

@@ -238,7 +238,11 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "429": { $ref: "#/components/responses/Error" }
-        "503": { $ref: "#/components/responses/Error" }
+        "503":
+          description: MySQL resilience dependency is unavailable or the bounded read times out; returns mysql_resilience_dependency_unavailable or mysql_resilience_read_timeout without SQL, driver, connection, host, account or credential details
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
   /platform/operations/files:
     get:
       summary: Read audited local managed file resilience facts
