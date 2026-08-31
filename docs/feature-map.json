@@ -1909,7 +1909,7 @@
       ],
       "routes": ["/platform-admin/operations", "/api/v1/platform/operations/backup-recovery"],
       "scope": "MySQL evidence export and non-secret config encrypted backups on the current Huizhou host with a separate encrypted recovery root",
-      "presentationBoundary": "backup assets use desktop tables and mobile summary cards with a detail drawer; restore evidence always shows its policy-derived expiry time and signed remaining days so operators see the approaching deadline without a fabricated reminder threshold; raw asset and storage role codes plus request IDs stay under collapsed technical details while business labels remain Chinese",
+      "presentationBoundary": "backup assets use desktop tables and mobile summary cards with a detail drawer; restore evidence always shows its policy-derived expiry time and signed remaining days so operators see the approaching deadline without a fabricated reminder threshold; raw asset and storage role codes plus request IDs stay under collapsed technical details while business labels remain Chinese; refresh is single-flight, keeps the last successful snapshot for retryable failures, and clears privileged facts for authentication or authorization failures",
       "truthBoundary": "verified only after same-host encrypted-copy integrity and a logically isolated restore check business data audit chain evidence hashes and permission boundaries within 90 days; host disk and site failure are not protected",
       "permission": "platform:operate read only; backup and restore execute only in Baota scheduled tasks",
       "configuration": [
@@ -1930,7 +1930,7 @@
         "BACKUP_MYSQL_ADMIN_PASSWORD_FILE",
         "BACKUP_RELEASE_ROOT"
       ],
-      "runtimeBoundary": "S0 finite Baota tasks with AES-256-GCM on one host; no new daemon, offsite recovery, host-failure protection or multi-node claim",
+      "runtimeBoundary": "S0 finite Baota tasks with AES-256-GCM on one host; the read API has a 14-second abort boundary, the browser has a 15-second boundary, and snapshot reads plus successful audit commit share one MySQL transaction; no new daemon, offsite recovery, host-failure protection or multi-node claim",
       "imageEvidence": [
         "concept 61 platform operations overview",
         "core 10 platform cockpit",
@@ -1938,7 +1938,7 @@
       ],
       "verificationRunId": "d1ede17d-0f7b-4f42-b80c-2d5dac118651",
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "module_verified_bounded_single_flight_refresh"
     },
     "releaseRollout": {
       "module": "M07-05",

@@ -1,5 +1,11 @@
 export interface BackupRecoveryRepository {
-  read(input: { actorId: string; requestId: string; traceId: string; now: Date }): Promise<{
+  read(input: {
+    actorId: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+    signal?: AbortSignal;
+  }): Promise<{
     runs: Array<Record<string, unknown>>;
     assets: Array<Record<string, unknown>>;
   }>;
@@ -20,9 +26,11 @@ export class BackupRecoveryService {
     private readonly now = () => new Date(),
   ) {}
 
-  async read(input: { actorId: string; requestId: string; traceId: string }) {
+  async read(input: { actorId: string; requestId: string; traceId: string; signal?: AbortSignal }) {
+    input.signal?.throwIfAborted();
     const now = this.now();
     const result = await this.repository.read({ ...input, now });
+    input.signal?.throwIfAborted();
     const latestBackup = result.runs.find((run) => run.run_type === "backup");
     const latestDrill = result.runs.find((run) => run.run_type === "restore_drill");
     const recoveryAssets = result.assets.filter(

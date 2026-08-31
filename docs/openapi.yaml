@@ -5012,8 +5012,9 @@ paths:
   /platform/operations/backup-recovery:
     get:
       summary: Read the audited backup and isolated recovery status
-      description: Requires platform:operate. Returns sanitized Huizhou same-host recovery, RPO/RTO, encrypted asset aggregates and drill checks. It explicitly does not claim host or offsite disaster protection. This endpoint never starts backup or restore and never exposes paths, hosts, credentials or organization-level contents.
+      description: Requires platform:operate. Returns sanitized Huizhou same-host recovery, RPO/RTO, encrypted asset aggregates and drill checks. The read is bounded to 14 seconds and a successful read commits its audit event in the same MySQL transaction as the snapshot reads. It explicitly does not claim host or offsite disaster protection. This endpoint never starts backup or restore and never exposes paths, hosts, credentials or organization-level contents.
       security: [{ HttpOnlySession: [] }]
+      x-required-capability: platform:operate
       responses:
         "200":
           description: Truthful empty, blocked, stale or verified backup recovery state
@@ -5077,7 +5078,11 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "429": { $ref: "#/components/responses/Error" }
-        "503": { $ref: "#/components/responses/Error" }
+        "503":
+          description: Backup recovery dependency is unavailable or the bounded read times out; returns backup_recovery_dependency_unavailable or backup_recovery_read_timeout without SQL, driver, connection, host, account, path or credential details
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
   /platform/operations/releases:
     get:
       summary: Read the audited production release and rollback gates
@@ -5345,10 +5350,19 @@ paths:
           {
             name: client_sort,
             in: query,
-            schema: { type: string, enum: [updated_desc, updated_asc, name_asc, name_desc], default: updated_desc },
+            schema:
+              {
+                type: string,
+                enum: [updated_desc, updated_asc, name_asc, name_desc],
+                default: updated_desc,
+              },
           },
           { name: client_page, in: query, schema: { type: integer, minimum: 1, default: 1 } },
-          { name: client_page_size, in: query, schema: { type: integer, minimum: 1, maximum: 50, default: 20 } },
+          {
+            name: client_page_size,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 50, default: 20 },
+          },
           { name: webhook_query, in: query, schema: { type: string, maxLength: 120 } },
           {
             name: webhook_status,
@@ -5358,23 +5372,46 @@ paths:
           {
             name: webhook_sort,
             in: query,
-            schema: { type: string, enum: [updated_desc, updated_asc, name_asc, name_desc], default: updated_desc },
+            schema:
+              {
+                type: string,
+                enum: [updated_desc, updated_asc, name_asc, name_desc],
+                default: updated_desc,
+              },
           },
           { name: webhook_page, in: query, schema: { type: integer, minimum: 1, default: 1 } },
-          { name: webhook_page_size, in: query, schema: { type: integer, minimum: 1, maximum: 50, default: 20 } },
+          {
+            name: webhook_page_size,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 50, default: 20 },
+          },
           { name: delivery_query, in: query, schema: { type: string, maxLength: 120 } },
           {
             name: delivery_status,
             in: query,
-            schema: { type: string, enum: [all, queued, leased, succeeded, retry_scheduled, dead_letter], default: all },
+            schema:
+              {
+                type: string,
+                enum: [all, queued, leased, succeeded, retry_scheduled, dead_letter],
+                default: all,
+              },
           },
           {
             name: delivery_sort,
             in: query,
-            schema: { type: string, enum: [updated_desc, updated_asc, attempts_desc], default: updated_desc },
+            schema:
+              {
+                type: string,
+                enum: [updated_desc, updated_asc, attempts_desc],
+                default: updated_desc,
+              },
           },
           { name: delivery_page, in: query, schema: { type: integer, minimum: 1, default: 1 } },
-          { name: delivery_page_size, in: query, schema: { type: integer, minimum: 1, maximum: 50, default: 20 } },
+          {
+            name: delivery_page_size,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 50, default: 20 },
+          },
         ]
       responses:
         {
@@ -7167,9 +7204,37 @@ components:
                     additionalProperties: false,
                     properties:
                       {
-                        clients: { type: object, required: [total, active, expired], additionalProperties: false, properties: { total: { type: integer }, active: { type: integer }, expired: { type: integer } } },
-                        webhooks: { type: object, required: [total, active], additionalProperties: false, properties: { total: { type: integer }, active: { type: integer } } },
-                        deliveries: { type: object, required: [total, dead_letter, retry_scheduled], additionalProperties: false, properties: { total: { type: integer }, dead_letter: { type: integer }, retry_scheduled: { type: integer } } },
+                        clients:
+                          {
+                            type: object,
+                            required: [total, active, expired],
+                            additionalProperties: false,
+                            properties:
+                              {
+                                total: { type: integer },
+                                active: { type: integer },
+                                expired: { type: integer },
+                              },
+                          },
+                        webhooks:
+                          {
+                            type: object,
+                            required: [total, active],
+                            additionalProperties: false,
+                            properties: { total: { type: integer }, active: { type: integer } },
+                          },
+                        deliveries:
+                          {
+                            type: object,
+                            required: [total, dead_letter, retry_scheduled],
+                            additionalProperties: false,
+                            properties:
+                              {
+                                total: { type: integer },
+                                dead_letter: { type: integer },
+                                retry_scheduled: { type: integer },
+                              },
+                          },
                       },
                   },
                 pagination:
@@ -7183,7 +7248,11 @@ components:
                         deliveries: { $ref: "#/components/schemas/OpenPlatformPagination" },
                       },
                   },
-                scope: { type: object, properties: { organization_id: { type: string, format: uuid, nullable: true } } },
+                scope:
+                  {
+                    type: object,
+                    properties: { organization_id: { type: string, format: uuid, nullable: true } },
+                  },
                 observed_at: { type: string, format: date-time },
               },
           }

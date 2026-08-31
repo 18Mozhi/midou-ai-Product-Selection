@@ -68,6 +68,140 @@ test("M07-04.A06-A11 platform operations status is read-only, guarded and saniti
     assert.doesNotMatch(all, new RegExp(forbidden, "i"));
   for (const state of ["loading", "empty", "blocked", "stale", "verified"])
     assert.match(all, new RegExp(state));
+  for (const token of [
+    "AbortController",
+    "15_000",
+    "refreshing",
+    "refreshFailure",
+    "backup_recovery_read_timeout",
+    "beginTransaction",
+    "rollback",
+  ])
+    assert.match(all, new RegExp(token));
+});
+
+test("M07-04.A06/A08 operations route bounds reads and sanitizes dependency failures", async () => {
+  const { buildApp } = await import("../../apps/api/dist/app.js");
+  const route = (service, readTimeoutMs) => ({
+    service,
+    authorization: { authorize: async () => undefined },
+    auth: {
+      authenticate: async () => ({ user: { id: "actor" }, session: { id: "session" } }),
+    },
+    secureCookie: false,
+    readTimeoutMs,
+  });
+  const failure = Object.assign(new Error("private mysql host detail"), {
+    code: "PROTOCOL_CONNECTION_LOST",
+  });
+  const dependencyApp = buildApp({
+    backupRecovery: route({ read: async () => Promise.reject(failure) }),
+  });
+  const dependency = await dependencyApp.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/backup-recovery",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "backup-dependency-request",
+      "x-trace-id": "backup-dependency-trace",
+    },
+  });
+  assert.equal(dependency.statusCode, 503);
+  assert.equal(dependency.json().error.code, "backup_recovery_dependency_unavailable");
+  assert.equal(dependency.json().request_id, "backup-dependency-request");
+  assert.doesNotMatch(dependency.body, /private mysql host detail|PROTOCOL_CONNECTION_LOST/);
+  await dependencyApp.close();
+
+  let aborted = false;
+  const timeoutApp = buildApp({
+    backupRecovery: route(
+      {
+        read: ({ signal }) =>
+          new Promise((_, reject) =>
+            signal.addEventListener(
+              "abort",
+              () => {
+                aborted = true;
+                reject(signal.reason);
+              },
+              { once: true },
+            ),
+          ),
+      },
+      10,
+    ),
+  });
+  const timeout = await timeoutApp.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/backup-recovery",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "backup-timeout-request",
+      "x-trace-id": "backup-timeout-trace",
+    },
+  });
+  assert.equal(timeout.statusCode, 503);
+  assert.equal(timeout.json().error.code, "backup_recovery_read_timeout");
+  assert.equal(aborted, true);
+  await timeoutApp.close();
+});
+
+test("M07-04.A10/A14 read facts and audit in one cancellable transaction", async () => {
+  const { MySqlBackupRecoveryRepository } =
+    await import("../../apps/api/dist/mysql-backup-recovery-repository.js");
+  const calls = [];
+  const connection = {
+    beginTransaction: async () => calls.push("begin"),
+    commit: async () => calls.push("commit"),
+    rollback: async () => calls.push("rollback"),
+    release: () => calls.push("release"),
+    query: async (sql, values = []) => {
+      calls.push(sql);
+      assert.equal(values.length, (sql.match(/\?/g) ?? []).length);
+      return [[], []];
+    },
+  };
+  const repository = new MySqlBackupRecoveryRepository({
+    getConnection: async () => connection,
+  });
+  assert.deepEqual(
+    await repository.read({
+      actorId: "actor",
+      requestId: "request",
+      traceId: "trace",
+      now: new Date("2026-08-08T12:00:00.000Z"),
+    }),
+    { runs: [], assets: [] },
+  );
+  assert.deepEqual(
+    calls.filter((item) => ["begin", "commit", "rollback", "release"].includes(item)),
+    ["begin", "commit", "release"],
+  );
+  assert.equal(calls.filter((item) => String(item).startsWith("INSERT INTO")).length, 1);
+
+  const controller = new AbortController();
+  const cancelledCalls = [];
+  const cancelledConnection = {
+    beginTransaction: async () => cancelledCalls.push("begin"),
+    commit: async () => cancelledCalls.push("commit"),
+    rollback: async () => cancelledCalls.push("rollback"),
+    release: () => cancelledCalls.push("release"),
+    query: async () => {
+      controller.abort();
+      return [[], []];
+    },
+  };
+  await assert.rejects(
+    new MySqlBackupRecoveryRepository({ getConnection: async () => cancelledConnection }).read({
+      actorId: "actor",
+      requestId: "request",
+      traceId: "trace",
+      now: new Date("2026-08-08T12:00:00.000Z"),
+      signal: controller.signal,
+    }),
+    /aborted/i,
+  );
+  assert.deepEqual(cancelledCalls, ["begin", "rollback", "release"]);
 });
 
 test("M07-04.A10/A13/A17 config, OpenAPI, Feature Map and runbooks stay synchronized", async () => {
