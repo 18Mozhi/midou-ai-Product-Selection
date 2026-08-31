@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, createApiResponseClient } from "../api-client";
+import { statusLabel, technicalStatus } from "../ui/status-labels";
 import { useAuditedReason } from "../use-audited-reason";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
@@ -24,17 +26,32 @@ interface OperationalLog {
 }
 
 const props = defineProps<{ apiBaseUrl: string }>();
+const route = useRoute(),
+  router = useRouter();
 const request = createApiClient(props.apiBaseUrl);
 const requestResponse = createApiResponseClient(props.apiBaseUrl);
+const allowedSources = ["", "api", "worker", "crawler"] as const;
+function routeText(name: "query" | "source", maximum: number) {
+  const value = route.query[name];
+  return typeof value === "string" ? value.trim().slice(0, maximum) : "";
+}
+function routeSource() {
+  const value = routeText("source", 40);
+  return allowedSources.includes(value as (typeof allowedSources)[number]) ? value : "";
+}
 const state = ref<State>("loading"),
-  query = ref(""),
-  source = ref(""),
+  query = ref(routeText("query", 120)),
+  source = ref(routeSource()),
   items = ref<OperationalLog[]>([]),
   summary = ref<Record<string, number>>({}),
   message = ref(""),
   requestId = ref(""),
   observedAt = ref(""),
+  refreshing = ref(false),
   exporting = ref(false);
+let controller: AbortController | null = null,
+  sequence = 0,
+  mounted = false;
 const {
   request: exportReasonRequest,
   open: exportReasonOpen,
@@ -67,6 +84,24 @@ const traceChains = computed(() => {
 });
 const sourceName = (value: string) =>
   ({ api: "API", worker: "Worker", crawler: "爬虫" })[value] ?? value;
+const eventName = (value: string) =>
+  ({
+    "platform.dashboard.read": "读取平台运行事实",
+    "platform.collection.requested": "提交采集请求",
+    "platform.provider.test.failed": "来源测试失败",
+    "collection.task.started": "采集任务开始",
+    "collection.task.failed": "采集任务失败",
+    "crawler.run.timed_out": "爬虫运行超时",
+  })[value] ?? value;
+const resourceName = (value: string) =>
+  ({
+    platform_dashboard: "平台运行事实",
+    collection_task: "采集任务",
+    crawler_run: "爬虫运行",
+    provider: "来源",
+    export_probe: "导出校验",
+  })[value] ?? value;
+const logStatusName = (value: string) => (value === "timed_out" ? "已超时" : statusLabel(value));
 const when = (value: string) => new Date(value).toLocaleString("zh-CN");
 const shortId = (value: string) => (value.length > 16 ? `${value.slice(0, 12)}…` : value);
 function isException(item: OperationalLog) {
@@ -87,24 +122,71 @@ const providerLink = (item: OperationalLog) =>
     : "";
 
 async function load() {
-  state.value = "loading";
+  if (controller) return;
+  const currentSequence = ++sequence,
+    requestController = new AbortController(),
+    hasSnapshot = Boolean(observedAt.value);
+  controller = requestController;
+  let timedOut = false;
+  const timeout = window.setTimeout(() => {
+    timedOut = true;
+    requestController.abort();
+  }, 15000);
+  if (!hasSnapshot) state.value = "loading";
+  refreshing.value = true;
   message.value = "";
   const params = new URLSearchParams({ domain: "logs" });
-  if (query.value.trim()) params.set("query", query.value.trim());
-  if (source.value) params.set("status", source.value);
+  const appliedQuery = routeText("query", 120),
+    appliedSource = routeSource();
+  if (appliedQuery) params.set("query", appliedQuery);
+  if (appliedSource) params.set("status", appliedSource);
   try {
-    const response = await request<any>(`/platform/management?${params}`);
+    const response = await request<any>(`/platform/management?${params}`, {
+      signal: requestController.signal,
+    });
+    if (currentSequence !== sequence) return;
     requestId.value = response.request_id;
     items.value = response.data.items ?? [];
     summary.value = response.data.summary ?? {};
     observedAt.value = response.data.observed_at ?? "";
     state.value = items.value.length ? "ready" : "empty";
   } catch (error) {
+    if (
+      currentSequence !== sequence ||
+      (error instanceof DOMException && error.name === "AbortError" && !timedOut)
+    )
+      return;
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? requestId.value;
-    message.value = failure?.actionHint ?? "链路日志暂不可用";
-    state.value = "error";
+    message.value = timedOut
+      ? "读取超过 15 秒，已停止本次请求并保留上次成功日志。"
+      : `${failure?.actionHint ?? "链路日志暂不可用。"}${hasSnapshot ? " 已保留上次成功日志。" : ""}`;
+    if (!hasSnapshot) state.value = "error";
+  } finally {
+    window.clearTimeout(timeout);
+    if (currentSequence === sequence) {
+      controller = null;
+      refreshing.value = false;
+    }
   }
+}
+
+async function applyFilters() {
+  const nextQuery = { ...route.query } as Record<string, string | string[] | null | undefined>;
+  const nextText = query.value.trim().slice(0, 120),
+    nextSource = allowedSources.includes(source.value as (typeof allowedSources)[number])
+      ? source.value
+      : "";
+  nextQuery.query = nextText || undefined;
+  nextQuery.source = nextSource || undefined;
+  if (routeText("query", 120) === nextText && routeSource() === nextSource) await load();
+  else await router.replace({ query: nextQuery });
+}
+
+async function resetFilters() {
+  query.value = "";
+  source.value = "";
+  await applyFilters();
 }
 
 async function exportCsv() {
@@ -121,8 +203,8 @@ async function exportCsv() {
       method: "POST",
       headers: { accept: "text/csv" },
       body: {
-        query: query.value.trim(),
-        ...(source.value ? { source: source.value } : {}),
+        query: routeText("query", 120),
+        ...(routeSource() ? { source: routeSource() } : {}),
         reason,
       },
     });
@@ -144,7 +226,31 @@ async function exportCsv() {
   }
 }
 
-onMounted(load);
+watch(
+  () => [route.query.query, route.query.source],
+  () => {
+    query.value = routeText("query", 120);
+    source.value = routeSource();
+    if (mounted) void load();
+  },
+);
+onMounted(async () => {
+  mounted = true;
+  const rawSource = routeText("source", 40);
+  if (rawSource && !allowedSources.includes(rawSource as (typeof allowedSources)[number])) {
+    const nextQuery = { ...route.query };
+    delete nextQuery.source;
+    await router.replace({ query: nextQuery });
+    return;
+  }
+  await load();
+});
+onBeforeUnmount(() => {
+  mounted = false;
+  sequence += 1;
+  controller?.abort();
+  controller = null;
+});
 </script>
 
 <template>
@@ -156,15 +262,17 @@ onMounted(load);
         <span>按请求编号、链路编号、任务、事件或错误码检索 API、Worker 与爬虫事件。</span>
       </div>
       <div class="platform-log-header-actions">
-        <button type="button" :disabled="exporting" @click="exportCsv">
+        <button type="button" :disabled="exporting || refreshing" @click="exportCsv">
           {{ exporting ? "正在导出…" : "导出当前筛选" }}
         </button>
-        <button type="button" @click="load">刷新日志</button>
+        <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
+          {{ refreshing ? "正在刷新…" : "刷新日志" }}
+        </button>
       </div>
     </header>
 
     <ResponsiveFilterDrawer label="筛选链路日志" :active-count="activeFilterCount">
-      <form class="platform-log-filter" @submit.prevent="load">
+      <form class="platform-log-filter" @submit.prevent="applyFilters">
         <label>
           检索条件
           <input
@@ -182,7 +290,12 @@ onMounted(load);
             <option value="crawler">爬虫</option>
           </select>
         </label>
-        <button>检索</button>
+        <div class="platform-log-filter__actions">
+          <button type="button" :disabled="refreshing || !activeFilterCount" @click="resetFilters">
+            重置
+          </button>
+          <button :disabled="refreshing">检索</button>
+        </div>
       </form>
     </ResponsiveFilterDrawer>
 
@@ -272,12 +385,15 @@ onMounted(load);
                     <i :data-source="item.source">{{ sourceName(item.source) }}</i>
                   </td>
                   <td>
-                    <strong>{{ item.event_type }}</strong
+                    <strong>{{ eventName(item.event_type) }}</strong
+                    ><small v-if="eventName(item.event_type) !== item.event_type">{{
+                      item.event_type
+                    }}</small
                     ><small v-if="item.error_code">{{ item.error_code }}</small>
                   </td>
-                  <td>{{ item.status }}</td>
+                  <td>{{ logStatusName(item.status) }}</td>
                   <td>
-                    {{ item.resource_type
+                    {{ resourceName(item.resource_type)
                     }}<small v-if="item.provider_name">{{ item.provider_name }}</small>
                   </td>
                   <td class="platform-log-actions">
@@ -304,9 +420,10 @@ onMounted(load);
             </table>
           </template>
           <template #summary="{ row }">
-            <strong>{{ row.event_type }}</strong>
+            <strong>{{ eventName(row.event_type) }}</strong>
             <small
-              >{{ sourceName(row.source) }} · {{ row.status }} · {{ when(row.occurred_at) }}</small
+              >{{ sourceName(row.source) }} · {{ logStatusName(row.status) }} ·
+              {{ when(row.occurred_at) }}</small
             >
           </template>
           <template #detail="{ row }">
@@ -322,17 +439,18 @@ onMounted(load);
               <div>
                 <dt>事件</dt>
                 <dd>
-                  {{ row.event_type }}<small v-if="row.error_code"> · {{ row.error_code }}</small>
+                  {{ eventName(row.event_type)
+                  }}<small v-if="row.error_code"> · {{ row.error_code }}</small>
                 </dd>
               </div>
               <div>
                 <dt>状态</dt>
-                <dd>{{ row.status }}</dd>
+                <dd>{{ logStatusName(row.status) }}</dd>
               </div>
               <div>
                 <dt>资源</dt>
                 <dd>
-                  {{ row.resource_type
+                  {{ resourceName(row.resource_type)
                   }}<small v-if="row.provider_name"> · {{ row.provider_name }}</small>
                 </dd>
               </div>
@@ -344,6 +462,8 @@ onMounted(load);
             </div>
             <details>
               <summary>技术详情</summary>
+              <code>event {{ row.event_type }}</code>
+              <code>status {{ technicalStatus(row.status) }}</code>
               <code v-if="row.resource_id">resource {{ row.resource_id }}</code>
               <code>request {{ row.request_id }}</code>
             </details>
@@ -413,6 +533,10 @@ onMounted(load);
 .platform-log-filter input,
 .platform-log-filter select {
   min-height: 42px;
+}
+.platform-log-filter__actions {
+  display: flex;
+  gap: 8px;
 }
 .platform-log-summary {
   display: flex;

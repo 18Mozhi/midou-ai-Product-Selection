@@ -1424,8 +1424,8 @@
         "path": "/platform-admin/logs",
         "view": "PlatformLogCenter",
         "domain": "platform-operational-logs",
-        "status": "implemented",
-        "statusDetail": "implemented_pending_full_verification"
+        "status": "verified",
+        "statusDetail": "M06-02_logs_live_mysql_api_worker_crawler_permission_failure_timeout_url_filter_export_idempotency_and_responsive_verification_completed"
       }
     },
     {

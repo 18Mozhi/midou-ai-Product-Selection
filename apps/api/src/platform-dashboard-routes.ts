@@ -194,7 +194,10 @@ export function registerPlatformDashboardRoutes(
     if (r.headers.origin !== o.webOrigin)
       throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 页面重试。");
     const c = await context(r),
-      data: any = await o.service.exportLogs(r.body, c),
+      data: any = await o.service.exportLogs(r.body, {
+        ...c,
+        idempotencyKey: requireIdempotencyKey(r),
+      }),
       columns = [
         "occurred_at",
         "trace_id",

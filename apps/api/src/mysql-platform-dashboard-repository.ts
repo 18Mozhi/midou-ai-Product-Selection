@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { resolve } from "node:path";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
@@ -1471,25 +1471,71 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       entity: "trends",
       status: i.source,
     });
-    await this.pool.query(
-      "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
-        "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
-        "schema_version) VALUES(?,NULL,NULL,?,'platform.logs.export','operational_logs'," +
-        "NULL,'succeeded',?,?,?,?,1)",
-      [
-        randomUUID(),
-        i.actorId,
-        i.requestId,
-        i.traceId,
-        JSON.stringify({
-          query: i.query,
-          source: i.source,
-          reason: i.reason,
-          row_count: data.items.length,
-        }),
-        i.now,
-      ],
-    );
-    return data;
+    const c = await this.pool.getConnection(),
+      signature = JSON.stringify({ query: i.query, source: i.source, reason: i.reason }),
+      operationLock = `platform-log-export:${createHash("sha256")
+        .update(`${i.actorId}:${i.route}:${i.idempotencyKey}`)
+        .digest("hex")
+        .slice(0, 44)}`;
+    let lockAcquired = false;
+    try {
+      const [lockRows] = await c.query<RowDataPacket[]>("SELECT GET_LOCK(?, 5) AS acquired", [
+        operationLock,
+      ]);
+      lockAcquired = Number(lockRows[0]?.acquired ?? 0) === 1;
+      if (!lockAcquired)
+        throw new PlatformDashboardError(
+          "platform_log_export_busy",
+          503,
+          "相同日志导出仍在处理中，请稍后重试。",
+        );
+      await c.beginTransaction();
+      const replay = await this.replayOperation(c, i);
+      if (replay) {
+        if (replay.idempotency_signature !== signature)
+          throw new PlatformDashboardError(
+            "idempotency_key_reused",
+            409,
+            "此 Idempotency-Key 已用于不同的日志导出条件。",
+          );
+        const { idempotency_signature: _signature, ...savedData } = replay;
+        await c.commit();
+        return savedData;
+      }
+      await c.query(
+        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+          "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
+          "schema_version) VALUES(?,NULL,NULL,?,'platform.logs.export','operational_logs'," +
+          "NULL,'succeeded',?,?,?,?,1)",
+        [
+          randomUUID(),
+          i.actorId,
+          i.requestId,
+          i.traceId,
+          JSON.stringify({
+            query: i.query,
+            source: i.source,
+            reason: i.reason,
+            row_count: data.items.length,
+          }),
+          i.now,
+        ],
+      );
+      await this.saveOperation(c, i, randomUUID(), {
+        ...data,
+        idempotency_signature: signature,
+      });
+      await c.commit();
+      return data;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      try {
+        if (lockAcquired) await c.query("SELECT RELEASE_LOCK(?)", [operationLock]);
+      } finally {
+        c.release();
+      }
+    }
   }
 }

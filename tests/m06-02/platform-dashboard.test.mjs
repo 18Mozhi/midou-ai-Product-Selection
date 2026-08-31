@@ -297,6 +297,35 @@ test("M06-02 chain logs group exact traces and deep-link persisted task or provi
   assert.match(architecture, /同一 `trace_id` 分组/);
   assert.match(runbook, /过滤后的来源页/);
   assert.match(JSON.parse(feature).implementation.platformDashboard.scope, /grouped by trace_id/);
+  assert.match(web, /useRoute\(\)/);
+  assert.match(web, /route\.query\.query/);
+  assert.match(web, /route\.query\.source/);
+  assert.match(web, /router\.replace/);
+  assert.match(web, /重置/);
+  assert.match(web, /new AbortController\(\)/);
+  assert.match(web, /15000/);
+  assert.match(web, /if \(controller\) return/);
+  assert.match(web, /已保留上次成功日志/);
+  assert.match(web, /logStatusName\(item\.status\)/);
+  assert.match(web, /timed_out["']\s*\?\s*["']已超时/);
+});
+
+test("M06-02 chain-log reads reject unsupported runtime sources", async () => {
+  const service = new PlatformDashboardService({ readManagement: async () => ({}) });
+  assert.throws(
+    () =>
+      service.management({
+        actorId: "actor",
+        domain: "logs",
+        status: "invalid-source",
+        requestId: "request",
+        traceId: "trace",
+      }),
+    (error) =>
+      error instanceof PlatformDashboardError &&
+      error.code === "platform_management_filter_invalid" &&
+      error.statusCode === 400,
+  );
 });
 
 test("M06-02 audited log export preserves the active production filters", async () => {
@@ -308,16 +337,28 @@ test("M06-02 audited log export preserves the active production filters", async 
   );
   await service.exportLogs(
     { query: "trace-1", source: "crawler", reason: "生产故障排查" },
-    { actorId: "actor", requestId: "request", traceId: "trace" },
+    {
+      actorId: "actor",
+      idempotencyKey: "log-export-key",
+      requestId: "request",
+      traceId: "trace",
+    },
   );
   assert.equal(calls[0].query, "trace-1");
   assert.equal(calls[0].source, "crawler");
   assert.equal(calls[0].reason, "生产故障排查");
+  assert.equal(calls[0].idempotencyKey, "log-export-key");
+  assert.equal(calls[0].route, "/platform/management/logs/exports");
   assert.throws(
     () =>
       service.exportLogs(
         { query: "", source: "unknown", reason: "生产故障排查" },
-        { actorId: "actor", requestId: "request", traceId: "trace" },
+        {
+          actorId: "actor",
+          idempotencyKey: "invalid-log-export-key",
+          requestId: "request",
+          traceId: "trace",
+        },
       ),
     (error) =>
       error instanceof PlatformDashboardError &&
@@ -331,7 +372,11 @@ test("M06-02 audited log export preserves the active production filters", async 
     ].map((path) => readFile(path, "utf8")),
   );
   assert.match(repository, /platform\.logs\.export[\s\S]*row_count/);
+  assert.match(repository, /idempotency_signature/);
+  assert.match(repository, /idempotency_key_reused/);
+  assert.match(repository, /GET_LOCK/);
   assert.match(routes, /platform\/management\/logs\/exports[\s\S]*text\/csv/);
+  assert.match(routes, /platform\/management\/logs\/exports[\s\S]*requireIdempotencyKey/);
   assert.match(routes, /\^\[=\+\\-@\]/);
   assert.match(web, /导出当前筛选[\s\S]*填写日志导出原因/);
 });

@@ -4780,7 +4780,7 @@ paths:
             description: For domain=content,
             values are active/irrelevant/stale/archived. For domain=data,
             values are entity-specific. For domain=governance,
-            values are section-specific and incompatible combinations return 400. For domain=notifications values are task/approval/competitor/system; score and cost use draft/pending_approval/approved/active/retired/rejected/rolled_back,
+            values are section-specific and incompatible combinations return 400. For domain=notifications values are task/approval/competitor/system. For domain=logs values are api/worker/crawler and unsupported values return 400; score and cost use draft/pending_approval/approved/active/retired/rejected/rolled_back,
             approval templates use draft/published/archived,
             automation uses active/paused,
             and releases use planned/preflight_passed/deploying/healthy/failed/rolled_back.,
@@ -4834,8 +4834,10 @@ paths:
   /platform/management/logs/exports:
     post:
       summary: Export the current bounded operational log filter as an audited CSV
-      description: Requires platform:operate and a same-origin request. Exports at most the same 200 normalized API audit, Worker task and Crawler run events returned by the logs page for the submitted query and source filter. The actor, exact filter, reason and row count are written to platform audit. CSV cells are formula-injection protected and contain no raw metadata, payload, stderr, credential or cookie.
+      description: Requires platform:operate, a same-origin request and Idempotency-Key. Exports at most the same 200 normalized API audit, Worker task and Crawler run events returned by the logs page for the submitted query and source filter. Repeating the same key and payload replays the first CSV without a second audit record; reusing the key with different filters or reason returns 409. The actor, exact filter, reason and row count are written to platform audit. CSV cells are formula-injection protected and contain no raw metadata, payload, stderr, credential or cookie.
       security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { $ref: "#/components/parameters/IdempotencyKey" }
       requestBody:
         required: true
         content:
@@ -4856,6 +4858,7 @@ paths:
         "400": { $ref: "#/components/responses/Error" }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
         "503": { $ref: "#/components/responses/Error" }
   /platform/management/content/{topicId}:
     patch:

@@ -79,6 +79,8 @@ export interface PlatformDashboardRepository {
     query: string;
     source: string;
     reason: string;
+    route: string;
+    idempotencyKey: string;
     requestId: string;
     traceId: string;
     now: Date;
@@ -204,6 +206,12 @@ export class PlatformDashboardService {
         400,
         "缩短筛选条件后重试。",
       );
+    if (domain === "logs" && status && !["api", "worker", "crawler"].includes(status))
+      throw new PlatformDashboardError(
+        "platform_management_filter_invalid",
+        400,
+        "选择 API、Worker 或爬虫运行面后重试。",
+      );
     if (domain === "data" && status && !platformDataStatuses[entity].includes(status))
       throw new PlatformDashboardError(
         "platform_data_status_invalid",
@@ -318,7 +326,15 @@ export class PlatformDashboardService {
       now: this.now(),
     });
   }
-  exportLogs(value: any, context: { actorId: string; requestId: string; traceId: string }) {
+  exportLogs(
+    value: any,
+    context: {
+      actorId: string;
+      idempotencyKey: string;
+      requestId: string;
+      traceId: string;
+    },
+  ) {
     const query = String(value?.query ?? "").trim(),
       source = String(value?.source ?? "").trim(),
       reason = String(value?.reason ?? "").trim();
@@ -335,6 +351,7 @@ export class PlatformDashboardService {
       query,
       source,
       reason,
+      route: "/platform/management/logs/exports",
       now: this.now(),
     });
   }
