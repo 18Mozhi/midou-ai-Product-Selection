@@ -1400,7 +1400,7 @@
         "view": "PlatformManagementCenter",
         "domain": "platform-system-status",
         "status": "verified",
-        "statusDetail": "M06-02_module_verified"
+        "statusDetail": "M06-02_status_live_mysql_api_worker_crawler_permission_failure_timeout_empty_refresh_and_responsive_verification_completed"
       },
       "navigation": {
         "label": "系统运维",

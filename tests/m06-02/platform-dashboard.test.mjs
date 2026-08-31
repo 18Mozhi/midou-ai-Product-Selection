@@ -231,9 +231,10 @@ test("M06-02 platform overview gives novice administrators clear next actions", 
   );
 });
 test("M06-02 system status presents dependency topology and bounded propagation scope", async () => {
-  const [web, topology, architecture, runbook, feature] = await Promise.all(
+  const [web, statusLoad, topology, architecture, runbook, feature] = await Promise.all(
     [
       "apps/web/src/components/PlatformManagementCenter.vue",
+      "apps/web/src/components/use-platform-status.ts",
       "apps/web/src/components/platform-status-topology.ts",
       "docs/architecture/m06-02-platform-dashboard.md",
       "docs/runbooks/m06-02-platform-dashboard.md",
@@ -254,12 +255,23 @@ test("M06-02 system status presents dependency topology and bounded propagation 
   for (const serviceCode of ["api", "mysql", "redis", "files", "worker", "crawler"])
     assert.match(topology, new RegExp(`code: ["']${serviceCode}["']`));
   assert.match(web, /\["healthy", "ready"\]\.includes\(node\.status\)/);
+  assert.match(web, /当前没有采集任务状态记录/);
+  assert.match(web, /当前没有来源配置记录/);
+  assert.match(statusLoad, /new AbortController\(\)/);
+  assert.match(statusLoad, /15000/);
+  assert.match(statusLoad, /if \(controller\) return true/);
+  assert.match(statusLoad, /已保留上次成功数据/);
+  assert.doesNotMatch(statusLoad, /options\.data\.value\s*=\s*null/);
   assert.match(architecture, /依赖拓扑与故障传播/);
   assert.match(architecture, /当前浏览器标签页会话[\s\S]*重连率[\s\S]*降级轮询次数/);
   assert.match(runbook, /当前需核查的传播范围/);
   assert.match(runbook, /当前浏览器标签页会话[\s\S]*重连率[\s\S]*降级轮询/);
   assert.match(JSON.parse(feature).implementation.platformDashboard.scope, /dependency topology/);
   assert.match(JSON.parse(feature).implementation.platformDashboard.scope, /browser-tab SSE/);
+  assert.match(
+    JSON.parse(feature).implementation.platformDashboard.scope,
+    /preserved status snapshot/,
+  );
 });
 test("M06-02 chain logs group exact traces and deep-link persisted task or provider relations", async () => {
   const [repository, web, sourceCenter, openapi, architecture, runbook, feature] =

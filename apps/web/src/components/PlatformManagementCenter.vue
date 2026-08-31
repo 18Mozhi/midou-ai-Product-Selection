@@ -32,6 +32,7 @@ import {
 import { usePlatformContentList } from "./use-platform-content-list";
 import { usePlatformContentReview } from "./use-platform-content-review";
 import { usePlatformNotificationList } from "./use-platform-notification-list";
+import { usePlatformStatus } from "./use-platform-status";
 
 const props = defineProps<{ apiBaseUrl: string; domain: string }>();
 const request = createApiClient(props.apiBaseUrl);
@@ -193,9 +194,18 @@ const {
   begin: beginReview,
   submit: submitReview,
 } = usePlatformContentReview({ request: api, reload: load, message, busy });
+const { load: loadStatus, stop: stopStatusLoad } = usePlatformStatus({
+  domain,
+  data,
+  state,
+  message,
+  refreshing,
+  request: api,
+});
 async function load() {
   if (await notificationList.load()) return;
   if (await loadContent()) return;
+  if (await loadStatus()) return;
   state.value = "loading";
   refreshing.value = true;
   message.value = "";
@@ -350,6 +360,7 @@ onMounted(() => {
   void load();
 });
 onUnmounted(() => {
+  stopStatusLoad();
   stopContentLoad();
   notificationList.stop();
   window.removeEventListener(realtimeMetricsEvent, syncRealtimeMetrics);
@@ -357,7 +368,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="platform-management" aria-live="polite">
+  <section class="platform-management" aria-live="polite" :aria-busy="refreshing">
     <header class="platform-management-hero">
       <div>
         <p>平台运营中心</p>
@@ -384,7 +395,7 @@ onUnmounted(() => {
       @apply="notificationList.applyFilters"
       @reset="notificationList.resetFilters"
     />
-    <p v-if="message" class="platform-management-message">{{ message }}</p>
+    <p v-if="message" class="platform-management-message" role="status">{{ message }}</p>
     <section v-if="state !== 'ready'" class="platform-management-state">
       <h3>
         {{
@@ -550,6 +561,9 @@ onUnmounted(() => {
         </section>
         <section>
           <h3>采集任务状态</h3>
+          <p v-if="!data.collections.length" class="platform-status-empty">
+            当前没有采集任务状态记录。
+          </p>
           <div v-for="item in data.collections" :key="item.status">
             <span>{{ stateName(item.status) }}</span
             ><strong>{{ item.total }}</strong>
@@ -558,6 +572,7 @@ onUnmounted(() => {
         </section>
         <section>
           <h3>来源状态</h3>
+          <p v-if="!data.sources.length" class="platform-status-empty">当前没有来源配置记录。</p>
           <div v-for="item in data.sources" :key="item.status">
             <span>{{ stateName(item.status) }}</span
             ><strong>{{ item.total }}</strong>
@@ -936,6 +951,11 @@ dialog footer button:last-child {
   margin: 6px 0 0;
   color: var(--so-text-muted);
   font-size: 13px;
+}
+.platform-status-empty {
+  margin: 0;
+  color: var(--so-text-muted);
+  line-height: 1.65;
 }
 .platform-status-grid h3 {
   margin-top: 0;

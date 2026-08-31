@@ -26,6 +26,8 @@
 
 同页“实时连接退化”只展示当前浏览器标签页会话的 SSE 客户端观测：重连次数除以连接打开与重连事件总数得到重连率，EventSource 首次进入每轮错误状态时立即刷新一次通知事实并累计“降级轮询次数”。重复错误事件在重新 `open` 前不会重复累计。该数据保存在标签页 `sessionStorage`，不写平台管理 API、MySQL 或审计，不推断其他用户和全站实时服务健康。
 
+系统状态读取由页面专属控制器管理。首次进入时显示读取态；已有成功快照时，刷新继续显示六类拓扑、观测时间、采集任务和来源统计，按钮显示“刷新中…”并拒绝重复触发。单次读取超过 15 秒会由 `AbortController` 中止；数据库 503、网络错误或超时只显示恢复提示，不清空上一份成功事实。组件卸载时取消未完成请求，迟到响应不能覆盖新页面。零任务或零来源时分别显示明确空状态，同时保留对应管理入口。本边界只改变 Web 读取生命周期，不增加接口字段、数据库表、配置项或后台任务。
+
 生产邮件 Provider 当前为 `pending_provider_selection`。平台导航不提供 `/platform-admin/email` 入口，直接访问也不装载邮件管理页面；通知偏好和平台通知草稿的邮件开关固定关闭。Node API 同时拒绝启用邮件偏好、创建邮件草稿、为通知启用邮件或发布历史邮件草稿，防止绕过前端。历史邮件投递、草稿、审计和安全处置 API 不删除，待 Provider 合同、回调与合规验收完成后再单独开放。
 
 平台管理页由 `PlatformManagementCenter.vue` 统一持有读取、写入、审核和加载状态，领域标题、状态文案和时间展示等无副作用转换集中在 `platform-management-presentation.ts`；筛选抽屉、热点内容与邮件记录列表、消息列表、消息编辑器与通知运营事实分别下沉到 `PlatformManagementFilter.vue`、`PlatformManagementRecordList.vue`、`PlatformMessageWorkbench.vue`、`PlatformMessageEditor.vue` 和 `PlatformNotificationOperations.vue`。通知运营样式由页面专属 `platform-notification-operations.css` 持有并以 `.notification-ops` 限定作用域。子组件只通过属性和事件协作，不直接访问 API，也不改变既有权限、审计或消息状态合同。
