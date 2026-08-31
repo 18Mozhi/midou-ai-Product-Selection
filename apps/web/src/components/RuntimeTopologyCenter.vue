@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import "../runtime-topology.css";
 
@@ -12,7 +12,9 @@ type ViewState =
   | "forbidden"
   | "expired"
   | "rate_limited"
+  | "timeout"
   | "unavailable";
+type RefreshFailure = "rate_limited" | "timeout" | "unavailable";
 interface RuntimeNode {
   node_id: string;
   host_id: string;
@@ -102,6 +104,7 @@ interface TopologyData {
       max_retries: number;
       active_runs: number;
       running: boolean;
+      due: boolean;
       queue_delay_ms: number;
       longest_running_ms: number;
       suspected_stuck: boolean;
@@ -139,6 +142,11 @@ const state = ref<ViewState>("loading");
 const data = ref<TopologyData | null>(null);
 const requestId = ref("");
 const actionHint = ref("");
+const refreshing = ref(false);
+const refreshFailure = ref<RefreshFailure | null>(null);
+const showAllQueues = ref(false);
+let controller: AbortController | null = null;
+let sequence = 0;
 const verdict = computed(
   () =>
     (
@@ -151,6 +159,7 @@ const verdict = computed(
         forbidden: ["没有平台运维权限", actionHint.value || "需要 platform:operate 能力。"],
         expired: ["登录已失效", "重新登录后再核验单机运行状态。"],
         rate_limited: ["刷新过于频繁", "稍后重试；现有结论不会因此升级。"],
+        timeout: ["读取运行事实超时", "本次请求已在 15 秒后停止，请检查服务状态再重试。"],
         unavailable: ["运行状态暂不可用", actionHint.value || "在宝塔查看 Node API 日志后重试。"],
       }) satisfies Record<ViewState, [string, string]>
     )[state.value],
@@ -212,6 +221,7 @@ const queueRows = computed(() =>
       ...queue,
       aging_boost: agingBoost,
       starvation_risk:
+        queue.due &&
         !queue.running &&
         queue.queue_delay_ms > 0 &&
         maximumAgingBoost > 0 &&
@@ -220,23 +230,36 @@ const queueRows = computed(() =>
   }),
 );
 const agedQueueCount = computed(
-  () => queueRows.value.filter((queue) => queue.aging_boost > 0).length,
+  () => queueRows.value.filter((queue) => queue.due && queue.aging_boost > 0).length,
 );
 const starvationRiskCount = computed(
   () => queueRows.value.filter((queue) => queue.starvation_risk).length,
 );
-const visibleQueues = computed(() => {
-  const queues = queueRows.value;
-  const exceptional = queues.filter(
+const exceptionalQueues = computed(() =>
+  queueRows.value.filter(
     (queue) =>
       queue.running ||
-      queue.queue_delay_ms > 0 ||
-      queue.failed_total > 0 ||
+      queue.due ||
+      queue.consecutive_failures > 0 ||
       queue.suspected_stuck ||
       queue.circuit_state === "open" ||
       queue.starvation_risk,
-  );
-  return (exceptional.length ? exceptional : queues).slice(0, 18);
+  ),
+);
+const visibleQueues = computed(() =>
+  (showAllQueues.value ? queueRows.value : exceptionalQueues.value).slice(0, 18),
+);
+const hiddenIdleQueueCount = computed(() =>
+  Math.max(0, queueRows.value.length - exceptionalQueues.value.length),
+);
+const refreshNotice = computed(() => {
+  if (refreshFailure.value === "timeout")
+    return "读取超过 15 秒，已停止本次请求并保留上次成功的运行事实。";
+  if (refreshFailure.value === "rate_limited")
+    return "刷新过于频繁，已保留上次成功的运行事实；请稍后重试。";
+  if (refreshFailure.value === "unavailable")
+    return `${actionHint.value || "运行状态暂不可用，请在宝塔核对 Node API 与数据库。"} 已保留上次成功的运行事实。`;
+  return "";
 });
 const restartSeries = computed(() => {
   const samples = data.value?.restart_trend ?? [];
@@ -266,18 +289,47 @@ const time = (value?: string) =>
   value ? new Date(value).toLocaleString("zh-CN", { hour12: false }) : "尚无记录";
 
 async function load() {
-  state.value = "loading";
+  if (controller) return;
+  const currentSequence = ++sequence;
+  const requestController = new AbortController();
+  const hasSnapshot = Boolean(data.value);
+  const correlationId = crypto.randomUUID();
+  controller = requestController;
+  refreshing.value = true;
+  refreshFailure.value = null;
+  if (!hasSnapshot) state.value = "loading";
   actionHint.value = "";
+  let timedOut = false;
+  const timeout = window.setTimeout(() => {
+    timedOut = true;
+    requestController.abort();
+  }, 15_000);
   try {
-    const response = await request<TopologyData>("/platform/operations/topology");
+    const response = await request<TopologyData>("/platform/operations/topology", {
+      signal: requestController.signal,
+      requestId: correlationId,
+      traceId: correlationId,
+    });
+    if (currentSequence !== sequence) return;
     requestId.value = response.request_id;
     data.value = response.data;
     state.value = response.data.state;
   } catch (error) {
+    if (
+      currentSequence !== sequence ||
+      (error instanceof DOMException && error.name === "AbortError" && !timedOut)
+    )
+      return;
+    if (timedOut) {
+      requestId.value = correlationId;
+      if (hasSnapshot) refreshFailure.value = "timeout";
+      else state.value = "timeout";
+      return;
+    }
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       actionHint.value = error.actionHint;
-      state.value =
+      const failureState =
         error.kind === "expired"
           ? "expired"
           : error.kind === "forbidden"
@@ -285,10 +337,28 @@ async function load() {
             : error.kind === "rate_limited"
               ? "rate_limited"
               : "unavailable";
-    } else state.value = "unavailable";
+      if (hasSnapshot && !["expired", "forbidden"].includes(failureState))
+        refreshFailure.value = failureState as RefreshFailure;
+      else {
+        data.value = null;
+        state.value = failureState;
+      }
+    } else if (hasSnapshot) refreshFailure.value = "unavailable";
+    else state.value = "unavailable";
+  } finally {
+    window.clearTimeout(timeout);
+    if (currentSequence === sequence) {
+      controller = null;
+      refreshing.value = false;
+    }
   }
 }
 onMounted(load);
+onBeforeUnmount(() => {
+  sequence += 1;
+  controller?.abort();
+  controller = null;
+});
 </script>
 
 <template>
@@ -299,8 +369,24 @@ onMounted(load);
         <h2>单机运行控制台</h2>
         <span>长期固定为一台惠州宝塔服务器，不启用负载均衡、备用服务器或多节点模式。</span>
       </div>
-      <button type="button" @click="load">刷新运行事实</button>
+      <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
+        {{ refreshing ? "正在刷新…" : "刷新运行事实" }}
+      </button>
     </header>
+
+    <section
+      v-if="data && refreshFailure"
+      class="topology-refresh-notice"
+      :data-kind="refreshFailure"
+      aria-live="polite"
+    >
+      <div>
+        <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
+        <p>{{ refreshNotice }}</p>
+        <code v-if="requestId">request_id {{ requestId }}</code>
+      </div>
+      <button type="button" :disabled="refreshing" @click="load">重新核验</button>
+    </section>
 
     <section v-if="state === 'loading'" class="topology-state" aria-live="polite">
       <span class="topology-pulse" aria-hidden="true"></span>
@@ -310,7 +396,7 @@ onMounted(load);
       </div>
     </section>
     <section
-      v-else-if="['forbidden', 'expired', 'rate_limited', 'unavailable'].includes(state)"
+      v-else-if="['forbidden', 'expired', 'rate_limited', 'timeout', 'unavailable'].includes(state)"
       class="topology-state topology-state--danger"
       aria-live="polite"
     >
@@ -321,7 +407,7 @@ onMounted(load);
         <code v-if="requestId">request_id {{ requestId }}</code>
       </div>
       <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
-      ><button v-else type="button" @click="load">重新核验</button>
+      ><button v-else type="button" :disabled="refreshing" @click="load">重新核验</button>
     </section>
 
     <template v-else-if="data">
@@ -536,9 +622,18 @@ onMounted(load);
                 <p>统一调度</p>
                 <h3>队列老化与实际调度延迟</h3>
               </div>
-              <span :data-node-state="data.worker_scheduler.status">{{
-                data.worker_scheduler.status === "running" ? "运行中" : "未运行"
-              }}</span>
+              <div class="topology-scheduler-actions">
+                <span :data-node-state="data.worker_scheduler.status">{{
+                  data.worker_scheduler.status === "running" ? "运行中" : "未运行"
+                }}</span>
+                <button
+                  type="button"
+                  :aria-expanded="showAllQueues"
+                  @click="showAllQueues = !showAllQueues"
+                >
+                  {{ showAllQueues ? "仅看运行与异常" : `查看全部 ${queueRows.length} 个队列策略` }}
+                </button>
+              </div>
             </header>
             <dl class="topology-scheduler-metrics">
               <div>
@@ -574,6 +669,13 @@ onMounted(load);
               </div>
             </dl>
             <div class="topology-queue-list">
+              <div v-if="!visibleQueues.length" class="topology-queue-empty">
+                <b>当前没有等待、运行或异常队列</b>
+                <span>
+                  {{ hiddenIdleQueueCount }}
+                  个空闲队列已收起；需要核对并发、超时和重试时可查看全部策略。
+                </span>
+              </div>
               <article
                 v-for="queue in visibleQueues"
                 :key="queue.name"
@@ -595,25 +697,30 @@ onMounted(load);
                       : queue.suspected_stuck
                         ? "疑似卡死"
                         : queue.running
-                          ? "处理中"
-                          : queue.queue_delay_ms > 0
+                          ? "执行中"
+                          : queue.due
                             ? "等待中"
                             : "空闲"
                   }}</b
                   ><small v-if="queue.running">运行 {{ queue.longest_running_ms }} ms</small
-                  ><small v-else>实际调度延迟 {{ queue.queue_delay_ms }} ms</small></span
+                  ><small v-else-if="queue.due">实际调度延迟 {{ queue.queue_delay_ms }} ms</small
+                  ><small v-else>未进入等待队列</small></span
                 >
                 <span class="topology-queue-aging" :data-risk="queue.starvation_risk"
                   ><b>{{
-                    queue.starvation_risk
-                      ? "饥饿风险"
-                      : queue.aging_boost > 0
-                        ? "老化保护中"
-                        : "尚未老化"
+                    !queue.due && !queue.running
+                      ? "未进入等待"
+                      : queue.starvation_risk
+                        ? "饥饿风险"
+                        : queue.aging_boost > 0
+                          ? "老化保护中"
+                          : "等待老化"
                   }}</b
-                  ><small v-if="queue.aging_boost > 0"
+                  ><small v-if="queue.due && queue.aging_boost > 0"
                     >优先级已提升 {{ queue.aging_boost }} / {{ queue.maximum_aging_boost }}</small
-                  ><small v-else>每 {{ queue.aging_interval_ms || "—" }} ms 检查一次</small></span
+                  ><small v-else-if="queue.due"
+                    >每 {{ queue.aging_interval_ms || "—" }} ms 检查一次</small
+                  ><small v-else>当前空闲，不累计老化</small></span
                 >
                 <details>
                   <summary>调度策略</summary>

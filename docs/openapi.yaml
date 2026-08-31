@@ -198,7 +198,11 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "429": { $ref: "#/components/responses/Error" }
-        "503": { $ref: "#/components/responses/Error" }
+        "503":
+          description: Runtime topology read dependency is unavailable; returns runtime_topology_dependency_unavailable without SQL, connection or host details
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
   /platform/operations/redis:
     get:
       summary: Read audited Redis single-instance resilience facts

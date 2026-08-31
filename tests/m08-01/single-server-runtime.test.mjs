@@ -318,6 +318,56 @@ test("M08-01.A06/A09/A11/A13 public health is sanitized and operations read is a
   await app.close();
 });
 
+test("M08-01 topology classifies a database outage as a recoverable 503", async () => {
+  const { buildApp } = await import("../../apps/api/dist/app.js");
+  const app = buildApp({
+    runtimeTopology: {
+      service: {
+        read: async () => {
+          throw Object.assign(new Error("database unavailable"), { code: "ECONNREFUSED" });
+        },
+      },
+      authorization: { authorize: async () => ({ reason: "allowed_platform" }) },
+      auth: {
+        authenticate: async () => ({
+          user: { id: "00000000-0000-4000-8000-000000000801" },
+          session: { id: "session" },
+        }),
+      },
+      secureCookie: false,
+    },
+  });
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/topology",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "topology-database-down",
+      "x-trace-id": "topology-database-down",
+    },
+  });
+  assert.equal(response.statusCode, 503);
+  assert.equal(response.json().error.code, "runtime_topology_dependency_unavailable");
+  assert.equal(response.json().request_id, "topology-database-down");
+  assert.doesNotMatch(response.body, /database unavailable|ECONNREFUSED/i);
+  await app.close();
+});
+
+test("M08-01 topology Web read is single-flight, bounded and does not call idle queues waiting", async () => {
+  const web = await readFile("apps/web/src/components/RuntimeTopologyCenter.vue", "utf8");
+  for (const token of [
+    "if (controller) return",
+    "15_000",
+    "已停止本次请求并保留上次成功的运行事实",
+    "queue.due",
+    "当前没有等待、运行或异常队列",
+    "查看全部 ${queueRows.length} 个队列策略",
+    "未进入等待队列",
+  ])
+    assert.match(web, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  assert.doesNotMatch(web, /queue\.queue_delay_ms > 0\s*\? "等待中"/);
+});
+
 test("M08-01.A04/A16 fails closed for missing stale stopped or mismatched API", async () => {
   const { RuntimeTopologyService } =
     await import("../../apps/api/dist/runtime-topology-service.js");

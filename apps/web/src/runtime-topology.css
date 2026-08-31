@@ -42,7 +42,9 @@
 }
 .topology-hero button,
 .topology-state button,
-.topology-state a {
+.topology-state a,
+.topology-refresh-notice button,
+.topology-scheduler-actions button {
   background: var(--so-primary-strong);
   border: 1px solid var(--so-primary-border);
   border-radius: 9px;
@@ -52,11 +54,41 @@
   padding: 10px 15px;
   text-decoration: none;
 }
+.topology-hero button:disabled,
+.topology-state button:disabled,
+.topology-refresh-notice button:disabled {
+  cursor: progress;
+  opacity: 0.64;
+}
 .topology-hero button:focus-visible,
 .topology-state button:focus-visible,
-.topology-state a:focus-visible {
+.topology-state a:focus-visible,
+.topology-refresh-notice button:focus-visible,
+.topology-scheduler-actions button:focus-visible {
   outline: 3px solid var(--topology-cyan);
   outline-offset: 3px;
+}
+.topology-refresh-notice {
+  align-items: center;
+  background: var(--so-warning-soft);
+  border: 1px solid var(--so-warning-border);
+  border-radius: 12px;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 14px 18px;
+}
+.topology-refresh-notice b,
+.topology-refresh-notice code {
+  display: block;
+}
+.topology-refresh-notice p {
+  color: var(--topology-muted);
+  margin: 4px 0;
+}
+.topology-refresh-notice code {
+  color: var(--topology-muted);
+  overflow-wrap: anywhere;
 }
 .topology-state {
   align-items: center;
@@ -180,7 +212,7 @@
 .topology-layout {
   display: grid;
   gap: 14px;
-  grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.7fr);
+  grid-template-columns: minmax(0, 1fr);
 }
 .topology-panel {
   padding: 20px;
@@ -311,6 +343,8 @@
 }
 .topology-evidence dl {
   display: grid;
+  gap: 0 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 0;
 }
 .topology-evidence dl div {
@@ -450,6 +484,13 @@
   }
   .topology-state a,
   .topology-state button {
+    width: 100%;
+  }
+  .topology-refresh-notice {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .topology-refresh-notice button {
     width: 100%;
   }
 }
@@ -629,9 +670,32 @@
   font-weight: 800;
   margin: 5px 0 0;
 }
+.topology-scheduler-actions {
+  align-items: flex-end;
+  display: grid;
+  gap: 8px;
+  justify-items: end;
+}
+.topology-scheduler-actions button {
+  background: transparent;
+  color: var(--topology-cyan);
+  padding: 7px 10px;
+}
 .topology-queue-list {
   display: grid;
   gap: 7px;
+}
+.topology-queue-empty {
+  background: var(--so-panel-soft);
+  border: 1px dashed var(--topology-line);
+  border-radius: 10px;
+  display: grid;
+  gap: 5px;
+  padding: 18px;
+  text-align: center;
+}
+.topology-queue-empty span {
+  color: var(--topology-muted);
 }
 .topology-queue-list article {
   align-items: center;
@@ -726,6 +790,16 @@
   grid-column: auto;
 }
 @media (max-width: 700px) {
+  .topology-evidence dl {
+    grid-template-columns: 1fr;
+  }
+  .topology-scheduler > header {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .topology-scheduler-actions {
+    max-width: 55%;
+  }
   .topology-health-grid {
     grid-template-columns: 1fr;
   }

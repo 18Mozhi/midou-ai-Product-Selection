@@ -42,6 +42,9 @@ SINGLE_SERVER_PRODUCTION_EVIDENCE_FILE=./.artifacts/verification/m08-01-single-s
 8. 至少间隔一个五分钟桶读取两次运行拓扑，确认 API/Worker 的 24 小时趋势显示真实观测数和新增重启数；监督器重新启动后必须显示计数器重置，而不是负增量。
 9. 等待至少两个连续探测周期，确认 `live`、`ready`、`available` 各自显示真实样本数、超时数与 P50/P95/P99。隔离验证中让一个请求超过超时门，确认只新增超时样本且页面不出现响应正文、主机或凭证。
 10. 执行 `node scripts/verify-single-server-production.mjs --production` 和 `npm run verify:module -- M08-01`。
+11. 在已有成功事实后刷新，确认按钮显示忙状态且不可重复触发，页面继续保留上次观测；让拓扑读取超过 15 秒，确认浏览器主动中止并显示保留提示。首次超时应显示独立超时态，401/403 不得继续显示旧事实。
+12. 空队列时确认“等待调度”为 0、主列表显示“当前没有等待、运行或异常队列”，不得把 `due=false` 的轮询抖动显示为等待；展开“查看全部 18 个队列策略”后仍能核对全部并发、超时和重试配置。
+13. 在隔离测试环境停止 MySQL 后读取运维拓扑，接口必须返回 503 `runtime_topology_dependency_unavailable`，响应不得包含 SQL、账号、主机或驱动错误；恢复 MySQL 后“重新核验”应返回当前真实事实。
 
 当前生产验收已通过：构建 `b55f7f814d7153e6a4a7958eb41a9bf6ff1e60e8`、证据 SHA-256 `0c7cd53311f9c778407e699747bc8d9b9d27b1fad18635fee1c05ff54a74e13c`、run_id/trace_id `fa76e44f-53d7-49da-8884-bac921aad580`。永久路由为本机 4101 单上游，4103 候选已停止。
 

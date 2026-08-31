@@ -299,6 +299,60 @@ test("M08-01.A07/A08/A15 desktop and 390 single-server truth", async ({ page }) 
   await expect(page).toHaveScreenshot("m08-01-single-server-mobile-390.png", { fullPage: true });
 });
 
+test("M08-01 refresh is single-flight, keeps the snapshot and labels idle queues truthfully", async ({
+  page,
+}) => {
+  let calls = 0;
+  await page.route("**/api/v1/platform/operations/topology", async (route) => {
+    calls += 1;
+    if (calls > 1) await new Promise((resolve) => setTimeout(resolve, 400));
+    await route.fulfill({
+      json: envelope({
+        ...base,
+        worker_scheduler: {
+          ...base.worker_scheduler,
+          due_queue_count: 0,
+          backpressure: false,
+          max_queue_delay_ms: 0,
+          failed_last_minute: 0,
+          failure_rate_percent: 0,
+          queues: base.worker_scheduler.queues.map((queue) => ({
+            ...queue,
+            running: false,
+            due: false,
+            queue_delay_ms: 87,
+            active_runs: 0,
+            longest_running_ms: 0,
+            consecutive_failures: 0,
+            failed_total: 0,
+            retry_total: 0,
+            deferred_total: 0,
+          })),
+        },
+        alerts: [],
+      }),
+    });
+  });
+  await page.goto("/platform-admin/topology");
+  await expect(page.getByText("单机运行门已满足")).toBeVisible();
+  const refresh = page.getByRole("button", { name: "刷新运行事实" });
+  await refresh.evaluate((button: HTMLButtonElement) => {
+    button.click();
+    button.click();
+    button.click();
+  });
+  await expect(page.getByRole("button", { name: "正在刷新…" })).toBeDisabled();
+  await expect(page.getByText("单机运行门已满足")).toBeVisible();
+  await expect(page.getByText("当前没有等待、运行或异常队列")).toBeVisible();
+  await expect(page.locator(".topology-queue-list article")).toHaveCount(0);
+  await expect.poll(() => calls).toBe(2);
+  await page.getByRole("button", { name: "查看全部 2 个队列策略" }).click();
+  await expect(page.locator(".topology-queue-list article")).toHaveCount(2);
+  await expect(page.getByText("空闲", { exact: true })).toHaveCount(2);
+  await expect(page.getByText("未进入等待队列", { exact: true })).toHaveCount(2);
+  await expect(page.getByText("等待中", { exact: true })).toHaveCount(0);
+});
+
 test("M08-01.A08/A09 empty blocked stale forbidden expired and rate limited", async ({ page }) => {
   let status = 200;
   let state = "empty";

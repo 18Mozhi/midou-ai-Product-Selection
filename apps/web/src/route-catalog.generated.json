@@ -1359,7 +1359,7 @@
         "view": "RuntimeTopologyCenter",
         "domain": "runtime-topology",
         "status": "verified",
-        "statusDetail": "M08-01_single_server_module_verified"
+        "statusDetail": "M08-01_topology_live_mysql_redis_api_worker_crawler_permission_refresh_timeout_failure_queue_truth_and_responsive_verification_completed"
       }
     },
     {
