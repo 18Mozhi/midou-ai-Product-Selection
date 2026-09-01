@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
 import { canConfirm } from "../ui/state-contract";
 const props = withDefaults(
   defineProps<{
@@ -20,6 +20,7 @@ const acknowledged = ref(false),
   dialog = ref<HTMLElement | null>(null),
   cancelButton = ref<HTMLButtonElement | null>(null);
 let returnFocus: HTMLElement | null = null;
+let previousBodyOverflow: string | null = null;
 const enabled = computed(() =>
   canConfirm({
     destructive: props.destructive,
@@ -28,10 +29,21 @@ const enabled = computed(() =>
     typedText: typedText.value,
   }),
 );
+function lockPageScroll() {
+  if (previousBodyOverflow !== null) return;
+  previousBodyOverflow = document.body.style.overflow;
+  document.body.style.overflow = "hidden";
+}
+function unlockPageScroll() {
+  if (previousBodyOverflow === null) return;
+  document.body.style.overflow = previousBodyOverflow;
+  previousBodyOverflow = null;
+}
 watch(
   () => props.open,
   async (open) => {
     if (open) {
+      lockPageScroll();
       const active = document.activeElement;
       returnFocus = active instanceof HTMLElement ? active : null;
       acknowledged.value = false;
@@ -40,12 +52,14 @@ watch(
       cancelButton.value?.focus();
       return;
     }
+    unlockPageScroll();
     await nextTick();
     returnFocus?.focus();
     returnFocus = null;
   },
   { immediate: true },
 );
+onBeforeUnmount(unlockPageScroll);
 function cancel() {
   emit("cancel");
 }

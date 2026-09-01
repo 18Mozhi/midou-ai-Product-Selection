@@ -23,7 +23,8 @@ test("M02-04.A02/A04/A12 failure mapping is deterministic and exhaustive", () =>
   assert.equal(stateFromHttp(401), "expired");
   assert.equal(stateFromHttp(403), "forbidden");
   assert.equal(stateFromHttp(404), "not_found");
-  for (const status of [408, 429, 502, 503, 504]) assert.equal(stateFromHttp(status), "blocked");
+  for (const status of [408, 425, 429, 502, 503, 504])
+    assert.equal(stateFromHttp(status), "blocked");
   assert.equal(stateFromHttp(409), "error");
   for (const kind of UI_STATE_KINDS) {
     assert.ok(DEFAULT_STATE_COPY[kind].title);
@@ -73,6 +74,9 @@ test("M02-04.A01/A03/A05/A06/A09/A10/A13/A14 component contract adds no backend 
   assert.match(dialog, /Escape/);
   assert.match(showcase, /不触发任何业务写入|不会请求后端/);
   assert.match(app, /isNotFoundRoute/);
+  assert.match(app, /selectedView\.value === "ui-states"/);
+  assert.match(showcase, /router\.push\(\{ query: \{ \.\.\.route\.query, state: kind \} \}\)/);
+  assert.match(showcase, /展示页没有业务接口|展示页不会伪造申请成功/);
   assert.match(openapi, /ErrorEnvelope|components\/responses\/Error/);
   assert.doesNotMatch(env, /UI_STATE_|CONFIRM_DIALOG_/);
   assert.match(architecture, /不新增数据库迁移|无需数据库迁移/);
@@ -91,6 +95,7 @@ test("M02-04.A07/A15/A16/A17 visual recovery and delivery evidence exists", asyn
   );
   assert.match(styles, /\.ui-state-panel/);
   assert.match(styles, /\.confirm-dialog/);
+  assert.match(styles, /max-height:\s*calc\(100dvh - 36px\)/);
   assert.match(styles, /@media\s*\(\s*max-width:\s*780px\s*\)/);
   assert.match(e2e, /keyboard\.press/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);

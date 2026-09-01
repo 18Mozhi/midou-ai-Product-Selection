@@ -71,8 +71,8 @@ const navigationShell = computed(() =>
 );
 const isUiStatesView = computed(
   () =>
-    import.meta.env.DEV &&
-    (requestedInternalView.value === "ui-states" || selectedView.value === "ui-states"),
+    selectedView.value === "ui-states" ||
+    (import.meta.env.DEV && requestedInternalView.value === "ui-states"),
 );
 const isNotFoundRoute = computed(
   () => route.meta.notFound === true || selectedView.value === "not-found",

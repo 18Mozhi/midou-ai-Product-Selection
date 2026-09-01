@@ -1161,6 +1161,19 @@
   color: var(--so-success);
   background: color-mix(in srgb, var(--so-success) 8%, transparent);
 }
+.state-action-result {
+  position: relative;
+  z-index: 2;
+  width: min(570px, 92%);
+  margin: 14px 0 0;
+  padding: 11px 13px;
+  border: 1px solid color-mix(in srgb, var(--so-primary) 28%, transparent);
+  border-radius: 10px;
+  color: var(--so-text);
+  background: color-mix(in srgb, var(--so-primary) 8%, var(--so-panel-soft));
+  line-height: 1.55;
+  text-align: center;
+}
 .state-canvas {
   position: relative;
   min-height: 570px;
@@ -1354,12 +1367,16 @@
   padding: 18px;
   display: grid;
   place-items: center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: color-mix(in srgb, var(--so-bg) 76%, transparent);
   backdrop-filter: blur(12px);
 }
 .confirm-dialog {
   width: min(520px, 100%);
+  max-height: calc(100dvh - 36px);
   padding: 30px;
+  overflow-y: auto;
   border: 1px solid var(--so-border);
   border-radius: 22px;
   color: var(--so-text);

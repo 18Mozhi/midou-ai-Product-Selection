@@ -464,10 +464,12 @@
     "commonUiStates": {
       "module": "M02-04",
       "entrypoints": [
+        "../apps/web/src/App.vue",
         "../apps/web/src/ui/state-contract.ts",
         "../apps/web/src/components/UiStatePanel.vue",
         "../apps/web/src/components/ConfirmDialog.vue",
-        "../apps/web/src/components/UiStateShowcase.vue"
+        "../apps/web/src/components/UiStateShowcase.vue",
+        "../apps/web/src/styles/onboarding-navigation.css"
       ],
       "route": "/ui-states",
       "states": [
@@ -481,12 +483,12 @@
         "not_found",
         "confirmation"
       ],
-      "contracts": "semantic text and symbol, safe request/trace identifiers, explicit recovery, fail-closed high-impact confirmation",
+      "contracts": "production-rendered internal route, query-backed refresh/history state, observable non-business demo actions, semantic text and symbol, safe request/trace identifiers, explicit recovery, fail-closed and short-viewport-safe high-impact confirmation",
       "imageEvidence": ["concept 72 not-found", "P02 contact sheets and M02-01 design tokens"],
       "nonGoals": "no API request, business mutation, permission inference, persistence, async service or environment value",
-      "verificationRunId": "fa7a1180-6dad-4c70-a621-10708aca95a9",
+      "verificationRunId": "d3ccbdc8-debf-4dc9-8848-e30ac5361f7e",
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "M02-04_production_route_and_action_chain_verified"
     },
     "globalDiscovery": {
       "module": "M02-05",
