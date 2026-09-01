@@ -101,6 +101,7 @@ test("API coverage UI, route, runtime packaging and production report fingerprin
   for (const copy of ["六角色覆盖", "结果覆盖", "数据来源", "UI 消费方", "爬虫副作用"])
     assert.match(component, new RegExp(copy));
   assert.match(center, /domain === ["']api-coverage["']/);
+  assert.match(center, /domain\.value === ["']api-coverage["'] \? ["']api_coverage["']/);
   const route = JSON.parse(routeCatalog).routes.find(
     (item) => item.path === "/platform-admin/api-coverage",
   );

@@ -108,7 +108,7 @@ test("API coverage dashboard exposes the current production truth dimensions on 
   page,
 }) => {
   await nav(page, "platform_super_admin", "platform:superadmin");
-  await page.route("**/api/v1/platform/management?domain=api-coverage**", (route) =>
+  await page.route("**/api/v1/platform/management?domain=api_coverage**", (route) =>
     route.fulfill({
       json: env({
         domain: "api_coverage",

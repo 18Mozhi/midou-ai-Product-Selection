@@ -43,6 +43,7 @@ const domain = computed<Domain>(
       ? props.domain
       : "status") as Domain,
 );
+const apiDomain = computed(() => (domain.value === "api-coverage" ? "api_coverage" : domain.value));
 const state = ref<"loading" | "ready" | "empty" | "error">("loading");
 const data = ref<any>(null),
   query = ref(""),
@@ -212,7 +213,7 @@ async function load() {
   state.value = "loading";
   refreshing.value = true;
   message.value = "";
-  const params = new URLSearchParams({ domain: domain.value });
+  const params = new URLSearchParams({ domain: apiDomain.value });
   if (query.value.trim()) params.set("query", query.value.trim());
   if (status.value) params.set("status", status.value);
   try {
