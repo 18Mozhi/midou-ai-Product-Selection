@@ -4,7 +4,7 @@
 
 M07-03 当前部署目标为惠州 `192.168.1.220`、`midouai.medouai.com` 与 `/www/wwwroot/ai选品`。宝塔管理网站、统一 Node 后端 `ai选品`、Python 3.12 采集项目 `ai选品-python`、MySQL 5.7、Redis、备份与日志。生产固定使用 `frontend/backend/python/config/runtime/backups`，不保存 Git、`current` 或 `releases`。独立 API、Worker、Canary 和面板外常驻项目禁止创建。manifest 只有在同提交生产证据、live/ready/version、Worker/Python 心跳与面板日志均通过时才可签发健康。
 
-部署脚本只认识上述六个固定目录、当前一次上传暂存与回滚目录，以及初始化时可迁移的受控 `shared`。脚本不再包含 `current`/`releases` 的迁移或删除分支；根目录存在其他条目时会在停止 Node 前失败关闭，由运维先确认归属并移出，不能由部署器猜测删除。
+部署脚本只认识上述六个固定目录、当前一次上传暂存与回滚目录，以及初始化时可迁移的受控 `shared`。脚本不再包含 `current`/`releases` 的迁移或删除分支；根目录存在其他条目时会在停止 Node 前失败关闭，由运维先确认归属并移出，不能由部署器猜测删除。固定目录开始切换后如任一步失败，部署器会恢复上一版 `frontend/backend/python`、`release.env` 与 Nginx 配置，并通过宝塔重新启动 Node；无论成功或失败都只清理当前 SHA 的 stage/upload，回滚本身失败时保留恢复目录并明确报错，禁止静默删除恢复材料。
 
 本地发布还要求 Git 忽略的 `.artifacts/release-change-ownership.json`。清单以一个已发布祖先 commit 为 `baseSha`、当前待发布提交为 `headSha`，并把区间内每个 commit 和每个变更路径精确归入一个带负责人的工作包。缺失、重复、区间外、跨工作包修改同一路径、基线非祖先或 HEAD 漂移均在读取 Windows 凭据和上传前失败关闭。示例结构位于 `verification/release-change-ownership.example.json`；清单是发布审批事实，不上传服务器、不写秘密。
 

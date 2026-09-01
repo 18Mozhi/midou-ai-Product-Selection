@@ -83,6 +83,12 @@ test("M07-03 deployer runs source and built-artifact gates before remote credent
   assert.match(deployer, /legacy_pattern = re\.compile/);
   assert.match(deployer, /managed_matches = list\(managed_pattern\.finditer\(previous_site\)\)/);
   assert.match(deployer, /indent = legacy_matches\[0\]\.group\("indent"\)/);
+  assert.match(deployer, /swapped = True[\s\S]*rolled_back=swapped and not recovery_errors/);
+  assert.match(deployer, /def transient_cleanup_source\(build_sha: str\)/);
+  assert.match(
+    deployer,
+    /remote_python\(client, transient_cleanup_source\(build_sha\), timeout=180\)/,
+  );
   assert.match(deployer, /nginx", "-t"/);
   assert.match(deployer, /unknown_route_status == 404/);
 });

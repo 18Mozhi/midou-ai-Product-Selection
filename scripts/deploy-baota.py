@@ -14,6 +14,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tarfile
 import tempfile
 import time
@@ -355,6 +356,15 @@ def ensure_inside(path):
     if resolved == root or root not in resolved.parents:
         raise RuntimeError("path escaped project root: " + str(path))
 
+swapped = False
+nginx_applied = False
+node = None
+release_file = None
+site_config = None
+route_include = None
+previous_site = None
+previous_include = None
+
 try:
     if str(root) != "/www/wwwroot/ai选品" or not root.is_dir():
         raise RuntimeError("unexpected project root")
@@ -403,6 +413,7 @@ try:
     if rollback.exists():
         shutil.rmtree(rollback)
     rollback.mkdir(mode=0o750)
+    swapped = True
     for name in ("frontend", "backend", "python"):
         target = root / name
         ensure_inside(target)
@@ -437,6 +448,8 @@ try:
     shutil.chown(env_file, user="root", group="www")
     os.chmod(env_file, 0o640)
     release_file = config / "release.env"
+    if release_file.is_file():
+        shutil.copy2(release_file, rollback / "release.env")
     (stage / "release.env").replace(release_file)
     shutil.chown(release_file, user="root", group="www")
     os.chmod(release_file, 0o640)
@@ -535,6 +548,7 @@ try:
     try:
         subprocess.run(["/www/server/nginx/sbin/nginx", "-t"], check=True, capture_output=True, text=True)
         subprocess.run(["/www/server/nginx/sbin/nginx", "-s", "reload"], check=True, capture_output=True, text=True)
+        nginx_applied = True
     except Exception:
         site_config.write_text(previous_site, encoding="utf-8")
         if previous_include is None:
@@ -590,7 +604,46 @@ try:
     shutil.rmtree(stage)
     result(True, "deployed", node_path=str(root / "backend"), python_path=str(root / "python"), nginx_spa_404=True)
 except Exception as error:
-    result(False, str(error))
+    recovery_errors = []
+    if nginx_applied and site_config is not None and previous_site is not None:
+        try:
+            site_config.write_text(previous_site, encoding="utf-8")
+            if previous_include is None:
+                route_include.unlink(missing_ok=True)
+            else:
+                route_include.write_text(previous_include, encoding="utf-8")
+            subprocess.run(["/www/server/nginx/sbin/nginx", "-t"], check=True, capture_output=True, text=True)
+            subprocess.run(["/www/server/nginx/sbin/nginx", "-s", "reload"], check=True, capture_output=True, text=True)
+        except Exception as nginx_error:
+            recovery_errors.append("Nginx rollback failed: " + str(nginx_error))
+    if swapped:
+        try:
+            for name in ("frontend", "backend", "python"):
+                restored = rollback / name
+                if not restored.exists():
+                    continue
+                target = root / name
+                ensure_inside(target)
+                if target.is_symlink():
+                    target.unlink()
+                elif target.is_dir():
+                    shutil.rmtree(target)
+                elif target.exists():
+                    target.unlink()
+                restored.rename(target)
+            previous_release = rollback / "release.env"
+            if previous_release.is_file() and release_file is not None:
+                previous_release.replace(release_file)
+            recovery_get = public.dict_obj(); recovery_get.project_name = v["node_project"]
+            panel_ok(node.start_project(recovery_get), "restore Node")
+            if rollback.exists():
+                shutil.rmtree(rollback)
+        except Exception as runtime_error:
+            recovery_errors.append("runtime rollback failed: " + str(runtime_error))
+    message = str(error)
+    if recovery_errors:
+        message += "; " + "; ".join(recovery_errors)
+    result(False, message, rolled_back=swapped and not recovery_errors)
 '''
 
 
@@ -612,6 +665,26 @@ for target in targets:
         shutil.rmtree(target)
     elif target.exists(): target.unlink()
 print("SCOUTOPS_RESULT="+json.dumps({{"status":True,"message":"cleanup complete"}}))
+'''
+
+
+def transient_cleanup_source(build_sha: str) -> str:
+    values = json.dumps({"root": PROJECT_ROOT, "sha": build_sha}, ensure_ascii=False)
+    return f'''import json, shutil, subprocess
+from pathlib import Path
+v=json.loads({values!r}); root=Path(v["root"])
+if str(root)!="/www/wwwroot/ai选品" or not root.is_dir(): raise SystemExit("unexpected root")
+targets=[root/(".deploy-stage-"+v["sha"]),root/(".deploy-upload-"+v["sha"]+".tar.gz")]
+for target in targets:
+    resolved=target.resolve(strict=False)
+    if resolved==root or root not in resolved.parents: raise SystemExit("unsafe transient cleanup target")
+    if target.is_symlink(): target.unlink()
+    elif target.is_dir():
+        for user_ini in target.glob("**/.user.ini"):
+            subprocess.run(["chattr", "-i", str(user_ini)], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        shutil.rmtree(target)
+    elif target.exists(): target.unlink()
+print("SCOUTOPS_RESULT="+json.dumps({{"status":True,"message":"transient cleanup complete"}}))
 '''
 
 
@@ -726,9 +799,22 @@ def main() -> None:
 
             client.connect(HOST, username=SSH_USER, password=password, timeout=15)
             remote_python(client, cleanup_source(build_sha, args.initialize_layout), timeout=180)
-            ssh_exec(client, f"rm -f '{remote_archive}'", timeout=30)
         finally:
-            client.close()
+            original_error = sys.exc_info()[1]
+            cleanup_error = None
+            try:
+                transport = client.get_transport()
+                if transport is None or not transport.is_active():
+                    client.connect(HOST, username=SSH_USER, password=password, timeout=15)
+                remote_python(client, transient_cleanup_source(build_sha), timeout=180)
+            except Exception as error:
+                cleanup_error = error
+            finally:
+                client.close()
+            if cleanup_error is not None:
+                if original_error is None:
+                    raise cleanup_error
+                print(f"deployment transient cleanup failed: {cleanup_error}", file=sys.stderr)
 
     print(json.dumps({
         "status": "deployed",

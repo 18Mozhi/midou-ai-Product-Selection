@@ -20,7 +20,7 @@
 ## 故障与回滚
 
 - 初次部署时目标或证据缺失：保持 blocked 和 `productionDeployed=false`；当前已签发环境如统一 Node、Python Crawler 或部署证据缺失，则保持 `productionDeployed=true` 但使 M07-03/M07-05 生产门失败，先在宝塔修复既有对象，不能把缺失写成通过。
-- Nginx 检查失败：不重载，保留当前有效配置，修复模板后重试。
+- 切换后的 Nginx、Node 或 Python 步骤失败：部署器恢复上一版 `frontend/backend/python`、`release.env` 与 Nginx，并通过宝塔重启 Node；同时删除当前 SHA 的 stage/upload。先确认公网 `ready/version` 已回到上一版，再修复错误重试；如输出包含 `rollback failed`，保留回滚目录并停止自动重试，按错误逐项恢复。
 - ready 失败：保持网站维护入口，按依赖字段检查 MySQL/Redis 与受限配置；不能用缓存状态伪装健康。
 - Worker 心跳过期或 API 子进程退出：在宝塔检查“ai选品”启动配置、监督器日志和租约。Python 心跳过期则检查并重启“ai选品-python”；不启动面板外替代进程。
 - 版本或配置指纹不一致：停止签发，恢复同一上一稳定 commit 与环境快照。
