@@ -100,6 +100,14 @@ const profiles = routeCatalog.productionAcceptance.roles.map((profile) => ({
   cookie: "",
   capabilities: [],
 }));
+const authorizationProbe = {
+  ...manifest.apiProbe.authorizationProbe,
+  email: required(`${manifest.apiProbe.authorizationProbe.credentialPrefix}_EMAIL`),
+  password: required(`${manifest.apiProbe.authorizationProbe.credentialPrefix}_PASSWORD`),
+  cookie: "",
+  capabilities: [],
+};
+const allProfiles = [...profiles, authorizationProbe];
 
 const headers = (extra = {}) => ({
   accept: "application/json",
@@ -115,7 +123,7 @@ const request = async (path, options = {}) => {
   return { response, body: await response.json().catch(() => null) };
 };
 
-for (const profile of profiles) {
+for (const profile of allProfiles) {
   const login = await request("/auth/login", {
     method: "POST",
     headers: headers({ "content-type": "application/json", origin: baseUrl }),
@@ -163,19 +171,39 @@ const safePathValue = (name) => {
     userId: resourceIds.memberUserId,
     membershipId: resourceIds.memberMembershipId,
     roleCode: "member",
+    reportType: "opportunity",
+    topicId: resourceIds.trendTopicId,
+    searchId: resourceIds.sourcingSearchId,
     shell: "member",
     code: "acceptance-missing",
     source: "system",
   };
   return String(aliases[name] ?? "00000000-0000-4000-8000-000000000000");
 };
-const concretePath = (template) =>
-  template.replace(/\{([^}]+)\}/g, (_, name) => encodeURIComponent(safePathValue(name)));
-const authorizedProfile = (capability) =>
-  profiles.find((profile) => !capability || profile.capabilities.includes(capability)) ??
-  profiles[0];
+const querySuffixes = {
+  get_me_navigation: "?shell=member",
+  get_me_global_search: "?q=acceptance",
+  get_me_quick_actions: "?shell=member",
+};
+const concretePath = (template, id) =>
+  `${template.replace(/\{([^}]+)\}/g, (_, name) => encodeURIComponent(safePathValue(name)))}${querySuffixes[id] ?? ""}`;
+const authorizedProfiles = (capability, path) => {
+  if (!capability) {
+    const preferredShell = path.startsWith("/platform/") ? "platform_admin" : "member";
+    return [...profiles].sort(
+      (left, right) =>
+        Number(right.shell === preferredShell) - Number(left.shell === preferredShell),
+    );
+  }
+  const candidates = profiles.filter((profile) => profile.capabilities.includes(capability));
+  if (!candidates.length) throw new Error(`acceptance_authorized_profile_missing:${capability}`);
+  return candidates;
+};
 const unauthorizedProfile = (capability) =>
-  profiles.find((profile) => capability && !profile.capabilities.includes(capability)) ?? null;
+  capability && !authorizationProbe.capabilities.includes(capability)
+    ? authorizationProbe
+    : (profiles.find((profile) => capability && !profile.capabilities.includes(capability)) ??
+      null);
 const classify = (status, body) => {
   if (status === 401) return "unauthenticated";
   if (status === 403) return "unauthorized";
@@ -194,15 +222,10 @@ const results = [];
 for (const operation of openapi.operations) {
   const isWrite = !["GET", "HEAD"].includes(operation.method);
   const isPublic = operation.is_public;
-  const profile = isWrite
-    ? isPublic
-      ? null
-      : unauthorizedProfile(operation.required_capability)
-    : isPublic
-      ? null
-      : authorizedProfile(operation.required_capability);
-  const path = concretePath(operation.path);
+  const writeProfile =
+    isWrite && !isPublic ? unauthorizedProfile(operation.required_capability) : null;
   const id = operationId(operation);
+  const path = concretePath(operation.path, id);
   const runProbe = async ({ kind, probeProfile }) => {
     const { response, body } = await request(path, {
       method: operation.method,
@@ -224,7 +247,7 @@ for (const operation of openapi.operations) {
     )
       throw new Error(`openapi_operation_route_not_found:${operation.method}:${operation.path}`);
     return {
-      test_id: `production:${traceId}:${id}:${kind}`,
+      test_id: `production:${traceId}:${id}:${kind}:${probeProfile?.key ?? "anonymous"}`,
       kind,
       role: probeProfile?.role ?? null,
       status: response.status,
@@ -235,8 +258,24 @@ for (const operation of openapi.operations) {
     };
   };
   const primaryKind = isWrite ? (isPublic ? "parameters" : "authorization") : "normal";
-  const primary = await runProbe({ kind: primaryKind, probeProfile: profile });
-  const probes = [primary];
+  let primary;
+  let probes;
+  if (isWrite || isPublic) {
+    primary = await runProbe({ kind: primaryKind, probeProfile: writeProfile });
+    probes = [primary];
+  } else {
+    const attempts = [];
+    for (const candidate of authorizedProfiles(operation.required_capability, operation.path)) {
+      const attempt = await runProbe({ kind: "normal", probeProfile: candidate });
+      attempts.push(attempt);
+      if (["success", "empty"].includes(attempt.outcome)) break;
+    }
+    primary =
+      attempts.find((attempt) => ["success", "empty"].includes(attempt.outcome)) ??
+      attempts.find((attempt) => attempt.outcome === "blocked") ??
+      attempts[0];
+    probes = [primary, ...attempts.filter((attempt) => attempt !== primary)];
+  }
   if (!isWrite && !isPublic)
     probes.push(await runProbe({ kind: "authorization", probeProfile: null }));
   const evidenceFor = (kind, applicable) => {
@@ -286,7 +325,7 @@ for (const operation of openapi.operations) {
   });
 }
 
-for (const profile of profiles)
+for (const profile of allProfiles)
   await request("/auth/logout", {
     method: "POST",
     headers: headers({

@@ -29,7 +29,10 @@ if (
   pathCount !== manifest.baseline.pathCount ||
   operationCount !== manifest.baseline.operationCount ||
   protectedRoutes.length !== manifest.baseline.protectedRouteCount ||
-  routeManifest.productionAcceptance.roles.length !== manifest.baseline.roleCount
+  routeManifest.productionAcceptance.roles.length !== manifest.baseline.roleCount ||
+  manifest.apiProbe?.authorizationProbe?.count !== 1 ||
+  manifest.apiProbe.authorizationProbe.role !== "auditor" ||
+  manifest.apiProbe.authorizationProbe.shell !== "member"
 )
   throw new Error("production_acceptance_manifest_drift");
 if (!production) {
@@ -73,6 +76,8 @@ const coreE2eReportFile = resolve(
 const config = loadRuntimeConfig(process.env, "api");
 const pool = createDatabasePool(config);
 const roleProfiles = routeManifest.productionAcceptance.roles;
+const authorizationProbeProfile = manifest.apiProbe.authorizationProbe;
+const seededProfiles = [...roleProfiles, authorizationProbeProfile];
 const state = {
   organizationId: randomUUID(),
   workspaceId: randomUUID(),
@@ -91,14 +96,14 @@ const state = {
   purchaseCostInputId: randomUUID(),
   logisticsCostInputId: randomUUID(),
   profitRunId: randomUUID(),
-  users: Object.fromEntries(roleProfiles.map((profile) => [profile.key, randomUUID()])),
+  users: Object.fromEntries(seededProfiles.map((profile) => [profile.key, randomUUID()])),
   memberships: Object.fromEntries(
-    roleProfiles
+    seededProfiles
       .filter((profile) => profile.shell !== "platform_admin")
       .map((profile) => [profile.key, randomUUID()]),
   ),
   emails: Object.fromEntries(
-    roleProfiles.map((profile) => [
+    seededProfiles.map((profile) => [
       profile.key,
       `${profile.key}.${runId}@${manifest.tenant.emailDomain}`,
     ]),
@@ -132,7 +137,7 @@ async function seed() {
   const [[lock]] = await pool.query("SELECT GET_LOCK('scoutops:production-acceptance',0) acquired");
   if (Number(lock.acquired) !== 1) throw new Error("production_acceptance_lock_busy");
   lockHeld = true;
-  const roleCodes = roleProfiles.map((profile) => profile.role);
+  const roleCodes = [...new Set(seededProfiles.map((profile) => profile.role))];
   const [roles] = await pool.query(
     `SELECT code FROM roles WHERE code IN (${placeholders(roleCodes)}) AND status='active'`,
     roleCodes,
@@ -146,7 +151,7 @@ async function seed() {
   });
   const passwordHash = await hasher.hash(password);
   const now = new Date();
-  for (const profile of roleProfiles) {
+  for (const profile of seededProfiles) {
     const email = state.emails[profile.key];
     await pool.query(
       "INSERT INTO users(id,email,email_normalized,password_hash,status,email_verified_at,failed_login_count,locked_until,password_changed_at,must_change_password,must_enroll_mfa,security_setup_completed_at,version,created_at,updated_at) VALUES(?,?,?,?,'active',?,0,NULL,?,0,0,?,1,?,?)",
@@ -173,7 +178,7 @@ async function seed() {
     state.workspaceId,
     state.organizationId,
   ]);
-  for (const profile of roleProfiles.filter((item) => item.shell !== "platform_admin")) {
+  for (const profile of seededProfiles.filter((item) => item.shell !== "platform_admin")) {
     const membershipId = state.memberships[profile.key];
     await pool.query(
       "INSERT INTO memberships(id,organization_id,user_id,status,joined_at,version,created_at,updated_at) VALUES(?,?,?,'active',?,1,?,?)",
@@ -197,7 +202,7 @@ async function seed() {
       ],
     );
   }
-  for (const profile of roleProfiles.filter((item) => item.shell === "platform_admin"))
+  for (const profile of seededProfiles.filter((item) => item.shell === "platform_admin"))
     await pool.query(
       "INSERT INTO platform_role_assignments(user_id,role_code,created_by,created_at) VALUES(?,?,?,?)",
       [state.users[profile.key], profile.role, state.users.platform_super_admin, now],
@@ -441,7 +446,7 @@ function childEnvironment() {
     SCOUTOPS_ACCEPTANCE_API_REPORT_FILE: apiReportFile,
     SCOUTOPS_ACCEPTANCE_RESOURCE_IDS: JSON.stringify(state),
   };
-  for (const profile of roleProfiles) {
+  for (const profile of seededProfiles) {
     env[`${profile.credentialPrefix}_EMAIL`] = state.emails[profile.key];
     env[`${profile.credentialPrefix}_PASSWORD`] = password;
   }
@@ -635,8 +640,8 @@ const report = {
     role_count: roleProfiles.length,
   },
   seed: {
-    verified_users: roleProfiles.length,
-    single_role_accounts: roleProfiles.length,
+    verified_users: seededProfiles.length,
+    single_role_accounts: seededProfiles.length,
     organizations: 1,
     workspaces: 1,
     trends: 1,

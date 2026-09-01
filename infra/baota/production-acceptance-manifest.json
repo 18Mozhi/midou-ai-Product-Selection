@@ -40,6 +40,13 @@
   "apiProbe": {
     "realFastifyRequired": true,
     "writePolicy": "validation_or_authorization_block_only",
+    "authorizationProbe": {
+      "count": 1,
+      "key": "authorization_probe",
+      "role": "auditor",
+      "shell": "member",
+      "credentialPrefix": "SCOUTOPS_QA_AUTHORIZATION_PROBE"
+    },
     "evidenceDimensions": ["normal", "authorization", "parameters", "idempotency", "fault"],
     "allowedOutcomes": ["success", "empty", "blocked", "unauthenticated", "unauthorized"],
     "routeNotFoundAllowed": false
