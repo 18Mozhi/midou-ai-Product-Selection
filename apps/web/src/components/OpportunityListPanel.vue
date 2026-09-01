@@ -164,8 +164,7 @@ function changeScope(event: Event) {
           <option value="product">可分析商品</option>
           <option value="all">全部线索</option>
         </select></label
-      ><button type="submit">筛选</button
-      ><button type="button" @click="emit('reset')">重置</button>
+      ><button type="submit">筛选</button><button type="button" @click="emit('reset')">重置</button>
     </form>
   </ResponsiveFilterDrawer>
   <section class="opportunity-list-summary" aria-label="选品机会数据总览">
