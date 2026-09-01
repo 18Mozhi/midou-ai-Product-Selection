@@ -8,7 +8,7 @@ const manifest = JSON.parse(
   await readFile("infra/baota/production-acceptance-manifest.json", "utf8"),
 );
 const routeCatalog = await readRouteCatalogManifest();
-const baseUrl = (process.env.SCOUTOPS_ACCEPTANCE_BASE_URL ?? "https://midouai.mozhiz.cn").replace(
+const baseUrl = (process.env.SCOUTOPS_ACCEPTANCE_BASE_URL ?? "https://midouai.medouai.com").replace(
   /\/$/,
   "",
 );

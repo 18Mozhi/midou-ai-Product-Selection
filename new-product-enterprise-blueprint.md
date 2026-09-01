@@ -891,16 +891,16 @@ P00 文件路径固定包含 `organizations/<organization_id>/workspaces/<worksp
 
 #### 10.5.2 宝塔服务映射与操作边界
 
-生产目标服务器为 `192.168.1.220`，主域名为 `midouai.mozhiz.cn`，项目根目录固定为 `/www/wwwroot/ai选品`。域名、HTTPS 证书、反向代理、静态前端、唯一 Node 后端、MySQL、Redis、日志和备份必须能在宝塔面板中查看并操作。
+生产目标服务器为 `192.168.1.220`，主域名为 `midouai.medouai.com`，项目根目录固定为 `/www/wwwroot/ai选品`。域名、HTTPS 证书、反向代理、静态前端、唯一 Node 后端、MySQL、Redis、日志和备份必须能在宝塔面板中查看并操作。
 
-| 能力          | 宝塔中的可见对象                              | 部署方式                                                                                                                                                           |
-| ------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Vue 3 前端    | 网站 `ai选品网站`（域名 `midouai.mozhiz.cn`） | 构建静态文件后发布到 `/www/wwwroot/ai选品/frontend`；HTTPS、缓存和反向代理由网站配置管理                                                                           |
-| 统一后端      | Node 项目 `ai选品`                            | 唯一宝塔后端以前台命令 `node apps/backend/dist/server.js` 运行；内部监督 HTTP API 与异步 Worker，任一子进程异常退出会自动重启，面板停止/重启信号会传递到全部子进程 |
-| MySQL         | MySQL 5.7 服务与数据库 `product_scout`        | 账号 `product_scout` 仅授予该库所需权限；密码只在宝塔数据库配置和运行环境变量中保存                                                                                |
-| Redis         | Redis 服务                                    | 仅绑定本机或受控内网；用于缓存、队列、限流和 SSE 协调                                                                                                              |
-| 文件证据/导出 | 宝塔受控目录与备份任务                        | 目录按组织隔离，备份任务写入同机独立加密恢复目录；不得暴露为公网目录，也不声明整机故障保护                                                                         |
-| 定时调度      | 统一后端内部 Worker                           | 业务调度由统一后端内的 Worker 执行；临时发布/验收任务结束后删除，禁止另建宿主机 crontab 或屏外守护进程                                                             |
+| 能力          | 宝塔中的可见对象                                | 部署方式                                                                                                                                                           |
+| ------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Vue 3 前端    | 网站 `ai选品网站`（域名 `midouai.medouai.com`） | 构建静态文件后发布到 `/www/wwwroot/ai选品/frontend`；HTTPS、缓存和反向代理由网站配置管理                                                                           |
+| 统一后端      | Node 项目 `ai选品`                              | 唯一宝塔后端以前台命令 `node apps/backend/dist/server.js` 运行；内部监督 HTTP API 与异步 Worker，任一子进程异常退出会自动重启，面板停止/重启信号会传递到全部子进程 |
+| MySQL         | MySQL 5.7 服务与数据库 `product_scout`          | 账号 `product_scout` 仅授予该库所需权限；密码只在宝塔数据库配置和运行环境变量中保存                                                                                |
+| Redis         | Redis 服务                                      | 仅绑定本机或受控内网；用于缓存、队列、限流和 SSE 协调                                                                                                              |
+| 文件证据/导出 | 宝塔受控目录与备份任务                          | 目录按组织隔离，备份任务写入同机独立加密恢复目录；不得暴露为公网目录，也不声明整机故障保护                                                                         |
+| 定时调度      | 统一后端内部 Worker                             | 业务调度由统一后端内的 Worker 执行；临时发布/验收任务结束后删除，禁止另建宿主机 crontab 或屏外守护进程                                                             |
 
 宝塔网站必须将 `/api/` 与 SSE 路径反向代理到统一后端的本机 `4101` 端口，关闭 SSE 响应缓冲并配置与客户端重连策略一致的读取超时；不得将内部 Worker、Redis 或 MySQL 端口直接暴露到公网。`192.168.1.220` 为内网地址，域名上线前必须由网络负责人提供固定公网入口或 NAT 映射、DNS A/AAAA 记录、80/443 转发规则和 TLS 证书签发条件；未满足时只允许内网预发布，不得宣称公网可用。
 
@@ -1026,7 +1026,7 @@ M07-02 安全门禁由 `verification/security-gate.json` 冻结依赖漏洞、�
 
 M07-02 最新同提交模块自动验收 `489e59a2-ee7e-426e-9321-7b22181f0c1b` 通过：全仓构建、策略单测、0 高危/严重生产依赖漏洞、静态安全门、MySQL 5.7 RBAC 隔离与脱敏安全运营真实链路、文档门均重新执行成功。该结果不代表 P08 容量或高可用能力完成。
 
-M07-03 部署合同现以 `infra/baota/service-manifest.json` schema v3 锁定惠州 `192.168.1.220`、`midouai.mozhiz.cn`、`/www/wwwroot/ai选品` 与唯一宝塔 Node 后端 `ai选品`。`scripts/verify-baota-deployment.mjs --preflight` 验证单后端发布包；`--production` 必须看到当前 Git commit、五个项目对象、live/ready/version、Worker 心跳、MySQL 5.7/utf8mb4、本机 Redis 和面板日志。旧 API/Worker/Canary/Python 独立项目与临时发布任务不得继续作为生产对象。
+M07-03 部署合同现以 `infra/baota/service-manifest.json` schema v3 锁定惠州 `192.168.1.220`、`midouai.medouai.com`、`/www/wwwroot/ai选品` 与唯一宝塔 Node 后端 `ai选品`。`scripts/verify-baota-deployment.mjs --preflight` 验证单后端发布包；`--production` 必须看到当前 Git commit、五个项目对象、live/ready/version、Worker 心跳、MySQL 5.7/utf8mb4、本机 Redis 和面板日志。旧 API/Worker/Canary/Python 独立项目与临时发布任务不得继续作为生产对象。
 
 M07-05 当前发布合同以 `infra/baota/service-manifest.json` 锁定固定目录和单一宝塔 Node 后端 `ai选品`：代码只在本地构建，提交且工作树干净后运行 `python scripts/deploy-baota.py`，服务器只覆盖 `frontend`、`backend`、`python`，并由宝塔重启既有 Node 与 Python 项目。部署器在 Git fetch、构建、凭据读取和上传之前先执行格式、运行文档一致性与发布矩阵门，构建或复用本地产物后再执行固定宝塔产物 preflight；任一失败都不得读取 Windows 凭据或连接生产。发布后分别核验公网 version、live、ready、available，失败时以本地目标 Git 提交重新构建和部署回滚。历史双槽证据中的 5%/25%/100%、每阶段 1,800 秒、1 秒采样、经本机 Nginx 保留 TLS/SNI/Host 的公网回环探针、HMAC 单行持久写和自动停止记录只用于审计；旧 `infra/baota/release-rollout-manifest.json` 与 `scripts/run-baota-release-rollout.mjs` 已退出当前生产调用链，不能据此创建第二后端、计划任务或分流配置。Playwright 模块验收仍使用可配置隔离端口并在命令结束后关闭；`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` 可显式选择主机既有 Chromium，Linux 视觉门必须确认 Chromium 可执行和中文字体存在，禁止接受方框字快照。惠州 Debian 11 主机历史上经明确授权由宝塔有限任务安装 Debian 官方 `fonts-noto-cjk` 固定版本并保留 0600 安装前证据；这不构成当前双槽拓扑、备用服务器、主机故障保护、多节点或 10,000 用户能力。
 

@@ -190,7 +190,7 @@
       "preflight": "../scripts/verify-baota-s0.mjs",
       "productionDeployed": true,
       "deploymentStatus": "healthy",
-      "target": "192.168.1.220 /www/wwwroot/ai选品 (domain: midouai.mozhiz.cn)",
+      "target": "192.168.1.220 /www/wwwroot/ai选品 (domain: midouai.medouai.com)",
       "productionVerifier": "../scripts/verify-baota-deployment.mjs --production",
       "runtimeScope": "one Huizhou host with fixed frontend backend python config runtime backups directories and BaoTa-managed ai选品 Node plus ai选品-python Python 3.12 projects; disk and capacity are not product completion gates",
       "status": "verified",

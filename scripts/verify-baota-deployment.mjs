@@ -26,7 +26,7 @@ try {
 
 if (manifest.schemaVersion !== 4 || manifest.stage !== "production")
   fail("manifest_contract_invalid", "production schemaVersion 4 is required");
-if (manifest.target?.host !== "192.168.1.220" || manifest.target?.domain !== "midouai.mozhiz.cn")
+if (manifest.target?.host !== "192.168.1.220" || manifest.target?.domain !== "midouai.medouai.com")
   fail("target_contract_invalid", "locked production host or domain is missing");
 if (manifest.target?.deployRoot !== "/www/wwwroot/ai选品")
   fail("deploy_root_invalid", "production deploy root must be /www/wwwroot/ai选品");
@@ -84,7 +84,7 @@ if (!manifest.logging?.managedInBaota || manifest.logging.forbiddenFields.length
   fail("logging_contract_invalid", "Baota logging and secret exclusions are required");
 const nginx = await readFile(resolve(root, "infra/baota/nginx/scoutops.conf.template"), "utf8");
 for (const token of [
-  "server_name midouai.mozhiz.cn",
+  "server_name midouai.medouai.com",
   "location /api/",
   "location /open/",
   "location /api/v1/realtime/events",

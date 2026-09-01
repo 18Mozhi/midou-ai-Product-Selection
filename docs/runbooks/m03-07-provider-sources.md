@@ -55,5 +55,5 @@
 
 - `public_page` 与 `public_rss` 可单独使用“匿名测试”排障；从停用切换为启用时必须走“烟测并启用”，由页面先保存停用配置、执行同一真实页面测试，再以新版本锁启用，不要求登录档案。失败后设置已保存但状态保持停用。
 - 登录型来源可先“打开登录页”，再上传 Playwright `storageState` JSON、浏览器 Cookie JSON、Netscape `cookies.txt` 或完整 `.tar.gz` 浏览器档案。
-- 也可由浏览器助手在用户点击后按目标域名读取当前浏览器 Cookie。扩展桥接只接受 `midouai.mozhiz.cn` 与本地开发来源，Cookie 进入 API 后规范化、加密且不再返回。
+- 也可由浏览器助手在用户点击后按目标域名读取当前浏览器 Cookie。扩展桥接只接受 `midouai.medouai.com` 与本地开发来源，Cookie 进入 API 后规范化、加密且不再返回。
 - 完整档案与 Cookie 文件是不同格式；不允许把 Cookie JSON 当作 tar.gz 解压。

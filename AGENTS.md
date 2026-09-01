@@ -25,14 +25,14 @@
 ## 固定生产目录与重复部署命令
 
 - 本项目唯一生产根目录是 `/www/wwwroot/ai选品`。只允许维护以下固定目录，禁止再创建 `current`、`releases`、Git 工作树或长期 staging 目录：
-  - `/www/wwwroot/ai选品/frontend`：Vue 构建后的静态文件，也是宝塔网站 `midouai.mozhiz.cn` 的网站目录。
+  - `/www/wwwroot/ai选品/frontend`：Vue 构建后的静态文件，也是宝塔网站 `midouai.medouai.com` 的网站目录。
   - `/www/wwwroot/ai选品/backend`：Node.js 20 后端运行包，也是宝塔 Node 项目 `ai选品` 的项目目录。
   - `/www/wwwroot/ai选品/python`：Python 3.12 采集运行包，也是宝塔 Python 项目 `ai选品-python` 的项目目录。
   - `/www/wwwroot/ai选品/config`：宝塔受限环境文件；不得提交、上传到其他目录或在输出中展示秘密。
   - `/www/wwwroot/ai选品/runtime`：`evidence`、`exports`、`credential-tmp`、`tmp`、`verification` 等运行数据。
   - `/www/wwwroot/ai选品/backups`：仅本项目的数据库和文件恢复材料。
 - 服务器不得执行 Git clone、pull、checkout 或 build。代码只在本地构建并用 `python scripts/deploy-baota.py` 上传运行包；该命令会排除 `tests`、截图、文档、计划、源码缓存和本地临时文件，上传完成后删除临时包。
-- 宝塔网站对象：`ai选品网站` / 域名 `midouai.mozhiz.cn` / 目录 `/www/wwwroot/ai选品/frontend`。
+- 宝塔网站对象：`ai选品网站` / 域名 `midouai.medouai.com` / 目录 `/www/wwwroot/ai选品/frontend`。
 - 宝塔 Node 对象：`ai选品` / 目录 `/www/wwwroot/ai选品/backend` / Node `v20.19.6` / 启动命令 `node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js`。这是宝塔面板中的直接 Node 命令，不得配置项目自带 Bash 启动器。
 - 宝塔 Python 对象：`ai选品-python` / 目录 `/www/wwwroot/ai选品/python` / Python `3.12.13` / 命令模式 / 启动命令 `python -m scoutops_crawler --env-file=/www/wwwroot/ai选品/config/product_scout.env`。由 Python 直接解析受限 `KEY=VALUE` 文件，不使用 Bash；Python 项目只允许由宝塔创建、启动、停止、重启和查看日志。
 - 创建或首次整理：在本地仓库根目录运行 `python scripts/deploy-baota.py --initialize-layout`。更新最新版：提交并确认工作树干净后运行 `python scripts/deploy-baota.py`。

@@ -9,6 +9,6 @@
 3. 点击“加载已解压的扩展程序”，选择解压后的 `scoutops-browser-helper` 文件夹。
 4. 返回 ai选品，点击“从当前浏览器读取 Cookie”或“从 ERP 导入”。
 
-扩展按操作动态申请目标网站权限，不读取浏览历史，不上传密码，不把 ERP 登录令牌交给 ai选品页面。桥接入口只注入 `https://midouai.mozhiz.cn`、`http://127.0.0.1` 和 `http://localhost`，扩展后台还会再次校验发送页面来源。
+扩展按操作动态申请目标网站权限，不读取浏览历史，不上传密码，不把 ERP 登录令牌交给 ai选品页面。桥接入口只注入 `https://midouai.medouai.com`、`http://127.0.0.1` 和 `http://localhost`，扩展后台还会再次校验发送页面来源。
 
 Cookie 上传另支持 Playwright `storageState`（`{"cookies":[...]}`）、浏览器 Cookie JSON 数组和 Netscape `cookies.txt` 七列格式。完整浏览器档案仅接受 `.tar.gz`，与 Cookie JSON 是两种不同档案。

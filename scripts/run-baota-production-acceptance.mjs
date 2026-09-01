@@ -428,9 +428,9 @@ async function seed() {
 function childEnvironment() {
   const env = {
     ...process.env,
-    SCOUTOPS_QA_BASE_URL: process.env.SCOUTOPS_ACCEPTANCE_BASE_URL ?? "https://midouai.mozhiz.cn",
+    SCOUTOPS_QA_BASE_URL: process.env.SCOUTOPS_ACCEPTANCE_BASE_URL ?? "https://midouai.medouai.com",
     SCOUTOPS_ACCEPTANCE_BASE_URL:
-      process.env.SCOUTOPS_ACCEPTANCE_BASE_URL ?? "https://midouai.mozhiz.cn",
+      process.env.SCOUTOPS_ACCEPTANCE_BASE_URL ?? "https://midouai.medouai.com",
     SCOUTOPS_QA_ORGANIZATION_LABEL: manifest.tenant.organizationLabel,
     SCOUTOPS_QA_WORKSPACE_LABEL: manifest.tenant.workspaceLabel,
     SCOUTOPS_QA_TRACE_ID: runId,

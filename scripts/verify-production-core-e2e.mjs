@@ -8,7 +8,7 @@ const required = (name) => {
   if (!value) throw new Error(`${name} is required`);
   return value;
 };
-const baseUrl = (process.env.SCOUTOPS_QA_BASE_URL ?? "https://midouai.mozhiz.cn").replace(
+const baseUrl = (process.env.SCOUTOPS_QA_BASE_URL ?? "https://midouai.medouai.com").replace(
   /\/$/,
   "",
 );

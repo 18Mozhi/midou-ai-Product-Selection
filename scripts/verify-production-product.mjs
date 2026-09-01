@@ -20,7 +20,7 @@ const credentials = (prefix) => ({
   password: required(`${prefix}_PASSWORD`),
 });
 
-const baseUrl = (process.env.SCOUTOPS_QA_BASE_URL ?? "https://midouai.mozhiz.cn").replace(
+const baseUrl = (process.env.SCOUTOPS_QA_BASE_URL ?? "https://midouai.medouai.com").replace(
   /\/$/,
   "",
 );

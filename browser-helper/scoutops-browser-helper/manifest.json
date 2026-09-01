@@ -9,7 +9,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://midouai.mozhiz.cn/*",
+        "https://midouai.medouai.com/*",
         "http://127.0.0.1/*",
         "http://localhost/*"
       ],

@@ -30,7 +30,7 @@ test("M07-03.A01-A05 manifest freezes fixed Node and Python BaoTa targets and he
 test("M07-03.A06-A11 site, runtime, permission, config and logging contracts fail closed", async () => {
   const manifest = JSON.parse(await read("infra/baota/service-manifest.json"));
   const nginx = await read("infra/baota/nginx/scoutops.conf.template");
-  assert.match(nginx, /server_name midouai\.mozhiz\.cn/);
+  assert.match(nginx, /server_name midouai\.medouai\.com/);
   assert.match(nginx, /location \/open\//);
   assert.match(nginx, /location \/api\/v1\/realtime\/events[\s\S]*proxy_buffering off/);
   for (const name of ["ai选品", "ai选品数据库", "ai选品缓存"])
@@ -91,7 +91,7 @@ test("M07-03.A17 docs, OpenAPI, Feature Map and evidence schema stay synchronize
   for (const token of [
     "M07-03",
     "192.168.1.220",
-    "midouai.mozhiz.cn",
+    "midouai.medouai.com",
     "productionDeployed",
     "healthy",
     "宝塔",

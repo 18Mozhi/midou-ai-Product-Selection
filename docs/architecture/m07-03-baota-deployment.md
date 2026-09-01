@@ -2,7 +2,7 @@
 
 ## 范围和真实状态
 
-M07-03 当前部署目标为惠州 `192.168.1.220`、`midouai.mozhiz.cn` 与 `/www/wwwroot/ai选品`。宝塔管理网站、统一 Node 后端 `ai选品`、Python 3.12 采集项目 `ai选品-python`、MySQL 5.7、Redis、备份与日志。生产固定使用 `frontend/backend/python/config/runtime/backups`，不保存 Git、`current` 或 `releases`。独立 API、Worker、Canary 和面板外常驻项目禁止创建。manifest 只有在同提交生产证据、live/ready/version、Worker/Python 心跳与面板日志均通过时才可签发健康。
+M07-03 当前部署目标为惠州 `192.168.1.220`、`midouai.medouai.com` 与 `/www/wwwroot/ai选品`。宝塔管理网站、统一 Node 后端 `ai选品`、Python 3.12 采集项目 `ai选品-python`、MySQL 5.7、Redis、备份与日志。生产固定使用 `frontend/backend/python/config/runtime/backups`，不保存 Git、`current` 或 `releases`。独立 API、Worker、Canary 和面板外常驻项目禁止创建。manifest 只有在同提交生产证据、live/ready/version、Worker/Python 心跳与面板日志均通过时才可签发健康。
 
 部署脚本只认识上述六个固定目录、当前一次上传暂存与回滚目录，以及初始化时可迁移的受控 `shared`。脚本不再包含 `current`/`releases` 的迁移或删除分支；根目录存在其他条目时会在停止 Node 前失败关闭，由运维先确认归属并移出，不能由部署器猜测删除。
 

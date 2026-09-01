@@ -49,7 +49,7 @@ x-scoutops-baota-s0:
   deploymentStatus: healthy
   manifest: infra/baota/service-manifest.json
   targetHost: 192.168.1.220
-  targetDomain: midouai.mozhiz.cn
+  targetDomain: midouai.medouai.com
   deployRoot: /www/wwwroot/ai选品
   backendProject: ai选品
   backendStartCommand: node apps/backend/dist/server.js

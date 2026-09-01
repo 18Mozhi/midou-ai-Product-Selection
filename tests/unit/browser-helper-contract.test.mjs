@@ -9,7 +9,7 @@ test("browser helper is restricted to ai选品 origins and never returns ERP tok
     worker = await readFile("browser-helper/scoutops-browser-helper/service-worker.js", "utf8"),
     bridge = await readFile("browser-helper/scoutops-browser-helper/content-bridge.js", "utf8");
   assert.deepEqual(manifest.content_scripts[0].matches, [
-    "https://midouai.mozhiz.cn/*",
+    "https://midouai.medouai.com/*",
     "http://127.0.0.1/*",
     "http://localhost/*",
   ]);

@@ -2,25 +2,44 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "ai选品固定目录宝塔生产证据",
   "type": "object",
-  "required": ["schemaVersion", "target", "release", "panelObjects", "health", "runtime", "dependencies", "logging", "capturedAt"],
+  "required": [
+    "schemaVersion",
+    "target",
+    "release",
+    "panelObjects",
+    "health",
+    "runtime",
+    "dependencies",
+    "logging",
+    "capturedAt"
+  ],
   "properties": {
-    "schemaVersion": {"const": 2},
+    "schemaVersion": { "const": 2 },
     "target": {
       "type": "object",
       "required": ["host", "domain", "deployRoot"],
       "properties": {
-        "host": {"const": "192.168.1.220"},
-        "domain": {"const": "midouai.mozhiz.cn"},
-        "deployRoot": {"const": "/www/wwwroot/ai选品"}
+        "host": { "const": "192.168.1.220" },
+        "domain": { "const": "midouai.medouai.com" },
+        "deployRoot": { "const": "/www/wwwroot/ai选品" }
       }
     },
-    "release": {"type": "object", "required": ["commit", "appVersion", "configFingerprint", "migrationVersion"]},
-    "panelObjects": {"type": "array", "minItems": 6, "maxItems": 6},
-    "health": {"type": "object", "required": ["live", "ready", "version"]},
-    "runtime": {"type": "object", "required": ["backend", "worker", "python"]},
-    "dependencies": {"type": "object", "required": ["mysqlVersion", "mysqlCharset", "redisLocalOnly"]},
-    "logging": {"type": "object", "required": ["panelVisible", "rotationConfigured", "secretScanPassed"]},
-    "capturedAt": {"type": "string", "format": "date-time"}
+    "release": {
+      "type": "object",
+      "required": ["commit", "appVersion", "configFingerprint", "migrationVersion"]
+    },
+    "panelObjects": { "type": "array", "minItems": 6, "maxItems": 6 },
+    "health": { "type": "object", "required": ["live", "ready", "version"] },
+    "runtime": { "type": "object", "required": ["backend", "worker", "python"] },
+    "dependencies": {
+      "type": "object",
+      "required": ["mysqlVersion", "mysqlCharset", "redisLocalOnly"]
+    },
+    "logging": {
+      "type": "object",
+      "required": ["panelVisible", "rotationConfigured", "secretScanPassed"]
+    },
+    "capturedAt": { "type": "string", "format": "date-time" }
   },
   "additionalProperties": false
 }

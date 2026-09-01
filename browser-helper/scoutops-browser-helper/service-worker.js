@@ -1,7 +1,7 @@
 const ERP_PAGE_ORIGIN = "https://medou.medouai.com";
 const ERP_API_ORIGIN = "https://medo2.mozhiz.cn";
 const BRIDGE_ORIGINS = new Set([
-  "https://midouai.mozhiz.cn",
+  "https://midouai.medouai.com",
   "http://127.0.0.1:5173",
   "http://localhost:5173",
 ]);

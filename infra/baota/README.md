@@ -1,17 +1,17 @@
 # ai选品宝塔固定目录部署
 
-生产目标固定为惠州 `192.168.1.220`、域名 `midouai.mozhiz.cn`、根目录 `/www/wwwroot/ai选品`。服务器不保存 Git 仓库，也不执行 `git pull` 或源码构建。本地构建完成后，由 `python scripts/deploy-baota.py` 只上传运行包。
+生产目标固定为惠州 `192.168.1.220`、域名 `midouai.medouai.com`、根目录 `/www/wwwroot/ai选品`。服务器不保存 Git 仓库，也不执行 `git pull` 或源码构建。本地构建完成后，由 `python scripts/deploy-baota.py` 只上传运行包。
 
 ## 目录与宝塔对象
 
-| 用途 | 固定目录 | 宝塔对象 | 启动方式 |
-| --- | --- | --- | --- |
-| Vue 前端 | `/www/wwwroot/ai选品/frontend` | 网站 `midouai.mozhiz.cn` | 静态文件，无独立进程 |
-| Node 后端 | `/www/wwwroot/ai选品/backend` | Node 项目 `ai选品` | `node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js` |
-| Python 采集运行时 | `/www/wwwroot/ai选品/python` | Python 项目 `ai选品-python` | Python 3.12.13 命令模式：`python -m scoutops_crawler --env-file=/www/wwwroot/ai选品/config/product_scout.env` |
-| 受限配置 | `/www/wwwroot/ai选品/config` | `root:www` 目录 `0750`、环境文件 `0640` | `www` 运行进程只读；不提交、不打印 |
-| 运行数据 | `/www/wwwroot/ai选品/runtime` | Node/Python 共用 | 证据、导出、凭据临时目录与验证数据 |
-| 本机备份 | `/www/wwwroot/ai选品/backups` | 宝塔备份任务 | 仅本项目恢复材料 |
+| 用途              | 固定目录                       | 宝塔对象                                | 启动方式                                                                                                                                     |
+| ----------------- | ------------------------------ | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Vue 前端          | `/www/wwwroot/ai选品/frontend` | 网站 `midouai.medouai.com`              | 静态文件，无独立进程                                                                                                                         |
+| Node 后端         | `/www/wwwroot/ai选品/backend`  | Node 项目 `ai选品`                      | `node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js` |
+| Python 采集运行时 | `/www/wwwroot/ai选品/python`   | Python 项目 `ai选品-python`             | Python 3.12.13 命令模式：`python -m scoutops_crawler --env-file=/www/wwwroot/ai选品/config/product_scout.env`                                |
+| 受限配置          | `/www/wwwroot/ai选品/config`   | `root:www` 目录 `0750`、环境文件 `0640` | `www` 运行进程只读；不提交、不打印                                                                                                           |
+| 运行数据          | `/www/wwwroot/ai选品/runtime`  | Node/Python 共用                        | 证据、导出、凭据临时目录与验证数据                                                                                                           |
+| 本机备份          | `/www/wwwroot/ai选品/backups`  | 宝塔备份任务                            | 仅本项目恢复材料                                                                                                                             |
 
 Node 项目由统一后端监督 API 与 Worker。Worker 内所有队列由一个优先级调度器控制，生产使用 `/www/wwwroot/ai选品/runtime/worker-scheduler.json` 回写脱敏的并发、背压、延迟和失败率；不得为积压队列另建 Worker 进程绕过配额。Python 项目是宝塔可见、可启停、可查看日志的浏览器采集消费者：通过内部服务令牌领取档案租约，执行 Python-to-Playwright 调用链，持续续租并回写完成结果；不再上报无业务任务的“空闲心跳”。
 

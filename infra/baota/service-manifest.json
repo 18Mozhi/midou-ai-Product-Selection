@@ -5,7 +5,7 @@
   "productionDeployed": true,
   "target": {
     "host": "192.168.1.220",
-    "domain": "midouai.mozhiz.cn",
+    "domain": "midouai.medouai.com",
     "deployRoot": "/www/wwwroot/ai选品",
     "primaryRegion": "惠州",
     "recoveryRegion": "惠州",
@@ -20,7 +20,7 @@
       "workingDirectory": "/www/wwwroot/ai选品/frontend",
       "buildCommand": "npm run build:web (local only)",
       "publishDirectory": "/www/wwwroot/ai选品/frontend",
-      "domain": "midouai.mozhiz.cn",
+      "domain": "midouai.medouai.com",
       "public": true,
       "healthPath": "/",
       "nginxTemplate": "infra/baota/nginx/scoutops.conf.template"
@@ -36,7 +36,36 @@
       "public": false,
       "healthPaths": ["/api/v1/health/live", "/api/v1/health/ready", "/api/v1/health/version"],
       "managedChildren": ["api", "worker"],
-      "environmentGroups": ["app", "database", "redis", "ai", "storage", "runtime", "security", "auth", "mfa", "realtime", "evidence", "providerAdapters", "playwrightCrawler", "collectionTasks", "trends", "opportunities", "competitorMonitor", "sourcing", "businessTasks", "approvals", "notifications", "platformDashboard", "collectionConsole", "securityOperations", "openPlatform", "commercial", "backupRecovery", "fileResilience"],
+      "environmentGroups": [
+        "app",
+        "database",
+        "redis",
+        "ai",
+        "storage",
+        "runtime",
+        "security",
+        "auth",
+        "mfa",
+        "realtime",
+        "evidence",
+        "providerAdapters",
+        "playwrightCrawler",
+        "collectionTasks",
+        "trends",
+        "opportunities",
+        "competitorMonitor",
+        "sourcing",
+        "businessTasks",
+        "approvals",
+        "notifications",
+        "platformDashboard",
+        "collectionConsole",
+        "securityOperations",
+        "openPlatform",
+        "commercial",
+        "backupRecovery",
+        "fileResilience"
+      ],
       "logSource": "stdout/stderr",
       "gracefulSignals": ["SIGTERM", "SIGINT"]
     },
@@ -85,8 +114,20 @@
   },
   "logging": {
     "managedInBaota": true,
-    "sources": ["site access/error", "ai选品 stdout/stderr", "ai选品-python stdout/stderr", "MySQL", "Redis", "backup task"],
-    "requiredFields": ["service", "status", "observed_at", "request_id or trace_id when request-scoped"],
+    "sources": [
+      "site access/error",
+      "ai选品 stdout/stderr",
+      "ai选品-python stdout/stderr",
+      "MySQL",
+      "Redis",
+      "backup task"
+    ],
+    "requiredFields": [
+      "service",
+      "status",
+      "observed_at",
+      "request_id or trace_id when request-scoped"
+    ],
     "forbiddenFields": ["password", "cookie", "token", "api_key", "private_key", "master_key"]
   },
   "productionEvidence": {
@@ -94,5 +135,10 @@
     "path": ".artifacts/verification/baota-production-evidence.json",
     "requiredBeforeDeployed": true
   },
-  "forbiddenProductionManagers": ["systemd", "standalone-pm2", "host-crontab", "screen-docker-compose"]
+  "forbiddenProductionManagers": [
+    "systemd",
+    "standalone-pm2",
+    "host-crontab",
+    "screen-docker-compose"
+  ]
 }

@@ -642,7 +642,7 @@ try {
   await writeFile(sitePath, rolloutSite, { mode: 0o600 });
   nginxBin = runtime.RELEASE_NGINX_BIN ?? "/www/server/nginx/sbin/nginx";
   nginxConfigured = true;
-  const publicBase = (runtime.RELEASE_PUBLIC_BASE_URL ?? "https://midouai.mozhiz.cn").replace(
+  const publicBase = (runtime.RELEASE_PUBLIC_BASE_URL ?? "https://midouai.medouai.com").replace(
       /\/$/,
       "",
     ),
