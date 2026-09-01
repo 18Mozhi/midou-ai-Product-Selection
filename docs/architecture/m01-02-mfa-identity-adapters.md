@@ -12,7 +12,7 @@ OIDC 接口状态为 `adapter_ready`；SAML 2.0 与 SCIM 2.0 为 `reserved_disab
 
 TOTP 使用 RFC 6238 的 HMAC-SHA1 兼容模式、30 秒默认时间步、6 位验证码与前后各一个时间步的受控窗口。成功时间步以条件更新写入，已经使用或更早的验证码不能重放。实现由 RFC 6238 官方测试向量锁定；种子使用 Node CSPRNG 生成，并以 `CREDENTIALS_MASTER_KEY` 域分离派生的 AES-256-GCM 密钥保存。依据：[RFC 6238](https://www.rfc-editor.org/info/rfc6238/)、[OWASP MFA Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html)。
 
-启用 MFA 先验证当前密码，再返回一次 `otpauth://` URI 与手工密钥；确认首个 TOTP 后启用因子并只返回一次恢复码。此响应带 `no-store`，页面不写 localStorage/sessionStorage；幂等表只记录完成标记和状态码，不保存密钥或恢复码响应，重复键明确拒绝而不重放敏感值。启用后，密码登录只创建 5 分钟默认有效的 HttpOnly、Secure、SameSite=Strict 挑战 Cookie；TOTP/恢复码成功且挑战原子消费后才创建会话 Cookie。挑战失败达到阈值即锁定。停用同时要求当前密码和当前第二因子，并撤销全部会话。
+启用 MFA 先验证当前密码，再返回一次 `otpauth://` URI 与手工密钥；确认首个 TOTP 后启用因子并只返回一次恢复码。此响应带 `no-store`，页面不写 localStorage/sessionStorage；幂等表只记录完成标记和状态码，不保存密钥或恢复码响应，重复键明确拒绝而不重放敏感值。启用后，密码登录只创建 5 分钟默认有效的 HttpOnly、Secure、SameSite=Strict 挑战 Cookie；TOTP/恢复码成功且挑战原子消费后才创建会话 Cookie。挑战页面只允许由本次密码登录进入，直接恢复旧 URL 或服务端判定挑战缺失、过期、已消费时，页面退回密码登录而不继续接受验证码。挑战失败达到阈值即锁定。停用同时要求当前密码和当前第二因子，并撤销全部会话。
 
 ## 适用性与失败状态
 

@@ -28,14 +28,7 @@ const pathModes: Record<string, IdentityMode> = {
   "/reset-password": "reset",
   "/security/mfa": "mfa",
 };
-const publicQueryModes = new Set<IdentityMode>([
-  "login",
-  "register",
-  "forgot",
-  "verify",
-  "reset",
-  "mfa-challenge",
-]);
+const publicQueryModes = new Set<IdentityMode>(["login", "register", "forgot", "verify", "reset"]);
 const queryMode = params.get("mode") as IdentityMode | null;
 const mode = ref<IdentityMode>(
   queryMode && publicQueryModes.has(queryMode)
@@ -124,6 +117,10 @@ async function request<T = unknown>(
       actionHint.value = error.actionHint;
       requestId.value = error.requestId;
       traceId.value = error.traceId;
+      if (mode.value === "mfa-challenge" && error.code === "mfa_challenge_invalid") {
+        mode.value = "login";
+        mfaCode.value = "";
+      }
       requestState.value =
         error.kind === "rate_limited"
           ? "rate_limited"
@@ -167,6 +164,7 @@ async function submit() {
       password: password.value,
     });
     if (result?.data?.mfa_required) {
+      mfaCode.value = "";
       mode.value = "mfa-challenge";
       requestState.value = "idle";
       message.value = "密码已验证，请输入认证器验证码。";

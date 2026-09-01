@@ -239,7 +239,7 @@
         "/api/v1/me/mfa/totp"
       ],
       "totp": "RFC6238, encrypted seed, replay-resistant time step, single-use recovery codes",
-      "challengeTransport": "short-lived opaque Secure HttpOnly SameSite=Strict cookie in production; hash only in MySQL",
+      "challengeTransport": "short-lived opaque Secure HttpOnly SameSite=Strict cookie in production; hash only in MySQL; MFA challenge UI is entered only from a fresh password login and stale or missing challenges return to password login",
       "identityAdapters": {
         "oidc": "adapter_ready_not_enabled",
         "saml2": "reserved_disabled",
