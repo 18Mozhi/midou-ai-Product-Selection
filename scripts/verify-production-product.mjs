@@ -205,23 +205,18 @@ async function verifyQuickActions(profile, session) {
   const { page } = session;
   if (profile.key === "platform_super_admin") {
     await page.goto(`${baseUrl}/platform-admin`, { waitUntil: "networkidle" });
-    await page.getByRole("button").filter({ hasText: "创建" }).first().click();
-    const dialog = page.getByRole("dialog", { name: "快捷创建" });
-    await dialog.waitFor();
-    await dialog.locator('.discovery-results a[href^="/"]').first().waitFor();
-    const links = await dialog.locator('.discovery-results a[href^="/"]').evaluateAll((items) =>
-      items.map((item) => ({
-        href: item.getAttribute("href"),
-        label: item.textContent?.trim() ?? "",
-      })),
-    );
-    assert(links.length > 0, "platform quick create returned no authorized action");
-    assert(!(await dialog.innerText()).includes("ERROR"), "platform quick create exposed ERROR");
+    const action = page.getByRole("link", { name: "新建组织", exact: true });
+    await action.waitFor();
+    const href = await action.getAttribute("href");
+    assert(href === "/platform-admin/organizations/new", "platform create action route drifted");
+    await action.click();
+    await page.waitForURL((url) => url.pathname === href);
+    await page.getByRole("dialog", { name: "新建组织" }).waitFor();
     await page.screenshot({
       path: resolve(screenshotDirectory, "02-platform-quick-create.png"),
       fullPage: true,
     });
-    return links;
+    return [{ href, label: "新建组织" }];
   }
   if (profile.key !== "member") return [];
   await page.goto(`${baseUrl}/home`, { waitUntil: "networkidle" });

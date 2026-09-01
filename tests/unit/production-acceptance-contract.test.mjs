@@ -81,6 +81,8 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.match(routeCoverage, /SCOUTOPS_ACCEPTANCE_RESOURCE_IDS/);
   assert.match(routeCoverage, /resolver\.resourceIdKey/);
   assert.match(routeCoverage, /seeded acceptance resource id is invalid/);
+  assert.match(routeCoverage, /getByRole\("link", \{ name: "新建组织", exact: true \}\)/);
+  assert.match(routeCoverage, /platform create action route drifted/);
   assert.doesNotMatch(coreE2e, /page\.route\s*\(/);
   for (const file of [
     "production-route-catalog.mjs",
