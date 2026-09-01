@@ -22,6 +22,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /0051c_provider_parser_sample_operations\.up\.sql/);
   assert.match(deploy, /0052a_amazon_structured_parser\.up\.sql/);
   assert.match(deploy, /0052b_provider_public_compliance\.up\.sql/);
+  assert.match(deploy, /0065_opportunity_operating_feedback\.up\.sql/);
   assert.match(deploy, /0066_automation_task_source_restore\.up\.sql/);
   assert.match(deploy, /0067_usernames_login\.up\.sql/);
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
@@ -97,6 +98,9 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     "0060_opportunity_workflow_visibility.up.sql",
     "0061_crawler_completion_spool_status.up.sql",
     "0062_runtime_process_restart_observations.up.sql",
+    "0063_runtime_health_endpoint_probes.up.sql",
+    "0064_governed_workflow_confirmations.up.sql",
+    "0065_opportunity_operating_feedback.up.sql",
     "0066_automation_task_source_restore.up.sql",
     "0067_usernames_login.up.sql",
   ];
@@ -144,6 +148,9 @@ test("allowlisted deployment migrations use the locked statement splitter", asyn
     "0060_opportunity_workflow_visibility.up.sql",
     "0061_crawler_completion_spool_status.up.sql",
     "0062_runtime_process_restart_observations.up.sql",
+    "0063_runtime_health_endpoint_probes.up.sql",
+    "0064_governed_workflow_confirmations.up.sql",
+    "0065_opportunity_operating_feedback.up.sql",
     "0066_automation_task_source_restore.up.sql",
     "0067_usernames_login.up.sql",
   ]) {
@@ -154,6 +161,7 @@ test("allowlisted deployment migrations use the locked statement splitter", asyn
     const expectedStatementCounts = {
       "0054_crawler_succeeded_empty.up.sql": 2,
       "0060_opportunity_workflow_visibility.up.sql": 4,
+      "0064_governed_workflow_confirmations.up.sql": 7,
     };
     assert.equal(
       statements.length,
