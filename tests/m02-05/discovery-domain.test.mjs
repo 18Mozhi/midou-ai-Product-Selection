@@ -217,6 +217,14 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(repo, /resource_type=\?[\s\S]*status=\?[\s\S]*assignee_name LIKE/);
   for (const table of ["tasks", "opportunities", "raw_evidence", "collection_tasks"])
     assert.match(repo, new RegExp(`FROM ${table}|JOIN ${table}`));
+  for (const expression of [
+    "CONVERT(t.id USING utf8mb4)",
+    "CONVERT(o.id USING utf8mb4)",
+    "CONVERT(e.id USING utf8mb4)",
+    "LEFT(CONVERT(id USING utf8mb4),8)",
+    "CONVERT(id USING utf8mb4)",
+  ])
+    assert.ok(repo.includes(expression), `missing MySQL 5.7 UUID collation guard: ${expression}`);
   assert.match(repo, /\/tasks\/[\s\S]*\/opportunities\/[\s\S]*evidence=[\s\S]*task=/);
   assert.match(openapi, /\/me\/global-search:/);
   assert.match(openapi, /\/me\/quick-actions:/);
