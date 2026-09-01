@@ -35,6 +35,7 @@ for (const file of ['apps/web/dist/index.html','apps/api/dist/server.js','apps/w
 const deployer = await readFile(resolve(root, 'scripts/deploy-baota.py'), 'utf8');
 if (!deployer.includes('PROJECT_ROOT = "/www/wwwroot/ai选品"') || !deployer.includes('TemporaryDirectory') || /git (pull|clone|checkout)/.test(deployer)) fail('local_upload_contract_invalid', 'deployment must build locally, upload a bounded runtime package and clean temporary artifacts');
 if (!deployer.includes('shutil.chown(runtime, user="root", group="www")') || !deployer.includes('os.chmod(runtime, 0o2770)') || !deployer.includes('shutil.chown(destination, user="root", group="www")') || !deployer.includes('os.chmod(destination, 0o2770)')) fail('runtime_permission_contract_invalid', 'BaoTa runtime and fixed writable subdirectories must be root:www with setgid group write');
+if (!deployer.includes('shutil.chown(config, user="root", group="www")') || !deployer.includes('os.chmod(config, 0o750)') || !deployer.includes('shutil.chown(env_file, user="root", group="www")') || !deployer.includes('shutil.chown(release_file, user="root", group="www")')) fail('restricted_config_permission_contract_invalid', 'BaoTa restricted config must stay root:www so www-managed Node and Python projects can read 0640 environment files');
 
 if (!production) {
   console.log(JSON.stringify({ module: 'M07-03', status: 'preflight_passed', production_deployed: manifest.productionDeployed === true, objects: expected.length, request_id: id, trace_id: id }, null, 2));

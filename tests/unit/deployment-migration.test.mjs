@@ -47,6 +47,10 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /os\.chmod\(runtime, 0o2770\)/);
   assert.match(deploy, /shutil\.chown\(destination, user="root", group="www"\)/);
   assert.match(deploy, /os\.chmod\(destination, 0o2770\)/);
+  assert.match(deploy, /shutil\.chown\(config, user="root", group="www"\)/);
+  assert.match(deploy, /os\.chmod\(config, 0o750\)/);
+  assert.match(deploy, /shutil\.chown\(env_file, user="root", group="www"\)/);
+  assert.match(deploy, /shutil\.chown\(release_file, user="root", group="www"\)/);
   assert.match(
     deploy,
     /upload = root \/ \("\.deploy-upload-" \+ v\["build_sha"\] \+ "\.tar\.gz"\)/,

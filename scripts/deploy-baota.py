@@ -415,6 +415,8 @@ try:
     if not config.exists() and (shared / "config").is_dir():
         (shared / "config").rename(config)
     config.mkdir(mode=0o750, exist_ok=True)
+    shutil.chown(config, user="root", group="www")
+    os.chmod(config, 0o750)
     env_file = config / "product_scout.env"
     if not env_file.is_file():
         raise RuntimeError("restricted product_scout.env is missing")
@@ -430,9 +432,12 @@ try:
     for old, new in replacements.items():
         new_env = new_env.replace(old, new)
     env_file.write_text(new_env, encoding="utf-8")
+    shutil.chown(env_file, user="root", group="www")
     os.chmod(env_file, 0o640)
-    (stage / "release.env").replace(config / "release.env")
-    os.chmod(config / "release.env", 0o640)
+    release_file = config / "release.env"
+    (stage / "release.env").replace(release_file)
+    shutil.chown(release_file, user="root", group="www")
+    os.chmod(release_file, 0o640)
     legacy_launcher = config / "start-backend.sh"
     if legacy_launcher.exists():
         legacy_launcher.unlink()
