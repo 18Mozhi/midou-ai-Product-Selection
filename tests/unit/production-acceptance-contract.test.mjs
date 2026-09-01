@@ -43,6 +43,9 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.match(runner, /SET FOREIGN_KEY_CHECKS=0/);
   assert.match(runner, /SET FOREIGN_KEY_CHECKS=1/);
   assert.match(runner, /remaining_rows/);
+  assert.match(runner, /cleanup_failure/);
+  assert.match(runner, /directIds\[table\] \?\? \[\]/);
+  assert.doesNotMatch(runner, /direct\[table\] \?\? rootIds/);
   assert.match(runner, /SCOUTOPS_ACCEPTANCE_PASSWORD/);
   assert.doesNotMatch(runner, /Qa-Platform|Qa-Member|password:\s*["'][^"']{12}/);
   assert.match(routeCoverage, /SCOUTOPS_QA_TRACE_ID/);
@@ -56,6 +59,10 @@ test("production acceptance only probes writes through safe blocking and always 
     "opportunity_profit_runs",
   ])
     assert.match(runner, new RegExp(`INSERT INTO ${table}`));
+  assert.match(
+    runner,
+    /opportunity_cost_inputs[\s\S]*is_current,submitted_by,confirmed_by[\s\S]*state\.users\.selection_manager[\s\S]*state\.users\.organization_admin/,
+  );
   assert.match(coreE2e, /dependencies\?\.mysql === "available"/);
   assert.match(coreE2e, /dependencies\?\.redis === "available"/);
   assert.match(coreE2e, /extraHTTPHeaders: \{ "x-trace-id": traceId \}/);

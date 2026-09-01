@@ -113,6 +113,7 @@ let routeReport = null;
 let apiReport = null;
 let coreE2eReport = null;
 let failure = null;
+let cleanupFailure = null;
 
 const placeholders = (values) => values.map(() => "?").join(",");
 const quoteIdentifier = (value) => `\`${String(value).replaceAll("`", "``")}\``;
@@ -390,7 +391,7 @@ async function seed() {
     [state.logisticsCostInputId, "logistics", 5, "USD", "acceptance-logistics"],
   ])
     await pool.query(
-      "INSERT INTO opportunity_cost_inputs(id,organization_id,workspace_id,opportunity_id,platform,input_type,amount_value,currency,source_type,source_ref_id,evidence_id,observed_at,input_version,is_current,confirmed_by,request_id,trace_id,created_at) VALUES(?,?,?,?,'amazon',?,?,?,?,?,?,?,1,1,?,?,?,?)",
+      "INSERT INTO opportunity_cost_inputs(id,organization_id,workspace_id,opportunity_id,platform,input_type,amount_value,currency,source_type,source_ref_id,evidence_id,observed_at,input_version,is_current,submitted_by,confirmed_by,request_id,trace_id,created_at) VALUES(?,?,?,?,'amazon',?,?,?,?,?,?,?,1,1,?,?,?,?,?)",
       [
         id,
         state.organizationId,
@@ -403,6 +404,7 @@ async function seed() {
         sourceRef,
         state.rawEvidenceId,
         now,
+        state.users.selection_manager,
         state.users.organization_admin,
         runId,
         runId,
@@ -465,19 +467,53 @@ async function cleanup() {
   const connection = await pool.getConnection();
   try {
     const userIds = Object.values(state.users);
-    const rootIds = [
-      ...userIds,
-      ...Object.values(state.memberships),
-      state.organizationId,
-      state.workspaceId,
+    const resourceIds = [
       state.opportunityId,
       state.taskId,
+      state.collectionTaskId,
+      state.sourcingSearchId,
+      state.sourcingCandidateId,
+      state.profitRunId,
     ];
+    const directIds = {
+      users: userIds,
+      organizations: [state.organizationId],
+      workspaces: [state.workspaceId],
+      memberships: Object.values(state.memberships),
+      trend_topics: [state.trendTopicId],
+      opportunities: [state.opportunityId],
+      tasks: [state.taskId],
+      collection_tasks: [state.collectionTaskId],
+      collection_subqueries: [state.collectionSubqueryId],
+      file_assets: [state.fileAssetId],
+      raw_evidence: [state.rawEvidenceId],
+      normalized_records: [state.normalizedRecordId],
+      sourcing_searches: [state.sourcingSearchId],
+      sourcing_candidates: [state.sourcingCandidateId],
+      cost_rules: [state.costRuleId],
+      opportunity_cost_inputs: [
+        state.saleCostInputId,
+        state.purchaseCostInputId,
+        state.logisticsCostInputId,
+      ],
+      opportunity_profit_runs: [state.profitRunId],
+    };
     const markerValues = (column, table) => {
       if (column === "organization_id") return [state.organizationId];
       if (column === "workspace_id") return [state.workspaceId];
       if (column === "membership_id") return Object.values(state.memberships);
-      if (["task_id", "result_task_id"].includes(column)) return [state.taskId];
+      if (["task_id", "result_task_id"].includes(column))
+        return [state.taskId, state.collectionTaskId];
+      if (column === "collection_task_id") return [state.collectionTaskId];
+      if (column === "collection_subquery_id") return [state.collectionSubqueryId];
+      if (column === "search_id") return [state.sourcingSearchId];
+      if (column === "candidate_id") return [state.sourcingCandidateId];
+      if (["raw_evidence_id", "evidence_id"].includes(column)) return [state.rawEvidenceId];
+      if (column === "file_asset_id") return [state.fileAssetId];
+      if (column === "normalized_record_id") return [state.normalizedRecordId];
+      if (column === "cost_rule_id") return [state.costRuleId];
+      if (column === "cost_input_id")
+        return [state.saleCostInputId, state.purchaseCostInputId, state.logisticsCostInputId];
       if (column === "opportunity_id") return [state.opportunityId];
       if (["request_id", "trace_id", "run_id"].includes(column)) return [runId];
       if (["email", "email_normalized"].includes(column)) return Object.values(state.emails);
@@ -490,19 +526,8 @@ async function cleanup() {
         column.endsWith("_user_id")
       )
         return userIds;
-      if (["resource_id", "source_ref_id"].includes(column))
-        return [state.opportunityId, state.taskId];
-      if (column === "id") {
-        const direct = {
-          users: userIds,
-          organizations: [state.organizationId],
-          workspaces: [state.workspaceId],
-          memberships: Object.values(state.memberships),
-          opportunities: [state.opportunityId],
-          tasks: [state.taskId],
-        };
-        return direct[table] ?? rootIds;
-      }
+      if (["resource_id", "source_ref_id"].includes(column)) return resourceIds;
+      if (column === "id") return directIds[table] ?? [];
       return [];
     };
     const [columns] = await connection.query(
@@ -579,7 +604,8 @@ try {
   try {
     await cleanup();
   } catch (error) {
-    failure ??= error instanceof Error ? error.message : String(error);
+    cleanupFailure = error instanceof Error ? error.message : String(error);
+    failure = failure ? `${failure}; cleanup failed: ${cleanupFailure}` : cleanupFailure;
   }
   if (lockHeld)
     await pool.query("SELECT RELEASE_LOCK('scoutops:production-acceptance')").catch(() => {});
@@ -637,6 +663,7 @@ const report = {
       }
     : null,
   cleanup: cleanupReport,
+  cleanup_failure: cleanupFailure,
   failure,
   captured_at: new Date().toISOString(),
 };
