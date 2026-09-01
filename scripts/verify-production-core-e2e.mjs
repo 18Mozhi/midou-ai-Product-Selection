@@ -97,7 +97,7 @@ try {
   report.dependencies = readyBody.data.dependencies;
 
   await page.goto(`${baseUrl}/login`, { waitUntil: "networkidle" });
-  await page.locator('input[type="email"]').fill(account.email);
+  await page.getByLabel("账号（邮箱或用户名）").fill(account.email);
   await page.locator('input[type="password"]').fill(account.password);
   await page.locator('button[type="submit"]').click();
   await page.waitForURL((url) => url.pathname !== "/login");
