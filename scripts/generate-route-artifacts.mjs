@@ -36,6 +36,11 @@ export function validateRouteCatalog(manifest) {
         (!route.productionResolver?.parentPath || !route.productionResolver?.pathPattern)
       )
         throw new Error(`dynamic_route_production_resolver_missing:${route.path}`);
+      if (
+        route.productionResolver?.resourceIdKey &&
+        !route.path.includes(`:${route.productionResolver.resourceIdKey}`)
+      )
+        throw new Error(`dynamic_route_resource_id_key_invalid:${route.path}`);
     }
     if (route.featureMap && route.featureMap.path !== normalizeFeaturePath(route.path))
       throw new Error(`route_feature_path_mismatch:${route.path}`);

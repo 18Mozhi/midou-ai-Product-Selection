@@ -36,6 +36,9 @@ const organizationLabel =
   process.env.SCOUTOPS_QA_ORGANIZATION_LABEL?.trim() || "AI选品功能验收组织";
 const workspaceLabel = process.env.SCOUTOPS_QA_WORKSPACE_LABEL?.trim() || "功能验收工作区";
 const qaTraceId = process.env.SCOUTOPS_QA_TRACE_ID?.trim() || randomUUID();
+const acceptanceResourceIds = JSON.parse(
+  process.env.SCOUTOPS_ACCEPTANCE_RESOURCE_IDS?.trim() || "{}",
+);
 const browserExecutablePath = process.env.SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH?.trim();
 if (browserExecutablePath && !isAbsolute(browserExecutablePath))
   throw new Error("SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH must be absolute");
@@ -152,11 +155,21 @@ async function concreteRoute(page, route) {
   if (!route.dynamic) return route.path;
   const resolver = route.resolver;
   assert(resolver, `no production resolver for ${route.path}`);
+  const pattern = new RegExp(resolver.pathPattern, "i");
+  if (resolver.resourceIdKey) {
+    const resourceId = String(acceptanceResourceIds[resolver.resourceIdKey] ?? "").trim();
+    assert(resourceId, `${route.path} has no seeded acceptance resource id`);
+    const resolved = route.path.replace(
+      `:${resolver.resourceIdKey}`,
+      encodeURIComponent(resourceId),
+    );
+    assert(pattern.test(resolved), `${route.path} seeded acceptance resource id is invalid`);
+    return resolved;
+  }
   await page.goto(`${baseUrl}${resolver.parentPath}`, { waitUntil: "networkidle" });
   const paths = await page
     .locator('a[href^="/"]')
     .evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
-  const pattern = new RegExp(resolver.pathPattern, "i");
   const resolved = paths.find((path) => pattern.test(path));
   assert(resolved, `${route.path} has no persisted acceptance record`);
   return resolved;

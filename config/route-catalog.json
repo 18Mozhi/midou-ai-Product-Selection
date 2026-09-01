@@ -949,7 +949,8 @@
       "acceptance": "protected",
       "productionResolver": {
         "parentPath": "/platform-admin/organizations",
-        "pathPattern": "^/platform-admin/organizations/[0-9a-f-]{36}$"
+        "pathPattern": "^/platform-admin/organizations/[0-9a-f-]{36}$",
+        "resourceIdKey": "organizationId"
       },
       "featureMap": {
         "path": "/platform-admin/organizations/{organizationId}",

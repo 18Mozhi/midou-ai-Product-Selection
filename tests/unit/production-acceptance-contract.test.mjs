@@ -22,6 +22,12 @@ test("production acceptance locks the 223 path, 256 operation, 60 route and six 
     manifest.baseline.protectedRouteCount,
   );
   assert.equal(routeCatalog.productionAcceptance.roles.length, manifest.baseline.roleCount);
+  assert.equal(
+    routeCatalog.routes.find(
+      (route) => route.path === "/platform-admin/organizations/:organizationId",
+    )?.productionResolver?.resourceIdKey,
+    "organizationId",
+  );
   assert.equal(manifest.baseline.realCoreScreenshotCount, 2);
   assert.equal(manifest.task.schedule, "manual");
   assert.equal(manifest.task.daemon, false);
@@ -72,6 +78,9 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.match(coreE2e, /extraHTTPHeaders: \{ "x-trace-id": traceId \}/);
   assert.match(coreE2e, /SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH/);
   assert.match(coreE2e, /executablePath: browserExecutablePath/);
+  assert.match(routeCoverage, /SCOUTOPS_ACCEPTANCE_RESOURCE_IDS/);
+  assert.match(routeCoverage, /resolver\.resourceIdKey/);
+  assert.match(routeCoverage, /seeded acceptance resource id is invalid/);
   assert.doesNotMatch(coreE2e, /page\.route\s*\(/);
   for (const file of [
     "production-route-catalog.mjs",
