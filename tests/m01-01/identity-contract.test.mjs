@@ -91,20 +91,31 @@ test("username login migration is nullable, uniquely normalized, MySQL57-compati
 });
 
 test("M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchronized", async () => {
-  const [ui, env, schema, map, architecture, runbook, registry, liveProbe, deploy] =
-    await Promise.all(
-      [
-        "apps/web/src/components/LocalIdentity.vue",
-        "config/env.example",
-        "config/schema.json",
-        "docs/feature-map.json",
-        "docs/architecture/m01-01-local-identity.md",
-        "docs/runbooks/m01-01-local-identity.md",
-        "verification/modules/M01-01.json",
-        "scripts/verify-local-auth-live.mjs",
-        "scripts/deploy-baota.py",
-      ].map((path) => readFile(path, "utf8")),
-    );
+  const [
+    ui,
+    env,
+    schema,
+    map,
+    architecture,
+    runbook,
+    registry,
+    liveProbe,
+    deploy,
+    migrationRunner,
+  ] = await Promise.all(
+    [
+      "apps/web/src/components/LocalIdentity.vue",
+      "config/env.example",
+      "config/schema.json",
+      "docs/feature-map.json",
+      "docs/architecture/m01-01-local-identity.md",
+      "docs/runbooks/m01-01-local-identity.md",
+      "verification/modules/M01-01.json",
+      "scripts/verify-local-auth-live.mjs",
+      "scripts/deploy-baota.py",
+      "scripts/apply-deployment-migrations.mjs",
+    ].map((path) => readFile(path, "utf8")),
+  );
   for (const state of [
     "login",
     "register",
@@ -135,6 +146,7 @@ test("M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchron
   assert.match(runbook, /## 回滚/);
   assert.match(liveProbe, /login_identifiers:\s*["']email_and_username["']/);
   assert.match(deploy, /0067_usernames_login\.up\.sql/);
+  assert.match(migrationRunner, /0067_usernames_login\.up\.sql/);
   const parsed = JSON.parse(registry);
   assert.equal(parsed.atomicTasks.length, 17);
   assert.deepEqual(
