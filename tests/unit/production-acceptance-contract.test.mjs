@@ -49,6 +49,8 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.match(runner, /SCOUTOPS_ACCEPTANCE_PASSWORD/);
   assert.doesNotMatch(runner, /Qa-Platform|Qa-Member|password:\s*["'][^"']{12}/);
   assert.match(routeCoverage, /SCOUTOPS_QA_TRACE_ID/);
+  assert.match(routeCoverage, /getByLabel\("账号（邮箱或用户名）"\)/);
+  assert.doesNotMatch(routeCoverage, /input\[type=["']email["']\]/);
   assert.match(routeCoverage, /SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH/);
   assert.match(routeCoverage, /executablePath: browserExecutablePath/);
   assert.match(runner, /verify-production-core-e2e\.mjs/);

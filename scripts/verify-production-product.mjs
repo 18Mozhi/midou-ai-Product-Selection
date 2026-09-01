@@ -137,7 +137,7 @@ async function createRoleSession(profile) {
     if (message.type() === "error") consoleErrors.push(message.text());
   });
   await page.goto(`${baseUrl}/login`, { waitUntil: "networkidle" });
-  await page.locator('input[type="email"]').fill(profile.account.email);
+  await page.getByLabel("账号（邮箱或用户名）").fill(profile.account.email);
   await page.locator('input[type="password"]').fill(profile.account.password);
   await page.locator('button[type="submit"]').click();
   await page.waitForURL((url) => url.pathname !== "/login");
