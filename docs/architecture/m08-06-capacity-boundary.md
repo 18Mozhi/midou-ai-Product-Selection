@@ -14,6 +14,8 @@ M08-06 收口容量状态的软件合同：规划用户数 100、规划并发区
 
 归档与恢复签认只验证 M08-04 已存在的加密归档和隔离恢复事实。POST 操作要求 `platform:operate`、同源和 Idempotency-Key，事务写入 `capacity_boundary_drills`、`capacity_boundary_operations` 与 `platform_audit_events`，不返回凭证、路径、SQL 或客户载荷。
 
+页面读取采用单飞控制：浏览器 15 秒停止等待，API 14 秒失败关闭；客户端断开或超时会向 service/repository 传递取消信号，取消后的读取不得提交成功观测或审计。已有成功快照时，限流、超时、证据暂缺和依赖故障显示独立可重试告警，不把旧事实替换成空白；401/403 则清除受保护数据。MySQL 等依赖错误统一为脱敏 `capacity_boundary_dependency_unavailable`，不得返回连接地址、SQL 或凭证。签认在一次结果不确定的用户操作中复用同一 Idempotency-Key，并由页面重复提交守卫保证只发一个 POST；成功消息不被随后失败的 GET 覆盖。URL 查询参数不能伪造 `verifying` 状态或阻止真实读取。
+
 ## 页面与图片
 
 实现前已读取 `images-html/README.txt`、`manifest.json` 与对应图片。页面采用 `61_平台运营-概览.jpg` 的总览层级、`63_采集任务监控.jpg` 的队列/任务状态、`64_系统监控.jpg` 的资源水位、`65_日志中心.jpg` 的关联标识、`66_安全审计.jpg` 的演练签认、`69_异常告警.jpg` 的失败关闭列表，并沿用 `10_霓虹科技平台驾驶舱_dashboard.png` 的深色霓虹驾驶舱。桌面显示结论、四项 KPI、资源/韧性双栏与 finding；390px 折叠为卡片，但不隐藏风险、数值、时间或操作入口。图片仅提供布局与状态，不是生产事实。

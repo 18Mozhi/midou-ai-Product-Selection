@@ -2561,7 +2561,7 @@
       ],
       "scope": "M08-06 software completion and honest capacity state for the current single-host product; server devices production resource evidence and capacity load tests are optional operations rather than software completion gates",
       "truthBoundary": "software completion keeps capacityClaim unverified when optional same-commit production measurements are absent or blocked; planned users and concurrency are never promoted to measured claims, while any separately executed measurement must still preserve ordered stages fixed thresholds failure evidence and canonical UTC timestamps; every warning and blocker exposes a factual reason action and the platform_operations_admin responsibility role inherited from platform:operate without fabricating an individual assignee",
-      "apiClientBoundary": "capacity reads and idempotent archive-recovery attestations use the shared frontend JSON client; absent capacity evidence still maps to the explicit empty state rather than an availability or measured-capacity claim",
+      "apiClientBoundary": "capacity reads are single-flight and bounded to 15 seconds in the browser and 14 seconds in the API; refresh timeout rate-limit empty-evidence and dependency failure preserve the last successful snapshot while 401 and 403 clear protected facts. Aborted reads stop before successful view-audit commit and dependency failures return sanitized 503 errors. Archive-recovery attestation has a duplicate-submit guard, retains one idempotency key until success, preserves its operation result across a failed follow-up read, and hidden query parameters cannot force a synthetic verifying state",
       "permission": "platform operations read and idempotent archive_recovery attestation require platform:operate; responses exclude customer payloads paths filenames hashes credentials cookies and SQL while view drill and failure retain request_id trace_id and audit",
       "configuration": [
         "CAPACITY_BOUNDARY_READ_P95_MS",
@@ -2607,7 +2607,7 @@
       "loadBalancingEnabled": false,
       "backupServerUsed": false,
       "multiNode": false,
-      "statusDetail": "software_complete_capacity_out_of_scope"
+      "statusDetail": "local_full_stack_live_api_worker_python_crawler_mysql57_redis_browser_permission_single_flight_refresh_bounded_abort_snapshot_preservation_drill_idempotency_and_sanitized_dependency_503_verified"
     }
   },
   "phaseVerification": {
@@ -3141,7 +3141,7 @@
       "view": "CapacityBoundaryCenter",
       "domain": "capacity-boundary",
       "status": "verified",
-      "statusDetail": "M08-06_software_complete_capacity_out_of_scope"
+      "statusDetail": "M08-06_live_refresh_and_drill_chain_verified"
     }
   ],
   "apiGroups": [

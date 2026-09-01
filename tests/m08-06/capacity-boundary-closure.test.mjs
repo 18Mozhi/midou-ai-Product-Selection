@@ -223,6 +223,74 @@ test("M08-06.A04/A06/A09 operations routes are platform-only and fail closed", a
   await app.close();
 });
 
+test("M08-06 capacity read has a cancellable timeout and sanitized dependency failures", async () => {
+  const { buildApp } = await import("../../apps/api/dist/app.js");
+  const authorization = { authorize: async () => undefined },
+    auth = { authenticate: async () => ({ user: { id: "00000000-0000-4000-8000-000000000806" } }) };
+  let aborted = false;
+  let app = buildApp({
+    capacityBoundary: {
+      service: {
+        read: ({ signal }) =>
+          new Promise((_resolve, reject) =>
+            signal.addEventListener(
+              "abort",
+              () => {
+                aborted = true;
+                reject(signal.reason);
+              },
+              { once: true },
+            ),
+          ),
+        attestDrill: async () => ({ status: "verified", observed_at: new Date().toISOString() }),
+      },
+      authorization,
+      auth,
+      secureCookie: false,
+      webOrigin: "http://127.0.0.1:5173",
+      readTimeoutMs: 5,
+    },
+  });
+  let response = await app.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/capacity",
+    headers: { cookie: "scoutops_session=test" },
+  });
+  assert.equal(response.statusCode, 503);
+  assert.equal(response.json().error.code, "capacity_boundary_read_timeout");
+  assert.equal(aborted, true);
+  await app.close();
+
+  app = buildApp({
+    capacityBoundary: {
+      service: {
+        read: async () => {
+          throw Object.assign(new Error("connect ECONNREFUSED database:3306"), {
+            code: "ECONNREFUSED",
+          });
+        },
+        attestDrill: async () => ({ status: "verified", observed_at: new Date().toISOString() }),
+      },
+      authorization,
+      auth,
+      secureCookie: false,
+      webOrigin: "http://127.0.0.1:5173",
+    },
+  });
+  response = await app.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/capacity",
+    headers: { cookie: "scoutops_session=test" },
+  });
+  assert.equal(response.statusCode, 503);
+  assert.equal(response.json().error.code, "capacity_boundary_dependency_unavailable");
+  assert.doesNotMatch(
+    response.body,
+    /database:3306|ECONNREFUSED|SELECT\s|INSERT\s|UPDATE\s|DELETE\s|password|cookie/i,
+  );
+  await app.close();
+});
+
 test("M08-06.A03/A10/A13 migration configuration and contracts stay MySQL57 and single-host", async () => {
   const [up, down, openapi, featureMap, schema, env, manifest, evidenceSchema] = await Promise.all(
     [
@@ -432,10 +500,20 @@ test("M08-06.A07/A08/A15/A16 UI and rollback cover the complete image-grounded s
     "forbidden",
     "expired",
     "rate_limited",
+    "timeout",
     "unavailable",
     "verifying",
   ])
     assert.match(ui, new RegExp(state));
+  for (const token of [
+    "AbortController",
+    "15_000",
+    "refreshing",
+    "refreshFailure",
+    "drillIdempotencyKey",
+    "preserveOperationMessage",
+  ])
+    assert.match(ui, new RegExp(token));
   assert.match(e2e, /390/);
   for (const image of [
     "61_平台运营-概览.jpg",

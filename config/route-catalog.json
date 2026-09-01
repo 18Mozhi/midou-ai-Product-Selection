@@ -1611,7 +1611,7 @@
         "view": "CapacityBoundaryCenter",
         "domain": "capacity-boundary",
         "status": "verified",
-        "statusDetail": "M08-06_software_complete_capacity_out_of_scope"
+        "statusDetail": "M08-06_live_refresh_and_drill_chain_verified"
       }
     },
     {

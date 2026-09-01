@@ -50,7 +50,8 @@ function boundaryStop(value: unknown): {
 
 export class CapacityBoundaryRepository implements Contract {
   constructor(private readonly pool: Pool) {}
-  async snapshot(_now: Date) {
+  async snapshot(_now: Date, signal?: AbortSignal) {
+    signal?.throwIfAborted();
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT measured_concurrency,read_p95_ms,write_p95_ms,error_rate_basis_points," +
         "async_lag_seconds,load_basis_points,available_memory_mb,free_disk_mb,archive_verified," +
@@ -58,6 +59,7 @@ export class CapacityBoundaryRepository implements Contract {
         "LPAD(FLOOR(MICROSECOND(observed_at)/1000),3,'0'),'Z') observed_at_utc FROM capacity_boundary_observations " +
         "WHERE source='production_benchmark' ORDER BY observed_at DESC LIMIT 1",
     );
+    signal?.throwIfAborted();
     const r = rows[0];
     return r
       ? {
@@ -77,10 +79,13 @@ export class CapacityBoundaryRepository implements Contract {
       : null;
   }
   async recordView(input: Parameters<Contract["recordView"]>[0]) {
+    input.signal?.throwIfAborted();
     const c = await this.pool.getConnection(),
       id = randomUUID();
     try {
+      input.signal?.throwIfAborted();
       await c.beginTransaction();
+      input.signal?.throwIfAborted();
       await c.query(
         "INSERT INTO capacity_boundary_observations(id,source,state,measured_concurrency," +
           "planning_users,read_p95_ms,write_p95_ms,error_rate_basis_points,async_lag_seconds," +
@@ -107,6 +112,7 @@ export class CapacityBoundaryRepository implements Contract {
           input.observedAt,
         ],
       );
+      input.signal?.throwIfAborted();
       await c.query(
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
           "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
@@ -130,6 +136,7 @@ export class CapacityBoundaryRepository implements Contract {
           input.observedAt,
         ],
       );
+      input.signal?.throwIfAborted();
       await c.commit();
     } catch (error) {
       await c.rollback();

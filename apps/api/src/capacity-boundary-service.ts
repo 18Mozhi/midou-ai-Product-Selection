@@ -39,7 +39,7 @@ export interface CapacityBoundaryEvaluation {
   findings: CapacityBoundaryFinding[];
 }
 export interface CapacityBoundaryRepositoryContract {
-  snapshot(now: Date): Promise<CapacityBoundarySnapshot | null>;
+  snapshot(now: Date, signal?: AbortSignal): Promise<CapacityBoundarySnapshot | null>;
   recordView(input: {
     actorId: string;
     requestId: string;
@@ -47,6 +47,7 @@ export interface CapacityBoundaryRepositoryContract {
     observedAt: Date;
     snapshot: CapacityBoundarySnapshot;
     evaluation: CapacityBoundaryEvaluation;
+    signal?: AbortSignal;
   }): Promise<void>;
   attestDrill(input: {
     actorId: string;
@@ -236,8 +237,10 @@ export class CapacityBoundaryService {
     private readonly policy: CapacityBoundaryPolicy,
     private readonly now = () => new Date(),
   ) {}
-  async read(input: { actorId: string; requestId: string; traceId: string }) {
-    const snapshot = await this.repository.snapshot(this.now());
+  async read(input: { actorId: string; requestId: string; traceId: string; signal?: AbortSignal }) {
+    input.signal?.throwIfAborted();
+    const snapshot = await this.repository.snapshot(this.now(), input.signal);
+    input.signal?.throwIfAborted();
     if (!snapshot)
       throw new CapacityBoundaryError(
         "capacity_evidence_unavailable",
@@ -247,6 +250,7 @@ export class CapacityBoundaryService {
     const observedAt = this.now(),
       evaluation = evaluateCapacityBoundary(snapshot, this.policy, observedAt);
     await this.repository.recordView({ ...input, observedAt, snapshot, evaluation });
+    input.signal?.throwIfAborted();
     const mode =
       evaluation.state === "blocked"
         ? "stop_new_work"

@@ -68,7 +68,7 @@ test("M08-06.A07/A08/A15 desktop and 390 measured single-host capacity truth", a
   ).toBeVisible();
 });
 
-test("M08-06.A08/A09/A16 warning blocked empty forbidden expired rate limited unavailable and verifying", async ({
+test("M08-06.A08/A09/A16 warning blocked empty forbidden expired rate limited and unavailable", async ({
   page,
 }) => {
   let status = 200,
@@ -112,7 +112,14 @@ test("M08-06.A08/A09/A16 warning blocked empty forbidden expired rate limited un
   response = {
     ...base,
     state: "blocked",
-    boundary: { ...base.boundary, capacity_claim: "unverified" },
+    boundary: {
+      ...base.boundary,
+      measured_concurrency: 0,
+      capacity_claim: "unverified",
+      stop_reason: null,
+      failed_next_concurrency: null,
+      failed_next_code: null,
+    },
     degradation: { mode: "stop_new_work", actions: ["停止新增后台工作。"] },
     findings: [
       {
@@ -124,6 +131,8 @@ test("M08-06.A08/A09/A16 warning blocked empty forbidden expired rate limited un
   };
   await page.reload();
   await expect(page.getByText("单机容量门已阻断")).toBeVisible();
+  await expect(page.getByText("固定并发 5 未通过；容量保持未验证")).toBeVisible();
+  await expect(page.getByText("固定并发 5 未通过", { exact: true })).toBeVisible();
   status = 503;
   await page.reload();
   await expect(page.getByText("尚无同提交容量基线")).toBeVisible();
@@ -137,6 +146,73 @@ test("M08-06.A08/A09/A16 warning blocked empty forbidden expired rate limited un
     await page.reload();
     await expect(page.getByText(label)).toBeVisible();
   }
+});
+
+test("M08-06 refresh preserves the last snapshot and hidden query state cannot stall loading", async ({
+  page,
+}) => {
+  let reads = 0;
+  await page.route("**/api/v1/platform/operations/capacity", async (route) => {
+    reads += 1;
+    if (reads === 1 || reads === 5) return route.fulfill({ json: envelope(base) });
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    return route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "capacity_boundary_dependency_unavailable",
+          action_hint: "检查 MySQL 后重试。",
+        },
+        request_id: "m08-06-refresh",
+        trace_id: "m08-06-refresh",
+      },
+    });
+  });
+  await page.goto("/platform-admin/capacity");
+  await expect(page.getByText("S0 单机实测边界已满足")).toBeVisible();
+  await page.getByRole("button", { name: "刷新实测事实" }).click();
+  await expect(page.getByRole("button", { name: "刷新中…" })).toBeDisabled();
+  await expect(page.getByText("S0 单机实测边界已满足")).toBeVisible();
+  await expect(page.getByText("刷新未完成")).toBeVisible();
+  await expect(page.getByText("检查 MySQL 后重试。")).toBeVisible();
   await page.goto("/platform-admin/capacity?state=verifying");
-  await expect(page.getByText("正在核验归档与恢复演练")).toBeVisible();
+  await expect(page.getByText("S0 单机实测边界已满足")).toBeVisible();
+  expect(reads).toBeGreaterThanOrEqual(5);
+});
+
+test("M08-06 drill is single-submit and success survives the follow-up read", async ({ page }) => {
+  let posts = 0,
+    reads = 0;
+  await page.route("**/api/v1/platform/operations/capacity", (route) => {
+    reads += 1;
+    if (reads === 1) return route.fulfill({ json: envelope(base) });
+    return route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "capacity_boundary_dependency_unavailable",
+          action_hint: "检查 MySQL 后重试。",
+        },
+        request_id: "m08-06-after-drill",
+        trace_id: "m08-06-after-drill",
+      },
+    });
+  });
+  await page.route("**/api/v1/platform/operations/capacity/drills", async (route) => {
+    posts += 1;
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    return route.fulfill({
+      json: envelope({ status: "verified", observed_at: "2026-08-15T08:00:00.000Z" }),
+    });
+  });
+  await page.goto("/platform-admin/capacity");
+  await page.getByRole("button", { name: "签认恢复演练" }).click();
+  await page.getByPlaceholder("确认签认").fill("确认签认");
+  const confirm = page.getByRole("button", { name: "确认签认", exact: true });
+  await confirm.dblclick();
+  await expect(page.getByRole("button", { name: "签认中…" })).toBeDisabled();
+  await expect(page.getByText("S0 单机实测边界已满足")).toBeVisible();
+  await expect(page.getByText("归档与隔离恢复演练已签认。")).toBeVisible();
+  await expect(page.getByText("刷新未完成")).toBeVisible();
+  expect(posts).toBe(1);
 });

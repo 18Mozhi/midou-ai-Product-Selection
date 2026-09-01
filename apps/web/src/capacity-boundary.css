@@ -8,6 +8,7 @@
 }
 .capacity-boundary__hero,
 .capacity-boundary__state,
+.capacity-boundary__notice,
 .capacity-boundary__verdict,
 .capacity-boundary__panel,
 .capacity-boundary__metrics article {
@@ -60,6 +61,27 @@
   gap: 14px;
   padding: 22px;
   border-radius: 14px;
+}
+.capacity-boundary__notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 17px;
+  border-left: 4px solid var(--so-warning);
+  border-radius: 12px;
+}
+.capacity-boundary__notice p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+.capacity-boundary__operation-message {
+  margin: 0;
+  padding: 12px 15px;
+  border: 1px solid var(--so-success-border);
+  border-radius: 10px;
+  background: var(--so-success-soft);
+  color: var(--so-text);
 }
 .capacity-boundary__state i {
   width: 22px;
@@ -271,7 +293,8 @@
     font-size: 18px;
   }
   .capacity-boundary__verdict,
-  .capacity-boundary__state {
+  .capacity-boundary__state,
+  .capacity-boundary__notice {
     align-items: flex-start;
     flex-direction: column;
   }

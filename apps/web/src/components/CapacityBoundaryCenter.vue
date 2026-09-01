@@ -12,6 +12,7 @@ type State =
   | "forbidden"
   | "expired"
   | "rate_limited"
+  | "timeout"
   | "unavailable"
   | "verifying";
 interface Dto {
@@ -58,14 +59,18 @@ interface Dto {
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
   request = createApiClient(props.apiBaseUrl),
-  state = ref<State>(
-    new URLSearchParams(location.search).get("state") === "verifying" ? "verifying" : "loading",
-  ),
+  state = ref<State>("loading"),
   data = ref<Dto | null>(null),
   requestId = ref(""),
   message = ref(""),
+  operationMessage = ref(""),
   confirming = ref(false),
-  saving = ref(false);
+  saving = ref(false),
+  refreshing = ref(false),
+  refreshFailure = ref<"rate_limited" | "timeout" | "empty" | "unavailable" | null>(null);
+let loadController: AbortController | null = null,
+  loadSequence = 0,
+  drillIdempotencyKey = crypto.randomUUID();
 const verdict = computed(
   () =>
     (
@@ -79,15 +84,28 @@ const verdict = computed(
         forbidden: ["没有平台运维权限", "联系平台管理员授予 platform:operate。"],
         expired: ["登录已失效", "重新登录后核验容量边界。"],
         rate_limited: ["刷新过于频繁", "稍后重试，不扩大当前并发。"],
+        timeout: ["容量边界事实读取超时", "本次请求已在 15 秒后停止，请检查服务状态再重试。"],
         unavailable: ["容量边界事实暂不可用", "检查 MySQL、生产证据与宝塔运行状态后重试。"],
       }) as const
     )[state.value],
 );
-const boundaryHint = computed(() =>
-    data.value?.boundary.stop_reason === "next_stage_gate_failed"
-      ? `并发 ${data.value.boundary.failed_next_concurrency} 已失败；声明只限并发 ${data.value.boundary.measured_concurrency}`
-      : "规划测量上限已完成；仍仅限当前单机实测",
-  ),
+const boundaryHint = computed(() => {
+    if (!data.value) return "";
+    if (data.value.boundary.stop_reason === "next_stage_gate_failed")
+      return `并发 ${data.value.boundary.failed_next_concurrency} 已失败；声明只限并发 ${data.value.boundary.measured_concurrency}`;
+    if (data.value.boundary.stop_reason === "planning_ceiling_reached")
+      return "规划测量上限已完成；仍仅限当前单机实测";
+    return data.value.boundary.measured_concurrency < 5
+      ? "固定并发 5 未通过；容量保持未验证"
+      : "停止事实缺失；容量保持未验证";
+  }),
+  nextStageHint = computed(() => {
+    if (!data.value) return "—";
+    if (data.value.boundary.failed_next_concurrency)
+      return `${data.value.boundary.failed_next_concurrency} 已停止`;
+    if (data.value.boundary.stop_reason === "planning_ceiling_reached") return "规划上限已完成";
+    return data.value.boundary.measured_concurrency < 5 ? "固定并发 5 未通过" : "停止事实缺失";
+  }),
   pct = (v: number) => `${(v / 100).toFixed(2)}%`,
   time = (v: string) =>
     new Intl.DateTimeFormat("zh-CN", {
@@ -103,25 +121,71 @@ const boundaryHint = computed(() =>
       : error.status === 404 || error.code === "capacity_evidence_unavailable"
         ? "empty"
         : "unavailable";
-async function load() {
-  state.value = "loading";
+const refreshFailureMessage = computed(() => {
+  if (refreshFailure.value === "timeout")
+    return "本次请求已在 15 秒后停止，请检查服务状态再重试；当前快照保持不变。";
+  if (refreshFailure.value === "rate_limited") return "刷新过于频繁，当前快照保持不变。";
+  if (refreshFailure.value === "empty") return "未读取到新的同提交容量基线，当前快照保持不变。";
+  return "新鲜容量事实暂不可用，当前快照保持不变。";
+});
+async function load(options: { preserveOperationMessage?: boolean } = {}) {
+  if (refreshing.value) return;
+  const hasSnapshot = Boolean(data.value),
+    controller = new AbortController(),
+    sequence = ++loadSequence;
+  loadController?.abort();
+  loadController = controller;
+  refreshing.value = true;
+  if (!hasSnapshot) state.value = "loading";
   message.value = "";
+  refreshFailure.value = null;
+  if (!options.preserveOperationMessage) operationMessage.value = "";
+  const timeout = window.setTimeout(
+    () => controller.abort("capacity_boundary_read_timeout"),
+    15_000,
+  );
   try {
-    const response = await request<Dto>("/platform/operations/capacity");
+    const response = await request<Dto>("/platform/operations/capacity", {
+      signal: controller.signal,
+    });
+    if (sequence !== loadSequence) return;
     requestId.value = response.request_id;
     data.value = response.data ?? null;
     state.value = data.value ? data.value.state : "empty";
   } catch (error) {
+    if (sequence !== loadSequence) return;
+    const timedOut = controller.signal.aborted;
+    if (timedOut) {
+      if (hasSnapshot) refreshFailure.value = "timeout";
+      else state.value = "timeout";
+      return;
+    }
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       message.value = error.actionHint;
-      state.value = status(error);
-    } else state.value = "unavailable";
+      const next = status(error);
+      if (["expired", "forbidden"].includes(next)) {
+        data.value = null;
+        state.value = next;
+      } else if (hasSnapshot) {
+        refreshFailure.value = next === "rate_limited" || next === "empty" ? next : "unavailable";
+      } else state.value = next;
+    } else if (hasSnapshot) refreshFailure.value = "unavailable";
+    else state.value = "unavailable";
+  } finally {
+    window.clearTimeout(timeout);
+    if (sequence === loadSequence) {
+      refreshing.value = false;
+      loadController = null;
+    }
   }
 }
 async function attest() {
+  if (saving.value || refreshing.value) return;
   saving.value = true;
-  state.value = "verifying";
+  confirming.value = false;
+  operationMessage.value = "";
+  if (!data.value) state.value = "verifying";
   try {
     const response = await request("/platform/operations/capacity/drills", {
       method: "POST",
@@ -129,24 +193,30 @@ async function attest() {
         kind: "archive_recovery",
         reason: "平台运维确认本轮单机容量收尾演练",
       },
+      idempotencyKey: drillIdempotencyKey,
     });
     requestId.value = response.request_id;
-    message.value = "归档与隔离恢复演练已签认。";
-    await load();
+    operationMessage.value = "归档与隔离恢复演练已签认。";
+    drillIdempotencyKey = crypto.randomUUID();
+    await load({ preserveOperationMessage: true });
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
-      message.value = error.actionHint;
-      state.value = status(error);
-    } else state.value = "unavailable";
+      operationMessage.value = error.actionHint;
+      const next = status(error);
+      if (["expired", "forbidden"].includes(next)) {
+        data.value = null;
+        state.value = next;
+      } else if (!data.value) state.value = next;
+    } else {
+      operationMessage.value = "签认请求未完成，请保留当前容量快照后重试。";
+      if (!data.value) state.value = "unavailable";
+    }
   } finally {
     saving.value = false;
-    confirming.value = false;
   }
 }
-onMounted(() => {
-  if (state.value !== "verifying") void load();
-});
+onMounted(() => void load());
 </script>
 <template>
   <section class="capacity-boundary" :data-state="state">
@@ -160,12 +230,38 @@ onMounted(() => {
         >
       </div>
       <div>
-        <button type="button" @click="load">刷新实测事实</button
-        ><button class="danger" type="button" :disabled="saving" @click="confirming = true">
-          签认恢复演练
+        <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="() => load()">
+          {{ refreshing ? "刷新中…" : "刷新实测事实" }}</button
+        ><button
+          class="danger"
+          type="button"
+          :disabled="saving || refreshing"
+          :aria-busy="saving"
+          @click="confirming = true"
+        >
+          {{ saving ? "签认中…" : "签认恢复演练" }}
         </button>
       </div>
     </header>
+    <section
+      v-if="data && refreshFailure"
+      class="capacity-boundary__notice"
+      data-tone="warning"
+      role="status"
+    >
+      <div>
+        <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
+        <p>{{ message || refreshFailureMessage }}</p>
+      </div>
+      <button type="button" :disabled="refreshing" @click="() => load()">重新核验</button>
+    </section>
+    <p
+      v-if="data && operationMessage"
+      class="capacity-boundary__operation-message"
+      aria-live="polite"
+    >
+      {{ operationMessage }}
+    </p>
     <section
       v-if="!['ready', 'warning', 'blocked'].includes(state)"
       class="capacity-boundary__state"
@@ -177,7 +273,12 @@ onMounted(() => {
         <p>{{ message || verdict[1] }}</p>
         <code v-if="requestId">request_id {{ requestId }}</code>
       </div>
-      <button v-if="!['loading', 'verifying'].includes(state)" type="button" @click="load">
+      <button
+        v-if="!['loading', 'verifying'].includes(state)"
+        type="button"
+        :disabled="refreshing"
+        @click="() => load()"
+      >
         重新核验
       </button>
     </section>
@@ -268,13 +369,7 @@ onMounted(() => {
             </div>
             <div>
               <dt>下一档</dt>
-              <dd>
-                {{
-                  data.boundary.failed_next_concurrency
-                    ? `${data.boundary.failed_next_concurrency} 已停止`
-                    : "规划上限已完成"
-                }}
-              </dd>
+              <dd>{{ nextStageHint }}</dd>
             </div>
           </dl>
         </aside>
