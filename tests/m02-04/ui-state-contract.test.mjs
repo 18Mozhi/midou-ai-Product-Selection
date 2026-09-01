@@ -57,11 +57,12 @@ test("M02-04.A08/A11/A12 destructive confirmation and correlation ids fail close
   assert.equal(sanitizeCorrelationId("x".repeat(129)), "");
 });
 test("M02-04.A01/A03/A05/A06/A09/A10/A13/A14 component contract adds no backend or persistence surface", async () => {
-  const [panel, dialog, showcase, app, openapi, env, architecture] = await Promise.all(
+  const [panel, dialog, showcase, notFound, app, openapi, env, architecture] = await Promise.all(
     [
       "apps/web/src/components/UiStatePanel.vue",
       "apps/web/src/components/ConfirmDialog.vue",
       "apps/web/src/components/UiStateShowcase.vue",
+      "apps/web/src/components/NotFoundPage.vue",
       "apps/web/src/App.vue",
       "docs/openapi.yaml",
       "config/env.example",
@@ -75,6 +76,10 @@ test("M02-04.A01/A03/A05/A06/A09/A10/A13/A14 component contract adds no backend 
   assert.match(showcase, /不触发任何业务写入|不会请求后端/);
   assert.match(app, /isNotFoundRoute/);
   assert.match(app, /selectedView\.value === "ui-states"/);
+  assert.match(app, /NotFoundPage v-else-if="isNotFoundRoute"/);
+  assert.match(notFound, /candidate\.meta\.notFound === true/);
+  assert.match(notFound, /这里不会把不存在的页面解释为无权限/);
+  assert.doesNotMatch(notFound, /UiStateShowcase|ConfirmDialog|m02-04-request/);
   assert.match(showcase, /router\.push\(\{ query: \{ \.\.\.route\.query, state: kind \} \}\)/);
   assert.match(showcase, /展示页没有业务接口|展示页不会伪造申请成功/);
   assert.match(openapi, /ErrorEnvelope|components\/responses\/Error/);

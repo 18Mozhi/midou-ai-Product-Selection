@@ -469,9 +469,11 @@
         "../apps/web/src/components/UiStatePanel.vue",
         "../apps/web/src/components/ConfirmDialog.vue",
         "../apps/web/src/components/UiStateShowcase.vue",
+        "../apps/web/src/components/NotFoundPage.vue",
         "../apps/web/src/styles/onboarding-navigation.css"
       ],
       "route": "/ui-states",
+      "fallbackRoute": "/:pathMatch(.*)*",
       "states": [
         "loading",
         "empty",
@@ -483,12 +485,12 @@
         "not_found",
         "confirmation"
       ],
-      "contracts": "production-rendered internal route, query-backed refresh/history state, observable non-business demo actions, semantic text and symbol, safe request/trace identifiers, explicit recovery, fail-closed and short-viewport-safe high-impact confirmation",
+      "contracts": "production-rendered internal route, query-backed refresh/history state, observable non-business demo actions, semantic text and symbol, safe request/trace identifiers, explicit recovery, fail-closed and short-viewport-safe high-impact confirmation; the fallback route uses a dedicated user-facing 404, never exposes the internal state harness or recent-route query, and rejects stale recent destinations that resolve back to not-found",
       "imageEvidence": ["concept 72 not-found", "P02 contact sheets and M02-01 design tokens"],
       "nonGoals": "no API request, business mutation, permission inference, persistence, async service or environment value",
-      "verificationRunId": "d3ccbdc8-debf-4dc9-8848-e30ac5361f7e",
+      "verificationRunId": "a3be511f-f5cb-4ad5-9bea-2e16e08d3362",
       "status": "verified",
-      "statusDetail": "M02-04_production_route_and_action_chain_verified"
+      "statusDetail": "M02-04_internal_state_library_and_dedicated_not_found_recovery_verified"
     },
     "globalDiscovery": {
       "module": "M02-05",

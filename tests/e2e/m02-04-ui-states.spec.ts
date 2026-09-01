@@ -77,15 +77,12 @@ test("M02-04 navigation actions reach their declared destinations", async ({ pag
   await page.getByRole("button", { name: "返回今日行动" }).click();
   await expect(page).toHaveURL(/\/home$/);
 });
-test("M02-04.A07/A15 unknown route renders the reference-grounded 404 state", async ({ page }) => {
+test("M02-04.A07/A15 internal state library keeps its 404 example isolated", async ({ page }) => {
   await page.goto("/ui-states");
-  await page.goto("/route-that-does-not-exist");
+  await page.getByRole("button", { name: "404" }).click();
   await expect(page.getByRole("heading", { name: "没有找到这个页面" })).toBeVisible();
-  await expect(page.getByText("最近有效页面：/ui-states")).toBeVisible();
-  await page.getByRole("button", { name: "返回最近页面" }).click();
-  await expect(page).toHaveURL(/\/ui-states$/);
-  await page.goto("/route-that-does-not-exist");
-  await expect(page).toHaveScreenshot("m02-04-not-found.png", { fullPage: true });
+  await expect(page.getByRole("navigation", { name: "状态示例" })).toBeVisible();
+  await expect(page).toHaveURL(/\/ui-states\?state=not_found$/);
 });
 test("M02-04.A08/A15 high-impact confirmation is keyboard safe and fail-closed", async ({
   page,

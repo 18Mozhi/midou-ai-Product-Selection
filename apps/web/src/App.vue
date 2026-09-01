@@ -32,6 +32,7 @@ const OnboardingGuide = defineAsyncComponent(() => import("./components/Onboardi
 const NavigationShell = defineAsyncComponent(() => import("./components/NavigationShell.vue"));
 const AccountShell = defineAsyncComponent(() => import("./components/AccountShell.vue"));
 const UiStateShowcase = defineAsyncComponent(() => import("./components/UiStateShowcase.vue"));
+const NotFoundPage = defineAsyncComponent(() => import("./components/NotFoundPage.vue"));
 const LandingRedirect = defineAsyncComponent(() => import("./components/LandingRedirect.vue"));
 
 const apiBase = publicConfig.apiBaseUrl;
@@ -97,8 +98,6 @@ const isNotFoundRoute = computed(
   <DeploymentFoundation v-else-if="selectedView === 'deployment'" :api-base-url="apiBase" />
   <NavigationShell v-else-if="navigationShell" :shell="navigationShell" :api-base-url="apiBase" />
   <AccountShell v-else-if="selectedView === 'account'" :api-base-url="apiBase" />
-  <UiStateShowcase
-    v-else-if="isUiStatesView || isNotFoundRoute"
-    :initial-state="isNotFoundRoute ? 'not_found' : undefined"
-  />
+  <UiStateShowcase v-else-if="isUiStatesView" />
+  <NotFoundPage v-else-if="isNotFoundRoute" />
 </template>
