@@ -494,12 +494,32 @@ try:
     if not site_config.is_file():
         raise RuntimeError("BaoTa website Nginx config is missing")
     previous_site = site_config.read_text(encoding="utf-8")
-    legacy_block = "location / {{\\n    try_files $uri $uri/ /index.html;\\n}}"
-    managed_block = "include /www/wwwroot/ai选品/config/nginx-spa-routes.conf;\\nerror_page 404 /index.html;\\n\\nlocation / {{\\n    try_files $uri $uri/ =404;\\n}}"
-    if managed_block in previous_site:
+    managed_pattern = re.compile(
+        r"(?m)^(?P<indent>[ \\t]*)include /www/wwwroot/ai选品/config/nginx-spa-routes\\.conf;\\r?\\n"
+        r"(?P=indent)error_page 404 /index\\.html;\\r?\\n\\r?\\n"
+        r"(?P=indent)location / \\{{\\r?\\n"
+        r"(?P=indent)    try_files \\$uri \\$uri/ =404;\\r?\\n"
+        r"(?P=indent)\\}}$"
+    )
+    legacy_pattern = re.compile(
+        r"(?m)^(?P<indent>[ \\t]*)location / \\{{\\r?\\n"
+        r"(?P=indent)    try_files \\$uri \\$uri/ /index\\.html;\\r?\\n"
+        r"(?P=indent)\\}}$"
+    )
+    managed_matches = list(managed_pattern.finditer(previous_site))
+    legacy_matches = list(legacy_pattern.finditer(previous_site))
+    if len(managed_matches) == 1 and not legacy_matches:
         next_site = previous_site
-    elif legacy_block in previous_site and previous_site.count(legacy_block) == 1:
-        next_site = previous_site.replace(legacy_block, managed_block)
+    elif len(legacy_matches) == 1 and not managed_matches:
+        indent = legacy_matches[0].group("indent")
+        managed_block = (
+            indent + "include /www/wwwroot/ai选品/config/nginx-spa-routes.conf;\\n"
+            + indent + "error_page 404 /index.html;\\n\\n"
+            + indent + "location / {{\\n"
+            + indent + "    try_files $uri $uri/ =404;\\n"
+            + indent + "}}"
+        )
+        next_site = legacy_pattern.sub(lambda _: managed_block, previous_site, count=1)
     else:
         raise RuntimeError("BaoTa website SPA fallback contract is not recognized")
     nginx_backup_dir = backups / "nginx"
