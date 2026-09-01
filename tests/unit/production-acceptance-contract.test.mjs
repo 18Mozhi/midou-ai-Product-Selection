@@ -50,6 +50,9 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.match(runner, /SET FOREIGN_KEY_CHECKS=1/);
   assert.match(runner, /remaining_rows/);
   assert.match(runner, /cleanup_failure/);
+  assert.match(runner, /ER_LOCK_DEADLOCK/);
+  assert.match(runner, /ER_LOCK_WAIT_TIMEOUT/);
+  assert.match(runner, /attempt <= 3/);
   assert.match(runner, /directIds\[table\] \?\? \[\]/);
   assert.doesNotMatch(runner, /direct\[table\] \?\? rootIds/);
   assert.match(runner, /SCOUTOPS_ACCEPTANCE_PASSWORD/);

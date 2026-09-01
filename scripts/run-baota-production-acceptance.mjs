@@ -541,49 +541,60 @@ async function cleanup() {
       entry.push({ column: row.column_name, values: [...new Set(values)] });
       grouped.set(row.table_name, entry);
     }
-    await connection.beginTransaction();
-    await connection.query("SET FOREIGN_KEY_CHECKS=0");
-    const tables = [];
-    for (const [table, entries] of grouped) {
-      const clauses = [];
-      const values = [];
-      for (const entry of entries) {
-        clauses.push(`${quoteIdentifier(entry.column)} IN (${placeholders(entry.values)})`);
-        values.push(...entry.values);
+    for (let attempt = 1; attempt <= 3; attempt += 1) {
+      try {
+        await connection.beginTransaction();
+        await connection.query("SET FOREIGN_KEY_CHECKS=0");
+        const tables = [];
+        for (const [table, entries] of grouped) {
+          const clauses = [];
+          const values = [];
+          for (const entry of entries) {
+            clauses.push(`${quoteIdentifier(entry.column)} IN (${placeholders(entry.values)})`);
+            values.push(...entry.values);
+          }
+          const [result] = await connection.query(
+            `DELETE FROM ${quoteIdentifier(table)} WHERE ${clauses.join(" OR ")}`,
+            values,
+          );
+          if (Number(result.affectedRows) > 0)
+            tables.push({ table, deleted_rows: Number(result.affectedRows) });
+        }
+        await connection.query("SET FOREIGN_KEY_CHECKS=1");
+        await connection.commit();
+        let remaining = 0;
+        for (const [table, entries] of grouped) {
+          const clauses = [];
+          const values = [];
+          for (const entry of entries) {
+            clauses.push(`${quoteIdentifier(entry.column)} IN (${placeholders(entry.values)})`);
+            values.push(...entry.values);
+          }
+          const [[row]] = await connection.query(
+            `SELECT COUNT(*) count FROM ${quoteIdentifier(table)} WHERE ${clauses.join(" OR ")}`,
+            values,
+          );
+          remaining += Number(row.count);
+        }
+        cleanupReport = {
+          status: remaining === 0 ? "passed" : "failed",
+          tables,
+          deleted_rows: tables.reduce((sum, table) => sum + table.deleted_rows, 0),
+          remaining_rows: remaining,
+        };
+        if (remaining !== 0)
+          throw new Error(`production_acceptance_cleanup_incomplete:${remaining}`);
+        return;
+      } catch (error) {
+        await connection.rollback().catch(() => {});
+        await connection.query("SET FOREIGN_KEY_CHECKS=1").catch(() => {});
+        const retryable =
+          [1205, 1213].includes(Number(error?.errno)) ||
+          ["ER_LOCK_WAIT_TIMEOUT", "ER_LOCK_DEADLOCK"].includes(String(error?.code));
+        if (!retryable || attempt === 3) throw error;
+        await new Promise((resolveDelay) => setTimeout(resolveDelay, attempt * 200));
       }
-      const [result] = await connection.query(
-        `DELETE FROM ${quoteIdentifier(table)} WHERE ${clauses.join(" OR ")}`,
-        values,
-      );
-      if (Number(result.affectedRows) > 0)
-        tables.push({ table, deleted_rows: Number(result.affectedRows) });
     }
-    await connection.query("SET FOREIGN_KEY_CHECKS=1");
-    await connection.commit();
-    let remaining = 0;
-    for (const [table, entries] of grouped) {
-      const clauses = [];
-      const values = [];
-      for (const entry of entries) {
-        clauses.push(`${quoteIdentifier(entry.column)} IN (${placeholders(entry.values)})`);
-        values.push(...entry.values);
-      }
-      const [[row]] = await connection.query(
-        `SELECT COUNT(*) count FROM ${quoteIdentifier(table)} WHERE ${clauses.join(" OR ")}`,
-        values,
-      );
-      remaining += Number(row.count);
-    }
-    cleanupReport = {
-      status: remaining === 0 ? "passed" : "failed",
-      tables,
-      deleted_rows: tables.reduce((sum, table) => sum + table.deleted_rows, 0),
-      remaining_rows: remaining,
-    };
-    if (remaining !== 0) throw new Error(`production_acceptance_cleanup_incomplete:${remaining}`);
-  } catch (error) {
-    await connection.rollback().catch(() => {});
-    throw error;
   } finally {
     await connection.query("SET FOREIGN_KEY_CHECKS=1").catch(() => {});
     connection.release();

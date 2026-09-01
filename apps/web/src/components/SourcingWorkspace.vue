@@ -128,6 +128,12 @@ const missingLabels: Record<string, string> = {
       minute: "2-digit",
       hour12: false,
     }).format(new Date(value)),
+  localDateTimeInput = (value: string) => {
+    const observed = new Date(value);
+    return new Date(observed.getTime() - observed.getTimezoneOffset() * 60_000)
+      .toISOString()
+      .slice(0, 16);
+  },
   statusText = (value: string) =>
     ({
       queued: "等待采集",
@@ -269,7 +275,7 @@ function openQuote(candidate: Candidate) {
   quote.confidence_value = candidate.confidence_value ?? 80;
   quote.stability_status = candidate.quote?.stability_status ?? "unknown";
   quote.risk_level = candidate.quote?.risk_level ?? "unknown";
-  quote.observed_at = new Date(candidate.observed_at).toISOString().slice(0, 16);
+  quote.observed_at = localDateTimeInput(candidate.observed_at);
   quote.evidence_id = candidate.evidence_id;
 }
 async function compare() {

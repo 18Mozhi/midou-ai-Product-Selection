@@ -200,6 +200,32 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await expect(page.getByRole("button", { name: "保存报价对比" })).toBeDisabled();
 });
 
+test.describe("supplier quote observation time", () => {
+  test.use({ timezoneId: "America/New_York" });
+
+  test("preserves the evidence instant through a non-UTC datetime-local editor", async ({
+    page,
+  }) => {
+    await setup(page);
+    let submitted: Record<string, unknown> | null = null;
+    await page.route("**/api/v1/sourcing/quotes", async (route) => {
+      submitted = route.request().postDataJSON() as Record<string, unknown>;
+      await route.fulfill({ status: 201, json: envelope({ id: "quote-timezone-proof" }) });
+    });
+    await page.goto("/sourcing");
+    await page.getByRole("button", { name: "确认报价" }).click();
+    const dialog = page.getByRole("dialog", { name: "确认完整供应商报价" });
+    await expect(dialog.getByLabel("观测时间")).toHaveValue("2026-08-08T08:05");
+    await dialog.getByLabel("规格").fill("500ml / 蓝色 / 单只彩盒");
+    await dialog.getByLabel("所在地").fill("浙江宁波");
+    await dialog.getByLabel("稳定性").selectOption("stable");
+    await dialog.getByLabel("风险").selectOption("low");
+    await dialog.getByRole("button", { name: "确认新版本" }).click();
+    await expect.poll(() => submitted).not.toBeNull();
+    expect(submitted?.observed_at).toBe(incompleteCandidate.observed_at);
+  });
+});
+
 test("opportunity sourcing detail exposes designated dual-person cost review", async ({ page }) => {
   await setup(page);
   const opportunityId = "00000000-0000-4000-8000-000000000612";
