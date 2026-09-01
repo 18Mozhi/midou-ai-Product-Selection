@@ -11,25 +11,25 @@ export class MySqlDiscoveryRepository implements DiscoveryRepository {
         "FROM search_documents WHERE organization_id=? AND workspace_id=?",
         "UNION ALL SELECT t.id,'task',t.id,t.title,t.description,t.status,t.assignee_id," +
           "COALESCE(NULLIF(task_profile.display_name,''),task_user.email)," +
-          "CONCAT('/tasks/',CONVERT(t.id USING utf8mb4)),'task:read',t.updated_at",
+          "CONCAT('/tasks/',CONVERT(t.id USING utf8mb4) COLLATE utf8mb4_unicode_ci),'task:read',t.updated_at",
         "FROM tasks t LEFT JOIN users task_user ON task_user.id=t.assignee_id " +
           "LEFT JOIN user_profiles task_profile ON task_profile.user_id=t.assignee_id " +
           "WHERE t.organization_id=? AND t.workspace_id=? AND t.deleted_at IS NULL",
         "UNION ALL SELECT o.id,'opportunity',o.id,o.name," +
           "CONCAT(o.market,' · ',COALESCE(o.category,'未分类')),o.lifecycle_status,o.owner_id," +
           "COALESCE(NULLIF(owner_profile.display_name,''),owner_user.email)," +
-          "CONCAT('/opportunities/',CONVERT(o.id USING utf8mb4)),'opportunity:read',o.updated_at",
+          "CONCAT('/opportunities/',CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_unicode_ci),'opportunity:read',o.updated_at",
         "FROM opportunities o LEFT JOIN users owner_user ON owner_user.id=o.owner_id " +
           "LEFT JOIN user_profiles owner_profile ON owner_profile.user_id=o.owner_id " +
           "WHERE o.organization_id=? AND o.workspace_id=?",
         "UNION ALL SELECT e.id,'evidence',e.id,CONCAT('证据 · ',p.name),e.canonical_url," +
-          "e.status,NULL,NULL,CONCAT('/platform-admin/data?evidence=',CONVERT(e.id USING utf8mb4))," +
+          "e.status,NULL,NULL,CONCAT('/platform-admin/data?evidence=',CONVERT(e.id USING utf8mb4) COLLATE utf8mb4_unicode_ci)," +
           "'platform:operate',e.created_at",
         "FROM raw_evidence e JOIN providers p ON p.id=e.provider_id " +
           "WHERE e.organization_id=? AND e.workspace_id=?",
-        "UNION ALL SELECT id,'collection_task',id,CONCAT('采集任务 · ',LEFT(CONVERT(id USING utf8mb4),8))," +
-          "CONCAT(status,IF(last_error_code IS NULL,'',CONCAT(' · ',CONVERT(last_error_code USING utf8mb4))))," +
-          "status,NULL,NULL,CONCAT('/platform-admin/collection?task=',CONVERT(id USING utf8mb4))," +
+        "UNION ALL SELECT id,'collection_task',id,CONCAT('采集任务 · ',LEFT(CONVERT(id USING utf8mb4) COLLATE utf8mb4_unicode_ci,8))," +
+          "CONCAT(status,IF(last_error_code IS NULL,'',CONCAT(' · ',CONVERT(last_error_code USING utf8mb4) COLLATE utf8mb4_unicode_ci)))," +
+          "status,NULL,NULL,CONCAT('/platform-admin/collection?task=',CONVERT(id USING utf8mb4) COLLATE utf8mb4_unicode_ci)," +
           "'collection:replay',updated_at",
         "FROM collection_tasks WHERE organization_id=? AND workspace_id=?",
       ].join(" "),

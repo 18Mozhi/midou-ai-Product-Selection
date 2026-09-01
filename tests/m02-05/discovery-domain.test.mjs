@@ -218,14 +218,18 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   for (const table of ["tasks", "opportunities", "raw_evidence", "collection_tasks"])
     assert.match(repo, new RegExp(`FROM ${table}|JOIN ${table}`));
   for (const expression of [
-    "CONVERT(t.id USING utf8mb4)",
-    "CONVERT(o.id USING utf8mb4)",
-    "CONVERT(e.id USING utf8mb4)",
-    "LEFT(CONVERT(id USING utf8mb4),8)",
-    "CONVERT(id USING utf8mb4)",
-    "CONVERT(last_error_code USING utf8mb4)",
+    "CONVERT(t.id USING utf8mb4) COLLATE utf8mb4_unicode_ci",
+    "CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_unicode_ci",
+    "CONVERT(e.id USING utf8mb4) COLLATE utf8mb4_unicode_ci",
+    "CONVERT(id USING utf8mb4) COLLATE utf8mb4_unicode_ci",
+    "CONVERT(last_error_code USING utf8mb4) COLLATE utf8mb4_unicode_ci",
   ])
     assert.ok(repo.includes(expression), `missing MySQL 5.7 ASCII collation guard: ${expression}`);
+  assert.equal(
+    repo.match(/COLLATE utf8mb4_unicode_ci/g)?.length,
+    6,
+    "every converted ASCII search fragment must use the table collation",
+  );
   assert.match(repo, /\/tasks\/[\s\S]*\/opportunities\/[\s\S]*evidence=[\s\S]*task=/);
   assert.match(openapi, /\/me\/global-search:/);
   assert.match(openapi, /\/me\/quick-actions:/);
