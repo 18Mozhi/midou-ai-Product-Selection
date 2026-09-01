@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { chmod, mkdir, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { constants } from "node:fs";
+import { access, chmod, mkdir, writeFile } from "node:fs/promises";
+import { dirname, isAbsolute, resolve } from "node:path";
 import { chromium } from "playwright";
 
 const required = (name) => {
@@ -18,6 +19,10 @@ const account = {
 };
 const resources = JSON.parse(required("SCOUTOPS_ACCEPTANCE_RESOURCE_IDS"));
 const traceId = process.env.SCOUTOPS_QA_TRACE_ID?.trim() || randomUUID();
+const browserExecutablePath = process.env.SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH?.trim();
+if (browserExecutablePath && !isAbsolute(browserExecutablePath))
+  throw new Error("SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH must be absolute");
+if (browserExecutablePath) await access(browserExecutablePath, constants.X_OK);
 const screenshotDirectory = resolve(
   process.env.SCOUTOPS_CORE_E2E_SCREENSHOT_DIR ?? ".artifacts/production-core-e2e",
 );
@@ -33,7 +38,10 @@ const assert = (condition, message) => {
 
 await mkdir(screenshotDirectory, { recursive: true });
 await mkdir(dirname(reportFile), { recursive: true });
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({
+  headless: true,
+  ...(browserExecutablePath ? { executablePath: browserExecutablePath } : {}),
+});
 const context = await browser.newContext({
   viewport: { width: 1440, height: 1000 },
   extraHTTPHeaders: { "x-trace-id": traceId },

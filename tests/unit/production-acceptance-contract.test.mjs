@@ -49,6 +49,8 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.match(runner, /SCOUTOPS_ACCEPTANCE_PASSWORD/);
   assert.doesNotMatch(runner, /Qa-Platform|Qa-Member|password:\s*["'][^"']{12}/);
   assert.match(routeCoverage, /SCOUTOPS_QA_TRACE_ID/);
+  assert.match(routeCoverage, /SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH/);
+  assert.match(routeCoverage, /executablePath: browserExecutablePath/);
   assert.match(runner, /verify-production-core-e2e\.mjs/);
   for (const table of [
     "trend_topics",
@@ -66,6 +68,8 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.match(coreE2e, /dependencies\?\.mysql === "available"/);
   assert.match(coreE2e, /dependencies\?\.redis === "available"/);
   assert.match(coreE2e, /extraHTTPHeaders: \{ "x-trace-id": traceId \}/);
+  assert.match(coreE2e, /SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH/);
+  assert.match(coreE2e, /executablePath: browserExecutablePath/);
   assert.doesNotMatch(coreE2e, /page\.route\s*\(/);
   for (const file of [
     "production-route-catalog.mjs",

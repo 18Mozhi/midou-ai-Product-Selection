@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { constants } from "node:fs";
+import { access, mkdir, writeFile } from "node:fs/promises";
+import { isAbsolute, resolve } from "node:path";
 import { chromium } from "playwright";
 import {
   authorizedRoutesFor,
@@ -35,6 +36,10 @@ const organizationLabel =
   process.env.SCOUTOPS_QA_ORGANIZATION_LABEL?.trim() || "AI选品功能验收组织";
 const workspaceLabel = process.env.SCOUTOPS_QA_WORKSPACE_LABEL?.trim() || "功能验收工作区";
 const qaTraceId = process.env.SCOUTOPS_QA_TRACE_ID?.trim() || randomUUID();
+const browserExecutablePath = process.env.SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH?.trim();
+if (browserExecutablePath && !isAbsolute(browserExecutablePath))
+  throw new Error("SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH must be absolute");
+if (browserExecutablePath) await access(browserExecutablePath, constants.X_OK);
 const routeManifest = await readRouteCatalogManifest();
 const profiles = routeManifest.productionAcceptance.roles.map((profile) => ({
   key: profile.key,
@@ -53,7 +58,10 @@ const protectedRouteCatalog = await readProtectedRouteCatalog();
 await mkdir(screenshotDirectory, { recursive: true });
 await mkdir(resolve(reportFile, ".."), { recursive: true });
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({
+  headless: true,
+  ...(browserExecutablePath ? { executablePath: browserExecutablePath } : {}),
+});
 const report = {
   schema_version: 3,
   base_url: baseUrl,

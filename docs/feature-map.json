@@ -1863,7 +1863,7 @@
       ],
       "scope": "one-time six-role production tenant, 223 OpenAPI paths, 256 operations, 60 protected routes, two real core business chains and automatic scoped cleanup",
       "runtimeBoundary": "manual finite BaoTa task only; no daemon, generic operation coverage uses no valid write payloads, and only the two manifest-authorized core E2E chains perform valid writes before exact cleanup; no persistent acceptance account or tenant",
-      "coreE2eBoundary": "Playwright performs no browser request interception, requires Fastify readiness to report real MySQL and Redis available, then covers trend to opportunity decision to task and sourcing candidate to quote confirmation to cost and profit with two screenshots",
+      "coreE2eBoundary": "Playwright performs no browser request interception, requires Fastify readiness to report real MySQL and Redis available, and may use only an absolute executable system Chromium or Chrome path supplied by the restricted BaoTa task when the bundled browser is unavailable; it then covers trend to opportunity decision to task and sourcing candidate to quote confirmation to cost and profit with two screenshots",
       "cleanupBoundary": "exact run users organization workspace resources and trace references are deleted with table-specific UUID markers, a per-table manifest and zero-reference verification; primary execution and cleanup failures are reported separately",
       "status": "implemented",
       "statusDetail": "local_preflight_passed_production_execution_required_per_release"

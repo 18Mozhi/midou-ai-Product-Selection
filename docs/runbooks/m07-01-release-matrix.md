@@ -14,6 +14,8 @@
 
 完整的一次性生产验收在宝塔计划任务中按 `infra/baota/production-acceptance-manifest.json` 创建 `product-scout-production-acceptance`，手工执行 `node scripts/run-baota-production-acceptance.mjs --production`。只在该任务的受限环境配置 `SCOUTOPS_ACCEPTANCE_PASSWORD`；其余地址和报告路径可沿用 `config/env.example`。先在本地或发布预检执行 `npm run verify:production-acceptance`，应只输出 223/256/60/6 基线且不连接数据库、不创建账号。
 
+生产机无法使用 Playwright 自带浏览器包时，在同一宝塔有限任务的受限环境设置 `SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH`，值必须是当前主机上由 `www` 可执行的 Chromium/Chrome 绝对路径；当前 Debian 11 主机使用面板内已安装的 `/usr/bin/chromium`。验收脚本在启动浏览器前检查绝对路径和执行权限，不通过时失败关闭。该配置仅影响两段生产浏览器验收，不改变网站、Node API、Worker 或 Crawler；修改后直接重新手工执行有限任务，不需要重启常驻服务，也不得在服务器升级 npm 锁定依赖来绕过平台不兼容。
+
 生产任务成功报告必须同时满足：`operation_count=256`、`route_catalog_count=60`、`matrix_cells=360`、六个已验证单角色账号、一个组织、一个工作区、两条 `core_e2e` 链路、两张真实栈截图，以及 `cleanup.status=passed`、`cleanup.remaining_rows=0`、`cleanup_failure=null`。`core_e2e.dependencies` 中 MySQL 与 Redis 都必须为 `available`；`cleanup.tables` 是逐表删除清单。任务失败但清理成功时仍返回非零，禁止把清理成功冒充验收成功；主失败与清理失败同时发生时必须分别写入报告。进程被主机强制终止时 `finally` 无法保证执行，应先按报告中的 run/trace 标记核对残留，不得使用宽泛邮箱或组织条件删除生产数据。
 
 ## 故障定位
