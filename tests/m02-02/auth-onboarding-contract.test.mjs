@@ -75,6 +75,9 @@ test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and tru
   assert.match(styles, /@media\s*\(\s*max-width:\s*780px\s*\)/);
   assert.match(e2e, /keyboard\.press/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
-  assert.match(runbook, /仅在宝塔网站发布/);
+  assert.match(runbook, /宝塔发布 Vue Web 静态资源/);
+  assert.match(runbook, /公开会话状态读取的 Node API/);
+  assert.match(runbook, /宝塔重启 Node 项目 `ai选品`/);
+  assert.match(runbook, /Node Worker 与 Python Crawler 不需要重启/);
   assert.match(feature, /authOnboardingPages/);
 });

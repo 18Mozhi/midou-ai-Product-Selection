@@ -255,7 +255,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(accountShell, /已保留上次成功读取的数据/);
   assert.match(accountShell, /if \(refreshing\.value\) return/);
   assert.match(accountShell, /没有符合当前条件的组织/);
-  assert.match(accountShell, /组织、状态与隔离边界，一眼看懂/);
+  assert.match(accountShell, /organizationListRoute[\s\S]*管理组织状态与隔离边界/);
   assert.match(accountShell, /搜索组织名称或标识/);
   assert.match(accountShell, /organizationEmptyState/);
   assert.match(accountShell, /清除筛选/);

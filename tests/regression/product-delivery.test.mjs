@@ -107,7 +107,9 @@ test("every visible production navigation entry resolves to a real feature surfa
   }
 
   assert.equal(catalog.routes.find((route) => route.path === "/me")?.view, "account");
-  assert.match(routeAdapter, /manifest\.routes\.map/);
+  assert.match(routeAdapter, /const runtimeRoutes = manifest\.routes\.filter/);
+  assert.match(routeAdapter, /entry\.acceptance !== "internal"/);
+  assert.match(routeAdapter, /runtimeRoutes\.map/);
   assert.doesNotMatch(shell, /isAccountCenter|import LocalIdentity/);
   assert.doesNotMatch(identity, /['"]\/me['"]\s*:\s*['"]sessions['"]/);
   assert.match(identity, /pathModes\[window\.location\.pathname\]/);

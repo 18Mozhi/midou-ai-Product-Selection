@@ -140,15 +140,23 @@ test("M02-03 regression: preferred landing sends platform and organization admin
 });
 
 test("M02-03 shell presents business labels grouped search and collapsed failure identifiers", async () => {
-  const [shell, permissions, catalog] = await Promise.all([
+  const [shell, permissions, catalogRaw, generatedCatalogRaw] = await Promise.all([
     read("apps/web/src/components/NavigationShell.vue"),
     read("apps/web/src/navigation-shell-permissions.ts"),
-    read("apps/web/src/route-catalog.ts"),
+    read("config/route-catalog.json"),
+    read("apps/web/src/route-catalog.generated.json"),
   ]);
+  const catalog = JSON.parse(catalogRaw);
+  const generatedCatalog = JSON.parse(generatedCatalogRaw);
   assert.match(`${shell}\n${permissions}`, /普通成员[\s\S]*平台超级管理员/);
   assert.match(shell, /搜索导航菜单[\s\S]*没有匹配的菜单或分组/);
   assert.match(shell, /role-gate-technical[\s\S]*故障详情[\s\S]*关联编号/);
-  assert.match(catalog, /业务运营[\s\S]*采集与数据[\s\S]*治理与安全[\s\S]*高级运维/);
+  const navigationGroups = new Set(
+    catalog.routes.flatMap((route) => (route.navigation?.group ? [route.navigation.group] : [])),
+  );
+  for (const group of ["业务运营", "采集与数据", "治理与安全", "高级运维"])
+    assert.ok(navigationGroups.has(group), `canonical route catalog is missing ${group}`);
+  assert.deepEqual(generatedCatalog, catalog);
 });
 
 test("M02-03.A06/A13 authenticated API validates shell and preserves error contract", async () => {
@@ -198,6 +206,7 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
     discovery,
     navigationMemory,
     routeCatalog,
+    routeCatalogManifestRaw,
     main,
     apiClient,
     app,
@@ -218,6 +227,7 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
       "apps/web/src/use-navigation-discovery.ts",
       "apps/web/src/navigation-memory.ts",
       "apps/web/src/route-catalog.ts",
+      "config/route-catalog.json",
       "apps/web/src/main.ts",
       "apps/web/src/api-client.ts",
       "apps/web/src/App.vue",
@@ -232,6 +242,7 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
     ].map(read),
   );
   const componentEvidence = [component, permissions, routeState, shellTheme, discovery].join("\n");
+  const routeCatalogManifest = JSON.parse(routeCatalogManifestRaw);
   for (const shell of ["member", "organization_admin", "platform_admin"])
     assert.match(componentEvidence + openapi, new RegExp(shell));
   for (const path of ["/home", "/org-admin", "/platform-admin"])
@@ -259,15 +270,22 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(component, /aria-current/);
   assert.match(componentEvidence, /navigationItemsFor/);
   assert.doesNotMatch(componentEvidence, /const\s+(memberMenu|orgMenu|platformMenu)/);
-  assert.match(routeCatalog, /navigationCatalog/);
-  assert.match(routeCatalog, /surfaceAliases/);
+  assert.match(routeCatalog, /generatedCatalog/);
+  assert.match(routeCatalog, /const runtimeRoutes = manifest\.routes\.filter/);
+  assert.match(routeCatalog, /entry\.acceptance !== "internal"/);
+  assert.match(routeCatalog, /runtimeRoutes\.map/);
+  assert.ok(routeCatalogManifest.routes.every((entry) => entry.surface && entry.cachePolicy));
+  assert.ok(routeCatalogManifest.routes.some((entry) => entry.acceptance === "internal"));
   assert.match(routeCatalog, /cachePolicy/);
   assert.match(component, /selectedSurfaceComponent/);
   assert.match(component, /surfaceCacheKey/);
   assert.doesNotMatch(component, /<HomeDashboard\s+v-if|<PlatformDashboard\s+v-else-if/);
-  assert.match(routeCatalog, /\/platform-admin\/organizations/);
-  assert.match(routeCatalog, /\/platform-admin\/users/);
-  assert.match(routeCatalog, /\/platform-admin\/admins/);
+  for (const path of [
+    "/platform-admin/organizations",
+    "/platform-admin/users",
+    "/platform-admin/admins",
+  ])
+    assert.ok(routeCatalogManifest.routes.some((entry) => entry.path === path));
   assert.doesNotMatch(main, /addEventListener\(["']click["']/);
   assert.match(component, /rememberMemberRoute/);
   assert.match(navigationMemory, /getLastMemberRoute/);
@@ -296,10 +314,10 @@ test("M02-03 each role shell keeps its role-specific primary action in the top b
     `\\s+class="role-create"\\s+to="/platform-admin/organizations/new"[\\s\\S]*?新建组织`,
   ].join("");
   assert.match(component, new RegExp(platformCreatePattern));
-  assert.match(
-    component,
-    /v-else-if="shell === 'organization_admin'"\s+class="role-create"\s+to="\/org-admin\/members"[\s\S]*?邀请成员/,
-  );
+  assert.match(component, /v-else-if="shell === 'organization_admin'"/);
+  assert.match(component, /guard\?\.roles\?\.includes\('organization_admin'\)/);
+  assert.match(component, /to="\/org-admin\/members"/);
+  assert.match(component, /<span>邀请成员<\/span>/);
   assert.match(
     component,
     /v-else-if="shell === 'member'"\s+type="button"\s+class="role-create"[\s\S]*?创建选品/,

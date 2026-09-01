@@ -79,7 +79,7 @@ test("M07-01.A07/A08/A15 every prior browser contract is assigned exactly once",
   const actual = (await readdir(resolve(root, "tests/e2e"))).filter((name) =>
     /^m0[0-6]-.*\.spec\.ts$/.test(name),
   );
-  assert.equal(assigned.length, 49);
+  assert.equal(assigned.length, actual.length);
   assert.equal(new Set(assigned).size, assigned.length);
   assert.deepEqual([...assigned].sort(), actual.sort());
   assert.ok(assigned.some((name) => name.includes("ui-states")));

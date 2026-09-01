@@ -87,7 +87,11 @@ test("M07-06.A07-A17 keeps UI, contracts, production evidence and rollback synch
     assert.match(all, new RegExp(token));
   assert.match(files[1], /max-width:\s*390px/);
   assert.match(files[0], /真实来源/);
-  assert.match(files[0], /没有演示数据替代真实结果/);
+  assert.match(files[0], /journey\.task_status === "succeeded_empty"/);
+  assert.match(files[0], /真实来源没有返回可用结果/);
+  assert.match(files[0], /真实来源已明确受阻/);
+  assert.match(files[0], /错误码：[\s\S]*journey\.blocked_reason/);
+  assert.match(files[0], /任务状态与事件记录/);
   assert.match(files[0], /localStorage\.setItem\(progressStorageKey/);
   assert.match(files[0], /比较 \{\{ candidates\.length \}\} 条候选后再生成机会/);
   assert.match(files[0], /@secondary="handleStateSecondary"/);
@@ -205,7 +209,11 @@ test("M07-06.A09/A16 production runner selects tenant context before member guar
     guard > context,
     "member capability guard must run only after tenant context is selected",
   );
-  assert.match(runner, /"idempotency-key":randomUUID\(\)/);
+  const contextWrite = runner.slice(context, guard);
+  const journeyWrite = runner.slice(runner.indexOf('request("/selection-journeys"'));
+  const idempotencyHeader = /"idempotency-key"\s*:\s*randomUUID\(\)/;
+  assert.match(contextWrite, idempotencyHeader);
+  assert.match(journeyWrite, idempotencyHeader);
   assert.equal(manifest.memberBoundary.sessionContextRequired, true);
   assert.equal(manifest.memberBoundary.exactlyOneActiveOrganization, true);
 });

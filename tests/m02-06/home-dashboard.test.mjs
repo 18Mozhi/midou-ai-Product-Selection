@@ -204,7 +204,15 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.match(openapi, /\/me\/home-dashboard:/);
   assert.match(home, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
-  assert.match(home, /真实任务、趋势、机会和来源状态/);
+  assert.match(home, /v-if="state === 'empty'" class="home-empty"/);
+  for (const fact of ["任务", "趋势", "机会", "来源状态", "无跨组织、无推测数据"])
+    assert.match(home, new RegExp(fact));
+  for (const destination of [
+    "/opportunities\\?create=1",
+    "/competitors\\?create=1",
+    "/sourcing\\?create=1",
+  ])
+    assert.match(home, new RegExp(`to="${destination}"`));
   assert.match(home, /home-priority-grid[\s\S]*今日行动[\s\S]*异常与数据健康/);
   assert.match(home, /source_label[\s\S]*riskLabel[\s\S]*value_score[\s\S]*context_label/);
   assert.match(home, /home-secondary[\s\S]*变化与关注/);
