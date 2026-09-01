@@ -382,7 +382,7 @@ function resetExports() {
             {{
               comparisons.length
                 ? "调整搜索条件或重置筛选后再试。"
-                : "接口返回空数组，本页不会补入示例数字。"
+                : "当前组织暂无可展示的数据对比记录。"
             }}
           </p>
         </div>

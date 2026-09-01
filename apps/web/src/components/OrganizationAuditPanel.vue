@@ -394,7 +394,9 @@ async function copy(value: string, field: string) {
           <div v-if="!visibleEvents.length" class="org-audit-empty">
             <b>{{ events.length ? "当前已加载记录中无匹配" : "当前组织暂无审计记录" }}</b>
             <span>{{
-              events.length ? "清空页内搜索，或调整服务端筛选条件。" : "不会用示例数据补齐。"
+              events.length
+                ? "清空页内搜索，或调整服务端筛选条件。"
+                : "受审计操作发生后将显示在这里。"
             }}</span>
           </div>
           <button

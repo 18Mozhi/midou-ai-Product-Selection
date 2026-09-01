@@ -562,7 +562,7 @@ test("1688 acceptance refresh keeps verified facts and suppresses duplicate read
   expect(reads).toBe(2);
   releaseRefresh();
   await pendingRefresh;
-  await expect(page.getByRole("status")).toContainText("已保留上一次成功读取的验收事实");
+  await expect(page.getByRole("status")).toContainText("已保留上一次成功读取的启用条件");
   await expect(page.getByRole("heading", { name: "尚未满足启用条件" })).toBeVisible();
   await expect(refresh).toBeEnabled();
   expect(reads).toBeGreaterThanOrEqual(2);

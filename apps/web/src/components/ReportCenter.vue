@@ -387,7 +387,7 @@ watch(
         </div>
         <div v-else class="report-empty">
           <h3>暂无可聚合记录</h3>
-          <p>报表不会用示例值补齐空结果。</p>
+          <p>业务记录产生后，报表将按当前范围自动汇总。</p>
         </div>
       </section></template
     >

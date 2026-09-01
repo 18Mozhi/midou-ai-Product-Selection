@@ -28,7 +28,7 @@ const ids = (r: FastifyRequest) => ({
 export function registerProviderSourceRoutes(app: FastifyInstance, o: ProviderSourceRouteOptions) {
   const actor = async (
       r: FastifyRequest,
-      capability: "provider:configure" | "collection:replay",
+      capability: "provider:configure" | "collection:replay" | "platform:superadmin",
     ) => {
       const a = await o.auth.authenticate(sessionToken(r, o.secureCookie));
       await o.authorization.authorize({
@@ -80,7 +80,7 @@ export function registerProviderSourceRoutes(app: FastifyInstance, o: ProviderSo
     return envelope(await o.service.list(), r);
   });
   app.get("/api/v1/platform/provider-sources/1688-acceptance", async (r, reply) => {
-    await actor(r, "provider:configure");
+    await actor(r, "platform:superadmin");
     reply.header("cache-control", "private, no-store");
     return envelope(await o.service.acceptance1688(), r);
   });

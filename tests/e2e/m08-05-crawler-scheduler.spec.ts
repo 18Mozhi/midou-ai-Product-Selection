@@ -97,7 +97,8 @@ test("M08-05.A07/A08/A15 desktop and 390 single-host scheduler truth", async ({ 
   await expect(page.getByText("采集调度已就绪")).toBeVisible();
   await expect(page.getByText("1 / 1")).toHaveCount(2);
   await expect(page.getByText("等待 3 个任务 · 最长 3 分钟")).toBeVisible();
-  await expect(page.getByText("等待 0 个任务 · 最长 0 秒")).toBeVisible();
+  await expect(page.getByLabel("运行范围")).toHaveValue("attention");
+  await expect(page.getByText("共 1 个来源")).toBeVisible();
   await expect(page.getByRole("region", { name: "采集排队摘要" })).toContainText(
     "待领取任务3最老等待3 分钟饥饿风险来源1",
   );

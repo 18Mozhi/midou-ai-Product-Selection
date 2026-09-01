@@ -79,7 +79,11 @@ const env = (data: any) => ({ data, request_id: "m06-02-e2e", trace_id: "m06-02-
     activity: [],
     observed_at: "2026-08-08T12:00:00.000Z",
   };
-async function nav(page: Page) {
+async function nav(
+  page: Page,
+  platformRole = "platform_operations_admin",
+  platformCapability = "platform:operate",
+) {
   await page.route("**/api/v1/me/navigation?shell=platform_admin", (r) =>
     r.fulfill({
       json: env({
@@ -88,8 +92,8 @@ async function nav(page: Page) {
         workspace_id: null,
         roles: [],
         capabilities: [],
-        platform_roles: ["platform_operations_admin"],
-        platform_capabilities: ["platform:operate"],
+        platform_roles: [platformRole],
+        platform_capabilities: [platformCapability],
         guard_reason: "navigation_platform_admin_allowed",
       }),
     }),
@@ -103,7 +107,7 @@ async function nav(page: Page) {
 test("API coverage dashboard exposes the current production truth dimensions on desktop and mobile", async ({
   page,
 }) => {
-  await nav(page);
+  await nav(page, "platform_super_admin", "platform:superadmin");
   await page.route("**/api/v1/platform/management?domain=api-coverage**", (route) =>
     route.fulfill({
       json: env({
@@ -111,9 +115,9 @@ test("API coverage dashboard exposes the current production truth dimensions on 
         report_status: "current",
         catalog_fingerprint: "a".repeat(64),
         summary: {
-          paths: 222,
-          operations: 255,
-          verified: 255,
+          paths: 223,
+          operations: 256,
+          verified: 256,
           coverage_percent: 100,
           ui_consumed: 180,
           crawler_side_effects: 12,
@@ -121,38 +125,38 @@ test("API coverage dashboard exposes the current production truth dimensions on 
         by_outcome: [{ key: "success", count: 255 }],
         by_role: [
           {
-            key: "platform_operations_admin",
-            expected_allowed: 255,
-            verified: 255,
-            success: 255,
+            key: "platform_super_admin",
+            expected_allowed: 256,
+            verified: 256,
+            success: 256,
             empty: 0,
             blocked: 0,
             unauthorized: 0,
           },
         ],
-        by_data_source: [{ key: "mysql57_business", count: 255 }],
+        by_data_source: [{ key: "mysql57_business", count: 256 }],
         by_ui_consumer: [{ key: "/platform-admin/api-coverage", count: 1 }],
         by_crawler_side_effect: [{ key: "none", count: 255 }],
         operations: [
           {
             method: "GET",
             path: "/api/v1/platform/management",
-            expected_roles: ["platform_operations_admin"],
-            verification_role: "platform_operations_admin",
+            expected_roles: ["platform_super_admin"],
+            verification_role: "platform_super_admin",
             outcome: "success",
             data_source: "mysql57_business",
             ui_consumers: ["/platform-admin/api-coverage"],
             crawler_side_effect: "none",
           },
         ],
-        total_filtered: 255,
+        total_filtered: 256,
         captured_at: "2026-08-23T12:00:00.000Z",
         age_seconds: 60,
       }),
     }),
   );
   await page.goto("/platform-admin/api-coverage");
-  await expect(page.getByRole("heading", { name: "接口覆盖", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "接口覆盖证据", level: 2 })).toBeVisible();
   for (const heading of ["结果覆盖", "六角色覆盖", "数据来源", "UI 消费方", "爬虫副作用"])
     await expect(page.getByRole("heading", { name: heading })).toBeVisible();
   await expect(page.getByText("100.00%", { exact: true })).toBeVisible();
@@ -168,9 +172,7 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
   await nav(page);
   await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
   await page.goto("/platform-admin");
-  await expect(
-    page.getByRole("heading", { name: "平台现在怎么样，一眼看懂", level: 2 }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "平台运行概览", level: 2 })).toBeVisible();
   await expect(page.getByRole("link", { name: /等待处理 7/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /需要关注 2/ })).toBeVisible();
   const facts = page.getByRole("region", { name: "平台事实" });
@@ -876,8 +878,8 @@ test("chain logs group trace events and deep-link exceptional task and source fa
   await page.getByLabel("运行面").selectOption("crawler");
   const mobileFilter = page.getByRole("dialog", { name: "筛选链路日志" });
   if (await mobileFilter.isVisible()) {
-    await mobileFilter.getByRole("button", { name: "关闭筛选条件" }).click();
-  }
+    await mobileFilter.getByRole("button", { name: "检索" }).click();
+  } else await page.getByRole("button", { name: "检索" }).click();
   await page.getByRole("button", { name: "导出当前筛选" }).click();
   const dialog = page.getByRole("dialog", { name: "填写日志导出原因" });
   await expect(dialog).toBeVisible();

@@ -237,7 +237,9 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
   );
   await page.goto("/home");
   await expect(page.getByRole("heading", { name: "当前范围还没有首页数据" })).toBeVisible();
-  await expect(page.getByText("现在不展示模拟指标")).toBeVisible();
+  await expect(
+    page.getByText("任务、趋势、机会和来源状态写入后，将自动汇总到首页。"),
+  ).toBeVisible();
   await expect(page.getByRole("link", { name: /开始一次选品/ })).toHaveAttribute(
     "href",
     "/opportunities?create=1",

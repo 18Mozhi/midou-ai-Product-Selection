@@ -66,7 +66,7 @@ const sourceState = { draft: "草稿", disabled: "已停用", enabled: "已启�
 const overallState = {
   setup_required: "尚未满足启用条件",
   ready_for_enable: "门禁已通过，等待负责人启用",
-  production_ready: "生产验收已通过",
+  production_ready: "来源已启用",
 } as const;
 const runState: Record<string, string> = {
   scheduled: "等待执行",
@@ -82,7 +82,7 @@ const runState: Record<string, string> = {
 const passedGateCount = computed(
   () => data.value?.gates.filter((gate) => gate.state === "passed").length ?? 0,
 );
-const title = computed(() => (data.value ? overallState[data.value.overall] : "1688 验收事实"));
+const title = computed(() => (data.value ? overallState[data.value.overall] : "1688 启用条件"));
 const conclusion = computed(() => {
   if (data.value?.overall === "production_ready")
     return "来源已经启用，仍应持续关注登录有效期、验证码和解析合同漂移。";
@@ -93,9 +93,9 @@ const conclusion = computed(() => {
 const stateTitle = computed(
   () =>
     ({
-      loading: "正在读取真实验收事实",
-      error: "验收服务暂不可用",
-      forbidden: "当前账号无权读取验收事实",
+      loading: "正在读取启用条件",
+      error: "启用检查服务暂不可用",
+      forbidden: "当前账号无权读取启用条件",
       expired: "登录已失效",
       ready: "",
     })[state.value],
@@ -141,7 +141,7 @@ async function load() {
     lastUpdatedAt.value = new Date().toISOString();
     if (preserve) {
       noticeTone.value = "success";
-      notice.value = "验收事实已刷新，页面结论来自最新一次真实数据库读取。";
+      notice.value = "启用条件已刷新，页面结论来自最新一次运行记录。";
     }
   } catch (error) {
     const timedOut = error instanceof DOMException && error.name === "AbortError";
@@ -155,8 +155,8 @@ async function load() {
       state.value = "ready";
       noticeTone.value = "danger";
       notice.value = timedOut
-        ? "刷新超过 12 秒，已保留上一次成功读取的验收事实。"
-        : `${message.value} 已保留上一次成功读取的验收事实。`;
+        ? "刷新超过 12 秒，已保留上一次成功读取的启用条件。"
+        : `${message.value} 已保留上一次成功读取的启用条件。`;
     } else if (error instanceof ApiClientError) {
       state.value =
         error.kind === "expired" ? "expired" : error.kind === "forbidden" ? "forbidden" : "error";
@@ -176,14 +176,14 @@ onBeforeUnmount(() => activeController?.abort());
   <section class="acceptance-1688" :data-state="state" :aria-busy="refreshing">
     <header class="acceptance-1688__hero">
       <div>
-        <p>登录来源生产门禁</p>
-        <h2>1688 生产启用验收</h2>
+        <p>登录来源启用条件</p>
+        <h2>1688 启用检查</h2>
         <span>只展示真实浏览器运行、固定样本回放和审批结论，不展示 Cookie 或账号秘密。</span>
       </div>
       <div class="acceptance-1688__refresh">
         <small>最近读取 {{ lastUpdatedLabel }}</small>
         <button type="button" :disabled="refreshing" @click="load">
-          {{ refreshing ? "刷新中…" : "刷新验收事实" }}
+          {{ refreshing ? "刷新中…" : "刷新检查结果" }}
         </button>
       </div>
     </header>
@@ -201,10 +201,13 @@ onBeforeUnmount(() => activeController?.abort());
     <section v-if="state !== 'ready'" class="acceptance-1688__state" :data-kind="state">
       <span aria-hidden="true">{{ state === "loading" ? "···" : "!" }}</span>
       <div aria-live="polite">
-        <p>验收事实</p>
+        <p>启用检查</p>
         <h3>{{ stateTitle }}</h3>
         <p>{{ message || "正在核对登录、验证码和字段解析三项证据。" }}</p>
-        <code v-if="requestId">request_id {{ requestId }}</code>
+        <details v-if="requestId">
+          <summary>故障详情</summary>
+          <code>关联编号：{{ requestId }}</code>
+        </details>
       </div>
       <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink>
       <RouterLink v-else-if="state === 'forbidden'" to="/platform-admin">返回平台概览</RouterLink>
@@ -244,7 +247,7 @@ onBeforeUnmount(() => activeController?.abort());
           </div>
           <small>全部通过仍需负责人显式启用</small>
         </header>
-        <div class="acceptance-1688__gates" aria-label="1688 验收门">
+        <div class="acceptance-1688__gates" aria-label="1688 启用条件">
           <article
             v-for="(gate, index) in data.gates"
             :key="gate.key"
@@ -303,7 +306,7 @@ onBeforeUnmount(() => activeController?.abort());
             <li v-for="reason in data.pending_reasons" :key="reason">{{ reason }}</li>
           </ol>
           <p v-else>当前没有待配置原因；由 {{ data.owner_label }} 复核后显式启用来源。</p>
-          <nav aria-label="1688 验收下一步操作">
+          <nav aria-label="1688 启用检查下一步操作">
             <RouterLink :to="credentialsLink">配置或续期登录档案</RouterLink>
             <RouterLink :to="sampleLink">定位 1688 固定样本</RouterLink>
           </nav>
@@ -332,8 +335,8 @@ onBeforeUnmount(() => activeController?.abort());
           <details>
             <summary>技术详情</summary>
             <code>overall {{ data.overall }}</code>
-            <code>Provider UUID {{ data.provider_id }}</code>
-            <code>request_id {{ requestId || "—" }}</code>
+            <code>来源内部编号：{{ data.provider_id }}</code>
+            <code>关联编号：{{ requestId || "—" }}</code>
           </details>
         </section>
       </div>
@@ -535,7 +538,7 @@ onBeforeUnmount(() => activeController?.abort());
 .acceptance-1688__matrix small {
   display: block;
   margin-top: auto;
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 .acceptance-1688__operations {
   display: grid;

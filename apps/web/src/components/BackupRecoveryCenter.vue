@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
+import TechnicalDetails from "./TechnicalDetails.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 type ViewState =
@@ -159,7 +160,7 @@ onBeforeUnmount(() => {
       <div>
         <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
         <span>{{ refreshNotice }}</span>
-        <code v-if="requestId">request_id {{ requestId }}</code>
+        <TechnicalDetails :request-id="requestId" />
       </div>
       <button type="button" :disabled="refreshing" @click="load">重新核验</button>
     </section>
@@ -401,10 +402,7 @@ onBeforeUnmount(() => {
       </section>
       <footer>
         观测时间 {{ when(data.observed_at) }} · 恢复动作仅由宝塔受控任务执行
-        <details>
-          <summary>技术详情</summary>
-          <span>请求 ID {{ requestId || "—" }}</span>
-        </details>
+        <TechnicalDetails :request-id="requestId" />
       </footer>
     </template>
   </section>

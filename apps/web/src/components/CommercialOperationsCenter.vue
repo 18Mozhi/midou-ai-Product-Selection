@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiRequestOptions } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
+import TechnicalDetails from "./TechnicalDetails.vue";
 import "../platform-polish.css";
 
 const props = defineProps<{ apiBaseUrl: string }>();
@@ -588,9 +589,9 @@ onBeforeUnmount(() => {
       </div>
       <form class="commercial-organization-lookup" @submit.prevent="readOrganization">
         <label
-          >组织编号<input
+          >组织内部编号<input
             v-model="organizationInput"
-            placeholder="输入组织 UUID"
+            placeholder="输入组织内部编号"
             required
             pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}"
         /></label>
@@ -606,7 +607,7 @@ onBeforeUnmount(() => {
       </form>
     </header>
     <p v-if="notice" class="notice" :data-kind="noticeKind" aria-live="polite">
-      {{ notice }} <code v-if="requestId">关联编号：{{ requestId }}</code>
+      {{ notice }} <TechnicalDetails :request-id="requestId" />
     </p>
     <section v-if="state === 'loading'" class="state commercial-loading" aria-live="polite">
       <strong>正在读取真实配额方案与用量…</strong>

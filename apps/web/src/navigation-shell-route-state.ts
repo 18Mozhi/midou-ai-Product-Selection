@@ -100,6 +100,8 @@ export function surfaceProps(input: {
       };
     case "platform-dashboard":
       return { ...common, capabilities: input.capabilities };
+    case "release-rollout-center":
+      return { ...common, capabilities: input.capabilities };
     case "platform-management-center":
       return { ...common, domain: input.path.split("/").pop() || "status" };
     case "trend-dashboard":

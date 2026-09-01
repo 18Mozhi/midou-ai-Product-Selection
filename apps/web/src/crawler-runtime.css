@@ -198,7 +198,7 @@
   display: grid;
   gap: 5px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   font-weight: 700;
 }
 .crawler-runs input,
@@ -284,7 +284,7 @@
 .crawler-pagination span,
 .crawler-runs > footer {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 .crawler-runs > footer {
   margin-top: 14px;

@@ -121,7 +121,7 @@
   display: block;
   margin-top: 5px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   font-weight: 500;
 }
 .role-comparison__matrix dl {

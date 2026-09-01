@@ -75,7 +75,9 @@ test("M02-04.A01/A03/A05/A06/A09/A10/A13/A14 component contract adds no backend 
   assert.match(dialog, /Escape/);
   assert.match(showcase, /不触发任何业务写入|不会请求后端/);
   assert.match(app, /isNotFoundRoute/);
-  assert.match(app, /selectedView\.value === "ui-states"/);
+  assert.match(app, /import\.meta\.env\.DEV && selectedView\.value === "ui-states"/);
+  assert.match(app, /UiStateShowcase = import\.meta\.env\.DEV/);
+  assert.match(app, /VerificationFramework = import\.meta\.env\.DEV/);
   assert.match(app, /NotFoundPage v-else-if="isNotFoundRoute"/);
   assert.match(notFound, /candidate\.meta\.notFound === true/);
   assert.match(notFound, /这里不会把不存在的页面解释为无权限/);
@@ -87,6 +89,27 @@ test("M02-04.A01/A03/A05/A06/A09/A10/A13/A14 component contract adds no backend 
   assert.match(architecture, /不新增数据库迁移|无需数据库迁移/);
   const migrations = await readdir("database/migrations");
   assert.equal(migrations.filter((name) => name.includes("m02_04")).length, 0);
+});
+test("M02-04 internal routes are registered only by development builds", async () => {
+  const [catalog, generated, app, vite, shell] = await Promise.all(
+    [
+      "apps/web/src/route-catalog.ts",
+      "apps/web/src/route-catalog.generated.json",
+      "apps/web/src/App.vue",
+      "apps/web/vite.config.ts",
+      "apps/web/src/components/NavigationShell.vue",
+    ].map(read),
+  );
+  const internal = JSON.parse(generated).routes.find((route) => route.path === "/ui-states");
+  assert.equal(internal.acceptance, "internal");
+  assert.match(catalog, /import\.meta\.env\.DEV \|\| entry\.acceptance !== "internal"/);
+  assert.match(app, /import\.meta\.env\.DEV && selectedView\.value === "ui-states"/);
+  assert.match(app, /import\.meta\.env\.DEV[\s\S]*VerificationFramework/);
+  assert.match(vite, /scoutops-strip-internal-surfaces/);
+  assert.match(vite, /internal_surface_production_strip_contract_missing/);
+  assert.match(vite, /generateBundle[\s\S]*UiStateShowcase\|VerificationFramework/);
+  assert.match(shell, /!\.\/UiStateShowcase\.vue/);
+  assert.match(shell, /!\.\/VerificationFramework\.vue/);
 });
 test("M02-04.A07/A15/A16/A17 visual recovery and delivery evidence exists", async () => {
   const [styles, e2e, runbook, feature, blueprint] = await Promise.all(

@@ -59,13 +59,16 @@ export function registerPlatformDashboardRoutes(
   app: FastifyInstance,
   o: PlatformDashboardRouteOptions,
 ) {
-  const context = async (r: FastifyRequest) => {
+  const context = async (
+    r: FastifyRequest,
+    capability: "platform:operate" | "platform:superadmin" = "platform:operate",
+  ) => {
     const requestId = String(r.headers["x-request-id"]),
       traceId = String(r.headers["x-trace-id"]),
       a = await o.auth.authenticate(sessionToken(r, o.secureCookie));
     await o.authorization.authorize({
       actorId: a.user.id,
-      capability: "platform:operate",
+      capability,
       surface: "api",
       requestId,
       traceId,
@@ -83,8 +86,11 @@ export function registerPlatformDashboardRoutes(
   });
   app.get("/api/v1/platform/management", async (r: FastifyRequest, reply) => {
     return withDependencyBoundary(async () => {
-      const c = await context(r),
-        query = r.query as any;
+      const query = r.query as any,
+        c = await context(
+          r,
+          query?.domain === "api_coverage" ? "platform:superadmin" : "platform:operate",
+        );
       reply.header("cache-control", "private, no-store");
       return {
         data: await o.service.management({

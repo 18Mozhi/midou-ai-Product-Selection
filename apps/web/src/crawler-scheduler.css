@@ -475,3 +475,51 @@
     text-align: left;
   }
 }
+.crawler-scheduler__source-filters {
+  align-items: end;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(12rem, 1fr) minmax(10rem, 0.55fr) auto;
+  margin: 16px 0 4px;
+}
+.crawler-scheduler__source-filters label {
+  color: var(--so-text-muted);
+  display: grid;
+  font-size: 0.82rem;
+  gap: 5px;
+}
+.crawler-scheduler__source-filters input,
+.crawler-scheduler__source-filters select {
+  background: var(--so-bg-elevated);
+  border: 1px solid var(--so-border-strong);
+  border-radius: 8px;
+  color: var(--so-text);
+  min-height: var(--so-touch-target);
+  padding: 8px 10px;
+}
+.crawler-scheduler__source-filters > span {
+  color: var(--so-text-muted);
+  padding-bottom: 10px;
+}
+.crawler-scheduler__source-pagination {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+.crawler-scheduler__source-pagination button {
+  min-height: var(--so-touch-target);
+}
+@media (max-width: 760px) {
+  .crawler-scheduler__source-filters {
+    align-items: stretch;
+    grid-template-columns: 1fr;
+  }
+  .crawler-scheduler__source-filters > span {
+    padding-bottom: 0;
+  }
+  .crawler-scheduler__source-pagination {
+    justify-content: space-between;
+  }
+}

@@ -570,7 +570,7 @@ watch(
     </section>
     <section v-else-if="!approvals.length" class="approval-state">
       <h3>当前筛选条件下没有审批</h3>
-      <p>系统不会填充示例审批；请使用已发布模板发起真实审批。</p>
+      <p>请使用已发布模板发起审批，提交后将显示在当前列表。</p>
     </section>
     <div v-else class="approval-list">
       <button v-for="item in approvals" :key="item.id" @click="open(item)">

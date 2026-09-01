@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { statusLabel } from "../ui/status-labels";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import TechnicalDetails from "./TechnicalDetails.vue";
 import "../crawler-scheduler.css";
 
 type State =
@@ -117,7 +118,11 @@ const data = ref<Dto | null>(null),
   saving = ref(false),
   refreshing = ref(false),
   refreshFailure = ref<"rate_limited" | "timeout" | "unavailable" | null>(null),
-  actionHint = ref("");
+  actionHint = ref(""),
+  providerQuery = ref(""),
+  providerFilter = ref<"attention" | "all" | "open" | "queued">("attention"),
+  providerPage = ref(1);
+const providerPageSize = 12;
 let loadController: AbortController | null = null,
   loadSequence = 0,
   recoverExpiredKey: string | null = null,
@@ -139,6 +144,37 @@ const queueSummary = computed(() => {
     ).length,
   };
 });
+const filteredProviders = computed(() => {
+  const query = providerQuery.value.trim().toLocaleLowerCase();
+  return [...(data.value?.providers ?? [])]
+    .filter((item) => !query || item.code.toLocaleLowerCase().includes(query))
+    .filter((item) => {
+      if (providerFilter.value === "all") return true;
+      if (providerFilter.value === "open") return item.circuit_state === "open";
+      if (providerFilter.value === "queued") return item.queued_tasks > 0;
+      return (
+        item.circuit_state === "open" || item.queued_tasks > 0 || item.consecutive_failures > 0
+      );
+    })
+    .sort(
+      (left, right) =>
+        Number(right.circuit_state === "open") - Number(left.circuit_state === "open") ||
+        right.queued_tasks - left.queued_tasks ||
+        right.consecutive_failures - left.consecutive_failures ||
+        left.code.localeCompare(right.code),
+    );
+});
+const providerPageCount = computed(() =>
+  Math.max(1, Math.ceil(filteredProviders.value.length / providerPageSize)),
+);
+const pagedProviders = computed(() => {
+  if (providerPage.value > providerPageCount.value) providerPage.value = providerPageCount.value;
+  const offset = (providerPage.value - 1) * providerPageSize;
+  return filteredProviders.value.slice(offset, offset + providerPageSize);
+});
+function resetProviderPage() {
+  providerPage.value = 1;
+}
 const expiredLeaseImpact = computed(() => {
   const impact = data.value?.expired_leases;
   if (!impact || impact.total === 0) return "当前没有过期租约；确认后不会修改任何活动槽位。";
@@ -385,7 +421,7 @@ onBeforeUnmount(() => {
       <div>
         <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
         <p>{{ refreshNotice }}</p>
-        <code v-if="requestId">request_id {{ requestId }}</code>
+        <TechnicalDetails :request-id="requestId" />
       </div>
       <button type="button" :disabled="refreshing" @click="() => load()">重新核验</button>
     </section>
@@ -399,7 +435,7 @@ onBeforeUnmount(() => {
       <div>
         <b>{{ verdict[0] }}</b>
         <p>{{ message ? `${message}；${actionHint || verdict[1]}` : actionHint || verdict[1] }}</p>
-        <code v-if="requestId">request_id {{ requestId }}</code>
+        <TechnicalDetails :request-id="requestId" />
       </div>
       <button v-if="!['loading', 'recovering'].includes(state)" type="button" @click="() => load()">
         重新核验
@@ -456,12 +492,33 @@ onBeforeUnmount(() => {
               <small>饥饿风险来源</small><strong>{{ queueSummary.starvationRisks }}</strong>
             </article>
           </section>
+          <div class="crawler-scheduler__source-filters">
+            <label>
+              搜索来源
+              <input
+                v-model="providerQuery"
+                type="search"
+                placeholder="输入来源代码"
+                @input="resetProviderPage"
+              />
+            </label>
+            <label>
+              运行范围
+              <select v-model="providerFilter" @change="resetProviderPage">
+                <option value="attention">需要关注</option>
+                <option value="open">已熔断</option>
+                <option value="queued">有排队任务</option>
+                <option value="all">全部来源</option>
+              </select>
+            </label>
+            <span>共 {{ filteredProviders.length }} 个来源</span>
+          </div>
           <div class="crawler-scheduler__sources">
             <p v-if="message" class="crawler-scheduler__operation-message" aria-live="polite">
               {{ message }}
             </p>
             <article
-              v-for="item in data.providers"
+              v-for="item in pagedProviders"
               :key="item.id"
               :data-circuit="item.circuit_state"
             >
@@ -515,7 +572,25 @@ onBeforeUnmount(() => {
               </details>
             </article>
             <p v-if="!data.providers.length">当前没有启用来源。</p>
+            <p v-else-if="!filteredProviders.length">当前筛选范围没有需要处理的来源。</p>
           </div>
+          <nav
+            v-if="filteredProviders.length > providerPageSize"
+            class="crawler-scheduler__source-pagination"
+            aria-label="来源列表分页"
+          >
+            <button type="button" :disabled="providerPage <= 1" @click="providerPage -= 1">
+              上一页
+            </button>
+            <span>第 {{ providerPage }} / {{ providerPageCount }} 页</span>
+            <button
+              type="button"
+              :disabled="providerPage >= providerPageCount"
+              @click="providerPage += 1"
+            >
+              下一页
+            </button>
+          </nav>
         </section>
         <aside class="crawler-scheduler__panel">
           <header>
@@ -666,8 +741,9 @@ onBeforeUnmount(() => {
       </section>
       <footer>
         <span>运行观测 {{ time(data.observed_at) }}</span
-        ><span>request_id {{ requestId || "—" }}</span
-        ><strong>服务、重启与有限任务只允许通过宝塔</strong>
+        ><TechnicalDetails :request-id="requestId" /><strong
+          >服务、重启与有限任务只允许通过宝塔</strong
+        >
       </footer>
     </template>
     <ConfirmDialog

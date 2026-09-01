@@ -812,7 +812,7 @@ watch(
             <span>{{ detail.evidence.length }} 条</span>
           </header>
           <p v-if="!detail.evidence.length" class="opportunity-empty-copy">
-            尚无真实证据；不会展示示例来源。
+            当前机会尚无关联证据。
           </p>
           <a
             v-for="item in detail.evidence"

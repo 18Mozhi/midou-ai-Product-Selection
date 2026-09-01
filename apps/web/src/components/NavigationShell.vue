@@ -33,7 +33,11 @@ import { useNavigationShellTheme } from "../use-navigation-shell-theme";
 import AppIcon from "./AppIcon.vue";
 import "../member-workspace-polish.css";
 
-const componentModules = import.meta.glob<{ default: object }>("./*.vue");
+const componentModules = import.meta.glob<{ default: object }>([
+  "./*.vue",
+  "!./UiStateShowcase.vue",
+  "!./VerificationFramework.vue",
+]);
 const lazy = (name: string) => {
   const loader = componentModules[`./${name}.vue`];
   if (!loader) throw new Error(`missing lazy component: ${name}`);

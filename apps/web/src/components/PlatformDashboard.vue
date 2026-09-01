@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
+import TechnicalDetails from "./TechnicalDetails.vue";
 const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>();
 const request = createApiClient(props.apiBaseUrl);
 type State = "loading" | "ready" | "empty" | "expired" | "forbidden" | "rate_limited" | "blocked";
@@ -186,7 +187,7 @@ onMounted(load);
     <div class="platform-dashboard-toolbar">
       <div>
         <p>管理员首页</p>
-        <h2>平台现在怎么样，一眼看懂</h2>
+        <h2>平台运行概览</h2>
         <span
           >先看有没有需要处理的问题，再进入对应页面。系统会自动获取热点，不需要守着页面操作。</span
         >
@@ -207,8 +208,7 @@ onMounted(load);
       <h3>{{ stateText[0] }}</h3>
       <p>{{ stateText[1] }}</p>
       <small v-if="hint">{{ hint }}</small
-      ><code v-if="requestId">request_id: {{ requestId }}</code
-      ><button
+      ><TechnicalDetails :request-id="requestId" /><button
         v-if="!['loading', 'expired', 'forbidden'].includes(state)"
         type="button"
         @click="load"
@@ -272,8 +272,8 @@ onMounted(load);
       </section>
       <section class="platform-get-started">
         <header>
-          <h3>今天先做什么</h3>
-          <span>按需要进入，不懂技术参数也能管理</span>
+          <h3>待办与常用入口</h3>
+          <span>根据运行状态进入对应管理页面</span>
         </header>
         <div>
           <RouterLink
@@ -488,12 +488,8 @@ onMounted(load);
       </div>
       <footer class="platform-observed">
         观测时间 {{ new Date(data.observed_at).toLocaleString() }}
-        <details>
-          <summary>技术详情</summary>
-          <span>请求 ID {{ requestId }}</span>
-        </details>
-      </footer></template
-    >
+        <TechnicalDetails :request-id="requestId" /></footer
+    ></template>
   </section>
 </template>
 <style scoped>

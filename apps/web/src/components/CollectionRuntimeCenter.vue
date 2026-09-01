@@ -5,6 +5,7 @@ import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-cli
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
+import TechnicalDetails from "./TechnicalDetails.vue";
 import "../crawler-runtime.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type RunStatus =
@@ -544,8 +545,10 @@ onBeforeUnmount(() => activeController?.abort());
             下一页
           </button>
         </nav>
-        <footer>观测时间 {{ time(observedAt) }} · request_id {{ requestId }}</footer>
-      </section></template
+        <footer>
+          <span>观测时间 {{ time(observedAt) }}</span>
+          <TechnicalDetails :request-id="requestId" />
+        </footer></section></template
     ><ConfirmDialog
       :open="confirming"
       title="回收所有已过期租约？"

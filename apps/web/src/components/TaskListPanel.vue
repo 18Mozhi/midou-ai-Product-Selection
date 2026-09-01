@@ -115,7 +115,7 @@ const toggle = (id: string, checked: boolean, selectedIds: string[]) =>
       {{
         query || status
           ? "调整筛选条件后重试，或重置查看全部任务。"
-          : "创建任务后会在此显示；系统不会填充示例业务数据。"
+          : "创建任务后，任务状态与处理进度会显示在这里。"
       }}
     </p>
     <button v-if="query || status" type="button" @click="$emit('resetFilters')">重置筛选</button>

@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import type { RedisResilienceDto } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
+import TechnicalDetails from "./TechnicalDetails.vue";
 import "../redis-resilience.css";
 
 type ViewState =
@@ -201,7 +202,7 @@ onBeforeUnmount(() => {
       <div>
         <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
         <p>{{ refreshNotice }}</p>
-        <code v-if="requestId">request_id {{ requestId }}</code>
+        <TechnicalDetails :request-id="requestId" />
       </div>
       <button type="button" :disabled="refreshing" @click="load">重新核验</button>
     </section>
@@ -227,7 +228,7 @@ onBeforeUnmount(() => {
       <div>
         <b>{{ verdict[0] }}</b>
         <p>{{ verdict[1] }}</p>
-        <code v-if="requestId">request_id {{ requestId }}</code>
+        <TechnicalDetails :request-id="requestId" />
       </div>
       <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
       ><button v-else type="button" :disabled="refreshing" @click="load">重新核验</button>
@@ -403,8 +404,7 @@ onBeforeUnmount(() => {
       </section>
       <footer class="redis-resilience__footer">
         <span>观测 {{ time(data.observed_at) }}</span
-        ><span>request_id {{ requestId || "—" }}</span
-        ><strong>重启、配置与恢复只允许通过宝塔</strong>
+        ><TechnicalDetails :request-id="requestId" /><strong>重启、配置与恢复只允许通过宝塔</strong>
       </footer>
     </template>
   </section>

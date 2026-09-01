@@ -6,6 +6,7 @@ import { statusLabel } from "../ui/status-labels";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
+import TechnicalDetails from "./TechnicalDetails.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 const route = useRoute(),
@@ -342,17 +343,17 @@ async function confirmBatchReplay() {
       <ResponsiveFilterDrawer label="采集范围与时间" :active-count="scopeFilterCount">
         <form @submit.prevent="applyScope">
           <label class="collection-filter-field"
-            ><span>组织 ID</span
+            ><span>组织内部编号</span
             ><input
               v-model="org"
-              aria-label="组织 ID 筛选"
-              placeholder="可选，输入完整 UUID" /></label
+              aria-label="组织内部编号筛选"
+              placeholder="可选，输入组织内部编号" /></label
           ><label class="collection-filter-field"
-            ><span>工作区 ID</span
+            ><span>工作区内部编号</span
             ><input
               v-model="workspace"
-              aria-label="工作区 ID 筛选"
-              placeholder="可选，输入完整 UUID"
+              aria-label="工作区内部编号筛选"
+              placeholder="可选，输入工作区内部编号"
           /></label>
           <label class="collection-filter-field"
             ><span>采集来源</span
@@ -407,8 +408,7 @@ async function confirmBatchReplay() {
         }}
       </h3>
       <p>{{ hint || "刷新或检查宝塔 Node API 与 MySQL 后重试。" }}</p>
-      <code v-if="requestId">request_id: {{ requestId }}</code
-      ><button
+      <TechnicalDetails :request-id="requestId" /><button
         v-if="!['loading', 'expired', 'forbidden'].includes(state)"
         :disabled="refreshing"
         @click="load()"
@@ -769,8 +769,10 @@ async function confirmBatchReplay() {
           </nav>
         </section>
       </div>
-      <footer>观测时间 {{ when(data.observed_at) }} · request_id {{ requestId }}</footer></template
-    >
+      <footer>
+        <span>观测时间 {{ when(data.observed_at) }}</span>
+        <TechnicalDetails :request-id="requestId" /></footer
+    ></template>
     <ConfirmDialog
       :open="batchPreview"
       title="确认批量重放开放死信？"

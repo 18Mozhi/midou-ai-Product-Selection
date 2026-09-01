@@ -19,8 +19,8 @@ test("API coverage joins the complete current catalog only to a matching schema-
     read("config/api-coverage-metadata.json"),
   ]);
   const parsed = parseOpenApiCoverage(openapiSource);
-  assert.equal(parsed.paths.length, 222);
-  assert.equal(parsed.operations.length, 255);
+  assert.equal(parsed.paths.length, 223);
+  assert.equal(parsed.operations.length, 256);
   const sample = parsed.operations.slice(0, 4).map((operation, index) => ({
     method: operation.method,
     path_template: operation.path,
@@ -32,8 +32,8 @@ test("API coverage joins the complete current catalog only to a matching schema-
   }));
   const report = {
     schema_version: 2,
-    path_count: 222,
-    operation_count: 255,
+    path_count: 223,
+    operation_count: 256,
     catalog_fingerprint: apiCoverageFingerprint(openapiSource),
     captured_at: "2026-08-23T12:00:00.000Z",
     operations: sample,
@@ -105,7 +105,8 @@ test("API coverage UI, route, runtime packaging and production report fingerprin
     (item) => item.path === "/platform-admin/api-coverage",
   );
   assert.equal(route.acceptance, "protected");
-  assert.deepEqual(route.capabilities, ["platform:operate", "platform:superadmin"]);
+  assert.deepEqual(route.capabilities, ["platform:superadmin"]);
+  assert.equal(route.navigation, undefined);
   assert.match(verifier, /schema_version:\s*2[\s\S]*catalog_fingerprint/);
   assert.match(deployer, /config\/api-coverage-metadata\.json/);
   assert.match(config, /SCOUTOPS_ACCEPTANCE_API_REPORT_FILE/);

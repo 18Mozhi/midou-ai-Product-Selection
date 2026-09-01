@@ -389,9 +389,7 @@ onUnmounted(stop);
           <b>{{ journey.task_status }}</b>
         </header>
         <p>
-          错误码：{{
-            journey.blocked_reason || "none"
-          }}。没有演示数据替代真实结果，任务状态和事件仍作为验收证据。
+          错误码：{{ journey.blocked_reason || "none" }}。请结合任务状态与事件记录排查阻塞原因。
         </p>
         <dl v-if="journey.blocked_reason" class="selection-block-owner">
           <div>

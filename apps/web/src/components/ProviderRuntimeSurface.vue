@@ -24,11 +24,12 @@ defineProps<{ apiBaseUrl: string; routePath: string; capabilities: string[] }>()
         :aria-current="routePath === '/platform-admin/providers/sources' ? 'page' : undefined"
         >来源频道</RouterLink
       ><RouterLink
+        v-if="capabilities.includes('platform:superadmin')"
         to="/platform-admin/providers/sources/1688-acceptance"
         :aria-current="
           routePath === '/platform-admin/providers/sources/1688-acceptance' ? 'page' : undefined
         "
-        >1688 验收</RouterLink
+        >检查启用条件</RouterLink
       ><RouterLink
         v-if="capabilities.includes('platform:superadmin')"
         to="/platform-admin/credentials"

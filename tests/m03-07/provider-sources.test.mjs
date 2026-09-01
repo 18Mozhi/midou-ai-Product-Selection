@@ -321,6 +321,27 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
   assert.match(automaticLive, /assertCleanup/);
   assert.match(blueprint, /100\+ 来源纠偏基线/);
 });
+
+test("1688 enablement check is a superadmin-only secondary route", async () => {
+  const [routeCatalog, routes, surface] = await Promise.all(
+    [
+      "config/route-catalog.json",
+      "apps/api/src/provider-source-routes.ts",
+      "apps/web/src/components/ProviderRuntimeSurface.vue",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  const route = JSON.parse(routeCatalog).routes.find(
+    (item) => item.path === "/platform-admin/providers/sources/1688-acceptance",
+  );
+  assert.deepEqual(route.capabilities, ["platform:superadmin"]);
+  assert.equal(route.navigation, undefined);
+  assert.match(
+    routes,
+    /1688-acceptance", async \(r, reply\) => \{[\s\S]*actor\(r, "platform:superadmin"\)/,
+  );
+  assert.match(surface, /v-if="capabilities\.includes\('platform:superadmin'\)"/);
+  assert.match(surface, />检查启用条件</);
+});
 test("M03-07 fixed source adapters reject redirects or validate the final host", async () => {
   const source = await readFile("packages/provider-sources/src/adapters/index.ts", "utf8");
   assert.match(source, /redirect: "error"/);

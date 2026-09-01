@@ -172,9 +172,10 @@ test("M03-04.A07/A08/A15 runtime monitor is responsive and visual", async ({ pag
   if ((page.viewportSize()?.width ?? 1000) <= 760) {
     await expect(page.getByRole("button", { name: /已拦截 · 0 条.*需要验证码/ })).toBeVisible();
     await page.getByRole("button", { name: /已拦截 · 0 条/ }).click();
-    await page.getByText("技术详情").click();
-    await expect(page.getByText(runs[2].id, { exact: true })).toBeVisible();
-    await page.getByRole("button", { name: "关闭详情" }).last().click();
+    const runDetail = page.getByRole("dialog", { name: /已拦截/ });
+    await runDetail.getByText("技术详情", { exact: true }).click();
+    await expect(runDetail.getByText(runs[2].id, { exact: true })).toBeVisible();
+    await runDetail.getByRole("button", { name: "关闭详情" }).click();
   } else await expect(page.getByText("需要验证码", { exact: true })).toBeVisible();
   // Functional assertions remain here; real-data visual evidence is captured by the real API suite.
 });

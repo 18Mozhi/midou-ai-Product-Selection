@@ -280,9 +280,9 @@ function scheduleCollectionRefresh() {
   clearCollectionRefresh();
   if (!selected.value || !collectionPending.value) return;
   const competitorId = selected.value.id;
-  collectionRefreshTimer = setTimeout(async () => {
+  collectionRefreshTimer = setTimeout(() => {
     if (selected.value?.id !== competitorId) return;
-    await detail(selected.value, false);
+    void detail(selected.value, false);
   }, 2000);
 }
 async function load() {
@@ -796,8 +796,7 @@ watch(
                 : "已建立竞品，但最近一次采集未形成快照"
             }}</strong>
             <p>
-              价格、排名、评论、评分和库存尚未从公开商品页采集到，因此这里不会用 0
-              或演示数据代替。请按最近一次采集状态检查链接或重新采集。
+              价格、排名、评论、评分和库存尚未从公开商品页采集到。请按最近一次采集状态检查链接或重新采集。
             </p>
             <a :href="selected.product_url" target="_blank" rel="noopener noreferrer"
               >打开外部 Amazon 商品页（新窗口）</a

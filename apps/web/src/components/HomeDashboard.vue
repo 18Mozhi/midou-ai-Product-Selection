@@ -134,7 +134,7 @@ onMounted(load);
         <div>
           <p>暂无已核验信号</p>
           <h2>当前范围还没有首页数据</h2>
-          <span>真实任务、趋势、机会和来源状态写入后会自动出现；现在不展示模拟指标。</span>
+          <span>任务、趋势、机会和来源状态写入后，将自动汇总到首页。</span>
         </div>
         <nav>
           <RouterLink to="/opportunities?create=1"

@@ -236,7 +236,7 @@
   border-radius: 999px;
   background: var(--so-panel-soft);
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 
 .membership > header b[data-status="active"],
@@ -376,7 +376,7 @@
 .commercial-plan-table th {
   background: var(--so-panel-soft);
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   white-space: nowrap;
 }
 
@@ -470,7 +470,7 @@
 
 .commercial-dialog-form legend {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   font-weight: 750;
 }
 
@@ -633,7 +633,7 @@ dialog::backdrop {
   .commercial-plan-table td::before {
     content: attr(data-label);
     color: var(--so-text-muted);
-    font-size: 12px;
+    font-size: var(--so-font-meta);
     font-weight: 750;
   }
 

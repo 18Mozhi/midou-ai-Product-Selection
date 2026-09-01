@@ -480,7 +480,7 @@ watch(
     </section>
     <section v-else-if="!items.length" class="notification-state">
       <h3>当前没有通知</h3>
-      <p>事务消息尚未投影出面向你的真实事件，系统不会填充示例消息。</p>
+      <p>与你相关的业务事件产生后，通知将显示在这里。</p>
     </section>
     <div v-else class="notification-list">
       <button

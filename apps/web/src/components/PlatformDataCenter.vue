@@ -7,6 +7,7 @@ import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import DataQualityCenter from "./DataQualityCenter.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
+import TechnicalDetails from "./TechnicalDetails.vue";
 
 type Entity = "trends" | "opportunities" | "competitors" | "suppliers";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
@@ -465,10 +466,7 @@ onBeforeUnmount(() => activeController?.abort());
               下一页
             </button>
           </nav>
-          <details v-if="requestId">
-            <summary>技术详情</summary>
-            <span>请求 ID {{ requestId }}</span>
-          </details>
+          <TechnicalDetails :request-id="requestId" />
         </footer>
       </template>
     </template>
@@ -538,7 +536,7 @@ onBeforeUnmount(() => activeController?.abort());
   flex: 1;
   gap: 5px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   font-weight: 750;
 }
 .platform-data-filter label:first-child {

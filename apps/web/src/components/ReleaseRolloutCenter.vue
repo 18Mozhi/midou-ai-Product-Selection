@@ -2,7 +2,8 @@
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
-const props = defineProps<{ apiBaseUrl: string }>();
+import TechnicalDetails from "./TechnicalDetails.vue";
+const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>();
 const request = createApiClient(props.apiBaseUrl);
 type ViewState =
   | "loading"
@@ -153,6 +154,12 @@ onBeforeUnmount(() => {
       <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
         {{ refreshing ? "正在刷新…" : "刷新发布事实" }}
       </button>
+      <RouterLink
+        v-if="capabilities?.includes('platform:superadmin')"
+        class="release-center__secondary-tool"
+        to="/platform-admin/api-coverage"
+        >查看接口覆盖证据</RouterLink
+      >
     </header>
     <section
       v-if="data && refreshFailure"
@@ -163,7 +170,7 @@ onBeforeUnmount(() => {
       <div>
         <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
         <span>{{ refreshNotice }}</span>
-        <code v-if="requestId">request_id {{ requestId }}</code>
+        <TechnicalDetails :request-id="requestId" />
       </div>
       <button type="button" :disabled="refreshing" @click="load">重新核验</button>
     </section>
@@ -438,10 +445,7 @@ onBeforeUnmount(() => {
       </section>
       <footer>
         观测 {{ time(data.observed_at) }} · 发布和回滚只能由宝塔任务执行
-        <details>
-          <summary>技术详情</summary>
-          <span>请求 ID {{ requestId || "—" }}</span>
-        </details>
+        <TechnicalDetails :request-id="requestId" />
       </footer>
     </template>
   </section>

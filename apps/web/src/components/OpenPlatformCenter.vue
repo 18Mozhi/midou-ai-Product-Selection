@@ -288,7 +288,7 @@ const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}
 function validate(kind: "client" | "webhook") {
   const errors: Record<string, string> = {};
   if (!uuidPattern.test(organizationId.value.trim()))
-    errors.organization_id = "请输入有效组织 UUID。";
+    errors.organization_id = "请输入有效的组织内部编号。";
   if (!form.name.trim() || form.name.trim().length > 120) errors.name = "名称需为 1–120 个字符。";
   if (!form.reason.trim() || form.reason.trim().length > 500)
     errors.reason = "变更原因需为 1–500 个字符。";
@@ -477,10 +477,10 @@ onBeforeUnmount(() => loadController?.abort());
       </div>
       <form class="open-org-filter" @submit.prevent="applyFilters">
         <label
-          >组织编号<input
+          >组织内部编号<input
             v-model.trim="organizationId"
             autocomplete="off"
-            placeholder="精确 UUID；留空查看全部组织"
+            placeholder="输入组织内部编号；留空查看全部组织"
         /></label>
         <button type="submit" :disabled="refreshing">{{ refreshing ? "读取中…" : "读取" }}</button>
       </form>

@@ -214,7 +214,7 @@
   position: fixed;
   z-index: 40;
   inset: 0;
-  background: color-mix(in srgb, #020817 52%, transparent);
+  background: var(--so-overlay);
   backdrop-filter: blur(2px);
 }
 .collection-detail-open {
@@ -393,7 +393,7 @@
   display: block;
   margin: -3px 0 10px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 .collection-technical-details {
   margin-top: 20px;
@@ -425,7 +425,7 @@
   margin: 0;
   overflow-wrap: anywhere;
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 @media (max-width: 760px) {
   .collection-task-title,

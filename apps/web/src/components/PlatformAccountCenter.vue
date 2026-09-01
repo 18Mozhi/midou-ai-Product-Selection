@@ -3,9 +3,9 @@ import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
-import { useModalDialog } from "../use-modal-dialog";
 import AppIcon from "./AppIcon.vue";
 import OrganizationCreationWizard from "./OrganizationCreationWizard.vue";
+import PlatformAccountDialogs from "./PlatformAccountDialogs.vue";
 import PlatformAdminRecords from "./PlatformAdminRecords.vue";
 import PlatformOrganizationRecords from "./PlatformOrganizationRecords.vue";
 import PlatformOrganizationDetailDialog from "./PlatformOrganizationDetailDialog.vue";
@@ -14,7 +14,6 @@ import PlatformUserDetailDialog from "./PlatformUserDetailDialog.vue";
 import PlatformUserRecords from "./PlatformUserRecords.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 type Tab = "organizations" | "users" | "admins";
-type State = "loading" | "ready" | "empty" | "error";
 interface Data {
   summary: {
     organizations: number;
@@ -43,7 +42,7 @@ const props = withDefaults(
   route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
-  state = ref<State>("loading"),
+  state = ref<"loading" | "ready" | "empty" | "error">("loading"),
   tab = ref<Tab>(props.initialTab),
   data = ref<Data | null>(null),
   platformRoles = ref<RoleCapabilitySummary[]>([]),
@@ -89,19 +88,6 @@ const props = withDefaults(
     organization_role_code: "member",
   }),
   passwordForm = reactive({ temporary_password: "" });
-const { dialogElement: createUserDialogElement, handleCancel: handleCreateUserCancel } =
-    useModalDialog(
-      () => createUserOpen.value,
-      () => (createUserOpen.value = false),
-    ),
-  { dialogElement: passwordDialogElement, handleCancel: handlePasswordCancel } = useModalDialog(
-    () => passwordOpen.value,
-    () => (passwordOpen.value = false),
-  ),
-  { dialogElement: reasonDialogElement, handleCancel: handleReasonCancel } = useModalDialog(
-    () => reasonOpen.value,
-    () => cancelReason(),
-  );
 watch(
   () => props.initialTab,
   (value) => {
@@ -468,6 +454,7 @@ function syncOrganizationRoute() {
   if (props.organizationId && data.value) {
     const organization = data.value.organizations.find((item) => item.id === props.organizationId);
     if (organization) showOrganization(organization);
+    else if (selected.value?.id === props.organizationId) showOrganization(selected.value);
     else {
       selected.value = null;
       organizationMissing.value = true;
@@ -504,6 +491,10 @@ function openCreateUser(asAdmin = false) {
   userForm.organization_id = "";
   userForm.organization_role_code = "member";
   createUserOpen.value = true;
+}
+function closeCreateUser() {
+  createUserOpen.value = false;
+  createUserError.value = "";
 }
 async function createUser() {
   createUserError.value = "";
@@ -611,14 +602,14 @@ onMounted(load);
         <h2>
           {{
             accountOverviewRoute
-              ? "谁在使用智能选品，一眼看懂"
+              ? "查看平台账号使用概况"
               : permissionsRoute
-                ? "角色能力边界，一眼对比"
+                ? "核对角色与能力边界"
                 : organizationListRoute
-                  ? "组织、状态与隔离边界，一眼看懂"
+                  ? "管理组织状态与隔离边界"
                   : adminListRoute
                     ? "授权、会话与登录状态，一处管理"
-                    : "用户归属与登录状态，一眼看懂"
+                    : "查看用户归属与登录状态"
           }}
         </h2>
         <span>{{
@@ -799,75 +790,28 @@ onMounted(load);
       @close="closeOrganizationWizard"
       @submit="createOrganization"
     />
-    <dialog
-      ref="createUserDialogElement"
-      aria-label="新建用户或平台管理员"
-      @cancel="handleCreateUserCancel"
-    >
-      <form @submit.prevent="createUser">
-        <h3>
-          {{
-            accountOverviewRoute
-              ? "新建用户或平台管理员"
-              : tab === "admins"
-                ? "新建平台管理员"
-                : "新建用户"
-          }}
-        </h3>
-        <p>账号立即可用；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。</p>
-        <p v-if="createUserError" class="dialog-feedback dialog-feedback--error" role="alert">
-          {{ createUserError }}
-        </p>
-        <label>邮箱<input v-model="userForm.email" type="email" required maxlength="254" /></label>
-        <label
-          >临时密码<input
-            v-model="userForm.temporary_password"
-            type="password"
-            required
-            minlength="12"
-            maxlength="128"
-            autocomplete="new-password"
-        /></label>
-        <label
-          >平台角色<select v-model="userForm.platform_role_code">
-            <option value="">普通用户</option>
-            <option value="platform_operations_admin">运营管理员</option>
-            <option value="platform_security_admin">安全管理员</option>
-            <option value="platform_super_admin">超级管理员</option>
-          </select></label
-        >
-        <label
-          >加入组织<select v-model="userForm.organization_id">
-            <option value="">暂不加入组织</option>
-            <option
-              v-for="item in data?.organizations || []"
-              :key="item.id"
-              :value="item.id"
-              :disabled="item.status !== 'active'"
-            >
-              {{ item.name }}
-            </option>
-          </select></label
-        >
-        <label v-if="userForm.organization_id"
-          >组织角色<select v-model="userForm.organization_role_code">
-            <option value="member">普通成员</option>
-            <option value="organization_admin">组织管理员</option>
-          </select></label
-        >
-        <footer>
-          <button
-            type="button"
-            @click="
-              createUserOpen = false;
-              createUserError = '';
-            "
-          >
-            取消</button
-          ><button :disabled="Boolean(busy)">确认创建</button>
-        </footer>
-      </form>
-    </dialog>
+    <PlatformAccountDialogs
+      :create-user-open="createUserOpen"
+      :create-user-error="createUserError"
+      :account-overview-route="accountOverviewRoute"
+      :tab="tab"
+      :user-form="userForm"
+      :organizations="data?.organizations || []"
+      :password-open="passwordOpen"
+      :password-error="passwordError"
+      :password-form="passwordForm"
+      :reason-open="reasonOpen"
+      :reason-title="reasonTitle"
+      :reason-text="reasonText"
+      :busy="Boolean(busy)"
+      @close-create-user="closeCreateUser"
+      @create-user="createUser"
+      @close-password="passwordOpen = false"
+      @reset-password="resetPassword"
+      @close-reason="cancelReason"
+      @submit-reason="submitReason"
+      @update:reason-text="reasonText = $event"
+    />
     <PlatformOrganizationDetailDialog
       :open="organizationDetailOpen"
       :organization="selected"
@@ -899,41 +843,6 @@ onMounted(load);
       @reset-password="openPassword"
       @revoke-sessions="revokeSessions"
     />
-    <dialog ref="passwordDialogElement" aria-label="强制重置密码" @cancel="handlePasswordCancel">
-      <form @submit.prevent="resetPassword">
-        <h3>强制重置密码</h3>
-        <p>保存后会撤销该用户全部活动会话，并要求首次登录修改密码。</p>
-        <p v-if="passwordError" class="dialog-feedback dialog-feedback--error" role="alert">
-          {{ passwordError }}
-        </p>
-        <label
-          >新临时密码<input
-            v-model="passwordForm.temporary_password"
-            type="password"
-            required
-            minlength="12"
-            maxlength="128"
-            autocomplete="new-password"
-        /></label>
-        <footer>
-          <button type="button" @click="passwordOpen = false">取消</button
-          ><button :disabled="Boolean(busy)">确认重置</button>
-        </footer>
-      </form>
-    </dialog>
-    <dialog ref="reasonDialogElement" :aria-label="reasonTitle" @cancel="handleReasonCancel">
-      <form @submit.prevent="submitReason">
-        <h3>{{ reasonTitle }}</h3>
-        <p>原因会写入平台审计记录。</p>
-        <label
-          >操作原因<textarea v-model="reasonText" required minlength="2" maxlength="300"></textarea>
-        </label>
-        <footer>
-          <button type="button" @click="reasonOpen = false">取消</button
-          ><button :disabled="Boolean(busy)">确认执行</button>
-        </footer>
-      </form>
-    </dialog>
   </section>
 </template>
 <style scoped src="./PlatformAccountCenter.css"></style>

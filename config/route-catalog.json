@@ -1106,11 +1106,11 @@
     {
       "path": "/platform-admin/providers/sources/1688-acceptance",
       "name": "platform-provider-1688-acceptance",
-      "title": "1688 验收",
-      "breadcrumb": ["平台后台", "热点与采集", "1688 验收"],
+      "title": "1688 启用检查",
+      "breadcrumb": ["平台后台", "热点与采集", "1688 启用检查"],
       "shell": "platform_admin",
       "view": null,
-      "capabilities": ["platform:operate", "platform:superadmin"],
+      "capabilities": ["platform:superadmin"],
       "notFound": false,
       "surface": "provider-runtime-surface",
       "cachePolicy": "preserve",
@@ -1225,7 +1225,7 @@
         "view": "PlatformDataCenter",
         "domain": "platform-data",
         "status": "verified",
-        "statusDetail": "M06-02_notification_factual_pagination_url_failure_permission_publish_audit_verified"
+          "statusDetail": "M06-02_module_verified"
       },
       "navigation": {
         "label": "数据中心",
@@ -1431,11 +1431,11 @@
     {
       "path": "/platform-admin/api-coverage",
       "name": "platform-api-coverage",
-      "title": "接口覆盖",
-      "breadcrumb": ["平台后台", "系统运维", "接口覆盖"],
+      "title": "接口覆盖证据",
+      "breadcrumb": ["平台后台", "系统运维", "接口覆盖证据"],
       "shell": "platform_admin",
       "view": null,
-      "capabilities": ["platform:operate", "platform:superadmin"],
+      "capabilities": ["platform:superadmin"],
       "notFound": false,
       "surface": "platform-management-center",
       "cachePolicy": "preserve",
@@ -1446,11 +1446,6 @@
         "domain": "platform-api-coverage",
         "status": "verified",
         "statusDetail": "machine_catalog_and_live_report_join_verified"
-      },
-      "navigation": {
-        "label": "接口覆盖",
-        "icon": "list",
-        "group": "高级运维"
       }
     },
     {

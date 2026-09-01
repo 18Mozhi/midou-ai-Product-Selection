@@ -1210,7 +1210,7 @@ test("organization audit distinguishes empty, HTTP failure and offline states", 
   );
   await page.goto("/org-admin/audit");
   await expect(page.getByText("当前组织暂无审计记录")).toBeVisible();
-  await expect(page.getByText("不会用示例数据补齐。")).toBeVisible();
+  await expect(page.getByText("受审计操作发生后将显示在这里。")).toBeVisible();
 
   await page.unroute("**/api/v1/organizations/*/audit-events**");
   await setup(page);

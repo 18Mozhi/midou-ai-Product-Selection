@@ -161,7 +161,7 @@ test("M06-02.A06/A07/A08/A10/A13/A17 contracts frontend config and handoff stay 
     [
       "docs/openapi.yaml",
       "apps/web/src/components/PlatformDashboard.vue",
-      "apps/web/src/styles/platform-operations.css",
+      "apps/web/src/styles/platform-dashboard.css",
       "config/env.example",
       "config/schema.json",
       "docs/architecture/m06-02-platform-dashboard.md",
@@ -183,13 +183,14 @@ test("M06-02.A06/A07/A08/A10/A13/A17 contracts frontend config and handoff stay 
   assert.match(runbook, /宝塔重启 Node API/);
   assert.equal(JSON.parse(feature).implementation.platformDashboard.module, "M06-02");
 });
-test("M06-02 platform overview gives novice administrators clear next actions", async () => {
+test("M06-02 platform overview gives administrators clear next actions", async () => {
   const [web, styles] = await Promise.all([
     readFile("apps/web/src/components/PlatformDashboard.vue", "utf8"),
-    readFile("apps/web/src/styles/platform-operations.css", "utf8"),
+    readFile("apps/web/src/styles/platform-dashboard.css", "utf8"),
   ]);
   for (const copy of [
-    "今天先做什么",
+    "平台运行概览",
+    "待办与常用入口",
     "系统会自动获取热点",
     "管理组织和用户",
     "查看热点来源",

@@ -158,7 +158,7 @@ for (const item of [
   {
     shell: "platform_admin" as const,
     path: "/platform-admin",
-    heading: "平台现在怎么样，一眼看懂",
+    heading: "平台运行概览",
     snapshot: "m02-03-platform-admin.png",
   },
 ])
@@ -482,9 +482,7 @@ test("theme continuity and real-height layout hold at 768, 1024 and 1440", async
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/platform-admin");
     await expect(page.locator("html")).toHaveAttribute("data-theme", "aurora-purple");
-    await expect(
-      page.getByRole("heading", { name: "平台现在怎么样，一眼看懂", level: 2 }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "平台运行概览", level: 2 })).toBeVisible();
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
       .toBe(true);
@@ -495,6 +493,16 @@ test("theme continuity and real-height layout hold at 768, 1024 and 1440", async
 test("M02-03 personal center uses an account shell without the organization navigation guard", async ({
   page,
 }) => {
+  await allow(page, "member");
+  await page.route("**/api/v1/auth/session-status", (route) =>
+    route.fulfill({
+      json: {
+        data: { authenticated: true },
+        request_id: "account-shell-session",
+        trace_id: "account-shell-session",
+      },
+    }),
+  );
   const envelope = (data: unknown) => ({
     data,
     request_id: "account-shell",

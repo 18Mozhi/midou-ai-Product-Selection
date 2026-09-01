@@ -352,7 +352,7 @@
     justify-content: space-between;
   }
   .adapter-pagination span {
-    font-size: 12px;
+    font-size: var(--so-font-meta);
     text-align: center;
   }
   .adapter-table-wrap {

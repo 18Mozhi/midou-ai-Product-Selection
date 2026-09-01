@@ -486,9 +486,9 @@
         "not_found",
         "confirmation"
       ],
-      "contracts": "production-rendered internal route, query-backed refresh/history state, observable non-business demo actions, semantic text and symbol, safe request/trace identifiers, explicit recovery, fail-closed and short-viewport-safe high-impact confirmation; the fallback route uses a dedicated user-facing 404, never exposes the internal state harness or recent-route query, and rejects stale recent destinations that resolve back to not-found",
+      "contracts": "development-only internal route excluded from production registration and lazy imports, query-backed refresh/history state, observable non-business demo actions, semantic text and symbol, safe request/trace identifiers, explicit recovery, fail-closed and short-viewport-safe high-impact confirmation; the fallback route uses a dedicated user-facing 404, never exposes the internal state harness or recent-route query, and rejects stale recent destinations that resolve back to not-found",
       "imageEvidence": ["concept 72 not-found", "P02 contact sheets and M02-01 design tokens"],
-      "nonGoals": "no API request, business mutation, permission inference, persistence, async service or environment value",
+      "nonGoals": "no production route or bundle, API request, business mutation, permission inference, persistence, async service or environment value",
       "verificationRunId": "a3be511f-f5cb-4ad5-9bea-2e16e08d3362",
       "status": "verified",
       "statusDetail": "M02-04_internal_state_library_and_dedicated_not_found_recovery_verified"
@@ -1861,7 +1861,7 @@
         "../scripts/verify-production-core-e2e.mjs",
         "../config/route-catalog.json"
       ],
-      "scope": "one-time six-role production tenant, 222 OpenAPI paths, 255 operations, 60 protected routes, two real core business chains and automatic scoped cleanup",
+      "scope": "one-time six-role production tenant, 223 OpenAPI paths, 256 operations, 60 protected routes, two real core business chains and automatic scoped cleanup",
       "runtimeBoundary": "manual finite BaoTa task only; no daemon, generic operation coverage uses no valid write payloads, and only the two manifest-authorized core E2E chains perform valid writes before exact cleanup; no persistent acceptance account or tenant",
       "coreE2eBoundary": "Playwright performs no browser request interception, requires Fastify readiness to report real MySQL and Redis available, then covers trend to opportunity decision to task and sourcing candidate to quote confirmation to cost and profit with two screenshots",
       "cleanupBoundary": "exact run users organization workspace resources and trace references are deleted with a per-table manifest and zero-reference verification",
@@ -3036,7 +3036,7 @@
       "view": "PlatformDataCenter",
       "domain": "platform-data",
       "status": "verified",
-      "statusDetail": "M06-02_notification_factual_pagination_url_failure_permission_publish_audit_verified"
+      "statusDetail": "M06-02_module_verified"
     },
     {
       "path": "/platform-admin/governance",

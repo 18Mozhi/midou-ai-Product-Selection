@@ -1,0 +1,70 @@
+dialog {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  width: min(560px, calc(100% - 32px));
+  max-height: calc(100vh - 48px);
+  margin: auto;
+  overflow: auto;
+  color: var(--so-text);
+  background: var(--so-bg-elevated);
+  border: 1px solid var(--so-border-strong);
+  border-radius: 12px;
+  box-shadow: var(--so-shadow-dialog);
+}
+dialog::backdrop {
+  background: var(--so-scrim);
+  backdrop-filter: blur(4px);
+}
+form,
+label {
+  display: grid;
+}
+form {
+  gap: 14px;
+  min-width: 340px;
+  padding: 10px;
+}
+label {
+  gap: 6px;
+}
+input,
+select,
+textarea {
+  padding: 10px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+  border: 1px solid var(--so-border-strong);
+  border-radius: 8px;
+}
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+button {
+  min-height: 44px;
+  padding: 10px 14px;
+}
+.dialog-feedback {
+  margin: 0;
+  padding: 11px 13px;
+  border-radius: 9px;
+}
+.dialog-feedback--error {
+  color: var(--so-danger);
+  background: var(--so-danger-soft);
+  border: 1px solid var(--so-danger-border);
+}
+@media (max-width: 640px) {
+  dialog {
+    width: calc(100% - 28px);
+  }
+  form {
+    min-width: 0;
+  }
+}

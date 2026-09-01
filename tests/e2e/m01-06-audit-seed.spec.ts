@@ -63,7 +63,7 @@ test("M01-06.A07/A08 organization auditor gets a truthful empty read-only state"
   await page.goto("/?view=audit-security");
   await page.getByRole("button", { name: "组织审计" }).click();
   await expect(page.getByText("当前范围暂无审计记录")).toBeVisible();
-  await expect(page.getByText("系统不会伪造示例记录；发生受审计行为后再刷新。")).toBeVisible();
+  await expect(page.getByText("受审计操作发生后，相关记录将显示在当前范围。")).toBeVisible();
 });
 test("M01-06.A08/A16 forbidden and expired responses show distinct recovery", async ({ page }) => {
   await page.route("**/api/v1/me/authorization", (route) =>

@@ -29,7 +29,7 @@ defineProps<{ opportunityId: string }>();
           <p>证据与来源</p>
           <div></div>
           <div></div>
-          <small>不显示示例证据</small>
+          <small>等待证据写入</small>
         </article>
         <article>
           <p>下一步</p>

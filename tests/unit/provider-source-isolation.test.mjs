@@ -215,31 +215,32 @@ test("an open provider circuit blocks only that source and preserves the remaini
     {},
     "worker-circuit",
   );
-  const outcomes = await executor.execute(
-    {
-      id: "task-circuit",
-      organizationId: "org-1",
-      workspaceId: "workspace-1",
-      attemptCount: 1,
-      requestId: "request-circuit",
-      traceId: "trace-circuit",
-      leaseToken: "lease-circuit",
-      subqueries: [
-        { id: "query-open", providerId: "provider-open", ordinal: 1, required: true, target: {} },
-        {
-          id: "query-next",
-          providerId: "provider-disabled",
-          ordinal: 2,
-          required: false,
-          target: {},
-        },
-      ],
-    },
-    async () => {},
+  await assert.rejects(
+    executor.execute(
+      {
+        id: "task-circuit",
+        organizationId: "org-1",
+        workspaceId: "workspace-1",
+        attemptCount: 1,
+        requestId: "request-circuit",
+        traceId: "trace-circuit",
+        leaseToken: "lease-circuit",
+        subqueries: [
+          { id: "query-open", providerId: "provider-open", ordinal: 1, required: true, target: {} },
+          {
+            id: "query-next",
+            providerId: "provider-disabled",
+            ordinal: 2,
+            required: false,
+            target: {},
+          },
+        ],
+      },
+      async () => {},
+    ),
+    { name: "CollectionExecutionError", code: "source_circuit_open" },
   );
   assert.equal(reads, 2);
-  assert.equal(outcomes[0].errorCode, "source_circuit_open");
-  assert.equal(outcomes[1].errorCode, "permission_denied");
   assert.equal(persisted.length, 2);
 });
 

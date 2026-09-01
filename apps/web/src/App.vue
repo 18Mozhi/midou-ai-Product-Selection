@@ -3,9 +3,9 @@ import { computed, defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
 import { publicConfig } from "./config";
 
-const VerificationFramework = defineAsyncComponent(
-  () => import("./components/VerificationFramework.vue"),
-);
+const VerificationFramework = import.meta.env.DEV
+  ? defineAsyncComponent(() => import("./components/VerificationFramework.vue"))
+  : null;
 const ConfigBoundary = defineAsyncComponent(() => import("./components/ConfigBoundary.vue"));
 const RedisFoundation = defineAsyncComponent(() => import("./components/RedisFoundation.vue"));
 const MySqlFoundation = defineAsyncComponent(() => import("./components/MySqlFoundation.vue"));
@@ -31,7 +31,9 @@ const ThemeStudio = defineAsyncComponent(() => import("./components/ThemeStudio.
 const OnboardingGuide = defineAsyncComponent(() => import("./components/OnboardingGuide.vue"));
 const NavigationShell = defineAsyncComponent(() => import("./components/NavigationShell.vue"));
 const AccountShell = defineAsyncComponent(() => import("./components/AccountShell.vue"));
-const UiStateShowcase = defineAsyncComponent(() => import("./components/UiStateShowcase.vue"));
+const UiStateShowcase = import.meta.env.DEV
+  ? defineAsyncComponent(() => import("./components/UiStateShowcase.vue"))
+  : null;
 const NotFoundPage = defineAsyncComponent(() => import("./components/NotFoundPage.vue"));
 const LandingRedirect = defineAsyncComponent(() => import("./components/LandingRedirect.vue"));
 
@@ -56,6 +58,7 @@ const internalViews = new Set([
   "audit-security",
   "theme",
   "onboarding",
+  "ui-states",
 ]);
 const selectedView = computed(
   () =>
@@ -70,11 +73,7 @@ const navigationShell = computed(() =>
     ? (route.meta.shell as "member" | "organization_admin" | "platform_admin")
     : null,
 );
-const isUiStatesView = computed(
-  () =>
-    selectedView.value === "ui-states" ||
-    (import.meta.env.DEV && requestedInternalView.value === "ui-states"),
-);
+const isUiStatesView = computed(() => import.meta.env.DEV && selectedView.value === "ui-states");
 const isNotFoundRoute = computed(
   () => route.meta.notFound === true || selectedView.value === "not-found",
 );
@@ -89,7 +88,10 @@ const isNotFoundRoute = computed(
   <AuditSecurityCenter v-else-if="selectedView === 'audit-security'" :api-base-url="apiBase" />
   <ThemeStudio v-else-if="selectedView === 'theme'" :api-base-url="apiBase" />
   <OnboardingGuide v-else-if="selectedView === 'onboarding'" />
-  <VerificationFramework v-else-if="selectedView === 'verification'" />
+  <component
+    :is="VerificationFramework"
+    v-else-if="VerificationFramework && selectedView === 'verification'"
+  />
   <ConfigBoundary v-else-if="selectedView === 'config'" :api-base-url="apiBase" />
   <RedisFoundation v-else-if="selectedView === 'redis'" />
   <MySqlFoundation v-else-if="selectedView === 'mysql'" />
@@ -98,6 +100,6 @@ const isNotFoundRoute = computed(
   <DeploymentFoundation v-else-if="selectedView === 'deployment'" :api-base-url="apiBase" />
   <NavigationShell v-else-if="navigationShell" :shell="navigationShell" :api-base-url="apiBase" />
   <AccountShell v-else-if="selectedView === 'account'" :api-base-url="apiBase" />
-  <UiStateShowcase v-else-if="isUiStatesView" />
+  <component :is="UiStateShowcase" v-else-if="UiStateShowcase && isUiStatesView" />
   <NotFoundPage v-else-if="isNotFoundRoute" />
 </template>

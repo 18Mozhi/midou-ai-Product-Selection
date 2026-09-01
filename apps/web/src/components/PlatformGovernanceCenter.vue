@@ -5,6 +5,7 @@ import { ApiClientError, createApiClient } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
+import TechnicalDetails from "./TechnicalDetails.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 type Section =
@@ -503,10 +504,7 @@ onBeforeUnmount(() => activeController?.abort());
         <span v-if="data.observed_at">
           事实时间 {{ new Date(data.observed_at).toLocaleString("zh-CN") }}
         </span>
-        <details v-if="requestId">
-          <summary>技术详情</summary>
-          <span>请求 ID {{ requestId }}</span>
-        </details>
+        <TechnicalDetails :request-id="requestId" />
       </footer>
     </template>
     <dialog
@@ -668,7 +666,7 @@ onBeforeUnmount(() => activeController?.abort());
   flex: 1;
   gap: 5px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 .platform-governance form label:nth-child(2) {
   max-width: 220px;

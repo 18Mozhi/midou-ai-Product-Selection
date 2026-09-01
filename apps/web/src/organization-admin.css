@@ -318,7 +318,7 @@
 }
 .org-admin-member-email {
   overflow-wrap: anywhere;
-  color: var(--so-info) !important;
+  color: var(--so-info);
 }
 .org-admin-invite-results {
   display: grid;
@@ -851,7 +851,7 @@
   border-radius: 999px;
   color: var(--so-success);
   background: var(--so-success-soft);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   font-style: normal;
 }
 .org-grant-list > button i[data-status="expired"],
@@ -934,7 +934,7 @@
 .org-workspace-detail header p {
   margin: 0 0 7px;
   color: var(--so-primary);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   font-weight: 850;
   letter-spacing: 0.14em;
 }
@@ -1166,7 +1166,7 @@
   border-radius: 6px;
   color: var(--so-primary);
   background: var(--so-bg-elevated);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   font-style: normal;
 }
 .org-workspace-list i {
@@ -1291,13 +1291,17 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  color: #f6fbff;
+  color: var(--so-text);
   border: 1px solid color-mix(in srgb, var(--so-primary) 42%, transparent);
   border-radius: 16px;
   background:
-    linear-gradient(120deg, rgba(5, 16, 31, 0.95), rgba(10, 47, 70, 0.92)),
-    repeating-linear-gradient(90deg, transparent 0 39px, rgba(255, 255, 255, 0.05) 40px);
-  box-shadow: 0 16px 36px rgba(5, 20, 37, 0.18);
+    linear-gradient(120deg, var(--so-bg), var(--so-bg-elevated)),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 39px,
+      color-mix(in srgb, var(--so-text) 5%, transparent) 40px
+    );
+  box-shadow: var(--so-shadow-card);
 }
 .org-team-overview p,
 .org-team-section-heading p,
@@ -1306,13 +1310,13 @@
 .org-team-create header p {
   margin: 0 0 4px;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 .org-team-overview p {
-  color: #74d4ec;
+  color: var(--so-info);
 }
 .org-team-overview h3,
 .org-team-create h3,
@@ -1329,7 +1333,7 @@
   display: block;
   max-width: 680px;
   margin-top: 8px;
-  color: rgba(236, 248, 255, 0.72);
+  color: color-mix(in srgb, var(--so-text) 72%, transparent);
   line-height: 1.6;
 }
 .org-team-overview > button {
@@ -1360,7 +1364,7 @@
 .org-team-metrics small {
   min-width: 0;
   overflow: hidden;
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1369,7 +1373,7 @@
   border: 1px solid var(--so-primary-border);
   border-radius: 14px;
   background: var(--so-panel);
-  box-shadow: 0 14px 34px rgba(14, 49, 75, 0.08);
+  box-shadow: var(--so-shadow-card);
 }
 .org-team-create > header,
 .org-team-create > footer,
@@ -1397,13 +1401,13 @@
   display: grid;
   gap: 7px;
   color: var(--so-text);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   font-weight: 750;
 }
 .org-team-create-grid small,
 .org-team-membership p {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   font-weight: 500;
   line-height: 1.55;
 }
@@ -1435,7 +1439,7 @@
   border: 1px solid var(--so-border);
   border-radius: 999px;
   background: var(--so-panel-soft);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   font-variant-numeric: tabular-nums;
 }
 .org-team-status-tabs {
@@ -1457,7 +1461,7 @@
 .org-team-status-tabs button[aria-pressed="true"] {
   color: var(--so-text);
   background: var(--so-panel);
-  box-shadow: 0 3px 10px rgba(6, 31, 50, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 .org-team-toolbar {
   display: grid;
@@ -1512,7 +1516,7 @@
 .org-team-list small {
   margin-top: 3px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-team-list em {
   padding: 4px 7px;
@@ -1520,7 +1524,7 @@
   border: 1px solid var(--so-primary-border);
   border-radius: 999px;
   background: var(--so-panel);
-  font-size: 10px;
+  font-size: var(--so-font-meta);
   font-style: normal;
   white-space: nowrap;
 }
@@ -1531,7 +1535,7 @@
   border: 1px solid color-mix(in srgb, var(--so-success) 35%, var(--so-border));
   border-radius: 999px;
   background: color-mix(in srgb, var(--so-success) 8%, var(--so-panel));
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   font-style: normal;
   white-space: nowrap;
 }
@@ -1560,7 +1564,7 @@
 }
 .org-team-detail dt {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-team-detail dd {
   margin: 4px 0 0;
@@ -1686,7 +1690,7 @@
 .org-approval-version-diff > header span {
   margin: 0 0 6px;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   font-weight: 800;
   letter-spacing: 0.12em;
 }
@@ -1720,7 +1724,7 @@
 .org-approval-overview aside span {
   margin-top: 5px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   line-height: 1.55;
 }
 .org-approval-metrics {
@@ -1761,7 +1765,7 @@
   white-space: nowrap;
 }
 .org-approval-metrics span {
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-metrics b {
   margin: 6px 0 3px;
@@ -1770,7 +1774,7 @@
   line-height: 1;
 }
 .org-approval-metrics small {
-  font-size: 10px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-section-tabs {
   display: flex;
@@ -1802,7 +1806,7 @@
   border-radius: 999px;
   color: var(--so-primary);
   background: var(--so-primary-soft);
-  font-size: 10px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-section {
   padding: 22px;
@@ -1829,7 +1833,7 @@
 .org-approval-section-heading > span {
   max-width: 430px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   line-height: 1.55;
   text-align: right;
 }
@@ -1849,7 +1853,7 @@
 }
 .org-approval-toolbar label > span {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-toolbar input,
 .org-approval-toolbar select,
@@ -1892,7 +1896,7 @@
   display: block;
   overflow: hidden;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1911,7 +1915,7 @@
   border-radius: 999px;
   color: var(--so-text-muted);
   background: var(--so-panel);
-  font-size: 10px;
+  font-size: var(--so-font-meta);
   font-style: normal;
 }
 .org-approval-request-list i[data-status="pending"] {
@@ -1954,14 +1958,14 @@
 .org-approval-request-list dt,
 .org-approval-template-detail dt {
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-request-list dd,
 .org-approval-template-detail dd {
   overflow: hidden;
   margin: 4px 0 0;
   color: var(--so-text);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1973,14 +1977,14 @@
 .org-approval-technical summary {
   cursor: pointer;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-technical code {
   display: block;
   overflow-wrap: anywhere;
   margin-top: 7px;
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-pagination {
   display: flex;
@@ -1989,7 +1993,7 @@
   gap: 12px;
   margin-top: 14px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-pagination div {
   display: flex;
@@ -2009,7 +2013,7 @@
   border-radius: 999px;
   color: var(--so-text-muted);
   background: var(--so-panel-soft);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-template-summary b {
   margin-right: 5px;
@@ -2057,7 +2061,7 @@
 }
 .org-approval-template-directory button > span {
   color: var(--so-primary);
-  font-size: 10px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-template-directory button > b,
 .org-approval-template-directory button > small {
@@ -2103,7 +2107,7 @@
 }
 .org-approval-version-diff > header b {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-version-diff > article {
   margin-top: 8px;
@@ -2127,7 +2131,7 @@
 .org-approval-version-diff article > header span,
 .org-approval-version-diff article > header i {
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: var(--so-font-meta);
   font-style: normal;
 }
 .org-approval-version-diff article > header b {
@@ -2140,7 +2144,7 @@
 .org-approval-diff-empty {
   margin: 8px 0 0;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   line-height: 1.55;
 }
 .org-approval-version-diff article dl {
@@ -2155,7 +2159,7 @@
 }
 .org-approval-version-diff article dt {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-version-diff article dd {
   display: flex;
@@ -2163,7 +2167,7 @@
   min-width: 0;
   margin: 0;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-version-diff del,
 .org-approval-version-diff ins {
@@ -2197,7 +2201,7 @@
 .org-approval-empty p {
   max-width: 440px;
   margin-top: 5px;
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   line-height: 1.55;
 }
 .org-approval-links {
@@ -2216,14 +2220,14 @@
 }
 .org-approval-links span {
   color: var(--so-primary);
-  font-size: 10px;
+  font-size: var(--so-font-meta);
   font-weight: 800;
   letter-spacing: 0.08em;
 }
 .org-approval-links b {
   margin-top: 4px;
   color: var(--so-text);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 .org-approval-links a {
   padding: 9px 12px;
@@ -2267,7 +2271,7 @@
 .org-data-section-heading p {
   margin: 0 0 7px;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   font-weight: 850;
   letter-spacing: 0.14em;
 }
@@ -2295,7 +2299,7 @@
 }
 .org-data-overview aside b {
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   letter-spacing: 0.08em;
 }
 .org-data-overview aside time {
@@ -2305,7 +2309,7 @@
 }
 .org-data-overview aside span {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-data-metrics {
   display: grid;
@@ -2333,7 +2337,7 @@
 .org-data-metrics small {
   overflow: hidden;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   text-overflow: ellipsis;
 }
 .org-data-metrics b {
@@ -2373,7 +2377,7 @@
 .org-data-truth p {
   margin-top: 4px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   line-height: 1.55;
 }
 .org-data-truth a {
@@ -2430,7 +2434,7 @@
 .org-data-section-heading > span {
   max-width: 410px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   line-height: 1.55;
   text-align: right;
 }
@@ -2455,7 +2459,7 @@
   display: grid;
   gap: 6px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-data-toolbar input,
 .org-data-toolbar select {
@@ -2520,7 +2524,7 @@
   border-radius: 999px;
   color: var(--so-success);
   background: var(--so-success-soft);
-  font-size: 10px;
+  font-size: var(--so-font-meta);
   font-style: normal;
 }
 .org-data-table i[data-status="archived"],
@@ -2543,7 +2547,7 @@
 }
 .org-data-table-head {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   background: var(--so-panel-soft);
 }
 .org-data-table [role="row"]:not(.org-data-table-head):hover {
@@ -2573,7 +2577,7 @@
 }
 .org-data-export-list article > header > span {
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   font-weight: 800;
   letter-spacing: 0.05em;
 }
@@ -2600,17 +2604,17 @@
 }
 .org-data-export-list dt {
   color: var(--so-text-muted);
-  font-size: 10px;
+  font-size: var(--so-font-meta);
 }
 .org-data-export-list dd {
   margin: 4px 0 0;
   color: var(--so-text);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-data-export-list details {
   margin-top: 10px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-data-export-list summary {
   width: fit-content;
@@ -2648,7 +2652,7 @@
 }
 .org-data-empty p {
   margin-top: 5px;
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 .org-data-pagination {
   margin-top: 14px;
@@ -2659,7 +2663,7 @@
 }
 .org-data-pagination > span {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-data-pagination > div {
   display: flex;
@@ -2707,7 +2711,7 @@
 .org-token-secret header p {
   margin: 0 0 7px;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   font-weight: 850;
   letter-spacing: 0.15em;
 }
@@ -2744,7 +2748,7 @@
 }
 .org-token-overview aside b {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   text-transform: uppercase;
 }
 .org-token-overview aside strong {
@@ -2778,7 +2782,7 @@
 .org-token-metrics small {
   display: block;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 .org-token-metrics b {
   display: block;
@@ -2802,7 +2806,7 @@
   border-radius: 6px;
   color: var(--so-on-primary);
   background: var(--so-primary);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   font-weight: 800;
 }
 .org-token-truth b,
@@ -2921,7 +2925,7 @@
 .org-token-scope-field > p {
   margin: 0;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
   line-height: 1.5;
 }
 .org-token-scope-field {
@@ -2964,14 +2968,14 @@
 .org-token-scope-field label small {
   margin-top: 3px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   line-height: 1.4;
 }
 .org-token-scope-field > strong {
   display: block;
   margin-top: 8px;
   color: var(--so-danger);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 .org-token-duration {
   display: grid;
@@ -3068,7 +3072,7 @@
   display: inline-block;
   margin-right: 5px;
   color: var(--so-success);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   font-weight: 750;
 }
 .org-token-list article header small {
@@ -3078,7 +3082,7 @@
   max-width: 42%;
   overflow: hidden;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -3094,10 +3098,10 @@
   border-radius: 999px;
   color: var(--so-primary);
   background: var(--so-primary-soft);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-token-list dl {
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 .org-token-list article > footer {
   align-items: flex-end;
@@ -3108,7 +3112,7 @@
 .org-token-list details {
   min-width: 0;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: var(--so-font-meta);
 }
 .org-token-list details code,
 .org-token-list details span {
@@ -3152,7 +3156,7 @@
   padding-top: 12px;
   border-top: 1px solid var(--so-border);
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: var(--so-font-meta);
 }
 
 @media (max-width: 1100px) {
@@ -3553,7 +3557,7 @@
     gap: 9px;
   }
   .org-data-table-head {
-    display: none !important;
+    display: none;
   }
   .org-data-table [role="row"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3577,7 +3581,7 @@
     float: left;
     content: attr(data-label);
     color: var(--so-text-muted);
-    font-size: 10px;
+    font-size: var(--so-font-meta);
   }
   .org-data-table strong[role="cell"] {
     padding: 0;
@@ -3587,7 +3591,7 @@
     float: left;
     content: attr(data-label);
     color: var(--so-text-muted);
-    font-size: 10px;
+    font-size: var(--so-font-meta);
     font-weight: 400;
   }
   .org-data-export-list,

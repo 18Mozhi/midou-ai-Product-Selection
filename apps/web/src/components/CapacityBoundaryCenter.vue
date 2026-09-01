@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import TechnicalDetails from "./TechnicalDetails.vue";
 import "../capacity-boundary.css";
 type State =
   | "loading"
@@ -271,7 +272,7 @@ onMounted(() => void load());
       <div>
         <b>{{ verdict[0] }}</b>
         <p>{{ message || verdict[1] }}</p>
-        <code v-if="requestId">request_id {{ requestId }}</code>
+        <TechnicalDetails :request-id="requestId" />
       </div>
       <button
         v-if="!['loading', 'verifying'].includes(state)"
@@ -409,8 +410,8 @@ onMounted(() => void load());
         </div>
       </section>
       <footer>
-        <span>request_id {{ requestId || "—" }}</span
-        ><span>未启用负载均衡 · 未配置备用服务器 · 未启用多节点</span
+        <TechnicalDetails :request-id="requestId" /><span
+          >未启用负载均衡 · 未配置备用服务器 · 未启用多节点</span
         ><strong>生产操作只允许通过宝塔</strong>
       </footer></template
     ><ConfirmDialog

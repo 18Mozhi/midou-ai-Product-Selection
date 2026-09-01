@@ -119,7 +119,7 @@ test("platform permission page reads only the real role catalog and preserves co
   });
   await page.goto("/platform-admin/permissions");
   await expect(page).toHaveTitle("角色权限 · 智能选品");
-  await expect(page.getByRole("heading", { name: "角色能力边界，一眼对比" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "核对角色与能力边界" })).toBeVisible();
   await expect(page.getByText("roles + role_capabilities", { exact: true })).toBeVisible();
   await expect(page.getByRole("table")).toHaveCount(0);
   expect(accountRequests).toBe(0);
@@ -196,7 +196,7 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
 }) => {
   await setup(page);
   await page.goto("/platform-admin/accounts");
-  await expect(page.getByRole("heading", { name: "谁在使用智能选品，一眼看懂" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "查看平台账号使用概况" })).toBeVisible();
   const accountTabs = page.getByRole("navigation", { name: "账号与组织二级导航" });
   await expect(accountTabs.getByRole("link", { name: "组织管理", exact: true })).toBeVisible();
   await expect(accountTabs.getByRole("link", { name: "用户管理", exact: true })).toBeVisible();
@@ -359,7 +359,7 @@ test("organization list uses organization-specific filters and a recoverable emp
     return route.fulfill({ json: env(query ? { ...overview, organizations: [] } : overview) });
   });
   await page.goto("/platform-admin/organizations");
-  await expect(page.getByRole("heading", { name: "组织、状态与隔离边界，一眼看懂" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "管理组织状态与隔离边界" })).toBeVisible();
   const mobile = (page.viewportSize()?.width ?? 0) <= 760;
   if (mobile) await page.getByRole("button", { name: "组织筛选" }).click();
   const filters = mobile ? page.getByRole("dialog", { name: "组织筛选" }) : page;

@@ -8,6 +8,7 @@ import {
   type RealtimeClientMetrics,
 } from "../realtime-client-metrics";
 import { useAuditedReason } from "../use-audited-reason";
+import { useModalDialog } from "../use-modal-dialog";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import ApiCoverageDashboard from "./ApiCoverageDashboard.vue";
 import PlatformContentPagination from "./PlatformContentPagination.vue";
@@ -189,11 +190,13 @@ const {
   item: reviewItem,
   status: reviewStatus,
   reason: reviewReason,
-  dialogElement: reviewDialogElement,
-  handleCancel: handleReviewCancel,
   begin: beginReview,
   submit: submitReview,
 } = usePlatformContentReview({ request: api, reload: load, message, busy });
+const { dialogElement: reviewDialogElement, handleCancel: handleReviewCancel } = useModalDialog(
+  () => Boolean(reviewItem.value),
+  () => (reviewItem.value = null),
+);
 const { load: loadStatus, stop: stopStatusLoad } = usePlatformStatus({
   domain,
   data,

@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
+import TechnicalDetails from "./TechnicalDetails.vue";
 import "../security-operations.css";
 
 const props = defineProps<{ apiBaseUrl: string }>();
@@ -1181,10 +1182,7 @@ onBeforeUnmount(() => {
 
       <footer class="security-footer">
         <span>数据更新时间 {{ when(data.observed_at) }}</span>
-        <details v-if="requestId">
-          <summary>技术详情</summary>
-          <span>请求 ID {{ requestId }}</span>
-        </details>
+        <TechnicalDetails :request-id="requestId" />
       </footer>
     </template>
   </section>

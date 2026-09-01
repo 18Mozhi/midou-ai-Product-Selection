@@ -19,18 +19,18 @@ const percent = (value: number, total: number) =>
   <section class="api-coverage" data-testid="api-coverage-dashboard">
     <header class="api-coverage__truth" :data-state="data.report_status">
       <div>
-        <strong>{{
-          data.report_status === "current" ? "当前目录已验收" : "当前目录待验收"
-        }}</strong>
-        <p v-if="data.report_status === 'missing'">尚无生产验收报告，目录覆盖不等于运行通过。</p>
+        <strong>{{ data.report_status === "current" ? "当前证据可用" : "当前证据待补充" }}</strong>
+        <p v-if="data.report_status === 'missing'">
+          尚无当前发布版本的运行证据，接口登记数量不代表实际运行结果。
+        </p>
         <p v-else-if="data.report_status === 'outdated'">
-          最近报告与当前 OpenAPI 指纹不一致，不计入实时覆盖率。
+          最近证据与当前 OpenAPI 指纹不一致，不计入当前覆盖率。
         </p>
         <p v-else-if="data.report_status === 'invalid'">
-          最近报告无法解析，不计入实时覆盖率；请重新运行生产验收任务。
+          最近证据无法解析，不计入当前覆盖率；请重新生成发布证据。
         </p>
         <p v-else>
-          最近验收于 {{ new Date(data.captured_at).toLocaleString("zh-CN") }} 完成，报告年龄
+          最近证据于 {{ new Date(data.captured_at).toLocaleString("zh-CN") }} 生成，距今
           {{ data.age_seconds }} 秒。
         </p>
       </div>
@@ -118,7 +118,7 @@ const percent = (value: number, total: number) =>
           <thead>
             <tr>
               <th>接口</th>
-              <th>验收结果</th>
+              <th>运行结果</th>
               <th>角色</th>
               <th>数据来源</th>
               <th>UI 消费方</th>

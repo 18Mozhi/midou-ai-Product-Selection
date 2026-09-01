@@ -80,7 +80,7 @@ test("M06-05.A07/A08/A15 desktop and 390 open platform", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "开放接口与事件回调", level: 2 })).toBeVisible();
   await expect(page.getByText("sco_open_public", { exact: true })).not.toBeVisible();
   await expect(page.getByText("webhook_timeout", { exact: true })).not.toBeVisible();
-  await page.getByLabel("组织编号").fill(orgId);
+  await page.getByLabel("组织内部编号").fill(orgId);
   await page.getByRole("textbox", { name: "名称", exact: true }).fill("状态观察接入");
   await page.getByRole("button", { name: "创建接口访问账号" }).click();
   const creationRisk = page.getByRole("alertdialog");
@@ -141,7 +141,7 @@ test("M06-05.A08/A16 confirmation rate limit and dependency recovery", async ({ 
 test("M06-05 form validation and URL-backed workspace filters fail closed", async ({ page }) => {
   await page.goto("/platform-admin/open-platform");
   await page.getByRole("button", { name: "创建接口访问账号" }).click();
-  await expect(page.getByText("请输入有效组织 UUID。")).toBeVisible();
+  await expect(page.getByText("请输入有效的组织内部编号。")).toBeVisible();
   await expect(page.getByText("名称需为 1–120 个字符。")).toBeVisible();
   await expect(page.getByRole("alertdialog")).toHaveCount(0);
   await page.getByRole("textbox", { name: "搜索", exact: true }).fill("报表");
@@ -151,7 +151,7 @@ test("M06-05 form validation and URL-backed workspace filters fail closed", asyn
   await page.reload();
   await expect(page.getByRole("textbox", { name: "搜索", exact: true })).toHaveValue("报表");
   await page.getByRole("button", { name: /^事件回调地址/ }).click();
-  await page.getByLabel("组织编号").fill(orgId);
+  await page.getByLabel("组织内部编号").fill(orgId);
   const create = page.locator(".open-create");
   await create.getByRole("textbox", { name: "名称" }).fill("错误网址验证");
   await create.getByRole("textbox", { name: "事件回调安全网址" }).fill("http://127.0.0.1/hook");

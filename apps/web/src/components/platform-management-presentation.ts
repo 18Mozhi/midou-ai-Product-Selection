@@ -9,7 +9,7 @@ export const platformManagementTitles: Record<PlatformManagementDomain, [string,
     "系统状态",
     "查看 API、MySQL、Redis、文件、Worker、Crawler、来源和采集任务的真实运行状态。",
   ],
-  "api-coverage": ["接口覆盖", "按角色、结果、来源、UI 消费方和爬虫副作用核对当前 OpenAPI。"],
+  "api-coverage": ["接口覆盖证据", "仅供平台超级管理员核对接口、权限、消费方与采集副作用。"],
 };
 
 const summaryNames: Record<string, string> = {

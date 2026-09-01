@@ -168,7 +168,7 @@ onMounted(() => load());
       </div>
       <div v-else-if="state === 'empty'" class="state">
         <b>○</b><strong>当前范围暂无审计记录</strong>
-        <p>系统不会伪造示例记录；发生受审计行为后再刷新。</p>
+        <p>受审计操作发生后，相关记录将显示在当前范围。</p>
         <button @click="load()">刷新</button>
       </div>
       <div v-else class="layout">

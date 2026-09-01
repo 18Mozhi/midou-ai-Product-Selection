@@ -50,8 +50,11 @@ interface RouteCatalogManifest {
 
 const manifest = generatedCatalog as RouteCatalogManifest;
 const ApplicationSurface = () => import("./App.vue");
+const runtimeRoutes = manifest.routes.filter(
+  (entry) => import.meta.env.DEV || entry.acceptance !== "internal",
+);
 
-export const appRoutes: RouteRecordRaw[] = manifest.routes.map((entry) => ({
+export const appRoutes: RouteRecordRaw[] = runtimeRoutes.map((entry) => ({
   path: entry.path,
   name: entry.name,
   component: ApplicationSurface,
@@ -69,7 +72,7 @@ export const appRoutes: RouteRecordRaw[] = manifest.routes.map((entry) => ({
 }));
 
 export function navigationItemsFor(shell: Exclude<AppShell, "account">): ShellNavigationItem[] {
-  return manifest.routes
+  return runtimeRoutes
     .filter((entry) => entry.shell === shell && entry.navigation)
     .map((entry) => ({
       label: entry.navigation!.label,

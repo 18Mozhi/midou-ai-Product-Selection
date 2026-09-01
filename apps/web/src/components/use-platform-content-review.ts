@@ -1,5 +1,4 @@
 import { ref, type Ref } from "vue";
-import { useModalDialog } from "../use-modal-dialog";
 
 type ReviewStatus = "active" | "irrelevant" | "stale";
 
@@ -12,10 +11,6 @@ export function usePlatformContentReview(options: {
   const item = ref<any>(null),
     status = ref<ReviewStatus>("active"),
     reason = ref("");
-  const { dialogElement, handleCancel } = useModalDialog(
-    () => Boolean(item.value),
-    () => (item.value = null),
-  );
 
   function begin(nextItem: any, nextStatus: ReviewStatus) {
     item.value = nextItem;
@@ -46,5 +41,5 @@ export function usePlatformContentReview(options: {
     }
   }
 
-  return { item, status, reason, dialogElement, handleCancel, begin, submit };
+  return { item, status, reason, begin, submit };
 }
