@@ -69,5 +69,6 @@ function runGate(mode = "--check") {
   return spawnSync(process.execPath, ["scripts/verify-code-style.mjs", mode], {
     cwd: process.cwd(),
     encoding: "utf8",
+    maxBuffer: 16 * 1024 * 1024,
   });
 }
