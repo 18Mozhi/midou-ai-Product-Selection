@@ -80,6 +80,9 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.match(coreE2e, /executablePath: browserExecutablePath/);
   assert.match(coreE2e, /getByLabel\("账号（邮箱或用户名）"\)/);
   assert.doesNotMatch(coreE2e, /input\[type=["']email["']\]/);
+  assert.match(coreE2e, /SCOUTOPS_QA_ORGANIZATION_ADMIN_EMAIL/);
+  assert.match(coreE2e, /SCOUTOPS_QA_ORGANIZATION_ADMIN_PASSWORD/);
+  assert.doesNotMatch(coreE2e, /SCOUTOPS_QA_SELECTION_MANAGER_(?:EMAIL|PASSWORD)/);
   assert.match(routeCoverage, /SCOUTOPS_ACCEPTANCE_RESOURCE_IDS/);
   assert.match(routeCoverage, /resolver\.resourceIdKey/);
   assert.match(routeCoverage, /seeded acceptance resource id is invalid/);

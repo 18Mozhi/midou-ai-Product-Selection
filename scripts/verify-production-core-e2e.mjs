@@ -14,8 +14,8 @@ const baseUrl = (process.env.SCOUTOPS_QA_BASE_URL ?? "https://midouai.medouai.co
   "",
 );
 const account = {
-  email: required("SCOUTOPS_QA_SELECTION_MANAGER_EMAIL"),
-  password: required("SCOUTOPS_QA_SELECTION_MANAGER_PASSWORD"),
+  email: required("SCOUTOPS_QA_ORGANIZATION_ADMIN_EMAIL"),
+  password: required("SCOUTOPS_QA_ORGANIZATION_ADMIN_PASSWORD"),
 };
 const resources = JSON.parse(required("SCOUTOPS_ACCEPTANCE_RESOURCE_IDS"));
 const traceId = process.env.SCOUTOPS_QA_TRACE_ID?.trim() || randomUUID();
