@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { DiscoveryService } from "../../apps/api/dist/discovery-service.js";
+import { MySqlDiscoveryRepository } from "../../apps/api/dist/mysql-discovery-repository.js";
 import { buildApp } from "../../apps/api/dist/app.js";
 
 const org = "00000000-0000-4000-8000-000000000501";
@@ -176,6 +177,29 @@ test("M02-05 regression: platform quick create does not require organization con
   await app.close();
 });
 
+test("M02-05 regression: every MySQL UNION text slot uses the table collation", async () => {
+  const queries = [];
+  const repository = new MySqlDiscoveryRepository({
+    query: async (sql) => {
+      queries.push(sql);
+      return [[]];
+    },
+  });
+  await repository.search({
+    organizationId: org,
+    workspaceId: workspace,
+    query: "机会",
+    capabilities: ["task:read", "opportunity:read", "platform:operate", "collection:replay"],
+    limit: 10,
+  });
+  assert.equal(queries.length, 1);
+  assert.equal(
+    queries[0].match(/COLLATE utf8mb4_unicode_ci/g)?.length,
+    46,
+    "all forty text slots and six nested ASCII fragments must use the table collation",
+  );
+});
+
 test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit", async () => {
   const [
     up,
@@ -217,19 +241,7 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(repo, /resource_type=\?[\s\S]*status=\?[\s\S]*assignee_name LIKE/);
   for (const table of ["tasks", "opportunities", "raw_evidence", "collection_tasks"])
     assert.match(repo, new RegExp(`FROM ${table}|JOIN ${table}`));
-  for (const expression of [
-    "CONVERT(t.id USING utf8mb4) COLLATE utf8mb4_unicode_ci",
-    "CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_unicode_ci",
-    "CONVERT(e.id USING utf8mb4) COLLATE utf8mb4_unicode_ci",
-    "CONVERT(id USING utf8mb4) COLLATE utf8mb4_unicode_ci",
-    "CONVERT(last_error_code USING utf8mb4) COLLATE utf8mb4_unicode_ci",
-  ])
-    assert.ok(repo.includes(expression), `missing MySQL 5.7 ASCII collation guard: ${expression}`);
-  assert.equal(
-    repo.match(/COLLATE utf8mb4_unicode_ci/g)?.length,
-    6,
-    "every converted ASCII search fragment must use the table collation",
-  );
+  assert.match(repo, /normalizeText[\s\S]*utf8mb4_unicode_ci/);
   assert.match(repo, /\/tasks\/[\s\S]*\/opportunities\/[\s\S]*evidence=[\s\S]*task=/);
   assert.match(openapi, /\/me\/global-search:/);
   assert.match(openapi, /\/me\/quick-actions:/);

@@ -10,7 +10,7 @@
 ## 诊断与调节
 
 - 搜索无结果：先核对活动租户上下文、对象类型、对象真实状态、任务 `assignee_id` 或机会 `owner_id`、`search_documents` 的精确组织/工作区、`required_capability`、`source_version` 与 `updated_at`。负责人筛选不适用于证据和采集任务；不要把创建人当负责人，也不要放宽范围或绕过权限。
-- 搜索返回 `ER_CANT_AGGREGATE_2COLLATIONS` 或 `ER_CANT_AGGREGATE_NCOLLATIONS`：确认当前运行包在拼接任务、机会、证据和采集任务的路由、标题或错误摘要前，已用 `CONVERT(... USING utf8mb4) COLLATE utf8mb4_unicode_ci` 规范化 `ascii` UUID 与错误码；不得通过修改数据库全局排序规则或放宽查询范围绕过。
+- 搜索返回 `ER_CANT_AGGREGATE_2COLLATIONS` 或 `ER_CANT_AGGREGATE_NCOLLATIONS`：确认当前运行包已把五个 `UNION` 分支的资源类型、标题、副标题、状态、负责人、路由和能力码统一为 `utf8mb4_unicode_ci`，并在拼接前用同一规则规范化 `ascii` UUID 与错误码；不得通过修改数据库全局排序规则或放宽查询范围绕过。
 - 401/403/409：重新登录、检查 capability 或重新选择组织/工作区。429/502/503/504 显示受阻状态，并携带安全格式的 `request_id` 联系运维。
 - 快捷入口缺失、顺序异常或显示 ERROR：核对请求是否包含真实 `shell`，再检查服务端 capability。服务端先按壳层角色排序，当前页面内点击过的入口会临时前置；刷新页面后最近使用顺序清空属于预期。成员的任务/找货入口必须分别进入 `/tasks?create=1` 和 `/sourcing?create=1` 并直接打开表单；接口本身不执行创建。
 - 本模块没有可调搜索阈值、超时、队列或重试配置；查询长度和每页上限属于已发布 API 合同。
