@@ -133,7 +133,7 @@ test("M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchron
   ])
     assert.match(architecture, new RegExp(image));
   assert.match(runbook, /## 回滚/);
-  assert.match(liveProbe, /login_identifiers:'email_and_username'/);
+  assert.match(liveProbe, /login_identifiers:\s*["']email_and_username["']/);
   assert.match(deploy, /0067_usernames_login\.up\.sql/);
   const parsed = JSON.parse(registry);
   assert.equal(parsed.atomicTasks.length, 17);

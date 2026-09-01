@@ -1,21 +1,172 @@
-import { randomUUID } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
-import { loadRuntimeConfig } from '../packages/config/dist/index.js';
-import { createDatabasePool } from '../packages/database/dist/index.js';
-import { EncryptedOutboxAuthDelivery, LocalAuthService, createArgon2PasswordHasher, normalizeUsername, openAuthDelivery } from '../packages/auth/dist/index.js';
-import { MySqlAuthRepository } from '../apps/api/dist/mysql-auth-repository.js';
-import { MySqlAuthOutboxStore } from '../apps/api/dist/mysql-auth-outbox.js';
-import { PendingMailProvider, processAuthDeliveryOnce } from '../apps/worker/dist/auth-delivery-worker.js';
+import { randomUUID } from "node:crypto";
+import { readFile } from "node:fs/promises";
+import { loadRuntimeConfig } from "../packages/config/dist/index.js";
+import { createDatabasePool } from "../packages/database/dist/index.js";
+import {
+  EncryptedOutboxAuthDelivery,
+  LocalAuthService,
+  createArgon2PasswordHasher,
+  normalizeUsername,
+  openAuthDelivery,
+} from "../packages/auth/dist/index.js";
+import { MySqlAuthRepository } from "../apps/api/dist/mysql-auth-repository.js";
+import { MySqlAuthOutboxStore } from "../apps/api/dist/mysql-auth-outbox.js";
+import {
+  PendingMailProvider,
+  processAuthDeliveryOnce,
+} from "../apps/worker/dist/auth-delivery-worker.js";
 
-const requestId=randomUUID();const traceId=requestId;const email=`m01-01-${requestId}@example.test`;const config=loadRuntimeConfig(process.env,'api');const pool=createDatabasePool(config);const masterKey=Buffer.alloc(32,11).toString('hex');let userId='';
-const migrations=[['users','0008a_users_m01_01.up.sql'],['user_sessions','0008b_sessions_m01_01.up.sql'],['auth_action_tokens','0008c_action_tokens_m01_01.up.sql'],['auth_security_events','0008d_security_events_m01_01.up.sql'],['auth_delivery_outbox','0008e_delivery_outbox_m01_01.up.sql'],['auth_idempotency_records','0008f_idempotency_m01_01.up.sql']];
-async function ensureMigrations(){for(const[table,file]of migrations){const[rows]=await pool.query('SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?',[table]);if(Number(rows[0].count)===0)await pool.query(await readFile(`database/migrations/${file}`,'utf8'));}}
-async function ensureUsernameMigration(){const[rows]=await pool.query("SELECT COUNT(*) AS count FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='users' AND column_name='username_normalized'");if(Number(rows[0].count)===0)await pool.query(await readFile('database/migrations/0067_usernames_login.up.sql','utf8'));}
-async function latestDelivery(kind){const[rows]=await pool.query('SELECT payload_ciphertext AS ciphertext,payload_nonce AS nonce,payload_auth_tag AS authTag FROM auth_delivery_outbox WHERE user_id=? AND kind=? ORDER BY created_at DESC LIMIT 1',[userId,kind]);if(!rows[0])throw new Error(`missing ${kind} outbox`);return openAuthDelivery(rows[0],masterKey);}
-async function cleanup(){if(!userId)return;await pool.query('DELETE FROM auth_idempotency_records WHERE request_id=?',[requestId]);await pool.query('DELETE FROM auth_delivery_outbox WHERE user_id=?',[userId]);await pool.query('DELETE FROM auth_security_events WHERE user_id=? OR request_id=?',[userId,requestId]);await pool.query('DELETE FROM auth_action_tokens WHERE user_id=?',[userId]);await pool.query('DELETE FROM user_sessions WHERE user_id=?',[userId]);await pool.query('DELETE FROM users WHERE id=?',[userId]);}
-try{
-  const[versionRows]=await pool.query('SELECT VERSION() AS version,@@character_set_server AS charset,DATABASE() AS database_name,CURRENT_USER() AS account_name');const runtime=versionRows[0];if(!String(runtime.version).startsWith('5.7.')||runtime.charset!=='utf8mb4'||runtime.database_name!=='product_scout'||!String(runtime.account_name).startsWith('product_scout@'))throw new Error('requires MySQL57 utf8mb4 product_scout business account');
-  await ensureMigrations();await ensureUsernameMigration();const repository=new MySqlAuthRepository(pool);const delivery=new EncryptedOutboxAuthDelivery(new MySqlAuthOutboxStore(pool),masterKey);const service=new LocalAuthService({repository,delivery,passwordHasher:createArgon2PasswordHasher({memoryCost:19456,timeCost:2,parallelism:1}),policy:{passwordMinLength:12,passwordMaxLength:128,sessionTtlMinutes:720,actionTokenTtlMinutes:15,maxFailedAttempts:3,lockMinutes:15}});const context={requestId,traceId,userAgent:'m01-live-gate',ipAddress:'127.0.0.1'};
-  const registered=await service.register({email,password:'Correct-Horse-42'},context);userId=registered.id;const verification=await latestDelivery('email_verification');await service.verifyEmail(verification.token,context);const username=normalizeUsername(`gate-${requestId.slice(0,12)}`);await pool.query('UPDATE users SET username=?,username_normalized=? WHERE id=?',[username.username,username.normalized,userId]);const login=await service.login({identifier:email,password:'Correct-Horse-42'},context);const usernameLogin=await service.login({identifier:username.username.toUpperCase(),password:'Correct-Horse-42'},context);if((await service.listSessions(usernameLogin.token)).length!==2)throw new Error('email and username session persistence mismatch');await service.requestPasswordReset(email,context);const reset=await latestDelivery('password_reset');await service.resetPassword(reset.token,'New-Correct-Horse-43',context);try{await service.authenticate(login.token);throw new Error('old session remained active');}catch(error){if(error?.code!=='session_invalid')throw error;}const recovered=await service.login({identifier:username.username,password:'New-Correct-Horse-43'},context);await service.revokeSession(recovered.token,recovered.session.id,context);const workerResult=await processAuthDeliveryOnce({pool,workerId:'m01-live-worker',masterKey,provider:new PendingMailProvider()});if(workerResult.status!=='blocked_provider')throw new Error('pending provider did not block outbox truthfully');await cleanup();console.log(JSON.stringify({status:'passed',module:'M01-01',mysql:runtime.version,password_hash:'argon2id',verification:'single_use',login_identifiers:'email_and_username',session:'hashed_and_revoked',outbox:'aes_256_gcm_blocked_provider',cleanup:'passed',request_id:requestId,trace_id:traceId}));
-}catch(error){console.error(JSON.stringify({status:'blocked',code:'local_auth_live_failed',message:error instanceof Error?error.message:'unknown',request_id:requestId,trace_id:traceId}));process.exitCode=2;}
-finally{try{await cleanup();}catch{}await pool.end();}
+const requestId = randomUUID();
+const traceId = requestId;
+const email = `m01-01-${requestId}@example.test`;
+const config = loadRuntimeConfig(process.env, "api");
+const pool = createDatabasePool(config);
+const masterKey = Buffer.alloc(32, 11).toString("hex");
+let userId = "";
+const migrations = [
+  ["users", "0008a_users_m01_01.up.sql"],
+  ["user_sessions", "0008b_sessions_m01_01.up.sql"],
+  ["auth_action_tokens", "0008c_action_tokens_m01_01.up.sql"],
+  ["auth_security_events", "0008d_security_events_m01_01.up.sql"],
+  ["auth_delivery_outbox", "0008e_delivery_outbox_m01_01.up.sql"],
+  ["auth_idempotency_records", "0008f_idempotency_m01_01.up.sql"],
+];
+async function ensureMigrations() {
+  for (const [table, file] of migrations) {
+    const [rows] = await pool.query(
+      "SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?",
+      [table],
+    );
+    if (Number(rows[0].count) === 0)
+      await pool.query(await readFile(`database/migrations/${file}`, "utf8"));
+  }
+}
+async function ensureUsernameMigration() {
+  const [rows] = await pool.query(
+    "SELECT COUNT(*) AS count FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='users' AND column_name='username_normalized'",
+  );
+  if (Number(rows[0].count) === 0)
+    await pool.query(await readFile("database/migrations/0067_usernames_login.up.sql", "utf8"));
+}
+async function latestDelivery(kind) {
+  const [rows] = await pool.query(
+    "SELECT payload_ciphertext AS ciphertext,payload_nonce AS nonce,payload_auth_tag AS authTag FROM auth_delivery_outbox WHERE user_id=? AND kind=? ORDER BY created_at DESC LIMIT 1",
+    [userId, kind],
+  );
+  if (!rows[0]) throw new Error(`missing ${kind} outbox`);
+  return openAuthDelivery(rows[0], masterKey);
+}
+async function cleanup() {
+  if (!userId) return;
+  await pool.query("DELETE FROM auth_idempotency_records WHERE request_id=?", [requestId]);
+  await pool.query("DELETE FROM auth_delivery_outbox WHERE user_id=?", [userId]);
+  await pool.query("DELETE FROM auth_security_events WHERE user_id=? OR request_id=?", [
+    userId,
+    requestId,
+  ]);
+  await pool.query("DELETE FROM auth_action_tokens WHERE user_id=?", [userId]);
+  await pool.query("DELETE FROM user_sessions WHERE user_id=?", [userId]);
+  await pool.query("DELETE FROM users WHERE id=?", [userId]);
+}
+try {
+  const [versionRows] = await pool.query(
+    "SELECT VERSION() AS version,@@character_set_server AS charset,DATABASE() AS database_name,CURRENT_USER() AS account_name",
+  );
+  const runtime = versionRows[0];
+  if (
+    !String(runtime.version).startsWith("5.7.") ||
+    runtime.charset !== "utf8mb4" ||
+    runtime.database_name !== "product_scout" ||
+    !String(runtime.account_name).startsWith("product_scout@")
+  )
+    throw new Error("requires MySQL57 utf8mb4 product_scout business account");
+  await ensureMigrations();
+  await ensureUsernameMigration();
+  const repository = new MySqlAuthRepository(pool);
+  const delivery = new EncryptedOutboxAuthDelivery(new MySqlAuthOutboxStore(pool), masterKey);
+  const service = new LocalAuthService({
+    repository,
+    delivery,
+    passwordHasher: createArgon2PasswordHasher({ memoryCost: 19456, timeCost: 2, parallelism: 1 }),
+    policy: {
+      passwordMinLength: 12,
+      passwordMaxLength: 128,
+      sessionTtlMinutes: 720,
+      actionTokenTtlMinutes: 15,
+      maxFailedAttempts: 3,
+      lockMinutes: 15,
+    },
+  });
+  const context = { requestId, traceId, userAgent: "m01-live-gate", ipAddress: "127.0.0.1" };
+  const registered = await service.register({ email, password: "Correct-Horse-42" }, context);
+  userId = registered.id;
+  const verification = await latestDelivery("email_verification");
+  await service.verifyEmail(verification.token, context);
+  const username = normalizeUsername(`gate-${requestId.slice(0, 12)}`);
+  await pool.query("UPDATE users SET username=?,username_normalized=? WHERE id=?", [
+    username.username,
+    username.normalized,
+    userId,
+  ]);
+  const login = await service.login({ identifier: email, password: "Correct-Horse-42" }, context);
+  const usernameLogin = await service.login(
+    { identifier: username.username.toUpperCase(), password: "Correct-Horse-42" },
+    context,
+  );
+  if ((await service.listSessions(usernameLogin.token)).length !== 2)
+    throw new Error("email and username session persistence mismatch");
+  await service.requestPasswordReset(email, context);
+  const reset = await latestDelivery("password_reset");
+  await service.resetPassword(reset.token, "New-Correct-Horse-43", context);
+  try {
+    await service.authenticate(login.token);
+    throw new Error("old session remained active");
+  } catch (error) {
+    if (error?.code !== "session_invalid") throw error;
+  }
+  const recovered = await service.login(
+    { identifier: username.username, password: "New-Correct-Horse-43" },
+    context,
+  );
+  await service.revokeSession(recovered.token, recovered.session.id, context);
+  const workerResult = await processAuthDeliveryOnce({
+    pool,
+    workerId: "m01-live-worker",
+    masterKey,
+    provider: new PendingMailProvider(),
+  });
+  if (workerResult.status !== "blocked_provider")
+    throw new Error("pending provider did not block outbox truthfully");
+  await cleanup();
+  console.log(
+    JSON.stringify({
+      status: "passed",
+      module: "M01-01",
+      mysql: runtime.version,
+      password_hash: "argon2id",
+      verification: "single_use",
+      login_identifiers: "email_and_username",
+      session: "hashed_and_revoked",
+      outbox: "aes_256_gcm_blocked_provider",
+      cleanup: "passed",
+      request_id: requestId,
+      trace_id: traceId,
+    }),
+  );
+} catch (error) {
+  console.error(
+    JSON.stringify({
+      status: "blocked",
+      code: "local_auth_live_failed",
+      message: error instanceof Error ? error.message : "unknown",
+      request_id: requestId,
+      trace_id: traceId,
+    }),
+  );
+  process.exitCode = 2;
+} finally {
+  try {
+    await cleanup();
+  } catch {}
+  await pool.end();
+}
