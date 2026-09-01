@@ -223,8 +223,9 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
     "CONVERT(e.id USING utf8mb4)",
     "LEFT(CONVERT(id USING utf8mb4),8)",
     "CONVERT(id USING utf8mb4)",
+    "CONVERT(last_error_code USING utf8mb4)",
   ])
-    assert.ok(repo.includes(expression), `missing MySQL 5.7 UUID collation guard: ${expression}`);
+    assert.ok(repo.includes(expression), `missing MySQL 5.7 ASCII collation guard: ${expression}`);
   assert.match(repo, /\/tasks\/[\s\S]*\/opportunities\/[\s\S]*evidence=[\s\S]*task=/);
   assert.match(openapi, /\/me\/global-search:/);
   assert.match(openapi, /\/me\/quick-actions:/);

@@ -28,7 +28,7 @@ export class MySqlDiscoveryRepository implements DiscoveryRepository {
         "FROM raw_evidence e JOIN providers p ON p.id=e.provider_id " +
           "WHERE e.organization_id=? AND e.workspace_id=?",
         "UNION ALL SELECT id,'collection_task',id,CONCAT('采集任务 · ',LEFT(CONVERT(id USING utf8mb4),8))," +
-          "CONCAT(status,IF(last_error_code IS NULL,'',CONCAT(' · ',last_error_code)))," +
+          "CONCAT(status,IF(last_error_code IS NULL,'',CONCAT(' · ',CONVERT(last_error_code USING utf8mb4))))," +
           "status,NULL,NULL,CONCAT('/platform-admin/collection?task=',CONVERT(id USING utf8mb4))," +
           "'collection:replay',updated_at",
         "FROM collection_tasks WHERE organization_id=? AND workspace_id=?",
