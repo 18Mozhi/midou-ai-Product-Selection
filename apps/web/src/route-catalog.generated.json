@@ -1299,7 +1299,7 @@
         "view": "ApiCoverageDashboard",
         "domain": "platform-api-coverage",
         "status": "verified",
-        "statusDetail": "machine_catalog_and_live_report_join_verified"
+        "statusDetail": "schema3_method_path_operation_evidence_manifest_and_live_report_join_verified"
       }
     },
     {

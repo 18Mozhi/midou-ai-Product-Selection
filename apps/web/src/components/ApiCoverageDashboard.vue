@@ -11,6 +11,16 @@ const outcomeName = (value: string) =>
     not_run: "未执行",
   })[value] ?? value;
 const sourceName = (value: string) => value.replaceAll("_", " · ");
+const dimensionName = (value: string) =>
+  ({
+    normal: "正常请求",
+    authorization: "鉴权拒绝",
+    parameters: "参数校验",
+    idempotency: "幂等/并发",
+    fault: "故障注入",
+  })[value] ?? value;
+const evidenceStatusName = (value: string) =>
+  ({ passed: "通过", failed: "失败", not_run: "未执行", not_applicable: "不适用" })[value] ?? value;
 const percent = (value: number, total: number) =>
   total ? `${((value * 100) / total).toFixed(1)}%` : "0.0%";
 </script>
@@ -19,7 +29,9 @@ const percent = (value: number, total: number) =>
   <section class="api-coverage" data-testid="api-coverage-dashboard">
     <header class="api-coverage__truth" :data-state="data.report_status">
       <div>
-        <strong>{{ data.report_status === "current" ? "当前证据可用" : "当前证据待补充" }}</strong>
+        <strong>{{
+          data.report_status === "current" ? "当前证据清单可用" : "当前证据待补充"
+        }}</strong>
         <p v-if="data.report_status === 'missing'">
           尚无当前发布版本的运行证据，接口登记数量不代表实际运行结果。
         </p>
@@ -45,7 +57,11 @@ const percent = (value: number, total: number) =>
         <small>操作基线</small><strong>{{ data.summary.operations }}</strong>
       </article>
       <article>
-        <small>实时覆盖率</small><strong>{{ data.summary.coverage_percent.toFixed(2) }}%</strong>
+        <small>路由探测率</small><strong>{{ data.summary.coverage_percent.toFixed(2) }}%</strong>
+      </article>
+      <article>
+        <small>证据维度覆盖</small
+        ><strong>{{ data.summary.evidence_coverage_percent.toFixed(2) }}%</strong>
       </article>
       <article>
         <small>已有 UI 消费</small><strong>{{ data.summary.ui_consumed }}</strong>
@@ -63,6 +79,16 @@ const percent = (value: number, total: number) =>
             <span>{{ outcomeName(item.key) }}</span
             ><b>{{ item.count }}</b
             ><small>{{ percent(item.count, data.summary.operations) }}</small>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h3>证据维度</h3>
+        <ul>
+          <li v-for="item in data.evidence_dimensions" :key="item.key">
+            <span>{{ dimensionName(item.key) }}</span
+            ><b>{{ item.passed }}/{{ item.applicable }}</b
+            ><small>失败 {{ item.failed }} · 未执行 {{ item.not_run }}</small>
           </li>
         </ul>
       </section>
@@ -119,6 +145,7 @@ const percent = (value: number, total: number) =>
             <tr>
               <th>接口</th>
               <th>运行结果</th>
+              <th>证据维度</th>
               <th>角色</th>
               <th>数据来源</th>
               <th>UI 消费方</th>
@@ -128,11 +155,26 @@ const percent = (value: number, total: number) =>
           <tbody>
             <tr v-for="operation in data.operations" :key="`${operation.method}:${operation.path}`">
               <td>
-                <b>{{ operation.method }}</b
-                ><code>{{ operation.path }}</code>
+                <b>{{ operation.method }}</b>
+                <span>
+                  <code>{{ operation.path }}</code>
+                  <small>{{ operation.operation_id }}</small>
+                </span>
               </td>
               <td>
                 <span :data-state="operation.outcome">{{ outcomeName(operation.outcome) }}</span>
+              </td>
+              <td class="api-coverage__evidence">
+                <span
+                  v-for="(item, key) in operation.evidence"
+                  :key="key"
+                  :data-state="item.status"
+                  :title="
+                    [item.test_id || '尚无测试 ID', item.latest_result].filter(Boolean).join(' · ')
+                  "
+                >
+                  {{ dimensionName(String(key)) }}：{{ evidenceStatusName(item.status) }}
+                </span>
               </td>
               <td>
                 {{ operation.verification_role || operation.expected_roles.join("、") || "公开" }}
@@ -181,7 +223,7 @@ const percent = (value: number, total: number) =>
 }
 .api-coverage__kpis {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 12px;
 }
 .api-coverage__kpis article {
@@ -243,7 +285,7 @@ const percent = (value: number, total: number) =>
 }
 .api-coverage table {
   width: 100%;
-  min-width: 980px;
+  min-width: 1180px;
   border-collapse: collapse;
 }
 .api-coverage th,
@@ -262,6 +304,20 @@ const percent = (value: number, total: number) =>
   overflow-wrap: anywhere;
   color: var(--so-text-muted);
 }
+.api-coverage td:first-child small {
+  display: block;
+  margin-top: 4px;
+  color: var(--so-text-muted);
+  overflow-wrap: anywhere;
+}
+.api-coverage__evidence {
+  min-width: 160px;
+}
+.api-coverage__evidence span {
+  display: block;
+  margin-bottom: 3px;
+  font-size: var(--so-font-meta);
+}
 .api-coverage [data-state="success"] {
   color: var(--so-success);
 }
@@ -271,8 +327,15 @@ const percent = (value: number, total: number) =>
   color: var(--so-danger);
 }
 .api-coverage [data-state="empty"],
-.api-coverage [data-state="not_run"] {
+.api-coverage [data-state="not_run"],
+.api-coverage [data-state="not_applicable"] {
   color: var(--so-warning);
+}
+.api-coverage [data-state="passed"] {
+  color: var(--so-success);
+}
+.api-coverage [data-state="failed"] {
+  color: var(--so-danger);
 }
 @media (max-width: 760px) {
   .api-coverage__truth,
@@ -325,15 +388,18 @@ const percent = (value: number, total: number) =>
     content: "验收结果";
   }
   .api-coverage td:nth-child(3)::before {
-    content: "角色";
+    content: "证据维度";
   }
   .api-coverage td:nth-child(4)::before {
-    content: "数据来源";
+    content: "角色";
   }
   .api-coverage td:nth-child(5)::before {
-    content: "UI 消费方";
+    content: "数据来源";
   }
   .api-coverage td:nth-child(6)::before {
+    content: "UI 消费方";
+  }
+  .api-coverage td:nth-child(7)::before {
     content: "爬虫副作用";
   }
 }

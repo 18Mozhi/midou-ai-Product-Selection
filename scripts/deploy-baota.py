@@ -17,6 +17,7 @@ import subprocess
 import tarfile
 import tempfile
 import time
+import urllib.error
 import urllib.request
 from ctypes import wintypes
 from pathlib import Path
@@ -243,6 +244,7 @@ def build_package(repo: Path, source_identity: dict[str, str], skip_build: bool,
         "config/route-catalog.json",
         "config/api-coverage-metadata.json",
         "infra/baota/production-acceptance-manifest.json",
+        "verification/api-operation-evidence.schema.json",
         "docs/openapi.yaml",
     ):
         source = repo / relative
@@ -321,7 +323,7 @@ def panel_deploy_source(build_sha: str, initialize_layout: bool) -> str:
         "initialize": initialize_layout,
     }
     payload = json.dumps(values, ensure_ascii=False)
-    return f'''import json, os, shutil, sys, traceback
+    return f'''import json, os, re, shutil, subprocess, sys, traceback
 from pathlib import Path
 sys.path.insert(0, "/www/server/panel")
 sys.path.insert(0, "/www/server/panel/class")
@@ -466,6 +468,62 @@ try:
     if site.get("path") != str(root / "frontend"):
         panel_ok(panelSite.panelSite().SetPath(site_get), "update website path")
 
+    route_catalog = json.loads((root / "backend/config/route-catalog.json").read_text(encoding="utf-8"))
+    route_patterns = []
+    for route in route_catalog.get("routes", []):
+        path = route.get("path")
+        if not isinstance(path, str) or route.get("acceptance") == "fallback":
+            continue
+        parts = []
+        for segment in path.split("/"):
+            if not segment:
+                parts.append("")
+            elif segment.startswith(":"):
+                parts.append("[^/]+")
+            else:
+                parts.append(re.escape(segment))
+        pattern = "/".join(parts) or "/"
+        route_patterns.append(pattern if pattern == "/" else pattern + "/?")
+    if len(route_patterns) != len(route_catalog.get("routes", [])) - 1:
+        raise RuntimeError("production SPA route catalog contains an unsupported fallback contract")
+    route_regex = "^(?:" + "|".join(sorted(set(route_patterns))) + ")$"
+    route_source = "location ~ " + route_regex + " {{\\n    try_files /index.html =404;\\n}}\\n"
+    route_include = config / "nginx-spa-routes.conf"
+    previous_include = route_include.read_text(encoding="utf-8") if route_include.is_file() else None
+    site_config = Path("/www/server/panel/vhost/nginx/midouai.medouai.com.conf")
+    if not site_config.is_file():
+        raise RuntimeError("BaoTa website Nginx config is missing")
+    previous_site = site_config.read_text(encoding="utf-8")
+    legacy_block = "location / {{\\n    try_files $uri $uri/ /index.html;\\n}}"
+    managed_block = "include /www/wwwroot/ai选品/config/nginx-spa-routes.conf;\\nerror_page 404 /index.html;\\n\\nlocation / {{\\n    try_files $uri $uri/ =404;\\n}}"
+    if managed_block in previous_site:
+        next_site = previous_site
+    elif legacy_block in previous_site and previous_site.count(legacy_block) == 1:
+        next_site = previous_site.replace(legacy_block, managed_block)
+    else:
+        raise RuntimeError("BaoTa website SPA fallback contract is not recognized")
+    nginx_backup_dir = backups / "nginx"
+    nginx_backup_dir.mkdir(mode=0o750, exist_ok=True)
+    nginx_backup = nginx_backup_dir / ("midouai.medouai.com.conf.before-" + v["build_sha"])
+    if not nginx_backup.exists():
+        nginx_backup.write_text(previous_site, encoding="utf-8")
+        os.chmod(nginx_backup, 0o600)
+    route_include.write_text(route_source, encoding="utf-8")
+    shutil.chown(route_include, user="root", group="www")
+    os.chmod(route_include, 0o640)
+    site_config.write_text(next_site, encoding="utf-8")
+    try:
+        subprocess.run(["/www/server/nginx/sbin/nginx", "-t"], check=True, capture_output=True, text=True)
+        subprocess.run(["/www/server/nginx/sbin/nginx", "-s", "reload"], check=True, capture_output=True, text=True)
+    except Exception:
+        site_config.write_text(previous_site, encoding="utf-8")
+        if previous_include is None:
+            route_include.unlink(missing_ok=True)
+        else:
+            route_include.write_text(previous_include, encoding="utf-8")
+        subprocess.run(["/www/server/nginx/sbin/nginx", "-t"], check=False, capture_output=True, text=True)
+        raise
+
     node_get = public.dict_obj()
     node_get.project_name = v["node_project"]
     node_get.project_cwd = str(root / "backend")
@@ -510,7 +568,7 @@ try:
         panel_ok(python_model.ChangeProjectConf(change), "update Python project")
 
     shutil.rmtree(stage)
-    result(True, "deployed", node_path=str(root / "backend"), python_path=str(root / "python"))
+    result(True, "deployed", node_path=str(root / "backend"), python_path=str(root / "python"), nginx_spa_404=True)
 except Exception as error:
     result(False, str(error))
 '''
@@ -563,6 +621,15 @@ def verify_public(build_sha: str) -> None:
                 available = json.load(response)
             with urllib.request.urlopen(f"{PUBLIC_BASE_URL}/api/v1/health/version", timeout=10) as response:
                 version = json.load(response)
+            with urllib.request.urlopen(f"{PUBLIC_BASE_URL}/login", timeout=10) as response:
+                known_route_status = response.status
+            unknown_route_status = None
+            try:
+                urllib.request.urlopen(
+                    f"{PUBLIC_BASE_URL}/__scoutops_missing_{build_sha[:12]}", timeout=10
+                )
+            except urllib.error.HTTPError as error:
+                unknown_route_status = error.code
             ready_status = ready.get("data", {}).get("status") or ready.get("status")
             available_status = available.get("data", {}).get("status") or available.get("status")
             if (
@@ -570,6 +637,8 @@ def verify_public(build_sha: str) -> None:
                 and version.get("data", {}).get("build_sha") == build_sha
                 and ready_status in ("ready", "healthy")
                 and available_status == "available"
+                and known_route_status == 200
+                and unknown_route_status == 404
             ):
                 return
         except Exception as error:  # noqa: BLE001 - retain latest health failure for handoff

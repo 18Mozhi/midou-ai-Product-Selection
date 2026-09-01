@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midouai.medouai.com/schemas/api-operation-evidence.schema.json",
+  "title": "ScoutOps production API operation evidence manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "status",
+    "path_count",
+    "operation_count",
+    "operation_id_policy",
+    "catalog_fingerprint",
+    "operations",
+    "captured_at",
+    "trace_id"
+  ],
+  "properties": {
+    "schema_version": { "const": 3 },
+    "status": { "const": "passed" },
+    "path_count": { "const": 223 },
+    "operation_count": { "const": 256 },
+    "operation_id_policy": { "const": "method_path_v1" },
+    "catalog_fingerprint": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "trace_id": { "type": "string", "minLength": 1 },
+    "operations": {
+      "type": "array",
+      "minItems": 256,
+      "maxItems": 256,
+      "items": {
+        "type": "object",
+        "required": [
+          "operation_id",
+          "method",
+          "path_template",
+          "status",
+          "outcome",
+          "probes",
+          "evidence"
+        ],
+        "properties": {
+          "operation_id": { "type": "string", "pattern": "^[a-z][a-z0-9_]+$" },
+          "method": { "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+          "path_template": { "type": "string", "pattern": "^/" },
+          "status": { "type": "integer", "minimum": 100, "maximum": 599 },
+          "outcome": {
+            "enum": ["success", "empty", "blocked", "unauthenticated", "unauthorized"]
+          },
+          "probes": { "type": "array", "minItems": 1 },
+          "evidence": {
+            "type": "object",
+            "required": ["normal", "authorization", "parameters", "idempotency", "fault"],
+            "additionalProperties": false,
+            "properties": {
+              "normal": { "$ref": "#/$defs/evidenceDimension" },
+              "authorization": { "$ref": "#/$defs/evidenceDimension" },
+              "parameters": { "$ref": "#/$defs/evidenceDimension" },
+              "idempotency": { "$ref": "#/$defs/evidenceDimension" },
+              "fault": { "$ref": "#/$defs/evidenceDimension" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "evidenceDimension": {
+      "type": "object",
+      "required": ["applicable", "status", "test_id", "latest_result"],
+      "additionalProperties": false,
+      "properties": {
+        "applicable": { "type": "boolean" },
+        "status": { "enum": ["passed", "failed", "not_run", "not_applicable"] },
+        "test_id": { "type": ["string", "null"] },
+        "latest_result": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

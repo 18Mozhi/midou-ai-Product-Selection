@@ -192,6 +192,7 @@
       "deploymentStatus": "healthy",
       "target": "192.168.1.220 /www/wwwroot/ai选品 (domain: midouai.medouai.com)",
       "productionVerifier": "../scripts/verify-baota-deployment.mjs --production",
+      "spaHttpStatusBoundary": "deploy-baota generates an exact production route include from config/route-catalog.json; registered SPA deep links return index.html with HTTP 200 while unknown paths render the same fallback document with HTTP 404; BaoTa nginx -t must pass before reload and the previous site config is retained under project backups",
       "runtimeScope": "one Huizhou host with fixed frontend backend python config runtime backups directories and BaoTa-managed ai选品 Node plus ai选品-python Python 3.12 projects; disk and capacity are not product completion gates",
       "status": "verified",
       "statusDetail": "module_verified"
@@ -1665,6 +1666,7 @@
         "../apps/web/src/components/PlatformGovernanceCenter.vue",
         "../database/migrations/0040_platform_messages.up.sql",
         "../config/api-coverage-metadata.json",
+        "../verification/api-operation-evidence.schema.json",
         "../scripts/verify-production-api-coverage.mjs"
       ],
       "routes": [
@@ -1689,7 +1691,7 @@
       "scope": "platform-global factual summary and task trend chart plus cross-organization trend opportunity competitor supplier data, audited CSV export, score/cost/approval/automation/release governance, paginated content moderation, in-app notification draft creation editing publishing and cancellation, retained historical email delivery audit APIs, unified backend database cache file task-processing and crawler status management with dedicated operations links, a six-service dependency topology with bounded fault-propagation review scope and preserved status snapshot during refresh timeout or dependency failure, browser-tab SSE reconnect-rate and fallback-refresh observations, a bounded cross-runtime chain-log search grouped by trace_id with URL-backed filters, preserved refresh snapshots and idempotent audited export, and a current API coverage dashboard grouped by role, outcome, declared data source, UI consumer and crawler side effect",
       "presentationBoundary": "every platform table keeps shared desktop column freeze visibility and density controls; at 390 pixels provider health data governance content notifications retained email and each trace-grouped log event render as summary cards with named side drawers, preserve exact task and provider deep links, and keep identifiers inside technical details without horizontal wide tables; platform governance content system status and chain logs preserve the last verified facts during refresh, timeout or dependency failure, and status exposes explicit zero-task and zero-source states; chain-log query and source filters are URL-backed and show Chinese event resource and status labels while retaining raw codes in technical context; content and governance use twenty-row server pagination with URL-backed applied filters and page; content exposes all four persisted read states and prevents submitting the already-current moderation state",
       "metricQueryBoundary": "the dashboard repository composes four read-only MySQL 5.7 metric domains in parallel: organization user and provider scale, collection task queue provider health and trend, quality alerts and recent platform activity, and file storage totals and growth; response assembly null or unknown semantics and the correlated dashboard view plus platform audit transaction remain in the repository while management writes exports and moderation are unchanged",
-      "truthBoundary": "API coverage keeps the browser route segment api-coverage but explicitly maps it at the shared page request boundary to the OpenAPI domain enum api_coverage; it reads the current OpenAPI and machine metadata on every request and accepts production outcomes only when schema 2, counts and catalog SHA-256 match; missing or older reports remain missing or outdated and contribute zero verified operations. No sample remains unknown or null; governance summary values and content active/irrelevant/stale/archived counts are untruncated MySQL counts, while filtered totals are independently counted before pagination; multilingual content search explicitly converts the ASCII market field to utf8mb4 without changing stored data; content writes remain active/irrelevant/stale only and preserve optimistic version, idempotency, mandatory reason, trend event and platform audit contracts; log responses and exports exclude raw audit metadata task payload crawler result stderr credentials cookies and internal paths; no invented uptime and capacity claims; /platform-admin/email and all email enable controls stay closed while Mail provider is pending_provider_selection",
+      "truthBoundary": "API coverage keeps the browser route segment api-coverage but explicitly maps it at the shared page request boundary to the OpenAPI domain enum api_coverage; it reads the current OpenAPI and machine metadata on every request and accepts production outcomes only when schema 3, method_path_v1 operation IDs, counts and catalog SHA-256 match. All 256 operations retain independent normal authorization parameter idempotency and fault evidence states with test IDs and latest results; missing dimensions remain not_run and missing or older reports contribute zero verified operations. No sample remains unknown or null; governance summary values and content active/irrelevant/stale/archived counts are untruncated MySQL counts, while filtered totals are independently counted before pagination; multilingual content search explicitly converts the ASCII market field to utf8mb4 without changing stored data; content writes remain active/irrelevant/stale only and preserve optimistic version, idempotency, mandatory reason, trend event and platform audit contracts; log responses and exports exclude raw audit metadata task payload crawler result stderr credentials cookies and internal paths; no invented uptime and capacity claims; /platform-admin/email and all email enable controls stay closed while Mail provider is pending_provider_selection",
       "permission": "platform:operate on the API; platform role navigation guard on the page; dashboard reads and platform data or log exports write correlated platform audit events, with same-origin enforcement on exports",
       "configuration": [
         "PLATFORM_DASHBOARD_DEFAULT_WINDOW",
@@ -1704,7 +1706,7 @@
       ],
       "verificationRunId": "d424c7a8-eb72-4ddd-b9aa-3ce93ffbbe96",
       "status": "implemented",
-      "statusDetail": "platform_dashboard_data_governance_and_content_factual_status_bounded_pagination_url_failure_permission_worker_projection_and_responsive_verification_completed"
+      "statusDetail": "platform_dashboard_and_schema3_operation_evidence_manifest_live_report_join_verified"
     },
     "collectionOperationsConsole": {
       "module": "M06-03",
@@ -3099,7 +3101,7 @@
       "view": "ApiCoverageDashboard",
       "domain": "platform-api-coverage",
       "status": "verified",
-      "statusDetail": "machine_catalog_and_live_report_join_verified"
+      "statusDetail": "schema3_method_path_operation_evidence_manifest_and_live_report_join_verified"
     },
     {
       "path": "/platform-admin/operations",

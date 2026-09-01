@@ -13,7 +13,7 @@ M07-03 当前部署目标为惠州 `192.168.1.220`、`midouai.medouai.com` 与 `
 ## 运行与安全边界
 
 - 网站只公开 80/443；统一后端内的 API 绑定 `127.0.0.1:4101`，MySQL/Redis 只绑定本机，内部 Worker 不监听公网。
-- Nginx 同时反代 `/api/`、`/open/` 和无缓冲 SSE；静态站点回退到 `index.html`，HTTP 强制跳转 HTTPS，并启用 HSTS 与安全响应头。
+- Nginx 同时反代 `/api/`、`/open/` 和无缓冲 SSE；部署器从当前 `config/route-catalog.json` 生成受控 SPA 路由 include，登记路由直达 `index.html` 时返回 200，未知路径仍渲染同一 404 页面但保留 HTTP 404。站点配置修改前写入本项目备份目录，只有 `nginx -t` 通过才 reload，失败立即恢复；HTTP 强制跳转 HTTPS，并启用 HSTS 与安全响应头。
 - API、Worker、Crawler 从 `config/schema.json` 对应环境组读取宝塔受限配置；浏览器只可读取 `VITE_API_BASE_URL`。
 - Worker/Crawler 输出结构化心跳并优雅处理 SIGTERM/SIGINT。Node 和 Python 项目都由宝塔展示、启停并轮转日志；日志禁止密码、Cookie、Token、API Key、私钥和主密钥。
 - S0 只声明 100 用户和 5–20 并发业务用户，不声明多节点或 10,000 用户能力；M07-04 仅签发同机逻辑隔离恢复，不签发整机或异地灾备。

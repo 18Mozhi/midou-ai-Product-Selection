@@ -25,6 +25,11 @@ function parseOperations(source) {
   let path = null;
   let operation = null;
   for (const line of source.split(/\r?\n/)) {
+    if (/^components:\s*$/.test(line)) {
+      path = null;
+      operation = null;
+      continue;
+    }
     const pathMatch = line.match(/^  (\/[^:]+):\s*$/);
     if (pathMatch) {
       path = pathMatch[1];
@@ -34,17 +39,41 @@ function parseOperations(source) {
     }
     const methodMatch = line.match(/^    ([a-z]+):\s*$/);
     if (path && methodMatch && METHODS.has(methodMatch[1])) {
-      operation = { path, method: methodMatch[1].toUpperCase(), required_capability: null };
+      operation = {
+        path,
+        method: methodMatch[1].toUpperCase(),
+        required_capability: null,
+        has_parameters: false,
+        has_request_body: false,
+        has_idempotency_key: false,
+        is_public: false,
+      };
       operations.push(operation);
       continue;
     }
+    if (operation && /^      parameters:\s*$/.test(line)) operation.has_parameters = true;
+    if (operation && /^      requestBody:\s*$/.test(line)) operation.has_request_body = true;
+    if (operation && line.includes("#/components/parameters/IdempotencyKey"))
+      operation.has_idempotency_key = true;
+    if (operation && /^      security:\s*\[\]\s*$/.test(line)) operation.is_public = true;
     const capabilityMatch = line.match(/^      x-required-capability:\s*(\S+)\s*$/);
     if (operation && capabilityMatch) operation.required_capability = capabilityMatch[1];
   }
   return { paths: [...paths], operations };
 }
 
+const operationId = (operation) =>
+  `${operation.method.toLowerCase()}_${operation.path
+    .replace(/\{([^}]+)\}/g, "by_$1")
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+    .replace(/[^A-Za-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "")
+    .toLowerCase()}`;
+
 const openapi = parseOperations(await readFile(manifest.baseline.openapiFile, "utf8"));
+const operationIds = openapi.operations.map(operationId);
+if (new Set(operationIds).size !== operationIds.length)
+  throw new Error("openapi_operation_id_collision");
 const catalogFingerprint = createHash("sha256")
   .update(
     openapi.operations
@@ -123,18 +152,6 @@ for (const profile of profiles) {
       : (guard.body?.data?.capabilities ?? []);
 }
 
-const publicPaths = new Set([
-  "/health/live",
-  "/health/ready",
-  "/health/available",
-  "/health/version",
-  "/auth/register",
-  "/auth/email-verification/confirm",
-  "/auth/login",
-  "/auth/mfa/totp/verify",
-  "/auth/password-reset/request",
-  "/auth/password-reset/confirm",
-]);
 const safePathValue = (name) => {
   const exact = resourceIds[name];
   if (exact) return String(exact);
@@ -158,8 +175,7 @@ const authorizedProfile = (capability) =>
   profiles.find((profile) => !capability || profile.capabilities.includes(capability)) ??
   profiles[0];
 const unauthorizedProfile = (capability) =>
-  profiles.find((profile) => capability && !profile.capabilities.includes(capability)) ??
-  profiles[0];
+  profiles.find((profile) => capability && !profile.capabilities.includes(capability)) ?? null;
 const classify = (status, body) => {
   if (status === 401) return "unauthenticated";
   if (status === 403) return "unauthorized";
@@ -177,7 +193,7 @@ const classify = (status, body) => {
 const results = [];
 for (const operation of openapi.operations) {
   const isWrite = !["GET", "HEAD"].includes(operation.method);
-  const isPublic = publicPaths.has(operation.path);
+  const isPublic = operation.is_public;
   const profile = isWrite
     ? isPublic
       ? null
@@ -186,36 +202,87 @@ for (const operation of openapi.operations) {
       ? null
       : authorizedProfile(operation.required_capability);
   const path = concretePath(operation.path);
-  const options = {
-    method: operation.method,
-    headers: headers({
-      ...(profile?.cookie ? { cookie: profile.cookie } : {}),
-      ...(isWrite
-        ? {
-            origin: baseUrl,
-            "content-type": "application/json",
-            "idempotency-key": randomUUID(),
-          }
-        : {}),
-    }),
-    ...(isWrite ? { body: "{}" } : {}),
+  const id = operationId(operation);
+  const runProbe = async ({ kind, probeProfile }) => {
+    const { response, body } = await request(path, {
+      method: operation.method,
+      headers: headers({
+        ...(probeProfile?.cookie ? { cookie: probeProfile.cookie } : {}),
+        ...(isWrite
+          ? {
+              origin: baseUrl,
+              "content-type": "application/json",
+              "idempotency-key": randomUUID(),
+            }
+          : {}),
+      }),
+      ...(isWrite ? { body: "{}" } : {}),
+    });
+    if (
+      response.status === 404 &&
+      (/^Route .* not found$/i.test(body?.message ?? "") || body?.code === "FST_ERR_NOT_FOUND")
+    )
+      throw new Error(`openapi_operation_route_not_found:${operation.method}:${operation.path}`);
+    return {
+      test_id: `production:${traceId}:${id}:${kind}`,
+      kind,
+      role: probeProfile?.role ?? null,
+      status: response.status,
+      outcome: classify(response.status, body),
+      error_code: typeof body?.code === "string" ? body.code.slice(0, 120) : null,
+      request_id: response.headers.get("x-request-id"),
+      trace_id: response.headers.get("x-trace-id") ?? traceId,
+    };
   };
-  const { response, body } = await request(path, options);
-  if (
-    response.status === 404 &&
-    (/^Route .* not found$/i.test(body?.message ?? "") || body?.code === "FST_ERR_NOT_FOUND")
-  )
-    throw new Error(`openapi_operation_route_not_found:${operation.method}:${operation.path}`);
+  const primaryKind = isWrite ? (isPublic ? "parameters" : "authorization") : "normal";
+  const primary = await runProbe({ kind: primaryKind, probeProfile: profile });
+  const probes = [primary];
+  if (!isWrite && !isPublic)
+    probes.push(await runProbe({ kind: "authorization", probeProfile: null }));
+  const evidenceFor = (kind, applicable) => {
+    if (!applicable)
+      return { applicable: false, status: "not_applicable", test_id: null, latest_result: null };
+    const probe = probes.find((candidate) => candidate.kind === kind);
+    if (!probe) return { applicable: true, status: "not_run", test_id: null, latest_result: null };
+    const passed =
+      kind === "normal"
+        ? ["success", "empty"].includes(probe.outcome)
+        : kind === "authorization"
+          ? ["unauthenticated", "unauthorized"].includes(probe.outcome)
+          : kind === "parameters"
+            ? probe.status >= 400 && ![401, 403, 404].includes(probe.status)
+            : false;
+    return {
+      applicable: true,
+      status: passed ? "passed" : "failed",
+      test_id: probe.test_id,
+      latest_result: `${probe.status}:${probe.outcome}${probe.error_code ? `:${probe.error_code}` : ""}`,
+    };
+  };
   results.push({
+    operation_id: id,
     method: operation.method,
     path_template: operation.path,
     concrete_path: path,
     required_capability: operation.required_capability,
-    role: profile?.role ?? null,
-    status: response.status,
-    outcome: classify(response.status, body),
-    request_id: response.headers.get("x-request-id"),
-    trace_id: response.headers.get("x-trace-id") ?? traceId,
+    role: primary.role,
+    status: primary.status,
+    outcome: primary.outcome,
+    request_id: primary.request_id,
+    trace_id: primary.trace_id,
+    probes,
+    evidence: {
+      normal: evidenceFor("normal", true),
+      authorization: evidenceFor("authorization", !isPublic),
+      parameters: evidenceFor("parameters", operation.has_parameters || operation.has_request_body),
+      idempotency: {
+        applicable: operation.has_idempotency_key,
+        status: operation.has_idempotency_key ? "not_run" : "not_applicable",
+        test_id: null,
+        latest_result: null,
+      },
+      fault: { applicable: true, status: "not_run", test_id: null, latest_result: null },
+    },
   });
 }
 
@@ -236,11 +303,12 @@ const counts = Object.fromEntries(
   ]),
 );
 const report = {
-  schema_version: 2,
+  schema_version: 3,
   status: "passed",
   base_url: baseUrl,
   path_count: openapi.paths.length,
   operation_count: results.length,
+  operation_id_policy: "method_path_v1",
   catalog_fingerprint: catalogFingerprint,
   counts,
   operations: results,

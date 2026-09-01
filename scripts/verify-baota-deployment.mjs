@@ -90,6 +90,9 @@ for (const token of [
   "location /api/v1/realtime/events",
   "proxy_buffering off",
   "127.0.0.1:4101",
+  "include /www/wwwroot/ai选品/config/nginx-spa-routes.conf",
+  "error_page 404 /index.html",
+  "try_files $uri $uri/ =404",
 ])
   if (!nginx.includes(token)) fail("nginx_contract_invalid", token);
 for (const file of [

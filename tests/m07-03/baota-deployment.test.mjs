@@ -33,6 +33,10 @@ test("M07-03.A06-A11 site, runtime, permission, config and logging contracts fai
   assert.match(nginx, /server_name midouai\.medouai\.com/);
   assert.match(nginx, /location \/open\//);
   assert.match(nginx, /location \/api\/v1\/realtime\/events[\s\S]*proxy_buffering off/);
+  assert.match(nginx, /include \/www\/wwwroot\/ai选品\/config\/nginx-spa-routes\.conf/);
+  assert.match(nginx, /error_page 404 \/index\.html/);
+  assert.match(nginx, /try_files \$uri \$uri\/ =404/);
+  assert.doesNotMatch(nginx, /try_files \$uri \$uri\/ \/index\.html/);
   for (const name of ["ai选品", "ai选品数据库", "ai选品缓存"])
     assert.equal(manifest.objects.find((item) => item.name === name).public, false);
   assert.deepEqual(manifest.restrictedConfig.browserAllowlist, ["VITE_API_BASE_URL"]);
@@ -74,6 +78,10 @@ test("M07-03 deployer runs source and built-artifact gates before remote credent
   );
   assert.ok(main.indexOf("build_package(") < main.indexOf("read_windows_credential()"));
   assert.match(deployer, /verify-baota-deployment\.mjs", "--preflight"/);
+  assert.match(deployer, /config \/ "nginx-spa-routes\.conf"/);
+  assert.match(deployer, /route\.get\("acceptance"\) == "fallback"/);
+  assert.match(deployer, /nginx", "-t"/);
+  assert.match(deployer, /unknown_route_status == 404/);
 });
 
 test("M07-03.A17 docs, OpenAPI, Feature Map and evidence schema stay synchronized", async () => {

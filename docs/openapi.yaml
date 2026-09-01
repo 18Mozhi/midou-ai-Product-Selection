@@ -4751,7 +4751,7 @@ paths:
   /platform/management:
     get:
       summary: Read platform data, governance, content, notification, email, system-status, API-coverage or operational-log facts
-      description: Requires platform:operate for content, notifications, email, status, logs, data and governance; api_coverage requires platform:superadmin. Returns bounded cross-organization operational facts without credentials, message secrets or raw crawler payloads. The content domain validates active/irrelevant/stale/archived read filters, returns untruncated status counts plus a filtered twenty-row page, and orders by last_seen_at then id; page values beyond the final page are clamped. The notifications domain validates task/approval/competitor/system categories, returns untruncated filtered notification counts, a stable twenty-row delivery page and an independently paged ten-row platform-message list; both page values are clamped. The api_coverage domain joins the current OpenAPI operation catalog, six-role route source, declared data-source/UI/crawler-effect metadata and latest production acceptance report on every read. A report contributes to the coverage rate only when its schema, path/operation counts and SHA-256 catalog fingerprint match the current OpenAPI. The logs domain correlates up to 200 API audit, Worker task and crawler run events by request_id and trace_id; crawler events additionally return their exact persisted collection task and provider association plus the provider display name so exceptional rows can link to the existing task and source pages. API or Worker rows without an exact provider association keep it null. The response only returns normalized status and error codes, not raw event metadata. The status domain also summarizes the latest persisted BaoTa API topology, Redis, MySQL, file-storage and Worker/Crawler scheduler observations, marking observations older than five minutes as stale and linking to the dedicated operations views.
+      description: Requires platform:operate for content, notifications, email, status, logs, data and governance; api_coverage requires platform:superadmin. Returns bounded cross-organization operational facts without credentials, message secrets or raw crawler payloads. The content domain validates active/irrelevant/stale/archived read filters, returns untruncated status counts plus a filtered twenty-row page, and orders by last_seen_at then id; page values beyond the final page are clamped. The notifications domain validates task/approval/competitor/system categories, returns untruncated filtered notification counts, a stable twenty-row delivery page and an independently paged ten-row platform-message list; both page values are clamped. The api_coverage domain joins the current OpenAPI operation catalog, six-role route source, declared data-source/UI/crawler-effect metadata and latest schema-3 production acceptance report on every read. Each operation uses the stable method_path_v1 operation ID and reports normal, authorization, parameter, idempotency and fault evidence independently; unexecuted dimensions remain not_run. A report contributes to the coverage rate only when its schema, ID policy, path/operation counts and SHA-256 catalog fingerprint match the current OpenAPI. The logs domain correlates up to 200 API audit, Worker task and crawler run events by request_id and trace_id; crawler events additionally return their exact persisted collection task and provider association plus the provider display name so exceptional rows can link to the existing task and source pages. API or Worker rows without an exact provider association keep it null. The response only returns normalized status and error codes, not raw event metadata. The status domain also summarizes the latest persisted BaoTa API topology, Redis, MySQL, file-storage and Worker/Crawler scheduler observations, marking observations older than five minutes as stale and linking to the dedicated operations views.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
@@ -8388,6 +8388,7 @@ components:
               catalog_fingerprint,
               summary,
               by_outcome,
+              evidence_dimensions,
               by_role,
               by_data_source,
               by_ui_consumer,
@@ -8402,15 +8403,20 @@ components:
             summary:
               type: object
               required:
-                [paths, operations, verified, coverage_percent, ui_consumed, crawler_side_effects]
+                [paths, operations, verified, coverage_percent, evidence_applicable, evidence_passed, evidence_coverage_percent, ui_consumed, crawler_side_effects]
               properties:
                 paths: { type: integer, minimum: 0 }
                 operations: { type: integer, minimum: 0 }
                 verified: { type: integer, minimum: 0 }
                 coverage_percent: { type: number, minimum: 0, maximum: 100 }
+                evidence_applicable: { type: integer, minimum: 0 }
+                evidence_passed: { type: integer, minimum: 0 }
+                evidence_coverage_percent: { type: number, minimum: 0, maximum: 100 }
                 ui_consumed: { type: integer, minimum: 0 }
                 crawler_side_effects: { type: integer, minimum: 0 }
             by_outcome: { type: array, items: { type: object, additionalProperties: true } }
+            evidence_dimensions:
+              { type: array, minItems: 5, maxItems: 5, items: { type: object, additionalProperties: true } }
             by_role: { type: array, items: { type: object, additionalProperties: true } }
             by_data_source: { type: array, items: { type: object, additionalProperties: true } }
             by_ui_consumer: { type: array, items: { type: object, additionalProperties: true } }

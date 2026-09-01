@@ -119,10 +119,60 @@ test("API coverage dashboard exposes the current production truth dimensions on 
           operations: 256,
           verified: 256,
           coverage_percent: 100,
+          evidence_applicable: 1080,
+          evidence_passed: 512,
+          evidence_coverage_percent: 47.41,
           ui_consumed: 180,
           crawler_side_effects: 12,
         },
         by_outcome: [{ key: "success", count: 255 }],
+        evidence_dimensions: [
+          {
+            key: "normal",
+            applicable: 256,
+            passed: 256,
+            failed: 0,
+            not_run: 0,
+            not_applicable: 0,
+            coverage_percent: 100,
+          },
+          {
+            key: "authorization",
+            applicable: 245,
+            passed: 245,
+            failed: 0,
+            not_run: 0,
+            not_applicable: 11,
+            coverage_percent: 100,
+          },
+          {
+            key: "parameters",
+            applicable: 184,
+            passed: 11,
+            failed: 0,
+            not_run: 173,
+            not_applicable: 72,
+            coverage_percent: 5.98,
+          },
+          {
+            key: "idempotency",
+            applicable: 139,
+            passed: 0,
+            failed: 0,
+            not_run: 139,
+            not_applicable: 117,
+            coverage_percent: 0,
+          },
+          {
+            key: "fault",
+            applicable: 256,
+            passed: 0,
+            failed: 0,
+            not_run: 256,
+            not_applicable: 0,
+            coverage_percent: 0,
+          },
+        ],
         by_role: [
           {
             key: "platform_super_admin",
@@ -139,6 +189,7 @@ test("API coverage dashboard exposes the current production truth dimensions on 
         by_crawler_side_effect: [{ key: "none", count: 255 }],
         operations: [
           {
+            operation_id: "get_platform_management",
             method: "GET",
             path: "/api/v1/platform/management",
             expected_roles: ["platform_super_admin"],
@@ -147,6 +198,38 @@ test("API coverage dashboard exposes the current production truth dimensions on 
             data_source: "mysql57_business",
             ui_consumers: ["/platform-admin/api-coverage"],
             crawler_side_effect: "none",
+            evidence: {
+              normal: {
+                applicable: true,
+                status: "passed",
+                test_id: "production:trace:get_platform_management:normal",
+                latest_result: "200:success",
+              },
+              authorization: {
+                applicable: true,
+                status: "passed",
+                test_id: "production:trace:get_platform_management:authorization",
+                latest_result: "401:unauthenticated",
+              },
+              parameters: {
+                applicable: true,
+                status: "not_run",
+                test_id: null,
+                latest_result: null,
+              },
+              idempotency: {
+                applicable: false,
+                status: "not_applicable",
+                test_id: null,
+                latest_result: null,
+              },
+              fault: {
+                applicable: true,
+                status: "not_run",
+                test_id: null,
+                latest_result: null,
+              },
+            },
           },
         ],
         total_filtered: 256,
@@ -157,9 +240,18 @@ test("API coverage dashboard exposes the current production truth dimensions on 
   );
   await page.goto("/platform-admin/api-coverage");
   await expect(page.getByRole("heading", { name: "接口覆盖证据", level: 2 })).toBeVisible();
-  for (const heading of ["结果覆盖", "六角色覆盖", "数据来源", "UI 消费方", "爬虫副作用"])
+  for (const heading of [
+    "结果覆盖",
+    "证据维度",
+    "六角色覆盖",
+    "数据来源",
+    "UI 消费方",
+    "爬虫副作用",
+  ])
     await expect(page.getByRole("heading", { name: heading })).toBeVisible();
   await expect(page.getByText("100.00%", { exact: true })).toBeVisible();
+  await expect(page.getByText("47.41%", { exact: true })).toBeVisible();
+  await expect(page.getByText("get_platform_management", { exact: true })).toBeVisible();
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();

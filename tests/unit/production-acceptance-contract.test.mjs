@@ -6,10 +6,11 @@ import { readFile } from "node:fs/promises";
 const read = (path) => readFile(path, "utf8");
 
 test("production acceptance locks the 223 path, 256 operation, 60 route and six role baseline", async () => {
-  const [manifest, routeCatalog, openapi] = await Promise.all([
+  const [manifest, routeCatalog, openapi, evidenceSchema] = await Promise.all([
     read("infra/baota/production-acceptance-manifest.json").then(JSON.parse),
     read("config/route-catalog.json").then(JSON.parse),
     read("docs/openapi.yaml"),
+    read("verification/api-operation-evidence.schema.json").then(JSON.parse),
   ]);
   const paths = openapi.split(/\r?\n/).filter((line) => /^  \/[^:]+:$/.test(line));
   const operations = openapi
@@ -29,6 +30,24 @@ test("production acceptance locks the 223 path, 256 operation, 60 route and six 
     "organizationId",
   );
   assert.equal(manifest.baseline.realCoreScreenshotCount, 2);
+  assert.equal(manifest.baseline.apiReportSchemaVersion, 3);
+  assert.equal(manifest.baseline.operationIdPolicy, "method_path_v1");
+  assert.deepEqual(manifest.apiProbe.evidenceDimensions, [
+    "normal",
+    "authorization",
+    "parameters",
+    "idempotency",
+    "fault",
+  ]);
+  assert.equal(evidenceSchema.properties.operation_count.const, 256);
+  assert.equal(evidenceSchema.properties.operation_id_policy.const, "method_path_v1");
+  assert.deepEqual(evidenceSchema.properties.operations.items.properties.evidence.required, [
+    "normal",
+    "authorization",
+    "parameters",
+    "idempotency",
+    "fault",
+  ]);
   assert.equal(manifest.task.schedule, "manual");
   assert.equal(manifest.task.daemon, false);
   assert.equal(manifest.cleanup.verifyZeroReferences, true);
@@ -43,6 +62,9 @@ test("production acceptance only probes writes through safe blocking and always 
     read("scripts/deploy-baota.py"),
   ]);
   assert.match(apiCoverage, /validation_or_authorization_block_only|isWrite/);
+  assert.match(apiCoverage, /operation_id_policy:\s*"method_path_v1"/);
+  assert.match(apiCoverage, /unauthorizedProfile[\s\S]*\?\? null/);
+  assert.match(apiCoverage, /kind:\s*"authorization",\s*probeProfile:\s*null/);
   assert.match(apiCoverage, /openapi_operation_route_not_found/);
   assert.doesNotMatch(apiCoverage, /route\.fulfill|page\.route/);
   assert.match(runner, /finally[\s\S]*cleanup\(\)/);
@@ -98,6 +120,7 @@ test("production acceptance only probes writes through safe blocking and always 
     "verify-production-api-coverage.mjs",
     "verify-production-core-e2e.mjs",
     "run-baota-production-acceptance.mjs",
+    "api-operation-evidence.schema.json",
   ])
     assert.match(deployer, new RegExp(file.replaceAll(".", "\\.")));
 });

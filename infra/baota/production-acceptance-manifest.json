@@ -15,6 +15,8 @@
     "openapiFile": "docs/openapi.yaml",
     "pathCount": 223,
     "operationCount": 256,
+    "apiReportSchemaVersion": 3,
+    "operationIdPolicy": "method_path_v1",
     "protectedRouteCount": 60,
     "roleCount": 6,
     "realCoreScreenshotCount": 2
@@ -38,6 +40,7 @@
   "apiProbe": {
     "realFastifyRequired": true,
     "writePolicy": "validation_or_authorization_block_only",
+    "evidenceDimensions": ["normal", "authorization", "parameters", "idempotency", "fault"],
     "allowedOutcomes": ["success", "empty", "blocked", "unauthenticated", "unauthorized"],
     "routeNotFoundAllowed": false
   },
