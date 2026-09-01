@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { statusLabel } from "../ui/status-labels";
 import ConfirmDialog from "./ConfirmDialog.vue";
@@ -14,6 +14,7 @@ type State =
   | "forbidden"
   | "expired"
   | "rate_limited"
+  | "timeout"
   | "unavailable"
   | "recovering";
 interface Dto {
@@ -113,7 +114,14 @@ const data = ref<Dto | null>(null),
   confirming = ref(false),
   circuitConfirm = ref<Dto["providers"][number] | null>(null),
   providerRecovering = ref(""),
-  saving = ref(false);
+  saving = ref(false),
+  refreshing = ref(false),
+  refreshFailure = ref<"rate_limited" | "timeout" | "unavailable" | null>(null),
+  actionHint = ref("");
+let loadController: AbortController | null = null,
+  loadSequence = 0,
+  recoverExpiredKey: string | null = null,
+  recoverProviderKey: { providerId: string; key: string } | null = null;
 const queueSummary = computed(() => {
   const providers = data.value?.providers ?? [];
   return {
@@ -154,10 +162,20 @@ const verdict = computed(
         forbidden: ["没有平台运维权限", "联系平台管理员授予 platform:operate。"],
         expired: ["登录已失效", "重新登录后核验调度状态。"],
         rate_limited: ["刷新过于频繁", "稍后再试，当前租约不受影响。"],
+        timeout: ["采集调度事实读取超时", "本次请求已在 15 秒后停止，请检查服务状态再重试。"],
         unavailable: ["采集调度事实暂不可用", "检查 MySQL、统一后端和受控目录后重试。"],
       }) as const
     )[state.value],
 );
+const refreshNotice = computed(() => {
+  if (refreshFailure.value === "timeout")
+    return "读取超过 15 秒，已停止本次请求并保留上次成功的采集调度事实。";
+  if (refreshFailure.value === "rate_limited")
+    return "刷新过于频繁，已保留上次成功的采集调度事实；请稍后重试。";
+  if (refreshFailure.value === "unavailable")
+    return `${actionHint.value || "采集调度事实暂不可用，请在宝塔核对 Node API 与 MySQL。"} 已保留上次成功的采集调度事实。`;
+  return "";
+});
 const time = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
     month: "2-digit",
@@ -199,66 +217,124 @@ const queueRiskText = (item: Dto["providers"][number]) => {
 const status = (kind: ApiFailureKind): State =>
   kind === "expired" || kind === "forbidden" || kind === "rate_limited" ? kind : "unavailable";
 
-async function load() {
-  state.value = "loading";
-  message.value = "";
+async function load(options: { preserveMessage?: boolean } = {}) {
+  if (loadController) return;
+  const currentSequence = ++loadSequence,
+    controller = new AbortController(),
+    hasSnapshot = Boolean(data.value),
+    correlationId = crypto.randomUUID();
+  loadController = controller;
+  refreshing.value = true;
+  refreshFailure.value = null;
+  actionHint.value = "";
+  if (!options.preserveMessage) message.value = "";
+  if (!hasSnapshot) state.value = "loading";
+  let timedOut = false;
+  const timeout = window.setTimeout(() => {
+    timedOut = true;
+    controller.abort("crawler_scheduler_read_timeout");
+  }, 15_000);
   try {
-    const response = await request<Dto>("/platform/operations/crawler-scheduler");
+    const response = await request<Dto>("/platform/operations/crawler-scheduler", {
+      signal: controller.signal,
+      requestId: correlationId,
+      traceId: correlationId,
+    });
+    if (currentSequence !== loadSequence) return;
     requestId.value = response.request_id;
     data.value = response.data ?? null;
     state.value = data.value ? data.value.state : "empty";
   } catch (error) {
-    if (error instanceof ApiClientError) {
-      requestId.value = error.requestId;
-      message.value = error.actionHint;
-      state.value = status(error.kind);
-    } else state.value = "unavailable";
+    if (
+      currentSequence !== loadSequence ||
+      (error instanceof DOMException && error.name === "AbortError" && !timedOut)
+    )
+      return;
+    if (timedOut) {
+      requestId.value = correlationId;
+      if (hasSnapshot) refreshFailure.value = "timeout";
+      else state.value = "timeout";
+      return;
+    }
+    const failure = error instanceof ApiClientError ? error : null,
+      failureState = failure ? status(failure.kind) : "unavailable";
+    requestId.value = failure?.requestId ?? "";
+    actionHint.value = failure?.actionHint ?? "";
+    if (hasSnapshot && !["expired", "forbidden"].includes(failureState))
+      refreshFailure.value = failureState as "rate_limited" | "unavailable";
+    else {
+      data.value = null;
+      state.value = failureState;
+    }
+  } finally {
+    window.clearTimeout(timeout);
+    if (currentSequence === loadSequence) {
+      loadController = null;
+      refreshing.value = false;
+    }
   }
 }
 
 async function recover() {
+  if (saving.value || refreshing.value) return;
   saving.value = true;
-  state.value = "recovering";
+  confirming.value = false;
+  refreshFailure.value = null;
+  actionHint.value = "";
+  if (!data.value) state.value = "recovering";
+  recoverExpiredKey ??= crypto.randomUUID();
   try {
     const response = await request<{ recovered: number }>(
       "/platform/operations/crawler-scheduler/recover-expired",
-      { method: "POST", body: {} },
+      { method: "POST", body: {}, idempotencyKey: recoverExpiredKey },
     );
+    recoverExpiredKey = null;
     requestId.value = response.request_id;
     message.value = `已回收 ${response.data.recovered} 个过期调度槽位`;
-    await load();
+    await load({ preserveMessage: true });
   } catch (error) {
     if (error instanceof ApiClientError) {
+      if (error.status > 0 && error.status < 500) recoverExpiredKey = null;
       requestId.value = error.requestId;
+      actionHint.value = error.actionHint;
       message.value = error.actionHint;
-      state.value = status(error.kind);
-    } else state.value = "unavailable";
+      if (!data.value) state.value = status(error.kind);
+    } else {
+      actionHint.value = "租约回收结果暂时无法确认，请使用相同操作重试。";
+      message.value = actionHint.value;
+      if (!data.value) state.value = "unavailable";
+    }
   } finally {
     saving.value = false;
-    confirming.value = false;
   }
 }
 
 async function recoverProvider() {
   const provider = circuitConfirm.value;
-  if (!provider) return;
+  if (!provider || providerRecovering.value || refreshing.value) return;
   providerRecovering.value = provider.id;
   message.value = "";
+  actionHint.value = "";
+  circuitConfirm.value = null;
+  if (recoverProviderKey?.providerId !== provider.id)
+    recoverProviderKey = { providerId: provider.id, key: crypto.randomUUID() };
   try {
     const response = await request<{ provider_id: string; recovered: boolean }>(
       `/platform/operations/crawler-scheduler/providers/${provider.id}/recover`,
-      { method: "POST", body: {} },
+      { method: "POST", body: {}, idempotencyKey: recoverProviderKey.key },
     );
+    recoverProviderKey = null;
     requestId.value = response.request_id;
     const resultMessage = response.data.recovered
       ? `已解除 ${provider.code} 的来源级熔断`
       : `${provider.code} 当前无需恢复`;
-    circuitConfirm.value = null;
-    await load();
     message.value = resultMessage;
+    await load({ preserveMessage: true });
   } catch (error) {
     if (error instanceof ApiClientError) {
+      if (error.status > 0 && error.status < 500) recoverProviderKey = null;
       requestId.value = error.requestId;
+      actionHint.value = error.actionHint;
       message.value = error.actionHint;
     } else message.value = "来源恢复失败，请核对来源健康检查后重试。";
   } finally {
@@ -268,6 +344,11 @@ async function recoverProvider() {
 
 onMounted(() => {
   if (state.value !== "recovering") void load();
+});
+onBeforeUnmount(() => {
+  loadSequence += 1;
+  loadController?.abort();
+  loadController = null;
 });
 </script>
 
@@ -283,12 +364,31 @@ onMounted(() => {
         >
       </div>
       <div>
-        <button type="button" @click="load">刷新运行事实</button
-        ><button class="danger" type="button" :disabled="saving" @click="confirming = true">
+        <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="() => load()">
+          {{ refreshing ? "正在刷新…" : "刷新运行事实" }}</button
+        ><button
+          class="danger"
+          type="button"
+          :disabled="saving || refreshing"
+          @click="confirming = true"
+        >
           回收过期租约
         </button>
       </div>
     </header>
+    <section
+      v-if="data && refreshFailure"
+      class="crawler-scheduler__refresh-notice"
+      :data-kind="refreshFailure"
+      aria-live="polite"
+    >
+      <div>
+        <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
+        <p>{{ refreshNotice }}</p>
+        <code v-if="requestId">request_id {{ requestId }}</code>
+      </div>
+      <button type="button" :disabled="refreshing" @click="() => load()">重新核验</button>
+    </section>
     <section
       v-if="!['ready', 'warning', 'blocked'].includes(state)"
       class="crawler-scheduler__state"
@@ -298,10 +398,10 @@ onMounted(() => {
       <i></i>
       <div>
         <b>{{ verdict[0] }}</b>
-        <p>{{ message || verdict[1] }}</p>
+        <p>{{ message ? `${message}；${actionHint || verdict[1]}` : actionHint || verdict[1] }}</p>
         <code v-if="requestId">request_id {{ requestId }}</code>
       </div>
-      <button v-if="!['loading', 'recovering'].includes(state)" type="button" @click="load">
+      <button v-if="!['loading', 'recovering'].includes(state)" type="button" @click="() => load()">
         重新核验
       </button>
     </section>
@@ -403,7 +503,7 @@ onMounted(() => {
                 >
                 <button
                   type="button"
-                  :disabled="providerRecovering === item.id"
+                  :disabled="providerRecovering === item.id || refreshing"
                   @click="circuitConfirm = item"
                 >
                   解除熔断

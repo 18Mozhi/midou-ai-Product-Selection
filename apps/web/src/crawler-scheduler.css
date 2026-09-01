@@ -8,6 +8,7 @@
 }
 .crawler-scheduler__hero,
 .crawler-scheduler__state,
+.crawler-scheduler__refresh-notice,
 .crawler-scheduler__verdict,
 .crawler-scheduler__panel,
 .crawler-scheduler__metrics article {
@@ -60,6 +61,26 @@
   gap: 14px;
   padding: 22px;
   border-radius: 14px;
+}
+.crawler-scheduler__refresh-notice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 17px;
+  border-left: 4px solid var(--so-warning);
+  border-radius: 12px;
+}
+.crawler-scheduler__refresh-notice p {
+  margin: 4px 0;
+  color: var(--muted);
+}
+.crawler-scheduler__refresh-notice code {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.crawler-scheduler__refresh-notice button {
+  margin-left: auto;
+  flex: 0 0 auto;
 }
 .crawler-scheduler__state i {
   width: 22px;
@@ -414,11 +435,13 @@
     font-size: 18px;
   }
   .crawler-scheduler__verdict,
-  .crawler-scheduler__state {
+  .crawler-scheduler__state,
+  .crawler-scheduler__refresh-notice {
     align-items: flex-start;
     flex-direction: column;
   }
-  .crawler-scheduler__state button {
+  .crawler-scheduler__state button,
+  .crawler-scheduler__refresh-notice button {
     margin-left: 0;
   }
   .crawler-scheduler__sources {

@@ -283,7 +283,11 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "429": { $ref: "#/components/responses/Error" }
-        "503": { $ref: "#/components/responses/Error" }
+        "503":
+          description: Scheduler dependencies are unavailable or the bounded read times out; returns crawler_scheduler_dependency_unavailable or crawler_scheduler_read_timeout without SQL, driver, host, account, path, credential, token or task payload details
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
   /platform/operations/crawler-scheduler/recover-expired:
     post:
       summary: Idempotently recover only expired single-host scheduler slots

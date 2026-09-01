@@ -17,6 +17,7 @@
 - 资源停止线默认：归一化负载 85%、可用内存 1024 MB、证据盘可用空间 4096 MB。触线时任务保持排队，不得通过放宽阈值绕过。
 - “完成回执”必须展示待回写/隔离数量与字节、最老回执、保留期、容量上限和目录所在磁盘可用量。默认保留期 30 天、容量 512 MiB、磁盘停止线 4096 MB；保留期或隔离告警要求人工核对 correlation，禁止直接删除回执。
 - 页面和日志只用 request_id/trace_id 关联，不复制租约令牌、哈希、Cookie、凭证或任务输入。
+- 刷新同一时刻只允许一个 GET；浏览器超过 15 秒取消，API 超过 14 秒返回 `crawler_scheduler_read_timeout`。已有快照时，429、超时和 `crawler_scheduler_dependency_unavailable` 只显示刷新失败横幅并保留旧事实；401/403 必须清除受保护事实。请求取消后不得出现同 request_id 的 `platform.crawler_scheduler.read` 成功审计。
 
 ## 过期租约恢复
 
@@ -33,6 +34,11 @@
 - `crawler_lease_duplicate` / `crawler_provider_quota_exceeded`：先回收已过期槽位；仍异常则通过宝塔回滚候选，保留数据库和审计证据。
 - `crawler_completion_spool_*`：先恢复 Node API 回写链，核对待回写和隔离回执的 request_id/trace_id；容量或磁盘触线时停止领取新作业。保留期到达不代表可以删除，必须在回写成功或取得终态登记依据后人工处理。
 - MySQL/Redis 不可用：任务不得领取；先恢复宝塔服务，再重跑 live 门。
+- 刷新超时或依赖 503：先按 request_id 核对 Node API、MySQL 和受控运行目录；不得连续点击放大压力。恢复操作若已返回成功而随后刷新失败，以成功操作审计和幂等结果为准，保留页面成功提示后重新核验；网络或 5xx 结果不确定时必须复用原 Idempotency-Key。
+
+## 本次刷新链发布
+
+本次只修改 Web 页面和 Node API 的采集调度读取边界，不新增环境变量、依赖、端口、数据库表或迁移，也不修改 Worker/Python Crawler 调度、来源并发、熔断判定或恢复事务。发布 Web 静态文件，并通过宝塔重启唯一的 `ai选品` Node 项目以加载 API 有界读取；`ai选品-python` 保持一个健康实例，无需因本次变更重启。发布后验证正常刷新、连续点击单飞、14/15 秒超时、依赖 503 脱敏、旧快照保留、401/403 清理、恢复后刷新失败以及取消请求不写成功审计。
 
 ## 回滚
 

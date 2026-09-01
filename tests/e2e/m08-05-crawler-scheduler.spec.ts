@@ -213,3 +213,66 @@ test("M08-05 mobile bottom navigation does not cover the scheduler handoff", asy
   await markOcclusionProbe(handoff);
   await expectAboveMobileNavigation(page, handoff);
 });
+
+test("M08-05 refresh is single-flight and keeps the last verified snapshot on failure", async ({
+  page,
+}) => {
+  let reads = 0;
+  await page.route("**/api/v1/platform/operations/crawler-scheduler", async (route) => {
+    reads += 1;
+    if (reads === 1) await route.fulfill({ json: envelope(base) });
+    else
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "crawler_scheduler_dependency_unavailable",
+            action_hint: "在宝塔检查 Node API 与 MySQL 后重新核验。",
+          },
+          request_id: "m08-05-refresh-failed",
+          trace_id: "m08-05-refresh-failed",
+        },
+      });
+  });
+  await page.goto("/platform-admin/crawler-scheduler");
+  const refresh = page.getByRole("button", { name: "刷新运行事实" });
+  await refresh.click();
+  await expect(page.getByRole("button", { name: "正在刷新…" })).toBeDisabled();
+  await expect(page.getByText("采集调度已就绪")).toBeVisible();
+  await expect(page.getByText("刷新未完成")).toBeVisible();
+  await expect(page.getByText(/已保留上次成功的采集调度事实/)).toBeVisible();
+  expect(reads).toBe(4);
+});
+
+test("M08-05 recovery success remains visible when the follow-up read fails", async ({ page }) => {
+  let reads = 0,
+    recoveryCalls = 0;
+  await page.route("**/api/v1/platform/operations/crawler-scheduler", async (route) => {
+    reads += 1;
+    if (reads === 1) await route.fulfill({ json: envelope(base) });
+    else
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: { action_hint: "重新核验调度事实。" },
+          request_id: "m08-05-after-recovery",
+          trace_id: "m08-05-after-recovery",
+        },
+      });
+  });
+  await page.route(
+    "**/api/v1/platform/operations/crawler-scheduler/recover-expired",
+    async (route) => {
+      recoveryCalls += 1;
+      await route.fulfill({ json: envelope({ recovered: 3 }) });
+    },
+  );
+  await page.goto("/platform-admin/crawler-scheduler");
+  await page.getByRole("button", { name: "回收过期租约" }).click();
+  await page.getByRole("textbox", { name: "输入 确认回收 继续" }).fill("确认回收");
+  await page.getByRole("button", { name: "确认回收" }).click();
+  await expect(page.getByText("已回收 3 个过期调度槽位")).toBeVisible();
+  await expect(page.getByText("刷新未完成")).toBeVisible();
+  await expect(page.getByText("采集调度已就绪")).toBeVisible();
+  expect(recoveryCalls).toBe(1);
+});

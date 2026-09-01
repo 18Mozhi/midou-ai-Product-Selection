@@ -96,6 +96,7 @@ export interface CrawlerSchedulerEvaluation {
 export interface CrawlerSchedulerRepository {
   snapshot(
     now: Date,
+    signal?: AbortSignal,
   ): Promise<Omit<CrawlerSchedulerSnapshot, "worker_instances" | "crawler_instances" | "resource">>;
   record(input: {
     actorId: string;
@@ -104,6 +105,7 @@ export interface CrawlerSchedulerRepository {
     observedAt: Date;
     snapshot: CrawlerSchedulerSnapshot;
     evaluation: CrawlerSchedulerEvaluation;
+    signal?: AbortSignal;
   }): Promise<void>;
   recoverExpired(input: {
     actorId: string;
@@ -249,15 +251,18 @@ export class CrawlerSchedulerService {
     private readonly policy: CrawlerSchedulerPolicy,
     private readonly now = () => new Date(),
   ) {}
-  async read(input: { actorId: string; requestId: string; traceId: string }) {
+  async read(input: { actorId: string; requestId: string; traceId: string; signal?: AbortSignal }) {
+    input.signal?.throwIfAborted();
     const repositoryObservedAt = this.now(),
       snapshot = {
-        ...(await this.repository.snapshot(repositoryObservedAt)),
+        ...(await this.repository.snapshot(repositoryObservedAt, input.signal)),
         ...(await this.hostProbe.snapshot()),
       },
       observedAt = this.now(),
       evaluation = evaluateCrawlerScheduler(snapshot, this.policy, observedAt);
+    input.signal?.throwIfAborted();
     await this.repository.record({ ...input, observedAt, snapshot, evaluation });
+    input.signal?.throwIfAborted();
     return {
       state: evaluation.state,
       topology: {

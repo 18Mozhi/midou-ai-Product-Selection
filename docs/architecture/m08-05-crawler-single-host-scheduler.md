@@ -16,6 +16,8 @@ Linux 主机探针分别读取 `/proc/*/cmdline`：Node Worker 只匹配 Worker 
 
 平台运维接口 `/api/v1/platform/operations/crawler-scheduler` 只向 `platform:operate` 返回分别观测的 Node Worker/Python Crawler 进程计数、聚合租约、来源有效并发、来源排队 P50/P95、24 小时成功率/耗时 P95/样本量、来源运行熔断、浏览器运行小时吞吐与失败率、档案聚合、资源水位，以及最多 100 个活动槽位到逻辑进程角色和采集任务的关联。来源排队直接按 `collection_subqueries.provider_id` 关联业务任务，只统计 `available_at <=` 当前服务端时间且状态为 `scheduled`、`queued`、`retry_scheduled` 或 `rate_limited` 的可领取任务；同一任务同一来源只计一次，最长等待按 `available_at` 计算，尚未到期的退避或限流任务不冒充当前积压。页面汇总当前待领取量和最老等待；仅当某来源最长等待超过其真实近 24 小时 P95 且存在样本时提示饥饿风险，缺少样本时明确“缺少基线”，不发明固定阈值。关联直接读取 `crawler_scheduler_leases` 的任务、运行、进程标识、心跳和到期事实；来源槽位联表展示来源名称。回收前的确认框使用同一读取时点聚合已过期槽位总数、类型、关联任务数和最早到期时间，明确预览影响；最终写事务仍重新以服务端当前时间筛选 `expires_at <= NOW`，不会依据过期预览删除活动租约。任务 UUID、运行 UUID、进程标识和槽位类型只放在可展开技术详情中，不返回组织/工作区标识、任务目标、租约令牌、哈希、凭证、Cookie、文件路径或队列载荷。读取写入观测和平台审计，过期回收与来源恢复均要求同源和 Idempotency-Key。
 
+读取链采用双层有界失败：浏览器 15 秒主动取消，API 14 秒中止读取；同一页面实例只允许一个在途 GET。刷新中的按钮禁用且旧快照继续可读，429、依赖 503 或超时只显示刷新告警，不用失败覆盖上次已核验事实；401/403 则清除受保护快照。API 将 MySQL、连接与受控目录依赖错误归一为脱敏 `crawler_scheduler_dependency_unavailable`，超时为 `crawler_scheduler_read_timeout`。九组调度事实复用一个只读、可重复读 MySQL 连接，既保持同一读取快照，也避免页面刷新一次占满连接池并阻塞 Worker/Crawler 内部请求。AbortSignal 在查询前后和观测事务提交前检查，连接关闭或超时后不得补写“读取成功”观测和审计。过期租约与单来源恢复在一次用户操作内固定 Idempotency-Key；网络或 5xx 结果不确定时重试复用该键，明确 4xx 或成功后才释放。恢复已确认但随后的 GET 失败时，页面同时保留操作成功消息、旧快照和刷新失败提示。
+
 Worker 在每个来源真实执行结果后独立更新 `provider_runtime_circuits`：成功清零，失败累加，达到该来源 `circuit_failure_threshold` 后只打开该来源熔断。后续多来源任务把该子查询记录为 `blocked/source_circuit_open` 并继续其余来源，不复用来源健康探针的手工检查次数冒充运行失败次数。解除熔断必须调用来源恢复端点，且 `provider_adapter_health` 必须存在一条晚于 `opened_at` 的 `ready` 健康检查；恢复只清零当前来源并写幂等操作和平台审计。
 
 平台调度页在既有进程、租约、来源和资源事实之外，集中展示完成回执容量与保留期。Python 上报只携带聚合计数、字节和时间；内部领取 API 不接受路径、文件名或回执正文，平台 API 也不返回这些敏感信息。

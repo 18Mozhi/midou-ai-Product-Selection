@@ -2494,7 +2494,7 @@
       "leaseAssociationBoundary": "the operations API reads up to 100 active crawler_scheduler_leases and links each slot to its logical Node Worker or Python Crawler role, collection task status, provider name, heartbeat and expiry; task run process and slot identifiers stay inside technical details, while scope IDs targets tokens hashes credentials and payloads remain excluded",
       "queueCapacityBoundary": "each enabled provider reports active versus effective concurrency plus distinct collection tasks whose available_at is already due in scheduled queued retry_scheduled or rate_limited state and the longest due wait in seconds; the page aggregates due backlog and oldest wait, and flags starvation risk only when a source longest wait exceeds its sampled 24-hour P95, while missing samples remain an explicit missing baseline; future backoff tasks are excluded and no capacity claim is inferred",
       "expiredLeasePreviewBoundary": "the read model aggregates expired scheduler slots by worker crawler and provider plus distinct associated task count and oldest expiry; the confirmation dialog shows that snapshot before recovery, while the recovery transaction independently rechecks expires_at against its current server clock and never deletes an active slot from the preview alone",
-      "apiClientBoundary": "crawler scheduler reads and idempotent expired-slot recovery use the shared frontend JSON client without changing single-host limits, resource stop gates or lease truth",
+      "apiClientBoundary": "crawler scheduler reads are single-flight and bounded to 15 seconds in the browser and 14 seconds in the API; nine scheduler queries share one read-only repeatable-read MySQL connection so a page refresh cannot consume the pool. Refresh timeout rate-limit and dependency failure preserve the last verified snapshot, while 401 and 403 clear protected facts. Aborted reads stop before successful observation or audit writes. Expired-slot and provider recovery keep one idempotency key across an uncertain network or 5xx result and preserve a confirmed operation message when the follow-up read fails, without changing single-host limits, resource stop gates or lease truth",
       "permission": "platform operations read and idempotent expired-slot recovery require platform:operate; responses exclude task payloads scope identifiers lease tokens hashes credentials cookies and paths while observation recovery and failure retain request_id trace_id and audit",
       "configuration": [
         "CRAWLER_SCHEDULER_MAX_LOAD_PERCENT",
@@ -2540,7 +2540,7 @@
       "loadBalancingEnabled": false,
       "backupServerUsed": false,
       "multiNode": false,
-      "statusDetail": "module_verified"
+      "statusDetail": "local_full_stack_live_api_worker_python_crawler_mysql57_redis_browser_permission_single_flight_bounded_abort_snapshot_preservation_recovery_idempotency_and_sanitized_dependency_503_verified"
     },
     "capacityBoundary": {
       "module": "M08-06",
@@ -3134,7 +3134,7 @@
       "title": "采集调度",
       "domain": "crawler-single-host-scheduler",
       "status": "verified",
-      "statusDetail": "M08-05_module_verified"
+      "statusDetail": "M08-05_refresh_chain_verified"
     },
     {
       "path": "/platform-admin/capacity",
@@ -3305,7 +3305,7 @@
       "prefix": "/api/v1/platform/operations/crawler-scheduler",
       "domain": "crawler-single-host-scheduler",
       "status": "verified",
-      "statusDetail": "M08-05_module_verified"
+      "statusDetail": "M08-05_bounded_read_and_sanitized_dependency_verified"
     },
     {
       "prefix": "/api/v1/platform/operations/capacity",

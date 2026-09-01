@@ -439,6 +439,139 @@ test("M08-05.A04/A06/A09 operations route is platform-only and never returns lea
   await app.close();
 });
 
+test("M08-05 scheduler read times out, aborts work and sanitizes dependency failures", async () => {
+  const { buildApp } = await import("../../apps/api/dist/app.js");
+  const authorization = { authorize: async () => undefined },
+    auth = {
+      authenticate: async () => ({ user: { id: "00000000-0000-4000-8000-000000000805" } }),
+    },
+    headers = {
+      cookie: "scoutops_session=test",
+      "x-request-id": "request-bounded-read",
+      "x-trace-id": "trace-bounded-read",
+    };
+  let observedSignal;
+  const timeoutApp = buildApp({
+    crawlerScheduler: {
+      service: {
+        read: async (input) => {
+          observedSignal = input.signal;
+          return new Promise(() => undefined);
+        },
+        recoverExpired: async () => ({ recovered: 0 }),
+        recoverProvider: async (input) => ({ provider_id: input.providerId, recovered: false }),
+      },
+      authorization,
+      auth,
+      secureCookie: false,
+      webOrigin: "http://127.0.0.1:5173",
+      readTimeoutMs: 5,
+    },
+  });
+  const timeoutResponse = await timeoutApp.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/crawler-scheduler",
+    headers,
+  });
+  assert.equal(timeoutResponse.statusCode, 503);
+  assert.equal(timeoutResponse.json().error.code, "crawler_scheduler_read_timeout");
+  assert.equal(observedSignal.aborted, true);
+  await timeoutApp.close();
+
+  const dependencyApp = buildApp({
+    crawlerScheduler: {
+      service: {
+        read: async () => {
+          const error = new Error("SELECT secret FROM credentials");
+          error.code = "ER_LOCK_WAIT_TIMEOUT";
+          throw error;
+        },
+        recoverExpired: async () => ({ recovered: 0 }),
+        recoverProvider: async (input) => ({ provider_id: input.providerId, recovered: false }),
+      },
+      authorization,
+      auth,
+      secureCookie: false,
+      webOrigin: "http://127.0.0.1:5173",
+    },
+  });
+  const dependencyResponse = await dependencyApp.inject({
+    method: "GET",
+    url: "/api/v1/platform/operations/crawler-scheduler",
+    headers,
+  });
+  assert.equal(dependencyResponse.statusCode, 503);
+  assert.equal(dependencyResponse.json().error.code, "crawler_scheduler_dependency_unavailable");
+  assert.doesNotMatch(dependencyResponse.body, /SELECT secret|credentials/i);
+  await dependencyApp.close();
+});
+
+test("M08-05 aborted scheduler reads never write a successful observation or audit", async () => {
+  const { CrawlerSchedulerService } =
+    await import("../../apps/api/dist/crawler-scheduler-service.js");
+  const controller = new AbortController();
+  let recordCount = 0;
+  const repository = {
+      snapshot: async () => {
+        await new Promise((resolve) => setTimeout(resolve, 20));
+        return {
+          active_worker_leases: 0,
+          active_crawler_leases: 0,
+          duplicate_lease_count: 0,
+          expired_leases: {
+            total: 0,
+            task_count: 0,
+            worker: 0,
+            crawler: 0,
+            provider: 0,
+            oldest_expired_at: null,
+          },
+          active_leases: [],
+          providers: [],
+          profiles: [],
+          trend: [],
+          receipt_spool: null,
+        };
+      },
+      record: async () => {
+        recordCount += 1;
+      },
+    },
+    service = new CrawlerSchedulerService(
+      repository,
+      {
+        snapshot: async () => ({
+          worker_instances: 1,
+          crawler_instances: 1,
+          resource: {
+            load_basis_points: 1000,
+            available_memory_mb: 4096,
+            free_disk_mb: 8192,
+            observed_at: new Date().toISOString(),
+          },
+        }),
+      },
+      {
+        maximumWorkers: 1,
+        maximumCrawlers: 1,
+        maximumProviderConcurrency: 1,
+        maximumLoadBasisPoints: 8500,
+        minimumAvailableMemoryMb: 1024,
+        minimumFreeDiskMb: 4096,
+        staleAfterSeconds: 90,
+      },
+    );
+  const read = service.read({
+    actorId: "actor",
+    requestId: "request",
+    traceId: "trace",
+    signal: controller.signal,
+  });
+  controller.abort(new Error("request closed"));
+  await assert.rejects(read, /request closed/);
+  assert.equal(recordCount, 0);
+});
+
 test("M08-05.A03/A05/A10/A13 migration config and runtime enforce one Worker and one Crawler", async () => {
   const [
     { loadRuntimeConfig },
@@ -652,101 +785,119 @@ test("M08-05 links leases and due provider queues without returning secrets", as
       await import("../../apps/api/dist/crawler-scheduler-repository.js"),
     now = new Date("2026-08-15T08:00:00.000Z");
   let providerQuery = "",
-    providerValues = [];
-  const pool = {
-      query: async (sql, values) => {
-        if (sql.startsWith("SELECT slot_type,COUNT")) return [[{ slot_type: "worker", total: 1 }]];
-        if (sql.startsWith("SELECT p.id,p.code")) {
-          providerQuery = sql;
-          providerValues = values;
-          return [
-            [
-              {
-                id: "provider",
-                code: "source",
-                configured_concurrency: 2,
-                effective_concurrency: 1,
-                active_leases: 1,
-                queued_tasks: 4,
-                longest_queue_wait_seconds: 125,
-                circuit_failure_threshold: 3,
-                consecutive_failures: 3,
-                last_error_code: "timeout",
-                runtime_circuit_state: "open",
-              },
-            ],
-          ];
-        }
-        if (sql.startsWith("SELECT p.id,COUNT")) return [[]];
-        if (sql.startsWith("SELECT COUNT(*) total,COUNT"))
-          return [
-            [
-              {
-                total: 3,
-                task_count: 1,
-                worker: 1,
-                crawler: 1,
-                provider: 1,
-                oldest_expired_at: new Date("2026-08-15T07:55:00.000Z"),
-              },
-            ],
-          ];
-        if (sql.includes("SELECT COUNT(*) total")) return [[{ total: 0 }]];
-        if (sql.startsWith("SELECT l.slot_type"))
-          return [
-            [
-              {
-                slot_type: "provider",
-                task_id: "00000000-0000-4000-8000-000000000861",
-                run_id: null,
-                lease_owner: "worker-main",
-                heartbeat_at: now,
-                expires_at: new Date("2026-08-15T08:01:00.000Z"),
-                task_status: "running",
-                provider_name: "Google 新闻检索",
-              },
-            ],
-          ];
-        if (sql.startsWith("SELECT q.provider_id,q.status"))
-          return [
-            [
-              {
-                provider_id: "provider",
-                status: "succeeded",
-                duration_ms: 800,
-                queue_wait_seconds: 15,
-              },
-              {
-                provider_id: "provider",
-                status: "failed",
-                duration_ms: 1200,
-                queue_wait_seconds: 45,
-              },
-            ],
-          ];
-        if (sql.startsWith("SELECT FROM_UNIXTIME"))
-          return [[{ bucket_at: now, total: 2, succeeded: 1, failed: 1 }]];
-        if (sql.startsWith("SELECT pending_count"))
-          return [
-            [
-              {
-                pending_count: 1,
-                pending_bytes: 1024,
-                quarantined_count: 0,
-                quarantined_bytes: 0,
-                oldest_pending_at: new Date("2026-08-15T07:59:00.000Z"),
-                retention_days: 30,
-                max_bytes: 536870912,
-                minimum_free_disk_mb: 4096,
-                free_disk_mb: 8192,
-                observed_at: now,
-              },
-            ],
-          ];
-        throw new Error(`unexpected query ${sql}`);
+    providerValues = [],
+    connectionCalls = 0,
+    commitCount = 0;
+  const query = async (sql, values) => {
+      if (sql.startsWith("SET TRANSACTION") || sql.startsWith("START TRANSACTION")) return [{}];
+      if (sql.startsWith("SELECT slot_type,COUNT")) return [[{ slot_type: "worker", total: 1 }]];
+      if (sql.startsWith("SELECT p.id,p.code")) {
+        providerQuery = sql;
+        providerValues = values;
+        return [
+          [
+            {
+              id: "provider",
+              code: "source",
+              configured_concurrency: 2,
+              effective_concurrency: 1,
+              active_leases: 1,
+              queued_tasks: 4,
+              longest_queue_wait_seconds: 125,
+              circuit_failure_threshold: 3,
+              consecutive_failures: 3,
+              last_error_code: "timeout",
+              runtime_circuit_state: "open",
+            },
+          ],
+        ];
+      }
+      if (sql.startsWith("SELECT p.id,COUNT")) return [[]];
+      if (sql.startsWith("SELECT COUNT(*) total,COUNT"))
+        return [
+          [
+            {
+              total: 3,
+              task_count: 1,
+              worker: 1,
+              crawler: 1,
+              provider: 1,
+              oldest_expired_at: new Date("2026-08-15T07:55:00.000Z"),
+            },
+          ],
+        ];
+      if (sql.includes("SELECT COUNT(*) total")) return [[{ total: 0 }]];
+      if (sql.startsWith("SELECT l.slot_type"))
+        return [
+          [
+            {
+              slot_type: "provider",
+              task_id: "00000000-0000-4000-8000-000000000861",
+              run_id: null,
+              lease_owner: "worker-main",
+              heartbeat_at: now,
+              expires_at: new Date("2026-08-15T08:01:00.000Z"),
+              task_status: "running",
+              provider_name: "Google 新闻检索",
+            },
+          ],
+        ];
+      if (sql.startsWith("SELECT q.provider_id,q.status"))
+        return [
+          [
+            {
+              provider_id: "provider",
+              status: "succeeded",
+              duration_ms: 800,
+              queue_wait_seconds: 15,
+            },
+            {
+              provider_id: "provider",
+              status: "failed",
+              duration_ms: 1200,
+              queue_wait_seconds: 45,
+            },
+          ],
+        ];
+      if (sql.startsWith("SELECT FROM_UNIXTIME"))
+        return [[{ bucket_at: now, total: 2, succeeded: 1, failed: 1 }]];
+      if (sql.startsWith("SELECT pending_count"))
+        return [
+          [
+            {
+              pending_count: 1,
+              pending_bytes: 1024,
+              quarantined_count: 0,
+              quarantined_bytes: 0,
+              oldest_pending_at: new Date("2026-08-15T07:59:00.000Z"),
+              retention_days: 30,
+              max_bytes: 536870912,
+              minimum_free_disk_mb: 4096,
+              free_disk_mb: 8192,
+              observed_at: now,
+            },
+          ],
+        ];
+      throw new Error(`unexpected query ${sql}`);
+    },
+    connection = {
+      query,
+      commit: async () => {
+        commitCount += 1;
+      },
+      rollback: async () => undefined,
+      release: () => undefined,
+    },
+    pool = {
+      query,
+      getConnection: async () => {
+        connectionCalls += 1;
+        return connection;
       },
     },
     result = await new CrawlerSchedulerRepository(pool).snapshot(now);
+  assert.equal(connectionCalls, 1);
+  assert.equal(commitCount, 1);
   assert.match(providerQuery, /COUNT\(DISTINCT t\.id\) queued_tasks/);
   assert.match(providerQuery, /TIMESTAMPDIFF\(SECOND,t\.available_at,\?\)/);
   assert.match(providerQuery, /t\.available_at<=\?/);
