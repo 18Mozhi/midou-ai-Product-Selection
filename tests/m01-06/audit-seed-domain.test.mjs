@@ -169,6 +169,8 @@ test("M01-06.A04/A08/A12 restricted seed session exposes setup state but blocks 
     id: actor,
     email: "root@example.test",
     email_normalized: "root@example.test",
+    username: null,
+    username_normalized: null,
     password_hash: "hash:Seed-password-123!",
     status: "active",
     email_verified_at: now,
@@ -183,7 +185,7 @@ test("M01-06.A04/A08/A12 restricted seed session exposes setup state but blocks 
     updated_at: now,
   });
   const login = await auth.login(
-    { email: "root@example.test", password: "Seed-password-123!" },
+    { identifier: "root@example.test", password: "Seed-password-123!" },
     context,
   );
   assert.equal(login.security_setup.required, true);

@@ -73,20 +73,38 @@ test("M01-01.A06/A09/A13 OpenAPI freezes local email account and own-session con
     "PasswordResetConfirm",
   ])
     assert.match(contracts, new RegExp(`interface ${dto}`));
+  assert.match(api, /identifier:[\s\S]*Verified email address or case-insensitive unique username/);
+  assert.match(contracts, /interface LocalLoginRequest[\s\S]*identifier\?: string/);
+});
+
+test("username login migration is nullable, uniquely normalized, MySQL57-compatible and reversible", async () => {
+  const [up, down] = await Promise.all([
+    readFile("database/migrations/0067_usernames_login.up.sql", "utf8"),
+    readFile("database/migrations/0067_usernames_login.down.sql", "utf8"),
+  ]);
+  assert.match(up, /`username` VARCHAR\(32\) NULL/);
+  assert.match(up, /`username_normalized` VARCHAR\(32\) NULL/);
+  assert.match(up, /UNIQUE KEY `uq_users_username_normalized`/);
+  assert.doesNotMatch(up, /CHECK\s*\(|utf8mb4_0900|GENERATED\s+ALWAYS/i);
+  assert.match(down, /DROP INDEX `uq_users_username_normalized`/);
+  assert.match(down, /DROP COLUMN `username`/);
 });
 
 test("M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchronized", async () => {
-  const [ui, env, schema, map, architecture, runbook, registry] = await Promise.all(
-    [
-      "apps/web/src/components/LocalIdentity.vue",
-      "config/env.example",
-      "config/schema.json",
-      "docs/feature-map.json",
-      "docs/architecture/m01-01-local-identity.md",
-      "docs/runbooks/m01-01-local-identity.md",
-      "verification/modules/M01-01.json",
-    ].map((path) => readFile(path, "utf8")),
-  );
+  const [ui, env, schema, map, architecture, runbook, registry, liveProbe, deploy] =
+    await Promise.all(
+      [
+        "apps/web/src/components/LocalIdentity.vue",
+        "config/env.example",
+        "config/schema.json",
+        "docs/feature-map.json",
+        "docs/architecture/m01-01-local-identity.md",
+        "docs/runbooks/m01-01-local-identity.md",
+        "verification/modules/M01-01.json",
+        "scripts/verify-local-auth-live.mjs",
+        "scripts/deploy-baota.py",
+      ].map((path) => readFile(path, "utf8")),
+    );
   for (const state of [
     "login",
     "register",
@@ -115,6 +133,8 @@ test("M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchron
   ])
     assert.match(architecture, new RegExp(image));
   assert.match(runbook, /## 回滚/);
+  assert.match(liveProbe, /login_identifiers:'email_and_username'/);
+  assert.match(deploy, /0067_usernames_login\.up\.sql/);
   const parsed = JSON.parse(registry);
   assert.equal(parsed.atomicTasks.length, 17);
   assert.deepEqual(

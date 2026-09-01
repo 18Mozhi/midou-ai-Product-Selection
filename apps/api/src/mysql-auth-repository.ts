@@ -11,7 +11,7 @@ import { AuthError } from "@scoutops/auth";
 import { withTransaction } from "@scoutops/database";
 
 const userColumns =
-  "id,email,email_normalized,password_hash,status,email_verified_at," +
+  "id,email,email_normalized,username,username_normalized,password_hash,status,email_verified_at," +
   "failed_login_count,locked_until,password_changed_at,must_change_password," +
   "must_enroll_mfa,security_setup_completed_at,version,created_at,updated_at";
 const sessionColumns =
@@ -35,6 +35,13 @@ export class MySqlAuthRepository implements AuthRepository {
     );
     return rows[0] ? asUser(rows[0]) : null;
   }
+  async findUserByUsername(username: string) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      `SELECT ${userColumns} FROM users WHERE username_normalized=? LIMIT 1`,
+      [username],
+    );
+    return rows[0] ? asUser(rows[0]) : null;
+  }
   async findUserById(id: string) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       `SELECT ${userColumns} FROM users WHERE id=? LIMIT 1`,
@@ -45,14 +52,16 @@ export class MySqlAuthRepository implements AuthRepository {
   async createUser(user: UserRecord) {
     try {
       await this.pool.query(
-        "INSERT INTO users (id,email,email_normalized,password_hash,status,email_verified_at," +
+        "INSERT INTO users (id,email,email_normalized,username,username_normalized,password_hash,status,email_verified_at," +
           "failed_login_count,locked_until,password_changed_at,must_change_password," +
           "must_enroll_mfa,security_setup_completed_at,version,created_at,updated_at) VALUES (?," +
-          "?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+          "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [
           user.id,
           user.email,
           user.email_normalized,
+          user.username,
+          user.username_normalized,
           user.password_hash,
           user.status,
           user.email_verified_at,
@@ -89,12 +98,14 @@ export class MySqlAuthRepository implements AuthRepository {
   }
   async saveUser(user: UserRecord) {
     const [result] = await this.pool.query<ResultSetHeader>(
-      "UPDATE users SET email=?,email_normalized=?,password_hash=?,status=?,email_verified_at=?," +
+      "UPDATE users SET email=?,email_normalized=?,username=?,username_normalized=?,password_hash=?,status=?,email_verified_at=?," +
         "failed_login_count=?,locked_until=?,password_changed_at=?,must_change_password=?," +
         "must_enroll_mfa=?,security_setup_completed_at=?,version=?,updated_at=? WHERE id=?",
       [
         user.email,
         user.email_normalized,
+        user.username,
+        user.username_normalized,
         user.password_hash,
         user.status,
         user.email_verified_at,

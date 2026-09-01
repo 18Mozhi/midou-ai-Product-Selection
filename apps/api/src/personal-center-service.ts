@@ -1,4 +1,5 @@
 import { ApiError } from "./api-foundation.js";
+import { normalizeUsername } from "@scoutops/auth";
 
 export interface PersonalCenterRepository {
   profile(input: { userId: string }): Promise<unknown>;
@@ -6,6 +7,8 @@ export interface PersonalCenterRepository {
     userId: string;
     organizationId: string;
     workspaceId: string;
+    username?: string | null;
+    usernameNormalized?: string | null;
     displayName: string;
     avatarUrl: string | null;
     phone: string | null;
@@ -70,12 +73,21 @@ export class PersonalCenterService {
         400,
         "手机号只允许国际区号、数字、空格和连字符。 ",
       );
+    const hasUsername = Object.prototype.hasOwnProperty.call(value ?? {}, "username"),
+      usernameInput = hasUsername ? String(value?.username ?? "").trim() : undefined,
+      username = usernameInput ? normalizeUsername(usernameInput) : null;
     const expectedVersion = Number(value?.expected_version);
     if (!Number.isInteger(expectedVersion) || expectedVersion < 0)
       throw new PersonalCenterError("profile_version_invalid", 400, "刷新个人资料后重试。 ");
     const reason = text(value?.reason, "reason", 300);
     return this.repository.updateProfile({
       ...context,
+      ...(hasUsername
+        ? {
+            username: username?.username ?? null,
+            usernameNormalized: username?.normalized ?? null,
+          }
+        : {}),
       displayName: text(value?.display_name, "display_name", 120),
       avatarUrl: avatarUrl || null,
       phone: phone || null,

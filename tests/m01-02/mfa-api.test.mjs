@@ -113,7 +113,7 @@ const headers = (key, cookie) => ({
 test("M01-02.A06/A09/A13 API uses separate HttpOnly challenge before session", async () => {
   const f = await fixture();
   const direct = await f.auth.login(
-    { email: f.user.email, password: "Correct-Horse-42" },
+    { identifier: f.user.email, password: "Correct-Horse-42" },
     { requestId: "r0", traceId: "t0" },
   );
   const sessionCookie = `__Host-scoutops_session=${direct.token}`;
@@ -167,7 +167,7 @@ test("M01-02.A08/A09 MFA endpoints require current session and idempotency", asy
   const unauth = await f.app.inject({ method: "GET", url: "/api/v1/me/mfa" });
   assert.equal(unauth.statusCode, 401);
   const login = await f.auth.login(
-    { email: f.user.email, password: "Correct-Horse-42" },
+    { identifier: f.user.email, password: "Correct-Horse-42" },
     { requestId: "r", traceId: "t" },
   );
   const cookie = `scoutops_session=${login.token}`;

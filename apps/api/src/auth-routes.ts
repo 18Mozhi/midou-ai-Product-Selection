@@ -236,16 +236,26 @@ export function registerLocalAuthRoutes(app: FastifyInstance, options: LocalAuth
     "/api/v1/auth/login",
     {
       schema: {
-        body: bodySchema(["email", "password"], {
-          email: { type: "string", maxLength: 254 },
-          password: { type: "string", maxLength: 1024 },
-        }),
+        body: {
+          type: "object",
+          required: ["password"],
+          oneOf: [{ required: ["identifier"] }, { required: ["email"] }],
+          additionalProperties: false,
+          properties: {
+            identifier: { type: "string", minLength: 2, maxLength: 254 },
+            email: { type: "string", maxLength: 254 },
+            password: { type: "string", maxLength: 1024 },
+          },
+        },
       },
     },
     async (request, reply) => {
       assertOrigin(request, options.webOrigin);
-      const body = request.body as { email: string; password: string };
-      const login = await options.service.login(body, requestIds(request));
+      const body = request.body as { identifier?: string; email?: string; password: string };
+      const login = await options.service.login(
+        { identifier: body.identifier ?? body.email ?? "", password: body.password },
+        requestIds(request),
+      );
       if ("mfa_required" in login) {
         setChallengeCookie(reply, login.challenge_token, options.secureCookie);
         reply.code(202);

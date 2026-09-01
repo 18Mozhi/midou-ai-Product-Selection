@@ -25,6 +25,8 @@ export interface UserRecord {
   id: string;
   email: string;
   email_normalized: string;
+  username: string | null;
+  username_normalized: string | null;
   password_hash: string;
   status: UserStatus;
   email_verified_at: Date | null;
@@ -78,6 +80,7 @@ export interface AuthSecurityEvent {
 
 export interface AuthRepository {
   findUserByEmail(normalizedEmail: string): Promise<UserRecord | null>;
+  findUserByUsername(normalizedUsername: string): Promise<UserRecord | null>;
   findUserById(userId: string): Promise<UserRecord | null>;
   createUser(user: UserRecord): Promise<void>;
   discardPendingRegistration(userId: string): Promise<void>;
@@ -155,10 +158,13 @@ export function authErrorMessage(code: string): string {
     (
       {
         invalid_email: "邮箱格式不正确。",
+        invalid_login_identifier: "登录账号格式不正确。",
+        invalid_username: "用户名格式不正确。",
+        username_already_registered: "该用户名已被使用。",
         password_policy_failed: "密码不符合安全策略。",
         email_already_registered: "该邮箱已注册。",
         invalid_or_expired_token: "链接无效或已过期。",
-        invalid_credentials: "邮箱或密码不正确。",
+        invalid_credentials: "账号或密码不正确。",
         account_locked: "账号暂时锁定。",
         account_disabled: "账号已停用。",
         email_verification_required: "邮箱尚未验证。",
@@ -207,6 +213,31 @@ export function normalizeEmail(email: string): string {
     throw new AuthError("invalid_email", 400, "输入有效邮箱地址后重试。");
   }
   return normalized;
+}
+
+export function normalizeUsername(username: string): {
+  username: string;
+  normalized: string;
+} {
+  const value = username.trim().normalize("NFKC"),
+    length = [...value].length;
+  if (length < 2 || length > 32 || !/^[\p{L}\p{N}](?:[\p{L}\p{N}._-]*[\p{L}\p{N}])?$/u.test(value))
+    throw new AuthError(
+      "invalid_username",
+      400,
+      "用户名须为 2–32 个字符，可使用文字、数字、点、下划线和连字符，且首尾须为文字或数字。",
+    );
+  return { username: value, normalized: value.toLocaleLowerCase("en-US") };
+}
+
+function normalizeLoginIdentifier(identifier: string) {
+  const value = String(identifier ?? "").trim();
+  try {
+    if (value.includes("@")) return { kind: "email" as const, value: normalizeEmail(value) };
+    return { kind: "username" as const, value: normalizeUsername(value).normalized };
+  } catch {
+    throw new AuthError("invalid_login_identifier", 400, "输入有效的邮箱或用户名后重试。");
+  }
 }
 
 export const digestOpaqueToken = (token: string) =>
@@ -320,6 +351,9 @@ export class InMemoryAuthRepository implements AuthRepository {
   readonly securityEvents: AuthSecurityEvent[] = [];
   async findUserByEmail(email: string) {
     return this.users.find((item) => item.email_normalized === email) ?? null;
+  }
+  async findUserByUsername(username: string) {
+    return this.users.find((item) => item.username_normalized === username) ?? null;
   }
   async findUserById(id: string) {
     return this.users.find((item) => item.id === id) ?? null;
@@ -491,6 +525,8 @@ export class LocalAuthService {
       id: randomUUID(),
       email,
       email_normalized: email,
+      username: null,
+      username_normalized: null,
       password_hash: await this.passwordHasher.hash(input.password),
       status: "pending_verification",
       email_verified_at: null,
@@ -513,7 +549,7 @@ export class LocalAuthService {
       throw error;
     }
     await this.event(user.id, "registration.created", "succeeded", context);
-    return { id: user.id, email: user.email, status: user.status };
+    return { id: user.id, email: user.email, username: user.username, status: user.status };
   }
 
   async verifyEmail(token: string, context: AuthContext): Promise<"verified"> {
@@ -535,15 +571,18 @@ export class LocalAuthService {
     return "verified";
   }
 
-  async login(input: { email: string; password: string }, context: AuthContext) {
-    const email = normalizeEmail(input.email);
-    const user = await this.repository.findUserByEmail(email);
+  async login(input: { identifier: string; password: string }, context: AuthContext) {
+    const identifier = normalizeLoginIdentifier(input.identifier),
+      user =
+        identifier.kind === "email"
+          ? await this.repository.findUserByEmail(identifier.value)
+          : await this.repository.findUserByUsername(identifier.value);
     const now = this.now();
     if (!user) {
       this.dummyPasswordHash ??= this.passwordHasher.hash("ScoutOps-dummy-password-not-a-user");
       await this.passwordHasher.verify(await this.dummyPasswordHash, input.password);
       await this.event(null, "login.failed", "failed", context);
-      throw new AuthError("invalid_credentials", 401, "检查邮箱和密码后重试。");
+      throw new AuthError("invalid_credentials", 401, "检查账号和密码后重试。");
     }
     if (user.status === "disabled")
       throw new AuthError("account_disabled", 403, "联系平台安全管理员。");
@@ -561,7 +600,7 @@ export class LocalAuthService {
       throw new AuthError(
         user.locked_until ? "account_locked" : "invalid_credentials",
         user.locked_until ? 423 : 401,
-        user.locked_until ? "锁定期结束后重试或使用密码重置。" : "检查邮箱和密码后重试。",
+        user.locked_until ? "锁定期结束后重试或使用密码重置。" : "检查账号和密码后重试。",
       );
     }
     if (!user.email_verified_at)
@@ -611,7 +650,7 @@ export class LocalAuthService {
     await this.event(user.id, "login.succeeded", "succeeded", context);
     return {
       token,
-      user: { id: user.id, email: user.email, status: user.status },
+      user: { id: user.id, email: user.email, username: user.username, status: user.status },
       session: this.sessionSummary(session),
       security_setup: {
         required: user.must_change_password || user.must_enroll_mfa,

@@ -44,6 +44,7 @@ const mode = ref<IdentityMode>(
 );
 const requestState = ref<RequestState>(params.get("state") === "expired" ? "expired" : "idle");
 const email = ref("");
+const identifier = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const currentPassword = ref("");
@@ -162,7 +163,7 @@ async function submit() {
   }
   if (mode.value === "login") {
     const result = await request<LoginResult>("/auth/login", {
-      email: email.value,
+      identifier: identifier.value,
       password: password.value,
     });
     if (result?.data?.mfa_required) {
@@ -306,7 +307,7 @@ onMounted(() => {
             {{ mode === "sessions" ? "账号中心" : "智能选品账号" }}
           </p>
           <h2>{{ title }}</h2>
-          <span v-if="mode === 'login'">使用已验证的邮箱和本地密码登录</span>
+          <span v-if="mode === 'login'">使用已验证的邮箱或唯一用户名登录</span>
           <span v-else-if="mode === 'register'">先创建账号，再完成邮箱验证</span>
           <span v-else-if="mode === 'forgot'">无论账号是否存在，页面提示保持一致</span>
           <span v-else-if="mode === 'mfa'">认证器密钥加密保存，恢复码仅显示一次</span>
@@ -369,7 +370,17 @@ onMounted(() => {
               maxlength="32"
               placeholder="6 位验证码"
           /></label>
-          <label v-if="!['reset', 'mfa-challenge'].includes(mode)"
+          <label v-if="mode === 'login'"
+            >账号（邮箱或用户名）<input
+              v-model="identifier"
+              type="text"
+              autocomplete="username"
+              required
+              minlength="2"
+              maxlength="254"
+              placeholder="name@company.com 或用户名"
+          /></label>
+          <label v-else-if="!['reset', 'mfa-challenge'].includes(mode)"
             >邮箱<input
               v-model="email"
               type="email"

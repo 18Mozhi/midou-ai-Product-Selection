@@ -10,7 +10,7 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
 
   async profile(input: { userId: string }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT u.id,u.email,u.email_verified_at,u.status,p.display_name,p.avatar_url," +
+      "SELECT u.id,u.email,u.username,u.email_verified_at,u.status,p.display_name,p.avatar_url," +
         "p.phone,p.phone_verified_at,p.locale,p.timezone,COALESCE(p.version,0) version," +
         "COALESCE(p.updated_at,u.updated_at) updated_at FROM users u LEFT JOIN user_profiles " +
         "p ON p.user_id=u.id WHERE u.id=?",
@@ -48,6 +48,11 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
         [input.userId],
       );
       const current = rows[0];
+      const [users] = await connection.query<RowDataPacket[]>(
+        "SELECT username FROM users WHERE id=? FOR UPDATE",
+        [input.userId],
+      );
+      if (!users[0]) throw new PersonalCenterError("user_not_found", 404, "重新登录后重试。 ");
       if (Number(current?.version ?? 0) !== input.expectedVersion)
         throw new PersonalCenterError(
           "profile_version_conflict",
@@ -88,8 +93,16 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
           ],
         );
       }
+      const usernameChanged =
+        input.username !== undefined && (users[0].username ?? null) !== input.username;
+      if (usernameChanged)
+        await connection.query(
+          "UPDATE users SET username=?,username_normalized=?,version=version+1,updated_at=? WHERE id=?",
+          [input.username, input.usernameNormalized, input.now, input.userId],
+        );
       const result = {
         id: input.userId,
+        username: usernameChanged ? input.username : (users[0].username ?? null),
         display_name: input.displayName,
         avatar_url: input.avatarUrl,
         phone: input.phone,
@@ -112,7 +125,14 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
           input.requestId,
           input.traceId,
           JSON.stringify({
-            fields: ["display_name", "avatar_url", "phone", "locale", "timezone"],
+            fields: [
+              "display_name",
+              ...(usernameChanged ? ["username"] : []),
+              "avatar_url",
+              "phone",
+              "locale",
+              "timezone",
+            ],
             phone_verification_reset: current?.phone !== input.phone,
             reason: input.reason,
           }),
@@ -127,6 +147,18 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
       return result;
     } catch (error) {
       await connection.rollback();
+      if (
+        typeof error === "object" &&
+        error &&
+        "code" in error &&
+        error.code === "ER_DUP_ENTRY" &&
+        String("message" in error ? error.message : "").includes("uq_users_username_normalized")
+      )
+        throw new PersonalCenterError(
+          "username_already_registered",
+          409,
+          "该用户名已被使用，请更换后重试。",
+        );
       throw error;
     } finally {
       connection.release();

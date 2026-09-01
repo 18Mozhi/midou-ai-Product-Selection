@@ -116,7 +116,7 @@ test("M01-02.A04/A09/A12 enrolls encrypted TOTP, gates login and rejects replay"
   assert.equal(confirmed.recovery_codes.length, 8);
   f.advance(30);
   const login = await f.localAuth.login(
-    { email: f.user.email, password: "Correct-Horse-42" },
+    { identifier: f.user.email, password: "Correct-Horse-42" },
     context,
   );
   assert.equal(login.mfa_required, true);
@@ -141,7 +141,7 @@ test("M01-02.A08/A12/A16 recovery codes are single-use and attempts lock a chall
   );
   f.advance(30);
   const first = await f.localAuth.login(
-    { email: f.user.email, password: "Correct-Horse-42" },
+    { identifier: f.user.email, password: "Correct-Horse-42" },
     context,
   );
   for (let i = 0; i < 2; i += 1)
@@ -154,12 +154,12 @@ test("M01-02.A08/A12/A16 recovery codes are single-use and attempts lock a chall
     /mfa_challenge_locked/,
   );
   const second = await f.localAuth.login(
-    { email: f.user.email, password: "Correct-Horse-42" },
+    { identifier: f.user.email, password: "Correct-Horse-42" },
     context,
   );
   await f.mfa.verifyLogin(second.challenge_token, confirmed.recovery_codes[0], context);
   const third = await f.localAuth.login(
-    { email: f.user.email, password: "Correct-Horse-42" },
+    { identifier: f.user.email, password: "Correct-Horse-42" },
     context,
   );
   await assert.rejects(

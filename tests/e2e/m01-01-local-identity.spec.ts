@@ -38,8 +38,10 @@ test("M01-01.A08/A15 anonymous security entry returns to login without protected
 test("M01-01 regression: successful administrator login enters the operation panel instead of device sessions", async ({
   page,
 }) => {
-  await page.route("**/api/v1/auth/login", (route) =>
-    route.fulfill({
+  let loginPayload: Record<string, string> | null = null;
+  await page.route("**/api/v1/auth/login", (route) => {
+    loginPayload = route.request().postDataJSON();
+    return route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
@@ -51,8 +53,8 @@ test("M01-01 regression: successful administrator login enters the operation pan
         request_id: "login-admin",
         trace_id: "login-admin",
       }),
-    }),
-  );
+    });
+  });
   await page.route("**/api/v1/me/landing", (route) =>
     route.fulfill({
       status: 200,
@@ -69,8 +71,9 @@ test("M01-01 regression: successful administrator login enters the operation pan
     }),
   );
   await page.goto("/login");
-  await page.getByLabel("邮箱").fill("admin@example.test");
+  await page.getByLabel("账号（邮箱或用户名）").fill("Admin.Operator");
   await page.getByLabel("密码").fill("AdminPassword!234");
   await page.getByRole("button", { name: "登录" }).click();
   await expect(page).toHaveURL(/\/platform-admin$/);
+  expect(loginPayload).toEqual({ identifier: "Admin.Operator", password: "AdminPassword!234" });
 });

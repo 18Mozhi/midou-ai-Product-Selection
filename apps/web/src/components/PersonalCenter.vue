@@ -38,6 +38,7 @@ const assets = ref<any>({ followed_trends: [], decisions: [], tasks: [] });
 const sectionsLoading = ref(false);
 let loadSequence = 0;
 const form = reactive({
+  username: "",
   display_name: "",
   avatar_url: "",
   phone: "",
@@ -82,6 +83,7 @@ async function load() {
     if (sequence !== loadSequence) return;
     profile.value = loadedProfile;
     Object.assign(form, {
+      username: profile.value.username ?? "",
       display_name: profile.value.display_name,
       avatar_url: profile.value.avatar_url ?? "",
       phone: profile.value.phone ?? "",
@@ -151,7 +153,7 @@ async function saveProfile() {
       },
     });
     profile.value = { ...profile.value, ...result };
-    notice.value = "个人资料已保存；手机号变化后保持未验证状态。";
+    notice.value = "个人资料已保存；用户名可用于登录，手机号变化后保持未验证状态。";
   } catch (error) {
     notice.value = error instanceof Error ? error.message : "保存失败";
   }
@@ -327,6 +329,14 @@ watch(
           >邮箱<input :value="profile.email" disabled /><small>{{
             profile.email_verified_at ? "已验证" : "尚未验证"
           }}</small></label
+        ><label
+          >登录用户名<input
+            v-model="form.username"
+            autocomplete="username"
+            minlength="2"
+            maxlength="32"
+            placeholder="可选；设置后可代替邮箱登录"
+          /><small>2–32 个字符；支持文字、数字、点、下划线和连字符，且不区分大小写</small></label
         ><label>显示名称<input v-model="form.display_name" required maxlength="120" /></label
         ><label>头像 HTTPS 地址<input v-model="form.avatar_url" type="url" /></label
         ><label

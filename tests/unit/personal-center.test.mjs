@@ -13,6 +13,7 @@ test("personal center validates versioned profile changes and preserves selected
   const service = new PersonalCenterService(repository, () => new Date("2026-08-18T12:00:00.000Z"));
   await service.update(
     {
+      username: "运营.Admin",
       display_name: "选品经理",
       avatar_url: "https://example.test/avatar.png",
       phone: "+86 138-0000-0000",
@@ -32,6 +33,27 @@ test("personal center validates versioned profile changes and preserves selected
   );
   assert.equal(calls[0].expectedVersion, 2);
   assert.equal(calls[0].organizationId, "org");
+  assert.equal(calls[0].username, "运营.Admin");
+  assert.equal(calls[0].usernameNormalized, "运营.admin");
+  await service.update(
+    {
+      display_name: "兼容旧客户端",
+      locale: "zh-CN",
+      timezone: "Asia/Shanghai",
+      expected_version: 3,
+      reason: "更新显示名称",
+    },
+    {
+      userId: "user",
+      organizationId: "org",
+      workspaceId: "workspace",
+      idempotencyKey: "legacy-client",
+      requestId: "request-legacy",
+      traceId: "trace-legacy",
+    },
+  );
+  assert.equal(calls[1].username, undefined);
+  assert.equal(calls[1].usernameNormalized, undefined);
   assert.throws(
     () =>
       service.update(
@@ -54,6 +76,28 @@ test("personal center validates versioned profile changes and preserves selected
       ),
     /avatar_url_invalid/,
   );
+  assert.throws(
+    () =>
+      service.update(
+        {
+          username: "-invalid-",
+          display_name: "a",
+          locale: "zh-CN",
+          timezone: "Asia/Shanghai",
+          expected_version: 0,
+          reason: "修改",
+        },
+        {
+          userId: "u",
+          organizationId: "o",
+          workspaceId: "w",
+          idempotencyKey: "username-invalid",
+          requestId: "r",
+          traceId: "t",
+        },
+      ),
+    /invalid_username/,
+  );
 });
 
 test("personal center delivery contains real profile assets security preferences and route contracts", async () => {
@@ -67,6 +111,7 @@ test("personal center delivery contains real profile assets security preferences
   ]);
   assert.match(component, /基本资料.*我的权限.*安全中心.*通知偏好.*我的资产/s);
   assert.match(component, /changePassword.*revokeSession.*savePreferences/s);
+  assert.match(component, /登录用户名[\s\S]*form\.username/);
   assert.match(component, /onMounted\(\(\) => void load\(\)\)/);
   assert.ok(
     component.indexOf('await call("/me/profile")') < component.indexOf("Promise.allSettled"),
@@ -79,6 +124,7 @@ test("personal center delivery contains real profile assets security preferences
   assert.match(repository, /opportunity_decisions/);
   assert.match(repository, /FROM tasks WHERE assignee_id/);
   assert.match(migration, /user_profiles/);
+  assert.match(repository, /uq_users_username_normalized/);
   assert.match(openapi, /\/me\/profile:/);
   assert.match(map, /"view": "PersonalCenter"/);
 });

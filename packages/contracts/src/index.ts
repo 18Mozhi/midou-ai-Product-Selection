@@ -160,6 +160,7 @@ export type LocalSessionStatus = "active" | "revoked" | "expired";
 export interface LocalAccountSummary {
   id: string;
   email: string;
+  username: string | null;
   status: LocalAccountStatus;
 }
 
@@ -168,7 +169,12 @@ export interface LocalAccountRegistration {
   password: string;
 }
 
-export interface LocalLoginRequest extends LocalAccountRegistration {}
+export interface LocalLoginRequest {
+  identifier?: string;
+  /** @deprecated Use identifier. Kept for existing email-login clients. */
+  email?: string;
+  password: string;
+}
 
 export interface LocalSessionSummary {
   id: string;

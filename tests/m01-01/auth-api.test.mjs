@@ -149,3 +149,39 @@ test("M01-01.A08/A09/A16 API rejects foreign origin, missing idempotency and rep
   assert.match(login.headers["set-cookie"], /__Host-scoutops_session=.*Secure/);
   await app.close();
 });
+
+test("login accepts the new identifier field for a unique username and keeps legacy email compatibility", async () => {
+  const { app, delivery, repository } = appFixture();
+  await app.inject({
+    method: "POST",
+    url: "/api/v1/auth/register",
+    headers: headers("register-username"),
+    payload: { email: "operator@example.com", password: "Correct-Horse-42" },
+  });
+  await app.inject({
+    method: "POST",
+    url: "/api/v1/auth/email-verification/confirm",
+    headers: headers("verify-username"),
+    payload: { token: delivery.messages[0].token },
+  });
+  repository.users[0].username = "运营.Admin";
+  repository.users[0].username_normalized = "运营.admin";
+  const usernameLogin = await app.inject({
+    method: "POST",
+    url: "/api/v1/auth/login",
+    headers: { origin: "http://127.0.0.1:5173" },
+    payload: { identifier: "运营.ADMIN", password: "Correct-Horse-42" },
+  });
+  assert.equal(usernameLogin.statusCode, 200, usernameLogin.body);
+  assert.equal(usernameLogin.json().data.user.username, "运营.Admin");
+  const missing = await app.inject({
+    method: "POST",
+    url: "/api/v1/auth/login",
+    headers: { origin: "http://127.0.0.1:5173" },
+    payload: { identifier: "missing-user", password: "Correct-Horse-42" },
+  });
+  assert.equal(missing.statusCode, 401);
+  assert.equal(missing.json().error.code, "invalid_credentials");
+  assert.equal(missing.json().error.message, "账号或密码不正确。");
+  await app.close();
+});

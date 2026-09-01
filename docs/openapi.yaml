@@ -406,7 +406,7 @@ paths:
         "400": { $ref: "#/components/responses/Error" }
   /auth/login:
     post:
-      summary: Authenticate a verified local account and set an opaque HttpOnly session cookie
+      summary: Authenticate a verified local account by email or username and set an opaque HttpOnly session cookie
       security: []
       requestBody:
         {
@@ -3265,6 +3265,14 @@ paths:
               type: object
               required: [display_name, locale, timezone, expected_version, reason]
               properties:
+                username:
+                  {
+                    type: string,
+                    nullable: true,
+                    minLength: 2,
+                    maxLength: 32,
+                    description: Case-insensitive unique login username; empty value removes the optional alias,
+                  }
                 display_name: { type: string, minLength: 1, maxLength: 120 }
                 avatar_url: { type: string, nullable: true, maxLength: 1000 }
                 phone: { type: string, nullable: true, maxLength: 40 }
@@ -8171,9 +8179,26 @@ components:
     LocalLoginRequest:
       type: object
       additionalProperties: false
-      required: [email, password]
+      required: [password]
+      oneOf:
+        - required: [identifier]
+        - required: [email]
       properties:
-        email: { type: string, format: email, maxLength: 254 }
+        identifier:
+          {
+            type: string,
+            minLength: 2,
+            maxLength: 254,
+            description: Verified email address or case-insensitive unique username,
+          }
+        email:
+          {
+            type: string,
+            format: email,
+            maxLength: 254,
+            deprecated: true,
+            description: Backward-compatible email-only field; use identifier for new clients,
+          }
         password: { type: string, maxLength: 1024, writeOnly: true }
     ActionTokenConfirm:
       type: object
@@ -8201,10 +8226,11 @@ components:
         new_password: { type: string, minLength: 8, maxLength: 1024, writeOnly: true }
     LocalAccountSummary:
       type: object
-      required: [id, email, status]
+      required: [id, email, username, status]
       properties:
         id: { type: string, format: uuid }
         email: { type: string, format: email }
+        username: { type: string, nullable: true, minLength: 2, maxLength: 32 }
         status: { type: string, enum: [pending_verification, active, locked, disabled] }
     SessionSummary:
       type: object

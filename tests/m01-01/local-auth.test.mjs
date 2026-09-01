@@ -72,7 +72,7 @@ test("M01-01.A04/A09/A16 login is generic, locks by policy, hashes sessions and 
     await assert.rejects(
       () =>
         service.login(
-          { email: "user@example.com", password: "wrong-password" },
+          { identifier: "user@example.com", password: "wrong-password" },
           { requestId: `rf${attempt}`, traceId: `tf${attempt}` },
         ),
       /invalid_credentials/,
@@ -81,7 +81,7 @@ test("M01-01.A04/A09/A16 login is generic, locks by policy, hashes sessions and 
   await assert.rejects(
     () =>
       service.login(
-        { email: "user@example.com", password: "wrong-password" },
+        { identifier: "user@example.com", password: "wrong-password" },
         { requestId: "rf3", traceId: "tf3" },
       ),
     /account_locked/,
@@ -89,7 +89,7 @@ test("M01-01.A04/A09/A16 login is generic, locks by policy, hashes sessions and 
   repository.users[0].locked_until = null;
   repository.users[0].failed_login_count = 0;
   const login = await service.login(
-    { email: "user@example.com", password: "Correct-Horse-42" },
+    { identifier: "user@example.com", password: "Correct-Horse-42" },
     { requestId: "rl", traceId: "tl", userAgent: "test-browser" },
   );
   assert.ok(login.token);
@@ -110,7 +110,7 @@ test("M01-01.A04/A08 password reset is enumeration-safe, single-use and revokes 
   );
   await service.verifyEmail(delivery.messages[0].token, { requestId: "r2", traceId: "t2" });
   const before = await service.login(
-    { email: "user@example.com", password: "Correct-Horse-42" },
+    { identifier: "user@example.com", password: "Correct-Horse-42" },
     { requestId: "r3", traceId: "t3" },
   );
   assert.deepEqual(
@@ -133,10 +133,38 @@ test("M01-01.A04/A08 password reset is enumeration-safe, single-use and revokes 
     /invalid_or_expired_token/,
   );
   const after = await service.login(
-    { email: "user@example.com", password: "New-Correct-Horse-43" },
+    { identifier: "user@example.com", password: "New-Correct-Horse-43" },
     { requestId: "r8", traceId: "t8" },
   );
   assert.ok(after.token);
+});
+
+test("username login is case-insensitive and shares the verified-account session path", async () => {
+  const { repository, delivery, service } = fixture();
+  await service.register(
+    { email: "operator@example.com", password: "Correct-Horse-42" },
+    { requestId: "username-register", traceId: "username-register" },
+  );
+  await service.verifyEmail(delivery.messages[0].token, {
+    requestId: "username-verify",
+    traceId: "username-verify",
+  });
+  repository.users[0].username = "运营.Admin";
+  repository.users[0].username_normalized = "运营.admin";
+  const login = await service.login(
+    { identifier: "运营.ADMIN", password: "Correct-Horse-42" },
+    { requestId: "username-login", traceId: "username-login" },
+  );
+  assert.equal(login.user.username, "运营.Admin");
+  assert.equal(login.user.email, "operator@example.com");
+  await assert.rejects(
+    () =>
+      service.login(
+        { identifier: "unknown-user", password: "Correct-Horse-42" },
+        { requestId: "username-missing", traceId: "username-missing" },
+      ),
+    /invalid_credentials/,
+  );
 });
 
 test("M01-01.A05 delivery outbox encrypts email and raw action token", async () => {

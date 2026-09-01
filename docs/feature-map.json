@@ -217,11 +217,12 @@
       "sessionTransport": "30-day opaque Secure HttpOnly SameSite=Strict cookie in production with Max-Age=2592000; token hash only in MySQL",
       "configuration": ["AUTH_SESSION_TTL_MINUTES=43200"],
       "delivery": "AES-256-GCM MySQL outbox; provider selection pending and explicitly blocked",
-      "scope": "local email account and own sessions only; MFA and enterprise identity capabilities are tracked separately by M01-02",
+      "scope": "local verified-email account with an optional case-insensitive unique username login alias and own sessions; registration and recovery remain email-based, while MFA and enterprise identity capabilities are tracked separately by M01-02",
+      "loginIdentifierBoundary": "new clients send identifier as a verified email or normalized unique username; the legacy email request field remains accepted for compatibility, unknown accounts share the same generic credential failure, and existing users retain email login until they explicitly set a username in the personal center",
       "apiClientBoundary": "local identity and own-session requests use the shared frontend API client; server error message, action hint and request/trace correlation remain visible without exposing tokens",
       "anonymousAdmissionBoundary": "login does not call protected identity APIs; /me and /security/mfa are marked sessionRequired in the canonical route catalog and use the public no-store 200 session-status boolean before rendering, while missing or invalid sessions return to login with a same-origin relative redirect and no user session or tenant identifiers",
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "email_and_username_login_implemented"
     },
     "mfaIdentityAdapters": {
       "module": "M01-02",
@@ -400,14 +401,14 @@
         "/select-context",
         "/onboarding"
       ],
-      "contracts": "reuses M01-01 local identity, M01-02 MFA and M01-03 tenancy APIs; adds only the identifier-free /auth/session-status boolean read for account-route admission",
+      "contracts": "reuses M01-01 local email-or-username identity, M01-02 MFA and M01-03 tenancy APIs; adds only the identity-detail-free /auth/session-status boolean read for account-route admission",
       "responsiveBoundary": "the login brand entry keeps a 44px minimum touch height on every viewport; mobile auxiliary account actions use a two-column 44px touch grid to reduce vertical occupation without shrinking targets or changing identity behavior",
       "imageEvidence": [
         "concepts 01-10",
         "high-resolution 02 login",
         "high-resolution 03 registration guide"
       ],
-      "nonGoals": "no phone login, Google, Microsoft or SSO activation; no onboarding persistence; no migration, environment value or production service",
+      "nonGoals": "no phone login, employee-number login, Google, Microsoft or SSO activation; no onboarding persistence or new production service",
       "verificationRunId": "facffd5e-7749-4831-ac73-9db677b608a8",
       "status": "verified",
       "statusDetail": "module_verified"
