@@ -5,6 +5,9 @@ const BRIDGE_ORIGINS = new Set([
   "http://127.0.0.1:5173",
   "http://localhost:5173",
 ]);
+const COOKIE_PARENT_DOMAIN_PERMISSIONS = new Map([
+  ["s.1688.com", "https://*.1688.com/*"],
+]);
 
 const reply = (data) => ({ ok: true, data });
 const fail = (error) => ({ ok: false, error });
@@ -12,6 +15,13 @@ const fail = (error) => ({ ok: false, error });
 async function permit(origins) {
   const granted = await chrome.permissions.request({ origins });
   if (!granted) throw new Error("browser_permission_denied");
+}
+
+function cookiePermissionOrigins(target) {
+  const origins = [`${target.origin}/*`];
+  const parentDomainPermission = COOKIE_PARENT_DOMAIN_PERMISSIONS.get(target.hostname);
+  if (parentDomainPermission) origins.push(parentDomainPermission);
+  return origins;
 }
 
 async function readCookies(payload) {
@@ -22,8 +32,9 @@ async function readCookies(payload) {
     throw new Error("browser_target_invalid");
   }
   if (target.protocol !== "https:") throw new Error("browser_target_invalid");
-  await permit([`${target.origin}/*`]);
+  await permit(cookiePermissionOrigins(target));
   const cookies = await chrome.cookies.getAll({ url: target.origin });
+  if (!cookies.length) throw new Error("browser_cookie_empty");
   return {
     origin: target.origin,
     cookies: cookies.map((cookie) => ({

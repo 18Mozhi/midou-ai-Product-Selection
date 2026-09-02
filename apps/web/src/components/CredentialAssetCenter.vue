@@ -377,10 +377,12 @@ async function acquireBrowserCookies() {
     loginPayload.value = JSON.stringify(result.cookies);
     loginFileName.value = `浏览器读取 · ${result.cookies.length} 条 Cookie`;
     loginMode.value = "browser";
-    message.value = "已读取 Cookie；确认来源后点击“加密保存并启用”。";
-  } catch {
+    message.value = `已读取 ${result.cookies.length} 条 Cookie；确认来源后点击“加密保存并启用”。`;
+  } catch (error) {
     message.value =
-      "未检测到浏览器助手或未授予该网站权限。请先下载并加载浏览器助手，或改用 Cookie 文件上传。";
+      error instanceof Error && error.message === "browser_cookie_empty"
+        ? "当前浏览器没有这个来源可用的 Cookie。请先在刚打开的来源页面完成登录，再重新读取。"
+        : "未检测到浏览器助手或未授予该网站权限。请先下载并加载浏览器助手，或改用 Cookie 文件上传。";
   } finally {
     saving.value = false;
   }
