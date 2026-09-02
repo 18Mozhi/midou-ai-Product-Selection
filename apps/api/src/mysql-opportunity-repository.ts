@@ -47,7 +47,10 @@ const opportunityCountsSql = sqlText(
   "(SELECT COUNT(*) FROM sourcing_candidates sc",
   "JOIN sourcing_searches ss ON ss.id=sc.search_id",
   "WHERE ss.input_type='opportunity' AND ss.input_ref=o.id AND ss.deleted_at IS NULL)",
-  "supplier_candidate_count",
+  "supplier_candidate_count,",
+  "(SELECT COUNT(*) FROM opportunity_rule_matches orm",
+  "WHERE orm.opportunity_id=o.id AND orm.organization_id=o.organization_id",
+  "AND orm.workspace_id=o.workspace_id) matched_rule_count",
 );
 const opportunityLifecycleSql =
   "GREATEST(0,TIMESTAMPDIFF(SECOND,o.lifecycle_entered_at,UTC_TIMESTAMP(3))) lifecycle_dwell_seconds";
@@ -74,6 +77,7 @@ const summary = (row: RowDataPacket): OpportunitySummary => ({
   source_count: Number(row.source_count),
   competitor_count: Number(row.competitor_count ?? 0),
   supplier_candidate_count: Number(row.supplier_candidate_count ?? 0),
+  matched_rule_count: Number(row.matched_rule_count ?? 0),
   coverage_status: row.coverage_status,
   blocking_reasons: [
     ...(Number(row.evidence_count) === 0 || row.coverage_status === "insufficient"

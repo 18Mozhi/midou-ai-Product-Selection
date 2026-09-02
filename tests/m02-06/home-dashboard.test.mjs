@@ -50,6 +50,16 @@ test("M02-06.A01/A02/A04/A12 service groups and caps the truthful projection", a
   assert.equal(result.changes.length, 1);
   assert.equal(result.follows.length, 1);
   assert.equal(result.health.length, 1);
+  assert.deepEqual(result.automatic_selection, {
+    state: "not_configured",
+    enabled_rule_count: 0,
+    candidate_count: 0,
+    recommended_count: 0,
+    awaiting_evidence_count: 0,
+    adopted_count: 0,
+    last_collection_at: null,
+    next_collection_at: null,
+  });
   assert.equal(result.generated_at, now);
   assert.deepEqual(scope, {
     organizationId: org,
@@ -57,6 +67,23 @@ test("M02-06.A01/A02/A04/A12 service groups and caps the truthful projection", a
     actorId: actor,
     capabilities: ["task:read"],
   });
+});
+test("M02-06 automatic selection summary preserves rule, recommendation and human adoption facts", async () => {
+  const automatic = {
+    state: "running",
+    enabled_rule_count: 3,
+    candidate_count: 12,
+    recommended_count: 4,
+    awaiting_evidence_count: 8,
+    adopted_count: 2,
+    last_collection_at: "2026-08-07T16:00:00.000Z",
+    next_collection_at: "2026-08-07T17:00:00.000Z",
+  };
+  const result = await new HomeDashboardService({
+    list: async () => [],
+    automaticSelection: async () => automatic,
+  }).get({ organizationId: org, workspaceId: workspace, actorId: actor, capabilities: [] });
+  assert.deepEqual(result.automatic_selection, automatic);
 });
 test("M02-06 merges cross-module actions by deadline blocker risk value and route", async () => {
   const rows = [
@@ -124,6 +151,16 @@ test("M02-06.A06/A09/A11/A13 API derives actor tenant capability and correlation
           changes: [],
           follows: [],
           health: [],
+          automatic_selection: {
+            state: "not_configured",
+            enabled_rule_count: 0,
+            candidate_count: 0,
+            recommended_count: 0,
+            awaiting_evidence_count: 0,
+            adopted_count: 0,
+            last_collection_at: null,
+            next_collection_at: null,
+          },
           scope: { organization_id: org, workspace_id: workspace },
           generated_at: now,
         };
@@ -204,19 +241,14 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.match(openapi, /\/me\/home-dashboard:/);
   assert.match(home, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
-  assert.match(home, /v-if="state === 'empty'" class="home-empty"/);
-  for (const fact of ["任务", "趋势", "机会", "来源状态", "无跨组织、无推测数据"])
+  for (const fact of ["自动选品运行中", "选品控制台", "系统推荐", "人工采纳"])
     assert.match(home, new RegExp(fact));
-  for (const destination of [
-    "/opportunities\\?create=1",
-    "/competitors\\?create=1",
-    "/sourcing\\?create=1",
-  ])
+  for (const destination of ["/trends\\?tab=rules", "/opportunities"])
     assert.match(home, new RegExp(`to="${destination}"`));
-  assert.match(home, /home-priority-grid[\s\S]*今日行动[\s\S]*异常与数据健康/);
-  assert.match(home, /source_label[\s\S]*riskLabel[\s\S]*value_score[\s\S]*context_label/);
-  assert.match(home, /home-secondary[\s\S]*变化与关注/);
-  assert.match(home, /source_count[\s\S]*去处理/);
+  assert.match(home, /home-selection-metrics[\s\S]*规则候选[\s\S]*系统推荐[\s\S]*已采纳/);
+  assert.match(home, /home-review-queue[\s\S]*推荐清单/);
+  assert.match(home, /home-automation-status[\s\S]*监控平台[\s\S]*补证与评分/);
+  assert.match(home, /自动推荐不等于自动采纳/);
   assert.doesNotMatch(home, /全链路教学/);
   assert.match(opportunity, /机会暂无详情[\s\S]*等待真实数据/);
   assert.doesNotMatch(opportunity, /SKELETON|P04/);

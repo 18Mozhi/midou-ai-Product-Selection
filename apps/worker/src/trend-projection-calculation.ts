@@ -49,6 +49,20 @@ const automaticProductTopics = new Set([
   "ebay",
   "new_products",
 ]);
+const automaticTrendTopicCategories = new Map<string, string>([
+  ["consumer_trends", "news"],
+  ["viral_products", "ecommerce"],
+  ["amazon", "ecommerce"],
+  ["tiktok_shop", "ecommerce"],
+  ["etsy", "ecommerce"],
+  ["ebay", "ecommerce"],
+  ["retail_data", "data"],
+  ["search_data", "data"],
+  ["social_buzz", "community"],
+  ["reddit", "community"],
+  ["youtube", "community"],
+  ["new_products", "news"],
+]);
 const automaticSources = new Map(
   BUILTIN_PROVIDER_SOURCES.filter(
     (source) => source.availability === "automatic" && source.category !== "product_supply",
@@ -56,7 +70,14 @@ const automaticSources = new Map(
 );
 
 export type ProjectedTrendProviderContext =
-  { accepted: false } | { accepted: true; automatic: boolean; market: string; language: string };
+  | { accepted: false }
+  | {
+      accepted: true;
+      automatic: boolean;
+      market: string;
+      language: string;
+      category: string | null;
+    };
 
 export function projectedTrendProviderContext(providerCode: string): ProjectedTrendProviderContext {
   if (providerCode === "google_news_search")
@@ -65,18 +86,32 @@ export function projectedTrendProviderContext(providerCode: string): ProjectedTr
       automatic: false,
       market: "US",
       language: "en-US",
+      category: null,
+    };
+  if (providerCode === "amazon_product")
+    return {
+      accepted: true,
+      automatic: true,
+      market: "US",
+      language: "en-US",
+      category: "ecommerce",
     };
   const source = automaticSources.get(providerCode);
   if (source) {
     const market =
         source.markets.find((value) => value !== "GLOBAL") ?? source.markets[0] ?? "GLOBAL",
       language = source.languages[0] ?? "multi";
-    return { accepted: true, automatic: true, market, language };
+    return { accepted: true, automatic: true, market, language, category: source.category };
   }
   const match = /^gnews_([a-z]{2})_(.+)$/.exec(providerCode),
     locale = match ? automaticTrendLocales[match[1] as keyof typeof automaticTrendLocales] : null;
   if (!match || !locale || !automaticTrendTopics.has(match[2]!)) return { accepted: false };
-  return { accepted: true, automatic: true, ...locale };
+  return {
+    accepted: true,
+    automatic: true,
+    ...locale,
+    category: automaticTrendTopicCategories.get(match[2]!) ?? null,
+  };
 }
 
 export function isAutomaticProductDiscoveryProvider(providerCode: string) {
@@ -86,7 +121,7 @@ export function isAutomaticProductDiscoveryProvider(providerCode: string) {
   return (
     context.accepted &&
     context.automatic &&
-    (source?.category === "ecommerce" || Boolean(match && automaticProductTopics.has(match[1]!)))
+    (source?.category === "ecommerce" || Boolean(match && automaticProductTopics.has(match[2]!)))
   );
 }
 

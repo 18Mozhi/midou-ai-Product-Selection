@@ -6,6 +6,10 @@ export interface HomeDashboardRepository {
     actorId: string;
     capabilities: string[];
   }): Promise<HomeDashboardItem[]>;
+  automaticSelection?(input: {
+    organizationId: string;
+    workspaceId: string;
+  }): Promise<HomeDashboardSummary["automatic_selection"]>;
 }
 const limits = { action: 5, change: 6, follow: 6, health: 3 } as const;
 const priorityRank = { overdue: 5, blocking: 4, high_risk: 3, high_value: 2, normal: 1 },
@@ -36,7 +40,20 @@ export class HomeDashboardService {
     actorId: string;
     capabilities: string[];
   }): Promise<HomeDashboardSummary> {
-    const rows = await this.repository.list(input),
+    const [rows, automaticSelection] = await Promise.all([
+        this.repository.list(input),
+        this.repository.automaticSelection?.(input) ??
+          Promise.resolve({
+            state: "not_configured" as const,
+            enabled_rule_count: 0,
+            candidate_count: 0,
+            recommended_count: 0,
+            awaiting_evidence_count: 0,
+            adopted_count: 0,
+            last_collection_at: null,
+            next_collection_at: null,
+          }),
+      ]),
       ordered = [
         ...rows.filter((item) => item.kind === "action").sort(actionOrder),
         ...rows.filter((item) => item.kind !== "action"),
@@ -65,6 +82,7 @@ export class HomeDashboardService {
     }
     return {
       ...groups,
+      automatic_selection: automaticSelection,
       scope: { organization_id: input.organizationId, workspace_id: input.workspaceId },
       generated_at: this.now().toISOString(),
     };

@@ -5,6 +5,7 @@ import { MySqlAutomaticSourceScheduler } from "../../apps/worker/dist/automatic-
 test("rule scheduler queries the manual keyword crawler and completes all source batches before the interval", async () => {
   const now = new Date("2026-08-19T10:00:00.000Z");
   const statements = [];
+  const targets = [];
   let ruleUpdate = null;
   const connection = {
     beginTransaction: async () => {},
@@ -37,11 +38,17 @@ test("rule scheduler queries the manual keyword crawler and completes all source
         return [
           Array.from({ length: 17 }, (_, index) => ({
             id: `provider-${index}`,
-            code: index === 0 ? "google_news_search" : `source-${index}`,
+            code:
+              index === 0
+                ? "google_news_search"
+                : index === 1
+                  ? "amazon_product"
+                  : `source-${index}`,
             markets_json: JSON.stringify([index % 2 ? "US" : "JP"]),
           })),
           [],
         ];
+      if (sql.includes("INSERT INTO collection_subqueries")) targets.push(JSON.parse(values[6]));
       if (sql.startsWith("UPDATE trend_monitoring_rules SET source_cursor")) ruleUpdate = values;
       return [[], []];
     },
@@ -83,6 +90,16 @@ test("rule scheduler queries the manual keyword crawler and completes all source
     ),
   );
   assert.ok(statements.some((sql) => sql.includes("SELECT id FROM users WHERE id=?")));
+  assert.deepEqual(
+    targets.find((target) => target.projection_type === "rule_product_discovery"),
+    {
+      monitoring_rule_id: "00000000-0000-4000-8000-000000004301",
+      query: "portable fan",
+      market: "GLOBAL",
+      language: "multi",
+      projection_type: "rule_product_discovery",
+    },
+  );
 });
 
 test("full automatic source scheduler skips persistence when no terms-approved provider is eligible", async () => {

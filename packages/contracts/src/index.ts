@@ -334,6 +334,16 @@ export interface HomeDashboardSummary {
   changes: HomeDashboardItem[];
   follows: HomeDashboardItem[];
   health: HomeDashboardItem[];
+  automatic_selection: {
+    state: "not_configured" | "running" | "attention";
+    enabled_rule_count: number;
+    candidate_count: number;
+    recommended_count: number;
+    awaiting_evidence_count: number;
+    adopted_count: number;
+    last_collection_at: string | null;
+    next_collection_at: string | null;
+  };
   scope: { organization_id: string; workspace_id: string };
   generated_at: string;
 }

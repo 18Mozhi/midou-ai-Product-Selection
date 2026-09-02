@@ -28,6 +28,7 @@ interface Opportunity {
   source_count: number;
   competitor_count: number;
   supplier_candidate_count: number;
+  matched_rule_count: number;
   blocking_reasons: Array<"evidence_insufficient" | "recommendation_insufficient">;
   owner_id: string | null;
   lifecycle_status: string;
@@ -61,9 +62,11 @@ const props = defineProps<{
   route = useRoute(),
   pageCount = computed(() => Math.max(1, Math.ceil(props.total / 20))),
   summary = computed(() => ({
-    withImage: props.items.filter((item) => Boolean(item.image_url)).length,
-    competitors: props.items.reduce((sum, item) => sum + (item.competitor_count ?? 0), 0),
-    suppliers: props.items.reduce((sum, item) => sum + (item.supplier_candidate_count ?? 0), 0),
+    ruleMatched: props.items.filter((item) => item.matched_rule_count > 0).length,
+    readyToDecide: props.items.filter(
+      (item) => item.blocking_reasons.length === 0 && item.decision_status === "pending",
+    ).length,
+    adopted: props.items.filter((item) => item.decision_status === "adopted").length,
   })),
   activeFilterCount = computed(
     () => Object.values(props.filters).filter(Boolean).length + (props.listScope === "all" ? 1 : 0),
@@ -99,16 +102,7 @@ const opportunityStatus = (value: string) =>
       hour12: false,
     }).format(new Date(value)),
   ownerLabel = (ownerId: string | null) =>
-    props.memberOptions.find((member) => member.id === ownerId)?.label ?? "未指派",
-  dwellLabel = (seconds: number) => {
-    const safe = Math.max(0, Number(seconds) || 0),
-      days = Math.floor(safe / 86400),
-      hours = Math.floor((safe % 86400) / 3600),
-      minutes = Math.floor((safe % 3600) / 60);
-    if (days) return `${days} 天 ${hours} 小时`;
-    if (hours) return `${hours} 小时 ${minutes} 分钟`;
-    return `${minutes} 分钟`;
-  };
+    props.memberOptions.find((member) => member.id === ownerId)?.label ?? "未指派";
 
 function changeScope(event: Event) {
   emit("update:listScope", (event.target as HTMLSelectElement).value as Scope);
@@ -172,13 +166,13 @@ function changeScope(event: Event) {
       <span>当前结果</span><b>{{ total }}</b>
     </article>
     <article>
-      <span>已补商品图</span><b>{{ summary.withImage }}</b>
+      <span>规则自动发现</span><b>{{ summary.ruleMatched }}</b>
     </article>
     <article>
-      <span>关联竞品</span><b>{{ summary.competitors }}</b>
+      <span>等待人工决策</span><b>{{ summary.readyToDecide }}</b>
     </article>
     <article>
-      <span>供应商候选</span><b>{{ summary.suppliers }}</b>
+      <span>当前页已采纳</span><b>{{ summary.adopted }}</b>
     </article>
   </section>
   <UiStatePanel
@@ -193,8 +187,8 @@ function changeScope(event: Event) {
   <section v-else class="opportunity-list">
     <header>
       <div>
-        <p>机会流程</p>
-        <h3>机会列表</h3>
+        <p>系统推荐清单</p>
+        <h3>自动发现，人工最终采纳</h3>
       </div>
       <span>共 {{ total }} 个机会 · 按更新时间排序</span>
     </header>
@@ -238,12 +232,14 @@ function changeScope(event: Event) {
           ><small
             >{{ item.market }} · {{ item.category || "未分类" }} ·
             {{ freshness(item.updated_at) }}</small
+          ><em v-if="item.matched_rule_count"
+            >命中 {{ item.matched_rule_count }} 条选品规则</em
           ></span
         >
         <dl>
           <div>
-            <dt>证据 / 来源</dt>
-            <dd>{{ item.evidence_count }} / {{ item.source_count }}</dd>
+            <dt>推荐阶段</dt>
+            <dd>{{ item.blocking_reasons.length ? "自动补证中" : "可人工决策" }}</dd>
           </div>
           <div>
             <dt>关联竞品</dt>
@@ -260,23 +256,6 @@ function changeScope(event: Event) {
           <div>
             <dt>风险</dt>
             <dd>{{ opportunityStatus(item.risk_level) }}</dd>
-          </div>
-          <div>
-            <dt>阻断原因</dt>
-            <dd>
-              {{
-                (item.blocking_reasons ?? []).length
-                  ? item.blocking_reasons.map(opportunityStatus).join("、")
-                  : "无采纳阻断"
-              }}
-            </dd>
-          </div>
-          <div>
-            <dt>当前阶段 / 停留</dt>
-            <dd>
-              {{ opportunityStatus(item.lifecycle_status) }} ·
-              {{ dwellLabel(item.lifecycle_dwell_seconds) }}
-            </dd>
           </div>
           <div>
             <dt>负责人</dt>

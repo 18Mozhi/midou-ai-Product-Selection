@@ -4,7 +4,6 @@ import { TrendProjectionAlerts } from "./trend-projection-alerts.js";
 import {
   buildSupplierSearchQuery,
   calculateTrendProjection,
-  isAutomaticProductDiscoveryProvider,
   isConcreteProductEvidence,
   TrendProjectionError,
   type TrendProjectionJob,
@@ -46,13 +45,14 @@ export class TrendProjectionPersistence {
       if (!topics[0]) {
         stage = "topic_insert";
         await c.query(
-          "INSERT INTO trend_topics (id,organization_id,workspace_id,topic_key,title,category,market,language,status,signal_count,source_count,heat_value,heat_unit,momentum_percent,confidence_score,confidence_status,first_seen_at,last_seen_at,source_fresh_at,version,created_by,created_at,updated_at) VALUES (?,?,?,?,?,NULL,?,?,'active',0,0,0,'signals',NULL,NULL,'insufficient_data',?,?,?,1,?,?,?)",
+          "INSERT INTO trend_topics (id,organization_id,workspace_id,topic_key,title,category,market,language,status,signal_count,source_count,heat_value,heat_unit,momentum_percent,confidence_score,confidence_status,first_seen_at,last_seen_at,source_fresh_at,version,created_by,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,'active',0,0,0,'signals',NULL,NULL,'insufficient_data',?,?,?,1,?,?,?)",
           [
             topicId,
             job.organizationId,
             job.workspaceId,
             topicKey,
             title,
+            providerContext.category,
             providerContext.market,
             providerContext.language,
             publishedAt,
@@ -64,6 +64,11 @@ export class TrendProjectionPersistence {
           ],
         );
       }
+      if (topics[0] && providerContext.category)
+        await c.query("UPDATE trend_topics SET category=COALESCE(category,?) WHERE id=?", [
+          providerContext.category,
+          topicId,
+        ]);
       stage = "signal_insert";
       const signalId = randomUUID();
       const [insert] = await c.query<ResultSetHeader>(
@@ -107,13 +112,14 @@ export class TrendProjectionPersistence {
           ],
         );
         stage = "monitoring_rules";
-        const matchedRule = await this.alerts.evaluateMonitoringRules(
+        const matchedRuleIds = await this.alerts.evaluateMonitoringRules(
           c,
           job,
           topicId,
           normalizedTitle,
           providerContext.market,
           providerContext.language,
+          providerContext.category,
           now,
         );
         stage = "event_insert";
@@ -124,11 +130,7 @@ export class TrendProjectionPersistence {
           language: providerContext.language,
           heat_unit: "signals",
         });
-        if (
-          (isAutomaticProductDiscoveryProvider(job.providerCode) &&
-            isConcreteProductEvidence(job.payload, canonicalUrl)) ||
-          matchedRule
-        ) {
+        if (matchedRuleIds.length && isConcreteProductEvidence(job.payload, canonicalUrl)) {
           stage = "automatic_product_discovery";
           await this.discoverOpportunity(
             c,
@@ -138,6 +140,8 @@ export class TrendProjectionPersistence {
             title,
             canonicalUrl,
             providerContext.market,
+            providerContext.category,
+            matchedRuleIds,
             observedAt,
             now,
           );
@@ -392,18 +396,21 @@ export class TrendProjectionPersistence {
     title: string,
     canonicalUrl: string,
     market: string,
+    category: string | null,
+    matchedRuleIds: string[],
     observedAt: Date,
     now: Date,
   ) {
     const opportunityId = randomUUID();
     const [insert] = await c.query<ResultSetHeader>(
-      "INSERT IGNORE INTO opportunities (id,organization_id,workspace_id,name,market,category,source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status,overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status,confidence_score,evidence_count,source_count,coverage_status,score_rule_version,scored_at,decision_status,version,created_by,created_at,updated_at) VALUES (?,?,?,?,?,NULL,'trend_topic',?,NULL,'ready','insufficient_data',NULL,NULL,NULL,'insufficient_data','unknown','insufficient_data',NULL,0,0,'partial',NULL,NULL,'pending',1,?,?,?)",
+      "INSERT IGNORE INTO opportunities (id,organization_id,workspace_id,name,market,category,source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status,overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status,confidence_score,evidence_count,source_count,coverage_status,score_rule_version,scored_at,decision_status,version,created_by,created_at,updated_at) VALUES (?,?,?,?,?,?,'trend_topic',?,NULL,'ready','insufficient_data',NULL,NULL,NULL,'insufficient_data','unknown','insufficient_data',NULL,0,0,'partial',NULL,NULL,'pending',1,?,?,?)",
       [
         opportunityId,
         job.organizationId,
         job.workspaceId,
         title.slice(0, 200),
         market,
+        category,
         topicId,
         job.actorId,
         now,
@@ -415,6 +422,19 @@ export class TrendProjectionPersistence {
       [job.organizationId, job.workspaceId, topicId],
     );
     const persistedOpportunityId = String(rows[0]?.id ?? opportunityId);
+    for (const ruleId of matchedRuleIds)
+      await c.query(
+        "INSERT IGNORE INTO opportunity_rule_matches (id,organization_id,workspace_id,opportunity_id,monitoring_rule_id,topic_id,matched_at) VALUES (?,?,?,?,?,?,?)",
+        [
+          randomUUID(),
+          job.organizationId,
+          job.workspaceId,
+          persistedOpportunityId,
+          ruleId,
+          topicId,
+          now,
+        ],
+      );
     await c.query(
       "INSERT IGNORE INTO opportunity_evidence_links (id,organization_id,workspace_id,opportunity_id,evidence_type,evidence_id,provider_id,raw_evidence_id,observed_at,created_at) VALUES (?,?,?,?,'trend_signal',?,?,?,?,?)",
       [
@@ -444,6 +464,7 @@ export class TrendProjectionPersistence {
           provider_code: job.providerCode,
           recommendation_status: "insufficient_data",
           discovery_mode: "automatic",
+          matched_rule_ids: matchedRuleIds,
         },
         now,
       );
@@ -456,6 +477,27 @@ export class TrendProjectionPersistence {
         market,
         now,
       );
+      const [activeScoreRules] = await c.query<RowDataPacket[]>(
+        "SELECT id FROM score_rules WHERE organization_id=? AND workspace_id=? AND status='active' ORDER BY activated_at DESC,id DESC LIMIT 1",
+        [job.organizationId, job.workspaceId],
+      );
+      if (activeScoreRules[0]) {
+        await c.query(
+          "INSERT INTO opportunity_score_jobs (id,organization_id,workspace_id,opportunity_id,score_rule_id,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
+          [
+            randomUUID(),
+            job.organizationId,
+            job.workspaceId,
+            persistedOpportunityId,
+            activeScoreRules[0].id,
+            now,
+            job.requestId,
+            job.traceId,
+            now,
+            now,
+          ],
+        );
+      }
     }
   }
 

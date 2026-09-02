@@ -46,6 +46,7 @@ export interface OpportunitySummary {
   source_count: number;
   competitor_count: number;
   supplier_candidate_count: number;
+  matched_rule_count: number;
   coverage_status: OpportunityCoverageStatus;
   blocking_reasons: OpportunityBlockingReason[];
   decision_status: OpportunityDecision;

@@ -56,6 +56,7 @@ export interface OpportunitySummary {
   source_count: number;
   competitor_count: number;
   supplier_candidate_count: number;
+  matched_rule_count: number;
   coverage_status: string;
   blocking_reasons: Array<"evidence_insufficient" | "recommendation_insufficient">;
   decision_status: string;

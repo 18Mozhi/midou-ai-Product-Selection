@@ -2,6 +2,46 @@ import { randomUUID } from "node:crypto";
 import type { PoolConnection, RowDataPacket } from "mysql2/promise";
 import type { TrendProjectionJob } from "./trend-projection-calculation.js";
 
+export function matchesTrendMonitoringRule(
+  rule: {
+    include_keywords_json: unknown;
+    negative_keywords_json: unknown;
+    market: unknown;
+    language: unknown;
+    category: unknown;
+  },
+  topic: { title: string; market: string; language: string; category: string | null },
+) {
+  const include =
+      typeof rule.include_keywords_json === "string"
+        ? JSON.parse(rule.include_keywords_json)
+        : rule.include_keywords_json,
+    negative =
+      typeof rule.negative_keywords_json === "string"
+        ? JSON.parse(rule.negative_keywords_json)
+        : rule.negative_keywords_json;
+  return (
+    Array.isArray(include) &&
+    include.some((keyword: unknown) =>
+      topic.title.includes(String(keyword).normalize("NFKC").toLocaleLowerCase("en-US")),
+    ) &&
+    !(Array.isArray(negative) ? negative : []).some((keyword: unknown) =>
+      topic.title.includes(String(keyword).normalize("NFKC").toLocaleLowerCase("en-US")),
+    ) &&
+    (!rule.market ||
+      String(rule.market).toUpperCase() === "GLOBAL" ||
+      String(rule.market).toUpperCase() === topic.market.toUpperCase()) &&
+    (!rule.language ||
+      String(rule.language).toLocaleLowerCase("en-US") === "multi" ||
+      String(rule.language).toLocaleLowerCase("en-US") ===
+        topic.language.toLocaleLowerCase("en-US")) &&
+    (!rule.category ||
+      (topic.category !== null &&
+        String(rule.category).normalize("NFKC").toLocaleLowerCase("en-US") ===
+          topic.category.normalize("NFKC").toLocaleLowerCase("en-US")))
+  );
+}
+
 export class TrendProjectionAlerts {
   constructor(
     private readonly workerId: string,
@@ -15,35 +55,27 @@ export class TrendProjectionAlerts {
     title: string,
     market: string,
     language: string,
+    category: string | null,
     now: Date,
   ) {
     const [rows] = await c.query<RowDataPacket[]>(
       "SELECT id,include_keywords_json,negative_keywords_json,market,language,category,created_by FROM trend_monitoring_rules WHERE organization_id=? AND workspace_id=? AND status='enabled' FOR UPDATE",
       [job.organizationId, job.workspaceId],
     );
-    let matchedAny = false;
+    const matchedRuleIds: string[] = [];
     for (const row of rows) {
-      const include =
-          typeof row.include_keywords_json === "string"
-            ? JSON.parse(row.include_keywords_json)
-            : row.include_keywords_json,
-        negative =
-          typeof row.negative_keywords_json === "string"
-            ? JSON.parse(row.negative_keywords_json)
-            : row.negative_keywords_json;
-      const matched =
-        Array.isArray(include) &&
-        include.some((keyword: unknown) =>
-          title.includes(String(keyword).normalize("NFKC").toLocaleLowerCase("en-US")),
-        ) &&
-        !(Array.isArray(negative) ? negative : []).some((keyword: unknown) =>
-          title.includes(String(keyword).normalize("NFKC").toLocaleLowerCase("en-US")),
-        ) &&
-        (!row.market || String(row.market).toUpperCase() === market) &&
-        (!row.language || String(row.language) === language) &&
-        !row.category;
+      const matched = matchesTrendMonitoringRule(
+        {
+          include_keywords_json: row.include_keywords_json,
+          negative_keywords_json: row.negative_keywords_json,
+          market: row.market,
+          language: row.language,
+          category: row.category,
+        },
+        { title, market, language, category },
+      );
       if (matched) {
-        matchedAny = true;
+        matchedRuleIds.push(String(row.id));
         await c.query(
           "INSERT IGNORE INTO trend_topic_follows (id,organization_id,workspace_id,topic_id,user_id,created_at) VALUES (?,?,?,?,?,?)",
           [randomUUID(), job.organizationId, job.workspaceId, topicId, row.created_by, now],
@@ -58,6 +90,7 @@ export class TrendProjectionAlerts {
             rule_id: String(row.id),
             market,
             language,
+            category,
           },
         );
       }
@@ -67,7 +100,7 @@ export class TrendProjectionAlerts {
         "UPDATE trend_monitoring_rules SET last_evaluated_at=?,updated_at=updated_at WHERE organization_id=? AND workspace_id=? AND status='enabled'",
         [now, job.organizationId, job.workspaceId],
       );
-    return matchedAny;
+    return matchedRuleIds;
   }
 
   async writeOpportunityDiscovery(

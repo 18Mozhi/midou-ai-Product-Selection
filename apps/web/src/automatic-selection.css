@@ -1,0 +1,203 @@
+.opportunity-workspace {
+  --selection-accent: #2f6bff;
+  --selection-positive: #1f9d6a;
+  --selection-line: color-mix(in srgb, var(--so-border) 82%, transparent);
+  margin-top: 18px;
+}
+
+.opportunity-workspace .opportunity-hero {
+  min-height: 126px;
+  padding: 24px 27px;
+  border: 1px solid var(--selection-line);
+  border-radius: 16px;
+  background: var(--so-panel);
+  box-shadow: none;
+}
+
+.opportunity-workspace .opportunity-hero p {
+  margin: 0;
+  color: var(--selection-positive);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.opportunity-workspace .opportunity-hero h2 {
+  margin: 5px 0;
+  font-size: clamp(26px, 3vw, 36px);
+  letter-spacing: -0.04em;
+}
+
+.opportunity-workspace .opportunity-hero span {
+  color: var(--so-text-muted);
+}
+
+.opportunity-workspace .opportunity-hero-actions a,
+.opportunity-workspace .opportunity-hero-actions button {
+  min-height: 44px;
+  padding: 0 17px;
+  border: 1px solid var(--selection-line);
+  border-radius: 10px;
+  color: var(--so-text);
+  background: var(--so-panel);
+  box-shadow: none;
+}
+
+.opportunity-workspace .opportunity-hero-actions a {
+  border-color: var(--selection-accent);
+  color: #fff;
+  background: var(--selection-accent);
+}
+
+.opportunity-workspace .opportunity-list-summary {
+  margin-top: 12px;
+  gap: 0;
+  border: 1px solid var(--selection-line);
+  border-radius: 14px;
+  background: var(--so-panel);
+  overflow: hidden;
+}
+
+.opportunity-workspace .opportunity-list-summary article {
+  min-height: 94px;
+  padding: 17px 20px;
+  border: 0;
+  border-right: 1px solid var(--selection-line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.opportunity-workspace .opportunity-list-summary article:last-child {
+  border-right: 0;
+}
+
+.opportunity-workspace .opportunity-list-summary span {
+  color: var(--so-text-muted);
+}
+
+.opportunity-workspace .opportunity-list-summary b {
+  margin-top: 2px;
+  font-size: 28px;
+  letter-spacing: -0.04em;
+}
+
+.opportunity-workspace .opportunity-list {
+  margin-top: 12px;
+  padding: 22px;
+  border: 1px solid var(--selection-line);
+  border-radius: 14px;
+  background: var(--so-panel);
+  box-shadow: none;
+}
+
+.opportunity-workspace .opportunity-list > header p {
+  margin: 0;
+  color: var(--selection-positive);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.opportunity-workspace .opportunity-list > header h3 {
+  margin: 3px 0 0;
+  font-size: 21px;
+}
+
+.opportunity-workspace .opportunity-list-row {
+  margin-top: 8px;
+}
+
+.opportunity-workspace .opportunity-list-row > a {
+  min-height: 104px;
+  padding: 14px 15px;
+  grid-template-columns: 64px minmax(190px, 1.1fr) minmax(430px, 1.7fr) auto;
+  border: 1px solid var(--selection-line);
+  border-radius: 10px;
+  background: var(--so-bg-elevated);
+  transition:
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+.opportunity-workspace .opportunity-list-row > a:hover {
+  border-color: color-mix(in srgb, var(--selection-accent) 48%, var(--selection-line));
+  transform: translateY(-1px);
+}
+
+.opportunity-workspace .opportunity-picture {
+  width: 58px;
+  height: 58px;
+  border-radius: 9px;
+}
+
+.opportunity-workspace .opportunity-list-row > a > span:nth-child(2) em {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  color: var(--selection-positive);
+  background: color-mix(in srgb, var(--selection-positive) 9%, transparent);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 750;
+}
+
+.opportunity-workspace .opportunity-list dl {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px 12px;
+}
+
+.opportunity-workspace .opportunity-list dl div {
+  padding: 0;
+  background: transparent;
+}
+
+.opportunity-workspace .opportunity-list dd {
+  font-size: 14px;
+}
+
+.opportunity-workspace .opportunity-list-row > a > b {
+  padding: 7px 9px;
+  color: var(--selection-accent);
+  background: color-mix(in srgb, var(--selection-accent) 8%, transparent);
+}
+
+@media (max-width: 1100px) {
+  .opportunity-workspace .opportunity-list-row > a {
+    grid-template-columns: 58px 1fr auto;
+  }
+  .opportunity-workspace .opportunity-list dl {
+    grid-column: 2 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .opportunity-workspace {
+    margin-top: 10px;
+  }
+  .opportunity-workspace .opportunity-hero,
+  .opportunity-workspace .opportunity-list {
+    padding: 16px;
+  }
+  .opportunity-workspace .opportunity-list-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+  .opportunity-workspace .opportunity-list-summary article:nth-child(2) {
+    border-right: 0;
+  }
+  .opportunity-workspace .opportunity-list-summary article:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--selection-line);
+  }
+  .opportunity-workspace .opportunity-list-row {
+    padding-left: 38px;
+  }
+  .opportunity-workspace .opportunity-list-row > a {
+    grid-template-columns: 52px 1fr;
+  }
+  .opportunity-workspace .opportunity-list dl {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+  }
+  .opportunity-workspace .opportunity-list-row > a > b {
+    grid-column: 2;
+  }
+}

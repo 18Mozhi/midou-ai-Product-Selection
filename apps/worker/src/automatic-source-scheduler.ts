@@ -264,7 +264,7 @@ export class MySqlAutomaticSourceScheduler {
         "AND terms_review_status='approved' AND terms_reference_url IS NOT NULL ",
         "AND terms_version IS NOT NULL AND terms_expires_at>NOW(3) ",
         "AND parser_version IN ('google-news-rss-v1','google-news-fixed-rss-v1',",
-        "'syndication-feed-v1','structured-public-page-v1') ORDER BY code",
+        "'syndication-feed-v1','structured-public-page-v1','amazon-structured-product-v2') ORDER BY code",
       ),
     );
     const market = String(rule.market).toUpperCase();
@@ -290,7 +290,7 @@ export class MySqlAutomaticSourceScheduler {
       taskId = randomUUID(),
       requestId = `trend-rule-${String(rule.id)}-${taskId}`,
       actorId = await this.actor(c),
-      target = JSON.stringify({
+      baseTarget = {
         monitoring_rule_id: String(rule.id),
         query: (typeof rule.include_keywords_json === "string"
           ? JSON.parse(rule.include_keywords_json)
@@ -298,7 +298,7 @@ export class MySqlAutomaticSourceScheduler {
         ).join(" OR "),
         market,
         language: String(rule.language),
-      });
+      };
     await c.query(
       statement(
         "INSERT INTO collection_tasks ",
@@ -337,7 +337,11 @@ export class MySqlAutomaticSourceScheduler {
           rule.workspace_id,
           providers[index]!.id,
           index + 1,
-          target,
+          JSON.stringify(
+            String(providers[index]!.code) === "amazon_product"
+              ? { ...baseTarget, projection_type: "rule_product_discovery" }
+              : baseTarget,
+          ),
           now,
           now,
         ],

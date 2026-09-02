@@ -27,6 +27,7 @@ import "../opportunities.css";
 import "../opportunity-profit.css";
 import "../opportunity-selection-entry.css";
 import "../opportunity-ai.css";
+import "../automatic-selection.css";
 const route = useRoute(),
   router = useRouter();
 const props = defineProps<{
@@ -638,14 +639,14 @@ watch(
   <section class="opportunity-workspace">
     <header v-if="!opportunityId" class="opportunity-hero">
       <div>
-        <p>决策工作台</p>
-        <h2>{{ opportunityId ? "机会详情" : "选品机会" }}</h2>
-        <span>评分、利润、风险和证据均展示真实状态；缺少下游输入时明确标记数据不足。</span>
+        <p>自动选品</p>
+        <h2>{{ opportunityId ? "机会详情" : "推荐清单" }}</h2>
+        <span>系统按规则持续发现、补证和评分；采纳、观察或驳回始终由你决定。</span>
       </div>
       <div v-if="canDecide" class="opportunity-hero-actions">
-        <RouterLink to="/opportunities/start">开始真实选品</RouterLink
+        <RouterLink to="/trends?tab=rules">管理选品规则</RouterLink
         ><button type="button" class="ghost" @click="showErpImport = true">从 ERP 导入</button
-        ><button type="button" @click="showCreate = true">＋ 手工创建机会</button>
+        ><button type="button" class="ghost" @click="showCreate = true">手工添加</button>
       </div>
       <span v-else>当前角色可查看机会事实与历史，写入操作需要“机会决策”权限。</span>
     </header>

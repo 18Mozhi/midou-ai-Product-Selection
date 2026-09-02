@@ -3,6 +3,71 @@ import type { HomeDashboardItem } from "@scoutops/contracts";
 import type { HomeDashboardRepository } from "./home-dashboard-service.js";
 export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
   constructor(private readonly pool: Pool) {}
+  async automaticSelection(input: { organizationId: string; workspaceId: string }) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      `SELECT
+         (SELECT COUNT(*) FROM trend_monitoring_rules r
+          WHERE r.organization_id=? AND r.workspace_id=? AND r.status='enabled') enabled_rule_count,
+         (SELECT MAX(r.last_collection_at) FROM trend_monitoring_rules r
+          WHERE r.organization_id=? AND r.workspace_id=? AND r.status='enabled') last_collection_at,
+         (SELECT MIN(r.next_collection_at) FROM trend_monitoring_rules r
+          WHERE r.organization_id=? AND r.workspace_id=? AND r.status='enabled') next_collection_at,
+         (SELECT COUNT(DISTINCT o.id) FROM opportunities o
+          JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
+            AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
+          WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
+            AND o.lifecycle_status<>'archived') candidate_count,
+         (SELECT COUNT(DISTINCT o.id) FROM opportunities o
+          JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
+            AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
+          WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
+            AND o.recommendation_status='recommend' AND o.lifecycle_status<>'archived') recommended_count,
+         (SELECT COUNT(DISTINCT o.id) FROM opportunities o
+          JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
+            AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
+          WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
+            AND o.recommendation_status='insufficient_data' AND o.lifecycle_status<>'archived') awaiting_evidence_count,
+         (SELECT COUNT(DISTINCT o.id) FROM opportunities o
+          JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
+            AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
+          WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='adopted') adopted_count`,
+      [
+        input.organizationId,
+        input.workspaceId,
+        input.organizationId,
+        input.workspaceId,
+        input.organizationId,
+        input.workspaceId,
+        input.organizationId,
+        input.workspaceId,
+        input.organizationId,
+        input.workspaceId,
+        input.organizationId,
+        input.workspaceId,
+        input.organizationId,
+        input.workspaceId,
+      ],
+    );
+    const row = rows[0] ?? ({} as RowDataPacket),
+      enabled = Number(row.enabled_rule_count ?? 0),
+      last = row.last_collection_at == null ? null : new Date(row.last_collection_at).toISOString(),
+      next = row.next_collection_at == null ? null : new Date(row.next_collection_at).toISOString();
+    return {
+      state:
+        enabled === 0
+          ? ("not_configured" as const)
+          : next
+            ? ("running" as const)
+            : ("attention" as const),
+      enabled_rule_count: enabled,
+      candidate_count: Number(row.candidate_count ?? 0),
+      recommended_count: Number(row.recommended_count ?? 0),
+      awaiting_evidence_count: Number(row.awaiting_evidence_count ?? 0),
+      adopted_count: Number(row.adopted_count ?? 0),
+      last_collection_at: last,
+      next_collection_at: next,
+    };
+  }
   async list(input: Parameters<HomeDashboardRepository["list"]>[0]) {
     if (!input.capabilities.length) return [];
     const [projectionRows] = await this.pool.query<RowDataPacket[]>(

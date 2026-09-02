@@ -848,8 +848,8 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /me/home-dashboard:
     get:
-      summary: Read the current user's scoped cross-module home dashboard
-      description: Requires an active selected context and task:read. Today actions merge active tasks assigned to the user, pending approval nodes assigned to the user, and pending opportunities owned by or created unassigned by the user; stored projection items remain capability and audience scoped. Actions are ordered by overdue, blocking, high risk, high value and normal, then by persisted risk, value score and deadline. Health items must target the authenticated user.
+      summary: Read the current user's scoped automatic-selection control dashboard
+      description: Requires an active selected context and task:read. The response derives automatic-selection configuration, collection timing, rule-created candidates, evidence-backed recommendations and human adoption counts from persisted organization-and-workspace facts. Secondary actions merge active tasks assigned to the user, pending approval nodes assigned to the user, and pending opportunities owned by or created unassigned by the user; stored projection items remain capability and audience scoped. Health items must target the authenticated user.
       security: [{ HttpOnlySession: [] }]
       responses:
         "200":
@@ -7857,7 +7857,7 @@ components:
     HomeDashboardSummary:
       type: object
       additionalProperties: false
-      required: [actions, changes, follows, health, scope, generated_at]
+      required: [actions, changes, follows, health, automatic_selection, scope, generated_at]
       properties:
         actions:
           { type: array, maxItems: 5, items: { $ref: "#/components/schemas/HomeDashboardItem" } }
@@ -7867,6 +7867,29 @@ components:
           { type: array, maxItems: 6, items: { $ref: "#/components/schemas/HomeDashboardItem" } }
         health:
           { type: array, maxItems: 3, items: { $ref: "#/components/schemas/HomeDashboardItem" } }
+        automatic_selection:
+          type: object
+          additionalProperties: false
+          required:
+            [
+              state,
+              enabled_rule_count,
+              candidate_count,
+              recommended_count,
+              awaiting_evidence_count,
+              adopted_count,
+              last_collection_at,
+              next_collection_at,
+            ]
+          properties:
+            state: { type: string, enum: [not_configured, running, attention] }
+            enabled_rule_count: { type: integer, minimum: 0 }
+            candidate_count: { type: integer, minimum: 0 }
+            recommended_count: { type: integer, minimum: 0 }
+            awaiting_evidence_count: { type: integer, minimum: 0 }
+            adopted_count: { type: integer, minimum: 0 }
+            last_collection_at: { type: string, format: date-time, nullable: true }
+            next_collection_at: { type: string, format: date-time, nullable: true }
         scope:
           {
             type: object,
@@ -8403,7 +8426,17 @@ components:
             summary:
               type: object
               required:
-                [paths, operations, verified, coverage_percent, evidence_applicable, evidence_passed, evidence_coverage_percent, ui_consumed, crawler_side_effects]
+                [
+                  paths,
+                  operations,
+                  verified,
+                  coverage_percent,
+                  evidence_applicable,
+                  evidence_passed,
+                  evidence_coverage_percent,
+                  ui_consumed,
+                  crawler_side_effects,
+                ]
               properties:
                 paths: { type: integer, minimum: 0 }
                 operations: { type: integer, minimum: 0 }
@@ -8416,7 +8449,12 @@ components:
                 crawler_side_effects: { type: integer, minimum: 0 }
             by_outcome: { type: array, items: { type: object, additionalProperties: true } }
             evidence_dimensions:
-              { type: array, minItems: 5, maxItems: 5, items: { type: object, additionalProperties: true } }
+              {
+                type: array,
+                minItems: 5,
+                maxItems: 5,
+                items: { type: object, additionalProperties: true },
+              }
             by_role: { type: array, items: { type: object, additionalProperties: true } }
             by_data_source: { type: array, items: { type: object, additionalProperties: true } }
             by_ui_consumer: { type: array, items: { type: object, additionalProperties: true } }
@@ -10784,6 +10822,7 @@ components:
           source_count,
           competitor_count,
           supplier_candidate_count,
+          matched_rule_count,
           coverage_status,
           blocking_reasons,
           decision_status,
@@ -10829,6 +10868,12 @@ components:
           }
         evidence_count: { type: integer, minimum: 0 }
         source_count: { type: integer, minimum: 0 }
+        matched_rule_count:
+          {
+            type: integer,
+            minimum: 0,
+            description: Enabled or historical monitoring rules exactly linked to this automatic candidate,
+          }
         coverage_status: { type: string, enum: [insufficient, partial, complete] }
         blocking_reasons:
           type: array
