@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import base64
 import ctypes
+import io
 import json
 import os
 import shutil
@@ -20,6 +21,7 @@ import tempfile
 import time
 import urllib.error
 import urllib.request
+import zipfile
 from ctypes import wintypes
 from pathlib import Path
 
@@ -716,6 +718,27 @@ def verify_public(build_sha: str) -> None:
                 version = json.load(response)
             with urllib.request.urlopen(f"{PUBLIC_BASE_URL}/login", timeout=10) as response:
                 known_route_status = response.status
+            with urllib.request.urlopen(
+                f"{PUBLIC_BASE_URL}/browser-helper/scoutops-browser-helper.zip?build={build_sha}",
+                timeout=10,
+            ) as helper_response:
+                helper_content_type = helper_response.headers.get_content_type()
+                helper_archive = helper_response.read()
+            with zipfile.ZipFile(io.BytesIO(helper_archive)) as helper_zip:
+                helper_manifest = json.loads(
+                    helper_zip.read("scoutops-browser-helper/manifest.json").decode("utf-8")
+                )
+                helper_worker = helper_zip.read(
+                    "scoutops-browser-helper/service-worker.js"
+                ).decode("utf-8")
+            helper_matches = helper_manifest.get("content_scripts", [{}])[0].get("matches", [])
+            helper_valid = (
+                helper_content_type == "application/zip"
+                and len(helper_archive) > 0
+                and "https://midouai.medouai.com/*" in helper_matches
+                and "https://midouai.medouai.com" in helper_worker
+                and "https://midouai.mozhiz.cn" not in helper_worker
+            )
             unknown_route_status = None
             try:
                 urllib.request.urlopen(
@@ -732,6 +755,7 @@ def verify_public(build_sha: str) -> None:
                 and available_status == "available"
                 and known_route_status == 200
                 and unknown_route_status == 404
+                and helper_valid
             ):
                 return
         except Exception as error:  # noqa: BLE001 - retain latest health failure for handoff

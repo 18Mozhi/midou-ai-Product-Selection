@@ -608,7 +608,10 @@
         "../apps/api/src/credential-asset-routes.ts",
         "../apps/web/src/components/CredentialAssetCenter.vue",
         "../browser-helper/scoutops-browser-helper/manifest.json",
-        "../browser-helper/scoutops-browser-helper/service-worker.js"
+        "../browser-helper/scoutops-browser-helper/service-worker.js",
+        "../scripts/browser-helper-archive.mjs",
+        "../scripts/build-browser-helper.mjs",
+        "../apps/web/public/browser-helper/scoutops-browser-helper.zip"
       ],
       "routes": [
         "/platform-admin/credentials",

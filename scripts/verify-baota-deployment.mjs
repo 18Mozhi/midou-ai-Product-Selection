@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { access, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { assertBrowserHelperArchive } from "./browser-helper-archive.mjs";
 
 const root = process.cwd();
 const id = randomUUID();
@@ -97,6 +98,7 @@ for (const token of [
   if (!nginx.includes(token)) fail("nginx_contract_invalid", token);
 for (const file of [
   "apps/web/dist/index.html",
+  "apps/web/dist/browser-helper/scoutops-browser-helper.zip",
   "apps/api/dist/server.js",
   "apps/worker/dist/index.js",
   "apps/backend/dist/server.js",
@@ -106,6 +108,18 @@ for (const file of [
   "config/schema.json",
 ])
   await access(resolve(root, file));
+for (const archive of [
+  "apps/web/public/browser-helper/scoutops-browser-helper.zip",
+  "apps/web/dist/browser-helper/scoutops-browser-helper.zip",
+])
+  try {
+    await assertBrowserHelperArchive(resolve(root, archive), root);
+  } catch (error) {
+    fail(
+      "browser_helper_archive_stale",
+      `${archive}: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
 const deployer = await readFile(resolve(root, "scripts/deploy-baota.py"), "utf8");
 if (
   !deployer.includes('PROJECT_ROOT = "/www/wwwroot/ai选品"') ||

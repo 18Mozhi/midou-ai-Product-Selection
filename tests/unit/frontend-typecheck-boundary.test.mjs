@@ -10,7 +10,9 @@ test("web build runs strict incremental Vue type checking before bundling", asyn
   ]);
 
   assert.equal(packageJson.scripts["typecheck:web"], "vue-tsc --noEmit -p apps/web/tsconfig.json");
-  assert.match(packageJson.scripts["build:web"], /^npm run typecheck:web && vite build/u);
+  const buildWeb = packageJson.scripts["build:web"];
+  assert.match(buildWeb, /^npm run build:browser-helper/u);
+  assert.ok(buildWeb.indexOf("npm run typecheck:web") < buildWeb.indexOf("vite build"));
   assert.equal(tsconfig.compilerOptions.strict, true);
   assert.equal(tsconfig.compilerOptions.incremental, true);
   assert.equal(tsconfig.compilerOptions.noEmit, true);

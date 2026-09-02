@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { assertBrowserHelperArchive } from "../../scripts/browser-helper-archive.mjs";
 
 test("browser helper is restricted to ai选品 origins and never returns ERP token", async () => {
   const manifest = JSON.parse(
@@ -18,4 +20,21 @@ test("browser helper is restricted to ai选品 origins and never returns ERP tok
   assert.match(worker, /Authorization: token/);
   assert.doesNotMatch(worker, /return\s+\{[^}]*token/s);
   assert.match(bridge, /scoutops-browser-bridge/);
+});
+
+test("published browser helper archive exactly matches the reviewed extension source", async () => {
+  const archive = await assertBrowserHelperArchive(
+    resolve("apps/web/public/browser-helper/scoutops-browser-helper.zip"),
+  );
+  const manifest = JSON.parse(
+    archive.get("scoutops-browser-helper/manifest.json").toString("utf8"),
+  );
+  const worker = archive.get("scoutops-browser-helper/service-worker.js").toString("utf8");
+  assert.deepEqual(manifest.content_scripts[0].matches, [
+    "https://midouai.medouai.com/*",
+    "http://127.0.0.1/*",
+    "http://localhost/*",
+  ]);
+  assert.match(worker, /https:\/\/midouai\.medouai\.com/);
+  assert.doesNotMatch(worker, /https:\/\/midouai\.mozhiz\.cn/);
 });
