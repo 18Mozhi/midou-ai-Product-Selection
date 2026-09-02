@@ -23,7 +23,7 @@
 
 ## 浏览器与档案
 
-`@scoutops/playwright-crawler` 使用 Chromium persistent context。执行计划仅允许 HTTP(S)、明确 origin 白名单和受上限约束的搜索、分页、滚动、详情页动作。搜索页提交后先等待条目；若滚动触发动态列表重新进入骨架屏且条目暂时归零，执行器会在既有 `PLAYWRIGHT_ACTION_TIMEOUT_MS` 内再次等待可见条目，再计算数量、快照和证据，不能把过渡骨架屏提前记成真实空结果。M03-07 才能提供真实来源的 URL 和选择器。
+`@scoutops/playwright-crawler` 使用 Chromium persistent context。执行计划仅允许 HTTP(S)、明确 origin 白名单和受上限约束的搜索、分页、滚动、详情页动作。搜索页提交后先等待条目；滚动完成后，执行器要求同一正数条目数连续稳定三次（每次间隔 250 ms），最长不超过既有 `PLAYWRIGHT_ACTION_TIMEOUT_MS`，再计算数量、快照和证据。瞬时旧卡片、过渡骨架屏或一次非零计数都不能提前结束等待。M03-07 才能提供真实来源的 URL 和选择器。
 
 浏览器档案秘密是 base64 编码的 `tar.gz` user-data archive，由 M03-02 AES-256-GCM 资产临时物化。解包拒绝绝对路径、目录穿越、反斜杠、链接和未知类型，并限制压缩大小、解压大小及文件数。档案 Buffer、明文压缩包、解压目录和 Chromium context 在成功、受阻、异常与超时路径都由 finally 清理。
 

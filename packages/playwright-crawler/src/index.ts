@@ -422,12 +422,21 @@ export class PlaywrightCrawlerEngine {
           await page.evaluate(() => window.scrollBy(0, Math.max(window.innerHeight, 600)));
           await page.waitForTimeout(25);
         }
-        if (plan.search && !(await page.locator(plan.item_selector).count()))
-          await page
-            .locator(plan.item_selector)
-            .first()
-            .waitFor({ state: "visible", timeout: this.limits.actionTimeoutMs })
-            .catch(() => {});
+        if (plan.search) {
+          const readinessDeadline = Date.now() + this.limits.actionTimeoutMs;
+          let previousItemCount = -1,
+            stableSamples = 0;
+          while (Date.now() <= readinessDeadline) {
+            const currentItemCount = await page.locator(plan.item_selector).count();
+            stableSamples =
+              currentItemCount > 0 && currentItemCount === previousItemCount
+                ? stableSamples + 1
+                : 0;
+            if (stableSamples >= 2) break;
+            previousItemCount = currentItemCount;
+            await page.waitForTimeout(250);
+          }
+        }
         itemCount += await page.locator(plan.item_selector).count();
         if (!artifacts.length) artifacts = await captureEvidence(page, plan);
         if (!searchSnapshot) searchSnapshot = await captureSearchSnapshot(page, plan);
