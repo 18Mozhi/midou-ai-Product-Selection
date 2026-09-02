@@ -503,10 +503,9 @@ try:
         source = shared / name
         if not destination.exists() and source.is_dir():
             source.rename(destination)
-        completion_spool = name == "crawler-completions"
-        destination.mkdir(mode=0o700 if completion_spool else 0o2770, exist_ok=True)
-        shutil.chown(destination, user="www" if completion_spool else "root", group="www")
-        os.chmod(destination, 0o700 if completion_spool else 0o2770)
+        destination.mkdir(mode=0o2770, exist_ok=True)
+        shutil.chown(destination, user="root", group="www")
+        os.chmod(destination, 0o2770)
     source_backups = shared / "backups"
     if source_backups.is_dir():
         for child in source_backups.iterdir():

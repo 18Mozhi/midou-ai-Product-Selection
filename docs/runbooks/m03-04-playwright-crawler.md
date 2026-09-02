@@ -16,7 +16,7 @@
 - `CRAWLER_API_BASE_URL`：固定指向本机统一 Node API。组织、工作区、档案和执行计划由 Worker 创建的 `browser_collection_jobs` 决定，不再配置静态 UUID 或请求文件。
 - Python Crawler 到该本机 API 的请求不继承系统代理；若日志持续出现 `crawler_api_http_502`，先用本机直连检查 `/api/v1/internal/crawler-runtime/jobs/acquire`，再确认已发布包含回环免代理传输的 Crawler 版本，不得通过修改系统代理或把 API 暴露公网来绕过。
 - `CRAWLER_LEASE_SECONDS`：30–600 秒；心跳间隔必须小于租约时长。
-- `CRAWLER_COMPLETION_SPOOL_ROOT`：完成回传失败的受限暂存目录；生产固定为 `/www/wwwroot/ai选品/runtime/crawler-completions`，由部署器创建并写入受限环境，目录及文件分别使用 0700/0600 权限，禁止使用 Python 项目工作目录下的相对 `runtime`、放入网站目录或备份外传。
+- `CRAWLER_COMPLETION_SPOOL_ROOT`：完成回传失败的受限暂存目录；生产固定为 `/www/wwwroot/ai选品/runtime/crawler-completions`，由部署器创建并写入受限环境。目录沿用固定运行目录合同 `root:www / 02770`，回执文件由 Crawler 以 0600 保存；禁止使用 Python 项目工作目录下的相对 `runtime`、放入网站目录或备份外传。
 - `CRAWLER_COMPLETION_RETENTION_DAYS`：待回写与隔离回执的人工处置保留期，默认 30 天；到期只告警，不自动删除。
 - `CRAWLER_COMPLETION_MAX_BYTES`：受限回执目录聚合容量停止线，默认 512 MiB。
 - `CRAWLER_COMPLETION_MIN_FREE_DISK_MB`：回执目录所在磁盘可用空间停止线，默认 4096 MB。
