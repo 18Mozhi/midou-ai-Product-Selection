@@ -97,7 +97,15 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
           409,
           "仅已接通执行器的来源可从此入口运行。",
         );
-      if (provider.status !== "enabled")
+      const requestedAcceptanceRun = input.target.acceptance_run === true,
+        acceptanceRun = provider.code === "1688_search" && requestedAcceptanceRun;
+      if (requestedAcceptanceRun && !acceptanceRun)
+        throw new ProviderSourceServiceError(
+          "provider_source_acceptance_not_supported",
+          409,
+          "验收运行仅支持 1688 登录来源。",
+        );
+      if (provider.status !== "enabled" && !acceptanceRun)
         throw new ProviderSourceServiceError(
           "provider_source_disabled",
           409,

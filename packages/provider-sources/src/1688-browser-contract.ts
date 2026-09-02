@@ -19,6 +19,7 @@ export function create1688BrowserExecutionRequest(target: Record<string, unknown
   const url = new URL("https://s.1688.com/selloffer/offer_search.htm");
   url.searchParams.set("keywords", query);
   return {
+    purpose: target.acceptance_run === true ? "acceptance" : "collection",
     plan: {
       start_url: url.toString(),
       allowed_origins: ["https://s.1688.com", "https://detail.1688.com"],

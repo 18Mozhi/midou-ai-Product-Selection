@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { OrganizationMembershipSummary, WorkspaceSummary } from "@scoutops/contracts";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 
@@ -33,6 +34,11 @@ interface Acceptance {
   pending_reasons: string[];
 }
 
+interface ScheduledReplay {
+  task_id: string;
+  status: "scheduled";
+}
+
 type ViewState = "loading" | "ready" | "error" | "forbidden" | "expired";
 type NoticeTone = "success" | "danger";
 
@@ -46,6 +52,15 @@ const refreshing = ref(false);
 const lastUpdatedAt = ref<string | null>(null);
 const notice = ref("");
 const noticeTone = ref<NoticeTone>("success");
+const organizations = ref<OrganizationMembershipSummary[]>([]);
+const workspaces = ref<WorkspaceSummary[]>([]);
+const selectedOrganizationId = ref("");
+const selectedWorkspaceId = ref("");
+const acceptanceQuery = ref("");
+const scopeLoading = ref(false);
+const scheduling = ref(false);
+const scopeMessage = ref("");
+const scheduledTaskId = ref("");
 let activeController: AbortController | null = null;
 
 const gateName = { login: "登录态", captcha: "验证码", parser: "字段解析" } as const;
@@ -119,8 +134,105 @@ const currentRunState = computed(() => {
   const status = data.value?.latest_run?.status;
   return status ? (runState[status] ?? status) : "尚无运行";
 });
+const canSchedule = computed(
+  () =>
+    Boolean(
+      data.value?.provider_id &&
+      selectedOrganizationId.value &&
+      selectedWorkspaceId.value &&
+      acceptanceQuery.value.trim(),
+    ) &&
+    !scopeLoading.value &&
+    !scheduling.value,
+);
 const time = (value: string | null) =>
   value ? new Date(value).toLocaleString("zh-CN", { hour12: false }) : "尚无证据";
+
+async function loadWorkspaces() {
+  workspaces.value = [];
+  selectedWorkspaceId.value = "";
+  if (!selectedOrganizationId.value) return;
+  scopeLoading.value = true;
+  scopeMessage.value = "";
+  try {
+    const response = await request<WorkspaceSummary[]>(
+      `/org/${selectedOrganizationId.value}/workspaces`,
+    );
+    const active = response.data.filter((workspace) => workspace.status === "active");
+    workspaces.value = active;
+    const organization = organizations.value.find(
+      (item) => item.id === selectedOrganizationId.value,
+    );
+    selectedWorkspaceId.value =
+      active.find((workspace) => workspace.id === organization?.default_workspace_id)?.id ??
+      active[0]?.id ??
+      "";
+    if (!active.length) scopeMessage.value = "该组织没有可用于验收的活动工作区。";
+  } catch (error) {
+    scopeMessage.value =
+      error instanceof ApiClientError ? error.actionHint : "工作区读取失败，请稍后重试。";
+  } finally {
+    scopeLoading.value = false;
+  }
+}
+
+async function loadExecutionScopes() {
+  scopeLoading.value = true;
+  scopeMessage.value = "";
+  try {
+    const response = await request<OrganizationMembershipSummary[]>("/org/memberships");
+    organizations.value = response.data.filter(
+      (organization) =>
+        organization.status === "active" && organization.membership_status === "active",
+    );
+    selectedOrganizationId.value = organizations.value[0]?.id ?? "";
+    if (!organizations.value.length) {
+      scopeMessage.value = "当前账号没有可用于验收的活动组织。";
+      scopeLoading.value = false;
+      return;
+    }
+  } catch (error) {
+    scopeMessage.value =
+      error instanceof ApiClientError ? error.actionHint : "组织范围读取失败，请稍后重试。";
+    scopeLoading.value = false;
+    return;
+  }
+  scopeLoading.value = false;
+  await loadWorkspaces();
+}
+
+async function scheduleAcceptanceRun() {
+  if (!canSchedule.value || !data.value) return;
+  scheduling.value = true;
+  notice.value = "";
+  scopeMessage.value = "";
+  try {
+    const response = await request<ScheduledReplay>(
+      `/platform/provider-sources/${data.value.provider_id}/replays`,
+      {
+        method: "POST",
+        body: {
+          organization_id: selectedOrganizationId.value,
+          workspace_id: selectedWorkspaceId.value,
+          query: acceptanceQuery.value.trim(),
+          acceptance_run: true,
+        },
+      },
+    );
+    requestId.value = response.request_id;
+    scheduledTaskId.value = response.data.task_id;
+    await load();
+    noticeTone.value = "success";
+    notice.value = "登录验收运行已提交；刷新检查结果可查看真实浏览器运行结论。";
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      scopeMessage.value = error.actionHint;
+    } else scopeMessage.value = "验收运行提交失败，请稍后重试。";
+  } finally {
+    scheduling.value = false;
+  }
+}
 
 async function load() {
   if (refreshing.value) return;
@@ -168,7 +280,10 @@ async function load() {
   }
 }
 
-onMounted(load);
+onMounted(() => {
+  void load();
+  void loadExecutionScopes();
+});
 onBeforeUnmount(() => activeController?.abort());
 </script>
 
@@ -296,6 +411,71 @@ onBeforeUnmount(() => activeController?.abort());
         </div>
       </section>
 
+      <section class="acceptance-1688__start" aria-labelledby="acceptance-1688-start-title">
+        <header>
+          <div>
+            <p>真实登录验收</p>
+            <h3 id="acceptance-1688-start-title">发起一次受控浏览器运行</h3>
+          </div>
+          <small>只创建本次人工验收；不会启用来源或加入自动调度。</small>
+        </header>
+        <form @submit.prevent="scheduleAcceptanceRun">
+          <label>
+            <span>组织</span>
+            <select
+              v-model="selectedOrganizationId"
+              aria-label="组织"
+              :disabled="scopeLoading || scheduling"
+              @change="loadWorkspaces"
+            >
+              <option value="">请选择组织</option>
+              <option
+                v-for="organization in organizations"
+                :key="organization.id"
+                :value="organization.id"
+              >
+                {{ organization.name }}
+              </option>
+            </select>
+          </label>
+          <label>
+            <span>工作区</span>
+            <select
+              v-model="selectedWorkspaceId"
+              aria-label="工作区"
+              :disabled="scopeLoading || scheduling"
+            >
+              <option value="">请选择工作区</option>
+              <option v-for="workspace in workspaces" :key="workspace.id" :value="workspace.id">
+                {{ workspace.name }}
+              </option>
+            </select>
+          </label>
+          <label class="acceptance-1688__query">
+            <span>验收关键词</span>
+            <input
+              v-model="acceptanceQuery"
+              type="text"
+              aria-label="验收关键词"
+              maxlength="200"
+              autocomplete="off"
+              placeholder="例如：桌面灯"
+              :disabled="scheduling"
+            />
+          </label>
+          <button class="acceptance-1688__start-button" type="submit" :disabled="!canSchedule">
+            {{ scheduling ? "提交中…" : "发起登录验收运行" }}
+          </button>
+        </form>
+        <p v-if="scopeMessage" class="acceptance-1688__form-message" role="alert">
+          {{ scopeMessage }}
+        </p>
+        <details v-if="scheduledTaskId">
+          <summary>运行详情</summary>
+          <code>任务编号：{{ scheduledTaskId }}</code>
+        </details>
+      </section>
+
       <div class="acceptance-1688__operations">
         <section class="acceptance-1688__actions">
           <div>
@@ -353,6 +533,7 @@ onBeforeUnmount(() => activeController?.abort());
 .acceptance-1688__state,
 .acceptance-1688__verdict,
 .acceptance-1688__section,
+.acceptance-1688__start,
 .acceptance-1688__actions,
 .acceptance-1688__run {
   border: 1px solid var(--so-border);
@@ -483,12 +664,61 @@ onBeforeUnmount(() => activeController?.abort());
 .acceptance-1688__section {
   padding: 18px;
 }
-.acceptance-1688__section > header {
+.acceptance-1688__section > header,
+.acceptance-1688__start > header {
   display: flex;
   justify-content: space-between;
   align-items: end;
   gap: 16px;
   margin-bottom: 13px;
+}
+.acceptance-1688__start {
+  padding: 18px;
+}
+.acceptance-1688__start > header > div > p {
+  color: var(--so-primary);
+  font-size: 13px;
+}
+.acceptance-1688__start form {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.8fr) minmax(160px, 0.8fr) minmax(220px, 1.4fr) auto;
+  gap: 10px;
+  align-items: end;
+  margin-top: 14px;
+}
+.acceptance-1688__start label {
+  display: grid;
+  gap: 6px;
+}
+.acceptance-1688__start label > span {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.acceptance-1688__start select,
+.acceptance-1688__start input {
+  min-width: 0;
+  min-height: 40px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  background: var(--so-bg);
+  color: var(--so-text);
+  padding: 8px 10px;
+}
+.acceptance-1688__start-button {
+  background: var(--so-primary) !important;
+  color: white !important;
+}
+.acceptance-1688__form-message {
+  margin-top: 10px !important;
+  color: var(--so-danger) !important;
+}
+.acceptance-1688__start details {
+  margin-top: 10px;
+}
+.acceptance-1688__start code {
+  display: block;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
 }
 .acceptance-1688__gates,
 .acceptance-1688__matrix {
@@ -586,13 +816,20 @@ onBeforeUnmount(() => activeController?.abort());
   .acceptance-1688__operations {
     grid-template-columns: 1fr;
   }
+  .acceptance-1688__start form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .acceptance-1688__query {
+    grid-column: 1 / -1;
+  }
   .acceptance-1688__verdict dl {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 @media (max-width: 700px) {
   .acceptance-1688__hero,
-  .acceptance-1688__section > header {
+  .acceptance-1688__section > header,
+  .acceptance-1688__start > header {
     align-items: stretch;
     flex-direction: column;
   }
@@ -612,6 +849,12 @@ onBeforeUnmount(() => activeController?.abort());
   }
   .acceptance-1688__actions nav {
     display: grid;
+  }
+  .acceptance-1688__start form {
+    grid-template-columns: 1fr;
+  }
+  .acceptance-1688__query {
+    grid-column: auto;
   }
 }
 </style>

@@ -230,7 +230,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         [task.id, query.providerId],
       ),
       row = rows[0];
-    if (!row || row.status !== "enabled") {
+    const acceptanceRun = row?.code === "1688_search" && query.target.acceptance_run === true;
+    if (!row || (row.status !== "enabled" && !acceptanceRun)) {
       if (query.required) throw new CollectionExecutionError("permission_denied");
       return {
         id: query.id,

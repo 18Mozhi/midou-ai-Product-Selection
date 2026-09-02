@@ -783,6 +783,91 @@ test("required disabled source fails instead of being reported as an empty succe
   );
 });
 
+test("explicit 1688 acceptance target runs while disabled without widening automatic collection", async () => {
+  const { ProviderSourceExecutor } =
+    await import("../../apps/worker/dist/provider-source-executor.js");
+  const provider = {
+    id: "55555555-5555-4555-8555-555555555568",
+    code: "1688_search",
+    access_mode: "authenticated_browser",
+    target_url: "https://s.1688.com/selloffer/offer_search.htm",
+    parser_version: "1688-browser-contract-v1",
+    timeout_ms: 20_000,
+    fields_json: ["title"],
+    status: "disabled",
+    circuit_failure_threshold: 5,
+    runtime_circuit_state: "closed",
+    created_by: "66666666-6666-4666-8666-666666666666",
+  };
+  const pool = {
+    query: async (sql) =>
+      sql.includes("FROM providers p")
+        ? [[provider]]
+        : sql.includes("SELECT state,consecutive_failures")
+          ? [[]]
+          : [{ affectedRows: 1 }],
+  };
+  let browserInput;
+  const executor = new ProviderSourceExecutor(
+    withTransactionConnection(pool),
+    {},
+    {},
+    "1688-acceptance-worker",
+    {
+      collect: async (input) => {
+        browserInput = input;
+        return {
+          browserJobId: "browser-job",
+          records: [],
+          artifacts: [],
+          parseError: null,
+        };
+      },
+    },
+  );
+  const outcomes = await executor.execute(
+    {
+      id: "33333333-3333-4333-8333-333333333368",
+      organizationId: "11111111-1111-4111-8111-111111111111",
+      workspaceId: "22222222-2222-4222-8222-222222222222",
+      attemptCount: 1,
+      requestId: "1688-acceptance-worker",
+      traceId: "1688-acceptance-worker",
+      leaseToken: "unused",
+      subqueries: [
+        {
+          id: "44444444-4444-4444-8444-444444444468",
+          providerId: provider.id,
+          ordinal: 0,
+          required: true,
+          target: { query: "桌面灯", acceptance_run: true },
+        },
+      ],
+    },
+    async () => {},
+  );
+  assert.equal(outcomes[0].status, "succeeded_empty");
+  assert.deepEqual(browserInput.target, { query: "桌面灯", acceptance_run: true });
+});
+
+test("crawler lease limits disabled-provider jobs to the marked 1688 acceptance purpose", async () => {
+  const source = await readFile(
+    new URL("../../apps/api/src/mysql-crawler-runtime-repository.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    source,
+    /v\.status='enabled' OR \(v\.code='1688_search'[\s\S]*JSON_UNQUOTE\(JSON_EXTRACT\(j\.execution_request_json,'\$\.purpose'\)\)='acceptance'/,
+  );
+  assert.doesNotMatch(
+    await readFile(
+      new URL("../../apps/worker/src/automatic-source-scheduler.ts", import.meta.url),
+      "utf8",
+    ),
+    /acceptance_run/,
+  );
+});
+
 test("parser drift pauses the provider before failing the required source", async () => {
   const [{ ProviderSourceExecutor }, { ProviderAdapterFailure }] = await Promise.all([
     import("../../apps/worker/dist/provider-source-executor.js"),

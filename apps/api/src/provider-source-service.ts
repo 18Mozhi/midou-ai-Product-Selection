@@ -521,6 +521,7 @@ export class ProviderSourceService {
       workspace_id?: unknown;
       query?: unknown;
       csv_text?: unknown;
+      acceptance_run?: unknown;
     },
     context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
   ) {
@@ -542,6 +543,18 @@ export class ProviderSourceService {
         400,
         "query 与 csv_text 只能提交一种。",
       );
+    if (value.acceptance_run !== undefined && value.acceptance_run !== true)
+      throw new ProviderSourceServiceError(
+        "provider_source_acceptance_invalid",
+        400,
+        "验收运行标记必须为 true。",
+      );
+    if (value.acceptance_run === true && value.query === undefined)
+      throw new ProviderSourceServiceError(
+        "provider_source_acceptance_query_required",
+        400,
+        "验收运行必须提交关键词。",
+      );
     if (value.query !== undefined) {
       if (typeof value.query !== "string" || !value.query.trim() || value.query.length > 200)
         throw new ProviderSourceServiceError(
@@ -549,7 +562,10 @@ export class ProviderSourceService {
           400,
           "关键词需要 1–200 字符。",
         );
-      target = { query: value.query.trim() };
+      target = {
+        query: value.query.trim(),
+        ...(value.acceptance_run === true ? { acceptance_run: true } : {}),
+      };
     } else if (value.csv_text !== undefined) {
       if (typeof value.csv_text !== "string")
         throw new ProviderSourceServiceError(

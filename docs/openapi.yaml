@@ -4001,8 +4001,8 @@ paths:
         "503": { $ref: "#/components/responses/Error" }
   /platform/provider-sources/{providerId}/replays:
     post:
-      summary: Schedule a bounded replay for an explicitly enabled built-in source
-      description: Requires collection:replay, same-origin Origin and Idempotency-Key. Query and CSV are mutually exclusive; each task reads at most 20 records.
+      summary: Schedule a bounded built-in source replay or an explicit 1688 acceptance run
+      description: Requires collection:replay, same-origin Origin and Idempotency-Key. Query and CSV are mutually exclusive; each task reads at most 20 records. Disabled sources are rejected except when acceptance_run is literal true for the 1688 authenticated-browser source; that manual path does not enable the source or admit it to automatic scheduling.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -9641,6 +9641,10 @@ components:
         workspace_id: { type: string, format: uuid }
         query: { type: string, minLength: 1, maxLength: 200 }
         csv_text: { type: string, maxLength: 1048576 }
+        acceptance_run:
+          type: boolean
+          enum: [true]
+          description: Explicit manual 1688 login acceptance run; valid only with query and never enables automatic scheduling.
       oneOf:
         - required: [query]
         - required: [csv_text]
@@ -9663,7 +9667,11 @@ components:
         id: { type: string, format: uuid }
         task_id: { type: string, format: uuid }
         provider_id: { type: string, format: uuid }
-        source_code: { type: string, enum: [google_news_search, manual_product_supply_csv] }
+        source_code:
+          {
+            type: string,
+            enum: [google_news_search, manual_product_supply_csv, 1688_search],
+          }
         status:
           {
             type: string,

@@ -138,9 +138,116 @@ test("authenticated browser job client links a business subquery and parses the 
   assert.equal(collection.artifacts[0].parser_version, ALIBABA_1688_BROWSER_PARSER_VERSION);
   assert.equal(heartbeats, 1);
   assert.match(statements[0].sql, /browser_collection_jobs/);
+  assert.equal(JSON.parse(statements[0].values[6]).purpose, "collection");
   assert.equal(
     JSON.parse(statements[0].values[6]).plan.start_url,
     create1688BrowserExecutionRequest({ query: "桌面灯" }).plan.start_url,
+  );
+});
+
+test("1688 acceptance replay is the only disabled-source path that can schedule a browser job", async () => {
+  const statements = [];
+  const connection = {
+    beginTransaction: async () => {},
+    commit: async () => {},
+    rollback: async () => {},
+    release: () => {},
+    query: async (sql, values) => {
+      statements.push({ sql, values });
+      if (sql.includes("FROM provider_source_operations")) return [[]];
+      if (sql.includes("SELECT * FROM providers"))
+        return [
+          [
+            {
+              id: ids.provider,
+              code: "1688_search",
+              status: "disabled",
+              access_mode: "authenticated_browser",
+            },
+          ],
+        ];
+      if (sql.includes("SELECT w.id FROM workspaces")) return [[{ id: ids.workspace }]];
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const result = await new MySqlProviderSourceRepository({
+    getConnection: async () => connection,
+  }).replay({
+    providerId: ids.provider,
+    sourceCode: "",
+    organizationId: ids.org,
+    workspaceId: ids.workspace,
+    target: { query: "桌面灯", acceptance_run: true },
+    inputSha256: "a".repeat(64),
+    runId: ids.run,
+    taskId: ids.task,
+    subqueryId: ids.subquery,
+    actorId: ids.actor,
+    route: `/platform/provider-sources/${ids.provider}/replays`,
+    idempotencyKey: "1688-acceptance-run",
+    requestId: "1688-acceptance-request",
+    traceId: "1688-acceptance-trace",
+    now: new Date("2026-08-20T01:00:00.000Z"),
+  });
+  assert.equal(result.status, "scheduled");
+  assert.equal(result.source_code, "1688_search");
+  const subqueryInsert = statements.find((statement) =>
+    statement.sql.includes("INSERT INTO collection_subqueries"),
+  );
+  assert.deepEqual(JSON.parse(subqueryInsert.values[5]), {
+    query: "桌面灯",
+    acceptance_run: true,
+  });
+});
+
+test("acceptance replay input is explicit, query-only and preserved in the execution request", async () => {
+  let captured;
+  const service = new ProviderSourceService(
+    {
+      replay: async (input) => {
+        captured = input;
+        return input;
+      },
+    },
+    () => new Date("2026-08-20T01:00:00.000Z"),
+  );
+  await service.replay(
+    ids.provider,
+    {
+      organization_id: ids.org,
+      workspace_id: ids.workspace,
+      query: " 桌面灯 ",
+      acceptance_run: true,
+    },
+    {
+      actorId: ids.actor,
+      idempotencyKey: "acceptance-service",
+      requestId: "acceptance-service-request",
+      traceId: "acceptance-service-trace",
+    },
+  );
+  assert.deepEqual(captured.target, { query: "桌面灯", acceptance_run: true });
+  assert.equal(create1688BrowserExecutionRequest(captured.target).purpose, "acceptance");
+  assert.throws(
+    () =>
+      service.replay(
+        ids.provider,
+        {
+          organization_id: ids.org,
+          workspace_id: ids.workspace,
+          query: "桌面灯",
+          acceptance_run: false,
+        },
+        {
+          actorId: ids.actor,
+          idempotencyKey: "acceptance-service-invalid",
+          requestId: "acceptance-service-invalid-request",
+          traceId: "acceptance-service-invalid-trace",
+        },
+      ),
+    (error) =>
+      error instanceof ProviderSourceServiceError &&
+      error.code === "provider_source_acceptance_invalid",
   );
 });
 

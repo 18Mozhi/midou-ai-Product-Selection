@@ -11,7 +11,7 @@ const navigation = (shell: "platform_admin" | "member") => ({
   platform_roles: shell === "platform_admin" ? ["platform_super_admin"] : [],
   platform_capabilities:
     shell === "platform_admin"
-      ? ["platform:operate", "platform:superadmin", "provider:configure"]
+      ? ["platform:operate", "platform:superadmin", "provider:configure", "collection:replay"]
       : [],
   guard_reason: `navigation_${shell}_allowed`,
 });
@@ -399,6 +399,46 @@ test("1688 acceptance shows the factual search detail and pagination coverage ma
   page,
 }) => {
   await nav(page, "platform_admin");
+  let acceptanceBody: any = null;
+  await page.route("**/api/v1/org/memberships", (route) =>
+    route.fulfill({
+      json: envelope([
+        {
+          id: org,
+          name: "一次性验收组织",
+          slug: "acceptance-org",
+          status: "active",
+          default_workspace_id: ws,
+          membership_status: "active",
+        },
+      ]),
+    }),
+  );
+  await page.route(`**/api/v1/org/${org}/workspaces`, (route) =>
+    route.fulfill({
+      json: envelope([
+        {
+          id: ws,
+          organization_id: org,
+          name: "1688 验收工作区",
+          slug: "1688-acceptance",
+          status: "active",
+          version: 1,
+        },
+      ]),
+    }),
+  );
+  await page.route("**/api/v1/platform/provider-sources/**/replays", async (route) => {
+    acceptanceBody = route.request().postDataJSON();
+    expect(route.request().headers()["idempotency-key"]).toBeTruthy();
+    await route.fulfill({
+      status: 202,
+      json: envelope({
+        task_id: "00000000-0000-4000-8000-000000001688",
+        status: "scheduled",
+      }),
+    });
+  });
   await page.route("**/api/v1/platform/provider-sources/1688-acceptance", (route) =>
     route.fulfill({
       json: envelope({
@@ -473,6 +513,20 @@ test("1688 acceptance shows the factual search detail and pagination coverage ma
   await expect(page.getByText("翻页覆盖")).toBeVisible();
   await expect(page.getByText("执行计划只允许 1 页，本次未演练翻页。")).toBeVisible();
   await expect(page.getByText("1688.search.v1 · 12 项")).toBeVisible();
+  const acceptanceForm = page.locator(".acceptance-1688__start");
+  await expect(acceptanceForm.getByLabel("组织", { exact: true })).toHaveValue(org);
+  await expect(acceptanceForm.getByLabel("工作区", { exact: true })).toHaveValue(ws);
+  await acceptanceForm.getByLabel("验收关键词").fill("桌面灯");
+  await acceptanceForm.getByRole("button", { name: "发起登录验收运行" }).click();
+  await expect
+    .poll(() => acceptanceBody)
+    .toEqual({
+      organization_id: org,
+      workspace_id: ws,
+      query: "桌面灯",
+      acceptance_run: true,
+    });
+  await expect(page.getByRole("status")).toContainText("登录验收运行已提交");
   const sampleLink = page.getByRole("link", { name: "定位 1688 固定样本" });
   await expect(sampleLink).toHaveAttribute(
     "href",
