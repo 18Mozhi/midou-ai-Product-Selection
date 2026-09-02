@@ -69,16 +69,19 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
       body: JSON.stringify({
         data: {
           actions: [
-            item("00000000-0000-4000-8000-000000000610", "action", "处理逾期采集复核", "/tasks/1", {
-              priority: "overdue",
-              source_module: "task",
-              source_label: "采集跟进",
-              context_label: "打开完整处理上下文",
-              risk_level: "critical",
-              blocked: true,
-              owner_label: "陈宇航",
-              due_at: "2026-08-07T18:00:00.000Z",
-            }),
+            item(
+              "00000000-0000-4000-8000-000000000610",
+              "action",
+              "便携咖啡机候选",
+              "/opportunities/00000000-0000-4000-8000-000000000610",
+              {
+                priority: "high_value",
+                source_module: "opportunity",
+                source_label: "自动选品",
+                context_label: "进入人工决策",
+                value_score: 86.5,
+              },
+            ),
           ],
           changes: [
             item(
@@ -106,6 +109,16 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
               { severity: "warning" },
             ),
           ],
+          automatic_selection: {
+            state: "running",
+            enabled_rule_count: 3,
+            candidate_count: 12,
+            recommended_count: 4,
+            awaiting_evidence_count: 8,
+            adopted_count: 2,
+            last_collection_at: "2026-08-07T16:00:00.000Z",
+            next_collection_at: "2026-08-07T17:00:00.000Z",
+          },
           scope: { organization_id: org, workspace_id: workspace },
           generated_at: at,
         },
@@ -115,19 +128,29 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
     }),
   );
   await page.goto("/home");
-  await expect(page.getByRole("heading", { name: "今天最值得做什么？" })).toBeVisible();
-  await expect(page.getByText("处理逾期采集复核")).toBeVisible();
-  await expect(page.getByText("风险 紧急")).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: /处理逾期采集复核.*打开完整处理上下文/ }),
-  ).toHaveAttribute("href", "/tasks/1");
+  await expect(page.getByRole("heading", { name: "选品控制台" })).toBeVisible();
+  await expect(page.getByText("自动选品运行中")).toBeVisible();
+  await expect(page.getByText("便携咖啡机候选")).toBeVisible();
+  await expect(page.getByText("86.5 分")).toBeVisible();
+  await expect(page.getByRole("link", { name: /便携咖啡机候选/ })).toHaveAttribute(
+    "href",
+    "/opportunities/00000000-0000-4000-8000-000000000610",
+  );
+  await expect(page.getByRole("link", { name: "管理规则" })).toHaveAttribute(
+    "href",
+    "/trends?tab=rules",
+  );
+  await expect(page.getByRole("link", { name: "查看推荐清单" })).toHaveAttribute(
+    "href",
+    "/opportunities",
+  );
   await expect(page.getByText("竞品来源延迟")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "异常与数据健康" })).toBeVisible();
-  const changeAction = page.getByRole("link", { name: /户外照明热度变化.*去处理/ });
-  await expect(changeAction).toHaveAttribute("href", "/trends/1");
-  await expect(page.locator(".home-priority-grid")).toContainText("今日行动");
-  await expect(page.locator(".home-priority-grid")).toContainText("异常与数据健康");
-  await expect(page.locator(".home-secondary")).toContainText("变化与关注");
+  await expect(page.getByRole("heading", { name: "推荐清单" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "系统正在做什么" })).toBeVisible();
+  await expect(page.locator(".home-selection-metrics")).toContainText("运行规则3");
+  await expect(page.locator(".home-selection-metrics")).toContainText("系统推荐4");
+  await expect(page.locator(".home-selection-metrics")).toContainText("已采纳2");
+  await expect(page.getByText("自动推荐不等于自动采纳")).toBeVisible();
 });
 
 test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 contract", async ({
@@ -226,6 +249,16 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
                 changes: [],
                 follows: [],
                 health: [],
+                automatic_selection: {
+                  state: "not_configured",
+                  enabled_rule_count: 0,
+                  candidate_count: 0,
+                  recommended_count: 0,
+                  awaiting_evidence_count: 0,
+                  adopted_count: 0,
+                  last_collection_at: null,
+                  next_collection_at: null,
+                },
                 scope: { organization_id: org, workspace_id: workspace },
                 generated_at: at,
               },
@@ -236,21 +269,12 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
     ),
   );
   await page.goto("/home");
-  await expect(page.getByRole("heading", { name: "当前范围还没有首页数据" })).toBeVisible();
-  await expect(
-    page.getByText("任务、趋势、机会和来源状态写入后，将自动汇总到首页。"),
-  ).toBeVisible();
-  await expect(page.getByRole("link", { name: /开始一次选品/ })).toHaveAttribute(
+  await expect(page.getByRole("heading", { name: "选品控制台" })).toBeVisible();
+  await expect(page.getByText("自动选品未配置")).toBeVisible();
+  await expect(page.getByText("先设置第一条选品规则")).toBeVisible();
+  await expect(page.getByRole("link", { name: "设置规则 →" })).toHaveAttribute(
     "href",
-    "/opportunities?create=1",
-  );
-  await expect(page.getByRole("link", { name: /添加竞品/ })).toHaveAttribute(
-    "href",
-    "/competitors?create=1",
-  );
-  await expect(page.getByRole("link", { name: /从 1688 找货/ })).toHaveAttribute(
-    "href",
-    "/sourcing?create=1",
+    "/trends?tab=rules",
   );
   blocked = true;
   await page.reload();
