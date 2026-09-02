@@ -455,7 +455,7 @@ watch(
           ><em>{{ item.candidate_count }} 个候选</em><strong>查看详情 →</strong>
         </button>
       </aside>
-      <main v-if="selected">
+      <section v-if="selected" class="sourcing-detail" aria-label="找货记录详情">
         <header>
           <div>
             <p>{{ inputTypeText(selected.input_type) }}</p>
@@ -636,7 +636,7 @@ watch(
           </article>
         </section>
         <SourcingComparisonPanel :comparisons="comparisons" />
-      </main>
+      </section>
     </div>
     <aside
       v-if="canManage && selectedQuotes.length"

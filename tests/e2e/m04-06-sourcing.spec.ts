@@ -272,7 +272,7 @@ test("opportunity sourcing detail exposes designated dual-person cost review", a
 test("供应链详情完整跟随深色与浅色主题", async ({ page }) => {
   await setup(page);
   await page.goto("/sourcing");
-  const surface = page.locator(".sourcing-layout main");
+  const surface = page.locator(".sourcing-detail");
   await expect(surface).toBeVisible();
   const deepBackground = await surface.evaluate(
     (element) => getComputedStyle(element).backgroundColor,

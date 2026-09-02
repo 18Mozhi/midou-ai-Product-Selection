@@ -39,7 +39,7 @@
   background: color-mix(in srgb, var(--so-primary) 12%, var(--so-panel));
 }
 .sourcing-head,
-.sourcing-layout main > header,
+.sourcing-detail > header,
 .supplier-cards article > header,
 .supplier-cards article > footer,
 .sourcing-modal header,
@@ -50,7 +50,7 @@
   gap: 14px;
 }
 .sourcing-head p,
-.sourcing-layout main > header p {
+.sourcing-detail > header p {
   margin: 0;
   color: var(--so-primary);
   font-size: 13px;
@@ -247,7 +247,7 @@
   color: var(--so-text-muted);
   font-style: normal;
 }
-.sourcing-layout main {
+.sourcing-detail {
   background: var(--so-panel);
   border: 1px solid var(--so-border);
   border-radius: 14px;

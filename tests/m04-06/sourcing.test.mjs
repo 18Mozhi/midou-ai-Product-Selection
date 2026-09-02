@@ -102,6 +102,8 @@ test("M04-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   for (const s of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(uiSurface, new RegExp(s));
   assert.match(css, /@media\s*\(\s*max-width:\s*820px\s*\)/);
+  assert.doesNotMatch(ui, /<main\b/);
+  assert.match(ui, /class="sourcing-detail"[\s\S]*aria-label="找货记录详情"/);
   assert.match(schema, /SOURCING_PROJECTION_POLL_MS/);
   assert.match(env, /SOURCING_PROJECTION_LEASE_SECONDS/);
   assert.match(openapi, /sourcing\/comparisons/);
