@@ -244,6 +244,101 @@ test("an open provider circuit blocks only that source and preserves the remaini
   assert.equal(persisted.length, 2);
 });
 
+test("an explicit 1688 acceptance run can probe and close its existing open circuit", async () => {
+  const circuitWrites = [];
+  const connection = {
+    beginTransaction: async () => {},
+    commit: async () => {},
+    rollback: async () => {},
+    release: () => {},
+    query: async (sql, values) => {
+      if (sql.startsWith("SELECT state,consecutive_failures"))
+        return [
+          [
+            {
+              state: "open",
+              consecutive_failures: 3,
+              opened_at: new Date("2026-09-02T07:00:00.000Z"),
+              recovered_at: null,
+            },
+          ],
+        ];
+      if (sql.startsWith("INSERT INTO provider_runtime_circuits")) circuitWrites.push(values);
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const pool = {
+    query: async (sql) => {
+      if (sql.startsWith("SELECT p.id"))
+        return [
+          [
+            {
+              id: "provider-1688-acceptance",
+              code: "1688_search",
+              access_mode: "authenticated_browser",
+              target_url: "https://s.1688.com/selloffer/offer_search.htm",
+              parser_version: "1688-browser-contract-v1",
+              timeout_ms: 1000,
+              fields_json: ["title"],
+              status: "disabled",
+              circuit_failure_threshold: 3,
+              runtime_circuit_state: "open",
+              created_by: "actor-1688-acceptance",
+            },
+          ],
+        ];
+      return [{ affectedRows: 1 }];
+    },
+    getConnection: async () => connection,
+  };
+  let browserRuns = 0;
+  const executor = new ProviderSourceExecutor(
+    pool,
+    { collect: async () => assert.fail("authenticated acceptance must use the browser job") },
+    {},
+    "worker-1688-acceptance",
+    {
+      collect: async () => {
+        browserRuns += 1;
+        return {
+          browserJobId: "browser-job-1688-acceptance",
+          records: [],
+          artifacts: [],
+          parseError: null,
+        };
+      },
+    },
+  );
+  const [outcome] = await executor.execute(
+    {
+      id: "task-1688-acceptance",
+      organizationId: "org-1688-acceptance",
+      workspaceId: "workspace-1688-acceptance",
+      attemptCount: 1,
+      requestId: "request-1688-acceptance",
+      traceId: "trace-1688-acceptance",
+      leaseToken: "lease-1688-acceptance",
+      subqueries: [
+        {
+          id: "query-1688-acceptance",
+          providerId: "provider-1688-acceptance",
+          ordinal: 1,
+          required: true,
+          target: { query: "桌面灯", acceptance_run: true },
+        },
+      ],
+    },
+    async () => {},
+  );
+  assert.equal(outcome.status, "succeeded_empty");
+  assert.equal(browserRuns, 1);
+  assert.equal(circuitWrites.length, 1);
+  assert.equal(circuitWrites[0][1], "closed");
+  assert.equal(circuitWrites[0][2], 0);
+  assert.equal(circuitWrites[0][4], null);
+  assert.ok(circuitWrites[0][6] instanceof Date);
+});
+
 test("a provider reaches its configured failure threshold and opens its runtime circuit", async () => {
   const statements = [];
   const connection = {

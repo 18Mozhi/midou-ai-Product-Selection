@@ -251,7 +251,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       timeoutMs: Number(row.timeout_ms),
       fields: typeof row.fields_json === "string" ? JSON.parse(row.fields_json) : row.fields_json,
     };
-    if (row.runtime_circuit_state === "open")
+    if (row.runtime_circuit_state === "open" && !acceptanceRun)
       return {
         id: query.id,
         required: query.required,

@@ -26,7 +26,7 @@
 - `queue_backlog_limit / tenant_active_task_budget`：自动采集因全局积压或单组织预算暂停；先消化现有任务和失败重试，不得通过旁路 Worker 绕过。
 - `adapter_not_registered`：来源仍处于待配置状态或部署版本不一致；不要伪造成功。
 - `provider_source_setup_required`：1688 没有由另一来源管理员审批通过且当前解析版本最近一次回放通过的真实登录固定样本；保持来源停用，先完成真实结构化采集、固定样本、第二人审批和差异回放。
-- `provider_source_acceptance_invalid / provider_source_acceptance_not_supported`：验收标记不是字面量 `true`，或被提交给非 1688 来源；只能从 1688 启用检查页重新发起，不得手工改库或复用到其他停用来源。
+- `provider_source_acceptance_invalid / provider_source_acceptance_not_supported`：验收标记不是字面量 `true`，或被提交给非 1688 来源；只能从 1688 启用检查页重新发起，不得手工改库或复用到其他停用来源。明确的 1688 验收任务允许穿过该来源由旧失败留下的 `open` 熔断做一次恢复探测；成功会自动关闭熔断，失败继续按真实错误留在熔断状态。普通任务仍返回 `source_circuit_open`。
 - `provider_source_smoke_test_required`：公开页面/RSS 的成功烟测缺失、早于当前配置，或烟测使用的超时配置与启用请求不同；在来源配置页保持停用保存当前设置，再点“烟测并启用”。不要直接改库或用历史启用版本绕过。
 - `rate_limited`：保留任务和证据，等待状态机退避；不要提高并发绕过限制。
 - `source_changed`：系统已事务化停用对应 Provider，并写 Provider 版本和 `provider.parser_drift.auto_paused` 平台审计；保留 trace_id，更新解析器和合同测试、完成固定样本差异回放后再由来源负责人显式恢复。
