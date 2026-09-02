@@ -43,6 +43,7 @@ export interface BrowserRuntimeLimits {
   maxExtractedBytes: number;
   maxArchiveFiles: number;
   headless: boolean;
+  executablePath?: string;
 }
 export interface BrowserRunResult {
   status: BrowserRunStatus;
@@ -257,6 +258,7 @@ export class PlaywrightCrawlerEngine {
     try {
       context = await chromium.launchPersistentContext(userDataDir, {
         headless: this.limits.headless,
+        ...(this.limits.executablePath ? { executablePath: this.limits.executablePath } : {}),
         ...(options.locale ? { locale: options.locale } : {}),
         ...(options.timezoneId ? { timezoneId: options.timezoneId } : {}),
       });

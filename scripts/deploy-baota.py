@@ -358,6 +358,21 @@ def ensure_inside(path):
     if resolved == root or root not in resolved.parents:
         raise RuntimeError("path escaped project root: " + str(path))
 
+def set_env_value(content, key, value):
+    prefix = key + "="
+    lines = content.splitlines()
+    replaced = False
+    updated = []
+    for line in lines:
+        if line.startswith(prefix):
+            updated.append(prefix + value)
+            replaced = True
+        else:
+            updated.append(line)
+    if not replaced:
+        updated.append(prefix + value)
+    return "\\n".join(updated) + "\\n"
+
 swapped = False
 nginx_applied = False
 node = None
@@ -379,6 +394,9 @@ try:
         raise RuntimeError("release identity is missing")
     if not Path(v["python_bin"]).is_file():
         raise RuntimeError("BaoTa Python 3.12.13 is unavailable")
+    chromium_executable = Path("/usr/bin/chromium")
+    if not chromium_executable.is_file() or not os.access(chromium_executable, os.X_OK):
+        raise RuntimeError("configured production Chromium is unavailable")
 
     permitted_entries = allowed | {{stage.name, rollback.name, upload.name}}
     if v["initialize"]:
@@ -446,6 +464,16 @@ try:
     new_env = old_env
     for old, new in replacements.items():
         new_env = new_env.replace(old, new)
+    new_env = set_env_value(
+        new_env,
+        "CRAWLER_COMPLETION_SPOOL_ROOT",
+        str(root / "runtime/crawler-completions"),
+    )
+    new_env = set_env_value(
+        new_env,
+        "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
+        str(chromium_executable),
+    )
     env_file.write_text(new_env, encoding="utf-8")
     shutil.chown(env_file, user="root", group="www")
     os.chmod(env_file, 0o640)
@@ -463,14 +491,22 @@ try:
     shutil.chown(runtime, user="root", group="www")
     os.chmod(runtime, 0o2770)
     backups.mkdir(mode=0o750, exist_ok=True)
-    for name in ("evidence", "exports", "credential-tmp", "tmp", "verification"):
+    for name in (
+        "evidence",
+        "exports",
+        "credential-tmp",
+        "crawler-completions",
+        "tmp",
+        "verification",
+    ):
         destination = runtime / name
         source = shared / name
         if not destination.exists() and source.is_dir():
             source.rename(destination)
-        destination.mkdir(mode=0o2770, exist_ok=True)
-        shutil.chown(destination, user="root", group="www")
-        os.chmod(destination, 0o2770)
+        completion_spool = name == "crawler-completions"
+        destination.mkdir(mode=0o700 if completion_spool else 0o2770, exist_ok=True)
+        shutil.chown(destination, user="www" if completion_spool else "root", group="www")
+        os.chmod(destination, 0o700 if completion_spool else 0o2770)
     source_backups = shared / "backups"
     if source_backups.is_dir():
         for child in source_backups.iterdir():

@@ -50,6 +50,9 @@ try {
     maxExtractedBytes: config.playwright.maxExtractedBytes,
     maxArchiveFiles: config.playwright.maxArchiveFiles,
     headless: config.playwright.headless,
+    ...(config.playwright.executablePath
+      ? { executablePath: config.playwright.executablePath }
+      : {}),
   };
   const engine = new PlaywrightCrawlerEngine(limits);
   const credential = input.credential;

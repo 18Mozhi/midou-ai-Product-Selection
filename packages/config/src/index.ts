@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { resolve } from "node:path";
+import { isAbsolute, resolve } from "node:path";
 
 export type RuntimeTarget = "api" | "worker";
 export class ConfigError extends Error {
@@ -123,6 +123,7 @@ export interface RuntimeConfig {
   };
   playwright: {
     browser: "chromium";
+    executablePath?: string;
     headless: boolean;
     navigationTimeoutMs: number;
     actionTimeoutMs: number;
@@ -353,6 +354,9 @@ export function loadRuntimeConfig(
     cwd,
     text(env, "CREDENTIAL_TEMP_ROOT", "./runtime/credential-tmp"),
   );
+  const playwrightExecutablePath = text(env, "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH");
+  if (playwrightExecutablePath && !isAbsolute(playwrightExecutablePath))
+    throw new ConfigError("PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH", "must be an absolute path");
   if (evidenceRoot === exportRoot)
     throw new ConfigError("EXPORT_ROOT", "must not equal EVIDENCE_ROOT");
   if (runtimeTempRoot === evidenceRoot || runtimeTempRoot === exportRoot)
@@ -545,6 +549,7 @@ export function loadRuntimeConfig(
     },
     playwright: {
       browser: "chromium" as const,
+      ...(playwrightExecutablePath ? { executablePath: playwrightExecutablePath } : {}),
       headless: text(env, "PLAYWRIGHT_HEADLESS", "true") === "true",
       navigationTimeoutMs: integer(env, "PLAYWRIGHT_NAVIGATION_TIMEOUT_MS", 30000, 1000, 120000),
       actionTimeoutMs: integer(env, "PLAYWRIGHT_ACTION_TIMEOUT_MS", 10000, 500, 60000),

@@ -13,6 +13,7 @@ import {
 } from "../../packages/playwright-crawler/dist/index.js";
 import { buildApp } from "../../apps/api/dist/app.js";
 import { CrawlerRuntimeService } from "../../apps/api/dist/crawler-runtime-service.js";
+import { loadRuntimeConfig } from "../../packages/config/dist/index.js";
 const limits = {
   navigationTimeoutMs: 1000,
   actionTimeoutMs: 500,
@@ -79,6 +80,22 @@ test("M03-04.A01/A02/A04/A12 validates bounded browser plans and block classific
     { status: "blocked_captcha", code: "blocked_captcha", retryable: false },
   );
   assert.notEqual(hashLeaseToken("secret-token"), "secret-token");
+});
+test("M03-04 production crawler accepts only an absolute configured Chromium path", () => {
+  const executablePath = join(tmpdir(), "scoutops-system-chromium");
+  const config = loadRuntimeConfig(
+    { NODE_ENV: "test", PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: executablePath },
+    "worker",
+  );
+  assert.equal(config.playwright.executablePath, executablePath);
+  assert.throws(
+    () =>
+      loadRuntimeConfig(
+        { NODE_ENV: "test", PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: "relative/chromium" },
+        "worker",
+      ),
+    /PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH/,
+  );
 });
 test("M03-04.A02/A11/A12 encrypted profile archive extraction rejects traversal and always cleans temp data", async () => {
   const root = await mkdtemp(join(tmpdir(), "scoutops-m03-04-unit-")),
@@ -292,6 +309,7 @@ test("M03-04.A03/A05-A10/A13/A15-A17 delivery evidence is complete and Baota bou
     "tests/integration/crawler-python-consumer.test.mjs",
     "tests/integration/authenticated-browser-source.test.mjs",
     "new-product-enterprise-blueprint.md",
+    "scripts/deploy-baota.py",
   ];
   const values = await Promise.all(paths.map((path) => readFile(path, "utf8")));
   const [
@@ -314,6 +332,7 @@ test("M03-04.A03/A05-A10/A13/A15-A17 delivery evidence is complete and Baota bou
     pythonIntegration,
     browserIntegration,
     blueprint,
+    deploy,
   ] = values;
   for (const table of [
     "crawler_browser_runs",
@@ -325,9 +344,11 @@ test("M03-04.A03/A05-A10/A13/A15-A17 delivery evidence is complete and Baota bou
     assert.ok(up.includes("CREATE TABLE `" + table + "`"));
   assert.match(down, /DROP TABLE IF EXISTS `crawler_browser_runs`/);
   assert.match(pkg, /launchPersistentContext/);
+  assert.match(pkg, /executablePath:\s*this\.limits\.executablePath/);
   assert.match(bridge, /shell=False/);
   assert.match(bridge, /encoding="utf-8"/);
   assert.match(runner, /stdin/);
+  assert.match(runner, /config\.playwright\.executablePath/);
   assert.match(repo, /FOR UPDATE/);
   assert.match(routes, /collection:replay/);
   assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
@@ -341,8 +362,13 @@ test("M03-04.A03/A05-A10/A13/A15-A17 delivery evidence is complete and Baota bou
   assert.match(architecture, /M03-05/);
   assert.match(runbook, /Python 3\.12 宝塔项目[\s\S]*Python-to-Playwright/);
   assert.match(feature, /playwrightCrawler/);
+  assert.match(feature, /PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(pythonIntegration, /CrawlerRuntimeService[\s\S]*app\.listen/);
   assert.match(browserIntegration, /sealCredential[\s\S]*runWithEncryptedProfile/);
   assert.match(blueprint, /M03-04/);
+  assert.match(deploy, /CRAWLER_COMPLETION_SPOOL_ROOT/);
+  assert.match(deploy, /crawler-completions/);
+  assert.match(deploy, /PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH/);
+  assert.match(deploy, /\/usr\/bin\/chromium/);
 });
