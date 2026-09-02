@@ -61,7 +61,8 @@ test("M00-01.A15 product entry is accessible and visually stable", async ({ page
   );
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "今日行动" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "当前范围还没有首页数据" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "选品控制台" })).toBeVisible();
+  await expect(page.getByText("自动选品未配置", { exact: true })).toBeVisible();
 });
 
 test("M00-01.A08/M00-01.A15 startup dependency error keeps recovery action at 390px", async ({

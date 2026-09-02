@@ -1,6 +1,6 @@
 .home-dashboard {
-  --home-accent: #2f6bff;
-  --home-positive: #1f9d6a;
+  --home-accent: var(--so-primary);
+  --home-positive: var(--so-success);
   --home-hairline: color-mix(in srgb, var(--so-border) 82%, transparent);
   margin-top: 18px;
   color: var(--so-text);

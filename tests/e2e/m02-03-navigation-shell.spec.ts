@@ -146,7 +146,7 @@ for (const item of [
   {
     shell: "member" as const,
     path: "/home",
-    heading: "今天最值得做什么？",
+    heading: "选品控制台",
     snapshot: "m02-03-member.png",
   },
   {

@@ -202,7 +202,7 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
 }) => {
   await ready(page);
   await page.goto("/opportunities?create=1");
-  await expect(page.getByRole("heading", { name: "选品机会", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "推荐清单", level: 2 })).toBeVisible();
   await expect(page.getByText("待补充数据", { exact: true }).first()).toBeVisible();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
@@ -218,7 +218,7 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await page.getByRole("button", { name: "筛选", exact: true }).click();
   await filtered;
   await expect(page).toHaveScreenshot("m04-02-opportunity-list.png", { fullPage: true });
-  const createButton = page.getByRole("button", { name: "＋ 手工创建机会", exact: true });
+  const createButton = page.getByRole("button", { name: "手工添加", exact: true });
   await createButton.click();
   await expect(dialog).toBeVisible();
   await page.keyboard.press("Escape");
@@ -298,8 +298,8 @@ test("mobile opportunity filters preserve selected adoption blocker inside the d
   );
   await drawer.getByRole("button", { name: "筛选", exact: true }).click();
   await filtered;
-  const resultCard = page.locator("a").filter({ hasText: base.name });
-  await expect(resultCard.getByText("尚无可靠推荐结论", { exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/blocking_reason=recommendation_insufficient/);
+  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
 });
 
 test("opportunity URL state and source return path survive list-detail navigation", async ({

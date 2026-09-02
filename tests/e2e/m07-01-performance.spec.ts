@@ -57,7 +57,8 @@ test("M07-01.A07/A08/A15 representative home meets browser budgets on desktop an
     }),
   );
   await page.goto("/home");
-  await expect(page.getByRole("heading", { name: "当前范围还没有首页数据" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "选品控制台" })).toBeVisible();
+  await expect(page.getByText("自动选品未配置", { exact: true })).toBeVisible();
   await page.waitForTimeout(250);
   const resourceBudget = await page.evaluate(() => {
     const resources = performance.getEntriesByType("resource") as PerformanceResourceTiming[];
