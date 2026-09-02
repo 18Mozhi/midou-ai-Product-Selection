@@ -369,6 +369,7 @@ test("dynamic product crawls use task-scoped evidence keys and auditable record 
     readFile("apps/worker/src/evidence-persistence.ts", "utf8"),
   ]);
   assert.match(executor, /VERSIONED_PRODUCT_SOURCES[\s\S]*amazon_product/);
+  assert.match(executor, /VERSIONED_PRODUCT_SOURCES[\s\S]*1688_search/);
   assert.match(executor, /task_id: task\.id, external_id: normalized\.external_id/);
   assert.match(persistence, /findExistingRecord\(connection, value\)/);
   assert.match(persistence, /SET status='superseded'/);

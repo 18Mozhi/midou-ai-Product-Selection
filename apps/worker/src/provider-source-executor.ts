@@ -26,6 +26,7 @@ import { EvidencePersistenceError, MySqlEvidencePersistence } from "./evidence-p
 import type { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
 const sha = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const VERSIONED_PRODUCT_SOURCES = new Set([
+  "1688_search",
   "amazon_product",
   "dhgate_supplier_search",
   "made_in_china_search",
