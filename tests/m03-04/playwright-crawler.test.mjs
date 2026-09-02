@@ -75,6 +75,24 @@ test("M03-04.A01/A02/A04/A12 validates bounded browser plans and block classific
     () => validateBrowserPlan({ ...plan, allowed_origins: ["https://evil.test"] }, limits),
     (error) => error.code === "crawler_origin_invalid",
   );
+  assert.throws(
+    () =>
+      validateBrowserPlan(
+        {
+          ...plan,
+          search_snapshot: {
+            schema_version: "1688.search.v1",
+            max_items: 21,
+            offer_id_query_param: "offerId",
+            canonical_url_template: "https://example.test/offer/{offer_id}",
+            title_selector: ".title",
+            supplier_name_selector: ".supplier",
+          },
+        },
+        limits,
+      ),
+    (error) => error.code === "crawler_snapshot_invalid",
+  );
   assert.deepEqual(
     classifyBrowserFailure(new PlaywrightCrawlerError("blocked_captcha", "blocked_captcha", false)),
     { status: "blocked_captcha", code: "blocked_captcha", retryable: false },

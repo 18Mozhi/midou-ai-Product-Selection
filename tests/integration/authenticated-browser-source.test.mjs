@@ -124,3 +124,85 @@ test("encrypted logged-in source runs through real Chromium and captures evidenc
     await rm(tempRoot, { recursive: true, force: true });
   }
 });
+
+test("real Chromium submits a dynamic search form and emits a bounded search snapshot", async () => {
+  const server = createServer((request, response) => {
+    response.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+    if (request.url?.startsWith("/results")) {
+      const cards = Array.from({ length: 15 }, (_, index) => {
+        const offerId = String(726088471976 + index);
+        return `<a class="search-offer-wrapper" href="/detail?offerId=${offerId}">
+            <div class="offer-title-row"><div class="title-text">LED 桌面灯</div></div>
+            <div class="offer-price-row"><div class="price-item">¥ 5 .8</div></div>
+            <div class="offer-shop-row"><div class="desc-text">真实灯具供应商</div></div>
+            <span>${"中".repeat(10_000)}</span>
+          </a>`;
+      }).join("");
+      response.end(`<!doctype html><html><body>${cards}</body></html>`);
+      return;
+    }
+    response.end(`<!doctype html><html><body>
+      <input id="alisearch-input"><button class="input-button" onclick="location.href='/results'">搜索</button>
+    </body></html>`);
+  });
+  const tempRoot = await mkdtemp(join(tmpdir(), "scoutops-search-snapshot-"));
+  try {
+    const origin = await listen(server),
+      result = await new PlaywrightCrawlerEngine(limits).run(
+        {
+          start_url: origin,
+          allowed_origins: [origin],
+          search: {
+            input_selector: "#alisearch-input",
+            query: "桌面灯",
+            submit_selector: ".input-button",
+          },
+          item_selector: 'a.search-offer-wrapper[href*="offerId="]',
+          search_snapshot: {
+            schema_version: "1688.search.v1",
+            max_items: 15,
+            offer_id_query_param: "offerId",
+            canonical_url_template: `${origin}/offer/{offer_id}`,
+            title_selector: ".offer-title-row .title-text",
+            supplier_name_selector: ".offer-shop-row .desc-text",
+            price_selector: ".offer-price-row .price-item",
+          },
+          max_pages: 1,
+          max_scrolls: 0,
+          max_details: 0,
+          evidence: { parser_version: "local-search-snapshot-v1" },
+        },
+        tempRoot,
+        { requestId: "request-search-snapshot", traceId: "trace-search-snapshot" },
+      );
+    assert.equal(result.status, "succeeded");
+    assert.equal(result.item_count, 15);
+    assert.equal(result.snapshots?.search.items.length, 15);
+    assert.deepEqual(result.snapshots?.search.items[0], {
+      offer_id: "726088471976",
+      title: "LED 桌面灯",
+      supplier_id: null,
+      supplier_name: "真实灯具供应商",
+      quoted_price: 5.8,
+      currency: "CNY",
+      moq: null,
+      location: null,
+      canonical_url: `${origin}/offer/726088471976`,
+      dom_fragment: result.snapshots.search.items[0].dom_fragment,
+      source_paths: {
+        title: ".offer-title-row .title-text",
+        supplier_name: ".offer-shop-row .desc-text",
+        quoted_price: ".offer-price-row .price-item",
+        moq: "current search card does not expose MOQ",
+        location: "current search card does not expose location",
+        canonical_url: 'a.search-offer-wrapper[href*="offerId="] @href query:offerId',
+      },
+    });
+    assert.match(result.snapshots.search.items[0].dom_fragment, /真实灯具供应商/);
+    assert.ok(Buffer.byteLength(result.snapshots.search.items[0].dom_fragment) <= 15_000);
+    assert.ok(Buffer.byteLength(JSON.stringify(result)) < 2 * 1024 * 1024);
+  } finally {
+    await close(server).catch(() => {});
+    await rm(tempRoot, { recursive: true, force: true });
+  }
+});

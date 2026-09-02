@@ -4,14 +4,14 @@
 
 `authenticated_browser` 由一条业务关联链执行：Node Worker 仍是 M03-05 `collection_tasks` 的唯一领取者；遇到登录型子查询时写入 `browser_collection_jobs`，Python Crawler 领取该浏览器作业并通过 Node Playwright runner 执行，结果回到同一业务任务和子查询后，再由 Worker 使用 M03-06 持久化证据。低层浏览器运行不能脱离业务作业伪装成采集任务完成。
 
-1688 已登记作业路由、受限导航计划与 `1688-browser-contract-v1` 规范化入口，但真实登录页面的字段提取还没有通过固定样本回放，因此来源继续保持 `setup_required / disabled`。未获得真实样本时不得用推测的字段选择器宣称生产可用。
+1688 已登记作业路由、受限导航计划与 `1688-browser-contract-v1` 规范化入口。当前搜索页声明 `accept-charset=GBK`，因此执行器从固定搜索页填写 `#alisearch-input` 并点击 `.input-button`，不再用 UTF-8 查询串拼接中文关键词；结果只识别带数字 `offerId` 的 `a.search-offer-wrapper` 当前商品卡。搜索快照从真实卡片读取标题、供应商和可见价格，按观测到的商品 ID 生成规范详情 URL；当前卡片未展示的 MOQ 和地区保持 `null` 并写入缺失字段，不补零、不猜值。商品详情提取尚未实现，`max_details=0`，不得把搜索覆盖宣称为详情覆盖。来源在真实登录固定样本回放及第二人审批前继续保持 `setup_required / disabled`。
 
 浏览器账户必须是项目依法持有并由平台安全管理员登记的账户。执行器遇到登录页、验证码、robots 限制或 HTTP 429 时返回明确 blocked/rate-limited 状态，不尝试绕过登录、验证码、付费墙或站点限制。
 
 ## 数据与租约
 
 - `browser_collection_jobs` 以 `collection_subquery_id` 唯一关联业务任务；状态、结果、错误、Crawler 实例与租约时间均在 MySQL 5.7 保存。
-- 请求证据的来源计划会在首个列表页滚动完成后采集一份最多 250 KB 的条目 DOM 片段和一份最多 800 KB 的视口 JPEG。结果携带来源 URL、采集时间、SHA-256 与解析版本；Worker 重算哈希后写入 `EVIDENCE_ROOT`，并用 `browser_evidence_artifacts` 关联浏览器作业、业务任务和子查询。Cookie、档案和请求头不进入制品或日志。
+- 请求证据的来源计划会在首个列表页滚动完成后采集一份最多 250 KB 的条目 DOM 片段和一份最多 800 KB 的视口 JPEG。配置了搜索快照的来源还会在同一页面生成受限结构化结果：当前 1688 上限为 15 个商品、每个商品 15 KB DOM，与证据一同受内部完成请求 2 MB 上限约束。结果携带来源 URL、采集时间、SHA-256 与解析版本；Worker 重算哈希后写入 `EVIDENCE_ROOT`，并用 `browser_evidence_artifacts` 关联浏览器作业、业务任务和子查询。Cookie、档案和请求头不进入制品或日志。
 - 凭证过期或登录失效会创建关联 `collection_task_id` 的 `collection_followup` 续期任务。凭证轮换后，仍处于业务任务执行期的 blocked job 清除旧运行与租约字段并原位回到 `queued`；业务任务已终态时不改写旧作业，而是由 M03-05 克隆任务和子查询自动重放。
 - `crawler_profiles` 与 `crawler_profile_leases` 是平台全局资产。同一档案以主键锁和 `SELECT ... FOR UPDATE` 保证仅一个活动租约。
 - `crawler_browser_runs` 必须携带 `organization_id`、`workspace_id`、Provider、档案、请求人及 request_id/trace_id；业务范围不从平台档案继承或猜测。

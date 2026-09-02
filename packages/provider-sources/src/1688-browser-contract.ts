@@ -16,18 +16,29 @@ export const ALIBABA_1688_SNAPSHOT_SCHEMAS = {
 export function create1688BrowserExecutionRequest(target: Record<string, unknown>) {
   const query = typeof target.query === "string" ? target.query.trim() : "";
   if (!query || query.length > 200) throw new ProviderAdapterFailure("query_invalid", false);
-  const url = new URL("https://s.1688.com/selloffer/offer_search.htm");
-  url.searchParams.set("keywords", query);
   return {
     purpose: target.acceptance_run === true ? "acceptance" : "collection",
     plan: {
-      start_url: url.toString(),
+      start_url: "https://s.1688.com/selloffer/offer_search.htm",
       allowed_origins: ["https://s.1688.com", "https://detail.1688.com"],
-      item_selector: 'a[href*="detail.1688.com/offer/"]',
-      detail_link_selector: 'a[href*="detail.1688.com/offer/"]',
+      search: {
+        input_selector: "#alisearch-input",
+        query,
+        submit_selector: ".input-button",
+      },
+      item_selector: 'a.search-offer-wrapper[href*="offerId="]',
+      search_snapshot: {
+        schema_version: ALIBABA_1688_SNAPSHOT_SCHEMAS.search,
+        max_items: 15,
+        offer_id_query_param: "offerId",
+        canonical_url_template: "https://detail.1688.com/offer/{offer_id}.html",
+        title_selector: ".offer-title-row .title-text",
+        supplier_name_selector: ".offer-shop-row .desc-text",
+        price_selector: ".offer-price-row .price-item",
+      },
       max_pages: 1,
       max_scrolls: 3,
-      max_details: 10,
+      max_details: 0,
       block_signals: {
         login: 'input[type="password"]',
         captcha: 'iframe[src*="captcha"], [class*="captcha"]',

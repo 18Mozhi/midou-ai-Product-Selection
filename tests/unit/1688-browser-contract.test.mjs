@@ -5,6 +5,7 @@ import {
   ALIBABA_1688_BROWSER_PARSER_VERSION,
   ALIBABA_1688_SNAPSHOT_SCHEMAS,
   BUILTIN_PROVIDER_SOURCES,
+  create1688BrowserExecutionRequest,
   parse1688OfferDetailSnapshot,
   parse1688SearchSnapshot,
   parse1688SupplierSnapshot,
@@ -31,6 +32,23 @@ const searchItem = {
     canonical_url: "article a.offer-link[href]",
   },
 };
+
+test("1688 execution uses the live GBK search form and current mobile offer cards", () => {
+  const request = create1688BrowserExecutionRequest({ query: "桌面灯", acceptance_run: true });
+  assert.equal(request.purpose, "acceptance");
+  assert.equal(request.plan.start_url, "https://s.1688.com/selloffer/offer_search.htm");
+  assert.deepEqual(request.plan.search, {
+    input_selector: "#alisearch-input",
+    query: "桌面灯",
+    submit_selector: ".input-button",
+  });
+  assert.equal(request.plan.item_selector, 'a.search-offer-wrapper[href*="offerId="]');
+  assert.equal(request.plan.search_snapshot.schema_version, "1688.search.v1");
+  assert.equal(request.plan.search_snapshot.max_items, 15);
+  assert.equal(request.plan.search_snapshot.price_selector, ".offer-price-row .price-item");
+  assert.equal(request.plan.max_details, 0);
+  assert.equal("detail_link_selector" in request.plan, false);
+});
 
 test("1688 search contract preserves evidence paths and explicit complete fields", () => {
   const records = parse1688SearchSnapshot({
