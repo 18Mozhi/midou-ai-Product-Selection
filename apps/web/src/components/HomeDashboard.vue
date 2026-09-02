@@ -36,6 +36,7 @@ interface Summary {
     recommended_count: number;
     awaiting_evidence_count: number;
     adopted_count: number;
+    recommended_items: Item[];
     last_collection_at: string | null;
     next_collection_at: string | null;
   };
@@ -66,13 +67,12 @@ const total = computed(() =>
         recommended_count: 0,
         awaiting_evidence_count: 0,
         adopted_count: 0,
+        recommended_items: [],
         last_collection_at: null,
         next_collection_at: null,
       },
   ),
-  decisionActions = computed(() =>
-    (data.value?.actions ?? []).filter((item) => item.source_module === "opportunity"),
-  ),
+  decisionActions = computed(() => selection.value.recommended_items ?? []),
   otherActions = computed(() =>
     (data.value?.actions ?? []).filter((item) => item.source_module !== "opportunity"),
   ),
@@ -193,7 +193,7 @@ onMounted(load);
               <span>需要你决定</span>
               <h3>推荐清单</h3>
             </div>
-            <RouterLink to="/opportunities">全部 {{ selection.candidate_count }} 条 →</RouterLink>
+            <RouterLink to="/opportunities">全部 {{ selection.recommended_count }} 条 →</RouterLink>
           </header>
           <RouterLink
             v-for="item in decisionActions"

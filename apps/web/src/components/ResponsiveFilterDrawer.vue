@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 
-withDefaults(defineProps<{ label?: string; activeCount?: number }>(), {
-  label: "筛选条件",
-  activeCount: 0,
-});
+const props = withDefaults(
+  defineProps<{ label?: string; activeCount?: number; alwaysDrawer?: boolean }>(),
+  {
+    label: "筛选条件",
+    activeCount: 0,
+    alwaysDrawer: false,
+  },
+);
 
 const open = ref(false);
 const mobile = ref(false);
@@ -12,10 +16,11 @@ const triggerButton = ref<HTMLButtonElement | null>(null);
 const closeButton = ref<HTMLButtonElement | null>(null);
 const sheet = ref<HTMLElement | null>(null);
 let mediaQuery: MediaQueryList | null = null;
+const overlay = computed(() => props.alwaysDrawer || mobile.value);
 
 function syncViewport(event?: MediaQueryListEvent) {
   mobile.value = event?.matches ?? mediaQuery?.matches ?? false;
-  if (!mobile.value) open.value = false;
+  if (!mobile.value && !props.alwaysDrawer) open.value = false;
 }
 
 async function show() {
@@ -39,7 +44,7 @@ function handleKeydown(event: KeyboardEvent) {
     void close();
     return;
   }
-  if (event.key !== "Tab" || !mobile.value || !open.value || !sheet.value) return;
+  if (event.key !== "Tab" || !overlay.value || !open.value || !sheet.value) return;
   const focusable = [
     ...sheet.value.querySelectorAll<HTMLElement>(
       'button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])',
@@ -67,7 +72,11 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
 </script>
 
 <template>
-  <div class="responsive-filter-drawer" @keydown="handleKeydown">
+  <div
+    class="responsive-filter-drawer"
+    :class="{ 'responsive-filter-drawer--overlay': overlay }"
+    @keydown="handleKeydown"
+  >
     <button
       ref="triggerButton"
       type="button"
@@ -83,7 +92,7 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
     <div
       class="responsive-filter-drawer__surface"
       :class="{ 'is-open': open }"
-      :aria-hidden="mobile && !open"
+      :aria-hidden="overlay && !open"
     >
       <button
         type="button"
@@ -94,8 +103,8 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
       <section
         ref="sheet"
         class="responsive-filter-drawer__sheet"
-        :role="mobile ? 'dialog' : 'group'"
-        :aria-modal="mobile && open ? 'true' : undefined"
+        :role="overlay ? 'dialog' : 'group'"
+        :aria-modal="overlay && open ? 'true' : undefined"
         :aria-label="label"
       >
         <header>
@@ -122,108 +131,110 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
   display: none;
 }
 
-@media (max-width: 760px) {
-  .responsive-filter-drawer__trigger {
-    width: 100%;
-    min-height: var(--so-touch-target);
-    padding: 10px 12px;
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    align-items: center;
-    gap: 10px;
-    border: 1px solid var(--so-border);
-    border-radius: 12px;
-    color: var(--so-text);
-    background: var(--so-panel);
-    text-align: left;
-  }
+.responsive-filter-drawer--overlay .responsive-filter-drawer__trigger {
+  width: 100%;
+  min-height: var(--so-touch-target);
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  color: var(--so-text);
+  background: var(--so-panel);
+  text-align: left;
+}
 
-  .responsive-filter-drawer__trigger b,
-  .responsive-filter-drawer__sheet small {
-    color: var(--so-text-muted);
-    font-size: var(--so-font-meta);
-  }
+.responsive-filter-drawer--overlay .responsive-filter-drawer__trigger b,
+.responsive-filter-drawer--overlay .responsive-filter-drawer__sheet small {
+  color: var(--so-text-muted);
+  font-size: var(--so-font-meta);
+}
 
-  .responsive-filter-drawer__trigger i {
-    width: 32px;
-    height: 32px;
-    display: grid;
-    place-items: center;
-    border-radius: 9px;
-    color: var(--so-primary);
-    background: color-mix(in srgb, var(--so-primary) 12%, transparent);
-    font-style: normal;
-  }
+.responsive-filter-drawer--overlay .responsive-filter-drawer__trigger i {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: var(--so-primary);
+  background: color-mix(in srgb, var(--so-primary) 12%, transparent);
+  font-style: normal;
+}
 
-  .responsive-filter-drawer__surface {
-    position: fixed;
-    z-index: 240;
-    inset: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
+.responsive-filter-drawer--overlay .responsive-filter-drawer__surface {
+  position: fixed;
+  z-index: 240;
+  inset: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
 
-  .responsive-filter-drawer__surface.is-open {
-    visibility: visible;
-    pointer-events: auto;
-  }
+.responsive-filter-drawer--overlay .responsive-filter-drawer__surface.is-open {
+  visibility: visible;
+  pointer-events: auto;
+}
 
+.responsive-filter-drawer--overlay .responsive-filter-drawer__scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+  background: color-mix(in srgb, var(--so-bg) 78%, transparent);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.responsive-filter-drawer--overlay
+  .responsive-filter-drawer__surface.is-open
   .responsive-filter-drawer__scrim {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    border: 0;
-    background: color-mix(in srgb, var(--so-bg) 78%, transparent);
-    opacity: 0;
-    transition: opacity 180ms ease;
-  }
+  opacity: 1;
+}
 
-  .responsive-filter-drawer__surface.is-open .responsive-filter-drawer__scrim {
-    opacity: 1;
-  }
+.responsive-filter-drawer--overlay .responsive-filter-drawer__sheet {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: min(370px, calc(100% - 20px));
+  max-height: 100dvh;
+  padding: 18px;
+  overflow-y: auto;
+  border-left: 1px solid var(--so-border);
+  color: var(--so-text);
+  background: var(--so-bg-elevated);
+  box-shadow: var(--so-shadow);
+  transform: translateX(100%);
+  transition: transform 180ms ease;
+}
 
+.responsive-filter-drawer--overlay
+  .responsive-filter-drawer__surface.is-open
   .responsive-filter-drawer__sheet {
-    position: absolute;
-    inset: 0 0 0 auto;
-    width: min(370px, calc(100% - 20px));
-    max-height: 100dvh;
-    padding: 18px;
-    overflow-y: auto;
-    border-left: 1px solid var(--so-border);
-    color: var(--so-text);
-    background: var(--so-bg-elevated);
-    box-shadow: var(--so-shadow);
-    transform: translateX(100%);
-    transition: transform 180ms ease;
-  }
+  transform: translateX(0);
+}
 
-  .responsive-filter-drawer__surface.is-open .responsive-filter-drawer__sheet {
-    transform: translateX(0);
-  }
+.responsive-filter-drawer--overlay .responsive-filter-drawer__sheet > header {
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
 
-  .responsive-filter-drawer__sheet > header {
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
+.responsive-filter-drawer--overlay .responsive-filter-drawer__sheet > header div {
+  display: grid;
+  gap: 3px;
+}
 
-  .responsive-filter-drawer__sheet > header div {
-    display: grid;
-    gap: 3px;
-  }
-
-  .responsive-filter-drawer__sheet > header button {
-    min-width: var(--so-touch-target);
-    min-height: var(--so-touch-target);
-    border: 1px solid var(--so-border);
-    border-radius: 10px;
-    color: var(--so-text);
-    background: var(--so-panel-soft);
-  }
+.responsive-filter-drawer--overlay .responsive-filter-drawer__sheet > header button {
+  min-width: var(--so-touch-target);
+  min-height: var(--so-touch-target);
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {

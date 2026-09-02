@@ -28,6 +28,18 @@ const base = {
   version: 1,
   updated_at: "2026-08-08T00:00:00.000Z",
 };
+const recommendedBase = {
+  ...base,
+  recommendation_status: "recommend",
+  overall_score: 86,
+  evidence_count: 8,
+  source_count: 3,
+  competitor_count: 5,
+  supplier_candidate_count: 4,
+  matched_rule_count: 1,
+  coverage_status: "complete",
+  blocking_reasons: [],
+};
 const evidence = [
   {
     id: "00000000-0000-4000-8000-000000000426",
@@ -185,7 +197,7 @@ async function ready(page: Page) {
     route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(envelope([base], { page: 1, page_size: 20, total: 1 })),
+      body: JSON.stringify(envelope([recommendedBase], { page: 1, page_size: 20, total: 1 })),
     }),
   );
   await page.route("**/api/v1/opportunities", (route) =>
@@ -202,13 +214,13 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
 }) => {
   await ready(page);
   await page.goto("/opportunities?create=1");
-  await expect(page.getByRole("heading", { name: "推荐清单", level: 2 })).toBeVisible();
-  await expect(page.getByText("待补充数据", { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "待我采纳", level: 2 })).toBeVisible();
+  await expect(page.getByText("系统推荐", { exact: true }).first()).toBeVisible();
+  await expect(page.locator(".opportunity-row-select")).toHaveCount(0);
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await dialog.getByRole("button", { name: "关闭" }).click();
-  if ((page.viewportSize()?.width ?? 0) <= 760)
-    await page.getByRole("button", { name: "筛选机会" }).click();
+  await page.getByRole("button", { name: "高级筛选" }).click();
   await page.getByLabel("证据完整度").selectOption("partial");
   const filtered = page.waitForRequest(
     (request) =>
@@ -218,6 +230,8 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await page.getByRole("button", { name: "筛选", exact: true }).click();
   await filtered;
   await expect(page).toHaveScreenshot("m04-02-opportunity-list.png", { fullPage: true });
+  await page.getByRole("button", { name: "全部机会" }).click();
+  await expect(page.locator(".opportunity-row-select")).toHaveCount(1);
   const createButton = page.getByRole("button", { name: "手工添加", exact: true });
   await createButton.click();
   await expect(dialog).toBeVisible();
@@ -287,11 +301,11 @@ test("mobile opportunity filters preserve selected adoption blocker inside the d
   await page.setViewportSize({ width: 390, height: 844 });
   await ready(page);
   await page.goto("/opportunities");
-  await page.getByRole("button", { name: /筛选机会/ }).click();
-  const drawer = page.getByRole("dialog", { name: "筛选机会" });
+  await page.getByRole("button", { name: /高级筛选/ }).click();
+  const drawer = page.getByRole("dialog", { name: "高级筛选" });
   await drawer.getByLabel("阻断原因").selectOption("recommendation_insufficient");
   await drawer.getByRole("button", { name: "关闭筛选条件" }).click();
-  await page.getByRole("button", { name: /筛选机会/ }).click();
+  await page.getByRole("button", { name: /高级筛选/ }).click();
   await expect(drawer.getByLabel("阻断原因")).toHaveValue("recommendation_insufficient");
   const filtered = page.waitForRequest((request) =>
     request.url().includes("blocking_reason=recommendation_insufficient"),
@@ -300,6 +314,33 @@ test("mobile opportunity filters preserve selected adoption blocker inside the d
   await filtered;
   await expect(page).toHaveURL(/blocking_reason=recommendation_insufficient/);
   await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+});
+
+test("selection views send explicit truthful recommendation filters", async ({ page }) => {
+  await ready(page);
+  const recommended = page.waitForRequest((request) =>
+    request.url().includes("selection_view=recommended"),
+  );
+  await page.goto("/opportunities");
+  await recommended;
+  await expect(page.getByRole("button", { name: "待我采纳" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+
+  const evidencePending = page.waitForRequest((request) =>
+    request.url().includes("selection_view=evidence_pending"),
+  );
+  await page.getByRole("button", { name: "自动补证中" }).click();
+  await evidencePending;
+  await expect(page).toHaveURL(/view=evidence_pending/);
+  await expect(page.getByRole("heading", { name: "自动补证中", level: 2 })).toBeVisible();
+
+  const all = page.waitForRequest((request) => request.url().includes("selection_view=all"));
+  await page.getByRole("button", { name: "全部机会" }).click();
+  await all;
+  await expect(page).toHaveURL(/view=all/);
+  await expect(page.getByRole("button", { name: "手工添加", exact: true })).toBeVisible();
 });
 
 test("opportunity URL state and source return path survive list-detail navigation", async ({

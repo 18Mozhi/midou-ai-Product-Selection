@@ -109,10 +109,23 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       "candidate" | "validating" | "ready" | "adopted" | "observing" | "rejected" | "archived";
     ownerId?: string;
     scope?: "product" | "all";
+    selectionView?: "recommended" | "evidence_pending" | "all";
   }) {
     const where = ["o.organization_id=?", "o.workspace_id=?"],
       values: unknown[] = [input.organizationId, input.workspaceId];
-    if (input.scope !== "all")
+    if (input.selectionView === "recommended") {
+      where.push(
+        "EXISTS (SELECT 1 FROM opportunity_rule_matches orm_view WHERE orm_view.opportunity_id=o.id AND orm_view.organization_id=o.organization_id AND orm_view.workspace_id=o.workspace_id)",
+        "o.decision_status='pending'",
+        "o.recommendation_status='recommend'",
+      );
+    } else if (input.selectionView === "evidence_pending") {
+      where.push(
+        "EXISTS (SELECT 1 FROM opportunity_rule_matches orm_view WHERE orm_view.opportunity_id=o.id AND orm_view.organization_id=o.organization_id AND orm_view.workspace_id=o.workspace_id)",
+        "o.decision_status='pending'",
+        "o.recommendation_status='insufficient_data'",
+      );
+    } else if (input.selectionView !== "all" && input.scope !== "all")
       where.push(
         sqlText(
           "(o.source_type='manual' OR o.category LIKE 'ERP%'",

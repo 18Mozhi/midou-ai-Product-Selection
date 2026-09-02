@@ -5,7 +5,7 @@ import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
-type Scope = "product" | "all";
+type SelectionView = "recommended" | "evidence_pending" | "all";
 interface OpportunityFilters {
   q: string;
   market: string;
@@ -21,7 +21,10 @@ interface Opportunity {
   image_url: string | null;
   market: string;
   category: string | null;
+  source_type: "manual" | "trend_topic";
   decision_status: string;
+  recommendation_status: string;
+  overall_score: number | null;
   profit_status: string;
   risk_level: string;
   evidence_count: number;
@@ -37,6 +40,11 @@ interface Opportunity {
   version: number;
   updated_at: string;
 }
+const viewOptions: Array<{ value: SelectionView; label: string }> = [
+  { value: "recommended", label: "待我采纳" },
+  { value: "evidence_pending", label: "自动补证中" },
+  { value: "all", label: "全部机会" },
+];
 
 const props = defineProps<{
     items: Opportunity[];
@@ -44,7 +52,7 @@ const props = defineProps<{
     state: State;
     requestId: string;
     filters: OpportunityFilters;
-    listScope: Scope;
+    selectionView: SelectionView;
     memberOptions: Array<{ id: string; label: string }>;
     selectedIds: string[];
     page: number;
@@ -53,23 +61,35 @@ const props = defineProps<{
   emit = defineEmits<{
     apply: [];
     page: [value: number];
-    "update:listScope": [value: Scope];
+    view: [value: SelectionView];
     "update:selectedIds": [value: string[]];
     batch: [value: "assign" | "archive" | "review"];
     create: [];
+    manageRules: [];
     reset: [];
   }>(),
   route = useRoute(),
   pageCount = computed(() => Math.max(1, Math.ceil(props.total / 20))),
-  summary = computed(() => ({
-    ruleMatched: props.items.filter((item) => item.matched_rule_count > 0).length,
-    readyToDecide: props.items.filter(
-      (item) => item.blocking_reasons.length === 0 && item.decision_status === "pending",
-    ).length,
-    adopted: props.items.filter((item) => item.decision_status === "adopted").length,
-  })),
-  activeFilterCount = computed(
-    () => Object.values(props.filters).filter(Boolean).length + (props.listScope === "all" ? 1 : 0),
+  activeFilterCount = computed(() => Object.values(props.filters).filter(Boolean).length),
+  viewCopy = computed(
+    () =>
+      ({
+        recommended: {
+          eyebrow: "等待人工决定",
+          title: "系统推荐",
+          description: "仅显示命中选品规则、完成评分且结论为推荐的商品。",
+        },
+        evidence_pending: {
+          eyebrow: "系统处理中",
+          title: "自动补证中",
+          description: "规则已命中，系统正在补齐市场、竞争、成本与风险证据。",
+        },
+        all: {
+          eyebrow: "完整工作区",
+          title: "全部机会",
+          description: "查看自动发现、ERP 导入和手工添加的全部机会。",
+        },
+      })[props.selectionView],
   );
 
 const opportunityStatus = (value: string) =>
@@ -101,99 +121,134 @@ const opportunityStatus = (value: string) =>
       minute: "2-digit",
       hour12: false,
     }).format(new Date(value)),
-  ownerLabel = (ownerId: string | null) =>
-    props.memberOptions.find((member) => member.id === ownerId)?.label ?? "未指派";
-
-function changeScope(event: Event) {
-  emit("update:listScope", (event.target as HTMLSelectElement).value as Scope);
-}
+  sourceLabel = (item: Opportunity) =>
+    item.matched_rule_count > 0
+      ? "规则发现"
+      : item.source_type === "manual"
+        ? "手工添加"
+        : "其他线索",
+  scoreLabel = (value: number | null) =>
+    value == null ? "—" : Number.isInteger(value) ? String(value) : value.toFixed(1),
+  recommendationLabel = (item: Opportunity) =>
+    item.matched_rule_count > 0 && item.recommendation_status === "recommend"
+      ? "系统推荐"
+      : item.matched_rule_count > 0 && item.recommendation_status === "insufficient_data"
+        ? "自动补证中"
+        : opportunityStatus(item.decision_status),
+  clearOrShowAll = () => {
+    if (activeFilterCount.value) emit("reset");
+    else if (props.selectionView === "all") emit("apply");
+    else emit("view", "all");
+  };
 </script>
 
 <template>
-  <ResponsiveFilterDrawer label="筛选机会" :active-count="activeFilterCount">
-    <form class="opportunity-filters" @submit.prevent="emit('apply')">
-      <label>市场<input v-model="filters.market" maxlength="40" placeholder="全部市场" /></label
-      ><label
-        >决策状态<select v-model="filters.decision_status">
-          <option value="">全部状态</option>
-          <option value="pending">待决策</option>
-          <option value="adopted">已采纳</option>
-          <option value="observing">继续观察</option>
-          <option value="rejected">已驳回</option>
-        </select></label
-      ><label
-        >证据完整度<select v-model="filters.coverage_status">
-          <option value="">全部完整度</option>
-          <option value="insufficient">不完整</option>
-          <option value="partial">部分完整</option>
-          <option value="complete">完整</option>
-        </select></label
-      ><label
-        >阻断原因<select v-model="filters.blocking_reason">
-          <option value="">全部原因</option>
-          <option value="evidence_insufficient">缺少可采纳证据</option>
-          <option value="recommendation_insufficient">尚无可靠推荐结论</option>
-        </select></label
-      ><label
-        >阶段<select v-model="filters.lifecycle_status">
-          <option value="">全部阶段</option>
-          <option value="candidate">候选</option>
-          <option value="validating">验证中</option>
-          <option value="ready">可决策</option>
-          <option value="adopted">已采纳</option>
-          <option value="observing">观察中</option>
-          <option value="rejected">已驳回</option>
-          <option value="archived">已归档</option>
-        </select></label
-      ><label
-        >负责人<select v-model="filters.owner_id">
-          <option value="">全部负责人</option>
-          <option v-for="member in memberOptions" :key="member.id" :value="member.id">
-            {{ member.label }}
-          </option>
-        </select></label
-      ><label>机会名称<input v-model="filters.q" maxlength="200" placeholder="搜索机会" /></label
-      ><label
-        >显示范围<select :value="listScope" @change="changeScope">
-          <option value="product">可分析商品</option>
-          <option value="all">全部线索</option>
-        </select></label
-      ><button type="submit">筛选</button><button type="button" @click="emit('reset')">重置</button>
-    </form>
-  </ResponsiveFilterDrawer>
-  <section class="opportunity-list-summary" aria-label="选品机会数据总览">
-    <article>
-      <span>当前结果</span><b>{{ total }}</b>
-    </article>
-    <article>
-      <span>规则自动发现</span><b>{{ summary.ruleMatched }}</b>
-    </article>
-    <article>
-      <span>等待人工决策</span><b>{{ summary.readyToDecide }}</b>
-    </article>
-    <article>
-      <span>当前页已采纳</span><b>{{ summary.adopted }}</b>
-    </article>
+  <section class="opportunity-view-bar" aria-label="推荐清单视图">
+    <nav>
+      <button
+        v-for="option in viewOptions"
+        :key="option.value"
+        type="button"
+        :aria-current="selectionView === option.value ? 'page' : undefined"
+        @click="emit('view', option.value)"
+      >
+        {{ option.label }}
+      </button>
+    </nav>
+    <ResponsiveFilterDrawer
+      label="高级筛选"
+      :active-count="activeFilterCount"
+      :always-drawer="true"
+    >
+      <form class="opportunity-filters" @submit.prevent="emit('apply')">
+        <label>市场<input v-model="filters.market" maxlength="40" placeholder="全部市场" /></label
+        ><label v-if="selectionView === 'all'"
+          >决策状态<select v-model="filters.decision_status">
+            <option value="">全部状态</option>
+            <option value="pending">待决策</option>
+            <option value="adopted">已采纳</option>
+            <option value="observing">继续观察</option>
+            <option value="rejected">已驳回</option>
+          </select></label
+        ><label
+          >证据完整度<select v-model="filters.coverage_status">
+            <option value="">全部完整度</option>
+            <option value="insufficient">不完整</option>
+            <option value="partial">部分完整</option>
+            <option value="complete">完整</option>
+          </select></label
+        ><label
+          >阻断原因<select v-model="filters.blocking_reason">
+            <option value="">全部原因</option>
+            <option value="evidence_insufficient">缺少可采纳证据</option>
+            <option value="recommendation_insufficient">尚无可靠推荐结论</option>
+          </select></label
+        ><label
+          >阶段<select v-model="filters.lifecycle_status">
+            <option value="">全部阶段</option>
+            <option value="candidate">候选</option>
+            <option value="validating">验证中</option>
+            <option value="ready">可决策</option>
+            <option value="adopted">已采纳</option>
+            <option value="observing">观察中</option>
+            <option value="rejected">已驳回</option>
+            <option value="archived">已归档</option>
+          </select></label
+        ><label
+          >负责人<select v-model="filters.owner_id">
+            <option value="">全部负责人</option>
+            <option v-for="member in memberOptions" :key="member.id" :value="member.id">
+              {{ member.label }}
+            </option>
+          </select></label
+        ><label>机会名称<input v-model="filters.q" maxlength="200" placeholder="搜索机会" /></label
+        ><button type="submit">筛选</button
+        ><button type="button" @click="emit('reset')">重置</button>
+      </form>
+    </ResponsiveFilterDrawer>
   </section>
   <UiStatePanel
     v-if="state !== 'ready'"
     :kind="state"
     :request-id="requestId"
-    :primary-label="state === 'empty' ? (canDecide ? '开始创建' : '刷新列表') : ''"
-    :secondary-label="state === 'empty' ? '清除筛选' : '返回机会列表'"
-    @primary="state === 'empty' && canDecide ? emit('create') : emit('apply')"
-    @secondary="emit('reset')"
+    :primary-label="
+      state === 'empty'
+        ? selectionView === 'all'
+          ? canDecide
+            ? '手工添加机会'
+            : '刷新列表'
+          : '管理选品规则'
+        : ''
+    "
+    :secondary-label="
+      state === 'empty'
+        ? activeFilterCount
+          ? '清除筛选'
+          : selectionView === 'all'
+            ? '刷新列表'
+            : '查看全部机会'
+        : '返回机会列表'
+    "
+    @primary="
+      state === 'empty' && selectionView !== 'all'
+        ? emit('manageRules')
+        : state === 'empty' && canDecide
+          ? emit('create')
+          : emit('apply')
+    "
+    @secondary="state === 'empty' ? clearOrShowAll() : emit('reset')"
   />
   <section v-else class="opportunity-list">
     <header>
       <div>
-        <p>系统推荐清单</p>
-        <h3>自动发现，人工最终采纳</h3>
+        <p>{{ viewCopy.eyebrow }}</p>
+        <h3>{{ viewCopy.title }}</h3>
+        <small>{{ viewCopy.description }}</small>
       </div>
-      <span>共 {{ total }} 个机会 · 按更新时间排序</span>
+      <span>共 {{ total }} 条 · 按更新时间排序</span>
     </header>
     <nav
-      v-if="canDecide && selectedIds.length"
+      v-if="canDecide && selectionView === 'all' && selectedIds.length"
       class="opportunity-batch-bar"
       aria-label="机会批量操作"
     >
@@ -202,8 +257,13 @@ function changeScope(event: Event) {
       <button type="button" @click="emit('batch', 'review')">批量复核</button>
       <button type="button" class="danger" @click="emit('batch', 'archive')">批量归档</button>
     </nav>
-    <article v-for="item in items" :key="item.id" class="opportunity-list-row">
-      <label v-if="canDecide" class="opportunity-row-select">
+    <article
+      v-for="item in items"
+      :key="item.id"
+      class="opportunity-list-row"
+      :class="{ 'is-selectable': canDecide && selectionView === 'all' }"
+    >
+      <label v-if="canDecide && selectionView === 'all'" class="opportunity-row-select">
         <input
           type="checkbox"
           :checked="selectedIds.includes(item.id)"
@@ -219,51 +279,48 @@ function changeScope(event: Event) {
         />
       </label>
       <RouterLink :to="{ path: `/opportunities/${item.id}`, query: { from: route.fullPath } }"
-        ><span class="opportunity-picture"
+        ><span
+          class="opportunity-picture"
+          :aria-label="item.image_url ? undefined : '商品主图待采集'"
           ><img
             v-if="item.image_url"
             :src="item.image_url"
             :alt="`${item.name} 商品图`"
             loading="lazy"
             referrerpolicy="no-referrer"
-          /><i v-else>主图<br />待采集</i></span
+          /><span v-else aria-hidden="true">图</span></span
         ><span
           ><strong>{{ item.name }}</strong
           ><small
             >{{ item.market }} · {{ item.category || "未分类" }} ·
             {{ freshness(item.updated_at) }}</small
-          ><em v-if="item.matched_rule_count"
-            >命中 {{ item.matched_rule_count }} 条选品规则</em
+          ><em
+            >{{ sourceLabel(item)
+            }}<template v-if="item.matched_rule_count">
+              · 命中 {{ item.matched_rule_count }} 条规则</template
+            ></em
           ></span
         >
         <dl>
           <div>
-            <dt>推荐阶段</dt>
-            <dd>{{ item.blocking_reasons.length ? "自动补证中" : "可人工决策" }}</dd>
+            <dt>当前结论</dt>
+            <dd>{{ recommendationLabel(item) }}</dd>
           </div>
           <div>
-            <dt>关联竞品</dt>
-            <dd>{{ item.competitor_count }}</dd>
+            <dt>综合评分</dt>
+            <dd>{{ scoreLabel(item.overall_score) }}</dd>
           </div>
           <div>
-            <dt>供应商候选</dt>
-            <dd>{{ item.supplier_candidate_count }}</dd>
-          </div>
-          <div>
-            <dt>利润</dt>
-            <dd>{{ opportunityStatus(item.profit_status) }}</dd>
+            <dt>证据</dt>
+            <dd>{{ item.evidence_count }} 条 · {{ item.source_count }} 源</dd>
           </div>
           <div>
             <dt>风险</dt>
             <dd>{{ opportunityStatus(item.risk_level) }}</dd>
           </div>
-          <div>
-            <dt>负责人</dt>
-            <dd>{{ ownerLabel(item.owner_id) }}</dd>
-          </div>
         </dl>
         <b :data-status="item.decision_status"
-          >{{ opportunityStatus(item.decision_status) }} · 查看详情 →</b
+          >{{ item.recommendation_status === "recommend" ? "审阅并决定" : "查看详情" }} →</b
         ></RouterLink
       >
     </article>

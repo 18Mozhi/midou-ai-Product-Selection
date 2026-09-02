@@ -103,10 +103,12 @@ test("M04-02.A04/A12 service enforces pagination, versions and scoped repository
     page: 1,
     pageSize: 20,
     query: " AI ",
+    selectionView: "recommended",
     coverageStatus: "partial",
     blockingReason: "evidence_insufficient",
   });
   assert.equal(calls[0][1].query, "AI");
+  assert.equal(calls[0][1].selectionView, "recommended");
   assert.equal(calls[0][1].coverageStatus, "partial");
   assert.equal(calls[0][1].blockingReason, "evidence_insufficient");
   await service.create({
@@ -131,6 +133,11 @@ test("M04-02.A04/A12 service enforces pagination, versions and scoped repository
   );
   assert.throws(
     () => service.list({ ...scope, page: 1, pageSize: 20, blockingReason: "profit_unknown" }),
+    (error) =>
+      error instanceof OpportunityServiceError && error.code === "opportunity_filter_invalid",
+  );
+  assert.throws(
+    () => service.list({ ...scope, page: 1, pageSize: 20, selectionView: "automatic" }),
     (error) =>
       error instanceof OpportunityServiceError && error.code === "opportunity_filter_invalid",
   );
@@ -172,7 +179,7 @@ test("M04-02.A06/A09/A13 API derives scope and protects writes with origin and i
     });
   let response = await app.inject({
     method: "GET",
-    url: "/api/v1/opportunities?page=1&page_size=20&coverage_status=partial&blocking_reason=recommendation_insufficient",
+    url: "/api/v1/opportunities?page=1&page_size=20&selection_view=recommended&coverage_status=partial&blocking_reason=recommendation_insufficient",
     headers: {
       cookie: "scoutops_session=test",
       "x-request-id": "opp-read",
@@ -183,6 +190,7 @@ test("M04-02.A06/A09/A13 API derives scope and protects writes with origin and i
   assert.equal(response.json().request_id, "opp-read");
   assert.equal(calls[0][1].capability, "opportunity:read");
   assert.equal(calls[1][1].organizationId, ids.org);
+  assert.equal(calls[1][1].selectionView, "recommended");
   assert.equal(calls[1][1].coverageStatus, "partial");
   assert.equal(calls[1][1].blockingReason, "recommendation_insufficient");
   response = await app.inject({
@@ -269,8 +277,10 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(down, /DROP TABLE IF EXISTS `opportunities`/);
   assert.match(worker, /succeeded_empty[\s\S]*failed_terminal[\s\S]*dead_letter/);
   assert.match(service, /coverageStatus[\s\S]*blockingReason/);
+  assert.match(service, /OpportunitySelectionView[\s\S]*evidence_pending/);
   assert.match(repository, /coverage_status=\?[\s\S]*recommendation_status='insufficient_data'/);
   assert.match(routes, /coverage_status[\s\S]*blocking_reason/);
+  assert.match(routes, /selection_view/);
   assert.match(routes, /lifecycle_status[\s\S]*owner_id/);
   assert.match(routes, /opportunities\/batch[\s\S]*evidence-completion-tasks/);
   assert.match(routes, /opportunity:decide/);
@@ -278,6 +288,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(webContract, new RegExp(state));
   assert.match(webContract, /证据完整度[\s\S]*阻断原因[\s\S]*缺少可采纳证据/);
+  assert.match(webContract, /待我采纳[\s\S]*自动补证中[\s\S]*全部机会/);
   assert.match(webContract, /证据新鲜度：观测于/);
   assert.match(webContract, /阶段[\s\S]*负责人[\s\S]*批量指派[\s\S]*批量复核[\s\S]*批量归档/);
   assert.match(webContract, /生成补数任务/);

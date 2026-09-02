@@ -1828,7 +1828,7 @@ paths:
   /opportunities:
     get:
       summary: List workspace-scoped opportunities without fabricated scores
-      description: 商品型自动热点频道会建立带真实趋势证据的待评估选品，并自动排队 Amazon 竞品快照与 DHgate/Made-in-China/EC21 公开供应商搜索；Amazon 使用 page_url 商品页目标，供应商按 supplier-keywords-v2 从原商品标题提取通用品类关键词且最多 120 字符，并兼容宝塔受限代理返回空 Response.url，单一供应商来源失败不会阻断后续公开来源。人工创建仍可用。自动候选保持 insufficient_data，不代表系统推荐、采纳或可靠利润。
+      description: 商品型自动热点频道会建立带真实趋势证据的待评估选品，并自动排队 Amazon 竞品快照与 DHgate/Made-in-China/EC21 公开供应商搜索；Amazon 使用 page_url 商品页目标，供应商按 supplier-keywords-v2 从原商品标题提取通用品类关键词且最多 120 字符，并兼容宝塔受限代理返回空 Response.url，单一供应商来源失败不会阻断后续公开来源。selection_view=recommended 只返回命中规则、待人工决定且评分结论为推荐的机会；evidence_pending 只返回命中规则但仍待补证的候选；all 返回完整机会库。未传 selection_view 时保留既有 scope 行为。人工创建仍可用，自动候选不等于系统推荐或自动采纳。
       security: [{ HttpOnlySession: [] }]
       parameters:
         - $ref: "#/components/parameters/Page"
@@ -1839,6 +1839,12 @@ paths:
           }
         - { name: q, in: query, schema: { type: string, maxLength: 200 } }
         - { name: market, in: query, schema: { type: string, maxLength: 40 } }
+        - {
+            name: selection_view,
+            in: query,
+            description: "Truthful automatic-selection view; recommendation and evidence-pending views require an exact opportunity_rule_matches link.",
+            schema: { type: string, enum: [recommended, evidence_pending, all] },
+          }
         - {
             name: decision_status,
             in: query,
@@ -7878,6 +7884,7 @@ components:
               recommended_count,
               awaiting_evidence_count,
               adopted_count,
+              recommended_items,
               last_collection_at,
               next_collection_at,
             ]
@@ -7888,6 +7895,13 @@ components:
             recommended_count: { type: integer, minimum: 0 }
             awaiting_evidence_count: { type: integer, minimum: 0 }
             adopted_count: { type: integer, minimum: 0 }
+            recommended_items:
+              {
+                type: array,
+                maxItems: 5,
+                description: Rule-matched pending recommendations visible to the current member for final human adoption,
+                items: { $ref: "#/components/schemas/HomeDashboardItem" },
+              }
             last_collection_at: { type: string, format: date-time, nullable: true }
             next_collection_at: { type: string, format: date-time, nullable: true }
         scope:

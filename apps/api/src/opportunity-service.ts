@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 export type OpportunityDecision = "pending" | "adopted" | "observing" | "rejected";
 export type OpportunityCoverageStatus = "insufficient" | "partial" | "complete";
 export type OpportunityBlockingReason = "evidence_insufficient" | "recommendation_insufficient";
+export type OpportunitySelectionView = "recommended" | "evidence_pending" | "all";
 export type OpportunityLifecycle =
   "candidate" | "validating" | "ready" | "adopted" | "observing" | "rejected" | "archived";
 export type OpportunityBatchAction = "assign" | "archive" | "review";
@@ -370,6 +371,7 @@ export interface OpportunityRepository {
       lifecycleStatus?: OpportunityLifecycle;
       ownerId?: string;
       scope?: "product" | "all";
+      selectionView?: OpportunitySelectionView;
     },
   ): Promise<{ items: OpportunitySummary[]; total: number }>;
   get(input: OpportunityScope & { opportunityId: string }): Promise<OpportunityDetail | null>;
@@ -425,6 +427,7 @@ export class OpportunityService {
       lifecycleStatus?: OpportunityLifecycle;
       ownerId?: string;
       scope?: "product" | "all";
+      selectionView?: OpportunitySelectionView;
     },
   ) {
     const page = input.page ?? 1,
@@ -467,6 +470,15 @@ export class OpportunityService {
         "opportunity_filter_invalid",
         400,
         "修正 blocking_reason 后重试。",
+      );
+    if (
+      input.selectionView &&
+      !["recommended", "evidence_pending", "all"].includes(input.selectionView)
+    )
+      throw new OpportunityServiceError(
+        "opportunity_filter_invalid",
+        400,
+        "修正 selection_view 后重试。",
       );
     if (
       input.lifecycleStatus &&

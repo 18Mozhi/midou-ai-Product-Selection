@@ -110,7 +110,7 @@ export function projectedTrendProviderContext(providerCode: string): ProjectedTr
     accepted: true,
     automatic: true,
     ...locale,
-    category: automaticTrendTopicCategories.get(match[2]!) ?? null,
+    category: automaticTrendTopicCategories.get(match[1]!) ?? null,
   };
 }
 
@@ -121,7 +121,7 @@ export function isAutomaticProductDiscoveryProvider(providerCode: string) {
   return (
     context.accepted &&
     context.automatic &&
-    (source?.category === "ecommerce" || Boolean(match && automaticProductTopics.has(match[2]!)))
+    (source?.category === "ecommerce" || Boolean(match && automaticProductTopics.has(match[1]!)))
   );
 }
 

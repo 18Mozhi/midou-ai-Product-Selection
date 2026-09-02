@@ -50,6 +50,7 @@ export class HomeDashboardService {
             recommended_count: 0,
             awaiting_evidence_count: 0,
             adopted_count: 0,
+            recommended_items: [],
             last_collection_at: null,
             next_collection_at: null,
           }),
@@ -64,6 +65,10 @@ export class HomeDashboardService {
         follows: [] as HomeDashboardItem[],
         health: [] as HomeDashboardItem[],
       };
+    const recommendedItems = rows
+      .filter((item) => item.kind === "action" && item.source_module === "opportunity")
+      .sort(actionOrder)
+      .slice(0, 5);
     const actionRoutes = new Set<string>();
     for (const item of ordered) {
       const key =
@@ -82,7 +87,7 @@ export class HomeDashboardService {
     }
     return {
       ...groups,
-      automatic_selection: automaticSelection,
+      automatic_selection: { ...automaticSelection, recommended_items: recommendedItems },
       scope: { organization_id: input.organizationId, workspace_id: input.workspaceId },
       generated_at: this.now().toISOString(),
     };

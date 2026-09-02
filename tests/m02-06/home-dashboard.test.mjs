@@ -57,6 +57,7 @@ test("M02-06.A01/A02/A04/A12 service groups and caps the truthful projection", a
     recommended_count: 0,
     awaiting_evidence_count: 0,
     adopted_count: 0,
+    recommended_items: [],
     last_collection_at: null,
     next_collection_at: null,
   });
@@ -76,6 +77,7 @@ test("M02-06 automatic selection summary preserves rule, recommendation and huma
     recommended_count: 4,
     awaiting_evidence_count: 8,
     adopted_count: 2,
+    recommended_items: [],
     last_collection_at: "2026-08-07T16:00:00.000Z",
     next_collection_at: "2026-08-07T17:00:00.000Z",
   };
@@ -84,6 +86,26 @@ test("M02-06 automatic selection summary preserves rule, recommendation and huma
     automaticSelection: async () => automatic,
   }).get({ organizationId: org, workspaceId: workspace, actorId: actor, capabilities: [] });
   assert.deepEqual(result.automatic_selection, automatic);
+});
+test("M02-06 recommendation queue is reserved from truthful opportunity actions", async () => {
+  const recommendation = {
+    ...item("action", 30),
+    title: "规则命中推荐",
+    source_module: "opportunity",
+    priority: "high_value",
+    value_score: 88,
+  };
+  const result = await new HomeDashboardService({
+    list: async () => [
+      ...Array.from({ length: 6 }, (_, index) => ({
+        ...item("action", 40 + index),
+        priority: "overdue",
+      })),
+      recommendation,
+    ],
+  }).get({ organizationId: org, workspaceId: workspace, actorId: actor, capabilities: [] });
+  assert.equal(result.actions.length, 5);
+  assert.deepEqual(result.automatic_selection.recommended_items, [recommendation]);
 });
 test("M02-06 merges cross-module actions by deadline blocker risk value and route", async () => {
   const rows = [
@@ -158,6 +180,7 @@ test("M02-06.A06/A09/A11/A13 API derives actor tenant capability and correlation
             recommended_count: 0,
             awaiting_evidence_count: 0,
             adopted_count: 0,
+            recommended_items: [],
             last_collection_at: null,
             next_collection_at: null,
           },
@@ -238,15 +261,18 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     "UTC_TIMESTAMP\\(3\\)",
   ])
     assert.match(repo, new RegExp(rule));
+  assert.match(repo, /opportunity_rule_matches orm/);
+  assert.match(repo, /recommendation_status='recommend'/);
   assert.match(openapi, /\/me\/home-dashboard:/);
   assert.match(home, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   for (const fact of ["自动选品运行中", "选品控制台", "系统推荐", "人工采纳"])
     assert.match(home, new RegExp(fact));
-  for (const destination of ["/trends\\?tab=rules", "/opportunities"])
+  for (const destination of ["/trends\\?section=rules", "/opportunities"])
     assert.match(home, new RegExp(`to="${destination}"`));
   assert.match(home, /home-selection-metrics[\s\S]*规则候选[\s\S]*系统推荐[\s\S]*已采纳/);
   assert.match(home, /home-review-queue[\s\S]*推荐清单/);
+  assert.match(home, /recommended_items[\s\S]*recommended_count/);
   assert.match(home, /home-automation-status[\s\S]*监控平台[\s\S]*补证与评分/);
   assert.match(home, /自动推荐不等于自动采纳/);
   assert.doesNotMatch(home, /全链路教学/);

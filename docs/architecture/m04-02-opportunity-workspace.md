@@ -18,16 +18,18 @@ M04-02 的事实边界是：趋势证据可使市场分区变为 covered，但�
 
 机会列表的阻断原因筛选只复用采纳接口已经执行的事实条件：`evidence_insufficient` 对应证据数为零或覆盖状态为 `insufficient`，`recommendation_insufficient` 对应推荐状态为 `insufficient_data`。列表响应返回同一组 `blocking_reasons` 并在界面翻译为中文；不把利润不足或风险未知擅自升级为采纳阻断。
 
+机会列表以 `selection_view` 明确区分三个互不冒充的工作队列：`recommended` 必须存在同组织、工作区的 `opportunity_rule_matches` 记录，同时为待决策且持久化评分结论为 `recommend`；`evidence_pending` 同样必须命中规则，但推荐结论仍为 `insufficient_data`；`all` 才展示手工、ERP 导入与其他未推荐机会。浏览器默认打开 `recommended`，未传新参数的旧调用继续沿用原 `scope` 行为。普通待处理机会不得进入首页或列表的“系统推荐”口径。
+
 机会列表同时将持久化 `lifecycle_status`、`owner_id` 下推到 MySQL 筛选；未显式筛选阶段时默认排除 `archived`。`lifecycle_entered_at` 独立于普通 `updated_at` 持久化，只有实际阶段变化时更新；API 以数据库当前时间计算 `lifecycle_dwell_seconds`，列表同时展示阶段、负责人和真实停留时长。`POST /opportunities/batch` 在单个事务内锁定 1–50 个机会并逐项校验 version，支持把负责人改为当前组织且可访问当前工作区的活动成员、进入归档阶段，或进入验证阶段并创建/复用 `selection_verification` 人工任务。任一机会不存在、越权或版本冲突都会整批回滚，每个成功机会写独立事件与 Outbox。
 
 数据不足的详情可通过 `POST /opportunities/{id}/evidence-completion-tasks` 创建或复用唯一 `evidence_completion` 补数任务，不再跳转到未关联机会的通用任务表单。详情把证据覆盖与推荐结论两类现有采纳阻断集中返回，并只用关联任务的真实进度、状态及评分 Job 状态说明“仍阻断 / 解除中 / 已解除”。任务完成事务会检查当前工作区活动评分规则：存在时写入带 `trigger_task_id` 的 `opportunity_score_jobs` 并把未归档机会切到验证中；不存在时明确返回 `waiting_for_active_rule`，不伪造已重新评分。评分仍由宝塔 Node Worker 基于已持久化输入重新计算；由补采任务触发的评分完成后，向机会负责人（无负责人时为补采任务执行人）写入站内通知 Outbox，通知深链返回同一机会详情重新决策。
 
 机会详情按结论、证据、利润、风险优先展示，并在用户界面把来源、覆盖、利润、风险和决策状态转换为中文；每条证据统一显式标注“证据新鲜度：观测于”及真实观测时间，不在没有来源时效规则的情况下猜测新鲜、临期或过期阈值。原始状态码仅保留在 API 与技术诊断数据中。
 
-趋势、机会和平台采集总览的筛选在桌面端保持内联，在 760px 及以下进入同一个可访问抽屉。抽屉只改变呈现方式，不重建表单，因此关闭后仍保留已选条件。
+机会列表的高级筛选在桌面和移动端都进入同一个可访问抽屉，首屏只保留“待我采纳 / 自动补证中 / 全部机会”视图切换和决策必需字段。趋势与平台采集总览仍按各自页面合同响应布局；抽屉只改变呈现方式，不重建表单，因此关闭后仍保留已选条件。
 
 `OpportunityListPanel.vue` 独立承载机会筛选、摘要与列表，`OpportunityDecisionPanel.vue` 承载阻断解除状态、重新决策提醒和固定决策动作，`OpportunityProfitPanel.vue` 承载利润与成本展示，`OpportunityWorkspaceDialogs.vue` 承载 ERP 导入、机会创建与留痕决策弹窗，详情数据编排继续由 `OpportunityWorkspace.vue` 负责；各子组件只接收父级事实并上抛动作，不重复请求或改写机会状态机。各弹窗进入浏览器顶层模态层并统一处理 Esc、焦点约束与关闭后的焦点归还，避免单个页面组件重新超过千行门禁。
 
-列表和详情使用独立 `/opportunities`、`/opportunities/{opportunityId}` 路由。列表筛选、范围和页码同步到 URL；进入详情时以同源 `from` 查询参数保存完整来源路径，返回后恢复原筛选与页码。详情分区使用 `tab` 查询参数支持直接定位。详情移除重复页面大标题卡，将推荐结论放在内容首屏，并把采纳、观察、驳回和证据补齐入口放入固定底部决策栏；390px 下标签横向滚动，决策栏避让系统安全区与成员底部导航。
+列表和详情使用独立 `/opportunities`、`/opportunities/{opportunityId}` 路由。列表视图、筛选和页码同步到 URL，旧 `scope=all` 链接映射到“全部机会”；进入详情时以同源 `from` 查询参数保存完整来源路径，返回后恢复原视图、筛选与页码。详情分区使用 `tab` 查询参数支持直接定位。详情移除重复页面大标题卡，将推荐结论放在内容首屏，并把采纳、观察、驳回和证据补齐入口放入固定底部决策栏；390px 下标签横向滚动，决策栏避让系统安全区与成员底部导航。
 
 所有业务写入、Worker 写入和失败均携带 request_id/trace_id。四次总尝试与 1/5/15 分钟退避在代码中锁定；不可重试错误进入 `failed_terminal`，依赖错误耗尽后进入 `dead_letter`。

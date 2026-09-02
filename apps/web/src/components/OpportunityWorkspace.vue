@@ -52,7 +52,7 @@ const props = defineProps<{
   requestId = ref(""),
   message = ref(""),
   busy = ref(false),
-  listScope = ref<"product" | "all">("product"),
+  selectionView = ref<"recommended" | "evidence_pending" | "all">("recommended"),
   downstream = ref({ competitors: 0, snapshots: 0, searches: 0, suppliers: 0 }),
   tab = ref<OpportunityTypes.OpportunityTab>("overview"),
   showCreate = ref(false),
@@ -227,7 +227,7 @@ async function load() {
     const params = new URLSearchParams({
       page: String(page.value),
       page_size: "20",
-      scope: listScope.value,
+      selection_view: selectionView.value,
     });
     for (const [key, value] of Object.entries(filters)) if (value) params.set(key, value);
     const result = await read(`/opportunities?${params}`);
@@ -538,7 +538,12 @@ function syncListRoute() {
   filters.lifecycle_status =
     typeof route.query.lifecycle_status === "string" ? route.query.lifecycle_status : "";
   filters.owner_id = typeof route.query.owner_id === "string" ? route.query.owner_id : "";
-  listScope.value = route.query.scope === "all" ? "all" : "product";
+  selectionView.value =
+    route.query.view === "evidence_pending"
+      ? "evidence_pending"
+      : route.query.view === "all" || route.query.scope === "all"
+        ? "all"
+        : "recommended";
   const requestedPage = Number(route.query.page ?? 1);
   page.value = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
 }
@@ -553,17 +558,31 @@ async function applyListFilters() {
       blocking_reason: filters.blocking_reason || undefined,
       lifecycle_status: filters.lifecycle_status || undefined,
       owner_id: filters.owner_id || undefined,
-      scope: listScope.value === "all" ? "all" : undefined,
+      view: selectionView.value === "recommended" ? undefined : selectionView.value,
     },
   });
   if (route.fullPath === previousPath) await load();
 }
 async function resetListFilters() {
   for (const key of Object.keys(filters) as Array<keyof typeof filters>) filters[key] = "";
-  listScope.value = "product";
   const previousPath = route.fullPath;
-  await router.push({ query: {} });
+  await router.push({
+    query: { view: selectionView.value === "recommended" ? undefined : selectionView.value },
+  });
   if (route.fullPath === previousPath) await load();
+}
+async function setSelectionView(nextView: "recommended" | "evidence_pending" | "all") {
+  if (selectionView.value === nextView) return;
+  selectedOpportunityIds.value = [];
+  await router.push({
+    query: {
+      ...route.query,
+      view: nextView === "recommended" ? undefined : nextView,
+      scope: undefined,
+      page: undefined,
+      decision_status: nextView === "all" ? route.query.decision_status : undefined,
+    },
+  });
 }
 async function goListPage(nextPage: number) {
   if (nextPage < 1 || nextPage > pageCount.value) return;
@@ -625,6 +644,7 @@ watch(
     route.query.blocking_reason,
     route.query.lifecycle_status,
     route.query.owner_id,
+    route.query.view,
     route.query.scope,
     route.query.page,
   ],
@@ -640,13 +660,34 @@ watch(
     <header v-if="!opportunityId" class="opportunity-hero">
       <div>
         <p>自动选品</p>
-        <h2>{{ opportunityId ? "机会详情" : "推荐清单" }}</h2>
-        <span>系统按规则持续发现、补证和评分；采纳、观察或驳回始终由你决定。</span>
+        <h2>
+          {{
+            selectionView === "recommended"
+              ? "待我采纳"
+              : selectionView === "evidence_pending"
+                ? "自动补证中"
+                : "全部机会"
+          }}
+        </h2>
+        <span>系统持续监控和补证；只有达到规则要求的商品才会进入人工采纳队列。</span>
       </div>
       <div v-if="canDecide" class="opportunity-hero-actions">
         <RouterLink to="/trends?section=rules">管理选品规则</RouterLink
-        ><button type="button" class="ghost" @click="showErpImport = true">从 ERP 导入</button
-        ><button type="button" class="ghost" @click="showCreate = true">手工添加</button>
+        ><button
+          v-if="selectionView === 'all'"
+          type="button"
+          class="ghost"
+          @click="showErpImport = true"
+        >
+          从 ERP 导入</button
+        ><button
+          v-if="selectionView === 'all'"
+          type="button"
+          class="ghost"
+          @click="showCreate = true"
+        >
+          手工添加
+        </button>
       </div>
       <span v-else>当前角色可查看机会事实与历史，写入操作需要“机会决策”权限。</span>
     </header>
@@ -659,7 +700,7 @@ watch(
     </p>
     <OpportunityListPanel
       v-if="!opportunityId"
-      v-model:list-scope="listScope"
+      :selection-view="selectionView"
       :items="items"
       :total="total"
       :state="state"
@@ -672,8 +713,10 @@ watch(
       @apply="applyListFilters"
       @batch="openBatch"
       @create="showCreate = true"
+      @manage-rules="router.push('/trends?section=rules')"
       @page="goListPage"
       @reset="resetListFilters"
+      @view="setSelectionView"
       @update:selected-ids="selectedOpportunityIds = $event"
     />
     <template v-else

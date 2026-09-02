@@ -11,6 +11,7 @@ import type {
   OpportunityCreateInput,
   OpportunityDecision,
   OpportunityOperatingFeedbackInput,
+  OpportunitySelectionView,
   OpportunityService,
 } from "./opportunity-service.js";
 
@@ -75,6 +76,9 @@ export function registerOpportunityRoutes(app: FastifyInstance, options: Opportu
       page,
       pageSize,
       scope: query.scope === "all" ? "all" : "product",
+      ...(query.selection_view
+        ? { selectionView: query.selection_view as OpportunitySelectionView }
+        : {}),
       ...(query.q ? { query: query.q } : {}),
       ...(query.market ? { market: query.market } : {}),
       ...(query.decision_status

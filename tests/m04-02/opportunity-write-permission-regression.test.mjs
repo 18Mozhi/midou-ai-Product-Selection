@@ -19,12 +19,12 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(workspace, /:can-write="canDecide"/);
   assert.match(workspace, /v-if="canManageCompetitors"[\s\S]*discoverCompetitors/);
   assert.match(workspace, /v-if="canManageSuppliers"[\s\S]*discoverSuppliers/);
-  assert.match(list, /v-if="canDecide && selectedIds\.length"/);
-  assert.match(list, /v-if="canDecide" class="opportunity-row-select"/);
+  assert.match(list, /v-if="canDecide && selectionView === 'all' && selectedIds\.length"/);
+  assert.match(list, /v-if="canDecide && selectionView === 'all'" class="opportunity-row-select"/);
   assert.match(list, /@click="emit\('reset'\)">重置/);
-  assert.match(list, /canDecide \? '开始创建' : '刷新列表'/);
-  assert.match(list, /state === 'empty' \? '清除筛选' : '返回机会列表'/);
-  assert.match(list, /state === 'empty' && canDecide \? emit\('create'\) : emit\('apply'\)/);
+  assert.match(list, /selectionView === 'all'[\s\S]*canDecide[\s\S]*'手工添加机会'/);
+  assert.match(list, /selectionView === 'all'[\s\S]*'刷新列表'[\s\S]*'查看全部机会'/);
+  assert.match(list, /state === 'empty' && selectionView !== 'all'[\s\S]*emit\('manageRules'\)/);
   assert.match(workspace, /async function resetListFilters\(\)/);
   assert.match(workspace, /@reset="resetListFilters"/);
   assert.match(decision, /v-if="canDecide"[\s\S]*aria-label="机会决策操作"/);

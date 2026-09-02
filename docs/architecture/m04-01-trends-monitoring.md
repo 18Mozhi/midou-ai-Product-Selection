@@ -8,7 +8,7 @@
 
 `normalized_records` 由宝塔管理的 Node Worker 扫描并补建 `trend_projection_jobs`。投影任务使用 MySQL 5.7 租约、四次总尝试和 1/5/15 分钟退避；不可恢复的字段错误进入 `failed_terminal`，可恢复依赖错误耗尽后进入 `dead_letter`，非趋势来源进入 `succeeded_empty`。
 
-Google News 记录按市场、语言以及 NFKC、小写和连续空白折叠后的完整标题生成 `topic_key`。相同市场和语言的相同标题在同一组织与工作区内合并；自动频道从 Provider code 解析真实市场与语言，不能全部伪装为美国。`trend_signals.normalized_record_id` 唯一，重放不会重复增加热度。`heat.value` 是实际信号数，单位固定为 `signals`。没有批准的时间窗口和置信度算法时，`momentum_percent` 与 `confidence_score` 保持空值，`confidence_status=insufficient_data`。
+Google News 记录按市场、语言以及 NFKC、小写和连续空白折叠后的完整标题生成 `topic_key`。相同市场和语言的相同标题在同一组织与工作区内合并；自动频道从 `gnews_<地区>_<主题>` Provider code 的唯一主题捕获组解析真实市场、语言和来源类别，不能全部伪装为美国，也不能因读取不存在的捕获组漏掉新品等商品主题。`trend_signals.normalized_record_id` 唯一，重放不会重复增加热度。`heat.value` 是实际信号数，单位固定为 `signals`。没有批准的时间窗口和置信度算法时，`momentum_percent` 与 `confidence_score` 保持空值，`confidence_status=insufficient_data`。
 
 人工主题治理通过 `trend_topic_change_requests` 保存合并或拆分提案，提案人与确认人必须是两个不同的活动 `trend:manage` 用户。合并保留目标主题、迁移信号、合并关键词与关注关系并归档来源主题；涉及多个既有机会时失败关闭，只存在一个机会时把它绑定到保留主题。拆分只能迁移提案中逐条锁定的信号，并要求显式输入新主题名称；既有机会继续留在原主题，新主题不自动生成或迁移机会。提案和确认均锁定主题及请求版本，拒绝不改业务事实，所有结论写趋势事件、Outbox 和审计。
 

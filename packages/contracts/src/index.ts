@@ -341,6 +341,7 @@ export interface HomeDashboardSummary {
     recommended_count: number;
     awaiting_evidence_count: number;
     adopted_count: number;
+    recommended_items: HomeDashboardItem[];
     last_collection_at: string | null;
     next_collection_at: string | null;
   };

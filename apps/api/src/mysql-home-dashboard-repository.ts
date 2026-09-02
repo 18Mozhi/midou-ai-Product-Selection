@@ -64,6 +64,7 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
       recommended_count: Number(row.recommended_count ?? 0),
       awaiting_evidence_count: Number(row.awaiting_evidence_count ?? 0),
       adopted_count: Number(row.adopted_count ?? 0),
+      recommended_items: [],
       last_collection_at: last,
       next_collection_at: next,
     };
@@ -229,29 +230,28 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
           "o.updated_at,o.version,COALESCE(NULLIF(p.display_name,''),u.email) owner_label FROM opportunities o " +
           "LEFT JOIN users u ON u.id=COALESCE(o.owner_id,o.created_by) LEFT JOIN user_profiles p ON " +
           "p.user_id=COALESCE(o.owner_id,o.created_by) WHERE o.organization_id=? AND o.workspace_id=? " +
-          "AND o.decision_status='pending' AND o.lifecycle_status<>'archived' AND " +
+          "AND o.decision_status='pending' AND o.recommendation_status='recommend' " +
+          "AND o.lifecycle_status<>'archived' AND EXISTS (SELECT 1 FROM opportunity_rule_matches orm " +
+          "WHERE orm.opportunity_id=o.id AND orm.organization_id=o.organization_id " +
+          "AND orm.workspace_id=o.workspace_id) AND " +
           "(o.owner_id=? OR (o.owner_id IS NULL AND o.created_by=?)) ORDER BY " +
-          "FIELD(o.risk_level,'high','medium','low','unknown'),(o.recommendation_status='recommend') DESC," +
-          "o.overall_score DESC,o.updated_at DESC LIMIT 40",
+          "FIELD(o.risk_level,'high','medium','low','unknown'),o.overall_score DESC,o.updated_at DESC LIMIT 40",
         [input.organizationId, input.workspaceId, input.actorId, input.actorId],
       );
       opportunities = opportunityRows.map((row) => {
-        const highRisk = row.risk_level === "high",
-          recommended = row.recommendation_status === "recommend";
+        const highRisk = row.risk_level === "high";
         return {
           id: String(row.id),
           kind: "action",
           title: String(row.name),
           reason: highRisk
             ? "当前机会风险较高，等待你复核证据并作出决策。"
-            : recommended
-              ? "现有规则结果为推荐，等待你确认是否采纳。"
-              : "机会正在等待你的下一步决策。",
+            : "命中已启用选品规则且评分结论为推荐，等待你最终确认。",
           route: `/opportunities/${row.id}`,
           source_module: "opportunity",
           source_label: "选品机会",
           context_label: "进入决策上下文",
-          priority: highRisk ? "high_risk" : recommended ? "high_value" : "normal",
+          priority: highRisk ? "high_risk" : "high_value",
           risk_level: String(row.risk_level) as HomeDashboardItem["risk_level"],
           value_score: row.overall_score === null ? null : Number(row.overall_score),
           blocked: false,

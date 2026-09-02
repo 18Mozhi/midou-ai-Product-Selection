@@ -67,25 +67,35 @@ test("M04-01 automatic hotspot channels project real markets and only product ch
     automatic: true,
     market: "JP",
     language: "ja-JP",
+    category: "ecommerce",
   });
   assert.deepEqual(projectedTrendProviderContext("gnews_gb_consumer_trends"), {
     accepted: true,
     automatic: true,
     market: "GB",
     language: "en-GB",
+    category: "news",
   });
   assert.deepEqual(projectedTrendProviderContext("google_news_search"), {
     accepted: true,
     automatic: false,
     market: "US",
     language: "en-US",
+    category: null,
   });
-  assert.equal(projectedTrendProviderContext("amazon_product").accepted, false);
+  assert.deepEqual(projectedTrendProviderContext("amazon_product"), {
+    accepted: true,
+    automatic: true,
+    market: "US",
+    language: "en-US",
+    category: "ecommerce",
+  });
   assert.deepEqual(projectedTrendProviderContext("page_amazon_bestsellers_us"), {
     accepted: true,
     automatic: true,
     market: "US",
     language: "en-US",
+    category: "ecommerce",
   });
   assert.equal(projectedTrendProviderContext("feed_reddit_buyitforlife").accepted, true);
   assert.equal(isAutomaticProductDiscoveryProvider("page_amazon_bestsellers_us"), true);
