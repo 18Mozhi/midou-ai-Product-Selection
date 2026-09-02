@@ -644,7 +644,7 @@ watch(
         <span>系统按规则持续发现、补证和评分；采纳、观察或驳回始终由你决定。</span>
       </div>
       <div v-if="canDecide" class="opportunity-hero-actions">
-        <RouterLink to="/trends?tab=rules">管理选品规则</RouterLink
+        <RouterLink to="/trends?section=rules">管理选品规则</RouterLink
         ><button type="button" class="ghost" @click="showErpImport = true">从 ERP 导入</button
         ><button type="button" class="ghost" @click="showCreate = true">手工添加</button>
       </div>

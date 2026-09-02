@@ -154,7 +154,7 @@ onMounted(load);
           <p>系统持续发现和补证，你只负责最终采纳。</p>
         </div>
         <nav>
-          <RouterLink class="home-secondary-action" to="/trends?tab=rules">管理规则</RouterLink>
+          <RouterLink class="home-secondary-action" to="/trends?section=rules">管理规则</RouterLink>
           <RouterLink class="home-primary-action" to="/opportunities">查看推荐清单</RouterLink>
         </nav>
       </header>
@@ -164,7 +164,7 @@ onMounted(load);
           <b>先设置第一条选品规则</b
           ><span>填写市场、关键词、排除词和监控周期，系统才会开始全天候发现商品。</span>
         </div>
-        <RouterLink to="/trends?tab=rules">设置规则 →</RouterLink>
+        <RouterLink to="/trends?section=rules">设置规则 →</RouterLink>
       </section>
 
       <section class="home-selection-metrics" aria-label="自动选品状态">

@@ -254,6 +254,16 @@ test("M04-01.A08/A09 monitoring rule and empty/forbidden states are explicit", a
   await expect(page.getByText("监控规则已启用；当前仅发送站内通知。")).toBeVisible();
 });
 
+test("monitoring-rule deep links open the rule view and keep the legacy alias working", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.goto("/trends?section=rules");
+  await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
+  await page.goto("/trends?tab=rules");
+  await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
+});
+
 test("trend:read-only loads topics and rules without requesting or exposing governance", async ({
   page,
 }) => {

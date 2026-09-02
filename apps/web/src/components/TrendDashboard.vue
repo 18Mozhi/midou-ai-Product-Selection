@@ -181,13 +181,13 @@ function syncFromRoute() {
   sort.value = ["impact", "latest", "momentum", "followed"].includes(String(route.query.sort))
     ? (route.query.sort as typeof sort.value)
     : "impact";
+  const rulesRequested = route.query.section === "rules" || route.query.tab === "rules";
   const governanceRequested = route.query.section === "governance";
-  tab.value =
-    route.query.section === "rules"
-      ? "rules"
-      : governanceRequested && canManageTrends.value
-        ? "governance"
-        : "topics";
+  tab.value = rulesRequested
+    ? "rules"
+    : governanceRequested && canManageTrends.value
+      ? "governance"
+      : "topics";
   if (governanceRequested && !canManageTrends.value)
     void router.replace({ query: { ...route.query, section: undefined } });
 }
@@ -440,7 +440,7 @@ watch(
   },
 );
 watch(
-  () => [route.query.section, route.query.sort],
+  () => [route.query.section, route.query.tab, route.query.sort],
   () => syncFromRoute(),
 );
 watch(canManageTrends, (allowed) => {

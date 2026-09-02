@@ -138,7 +138,7 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   );
   await expect(page.getByRole("link", { name: "管理规则" })).toHaveAttribute(
     "href",
-    "/trends?tab=rules",
+    "/trends?section=rules",
   );
   await expect(page.getByRole("link", { name: "查看推荐清单" })).toHaveAttribute(
     "href",
@@ -274,7 +274,7 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
   await expect(page.getByText("先设置第一条选品规则")).toBeVisible();
   await expect(page.getByRole("link", { name: "设置规则 →" })).toHaveAttribute(
     "href",
-    "/trends?tab=rules",
+    "/trends?section=rules",
   );
   blocked = true;
   await page.reload();
