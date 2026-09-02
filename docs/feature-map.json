@@ -843,7 +843,7 @@
         "/api/v1/platform/data/evidence/{evidenceId}/download-grant",
         "/api/v1/platform/data/evidence/{evidenceId}/download"
       ],
-      "scope": "organization and workspace scoped immutable raw evidence, browser screenshots and DOM fragments linked to task/subquery/job/parser version, versioned normalized records, field provenance, reconciliation, quality issues with direct evidence and parser links plus atomic batch attribution active-member assignment and close operations, events and outbox in MySQL 5.7 plus Baota-controlled evidence files",
+      "scope": "organization and workspace scoped immutable raw evidence, browser screenshots and DOM fragments linked to task/subquery/job/parser version, versioned normalized records, field provenance including bounded printable-ASCII JSON/XML/CSS/attribute/query locator expressions, reconciliation, quality issues with direct evidence and parser links plus atomic batch attribution active-member assignment and close operations, events and outbox in MySQL 5.7 plus Baota-controlled evidence files",
       "dedupeBoundary": "provider-supplied key scoped by organization workspace and provider; identical content replays, different content conflicts",
       "qualityMetrics": [
         "title_accuracy",

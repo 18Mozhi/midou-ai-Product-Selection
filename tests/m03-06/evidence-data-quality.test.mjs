@@ -86,6 +86,26 @@ test("M03-06.A01/A02/A12 validates evidence boundaries, canonical URL, hashes an
     actorId: ids.actor,
   };
   assert.equal(validateEvidenceInput(input, 1024).contentHash, sha256("{}"));
+  const browserLocator = 'a.search-offer-wrapper[href*="offerId="] @href query:offerId';
+  assert.equal(
+    validateEvidenceInput(
+      {
+        ...input,
+        provenance: [{ ...input.provenance[0], sourcePath: browserLocator }],
+      },
+      1024,
+    ).provenance[0].sourcePath,
+    browserLocator,
+  );
+  for (const sourcePath of ["selector\nscript", "选择器", "x".repeat(201)])
+    assert.throws(
+      () =>
+        validateEvidenceInput(
+          { ...input, provenance: [{ ...input.provenance[0], sourcePath }] },
+          1024,
+        ),
+      /field_provenance_invalid/,
+    );
   assert.throws(
     () => validateEvidenceInput({ ...input, content: Buffer.alloc(1025) }, 1024),
     /evidence_content_size_invalid/,
