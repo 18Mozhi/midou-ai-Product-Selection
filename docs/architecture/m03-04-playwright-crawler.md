@@ -19,11 +19,11 @@
 - 心跳和完成必须同时匹配 run、profile 和令牌摘要。到期租约可由显式运维动作回收，对应运行写为 `timed_out / lease_expired`，所有 acquire、heartbeat、release、recover 均落不可变事件。
 - Python 心跳调用不重试；第一次失败即通知桥接层终止 Playwright 子进程，禁止浏览器在失去租约后继续操作目标站。普通 API 领取和完成回传使用有上限的指数退避与抖动。完成回传失败时，带 correlation 的结果与租约令牌写入权限 0600 的 `CRAWLER_COMPLETION_SPOOL_ROOT`，后续循环先重试再领取新作业；完成接口以原令牌摘要接受幂等重放，成功后不改写既有终态。
 - Python Crawler 每次领取轮询同时上报完成回执目录的待回写/隔离数量、字节数、最老回执时间、配置保留期、容量上限和所在磁盘可用量。Node 只保存脱敏聚合值，不接收路径、文件名或回执内容；达到保留期、容量或磁盘停止线只告警或阻断新领取，绝不自动删除待回写或隔离回执。
-- `0054_crawler_succeeded_empty` 将浏览器运行与作业的真实空结果保留为 `succeeded_empty`，不得折叠成普通成功。Playwright stderr 只保存最多 4000 字符的单行脱敏诊断到受限 `result_json`，平台监控不返回该字段。
+- `0054_crawler_succeeded_empty` 将浏览器运行与作业的真实空结果保留为 `succeeded_empty`，不得折叠成普通成功。Worker 浏览器作业等待器把 `succeeded` 和 `succeeded_empty` 都作为终态读取，不能在 Crawler 已完成空结果后继续轮询到超时；来源执行器仍按空记录完成子查询并通过既有运行结果事务恢复熔断。Playwright stderr 只保存最多 4000 字符的单行脱敏诊断到受限 `result_json`，平台监控不返回该字段。
 
 ## 浏览器与档案
 
-`@scoutops/playwright-crawler` 使用 Chromium persistent context。执行计划仅允许 HTTP(S)、明确 origin 白名单和受上限约束的搜索、分页、滚动、详情页动作。M03-07 才能提供真实来源的 URL 和选择器。
+`@scoutops/playwright-crawler` 使用 Chromium persistent context。执行计划仅允许 HTTP(S)、明确 origin 白名单和受上限约束的搜索、分页、滚动、详情页动作。搜索页提交后先等待条目；若滚动触发动态列表重新进入骨架屏且条目暂时归零，执行器会在既有 `PLAYWRIGHT_ACTION_TIMEOUT_MS` 内再次等待可见条目，再计算数量、快照和证据，不能把过渡骨架屏提前记成真实空结果。M03-07 才能提供真实来源的 URL 和选择器。
 
 浏览器档案秘密是 base64 编码的 `tar.gz` user-data archive，由 M03-02 AES-256-GCM 资产临时物化。解包拒绝绝对路径、目录穿越、反斜杠、链接和未知类型，并限制压缩大小、解压大小及文件数。档案 Buffer、明文压缩包、解压目录和 Chromium context 在成功、受阻、异常与超时路径都由 finally 清理。
 

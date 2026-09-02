@@ -15,7 +15,7 @@ const limits = {
   navigationTimeoutMs: 10_000,
   actionTimeoutMs: 5_000,
   maxPages: 1,
-  maxScrolls: 0,
+  maxScrolls: 1,
   maxDetails: 0,
   maxArchiveBytes: 1_000_000,
   maxExtractedBytes: 1_000_000,
@@ -138,7 +138,20 @@ test("real Chromium submits a dynamic search form and emits a bounded search sna
             <span>${"中".repeat(10_000)}</span>
           </a>`;
       }).join("");
-      response.end(`<!doctype html><html><body>${cards}</body></html>`);
+      const transientCard = `<a class="search-offer-wrapper" href="/detail?offerId=726088471975">
+        <div class="offer-title-row"><div class="title-text">过渡商品</div></div>
+        <div class="offer-shop-row"><div class="desc-text">过渡供应商</div></div>
+      </a>`;
+      response.end(`<!doctype html><html><body>
+        <div id="results">${transientCard}</div><div style="height:2000px"></div>
+        <script>
+          addEventListener("scroll", () => {
+            const results = document.getElementById("results");
+            results.innerHTML = '<div class="offer-skeleton-item">加载中</div>';
+            setTimeout(() => { results.innerHTML = ${JSON.stringify(cards)}; }, 150);
+          }, { once: true });
+        </script>
+      </body></html>`);
       return;
     }
     response.end(`<!doctype html><html><body>
@@ -168,7 +181,7 @@ test("real Chromium submits a dynamic search form and emits a bounded search sna
             price_selector: ".offer-price-row .price-item",
           },
           max_pages: 1,
-          max_scrolls: 0,
+          max_scrolls: 1,
           max_details: 0,
           evidence: { parser_version: "local-search-snapshot-v1" },
         },

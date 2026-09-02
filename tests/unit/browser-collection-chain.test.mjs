@@ -145,6 +145,64 @@ test("authenticated browser job client links a business subquery and parses the 
   );
 });
 
+test("authenticated browser job client returns a succeeded-empty terminal job without polling to timeout", async () => {
+  let reads = 0;
+  const emptySearchSnapshot = { ...searchSnapshot, items: [] };
+  const pool = {
+    query: async (sql) => {
+      if (sql.startsWith("SELECT id,status")) {
+        reads += 1;
+        return [
+          [
+            {
+              id: "browser-job-succeeded-empty",
+              status: "succeeded_empty",
+              error_code: null,
+              result_json: {
+                status: "succeeded_empty",
+                error_code: null,
+                snapshots: { search: emptySearchSnapshot },
+                artifacts: [
+                  artifact("dom_fragment", "text/html", "<main>暂无结果</main>"),
+                  artifact("screenshot", "image/jpeg", Buffer.from([0xff, 0xd8, 0xff, 0x00])),
+                ],
+              },
+            },
+          ],
+        ];
+      }
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const collection = await new MySqlAuthenticatedBrowserJobClient(pool, 1, async () =>
+    assert.fail("terminal succeeded-empty jobs must not continue polling"),
+  ).collect(
+    {
+      organizationId: ids.org,
+      workspaceId: ids.workspace,
+      taskId: "task-succeeded-empty",
+      subqueryId: "subquery-succeeded-empty",
+      provider: {
+        id: ids.provider,
+        code: "1688_search",
+        accessMode: "authenticated_browser",
+        targetUrl: "https://s.1688.com/selloffer/offer_search.htm",
+        parserVersion: ALIBABA_1688_BROWSER_PARSER_VERSION,
+        timeoutMs: 1000,
+        fields: ["title"],
+      },
+      target: { query: "桌面灯", acceptance_run: true },
+      requestId: "succeeded-empty-request",
+      traceId: "succeeded-empty-trace",
+    },
+    async () => {},
+  );
+  assert.equal(reads, 1);
+  assert.deepEqual(collection.records, []);
+  assert.equal(collection.parseError, null);
+  assert.equal(collection.artifacts.length, 2);
+});
+
 test("1688 acceptance replay is the only disabled-source path that can schedule a browser job", async () => {
   const statements = [];
   const connection = {

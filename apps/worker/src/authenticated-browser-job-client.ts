@@ -106,7 +106,7 @@ export class MySqlAuthenticatedBrowserJobClient {
       );
       const row = rows[0];
       if (!row) throw new ProviderAdapterFailure("dependency_unavailable", true);
-      if (row.status === "succeeded") {
+      if (["succeeded", "succeeded_empty"].includes(String(row.status))) {
         const result =
             typeof row.result_json === "string" ? JSON.parse(row.result_json) : row.result_json,
           artifacts = parseBrowserEvidenceArtifacts((result as Record<string, unknown>).artifacts);

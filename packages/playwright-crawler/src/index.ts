@@ -422,6 +422,12 @@ export class PlaywrightCrawlerEngine {
           await page.evaluate(() => window.scrollBy(0, Math.max(window.innerHeight, 600)));
           await page.waitForTimeout(25);
         }
+        if (plan.search && !(await page.locator(plan.item_selector).count()))
+          await page
+            .locator(plan.item_selector)
+            .first()
+            .waitFor({ state: "visible", timeout: this.limits.actionTimeoutMs })
+            .catch(() => {});
         itemCount += await page.locator(plan.item_selector).count();
         if (!artifacts.length) artifacts = await captureEvidence(page, plan);
         if (!searchSnapshot) searchSnapshot = await captureSearchSnapshot(page, plan);
