@@ -75,18 +75,15 @@ const props = defineProps<{
     () =>
       ({
         recommended: {
-          eyebrow: "等待人工决定",
-          title: "系统推荐",
-          description: "仅显示命中规则并达到来源门槛、等待你决定的商品。",
+          title: `系统推荐 ${props.total} 个商品`,
+          description: "均已命中规则并通过证据门槛，只等你作最终决定。",
         },
         evidence_pending: {
-          eyebrow: "系统处理中",
-          title: "自动补证中",
-          description: "规则已命中，系统正在补齐市场、竞争、成本与风险证据。",
+          title: `${props.total} 个商品正在自动补证`,
+          description: "系统正在补齐市场、竞争、成本与风险信息，无需人工盯守。",
         },
         all: {
-          eyebrow: "完整工作区",
-          title: "全部机会",
+          title: `全部 ${props.total} 个机会`,
           description: "查看自动发现、ERP 导入和手工添加的全部机会。",
         },
       })[props.selectionView],
@@ -241,11 +238,10 @@ const opportunityStatus = (value: string) =>
   <section v-else class="opportunity-list">
     <header>
       <div>
-        <p>{{ viewCopy.eyebrow }}</p>
         <h3>{{ viewCopy.title }}</h3>
         <small>{{ viewCopy.description }}</small>
       </div>
-      <span>共 {{ total }} 条 · 按更新时间排序</span>
+      <span>按更新时间排序</span>
     </header>
     <nav
       v-if="canDecide && selectionView === 'all' && selectedIds.length"
@@ -302,7 +298,7 @@ const opportunityStatus = (value: string) =>
           ></span
         >
         <dl>
-          <div>
+          <div v-if="selectionView === 'all'">
             <dt>当前结论</dt>
             <dd>{{ recommendationLabel(item) }}</dd>
           </div>

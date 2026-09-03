@@ -238,6 +238,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "apps/web/src/components/OpportunityListPanel.vue",
     "apps/web/src/components/OpportunityDecisionPanel.vue",
     "apps/web/src/opportunities.css",
+    "apps/web/src/automatic-selection.css",
     "config/schema.json",
     "config/env.example",
     "docs/openapi.yaml",
@@ -260,6 +261,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       listWeb,
       decisionWeb,
       css,
+      selectionCss,
       schema,
       env,
       openapi,
@@ -289,14 +291,15 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     assert.match(webContract, new RegExp(state));
   assert.match(webContract, /证据完整度[\s\S]*阻断原因[\s\S]*缺少可采纳证据/);
   assert.match(webContract, /待我采纳[\s\S]*自动补证中[\s\S]*全部机会/);
-  assert.match(listWeb, /命中规则并达到来源门槛、等待你决定/);
+  assert.match(listWeb, /命中规则并通过证据门槛，只等你作最终决定/);
   assert.doesNotMatch(listWeb, /完成评分且结论为推荐/);
   assert.match(webContract, /证据新鲜度：观测于/);
   assert.match(webContract, /阶段[\s\S]*负责人[\s\S]*批量指派[\s\S]*批量复核[\s\S]*批量归档/);
-  assert.match(webContract, /生成补数任务/);
+  assert.match(webContract, /创建补采任务/);
   assert.match(web, /evidence-completion-tasks/);
   assert.match(webContract, /route\.query\.from[\s\S]*route\.query\.tab[\s\S]*applyListFilters/);
-  assert.match(css, /position:\s*fixed[\s\S]*safe-area-inset-bottom/);
+  assert.match(selectionCss, /opportunity-decision-actions[\s\S]*display:\s*flex/);
+  assert.doesNotMatch(decisionWeb, /opportunity-decision-bar/);
   assert.match(css, /@media\s*\(\s*max-width:\s*640px\s*\)/);
   assert.match(schema, /OPPORTUNITY_REFRESH_POLL_MS/);
   assert.match(env, /OPPORTUNITY_REFRESH_LEASE_SECONDS/);
@@ -308,7 +311,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(feature, /navigationState[\s\S]*decisionLayout/);
   assert.match(architecture, /blocking_reasons/);
   assert.match(architecture, /opportunities\/batch[\s\S]*evidence_completion/);
-  assert.match(architecture, /from[\s\S]*tab[\s\S]*底部决策栏/);
+  assert.match(architecture, /from[\s\S]*tab[\s\S]*人工决策区/);
   assert.match(runbook, /宝塔[\s\S]*回滚/);
   assert.match(runbook, /返回来源列表[\s\S]*tab=evidence/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);

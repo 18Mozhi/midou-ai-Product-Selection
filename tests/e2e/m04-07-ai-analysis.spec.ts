@@ -109,6 +109,7 @@ test("M04-07.A07/A08/A15 shows AI boundary evidence references and human samplin
 }) => {
   await setup(page);
   await page.goto(`/opportunities/${opportunityId}`);
+  await page.locator(".opportunity-tabs details > summary").click();
   await page.getByRole("button", { name: "AI 辅助" }).click();
   await expect(page.getByRole("heading", { name: "AI 辅助分析" })).toBeVisible();
   await expect(page.getByText("智能分析 · 待复核")).toBeVisible();

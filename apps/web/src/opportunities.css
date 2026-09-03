@@ -350,29 +350,6 @@
 .opportunity-detail > header > div:last-child small {
   color: var(--so-text-muted);
 }
-.opportunity-recommendation {
-  padding: 15px;
-  border: 1px solid var(--so-border);
-  border-radius: 14px;
-  background: linear-gradient(
-    120deg,
-    color-mix(in srgb, var(--so-primary) 8%, var(--so-panel-soft)),
-    var(--so-panel-soft)
-  );
-}
-.opportunity-recommendation span,
-.opportunity-recommendation strong,
-.opportunity-recommendation small {
-  display: block;
-}
-.opportunity-recommendation span,
-.opportunity-recommendation small {
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.opportunity-recommendation strong {
-  margin: 4px 0;
-}
 .opportunity-redecision-ready,
 .opportunity-blocker-summary {
   margin-top: 12px;
@@ -447,54 +424,6 @@
 .opportunity-blocker-summary article span,
 .opportunity-blocker-summary article small {
   display: block;
-}
-.opportunity-decision-bar {
-  position: fixed;
-  z-index: 18;
-  right: clamp(22px, 4vw, 58px);
-  bottom: calc(12px + env(safe-area-inset-bottom));
-  left: calc(244px + clamp(22px, 4vw, 58px));
-  width: auto;
-  max-width: var(--so-content-max);
-  margin-inline: auto;
-  padding: 15px;
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  justify-content: end;
-  align-items: center;
-  gap: 9px;
-  border: 1px solid var(--so-border);
-  border-radius: 14px;
-  background: linear-gradient(
-    120deg,
-    color-mix(in srgb, var(--so-primary) 8%, var(--so-panel-soft)),
-    var(--so-panel-soft)
-  );
-  box-shadow: var(--so-shadow-card);
-  backdrop-filter: blur(12px);
-}
-.opportunity-decision-bar button {
-  padding: 10px 14px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  color: var(--so-text);
-  background: var(--so-panel);
-}
-.opportunity-decision-bar button:first-of-type {
-  color: var(--so-on-primary);
-  background: linear-gradient(120deg, var(--so-primary-strong), var(--so-primary));
-}
-.opportunity-decision-bar .reject {
-  color: var(--so-danger);
-}
-.opportunity-decision-bar > a {
-  padding: 10px 14px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  color: var(--so-primary);
-  text-align: center;
-  text-decoration: none;
-  background: var(--so-panel);
 }
 .opportunity-tabs {
   margin: 14px 0;
@@ -949,30 +878,6 @@
     display: grid;
     gap: 12px;
   }
-  .opportunity-detail > header > div:last-child {
-    padding: 10px 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid var(--so-border);
-    border-radius: var(--so-control-radius);
-    text-align: left;
-    background: var(--so-panel-soft);
-  }
-  .opportunity-detail > header > div:last-child strong {
-    font-size: 26px;
-  }
-  .opportunity-detail > header > div:last-child small {
-    white-space: nowrap;
-  }
-  .opportunity-decision-bar {
-    right: 14px;
-    bottom: calc(76px + env(safe-area-inset-bottom));
-    left: 14px;
-    grid-template-columns: repeat(3, 1fr);
-    justify-content: stretch;
-    padding: 10px;
-  }
   .opportunity-redecision-ready,
   .opportunity-blocker-summary > header,
   .opportunity-blocker-summary article {
@@ -984,13 +889,6 @@
   .opportunity-blocker-summary button {
     width: 100%;
     text-align: center;
-  }
-  .opportunity-decision-bar button {
-    padding: 10px 5px;
-    font-size: 13px;
-  }
-  .opportunity-decision-bar > a {
-    grid-column: 1/-1;
   }
   .opportunity-tabs {
     margin-left: -5px;

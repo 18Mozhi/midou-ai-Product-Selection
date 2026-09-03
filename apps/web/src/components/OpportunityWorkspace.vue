@@ -18,7 +18,8 @@ import { useModalDialog } from "../use-modal-dialog";
 import {
   formatOpportunityTime as freshness,
   opportunityStatusLabel,
-  opportunityTabs as tabs,
+  opportunityPrimaryTabs as primaryTabs,
+  opportunitySecondaryTabs as secondaryTabs,
   resolveOpportunityTab,
   safeOpportunityReturnPath,
 } from "./opportunity-workspace-presentation";
@@ -735,27 +736,20 @@ watch(
             </p>
             <h3>{{ detail.name }}</h3>
             <span
-              >当前阶段已停留 {{ durationLabel(detail.lifecycle_dwell_seconds) }} · 更新
-              {{ freshness(detail.updated_at) }} · v{{ detail.version }} · 来源
+              >更新 {{ freshness(detail.updated_at) }} · 来源
               {{ opportunityStatusLabel(detail.source_type) }}</span
             >
-          </div>
-          <div>
-            <strong>{{ detail.overall_score ?? "—" }}</strong
-            ><small>综合评分 · {{ detail.overall_score == null ? "数据不足" : "已计算" }}</small>
+            <details class="opportunity-technical-details">
+              <summary>运行信息</summary>
+              <small
+                >当前阶段已停留 {{ durationLabel(detail.lifecycle_dwell_seconds) }} · 数据版本 v{{
+                  detail.version
+                }}
+                · 评分规则 {{ detail.score_rule_version ?? "尚未计算" }}</small
+              >
+            </details>
           </div>
         </header>
-        <section class="opportunity-recommendation">
-          <div>
-            <span>推荐结论</span
-            ><strong>{{ opportunityStatusLabel(detail.recommendation_status) }}</strong
-            ><small
-              >规则版本：{{ detail.score_rule_version ?? "尚未计算" }} · 置信度：{{
-                opportunityStatusLabel(detail.confidence.status)
-              }}{{ detail.confidence.score == null ? "" : `（${detail.confidence.score}）` }}</small
-            >
-          </div>
-        </section>
         <OpportunityDecisionPanel
           :detail="detail"
           :busy="busy"
@@ -765,31 +759,33 @@ watch(
         />
         <section
           v-if="detail.recommendation_status === 'insufficient_data'"
-          class="opportunity-next-steps"
+          class="opportunity-next-steps opportunity-collection-tools"
         >
-          <div>
-            <b>为什么还不能给出结论？</b
-            ><span>系统只在证据足够时评分。可直接启动真实网页采集，不需要填写官方 API。</span>
-          </div>
-          <button
-            v-if="canManageCompetitors"
-            type="button"
-            :disabled="busy"
-            @click="discoverCompetitors"
-          >
-            ① 采集 Amazon 竞品</button
-          ><button
-            v-if="canManageSuppliers"
-            type="button"
-            :disabled="busy"
-            @click="discoverSuppliers"
-          >
-            ② 采集公开供应商</button
-          ><RouterLink to="/opportunities/scoring-rules">③ 检查评分规则</RouterLink>
+          <details>
+            <summary>补证异常时手动处理</summary>
+            <p>系统会持续自动补证；只有需要立即重试时才使用下面的操作。</p>
+            <div>
+              <button
+                v-if="canManageCompetitors"
+                type="button"
+                :disabled="busy"
+                @click="discoverCompetitors"
+              >
+                采集 Amazon 竞品</button
+              ><button
+                v-if="canManageSuppliers"
+                type="button"
+                :disabled="busy"
+                @click="discoverSuppliers"
+              >
+                采集公开供应商</button
+              ><RouterLink to="/opportunities/scoring-rules">检查评分规则</RouterLink>
+            </div>
+          </details>
         </section>
         <nav class="opportunity-tabs" aria-label="机会详情分区">
           <button
-            v-for="item in tabs"
+            v-for="item in primaryTabs"
             :key="item[0]"
             type="button"
             :aria-current="tab === item[0] ? 'page' : undefined"
@@ -797,6 +793,20 @@ watch(
           >
             {{ item[1] }}
           </button>
+          <details :open="secondaryTabs.some(([key]) => key === tab)">
+            <summary>更多分析</summary>
+            <div>
+              <button
+                v-for="item in secondaryTabs"
+                :key="item[0]"
+                type="button"
+                :aria-current="tab === item[0] ? 'page' : undefined"
+                @click="setTab(item[0])"
+              >
+                {{ item[1] }}
+              </button>
+            </div>
+          </details>
         </nav>
         <OpportunityDetailInsights
           v-if="['overview', 'market', 'competition', 'risk'].includes(tab)"

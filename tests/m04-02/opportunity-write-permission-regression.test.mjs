@@ -28,7 +28,7 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(workspace, /async function resetListFilters\(\)/);
   assert.match(workspace, /@reset="resetListFilters"/);
   assert.match(decision, /v-if="canDecide"[\s\S]*aria-label="机会决策操作"/);
-  assert.match(decision, /canDecide && blocker\.status !== 'cleared'/);
+  assert.match(decision, /v-else-if="canDecide"[\s\S]*emit\('createEvidenceTask'\)/);
   assert.match(feedback, /<form v-if="canWrite"/);
   assert.match(
     styles,

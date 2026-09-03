@@ -68,17 +68,25 @@ const aiErrorLabels: Record<string, string> = {
 export const opportunityAiErrorLabel = (value: string | null | undefined) =>
   value ? (aiErrorLabels[value] ?? value) : "未记录错误码";
 
-export const opportunityTabs: [OpportunityTab, string][] = [
+export const opportunityPrimaryTabs: [OpportunityTab, string][] = [
   ["overview", "结论"],
-  ["lineage", "业务血缘"],
-  ["feedback", "经营复盘"],
   ["evidence", "证据"],
   ["profit", "利润与成本"],
   ["risk", "风险"],
+];
+
+export const opportunitySecondaryTabs: [OpportunityTab, string][] = [
   ["market", "市场"],
   ["competition", "竞争"],
   ["ai", "AI 辅助"],
+  ["lineage", "业务血缘"],
+  ["feedback", "经营复盘"],
   ["decisions", "决策历史"],
+];
+
+export const opportunityTabs: [OpportunityTab, string][] = [
+  ...opportunityPrimaryTabs,
+  ...opportunitySecondaryTabs,
 ];
 
 export const formatOpportunityTime = (value: string) =>

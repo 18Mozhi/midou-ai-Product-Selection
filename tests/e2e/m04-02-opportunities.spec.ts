@@ -215,7 +215,7 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await ready(page);
   await page.goto("/opportunities?create=1");
   await expect(page.getByRole("heading", { name: "待我采纳", level: 2 })).toBeVisible();
-  await expect(page.getByText("系统推荐", { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "系统推荐 1 个商品" })).toBeVisible();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(0);
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
@@ -256,19 +256,15 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page.locator("body")).not.toContainText(
     /trend_topic|insufficient_data|\bpartial\b|\bunknown\b/,
   );
-  await expect(page.locator(".opportunity-tabs button")).toHaveText([
+  await expect(page.locator(".opportunity-tabs > button")).toHaveText([
     "结论",
-    "业务血缘",
-    "经营复盘",
     "证据",
     "利润与成本",
     "风险",
-    "市场",
-    "竞争",
-    "AI 辅助",
-    "决策历史",
   ]);
+  await expect(page.locator(".opportunity-tabs details > summary")).toHaveText("更多分析");
   await expect(page.getByText("尚无评分运行；缺失输入不会用默认值补齐。")).toBeVisible();
+  await page.locator(".opportunity-tabs details > summary").click();
   await page.getByRole("button", { name: "业务血缘" }).click();
   await expect(page.getByRole("heading", { name: "业务血缘追踪" })).toBeVisible();
   await expect(page.getByText("部分环节降级", { exact: true })).toBeVisible();
@@ -285,6 +281,7 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await dialog.getByLabel("原因（必填）").fill("补齐成本与竞品后再判断");
   await dialog.getByRole("button", { name: "确认记录" }).click();
   await expect(page.getByText("决策已记录；原始评分与证据未被改写。")).toBeVisible();
+  await page.locator(".opportunity-tabs details > summary").click();
   await page.getByRole("button", { name: "决策历史" }).click();
   await expect(page.getByText("补齐成本与竞品后再判断")).toBeVisible();
   await expect(
@@ -293,6 +290,11 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page.locator("body")).not.toContainText(
     /\bobserve\b|trend_topic|insufficient_data|\bpartial\b|\bunknown\b/,
   );
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(page).toHaveScreenshot("m04-02-opportunity-detail.png", { fullPage: true });
+  if ((page.viewportSize()?.width ?? 0) <= 640) {
+    await expect(page.locator(".opportunity-decision-actions")).toHaveCSS("position", "static");
+  }
 });
 
 test("mobile opportunity filters preserve selected adoption blocker inside the drawer", async ({
