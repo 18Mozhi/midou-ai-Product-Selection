@@ -78,6 +78,7 @@ export class TrendProjectionAlerts {
     for (const row of rows) {
       const matched = matchesTrendMonitoringRule(
         {
+          id: row.id,
           include_keywords_json: row.include_keywords_json,
           negative_keywords_json: row.negative_keywords_json,
           market: row.market,

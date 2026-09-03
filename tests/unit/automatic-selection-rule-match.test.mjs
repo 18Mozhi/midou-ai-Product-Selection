@@ -1,7 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { matchesTrendMonitoringRule } from "../../apps/worker/dist/trend-projection-alerts.js";
+import {
+  matchesTrendMonitoringRule,
+  TrendProjectionAlerts,
+} from "../../apps/worker/dist/trend-projection-alerts.js";
 import {
   projectedTrendProviderContext,
   isAutomaticProductDiscoveryProvider,
@@ -138,6 +141,51 @@ test("trend projection reads rule provenance only from an exact product-discover
     }),
     { monitoringRuleId: null, monitoringRuleQuery: null },
   );
+});
+
+test("projection alert evaluation forwards the persisted rule id to provenance matching", async () => {
+  const writes = [];
+  const connection = {
+    query: async (sql, values = []) => {
+      if (sql.startsWith("SELECT id,include_keywords_json"))
+        return [
+          [
+            {
+              id: "00000000-0000-4000-8000-000000004301",
+              include_keywords_json: ["手机壳"],
+              negative_keywords_json: [],
+              market: "GLOBAL",
+              language: "multi",
+              category: "ecommerce",
+              created_by: "00000000-0000-4000-8000-000000004304",
+            },
+          ],
+          [],
+        ];
+      writes.push([sql, values]);
+      return [[], []];
+    },
+  };
+  const now = new Date("2026-09-04T00:00:00.000Z");
+  const result = await new TrendProjectionAlerts("worker-test", () => now).evaluateMonitoringRules(
+    connection,
+    {
+      organizationId: "00000000-0000-4000-8000-000000004302",
+      workspaceId: "00000000-0000-4000-8000-000000004303",
+      monitoringRuleId: "00000000-0000-4000-8000-000000004301",
+      monitoringRuleQuery: "手机壳",
+      requestId: "request-rule-provenance",
+      traceId: "trace-rule-provenance",
+    },
+    "00000000-0000-4000-8000-000000004305",
+    "fntcase for iphone 17 phone case compatible with magsafe",
+    "US",
+    "en-US",
+    "ecommerce",
+    now,
+  );
+  assert.deepEqual(result, ["00000000-0000-4000-8000-000000004301"]);
+  assert.ok(writes.some(([, values]) => values.includes("trend.monitoring_rule.matched")));
 });
 
 test("automatic product channels preserve their source category", () => {
