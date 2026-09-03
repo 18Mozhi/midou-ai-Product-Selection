@@ -454,7 +454,7 @@ export class TrendProjectionPersistence {
       "UPDATE opportunities o SET evidence_count=(SELECT COUNT(*) FROM opportunity_evidence_links l WHERE l.opportunity_id=o.id),source_count=(SELECT COUNT(DISTINCT provider_id) FROM opportunity_evidence_links l WHERE l.opportunity_id=o.id),coverage_status='partial',lifecycle_status=IF(lifecycle_status='candidate','ready',lifecycle_status),version=IF(?,version,version+1),updated_at=? WHERE o.id=?",
       [insert.affectedRows, now, persistedOpportunityId],
     );
-    await refreshRuleRecommendation(c, {
+    const ruleRecommendation = await refreshRuleRecommendation(c, {
       organizationId: job.organizationId,
       workspaceId: job.workspaceId,
       opportunityId: persistedOpportunityId,
@@ -473,7 +473,9 @@ export class TrendProjectionPersistence {
           source_type: "trend_topic",
           source_ref_id: topicId,
           provider_code: job.providerCode,
-          recommendation_status: "insufficient_data",
+          recommendation_status: ruleRecommendation.changed
+            ? ruleRecommendation.recommendationStatus
+            : "insufficient_data",
           discovery_mode: "automatic",
           matched_rule_ids: matchedRuleIds,
         },
@@ -550,14 +552,43 @@ export class TrendProjectionPersistence {
       );
       competitorId = String(competitors[0]?.id ?? proposedCompetitorId);
     }
-    const searchId = randomUUID();
+    const searchId = randomUUID(),
+      providers = await this.downstreamProviders(c),
+      supplierProviderIds = [providers.madeInChina, providers.ec21].filter(
+        (value): value is string => Boolean(value),
+      ),
+      supplierTaskId = supplierProviderIds.length ? randomUUID() : job.collectionTaskId;
+    if (supplierProviderIds.length)
+      await this.scheduleCoreCollection(
+        c,
+        {
+          organizationId: job.organizationId,
+          workspaceId: job.workspaceId,
+          actorId: job.actorId,
+          requestId: job.requestId,
+          traceId: job.traceId,
+        },
+        supplierTaskId,
+        supplierProviderIds.map((providerId) => ({
+          providerId,
+          required: false,
+          target: {
+            query: buildSupplierSearchQuery(title),
+            query_contract: "supplier-keywords-v2",
+            projection_type: "sourcing_search",
+            search_id: searchId,
+          },
+        })),
+        "sourcing.collection.auto_scheduled",
+        now,
+      );
     await c.query(
       "INSERT INTO sourcing_searches (id,organization_id,workspace_id,collection_task_id,input_type,input_ref,status,candidate_count,missing_fields_json,request_id,trace_id,created_by,created_at,updated_at) VALUES (?,?,?,?,'opportunity',?,'queued',0,'[]',?,?,?,?,?)",
       [
         searchId,
         job.organizationId,
         job.workspaceId,
-        null,
+        supplierTaskId,
         opportunityId,
         job.requestId,
         job.traceId,
@@ -566,7 +597,6 @@ export class TrendProjectionPersistence {
         now,
       ],
     );
-    const providers = await this.downstreamProviders(c);
     if (competitorId && asin && providers.amazon) {
       await this.scheduleCoreCollection(
         c,
@@ -594,39 +624,7 @@ export class TrendProjectionPersistence {
         now,
       );
     }
-    const supplierProviderIds = [providers.madeInChina, providers.ec21].filter(
-      (value): value is string => Boolean(value),
-    );
-    if (supplierProviderIds.length) {
-      const supplierTaskId = randomUUID();
-      await this.scheduleCoreCollection(
-        c,
-        {
-          organizationId: job.organizationId,
-          workspaceId: job.workspaceId,
-          actorId: job.actorId,
-          requestId: job.requestId,
-          traceId: job.traceId,
-        },
-        supplierTaskId,
-        supplierProviderIds.map((providerId) => ({
-          providerId,
-          required: false,
-          target: {
-            query: buildSupplierSearchQuery(title),
-            query_contract: "supplier-keywords-v2",
-            projection_type: "sourcing_search",
-            search_id: searchId,
-          },
-        })),
-        "sourcing.collection.auto_scheduled",
-        now,
-      );
-      await c.query("UPDATE sourcing_searches SET collection_task_id=? WHERE id=?", [
-        supplierTaskId,
-        searchId,
-      ]);
-    } else {
+    if (!supplierProviderIds.length) {
       await c.query(
         "UPDATE sourcing_searches SET status='succeeded_empty',missing_fields_json=?,updated_at=? WHERE id=?",
         [JSON.stringify(["supplier_crawler"]), now, searchId],

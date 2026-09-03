@@ -531,16 +531,22 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(persistence, /CONVERT\(c\.id USING utf8mb4\) COLLATE utf8mb4_bin/);
   assert.match(
     persistence,
-    /scheduleCoreCollection[\s\S]*UPDATE sourcing_searches SET collection_task_id/,
+    /supplierTaskId = supplierProviderIds\.length \? randomUUID\(\) : job\.collectionTaskId[\s\S]*scheduleCoreCollection[\s\S]*INSERT INTO sourcing_searches/,
+  );
+  assert.match(
+    persistence,
+    /const ruleRecommendation = await refreshRuleRecommendation[\s\S]*recommendation_status: ruleRecommendation\.changed[\s\S]*ruleRecommendation\.recommendationStatus/,
+  );
+  assert.doesNotMatch(
+    persistence,
+    /INSERT INTO sourcing_searches[\s\S]{0,800}job\.workspaceId,\s*null,\s*opportunityId/,
   );
   assert.match(
     persistence,
     /page_url: String\(row\.product_url\)[\s\S]*query: buildSupplierSearchQuery\(String\(row\.name\)\)/,
   );
-  assert.match(
-    persistence,
-    /page_url: canonicalUrl[\s\S]*query: buildSupplierSearchQuery\(title\)/,
-  );
+  assert.match(persistence, /page_url: canonicalUrl/);
+  assert.match(persistence, /query: buildSupplierSearchQuery\(title\)/);
   assert.match(
     persistence,
     /CHAR_LENGTH\(JSON_UNQUOTE\(JSON_EXTRACT\(q\.target_json,'\$\.query'\)\)\) BETWEEN 1 AND 300/,
