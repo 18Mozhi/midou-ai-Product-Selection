@@ -423,7 +423,7 @@ export class FixedStructuredPublicPageAdapter extends SourceAdapter {
 export class AmazonProductSearchAdapter extends SourceAdapter {
   readonly key = "amazon_product";
   readonly accessMode = "public_page" as const;
-  readonly version = "amazon-structured-product-adapter-v3";
+  readonly version = "amazon-structured-product-adapter-v4";
   constructor(private readonly fetcher?: typeof fetch) {
     super();
   }
@@ -455,11 +455,31 @@ export class AmazonProductSearchAdapter extends SourceAdapter {
     if (!response.ok) throw new ProviderAdapterFailure("permission_denied", false);
     return response;
   }
+  private async records(url: string, signal: AbortSignal, limit: number) {
+    let firstDrift: ProviderAdapterFailure | null = null;
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        const response = await this.response(url, signal);
+        return parseAmazonProductPage(await response.text(), url, limit);
+      } catch (error) {
+        if (
+          attempt === 0 &&
+          !signal.aborted &&
+          error instanceof ProviderAdapterFailure &&
+          error.code === "source_changed"
+        ) {
+          firstDrift = error;
+          continue;
+        }
+        throw error;
+      }
+    }
+    throw firstDrift ?? new ProviderAdapterFailure("source_changed", false);
+  }
   async collect(request: ProviderCollectRequest, signal: AbortSignal) {
-    const url = this.url(request.target),
-      response = await this.response(url, signal);
+    const url = this.url(request.target);
     return {
-      records: parseAmazonProductPage(await response.text(), url, Math.min(request.limit, 20)),
+      records: await this.records(url, signal, Math.min(request.limit, 20)),
       nextCursor: null,
     };
   }
@@ -467,8 +487,7 @@ export class AmazonProductSearchAdapter extends SourceAdapter {
     const started = Date.now(),
       url = "https://www.amazon.com/s?k=storage+box";
     try {
-      const response = await this.response(url, signal);
-      parseAmazonProductPage(await response.text(), url, 1);
+      await this.records(url, signal, 1);
       return {
         status: "ready" as const,
         latencyMs: Date.now() - started,

@@ -178,7 +178,7 @@ test("Amazon product parser preserves the response currency instead of forcing U
   assert.equal(record.payload.fields.currency, "CNY");
 });
 
-test("Amazon adapter keeps injected transports for deterministic replay and reports v3", async () => {
+test("Amazon adapter keeps injected transports for deterministic replay and reports v4", async () => {
   let requestedUrl = "";
   const adapter = new AmazonProductSearchAdapter(async (url) => {
     requestedUrl = String(url);
@@ -194,9 +194,42 @@ test("Amazon adapter keeps injected transports for deterministic replay and repo
     { target: { query: "storage box" }, limit: 1 },
     AbortSignal.timeout(1000),
   );
-  assert.equal(adapter.version, "amazon-structured-product-adapter-v3");
+  assert.equal(adapter.version, "amazon-structured-product-adapter-v4");
   assert.match(requestedUrl, /^https:\/\/www\.amazon\.com\/s\?k=storage%20box$/);
   assert.equal(result.records.length, 1);
+});
+
+test("Amazon adapter confirms a transient source change once before failing closed", async () => {
+  let recoveredCalls = 0;
+  const recovered = new AmazonProductSearchAdapter(async () => {
+      recoveredCalls += 1;
+      return new Response(
+        recoveredCalls === 1
+          ? "<html><body><p>Temporary incomplete response</p></body></html>"
+          : '<html><body><div data-component-type="s-search-result" data-asin="B0ABCDEF12">' +
+              "<h2><span>Storage Box</span></h2>" +
+              '<span class="a-price"><span class="a-offscreen">$29.99</span></span>' +
+              '<img class="s-image" src="https://images.example/box.jpg"></div></body></html>',
+        { status: 200 },
+      );
+    }),
+    recoveredResult = await recovered.collect(
+      { target: { query: "storage box" }, limit: 1 },
+      AbortSignal.timeout(1000),
+    );
+  assert.equal(recoveredCalls, 2);
+  assert.equal(recoveredResult.records[0].externalId, "B0ABCDEF12");
+
+  let failedCalls = 0;
+  const failed = new AmazonProductSearchAdapter(async () => {
+    failedCalls += 1;
+    return new Response("<html><body><p>Still incomplete</p></body></html>", { status: 200 });
+  });
+  await assert.rejects(
+    () => failed.collect({ target: { query: "storage box" }, limit: 1 }, AbortSignal.timeout(1000)),
+    (error) => error?.code === "source_changed" && error?.retryable === false,
+  );
+  assert.equal(failedCalls, 2);
 });
 
 test("Amazon product links that no longer exist close as empty results instead of permission denial", async () => {

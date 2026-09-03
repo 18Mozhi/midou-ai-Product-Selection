@@ -11,7 +11,7 @@
 ## 诊断与调节
 
 - 队列积压：检查 `competitor_snapshot_jobs` 的 `status/available_at/lease_expires_at/last_error_code`，再看宝塔 Worker 日志中的 `queue=competitor_monitor`。
-- 快照不更新：确认竞品为 `active`、`amazon_product` 为 `enabled/public_page`，查看对应 `collection_tasks`、`collection_subqueries` 和 `core_collection_projection_runs`。无代理直连由 Adapter v3 使用 Node 原生 HTTPS；若启用专用 Provider 代理则检查代理连通性。页面没有披露的指标允许为空，不要手工补零；价格币种必须与原始页面响应一致，不能默认写成 USD。
+- 快照不更新：确认竞品为 `active`、`amazon_product` 为 `enabled/public_page`，查看对应 `collection_tasks`、`collection_subqueries` 和 `core_collection_projection_runs`。无代理直连由 Adapter v4 使用 Node 原生 HTTPS；若启用专用 Provider 代理则检查代理连通性。Adapter v4 只对首次 `source_changed` 做一次同传输确认，连续两次解析失败仍会停用来源；因此若来源已停用，应先用相同关键词连续复核代理页面和当前 Parser v2，再由来源负责人显式恢复。页面没有披露的指标允许为空，不要手工补零；价格币种必须与原始页面响应一致，不能默认写成 USD。
 - 重复采集异常：同一任务重试应复用任务级证据键；新的采集任务应形成下一版活动规范记录，并让旧版变为 `superseded`。若出现 `evidence_dedupe_conflict`，核对 Worker 是否仍把动态商品的稳定 ASIN 直接当成原始证据键。
 - Amazon 解析升级：先应用 `0052a_amazon_structured_parser.up.sql`，再通过宝塔重启统一 Node 项目 `ai选品`。新任务的证据应优先显示 `application/ld+json` 与 `amazon.jsonld.Product.*` 字段路径；旧 HTML 回退证据仍可读取。无需重启 Python 项目。
 - 告警未产生：核对规则范围、指标、方向和显式阈值。首个快照只是基线。
