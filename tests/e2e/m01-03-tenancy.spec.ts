@@ -66,9 +66,12 @@ test("M01-03.A07/A08/A15 organization and workspace chooser is responsive and ke
   await mockReady(page);
   await page.goto("/select-context");
   await expect(page.getByRole("heading", { name: "选择组织" })).toBeVisible();
+  await expect(page.locator('[aria-label="可用工作区"]')).toHaveCount(0);
+  await expect(page.getByText("组织团队")).toHaveCount(0);
   await page.getByRole("button", { name: /华南增长中心/ }).focus();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("heading", { name: "选择工作区" })).toBeVisible();
+  await expect(page.locator('[aria-label="可用工作区"]')).toBeVisible();
   await expect(page.getByText("组织团队")).toBeVisible();
   await page.getByRole("button", { name: /新品决策工作区/ }).focus();
   await page.keyboard.press("Enter");

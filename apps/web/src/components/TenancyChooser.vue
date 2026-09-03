@@ -271,7 +271,7 @@ onMounted(() => {
           <p>清除搜索词后查看全部可用组织。</p>
           <button type="button" @click="organizationQuery = ''">清除搜索</button>
         </div>
-        <div v-else class="workspace-layout">
+        <div v-if="selectedOrganization" class="workspace-layout">
           <div class="workspace-grid" aria-label="可用工作区">
             <button
               v-for="workspace in workspaces"
