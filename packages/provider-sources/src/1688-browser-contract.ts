@@ -6,7 +6,7 @@ import {
   type ProviderRawRecord,
 } from "@scoutops/provider-adapters";
 
-export const ALIBABA_1688_BROWSER_PARSER_VERSION = "1688-browser-contract-v2";
+export const ALIBABA_1688_BROWSER_PARSER_VERSION = "1688-browser-contract-v3";
 export const ALIBABA_1688_SNAPSHOT_SCHEMAS = {
   search: "1688.search.v1",
   offerDetail: "1688.offer-detail.v1",
@@ -36,9 +36,21 @@ export function create1688BrowserExecutionRequest(target: Record<string, unknown
         supplier_name_selector: '[class*="shopRow--"] [class*="descText--"]',
         price_selector: '[class*="priceItem--"]',
       },
-      max_pages: 1,
+      offer_detail_snapshot: {
+        schema_version: ALIBABA_1688_SNAPSHOT_SCHEMAS.offerDetail,
+        title_selector: ".module-od-title h1",
+        supplier_name_selector: ".od-shop-navigation h1",
+        supplier_link_selector: ".shop-container",
+        specification_selector: ".core-attributes",
+        price_selector: ".price-info",
+        moq_selector: ".module-od-main-price p",
+        location_selector: ".module-od-shipping-services .location",
+      },
+      next_page_selector:
+        '[class*="pagingList--"] [class*="nextArrow--"]:not([class*="arrowDisabled--"])',
+      max_pages: 2,
       max_scrolls: 3,
-      max_details: 0,
+      max_details: 1,
       block_signals: {
         login: 'input[type="password"]',
         captcha: 'iframe[src*="captcha"], [class*="captcha"]',

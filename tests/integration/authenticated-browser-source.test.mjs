@@ -14,9 +14,9 @@ import {
 const limits = {
   navigationTimeoutMs: 10_000,
   actionTimeoutMs: 5_000,
-  maxPages: 1,
+  maxPages: 2,
   maxScrolls: 1,
-  maxDetails: 0,
+  maxDetails: 1,
   maxArchiveBytes: 1_000_000,
   maxExtractedBytes: 1_000_000,
   maxArchiveFiles: 20,
@@ -214,6 +214,134 @@ test("real Chromium submits a dynamic search form and emits a bounded search sna
     assert.match(result.snapshots.search.items[0].dom_fragment, /真实灯具供应商/);
     assert.ok(Buffer.byteLength(result.snapshots.search.items[0].dom_fragment) <= 15_000);
     assert.ok(Buffer.byteLength(JSON.stringify(result)) < 2 * 1024 * 1024);
+  } finally {
+    await close(server).catch(() => {});
+    await rm(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("real Chromium merges two 1688-style pages and emits a detail snapshot", async () => {
+  const server = createServer((request, response) => {
+    response.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+    if (request.url?.startsWith("/offer/")) {
+      response.end(`<!doctype html><html><body>
+        <section class="od-shop-navigation"><h1>中山测试电器厂</h1><a class="shop-container" href="https://shop5700957773029.1688.com">店铺</a></section>
+        <main class="module-od-cart-sider">
+          <div class="module-od-title"><h1>跨境手持打蛋器</h1></div>
+          <div class="module-od-main-price"><div class="price-info">¥30.00</div><p>2个起批</p></div>
+          <div class="module-od-shipping-services"><span class="location">广东中山</span></div>
+        </main>
+        <div class="core-attributes">功率 300W 颜色 银色</div>
+      </body></html>`);
+      return;
+    }
+    if (request.url?.startsWith("/results")) {
+      const page = new URL(request.url, "http://fixture.test").searchParams.get("page") ?? "1",
+        base = page === "1" ? 8100 : 8200,
+        cards = [1, 2]
+          .map(
+            (
+              index,
+            ) => `<a data-tracker="offer" href="http://detail.m.1688.com/page/index.html?offerId=${base + index}">
+              <span class="titleText--fixture">第 ${page} 页商品 ${index}</span>
+              <span class="descText--fixture">中山测试电器厂</span>
+              <span class="priceItem--fixture">¥${30 + index}.00</span>
+            </a>`,
+          )
+          .join("");
+      response.end(`<!doctype html><html><body>${cards}
+        <div class="pagingList--fixture">
+          <div class="pageItem--fixture pageCurrent--fixture">${page}</div>
+          ${
+            page === "1"
+              ? '<div class="nextArrow--fixture" onclick="location.href=\'/results?page=2\'">下一页</div>'
+              : '<div class="nextArrow--fixture arrowDisabled--fixture">下一页</div>'
+          }
+        </div>
+      </body></html>`);
+      return;
+    }
+    response.end(`<!doctype html><html><body>
+      <input id="alisearch-input"><button class="input-button" onclick="location.href='/results?page=1'">搜索</button>
+    </body></html>`);
+  });
+  const tempRoot = await mkdtemp(join(tmpdir(), "scoutops-paged-detail-snapshot-"));
+  try {
+    const origin = await listen(server),
+      result = await new PlaywrightCrawlerEngine(limits).run(
+        {
+          start_url: origin,
+          allowed_origins: [origin],
+          search: {
+            input_selector: "#alisearch-input",
+            query: "打蛋器",
+            submit_selector: ".input-button",
+          },
+          item_selector: 'a[data-tracker="offer"][href*="offerId="]',
+          search_snapshot: {
+            schema_version: "1688.search.v1",
+            max_items: 15,
+            offer_id_query_param: "offerId",
+            canonical_url_template: `${origin}/offer/{offer_id}`,
+            title_selector: '[class*="titleText--"]',
+            supplier_name_selector: '[class*="descText--"]',
+            price_selector: '[class*="priceItem--"]',
+          },
+          offer_detail_snapshot: {
+            schema_version: "1688.offer-detail.v1",
+            title_selector: ".module-od-title h1",
+            supplier_name_selector: ".od-shop-navigation h1",
+            supplier_link_selector: ".shop-container",
+            specification_selector: ".core-attributes",
+            price_selector: ".price-info",
+            moq_selector: ".module-od-main-price p",
+            location_selector: ".module-od-shipping-services .location",
+          },
+          next_page_selector:
+            '[class*="pagingList--"] [class*="nextArrow--"]:not([class*="arrowDisabled--"])',
+          max_pages: 2,
+          max_scrolls: 0,
+          max_details: 1,
+          evidence: { parser_version: "local-paged-detail-v1" },
+        },
+        tempRoot,
+        { requestId: "request-paged-detail", traceId: "trace-paged-detail" },
+      );
+    assert.equal(result.status, "succeeded");
+    assert.equal(result.page_count, 2);
+    assert.equal(result.item_count, 4);
+    assert.equal(result.detail_count, 1);
+    assert.equal(result.snapshots?.search?.items.length, 4);
+    assert.deepEqual(
+      result.snapshots?.search?.items.map((item) => item.offer_id),
+      ["8101", "8102", "8201", "8202"],
+    );
+    assert.deepEqual(result.snapshots?.offer_details?.[0].offer, {
+      offer_id: "8101",
+      title: "跨境手持打蛋器",
+      supplier_id: "5700957773029",
+      supplier_name: "中山测试电器厂",
+      specification: "功率 300W 颜色 银色",
+      quoted_price: 30,
+      currency: "CNY",
+      moq: 2,
+      lead_time_days: null,
+      location: "广东中山",
+      canonical_url: `${origin}/offer/8101`,
+      dom_fragment: result.snapshots.offer_details[0].offer.dom_fragment,
+      source_paths: {
+        title: ".module-od-title h1",
+        supplier_id: ".shop-container @href hostname shop{id}.1688.com",
+        supplier_name: ".od-shop-navigation h1",
+        specification: ".core-attributes",
+        quoted_price: ".price-info",
+        moq: ".module-od-main-price p",
+        lead_time_days: "current detail page exposes destination ETA, not supplier lead time",
+        location: ".module-od-shipping-services .location",
+        canonical_url: "document.location.href",
+      },
+    });
+    assert.match(result.snapshots.offer_details[0].offer.dom_fragment, /跨境手持打蛋器/);
   } finally {
     await close(server).catch(() => {});
     await rm(tempRoot, { recursive: true, force: true });

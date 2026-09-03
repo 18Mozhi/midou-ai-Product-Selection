@@ -51,7 +51,11 @@ test("1688 execution uses the live GBK search form and current tracked offer car
     '[class*="shopRow--"] [class*="descText--"]',
   );
   assert.equal(request.plan.search_snapshot.price_selector, '[class*="priceItem--"]');
-  assert.equal(request.plan.max_details, 0);
+  assert.equal(request.plan.max_pages, 2);
+  assert.equal(request.plan.max_details, 1);
+  assert.equal(request.plan.offer_detail_snapshot.schema_version, "1688.offer-detail.v1");
+  assert.equal(request.plan.offer_detail_snapshot.title_selector, ".module-od-title h1");
+  assert.match(request.plan.next_page_selector, /nextArrow/);
   assert.equal("detail_link_selector" in request.plan, false);
 });
 

@@ -26,6 +26,7 @@ export interface BrowserCollectionPlan {
   search?: { input_selector: string; query: string; submit_selector?: string };
   item_selector: string;
   search_snapshot?: BrowserSearchSnapshotPlan;
+  offer_detail_snapshot?: BrowserOfferDetailSnapshotPlan;
   next_page_selector?: string;
   detail_link_selector?: string;
   max_pages: number;
@@ -33,6 +34,16 @@ export interface BrowserCollectionPlan {
   max_details: number;
   block_signals?: BrowserBlockSignals;
   evidence?: { parser_version: string };
+}
+export interface BrowserOfferDetailSnapshotPlan {
+  schema_version: string;
+  title_selector: string;
+  supplier_name_selector: string;
+  supplier_link_selector: string;
+  specification_selector: string;
+  price_selector: string;
+  moq_selector: string;
+  location_selector: string;
 }
 export interface BrowserSearchSnapshotPlan {
   schema_version: string;
@@ -65,7 +76,10 @@ export interface BrowserRunResult {
   request_id: string;
   trace_id: string;
   artifacts?: BrowserEvidenceArtifact[];
-  snapshots?: { search: BrowserSearchSnapshot };
+  snapshots?: {
+    search?: BrowserSearchSnapshot;
+    offer_details?: BrowserOfferDetailSnapshot[];
+  };
 }
 export interface BrowserSearchSnapshot {
   schema_version: string;
@@ -84,6 +98,26 @@ export interface BrowserSearchSnapshot {
     dom_fragment: string;
     source_paths: Record<string, string>;
   }>;
+}
+export interface BrowserOfferDetailSnapshot {
+  schema_version: string;
+  source_url: string;
+  observed_at: string;
+  offer: {
+    offer_id: string;
+    title: string;
+    supplier_id: string | null;
+    supplier_name: string;
+    specification: string | null;
+    quoted_price: number | null;
+    currency: "CNY" | null;
+    moq: number | null;
+    lead_time_days: null;
+    location: string | null;
+    canonical_url: string;
+    dom_fragment: string;
+    source_paths: Record<string, string>;
+  };
 }
 export interface BrowserEvidenceArtifact {
   kind: "dom_fragment" | "screenshot";
@@ -175,6 +209,21 @@ export function validateBrowserPlan(
       !selector(snapshot.title_selector) ||
       !selector(snapshot.supplier_name_selector) ||
       (snapshot.price_selector && !selector(snapshot.price_selector))
+    )
+      throw new PlaywrightCrawlerError("crawler_snapshot_invalid", "parser_changed", false);
+  }
+  if (input.offer_detail_snapshot) {
+    const snapshot = input.offer_detail_snapshot;
+    if (
+      !input.search_snapshot ||
+      !/^[A-Za-z0-9._-]{1,120}$/.test(snapshot.schema_version) ||
+      !selector(snapshot.title_selector) ||
+      !selector(snapshot.supplier_name_selector) ||
+      !selector(snapshot.supplier_link_selector) ||
+      !selector(snapshot.specification_selector) ||
+      !selector(snapshot.price_selector) ||
+      !selector(snapshot.moq_selector) ||
+      !selector(snapshot.location_selector)
     )
       throw new PlaywrightCrawlerError("crawler_snapshot_invalid", "parser_changed", false);
   }
@@ -363,6 +412,112 @@ async function captureSearchSnapshot(
     items,
   };
 }
+
+const firstPositiveInteger = (value: string): number | null => {
+  const match = /(\d+)/.exec(value.replace(/,/g, "")),
+    parsed = match ? Number(match[1]) : Number.NaN;
+  return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : null;
+};
+
+async function captureOfferDetailSnapshot(
+  page: Page,
+  plan: BrowserCollectionPlan,
+  source: BrowserSearchSnapshot["items"][number],
+): Promise<BrowserOfferDetailSnapshot | undefined> {
+  const snapshot = plan.offer_detail_snapshot;
+  if (!snapshot) return undefined;
+  const raw = await page.evaluate(
+      (input) => {
+        const node = (selector: string) => document.querySelector<HTMLElement>(selector),
+          text = (selector: string) =>
+            node(selector)?.textContent?.replace(/\s+/g, " ").trim() ?? "",
+          roots = [
+            input.titleSelector,
+            input.supplierNameSelector,
+            input.specificationSelector,
+            input.priceSelector,
+            input.moqSelector,
+            input.locationSelector,
+          ];
+        return {
+          title: text(input.titleSelector),
+          supplierName: text(input.supplierNameSelector),
+          supplierHref:
+            node(input.supplierLinkSelector) instanceof HTMLAnchorElement
+              ? (node(input.supplierLinkSelector) as HTMLAnchorElement).href
+              : "",
+          specification: text(input.specificationSelector),
+          price: text(input.priceSelector),
+          moq: text(input.moqSelector),
+          location: text(input.locationSelector),
+          dom: roots
+            .map((selector) => node(selector)?.outerHTML ?? "")
+            .filter(Boolean)
+            .join("\n"),
+        };
+      },
+      {
+        titleSelector: snapshot.title_selector,
+        supplierNameSelector: snapshot.supplier_name_selector,
+        supplierLinkSelector: snapshot.supplier_link_selector,
+        specificationSelector: snapshot.specification_selector,
+        priceSelector: snapshot.price_selector,
+        moqSelector: snapshot.moq_selector,
+        locationSelector: snapshot.location_selector,
+      },
+    ),
+    currentUrl = httpUrl(page.url()),
+    expectedUrl = httpUrl(source.canonical_url);
+  if (currentUrl.origin !== expectedUrl.origin || currentUrl.pathname !== expectedUrl.pathname)
+    throw new PlaywrightCrawlerError("crawler_detail_url_changed", "parser_changed", false);
+  if (!raw.title || !raw.supplierName || !raw.dom)
+    throw new PlaywrightCrawlerError("crawler_detail_snapshot_invalid", "parser_changed", false);
+  let supplierId: string | null = null;
+  if (raw.supplierHref) {
+    const supplierUrl = httpUrl(raw.supplierHref),
+      match = /^shop([A-Za-z0-9._-]+)\.1688\.com$/i.exec(supplierUrl.hostname);
+    supplierId = match?.[1] ?? null;
+  }
+  const priceMatch = /(?:¥|￥)\s*(\d+(?:\.\d+)?)/.exec(raw.price.replace(/,/g, "")),
+    quotedPrice = priceMatch ? Number(priceMatch[1]) : null,
+    moqMatch = /(\d[\d,]*)\s*[^\d\s]{0,6}\s*起批/.exec(raw.moq),
+    moqText = moqMatch?.[1],
+    moq = moqText ? firstPositiveInteger(moqText) : null;
+  return {
+    schema_version: snapshot.schema_version,
+    source_url: expectedUrl.toString(),
+    observed_at: new Date().toISOString(),
+    offer: {
+      offer_id: source.offer_id,
+      title: raw.title.slice(0, 1000),
+      supplier_id: supplierId,
+      supplier_name: raw.supplierName.slice(0, 500),
+      specification: raw.specification ? raw.specification.slice(0, 1000) : null,
+      quoted_price:
+        quotedPrice != null && Number.isFinite(quotedPrice) && quotedPrice >= 0
+          ? quotedPrice
+          : null,
+      currency:
+        quotedPrice != null && Number.isFinite(quotedPrice) && quotedPrice >= 0 ? "CNY" : null,
+      moq,
+      lead_time_days: null,
+      location: raw.location ? raw.location.slice(0, 255) : null,
+      canonical_url: expectedUrl.toString(),
+      dom_fragment: boundedUtf8(raw.dom, 30_000).toString("utf8"),
+      source_paths: {
+        title: snapshot.title_selector,
+        supplier_id: `${snapshot.supplier_link_selector} @href hostname shop{id}.1688.com`,
+        supplier_name: snapshot.supplier_name_selector,
+        specification: snapshot.specification_selector,
+        quoted_price: snapshot.price_selector,
+        moq: snapshot.moq_selector,
+        lead_time_days: "current detail page exposes destination ETA, not supplier lead time",
+        location: snapshot.location_selector,
+        canonical_url: "document.location.href",
+      },
+    },
+  };
+}
 export class PlaywrightCrawlerEngine {
   constructor(private readonly limits: BrowserRuntimeLimits) {}
   async run(
@@ -384,6 +539,7 @@ export class PlaywrightCrawlerEngine {
       detailCount = 0;
     let artifacts: BrowserEvidenceArtifact[] = [];
     let searchSnapshot: BrowserSearchSnapshot | undefined;
+    const offerDetails: BrowserOfferDetailSnapshot[] = [];
     try {
       context = await chromium.launchPersistentContext(userDataDir, {
         headless: this.limits.headless,
@@ -439,8 +595,34 @@ export class PlaywrightCrawlerEngine {
         }
         itemCount += await page.locator(plan.item_selector).count();
         if (!artifacts.length) artifacts = await captureEvidence(page, plan);
-        if (!searchSnapshot) searchSnapshot = await captureSearchSnapshot(page, plan);
-        if (plan.detail_link_selector && detailCount < plan.max_details) {
+        const currentSearchSnapshot = await captureSearchSnapshot(page, plan);
+        if (currentSearchSnapshot) {
+          if (!searchSnapshot) searchSnapshot = currentSearchSnapshot;
+          else {
+            const known = new Set(searchSnapshot.items.map((item) => item.offer_id));
+            for (const item of currentSearchSnapshot.items)
+              if (!known.has(item.offer_id) && searchSnapshot.items.length < 100) {
+                searchSnapshot.items.push(item);
+                known.add(item.offer_id);
+              }
+          }
+        }
+        if (plan.offer_detail_snapshot && currentSearchSnapshot && detailCount < plan.max_details) {
+          for (const item of currentSearchSnapshot.items) {
+            if (detailCount >= plan.max_details) break;
+            if (offerDetails.some((detail) => detail.offer.offer_id === item.offer_id)) continue;
+            const detailPage = await context.newPage();
+            try {
+              await this.goto(detailPage, item.canonical_url, plan.allowed_origins);
+              await blocked(detailPage, plan.block_signals);
+              const detail = await captureOfferDetailSnapshot(detailPage, plan, item);
+              if (detail) offerDetails.push(detail);
+              detailCount += 1;
+            } finally {
+              await detailPage.close();
+            }
+          }
+        } else if (plan.detail_link_selector && detailCount < plan.max_details) {
           const hrefs = await page
             .locator(plan.detail_link_selector)
             .evaluateAll(
@@ -463,10 +645,25 @@ export class PlaywrightCrawlerEngine {
           }
         }
         if (!plan.next_page_selector || index + 1 >= plan.max_pages) break;
-        const next = page.locator(plan.next_page_selector);
+        const next = page.locator(plan.next_page_selector).first();
         if (!(await next.count()) || (await next.isDisabled().catch(() => false))) break;
+        const previousUrl = page.url(),
+          previousFirstItem = await page
+            .locator(plan.item_selector)
+            .first()
+            .getAttribute("href")
+            .catch(() => null);
         await next.click();
         await page.waitForLoadState("domcontentloaded").catch(() => {});
+        await page
+          .waitForFunction(
+            ({ url, firstItem, itemSelector }) =>
+              location.href !== url ||
+              document.querySelector(itemSelector)?.getAttribute("href") !== firstItem,
+            { url: previousUrl, firstItem: previousFirstItem, itemSelector: plan.item_selector },
+            { timeout: this.limits.actionTimeoutMs },
+          )
+          .catch(() => {});
         if (!plan.allowed_origins.includes(httpUrl(page.url()).origin))
           throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
       }
@@ -480,7 +677,14 @@ export class PlaywrightCrawlerEngine {
         request_id: ids.requestId,
         trace_id: ids.traceId,
         ...(artifacts.length ? { artifacts } : {}),
-        ...(searchSnapshot ? { snapshots: { search: searchSnapshot } } : {}),
+        ...(searchSnapshot || offerDetails.length
+          ? {
+              snapshots: {
+                ...(searchSnapshot ? { search: searchSnapshot } : {}),
+                ...(offerDetails.length ? { offer_details: offerDetails } : {}),
+              },
+            }
+          : {}),
       };
     } catch (error) {
       const failure = classifyBrowserFailure(error);
@@ -494,7 +698,14 @@ export class PlaywrightCrawlerEngine {
         request_id: ids.requestId,
         trace_id: ids.traceId,
         ...(artifacts.length ? { artifacts } : {}),
-        ...(searchSnapshot ? { snapshots: { search: searchSnapshot } } : {}),
+        ...(searchSnapshot || offerDetails.length
+          ? {
+              snapshots: {
+                ...(searchSnapshot ? { search: searchSnapshot } : {}),
+                ...(offerDetails.length ? { offer_details: offerDetails } : {}),
+              },
+            }
+          : {}),
       };
     } finally {
       await context?.close().catch(() => {});

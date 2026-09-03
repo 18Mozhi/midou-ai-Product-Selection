@@ -462,7 +462,7 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
               id: "00000000-0000-4000-8000-000000001688",
               status: "disabled",
               owner_label: "平台来源中心",
-              parser_version: "1688-browser-contract-v2",
+              parser_version: "1688-browser-contract-v3",
             },
           ],
         ];
@@ -486,8 +486,8 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
               last_replay_status: "passed",
               review_status: "approved",
               last_replay_at: new Date("2026-08-21T07:20:00.000Z"),
-              baseline_parser_version: "1688-browser-contract-v2",
-              replay_parser_version: "1688-browser-contract-v2",
+              baseline_parser_version: "1688-browser-contract-v3",
+              replay_parser_version: "1688-browser-contract-v3",
               replay_status: "passed",
               current_parser_passed: 1,
             },
@@ -497,10 +497,10 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
         return [
           [
             {
-              execution_request_json: JSON.stringify({ plan: { max_pages: 1 } }),
+              execution_request_json: JSON.stringify({ plan: { max_pages: 2 } }),
               result_json: JSON.stringify({ snapshots }),
               finished_at: new Date("2026-08-21T07:12:00.000Z"),
-              page_count: 1,
+              page_count: 2,
             },
           ],
         ];
@@ -519,10 +519,10 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
     [
       ["search", "covered", 1],
       ["detail", "covered", 1],
-      ["pagination", "not_exercised", 1],
+      ["pagination", "covered", 2],
     ],
   );
-  assert.equal(result.coverage_matrix.parser_version, "1688-browser-contract-v2");
+  assert.equal(result.coverage_matrix.parser_version, "1688-browser-contract-v3");
   assert.deepEqual(result.pending_reasons, []);
   assert.doesNotMatch(JSON.stringify(result), /cookie|credential_asset_id|lease_token|payload/i);
   assert.match(
@@ -548,7 +548,7 @@ test("1688 acceptance does not misreport a stale parser replay as waiting only f
               id: "00000000-0000-4000-8000-000000001688",
               status: "disabled",
               owner_label: "平台来源中心",
-              parser_version: "1688-browser-contract-v2",
+              parser_version: "1688-browser-contract-v3",
             },
           ],
         ];
@@ -589,6 +589,6 @@ test("1688 acceptance does not misreport a stale parser replay as waiting only f
   assert.equal(result.overall, "setup_required");
   assert.equal(parserGate.state, "pending");
   assert.match(parserGate.reason, /1688-browser-contract-v1/);
-  assert.match(parserGate.reason, /1688-browser-contract-v2/);
+  assert.match(parserGate.reason, /1688-browser-contract-v3/);
   assert.doesNotMatch(parserGate.reason, /仍需另一名来源管理员/);
 });

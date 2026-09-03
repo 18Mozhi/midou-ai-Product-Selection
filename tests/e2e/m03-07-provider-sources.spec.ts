@@ -473,7 +473,7 @@ test("1688 acceptance shows the factual search detail and pagination coverage ma
           finished_at: "2026-08-21T07:12:00.000Z",
         },
         coverage_matrix: {
-          parser_version: "1688-browser-contract-v2",
+          parser_version: "1688-browser-contract-v3",
           observed_at: "2026-08-21T07:12:00.000Z",
           rows: [
             {
@@ -572,7 +572,7 @@ test("1688 acceptance refresh keeps verified facts and suppresses duplicate read
     ],
     latest_run: null,
     coverage_matrix: {
-      parser_version: "1688-browser-contract-v2",
+      parser_version: "1688-browser-contract-v3",
       observed_at: null,
       rows: [
         {
