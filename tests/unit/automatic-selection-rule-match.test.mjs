@@ -7,6 +7,7 @@ import {
   isAutomaticProductDiscoveryProvider,
   isConcreteProductEvidence,
 } from "../../apps/worker/dist/trend-projection-worker.js";
+import { calculateTrendProjection } from "../../apps/worker/dist/trend-projection-calculation.js";
 
 const topic = {
   title: "portable espresso maker for travel",
@@ -94,6 +95,41 @@ test("Amazon public-search records enter the rule projection context", () => {
   });
 });
 
+test("1688 browser records enter the automatic product projection context", () => {
+  const context = projectedTrendProviderContext("1688_search");
+  assert.deepEqual(context, {
+    accepted: true,
+    automatic: true,
+    market: "GLOBAL",
+    language: "und",
+    category: "ecommerce",
+  });
+  assert.equal(isAutomaticProductDiscoveryProvider("1688_search"), true);
+
+  const projection = calculateTrendProjection({
+    id: "job-1688",
+    organizationId: "org-1688",
+    workspaceId: "workspace-1688",
+    normalizedRecordId: "record-1688",
+    providerId: "provider-1688",
+    providerCode: "1688_search",
+    rawEvidenceId: "evidence-1688",
+    collectionTaskId: "task-1688",
+    payload: {
+      title: "手机壳透明防摔款",
+      supplier_name: "验收供应商",
+      canonical_url: "https://detail.1688.com/offer/123456789.html",
+      observed_at: "2026-09-04T00:00:00.000Z",
+    },
+    actorId: "actor-1688",
+    requestId: "request-1688",
+    traceId: "trace-1688",
+    attemptCount: 1,
+  });
+  assert.equal(projection.publisher, "验收供应商");
+  assert.equal(projection.providerContext.category, "ecommerce");
+});
+
 test("automatic selection requires concrete product evidence after a rule match", () => {
   assert.equal(
     isConcreteProductEvidence(
@@ -108,5 +144,12 @@ test("automatic selection requires concrete product evidence after a rule match"
       "https://example.com/news/portable-espresso",
     ),
     false,
+  );
+  assert.equal(
+    isConcreteProductEvidence(
+      { title: "手机壳透明防摔款", supplier_name: "验收供应商" },
+      "https://detail.1688.com/offer/123456789.html",
+    ),
+    true,
   );
 });

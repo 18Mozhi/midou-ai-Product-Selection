@@ -38,7 +38,7 @@ Google News 记录按市场、语言以及 NFKC、小写和连续空白折叠后
 
 投影现在接纳代码目录中的手动 Google News、固定 Google 频道、非 Google RSS/Atom、主要论坛和 Amazon/eBay 公开榜单。市场和语言来自来源目录；公开商品页没有独立发布时间时使用真实抓取时间。未登记来源仍以 `succeeded_empty` 结束。
 
-`trend_monitoring_rules.collection_interval_minutes` 允许 15–10080 分钟。统一宝塔 Node Worker 按 `next_collection_at` 和 `source_cursor` 分批选择匹配市场的来源，把关键词与规则编号写入采集目标、任务事件和 Outbox。暂停规则会停止下次执行，恢复规则会立即排队；不创建 crontab、systemd 或独立服务。
+`trend_monitoring_rules.collection_interval_minutes` 允许 15–10080 分钟。统一宝塔 Node Worker 按 `next_collection_at` 和 `source_cursor` 分批选择匹配市场的来源，把关键词与规则编号写入采集目标、任务事件和 Outbox。通过固定样本回放、第二人审批并由负责人显式启用后的 `1688-browser-contract-v3` 与 `amazon-structured-product-v2` 都属于规则驱动的商品发现来源；1688 规范记录使用供应商名称作为趋势信号发布方，并只把规范 `https://detail.1688.com/offer/{offerId}.html` 识别为具体商品证据。暂停规则会停止下次执行，恢复规则会立即排队；不创建 crontab、systemd 或独立服务。
 
 商品型 Google 频道和自动电商来源直接建立证据化机会；普通新闻、数据和社区来源只有命中用户规则才建立机会。Amazon 商品网址中的真实 ASIN 会建立竞品，并立即以高优先级排队 `amazon_product` 公开商品页快照；同一机会同时排队 Made-in-China 与 EC21 公开供应商搜索，只要任一来源返回有效公开商品就投影候选。列表图片读取竞品快照关联的不可变规范记录，供应商候选保留报价、币种、MOQ、网址和原始证据；网页未披露的字段继续保持缺失，不填 0 或演示数据。
 

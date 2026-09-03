@@ -264,7 +264,8 @@ export class MySqlAutomaticSourceScheduler {
         "AND terms_review_status='approved' AND terms_reference_url IS NOT NULL ",
         "AND terms_version IS NOT NULL AND terms_expires_at>NOW(3) ",
         "AND parser_version IN ('google-news-rss-v1','google-news-fixed-rss-v1',",
-        "'syndication-feed-v1','structured-public-page-v1','amazon-structured-product-v2') ORDER BY code",
+        "'syndication-feed-v1','structured-public-page-v1','amazon-structured-product-v2',",
+        "'1688-browser-contract-v3') ORDER BY code",
       ),
     );
     const market = String(rule.market).toUpperCase();
@@ -338,7 +339,7 @@ export class MySqlAutomaticSourceScheduler {
           providers[index]!.id,
           index + 1,
           JSON.stringify(
-            String(providers[index]!.code) === "amazon_product"
+            ["amazon_product", "1688_search"].includes(String(providers[index]!.code))
               ? { ...baseTarget, projection_type: "rule_product_discovery" }
               : baseTarget,
           ),

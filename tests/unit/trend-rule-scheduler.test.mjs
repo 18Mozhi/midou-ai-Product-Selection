@@ -43,7 +43,9 @@ test("rule scheduler queries the manual keyword crawler and completes all source
                 ? "google_news_search"
                 : index === 1
                   ? "amazon_product"
-                  : `source-${index}`,
+                  : index === 2
+                    ? "1688_search"
+                    : `source-${index}`,
             markets_json: JSON.stringify([index % 2 ? "US" : "JP"]),
           })),
           [],
@@ -70,6 +72,7 @@ test("rule scheduler queries the manual keyword crawler and completes all source
       (sql) => sql.includes("google-news-rss-v1") && sql.includes("google-news-fixed-rss-v1"),
     ),
   );
+  assert.ok(statements.some((sql) => sql.includes("1688-browser-contract-v3")));
   assert.ok(
     statements.some(
       (sql) =>
@@ -99,6 +102,10 @@ test("rule scheduler queries the manual keyword crawler and completes all source
       language: "multi",
       projection_type: "rule_product_discovery",
     },
+  );
+  assert.equal(
+    targets.filter((target) => target.projection_type === "rule_product_discovery").length,
+    2,
   );
 });
 
