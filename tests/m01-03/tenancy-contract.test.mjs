@@ -26,10 +26,11 @@ test("M01-03.A03/A13 migrations are MySQL57 scoped and reversible in dependency 
 });
 
 test("M01-03.A06/A09 OpenAPI and DTOs lock membership-first session context routes", async () => {
-  const [openapi, contracts, routes] = await Promise.all([
+  const [openapi, contracts, routes, repository] = await Promise.all([
     read("docs/openapi.yaml"),
     read("packages/contracts/src/index.ts"),
     read("apps/api/src/tenancy-routes.ts"),
+    read("apps/api/src/mysql-tenancy-repository.ts"),
   ]);
   for (const path of [
     "/org/memberships:",
@@ -48,6 +49,7 @@ test("M01-03.A06/A09 OpenAPI and DTOs lock membership-first session context rout
   assert.match(routes, /options\.auth\.authenticate/);
   assert.match(routes, /Idempotency-Key|requireIdempotencyKey/);
   assert.doesNotMatch(routes, /provisionOrganization|actor_id|session_id/);
+  assert.match(repository, /m\.status='active' AND o\.status='active'/);
 });
 
 test("M01-03.A07/A08/A15 UI implements reference-backed desktop and 390 states", async () => {

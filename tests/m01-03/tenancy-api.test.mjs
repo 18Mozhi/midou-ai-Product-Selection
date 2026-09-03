@@ -101,6 +101,19 @@ test("M01-03.A06/A09 membership-backed lists use only current HttpOnly session i
   await f.app.close();
 });
 
+test("M01-03.A06/A09 archived organizations are omitted before context selection", async () => {
+  const f = await fixture();
+  f.first.organization.status = "archived";
+  const organizations = await f.app.inject({
+    method: "GET",
+    url: "/api/v1/org/memberships",
+    headers: cookie,
+  });
+  assert.equal(organizations.statusCode, 200);
+  assert.deepEqual(organizations.json().data, []);
+  await f.app.close();
+});
+
 test("M01-03.A08/A09/A16 foreign organization access is forbidden with stable envelope", async () => {
   const f = await fixture();
   const response = await f.app.inject({

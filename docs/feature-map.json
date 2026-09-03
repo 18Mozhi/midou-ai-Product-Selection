@@ -271,7 +271,7 @@
         "/api/v1/auth/context",
         "/api/v1/me/personal-workspace"
       ],
-      "dataScope": "active organization membership first; a verified authenticated account with no active membership may idempotently create exactly its own organization-admin personal selection space and default workspace, after which workspace access still requires membership and the session context remains auditable",
+      "dataScope": "organization selection returns only rows where both the membership and organization are active, so archived organizations with stale active memberships never appear as selectable; a verified authenticated account with no selectable active organization may idempotently create exactly its own organization-admin personal selection space and default workspace, after which workspace access still requires membership and the session context remains auditable",
       "apiClientBoundary": "membership, workspace, team, personal-space provisioning and context-selection requests use the shared frontend API client; writes inherit automatic idempotency and correlation",
       "nonGoals": "ordinary users cannot create arbitrary named organizations, invite other members or cross organization boundaries from the personal-space entrypoint; team membership remains in its owning module",
       "verificationRunId": "e529cce4-28c3-4e6c-947e-38dae71a1d6f",

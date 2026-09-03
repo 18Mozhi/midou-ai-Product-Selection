@@ -136,7 +136,7 @@ export class MySqlTenancyRepository implements TenancyRepository {
         .map((x) => `m.${x} AS membership_${x}`)
         .join(
           ",",
-        )} FROM memberships m JOIN organizations o ON o.id=m.organization_id WHERE m.user_id=? AND m.status='active' ORDER BY o.name,o.id`,
+        )} FROM memberships m JOIN organizations o ON o.id=m.organization_id WHERE m.user_id=? AND m.status='active' AND o.status='active' ORDER BY o.name,o.id`,
       [userId],
     );
     return rows.map((row) => ({

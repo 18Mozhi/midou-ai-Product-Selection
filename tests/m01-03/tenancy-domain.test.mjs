@@ -60,6 +60,18 @@ test("M01-03.A09/A12 isolates organization, workspace and team reads by active m
   );
 });
 
+test("M01-03.A09 archived organizations never appear as selectable memberships", async () => {
+  const repository = new InMemoryTenancyRepository();
+  const service = new TenancyService(repository);
+  const archived = await provision(service, "archived");
+  archived.organization.status = "archived";
+  assert.deepEqual(await service.listOrganizations(actorA), []);
+  await assert.rejects(
+    () => service.listWorkspaces(actorA, archived.organization.id),
+    (error) => error instanceof TenancyError && error.code === "organization_forbidden",
+  );
+});
+
 test("M01-03.A12/A16 context selection rejects foreign and archived workspaces", async () => {
   const repository = new InMemoryTenancyRepository();
   const service = new TenancyService(repository);

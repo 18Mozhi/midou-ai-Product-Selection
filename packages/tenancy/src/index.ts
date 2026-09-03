@@ -237,8 +237,12 @@ export class TenancyService {
     return { ...selected, created };
   }
   async listOrganizations(userId: string) {
-    return (await this.repository.listOrganizations(userId)).map(
-      ({ organization, membership }) => ({
+    return (await this.repository.listOrganizations(userId))
+      .filter(
+        ({ organization, membership }) =>
+          organization.status === "active" && membership.status === "active",
+      )
+      .map(({ organization, membership }) => ({
         id: organization.id,
         name: organization.name,
         slug: organization.slug,
@@ -246,8 +250,7 @@ export class TenancyService {
         timezone: organization.timezone,
         default_workspace_id: organization.default_workspace_id,
         membership_status: membership.status,
-      }),
-    );
+      }));
   }
   async listWorkspaces(userId: string, organizationId: string) {
     await this.guard(userId, organizationId);
@@ -365,7 +368,7 @@ export class InMemoryTenancyRepository implements TenancyRepository {
       .filter((m) => m.user_id === u && m.status === "active")
       .flatMap((m) => {
         const o = this.organizations.find((x) => x.id === m.organization_id);
-        return o ? [{ organization: o, membership: m }] : [];
+        return o?.status === "active" ? [{ organization: o, membership: m }] : [];
       });
   }
   async findActiveMembership(u: string, o: string) {
