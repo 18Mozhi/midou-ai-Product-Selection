@@ -178,6 +178,10 @@ onMounted(() => {
         <button v-if="selectedOrganization" type="button" @click="loadOrganizations">
           返回组织列表
         </button>
+        <div v-else class="tenancy-empty-actions">
+          <RouterLink to="/me">进入个人中心</RouterLink>
+          <RouterLink to="/security/mfa">管理 MFA</RouterLink>
+        </div>
       </div>
       <div
         v-else-if="state === 'selected' && selectedContext"

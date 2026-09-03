@@ -772,7 +772,7 @@ paths:
   /me/landing:
     get:
       summary: Resolve the authenticated user's preferred application landing
-      description: Platform administrators land in the platform console without an organization context. Otherwise the active organization context selects the organization-admin or member workspace; users without an active context are sent to context selection. Every resolution writes an authorization decision.
+      description: Platform administrators land in the platform console without an organization context. Otherwise the active organization context selects the organization-admin or member workspace. Users with an active membership but no selected context are sent to context selection; accounts with no active organization membership land in the account center, where account-level profile and security functions remain available without granting business-data access. Every resolution writes an authorization decision.
       security: [{ HttpOnlySession: [] }]
       responses:
         "200":
@@ -3258,10 +3258,14 @@ paths:
   /me/profile:
     get:
       summary: Get current-user personal profile
+      description: Account-level read that requires a valid session but no organization or workspace context.
+      security: [{ HttpOnlySession: [] }]
       responses:
         "200": { $ref: "#/components/responses/Success" }
     patch:
       summary: Update current-user versioned personal profile
+      description: Account-level update that requires a valid session but no organization or workspace context; the write is recorded in the platform audit stream without tenant identifiers.
+      security: [{ HttpOnlySession: [] }]
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       requestBody:
         required: true
@@ -6008,7 +6012,7 @@ paths:
   /platform/accounts/users/{userId}/platform-role:
     post:
       summary: Grant or revoke a fixed platform administrator role
-      description: Requires platform:superadmin. Self-revocation of platform_super_admin is rejected; all changes require a reason and are audited.
+      description: Requires platform:superadmin. Self-revocation of platform_super_admin is rejected; all changes require a reason and are audited. Granting any platform role sets mandatory MFA enrollment when the target account has no enabled factor; an existing enabled factor is preserved.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: userId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -7725,8 +7729,8 @@ components:
       additionalProperties: false
       required: [shell, route, reason]
       properties:
-        shell: { type: string, enum: [member, organization_admin, platform_admin, select_context] }
-        route: { type: string, enum: [/home, /org-admin, /platform-admin, /select-context] }
+        shell: { type: string, enum: [member, organization_admin, platform_admin, select_context, account] }
+        route: { type: string, enum: [/home, /org-admin, /platform-admin, /platform-admin/security, /select-context, /me] }
         reason:
           {
             type: string,
@@ -7736,6 +7740,7 @@ components:
                 landing_organization_admin,
                 landing_platform_admin,
                 landing_context_required,
+                landing_account_only,
               ],
           }
     LandingEnvelope:

@@ -5,8 +5,6 @@ export interface PersonalCenterRepository {
   profile(input: { userId: string }): Promise<unknown>;
   updateProfile(input: {
     userId: string;
-    organizationId: string;
-    workspaceId: string;
     username?: string | null;
     usernameNormalized?: string | null;
     displayName: string;
@@ -56,8 +54,6 @@ export class PersonalCenterService {
     value: any,
     context: {
       userId: string;
-      organizationId: string;
-      workspaceId: string;
       idempotencyKey: string;
       requestId: string;
       traceId: string;

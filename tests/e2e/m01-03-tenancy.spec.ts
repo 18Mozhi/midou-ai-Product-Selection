@@ -80,6 +80,11 @@ test("M01-03.A08/A16 empty state gives a next action", async ({ page }) => {
   await page.goto("/select-context");
   await expect(page.getByText("暂无可用组织")).toBeVisible();
   await expect(page.getByText("请联系平台管理员加入组织。")).toBeVisible();
+  await expect(page.getByRole("link", { name: "进入个人中心" })).toHaveAttribute("href", "/me");
+  await expect(page.getByRole("link", { name: "管理 MFA" })).toHaveAttribute(
+    "href",
+    "/security/mfa",
+  );
 });
 
 test("M01-03.A08/A16 forbidden state does not expose another organization", async ({ page }) => {

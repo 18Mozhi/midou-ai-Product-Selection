@@ -81,7 +81,7 @@ const isNotFoundRoute = computed(
 
 <template>
   <LandingRedirect v-if="selectedView === 'landing'" :api-base-url="apiBase" />
-  <LocalIdentity v-else-if="selectedView === 'local-identity'" />
+  <LocalIdentity v-else-if="selectedView === 'local-identity'" :key="routePath" />
   <TenancyChooser v-else-if="selectedView === 'tenancy'" :api-base-url="apiBase" />
   <AuthorizationCenter v-else-if="selectedView === 'authorization'" :api-base-url="apiBase" />
   <ResourceGrantCenter v-else-if="selectedView === 'resource-grants'" :api-base-url="apiBase" />

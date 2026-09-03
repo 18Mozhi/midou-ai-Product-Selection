@@ -139,6 +139,32 @@ test("M02-03 regression: preferred landing sends platform and organization admin
   });
 });
 
+test("M02-03 no-organization accounts land in account settings while members still select context", async () => {
+  const accountRepo = new InMemoryAuthorizationRepository();
+  const account = await new AuthorizationService(accountRepo).resolveLanding(actor, session, {
+    requestId: "landing-account",
+    traceId: "landing-account",
+  });
+  assert.deepEqual(account, {
+    shell: "account",
+    route: "/me",
+    reason: "landing_account_only",
+  });
+  assert.equal(accountRepo.decisions[0].outcome, "denied");
+
+  const memberRepo = new InMemoryAuthorizationRepository();
+  memberRepo.activeMembershipActors.add(actor);
+  const member = await new AuthorizationService(memberRepo).resolveLanding(actor, session, {
+    requestId: "landing-context",
+    traceId: "landing-context",
+  });
+  assert.deepEqual(member, {
+    shell: "select_context",
+    route: "/select-context",
+    reason: "landing_context_required",
+  });
+});
+
 test("M02-03 shell presents business labels grouped search and collapsed failure identifiers", async () => {
   const [shell, permissions, catalogRaw, generatedCatalogRaw] = await Promise.all([
     read("apps/web/src/components/NavigationShell.vue"),
@@ -194,6 +220,22 @@ test("M02-03.A06/A13 authenticated API validates shell and preserves error contr
   });
   assert.equal(landing.statusCode, 200);
   assert.equal(landing.json().data.route, "/home");
+  repo.contexts.delete(session);
+  const accountLanding = await app.inject({
+    method: "GET",
+    url: "/api/v1/me/landing",
+    headers: {
+      cookie: "scoutops_session=test",
+      "x-request-id": "landing-account-request",
+      "x-trace-id": "landing-account-trace",
+    },
+  });
+  assert.equal(accountLanding.statusCode, 200);
+  assert.deepEqual(accountLanding.json().data, {
+    shell: "account",
+    route: "/me",
+    reason: "landing_account_only",
+  });
   await app.close();
 });
 

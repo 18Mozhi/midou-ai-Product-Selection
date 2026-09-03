@@ -22,12 +22,12 @@ const activeSection = computed(() => {
 <template>
   <main class="account-shell">
     <header class="account-topbar">
-      <RouterLink to="/home" class="account-brand"><span>选</span><b>智能选品</b></RouterLink>
+      <RouterLink to="/" class="account-brand"><span>选</span><b>智能选品</b></RouterLink>
       <div>
         <small>账号级设置</small>
         <h1>个人中心</h1>
       </div>
-      <RouterLink to="/home">返回工作台</RouterLink>
+      <RouterLink to="/select-context">组织与工作区</RouterLink>
     </header>
     <aside class="account-sidebar" aria-label="个人中心分区">
       <p>账号设置</p>
@@ -43,7 +43,7 @@ const activeSection = computed(() => {
     </aside>
     <section class="account-content">
       <nav class="account-breadcrumb" aria-label="面包屑">
-        <RouterLink to="/home">工作台</RouterLink><b>/</b><span aria-current="page">个人中心</span>
+        <RouterLink to="/">应用入口</RouterLink><b>/</b><span aria-current="page">个人中心</span>
       </nav>
       <PersonalCenter :api-base-url="apiBaseUrl" :initial-section="activeSection" account-shell />
     </section>

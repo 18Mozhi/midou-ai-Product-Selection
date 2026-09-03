@@ -6,10 +6,10 @@
 
 ## 服务端 Guard 与数据边界
 
-- `GET /api/v1/me/landing` 先验证 HttpOnly 会话，再按真实平台角色、当前组织管理员角色、普通成员上下文的优先级返回 `/platform-admin`、`/org-admin`、`/home` 或 `/select-context`。公开根路径 `/` 和登录/MFA 成功后都消费该结果，不再默认打开成员壳层或设备会话。
+- `GET /api/v1/me/landing` 先验证 HttpOnly 会话，再按真实平台角色、当前组织管理员角色、普通成员上下文的优先级返回 `/platform-admin`、`/org-admin`、`/home` 或 `/select-context`。没有已选上下文时，服务端额外检查活动组织成员资格：有成员资格才进入 `/select-context`，完全无成员资格则进入账号级 `/me`。公开根路径 `/` 和登录/MFA 成功后都消费该结果，不再默认打开成员壳层或设备会话。
 - `GET /api/v1/me/navigation?shell=member|organization_admin|platform_admin` 再由 `AuthorizationService.guardNavigationShell` 读取真实角色、能力及可选租户上下文。
 - 成员壳层要求活动成员资格和已选组织/工作区；组织后台默认要求 `organization_admin`，唯一只读例外是同时具有 `auditor` 角色与 `audit:read` 能力的活动成员进入 `/org-admin/audit`。审计员只获得带 `audit:read` 的组织审计目录和路由，空能力的组织管理路由继续失败关闭，顶部也不展示邀请成员写入口。平台后台要求任一真实平台角色，且不依赖组织上下文。
-- 每次允许或拒绝写入现有 `authorization_decisions`，保留 actor、组织/工作区（适用时）、代表能力、结果、原因、`request_id` 与 `trace_id`。前端菜单只是服务端结果的展示层，不能代替后续 API/Worker/导出/文件/事件/SSE Guard。
+- 每次允许或拒绝写入现有 `authorization_decisions`，保留 actor、组织/工作区（适用时）、代表能力、结果、原因、`request_id` 与 `trace_id`。账号级落地记录 `landing_account_only` 拒绝业务能力，同时只放行会话级个人资料、设备会话和 MFA，不产生任何组织数据权限。前端菜单只是服务端结果的展示层，不能代替后续 API/Worker/导出/文件/事件/SSE Guard。
 - 菜单只使用服务端返回的 capabilities 过滤。三个壳层不会互相混入菜单，也不读取其他组织数据。
 
 ## 持久化、异步与配置
@@ -24,6 +24,6 @@
 
 壳层内部按权限、路由装配、主题和发现状态拆分：`navigation-shell-permissions.ts` 只消费服务端 Guard 返回的能力并过滤路由目录；`navigation-shell-route-state.ts` 解析兼容路由、页面摘要、实体参数和页面组件属性；`use-navigation-shell-theme.ts` 管理带版本锁的主题读取、保存和失败回滚；`use-navigation-discovery.ts` 管理搜索、快捷创建和 Ctrl/Cmd+K。`NavigationShell.vue` 继续拥有 Guard 请求、壳层布局与页面挂载，拆分不增加第二份权限表或路由目录。
 
-成员、组织和平台侧栏按任务域折叠；平台后台收敛为“业务运营、采集与数据、治理与安全、高级运维”四组，让日常业务入口与基础设施运维入口分层，侧栏和平台首页快捷入口都按服务端返回的能力过滤，普通管理员看不到超级管理员专属的组织管理入口。账号与组织拆为 `/platform-admin/organizations`、`/platform-admin/users`、`/platform-admin/admins` 三个可深链页面，组织创建与详情继续使用 `/platform-admin/organizations/new` 和 `/platform-admin/organizations/{organizationId}` 独立地址，旧 `/accounts` 与 `/permissions` 地址继续兼容。凭证入口只在来源管理上下文出现；采集总览、任务和运行时复用采集二级导航；系统状态、拓扑、调度、存储、备份、发布和容量复用运行二级导航。组织、平台和个人中心壳层继承用户当前主题，不再强制切换 `cloud-white`；后台只切换为紧凑密度并禁用装饰性光晕。`/me` 使用独立账号壳层，不要求平台管理员先拥有组织上下文；个人资料优先加载，权限、设备、通知和资产分区允许独立失败。
+成员、组织和平台侧栏按任务域折叠；平台后台收敛为“业务运营、采集与数据、治理与安全、高级运维”四组，让日常业务入口与基础设施运维入口分层，侧栏和平台首页快捷入口都按服务端返回的能力过滤，普通管理员看不到超级管理员专属的组织管理入口。账号与组织拆为 `/platform-admin/organizations`、`/platform-admin/users`、`/platform-admin/admins` 三个可深链页面，组织创建与详情继续使用 `/platform-admin/organizations/new` 和 `/platform-admin/organizations/{organizationId}` 独立地址，旧 `/accounts` 与 `/permissions` 地址继续兼容。凭证入口只在来源管理上下文出现；采集总览、任务和运行时复用采集二级导航；系统状态、拓扑、调度、存储、备份、发布和容量复用运行二级导航。组织、平台和个人中心壳层继承用户当前主题，不再强制切换 `cloud-white`；后台只切换为紧凑密度并禁用装饰性光晕。`/me` 使用独立账号壳层，不要求平台管理员或无组织账号先拥有组织上下文；个人资料读写、设备会话和 MFA 属于账号级能力，个人资料审计写入允许组织为空的平台审计流。权限、通知和资产仍按真实组织范围加载，缺少上下文时只能局部失败，不能伪造个人工作区或放宽业务 API。
 
 成员完整路径（含筛选和分页）与最近有效站内路径写入限定名称的 `localStorage` 键，只保存同源绝对路径，不保存身份、权限、查询结果或其他敏感数据；根路径在服务端返回成员首页时恢复最近成员页，404 使用最近有效路径提供恢复操作。组织最近使用顺序同样只保存最多五个组织 ID，用于当前账号的选择页排序，不改变服务端返回范围。从平台后台返回成员工作台仍必须先进入 `/select-context` 选择目标组织与工作区，成功后按受控 `return_to` 回到原页面。`/select-context` 位于三套导航壳之外，切换时旧 `NavigationShell` 及其内部 `KeepAlive` 会整体卸载；新范围返回业务页时重新挂载页面实例，禁止复用旧组织或旧工作区的页面缓存。`return_to` 只接受同源绝对路径，不允许协议相对地址。

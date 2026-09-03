@@ -169,6 +169,36 @@ test("M06-01 rejects an idempotency key reused with a different request body", a
     (error) => error.code === "idempotency_key_reused" && error.statusCode === 409,
   );
 });
+test("M06-01 granting a platform role enforces MFA policy for existing accounts", async () => {
+  const statements = [],
+    connection = {
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release: () => {},
+      query: async (sql) => {
+        statements.push(sql);
+        if (sql.startsWith("SELECT result_json")) return [[], []];
+        if (sql.startsWith("SELECT id FROM users")) return [[{ id: other }], []];
+        return [[], []];
+      },
+    },
+    repository = new MySqlPlatformAccountRepository({
+      getConnection: async () => connection,
+    });
+  await repository.setPlatformRole({
+    ...context,
+    userId: other,
+    roleCode: "platform_operations_admin",
+    enabled: true,
+    reason: "负责平台运营",
+    requestHash: "c".repeat(64),
+    now: new Date("2026-09-03T00:00:00.000Z"),
+  });
+  assert.ok(statements.some((sql) => sql.includes("INSERT IGNORE INTO platform_role_assignments")));
+  assert.ok(statements.some((sql) => sql.includes("must_enroll_mfa=CASE WHEN EXISTS")));
+  assert.ok(statements.some((sql) => sql.includes("f.status='enabled'")));
+});
 test("M06-01 platform account delivery includes API, migration, novice UI, permissions and audit", async () => {
   const paths = [
       "database/migrations/0036_automatic_hotspot_sources.up.sql",
@@ -228,6 +258,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(repository, /user.password.forced_reset/);
   assert.match(repository, /user.sessions.revoked/);
   assert.match(repository, /must_change_password=1/);
+  assert.match(repository, /must_enroll_mfa=CASE WHEN EXISTS/);
+  assert.match(repository, /user_mfa_factors f[\s\S]*f\.status='enabled'/);
   assert.match(repository, /INSERT INTO membership_role_assignments/);
   assert.match(repository, /INSERT INTO membership_data_scopes.*'organization'/s);
   assert.match(repository, /default_workspace_id,created_by.*NULL/s);

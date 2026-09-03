@@ -410,12 +410,20 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
       );
       if (!rows[0])
         throw new PlatformAccountError("user_not_available", 409, "用户不存在或已停用。");
-      if (input.enabled)
+      if (input.enabled) {
         await c.query(
           "INSERT IGNORE INTO platform_role_assignments (user_id,role_code,created_by,created_at) VALUES (?,?,?,?)",
           [input.userId, input.roleCode, input.actorId, input.now],
         );
-      else
+        await c.query(
+          "UPDATE users u SET must_enroll_mfa=CASE WHEN EXISTS (SELECT 1 FROM " +
+            "user_mfa_factors f WHERE f.user_id=u.id AND f.status='enabled') THEN 0 ELSE 1 END," +
+            "security_setup_completed_at=CASE WHEN EXISTS (SELECT 1 FROM user_mfa_factors f " +
+            "WHERE f.user_id=u.id AND f.status='enabled') THEN security_setup_completed_at ELSE NULL END," +
+            "version=version+1,updated_at=? WHERE id=?",
+          [input.now, input.userId],
+        );
+      } else
         await c.query("DELETE FROM platform_role_assignments WHERE user_id=? AND role_code=?", [
           input.userId,
           input.roleCode,
@@ -428,6 +436,7 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
       await this.audit(c, input, "platform.role.changed", "user", input.userId, {
         role_code: input.roleCode,
         enabled: input.enabled,
+        mfa_policy_enforced: input.enabled,
         reason: input.reason,
       });
       return result;

@@ -14,8 +14,10 @@ test("Feature Map frontend routes are unique and /me has one PersonalCenter owne
         view: "PersonalCenter",
         domain: "personal-profile-permissions-security-notifications-assets",
         loading: [
-          "profile is loaded and rendered first; authorization, sessions, notifications and assets",
-          "settle independently in the background with explicit partial-failure feedback",
+          "profile is loaded and rendered first from the valid account session even without organization context;",
+          "authorization, sessions, notifications and assets settle independently in the background with explicit",
+          "partial-failure feedback, and tenant-owned sections remain unavailable until a real organization and",
+          "workspace are selected",
         ].join(" "),
         status: "implemented",
       },

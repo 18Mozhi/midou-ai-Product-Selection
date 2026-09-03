@@ -113,13 +113,12 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
         updated_at: input.now.toISOString(),
       };
       await connection.query(
-        "INSERT INTO audit_logs(id,organization_id,workspace_id,actor_id,action,resource_type," +
-          "resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES(?," +
-          "?,?,?, 'user.profile.updated','user_profile',?,?,?,?,?, ?,1)",
+        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action," +
+          "resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
+          "schema_version) VALUES (?,NULL,NULL,?,'user.profile.updated','user_profile',?," +
+          "'succeeded',?,?,?,?,1)",
         [
           randomUUID(),
-          input.organizationId,
-          input.workspaceId,
           input.userId,
           input.userId,
           input.requestId,

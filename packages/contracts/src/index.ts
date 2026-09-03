@@ -275,10 +275,16 @@ export interface NavigationGuardSummary {
   platform_capabilities: string[];
   guard_reason: string;
 }
-export type LandingShell = NavigationShell | "select_context";
+export type LandingShell = NavigationShell | "select_context" | "account";
 export interface LandingSummary {
   shell: LandingShell;
-  route: "/home" | "/org-admin" | "/platform-admin" | "/select-context";
+  route:
+    | "/home"
+    | "/org-admin"
+    | "/platform-admin"
+    | "/platform-admin/security"
+    | "/select-context"
+    | "/me";
   reason: string;
 }
 export interface GlobalSearchResult {

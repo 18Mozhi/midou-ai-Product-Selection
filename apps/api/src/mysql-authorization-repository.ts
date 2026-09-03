@@ -11,6 +11,14 @@ import type {
 
 export class MySqlAuthorizationRepository implements AuthorizationRepository {
   constructor(private readonly pool: Pool) {}
+  async hasActiveMembership(actorId: string) {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT 1 FROM memberships m JOIN organizations o ON o.id=m.organization_id " +
+        "WHERE m.user_id=? AND m.status='active' AND o.status='active' LIMIT 1",
+      [actorId],
+    );
+    return Boolean(rows[0]);
+  }
   async loadSubject(actorId: string, organizationId?: string): Promise<AuthorizationSubject> {
     const [platformRows] = await this.pool.query<RowDataPacket[]>(
       "SELECT DISTINCT pra.role_code,rc.capability_code FROM platform_role_assignments pra " +

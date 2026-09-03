@@ -240,6 +240,7 @@ export interface AuthorizationDecisionEvent {
 }
 export interface AuthorizationRepository {
   loadSubject(actorId: string, organizationId?: string): Promise<AuthorizationSubject>;
+  hasActiveMembership(actorId: string): Promise<boolean>;
   appendDecision(event: AuthorizationDecisionEvent): Promise<void>;
   listRoles(category?: RoleCategory): Promise<RoleDefinition[]>;
   findSessionContext(
@@ -403,12 +404,19 @@ export class AuthorizationService {
               reason: "landing_member",
               capability: "task:read" as Capability,
             }
-          : {
-              shell: "select_context" as const,
-              route: "/select-context" as const,
-              reason: "landing_context_required",
-              capability: "task:read" as Capability,
-            };
+          : (await this.repository.hasActiveMembership(actorId))
+            ? {
+                shell: "select_context" as const,
+                route: "/select-context" as const,
+                reason: "landing_context_required",
+                capability: "task:read" as Capability,
+              }
+            : {
+                shell: "account" as const,
+                route: "/me" as const,
+                reason: "landing_account_only",
+                capability: "task:read" as Capability,
+              };
     await this.repository.appendDecision({
       id: randomUUID(),
       actor_id: actorId,
@@ -417,7 +425,8 @@ export class AuthorizationService {
       team_id: null,
       capability: landing.capability,
       surface: "api",
-      outcome: landing.shell === "select_context" ? "denied" : "allowed",
+      outcome:
+        landing.shell === "select_context" || landing.shell === "account" ? "denied" : "allowed",
       reason: landing.reason,
       request_id: ids.requestId,
       trace_id: ids.traceId,
@@ -521,6 +530,7 @@ export class AuthorizationService {
 export class InMemoryAuthorizationRepository implements AuthorizationRepository {
   subjects = new Map<string, AuthorizationSubject>();
   contexts = new Map<string, { user_id: string; organization_id: string; workspace_id: string }>();
+  activeMembershipActors = new Set<string>();
   decisions: AuthorizationDecisionEvent[] = [];
   roles = BUILTIN_ROLES;
   key(actor: string, org?: string) {
@@ -539,6 +549,9 @@ export class InMemoryAuthorizationRepository implements AuthorizationRepository 
         platform_capabilities: [],
       }
     );
+  }
+  async hasActiveMembership(actor: string) {
+    return this.activeMembershipActors.has(actor);
   }
   async appendDecision(e: AuthorizationDecisionEvent) {
     this.decisions.push(e);

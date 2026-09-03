@@ -22,6 +22,26 @@ test("M01-02.A07/A15 MFA security center loads through an authenticated session"
   await expect(page.getByTestId("mfa")).toContainText("认证器 TOTP");
 });
 
+test("M01-02 account link switches the reused identity surface into MFA management", async ({
+  page,
+}) => {
+  await page.route("**/api/v1/auth/session-status", (route) =>
+    route.fulfill({
+      json: { data: { authenticated: true }, request_id: "status", trace_id: "status" },
+    }),
+  );
+  await page.route("**/api/v1/me/mfa", (route) =>
+    route.fulfill({
+      json: { data: { totp_enabled: false }, request_id: "mfa", trace_id: "mfa" },
+    }),
+  );
+  await page.goto("/login");
+  await page.getByRole("link", { name: "管理 MFA" }).click();
+  await expect(page).toHaveURL(/\/security\/mfa$/);
+  await expect(page.getByRole("heading", { name: "多因素认证" })).toBeVisible();
+  await expect(page.getByTestId("mfa")).toContainText("认证器 TOTP");
+});
+
 test("M01-02.A08/A15 stale MFA state returns to password login at desktop and 390px", async ({
   page,
 }) => {

@@ -19,16 +19,20 @@ export function registerPersonalCenterRoutes(
     requestId: String(request.headers["x-request-id"]),
     traceId: String(request.headers["x-trace-id"]),
   });
-  const scope = async (request: FastifyRequest) => {
+  const identity = async (request: FastifyRequest) => {
     const authenticated = await options.auth.authenticate(
       sessionToken(request, options.secureCookie),
     );
+    return { userId: authenticated.user.id, sessionId: authenticated.session.id };
+  };
+  const scope = async (request: FastifyRequest) => {
+    const authenticated = await identity(request);
     const resolved = await options.authorization.resolveSession(
-      authenticated.user.id,
-      authenticated.session.id,
+      authenticated.userId,
+      authenticated.sessionId,
     );
     return {
-      userId: authenticated.user.id,
+      userId: authenticated.userId,
       organizationId: resolved.context.organization_id,
       workspaceId: resolved.context.workspace_id,
     };
@@ -39,14 +43,14 @@ export function registerPersonalCenterRoutes(
     trace_id: ids(request).traceId,
   });
   app.get("/api/v1/me/profile", async (request, reply) => {
-    const current = await scope(request);
+    const current = await identity(request);
     reply.header("cache-control", "private, no-store");
     return envelope(await options.service.profile(current.userId), request);
   });
   app.patch("/api/v1/me/profile", async (request) => {
     if (request.headers.origin !== options.webOrigin)
       throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ai选品 个人中心重试。 ");
-    const current = await scope(request);
+    const current = await identity(request);
     return envelope(
       await options.service.update(request.body, {
         ...current,
