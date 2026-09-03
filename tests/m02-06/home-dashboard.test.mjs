@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { HomeDashboardService } from "../../apps/api/dist/home-dashboard-service.js";
+import { MySqlHomeDashboardRepository } from "../../apps/api/dist/mysql-home-dashboard-repository.js";
 import { buildApp } from "../../apps/api/dist/app.js";
 const org = "00000000-0000-4000-8000-000000000601",
   workspace = "00000000-0000-4000-8000-000000000602",
@@ -106,6 +107,42 @@ test("M02-06 recommendation queue is reserved from truthful opportunity actions"
   }).get({ organizationId: org, workspaceId: workspace, actorId: actor, capabilities: [] });
   assert.equal(result.actions.length, 5);
   assert.deepEqual(result.automatic_selection.recommended_items, [recommendation]);
+});
+test("M02-06 unassigned rule recommendations remain visible to scoped readers", async () => {
+  const calls = [];
+  const repository = new MySqlHomeDashboardRepository({
+    query: async (sql, values) => {
+      calls.push({ sql, values });
+      if (!sql.includes("FROM opportunities o")) return [[], []];
+      return [
+        [
+          {
+            id: "00000000-0000-4000-8000-000000000630",
+            name: "自动发现商品",
+            recommendation_status: "recommend",
+            overall_score: null,
+            risk_level: "unknown",
+            coverage_status: "partial",
+            updated_at: now,
+            version: 1,
+            owner_label: null,
+          },
+        ],
+        [],
+      ];
+    },
+  });
+  const result = await repository.list({
+    organizationId: org,
+    workspaceId: workspace,
+    actorId: actor,
+    capabilities: ["opportunity:read"],
+  });
+  const opportunityQuery = calls.find(({ sql }) => sql.includes("FROM opportunities o"));
+  assert.match(opportunityQuery.sql, /\(o\.owner_id=\? OR o\.owner_id IS NULL\)/);
+  assert.deepEqual(opportunityQuery.values, [org, workspace, actor]);
+  assert.equal(result.length, 1);
+  assert.equal(result[0].title, "自动发现商品");
 });
 test("M02-06 merges cross-module actions by deadline blocker risk value and route", async () => {
   const rows = [

@@ -234,9 +234,9 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
           "AND o.lifecycle_status<>'archived' AND EXISTS (SELECT 1 FROM opportunity_rule_matches orm " +
           "WHERE orm.opportunity_id=o.id AND orm.organization_id=o.organization_id " +
           "AND orm.workspace_id=o.workspace_id) AND " +
-          "(o.owner_id=? OR (o.owner_id IS NULL AND o.created_by=?)) ORDER BY " +
+          "(o.owner_id=? OR o.owner_id IS NULL) ORDER BY " +
           "FIELD(o.risk_level,'high','medium','low','unknown'),o.overall_score DESC,o.updated_at DESC LIMIT 40",
-        [input.organizationId, input.workspaceId, input.actorId, input.actorId],
+        [input.organizationId, input.workspaceId, input.actorId],
       );
       opportunities = opportunityRows.map((row) => {
         const highRisk = row.risk_level === "high";
