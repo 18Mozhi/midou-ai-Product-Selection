@@ -301,6 +301,23 @@
   text-align: center;
   color: var(--so-text-muted);
 }
+.platform-provider-disclosure {
+  width: 100%;
+  min-height: var(--so-touch-target);
+  margin-top: 12px;
+  padding: 9px 12px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 9px;
+  color: var(--so-primary);
+  background: var(--so-panel-soft);
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+.platform-provider-disclosure:focus-visible {
+  outline: 2px solid var(--so-primary);
+  outline-offset: 3px;
+}
 @media (max-width: 1100px) {
   .platform-kpis {
     grid-template-columns: repeat(3, 1fr);

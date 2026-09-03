@@ -242,6 +242,43 @@
   background: var(--so-panel-soft);
 }
 
+.org-audit-system-events {
+  width: 100%;
+  min-height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 13px;
+  border: 1px solid var(--so-border);
+  border-radius: 11px;
+  color: var(--so-text);
+  text-align: left;
+  background: var(--so-panel-soft);
+}
+
+.org-audit-system-events span,
+.org-audit-system-events strong,
+.org-audit-system-events small {
+  min-width: 0;
+  display: block;
+}
+
+.org-audit-system-events small {
+  margin-top: 4px;
+  color: var(--so-text-muted);
+}
+
+.org-audit-system-events b {
+  color: var(--so-primary);
+  white-space: nowrap;
+}
+
+.org-audit-system-events:focus-visible {
+  outline: 2px solid var(--so-primary);
+  outline-offset: 2px;
+}
+
 .org-audit-row:hover,
 .org-audit-row.selected {
   border-color: var(--so-primary-border);

@@ -28,7 +28,9 @@ const props = defineProps<{
   selectedId = ref(queryText("org_audit_selected", 36)),
   form = ref(formFromFilters(props.filters)),
   validationMessage = ref(""),
-  copyState = ref("");
+  copyState = ref(""),
+  systemEventsExpanded = ref(false);
+const collapsedSystemActions = new Set(["realtime.connected"]);
 
 const actionLabels: Record<string, string> = {
     "organization.profile.updated": "组织资料已更新",
@@ -45,6 +47,7 @@ const actionLabels: Record<string, string> = {
     "organization.collection.run.failed": "组织采集执行失败",
     "organization.collection.run.blocked": "组织采集被阻止",
     "organization.erp.import.completed": "ERP 导入已完成",
+    "realtime.connected": "实时连接已建立",
   },
   resourceLabels: Record<string, string> = {
     organization: "组织",
@@ -65,7 +68,7 @@ const actionLabels: Record<string, string> = {
     blocked: "已阻止",
   };
 
-const visibleEvents = computed(() => {
+const searchedEvents = computed(() => {
     const query = loadedQuery.value.trim().toLocaleLowerCase("zh-CN");
     if (!query) return props.events;
     return props.events.filter((event) =>
@@ -83,6 +86,14 @@ const visibleEvents = computed(() => {
           .includes(query),
       ),
     );
+  }),
+  hiddenSystemEventCount = computed(
+    () => searchedEvents.value.filter((event) => collapsedSystemActions.has(event.action)).length,
+  ),
+  visibleEvents = computed(() => {
+    if (systemEventsExpanded.value || loadedQuery.value.trim() || props.filters.action.trim())
+      return searchedEvents.value;
+    return searchedEvents.value.filter((event) => !collapsedSystemActions.has(event.action));
   }),
   selectedEvent = computed(
     () =>
@@ -369,6 +380,19 @@ async function copy(value: string, field: string) {
       <div class="org-audit-browser">
         <div class="org-audit-list" role="list" aria-label="组织审计列表">
           <button
+            v-if="hiddenSystemEventCount && !loadedQuery.trim() && !filters.action.trim()"
+            type="button"
+            class="org-audit-system-events"
+            :aria-expanded="systemEventsExpanded"
+            @click="systemEventsExpanded = !systemEventsExpanded"
+          >
+            <span>
+              <strong>系统连接记录 {{ hiddenSystemEventCount }} 条</strong>
+              <small>高频技术事件默认收起，不影响审计总数、筛选或追踪。</small>
+            </span>
+            <b>{{ systemEventsExpanded ? "收起" : "展开" }}</b>
+          </button>
+          <button
             v-for="event in visibleEvents"
             :key="event.id"
             type="button"
@@ -392,10 +416,18 @@ async function copy(value: string, field: string) {
             <em :data-outcome="event.outcome">{{ outcomeLabel(event.outcome) }}</em>
           </button>
           <div v-if="!visibleEvents.length" class="org-audit-empty">
-            <b>{{ events.length ? "当前已加载记录中无匹配" : "当前组织暂无审计记录" }}</b>
+            <b>{{
+              events.length
+                ? hiddenSystemEventCount
+                  ? "当前没有需要处理的业务审计记录"
+                  : "当前已加载记录中无匹配"
+                : "当前组织暂无审计记录"
+            }}</b>
             <span>{{
               events.length
-                ? "清空页内搜索，或调整服务端筛选条件。"
+                ? hiddenSystemEventCount
+                  ? "可展开上方系统连接记录，或调整筛选条件。"
+                  : "清空页内搜索，或调整服务端筛选条件。"
                 : "受审计操作发生后将显示在这里。"
             }}</span>
           </div>

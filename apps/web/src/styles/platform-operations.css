@@ -514,6 +514,23 @@
   color: var(--so-text-muted);
   font-size: 13px;
 }
+.collection-source-disclosure {
+  width: 100%;
+  min-height: var(--so-touch-target);
+  margin-top: 12px;
+  padding: 9px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  color: var(--so-primary);
+  background: var(--so-panel-soft);
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+.collection-source-disclosure:focus-visible {
+  outline: 2px solid var(--so-primary);
+  outline-offset: 3px;
+}
 .collection-section-empty {
   margin: 10px 0 0;
   padding: 13px;

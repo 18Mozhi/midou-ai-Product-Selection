@@ -286,12 +286,55 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByText("查看排队、运行或受阻的采集任务 →")).toBeVisible();
-  await page.getByRole("button", { name: "查看详情" }).first().click();
+  await page.getByRole("button", { name: /公开趋势 RSS/ }).click();
   const dialog = page.getByRole("dialog", { name: "公开趋势 RSS" });
   await expect(dialog).toBeVisible();
   await dialog.getByText("技术详情").click();
   await expect(dialog.getByText("p1", { exact: true })).toBeVisible();
   await dialog.getByRole("button", { name: "关闭详情" }).click();
+});
+test("platform cockpit prioritizes source exceptions and progressively reveals the full catalog", async ({
+  page,
+}) => {
+  await nav(page);
+  const providerHealth = Array.from({ length: 15 }, (_, index) => ({
+    id: `provider-${index + 1}`,
+    code: `provider_${index + 1}`,
+    name: index === 14 ? "异常来源 15" : `待观测来源 ${index + 1}`,
+    status: index === 14 ? "degraded" : "unknown",
+    observed_count: index === 14 ? 4 : 0,
+    success_count: index === 14 ? 1 : 0,
+    failed_count: index === 14 ? 3 : 0,
+    last_observed_at: index === 14 ? "2026-08-08T11:40:00.000Z" : null,
+  }));
+  await page.route("**/api/v1/platform/dashboard?**", (route) =>
+    route.fulfill({
+      json: env({
+        ...dashboard,
+        summary: { ...dashboard.summary, enabled_providers: providerHealth.length },
+        provider_health: providerHealth,
+      }),
+    }),
+  );
+
+  await page.goto("/platform-admin");
+  const sourceSection = page.getByRole("heading", { name: "来源健康" }).locator("../..");
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  const sourceName = (name: string) =>
+    mobile
+      ? sourceSection.locator(".responsive-data-view__mobile strong").filter({ hasText: name })
+      : sourceSection.locator("tbody b").filter({ hasText: name });
+  await expect(sourceName("异常来源 15")).toBeVisible();
+  await expect(sourceName("待观测来源 14")).toBeHidden();
+  const visibleRows = mobile
+    ? sourceSection.locator(".responsive-data-view__mobile article:visible")
+    : sourceSection.locator("tbody tr");
+  await expect(visibleRows).toHaveCount(8);
+  await sourceSection.getByRole("button", { name: /查看全部 15 个来源/ }).click();
+  await expect(visibleRows).toHaveCount(15);
+  await expect(sourceName("待观测来源 14")).toBeVisible();
+  await sourceSection.getByRole("button", { name: /收起来源/ }).click();
+  await expect(visibleRows).toHaveCount(8);
 });
 test("M06-02.A08/A16 empty forbidden and dependency states recover truthfully", async ({
   page,

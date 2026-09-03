@@ -18,7 +18,28 @@ const state = ref<State>("loading"),
   requestId = ref(""),
   hint = ref(""),
   pending = ref(false),
-  refreshError = ref("");
+  refreshError = ref(""),
+  providerHealthExpanded = ref(false);
+const providerHealthLimit = 8,
+  providerHealthRows = computed(() =>
+    [...(data.value?.provider_health ?? [])].sort((left: any, right: any) => {
+      const priority = (item: any) =>
+        item.status === "degraded" || item.status === "critical" || Number(item.failed_count) > 0
+          ? 0
+          : item.status === "healthy"
+            ? 1
+            : 2;
+      return priority(left) - priority(right);
+    }),
+  ),
+  visibleProviderHealth = computed(() =>
+    providerHealthExpanded.value
+      ? providerHealthRows.value
+      : providerHealthRows.value.slice(0, providerHealthLimit),
+  ),
+  hiddenProviderHealthCount = computed(() =>
+    Math.max(0, providerHealthRows.value.length - visibleProviderHealth.value.length),
+  );
 const stateText = computed(
   () =>
     (
@@ -323,12 +344,12 @@ onMounted(load);
         <section>
           <header>
             <h3>来源健康</h3>
-            <span>{{ data.provider_health.length }} 个启用来源</span>
+            <span>{{ data.provider_health.length }} 个启用来源 · 异常优先</span>
           </header>
           <div v-if="!data.provider_health.length" class="platform-inline-empty">尚无启用来源</div>
           <ResponsiveDataView
             v-else
-            :rows="data.provider_health"
+            :rows="visibleProviderHealth"
             :row-key="(item) => item.id"
             title="来源健康"
             :detail-title="(item) => item.name"
@@ -344,7 +365,7 @@ onMounted(load);
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="p in data.provider_health" :key="p.id">
+                  <tr v-for="p in visibleProviderHealth" :key="p.id">
                     <td>
                       <b>{{ p.name }}</b>
                     </td>
@@ -424,6 +445,19 @@ onMounted(load);
               </details>
             </template>
           </ResponsiveDataView>
+          <button
+            v-if="data.provider_health.length > providerHealthLimit"
+            type="button"
+            class="platform-provider-disclosure"
+            :aria-expanded="providerHealthExpanded"
+            @click="providerHealthExpanded = !providerHealthExpanded"
+          >
+            {{
+              providerHealthExpanded
+                ? `收起来源，仅看前 ${providerHealthLimit} 个`
+                : `查看全部 ${data.provider_health.length} 个来源（还有 ${hiddenProviderHealthCount} 个）`
+            }}
+          </button>
         </section>
         <section>
           <header>

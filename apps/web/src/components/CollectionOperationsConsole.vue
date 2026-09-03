@@ -42,8 +42,10 @@ const state = ref("loading"),
   batchBusy = ref(false),
   batchNotice = ref(""),
   batchFailures = ref<Array<{ task: string; reason: string }>>([]),
+  sourcesExpanded = ref(false),
   rootCauseSection = ref<HTMLElement | null>(null);
 let activeController: AbortController | null = null;
+const sourceDisplayLimit = 8;
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const selectedDeadLetters = computed(() =>
     (data.value?.dead_letters ?? []).filter(
@@ -65,6 +67,26 @@ const selectedDeadLetters = computed(() =>
     () =>
       [org.value, workspace.value, provider.value, errorCode.value].filter(Boolean).length +
       (timeWindow.value === "24h" ? 0 : 1),
+  ),
+  orderedSources = computed(() =>
+    [...(data.value?.sources ?? [])].sort((left: any, right: any) => {
+      const priority = (item: any) =>
+        ["blocked", "critical", "degraded", "warning"].includes(item.health_status) ||
+        Number(item.consecutive_failures) > 0
+          ? 0
+          : ["ready", "healthy"].includes(item.health_status)
+            ? 1
+            : 2;
+      return priority(left) - priority(right);
+    }),
+  ),
+  visibleSources = computed(() =>
+    sourcesExpanded.value
+      ? orderedSources.value
+      : orderedSources.value.slice(0, sourceDisplayLimit),
+  ),
+  hiddenSourceCount = computed(() =>
+    Math.max(0, orderedSources.value.length - visibleSources.value.length),
   );
 
 function scopeValidation() {
@@ -424,11 +446,14 @@ async function confirmBatchReplay() {
       </nav>
       <div class="collection-ops-grid">
         <section>
-          <h3>来源与健康</h3>
+          <header class="collection-section-header">
+            <h3>来源与健康</h3>
+            <span>共 {{ data.sources.length }} 个 · 异常优先</span>
+          </header>
           <ResponsiveDataView
             v-if="data.sources.length"
             title="来源与健康"
-            :rows="data.sources"
+            :rows="visibleSources"
             :row-key="sourceRowKey"
             :detail-title="sourceDetailTitle"
           >
@@ -445,7 +470,7 @@ async function confirmBatchReplay() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="s in data.sources" :key="s.id">
+                  <tr v-for="s in visibleSources" :key="s.id">
                     <td>
                       <b>{{ s.name }}</b
                       ><small>{{ s.owner_label }}</small>
@@ -506,6 +531,19 @@ async function confirmBatchReplay() {
               </details>
             </template>
           </ResponsiveDataView>
+          <button
+            v-if="data.sources.length > sourceDisplayLimit"
+            type="button"
+            class="collection-source-disclosure"
+            :aria-expanded="sourcesExpanded"
+            @click="sourcesExpanded = !sourcesExpanded"
+          >
+            {{
+              sourcesExpanded
+                ? `收起来源，仅看前 ${sourceDisplayLimit} 个`
+                : `查看全部 ${data.sources.length} 个来源（还有 ${hiddenSourceCount} 个）`
+            }}
+          </button>
           <p v-else class="collection-section-empty">当前范围没有来源健康记录。</p>
         </section>
         <section>

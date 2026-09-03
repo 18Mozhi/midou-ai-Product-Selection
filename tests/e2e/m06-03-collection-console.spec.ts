@@ -184,6 +184,43 @@ test("M06-03 distinguishes network login captcha and parser alert categories", a
     await expect(page.getByText(`告警类别：${category}`, { exact: true })).toBeVisible();
 });
 
+test("collection overview prioritizes unhealthy sources and keeps the complete catalog reachable", async ({
+  page,
+}) => {
+  await navigation(page);
+  const sources = Array.from({ length: 14 }, (_, index) => ({
+    ...data.sources[0],
+    id: `00000000-0000-4000-8000-${String(700 + index).padStart(12, "0")}`,
+    code: `source_${index + 1}`,
+    name: index === 13 ? "采集受阻来源 14" : `尚未检查来源 ${index + 1}`,
+    health_status: index === 13 ? "blocked" : "unknown",
+    consecutive_failures: index === 13 ? 5 : 0,
+    last_checked_at: index === 13 ? "2026-08-08T12:00:00Z" : null,
+  }));
+  await page.route("**/api/v1/platform/collection/console?**", (route) =>
+    route.fulfill({ json: envelope({ ...data, sources }) }),
+  );
+
+  await page.goto("/platform-admin/collection/overview");
+  const sourceSection = page.getByRole("heading", { name: "来源与健康" }).locator("../..");
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  const sourceName = (name: string) =>
+    mobile
+      ? sourceSection.locator(".responsive-data-view__mobile strong").filter({ hasText: name })
+      : sourceSection.locator("tbody b").filter({ hasText: name });
+  await expect(sourceName("采集受阻来源 14")).toBeVisible();
+  await expect(sourceName("尚未检查来源 13")).toBeHidden();
+  const visibleRows = mobile
+    ? sourceSection.locator(".responsive-data-view__mobile article:visible")
+    : sourceSection.locator("tbody tr");
+  await expect(visibleRows).toHaveCount(8);
+  await sourceSection.getByRole("button", { name: /查看全部 14 个来源/ }).click();
+  await expect(visibleRows).toHaveCount(14);
+  await expect(sourceName("尚未检查来源 13")).toBeVisible();
+  await sourceSection.getByRole("button", { name: /收起来源/ }).click();
+  await expect(visibleRows).toHaveCount(8);
+});
+
 test("M06-03.A17 batch safely replays explicitly selected open dead letters", async ({ page }) => {
   const secondTaskId = "00000000-0000-4000-8000-000000000641";
   const batchData = {

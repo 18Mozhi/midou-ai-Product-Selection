@@ -153,7 +153,7 @@
 }
 .trend-workbench {
   display: grid;
-  grid-template-columns: minmax(310px, var(--trend-master-width, 38%)) minmax(520px, 1fr);
+  grid-template-columns: minmax(310px, var(--trend-master-width, 38%)) minmax(0, 1fr);
   gap: 14px;
 }
 .trend-list,
@@ -282,6 +282,7 @@
   background: var(--so-panel-soft);
 }
 .trend-detail {
+  min-width: 0;
   padding: 22px;
 }
 .trend-detail > header {
@@ -453,26 +454,32 @@
 .trend-lower {
   margin-top: 14px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 12px;
 }
 .trend-lower > section {
+  min-width: 0;
   min-height: 220px;
   padding: 16px;
   border: 1px solid var(--so-border);
   border-radius: 14px;
 }
 .timeline-bars {
-  height: 145px;
+  width: 100%;
+  min-width: 0;
+  height: 165px;
   margin-top: 12px;
+  padding-bottom: 18px;
   display: flex;
   align-items: end;
   gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
   border-bottom: 1px solid var(--so-border);
 }
 .timeline-bars > span {
   height: 100%;
-  min-width: 38px;
+  min-width: 74px;
   display: flex;
   align-items: center;
   justify-content: end;
@@ -494,7 +501,7 @@
   font-size: 13px;
 }
 .timeline-bars small {
-  margin: 5px 0 -18px;
+  margin: 5px 0 0;
   color: var(--so-text-muted);
   font-size: 13px;
   white-space: nowrap;
@@ -506,12 +513,14 @@
   flex-wrap: wrap;
 }
 .keyword-cloud > span {
+  min-width: 0;
   padding: 10px 12px;
   border: 1px solid var(--so-border);
   border-radius: 12px;
   color: var(--so-chart-2);
   background: color-mix(in srgb, var(--so-chart-2) 8%, transparent);
   font-size: 13px;
+  overflow-wrap: anywhere;
 }
 .keyword-cloud small {
   display: block;

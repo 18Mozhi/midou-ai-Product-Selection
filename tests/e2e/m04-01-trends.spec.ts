@@ -123,7 +123,11 @@ async function navigation(page: Page, capabilities = managerCapabilities) {
 async function ready(
   page: Page,
   topics = [topic],
-  options: { capabilities?: string[]; onGovernanceRequest?: () => void } = {},
+  options: {
+    capabilities?: string[];
+    detailData?: typeof detail;
+    onGovernanceRequest?: () => void;
+  } = {},
 ) {
   await navigation(page, options.capabilities);
   let changeRequests: unknown[] = [];
@@ -173,7 +177,7 @@ async function ready(
     route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(envelope(detail)),
+      body: JSON.stringify(envelope(options.detailData ?? detail)),
     }),
   );
   await page.route(`**/api/v1/trends/${topicId}/follow`, (route) =>
@@ -241,6 +245,32 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await expect(page.getByRole("button", { name: "已关注", exact: true })).toBeVisible();
   await page.keyboard.press("Tab");
   await expect(page).toHaveScreenshot("m04-01-trends.png", { fullPage: true });
+});
+
+test("long trend timelines scroll inside the detail card without widening the page", async ({
+  page,
+}) => {
+  const timeline = Array.from({ length: 48 }, (_, index) => ({
+    at: new Date(Date.UTC(2026, 7, 7, index)).toISOString(),
+    signal_count: (index % 9) + 1,
+    source_count: 1,
+  }));
+  await ready(page, [topic], { detailData: { ...detail, timeline, timeline_sources: [] } });
+  await page.goto("/trends");
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+      ),
+    )
+    .toBe(true);
+  await expect
+    .poll(() =>
+      page
+        .locator(".timeline-bars")
+        .evaluate((element) => element.scrollWidth > element.clientWidth),
+    )
+    .toBe(true);
 });
 test("M04-01.A08/A09 monitoring rule and empty/forbidden states are explicit", async ({ page }) => {
   await ready(page);

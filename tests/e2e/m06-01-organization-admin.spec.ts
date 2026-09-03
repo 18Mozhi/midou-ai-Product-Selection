@@ -1144,6 +1144,39 @@ test("organization audit unifies readable details filters cursor and URL state",
   await expect(page.getByLabel("操作代码（精确）")).toHaveValue("");
 });
 
+test("organization audit collapses high-frequency realtime connection records without hiding them", async ({
+  page,
+}) => {
+  await setup(page);
+  const businessEvents = organizationAuditEvents.slice(0, 10);
+  const realtimeEvents = Array.from({ length: 40 }, (_, index) => ({
+    ...organizationAuditEvents[0],
+    id: `00000000-0000-4000-8000-${String(900 + index).padStart(12, "0")}`,
+    action: "realtime.connected",
+    resource_type: "organization",
+    request_id: `realtime-request-${index + 1}`,
+    trace_id: `realtime-trace-${index + 1}`,
+    occurred_at: new Date(Date.parse("2026-08-27T11:00:00.000Z") - index * 60_000).toISOString(),
+  }));
+  await page.route("**/api/v1/organizations/*/audit-events**", (route) =>
+    route.fulfill({
+      json: env({ items: [...realtimeEvents, ...businessEvents], nextCursor: null }),
+    }),
+  );
+
+  await page.goto("/org-admin/audit");
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(10);
+  const disclosure = page.getByRole("button", { name: /系统连接记录 40 条/ });
+  await expect(disclosure).toContainText("不影响审计总数、筛选或追踪");
+  await disclosure.click();
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(50);
+  await expect(page.getByText("实时连接已建立", { exact: true }).first()).toBeVisible();
+  await disclosure.click();
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(10);
+  await page.getByLabel("页内搜索").fill("实时连接");
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(40);
+});
+
 test("organization audit validates ranges and has no mobile overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await setup(page);
