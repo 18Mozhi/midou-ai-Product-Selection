@@ -446,7 +446,7 @@ onMounted(() => {
             {{
               params.get("token")
                 ? "验证链接只使用一次；失败时按上方提示重新申请。"
-                : "邮件服务未确认时，生产投递会明确显示受阻，不会假报已发送。"
+                : "账号邮件由受限邮件通道投递；异常时会明确显示受阻，不会假报已发送。"
             }}
           </p>
           <button type="button" @click="switchMode('login')">返回登录</button>

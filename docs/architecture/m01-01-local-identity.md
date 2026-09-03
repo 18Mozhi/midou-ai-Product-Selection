@@ -12,11 +12,11 @@
 
 注册先校验投递能力；Outbox 入库失败时删除尚未完成的待验证账号与令牌，保留不关联用户的阻断安全事件，使相同邮箱可安全重试。写 API 使用 `Idempotency-Key`；登录响应只通过 HttpOnly、SameSite=Strict Cookie 建立会话，生产名为 `__Host-scoutops_session` 且带 Secure，浏览器脚本不接触令牌。改密、重置密码会撤销该用户所有活动会话；会话列表和撤销始终从当前 Cookie 解析 user_id，不能代查其他用户。
 
-邮件明文负载在 API 内以 `CREDENTIALS_MASTER_KEY` 派生的 AES-256-GCM 密钥加密后进入 `auth_delivery_outbox`。Worker 使用租约、有限重试、`dead_letter` 和 `blocked_provider` 状态；当前蓝图尚未确认生产邮件 Provider，因此真实发送保持显式受阻，绝不伪造成功。Crawler、Redis、文件、导出和 SSE 不参与本模块。
+邮件明文负载在 API 内以 `CREDENTIALS_MASTER_KEY` 派生的 AES-256-GCM 密钥加密后进入 `auth_delivery_outbox`。Worker 使用租约、有限重试、`dead_letter` 和 `blocked_provider` 状态；账号邮件 Provider 经批准后固定为 QQ Mail SMTP，使用 `smtp.qq.com:465`、TLS 校验证书与 `AUTH LOGIN` 授权码认证，只发送邮箱验证和密码找回邮件。SMTP 用户名与授权码仅从宝塔受限环境读取，命令响应、日志和审计均不记录授权码、收件人、正文或原始动作令牌。未启用 `qq_smtp` 时仍显式受阻，绝不伪造成功。Crawler、Redis、文件、导出和 SSE 不参与本模块；业务通知邮件仍保持 M05-03 的 `placeholder` 边界。
 
 ## 安全与配置依据
 
-Argon2id 默认 `memory=19456 KiB,time=2,parallelism=1`，对应 OWASP Password Storage Cheat Sheet 的最低推荐档。密码长度、锁定阈值、会话/动作令牌 TTL 和 Outbox 轮询均经配置 schema 校验，可由安全负责人在宝塔受限环境调整；这些本地默认值不是未经审批的生产政策。错误响应区分可操作状态，但登录失败对未知邮箱和未知用户名统一返回“账号或密码不正确”，邮件请求不在响应中暴露账号是否存在。登录接口优先接受 `identifier`，并继续接受旧客户端的 `email` 字段；两种入口共享锁定、MFA、会话和审计逻辑。
+Argon2id 默认 `memory=19456 KiB,time=2,parallelism=1`，对应 OWASP Password Storage Cheat Sheet 的最低推荐档。密码长度、锁定阈值、会话/动作令牌 TTL、Outbox 轮询及账号邮件模式和超时均经配置 schema 校验，可由安全负责人在宝塔受限环境调整；`qq_smtp` 启动时还会校验 QQ 邮箱格式与 16 字符授权码，缺失或错误即拒绝启动。这些本地默认值不是未经审批的生产政策。错误响应区分可操作状态，但登录失败对未知邮箱和未知用户名统一返回“账号或密码不正确”，邮件请求不在响应中暴露账号是否存在。登录接口优先接受 `identifier`，并继续接受旧客户端的 `email` 字段；两种入口共享锁定、MFA、会话和审计逻辑。
 
 ## 页面与失败状态
 

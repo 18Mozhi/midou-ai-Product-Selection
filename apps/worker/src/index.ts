@@ -9,7 +9,11 @@ import {
 import { createRedisConnection, ScopedRedisStore } from "@scoutops/redis";
 import { MySqlAiAnalysisWorker, OpenAiCompatibleAnalysisAdapter } from "./ai-analysis-worker.js";
 import { ApprovalEscalationWorker } from "./approval-escalation-worker.js";
-import { PendingMailProvider, processAuthDeliveryOnce } from "./auth-delivery-worker.js";
+import {
+  PendingMailProvider,
+  processAuthDeliveryOnce,
+  QqSmtpMailProvider,
+} from "./auth-delivery-worker.js";
 import { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
 import { MySqlAutomaticSourceScheduler } from "./automatic-source-scheduler.js";
 import { AutomationWorker } from "./automation-worker.js";
@@ -124,6 +128,16 @@ const notificationOutbox = new NotificationOutboxWorker(
   config.notifications.outboxLeaseSeconds,
   config.notifications.retryLimit,
 );
+const authMailProvider =
+  config.authEmail.deliveryMode === "qq_smtp"
+    ? new QqSmtpMailProvider({
+        username: config.authEmail.qqSmtpUsername,
+        authCode: config.authEmail.qqSmtpAuthCode,
+        fromName: config.authEmail.fromName,
+        webOrigin: config.app.webOrigin,
+        timeoutMs: config.authEmail.timeoutMs,
+      })
+    : new PendingMailProvider();
 const automation = new AutomationWorker(
   pool,
   config.identity.workerId,
@@ -220,7 +234,7 @@ const queues = [
           pool,
           workerId: config.identity.workerId,
           masterKey: config.security.credentialsMasterKey,
-          provider: new PendingMailProvider(),
+          provider: authMailProvider,
         }),
       { enabled: () => Boolean(config.security.credentialsMasterKey) },
     ),

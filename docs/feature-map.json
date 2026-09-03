@@ -216,8 +216,15 @@
         "/api/v1/me/sessions"
       ],
       "sessionTransport": "30-day opaque Secure HttpOnly SameSite=Strict cookie in production with Max-Age=2592000; token hash only in MySQL",
-      "configuration": ["AUTH_SESSION_TTL_MINUTES=43200"],
-      "delivery": "AES-256-GCM MySQL outbox; provider selection pending and explicitly blocked",
+      "configuration": [
+        "AUTH_SESSION_TTL_MINUTES=43200",
+        "AUTH_EMAIL_DELIVERY_MODE",
+        "QQ_SMTP_USERNAME",
+        "QQ_SMTP_AUTH_CODE",
+        "AUTH_EMAIL_FROM_NAME",
+        "AUTH_EMAIL_TIMEOUT_MS"
+      ],
+      "delivery": "AES-256-GCM MySQL outbox; approved account verification and password recovery delivery uses fixed QQ Mail smtp.qq.com:465 TLS with a BaoTa-restricted authorization code, while placeholder mode remains explicitly blocked and business notification email remains separate and disabled",
       "scope": "local verified-email account with an optional case-insensitive unique username login alias and own sessions; registration and recovery remain email-based, while MFA and enterprise identity capabilities are tracked separately by M01-02",
       "loginIdentifierBoundary": "new clients send identifier as a verified email or normalized unique username; the legacy email request field remains accepted for compatibility, unknown accounts share the same generic credential failure, and existing users retain email login until they explicitly set a username in the personal center",
       "apiClientBoundary": "local identity and own-session requests use the shared frontend API client; server error message, action hint and request/trace correlation remain visible without exposing tokens",

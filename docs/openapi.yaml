@@ -4999,7 +4999,7 @@ paths:
   /platform/management/email/{source}/{deliveryId}/actions:
     post:
       summary: Retry or suppress one email delivery with an audit reason
-      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Account verification/password-reset deliveries only support retry; business notification deliveries support retry or suppress. A retry places the record back into the existing queue and does not bypass provider configuration.
+      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Account verification/password-reset deliveries only support retry and are sent only when the approved QQ SMTP account channel is enabled; business notification deliveries support retry or suppress but remain placeholder-only. A retry places the record back into the existing queue and never bypasses runtime provider configuration.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {

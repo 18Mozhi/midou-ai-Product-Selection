@@ -147,6 +147,13 @@ export interface RuntimeConfig {
     lockMinutes: number;
     outboxPollMs: number;
   };
+  authEmail: {
+    deliveryMode: "placeholder" | "qq_smtp";
+    qqSmtpUsername: string;
+    qqSmtpAuthCode: string;
+    fromName: string;
+    timeoutMs: number;
+  };
   mfa: {
     issuer: string;
     totpPeriodSeconds: number;
@@ -355,6 +362,26 @@ export function loadRuntimeConfig(
     text(env, "CREDENTIAL_TEMP_ROOT", "./runtime/credential-tmp"),
   );
   const playwrightExecutablePath = text(env, "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH");
+  const authEmailDeliveryMode = text(env, "AUTH_EMAIL_DELIVERY_MODE", "placeholder");
+  if (authEmailDeliveryMode !== "placeholder" && authEmailDeliveryMode !== "qq_smtp")
+    throw new ConfigError("AUTH_EMAIL_DELIVERY_MODE", "must be placeholder or qq_smtp");
+  const qqSmtpUsername = text(env, "QQ_SMTP_USERNAME");
+  const qqSmtpAuthCode = text(env, "QQ_SMTP_AUTH_CODE");
+  const authEmailFromName = text(env, "AUTH_EMAIL_FROM_NAME", "ScoutOps");
+  if (authEmailFromName.length > 80 || /[\r\n]/.test(authEmailFromName))
+    throw new ConfigError("AUTH_EMAIL_FROM_NAME", "must be a single line of at most 80 characters");
+  if (authEmailDeliveryMode === "qq_smtp") {
+    if (!/^[^\s@]+@qq\.com$/i.test(qqSmtpUsername))
+      throw new ConfigError(
+        "QQ_SMTP_USERNAME",
+        "must be a QQ Mail address when qq_smtp is enabled",
+      );
+    if (!/^[A-Za-z]{16}$/.test(qqSmtpAuthCode))
+      throw new ConfigError(
+        "QQ_SMTP_AUTH_CODE",
+        "must be the 16-character QQ Mail authorization code when qq_smtp is enabled",
+      );
+  }
   if (playwrightExecutablePath && !isAbsolute(playwrightExecutablePath))
     throw new ConfigError("PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH", "must be an absolute path");
   if (evidenceRoot === exportRoot)
@@ -584,6 +611,13 @@ export function loadRuntimeConfig(
       maxFailedAttempts: integer(env, "AUTH_MAX_FAILED_ATTEMPTS", 5, 2, 20),
       lockMinutes: integer(env, "AUTH_LOCK_MINUTES", 15, 1, 1440),
       outboxPollMs: integer(env, "AUTH_OUTBOX_POLL_MS", 5000, 1000, 60000),
+    },
+    authEmail: {
+      deliveryMode: authEmailDeliveryMode as "placeholder" | "qq_smtp",
+      qqSmtpUsername,
+      qqSmtpAuthCode,
+      fromName: authEmailFromName,
+      timeoutMs: integer(env, "AUTH_EMAIL_TIMEOUT_MS", 15000, 1000, 60000),
     },
     mfa: {
       issuer: text(env, "MFA_ISSUER", "ScoutOps"),
@@ -882,6 +916,10 @@ export function loadRuntimeConfig(
     database: { ...base.database, password: Boolean(base.database.password) },
     redis: { ...base.redis, password: Boolean(base.redis.password) },
     ai: { ...base.ai, apiKey: Boolean(base.ai.apiKey) },
+    authEmail: {
+      ...base.authEmail,
+      qqSmtpAuthCode: Boolean(base.authEmail.qqSmtpAuthCode),
+    },
     security: {
       sessionSecret: Boolean(base.security.sessionSecret),
       credentialsMasterKey: Boolean(base.security.credentialsMasterKey),

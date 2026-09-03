@@ -2,21 +2,22 @@
 
 ## 配置与发布
 
-1. 在宝塔受限环境保留已有 `CREDENTIALS_MASTER_KEY`；不得把值写入 Git、日志或文档。按 `config/env.example` 设置 `AUTH_ARGON2_*`、密码长度、会话/动作令牌 TTL、锁定阈值和 `AUTH_OUTBOX_POLL_MS`。
+1. 在宝塔受限环境保留已有 `CREDENTIALS_MASTER_KEY`；不得把值写入 Git、日志或文档。按 `config/env.example` 设置 `AUTH_ARGON2_*`、密码长度、会话/动作令牌 TTL、锁定阈值和 `AUTH_OUTBOX_POLL_MS`。账号邮件启用 QQ SMTP 时设置 `AUTH_EMAIL_DELIVERY_MODE=qq_smtp`、QQ 邮箱用户名、QQ 邮箱生成的 16 字符授权码、发件人名称和超时；授权码只写 `/www/wwwroot/ai选品/config/product_scout.env`，不得写源码、提交、日志、截图或验收报告。
 2. 按 `0008a` 到 `0008f` 顺序执行基础 up 迁移，并执行 `0067_usernames_login.up.sql` 增加可空用户名及唯一规范化索引。生产数据库固定 MySQL 5.7、`product_scout` 业务账号、utf8mb4；不得自动用邮箱前缀回填现有账号。
 3. 先在宝塔发布静态 Web 和 Node API，再发布 Node Worker。`GET /api/v1/auth/session-status` 随 Node API 发布，需在宝塔重启 Node 项目 `ai选品` 后生效；配置由进程启动时读取，任何 `AUTH_*` 或主密钥变化后必须在宝塔分别重启 API 与 Worker。
-4. 当前生产邮件 Provider 未确认。保持投递为 `blocked_provider`，注册 API 返回可操作的 `mail_provider_pending`，不得为了演示绕过投递或把令牌返回浏览器。Provider 选型、跨境与回调合同必须在后续获批后再接入。
+4. 账号验证与密码找回邮件固定经 QQ Mail `smtp.qq.com:465` TLS 发送；业务通知邮件仍保持 `NOTIFICATION_EMAIL_DELIVERY_MODE=placeholder`，不得把账号邮件接通误报为业务通知邮件已开放。修改任何 `AUTH_EMAIL_*` 或 `QQ_SMTP_*` 后必须在宝塔重启统一 Node 项目 `ai选品`。若 QQ SMTP 未启用或启动校验失败，账号投递保持 `blocked_provider`；不得绕过投递或把令牌返回浏览器。
 
 ## 验证与观测
 
-最小验证依次运行 `npm run build`、`node --test tests/m01-01/local-auth.test.mjs`、`node --test tests/m01-01/auth-api.test.mjs`、`node --test tests/m01-01/identity-contract.test.mjs`。另需确认同一已验证账号可分别使用邮箱和用户名登录、大小写用户名命中同一账号、重复用户名被唯一索引拒绝、旧 `email` 登录请求仍兼容、未知邮箱和未知用户名返回相同错误；匿名请求 `/api/v1/auth/session-status` 返回 200 与 `authenticated=false`，从登录页点击安全会话/MFA 不请求任何 `/me/*` 接口。使用隔离 MySQL 5.7 时设置安全的本地 `DB_HOST/DB_PORT/DB_NAME/DB_USER/DB_PASSWORD/CREDENTIALS_MASTER_KEY` 后运行 `node scripts/verify-local-auth-live.mjs`；脚本会创建并清理唯一探针数据。视觉门禁为 `npx playwright test tests/e2e/m01-01-local-identity.spec.ts`，最终统一运行 `npm run verify:module -- M01-01`。
+最小验证依次运行 `npm run build`、`node --test tests/m01-01/qq-smtp-auth-delivery.test.mjs`、`node --test tests/m01-01/local-auth.test.mjs`、`node --test tests/m01-01/auth-api.test.mjs`、`node --test tests/m01-01/identity-contract.test.mjs`。另需确认同一已验证账号可分别使用邮箱和用户名登录、大小写用户名命中同一账号、重复用户名被唯一索引拒绝、旧 `email` 登录请求仍兼容、未知邮箱和未知用户名返回相同错误；匿名请求 `/api/v1/auth/session-status` 返回 200 与 `authenticated=false`，从登录页点击安全会话/MFA 不请求任何 `/me/*` 接口。使用隔离 MySQL 5.7 时设置安全的本地 `DB_HOST/DB_PORT/DB_NAME/DB_USER/DB_PASSWORD/CREDENTIALS_MASTER_KEY` 后运行 `node scripts/verify-local-auth-live.mjs`；脚本会创建并清理唯一探针数据。视觉门禁为 `npx playwright test tests/e2e/m01-01-local-identity.spec.ts`，最终统一运行 `npm run verify:module -- M01-01`。生产启用后，从平台邮件记录对一个 `blocked_provider` 账号邮件执行一次“重新投递”，确认记录进入 `succeeded`、收件箱实际收到邮件、链接只消费一次且日志不含邮箱和原始 token。
 
 宝塔日志只观察事件名、状态、request_id、trace_id 和重试次数，不记录邮箱、密码、Cookie、原始动作令牌或主密钥。重点告警：注册投递连续失败、Outbox `dead_letter` 增长、`blocked_provider` 非预期出现、登录锁定激增、数据库不可用。定位时以 trace_id 关联 API 安全事件和 Worker Outbox 行。
 
 ## 故障恢复
 
 - MySQL/Outbox 暂时失败：API 不保留半成品待验证账号；恢复依赖后用户可用原邮箱重试。Worker 依照租约和退避重试，超过上限进入 dead_letter，必须人工确认原因后按后续重放流程恢复。
-- 邮件 Provider 未启用：这是已知受阻状态，不是发送成功。确认 Provider 和合规合同前不重放。
+- QQ SMTP 未启用：这是已知受阻状态，不是发送成功。核对模式、QQ 邮箱用户名和授权码后重启统一 Node 项目，再由平台运营管理员对账号邮件执行一次有审计原因的重新投递。
+- QQ SMTP 认证失败：先在 QQ 邮箱安全设置停用泄露或失效授权码并生成新授权码，只替换宝塔受限配置；重启后再重放。不得把授权码写入命令输出或工单。
 - 会话泄露或密码变更：用户在安全会话页撤销单个会话；改密或重置密码会撤销全部活动会话。
 - 用户名冲突：个人中心返回 `username_already_registered`，保留原用户名和资料版本；不得绕过唯一索引直接写库。
 - 动作链接过期/重放：返回 `invalid_or_expired_token`，不得人工把数据库令牌改回未消费状态。
