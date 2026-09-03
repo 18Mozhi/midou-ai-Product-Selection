@@ -159,7 +159,8 @@ async function ready(page: Page, detailEvidence = evidence) {
               code: "recommendation_insufficient",
               status: "blocked",
               progress_percent: null,
-              next_action: "启用评分规则并在补采后重新评分。",
+              next_action:
+                "当前候选尚未命中运行中的自动选品规则；在首页设置匹配关键词后，系统会继续采集并重新判断。",
               task_id: null,
               task_status: null,
               score_job_status: null,
@@ -264,6 +265,12 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   ]);
   await expect(page.locator(".opportunity-tabs details > summary")).toHaveText("更多分析");
   await expect(page.getByText("尚无评分运行；缺失输入不会用默认值补齐。")).toBeVisible();
+  await expect(
+    page.getByText(
+      "当前候选尚未命中运行中的自动选品规则；在首页设置匹配关键词后，系统会继续采集并重新判断。",
+      { exact: true },
+    ),
+  ).toBeVisible();
   await page.locator(".opportunity-tabs details > summary").click();
   await page.getByRole("button", { name: "业务血缘" }).click();
   await expect(page.getByRole("heading", { name: "业务血缘追踪" })).toBeVisible();

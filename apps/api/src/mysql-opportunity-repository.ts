@@ -12,6 +12,7 @@ import {
   type OpportunitySummary,
   type OpportunityWriteContext,
 } from "./opportunity-service.js";
+import { recommendationGuidance } from "./opportunity-recommendation-guidance.js";
 
 const iso = (value: unknown) =>
   value instanceof Date ? value.toISOString() : new Date(String(value)).toISOString();
@@ -604,7 +605,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       ),
       [input.opportunityId, input.organizationId, input.workspaceId],
     );
-    const [[evidenceTasks], [scoreJobs]] = await Promise.all([
+    const [[evidenceTasks], [scoreJobs], [recommendationRuleRows]] = await Promise.all([
       this.pool.query<RowDataPacket[]>(
         "SELECT id,status,progress_percent,assignee_id,due_at,completed_at,created_at,updated_at " +
           "FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
@@ -617,6 +618,15 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           "WHERE organization_id=? AND workspace_id=? AND opportunity_id=? " +
           "ORDER BY created_at DESC,id DESC LIMIT 1",
         [input.organizationId, input.workspaceId, input.opportunityId],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT COUNT(DISTINCT m.monitoring_rule_id) matched_rule_count," +
+          "COUNT(DISTINCT CASE WHEN r.status='enabled' THEN m.monitoring_rule_id END) enabled_rule_count," +
+          "MIN(CASE WHEN r.status='enabled' THEN r.recommendation_min_source_count END) minimum_source_count " +
+          "FROM opportunity_rule_matches m JOIN trend_monitoring_rules r ON r.id=m.monitoring_rule_id " +
+          "AND r.organization_id=m.organization_id AND r.workspace_id=m.workspace_id WHERE " +
+          "m.opportunity_id=? AND m.organization_id=? AND m.workspace_id=?",
+        [input.opportunityId, input.organizationId, input.workspaceId],
       ),
     ]);
     let scoreRun: RowDataPacket | undefined,
@@ -644,6 +654,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     }
     const evidenceTask = evidenceTasks[0],
       scoreJob = scoreJobs[0],
+      recommendationRule = recommendationRuleRows[0],
       evidenceBlocked = Number(row.evidence_count) === 0 || row.coverage_status === "insufficient",
       qualityRegressionBlocked =
         String(scoreJob?.last_error_code ?? "") === "score_blocked_by_data_quality_regression",
@@ -685,11 +696,22 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           status: recommendationBlocked ? (scoreInProgress ? "in_progress" : "blocked") : "cleared",
           progress_percent: null,
           next_action: recommendationBlocked
-            ? qualityRegressionBlocked
-              ? "关联证据的最新质量核对未通过；先解决数据质量问题，再重新评分。"
-              : scoreInProgress
-                ? "评分任务处理中，完成后会提醒重新决策。"
-                : "启用评分规则并在补采后重新评分。"
+            ? recommendationGuidance({
+                qualityRegressionBlocked,
+                scoreInProgress: Boolean(scoreInProgress),
+                scoreRuleVersion:
+                  row.score_rule_version == null ? null : String(row.score_rule_version),
+                latestScoreStatus: scoreRun?.status == null ? null : String(scoreRun.status),
+                matchedRuleCount: Number(
+                  recommendationRule?.matched_rule_count ?? row.matched_rule_count ?? 0,
+                ),
+                enabledRuleCount: Number(recommendationRule?.enabled_rule_count ?? 0),
+                minimumSourceCount:
+                  recommendationRule?.minimum_source_count == null
+                    ? null
+                    : Number(recommendationRule.minimum_source_count),
+                sourceCount: Number(row.source_count ?? 0),
+              })
             : "推荐结论阻断已解除。",
           task_id: evidenceTask ? String(evidenceTask.id) : null,
           task_status: evidenceTask ? String(evidenceTask.status) : null,

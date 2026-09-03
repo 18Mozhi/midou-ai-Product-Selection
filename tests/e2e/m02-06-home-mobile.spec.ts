@@ -175,6 +175,7 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   await expect(page.getByRole("heading", { name: "系统正在做什么" })).toBeVisible();
   await expect(page.locator(".home-runtime-panel")).toContainText("规则候选12 条");
   await expect(page.locator(".home-runtime-panel")).toContainText("人工已采纳2 条");
+  await expect(page.locator(".home-runtime-panel li").first()).toHaveAttribute("data-done", "true");
   await expect(page.getByText("自动推荐不等于自动采纳")).toBeHidden();
   await page.getByText("数据说明", { exact: true }).click();
   await expect(page.getByText("自动推荐不等于自动采纳")).toBeVisible();
@@ -325,6 +326,11 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
   await expect(page.getByText("自动选品未配置")).toBeVisible();
   await expect(page.getByText("先告诉系统要找什么")).toBeVisible();
   await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeVisible();
+  await page.getByText("运行详情", { exact: true }).click();
+  await expect(page.locator(".home-runtime-panel li").first()).toHaveAttribute(
+    "data-done",
+    "false",
+  );
   const emptyRecommendation = page.getByText("系统会在规则命中后自动加入这里。");
   await expect(emptyRecommendation).toBeVisible();
   if (testInfo.project.name === "mobile-390") {

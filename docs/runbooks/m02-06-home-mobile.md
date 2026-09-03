@@ -8,7 +8,7 @@
 
 ## 故障定位
 
-- 首页显示“未配置”：检查活动会话的组织/工作区及 `trend_monitoring_rules.status='enabled'`。存在规则但显示“需处理”时，继续检查最近规则采集任务的阻断/失败状态；不得用前端假状态改成“运行中”。
+- 首页显示“未配置”：检查活动会话的组织/工作区及 `trend_monitoring_rules.status='enabled'`；展开“运行详情”后，“监控平台”步骤必须是未完成且显示零条规则。存在规则但显示“需处理”时，继续检查最近规则采集任务的阻断/失败状态；不得用前端假状态改成“运行中”。
 - 首页无推荐：检查 `opportunity_rule_matches`、匹配规则是否启用、`recommendation_min_source_count`、机会 `source_count` 以及是否已有评分规则版本。无评分规则结果时，达到任一启用命中规则的独立来源门槛才写入 `recommend`；存在评分版本时仍以评分结论为准。
 - 次要行动为空：检查本人未完成任务、本人当前审批节点、本人待决策机会，以及 `home_dashboard_items` 的 capability、受众、站内 route、`source_version` 与 `observed_at`。这些范围为空时保留自动选品控制台，不应把整个首页伪装为故障。
 - 行动顺序异常：先核对逾期时间、暂停或关联采集阻断、任务优先级、机会风险、推荐状态与已有总分，再按 `overdue, blocking, high_risk, high_value, normal` 检查排序；不要用前端重新定义业务排序。

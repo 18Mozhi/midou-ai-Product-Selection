@@ -42,7 +42,7 @@ const date = (value: string | null) => (value ? new Date(value).toLocaleString("
           <h3>系统正在做什么</h3>
         </header>
         <ol>
-          <li data-done="true">
+          <li :data-done="selection.enabled_rule_count > 0">
             <i>1</i>
             <div>
               <b>监控平台</b><span>{{ selection.enabled_rule_count }} 条规则运行中</span>

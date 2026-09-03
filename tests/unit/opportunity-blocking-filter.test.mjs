@@ -110,5 +110,31 @@ test("opportunity detail centralizes persisted blocker release progress", async 
   assert.equal(detail.adoption_blockers[0].progress_percent, 100);
   assert.equal(detail.adoption_blockers[1].status, "in_progress");
   assert.equal(detail.adoption_blockers[1].score_job_status, "queued");
+  assert.equal(detail.adoption_blockers[1].next_action, "评分任务处理中，完成后会提醒重新决策。");
   assert.equal(detail.redecision_ready, false);
+});
+
+test("opportunity detail explains the persisted rule source threshold", async () => {
+  const ruleRow = {
+    matched_rule_count: 2,
+    enabled_rule_count: 2,
+    minimum_source_count: 3,
+  };
+  const repository = new MySqlOpportunityRepository({
+    query: async (sql) => {
+      if (sql.includes("COUNT(DISTINCT m.monitoring_rule_id)")) return [[ruleRow], []];
+      if (sql.includes("FROM opportunities o")) return [[{ ...row, source_count: 1 }], []];
+      return [[], []];
+    },
+  });
+  const detail = await repository.get({
+    organizationId: scope.organizationId,
+    workspaceId: scope.workspaceId,
+    actorId: scope.actorId,
+    opportunityId: row.id,
+  });
+  assert.equal(
+    detail.adoption_blockers[1].next_action,
+    "已命中 2 条运行规则；当前 1 个独立来源，达到 3 个后进入推荐。系统会继续自动补证。",
+  );
 });

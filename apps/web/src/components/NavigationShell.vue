@@ -35,6 +35,14 @@ import "../member-workspace-polish.css";
 
 const componentModules = import.meta.glob<{ default: object }>([
   "./*.vue",
+  "!./AccountShell.vue",
+  "!./LandingRedirect.vue",
+  "!./LocalIdentity.vue",
+  "!./NotFoundPage.vue",
+  "!./OnboardingGuide.vue",
+  "!./TenancyChooser.vue",
+  "!./ThemeStudio.vue",
+  "!./UiStatePanel.vue",
   "!./UiStateShowcase.vue",
   "!./VerificationFramework.vue",
 ]);
