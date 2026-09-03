@@ -133,7 +133,7 @@ defineEmits<{
       <span
         >覆盖状态：{{
           opportunityStatusLabel(detail.coverage_status)
-        }}。市场、竞争、成本三类未齐全时不能自动推荐。</span
+        }}。达到来源门槛即可进入推荐；市场、竞争、成本未齐全时会继续补证，并明确显示缺失项。</span
       >
     </article>
     <article>

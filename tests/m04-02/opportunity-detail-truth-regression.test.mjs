@@ -27,6 +27,8 @@ test("opportunity detail renders persisted status and competitor facts without r
   ]);
 
   assert.match(presentation, /recommend: "建议采纳"/);
+  assert.match(insights, /达到来源门槛即可进入推荐/);
+  assert.doesNotMatch(insights, /三类未齐全时不能自动推荐/);
   assert.match(presentation, /measured: "已测量"/);
   assert.match(presentation, /ai_provider_timeout: "模型服务超时"/);
   assert.match(insights, /评估覆盖/);

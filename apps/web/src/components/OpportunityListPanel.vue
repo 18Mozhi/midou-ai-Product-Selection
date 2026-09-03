@@ -77,7 +77,7 @@ const props = defineProps<{
         recommended: {
           eyebrow: "等待人工决定",
           title: "系统推荐",
-          description: "仅显示命中选品规则、完成评分且结论为推荐的商品。",
+          description: "仅显示命中规则并达到来源门槛、等待你决定的商品。",
         },
         evidence_pending: {
           eyebrow: "系统处理中",

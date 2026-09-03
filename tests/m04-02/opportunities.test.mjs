@@ -289,6 +289,8 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     assert.match(webContract, new RegExp(state));
   assert.match(webContract, /证据完整度[\s\S]*阻断原因[\s\S]*缺少可采纳证据/);
   assert.match(webContract, /待我采纳[\s\S]*自动补证中[\s\S]*全部机会/);
+  assert.match(listWeb, /命中规则并达到来源门槛、等待你决定/);
+  assert.doesNotMatch(listWeb, /完成评分且结论为推荐/);
   assert.match(webContract, /证据新鲜度：观测于/);
   assert.match(webContract, /阶段[\s\S]*负责人[\s\S]*批量指派[\s\S]*批量复核[\s\S]*批量归档/);
   assert.match(webContract, /生成补数任务/);
