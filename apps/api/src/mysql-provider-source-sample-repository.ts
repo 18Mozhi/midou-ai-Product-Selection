@@ -236,8 +236,17 @@ export class MySqlProviderSourceSampleRepository {
           [provider.id],
         ),
         this.pool.query<RowDataPacket[]>(
-          "SELECT last_replay_status,last_replay_at,baseline_parser_version,review_status FROM provider_parser_samples WHERE provider_id=? AND status='active' ORDER BY last_replay_at IS NULL,last_replay_at DESC,created_at DESC LIMIT 1",
-          [provider.id],
+          [
+            "SELECT s.last_replay_status,s.last_replay_at,s.baseline_parser_version,s.review_status,",
+            "r.parser_version replay_parser_version,r.status replay_status,",
+            "IF(s.review_status='approved' AND s.last_replay_status='passed' AND r.parser_version=? ",
+            "AND r.status='passed' AND r.created_at=s.last_replay_at,1,0) current_parser_passed ",
+            "FROM provider_parser_samples s LEFT JOIN provider_parser_sample_replay_runs r ON r.id=(SELECT rr.id ",
+            "FROM provider_parser_sample_replay_runs rr WHERE rr.sample_id=s.id ORDER BY rr.created_at DESC,rr.id DESC LIMIT 1) ",
+            "WHERE s.provider_id=? AND s.status='active' ORDER BY current_parser_passed DESC,",
+            "(r.parser_version=?) DESC,s.last_replay_at IS NULL,s.last_replay_at DESC,s.created_at DESC LIMIT 1",
+          ].join(""),
+          [provider.parser_version, provider.id, provider.parser_version],
         ),
         this.pool.query<RowDataPacket[]>(
           "SELECT j.execution_request_json,j.result_json,j.finished_at,COALESCE(r.page_count,0) page_count FROM browser_collection_jobs j LEFT JOIN crawler_browser_runs r ON r.id=j.crawler_run_id WHERE j.provider_id=? ORDER BY j.created_at DESC,j.id DESC LIMIT 1",
@@ -248,10 +257,10 @@ export class MySqlProviderSourceSampleRepository {
       loginBlocked = ["login_required", "session_expired"].includes(String(latestRun?.error_code)),
       captchaBlocked = ["captcha", "blocked_captcha"].includes(String(latestRun?.error_code)),
       profileReady = Number(profile?.active_count ?? 0) > 0,
-      parserPassed =
-        parser?.last_replay_status === "passed" &&
-        parser?.review_status === "approved" &&
-        String(parser.baseline_parser_version) === String(provider.parser_version),
+      parserVersionCurrent =
+        parser?.replay_parser_version != null &&
+        String(parser.replay_parser_version) === String(provider.parser_version),
+      parserPassed = Number(parser?.current_parser_passed ?? 0) === 1,
       gates: Provider1688Acceptance["gates"] = [
         {
           key: "login",
@@ -282,15 +291,18 @@ export class MySqlProviderSourceSampleRepository {
           key: "parser",
           state: parserPassed
             ? "passed"
-            : ["changed", "failed"].includes(String(parser?.last_replay_status))
+            : parserVersionCurrent &&
+                ["changed", "failed"].includes(String(parser?.last_replay_status))
               ? "blocked"
               : "pending",
           evidence_at: parser?.last_replay_at ? iso(parser.last_replay_at) : null,
           reason: parserPassed
             ? "当前解析器版本的固定样本回放和人工审批均已通过。"
-            : parser?.last_replay_status === "passed" && parser?.review_status !== "approved"
-              ? "固定样本回放已通过，仍需另一名来源管理员完成人工审批。"
-              : "需要用真实登录样本完成当前解析器版本回放并通过人工审批。",
+            : !parserVersionCurrent && parser?.replay_parser_version
+              ? `现有固定样本最近回放使用 ${String(parser.replay_parser_version)}，需要用真实登录作业创建并回放当前 ${String(provider.parser_version)} 样本，再由另一名来源管理员审批。`
+              : parser?.last_replay_status === "passed" && parser?.review_status !== "approved"
+                ? "当前解析器版本的固定样本回放已通过，仍需另一名来源管理员完成人工审批。"
+                : "需要用真实登录样本完成当前解析器版本回放并通过人工审批。",
         },
       ],
       pendingReasons = gates.filter((gate) => gate.state !== "passed").map((gate) => gate.reason),

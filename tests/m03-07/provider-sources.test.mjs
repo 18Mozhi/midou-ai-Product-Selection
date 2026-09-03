@@ -487,6 +487,9 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
               review_status: "approved",
               last_replay_at: new Date("2026-08-21T07:20:00.000Z"),
               baseline_parser_version: "1688-browser-contract-v2",
+              replay_parser_version: "1688-browser-contract-v2",
+              replay_status: "passed",
+              current_parser_passed: 1,
             },
           ],
         ];
@@ -526,4 +529,66 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
     queries.find((sql) => sql.includes("FROM crawler_profiles")),
     /ca\.expires_at/,
   );
+  assert.match(
+    queries.find((sql) => sql.includes("FROM provider_parser_samples")),
+    /provider_parser_sample_replay_runs/,
+  );
+});
+
+test("1688 acceptance does not misreport a stale parser replay as waiting only for approval", async () => {
+  const { MySqlProviderSourceRepository } =
+      await import("../../apps/api/dist/mysql-provider-source-repository.js"),
+    now = new Date("2026-08-21T08:00:00.000Z");
+  const pool = {
+    query: async (sql) => {
+      if (sql.includes("FROM providers WHERE code='1688_search'"))
+        return [
+          [
+            {
+              id: "00000000-0000-4000-8000-000000001688",
+              status: "disabled",
+              owner_label: "平台来源中心",
+              parser_version: "1688-browser-contract-v2",
+            },
+          ],
+        ];
+      if (sql.includes("FROM crawler_profiles"))
+        return [[{ active_count: 1, evidence_at: new Date("2026-08-21T07:00:00.000Z") }]];
+      if (sql.includes("FROM crawler_browser_runs"))
+        return [
+          [
+            {
+              status: "succeeded",
+              error_code: null,
+              started_at: new Date("2026-08-21T07:10:00.000Z"),
+              finished_at: new Date("2026-08-21T07:12:00.000Z"),
+            },
+          ],
+        ];
+      if (sql.includes("FROM provider_parser_samples"))
+        return [
+          [
+            {
+              last_replay_status: "passed",
+              review_status: "pending",
+              last_replay_at: new Date("2026-08-21T07:20:00.000Z"),
+              baseline_parser_version: "1688-browser-contract-v1",
+              replay_parser_version: "1688-browser-contract-v1",
+              replay_status: "passed",
+              current_parser_passed: 0,
+            },
+          ],
+        ];
+      if (sql.includes("FROM browser_collection_jobs j LEFT JOIN crawler_browser_runs"))
+        return [[]];
+      throw new Error(`unexpected query ${sql}`);
+    },
+  };
+  const result = await new MySqlProviderSourceRepository(pool).read1688Acceptance(now);
+  const parserGate = result.gates.find((gate) => gate.key === "parser");
+  assert.equal(result.overall, "setup_required");
+  assert.equal(parserGate.state, "pending");
+  assert.match(parserGate.reason, /1688-browser-contract-v1/);
+  assert.match(parserGate.reason, /1688-browser-contract-v2/);
+  assert.doesNotMatch(parserGate.reason, /仍需另一名来源管理员/);
 });
