@@ -67,7 +67,7 @@ const envelope = (data: unknown, meta?: unknown) => ({
   trace_id: "m04-02-e2e-trace",
 });
 
-async function ready(page: Page) {
+async function ready(page: Page, detailEvidence = evidence) {
   let decided = false;
   await page.route("**/api/v1/me/navigation?shell=member", (route) =>
     route.fulfill({
@@ -123,7 +123,7 @@ async function ready(page: Page) {
           latest_score_run: null,
           score_components: [],
           lineage: {
-            freshness: { observed_at: evidence[0].observed_at, age_seconds: 3600 },
+            freshness: { observed_at: detailEvidence[0].observed_at, age_seconds: 3600 },
             failure_impact: {
               level: "degraded",
               codes: ["insufficient_data"],
@@ -166,7 +166,7 @@ async function ready(page: Page) {
             },
           ],
           redecision_ready: false,
-          evidence,
+          evidence: detailEvidence,
           decisions: decided
             ? [
                 {
@@ -368,4 +368,27 @@ test("opportunity detail tab supports a direct URL", async ({ page }) => {
     "page",
   );
   await expect(page.getByText("Example News")).toBeVisible();
+});
+
+test("opportunity evidence uses progressive batches instead of rendering every record", async ({
+  page,
+}) => {
+  const manyEvidence = Array.from({ length: 45 }, (_, index) => ({
+    ...evidence[index % evidence.length],
+    id: `evidence-${index + 1}`,
+    title: `证据记录 ${index + 1}`,
+    canonical_url: `https://example.test/evidence-${index + 1}`,
+    observed_at: new Date(Date.UTC(2026, 7, 8, 0, 0, 45 - index)).toISOString(),
+  }));
+  await ready(page, manyEvidence);
+  await page.goto(`/opportunities/${opportunityId}?tab=evidence`);
+  const evidencePanel = page.locator(".opportunity-evidence");
+  await expect(evidencePanel.locator(":scope > a")).toHaveCount(20);
+  await expect(evidencePanel.getByText("已显示 20 / 45 条")).toBeVisible();
+  await evidencePanel.getByRole("button", { name: "继续显示 20 条（剩余 25 条）" }).click();
+  await expect(evidencePanel.locator(":scope > a")).toHaveCount(40);
+  await evidencePanel.getByRole("button", { name: "继续显示 5 条（剩余 5 条）" }).click();
+  await expect(evidencePanel.locator(":scope > a")).toHaveCount(45);
+  await evidencePanel.getByRole("button", { name: "收起到最新 20 条" }).click();
+  await expect(evidencePanel.locator(":scope > a")).toHaveCount(20);
 });

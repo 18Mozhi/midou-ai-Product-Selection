@@ -7,6 +7,7 @@ import OpportunityDecisionPanel from "./OpportunityDecisionPanel.vue";
 import OpportunityFeedbackPanel from "./OpportunityFeedbackPanel.vue";
 import OpportunityLineagePanel from "./OpportunityLineagePanel.vue";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
+import OpportunityEvidencePanel from "./OpportunityEvidencePanel.vue";
 import OpportunityDetailInsights from "./OpportunityDetailInsights.vue";
 import OpportunityAiPanel from "./OpportunityAiPanel.vue";
 import OpportunityWorkspaceDialogs from "./OpportunityWorkspaceDialogs.vue";
@@ -857,31 +858,11 @@ watch(
           @retry="loadAi"
           @review="reviewAi"
         />
-        <section v-else-if="tab === 'evidence'" class="opportunity-evidence">
-          <header>
-            <div>
-              <p>可追溯证据</p>
-              <h4>证据管理</h4>
-            </div>
-            <span>{{ detail.evidence.length }} 条</span>
-          </header>
-          <p v-if="!detail.evidence.length" class="opportunity-empty-copy">
-            当前机会尚无关联证据。
-          </p>
-          <a
-            v-for="item in detail.evidence"
-            :key="item.id"
-            :href="item.canonical_url"
-            target="_blank"
-            rel="noopener noreferrer"
-            ><span
-              ><strong>{{ item.title }}</strong
-              ><small
-                >{{ item.publisher }} · 证据新鲜度：观测于 {{ freshness(item.observed_at) }}</small
-              ></span
-            ><b>查看原文 ↗</b></a
-          >
-        </section>
+        <OpportunityEvidencePanel
+          v-else-if="tab === 'evidence'"
+          :evidence="detail.evidence"
+          :opportunity-id="detail.id"
+        />
         <section v-else class="opportunity-decisions">
           <header>
             <div>
