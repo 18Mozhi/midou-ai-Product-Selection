@@ -10,11 +10,36 @@ export interface TrendProjectionJob {
   providerCode: string;
   rawEvidenceId: string;
   collectionTaskId: string;
+  monitoringRuleId?: string | null;
+  monitoringRuleQuery?: string | null;
   payload: Record<string, unknown>;
   actorId: string;
   requestId: string;
   traceId: string;
   attemptCount: number;
+}
+
+export function readRuleProductDiscoveryProvenance(value: unknown) {
+  try {
+    const target = typeof value === "string" ? JSON.parse(value) : value;
+    const targetRecord =
+        target && typeof target === "object" && !Array.isArray(target)
+          ? (target as Record<string, unknown>)
+          : null,
+      monitoringRuleId = targetRecord?.monitoring_rule_id,
+      monitoringRuleQuery = targetRecord?.query;
+    if (
+      targetRecord?.projection_type !== "rule_product_discovery" ||
+      typeof monitoringRuleId !== "string" ||
+      !monitoringRuleId ||
+      typeof monitoringRuleQuery !== "string" ||
+      !monitoringRuleQuery
+    )
+      return { monitoringRuleId: null, monitoringRuleQuery: null } as const;
+    return { monitoringRuleId, monitoringRuleQuery } as const;
+  } catch {
+    return { monitoringRuleId: null, monitoringRuleQuery: null } as const;
+  }
 }
 
 const automaticTrendLocales = {

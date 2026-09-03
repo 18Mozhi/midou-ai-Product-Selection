@@ -2,6 +2,7 @@ import type { Pool, RowDataPacket } from "mysql2/promise";
 import {
   buildSupplierSearchQuery,
   projectedTrendProviderContext,
+  readRuleProductDiscoveryProvenance,
   TrendProjectionError,
   type TrendProjectionJob,
 } from "./trend-projection-calculation.js";
@@ -115,11 +116,12 @@ export class MySqlTrendProjectionWorker {
         [this.workerId, expires, now, row.id],
       );
       const [records] = await c.query<RowDataPacket[]>(
-        "SELECT n.organization_id,n.workspace_id,n.provider_id,n.raw_evidence_id,n.payload_json,n.created_by,n.request_id,n.trace_id,p.code provider_code,e.collection_task_id FROM normalized_records n JOIN providers p ON p.id=n.provider_id JOIN raw_evidence e ON e.id=n.raw_evidence_id WHERE n.id=? AND n.organization_id=? AND n.workspace_id=? LIMIT 1",
+        "SELECT n.organization_id,n.workspace_id,n.provider_id,n.raw_evidence_id,n.payload_json,n.created_by,n.request_id,n.trace_id,p.code provider_code,e.collection_task_id,cs.target_json FROM normalized_records n JOIN providers p ON p.id=n.provider_id JOIN raw_evidence e ON e.id=n.raw_evidence_id LEFT JOIN collection_subqueries cs ON cs.id=e.collection_subquery_id WHERE n.id=? AND n.organization_id=? AND n.workspace_id=? LIMIT 1",
         [row.normalized_record_id, row.organization_id, row.workspace_id],
       );
       if (!records[0]) throw new TrendProjectionError("trend_projection_record_missing", false);
-      const record = records[0];
+      const record = records[0],
+        provenance = readRuleProductDiscoveryProvenance(record.target_json);
       await c.commit();
       return {
         id: String(row.id),
@@ -130,6 +132,8 @@ export class MySqlTrendProjectionWorker {
         providerCode: String(record.provider_code),
         rawEvidenceId: String(record.raw_evidence_id),
         collectionTaskId: String(record.collection_task_id),
+        monitoringRuleId: provenance.monitoringRuleId,
+        monitoringRuleQuery: provenance.monitoringRuleQuery,
         payload:
           typeof record.payload_json === "string"
             ? JSON.parse(record.payload_json)

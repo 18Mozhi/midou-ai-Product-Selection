@@ -7,7 +7,10 @@ import {
   isAutomaticProductDiscoveryProvider,
   isConcreteProductEvidence,
 } from "../../apps/worker/dist/trend-projection-worker.js";
-import { calculateTrendProjection } from "../../apps/worker/dist/trend-projection-calculation.js";
+import {
+  calculateTrendProjection,
+  readRuleProductDiscoveryProvenance,
+} from "../../apps/worker/dist/trend-projection-calculation.js";
 
 const topic = {
   title: "portable espresso maker for travel",
@@ -74,6 +77,66 @@ test("global and multi-language monitoring rules match concrete market records",
       topic,
     ),
     true,
+  );
+});
+
+test("rule-targeted product search keeps its exact rule association across languages", () => {
+  const rule = {
+    id: "00000000-0000-4000-8000-000000004301",
+    include_keywords_json: ["手机壳"],
+    negative_keywords_json: [],
+    market: "GLOBAL",
+    language: "multi",
+    category: "ecommerce",
+  };
+  const amazonTopic = {
+    title: "fntcase for iphone 17 phone case compatible with magsafe",
+    market: "US",
+    language: "en-US",
+    category: "ecommerce",
+  };
+  assert.equal(matchesTrendMonitoringRule(rule, amazonTopic), false);
+  assert.equal(
+    matchesTrendMonitoringRule(rule, amazonTopic, {
+      monitoringRuleId: rule.id,
+      monitoringRuleQuery: "手机壳",
+    }),
+    true,
+  );
+  assert.equal(
+    matchesTrendMonitoringRule(rule, amazonTopic, {
+      monitoringRuleId: rule.id,
+      monitoringRuleQuery: "无线耳机",
+    }),
+    false,
+  );
+});
+
+test("trend projection reads rule provenance only from an exact product-discovery target", () => {
+  assert.deepEqual(
+    readRuleProductDiscoveryProvenance(
+      JSON.stringify({
+        projection_type: "rule_product_discovery",
+        monitoring_rule_id: "00000000-0000-4000-8000-000000004301",
+        query: "手机壳",
+      }),
+    ),
+    {
+      monitoringRuleId: "00000000-0000-4000-8000-000000004301",
+      monitoringRuleQuery: "手机壳",
+    },
+  );
+  assert.deepEqual(readRuleProductDiscoveryProvenance("{"), {
+    monitoringRuleId: null,
+    monitoringRuleQuery: null,
+  });
+  assert.deepEqual(
+    readRuleProductDiscoveryProvenance({
+      projection_type: "competitor_snapshot",
+      monitoring_rule_id: "00000000-0000-4000-8000-000000004301",
+      query: "手机壳",
+    }),
+    { monitoringRuleId: null, monitoringRuleQuery: null },
   );
 });
 

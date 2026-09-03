@@ -4,6 +4,7 @@ import type { TrendProjectionJob } from "./trend-projection-calculation.js";
 
 export function matchesTrendMonitoringRule(
   rule: {
+    id?: unknown;
     include_keywords_json: unknown;
     negative_keywords_json: unknown;
     market: unknown;
@@ -11,6 +12,10 @@ export function matchesTrendMonitoringRule(
     category: unknown;
   },
   topic: { title: string; market: string; language: string; category: string | null },
+  provenance?: {
+    monitoringRuleId?: string | null | undefined;
+    monitoringRuleQuery?: string | null | undefined;
+  },
 ) {
   const include =
       typeof rule.include_keywords_json === "string"
@@ -20,13 +25,20 @@ export function matchesTrendMonitoringRule(
       typeof rule.negative_keywords_json === "string"
         ? JSON.parse(rule.negative_keywords_json)
         : rule.negative_keywords_json;
+  const normalize = (value: unknown) =>
+      String(value).normalize("NFKC").trim().replace(/\s+/g, " ").toLocaleLowerCase("en-US"),
+    keywordMatched =
+      Array.isArray(include) &&
+      include.some((keyword: unknown) => topic.title.includes(normalize(keyword))),
+    provenanceMatched =
+      Array.isArray(include) &&
+      String(rule.id ?? "") === provenance?.monitoringRuleId &&
+      normalize(include.map((keyword: unknown) => String(keyword)).join(" OR ")) ===
+        normalize(provenance?.monitoringRuleQuery ?? "");
   return (
-    Array.isArray(include) &&
-    include.some((keyword: unknown) =>
-      topic.title.includes(String(keyword).normalize("NFKC").toLocaleLowerCase("en-US")),
-    ) &&
+    (keywordMatched || provenanceMatched) &&
     !(Array.isArray(negative) ? negative : []).some((keyword: unknown) =>
-      topic.title.includes(String(keyword).normalize("NFKC").toLocaleLowerCase("en-US")),
+      topic.title.includes(normalize(keyword)),
     ) &&
     (!rule.market ||
       String(rule.market).toUpperCase() === "GLOBAL" ||
@@ -73,6 +85,10 @@ export class TrendProjectionAlerts {
           category: row.category,
         },
         { title, market, language, category },
+        {
+          monitoringRuleId: job.monitoringRuleId,
+          monitoringRuleQuery: job.monitoringRuleQuery,
+        },
       );
       if (matched) {
         matchedRuleIds.push(String(row.id));
