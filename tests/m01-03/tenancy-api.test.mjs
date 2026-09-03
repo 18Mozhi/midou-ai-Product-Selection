@@ -4,7 +4,8 @@ import { buildApp } from "../../apps/api/dist/app.js";
 import { InMemoryTenancyRepository, TenancyService } from "../../packages/tenancy/dist/index.js";
 
 const userA = "00000000-0000-4000-8000-000000000311",
-  userB = "00000000-0000-4000-8000-000000000312";
+  userB = "00000000-0000-4000-8000-000000000312",
+  userC = "00000000-0000-4000-8000-000000000315";
 async function fixture() {
   const repository = new InMemoryTenancyRepository();
   const service = new TenancyService(repository);
@@ -19,6 +20,11 @@ async function fixture() {
         return {
           user: { id: userB, status: "active" },
           session: { id: "00000000-0000-4000-8000-000000000314" },
+        };
+      if (token === "token-c")
+        return {
+          user: { id: userC, status: "active" },
+          session: { id: "00000000-0000-4000-8000-000000000316" },
         };
       throw new Error("bad_token");
     },
@@ -141,5 +147,30 @@ test("M01-03.A06/A11 context selection requires origin/idempotency and replays w
   assert.equal(replay.headers["idempotency-replayed"], "true");
   assert.equal(f.repository.audits.filter((item) => item.action === "context.selected").length, 1);
   assert.equal(f.repository.contexts.length, 1);
+  await f.app.close();
+});
+
+test("M01-03 no-membership account creates and enters one personal workspace idempotently", async () => {
+  const f = await fixture();
+  const headers = {
+    cookie: "scoutops_session=token-c",
+    origin: "http://127.0.0.1:5173",
+    "idempotency-key": "create-personal-workspace",
+  };
+  const first = await f.app.inject({
+    method: "POST",
+    url: "/api/v1/me/personal-workspace",
+    headers,
+  });
+  const replay = await f.app.inject({
+    method: "POST",
+    url: "/api/v1/me/personal-workspace",
+    headers,
+  });
+  assert.equal(first.statusCode, 201);
+  assert.equal(first.json().data.created, true);
+  assert.equal(replay.headers["idempotency-replayed"], "true");
+  assert.equal(f.repository.memberships.filter((item) => item.user_id === userC).length, 1);
+  assert.equal(f.repository.contexts.filter((item) => item.user_id === userC).length, 1);
   await f.app.close();
 });

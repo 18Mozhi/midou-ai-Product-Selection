@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import { withTransaction } from "@scoutops/database";
 import {
@@ -99,6 +100,17 @@ export class MySqlTenancyRepository implements TenancyRepository {
             m.created_at,
             m.updated_at,
           ],
+        );
+        await connection.query(
+          "INSERT INTO membership_role_assignments (membership_id,role_code,created_by," +
+            "created_at) VALUES (?,'organization_admin',?,?)",
+          [m.id, m.user_id, m.created_at],
+        );
+        await connection.query(
+          "INSERT INTO membership_data_scopes (id,membership_id,scope_type,scope_key," +
+            "workspace_id,team_id,created_by,version,created_at) VALUES (?,?,'organization'," +
+            "'organization',NULL,NULL,?,1,?)",
+          [randomUUID(), m.id, m.user_id, m.created_at],
         );
         await connection.query(
           "INSERT INTO tenancy_audit_events (id,organization_id,workspace_id,actor_id," +

@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
+import { refreshRuleRecommendation } from "./rule-recommendation.js";
 import { TrendProjectionAlerts } from "./trend-projection-alerts.js";
 import {
   buildSupplierSearchQuery,
@@ -453,6 +454,16 @@ export class TrendProjectionPersistence {
       "UPDATE opportunities o SET evidence_count=(SELECT COUNT(*) FROM opportunity_evidence_links l WHERE l.opportunity_id=o.id),source_count=(SELECT COUNT(DISTINCT provider_id) FROM opportunity_evidence_links l WHERE l.opportunity_id=o.id),coverage_status='partial',lifecycle_status=IF(lifecycle_status='candidate','ready',lifecycle_status),version=IF(?,version,version+1),updated_at=? WHERE o.id=?",
       [insert.affectedRows, now, persistedOpportunityId],
     );
+    await refreshRuleRecommendation(c, {
+      organizationId: job.organizationId,
+      workspaceId: job.workspaceId,
+      opportunityId: persistedOpportunityId,
+      actorType: "worker",
+      actorId: this.workerId,
+      requestId: job.requestId,
+      traceId: job.traceId,
+      now,
+    });
     if (insert.affectedRows) {
       await this.alerts.writeOpportunityDiscovery(
         c,

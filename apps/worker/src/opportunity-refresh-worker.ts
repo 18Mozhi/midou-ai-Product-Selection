@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { refreshRuleRecommendation } from "./rule-recommendation.js";
 
 export type OpportunityRefreshResult =
   | { status: "idle" }
@@ -151,6 +152,16 @@ export class MySqlOpportunityRefreshWorker {
           job.workspaceId,
         ],
       );
+      await refreshRuleRecommendation(connection, {
+        organizationId: job.organizationId,
+        workspaceId: job.workspaceId,
+        opportunityId: job.opportunityId,
+        actorType: "worker",
+        actorId: this.workerId,
+        requestId: job.requestId,
+        traceId: job.traceId,
+        now,
+      });
       const status = evidenceCount ? "succeeded" : "succeeded_empty";
       await connection.query(
         "UPDATE opportunity_refresh_jobs SET status=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? WHERE id=? AND lease_owner=?",

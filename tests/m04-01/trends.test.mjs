@@ -39,9 +39,15 @@ test("M04-01.A02/A12 title and monitoring contracts normalize without inventing 
   assert.equal(normalizeProjectedTrendTitle("  AI  Skin Care  "), "ai skin care");
   assert.deepEqual(validateMonitoringRuleInput(ruleInput).include_keywords, ["ai skincare"]);
   assert.equal(validateMonitoringRuleInput(ruleInput).collection_interval_minutes, 60);
+  assert.equal(validateMonitoringRuleInput(ruleInput).recommendation_min_source_count, 1);
   assert.throws(
     () => validateMonitoringRuleInput({ ...ruleInput, collection_interval_minutes: 5 }),
     (error) => error instanceof TrendServiceError && error.code === "trend_rule_interval_invalid",
+  );
+  assert.throws(
+    () => validateMonitoringRuleInput({ ...ruleInput, recommendation_min_source_count: 0 }),
+    (error) =>
+      error instanceof TrendServiceError && error.code === "trend_rule_source_threshold_invalid",
   );
   assert.throws(
     () => validateMonitoringRuleInput({ ...ruleInput, include_keywords: [] }),

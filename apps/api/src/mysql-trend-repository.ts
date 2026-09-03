@@ -45,6 +45,7 @@ const rule = (row: RowDataPacket): TrendMonitoringRule => ({
   category: row.category == null ? null : String(row.category),
   notification_channel: "in_app",
   collection_interval_minutes: Number(row.collection_interval_minutes),
+  recommendation_min_source_count: Number(row.recommendation_min_source_count),
   status: row.status,
   last_evaluated_at: row.last_evaluated_at == null ? null : iso(row.last_evaluated_at),
   last_collection_at: row.last_collection_at == null ? null : iso(row.last_collection_at),
@@ -618,9 +619,9 @@ export class MySqlTrendRepository implements TrendRepository {
         await c.query(
           "INSERT INTO trend_monitoring_rules (id,organization_id,workspace_id,name," +
             "include_keywords_json,negative_keywords_json,market,language,category,notification_channel," +
-            "collection_interval_minutes,status,last_evaluated_at,next_collection_at," +
+            "collection_interval_minutes,recommendation_min_source_count,status,last_evaluated_at,next_collection_at," +
             "version,created_by,updated_by,created_at,updated_at) VALUES (?,?,?,?,?,?," +
-            "?,?,?,'in_app',?,'enabled',NULL,?,1,?,?,?,?)",
+            "?,?,?,'in_app',?,?,'enabled',NULL,?,1,?,?,?,?)",
           [
             input.ruleId,
             input.organizationId,
@@ -632,6 +633,7 @@ export class MySqlTrendRepository implements TrendRepository {
             value.language,
             value.category,
             value.collection_interval_minutes,
+            value.recommendation_min_source_count,
             now,
             input.actorId,
             input.actorId,
@@ -671,11 +673,13 @@ export class MySqlTrendRepository implements TrendRepository {
     return this.write(input, input.ruleId, async (c) => {
       const [update] = await c.query<ResultSetHeader>(
         "UPDATE trend_monitoring_rules SET status=?,collection_interval_minutes=?," +
+          "recommendation_min_source_count=?," +
           "next_collection_at=IF(?='enabled',?,NULL),updated_by=?,version=version+1," +
           "updated_at=? WHERE id=? AND organization_id=? AND workspace_id=? AND version=?",
         [
           input.status,
           input.collectionIntervalMinutes,
+          input.recommendationMinSourceCount,
           input.status,
           this.now(),
           input.actorId,
@@ -688,6 +692,35 @@ export class MySqlTrendRepository implements TrendRepository {
       );
       if (update.affectedRows !== 1)
         throw new TrendServiceError("trend_rule_version_conflict", 409, "刷新监控规则后重新提交。");
+      const [affectedOpportunities] = await c.query<RowDataPacket[]>(
+        "SELECT o.id,o.recommendation_status,o.source_count,(SELECT MIN(" +
+          "r.recommendation_min_source_count) FROM opportunity_rule_matches m JOIN " +
+          "trend_monitoring_rules r ON r.id=m.monitoring_rule_id AND " +
+          "r.organization_id=m.organization_id AND r.workspace_id=m.workspace_id WHERE " +
+          "m.opportunity_id=o.id AND m.organization_id=o.organization_id AND " +
+          "m.workspace_id=o.workspace_id AND r.status='enabled' AND " +
+          "o.source_count>=r.recommendation_min_source_count) matched_threshold FROM " +
+          "opportunities o JOIN opportunity_rule_matches affected ON " +
+          "affected.opportunity_id=o.id AND affected.organization_id=o.organization_id AND " +
+          "affected.workspace_id=o.workspace_id WHERE o.organization_id=? AND " +
+          "o.workspace_id=? AND affected.monitoring_rule_id=? AND " +
+          "o.decision_status='pending' AND o.score_rule_version IS NULL FOR UPDATE",
+        [input.organizationId, input.workspaceId, input.ruleId],
+      );
+      let recommendationUpdates = 0;
+      for (const opportunity of affectedOpportunities) {
+        const recommendationStatus =
+          opportunity.matched_threshold == null ? "insufficient_data" : "recommend";
+        if (String(opportunity.recommendation_status) === recommendationStatus) continue;
+        const now = this.now();
+        await c.query(
+          "UPDATE opportunities SET recommendation_status=?,version=version+1,updated_at=? " +
+            "WHERE id=? AND organization_id=? AND workspace_id=?",
+          [recommendationStatus, now, opportunity.id, input.organizationId, input.workspaceId],
+        );
+        await this.opportunityRecommendationEvent(c, input, opportunity, recommendationStatus, now);
+        recommendationUpdates += 1;
+      }
       const [rows] = await c.query<RowDataPacket[]>(
         "SELECT * FROM trend_monitoring_rules WHERE id=? AND organization_id=? AND workspace_id=?",
         [input.ruleId, input.organizationId, input.workspaceId],
@@ -700,7 +733,11 @@ export class MySqlTrendRepository implements TrendRepository {
         "trend.monitoring_rule.status_changed",
         "trend_monitoring_rule",
         input.ruleId,
-        { status: result.status, version: result.version },
+        {
+          status: result.status,
+          version: result.version,
+          recommendation_updates: recommendationUpdates,
+        },
         "user",
       );
       return result;
@@ -1018,6 +1055,66 @@ export class MySqlTrendRepository implements TrendRepository {
         resourceType,
         resourceId,
         JSON.stringify(payload),
+        now,
+        input.requestId,
+        input.traceId,
+        now,
+        now,
+      ],
+    );
+  }
+
+  private async opportunityRecommendationEvent(
+    c: PoolConnection,
+    input: {
+      organizationId: string;
+      workspaceId: string;
+      actorId: string;
+      requestId: string;
+      traceId: string;
+    },
+    opportunity: RowDataPacket,
+    recommendationStatus: "recommend" | "insufficient_data",
+    now: Date,
+  ) {
+    const eventId = randomUUID();
+    const payload = JSON.stringify({
+      previous_status: String(opportunity.recommendation_status),
+      recommendation_status: recommendationStatus,
+      source_count: Number(opportunity.source_count),
+      minimum_source_count:
+        opportunity.matched_threshold == null ? null : Number(opportunity.matched_threshold),
+      basis: "monitoring_rule_source_threshold",
+    });
+    await c.query(
+      "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type,resource_type," +
+        "resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES " +
+        "(?,?,?,?,'opportunity',?,?,?,?,?,?,?)",
+      [
+        eventId,
+        input.organizationId,
+        input.workspaceId,
+        "opportunity.rule_recommendation.changed",
+        opportunity.id,
+        "user",
+        input.actorId,
+        input.requestId,
+        input.traceId,
+        payload,
+        now,
+      ],
+    );
+    await c.query(
+      "INSERT INTO opportunity_outbox (id,organization_id,workspace_id,event_type,resource_type," +
+        "resource_id,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at," +
+        "updated_at) VALUES (?,?,?,?,'opportunity',?,?,'queued',0,?,?,?,?,?)",
+      [
+        eventId,
+        input.organizationId,
+        input.workspaceId,
+        "opportunity.rule_recommendation.changed",
+        opportunity.id,
+        payload,
         now,
         input.requestId,
         input.traceId,

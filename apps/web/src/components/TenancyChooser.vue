@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import type {
   OrganizationMembershipSummary,
   SelectedTenancyContext,
@@ -13,8 +13,17 @@ import { getRecentOrganizationIds, rememberOrganization } from "../navigation-me
 const props = defineProps<{ apiBaseUrl: string }>();
 const apiRequest = createApiClient(props.apiBaseUrl);
 const route = useRoute();
+const router = useRouter();
 type State =
-  "loading" | "ready" | "empty" | "error" | "forbidden" | "expired" | "selecting" | "selected";
+  | "loading"
+  | "ready"
+  | "empty"
+  | "error"
+  | "forbidden"
+  | "expired"
+  | "selecting"
+  | "provisioning"
+  | "selected";
 const state = ref<State>("loading");
 const organizations = ref<OrganizationMembershipSummary[]>([]);
 const workspaces = ref<WorkspaceSummary[]>([]);
@@ -112,6 +121,19 @@ async function chooseWorkspace(workspace: WorkspaceSummary) {
     state.value = failureState(error);
   }
 }
+async function createPersonalWorkspace() {
+  state.value = "provisioning";
+  try {
+    selectedContext.value = await request<SelectedTenancyContext & { created: boolean }>(
+      "/me/personal-workspace",
+      { method: "POST" },
+    );
+    state.value = "selected";
+    await router.replace(safeReturnTo.value === "/onboarding" ? "/home" : safeReturnTo.value);
+  } catch (error) {
+    state.value = failureState(error);
+  }
+}
 onMounted(() => {
   recentOrganizationIds.value = getRecentOrganizationIds();
   void loadOrganizations();
@@ -136,9 +158,20 @@ onMounted(() => {
         <h1>{{ title }}</h1>
         <span>{{ copy }}</span>
       </div>
-      <div v-if="state === 'loading'" class="tenancy-state" aria-live="polite">
-        <span class="spinner"></span><strong>正在读取可用范围</strong>
-        <p>组织和工作区会从当前登录会话加载。</p>
+      <div
+        v-if="state === 'loading' || state === 'provisioning'"
+        class="tenancy-state"
+        aria-live="polite"
+      >
+        <span class="spinner"></span
+        ><strong>{{ state === "provisioning" ? "正在创建选品空间" : "正在读取可用范围" }}</strong>
+        <p>
+          {{
+            state === "provisioning"
+              ? "完成后会直接进入你的选品工作台。"
+              : "组织和工作区会从当前登录会话加载。"
+          }}
+        </p>
       </div>
       <div
         v-else-if="state === 'error' || state === 'forbidden' || state === 'expired'"
@@ -172,13 +205,14 @@ onMounted(() => {
           {{
             selectedOrganization
               ? "请联系组织管理员创建或恢复工作区。"
-              : "请联系平台管理员加入组织。"
+              : "创建个人选品空间后即可直接开始使用。"
           }}
         </p>
         <button v-if="selectedOrganization" type="button" @click="loadOrganizations">
           返回组织列表
         </button>
         <div v-else class="tenancy-empty-actions">
+          <button type="button" @click="createPersonalWorkspace">创建并进入选品空间</button>
           <RouterLink to="/me">进入个人中心</RouterLink>
           <RouterLink to="/security/mfa">管理 MFA</RouterLink>
         </div>

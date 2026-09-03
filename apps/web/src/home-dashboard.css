@@ -78,7 +78,8 @@
 }
 
 .home-command-bar nav a,
-.home-setup-callout a {
+.home-setup-callout a,
+.home-setup-callout button {
   min-height: 44px;
   padding: 0 18px;
   display: inline-flex;
@@ -89,6 +90,13 @@
   color: var(--so-text);
   text-decoration: none;
   font-weight: 750;
+}
+
+.home-setup-callout button {
+  border-color: var(--home-accent);
+  color: white;
+  background: var(--home-accent);
+  cursor: pointer;
 }
 
 .home-command-bar nav .home-primary-action {
@@ -131,6 +139,110 @@
   flex: 0 0 auto;
   border-color: transparent;
   color: var(--home-accent);
+}
+
+.home-setup-message {
+  margin: 10px 2px 0;
+  color: var(--so-primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.home-rule-setup {
+  margin-top: 12px;
+  padding: 22px;
+  border: 1px solid var(--home-hairline);
+  border-radius: 14px;
+  background: var(--so-panel);
+}
+
+.home-rule-setup > header,
+.home-rule-setup > footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.home-rule-setup h3,
+.home-rule-setup p {
+  margin: 0;
+}
+
+.home-rule-setup h3 {
+  margin-top: 3px;
+  font-size: 20px;
+}
+
+.home-rule-setup header span,
+.home-rule-setup header small,
+.home-rule-setup label small {
+  color: var(--so-text-muted);
+}
+
+.home-rule-fields {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, minmax(140px, 0.75fr));
+  gap: 12px;
+}
+
+.home-rule-setup label {
+  display: grid;
+  gap: 6px;
+  color: var(--so-text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.home-rule-setup input,
+.home-rule-setup select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--home-hairline);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-bg-elevated);
+  font: inherit;
+  font-weight: 500;
+}
+
+.home-rule-setup input:focus,
+.home-rule-setup select:focus {
+  border-color: var(--home-accent);
+  outline: 3px solid color-mix(in srgb, var(--home-accent) 14%, transparent);
+}
+
+.home-rule-keywords {
+  grid-column: span 2;
+}
+
+.home-rule-setup > footer {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--home-hairline);
+}
+
+.home-rule-setup > footer label {
+  width: min(420px, 100%);
+}
+
+.home-rule-setup > footer button {
+  min-height: 46px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 9px;
+  color: white;
+  background: var(--home-accent);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.home-rule-setup button:disabled,
+.home-setup-callout button:disabled {
+  cursor: wait;
+  opacity: 0.62;
 }
 
 .home-selection-metrics {
@@ -362,6 +474,9 @@
   .home-operations-strip > div {
     grid-template-columns: 1fr;
   }
+  .home-rule-fields {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 640px) {
@@ -382,6 +497,23 @@
   .home-setup-callout {
     align-items: flex-start;
     flex-direction: column;
+  }
+  .home-rule-setup {
+    padding: 16px;
+  }
+  .home-rule-setup > header,
+  .home-rule-setup > footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .home-rule-fields {
+    grid-template-columns: 1fr;
+  }
+  .home-rule-keywords {
+    grid-column: auto;
+  }
+  .home-rule-setup > footer label {
+    width: 100%;
   }
   .home-selection-metrics article {
     min-height: 104px;

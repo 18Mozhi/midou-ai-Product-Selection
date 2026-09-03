@@ -63,6 +63,7 @@ export interface TrendRule {
   category: string | null;
   notification_channel: "in_app";
   collection_interval_minutes: number;
+  recommendation_min_source_count: number;
   status: "enabled" | "paused";
   last_evaluated_at: string | null;
   last_collection_at: string | null;

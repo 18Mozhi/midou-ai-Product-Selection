@@ -77,14 +77,29 @@ test("M01-03.A07/A08/A15 organization and workspace chooser is responsive and ke
 
 test("M01-03.A08/A16 empty state gives a next action", async ({ page }) => {
   await page.route("**/api/v1/org/memberships", (route) => route.fulfill({ json: envelope([]) }));
+  let provisioned = false;
+  await page.route("**/api/v1/me/personal-workspace", (route) => {
+    provisioned = true;
+    return route.fulfill({
+      status: 201,
+      json: envelope({
+        organization: { id: organization.id, name: "我的选品空间" },
+        workspace: { ...workspace, name: "默认工作区", slug: "default" },
+        created: true,
+      }),
+    });
+  });
   await page.goto("/select-context");
   await expect(page.getByText("暂无可用组织")).toBeVisible();
-  await expect(page.getByText("请联系平台管理员加入组织。")).toBeVisible();
+  await expect(page.getByText("创建个人选品空间后即可直接开始使用。")).toBeVisible();
   await expect(page.getByRole("link", { name: "进入个人中心" })).toHaveAttribute("href", "/me");
   await expect(page.getByRole("link", { name: "管理 MFA" })).toHaveAttribute(
     "href",
     "/security/mfa",
   );
+  await page.getByRole("button", { name: "创建并进入选品空间" }).click();
+  await expect.poll(() => provisioned).toBe(true);
+  await expect(page).toHaveURL(/\/home$/);
 });
 
 test("M01-03.A08/A16 forbidden state does not expose another organization", async ({ page }) => {

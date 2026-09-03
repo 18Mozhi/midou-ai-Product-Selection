@@ -76,6 +76,8 @@ export function surfaceProps(input: {
   const common = { apiBaseUrl: input.apiBaseUrl },
     ids = routeEntityIds(input.path);
   switch (input.surface) {
+    case "home-dashboard":
+      return { ...common, capabilities: input.capabilities };
     case "task-workspace":
       return {
         ...common,

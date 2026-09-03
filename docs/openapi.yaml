@@ -666,6 +666,25 @@ paths:
               },
           }
         "401": { $ref: "#/components/responses/Error" }
+  /me/personal-workspace:
+    post:
+      summary: Create the authenticated user's personal selection workspace when no membership exists and select it for the current session
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
+      responses:
+        "201":
+          {
+            description: Personal organization and default workspace created or safely reused with the session context selected,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/SelectedTenancyContextEnvelope" } },
+              },
+          }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
   /org/{organizationId}/workspaces:
     get:
       summary: List workspaces in an organization after active-membership guard
@@ -1647,13 +1666,21 @@ paths:
                   schema:
                     {
                       type: object,
-                      required: [status, expected_version, collection_interval_minutes],
+                      required:
+                        [
+                          status,
+                          expected_version,
+                          collection_interval_minutes,
+                          recommendation_min_source_count,
+                        ],
                       properties:
                         {
                           status: { type: string, enum: [enabled, paused] },
                           expected_version: { type: integer, minimum: 1 },
                           collection_interval_minutes:
                             { type: integer, minimum: 15, maximum: 10080 },
+                          recommendation_min_source_count:
+                            { type: integer, minimum: 1, maximum: 10 },
                         },
                     },
                 },
@@ -7615,6 +7642,11 @@ components:
           required: [id, name]
           properties: { id: { type: string, format: uuid }, name: { type: string } }
         workspace: { $ref: "#/components/schemas/WorkspaceSummary" }
+        created:
+          {
+            type: boolean,
+            description: Present for personal workspace provisioning and true only when this request created the aggregate,
+          }
     OrganizationMembershipListEnvelope:
       allOf:
         [
@@ -10325,6 +10357,7 @@ components:
           language,
           notification_channel,
           collection_interval_minutes,
+          recommendation_min_source_count,
         ]
       properties:
         name: { type: string, minLength: 1, maxLength: 120 }
@@ -10354,6 +10387,13 @@ components:
             minimum: 15,
             maximum: 10080,
             description: Baota Worker collection interval for this rule,
+          }
+        recommendation_min_source_count:
+          {
+            type: integer,
+            minimum: 1,
+            maximum: 10,
+            description: Minimum distinct persisted evidence providers required before a rule-matched unscored opportunity becomes an automatic recommendation,
           }
     TrendMonitoringRule:
       allOf:

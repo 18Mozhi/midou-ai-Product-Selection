@@ -6,6 +6,7 @@ import UiStatePanel from "./UiStatePanel.vue";
 import TrendDetailPanel from "./TrendDetailPanel.vue";
 import TrendFilterPanel from "./TrendFilterPanel.vue";
 import TrendChangeQueue from "./TrendChangeQueue.vue";
+import TrendRuleDialog, { type TrendRuleDraft } from "./TrendRuleDialog.vue";
 import { statusLabel } from "../ui/status-labels";
 import type {
   TrendDetail as Detail,
@@ -47,16 +48,7 @@ const props = defineProps<{
   page = ref(1),
   sort = ref<TrendSort>("impact"),
   masterWidth = ref(38),
-  filters = reactive<TrendFilters>({ q: "", market: "", category: "", status: "active" }),
-  form = reactive({
-    name: "",
-    include_keywords: "",
-    negative_keywords: "",
-    market: "US",
-    language: "en-US",
-    category: "",
-    collection_interval_minutes: 60,
-  });
+  filters = reactive<TrendFilters>({ q: "", market: "", category: "", status: "active" });
 const freshness = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
     month: "2-digit",
@@ -329,35 +321,11 @@ async function createQualityIssue() {
     ? `质量工单 ${result.issue.id} 已创建，可在数据质量页继续处理。`
     : `该证据已有未关闭质量工单 ${result.issue.id}，请直接继续处理。`;
 }
-async function createRule() {
+async function createRule(form: TrendRuleDraft) {
   if (!requireTrendManage()) return;
-  const result = await write("/trends/monitoring-rules", "POST", {
-    name: form.name,
-    include_keywords: form.include_keywords
-      .split(",")
-      .map((x) => x.trim())
-      .filter(Boolean),
-    negative_keywords: form.negative_keywords
-      .split(",")
-      .map((x) => x.trim())
-      .filter(Boolean),
-    market: form.market,
-    language: form.language,
-    category: form.category || null,
-    notification_channel: "in_app",
-    collection_interval_minutes: form.collection_interval_minutes,
-  });
+  const result = await write("/trends/monitoring-rules", "POST", form);
   if (result) {
     showRule.value = false;
-    Object.assign(form, {
-      name: "",
-      include_keywords: "",
-      negative_keywords: "",
-      market: "US",
-      language: "en-US",
-      category: "",
-      collection_interval_minutes: 60,
-    });
     await load();
     message.value = "监控规则已启用；当前仅发送站内通知。";
     await setTab("rules");
@@ -369,6 +337,7 @@ async function toggleRule(item: Rule) {
     status: item.status === "enabled" ? "paused" : "enabled",
     expected_version: item.version,
     collection_interval_minutes: item.collection_interval_minutes,
+    recommendation_min_source_count: item.recommendation_min_source_count,
   });
   if (result) {
     Object.assign(item, result);
@@ -634,6 +603,10 @@ onMounted(() => {
             <dd>每 {{ item.collection_interval_minutes }} 分钟</dd>
           </div>
           <div>
+            <dt>进入推荐</dt>
+            <dd>至少 {{ item.recommendation_min_source_count }} 个独立来源</dd>
+          </div>
+          <div>
             <dt>最后评估</dt>
             <dd>
               {{ item.last_evaluated_at ? freshness(item.last_evaluated_at) : "尚未评估" }}
@@ -669,53 +642,12 @@ onMounted(() => {
       @propose="proposeTopicChange"
       @decide="decideTopicChange"
     />
-    <div
+    <TrendRuleDialog
       v-if="showRule && canManageTrends"
-      class="trend-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="trend-rule-title"
-    >
-      <form @submit.prevent="createRule">
-        <header>
-          <div>
-            <p>监控规则</p>
-            <h3 id="trend-rule-title">创建趋势监控</h3>
-          </div>
-          <button type="button" aria-label="关闭" @click="showRule = false">×</button>
-        </header>
-        <label>规则名称<input v-model="form.name" required maxlength="120" /></label
-        ><label
-          >包含关键词（逗号分隔）<input
-            v-model="form.include_keywords"
-            required
-            maxlength="500" /></label
-        ><label>排除关键词（可选）<input v-model="form.negative_keywords" maxlength="500" /></label>
-        <div>
-          <label>市场<input v-model="form.market" required maxlength="40" /></label
-          ><label>语言<input v-model="form.language" required maxlength="40" /></label>
-        </div>
-        <label>分类（可选）<input v-model="form.category" maxlength="80" /></label>
-        <label
-          >自动采集周期<select v-model.number="form.collection_interval_minutes">
-            <option :value="15">每 15 分钟</option>
-            <option :value="30">每 30 分钟</option>
-            <option :value="60">每 1 小时</option>
-            <option :value="180">每 3 小时</option>
-            <option :value="360">每 6 小时</option>
-            <option :value="720">每 12 小时</option>
-            <option :value="1440">每天</option>
-          </select></label
-        >
-        <aside><strong>通知渠道</strong><span>站内通知。邮件服务尚未确认，不能选择。</span></aside>
-        <footer>
-          <button type="button" @click="showRule = false">取消</button
-          ><button type="submit" :disabled="Boolean(busy)">
-            {{ busy ? "保存中…" : "创建并启用" }}
-          </button>
-        </footer>
-      </form>
-    </div>
+      :busy="Boolean(busy)"
+      @close="showRule = false"
+      @submit="createRule"
+    />
     <div
       v-if="anomalyEvidence && canManageTrends"
       class="trend-modal"

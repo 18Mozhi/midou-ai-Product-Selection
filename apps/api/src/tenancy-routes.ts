@@ -62,6 +62,35 @@ export function registerTenancyRoutes(app: FastifyInstance, options: TenancyRout
     reply.header("cache-control", "no-store");
     return envelope(await options.service.listOrganizations(authenticated.user.id), request);
   });
+  app.post("/api/v1/me/personal-workspace", async (request, reply) => {
+    assertOrigin(request, options.webOrigin);
+    const authenticated = await current(request);
+    const requestIds = ids(request);
+    const result = await options.idempotency.execute(
+      {
+        scope: `user:${authenticated.user.id}`,
+        route: "/me/personal-workspace",
+        method: "POST",
+        key: requireIdempotencyKey(request),
+        requestId: requestIds.requestId,
+        traceId: requestIds.traceId,
+      },
+      async (): Promise<IdempotentResponse> => ({
+        status: 201,
+        body: envelope(
+          await options.service.provisionPersonalWorkspace({
+            actorId: authenticated.user.id,
+            sessionId: authenticated.session.id,
+            ...requestIds,
+          }),
+          request,
+        ),
+      }),
+    );
+    reply.code(result.status).header("cache-control", "no-store");
+    if (result.replayed) reply.header("idempotency-replayed", "true");
+    return result.body;
+  });
   app.get(
     "/api/v1/org/:organizationId/workspaces",
     { schema: { params: paramsSchema } },

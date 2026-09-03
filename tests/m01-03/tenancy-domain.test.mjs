@@ -119,3 +119,27 @@ test("M01-03.A12/A16 validates names and detects organization slug collisions", 
       error.code === "invalid_name",
   );
 });
+
+test("M01-03 self-service personal workspace provisions once and selects the current session", async () => {
+  const repository = new InMemoryTenancyRepository();
+  const service = new TenancyService(repository, () => new Date("2026-09-03T00:00:00Z"));
+  const context = {
+    actorId: actorA,
+    sessionId: "00000000-0000-4000-8000-000000000397",
+    requestId: "personal-workspace",
+    traceId: "personal-workspace-trace",
+  };
+  const created = await service.provisionPersonalWorkspace(context);
+  const replayedWithAnotherRequest = await service.provisionPersonalWorkspace({
+    ...context,
+    requestId: "personal-workspace-2",
+  });
+  assert.equal(created.created, true);
+  assert.equal(created.workspace.name, "默认工作区");
+  assert.equal(replayedWithAnotherRequest.created, false);
+  assert.equal(replayedWithAnotherRequest.organization.id, created.organization.id);
+  assert.equal(repository.organizations.length, 1);
+  assert.equal(repository.memberships.length, 1);
+  assert.equal(repository.contexts.length, 1);
+  assert.equal(repository.audits.filter((item) => item.action === "context.selected").length, 2);
+});

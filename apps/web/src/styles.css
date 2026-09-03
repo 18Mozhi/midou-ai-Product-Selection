@@ -1152,7 +1152,7 @@ a {
   justify-content: center;
   gap: 10px;
 }
-.tenancy-empty-actions a + a {
+.tenancy-empty-actions a {
   color: var(--so-primary);
   background: var(--so-panel-soft);
   box-shadow: inset 0 0 0 1px var(--so-border);

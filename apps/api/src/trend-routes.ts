@@ -99,6 +99,7 @@ export function registerTrendRoutes(app: FastifyInstance, options: TrendRouteOpt
       status: MonitoringRuleStatus;
       expected_version: number;
       collection_interval_minutes?: number;
+      recommendation_min_source_count?: number;
     };
     return envelope(
       await options.service.updateRule({
@@ -107,6 +108,7 @@ export function registerTrendRoutes(app: FastifyInstance, options: TrendRouteOpt
         status: body.status,
         expectedVersion: body.expected_version,
         collectionIntervalMinutes: body.collection_interval_minutes ?? 60,
+        recommendationMinSourceCount: body.recommendation_min_source_count ?? 1,
       }),
       request,
     );

@@ -6,11 +6,11 @@
 
 执行 `npm run build`、三个 `tests/m01-03` 测试、`node scripts/verify-tenancy-live.mjs`、M01-03 Playwright 和 `npm run verify:module -- M01-03`。真实数据库探针必须显示 MySQL 5.7、product_scout 业务账号、utf8mb4、跨组织拒绝、上下文审计和测试数据清理通过。
 
-人工检查：登录后进入 `/select-context`，只能看到本人活动成员资格对应的组织；选择组织后只能看到该组织工作区/团队摘要；归档工作区不可进入；选择成功后刷新后续页面应由服务端会话上下文确定范围，浏览器不能提交 actor_id/session_id。
+人工检查：已有成员登录后进入 `/select-context`，只能看到本人活动成员资格对应的组织；选择组织后只能看到该组织工作区/团队摘要。无成员资格的新账号应看到“创建并进入选品空间”，点击一次后创建固定个人组织、默认工作区、组织管理员角色和组织范围并直接进入 `/home`；重复请求不得创建第二个组织。归档工作区不可进入；选择成功后刷新后续页面应由服务端会话上下文确定范围，浏览器不能提交 actor_id/session_id。
 
 ## 观测、故障与恢复
 
-关注 `organization_forbidden`、`workspace_not_found`、`workspace_archived`、上下文选择失败率以及 `tenancy_audit_events` 中 request_id/trace_id 的连续性。403 激增时检查成员资格是否被禁用或请求组织是否错误；404 检查工作区是否属于当前组织；409 检查工作区状态。数据库异常时保持页面错误状态，不缓存或猜测旧范围，并在宝塔检查 Node API/MySQL 日志与 readiness。
+关注 `organization_forbidden`、`workspace_not_found`、`workspace_archived`、`personal_workspace_unavailable`、上下文选择失败率以及 `tenancy_audit_events` 中 request_id/trace_id 的连续性。403 激增时检查成员资格是否被禁用或请求组织是否错误；404 检查工作区是否属于当前组织；409 检查个人空间并发创建后的成员资格与默认工作区状态。数据库异常时保持页面错误状态，不缓存或猜测旧范围，并在宝塔检查 Node API/MySQL 日志与 readiness。
 
 ## 回滚
 

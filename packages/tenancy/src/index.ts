@@ -187,6 +187,55 @@ export class TenancyService {
     });
     return { organization, workspace };
   }
+  async provisionPersonalWorkspace(context: TenancyContext) {
+    const memberships = await this.repository.listOrganizations(context.actorId);
+    let created = false;
+    let organization = memberships.find(
+      (item) => item.organization.status === "active" && item.membership.status === "active",
+    )?.organization;
+    let workspace = organization?.default_workspace_id
+      ? await this.repository.findWorkspace(organization.default_workspace_id)
+      : null;
+    if (!organization) {
+      try {
+        const result = await this.provisionOrganization(
+          {
+            name: "我的选品空间",
+            slug: `personal-${context.actorId.replaceAll("-", "")}`,
+            timezone: "Asia/Shanghai",
+            dataRetentionDays: 365,
+            defaultWorkspaceName: "默认工作区",
+            defaultWorkspaceSlug: "default",
+          },
+          context,
+        );
+        organization = result.organization;
+        workspace = result.workspace;
+        created = true;
+      } catch (error) {
+        if (!(error instanceof TenancyError) || error.code !== "organization_slug_conflict")
+          throw error;
+        const concurrent = await this.repository.listOrganizations(context.actorId);
+        organization = concurrent.find(
+          (item) => item.organization.status === "active" && item.membership.status === "active",
+        )?.organization;
+        workspace = organization?.default_workspace_id
+          ? await this.repository.findWorkspace(organization.default_workspace_id)
+          : null;
+      }
+    }
+    if (!organization || !workspace || workspace.status !== "active")
+      throw new TenancyError(
+        "personal_workspace_unavailable",
+        409,
+        "当前账号没有可进入的工作区，请联系平台管理员。",
+      );
+    const selected = await this.selectContext(
+      { organizationId: organization.id, workspaceId: workspace.id },
+      context,
+    );
+    return { ...selected, created };
+  }
   async listOrganizations(userId: string) {
     return (await this.repository.listOrganizations(userId)).map(
       ({ organization, membership }) => ({

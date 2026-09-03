@@ -82,6 +82,8 @@ const rule = {
   language: "en-US",
   category: "beauty",
   notification_channel: "in_app",
+  collection_interval_minutes: 60,
+  recommendation_min_source_count: 2,
   status: "enabled",
   last_evaluated_at: null,
   version: 1,
@@ -246,8 +248,10 @@ test("M04-01.A08/A09 monitoring rule and empty/forbidden states are explicit", a
   await page.getByRole("button", { name: /监控规则/ }).click();
   await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
   await expect(page.getByText(/邮件服务未确认/)).toBeVisible();
+  await expect(page.getByText("至少 2 个独立来源")).toBeVisible();
   await page.getByRole("button", { name: "＋ 创建规则" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page.getByText("推荐不等于采纳")).toBeVisible();
   await page.getByLabel("规则名称").fill("新的监控");
   await page.getByLabel("包含关键词（逗号分隔）").fill("desk lamp");
   await page.getByRole("button", { name: "创建并启用" }).click();

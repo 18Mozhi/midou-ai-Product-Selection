@@ -248,6 +248,7 @@ export interface TeamSummary {
 export interface SelectedTenancyContext {
   organization: { id: string; name: string };
   workspace: WorkspaceSummary;
+  created?: boolean;
 }
 export type AuthorizationDataScope = "own" | "team" | "workspace" | "organization" | "platform";
 export interface AuthorizationScopeSummary {

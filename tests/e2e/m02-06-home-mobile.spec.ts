@@ -13,6 +13,7 @@ const navigation = {
     "task:read",
     "task:create",
     "trend:read",
+    "trend:manage",
     "opportunity:read",
     "competitor:read",
     "sourcing:read",
@@ -57,6 +58,9 @@ async function nav(page: any) {
       contentType: "application/json",
       body: JSON.stringify({ data: navigation, request_id: "m02-06-nav", trace_id: "m02-06-nav" }),
     }),
+  );
+  await page.route("**/api/v1/trends/monitoring-rules", (route: any) =>
+    route.fulfill({ json: envelope([]) }),
   );
 }
 
@@ -239,6 +243,23 @@ test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 con
 test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", async ({ page }) => {
   await nav(page);
   let blocked = false;
+  let createdRuleBody: Record<string, unknown> | null = null;
+  await page.unroute("**/api/v1/trends/monitoring-rules");
+  await page.route("**/api/v1/trends/monitoring-rules", async (route) => {
+    if (route.request().method() === "POST") {
+      createdRuleBody = route.request().postDataJSON() as Record<string, unknown>;
+      return route.fulfill({
+        status: 201,
+        json: envelope({
+          id: "00000000-0000-4000-8000-000000000630",
+          ...createdRuleBody,
+          status: "enabled",
+          version: 1,
+        }),
+      });
+    }
+    return route.fulfill({ json: envelope(createdRuleBody ? [{ ...createdRuleBody }] : []) });
+  });
   await page.route("**/api/v1/me/home-dashboard", (route) =>
     route.fulfill(
       blocked
@@ -287,11 +308,13 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
   await page.goto("/home");
   await expect(page.getByRole("heading", { name: "选品控制台" })).toBeVisible();
   await expect(page.getByText("自动选品未配置")).toBeVisible();
-  await expect(page.getByText("先设置第一条选品规则")).toBeVisible();
-  await expect(page.getByRole("link", { name: "设置规则 →" })).toHaveAttribute(
-    "href",
-    "/trends?section=rules",
-  );
+  await expect(page.getByText("先告诉系统要找什么")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeVisible();
+  await page.getByLabel("想找的商品关键词").fill("egg washer, egg brush");
+  await page.getByLabel("进入推荐的门槛").selectOption("2");
+  await page.getByRole("button", { name: "保存并开始自动选品" }).click();
+  await expect.poll(() => createdRuleBody?.recommendation_min_source_count).toBe(2);
+  await expect.poll(() => createdRuleBody?.include_keywords).toEqual(["egg washer", "egg brush"]);
   blocked = true;
   await page.reload();
   await expect(page.getByRole("heading", { name: "依赖暂时受阻" })).toBeVisible();

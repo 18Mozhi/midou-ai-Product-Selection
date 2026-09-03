@@ -77,6 +77,7 @@ export interface TrendMonitoringRule {
   category: string | null;
   notification_channel: "in_app";
   collection_interval_minutes: number;
+  recommendation_min_source_count: number;
   status: MonitoringRuleStatus;
   last_evaluated_at: string | null;
   last_collection_at: string | null;
@@ -127,6 +128,7 @@ export interface MonitoringRuleInput {
   category?: string | null;
   notification_channel: "in_app";
   collection_interval_minutes: number;
+  recommendation_min_source_count: number;
 }
 
 export class TrendServiceError extends Error {
@@ -186,6 +188,17 @@ export function validateMonitoringRuleInput(value: MonitoringRuleInput): Monitor
       400,
       "采集周期必须为 15–10080 分钟。",
     );
+  const recommendationMinSourceCount = Number(value.recommendation_min_source_count ?? 1);
+  if (
+    !Number.isSafeInteger(recommendationMinSourceCount) ||
+    recommendationMinSourceCount < 1 ||
+    recommendationMinSourceCount > 10
+  )
+    throw new TrendServiceError(
+      "trend_rule_source_threshold_invalid",
+      400,
+      "自动推荐所需独立来源数必须为 1–10。",
+    );
   return {
     name: boundedText(value.name, "name", 120),
     include_keywords: keywords(value.include_keywords, "include_keywords", false),
@@ -207,6 +220,7 @@ export function validateMonitoringRuleInput(value: MonitoringRuleInput): Monitor
             );
           })(),
     collection_interval_minutes: collectionInterval,
+    recommendation_min_source_count: recommendationMinSourceCount,
   };
 }
 
@@ -283,6 +297,7 @@ export interface TrendRepository {
       ruleId: string;
       status: MonitoringRuleStatus;
       collectionIntervalMinutes: number;
+      recommendationMinSourceCount: number;
       expectedVersion: number;
       route: string;
     },
@@ -521,11 +536,13 @@ export class TrendService {
       ruleId: string;
       status: MonitoringRuleStatus;
       collectionIntervalMinutes?: number;
+      recommendationMinSourceCount?: number;
       expectedVersion: number;
     },
   ) {
     const ruleId = uuid(input.ruleId, "rule_id"),
-      collectionIntervalMinutes = Number(input.collectionIntervalMinutes ?? 60);
+      collectionIntervalMinutes = Number(input.collectionIntervalMinutes ?? 60),
+      recommendationMinSourceCount = Number(input.recommendationMinSourceCount ?? 1);
     if (
       !["enabled", "paused"].includes(input.status) ||
       !Number.isSafeInteger(input.expectedVersion) ||
@@ -535,6 +552,16 @@ export class TrendService {
         "trend_rule_status_invalid",
         400,
         "提交 enabled/paused 和当前 version。",
+      );
+    if (
+      !Number.isSafeInteger(recommendationMinSourceCount) ||
+      recommendationMinSourceCount < 1 ||
+      recommendationMinSourceCount > 10
+    )
+      throw new TrendServiceError(
+        "trend_rule_source_threshold_invalid",
+        400,
+        "自动推荐所需独立来源数必须为 1–10。",
       );
     if (
       !Number.isSafeInteger(collectionIntervalMinutes) ||
@@ -550,6 +577,7 @@ export class TrendService {
       ...input,
       ruleId,
       collectionIntervalMinutes,
+      recommendationMinSourceCount,
       route: `PATCH:/api/v1/trends/monitoring-rules/${ruleId}`,
     });
   }
