@@ -531,6 +531,7 @@
         "../apps/api/src/mysql-home-dashboard-repository.ts",
         "../apps/api/src/home-dashboard-routes.ts",
         "../apps/web/src/components/HomeDashboard.vue",
+        "../apps/web/src/components/HomeAutomationOverview.vue",
         "../apps/web/src/home-dashboard.css",
         "../apps/web/src/components/OpportunityMobileShell.vue"
       ],
@@ -538,11 +539,11 @@
       "sections": [
         "automatic selection operating state",
         "recommendation review queue",
-        "selection pipeline status",
+        "progressively disclosed selection pipeline status",
         "secondary actionable work",
         "actionable empty state"
       ],
-      "presentationBoundary": "the first fold is a restrained automatic-selection control console: it shows whether monitoring rules are configured, factual candidate recommendation evidence and adoption counts, then puts the human review queue before secondary work and health; first-time users can create or resume the core monitoring rule in place without entering the diagnostic trend workspace, every action keeps an explicit internal route and no decorative metric is invented",
+      "presentationBoundary": "the first fold is a decision-first automatic-selection console: pending human adoption is the only primary task, three compact factual counters replace the four-card metric wall, the full collection pipeline timestamps adopted count and technical projection facts remain available through native progressive disclosure, and recommendation items are divider-based rows instead of nested cards; first-time users can create or resume the core monitoring rule in place without entering the diagnostic trend workspace, every action keeps an explicit internal route and no decorative metric is invented",
       "actionOrder": ["overdue", "blocking", "high_risk", "high_value", "normal"],
       "scope": "exact organization and workspace; required capability; enabled monitoring rules, rule-created candidates, evidence-backed recommendations, pending human adoption, active tasks assigned to the actor, pending approvals at the actor's current node, and health exact authenticated audience user",
       "truth": "synchronous MySQL 5.7 cross-module read from monitoring rules collection tasks opportunities decisions tasks approvals plus stored change follow and health projections; automatic-selection state and counters are derived from persisted facts and never imply that an unconfigured or blocked crawler is running; the home recommendation queue includes only pending recommendation_status=recommend opportunities with an exact opportunity_rule_matches link, where an unscored item may become recommended only after its enabled matching rule's explicit distinct-source threshold is met, and remains separate from generic opportunity actions",

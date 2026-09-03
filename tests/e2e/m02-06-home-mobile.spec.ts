@@ -64,7 +64,9 @@ async function nav(page: any) {
   );
 }
 
-test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", async ({ page }) => {
+test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", async ({
+  page,
+}, testInfo) => {
   await nav(page);
   await page.route("**/api/v1/me/home-dashboard", (route) =>
     route.fulfill({
@@ -165,11 +167,22 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   );
   await expect(page.getByText("竞品来源延迟")).toBeVisible();
   await expect(page.getByRole("heading", { name: "推荐清单" })).toBeVisible();
+  await expect(page.locator(".home-status-facts")).toContainText("4待你采纳");
+  await expect(page.locator(".home-status-facts")).toContainText("8自动补证中");
+  await expect(page.locator(".home-status-facts")).toContainText("3运行规则");
+  await expect(page.getByRole("heading", { name: "系统正在做什么" })).toBeHidden();
+  await page.getByText("运行详情", { exact: true }).click();
   await expect(page.getByRole("heading", { name: "系统正在做什么" })).toBeVisible();
-  await expect(page.locator(".home-selection-metrics")).toContainText("运行规则3");
-  await expect(page.locator(".home-selection-metrics")).toContainText("系统推荐4");
-  await expect(page.locator(".home-selection-metrics")).toContainText("已采纳2");
+  await expect(page.locator(".home-runtime-panel")).toContainText("规则候选12 条");
+  await expect(page.locator(".home-runtime-panel")).toContainText("人工已采纳2 条");
+  await expect(page.getByText("自动推荐不等于自动采纳")).toBeHidden();
+  await page.getByText("数据说明", { exact: true }).click();
   await expect(page.getByText("自动推荐不等于自动采纳")).toBeVisible();
+  if (testInfo.project.name === "mobile-390") {
+    const firstRecommendation = page.getByRole("link", { name: /便携咖啡机候选/ });
+    await markOcclusionProbe(firstRecommendation);
+    await expectAboveMobileNavigation(page, firstRecommendation);
+  }
 });
 
 test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 contract", async ({
@@ -240,7 +253,9 @@ test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 con
   await expectAboveMobileNavigation(page, finalEvidenceMessage);
 });
 
-test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", async ({ page }) => {
+test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", async ({
+  page,
+}, testInfo) => {
   await nav(page);
   let blocked = false;
   let createdRuleBody: Record<string, unknown> | null = null;
@@ -310,6 +325,12 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
   await expect(page.getByText("自动选品未配置")).toBeVisible();
   await expect(page.getByText("先告诉系统要找什么")).toBeVisible();
   await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeVisible();
+  const emptyRecommendation = page.getByText("系统会在规则命中后自动加入这里。");
+  await expect(emptyRecommendation).toBeVisible();
+  if (testInfo.project.name === "mobile-390") {
+    await markOcclusionProbe(emptyRecommendation);
+    await expectAboveMobileNavigation(page, emptyRecommendation);
+  }
   await page.getByLabel("想找的商品关键词").fill("egg washer, egg brush");
   await page.getByLabel("进入推荐的门槛").selectOption("2");
   await page.getByRole("button", { name: "保存并开始自动选品" }).click();

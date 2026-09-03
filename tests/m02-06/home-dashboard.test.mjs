@@ -220,6 +220,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     down,
     repo,
     home,
+    overview,
     apiClient,
     opportunity,
     shell,
@@ -235,6 +236,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
       "database/migrations/0015b_home_dashboard_m02_06.down.sql",
       "apps/api/src/mysql-home-dashboard-repository.ts",
       "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/components/HomeAutomationOverview.vue",
       "apps/web/src/api-client.ts",
       "apps/web/src/components/OpportunityMobileShell.vue",
       "apps/web/src/components/NavigationShell.vue",
@@ -266,15 +268,17 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.match(openapi, /\/me\/home-dashboard:/);
   assert.match(home, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
-  for (const fact of ["自动选品运行中", "选品控制台", "系统推荐", "人工采纳"])
+  for (const fact of ["自动选品运行中", "选品控制台", "HomeAutomationOverview"])
     assert.match(home, new RegExp(fact));
   for (const destination of ["/trends\\?section=rules", "/opportunities"])
     assert.match(home, new RegExp(`to="${destination}"`));
-  assert.match(home, /home-selection-metrics[\s\S]*规则候选[\s\S]*系统推荐[\s\S]*已采纳/);
+  assert.match(home, /<HomeAutomationOverview :selection="selection"/);
   assert.match(home, /home-review-queue[\s\S]*推荐清单/);
   assert.match(home, /recommended_items[\s\S]*recommended_count/);
-  assert.match(home, /home-automation-status[\s\S]*监控平台[\s\S]*补证与评分/);
-  assert.match(home, /自动推荐不等于自动采纳/);
+  assert.match(overview, /home-status-facts[\s\S]*待你采纳[\s\S]*自动补证中[\s\S]*运行规则/);
+  assert.match(overview, /home-runtime-details[\s\S]*监控平台[\s\S]*补证与评分/);
+  assert.match(overview, /人工采纳[\s\S]*人工已采纳/);
+  assert.match(home, /<details class="home-truth">[\s\S]*自动推荐不等于自动采纳/);
   assert.doesNotMatch(home, /全链路教学/);
   assert.match(opportunity, /机会暂无详情[\s\S]*等待真实数据/);
   assert.doesNotMatch(opportunity, /SKELETON|P04/);

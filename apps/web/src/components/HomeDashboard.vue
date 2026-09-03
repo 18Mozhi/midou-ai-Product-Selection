@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import HomeAutomationOverview from "./HomeAutomationOverview.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../home-dashboard.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
@@ -375,24 +376,7 @@ onMounted(load);
         </footer>
       </form>
 
-      <section class="home-selection-metrics" aria-label="自动选品状态">
-        <article>
-          <span>运行规则</span><strong>{{ selection.enabled_rule_count }}</strong
-          ><small>持续监控</small>
-        </article>
-        <article>
-          <span>规则候选</span><strong>{{ selection.candidate_count }}</strong
-          ><small>等待补证或决策</small>
-        </article>
-        <article data-tone="positive">
-          <span>系统推荐</span><strong>{{ selection.recommended_count }}</strong
-          ><small>等待人工采纳</small>
-        </article>
-        <article>
-          <span>已采纳</span><strong>{{ selection.adopted_count }}</strong
-          ><small>人工最终确认</small>
-        </article>
-      </section>
+      <HomeAutomationOverview :selection="selection" />
 
       <section class="home-main-grid">
         <section class="home-review-queue">
@@ -425,49 +409,6 @@ onMounted(load);
             }}</span>
           </div>
         </section>
-
-        <aside class="home-automation-status">
-          <header>
-            <span>自动流程</span>
-            <h3>系统正在做什么</h3>
-          </header>
-          <ol>
-            <li data-done="true">
-              <i>1</i>
-              <div>
-                <b>监控平台</b><span>{{ selection.enabled_rule_count }} 条规则运行中</span>
-              </div>
-            </li>
-            <li :data-done="selection.candidate_count > 0">
-              <i>2</i>
-              <div>
-                <b>筛出候选</b><span>已发现 {{ selection.candidate_count }} 条</span>
-              </div>
-            </li>
-            <li :data-done="selection.recommended_count > 0">
-              <i>3</i>
-              <div>
-                <b>补证与评分</b><span>{{ selection.awaiting_evidence_count }} 条仍在补证</span>
-              </div>
-            </li>
-            <li :data-done="selection.adopted_count > 0">
-              <i>4</i>
-              <div>
-                <b>人工采纳</b><span>已确认 {{ selection.adopted_count }} 条</span>
-              </div>
-            </li>
-          </ol>
-          <dl>
-            <div>
-              <dt>上次采集</dt>
-              <dd>{{ date(selection.last_collection_at) }}</dd>
-            </div>
-            <div>
-              <dt>下次采集</dt>
-              <dd>{{ date(selection.next_collection_at) }}</dd>
-            </div>
-          </dl>
-        </aside>
       </section>
 
       <section v-if="otherActions.length || data?.health.length" class="home-operations-strip">
@@ -490,11 +431,14 @@ onMounted(load);
         </div>
       </section>
 
-      <footer class="home-truth">
-        <span>共 {{ total }} 条可见投影</span
-        ><span>生成时间 {{ date(data?.generated_at ?? null) }}</span
-        ><span>自动推荐不等于自动采纳</span>
-      </footer></template
+      <details class="home-truth">
+        <summary>数据说明</summary>
+        <div>
+          <span>共 {{ total }} 条可见投影</span
+          ><span>生成时间 {{ date(data?.generated_at ?? null) }}</span
+          ><span>自动推荐不等于自动采纳</span>
+        </div>
+      </details></template
     >
   </section>
 </template>

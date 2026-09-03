@@ -25,6 +25,7 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
     [`${components}/SourcingWorkspace.vue`, 700],
     [`${components}/SourcingComparisonPanel.vue`, 120],
     [`${components}/NavigationShell.vue`, 700],
+    [`${components}/HomeAutomationOverview.vue`, 140],
     ["apps/web/src/navigation-shell-permissions.ts", 80],
     ["apps/web/src/use-navigation-shell-theme.ts", 100],
     ["apps/web/src/use-navigation-discovery.ts", 40],
