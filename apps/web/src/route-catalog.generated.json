@@ -354,7 +354,7 @@
       "cachePolicy": "reset_on_scope",
       "acceptance": "protected",
       "productionResolver": {
-        "parentPath": "/opportunities",
+        "parentPath": "/opportunities?view=all",
         "pathPattern": "^/opportunities/[0-9a-f-]{36}$"
       },
       "featureMap": {

@@ -29,6 +29,11 @@ test("production acceptance locks the 224 path, 257 operation, 60 route and six 
     )?.productionResolver?.resourceIdKey,
     "organizationId",
   );
+  assert.equal(
+    routeCatalog.routes.find((route) => route.path === "/opportunities/:opportunityId")
+      ?.productionResolver?.parentPath,
+    "/opportunities?view=all",
+  );
   assert.equal(manifest.baseline.realCoreScreenshotCount, 2);
   assert.equal(manifest.baseline.apiReportSchemaVersion, 3);
   assert.equal(manifest.baseline.operationIdPolicy, "method_path_v1");
