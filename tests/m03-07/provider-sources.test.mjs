@@ -461,7 +461,7 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
               id: "00000000-0000-4000-8000-000000001688",
               status: "disabled",
               owner_label: "平台来源中心",
-              parser_version: "1688-browser-contract-v1",
+              parser_version: "1688-browser-contract-v2",
             },
           ],
         ];
@@ -485,7 +485,7 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
               last_replay_status: "passed",
               review_status: "approved",
               last_replay_at: new Date("2026-08-21T07:20:00.000Z"),
-              baseline_parser_version: "1688-browser-contract-v1",
+              baseline_parser_version: "1688-browser-contract-v2",
             },
           ],
         ];
@@ -518,7 +518,7 @@ test("1688 acceptance reports login captcha and parser evidence without exposing
       ["pagination", "not_exercised", 1],
     ],
   );
-  assert.equal(result.coverage_matrix.parser_version, "1688-browser-contract-v1");
+  assert.equal(result.coverage_matrix.parser_version, "1688-browser-contract-v2");
   assert.deepEqual(result.pending_reasons, []);
   assert.doesNotMatch(JSON.stringify(result), /cookie|credential_asset_id|lease_token|payload/i);
   assert.match(

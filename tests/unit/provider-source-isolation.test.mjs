@@ -277,7 +277,7 @@ test("an explicit 1688 acceptance run can probe and close its existing open circ
               code: "1688_search",
               access_mode: "authenticated_browser",
               target_url: "https://s.1688.com/selloffer/offer_search.htm",
-              parser_version: "1688-browser-contract-v1",
+              parser_version: "1688-browser-contract-v2",
               timeout_ms: 1000,
               fields_json: ["title"],
               status: "disabled",

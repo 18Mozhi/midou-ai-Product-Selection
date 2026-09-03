@@ -131,16 +131,16 @@ test("real Chromium submits a dynamic search form and emits a bounded search sna
     if (request.url?.startsWith("/results")) {
       const cards = Array.from({ length: 15 }, (_, index) => {
         const offerId = String(726088471976 + index);
-        return `<a class="search-offer-wrapper" href="/detail?offerId=${offerId}">
-            <div class="offer-title-row"><div class="title-text">LED 桌面灯</div></div>
-            <div class="offer-price-row"><div class="price-item">¥ 5 .8</div></div>
-            <div class="offer-shop-row"><div class="desc-text">真实灯具供应商</div></div>
+        return `<a data-tracker="offer" class="offerCard--fixture" href="http://detail.m.1688.com/page/index.html?offerId=${offerId}">
+            <div class="titleRow--fixture"><div class="titleText--fixture">LED 桌面灯</div></div>
+            <div class="priceRow--fixture"><div class="priceItem--fixture">¥ 5 .8</div></div>
+            <div class="shopRow--fixture"><div class="descItem--fixture"><div class="descText--fixture">真实灯具供应商</div></div></div>
             <span>${"中".repeat(10_000)}</span>
           </a>`;
       }).join("");
-      const transientCard = `<a class="search-offer-wrapper" href="/detail?offerId=726088471975">
-        <div class="offer-title-row"><div class="title-text">过渡商品</div></div>
-        <div class="offer-shop-row"><div class="desc-text">过渡供应商</div></div>
+      const transientCard = `<a data-tracker="offer" class="offerCard--fixture" href="http://detail.m.1688.com/page/index.html?offerId=726088471975">
+        <div class="titleRow--fixture"><div class="titleText--fixture">过渡商品</div></div>
+        <div class="shopRow--fixture"><div class="descItem--fixture"><div class="descText--fixture">过渡供应商</div></div></div>
       </a>`;
       response.end(`<!doctype html><html><body>
         <div id="results">${transientCard}</div><div style="height:2000px"></div>
@@ -170,15 +170,15 @@ test("real Chromium submits a dynamic search form and emits a bounded search sna
             query: "桌面灯",
             submit_selector: ".input-button",
           },
-          item_selector: 'a.search-offer-wrapper[href*="offerId="]',
+          item_selector: 'a[data-tracker="offer"][href*="offerId="]',
           search_snapshot: {
             schema_version: "1688.search.v1",
             max_items: 15,
             offer_id_query_param: "offerId",
             canonical_url_template: `${origin}/offer/{offer_id}`,
-            title_selector: ".offer-title-row .title-text",
-            supplier_name_selector: ".offer-shop-row .desc-text",
-            price_selector: ".offer-price-row .price-item",
+            title_selector: '[class*="titleText--"]',
+            supplier_name_selector: '[class*="shopRow--"] [class*="descText--"]',
+            price_selector: '[class*="priceItem--"]',
           },
           max_pages: 1,
           max_scrolls: 1,
@@ -203,12 +203,12 @@ test("real Chromium submits a dynamic search form and emits a bounded search sna
       canonical_url: `${origin}/offer/726088471976`,
       dom_fragment: result.snapshots.search.items[0].dom_fragment,
       source_paths: {
-        title: ".offer-title-row .title-text",
-        supplier_name: ".offer-shop-row .desc-text",
-        quoted_price: ".offer-price-row .price-item",
+        title: '[class*="titleText--"]',
+        supplier_name: '[class*="shopRow--"] [class*="descText--"]',
+        quoted_price: '[class*="priceItem--"]',
         moq: "current search card does not expose MOQ",
         location: "current search card does not expose location",
-        canonical_url: 'a.search-offer-wrapper[href*="offerId="] @href query:offerId',
+        canonical_url: 'a[data-tracker="offer"][href*="offerId="] @href query:offerId',
       },
     });
     assert.match(result.snapshots.search.items[0].dom_fragment, /真实灯具供应商/);

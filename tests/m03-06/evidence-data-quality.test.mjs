@@ -86,7 +86,7 @@ test("M03-06.A01/A02/A12 validates evidence boundaries, canonical URL, hashes an
     actorId: ids.actor,
   };
   assert.equal(validateEvidenceInput(input, 1024).contentHash, sha256("{}"));
-  const browserLocator = 'a.search-offer-wrapper[href*="offerId="] @href query:offerId';
+  const browserLocator = 'a[data-tracker="offer"][href*="offerId="] @href query:offerId';
   assert.equal(
     validateEvidenceInput(
       {

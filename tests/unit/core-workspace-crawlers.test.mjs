@@ -792,7 +792,7 @@ test("explicit 1688 acceptance target runs while disabled without widening autom
     code: "1688_search",
     access_mode: "authenticated_browser",
     target_url: "https://s.1688.com/selloffer/offer_search.htm",
-    parser_version: "1688-browser-contract-v1",
+    parser_version: "1688-browser-contract-v2",
     timeout_ms: 20_000,
     fields_json: ["title"],
     status: "disabled",

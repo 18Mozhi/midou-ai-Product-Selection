@@ -4,7 +4,7 @@
 
 `authenticated_browser` 由一条业务关联链执行：Node Worker 仍是 M03-05 `collection_tasks` 的唯一领取者；遇到登录型子查询时写入 `browser_collection_jobs`，Python Crawler 领取该浏览器作业并通过 Node Playwright runner 执行，结果回到同一业务任务和子查询后，再由 Worker 使用 M03-06 持久化证据。低层浏览器运行不能脱离业务作业伪装成采集任务完成。
 
-1688 已登记作业路由、受限导航计划与 `1688-browser-contract-v1` 规范化入口。当前搜索页声明 `accept-charset=GBK`，因此执行器从固定搜索页填写 `#alisearch-input` 并点击 `.input-button`，不再用 UTF-8 查询串拼接中文关键词；结果只识别带数字 `offerId` 的 `a.search-offer-wrapper` 当前商品卡。搜索快照从真实卡片读取标题、供应商和可见价格，按观测到的商品 ID 生成规范详情 URL；当前卡片未展示的 MOQ 和地区保持 `null` 并写入缺失字段，不补零、不猜值。商品详情提取尚未实现，`max_details=0`，不得把搜索覆盖宣称为详情覆盖。来源在真实登录固定样本回放及第二人审批前继续保持 `setup_required / disabled`。
+1688 已登记作业路由、受限导航计划与 `1688-browser-contract-v2` 规范化入口。当前搜索页声明 `accept-charset=GBK`，因此执行器从固定搜索页填写 `#alisearch-input` 并点击 `.input-button`，不再用 UTF-8 查询串拼接中文关键词；结果只识别带数字 `offerId` 且声明 `data-tracker="offer"` 的当前商品卡。搜索快照从卡片的版本化字段选择器读取标题、供应商和可见价格，从移动详情链接提取商品 ID 后生成 HTTPS 规范详情 URL，但不跟随或保存原始 HTTP 移动链接；当前卡片未展示的 MOQ 和地区保持 `null` 并写入缺失字段，不补零、不猜值。商品详情提取尚未实现，`max_details=0`，不得把搜索覆盖宣称为详情覆盖。来源在真实登录固定样本回放及第二人审批前继续保持 `setup_required / disabled`。
 
 浏览器账户必须是项目依法持有并由平台安全管理员登记的账户。执行器遇到登录页、验证码、robots 限制或 HTTP 429 时返回明确 blocked/rate-limited 状态，不尝试绕过登录、验证码、付费墙或站点限制。
 

@@ -6,7 +6,7 @@ import {
   type ProviderRawRecord,
 } from "@scoutops/provider-adapters";
 
-export const ALIBABA_1688_BROWSER_PARSER_VERSION = "1688-browser-contract-v1";
+export const ALIBABA_1688_BROWSER_PARSER_VERSION = "1688-browser-contract-v2";
 export const ALIBABA_1688_SNAPSHOT_SCHEMAS = {
   search: "1688.search.v1",
   offerDetail: "1688.offer-detail.v1",
@@ -26,15 +26,15 @@ export function create1688BrowserExecutionRequest(target: Record<string, unknown
         query,
         submit_selector: ".input-button",
       },
-      item_selector: 'a.search-offer-wrapper[href*="offerId="]',
+      item_selector: 'a[data-tracker="offer"][href*="offerId="]',
       search_snapshot: {
         schema_version: ALIBABA_1688_SNAPSHOT_SCHEMAS.search,
         max_items: 15,
         offer_id_query_param: "offerId",
         canonical_url_template: "https://detail.1688.com/offer/{offer_id}.html",
-        title_selector: ".offer-title-row .title-text",
-        supplier_name_selector: ".offer-shop-row .desc-text",
-        price_selector: ".offer-price-row .price-item",
+        title_selector: '[class*="titleText--"]',
+        supplier_name_selector: '[class*="shopRow--"] [class*="descText--"]',
+        price_selector: '[class*="priceItem--"]',
       },
       max_pages: 1,
       max_scrolls: 3,

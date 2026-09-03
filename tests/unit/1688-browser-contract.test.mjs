@@ -33,7 +33,7 @@ const searchItem = {
   },
 };
 
-test("1688 execution uses the live GBK search form and current mobile offer cards", () => {
+test("1688 execution uses the live GBK search form and current tracked offer cards", () => {
   const request = create1688BrowserExecutionRequest({ query: "桌面灯", acceptance_run: true });
   assert.equal(request.purpose, "acceptance");
   assert.equal(request.plan.start_url, "https://s.1688.com/selloffer/offer_search.htm");
@@ -42,10 +42,15 @@ test("1688 execution uses the live GBK search form and current mobile offer card
     query: "桌面灯",
     submit_selector: ".input-button",
   });
-  assert.equal(request.plan.item_selector, 'a.search-offer-wrapper[href*="offerId="]');
+  assert.equal(request.plan.item_selector, 'a[data-tracker="offer"][href*="offerId="]');
   assert.equal(request.plan.search_snapshot.schema_version, "1688.search.v1");
   assert.equal(request.plan.search_snapshot.max_items, 15);
-  assert.equal(request.plan.search_snapshot.price_selector, ".offer-price-row .price-item");
+  assert.equal(request.plan.search_snapshot.title_selector, '[class*="titleText--"]');
+  assert.equal(
+    request.plan.search_snapshot.supplier_name_selector,
+    '[class*="shopRow--"] [class*="descText--"]',
+  );
+  assert.equal(request.plan.search_snapshot.price_selector, '[class*="priceItem--"]');
   assert.equal(request.plan.max_details, 0);
   assert.equal("detail_link_selector" in request.plan, false);
 });
