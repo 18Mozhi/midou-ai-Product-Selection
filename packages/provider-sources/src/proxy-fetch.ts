@@ -101,13 +101,13 @@ const responseHeaders = (headers: Record<string, string | string[] | undefined>)
   return result;
 };
 
-const MAX_PROXY_RESPONSE_BYTES = 2_000_000;
+const MAX_PROXY_RESPONSE_BYTES = 5 * 1024 * 1024;
 export function decodeProviderProxyResponseBody(
   body: Buffer,
   contentEncoding: string | null | undefined,
 ) {
   if (body.length > MAX_PROXY_RESPONSE_BYTES)
-    throw new Error("Provider proxy response exceeds 2 MB");
+    throw new Error("Provider proxy response exceeds 5 MiB");
   const encoding = (contentEncoding ?? "").trim().toLowerCase();
   if (!encoding || encoding === "identity") return body;
   try {
@@ -122,7 +122,7 @@ export function decodeProviderProxyResponseBody(
               : null;
     if (!decoded) throw new Error(`Provider proxy response encoding is unsupported: ${encoding}`);
     if (decoded.length > MAX_PROXY_RESPONSE_BYTES)
-      throw new Error("Provider proxy response exceeds 2 MB");
+      throw new Error("Provider proxy response exceeds 5 MiB");
     return decoded;
   } catch (error) {
     if (error instanceof Error && error.message.startsWith("Provider proxy")) throw error;
@@ -149,7 +149,8 @@ const httpConnectFetch: TunnelFetch = async (url, init, proxy) => {
         let bytes = 0;
         response.on("data", (chunk: Buffer) => {
           bytes += chunk.length;
-          if (bytes > 2_000_000) request.destroy(new Error("Provider proxy response exceeds 2 MB"));
+          if (bytes > MAX_PROXY_RESPONSE_BYTES)
+            request.destroy(new Error("Provider proxy response exceeds 5 MiB"));
           else chunks.push(chunk);
         });
         response.once("error", (error) => {

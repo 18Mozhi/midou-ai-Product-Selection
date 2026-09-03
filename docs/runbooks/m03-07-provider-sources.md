@@ -35,7 +35,7 @@
 - 1688 搜索返回空：先检查页面标题和关键词是否乱码；执行请求必须从固定搜索页填写 `#alisearch-input` 并点击 `.input-button`，不得恢复为 UTF-8 `keywords` 查询串。若证据 DOM 只有 `offer-skeleton-item`，核对滚动后的二次条目等待是否生效；Crawler 的 `succeeded_empty` 必须被 Worker 立即作为终态读取，不能继续轮询约 190 秒后误记为 `timeout`。再检查商品卡是否仍为带数字 `offerId` 且声明 `data-tracker="offer"` 的链接，以及标题、供应商和可见价格节点是否仍为当前 `v2` 合同选择器；结构变化按 `source_changed` 处理，不得扩大到旺旺、广告跳转或店铺链接。
 - 1688 的 `source_configuration_invalid`：检查是否为 HTTPS 1688 域名、搜索入口是否为 `s.1688.com`，以及详情 URL 中商品 ID 是否与记录一致。该错误不是登录续期信号，不能通过重放绕过。
 - 固定公开榜单页面无结果：先核对页面是否调整结构或返回地区/验证页面；解析器会以 `source_changed` 失败，不会把空白或错误页当成商品数据。
-- `invalid_payload`：核对响应类型与编码；项目代理会在 2 MB 解压上限内处理 gzip/deflate/br，频道解析器支持 RSS、Atom 与 RDF，超限或未知编码继续失败关闭。
+- `invalid_payload`：核对响应类型与编码；项目代理会在 5 MiB 传输上限内处理 gzip/deflate/br，频道解析器仍只接受最多 2 MB 的 RSS、Atom 与 RDF，任一层超限或未知编码都继续失败关闭。Amazon 健康检查若报 `network_error`，应先核对代理错误是否仍为旧版 `exceeds 2 MB`；新版正常公开页只在超过 5 MiB 时拒绝。
 - 自动任务不生成：核对 `automatic_source_schedules.next_scheduled_at`、组织/默认工作区状态、来源是否已启用，以及公开来源的条款批准状态、HTTPS 参考地址、条款版本和有效期；没有合规可用来源时调度器只顺延 5 分钟，不写入必然得到 `permission_denied` 的任务。再检查统一后端 Worker 日志。
 - 手动刷新失败：核对当前会话的活动组织/工作区、`trend:read`、Origin 与 Idempotency-Key。
 

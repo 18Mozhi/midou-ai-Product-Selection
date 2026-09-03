@@ -107,9 +107,10 @@ test("M03-07 proxy transport decodes bounded gzip and syndication parser accepts
   const html = Buffer.from("<html><body>Amazon</body></html>"),
     compressed = gzipSync(html);
   assert.deepEqual(decodeProviderProxyResponseBody(compressed, "gzip"), html);
+  assert.equal(decodeProviderProxyResponseBody(Buffer.alloc(2_000_001), null).length, 2_000_001);
   assert.throws(
-    () => decodeProviderProxyResponseBody(Buffer.alloc(2_000_001), null),
-    /exceeds 2 MB/,
+    () => decodeProviderProxyResponseBody(Buffer.alloc(5 * 1024 * 1024 + 1), null),
+    /exceeds 5 MiB/,
   );
   const rdf = [
       '<?xml version="1.0"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" ',

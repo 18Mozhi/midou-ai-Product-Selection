@@ -953,7 +953,7 @@
         "authenticated-browser or fixed-public-page platform entries without official API dependency",
         "google_news_search manual keyword RSS",
         "manual_product_supply_csv explicit import",
-        "amazon_product enabled public search and product-page crawler whose code-owned catalog definition also boots fresh databases as enabled/manual on amazon-structured-product-v2, with native HTTPS direct transport, governed Provider proxy fallback, Schema.org Product JSON-LD primary parsing, semantic HTML fallback, and response-derived price currency",
+        "amazon_product enabled public search and product-page crawler whose code-owned catalog definition also boots fresh databases as enabled/manual on amazon-structured-product-adapter-v4, with native HTTPS direct transport, governed Provider proxy fallback bounded at 5 MiB to match the existing adapter response limit, Schema.org Product JSON-LD primary parsing, semantic HTML fallback, response-derived price currency, and one same-signal retry before confirmed source_changed fails closed",
         "made_in_china_search public supplier product crawler",
         "ec21_supplier_search independent public supplier fallback crawler",
         "dhgate_supplier_search robots-allowed public wholesale supplier crawler",
