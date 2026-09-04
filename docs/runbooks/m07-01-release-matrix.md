@@ -2,7 +2,7 @@
 
 ## 使用与宝塔边界
 
-先运行 `npm run verify:route-artifacts` 和 `npm run verify:release-matrix` 校验路由生成物、清单和 E2E 真实性比例，再运行 Node、live 和 `node scripts/verify-release-matrix.mjs --browser all`；排障时也可把 `all` 换成 `p00` 至 `p06`。新增或修改路由时只编辑 `config/route-catalog.json`，随后执行 `npm run generate:route-artifacts`，不得手工编辑 `apps/web/src/route-catalog.generated.json` 或 `docs/feature-map.json` 的 `routes` 段。`npm run verify:e2e-realism` 可单独输出截图总数、位于 Mock 文件的截图数和比例；该比例必须低于 50%，当前为 15/33（45.45%），其中两张核心业务截图只能由一次性生产验收的真实 Fastify/MySQL/Redis 脚本贡献；被其替代的机会详情与找货 Mock 以及匿名鉴权 MFA 场景只保留行为断言。移动端还必须复用遮挡 helper 检查成员与平台壳层末端内容不被固定底栏覆盖。模块正式入口仍为 `npm run verify:module -- M07-01`。完整矩阵耗时可能超过默认单命令上限，宝塔受限发布任务可临时设置 `VERIFY_COMMAND_TIMEOUT_MS=900000`；报告继续写到 `VERIFY_REPORT_DIR`。这两个变量均已在 `config/env.example` 和配置 schema 中登记，无新增配置。
+先运行 `npm run verify:route-artifacts` 和 `npm run verify:release-matrix` 校验路由生成物、清单和 E2E 真实性比例，再运行 Node、live 和 `node scripts/verify-release-matrix.mjs --browser all`；排障时也可把 `all` 换成 `p00` 至 `p06`。新增或修改路由时只编辑 `config/route-catalog.json`，随后执行 `npm run generate:route-artifacts`，不得手工编辑 `apps/web/src/route-catalog.generated.json` 或 `docs/feature-map.json` 的 `routes` 段。`npm run verify:e2e-realism` 可单独输出截图总数、位于 Mock 文件的截图数和比例；该比例必须低于 50%，当前为 19/39（48.72%），其中四张核心业务截图只能由一次性生产验收的真实 Fastify/MySQL/Redis 脚本贡献，覆盖来源决策任务、任务移动端次要操作、审批决策台和供应链成本利润；被其替代的机会详情与找货 Mock 以及匿名鉴权 MFA 场景只保留行为断言。移动端还必须复用遮挡 helper 检查成员与平台壳层末端内容不被固定底栏覆盖。模块正式入口仍为 `npm run verify:module -- M07-01`。完整矩阵耗时可能超过默认单命令上限，宝塔受限发布任务可临时设置 `VERIFY_COMMAND_TIMEOUT_MS=900000`；报告继续写到 `VERIFY_REPORT_DIR`。这两个变量均已在 `config/env.example` 和配置 schema 中登记，无新增配置。
 
 `npm run test:e2e`、`npm run verify:functional` 和发布矩阵浏览器门都会先完整执行桌面项目并关闭其 API/Web 服务，再重新启动服务执行 390px 项目。日志中应出现两次独立的 Playwright 运行；第二次端口占用通常表示第一次服务未正常退出，必须先清理对应测试进程再重跑，不得启用 `reuseExistingServer` 掩盖生命周期泄漏。`node scripts/run-playwright-projects.mjs --self-test` 只校验编排合同，不启动服务。
 
@@ -16,7 +16,7 @@
 
 生产机无法使用 Playwright 自带浏览器包时，在同一宝塔有限任务的受限环境设置 `SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH`，值必须是当前主机上由 `www` 可执行的 Chromium/Chrome 绝对路径；当前 Debian 11 主机使用面板内已安装的 `/usr/bin/chromium`。验收脚本在启动浏览器前检查绝对路径和执行权限，不通过时失败关闭。该配置仅影响两段生产浏览器验收，不改变网站、Node API、Worker 或 Crawler；修改后直接重新手工执行有限任务，不需要重启常驻服务，也不得在服务器升级 npm 锁定依赖来绕过平台不兼容。
 
-生产任务成功报告必须同时满足：`operation_count=257`、`route_catalog_count=60`、`matrix_cells=360`、六个产品矩阵单角色账号、一个隔离鉴权单角色账号、一个组织、一个工作区、两条 `core_e2e` 链路、两张真实栈截图，以及 `cleanup.status=passed`、`cleanup.remaining_rows=0`、`cleanup_failure=null`。报告中的 `baseline.role_count` 仍必须为 6，`seed.verified_users` 与 `seed.single_role_accounts` 必须为 7。`core_e2e.dependencies` 中 MySQL 与 Redis 都必须为 `available`；`cleanup.tables` 是逐表删除清单。任务失败但清理成功时仍返回非零，禁止把清理成功冒充验收成功；主失败与清理失败同时发生时必须分别写入报告。进程被主机强制终止时 `finally` 无法保证执行，应先按报告中的 run/trace 标记核对残留，不得使用宽泛邮箱或组织条件删除生产数据。
+生产任务成功报告必须同时满足：`operation_count=257`、`route_catalog_count=60`、`matrix_cells=360`、六个产品矩阵单角色账号、一个隔离鉴权单角色账号、一个组织、一个工作区、三条 `core_e2e` 链路、四张真实栈截图，以及 `cleanup.status=passed`、`cleanup.remaining_rows=0`、`cleanup_failure=null`。报告中的 `baseline.role_count` 仍必须为 6，`seed.verified_users` 与 `seed.single_role_accounts` 必须为 7。`core_e2e.dependencies` 中 MySQL 与 Redis 都必须为 `available`；`cleanup.tables` 是逐表删除清单。任务失败但清理成功时仍返回非零，禁止把清理成功冒充验收成功；主失败与清理失败同时发生时必须分别写入报告。进程被主机强制终止时 `finally` 无法保证执行，应先按报告中的 run/trace 标记核对残留，不得使用宽泛邮箱或组织条件删除生产数据。
 
 ## 故障定位
 
